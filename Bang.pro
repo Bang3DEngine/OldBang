@@ -6,7 +6,9 @@ SOURCES += \
     View/Canvas.cpp \
     Domain/main.cpp \
     Domain/Shader.cpp \
-    Domain/Logger.cpp
+    Domain/Logger.cpp \
+    Domain/VBO.cpp \
+    Domain/VAO.cpp
 
 OBJECTS_DIR = obj/
 
@@ -31,5 +33,7 @@ HEADERS += \
     Domain/Shader.h \
     Domain/IToString.h \
     Domain/Idable.h \
-    Domain/Logger.h
+    Domain/Logger.h \
+    Domain/VBO.h \
+    Domain/VAO.h
 
