@@ -1,6 +1,4 @@
 TEMPLATE = app
-CONFIG += console
-CONFIG += app_bundle
 
 QT_VERSION = 4
 
@@ -26,10 +24,7 @@ CONFIG += qt
 
 QMAKE_CXXFLAGS += --std=c++11
 
-LIBS += -L/usr/lib/*.so \
-        -L/usr/lib/qt4 \
-        -L/usr/local/lib \
-        -lGLEW
+LIBS += -lGLEW
 
 HEADERS += \
     View/Canvas.h \

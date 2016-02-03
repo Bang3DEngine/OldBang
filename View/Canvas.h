@@ -2,7 +2,7 @@
 #define CANVAS_H
 
 #include "../Domain/Shader.h"
-#include <QtOpenGL/QGLWidget>
+#include <QGLWidget>
 
 class Canvas : public QGLWidget
 {
@@ -10,26 +10,10 @@ class Canvas : public QGLWidget
 public:
     explicit Canvas(QWidget *parent = 0);
 
-    void initializeGL()
-    {
-        // Set up the rendering context, define display lists etc.:
-        glClearColor(0.0, 1.0, 0.0, 1.0);
-        glEnable(GL_DEPTH_TEST);
+    void initializeGL();
+    void resizeGL(int w, int h);
+    void paintGL();
 
-        Shader s(Shader::Type::Fragment, "Domain/main.cpp");
-        std::cout << s.ToString() << std::endl;
-    }
-
-    void resizeGL(int w, int h)
-    {
-        glViewport(0, 0, (GLint)w, (GLint)h);
-    }
-
-    void paintGL()
-    {
-        // draw the scene:
-        glClear(GL_COLOR_BUFFER_BIT);
-    }
 signals:
 
 public slots:

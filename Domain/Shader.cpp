@@ -26,8 +26,8 @@ bool Shader::LoadFromFile(const std::string& filepath)
     sourceCode = ss.str();
 
 
-    std::cout << "xzczxc" << std::endl;
-    id = glCreateShader(type);
+    std::cout << sourceCode << std::endl;
+    id = glCreateShader(GL_VERTEX_SHADER);
     std::cout << "vcbb" << std::endl;
 
     GLchar *source = (GLchar*)(sourceCode.c_str());
