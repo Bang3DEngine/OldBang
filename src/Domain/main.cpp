@@ -2,14 +2,16 @@
 #include <string>
 #include <iostream>
 #include <QApplication>
-#include "View/WindowMain.h"
-#include "View/Canvas.h"
-#include "Domain/Shader.h"
 
-#include "Domain/glm/glm.hpp"
+#include "glm/glm.hpp"
 
 #include "ShaderProgram.h"
 #include "MeshRenderer.h"
+#include "WindowMain.h"
+#include "Canvas.h"
+#include "Shader.h"
+
+
 
 class WindowMain: public Ui_WindowMain
 {
@@ -61,8 +63,8 @@ int main(int argc, char *argv[])
 
     Shader *vs = new Shader(Shader::Type::Vertex);
     Shader *fs = new Shader(Shader::Type::Fragment);
-    vs->LoadFromFile("Domain/Shaders/pass.vert");
-    fs->LoadFromFile("Domain/Shaders/pass.frag");
+    vs->LoadFromFile("res/Shaders/pass.vert");
+    fs->LoadFromFile("res/Shaders/pass.frag");
 
     ShaderProgram *sp = new ShaderProgram();
     sp->BindVertexShader(vs);

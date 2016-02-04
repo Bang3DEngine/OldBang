@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd View
+cd res
 for f in *.ui
 do
 	fname=$(echo $f | cut -d'.' -f1)
