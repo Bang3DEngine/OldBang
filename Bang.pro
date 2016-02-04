@@ -8,7 +8,8 @@ SOURCES += \
     Domain/Shader.cpp \
     Domain/Logger.cpp \
     Domain/VBO.cpp \
-    Domain/VAO.cpp
+    Domain/VAO.cpp \
+    Domain/ShaderProgram.cpp
 
 OBJECTS_DIR = obj/
 
@@ -35,5 +36,6 @@ HEADERS += \
     Domain/Logger.h \
     Domain/VBO.h \
     Domain/VAO.h \
-    Domain/Idable.h
+    Domain/Idable.h \
+    Domain/ShaderProgram.h
 

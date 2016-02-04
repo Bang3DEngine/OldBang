@@ -6,6 +6,7 @@
 
 #include "Domain/glm/glm.hpp"
 
+#include "ShaderProgram.h"
 #include "VAO.h"
 
 class WindowMain: public Ui_WindowMain
@@ -58,6 +59,12 @@ int main(int argc, char *argv[])
     Shader fs(Shader::Type::Fragment);
     vs.LoadFromFile("Domain/Shaders/pass.vert");
     fs.LoadFromFile("Domain/Shaders/pass.frag");
+
+    ShaderProgram sp;
+    sp.BindVertexShader(&vs);
+    sp.BindFragmentShader(&fs);
+
+    //glDrawArrays(GL_TRIANGLES, 0, sizeof(pyramid) / (sizeof(float) * 3));
 
     return app.exec();
 }
