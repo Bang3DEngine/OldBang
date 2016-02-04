@@ -1,7 +1,14 @@
+
+#define GLEW_STATIC
+#define GLEW_VERSION_3_3
+#include <GL/glew.h>
+#include <GL/glu.h>
+
 #include <iostream>
 #include <QApplication>
 #include "View/WindowMain.h"
 #include "View/Canvas.h"
+#include "Domain/Shader.h"
 
 class WindowMain: public Ui_WindowMain
 {

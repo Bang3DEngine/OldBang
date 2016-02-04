@@ -24,7 +24,7 @@ QT_BEGIN_NAMESPACE
 class Ui_WindowMain
 {
 public:
-    QWidget *verticalLayoutWidget;
+    QVBoxLayout *verticalLayout_2;
     QVBoxLayout *verticalLayout;
     Canvas *widget;
     QPushButton *pushButton;
@@ -39,23 +39,27 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(WindowMain->sizePolicy().hasHeightForWidth());
         WindowMain->setSizePolicy(sizePolicy);
-        verticalLayoutWidget = new QWidget(WindowMain);
-        verticalLayoutWidget->setObjectName(QString::fromUtf8("verticalLayoutWidget"));
-        verticalLayoutWidget->setGeometry(QRect(20, 40, 751, 501));
-        verticalLayout = new QVBoxLayout(verticalLayoutWidget);
+        verticalLayout_2 = new QVBoxLayout(WindowMain);
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        widget = new Canvas(verticalLayoutWidget);
+        widget = new Canvas(WindowMain);
         widget->setObjectName(QString::fromUtf8("widget"));
 
         verticalLayout->addWidget(widget);
 
-        pushButton = new QPushButton(verticalLayoutWidget);
+        pushButton = new QPushButton(WindowMain);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        sizePolicy.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
-        pushButton->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Maximum, QSizePolicy::Maximum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
+        pushButton->setSizePolicy(sizePolicy1);
 
         verticalLayout->addWidget(pushButton);
+
+
+        verticalLayout_2->addLayout(verticalLayout);
 
 
         retranslateUi(WindowMain);

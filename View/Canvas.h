@@ -1,7 +1,8 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include <QGLWidget>
+#include "../Domain/Shader.h"
+#include <QtOpenGL/QGLWidget>
 
 class Canvas : public QGLWidget
 {
@@ -14,6 +15,9 @@ public:
         // Set up the rendering context, define display lists etc.:
         glClearColor(0.0, 1.0, 0.0, 1.0);
         glEnable(GL_DEPTH_TEST);
+
+        Shader s(Shader::Type::Fragment, "Domain/main.cpp");
+        std::cout << s.ToString() << std::endl;
     }
 
     void resizeGL(int w, int h)

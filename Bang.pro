@@ -1,12 +1,14 @@
 TEMPLATE = app
 CONFIG += console
-CONFIG -= app_bundle
+CONFIG += app_bundle
 
-QT_VERSION = 5
+QT_VERSION = 4
 
 SOURCES += \
     View/Canvas.cpp \
-    Domain/main.cpp
+    Domain/main.cpp \
+    Domain/Shader.cpp \
+    Domain/Logger.cpp
 
 OBJECTS_DIR = obj/
 
@@ -22,14 +24,17 @@ OTHER_FILES += \
 
 CONFIG += qt
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += --std=c++11
 
 LIBS += -L/usr/lib/*.so \
         -L/usr/lib/qt4 \
-        -L/usr/local/lib
-
+        -L/usr/local/lib \
+        -lGLEW
 
 HEADERS += \
     View/Canvas.h \
-    View/WindowMain.h
+    Domain/Shader.h \
+    Domain/IToString.h \
+    Domain/Idable.h \
+    Domain/Logger.h
 
