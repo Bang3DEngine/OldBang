@@ -15,14 +15,19 @@ public:
     };
 
 private:
+    int meshVerticesPosVBOIndex;
+    const Mesh *mesh;
     VAO *vao;
 
 public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
-    void Render(const ShaderProgram *shaderProgram, const Mesh *mesh,
+    void Render(const ShaderProgram *shaderProgram,
                 MeshRenderer::DrawingMode drawingMode) const;
+
+    void SetMesh(const Mesh *m);
+    const Mesh* GetMesh() { return mesh; }
 };
 
 #endif // MESHRENDERER_H

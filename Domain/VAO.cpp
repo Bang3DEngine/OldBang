@@ -10,7 +10,7 @@ VAO::~VAO()
     glDeleteVertexArrays(1, &idgl);
 }
 
-void VAO::BindVBO(const VBO& vbo,
+int VAO::BindVBO(const VBO *vbo,
                   GLuint dataComponentsCount,
                   GLenum dataType,
                   GLboolean dataNormalized,
@@ -19,19 +19,29 @@ void VAO::BindVBO(const VBO& vbo,
 {
     this->Bind();
 
-    vbo.Bind();
+    vbo->Bind();
 
     glEnableVertexAttribArray(vboCount);
     glVertexAttribPointer(vboCount,
                           dataComponentsCount, dataType,
                           dataNormalized, dataStride, dataOffset);
 
-    vbo.UnBind();
+    vbo->UnBind();
 
     this->UnBind();
 
-    ++vboCount;
+    return vboCount++;
 }
+
+void VAO::UnBindVBO(int index)
+{
+    this->Bind();
+    glDisableVertexAttribArray(index);
+    this->UnBind();
+
+    --vboCount;
+}
+
 
 void VAO::Bind() const
 {

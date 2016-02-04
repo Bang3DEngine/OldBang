@@ -14,12 +14,14 @@ public:
     VAO();
     virtual ~VAO();
 
-    void BindVBO(const VBO& vbo,
-                 GLuint dataComponentsCount,
-                 GLenum dataType            = GL_FLOAT,
-                 GLboolean dataNormalized   = GL_FALSE,
-                 GLsizei dataStride         = 0,
-                 const GLvoid* dataOffset   = (void*)0);
+    int BindVBO(const VBO *vbo,
+                GLuint dataComponentsCount,
+                GLenum dataType            = GL_FLOAT,
+                GLboolean dataNormalized   = GL_FALSE,
+                GLsizei dataStride         = 0,
+                const GLvoid* dataOffset   = (void*)0);
+
+    void UnBindVBO(int index);
 
     void Bind() const override;
     void UnBind() const override;

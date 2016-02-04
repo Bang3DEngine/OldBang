@@ -56,27 +56,23 @@ int main(int argc, char *argv[])
     windowMain.setupUi(widget);
     widget->show();
 
-    VBO vbo;
-    vbo.Fill((void*)&pyramid[0], int(sizeof(pyramid)));
+    Shader *vs = new Shader(Shader::Type::Vertex);
+    Shader *fs = new Shader(Shader::Type::Fragment);
+    vs->LoadFromFile("Domain/Shaders/pass.vert");
+    fs->LoadFromFile("Domain/Shaders/pass.frag");
 
-    VAO vao;
-    vao.BindVBO(vbo, 3);
+    ShaderProgram *sp = new ShaderProgram();
+    sp->BindVertexShader(vs);
+    sp->BindFragmentShader(fs);
+    sp->Link();
 
-    Shader vs(Shader::Type::Vertex);
-    Shader fs(Shader::Type::Fragment);
-    vs.LoadFromFile("Domain/Shaders/pass.vert");
-    fs.LoadFromFile("Domain/Shaders/pass.frag");
+    Mesh *m = new Mesh();
+    m->Load(pyramid);
 
-    ShaderProgram sp;
-    sp.BindVertexShader(&vs);
-    sp.BindFragmentShader(&fs);
-    sp.Link();
+    MeshRenderer *mr = new MeshRenderer();
+    mr->SetMesh(m);
 
-    Mesh m;
-    m.Load(pyramid);
-
-    MeshRenderer mr;
-    windowMain.canvas->Draw(&mr, &sp, &m);
+    windowMain.canvas->Draw(mr, sp);
 
     return app.exec();
 }

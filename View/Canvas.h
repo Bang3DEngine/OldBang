@@ -20,12 +20,9 @@ private:
     public:
         const MeshRenderer *renderer;
         const ShaderProgram *shaderProgram;
-        const Mesh *mesh;
         DrawRequest(const MeshRenderer *r,
-                    const ShaderProgram *sp,
-                    const Mesh *m) : renderer(r),
-                                     shaderProgram(sp),
-                                     mesh(m)
+                    const ShaderProgram *sp) : renderer(r),
+                                     shaderProgram(sp)
         {
         }
     };
@@ -41,8 +38,7 @@ public:
     void paintGL();
 
     void Draw(const MeshRenderer *renderer,
-              const ShaderProgram *shaderProgram,
-              const Mesh *mesh) const;
+              const ShaderProgram *shaderProgram) const;
 
 signals:
 

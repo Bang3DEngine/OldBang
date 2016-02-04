@@ -9,6 +9,7 @@
 
 class Mesh
 {
+friend class MeshRenderer;
 
 private:
     VBO *verticesPosVBO;
