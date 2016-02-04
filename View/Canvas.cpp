@@ -13,8 +13,7 @@ void Canvas::initializeGL()
     glClearColor(0.0, 1.0, 0.0, 1.0);
     glEnable(GL_DEPTH_TEST);
 
-    Shader s(Shader::Type::Fragment, "Domain/main.cpp");
-    std::cout << s.ToString() << std::endl;
+    //Shader s(Shader::Type::Fragment, "Domain/main.cpp");
 }
 
 void Canvas::resizeGL(int w, int h)
@@ -24,5 +23,5 @@ void Canvas::resizeGL(int w, int h)
 
 void Canvas::paintGL()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_TEST | GL_COLOR_BUFFER_BIT);
 }

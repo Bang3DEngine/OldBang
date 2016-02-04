@@ -4,10 +4,41 @@
 #include "View/Canvas.h"
 #include "Domain/Shader.h"
 
+#include "Domain/glm/glm.hpp"
+
+#include "VAO.h"
+
 class WindowMain: public Ui_WindowMain
 { public: WindowMain() : Ui_WindowMain() {} };
 
 WindowMain windowMain;
+
+glm::vec3 pyramid[] =
+{
+    glm::vec3(0.0f,  0.5f,  0.0f),
+    glm::vec3(0.5f, -0.5f,  0.5f),
+    glm::vec3(0.5f, -0.5f, -0.5f),
+
+    glm::vec3( 0.0f,  0.5f,  0.0f),
+    glm::vec3(-0.5f, -0.5f, -0.5f),
+    glm::vec3(-0.5f, -0.5f,  0.5f),
+
+    glm::vec3( 0.0f,  0.5f, 0.0f),
+    glm::vec3(-0.5f, -0.5f, 0.5f),
+    glm::vec3( 0.5f, -0.5f, 0.5f),
+
+    glm::vec3( 0.0f,  0.5f,  0.0f),
+    glm::vec3( 0.5f, -0.5f, -0.5f),
+    glm::vec3(-0.5f, -0.5f, -0.5f),
+
+    glm::vec3(-0.5f, -0.5f, -0.5f),
+    glm::vec3( 0.5f, -0.5f, -0.5f),
+    glm::vec3( 0.5f, -0.5f,  0.5f),
+
+    glm::vec3(-0.5f, -0.5f, -0.5f),
+    glm::vec3( 0.5f, -0.5f,  0.5f),
+    glm::vec3(-0.5f, -0.5f,  0.5f)
+};
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +47,17 @@ int main(int argc, char *argv[])
     QWidget *widget = new QWidget;
     windowMain.setupUi(widget);
     widget->show();
+
+    VBO vbo;
+    vbo.Fill(pyramid, sizeof(pyramid));
+
+    VAO vao;
+    vao.BindVBO(vbo, 3);
+
+    Shader vs(Shader::Type::Vertex);
+    Shader fs(Shader::Type::Fragment);
+    vs.LoadFromFile("Domain/Shaders/pass.vert");
+    fs.LoadFromFile("Domain/Shaders/pass.frag");
 
     return app.exec();
 }

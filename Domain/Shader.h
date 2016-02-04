@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 
+#include <vector>
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -12,7 +13,7 @@
 #include "Idable.h"
 #include "IToString.h"
 
-class Shader : public IToString, public Idable
+class Shader : public IToString, public GLIdable
 {
 public:
 
@@ -27,12 +28,12 @@ private:
 
 public:
 
-    Shader(Type t);
-    Shader(Type t, const std::string &filepath);
+    Shader(Shader::Type t);
 
     bool LoadFromFile(const std::string &filepath);
 
-    Type GetType() { return type; }
+    Type GetType() const { return type; }
+    const std::string GetSourceCode() const { return sourceCode; }
     const std::string ToString() const;
 
 };

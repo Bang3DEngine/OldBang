@@ -1,24 +1,17 @@
 #include "Shader.h"
 
-Shader::Shader(Type t) : type(t)
+Shader::Shader(Shader::Type t) : type(t)
 {
-}
-
-Shader::Shader(Shader::Type t, const std::string &filepath) : Shader(t)
-{
-    LoadFromFile(filepath);
 }
 
 bool Shader::LoadFromFile(const std::string& filepath)
 {
     std::ifstream f;
-    try
-    {
-        f.open(filepath);
-    }
-    catch(std::ios_base::failure &e)
+    f.open(filepath);
+    if(not f.is_open())
     {
         Logger::Error("Error opening file '" + filepath + "'");
+        return false;
     }
 
     std::stringstream ss;
@@ -26,22 +19,27 @@ bool Shader::LoadFromFile(const std::string& filepath)
     sourceCode = ss.str();
 
 
-    std::cout << sourceCode << std::endl;
-    id = glCreateShader(GL_VERTEX_SHADER);
-    std::cout << "vcbb" << std::endl;
+    idgl = glCreateShader(type);
 
-    GLchar *source = (GLchar*)(sourceCode.c_str());
+    const GLchar *source = (const GLchar*)(sourceCode.c_str());
     GLint size = sourceCode.length();
-    glShaderSource(id, 1, &source, &size);
-    glCompileShader(id);
+    glShaderSource(idgl, 1, &source, &size);
+    glCompileShader(idgl);
 
     GLint ok;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &ok);
+    glGetShaderiv(idgl, GL_COMPILE_STATUS, &ok);
     if (not ok)
     {
-        Logger::Error("Failed to compile shader: '" + filepath + "'");
-        glDeleteShader(id);
-        return 0;
+        GLint maxLength = 0;
+        glGetShaderiv(idgl, GL_INFO_LOG_LENGTH, &maxLength);
+
+        std::vector<GLchar> v(maxLength);
+        glGetShaderInfoLog(idgl, maxLength, &maxLength, &v[0]);
+
+        std::string errorStr(v.begin(), v.end());
+        Logger::Error("Failed to compile shader: '" + filepath + "': " + errorStr);
+        glDeleteShader(idgl);
+        return false;
     }
 
     return true;

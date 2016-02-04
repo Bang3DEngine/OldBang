@@ -1,14 +1,14 @@
-#ifndef IDABLE_H
-#define IDABLE_H
+#ifndef GLIDABLE_H
+#define GLIDABLE_H
 
-class Idable
+class GLIdable
 {
 protected:
-    Idable() {}
-    GLuint id;
+    GLIdable() {}
+    GLuint idgl;
 
 public:
-    GLuint GetId() { return id; }
+    GLuint GetGLId() { return idgl; }
 };
 
-#endif // IDABLE_H
+#endif // GLIDABLE_H

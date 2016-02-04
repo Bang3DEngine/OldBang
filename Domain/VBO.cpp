@@ -2,12 +2,12 @@
 
 VBO::VBO() : lastBoundVBOId(-1)
 {
-    glGenBuffers(1, &id);
+    glGenBuffers(1, &idgl);
 }
 
 VBO::~VBO()
 {
-    glDeleteBuffers(1, &id);
+    glDeleteBuffers(1, &idgl);
 }
 
 void VBO::Fill(void *data, int dataSize, GLenum usage)
@@ -20,7 +20,7 @@ void VBO::Fill(void *data, int dataSize, GLenum usage)
 void VBO::Bind() const
 {
     if(lastBoundVBOId == -1) glGetIntegerv(GL_ARRAY_BUFFER, &lastBoundVBOId);
-    glBindBuffer(GL_ARRAY_BUFFER, id);
+    glBindBuffer(GL_ARRAY_BUFFER, idgl);
 }
 
 void VBO::UnBind() const

@@ -6,7 +6,7 @@
 #include "VBO.h"
 #include "Idable.h"
 
-class VAO : public Idable
+class VAO : public GLIdable
 {
 private:
     mutable GLint lastBoundVAOId;

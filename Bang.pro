@@ -32,8 +32,8 @@ HEADERS += \
     View/Canvas.h \
     Domain/Shader.h \
     Domain/IToString.h \
-    Domain/Idable.h \
     Domain/Logger.h \
     Domain/VBO.h \
-    Domain/VAO.h
+    Domain/VAO.h \
+    Domain/Idable.h
 

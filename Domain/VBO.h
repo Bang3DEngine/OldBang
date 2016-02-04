@@ -5,7 +5,7 @@
 
 #include "Idable.h"
 
-class VBO : public Idable
+class VBO : public GLIdable
 {
 private:
     mutable GLint lastBoundVBOId;

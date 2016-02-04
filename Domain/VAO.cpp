@@ -2,12 +2,12 @@
 
 VAO::VAO() : lastBoundVAOId(0), vboCount(0)
 {
-    glGenVertexArrays(1, &id);
+    glGenVertexArrays(1, &idgl);
 }
 
 VAO::~VAO()
 {
-    glDeleteVertexArrays(1, &id);
+    glDeleteVertexArrays(1, &idgl);
 }
 
 void VAO::BindVBO(const VBO& vbo,
@@ -36,7 +36,7 @@ void VAO::BindVBO(const VBO& vbo,
 void VAO::Bind() const
 {
     if(lastBoundVAOId == -1) glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &lastBoundVAOId);
-    glBindVertexArray(id);
+    glBindVertexArray(idgl);
 }
 
 void VAO::UnBind() const
