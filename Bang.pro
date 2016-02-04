@@ -54,7 +54,8 @@ HEADERS += \
     include/Domain/ShaderContract.h \
     include/Domain/Entity.h \
     include/Domain/Part.h \
-    include/Domain/Stage.h
+    include/Domain/Stage.h \
+    include/Domain/IStageEventListener.h
 
 SOURCES += \
     src/Domain/Logger.cpp \

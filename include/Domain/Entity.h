@@ -5,17 +5,25 @@
 #include <string>
 
 #include "Part.h"
+#include "IStageEventListener.h"
 
-class Entity
+class Entity : public IStageEventListener
 {
-friend class Scene;
+friend class Stage;
 
 private:
     std::string name;
     std::list<Part*> parts;
+    std::list<Entity*> children;
+    Entity* parent;
+
+    virtual void _OnStart() override;
+    virtual void _OnUpdate() override;
+    virtual void _OnDestroy() override;
 
 public:
     Entity();
+    virtual ~Entity();
 
     template <class T>
     T* AddPart()
@@ -51,7 +59,14 @@ public:
         }
     }
 
+    //Entity* AddChild(c);
+    //void GetChild(const std::string &name);
+    //void RemoveChild(const std::string &name);
+    //void SetParent(const std::string &name);
+
+    const std::string GetName() const { return name; }
     const std::list<Part*>* GetParts() const { return &parts; }
+    const std::list<Entity*>* GetChildren() const { return &children; }
 };
 
 #endif // ENTITY_H

@@ -12,7 +12,7 @@ class Stage
 friend class Canvas;
 
 private:
-    std::list<Entity> entities;
+    std::list<Entity*> entities;
 
     void OnStart();
     void OnUpdate();
@@ -20,11 +20,12 @@ private:
 
 public:
     Stage();
+    virtual ~Stage();
 
     Entity* AddEntity();
     Entity* GetEntity(const std::string &name) const;
 
-    const std::list<Entity>* GetEntities() const { return &entities; }
+    const std::list<Entity*>* GetEntities() const { return &entities; }
 };
 
 #endif // STAGE_H
