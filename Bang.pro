@@ -59,4 +59,5 @@ SOURCES += \
     src/Domain/VAO.cpp \
     src/Domain/VBO.cpp \
     src/View/Canvas.cpp \
-    src/Domain/Transform.cpp
+    src/Domain/Transform.cpp \
+    src/Domain/ShaderContract.cpp

@@ -19,13 +19,10 @@ void VBO::Fill(void *data, int dataSize, GLenum usage)
 
 void VBO::Bind() const
 {
-    if(lastBoundId == -1) glGetIntegerv(GL_ARRAY_BUFFER, &lastBoundId);
+    PreBind(GL_ARRAY_BUFFER);
     glBindBuffer(GL_ARRAY_BUFFER, idgl);
 }
-
 void VBO::UnBind() const
 {
-    //needed if, if UnBind called multiple times
-    if(lastBoundId != -1) glBindBuffer(GL_ARRAY_BUFFER, lastBoundId);
-    lastBoundId = -1;
+    glBindBuffer(GL_ARRAY_BUFFER, PreUnBind());
 }

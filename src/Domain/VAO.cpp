@@ -45,13 +45,11 @@ void VAO::UnBindVBO(int index)
 
 void VAO::Bind() const
 {
-    if(lastBoundId == -1) glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &lastBoundId);
+    PreBind(GL_VERTEX_ARRAY_BINDING);
     glBindVertexArray(idgl);
 }
 
 void VAO::UnBind() const
 {
-    //needed if, if UnBind called multiple times
-    if(lastBoundId != -1) glBindVertexArray(lastBoundId);
-    lastBoundId = -1;
+    glBindVertexArray(PreUnBind());
 }

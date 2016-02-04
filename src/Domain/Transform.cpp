@@ -1,6 +1,8 @@
 #include "Transform.h"
 
-Transform::Transform()
+Transform::Transform() : position(glm::vec3(0.0f)),
+                         rotation(glm::quat()),
+                         scale(glm::vec3(1.0f))
 {
 }
 

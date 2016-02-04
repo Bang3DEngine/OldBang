@@ -2,5 +2,5 @@
 
 ./updateUI.sh
 qmake
-make clean
+#make clean
 make && ./Bang

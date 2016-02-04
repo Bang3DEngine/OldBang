@@ -54,15 +54,16 @@ void MeshRenderer::Render(const Transform *t,
         }
     }
 
-
     vao->Bind();
     material->shaderProgram->Bind();
 
+    glm::mat4 matTransform; t->GetMatrix(matTransform);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
-                                            t->GetMatrix());
+                                            matTransform);
+
 
     glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
 
-    material->GetShaderProgram()->UnBind();
+    material->shaderProgram->UnBind();
     vao->UnBind();
 }

@@ -62,8 +62,8 @@ int main(int argc, char *argv[])
 
     Shader *vs = new Shader(Shader::Type::Vertex);
     Shader *fs = new Shader(Shader::Type::Fragment);
-    vs->LoadFromFile("res/Shaders/pass.vert");
-    fs->LoadFromFile("res/Shaders/pass.frag");
+    vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_Model);
+    fs->LoadFromFile(ShaderContract::Filepath_Shader_Fragment_Pass);
 
     ShaderProgram *sp = new ShaderProgram();
     sp->BindVertexShader(vs);
@@ -78,7 +78,9 @@ int main(int argc, char *argv[])
     mr->SetMaterial(mat);
 
     Transform t;
-    t.position = glm::vec3(0.0f, 0.3f, 0.0f);
+    t.position = glm::vec3(0.0f, 0.0f, 0.0f);
+    t.rotation = glm::quat();
+    t.scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
     windowMain.canvas->Draw(mr, &t);
 

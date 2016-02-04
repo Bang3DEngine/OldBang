@@ -1,11 +1,13 @@
 #version 130
 
-in vec3 vertexPos_in;
+uniform mat4 BANG_matrix_model;
 
-out vec3 vertexPos_out;
+in vec3 BANG_position_vin;
+
+out vec4 BANG_position_vout_fin;
 
 void main()
 {
-    vertexPos_out = vertexPos_in;
-    gl_Position = vec4(vertexPos_out, 1.0);
+    vec4 tVertex = BANG_matrix_model * vec4(BANG_position_vin, 1.0);
+    gl_Position = tVertex;
 }

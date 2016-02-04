@@ -1,11 +1,12 @@
 #version 130
 
-in vec3 vertexPos_vin;
+in vec3 BANG_position_vin;
 
-out vec3 vertexPos_vout_fin;
+out vec4 BANG_position_vout_fin;
+
 
 void main()
 {
-    vertexPos_vout_fin = vertexPos_vin;
-    gl_Position = vec4(vertexPos_vout_fin, 1.0);
+    BANG_position_vout_fin = BANG_position_vin;
+    gl_Position = BANG_position_vout_fin;
 }

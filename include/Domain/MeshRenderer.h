@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "ShaderProgram.h"
 #include "ShaderContract.h"
+#include <glm/gtx/string_cast.hpp>
 
 class MeshRenderer
 {
