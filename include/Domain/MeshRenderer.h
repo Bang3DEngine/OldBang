@@ -3,13 +3,14 @@
 
 #include "VAO.h"
 #include "Mesh.h"
+#include "Part.h"
 #include "Material.h"
 #include "Transform.h"
 #include "ShaderProgram.h"
 #include "ShaderContract.h"
 #include <glm/gtx/string_cast.hpp>
 
-class MeshRenderer
+class MeshRenderer : public Part
 {
 public:
     enum DrawingMode

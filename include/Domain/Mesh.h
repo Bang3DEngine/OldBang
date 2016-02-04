@@ -3,11 +3,12 @@
 
 #include "glm/glm.hpp"
 #include <GL/glew.h>
+#include "Part.h"
 #include "VBO.h"
 
 #include <vector>
 
-class Mesh
+class Mesh : public Part
 {
 friend class MeshRenderer;
 
