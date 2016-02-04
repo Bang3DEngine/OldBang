@@ -9,7 +9,9 @@ SOURCES += \
     Domain/Logger.cpp \
     Domain/VBO.cpp \
     Domain/VAO.cpp \
-    Domain/ShaderProgram.cpp
+    Domain/ShaderProgram.cpp \
+    Domain/MeshRenderer.cpp \
+    Domain/Mesh.cpp
 
 OBJECTS_DIR = obj/
 
@@ -38,5 +40,7 @@ HEADERS += \
     Domain/VAO.h \
     Domain/ShaderProgram.h \
     Domain/GLBindable.h \
-    Domain/GLIdable.h
+    Domain/GLIdable.h \
+    Domain/MeshRenderer.h \
+    Domain/Mesh.h
 

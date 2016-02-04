@@ -1,3 +1,5 @@
+#include <vector>
+#include <string>
 #include <iostream>
 #include <QApplication>
 #include "View/WindowMain.h"
@@ -7,7 +9,7 @@
 #include "Domain/glm/glm.hpp"
 
 #include "ShaderProgram.h"
-#include "VAO.h"
+#include "MeshRenderer.h"
 
 class WindowMain: public Ui_WindowMain
 {
@@ -19,7 +21,7 @@ public:
 
 WindowMain windowMain;
 
-glm::vec3 pyramid[] =
+std::vector<glm::vec3> pyramid =
 {
     glm::vec3(0.0f,  0.5f,  0.0f),
     glm::vec3(0.5f, -0.5f,  0.5f),
@@ -55,7 +57,7 @@ int main(int argc, char *argv[])
     widget->show();
 
     VBO vbo;
-    vbo.Fill(pyramid, sizeof(pyramid));
+    vbo.Fill((void*)&pyramid[0], int(sizeof(pyramid)));
 
     VAO vao;
     vao.BindVBO(vbo, 3);
@@ -70,9 +72,11 @@ int main(int argc, char *argv[])
     sp.BindFragmentShader(&fs);
     sp.Link();
 
-    windowMain.canvas->vaosToDraw.push_back(&vao);
-    windowMain.canvas->shaderProgramsToDraw.push_back(&sp);
-    windowMain.canvas->vertexCountsToDraw.push_back(sizeof(pyramid) / (sizeof(float) * 3));
+    Mesh m;
+    m.Load(pyramid);
+
+    MeshRenderer mr;
+    windowMain.canvas->Draw(&mr, &sp, &m);
 
     return app.exec();
 }

@@ -12,7 +12,7 @@ private:
 
 public:
     VAO();
-    ~VAO();
+    virtual ~VAO();
 
     void BindVBO(const VBO& vbo,
                  GLuint dataComponentsCount,

@@ -12,7 +12,7 @@ private:
 
 public:
     ShaderProgram();
-    ~ShaderProgram();
+    virtual ~ShaderProgram();
 
     void BindVertexShader(Shader *vshader);
     void BindFragmentShader(Shader *fshader);

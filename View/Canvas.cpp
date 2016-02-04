@@ -23,18 +23,21 @@ void Canvas::paintGL()
     glClearColor(0.0, 1.0, 0.0, 1.0);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    for(unsigned int i = 0; i < vaosToDraw.size(); ++i)
-    {
-        VAO *vao = vaosToDraw[i];
-        ShaderProgram *program = shaderProgramsToDraw[i];
-        int vertexCount = vertexCountsToDraw[i];
 
-        vao->Bind();
-        program->Bind();
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-        program->UnBind();
-        vao->UnBind();
+    for(DrawRequest dr : drawRequests)
+    {
+        dr.renderer->Render(dr.shaderProgram,
+                            dr.mesh,
+                            MeshRenderer::DrawingMode::Triangles);
     }
+    //drawRequests.clear();
 
     QGLWidget::swapBuffers();
+}
+
+void Canvas::Draw(const MeshRenderer *renderer,
+                  const ShaderProgram *shaderProgram,
+                  const Mesh *mesh) const
+{
+    drawRequests.push_back(DrawRequest(renderer, shaderProgram, mesh));
 }

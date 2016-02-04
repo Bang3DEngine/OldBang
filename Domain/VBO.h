@@ -10,7 +10,7 @@ class VBO : public GLIdable, public GLBindable
 {
 public:
     VBO();
-    ~VBO();
+    virtual ~VBO();
 
     void Fill(void *data, int dataSize, GLenum usage = GL_STATIC_DRAW);
 
