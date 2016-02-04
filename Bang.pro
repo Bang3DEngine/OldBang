@@ -53,7 +53,8 @@ HEADERS += \
     include/Domain/Transform.h \
     include/Domain/ShaderContract.h \
     include/Domain/Entity.h \
-    include/Domain/Part.h
+    include/Domain/Part.h \
+    include/Domain/Stage.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -69,4 +70,5 @@ SOURCES += \
     src/Domain/Transform.cpp \
     src/Domain/ShaderContract.cpp \
     src/Domain/Entity.cpp \
-    src/Domain/Part.cpp
+    src/Domain/Part.cpp \
+    src/Domain/Stage.cpp

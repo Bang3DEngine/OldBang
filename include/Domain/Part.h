@@ -3,6 +3,8 @@
 
 class Part
 {
+friend class Entity;
+
 protected:
     Part();
 };

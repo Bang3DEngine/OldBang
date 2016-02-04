@@ -1,12 +1,17 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "Part.h"
 #include <list>
+#include <string>
+
+#include "Part.h"
 
 class Entity
 {
+friend class Scene;
+
 private:
+    std::string name;
     std::list<Part*> parts;
 
 public:
@@ -21,7 +26,7 @@ public:
     }
 
     template <class T>
-    T* GetPart()
+    T* GetPart() const
     {
         for(auto part = parts.begin(); part != parts.end(); ++part)
         {
@@ -46,7 +51,7 @@ public:
         }
     }
 
-    const std::list<Part*>* GetParts() { return &parts; }
+    const std::list<Part*>* GetParts() const { return &parts; }
 };
 
 #endif // ENTITY_H
