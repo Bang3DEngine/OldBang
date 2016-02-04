@@ -1,10 +1,10 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "../Domain/VAO.h"
-#include "../Domain/Shader.h"
-#include "../Domain/ShaderProgram.h"
-#include "../Domain/MeshRenderer.h"
+#include "VAO.h"
+#include "Shader.h"
+#include "ShaderProgram.h"
+#include "MeshRenderer.h"
 
 #include <vector>
 #include <string>
@@ -15,6 +15,7 @@ class Canvas : public QGLWidget
     Q_OBJECT
 
 private:
+
     class DrawRequest
     {
     public:
@@ -27,6 +28,7 @@ private:
     mutable std::vector<DrawRequest> drawRequests;
 
 public:
+    glm::vec4 clearColor;
 
     explicit Canvas(QWidget *parent = 0);
 

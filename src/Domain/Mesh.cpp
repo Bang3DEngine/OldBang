@@ -1,19 +1,26 @@
 #include "Mesh.h"
 
-Mesh::Mesh() : verticesPosVBO(nullptr)
+Mesh::Mesh() : vertexPositionsVBO(nullptr), vertexNormalsVBO(nullptr)
 {
 }
 
 Mesh::~Mesh()
 {
-    if(verticesPosVBO != nullptr) delete verticesPosVBO;
+    if(vertexPositionsVBO != nullptr) delete vertexPositionsVBO;
+    if(vertexNormalsVBO != nullptr)   delete vertexNormalsVBO;
 }
 
-void Mesh::Load(const std::vector<glm::vec3>& vertices)
+void Mesh::LoadVertices(const std::vector<glm::vec3>& vertices)
 {
-    verticesPosVBO = new VBO();
-    verticesPosVBO->Fill((void*)(&vertices[0]), vertices.size() * sizeof(float) * 3);
+    vertexPositionsVBO = new VBO();
+    vertexPositionsVBO->Fill((void*)(&vertices[0]), vertices.size() * sizeof(float) * 3);
     vertexCount = vertices.size();
+}
+
+void Mesh::LoadNormals(const std::vector<glm::vec3> &normals)
+{
+    vertexNormalsVBO = new VBO();
+    vertexNormalsVBO->Fill((void*)(&normals[0]), normals.size() * sizeof(float) * 3);
 }
 
 int Mesh::GetVertexCount() const

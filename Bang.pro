@@ -25,9 +25,14 @@ OTHER_FILES += \
     .gitignore \
     run.sh \
     updateUI.sh \
-    res/Shaders/pass.frag \
     res/Shaders/pass.vert \
-    res/Shaders/model.vert
+    res/Shaders/model.vert \
+    res/Shaders/pass_pos_normal.frag \
+    res/Shaders/pass_pos.frag \
+    res/Shaders/pass_pos_normal.vert \
+    res/Shaders/pass_pos.vert \
+    res/Shaders/model_pos_normal.vert \
+    res/Shaders/model_pos.vert
 
 
 

@@ -12,14 +12,16 @@ class Mesh
 friend class MeshRenderer;
 
 private:
-    VBO *verticesPosVBO;
+    VBO *vertexPositionsVBO;
+    VBO *vertexNormalsVBO;
     int vertexCount;
 
 public:
     Mesh();
     virtual ~Mesh();
 
-    void Load(const std::vector<glm::vec3>& vertices);
+    void LoadVertices(const std::vector<glm::vec3>& vertices);
+    void LoadNormals(const std::vector<glm::vec3>& normals);
 
     int GetVertexCount() const;
 };

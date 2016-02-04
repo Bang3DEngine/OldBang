@@ -24,30 +24,70 @@ WindowMain windowMain;
 
 std::vector<glm::vec3> pyramid =
 {
+    //RIGHT
     glm::vec3(0.0f,  0.5f,  0.0f),
     glm::vec3(0.5f, -0.5f,  0.5f),
     glm::vec3(0.5f, -0.5f, -0.5f),
 
+    //LEFT
     glm::vec3( 0.0f,  0.5f,  0.0f),
     glm::vec3(-0.5f, -0.5f, -0.5f),
     glm::vec3(-0.5f, -0.5f,  0.5f),
 
+    //FRONT
     glm::vec3( 0.0f,  0.5f, 0.0f),
     glm::vec3(-0.5f, -0.5f, 0.5f),
     glm::vec3( 0.5f, -0.5f, 0.5f),
 
+    //BACK
     glm::vec3( 0.0f,  0.5f,  0.0f),
     glm::vec3( 0.5f, -0.5f, -0.5f),
     glm::vec3(-0.5f, -0.5f, -0.5f),
 
+    //BOTTOM FRONT
     glm::vec3(-0.5f, -0.5f, -0.5f),
     glm::vec3( 0.5f, -0.5f, -0.5f),
     glm::vec3( 0.5f, -0.5f,  0.5f),
 
+    //BOTTOM BACK
     glm::vec3(-0.5f, -0.5f, -0.5f),
     glm::vec3( 0.5f, -0.5f,  0.5f),
     glm::vec3(-0.5f, -0.5f,  0.5f)
 };
+
+std::vector<glm::vec3> normals =
+{
+    //RIGHT
+    glm::vec3(1.0f,  0.0f,  0.0f),
+    glm::vec3(1.0f,  0.0f,  0.0f),
+    glm::vec3(1.0f,  0.0f,  0.0f),
+
+    //LEFT
+    glm::vec3(-1.0f,  0.0f,  0.0f),
+    glm::vec3(-1.0f,  0.0f,  0.0f),
+    glm::vec3(-1.0f,  0.0f,  0.0f),
+
+    //FRONT
+    glm::vec3(0.0f,  0.0f, -1.0f),
+    glm::vec3(0.0f,  0.0f, -1.0f),
+    glm::vec3(0.0f,  0.0f, -1.0f),
+
+    //BACK
+    glm::vec3(0.0f,  0.0f,  1.0f),
+    glm::vec3(0.0f,  0.0f,  1.0f),
+    glm::vec3(0.0f,  0.0f,  1.0f),
+
+    //BOTTOM FRONT
+    glm::vec3(0.0f, -1.0f, 0.0f),
+    glm::vec3(0.0f, -1.0f, 0.0f),
+    glm::vec3(0.0f, -1.0f, 0.0f),
+
+    //BOTTOM BACK
+    glm::vec3(0.0f, -1.0f, 0.0f),
+    glm::vec3(0.0f, -1.0f, 0.0f),
+    glm::vec3(0.0f, -1.0f, 0.0f)
+};
+
 
 int main(int argc, char *argv[])
 {
@@ -58,12 +98,13 @@ int main(int argc, char *argv[])
     widget->show();
 
     Mesh *m = new Mesh();
-    m->Load(pyramid);
+    m->LoadVertices(pyramid);
+    m->LoadNormals(normals);
 
     Shader *vs = new Shader(Shader::Type::Vertex);
     Shader *fs = new Shader(Shader::Type::Fragment);
-    vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_Model);
-    fs->LoadFromFile(ShaderContract::Filepath_Shader_Fragment_Pass);
+    vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_Model_Position_Normal);
+    fs->LoadFromFile(ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal);
 
     ShaderProgram *sp = new ShaderProgram();
     sp->BindVertexShader(vs);
@@ -79,8 +120,8 @@ int main(int argc, char *argv[])
 
     Transform t;
     t.position = glm::vec3(0.0f, 0.0f, 0.0f);
-    t.rotation = glm::quat();
-    t.scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    t.rotation = glm::angleAxis(60.0f, glm::vec3(0.0f, 1.0f, 0.7f));
+    t.scale = glm::vec3(0.3f);
 
     windowMain.canvas->Draw(mr, &t);
 

@@ -14,19 +14,29 @@ private:
 public:
     const static std::string \
         ShaderNames_Prefix,
-        Vertex_In_Position,
-        Vertex_Out_Position,
-        Fragment_In_Vertex_Position_Raw,
-        Fragment_In_Vertex_Position_Model,
-        Fragment_In_Vertex_Position_View,
-        Fragment_In_Vertex_Position_Projection,
+
+        Vertex_In_Position_Raw,
+        Vertex_In_Normal_Raw,
+        Vertex_In_Uv_Raw,
+
+        Vertex_Out_Fragment_In_Vertex_Position_Raw,
+        Vertex_Out_Fragment_In_Vertex_Position_Model,
+        Vertex_Out_Fragment_In_Vertex_Position_View,
+        Vertex_Out_Fragment_In_Vertex_Position_Projection,
+        Vertex_Out_Fragment_In_Vertex_Normal_Raw,
+        Vertex_Out_Fragment_In_Vertex_Uv_Raw,
+
         Uniform_Position_Camera,
         Uniform_Matrix_Model,
         Uniform_Matrix_View,
         Uniform_Matrix_Projection,
-        Filepath_Shader_Vertex_Pass,
-        Filepath_Shader_Fragment_Pass,
-        Filepath_Shader_Vertex_Model
+
+        Filepath_Shader_Vertex_Pass_Position,
+        Filepath_Shader_Vertex_Pass_Position_Normal,
+        Filepath_Shader_Vertex_Model_Position,
+        Filepath_Shader_Vertex_Model_Position_Normal,
+        Filepath_Shader_Fragment_Pass_Position,
+        Filepath_Shader_Fragment_Pass_Position_Normal
     ;
 };
 

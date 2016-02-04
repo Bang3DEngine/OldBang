@@ -3,6 +3,7 @@
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
+    clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void Canvas::initializeGL()
@@ -11,6 +12,7 @@ void Canvas::initializeGL()
     glewInit();
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 }
 
 void Canvas::resizeGL(int w, int h)
@@ -20,7 +22,7 @@ void Canvas::resizeGL(int w, int h)
 
 void Canvas::paintGL()
 {
-    glClearColor(0.0, 1.0, 0.0, 1.0);
+    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     for(DrawRequest dr : drawRequests)

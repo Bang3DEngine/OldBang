@@ -23,7 +23,9 @@ private:
     const Mesh *mesh;
     const Material *material;
 
-    int meshVerticesPosVBOIndex;
+    int meshVertexPositionsVBOIndex,
+        meshVertexNormalsVBOIndex;
+
     VAO *vao;
 
 public:

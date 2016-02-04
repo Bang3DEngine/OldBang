@@ -1,6 +1,6 @@
 #include "MeshRenderer.h"
 
-MeshRenderer::MeshRenderer() : mesh(nullptr), material(nullptr)
+MeshRenderer::MeshRenderer() : mesh(nullptr), material(nullptr), meshVertexPositionsVBOIndex(-1), meshVertexNormalsVBOIndex(-1)
 {
     vao = new VAO();
 }
@@ -14,12 +14,16 @@ void MeshRenderer::SetMesh(const Mesh *m)
 {
     if(m != nullptr)
     {
-        meshVerticesPosVBOIndex = vao->BindVBO(m->verticesPosVBO, 3);
+        meshVertexPositionsVBOIndex = vao->BindVBO(m->vertexPositionsVBO, 3);
+        meshVertexNormalsVBOIndex   = vao->BindVBO(m->vertexNormalsVBO,   3);
     }
-    else if(meshVerticesPosVBOIndex != -1)
+    else if(meshVertexPositionsVBOIndex != -1)
     {
-        vao->UnBindVBO(meshVerticesPosVBOIndex);
-        meshVerticesPosVBOIndex = -1;
+        vao->UnBindVBO(meshVertexPositionsVBOIndex);
+        meshVertexPositionsVBOIndex = -1;
+
+        vao->UnBindVBO(meshVertexNormalsVBOIndex);
+        meshVertexNormalsVBOIndex  = -1;
     }
 
     mesh = m;
