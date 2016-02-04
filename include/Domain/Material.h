@@ -5,6 +5,8 @@
 
 class Material
 {
+friend class MeshRenderer;
+
 private:
     const ShaderProgram *shaderProgram;
 

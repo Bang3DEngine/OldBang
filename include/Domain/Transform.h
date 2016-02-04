@@ -2,7 +2,8 @@
 #define TRANSFORM_H
 
 #include "glm/glm.hpp"
-#include "glm/gtx/quaternion.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 class Transform
 {
@@ -12,6 +13,7 @@ public:
     glm::vec3 scale;
 
     Transform();
+    void GetMatrix(glm::mat4 &m) const;
 };
 
 #endif // TRANSFORM_H

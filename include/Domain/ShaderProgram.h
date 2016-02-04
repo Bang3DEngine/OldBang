@@ -3,6 +3,7 @@
 
 #include "Shader.h"
 #include "GLBindable.h"
+#include "glm/glm.hpp"
 
 class ShaderProgram : public GLIdable, public GLBindable
 {
@@ -21,6 +22,12 @@ public:
 
     void Bind() const override;
     void UnBind() const override;
+
+    void SetUniformFloat(const std::string &name, float v);
+    void SetUniformVec2 (const std::string &name, const glm::vec2& v);
+    void SetUniformVec3 (const std::string &name, const glm::vec3& v);
+    void SetUniformVec4 (const std::string &name, const glm::vec4& v);
+    void SetUniformMat4 (const std::string &name, const glm::mat4& m);
 
     Shader* GetVertexShader() const { return vshader; }
     Shader* GetFragmentShader() const { return fshader; }
