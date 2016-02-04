@@ -6,17 +6,19 @@
 
 #include "Canvas.h"
 #include "Entity.h"
+#include "StageEventListener.h"
 
-class Stage
+class Stage : public StageEventListener
 {
 friend class Canvas;
 
 private:
     std::list<Entity*> entities;
 
-    void OnStart();
-    void OnUpdate();
-    void OnDestroy();
+    void _OnStart() override;
+    void _OnUpdate() override;
+    void _OnDrawing() override;
+    void _OnDestroy() override;
 
 public:
     Stage();

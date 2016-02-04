@@ -15,8 +15,9 @@ Stage::~Stage()
     }
 }
 
-void Stage::OnStart()
+void Stage::_OnStart()
 {
+    OnStart();
     for(auto e = entities.begin(); e != entities.end(); ++e)
     {
         Entity* ent = *e;
@@ -24,8 +25,9 @@ void Stage::OnStart()
     }
 }
 
-void Stage::OnUpdate()
+void Stage::_OnUpdate()
 {
+    OnUpdate();
     for(auto e = entities.begin(); e != entities.end(); ++e)
     {
         Entity* ent = *e;
@@ -33,8 +35,20 @@ void Stage::OnUpdate()
     }
 }
 
-void Stage::OnDestroy()
+void Stage::_OnDrawing()
 {
+    OnDrawing();
+    for(auto e = entities.begin(); e != entities.end(); ++e)
+    {
+        Entity* ent = *e;
+        ent->_OnUpdate();
+    }
+}
+
+
+void Stage::_OnDestroy()
+{
+    OnDestroy();
     for(auto e = entities.begin(); e != entities.end(); ++e)
     {
         Entity* ent = *e;

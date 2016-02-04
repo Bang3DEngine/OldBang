@@ -5,9 +5,9 @@
 #include <string>
 
 #include "Part.h"
-#include "IStageEventListener.h"
+#include "StageEventListener.h"
 
-class Entity : public IStageEventListener
+class Entity : public StageEventListener
 {
 friend class Stage;
 

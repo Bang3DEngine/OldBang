@@ -1,14 +1,13 @@
 #ifndef PART_H
 #define PART_H
 
-#include "IStageEventListener.h"
+#include "StageEventListener.h"
 
-class Part : public IStageEventListener
+class Part : public StageEventListener
 {
 friend class Entity;
 
 private:
-
     virtual void _OnStart() override;
     virtual void _OnUpdate() override;
     virtual void _OnDestroy() override;

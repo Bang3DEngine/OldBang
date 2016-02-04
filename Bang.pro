@@ -55,7 +55,7 @@ HEADERS += \
     include/Domain/Entity.h \
     include/Domain/Part.h \
     include/Domain/Stage.h \
-    include/Domain/IStageEventListener.h
+    include/Domain/StageEventListener.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
