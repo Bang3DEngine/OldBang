@@ -1,6 +1,6 @@
 #include "MeshRenderer.h"
 
-MeshRenderer::MeshRenderer() : mesh(nullptr)
+MeshRenderer::MeshRenderer() : mesh(nullptr), material(nullptr)
 {
     vao = new VAO();
 }
@@ -25,17 +25,40 @@ void MeshRenderer::SetMesh(const Mesh *m)
     mesh = m;
 }
 
-void MeshRenderer::Render(const ShaderProgram *shaderProgram,
-                          MeshRenderer::DrawingMode drawingMode) const
+void MeshRenderer::SetMaterial(const Material *m)
 {
-    if(mesh != nullptr)
+    material = m;
+}
+
+void MeshRenderer::Render(MeshRenderer::DrawingMode drawingMode) const
+{
+    if(mesh == nullptr)
     {
-        vao->Bind();
-        shaderProgram->Bind();
-
-        glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
-
-        shaderProgram->UnBind();
-        vao->UnBind();
+        Logger::Error("This MeshRenderer doesn't have a Mesh. Can't render.");
+        return;
     }
+
+    if(material == nullptr)
+    {
+        Logger::Error("This MeshRenderer doesn't have a Material. Can't render.");
+        return;
+    }
+    else
+    {
+        if(material->GetShaderProgram() == nullptr)
+        {
+            Logger::Error("This MeshRenderer has a Material with a null \
+                          ShaderProgram. Can't render.");
+            return;
+        }
+    }
+
+
+    vao->Bind();
+    material->GetShaderProgram()->Bind();
+
+    glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
+
+    material->GetShaderProgram()->UnBind();
+    vao->UnBind();
 }

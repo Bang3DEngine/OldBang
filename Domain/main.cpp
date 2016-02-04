@@ -56,6 +56,9 @@ int main(int argc, char *argv[])
     windowMain.setupUi(widget);
     widget->show();
 
+    Mesh *m = new Mesh();
+    m->Load(pyramid);
+
     Shader *vs = new Shader(Shader::Type::Vertex);
     Shader *fs = new Shader(Shader::Type::Fragment);
     vs->LoadFromFile("Domain/Shaders/pass.vert");
@@ -66,13 +69,14 @@ int main(int argc, char *argv[])
     sp->BindFragmentShader(fs);
     sp->Link();
 
-    Mesh *m = new Mesh();
-    m->Load(pyramid);
+    Material *mat = new Material();
+    mat->SetShaderProgram(sp);
 
     MeshRenderer *mr = new MeshRenderer();
     mr->SetMesh(m);
+    mr->SetMaterial(mat);
 
-    windowMain.canvas->Draw(mr, sp);
+    windowMain.canvas->Draw(mr);
 
     return app.exec();
 }

@@ -25,16 +25,14 @@ void Canvas::paintGL()
 
     for(DrawRequest dr : drawRequests)
     {
-        dr.renderer->Render(dr.shaderProgram,
-                            MeshRenderer::DrawingMode::Triangles);
+        dr.renderer->Render(MeshRenderer::DrawingMode::Triangles);
     }
     //drawRequests.clear();
 
     QGLWidget::swapBuffers();
 }
 
-void Canvas::Draw(const MeshRenderer *renderer,
-                  const ShaderProgram *shaderProgram) const
+void Canvas::Draw(const MeshRenderer *renderer) const
 {
-    drawRequests.push_back(DrawRequest(renderer, shaderProgram));
+    drawRequests.push_back(DrawRequest(renderer));
 }

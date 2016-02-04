@@ -19,12 +19,7 @@ private:
     {
     public:
         const MeshRenderer *renderer;
-        const ShaderProgram *shaderProgram;
-        DrawRequest(const MeshRenderer *r,
-                    const ShaderProgram *sp) : renderer(r),
-                                     shaderProgram(sp)
-        {
-        }
+        DrawRequest(const MeshRenderer *r) : renderer(r) { }
     };
 
     mutable std::vector<DrawRequest> drawRequests;
@@ -37,8 +32,7 @@ public:
     void resizeGL(int w, int h);
     void paintGL();
 
-    void Draw(const MeshRenderer *renderer,
-              const ShaderProgram *shaderProgram) const;
+    void Draw(const MeshRenderer *renderer) const;
 
 signals:
 

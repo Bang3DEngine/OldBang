@@ -3,6 +3,7 @@
 
 #include "VAO.h"
 #include "Mesh.h"
+#include "Material.h"
 #include "ShaderProgram.h"
 
 class MeshRenderer
@@ -15,19 +16,24 @@ public:
     };
 
 private:
-    int meshVerticesPosVBOIndex;
+
     const Mesh *mesh;
+    const Material *material;
+
+    int meshVerticesPosVBOIndex;
     VAO *vao;
 
 public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
-    void Render(const ShaderProgram *shaderProgram,
-                MeshRenderer::DrawingMode drawingMode) const;
+    void Render(MeshRenderer::DrawingMode drawingMode) const;
 
     void SetMesh(const Mesh *m);
     const Mesh* GetMesh() { return mesh; }
+
+    void SetMaterial(const Material *m);
+    const Material* GetMaterial() { return material; }
 };
 
 #endif // MESHRENDERER_H

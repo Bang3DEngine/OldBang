@@ -11,7 +11,8 @@ SOURCES += \
     Domain/VAO.cpp \
     Domain/ShaderProgram.cpp \
     Domain/MeshRenderer.cpp \
-    Domain/Mesh.cpp
+    Domain/Mesh.cpp \
+    Domain/Material.cpp
 
 OBJECTS_DIR = obj/
 
@@ -42,5 +43,6 @@ HEADERS += \
     Domain/GLBindable.h \
     Domain/GLIdable.h \
     Domain/MeshRenderer.h \
-    Domain/Mesh.h
+    Domain/Mesh.h \
+    Domain/Material.h
 
