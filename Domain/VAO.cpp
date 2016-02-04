@@ -1,6 +1,6 @@
 #include "VAO.h"
 
-VAO::VAO() : lastBoundVAOId(0), vboCount(0)
+VAO::VAO() : vboCount(0)
 {
     glGenVertexArrays(1, &idgl);
 }
@@ -35,12 +35,13 @@ void VAO::BindVBO(const VBO& vbo,
 
 void VAO::Bind() const
 {
-    if(lastBoundVAOId == -1) glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &lastBoundVAOId);
+    if(lastBoundId == -1) glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &lastBoundId);
     glBindVertexArray(idgl);
 }
 
 void VAO::UnBind() const
 {
-    if(lastBoundVAOId != -1) glBindVertexArray(lastBoundVAOId);
-    lastBoundVAOId = -1;
+    //needed if, if UnBind called multiple times
+    if(lastBoundId != -1) glBindVertexArray(lastBoundId);
+    lastBoundId = -1;
 }

@@ -64,4 +64,17 @@ bool ShaderProgram::Link()
     return true;
 }
 
+void ShaderProgram::Bind() const
+{
+    if(lastBoundId == -1) glGetIntegerv(GL_CURRENT_PROGRAM, &lastBoundId);
+    glUseProgram(idgl);
+}
+
+void ShaderProgram::UnBind() const
+{
+    //needed if, if UnBind called multiple times
+    if(lastBoundId != -1) glUseProgram(lastBoundId);
+    lastBoundId = -1;
+}
+
 

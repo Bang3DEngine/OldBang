@@ -10,7 +10,12 @@
 #include "VAO.h"
 
 class WindowMain: public Ui_WindowMain
-{ public: WindowMain() : Ui_WindowMain() {} };
+{
+public:
+    WindowMain() : Ui_WindowMain()
+    {
+    }
+};
 
 WindowMain windowMain;
 
@@ -63,8 +68,11 @@ int main(int argc, char *argv[])
     ShaderProgram sp;
     sp.BindVertexShader(&vs);
     sp.BindFragmentShader(&fs);
+    sp.Link();
 
-    //glDrawArrays(GL_TRIANGLES, 0, sizeof(pyramid) / (sizeof(float) * 3));
+    windowMain.canvas->vaosToDraw.push_back(&vao);
+    windowMain.canvas->shaderProgramsToDraw.push_back(&sp);
+    windowMain.canvas->vertexCountsToDraw.push_back(sizeof(pyramid) / (sizeof(float) * 3));
 
     return app.exec();
 }

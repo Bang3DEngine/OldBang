@@ -23,6 +23,18 @@ void Canvas::paintGL()
     glClearColor(0.0, 1.0, 0.0, 1.0);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    Logger::Log("kasdjdsa");
-    swapBuffers();
+    for(unsigned int i = 0; i < vaosToDraw.size(); ++i)
+    {
+        VAO *vao = vaosToDraw[i];
+        ShaderProgram *program = shaderProgramsToDraw[i];
+        int vertexCount = vertexCountsToDraw[i];
+
+        vao->Bind();
+        program->Bind();
+        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+        program->UnBind();
+        vao->UnBind();
+    }
+
+    QGLWidget::swapBuffers();
 }

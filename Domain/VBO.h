@@ -3,21 +3,19 @@
 
 #include <GL/glew.h>
 
-#include "Idable.h"
+#include "GLIdable.h"
+#include "GLBindable.h"
 
-class VBO : public GLIdable
+class VBO : public GLIdable, public GLBindable
 {
-private:
-    mutable GLint lastBoundVBOId;
-
 public:
     VBO();
     ~VBO();
 
     void Fill(void *data, int dataSize, GLenum usage = GL_STATIC_DRAW);
 
-    void Bind() const;
-    void UnBind() const;
+    void Bind() const override;
+    void UnBind() const override;
 };
 
 #endif // VBO_H

@@ -1,6 +1,6 @@
 #include "VBO.h"
 
-VBO::VBO() : lastBoundVBOId(-1)
+VBO::VBO()
 {
     glGenBuffers(1, &idgl);
 }
@@ -19,12 +19,13 @@ void VBO::Fill(void *data, int dataSize, GLenum usage)
 
 void VBO::Bind() const
 {
-    if(lastBoundVBOId == -1) glGetIntegerv(GL_ARRAY_BUFFER, &lastBoundVBOId);
+    if(lastBoundId == -1) glGetIntegerv(GL_ARRAY_BUFFER, &lastBoundId);
     glBindBuffer(GL_ARRAY_BUFFER, idgl);
 }
 
 void VBO::UnBind() const
 {
-    if(lastBoundVBOId != -1) glBindBuffer(GL_ARRAY_BUFFER, lastBoundVBOId);
-    lastBoundVBOId = -1;
+    //needed if, if UnBind called multiple times
+    if(lastBoundId != -1) glBindBuffer(GL_ARRAY_BUFFER, lastBoundId);
+    lastBoundId = -1;
 }

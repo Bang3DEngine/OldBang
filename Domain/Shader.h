@@ -10,7 +10,7 @@
 #include <iostream>
 
 #include "Logger.h"
-#include "Idable.h"
+#include "GLIdable.h"
 #include "IToString.h"
 
 class Shader : public IToString, public GLIdable
@@ -35,7 +35,6 @@ public:
     Type GetType() const { return type; }
     const std::string GetSourceCode() const { return sourceCode; }
     const std::string ToString() const;
-
 };
 
 #endif // SHADER_H

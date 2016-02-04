@@ -36,6 +36,7 @@ HEADERS += \
     Domain/Logger.h \
     Domain/VBO.h \
     Domain/VAO.h \
-    Domain/Idable.h \
-    Domain/ShaderProgram.h
+    Domain/ShaderProgram.h \
+    Domain/GLBindable.h \
+    Domain/GLIdable.h
 

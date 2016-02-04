@@ -4,12 +4,10 @@
 #include <GL/glew.h>
 
 #include "VBO.h"
-#include "Idable.h"
 
-class VAO : public GLIdable
+class VAO : public GLIdable, GLBindable
 {
 private:
-    mutable GLint lastBoundVAOId;
     int vboCount;
 
 public:
@@ -23,8 +21,10 @@ public:
                  GLsizei dataStride         = 0,
                  const GLvoid* dataOffset   = (void*)0);
 
-    void Bind() const;
-    void UnBind() const;
+    void Bind() const override;
+    void UnBind() const override;
+
+    int GetVBOCount() const { return vboCount; }
 };
 
 #endif // VAO_H

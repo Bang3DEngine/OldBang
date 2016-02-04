@@ -2,10 +2,12 @@
 #define SHADERPROGRAM_H
 
 #include "Shader.h"
+#include "GLBindable.h"
 
-class ShaderProgram : public GLIdable
+class ShaderProgram : public GLIdable, public GLBindable
 {
 private:
+    GLint lastBoundShaderProgramId;
     Shader *vshader, *fshader;
 
 public:
@@ -17,8 +19,11 @@ public:
 
     bool Link();
 
-    Shader* GetVertexShader() const { return vshader; };
-    Shader* GetFragmentShader() const { return fshader; };
+    void Bind() const override;
+    void UnBind() const override;
+
+    Shader* GetVertexShader() const { return vshader; }
+    Shader* GetFragmentShader() const { return fshader; }
 };
 
 #endif // SHADERPROGRAM_H

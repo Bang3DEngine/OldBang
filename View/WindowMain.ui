@@ -23,7 +23,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="Canvas" name="widget" native="true"/>
+      <widget class="Canvas" name="canvas" native="true"/>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
