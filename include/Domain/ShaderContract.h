@@ -1,17 +1,19 @@
-#ifndef SHADERNAMING_H
-#define SHADERNAMING_H
+#ifndef SHADERCONTRACT_H
+#define SHADERCONTRACT_H
 
 //TODO: Add check of all variables beginning with ShaderNames_Prefix, to see
 //      if all of them have an existing name. Do this when loading shaders.
 
-class ShaderNaming
+#include <string>
+
+class ShaderContract
 {
 private:
-    ShaderNaming() {}
+    ShaderContract() {}
 
 public:
 
-    const static std::string
+    const static std::string \
 
         ShaderNames_Prefix = "BANG_",
 
@@ -28,6 +30,13 @@ public:
         Uniform_Matrix_Model      = ShaderNamePrefix + "matrix_model",
         Uniform_Matrix_View       = ShaderNamePrefix + "matrix_view",
         Uniform_Matrix_Projection = ShaderNamePrefix + "matrix_projection"
+    ;
+
+    const static std::string \
+
+        Filepath_Shader_Pass_Vertex   = "res/Shaders/pass.vert",
+        Filepath_Shader_Pass_Fragment = "res/Shaders/pass.frag",
+        Filepath_Shader_Model_Vertex  = "res/Shaders/model.vert"
     ;
 
 };

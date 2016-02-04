@@ -6,6 +6,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "ShaderProgram.h"
+#include "ShaderContract.h"
 
 class MeshRenderer
 {

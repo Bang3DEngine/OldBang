@@ -27,7 +27,7 @@ OTHER_FILES += \
     updateUI.sh \
     res/Shaders/pass.frag \
     res/Shaders/pass.vert \
-    res/Shaders/passModel.vert
+    res/Shaders/model.vert
 
 
 
@@ -46,7 +46,7 @@ HEADERS += \
     include/View/Canvas.h \
     include/View/WindowMain.h \
     include/Domain/Transform.h \
-    include/Domain/ShaderNaming.h
+    include/Domain/ShaderContract.h
 
 SOURCES += \
     src/Domain/Logger.cpp \

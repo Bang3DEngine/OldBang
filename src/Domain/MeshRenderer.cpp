@@ -56,7 +56,10 @@ void MeshRenderer::Render(const Transform *t,
 
 
     vao->Bind();
-    material->GetShaderProgram()->Bind();
+    material->shaderProgram->Bind();
+
+    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
+                                            t->GetMatrix());
 
     glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
 

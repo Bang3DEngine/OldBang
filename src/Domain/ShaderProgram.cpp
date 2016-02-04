@@ -105,7 +105,6 @@ void ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m)
 }
 
 
-
 void ShaderProgram::Bind() const
 {
     if(lastBoundId == -1) glGetIntegerv(GL_CURRENT_PROGRAM, &lastBoundId);
