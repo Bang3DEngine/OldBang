@@ -24,7 +24,10 @@ INCLUDEPATH += \
 OTHER_FILES += \
     .gitignore \
     run.sh \
-    updateUI.sh
+    updateUI.sh \
+    res/Shaders/pass.frag \
+    res/Shaders/pass.vert \
+    res/Shaders/passModel.vert
 
 
 
@@ -41,7 +44,9 @@ HEADERS += \
     include/Domain/VAO.h \
     include/Domain/VBO.h \
     include/View/Canvas.h \
-    include/View/WindowMain.h
+    include/View/WindowMain.h \
+    include/Domain/Transform.h \
+    include/Domain/ShaderNaming.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -53,4 +58,5 @@ SOURCES += \
     src/Domain/ShaderProgram.cpp \
     src/Domain/VAO.cpp \
     src/Domain/VBO.cpp \
-    src/View/Canvas.cpp
+    src/View/Canvas.cpp \
+    src/Domain/Transform.cpp

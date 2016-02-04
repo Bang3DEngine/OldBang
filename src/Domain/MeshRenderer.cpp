@@ -30,7 +30,8 @@ void MeshRenderer::SetMaterial(const Material *m)
     material = m;
 }
 
-void MeshRenderer::Render(MeshRenderer::DrawingMode drawingMode) const
+void MeshRenderer::Render(const Transform *t,
+                          MeshRenderer::DrawingMode drawingMode) const
 {
     if(mesh == nullptr)
     {

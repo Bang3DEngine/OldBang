@@ -4,6 +4,7 @@
 #include "VAO.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "Transform.h"
 #include "ShaderProgram.h"
 
 class MeshRenderer
@@ -27,7 +28,8 @@ public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
-    void Render(MeshRenderer::DrawingMode drawingMode) const;
+    void Render(const Transform *t,
+                MeshRenderer::DrawingMode drawingMode = MeshRenderer::DrawingMode::Triangles) const;
 
     void SetMesh(const Mesh *m);
     const Mesh* GetMesh() { return mesh; }

@@ -19,7 +19,9 @@ private:
     {
     public:
         const MeshRenderer *renderer;
-        DrawRequest(const MeshRenderer *r) : renderer(r) { }
+        const Transform *transform;
+        DrawRequest(const MeshRenderer *r,
+                    const Transform *t) : renderer(r), transform(t) { }
     };
 
     mutable std::vector<DrawRequest> drawRequests;
@@ -32,7 +34,7 @@ public:
     void resizeGL(int w, int h);
     void paintGL();
 
-    void Draw(const MeshRenderer *renderer) const;
+    void Draw(const MeshRenderer *renderer, const Transform *t) const;
 
 signals:
 

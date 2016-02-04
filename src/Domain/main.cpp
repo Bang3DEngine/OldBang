@@ -12,7 +12,6 @@
 #include "Shader.h"
 
 
-
 class WindowMain: public Ui_WindowMain
 {
 public:
@@ -78,7 +77,10 @@ int main(int argc, char *argv[])
     mr->SetMesh(m);
     mr->SetMaterial(mat);
 
-    windowMain.canvas->Draw(mr);
+    Transform t;
+    t.position = glm::vec3(0.0f, 0.3f, 0.0f);
+
+    windowMain.canvas->Draw(mr, &t);
 
     return app.exec();
 }
