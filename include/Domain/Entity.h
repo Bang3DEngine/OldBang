@@ -3,6 +3,7 @@
 
 #include <list>
 #include <string>
+#include <functional>
 
 #include "Part.h"
 #include "StageEventListener.h"

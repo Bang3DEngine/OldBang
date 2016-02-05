@@ -13,6 +13,10 @@ class Stage : public StageEventListener
 friend class Canvas;
 
 private:
+    std::string name;
+
+protected:
+    Stage();
     std::list<Entity*> entities;
 
     void _OnStart() override;
@@ -21,7 +25,6 @@ private:
     void _OnDestroy() override;
 
 public:
-    Stage();
     virtual ~Stage();
 
     Entity* AddEntity();

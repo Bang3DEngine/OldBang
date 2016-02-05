@@ -2,23 +2,28 @@
 #define STAGEEVENTLISTENER_H
 
 #include <list>
+#include <algorithm>
 #include <functional>
+
+#define PROPAGATE_EVENT(FUNCTION, ITERABLE) \
+    for(auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
+    {\
+        (*it)->FUNCTION(); \
+    }
 
 class StageEventListener
 {
-private:
-    virtual void _OnStart() = 0;
-    virtual void _OnUpdate() = 0;
-    virtual void _OnDrawing() = 0;
-    virtual void _OnDestroy() = 0;
-
-    //void Propagate(function<void()> func, std::iterator begin, std::iterator end);
-
 protected:
+
     StageEventListener() {}
 
-    virtual void OnStart() {}
-    virtual void OnUpdate() {}
+    virtual void _OnStart()   { OnStart();   }
+    virtual void _OnUpdate()  { OnUpdate();  }
+    virtual void _OnDrawing() { OnDrawing(); }
+    virtual void _OnDestroy() { OnDestroy(); }
+
+    virtual void OnStart()   {}
+    virtual void OnUpdate()  {}
     virtual void OnDrawing() {}
     virtual void OnDestroy() {}
 };

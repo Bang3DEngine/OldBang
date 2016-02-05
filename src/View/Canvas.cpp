@@ -34,6 +34,31 @@ void Canvas::paintGL()
     QGLWidget::swapBuffers();
 }
 
+Stage *Canvas::AddStage(const std::string &name)
+{
+    Stage *st = new Stage();
+    st->name = name;
+    stages.push_back(st);
+    return st;
+}
+
+Stage *Canvas::GetStage(const std::string &name)
+{
+    for(auto it = stages.begin(); it != stages.end(); ++it)
+    {
+        if((*it)->name == name) return (*it);
+    }
+    return nullptr;
+}
+
+void Canvas::RemoveStage(const std::string &name)
+{
+    for(auto it = stages.begin(); it != stages.end(); ++it)
+    {
+        if((*it)->name == name) { stages.erase(it); return; }
+    }
+}
+
 void Canvas::Draw(const MeshRenderer *renderer, const Transform *t) const
 {
     drawRequests.push_back(DrawRequest(renderer, t));

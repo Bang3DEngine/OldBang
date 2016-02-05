@@ -8,6 +8,7 @@
 #include "ShaderProgram.h"
 #include "MeshRenderer.h"
 #include "WindowMain.h"
+#include "Entity.h"
 #include "Canvas.h"
 #include "Shader.h"
 
@@ -114,16 +115,18 @@ int main(int argc, char *argv[])
     Material *mat = new Material();
     mat->SetShaderProgram(sp);
 
-    MeshRenderer *mr = new MeshRenderer();
+    Entity *ent = new Entity();
+
+    Transform *t = ent->AddPart<Transform>();
+    t->position = glm::vec3(0.0f, 0.0f, 0.0f);
+    t->rotation = glm::angleAxis(60.0f, glm::vec3(0.0f, 1.0f, 0.7f));
+    t->scale = glm::vec3(0.3f);
+
+    MeshRenderer *mr = ent->AddPart<MeshRenderer>();
     mr->SetMesh(m);
     mr->SetMaterial(mat);
 
-    Transform t;
-    t.position = glm::vec3(0.0f, 0.0f, 0.0f);
-    t.rotation = glm::angleAxis(60.0f, glm::vec3(0.0f, 1.0f, 0.7f));
-    t.scale = glm::vec3(0.3f);
-
-    windowMain.canvas->Draw(mr, &t);
+    windowMain.canvas->Draw(mr, t);
 
     return app.exec();
 }
