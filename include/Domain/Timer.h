@@ -9,7 +9,7 @@ class Timer
 {
 private:
     std::function<void()> func;
-    int msDelay;
+    float secDelay;
     int repeatCount;
     bool waitOneDelayTime;
 
@@ -20,7 +20,7 @@ private:
     void TimerLoop() const;
 
 public:
-    Timer(std::function<void()> func, int msDelay, int repeatCount = -1, bool waitOneDelayTime = false);
+    Timer(std::function<void()> func, float secDelay, int repeatCount = -1, bool waitOneDelayTime = false);
 
     void Start() const;
     void Stop() const;

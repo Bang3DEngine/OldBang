@@ -1,8 +1,8 @@
 #include "Timer.h"
 
-Timer::Timer(std::function<void ()> func, int msDelay, int repeatCount, bool waitOneDelayTime) :
+Timer::Timer(std::function<void ()> func, int secDelay, int repeatCount, bool waitOneDelayTime) :
     func(func),
-    msDelay(msDelay),
+    secDelay(secDelay),
     repeatCount(repeatCount),
     waitOneDelayTime(waitOneDelayTime),
     stop(true)
@@ -19,7 +19,7 @@ void Timer::TimerLoop() const
 
     while( !stop && (repeatCount == -1 || count < repeatCount) )
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(msDelay));
+        std::this_thread::sleep_for(std::chrono::milliseconds(secDelay * 1000));
         func();
         ++count;
     }

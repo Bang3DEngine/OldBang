@@ -59,7 +59,8 @@ HEADERS += \
     include/Domain/StageEventListener.h \
     include/Domain/Behaviour.h \
     include/Domain/TestBehaviour.h \
-    include/Domain/Timer.h
+    include/Domain/Timer.h \
+    include/Domain/Time.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -79,4 +80,5 @@ SOURCES += \
     src/Domain/Stage.cpp \
     src/Domain/TestBehaviour.cpp \
     src/Domain/Behaviour.cpp \
-    src/Domain/Timer.cpp
+    src/Domain/Timer.cpp \
+    src/Domain/Time.cpp
