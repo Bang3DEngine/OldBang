@@ -26,6 +26,7 @@ public:
     void LoadVertices(const std::vector<glm::vec3>& vertices);
     void LoadNormals(const std::vector<glm::vec3>& normals);
 
+    VAO *GetVAO() const;
     int GetVertexCount() const;
 };
 

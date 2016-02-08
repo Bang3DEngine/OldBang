@@ -18,6 +18,8 @@ int VAO::BindVBO(const VBO *vbo,
                   GLsizei dataStride,
                   GLuint dataOffset)
 {
+    UnBindVBO(vboMeaning); //unbind in case its a vbo replace
+
     if(dataComponentsCount == -1)
     {
         if(vboMeaning == VBOMeaning::Position ||
@@ -55,6 +57,8 @@ void VAO::UnBindVBO(VBOMeaning meaning)
 
 void VAO::UnBindVBO(int vboid)
 {
+    if(vboid == -1) return;
+
     this->Bind();
     glDisableVertexAttribArray(vboid);
     this->UnBind();

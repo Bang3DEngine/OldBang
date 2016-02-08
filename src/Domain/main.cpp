@@ -11,6 +11,7 @@
 #include "Entity.h"
 #include "Canvas.h"
 #include "Shader.h"
+#include "Timer.h"
 #include "TestBehaviour.h"
 
 class WindowMain: public Ui_WindowMain
@@ -89,6 +90,11 @@ std::vector<glm::vec3> normals =
     glm::vec3(0.0f, -1.0f, 0.0f)
 };
 
+
+void hi()
+{
+    std::cerr << "hi" << std::endl;
+}
 
 int main(int argc, char *argv[])
 {

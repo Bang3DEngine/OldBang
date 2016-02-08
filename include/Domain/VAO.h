@@ -15,13 +15,8 @@ public:
         Position,
         Normal,
         UV,
-        Other_0, Other_1,
-        Other_2,
-        Other_3,
-        Other_4,
-        Other_5,
-        Other_6,
-        Other_7,
+        Other_0, Other_1, Other_2, Other_3,
+        Other_4, Other_5, Other_6, Other_7
     };
 
 private:
