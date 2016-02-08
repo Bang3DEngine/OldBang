@@ -1,4 +1,14 @@
 #include "MeshRenderer.h"
+#include "Entity.h"
+
+void MeshRenderer::_OnDrawing()
+{
+    if(GetOwner() != nullptr)
+    {
+        Render(GetOwner()->GetPart<Transform>(),
+               MeshRenderer::DrawingMode::Triangles);
+    }
+}
 
 MeshRenderer::MeshRenderer() : mesh(nullptr), material(nullptr), meshVertexPositionsVBOIndex(-1), meshVertexNormalsVBOIndex(-1)
 {
@@ -37,6 +47,12 @@ void MeshRenderer::SetMaterial(const Material *m)
 void MeshRenderer::Render(const Transform *t,
                           MeshRenderer::DrawingMode drawingMode) const
 {
+    if(t == nullptr)
+    {
+        Logger::Error("This Entity doesn't have a Transform. Can't render.");
+        return;
+    }
+
     if(mesh == nullptr)
     {
         Logger::Error("This MeshRenderer doesn't have a Mesh. Can't render.");

@@ -1,6 +1,7 @@
 #include "Part.h"
+#include "Entity.h"
 
-Part::Part()
+Part::Part() : owner(nullptr)
 {
 }
 

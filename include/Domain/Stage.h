@@ -4,7 +4,6 @@
 #include <list>
 #include <string>
 
-#include "Canvas.h"
 #include "Entity.h"
 #include "StageEventListener.h"
 
@@ -27,7 +26,7 @@ protected:
 public:
     virtual ~Stage();
 
-    Entity* AddEntity();
+    Entity* AddEntity(const std::string &name);
     Entity* GetEntity(const std::string &name) const;
 
     const std::list<Entity*>* GetEntities() const { return &entities; }

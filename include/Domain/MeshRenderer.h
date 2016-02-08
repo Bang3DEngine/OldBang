@@ -29,6 +29,10 @@ private:
 
     VAO *vao;
 
+protected:
+
+    void _OnDrawing() override;
+
 public:
     MeshRenderer();
     virtual ~MeshRenderer();

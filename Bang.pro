@@ -32,7 +32,8 @@ OTHER_FILES += \
     res/Shaders/pass_pos_normal.vert \
     res/Shaders/pass_pos.vert \
     res/Shaders/model_pos_normal.vert \
-    res/Shaders/model_pos.vert
+    res/Shaders/model_pos.vert \
+    src/Domain
 
 
 
@@ -55,7 +56,9 @@ HEADERS += \
     include/Domain/Entity.h \
     include/Domain/Part.h \
     include/Domain/Stage.h \
-    include/Domain/StageEventListener.h
+    include/Domain/StageEventListener.h \
+    include/Domain/Behaviour.h \
+    include/Domain/TestBehaviour.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -72,4 +75,6 @@ SOURCES += \
     src/Domain/ShaderContract.cpp \
     src/Domain/Entity.cpp \
     src/Domain/Part.cpp \
-    src/Domain/Stage.cpp
+    src/Domain/Stage.cpp \
+    src/Domain/TestBehaviour.cpp \
+    src/Domain/Behaviour.cpp

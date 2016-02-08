@@ -16,20 +16,14 @@ class Canvas : public QGLWidget
     Q_OBJECT
 
 private:
+    static float lastRenderTime, deltaTime;
 
-    class DrawRequest
-    {
-    public:
-        const MeshRenderer *renderer;
-        const Transform *transform;
-        DrawRequest(const MeshRenderer *r,
-                    const Transform *t) : renderer(r), transform(t) { }
-    };
-
-    mutable std::vector<DrawRequest> drawRequests;
     std::list<Stage*> stages;
 
+    Stage *currentStage;
+    
 public:
+
     glm::vec4 clearColor;
 
     explicit Canvas(QWidget *parent = 0);
@@ -39,10 +33,11 @@ public:
     void paintGL();
 
     Stage* AddStage(const std::string &name);
-    Stage* GetStage(const std::string &name);
+    void SetStage(const std::string &name);
+    Stage* GetStage(const std::string &name) const;
     void RemoveStage(const std::string &name);
 
-    void Draw(const MeshRenderer *renderer, const Transform *t) const;
+    static float GetDeltaTime() { return deltaTime; }
 
 signals:
 

@@ -3,6 +3,7 @@
 
 #include <list>
 #include <string>
+#include <iostream>
 #include <functional>
 
 #include "Part.h"
@@ -20,6 +21,7 @@ private:
 
     virtual void _OnStart() override;
     virtual void _OnUpdate() override;
+    virtual void _OnDrawing() override;
     virtual void _OnDestroy() override;
 
 public:
@@ -31,6 +33,7 @@ public:
     {
         T *part = new T();
         parts.push_back(part);
+        part->owner = this;
         return part;
     }
 
@@ -39,12 +42,13 @@ public:
     {
         for(auto part = parts.begin(); part != parts.end(); ++part)
         {
-            T *tp = dynamic_cast<T>(*part);
+            T *tp = dynamic_cast<T*>(*part);
             if(tp != nullptr)
             {
                 return tp;
             }
         }
+        return nullptr;
     }
 
     template <class T>
@@ -52,10 +56,12 @@ public:
     {
         for(auto part = parts.begin(); part != parts.end(); ++part)
         {
-            T *tp = dynamic_cast<T>(*part);
+            T *tp = dynamic_cast<T*>(*part);
             if(tp != nullptr)
             {
-                part = parts.erase(part);
+                parts.erase(part);
+                delete tp;
+                break;
             }
         }
     }

@@ -11,7 +11,7 @@
 #include "Entity.h"
 #include "Canvas.h"
 #include "Shader.h"
-
+#include "TestBehaviour.h"
 
 class WindowMain: public Ui_WindowMain
 {
@@ -115,7 +115,9 @@ int main(int argc, char *argv[])
     Material *mat = new Material();
     mat->SetShaderProgram(sp);
 
-    Entity *ent = new Entity();
+    Stage *stage = windowMain.canvas->AddStage("testStage");
+    Entity *ent = stage->AddEntity("testEntity");
+    TestBehaviour *testBehaviour = ent->AddPart<TestBehaviour>();
 
     Transform *t = ent->AddPart<Transform>();
     t->position = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -126,7 +128,7 @@ int main(int argc, char *argv[])
     mr->SetMesh(m);
     mr->SetMaterial(mat);
 
-    windowMain.canvas->Draw(mr, t);
+    windowMain.canvas->SetStage("testStage");
 
     return app.exec();
 }

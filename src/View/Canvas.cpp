@@ -25,11 +25,11 @@ void Canvas::paintGL()
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    for(DrawRequest dr : drawRequests)
+    if(currentStage != nullptr)
     {
-        dr.renderer->Render(dr.transform, MeshRenderer::DrawingMode::Triangles);
+        currentStage->_OnUpdate();
+        currentStage->_OnDrawing();
     }
-    //drawRequests.clear();
 
     QGLWidget::swapBuffers();
 }
@@ -42,7 +42,23 @@ Stage *Canvas::AddStage(const std::string &name)
     return st;
 }
 
-Stage *Canvas::GetStage(const std::string &name)
+void Canvas::SetStage(const std::string &name)
+{
+    for(auto it = stages.begin(); it != stages.end(); ++it)
+    {
+        if((*it)->name == name)
+        {
+            if(currentStage != (*it))
+            {
+                currentStage = (*it);
+                currentStage->_OnStart();
+            }
+            return;
+        }
+    }
+}
+
+Stage *Canvas::GetStage(const std::string &name) const
 {
     for(auto it = stages.begin(); it != stages.end(); ++it)
     {
@@ -57,9 +73,4 @@ void Canvas::RemoveStage(const std::string &name)
     {
         if((*it)->name == name) { stages.erase(it); return; }
     }
-}
-
-void Canvas::Draw(const MeshRenderer *renderer, const Transform *t) const
-{
-    drawRequests.push_back(DrawRequest(renderer, t));
 }
