@@ -1,9 +1,17 @@
 #include "Canvas.h"
 
+int Canvas::RedrawDelay = 1;
+unsigned long long Canvas::lastRenderTime = 0;
+double Canvas::deltaTime = 0.0d;
+
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
     clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+
+    connect(&drawTimer, SIGNAL(timeout()), this, SLOT(updateGL()));
+    drawTimer.setInterval(Canvas::RedrawDelay);
+    drawTimer.start();
 }
 
 void Canvas::initializeGL()
@@ -13,25 +21,33 @@ void Canvas::initializeGL()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-}
 
-void Canvas::resizeGL(int w, int h)
-{
-    glViewport(0, 0, (GLint)w, (GLint)h);
+    lastRenderTime = GetNow();
 }
 
 void Canvas::paintGL()
+{
+}
+
+void Canvas::updateGL()
 {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     if(currentStage != nullptr)
     {
+        deltaTime = double(GetNow() - lastRenderTime) / 1000.0d;
         currentStage->_OnUpdate();
         currentStage->_OnDrawing();
     }
 
     QGLWidget::swapBuffers();
+    lastRenderTime = GetNow();
+}
+
+void Canvas::resizeGL(int w, int h)
+{
+    glViewport(0, 0, (GLint)w, (GLint)h);
 }
 
 Stage *Canvas::AddStage(const std::string &name)

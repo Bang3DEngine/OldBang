@@ -7,7 +7,7 @@ TestBehaviour::TestBehaviour()
 
 void TestBehaviour::OnUpdate()
 {
-    GetOwner()->GetPart<Transform>()->position.x += 0.01f;
+    GetOwner()->GetPart<Transform>()->position.x += 0.3f * Canvas::deltaTime;
 }
 
 

@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "Transform.h"
 #include "Behaviour.h"
+#include "Canvas.h"
 
 class TestBehaviour : public Behaviour
 {

@@ -79,4 +79,4 @@ SOURCES += \
     src/Domain/Stage.cpp \
     src/Domain/TestBehaviour.cpp \
     src/Domain/Behaviour.cpp \
-    include/Domain/Timer.cpp
+    src/Domain/Timer.cpp
