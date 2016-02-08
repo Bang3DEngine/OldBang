@@ -1,12 +1,20 @@
 #ifndef TIME_H
 #define TIME_H
 
+#include <chrono>
+
 class Time
 {
-public:
-    Time();
+friend class Canvas;
 
-    static double deltaTime;
+private:
+    static float deltaTime;
+
+    Time() {}
+
+public:
+    static float GetDeltaTime();
+    static unsigned long long GetNow();
 };
 
 #endif // TIME_H

@@ -8,6 +8,9 @@
 
 class TestBehaviour : public Behaviour
 {
+private:
+    float time;
+
 public:
     TestBehaviour();
 

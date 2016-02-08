@@ -4,6 +4,7 @@
 #include "VAO.h"
 #include "Shader.h"
 #include "Stage.h"
+#include "Time.h"
 #include "ShaderProgram.h"
 #include "MeshRenderer.h"
 
@@ -26,12 +27,8 @@ private:
     Stage *currentStage;
     QTimer drawTimer;
 
-    static unsigned long long GetNow() {
-        return std::chrono::system_clock::now().time_since_epoch() / std::chrono::milliseconds(1);
-    }
-
 public:
-    static double deltaTime;
+    static float deltaTime;
 
     glm::vec4 clearColor;
 

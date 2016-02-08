@@ -2,7 +2,6 @@
 
 int Canvas::RedrawDelay = 1;
 unsigned long long Canvas::lastRenderTime = 0;
-double Canvas::deltaTime = 0.0d;
 
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
@@ -22,7 +21,7 @@ void Canvas::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-    lastRenderTime = GetNow();
+    lastRenderTime = Time::GetNow();
 }
 
 void Canvas::paintGL()
@@ -34,15 +33,16 @@ void Canvas::updateGL()
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
+    Time::deltaTime = float(Time::GetNow() - lastRenderTime) / 1000.0f;
+
     if(currentStage != nullptr)
     {
-        deltaTime = double(GetNow() - lastRenderTime) / 1000.0d;
         currentStage->_OnUpdate();
         currentStage->_OnDrawing();
     }
 
     QGLWidget::swapBuffers();
-    lastRenderTime = GetNow();
+    lastRenderTime = Time::GetNow();
 }
 
 void Canvas::resizeGL(int w, int h)

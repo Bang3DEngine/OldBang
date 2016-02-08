@@ -1,13 +1,20 @@
 #include "TestBehaviour.h"
 #include "Entity.h"
 
-TestBehaviour::TestBehaviour()
+TestBehaviour::TestBehaviour() : time(.0f)
 {
 }
 
 void TestBehaviour::OnUpdate()
 {
-    GetOwner()->GetPart<Transform>()->position.x += 0.3f * Canvas::deltaTime;
+    time += Time::GetDeltaTime();
+    Transform *t = GetOwner()->GetPart<Transform>();
+    t->position = glm::vec3(sin(time), -cos(time), sin(time)) * 0.6f;
+    GetOwner()->GetPart<Transform>()->rotation *= glm::angleAxis(1.0f * Time::GetDeltaTime(), glm::vec3(.0f,1.0f,.0f));
+    if(int(time) % 2 == 0)
+        t->scale = glm::vec3(0.1f);
+    else
+        t->scale = glm::vec3(0.3f);
 }
 
 

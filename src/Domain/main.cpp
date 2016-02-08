@@ -123,16 +123,16 @@ int main(int argc, char *argv[])
 
     Stage *stage = windowMain.canvas->AddStage("testStage");
     Entity *ent = stage->AddEntity("testEntity");
-    TestBehaviour *testBehaviour = ent->AddPart<TestBehaviour>();
 
     Transform *t = ent->AddPart<Transform>();
     t->position = glm::vec3(0.0f, 0.0f, 0.0f);
     t->rotation = glm::angleAxis(60.0f, glm::vec3(0.0f, 1.0f, 0.7f));
-    t->scale = glm::vec3(0.3f);
 
     MeshRenderer *mr = ent->AddPart<MeshRenderer>();
     mr->SetMesh(m);
     mr->SetMaterial(mat);
+
+    TestBehaviour *testBehaviour = ent->AddPart<TestBehaviour>();
 
     windowMain.canvas->SetStage("testStage");
 
