@@ -20,7 +20,7 @@ protected:
 
     void _OnStart() override;
     void _OnUpdate() override;
-    void _OnDrawing() override;
+    void _OnRender() override;
     void _OnDestroy() override;
 
 public:

@@ -13,7 +13,7 @@
 class MeshRenderer : public Part
 {
 public:
-    enum DrawingMode
+    enum RenderMode
     {
         Triangles = GL_TRIANGLES,
         Quads = GL_QUADS
@@ -24,24 +24,22 @@ private:
     const Mesh *mesh;
     const Material *material;
 
-    VAO *vao;
-
 protected:
 
-    void _OnDrawing() override;
+    void _OnRender() override;
 
 public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
     void Render(const Transform *t,
-                MeshRenderer::DrawingMode drawingMode = MeshRenderer::DrawingMode::Triangles) const;
+                MeshRenderer::RenderMode drawingMode = MeshRenderer::RenderMode::Triangles) const;
 
     void SetMesh(const Mesh *m);
-    const Mesh* GetMesh() { return mesh; }
+    const Mesh* GetMesh();
 
     void SetMaterial(const Material *m);
-    const Material* GetMaterial() { return material; }
+    const Material* GetMaterial();
 };
 
 #endif // MESHRENDERER_H

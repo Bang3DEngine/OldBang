@@ -1,27 +1,25 @@
 #include "MeshRenderer.h"
 #include "Entity.h"
 
-void MeshRenderer::_OnDrawing()
-{
-    if(GetOwner() != nullptr)
-    {
-        Render(GetOwner()->GetPart<Transform>(),
-               MeshRenderer::DrawingMode::Triangles);
-    }
-}
-
 MeshRenderer::MeshRenderer() : mesh(nullptr), material(nullptr)
 {
-    vao = new VAO();
 }
 
 MeshRenderer::~MeshRenderer()
 {
-    if(vao != nullptr) delete vao;
+}
+
+void MeshRenderer::_OnRender()
+{
+    if(GetOwner() != nullptr)
+    {
+        Render(GetOwner()->GetPart<Transform>(),
+               MeshRenderer::RenderMode::Triangles);
+    }
 }
 
 void MeshRenderer::SetMesh(const Mesh *m)
-{
+{/*
     if(m != nullptr)
     {
         vao->BindVBO(m->vertexPositionsVBO, VAO::VBOMeaning::Position);
@@ -32,8 +30,13 @@ void MeshRenderer::SetMesh(const Mesh *m)
         vao->UnBindVBO(VAO::VBOMeaning::Position);
         vao->UnBindVBO(VAO::VBOMeaning::Normal);
     }
-
+*/
     mesh = m;
+}
+
+const Mesh *MeshRenderer::GetMesh()
+{
+    return mesh;
 }
 
 void MeshRenderer::SetMaterial(const Material *m)
@@ -41,8 +44,13 @@ void MeshRenderer::SetMaterial(const Material *m)
     material = m;
 }
 
+const Material *MeshRenderer::GetMaterial()
+{
+    return material;
+}
+
 void MeshRenderer::Render(const Transform *t,
-                          MeshRenderer::DrawingMode drawingMode) const
+                          MeshRenderer::RenderMode drawingMode) const
 {
     if(t == nullptr)
     {
@@ -71,7 +79,7 @@ void MeshRenderer::Render(const Transform *t,
         }
     }
 
-    vao->Bind();
+    mesh->GetVAO()->Bind();
     material->shaderProgram->Bind();
 
     glm::mat4 matTransform; t->GetMatrix(matTransform);
@@ -82,5 +90,5 @@ void MeshRenderer::Render(const Transform *t,
     glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
 
     material->shaderProgram->UnBind();
-    vao->UnBind();
+    mesh->GetVAO()->UnBind();
 }

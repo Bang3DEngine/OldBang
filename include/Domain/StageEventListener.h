@@ -5,11 +5,13 @@
 #include <algorithm>
 #include <functional>
 
-#define PROPAGATE_EVENT(FUNCTION, ITERABLE) \
+#define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
     for(auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
     {\
         (*it)->FUNCTION(); \
-    }
+    }\
+} while(0)
+
 
 class StageEventListener
 {
@@ -19,12 +21,12 @@ protected:
 
     virtual void _OnStart()   { OnStart();   }
     virtual void _OnUpdate()  { OnUpdate();  }
-    virtual void _OnDrawing() { OnDrawing(); }
+    virtual void _OnRender() { OnRender(); }
     virtual void _OnDestroy() { OnDestroy(); }
 
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
-    virtual void OnDrawing() {}
+    virtual void OnRender() {}
     virtual void OnDestroy() {}
 };
 

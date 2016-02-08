@@ -21,7 +21,7 @@ private:
 
     virtual void _OnStart() override;
     virtual void _OnUpdate() override;
-    virtual void _OnDrawing() override;
+    virtual void _OnRender() override;
     virtual void _OnDestroy() override;
 
 public:

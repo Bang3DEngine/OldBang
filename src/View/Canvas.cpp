@@ -38,7 +38,7 @@ void Canvas::updateGL()
     if(currentStage != nullptr)
     {
         currentStage->_OnUpdate();
-        currentStage->_OnDrawing();
+        currentStage->_OnRender();
     }
 
     QGLWidget::swapBuffers();

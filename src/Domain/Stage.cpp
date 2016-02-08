@@ -38,42 +38,26 @@ Entity *Stage::GetEntity(const std::string &name) const
 void Stage::_OnStart()
 {
     OnStart();
-    for(auto e = entities.begin(); e != entities.end(); ++e)
-    {
-        Entity* ent = *e;
-        ent->_OnStart();
-    }
+    PROPAGATE_EVENT(_OnStart, entities);
 }
 
 void Stage::_OnUpdate()
 {
     OnUpdate();
-    for(auto e = entities.begin(); e != entities.end(); ++e)
-    {
-        Entity* ent = *e;
-        ent->_OnUpdate();
-    }
+    PROPAGATE_EVENT(_OnUpdate, entities);
 }
 
-void Stage::_OnDrawing()
+void Stage::_OnRender()
 {
-    OnDrawing();
-    for(auto e = entities.begin(); e != entities.end(); ++e)
-    {
-        Entity* ent = *e;
-        ent->_OnDrawing();
-    }
+    OnRender();
+    PROPAGATE_EVENT(_OnRender, entities);
 }
 
 
 void Stage::_OnDestroy()
 {
     OnDestroy();
-    for(auto e = entities.begin(); e != entities.end(); ++e)
-    {
-        Entity* ent = *e;
-        ent->_OnDestroy();
-    }
+    PROPAGATE_EVENT(_OnDestroy, entities);
 }
 
 

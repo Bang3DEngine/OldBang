@@ -24,11 +24,11 @@ void Entity::_OnUpdate()
     PROPAGATE_EVENT(_OnUpdate, children);
 }
 
-void Entity::_OnDrawing()
+void Entity::_OnRender()
 {
-    OnDrawing();
-    PROPAGATE_EVENT(_OnDrawing, parts);
-    PROPAGATE_EVENT(_OnDrawing, children);
+    OnRender();
+    PROPAGATE_EVENT(_OnRender, parts);
+    PROPAGATE_EVENT(_OnRender, children);
 }
 
 void Entity::_OnDestroy()
