@@ -2,6 +2,7 @@
 
 Mesh::Mesh() : vertexPositionsVBO(nullptr), vertexNormalsVBO(nullptr)
 {
+    vao = new VAO();
 }
 
 Mesh::~Mesh()

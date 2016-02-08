@@ -4,6 +4,7 @@
 #include "glm/glm.hpp"
 #include <GL/glew.h>
 #include "Part.h"
+#include "VAO.h"
 #include "VBO.h"
 
 #include <vector>
@@ -13,6 +14,7 @@ class Mesh : public Part
 friend class MeshRenderer;
 
 private:
+    VAO *vao;
     VBO *vertexPositionsVBO;
     VBO *vertexNormalsVBO;
     int vertexCount;

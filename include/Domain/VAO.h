@@ -15,7 +15,13 @@ public:
         Position,
         Normal,
         UV,
-        Other
+        Other_0, Other_1,
+        Other_2,
+        Other_3,
+        Other_4,
+        Other_5,
+        Other_6,
+        Other_7,
     };
 
 private:
@@ -39,10 +45,10 @@ public:
     int BindVBO(const VBO *vbo,
                 VBOMeaning vboMeaning,
                 GLint dataComponentsCount = -1,
-                GLenum dataType            = GL_FLOAT,
-                GLboolean dataNormalized   = GL_FALSE,
-                GLsizei dataStride         = 0,
-                const GLvoid* dataOffset   = (void*)0);
+                GLenum dataType           = GL_FLOAT,
+                GLboolean dataNormalized  = GL_FALSE,
+                GLsizei dataStride        = 0,
+                GLuint dataOffset         = 0);
 
     void UnBindVBO(VBOMeaning meaning);
     void UnBindVBO(int vboid);

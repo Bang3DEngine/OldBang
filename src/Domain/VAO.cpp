@@ -16,7 +16,7 @@ int VAO::BindVBO(const VBO *vbo,
                   GLenum dataType,
                   GLboolean dataNormalized,
                   GLsizei dataStride,
-                  const GLvoid* dataOffset)
+                  GLuint dataOffset)
 {
     if(dataComponentsCount == -1)
     {
@@ -38,7 +38,7 @@ int VAO::BindVBO(const VBO *vbo,
     glEnableVertexAttribArray(vboIdCounter);
     glVertexAttribPointer(vboIdCounter,
                           dataComponentsCount, dataType,
-                          dataNormalized, dataStride, dataOffset);
+                          dataNormalized, dataStride, (void*) dataOffset);
 
     vbo->UnBind();
 
