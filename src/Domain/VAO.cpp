@@ -1,6 +1,6 @@
 #include "VAO.h"
 
-VAO::VAO() : vboCount(0)
+VAO::VAO() : vboIdCounter(0)
 {
     glGenVertexArrays(1, &idgl);
 }
@@ -11,18 +11,32 @@ VAO::~VAO()
 }
 
 int VAO::BindVBO(const VBO *vbo,
-                  GLuint dataComponentsCount,
+                  VBOMeaning vboMeaning,
+                  GLint dataComponentsCount,
                   GLenum dataType,
                   GLboolean dataNormalized,
                   GLsizei dataStride,
                   const GLvoid* dataOffset)
 {
+    if(dataComponentsCount == -1)
+    {
+        if(vboMeaning == VBOMeaning::Position ||
+           vboMeaning == VBOMeaning::Normal)
+        {
+            dataComponentsCount = 3;
+        }
+        else
+        {
+            dataComponentsCount = 2;
+        }
+    }
+
     this->Bind();
 
     vbo->Bind();
 
-    glEnableVertexAttribArray(vboCount);
-    glVertexAttribPointer(vboCount,
+    glEnableVertexAttribArray(vboIdCounter);
+    glVertexAttribPointer(vboIdCounter,
                           dataComponentsCount, dataType,
                           dataNormalized, dataStride, dataOffset);
 
@@ -30,16 +44,25 @@ int VAO::BindVBO(const VBO *vbo,
 
     this->UnBind();
 
-    return vboCount++;
+    vbos[vboMeaning] = VBOLocation(vbo, vboIdCounter);
+    return vboIdCounter++;
 }
 
-void VAO::UnBindVBO(int index)
+void VAO::UnBindVBO(VBOMeaning meaning)
+{
+    UnBindVBO(GetVBOIdByMeaning(meaning));
+}
+
+void VAO::UnBindVBO(int vboid)
 {
     this->Bind();
-    glDisableVertexAttribArray(index);
+    glDisableVertexAttribArray(vboid);
     this->UnBind();
 
-    --vboCount;
+    for(auto it = vbos.begin(); it != vbos.end(); ++it)
+    {
+        if((*it).second.vboid == vboid) vbos.erase(it);
+    }
 }
 
 
@@ -52,4 +75,10 @@ void VAO::Bind() const
 void VAO::UnBind() const
 {
     glBindVertexArray(PreUnBind());
+}
+
+int VAO::GetVBOIdByMeaning(VAO::VBOMeaning meaning) const
+{
+    if(vbos.find(meaning) == vbos.end()) return -1;
+    else return vbos[meaning].vboid;
 }

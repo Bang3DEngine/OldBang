@@ -10,7 +10,7 @@ void MeshRenderer::_OnDrawing()
     }
 }
 
-MeshRenderer::MeshRenderer() : mesh(nullptr), material(nullptr), meshVertexPositionsVBOIndex(-1), meshVertexNormalsVBOIndex(-1)
+MeshRenderer::MeshRenderer() : mesh(nullptr), material(nullptr)
 {
     vao = new VAO();
 }
@@ -24,16 +24,13 @@ void MeshRenderer::SetMesh(const Mesh *m)
 {
     if(m != nullptr)
     {
-        meshVertexPositionsVBOIndex = vao->BindVBO(m->vertexPositionsVBO, 3);
-        meshVertexNormalsVBOIndex   = vao->BindVBO(m->vertexNormalsVBO,   3);
+        vao->BindVBO(m->vertexPositionsVBO, VAO::VBOMeaning::Position);
+        vao->BindVBO(m->vertexNormalsVBO,   VAO::VBOMeaning::Normal);
     }
-    else if(meshVertexPositionsVBOIndex != -1)
+    else
     {
-        vao->UnBindVBO(meshVertexPositionsVBOIndex);
-        meshVertexPositionsVBOIndex = -1;
-
-        vao->UnBindVBO(meshVertexNormalsVBOIndex);
-        meshVertexNormalsVBOIndex  = -1;
+        vao->UnBindVBO(VAO::VBOMeaning::Position);
+        vao->UnBindVBO(VAO::VBOMeaning::Normal);
     }
 
     mesh = m;

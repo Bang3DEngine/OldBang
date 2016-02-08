@@ -24,9 +24,6 @@ private:
     const Mesh *mesh;
     const Material *material;
 
-    int meshVertexPositionsVBOIndex,
-        meshVertexNormalsVBOIndex;
-
     VAO *vao;
 
 protected:
