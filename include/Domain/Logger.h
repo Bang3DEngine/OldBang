@@ -26,15 +26,15 @@ std::ostream &operator<<(std::ostream &log, const IToString *s);
 
 
 #define _Logger_Suffix \
-       "     at file:'" << __FILE__ << ", in function " << __FUNCTION__ << \
-       ", at line number " << __LINE__ << std::endl
+       " (file:'" << __FILE__ << "':" << __LINE__ << ", '" << __FUNCTION__ << \
+         "')" << std::endl
 
 #define Logger_Log(x) do{\
     std::ostringstream log;\
     log << x;\
     log.flush();\
     using std::operator<<;\
-    std::cerr <<  log.str();\
+    std::cerr << "[   LOG   ]: " << log.str();\
 } while(0)
 
 #define Logger_Warning(x) do{\

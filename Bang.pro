@@ -60,7 +60,9 @@ HEADERS += \
     include/Domain/Behaviour.h \
     include/Domain/TestBehaviour.h \
     include/Domain/Timer.h \
-    include/Domain/Time.h
+    include/Domain/Time.h \
+    include/Domain/Camera.h \
+    include/Domain/Rect.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -81,4 +83,6 @@ SOURCES += \
     src/Domain/TestBehaviour.cpp \
     src/Domain/Behaviour.cpp \
     src/Domain/Timer.cpp \
-    src/Domain/Time.cpp
+    src/Domain/Time.cpp \
+    src/Domain/Rect.cpp \
+    src/Domain/Camera.cpp

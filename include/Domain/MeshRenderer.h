@@ -4,6 +4,7 @@
 #include "VAO.h"
 #include "Mesh.h"
 #include "Part.h"
+#include "Stage.h"
 #include "Material.h"
 #include "Transform.h"
 #include "ShaderProgram.h"

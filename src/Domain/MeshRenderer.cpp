@@ -11,26 +11,22 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::_OnRender()
 {
-    if(GetOwner() != nullptr)
+    Stage *stage = GetParent()->GetStage();
+    Camera *cam = stage->GetCamera();
+    if(cam != nullptr)
     {
-        Render(GetOwner()->GetPart<Transform>(),
+        Render(GetParent()->GetPart<Transform>(),
                MeshRenderer::RenderMode::Triangles);
+    }
+    else
+    {
+        Logger_Warning("Can't render " << GetParent() << " because "
+                       << stage << " does not have a set Camera.");
     }
 }
 
 void MeshRenderer::SetMesh(const Mesh *m)
-{/*
-    if(m != nullptr)
-    {
-        vao->BindVBO(m->vertexPositionsVBO, VAO::VBOMeaning::Position);
-        vao->BindVBO(m->vertexNormalsVBO,   VAO::VBOMeaning::Normal);
-    }
-    else
-    {
-        vao->UnBindVBO(VAO::VBOMeaning::Position);
-        vao->UnBindVBO(VAO::VBOMeaning::Normal);
-    }
-*/
+{
     mesh = m;
 }
 

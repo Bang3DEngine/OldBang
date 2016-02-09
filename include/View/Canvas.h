@@ -39,7 +39,8 @@ public:
     void paintGL() override;
 
     Stage* AddStage(const std::string &name);
-    void SetStage(const std::string &name);
+    void SetCurrentStage(const std::string &name);
+    Stage* GetCurrentStage() const;
     Stage* GetStage(const std::string &name) const;
     void RemoveStage(const std::string &name);
 

@@ -3,7 +3,7 @@
 int Canvas::RedrawDelay = 1;
 unsigned long long Canvas::lastRenderTime = 0;
 
-Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
+Canvas::Canvas(QWidget* parent) : QGLWidget(parent), currentStage(nullptr)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
     clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
@@ -58,7 +58,7 @@ Stage *Canvas::AddStage(const std::string &name)
     return st;
 }
 
-void Canvas::SetStage(const std::string &name)
+void Canvas::SetCurrentStage(const std::string &name)
 {
     for(auto it = stages.begin(); it != stages.end(); ++it)
     {
@@ -72,6 +72,11 @@ void Canvas::SetStage(const std::string &name)
             return;
         }
     }
+}
+
+Stage *Canvas::GetCurrentStage() const
+{
+    return currentStage;
 }
 
 Stage *Canvas::GetStage(const std::string &name) const

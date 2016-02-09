@@ -1,6 +1,8 @@
 #ifndef ITOSTRING_H
 #define ITOSTRING_H
 
+#include <iostream>
+#include <sstream>
 #include <string>
 
 class IToString

@@ -1,63 +1,37 @@
 #include "Stage.h"
+#include "Entity.h"
 
-
-Stage::Stage()
+Stage::Stage() : cameraEntity(nullptr)
 {
 }
 
 Stage::~Stage()
 {
-    for(auto e = entities.begin(); e != entities.end(); ++e)
+    for(auto it = children.begin(); it != children.end(); ++it)
     {
-        Entity *ent = *e;
-        ent->_OnDestroy();
-        delete ent;
+        Entity *child = *it;
+        child->_OnDestroy();
+        this->RemoveChild(child->GetName());
+        delete child;
     }
 }
 
-Entity *Stage::AddEntity(const std::string &name)
+void Stage::SetCameraEntity(const Entity *cameraEntity)
 {
-    Entity *ent =  new Entity();
-    ent->name = name;
-    entities.push_back(ent);
-    return ent;
-}
-
-Entity *Stage::GetEntity(const std::string &name) const
-{
-    for(auto it = entities.begin(); it != entities.end(); ++it)
+    if(cameraEntity->HasPart<Camera>())
     {
-        if((*it)->name == name)
-        {
-            return (*it);
-        }
+        this->cameraEntity = cameraEntity;
     }
-    return nullptr;
+    else
+    {
+        Logger_Error("Can't set " << cameraEntity <<
+                     " as camera because it does not have a Camera part.");
+    }
 }
 
-void Stage::_OnStart()
+Camera *Stage::GetCamera() const
 {
-    OnStart();
-    PROPAGATE_EVENT(_OnStart, entities);
+    if(cameraEntity == nullptr) return nullptr;
+    return cameraEntity->GetPart<Camera>();
 }
-
-void Stage::_OnUpdate()
-{
-    OnUpdate();
-    PROPAGATE_EVENT(_OnUpdate, entities);
-}
-
-void Stage::_OnRender()
-{
-    OnRender();
-    PROPAGATE_EVENT(_OnRender, entities);
-}
-
-
-void Stage::_OnDestroy()
-{
-    OnDestroy();
-    PROPAGATE_EVENT(_OnDestroy, entities);
-}
-
 

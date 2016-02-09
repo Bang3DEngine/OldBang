@@ -23,7 +23,8 @@ const std::string Transform::ToString() const
 
     std::ostringstream msg;
 
-    msg << "Transform: [" << std::endl <<
+    msg << "[" <<
+           "Transform: " << std::endl <<
            "   Position: (" << position.x << ", " << position.y << ", " << position.z << ")"  << std::endl <<
            "   Rotation: (" << rotation.x << ", " << rotation.y << ", " << rotation.z << "," << rotation.w << ")" << std::endl <<
            "   Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl <<

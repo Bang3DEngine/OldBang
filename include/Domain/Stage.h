@@ -4,32 +4,24 @@
 #include <list>
 #include <string>
 
+#include "Logger.h"
 #include "Entity.h"
+#include "Camera.h"
 #include "StageEventListener.h"
 
-class Stage : public StageEventListener
+class Stage : public Entity
 {
 friend class Canvas;
-
-private:
-    std::string name;
-
 protected:
     Stage();
-    std::list<Entity*> entities;
 
-    void _OnStart() override;
-    void _OnUpdate() override;
-    void _OnRender() override;
-    void _OnDestroy() override;
+    const Entity *cameraEntity;
 
 public:
     virtual ~Stage();
 
-    Entity* AddEntity(const std::string &name);
-    Entity* GetEntity(const std::string &name) const;
-
-    const std::list<Entity*>* GetEntities() const { return &entities; }
+    void SetCameraEntity(const Entity *cameraEntity);
+    Camera* GetCamera() const;
 };
 
 #endif // STAGE_H

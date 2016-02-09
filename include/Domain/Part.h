@@ -1,21 +1,21 @@
 #ifndef PART_H
 #define PART_H
 
+#include "Entity.h"
 #include "StageEventListener.h"
 
-class Entity;
 class Part : public StageEventListener
 {
 friend class Entity;
 private:
-    Entity *owner;
+    Entity *parent;
 
 protected:
     Part();
     virtual ~Part();
 
 public:
-    Entity* GetOwner() const { return owner; }
+    Entity* GetParent() const;
 };
 
 #endif // PART_H

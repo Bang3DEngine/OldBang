@@ -6,13 +6,15 @@
 #include <iostream>
 #include <functional>
 
-#include "Part.h"
+#include "IToString.h"
 #include "StageEventListener.h"
 
-class Entity : public StageEventListener
+class Part;
+class Stage;
+class Entity : public StageEventListener, public IToString
 {
+friend class Canvas;
 friend class Stage;
-
 private:
     std::string name;
     std::list<Part*> parts;
@@ -26,14 +28,32 @@ private:
 
 public:
     Entity();
+    Entity(const std::string &name);
+
     virtual ~Entity();
+
+
+    void AddChild(Entity *child);
+    Entity* GetChild(const std::string &name) const;
+    void RemoveChild(const std::string &name);
+
+    void SetParent(Entity *parent);
+
+    const std::string ToString() const;
+
+    Stage* GetStage() const;
+    Entity* GetParent() const;
+    const std::string GetName() const { return name; }
+    const std::list<Part*>* GetParts() const { return &parts; }
+    const std::list<Entity*>* GetChildren() const { return &children; }
+
 
     template <class T>
     T* AddPart()
     {
         T *part = new T();
         parts.push_back(part);
-        part->owner = this;
+        part->parent = this;
         return part;
     }
 
@@ -52,6 +72,12 @@ public:
     }
 
     template <class T>
+    bool HasPart() const
+    {
+        return GetPart<T>() != nullptr;
+    }
+
+    template <class T>
     void RemovePart()
     {
         for(auto part = parts.begin(); part != parts.end(); ++part)
@@ -65,15 +91,6 @@ public:
             }
         }
     }
-
-    //Entity* AddChild(c);
-    //void GetChild(const std::string &name);
-    //void RemoveChild(const std::string &name);
-    //void SetParent(const std::string &name);
-
-    const std::string GetName() const { return name; }
-    const std::list<Part*>* GetParts() const { return &parts; }
-    const std::list<Entity*>* GetChildren() const { return &children; }
 };
 
 #endif // ENTITY_H

@@ -9,6 +9,7 @@
 #include "MeshRenderer.h"
 #include "WindowMain.h"
 #include "Entity.h"
+#include "Camera.h"
 #include "Canvas.h"
 #include "Shader.h"
 #include "Timer.h"
@@ -90,12 +91,6 @@ std::vector<glm::vec3> normals =
     glm::vec3(0.0f, -1.0f, 0.0f)
 };
 
-
-void hi()
-{
-    std::cerr << "hi" << std::endl;
-}
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -122,19 +117,24 @@ int main(int argc, char *argv[])
     mat->SetShaderProgram(sp);
 
     Stage *stage = windowMain.canvas->AddStage("testStage");
-    Entity *ent = stage->AddEntity("testEntity");
 
+    Entity *ent = new Entity("test");
+    stage->AddChild(ent);
     Transform *t = ent->AddPart<Transform>();
     t->position = glm::vec3(0.0f, 0.0f, 0.0f);
     t->rotation = glm::angleAxis(60.0f, glm::vec3(0.0f, 1.0f, 0.7f));
-
     MeshRenderer *mr = ent->AddPart<MeshRenderer>();
     mr->SetMesh(m);
     mr->SetMaterial(mat);
-
     TestBehaviour *testBehaviour = ent->AddPart<TestBehaviour>();
 
-    windowMain.canvas->SetStage("testStage");
+    Entity *cam = new Entity("camera");
+    stage->AddChild(cam);
+    Camera *camPart = cam->AddPart<Camera>();
+
+    //stage->SetCameraEntity(cam);
+
+    windowMain.canvas->SetCurrentStage("testStage");
 
     return app.exec();
 }
