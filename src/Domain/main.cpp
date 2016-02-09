@@ -14,6 +14,7 @@
 #include "Shader.h"
 #include "Timer.h"
 #include "TestBehaviour.h"
+#include "TestCameraBehaviour.h"
 
 class WindowMain: public Ui_WindowMain
 {
@@ -129,13 +130,12 @@ int main(int argc, char *argv[])
     TestBehaviour *testBehaviour = ent->AddPart<TestBehaviour>();
 
     Entity *cam = new Entity("camera");
-    Transform *t2 = cam->AddPart<Transform>();
-    t2->position = glm::vec3(0.0f, 0.0f, 0.0f);
-    t2->rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, 3.0f));
-
     Camera *camPart = cam->AddPart<Camera>();
+    Transform *t2 = cam->AddPart<Transform>();
+    t2->position = glm::vec3(0.0f, 1.0f, 3.0f);
+    //t2->rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, 3.0f));
 
-
+    cam->AddPart<TestCameraBehaviour>();
 
     stage->AddChild(cam);
     stage->SetCameraEntity(cam);

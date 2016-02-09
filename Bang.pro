@@ -63,7 +63,8 @@ HEADERS += \
     include/Domain/Timer.h \
     include/Domain/Time.h \
     include/Domain/Camera.h \
-    include/Domain/Rect.h
+    include/Domain/Rect.h \
+    include/Domain/TestCameraBehaviour.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -86,4 +87,5 @@ SOURCES += \
     src/Domain/Timer.cpp \
     src/Domain/Time.cpp \
     src/Domain/Rect.cpp \
-    src/Domain/Camera.cpp
+    src/Domain/Camera.cpp \
+    src/Domain/TestCameraBehaviour.cpp

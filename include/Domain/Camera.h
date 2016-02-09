@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include "glm/glm.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include "glm/gtx/transform.hpp"
 
 #include "Rect.h"
@@ -21,7 +22,7 @@ private:
 
     Rect orthoRect;
 
-    float fov;
+    float fovDegrees;
     float zNear;
     float zFar;
 
@@ -41,7 +42,7 @@ public:
 
     void SetOrthoRect(const Rect& rect);
 
-    void SetFov(float fov);
+    void SetFovDegrees(float fovDegrees);
     void SetZNear(float zNear);
     void SetZFar(float zFar);
 
@@ -50,7 +51,7 @@ public:
     void SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio);
 
 
-    float GetFov() const;
+    float GetFovDegrees() const;
     float GetAspectRatio() const;
     float GetZNear() const;
     float GetZFar() const;

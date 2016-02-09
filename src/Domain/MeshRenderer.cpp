@@ -82,7 +82,7 @@ void MeshRenderer::Render(MeshRenderer::RenderMode drawingMode) const
     if(camera != nullptr)
     {
         camera->GetViewMatrix(view);
-        camera->GetViewMatrix(projection);
+        camera->GetProjectionMatrix(projection);
     }
 
     glm::mat4 pvm = projection * view * model;

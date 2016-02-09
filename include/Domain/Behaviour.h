@@ -2,6 +2,8 @@
 #define BEHAVIOUR_H
 
 #include "Part.h"
+#include "Transform.h"
+#include "Time.h"
 
 class Behaviour : public Part
 {

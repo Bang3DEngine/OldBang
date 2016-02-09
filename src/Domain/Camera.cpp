@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
-                   fov(60.0f),
+                   fovDegrees(60.0f),
                    zNear(0.1f),
                    zFar(100.0f),
                    aspectRatio(1.0f),
@@ -16,7 +16,10 @@ void Camera::GetViewMatrix(glm::mat4 &view) const
     if(t != nullptr)
     {
         t->GetMatrix(view);
-        view =  glm::inverse(view);
+        view = glm::inverse(view);
+        /*glm::mat4 T = glm::translate(-t->position);
+        glm::mat4 R = glm::mat4_cast(glm::conjugate(t->rotation));
+        view = T * R;*/
     }
     else
     {
@@ -31,7 +34,7 @@ void Camera::GetProjectionMatrix(glm::mat4 &proj) const
 {
     if(projMode == ProjectionMode::Perspective)
     {
-        proj = glm::perspective(fov, aspectRatio, zNear, zFar);
+        proj = glm::perspective(glm::radians(fovDegrees), aspectRatio, zNear, zFar);
     }
     else //Ortho
     {
@@ -51,9 +54,9 @@ void Camera::SetOrthoRect(const Rect &rect)
 
 
 
-void Camera::SetFov(float fov)
+void Camera::SetFovDegrees(float fovDegrees)
 {
-    this->fov = fov;
+    this->fovDegrees = fovDegrees;
 }
 
 void Camera::SetAspectRatio(float aspectRatio)
@@ -81,9 +84,9 @@ void Camera::SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio)
 
 
 
-float Camera::GetFov() const
+float Camera::GetFovDegrees() const
 {
-    return fov;
+    return fovDegrees;
 }
 
 float Camera::GetAspectRatio() const
