@@ -24,13 +24,13 @@ bool ShaderProgram::Link()
 {
     if(vshader == nullptr)
     {
-        Logger::Error("Vertex shader not set. Can't link shader program.");
+        Logger_Error("Vertex shader not set. Can't link shader program.");
         return false;
     }
 
     if(fshader == nullptr)
     {
-        Logger::Error("Fragment shader not set. Can't link shader program.");
+        Logger_Error("Fragment shader not set. Can't link shader program.");
         return false;
     }
 
@@ -52,7 +52,7 @@ bool ShaderProgram::Link()
           glGetProgramInfoLog(idgl, errorLength, NULL, errorLog);
 
           std::string errorStr(errorLog);
-          Logger::Error("Can't link shader program: " + errorStr);
+          Logger_Error("Can't link shader program: " + errorStr);
 
           free(errorLog);
         }
@@ -76,7 +76,7 @@ bool ShaderProgram::SetUniformFloat(const std::string &name, float v) const
     }
     else
     {
-        Logger::Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }
@@ -93,7 +93,7 @@ bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v)
     }
     else
     {
-        Logger::Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }
@@ -110,7 +110,7 @@ bool ShaderProgram::SetUniformVec3 (const std::string &name, const glm::vec3& v)
     }
     else
     {
-        Logger::Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }
@@ -127,7 +127,7 @@ bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v)
     }
     else
     {
-        Logger::Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }
@@ -144,7 +144,7 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m)
     }
     else
     {
-        Logger::Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }

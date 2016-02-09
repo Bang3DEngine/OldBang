@@ -54,27 +54,26 @@ void MeshRenderer::Render(const Transform *t,
 {
     if(t == nullptr)
     {
-        Logger::Error("This Entity doesn't have a Transform. Can't render.");
+        Logger_Error("This Entity doesn't have a Transform. Can't render.");
         return;
     }
 
     if(mesh == nullptr)
     {
-        Logger::Error("This MeshRenderer doesn't have a Mesh. Can't render.");
+        Logger_Error("This MeshRenderer doesn't have a Mesh. Can't render.");
         return;
     }
 
     if(material == nullptr)
     {
-        Logger::Error("This MeshRenderer doesn't have a Material. Can't render.");
+        Logger_Error("This MeshRenderer doesn't have a Material. Can't render.");
         return;
     }
     else
     {
         if(material->GetShaderProgram() == nullptr)
         {
-            Logger::Error("This MeshRenderer has a Material with a null \
-                          ShaderProgram. Can't render.");
+            Logger_Error("This MeshRenderer has a Material with a null ShaderProgram. Can't render.");
             return;
         }
     }

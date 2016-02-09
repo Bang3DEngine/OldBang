@@ -10,7 +10,7 @@ bool Shader::LoadFromFile(const std::string& filepath)
     f.open(filepath);
     if(not f.is_open())
     {
-        Logger::Error("Error opening file '" + filepath + "'");
+        Logger_Error("Error opening file '" + filepath + "'");
         return false;
     }
 
@@ -37,7 +37,7 @@ bool Shader::LoadFromFile(const std::string& filepath)
         glGetShaderInfoLog(idgl, maxLength, &maxLength, &v[0]);
 
         std::string errorStr(v.begin(), v.end());
-        Logger::Error("Failed to compile shader: '" + filepath + "': " + errorStr);
+        Logger_Error("Failed to compile shader: '" + filepath + "': " + errorStr);
         glDeleteShader(idgl);
         return false;
     }
