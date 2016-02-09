@@ -23,11 +23,11 @@ public:
     void Bind() const override;
     void UnBind() const override;
 
-    bool SetUniformFloat(const std::string &name, float v) const;
-    bool SetUniformVec2 (const std::string &name, const glm::vec2& v) const;
-    bool SetUniformVec3 (const std::string &name, const glm::vec3& v) const;
-    bool SetUniformVec4 (const std::string &name, const glm::vec4& v) const;
-    bool SetUniformMat4 (const std::string &name, const glm::mat4& m) const;
+    bool SetUniformFloat(const std::string &name, float v, bool warn = true) const;
+    bool SetUniformVec2 (const std::string &name, const glm::vec2& v, bool warn = true) const;
+    bool SetUniformVec3 (const std::string &name, const glm::vec3& v, bool warn = true) const;
+    bool SetUniformVec4 (const std::string &name, const glm::vec4& v, bool warn = true) const;
+    bool SetUniformMat4 (const std::string &name, const glm::mat4& m, bool warn = true) const;
 
     Shader* GetVertexShader() const { return vshader; }
     Shader* GetFragmentShader() const { return fshader; }

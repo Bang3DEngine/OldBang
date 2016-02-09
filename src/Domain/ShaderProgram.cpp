@@ -64,7 +64,7 @@ bool ShaderProgram::Link()
     return true;
 }
 
-bool ShaderProgram::SetUniformFloat(const std::string &name, float v) const
+bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
@@ -76,12 +76,12 @@ bool ShaderProgram::SetUniformFloat(const std::string &name, float v) const
     }
     else
     {
-        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }
 
-bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v) const
+bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
@@ -93,12 +93,12 @@ bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v)
     }
     else
     {
-        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }
 
-bool ShaderProgram::SetUniformVec3 (const std::string &name, const glm::vec3& v) const
+bool ShaderProgram::SetUniformVec3 (const std::string &name, const glm::vec3& v, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
@@ -110,12 +110,12 @@ bool ShaderProgram::SetUniformVec3 (const std::string &name, const glm::vec3& v)
     }
     else
     {
-        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }
 
-bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v) const
+bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
@@ -127,12 +127,12 @@ bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v)
     }
     else
     {
-        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }
 
-bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m) const
+bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
@@ -144,7 +144,7 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m)
     }
     else
     {
-        Logger_Error("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
         return false;
     }
 }

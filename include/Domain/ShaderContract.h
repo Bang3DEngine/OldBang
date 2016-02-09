@@ -30,11 +30,13 @@ public:
         Uniform_Matrix_Model,
         Uniform_Matrix_View,
         Uniform_Matrix_Projection,
+        Uniform_Matrix_PVM,
 
         Filepath_Shader_Vertex_Pass_Position,
         Filepath_Shader_Vertex_Pass_Position_Normal,
         Filepath_Shader_Vertex_Model_Position,
         Filepath_Shader_Vertex_Model_Position_Normal,
+        Filepath_Shader_Vertex_PVM_Position_Normal,
         Filepath_Shader_Fragment_Pass_Position,
         Filepath_Shader_Fragment_Pass_Position_Normal
     ;

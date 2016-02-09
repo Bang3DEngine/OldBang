@@ -47,12 +47,16 @@ const std::string ShaderContract::Uniform_Matrix_View =
 const std::string ShaderContract::Uniform_Matrix_Projection =
         ShaderContract::ShaderNames_Prefix + "matrix_projection";
 
+const std::string ShaderContract::Uniform_Matrix_PVM =
+        ShaderContract::ShaderNames_Prefix + "matrix_pvm";
+
 
 
 const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position   = "res/Shaders/pass_pos.vert";
 const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position_Normal = "res/Shaders/pass_pos_normal.vert";
 const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position  = "res/Shaders/model_pos.vert";
 const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position_Normal  = "res/Shaders/model_pos_normal.vert";
+const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal  = "res/Shaders/pvm_pos_normal.vert";
 
 const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position  = "res/Shaders/pass_pos.frag";
 const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal  = "res/Shaders/pass_pos_normal.frag";

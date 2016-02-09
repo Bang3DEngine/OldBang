@@ -33,7 +33,8 @@ OTHER_FILES += \
     res/Shaders/pass_pos.vert \
     res/Shaders/model_pos_normal.vert \
     res/Shaders/model_pos.vert \
-    src/Domain
+    src/Domain \
+    res/Shaders/pvm_pos_normal.vert
 
 
 

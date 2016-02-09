@@ -6,6 +6,7 @@
 
 #include "Rect.h"
 #include "Part.h"
+#include "Transform.h"
 
 class Camera : public Part
 {

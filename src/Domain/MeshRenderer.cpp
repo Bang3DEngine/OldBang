@@ -15,8 +15,7 @@ void MeshRenderer::_OnRender()
     Camera *cam = stage->GetCamera();
     if(cam != nullptr)
     {
-        Render(GetParent()->GetPart<Transform>(),
-               MeshRenderer::RenderMode::Triangles);
+        Render(MeshRenderer::RenderMode::Triangles);
     }
     else
     {
@@ -45,42 +44,56 @@ const Material *MeshRenderer::GetMaterial()
     return material;
 }
 
-void MeshRenderer::Render(const Transform *t,
-                          MeshRenderer::RenderMode drawingMode) const
+void MeshRenderer::Render(MeshRenderer::RenderMode drawingMode) const
 {
+    Transform *t = parent->GetPart<Transform>();
     if(t == nullptr)
     {
-        Logger_Error("This Entity doesn't have a Transform. Can't render.");
+        Logger_Error(parent << "does not have a Transform. Can't render.");
         return;
     }
 
     if(mesh == nullptr)
     {
-        Logger_Error("This MeshRenderer doesn't have a Mesh. Can't render.");
+        Logger_Error(parent << " does not have a Mesh. Can't render.");
         return;
     }
 
     if(material == nullptr)
     {
-        Logger_Error("This MeshRenderer doesn't have a Material. Can't render.");
+        Logger_Error(parent << " does not have a Material. Can't render.");
         return;
     }
     else
     {
         if(material->GetShaderProgram() == nullptr)
         {
-            Logger_Error("This MeshRenderer has a Material with a null ShaderProgram. Can't render.");
+            Logger_Error(parent << " has a Material with no ShaderProgram. Can't render.");
             return;
         }
     }
 
+    glm::mat4 model; t->GetMatrix(model);
+    glm::mat4 view(1.0f);
+    glm::mat4 projection(1.0f);
+
+    //In case the parent stage has a camera, retrieve the view and proj matrices
+    Camera *camera = parent->GetStage()->GetCamera();
+    if(camera != nullptr)
+    {
+        camera->GetViewMatrix(view);
+        camera->GetViewMatrix(projection);
+    }
+
+    glm::mat4 pvm = projection * view * model;
+
     mesh->GetVAO()->Bind();
     material->shaderProgram->Bind();
 
-    glm::mat4 matTransform; t->GetMatrix(matTransform);
-    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
-                                            matTransform);
-
+    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
+    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
+    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
+    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
 
     glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
 

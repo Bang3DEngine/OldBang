@@ -2,15 +2,15 @@
 #define PART_H
 
 #include "Entity.h"
+#include "Logger.h"
 #include "StageEventListener.h"
 
 class Part : public StageEventListener
 {
 friend class Entity;
-private:
+protected:
     Entity *parent;
 
-protected:
     Part();
     virtual ~Part();
 

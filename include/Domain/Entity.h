@@ -16,15 +16,17 @@ class Entity : public StageEventListener, public IToString
 friend class Canvas;
 friend class Stage;
 private:
-    std::string name;
-    std::list<Part*> parts;
-    std::list<Entity*> children;
-    Entity* parent;
 
     virtual void _OnStart() override;
     virtual void _OnUpdate() override;
     virtual void _OnRender() override;
     virtual void _OnDestroy() override;
+
+protected:
+    std::string name;
+    std::list<Part*> parts;
+    std::list<Entity*> children;
+    Entity* parent;
 
 public:
     Entity();

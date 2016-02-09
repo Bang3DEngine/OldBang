@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 
     Shader *vs = new Shader(Shader::Type::Vertex);
     Shader *fs = new Shader(Shader::Type::Fragment);
-    vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_Model_Position_Normal);
+    vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal);
     fs->LoadFromFile(ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal);
 
     ShaderProgram *sp = new ShaderProgram();
@@ -129,10 +129,16 @@ int main(int argc, char *argv[])
     TestBehaviour *testBehaviour = ent->AddPart<TestBehaviour>();
 
     Entity *cam = new Entity("camera");
-    stage->AddChild(cam);
+    Transform *t2 = cam->AddPart<Transform>();
+    t2->position = glm::vec3(0.0f, 0.0f, 0.0f);
+    t2->rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, 3.0f));
+
     Camera *camPart = cam->AddPart<Camera>();
 
-    //stage->SetCameraEntity(cam);
+
+
+    stage->AddChild(cam);
+    stage->SetCameraEntity(cam);
 
     windowMain.canvas->SetCurrentStage("testStage");
 

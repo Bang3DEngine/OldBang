@@ -33,8 +33,7 @@ public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
-    void Render(const Transform *t,
-                MeshRenderer::RenderMode drawingMode = MeshRenderer::RenderMode::Triangles) const;
+    void Render(MeshRenderer::RenderMode drawingMode = MeshRenderer::RenderMode::Triangles) const;
 
     void SetMesh(const Mesh *m);
     const Mesh* GetMesh();

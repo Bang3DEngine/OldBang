@@ -12,7 +12,19 @@ Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
 
 void Camera::GetViewMatrix(glm::mat4 &view) const
 {
+    Transform *t = GetParent()->GetPart<Transform>();
+    if(t != nullptr)
+    {
+        t->GetMatrix(view);
+        view =  glm::inverse(view);
+    }
+    else
+    {
+        Logger_Warning(GetParent() << " has a Camera but does not have a transform. " <<
+                       "View matrix will be the identity matrix.");
 
+        view = glm::mat4(1.0f);
+    }
 }
 
 void Camera::GetProjectionMatrix(glm::mat4 &proj) const
