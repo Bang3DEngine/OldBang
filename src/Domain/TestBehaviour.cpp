@@ -16,7 +16,8 @@ void TestBehaviour::OnUpdate()
     else
         t->scale = glm::vec3(0.3f);
 
-    Logger_Log(",");
+    Logger_Log(t);
+    //Logger_Log(t);
 }
 
 

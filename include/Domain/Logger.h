@@ -11,16 +11,18 @@
 
 #include "glm/gtc/quaternion.hpp"
 #include "glm/glm.hpp"
+
 #include "Time.h"
+#include "IToString.h"
 
 //OSTREAM OPERATORS //////////////////////////////////
-std::ostream& operator<<(std::ostream &log, const char *str);
 std::ostream& operator<<(std::ostream &log, const std::string &str);
 std::ostream& operator<<(std::ostream &log, const glm::vec2 &v);
 std::ostream& operator<<(std::ostream &log, const glm::vec3 &v);
 std::ostream& operator<<(std::ostream &log, const glm::vec4 &v);
 std::ostream& operator<<(std::ostream &log, const glm::quat &q);
 std::ostream& operator<<(std::ostream &log, const glm::mat4 &v);
+std::ostream &operator<<(std::ostream &log, const IToString *s);
 
 
 #define _Logger_Suffix \
@@ -28,11 +30,11 @@ std::ostream& operator<<(std::ostream &log, const glm::mat4 &v);
        ", at line number " << __LINE__ << std::endl
 
 #define Logger_Log(x) do{\
-    using std::operator<<;\
     std::ostringstream log;\
     log << x;\
-    std::cerr << "[   LOG   ]: " << log.str() << _Logger_Suffix;\
     log.flush();\
+    using std::operator<<;\
+    std::cerr <<  log.str();\
 } while(0)
 
 #define Logger_Warning(x) do{\

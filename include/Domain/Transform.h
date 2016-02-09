@@ -1,12 +1,18 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include "Part.h"
+#include <string>
+#include <sstream>
+#include <ostream>
+
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 
-class Transform : public Part
+#include "Part.h"
+#include "IToString.h"
+
+class Transform : public Part, public IToString
 {
 public:
     glm::vec3 position;
@@ -15,6 +21,8 @@ public:
 
     Transform();
     void GetMatrix(glm::mat4 &m) const;
+
+    const std::string ToString() const override;
 };
 
 #endif // TRANSFORM_H

@@ -16,3 +16,18 @@ void Transform::GetMatrix(glm::mat4 &m) const
 
     m = T * R * S;
 }
+
+const std::string Transform::ToString() const
+{
+    using std::operator<<;
+
+    std::ostringstream msg;
+
+    msg << "Transform: [" << std::endl <<
+           "   Position: (" << position.x << ", " << position.y << ", " << position.z << ")"  << std::endl <<
+           "   Rotation: (" << rotation.x << ", " << rotation.y << ", " << rotation.z << "," << rotation.w << ")" << std::endl <<
+           "   Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl <<
+           "]" << std::endl;
+
+    return msg.str();
+}
