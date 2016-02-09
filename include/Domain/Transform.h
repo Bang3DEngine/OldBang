@@ -21,6 +21,16 @@ public:
 
     Transform();
     void GetMatrix(glm::mat4 &m) const;
+    void LookAt(glm::vec3 target);
+
+    glm::vec3 GetForward() const;
+    glm::vec3 GetBack() const;
+    glm::vec3 GetRight() const;
+    glm::vec3 GetLeft() const;
+    glm::vec3 GetUp() const;
+    glm::vec3 GetDown() const;
+
+
 
     const std::string ToString() const override;
 };

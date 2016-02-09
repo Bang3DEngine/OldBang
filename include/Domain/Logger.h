@@ -53,4 +53,12 @@ std::ostream &operator<<(std::ostream &log, const IToString *s);
     log.flush();\
 } while(0)
 
+
+#define Assert(mustBeTrue, message, returnAction) do{\
+    if(!(mustBeTrue)) {\
+        Logger_Error("Assertion failed: " << message);\
+        returnAction;\
+    }\
+} while(0)
+
 #endif //LOGGER_H

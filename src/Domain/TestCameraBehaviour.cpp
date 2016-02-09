@@ -6,8 +6,11 @@ TestCameraBehaviour::TestCameraBehaviour()
 
 void TestCameraBehaviour::OnUpdate()
 {
+    Stage *st = GetParent()->GetStage();
+    Entity *pyramid = st->GetChild("pyramid");
+
     Transform *t = GetParent()->GetPart<Transform>();
-    t->position.z += 1.0f * Time::GetDeltaTime();
-    t->rotation *= glm::angleAxis(Time::GetDeltaTime(), glm::vec3(1.0f, 1.0f, 0.0f));
+    t->position = glm::vec3(3.0f, 5.0f, 5.0f);
+    t->LookAt(pyramid->GetPart<Transform>()->position);
     //Logger_Log(t);
 }

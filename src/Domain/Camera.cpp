@@ -17,9 +17,6 @@ void Camera::GetViewMatrix(glm::mat4 &view) const
     {
         t->GetMatrix(view);
         view = glm::inverse(view);
-        /*glm::mat4 T = glm::translate(-t->position);
-        glm::mat4 R = glm::mat4_cast(glm::conjugate(t->rotation));
-        view = T * R;*/
     }
     else
     {

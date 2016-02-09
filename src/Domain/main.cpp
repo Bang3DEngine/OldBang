@@ -119,11 +119,11 @@ int main(int argc, char *argv[])
 
     Stage *stage = windowMain.canvas->AddStage("testStage");
 
-    Entity *ent = new Entity("test");
+    Entity *ent = new Entity("pyramid");
     stage->AddChild(ent);
     Transform *t = ent->AddPart<Transform>();
     t->position = glm::vec3(0.0f, 0.0f, 0.0f);
-    t->rotation = glm::angleAxis(60.0f, glm::vec3(0.0f, 1.0f, 0.7f));
+    //t->rotation = glm::angleAxis(3.141592f/2, glm::vec3(0.0f, 1.0f, 0.0f));
     MeshRenderer *mr = ent->AddPart<MeshRenderer>();
     mr->SetMesh(m);
     mr->SetMaterial(mat);

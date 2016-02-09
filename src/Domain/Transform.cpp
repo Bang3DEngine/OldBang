@@ -17,6 +17,60 @@ void Transform::GetMatrix(glm::mat4 &m) const
     m = T * R * S;
 }
 
+void Transform::LookAt(glm::vec3 target)
+{
+    Assert(target != position, "LookAt target is the same as position.", return);
+
+    glm::vec3 direction = glm::normalize(target - position);
+    float dot = glm::dot(glm::vec3(0, 0, -1), direction);
+
+    if (fabs(dot - (-1.0f)) < 0.000001f)
+    {
+        rotation = glm::angleAxis(3.141592f, glm::vec3(0, 1, 0));
+        return;
+    }
+    else if (fabs(dot - (1.0f)) < 0.000001f)
+    {
+        rotation = glm::quat();
+        return;
+    }
+
+    float angle = -glm::acos(dot);
+    glm::vec3 cross = glm::normalize(glm::cross(glm::vec3(0, 0, -1), direction));
+    rotation = glm::conjugate(glm::normalize(glm::angleAxis(angle, cross)));
+}
+
+glm::vec3 Transform::GetForward() const
+{
+    return rotation * glm::vec3(0.0f, 0.0f, -1.0f);
+}
+
+glm::vec3 Transform::GetBack() const
+{
+    return -GetForward();
+}
+
+glm::vec3 Transform::GetRight() const
+{
+    return rotation * glm::vec3(1.0f, 0.0f, 0.0f);
+}
+
+glm::vec3 Transform::GetLeft() const
+{
+    return -GetRight();
+}
+
+glm::vec3 Transform::GetUp() const
+{
+    return rotation * glm::vec3(0.0f, 1.0f, 0.0f);
+}
+
+glm::vec3 Transform::GetDown() const
+{
+    return -GetUp();
+}
+
+
 const std::string Transform::ToString() const
 {
     using std::operator<<;
