@@ -17,14 +17,16 @@ private:
     VAO *vao;
     VBO *vertexPositionsVBO;
     VBO *vertexNormalsVBO;
+    VBO *vertexUvsVBO;
     int vertexCount;
 
 public:
     Mesh();
     virtual ~Mesh();
 
-    void LoadVertices(const std::vector<glm::vec3>& vertices);
+    void LoadPositions(const std::vector<glm::vec3>& positions);
     void LoadNormals(const std::vector<glm::vec3>& normals);
+    void LoadUvs(const std::vector<glm::vec2>& uvs);
 
     VAO *GetVAO() const;
     int GetVertexCount() const;

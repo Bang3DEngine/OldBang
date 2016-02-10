@@ -1,0 +1,2 @@
+Created WindowMain.h
+g++ -c -m64 -pipe --std=c++11 -O2 -D_REENTRANT -Wall -W -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++-64 -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtOpenGL -I/usr/include/qt4 -Iinclude -Iinclude/Domain -Iinclude/View -I/usr/X11R6/include -I. -o obj/MeshPyramid.o src/Domain/MeshPyramid.cpp

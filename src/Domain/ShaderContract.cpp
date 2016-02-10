@@ -57,7 +57,9 @@ const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position_Normal = 
 const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position  = "res/Shaders/model_pos.vert";
 const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position_Normal  = "res/Shaders/model_pos_normal.vert";
 const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal  = "res/Shaders/pvm_pos_normal.vert";
+const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv = "res/Shaders/pvm_pos_normal_uv.vert";
 
 const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position  = "res/Shaders/pass_pos.frag";
 const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal  = "res/Shaders/pass_pos_normal.frag";
+const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv  = "res/Shaders/pass_pos_normal_uv.frag";
 

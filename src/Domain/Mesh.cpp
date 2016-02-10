@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-Mesh::Mesh() : vertexPositionsVBO(nullptr), vertexNormalsVBO(nullptr)
+Mesh::Mesh() : vertexPositionsVBO(nullptr), vertexNormalsVBO(nullptr), vertexUvsVBO(nullptr)
 {
     vao = new VAO();
 }
@@ -9,15 +9,16 @@ Mesh::~Mesh()
 {
     if(vertexPositionsVBO != nullptr) delete vertexPositionsVBO;
     if(vertexNormalsVBO != nullptr)   delete vertexNormalsVBO;
+    if(vertexNormalsVBO != nullptr)   delete vertexUvsVBO;
 }
 
-void Mesh::LoadVertices(const std::vector<glm::vec3>& vertices)
+void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
 {
     if(vertexPositionsVBO != nullptr) delete vertexPositionsVBO;
 
     vertexPositionsVBO = new VBO();
-    vertexPositionsVBO->Fill((void*)(&vertices[0]), vertices.size() * sizeof(float) * 3);
-    vertexCount = vertices.size();
+    vertexPositionsVBO->Fill((void*)(&positions[0]), positions.size() * sizeof(float) * 3);
+    vertexCount = positions.size();
     vao->BindVBO(vertexPositionsVBO, VAO::VBOMeaning::Position);
 }
 
@@ -28,6 +29,15 @@ void Mesh::LoadNormals(const std::vector<glm::vec3> &normals)
     vertexNormalsVBO = new VBO();
     vertexNormalsVBO->Fill((void*)(&normals[0]), normals.size() * sizeof(float) * 3);
     vao->BindVBO(vertexNormalsVBO, VAO::VBOMeaning::Normal);
+}
+
+void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
+{
+    if(vertexUvsVBO != nullptr) delete vertexUvsVBO;
+
+    vertexUvsVBO = new VBO();
+    vertexUvsVBO->Fill((void*)(&uvs[0]), uvs.size() * sizeof(float) * 2);
+    vao->BindVBO(vertexUvsVBO, VAO::VBOMeaning::UV);
 }
 
 VAO *Mesh::GetVAO() const

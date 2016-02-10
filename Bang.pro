@@ -34,7 +34,9 @@ OTHER_FILES += \
     res/Shaders/model_pos_normal.vert \
     res/Shaders/model_pos.vert \
     src/Domain \
-    res/Shaders/pvm_pos_normal.vert
+    res/Shaders/pvm_pos_normal.vert \
+    res/Shaders/pass_pos_normal_uv.frag \
+    res/Shaders/pvm_pos_normal_uv.vert
 
 
 
@@ -64,7 +66,11 @@ HEADERS += \
     include/Domain/Time.h \
     include/Domain/Camera.h \
     include/Domain/Rect.h \
-    include/Domain/TestCameraBehaviour.h
+    include/Domain/TestCameraBehaviour.h \
+    include/Domain/MeshPyramid.h \
+    include/Domain/stb_image.h \
+    include/Domain/FileLoader.h \
+    include/Domain/Texture.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -88,4 +94,8 @@ SOURCES += \
     src/Domain/Time.cpp \
     src/Domain/Rect.cpp \
     src/Domain/Camera.cpp \
-    src/Domain/TestCameraBehaviour.cpp
+    src/Domain/TestCameraBehaviour.cpp \
+    src/Domain/MeshPyramid.cpp \
+    src/Domain/FileLoader.cpp \
+    src/Domain/stb_image.cpp \
+    include/Domain/Texture.cpp

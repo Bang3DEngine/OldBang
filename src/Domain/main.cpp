@@ -7,6 +7,7 @@
 
 #include "ShaderProgram.h"
 #include "MeshRenderer.h"
+#include "MeshPyramid.h"
 #include "WindowMain.h"
 #include "Entity.h"
 #include "Camera.h"
@@ -26,72 +27,6 @@ public:
 
 WindowMain windowMain;
 
-std::vector<glm::vec3> pyramid =
-{
-    //RIGHT
-    glm::vec3(0.0f,  0.5f,  0.0f),
-    glm::vec3(0.5f, -0.5f,  0.5f),
-    glm::vec3(0.5f, -0.5f, -0.5f),
-
-    //LEFT
-    glm::vec3( 0.0f,  0.5f,  0.0f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f,  0.5f),
-
-    //FRONT
-    glm::vec3( 0.0f,  0.5f, 0.0f),
-    glm::vec3(-0.5f, -0.5f, 0.5f),
-    glm::vec3( 0.5f, -0.5f, 0.5f),
-
-    //BACK
-    glm::vec3( 0.0f,  0.5f,  0.0f),
-    glm::vec3( 0.5f, -0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-
-    //BOTTOM FRONT
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f, -0.5f,  0.5f),
-
-    //BOTTOM BACK
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f, -0.5f,  0.5f),
-    glm::vec3(-0.5f, -0.5f,  0.5f)
-};
-
-std::vector<glm::vec3> normals =
-{
-    //RIGHT
-    glm::vec3(1.0f,  0.0f,  0.0f),
-    glm::vec3(1.0f,  0.0f,  0.0f),
-    glm::vec3(1.0f,  0.0f,  0.0f),
-
-    //LEFT
-    glm::vec3(-1.0f,  0.0f,  0.0f),
-    glm::vec3(-1.0f,  0.0f,  0.0f),
-    glm::vec3(-1.0f,  0.0f,  0.0f),
-
-    //FRONT
-    glm::vec3(0.0f,  0.0f, -1.0f),
-    glm::vec3(0.0f,  0.0f, -1.0f),
-    glm::vec3(0.0f,  0.0f, -1.0f),
-
-    //BACK
-    glm::vec3(0.0f,  0.0f,  1.0f),
-    glm::vec3(0.0f,  0.0f,  1.0f),
-    glm::vec3(0.0f,  0.0f,  1.0f),
-
-    //BOTTOM FRONT
-    glm::vec3(0.0f, -1.0f, 0.0f),
-    glm::vec3(0.0f, -1.0f, 0.0f),
-    glm::vec3(0.0f, -1.0f, 0.0f),
-
-    //BOTTOM BACK
-    glm::vec3(0.0f, -1.0f, 0.0f),
-    glm::vec3(0.0f, -1.0f, 0.0f),
-    glm::vec3(0.0f, -1.0f, 0.0f)
-};
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -100,14 +35,12 @@ int main(int argc, char *argv[])
     windowMain.setupUi(widget);
     widget->show();
 
-    Mesh *m = new Mesh();
-    m->LoadVertices(pyramid);
-    m->LoadNormals(normals);
+    MeshPyramid *m = new MeshPyramid();
 
     Shader *vs = new Shader(Shader::Type::Vertex);
     Shader *fs = new Shader(Shader::Type::Fragment);
-    vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal);
-    fs->LoadFromFile(ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal);
+    vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv);
+    fs->LoadFromFile(ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv);
 
     ShaderProgram *sp = new ShaderProgram();
     sp->BindVertexShader(vs);
