@@ -13,13 +13,6 @@
 
 class MeshRenderer : public Part
 {
-public:
-    enum RenderMode
-    {
-        Triangles = GL_TRIANGLES,
-        Quads = GL_QUADS
-    };
-
 private:
 
     const Mesh *mesh;
@@ -33,7 +26,7 @@ public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
-    void Render(MeshRenderer::RenderMode drawingMode = MeshRenderer::RenderMode::Triangles) const;
+    void Render(Mesh::RenderMode drawingMode = Mesh::RenderMode::Triangles) const;
 
     void SetMesh(const Mesh *m);
     const Mesh* GetMesh();

@@ -61,7 +61,8 @@ bool ShaderProgram::Link()
           glGetProgramInfoLog(idgl, errorLength, NULL, errorLog);
 
           std::string errorStr(errorLog);
-          Logger_Error("Can't link shader program: " + errorStr);
+          Logger_Error("Can't link " << std::endl << this << std::endl <<
+                       "   Reason:  " << errorStr);
 
           free(errorLog);
         }
@@ -85,7 +86,8 @@ bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn)
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+                                std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
 }
@@ -102,7 +104,8 @@ bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v,
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+                                std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
 }
@@ -119,7 +122,8 @@ bool ShaderProgram::SetUniformVec3 (const std::string &name, const glm::vec3& v,
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+                                std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
 }
@@ -136,7 +140,8 @@ bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v,
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+                                std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
 }
@@ -153,12 +158,13 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m,
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+                                std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
 }
 
-bool ShaderProgram::SetUniformTexture2D(const std::string &name, const Texture2D *texture, bool warn) const
+bool ShaderProgram::SetUniformTexture(const std::string &name, const Texture *texture, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
@@ -170,9 +176,19 @@ bool ShaderProgram::SetUniformTexture2D(const std::string &name, const Texture2D
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+                                std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
+}
+
+const std::string ShaderProgram::ToString() const
+{
+    std::ostringstream oss;
+    oss << "Shader program: " << std::endl <<
+           "   " << vshader << std::endl <<
+           "   " << fshader << std::endl;
+    return oss.str();
 }
 
 void ShaderProgram::Bind() const

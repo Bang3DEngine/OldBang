@@ -1,6 +1,7 @@
 #include "Mesh.h"
 
-Mesh::Mesh() : vertexPositionsVBO(nullptr), vertexNormalsVBO(nullptr), vertexUvsVBO(nullptr)
+Mesh::Mesh() : vertexPositionsVBO(nullptr), vertexNormalsVBO(nullptr), vertexUvsVBO(nullptr),
+               renderMode(RenderMode::Triangles)
 {
     vao = new VAO();
 }
@@ -10,6 +11,20 @@ Mesh::~Mesh()
     if(vertexPositionsVBO != nullptr) delete vertexPositionsVBO;
     if(vertexNormalsVBO != nullptr)   delete vertexNormalsVBO;
     if(vertexNormalsVBO != nullptr)   delete vertexUvsVBO;
+}
+
+void Mesh::LoadFromFile(const std::string &filepath)
+{
+    std::vector<glm::vec3> positions;
+    std::vector<glm::vec3> normals;
+    std::vector<glm::vec2> uvs;
+
+    bool trianglesMode;
+
+    FileLoader::LoadOBJ(filepath,
+                        &positions, &normals, &uvs,
+                        &trianglesMode);
+    renderMode = trianglesMode ? RenderMode::Triangles : RenderMode::Quads;
 }
 
 void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
@@ -40,9 +55,19 @@ void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
     vao->BindVBO(vertexUvsVBO, VAO::VBOMeaning::UV);
 }
 
+void Mesh::SetRenderMode(Mesh::RenderMode renderMode)
+{
+    this->renderMode = renderMode;
+}
+
 VAO *Mesh::GetVAO() const
 {
     return vao;
+}
+
+Mesh::RenderMode Mesh::GetRenderMode() const
+{
+    return renderMode;
 }
 
 int Mesh::GetVertexCount() const

@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-Shader::Shader(Shader::Type t) : type(t)
+Shader::Shader(Shader::Type t) : sourceCode(""), filepath(""), type(t)
 {
 }
 
@@ -11,6 +11,8 @@ Shader::Shader(Shader::Type t, const std::string &shaderPath) : Shader(t)
 
 bool Shader::LoadFromFile(const std::string& filepath)
 {
+    this->filepath = filepath;
+
     std::ifstream f;
     f.open(filepath);
     if(not f.is_open())
@@ -50,8 +52,23 @@ bool Shader::LoadFromFile(const std::string& filepath)
     return true;
 }
 
+const std::string& Shader::GetSourceCode() const
+{
+    return sourceCode;
+}
+
+const std::string& Shader::GetFilepath() const
+{
+    return filepath;
+}
+
+Shader::Type Shader::GetType() const
+{
+    return type;
+}
+
 const std::string Shader::ToString() const
 {
-    if(type == Type::Vertex) return "Vertex Shader";
-    return "Fragment Shader";
+    if(type == Type::Vertex) return "Vertex Shader: '" + filepath + "'";
+    return "Fragment Shader: '" + filepath + "'";
 }

@@ -15,7 +15,7 @@ void MeshRenderer::_OnRender()
     Camera *cam = stage->GetCamera();
     if(cam != nullptr)
     {
-        Render(MeshRenderer::RenderMode::Triangles);
+        Render(Mesh::RenderMode::Triangles);
     }
     else
     {
@@ -44,7 +44,7 @@ const Material *MeshRenderer::GetMaterial()
     return material;
 }
 
-void MeshRenderer::Render(MeshRenderer::RenderMode drawingMode) const
+void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 {
     Transform *t = parent->GetPart<Transform>();
     if(t == nullptr)

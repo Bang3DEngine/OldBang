@@ -9,6 +9,14 @@
 class Texture : public GLBindable, public GLIdable
 {
 public:
+    enum TextureType
+    {
+        Texture1D = GL_TEXTURE_1D,
+        Texture2D = GL_TEXTURE_2D,
+        Texture3D = GL_TEXTURE_3D,
+        TextureCubeMap = GL_TEXTURE_CUBE_MAP,
+    };
+
     enum FilterMode
     {
         Nearest = GL_NEAREST,
@@ -21,6 +29,9 @@ public:
         Clamp = GL_CLAMP
     };
 
+private:
+    GLint glTextureGetIntegerType;
+
 protected:
     int width;
     int height;
@@ -30,13 +41,12 @@ protected:
     WrapMode wrapMode;
     int textureSlot;
 
-    unsigned char *rgbs;
+    unsigned char *data;
 
-    GLint glTextureTarget;
-    GLint glTextureTargetGetInteger;
+    TextureType glTextureType;
 
 public:
-    Texture(GLint glTextureTarget);
+    Texture(TextureType glTextureType);
     virtual ~Texture();
 
     virtual void CreateEmpty(int width, int height) = 0;
@@ -45,6 +55,9 @@ public:
     void SetWrapMode(WrapMode wrapMode);
     void SetTextureSlot(int textureSlot);
 
+    int GetWidth() const;
+    int GetHeight() const;
+    int GetNumComponents() const;
     FilterMode GetFilterMode() const;
     WrapMode GetWrapMode() const;
     int GetTextureSlot() const;

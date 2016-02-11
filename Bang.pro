@@ -36,7 +36,9 @@ OTHER_FILES += \
     src/Domain \
     res/Shaders/pvm_pos_normal.vert \
     res/Shaders/pass_pos_normal_uv.frag \
-    res/Shaders/pvm_pos_normal_uv.vert
+    res/Shaders/pvm_pos_normal_uv.vert \
+    res/Shaders/render_to_screen.frag \
+    res/Shaders/render_to_screen.vert
 
 
 
@@ -72,7 +74,9 @@ HEADERS += \
     include/Domain/FileLoader.h \
     include/Domain/Framebuffer.h \
     include/Domain/Texture2D.h \
-    include/Domain/Texture.h
+    include/Domain/Texture.h \
+    include/Domain/MeshPlane.h \
+    include/Domain/TextureRender.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -103,4 +107,6 @@ SOURCES += \
     src/Domain/GLBindable.cpp \
     src/Domain/Texture2D.cpp \
     src/Domain/Texture.cpp \
-    src/Domain/Framebuffer.cpp
+    src/Domain/Framebuffer.cpp \
+    src/Domain/MeshPlane.cpp \
+    src/Domain/TextureRender.cpp

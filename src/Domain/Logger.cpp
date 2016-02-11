@@ -42,6 +42,12 @@ std::ostream& operator<<(std::ostream &log, const glm::mat4 &v)
 
 std::ostream &operator<<(std::ostream &log, const IToString *s)
 {
+    if(s == nullptr)
+    {
+        log << "Null";
+        return log;
+    }
+
     log << s->ToString();
     return log;
 }

@@ -4,9 +4,9 @@
 #include <vector>
 
 #include "Logger.h"
-#include "Texture2D.h"
 #include "GLIdable.h"
 #include "GLBindable.h"
+#include "TextureRender.h"
 
 class Framebuffer : public GLBindable, public GLIdable
 {
@@ -16,7 +16,7 @@ private:
     GLuint depthBufferAttachmentId;
 
     std::vector<GLenum> boundAttachments;
-    std::vector<Texture2D*> textureAttachments;
+    std::vector<TextureRender*> textureAttachments;
 
 public:
     Framebuffer(int width, int height);
@@ -25,8 +25,7 @@ public:
     void CreateTextureAttachment(int framebufferAttachmentNum);
     void CreateDepthBufferAttachment();
 
-    void Ready();
-
+    const TextureRender* GetTextureAttachment(int framebufferAttachmentNum) const;
 
     void Bind() const override;
     void UnBind() const override;

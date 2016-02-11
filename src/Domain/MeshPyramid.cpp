@@ -3,13 +3,12 @@
 
 MeshPyramid::MeshPyramid()
 {
-    LoadPositions(positions);
-    LoadNormals(normals);
-    LoadUvs(uvs);
+    LoadPositions(pyramidPositions);
+    LoadNormals(pyramidNormals);
+    LoadUvs(pyramidUvs);
 }
 
-
-const std::vector<glm::vec3> MeshPyramid::positions =
+const std::vector<glm::vec3> MeshPyramid::pyramidPositions =
 {
     //RIGHT
     glm::vec3(0.0f,  0.5f,  0.0f),
@@ -42,7 +41,7 @@ const std::vector<glm::vec3> MeshPyramid::positions =
     glm::vec3(-0.5f, -0.5f,  0.5f)
 };
 
-const std::vector<glm::vec3> MeshPyramid::normals =
+const std::vector<glm::vec3> MeshPyramid::pyramidNormals =
 {
     //RIGHT
     glm::vec3(1.0f,  0.0f,  0.0f),
@@ -75,7 +74,7 @@ const std::vector<glm::vec3> MeshPyramid::normals =
     glm::vec3(0.0f, -1.0f, 0.0f)
 };
 
-const std::vector<glm::vec2> MeshPyramid::uvs =
+const std::vector<glm::vec2> MeshPyramid::pyramidUvs =
 {
     //RIGHT
     glm::vec2(0.125f, 1.0f),

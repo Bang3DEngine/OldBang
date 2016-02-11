@@ -15,6 +15,7 @@
 #include "Shader.h"
 #include "Timer.h"
 #include "Framebuffer.h"
+#include "Texture2D.h"
 #include "TestBehaviour.h"
 #include "TestCameraBehaviour.h"
 
@@ -56,12 +57,6 @@ int main(int argc, char *argv[])
     t2->position = glm::vec3(0.0f, 1.0f, 2.0f);
 
     cam->AddPart<TestCameraBehaviour>();
-
-
-    Framebuffer *fb = new Framebuffer(Canvas::GetWidth(), Canvas::GetHeight());
-    fb->CreateDepthBufferAttachment();
-    fb->CreateTextureAttachment(0);
-    //fb->Bind();
 
     Stage *stage = windowMain.canvas->AddStage("testStage");
     stage->AddChild(ent);

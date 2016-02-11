@@ -1,7 +1,7 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "Texture2D.h"
+#include "Texture.h"
 #include "ShaderContract.h"
 #include "ShaderProgram.h"
 
@@ -11,17 +11,17 @@ friend class MeshRenderer;
 
 private:
     const ShaderProgram *shaderProgram;
-    const Texture2D *texture;
+    const Texture *texture;
 
 public:
     Material();
     virtual ~Material();
 
     void SetShaderProgram(const ShaderProgram *program);
-    void SetTexture(const Texture2D *texture);
+    void SetTexture(const Texture *texture);
 
     const ShaderProgram* GetShaderProgram() const;
-    const Texture2D* GetTexture() const;
+    const Texture* GetTexture() const;
 
     void Bind() const override;
     void UnBind() const override;

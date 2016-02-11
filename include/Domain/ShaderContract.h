@@ -36,6 +36,14 @@ public:
 
         Uniform_Texture_Prefix,
 
+        // When rendering to screen after Deferred Rendering passes.
+        // This texture will hold the definitive color values of the rendered stage
+        Uniform_Texture_Final_Color,
+
+
+
+        Filepath_Shader_Vertex_Render_To_Screen,
+        Filepath_Shader_Fragment_Render_To_Screen,
 
         Filepath_Shader_Vertex_Pass_Position,
         Filepath_Shader_Vertex_Pass_Position_Normal,

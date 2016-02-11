@@ -51,9 +51,14 @@ const std::string ShaderContract::Uniform_Matrix_PVM =
         ShaderContract::ShaderNames_Prefix + "matrix_pvm";
 
 const std::string ShaderContract::Uniform_Texture_Prefix =
-        ShaderContract::ShaderNames_Prefix + "texture";
+        ShaderContract::ShaderNames_Prefix + "texture_";
+
+const std::string ShaderContract::Uniform_Texture_Final_Color =
+        ShaderContract::Uniform_Texture_Prefix + "final_color";
 
 
+const std::string ShaderContract::Filepath_Shader_Vertex_Render_To_Screen = "res/Shaders/render_to_screen.vert";
+const std::string ShaderContract::Filepath_Shader_Fragment_Render_To_Screen = "res/Shaders/render_to_screen.frag";
 
 const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position   = "res/Shaders/pass_pos.vert";
 const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position_Normal = "res/Shaders/pass_pos_normal.vert";

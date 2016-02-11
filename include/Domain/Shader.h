@@ -24,6 +24,7 @@ public:
 
 private:
     std::string sourceCode;
+    std::string filepath;
     Type type;
 
 public:
@@ -33,8 +34,9 @@ public:
 
     bool LoadFromFile(const std::string &filepath);
 
-    Type GetType() const { return type; }
-    const std::string GetSourceCode() const { return sourceCode; }
+    const std::string& GetSourceCode() const;
+    const std::string& GetFilepath() const;
+    Type GetType() const;
     const std::string ToString() const;
 };
 
