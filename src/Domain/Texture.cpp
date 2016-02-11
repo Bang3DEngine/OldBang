@@ -1,18 +1,17 @@
 #include "Texture.h"
 
-Texture::Texture(int textureSlot) : width(0), height(0), numComponents(0),
-                                    filterMode(FilterMode::Linear),
-                                    wrapMode(WrapMode::Repeat),
-                                    rgbs(nullptr)
+Texture::Texture() : width(0), height(0), numComponents(0),
+                     filterMode(FilterMode::Linear),
+                     wrapMode(WrapMode::Repeat),
+                     textureSlot(0),
+                     rgbs(nullptr)
 {
     glGenTextures(1, &idgl);
-    this->textureSlot = textureSlot;
-
     SetFilterMode(filterMode);
     SetWrapMode(wrapMode);
 }
 
-Texture::Texture(int textureSlot, const std::string &filepath) : Texture(textureSlot)
+Texture::Texture(const std::string &filepath) : Texture()
 {
     LoadFromFile(filepath);
 }
@@ -64,6 +63,11 @@ void Texture::SetWrapMode(Texture::WrapMode wrapMode)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
     UnBind();
+}
+
+void Texture::SetTextureSlot(int textureSlot)
+{
+    this->textureSlot = textureSlot;
 }
 
 Texture::FilterMode Texture::GetFilterMode() const

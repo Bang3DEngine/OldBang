@@ -24,7 +24,7 @@ void Framebuffer::CreateTextureAttachment(int framebufferAttachmentNum)
 {
     Bind();
 
-    Texture *tex = new Texture(0);
+    Texture *tex = new Texture();
     tex->CreateEmpty(width, height);
     tex->SetFilterMode(Texture::FilterMode::Nearest);
     textureAttachments.push_back(tex);

@@ -33,7 +33,8 @@ int main(int argc, char *argv[])
     ShaderProgram *sp = new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
                                           ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv);
 
-    Texture *tex = new Texture(1, "res/testTexture.png");
+    Texture *tex = new Texture("res/testTexture.png");
+    tex->SetTextureSlot(0);
 
     Material *mat = new Material();
     mat->SetShaderProgram(sp);
@@ -50,7 +51,7 @@ int main(int argc, char *argv[])
     ent->AddPart<TestBehaviour>();
 
     Entity *cam = new Entity("camera");
-    Camera *camPart = cam->AddPart<Camera>();
+    cam->AddPart<Camera>();
     Transform *t2 = cam->AddPart<Transform>();
     t2->position = glm::vec3(0.0f, 1.0f, 2.0f);
 

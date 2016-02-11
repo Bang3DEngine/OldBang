@@ -1,4 +1,4 @@
-#ifndef TEXTURE_H
+﻿#ifndef TEXTURE_H
 #define TEXTURE_H
 
 #include <string>
@@ -31,17 +31,17 @@ public:
 private:
     int width;
     int height;
-    int textureSlot;
     int numComponents;
 
     FilterMode filterMode;
     WrapMode wrapMode;
+    int textureSlot;
 
     unsigned char *rgbs;
 
 public:
-    Texture(int textureSlot);
-    Texture(int textureSlot, const std::string &filepath);
+    Texture();
+    Texture(const std::string &filepath);
     virtual ~Texture();
 
     void LoadFromFile(const std::string &filepath);
@@ -49,11 +49,11 @@ public:
 
     void SetFilterMode(FilterMode filterMode);
     void SetWrapMode(WrapMode wrapMode);
+    void SetTextureSlot(int textureSlot);
 
     FilterMode GetFilterMode() const;
     WrapMode GetWrapMode() const;
     int GetTextureSlot() const;
-
 
     void Bind() const override;
     void UnBind() const override;
