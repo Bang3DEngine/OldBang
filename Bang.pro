@@ -76,7 +76,8 @@ HEADERS += \
     include/Domain/Texture2D.h \
     include/Domain/Texture.h \
     include/Domain/MeshPlane.h \
-    include/Domain/TextureRender.h
+    include/Domain/TextureRender.h \
+    include/Domain/MeshScreenPlane.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -109,4 +110,5 @@ SOURCES += \
     src/Domain/Texture.cpp \
     src/Domain/Framebuffer.cpp \
     src/Domain/MeshPlane.cpp \
-    src/Domain/TextureRender.cpp
+    src/Domain/TextureRender.cpp \
+    src/Domain/MeshScreenPlane.cpp

@@ -15,7 +15,7 @@ Stage::Stage() : cameraEntity(nullptr)
     ShaderProgram *sp = new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_Render_To_Screen,
                                           ShaderContract::Filepath_Shader_Fragment_Render_To_Screen);
     renderToScreenMaterial->SetShaderProgram(sp);
-    planeMesh = new MeshPlane();
+    screenPlaneMesh = new MeshScreenPlane();
 }
 
 Stage::~Stage()
@@ -28,13 +28,14 @@ Stage::~Stage()
         delete child;
     }
 
-    delete renderToScreenMaterial;
-    delete planeMesh;
+    if(renderToScreenMaterial != nullptr) delete renderToScreenMaterial;
+    if(screenPlaneMesh != nullptr) delete screenPlaneMesh;
 }
 
 void Stage::_OnRender()
 {
     geometryFramebuffer->Bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //All the mesh renderers now will render stuff into the geometryFramebuffer
     PROPAGATE_EVENT(_OnRender, children);
     geometryFramebuffer->UnBind();
@@ -46,14 +47,15 @@ void Stage::_OnRender()
     const TextureRender *diffuseTex  = geometryFramebuffer->GetTextureAttachment(GeometryFBAttachment::Diffuse);
 
     //Render to screen
+    screenPlaneMesh->GetVAO()->Bind();
+
     renderToScreenMaterial->SetTexture(positionTex);
-    planeMesh->GetVAO()->Bind();
     renderToScreenMaterial->Bind();
 
-    glDrawArrays(planeMesh->GetRenderMode(), 0, planeMesh->GetVertexCount()); //Draw the screen plane!
+    glDrawArrays(screenPlaneMesh->GetRenderMode(), 0, screenPlaneMesh->GetVertexCount()); //Draw the screen plane!
 
     renderToScreenMaterial->UnBind();
-    planeMesh->GetVAO()->UnBind();
+    screenPlaneMesh->GetVAO()->UnBind();
     //
 }
 

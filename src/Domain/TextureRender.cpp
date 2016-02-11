@@ -3,6 +3,7 @@
 TextureRender::TextureRender() : Texture(TextureType::Texture2D)
 {
     SetFilterMode(Texture::FilterMode::Nearest);
+    SetWrapMode(Texture::WrapMode::Clamp);
 }
 
 TextureRender::~TextureRender()

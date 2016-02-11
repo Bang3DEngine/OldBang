@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include "Canvas.h"
 #include "Framebuffer.h"
-#include "MeshPlane.h"
+#include "MeshScreenPlane.h"
 #include "Material.h"
 #include "StageEventListener.h"
 
@@ -31,7 +31,7 @@ private:
     //When you want to render with it, just attach
     //the final color texture to texture slot 0
     Material *renderToScreenMaterial;
-    Mesh *planeMesh; //This will be used to render to screen
+    MeshScreenPlane *screenPlaneMesh; //This will be used to render to screen
 
 protected:
     Stage();
