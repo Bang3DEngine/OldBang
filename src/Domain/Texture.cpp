@@ -1,8 +1,9 @@
 #include "Texture.h"
 
-Texture::Texture() : width(0), height(0), numComponents(0), rgbs(nullptr)
+Texture::Texture(int textureSlot) : width(0), height(0), numComponents(0), rgbs(nullptr)
 {
     glGenTextures(1, &idgl);
+    this->textureSlot = textureSlot;
 }
 
 Texture::~Texture()
@@ -28,22 +29,22 @@ void Texture::LoadFromFile(const std::string &filepath)
     UnBind();
 }
 
+int Texture::GetTextureSlot() const
+{
+    return textureSlot;
+}
+
 void Texture::Bind() const
 {
-    GLuint lastActive; glGetIntegerv(GL_ACTIVE_TEXTURE, &lastActive);
-    lastActiveTextureSlots.push(lastActive);
+    PreBind(GL_ACTIVE_TEXTURE, 1);
+    glActiveTexture(textureSlot);
 
-    PreBind(GL_TEXTURE_BINDING_2D);
-
-    glActiveTexture(GL_TEXTURE0);
-
+    PreBind(GL_TEXTURE_BINDING_2D, 0);
     glBindTexture(GL_TEXTURE_2D, idgl);
 }
 
 void Texture::UnBind() const
 {
-    glBindBuffer(GL_TEXTURE_2D, PreUnBind());
-
-    glActiveTexture(lastActiveTextureSlots.top());
-    lastActiveTextureSlots.pop();
+    glActiveTexture( PreUnBind(1) );
+    glBindBuffer(GL_TEXTURE_2D, PreUnBind(0));
 }

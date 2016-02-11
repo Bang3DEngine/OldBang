@@ -11,7 +11,7 @@ QT += core gui opengl
 
 CONFIG += qt
 
-QMAKE_CXXFLAGS += --std=c++11
+QMAKE_CXXFLAGS += -g --std=c++11
 
 LIBS += -lGLEW
 
@@ -98,4 +98,5 @@ SOURCES += \
     src/Domain/MeshPyramid.cpp \
     src/Domain/FileLoader.cpp \
     src/Domain/stb_image.cpp \
-    include/Domain/Texture.cpp
+    src/Domain/Texture.cpp \
+    src/Domain/GLBindable.cpp

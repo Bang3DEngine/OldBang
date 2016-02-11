@@ -50,6 +50,9 @@ const std::string ShaderContract::Uniform_Matrix_Projection =
 const std::string ShaderContract::Uniform_Matrix_PVM =
         ShaderContract::ShaderNames_Prefix + "matrix_pvm";
 
+const std::string ShaderContract::Uniform_Texture_Prefix =
+        ShaderContract::ShaderNames_Prefix + "texture";
+
 
 
 const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position   = "res/Shaders/pass_pos.vert";

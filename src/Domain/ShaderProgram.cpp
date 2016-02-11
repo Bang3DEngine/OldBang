@@ -149,6 +149,23 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m,
     }
 }
 
+bool ShaderProgram::SetUniformTexture2D(const std::string &name, const Texture *texture, bool warn) const
+{
+    int location = glGetUniformLocation(idgl, name.c_str());
+    if(location >= 0)
+    {
+        this->Bind();
+        glUniform1i(location, texture->GetTextureSlot());
+        this->UnBind();
+        return true;
+    }
+    else
+    {
+        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in shader program. Not setting it.");
+        return false;
+    }
+}
+
 void ShaderProgram::Bind() const
 {
     PreBind(GL_CURRENT_PROGRAM);

@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Canvas.h"
 
 Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
                    fovDegrees(60.0f),
@@ -31,6 +32,11 @@ void Camera::GetProjectionMatrix(glm::mat4 &proj) const
 {
     if(projMode == ProjectionMode::Perspective)
     {
+        if(autoUpdateAspectRatio)
+        {
+            aspectRatio = Canvas::GetAspectRatio();
+        }
+
         proj = glm::perspective(glm::radians(fovDegrees), aspectRatio, zNear, zFar);
     }
     else //Ortho

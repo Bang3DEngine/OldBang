@@ -3,30 +3,21 @@
 
 #include <GL/glew.h>
 #include <iostream>
+#include <vector>
 #include <stack>
 
 class GLBindable
 {
+private:
+    void CreateEnoughLatestBoundIdsStacks(unsigned  int latestBindStackId) const;
+
 protected:
-    mutable std::stack<GLint> latestBoundIds;
+    mutable std::vector< std::stack<GLint> > latestBoundIds;
 
-    GLBindable() {}
+    GLBindable();
 
-    void PreBind(GLenum bindTarget) const
-    {
-        GLint lastBoundId;
-        glGetIntegerv(bindTarget, &lastBoundId);
-        latestBoundIds.push(lastBoundId);
-    }
-
-    GLint PreUnBind() const
-    {
-        if(latestBoundIds.empty()) return 0;
-        GLint lastBoundId = latestBoundIds.top();
-        latestBoundIds.pop();
-        return lastBoundId;
-    }
-
+    void PreBind(GLenum bindTarget, unsigned int latestBindStackId = 0) const;
+    GLint PreUnBind(unsigned int latestBindStackId = 0) const;
     virtual void Bind() const = 0;
     virtual void UnBind() const = 0;
 };

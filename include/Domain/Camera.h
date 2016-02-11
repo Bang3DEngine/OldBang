@@ -9,6 +9,7 @@
 #include "Part.h"
 #include "Transform.h"
 
+class Canvas;
 class Camera : public Part
 {
 public:
@@ -26,7 +27,7 @@ private:
     float zNear;
     float zFar;
 
-    float aspectRatio;
+    mutable float aspectRatio;
 
     ProjectionMode projMode;
 

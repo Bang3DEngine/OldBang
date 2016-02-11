@@ -1,5 +1,6 @@
 #include "Stage.h"
 #include "Entity.h"
+#include "Canvas.h"
 
 Stage::Stage() : cameraEntity(nullptr)
 {
@@ -33,5 +34,10 @@ Camera *Stage::GetCamera() const
 {
     if(cameraEntity == nullptr) return nullptr;
     return cameraEntity->GetPart<Camera>();
+}
+
+const Canvas *Stage::GetCanvas() const
+{
+    return canvas;
 }
 

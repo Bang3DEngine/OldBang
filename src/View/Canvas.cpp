@@ -1,6 +1,7 @@
 #include "Canvas.h"
 
 int Canvas::RedrawDelay = 1;
+float Canvas::aspectRatio = 1.0f;
 unsigned long long Canvas::lastRenderTime = 0;
 
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent), currentStage(nullptr)
@@ -48,6 +49,7 @@ void Canvas::updateGL()
 void Canvas::resizeGL(int w, int h)
 {
     glViewport(0, 0, (GLint)w, (GLint)h);
+    aspectRatio = float(w) / h;
 }
 
 Stage *Canvas::AddStage(const std::string &name)
@@ -94,4 +96,9 @@ void Canvas::RemoveStage(const std::string &name)
     {
         if((*it)->name == name) { stages.erase(it); return; }
     }
+}
+
+float Canvas::GetAspectRatio()
+{
+    return aspectRatio;
 }

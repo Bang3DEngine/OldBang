@@ -42,13 +42,18 @@ int main(int argc, char *argv[])
     vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv);
     fs->LoadFromFile(ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv);
 
+
+    Material *mat = new Material();
+
     ShaderProgram *sp = new ShaderProgram();
     sp->BindVertexShader(vs);
     sp->BindFragmentShader(fs);
     sp->Link();
-
-    Material *mat = new Material();
     mat->SetShaderProgram(sp);
+
+    Texture *tex = new Texture(0);
+    tex->LoadFromFile("res/testTexture.png");
+    mat->SetTexture(tex);
 
     Stage *stage = windowMain.canvas->AddStage("testStage");
 
@@ -57,6 +62,7 @@ int main(int argc, char *argv[])
     Transform *t = ent->AddPart<Transform>();
     t->position = glm::vec3(0.0f, 0.0f, 0.0f);
     //t->rotation = glm::angleAxis(3.141592f/2, glm::vec3(0.0f, 1.0f, 0.0f));
+
     MeshRenderer *mr = ent->AddPart<MeshRenderer>();
     mr->SetMesh(m);
     mr->SetMaterial(mat);
@@ -65,7 +71,7 @@ int main(int argc, char *argv[])
     Entity *cam = new Entity("camera");
     Camera *camPart = cam->AddPart<Camera>();
     Transform *t2 = cam->AddPart<Transform>();
-    t2->position = glm::vec3(0.0f, 1.0f, 3.0f);
+    t2->position = glm::vec3(0.0f, 1.0f, 2.0f);
     //t2->rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, 3.0f));
 
     cam->AddPart<TestCameraBehaviour>();

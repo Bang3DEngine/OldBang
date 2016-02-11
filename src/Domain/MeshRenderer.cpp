@@ -88,7 +88,8 @@ void MeshRenderer::Render(MeshRenderer::RenderMode drawingMode) const
     glm::mat4 pvm = projection * view * model;
 
     mesh->GetVAO()->Bind();
-    material->shaderProgram->Bind();
+
+    material->Bind();
 
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
@@ -97,6 +98,7 @@ void MeshRenderer::Render(MeshRenderer::RenderMode drawingMode) const
 
     glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
 
-    material->shaderProgram->UnBind();
+    material->UnBind();
+
     mesh->GetVAO()->UnBind();
 }

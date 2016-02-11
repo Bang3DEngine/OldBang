@@ -28,10 +28,13 @@ public:
 
 
         Uniform_Position_Camera,
+
         Uniform_Matrix_Model,
         Uniform_Matrix_View,
         Uniform_Matrix_Projection,
         Uniform_Matrix_PVM,
+
+        Uniform_Texture_Prefix,
 
 
         Filepath_Shader_Vertex_Pass_Position,

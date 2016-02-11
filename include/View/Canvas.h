@@ -19,6 +19,7 @@ class Canvas : public QGLWidget
     Q_OBJECT
 
 private:
+    static float aspectRatio;
     static int RedrawDelay;
     static unsigned long long lastRenderTime;
 
@@ -28,7 +29,6 @@ private:
     QTimer drawTimer;
 
 public:
-    static float deltaTime;
 
     glm::vec4 clearColor;
 
@@ -44,7 +44,7 @@ public:
     Stage* GetStage(const std::string &name) const;
     void RemoveStage(const std::string &name);
 
-    static float GetDeltaTime() { return deltaTime; }
+    static float GetAspectRatio();
 
 signals:
 

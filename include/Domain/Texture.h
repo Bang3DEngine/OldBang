@@ -16,19 +16,20 @@
 class Texture : public GLBindable, public GLIdable
 {
 private:
-    std::stack<GLuint> lastActiveTextureSlots;
-
     int width;
     int height;
+    int textureSlot;
     int numComponents;
 
     unsigned char *rgbs;
 
 public:
-    Texture();
+    Texture(int textureSlot);
     virtual ~Texture();
 
     void LoadFromFile(const std::string &filepath);
+
+    int GetTextureSlot() const;
 
     void Bind() const override;
     void UnBind() const override;
