@@ -2,7 +2,7 @@
 #define SHADERPROGRAM_H
 
 #include "Shader.h"
-#include "Texture.h"
+#include "Texture2D.h"
 #include "GLBindable.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -30,7 +30,7 @@ public:
     bool SetUniformVec3 (const std::string &name, const glm::vec3& v, bool warn = true) const;
     bool SetUniformVec4 (const std::string &name, const glm::vec4& v, bool warn = true) const;
     bool SetUniformMat4 (const std::string &name, const glm::mat4& m, bool warn = true) const;
-    bool SetUniformTexture2D (const std::string &name, const Texture *texture, bool warn = true) const;
+    bool SetUniformTexture2D (const std::string &name, const Texture2D *texture, bool warn = true) const;
 
     Shader* GetVertexShader() const { return vshader; }
     Shader* GetFragmentShader() const { return fshader; }

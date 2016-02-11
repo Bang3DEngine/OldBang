@@ -70,8 +70,9 @@ HEADERS += \
     include/Domain/MeshPyramid.h \
     include/Domain/stb_image.h \
     include/Domain/FileLoader.h \
-    include/Domain/Texture.h \
-    include/Domain/Framebuffer.h
+    include/Domain/Framebuffer.h \
+    include/Domain/Texture2D.h \
+    include/Domain/Texture.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -99,6 +100,7 @@ SOURCES += \
     src/Domain/MeshPyramid.cpp \
     src/Domain/FileLoader.cpp \
     src/Domain/stb_image.cpp \
-    src/Domain/Texture.cpp \
     src/Domain/GLBindable.cpp \
-    include/Domain/Framebuffer.cpp
+    src/Domain/Texture2D.cpp \
+    src/Domain/Texture.cpp \
+    src/Domain/Framebuffer.cpp

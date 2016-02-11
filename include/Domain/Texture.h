@@ -1,17 +1,10 @@
-﻿#ifndef TEXTURE_H
+#ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <string>
-#include <vector>
-#include <stack>
+#include <GL/glew.h>
 
-#include "glm/glm.hpp"
-
-
-#include "FileLoader.h"
 #include "GLBindable.h"
 #include "GLIdable.h"
-#include "Logger.h"
 
 class Texture : public GLBindable, public GLIdable
 {
@@ -28,7 +21,7 @@ public:
         Clamp = GL_CLAMP
     };
 
-private:
+protected:
     int width;
     int height;
     int numComponents;
@@ -39,13 +32,14 @@ private:
 
     unsigned char *rgbs;
 
+    GLint glTextureTarget;
+    GLint glTextureTargetGetInteger;
+
 public:
-    Texture();
-    Texture(const std::string &filepath);
+    Texture(GLint glTextureTarget);
     virtual ~Texture();
 
-    void LoadFromFile(const std::string &filepath);
-    void CreateEmpty(int width, int height);
+    virtual void CreateEmpty(int width, int height) = 0;
 
     void SetFilterMode(FilterMode filterMode);
     void SetWrapMode(WrapMode wrapMode);

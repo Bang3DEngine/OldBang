@@ -1,19 +1,26 @@
 #include "Texture.h"
 
-Texture::Texture() : width(0), height(0), numComponents(0),
-                     filterMode(FilterMode::Linear),
-                     wrapMode(WrapMode::Repeat),
-                     textureSlot(0),
-                     rgbs(nullptr)
+Texture::Texture(GLint glTextureTarget) :
+    width(0), height(0), numComponents(0),
+    filterMode(FilterMode::Linear),
+    wrapMode(WrapMode::Repeat),
+    textureSlot(0),
+    rgbs(nullptr),
+    glTextureTarget(glTextureTarget)
 {
     glGenTextures(1, &idgl);
     SetFilterMode(filterMode);
     SetWrapMode(wrapMode);
-}
 
-Texture::Texture(const std::string &filepath) : Texture()
-{
-    LoadFromFile(filepath);
+    if(glTextureTarget == GL_TEXTURE_1D)
+        glTextureTargetGetInteger = GL_TEXTURE_BINDING_1D;
+    else if(glTextureTarget == GL_TEXTURE_2D)
+        glTextureTargetGetInteger = GL_TEXTURE_BINDING_2D;
+    else if(glTextureTarget == GL_TEXTURE_3D)
+        glTextureTargetGetInteger = GL_TEXTURE_BINDING_3D;
+    else if(glTextureTarget == GL_TEXTURE_CUBE_MAP)
+        glTextureTargetGetInteger = GL_TEXTURE_BINDING_CUBE_MAP;
+
 }
 
 Texture::~Texture()
@@ -22,37 +29,12 @@ Texture::~Texture()
     glDeleteTextures(1, &idgl);
 }
 
-void Texture::LoadFromFile(const std::string &filepath)
-{
-    Bind();
-
-    rgbs = FileLoader::LoadImage(filepath, &numComponents, &width, &height);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, rgbs);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    UnBind();
-}
-
-void Texture::CreateEmpty(int width, int height)
-{
-    if(rgbs != nullptr) delete rgbs;
-    Bind();
-
-    this->width = width;
-    this->height = height;
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-
-    UnBind();
-}
-
 void Texture::SetFilterMode(Texture::FilterMode filterMode)
 {
     this->filterMode = filterMode;
     Bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filterMode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filterMode);
+    glTexParameteri(glTextureTarget, GL_TEXTURE_MAG_FILTER, filterMode);
+    glTexParameteri(glTextureTarget, GL_TEXTURE_MIN_FILTER, filterMode);
     UnBind();
 }
 
@@ -60,8 +42,9 @@ void Texture::SetWrapMode(Texture::WrapMode wrapMode)
 {
     this->wrapMode = wrapMode;
     Bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
+    glTexParameteri(glTextureTarget, GL_TEXTURE_WRAP_S, wrapMode);
+    glTexParameteri(glTextureTarget, GL_TEXTURE_WRAP_T, wrapMode);
+    glTexParameteri(glTextureTarget, GL_TEXTURE_WRAP_R, wrapMode);
     UnBind();
 }
 
@@ -96,6 +79,6 @@ void Texture::Bind() const
 
 void Texture::UnBind() const
 {
-    glBindTexture(GL_TEXTURE_2D, PreUnBind(0));
+    glBindTexture(glTextureTarget, PreUnBind(0));
     glActiveTexture( PreUnBind(1) );
 }

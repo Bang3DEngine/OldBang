@@ -12,7 +12,7 @@ Framebuffer::~Framebuffer()
     if(depthBufferAttachmentId != 0)
         glDeleteRenderbuffers(1, &depthBufferAttachmentId);
 
-    for(Texture *t : textureAttachments)
+    for(Texture2D *t : textureAttachments)
     {
         delete t;
     }
@@ -24,9 +24,9 @@ void Framebuffer::CreateTextureAttachment(int framebufferAttachmentNum)
 {
     Bind();
 
-    Texture *tex = new Texture();
+    Texture2D *tex = new Texture2D();
     tex->CreateEmpty(width, height);
-    tex->SetFilterMode(Texture::FilterMode::Nearest);
+    tex->SetFilterMode(Texture2D::FilterMode::Nearest);
     textureAttachments.push_back(tex);
 
     GLuint attachment = GL_COLOR_ATTACHMENT0 + framebufferAttachmentNum;

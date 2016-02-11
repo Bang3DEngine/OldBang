@@ -158,7 +158,7 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m,
     }
 }
 
-bool ShaderProgram::SetUniformTexture2D(const std::string &name, const Texture *texture, bool warn) const
+bool ShaderProgram::SetUniformTexture2D(const std::string &name, const Texture2D *texture, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)

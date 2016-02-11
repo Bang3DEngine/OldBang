@@ -39,7 +39,7 @@ void Material::SetShaderProgram(const ShaderProgram *program)
     shaderProgram = program;
 }
 
-void Material::SetTexture(const Texture *texture)
+void Material::SetTexture(const Texture2D *texture)
 {
     this->texture = texture;
 }
@@ -49,7 +49,7 @@ const ShaderProgram *Material::GetShaderProgram() const
     return shaderProgram;
 }
 
-const Texture *Material::GetTexture() const
+const Texture2D *Material::GetTexture() const
 {
     return texture;
 }

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Logger.h"
-#include "Texture.h"
+#include "Texture2D.h"
 #include "GLIdable.h"
 #include "GLBindable.h"
 
@@ -16,7 +16,7 @@ private:
     GLuint depthBufferAttachmentId;
 
     std::vector<GLenum> boundAttachments;
-    std::vector<Texture*> textureAttachments;
+    std::vector<Texture2D*> textureAttachments;
 
 public:
     Framebuffer(int width, int height);
