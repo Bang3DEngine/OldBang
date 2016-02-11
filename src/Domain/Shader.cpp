@@ -4,6 +4,11 @@ Shader::Shader(Shader::Type t) : type(t)
 {
 }
 
+Shader::Shader(Shader::Type t, const std::string &shaderPath) : Shader(t)
+{
+    LoadFromFile(shaderPath);
+}
+
 bool Shader::LoadFromFile(const std::string& filepath)
 {
     std::ifstream f;

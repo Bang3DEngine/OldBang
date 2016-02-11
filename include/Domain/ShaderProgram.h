@@ -14,6 +14,7 @@ private:
 
 public:
     ShaderProgram();
+    ShaderProgram(const std::string &vshaderPath, const std::string &fshaderPath);
     virtual ~ShaderProgram();
 
     void BindVertexShader(Shader *vshader);

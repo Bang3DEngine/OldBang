@@ -12,6 +12,11 @@ Texture::Texture(int textureSlot) : width(0), height(0), numComponents(0),
     SetWrapMode(wrapMode);
 }
 
+Texture::Texture(int textureSlot, const std::string &filepath) : Texture(textureSlot)
+{
+    LoadFromFile(filepath);
+}
+
 Texture::~Texture()
 {
     if(rgbs != nullptr) delete rgbs;

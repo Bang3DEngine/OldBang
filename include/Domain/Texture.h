@@ -41,6 +41,7 @@ private:
 
 public:
     Texture(int textureSlot);
+    Texture(int textureSlot, const std::string &filepath);
     virtual ~Texture();
 
     void LoadFromFile(const std::string &filepath);

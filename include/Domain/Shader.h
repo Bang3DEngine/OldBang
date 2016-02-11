@@ -29,6 +29,7 @@ private:
 public:
 
     Shader(Shader::Type t);
+    Shader(Shader::Type t, const std::string &shaderPath);
 
     bool LoadFromFile(const std::string &filepath);
 

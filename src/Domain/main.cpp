@@ -18,14 +18,7 @@
 #include "TestBehaviour.h"
 #include "TestCameraBehaviour.h"
 
-class WindowMain: public Ui_WindowMain
-{
-public:
-    WindowMain() : Ui_WindowMain()
-    {
-    }
-};
-
+class WindowMain: public Ui_WindowMain { public: WindowMain() : Ui_WindowMain() { } };
 WindowMain windowMain;
 
 int main(int argc, char *argv[])
@@ -37,36 +30,24 @@ int main(int argc, char *argv[])
     widget->show();
 
     ////////
-    MeshPyramid *m = new MeshPyramid();
+    ShaderProgram *sp = new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
+                                          ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv);
 
-    Shader *vs = new Shader(Shader::Type::Vertex);
-    Shader *fs = new Shader(Shader::Type::Fragment);
-    vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv);
-    fs->LoadFromFile(ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv);
+    Texture *tex = new Texture(1, "res/testTexture.png");
 
     Material *mat = new Material();
-
-    ShaderProgram *sp = new ShaderProgram();
-    sp->BindVertexShader(vs);
-    sp->BindFragmentShader(fs);
-    sp->Link();
     mat->SetShaderProgram(sp);
-
-    Texture *tex = new Texture(1);
-    tex->LoadFromFile("res/testTexture.png");
     mat->SetTexture(tex);
 
-    Stage *stage = windowMain.canvas->AddStage("testStage");
-
     Entity *ent = new Entity("pyramid");
-    stage->AddChild(ent);
     Transform *t = ent->AddPart<Transform>();
     t->position = glm::vec3(0.0f, 0.0f, 0.0f);
 
+    MeshPyramid *m = new MeshPyramid();
     MeshRenderer *mr = ent->AddPart<MeshRenderer>();
     mr->SetMesh(m);
     mr->SetMaterial(mat);
-    TestBehaviour *testBehaviour = ent->AddPart<TestBehaviour>();
+    ent->AddPart<TestBehaviour>();
 
     Entity *cam = new Entity("camera");
     Camera *camPart = cam->AddPart<Camera>();
@@ -75,15 +56,18 @@ int main(int argc, char *argv[])
 
     cam->AddPart<TestCameraBehaviour>();
 
-    stage->AddChild(cam);
-    stage->SetCameraEntity(cam);
-
-    windowMain.canvas->SetCurrentStage("testStage");
 
     Framebuffer *fb = new Framebuffer(Canvas::GetWidth(), Canvas::GetHeight());
     fb->CreateDepthBufferAttachment();
     fb->CreateTextureAttachment(0);
     //fb->Bind();
+
+    Stage *stage = windowMain.canvas->AddStage("testStage");
+    stage->AddChild(ent);
+    stage->AddChild(cam);
+    stage->SetCameraEntity(cam);
+
+    windowMain.canvas->SetCurrentStage("testStage");
     ///////
 
     return app.exec();
