@@ -16,7 +16,8 @@ void Material::Bind() const
         shaderProgram->Bind();
         if(texture != nullptr)
         {
-            shaderProgram->SetUniformTexture2D(ShaderContract::Uniform_Texture_Prefix + "0", texture, false);
+            texture->Bind();
+            shaderProgram->SetUniformTexture2D(ShaderContract::Uniform_Texture_Prefix + "0", texture, true);
         }
     }
 }
@@ -26,6 +27,10 @@ void Material::UnBind() const
     if(shaderProgram != nullptr)
     {
         shaderProgram->UnBind();
+        if(texture != nullptr)
+        {
+            texture->UnBind();
+        }
     }
 }
 

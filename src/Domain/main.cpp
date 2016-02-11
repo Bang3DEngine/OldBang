@@ -14,6 +14,7 @@
 #include "Canvas.h"
 #include "Shader.h"
 #include "Timer.h"
+#include "Framebuffer.h"
 #include "TestBehaviour.h"
 #include "TestCameraBehaviour.h"
 
@@ -35,13 +36,13 @@ int main(int argc, char *argv[])
     windowMain.setupUi(widget);
     widget->show();
 
+    ////////
     MeshPyramid *m = new MeshPyramid();
 
     Shader *vs = new Shader(Shader::Type::Vertex);
     Shader *fs = new Shader(Shader::Type::Fragment);
     vs->LoadFromFile(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv);
     fs->LoadFromFile(ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv);
-
 
     Material *mat = new Material();
 
@@ -51,7 +52,7 @@ int main(int argc, char *argv[])
     sp->Link();
     mat->SetShaderProgram(sp);
 
-    Texture *tex = new Texture(0);
+    Texture *tex = new Texture(1);
     tex->LoadFromFile("res/testTexture.png");
     mat->SetTexture(tex);
 
@@ -61,7 +62,6 @@ int main(int argc, char *argv[])
     stage->AddChild(ent);
     Transform *t = ent->AddPart<Transform>();
     t->position = glm::vec3(0.0f, 0.0f, 0.0f);
-    //t->rotation = glm::angleAxis(3.141592f/2, glm::vec3(0.0f, 1.0f, 0.0f));
 
     MeshRenderer *mr = ent->AddPart<MeshRenderer>();
     mr->SetMesh(m);
@@ -72,7 +72,6 @@ int main(int argc, char *argv[])
     Camera *camPart = cam->AddPart<Camera>();
     Transform *t2 = cam->AddPart<Transform>();
     t2->position = glm::vec3(0.0f, 1.0f, 2.0f);
-    //t2->rotation = glm::angleAxis(0.0f, glm::vec3(0.0f, 0.0f, 3.0f));
 
     cam->AddPart<TestCameraBehaviour>();
 
@@ -80,6 +79,12 @@ int main(int argc, char *argv[])
     stage->SetCameraEntity(cam);
 
     windowMain.canvas->SetCurrentStage("testStage");
+
+    Framebuffer *fb = new Framebuffer(Canvas::GetWidth(), Canvas::GetHeight());
+    fb->CreateDepthBufferAttachment();
+    fb->CreateTextureAttachment(0);
+    //fb->Bind();
+    ///////
 
     return app.exec();
 }

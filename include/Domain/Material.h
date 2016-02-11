@@ -17,14 +17,14 @@ public:
     Material();
     virtual ~Material();
 
-    void Bind() const;
-    void UnBind() const;
-
     void SetShaderProgram(const ShaderProgram *program);
     void SetTexture(const Texture *texture);
 
     const ShaderProgram* GetShaderProgram() const;
     const Texture* GetTexture() const;
+
+    void Bind() const override;
+    void UnBind() const override;
 };
 
 #endif // MATERIAL_H

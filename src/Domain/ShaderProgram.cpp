@@ -69,9 +69,9 @@ bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn)
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
     {
-        this->Bind();
+        Bind();
         glUniform1fv(location, 1, &v);
-        this->UnBind();
+        UnBind();
         return true;
     }
     else
@@ -86,9 +86,9 @@ bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v,
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
     {
-        this->Bind();
+        Bind();
         glUniform2fv(location, 1, &v[0]);
-        this->UnBind();
+        UnBind();
         return true;
     }
     else
@@ -103,9 +103,9 @@ bool ShaderProgram::SetUniformVec3 (const std::string &name, const glm::vec3& v,
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
     {
-        this->Bind();
+        Bind();
         glUniform3fv(location, 1, &v[0]);
-        this->UnBind();
+        UnBind();
         return true;
     }
     else
@@ -120,9 +120,9 @@ bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v,
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
     {
-        this->Bind();
+        Bind();
         glUniform4fv(location, 1, &v[0]);
-        this->UnBind();
+        UnBind();
         return true;
     }
     else
@@ -137,9 +137,9 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m,
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
     {
-        this->Bind();
+        Bind();
         glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m));
-        this->UnBind();
+        UnBind();
         return true;
     }
     else
@@ -154,9 +154,9 @@ bool ShaderProgram::SetUniformTexture2D(const std::string &name, const Texture *
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
     {
-        this->Bind();
+        Bind();
         glUniform1i(location, texture->GetTextureSlot());
-        this->UnBind();
+        UnBind();
         return true;
     }
     else

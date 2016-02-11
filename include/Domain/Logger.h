@@ -32,13 +32,11 @@ std::ostream &operator<<(std::ostream &log, const IToString *s);
 #define Logger_Log(x) do{\
     std::ostringstream log;\
     log << x;\
+    std::cerr << "[   LOG   ]: " << log.str() << std::endl;\
     log.flush();\
-    using std::operator<<;\
-    std::cerr << "[   LOG   ]: " << log.str();\
 } while(0)
 
 #define Logger_Warning(x) do{\
-    using std::operator<<;\
     std::ostringstream log;\
     log << x;\
     std::cerr << "[ WARNING ]: " << log.str() << _Logger_Suffix;\
@@ -46,7 +44,6 @@ std::ostream &operator<<(std::ostream &log, const IToString *s);
 } while(0)
 
 #define Logger_Error(x) do{\
-    using std::operator<<;\
     std::ostringstream log;\
     log << x;\
     std::cerr << "[  ERROR  ]: " << log.str() << _Logger_Suffix;\

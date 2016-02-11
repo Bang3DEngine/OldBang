@@ -1,6 +1,8 @@
 #ifndef GLIDABLE_H
 #define GLIDABLE_H
 
+#include <GL/glew.h>
+
 class GLIdable
 {
 protected:

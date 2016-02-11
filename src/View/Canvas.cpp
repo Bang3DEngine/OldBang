@@ -1,5 +1,7 @@
 #include "Canvas.h"
 
+int Canvas::width = 0;
+int Canvas::height = 0;
 int Canvas::RedrawDelay = 1;
 float Canvas::aspectRatio = 1.0f;
 unsigned long long Canvas::lastRenderTime = 0;
@@ -49,6 +51,8 @@ void Canvas::updateGL()
 void Canvas::resizeGL(int w, int h)
 {
     glViewport(0, 0, (GLint)w, (GLint)h);
+    width = w;
+    height = h;
     aspectRatio = float(w) / h;
 }
 
@@ -101,4 +105,14 @@ void Canvas::RemoveStage(const std::string &name)
 float Canvas::GetAspectRatio()
 {
     return aspectRatio;
+}
+
+int Canvas::GetWidth()
+{
+    return width;
+}
+
+int Canvas::GetHeight()
+{
+    return height;
 }

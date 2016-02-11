@@ -19,8 +19,9 @@ class Canvas : public QGLWidget
     Q_OBJECT
 
 private:
-    static float aspectRatio;
     static int RedrawDelay;
+    static float aspectRatio;
+    static int width, height;
     static unsigned long long lastRenderTime;
 
     std::list<Stage*> stages;
@@ -45,6 +46,8 @@ public:
     void RemoveStage(const std::string &name);
 
     static float GetAspectRatio();
+    static int GetWidth();
+    static int GetHeight();
 
 signals:
 

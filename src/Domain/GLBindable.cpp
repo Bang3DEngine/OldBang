@@ -21,7 +21,6 @@ GLint GLBindable::PreUnBind(unsigned int latestBindStackId) const
 {
     CreateEnoughLatestBoundIdsStacks(latestBindStackId);
 
-    if(latestBoundIds[latestBindStackId].empty()) return 0;
     GLint lastBoundId = latestBoundIds[latestBindStackId].top();
     latestBoundIds[latestBindStackId].pop();
     return lastBoundId;
