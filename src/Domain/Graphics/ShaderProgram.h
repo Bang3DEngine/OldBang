@@ -3,11 +3,11 @@
 
 #include "Shader.h"
 #include "Texture.h"
-#include "GLBindable.h"
+#include "IGLBindable.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class ShaderProgram : public GLIdable, public GLBindable, public IToString
+class ShaderProgram : public IGLIdable, public IGLBindable, public IToString
 {
 private:
     Shader *vshader, *fshader;

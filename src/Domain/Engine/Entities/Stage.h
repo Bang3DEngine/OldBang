@@ -11,7 +11,6 @@
 #include "GBuffer.h"
 #include "MeshScreenPlane.h"
 #include "Material.h"
-#include "StageEventListener.h"
 
 class Canvas;
 class Stage : public Entity

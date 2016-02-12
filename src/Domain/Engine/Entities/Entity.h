@@ -7,11 +7,11 @@
 #include <functional>
 
 #include "IToString.h"
-#include "StageEventListener.h"
+#include "IStageEventListener.h"
 
 class Part;
 class Stage;
-class Entity : public StageEventListener, public IToString
+class Entity : public IStageEventListener, public IToString
 {
 friend class Canvas;
 friend class Stage;

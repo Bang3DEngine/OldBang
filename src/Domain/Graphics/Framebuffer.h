@@ -4,12 +4,12 @@
 #include <vector>
 
 #include "Logger.h"
-#include "GLIdable.h"
-#include "GLBindable.h"
+#include "IGLIdable.h"
+#include "IGLBindable.h"
 #include "TextureRender.h"
 #include "TextureDepth.h"
 
-class Framebuffer : public GLBindable, public GLIdable
+class Framebuffer : public IGLBindable, public IGLIdable
 {
 public:
     enum AttachmentType

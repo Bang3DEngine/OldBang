@@ -2,12 +2,11 @@
 #define VAO_H
 
 #include <GL/glew.h>
-
 #include <map>
 
 #include "VBO.h"
 
-class VAO : public GLIdable, GLBindable
+class VAO : public IGLIdable, IGLBindable
 {
 public:
     enum VBOMeaning

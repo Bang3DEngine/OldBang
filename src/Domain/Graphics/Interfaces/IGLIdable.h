@@ -1,12 +1,12 @@
-#ifndef GLIDABLE_H
-#define GLIDABLE_H
+#ifndef IGLIDABLE_H
+#define IGLIDABLE_H
 
 #include <GL/glew.h>
 
-class GLIdable
+class IGLIdable
 {
 protected:
-    GLIdable() {}
+    IGLIdable() {}
     GLuint idgl;
 
 public:

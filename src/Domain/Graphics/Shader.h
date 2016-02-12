@@ -10,10 +10,10 @@
 #include <iostream>
 
 #include "Logger.h"
-#include "GLIdable.h"
+#include "IGLIdable.h"
 #include "IToString.h"
 
-class Shader : public IToString, public GLIdable
+class Shader : public IToString, public IGLIdable
 {
 public:
 

@@ -3,9 +3,9 @@
 
 #include "Entity.h"
 #include "Logger.h"
-#include "StageEventListener.h"
+#include "IStageEventListener.h"
 
-class Part : public StageEventListener
+class Part : public IStageEventListener
 {
 friend class Entity;
 protected:

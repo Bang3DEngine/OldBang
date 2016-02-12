@@ -3,10 +3,10 @@
 
 #include <GL/glew.h>
 
-#include "GLIdable.h"
-#include "GLBindable.h"
+#include "IGLIdable.h"
+#include "IGLBindable.h"
 
-class VBO : public GLIdable, public GLBindable
+class VBO : public IGLIdable, public IGLBindable
 {
 public:
     VBO();

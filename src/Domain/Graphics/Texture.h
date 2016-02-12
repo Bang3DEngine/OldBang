@@ -3,10 +3,10 @@
 
 #include <GL/glew.h>
 
-#include "GLBindable.h"
-#include "GLIdable.h"
+#include "IGLBindable.h"
+#include "IGLIdable.h"
 
-class Texture : public GLBindable, public GLIdable
+class Texture : public IGLBindable, public IGLIdable
 {
 public:
     enum TextureType

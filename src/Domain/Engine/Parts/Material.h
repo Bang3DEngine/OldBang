@@ -7,7 +7,7 @@
 #include "ShaderContract.h"
 #include "ShaderProgram.h"
 
-class Material : public GLBindable
+class Material : public IGLBindable
 {
 friend class MeshRenderer;
 

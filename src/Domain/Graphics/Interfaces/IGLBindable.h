@@ -1,12 +1,12 @@
-#ifndef GLBINDABLE_H
-#define GLBINDABLE_H
+#ifndef IGLBINDABLE_H
+#define IGLBINDABLE_H
 
 #include <GL/glew.h>
 #include <iostream>
 #include <vector>
 #include <stack>
 
-class GLBindable
+class IGLBindable
 {
 private:
     void CreateEnoughLatestBoundIdsPositions(unsigned  int index) const;
@@ -14,7 +14,7 @@ private:
 protected:
     mutable std::vector<GLint> latestBoundId;
 
-    GLBindable();
+    IGLBindable();
 
     void PreBind(GLenum bindTarget, unsigned int index = 0) const;
     GLint PreUnBind(unsigned int index = 0) const;
@@ -23,4 +23,4 @@ protected:
     virtual void UnBind() const = 0;
 };
 
-#endif // GLBINDABLE_H
+#endif // IGLBINDABLE_H

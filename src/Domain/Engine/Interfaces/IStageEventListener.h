@@ -1,5 +1,5 @@
-#ifndef STAGEEVENTLISTENER_H
-#define STAGEEVENTLISTENER_H
+#ifndef ISTAGEEVENTLISTENER_H
+#define ISTAGEEVENTLISTENER_H
 
 #include <list>
 #include <algorithm>
@@ -13,11 +13,11 @@
 } while(0)
 
 
-class StageEventListener
+class IStageEventListener
 {
 protected:
 
-    StageEventListener() {}
+    IStageEventListener() {}
 
     virtual void _OnStart()   { OnStart();   }
     virtual void _OnUpdate()  { OnUpdate();  }
