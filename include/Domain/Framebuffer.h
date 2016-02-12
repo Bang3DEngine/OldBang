@@ -7,15 +7,22 @@
 #include "GLIdable.h"
 #include "GLBindable.h"
 #include "TextureRender.h"
+#include "TextureDepth.h"
 
 class Framebuffer : public GLBindable, public GLIdable
 {
+public:
+    enum AttachmentType
+    {
+        Color = GL_COLOR_ATTACHMENT0, //For position, normal, uv, diffuse, etc.
+        Depth = GL_DEPTH_ATTACHMENT   //For Depth
+    };
+
 private:
 
     int width, height;
-    GLuint depthBufferAttachmentId;
 
-    std::vector<GLenum> boundAttachments;
+    std::vector<GLuint> boundAttachments;
     std::vector<TextureRender*> textureAttachments;
 
 protected:
@@ -26,10 +33,12 @@ public:
     Framebuffer(int width, int height);
     virtual ~Framebuffer();
 
-    void CreateTextureAttachment(int framebufferAttachmentNum);
-    void CreateDepthBufferAttachment();
+    void CreateTextureAttachment(int framebufferAttachmentNum,
+                                 AttachmentType attachmentType = AttachmentType::Color);
 
     TextureRender* GetTextureAttachment(int framebufferAttachmentNum) const;
+
+    void Resize(int width, int height);
 
     virtual void Bind() const override;
     virtual void UnBind() const override;

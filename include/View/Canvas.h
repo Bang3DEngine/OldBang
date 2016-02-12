@@ -36,8 +36,8 @@ public:
     explicit Canvas(QWidget *parent = 0);
 
     void initializeGL() override;
-    void resizeGL(int w, int h) override;
     void paintGL() override;
+    void resizeGL(int w, int h) override;
 
     Stage* AddStage(const std::string &name);
     void SetCurrentStage(const std::string &name);

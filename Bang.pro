@@ -78,7 +78,8 @@ HEADERS += \
     include/Domain/MeshPlane.h \
     include/Domain/TextureRender.h \
     include/Domain/MeshScreenPlane.h \
-    include/Domain/GBuffer.h
+    include/Domain/GBuffer.h \
+    include/Domain/TextureDepth.h
 
 SOURCES += \
     src/Domain/Logger.cpp \
@@ -113,4 +114,5 @@ SOURCES += \
     src/Domain/MeshPlane.cpp \
     src/Domain/TextureRender.cpp \
     src/Domain/MeshScreenPlane.cpp \
-    include/Domain/GBuffer.cpp
+    src/Domain/GBuffer.cpp \
+    src/Domain/TextureDepth.cpp

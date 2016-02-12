@@ -26,6 +26,8 @@ protected:
     const Canvas *canvas;
     const Entity *cameraEntity;
 
+    void _OnResize(int newWidth, int newHeight);
+
 public:
     virtual ~Stage();
 

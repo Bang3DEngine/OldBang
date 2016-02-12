@@ -1,12 +1,15 @@
 #include "Texture.h"
 
 Texture::Texture(TextureType glTextureTarget) :
-    width(0), height(0), numComponents(0),
-    filterMode(FilterMode::Linear),
-    wrapMode(WrapMode::Repeat),
-    textureSlot(0),
-    data(nullptr),
-    glTextureType(glTextureTarget)
+                                                width(0),
+                                                height(0),
+                                                numComponents(0),
+                                                filterMode(FilterMode::Linear),
+                                                wrapMode(WrapMode::Repeat),
+                                                textureSlot(0),
+                                                data(nullptr),
+                                                glTextureType(glTextureTarget)
+
 {
     glGenTextures(1, &idgl);
     SetFilterMode(filterMode);

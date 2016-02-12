@@ -54,6 +54,11 @@ void Canvas::resizeGL(int w, int h)
     width = w;
     height = h;
     aspectRatio = float(w) / h;
+
+    if(currentStage != nullptr)
+    {
+        currentStage->_OnResize(w,h);
+    }
 }
 
 Stage *Canvas::AddStage(const std::string &name)

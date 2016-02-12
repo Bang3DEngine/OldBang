@@ -22,6 +22,8 @@ public:
 
     void LoadFromFile(const std::string &filepath);
     void CreateEmpty(int width, int height) override;
+    void Resize(int width, int height) override;
+    void Fill(unsigned char *newData, int width, int height, int numComponents);
 };
 
 #endif // TEXTURE2D_H

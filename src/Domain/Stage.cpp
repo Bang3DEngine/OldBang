@@ -7,6 +7,11 @@ Stage::Stage() : cameraEntity(nullptr)
     gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
 
+void Stage::_OnResize(int newWidth, int newHeight)
+{
+    gbuffer->Resize(newWidth, newHeight);
+}
+
 Stage::~Stage()
 {
     for(auto it = children.begin(); it != children.end(); ++it)

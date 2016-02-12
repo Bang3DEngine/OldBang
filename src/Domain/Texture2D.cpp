@@ -16,24 +16,33 @@ Texture2D::~Texture2D()
 void Texture2D::LoadFromFile(const std::string &filepath)
 {
     Bind();
-
-    data = FileLoader::LoadImage(filepath, &numComponents, &width, &height);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
+    unsigned char *loadedData = FileLoader::LoadImage(filepath, &numComponents, &width, &height);
+    Fill(loadedData, width, height, numComponents);
     UnBind();
 }
 
 void Texture2D::CreateEmpty(int width, int height)
 {
-    if(data != nullptr) delete data;
-    Bind();
+    Fill(nullptr, width, height, numComponents);
+}
 
+void Texture2D::Resize(int width, int height)
+{
+    Fill(data, width, height, numComponents);
+}
+
+void Texture2D::Fill(unsigned char *newData, int width, int height, int numComponents)
+{
+    if(this->data != nullptr && this->data != newData)
+        delete this->data;
+
+    this->data = newData;
     this->width = width;
     this->height = height;
+    this->numComponents = numComponents;
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
-
+    Bind();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glGenerateMipmap(GL_TEXTURE_2D);
     UnBind();
 }

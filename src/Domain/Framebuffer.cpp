@@ -1,17 +1,13 @@
 #include "Framebuffer.h"
 
 Framebuffer::Framebuffer(int width, int height) : width(width),
-                                                  height(height),
-                                                  depthBufferAttachmentId(0)
+                                                  height(height)
 {
     glGenFramebuffers(1, &idgl);
 }
 
 Framebuffer::~Framebuffer()
 {
-    if(depthBufferAttachmentId != 0)
-        glDeleteRenderbuffers(1, &depthBufferAttachmentId);
-
     for(TextureRender *t : textureAttachments)
     {
         delete t;
@@ -20,34 +16,36 @@ Framebuffer::~Framebuffer()
     glDeleteFramebuffers(1, &idgl);
 }
 
-void Framebuffer::CreateTextureAttachment(int framebufferAttachmentNum)
+void Framebuffer::CreateTextureAttachment(int framebufferAttachmentNum, AttachmentType attachmentType)
 {
-    Bind();
     while(int(textureAttachments.size()) <= framebufferAttachmentNum)
         textureAttachments.push_back(nullptr);
 
+    Bind();
+
+    //Create texture
     TextureRender *tex = new TextureRender();
     tex->CreateEmpty(width, height);
     textureAttachments[framebufferAttachmentNum] = tex;
 
-    GLuint attachment = GL_COLOR_ATTACHMENT0 + framebufferAttachmentNum;
+
+    //Attach it to framebuffer itself
+    GLuint attachment;
+    if(attachmentType == AttachmentType::Color)
+    {
+        attachment = GL_COLOR_ATTACHMENT0 + framebufferAttachmentNum;
+    }
+    else
+    {
+        attachment = GL_DEPTH_ATTACHMENT;
+    }
     glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, tex->GetGLId(), 0);
     boundAttachments.push_back(attachment);
+    //
+
 
     CheckFramebufferError();
 
-    UnBind();
-}
-
-void Framebuffer::CreateDepthBufferAttachment()
-{
-    Bind();
-    glGenRenderbuffers(1, &depthBufferAttachmentId);
-    glBindRenderbuffer(GL_RENDERBUFFER, depthBufferAttachmentId);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBufferAttachmentId);
-
-    CheckFramebufferError();
     UnBind();
 }
 
@@ -55,6 +53,19 @@ TextureRender *Framebuffer::GetTextureAttachment(int framebufferAttachmentNum) c
 {
     if(framebufferAttachmentNum >= int(textureAttachments.size())) return nullptr;
     return textureAttachments[framebufferAttachmentNum];
+}
+
+void Framebuffer::Resize(int width, int height)
+{
+    this->width = width;
+    this->height = height;
+    for(Texture *t : textureAttachments)
+    {
+        if(t != nullptr)
+        {
+            t->Resize(width, height);
+        }
+    }
 }
 
 void Framebuffer::CheckFramebufferError() const

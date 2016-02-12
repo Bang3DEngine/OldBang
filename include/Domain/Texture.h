@@ -50,6 +50,7 @@ public:
     virtual ~Texture();
 
     virtual void CreateEmpty(int width, int height) = 0;
+    virtual void Resize(int width, int height) = 0;
 
     void SetFilterMode(FilterMode filterMode);
     void SetWrapMode(WrapMode wrapMode);

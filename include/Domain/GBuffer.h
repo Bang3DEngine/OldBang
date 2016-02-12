@@ -13,7 +13,8 @@ public:
         Position = 0,
         Normal,
         Uv,
-        Diffuse
+        Diffuse,
+        Depth
     };
 
 private:

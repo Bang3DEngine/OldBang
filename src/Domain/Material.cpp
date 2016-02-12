@@ -20,9 +20,9 @@ void Material::Bind() const
             const Texture *t = textures[i];
             if(t != nullptr)
             {
-                t->Bind();
                 std::string texName = ShaderContract::Uniform_Texture_Prefix + std::to_string(i);
-                shaderProgram->SetUniformTexture(texName, t, false);
+                shaderProgram->SetUniformTexture(texName, t, false); //Set the uniform with the texture slot
+                t->Bind(); //Leave it bound
             }
         }
     }
@@ -35,7 +35,8 @@ void Material::UnBind() const
         shaderProgram->UnBind();
         for(unsigned int i = 0; i < textures.size(); ++i)
         {
-            if(textures[i] != nullptr) textures[i]->UnBind();
+            if(textures[i] != nullptr)
+                textures[i]->UnBind();
         }
     }
 }
