@@ -27,8 +27,8 @@ public:
 
     const TextureRender* GetTextureAttachment(int framebufferAttachmentNum) const;
 
-    void Bind() const override;
-    void UnBind() const override;
+    virtual void Bind() const override;
+    virtual void UnBind() const override;
 };
 
 #endif // FRAMEBUFFER_H

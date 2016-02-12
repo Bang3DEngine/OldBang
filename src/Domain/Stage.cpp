@@ -4,18 +4,7 @@
 
 Stage::Stage() : cameraEntity(nullptr)
 {
-    geometryFramebuffer = new Framebuffer(Canvas::GetWidth(), Canvas::GetHeight());
-    geometryFramebuffer->CreateDepthBufferAttachment();
-    geometryFramebuffer->CreateTextureAttachment(GeometryFBAttachment::Position);
-    geometryFramebuffer->CreateTextureAttachment(GeometryFBAttachment::Normal);
-    geometryFramebuffer->CreateTextureAttachment(GeometryFBAttachment::Uv);
-    geometryFramebuffer->CreateTextureAttachment(GeometryFBAttachment::Diffuse);
-
-    renderToScreenMaterial = new Material();
-    ShaderProgram *sp = new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_Render_To_Screen,
-                                          ShaderContract::Filepath_Shader_Fragment_Render_To_Screen);
-    renderToScreenMaterial->SetShaderProgram(sp);
-    screenPlaneMesh = new MeshScreenPlane();
+    gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
 
 Stage::~Stage()
@@ -27,36 +16,17 @@ Stage::~Stage()
         this->RemoveChild(child->GetName());
         delete child;
     }
-
-    if(renderToScreenMaterial != nullptr) delete renderToScreenMaterial;
-    if(screenPlaneMesh != nullptr) delete screenPlaneMesh;
 }
 
 void Stage::_OnRender()
 {
-    geometryFramebuffer->Bind();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    gbuffer->Bind();
     //All the mesh renderers now will render stuff into the geometryFramebuffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     PROPAGATE_EVENT(_OnRender, children);
-    geometryFramebuffer->UnBind();
+    gbuffer->UnBind();
 
-    //Get textures where we rendered, and render them to actual screen
-    const TextureRender *positionTex = geometryFramebuffer->GetTextureAttachment(GeometryFBAttachment::Position);
-    const TextureRender *normalTex   = geometryFramebuffer->GetTextureAttachment(GeometryFBAttachment::Normal);
-    const TextureRender *uvTex       = geometryFramebuffer->GetTextureAttachment(GeometryFBAttachment::Uv);
-    const TextureRender *diffuseTex  = geometryFramebuffer->GetTextureAttachment(GeometryFBAttachment::Diffuse);
-
-    //Render to screen
-    screenPlaneMesh->GetVAO()->Bind();
-
-    renderToScreenMaterial->SetTexture(positionTex);
-    renderToScreenMaterial->Bind();
-
-    glDrawArrays(screenPlaneMesh->GetRenderMode(), 0, screenPlaneMesh->GetVertexCount()); //Draw the screen plane!
-
-    renderToScreenMaterial->UnBind();
-    screenPlaneMesh->GetVAO()->UnBind();
-    //
+    gbuffer->RenderToScreen();
 }
 
 void Stage::SetCameraEntity(const Entity *cameraEntity)
