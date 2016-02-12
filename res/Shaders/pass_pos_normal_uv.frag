@@ -6,10 +6,15 @@ in vec4 BANG_position_raw_vout_fin;
 in vec4 BANG_normal_raw_vout_fin;
 in vec2 BANG_uv_raw_vout_fin;
 
-out vec3 BANG_position_fout;
+out vec3 BANG_position_fout_gbufferin;
+out vec3 BANG_normal_fout_gbufferin;
+out vec2 BANG_uv_fout_gbufferin;
+out vec3 BANG_diffuse_fout_gbufferin;
 
 void main()
 {
-    vec4 color = texture2D(BANG_texture_0, BANG_uv_raw_vout_fin);
-    BANG_position_fout = color.rgb;
+    BANG_position_fout_gbufferin = BANG_position_raw_vout_fin.xyz;
+    BANG_normal_fout_gbufferin   = BANG_normal_raw_vout_fin.xyz;
+    BANG_uv_fout_gbufferin       = BANG_uv_raw_vout_fin;
+    BANG_diffuse_fout_gbufferin  = texture2D(BANG_texture_0, BANG_uv_raw_vout_fin).rgb;
 }

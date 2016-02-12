@@ -33,6 +33,17 @@ const std::string ShaderContract::Vertex_Out_Fragment_In_Vertex_Normal_Raw =
 const std::string ShaderContract::Vertex_Out_Fragment_In_Vertex_Uv_Raw =
         ShaderContract::ShaderNames_Prefix + "uv_raw_vout_fin";
 
+const std::string ShaderContract::Fragment_Out_GBuffer_In_Position =
+        ShaderContract::ShaderNames_Prefix + "position_fout_gbufferin";
+
+const std::string ShaderContract::Fragment_Out_GBuffer_In_Normal =
+        ShaderContract::ShaderNames_Prefix + "normal_fout_gbufferin";
+
+const std::string ShaderContract::Fragment_Out_GBuffer_In_Uv =
+        ShaderContract::ShaderNames_Prefix + "uv_fout_gbufferin";
+
+const std::string ShaderContract::Fragment_Out_GBuffer_In_Diffuse =
+        ShaderContract::ShaderNames_Prefix + "diffuse_fout_gbufferin";
 
 
 const std::string ShaderContract::Uniform_Position_Camera =

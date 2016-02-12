@@ -16,8 +16,8 @@ out vec2 BANG_uv_raw_vout_fin;
 void main()
 {
     BANG_position_raw_vout_fin = BANG_matrix_model * vec4(BANG_position_raw_vin, 1.0);
-    BANG_normal_raw_vout_fin = BANG_matrix_model * vec4(BANG_normal_raw_vin, 0.0);
-    BANG_uv_raw_vout_fin = BANG_uv_raw_vin;
+    BANG_normal_raw_vout_fin   = BANG_matrix_model * vec4(BANG_normal_raw_vin, 0.0);
+    BANG_uv_raw_vout_fin       = BANG_uv_raw_vin;
 
     gl_Position = BANG_matrix_pvm * vec4(BANG_position_raw_vin, 1.0);
 }

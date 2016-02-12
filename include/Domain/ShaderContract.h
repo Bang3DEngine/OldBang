@@ -26,6 +26,10 @@ public:
         Vertex_Out_Fragment_In_Vertex_Normal_Raw,
         Vertex_Out_Fragment_In_Vertex_Uv_Raw,
 
+        Fragment_Out_GBuffer_In_Position,
+        Fragment_Out_GBuffer_In_Normal,
+        Fragment_Out_GBuffer_In_Uv,
+        Fragment_Out_GBuffer_In_Diffuse,
 
         Uniform_Position_Camera,
 

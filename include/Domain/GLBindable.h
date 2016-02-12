@@ -9,15 +9,16 @@
 class GLBindable
 {
 private:
-    void CreateEnoughLatestBoundIdsStacks(unsigned  int latestBindStackId) const;
+    void CreateEnoughLatestBoundIdsPositions(unsigned  int index) const;
 
 protected:
-    mutable std::vector< std::stack<GLint> > latestBoundIds;
+    mutable std::vector<GLint> latestBoundId;
 
     GLBindable();
 
-    void PreBind(GLenum bindTarget, unsigned int latestBindStackId = 0) const;
-    GLint PreUnBind(unsigned int latestBindStackId = 0) const;
+    void PreBind(GLenum bindTarget, unsigned int index = 0) const;
+    GLint PreUnBind(unsigned int index = 0) const;
+
     virtual void Bind() const = 0;
     virtual void UnBind() const = 0;
 };

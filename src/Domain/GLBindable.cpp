@@ -2,26 +2,19 @@
 
 GLBindable::GLBindable() {}
 
-void GLBindable::CreateEnoughLatestBoundIdsStacks(unsigned int latestBindStackId) const
+void GLBindable::CreateEnoughLatestBoundIdsPositions(unsigned int index) const
 {
-    while(latestBoundIds.size() <= latestBindStackId)
-        latestBoundIds.push_back(std::stack<GLint>());
+    while(latestBoundId.size() <= index)
+        latestBoundId.push_back(0);
 }
 
-void GLBindable::PreBind(GLenum bindTarget, unsigned int latestBindStackId) const
+void GLBindable::PreBind(GLenum bindTarget, unsigned int index) const
 {
-    CreateEnoughLatestBoundIdsStacks(latestBindStackId);
-
-    GLint lastBoundId;
-    glGetIntegerv(bindTarget, &lastBoundId);
-    latestBoundIds[latestBindStackId].push(lastBoundId);
+    CreateEnoughLatestBoundIdsPositions(index);
+    glGetIntegerv(bindTarget, &latestBoundId[index]);
 }
 
-GLint GLBindable::PreUnBind(unsigned int latestBindStackId) const
+GLint GLBindable::PreUnBind(unsigned int index) const
 {
-    CreateEnoughLatestBoundIdsStacks(latestBindStackId);
-
-    GLint lastBoundId = latestBoundIds[latestBindStackId].top();
-    latestBoundIds[latestBindStackId].pop();
-    return lastBoundId;
+    return latestBoundId[index];
 }

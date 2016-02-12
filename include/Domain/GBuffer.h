@@ -17,11 +17,9 @@ public:
     };
 
 private:
-    //Simple material with pass by shaders
-    //When you want to render with it, just attach
-    //the final color texture to texture slot 0
+
     Material *renderToScreenMaterial;
-    MeshScreenPlane *screenPlaneMesh; //This will be used to render to screen
+    MeshScreenPlane *renderToScreenPlaneMesh;
 
 public:
     GBuffer(int width, int height);

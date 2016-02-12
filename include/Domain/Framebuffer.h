@@ -18,6 +18,10 @@ private:
     std::vector<GLenum> boundAttachments;
     std::vector<TextureRender*> textureAttachments;
 
+protected:
+
+    void CheckFramebufferError() const;
+
 public:
     Framebuffer(int width, int height);
     virtual ~Framebuffer();
@@ -25,7 +29,7 @@ public:
     void CreateTextureAttachment(int framebufferAttachmentNum);
     void CreateDepthBufferAttachment();
 
-    const TextureRender* GetTextureAttachment(int framebufferAttachmentNum) const;
+    TextureRender* GetTextureAttachment(int framebufferAttachmentNum) const;
 
     virtual void Bind() const override;
     virtual void UnBind() const override;
