@@ -17,6 +17,7 @@
 #include "Framebuffer.h"
 #include "Texture2D.h"
 #include "TestBehaviour.h"
+#include "StageLoader.h"
 #include "TestCameraBehaviour.h"
 
 class WindowMain: public Ui_WindowMain { public: WindowMain() : Ui_WindowMain() { } };
@@ -29,7 +30,7 @@ int main(int argc, char *argv[])
     QWidget *widget = new QWidget;
     windowMain.setupUi(widget);
     widget->show();
-
+/*
     ////////
     ShaderProgram *sp = new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
                                           ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv);
@@ -57,12 +58,15 @@ int main(int argc, char *argv[])
     t2->position = glm::vec3(0.0f, 1.0f, 2.0f);
 
     cam->AddPart<TestCameraBehaviour>();
+*/
 
-    Stage *stage = windowMain.canvas->AddStage("testStage");
+    Stage *stage = windowMain.canvas->AddStage("stageTest1");
+    StageLoader::LoadStage("res/Stages/stageTest1.stage", stage);
+    /*
     stage->AddChild(ent);
     stage->AddChild(cam);
     stage->SetCameraEntity(cam);
-
+*/
     windowMain.canvas->SetCurrentStage("testStage");
     ///////
 

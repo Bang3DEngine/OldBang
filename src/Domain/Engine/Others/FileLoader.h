@@ -14,11 +14,10 @@
 #include "stb_image.h"
 #include "glm/glm.hpp"
 
+class Stage;
 class FileLoader
 {
-
 private:
-
     static void GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *hasNormals, bool *isTriangles);
 
 public:

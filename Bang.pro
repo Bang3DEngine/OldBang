@@ -48,7 +48,8 @@ OTHER_FILES += \
     res/Shaders/pass_pos_normal_uv.frag \
     res/Shaders/pvm_pos_normal_uv.vert \
     res/Shaders/render_to_screen.frag \
-    res/Shaders/render_to_screen.vert
+    res/Shaders/render_to_screen.vert \
+    res/Stages/stageTest1.stage
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -88,7 +89,8 @@ HEADERS += \
     src/Domain/Engine/Parts/Part.h \
     src/Domain/Engine/Parts/MeshRenderer.h \
     src/Domain/Engine/Parts/Material.h \
-    src/Domain/Engine/Parts/Camera.h
+    src/Domain/Engine/Parts/Camera.h \
+    src/Domain/Engine/Others/StageLoader.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -124,4 +126,5 @@ SOURCES += \
     src/Domain/Engine/Parts/MeshRenderer.cpp \
     src/Domain/Engine/Parts/Material.cpp \
     src/Domain/Engine/Parts/Camera.cpp \
-    src/main.cpp
+    src/main.cpp \
+    src/Domain/Engine/Others/StageLoader.cpp

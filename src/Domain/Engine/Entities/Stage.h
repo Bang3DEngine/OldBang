@@ -17,7 +17,6 @@ class Stage : public Entity
 {
 friend class Canvas;
 protected:
-    Stage();
 
     //Framebuffer for positions, normals, uvs and diffuse
     GBuffer *gbuffer;
@@ -28,6 +27,7 @@ protected:
     void _OnResize(int newWidth, int newHeight);
 
 public:
+    Stage();
     virtual ~Stage();
 
     void _OnRender() override;

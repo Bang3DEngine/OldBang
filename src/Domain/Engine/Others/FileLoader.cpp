@@ -1,5 +1,6 @@
 #include "FileLoader.h"
 #include "stb_image.h"
+#include "Stage.h"
 
 unsigned char* FileLoader::LoadImage(const std::string& filepath, int *components, int *width, int *height)
 {
