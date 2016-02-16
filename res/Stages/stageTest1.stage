@@ -24,9 +24,9 @@
             <parts>
                 <Transform>
                     t0
-                    0.04 0.1344 1.5   #position
-                    1.0 2.0 3.0 4.421 #rotation
-                    1.0 2.0 1.8       #scale
+                    0.0 0.0 0.0       #position
+                    0.0 1.0 0.0 1.0   #rotation
+                    0.3 0.3 0.3       #scale
                 </Transform>
 
                 <MeshPyramid>
@@ -40,6 +40,29 @@
                 </MeshRenderer>
             </parts>
 
+        </Entity>
+
+        #Camera
+        <Entity>
+            e1
+            camera
+            <parts>
+                <Transform>
+                    t1
+                    0.0 0.0 2.0       #position
+                    0.0 0.0 0.0 0.0   #rotation
+                    1.0 1.0 1.0       #scale
+                </Transform>
+
+                <Camera>
+                    cam0
+                    60.0                #fov
+                    0.5                 #zNear
+                    30.0                #zFar
+                    Ortho #Projection mode
+                    -1.0 1.0 -1.0 1.0   #OrthoRect
+                </Camera>
+            </parts>
         </Entity>
 
     </children>

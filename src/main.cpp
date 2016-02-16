@@ -68,12 +68,10 @@ int main(int argc, char *argv[])
     windowMain.canvas->AddStage(stage);
     windowMain.canvas->SetCurrentStage("stageTest1");
 
-    Entity *cam = new Entity("camera");
-    cam->AddPart<Camera>();
-    Transform *t2 = cam->AddPart<Transform>();
-    t2->position = glm::vec3(0.0f, 0.0f, 10.0f);
-    stage->AddChild(cam);
-    stage->SetCameraEntity(cam);
+    TestBehaviour *tb = new TestBehaviour();
+    stage->GetChild("potato1")->AddPart(tb);
+
+    stage->SetCameraChild("camera");
     ///////
 
     return app.exec();

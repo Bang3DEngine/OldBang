@@ -42,7 +42,8 @@ void Camera::GetProjectionMatrix(glm::mat4 &proj) const
     else //Ortho
     {
         proj = glm::ortho(orthoRect.left, orthoRect.right,
-                          orthoRect.bottom, orthoRect.top);
+                          orthoRect.bottom, orthoRect.top,
+                          zNear, zFar);
     }
 }
 
@@ -77,6 +78,11 @@ void Camera::SetZFar(float zFar)
     this->zFar = zFar;
 }
 
+void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
+{
+    this->projMode = projMode;
+}
+
 void Camera::SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio)
 {
     this->autoUpdateAspectRatio = autoUpdateAspectRatio;
@@ -105,6 +111,11 @@ float Camera::GetZNear() const
 float Camera::GetZFar() const
 {
     return zFar;
+}
+
+Camera::ProjectionMode Camera::GetProjectionMode() const
+{
+    return projMode;
 }
 
 bool Camera::GetAutoUpdateAspectRatio() const

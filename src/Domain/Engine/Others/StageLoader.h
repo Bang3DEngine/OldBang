@@ -15,8 +15,10 @@
 #include "Behaviour.h"
 #include "Transform.h"
 #include "Texture2D.h"
+#include "Camera.h"
 #include "Logger.h"
 #include "Stage.h"
+#include "Rect.h"
 #include "Mesh.h"
 
 class StageLoader
@@ -49,6 +51,7 @@ private:
     static glm::vec2 ReadVec2(std::ifstream &f);
     static glm::vec3 ReadVec3(std::ifstream &f);
     static glm::quat ReadQuat(std::ifstream &f);
+    static Rect ReadRect(std::ifstream &f);
     static std::string ReadString(std::ifstream &f);
 
     //They all start from the first line inside the tag
@@ -60,6 +63,7 @@ private:
     static Transform* ReadTransform(std::ifstream &f);
     static MeshPyramid* ReadMeshPyramid(std::ifstream &f);
     static MeshRenderer* ReadMeshRenderer(std::ifstream &f);
+    static Camera* ReadCamera(std::ifstream &f);
 
     //ASSETS
     static void ReadAssets(std::ifstream &f);

@@ -20,7 +20,7 @@ std::string StageLoader::GetLine(std::ifstream &f)
         std::getline(f, line);
         TrimStringLeft(&line);
     }
-    while( line.empty() ); //Skip all empty lines
+    while( line.empty() || line.at(0) == '#'); //Skip all empty/comment lines
 
     return line;
 }
@@ -53,6 +53,12 @@ glm::quat StageLoader::ReadQuat(std::ifstream &f)
     float x,y,z,w;
     iss >> x >> y >> z >> w;
     return glm::quat(x, y, z, w);
+}
+
+Rect StageLoader::ReadRect(std::ifstream &f)
+{
+    glm::quat q = ReadQuat(f);
+    return Rect(q.x, q.y, q.z, q.w);
 }
 
 std::string StageLoader::ReadString(std::ifstream &f)
@@ -90,6 +96,11 @@ void StageLoader::ReadParts(std::ifstream &f, Entity **e)
         {
             p = ReadMeshRenderer(f);
         }
+        else if(line == "<Camera>")
+        {
+            p = ReadCamera(f);
+        }
+
 
         if(p != nullptr)
         {
@@ -149,6 +160,21 @@ MeshRenderer *StageLoader::ReadMeshRenderer(std::ifstream &f)
     mr->SetMaterial( ReadNextPointer<Material>(f) );
     GetLine(f); //Consume close tag
     return mr;
+}
+
+Camera *StageLoader::ReadCamera(std::ifstream &f)
+{
+    Camera *cam = new Camera();
+    RegisterNextPointer(f, cam);
+    cam->SetFovDegrees( ReadFloat(f) );
+    cam->SetZNear( ReadFloat(f) );
+    cam->SetZFar( ReadFloat(f) );
+    cam->SetProjectionMode( ReadString(f) == "Perspective" ?
+                                Camera::ProjectionMode::Perspective :
+                                Camera::ProjectionMode::Orthographic);
+    cam->SetOrthoRect( ReadRect(f) );
+    GetLine(f); //Consume close tag
+    return cam;
 }
 
 void StageLoader::ReadAssets(std::ifstream &f)

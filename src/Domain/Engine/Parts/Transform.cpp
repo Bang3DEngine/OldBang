@@ -17,6 +17,12 @@ void Transform::GetMatrix(glm::mat4 &m) const
     m = T * R * S;
 }
 
+void Transform::GetNormalMatrix(glm::mat4 &m) const
+{
+    GetMatrix(m);
+    m = glm::transpose(glm::inverse(m));
+}
+
 void Transform::LookAt(glm::vec3 target)
 {
     Assert(target != position, "LookAt target is the same as position.", return);

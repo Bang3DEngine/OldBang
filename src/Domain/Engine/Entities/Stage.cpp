@@ -34,16 +34,20 @@ void Stage::_OnRender()
     gbuffer->RenderToScreen();
 }
 
-void Stage::SetCameraEntity(const Entity *cameraEntity)
+void Stage::SetCameraChild(const std::string &cameraChildName)
 {
-    if(cameraEntity->HasPart<Camera>())
+    Entity *cameraEntity = GetChild(cameraChildName);
+    if(cameraEntity != nullptr)
     {
-        this->cameraEntity = cameraEntity;
-    }
-    else
-    {
-        Logger_Error("Can't set " << cameraEntity <<
-                     " as camera because it does not have a Camera part.");
+        if(cameraEntity->HasPart<Camera>())
+        {
+            this->cameraEntity = cameraEntity;
+        }
+        else
+        {
+            Logger_Error("Can't set " << cameraEntity <<
+                         " as camera because it does not have a Camera part.");
+        }
     }
 }
 

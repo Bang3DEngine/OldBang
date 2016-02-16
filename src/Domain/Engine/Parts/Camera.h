@@ -36,7 +36,6 @@ private:
 public:
     Camera();
 
-
     void GetViewMatrix(glm::mat4 &view) const;
     void GetProjectionMatrix(glm::mat4 &proj) const;
 
@@ -47,6 +46,8 @@ public:
     void SetZNear(float zNear);
     void SetZFar(float zFar);
 
+    void SetProjectionMode(ProjectionMode projMode);
+
     void SetAspectRatio(float aspectRatio);
 
     void SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio);
@@ -56,6 +57,7 @@ public:
     float GetAspectRatio() const;
     float GetZNear() const;
     float GetZFar() const;
+    ProjectionMode GetProjectionMode() const;
     bool  GetAutoUpdateAspectRatio() const;
 };
 

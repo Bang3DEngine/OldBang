@@ -21,6 +21,8 @@ public:
 
     Transform();
     void GetMatrix(glm::mat4 &m) const;
+    void GetNormalMatrix(glm::mat4 &m) const;
+
     void LookAt(glm::vec3 target);
 
     glm::vec3 GetForward() const;
