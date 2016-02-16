@@ -1,12 +1,14 @@
 <Stage>
     <entities>
         <Entity>
-            <name>potato1</name>
+            potato1 #name
+            <children>
+            </children>
             <parts>
                 <Transform>
-                    <position>vec3 0.04 0.1344 1.5</position>
-                    <rotation>quat 1.0 2.0 3.0 4.421</rotation>
-                    <scale>vec3 1.0 2.0 1.8</scale>
+                    0.04 0.1344 1.5   #position
+                    1.0 2.0 3.0 4.421 #rotation
+                    1.0 2.0 1.8       #scale
                 </Transform>
             </parts>
         </Entity>

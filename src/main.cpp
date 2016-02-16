@@ -60,14 +60,16 @@ int main(int argc, char *argv[])
     cam->AddPart<TestCameraBehaviour>();
 */
 
-    Stage *stage = windowMain.canvas->AddStage("stageTest1");
-    StageLoader::LoadStage("res/Stages/stageTest1.stage", stage);
+
     /*
     stage->AddChild(ent);
     stage->AddChild(cam);
     stage->SetCameraEntity(cam);
 */
-    windowMain.canvas->SetCurrentStage("testStage");
+
+    Stage *stage = windowMain.canvas->AddStage("stageTest1");
+    StageLoader::LoadStage("res/Stages/stageTest1.stage", stage);
+    windowMain.canvas->SetCurrentStage("stageTest1");
     ///////
 
     return app.exec();

@@ -40,6 +40,7 @@ public:
     void RemoveChild(const std::string &name);
 
     void SetParent(Entity *parent);
+    void SetName(const std::string &name);
 
     const std::string ToString() const;
 
@@ -49,6 +50,8 @@ public:
     const std::list<Part*>* GetParts() const { return &parts; }
     const std::list<Entity*>* GetChildren() const { return &children; }
 
+
+    void AddPart(Part *p);
 
     template <class T>
     T* AddPart()

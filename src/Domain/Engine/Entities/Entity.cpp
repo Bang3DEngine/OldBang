@@ -32,6 +32,12 @@ Entity *Entity::GetParent() const
     return parent;
 }
 
+void Entity::AddPart(Part *p)
+{
+    parts.push_back(p);
+    p->parent = this;
+}
+
 void Entity::AddChild(Entity *child)
 {
     child->parent = this;
@@ -72,6 +78,11 @@ void Entity::SetParent(Entity *newParent)
 
     if(newParent != nullptr)
         newParent->AddChild(this);
+}
+
+void Entity::SetName(const std::string &name)
+{
+    this->name = name;
 }
 
 const std::string Entity::ToString() const
