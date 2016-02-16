@@ -90,7 +90,7 @@ Entity *StageLoader::ReadEntity(std::ifstream &f)
                 //Read children
                 while( (line = GetLine(f)) != "" )
                 {
-                    if(line != "</children>" )
+                    if(line != "</children>")
                     {
                         Entity *child = ReadEntity(f);
                         e->AddChild(child);
@@ -149,13 +149,37 @@ void StageLoader::LoadStage(const std::string &filepath, Stage* stage)
     std::ifstream f (filepath);
     if ( !f.is_open() )
     {
-        Logger_Error("Couldnt open file '" << filepath << "'.");
+        Logger_Error("Could not open the file '" << filepath << "' to load the stage.");
     }
     else
     {
         std::string line;
         while( (line = GetLine(f)) != "")
         {
+            if(line.at(0) == '<')
+            {
+                std::string tag = ReadTag(line);
+                if(tag.at(0) != '/')
+                {
+                    if(tag == "children")
+                    {
+                        //Read children
+                        while( (line = GetLine(f)) != "" )
+                        {
+                            if(line != "</children>")
+                            {
+                                Entity *e = ReadEntity(f);
+                                stage->AddChild(e);
+                            }
+                            else break;
+                        }
+                    }
+                }
+                else
+                {
+
+                }
+            }
         }
     }
 }
