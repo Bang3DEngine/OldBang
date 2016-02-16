@@ -1,16 +1,46 @@
 <Stage>
-    <entities>
+    s0
+    stageTest1
+
+    <assets>
+        <Material>
+            m0
+        </Material>
+    </assets>
+
+    <children>
+
         <Entity>
-            potato1 #name
+            e0
+            potato1
+
             <children>
+                <Entity>
+                    e1
+                    potatoChild
+                </Entity>
             </children>
+
             <parts>
                 <Transform>
+                    t0
                     0.04 0.1344 1.5   #position
                     1.0 2.0 3.0 4.421 #rotation
                     1.0 2.0 1.8       #scale
                 </Transform>
+
+                <MeshPyramid>
+                    mp0
+                </MeshPyramid>
+
+                <MeshRenderer>
+                    mr0
+                    mp0
+                    m0
+                </MeshRenderer>
             </parts>
+
         </Entity>
-    </entities>
+
+    </children>
 </Stage>

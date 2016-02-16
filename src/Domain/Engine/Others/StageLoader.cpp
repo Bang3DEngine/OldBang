@@ -1,5 +1,7 @@
 #include "StageLoader.h"
 
+std::map<std::string, void*> StageLoader::idToPointers;
+
 void StageLoader::TrimStringLeft(std::string *str)
 {
     unsigned int i = 0;
@@ -13,8 +15,13 @@ void StageLoader::TrimStringLeft(std::string *str)
 std::string StageLoader::GetLine(std::ifstream &f)
 {
     std::string line;
-    std::getline(f, line);
-    TrimStringLeft(&line);
+    do
+    {
+        std::getline(f, line);
+        TrimStringLeft(&line);
+    }
+    while( line.empty() ); //Skip all empty lines
+
     return line;
 }
 
@@ -56,96 +63,138 @@ std::string StageLoader::ReadString(std::ifstream &f)
     return str;
 }
 
-std::string StageLoader::ReadTag(std::string &line)
+void StageLoader::RegisterNextPointer(std::ifstream &f, void *pointer)
 {
-    return line.substr(1, line.find('>')-1);
+    idToPointers[ ReadString(f) ] = pointer;
+}
+
+void StageLoader::ReadParts(std::ifstream &f, Entity **e)
+{
+    std::string line;
+    while( (line = GetLine(f)) != "</parts>" )
+    {
+        Part *p = nullptr;
+        if(line == "<Transform>")
+        {
+            p = ReadTransform(f);
+        }
+        else if(line == "<Behaviour>")
+        {
+            //p = ReadBehaviour(f);
+        }
+        else if(line == "<MeshPyramid>")
+        {
+            p = ReadMeshPyramid(f);
+        }
+        else if(line == "<MeshRenderer>")
+        {
+            p = ReadMeshRenderer(f);
+        }
+
+        if(p != nullptr)
+        {
+            (*e)->AddPart(p);
+        }
+    }
 }
 
 Transform *StageLoader::ReadTransform(std::ifstream &f)
 {
     Transform *t = new Transform();
+    RegisterNextPointer(f, t);
+
     t->position = ReadVec3(f);
     t->rotation = ReadQuat(f);
     t->scale    = ReadVec3(f);
+    GetLine(f); //Consume close tag
     return t;
+}
+
+Material *StageLoader::ReadMaterial(std::ifstream &f)
+{
+    Material *m = new Material();
+    RegisterNextPointer(f, m);
+    m->SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
+                                          ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
+    Texture2D *tex = new Texture2D("res/testTexture.png");
+    tex->SetTextureSlot(0);
+    m->SetTexture(tex);
+    GetLine(f); //Consume close tag
+    return m;
+}
+
+void StageLoader::ReadChildren(std::ifstream &f, Entity **e)
+{
+    std::string line;
+    while( (line = GetLine(f)) != "</children>" )
+    {
+        Entity *child = ReadEntity(f);
+        (*e)->AddChild(child);
+    }
+}
+
+MeshPyramid *StageLoader::ReadMeshPyramid(std::ifstream &f)
+{
+    MeshPyramid *mp = new MeshPyramid();
+    RegisterNextPointer(f, mp);
+    GetLine(f); //Consume close tag
+    return mp;
+}
+
+MeshRenderer *StageLoader::ReadMeshRenderer(std::ifstream &f)
+{
+    MeshRenderer *mr = new MeshRenderer();
+    RegisterNextPointer(f, mr);
+    mr->SetMesh( ReadNextPointer<Mesh>(f) );
+    mr->SetMaterial( ReadNextPointer<Material>(f) );
+    GetLine(f); //Consume close tag
+    return mr;
+}
+
+void StageLoader::ReadAssets(std::ifstream &f)
+{
+    std::string line;
+    while( (line = GetLine(f)) != "</assets>" )
+    {
+        if(line == "<Material>")
+        {
+            ReadMaterial(f);
+        }
+    }
 }
 
 Entity *StageLoader::ReadEntity(std::ifstream &f)
 {
     Entity *e = new Entity();
 
+    RegisterNextPointer(f, e); //Read Entity id
+    e->SetName( GetLine(f) );  //Read Entity name
+
     std::string line;
-
-    //Read name
-    line = GetLine(f);
-    e->SetName(line);
-
-    while( (line = GetLine(f)) != "")
+    while( (line = GetLine(f)) != "</Entity>")
     {
-        if(line.at(0) == '<')
+        if(line == "<children>")
         {
-            std::string tag = ReadTag(line);
-            if(tag == "children")
-            {
-                //Read children
-                while( (line = GetLine(f)) != "" )
-                {
-                    if(line != "</children>")
-                    {
-                        Entity *child = ReadEntity(f);
-                        e->AddChild(child);
-                    }
-                    else break;
-                }
-            }
-            else if(tag == "parts")
-            {
-                //Read parts
-                while( (line = GetLine(f)) != "" )
-                {
-                    if(line != "</parts>" )
-                    {
-                        if(line.at(0) == '<')
-                        {
-                            std::string tag = ReadTag(line);
-                            if(tag.at(0) != '/')
-                            {
-                                Part *p = nullptr;
-                                if(tag == "Transform")
-                                {
-                                    p = ReadTransform(f);
-                                }
-                                else if(tag == "Behaviour")
-                                {
-                                    //p = ReadBehaviour(f);
-                                }
-
-                                if(p != nullptr)
-                                {
-                                    e->AddPart(p);
-                                }
-                            }
-                            else
-                            {
-
-                            }
-                        }
-                    }
-                    else break;
-                }
-            }
+            ReadChildren(f, &e);
+        }
+        else if(line == "<parts>")
+        {
+            ReadParts(f, &e);
         }
         else
         {
 
         }
     }
+    return e;
 }
 
 
-void StageLoader::LoadStage(const std::string &filepath, Stage* stage)
+void StageLoader::LoadStage(const std::string &filepath, Stage** stage)
 {
-    stage = new Stage();
+    idToPointers.clear();
+
+    *stage = new Stage();
     std::ifstream f (filepath);
     if ( !f.is_open() )
     {
@@ -153,32 +202,25 @@ void StageLoader::LoadStage(const std::string &filepath, Stage* stage)
     }
     else
     {
-        std::string line;
-        while( (line = GetLine(f)) != "")
-        {
-            if(line.at(0) == '<')
-            {
-                std::string tag = ReadTag(line);
-                if(tag.at(0) != '/')
-                {
-                    if(tag == "children")
-                    {
-                        //Read children
-                        while( (line = GetLine(f)) != "" )
-                        {
-                            if(line != "</children>")
-                            {
-                                Entity *e = ReadEntity(f);
-                                stage->AddChild(e);
-                            }
-                            else break;
-                        }
-                    }
-                }
-                else
-                {
+        std::string line = GetLine(f); // Skip <Stage> line
+        RegisterNextPointer(f, (*stage)); // Read Stage id
+        (*stage)->SetName( ReadString(f) ); //Read Stage name
 
-                }
+        while( (line = GetLine(f)) != "</Stage>")
+        {
+            if(line == "") continue; //Skip blank lines
+
+            if(line == "<assets>")
+            {
+                ReadAssets(f);
+            }
+            else if(line == "<children>")
+            {
+                ReadChildren(f, (Entity**)stage);
+            }
+            else
+            {
+
             }
         }
     }

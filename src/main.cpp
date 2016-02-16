@@ -52,24 +52,28 @@ int main(int argc, char *argv[])
     mr->SetMaterial(mat);
     ent->AddPart<TestBehaviour>();
 
-    Entity *cam = new Entity("camera");
-    cam->AddPart<Camera>();
-    Transform *t2 = cam->AddPart<Transform>();
-    t2->position = glm::vec3(0.0f, 1.0f, 2.0f);
 
     cam->AddPart<TestCameraBehaviour>();
 */
 
 
-    /*
+/*
     stage->AddChild(ent);
     stage->AddChild(cam);
     stage->SetCameraEntity(cam);
 */
 
-    Stage *stage = windowMain.canvas->AddStage("stageTest1");
-    StageLoader::LoadStage("res/Stages/stageTest1.stage", stage);
+    Stage *stage;
+    StageLoader::LoadStage("res/Stages/stageTest1.stage", &stage);
+    windowMain.canvas->AddStage(stage);
     windowMain.canvas->SetCurrentStage("stageTest1");
+
+    Entity *cam = new Entity("camera");
+    cam->AddPart<Camera>();
+    Transform *t2 = cam->AddPart<Transform>();
+    t2->position = glm::vec3(0.0f, 0.0f, 10.0f);
+    stage->AddChild(cam);
+    stage->SetCameraEntity(cam);
     ///////
 
     return app.exec();

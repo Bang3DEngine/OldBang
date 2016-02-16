@@ -69,6 +69,11 @@ Stage *Canvas::AddStage(const std::string &name)
     return st;
 }
 
+void Canvas::AddStage(Stage *stage)
+{
+    stages.push_back(stage);
+}
+
 void Canvas::SetCurrentStage(const std::string &name)
 {
     for(auto it = stages.begin(); it != stages.end(); ++it)
@@ -83,6 +88,8 @@ void Canvas::SetCurrentStage(const std::string &name)
             return;
         }
     }
+    Logger_Warning("Could not change Stage to '" << name << "', "<<
+                   "because no stage with this name is added to the Canvas.");
 }
 
 Stage *Canvas::GetCurrentStage() const

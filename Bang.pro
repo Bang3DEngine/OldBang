@@ -49,7 +49,8 @@ OTHER_FILES += \
     res/Shaders/pvm_pos_normal_uv.vert \
     res/Shaders/render_to_screen.frag \
     res/Shaders/render_to_screen.vert \
-    res/Stages/stageTest1.stage
+    res/Stages/stageTest1.stage \
+    res/Stages/stageFileFormat.txt
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

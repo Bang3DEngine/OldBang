@@ -40,6 +40,7 @@ public:
     void resizeGL(int w, int h) override;
 
     Stage* AddStage(const std::string &name);
+    void AddStage(Stage* stage);
     void SetCurrentStage(const std::string &name);
     Stage* GetCurrentStage() const;
     Stage* GetStage(const std::string &name) const;
