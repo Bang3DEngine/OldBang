@@ -9,7 +9,7 @@ unsigned long long Canvas::lastRenderTime = 0;
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent), currentStage(nullptr)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
-    clearColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    clearColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     connect(&drawTimer, SIGNAL(timeout()), this, SLOT(updateGL()));
     drawTimer.setInterval(Canvas::RedrawDelay);

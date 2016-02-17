@@ -68,10 +68,9 @@ int main(int argc, char *argv[])
     windowMain.canvas->AddStage(stage);
     windowMain.canvas->SetCurrentStage("stageTest1");
 
-    TestBehaviour *tb = new TestBehaviour();
-    stage->GetChild("potato1")->AddPart(tb);
-
+    stage->GetChild("pyramid")->AddPart(new TestBehaviour());
     stage->SetCameraChild("camera");
+    stage->GetChild("camera")->AddPart<TestCameraBehaviour>();
     ///////
 
     return app.exec();

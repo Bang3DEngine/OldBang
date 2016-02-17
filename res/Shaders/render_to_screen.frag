@@ -26,7 +26,10 @@ void main()
        abs(BANG_depth - depthLeft) > 0.1 ||
        abs(BANG_depth - depthDown) > 0.1 )
     {
-        gl_FragColor = vec4(1);
+        gl_FragColor = vec4(0,0,0,1);
     }
-    else gl_FragColor = vec4(BANG_diffuse* 0.5, 1)  + vec4(BANG_position* 0.5, 1);
+    else if(BANG_depth > 0.01)
+        gl_FragColor = vec4(BANG_diffuse, 1);
+    else
+        gl_FragColor = vec4(1);
 }

@@ -5,6 +5,9 @@
 
 class TestCameraBehaviour : public Behaviour
 {
+private:
+    float time;
+
 public:
     TestCameraBehaviour();
 

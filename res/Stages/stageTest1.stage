@@ -12,21 +12,14 @@
 
         <Entity>
             e0
-            potato1
-
-            <children>
-                <Entity>
-                    e1
-                    potatoChild
-                </Entity>
-            </children>
+            pyramid
 
             <parts>
                 <Transform>
                     t0
-                    0.0 0.0 0.0       #position
-                    0.0 1.0 0.0 1.0   #rotation
-                    0.3 0.3 0.3       #scale
+                    0.0 0.0 0.0     #position
+                    0.0 0.0 0.0 1.0   #rotation
+                    1.0 1.0 1.0       #scale
                 </Transform>
 
                 <MeshPyramid>
@@ -49,8 +42,8 @@
             <parts>
                 <Transform>
                     t1
-                    0.0 0.0 2.0       #position
-                    0.0 0.0 0.0 0.0   #rotation
+                    0.0 0.0 4.0       #position
+                    0.0 0.0 0.0 1.0   #rotation
                     1.0 1.0 1.0       #scale
                 </Transform>
 
@@ -59,11 +52,10 @@
                     60.0                #fov
                     0.5                 #zNear
                     30.0                #zFar
-                    Ortho #Projection mode
+                    Perspective         #Projection mode
                     -1.0 1.0 -1.0 1.0   #OrthoRect
                 </Camera>
             </parts>
         </Entity>
-
     </children>
 </Stage>
