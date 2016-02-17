@@ -114,9 +114,9 @@ Transform *StageLoader::ReadTransform(std::ifstream &f)
     Transform *t = new Transform();
     RegisterNextPointer(f, t);
 
-    t->position = ReadVec3(f);
-    t->rotation = ReadQuat(f);
-    t->scale    = ReadVec3(f);
+    t->SetPosition(ReadVec3(f));
+    t->SetRotation(ReadQuat(f));
+    t->SetScale(ReadVec3(f));
     GetLine(f); //Consume close tag
     return t;
 }

@@ -6,6 +6,21 @@ Transform::Transform() : position(glm::vec3(0.0f)),
 {
 }
 
+void Transform::SetPosition(const glm::vec3 &p)
+{
+    position = p;
+}
+
+void Transform::SetRotation(const glm::quat &q)
+{
+    rotation = glm::normalize(q);
+}
+
+void Transform::SetScale(const glm::vec3 &s)
+{
+    scale = s;
+}
+
 void Transform::GetMatrix(glm::mat4 &m) const
 {
     glm::mat4 T = glm::translate(glm::mat4(1.0f), position);
@@ -44,6 +59,20 @@ void Transform::LookAt(glm::vec3 target)
     rotation = glm::conjugate(glm::normalize(glm::angleAxis(angle, cross)));
 }
 
+glm::vec3 Transform::GetPosition() const
+{
+    return position;
+}
+
+glm::quat Transform::GetRotation() const
+{
+    return rotation;
+}
+
+glm::vec3 Transform::GetScale() const
+{
+    return scale;
+}
 glm::vec3 Transform::GetForward() const
 {
     return rotation * glm::vec3(0.0f, 0.0f, -1.0f);

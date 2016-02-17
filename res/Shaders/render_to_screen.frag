@@ -21,10 +21,10 @@ void main()
     float depthLeft = texture2D(BANG_texture_4, BANG_uv_raw_vout_fin + vec2(-0.001,0)).x;
     float depthDown = texture2D(BANG_texture_4, BANG_uv_raw_vout_fin + vec2(0,-0.001)).x;
 
-    if(abs(BANG_depth - depthUp) > 0.1 ||
-       abs(BANG_depth - depthRight) > 0.1 ||
-       abs(BANG_depth - depthLeft) > 0.1 ||
-       abs(BANG_depth - depthDown) > 0.1 )
+    if(abs(BANG_depth - depthUp) > 0.01 ||
+       abs(BANG_depth - depthRight) > 0.01 ||
+       abs(BANG_depth - depthLeft) > 0.01 ||
+       abs(BANG_depth - depthDown) > 0.01 )
     {
         gl_FragColor = vec4(0,0,0,1);
     }

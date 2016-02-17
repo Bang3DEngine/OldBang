@@ -17,6 +17,6 @@ void TestCameraBehaviour::OnUpdate()
     /*t->position.x = sin(time) * R;
     t->position.y = 3.0f;// 1.0f * Time::GetDeltaTime();
     t->position.z = cos(time) * R;
-   */ t->LookAt(pyramid->GetPart<Transform>()->position);
+   */ t->LookAt(pyramid->GetPart<Transform>()->GetPosition());
     //Logger_Log(t);
 }
