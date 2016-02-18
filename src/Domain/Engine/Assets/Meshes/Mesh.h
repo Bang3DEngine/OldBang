@@ -5,14 +5,15 @@
 
 #include "glm/glm.hpp"
 
-#include "FileLoader.h"
-#include "Part.h"
+#include "IFileable.h"
+#include "FileReader.h"
+#include "Asset.h"
 #include "VAO.h"
 #include "VBO.h"
 
 #include <vector>
 
-class Mesh : public Part
+class Mesh : public Asset
 {
 friend class MeshRenderer;
 
@@ -47,6 +48,9 @@ public:
     VAO *GetVAO() const;
     RenderMode GetRenderMode() const;
     int GetVertexCount() const;
+
+    void Write(std::ofstream &f) const;
+    void Read(std::ifstream &f);
 };
 
 #endif // MESH_H

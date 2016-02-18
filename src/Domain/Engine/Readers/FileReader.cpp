@@ -1,8 +1,8 @@
-#include "FileLoader.h"
+#include "FileReader.h"
 #include "stb_image.h"
 #include "Stage.h"
 
-unsigned char* FileLoader::LoadImage(const std::string& filepath, int *components, int *width, int *height)
+unsigned char* FileReader::ReadImage(const std::string& filepath, int *components, int *width, int *height)
 {
     unsigned char* data = stbi_load(filepath.c_str(), width, height, components, 0);
     if(data == nullptr)
@@ -13,7 +13,7 @@ unsigned char* FileLoader::LoadImage(const std::string& filepath, int *component
     return data;
 }
 
-void FileLoader::GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *hasNormals, bool *isTriangles)
+void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *hasNormals, bool *isTriangles)
 {
     std::FILE *f;
     f = fopen(filepath.c_str(), "r");
@@ -71,7 +71,7 @@ void FileLoader::GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *h
     fclose(f);
 }
 
-bool FileLoader::LoadOBJ(const std::string& filepath, std::vector<glm::vec3> *vertexPos,
+bool FileReader::ReadOBJ(const std::string& filepath, std::vector<glm::vec3> *vertexPos,
                          std::vector<glm::vec3> *vertexNormals,
                          std::vector<glm::vec2> *vertexUvs,
                          bool *isTriangles)

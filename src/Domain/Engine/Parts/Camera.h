@@ -59,6 +59,9 @@ public:
     float GetZFar() const;
     ProjectionMode GetProjectionMode() const;
     bool  GetAutoUpdateAspectRatio() const;
+
+    void Write(std::ofstream &f) const;
+    void Read(std::ifstream &f);
 };
 
 #endif // CAMERA_H

@@ -44,6 +44,19 @@ const Material *MeshRenderer::GetMaterial()
     return material;
 }
 
+void MeshRenderer::Write(std::ofstream &f) const
+{
+
+}
+
+void MeshRenderer::Read(std::ifstream &f)
+{
+    StageReader::RegisterNextPointer(f, this);
+    SetMesh( StageReader::ReadNextPointer<Mesh>(f) );
+    SetMaterial( StageReader::ReadNextPointer<Material>(f) );
+    StageReader::GetLine(f); //Consume close tag
+}
+
 void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 {
     Transform *t = parent->GetPart<Transform>();

@@ -122,3 +122,21 @@ bool Camera::GetAutoUpdateAspectRatio() const
 {
     return autoUpdateAspectRatio;
 }
+
+void Camera::Write(std::ofstream &f) const
+{
+
+}
+
+void Camera::Read(std::ifstream &f)
+{
+    StageReader::RegisterNextPointer(f, this);
+    SetFovDegrees( StageReader::ReadFloat(f) );
+    SetZNear( StageReader::ReadFloat(f) );
+    SetZFar( StageReader::ReadFloat(f) );
+    SetProjectionMode( StageReader::ReadString(f) == "Perspective" ?
+                                            Camera::ProjectionMode::Perspective :
+                                            Camera::ProjectionMode::Orthographic);
+    SetOrthoRect( StageReader::ReadRect(f) );
+    StageReader::GetLine(f); //Consume close tag
+}

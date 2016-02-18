@@ -16,7 +16,7 @@ Texture2D::~Texture2D()
 void Texture2D::LoadFromFile(const std::string &filepath)
 {
     Bind();
-    unsigned char *loadedData = FileLoader::LoadImage(filepath, &numComponents, &width, &height);
+    unsigned char *loadedData = FileReader::ReadImage(filepath, &numComponents, &width, &height);
     Fill(loadedData, width, height, numComponents);
     UnBind();
 }

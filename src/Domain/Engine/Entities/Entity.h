@@ -6,12 +6,13 @@
 #include <iostream>
 #include <functional>
 
+#include "IFileable.h"
 #include "IToString.h"
 #include "IStageEventListener.h"
 
 class Part;
 class Stage;
-class Entity : public IStageEventListener, public IToString
+class Entity : public IStageEventListener, public IToString, public IFileable
 {
 friend class Canvas;
 friend class Stage;
@@ -49,7 +50,6 @@ public:
     const std::string GetName() const { return name; }
     const std::list<Part*>* GetParts() const { return &parts; }
     const std::list<Entity*>* GetChildren() const { return &children; }
-
 
     void AddPart(Part *p);
 
@@ -96,6 +96,9 @@ public:
             }
         }
     }
+
+    void Write(std::ofstream &f) const override;
+    void Read(std::ifstream &f) override;
 };
 
 #endif // ENTITY_H

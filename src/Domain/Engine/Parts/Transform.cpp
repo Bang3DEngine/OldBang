@@ -119,3 +119,17 @@ const std::string Transform::ToString() const
 
     return msg.str();
 }
+
+void Transform::Write(std::ofstream &f) const
+{
+
+}
+
+void Transform::Read(std::ifstream &f)
+{
+    StageReader::RegisterNextPointer(f, this);
+    SetPosition(StageReader::ReadVec3(f));
+    SetRotation(StageReader::ReadQuat(f));
+    SetScale(StageReader::ReadVec3(f));
+    StageReader::GetLine(f); //Consume close tag
+}

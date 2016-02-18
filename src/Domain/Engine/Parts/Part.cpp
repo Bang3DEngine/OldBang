@@ -14,3 +14,8 @@ Entity *Part::GetParent() const
 {
     return parent;
 }
+
+const std::string Part::ToString() const
+{
+    return "Part";
+}

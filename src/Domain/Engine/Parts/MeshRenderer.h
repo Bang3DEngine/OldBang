@@ -33,6 +33,9 @@ public:
 
     void SetMaterial(const Material *m);
     const Material* GetMaterial();
+
+    void Write(std::ofstream &f) const;
+    void Read(std::ifstream &f);
 };
 
 #endif // MESHRENDERER_H

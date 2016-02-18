@@ -10,9 +10,8 @@
 #include "glm/gtc/quaternion.hpp"
 
 #include "Part.h"
-#include "IToString.h"
 
-class Transform : public Part, public IToString
+class Transform : public Part
 {
 private:
 
@@ -44,6 +43,9 @@ public:
     glm::vec3 GetScale() const;
 
     const std::string ToString() const override;
+
+    void Write(std::ofstream &f) const override;
+    void Read(std::ifstream &f) override;
 };
 
 #endif // TRANSFORM_H

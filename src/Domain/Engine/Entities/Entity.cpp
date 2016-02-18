@@ -85,6 +85,35 @@ void Entity::SetName(const std::string &name)
     this->name = name;
 }
 
+void Entity::Write(std::ofstream &f) const
+{
+
+}
+
+void Entity::Read(std::ifstream &f)
+{
+    StageReader::RegisterNextPointer(f, this); //Read Entity id
+    SetName( StageReader::GetLine(f) );  //Read Entity name
+
+    std::string line;
+    while( (line = StageReader::GetLine(f)) != "</Entity>")
+    {
+        if(line == "<children>")
+        {
+            StageReader::ReadChildren(f, this);
+        }
+        else if(line == "<parts>")
+        {
+            StageReader::ReadParts(f, this);
+        }
+        else
+        {
+
+        }
+    }
+}
+
+
 const std::string Entity::ToString() const
 {
     return " [Entity:'" + name + "']";

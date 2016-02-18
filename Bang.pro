@@ -25,8 +25,10 @@ INCLUDEPATH += \
     $$PWD/src/Domain/Engine/Entities/ \
     $$PWD/src/Domain/Engine/Others/ \
     $$PWD/src/Domain/Engine/Parts/ \
-    $$PWD/src/Domain/Engine/Parts/Meshes/ \
-    $$PWD/src/Domain/Engine/Parts/Behaviours/ \
+    $$PWD/src/Domain/Engine/Readers/ \
+    $$PWD/src/Domain/Engine/Assets/ \
+    $$PWD/src/Domain/Engine/Assets/Meshes/ \
+    $$PWD/src/Domain/Engine/Assets/Behaviours/ \
     $$PWD/src/Domain/Engine/Physics/ \
     $$PWD/src/Domain/Graphics/ \
 
@@ -50,7 +52,8 @@ OTHER_FILES += \
     res/Shaders/render_to_screen.frag \
     res/Shaders/render_to_screen.vert \
     res/Stages/stageTest1.stage \
-    res/Stages/stageFileFormat.txt
+    res/Stages/stageFileFormat.txt \
+    res/Meshes/Pyramid.obj
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -60,7 +63,6 @@ HEADERS += \
     src/Domain/Engine/Interfaces/IStageEventListener.h \
     src/Domain/Engine/Others/stb_image.h \
     src/Domain/Engine/Others/Logger.h \
-    src/Domain/Engine/Others/FileLoader.h \
     src/Domain/Engine/Others/Timer.h \
     src/Domain/Engine/Others/Time.h \
     src/Domain/Engine/Entities/Entity.h \
@@ -79,25 +81,27 @@ HEADERS += \
     src/Domain/Graphics/Interfaces/IGLBindable.h \
     src/Domain/Graphics/Interfaces/IToString.h \
     src/Domain/Graphics/Interfaces/IGLIdable.h \
-    src/Domain/Engine/Parts/Meshes/MeshScreenPlane.h \
-    src/Domain/Engine/Parts/Meshes/MeshPyramid.h \
-    src/Domain/Engine/Parts/Meshes/MeshPlane.h \
-    src/Domain/Engine/Parts/Meshes/Mesh.h \
-    src/Domain/Engine/Parts/Behaviours/TestCameraBehaviour.h \
-    src/Domain/Engine/Parts/Behaviours/TestBehaviour.h \
-    src/Domain/Engine/Parts/Behaviours/Behaviour.h \
     src/Domain/Engine/Parts/Transform.h \
     src/Domain/Engine/Parts/Part.h \
     src/Domain/Engine/Parts/MeshRenderer.h \
-    src/Domain/Engine/Parts/Material.h \
     src/Domain/Engine/Parts/Camera.h \
-    src/Domain/Engine/Others/StageLoader.h
+    src/Domain/Engine/Assets/Asset.h \
+    src/Domain/Engine/Assets/Material.h \
+    src/Domain/Engine/Assets/Meshes/Mesh.h \
+    src/Domain/Engine/Assets/Meshes/MeshPlane.h \
+    src/Domain/Engine/Assets/Meshes/MeshPyramid.h \
+    src/Domain/Engine/Assets/Meshes/MeshScreenPlane.h \
+    src/Domain/Engine/Parts/Behaviour.h \
+    src/Domain/Engine/Parts/TestBehaviour.h \
+    src/Domain/Engine/Parts/TestCameraBehaviour.h \
+    src/Domain/Engine/Readers/FileReader.h \
+    src/Domain/Engine/Readers/StageReader.h \
+    src/Domain/Engine/Interfaces/IFileable.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
     src/View/Canvas.cpp \
     src/Domain/Engine/Others/stb_image.cpp \
-    src/Domain/Engine/Others/FileLoader.cpp \
     src/Domain/Engine/Others/Logger.cpp \
     src/Domain/Engine/Others/Timer.cpp \
     src/Domain/Engine/Others/Time.cpp \
@@ -115,17 +119,19 @@ SOURCES += \
     src/Domain/Graphics/TextureDepth.cpp \
     src/Domain/Graphics/VBO.cpp \
     src/Domain/Graphics/Interfaces/IGLBindable.cpp \
-    src/Domain/Engine/Parts/Meshes/MeshScreenPlane.cpp \
-    src/Domain/Engine/Parts/Meshes/MeshPyramid.cpp \
-    src/Domain/Engine/Parts/Meshes/MeshPlane.cpp \
-    src/Domain/Engine/Parts/Meshes/Mesh.cpp \
-    src/Domain/Engine/Parts/Behaviours/TestCameraBehaviour.cpp \
-    src/Domain/Engine/Parts/Behaviours/TestBehaviour.cpp \
-    src/Domain/Engine/Parts/Behaviours/Behaviour.cpp \
     src/Domain/Engine/Parts/Transform.cpp \
     src/Domain/Engine/Parts/Part.cpp \
     src/Domain/Engine/Parts/MeshRenderer.cpp \
-    src/Domain/Engine/Parts/Material.cpp \
     src/Domain/Engine/Parts/Camera.cpp \
     src/main.cpp \
-    src/Domain/Engine/Others/StageLoader.cpp
+    src/Domain/Engine/Assets/Asset.cpp \
+    src/Domain/Engine/Assets/Meshes/Mesh.cpp \
+    src/Domain/Engine/Assets/Meshes/MeshPlane.cpp \
+    src/Domain/Engine/Assets/Meshes/MeshScreenPlane.cpp \
+    src/Domain/Engine/Assets/Meshes/MeshPyramid.cpp \
+    src/Domain/Engine/Assets/Material.cpp \
+    src/Domain/Engine/Parts/Behaviour.cpp \
+    src/Domain/Engine/Parts/TestBehaviour.cpp \
+    src/Domain/Engine/Parts/TestCameraBehaviour.cpp \
+    src/Domain/Engine/Readers/FileReader.cpp \
+    src/Domain/Engine/Readers/StageReader.cpp

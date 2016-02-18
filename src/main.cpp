@@ -17,7 +17,7 @@
 #include "Framebuffer.h"
 #include "Texture2D.h"
 #include "TestBehaviour.h"
-#include "StageLoader.h"
+#include "StageReader.h"
 #include "TestCameraBehaviour.h"
 
 class WindowMain: public Ui_WindowMain { public: WindowMain() : Ui_WindowMain() { } };
@@ -63,13 +63,14 @@ int main(int argc, char *argv[])
     stage->SetCameraEntity(cam);
 */
 
-    Stage *stage;
-    StageLoader::LoadStage("res/Stages/stageTest1.stage", &stage);
+    Stage *stage = new Stage();
+    StageReader::ReadStage("res/Stages/stageTest1.stage", stage);
     windowMain.canvas->AddStage(stage);
     windowMain.canvas->SetCurrentStage("stageTest1");
 
-    stage->GetChild("pyramid")->AddPart(new TestBehaviour());
     stage->SetCameraChild("camera");
+
+    stage->GetChild("pyramid")->AddPart<TestBehaviour>();
     stage->GetChild("camera")->AddPart<TestCameraBehaviour>();
     ///////
 

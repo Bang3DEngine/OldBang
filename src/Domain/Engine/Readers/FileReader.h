@@ -1,5 +1,5 @@
-#ifndef FILELOADER_H
-#define FILELOADER_H
+#ifndef FILEREADER_H
+#define FILEREADER_H
 
 #include <vector>
 #include <string>
@@ -15,20 +15,22 @@
 #include "glm/glm.hpp"
 
 class Stage;
-class FileLoader
+class FileReader
 {
 private:
     static void GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *hasNormals, bool *isTriangles);
 
 public:
 
-    static unsigned char* LoadImage(const std::string& filepath, int *components, int *width, int *height);
+    static unsigned char* ReadImage(const std::string& filepath, int *components, int *width, int *height);
 
-    static bool LoadOBJ(const std::string& filepath,
+    static bool ReadOBJ(const std::string& filepath,
                         std::vector<glm::vec3> *vertexPos,
                         std::vector<glm::vec3> *vertexNormals,
                         std::vector<glm::vec2> *vertexUvs,
                         bool *isTriangles);
+
+
 };
 
-#endif // FILELOADER_H
+#endif // FILEREADER_H

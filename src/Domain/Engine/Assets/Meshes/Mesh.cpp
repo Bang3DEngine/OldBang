@@ -21,7 +21,7 @@ void Mesh::LoadFromFile(const std::string &filepath)
 
     bool trianglesMode;
 
-    FileLoader::LoadOBJ(filepath,
+    FileReader::ReadOBJ(filepath,
                         &positions, &normals, &uvs,
                         &trianglesMode);
     renderMode = trianglesMode ? RenderMode::Triangles : RenderMode::Quads;
@@ -73,4 +73,17 @@ Mesh::RenderMode Mesh::GetRenderMode() const
 int Mesh::GetVertexCount() const
 {
     return vertexCount;
+}
+
+void Mesh::Write(std::ofstream &f) const
+{
+
+}
+
+void Mesh::Read(std::ifstream &f)
+{
+    StageReader::RegisterNextPointer(f, this);
+    std::string filepath = StageReader::ReadString(f);
+    LoadFromFile(filepath);
+    StageReader::GetLine(f); //Consume close tag
 }

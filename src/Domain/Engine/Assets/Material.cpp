@@ -1,6 +1,7 @@
 #include "Material.h"
 
-Material::Material() : shaderProgram(nullptr)
+Material::Material() : Asset(),
+                       shaderProgram(nullptr)
 {
 }
 
@@ -39,6 +40,24 @@ void Material::UnBind() const
                 textures[i]->UnBind();
         }
     }
+}
+
+void Material::Write(std::ofstream &f) const
+{
+
+}
+
+void Material::Read(std::ifstream &f)
+{
+    StageReader::RegisterNextPointer(f, this);
+
+    SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
+                                       ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
+    Texture2D *tex = new Texture2D("res/testTexture.png");
+    tex->SetTextureSlot(0);
+    SetTexture(tex);
+
+    StageReader::GetLine(f); //Consume close tag
 }
 
 void Material::SetShaderProgram(const ShaderProgram *program)

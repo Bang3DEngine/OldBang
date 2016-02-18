@@ -1,5 +1,5 @@
-﻿#ifndef STAGELOADER_H
-#define STAGELOADER_H
+﻿#ifndef STAGEREADER_H
+#define STAGEREADER_H
 
 #include <istream>
 #include <sstream>
@@ -10,18 +10,11 @@
 #include <map>
 
 #include "glm/glm.hpp"
-
-#include "MeshPyramid.h"
-#include "Behaviour.h"
-#include "Transform.h"
-#include "Texture2D.h"
-#include "Camera.h"
-#include "Logger.h"
-#include "Stage.h"
 #include "Rect.h"
-#include "Mesh.h"
 
-class StageLoader
+class Stage;
+class Entity;
+class StageReader
 {
 private:
 
@@ -29,9 +22,11 @@ private:
     // it saves a pointer to the corresponding Part, Entity, etc.
     static std::map<std::string, void*> idToPointers;
 
-    StageLoader() {}
+    StageReader() {}
 
     static void TrimStringLeft(std::string *str);
+
+public:
     static std::string GetLine(std::ifstream &f);
 
 
@@ -59,24 +54,18 @@ private:
     // and they consume the closing tag.
 
     //PARTS
-    static void ReadParts(std::ifstream &f, Entity **e);
-    static Transform* ReadTransform(std::ifstream &f);
-    static MeshPyramid* ReadMeshPyramid(std::ifstream &f);
-    static MeshRenderer* ReadMeshRenderer(std::ifstream &f);
-    static Camera* ReadCamera(std::ifstream &f);
+    static void ReadParts(std::ifstream &f, Entity *e);
 
     //ASSETS
     static void ReadAssets(std::ifstream &f);
-    static Material* ReadMaterial(std::ifstream &f);
 
     //ENTITIES
-    static void ReadChildren(std::ifstream &f, Entity **e);
-    static Entity* ReadEntity(std::ifstream &f);
+    static void ReadChildren(std::ifstream &f, Entity *e);
     // ////////////////////
 
 public:
-    static void LoadStage(const std::string &filepath, Stage** stage);
+    static void ReadStage(const std::string &filepath, Stage* stage);
     static void SaveStage(const std::string &filepath, const Stage *stage);
 };
 
-#endif // STAGELOADER_H
+#endif // STAGEREADER_H

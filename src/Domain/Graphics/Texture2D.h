@@ -8,7 +8,7 @@
 #include "glm/glm.hpp"
 
 
-#include "FileLoader.h"
+#include "FileReader.h"
 #include "Texture.h"
 #include "Logger.h"
 

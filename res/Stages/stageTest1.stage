@@ -4,8 +4,13 @@
 
     <assets>
         <Material>
-            m0
+            mat0
         </Material>
+
+        <Mesh>
+            mesh0
+            res/Meshes/Pyramid.obj
+        </Mesh>
     </assets>
 
     <children>
@@ -17,19 +22,15 @@
             <parts>
                 <Transform>
                     t0
-                    0.0 0.0 0.0     #position
+                    0.0 0.0 0.0       #position
                     0.0 0.0 0.0 1.0   #rotation
                     1.0 1.0 1.0       #scale
                 </Transform>
 
-                <MeshPyramid>
-                    mp0
-                </MeshPyramid>
-
                 <MeshRenderer>
                     mr0
-                    mp0
-                    m0
+                    mesh0
+                    mat0
                 </MeshRenderer>
             </parts>
 

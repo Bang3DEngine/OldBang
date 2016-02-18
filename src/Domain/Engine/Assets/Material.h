@@ -3,11 +3,13 @@
 
 #include <vector>
 
+#include "Asset.h"
 #include "Texture.h"
+#include "Texture2D.h"
 #include "ShaderContract.h"
 #include "ShaderProgram.h"
 
-class Material : public IGLBindable
+class Material : public IGLBindable, public Asset
 {
 friend class MeshRenderer;
 
@@ -27,6 +29,9 @@ public:
 
     void Bind() const override;
     void UnBind() const override;
+
+    void Write(std::ofstream &f) const;
+    void Read(std::ifstream &f);
 };
 
 #endif // MATERIAL_H
