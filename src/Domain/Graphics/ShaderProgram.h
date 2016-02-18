@@ -4,6 +4,9 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "IGLBindable.h"
+
+#include <string>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -34,6 +37,8 @@ public:
 
     Shader* GetVertexShader() const { return vshader; }
     Shader* GetFragmentShader() const { return fshader; }
+
+    GLint GetLocation(const std::string &name) const;
 
     const std::string ToString() const override;
 };

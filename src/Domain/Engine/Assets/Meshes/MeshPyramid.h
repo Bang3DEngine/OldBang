@@ -6,7 +6,7 @@
 
 class MeshPyramid : public Mesh
 {
-private:
+public:
     static const std::vector<glm::vec3> pyramidPositions;
     static const std::vector<glm::vec3> pyramidNormals;
     static const std::vector<glm::vec2> pyramidUvs;

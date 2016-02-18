@@ -4,53 +4,34 @@
 #include <GL/glew.h>
 #include <map>
 
+#include "ShaderProgram.h"
 #include "VBO.h"
 
 class VAO : public IGLIdable, IGLBindable
 {
-public:
-    enum VBOMeaning
-    {
-        Position,
-        Normal,
-        UV,
-        Other_0, Other_1, Other_2, Other_3,
-        Other_4, Other_5, Other_6, Other_7
-    };
-
 private:
 
-    struct VBOLocation
-    {
-        const VBO *vbo;
-        int vboid;
-        VBOLocation() : vbo(nullptr), vboid(-1) {}
-        VBOLocation(const VBO *vbo, int id) : vbo(vbo), vboid(id) {}
-    };
-
-    int vboIdCounter;
-    mutable std::map<VBOMeaning, VBOLocation> vbos;
+    std::vector<const VBO*> vbos;
 
 public:
 
     VAO();
     virtual ~VAO();
 
-    int BindVBO(const VBO *vbo,
-                VBOMeaning vboMeaning,
-                GLint dataComponentsCount = -1,
-                GLenum dataType           = GL_FLOAT,
-                GLboolean dataNormalized  = GL_FALSE,
-                GLsizei dataStride        = 0,
-                GLuint dataOffset         = 0);
+    void BindVBO(const VBO *vbo,
+                 GLint location,
+                 GLint dataComponentsCount = -1,
+                 GLenum dataType           = GL_FLOAT,
+                 GLboolean dataNormalized  = GL_FALSE,
+                 GLsizei dataStride        = 0,
+                 GLuint dataOffset         = 0);
 
-    void UnBindVBO(VBOMeaning meaning);
-    void UnBindVBO(int vboid);
+    void UnBindVBO(GLint location);
 
     void Bind() const override;
     void UnBind() const override;
 
-    int GetVBOIdByMeaning(VBOMeaning meaning) const;
+    const VBO *GetVBOByLocation(int location) const;
 
     int GetVBOCount() const { return vbos.size(); }
 };

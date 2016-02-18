@@ -15,7 +15,7 @@ class MeshRenderer : public Part
 {
 private:
 
-    const Mesh *mesh;
+    Mesh *mesh;
     const Material *material;
 
 protected:
@@ -28,7 +28,7 @@ public:
 
     void Render(Mesh::RenderMode drawingMode = Mesh::RenderMode::Triangles) const;
 
-    void SetMesh(const Mesh *m);
+    void SetMesh(Mesh *m);
     const Mesh* GetMesh();
 
     void SetMaterial(const Material *m);

@@ -10,7 +10,7 @@ protected:
     GLuint idgl;
 
 public:
-    GLuint GetGLId() { return idgl; }
+    GLuint GetGLId() const { return idgl; }
 };
 
 #endif // GLIDABLE_H

@@ -5,6 +5,7 @@
 
 #include "glm/glm.hpp"
 
+#include "ShaderContract.h"
 #include "IFileable.h"
 #include "FileReader.h"
 #include "Asset.h"
@@ -42,6 +43,12 @@ public:
     void LoadPositions(const std::vector<glm::vec3>& positions);
     void LoadNormals(const std::vector<glm::vec3>& normals);
     void LoadUvs(const std::vector<glm::vec2>& uvs);
+
+    void BindPositionsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
+    void BindNormalsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
+    void BindUvsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
+
+    void BindAllVBOs(const ShaderProgram &sp);
 
     void SetRenderMode(RenderMode renderMode);
 

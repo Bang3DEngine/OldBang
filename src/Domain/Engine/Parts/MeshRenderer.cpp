@@ -24,9 +24,13 @@ void MeshRenderer::_OnRender()
     }
 }
 
-void MeshRenderer::SetMesh(const Mesh *m)
+void MeshRenderer::SetMesh(Mesh *m)
 {
     mesh = m;
+    if(mesh != nullptr && material != nullptr && material->GetShaderProgram() != nullptr)
+    {
+        mesh->BindAllVBOs(*(material->GetShaderProgram()));
+    }
 }
 
 const Mesh *MeshRenderer::GetMesh()
@@ -37,6 +41,10 @@ const Mesh *MeshRenderer::GetMesh()
 void MeshRenderer::SetMaterial(const Material *m)
 {
     material = m;
+    if(mesh != nullptr && material != nullptr && material->GetShaderProgram() != nullptr)
+    {
+        mesh->BindAllVBOs(*(material->GetShaderProgram()));
+    }
 }
 
 const Material *MeshRenderer::GetMaterial()
@@ -109,6 +117,7 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
 
+    //Logger_Warning("Rendering " << material->GetShaderProgram());
     glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
 
     material->UnBind();

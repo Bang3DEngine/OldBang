@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "MeshPyramid.h"
 
 Mesh::Mesh() : vertexPositionsVBO(nullptr), vertexNormalsVBO(nullptr), vertexUvsVBO(nullptr),
                renderMode(RenderMode::Triangles)
@@ -24,7 +25,18 @@ void Mesh::LoadFromFile(const std::string &filepath)
     FileReader::ReadOBJ(filepath,
                         &positions, &normals, &uvs,
                         &trianglesMode);
+    /*
+    LoadPositions(positions);
+    LoadNormals(normals);
+    LoadUvs(uvs);
     renderMode = trianglesMode ? RenderMode::Triangles : RenderMode::Quads;
+    */
+
+
+    LoadPositions(MeshPyramid::pyramidPositions);
+    LoadNormals(MeshPyramid::pyramidNormals);
+    LoadUvs(MeshPyramid::pyramidUvs);
+    renderMode = RenderMode::Triangles;
 }
 
 void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
@@ -34,7 +46,6 @@ void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
     vertexPositionsVBO = new VBO();
     vertexPositionsVBO->Fill((void*)(&positions[0]), positions.size() * sizeof(float) * 3);
     vertexCount = positions.size();
-    vao->BindVBO(vertexPositionsVBO, VAO::VBOMeaning::Position);
 }
 
 void Mesh::LoadNormals(const std::vector<glm::vec3> &normals)
@@ -43,7 +54,6 @@ void Mesh::LoadNormals(const std::vector<glm::vec3> &normals)
 
     vertexNormalsVBO = new VBO();
     vertexNormalsVBO->Fill((void*)(&normals[0]), normals.size() * sizeof(float) * 3);
-    vao->BindVBO(vertexNormalsVBO, VAO::VBOMeaning::Normal);
 }
 
 void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
@@ -52,7 +62,43 @@ void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
 
     vertexUvsVBO = new VBO();
     vertexUvsVBO->Fill((void*)(&uvs[0]), uvs.size() * sizeof(float) * 2);
-    vao->BindVBO(vertexUvsVBO, VAO::VBOMeaning::UV);
+}
+
+void Mesh::BindPositionsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
+{
+    if(vertexPositionsVBO != nullptr)
+    {
+        GLint location = sp.GetLocation(nameInShader);
+        vao->BindVBO(vertexPositionsVBO, location, 3);
+        Logger_Log("Binding position VBO to location " << location);
+    }
+}
+
+void Mesh::BindNormalsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
+{
+    if(vertexNormalsVBO != nullptr)
+    {
+        GLint location = sp.GetLocation(nameInShader);
+        vao->BindVBO(vertexNormalsVBO, location, 3);
+        Logger_Log("Binding normal VBO to location " << location);
+    }
+}
+
+void Mesh::BindUvsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
+{
+    if(vertexUvsVBO != nullptr)
+    {
+        GLint location = sp.GetLocation(nameInShader);
+        vao->BindVBO(vertexUvsVBO, location, 2);
+        Logger_Log("Binding uv VBO to location " << location);
+    }
+}
+
+void Mesh::BindAllVBOs(const ShaderProgram &sp)
+{
+    BindPositionsToShaderProgram(ShaderContract::Vertex_In_Position_Raw, sp);
+    BindNormalsToShaderProgram(ShaderContract::Vertex_In_Normal_Raw, sp);
+    BindUvsToShaderProgram(ShaderContract::Vertex_In_Uv_Raw, sp);
 }
 
 void Mesh::SetRenderMode(Mesh::RenderMode renderMode)

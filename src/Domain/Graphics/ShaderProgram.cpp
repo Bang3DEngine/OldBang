@@ -182,6 +182,11 @@ bool ShaderProgram::SetUniformTexture(const std::string &name, const Texture *te
     }
 }
 
+GLint ShaderProgram::GetLocation(const std::string &name) const
+{
+    return glGetAttribLocation(GetGLId(), name.c_str());
+}
+
 const std::string ShaderProgram::ToString() const
 {
     std::ostringstream oss;
