@@ -14,6 +14,8 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     renderToScreenMaterial->SetShaderProgram(sp);
 
     renderToScreenPlaneMesh = new MeshScreenPlane();
+    renderToScreenPlaneMesh->BindPositionsToShaderProgram(ShaderContract::Vertex_In_Position_Raw,
+                                                          *(renderToScreenMaterial->GetShaderProgram()));
 }
 
 GBuffer::~GBuffer()
@@ -30,7 +32,6 @@ void GBuffer::RenderToScreen() const
     TextureRender *diffuseTex  = GetTextureAttachment(GBuffer::Attachment::Diffuse);
     TextureRender *depthTex    = GetTextureAttachment(GBuffer::Attachment::Depth);
 
-    renderToScreenPlaneMesh->BindAllVBOs(*(renderToScreenMaterial->GetShaderProgram()));
     renderToScreenPlaneMesh->GetVAO()->Bind();
 
     //Pass the textures to the render to screen shaderProgram, through the Material

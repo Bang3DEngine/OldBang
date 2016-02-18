@@ -78,6 +78,7 @@ void Canvas::SetCurrentStage(const std::string &name)
 {
     for(auto it = stages.begin(); it != stages.end(); ++it)
     {
+        Logger_Log("NAMEE: " << (*it)->name);
         if((*it)->name == name)
         {
             if(currentStage != (*it))

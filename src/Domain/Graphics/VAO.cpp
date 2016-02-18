@@ -20,6 +20,8 @@ void VAO::BindVBO(const VBO *vbo,
 {
     UnBindVBO(location); //unbind in case its a vbo replace
 
+    if(location < 0) return;
+
     this->Bind();
 
     vbo->Bind();
