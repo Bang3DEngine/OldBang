@@ -25,18 +25,11 @@ void Mesh::LoadFromFile(const std::string &filepath)
     FileReader::ReadOBJ(filepath,
                         &positions, &normals, &uvs,
                         &trianglesMode);
-    /*
+
     LoadPositions(positions);
     LoadNormals(normals);
     LoadUvs(uvs);
     renderMode = trianglesMode ? RenderMode::Triangles : RenderMode::Quads;
-    */
-
-
-    LoadPositions(MeshPyramid::pyramidPositions);
-    LoadNormals(MeshPyramid::pyramidNormals);
-    LoadUvs(MeshPyramid::pyramidUvs);
-    renderMode = RenderMode::Triangles;
 }
 
 void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
