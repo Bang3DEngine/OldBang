@@ -29,9 +29,7 @@ void main()
         gl_FragColor = vec4(0,0,0,1);
     }
     else if(BANG_depth > 0.01)
-        gl_FragColor = vec4(BANG_normal, 1);
+        gl_FragColor = vec4(BANG_diffuse, 1);
     else
         gl_FragColor = vec4(1);
-
-    gl_FragColor = vec4(BANG_normal, 1);
 }

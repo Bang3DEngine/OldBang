@@ -1,4 +1,4 @@
-#shaderProgram path
-
-
-#texture path
+<Material>
+    #MerProgram path
+    res/Assets/Textures/testTexture.png
+</Material>

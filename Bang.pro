@@ -76,7 +76,6 @@ HEADERS += \
     src/Domain/Graphics/VAO.h \
     src/Domain/Graphics/Framebuffer.h \
     src/Domain/Graphics/Shader.h \
-    src/Domain/Graphics/Texture2D.h \
     src/Domain/Graphics/GBuffer.h \
     src/Domain/Graphics/TextureRender.h \
     src/Domain/Graphics/VBO.h \
@@ -102,7 +101,8 @@ HEADERS += \
     src/Domain/Engine/Interfaces/IFileable.h \
     src/Domain/Engine/Readers/AssetsReader.h \
     src/Domain/Engine/Readers/ReaderWithPointerIds.h \
-    src/Domain/Engine/Others/AssetsManager.h
+    src/Domain/Engine/Others/AssetsManager.h \
+    src/Domain/Engine/Assets/Texture2D.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -120,7 +120,6 @@ SOURCES += \
     src/Domain/Graphics/Framebuffer.cpp \
     src/Domain/Graphics/VAO.cpp \
     src/Domain/Graphics/Shader.cpp \
-    src/Domain/Graphics/Texture2D.cpp \
     src/Domain/Graphics/TextureRender.cpp \
     src/Domain/Graphics/TextureDepth.cpp \
     src/Domain/Graphics/VBO.cpp \
@@ -143,4 +142,5 @@ SOURCES += \
     src/Domain/Engine/Readers/StageReader.cpp \
     src/Domain/Engine/Readers/AssetsReader.cpp \
     src/Domain/Engine/Readers/ReaderWithPointerIds.cpp \
-    src/Domain/Engine/Others/AssetsManager.cpp
+    src/Domain/Engine/Others/AssetsManager.cpp \
+    src/Domain/Engine/Assets/Texture2D.cpp

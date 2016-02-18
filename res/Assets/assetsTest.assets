@@ -10,4 +10,9 @@
         res/Assets/Meshes/Boy.obj
     </Mesh>
 
+    <Texture2D>
+        mesh0
+        res/Assets/Textures/testTexture.png
+    </Texture2D>
+
 </assets>

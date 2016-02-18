@@ -51,11 +51,27 @@ void Material::Read(std::ifstream &f)
 {
     AssetsReader::RegisterNextPointerId(f, this);
     filepath = FileReader::ReadString(f);
-    SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
-                                       ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
-    Texture2D *tex = new Texture2D("res/Assets/Textures/testTexture.png");
-    tex->SetTextureSlot(0);
-    SetTexture(tex);
+
+    //Read the file itself, where the material is defined (*.mat)
+    std::ifstream fm (filepath);
+    if ( !fm.is_open() )
+    {
+        Logger_Error("Could not open the file '" << filepath << "' to load the material.");
+    }
+    else
+    {
+        FileReader::ReadNextLine(fm); // Skip <Material> line
+
+        //Read the ShaderProgram
+        SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
+                                           ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
+        //Read the texture
+        Texture2D *tex = new Texture2D( FileReader::ReadString(fm) );
+        tex->SetTextureSlot(0);
+        SetTexture(tex);
+
+        FileReader::ReadNextLine(fm); // Skip </Material> line
+    }
 
     FileReader::ReadNextLine(f); //Consume close tag
 }

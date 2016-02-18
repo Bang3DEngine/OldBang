@@ -3,9 +3,10 @@
 
 #include "ReaderWithPointerIds.h"
 #include "AssetsManager.h"
+#include "Texture2D.h"
+#include "Material.h"
 #include "Asset.h"
 #include "Mesh.h"
-#include "Material.h"
 
 class AssetsReader : public ReaderWithPointerIds
 {

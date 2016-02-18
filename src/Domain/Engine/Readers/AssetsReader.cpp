@@ -28,6 +28,12 @@ void AssetsReader::ReadAssets(const std::string &filepath)
                 m->Read(f);
                 a = m;
             }
+            else if(line == "<Texture2D>")
+            {
+                Texture2D *tex = new Texture2D();
+                tex->Read(f);
+                a = tex;
+            }
 
             if(a != nullptr && a->GetFilepath() != "")
             {

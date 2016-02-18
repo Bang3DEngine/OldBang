@@ -1,6 +1,6 @@
 #include "Asset.h"
 
-Asset::Asset() : filepath(__FILE__)
+Asset::Asset()
 {
 
 }
