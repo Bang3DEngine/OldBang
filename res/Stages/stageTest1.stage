@@ -2,17 +2,6 @@
     s0
     stageTest1
 
-    <assets>
-        <Material>
-            mat0
-        </Material>
-
-        <Mesh>
-            mesh0
-            res/Meshes/Pyramid.obj
-        </Mesh>
-    </assets>
-
     <children>
 
         <Entity>
@@ -29,8 +18,8 @@
 
                 <MeshRenderer>
                     mr0
-                    mesh0
-                    mat0
+                    res/Assets/Meshes/Pyramid.obj
+                    res/Assets/Materials/testMaterial.mat
                 </MeshRenderer>
             </parts>
 

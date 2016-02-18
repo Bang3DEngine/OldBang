@@ -33,6 +33,7 @@ std::ostream &operator<<(std::ostream &log, const IToString *s);
     std::ostringstream log;\
     log << x;\
     std::cerr << "[   LOG   ]: " << log.str() << std::endl;\
+    std::cerr.flush();\
     log.flush();\
 } while(0)
 
@@ -40,6 +41,7 @@ std::ostream &operator<<(std::ostream &log, const IToString *s);
     std::ostringstream log;\
     log << x;\
     std::cerr << "[ WARNING ]: " << log.str() << _Logger_Suffix;\
+    std::cerr.flush();\
     log.flush();\
 } while(0)
 
@@ -47,6 +49,7 @@ std::ostream &operator<<(std::ostream &log, const IToString *s);
     std::ostringstream log;\
     log << x;\
     std::cerr << "[  ERROR  ]: " << log.str() << _Logger_Suffix;\
+    std::cerr.flush();\
     log.flush();\
 } while(0)
 

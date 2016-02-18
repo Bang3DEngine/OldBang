@@ -92,11 +92,10 @@ void Entity::Write(std::ofstream &f) const
 
 void Entity::Read(std::ifstream &f)
 {
-    StageReader::RegisterNextPointer(f, this); //Read Entity id
-    SetName( StageReader::GetLine(f) );  //Read Entity name
-
+    StageReader::RegisterNextPointerId(f, this); //Read Entity id
+    SetName( FileReader::ReadString(f) );  //Read Entity name
     std::string line;
-    while( (line = StageReader::GetLine(f)) != "</Entity>")
+    while( (line = FileReader::ReadNextLine(f)) != "</Entity>")
     {
         if(line == "<children>")
         {

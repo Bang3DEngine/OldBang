@@ -130,13 +130,13 @@ void Camera::Write(std::ofstream &f) const
 
 void Camera::Read(std::ifstream &f)
 {
-    StageReader::RegisterNextPointer(f, this);
-    SetFovDegrees( StageReader::ReadFloat(f) );
-    SetZNear( StageReader::ReadFloat(f) );
-    SetZFar( StageReader::ReadFloat(f) );
-    SetProjectionMode( StageReader::ReadString(f) == "Perspective" ?
+    StageReader::RegisterNextPointerId(f, this);
+    SetFovDegrees( FileReader::ReadFloat(f) );
+    SetZNear( FileReader::ReadFloat(f) );
+    SetZFar( FileReader::ReadFloat(f) );
+    SetProjectionMode( FileReader::ReadString(f) == "Perspective" ?
                                             Camera::ProjectionMode::Perspective :
                                             Camera::ProjectionMode::Orthographic);
-    SetOrthoRect( StageReader::ReadRect(f) );
-    StageReader::GetLine(f); //Consume close tag
+    SetOrthoRect( FileReader::ReadRect(f) );
+    FileReader::ReadNextLine(f); //Consume close tag
 }

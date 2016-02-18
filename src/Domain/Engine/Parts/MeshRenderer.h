@@ -1,6 +1,8 @@
 #ifndef MESHRENDERER_H
 #define MESHRENDERER_H
 
+#include <glm/gtx/string_cast.hpp>
+
 #include "VAO.h"
 #include "Mesh.h"
 #include "Part.h"
@@ -9,7 +11,7 @@
 #include "Transform.h"
 #include "ShaderProgram.h"
 #include "ShaderContract.h"
-#include <glm/gtx/string_cast.hpp>
+#include "AssetsManager.h"
 
 class MeshRenderer : public Part
 {

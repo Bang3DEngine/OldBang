@@ -22,14 +22,19 @@ void Mesh::LoadFromFile(const std::string &filepath)
 
     bool trianglesMode;
 
-    FileReader::ReadOBJ(filepath,
-                        &positions, &normals, &uvs,
-                        &trianglesMode);
-
-    LoadPositions(positions);
-    LoadNormals(normals);
-    LoadUvs(uvs);
-    renderMode = trianglesMode ? RenderMode::Triangles : RenderMode::Quads;
+    if( FileReader::ReadOBJ(filepath,
+                            &positions, &normals, &uvs,
+                            &trianglesMode))
+    {
+        LoadPositions(positions);
+        LoadNormals(normals);
+        LoadUvs(uvs);
+        renderMode = trianglesMode ? RenderMode::Triangles : RenderMode::Quads;
+    }
+    else
+    {
+        Logger_Error("There was an error when reading mesh file '" << filepath << "'.");
+    }
 }
 
 void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
@@ -118,8 +123,8 @@ void Mesh::Write(std::ofstream &f) const
 
 void Mesh::Read(std::ifstream &f)
 {
-    StageReader::RegisterNextPointer(f, this);
-    std::string filepath = StageReader::ReadString(f);
+    StageReader::RegisterNextPointerId(f, this);
+    filepath = FileReader::ReadString(f);
     LoadFromFile(filepath);
-    StageReader::GetLine(f); //Consume close tag
+    FileReader::ReadNextLine(f); //Consume close tag
 }

@@ -87,7 +87,7 @@ bool FileReader::ReadOBJ(const std::string& filepath, std::vector<glm::vec3> *ve
     if(!f.is_open()) Logger_Error("Error opening the mesh file '" << filepath << "'");
     std::string line;
 
-    while(getline(f, line))
+    while(std::getline(f, line))
     {
         std::stringstream ss(line);
         std::string lineHeader;
@@ -174,4 +174,71 @@ bool FileReader::ReadOBJ(const std::string& filepath, std::vector<glm::vec3> *ve
     }
 
     return true;
+}
+
+void FileReader::TrimStringLeft(std::string *str)
+{
+    unsigned int i = 0;
+    for(; i < str->length(); ++i)
+    {
+        if(str->at(i) != ' ' && str->at(i) != '\t') break;
+    }
+    *str = str->substr(i, str->length() - i);
+}
+
+std::string FileReader::ReadNextLine(std::ifstream &f)
+{
+    std::string line;
+    do
+    {
+        std::getline(f, line);
+        TrimStringLeft(&line);
+    }
+    while( line.empty() || line.at(0) == '#'); //Skip all empty/comment lines
+
+    return line;
+}
+
+float FileReader::ReadFloat(std::ifstream &f)
+{
+    std::istringstream iss(ReadNextLine(f));
+    float v; iss >> v; return v;
+}
+
+glm::vec2 FileReader::ReadVec2(std::ifstream &f)
+{
+    std::istringstream iss(ReadNextLine(f));
+    float x,y;
+    iss >> x >> y;
+    return glm::vec2(x, y);
+}
+
+glm::vec3 FileReader::ReadVec3(std::ifstream &f)
+{
+    std::istringstream iss(ReadNextLine(f));
+    float x,y,z;
+    iss >> x >> y >> z;
+    return glm::vec3(x, y, z);
+}
+
+glm::quat FileReader::ReadQuat(std::ifstream &f)
+{
+    std::istringstream iss(ReadNextLine(f));
+    float x,y,z,w;
+    iss >> x >> y >> z >> w;
+    return glm::quat(x, y, z, w);
+}
+
+Rect FileReader::ReadRect(std::ifstream &f)
+{
+    glm::quat q = ReadQuat(f);
+    return Rect(q.x, q.y, q.z, q.w);
+}
+
+std::string FileReader::ReadString(std::ifstream &f)
+{
+    std::istringstream iss(ReadNextLine(f));
+    std::string str;
+    iss >> str;
+    return str;
 }

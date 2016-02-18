@@ -9,6 +9,8 @@
 #include "ShaderContract.h"
 #include "ShaderProgram.h"
 
+#include "AssetsReader.h"
+
 class Material : public IGLBindable, public Asset
 {
 friend class MeshRenderer;

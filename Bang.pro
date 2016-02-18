@@ -37,23 +37,24 @@ OTHER_FILES += \
     .gitignore \
     run.sh \
     updateUI.sh \
-    res/Shaders/pass.vert \
-    res/Shaders/model.vert \
-    res/Shaders/pass_pos_normal.frag \
-    res/Shaders/pass_pos.frag \
-    res/Shaders/pass_pos_normal.vert \
-    res/Shaders/pass_pos.vert \
-    res/Shaders/model_pos_normal.vert \
-    res/Shaders/model_pos.vert \
     src/Domain \
-    res/Shaders/pvm_pos_normal.vert \
-    res/Shaders/pass_pos_normal_uv.frag \
-    res/Shaders/pvm_pos_normal_uv.vert \
-    res/Shaders/render_to_screen.frag \
-    res/Shaders/render_to_screen.vert \
     res/Stages/stageTest1.stage \
     res/Stages/stageFileFormat.txt \
-    res/Meshes/Pyramid.obj
+    res/Stages/assetsTest.assets \
+    res/Assets/assetsTest.assets \
+    res/Assets/Materials/testMaterial.mat \
+    res/Assets/Meshes/Pyramid.obj \
+    res/Shaders/pass_pos.frag \
+    res/Shaders/pass_pos_normal.frag \
+    res/Shaders/pass_pos_normal_uv.frag \
+    res/Shaders/render_to_screen.frag \
+    res/Shaders/model_pos.vert \
+    res/Shaders/model_pos_normal.vert \
+    res/Shaders/pass_pos.vert \
+    res/Shaders/pass_pos_normal.vert \
+    res/Shaders/pvm_pos_normal.vert \
+    res/Shaders/pvm_pos_normal_uv.vert \
+    res/Shaders/render_to_screen.vert
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -96,7 +97,10 @@ HEADERS += \
     src/Domain/Engine/Parts/TestCameraBehaviour.h \
     src/Domain/Engine/Readers/FileReader.h \
     src/Domain/Engine/Readers/StageReader.h \
-    src/Domain/Engine/Interfaces/IFileable.h
+    src/Domain/Engine/Interfaces/IFileable.h \
+    src/Domain/Engine/Readers/AssetsReader.h \
+    src/Domain/Engine/Readers/ReaderWithPointerIds.h \
+    src/Domain/Engine/Others/AssetsManager.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -134,4 +138,7 @@ SOURCES += \
     src/Domain/Engine/Parts/TestBehaviour.cpp \
     src/Domain/Engine/Parts/TestCameraBehaviour.cpp \
     src/Domain/Engine/Readers/FileReader.cpp \
-    src/Domain/Engine/Readers/StageReader.cpp
+    src/Domain/Engine/Readers/StageReader.cpp \
+    src/Domain/Engine/Readers/AssetsReader.cpp \
+    src/Domain/Engine/Readers/ReaderWithPointerIds.cpp \
+    src/Domain/Engine/Others/AssetsManager.cpp

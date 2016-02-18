@@ -1,24 +1,31 @@
 #ifndef FILEREADER_H
 #define FILEREADER_H
 
+#include <map>
 #include <vector>
 #include <string>
-#include <iostream>
-#include <stdio.h>
-#include <string.h>
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
+#include <stdio.h>
+#include <iostream>
+#include <string.h>
 
-#include "Logger.h"
 #include "stb_image.h"
 #include "glm/glm.hpp"
+
+#include "Rect.h"
+#include "Logger.h"
 
 class Stage;
 class FileReader
 {
 private:
+    FileReader() {}
+
     static void GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *hasNormals, bool *isTriangles);
+
+    static void TrimStringLeft(std::string *str);
 
 public:
 
@@ -29,6 +36,16 @@ public:
                         std::vector<glm::vec3> *vertexNormals,
                         std::vector<glm::vec2> *vertexUvs,
                         bool *isTriangles);
+
+    //READ PRIMITIVE VALUES
+    static std::string ReadNextLine(std::ifstream &f);
+
+    static float ReadFloat(std::ifstream &f);
+    static glm::vec2 ReadVec2(std::ifstream &f);
+    static glm::vec3 ReadVec3(std::ifstream &f);
+    static glm::quat ReadQuat(std::ifstream &f);
+    static Rect ReadRect(std::ifstream &f);
+    static std::string ReadString(std::ifstream &f);
 
 
 };

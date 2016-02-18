@@ -49,15 +49,15 @@ void Material::Write(std::ofstream &f) const
 
 void Material::Read(std::ifstream &f)
 {
-    StageReader::RegisterNextPointer(f, this);
-
+    AssetsReader::RegisterNextPointerId(f, this);
+    filepath = FileReader::ReadString(f);
     SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
                                        ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
-    Texture2D *tex = new Texture2D("res/testTexture.png");
+    Texture2D *tex = new Texture2D("res/Assets/Textures/testTexture.png");
     tex->SetTextureSlot(0);
     SetTexture(tex);
 
-    StageReader::GetLine(f); //Consume close tag
+    FileReader::ReadNextLine(f); //Consume close tag
 }
 
 void Material::SetShaderProgram(const ShaderProgram *program)

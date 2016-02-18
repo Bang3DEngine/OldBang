@@ -1,0 +1,13 @@
+<assets>
+
+    <Material>
+        mat0
+        res/Assets/Materials/testMaterial.mat
+    </Material>
+
+    <Mesh>
+        mesh0
+        res/Assets/Meshes/Pyramid.obj
+    </Mesh>
+
+</assets>
