@@ -54,7 +54,9 @@ OTHER_FILES += \
     res/Shaders/pass_pos_normal.vert \
     res/Shaders/pvm_pos_normal.vert \
     res/Shaders/pvm_pos_normal_uv.vert \
-    res/Shaders/render_to_screen.vert
+    res/Shaders/render_to_screen.vert \
+    res/Assets/Meshes/Gandalf.obj \
+    res/Assets/Meshes/Boy.obj
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

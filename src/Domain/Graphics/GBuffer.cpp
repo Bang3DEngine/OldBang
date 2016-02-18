@@ -7,6 +7,7 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateTextureAttachment(Attachment::Uv);
     CreateTextureAttachment(Attachment::Diffuse);
     CreateTextureAttachment(Attachment::Depth);
+    CreateDepthBufferAttachment();
 
     renderToScreenMaterial = new Material();
     ShaderProgram *sp = new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_Render_To_Screen,

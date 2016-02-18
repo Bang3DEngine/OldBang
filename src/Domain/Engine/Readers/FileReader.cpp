@@ -69,6 +69,8 @@ void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *h
         fseek(f, -3, SEEK_CUR);
     }
     fclose(f);
+
+    *isTriangles = true;
 }
 
 bool FileReader::ReadOBJ(const std::string& filepath, std::vector<glm::vec3> *vertexPos,
@@ -95,59 +97,88 @@ bool FileReader::ReadOBJ(const std::string& filepath, std::vector<glm::vec3> *ve
         if(lineHeader == "v")
         {
             glm::vec3 pos;
-            ss >> pos.x;
-            ss >> pos.y;
-            ss >> pos.z;
+            ss >> pos.x >> pos.y >> pos.z;
             disorderedVertexPos.push_back(pos);
         }
         else if(hasUvs && lineHeader == "vt") //Cargamos uvs
         {
             glm::vec2 uv;
-            ss >> uv.x;
-            ss >> uv.y;
+            ss >> uv.x >> uv.y;
             disorderedVertexUvs.push_back(uv);
         }
         else if(hasNormals && lineHeader == "vn") //Cargamos normals
         {
             glm::vec3 normal;
-            ss >> normal.x;
-            ss >> normal.y;
-            ss >> normal.z;
+            ss >> normal.x >> normal.y >> normal.z;
             disorderedVertexNormals.push_back(normal);
         }
         else if(lineHeader == "f")
         {
-            int n = isTriangles ? 3 : 4;
-            unsigned int index;
-            char c;
+            unsigned int posIndices[4];
+            unsigned int uvIndices[4];
+            unsigned int normalIndices[4];
 
-            for (int i = 0; i < n; ++i)
+            for (int i = 0; i < 3; ++i)
             {
-                ss >> index;
-                vertexPosIndexes.push_back(index);
-
+                ss >> posIndices[i];
                 if(hasUvs)
                 {
-                    ss >> c;  //Read the '/'
-                    ss >> index;
-                    vertexUvsIndexes.push_back(index);
+                    while(ss.peek() == '/') ss.ignore();  //Read the '/'s
+                    ss >> uvIndices[i];
+                }
 
-                    if (hasNormals)
-                    {
-                        ss >> c;
-                        ss >> index;
-                        vertexNormIndexes.push_back(index);
-                    }
-                }
-                else
+                if (hasNormals)
                 {
-                    if (hasNormals)
-                    {
-                        ss >> c;
-                        ss >> index;
-                        vertexNormIndexes.push_back(index);
-                    }
+                    while(ss.peek() == '/') ss.ignore();
+                    ss >> normalIndices[i];
                 }
+            }
+
+            //Vertices 0,1 same for tris and quads in CCW
+            for(int j = 0; j <= 1; ++j)
+            {
+                vertexPosIndexes.push_back(posIndices[j]);
+                vertexUvsIndexes.push_back(uvIndices[j]);
+                vertexNormIndexes.push_back(normalIndices[j]);
+            }
+
+            bool theresAFaceLeft = false;
+            while(ss.peek() == '\n' || ss.peek() == '\r' || ss.peek() == ' ')
+                ss.ignore();
+            theresAFaceLeft = (ss.peek() != EOF);
+
+            if(theresAFaceLeft)
+            {
+                //QUAD FOUND, turn it into two triangles
+                //Finish first triangle in CCW
+                ss >> posIndices[3];
+                if(hasUvs)
+                {
+                    while(ss.peek() == '/') ss.ignore();
+                    ss >> uvIndices[3];
+                }
+                if(hasNormals)
+                {
+                    while(ss.peek() == '/') ss.ignore();
+                    ss >> normalIndices[3];
+                }
+                vertexPosIndexes.push_back(posIndices[3]);
+                vertexUvsIndexes.push_back(uvIndices[3]);
+                vertexNormIndexes.push_back(normalIndices[3]);
+
+                //Make second triangle in CCW
+                for(int j = 1; j <= 3; ++j) //3,2,1
+                {
+                    vertexPosIndexes.push_back(posIndices[j]);
+                    vertexUvsIndexes.push_back(uvIndices[j]);
+                    vertexNormIndexes.push_back(normalIndices[j]);
+                }
+            }
+            else //Triangles, finish with index 2
+            {
+                vertexPosIndexes.push_back(posIndices[2]);
+                vertexUvsIndexes.push_back(uvIndices[2]);
+                vertexNormIndexes.push_back(normalIndices[2]);
             }
         }
     }

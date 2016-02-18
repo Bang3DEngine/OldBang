@@ -13,12 +13,12 @@
                     t0
                     0.0 0.0 0.0       #position
                     0.0 0.0 0.0 1.0   #rotation
-                    1.0 1.0 1.0       #scale
+                    0.35 0.35 0.35       #scale
                 </Transform>
 
                 <MeshRenderer>
                     mr0
-                    res/Assets/Meshes/Pyramid.obj
+                    res/Assets/Meshes/Boy.obj
                     res/Assets/Materials/testMaterial.mat
                 </MeshRenderer>
             </parts>

@@ -7,7 +7,7 @@
 
     <Mesh>
         mesh0
-        res/Assets/Meshes/Pyramid.obj
+        res/Assets/Meshes/Boy.obj
     </Mesh>
 
 </assets>

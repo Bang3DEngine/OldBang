@@ -20,6 +20,7 @@ public:
 
 private:
 
+    GLuint depthBufferAttachmentId;
     int width, height;
 
     std::vector<GLuint> boundAttachments;
@@ -35,6 +36,8 @@ public:
 
     void CreateTextureAttachment(int framebufferAttachmentNum,
                                  AttachmentType attachmentType = AttachmentType::Color);
+
+    void CreateDepthBufferAttachment();
 
     TextureRender* GetTextureAttachment(int framebufferAttachmentNum) const;
 

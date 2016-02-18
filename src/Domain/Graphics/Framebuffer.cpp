@@ -1,7 +1,8 @@
 #include "Framebuffer.h"
 
 Framebuffer::Framebuffer(int width, int height) : width(width),
-                                                  height(height)
+                                                  height(height),
+                                                  depthBufferAttachmentId(0)
 {
     glGenFramebuffers(1, &idgl);
 }
@@ -12,6 +13,9 @@ Framebuffer::~Framebuffer()
     {
         delete t;
     }
+
+    if(depthBufferAttachmentId != 0)
+        glDeleteRenderbuffers(1, &depthBufferAttachmentId);
 
     glDeleteFramebuffers(1, &idgl);
 }
@@ -49,6 +53,20 @@ void Framebuffer::CreateTextureAttachment(int framebufferAttachmentNum, Attachme
     UnBind();
 }
 
+
+void Framebuffer::CreateDepthBufferAttachment()
+{
+    Bind();
+    glGenRenderbuffers(1, &depthBufferAttachmentId);
+    //TODO:  respect former bindings of renderbuffers
+    glBindRenderbuffer(GL_RENDERBUFFER, depthBufferAttachmentId);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBufferAttachmentId);
+
+    CheckFramebufferError();
+    UnBind();
+}
+
 TextureRender *Framebuffer::GetTextureAttachment(int framebufferAttachmentNum) const
 {
     if(framebufferAttachmentNum >= int(textureAttachments.size())) return nullptr;
@@ -65,6 +83,13 @@ void Framebuffer::Resize(int width, int height)
         {
             t->Resize(width, height);
         }
+    }
+
+    if(depthBufferAttachmentId != 0)
+    {
+        //TODO:  respect former bindings of renderbuffers
+        glBindRenderbuffer(GL_RENDERBUFFER, depthBufferAttachmentId);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
     }
 }
 
