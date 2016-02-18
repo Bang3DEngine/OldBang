@@ -1,5 +1,10 @@
 <assets>
 
+    <Texture2D>
+        tex0
+        res/Assets/Textures/testTexture.png
+    </Texture2D>
+
     <Material>
         mat0
         res/Assets/Materials/testMaterial.mat
@@ -9,10 +14,5 @@
         mesh0
         res/Assets/Meshes/Boy.obj
     </Mesh>
-
-    <Texture2D>
-        mesh0
-        res/Assets/Textures/testTexture.png
-    </Texture2D>
 
 </assets>

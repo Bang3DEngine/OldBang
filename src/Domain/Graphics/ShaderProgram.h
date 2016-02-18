@@ -3,6 +3,7 @@
 
 #include "Shader.h"
 #include "Texture.h"
+#include "IFileable.h"
 #include "IGLBindable.h"
 
 #include <string>
@@ -10,7 +11,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class ShaderProgram : public IGLIdable, public IGLBindable, public IToString
+class ShaderProgram : public IGLIdable, public IGLBindable, public IToString, public IFileable
 {
 private:
     Shader *vshader, *fshader;
@@ -41,6 +42,9 @@ public:
     GLint GetLocation(const std::string &name) const;
 
     const std::string ToString() const override;
+
+    void Write(std::ofstream &f) const;
+    void Read(std::ifstream &f);
 };
 
 #endif // SHADERPROGRAM_H

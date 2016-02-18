@@ -66,7 +66,7 @@ void Material::Read(std::ifstream &f)
         SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
                                            ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
         //Read the texture
-        Texture2D *tex = new Texture2D( FileReader::ReadString(fm) );
+        Texture2D *tex = AssetsManager::GetAsset<Texture2D>(  FileReader::ReadString(fm) );
         tex->SetTextureSlot(0);
         SetTexture(tex);
 
