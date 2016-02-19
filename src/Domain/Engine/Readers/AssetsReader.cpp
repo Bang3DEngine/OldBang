@@ -19,11 +19,14 @@ void AssetsReader::ReadAssetsFile(const std::string &filepath)
         while( (line = FileReader::ReadNextLine(f)) != "</assets>" )
         {
             Asset *a = nullptr;
-            Logger_Log(line);
-            if(line == "<Material>") a = ReadAsset<Material>(f);
-            else if(line == "<Mesh>") a = ReadAsset<Mesh>(f);
-            else if(line == "<Texture2D>") a = ReadAsset<Texture2D>(f);
-            Logger_Log("_");
+            std::string assetFilepath = FileReader::ReadString(f);
+            if(line == "<Material>") a = ReadAssetFile<Material>(assetFilepath);
+            else if(line == "<Mesh>") a = ReadAssetFile<Mesh>(assetFilepath);
+            else if(line == "<Texture2D>") a = ReadAssetFile<Texture2D>(assetFilepath);
+
+
+            FileReader::ReadNextLine(f); //Consume closing tag
+            AssetsManager::SaveAsset(a->GetFilepath(), a);
         }
     }
 }

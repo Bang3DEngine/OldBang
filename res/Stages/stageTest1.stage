@@ -18,8 +18,8 @@
 
                 <MeshRenderer>
                     mr0
-                    res/Assets/Meshes/Boy.obj
-                    res/Assets/Materials/testMaterial.mat
+                    res/Assets/boyMesh.asset
+                    res/Assets/testMaterial.asset
                 </MeshRenderer>
             </parts>
 

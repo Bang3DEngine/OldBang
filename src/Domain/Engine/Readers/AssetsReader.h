@@ -26,7 +26,7 @@ public:
     }
 
 
-    //Reads a specific asset file (image.png, myMaterial.mat, etc.)
+    //Reads a specific asset file (*.asset)
     template <class T>
     static T* ReadAssetFile(const std::string &filepath)
     {
@@ -37,7 +37,7 @@ public:
             return nullptr;
         }
 
-        //Skip open tag
+        FileReader::ReadNextLine(f); //Consume open tag
         return ReadAsset<T>(f);
     }
 };

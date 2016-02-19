@@ -23,18 +23,15 @@ public:
     template <class T>
     static T* GetAsset(const std::string &filepath)
     {
-        Logger_Log("Get Asset " << filepath);
         Asset *a = nullptr;
         if(filepathToAssetPointer.find(filepath) == filepathToAssetPointer.end())
         {
-            Logger_Log("ReadAssetFile called");
             //Doesnt have the Asset created. Create, read, and save it
             a = AssetsReader::ReadAssetFile<T>(filepath);
             SaveAsset(filepath, a);
         }
         else
         {
-            Logger_Log("Directly retrieved");
             a = filepathToAssetPointer[filepath];
         }
 

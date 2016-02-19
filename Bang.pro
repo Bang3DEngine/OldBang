@@ -42,7 +42,6 @@ OTHER_FILES += \
     res/Stages/stageFileFormat.txt \
     res/Stages/assetsTest.assets \
     res/Assets/assetsTest.assets \
-    res/Assets/Materials/testMaterial.mat \
     res/Assets/Meshes/Pyramid.obj \
     res/Shaders/pass_pos.frag \
     res/Shaders/pass_pos_normal.frag \
@@ -56,7 +55,10 @@ OTHER_FILES += \
     res/Shaders/pvm_pos_normal_uv.vert \
     res/Shaders/render_to_screen.vert \
     res/Assets/Meshes/Gandalf.obj \
-    res/Assets/Meshes/Boy.obj
+    res/Assets/Meshes/Boy.obj \
+    res/Assets/testMaterial.asset \
+    res/Assets/woodTexture.asset \
+    res/Assets/boyMesh.asset
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

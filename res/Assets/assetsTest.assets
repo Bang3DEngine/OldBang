@@ -1,15 +1,15 @@
 <assets>
 
     <Texture2D>
-        res/Assets/Textures/testTexture.png
+        res/Assets/woodTexture.asset
     </Texture2D>
 
     <Material>
-        res/Assets/Materials/testMaterial.mat
+        res/Assets/testMaterial.asset
     </Material>
 
     <Mesh>
-        res/Assets/Meshes/Boy.obj
+        res/Assets/boyMesh.asset
     </Mesh>
 
 </assets>
