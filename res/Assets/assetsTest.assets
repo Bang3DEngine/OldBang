@@ -1,17 +1,14 @@
 <assets>
 
     <Texture2D>
-        tex0
         res/Assets/Textures/testTexture.png
     </Texture2D>
 
     <Material>
-        mat0
         res/Assets/Materials/testMaterial.mat
     </Material>
 
     <Mesh>
-        mesh0
         res/Assets/Meshes/Boy.obj
     </Mesh>
 

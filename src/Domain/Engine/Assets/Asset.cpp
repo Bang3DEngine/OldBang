@@ -19,3 +19,12 @@ const std::string Asset::ToString() const
 {
     return "Asset '" + filepath + "'.";
 }
+
+
+void Asset::Write(std::ofstream &f) const
+{
+}
+
+void Asset::Read(std::ifstream &f)
+{
+}

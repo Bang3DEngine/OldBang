@@ -55,7 +55,7 @@ void Texture2D::Write(std::ofstream &f) const
 
 void Texture2D::Read(std::ifstream &f)
 {
-    AssetsReader::RegisterNextPointerId(f, this);
-    LoadFromFile( FileReader::ReadString(f) );
-    FileReader::ReadNextLine(f); //consume close tag
+    filepath = FileReader::ReadString(f);
+    Logger_Log("Reading texture2D: " << filepath);
+    LoadFromFile(filepath );
 }

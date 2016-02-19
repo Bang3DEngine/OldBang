@@ -49,7 +49,6 @@ void Material::Write(std::ofstream &f) const
 
 void Material::Read(std::ifstream &f)
 {
-    AssetsReader::RegisterNextPointerId(f, this);
     filepath = FileReader::ReadString(f);
 
     //Read the file itself, where the material is defined (*.mat)
@@ -72,8 +71,6 @@ void Material::Read(std::ifstream &f)
 
         FileReader::ReadNextLine(fm); // Skip </Material> line
     }
-
-    FileReader::ReadNextLine(f); //Consume close tag
 }
 
 void Material::SetShaderProgram(const ShaderProgram *program)

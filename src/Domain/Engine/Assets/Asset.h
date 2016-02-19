@@ -19,6 +19,9 @@ public:
     std::string GetFilepath() const;
 
     virtual const std::string ToString() const override;
+
+    virtual void Write(std::ofstream &f) const override;
+    virtual void Read(std::ifstream &f) override;
 };
 
 #endif // ASSET_H

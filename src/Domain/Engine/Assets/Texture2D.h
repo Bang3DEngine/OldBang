@@ -10,12 +10,11 @@
 
 #include "AssetsReader.h"
 #include "FileReader.h"
-#include "IFileable.h"
 #include "Texture.h"
 #include "Logger.h"
 #include "Asset.h"
 
-class Texture2D : public Texture, public IFileable, public Asset
+class Texture2D : public Texture, public Asset
 {
 
 public:
@@ -28,8 +27,6 @@ public:
     void Resize(int width, int height) override;
     void Fill(unsigned char *newData, int width, int height, int numComponents);
 
-    // IFileable interface
-public:
     void Write(std::ofstream &f) const;
     void Read(std::ifstream &f);
 };

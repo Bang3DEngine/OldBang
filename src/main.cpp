@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     stage->SetCameraEntity(cam);
 */
 
-    AssetsReader::ReadAssets("res/Assets/assetsTest.assets");
+    AssetsReader::ReadAssetsFile("res/Assets/assetsTest.assets");
 
     Stage *stage = new Stage();
     StageReader::ReadStage("res/Stages/stageTest1.stage", stage);

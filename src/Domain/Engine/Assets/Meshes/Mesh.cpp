@@ -123,8 +123,6 @@ void Mesh::Write(std::ofstream &f) const
 
 void Mesh::Read(std::ifstream &f)
 {
-    StageReader::RegisterNextPointerId(f, this);
     filepath = FileReader::ReadString(f);
     LoadFromFile(filepath);
-    FileReader::ReadNextLine(f); //Consume close tag
 }
