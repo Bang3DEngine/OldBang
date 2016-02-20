@@ -4,25 +4,9 @@
 
     <children>
 
-        <Entity>
-            e0
-            pyramid
-
-            <parts>
-                <Transform>
-                    t0
-                    0.0 0.0 0.0       #position
-                    0.0 0.0 0.0 1.0   #rotation
-                    0.35 0.35 0.35       #scale
-                </Transform>
-
-                <MeshRenderer>
-                    mr0
-                    res/Assets/boyMesh.asset
-                    res/Assets/testMaterial.asset
-                </MeshRenderer>
-            </parts>
-        </Entity>
+        <EntityPrefab>
+            res/Assets/prefabTest.asset
+        </EntityPrefab>
 
         #Camera
         <Entity>

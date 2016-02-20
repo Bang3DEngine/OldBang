@@ -22,7 +22,9 @@ void StageReader::ReadParts(std::istream &f, Entity *e)
         }
         else if(line == "<Behaviour>")
         {
-            //p = ReadBehaviour(f);
+            Behaviour *b = new Behaviour();
+            p = b;
+
         }
         else if(line == "<MeshRenderer>")
         {
@@ -49,9 +51,19 @@ void StageReader::ReadChildren(std::istream &f, Entity *e)
     std::string line;
     while( (line = FileReader::ReadNextLine(f)) != "</children>" )
     {
-        Entity *child = new Entity();
-        child->Read(f);
-        e->AddChild(child);
+        if(line == "<Entity>")
+        {
+            Entity *child = new Entity();
+            child->Read(f);
+            e->AddChild(child);
+        }
+        else if(line == "<EntityPrefab>")
+        {
+            std::string prefabFilepath = FileReader::ReadString(f);
+            Prefab *p = AssetsManager::GetAsset<Prefab>(prefabFilepath);
+            Entity *child = p->Instantiate();
+            e->AddChild(child);
+        }
     }
 }
 

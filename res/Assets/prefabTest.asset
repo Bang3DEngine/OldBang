@@ -14,6 +14,11 @@
             res/Assets/boyMesh.asset
             res/Assets/testMaterial.asset
         </MeshRenderer>
+
+        <Behaviour>
+            src/Domain/Engine/Assets/Parts/TestBehaviour
+        </Behaviour>
+
     </parts>
 </Entity>
 
