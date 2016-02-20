@@ -16,8 +16,8 @@ protected:
     IFileable() {}
 
 public:
-    virtual void Write(std::ofstream &f) const = 0;
-    virtual void Read(std::ifstream &f) = 0;
+    virtual void Write(std::ostream &f) const = 0;
+    virtual void Read(std::istream &f) = 0;
 };
 
 #endif // IFILEABLE_H

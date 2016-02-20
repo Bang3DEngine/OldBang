@@ -123,12 +123,12 @@ bool Camera::GetAutoUpdateAspectRatio() const
     return autoUpdateAspectRatio;
 }
 
-void Camera::Write(std::ofstream &f) const
+void Camera::Write(std::ostream &f) const
 {
 
 }
 
-void Camera::Read(std::ifstream &f)
+void Camera::Read(std::istream &f)
 {
     StageReader::RegisterNextPointerId(f, this);
     SetFovDegrees( FileReader::ReadFloat(f) );

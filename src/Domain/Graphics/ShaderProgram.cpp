@@ -210,11 +210,11 @@ void ShaderProgram::UnBind() const
 
 
 
-void ShaderProgram::Write(std::ofstream &f) const
+void ShaderProgram::Write(std::ostream &f) const
 {
 }
 
-void ShaderProgram::Read(std::ifstream &f)
+void ShaderProgram::Read(std::istream &f)
 {
 
 }

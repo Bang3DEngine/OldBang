@@ -85,12 +85,12 @@ void Entity::SetName(const std::string &name)
     this->name = name;
 }
 
-void Entity::Write(std::ofstream &f) const
+void Entity::Write(std::ostream &f) const
 {
 
 }
 
-void Entity::Read(std::ifstream &f)
+void Entity::Read(std::istream &f)
 {
     StageReader::RegisterNextPointerId(f, this); //Read Entity id
     SetName( FileReader::ReadString(f) );  //Read Entity name

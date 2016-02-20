@@ -28,10 +28,10 @@ public:
     // and they consume the closing tag.
 
     //PARTS
-    static void ReadParts(std::ifstream &f, Entity *e);
+    static void ReadParts(std::istream &f, Entity *e);
 
     //ENTITIES
-    static void ReadChildren(std::ifstream &f, Entity *e);
+    static void ReadChildren(std::istream &f, Entity *e);
     // ////////////////////
 
 public:

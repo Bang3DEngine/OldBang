@@ -21,10 +21,10 @@ const std::string Asset::ToString() const
 }
 
 
-void Asset::Write(std::ofstream &f) const
+void Asset::Write(std::ostream &f) const
 {
 }
 
-void Asset::Read(std::ifstream &f)
+void Asset::Read(std::istream &f)
 {
 }

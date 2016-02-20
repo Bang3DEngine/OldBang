@@ -8,7 +8,7 @@
 #include "Logger.h"
 #include "Stage.h"
 
-void StageReader::ReadParts(std::ifstream &f, Entity *e)
+void StageReader::ReadParts(std::istream &f, Entity *e)
 {
     std::string line;
     while( (line = FileReader::ReadNextLine(f)) != "</parts>" )
@@ -37,7 +37,6 @@ void StageReader::ReadParts(std::ifstream &f, Entity *e)
             p = cam;
         }
 
-
         if(p != nullptr)
         {
             e->AddPart(p);
@@ -45,7 +44,7 @@ void StageReader::ReadParts(std::ifstream &f, Entity *e)
     }
 }
 
-void StageReader::ReadChildren(std::ifstream &f, Entity *e)
+void StageReader::ReadChildren(std::istream &f, Entity *e)
 {
     std::string line;
     while( (line = FileReader::ReadNextLine(f)) != "</children>" )

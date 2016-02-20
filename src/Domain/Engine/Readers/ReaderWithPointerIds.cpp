@@ -1,5 +1,7 @@
 #include "ReaderWithPointerIds.h"
 
+const std::string ReaderWithPointerIds::NoRegisterId = "-";
+
 std::map<std::string, void*> ReaderWithPointerIds::idToPointers;
 
 void ReaderWithPointerIds::ClearPointerIds()
@@ -7,7 +9,9 @@ void ReaderWithPointerIds::ClearPointerIds()
     idToPointers.clear();
 }
 
-void ReaderWithPointerIds::RegisterNextPointerId(std::ifstream &f, void *pointer)
+void ReaderWithPointerIds::RegisterNextPointerId(std::istream &f, void *pointer)
 {
-    idToPointers[ FileReader::ReadString(f) ] = pointer;
+    std::string id = FileReader::ReadString(f);
+    if(id != ReaderWithPointerIds::NoRegisterId)
+        idToPointers[id] = pointer;
 }

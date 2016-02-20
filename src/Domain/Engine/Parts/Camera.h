@@ -60,8 +60,8 @@ public:
     ProjectionMode GetProjectionMode() const;
     bool  GetAutoUpdateAspectRatio() const;
 
-    void Write(std::ofstream &f) const;
-    void Read(std::ifstream &f);
+    void Write(std::ostream &f) const;
+    void Read(std::istream &f);
 };
 
 #endif // CAMERA_H

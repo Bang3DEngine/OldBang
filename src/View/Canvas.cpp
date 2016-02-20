@@ -131,5 +131,7 @@ int Canvas::GetHeight()
 
 void Canvas::OnTopKekPressed()
 {
-    currentStage->GetChild("pyramid")->GetPart<Transform>()->SetScale(glm::vec3(((float)(rand()%1000))/1000));
+    Prefab *p = AssetsManager::GetAsset<Prefab>("res/Assets/prefabTest.asset");
+    Entity *e = p->Instantiate();
+    currentStage->AddChild(e);
 }

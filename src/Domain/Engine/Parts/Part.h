@@ -21,8 +21,8 @@ public:
 
     virtual const std::string ToString() const override;
 
-    virtual void Write(std::ofstream &f) const override {}
-    virtual void Read(std::ifstream &f) override {}
+    virtual void Write(std::ostream &f) const override {}
+    virtual void Read(std::istream &f) override {}
 };
 
 #endif // PART_H

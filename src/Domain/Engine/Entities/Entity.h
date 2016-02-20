@@ -97,8 +97,8 @@ public:
         }
     }
 
-    void Write(std::ofstream &f) const override;
-    void Read(std::ifstream &f) override;
+    void Write(std::ostream &f) const override;
+    void Read(std::istream &f) override;
 };
 
 #endif // ENTITY_H

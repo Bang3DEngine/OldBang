@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Stage.h"
 #include "Time.h"
+#include "Prefab.h"
 #include "ShaderProgram.h"
 #include "MeshRenderer.h"
 

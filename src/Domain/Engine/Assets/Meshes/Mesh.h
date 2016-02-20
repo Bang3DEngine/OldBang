@@ -56,8 +56,8 @@ public:
     RenderMode GetRenderMode() const;
     int GetVertexCount() const;
 
-    void Write(std::ofstream &f) const;
-    void Read(std::ifstream &f);
+    void Write(std::ostream &f) const;
+    void Read(std::istream &f);
 };
 
 #endif // MESH_H

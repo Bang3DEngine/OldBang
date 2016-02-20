@@ -42,12 +42,12 @@ void Material::UnBind() const
     }
 }
 
-void Material::Write(std::ofstream &f) const
+void Material::Write(std::ostream &f) const
 {
 
 }
 
-void Material::Read(std::ifstream &f)
+void Material::Read(std::istream &f)
 {
     std::string vshaderFilepath = FileReader::ReadString(f);
     std::string fshaderFilepath = FileReader::ReadString(f);

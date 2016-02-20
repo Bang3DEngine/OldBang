@@ -17,7 +17,7 @@ private:
 
     //The input must not have the opening tag!
     template <class T>
-    static T* ReadAsset(std::ifstream &f)
+    static T* ReadAsset(std::istream &f)
     {
         Asset *a = new T();
         FileReader::ReadNextLine(f); //Consume open tag
@@ -39,9 +39,14 @@ private:
         }
 
         Asset *a = ReadAsset<T>(f);
-        AssetsManager::SaveAsset(a->GetFilepath(), a);
+        if(a != nullptr)
+        {
+            AssetsManager::SaveAsset(filepath, a);
+            a->filepath = filepath;
+            return dynamic_cast<T*>(a);
+        }
 
-        return dynamic_cast<T*>(a);
+        return nullptr;
     }
 
     AssetsManager() {}

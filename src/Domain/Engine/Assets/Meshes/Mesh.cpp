@@ -116,12 +116,12 @@ int Mesh::GetVertexCount() const
     return vertexCount;
 }
 
-void Mesh::Write(std::ofstream &f) const
+void Mesh::Write(std::ostream &f) const
 {
 
 }
 
-void Mesh::Read(std::ifstream &f)
+void Mesh::Read(std::istream &f)
 {
     filepath = FileReader::ReadString(f);
     LoadFromFile(filepath);

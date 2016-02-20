@@ -217,7 +217,7 @@ void FileReader::TrimStringLeft(std::string *str)
     *str = str->substr(i, str->length() - i);
 }
 
-std::string FileReader::ReadNextLine(std::ifstream &f)
+std::string FileReader::ReadNextLine(std::istream &f)
 {
     std::string line;
     do
@@ -225,18 +225,18 @@ std::string FileReader::ReadNextLine(std::ifstream &f)
         std::getline(f, line);
         TrimStringLeft(&line);
     }
-    while( line.empty() || line.at(0) == '#'); //Skip all empty/comment lines
+    while( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') && f.peek() != EOF); //Skip all empty/comment lines
 
     return line;
 }
 
-float FileReader::ReadFloat(std::ifstream &f)
+float FileReader::ReadFloat(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
     float v; iss >> v; return v;
 }
 
-glm::vec2 FileReader::ReadVec2(std::ifstream &f)
+glm::vec2 FileReader::ReadVec2(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
     float x,y;
@@ -244,7 +244,7 @@ glm::vec2 FileReader::ReadVec2(std::ifstream &f)
     return glm::vec2(x, y);
 }
 
-glm::vec3 FileReader::ReadVec3(std::ifstream &f)
+glm::vec3 FileReader::ReadVec3(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
     float x,y,z;
@@ -252,7 +252,7 @@ glm::vec3 FileReader::ReadVec3(std::ifstream &f)
     return glm::vec3(x, y, z);
 }
 
-glm::quat FileReader::ReadQuat(std::ifstream &f)
+glm::quat FileReader::ReadQuat(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
     float x,y,z,w;
@@ -260,13 +260,13 @@ glm::quat FileReader::ReadQuat(std::ifstream &f)
     return glm::quat(x, y, z, w);
 }
 
-Rect FileReader::ReadRect(std::ifstream &f)
+Rect FileReader::ReadRect(std::istream &f)
 {
     glm::quat q = ReadQuat(f);
     return Rect(q.x, q.y, q.z, q.w);
 }
 
-std::string FileReader::ReadString(std::ifstream &f)
+std::string FileReader::ReadString(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
     std::string str;

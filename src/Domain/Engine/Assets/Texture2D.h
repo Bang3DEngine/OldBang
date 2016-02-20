@@ -25,8 +25,8 @@ public:
     void Resize(int width, int height) override;
     void Fill(unsigned char *newData, int width, int height, int numComponents);
 
-    void Write(std::ofstream &f) const;
-    void Read(std::ifstream &f);
+    void Write(std::ostream &f) const;
+    void Read(std::istream &f);
 };
 
 #endif // TEXTURE2D_H

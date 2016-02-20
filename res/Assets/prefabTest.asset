@@ -1,0 +1,19 @@
+<Entity>
+    -
+    pyramid
+    <parts>
+        <Transform>
+            -
+            0.0 0.0 0.0       #position
+            0.0 0.0 0.0 1.0   #rotation
+            0.35 0.35 0.35       #scale
+        </Transform>
+
+        <MeshRenderer>
+            -
+            res/Assets/boyMesh.asset
+            res/Assets/testMaterial.asset
+        </MeshRenderer>
+    </parts>
+</Entity>
+

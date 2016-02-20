@@ -38,14 +38,14 @@ public:
                         bool *isTriangles);
 
     //READ PRIMITIVE VALUES
-    static std::string ReadNextLine(std::ifstream &f);
+    static std::string ReadNextLine(std::istream &f);
 
-    static float ReadFloat(std::ifstream &f);
-    static glm::vec2 ReadVec2(std::ifstream &f);
-    static glm::vec3 ReadVec3(std::ifstream &f);
-    static glm::quat ReadQuat(std::ifstream &f);
-    static Rect ReadRect(std::ifstream &f);
-    static std::string ReadString(std::ifstream &f);
+    static float ReadFloat(std::istream &f);
+    static glm::vec2 ReadVec2(std::istream &f);
+    static glm::vec3 ReadVec3(std::istream &f);
+    static glm::quat ReadQuat(std::istream &f);
+    static Rect ReadRect(std::istream &f);
+    static std::string ReadString(std::istream &f);
 
 
 };

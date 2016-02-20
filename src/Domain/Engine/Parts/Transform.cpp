@@ -120,12 +120,12 @@ const std::string Transform::ToString() const
     return msg.str();
 }
 
-void Transform::Write(std::ofstream &f) const
+void Transform::Write(std::ostream &f) const
 {
 
 }
 
-void Transform::Read(std::ifstream &f)
+void Transform::Read(std::istream &f)
 {
     StageReader::RegisterNextPointerId(f, this);
     SetPosition(FileReader::ReadVec3(f));

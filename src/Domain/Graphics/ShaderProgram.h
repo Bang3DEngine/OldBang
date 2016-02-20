@@ -43,8 +43,8 @@ public:
 
     const std::string ToString() const override;
 
-    void Write(std::ofstream &f) const;
-    void Read(std::ifstream &f);
+    void Write(std::ostream &f) const;
+    void Read(std::istream &f);
 };
 
 #endif // SHADERPROGRAM_H

@@ -48,12 +48,12 @@ void Texture2D::Fill(unsigned char *newData, int width, int height, int numCompo
     UnBind();
 }
 
-void Texture2D::Write(std::ofstream &f) const
+void Texture2D::Write(std::ostream &f) const
 {
 
 }
 
-void Texture2D::Read(std::ifstream &f)
+void Texture2D::Read(std::istream &f)
 {
     filepath = FileReader::ReadString(f);
     Logger_Log("Texture 2D read: " << filepath);

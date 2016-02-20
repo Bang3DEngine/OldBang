@@ -26,16 +26,25 @@ protected:
 
 public:
 
+    //Since we have Prefab's and Entity's,
+    // that use the same method Entity::Read(),
+    // we need to have a way to avoid registering
+    // the id into the StageReader, when calling
+    // Read() from Prefab. This is one way :)
+    // (So, in prefab files, all XMLs internal ids will be NoRegisterId)
+    static const std::string NoRegisterId;
+
+
     static void ClearPointerIds();
 
     template <class T>
-    static T* GetNextPointerAddress(std::ifstream &f)
+    static T* GetNextPointerAddress(std::istream &f)
     {
         std::string id = FileReader::ReadString(f);
         if(idToPointers.find(id) == idToPointers.end()) return nullptr;
         return (T*)(idToPointers[id]);
     }
-    static void RegisterNextPointerId(std::ifstream &f, void *pointer);
+    static void RegisterNextPointerId(std::istream &f, void *pointer);
 
 };
 

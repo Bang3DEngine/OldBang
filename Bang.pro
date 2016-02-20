@@ -59,7 +59,8 @@ OTHER_FILES += \
     res/Assets/woodTexture.asset \
     res/Assets/boyMesh.asset \
     res/Assets/carpetTexture.asset \
-    res/Assets/testMaterial2.asset
+    res/Assets/testMaterial2.asset \
+    res/Assets/prefabTest.asset
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -104,7 +105,8 @@ HEADERS += \
     src/Domain/Engine/Interfaces/IFileable.h \
     src/Domain/Engine/Readers/ReaderWithPointerIds.h \
     src/Domain/Engine/Assets/Texture2D.h \
-    src/Domain/Engine/Readers/AssetsManager.h
+    src/Domain/Engine/Readers/AssetsManager.h \
+    src/Domain/Engine/Assets/Prefab.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -144,4 +146,5 @@ SOURCES += \
     src/Domain/Engine/Readers/StageReader.cpp \
     src/Domain/Engine/Readers/ReaderWithPointerIds.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
-    src/Domain/Engine/Readers/AssetsManager.cpp
+    src/Domain/Engine/Readers/AssetsManager.cpp \
+    src/Domain/Engine/Assets/Prefab.cpp

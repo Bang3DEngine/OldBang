@@ -52,12 +52,12 @@ const Material *MeshRenderer::GetMaterial()
     return material;
 }
 
-void MeshRenderer::Write(std::ofstream &f) const
+void MeshRenderer::Write(std::ostream &f) const
 {
 
 }
 
-void MeshRenderer::Read(std::ifstream &f)
+void MeshRenderer::Read(std::istream &f)
 {
     StageReader::RegisterNextPointerId(f, this);
     SetMesh( AssetsManager::GetAsset<Mesh>( FileReader::ReadString(f) ) );
