@@ -49,13 +49,11 @@ void Material::Write(std::ofstream &f) const
 
 void Material::Read(std::ifstream &f)
 {
-
-    //Read the ShaderProgram
-    SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
-                                       ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
-    //Read the texture
+    std::string vshaderFilepath = FileReader::ReadString(f);
+    std::string fshaderFilepath = FileReader::ReadString(f);
     std::string texFilepath = FileReader::ReadString(f);
-    Logger_Log("Material read texFilepath: " << texFilepath);
+
+    SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
     Texture2D *tex = AssetsManager::GetAsset<Texture2D>( texFilepath );
     tex->SetTextureSlot(0);
     SetTexture(tex);

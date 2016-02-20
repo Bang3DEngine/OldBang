@@ -15,9 +15,9 @@ bool Shader::LoadFromFile(const std::string& filepath)
 
     std::ifstream f;
     f.open(filepath);
-    if(not f.is_open())
+    if(!f.is_open())
     {
-        Logger_Error("Error opening file '" + filepath + "'");
+        Logger_Error("Could not open shader file '" + filepath + "'. Does it exist / is reachable?");
         return false;
     }
 

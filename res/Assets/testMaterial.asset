@@ -1,4 +1,5 @@
 <Material>
-    #MerProgram path
+    res/Shaders/pvm_pos_normal_uv.vert
+    res/Shaders/pass_pos_normal_uv.frag
     res/Assets/carpetTexture.asset
 </Material>
