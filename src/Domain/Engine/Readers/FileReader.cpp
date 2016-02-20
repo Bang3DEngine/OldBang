@@ -227,6 +227,7 @@ std::string FileReader::ReadNextLine(std::ifstream &f)
     }
     while( line.empty() || line.at(0) == '#'); //Skip all empty/comment lines
 
+    Logger_Log(line);
     return line;
 }
 

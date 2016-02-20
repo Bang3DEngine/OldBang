@@ -49,28 +49,16 @@ void Material::Write(std::ofstream &f) const
 
 void Material::Read(std::ifstream &f)
 {
-    filepath = FileReader::ReadString(f);
 
-    //Read the file itself, where the material is defined (*.mat)
-    std::ifstream fm (filepath);
-    if ( !fm.is_open() )
-    {
-        Logger_Error("Could not open the file '" << filepath << "' to load the material.");
-    }
-    else
-    {
-        FileReader::ReadNextLine(fm); // Skip <Material> line
-
-        //Read the ShaderProgram
-        SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
-                                           ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
-        //Read the texture
-        Texture2D *tex = AssetsManager::GetAsset<Texture2D>(  FileReader::ReadString(fm) );
-        tex->SetTextureSlot(0);
-        SetTexture(tex);
-
-        FileReader::ReadNextLine(fm); // Skip </Material> line
-    }
+    //Read the ShaderProgram
+    SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
+                                       ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
+    //Read the texture
+    std::string texFilepath = FileReader::ReadString(f);
+    Logger_Log("Material read texFilepath: " << texFilepath);
+    Texture2D *tex = AssetsManager::GetAsset<Texture2D>( texFilepath );
+    tex->SetTextureSlot(0);
+    SetTexture(tex);
 }
 
 void Material::SetShaderProgram(const ShaderProgram *program)

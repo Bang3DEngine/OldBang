@@ -58,7 +58,9 @@ OTHER_FILES += \
     res/Assets/Meshes/Boy.obj \
     res/Assets/testMaterial.asset \
     res/Assets/woodTexture.asset \
-    res/Assets/boyMesh.asset
+    res/Assets/boyMesh.asset \
+    res/Assets/carpetTexture.asset \
+    res/Assets/testMaterial2.asset
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

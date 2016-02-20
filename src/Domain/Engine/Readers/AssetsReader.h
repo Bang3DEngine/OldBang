@@ -20,8 +20,9 @@ public:
     static T* ReadAsset(std::ifstream &f)
     {
         Asset *a = new T();
+        L("Open tag consume..."); FileReader::ReadNextLine(f); //Consume open tag
         a->Read(f);
-        FileReader::ReadNextLine(f); //Consume close tag
+        L("Close tag consume..."); FileReader::ReadNextLine(f); //Consume close tag
         return dynamic_cast<T*>(a);
     }
 
@@ -30,6 +31,7 @@ public:
     template <class T>
     static T* ReadAssetFile(const std::string &filepath)
     {
+        L("ReadAssetFile...");
         std::ifstream f (filepath);
         if ( !f.is_open() )
         {
@@ -37,7 +39,6 @@ public:
             return nullptr;
         }
 
-        FileReader::ReadNextLine(f); //Consume open tag
         return ReadAsset<T>(f);
     }
 };

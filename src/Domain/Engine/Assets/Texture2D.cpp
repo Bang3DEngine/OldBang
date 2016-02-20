@@ -56,6 +56,6 @@ void Texture2D::Write(std::ofstream &f) const
 void Texture2D::Read(std::ifstream &f)
 {
     filepath = FileReader::ReadString(f);
-    Logger_Log("Reading texture2D: " << filepath);
+    Logger_Log("Texture 2D read: " << filepath);
     LoadFromFile(filepath );
 }

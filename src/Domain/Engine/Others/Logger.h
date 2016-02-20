@@ -37,6 +37,19 @@ std::ostream &operator<<(std::ostream &log, const IToString *s);
     log.flush();\
 } while(0)
 
+#define L(x) do{\
+    std::ostringstream log;\
+    log << x;\
+    std::cerr << log.str();\
+    std::cerr.flush();\
+    log.flush();\
+} while(0)
+
+#define LN(x) do{\
+    std::cerr << std::endl;\
+    std::cerr.flush();\
+} while(0)
+
 #define Logger_Warning(x) do{\
     std::ostringstream log;\
     log << x;\

@@ -1,15 +1,23 @@
 <assets>
 
-    <Texture2D>
-        res/Assets/woodTexture.asset
-    </Texture2D>
+    <Material>
+        res/Assets/testMaterial22.asset
+    </Material>
 
     <Material>
-        res/Assets/testMaterial.asset
+        res/Assets/testMaterial23.asset
     </Material>
 
     <Mesh>
         res/Assets/boyMesh.asset
     </Mesh>
+
+    <Texture2D>
+        res/Assets/woodTexture.asset
+    </Texture2D>
+
+    #<Texture2D>
+    #    res/Assets/carpetTexture.asset
+    #</Texture2D>
 
 </assets>
