@@ -128,3 +128,8 @@ int Canvas::GetHeight()
 {
     return height;
 }
+
+void Canvas::OnTopKekPressed()
+{
+    currentStage->GetChild("pyramid")->GetPart<Transform>()->SetScale(glm::vec3(((float)(rand()%1000))/1000));
+}

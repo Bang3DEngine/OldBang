@@ -54,7 +54,7 @@ signals:
 
 public slots:
     void updateGL() override;
-
+    void OnTopKekPressed();
 };
 
 #endif // CANVAS_H

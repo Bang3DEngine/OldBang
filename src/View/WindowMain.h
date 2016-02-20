@@ -13,6 +13,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
+#include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QPushButton>
 #include <QtGui/QVBoxLayout>
@@ -24,45 +25,86 @@ QT_BEGIN_NAMESPACE
 class Ui_WindowMain
 {
 public:
+    QVBoxLayout *verticalLayout_3;
+    QHBoxLayout *horizontalLayout_2;
     QVBoxLayout *verticalLayout_2;
-    QVBoxLayout *verticalLayout;
     Canvas *canvas;
-    QPushButton *pushButton;
+    QPushButton *pushButton_2;
+    QVBoxLayout *verticalLayout_5;
+    QPushButton *pushButton_4;
+    QPushButton *pushButton_3;
 
     void setupUi(QWidget *WindowMain)
     {
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
-        WindowMain->resize(800, 640);
+        WindowMain->resize(1111, 740);
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(WindowMain->sizePolicy().hasHeightForWidth());
         WindowMain->setSizePolicy(sizePolicy);
-        verticalLayout_2 = new QVBoxLayout(WindowMain);
+        verticalLayout_3 = new QVBoxLayout(WindowMain);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout_2->setSizeConstraint(QLayout::SetDefaultConstraint);
         canvas = new Canvas(WindowMain);
         canvas->setObjectName(QString::fromUtf8("canvas"));
+        canvas->setEnabled(true);
+        sizePolicy.setHeightForWidth(canvas->sizePolicy().hasHeightForWidth());
+        canvas->setSizePolicy(sizePolicy);
+        canvas->setMinimumSize(QSize(0, 0));
 
-        verticalLayout->addWidget(canvas);
+        verticalLayout_2->addWidget(canvas);
 
-        pushButton = new QPushButton(WindowMain);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        QSizePolicy sizePolicy1(QSizePolicy::Maximum, QSizePolicy::Maximum);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
-        pushButton->setSizePolicy(sizePolicy1);
+        pushButton_2 = new QPushButton(WindowMain);
+        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
+        sizePolicy.setHeightForWidth(pushButton_2->sizePolicy().hasHeightForWidth());
+        pushButton_2->setSizePolicy(sizePolicy);
+        pushButton_2->setDefault(true);
 
-        verticalLayout->addWidget(pushButton);
+        verticalLayout_2->addWidget(pushButton_2);
+
+        verticalLayout_2->setStretch(0, 90);
+        verticalLayout_2->setStretch(1, 10);
+
+        horizontalLayout_2->addLayout(verticalLayout_2);
+
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        pushButton_4 = new QPushButton(WindowMain);
+        pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(1);
+        sizePolicy1.setVerticalStretch(1);
+        sizePolicy1.setHeightForWidth(pushButton_4->sizePolicy().hasHeightForWidth());
+        pushButton_4->setSizePolicy(sizePolicy1);
+        pushButton_4->setShortcut(QString::fromUtf8(""));
+
+        verticalLayout_5->addWidget(pushButton_4);
+
+        pushButton_3 = new QPushButton(WindowMain);
+        pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
+        sizePolicy1.setHeightForWidth(pushButton_3->sizePolicy().hasHeightForWidth());
+        pushButton_3->setSizePolicy(sizePolicy1);
+        pushButton_3->setShortcut(QString::fromUtf8(""));
+
+        verticalLayout_5->addWidget(pushButton_3);
 
 
-        verticalLayout_2->addLayout(verticalLayout);
+        horizontalLayout_2->addLayout(verticalLayout_5);
+
+        horizontalLayout_2->setStretch(0, 70);
+        horizontalLayout_2->setStretch(1, 30);
+
+        verticalLayout_3->addLayout(horizontalLayout_2);
 
 
         retranslateUi(WindowMain);
+        QObject::connect(pushButton_2, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
 
         QMetaObject::connectSlotsByName(WindowMain);
     } // setupUi
@@ -70,7 +112,9 @@ public:
     void retranslateUi(QWidget *WindowMain)
     {
         WindowMain->setWindowTitle(QApplication::translate("WindowMain", "Bang Editor", 0, QApplication::UnicodeUTF8));
-        pushButton->setText(QApplication::translate("WindowMain", "TOPKEK", 0, QApplication::UnicodeUTF8));
+        pushButton_2->setText(QApplication::translate("WindowMain", "TOPKEK", 0, QApplication::UnicodeUTF8));
+        pushButton_4->setText(QApplication::translate("WindowMain", "Transform", 0, QApplication::UnicodeUTF8));
+        pushButton_3->setText(QApplication::translate("WindowMain", "Camera", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

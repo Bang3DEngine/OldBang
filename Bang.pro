@@ -103,8 +103,8 @@ HEADERS += \
     src/Domain/Engine/Readers/StageReader.h \
     src/Domain/Engine/Interfaces/IFileable.h \
     src/Domain/Engine/Readers/ReaderWithPointerIds.h \
-    src/Domain/Engine/Others/AssetsManager.h \
-    src/Domain/Engine/Assets/Texture2D.h
+    src/Domain/Engine/Assets/Texture2D.h \
+    src/Domain/Engine/Readers/AssetsManager.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -143,5 +143,5 @@ SOURCES += \
     src/Domain/Engine/Readers/FileReader.cpp \
     src/Domain/Engine/Readers/StageReader.cpp \
     src/Domain/Engine/Readers/ReaderWithPointerIds.cpp \
-    src/Domain/Engine/Others/AssetsManager.cpp \
-    src/Domain/Engine/Assets/Texture2D.cpp
+    src/Domain/Engine/Assets/Texture2D.cpp \
+    src/Domain/Engine/Readers/AssetsManager.cpp

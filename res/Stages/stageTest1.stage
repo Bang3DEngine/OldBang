@@ -22,7 +22,6 @@
                     res/Assets/testMaterial.asset
                 </MeshRenderer>
             </parts>
-
         </Entity>
 
         #Camera
