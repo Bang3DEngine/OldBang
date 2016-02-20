@@ -9,7 +9,6 @@
 #include "ShaderContract.h"
 #include "ShaderProgram.h"
 
-#include "AssetsReader.h"
 #include "AssetsManager.h"
 
 class Material : public IGLBindable, public Asset

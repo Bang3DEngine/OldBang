@@ -41,7 +41,6 @@ OTHER_FILES += \
     res/Stages/stageTest1.stage \
     res/Stages/stageFileFormat.txt \
     res/Stages/assetsTest.assets \
-    res/Assets/assetsTest.assets \
     res/Assets/Meshes/Pyramid.obj \
     res/Shaders/pass_pos.frag \
     res/Shaders/pass_pos_normal.frag \
@@ -103,7 +102,6 @@ HEADERS += \
     src/Domain/Engine/Readers/FileReader.h \
     src/Domain/Engine/Readers/StageReader.h \
     src/Domain/Engine/Interfaces/IFileable.h \
-    src/Domain/Engine/Readers/AssetsReader.h \
     src/Domain/Engine/Readers/ReaderWithPointerIds.h \
     src/Domain/Engine/Others/AssetsManager.h \
     src/Domain/Engine/Assets/Texture2D.h
@@ -144,7 +142,6 @@ SOURCES += \
     src/Domain/Engine/Parts/TestCameraBehaviour.cpp \
     src/Domain/Engine/Readers/FileReader.cpp \
     src/Domain/Engine/Readers/StageReader.cpp \
-    src/Domain/Engine/Readers/AssetsReader.cpp \
     src/Domain/Engine/Readers/ReaderWithPointerIds.cpp \
     src/Domain/Engine/Others/AssetsManager.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp

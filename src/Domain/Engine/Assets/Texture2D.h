@@ -7,8 +7,6 @@
 
 #include "glm/glm.hpp"
 
-
-#include "AssetsReader.h"
 #include "FileReader.h"
 #include "Texture.h"
 #include "Logger.h"

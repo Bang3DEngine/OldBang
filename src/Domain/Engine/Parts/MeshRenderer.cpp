@@ -59,7 +59,7 @@ void MeshRenderer::Write(std::ofstream &f) const
 
 void MeshRenderer::Read(std::ifstream &f)
 {
-    StageReader::RegisterNextPointerId(f, this);;
+    StageReader::RegisterNextPointerId(f, this);
     SetMesh( AssetsManager::GetAsset<Mesh>( FileReader::ReadString(f) ) );
     SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
     FileReader::ReadNextLine(f); //Consume close tag
