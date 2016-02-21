@@ -14,10 +14,10 @@ void Stage::_OnResize(int newWidth, int newHeight)
 
 Stage::~Stage()
 {
+    this->_OnDestroy();
     for(auto it = children.begin(); it != children.end(); ++it)
     {
         Entity *child = *it;
-        child->_OnDestroy();
         this->RemoveChild(child->GetName());
         delete child;
     }

@@ -24,6 +24,11 @@ public:
 
     virtual void Write(std::ostream &f) const override {}
     virtual void Read(std::istream &f) override {}
+
+    virtual void _OnStart() override { OnStart(); }
+    virtual void _OnRender() override { OnRender(); }
+    virtual void _OnUpdate() override { OnUpdate(); }
+    virtual void _OnDestroy() override { OnDestroy(); }
 };
 
 #endif // PART_H

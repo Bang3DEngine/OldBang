@@ -15,6 +15,7 @@ class Stage;
 class Entity : public IStageEventListener, public IToString, public IFileable
 {
 friend class Canvas;
+friend class Prefab;
 friend class Stage;
 private:
 

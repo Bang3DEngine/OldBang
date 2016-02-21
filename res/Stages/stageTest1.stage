@@ -4,10 +4,6 @@
 
     <children>
 
-        <EntityPrefab>
-            res/Assets/prefabTest.asset
-        </EntityPrefab>
-
         #Camera
         <Entity>
             e1
@@ -15,7 +11,7 @@
             <parts>
                 <Transform>
                     t1
-                    0.0 0.0 4.0       #position
+                    0.0 0.0 10.0       #position
                     0.0 0.0 0.0 1.0   #rotation
                     1.0 1.0 1.0       #scale
                 </Transform>
@@ -28,7 +24,13 @@
                     Perspective         #Projection mode
                     -1.0 1.0 -1.0 1.0   #OrthoRect
                 </Camera>
+                <TestCameraBehaviour>
+                </TestCameraBehaviour>
             </parts>
         </Entity>
     </children>
+
+    <cameraEntity>
+        e1
+    </cameraEntity>
 </Stage>

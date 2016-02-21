@@ -40,12 +40,12 @@ void Canvas::updateGL()
 
     if(currentStage != nullptr)
     {
+        lastRenderTime = Time::GetNow();
         currentStage->_OnUpdate();
         currentStage->_OnRender();
     }
 
     QGLWidget::swapBuffers();
-    lastRenderTime = Time::GetNow();
 }
 
 void Canvas::resizeGL(int w, int h)
@@ -76,6 +76,11 @@ void Canvas::AddStage(Stage *stage)
 
 void Canvas::SetCurrentStage(const std::string &name)
 {
+    if(currentStage != nullptr)
+    {
+        currentStage->_OnDestroy();
+    }
+
     for(auto it = stages.begin(); it != stages.end(); ++it)
     {
         if((*it)->name == name)
@@ -131,7 +136,12 @@ int Canvas::GetHeight()
 
 void Canvas::OnTopKekPressed()
 {
+    static int a = 0;
+    Logger_Log("AAA");
     Prefab *p = AssetsManager::GetAsset<Prefab>("res/Assets/prefabTest.asset");
+    Logger_Log("B");
     Entity *e = p->Instantiate();
+    Logger_Log("M");
     currentStage->AddChild(e);
+    Logger_Log(++a);
 }

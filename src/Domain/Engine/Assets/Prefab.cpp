@@ -17,9 +17,9 @@ Entity *Prefab::Instantiate() const
         std::istringstream iss (assetDescription);
         Entity *e = new Entity();
         e->Read(iss);
+        e->_OnStart();
         return e;
     }
-
     return nullptr;
 }
 

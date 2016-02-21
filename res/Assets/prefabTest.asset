@@ -12,12 +12,11 @@
         <MeshRenderer>
             -
             res/Assets/boyMesh.asset
-            res/Assets/testMaterial.asset
+            res/Assets/testMaterial2.asset
         </MeshRenderer>
 
         <Behaviour>
             <TestBehaviour>
-                src/Domain/Engine/Assets/Parts/TestBehaviour
             </TestBehaviour>
         </Behaviour>
 

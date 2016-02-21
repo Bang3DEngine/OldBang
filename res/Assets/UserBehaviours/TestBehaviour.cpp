@@ -6,18 +6,31 @@
 #include "Stage.h"
 #include "Time.h"
 
-TestBehaviour::TestBehaviour() : time(.0f)
+TestBehaviour::TestBehaviour()
+{
+    time = 0.0f;
+    /*
+    randomAxis = glm::vec3( float(rand()%1000)/1000, float(rand()%1000)/1000, float(rand()%1000)/1000);
+    randomAxis = glm::normalize(randomAxis);
+    */
+}
+
+void TestBehaviour::OnStart()
 {
 }
 
 void TestBehaviour::OnUpdate()
 {
+    /*
     time += Time::GetDeltaTime();
     Transform *t = GetParent()->GetPart<Transform>();
-    //t->SetScale(glm::vec3(time));
-    //Logger_Log(t);
-    t->SetRotation(glm::angleAxis(1.0f * Time::GetDeltaTime(), glm::vec3(1.0f,1.0f,1.0f)) * t->GetRotation());
-    //Logger_Log(t);
+    t->SetRotation(glm::angleAxis(1.0f * Time::GetDeltaTime(), randomAxis) * t->GetRotation());
+    */
+}
+
+void TestBehaviour::OnDestroy()
+{
+
 }
 
 

@@ -1,6 +1,7 @@
 #include "Part.h"
 #include "Entity.h"
 
+
 Part::Part() : parent(nullptr)
 {
 }
@@ -17,5 +18,7 @@ Entity *Part::GetParent() const
 
 const std::string Part::ToString() const
 {
-    return "Part";
+    std::ostringstream msg;
+    msg << "Part";
+    return msg.str();
 }

@@ -106,6 +106,15 @@ void StageReader::ReadStage(const std::string &filepath, Stage* stage)
             {
                 ReadChildren(f, (Entity*)stage);
             }
+            else if(line == "<cameraEntity>")
+            {
+                Entity *camChild = GetNextPointerAddress<Entity>(f);
+                if(camChild != nullptr)
+                {
+                    stage->SetCameraChild(camChild->GetName());
+                }
+                FileReader::ReadString(f);
+            }
             else
             {
             }

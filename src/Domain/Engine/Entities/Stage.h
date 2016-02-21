@@ -16,6 +16,7 @@ class Canvas;
 class Stage : public Entity
 {
 friend class Canvas;
+
 protected:
 
     //Framebuffer for positions, normals, uvs and diffuse
