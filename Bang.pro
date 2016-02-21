@@ -32,7 +32,7 @@ INCLUDEPATH += \
     $$PWD/src/Domain/Engine/Physics/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/BangPreprocessor/GeneratedFiles/ \
-    $$PWD/res/Assets/UserBehaviours/ \
+    $$PWD/res/Assets/UserBehaviours/
 
 
 OTHER_FILES += \
@@ -62,7 +62,8 @@ OTHER_FILES += \
     res/Assets/boyMesh.asset \
     res/Assets/carpetTexture.asset \
     res/Assets/testMaterial2.asset \
-    res/Assets/prefabTest.asset
+    res/Assets/prefabTest.asset \
+    res/Assets/userBehavioursNamesList.ubnl
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -100,8 +101,6 @@ HEADERS += \
     src/Domain/Engine/Assets/Meshes/MeshPyramid.h \
     src/Domain/Engine/Assets/Meshes/MeshScreenPlane.h \
     src/Domain/Engine/Parts/Behaviour.h \
-    src/Domain/Engine/Parts/TestBehaviour.h \
-    src/Domain/Engine/Parts/TestCameraBehaviour.h \
     src/Domain/Engine/Readers/FileReader.h \
     src/Domain/Engine/Readers/StageReader.h \
     src/Domain/Engine/Interfaces/IFileable.h \
@@ -109,7 +108,7 @@ HEADERS += \
     src/Domain/Engine/Assets/Texture2D.h \
     src/Domain/Engine/Readers/AssetsManager.h \
     src/Domain/Engine/Assets/Prefab.h \
-    $files(res/Assets/UserBehaviours/.h)
+    $$files(res/Assets/UserBehaviours/*.h,true)
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -143,15 +142,13 @@ SOURCES += \
     src/Domain/Engine/Assets/Meshes/MeshPyramid.cpp \
     src/Domain/Engine/Assets/Material.cpp \
     src/Domain/Engine/Parts/Behaviour.cpp \
-    src/Domain/Engine/Parts/TestBehaviour.cpp \
-    src/Domain/Engine/Parts/TestCameraBehaviour.cpp \
     src/Domain/Engine/Readers/FileReader.cpp \
     src/Domain/Engine/Readers/StageReader.cpp \
     src/Domain/Engine/Readers/ReaderWithPointerIds.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
     src/Domain/Engine/Readers/AssetsManager.cpp \
     src/Domain/Engine/Assets/Prefab.cpp \
-    $files(res/Assets/UserBehaviours/.h)
+    $$files(res/Assets/UserBehaviours/*.cpp,true)
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

@@ -1,11 +1,12 @@
 #ifndef PART_H
 #define PART_H
 
-#include "Entity.h"
 #include "Logger.h"
 #include "IFileable.h"
 #include "IToString.h"
 #include "IStageEventListener.h"
+
+class Entity;
 
 class Part : public IStageEventListener, public IToString, public IFileable
 {

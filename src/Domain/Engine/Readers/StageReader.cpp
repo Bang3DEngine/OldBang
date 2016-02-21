@@ -34,7 +34,7 @@ void StageReader::ReadParts(std::istream &f, Entity *e)
         }
         else
         {
-            #BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS
+            BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS();
 
             /*
             BANG_PREPROCESSOR
@@ -42,12 +42,12 @@ void StageReader::ReadParts(std::istream &f, Entity *e)
             will write something like this:
                  if(line == "<UserBehaviour1>")
                  {
-                      *p = new UserBehaviour1();
+                      p = new UserBehaviour1();
                       ReadNextLine(f);
                  }
                  else if(line == "<UserBehaviour2>")
                  {
-                      *p = new UserBehaviour2();
+                      p = new UserBehaviour2();
                       ReadNextLine(f);
                  }
                  ...

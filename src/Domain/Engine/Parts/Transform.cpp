@@ -1,4 +1,5 @@
 #include "Transform.h"
+#include "StageReader.h"
 
 Transform::Transform() : position(glm::vec3(0.0f)),
                          rotation(glm::quat()),

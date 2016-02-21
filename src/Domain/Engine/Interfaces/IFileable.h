@@ -7,8 +7,6 @@
 #include <fstream>
 #include <string>
 
-#include "StageReader.h"
-
 //Describes something than can be written and read to/from a file
 class IFileable
 {

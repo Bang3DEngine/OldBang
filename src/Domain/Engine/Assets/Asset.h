@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "FileReader.h"
+
 #include "IToString.h"
 #include "IFileable.h"
 

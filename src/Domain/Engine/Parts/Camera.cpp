@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Canvas.h"
+#include "StageReader.h"
 
 Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
                    fovDegrees(60.0f),

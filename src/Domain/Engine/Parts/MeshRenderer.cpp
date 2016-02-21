@@ -1,5 +1,6 @@
 #include "MeshRenderer.h"
 #include "Entity.h"
+#include "StageReader.h"
 
 MeshRenderer::MeshRenderer() : mesh(nullptr), material(nullptr)
 {

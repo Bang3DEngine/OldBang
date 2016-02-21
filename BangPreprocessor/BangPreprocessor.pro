@@ -14,7 +14,8 @@ QMAKE_CXXFLAGS += -g --std=c++11
 include(deployment.pri)
 qtcAddDeployment()
 
-SOURCES += main.cpp
+SOURCES += \
+    BangPreprocessorMain.cpp
 
 INCLUDEPATH += \
     $$PWD/../src/ \

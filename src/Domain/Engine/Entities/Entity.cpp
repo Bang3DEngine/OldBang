@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "Stage.h"
 #include "Part.h"
+#include "StageReader.h"
 
 Entity::Entity() : Entity("")
 {
