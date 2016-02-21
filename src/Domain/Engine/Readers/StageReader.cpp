@@ -20,12 +20,6 @@ void StageReader::ReadParts(std::istream &f, Entity *e)
             t->Read(f);
             p = t;
         }
-        else if(line == "<Behaviour>")
-        {
-            Behaviour *b = new Behaviour();
-            p = b;
-
-        }
         else if(line == "<MeshRenderer>")
         {
             MeshRenderer *mr = new MeshRenderer();
@@ -37,6 +31,19 @@ void StageReader::ReadParts(std::istream &f, Entity *e)
             Camera *cam = new Camera();
             cam->Read(f);
             p = cam;
+        }
+        else
+        {
+            /*
+            BANG_PREPROCESSOR
+            Here the BangPreprocessor will write something like this:
+                 if(line == "<UserBehaviour1>") { *p = new UserBehaviour1(); }
+                 else if(line == "<UserBehaviour2>")  { *p = new UserBehaviour2(); }
+                 ...
+            In order to complete the rest of the else if, for the custom user behaviours!!!
+            */
+
+            #include "BP_StageReader_cpp_UserBehaviours_elseifs.bp"
         }
 
         if(p != nullptr)
@@ -92,7 +99,6 @@ void StageReader::ReadStage(const std::string &filepath, Stage* stage)
             }
             else
             {
-
             }
         }
     }

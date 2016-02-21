@@ -16,7 +16,9 @@
         </MeshRenderer>
 
         <Behaviour>
-            src/Domain/Engine/Assets/Parts/TestBehaviour
+            <TestBehaviour>
+                src/Domain/Engine/Assets/Parts/TestBehaviour
+            </TestBehaviour>
         </Behaviour>
 
     </parts>

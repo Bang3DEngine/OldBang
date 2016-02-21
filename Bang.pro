@@ -148,3 +148,6 @@ SOURCES += \
     src/Domain/Engine/Assets/Texture2D.cpp \
     src/Domain/Engine/Readers/AssetsManager.cpp \
     src/Domain/Engine/Assets/Prefab.cpp
+
+SUBDIRS += \
+    BangPreprocessor/BangPreprocessor.pro

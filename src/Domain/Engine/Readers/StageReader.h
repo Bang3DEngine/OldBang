@@ -37,6 +37,7 @@ public:
 public:
     static void ReadStage(const std::string &filepath, Stage* stage);
     static void SaveStage(const std::string &filepath, const Stage *stage);
+
 };
 
 #endif // STAGEREADER_H
