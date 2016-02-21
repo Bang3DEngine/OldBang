@@ -1,6 +1,8 @@
 #include "TestBehaviour.h"
 
+#include "ShaderContract.h"
 #include "Transform.h"
+#include "Material.h"
 #include "Logger.h"
 #include "Canvas.h"
 #include "Stage.h"
@@ -17,10 +19,18 @@ TestBehaviour::TestBehaviour()
 
 void TestBehaviour::OnStart()
 {
-    GetOwner()->GetPart<MeshRenderer>()->GetMaterial()->SetDiffuseColor(glm::vec4( float(rand()%2000-1000)/1000,
-                                                                         float(rand()%2000-1000)/1000,
-                                                                         float(rand()%2000-1000)/1000,
-                                                                         0.5f));
+    Material *m = new Material();
+
+    m->SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
+                                          ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
+
+    //GetOwner()->GetPart<MeshRenderer>()->SetMaterial(m);
+    m->SetDiffuseColor(glm::vec4( float(rand()%2000-1000)/1000,
+                                  float(rand()%2000-1000)/1000,
+                                  float(rand()%2000-1000)/1000,
+                                  0.2f));
+
+    GetOwner()->GetPart<MeshRenderer>()->SetMaterial(m);
 }
 
 void TestBehaviour::OnUpdate()

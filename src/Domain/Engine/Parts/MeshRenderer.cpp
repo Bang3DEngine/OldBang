@@ -30,7 +30,7 @@ void MeshRenderer::SetMesh(Mesh *m)
     mesh = m;
     if(mesh != nullptr && material != nullptr && material->GetShaderProgram() != nullptr)
     {
-        mesh->BindAllVBOs(*(material->GetShaderProgram()));
+        mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
     }
 }
 
@@ -44,7 +44,7 @@ void MeshRenderer::SetMaterial(Material *m)
     material = m;
     if(mesh != nullptr && material != nullptr && material->GetShaderProgram() != nullptr)
     {
-        mesh->BindAllVBOs(*(material->GetShaderProgram()));
+        mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
     }
 }
 

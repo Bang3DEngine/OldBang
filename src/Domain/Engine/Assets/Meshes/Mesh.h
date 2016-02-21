@@ -48,7 +48,7 @@ public:
     void BindNormalsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
     void BindUvsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
 
-    void BindAllVBOs(const ShaderProgram &sp);
+    void BindAllVBOsToShaderProgram(const ShaderProgram &sp);
 
     void SetRenderMode(RenderMode renderMode);
 
