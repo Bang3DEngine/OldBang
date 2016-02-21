@@ -28,9 +28,9 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    QWidget *widget = new QWidget;
-    windowMain.setupUi(widget);
-    widget->show();
+    QMainWindow *window = new QMainWindow;
+    windowMain.setupUi(window);
+    window->show();
 
     Stage *stage = new Stage();
     StageReader::ReadStage("res/Stages/stageTest1.stage", stage);

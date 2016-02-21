@@ -1,0 +1,391 @@
+[31mvoid DBusMenuExporterPrivate::addAction(QAction*, int)[0m: Already tracking action "Follow Symbol Under Cursor" under id 144 
+Id for kit:  "Qt 5.2.1 (qt5)"   "CMakeProjectManager.DefaultCMakeTool"   10000513 
+Id for kit:  "Qt 5.2.1 (qt5)"   "CMakeProjectManager.DefaultCMakeTool"   10000513 
+Id for kit:  "Qt 5.2.1 (qt5)"   "CMakeProjectManager.DefaultCMakeTool"   10000513 
+Id for kit:  "Qt 5.2.1 (qt5)"   "CMakeProjectManager.DefaultCMakeTool"   10000513 
+Id for kit:  "Qt 5.2.1 (qt5)"   "CMakeProjectManager.DefaultCMakeTool"   10000513 
+Id for kit:  "Qt 5.2.1 (qt5)"   "CMakeProjectManager.DefaultCMakeTool"   10000513 
+Error while reparenting!
+QMetaProperty::read: Unable to handle unregistered datatype 'QList<QColor>' for property 'KColorCombo::colors'
+Connecting to deprecated signal QDBusConnectionInterface::serviceOwnerChanged(QString,QString,QString)
+QDBusConnection: session D-Bus connection created before QCoreApplication. Application may misbehave.
+QDBusConnection: session D-Bus connection created before QCoreApplication. Application may misbehave.
+kbuildsycoca4 running...
+kbuildsycoca4(2064) KBuildSycoca::checkTimestamps: checking file timestamps
+kbuildsycoca4(2064) KBuildSycoca::checkTimestamps: timestamps check ok
+kbuildsycoca4(2064) kdemain: Emitting notifyDatabaseChanged ()
+makekdewidgets(2040)/nepomuk (library): Could not find virtuoso to connect to. Aborting 
+QMetaProperty::read: Unable to handle unregistered datatype 'SelectionBehavior' for property 'QTabBar::selectionBehaviorOnRemove'
+QMetaProperty::read: Unable to handle unregistered datatype 'KUrl' for property 'KUrlRequester::url'
+QMetaProperty::read: Unable to handle unregistered datatype 'QList<QChar>' for property 'KCharSelect::displayedChars'
+QMetaProperty::read: Unable to handle unregistered datatype 'KUrl' for property 'KUrlRequester::url'
+Hspell: can't open /usr/share/hspell/hebrew.wgz.sizes.
+QDBusConnection: session D-Bus connection created before QCoreApplication. Application may misbehave.
+kate(3557)/kate-filetree KateFileTreePluginView::KateFileTreePluginView: BEGIN: mw: Kate::MainWindow(0x25d3a50)
+kate(3557)/kate-filetree ProxyItem::ProxyItem: ProxyItem(0x29a9a10,0x0,-1,QObject(0x0) ,"m_root")
+kate(3557)/kate-filetree ProxyItem::ProxyItem: ProxyItem(0x29aa680,0x0,-1,QObject(0x0) ,"Untitled")
+kate(3557)/kate-filetree KateFileTreeModel::documentOpened: before add: ProxyItem(0x29aa680,0x0,-1,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeModel::setupIcon: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::setupIcon: END!
+kate(3557)/kate-filetree KateFileTreeModel::handleInsert: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::handleInsert: empty item
+kate(3557)/kate-filetree ProxyItem::addChild: added ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )   to ProxyItemDir(0x29a9a10,0x0,-1,"m_root", children:1)
+kate(3557)/kate-filetree KateFileTreeModel::documentOpened: after add: ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeProxyModel::KateFileTreeProxyModel: BEGIN!
+kate(3557)/kate-filetree KateFileTreePluginView::setListMode: BEGIN
+kate(3557)/kate-filetree KateFileTreePluginView::setListMode: treeMode
+kate(3557)/kate-filetree KateFileTreePluginView::setListMode: END
+QDBusConnection: session D-Bus connection created before QCoreApplication. Application may misbehave.
+QDBusConnection: session D-Bus connection created before QCoreApplication. Application may misbehave.
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x269ca60) QModelIndex(0,0,0x2a06d00,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: display= "Untitled"
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3557)/kate-filetree KateFileTree::slotCurrentChanged: current: QModelIndex(0,0,0x2a06d00,KateFileTreeProxyModel(0x2761320) )  previous: QModelIndex(-1,-1,0x0,QObject(0x0) )
+kate(3557)/kate-filetree KateFileTree::slotCurrentChanged: got doc, setting prev: QModelIndex(0,0,0x2a06d00,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: change to unnamed item
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: "Untitled" -> "Untitled"
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: removing brush ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: removing/replacing view history ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: bogus name change
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x269ca60) QModelIndex(0,0,0x2a06d00,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: display= "Untitled"
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: "Untitled" -> "/home/sephirot47/Bang/res/WindowMain.ui"
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: removing brush ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: removing/replacing view history ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "Untitled" )
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: removing ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )   from ProxyItemDir(0x29a9a10,0x0,-1,"m_root", children:1)
+kate(3557)/kate-filetree KateFileTree::slotCurrentChanged: current: QModelIndex(-1,-1,0x0,QObject(0x0) ) previous: QModelIndex(0,0,0x2a06d00,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree ProxyItem::remChild: remove ProxyItem(0x29aa680,0x29a9a10,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )   from ProxyItemDir(0x29a9a10,0x0,-1,"m_root", children:1)
+kate(3557)/kate-filetree KateFileTreeModel::handleEmptyParents: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::handleEmptyParents: parent ProxyItemDir(0x29a9a10,0x0,-1,"m_root", children:0) grandparentProxyItemDir(0x0)
+kate(3557)/kate-filetree KateFileTreeModel::setupIcon: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::setupIcon: END!
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: inserting ProxyItem(0x29aa680,0x0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::handleInsert: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::handleInsert: creating a new root
+kate(3557)/kate-filetree ProxyItem::ProxyItem: ProxyItem(0x2ed80c0,0x0,-1,QObject(0x0) ,"/home/sephirot47/Bang/res")
+kate(3557)/kate-filetree KateFileTreeModel::handleInsert: add ProxyItemDir(0x2ed80c0,0x0,-1,"/home/sephirot47/Bang/res", children:0) to m_root
+kate(3557)/kate-filetree ProxyItem::addChild: added ProxyItem(0x2ed80c0,0x29a9a10,0,QObject(0x0) ,"/home/sephirot47/Bang/res") toProxyItemDir(0x29a9a10,0x0,-1,"m_root", children:1)
+kate(3557)/kate-filetree KateFileTreeModel::handleInsert: attempting to merge some existing roots
+kate(3557)/kate-filetree KateFileTreeModel::handleInsert: adding ProxyItem(0x29aa680,0x0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )   to ProxyItemDir(0x2ed80c0,0x29a9a10,0,"/home/sephirot47/Bang/res", children:0)
+kate(3557)/kate-filetree ProxyItem::addChild: added ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )   to ProxyItemDir(0x2ed80c0,0x29a9a10,0,"/home/sephirot47/Bang/res", children:1)
+kate(3557)/kate-filetree KateFileTreeModel::handleInsert: END!
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x269ca60) QModelIndex(0,0,0x2bc33b0,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.ui"
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3557)/kate-filetree KateFileTree::slotCurrentChanged: current: QModelIndex(0,0,0x2bc33b0,KateFileTreeProxyModel(0x2761320) )  previous: QModelIndex(-1,-1,0x0,QObject(0x0) )
+kate(3557)/kate-filetree KateFileTree::slotCurrentChanged: got doc, setting prev: QModelIndex(0,0,0x2bc33b0,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: "WindowMain.ui" -> "/home/sephirot47/Bang/res/WindowMain.ui"
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: removing brush ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: removing/replacing view history ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: bogus name change
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x269ca60) QModelIndex(0,0,0x2bc33b0,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.ui"
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x269ca60) QModelIndex(0,0,0x2bc33b0,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.ui"
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: "WindowMain.ui" -> "/home/sephirot47/Bang/res/WindowMain.ui"
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: removing brush ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: removing/replacing view history ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::handleNameChange: bogus name change
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x269ca60) QModelIndex(0,0,0x2bc33b0,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.ui"
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentNameChanged: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3557)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x269ca60) QModelIndex(0,0,0x2bc33b0,KateFileTreeProxyModel(0x2761320) )
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.ui"
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x29aa680,0x2ed80c0,0,KateDocument(0x269ca60) , "/home/sephirot47/Bang/res/WindowMain.ui" )
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3557)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3557)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3557)/kate-filetree KateFileTreePluginView::viewChanged: END!
+QInotifyFileSystemWatcherEngine::addPaths: inotify_add_watch failed: No such file or directory
+QFileSystemWatcher: failed to add paths: /home/sephirot47/.kde/share/config/activitymanager-pluginsrc
+QObject::connect: Cannot connect (null)::resourceScoreUpdated(QString, QString, QString, double) to NepomukPlugin::resourceScoreUpdated(QString, QString, QString, double)
+QObject::connect: Cannot connect (null)::recentStatsDeleted(QString, int, QString) to NepomukPlugin::deleteRecentStats(QString, int, QString)
+QObject::connect: Cannot connect (null)::earlierStatsDeleted(QString, int) to NepomukPlugin::deleteEarlierStats(QString, int)
+kactivitymanagerd(3567)/nepomuk (library): Could not find virtuoso to connect to. Aborting 
+[31muint DBusMenuExporterDBus::GetLayout(int, int, const QStringList&, DBusMenuLayoutItem&)[0m: Condition failed: menu 
+kate(3557)/kate-filetree KateFileTreePluginSettings::save: save config!
+QDBusConnection: session D-Bus connection created before QCoreApplication. Application may misbehave.
+kate(3661)/kate-filetree KateFileTreePluginView::KateFileTreePluginView: BEGIN: mw: Kate::MainWindow(0x1de8cf0)
+kate(3661)/kate-filetree ProxyItem::ProxyItem: ProxyItem(0x21c8cc0,0x0,-1,QObject(0x0) ,"m_root")
+kate(3661)/kate-filetree ProxyItem::ProxyItem: ProxyItem(0x21c9930,0x0,-1,QObject(0x0) ,"Untitled")
+kate(3661)/kate-filetree KateFileTreeModel::documentOpened: before add: ProxyItem(0x21c9930,0x0,-1,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeModel::setupIcon: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::setupIcon: END!
+kate(3661)/kate-filetree KateFileTreeModel::handleInsert: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::handleInsert: empty item
+kate(3661)/kate-filetree ProxyItem::addChild: added ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )   to ProxyItemDir(0x21c8cc0,0x0,-1,"m_root", children:1)
+kate(3661)/kate-filetree KateFileTreeModel::documentOpened: after add: ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeProxyModel::KateFileTreeProxyModel: BEGIN!
+kate(3661)/kate-filetree KateFileTreePluginView::setListMode: BEGIN
+kate(3661)/kate-filetree KateFileTreePluginView::setListMode: treeMode
+kate(3661)/kate-filetree KateFileTreePluginView::setListMode: END
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x1fcebe0) QModelIndex(0,0,0x221c3f0,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: display= "Untitled"
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3661)/kate-filetree KateFileTree::slotCurrentChanged: current: QModelIndex(0,0,0x221c3f0,KateFileTreeProxyModel(0x1c02180) )  previous: QModelIndex(-1,-1,0x0,QObject(0x0) )
+kate(3661)/kate-filetree KateFileTree::slotCurrentChanged: got doc, setting prev: QModelIndex(0,0,0x221c3f0,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: change to unnamed item
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: "Untitled" -> "Untitled"
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: removing brush ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: removing/replacing view history ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: bogus name change
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x1fcebe0) QModelIndex(0,0,0x221c3f0,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: display= "Untitled"
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: "Untitled" -> "/home/sephirot47/Bang/src/View/WindowMain.h"
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: removing brush ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: removing/replacing view history ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "Untitled" )
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: removing ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )   from ProxyItemDir(0x21c8cc0,0x0,-1,"m_root", children:1)
+kate(3661)/kate-filetree KateFileTree::slotCurrentChanged: current: QModelIndex(-1,-1,0x0,QObject(0x0) ) previous: QModelIndex(0,0,0x221c3f0,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree ProxyItem::remChild: remove ProxyItem(0x21c9930,0x21c8cc0,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )   from ProxyItemDir(0x21c8cc0,0x0,-1,"m_root", children:1)
+kate(3661)/kate-filetree KateFileTreeModel::handleEmptyParents: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::handleEmptyParents: parent ProxyItemDir(0x21c8cc0,0x0,-1,"m_root", children:0) grandparentProxyItemDir(0x0)
+kate(3661)/kate-filetree KateFileTreeModel::setupIcon: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::setupIcon: END!
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: inserting ProxyItem(0x21c9930,0x0,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::handleInsert: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::handleInsert: creating a new root
+kate(3661)/kate-filetree ProxyItem::ProxyItem: ProxyItem(0x24d9090,0x0,-1,QObject(0x0) ,"/home/sephirot47/Bang/src/View")
+kate(3661)/kate-filetree KateFileTreeModel::handleInsert: add ProxyItemDir(0x24d9090,0x0,-1,"/home/sephirot47/Bang/src/View", children:0) to m_root
+kate(3661)/kate-filetree ProxyItem::addChild: added ProxyItem(0x24d9090,0x21c8cc0,0,QObject(0x0) ,"/home/sephirot47/Bang/src/View") toProxyItemDir(0x21c8cc0,0x0,-1,"m_root", children:1)
+kate(3661)/kate-filetree KateFileTreeModel::handleInsert: attempting to merge some existing roots
+kate(3661)/kate-filetree KateFileTreeModel::handleInsert: adding ProxyItem(0x21c9930,0x0,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )   to ProxyItemDir(0x24d9090,0x21c8cc0,0,"/home/sephirot47/Bang/src/View", children:0)
+kate(3661)/kate-filetree ProxyItem::addChild: added ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )   to ProxyItemDir(0x24d9090,0x21c8cc0,0,"/home/sephirot47/Bang/src/View", children:1)
+kate(3661)/kate-filetree KateFileTreeModel::handleInsert: END!
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x1fcebe0) QModelIndex(0,0,0x271ef00,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.h"
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3661)/kate-filetree KateFileTree::slotCurrentChanged: current: QModelIndex(0,0,0x271ef00,KateFileTreeProxyModel(0x1c02180) )  previous: QModelIndex(-1,-1,0x0,QObject(0x0) )
+kate(3661)/kate-filetree KateFileTree::slotCurrentChanged: got doc, setting prev: QModelIndex(0,0,0x271ef00,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: "WindowMain.h" -> "/home/sephirot47/Bang/src/View/WindowMain.h"
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: removing brush ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: removing/replacing view history ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: bogus name change
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x1fcebe0) QModelIndex(0,0,0x271ef00,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.h"
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x1fcebe0) QModelIndex(0,0,0x271ef00,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.h"
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: "WindowMain.h" -> "/home/sephirot47/Bang/src/View/WindowMain.h"
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: removing brush ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: removing/replacing view history ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::handleNameChange: bogus name change
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x1fcebe0) QModelIndex(0,0,0x271ef00,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.h"
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentNameChanged: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: BEGIN!
+kate(3661)/kate-filetree KateFileTreeProxyModel::docIndex: !
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::docIndex: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: selected doc= KateDocument(0x1fcebe0) QModelIndex(0,0,0x271ef00,KateFileTreeProxyModel(0x1c02180) )
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: display= "WindowMain.h"
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: adding viewHistory ProxyItem(0x21c9930,0x24d9090,0,KateDocument(0x1fcebe0) , "/home/sephirot47/Bang/src/View/WindowMain.h" )
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: BEGIN!
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: m_editHistory contains  0  elements
+kate(3661)/kate-filetree KateFileTreeModel::updateBackgrounds: END!
+kate(3661)/kate-filetree KateFileTreeModel::documentActivated: END!
+kate(3661)/kate-filetree KateFileTreePluginView::viewChanged: END!
+[31muint DBusMenuExporterDBus::GetLayout(int, int, const QStringList&, DBusMenuLayoutItem&)[0m: Condition failed: menu 
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')

@@ -5,7 +5,7 @@
 # Make and run BangPreprocessor
 echo ; echo ; echo ;
 echo "---------------------------------"
-echo "MAKE AND RUN OF BANGPREPROCESSOR"; echo
+echo "MAKE AND RUN OF BANGPREPROCESSOR"
 echo "---------------------------------"
 cd BangPreprocessor
 qmake

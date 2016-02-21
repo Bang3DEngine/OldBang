@@ -29,6 +29,7 @@ void TestBehaviour::OnStart()
                                   float(rand()%2000-1000)/1000,
                                   float(rand()%2000-1000)/1000,
                                   0.2f));
+    m->SetTexture(AssetsManager::GetAsset<Texture2D>("res/Assets/woodTexture.asset"));
 
     GetOwner()->GetPart<MeshRenderer>()->SetMaterial(m);
 }
