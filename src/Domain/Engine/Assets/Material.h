@@ -1,4 +1,4 @@
-#ifndef MATERIAL_H
+﻿#ifndef MATERIAL_H
 #define MATERIAL_H
 
 #include <vector>
@@ -16,6 +16,8 @@ class Material : public IGLBindable, public Asset
 friend class MeshRenderer;
 
 private:
+    glm::vec4 diffuseColor;
+
     const ShaderProgram *shaderProgram;
     std::vector<const Texture*> textures;
 
@@ -26,8 +28,12 @@ public:
     void SetShaderProgram(const ShaderProgram *program);
     void SetTexture(const Texture *texture, unsigned int index = 0);
 
+    void SetDiffuseColor(const glm::vec4 &diffuseColor);
+
     const ShaderProgram* GetShaderProgram() const;
     const Texture* GetTexture(unsigned int index = 0) const;
+
+    glm::vec4 GetDiffuseColor() const;
 
     void Bind() const override;
     void UnBind() const override;

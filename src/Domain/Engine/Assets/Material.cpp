@@ -1,6 +1,7 @@
 #include "Material.h"
 
 Material::Material() : Asset(),
+                       diffuseColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.0f)),
                        shaderProgram(nullptr)
 {
 }
@@ -26,6 +27,9 @@ void Material::Bind() const
                 t->Bind(); //Leave it bound
             }
         }
+
+        shaderProgram->SetUniformVec4(ShaderContract::Uniform_Material_Diffuse_Color,
+                                      diffuseColor, false);
     }
 }
 
@@ -70,6 +74,11 @@ void Material::SetTexture(const Texture *texture, unsigned int index)
     textures[index] = texture;
 }
 
+void Material::SetDiffuseColor(const glm::vec4 &diffuseColor)
+{
+    this->diffuseColor = diffuseColor;
+}
+
 const ShaderProgram *Material::GetShaderProgram() const
 {
     return shaderProgram;
@@ -79,4 +88,9 @@ const Texture *Material::GetTexture(unsigned int index) const
 {
     if(index >= textures.size()) return nullptr;
     return textures[index];
+}
+
+glm::vec4 Material::GetDiffuseColor() const
+{
+    return diffuseColor;
 }

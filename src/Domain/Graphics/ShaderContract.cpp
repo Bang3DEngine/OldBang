@@ -67,6 +67,9 @@ const std::string ShaderContract::Uniform_Texture_Prefix =
 const std::string ShaderContract::Uniform_Texture_Final_Color =
         ShaderContract::Uniform_Texture_Prefix + "final_color";
 
+const std::string ShaderContract::Uniform_Material_Diffuse_Color =
+        ShaderContract::ShaderNames_Prefix + "material_diffuse_color";
+
 
 const std::string ShaderContract::Filepath_Shader_Vertex_Render_To_Screen = "res/Shaders/render_to_screen.vert";
 const std::string ShaderContract::Filepath_Shader_Fragment_Render_To_Screen = "res/Shaders/render_to_screen.frag";

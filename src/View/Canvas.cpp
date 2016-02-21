@@ -136,12 +136,10 @@ int Canvas::GetHeight()
 
 void Canvas::OnTopKekPressed()
 {
-    static int a = 0;
-    Logger_Log("AAA");
     Prefab *p = AssetsManager::GetAsset<Prefab>("res/Assets/prefabTest.asset");
-    Logger_Log("B");
     Entity *e = p->Instantiate();
-    Logger_Log("M");
     currentStage->AddChild(e);
+
+    static int a = 0;
     Logger_Log(++a);
 }

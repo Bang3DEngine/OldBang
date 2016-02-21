@@ -18,7 +18,7 @@ class MeshRenderer : public Part
 private:
 
     Mesh *mesh;
-    const Material *material;
+    Material *material;
 
 protected:
 
@@ -33,8 +33,8 @@ public:
     void SetMesh(Mesh *m);
     const Mesh* GetMesh();
 
-    void SetMaterial(const Material *m);
-    const Material* GetMaterial();
+    void SetMaterial(Material *m);
+    Material* GetMaterial();
 
     void Write(std::ostream &f) const;
     void Read(std::istream &f);

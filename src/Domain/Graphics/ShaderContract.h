@@ -43,7 +43,7 @@ public:
         // When rendering to screen after Deferred Rendering passes.
         // This texture will hold the definitive color values of the rendered stage
         Uniform_Texture_Final_Color,
-
+        Uniform_Material_Diffuse_Color,
 
 
         Filepath_Shader_Vertex_Render_To_Screen,

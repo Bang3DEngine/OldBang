@@ -35,8 +35,8 @@ Entity *Entity::GetParent() const
 
 void Entity::AddPart(Part *p)
 {
+    p->owner = this;
     parts.push_back(p);
-    p->parent = this;
 }
 
 void Entity::AddChild(Entity *child)

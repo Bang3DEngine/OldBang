@@ -12,13 +12,13 @@ class Part : public IStageEventListener, public IToString, public IFileable
 {
 friend class Entity;
 protected:
-    Entity *parent;
+    Entity *owner;
 
     Part();
     virtual ~Part();
 
 public:
-    Entity* GetParent() const;
+    Entity* GetOwner() const;
 
     virtual const std::string ToString() const override;
 

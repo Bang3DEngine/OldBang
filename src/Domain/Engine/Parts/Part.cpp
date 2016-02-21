@@ -2,7 +2,7 @@
 #include "Entity.h"
 
 
-Part::Part() : parent(nullptr)
+Part::Part() : owner(nullptr)
 {
 }
 
@@ -11,9 +11,9 @@ Part::~Part()
 
 }
 
-Entity *Part::GetParent() const
+Entity *Part::GetOwner() const
 {
-    return parent;
+    return owner;
 }
 
 const std::string Part::ToString() const

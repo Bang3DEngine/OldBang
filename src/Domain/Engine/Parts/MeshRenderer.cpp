@@ -12,7 +12,7 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::_OnRender()
 {
-    Stage *stage = GetParent()->GetStage();
+    Stage *stage = GetOwner()->GetStage();
     Camera *cam = stage->GetCamera();
     if(cam != nullptr)
     {
@@ -20,7 +20,7 @@ void MeshRenderer::_OnRender()
     }
     else
     {
-        Logger_Warning("Can't render " << GetParent() << " because "
+        Logger_Warning("Can't render " << GetOwner() << " because "
                        << stage << " does not have a set Camera.");
     }
 }
@@ -39,7 +39,7 @@ const Mesh *MeshRenderer::GetMesh()
     return mesh;
 }
 
-void MeshRenderer::SetMaterial(const Material *m)
+void MeshRenderer::SetMaterial(Material *m)
 {
     material = m;
     if(mesh != nullptr && material != nullptr && material->GetShaderProgram() != nullptr)
@@ -48,7 +48,7 @@ void MeshRenderer::SetMaterial(const Material *m)
     }
 }
 
-const Material *MeshRenderer::GetMaterial()
+Material *MeshRenderer::GetMaterial()
 {
     return material;
 }
@@ -68,29 +68,29 @@ void MeshRenderer::Read(std::istream &f)
 
 void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 {
-    Transform *t = parent->GetPart<Transform>();
+    Transform *t = owner->GetPart<Transform>();
     if(t == nullptr)
     {
-        Logger_Error(parent << "does not have a Transform. Can't render.");
+        Logger_Error(owner << "does not have a Transform. Can't render.");
         return;
     }
 
     if(mesh == nullptr)
     {
-        Logger_Error(parent << " does not have a Mesh. Can't render.");
+        Logger_Error(owner << " does not have a Mesh. Can't render.");
         return;
     }
 
     if(material == nullptr)
     {
-        Logger_Error(parent << " does not have a Material. Can't render.");
+        Logger_Error(owner << " does not have a Material. Can't render.");
         return;
     }
     else
     {
         if(material->GetShaderProgram() == nullptr)
         {
-            Logger_Error(parent << " has a Material with no ShaderProgram. Can't render.");
+            Logger_Error(owner << " has a Material with no ShaderProgram. Can't render.");
             return;
         }
     }
@@ -100,7 +100,7 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
     glm::mat4 projection(1.0f);
 
     //In case the parent stage has a camera, retrieve the view and proj matrices
-    Camera *camera = parent->GetStage()->GetCamera();
+    Camera *camera = owner->GetStage()->GetCamera();
     if(camera != nullptr)
     {
         camera->GetViewMatrix(view);
