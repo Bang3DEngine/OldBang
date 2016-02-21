@@ -24,12 +24,13 @@ void TestBehaviour::OnStart()
     m->SetShaderProgram(new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
                                           ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv));
 
-    //GetOwner()->GetPart<MeshRenderer>()->SetMaterial(m);
     m->SetDiffuseColor(glm::vec4( float(rand()%2000-1000)/1000,
                                   float(rand()%2000-1000)/1000,
                                   float(rand()%2000-1000)/1000,
                                   0.2f));
     m->SetTexture(AssetsManager::GetAsset<Texture2D>("res/Assets/woodTexture.asset"));
+
+    m->SetTexture( AssetsManager::GetAsset<Texture2D>("res/Assets/woodTexture.asset") );
 
     GetOwner()->GetPart<MeshRenderer>()->SetMaterial(m);
 }
