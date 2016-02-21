@@ -3,10 +3,9 @@
 #include <string>
 #include <vector>
 
-const std::string userBehavioursFilePath = "../res/Assets/userBehavioursFilepathsList.ubfl";
+const std::string GeneratedFilesDir = "GeneratedFiles";
 
-const std::string StageReaderHeaderFilepath = "../src/Domain/Engine/Assets/StageReader.h";
-const std::string StageReaderImplFilepath = "../src/Domain/Engine/Assets/StageReader.cpp";
+const std::string userBehavioursFilePath = "../res/Assets/userBehavioursFilepathsList.ubfl";
 
 std::string ReadNextLine(std::istream &f)
 {
@@ -29,36 +28,35 @@ void GetAllUserBehaviourClassNames(std::vector<std::string> *behaviourClassNames
     }
 }
 
-void PreprocessStageReaderImpl()
+void Preprocess_BP_StageReader_cpp_UserBehaviours_elseifs()
 {
-    std::ifstream f(StageReaderImplFilepath);
+    const std::string filepath = "BP_StageReader_cpp_UserBehaviours_elseifs.bp";
+    std::ifstream f(filepath);
     if(!f.is_open())
     {
-        Logger_Error("Error opening file to preprocess '" << StageReaderImplFilepath << "'.");
+        Logger_Error("Error opening file to preprocess '" << filepath << "'.");
         exit(-1);
     }
 
-    std::string line;
-    while( (line = ReadNextLine(f)).empty() )
+    std::vector<std::string> userBehaviourNames;
+    GetAllUserBehaviourClassNames(&userBehaviourNames);
+
+    //Add #includes
+    for(std::string bName : userBehaviourNames)
     {
-        std::ofstream os(StageReaderImplFilepath, std::ios::out | std::ios::app );
-        if(!f.is_open())
-        {
-            Logger_Error("Error opening file to preprocess '" << StageReaderImplFilepath << "'.");
-            exit(-1);
-        }
-
-        std::vector<std::string> userBehaviourNames;
-        GetAllUserBehaviourClassNames(&userBehaviourNames);
-
-        os << "void StageReader::ReadUserBehaviours(const std::string &line, Part **p) {";
-        for(std::string bName : userBehaviourNames)
-        {
-            os << "if(line == <" << bName << ">) { *p = new " << bName << "(); }";
-            std::cerr << "if(line == <" << bName << ">) { *p = new " << bName << "(); }" << std::endl;
-        }
-        os << "}";
+        os << "#include \"" << bName << ".h\"";
     }
+
+    os << "#define BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS \\" << std::endl;
+    for(std::string bName : userBehaviourNames)
+    {
+        os << "if(line == <" << bName << ">)\\" << std::endl;
+        os << "{\\" << std::endl;
+        os << "     *p = new " << bName << "();\\" << std::endl;
+        os << "     FileReader::ReadNextLine(f);\\" << std::endl;
+        os << "} else ";
+    }
+    os << "{ }" << std::endl; //To complete the final else...
 }
 
 int main()
@@ -68,7 +66,7 @@ int main()
     Logger_Log(":::::::::::::::::::::::::::::::::::::::::::");
 
     Logger_Log("Running Bang Preprocessor on file '" << StageReaderImplFilepath << "'...");
-    PreprocessStageReaderImpl();
+    Preprocess_BP_StageReader_cpp_UserBehaviours_elseifs();
     Logger_Log("Successfully run Bang Preprocessor on file '" << StageReaderImplFilepath << "'.");
 
     Logger_Log(":::::::::::::::::::::::::::::::::::::::::::");

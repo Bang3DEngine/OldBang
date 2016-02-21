@@ -32,3 +32,6 @@ INCLUDEPATH += \
     $$PWD/../src/Domain/Engine/Assets/Behaviours/ \
     $$PWD/../src/Domain/Engine/Physics/ \
     $$PWD/../src/Domain/Graphics/ \
+
+OTHER_FILES += \
+    GeneratedFiles/BP_StageReader_cpp_UserBehaviours_elseifs.bp

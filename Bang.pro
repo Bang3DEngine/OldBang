@@ -31,6 +31,8 @@ INCLUDEPATH += \
     $$PWD/src/Domain/Engine/Assets/Behaviours/ \
     $$PWD/src/Domain/Engine/Physics/ \
     $$PWD/src/Domain/Graphics/ \
+    $$PWD/BangPreprocessor/GeneratedFiles/ \
+    $$PWD/res/Assets/UserBehaviours/ \
 
 
 OTHER_FILES += \
@@ -106,7 +108,8 @@ HEADERS += \
     src/Domain/Engine/Readers/ReaderWithPointerIds.h \
     src/Domain/Engine/Assets/Texture2D.h \
     src/Domain/Engine/Readers/AssetsManager.h \
-    src/Domain/Engine/Assets/Prefab.h
+    src/Domain/Engine/Assets/Prefab.h \
+    $files(res/Assets/UserBehaviours/.h)
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -147,7 +150,8 @@ SOURCES += \
     src/Domain/Engine/Readers/ReaderWithPointerIds.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
     src/Domain/Engine/Readers/AssetsManager.cpp \
-    src/Domain/Engine/Assets/Prefab.cpp
+    src/Domain/Engine/Assets/Prefab.cpp \
+    $files(res/Assets/UserBehaviours/.h)
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

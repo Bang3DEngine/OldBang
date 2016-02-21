@@ -13,6 +13,8 @@
 #include "glm/glm.hpp"
 #include "Rect.h"
 
+#include "BP_StageReader_cpp_UserBehaviours_elseifs.bp"
+
 class Stage;
 class Entity;
 class StageReader : public ReaderWithPointerIds
