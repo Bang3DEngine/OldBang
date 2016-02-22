@@ -18,6 +18,7 @@ LIBS += -lGLEW
 INCLUDEPATH += \
     $$PWD/src/ \
     $$PWD/src/View/ \
+    $$PWD/src/View/Interfaces \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/src/Domain/Graphics/Interfaces/ \
@@ -108,7 +109,9 @@ HEADERS += \
     src/Domain/Engine/Assets/Texture2D.h \
     src/Domain/Engine/Readers/AssetsManager.h \
     src/Domain/Engine/Assets/Prefab.h \
-    $$files(res/Assets/UserBehaviours/*.h,true)
+    $$files(res/Assets/UserBehaviours/*.h,true) \
+    src/View/WindowEventManager.h \
+    src/View/Interfaces/IWindowEventManagerListener.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -148,7 +151,10 @@ SOURCES += \
     src/Domain/Engine/Assets/Texture2D.cpp \
     src/Domain/Engine/Readers/AssetsManager.cpp \
     src/Domain/Engine/Assets/Prefab.cpp \
-    $$files(res/Assets/UserBehaviours/*.cpp,true)
+    $$files(res/Assets/UserBehaviours/*.cpp,true) \
+    src/View/WindowMain.cpp \
+    src/View/WindowEventManager.cpp \
+    src/View/Interfaces/IWindowEventManagerListener.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

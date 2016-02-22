@@ -28,8 +28,12 @@ void main()
     {
         gl_FragColor = vec4(0,0,0,1);
     }
-    else if(BANG_depth > 0.01)
+    else if(BANG_depth < 1.0)
+    {
         gl_FragColor = vec4(BANG_diffuse, 1);
+    }
     else
-        gl_FragColor = vec4(1);
+    {
+        gl_FragColor = vec4(vec3(0.2,0.2,0.6) + (BANG_uv_raw_vout_fin.y) * vec3(0.8,0.8,0.4), 1.0);
+    }
 }

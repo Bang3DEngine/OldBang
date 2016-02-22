@@ -1,6 +1,15 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
+#include <GL/glew.h>
+
+#include <vector>
+#include <string>
+#include <chrono>
+#include <QTimer>
+#include <QGLWidget>
+#include <QApplication>
+
 #include "VAO.h"
 #include "Shader.h"
 #include "Stage.h"
@@ -8,14 +17,10 @@
 #include "Prefab.h"
 #include "ShaderProgram.h"
 #include "MeshRenderer.h"
+#include "IWindowEventManagerListener.h"
 
-#include <vector>
-#include <string>
-#include <QGLWidget>
-#include <chrono>
-#include <QTimer>
-
-class Canvas : public QGLWidget
+class WindowMain;
+class Canvas : public QGLWidget, public IWindowEventManagerListener
 {
     Q_OBJECT
 
@@ -33,6 +38,7 @@ private:
 public:
 
     glm::vec4 clearColor;
+    WindowMain *windowMain;
 
     explicit Canvas(QWidget *parent = 0);
 
@@ -50,6 +56,8 @@ public:
     static float GetAspectRatio();
     static int GetWidth();
     static int GetHeight();
+
+    void OnMenuBarItemClicked(int itemClicked) override;
 
 signals:
 

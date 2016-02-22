@@ -28,11 +28,18 @@ void TestBehaviour::OnStart()
                                   float(rand()%2000-1000)/1000,
                                   float(rand()%2000-1000)/1000,
                                   0.2f));
-    m->SetTexture(AssetsManager::GetAsset<Texture2D>("res/Assets/woodTexture.asset"));
 
-    m->SetTexture( AssetsManager::GetAsset<Texture2D>("res/Assets/woodTexture.asset") );
+    if(rand() % 2 == 0)
+        m->SetTexture( AssetsManager::GetAsset<Texture2D>("res/Assets/woodTexture.asset") );
+    else
+        m->SetTexture( AssetsManager::GetAsset<Texture2D>("res/Assets/carpetTexture.asset") );
+
 
     GetOwner()->GetPart<MeshRenderer>()->SetMaterial(m);
+
+    GetOwner()->GetPart<Transform>()->SetPosition(glm::vec3(float(rand()%2000-1000)/1000 * 6.0f,
+                                                            float(rand()%2000-1000)/1000 * 3.0f,
+                                                            float(rand()%2000-1000)/1000 * 3.0f));
 }
 
 void TestBehaviour::OnUpdate()
@@ -40,6 +47,7 @@ void TestBehaviour::OnUpdate()
     time += Time::GetDeltaTime();
     Transform *t = GetOwner()->GetPart<Transform>();
     t->SetRotation(glm::angleAxis(1.0f * Time::GetDeltaTime(), randomAxis) * t->GetRotation());
+    t->SetScale(glm::vec3(1,1,1) * 0.5f * (float(sin(time)) * 0.5f + 0.5f + 0.2f));
 }
 
 void TestBehaviour::OnDestroy()

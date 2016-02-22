@@ -1,5 +1,7 @@
 #include "Canvas.h"
 
+#include "WindowMain.h"
+
 int Canvas::width = 0;
 int Canvas::height = 0;
 int Canvas::RedrawDelay = 1;
@@ -14,6 +16,8 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent), currentStage(nullptr)
     connect(&drawTimer, SIGNAL(timeout()), this, SLOT(updateGL()));
     drawTimer.setInterval(Canvas::RedrawDelay);
     drawTimer.start();
+
+    windowMain = WindowMain::GetInstance();
 }
 
 void Canvas::initializeGL()
@@ -132,6 +136,11 @@ int Canvas::GetWidth()
 int Canvas::GetHeight()
 {
     return height;
+}
+
+void Canvas::OnMenuBarItemClicked(int itemClicked)
+{
+    OnTopKekPressed();
 }
 
 void Canvas::OnTopKekPressed()
