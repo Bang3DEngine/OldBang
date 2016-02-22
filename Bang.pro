@@ -64,7 +64,11 @@ OTHER_FILES += \
     res/Assets/carpetTexture.asset \
     res/Assets/testMaterial2.asset \
     res/Assets/prefabTest.asset \
-    res/Assets/userBehavioursNamesList.ubnl
+    res/Assets/userBehavioursNamesList.ubnl \
+    res/Assets/luigiPrefab.asset \
+    res/Assets/luigiMesh.asset \
+    res/Assets/luigiMaterial.asset \
+    res/Assets/luigiTexture.asset
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

@@ -145,7 +145,12 @@ void Canvas::OnMenuBarItemClicked(int itemClicked)
 
 void Canvas::OnTopKekPressed()
 {
-    Prefab *p = AssetsManager::GetAsset<Prefab>("res/Assets/prefabTest.asset");
+    Prefab *p;
+    if(rand()%2 == 0)
+        p = AssetsManager::GetAsset<Prefab>("res/Assets/prefabTest.asset");
+    else
+        p = AssetsManager::GetAsset<Prefab>("res/Assets/luigiPrefab.asset");
+
     Entity *e = p->Instantiate();
     currentStage->AddChild(e);
 

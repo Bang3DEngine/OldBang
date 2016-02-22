@@ -705,3 +705,7 @@ kfilemodule(2064) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  re
 kfilemodule(2064) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-powerpoint.template.macroEnabled.12" 
 kfilemodule(2064) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-word.document.macroEnabled.12" 
 kfilemodule(2064) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-powerpoint.slide.macroEnabled.12" 
+static Core::IEditor* Core::EditorManager::createEditor(Core::Id, const QString&) unable to determine mime type of /home/vanton/Bang/res/Assets/luigiPrefab.asset/. Falling back to text/plain
+static Core::IEditor* Core::EditorManager::createEditor(Core::Id, const QString&) unable to determine mime type of /home/vanton/Bang/res/Assets/luigiMesh.asset/. Falling back to text/plain
+static Core::IEditor* Core::EditorManager::createEditor(Core::Id, const QString&) unable to determine mime type of /home/vanton/Bang/res/Assets/luigiMaterial.asset/. Falling back to text/plain
+static Core::IEditor* Core::EditorManager::createEditor(Core::Id, const QString&) unable to determine mime type of /home/vanton/Bang/res/Assets/luigiTexture.asset/. Falling back to text/plain

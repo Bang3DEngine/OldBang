@@ -7,6 +7,7 @@ class TestBehaviour : public Behaviour
 {
 private:
     float time;
+    float originalScale;
     glm::vec3 randomAxis;
 
 public:
