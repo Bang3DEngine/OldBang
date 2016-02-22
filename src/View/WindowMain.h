@@ -12,6 +12,7 @@ private:
 public:
     WindowMain();
 
+    static void Init(QMainWindow *window);
     static WindowMain *GetInstance();
 };
 

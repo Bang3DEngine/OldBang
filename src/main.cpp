@@ -28,14 +28,14 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QMainWindow *window = new QMainWindow;
+    WindowMain::Init(window); //init window main
     WindowMain *windowMain = WindowMain::GetInstance();
-    windowMain->setupUi(window);
-    window->show();
 
     Stage *stage = new Stage();
     StageReader::ReadStage("res/Stages/stageTest1.stage", stage);
     windowMain->canvas->AddStage(stage);
     windowMain->canvas->SetCurrentStage("stageTest1");
+
 
     //stage->SetCameraChild("camera");
     ///////

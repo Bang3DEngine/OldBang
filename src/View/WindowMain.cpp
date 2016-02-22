@@ -6,6 +6,20 @@ WindowMain::WindowMain()  : Ui_WindowMain()
 {
 }
 
+void WindowMain::Init(QMainWindow *window)
+{
+    if(win == nullptr)
+    {
+        win = new WindowMain();
+        win->setupUi(window);
+        window->show();
+    }
+
+    //Init inspector
+    win->widgetListInspector->addItem("ASDKDJASKDJAS");
+    //
+}
+
 WindowMain *WindowMain::GetInstance()
 {
     if(win == nullptr)

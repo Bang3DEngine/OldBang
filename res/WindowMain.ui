@@ -101,7 +101,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0">
        <item>
-        <widget class="QTreeView" name="widgetTreeHierarchy_2">
+        <widget class="QTreeWidget" name="widgetTreeHierarchy">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -111,6 +111,11 @@
          <property name="acceptDrops">
           <bool>true</bool>
          </property>
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
         </widget>
        </item>
       </layout>

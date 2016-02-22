@@ -93,6 +93,14 @@ void Canvas::SetCurrentStage(const std::string &name)
             {
                 currentStage = (*it);
                 currentStage->_OnStart();
+
+                //Init hierarchy
+                QTreeWidgetItem *treeRoot = new QTreeWidgetItem();
+                treeRoot->setText(0, "Stage");
+                treeRoot->addChild(new QTreeWidgetItem({"Hola"}));
+                treeRoot->addChild(new QTreeWidgetItem({"Adios"}));
+                win->widgetTreeHierarchy->addTopLevelItem(treeRoot);
+                //
             }
             return;
         }

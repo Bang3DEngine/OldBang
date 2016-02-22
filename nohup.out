@@ -709,3 +709,349 @@ static Core::IEditor* Core::EditorManager::createEditor(Core::Id, const QString&
 static Core::IEditor* Core::EditorManager::createEditor(Core::Id, const QString&) unable to determine mime type of /home/vanton/Bang/res/Assets/luigiMesh.asset/. Falling back to text/plain
 static Core::IEditor* Core::EditorManager::createEditor(Core::Id, const QString&) unable to determine mime type of /home/vanton/Bang/res/Assets/luigiMaterial.asset/. Falling back to text/plain
 static Core::IEditor* Core::EditorManager::createEditor(Core::Id, const QString&) unable to determine mime type of /home/vanton/Bang/res/Assets/luigiTexture.asset/. Falling back to text/plain
+makekdewidgets(4205)/libakonadi Akonadi::AgentManagerPrivate::createDBusInterface: AgentManager failed to get a valid AgentManager DBus interface. Error is: 1 "org.freedesktop.DBus.Error.NameHasNoOwner" "Could not get owner of name 'org.freedesktop.Akonadi.Control': no such name" 
+makekdewidgets(4205)/libakonadi Akonadi::SessionPrivate::socketError: Socket error occurred: "QLocalSocket::connectToServer: Connection refused" 
+Connecting to deprecated signal QDBusConnectionInterface::serviceOwnerChanged(QString,QString,QString)
+makekdewidgets(4205)/libakonadi Akonadi::SessionPrivate::socketError: Socket error occurred: "QLocalSocket::connectToServer: Connection refused" 
+search paths:  ("/home/vanton/bin", "/usr/local/bin", "/usr/bin", "/bin", "/usr/bin/X11", "/usr/games", "/opt/COMPSs/Runtime/scripts/user", "/opt/COMPSs/Runtime/scripts/user", "/opt/COMPSs/Runtime/scripts/user", "/usr/sbin", "/usr/local/sbin", "/usr/local/libexec", "/usr/libexec", "/opt/mysql/libexec", "/opt/local/lib/mysql5/bin", "/opt/mysql/sbin") 
+Found mysql_install_db:  "/usr/bin/mysql_install_db" 
+Found mysqlcheck:  "/usr/bin/mysqlcheck" 
+Error while reparenting!
+QMetaProperty::read: Unable to handle unregistered datatype 'QList<QColor>' for property 'KColorCombo::colors'
+makekdewidgets(4205)/nepomuk (library): Could not find virtuoso backend 
+makekdewidgets(4205)/nepomuk (library): Could not find virtuoso to connect to. Aborting 
+QMetaProperty::read: Unable to handle unregistered datatype 'SelectionBehavior' for property 'QTabBar::selectionBehaviorOnRemove'
+QMetaProperty::read: Unable to handle unregistered datatype 'KUrl' for property 'KUrlRequester::url'
+QMetaProperty::read: Unable to handle unregistered datatype 'QList<QChar>' for property 'KCharSelect::displayedChars'
+QMetaProperty::read: Unable to handle unregistered datatype 'KUrl' for property 'KUrlRequester::url'
+akonadi.collectionattributetable                   OK
+akonadi.collectionmimetyperelation                 OK
+akonadi.collectionpimitemrelation                  OK
+akonadi.collectiontable                            OK
+akonadi.flagtable                                  OK
+akonadi.mimetypetable                              OK
+akonadi.parttable                                  OK
+akonadi.parttypetable                              OK
+akonadi.pimitemflagrelation                        OK
+akonadi.pimitemtable                               OK
+akonadi.pimitemtagrelation                         OK
+akonadi.resourcetable                              OK
+akonadi.schemaversiontable                         OK
+akonadi.tagattributetable                          OK
+akonadi.tagremoteidresourcerelationtable           OK
+akonadi.tagtable                                   OK
+akonadi.tagtypetable                               OK
+mysql.column_stats                                 OK
+mysql.columns_priv                                 OK
+mysql.db                                           OK
+mysql.event                                        OK
+mysql.func                                         OK
+mysql.gtid_slave_pos                               OK
+mysql.help_category                                OK
+mysql.help_keyword                                 OK
+mysql.help_relation                                OK
+mysql.help_topic                                   OK
+mysql.host                                         OK
+mysql.index_stats                                  OK
+mysql.innodb_index_stats                           OK
+mysql.innodb_table_stats                           OK
+mysql.plugin                                       OK
+mysql.proc                                         OK
+mysql.procs_priv                                   OK
+mysql.proxies_priv                                 OK
+mysql.roles_mapping                                OK
+mysql.servers                                      OK
+mysql.table_stats                                  OK
+mysql.tables_priv                                  OK
+mysql.time_zone                                    OK
+mysql.time_zone_leap_second                        OK
+mysql.time_zone_name                               OK
+mysql.time_zone_transition                         OK
+mysql.time_zone_transition_type                    OK
+mysql.user                                         OK
+MySQL version OK (required "5.1" , available "10.0" ) 
+Database "akonadi" opened using driver "QMYSQL" 
+DbInitializer::run() 
+checking table  "SchemaVersionTable" 
+checking table  "ResourceTable" 
+checking table  "CollectionTable" 
+checking table  "MimeTypeTable" 
+checking table  "PimItemTable" 
+checking table  "FlagTable" 
+checking table  "PartTypeTable" 
+checking table  "PartTable" 
+checking table  "CollectionAttributeTable" 
+checking table  "TagTypeTable" 
+checking table  "TagTable" 
+checking table  "TagAttributeTable" 
+checking table  "TagRemoteIdResourceRelationTable" 
+checking table  "PimItemFlagRelation" 
+checking table  "PimItemTagRelation" 
+checking table  "CollectionMimeTypeRelation" 
+checking table  "CollectionPimItemRelation" 
+DbInitializer::run() done 
+skipping update 2 
+skipping update 3 
+skipping update 4 
+skipping update 8 
+skipping update 10 
+skipping update 12 
+skipping update 13 
+skipping update 14 
+skipping update 15 
+skipping update 16 
+skipping update 17 
+skipping update 18 
+skipping update 19 
+skipping update 20 
+skipping update 21 
+skipping update 22 
+skipping update 23 
+skipping update 24 
+skipping update 25 
+skipping update 26 
+skipping update 28 
+Indexes successfully created 
+DataStore::unhideAllPimItems() 
+Database "akonadi" opened using driver "QMYSQL" 
+Search loop is waiting, will wake again in -1 ms 
+Database "akonadi" opened using driver "QMYSQL" 
+Database "akonadi" opened using driver "QMYSQL" 
+Connecting to deprecated signal QDBusConnectionInterface::serviceOwnerChanged(QString,QString,QString)
+Database "akonadi" opened using driver "QMYSQL" 
+search paths:  ("/home/vanton/.kde4/lib64/kde4/plugins/", "/usr/lib64/kde4/plugins/", "/usr/lib64/qt4/plugins", "/usr/lib64/kde4/plugins", "/usr/bin", "/home/vanton/.kde4/lib64/kde4/", "/usr/lib64/kde4/") 
+SEARCH MANAGER: searching in  "/home/vanton/.kde4/lib64/kde4/plugins//akonadi" : () 
+SEARCH MANAGER: searching in  "/usr/lib64/kde4/plugins//akonadi" : () 
+SEARCH MANAGER: searching in  "/usr/lib64/qt4/plugins/akonadi" : () 
+SEARCH MANAGER: searching in  "/usr/lib64/kde4/plugins/akonadi" : () 
+SEARCH MANAGER: searching in  "/usr/bin/akonadi" : () 
+SEARCH MANAGER: searching in  "/home/vanton/.kde4/lib64/kde4//akonadi" : () 
+SEARCH MANAGER: searching in  "/usr/lib64/kde4//akonadi" : ("akonadibaloosearchplugin.desktop") 
+PLUGINS:  "/usr/share/akonadi/agents" 
+PLUGINS:  ("akonadibalooindexingagent.desktop", "akonadinepomukfeederagent.desktop", "akonotesresource.desktop", "archivemailagent.desktop", "birthdaysresource.desktop", "contactsresource.desktop", "davgroupwareresource.desktop", "facebookresource.desktop", "folderarchiveagent.desktop", "followupreminder.desktop", "googlecalendarresource.desktop", "googlecontactsresource.desktop", "icaldirresource.desktop", "icalresource.desktop", "imapresource.desktop", "invitationsagent.desktop", "kabcresource.desktop", "kalarmdirresource.desktop", "kalarmresource.desktop", "kcalresource.desktop", "kdeaccountsresource.desktop", "kolabproxyresource.desktop", "kolabresource.desktop", "localbookmarksresource.desktop", "maildirresource.desktop", "maildispatcheragent.desktop", "mailfilteragent.desktop", "mboxresource.desktop", "migrationagent.desktop", "mixedmaildirresource.desktop", "mtdummyresource.desktop", "newmailnotifieragent.desktop", "nntpresource.desktop", "notesagent.desktop", "notesresource.desktop", "openxchangeresource.desktop", "pop3resource.desktop", "sendlateragent.desktop", "vcarddirresource.desktop", "vcardresource.desktop") 
+search paths:  ("/home/vanton/bin", "/usr/local/bin", "/usr/bin", "/bin", "/usr/bin/X11", "/usr/games", "/opt/COMPSs/Runtime/scripts/user", "/opt/COMPSs/Runtime/scripts/user", "/opt/COMPSs/Runtime/scripts/user") 
+PLUGINS inserting:  "akonadi_baloo_indexer" 0 ("Unique", "Autostart") 
+Executable "akonadi_nepomuk_feeder" for agent "akonadi_nepomuk_feeder" could not be found!
+PLUGINS inserting:  "akonadi_akonotes_resource" 1 ("Resource", "Notes") 
+PLUGINS inserting:  "akonadi_archivemail_agent" 0 ("Unique", "Autostart") 
+PLUGINS inserting:  "akonadi_birthdays_resource" 0 ("Resource", "Unique") 
+PLUGINS inserting:  "akonadi_contacts_resource" 1 ("Resource") 
+PLUGINS inserting:  "akonadi_davgroupware_resource" 0 ("Resource", "FreeBusyProvider") 
+PLUGINS inserting:  "akonadi_facebook_resource" 0 ("Resource") 
+Executable "akonadi_folderarchive_agent" for agent "akonadi_folderarchive_agent" could not be found!
+PLUGINS inserting:  "akonadi_followupreminder_agent" 0 ("Unique", "Autostart") 
+PLUGINS inserting:  "akonadi_googlecalendar_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_googlecontacts_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_icaldir_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_ical_resource" 1 ("Resource") 
+PLUGINS inserting:  "akonadi_imap_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_invitations_agent" 0 ("NoConfig") 
+PLUGINS inserting:  "akonadi_kabc_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_kalarm_dir_resource" 0 ("Resource") 
+SearchManager: loaded search plugin "akonadi_baloo_searchplugin" 
+PLUGINS inserting:  "akonadi_kalarm_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_kcal_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_kdeaccounts_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_kolabproxy_resource" 0 ("Resource", "Unique") 
+PLUGINS inserting:  "akonadi_kolab_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_localbookmarks_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_maildir_resource" 1 ("Resource") 
+PLUGINS inserting:  "akonadi_maildispatcher_agent" 0 ("Unique", "Autostart") 
+PLUGINS inserting:  "akonadi_mailfilter_agent" 0 ("Unique", "Autostart", "NoConfig") 
+PLUGINS inserting:  "akonadi_mbox_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_migration_agent" 0 ("Unique", "Autostart") 
+QMetaProperty::read: Unable to handle unregistered datatype 'RenderStatus' for property 'Marble::MarbleWidget::renderStatus'
+PLUGINS inserting:  "akonadi_mixedmaildir_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_mailtransport_dummy_resource" 0 ("Resource", "MailTransport") 
+PLUGINS inserting:  "akonadi_newmailnotifier_agent" 0 ("Unique", "Autostart") 
+PLUGINS inserting:  "akonadi_nntp_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_notes_agent" 0 ("Unique", "Autostart") 
+PLUGINS inserting:  "akonadi_notes_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_openxchange_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_pop3_resource" 0 ("Resource", "NeedsNetwork") 
+PLUGINS inserting:  "akonadi_sendlater_agent" 0 ("Unique", "Autostart") 
+PLUGINS inserting:  "akonadi_vcarddir_resource" 0 ("Resource") 
+PLUGINS inserting:  "akonadi_vcard_resource" 0 ("Resource") 
+libpng warning: iCCP: profile 'ICC Profile': 1000000h: invalid rendering intent
+Akonadi server is now operational. 
+search paths:  ("/home/vanton/.kde4/lib64/kde4/plugins/", "/usr/lib64/kde4/plugins/", "/usr/lib64/qt4/plugins", "/usr/lib64/kde4/plugins", "/usr/bin", "/home/vanton/.kde4/lib64/kde4/", "/usr/lib64/kde4/") 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "AkonadiAgentServer_4284_1W9dtz" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "AkonadiAgentServer_4284_1W9dtz" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+search paths:  ("/home/vanton/.kde4/lib64/kde4/plugins/", "/usr/lib64/kde4/plugins/", "/usr/lib64/qt4/plugins", "/usr/lib64/kde4/plugins", "/usr/bin", "/home/vanton/.kde4/lib64/kde4/", "/usr/lib64/kde4/") 
+Database "akonadi" opened using driver "QMYSQL" 
+Database "akonadi" opened using driver "QMYSQL" 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "AkonadiAgentServer_4288_KUUZC6" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "AkonadiAgentServer_4288_KUUZC6" true false 
+search paths:  ("/home/vanton/.kde4/lib64/kde4/plugins/", "/usr/lib64/kde4/plugins/", "/usr/lib64/qt4/plugins", "/usr/lib64/kde4/plugins", "/usr/bin", "/home/vanton/.kde4/lib64/kde4/", "/usr/lib64/kde4/") 
+search paths:  ("/home/vanton/.kde4/lib64/kde4/plugins/", "/usr/lib64/kde4/plugins/", "/usr/lib64/qt4/plugins", "/usr/lib64/kde4/plugins", "/usr/bin", "/home/vanton/.kde4/lib64/kde4/", "/usr/lib64/kde4/") 
+Agent instance created in separate process. 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "AkonadiAgentServer_4291_KsgzRE" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "AkonadiAgentServer_4291_KsgzRE" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "AkonadiAgentServer_4290_vVUsax" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "AkonadiAgentServer_4290_vVUsax" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+Agent instance created in separate process. 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_notes_agent_4302_XO3gbw" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_notes_agent_4302_XO3gbw" true false 
+Agent instance created in separate process. 
+Database "akonadi" opened using driver "QMYSQL" 
+Agent instance created in separate process. 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_birthdays_resource_4287_c2qGJC" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_birthdays_resource_4287_c2qGJC" true false 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_archivemail_agent_4285_0H1IG0" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_archivemail_agent_4285_0H1IG0" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_baloo_indexer_4286_jP7z8M" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_baloo_indexer_4286_jP7z8M" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_migration_agent_4297_eelV2t" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_migration_agent_4297_eelV2t" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_maildispatcher_agent_4293_4LRLrG" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_maildispatcher_agent_4293_4LRLrG" true false 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_followupreminder_agent_4289_n8ZUgO" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_followupreminder_agent_4289_n8ZUgO" true false 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_notes_agent_4302_E2Lpmb" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_notes_agent_4302_E2Lpmb" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_newmailnotifier_agent_4298_UVw70J" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_newmailnotifier_agent_4298_UVw70J" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_sendlater_agent_4304_vSG37N" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_sendlater_agent_4304_vSG37N" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_mailfilter_agent_4295_sPZ49Q" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_mailfilter_agent_4295_sPZ49Q" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_birthdays_resource_4287_S0NXDt" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_birthdays_resource_4287_S0NXDt" true false 
+akonadi_archivemail_agent(4285)/kdepimlibs (kpimidentities) KPIMIdentities::IdentityManager::readConfig: IdentityManager: There was no default identity. Marking first one as default. 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_archivemail_agent_4285_sz5M6b" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_archivemail_agent_4285_sz5M6b" true false 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_archivemail_agent_4285_3rvP5f" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_archivemail_agent_4285_3rvP5f" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_maildispatcher_agent_4293_baTNrh" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_maildispatcher_agent_4293_baTNrh" true false 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_maildispatcher_agent_4293_qfC5Sj" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_maildispatcher_agent_4293_qfC5Sj" true false 
+akonadi_newmailnotifier_agent(4298)/kdepimlibs (kpimidentities) KPIMIdentities::IdentityManager::readConfig: IdentityManager: There was no default identity. Marking first one as default. 
+akonadi_mailfilter_agent(4295)/kdepimlibs (kpimidentities) KPIMIdentities::IdentityManager::readConfig: IdentityManager: There was no default identity. Marking first one as default. 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_mailfilter_agent_4295_1nlrkF" true 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_mailfilter_agent_4295_1nlrkF" true false 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_mailfilter_agent_4295_pKOptk" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_mailfilter_agent_4295_pKOptk" true false 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_mailfilter_agent_4295_AzTThL" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "akonadi_mailfilter_agent_4295_AzTThL" true false 
+X Error: BadWindow (invalid Window parameter) 3
+  Major opcode: 20 (X_GetProperty)
+  Resource id:  0x580009a
+ list is empty 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-excel.sheet.binary.macroEnabled.12" 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-excel.addin.macroEnabled.12" 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-powerpoint.slideshow.macroEnabled.12" 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-excel.sheet.macroEnabled.12" 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-powerpoint.presentation.macroEnabled.12" 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-word.template.macroEnabled.12" 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-excel.template.macroEnabled.12" 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-powerpoint.template.macroEnabled.12" 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-word.document.macroEnabled.12" 
+kfilemodule(2283) KMimeTypeRepository::parents: "/usr/share/mime/subclasses"  refers to unknown mimetype  "application/vnd.ms-powerpoint.slide.macroEnabled.12" 
+Database "akonadi" opened using driver "QMYSQL" 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV2(const QString&, bool) Akonadi::Server::NotificationManager(0x1643c00) "kfilemodule_2283_XKAeCm" true 
+QDBusObjectPath Akonadi::Server::NotificationManager::subscribeV3(const QString&, bool, bool) Akonadi::Server::NotificationManager(0x1643c00) "kfilemodule_2283_XKAeCm" true false 
+Database "akonadi" opened using driver "QMYSQL" 
+Error while reparenting!
+QMetaProperty::read: Unable to handle unregistered datatype 'QList<QColor>' for property 'KColorCombo::colors'
+kfilemodule(2283)/nepomuk (library): Could not find virtuoso backend 
+kfilemodule(2283)/nepomuk (library): Could not find virtuoso to connect to. Aborting 
+QMetaProperty::read: Unable to handle unregistered datatype 'SelectionBehavior' for property 'QTabBar::selectionBehaviorOnRemove'
+QMetaProperty::read: Unable to handle unregistered datatype 'KUrl' for property 'KUrlRequester::url'
+QMetaProperty::read: Unable to handle unregistered datatype 'QList<QChar>' for property 'KCharSelect::displayedChars'
+QMetaProperty::read: Unable to handle unregistered datatype 'KUrl' for property 'KUrlRequester::url'
+QMetaProperty::read: Unable to handle unregistered datatype 'RenderStatus' for property 'Marble::MarbleWidget::renderStatus'
+libpng warning: iCCP: profile 'ICC Profile': 1000000h: invalid rendering intent
+X Error: BadWindow (invalid Window parameter) 3
+  Major opcode: 20 (X_GetProperty)
+  Resource id:  0x58000e5
+X Error: BadWindow (invalid Window parameter) 3
+  Major opcode: 20 (X_GetProperty)
+  Resource id:  0x58000e5
+X Error: BadWindow (invalid Window parameter) 3
+  Major opcode: 20 (X_GetProperty)
+  Resource id:  0x4e0024d
+X Error: BadWindow (invalid Window parameter) 3
+  Major opcode: 20 (X_GetProperty)
+  Resource id:  0x4e0027e
+X Error: BadWindow (invalid Window parameter) 3
+  Major opcode: 20 (X_GetProperty)
+  Resource id:  0x4e0049a
+X Error: BadWindow (invalid Window parameter) 3
+  Major opcode: 20 (X_GetProperty)
+  Resource id:  0x580015b
+X Error: BadWindow (invalid Window parameter) 3
+  Major opcode: 20 (X_GetProperty)
+  Resource id:  0x580015b
+Could not read  "/home/vanton/Bang/src/View/ListHierarchy.h" . Error:  "Cannot open /home/vanton/Bang/src/View/ListHierarchy.h for reading: No such file or directory" 
+X Error: BadWindow (invalid Window parameter) 3
+  Major opcode: 20 (X_GetProperty)
+  Resource id:  0x4e00510
+Could not read  "/home/vanton/Bang/src/View/ListHierarchy.h" . Error:  "Cannot open /home/vanton/Bang/src/View/ListHierarchy.h for reading: No such file or directory" 
+Could not read  "/home/vanton/Bang/src/View/ListHierarchy.h" . Error:  "Cannot open /home/vanton/Bang/src/View/ListHierarchy.h for reading: No such file or directory" 
+Could not read  "/home/vanton/Bang/src/View/ListHierarchy.h" . Error:  "Cannot open /home/vanton/Bang/src/View/ListHierarchy.h for reading: No such file or directory" 
+Could not read  "/home/vanton/Bang/src/View/ListHierarchy.h" . Error:  "Cannot open /home/vanton/Bang/src/View/ListHierarchy.h for reading: No such file or directory" 
+Could not read  "/home/vanton/Bang/src/View/ListHierarchy.cpp" . Error:  "Cannot open /home/vanton/Bang/src/View/ListHierarchy.cpp for reading: No such file or directory" 
+Lost connection to resource "org.freedesktop.Akonadi.Resource.akonadi_akonotes_resource_0" , discarding cached interface 
+Application '/usr/bin/akonadi_agent_launcher' exited normally...
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "AkonadiAgentServer_4284_1W9dtz" now serving: () 
+Application '/usr/bin/akonadi_archivemail_agent' exited normally...
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_archivemail_agent_4285_3rvP5f" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_archivemail_agent_4285_sz5M6b" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_archivemail_agent_4285_0H1IG0" now serving: () 
+Application '/usr/bin/akonadi_newmailnotifier_agent' exited normally...
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_newmailnotifier_agent_4298_UVw70J" now serving: () 
+Application '/usr/bin/akonadi_mailfilter_agent' exited normally...
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_mailfilter_agent_4295_AzTThL" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_mailfilter_agent_4295_pKOptk" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_mailfilter_agent_4295_1nlrkF" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_mailfilter_agent_4295_sPZ49Q" now serving: () 
+Lost connection to resource "org.freedesktop.Akonadi.Resource.akonadi_contacts_resource_0" , discarding cached interface 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_followupreminder_agent_4289_n8ZUgO" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "AkonadiAgentServer_4288_KUUZC6" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_migration_agent_4297_eelV2t" now serving: () 
+Lost connection to resource "org.freedesktop.Akonadi.Resource.akonadi_maildir_resource_0" , discarding cached interface 
+Application '/usr/bin/akonadi_agent_launcher' exited normally...
+Application '/usr/bin/akonadi_migration_agent' exited normally...
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "AkonadiAgentServer_4291_KsgzRE" now serving: () 
+Lost connection to resource "org.freedesktop.Akonadi.Resource.akonadi_ical_resource_0" , discarding cached interface 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "AkonadiAgentServer_4290_vVUsax" now serving: () 
+Application '/usr/bin/akonadi_followupreminder_agent' exited normally...
+Application '/usr/bin/akonadi_agent_launcher' exited normally...
+Application '/usr/bin/akonadi_agent_launcher' exited normally...
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_maildispatcher_agent_4293_qfC5Sj" now serving: () 
+Lost connection to resource "org.freedesktop.Akonadi.Resource.akonadi_birthdays_resource" , discarding cached interface 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_maildispatcher_agent_4293_baTNrh" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_maildispatcher_agent_4293_4LRLrG" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_birthdays_resource_4287_S0NXDt" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_birthdays_resource_4287_c2qGJC" now serving: () 
+Application '/usr/bin/akonadi_maildispatcher_agent' exited normally...
+Application '/usr/bin/akonadi_sendlater_agent' exited normally...
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_sendlater_agent_4304_vSG37N" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_notes_agent_4302_E2Lpmb" now serving: () 
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_notes_agent_4302_XO3gbw" now serving: () 
+Application '/usr/bin/akonadi_birthdays_resource' exited normally...
+Application '/usr/bin/akonadi_notes_agent' exited normally...
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "akonadi_baloo_indexer_4286_jP7z8M" now serving: () 
+Application '/usr/bin/akonadi_baloo_indexer' exited normally...
+void Akonadi::Server::NotificationSource::serviceUnregistered(const QString&) Notification source "kfilemodule_2283_XKAeCm" now serving: () 
+Control process died, committing suicide!
+terminating service threads 
+terminating connection threads 
+stopping db process 

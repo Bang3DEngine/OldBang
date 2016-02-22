@@ -23,6 +23,7 @@
 #include <QtGui/QSplitter>
 #include <QtGui/QStatusBar>
 #include <QtGui/QTreeView>
+#include <QtGui/QTreeWidget>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 #include "Canvas.h"
@@ -56,7 +57,7 @@ public:
     QWidget *dockWidgetContents_4;
     QVBoxLayout *verticalLayout_8;
     QVBoxLayout *verticalLayout_4;
-    QTreeView *widgetTreeHierarchy_2;
+    QTreeWidget *widgetTreeHierarchy;
     QDockWidget *dockInspector;
     QWidget *dockWidgetContents_7;
     QVBoxLayout *verticalLayout_9;
@@ -143,16 +144,19 @@ public:
         verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
-        widgetTreeHierarchy_2 = new QTreeView(dockWidgetContents_4);
-        widgetTreeHierarchy_2->setObjectName(QString::fromUtf8("widgetTreeHierarchy_2"));
+        widgetTreeHierarchy = new QTreeWidget(dockWidgetContents_4);
+        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
+        __qtreewidgetitem->setText(0, QString::fromUtf8("1"));
+        widgetTreeHierarchy->setHeaderItem(__qtreewidgetitem);
+        widgetTreeHierarchy->setObjectName(QString::fromUtf8("widgetTreeHierarchy"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(widgetTreeHierarchy_2->sizePolicy().hasHeightForWidth());
-        widgetTreeHierarchy_2->setSizePolicy(sizePolicy1);
-        widgetTreeHierarchy_2->setAcceptDrops(true);
+        sizePolicy1.setHeightForWidth(widgetTreeHierarchy->sizePolicy().hasHeightForWidth());
+        widgetTreeHierarchy->setSizePolicy(sizePolicy1);
+        widgetTreeHierarchy->setAcceptDrops(true);
 
-        verticalLayout_4->addWidget(widgetTreeHierarchy_2);
+        verticalLayout_4->addWidget(widgetTreeHierarchy);
 
 
         verticalLayout_8->addLayout(verticalLayout_4);

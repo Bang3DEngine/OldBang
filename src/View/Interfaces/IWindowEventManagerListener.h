@@ -8,7 +8,7 @@ protected:
     IWindowEventManagerListener();
 
 public:
-    virtual void OnMenuBarItemClicked(int itemClicked) = 0;
+    virtual void OnMenuBarItemClicked(int itemClicked) { };
 };
 
 #endif // IWINDOWEVENTMANAGERLISTENER_H

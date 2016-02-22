@@ -115,7 +115,8 @@ HEADERS += \
     src/Domain/Engine/Assets/Prefab.h \
     $$files(res/Assets/UserBehaviours/*.h,true) \
     src/View/WindowEventManager.h \
-    src/View/Interfaces/IWindowEventManagerListener.h
+    src/View/Interfaces/IWindowEventManagerListener.h \
+    src/View/TreeHierarchy.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -158,7 +159,8 @@ SOURCES += \
     $$files(res/Assets/UserBehaviours/*.cpp,true) \
     src/View/WindowMain.cpp \
     src/View/WindowEventManager.cpp \
-    src/View/Interfaces/IWindowEventManagerListener.cpp
+    src/View/Interfaces/IWindowEventManagerListener.cpp \
+    src/View/TreeHierarchy.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro
