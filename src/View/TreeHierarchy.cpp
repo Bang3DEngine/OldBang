@@ -11,6 +11,15 @@ TreeHierarchy::~TreeHierarchy()
     this->clear();
 }
 
+void TreeHierarchy::ExpandRecursiveUpwards(QTreeWidgetItem *item)
+{
+    if(item != nullptr)
+    {
+        item->setExpanded(true);
+        ExpandRecursiveUpwards(item->parent());
+    }
+}
+
 QTreeWidgetItem* TreeHierarchy::FillRecursive(Entity *e)
 {
     const std::list<Entity*> *children = e->GetChildren();
@@ -41,6 +50,7 @@ void TreeHierarchy::OnChildAdded(Entity *child)
     if(entityToTreeItem.find(parent) != entityToTreeItem.end())
     {
         entityToTreeItem[parent]->addChild( FillRecursive(child) );
+        ExpandRecursiveUpwards(entityToTreeItem[parent]);
     }
     else
     {

@@ -155,11 +155,12 @@ void Canvas::OnTopKekPressed()
 
     Entity *e = p->Instantiate();
 
-    if(currentStage->GetChild("pyramid") != nullptr)
-    {
-        currentStage->GetChild("pyramid")->AddChild(e);
+    static Entity *lastAddedChild = nullptr;
+    if(lastAddedChild == nullptr) currentStage->AddChild(e);
+    else {
+        lastAddedChild->AddChild(e);
     }
-    else currentStage->AddChild(e);
+    lastAddedChild = e;
 
     static int a = 0;
     Logger_Log(++a);

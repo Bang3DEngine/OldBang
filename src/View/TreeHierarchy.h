@@ -23,6 +23,7 @@ private:
     //in order to update :)
     std::map<Entity*, QTreeWidgetItem*> entityToTreeItem;
 
+    void ExpandRecursiveUpwards(QTreeWidgetItem *item);
     QTreeWidgetItem* FillRecursive(Entity *e);
 
 public:
