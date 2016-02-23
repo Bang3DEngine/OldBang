@@ -15,6 +15,7 @@
 #include <QMenu>
 #include <QTreeWidget>
 #include <QApplication>
+#include <QDropEvent>
 
 #include "Stage.h"
 #include "Entity.h"
@@ -27,11 +28,15 @@ class TreeHierarchy : public QTreeWidget, public IWindowEventManagerListener
 private:
     //For every entity, we have the associated treeItem,
     //in order to update :)
-    std::map<Entity*, QTreeWidgetItem*> entityToTreeItem;
-    std::map<QTreeWidgetItem*,Entity*> treeItemToEntity;
+    mutable std::map<Entity*, QTreeWidgetItem*> entityToTreeItem;
+    mutable std::map<QTreeWidgetItem*,Entity*> treeItemToEntity;
 
     void ExpandRecursiveUpwards(QTreeWidgetItem *item);
-    QTreeWidgetItem* FillRecursive(Entity *e);
+    QTreeWidgetItem* FillRecursiveDownwards(Entity *e);
+
+    //Useful for example, for RemoveChild
+    //(we just need to remove the parent/s of all the selected entities)
+    void LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items);
 
     void UnselectAll();
 
@@ -39,10 +44,15 @@ public:
     explicit TreeHierarchy(QWidget *parent = 0);
     virtual ~TreeHierarchy();
 
-    void Fill(Stage *currentStage);
+    void FillDownwards(Stage *currentStage);
+
+    Entity* GetFirstSelectedEntity() const;
 
     void OnChildAdded(Entity *child) override;
+    void OnChildChangedParent(Entity *child, Entity *previousParent) override;
     void OnChildRemoved(Entity *child) override;
+
+    void dropEvent(QDropEvent *event);
 
 public slots:
 

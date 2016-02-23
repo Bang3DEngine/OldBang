@@ -45,6 +45,7 @@ public:
 
     void AddChild(Entity *child);
     Entity* GetChild(const std::string &name) const;
+    void MoveChild(Entity *child, Entity *newParent);
     void RemoveChild(const std::string &name);
     void RemoveChild(Entity *child);
 

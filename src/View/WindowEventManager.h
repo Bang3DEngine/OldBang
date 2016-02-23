@@ -41,6 +41,7 @@ public:
 public slots:
 
     static void NotifyChildAdded(Entity *child);
+    static void NotifyChildChangedParent(Entity *child, Entity *previousParent);
     static void NotifyChildRemoved(Entity *child);
 
     static void NotifyMenuBarItemClicked(int itemClcked);

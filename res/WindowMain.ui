@@ -124,7 +124,7 @@
           <enum>QAbstractItemView::DragDrop</enum>
          </property>
          <property name="defaultDropAction">
-          <enum>Qt::IgnoreAction</enum>
+          <enum>Qt::MoveAction</enum>
          </property>
          <property name="alternatingRowColors">
           <bool>false</bool>
@@ -152,6 +152,61 @@
            <string notr="true">1</string>
           </property>
          </column>
+         <item>
+          <property name="text">
+           <string>aaaaaa</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>bbbbbb</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>cccccc</string>
+            </property>
+           </item>
+          </item>
+          <item>
+           <property name="text">
+            <string>dddddd</string>
+           </property>
+          </item>
+         </item>
+         <item>
+          <property name="text">
+           <string>xxxxxxxx</string>
+          </property>
+          <item>
+           <property name="text">
+            <string>wwwwwwwwwwwww</string>
+           </property>
+           <item>
+            <property name="text">
+             <string>eeeeeeeeeeeeeee</string>
+            </property>
+            <item>
+             <property name="text">
+              <string>rrrrrrrrrrrrrrrrrr</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>wwwwwwww</string>
+             </property>
+            </item>
+           </item>
+           <item>
+            <property name="text">
+             <string>qqqqqqqqqqqq</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>qqqqqqqqqqqqqssssssssssssss</string>
+            </property>
+           </item>
+          </item>
+         </item>
         </widget>
        </item>
       </layout>
@@ -194,7 +249,7 @@
        <item>
         <widget class="QLabel" name="labelInspectorEntityName">
          <property name="text">
-          <string>TextLabel</string>
+          <string>Entity Name</string>
          </property>
         </widget>
        </item>

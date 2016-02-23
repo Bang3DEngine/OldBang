@@ -22,19 +22,52 @@ void TreeHierarchy::ExpandRecursiveUpwards(QTreeWidgetItem *item)
     }
 }
 
-QTreeWidgetItem* TreeHierarchy::FillRecursive(Entity *e)
+QTreeWidgetItem* TreeHierarchy::FillRecursiveDownwards(Entity *e)
 {
     const std::list<Entity*> *children = e->GetChildren();
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
     eRoot->setText(0, QString::fromStdString(e->GetName()) );
     for(auto it = children->begin(); it != children->end(); ++it)
     {
-        eRoot->addChild( FillRecursive( (*it) ) );
+        eRoot->addChild( FillRecursiveDownwards( (*it) ) );
     }
 
     entityToTreeItem[e] = eRoot;
     treeItemToEntity[eRoot] = e;
     return eRoot;
+}
+
+void TreeHierarchy::LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items)
+{
+    //For each item, it will be a top level item,
+    //if non of the selected items is its parent
+    std::list<QTreeWidgetItem*> result;
+    for(auto it = items->begin(); it != items->end(); ++it)
+    {
+        QTreeWidgetItem *parent = (*it)->parent();
+        if(parent != nullptr)
+        {
+            bool hasItsParentInTheList = false;
+            for(auto it2 = items->begin(); it2 != items->end(); ++it2)
+            {
+                if(parent == (*it2))
+                {
+                    hasItsParentInTheList = true;
+                    break;
+                }
+            }
+
+            if(!hasItsParentInTheList)
+            {
+                result.push_back((*it));
+            }
+        }
+        else
+        {
+            it = items->erase(it);
+        }
+    }
+    *items = result;
 }
 
 void TreeHierarchy::UnselectAll()
@@ -45,7 +78,7 @@ void TreeHierarchy::UnselectAll()
     }
 }
 
-void TreeHierarchy::Fill(Stage *currentStage)
+void TreeHierarchy::FillDownwards(Stage *currentStage)
 {
     if(currentStage == nullptr) return;
 
@@ -53,16 +86,23 @@ void TreeHierarchy::Fill(Stage *currentStage)
     treeItemToEntity.clear();
     this->clear();
 
-    this->addTopLevelItem( FillRecursive(currentStage) );
+    this->addTopLevelItem( FillRecursiveDownwards(currentStage) );
+}
+
+Entity *TreeHierarchy::GetFirstSelectedEntity() const
+{
+    if(!selectedItems().empty()) return treeItemToEntity[selectedItems().at(0)];
+    return nullptr;
 }
 
 
 void TreeHierarchy::OnChildAdded(Entity *child)
 {
     Entity *parent = child->GetParent();
+    Logger_Log("Child added: " << child << " to " << parent);
     if(entityToTreeItem.find(parent) != entityToTreeItem.end())
     {
-        entityToTreeItem[parent]->addChild( FillRecursive(child) );
+        entityToTreeItem[parent]->addChild( FillRecursiveDownwards(child) );
 
         ExpandRecursiveUpwards(entityToTreeItem[parent]);
 
@@ -72,12 +112,17 @@ void TreeHierarchy::OnChildAdded(Entity *child)
     }
     else
     {
-        Fill(child->GetStage()); //if the parent isnt found, just redo all the hierarchy
+        FillDownwards(child->GetStage()); //if the parent isnt found, just redo all the hierarchy
     }
+}
+
+void TreeHierarchy::OnChildChangedParent(Entity *child, Entity *previousParent)
+{
 }
 
 void TreeHierarchy::OnChildRemoved(Entity *child)
 {
+    Logger_Log("Child removed: " << child);
     QTreeWidgetItem *item = entityToTreeItem[child];
     if(item != nullptr)
     {
@@ -85,6 +130,40 @@ void TreeHierarchy::OnChildRemoved(Entity *child)
         treeItemToEntity.erase(item);
         entityToTreeItem.erase(child);
     }
+}
+
+void TreeHierarchy::dropEvent(QDropEvent *event)
+{
+    std::list<QTreeWidgetItem*> sourceItems = selectedItems().toStdList();
+    LeaveOnlyTopLevelItems(&sourceItems);
+
+    QTreeWidgetItem *targetItem = itemAt(event->pos());
+    if(targetItem != nullptr && !sourceItems.empty())
+    {
+        DropIndicatorPosition dropPos = dropIndicatorPosition();
+        if (dropPos == BelowItem) targetItem = itemBelow(targetItem);
+
+        Entity *target = treeItemToEntity[targetItem];
+        for(auto it = sourceItems.begin(); it != sourceItems.end(); ++it)
+        {
+            if((*it) != targetItem)
+            {
+                QTreeWidgetItem *sourceItem = (*it);
+
+                Entity *source = treeItemToEntity[sourceItem];
+                if( !source->IsStage() )
+                {
+                    if(source->GetParent() != nullptr)
+                        source->GetParent()->MoveChild(source, target);
+                    else
+                        source->SetParent(target);
+                }
+            }
+        }
+    }
+
+    QTreeWidget::dropEvent(event); //super
+    event->acceptProposedAction();
 }
 
 void TreeHierarchy::OnContextMenuCreateEmptyClicked()
@@ -101,7 +180,9 @@ void TreeHierarchy::OnContextMenuCreateEmptyClicked()
 
 void TreeHierarchy::OnContextMenuDeleteClicked()
 {
-    foreach(QTreeWidgetItem *item, selectedItems())
+    std::list<QTreeWidgetItem*> items = selectedItems().toStdList();
+    LeaveOnlyTopLevelItems(&items);
+    foreach(QTreeWidgetItem *item, items)
     {
         Entity *selected = treeItemToEntity[item];
         if(selected->GetParent() != nullptr)

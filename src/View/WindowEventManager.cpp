@@ -30,6 +30,11 @@ void WindowEventManager::NotifyChildAdded(Entity *child)
     PROPAGATE_EVENT_PAR(OnChildAdded(child), wem->listeners);
 }
 
+void WindowEventManager::NotifyChildChangedParent(Entity *child, Entity *previousParent)
+{
+    PROPAGATE_EVENT_PAR(OnChildChangedParent(child, previousParent), wem->listeners);
+}
+
 void WindowEventManager::NotifyChildRemoved(Entity *child)
 {
     PROPAGATE_EVENT_PAR(OnChildRemoved(child), wem->listeners);

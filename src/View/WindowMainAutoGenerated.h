@@ -151,6 +151,17 @@ public:
         QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
         __qtreewidgetitem->setText(0, QString::fromUtf8("1"));
         widgetTreeHierarchy->setHeaderItem(__qtreewidgetitem);
+        QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem(widgetTreeHierarchy);
+        QTreeWidgetItem *__qtreewidgetitem2 = new QTreeWidgetItem(__qtreewidgetitem1);
+        new QTreeWidgetItem(__qtreewidgetitem2);
+        new QTreeWidgetItem(__qtreewidgetitem1);
+        QTreeWidgetItem *__qtreewidgetitem3 = new QTreeWidgetItem(widgetTreeHierarchy);
+        QTreeWidgetItem *__qtreewidgetitem4 = new QTreeWidgetItem(__qtreewidgetitem3);
+        QTreeWidgetItem *__qtreewidgetitem5 = new QTreeWidgetItem(__qtreewidgetitem4);
+        new QTreeWidgetItem(__qtreewidgetitem5);
+        new QTreeWidgetItem(__qtreewidgetitem5);
+        new QTreeWidgetItem(__qtreewidgetitem4);
+        new QTreeWidgetItem(__qtreewidgetitem4);
         widgetTreeHierarchy->setObjectName(QString::fromUtf8("widgetTreeHierarchy"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy1.setHorizontalStretch(0);
@@ -161,7 +172,7 @@ public:
         widgetTreeHierarchy->setAcceptDrops(true);
         widgetTreeHierarchy->setDragEnabled(true);
         widgetTreeHierarchy->setDragDropMode(QAbstractItemView::DragDrop);
-        widgetTreeHierarchy->setDefaultDropAction(Qt::IgnoreAction);
+        widgetTreeHierarchy->setDefaultDropAction(Qt::MoveAction);
         widgetTreeHierarchy->setAlternatingRowColors(false);
         widgetTreeHierarchy->setSelectionMode(QAbstractItemView::ExtendedSelection);
         widgetTreeHierarchy->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -285,8 +296,35 @@ public:
         menuEntity->setTitle(QApplication::translate("WindowMain", "Entities", 0, QApplication::UnicodeUTF8));
         menuProject->setTitle(QApplication::translate("WindowMain", "Project", 0, QApplication::UnicodeUTF8));
         dockHierarchy->setWindowTitle(QApplication::translate("WindowMain", "Hierarchy", 0, QApplication::UnicodeUTF8));
+
+        const bool __sortingEnabled = widgetTreeHierarchy->isSortingEnabled();
+        widgetTreeHierarchy->setSortingEnabled(false);
+        QTreeWidgetItem *___qtreewidgetitem = widgetTreeHierarchy->topLevelItem(0);
+        ___qtreewidgetitem->setText(0, QApplication::translate("WindowMain", "aaaaaa", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem1 = ___qtreewidgetitem->child(0);
+        ___qtreewidgetitem1->setText(0, QApplication::translate("WindowMain", "bbbbbb", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem2 = ___qtreewidgetitem1->child(0);
+        ___qtreewidgetitem2->setText(0, QApplication::translate("WindowMain", "cccccc", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem3 = ___qtreewidgetitem->child(1);
+        ___qtreewidgetitem3->setText(0, QApplication::translate("WindowMain", "dddddd", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem4 = widgetTreeHierarchy->topLevelItem(1);
+        ___qtreewidgetitem4->setText(0, QApplication::translate("WindowMain", "xxxxxxxx", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem5 = ___qtreewidgetitem4->child(0);
+        ___qtreewidgetitem5->setText(0, QApplication::translate("WindowMain", "wwwwwwwwwwwww", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem6 = ___qtreewidgetitem5->child(0);
+        ___qtreewidgetitem6->setText(0, QApplication::translate("WindowMain", "eeeeeeeeeeeeeee", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem7 = ___qtreewidgetitem6->child(0);
+        ___qtreewidgetitem7->setText(0, QApplication::translate("WindowMain", "rrrrrrrrrrrrrrrrrr", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem8 = ___qtreewidgetitem6->child(1);
+        ___qtreewidgetitem8->setText(0, QApplication::translate("WindowMain", "wwwwwwww", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem9 = ___qtreewidgetitem5->child(1);
+        ___qtreewidgetitem9->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqq", 0, QApplication::UnicodeUTF8));
+        QTreeWidgetItem *___qtreewidgetitem10 = ___qtreewidgetitem5->child(2);
+        ___qtreewidgetitem10->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqqqssssssssssssss", 0, QApplication::UnicodeUTF8));
+        widgetTreeHierarchy->setSortingEnabled(__sortingEnabled);
+
         dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0, QApplication::UnicodeUTF8));
-        labelInspectorEntityName->setText(QApplication::translate("WindowMain", "TextLabel", 0, QApplication::UnicodeUTF8));
+        labelInspectorEntityName->setText(QApplication::translate("WindowMain", "Entity Name", 0, QApplication::UnicodeUTF8));
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));
         buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

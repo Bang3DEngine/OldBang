@@ -65,6 +65,20 @@ Entity *Entity::GetChild(const std::string &name) const
     return nullptr;
 }
 
+void Entity::MoveChild(Entity *child, Entity *newParent)
+{
+    for(auto it = children.begin(); it != children.end(); ++it)
+    {
+        Entity *c = (*it);
+        if(c == child)
+        {
+            RemoveChild(it);
+            newParent->AddChild(child);
+            break;
+        }
+    }
+}
+
 void Entity::RemoveChild(std::list<Entity*>::iterator &it)
 {
     Entity *child = (*it);
@@ -105,11 +119,26 @@ void Entity::RemoveChild(Entity *child)
 
 void Entity::SetParent(Entity *newParent)
 {
+    Entity *previousParent = parent;
     if(parent != nullptr)
-        parent->RemoveChild(name);
+    {
+        if(newParent != nullptr)
+        {
+            parent->MoveChild(this, newParent);
+        }
+        else
+        {
+            Stage *st = GetStage();
+            if(st != nullptr)
+            {
+                parent->MoveChild(this, newParent);
+            }
+        }
+    }
 
-    if(newParent != nullptr)
-        newParent->AddChild(this);
+    #ifdef BANG_EDITOR
+    WindowEventManager::NotifyChildChangedParent(this, previousParent);
+    #endif
 }
 
 void Entity::SetName(const std::string &name)
