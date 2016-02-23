@@ -1,6 +1,8 @@
 ﻿#ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include "Bang.h"
+
 #include <vector>
 
 #include "Asset.h"

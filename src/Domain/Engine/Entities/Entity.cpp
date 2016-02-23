@@ -48,7 +48,7 @@ void Entity::AddChild(Entity *child)
     child->parent = this;
     children.push_back(child);
 
-    #ifdef EDITOR
+    #ifdef BANG_EDITOR
     WindowEventManager::NotifyChildAdded(child);
     #endif
 }
@@ -72,7 +72,7 @@ void Entity::RemoveChild(std::list<Entity*>::iterator &it)
     child->parent = nullptr;
     children.erase(it);
 
-    #ifdef EDITOR
+    #ifdef BANG_EDITOR
     WindowEventManager::NotifyChildRemoved(child);
     #endif
 }

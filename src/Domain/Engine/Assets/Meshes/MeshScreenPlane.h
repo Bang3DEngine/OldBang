@@ -1,6 +1,8 @@
 #ifndef MESHSCREENPLANE_H
 #define MESHSCREENPLANE_H
 
+#include "Bang.h"
+
 #include "Mesh.h"
 
 class MeshScreenPlane : public Mesh

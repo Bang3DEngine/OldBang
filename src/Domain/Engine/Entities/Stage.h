@@ -1,6 +1,8 @@
 #ifndef STAGE_H
 #define STAGE_H
 
+#include "Bang.h"
+
 #include <list>
 #include <string>
 

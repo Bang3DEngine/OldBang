@@ -1,6 +1,8 @@
 #ifndef LOGGER_H
 #define LOGGER_H
 
+#include "Bang.h"
+
 #include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glu.h>

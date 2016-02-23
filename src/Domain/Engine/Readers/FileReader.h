@@ -1,6 +1,8 @@
 #ifndef FILEREADER_H
 #define FILEREADER_H
 
+#include "Bang.h"
+
 #include <map>
 #include <vector>
 #include <string>

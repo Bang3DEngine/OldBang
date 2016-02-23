@@ -1,6 +1,8 @@
 #ifndef READERWITHPOINTERIDS_H
 #define READERWITHPOINTERIDS_H
 
+#include "Bang.h"
+
 #include <map>
 #include <string>
 

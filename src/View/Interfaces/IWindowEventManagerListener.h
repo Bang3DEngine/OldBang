@@ -1,6 +1,8 @@
 #ifndef IWINDOWEVENTMANAGERLISTENER_H
 #define IWINDOWEVENTMANAGERLISTENER_H
 
+#include "Bang.h"
+
 class Entity;
 class IWindowEventManagerListener
 {

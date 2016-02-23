@@ -1,6 +1,8 @@
 #ifndef IFILEABLE_H
 #define IFILEABLE_H
 
+#include "Bang.h"
+
 #include <istream>
 #include <ostream>
 #include <sstream>

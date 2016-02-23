@@ -1,6 +1,8 @@
 #ifndef GBUFFER_H
 #define GBUFFER_H
 
+#include "Bang.h"
+
 #include "Material.h"
 #include "MeshScreenPlane.h"
 #include "Framebuffer.h"

@@ -1,6 +1,8 @@
 #ifndef RECT_H
 #define RECT_H
 
+#include "Bang.h"
+
 #include "IToString.h"
 
 class Rect : public IToString

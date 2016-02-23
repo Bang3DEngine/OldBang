@@ -1,6 +1,8 @@
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
 
+#include "Bang.h"
+
 #include "Shader.h"
 #include "Texture.h"
 #include "IFileable.h"

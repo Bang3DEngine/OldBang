@@ -1,6 +1,8 @@
 #ifndef ASSET_H
 #define ASSET_H
 
+#include "Bang.h"
+
 #include <string>
 
 #include "FileReader.h"

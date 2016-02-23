@@ -1,6 +1,8 @@
 #ifndef TREEHIERARCHY_H
 #define TREEHIERARCHY_H
 
+#include "Bang.h"
+
 #include <GL/glew.h>
 
 #include <map>

@@ -1,6 +1,8 @@
 #ifndef MESHPLANE_H
 #define MESHPLANE_H
 
+#include "Bang.h"
+
 #include "Mesh.h"
 
 class MeshPlane : public Mesh

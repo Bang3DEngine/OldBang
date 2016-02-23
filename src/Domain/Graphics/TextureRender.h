@@ -1,6 +1,8 @@
 #ifndef TEXTURERENDER_H
 #define TEXTURERENDER_H
 
+#include "Bang.h"
+
 #include "Texture.h"
 
 class TextureRender : public Texture

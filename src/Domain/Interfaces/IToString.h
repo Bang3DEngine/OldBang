@@ -1,6 +1,8 @@
 #ifndef ITOSTRING_H
 #define ITOSTRING_H
 
+#include "Bang.h"
+
 #include <iostream>
 #include <sstream>
 #include <string>

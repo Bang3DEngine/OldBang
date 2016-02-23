@@ -1,6 +1,8 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include "Bang.h"
+
 #include <GL/glew.h>
 
 #include "glm/glm.hpp"

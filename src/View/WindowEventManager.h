@@ -1,6 +1,8 @@
 #ifndef WINDOWEVENTMANAGER_H
 #define WINDOWEVENTMANAGER_H
 
+#include "Bang.h"
+
 #include <GL/glew.h>
 
 #include <vector>

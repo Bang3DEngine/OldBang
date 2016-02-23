@@ -1,6 +1,8 @@
 #ifndef VBO_H
 #define VBO_H
 
+#include "Bang.h"
+
 #include <GL/glew.h>
 
 #include "IGLIdable.h"

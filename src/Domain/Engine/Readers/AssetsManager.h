@@ -1,6 +1,8 @@
 #ifndef ASSETSMANAGER_H
 #define ASSETSMANAGER_H
 
+#include "Bang.h"
+
 #include <string>
 #include <map>
 

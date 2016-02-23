@@ -1,6 +1,8 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
+#include "Bang.h"
+
 #include <string>
 #include <sstream>
 #include <ostream>

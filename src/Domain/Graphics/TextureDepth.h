@@ -1,6 +1,8 @@
 #ifndef TEXTUREDEPTH_H
 #define TEXTUREDEPTH_H
 
+#include "Bang.h"
+
 #include "Texture.h"
 
 class TextureDepth : public Texture

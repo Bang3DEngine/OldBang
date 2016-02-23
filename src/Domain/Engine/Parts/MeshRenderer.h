@@ -1,6 +1,8 @@
 #ifndef MESHRENDERER_H
 #define MESHRENDERER_H
 
+#include "Bang.h"
+
 #include <glm/gtx/string_cast.hpp>
 
 #include "VAO.h"

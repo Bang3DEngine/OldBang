@@ -1,6 +1,8 @@
 #ifndef MESHPYRAMID_H
 #define MESHPYRAMID_H
 
+#include "Bang.h"
+
 #include <vector>
 #include "Mesh.h"
 

@@ -1,6 +1,8 @@
 #ifndef ISTAGEEVENTLISTENER_H
 #define ISTAGEEVENTLISTENER_H
 
+#include "Bang.h"
+
 #include <list>
 #include <algorithm>
 #include <functional>

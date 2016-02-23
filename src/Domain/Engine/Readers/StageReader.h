@@ -1,6 +1,8 @@
 ﻿#ifndef STAGEREADER_H
 #define STAGEREADER_H
 
+#include "Bang.h"
+
 #include <istream>
 #include <sstream>
 #include <functional>

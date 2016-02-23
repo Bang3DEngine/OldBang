@@ -117,7 +117,8 @@ HEADERS += \
     src/View/WindowEventManager.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/View/TreeHierarchy.h \
-    src/View/ListInspector.h
+    src/View/ListInspector.h \
+    src/Bang.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \

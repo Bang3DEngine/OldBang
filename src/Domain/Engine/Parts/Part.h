@@ -1,6 +1,8 @@
 #ifndef PART_H
 #define PART_H
 
+#include "Bang.h"
+
 #include "Logger.h"
 #include "IFileable.h"
 #include "IToString.h"

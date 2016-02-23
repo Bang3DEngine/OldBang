@@ -1,6 +1,8 @@
 #ifndef BANGFAB_H
 #define BANGFAB_H
 
+#include "Bang.h"
+
 #include <string>
 
 #include "Entity.h"

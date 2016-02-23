@@ -1,6 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "Bang.h"
+
 #include <list>
 #include <string>
 #include <iostream>
@@ -9,7 +11,6 @@
 #include "IFileable.h"
 #include "IToString.h"
 #include "IStageEventListener.h"
-#define EDITOR
 
 class Part;
 class Stage;

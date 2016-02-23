@@ -1,5 +1,3 @@
-#define EDITOR
-
 #include <vector>
 #include <string>
 #include <iostream>
@@ -7,6 +5,7 @@
 
 #include "glm/glm.hpp"
 
+#include "Bang.h"
 #include "ShaderProgram.h"
 #include "MeshRenderer.h"
 #include "MeshPyramid.h"

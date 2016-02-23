@@ -1,6 +1,8 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
+#include "Bang.h"
+
 #include <vector>
 
 #include "Logger.h"

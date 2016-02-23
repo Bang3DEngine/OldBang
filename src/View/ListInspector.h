@@ -1,6 +1,8 @@
 #ifndef LISTINSPECTOR_H
 #define LISTINSPECTOR_H
 
+#include "Bang.h"
+
 #include <QLabel>
 #include <QListWidget>
 

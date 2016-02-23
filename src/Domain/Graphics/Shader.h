@@ -1,6 +1,8 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+#include "Bang.h"
+
 #include <GL/glew.h>
 
 #include <vector>
