@@ -12,7 +12,6 @@
     }\
 } while(0)
 
-
 class IStageEventListener
 {
 protected:

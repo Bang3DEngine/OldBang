@@ -2,6 +2,7 @@
 #include "Stage.h"
 #include "Part.h"
 #include "StageReader.h"
+#include "WindowEventManager.h"
 
 Entity::Entity() : Entity("")
 {
@@ -17,8 +18,11 @@ Entity::~Entity()
 }
 
 
-Stage *Entity::GetStage() const
+Stage *Entity::GetStage()
 {
+    Stage *thisSt = dynamic_cast<Stage*>(this);
+    if(thisSt != nullptr) return thisSt;
+
     if(parent != nullptr)
     {
         Stage *st = dynamic_cast<Stage*>(parent);
@@ -43,6 +47,8 @@ void Entity::AddChild(Entity *child)
 {
     child->parent = this;
     children.push_back(child);
+
+    WindowEventManager::NotifyChildAdded(child);
 }
 
 Entity *Entity::GetChild(const std::string &name) const

@@ -94,13 +94,7 @@ void Canvas::SetCurrentStage(const std::string &name)
                 currentStage = (*it);
                 currentStage->_OnStart();
 
-                //Init hierarchy
-                QTreeWidgetItem *treeRoot = new QTreeWidgetItem();
-                treeRoot->setText(0, "Stage");
-                treeRoot->addChild(new QTreeWidgetItem({"Hola"}));
-                treeRoot->addChild(new QTreeWidgetItem({"Adios"}));
-                win->widgetTreeHierarchy->addTopLevelItem(treeRoot);
-                //
+                WindowMain::GetInstance()->widgetTreeHierarchy->Fill(currentStage);
             }
             return;
         }
@@ -160,7 +154,12 @@ void Canvas::OnTopKekPressed()
         p = AssetsManager::GetAsset<Prefab>("res/Assets/luigiPrefab.asset");
 
     Entity *e = p->Instantiate();
-    currentStage->AddChild(e);
+
+    if(currentStage->GetChild("pyramid") != nullptr)
+    {
+        currentStage->GetChild("pyramid")->AddChild(e);
+    }
+    else currentStage->AddChild(e);
 
     static int a = 0;
     Logger_Log(++a);

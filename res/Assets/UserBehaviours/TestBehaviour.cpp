@@ -51,7 +51,7 @@ void TestBehaviour::OnUpdate()
     time += Time::GetDeltaTime();
     Transform *t = GetOwner()->GetPart<Transform>();
     t->SetRotation(glm::angleAxis(1.0f * Time::GetDeltaTime(), randomAxis) * t->GetRotation());
-    t->SetScale(glm::vec3(originalScale) * (float(sin(time)) * 0.5f + 0.5f + 0.2f));
+    //t->SetScale(glm::vec3(originalScale) * (float(sin(time)) * 0.5f + 0.5f + 0.2f));
 }
 
 void TestBehaviour::OnDestroy()

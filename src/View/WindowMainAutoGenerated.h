@@ -23,10 +23,10 @@
 #include <QtGui/QSplitter>
 #include <QtGui/QStatusBar>
 #include <QtGui/QTreeView>
-#include <QtGui/QTreeWidget>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 #include "Canvas.h"
+#include "TreeHierarchy.h"
 #include "WindowEventManager.h"
 
 QT_BEGIN_NAMESPACE
@@ -57,7 +57,7 @@ public:
     QWidget *dockWidgetContents_4;
     QVBoxLayout *verticalLayout_8;
     QVBoxLayout *verticalLayout_4;
-    QTreeWidget *widgetTreeHierarchy;
+    TreeHierarchy *widgetTreeHierarchy;
     QDockWidget *dockInspector;
     QWidget *dockWidgetContents_7;
     QVBoxLayout *verticalLayout_9;
@@ -75,7 +75,7 @@ public:
     {
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
-        WindowMain->resize(966, 671);
+        WindowMain->resize(484, 453);
         actionOpen_project = new QAction(WindowMain);
         actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
@@ -120,7 +120,7 @@ public:
         WindowMain->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 966, 32));
+        menubar->setGeometry(QRect(0, 0, 484, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -144,7 +144,7 @@ public:
         verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
-        widgetTreeHierarchy = new QTreeWidget(dockWidgetContents_4);
+        widgetTreeHierarchy = new TreeHierarchy(dockWidgetContents_4);
         QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
         __qtreewidgetitem->setText(0, QString::fromUtf8("1"));
         widgetTreeHierarchy->setHeaderItem(__qtreewidgetitem);

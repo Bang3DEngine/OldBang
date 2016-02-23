@@ -97,7 +97,7 @@ void Framebuffer::CheckFramebufferError() const
 {
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
-        Logger_Error("There was an error when creating Depth attachment for a Framebuffer.");
+        Logger_Error("There was an error when creating an attachment for a Framebuffer.");
     }
 }
 

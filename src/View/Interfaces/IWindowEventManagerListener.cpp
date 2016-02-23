@@ -6,3 +6,4 @@ IWindowEventManagerListener::IWindowEventManagerListener()
 {
     WindowEventManager::GetInstance()->AddListener(this);
 }
+

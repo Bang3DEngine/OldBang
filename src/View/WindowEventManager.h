@@ -12,6 +12,14 @@
 
 #include "IWindowEventManagerListener.h"
 
+#define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
+    for(auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
+    {\
+        (*it)->FUNCTION; \
+    }\
+} while(0)
+
+class Entity;
 class WindowEventManager : public QGLWidget
 {
     Q_OBJECT
@@ -29,8 +37,10 @@ public:
 
 public slots:
 
-    static void OnMenuBarItemClicked(int itemClcked);
-    void _OnMenuBarItemClicked(int itemClicked);
+    static void NotifyChildAdded(Entity *child);
+
+    static void NotifyMenuBarItemClicked(int itemClcked);
+    void _NotifyMenuBarItemClicked(int itemClicked);
 };
 
 #endif // WINDOWEVENTMANAGER_H

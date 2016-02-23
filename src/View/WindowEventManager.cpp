@@ -1,5 +1,6 @@
 #include "WindowEventManager.h"
 
+#include "Entity.h"
 #include "WindowMain.h"
 
 WindowEventManager *WindowEventManager::wem = nullptr;
@@ -24,18 +25,19 @@ WindowEventManager *WindowEventManager::GetInstance()
     return wem;
 }
 
-void WindowEventManager::OnMenuBarItemClicked(int itemClicked)
+void WindowEventManager::NotifyChildAdded(Entity *child)
 {
-    Logger_Log("Menu bar item clicked: " << itemClicked);
-    for(IWindowEventManagerListener *listener : wem->listeners)
-    {
-        listener->OnMenuBarItemClicked(itemClicked);
-    }
+    PROPAGATE_EVENT_PAR(OnChildAdded(child), wem->listeners);
 }
 
-void WindowEventManager::_OnMenuBarItemClicked(int itemClicked)
+void WindowEventManager::NotifyMenuBarItemClicked(int itemClicked)
 {
-    OnMenuBarItemClicked(itemClicked);
+    PROPAGATE_EVENT_PAR(OnMenuBarItemClicked(itemClicked), wem->listeners);
+}
+
+void WindowEventManager::_NotifyMenuBarItemClicked(int itemClicked)
+{
+    WindowEventManager::NotifyMenuBarItemClicked(itemClicked);
 }
 
 

@@ -46,7 +46,7 @@ public:
 
     const std::string ToString() const;
 
-    Stage* GetStage() const;
+    Stage* GetStage();
     Entity* GetParent() const;
     const std::string GetName() const { return name; }
     const std::list<Part*>* GetParts() const { return &parts; }
