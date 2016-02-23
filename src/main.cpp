@@ -34,10 +34,7 @@ int main(int argc, char *argv[])
     Stage *stage = new Stage();
     StageReader::ReadStage("res/Stages/stageTest1.stage", stage);
     windowMain->canvas->AddStage(stage);
-    windowMain->canvas->SetCurrentStage("stageTest1");
-
-
-    //stage->SetCameraChild("camera");
+    windowMain->canvas->SetCurrentStage("MainStage");
     ///////
 
     return app.exec();

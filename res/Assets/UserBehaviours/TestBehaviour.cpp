@@ -11,9 +11,12 @@
 TestBehaviour::TestBehaviour()
 {
     time = 0.0f;
-    randomAxis = glm::vec3( float(rand()%2000-1000)/1000,
-                            float(rand()%2000-1000)/1000,
-                            float(rand()%2000-1000)/1000);
+
+    int r = rand()%3;
+    if(r == 0) randomAxis = glm::vec3(1.0, 0.0, 0.0);
+    if(r == 1) randomAxis = glm::vec3(0.0, 1.0, 0.0);
+    if(r == 2) randomAxis = glm::vec3(0.0, 0.0, 1.0);
+
     randomAxis = glm::normalize(randomAxis);
 }
 
@@ -41,9 +44,9 @@ void TestBehaviour::OnStart()
         GetOwner()->GetPart<MeshRenderer>()->SetMaterial(m);
     }
 
-    GetOwner()->GetPart<Transform>()->SetPosition(glm::vec3(float(rand()%2000-1000)/1000 * 6.0f,
-                                                            float(rand()%2000-1000)/1000 * 3.0f,
-                                                            float(rand()%2000-1000)/1000 * 3.0f));
+    GetOwner()->GetPart<Transform>()->SetPosition(glm::vec3(float(rand()%2000-1000)/1000 * 1.0f,
+                                                            float(rand()%2000-1000)/1000 * 1.0f,
+                                                            float(rand()%2000-1000)/1000 * 1.0f));
 }
 
 void TestBehaviour::OnUpdate()

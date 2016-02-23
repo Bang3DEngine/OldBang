@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>WindowMain</class>
  <widget class="QMainWindow" name="WindowMain">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>484</width>
-    <height>453</height>
+    <width>860</width>
+    <height>563</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,7 +45,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>484</width>
+     <width>860</width>
      <height>25</height>
     </rect>
    </property>
@@ -156,7 +159,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1">
        <item>
-        <widget class="QListWidget" name="widgetListInspector"/>
+        <widget class="ListInspector" name="widgetListInspector"/>
        </item>
       </layout>
      </item>
@@ -289,6 +292,11 @@
    <class>TreeHierarchy</class>
    <extends>QTreeWidget</extends>
    <header>TreeHierarchy.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ListInspector</class>
+   <extends>QListWidget</extends>
+   <header location="global">ListInspector.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

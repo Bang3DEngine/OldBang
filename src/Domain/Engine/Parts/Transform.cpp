@@ -1,5 +1,6 @@
 #include "Transform.h"
 #include "StageReader.h"
+#include "Entity.h"
 
 Transform::Transform() : position(glm::vec3(0.0f)),
                          rotation(glm::quat()),
@@ -29,6 +30,19 @@ void Transform::GetMatrix(glm::mat4 &m) const
     glm::mat4 S = glm::scale(glm::mat4(1.0f), scale);
 
     m = T * R * S;
+
+    Entity *parent = GetOwner()->GetParent();
+    if(parent != nullptr)
+    {
+        Transform *tp = parent->GetPart<Transform>();
+        if(tp != nullptr)
+        {
+            glm::mat4 mp = glm::mat4(1.0f);
+            tp->GetMatrix(mp);
+            m = mp * m;
+            Logger_Log(mp);
+        }
+    }
 }
 
 void Transform::GetNormalMatrix(glm::mat4 &m) const

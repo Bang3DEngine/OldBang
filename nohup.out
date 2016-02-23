@@ -1088,3 +1088,30 @@ Starting process:  "/usr/bin/cmake" "--help-command-list"
 Starting process:  "/usr/bin/cmake" "--help-commands" 
 Starting process:  "/usr/bin/cmake" "--help-property-list" 
 Starting process:  "/usr/bin/cmake" "--help-variable-list" 
+Error while reparenting!
+QMetaProperty::read: Unable to handle unregistered datatype 'QList<QColor>' for property 'KColorCombo::colors'
+Connecting to deprecated signal QDBusConnectionInterface::serviceOwnerChanged(QString,QString,QString)
+QDBusConnection: session D-Bus connection created before QCoreApplication. Application may misbehave.
+QDBusConnection: session D-Bus connection created before QCoreApplication. Application may misbehave.
+kbuildsycoca4 running...
+kbuildsycoca4(3192) KBuildSycoca::checkTimestamps: checking file timestamps
+kbuildsycoca4(3192) KBuildSycoca::checkTimestamps: timestamps check ok
+kbuildsycoca4(3192) kdemain: Emitting notifyDatabaseChanged ()
+makekdewidgets(3167)/nepomuk (library): Could not find virtuoso to connect to. Aborting 
+QMetaProperty::read: Unable to handle unregistered datatype 'SelectionBehavior' for property 'QTabBar::selectionBehaviorOnRemove'
+QMetaProperty::read: Unable to handle unregistered datatype 'KUrl' for property 'KUrlRequester::url'
+QMetaProperty::read: Unable to handle unregistered datatype 'QList<QChar>' for property 'KCharSelect::displayedChars'
+QMetaProperty::read: Unable to handle unregistered datatype 'KUrl' for property 'KUrlRequester::url'
+Hspell: can't open /usr/share/hspell/hebrew.wgz.sizes.
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::_OnMenuBarItemClicked(int)
+Object::connect:  (sender name:   'menubar')
+Object::connect:  (receiver name: 'windowEventManager')
+Object::connect: No such slot QWidget::OnTopKekPressed()
+Object::connect:  (sender name:   'buttonCreatePrefab')
+Object::connect:  (receiver name: 'canvas')
+Object::connect: No such slot QWidget::_OnMenuBarItemClicked(int)
+Object::connect:  (sender name:   'menubar')
+Object::connect:  (receiver name: 'windowEventManager')

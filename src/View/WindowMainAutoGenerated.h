@@ -9,13 +9,13 @@
 #ifndef UI_WINDOWMAIN_H
 #define UI_WINDOWMAIN_H
 
+#include <ListInspector.h>
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QDockWidget>
 #include <QtGui/QHeaderView>
-#include <QtGui/QListWidget>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
@@ -63,7 +63,7 @@ public:
     QVBoxLayout *verticalLayout_9;
     QWidget *widget;
     QVBoxLayout *verticalLayout_2;
-    QListWidget *widgetListInspector;
+    ListInspector *widgetListInspector;
     QDockWidget *dockExplorer;
     QWidget *dockWidgetContents_5;
     QVBoxLayout *verticalLayout_7;
@@ -75,7 +75,8 @@ public:
     {
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
-        WindowMain->resize(484, 453);
+        WindowMain->setWindowModality(Qt::NonModal);
+        WindowMain->resize(860, 563);
         actionOpen_project = new QAction(WindowMain);
         actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
@@ -120,7 +121,7 @@ public:
         WindowMain->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 484, 25));
+        menubar->setGeometry(QRect(0, 0, 860, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -185,7 +186,7 @@ public:
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        widgetListInspector = new QListWidget(dockWidgetContents_7);
+        widgetListInspector = new ListInspector(dockWidgetContents_7);
         widgetListInspector->setObjectName(QString::fromUtf8("widgetListInspector"));
 
         verticalLayout_2->addWidget(widgetListInspector);

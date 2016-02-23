@@ -12,7 +12,7 @@ void WindowMain::Init(QMainWindow *window)
     {
         win = new WindowMain();
         win->setupUi(window);
-        window->show();
+        window->showMaximized();
     }
 
     //Init inspector
