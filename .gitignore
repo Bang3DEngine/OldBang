@@ -9,6 +9,7 @@
 *.so
 *.dll
 *.dylib
+nohup.out
 
 # Qt-es
 
