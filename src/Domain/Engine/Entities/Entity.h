@@ -9,6 +9,7 @@
 #include "IFileable.h"
 #include "IToString.h"
 #include "IStageEventListener.h"
+#define EDITOR
 
 class Part;
 class Stage;
@@ -23,6 +24,8 @@ private:
     virtual void _OnUpdate() override;
     virtual void _OnRender() override;
     virtual void _OnDestroy() override;
+
+    void RemoveChild(std::list<Entity*>::iterator &it);
 
 protected:
     std::string name;
@@ -40,6 +43,7 @@ public:
     void AddChild(Entity *child);
     Entity* GetChild(const std::string &name) const;
     void RemoveChild(const std::string &name);
+    void RemoveChild(Entity *child);
 
     void SetParent(Entity *parent);
     void SetName(const std::string &name);

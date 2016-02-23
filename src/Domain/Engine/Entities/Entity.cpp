@@ -48,7 +48,9 @@ void Entity::AddChild(Entity *child)
     child->parent = this;
     children.push_back(child);
 
+    #ifdef EDITOR
     WindowEventManager::NotifyChildAdded(child);
+    #endif
 }
 
 Entity *Entity::GetChild(const std::string &name) const
@@ -64,6 +66,17 @@ Entity *Entity::GetChild(const std::string &name) const
     return nullptr;
 }
 
+void Entity::RemoveChild(std::list<Entity*>::iterator &it)
+{
+    Entity *child = (*it);
+    child->parent = nullptr;
+    children.erase(it);
+
+    #ifdef EDITOR
+    WindowEventManager::NotifyChildRemoved(child);
+    #endif
+}
+
 void Entity::RemoveChild(const std::string &name)
 {
     for(auto it = children.begin(); it != children.end(); ++it)
@@ -71,11 +84,24 @@ void Entity::RemoveChild(const std::string &name)
         Entity *child = (*it);
         if(child->name == name)
         {
-            child->parent = nullptr;
-            children.erase(it);
-            return;
+            RemoveChild(it);
+            break;
         }
     }
+
+}
+
+void Entity::RemoveChild(Entity *child)
+{
+    for(auto it = children.begin(); it != children.end(); ++it)
+    {
+        if((*it) == child)
+        {
+            RemoveChild(it);
+            break;
+        }
+    }
+
 }
 
 void Entity::SetParent(Entity *newParent)

@@ -30,6 +30,11 @@ void WindowEventManager::NotifyChildAdded(Entity *child)
     PROPAGATE_EVENT_PAR(OnChildAdded(child), wem->listeners);
 }
 
+void WindowEventManager::NotifyChildRemoved(Entity *child)
+{
+    PROPAGATE_EVENT_PAR(OnChildRemoved(child), wem->listeners);
+}
+
 void WindowEventManager::NotifyMenuBarItemClicked(int itemClicked)
 {
     PROPAGATE_EVENT_PAR(OnMenuBarItemClicked(itemClicked), wem->listeners);

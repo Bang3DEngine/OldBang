@@ -78,7 +78,7 @@ public:
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
-        WindowMain->resize(860, 577);
+        WindowMain->resize(558, 511);
         actionOpen_project = new QAction(WindowMain);
         actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
@@ -123,7 +123,7 @@ public:
         WindowMain->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 860, 32));
+        menubar->setGeometry(QRect(0, 0, 558, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -139,7 +139,7 @@ public:
         WindowMain->setStatusBar(statusbar);
         dockHierarchy = new QDockWidget(WindowMain);
         dockHierarchy->setObjectName(QString::fromUtf8("dockHierarchy"));
-        dockHierarchy->setFeatures(QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable);
+        dockHierarchy->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockHierarchy->setAllowedAreas(Qt::AllDockWidgetAreas);
         dockWidgetContents_4 = new QWidget();
         dockWidgetContents_4->setObjectName(QString::fromUtf8("dockWidgetContents_4"));
@@ -157,9 +157,18 @@ public:
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(widgetTreeHierarchy->sizePolicy().hasHeightForWidth());
         widgetTreeHierarchy->setSizePolicy(sizePolicy1);
+        widgetTreeHierarchy->setContextMenuPolicy(Qt::CustomContextMenu);
         widgetTreeHierarchy->setAcceptDrops(true);
+        widgetTreeHierarchy->setDragEnabled(true);
+        widgetTreeHierarchy->setDragDropMode(QAbstractItemView::DragDrop);
+        widgetTreeHierarchy->setDefaultDropAction(Qt::IgnoreAction);
+        widgetTreeHierarchy->setAlternatingRowColors(false);
         widgetTreeHierarchy->setSelectionMode(QAbstractItemView::ExtendedSelection);
         widgetTreeHierarchy->setSelectionBehavior(QAbstractItemView::SelectRows);
+        widgetTreeHierarchy->setIndentation(10);
+        widgetTreeHierarchy->setRootIsDecorated(true);
+        widgetTreeHierarchy->setAnimated(true);
+        widgetTreeHierarchy->header()->setVisible(false);
 
         verticalLayout_4->addWidget(widgetTreeHierarchy);
 
@@ -171,7 +180,7 @@ public:
         dockInspector = new QDockWidget(WindowMain);
         dockInspector->setObjectName(QString::fromUtf8("dockInspector"));
         dockInspector->setFloating(false);
-        dockInspector->setFeatures(QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable);
+        dockInspector->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockInspector->setAllowedAreas(Qt::AllDockWidgetAreas);
         dockWidgetContents_7 = new QWidget();
         dockWidgetContents_7->setObjectName(QString::fromUtf8("dockWidgetContents_7"));
@@ -209,7 +218,7 @@ public:
         dockExplorer = new QDockWidget(WindowMain);
         dockExplorer->setObjectName(QString::fromUtf8("dockExplorer"));
         dockExplorer->setMinimumSize(QSize(420, 130));
-        dockExplorer->setFeatures(QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable);
+        dockExplorer->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockWidgetContents_5 = new QWidget();
         dockWidgetContents_5->setObjectName(QString::fromUtf8("dockWidgetContents_5"));
         verticalLayout_7 = new QVBoxLayout(dockWidgetContents_5);
@@ -255,6 +264,7 @@ public:
         QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
         QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_NotifyMenuBarItemClicked(int)));
         QObject::connect(widgetTreeHierarchy, SIGNAL(itemClicked(QTreeWidgetItem*,int)), widgetTreeHierarchy, SLOT(_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)));
+        QObject::connect(widgetTreeHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetTreeHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
 
         QMetaObject::connectSlotsByName(WindowMain);
     } // setupUi

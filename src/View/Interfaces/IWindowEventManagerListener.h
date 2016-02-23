@@ -10,6 +10,7 @@ protected:
 public:
     virtual void OnMenuBarItemClicked(int itemClicked) { }
     virtual void OnChildAdded(Entity *child) { }
+    virtual void OnChildRemoved(Entity *child) { }
 
     virtual void OnTreeHierarchyEntitySelected(Entity *e) { }
 };

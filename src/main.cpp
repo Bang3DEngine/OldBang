@@ -1,3 +1,4 @@
+#define EDITOR
 
 #include <vector>
 #include <string>

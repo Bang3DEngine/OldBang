@@ -41,7 +41,6 @@ void TreeHierarchy::UnselectAll()
 {
     foreach(QTreeWidgetItem *item, selectedItems())
     {
-        Logger_Log("a");
         item->setSelected(false);
     }
 }
@@ -53,6 +52,7 @@ void TreeHierarchy::Fill(Stage *currentStage)
     entityToTreeItem.clear();
     treeItemToEntity.clear();
     this->clear();
+
     this->addTopLevelItem( FillRecursive(currentStage) );
 }
 
@@ -76,7 +76,72 @@ void TreeHierarchy::OnChildAdded(Entity *child)
     }
 }
 
+void TreeHierarchy::OnChildRemoved(Entity *child)
+{
+    QTreeWidgetItem *item = entityToTreeItem[child];
+    if(item != nullptr)
+    {
+        item->parent()->removeChild(item);
+        treeItemToEntity.erase(item);
+        entityToTreeItem.erase(child);
+    }
+}
+
+void TreeHierarchy::OnContextMenuCreateEmptyClicked()
+{
+    Entity *empty = new Entity();
+    empty->SetName("Empty");
+
+    foreach(QTreeWidgetItem *item, selectedItems())
+    {
+        Entity *selected = treeItemToEntity[item];
+        selected->AddChild(empty);
+    }
+}
+
+void TreeHierarchy::OnContextMenuDeleteClicked()
+{
+    foreach(QTreeWidgetItem *item, selectedItems())
+    {
+        Entity *selected = treeItemToEntity[item];
+        if(selected->GetParent() != nullptr)
+        {
+            selected->GetParent()->RemoveChild(selected);
+        }
+    }
+}
+
+void TreeHierarchy::OnCustomContextMenuRequested(QPoint point)
+{
+    QTreeWidgetItem *item = itemAt(point);
+    if (item != nullptr)
+    {
+        Entity *e = treeItemToEntity[item];
+        QMenu contextMenu(tr("Entity hierarchy context menu"), this);
+
+        QAction actionCreateEmpty("Create empty", this);
+        connect(&actionCreateEmpty, SIGNAL(triggered()), this, SLOT(OnContextMenuCreateEmptyClicked()));
+        contextMenu.addAction(&actionCreateEmpty);
+
+
+        if(dynamic_cast<Stage*>(e) == nullptr) //For non-stage entities
+        {
+            QAction actionDelete("Delete", this);
+            connect(&actionDelete, SIGNAL(triggered()), this, SLOT(OnContextMenuDeleteClicked()));
+            contextMenu.addAction(&actionDelete);
+        }
+
+        contextMenu.exec(mapToGlobal(point));
+    }
+}
+
 void TreeHierarchy::_NotifyHierarchyItemSelected(QTreeWidgetItem *item, int column)
 {
-    WindowEventManager::NotifyHierarchyEntitySelected(treeItemToEntity[item]);
+    if(item != nullptr && treeItemToEntity.find(item) != treeItemToEntity.end())
+    {
+        if(treeItemToEntity[item] != nullptr)
+        {
+            WindowEventManager::NotifyHierarchyEntitySelected(treeItemToEntity[item]);
+        }
+    }
 }

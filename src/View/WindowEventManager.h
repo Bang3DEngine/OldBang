@@ -16,7 +16,7 @@
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
     for(auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
     {\
-        (*it)->FUNCTION; \
+        if((*it) != nullptr) (*it)->FUNCTION;\
     }\
 } while(0)
 
@@ -39,6 +39,7 @@ public:
 public slots:
 
     static void NotifyChildAdded(Entity *child);
+    static void NotifyChildRemoved(Entity *child);
 
     static void NotifyMenuBarItemClicked(int itemClcked);
     void _NotifyMenuBarItemClicked(int itemClicked);

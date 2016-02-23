@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>860</width>
-    <height>577</height>
+    <width>558</width>
+    <height>511</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,8 +45,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>860</width>
-     <height>32</height>
+     <width>558</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -88,7 +88,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="dockHierarchy">
    <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+    <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::AllDockWidgetAreas</set>
@@ -111,8 +111,23 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="acceptDrops">
           <bool>true</bool>
+         </property>
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::DragDrop</enum>
+         </property>
+         <property name="defaultDropAction">
+          <enum>Qt::IgnoreAction</enum>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>false</bool>
          </property>
          <property name="selectionMode">
           <enum>QAbstractItemView::ExtendedSelection</enum>
@@ -120,6 +135,18 @@
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
          </property>
+         <property name="indentation">
+          <number>10</number>
+         </property>
+         <property name="rootIsDecorated">
+          <bool>true</bool>
+         </property>
+         <property name="animated">
+          <bool>true</bool>
+         </property>
+         <attribute name="headerVisible">
+          <bool>false</bool>
+         </attribute>
          <column>
           <property name="text">
            <string notr="true">1</string>
@@ -137,7 +164,7 @@
     <bool>false</bool>
    </property>
    <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+    <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::AllDockWidgetAreas</set>
@@ -187,7 +214,7 @@
     </size>
    </property>
    <property name="features">
-    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+    <set>QDockWidget::AllDockWidgetFeatures</set>
    </property>
    <property name="windowTitle">
     <string>Explorer</string>
@@ -307,6 +334,7 @@
    <header>TreeHierarchy.h</header>
    <slots>
     <slot>_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)</slot>
+    <slot>OnCustomContextMenuRequested(QPoint)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -324,12 +352,12 @@
    <slot>OnTopKekPressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>299</x>
-     <y>477</y>
+     <x>202</x>
+     <y>479</y>
     </hint>
     <hint type="destinationlabel">
-     <x>568</x>
-     <y>264</y>
+     <x>426</x>
+     <y>238</y>
     </hint>
    </hints>
   </connection>
@@ -344,8 +372,8 @@
      <y>11</y>
     </hint>
     <hint type="destinationlabel">
-     <x>567</x>
-     <y>41</y>
+     <x>425</x>
+     <y>34</y>
     </hint>
    </hints>
   </connection>
@@ -356,12 +384,28 @@
    <slot>_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>137</x>
-     <y>174</y>
+     <x>132</x>
+     <y>200</y>
     </hint>
     <hint type="destinationlabel">
-     <x>137</x>
-     <y>174</y>
+     <x>132</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widgetTreeHierarchy</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>widgetTreeHierarchy</receiver>
+   <slot>OnCustomContextMenuRequested(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>75</x>
+     <y>123</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>118</x>
+     <y>101</y>
     </hint>
    </hints>
   </connection>

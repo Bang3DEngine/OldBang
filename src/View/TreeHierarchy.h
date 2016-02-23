@@ -9,6 +9,8 @@
 #include <string>
 #include <chrono>
 #include <QTimer>
+#include <QAction>
+#include <QMenu>
 #include <QTreeWidget>
 #include <QApplication>
 
@@ -37,9 +39,15 @@ public:
 
     void Fill(Stage *currentStage);
 
-    void OnChildAdded(Entity *parent) override;
+    void OnChildAdded(Entity *child) override;
+    void OnChildRemoved(Entity *child) override;
 
 public slots:
+
+    void OnContextMenuCreateEmptyClicked();
+    void OnContextMenuDeleteClicked();
+    void OnCustomContextMenuRequested(QPoint point);
+
     void _NotifyHierarchyItemSelected(QTreeWidgetItem *item, int column);
 };
 
