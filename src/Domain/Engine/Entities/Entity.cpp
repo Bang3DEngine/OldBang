@@ -8,27 +8,26 @@ Entity::Entity() : Entity("")
 {
 }
 
-Entity::Entity(const std::string &name) : name(name), parent(nullptr)
+Entity::Entity(const std::string &name) : name(name), parent(nullptr), isStage(false)
 {
 }
 
 Entity::~Entity()
 {
-    _OnDestroy();
+    this->_OnDestroy();
+    for(auto it = children.begin(); it != children.end(); ++it)
+    {
+        Entity *child = *it;
+        this->RemoveChild(child->GetName());
+        delete child;
+    }
 }
 
 
 Stage *Entity::GetStage()
 {
-    Stage *thisSt = dynamic_cast<Stage*>(this);
-    if(thisSt != nullptr) return thisSt;
-
-    if(parent != nullptr)
-    {
-        Stage *st = dynamic_cast<Stage*>(parent);
-        if(st == nullptr) return parent->GetStage();
-        else return st;
-    }
+    if(isStage) { return (Stage*) this; }
+    if(parent != nullptr) return parent->GetStage();
     return nullptr;
 }
 
@@ -116,6 +115,11 @@ void Entity::SetParent(Entity *newParent)
 void Entity::SetName(const std::string &name)
 {
     this->name = name;
+}
+
+bool Entity::IsStage() const
+{
+    return isStage;
 }
 
 void Entity::Write(std::ostream &f) const

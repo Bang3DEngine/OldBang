@@ -34,6 +34,8 @@ protected:
     std::list<Entity*> children;
     Entity* parent;
 
+    bool isStage;
+
 public:
     Entity();
     Entity(const std::string &name);
@@ -102,6 +104,8 @@ public:
             }
         }
     }
+
+    bool IsStage() const;
 
     void Write(std::ostream &f) const override;
     void Read(std::istream &f) override;

@@ -4,6 +4,7 @@
 
 Stage::Stage() : cameraEntity(nullptr)
 {
+    isStage = true;
     gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
 
@@ -15,12 +16,6 @@ void Stage::_OnResize(int newWidth, int newHeight)
 Stage::~Stage()
 {
     this->_OnDestroy();
-    for(auto it = children.begin(); it != children.end(); ++it)
-    {
-        Entity *child = *it;
-        this->RemoveChild(child->GetName());
-        delete child;
-    }
 }
 
 void Stage::_OnRender()

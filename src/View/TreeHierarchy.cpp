@@ -120,13 +120,13 @@ void TreeHierarchy::OnCustomContextMenuRequested(QPoint point)
         QMenu contextMenu(tr("Entity hierarchy context menu"), this);
 
         QAction actionCreateEmpty("Create empty", this);
+        QAction actionDelete("Delete", this);
+
         connect(&actionCreateEmpty, SIGNAL(triggered()), this, SLOT(OnContextMenuCreateEmptyClicked()));
         contextMenu.addAction(&actionCreateEmpty);
 
-
-        if(dynamic_cast<Stage*>(e) == nullptr) //For non-stage entities
+        if(!e->IsStage())
         {
-            QAction actionDelete("Delete", this);
             connect(&actionDelete, SIGNAL(triggered()), this, SLOT(OnContextMenuDeleteClicked()));
             contextMenu.addAction(&actionDelete);
         }
