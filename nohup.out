@@ -1115,3 +1115,11 @@ Object::connect:  (receiver name: 'canvas')
 Object::connect: No such slot QWidget::_OnMenuBarItemClicked(int)
 Object::connect:  (sender name:   'menubar')
 Object::connect:  (receiver name: 'windowEventManager')
+kdeinit4: Fatal IO error: client killed
+klauncher: Exiting on signal 15
+kdeinit4: kded4 [kdeinit]: Fatal IO error 11 (Resource temporarily unavailable) on X server :0.
+designer: Fatal IO error 11 (Resource temporarily unavailable) on X server :0.
+qtcreator: Fatal IO error 11 (Resource temporarily unavailable) on X server :0.
+g_dbus_connection_real_closed: Remote peer vanished with error: Underlying GIOStream returned 0 bytes on an async read (g-io-error-quark, 0). Exiting.
+g_dbus_connection_real_closed: Remote peer vanished with error: Underlying GIOStream returned 0 bytes on an async read (g-io-error-quark, 0). Exiting.
+g_dbus_connection_real_closed: Remote peer vanished with error: Underlying GIOStream returned 0 bytes on an async read (g-io-error-quark, 0). Exiting.

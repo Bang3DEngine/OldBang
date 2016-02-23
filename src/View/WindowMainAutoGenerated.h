@@ -245,6 +245,7 @@ public:
         retranslateUi(WindowMain);
         QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
         QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_OnMenuBarItemClicked(int)));
+        QObject::connect(widgetTreeHierarchy, SIGNAL(itemClicked(QTreeWidgetItem*,int)), widgetTreeHierarchy, SLOT(_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)));
 
         QMetaObject::connectSlotsByName(WindowMain);
     } // setupUi

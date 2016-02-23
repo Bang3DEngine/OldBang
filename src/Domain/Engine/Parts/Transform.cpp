@@ -40,7 +40,6 @@ void Transform::GetMatrix(glm::mat4 &m) const
             glm::mat4 mp = glm::mat4(1.0f);
             tp->GetMatrix(mp);
             m = mp * m;
-            Logger_Log(mp);
         }
     }
 }

@@ -292,6 +292,9 @@
    <class>TreeHierarchy</class>
    <extends>QTreeWidget</extends>
    <header>TreeHierarchy.h</header>
+   <slots>
+    <slot>_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)</slot>
+   </slots>
   </customwidget>
   <customwidget>
    <class>ListInspector</class>
@@ -330,6 +333,22 @@
     <hint type="destinationlabel">
      <x>306</x>
      <y>92</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widgetTreeHierarchy</sender>
+   <signal>itemClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>widgetTreeHierarchy</receiver>
+   <slot>_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>137</x>
+     <y>174</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>174</y>
     </hint>
    </hints>
   </connection>

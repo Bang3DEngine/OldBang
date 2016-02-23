@@ -1,4 +1,6 @@
 #include "TreeHierarchy.h"
+
+#include "WindowEventManager.h"
 #include "Logger.h"
 
 TreeHierarchy::TreeHierarchy(QWidget *parent)
@@ -31,6 +33,7 @@ QTreeWidgetItem* TreeHierarchy::FillRecursive(Entity *e)
     }
 
     entityToTreeItem[e] = eRoot;
+    treeItemToEntity[eRoot] = e;
     return eRoot;
 }
 
@@ -39,6 +42,7 @@ void TreeHierarchy::Fill(Stage *currentStage)
     if(currentStage == nullptr) return;
 
     entityToTreeItem.clear();
+    treeItemToEntity.clear();
     this->clear();
     this->addTopLevelItem( FillRecursive(currentStage) );
 }
@@ -56,4 +60,9 @@ void TreeHierarchy::OnChildAdded(Entity *child)
     {
         Fill(child->GetStage()); //if the parent isnt found, just redo all the hierarchy
     }
+}
+
+void TreeHierarchy::_NotifyHierarchyItemSelected(QTreeWidgetItem *item, int column)
+{
+    WindowEventManager::NotifyHierarchyEntitySelected(treeItemToEntity[item]);
 }

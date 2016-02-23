@@ -22,6 +22,7 @@ private:
     //For every entity, we have the associated treeItem,
     //in order to update :)
     std::map<Entity*, QTreeWidgetItem*> entityToTreeItem;
+    std::map<QTreeWidgetItem*,Entity*> treeItemToEntity;
 
     void ExpandRecursiveUpwards(QTreeWidgetItem *item);
     QTreeWidgetItem* FillRecursive(Entity *e);
@@ -33,6 +34,9 @@ public:
     void Fill(Stage *currentStage);
 
     void OnChildAdded(Entity *parent) override;
+
+public slots:
+    void _NotifyHierarchyItemSelected(QTreeWidgetItem *item, int column);
 };
 
 #endif // TREEHIERARCHY_H

@@ -5,10 +5,11 @@
 
 #include <vector>
 #include <string>
-#include <QGLWidget>
 #include <chrono>
 #include <QTimer>
+#include <QGLWidget>
 #include <QApplication>
+#include <QTreeWidgetItem>
 
 #include "IWindowEventManagerListener.h"
 
@@ -41,6 +42,8 @@ public slots:
 
     static void NotifyMenuBarItemClicked(int itemClcked);
     void _NotifyMenuBarItemClicked(int itemClicked);
+
+    static void NotifyHierarchyEntitySelected(Entity *selectedEntity);
 };
 
 #endif // WINDOWEVENTMANAGER_H

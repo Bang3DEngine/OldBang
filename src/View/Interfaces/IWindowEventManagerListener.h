@@ -8,8 +8,10 @@ protected:
     IWindowEventManagerListener();
 
 public:
-    virtual void OnMenuBarItemClicked(int itemClicked) { };
-    virtual void OnChildAdded(Entity *child) { };
+    virtual void OnMenuBarItemClicked(int itemClicked) { }
+    virtual void OnChildAdded(Entity *child) { }
+
+    virtual void OnTreeHierarchyEntitySelected(Entity *e) { }
 };
 
 #endif // IWINDOWEVENTMANAGERLISTENER_H
