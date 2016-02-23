@@ -66,6 +66,11 @@ void MeshRenderer::Read(std::istream &f)
     FileReader::ReadNextLine(f); //Consume close tag
 }
 
+const std::string MeshRenderer::ToString() const
+{
+    return "MeshRenderer";
+}
+
 void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 {
     Transform *t = owner->GetPart<Transform>();

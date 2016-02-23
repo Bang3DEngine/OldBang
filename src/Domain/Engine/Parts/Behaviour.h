@@ -7,6 +7,8 @@ class Behaviour : public Part
 {
 public:
     Behaviour();
+
+    virtual const std::string ToString() const override;
 };
 
 #endif

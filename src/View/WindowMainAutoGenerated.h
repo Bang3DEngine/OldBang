@@ -16,6 +16,7 @@
 #include <QtGui/QButtonGroup>
 #include <QtGui/QDockWidget>
 #include <QtGui/QHeaderView>
+#include <QtGui/QLabel>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
@@ -63,6 +64,7 @@ public:
     QVBoxLayout *verticalLayout_9;
     QWidget *widget;
     QVBoxLayout *verticalLayout_2;
+    QLabel *labelInspectorEntityName;
     ListInspector *widgetListInspector;
     QDockWidget *dockExplorer;
     QWidget *dockWidgetContents_5;
@@ -76,7 +78,7 @@ public:
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
-        WindowMain->resize(860, 563);
+        WindowMain->resize(860, 577);
         actionOpen_project = new QAction(WindowMain);
         actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
@@ -121,7 +123,7 @@ public:
         WindowMain->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 860, 25));
+        menubar->setGeometry(QRect(0, 0, 860, 32));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -156,6 +158,8 @@ public:
         sizePolicy1.setHeightForWidth(widgetTreeHierarchy->sizePolicy().hasHeightForWidth());
         widgetTreeHierarchy->setSizePolicy(sizePolicy1);
         widgetTreeHierarchy->setAcceptDrops(true);
+        widgetTreeHierarchy->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        widgetTreeHierarchy->setSelectionBehavior(QAbstractItemView::SelectRows);
 
         verticalLayout_4->addWidget(widgetTreeHierarchy);
 
@@ -186,12 +190,17 @@ public:
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        labelInspectorEntityName = new QLabel(dockWidgetContents_7);
+        labelInspectorEntityName->setObjectName(QString::fromUtf8("labelInspectorEntityName"));
+
+        verticalLayout_2->addWidget(labelInspectorEntityName);
+
         widgetListInspector = new ListInspector(dockWidgetContents_7);
         widgetListInspector->setObjectName(QString::fromUtf8("widgetListInspector"));
 
         verticalLayout_2->addWidget(widgetListInspector);
 
-        verticalLayout_2->setStretch(0, 1);
+        verticalLayout_2->setStretch(1, 1);
 
         verticalLayout_9->addLayout(verticalLayout_2);
 
@@ -244,7 +253,7 @@ public:
 
         retranslateUi(WindowMain);
         QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
-        QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_OnMenuBarItemClicked(int)));
+        QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_NotifyMenuBarItemClicked(int)));
         QObject::connect(widgetTreeHierarchy, SIGNAL(itemClicked(QTreeWidgetItem*,int)), widgetTreeHierarchy, SLOT(_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)));
 
         QMetaObject::connectSlotsByName(WindowMain);
@@ -267,6 +276,7 @@ public:
         menuProject->setTitle(QApplication::translate("WindowMain", "Project", 0, QApplication::UnicodeUTF8));
         dockHierarchy->setWindowTitle(QApplication::translate("WindowMain", "Hierarchy", 0, QApplication::UnicodeUTF8));
         dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0, QApplication::UnicodeUTF8));
+        labelInspectorEntityName->setText(QApplication::translate("WindowMain", "TextLabel", 0, QApplication::UnicodeUTF8));
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));
         buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

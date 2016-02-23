@@ -37,6 +37,15 @@ QTreeWidgetItem* TreeHierarchy::FillRecursive(Entity *e)
     return eRoot;
 }
 
+void TreeHierarchy::UnselectAll()
+{
+    foreach(QTreeWidgetItem *item, selectedItems())
+    {
+        Logger_Log("a");
+        item->setSelected(false);
+    }
+}
+
 void TreeHierarchy::Fill(Stage *currentStage)
 {
     if(currentStage == nullptr) return;
@@ -54,7 +63,12 @@ void TreeHierarchy::OnChildAdded(Entity *child)
     if(entityToTreeItem.find(parent) != entityToTreeItem.end())
     {
         entityToTreeItem[parent]->addChild( FillRecursive(child) );
+
         ExpandRecursiveUpwards(entityToTreeItem[parent]);
+
+        UnselectAll();
+        entityToTreeItem[child]->setSelected(true);
+        WindowEventManager::NotifyHierarchyEntitySelected(child);
     }
     else
     {

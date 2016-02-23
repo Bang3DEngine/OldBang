@@ -18,6 +18,8 @@
 
 class TreeHierarchy : public QTreeWidget, public IWindowEventManagerListener
 {
+    Q_OBJECT
+
 private:
     //For every entity, we have the associated treeItem,
     //in order to update :)
@@ -26,6 +28,8 @@ private:
 
     void ExpandRecursiveUpwards(QTreeWidgetItem *item);
     QTreeWidgetItem* FillRecursive(Entity *e);
+
+    void UnselectAll();
 
 public:
     explicit TreeHierarchy(QWidget *parent = 0);

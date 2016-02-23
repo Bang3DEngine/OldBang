@@ -141,3 +141,8 @@ void Camera::Read(std::istream &f)
     SetOrthoRect( FileReader::ReadRect(f) );
     FileReader::ReadNextLine(f); //Consume close tag
 }
+
+const std::string Camera::ToString() const
+{
+    return "Camera";
+}

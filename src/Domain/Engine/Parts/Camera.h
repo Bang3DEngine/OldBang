@@ -62,6 +62,8 @@ public:
 
     void Write(std::ostream &f) const;
     void Read(std::istream &f);
+
+    virtual const std::string ToString() const override;
 };
 
 #endif // CAMERA_H

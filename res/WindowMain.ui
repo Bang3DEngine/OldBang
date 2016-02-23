@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>860</width>
-    <height>563</height>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,7 +46,7 @@
      <x>0</x>
      <y>0</y>
      <width>860</width>
-     <height>25</height>
+     <height>32</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -114,6 +114,12 @@
          <property name="acceptDrops">
           <bool>true</bool>
          </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::ExtendedSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
          <column>
           <property name="text">
            <string notr="true">1</string>
@@ -157,7 +163,14 @@
       <widget class="QWidget" name="widget" native="true"/>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1">
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
+       <item>
+        <widget class="QLabel" name="labelInspectorEntityName">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="ListInspector" name="widgetListInspector"/>
        </item>
@@ -285,7 +298,7 @@
    <header>WindowEventManager.h</header>
    <container>1</container>
    <slots>
-    <slot>_OnMenuBarItemClicked(int)</slot>
+    <slot>_NotifyMenuBarItemClicked(int)</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -315,8 +328,8 @@
      <y>477</y>
     </hint>
     <hint type="destinationlabel">
-     <x>519</x>
-     <y>325</y>
+     <x>568</x>
+     <y>264</y>
     </hint>
    </hints>
   </connection>
@@ -324,15 +337,15 @@
    <sender>menubar</sender>
    <signal>activated(int)</signal>
    <receiver>windowEventManager</receiver>
-   <slot>_OnMenuBarItemClicked(int)</slot>
+   <slot>_NotifyMenuBarItemClicked(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>58</x>
      <y>11</y>
     </hint>
     <hint type="destinationlabel">
-     <x>306</x>
-     <y>92</y>
+     <x>567</x>
+     <y>41</y>
     </hint>
    </hints>
   </connection>
