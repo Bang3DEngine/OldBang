@@ -42,10 +42,15 @@ void Entity::AddPart(Part *p)
     parts.push_back(p);
 }
 
-void Entity::AddChild(Entity *child)
+void Entity::AddChildWithoutNoifyingHierarchy(Entity *child)
 {
     child->parent = this;
     children.push_back(child);
+}
+
+void Entity::AddChild(Entity *child)
+{
+    AddChildWithoutNoifyingHierarchy(child);
 
     #ifdef BANG_EDITOR
     WindowEventManager::NotifyChildAdded(child);
@@ -69,24 +74,33 @@ void Entity::MoveChild(Entity *child, Entity *newParent)
 {
     for(auto it = children.begin(); it != children.end(); ++it)
     {
-        Entity *c = (*it);
-        if(c == child)
+        if((*it) == child)
         {
-            RemoveChild(it);
-            newParent->AddChild(child);
+            RemoveChildWithoutNoifyingHierarchy(it);
+            newParent->AddChildWithoutNoifyingHierarchy(child);
+
+            #ifdef BANG_EDITOR
+            WindowEventManager::NotifyChildChangedParent(child, this);
+            #endif
+
             break;
         }
     }
 }
 
-void Entity::RemoveChild(std::list<Entity*>::iterator &it)
+void Entity::RemoveChildWithoutNoifyingHierarchy(std::list<Entity*>::iterator &it)
 {
     Entity *child = (*it);
     child->parent = nullptr;
     children.erase(it);
+}
 
+
+void Entity::RemoveChild(std::list<Entity*>::iterator &it)
+{
+    RemoveChildWithoutNoifyingHierarchy(it);
     #ifdef BANG_EDITOR
-    WindowEventManager::NotifyChildRemoved(child);
+    WindowEventManager::NotifyChildRemoved((*it));
     #endif
 }
 
@@ -101,7 +115,6 @@ void Entity::RemoveChild(const std::string &name)
             break;
         }
     }
-
 }
 
 void Entity::RemoveChild(Entity *child)
@@ -114,7 +127,6 @@ void Entity::RemoveChild(Entity *child)
             break;
         }
     }
-
 }
 
 void Entity::SetParent(Entity *newParent)

@@ -10,6 +10,8 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <list>
 
 #include "glm/gtc/quaternion.hpp"
 #include "glm/glm.hpp"
@@ -25,6 +27,33 @@ std::ostream& operator<<(std::ostream &log, const glm::vec4 &v);
 std::ostream& operator<<(std::ostream &log, const glm::quat &q);
 std::ostream& operator<<(std::ostream &log, const glm::mat4 &v);
 std::ostream &operator<<(std::ostream &log, const IToString *s);
+
+template <class T>
+std::ostream &operator<<(std::ostream &log, const std::list<T> *l)
+{
+    log << "List("; bool first = true;
+    for(auto it = l->begin(); it != l->end(); ++it)
+    {
+        if(!first) log << ", ";
+        log << (*it);
+        first = false;
+    }
+    log <<")";
+    return log;
+}
+
+template <class T>
+std::ostream &operator<<(std::ostream &log, const std::vector<T> *v)
+{
+    log << "Vector(";
+    for(int i = 0; i < v.size(); ++i)
+    {
+        if(i != 0) log << ", ";
+        log << v[i];
+    }
+    log << ")";
+    return log;
+}
 
 
 #define _Logger_Suffix \

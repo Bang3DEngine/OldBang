@@ -26,7 +26,10 @@ QTreeWidgetItem* TreeHierarchy::FillRecursiveDownwards(Entity *e)
 {
     const std::list<Entity*> *children = e->GetChildren();
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
-    eRoot->setText(0, QString::fromStdString(e->GetName()) );
+    std::ostringstream log;
+    log << ((void*)e);
+    //e->SetName(log.str());
+    eRoot->setText(0, QString::fromStdString(e->GetName()));
     for(auto it = children->begin(); it != children->end(); ++it)
     {
         eRoot->addChild( FillRecursiveDownwards( (*it) ) );
@@ -42,6 +45,8 @@ void TreeHierarchy::LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items)
     //For each item, it will be a top level item,
     //if non of the selected items is its parent
     std::list<QTreeWidgetItem*> result;
+    Logger_Log("LeaveOnlyTopLevelItems");
+    Logger_Log("Before: " << items);
     for(auto it = items->begin(); it != items->end(); ++it)
     {
         QTreeWidgetItem *parent = (*it)->parent();
@@ -67,6 +72,7 @@ void TreeHierarchy::LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items)
             it = items->erase(it);
         }
     }
+    Logger_Log("After: " << items);
     *items = result;
 }
 
@@ -103,7 +109,6 @@ void TreeHierarchy::OnChildAdded(Entity *child)
     if(entityToTreeItem.find(parent) != entityToTreeItem.end())
     {
         entityToTreeItem[parent]->addChild( FillRecursiveDownwards(child) );
-
         ExpandRecursiveUpwards(entityToTreeItem[parent]);
 
         UnselectAll();
@@ -118,6 +123,7 @@ void TreeHierarchy::OnChildAdded(Entity *child)
 
 void TreeHierarchy::OnChildChangedParent(Entity *child, Entity *previousParent)
 {
+    Logger_Log("Child changed parent: " << child << " from  " << previousParent << " to " << child->GetParent());
 }
 
 void TreeHierarchy::OnChildRemoved(Entity *child)
@@ -141,18 +147,23 @@ void TreeHierarchy::dropEvent(QDropEvent *event)
     if(targetItem != nullptr && !sourceItems.empty())
     {
         DropIndicatorPosition dropPos = dropIndicatorPosition();
-        if (dropPos == BelowItem) targetItem = itemBelow(targetItem);
-
-        Entity *target = treeItemToEntity[targetItem];
-        for(auto it = sourceItems.begin(); it != sourceItems.end(); ++it)
+        if (dropPos == BelowItem || dropPos == AboveItem)
         {
-            if((*it) != targetItem)
-            {
-                QTreeWidgetItem *sourceItem = (*it);
+            //Not putting inside, but below or above. Thus take its parent
+            targetItem = targetItem->parent();
+        }
 
-                Entity *source = treeItemToEntity[sourceItem];
-                if( !source->IsStage() )
+        //Only if the user is not trying to put it on the same level as stage.
+        if(targetItem == nullptr) //Trying to put it on the same level as stage. STOP
+        {
+            Entity *target = treeItemToEntity[targetItem];
+            for(auto it = sourceItems.begin(); it != sourceItems.end(); ++it)
+            {
+                if((*it) != targetItem)
                 {
+                    QTreeWidgetItem *sourceItem = (*it);
+                    Entity *source = treeItemToEntity[sourceItem];
+                    Logger_Log(source << " to " << target);
                     if(source->GetParent() != nullptr)
                         source->GetParent()->MoveChild(source, target);
                     else
@@ -162,8 +173,12 @@ void TreeHierarchy::dropEvent(QDropEvent *event)
         }
     }
 
-    QTreeWidget::dropEvent(event); //super
-    event->acceptProposedAction();
+    //Only if the user is not trying to put it on the same level as stage.
+    if(targetItem != nullptr)
+    {
+        QTreeWidget::dropEvent(event); //super
+        event->acceptProposedAction();
+    }
 }
 
 void TreeHierarchy::OnContextMenuCreateEmptyClicked()

@@ -26,6 +26,8 @@ private:
     virtual void _OnRender() override;
     virtual void _OnDestroy() override;
 
+    void AddChildWithoutNoifyingHierarchy(Entity *child);
+    void RemoveChildWithoutNoifyingHierarchy(std::list<Entity*>::iterator &it);
     void RemoveChild(std::list<Entity*>::iterator &it);
 
 protected:
