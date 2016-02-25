@@ -10,16 +10,20 @@ ListInspector::ListInspector(QWidget *parent)
 
 void ListInspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
 {
-    Entity *selectedEntity = selectedEntities.front();
-    QLabel *nameLabel = parent()->findChild<QLabel*>("labelInspectorEntityName");
-    if(nameLabel != nullptr)
+    if(!selectedEntities.empty())
     {
-        nameLabel->setText(QString::fromStdString("Name: " + selectedEntity->GetName()));
-    }
+        Entity *selectedEntity = selectedEntities.front();
 
-    clear();
-    for(Part *p : *(selectedEntity->GetParts()))
-    {
-        addItem(QString::fromStdString(p->ToString()));
+        QLabel *nameLabel = parent()->findChild<QLabel*>("labelInspectorEntityName");
+        if(nameLabel != nullptr)
+        {
+            nameLabel->setText(QString::fromStdString("Name: " + selectedEntity->GetName()));
+        }
+
+        clear();
+        for(Part *p : selectedEntity->GetParts())
+        {
+            addItem(QString::fromStdString(p->ToString()));
+        }
     }
 }

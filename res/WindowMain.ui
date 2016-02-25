@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>558</width>
-    <height>511</height>
+    <width>1178</width>
+    <height>771</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>558</width>
+     <width>1178</width>
      <height>25</height>
     </rect>
    </property>
@@ -408,7 +408,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>202</x>
-     <y>479</y>
+     <y>739</y>
     </hint>
     <hint type="destinationlabel">
      <x>279</x>
@@ -427,24 +427,8 @@
      <y>11</y>
     </hint>
     <hint type="destinationlabel">
-     <x>278</x>
+     <x>557</x>
      <y>34</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>widgetTreeHierarchy</sender>
-   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
-   <receiver>widgetTreeHierarchy</receiver>
-   <slot>_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>132</x>
-     <y>200</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>132</x>
-     <y>200</y>
     </hint>
    </hints>
   </connection>

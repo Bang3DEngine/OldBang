@@ -203,18 +203,24 @@ void Entity::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedE
         }
     }
 
+    Material *mat = nullptr;
+    if(this->HasPart<MeshRenderer>())
+    {
+        mat = this->GetPart<MeshRenderer>()->GetMaterial();
+    }
+
     if(isSelected)
     {
-        if(this->HasPart<Material>())
+        if(mat != nullptr)
         {
-            this->GetPart<Material>()->SetDiffuseColor(glm::vec4(1.0f, 0.3f, 0.0f, 0.5f));
+            mat->SetDiffuseColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.7f));
         }
     }
     else
     {
-        if(this->HasPart<Material>())
+        if(mat != nullptr)
         {
-            this->GetPart<Material>()->SetDiffuseColor(glm::vec4(glm::vec3(1.0f), 0.0f));
+            mat->SetDiffuseColor(glm::vec4(0.0f));
         }
     }
 }

@@ -24,13 +24,13 @@ void TreeHierarchy::ExpandRecursiveUpwards(QTreeWidgetItem *item)
 
 QTreeWidgetItem* TreeHierarchy::FillRecursiveDownwards(Entity *e)
 {
-    const std::list<Entity*> *children = e->GetChildren();
+    const std::list<Entity*> children = e->GetChildren();
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
     std::ostringstream log;
     log << ((void*)e);
     //e->SetName(log.str());
     eRoot->setText(0, QString::fromStdString(e->GetName()));
-    for(auto it = children->begin(); it != children->end(); ++it)
+    for(auto it = children.begin(); it != children.end(); ++it)
     {
         eRoot->addChild( FillRecursiveDownwards( (*it) ) );
     }
@@ -45,8 +45,6 @@ void TreeHierarchy::LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items)
     //For each item, it will be a top level item,
     //if non of the selected items is its parent
     std::list<QTreeWidgetItem*> result;
-    Logger_Log("LeaveOnlyTopLevelItems");
-    Logger_Log("Before: " << items);
     for(auto it = items->begin(); it != items->end(); ++it)
     {
         QTreeWidgetItem *parent = (*it)->parent();
@@ -68,7 +66,6 @@ void TreeHierarchy::LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items)
             }
         }
     }
-    Logger_Log("After: " << (&result));
     *items = result;
 }
 
@@ -108,7 +105,6 @@ void TreeHierarchy::OnChildAdded(Entity *child)
 
         UnselectAll();
         entityToTreeItem[child]->setSelected(true);
-        //WindowEventManager::NotifyHierarchyEntitySelected(child);
     }
     else
     {
@@ -122,7 +118,6 @@ void TreeHierarchy::OnChildChangedParent(Entity *child, Entity *previousParent)
 
 void TreeHierarchy::OnChildRemoved(Entity *child)
 {
-    Logger_Log("Child removed: " << child);
     QTreeWidgetItem *item = entityToTreeItem[child];
     if(item != nullptr)
     {

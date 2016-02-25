@@ -19,9 +19,9 @@ class Part;
 class Stage;
 class Entity : public IStageEventListener,
                public IToString,
-               public IFileable,
+               public IFileable
                #ifdef BANG_EDITOR
-                public IWindowEventManagerListener
+                ,public IWindowEventManagerListener
                #endif
 {
 friend class Canvas;
@@ -68,8 +68,8 @@ public:
     Stage* GetStage();
     Entity* GetParent() const;
     const std::string GetName() const { return name; }
-    const std::list<Part*>* GetParts() const { return &parts; }
-    const std::list<Entity*>* GetChildren() const { return &children; }
+    const std::list<Part*> GetParts() const { return parts; }
+    const std::list<Entity*> GetChildren() const { return children; }
 
     void AddPart(Part *p);
 
