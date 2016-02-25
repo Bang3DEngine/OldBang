@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'WindowMain.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created by: Qt User Interface Compiler version 5.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -11,21 +11,21 @@
 
 #include <ListInspector.h>
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDockWidget>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QPushButton>
-#include <QtGui/QSplitter>
-#include <QtGui/QStatusBar>
-#include <QtGui/QTreeView>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDockWidget>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSplitter>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTreeView>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 #include "Canvas.h"
 #include "TreeHierarchy.h"
 #include "WindowEventManager.h"
@@ -76,33 +76,33 @@ public:
     void setupUi(QMainWindow *WindowMain)
     {
         if (WindowMain->objectName().isEmpty())
-            WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
+            WindowMain->setObjectName(QStringLiteral("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
         WindowMain->resize(1178, 771);
         actionOpen_project = new QAction(WindowMain);
-        actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
+        actionOpen_project->setObjectName(QStringLiteral("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
-        actionSave_project->setObjectName(QString::fromUtf8("actionSave_project"));
+        actionSave_project->setObjectName(QStringLiteral("actionSave_project"));
         actionMaterial = new QAction(WindowMain);
-        actionMaterial->setObjectName(QString::fromUtf8("actionMaterial"));
+        actionMaterial->setObjectName(QStringLiteral("actionMaterial"));
         actionMesh = new QAction(WindowMain);
-        actionMesh->setObjectName(QString::fromUtf8("actionMesh"));
+        actionMesh->setObjectName(QStringLiteral("actionMesh"));
         actionShaderProgram = new QAction(WindowMain);
-        actionShaderProgram->setObjectName(QString::fromUtf8("actionShaderProgram"));
+        actionShaderProgram->setObjectName(QStringLiteral("actionShaderProgram"));
         actionTexture2D = new QAction(WindowMain);
-        actionTexture2D->setObjectName(QString::fromUtf8("actionTexture2D"));
+        actionTexture2D->setObjectName(QStringLiteral("actionTexture2D"));
         actionProject_Settings = new QAction(WindowMain);
-        actionProject_Settings->setObjectName(QString::fromUtf8("actionProject_Settings"));
+        actionProject_Settings->setObjectName(QStringLiteral("actionProject_Settings"));
         actionCreate_from_prefab = new QAction(WindowMain);
-        actionCreate_from_prefab->setObjectName(QString::fromUtf8("actionCreate_from_prefab"));
+        actionCreate_from_prefab->setObjectName(QStringLiteral("actionCreate_from_prefab"));
         centralwidget = new QWidget(WindowMain);
-        centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        centralwidget->setObjectName(QStringLiteral("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout_3 = new QVBoxLayout();
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         windowEventManager = new WindowEventManager(centralwidget);
-        windowEventManager->setObjectName(QString::fromUtf8("windowEventManager"));
+        windowEventManager->setObjectName(QStringLiteral("windowEventManager"));
 
         verticalLayout_3->addWidget(windowEventManager);
 
@@ -110,7 +110,7 @@ public:
         verticalLayout->addLayout(verticalLayout_3);
 
         canvas = new Canvas(centralwidget);
-        canvas->setObjectName(QString::fromUtf8("canvas"));
+        canvas->setObjectName(QStringLiteral("canvas"));
         canvas->setEnabled(true);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(1);
@@ -122,34 +122,34 @@ public:
 
         WindowMain->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowMain);
-        menubar->setObjectName(QString::fromUtf8("menubar"));
+        menubar->setObjectName(QStringLiteral("menubar"));
         menubar->setGeometry(QRect(0, 0, 1178, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
-        menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
+        menuAssets->setObjectName(QStringLiteral("menuAssets"));
         menuCreate = new QMenu(menuAssets);
-        menuCreate->setObjectName(QString::fromUtf8("menuCreate"));
+        menuCreate->setObjectName(QStringLiteral("menuCreate"));
         menuEntity = new QMenu(menubar);
-        menuEntity->setObjectName(QString::fromUtf8("menuEntity"));
+        menuEntity->setObjectName(QStringLiteral("menuEntity"));
         menuProject = new QMenu(menubar);
-        menuProject->setObjectName(QString::fromUtf8("menuProject"));
+        menuProject->setObjectName(QStringLiteral("menuProject"));
         WindowMain->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowMain);
-        statusbar->setObjectName(QString::fromUtf8("statusbar"));
+        statusbar->setObjectName(QStringLiteral("statusbar"));
         WindowMain->setStatusBar(statusbar);
         dockHierarchy = new QDockWidget(WindowMain);
-        dockHierarchy->setObjectName(QString::fromUtf8("dockHierarchy"));
+        dockHierarchy->setObjectName(QStringLiteral("dockHierarchy"));
         dockHierarchy->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockHierarchy->setAllowedAreas(Qt::AllDockWidgetAreas);
         dockWidgetContents_4 = new QWidget();
-        dockWidgetContents_4->setObjectName(QString::fromUtf8("dockWidgetContents_4"));
+        dockWidgetContents_4->setObjectName(QStringLiteral("dockWidgetContents_4"));
         verticalLayout_8 = new QVBoxLayout(dockWidgetContents_4);
-        verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
+        verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
         verticalLayout_4 = new QVBoxLayout();
-        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
         widgetTreeHierarchy = new TreeHierarchy(dockWidgetContents_4);
         QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
-        __qtreewidgetitem->setText(0, QString::fromUtf8("1"));
+        __qtreewidgetitem->setText(0, QStringLiteral("1"));
         widgetTreeHierarchy->setHeaderItem(__qtreewidgetitem);
         QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem(widgetTreeHierarchy);
         QTreeWidgetItem *__qtreewidgetitem2 = new QTreeWidgetItem(__qtreewidgetitem1);
@@ -162,7 +162,7 @@ public:
         new QTreeWidgetItem(__qtreewidgetitem5);
         new QTreeWidgetItem(__qtreewidgetitem4);
         new QTreeWidgetItem(__qtreewidgetitem4);
-        widgetTreeHierarchy->setObjectName(QString::fromUtf8("widgetTreeHierarchy"));
+        widgetTreeHierarchy->setObjectName(QStringLiteral("widgetTreeHierarchy"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
@@ -189,12 +189,12 @@ public:
         dockHierarchy->setWidget(dockWidgetContents_4);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(1), dockHierarchy);
         dockInspector = new QDockWidget(WindowMain);
-        dockInspector->setObjectName(QString::fromUtf8("dockInspector"));
+        dockInspector->setObjectName(QStringLiteral("dockInspector"));
         dockInspector->setFloating(false);
         dockInspector->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockInspector->setAllowedAreas(Qt::AllDockWidgetAreas);
         dockWidgetContents_7 = new QWidget();
-        dockWidgetContents_7->setObjectName(QString::fromUtf8("dockWidgetContents_7"));
+        dockWidgetContents_7->setObjectName(QStringLiteral("dockWidgetContents_7"));
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
@@ -202,21 +202,21 @@ public:
         dockWidgetContents_7->setSizePolicy(sizePolicy2);
         dockWidgetContents_7->setContextMenuPolicy(Qt::DefaultContextMenu);
         verticalLayout_9 = new QVBoxLayout(dockWidgetContents_7);
-        verticalLayout_9->setObjectName(QString::fromUtf8("verticalLayout_9"));
+        verticalLayout_9->setObjectName(QStringLiteral("verticalLayout_9"));
         widget = new QWidget(dockWidgetContents_7);
-        widget->setObjectName(QString::fromUtf8("widget"));
+        widget->setObjectName(QStringLiteral("widget"));
 
         verticalLayout_9->addWidget(widget);
 
         verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         labelInspectorEntityName = new QLabel(dockWidgetContents_7);
-        labelInspectorEntityName->setObjectName(QString::fromUtf8("labelInspectorEntityName"));
+        labelInspectorEntityName->setObjectName(QStringLiteral("labelInspectorEntityName"));
 
         verticalLayout_2->addWidget(labelInspectorEntityName);
 
         widgetListInspector = new ListInspector(dockWidgetContents_7);
-        widgetListInspector->setObjectName(QString::fromUtf8("widgetListInspector"));
+        widgetListInspector->setObjectName(QStringLiteral("widgetListInspector"));
 
         verticalLayout_2->addWidget(widgetListInspector);
 
@@ -227,27 +227,27 @@ public:
         dockInspector->setWidget(dockWidgetContents_7);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockInspector);
         dockExplorer = new QDockWidget(WindowMain);
-        dockExplorer->setObjectName(QString::fromUtf8("dockExplorer"));
+        dockExplorer->setObjectName(QStringLiteral("dockExplorer"));
         dockExplorer->setMinimumSize(QSize(420, 130));
         dockExplorer->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockWidgetContents_5 = new QWidget();
-        dockWidgetContents_5->setObjectName(QString::fromUtf8("dockWidgetContents_5"));
+        dockWidgetContents_5->setObjectName(QStringLiteral("dockWidgetContents_5"));
         verticalLayout_7 = new QVBoxLayout(dockWidgetContents_5);
-        verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
         splitter = new QSplitter(dockWidgetContents_5);
-        splitter->setObjectName(QString::fromUtf8("splitter"));
+        splitter->setObjectName(QStringLiteral("splitter"));
         sizePolicy2.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
         splitter->setSizePolicy(sizePolicy2);
         splitter->setOrientation(Qt::Horizontal);
         splitter->setChildrenCollapsible(true);
         buttonCreatePrefab = new QPushButton(splitter);
-        buttonCreatePrefab->setObjectName(QString::fromUtf8("buttonCreatePrefab"));
+        buttonCreatePrefab->setObjectName(QStringLiteral("buttonCreatePrefab"));
         sizePolicy2.setHeightForWidth(buttonCreatePrefab->sizePolicy().hasHeightForWidth());
         buttonCreatePrefab->setSizePolicy(sizePolicy2);
         buttonCreatePrefab->setDefault(true);
         splitter->addWidget(buttonCreatePrefab);
         widgetTreeExplorer = new QTreeView(splitter);
-        widgetTreeExplorer->setObjectName(QString::fromUtf8("widgetTreeExplorer"));
+        widgetTreeExplorer->setObjectName(QStringLiteral("widgetTreeExplorer"));
         sizePolicy2.setHeightForWidth(widgetTreeExplorer->sizePolicy().hasHeightForWidth());
         widgetTreeExplorer->setSizePolicy(sizePolicy2);
         widgetTreeExplorer->setAcceptDrops(true);
@@ -282,51 +282,51 @@ public:
 
     void retranslateUi(QMainWindow *WindowMain)
     {
-        WindowMain->setWindowTitle(QApplication::translate("WindowMain", "Bang Editor", 0, QApplication::UnicodeUTF8));
-        actionOpen_project->setText(QApplication::translate("WindowMain", "Open project", 0, QApplication::UnicodeUTF8));
-        actionSave_project->setText(QApplication::translate("WindowMain", "Save project", 0, QApplication::UnicodeUTF8));
-        actionMaterial->setText(QApplication::translate("WindowMain", "Material", 0, QApplication::UnicodeUTF8));
-        actionMesh->setText(QApplication::translate("WindowMain", "Mesh", 0, QApplication::UnicodeUTF8));
-        actionShaderProgram->setText(QApplication::translate("WindowMain", "ShaderProgram", 0, QApplication::UnicodeUTF8));
-        actionTexture2D->setText(QApplication::translate("WindowMain", "Texture2D", 0, QApplication::UnicodeUTF8));
-        actionProject_Settings->setText(QApplication::translate("WindowMain", "Project Settings", 0, QApplication::UnicodeUTF8));
-        actionCreate_from_prefab->setText(QApplication::translate("WindowMain", "Create from prefab", 0, QApplication::UnicodeUTF8));
-        menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
-        menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));
-        menuEntity->setTitle(QApplication::translate("WindowMain", "Entities", 0, QApplication::UnicodeUTF8));
-        menuProject->setTitle(QApplication::translate("WindowMain", "Project", 0, QApplication::UnicodeUTF8));
-        dockHierarchy->setWindowTitle(QApplication::translate("WindowMain", "Hierarchy", 0, QApplication::UnicodeUTF8));
+        WindowMain->setWindowTitle(QApplication::translate("WindowMain", "Bang Editor", 0));
+        actionOpen_project->setText(QApplication::translate("WindowMain", "Open project", 0));
+        actionSave_project->setText(QApplication::translate("WindowMain", "Save project", 0));
+        actionMaterial->setText(QApplication::translate("WindowMain", "Material", 0));
+        actionMesh->setText(QApplication::translate("WindowMain", "Mesh", 0));
+        actionShaderProgram->setText(QApplication::translate("WindowMain", "ShaderProgram", 0));
+        actionTexture2D->setText(QApplication::translate("WindowMain", "Texture2D", 0));
+        actionProject_Settings->setText(QApplication::translate("WindowMain", "Project Settings", 0));
+        actionCreate_from_prefab->setText(QApplication::translate("WindowMain", "Create from prefab", 0));
+        menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0));
+        menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0));
+        menuEntity->setTitle(QApplication::translate("WindowMain", "Entities", 0));
+        menuProject->setTitle(QApplication::translate("WindowMain", "Project", 0));
+        dockHierarchy->setWindowTitle(QApplication::translate("WindowMain", "Hierarchy", 0));
 
         const bool __sortingEnabled = widgetTreeHierarchy->isSortingEnabled();
         widgetTreeHierarchy->setSortingEnabled(false);
         QTreeWidgetItem *___qtreewidgetitem = widgetTreeHierarchy->topLevelItem(0);
-        ___qtreewidgetitem->setText(0, QApplication::translate("WindowMain", "aaaaaa", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem->setText(0, QApplication::translate("WindowMain", "aaaaaa", 0));
         QTreeWidgetItem *___qtreewidgetitem1 = ___qtreewidgetitem->child(0);
-        ___qtreewidgetitem1->setText(0, QApplication::translate("WindowMain", "bbbbbb", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem1->setText(0, QApplication::translate("WindowMain", "bbbbbb", 0));
         QTreeWidgetItem *___qtreewidgetitem2 = ___qtreewidgetitem1->child(0);
-        ___qtreewidgetitem2->setText(0, QApplication::translate("WindowMain", "cccccc", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem2->setText(0, QApplication::translate("WindowMain", "cccccc", 0));
         QTreeWidgetItem *___qtreewidgetitem3 = ___qtreewidgetitem->child(1);
-        ___qtreewidgetitem3->setText(0, QApplication::translate("WindowMain", "dddddd", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem3->setText(0, QApplication::translate("WindowMain", "dddddd", 0));
         QTreeWidgetItem *___qtreewidgetitem4 = widgetTreeHierarchy->topLevelItem(1);
-        ___qtreewidgetitem4->setText(0, QApplication::translate("WindowMain", "xxxxxxxx", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem4->setText(0, QApplication::translate("WindowMain", "xxxxxxxx", 0));
         QTreeWidgetItem *___qtreewidgetitem5 = ___qtreewidgetitem4->child(0);
-        ___qtreewidgetitem5->setText(0, QApplication::translate("WindowMain", "wwwwwwwwwwwww", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem5->setText(0, QApplication::translate("WindowMain", "wwwwwwwwwwwww", 0));
         QTreeWidgetItem *___qtreewidgetitem6 = ___qtreewidgetitem5->child(0);
-        ___qtreewidgetitem6->setText(0, QApplication::translate("WindowMain", "eeeeeeeeeeeeeee", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem6->setText(0, QApplication::translate("WindowMain", "eeeeeeeeeeeeeee", 0));
         QTreeWidgetItem *___qtreewidgetitem7 = ___qtreewidgetitem6->child(0);
-        ___qtreewidgetitem7->setText(0, QApplication::translate("WindowMain", "rrrrrrrrrrrrrrrrrr", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem7->setText(0, QApplication::translate("WindowMain", "rrrrrrrrrrrrrrrrrr", 0));
         QTreeWidgetItem *___qtreewidgetitem8 = ___qtreewidgetitem6->child(1);
-        ___qtreewidgetitem8->setText(0, QApplication::translate("WindowMain", "wwwwwwww", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem8->setText(0, QApplication::translate("WindowMain", "wwwwwwww", 0));
         QTreeWidgetItem *___qtreewidgetitem9 = ___qtreewidgetitem5->child(1);
-        ___qtreewidgetitem9->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqq", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem9->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqq", 0));
         QTreeWidgetItem *___qtreewidgetitem10 = ___qtreewidgetitem5->child(2);
-        ___qtreewidgetitem10->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqqqssssssssssssss", 0, QApplication::UnicodeUTF8));
+        ___qtreewidgetitem10->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqqqssssssssssssss", 0));
         widgetTreeHierarchy->setSortingEnabled(__sortingEnabled);
 
-        dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0, QApplication::UnicodeUTF8));
-        labelInspectorEntityName->setText(QApplication::translate("WindowMain", "Entity Name", 0, QApplication::UnicodeUTF8));
-        dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));
-        buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0, QApplication::UnicodeUTF8));
+        dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0));
+        labelInspectorEntityName->setText(QApplication::translate("WindowMain", "Entity Name", 0));
+        dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0));
+        buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0));
     } // retranslateUi
 
 };
