@@ -67,12 +67,8 @@ void TreeHierarchy::LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items)
                 result.push_back((*it));
             }
         }
-        else
-        {
-            it = items->erase(it);
-        }
     }
-    Logger_Log("After: " << items);
+    Logger_Log("After: " << (&result));
     *items = result;
 }
 
@@ -105,7 +101,6 @@ Entity *TreeHierarchy::GetFirstSelectedEntity() const
 void TreeHierarchy::OnChildAdded(Entity *child)
 {
     Entity *parent = child->GetParent();
-    Logger_Log("Child added: " << child << " to " << parent);
     if(entityToTreeItem.find(parent) != entityToTreeItem.end())
     {
         entityToTreeItem[parent]->addChild( FillRecursiveDownwards(child) );
@@ -123,7 +118,6 @@ void TreeHierarchy::OnChildAdded(Entity *child)
 
 void TreeHierarchy::OnChildChangedParent(Entity *child, Entity *previousParent)
 {
-    Logger_Log("Child changed parent: " << child << " from  " << previousParent << " to " << child->GetParent());
 }
 
 void TreeHierarchy::OnChildRemoved(Entity *child)
@@ -146,28 +140,33 @@ void TreeHierarchy::dropEvent(QDropEvent *event)
     QTreeWidgetItem *targetItem = itemAt(event->pos());
     if(targetItem != nullptr && !sourceItems.empty())
     {
+        Entity *target = treeItemToEntity[targetItem];
         DropIndicatorPosition dropPos = dropIndicatorPosition();
         if (dropPos == BelowItem || dropPos == AboveItem)
         {
+            if(target->IsStage())
+            {
+                return;
+            }
+
             //Not putting inside, but below or above. Thus take its parent
             targetItem = targetItem->parent();
         }
 
         //Only if the user is not trying to put it on the same level as stage.
-        if(targetItem == nullptr) //Trying to put it on the same level as stage. STOP
+        if(targetItem != nullptr) //Trying to put it on the same level as stage. STOP
         {
-            Entity *target = treeItemToEntity[targetItem];
             for(auto it = sourceItems.begin(); it != sourceItems.end(); ++it)
             {
-                if((*it) != targetItem)
+                QTreeWidgetItem *sourceItem = (*it);
+                if(sourceItem != targetItem)
                 {
-                    QTreeWidgetItem *sourceItem = (*it);
                     Entity *source = treeItemToEntity[sourceItem];
-                    Logger_Log(source << " to " << target);
-                    if(source->GetParent() != nullptr)
+                    if(source != nullptr && target != nullptr &&
+                       source->GetParent() != nullptr)
+                    {
                         source->GetParent()->MoveChild(source, target);
-                    else
-                        source->SetParent(target);
+                    }
                 }
             }
         }

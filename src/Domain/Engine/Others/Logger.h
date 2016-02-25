@@ -41,6 +41,11 @@ std::ostream &operator<<(std::ostream &log, const std::list<T> *l)
     log <<")";
     return log;
 }
+template <class T>
+std::ostream &operator<<(std::ostream &log, const std::list<T> &l)
+{
+    return log << (&l);
+}
 
 template <class T>
 std::ostream &operator<<(std::ostream &log, const std::vector<T> *v)
@@ -54,6 +59,12 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> *v)
     log << ")";
     return log;
 }
+template <class T>
+std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
+{
+    return log << (&v);
+}
+
 
 
 #define _Logger_Suffix \
