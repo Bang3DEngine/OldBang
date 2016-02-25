@@ -146,6 +146,7 @@ void TreeHierarchy::dropEvent(QDropEvent *event)
 
             //Not putting inside, but below or above. Thus take its parent
             targetItem = targetItem->parent();
+            target = treeItemToEntity[targetItem];
         }
 
         //Only if the user is not trying to put it on the same level as stage.
