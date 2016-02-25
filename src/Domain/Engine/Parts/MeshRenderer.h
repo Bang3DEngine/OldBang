@@ -42,6 +42,7 @@ public:
     void Read(std::istream &f);
 
     virtual const std::string ToString() const override;
+    virtual std::string GetName() const override { return "MeshRenderer"; }
 };
 
 #endif // MESHRENDERER_H

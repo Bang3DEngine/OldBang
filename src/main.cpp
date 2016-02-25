@@ -27,6 +27,11 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
+    QFont font;
+    font.setFamily(font.defaultFamily());
+    font.setPixelSize(12);
+    app.setFont(font);
+
     QMainWindow *window = new QMainWindow;
     WindowMain::Init(window); //init window main
     WindowMain *windowMain = WindowMain::GetInstance();

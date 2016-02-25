@@ -4,7 +4,7 @@
 #include "Part.h"
 #include "Logger.h"
 
-ListInspector::ListInspector(QWidget *parent)
+ListInspector::ListInspector(QWidget *parent) : QListWidget(parent)
 {
 }
 
@@ -23,7 +23,15 @@ void ListInspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &se
         clear();
         for(Part *p : selectedEntity->GetParts())
         {
-            addItem(QString::fromStdString(p->ToString()));
+            QListWidgetItem *item = new QListWidgetItem();
+            addItem(item);
+
+            ListInspectorItemWidget *iw = new ListInspectorItemWidget(p->GetName());
+            this->setItemWidget(item, iw);
+            item->setSizeHint(iw->size() * 0.9);
+
+            this->adjustSize();
+            this->show();
         }
     }
 }

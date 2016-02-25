@@ -118,7 +118,8 @@ HEADERS += \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/View/TreeHierarchy.h \
     src/View/ListInspector.h \
-    src/Bang.h
+    src/Bang.h \
+    src/View/ListInspectorItemWidget.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -163,7 +164,8 @@ SOURCES += \
     src/View/WindowEventManager.cpp \
     src/View/Interfaces/IWindowEventManagerListener.cpp \
     src/View/TreeHierarchy.cpp \
-    src/View/ListInspector.cpp
+    src/View/ListInspector.cpp \
+    src/View/ListInspectorItemWidget.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

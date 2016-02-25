@@ -49,6 +49,8 @@ public:
 
     void Write(std::ostream &f) const override;
     void Read(std::istream &f) override;
+
+    virtual std::string GetName() const override { return "Transform"; }
 };
 
 #endif // TRANSFORM_H

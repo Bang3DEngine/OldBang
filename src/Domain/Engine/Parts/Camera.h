@@ -66,6 +66,7 @@ public:
     void Read(std::istream &f);
 
     virtual const std::string ToString() const override;
+    virtual std::string GetName() const override { return "Camera"; }
 };
 
 #endif // CAMERA_H

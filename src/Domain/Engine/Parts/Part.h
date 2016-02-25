@@ -31,6 +31,8 @@ public:
     virtual void _OnRender() override { OnRender(); }
     virtual void _OnUpdate() override { OnUpdate(); }
     virtual void _OnDestroy() override { OnDestroy(); }
+
+    virtual std::string GetName() const { return "Part"; }
 };
 
 #endif // PART_H

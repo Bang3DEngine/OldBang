@@ -78,7 +78,7 @@ public:
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
-        WindowMain->resize(1178, 771);
+        WindowMain->resize(531, 402);
         actionOpen_project = new QAction(WindowMain);
         actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
@@ -123,7 +123,7 @@ public:
         WindowMain->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1178, 25));
+        menubar->setGeometry(QRect(0, 0, 531, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -216,7 +216,20 @@ public:
         verticalLayout_2->addWidget(labelInspectorEntityName);
 
         widgetListInspector = new ListInspector(dockWidgetContents_7);
+        new QListWidgetItem(widgetListInspector);
+        new QListWidgetItem(widgetListInspector);
+        new QListWidgetItem(widgetListInspector);
+        new QListWidgetItem(widgetListInspector);
+        new QListWidgetItem(widgetListInspector);
+        new QListWidgetItem(widgetListInspector);
+        new QListWidgetItem(widgetListInspector);
+        new QListWidgetItem(widgetListInspector);
         widgetListInspector->setObjectName(QString::fromUtf8("widgetListInspector"));
+        widgetListInspector->setDefaultDropAction(Qt::MoveAction);
+        widgetListInspector->setAlternatingRowColors(true);
+        widgetListInspector->setMovement(QListView::Snap);
+        widgetListInspector->setFlow(QListView::TopToBottom);
+        widgetListInspector->setViewMode(QListView::ListMode);
 
         verticalLayout_2->addWidget(widgetListInspector);
 
@@ -325,6 +338,27 @@ public:
 
         dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0, QApplication::UnicodeUTF8));
         labelInspectorEntityName->setText(QApplication::translate("WindowMain", "Entity Name", 0, QApplication::UnicodeUTF8));
+
+        const bool __sortingEnabled1 = widgetListInspector->isSortingEnabled();
+        widgetListInspector->setSortingEnabled(false);
+        QListWidgetItem *___qlistwidgetitem = widgetListInspector->item(0);
+        ___qlistwidgetitem->setText(QApplication::translate("WindowMain", "a", 0, QApplication::UnicodeUTF8));
+        QListWidgetItem *___qlistwidgetitem1 = widgetListInspector->item(1);
+        ___qlistwidgetitem1->setText(QApplication::translate("WindowMain", "v", 0, QApplication::UnicodeUTF8));
+        QListWidgetItem *___qlistwidgetitem2 = widgetListInspector->item(2);
+        ___qlistwidgetitem2->setText(QApplication::translate("WindowMain", "f", 0, QApplication::UnicodeUTF8));
+        QListWidgetItem *___qlistwidgetitem3 = widgetListInspector->item(3);
+        ___qlistwidgetitem3->setText(QApplication::translate("WindowMain", "g", 0, QApplication::UnicodeUTF8));
+        QListWidgetItem *___qlistwidgetitem4 = widgetListInspector->item(4);
+        ___qlistwidgetitem4->setText(QApplication::translate("WindowMain", "h", 0, QApplication::UnicodeUTF8));
+        QListWidgetItem *___qlistwidgetitem5 = widgetListInspector->item(5);
+        ___qlistwidgetitem5->setText(QApplication::translate("WindowMain", "New Item", 0, QApplication::UnicodeUTF8));
+        QListWidgetItem *___qlistwidgetitem6 = widgetListInspector->item(6);
+        ___qlistwidgetitem6->setText(QApplication::translate("WindowMain", "j", 0, QApplication::UnicodeUTF8));
+        QListWidgetItem *___qlistwidgetitem7 = widgetListInspector->item(7);
+        ___qlistwidgetitem7->setText(QApplication::translate("WindowMain", "j", 0, QApplication::UnicodeUTF8));
+        widgetListInspector->setSortingEnabled(__sortingEnabled1);
+
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));
         buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
