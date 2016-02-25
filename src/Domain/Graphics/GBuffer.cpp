@@ -7,10 +7,6 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateTextureAttachment(Attachment::Uv);
     CreateTextureAttachment(Attachment::Diffuse);
     CreateTextureAttachment(Attachment::Depth);
-    #ifdef BANG_EDITOR
-    CreateTextureAttachment(Attachment::SelectedInEditor);
-    #endif
-
     CreateDepthBufferAttachment();
 
     renderToScreenMaterial = new Material();
@@ -36,9 +32,6 @@ void GBuffer::RenderToScreen() const
     TextureRender *uvTex       = GetTextureAttachment(GBuffer::Attachment::Uv);
     TextureRender *diffuseTex  = GetTextureAttachment(GBuffer::Attachment::Diffuse);
     TextureRender *depthTex    = GetTextureAttachment(GBuffer::Attachment::Depth);
-    #ifdef BANG_EDITOR
-    TextureRender *selectedTex    = GetTextureAttachment(GBuffer::Attachment::SelectedInEditor);
-    #endif
 
     renderToScreenPlaneMesh->GetVAO()->Bind();
 
@@ -49,9 +42,6 @@ void GBuffer::RenderToScreen() const
     uvTex->SetTextureSlot(GBuffer::Attachment::Uv);             //2
     diffuseTex->SetTextureSlot(GBuffer::Attachment::Diffuse);   //3
     depthTex->SetTextureSlot(GBuffer::Attachment::Depth);       //4
-    #ifdef BANG_EDITOR
-    selectedTex->SetTextureSlot(GBuffer::Attachment::SelectedInEditor);
-    #endif
 
     //Now attach to the material, with its corresponding index for the name (BANG_texture_0)
     //which in this case are the same as each respective texture slot
@@ -60,10 +50,6 @@ void GBuffer::RenderToScreen() const
     renderToScreenMaterial->SetTexture(uvTex,       GBuffer::Attachment::Uv);       //2
     renderToScreenMaterial->SetTexture(diffuseTex,  GBuffer::Attachment::Diffuse);  //3
     renderToScreenMaterial->SetTexture(depthTex,    GBuffer::Attachment::Depth);    //4
-    #ifdef BANG_EDITOR
-    renderToScreenMaterial->SetTexture(selectedTex,  GBuffer::Attachment::SelectedInEditor);
-    #endif
-
     renderToScreenMaterial->Bind();
 
     //Render the screen plane!

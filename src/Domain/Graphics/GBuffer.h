@@ -17,9 +17,6 @@ public:
         Uv,
         Diffuse,
         Depth
-        #ifdef BANG_EDITOR
-        ,SelectedInEditor
-        #endif
     };
 
 private:

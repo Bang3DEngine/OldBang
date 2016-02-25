@@ -47,7 +47,6 @@ public:
         Uniform_Texture_Final_Color,
         Uniform_Material_Diffuse_Color,
 
-        Uniform_Selected_In_Editor,
 
         Filepath_Shader_Vertex_Render_To_Screen,
         Filepath_Shader_Fragment_Render_To_Screen,

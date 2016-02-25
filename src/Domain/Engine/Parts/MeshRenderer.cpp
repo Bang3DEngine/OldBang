@@ -123,17 +123,6 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
 
-    #ifdef BANG_EDITOR
-    if(GetOwner()->IsSelectedInEditor())
-    {
-        material->shaderProgram->SetUniformFloat(ShaderContract::Uniform_Selected_In_Editor, 1.0f);
-    }
-    else
-    {
-        material->shaderProgram->SetUniformFloat(ShaderContract::Uniform_Selected_In_Editor, 0.0f);
-    }
-    #endif
-
     //Logger_Warning("Rendering " << material->GetShaderProgram());
     glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
 

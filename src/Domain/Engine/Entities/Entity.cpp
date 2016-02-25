@@ -191,20 +191,36 @@ void Entity::Read(std::istream &f)
 }
 
 #ifdef BANG_EDITOR
-bool Entity::IsSelectedInEditor()
-{
-    return selectedInEditor;
-}
-
 void Entity::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
 {
-    selectedInEditor = false;
+    bool isSelected = false;
     for(auto it = selectedEntities.begin(); it != selectedEntities.end(); ++it)
     {
         if((*it) == this)
         {
-            selectedInEditor = true;
+            isSelected = true;
             break;
+        }
+    }
+
+    Material *mat = nullptr;
+    if(this->HasPart<MeshRenderer>())
+    {
+        mat = this->GetPart<MeshRenderer>()->GetMaterial();
+    }
+
+    if(isSelected)
+    {
+        if(mat != nullptr)
+        {
+            mat->SetDiffuseColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.7f));
+        }
+    }
+    else
+    {
+        if(mat != nullptr)
+        {
+            mat->SetDiffuseColor(glm::vec4(0.0f));
         }
     }
 }

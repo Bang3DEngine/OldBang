@@ -39,10 +39,6 @@ private:
     void RemoveChildWithoutNoifyingHierarchy(std::list<Entity*>::iterator &it);
     void RemoveChild(std::list<Entity*>::iterator &it);
 
-    #ifdef BANG_EDITOR
-     bool selectedInEditor;
-    #endif
-
 protected:
     std::string name;
     std::list<Part*> parts;
@@ -127,7 +123,6 @@ public:
     void Read(std::istream &f) override;
 
     #ifdef BANG_EDITOR
-    bool IsSelectedInEditor();
     void OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities) override;
     #endif
 };
