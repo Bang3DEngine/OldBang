@@ -15,7 +15,7 @@ class ListInspector : public QListWidget, public IWindowEventManagerListener
 public:
     explicit ListInspector(QWidget *parent = 0);
 
-    void OnTreeHierarchyEntitySelected(Entity *selectedEntity) override;
+    void OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities) override;
 };
 
 #endif // LISTINSPECTOR_H

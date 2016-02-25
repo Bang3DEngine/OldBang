@@ -108,7 +108,7 @@ void TreeHierarchy::OnChildAdded(Entity *child)
 
         UnselectAll();
         entityToTreeItem[child]->setSelected(true);
-        WindowEventManager::NotifyHierarchyEntitySelected(child);
+        //WindowEventManager::NotifyHierarchyEntitySelected(child);
     }
     else
     {
@@ -230,13 +230,17 @@ void TreeHierarchy::OnCustomContextMenuRequested(QPoint point)
     }
 }
 
-void TreeHierarchy::_NotifyHierarchyItemSelected(QTreeWidgetItem *item, int column)
+void TreeHierarchy::_NotifyHierarchyItemSelectionChanged()
 {
-    if(item != nullptr && treeItemToEntity.find(item) != treeItemToEntity.end())
+    std::list<Entity*> selectedEntities;
+    foreach(QTreeWidgetItem *item, selectedItems())
     {
-        if(treeItemToEntity[item] != nullptr)
+        if(treeItemToEntity.find(item) != treeItemToEntity.end())
         {
-            WindowEventManager::NotifyHierarchyEntitySelected(treeItemToEntity[item]);
+            Entity *e = treeItemToEntity[item];
+            if(e != nullptr)
+                selectedEntities.push_back(e);
         }
     }
+    WindowEventManager::NotifyHierarchyEntitiesSelected(selectedEntities);
 }

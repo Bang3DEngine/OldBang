@@ -190,6 +190,36 @@ void Entity::Read(std::istream &f)
     }
 }
 
+#ifdef BANG_EDITOR
+void Entity::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
+{
+    bool isSelected = false;
+    for(auto it = selectedEntities.begin(); it != selectedEntities.end(); ++it)
+    {
+        if((*it) == this)
+        {
+            isSelected = true;
+            break;
+        }
+    }
+
+    if(isSelected)
+    {
+        if(this->HasPart<Material>())
+        {
+            this->GetPart<Material>()->SetDiffuseColor(glm::vec4(1.0f, 0.3f, 0.0f, 0.5f));
+        }
+    }
+    else
+    {
+        if(this->HasPart<Material>())
+        {
+            this->GetPart<Material>()->SetDiffuseColor(glm::vec4(glm::vec3(1.0f), 0.0f));
+        }
+    }
+}
+#endif
+
 
 const std::string Entity::ToString() const
 {

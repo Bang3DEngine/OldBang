@@ -60,7 +60,7 @@ public slots:
     void OnContextMenuDeleteClicked();
     void OnCustomContextMenuRequested(QPoint point);
 
-    void _NotifyHierarchyItemSelected(QTreeWidgetItem *item, int column);
+    void _NotifyHierarchyItemSelectionChanged();
 };
 
 #endif // TREEHIERARCHY_H

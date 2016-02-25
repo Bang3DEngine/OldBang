@@ -274,8 +274,9 @@ public:
         retranslateUi(WindowMain);
         QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
         QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_NotifyMenuBarItemClicked(int)));
-        QObject::connect(widgetTreeHierarchy, SIGNAL(itemClicked(QTreeWidgetItem*,int)), widgetTreeHierarchy, SLOT(_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)));
+        QObject::connect(widgetTreeHierarchy, SIGNAL(itemChanged(QTreeWidgetItem*,int)), widgetTreeHierarchy, SLOT(_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)));
         QObject::connect(widgetTreeHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetTreeHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
+        QObject::connect(widgetTreeHierarchy, SIGNAL(itemSelectionChanged()), widgetTreeHierarchy, SLOT(_NotifyHierarchyItemSelectionChanged()));
 
         QMetaObject::connectSlotsByName(WindowMain);
     } // setupUi

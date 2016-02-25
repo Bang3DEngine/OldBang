@@ -50,9 +50,9 @@ void WindowEventManager::_NotifyMenuBarItemClicked(int itemClicked)
     WindowEventManager::NotifyMenuBarItemClicked(itemClicked);
 }
 
-void WindowEventManager::NotifyHierarchyEntitySelected(Entity *selectedEntity)
+void WindowEventManager::NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
 {
-    PROPAGATE_EVENT_PAR(OnTreeHierarchyEntitySelected(selectedEntity), wem->listeners);
+    PROPAGATE_EVENT_PAR(OnTreeHierarchyEntitiesSelected(selectedEntities), wem->listeners);
 }
 
 

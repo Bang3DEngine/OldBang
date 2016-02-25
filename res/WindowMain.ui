@@ -388,7 +388,7 @@
    <extends>QTreeWidget</extends>
    <header>TreeHierarchy.h</header>
    <slots>
-    <slot>_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)</slot>
+    <slot>_NotifyHierarchyItemSelectionChanged()</slot>
     <slot>OnCustomContextMenuRequested(QPoint)</slot>
    </slots>
   </customwidget>
@@ -411,8 +411,8 @@
      <y>479</y>
     </hint>
     <hint type="destinationlabel">
-     <x>426</x>
-     <y>238</y>
+     <x>279</x>
+     <y>264</y>
     </hint>
    </hints>
   </connection>
@@ -427,14 +427,14 @@
      <y>11</y>
     </hint>
     <hint type="destinationlabel">
-     <x>425</x>
+     <x>278</x>
      <y>34</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>widgetTreeHierarchy</sender>
-   <signal>itemClicked(QTreeWidgetItem*,int)</signal>
+   <signal>itemChanged(QTreeWidgetItem*,int)</signal>
    <receiver>widgetTreeHierarchy</receiver>
    <slot>_NotifyHierarchyItemSelected(QTreeWidgetItem*,int)</slot>
    <hints>
@@ -461,6 +461,22 @@
     <hint type="destinationlabel">
      <x>118</x>
      <y>101</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widgetTreeHierarchy</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>widgetTreeHierarchy</receiver>
+   <slot>_NotifyHierarchyItemSelectionChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>133</x>
+     <y>138</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>133</x>
+     <y>138</y>
     </hint>
    </hints>
   </connection>

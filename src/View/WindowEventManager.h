@@ -47,7 +47,7 @@ public slots:
     static void NotifyMenuBarItemClicked(int itemClcked);
     void _NotifyMenuBarItemClicked(int itemClicked);
 
-    static void NotifyHierarchyEntitySelected(Entity *selectedEntity);
+    static void NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities);
 };
 
 #endif // WINDOWEVENTMANAGER_H

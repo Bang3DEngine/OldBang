@@ -12,9 +12,17 @@
 #include "IToString.h"
 #include "IStageEventListener.h"
 
+#ifdef BANG_EDITOR
+#include "IWindowEventManagerListener.h"
+#endif
 class Part;
 class Stage;
-class Entity : public IStageEventListener, public IToString, public IFileable
+class Entity : public IStageEventListener,
+               public IToString,
+               public IFileable,
+               #ifdef BANG_EDITOR
+                public IWindowEventManagerListener
+               #endif
 {
 friend class Canvas;
 friend class Prefab;
@@ -25,6 +33,7 @@ private:
     virtual void _OnUpdate() override;
     virtual void _OnRender() override;
     virtual void _OnDestroy() override;
+
 
     void AddChildWithoutNoifyingHierarchy(Entity *child);
     void RemoveChildWithoutNoifyingHierarchy(std::list<Entity*>::iterator &it);
@@ -112,6 +121,10 @@ public:
 
     void Write(std::ostream &f) const override;
     void Read(std::istream &f) override;
+
+    #ifdef BANG_EDITOR
+    void OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities) override;
+    #endif
 };
 
 #endif // ENTITY_H

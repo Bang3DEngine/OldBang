@@ -8,8 +8,9 @@ ListInspector::ListInspector(QWidget *parent)
 {
 }
 
-void ListInspector::OnTreeHierarchyEntitySelected(Entity *selectedEntity)
+void ListInspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
 {
+    Entity *selectedEntity = selectedEntities.front();
     QLabel *nameLabel = parent()->findChild<QLabel*>("labelInspectorEntityName");
     if(nameLabel != nullptr)
     {
