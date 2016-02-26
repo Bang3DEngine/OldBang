@@ -13,8 +13,11 @@ ListInspectorItemWidget::ListInspectorItemWidget(const std::string &title) : QWi
     titleLabel->show();
     mainLayout->addWidget(titleLabel);
 
-    mainLayout->addWidget( new WidgetSlotVector({1.0f, 2.0f, 3.0f}, "Speed") );
-    mainLayout->addWidget( new WidgetSlotFloat(2.0f, "Direction") );
+    WidgetSlot *w =  new WidgetSlotVector({1.0f, 2.0f, 3.0f}, "Speed");
+    mainLayout->addWidget(w);
+    w =  new WidgetSlotFloat(2.0f, "Direction");
+    mainLayout->addWidget(w);
+    w->setContentsMargins(0,0,0,15);
 
     this->show();
 }
