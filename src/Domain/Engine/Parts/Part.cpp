@@ -22,3 +22,10 @@ const std::string Part::ToString() const
     msg << "Part";
     return msg.str();
 }
+
+#ifdef BANG_EDITOR
+void Part::OnInspectorSlotChanged()
+{
+    Logger_Log("OnInspectorSlotChanged !!!");
+}
+#endif

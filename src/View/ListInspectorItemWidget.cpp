@@ -1,28 +1,32 @@
 #include "ListInspectorItemWidget.h"
+#include "WindowEventManager.h"
+#include "Part.h"
 
 //TODO: RENAME THIS CLASS SO IT SHOWS THAT THIS IS RELATED TO A UNIQUE ENTITY PART
-ListInspectorItemWidget::ListInspectorItemWidget(const std::string &title, ListInspectorItemInfo &itemInfo)
+ListInspectorItemWidget::ListInspectorItemWidget(Part *relatedPart)
     : QWidget()
 {
+    this->relatedPart = relatedPart;
+
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->setSpacing(0); mainLayout->setContentsMargins(0,0,0,0);
     setLayout(mainLayout);
 
-    QLabel *titleLabel = new QLabel(QString::fromStdString(title));
+    QLabel *titleLabel = new QLabel(QString::fromStdString(relatedPart->GetName()));
     QFont font = titleLabel->font();
     font.setBold(true);
     titleLabel->setFont(font);
     titleLabel->show();
     mainLayout->addWidget(titleLabel);
 
-    for(ListInspectorItemInfo::SlotInfo si : itemInfo.slotInfos)
+    for(ListInspectorItemInfoSlot si : relatedPart->inspectorItemInfo.slotInfos)
     {
         if(si.IsVectorTyped())
         {
             std::vector<float> v;
             for(int i = 0; i < si.GetVectorComponentsCount(); ++i) v.push_back(float(i));
 
-            WidgetSlot *w =  new WidgetSlotVector(v, si.label);
+            WidgetSlot *w =  new WidgetSlotVector(v, si.label, this);
             w->show();
             mainLayout->addWidget(w);
         }
@@ -39,7 +43,8 @@ const std::string ListInspectorItemWidget::FloatToString(float f)
 }
 
 ListInspectorItemWidget::WidgetSlotFloat::WidgetSlotFloat(float initialValue,
-                                                          const std::string &labelString) : WidgetSlot()
+                                                          const std::string &labelString,
+                                                          ListInspectorItemWidget *parent) : WidgetSlot()
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
@@ -54,6 +59,7 @@ ListInspectorItemWidget::WidgetSlotFloat::WidgetSlotFloat(float initialValue,
     }
 
     QDoubleSpinBox *sp = new QDoubleSpinBox(); sp->setValue(initialValue);
+    connect(sp, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
     sp->setAlignment(Qt::AlignHCenter);
     sp->setMinimum(-999999999.9);
     sp->setMaximum(999999999.9);
@@ -69,7 +75,8 @@ ListInspectorItemWidget::WidgetSlotFloat::WidgetSlotFloat(float initialValue,
 
 
 ListInspectorItemWidget::WidgetSlotVector::WidgetSlotVector(std::vector<float> initialValues,
-                                                            const std::string &labelString) : WidgetSlot()
+                                                            const std::string &labelString,
+                                                            ListInspectorItemWidget *parent) : WidgetSlot()
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0); vLayout->setContentsMargins(0,0,0,0);
@@ -85,7 +92,7 @@ ListInspectorItemWidget::WidgetSlotVector::WidgetSlotVector(std::vector<float> i
 
     for(unsigned int i = 0; i < initialValues.size(); ++i)
     {
-        WidgetSlotFloat *s = new WidgetSlotFloat(initialValues[i]);
+        WidgetSlotFloat *s = new WidgetSlotFloat(initialValues[i], "", parent);
         s->setContentsMargins(0,0,0,0);
         s->show();
         hLayout->addWidget(s);
@@ -93,4 +100,9 @@ ListInspectorItemWidget::WidgetSlotVector::WidgetSlotVector(std::vector<float> i
 
     this->setContentsMargins(0,0,0,0);
     this->show();
+}
+
+void ListInspectorItemWidget::_NotifyInspectorSlotChanged(double newValue)
+{
+    WindowEventManager::NotifyInspectorSlotChanged(relatedPart);
 }

@@ -50,6 +50,11 @@ void WindowEventManager::_NotifyMenuBarItemClicked(int itemClicked)
     WindowEventManager::NotifyMenuBarItemClicked(itemClicked);
 }
 
+void WindowEventManager::NotifyInspectorSlotChanged(Part *updatedPart)
+{
+    updatedPart->OnInspectorSlotChanged();
+}
+
 void WindowEventManager::NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
 {
     PROPAGATE_EVENT_PAR(OnTreeHierarchyEntitiesSelected(selectedEntities), wem->listeners);

@@ -10,11 +10,12 @@
 
 #ifdef BANG_EDITOR
 #include "ListInspectorItemInfo.h"
+#include "IWindowEventManagerListener.h"
 #endif
 
 class Entity;
 
-class Part : public IStageEventListener, public IToString, public IFileable
+class Part : public IStageEventListener, public IToString, public IFileable, public IWindowEventManagerListener
 {
 friend class Entity;
 protected:
@@ -41,6 +42,11 @@ public:
     virtual void _OnDestroy() override { OnDestroy(); }
 
     virtual std::string GetName() const { return "Part"; }
+
+
+    #ifdef BANG_EDITOR
+    virtual void OnInspectorSlotChanged() override;
+    #endif
 };
 
 #endif // PART_H

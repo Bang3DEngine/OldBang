@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QTreeWidgetItem>
 
+#include "ListInspectorItemInfo.h"
 #include "IWindowEventManagerListener.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
@@ -22,6 +23,7 @@
     }\
 } while(0)
 
+class Part;
 class Entity;
 class WindowEventManager : public QGLWidget
 {
@@ -47,6 +49,7 @@ public slots:
     static void NotifyMenuBarItemClicked(int itemClcked);
     void _NotifyMenuBarItemClicked(int itemClicked);
 
+    static void NotifyInspectorSlotChanged(Part *updatedPart);
     static void NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities);
 };
 

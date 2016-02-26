@@ -20,8 +20,12 @@
 #include "ListInspectorItemInfo.h"
 #include "IWindowEventManagerListener.h"
 
+class Part;
+class WindowEventManager;
 class ListInspectorItemWidget : public QWidget
 {
+    Q_OBJECT
+
 private:
 
     //Private function of the different Widget Slots
@@ -37,7 +41,9 @@ private:
     class WidgetSlotFloat : public WidgetSlot
     {
         public:
-            WidgetSlotFloat(float initialValue = 0.0f, const std::string &labelString = "");
+            WidgetSlotFloat(float initialValue, const std::string &labelString,
+                            ListInspectorItemWidget *parent);
+
             QSize sizeHint() const override
             {
                 return QSize(50, 50);
@@ -47,14 +53,20 @@ private:
     class WidgetSlotVector : public WidgetSlot
     {
         public:
-            WidgetSlotVector(std::vector<float> initialValues, const std::string &labelString = "");
+            WidgetSlotVector(std::vector<float> initialValues, const std::string &labelString,
+                             ListInspectorItemWidget *parent);
     };
 
     //
 
+    Part *relatedPart; //Set by ListInspector when creating it
+
 
 public:
-    explicit ListInspectorItemWidget(const std::string &title, ListInspectorItemInfo &itemInfo);
+    explicit ListInspectorItemWidget(Part *relatedPart);
+
+public slots:
+    void _NotifyInspectorSlotChanged(double newValue);
 };
 
 #endif // LISTINSPECTORITEM_H

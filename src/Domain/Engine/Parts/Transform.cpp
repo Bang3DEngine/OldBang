@@ -9,19 +9,19 @@ Transform::Transform() : position(glm::vec3(0.0f)),
     #ifdef BANG_EDITOR
     inspectorItemInfo.slotInfos =
     {
-        ListInspectorItemInfo::SlotInfo(
+        ListInspectorItemInfoSlot(
             "Position",
-            ListInspectorItemInfo::SlotInfo::Type::Vec3Float,
+            ListInspectorItemInfoSlot::Type::Vec3Float,
             {"X", "Y", "Z"}
         ),
-        ListInspectorItemInfo::SlotInfo(
+        ListInspectorItemInfoSlot(
             "Rotation",
-            ListInspectorItemInfo::SlotInfo::Type::Vec4Float,
+            ListInspectorItemInfoSlot::Type::Vec4Float,
             {"X", "Y", "Z", "W"}
         ),
-        ListInspectorItemInfo::SlotInfo(
+        ListInspectorItemInfoSlot(
             "Scale",
-            ListInspectorItemInfo::SlotInfo::Type::Vec3Float,
+            ListInspectorItemInfoSlot::Type::Vec3Float,
             {"X", "Y", "Z"}
         )
     };
