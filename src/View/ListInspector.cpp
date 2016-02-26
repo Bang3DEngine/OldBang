@@ -21,12 +21,15 @@ void ListInspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &se
         }
 
         clear();
+
+        //For every part, create a widgetItem by reading its ListInspectorItemInfo
         for(Part *p : selectedEntity->GetParts())
         {
             QListWidgetItem *item = new QListWidgetItem();
             addItem(item);
 
-            ListInspectorItemWidget *iw = new ListInspectorItemWidget(p->GetName());
+            ListInspectorItemWidget *iw = new ListInspectorItemWidget(p->GetName(),
+                                                                      p->inspectorItemInfo);
             this->setItemWidget(item, iw);
             item->setSizeHint(iw->size() * 0.9);
 

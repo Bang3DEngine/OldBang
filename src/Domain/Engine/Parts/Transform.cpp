@@ -6,6 +6,27 @@ Transform::Transform() : position(glm::vec3(0.0f)),
                          rotation(glm::quat()),
                          scale(glm::vec3(1.0f))
 {
+    #ifdef BANG_EDITOR
+    inspectorItemInfo.slotInfos =
+    {
+        ListInspectorItemInfo::SlotInfo(
+            "Position",
+            ListInspectorItemInfo::SlotInfo::Type::Vec3Float,
+            {"X", "Y", "Z"}
+        ),
+        ListInspectorItemInfo::SlotInfo(
+            "Rotation",
+            ListInspectorItemInfo::SlotInfo::Type::Vec4Float,
+            {"X", "Y", "Z", "W"}
+        ),
+        ListInspectorItemInfo::SlotInfo(
+            "Scale",
+            ListInspectorItemInfo::SlotInfo::Type::Vec3Float,
+            {"X", "Y", "Z"}
+        )
+    };
+
+    #endif
 }
 
 void Transform::SetPosition(const glm::vec3 &p)

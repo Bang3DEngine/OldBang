@@ -17,6 +17,7 @@
 #include <QDoubleSpinBox>
 
 #include "Logger.h"
+#include "ListInspectorItemInfo.h"
 #include "IWindowEventManagerListener.h"
 
 class ListInspectorItemWidget : public QWidget
@@ -53,7 +54,7 @@ private:
 
 
 public:
-    explicit ListInspectorItemWidget(const std::string &title);
+    explicit ListInspectorItemWidget(const std::string &title, ListInspectorItemInfo &itemInfo);
 };
 
 #endif // LISTINSPECTORITEM_H

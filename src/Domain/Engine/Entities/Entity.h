@@ -15,6 +15,7 @@
 #ifdef BANG_EDITOR
 #include "IWindowEventManagerListener.h"
 #endif
+
 class Part;
 class Stage;
 class Entity : public IStageEventListener,
@@ -48,11 +49,11 @@ protected:
     bool isStage;
 
 public:
+
     Entity();
     Entity(const std::string &name);
 
     virtual ~Entity();
-
 
     void AddChild(Entity *child);
     Entity* GetChild(const std::string &name) const;

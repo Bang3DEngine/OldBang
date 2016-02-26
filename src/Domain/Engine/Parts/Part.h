@@ -8,6 +8,10 @@
 #include "IToString.h"
 #include "IStageEventListener.h"
 
+#ifdef BANG_EDITOR
+#include "ListInspectorItemInfo.h"
+#endif
+
 class Entity;
 
 class Part : public IStageEventListener, public IToString, public IFileable
@@ -20,6 +24,10 @@ protected:
     virtual ~Part();
 
 public:
+    #ifdef BANG_EDITOR
+    ListInspectorItemInfo inspectorItemInfo;
+    #endif
+
     Entity* GetOwner() const;
 
     virtual const std::string ToString() const override;

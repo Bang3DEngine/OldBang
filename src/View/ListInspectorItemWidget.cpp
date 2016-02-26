@@ -1,6 +1,8 @@
 #include "ListInspectorItemWidget.h"
 
-ListInspectorItemWidget::ListInspectorItemWidget(const std::string &title) : QWidget()
+//TODO: RENAME THIS CLASS SO IT SHOWS THAT THIS IS RELATED TO A UNIQUE ENTITY PART
+ListInspectorItemWidget::ListInspectorItemWidget(const std::string &title, ListInspectorItemInfo &itemInfo)
+    : QWidget()
 {
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->setSpacing(0); mainLayout->setContentsMargins(0,0,0,0);
@@ -13,11 +15,18 @@ ListInspectorItemWidget::ListInspectorItemWidget(const std::string &title) : QWi
     titleLabel->show();
     mainLayout->addWidget(titleLabel);
 
-    WidgetSlot *w =  new WidgetSlotVector({1.0f, 2.0f, 3.0f}, "Speed");
-    mainLayout->addWidget(w);
-    w =  new WidgetSlotFloat(2.0f, "Direction");
-    mainLayout->addWidget(w);
-    w->setContentsMargins(0,0,0,15);
+    for(ListInspectorItemInfo::SlotInfo si : itemInfo.slotInfos)
+    {
+        if(si.IsVectorTyped())
+        {
+            std::vector<float> v;
+            for(int i = 0; i < si.GetVectorComponentsCount(); ++i) v.push_back(float(i));
+
+            WidgetSlot *w =  new WidgetSlotVector(v, si.label);
+            w->show();
+            mainLayout->addWidget(w);
+        }
+    }
 
     this->show();
 }
