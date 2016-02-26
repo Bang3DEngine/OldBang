@@ -40,9 +40,13 @@ private:
 
     class WidgetSlotFloat : public WidgetSlot
     {
+        private:
+
         public:
             WidgetSlotFloat(float initialValue, const std::string &labelString,
                             ListInspectorItemWidget *parent);
+
+            QDoubleSpinBox *spinbox;
 
             QSize sizeHint() const override
             {
@@ -50,20 +54,23 @@ private:
             }
     };
 
-    class WidgetSlotVector : public WidgetSlot
+    class WidgetSlotVectorFloat : public WidgetSlot
     {
         public:
-            WidgetSlotVector(std::vector<float> initialValues, const std::string &labelString,
+            WidgetSlotVectorFloat(std::vector<float> initialValues, const std::string &labelString,
                              ListInspectorItemWidget *parent);
+
+            std::vector<QDoubleSpinBox*> spinboxes;
     };
 
     //
 
     Part *relatedPart; //Set by ListInspector when creating it
-
+    std::map<std::string, WidgetSlotVectorFloat*> labelsToSlotsVectorFloat;
 
 public:
     explicit ListInspectorItemWidget(Part *relatedPart);
+    std::vector<float> GetSlotValueVecFloat(const std::string &slotLabel);
 
 public slots:
     void _NotifyInspectorSlotChanged(double newValue);

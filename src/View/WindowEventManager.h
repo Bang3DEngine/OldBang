@@ -49,7 +49,7 @@ public slots:
     static void NotifyMenuBarItemClicked(int itemClcked);
     void _NotifyMenuBarItemClicked(int itemClicked);
 
-    static void NotifyInspectorSlotChanged(Part *updatedPart);
+    static void NotifyInspectorSlotChanged(Part *updatedPart, ListInspectorItemWidget *inspectorItem);
     static void NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities);
 };
 

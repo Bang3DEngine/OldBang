@@ -19,20 +19,35 @@ ListInspectorItemWidget::ListInspectorItemWidget(Part *relatedPart)
     titleLabel->show();
     mainLayout->addWidget(titleLabel);
 
-    for(ListInspectorItemInfoSlot si : relatedPart->inspectorItemInfo.slotInfos)
+    for(ListInspectorItemInfoSlot *si : relatedPart->inspectorItemInfo.slotInfos)
     {
-        if(si.IsVectorTyped())
+        WidgetSlot *w = nullptr;
+        if(si->IsVectorTyped())
         {
-            std::vector<float> v;
-            for(int i = 0; i < si.GetVectorComponentsCount(); ++i) v.push_back(float(i));
+            ListInspectorItemInfoSlotVecFloat *siv = (ListInspectorItemInfoSlotVecFloat*) si;
+            w =  new WidgetSlotVectorFloat(siv->initialValues, si->label, this);
+            labelsToSlotsVectorFloat[si->label] = (WidgetSlotVectorFloat*)(w);
+        }
 
-            WidgetSlot *w =  new WidgetSlotVector(v, si.label, this);
+        if(w != nullptr)
+        {
             w->show();
             mainLayout->addWidget(w);
         }
     }
 
     this->show();
+}
+
+std::vector<float> ListInspectorItemWidget::GetSlotValueVecFloat(const std::string &slotLabel)
+{
+    WidgetSlotVectorFloat *w = labelsToSlotsVectorFloat[slotLabel];
+    std::vector<float> result;
+    for(unsigned int i = 0; i < w->spinboxes.size(); ++i)
+    {
+        result.push_back( float(w->spinboxes[i]->value()) );
+    }
+    return result;
 }
 
 const std::string ListInspectorItemWidget::FloatToString(float f)
@@ -58,23 +73,25 @@ ListInspectorItemWidget::WidgetSlotFloat::WidgetSlotFloat(float initialValue,
         layout->addWidget(textLabel);
     }
 
-    QDoubleSpinBox *sp = new QDoubleSpinBox(); sp->setValue(initialValue);
-    connect(sp, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
-    sp->setAlignment(Qt::AlignHCenter);
-    sp->setMinimum(-999999999.9);
-    sp->setMaximum(999999999.9);
-    sp->setAccelerated(true);
-    sp->setMinimumWidth(50);
-    sp->setContentsMargins(0,0,0,0);
-    sp->show();
-    layout->addWidget(sp);
+    spinbox = new QDoubleSpinBox();
+    spinbox->setValue(initialValue);
+    spinbox->setAlignment(Qt::AlignHCenter);
+    spinbox->setMinimum(-999999999.9);
+    spinbox->setMaximum(999999999.9);
+    spinbox->setAccelerated(true);
+    spinbox->setMinimumWidth(50);
+    spinbox->setContentsMargins(0,0,0,0);
+    spinbox->show();
+    connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
+
+    layout->addWidget(spinbox);
 
     this->setContentsMargins(0,0,0,0);
     this->show();
 }
 
 
-ListInspectorItemWidget::WidgetSlotVector::WidgetSlotVector(std::vector<float> initialValues,
+ListInspectorItemWidget::WidgetSlotVectorFloat::WidgetSlotVectorFloat(std::vector<float> initialValues,
                                                             const std::string &labelString,
                                                             ListInspectorItemWidget *parent) : WidgetSlot()
 {
@@ -93,6 +110,7 @@ ListInspectorItemWidget::WidgetSlotVector::WidgetSlotVector(std::vector<float> i
     for(unsigned int i = 0; i < initialValues.size(); ++i)
     {
         WidgetSlotFloat *s = new WidgetSlotFloat(initialValues[i], "", parent);
+        spinboxes.push_back(s->spinbox);
         s->setContentsMargins(0,0,0,0);
         s->show();
         hLayout->addWidget(s);
@@ -104,5 +122,5 @@ ListInspectorItemWidget::WidgetSlotVector::WidgetSlotVector(std::vector<float> i
 
 void ListInspectorItemWidget::_NotifyInspectorSlotChanged(double newValue)
 {
-    WindowEventManager::NotifyInspectorSlotChanged(relatedPart);
+    WindowEventManager::NotifyInspectorSlotChanged(relatedPart, this);
 }

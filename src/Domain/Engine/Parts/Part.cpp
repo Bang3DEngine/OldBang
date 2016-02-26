@@ -8,7 +8,8 @@ Part::Part() : owner(nullptr)
 
 Part::~Part()
 {
-
+    for(int i = 0; i < inspectorItemInfo.slotInfos.size(); ++i)
+        delete inspectorItemInfo.slotInfos[i];
 }
 
 Entity *Part::GetOwner() const
@@ -22,10 +23,3 @@ const std::string Part::ToString() const
     msg << "Part";
     return msg.str();
 }
-
-#ifdef BANG_EDITOR
-void Part::OnInspectorSlotChanged()
-{
-    Logger_Log("OnInspectorSlotChanged !!!");
-}
-#endif

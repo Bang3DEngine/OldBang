@@ -25,6 +25,8 @@ private:
 public:
 
     Transform();
+    virtual ~Transform();
+
     void GetMatrix(glm::mat4 &m) const;
     void GetNormalMatrix(glm::mat4 &m) const;
 
@@ -51,6 +53,10 @@ public:
     void Read(std::istream &f) override;
 
     virtual std::string GetName() const override { return "Transform"; }
+
+    #ifdef BANG_EDITOR
+    virtual void OnInspectorSlotChanged(ListInspectorItemWidget *inspectorItem) override;
+    #endif
 };
 
 #endif // TRANSFORM_H

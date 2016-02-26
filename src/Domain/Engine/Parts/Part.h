@@ -9,7 +9,7 @@
 #include "IStageEventListener.h"
 
 #ifdef BANG_EDITOR
-#include "ListInspectorItemInfo.h"
+#include "ListInspectorItemWidget.h"
 #include "IWindowEventManagerListener.h"
 #endif
 
@@ -45,7 +45,7 @@ public:
 
 
     #ifdef BANG_EDITOR
-    virtual void OnInspectorSlotChanged() override;
+    virtual void OnInspectorSlotChanged(ListInspectorItemWidget *inspectorItem) override {}
     #endif
 };
 

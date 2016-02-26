@@ -9,24 +9,30 @@ Transform::Transform() : position(glm::vec3(0.0f)),
     #ifdef BANG_EDITOR
     inspectorItemInfo.slotInfos =
     {
-        ListInspectorItemInfoSlot(
+        new ListInspectorItemInfoSlotVecFloat(
             "Position",
             ListInspectorItemInfoSlot::Type::Vec3Float,
+            {position.x, position.y, position.z},
             {"X", "Y", "Z"}
         ),
-        ListInspectorItemInfoSlot(
+        new ListInspectorItemInfoSlotVecFloat(
             "Rotation",
             ListInspectorItemInfoSlot::Type::Vec4Float,
+            {rotation.x, rotation.y, rotation.z, rotation.w},
             {"X", "Y", "Z", "W"}
         ),
-        ListInspectorItemInfoSlot(
+        new ListInspectorItemInfoSlotVecFloat(
             "Scale",
             ListInspectorItemInfoSlot::Type::Vec3Float,
+            {scale.x, scale.y, scale.z},
             {"X", "Y", "Z"}
         )
     };
-
     #endif
+}
+
+Transform::~Transform()
+{
 }
 
 void Transform::SetPosition(const glm::vec3 &p)
@@ -167,4 +173,16 @@ void Transform::Read(std::istream &f)
     SetRotation(FileReader::ReadQuat(f));
     SetScale(FileReader::ReadVec3(f));
     FileReader::ReadNextLine(f); //Consume close tag
+}
+
+void Transform::OnInspectorSlotChanged(ListInspectorItemWidget *inspectorItem)
+{
+    std::vector<float> v = inspectorItem->GetSlotValueVecFloat("Position");
+    position = glm::vec3(v[0], v[1], v[2]);
+
+    v = inspectorItem->GetSlotValueVecFloat("Rotation");
+    rotation = glm::quat(v[0], v[1], v[2], v[3]);
+
+    v = inspectorItem->GetSlotValueVecFloat("Scale");
+    scale = glm::vec3(v[0], v[1], v[2]);
 }

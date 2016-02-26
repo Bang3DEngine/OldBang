@@ -50,9 +50,9 @@ void WindowEventManager::_NotifyMenuBarItemClicked(int itemClicked)
     WindowEventManager::NotifyMenuBarItemClicked(itemClicked);
 }
 
-void WindowEventManager::NotifyInspectorSlotChanged(Part *updatedPart)
+void WindowEventManager::NotifyInspectorSlotChanged(Part *updatedPart, ListInspectorItemWidget *inspectorItem)
 {
-    updatedPart->OnInspectorSlotChanged();
+    updatedPart->OnInspectorSlotChanged(inspectorItem);
 }
 
 void WindowEventManager::NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)

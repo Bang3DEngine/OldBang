@@ -51,10 +51,10 @@ template <class T>
 std::ostream &operator<<(std::ostream &log, const std::vector<T> *v)
 {
     log << "Vector(";
-    for(int i = 0; i < v.size(); ++i)
+    for(int i = 0; i < v->size(); ++i)
     {
         if(i != 0) log << ", ";
-        log << v[i];
+        log << (*v)[i];
     }
     log << ")";
     return log;
