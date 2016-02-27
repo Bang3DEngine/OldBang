@@ -28,7 +28,7 @@ void ListInspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &se
             QListWidgetItem *item = new QListWidgetItem();
             addItem(item);
 
-            ListInspectorItemWidget *iw = new ListInspectorItemWidget(p);
+            ListInspectorPartWidget *iw = new ListInspectorPartWidget(p);
 
             this->setItemWidget(item, iw);
             item->setSizeHint(iw->size() * 0.9);

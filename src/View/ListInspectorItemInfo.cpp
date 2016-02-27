@@ -1,5 +1,5 @@
 #include "ListInspectorItemInfo.h"
 
-ListInspectorItemInfo::ListInspectorItemInfo()
+ListInspectorPartInfo::ListInspectorPartInfo()
 {
 }

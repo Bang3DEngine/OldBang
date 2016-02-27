@@ -3,63 +3,68 @@
 #include "Part.h"
 
 //TODO: RENAME THIS CLASS SO IT SHOWS THAT THIS IS RELATED TO A UNIQUE ENTITY PART
-ListInspectorItemWidget::ListInspectorItemWidget(Part *relatedPart)
+ListInspectorPartWidget::ListInspectorPartWidget(Part *relatedPart)
     : QWidget()
 {
     this->relatedPart = relatedPart;
 
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->setSpacing(0); mainLayout->setContentsMargins(0,0,0,0);
-    setLayout(mainLayout);
+    setLayout(new QVBoxLayout());
+    layout()->setSpacing(0); layout()->setContentsMargins(0,0,0,0);
 
-    QLabel *titleLabel = new QLabel(QString::fromStdString(relatedPart->GetName()));
-    QFont font = titleLabel->font();
-    font.setBold(true);
-    titleLabel->setFont(font);
-    titleLabel->show();
-    mainLayout->addWidget(titleLabel);
+    titleLabel = new QLabel(QString::fromStdString(relatedPart->GetName()));
+    QFont font = titleLabel->font(); font.setBold(true);
+    titleLabel->setFont(font); titleLabel->show();
+    layout()->addWidget(titleLabel);
 
-    for(ListInspectorItemInfoSlot *si : relatedPart->inspectorItemInfo.slotInfos)
+    for(ListInspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
     {
-        WidgetSlot *w = nullptr;
-        if(si->IsVectorTyped())
+        WidgetSlot *ws = nullptr;
+
+        ListInspectorPartInfoSlotVecFloat* siv;  //If the infoSlot is of type VecFloat
+        if( (siv = dynamic_cast<ListInspectorPartInfoSlotVecFloat*>(si)) != nullptr)
         {
-            ListInspectorItemInfoSlotVecFloat *siv = (ListInspectorItemInfoSlotVecFloat*) si;
-            w =  new WidgetSlotVectorFloat(siv->initialValues, si->label, this);
-            labelsToSlotsVectorFloat[si->label] = (WidgetSlotVectorFloat*)(w);
+            ws =  new WidgetSlotVectorFloat(siv->value, siv->label, this);
         }
 
-        if(w != nullptr)
+        if(ws != nullptr)
         {
-            w->show();
-            mainLayout->addWidget(w);
+            ws->show();
+            layout()->addWidget(ws);
+            partSlots.push_back(ws);
+            labelsToPartSlots[si->label] = ws;
         }
     }
 
     this->show();
+
+    updateTimer = new QTimer(this); //Every X seconds, update all the slots values
+    connect(updateTimer, SIGNAL(timeout()), this, SLOT(UpdateSlotsValues()));
+    updateTimer->start(256);
 }
 
-std::vector<float> ListInspectorItemWidget::GetSlotValueVecFloat(const std::string &slotLabel)
+ListInspectorPartWidget::~ListInspectorPartWidget()
 {
-    WidgetSlotVectorFloat *w = labelsToSlotsVectorFloat[slotLabel];
-    std::vector<float> result;
-    for(unsigned int i = 0; i < w->spinboxes.size(); ++i)
-    {
-        result.push_back( float(w->spinboxes[i]->value()) );
-    }
-    return result;
+   delete updateTimer;
 }
 
-const std::string ListInspectorItemWidget::FloatToString(float f)
+std::vector<float> ListInspectorPartWidget::GetSlotValueVecFloat(const std::string &slotLabel)
+{
+    WidgetSlotVectorFloat *w = dynamic_cast<WidgetSlotVectorFloat*>(labelsToPartSlots[slotLabel]);
+    std::vector<float> r;
+    if(w != nullptr) r = w->GetValue();
+    return r;
+}
+
+const std::string ListInspectorPartWidget::FloatToString(float f)
 {
     std::stringstream ss;
     ss << std::fixed << std::setprecision(2) << f;
     return ss.str();
 }
 
-ListInspectorItemWidget::WidgetSlotFloat::WidgetSlotFloat(float initialValue,
+ListInspectorPartWidget::WidgetSlotFloat::WidgetSlotFloat(float initialValue,
                                                           const std::string &labelString,
-                                                          ListInspectorItemWidget *parent) : WidgetSlot()
+                                                          ListInspectorPartWidget *parent) : WidgetSlot()
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
@@ -90,10 +95,19 @@ ListInspectorItemWidget::WidgetSlotFloat::WidgetSlotFloat(float initialValue,
     this->show();
 }
 
+void ListInspectorPartWidget::WidgetSlotFloat::SetValue(float f)
+{
+    spinbox->setValue( double(f) );
+}
 
-ListInspectorItemWidget::WidgetSlotVectorFloat::WidgetSlotVectorFloat(std::vector<float> initialValues,
+float ListInspectorPartWidget::WidgetSlotFloat::GetValue()
+{
+    return float(spinbox->value());
+}
+
+ListInspectorPartWidget::WidgetSlotVectorFloat::WidgetSlotVectorFloat(std::vector<float> initialValues,
                                                             const std::string &labelString,
-                                                            ListInspectorItemWidget *parent) : WidgetSlot()
+                                                            ListInspectorPartWidget *parent) : WidgetSlot()
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0); vLayout->setContentsMargins(0,0,0,0);
@@ -110,9 +124,9 @@ ListInspectorItemWidget::WidgetSlotVectorFloat::WidgetSlotVectorFloat(std::vecto
     for(unsigned int i = 0; i < initialValues.size(); ++i)
     {
         WidgetSlotFloat *s = new WidgetSlotFloat(initialValues[i], "", parent);
-        spinboxes.push_back(s->spinbox);
-        s->setContentsMargins(0,0,0,0);
-        s->show();
+        floatSlots.push_back(s);
+
+        s->setContentsMargins(0,0,0,0); s->show();
         hLayout->addWidget(s);
     }
 
@@ -120,7 +134,49 @@ ListInspectorItemWidget::WidgetSlotVectorFloat::WidgetSlotVectorFloat(std::vecto
     this->show();
 }
 
-void ListInspectorItemWidget::_NotifyInspectorSlotChanged(double newValue)
+void ListInspectorPartWidget::WidgetSlotVectorFloat::SetValue(const std::vector<float> &v)
+{
+    for(unsigned int i = 0; i < floatSlots.size(); ++i)
+    {
+        floatSlots[i]->SetValue(v[i]);
+    }
+}
+
+std::vector<float>  ListInspectorPartWidget::WidgetSlotVectorFloat::GetValue()
+{
+    std::vector<float> result;
+    for(unsigned int i = 0; i < floatSlots.size(); ++i)
+    {
+        float f = floatSlots[i]->GetValue();
+        result.push_back(f);
+    }
+    return result;
+}
+
+void ListInspectorPartWidget::UpdateSlotsValues()
+{
+    for(ListInspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
+    {
+        WidgetSlot *ws = labelsToPartSlots[si->label];
+
+        ListInspectorPartInfoSlotVecFloat* siv;
+        if( (siv = dynamic_cast<ListInspectorPartInfoSlotVecFloat*>(si)) != nullptr)
+        {
+            WidgetSlotVectorFloat *wv = static_cast<WidgetSlotVectorFloat*>(ws);
+            wv->SetValue( siv->value );
+        }
+
+        if(ws != nullptr)
+        {
+            ws->show();
+            layout()->addWidget(ws);
+            partSlots.push_back(ws);
+            labelsToPartSlots[si->label] = ws;
+        }
+    }
+}
+
+void ListInspectorPartWidget::_NotifyInspectorSlotChanged(double newValue)
 {
     WindowEventManager::NotifyInspectorSlotChanged(relatedPart, this);
 }

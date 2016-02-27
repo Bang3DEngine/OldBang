@@ -7,25 +7,16 @@ Transform::Transform() : position(glm::vec3(0.0f)),
                          scale(glm::vec3(1.0f))
 {
     #ifdef BANG_EDITOR
-    inspectorItemInfo.slotInfos =
+    inspectorPartInfo.slotInfos =
     {
-        new ListInspectorItemInfoSlotVecFloat(
-            "Position",
-            ListInspectorItemInfoSlot::Type::Vec3Float,
-            {position.x, position.y, position.z},
-            {"X", "Y", "Z"}
+        new ListInspectorPartInfoSlotVecFloat(
+            "Position", {position.x, position.y, position.z}
         ),
-        new ListInspectorItemInfoSlotVecFloat(
-            "Rotation",
-            ListInspectorItemInfoSlot::Type::Vec4Float,
-            {rotation.x, rotation.y, rotation.z, rotation.w},
-            {"X", "Y", "Z", "W"}
+        new ListInspectorPartInfoSlotVecFloat(
+            "Rotation", {rotation.x, rotation.y, rotation.z, rotation.w}
         ),
-        new ListInspectorItemInfoSlotVecFloat(
-            "Scale",
-            ListInspectorItemInfoSlot::Type::Vec3Float,
-            {scale.x, scale.y, scale.z},
-            {"X", "Y", "Z"}
+        new ListInspectorPartInfoSlotVecFloat(
+            "Scale", {scale.x, scale.y, scale.z}
         )
     };
     #endif
@@ -175,7 +166,20 @@ void Transform::Read(std::istream &f)
     FileReader::ReadNextLine(f); //Consume close tag
 }
 
-void Transform::OnInspectorSlotChanged(ListInspectorItemWidget *inspectorItem)
+#ifdef BANG_EDITOR
+ListInspectorPartInfo* Transform::GetInfo()
+{
+    static_cast<ListInspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value =
+        {position.x, position.y, position.z};
+    static_cast<ListInspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value =
+        {rotation.x, rotation.y, rotation.z, rotation.w};
+    static_cast<ListInspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[2])->value =
+        {scale.x, scale.y, scale.z};
+
+    return &inspectorPartInfo;
+}
+
+void Transform::OnInspectorSlotChanged(ListInspectorPartWidget *inspectorItem)
 {
     std::vector<float> v = inspectorItem->GetSlotValueVecFloat("Position");
     position = glm::vec3(v[0], v[1], v[2]);
@@ -186,3 +190,4 @@ void Transform::OnInspectorSlotChanged(ListInspectorItemWidget *inspectorItem)
     v = inspectorItem->GetSlotValueVecFloat("Scale");
     scale = glm::vec3(v[0], v[1], v[2]);
 }
+#endif

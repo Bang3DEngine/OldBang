@@ -21,14 +21,15 @@ friend class Entity;
 protected:
     Entity *owner;
 
+    #ifdef BANG_EDITOR
+    ListInspectorPartInfo inspectorPartInfo;
+    #endif
+
+
     Part();
     virtual ~Part();
 
 public:
-    #ifdef BANG_EDITOR
-    ListInspectorItemInfo inspectorItemInfo;
-    #endif
-
     Entity* GetOwner() const;
 
     virtual const std::string ToString() const override;
@@ -45,7 +46,8 @@ public:
 
 
     #ifdef BANG_EDITOR
-    virtual void OnInspectorSlotChanged(ListInspectorItemWidget *inspectorItem) override {}
+    virtual ListInspectorPartInfo* GetInfo();
+    virtual void OnInspectorSlotChanged(ListInspectorPartWidget *inspectorItem) override {}
     #endif
 };
 

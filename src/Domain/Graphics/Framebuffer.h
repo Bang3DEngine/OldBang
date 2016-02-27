@@ -22,8 +22,8 @@ public:
 
 private:
 
-    GLuint depthBufferAttachmentId;
     int width, height;
+    GLuint depthBufferAttachmentId;
 
     std::vector<GLuint> boundAttachments;
     std::vector<TextureRender*> textureAttachments;
