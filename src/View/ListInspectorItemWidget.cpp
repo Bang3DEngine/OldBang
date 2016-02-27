@@ -39,7 +39,7 @@ ListInspectorPartWidget::ListInspectorPartWidget(Part *relatedPart)
 
     updateTimer = new QTimer(this); //Every X seconds, update all the slots values
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(UpdateSlotsValues()));
-    updateTimer->start(256);
+    updateTimer->start(1000);
 }
 
 ListInspectorPartWidget::~ListInspectorPartWidget()
@@ -64,7 +64,7 @@ const std::string ListInspectorPartWidget::FloatToString(float f)
 
 ListInspectorPartWidget::WidgetSlotFloat::WidgetSlotFloat(float initialValue,
                                                           const std::string &labelString,
-                                                          ListInspectorPartWidget *parent) : WidgetSlot()
+                                                          ListInspectorPartWidget *parent) : WidgetSlot(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
@@ -97,7 +97,9 @@ ListInspectorPartWidget::WidgetSlotFloat::WidgetSlotFloat(float initialValue,
 
 void ListInspectorPartWidget::WidgetSlotFloat::SetValue(float f)
 {
+    disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
     spinbox->setValue( double(f) );
+    connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
 }
 
 float ListInspectorPartWidget::WidgetSlotFloat::GetValue()
@@ -107,7 +109,7 @@ float ListInspectorPartWidget::WidgetSlotFloat::GetValue()
 
 ListInspectorPartWidget::WidgetSlotVectorFloat::WidgetSlotVectorFloat(std::vector<float> initialValues,
                                                             const std::string &labelString,
-                                                            ListInspectorPartWidget *parent) : WidgetSlot()
+                                                            ListInspectorPartWidget *parent) : WidgetSlot(parent)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0); vLayout->setContentsMargins(0,0,0,0);
@@ -158,7 +160,6 @@ void ListInspectorPartWidget::UpdateSlotsValues()
     for(ListInspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
     {
         WidgetSlot *ws = labelsToPartSlots[si->label];
-
         ListInspectorPartInfoSlotVecFloat* siv;
         if( (siv = dynamic_cast<ListInspectorPartInfoSlotVecFloat*>(si)) != nullptr)
         {

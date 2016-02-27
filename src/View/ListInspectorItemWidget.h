@@ -44,7 +44,8 @@ private:
     class WidgetSlot : public QWidget
     {
         protected:
-            WidgetSlot() : QWidget(nullptr) {}
+        ListInspectorPartWidget *parent;
+        WidgetSlot(ListInspectorPartWidget *parent) : QWidget(nullptr), parent(parent) {}
     };
 
     class WidgetSlotFloat : public WidgetSlot //Slot for a float (label + float)
