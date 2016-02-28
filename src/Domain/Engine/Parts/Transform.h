@@ -56,7 +56,7 @@ public:
 
     #ifdef BANG_EDITOR
     virtual ListInspectorPartInfo* GetInfo() override;
-    virtual void OnInspectorSlotChanged(ListInspectorPartWidget *inspectorItem) override;
+    virtual void OnInspectorSlotChanged(ListInspectorPartWidget *partWidget) override;
     #endif
 };
 

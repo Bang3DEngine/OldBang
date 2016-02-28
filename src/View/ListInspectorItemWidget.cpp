@@ -39,7 +39,7 @@ ListInspectorPartWidget::ListInspectorPartWidget(Part *relatedPart)
 
     updateTimer = new QTimer(this); //Every X seconds, update all the slots values
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(UpdateSlotsValues()));
-    updateTimer->start(1000);
+    updateTimer->start(20);
 }
 
 ListInspectorPartWidget::~ListInspectorPartWidget()

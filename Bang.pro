@@ -120,7 +120,8 @@ HEADERS += \
     src/View/ListInspector.h \
     src/Bang.h \
     src/View/ListInspectorItemWidget.h \
-    src/View/ListInspectorItemInfo.h
+    src/View/ListInspectorItemInfo.h \
+    src/Domain/Engine/Quaternion.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -167,7 +168,8 @@ SOURCES += \
     src/View/TreeHierarchy.cpp \
     src/View/ListInspector.cpp \
     src/View/ListInspectorItemWidget.cpp \
-    src/View/ListInspectorItemInfo.cpp
+    src/View/ListInspectorItemInfo.cpp \
+    src/Domain/Engine/Quaternion.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

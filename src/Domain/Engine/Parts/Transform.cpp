@@ -179,15 +179,22 @@ ListInspectorPartInfo* Transform::GetInfo()
     return &inspectorPartInfo;
 }
 
-void Transform::OnInspectorSlotChanged(ListInspectorPartWidget *inspectorItem)
+void Transform::OnInspectorSlotChanged(ListInspectorPartWidget *partWidget)
 {
-    std::vector<float> v = inspectorItem->GetSlotValueVecFloat("Position");
+    Logger_Log("_______________________________________");
+    Logger_Log(this);
+
+    std::vector<float> v;
+    v = partWidget->GetSlotValueVecFloat("Position");
+    Logger_Log("pos v: " << v);
     position = glm::vec3(v[0], v[1], v[2]);
 
-    v = inspectorItem->GetSlotValueVecFloat("Rotation");
+    v = partWidget->GetSlotValueVecFloat("Rotation");
+    Logger_Log("rot v: " << v);
     rotation = glm::quat(v[0], v[1], v[2], v[3]);
 
-    v = inspectorItem->GetSlotValueVecFloat("Scale");
+    v = partWidget->GetSlotValueVecFloat("Scale");
+    Logger_Log("scale v: " << v);
     scale = glm::vec3(v[0], v[1], v[2]);
 }
 #endif
