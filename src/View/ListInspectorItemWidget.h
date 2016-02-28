@@ -45,7 +45,10 @@ private:
     {
         protected:
         ListInspectorPartWidget *parent;
+
         WidgetSlot(ListInspectorPartWidget *parent) : QWidget(nullptr), parent(parent) {}
+        void focusInEvent(QFocusEvent * event) override;
+        void focusOutEvent(QFocusEvent * event) override;
     };
 
     class WidgetSlotFloat : public WidgetSlot //Slot for a float (label + float)

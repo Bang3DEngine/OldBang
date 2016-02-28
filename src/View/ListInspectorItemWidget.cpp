@@ -181,3 +181,14 @@ void ListInspectorPartWidget::_NotifyInspectorSlotChanged(double newValue)
 {
     WindowEventManager::NotifyInspectorSlotChanged(relatedPart, this);
 }
+
+
+void ListInspectorPartWidget::WidgetSlot::focusInEvent(QFocusEvent *event)
+{
+    Logger_Log("Focus in");
+}
+
+void ListInspectorPartWidget::WidgetSlot::focusOutEvent(QFocusEvent *event)
+{
+    Logger_Log("Focus out");
+}

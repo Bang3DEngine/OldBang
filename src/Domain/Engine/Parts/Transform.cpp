@@ -151,10 +151,11 @@ const std::string Transform::ToString() const
 
     std::ostringstream msg;
 
+    glm::vec3 euler = glm::eulerAngles(rotation);
     msg << "[" <<
            "Transform: " << std::endl <<
            "   Position: (" << position.x << ", " << position.y << ", " << position.z << ")"  << std::endl <<
-           "   Rotation: (" << rotation.x << ", " << rotation.y << ", " << rotation.z << "," << rotation.w << ")" << std::endl <<
+           "   Rotation: (" << euler.x << ", " << euler.y << ", " << euler.z << ")" << std::endl <<
            "   Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl <<
            "]" << std::endl;
 
