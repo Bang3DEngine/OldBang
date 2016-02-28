@@ -16,7 +16,7 @@ void WindowMain::Init(QMainWindow *window)
     }
 
     //Init inspector
-    win->widgetListInspector->addItem("ASDKDJASKDJAS");
+    win->widgetInspector->addItem("ASDKDJASKDJAS");
     //
 }
 

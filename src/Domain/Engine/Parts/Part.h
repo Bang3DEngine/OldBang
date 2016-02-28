@@ -9,7 +9,7 @@
 #include "IStageEventListener.h"
 
 #ifdef BANG_EDITOR
-#include "ListInspectorItemWidget.h"
+#include "InspectorItemWidget.h"
 #include "IWindowEventManagerListener.h"
 #endif
 
@@ -22,7 +22,7 @@ protected:
     Entity *owner;
 
     #ifdef BANG_EDITOR
-    ListInspectorPartInfo inspectorPartInfo;
+    InspectorPartInfo inspectorPartInfo;
     #endif
 
 
@@ -46,8 +46,8 @@ public:
 
 
     #ifdef BANG_EDITOR
-    virtual ListInspectorPartInfo* GetInfo();
-    virtual void OnInspectorSlotChanged(ListInspectorPartWidget *inspectorItem) override {}
+    virtual InspectorPartInfo* GetInfo();
+    virtual void OnInspectorSlotChanged(InspectorPartWidget *inspectorItem) override {}
     #endif
 };
 

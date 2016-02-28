@@ -56,8 +56,8 @@ public:
     virtual std::string GetName() const override { return "Transform"; }
 
     #ifdef BANG_EDITOR
-    virtual ListInspectorPartInfo* GetInfo() override;
-    virtual void OnInspectorSlotChanged(ListInspectorPartWidget *partWidget) override;
+    virtual InspectorPartInfo* GetInfo() override;
+    virtual void OnInspectorSlotChanged(InspectorPartWidget *partWidget) override;
     #endif
 };
 

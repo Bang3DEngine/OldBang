@@ -5,7 +5,7 @@
 #include <list>
 
 class Entity;
-class ListInspectorPartWidget;
+class InspectorPartWidget;
 class IWindowEventManagerListener
 {
 protected:
@@ -17,7 +17,7 @@ public:
     virtual void OnChildChangedParent(Entity *child, Entity *previousParent) { }
     virtual void OnChildRemoved(Entity *child) { }
 
-    virtual void OnInspectorSlotChanged(ListInspectorPartWidget *inspectorItem)  { }
+    virtual void OnInspectorSlotChanged(InspectorPartWidget *inspectorItem)  { }
     virtual void OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities) { }
 };
 

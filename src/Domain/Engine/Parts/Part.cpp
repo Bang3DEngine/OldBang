@@ -25,7 +25,7 @@ const std::string Part::ToString() const
 }
 
 #ifdef BANG_EDITOR
-ListInspectorPartInfo* Part::GetInfo()
+InspectorPartInfo* Part::GetInfo()
 {
     return &inspectorPartInfo;
 }

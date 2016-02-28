@@ -50,7 +50,7 @@ void WindowEventManager::_NotifyMenuBarItemClicked(int itemClicked)
     WindowEventManager::NotifyMenuBarItemClicked(itemClicked);
 }
 
-void WindowEventManager::NotifyInspectorSlotChanged(Part *updatedPart, ListInspectorPartWidget *inspectorItem)
+void WindowEventManager::NotifyInspectorSlotChanged(Part *updatedPart, InspectorPartWidget *inspectorItem)
 {
     updatedPart->OnInspectorSlotChanged(inspectorItem);
 }

@@ -104,7 +104,7 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0">
        <item>
-        <widget class="TreeHierarchy" name="widgetTreeHierarchy">
+        <widget class="Hierarchy" name="widgetHierarchy">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -254,7 +254,7 @@
         </widget>
        </item>
        <item>
-        <widget class="ListInspector" name="widgetListInspector">
+        <widget class="Inspector" name="widgetInspector">
          <property name="defaultDropAction">
           <enum>Qt::MoveAction</enum>
          </property>
@@ -440,18 +440,18 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>TreeHierarchy</class>
+   <class>Hierarchy</class>
    <extends>QTreeWidget</extends>
-   <header>TreeHierarchy.h</header>
+   <header>Hierarchy.h</header>
    <slots>
     <slot>_NotifyHierarchyItemSelectionChanged()</slot>
     <slot>OnCustomContextMenuRequested(QPoint)</slot>
    </slots>
   </customwidget>
   <customwidget>
-   <class>ListInspector</class>
+   <class>Inspector</class>
    <extends>QListWidget</extends>
-   <header location="global">ListInspector.h</header>
+   <header>Inspector.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
@@ -489,9 +489,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>widgetTreeHierarchy</sender>
+   <sender>widgetHierarchy</sender>
    <signal>customContextMenuRequested(QPoint)</signal>
-   <receiver>widgetTreeHierarchy</receiver>
+   <receiver>widgetHierarchy</receiver>
    <slot>OnCustomContextMenuRequested(QPoint)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -505,9 +505,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>widgetTreeHierarchy</sender>
+   <sender>widgetHierarchy</sender>
    <signal>itemSelectionChanged()</signal>
-   <receiver>widgetTreeHierarchy</receiver>
+   <receiver>widgetHierarchy</receiver>
    <slot>_NotifyHierarchyItemSelectionChanged()</slot>
    <hints>
     <hint type="sourcelabel">

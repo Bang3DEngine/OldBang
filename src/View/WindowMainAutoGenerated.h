@@ -9,7 +9,6 @@
 #ifndef UI_WINDOWMAIN_H
 #define UI_WINDOWMAIN_H
 
-#include <ListInspector.h>
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
@@ -27,7 +26,8 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 #include "Canvas.h"
-#include "TreeHierarchy.h"
+#include "Hierarchy.h"
+#include "Inspector.h"
 #include "WindowEventManager.h"
 
 QT_BEGIN_NAMESPACE
@@ -58,14 +58,14 @@ public:
     QWidget *dockWidgetContents_4;
     QVBoxLayout *verticalLayout_8;
     QVBoxLayout *verticalLayout_4;
-    TreeHierarchy *widgetTreeHierarchy;
+    Hierarchy *widgetHierarchy;
     QDockWidget *dockInspector;
     QWidget *dockWidgetContents_7;
     QVBoxLayout *verticalLayout_9;
     QWidget *widget;
     QVBoxLayout *verticalLayout_2;
     QLabel *labelInspectorEntityName;
-    ListInspector *widgetListInspector;
+    Inspector *widgetInspector;
     QDockWidget *dockExplorer;
     QWidget *dockWidgetContents_5;
     QVBoxLayout *verticalLayout_7;
@@ -147,41 +147,41 @@ public:
         verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
-        widgetTreeHierarchy = new TreeHierarchy(dockWidgetContents_4);
+        widgetHierarchy = new Hierarchy(dockWidgetContents_4);
         QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
         __qtreewidgetitem->setText(0, QString::fromUtf8("1"));
-        widgetTreeHierarchy->setHeaderItem(__qtreewidgetitem);
-        QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem(widgetTreeHierarchy);
+        widgetHierarchy->setHeaderItem(__qtreewidgetitem);
+        QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem(widgetHierarchy);
         QTreeWidgetItem *__qtreewidgetitem2 = new QTreeWidgetItem(__qtreewidgetitem1);
         new QTreeWidgetItem(__qtreewidgetitem2);
         new QTreeWidgetItem(__qtreewidgetitem1);
-        QTreeWidgetItem *__qtreewidgetitem3 = new QTreeWidgetItem(widgetTreeHierarchy);
+        QTreeWidgetItem *__qtreewidgetitem3 = new QTreeWidgetItem(widgetHierarchy);
         QTreeWidgetItem *__qtreewidgetitem4 = new QTreeWidgetItem(__qtreewidgetitem3);
         QTreeWidgetItem *__qtreewidgetitem5 = new QTreeWidgetItem(__qtreewidgetitem4);
         new QTreeWidgetItem(__qtreewidgetitem5);
         new QTreeWidgetItem(__qtreewidgetitem5);
         new QTreeWidgetItem(__qtreewidgetitem4);
         new QTreeWidgetItem(__qtreewidgetitem4);
-        widgetTreeHierarchy->setObjectName(QString::fromUtf8("widgetTreeHierarchy"));
+        widgetHierarchy->setObjectName(QString::fromUtf8("widgetHierarchy"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(widgetTreeHierarchy->sizePolicy().hasHeightForWidth());
-        widgetTreeHierarchy->setSizePolicy(sizePolicy1);
-        widgetTreeHierarchy->setContextMenuPolicy(Qt::CustomContextMenu);
-        widgetTreeHierarchy->setAcceptDrops(true);
-        widgetTreeHierarchy->setDragEnabled(true);
-        widgetTreeHierarchy->setDragDropMode(QAbstractItemView::DragDrop);
-        widgetTreeHierarchy->setDefaultDropAction(Qt::MoveAction);
-        widgetTreeHierarchy->setAlternatingRowColors(false);
-        widgetTreeHierarchy->setSelectionMode(QAbstractItemView::ExtendedSelection);
-        widgetTreeHierarchy->setSelectionBehavior(QAbstractItemView::SelectRows);
-        widgetTreeHierarchy->setIndentation(10);
-        widgetTreeHierarchy->setRootIsDecorated(true);
-        widgetTreeHierarchy->setAnimated(true);
-        widgetTreeHierarchy->header()->setVisible(false);
+        sizePolicy1.setHeightForWidth(widgetHierarchy->sizePolicy().hasHeightForWidth());
+        widgetHierarchy->setSizePolicy(sizePolicy1);
+        widgetHierarchy->setContextMenuPolicy(Qt::CustomContextMenu);
+        widgetHierarchy->setAcceptDrops(true);
+        widgetHierarchy->setDragEnabled(true);
+        widgetHierarchy->setDragDropMode(QAbstractItemView::DragDrop);
+        widgetHierarchy->setDefaultDropAction(Qt::MoveAction);
+        widgetHierarchy->setAlternatingRowColors(false);
+        widgetHierarchy->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        widgetHierarchy->setSelectionBehavior(QAbstractItemView::SelectRows);
+        widgetHierarchy->setIndentation(10);
+        widgetHierarchy->setRootIsDecorated(true);
+        widgetHierarchy->setAnimated(true);
+        widgetHierarchy->header()->setVisible(false);
 
-        verticalLayout_4->addWidget(widgetTreeHierarchy);
+        verticalLayout_4->addWidget(widgetHierarchy);
 
 
         verticalLayout_8->addLayout(verticalLayout_4);
@@ -215,23 +215,23 @@ public:
 
         verticalLayout_2->addWidget(labelInspectorEntityName);
 
-        widgetListInspector = new ListInspector(dockWidgetContents_7);
-        new QListWidgetItem(widgetListInspector);
-        new QListWidgetItem(widgetListInspector);
-        new QListWidgetItem(widgetListInspector);
-        new QListWidgetItem(widgetListInspector);
-        new QListWidgetItem(widgetListInspector);
-        new QListWidgetItem(widgetListInspector);
-        new QListWidgetItem(widgetListInspector);
-        new QListWidgetItem(widgetListInspector);
-        widgetListInspector->setObjectName(QString::fromUtf8("widgetListInspector"));
-        widgetListInspector->setDefaultDropAction(Qt::MoveAction);
-        widgetListInspector->setAlternatingRowColors(true);
-        widgetListInspector->setMovement(QListView::Snap);
-        widgetListInspector->setFlow(QListView::TopToBottom);
-        widgetListInspector->setViewMode(QListView::ListMode);
+        widgetInspector = new Inspector(dockWidgetContents_7);
+        new QListWidgetItem(widgetInspector);
+        new QListWidgetItem(widgetInspector);
+        new QListWidgetItem(widgetInspector);
+        new QListWidgetItem(widgetInspector);
+        new QListWidgetItem(widgetInspector);
+        new QListWidgetItem(widgetInspector);
+        new QListWidgetItem(widgetInspector);
+        new QListWidgetItem(widgetInspector);
+        widgetInspector->setObjectName(QString::fromUtf8("widgetInspector"));
+        widgetInspector->setDefaultDropAction(Qt::MoveAction);
+        widgetInspector->setAlternatingRowColors(true);
+        widgetInspector->setMovement(QListView::Snap);
+        widgetInspector->setFlow(QListView::TopToBottom);
+        widgetInspector->setViewMode(QListView::ListMode);
 
-        verticalLayout_2->addWidget(widgetListInspector);
+        verticalLayout_2->addWidget(widgetInspector);
 
         verticalLayout_2->setStretch(1, 1);
 
@@ -287,8 +287,8 @@ public:
         retranslateUi(WindowMain);
         QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
         QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_NotifyMenuBarItemClicked(int)));
-        QObject::connect(widgetTreeHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetTreeHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
-        QObject::connect(widgetTreeHierarchy, SIGNAL(itemSelectionChanged()), widgetTreeHierarchy, SLOT(_NotifyHierarchyItemSelectionChanged()));
+        QObject::connect(widgetHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
+        QObject::connect(widgetHierarchy, SIGNAL(itemSelectionChanged()), widgetHierarchy, SLOT(_NotifyHierarchyItemSelectionChanged()));
 
         QMetaObject::connectSlotsByName(WindowMain);
     } // setupUi
@@ -310,9 +310,9 @@ public:
         menuProject->setTitle(QApplication::translate("WindowMain", "Project", 0, QApplication::UnicodeUTF8));
         dockHierarchy->setWindowTitle(QApplication::translate("WindowMain", "Hierarchy", 0, QApplication::UnicodeUTF8));
 
-        const bool __sortingEnabled = widgetTreeHierarchy->isSortingEnabled();
-        widgetTreeHierarchy->setSortingEnabled(false);
-        QTreeWidgetItem *___qtreewidgetitem = widgetTreeHierarchy->topLevelItem(0);
+        const bool __sortingEnabled = widgetHierarchy->isSortingEnabled();
+        widgetHierarchy->setSortingEnabled(false);
+        QTreeWidgetItem *___qtreewidgetitem = widgetHierarchy->topLevelItem(0);
         ___qtreewidgetitem->setText(0, QApplication::translate("WindowMain", "aaaaaa", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem1 = ___qtreewidgetitem->child(0);
         ___qtreewidgetitem1->setText(0, QApplication::translate("WindowMain", "bbbbbb", 0, QApplication::UnicodeUTF8));
@@ -320,7 +320,7 @@ public:
         ___qtreewidgetitem2->setText(0, QApplication::translate("WindowMain", "cccccc", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem3 = ___qtreewidgetitem->child(1);
         ___qtreewidgetitem3->setText(0, QApplication::translate("WindowMain", "dddddd", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem4 = widgetTreeHierarchy->topLevelItem(1);
+        QTreeWidgetItem *___qtreewidgetitem4 = widgetHierarchy->topLevelItem(1);
         ___qtreewidgetitem4->setText(0, QApplication::translate("WindowMain", "xxxxxxxx", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem5 = ___qtreewidgetitem4->child(0);
         ___qtreewidgetitem5->setText(0, QApplication::translate("WindowMain", "wwwwwwwwwwwww", 0, QApplication::UnicodeUTF8));
@@ -334,30 +334,30 @@ public:
         ___qtreewidgetitem9->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqq", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem10 = ___qtreewidgetitem5->child(2);
         ___qtreewidgetitem10->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqqqssssssssssssss", 0, QApplication::UnicodeUTF8));
-        widgetTreeHierarchy->setSortingEnabled(__sortingEnabled);
+        widgetHierarchy->setSortingEnabled(__sortingEnabled);
 
         dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0, QApplication::UnicodeUTF8));
         labelInspectorEntityName->setText(QApplication::translate("WindowMain", "Entity Name", 0, QApplication::UnicodeUTF8));
 
-        const bool __sortingEnabled1 = widgetListInspector->isSortingEnabled();
-        widgetListInspector->setSortingEnabled(false);
-        QListWidgetItem *___qlistwidgetitem = widgetListInspector->item(0);
+        const bool __sortingEnabled1 = widgetInspector->isSortingEnabled();
+        widgetInspector->setSortingEnabled(false);
+        QListWidgetItem *___qlistwidgetitem = widgetInspector->item(0);
         ___qlistwidgetitem->setText(QApplication::translate("WindowMain", "a", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem1 = widgetListInspector->item(1);
+        QListWidgetItem *___qlistwidgetitem1 = widgetInspector->item(1);
         ___qlistwidgetitem1->setText(QApplication::translate("WindowMain", "v", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem2 = widgetListInspector->item(2);
+        QListWidgetItem *___qlistwidgetitem2 = widgetInspector->item(2);
         ___qlistwidgetitem2->setText(QApplication::translate("WindowMain", "f", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem3 = widgetListInspector->item(3);
+        QListWidgetItem *___qlistwidgetitem3 = widgetInspector->item(3);
         ___qlistwidgetitem3->setText(QApplication::translate("WindowMain", "g", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem4 = widgetListInspector->item(4);
+        QListWidgetItem *___qlistwidgetitem4 = widgetInspector->item(4);
         ___qlistwidgetitem4->setText(QApplication::translate("WindowMain", "h", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem5 = widgetListInspector->item(5);
+        QListWidgetItem *___qlistwidgetitem5 = widgetInspector->item(5);
         ___qlistwidgetitem5->setText(QApplication::translate("WindowMain", "New Item", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem6 = widgetListInspector->item(6);
+        QListWidgetItem *___qlistwidgetitem6 = widgetInspector->item(6);
         ___qlistwidgetitem6->setText(QApplication::translate("WindowMain", "j", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem7 = widgetListInspector->item(7);
+        QListWidgetItem *___qlistwidgetitem7 = widgetInspector->item(7);
         ___qlistwidgetitem7->setText(QApplication::translate("WindowMain", "j", 0, QApplication::UnicodeUTF8));
-        widgetListInspector->setSortingEnabled(__sortingEnabled1);
+        widgetInspector->setSortingEnabled(__sortingEnabled1);
 
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));
         buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0, QApplication::UnicodeUTF8));

@@ -18,7 +18,10 @@ LIBS += -lGLEW
 INCLUDEPATH += \
     $$PWD/src/ \
     $$PWD/src/View/ \
-    $$PWD/src/View/Interfaces \
+    $$PWD/src/View/Interfaces/ \
+    $$PWD/src/View/Inspector/ \
+    $$PWD/src/View/Hierarchy/ \
+    $$PWD/src/View/Explorer/ \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/src/Domain/Graphics/Interfaces/ \
@@ -116,12 +119,12 @@ HEADERS += \
     $$files(res/Assets/UserBehaviours/*.h,true) \
     src/View/WindowEventManager.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
-    src/View/TreeHierarchy.h \
-    src/View/ListInspector.h \
     src/Bang.h \
-    src/View/ListInspectorItemWidget.h \
-    src/View/ListInspectorItemInfo.h \
-    src/Domain/Engine/Quaternion.h
+    src/Domain/Engine/Quaternion.h \
+    src/View/Inspector/Inspector.h \
+    src/View/Inspector/InspectorItemInfo.h \
+    src/View/Inspector/InspectorItemWidget.h \
+    src/View/Hierarchy/Hierarchy.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -165,11 +168,11 @@ SOURCES += \
     src/View/WindowMain.cpp \
     src/View/WindowEventManager.cpp \
     src/View/Interfaces/IWindowEventManagerListener.cpp \
-    src/View/TreeHierarchy.cpp \
-    src/View/ListInspector.cpp \
-    src/View/ListInspectorItemWidget.cpp \
-    src/View/ListInspectorItemInfo.cpp \
-    src/Domain/Engine/Quaternion.cpp
+    src/Domain/Engine/Quaternion.cpp \
+    src/View/Inspector/Inspector.cpp \
+    src/View/Inspector/InspectorItemInfo.cpp \
+    src/View/Inspector/InspectorItemWidget.cpp \
+    src/View/Hierarchy/Hierarchy.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

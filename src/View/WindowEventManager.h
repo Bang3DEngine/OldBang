@@ -13,7 +13,7 @@
 #include <QApplication>
 #include <QTreeWidgetItem>
 
-#include "ListInspectorItemInfo.h"
+#include "InspectorItemInfo.h"
 #include "IWindowEventManagerListener.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
@@ -49,7 +49,7 @@ public slots:
     static void NotifyMenuBarItemClicked(int itemClcked);
     void _NotifyMenuBarItemClicked(int itemClicked);
 
-    static void NotifyInspectorSlotChanged(Part *updatedPart, ListInspectorPartWidget *inspectorItem);
+    static void NotifyInspectorSlotChanged(Part *updatedPart, InspectorPartWidget *inspectorItem);
     static void NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities);
 };
 

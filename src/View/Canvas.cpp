@@ -94,7 +94,7 @@ void Canvas::SetCurrentStage(const std::string &name)
                 currentStage = (*it);
                 currentStage->_OnStart();
 
-                WindowMain::GetInstance()->widgetTreeHierarchy->FillDownwards(currentStage);
+                WindowMain::GetInstance()->widgetHierarchy->FillDownwards(currentStage);
             }
             return;
         }
@@ -156,11 +156,8 @@ void Canvas::OnTopKekPressed()
 
     Entity *e = p->Instantiate();
 
-    Entity *selected = WindowMain::GetInstance()->widgetTreeHierarchy->GetFirstSelectedEntity();
+    Entity *selected = WindowMain::GetInstance()->widgetHierarchy->GetFirstSelectedEntity();
 
     if(selected != nullptr) selected->AddChild(e);
     else currentStage->AddChild(e);
-
-    static int a = 0;
-    Logger_Log(++a);
 }
