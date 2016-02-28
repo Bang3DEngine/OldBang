@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QListWidget>
 
-#include "InspectorItemWidget.h"
+#include "InspectorPartWidget.h"
 #include "IWindowEventManagerListener.h"
 
 class Inspector : public QListWidget, public IWindowEventManagerListener

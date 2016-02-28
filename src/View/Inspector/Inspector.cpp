@@ -22,7 +22,7 @@ void Inspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &select
 
         clear();
 
-        //For every part, create a widgetItem by reading its InspectorItemInfo
+        //For every part, create a widgetItem by reading its InspectorPartInfo
         for(Part *p : selectedEntity->GetParts())
         {
             QListWidgetItem *item = new QListWidgetItem();

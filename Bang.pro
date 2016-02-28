@@ -122,9 +122,12 @@ HEADERS += \
     src/Bang.h \
     src/Domain/Engine/Quaternion.h \
     src/View/Inspector/Inspector.h \
-    src/View/Inspector/InspectorItemInfo.h \
-    src/View/Inspector/InspectorItemWidget.h \
-    src/View/Hierarchy/Hierarchy.h
+    src/View/Hierarchy/Hierarchy.h \
+    src/View/Inspector/InspectorPartInfo.h \
+    src/View/Inspector/InspectorPartWidget.h \
+    src/View/Inspector/InspectorPartSlotWidget.h \
+    src/View/Inspector/InspectorFloatPartSlotWidget.h \
+    src/View/Inspector/InspectorVectorFloatPartSlotWidget.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -170,9 +173,12 @@ SOURCES += \
     src/View/Interfaces/IWindowEventManagerListener.cpp \
     src/Domain/Engine/Quaternion.cpp \
     src/View/Inspector/Inspector.cpp \
-    src/View/Inspector/InspectorItemInfo.cpp \
-    src/View/Inspector/InspectorItemWidget.cpp \
-    src/View/Hierarchy/Hierarchy.cpp
+    src/View/Hierarchy/Hierarchy.cpp \
+    src/View/Inspector/InspectorPartInfo.cpp \
+    src/View/Inspector/InspectorPartWidget.cpp \
+    src/View/Inspector/InspectorPartSlotWidget.cpp \
+    src/View/Inspector/InspectorFloatPartSlotWidget.cpp \
+    src/View/Inspector/InspectorVectorFloatPartSlotWidget.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

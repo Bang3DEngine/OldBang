@@ -13,7 +13,7 @@
 #include <QApplication>
 #include <QTreeWidgetItem>
 
-#include "InspectorItemInfo.h"
+#include "InspectorPartInfo.h"
 #include "IWindowEventManagerListener.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
