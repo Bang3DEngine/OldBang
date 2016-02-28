@@ -7,13 +7,14 @@ Transform::Transform() : position(glm::vec3(0.0f)),
                          scale(glm::vec3(1.0f))
 {
     #ifdef BANG_EDITOR
+    glm::vec3 euler = glm::eulerAngles(rotation);
     inspectorPartInfo.slotInfos =
     {
         new ListInspectorPartInfoSlotVecFloat(
             "Position", {position.x, position.y, position.z}
         ),
         new ListInspectorPartInfoSlotVecFloat(
-            "Rotation", {rotation.x, rotation.y, rotation.z, rotation.w}
+            "Rotation", {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)}
         ),
         new ListInspectorPartInfoSlotVecFloat(
             "Scale", {scale.x, scale.y, scale.z}
@@ -29,6 +30,14 @@ Transform::~Transform()
 void Transform::SetPosition(const glm::vec3 &p)
 {
     position = p;
+}
+
+void Transform::SetRotation(const glm::vec3 &euler)
+{
+    glm::quat qx = glm::angleAxis(glm::radians(euler.x), glm::vec3(1,0,0));
+    glm::quat qy = glm::angleAxis(glm::radians(euler.y), glm::vec3(0,1,0));
+    glm::quat qz = glm::angleAxis(glm::radians(euler.z), glm::vec3(0,0,1));
+    rotation = qx * qy * qz;
 }
 
 void Transform::SetRotation(const glm::quat &q)
@@ -171,8 +180,9 @@ ListInspectorPartInfo* Transform::GetInfo()
 {
     static_cast<ListInspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value =
         {position.x, position.y, position.z};
+    glm::vec3 euler = glm::eulerAngles(rotation);
     static_cast<ListInspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value =
-        {rotation.x, rotation.y, rotation.z, rotation.w};
+        {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)};
     static_cast<ListInspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[2])->value =
         {scale.x, scale.y, scale.z};
 
@@ -191,7 +201,7 @@ void Transform::OnInspectorSlotChanged(ListInspectorPartWidget *partWidget)
 
     v = partWidget->GetSlotValueVecFloat("Rotation");
     Logger_Log("rot v: " << v);
-    rotation = glm::quat(v[0], v[1], v[2], v[3]);
+    SetRotation(glm::vec3(v[0], v[1], v[2]));
 
     v = partWidget->GetSlotValueVecFloat("Scale");
     Logger_Log("scale v: " << v);

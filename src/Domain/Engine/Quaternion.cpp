@@ -1,5 +1,5 @@
 #include "Quaternion.h"
 
-Quaternion::Quaternion() : glm::quat()
+Quaternion::Quaternion()
 {
 }

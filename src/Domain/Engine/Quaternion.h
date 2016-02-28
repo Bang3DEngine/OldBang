@@ -1,12 +1,11 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
 
-#include "glm/glm.hpp"
-
-class Quaternion : public glm::quat
+class Quaternion
 {
-public:
+private:
     Quaternion();
+
 };
 
 #endif // QUATERNION_H

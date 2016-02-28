@@ -33,6 +33,7 @@ public:
     void LookAt(glm::vec3 target);
 
     void SetPosition(const glm::vec3 &p);
+    void SetRotation(const glm::vec3 &euler);
     void SetRotation(const glm::quat &r);
     void SetScale(const glm::vec3 &s);
 
