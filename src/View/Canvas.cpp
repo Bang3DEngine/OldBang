@@ -8,7 +8,7 @@ int Canvas::RedrawDelay = 1;
 float Canvas::aspectRatio = 1.0f;
 unsigned long long Canvas::lastRenderTime = 0;
 
-Canvas::Canvas(QWidget* parent) : QGLWidget(parent), currentStage(nullptr)
+Canvas::Canvas(QWidget* parent) : QGLWidget(parent), currentStage(nullptr), paused(false)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
     clearColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -18,6 +18,7 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent), currentStage(nullptr)
     drawTimer.start();
 
     windowMain = WindowMain::GetInstance();
+    WindowMain::GetInstance()->buttonPauseResume->setText( (paused ? QString("Resume") : QString("Pause")) );
 }
 
 void Canvas::initializeGL()
@@ -37,19 +38,22 @@ void Canvas::paintGL()
 
 void Canvas::updateGL()
 {
-    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-    Time::deltaTime = float(Time::GetNow() - lastRenderTime) / 1000.0f;
-
-    if(currentStage != nullptr)
+    if(!paused)
     {
-        lastRenderTime = Time::GetNow();
-        currentStage->_OnUpdate();
-        currentStage->_OnRender();
-    }
+        glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    QGLWidget::swapBuffers();
+        Time::deltaTime = float(Time::GetNow() - lastRenderTime) / 1000.0f;
+
+        if(currentStage != nullptr)
+        {
+            lastRenderTime = Time::GetNow();
+            currentStage->_OnUpdate();
+            currentStage->_OnRender();
+        }
+
+        QGLWidget::swapBuffers();
+    }
 }
 
 void Canvas::resizeGL(int w, int h)
@@ -160,4 +164,10 @@ void Canvas::OnTopKekPressed()
 
     if(selected != nullptr) selected->AddChild(e);
     else currentStage->AddChild(e);
+}
+
+void Canvas::OnPauseResumeButtonPressed()
+{
+    paused = !paused;
+    WindowMain::GetInstance()->buttonPauseResume->setText( (paused ? QString("Resume") : QString("Pause")) );
 }

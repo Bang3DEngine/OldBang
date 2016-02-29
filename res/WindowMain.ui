@@ -26,6 +26,19 @@
      </layout>
     </item>
     <item>
+     <widget class="QPushButton" name="buttonPauseResume">
+      <property name="text">
+       <string>Pause</string>
+      </property>
+      <property name="icon">
+       <iconset theme="pause"/>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="Canvas" name="canvas" native="true">
       <property name="enabled">
        <bool>true</bool>
@@ -39,6 +52,9 @@
      </widget>
     </item>
    </layout>
+   <zorder></zorder>
+   <zorder>buttonPauseResume</zorder>
+   <zorder>canvas</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -428,6 +444,7 @@
    <container>1</container>
    <slots>
     <slot>OnTopKekPressed()</slot>
+    <slot>OnPauseResumeButtonPressed()</slot>
    </slots>
   </customwidget>
   <customwidget>
@@ -457,18 +474,34 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonCreatePrefab</sender>
-   <signal>clicked()</signal>
-   <receiver>canvas</receiver>
-   <slot>OnTopKekPressed()</slot>
+   <sender>widgetHierarchy</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>widgetHierarchy</receiver>
+   <slot>OnCustomContextMenuRequested(QPoint)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>202</x>
-     <y>739</y>
+     <x>75</x>
+     <y>123</y>
     </hint>
     <hint type="destinationlabel">
-     <x>279</x>
-     <y>264</y>
+     <x>87</x>
+     <y>127</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>widgetHierarchy</sender>
+   <signal>itemSelectionChanged()</signal>
+   <receiver>widgetHierarchy</receiver>
+   <slot>_NotifyHierarchyItemSelectionChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>87</x>
+     <y>164</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>87</x>
+     <y>164</y>
     </hint>
    </hints>
   </connection>
@@ -483,40 +516,40 @@
      <y>11</y>
     </hint>
     <hint type="destinationlabel">
-     <x>557</x>
+     <x>410</x>
      <y>34</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>widgetHierarchy</sender>
-   <signal>customContextMenuRequested(QPoint)</signal>
-   <receiver>widgetHierarchy</receiver>
-   <slot>OnCustomContextMenuRequested(QPoint)</slot>
+   <sender>buttonCreatePrefab</sender>
+   <signal>clicked()</signal>
+   <receiver>canvas</receiver>
+   <slot>OnTopKekPressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>75</x>
-     <y>123</y>
+     <x>192</x>
+     <y>370</y>
     </hint>
     <hint type="destinationlabel">
-     <x>118</x>
-     <y>101</y>
+     <x>392</x>
+     <y>210</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>widgetHierarchy</sender>
-   <signal>itemSelectionChanged()</signal>
-   <receiver>widgetHierarchy</receiver>
-   <slot>_NotifyHierarchyItemSelectionChanged()</slot>
+   <sender>buttonPauseResume</sender>
+   <signal>clicked()</signal>
+   <receiver>canvas</receiver>
+   <slot>OnPauseResumeButtonPressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>133</x>
-     <y>138</y>
+     <x>262</x>
+     <y>55</y>
     </hint>
     <hint type="destinationlabel">
-     <x>133</x>
-     <y>138</y>
+     <x>262</x>
+     <y>142</y>
     </hint>
    </hints>
   </connection>

@@ -32,6 +32,7 @@ private:
     static int width, height;
     static unsigned long long lastRenderTime;
 
+    bool paused;
     std::list<Stage*> stages;
 
     Stage *currentStage;
@@ -66,6 +67,7 @@ signals:
 public slots:
     void updateGL() override;
     void OnTopKekPressed();
+    void OnPauseResumeButtonPressed();
 };
 
 #endif // CANVAS_H

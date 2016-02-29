@@ -47,6 +47,7 @@ public:
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
     WindowEventManager *windowEventManager;
+    QPushButton *buttonPauseResume;
     Canvas *canvas;
     QMenuBar *menubar;
     QMenu *menuAssets;
@@ -109,6 +110,14 @@ public:
 
         verticalLayout->addLayout(verticalLayout_3);
 
+        buttonPauseResume = new QPushButton(centralwidget);
+        buttonPauseResume->setObjectName(QString::fromUtf8("buttonPauseResume"));
+        QIcon icon(QIcon::fromTheme(QString::fromUtf8("pause")));
+        buttonPauseResume->setIcon(icon);
+        buttonPauseResume->setFlat(false);
+
+        verticalLayout->addWidget(buttonPauseResume);
+
         canvas = new Canvas(centralwidget);
         canvas->setObjectName(QString::fromUtf8("canvas"));
         canvas->setEnabled(true);
@@ -121,6 +130,8 @@ public:
         verticalLayout->addWidget(canvas);
 
         WindowMain->setCentralWidget(centralwidget);
+        buttonPauseResume->raise();
+        canvas->raise();
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 531, 25));
@@ -285,10 +296,11 @@ public:
         menuProject->addAction(actionProject_Settings);
 
         retranslateUi(WindowMain);
-        QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
-        QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_NotifyMenuBarItemClicked(int)));
         QObject::connect(widgetHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
         QObject::connect(widgetHierarchy, SIGNAL(itemSelectionChanged()), widgetHierarchy, SLOT(_NotifyHierarchyItemSelectionChanged()));
+        QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_NotifyMenuBarItemClicked(int)));
+        QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
+        QObject::connect(buttonPauseResume, SIGNAL(clicked()), canvas, SLOT(OnPauseResumeButtonPressed()));
 
         QMetaObject::connectSlotsByName(WindowMain);
     } // setupUi
@@ -304,6 +316,7 @@ public:
         actionTexture2D->setText(QApplication::translate("WindowMain", "Texture2D", 0, QApplication::UnicodeUTF8));
         actionProject_Settings->setText(QApplication::translate("WindowMain", "Project Settings", 0, QApplication::UnicodeUTF8));
         actionCreate_from_prefab->setText(QApplication::translate("WindowMain", "Create from prefab", 0, QApplication::UnicodeUTF8));
+        buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0, QApplication::UnicodeUTF8));
         menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
         menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));
         menuEntity->setTitle(QApplication::translate("WindowMain", "Entities", 0, QApplication::UnicodeUTF8));
