@@ -17,7 +17,7 @@ InspectorFloatPartSlotWidget::InspectorFloatPartSlotWidget(float initialValue,
         layout->addWidget(textLabel);
     }
 
-    spinbox = new QDoubleSpinBox();
+    spinbox = new FloatPartSlotSpinBox();
     spinbox->setValue(initialValue);
     spinbox->setAlignment(Qt::AlignHCenter);
     spinbox->setMinimum(-999999999.9);
@@ -26,14 +26,12 @@ InspectorFloatPartSlotWidget::InspectorFloatPartSlotWidget(float initialValue,
     spinbox->setMinimumWidth(50);
     spinbox->setContentsMargins(0,0,0,0);
     spinbox->show();
-    connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
 
     layout->addWidget(spinbox);
 
     this->setContentsMargins(0,0,0,0);
     this->show();
 
-    lastValueBeforeEditing = GetValue();
     setFocusPolicy(Qt::FocusPolicy::ClickFocus);
 }
 
@@ -42,30 +40,27 @@ void InspectorFloatPartSlotWidget::SetValue(float f)
     if(!editing)
     {
         disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
-        lastValueBeforeEditing = float(spinbox->value());
-        spinbox->setValue( double(f) );
+        spinbox->setValue(f);
         connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
     }
 }
 
 float InspectorFloatPartSlotWidget::GetValue()
 {
-    return lastValueBeforeEditing;
+    return spinbox->value();
 }
 
-void InspectorFloatPartSlotWidget::focusInEvent(QFocusEvent *event)
+void InspectorFloatPartSlotWidget::OnSpinBoxFocusIn()
 {
     editing = true;
-    Logger_Log("IN");
 }
 
-void InspectorFloatPartSlotWidget::focusOutEvent(QFocusEvent *event)
+void InspectorFloatPartSlotWidget::OnSpinBoxFocusOut()
 {
     editing = false;
-    Logger_Log("OUT");
+    connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
+    spinbox->setValue(spinbox->value());
+    disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
 }
-
-
-
 
 QSize InspectorFloatPartSlotWidget::sizeHint() const { return QSize(50, 50); }
