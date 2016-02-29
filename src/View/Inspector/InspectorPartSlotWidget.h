@@ -11,8 +11,12 @@ protected:
     InspectorPartWidget *parent;
 
     InspectorPartSlotWidget(InspectorPartWidget *parent);
-    void focusInEvent(QFocusEvent * event) override;
-    void focusOutEvent(QFocusEvent * event) override;
+
+    template <class T>
+    void SetValue(const T &v) {}
+
+    template <class T>
+    T GetValue() { return nullptr; }
 };
 
 #endif // INSPECTORPARTSLOTWIDGET_H

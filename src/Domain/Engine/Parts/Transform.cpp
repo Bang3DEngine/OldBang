@@ -37,7 +37,7 @@ void Transform::SetRotation(const glm::vec3 &euler)
     glm::quat qx = glm::angleAxis(glm::radians(euler.x), glm::vec3(1,0,0));
     glm::quat qy = glm::angleAxis(glm::radians(euler.y), glm::vec3(0,1,0));
     glm::quat qz = glm::angleAxis(glm::radians(euler.z), glm::vec3(0,0,1));
-    rotation = qx * qy * qz;
+    rotation = qx * qz * qy;
 }
 
 void Transform::SetRotation(const glm::quat &q)
@@ -155,7 +155,7 @@ const std::string Transform::ToString() const
     msg << "[" <<
            "Transform: " << std::endl <<
            "   Position: (" << position.x << ", " << position.y << ", " << position.z << ")"  << std::endl <<
-           "   Rotation: (" << euler.x << ", " << euler.y << ", " << euler.z << ")" << std::endl <<
+           "   Rotation: (" << glm::degrees(euler.x) << ", " << glm::degrees(euler.y) << ", " << glm::degrees(euler.z) << ")" << std::endl <<
            "   Scale: (" << scale.x << ", " << scale.y << ", " << scale.z << ")" << std::endl <<
            "]" << std::endl;
 
@@ -192,20 +192,14 @@ InspectorPartInfo* Transform::GetInfo()
 
 void Transform::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
 {
-    Logger_Log("_______________________________________");
-    Logger_Log(this);
-
     std::vector<float> v;
     v = partWidget->GetVectorFloatSlotValue("Position");
-    Logger_Log("pos v: " << v);
     position = glm::vec3(v[0], v[1], v[2]);
 
     v = partWidget->GetVectorFloatSlotValue("Rotation");
-    Logger_Log("rot v: " << v);
     SetRotation(glm::vec3(v[0], v[1], v[2]));
 
     v = partWidget->GetVectorFloatSlotValue("Scale");
-    Logger_Log("scale v: " << v);
     scale = glm::vec3(v[0], v[1], v[2]);
 }
 #endif

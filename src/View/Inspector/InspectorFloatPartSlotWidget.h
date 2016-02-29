@@ -7,13 +7,18 @@
 
 class InspectorFloatPartSlotWidget : public InspectorPartSlotWidget //Slot for a float (label + float)
 {
-    public:
+    private:
         QDoubleSpinBox *spinbox;
 
-        InspectorFloatPartSlotWidget(float initialValue, const std::string &labelString,InspectorPartWidget *parent);
+    public:
+        InspectorFloatPartSlotWidget(float initialValue, const std::string &labelString,
+                                     InspectorPartWidget *parent);
+
         virtual void SetValue(float f);
         virtual float GetValue();
 
+        virtual void focusInEvent(QFocusEvent * event) override;
+        virtual void focusOutEvent(QFocusEvent * event) override;
         QSize sizeHint() const override;
 };
 

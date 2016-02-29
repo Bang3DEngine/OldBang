@@ -12,7 +12,7 @@ class InspectorVectorFloatPartSlotWidget : public InspectorPartSlotWidget //Slot
         std::vector<InspectorFloatPartSlotWidget*> floatSlots;
 
         InspectorVectorFloatPartSlotWidget(std::vector<float> initialValues, const std::string &labelString,
-                              InspectorPartWidget *parent);
+                                           InspectorPartWidget *parent);
 
         virtual void SetValue(const std::vector<float> &v);
         virtual std::vector<float> GetValue();

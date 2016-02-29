@@ -45,5 +45,17 @@ float InspectorFloatPartSlotWidget::GetValue()
     return float(spinbox->value());
 }
 
+void InspectorFloatPartSlotWidget::focusInEvent(QFocusEvent *event)
+{
+    Logger_Log("Focus in");
+}
+
+void InspectorFloatPartSlotWidget::focusOutEvent(QFocusEvent *event)
+{
+    Logger_Log("Focus out");
+}
+
+
+
 
 QSize InspectorFloatPartSlotWidget::sizeHint() const { return QSize(50, 50); }
