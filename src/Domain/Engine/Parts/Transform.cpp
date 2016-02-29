@@ -37,7 +37,7 @@ void Transform::SetRotation(const glm::vec3 &euler)
     glm::quat qx = glm::angleAxis(glm::radians(euler.x), glm::vec3(1,0,0));
     glm::quat qy = glm::angleAxis(glm::radians(euler.y), glm::vec3(0,1,0));
     glm::quat qz = glm::angleAxis(glm::radians(euler.z), glm::vec3(0,0,1));
-    rotation = qx * qz * qy;
+    SetRotation(qz * qy * qx);
 }
 
 void Transform::SetRotation(const glm::quat &q)

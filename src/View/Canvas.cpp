@@ -8,7 +8,7 @@ int Canvas::RedrawDelay = 1;
 float Canvas::aspectRatio = 1.0f;
 unsigned long long Canvas::lastRenderTime = 0;
 
-Canvas::Canvas(QWidget* parent) : QGLWidget(parent), currentStage(nullptr), paused(false)
+Canvas::Canvas(QWidget* parent) : QGLWidget(parent), paused(false), currentStage(nullptr)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
     clearColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -38,22 +38,23 @@ void Canvas::paintGL()
 
 void Canvas::updateGL()
 {
-    if(!paused)
+    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+    Time::deltaTime = float(Time::GetNow() - lastRenderTime) / 1000.0f;
+
+    if(currentStage != nullptr)
     {
-        glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
-        Time::deltaTime = float(Time::GetNow() - lastRenderTime) / 1000.0f;
-
-        if(currentStage != nullptr)
+        lastRenderTime = Time::GetNow();
+        if(!paused)
         {
-            lastRenderTime = Time::GetNow();
             currentStage->_OnUpdate();
-            currentStage->_OnRender();
         }
 
-        QGLWidget::swapBuffers();
+        currentStage->_OnRender();
     }
+
+    QGLWidget::swapBuffers();
 }
 
 void Canvas::resizeGL(int w, int h)

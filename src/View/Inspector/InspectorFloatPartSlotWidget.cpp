@@ -2,7 +2,8 @@
 
 InspectorFloatPartSlotWidget::InspectorFloatPartSlotWidget(float initialValue,
                                                           const std::string &labelString,
-                                                          InspectorPartWidget *parent) : InspectorPartSlotWidget(parent)
+                                                          InspectorPartWidget *parent) : InspectorPartSlotWidget(parent),
+                                                          editing(false)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
@@ -31,28 +32,37 @@ InspectorFloatPartSlotWidget::InspectorFloatPartSlotWidget(float initialValue,
 
     this->setContentsMargins(0,0,0,0);
     this->show();
+
+    lastValueBeforeEditing = GetValue();
+    setFocusPolicy(Qt::FocusPolicy::ClickFocus);
 }
 
 void InspectorFloatPartSlotWidget::SetValue(float f)
 {
-    disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
-    spinbox->setValue( double(f) );
-    connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
+    if(!editing)
+    {
+        disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
+        lastValueBeforeEditing = float(spinbox->value());
+        spinbox->setValue( double(f) );
+        connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
+    }
 }
 
 float InspectorFloatPartSlotWidget::GetValue()
 {
-    return float(spinbox->value());
+    return lastValueBeforeEditing;
 }
 
 void InspectorFloatPartSlotWidget::focusInEvent(QFocusEvent *event)
 {
-    Logger_Log("Focus in");
+    editing = true;
+    Logger_Log("IN");
 }
 
 void InspectorFloatPartSlotWidget::focusOutEvent(QFocusEvent *event)
 {
-    Logger_Log("Focus out");
+    editing = false;
+    Logger_Log("OUT");
 }
 
 
