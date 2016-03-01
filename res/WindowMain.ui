@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>531</width>
-    <height>402</height>
+    <width>846</width>
+    <height>507</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,9 @@
        <string>Pause</string>
       </property>
       <property name="icon">
-       <iconset theme="pause"/>
+       <iconset theme="pause">
+        <normaloff/>
+       </iconset>
       </property>
       <property name="flat">
        <bool>false</bool>
@@ -61,7 +63,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>531</width>
+     <width>846</width>
      <height>25</height>
     </rect>
    </property>
@@ -286,46 +288,6 @@
          <property name="viewMode">
           <enum>QListView::ListMode</enum>
          </property>
-         <item>
-          <property name="text">
-           <string>a</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>v</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>f</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>g</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>h</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>New Item</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>j</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>j</string>
-          </property>
-         </item>
         </widget>
        </item>
       </layout>
@@ -391,6 +353,21 @@
         </property>
        </widget>
       </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockLogger">
+   <property name="windowTitle">
+    <string>Logger</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QListWidget" name="widgetLogger"/>
      </item>
     </layout>
    </widget>

@@ -22,6 +22,7 @@ INCLUDEPATH += \
     $$PWD/src/View/Inspector/ \
     $$PWD/src/View/Hierarchy/ \
     $$PWD/src/View/Explorer/ \
+    $$PWD/src/View/Logger/ \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/src/Domain/Graphics/Interfaces/ \
@@ -127,7 +128,8 @@ HEADERS += \
     src/View/Inspector/InspectorPartWidget.h \
     src/View/Inspector/InspectorPartSlotWidget.h \
     src/View/Inspector/InspectorFloatPartSlotWidget.h \
-    src/View/Inspector/InspectorVectorFloatPartSlotWidget.h
+    src/View/Inspector/InspectorVectorFloatPartSlotWidget.h \
+    src/View/Logger/ListLogger.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -178,7 +180,8 @@ SOURCES += \
     src/View/Inspector/InspectorPartWidget.cpp \
     src/View/Inspector/InspectorPartSlotWidget.cpp \
     src/View/Inspector/InspectorFloatPartSlotWidget.cpp \
-    src/View/Inspector/InspectorVectorFloatPartSlotWidget.cpp
+    src/View/Inspector/InspectorVectorFloatPartSlotWidget.cpp \
+    src/View/Logger/ListLogger.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

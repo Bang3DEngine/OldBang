@@ -19,6 +19,10 @@
 #include "Time.h"
 #include "IToString.h"
 
+#ifdef BANG_EDITOR
+#include "ListLogger.h"
+#endif
+
 //OSTREAM OPERATORS //////////////////////////////////
 std::ostream& operator<<(std::ostream &log, const std::string &str);
 std::ostream& operator<<(std::ostream &log, const glm::vec2 &v);
@@ -77,6 +81,7 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
     std::cerr << "[   LOG   ]: " << log.str() << std::endl;\
     std::cerr.flush();\
     log.flush();\
+    ListLogger::AddLog(log.str()); \
 } while(0)
 
 #define L(x) do{\

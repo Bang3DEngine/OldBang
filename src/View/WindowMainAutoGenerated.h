@@ -16,6 +16,7 @@
 #include <QtGui/QDockWidget>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
+#include <QtGui/QListWidget>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
@@ -73,13 +74,17 @@ public:
     QSplitter *splitter;
     QPushButton *buttonCreatePrefab;
     QTreeView *widgetTreeExplorer;
+    QDockWidget *dockLogger;
+    QWidget *dockWidgetContents;
+    QVBoxLayout *verticalLayout_5;
+    QListWidget *widgetLogger;
 
     void setupUi(QMainWindow *WindowMain)
     {
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
-        WindowMain->resize(531, 402);
+        WindowMain->resize(846, 507);
         actionOpen_project = new QAction(WindowMain);
         actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
@@ -112,7 +117,13 @@ public:
 
         buttonPauseResume = new QPushButton(centralwidget);
         buttonPauseResume->setObjectName(QString::fromUtf8("buttonPauseResume"));
-        QIcon icon(QIcon::fromTheme(QString::fromUtf8("pause")));
+        QIcon icon;
+        QString iconThemeName = QString::fromUtf8("pause");
+        if (QIcon::hasThemeIcon(iconThemeName)) {
+            icon = QIcon::fromTheme(iconThemeName);
+        } else {
+            icon.addFile(QString::fromUtf8(""), QSize(), QIcon::Normal, QIcon::Off);
+        }
         buttonPauseResume->setIcon(icon);
         buttonPauseResume->setFlat(false);
 
@@ -134,7 +145,7 @@ public:
         canvas->raise();
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 531, 25));
+        menubar->setGeometry(QRect(0, 0, 846, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -227,14 +238,6 @@ public:
         verticalLayout_2->addWidget(labelInspectorEntityName);
 
         widgetInspector = new Inspector(dockWidgetContents_7);
-        new QListWidgetItem(widgetInspector);
-        new QListWidgetItem(widgetInspector);
-        new QListWidgetItem(widgetInspector);
-        new QListWidgetItem(widgetInspector);
-        new QListWidgetItem(widgetInspector);
-        new QListWidgetItem(widgetInspector);
-        new QListWidgetItem(widgetInspector);
-        new QListWidgetItem(widgetInspector);
         widgetInspector->setObjectName(QString::fromUtf8("widgetInspector"));
         widgetInspector->setDefaultDropAction(Qt::MoveAction);
         widgetInspector->setAlternatingRowColors(true);
@@ -281,6 +284,19 @@ public:
 
         dockExplorer->setWidget(dockWidgetContents_5);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockExplorer);
+        dockLogger = new QDockWidget(WindowMain);
+        dockLogger->setObjectName(QString::fromUtf8("dockLogger"));
+        dockWidgetContents = new QWidget();
+        dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
+        verticalLayout_5 = new QVBoxLayout(dockWidgetContents);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        widgetLogger = new QListWidget(dockWidgetContents);
+        widgetLogger->setObjectName(QString::fromUtf8("widgetLogger"));
+
+        verticalLayout_5->addWidget(widgetLogger);
+
+        dockLogger->setWidget(dockWidgetContents);
+        WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockLogger);
 
         menubar->addAction(menuProject->menuAction());
         menubar->addAction(menuEntity->menuAction());
@@ -351,29 +367,9 @@ public:
 
         dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0, QApplication::UnicodeUTF8));
         labelInspectorEntityName->setText(QApplication::translate("WindowMain", "Entity Name", 0, QApplication::UnicodeUTF8));
-
-        const bool __sortingEnabled1 = widgetInspector->isSortingEnabled();
-        widgetInspector->setSortingEnabled(false);
-        QListWidgetItem *___qlistwidgetitem = widgetInspector->item(0);
-        ___qlistwidgetitem->setText(QApplication::translate("WindowMain", "a", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem1 = widgetInspector->item(1);
-        ___qlistwidgetitem1->setText(QApplication::translate("WindowMain", "v", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem2 = widgetInspector->item(2);
-        ___qlistwidgetitem2->setText(QApplication::translate("WindowMain", "f", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem3 = widgetInspector->item(3);
-        ___qlistwidgetitem3->setText(QApplication::translate("WindowMain", "g", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem4 = widgetInspector->item(4);
-        ___qlistwidgetitem4->setText(QApplication::translate("WindowMain", "h", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem5 = widgetInspector->item(5);
-        ___qlistwidgetitem5->setText(QApplication::translate("WindowMain", "New Item", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem6 = widgetInspector->item(6);
-        ___qlistwidgetitem6->setText(QApplication::translate("WindowMain", "j", 0, QApplication::UnicodeUTF8));
-        QListWidgetItem *___qlistwidgetitem7 = widgetInspector->item(7);
-        ___qlistwidgetitem7->setText(QApplication::translate("WindowMain", "j", 0, QApplication::UnicodeUTF8));
-        widgetInspector->setSortingEnabled(__sortingEnabled1);
-
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));
         buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0, QApplication::UnicodeUTF8));
+        dockLogger->setWindowTitle(QApplication::translate("WindowMain", "Logger", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
