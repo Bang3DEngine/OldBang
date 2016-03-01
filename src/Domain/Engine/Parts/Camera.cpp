@@ -10,6 +10,15 @@ Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
                    projMode(ProjectionMode::Perspective),
                    autoUpdateAspectRatio(true)
 {
+    #ifdef BANG_EDITOR
+    inspectorPartInfo.slotInfos =
+    {
+        new InspectorPartInfoSlotVecFloat( "FOV", {fovDegrees} ),
+        new InspectorPartInfoSlotVecFloat( "Z Near", {zNear} ),
+        new InspectorPartInfoSlotVecFloat( "Z Far", {zFar} ),
+        new InspectorPartInfoSlotVecFloat( "Aspect Ratio", {aspectRatio} )
+    };
+    #endif
 }
 
 void Camera::GetViewMatrix(glm::mat4 &view) const
@@ -146,3 +155,24 @@ const std::string Camera::ToString() const
 {
     return "Camera";
 }
+
+
+#ifdef BANG_EDITOR
+InspectorPartInfo* Camera::GetInfo()
+{
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value = {fovDegrees};
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value = {zNear};
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[2])->value = {zFar};
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[3])->value = {aspectRatio};
+
+    return &inspectorPartInfo;
+}
+
+void Camera::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
+{
+    fovDegrees = partWidget->GetVectorFloatSlotValue("FOV")[0];
+    zNear = partWidget->GetVectorFloatSlotValue("Z Near")[0];
+    zFar = partWidget->GetVectorFloatSlotValue("Z Far")[0];
+    aspectRatio = partWidget->GetVectorFloatSlotValue("Aspect Ratio")[0];
+}
+#endif
