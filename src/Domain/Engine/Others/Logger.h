@@ -75,34 +75,32 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
        " (file:'" << __FILE__ << "':" << __LINE__ << ", '" << __FUNCTION__ << \
          "')" << std::endl
 
+#ifdef BANG_EDITOR
+    #define _Log_To_ListLogger(x)   ListLogger::AddLog(x);
+    #define _Warn_To_ListLogger(x)  ListLogger::AddWarn(x);
+    #define _Error_To_ListLogger(x) ListLogger::AddError(x);
+#else
+    #define _Log_To_ListLogger(x) do{}while(0);
+    #define _Warn_To_ListLogger(x) do{}while(0);
+    #define _Error_To_ListLogger(x) do{}while(0);
+#endif
+
 #define Logger_Log(x) do{\
     std::ostringstream log;\
     log << x;\
     std::cerr << "[   LOG   ]: " << log.str() << std::endl;\
     std::cerr.flush();\
     log.flush();\
-    ListLogger::AddLog(log.str()); \
+    _Log_To_ListLogger(log.str()); \
 } while(0)
 
-#define L(x) do{\
-    std::ostringstream log;\
-    log << x;\
-    std::cerr << log.str();\
-    std::cerr.flush();\
-    log.flush();\
-} while(0)
-
-#define LN(x) do{\
-    std::cerr << std::endl;\
-    std::cerr.flush();\
-} while(0)
-
-#define Logger_Warning(x) do{\
+#define Logger_Warn(x) do{\
     std::ostringstream log;\
     log << x;\
     std::cerr << "[ WARNING ]: " << log.str() << _Logger_Suffix;\
     std::cerr.flush();\
     log.flush();\
+    _Warn_To_ListLogger(log.str()); \
 } while(0)
 
 #define Logger_Error(x) do{\
@@ -111,6 +109,7 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
     std::cerr << "[  ERROR  ]: " << log.str() << _Logger_Suffix;\
     std::cerr.flush();\
     log.flush();\
+    _Error_To_ListLogger(log.str()); \
 } while(0)
 
 

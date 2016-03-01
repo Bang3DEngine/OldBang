@@ -31,7 +31,7 @@ void Camera::GetViewMatrix(glm::mat4 &view) const
     }
     else
     {
-        Logger_Warning(GetOwner() << " has a Camera but does not have a transform. " <<
+        Logger_Warn(GetOwner() << " has a Camera but does not have a transform. " <<
                        "View matrix will be the identity matrix.");
 
         view = glm::mat4(1.0f);

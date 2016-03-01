@@ -105,7 +105,7 @@ void Canvas::SetCurrentStage(const std::string &name)
         }
     }
 
-    Logger_Warning("Could not change Stage to '" << name << "', "<<
+    Logger_Warn("Could not change Stage to '" << name << "', "<<
                    "because no stage with this name is added to the Canvas.");
 }
 

@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>846</width>
-    <height>507</height>
+    <width>632</width>
+    <height>464</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,7 +63,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>846</width>
+     <width>632</width>
      <height>25</height>
     </rect>
    </property>
@@ -367,7 +367,30 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
-      <widget class="QListWidget" name="widgetLogger"/>
+      <widget class="LoggerWidget" name="widgetLogger" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="ListLogger" name="listLogger">
+          <property name="alternatingRowColors">
+           <bool>false</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonLoggerClear">
+          <property name="text">
+           <string>Clear</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -447,6 +470,17 @@
    <extends>QListWidget</extends>
    <header>Inspector.h</header>
   </customwidget>
+  <customwidget>
+   <class>LoggerWidget</class>
+   <extends>QWidget</extends>
+   <header>LoggerWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ListLogger</class>
+   <extends>QListWidget</extends>
+   <header>ListLogger.h</header>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -493,7 +527,7 @@
      <y>11</y>
     </hint>
     <hint type="destinationlabel">
-     <x>410</x>
+     <x>355</x>
      <y>34</y>
     </hint>
    </hints>
@@ -505,12 +539,12 @@
    <slot>OnTopKekPressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>192</x>
-     <y>370</y>
+     <x>154</x>
+     <y>432</y>
     </hint>
     <hint type="destinationlabel">
-     <x>392</x>
-     <y>210</y>
+     <x>356</x>
+     <y>219</y>
     </hint>
    </hints>
   </connection>
@@ -521,12 +555,28 @@
    <slot>OnPauseResumeButtonPressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>262</x>
-     <y>55</y>
+     <x>356</x>
+     <y>68</y>
     </hint>
     <hint type="destinationlabel">
-     <x>262</x>
-     <y>142</y>
+     <x>356</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonLoggerClear</sender>
+   <signal>clicked()</signal>
+   <receiver>listLogger</receiver>
+   <slot>clear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>568</x>
+     <y>405</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>569</x>
+     <y>353</y>
     </hint>
    </hints>
   </connection>

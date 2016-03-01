@@ -16,7 +16,6 @@
 #include <QtGui/QDockWidget>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
-#include <QtGui/QListWidget>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
@@ -29,6 +28,8 @@
 #include "Canvas.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
+#include "ListLogger.h"
+#include "LoggerWidget.h"
 #include "WindowEventManager.h"
 
 QT_BEGIN_NAMESPACE
@@ -77,14 +78,17 @@ public:
     QDockWidget *dockLogger;
     QWidget *dockWidgetContents;
     QVBoxLayout *verticalLayout_5;
-    QListWidget *widgetLogger;
+    LoggerWidget *widgetLogger;
+    QVBoxLayout *verticalLayout_6;
+    ListLogger *listLogger;
+    QPushButton *buttonLoggerClear;
 
     void setupUi(QMainWindow *WindowMain)
     {
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
-        WindowMain->resize(846, 507);
+        WindowMain->resize(632, 464);
         actionOpen_project = new QAction(WindowMain);
         actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
@@ -145,7 +149,7 @@ public:
         canvas->raise();
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 846, 25));
+        menubar->setGeometry(QRect(0, 0, 632, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -290,8 +294,24 @@ public:
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         verticalLayout_5 = new QVBoxLayout(dockWidgetContents);
         verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
-        widgetLogger = new QListWidget(dockWidgetContents);
+        widgetLogger = new LoggerWidget(dockWidgetContents);
         widgetLogger->setObjectName(QString::fromUtf8("widgetLogger"));
+        verticalLayout_6 = new QVBoxLayout(widgetLogger);
+        verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
+        listLogger = new ListLogger(widgetLogger);
+        listLogger->setObjectName(QString::fromUtf8("listLogger"));
+        listLogger->setAutoScrollMargin(999999);
+        listLogger->setAlternatingRowColors(false);
+        listLogger->setSelectionMode(QAbstractItemView::SingleSelection);
+        listLogger->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+        verticalLayout_6->addWidget(listLogger);
+
+        buttonLoggerClear = new QPushButton(widgetLogger);
+        buttonLoggerClear->setObjectName(QString::fromUtf8("buttonLoggerClear"));
+
+        verticalLayout_6->addWidget(buttonLoggerClear);
+
 
         verticalLayout_5->addWidget(widgetLogger);
 
@@ -317,6 +337,7 @@ public:
         QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_NotifyMenuBarItemClicked(int)));
         QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
         QObject::connect(buttonPauseResume, SIGNAL(clicked()), canvas, SLOT(OnPauseResumeButtonPressed()));
+        QObject::connect(buttonLoggerClear, SIGNAL(clicked()), listLogger, SLOT(clear()));
 
         QMetaObject::connectSlotsByName(WindowMain);
     } // setupUi
@@ -370,6 +391,7 @@ public:
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));
         buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0, QApplication::UnicodeUTF8));
         dockLogger->setWindowTitle(QApplication::translate("WindowMain", "Logger", 0, QApplication::UnicodeUTF8));
+        buttonLoggerClear->setText(QApplication::translate("WindowMain", "Clear", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

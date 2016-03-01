@@ -20,7 +20,7 @@ void MeshRenderer::_OnRender()
     }
     else
     {
-        Logger_Warning("Can't render " << GetOwner() << " because "
+        Logger_Warn("Can't render " << GetOwner() << " because "
                        << stage << " does not have a set Camera.");
     }
 }

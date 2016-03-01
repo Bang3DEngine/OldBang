@@ -86,7 +86,7 @@ bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn)
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+        if(warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
@@ -104,7 +104,7 @@ bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v,
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+        if(warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
@@ -122,7 +122,7 @@ bool ShaderProgram::SetUniformVec3 (const std::string &name, const glm::vec3& v,
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+        if(warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
@@ -140,7 +140,7 @@ bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v,
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+        if(warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
@@ -158,7 +158,7 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m,
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+        if(warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
@@ -176,7 +176,7 @@ bool ShaderProgram::SetUniformTexture(const std::string &name, const Texture *te
     }
     else
     {
-        if(warn) Logger_Warning("Couldn't find uniform '" + name + "' in " <<
+        if(warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
         return false;
     }
