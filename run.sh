@@ -5,9 +5,9 @@
 # Make and run BangPreprocessor
 cd BangPreprocessor
 qmake
-(make && ./BangPreprocessor) || exit -1
+(make -j4 && ./BangPreprocessor) || exit -1
 cd ..
 
 # Make and run Bang
 qmake
-(make && ./Bang) || exit -1
+(make -j4 && ./Bang) || exit -1

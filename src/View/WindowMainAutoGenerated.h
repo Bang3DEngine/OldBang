@@ -300,7 +300,6 @@ public:
         verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
         listLogger = new ListLogger(widgetLogger);
         listLogger->setObjectName(QString::fromUtf8("listLogger"));
-        listLogger->setAutoScrollMargin(999999);
         listLogger->setAlternatingRowColors(false);
         listLogger->setSelectionMode(QAbstractItemView::SingleSelection);
         listLogger->setSelectionBehavior(QAbstractItemView::SelectRows);

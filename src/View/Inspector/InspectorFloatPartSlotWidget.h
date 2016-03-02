@@ -38,6 +38,7 @@ public:
     FloatPartSlotSpinBox() : QDoubleSpinBox()
     {
         connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
+        AdjustStep(value());
     }
 
     virtual void focusInEvent(QFocusEvent * event) override
@@ -65,8 +66,8 @@ public:
 public slots:
     void AdjustStep(double v)
     {
-        if(abs(v) <= 0.1f) v = 0.1f;
-        setSingleStep( pow(10.0, int(log10(v == 0.0f ? v + 0.1f : v))-1) );
+        if(abs(v) <= 1.0f) setSingleStep(0.1f);
+        else setSingleStep( pow(10.0, int(log10(v == 0.0f ? 0.1f : abs(v)))-1) );
     }
 
     void SelectAll() { selectAll(); }

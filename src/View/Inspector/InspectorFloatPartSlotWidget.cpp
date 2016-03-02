@@ -63,4 +63,4 @@ void InspectorFloatPartSlotWidget::OnSpinBoxFocusOut()
     disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
 }
 
-QSize InspectorFloatPartSlotWidget::sizeHint() const { return QSize(50, 50); }
+QSize InspectorFloatPartSlotWidget::sizeHint() const { return QSize(30, 30); }
