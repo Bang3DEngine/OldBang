@@ -16,8 +16,6 @@ public:
     virtual ~InspectorPartSlotInfo() {}
 };
 
-
-
 class InspectorPartInfoSlotVecFloat : public InspectorPartSlotInfo
 {
 public:
@@ -32,6 +30,24 @@ public:
 
     bool IsOfTypeVecFloat() override { return true; }
 };
+
+
+class InspectorPartInfoSlotEnum : public InspectorPartInfoSlotEnum
+{
+public:
+    std::vector<std::string> possibleValues;
+    int selectedValueIndex = 0;
+
+    InspectorPartInfoSlotEnum(const std::string &label,
+                              const std::vector<std::string> &initialValues) : InspectorPartSlotInfo(label)
+    {
+        this->possibleValues = initialValues;
+    }
+    virtual ~InspectorPartInfoSlotVecFloat() {}
+
+    bool IsOfTypeVecFloat() override { return false; }
+};
+
 
 
 

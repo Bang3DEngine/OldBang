@@ -4,6 +4,14 @@
 
 MeshRenderer::MeshRenderer()
 {
+#ifdef BANG_EDITOR
+    inspectorPartInfo.slotInfos =
+    {
+        new InspectorPartInfoSlotEnum(
+            "Drawing Mode", {"Triangles", "Quads"}
+        )
+    };
+#endif
 }
 
 MeshRenderer::~MeshRenderer()

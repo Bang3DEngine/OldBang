@@ -14,9 +14,8 @@ class InspectorFloatPartSlotWidget : public InspectorPartSlotWidget //Slot for a
     Q_OBJECT
 
 private:
-    FloatPartSlotSpinBox *spinbox;
-
-    bool editing;
+    FloatPartSlotSpinBox *spinbox = nullptr;
+    bool editing =false;
 
 public:
     InspectorFloatPartSlotWidget(float initialValue, const std::string &labelString,

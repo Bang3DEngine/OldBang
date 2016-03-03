@@ -2,8 +2,7 @@
 
 InspectorFloatPartSlotWidget::InspectorFloatPartSlotWidget(float initialValue,
                                                           const std::string &labelString,
-                                                          InspectorPartWidget *parent) : InspectorPartSlotWidget(parent),
-                                                          editing(false)
+                                                          InspectorPartWidget *parent) : InspectorPartSlotWidget(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);

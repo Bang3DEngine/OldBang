@@ -130,7 +130,8 @@ HEADERS += \
     src/View/Inspector/InspectorFloatPartSlotWidget.h \
     src/View/Inspector/InspectorVectorFloatPartSlotWidget.h \
     src/View/Logger/ListLogger.h \
-    src/View/Logger/LoggerWidget.h
+    src/View/Logger/LoggerWidget.h \
+    src/View/Inspector/InspectorPartEnumSlotWidget.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -183,7 +184,8 @@ SOURCES += \
     src/View/Inspector/InspectorFloatPartSlotWidget.cpp \
     src/View/Inspector/InspectorVectorFloatPartSlotWidget.cpp \
     src/View/Logger/ListLogger.cpp \
-    src/View/Logger/LoggerWidget.cpp
+    src/View/Logger/LoggerWidget.cpp \
+    src/View/Inspector/InspectorPartEnumSlotWidget.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro
