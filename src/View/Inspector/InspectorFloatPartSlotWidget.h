@@ -18,7 +18,7 @@ private:
     bool editing =false;
 
 public:
-    InspectorFloatPartSlotWidget(float initialValue, const std::string &labelString,
+    InspectorFloatPartSlotWidget(const std::string &labelString, float initialValue,
                                  InspectorPartWidget *parent);
 
     virtual void SetValue(float f);

@@ -3,6 +3,7 @@
 #include "Part.h"
 
 #include "InspectorPartSlotWidget.h"
+#include "InspectorPartEnumSlotWidget.h"
 #include "InspectorFloatPartSlotWidget.h"
 #include "InspectorVectorFloatPartSlotWidget.h"
 
@@ -13,7 +14,7 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
     setLayout(mainLayout);
-    mainLayout->setSpacing(0); mainLayout->setContentsMargins(0,0,0,0);
+    mainLayout->setSpacing(0); mainLayout->setContentsMargins(10,10,10,20);
 
     QHBoxLayout *titleLayout = new QHBoxLayout();
     titleLabel = new QLabel(QString::fromStdString(relatedPart->GetName()));
@@ -24,7 +25,7 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
     enabledCheckbox->setChecked(relatedPart->IsEnabled());
     connect(enabledCheckbox, SIGNAL(clicked(bool)), this, SLOT(OnEnabledCheckboxPressed(bool)));
 
-    titleLayout->setContentsMargins(0, 5, 0, 5);
+    titleLayout->setContentsMargins(0,0,0,0);
     titleLayout->addWidget(titleLabel, 10);
     titleLayout->addWidget(enabledCheckbox, 1);
     mainLayout->addLayout(titleLayout);
@@ -33,10 +34,16 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
     {
         InspectorPartSlotWidget *ws = nullptr;
 
-        InspectorPartInfoSlotVecFloat* siv;  //If the infoSlot is of type VecFloat
+        InspectorPartInfoSlotVecFloat* siv;
+        InspectorPartInfoSlotEnum* sie;
+
         if( (siv = dynamic_cast<InspectorPartInfoSlotVecFloat*>(si)) != nullptr)
         {
-            ws =  new InspectorVectorFloatPartSlotWidget(siv->value, siv->label, this);
+            ws =  new InspectorVectorFloatPartSlotWidget(siv->label, siv->value, this);
+        }
+        else if( (sie = dynamic_cast<InspectorPartInfoSlotEnum*>(si)) != nullptr)
+        {
+            ws =  new InspectorPartEnumSlotWidget(sie->label, sie->enumValues, sie->selectedValueIndex, this);
         }
 
         if(ws != nullptr)
@@ -62,10 +69,20 @@ InspectorPartWidget::~InspectorPartWidget()
 
 std::vector<float> InspectorPartWidget::GetVectorFloatSlotValue(const std::string &slotLabel)
 {
-    InspectorVectorFloatPartSlotWidget *w = dynamic_cast<InspectorVectorFloatPartSlotWidget*>(labelsToPartSlots[slotLabel]);
+    InspectorVectorFloatPartSlotWidget *w =
+            dynamic_cast<InspectorVectorFloatPartSlotWidget*>(labelsToPartSlots[slotLabel]);
     std::vector<float> r;
     if(w != nullptr) r = w->GetValue();
     return r;
+}
+
+int InspectorPartWidget::GetSelectedEnumSlotIndex(const std::string &slotLabel)
+{
+    InspectorPartEnumSlotWidget *w =
+            dynamic_cast<InspectorPartEnumSlotWidget*>(labelsToPartSlots[slotLabel]);
+    int selectedIndex = 0;
+    if(w != nullptr) selectedIndex = w->GetValue();
+    return selectedIndex;
 }
 
 void InspectorPartWidget::UpdateSlotsValues()
@@ -98,7 +115,12 @@ void InspectorPartWidget::OnEnabledCheckboxPressed(bool checked)
     }
 }
 
-void InspectorPartWidget::_NotifyInspectorSlotChanged(double newValue)
+void InspectorPartWidget::_NotifyInspectorSlotChanged(double _)
+{
+    WindowEventManager::NotifyInspectorSlotChanged(relatedPart, this);
+}
+
+void InspectorPartWidget::_NotifyInspectorSlotChanged(QString _)
 {
     WindowEventManager::NotifyInspectorSlotChanged(relatedPart, this);
 }

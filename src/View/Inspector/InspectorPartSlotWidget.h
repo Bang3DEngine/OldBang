@@ -13,12 +13,13 @@ protected:
     InspectorPartWidget *parent;
 
     InspectorPartSlotWidget(InspectorPartWidget *parent);
-
+/*
     template <class T>
     void SetValue(const T &v) {}
 
     template <class T>
-    T GetValue() { return nullptr; }
+    T GetValue() { return 0; }
+*/
 };
 
 #endif // INSPECTORPARTSLOTWIDGET_H

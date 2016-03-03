@@ -51,8 +51,8 @@ public:
     bool IsEnabled() { return enabled; }
 
     #ifdef BANG_EDITOR
-    virtual InspectorPartInfo* GetInfo();
-    virtual void OnInspectorSlotChanged(InspectorPartWidget *inspectorItem) override {}
+    virtual InspectorPartInfo* GetInfo() = 0;
+    virtual void OnInspectorSlotChanged(InspectorPartWidget *partWidget) = 0;
     #endif
 };
 

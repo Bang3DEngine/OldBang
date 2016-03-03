@@ -22,7 +22,7 @@ public:
     std::vector<float> value;
 
     InspectorPartInfoSlotVecFloat(const std::string &label,
-                                      const std::vector<float> &initialValues) : InspectorPartSlotInfo(label)
+                                  const std::vector<float> &initialValues) : InspectorPartSlotInfo(label)
     {
         this->value = initialValues;
     }
@@ -32,18 +32,18 @@ public:
 };
 
 
-class InspectorPartInfoSlotEnum : public InspectorPartInfoSlotEnum
+class InspectorPartInfoSlotEnum : public InspectorPartSlotInfo
 {
 public:
-    std::vector<std::string> possibleValues;
+    std::vector<std::string> enumValues;
     int selectedValueIndex = 0;
 
     InspectorPartInfoSlotEnum(const std::string &label,
                               const std::vector<std::string> &initialValues) : InspectorPartSlotInfo(label)
     {
-        this->possibleValues = initialValues;
+        this->enumValues = initialValues;
     }
-    virtual ~InspectorPartInfoSlotVecFloat() {}
+    virtual ~InspectorPartInfoSlotEnum() {}
 
     bool IsOfTypeVecFloat() override { return false; }
 };

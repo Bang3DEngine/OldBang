@@ -4,14 +4,11 @@
 
 MeshRenderer::MeshRenderer()
 {
-#ifdef BANG_EDITOR
-    inspectorPartInfo.slotInfos =
-    {
-        new InspectorPartInfoSlotEnum(
-            "Drawing Mode", {"Triangles", "Quads"}
-        )
-    };
-#endif
+    #ifdef BANG_EDITOR
+        inspectorPartInfo.slotInfos =
+        {
+        };
+    #endif
 }
 
 MeshRenderer::~MeshRenderer()
@@ -125,3 +122,15 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 
     mesh->GetVAO()->UnBind();
 }
+
+
+#ifdef BANG_EDITOR
+InspectorPartInfo* MeshRenderer::GetInfo()
+{
+    return &inspectorPartInfo;
+}
+
+void MeshRenderer::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
+{
+}
+#endif

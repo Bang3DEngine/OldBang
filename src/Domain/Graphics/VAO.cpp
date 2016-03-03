@@ -11,12 +11,12 @@ VAO::~VAO()
 }
 
 void VAO::BindVBO(const VBO *vbo,
-                 GLint location,
-                 GLint dataComponentsCount,
-                 GLenum dataType,
-                 GLboolean dataNormalized,
-                 GLsizei dataStride,
-                 GLuint dataOffset)
+                  GLint location,
+                  GLint dataComponentsCount,
+                  GLenum dataType,
+                  GLboolean dataNormalized,
+                  GLsizei dataStride,
+                  GLuint dataOffset)
 {
     UnBindVBO(location); //unbind in case its a vbo replace
 

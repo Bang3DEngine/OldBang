@@ -11,7 +11,8 @@ class InspectorVectorFloatPartSlotWidget : public InspectorPartSlotWidget //Slot
     public:
         std::vector<InspectorFloatPartSlotWidget*> floatSlots;
 
-        InspectorVectorFloatPartSlotWidget(std::vector<float> initialValues, const std::string &labelString,
+        InspectorVectorFloatPartSlotWidget(const std::string &labelString,
+                                           std::vector<float> initialValues,
                                            InspectorPartWidget *parent);
 
         virtual void SetValue(const std::vector<float> &v);

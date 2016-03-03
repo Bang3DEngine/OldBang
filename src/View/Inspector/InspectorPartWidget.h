@@ -1,4 +1,4 @@
-#ifndef LISTINSPECTORITEMWIDGET_H
+﻿#ifndef LISTINSPECTORITEMWIDGET_H
 #define LISTINSPECTORITEMWIDGET_H
 
 #include "Bang.h"
@@ -45,12 +45,15 @@ private:
 public:
     explicit InspectorPartWidget(Part *relatedPart);
     virtual ~InspectorPartWidget();
+
     std::vector<float> GetVectorFloatSlotValue(const std::string &slotLabel);
+    int GetSelectedEnumSlotIndex(const std::string &slotLabel);
 
 public slots:
     void UpdateSlotsValues();
     void OnEnabledCheckboxPressed(bool checked);
-    void _NotifyInspectorSlotChanged(double newValue);
+    void _NotifyInspectorSlotChanged(double _);
+    void _NotifyInspectorSlotChanged(QString _);
 };
 
 #endif // LISTINSPECTORITEM_H
