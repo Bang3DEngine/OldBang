@@ -24,14 +24,14 @@ Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
 void Camera::GetViewMatrix(glm::mat4 &view) const
 {
     Transform *t = GetOwner()->GetPart<Transform>();
-    if(t != nullptr)
+    if(CAN_USE_PART(t))
     {
         t->GetMatrix(view);
         view = glm::inverse(view);
     }
     else
     {
-        Logger_Warn(GetOwner() << " has a Camera but does not have a transform. " <<
+        Logger_Verbose(GetOwner() << " has a Camera but does not have a transform. " <<
                        "View matrix will be the identity matrix.");
 
         view = glm::mat4(1.0f);

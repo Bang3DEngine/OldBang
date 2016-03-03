@@ -10,7 +10,9 @@
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
     for(auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
     {\
-        (*it)->FUNCTION(); \
+        if((*it)->IsEnabled()) { \
+            (*it)->FUNCTION();   \
+        } \
     }\
 } while(0)
 

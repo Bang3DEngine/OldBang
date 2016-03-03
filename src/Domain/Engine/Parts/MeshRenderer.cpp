@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "StageReader.h"
 
-MeshRenderer::MeshRenderer() : mesh(nullptr), material(nullptr)
+MeshRenderer::MeshRenderer()
 {
 }
 
@@ -14,7 +14,7 @@ void MeshRenderer::_OnRender()
 {
     Stage *stage = GetOwner()->GetStage();
     Camera *cam = stage->GetCamera();
-    if(cam != nullptr)
+    if(CAN_USE_PART(cam))
     {
         Render(Mesh::RenderMode::Triangles);
     }
@@ -74,30 +74,17 @@ const std::string MeshRenderer::ToString() const
 void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 {
     Transform *t = owner->GetPart<Transform>();
-    if(t == nullptr)
+    if(!CAN_USE_PART(t) || mesh == nullptr || material == nullptr)
     {
-        Logger_Error(owner << "does not have a Transform. Can't render.");
+        if(!CAN_USE_PART(t)) Logger_Verbose(owner << " could not be rendered because it does not have a Transform (or it's disabled')");
+        if(mesh == nullptr) Logger_Verbose(owner << " could not be rendered because it does not have a Mesh (or it's disabled')");
+        if(material == nullptr) Logger_Verbose(owner << " could not be rendered because it does not have a Material (or it's disabled')");
         return;
     }
-
-    if(mesh == nullptr)
+    else if(material->GetShaderProgram() == nullptr)
     {
-        Logger_Error(owner << " does not have a Mesh. Can't render.");
+        Logger_Error(owner << " has a Material with no ShaderProgram. Can't render.");
         return;
-    }
-
-    if(material == nullptr)
-    {
-        Logger_Error(owner << " does not have a Material. Can't render.");
-        return;
-    }
-    else
-    {
-        if(material->GetShaderProgram() == nullptr)
-        {
-            Logger_Error(owner << " has a Material with no ShaderProgram. Can't render.");
-            return;
-        }
     }
 
     glm::mat4 model; t->GetMatrix(model);
@@ -106,7 +93,7 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 
     //In case the parent stage has a camera, retrieve the view and proj matrices
     Camera *camera = owner->GetStage()->GetCamera();
-    if(camera != nullptr)
+    if( CAN_USE_PART(camera) )
     {
         camera->GetViewMatrix(view);
         camera->GetProjectionMatrix(projection);

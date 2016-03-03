@@ -79,10 +79,12 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
     #define _Log_To_ListLogger(x)   ListLogger::AddLog(x);
     #define _Warn_To_ListLogger(x)  ListLogger::AddWarn(x);
     #define _Error_To_ListLogger(x) ListLogger::AddError(x);
+    #define _Verbose_To_ListLogger(x) do{}while(0);
 #else
     #define _Log_To_ListLogger(x) do{}while(0);
     #define _Warn_To_ListLogger(x) do{}while(0);
     #define _Error_To_ListLogger(x) do{}while(0);
+    #define _Verbose_To_ListLogger(x) do{}while(0);
 #endif
 
 #define Logger_Log(x) do{\
@@ -112,6 +114,14 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
     _Error_To_ListLogger(log.str()); \
 } while(0)
 
+#define Logger_Verbose(x) do{\
+    std::ostringstream log;\
+    log << x;\
+    std::cerr << "[ VERBOSE ]: " << log.str() << _Logger_Suffix;\
+    std::cerr.flush();\
+    log.flush();\
+    _Verbose_To_ListLogger(log.str()); \
+} while(0)
 
 #define Assert(mustBeTrue, message, returnAction) do{\
     if(!(mustBeTrue)) {\

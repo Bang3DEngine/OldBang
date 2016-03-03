@@ -53,12 +53,12 @@ void TestBehaviour::OnUpdate()
 {
     time += Time::GetDeltaTime();
     Transform *t = GetOwner()->GetPart<Transform>();
-
+    /*
     int r = rand()%3;
     if(r == 0)      Logger_Log     (t->GetRotation());
     else if(r == 1) Logger_Warn    (t->GetRotation());
     else            Logger_Error   (t->GetRotation());
-
+    */
     t->SetRotation(glm::angleAxis(1.0f * Time::GetDeltaTime(), randomAxis) * t->GetRotation());
     //t->SetScale(glm::vec3(originalScale) * (float(sin(time)) * 0.5f + 0.5f + 0.2f));
     //t->SetPosition(t->GetPosition() + glm::vec3(sin(time) * 0.05f, 0.0f, 0.0f));

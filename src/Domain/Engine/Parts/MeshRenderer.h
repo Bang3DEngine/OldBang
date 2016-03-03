@@ -19,8 +19,8 @@ class MeshRenderer : public Part
 {
 private:
 
-    Mesh *mesh;
-    Material *material;
+    Mesh *mesh = nullptr;
+    Material *material = nullptr;
 
 protected:
 

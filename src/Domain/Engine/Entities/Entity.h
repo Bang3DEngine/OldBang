@@ -46,6 +46,7 @@ protected:
     std::list<Entity*> children;
     Entity* parent;
 
+    bool enabled = true;
     bool isStage;
 
 public:
@@ -122,6 +123,9 @@ public:
 
     void Write(std::ostream &f) const override;
     void Read(std::istream &f) override;
+
+    void SetEnabled(bool enabled) { this->enabled = enabled; }
+    bool IsEnabled() { return enabled; }
 
     #ifdef BANG_EDITOR
     void OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities) override;

@@ -13,6 +13,8 @@
 #include "IWindowEventManagerListener.h"
 #endif
 
+#define CAN_USE_PART(part)  ( part != nullptr && part->IsEnabled() )
+
 class Entity;
 
 class Part : public IStageEventListener, public IToString, public IFileable, public IWindowEventManagerListener
@@ -20,6 +22,7 @@ class Part : public IStageEventListener, public IToString, public IFileable, pub
 friend class Entity;
 protected:
     Entity *owner;
+    bool enabled = true;
 
     #ifdef BANG_EDITOR
     InspectorPartInfo inspectorPartInfo;
@@ -44,6 +47,8 @@ public:
 
     virtual std::string GetName() const { return "Part"; }
 
+    void SetEnabled(bool enabled) { this->enabled = enabled; }
+    bool IsEnabled() { return enabled; }
 
     #ifdef BANG_EDITOR
     virtual InspectorPartInfo* GetInfo();

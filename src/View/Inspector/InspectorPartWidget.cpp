@@ -11,13 +11,23 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
 {
     this->relatedPart = relatedPart;
 
-    setLayout(new QVBoxLayout());
-    layout()->setSpacing(0); layout()->setContentsMargins(0,0,0,0);
+    QVBoxLayout *mainLayout = new QVBoxLayout();
+    setLayout(mainLayout);
+    mainLayout->setSpacing(0); mainLayout->setContentsMargins(0,0,0,0);
 
+    QHBoxLayout *titleLayout = new QHBoxLayout();
     titleLabel = new QLabel(QString::fromStdString(relatedPart->GetName()));
     QFont font = titleLabel->font(); font.setBold(true);
     titleLabel->setFont(font); titleLabel->show();
-    layout()->addWidget(titleLabel);
+
+    enabledCheckbox = new QCheckBox();
+    enabledCheckbox->setChecked(relatedPart->IsEnabled());
+    connect(enabledCheckbox, SIGNAL(clicked(bool)), this, SLOT(OnEnabledCheckboxPressed(bool)));
+
+    titleLayout->setContentsMargins(0, 5, 0, 5);
+    titleLayout->addWidget(titleLabel, 10);
+    titleLayout->addWidget(enabledCheckbox, 1);
+    mainLayout->addLayout(titleLayout);
 
     for(InspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
     {
@@ -32,7 +42,7 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
         if(ws != nullptr)
         {
             ws->show();
-            layout()->addWidget(ws);
+            mainLayout->addWidget(ws);
             partSlots.push_back(ws);
             labelsToPartSlots[si->label] = ws;
         }
@@ -77,6 +87,14 @@ void InspectorPartWidget::UpdateSlotsValues()
             partSlots.push_back(ws);
             labelsToPartSlots[si->label] = ws;
         }
+    }
+}
+
+void InspectorPartWidget::OnEnabledCheckboxPressed(bool checked)
+{
+    if(relatedPart != nullptr)
+    {
+        relatedPart->SetEnabled(checked);
     }
 }
 

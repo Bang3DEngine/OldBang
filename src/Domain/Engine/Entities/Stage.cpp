@@ -23,9 +23,13 @@ void Stage::_OnRender()
     gbuffer->Bind();
     //All the mesh renderers now will render stuff into the geometryFramebuffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if(cameraEntity != nullptr && cameraEntity->GetPart<Camera>()->GetAutoUpdateAspectRatio())
+    if(cameraEntity != nullptr)
     {
-        cameraEntity->GetPart<Camera>()->SetAspectRatio( canvas->GetAspectRatio() );
+        Camera *cam = cameraEntity->GetPart<Camera>();
+        if(cam != nullptr && cam->GetAutoUpdateAspectRatio())
+        {
+            cam->SetAspectRatio( canvas->GetAspectRatio() );
+        }
     }
 
     PROPAGATE_EVENT(_OnRender, children);

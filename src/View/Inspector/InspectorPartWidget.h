@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QWidget>
+#include <QCheckBox>
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QPushButton>
@@ -35,6 +36,7 @@ private:
 
     Part *relatedPart; //Set by Inspector when creating it
     QLabel *titleLabel;
+    QCheckBox *enabledCheckbox;
     std::vector<InspectorPartSlotWidget*> partSlots;
     std::map<std::string, InspectorPartSlotWidget*> labelsToPartSlots;
 
@@ -47,6 +49,7 @@ public:
 
 public slots:
     void UpdateSlotsValues();
+    void OnEnabledCheckboxPressed(bool checked);
     void _NotifyInspectorSlotChanged(double newValue);
 };
 
