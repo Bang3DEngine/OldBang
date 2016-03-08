@@ -1,7 +1,9 @@
 #include "InspectorPartEnumSlotWidget.h"
 
-InspectorPartSlotWidget<std::vector<std::string> >::InspectorPartSlotWidget<std::vector<std::string> >
-    (InspectorPartWidget *parent, const std::string &label, const std::vector<std::string> &value, int selectedValue)
+InspectorPartEnumSlotWidget::InspectorPartEnumSlotWidget(const std::string &labelString,
+                                                         const std::vector<std::string> &enumValues,
+                                                         const int selectedValue,
+                                                         InspectorPartWidget *parent) : InspectorPartSlotWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
@@ -30,3 +32,14 @@ InspectorPartSlotWidget<std::vector<std::string> >::InspectorPartSlotWidget<std:
     this->setContentsMargins(0,0,0,0);
     this->show();
 }
+
+void InspectorPartEnumSlotWidget::SetValue(int index)
+{
+    comboBox->setCurrentIndex(index);
+}
+
+int InspectorPartEnumSlotWidget::GetValue()
+{
+    return comboBox->currentIndex();
+}
+

@@ -1,11 +1,8 @@
 #include "InspectorVectorFloatPartSlotWidget.h"
 
-#include "InspectorPartWidget.h"
-
-InspectorPartSlotWidget< std::vector<float> >::InspectorVectorFloatPartSlotWidget(InspectorPartWidget *parent,
-                                                                                  const std::string &labelString,
-                                                                                  std::vector<float> value) :
-                                                InspectorPartSlotWidget(parent, labelString, value)
+InspectorVectorFloatPartSlotWidget::InspectorVectorFloatPartSlotWidget(const std::string &labelString,
+                                                                       std::vector<float> initialValues,
+                                                                       InspectorPartWidget *parent) : InspectorPartSlotWidget(parent)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0);

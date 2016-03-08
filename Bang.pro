@@ -35,7 +35,6 @@ INCLUDEPATH += \
     $$PWD/src/Domain/Engine/Assets/Meshes/ \
     $$PWD/src/Domain/Engine/Assets/Behaviours/ \
     $$PWD/src/Domain/Engine/Physics/ \
-    $$PWD/src/Persistence/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/BangPreprocessor/GeneratedFiles/ \
     $$PWD/res/Assets/UserBehaviours/
@@ -81,6 +80,7 @@ HEADERS += \
     src/View/WindowMain.h \
     src/Domain/Interfaces/IToString.h \
     src/Domain/Engine/Interfaces/IStageEventListener.h \
+    src/Domain/Engine/Others/stb_image.h \
     src/Domain/Engine/Others/Logger.h \
     src/Domain/Engine/Others/Timer.h \
     src/Domain/Engine/Others/Time.h \
@@ -110,8 +110,12 @@ HEADERS += \
     src/Domain/Engine/Assets/Meshes/MeshPyramid.h \
     src/Domain/Engine/Assets/Meshes/MeshScreenPlane.h \
     src/Domain/Engine/Parts/Behaviour.h \
+    src/Domain/Engine/Readers/FileReader.h \
+    src/Domain/Engine/Readers/StageReader.h \
     src/Domain/Engine/Interfaces/IFileable.h \
+    src/Domain/Engine/Readers/ReaderWithPointerIds.h \
     src/Domain/Engine/Assets/Texture2D.h \
+    src/Domain/Engine/Readers/AssetsManager.h \
     src/Domain/Engine/Assets/Prefab.h \
     $$files(res/Assets/UserBehaviours/*.h,true) \
     src/View/WindowEventManager.h \
@@ -127,16 +131,12 @@ HEADERS += \
     src/View/Inspector/InspectorVectorFloatPartSlotWidget.h \
     src/View/Logger/ListLogger.h \
     src/View/Logger/LoggerWidget.h \
-    src/View/Inspector/InspectorPartEnumSlotWidget.h \
-    src/Persistence/AssetsManager.h \
-    src/Persistence/FileReader.h \
-    src/Persistence/ReaderWithPointerIds.h \
-    src/Persistence/StageReader.h \
-    src/Persistence/stb_image.h
+    src/View/Inspector/InspectorPartEnumSlotWidget.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
     src/View/Canvas.cpp \
+    src/Domain/Engine/Others/stb_image.cpp \
     src/Domain/Engine/Others/Logger.cpp \
     src/Domain/Engine/Others/Timer.cpp \
     src/Domain/Engine/Others/Time.cpp \
@@ -165,7 +165,11 @@ SOURCES += \
     src/Domain/Engine/Assets/Meshes/MeshPyramid.cpp \
     src/Domain/Engine/Assets/Material.cpp \
     src/Domain/Engine/Parts/Behaviour.cpp \
+    src/Domain/Engine/Readers/FileReader.cpp \
+    src/Domain/Engine/Readers/StageReader.cpp \
+    src/Domain/Engine/Readers/ReaderWithPointerIds.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
+    src/Domain/Engine/Readers/AssetsManager.cpp \
     src/Domain/Engine/Assets/Prefab.cpp \
     $$files(res/Assets/UserBehaviours/*.cpp,true) \
     src/View/WindowMain.cpp \
@@ -181,12 +185,7 @@ SOURCES += \
     src/View/Inspector/InspectorVectorFloatPartSlotWidget.cpp \
     src/View/Logger/ListLogger.cpp \
     src/View/Logger/LoggerWidget.cpp \
-    src/View/Inspector/InspectorPartEnumSlotWidget.cpp \
-    src/Persistence/AssetsManager.cpp \
-    src/Persistence/FileReader.cpp \
-    src/Persistence/ReaderWithPointerIds.cpp \
-    src/Persistence/StageReader.cpp \
-    src/Persistence/stb_image.cpp
+    src/View/Inspector/InspectorPartEnumSlotWidget.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

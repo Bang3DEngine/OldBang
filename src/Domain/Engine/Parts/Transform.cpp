@@ -8,17 +8,17 @@ Transform::Transform() : position(glm::vec3(0.0f)),
 {
     #ifdef BANG_EDITOR
     glm::vec3 euler = glm::eulerAngles(rotation);
-
     inspectorPartInfo.slotInfos =
     {
-        new InspectorPartSlotInfo< std::vector<float> >
-        ( "Position", {position.x, position.y, position.z} ),
-
-        new InspectorPartSlotInfo< std::vector<float> >(
-            "Rotation", {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)} ),
-
-        new InspectorPartSlotInfo< std::vector<float> >(
-            "Scale", {scale.x, scale.y, scale.z} )
+        new InspectorPartInfoSlotVecFloat(
+            "Position", {position.x, position.y, position.z}
+        ),
+        new InspectorPartInfoSlotVecFloat(
+            "Rotation", {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)}
+        ),
+        new InspectorPartInfoSlotVecFloat(
+            "Scale", {scale.x, scale.y, scale.z}
+        )
     };
     #endif
 }
@@ -179,15 +179,13 @@ void Transform::Read(std::istream &f)
 #ifdef BANG_EDITOR
 InspectorPartInfo* Transform::GetInfo()
 {
-    static_cast<InspectorPartSlotInfo< std::vector<float> >*>(inspectorPartInfo.slotInfos[0])->SetValue(
-        {position.x, position.y, position.z});
-
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value =
+        {position.x, position.y, position.z};
     glm::vec3 euler = glm::eulerAngles(rotation);
-    static_cast<InspectorPartSlotInfo< std::vector<float> >*>(inspectorPartInfo.slotInfos[1])->SetValue(
-        {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)});
-
-    static_cast<InspectorPartSlotInfo< std::vector<float> >*>(inspectorPartInfo.slotInfos[2])->SetValue(
-        {scale.x, scale.y, scale.z});
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value =
+        {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)};
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[2])->value =
+        {scale.x, scale.y, scale.z};
 
     return &inspectorPartInfo;
 }
@@ -195,13 +193,13 @@ InspectorPartInfo* Transform::GetInfo()
 void Transform::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
 {
     std::vector<float> v;
-    v = partWidget->GetSlotValue< std::vector<float> >("Position");
+    v = partWidget->GetVectorFloatSlotValue("Position");
     position = glm::vec3(v[0], v[1], v[2]);
 
-    v = partWidget->GetSlotValue< std::vector<float> >("Rotation");
+    v = partWidget->GetVectorFloatSlotValue("Rotation");
     SetRotation(glm::vec3(v[0], v[1], v[2]));
 
-    v = partWidget->GetSlotValue< std::vector<float> >("Scale");
+    v = partWidget->GetVectorFloatSlotValue("Scale");
     scale = glm::vec3(v[0], v[1], v[2]);
 }
 #endif

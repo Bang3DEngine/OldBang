@@ -4,39 +4,60 @@
 #include <vector>
 #include <string>
 
-class InspectorPartSlotInfoBase
+class InspectorPartSlotInfo
 {
 protected:
-    InspectorPartSlotInfoBase() {}
-    virtual ~InspectorPartSlotInfoBase() {}
-};
-
-template<class T>
-class InspectorPartSlotInfo : public InspectorPartSlotInfoBase
-{
-protected:
-    std::string label;
-    T value;
-    int selectedIndex; //useful for enums, for example
+    InspectorPartSlotInfo(const std::string &label) : label(label){ }
 
 public:
-    InspectorPartSlotInfo(const std::string &label,
-                          const T &value) : label(label), value(value) {}
+    std::string label;
+    virtual bool IsOfTypeVecFloat() = 0;
 
     virtual ~InspectorPartSlotInfo() {}
-
-    std::string GetLabel() { return label; }
-    void SetValue(const T &value) { this->value = value; }
-    T GetValue() { return value; }
-    int GetSelectedIndex() { return selectedIndex; }
-
-    int SetSelectedIndex(int index) { selectedIndex = index; }
 };
+
+class InspectorPartInfoSlotVecFloat : public InspectorPartSlotInfo
+{
+public:
+    std::vector<float> value;
+
+    InspectorPartInfoSlotVecFloat(const std::string &label,
+                                  const std::vector<float> &initialValues) : InspectorPartSlotInfo(label)
+    {
+        this->value = initialValues;
+    }
+    virtual ~InspectorPartInfoSlotVecFloat() {}
+
+    bool IsOfTypeVecFloat() override { return true; }
+};
+
+
+class InspectorPartInfoSlotEnum : public InspectorPartSlotInfo
+{
+public:
+    std::vector<std::string> enumValues;
+    int selectedValueIndex = 0;
+
+    InspectorPartInfoSlotEnum(const std::string &label,
+                              const std::vector<std::string> &initialValues) : InspectorPartSlotInfo(label)
+    {
+        this->enumValues = initialValues;
+    }
+    virtual ~InspectorPartInfoSlotEnum() {}
+
+    bool IsOfTypeVecFloat() override { return false; }
+};
+
+
+
 
 class InspectorPartInfo
 {
 public:
-    std::vector<InspectorPartSlotInfoBase*> slotInfos;
+    std::vector<InspectorPartSlotInfo*> slotInfos;
+
+    InspectorPartInfo();
+    virtual ~InspectorPartInfo() {}
 };
 
 #endif // LISTINSPECTORITEMINFO_H

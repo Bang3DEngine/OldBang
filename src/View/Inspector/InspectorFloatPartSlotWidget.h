@@ -3,17 +3,13 @@
 
 #include <string>
 #include <QTimer>
-#include <QLabel>
 #include <QFocusEvent>
-#include <QVBoxLayout>
 #include <QDoubleSpinBox>
 
 #include "InspectorPartSlotWidget.h"
 
 class FloatPartSlotSpinBox;
-
-template <>
-class InspectorPartSlotWidget<float>  : public InspectorPartSlotWidgetBase //Slot for a float (label + float)
+class InspectorFloatPartSlotWidget : public InspectorPartSlotWidget //Slot for a float (label + float)
 {
     Q_OBJECT
 
@@ -22,9 +18,8 @@ private:
     bool editing =false;
 
 public:
-    InspectorPartSlotWidget(InspectorPartWidget *parent,
-                            const std::string &labelString,
-                            float value);
+    InspectorFloatPartSlotWidget(const std::string &labelString, float initialValue,
+                                 InspectorPartWidget *parent);
 
     virtual void SetValue(float f);
     virtual float GetValue();
@@ -49,13 +44,13 @@ public:
     {
         QDoubleSpinBox::focusInEvent(event);
         QTimer::singleShot(50, this, SLOT(SelectAll()));
-        static_cast<InspectorPartSlotWidget<float>*>(parent())->OnSpinBoxFocusIn();
+        static_cast<InspectorFloatPartSlotWidget*>(parent())->OnSpinBoxFocusIn();
     }
 
     virtual void focusOutEvent(QFocusEvent * event) override
     {
         QDoubleSpinBox::focusOutEvent(event);
-        static_cast<InspectorPartSlotWidget<float>*>(parent())->OnSpinBoxFocusOut();
+        static_cast<InspectorFloatPartSlotWidget*>(parent())->OnSpinBoxFocusOut();
     }
 
     virtual void  keyPressEvent(QKeyEvent *event) override
@@ -63,7 +58,7 @@ public:
         QDoubleSpinBox::keyPressEvent(event);
         if(event->key() == QKeyEvent::Enter)
         {
-            static_cast<InspectorPartSlotWidget<float>*>(parent())->OnSpinBoxFocusOut();
+            static_cast<InspectorFloatPartSlotWidget*>(parent())->OnSpinBoxFocusOut();
         }
     }
 

@@ -19,16 +19,16 @@
 
 #include "Logger.h"
 #include "InspectorPartInfo.h"
-#include "InspectorPartSlotWidget.h"
 
 #include "IWindowEventManagerListener.h"
 
 class Part;
 class WindowEventManager;
+class InspectorPartSlotWidget;
 class InspectorPartWidget : public QWidget
 {
     //Every part widget, has many slots,
-    // representing all relatedPart's attributes (vectors, strings, integers, etc.)
+    // representing all its attributes (vectors, strings, integers, etc.)
     Q_OBJECT
 
 private:
@@ -37,9 +37,8 @@ private:
     Part *relatedPart; //Set by Inspector when creating it
     QLabel *titleLabel;
     QCheckBox *enabledCheckbox;
-
-    //void=InspectorPartSlotWidget<T>*
-    std::map<std::string, void*> labelsToPartSlots;
+    std::vector<InspectorPartSlotWidget*> partSlots;
+    std::map<std::string, InspectorPartSlotWidget*> labelsToPartSlots;
 
     QTimer *updateTimer;
 
@@ -47,13 +46,8 @@ public:
     explicit InspectorPartWidget(Part *relatedPart);
     virtual ~InspectorPartWidget();
 
-    template <class T>
-    T GetSlotValue(const std::string &slotLabel)
-    {
-        InspectorPartSlotWidget<T> *w =
-                static_cast<InspectorPartSlotWidget<T>*>(labelsToPartSlots[slotLabel]);
-        return *( w->GetValue() );
-    }
+    std::vector<float> GetVectorFloatSlotValue(const std::string &slotLabel);
+    int GetSelectedEnumSlotIndex(const std::string &slotLabel);
 
 public slots:
     void UpdateSlotsValues();

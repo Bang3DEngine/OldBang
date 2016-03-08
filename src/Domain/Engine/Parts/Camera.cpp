@@ -13,11 +13,11 @@ Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
     #ifdef BANG_EDITOR
     inspectorPartInfo.slotInfos =
     {
-        new InspectorPartSlotInfo< std::vector<float> >( "FOV", {fovDegrees} ),
-        new InspectorPartSlotInfo< std::vector<float> >( "Z Near", {zNear} ),
-        new InspectorPartSlotInfo< std::vector<float> >( "Z Far", {zFar} ),
-        new InspectorPartSlotInfo< std::vector<float> >( "Aspect Ratio", {aspectRatio} ),
-        new InspectorPartSlotInfo< std::vector<std::string> >( "Projection Mode", {"Orthographic", "Perspective"} )
+        new InspectorPartInfoSlotVecFloat( "FOV", {fovDegrees} ),
+        new InspectorPartInfoSlotVecFloat( "Z Near", {zNear} ),
+        new InspectorPartInfoSlotVecFloat( "Z Far", {zFar} ),
+        new InspectorPartInfoSlotVecFloat( "Aspect Ratio", {aspectRatio} ),
+        new InspectorPartInfoSlotEnum( "Projection Mode", {"Orthographic", "Perspective"} )
     };
     #endif
 }
@@ -161,21 +161,21 @@ const std::string Camera::ToString() const
 #ifdef BANG_EDITOR
 InspectorPartInfo* Camera::GetInfo()
 {
-    static_cast<InspectorPartSlotInfo< std::vector<float> >*>(inspectorPartInfo.slotInfos[0])->SetValue({fovDegrees});
-    static_cast<InspectorPartSlotInfo< std::vector<float> >*>(inspectorPartInfo.slotInfos[1])->SetValue({zNear});
-    static_cast<InspectorPartSlotInfo< std::vector<float> >*>(inspectorPartInfo.slotInfos[2])->SetValue({zFar});
-    static_cast<InspectorPartSlotInfo< std::vector<float> >*>(inspectorPartInfo.slotInfos[3])->SetValue({aspectRatio});
-   // static_cast<InspectorPartInfoSlotEnum*>(inspectorPartInfo.slotInfos[4])->SetValue(projMode);
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value = {fovDegrees};
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value = {zNear};
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[2])->value = {zFar};
+    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[3])->value = {aspectRatio};
+    static_cast<InspectorPartInfoSlotEnum*>(inspectorPartInfo.slotInfos[4])->selectedValueIndex = projMode;
 
     return &inspectorPartInfo;
 }
 
 void Camera::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
 {
-    fovDegrees  = partWidget->GetSlotValue< std::vector<float> >("FOV")[0];
-    zNear       = partWidget->GetSlotValue< std::vector<float> >("Z Near")[0];
-    zFar        = partWidget->GetSlotValue< std::vector<float> >("Z Far")[0];
-    aspectRatio = partWidget->GetSlotValue< std::vector<float> >("Aspect Ratio")[0];
-    //projMode =  static_cast<Camera::ProjectionMode>(*(partWidget->GetSlotValue("Projection Mode")));
+    fovDegrees = partWidget->GetVectorFloatSlotValue("FOV")[0];
+    zNear = partWidget->GetVectorFloatSlotValue("Z Near")[0];
+    zFar = partWidget->GetVectorFloatSlotValue("Z Far")[0];
+    aspectRatio = partWidget->GetVectorFloatSlotValue("Aspect Ratio")[0];
+    projMode =  static_cast<Camera::ProjectionMode>(partWidget->GetSelectedEnumSlotIndex("Projection Mode"));
 }
 #endif
