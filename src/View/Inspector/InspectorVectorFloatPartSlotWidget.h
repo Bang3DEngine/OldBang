@@ -6,17 +6,15 @@
 #include "InspectorPartWidget.h"
 #include "InspectorFloatPartSlotWidget.h"
 
-class InspectorVectorFloatPartSlotWidget : public InspectorPartSlotWidget //Slot for a vector of size N
+template <>
+class InspectorPartSlotWidget< std::vector <float> >  : public InspectorPartSlotWidgetBase //Slot widget for a float vector of size N
 {
     public:
-        std::vector<InspectorFloatPartSlotWidget*> floatSlots;
+        std::vector<InspectorPartSlotWidget<float>*> floatSlots;
 
-        InspectorVectorFloatPartSlotWidget(const std::string &labelString,
-                                           std::vector<float> initialValues,
-                                           InspectorPartWidget *parent);
-
-        virtual void SetValue(const std::vector<float> &v);
-        virtual std::vector<float> GetValue();
+        InspectorPartSlotWidget(InspectorPartWidget *parent,
+                                const std::string &labelString,
+                                std::vector<float> value);
 };
 
 #endif // INSPECTORVECTORFLOATPARTSLOTWIDGET_H

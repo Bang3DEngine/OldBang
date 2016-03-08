@@ -3,6 +3,7 @@
 
 #include "Bang.h"
 
+#include <vector>
 #include <string>
 #include <sstream>
 #include <ostream>

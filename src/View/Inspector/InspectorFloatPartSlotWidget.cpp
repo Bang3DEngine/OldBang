@@ -1,8 +1,11 @@
 #include "InspectorFloatPartSlotWidget.h"
 
-InspectorFloatPartSlotWidget::InspectorFloatPartSlotWidget(const std::string &labelString,
-                                                           float initialValue,
-                                                           InspectorPartWidget *parent) : InspectorPartSlotWidget(parent)
+#include "InspectorPartWidget.h"
+
+InspectorPartSlotWidget<float>::InspectorPartSlotWidget(InspectorPartWidget *parent,
+                                                        const std::string &labelString,
+                                                        float value) :
+                             InspectorPartSlotWidget(parent, labelString, value)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
@@ -17,7 +20,7 @@ InspectorFloatPartSlotWidget::InspectorFloatPartSlotWidget(const std::string &la
     }
 
     spinbox = new FloatPartSlotSpinBox();
-    spinbox->setValue(initialValue);
+    spinbox->setValue(value);
     spinbox->setAlignment(Qt::AlignHCenter);
     spinbox->setMinimum(-999999999.9);
     spinbox->setMaximum(999999999.9);
@@ -34,7 +37,7 @@ InspectorFloatPartSlotWidget::InspectorFloatPartSlotWidget(const std::string &la
     setFocusPolicy(Qt::FocusPolicy::ClickFocus);
 }
 
-void InspectorFloatPartSlotWidget::SetValue(float f)
+void InspectorPartSlotWidget<float>::SetValue(float f)
 {
     if(!editing)
     {
@@ -44,17 +47,17 @@ void InspectorFloatPartSlotWidget::SetValue(float f)
     }
 }
 
-float InspectorFloatPartSlotWidget::GetValue()
+float InspectorPartSlotWidget<float>::GetValue()
 {
     return spinbox->value();
 }
 
-void InspectorFloatPartSlotWidget::OnSpinBoxFocusIn()
+void InspectorPartSlotWidget<float>::OnSpinBoxFocusIn()
 {
     editing = true;
 }
 
-void InspectorFloatPartSlotWidget::OnSpinBoxFocusOut()
+void InspectorPartSlotWidget<float>::OnSpinBoxFocusOut()
 {
     editing = false;
     connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
@@ -62,4 +65,4 @@ void InspectorFloatPartSlotWidget::OnSpinBoxFocusOut()
     disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
 }
 
-QSize InspectorFloatPartSlotWidget::sizeHint() const { return QSize(30, 30); }
+QSize InspectorPartSlotWidget<float>::sizeHint() const { return QSize(30, 30); }

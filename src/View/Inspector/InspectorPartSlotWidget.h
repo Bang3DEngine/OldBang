@@ -2,24 +2,35 @@
 #define INSPECTORPARTSLOTWIDGET_H
 
 #include <QWidget>
+#include "WindowEventManager.h"
 
-#include "InspectorPartWidget.h"
-
-class InspectorPartSlotWidget : public QWidget
+class InspectorPartSlotWidgetBase : public QWidget
 {
-    Q_OBJECT
+protected:
+    InspectorPartSlotWidgetBase() : QWidget() {}
+    virtual ~InspectorPartSlotWidgetBase() {}
+};
+
+class InspectorPartWidget;
+
+template<class T>
+class InspectorPartSlotWidget : public InspectorPartSlotWidgetBase
+{
+private:
+    T value;
 
 protected:
-    InspectorPartWidget *parent;
+    InspectorPartWidget *parent = nullptr;
 
-    InspectorPartSlotWidget(InspectorPartWidget *parent);
-/*
-    template <class T>
-    void SetValue(const T &v) {}
+    InspectorPartSlotWidget(InspectorPartWidget *parent,
+                            const std::string &label,
+                            const T &value) : parent(parent), value(value)
+    {}
 
-    template <class T>
-    T GetValue() { return 0; }
-*/
+public:
+
+    void SetValue(const T &v) { this->value = v; }
+    T* GetValue() { return &value; }
 };
 
 #endif // INSPECTORPARTSLOTWIDGET_H

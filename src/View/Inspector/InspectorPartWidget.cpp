@@ -30,33 +30,9 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
     titleLayout->addWidget(enabledCheckbox, 1);
     mainLayout->addLayout(titleLayout);
 
-    for(InspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
-    {
-        InspectorPartSlotWidget *ws = nullptr;
-
-        InspectorPartInfoSlotVecFloat* siv;
-        InspectorPartInfoSlotEnum* sie;
-
-        if( (siv = dynamic_cast<InspectorPartInfoSlotVecFloat*>(si)) != nullptr)
-        {
-            ws =  new InspectorVectorFloatPartSlotWidget(siv->label, siv->value, this);
-        }
-        else if( (sie = dynamic_cast<InspectorPartInfoSlotEnum*>(si)) != nullptr)
-        {
-            ws =  new InspectorPartEnumSlotWidget(sie->label, sie->enumValues, sie->selectedValueIndex, this);
-        }
-
-        if(ws != nullptr)
-        {
-            ws->show();
-            mainLayout->addWidget(ws);
-            partSlots.push_back(ws);
-            labelsToPartSlots[si->label] = ws;
-        }
-    }
-
     this->show();
 
+    UpdateSlotsValues();
     updateTimer = new QTimer(this); //Every X seconds, update all the slots values
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(UpdateSlotsValues()));
     updateTimer->start(20);
@@ -67,42 +43,31 @@ InspectorPartWidget::~InspectorPartWidget()
    delete updateTimer;
 }
 
-std::vector<float> InspectorPartWidget::GetVectorFloatSlotValue(const std::string &slotLabel)
-{
-    InspectorVectorFloatPartSlotWidget *w =
-            dynamic_cast<InspectorVectorFloatPartSlotWidget*>(labelsToPartSlots[slotLabel]);
-    std::vector<float> r;
-    if(w != nullptr) r = w->GetValue();
-    return r;
-}
-
-int InspectorPartWidget::GetSelectedEnumSlotIndex(const std::string &slotLabel)
-{
-    InspectorPartEnumSlotWidget *w =
-            dynamic_cast<InspectorPartEnumSlotWidget*>(labelsToPartSlots[slotLabel]);
-    int selectedIndex = 0;
-    if(w != nullptr) selectedIndex = w->GetValue();
-    return selectedIndex;
-}
-
 void InspectorPartWidget::UpdateSlotsValues()
 {
-    for(InspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
+    for(InspectorPartSlotInfoBase *si : relatedPart->GetInfo()->slotInfos)
     {
-        InspectorPartSlotWidget *ws = labelsToPartSlots[si->label];
-        InspectorPartInfoSlotVecFloat* siv;
-        if( (siv = dynamic_cast<InspectorPartInfoSlotVecFloat*>(si)) != nullptr)
+        InspectorPartSlotWidgetBase *ws = nullptr;
+
+        InspectorPartSlotInfo< std::vector<float> >* siv;
+        InspectorPartSlotInfo< std::vector<std::string> >* sie;
+
+        if( (siv = dynamic_cast<InspectorPartSlotInfo< std::vector<float> > *>(si)) != nullptr)
         {
-            InspectorVectorFloatPartSlotWidget *wv = static_cast<InspectorVectorFloatPartSlotWidget*>(ws);
-            wv->SetValue( siv->value );
+            ws = new InspectorPartSlotWidget< std::vector<float> >(this, siv->GetLabel(), siv->GetValue());
+        }
+        else if( (sie = dynamic_cast<InspectorPartSlotInfo< std::vector<std::string> > *>(si)) != nullptr)
+        {
+            ws = new InspectorPartSlotWidget< std::vector<std::string> >(this, sie->GetLabel(),
+                                                                               sie->GetValue(),
+                                                                               sie->GetSelectedIndex() );
         }
 
         if(ws != nullptr)
         {
             ws->show();
             layout()->addWidget(ws);
-            partSlots.push_back(ws);
-            labelsToPartSlots[si->label] = ws;
+            labelsToPartSlots[slotInfo->GetLabel()] = ws;
         }
     }
 }
