@@ -20,5 +20,6 @@ Explorer::Explorer(QWidget *parent) : QListView(parent)
     setDropIndicatorShown(true);
 
     setViewMode(ViewMode::IconMode);
+    setResizeMode(ResizeMode::Adjust);
 }
 
