@@ -78,6 +78,9 @@
      <property name="title">
       <string>Create</string>
      </property>
+     <addaction name="actionPrefab"/>
+     <addaction name="actionPrefab_2"/>
+     <addaction name="separator"/>
      <addaction name="actionMaterial"/>
      <addaction name="actionMesh"/>
      <addaction name="actionShaderProgram"/>
@@ -341,7 +344,7 @@
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QTreeView" name="widgetTreeExplorer">
+       <widget class="Explorer" name="widgetTreeExplorer">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -435,6 +438,16 @@
     <string>Create from prefab</string>
    </property>
   </action>
+  <action name="actionPrefab">
+   <property name="text">
+    <string>Empty Entity</string>
+   </property>
+  </action>
+  <action name="actionPrefab_2">
+   <property name="text">
+    <string>Prefab</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -480,6 +493,11 @@
    <class>ListLogger</class>
    <extends>QListWidget</extends>
    <header>ListLogger.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Explorer</class>
+   <extends>QListView</extends>
+   <header>Explorer.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

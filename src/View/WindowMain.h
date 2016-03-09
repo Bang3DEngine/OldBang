@@ -8,6 +8,12 @@
 
 class WindowMain : public Ui_WindowMain
 {
+public:
+    enum MenuAction
+    {
+        CREATE_PREFAB
+    };
+
 private:
     static WindowMain *win;
 

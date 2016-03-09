@@ -15,6 +15,8 @@ QMAKE_CXXFLAGS += -g --std=c++11 -Wno-unused-parameter -Wno-sign-compare
 
 LIBS += -lGLEW
 
+DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
+
 INCLUDEPATH += \
     $$PWD/src/ \
     $$PWD/src/View/ \
@@ -132,7 +134,8 @@ HEADERS += \
     src/Persistence/FileReader.h \
     src/Persistence/ReaderWithPointerIds.h \
     src/Persistence/StageReader.h \
-    src/Persistence/stb_image.h
+    src/Persistence/stb_image.h \
+    src/View/Explorer/Explorer.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -186,7 +189,8 @@ SOURCES += \
     src/Persistence/AssetsManager.cpp \
     src/Persistence/FileReader.cpp \
     src/Persistence/ReaderWithPointerIds.cpp \
-    src/Persistence/StageReader.cpp
+    src/Persistence/StageReader.cpp \
+    src/View/Explorer/Explorer.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

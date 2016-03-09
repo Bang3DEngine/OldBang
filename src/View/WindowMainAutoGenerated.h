@@ -22,10 +22,10 @@
 #include <QtGui/QPushButton>
 #include <QtGui/QSplitter>
 #include <QtGui/QStatusBar>
-#include <QtGui/QTreeView>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 #include "Canvas.h"
+#include "Explorer.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
 #include "ListLogger.h"
@@ -45,6 +45,8 @@ public:
     QAction *actionTexture2D;
     QAction *actionProject_Settings;
     QAction *actionCreate_from_prefab;
+    QAction *actionPrefab;
+    QAction *actionPrefab_2;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
@@ -74,7 +76,7 @@ public:
     QVBoxLayout *verticalLayout_7;
     QSplitter *splitter;
     QPushButton *buttonCreatePrefab;
-    QTreeView *widgetTreeExplorer;
+    Explorer *widgetTreeExplorer;
     QDockWidget *dockLogger;
     QWidget *dockWidgetContents;
     QVBoxLayout *verticalLayout_5;
@@ -105,6 +107,10 @@ public:
         actionProject_Settings->setObjectName(QString::fromUtf8("actionProject_Settings"));
         actionCreate_from_prefab = new QAction(WindowMain);
         actionCreate_from_prefab->setObjectName(QString::fromUtf8("actionCreate_from_prefab"));
+        actionPrefab = new QAction(WindowMain);
+        actionPrefab->setObjectName(QString::fromUtf8("actionPrefab"));
+        actionPrefab_2 = new QAction(WindowMain);
+        actionPrefab_2->setObjectName(QString::fromUtf8("actionPrefab_2"));
         centralwidget = new QWidget(WindowMain);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -277,7 +283,7 @@ public:
         buttonCreatePrefab->setSizePolicy(sizePolicy2);
         buttonCreatePrefab->setDefault(true);
         splitter->addWidget(buttonCreatePrefab);
-        widgetTreeExplorer = new QTreeView(splitter);
+        widgetTreeExplorer = new Explorer(splitter);
         widgetTreeExplorer->setObjectName(QString::fromUtf8("widgetTreeExplorer"));
         sizePolicy2.setHeightForWidth(widgetTreeExplorer->sizePolicy().hasHeightForWidth());
         widgetTreeExplorer->setSizePolicy(sizePolicy2);
@@ -321,6 +327,9 @@ public:
         menubar->addAction(menuEntity->menuAction());
         menubar->addAction(menuAssets->menuAction());
         menuAssets->addAction(menuCreate->menuAction());
+        menuCreate->addAction(actionPrefab);
+        menuCreate->addAction(actionPrefab_2);
+        menuCreate->addSeparator();
         menuCreate->addAction(actionMaterial);
         menuCreate->addAction(actionMesh);
         menuCreate->addAction(actionShaderProgram);
@@ -352,6 +361,8 @@ public:
         actionTexture2D->setText(QApplication::translate("WindowMain", "Texture2D", 0, QApplication::UnicodeUTF8));
         actionProject_Settings->setText(QApplication::translate("WindowMain", "Project Settings", 0, QApplication::UnicodeUTF8));
         actionCreate_from_prefab->setText(QApplication::translate("WindowMain", "Create from prefab", 0, QApplication::UnicodeUTF8));
+        actionPrefab->setText(QApplication::translate("WindowMain", "Empty Entity", 0, QApplication::UnicodeUTF8));
+        actionPrefab_2->setText(QApplication::translate("WindowMain", "Prefab", 0, QApplication::UnicodeUTF8));
         buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0, QApplication::UnicodeUTF8));
         menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
         menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));
