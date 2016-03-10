@@ -4,7 +4,7 @@ Explorer::Explorer(QWidget *parent) : QListView(parent)
 {
     fileSystemModel = new QFileSystemModel();
 
-    rootPath = QT_PROJECT_PATH;
+    QString rootPath = QT_PROJECT_PATH;
 
     Logger_Log(rootPath.toStdString());
 
@@ -21,5 +21,22 @@ Explorer::Explorer(QWidget *parent) : QListView(parent)
 
     setViewMode(ViewMode::IconMode);
     setResizeMode(ResizeMode::Adjust);
+}
+
+void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    if(e->button() == Qt::LeftButton)
+    {
+        QModelIndex clickedIndex = this->selectedIndexes().at(0);
+        bool isDir = fileSystemModel->isDir(clickedIndex);
+        if(isDir)
+        {
+            std::string clickedDirName = fileSystemModel->fileName(clickedIndex).toStdString();
+            setRootIndex(fileSystemModel->setRootPath(
+                             QString::fromStdString(fileSystemModel->rootPath().toStdString() + "/" + clickedDirName)
+                             )
+                         );
+        }
+    }
 }
 
