@@ -5,6 +5,7 @@
 
 #include <QListView>
 #include <QMouseEvent>
+#include <QToolButton>
 #include <QFileSystemModel>
 
 #include "Bang.h"
@@ -16,11 +17,21 @@ class Explorer : public QListView
 
 private:
     QFileSystemModel *fileSystemModel = nullptr;
+    QToolButton *buttonDirUp;
+    QToolButton *buttonChangeViewMode;
+
+    std::string topPath;
+    void setDir(const std::string &path);
+    std::string getCurrentDir() const;
 
 public:
     Explorer(QWidget *parent);
 
     void mouseDoubleClickEvent(QMouseEvent *e) override;
+
+public slots:
+    void OnButtonDirUpClicked();
+    void OnButtonChangeViewModeClicked();
 };
 
 #endif // EXPLORER_H

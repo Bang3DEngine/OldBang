@@ -14,14 +14,15 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDockWidget>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "Canvas.h"
@@ -73,9 +74,13 @@ public:
     Inspector *widgetInspector;
     QDockWidget *dockExplorer;
     QWidget *dockWidgetContents_5;
-    QVBoxLayout *verticalLayout_7;
-    QSplitter *splitter;
+    QVBoxLayout *verticalLayout_10;
+    QHBoxLayout *horizontalLayout_3;
     QPushButton *buttonCreatePrefab;
+    QVBoxLayout *verticalLayout_7;
+    QHBoxLayout *horizontalLayout_4;
+    QToolButton *buttonExplorerDirUp;
+    QToolButton *buttonExplorerChangeViewMode;
     Explorer *widgetTreeExplorer;
     QDockWidget *dockLogger;
     QWidget *dockWidgetContents;
@@ -90,7 +95,7 @@ public:
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QStringLiteral("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
-        WindowMain->resize(632, 464);
+        WindowMain->resize(941, 594);
         actionOpen_project = new QAction(WindowMain);
         actionOpen_project->setObjectName(QStringLiteral("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
@@ -155,7 +160,7 @@ public:
         canvas->raise();
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 632, 25));
+        menubar->setGeometry(QRect(0, 0, 941, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QStringLiteral("menuAssets"));
@@ -265,32 +270,52 @@ public:
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockInspector);
         dockExplorer = new QDockWidget(WindowMain);
         dockExplorer->setObjectName(QStringLiteral("dockExplorer"));
-        dockExplorer->setMinimumSize(QSize(420, 130));
+        dockExplorer->setMinimumSize(QSize(420, 158));
         dockExplorer->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockWidgetContents_5 = new QWidget();
         dockWidgetContents_5->setObjectName(QStringLiteral("dockWidgetContents_5"));
-        verticalLayout_7 = new QVBoxLayout(dockWidgetContents_5);
-        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
-        splitter = new QSplitter(dockWidgetContents_5);
-        splitter->setObjectName(QStringLiteral("splitter"));
-        sizePolicy2.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
-        splitter->setSizePolicy(sizePolicy2);
-        splitter->setOrientation(Qt::Horizontal);
-        splitter->setChildrenCollapsible(true);
-        buttonCreatePrefab = new QPushButton(splitter);
+        verticalLayout_10 = new QVBoxLayout(dockWidgetContents_5);
+        verticalLayout_10->setObjectName(QStringLiteral("verticalLayout_10"));
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        buttonCreatePrefab = new QPushButton(dockWidgetContents_5);
         buttonCreatePrefab->setObjectName(QStringLiteral("buttonCreatePrefab"));
         sizePolicy2.setHeightForWidth(buttonCreatePrefab->sizePolicy().hasHeightForWidth());
         buttonCreatePrefab->setSizePolicy(sizePolicy2);
         buttonCreatePrefab->setDefault(true);
-        splitter->addWidget(buttonCreatePrefab);
-        widgetTreeExplorer = new Explorer(splitter);
+
+        horizontalLayout_3->addWidget(buttonCreatePrefab);
+
+        verticalLayout_7 = new QVBoxLayout();
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        buttonExplorerDirUp = new QToolButton(dockWidgetContents_5);
+        buttonExplorerDirUp->setObjectName(QStringLiteral("buttonExplorerDirUp"));
+
+        horizontalLayout_4->addWidget(buttonExplorerDirUp);
+
+        buttonExplorerChangeViewMode = new QToolButton(dockWidgetContents_5);
+        buttonExplorerChangeViewMode->setObjectName(QStringLiteral("buttonExplorerChangeViewMode"));
+
+        horizontalLayout_4->addWidget(buttonExplorerChangeViewMode);
+
+
+        verticalLayout_7->addLayout(horizontalLayout_4);
+
+        widgetTreeExplorer = new Explorer(dockWidgetContents_5);
         widgetTreeExplorer->setObjectName(QStringLiteral("widgetTreeExplorer"));
         sizePolicy2.setHeightForWidth(widgetTreeExplorer->sizePolicy().hasHeightForWidth());
         widgetTreeExplorer->setSizePolicy(sizePolicy2);
         widgetTreeExplorer->setAcceptDrops(true);
-        splitter->addWidget(widgetTreeExplorer);
 
-        verticalLayout_7->addWidget(splitter);
+        verticalLayout_7->addWidget(widgetTreeExplorer);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_7);
+
+
+        verticalLayout_10->addLayout(horizontalLayout_3);
 
         dockExplorer->setWidget(dockWidgetContents_5);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockExplorer);
@@ -400,6 +425,8 @@ public:
         labelInspectorEntityName->setText(QApplication::translate("WindowMain", "Entity Name", 0));
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0));
         buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0));
+        buttonExplorerDirUp->setText(QApplication::translate("WindowMain", "Up", 0));
+        buttonExplorerChangeViewMode->setText(QApplication::translate("WindowMain", "Change view mode", 0));
         dockLogger->setWindowTitle(QApplication::translate("WindowMain", "Logger", 0));
         buttonLoggerClear->setText(QApplication::translate("WindowMain", "Clear", 0));
     } // retranslateUi
