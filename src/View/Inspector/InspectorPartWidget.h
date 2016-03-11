@@ -24,7 +24,7 @@
 
 class Part;
 class WindowEventManager;
-class InspectorPartSlotWidget;
+class InspectorPartSW;
 class InspectorPartWidget : public QWidget
 {
     //Every part widget, has many slots,
@@ -37,8 +37,8 @@ private:
     Part *relatedPart; //Set by Inspector when creating it
     QLabel *titleLabel;
     QCheckBox *enabledCheckbox;
-    std::vector<InspectorPartSlotWidget*> partSlots;
-    std::map<std::string, InspectorPartSlotWidget*> labelsToPartSlots;
+    std::vector<InspectorPartSW*> partSlots;
+    std::map<std::string, InspectorPartSW*> labelsToPartSlots;
 
     QTimer *updateTimer;
 

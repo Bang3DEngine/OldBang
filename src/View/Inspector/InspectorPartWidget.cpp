@@ -2,10 +2,10 @@
 #include "WindowEventManager.h"
 #include "Part.h"
 
-#include "InspectorPartSlotWidget.h"
-#include "InspectorPartEnumSlotWidget.h"
-#include "InspectorFloatPartSlotWidget.h"
-#include "InspectorVectorFloatPartSlotWidget.h"
+#include "InspectorPartSW.h"
+#include "InspectorPartEnumSW.h"
+#include "InspectorPartFloatSW.h"
+#include "InspectorPartVFloatSW.h"
 
 InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
     : QWidget()
@@ -32,18 +32,18 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
 
     for(InspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
     {
-        InspectorPartSlotWidget *ws = nullptr;
+        InspectorPartSW *ws = nullptr;
 
         InspectorPartInfoSlotVecFloat* siv;
         InspectorPartInfoSlotEnum* sie;
 
         if( (siv = dynamic_cast<InspectorPartInfoSlotVecFloat*>(si)) != nullptr)
         {
-            ws =  new InspectorVectorFloatPartSlotWidget(siv->label, siv->value, this);
+            ws =  new InspectorPartVFloatSW(siv->label, siv->value, this);
         }
         else if( (sie = dynamic_cast<InspectorPartInfoSlotEnum*>(si)) != nullptr)
         {
-            ws =  new InspectorPartEnumSlotWidget(sie->label, sie->enumValues, sie->selectedValueIndex, this);
+            ws =  new InspectorPartEnumSW(sie->label, sie->enumValues, sie->selectedValueIndex, this);
         }
 
         if(ws != nullptr)
@@ -69,8 +69,8 @@ InspectorPartWidget::~InspectorPartWidget()
 
 std::vector<float> InspectorPartWidget::GetVectorFloatSlotValue(const std::string &slotLabel)
 {
-    InspectorVectorFloatPartSlotWidget *w =
-            dynamic_cast<InspectorVectorFloatPartSlotWidget*>(labelsToPartSlots[slotLabel]);
+    InspectorPartVFloatSW *w =
+            dynamic_cast<InspectorPartVFloatSW*>(labelsToPartSlots[slotLabel]);
     std::vector<float> r;
     if(w != nullptr) r = w->GetValue();
     return r;
@@ -78,8 +78,8 @@ std::vector<float> InspectorPartWidget::GetVectorFloatSlotValue(const std::strin
 
 int InspectorPartWidget::GetSelectedEnumSlotIndex(const std::string &slotLabel)
 {
-    InspectorPartEnumSlotWidget *w =
-            dynamic_cast<InspectorPartEnumSlotWidget*>(labelsToPartSlots[slotLabel]);
+    InspectorPartEnumSW *w =
+            dynamic_cast<InspectorPartEnumSW*>(labelsToPartSlots[slotLabel]);
     int selectedIndex = 0;
     if(w != nullptr) selectedIndex = w->GetValue();
     return selectedIndex;
@@ -89,11 +89,11 @@ void InspectorPartWidget::UpdateSlotsValues()
 {
     for(InspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
     {
-        InspectorPartSlotWidget *ws = labelsToPartSlots[si->label];
+        InspectorPartSW *ws = labelsToPartSlots[si->label];
         InspectorPartInfoSlotVecFloat* siv;
         if( (siv = dynamic_cast<InspectorPartInfoSlotVecFloat*>(si)) != nullptr)
         {
-            InspectorVectorFloatPartSlotWidget *wv = static_cast<InspectorVectorFloatPartSlotWidget*>(ws);
+            InspectorPartVFloatSW *wv = static_cast<InspectorPartVFloatSW*>(ws);
             wv->SetValue( siv->value );
         }
 

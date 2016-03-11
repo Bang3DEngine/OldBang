@@ -124,12 +124,12 @@ HEADERS += \
     src/View/Hierarchy/Hierarchy.h \
     src/View/Inspector/InspectorPartInfo.h \
     src/View/Inspector/InspectorPartWidget.h \
-    src/View/Inspector/InspectorPartSlotWidget.h \
-    src/View/Inspector/InspectorFloatPartSlotWidget.h \
-    src/View/Inspector/InspectorVectorFloatPartSlotWidget.h \
+    src/View/Inspector/InspectorPartSW.h \
+    src/View/Inspector/InspectorPartFloatSW.h \
+    src/View/Inspector/InspectorPartVFloatSW.h \
     src/View/Logger/ListLogger.h \
     src/View/Logger/LoggerWidget.h \
-    src/View/Inspector/InspectorPartEnumSlotWidget.h \
+    src/View/Inspector/InspectorPartEnumSW.h \
     src/Persistence/AssetsManager.h \
     src/Persistence/FileReader.h \
     src/Persistence/ReaderWithPointerIds.h \
@@ -179,12 +179,12 @@ SOURCES += \
     src/View/Hierarchy/Hierarchy.cpp \
     src/View/Inspector/InspectorPartInfo.cpp \
     src/View/Inspector/InspectorPartWidget.cpp \
-    src/View/Inspector/InspectorPartSlotWidget.cpp \
-    src/View/Inspector/InspectorFloatPartSlotWidget.cpp \
-    src/View/Inspector/InspectorVectorFloatPartSlotWidget.cpp \
+    src/View/Inspector/InspectorPartSW.cpp \
+    src/View/Inspector/InspectorPartFloatSW.cpp \
+    src/View/Inspector/InspectorPartVFloatSW.cpp \
     src/View/Logger/ListLogger.cpp \
     src/View/Logger/LoggerWidget.cpp \
-    src/View/Inspector/InspectorPartEnumSlotWidget.cpp \
+    src/View/Inspector/InspectorPartEnumSW.cpp \
     src/Persistence/stb_image.cpp \
     src/Persistence/AssetsManager.cpp \
     src/Persistence/FileReader.cpp \
