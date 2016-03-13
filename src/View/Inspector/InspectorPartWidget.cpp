@@ -4,6 +4,7 @@
 
 #include "InspectorPartSW.h"
 #include "InspectorPartEnumSW.h"
+#include "InspectorPartAssetSW.h"
 #include "InspectorPartFloatSW.h"
 #include "InspectorPartVFloatSW.h"
 
@@ -34,16 +35,21 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
     {
         InspectorPartSW *ws = nullptr;
 
-        InspectorPartInfoSlotVecFloat* siv;
-        InspectorPartInfoSlotEnum* sie;
+        InspectorPartInfoSlotVecFloat *siv;
+        InspectorPartInfoSlotEnum *sie;
+        InspectorPartInfoSlotAsset *sia;
 
         if( (siv = dynamic_cast<InspectorPartInfoSlotVecFloat*>(si)) != nullptr)
         {
-            ws =  new InspectorPartVFloatSW(siv->label, siv->value, this);
+            ws = new InspectorPartVFloatSW(siv->label, siv->value, this);
         }
         else if( (sie = dynamic_cast<InspectorPartInfoSlotEnum*>(si)) != nullptr)
         {
-            ws =  new InspectorPartEnumSW(sie->label, sie->enumValues, sie->selectedValueIndex, this);
+            ws = new InspectorPartEnumSW(sie->label, sie->enumValues, sie->selectedValueIndex, this);
+        }
+        else if( (sia = dynamic_cast<InspectorPartInfoSlotAsset*>(si)) != nullptr)
+        {
+            ws = new InspectorPartAssetSW(sia->label, sia->filepath, this);
         }
 
         if(ws != nullptr)
@@ -91,10 +97,23 @@ void InspectorPartWidget::UpdateSlotsValues()
     {
         InspectorPartSW *ws = labelsToPartSlots[si->label];
         InspectorPartInfoSlotVecFloat* siv;
+        InspectorPartInfoSlotEnum *sie;
+        InspectorPartInfoSlotAsset *sia;
+
         if( (siv = dynamic_cast<InspectorPartInfoSlotVecFloat*>(si)) != nullptr)
         {
             InspectorPartVFloatSW *wv = static_cast<InspectorPartVFloatSW*>(ws);
             wv->SetValue( siv->value );
+        }
+        else if( (sie = dynamic_cast<InspectorPartInfoSlotEnum*>(si)) != nullptr)
+        {
+            InspectorPartEnumSW *we = static_cast<InspectorPartEnumSW*>(ws);
+            we->SetValue( sie->selectedValueIndex );
+        }
+        else if( (sia = dynamic_cast<InspectorPartInfoSlotAsset*>(si)) != nullptr)
+        {
+            InspectorPartAssetSW *wa = static_cast<InspectorPartAssetSW*>(ws);
+            wa->SetValue( sia->filepath );
         }
 
         if(ws != nullptr)

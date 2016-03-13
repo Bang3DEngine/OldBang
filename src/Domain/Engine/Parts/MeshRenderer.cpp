@@ -7,6 +7,8 @@ MeshRenderer::MeshRenderer()
     #ifdef BANG_EDITOR
         inspectorPartInfo.slotInfos =
         {
+            new InspectorPartInfoSlotAsset("Material"),
+            new InspectorPartInfoSlotAsset("Mesh"),
         };
     #endif
 }
@@ -127,10 +129,46 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 #ifdef BANG_EDITOR
 InspectorPartInfo* MeshRenderer::GetInfo()
 {
+    InspectorPartInfoSlotAsset* matInfo, *meshInfo;
+    matInfo  = static_cast<InspectorPartInfoSlotAsset*>(inspectorPartInfo.slotInfos[0]);
+    meshInfo = static_cast<InspectorPartInfoSlotAsset*>(inspectorPartInfo.slotInfos[1]);
+
+    if (material != nullptr)
+    {
+        matInfo->filepath = material->GetFilepath();
+    }
+    else
+    {
+        matInfo->filepath = "";
+    }
+
+    if (mesh != nullptr)
+    {
+        meshInfo->filepath = mesh->GetFilepath();
+    }
+    else
+    {
+        meshInfo->filepath = "";
+    }
+
     return &inspectorPartInfo;
 }
 
 void MeshRenderer::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
 {
+    InspectorPartInfoSlotAsset* matInfo, *meshInfo;
+    matInfo  = static_cast<InspectorPartInfoSlotAsset*>(inspectorPartInfo.slotInfos[0]);
+    meshInfo = static_cast<InspectorPartInfoSlotAsset*>(inspectorPartInfo.slotInfos[1]);
+
+    if (matInfo->filepath != "")
+    {
+        material = AssetsManager::GetAsset<Material>(matInfo->filepath);
+    }
+
+
+    if (meshInfo->filepath != "")
+    {
+        mesh = AssetsManager::GetAsset<Mesh>(meshInfo->filepath);
+    }
 }
 #endif

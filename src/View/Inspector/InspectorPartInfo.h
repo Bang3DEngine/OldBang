@@ -48,18 +48,16 @@ public:
     bool IsOfTypeVecFloat() override { return false; }
 };
 
-class InspectorPartInfoSlot: public InspectorPartSlotInfo
+class InspectorPartInfoSlotAsset: public InspectorPartSlotInfo
 {
 public:
-    std::vector<std::string> enumValues;
-    int selectedValueIndex = 0;
+    std::string filepath = "";
 
-    InspectorPartInfoSlotEnum(const std::string &label,
-                              const std::vector<std::string> &initialValues) : InspectorPartSlotInfo(label)
+    InspectorPartInfoSlotAsset(const std::string &label) : InspectorPartSlotInfo(label)
     {
-        this->enumValues = initialValues;
     }
-    virtual ~InspectorPartInfoSlotEnum() {}
+
+    virtual ~InspectorPartInfoSlotAsset() {}
 
     bool IsOfTypeVecFloat() override { return false; }
 };

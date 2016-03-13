@@ -15,11 +15,11 @@ InspectorPartAssetSW::InspectorPartAssetSW(const std::string &labelString, const
     hLayout->setSpacing(0); hLayout->setContentsMargins(0,0,0,0);
     vLayout->addLayout(hLayout);
 
-    QLineEdit *filepathLineEdit = new QLineEdit();
+    filepathLineEdit = new QLineEdit();
     hLayout->addWidget(filepathLineEdit);
 
-    QPushButton *browseButton = new QPushButton();
-    connect(browseButton, SIGNAL(clicked()), this, SLOT(browse()));
+    QPushButton *browseButton = new QPushButton(QString::fromStdString("Browse"));
+    connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
     hLayout->addWidget(browseButton);
 
     this->setContentsMargins(0,0,0,0);
@@ -31,16 +31,22 @@ void InspectorPartAssetSW::Browse()
     QString directory = QFileDialog::getExistingDirectory(this,
                             tr("Find Files"), QDir::currentPath());
 
-    if (!directory.isEmpty()) {
-        if (directoryComboBox->findText(directory) == -1)
-            directoryComboBox->addItem(directory);
-        directoryComboBox->setCurrentIndex(directoryComboBox->findText(directory));
+    Logger_Log("ASDSADSA");
+    if (!directory.isEmpty())
+    {
+        //if (directoryComboBox->findText(directory) == -1)
+        //    directoryComboBox->addItem(directory);
+        //directoryComboBox->setCurrentIndex(directoryComboBox->findText(directory));
     }
 }
 
 void InspectorPartAssetSW::SetValue(const std::string &assetPath)
 {
-    this->assetPath = assetPath;
+    if(this->assetPath != assetPath)
+    {
+        this->assetPath = assetPath;
+        filepathLineEdit->setText(QString::fromStdString(assetPath));
+    }
 }
 
 std::string  InspectorPartAssetSW::GetValue()
