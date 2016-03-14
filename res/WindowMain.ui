@@ -64,7 +64,7 @@
      <x>0</x>
      <y>0</y>
      <width>941</width>
-     <height>25</height>
+     <height>32</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -276,11 +276,17 @@
        </item>
        <item>
         <widget class="Inspector" name="widgetInspector">
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::NoDragDrop</enum>
+         </property>
          <property name="defaultDropAction">
-          <enum>Qt::MoveAction</enum>
+          <enum>Qt::IgnoreAction</enum>
          </property>
          <property name="alternatingRowColors">
           <bool>true</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::NoSelection</enum>
          </property>
          <property name="movement">
           <enum>QListView::Snap</enum>
@@ -301,8 +307,8 @@
   <widget class="QDockWidget" name="dockExplorer">
    <property name="minimumSize">
     <size>
-     <width>420</width>
-     <height>158</height>
+     <width>493</width>
+     <height>172</height>
     </size>
    </property>
    <property name="features">
@@ -363,6 +369,27 @@
             </sizepolicy>
            </property>
            <property name="acceptDrops">
+            <bool>true</bool>
+           </property>
+           <property name="dragDropMode">
+            <enum>QAbstractItemView::InternalMove</enum>
+           </property>
+           <property name="defaultDropAction">
+            <enum>Qt::MoveAction</enum>
+           </property>
+           <property name="movement">
+            <enum>QListView::Snap</enum>
+           </property>
+           <property name="resizeMode">
+            <enum>QListView::Adjust</enum>
+           </property>
+           <property name="viewMode">
+            <enum>QListView::IconMode</enum>
+           </property>
+           <property name="uniformItemSizes">
+            <bool>true</bool>
+           </property>
+           <property name="wordWrap">
             <bool>true</bool>
            </property>
           </widget>

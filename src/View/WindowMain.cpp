@@ -14,10 +14,6 @@ void WindowMain::Init(QMainWindow *window)
         win->setupUi(window);
         window->showMaximized();
     }
-
-    //Init inspector
-    win->widgetInspector->addItem("ASDKDJASKDJAS");
-    //
 }
 
 WindowMain *WindowMain::GetInstance()

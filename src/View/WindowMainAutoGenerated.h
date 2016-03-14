@@ -160,7 +160,7 @@ public:
         canvas->raise();
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 941, 25));
+        menubar->setGeometry(QRect(0, 0, 941, 32));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -254,8 +254,10 @@ public:
 
         widgetInspector = new Inspector(dockWidgetContents_7);
         widgetInspector->setObjectName(QString::fromUtf8("widgetInspector"));
-        widgetInspector->setDefaultDropAction(Qt::MoveAction);
+        widgetInspector->setDragDropMode(QAbstractItemView::NoDragDrop);
+        widgetInspector->setDefaultDropAction(Qt::IgnoreAction);
         widgetInspector->setAlternatingRowColors(true);
+        widgetInspector->setSelectionMode(QAbstractItemView::NoSelection);
         widgetInspector->setMovement(QListView::Snap);
         widgetInspector->setFlow(QListView::TopToBottom);
         widgetInspector->setViewMode(QListView::ListMode);
@@ -270,7 +272,7 @@ public:
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockInspector);
         dockExplorer = new QDockWidget(WindowMain);
         dockExplorer->setObjectName(QString::fromUtf8("dockExplorer"));
-        dockExplorer->setMinimumSize(QSize(420, 158));
+        dockExplorer->setMinimumSize(QSize(493, 172));
         dockExplorer->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockWidgetContents_5 = new QWidget();
         dockWidgetContents_5->setObjectName(QString::fromUtf8("dockWidgetContents_5"));
@@ -308,6 +310,13 @@ public:
         sizePolicy2.setHeightForWidth(widgetTreeExplorer->sizePolicy().hasHeightForWidth());
         widgetTreeExplorer->setSizePolicy(sizePolicy2);
         widgetTreeExplorer->setAcceptDrops(true);
+        widgetTreeExplorer->setDragDropMode(QAbstractItemView::InternalMove);
+        widgetTreeExplorer->setDefaultDropAction(Qt::MoveAction);
+        widgetTreeExplorer->setMovement(QListView::Snap);
+        widgetTreeExplorer->setResizeMode(QListView::Adjust);
+        widgetTreeExplorer->setViewMode(QListView::IconMode);
+        widgetTreeExplorer->setUniformItemSizes(true);
+        widgetTreeExplorer->setWordWrap(true);
 
         verticalLayout_7->addWidget(widgetTreeExplorer);
 

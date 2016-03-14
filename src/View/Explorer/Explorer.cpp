@@ -16,16 +16,6 @@ Explorer::Explorer(QWidget *parent) : QListView(parent)
     setModel(fileSystemModel);
     setDir(topPath);
     fileSystemModel->setReadOnly(false);
-    setAcceptDrops(true);
-    setDragDropOverwriteMode(false);
-    setAlternatingRowColors(true);
-    setContextMenuPolicy(Qt::ActionsContextMenu);
-    setDefaultDropAction(Qt::DropAction::MoveAction);
-    setDragDropMode(DragDropMode::InternalMove);
-    setDropIndicatorShown(true);
-
-    setViewMode(ViewMode::IconMode);
-    setResizeMode(ResizeMode::Adjust);
 
     connect(buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
     connect(buttonChangeViewMode, SIGNAL(clicked()), this, SLOT(OnButtonChangeViewModeClicked()));

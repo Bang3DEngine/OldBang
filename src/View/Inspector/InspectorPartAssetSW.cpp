@@ -19,6 +19,7 @@ InspectorPartAssetSW::InspectorPartAssetSW(const std::string &labelString,
     vLayout->addLayout(hLayout);
 
     filepathLineEdit = new QLineEdit();
+    filepathLineEdit->setReadOnly(true);
     hLayout->addWidget(filepathLineEdit);
 
     QPushButton *browseButton = new QPushButton(QString::fromStdString("Browse"));
