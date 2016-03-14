@@ -7,6 +7,9 @@
 #include <QDir>
 
 #include "Asset.h"
+#include "Mesh.h"
+#include "Explorer.h"
+#include "FileDialogAsset.h"
 #include "InspectorPartSW.h"
 
 class InspectorPartAssetSW : public InspectorPartSW
@@ -14,6 +17,7 @@ class InspectorPartAssetSW : public InspectorPartSW
     Q_OBJECT
 
 private:
+    std::string fileExtension;
     std::string assetPath;
     QLineEdit *filepathLineEdit;
 

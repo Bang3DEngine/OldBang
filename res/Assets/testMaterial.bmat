@@ -1,0 +1,5 @@
+<Material>
+    res/Shaders/pvm_pos_normal_uv.vert
+    res/Shaders/pass_pos_normal_uv.frag
+    res/Assets/carpetTexture.btex2d
+</Material>

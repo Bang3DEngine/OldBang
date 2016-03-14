@@ -136,7 +136,8 @@ HEADERS += \
     src/Persistence/StageReader.h \
     src/Persistence/stb_image.h \
     src/View/Explorer/Explorer.h \
-    src/View/Inspector/InspectorPartAssetSW.h
+    src/View/Inspector/InspectorPartAssetSW.h \
+    src/View/Inspector/FileDialogAsset.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -192,7 +193,8 @@ SOURCES += \
     src/Persistence/ReaderWithPointerIds.cpp \
     src/Persistence/StageReader.cpp \
     src/View/Explorer/Explorer.cpp \
-    src/View/Inspector/InspectorPartAssetSW.cpp
+    src/View/Inspector/InspectorPartAssetSW.cpp \
+    src/View/Inspector/FileDialogAsset.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

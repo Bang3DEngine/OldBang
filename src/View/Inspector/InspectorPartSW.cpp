@@ -1,5 +1,6 @@
 #include "InspectorPartSW.h"
 
-InspectorPartSW::InspectorPartSW(InspectorPartWidget *parent) : QWidget(nullptr), parent(parent)
+InspectorPartSW::InspectorPartSW(const std::string &label, InspectorPartWidget *parent) : QWidget(nullptr),
+    label(label), parent(parent)
 {
 }

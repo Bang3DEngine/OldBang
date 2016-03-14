@@ -1,0 +1,25 @@
+<Entity>
+    -
+    Luigi
+    <parts>
+        <Transform>
+            -
+            0.0 0.0 0.0       #position
+            0.0 0.0 0.0 1.0   #rotation
+            0.03 0.03 0.03       #scale
+        </Transform>
+
+        <MeshRenderer>
+            -
+            res/Assets/luigiMesh.bmesh
+            res/Assets/luigiMaterial.bmat
+        </MeshRenderer>
+
+        <Behaviour>
+            <TestBehaviour>
+            </TestBehaviour>
+        </Behaviour>
+
+    </parts>
+</Entity>
+

@@ -155,9 +155,9 @@ void Canvas::OnTopKekPressed()
 {
     Prefab *p;
     if(rand()%2 == 0)
-        p = AssetsManager::GetAsset<Prefab>("res/Assets/prefabTest.asset");
+        p = AssetsManager::GetAsset<Prefab>("res/Assets/prefabTest.bprefab");
     else
-        p = AssetsManager::GetAsset<Prefab>("res/Assets/luigiPrefab.asset");
+        p = AssetsManager::GetAsset<Prefab>("res/Assets/luigiPrefab.bprefab");
 
     Entity *e = p->Instantiate();
 

@@ -1,7 +1,9 @@
 #include "InspectorPartAssetSW.h"
 
-InspectorPartAssetSW::InspectorPartAssetSW(const std::string &labelString, const std::string &value, InspectorPartWidget *parent) :
-    InspectorPartSW(parent)
+InspectorPartAssetSW::InspectorPartAssetSW(const std::string &labelString,
+                                           const std::string &value,
+                                           InspectorPartWidget *parent) :
+    InspectorPartSW(labelString, parent)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0);
@@ -22,17 +24,17 @@ InspectorPartAssetSW::InspectorPartAssetSW(const std::string &labelString, const
     connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
     hLayout->addWidget(browseButton);
 
+    this->fileExtension = fileExtension;
     this->setContentsMargins(0,0,0,0);
     this->show();
 }
 
 void InspectorPartAssetSW::Browse()
 {
-    QString directory = QFileDialog::getExistingDirectory(this,
-                            tr("Find Files"), QDir::currentPath());
+    FileDialogAsset fda(Explorer::GetTopPath(), Mesh::GetFileExtension(), this);
 
-    Logger_Log("ASDSADSA");
-    if (!directory.isEmpty())
+    Logger_Log(fda.GetOpenFileName());
+//    if (!directory.isEmpty())
     {
         //if (directoryComboBox->findText(directory) == -1)
         //    directoryComboBox->addItem(directory);

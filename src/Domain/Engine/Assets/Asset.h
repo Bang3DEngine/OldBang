@@ -13,7 +13,11 @@
 class AssetsManager;
 class Asset : public IToString, public IFileable
 {
-friend class AssetsManager;
+    friend class AssetsManager;
+
+public:
+    const static std::string GetFileExtension() { return "basset"; }
+
 
 protected:
     std::string filepath;

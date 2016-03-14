@@ -37,9 +37,9 @@ void TestBehaviour::OnStart()
                                       0.2f));
 
         if(rand() % 2 == 0)
-            m->SetTexture( AssetsManager::GetAsset<Texture2D>("res/Assets/woodTexture.asset") );
+            m->SetTexture( AssetsManager::GetAsset<Texture2D>("res/Assets/woodTexture.btex2d") );
         else
-            m->SetTexture( AssetsManager::GetAsset<Texture2D>("res/Assets/carpetTexture.asset") );
+            m->SetTexture( AssetsManager::GetAsset<Texture2D>("res/Assets/carpetTexture.btex2d") );
 
         GetOwner()->GetPart<MeshRenderer>()->SetMaterial(m);
     }

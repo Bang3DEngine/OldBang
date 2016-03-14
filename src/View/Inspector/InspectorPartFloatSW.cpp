@@ -1,8 +1,8 @@
 #include "InspectorPartFloatSW.h"
 
 InspectorPartFloatSW::InspectorPartFloatSW(const std::string &labelString,
-                                                           float initialValue,
-                                                           InspectorPartWidget *parent) : InspectorPartSW(parent)
+                                           float initialValue,
+                                           InspectorPartWidget *parent) : InspectorPartSW(labelString, parent)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);

@@ -17,6 +17,9 @@ class Material : public IGLBindable, public Asset
 {
 friend class MeshRenderer;
 
+public:
+    const static std::string GetFileExtension() { return "bmat"; }
+
 private:
     glm::vec4 diffuseColor;
 

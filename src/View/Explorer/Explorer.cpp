@@ -2,11 +2,14 @@
 
 #include "WindowMain.h"
 
+std::string Explorer::topPath = "";
+
 Explorer::Explorer(QWidget *parent) : QListView(parent)
 {
     fileSystemModel = new QFileSystemModel();
 
     topPath = QT_PROJECT_PATH;
+    topPath += "/res/Assets";
 
     buttonDirUp = WindowMain::GetInstance()->buttonExplorerDirUp;
     buttonChangeViewMode = WindowMain::GetInstance()->buttonExplorerChangeViewMode;

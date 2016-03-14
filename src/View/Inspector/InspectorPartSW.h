@@ -10,16 +10,10 @@ class InspectorPartSW : public QWidget
     Q_OBJECT
 
 protected:
+    std::string label;
     InspectorPartWidget *parent;
 
-    InspectorPartSW(InspectorPartWidget *parent);
-/*
-    template <class T>
-    void SetValue(const T &v) {}
-
-    template <class T>
-    T GetValue() { return 0; }
-*/
+    InspectorPartSW(const std::string &label, InspectorPartWidget *parent);
 };
 
 #endif // INSPECTORPARTSLOTWIDGET_H

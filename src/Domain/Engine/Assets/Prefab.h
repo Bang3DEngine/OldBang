@@ -16,6 +16,10 @@
 //</Entity>
 class Prefab : public Asset
 {
+
+public:
+    const static std::string GetFileExtension() { return "bprefab"; }
+
 private:
     //This variable contains the description inside the
     //corresponding *.asset file (without the opening/closing tags)

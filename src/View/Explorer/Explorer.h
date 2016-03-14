@@ -20,7 +20,7 @@ private:
     QToolButton *buttonDirUp;
     QToolButton *buttonChangeViewMode;
 
-    std::string topPath;
+    static std::string topPath;
     void setDir(const std::string &path);
     std::string getCurrentDir() const;
 
@@ -28,6 +28,8 @@ public:
     Explorer(QWidget *parent);
 
     void mouseDoubleClickEvent(QMouseEvent *e) override;
+
+    static std::string GetTopPath() { return topPath; }
 
 public slots:
     void OnButtonDirUpClicked();

@@ -21,6 +21,8 @@ class Mesh : public Asset
 friend class MeshRenderer;
 
 public:
+    const static std::string GetFileExtension() { return "bmesh"; }
+
     enum RenderMode
     {
         Triangles = GL_TRIANGLES,

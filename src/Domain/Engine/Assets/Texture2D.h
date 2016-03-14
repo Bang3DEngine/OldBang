@@ -18,6 +18,9 @@ class Texture2D : public Texture, public Asset
 {
 
 public:
+    const static std::string GetFileExtension() { return "btex2d"; }
+
+public:
     Texture2D();
     Texture2D(const std::string &filepath);
     virtual ~Texture2D();
