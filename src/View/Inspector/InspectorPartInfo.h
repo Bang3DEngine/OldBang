@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include "Logger.h"
+
 class InspectorPartSlotInfo
 {
 protected:
@@ -52,9 +54,12 @@ class InspectorPartInfoSlotAsset: public InspectorPartSlotInfo
 {
 public:
     std::string filepath = "";
+    std::string fileExtension = "*";
 
-    InspectorPartInfoSlotAsset(const std::string &label) : InspectorPartSlotInfo(label)
+    InspectorPartInfoSlotAsset(const std::string& label, const std::string& fileExtension) : InspectorPartSlotInfo(label)
     {
+        Logger_Log("A " + fileExtension);
+        this->fileExtension = fileExtension;
     }
 
     virtual ~InspectorPartInfoSlotAsset() {}

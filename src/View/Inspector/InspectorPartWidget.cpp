@@ -49,7 +49,7 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
         }
         else if( (sia = dynamic_cast<InspectorPartInfoSlotAsset*>(si)) != nullptr)
         {
-            ws = new InspectorPartAssetSW(sia->label, sia->filepath, this);
+            ws = new InspectorPartAssetSW(sia->label, sia->filepath, sia->fileExtension, this);
         }
 
         if(ws != nullptr)

@@ -2,6 +2,7 @@
 
 InspectorPartAssetSW::InspectorPartAssetSW(const std::string &labelString,
                                            const std::string &value,
+                                           const std::string &fileExtension,
                                            InspectorPartWidget *parent) :
     InspectorPartSW(labelString, parent)
 {
@@ -31,7 +32,7 @@ InspectorPartAssetSW::InspectorPartAssetSW(const std::string &labelString,
 
 void InspectorPartAssetSW::Browse()
 {
-    FileDialogAsset fda(Explorer::GetTopPath(), Mesh::GetFileExtension(), this);
+    FileDialogAsset fda(Explorer::GetTopPath(), fileExtension, this);
 
     Logger_Log(fda.GetOpenFileName());
 //    if (!directory.isEmpty())
