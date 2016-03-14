@@ -172,10 +172,10 @@ InspectorPartInfo* Camera::GetInfo()
 
 void Camera::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
 {
-    fovDegrees = partWidget->GetVectorFloatSlotValue("FOV")[0];
-    zNear = partWidget->GetVectorFloatSlotValue("Z Near")[0];
-    zFar = partWidget->GetVectorFloatSlotValue("Z Far")[0];
-    aspectRatio = partWidget->GetVectorFloatSlotValue("Aspect Ratio")[0];
-    projMode =  static_cast<Camera::ProjectionMode>(partWidget->GetSelectedEnumSlotIndex("Projection Mode"));
+    fovDegrees = partWidget->GetSWVectorFloatValue("FOV")[0];
+    zNear = partWidget->GetSWVectorFloatValue("Z Near")[0];
+    zFar = partWidget->GetSWVectorFloatValue("Z Far")[0];
+    aspectRatio = partWidget->GetSWVectorFloatValue("Aspect Ratio")[0];
+    projMode =  static_cast<Camera::ProjectionMode>(partWidget->GetSWSelectedEnumIndex("Projection Mode"));
 }
 #endif

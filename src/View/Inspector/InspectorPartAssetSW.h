@@ -11,6 +11,7 @@
 #include "Explorer.h"
 #include "FileDialogAsset.h"
 #include "InspectorPartSW.h"
+#include "WindowEventManager.h"
 
 class InspectorPartAssetSW : public InspectorPartSW
 {

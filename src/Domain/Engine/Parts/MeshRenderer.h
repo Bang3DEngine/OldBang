@@ -15,6 +15,11 @@
 #include "ShaderContract.h"
 #include "AssetsManager.h"
 
+#ifdef BANG_EDITOR
+#include "InspectorPartAssetSW.h"
+#endif
+
+
 class MeshRenderer : public Part
 {
 private:

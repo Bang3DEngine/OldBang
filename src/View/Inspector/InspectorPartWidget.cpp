@@ -73,7 +73,7 @@ InspectorPartWidget::~InspectorPartWidget()
    delete updateTimer;
 }
 
-std::vector<float> InspectorPartWidget::GetVectorFloatSlotValue(const std::string &slotLabel)
+std::vector<float> InspectorPartWidget::GetSWVectorFloatValue(const std::string &slotLabel)
 {
     InspectorPartVFloatSW *w =
             dynamic_cast<InspectorPartVFloatSW*>(labelsToPartSlots[slotLabel]);
@@ -82,13 +82,20 @@ std::vector<float> InspectorPartWidget::GetVectorFloatSlotValue(const std::strin
     return r;
 }
 
-int InspectorPartWidget::GetSelectedEnumSlotIndex(const std::string &slotLabel)
+int InspectorPartWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
 {
     InspectorPartEnumSW *w =
             dynamic_cast<InspectorPartEnumSW*>(labelsToPartSlots[slotLabel]);
-    int selectedIndex = 0;
-    if(w != nullptr) selectedIndex = w->GetValue();
-    return selectedIndex;
+    if(w != nullptr) return w->GetValue();
+    return 0;
+}
+
+std::string InspectorPartWidget::GetSWAssetFilepath(const std::string &slotLabel)
+{
+    InspectorPartAssetSW *w =
+            dynamic_cast<InspectorPartAssetSW*>(labelsToPartSlots[slotLabel]);
+    if(w != nullptr) return w->GetValue();
+    return "";
 }
 
 void InspectorPartWidget::UpdateSlotsValues()
@@ -140,6 +147,11 @@ void InspectorPartWidget::_NotifyInspectorSlotChanged(double _)
 }
 
 void InspectorPartWidget::_NotifyInspectorSlotChanged(QString _)
+{
+    WindowEventManager::NotifyInspectorSlotChanged(relatedPart, this);
+}
+
+void InspectorPartWidget::_NotifyInspectorSlotChanged()
 {
     WindowEventManager::NotifyInspectorSlotChanged(relatedPart, this);
 }

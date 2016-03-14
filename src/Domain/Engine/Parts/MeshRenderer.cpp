@@ -156,19 +156,12 @@ InspectorPartInfo* MeshRenderer::GetInfo()
 
 void MeshRenderer::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
 {
-    InspectorPartInfoSlotAsset* matInfo, *meshInfo;
-    matInfo  = static_cast<InspectorPartInfoSlotAsset*>(inspectorPartInfo.slotInfos[0]);
-    meshInfo = static_cast<InspectorPartInfoSlotAsset*>(inspectorPartInfo.slotInfos[1]);
+    std::string materialFilepath = partWidget->GetSWAssetFilepath("Material");
+    std::string meshFilepath = partWidget->GetSWAssetFilepath("Mesh");
 
-    if (matInfo->filepath != "")
-    {
-        material = AssetsManager::GetAsset<Material>(matInfo->filepath);
-    }
+    material = AssetsManager::GetAsset<Material>(materialFilepath);
+    mesh = AssetsManager::GetAsset<Mesh>(meshFilepath);
 
-
-    if (meshInfo->filepath != "")
-    {
-        mesh = AssetsManager::GetAsset<Mesh>(meshInfo->filepath);
-    }
+    Logger_Log("NOPE");
 }
 #endif

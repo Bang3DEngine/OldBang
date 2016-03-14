@@ -46,14 +46,16 @@ public:
     explicit InspectorPartWidget(Part *relatedPart);
     virtual ~InspectorPartWidget();
 
-    std::vector<float> GetVectorFloatSlotValue(const std::string &slotLabel);
-    int GetSelectedEnumSlotIndex(const std::string &slotLabel);
+    std::vector<float> GetSWVectorFloatValue(const std::string &slotLabel);
+    int GetSWSelectedEnumIndex(const std::string &slotLabel);
+    std::string GetSWAssetFilepath(const std::string &slotLabel);
 
 public slots:
     void UpdateSlotsValues();
     void OnEnabledCheckboxPressed(bool checked);
     void _NotifyInspectorSlotChanged(double _);
     void _NotifyInspectorSlotChanged(QString _);
+    void _NotifyInspectorSlotChanged();
 };
 
 #endif // LISTINSPECTORITEM_H

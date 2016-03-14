@@ -34,12 +34,11 @@ void InspectorPartAssetSW::Browse()
 {
     FileDialogAsset fda(Explorer::GetTopPath(), fileExtension, this);
 
-    Logger_Log(fda.GetOpenFileName());
-//    if (!directory.isEmpty())
+    std::string selectedFile = fda.GetOpenFileName();
+    if(selectedFile != "")
     {
-        //if (directoryComboBox->findText(directory) == -1)
-        //    directoryComboBox->addItem(directory);
-        //directoryComboBox->setCurrentIndex(directoryComboBox->findText(directory));
+        this->filepathLineEdit->setText( QString::fromStdString(selectedFile) );
+        this->parent->_NotifyInspectorSlotChanged();
     }
 }
 

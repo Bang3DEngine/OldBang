@@ -193,13 +193,13 @@ InspectorPartInfo* Transform::GetInfo()
 void Transform::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
 {
     std::vector<float> v;
-    v = partWidget->GetVectorFloatSlotValue("Position");
+    v = partWidget->GetSWVectorFloatValue("Position");
     position = glm::vec3(v[0], v[1], v[2]);
 
-    v = partWidget->GetVectorFloatSlotValue("Rotation");
+    v = partWidget->GetSWVectorFloatValue("Rotation");
     SetRotation(glm::vec3(v[0], v[1], v[2]));
 
-    v = partWidget->GetVectorFloatSlotValue("Scale");
+    v = partWidget->GetSWVectorFloatValue("Scale");
     scale = glm::vec3(v[0], v[1], v[2]);
 }
 #endif
