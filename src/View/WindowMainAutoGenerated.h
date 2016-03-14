@@ -17,6 +17,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
+#include <QtGui/QListView>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QMenuBar>
@@ -52,8 +53,8 @@ public:
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
     WindowEventManager *windowEventManager;
-    QPushButton *buttonPauseResume;
     Canvas *canvas;
+    QPushButton *buttonPauseResume;
     QMenuBar *menubar;
     QMenu *menuAssets;
     QMenu *menuCreate;
@@ -76,12 +77,13 @@ public:
     QWidget *dockWidgetContents_5;
     QVBoxLayout *verticalLayout_10;
     QHBoxLayout *horizontalLayout_3;
-    QPushButton *buttonCreatePrefab;
+    QListView *widgetListExplorerDirs;
     QVBoxLayout *verticalLayout_7;
     QHBoxLayout *horizontalLayout_4;
     QToolButton *buttonExplorerDirUp;
     QToolButton *buttonExplorerChangeViewMode;
-    Explorer *widgetTreeExplorer;
+    Explorer *widgetListExplorer;
+    QPushButton *buttonCreatePrefab;
     QDockWidget *dockLogger;
     QWidget *dockWidgetContents;
     QVBoxLayout *verticalLayout_5;
@@ -130,6 +132,17 @@ public:
 
         verticalLayout->addLayout(verticalLayout_3);
 
+        canvas = new Canvas(centralwidget);
+        canvas->setObjectName(QString::fromUtf8("canvas"));
+        canvas->setEnabled(true);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(1);
+        sizePolicy.setVerticalStretch(1);
+        sizePolicy.setHeightForWidth(canvas->sizePolicy().hasHeightForWidth());
+        canvas->setSizePolicy(sizePolicy);
+
+        verticalLayout->addWidget(canvas);
+
         buttonPauseResume = new QPushButton(centralwidget);
         buttonPauseResume->setObjectName(QString::fromUtf8("buttonPauseResume"));
         QIcon icon;
@@ -144,23 +157,12 @@ public:
 
         verticalLayout->addWidget(buttonPauseResume);
 
-        canvas = new Canvas(centralwidget);
-        canvas->setObjectName(QString::fromUtf8("canvas"));
-        canvas->setEnabled(true);
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy.setHorizontalStretch(1);
-        sizePolicy.setVerticalStretch(1);
-        sizePolicy.setHeightForWidth(canvas->sizePolicy().hasHeightForWidth());
-        canvas->setSizePolicy(sizePolicy);
-
-        verticalLayout->addWidget(canvas);
-
         WindowMain->setCentralWidget(centralwidget);
-        buttonPauseResume->raise();
         canvas->raise();
+        buttonPauseResume->raise();
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 941, 32));
+        menubar->setGeometry(QRect(0, 0, 941, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -254,7 +256,7 @@ public:
 
         widgetInspector = new Inspector(dockWidgetContents_7);
         widgetInspector->setObjectName(QString::fromUtf8("widgetInspector"));
-        widgetInspector->setDragDropMode(QAbstractItemView::NoDragDrop);
+        widgetInspector->setDragDropMode(QAbstractItemView::DragOnly);
         widgetInspector->setDefaultDropAction(Qt::IgnoreAction);
         widgetInspector->setAlternatingRowColors(true);
         widgetInspector->setSelectionMode(QAbstractItemView::NoSelection);
@@ -272,7 +274,7 @@ public:
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockInspector);
         dockExplorer = new QDockWidget(WindowMain);
         dockExplorer->setObjectName(QString::fromUtf8("dockExplorer"));
-        dockExplorer->setMinimumSize(QSize(493, 172));
+        dockExplorer->setMinimumSize(QSize(493, 191));
         dockExplorer->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockWidgetContents_5 = new QWidget();
         dockWidgetContents_5->setObjectName(QString::fromUtf8("dockWidgetContents_5"));
@@ -280,13 +282,10 @@ public:
         verticalLayout_10->setObjectName(QString::fromUtf8("verticalLayout_10"));
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-        buttonCreatePrefab = new QPushButton(dockWidgetContents_5);
-        buttonCreatePrefab->setObjectName(QString::fromUtf8("buttonCreatePrefab"));
-        sizePolicy2.setHeightForWidth(buttonCreatePrefab->sizePolicy().hasHeightForWidth());
-        buttonCreatePrefab->setSizePolicy(sizePolicy2);
-        buttonCreatePrefab->setDefault(true);
+        widgetListExplorerDirs = new QListView(dockWidgetContents_5);
+        widgetListExplorerDirs->setObjectName(QString::fromUtf8("widgetListExplorerDirs"));
 
-        horizontalLayout_3->addWidget(buttonCreatePrefab);
+        horizontalLayout_3->addWidget(widgetListExplorerDirs);
 
         verticalLayout_7 = new QVBoxLayout();
         verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
@@ -305,27 +304,40 @@ public:
 
         verticalLayout_7->addLayout(horizontalLayout_4);
 
-        widgetTreeExplorer = new Explorer(dockWidgetContents_5);
-        widgetTreeExplorer->setObjectName(QString::fromUtf8("widgetTreeExplorer"));
-        sizePolicy2.setHeightForWidth(widgetTreeExplorer->sizePolicy().hasHeightForWidth());
-        widgetTreeExplorer->setSizePolicy(sizePolicy2);
-        widgetTreeExplorer->setAcceptDrops(true);
-        widgetTreeExplorer->setDragDropMode(QAbstractItemView::InternalMove);
-        widgetTreeExplorer->setDefaultDropAction(Qt::MoveAction);
-        widgetTreeExplorer->setMovement(QListView::Snap);
-        widgetTreeExplorer->setResizeMode(QListView::Adjust);
-        widgetTreeExplorer->setViewMode(QListView::IconMode);
-        widgetTreeExplorer->setUniformItemSizes(true);
-        widgetTreeExplorer->setWordWrap(true);
+        widgetListExplorer = new Explorer(dockWidgetContents_5);
+        widgetListExplorer->setObjectName(QString::fromUtf8("widgetListExplorer"));
+        sizePolicy2.setHeightForWidth(widgetListExplorer->sizePolicy().hasHeightForWidth());
+        widgetListExplorer->setSizePolicy(sizePolicy2);
+        widgetListExplorer->setAcceptDrops(true);
+        widgetListExplorer->setProperty("showDropIndicator", QVariant(true));
+        widgetListExplorer->setDragEnabled(true);
+        widgetListExplorer->setDragDropMode(QAbstractItemView::DragDrop);
+        widgetListExplorer->setDefaultDropAction(Qt::MoveAction);
+        widgetListExplorer->setMovement(QListView::Snap);
+        widgetListExplorer->setResizeMode(QListView::Adjust);
+        widgetListExplorer->setViewMode(QListView::IconMode);
+        widgetListExplorer->setUniformItemSizes(true);
+        widgetListExplorer->setWordWrap(true);
 
-        verticalLayout_7->addWidget(widgetTreeExplorer);
+        verticalLayout_7->addWidget(widgetListExplorer);
 
 
         horizontalLayout_3->addLayout(verticalLayout_7);
 
+        horizontalLayout_3->setStretch(0, 2);
+        horizontalLayout_3->setStretch(1, 5);
 
         verticalLayout_10->addLayout(horizontalLayout_3);
 
+        buttonCreatePrefab = new QPushButton(dockWidgetContents_5);
+        buttonCreatePrefab->setObjectName(QString::fromUtf8("buttonCreatePrefab"));
+        sizePolicy2.setHeightForWidth(buttonCreatePrefab->sizePolicy().hasHeightForWidth());
+        buttonCreatePrefab->setSizePolicy(sizePolicy2);
+        buttonCreatePrefab->setDefault(true);
+
+        verticalLayout_10->addWidget(buttonCreatePrefab);
+
+        verticalLayout_10->setStretch(0, 1);
         dockExplorer->setWidget(dockWidgetContents_5);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockExplorer);
         dockLogger = new QDockWidget(WindowMain);
@@ -433,9 +445,9 @@ public:
         dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0, QApplication::UnicodeUTF8));
         labelInspectorEntityName->setText(QApplication::translate("WindowMain", "Entity Name", 0, QApplication::UnicodeUTF8));
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));
-        buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Test: Create prefab", 0, QApplication::UnicodeUTF8));
         buttonExplorerDirUp->setText(QApplication::translate("WindowMain", "Up", 0, QApplication::UnicodeUTF8));
         buttonExplorerChangeViewMode->setText(QApplication::translate("WindowMain", "Change view mode", 0, QApplication::UnicodeUTF8));
+        buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Create prefab", 0, QApplication::UnicodeUTF8));
         dockLogger->setWindowTitle(QApplication::translate("WindowMain", "Logger", 0, QApplication::UnicodeUTF8));
         buttonLoggerClear->setText(QApplication::translate("WindowMain", "Clear", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

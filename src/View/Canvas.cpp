@@ -18,11 +18,12 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent), paused(false), currentStage
     drawTimer.start();
 
     windowMain = WindowMain::GetInstance();
-    WindowMain::GetInstance()->buttonPauseResume->setText( (paused ? QString("Resume") : QString("Pause")) );
 }
 
 void Canvas::initializeGL()
 {
+    windowMain->buttonPauseResume->setText( (paused ? QString("Resume") : QString("Pause")) );
+
     glewExperimental = GL_TRUE;
     glewInit();
 

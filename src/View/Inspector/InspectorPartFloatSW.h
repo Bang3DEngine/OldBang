@@ -67,7 +67,6 @@ public slots:
     {
         if(abs(v) <= 1.0f) setSingleStep(0.1f);
         else setSingleStep( pow(10.0, int(log10(v == 0.0f ? 0.1f : abs(v)))-1) );
-        setSingleStep(1.0f);
     }
 
     void SelectAll() { selectAll(); }

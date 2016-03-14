@@ -64,6 +64,21 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
     }
 }
 
+void Explorer::dropEvent(QDropEvent *e)
+{
+    if (e->source() != this)
+    {
+        e->accept();
+    }
+    else
+    {
+        //e->ignore();
+        e->accept();
+    }
+
+    Logger_Log("Drop event in explorer " << e->source());
+}
+
 void Explorer::setDir(const std::string &path)
 {
     setRootIndex(fileSystemModel->setRootPath(QString::fromStdString(path)));

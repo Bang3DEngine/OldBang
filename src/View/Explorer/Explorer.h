@@ -28,6 +28,7 @@ public:
     Explorer(QWidget *parent);
 
     void mouseDoubleClickEvent(QMouseEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
 
     static std::string GetTopPath() { return topPath; }
 
