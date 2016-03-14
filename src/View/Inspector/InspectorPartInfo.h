@@ -58,7 +58,6 @@ public:
 
     InspectorPartInfoSlotAsset(const std::string& label, const std::string& fileExtension) : InspectorPartSlotInfo(label)
     {
-        Logger_Log("A " + fileExtension);
         this->fileExtension = fileExtension;
     }
 

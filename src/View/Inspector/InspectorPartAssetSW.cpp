@@ -37,7 +37,7 @@ void InspectorPartAssetSW::Browse()
     std::string selectedFile = fda.GetOpenFileName();
     if(selectedFile != "")
     {
-        this->filepathLineEdit->setText( QString::fromStdString(selectedFile) );
+        this->SetValue( selectedFile );
         this->parent->_NotifyInspectorSlotChanged();
     }
 }

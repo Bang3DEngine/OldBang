@@ -159,9 +159,16 @@ void MeshRenderer::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
     std::string materialFilepath = partWidget->GetSWAssetFilepath("Material");
     std::string meshFilepath = partWidget->GetSWAssetFilepath("Mesh");
 
-    material = AssetsManager::GetAsset<Material>(materialFilepath);
-    mesh = AssetsManager::GetAsset<Mesh>(meshFilepath);
+    if(materialFilepath != "")
+    {
+        SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
+    }
+    else { }
 
-    Logger_Log("NOPE");
+    if(meshFilepath != "")
+    {
+        SetMesh( AssetsManager::GetAsset<Mesh>(meshFilepath) );
+    }
+    else { }
 }
 #endif

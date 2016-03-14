@@ -102,7 +102,6 @@ bool FileDialogAsset::PathFits(const QString &path) const
 
 void FileDialogAsset::CheckHistory()
 {
-    Logger_Log("CH");
     QStringList list = history();
     for (int i = list.size() - 1; i >= 0; --i)
         if (!PathFits(list.at(i)))
@@ -112,13 +111,11 @@ void FileDialogAsset::CheckHistory()
 
 void FileDialogAsset::CheckGoToParent()
 {
-    Logger_Log("CP");
     findChild<QToolButton *>("toParentButton")->setEnabled(PathFits(directory().absolutePath()));
 }
 
 void FileDialogAsset::CheckLineEdit(const QString &text)
 {
-    Logger_Log("CL");
     QAbstractButton *btn = findChild<QDialogButtonBox *>("buttonBox")->buttons().first();
     QString path = QDir::cleanPath(directory().absolutePath() + (text.startsWith("/") ? "" : "/") + text);
     bool a = QDir(text).isAbsolute();
