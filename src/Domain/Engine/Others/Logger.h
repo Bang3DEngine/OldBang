@@ -105,6 +105,12 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
     _Warn_To_ListLogger(log.str()); \
 } while(0)
 
+#define Logger_GetString(strVar, x) do{\
+    std::ostringstream log;\
+    log << x;\
+    strVar = log.str(); \
+} while(0)
+
 #define Logger_Error(x) do{\
     std::ostringstream log;\
     log << x;\

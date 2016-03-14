@@ -1,7 +1,7 @@
 #include "InspectorPartAssetSW.h"
 
 InspectorPartAssetSW::InspectorPartAssetSW(const std::string &labelString,
-                                           const std::string &value,
+                                           const std::string &assetPath,
                                            const std::string &fileExtension,
                                            InspectorPartWidget *parent) :
     InspectorPartSW(labelString, parent)
@@ -29,6 +29,7 @@ InspectorPartAssetSW::InspectorPartAssetSW(const std::string &labelString,
     this->fileExtension = fileExtension;
     this->setContentsMargins(0,0,0,0);
     this->show();
+    this->SetValue(assetPath);
 }
 
 void InspectorPartAssetSW::Browse()

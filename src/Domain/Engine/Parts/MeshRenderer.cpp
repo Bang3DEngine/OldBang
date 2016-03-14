@@ -117,7 +117,6 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
 
-    //Logger_Warning("Rendering " << material->GetShaderProgram());
     glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
 
     material->UnBind();
@@ -135,20 +134,34 @@ InspectorPartInfo* MeshRenderer::GetInfo()
 
     if (material != nullptr)
     {
-        matInfo->filepath = material->GetFilepath();
+        if(material->GetFilepath() != "")
+        {
+            matInfo->filepath = material->GetFilepath();
+        }
+        else //In case the asset is created in runtime, write its mem address
+        {
+            Logger_GetString(matInfo->filepath, (void*)material);
+        }
     }
     else
     {
-        matInfo->filepath = "";
+        matInfo->filepath = "-";
     }
 
     if (mesh != nullptr)
     {
-        meshInfo->filepath = mesh->GetFilepath();
+        if(mesh->GetFilepath() != "")
+        {
+            meshInfo->filepath = mesh->GetFilepath();
+        }
+        else //In case the asset is created in runtime, write its mem address
+        {
+            Logger_GetString(meshInfo->filepath, (void*)mesh);
+        }
     }
     else
     {
-        meshInfo->filepath = "";
+        meshInfo->filepath = "-";
     }
 
     return &inspectorPartInfo;

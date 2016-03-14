@@ -24,7 +24,7 @@ private:
 
 public:
     InspectorPartAssetSW(const std::string &labelString,
-                         const std::string &value,
+                         const std::string &assetPath,
                          const std::string &fileExtension,
                          InspectorPartWidget *parent);
 
