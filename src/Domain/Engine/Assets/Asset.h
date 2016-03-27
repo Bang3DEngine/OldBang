@@ -10,8 +10,15 @@
 #include "IToString.h"
 #include "IFileable.h"
 
+#ifdef BANG_EDITOR
+#include "IInspectable.h"
+#endif
+
 class AssetsManager;
 class Asset : public IToString, public IFileable
+              #ifdef BANG_EDITOR
+              , public IInspectable
+              #endif
 {
     friend class AssetsManager;
 

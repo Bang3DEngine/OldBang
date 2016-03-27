@@ -10,9 +10,10 @@ class IWindowEventManagerListener
 {
 protected:
     IWindowEventManagerListener();
+    virtual ~IWindowEventManagerListener();
 
 public:
-    virtual void OnMenuBarItemClicked(int itemClicked) { }
+    virtual void OnMenuBarActionClicked(int clickedAction) { }
     virtual void OnChildAdded(Entity *child) { }
     virtual void OnChildChangedParent(Entity *child, Entity *previousParent) { }
     virtual void OnChildRemoved(Entity *child) { }

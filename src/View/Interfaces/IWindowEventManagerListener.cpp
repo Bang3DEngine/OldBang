@@ -7,3 +7,8 @@ IWindowEventManagerListener::IWindowEventManagerListener()
     WindowEventManager::GetInstance()->AddListener(this);
 }
 
+IWindowEventManagerListener::~IWindowEventManagerListener()
+{
+    WindowEventManager::GetInstance()->RemoveListener(this);
+}
+

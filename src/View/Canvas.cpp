@@ -147,8 +147,9 @@ int Canvas::GetHeight()
     return height;
 }
 
-void Canvas::OnMenuBarItemClicked(int itemClicked)
+void Canvas::OnMenuBarActionClicked(int clickedAction)
 {
+    Logger_Log("Clicked action: " << clickedAction);
     OnTopKekPressed();
 }
 

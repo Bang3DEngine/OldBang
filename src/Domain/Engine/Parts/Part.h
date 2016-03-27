@@ -9,6 +9,7 @@
 #include "IStageEventListener.h"
 
 #ifdef BANG_EDITOR
+#include "IInspectable.h"
 #include "InspectorPartWidget.h"
 #include "IWindowEventManagerListener.h"
 #endif
@@ -18,16 +19,14 @@
 class Entity;
 
 class Part : public IStageEventListener, public IToString, public IFileable, public IWindowEventManagerListener
+             #ifdef BANG_EDITOR
+             , public IInspectable
+             #endif
 {
 friend class Entity;
 protected:
     Entity *owner;
     bool enabled = true;
-
-    #ifdef BANG_EDITOR
-    InspectorPartInfo inspectorPartInfo;
-    #endif
-
 
     Part();
     virtual ~Part();
@@ -49,11 +48,6 @@ public:
 
     void SetEnabled(bool enabled) { this->enabled = enabled; }
     bool IsEnabled() { return enabled; }
-
-    #ifdef BANG_EDITOR
-    virtual InspectorPartInfo* GetInfo() = 0;
-    virtual void OnInspectorSlotChanged(InspectorPartWidget *partWidget) = 0;
-    #endif
 };
 
 #endif // PART_H

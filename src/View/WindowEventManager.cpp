@@ -15,6 +15,18 @@ void WindowEventManager::AddListener(IWindowEventManagerListener *listener)
     listeners.push_back(listener);
 }
 
+void WindowEventManager::RemoveListener(IWindowEventManagerListener *listener)
+{
+    for(auto it = listeners.begin(); it != listeners.end(); ++it)
+    {
+        if((*it) == listener)
+        {
+            listeners.erase(it);
+            break;
+        }
+    }
+}
+
 WindowEventManager *WindowEventManager::GetInstance()
 {
     if(wem == nullptr)
@@ -40,14 +52,9 @@ void WindowEventManager::NotifyChildRemoved(Entity *child)
     PROPAGATE_EVENT_PAR(OnChildRemoved(child), wem->listeners);
 }
 
-void WindowEventManager::NotifyMenuBarItemClicked(int itemClicked)
+void WindowEventManager::NotifyMenuBarActionClicked(MenuBar::Action clickedAction)
 {
-    PROPAGATE_EVENT_PAR(OnMenuBarItemClicked(itemClicked), wem->listeners);
-}
-
-void WindowEventManager::_NotifyMenuBarItemClicked(int itemClicked)
-{
-    WindowEventManager::NotifyMenuBarItemClicked(itemClicked);
+    PROPAGATE_EVENT_PAR(OnMenuBarActionClicked(clickedAction), wem->listeners);
 }
 
 void WindowEventManager::NotifyInspectorSlotChanged(Part *updatedPart, InspectorPartWidget *inspectorItem)

@@ -20,7 +20,6 @@
 #include <QtGui/QListView>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
 #include <QtGui/QPushButton>
 #include <QtGui/QStatusBar>
 #include <QtGui/QToolButton>
@@ -32,6 +31,7 @@
 #include "Inspector.h"
 #include "ListLogger.h"
 #include "LoggerWidget.h"
+#include "MenuBar.h"
 #include "WindowEventManager.h"
 
 QT_BEGIN_NAMESPACE
@@ -41,21 +41,21 @@ class Ui_WindowMain
 public:
     QAction *actionOpen_project;
     QAction *actionSave_project;
-    QAction *actionMaterial;
-    QAction *actionMesh;
-    QAction *actionShaderProgram;
-    QAction *actionTexture2D;
+    QAction *actionCreateMaterial;
+    QAction *actionCreateMesh;
+    QAction *actionCreateShaderProgram;
+    QAction *actionCreateTexture2D;
     QAction *actionProject_Settings;
     QAction *actionCreate_from_prefab;
-    QAction *actionPrefab;
-    QAction *actionPrefab_2;
+    QAction *actionEmptyEntity;
+    QAction *actionCreatePrefab;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
     WindowEventManager *windowEventManager;
     Canvas *canvas;
     QPushButton *buttonPauseResume;
-    QMenuBar *menubar;
+    MenuBar *menubar;
     QMenu *menuAssets;
     QMenu *menuCreate;
     QMenu *menuEntity;
@@ -102,22 +102,22 @@ public:
         actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
         actionSave_project->setObjectName(QString::fromUtf8("actionSave_project"));
-        actionMaterial = new QAction(WindowMain);
-        actionMaterial->setObjectName(QString::fromUtf8("actionMaterial"));
-        actionMesh = new QAction(WindowMain);
-        actionMesh->setObjectName(QString::fromUtf8("actionMesh"));
-        actionShaderProgram = new QAction(WindowMain);
-        actionShaderProgram->setObjectName(QString::fromUtf8("actionShaderProgram"));
-        actionTexture2D = new QAction(WindowMain);
-        actionTexture2D->setObjectName(QString::fromUtf8("actionTexture2D"));
+        actionCreateMaterial = new QAction(WindowMain);
+        actionCreateMaterial->setObjectName(QString::fromUtf8("actionCreateMaterial"));
+        actionCreateMesh = new QAction(WindowMain);
+        actionCreateMesh->setObjectName(QString::fromUtf8("actionCreateMesh"));
+        actionCreateShaderProgram = new QAction(WindowMain);
+        actionCreateShaderProgram->setObjectName(QString::fromUtf8("actionCreateShaderProgram"));
+        actionCreateTexture2D = new QAction(WindowMain);
+        actionCreateTexture2D->setObjectName(QString::fromUtf8("actionCreateTexture2D"));
         actionProject_Settings = new QAction(WindowMain);
         actionProject_Settings->setObjectName(QString::fromUtf8("actionProject_Settings"));
         actionCreate_from_prefab = new QAction(WindowMain);
         actionCreate_from_prefab->setObjectName(QString::fromUtf8("actionCreate_from_prefab"));
-        actionPrefab = new QAction(WindowMain);
-        actionPrefab->setObjectName(QString::fromUtf8("actionPrefab"));
-        actionPrefab_2 = new QAction(WindowMain);
-        actionPrefab_2->setObjectName(QString::fromUtf8("actionPrefab_2"));
+        actionEmptyEntity = new QAction(WindowMain);
+        actionEmptyEntity->setObjectName(QString::fromUtf8("actionEmptyEntity"));
+        actionCreatePrefab = new QAction(WindowMain);
+        actionCreatePrefab->setObjectName(QString::fromUtf8("actionCreatePrefab"));
         centralwidget = new QWidget(WindowMain);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -150,7 +150,7 @@ public:
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon = QIcon::fromTheme(iconThemeName);
         } else {
-            icon.addFile(QString::fromUtf8(""), QSize(), QIcon::Normal, QIcon::Off);
+            icon.addFile(QString::fromUtf8("../../.designer/backup"), QSize(), QIcon::Normal, QIcon::Off);
         }
         buttonPauseResume->setIcon(icon);
         buttonPauseResume->setFlat(false);
@@ -160,7 +160,7 @@ public:
         WindowMain->setCentralWidget(centralwidget);
         canvas->raise();
         buttonPauseResume->raise();
-        menubar = new QMenuBar(WindowMain);
+        menubar = new MenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 941, 25));
         menubar->setNativeMenuBar(false);
@@ -373,13 +373,13 @@ public:
         menubar->addAction(menuEntity->menuAction());
         menubar->addAction(menuAssets->menuAction());
         menuAssets->addAction(menuCreate->menuAction());
-        menuCreate->addAction(actionPrefab);
-        menuCreate->addAction(actionPrefab_2);
+        menuCreate->addAction(actionEmptyEntity);
+        menuCreate->addAction(actionCreatePrefab);
         menuCreate->addSeparator();
-        menuCreate->addAction(actionMaterial);
-        menuCreate->addAction(actionMesh);
-        menuCreate->addAction(actionShaderProgram);
-        menuCreate->addAction(actionTexture2D);
+        menuCreate->addAction(actionCreateMaterial);
+        menuCreate->addAction(actionCreateMesh);
+        menuCreate->addAction(actionCreateShaderProgram);
+        menuCreate->addAction(actionCreateTexture2D);
         menuEntity->addAction(actionCreate_from_prefab);
         menuProject->addAction(actionOpen_project);
         menuProject->addAction(actionSave_project);
@@ -388,7 +388,6 @@ public:
         retranslateUi(WindowMain);
         QObject::connect(widgetHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
         QObject::connect(widgetHierarchy, SIGNAL(itemSelectionChanged()), widgetHierarchy, SLOT(_NotifyHierarchyItemSelectionChanged()));
-        QObject::connect(menubar, SIGNAL(activated(int)), windowEventManager, SLOT(_NotifyMenuBarItemClicked(int)));
         QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
         QObject::connect(buttonPauseResume, SIGNAL(clicked()), canvas, SLOT(OnPauseResumeButtonPressed()));
         QObject::connect(buttonLoggerClear, SIGNAL(clicked()), listLogger, SLOT(clear()));
@@ -401,14 +400,14 @@ public:
         WindowMain->setWindowTitle(QApplication::translate("WindowMain", "Bang Editor", 0, QApplication::UnicodeUTF8));
         actionOpen_project->setText(QApplication::translate("WindowMain", "Open project", 0, QApplication::UnicodeUTF8));
         actionSave_project->setText(QApplication::translate("WindowMain", "Save project", 0, QApplication::UnicodeUTF8));
-        actionMaterial->setText(QApplication::translate("WindowMain", "Material", 0, QApplication::UnicodeUTF8));
-        actionMesh->setText(QApplication::translate("WindowMain", "Mesh", 0, QApplication::UnicodeUTF8));
-        actionShaderProgram->setText(QApplication::translate("WindowMain", "ShaderProgram", 0, QApplication::UnicodeUTF8));
-        actionTexture2D->setText(QApplication::translate("WindowMain", "Texture2D", 0, QApplication::UnicodeUTF8));
+        actionCreateMaterial->setText(QApplication::translate("WindowMain", "Material", 0, QApplication::UnicodeUTF8));
+        actionCreateMesh->setText(QApplication::translate("WindowMain", "Mesh", 0, QApplication::UnicodeUTF8));
+        actionCreateShaderProgram->setText(QApplication::translate("WindowMain", "ShaderProgram", 0, QApplication::UnicodeUTF8));
+        actionCreateTexture2D->setText(QApplication::translate("WindowMain", "Texture2D", 0, QApplication::UnicodeUTF8));
         actionProject_Settings->setText(QApplication::translate("WindowMain", "Project Settings", 0, QApplication::UnicodeUTF8));
         actionCreate_from_prefab->setText(QApplication::translate("WindowMain", "Create from prefab", 0, QApplication::UnicodeUTF8));
-        actionPrefab->setText(QApplication::translate("WindowMain", "Empty Entity", 0, QApplication::UnicodeUTF8));
-        actionPrefab_2->setText(QApplication::translate("WindowMain", "Prefab", 0, QApplication::UnicodeUTF8));
+        actionEmptyEntity->setText(QApplication::translate("WindowMain", "Empty Entity", 0, QApplication::UnicodeUTF8));
+        actionCreatePrefab->setText(QApplication::translate("WindowMain", "Prefab", 0, QApplication::UnicodeUTF8));
         buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0, QApplication::UnicodeUTF8));
         menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
         menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));

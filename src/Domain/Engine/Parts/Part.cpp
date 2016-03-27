@@ -23,10 +23,3 @@ const std::string Part::ToString() const
     msg << "Part";
     return msg.str();
 }
-
-#ifdef BANG_EDITOR
-InspectorPartInfo* Part::GetInfo()
-{
-    return &inspectorPartInfo;
-}
-#endif

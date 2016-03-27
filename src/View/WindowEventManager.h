@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QTreeWidgetItem>
 
+#include "MenuBar.h"
 #include "InspectorPartInfo.h"
 #include "IWindowEventManagerListener.h"
 
@@ -30,12 +31,13 @@ class WindowEventManager : public QGLWidget
     Q_OBJECT
 private:
     static WindowEventManager *wem;
-    std::vector<IWindowEventManagerListener*> listeners;
+    std::list<IWindowEventManagerListener*> listeners;
 
 public:
     explicit WindowEventManager(QWidget *parent = 0);
 
     void AddListener(IWindowEventManagerListener *listener);
+    void RemoveListener(IWindowEventManagerListener *listener);
 
     static WindowEventManager *GetInstance();
 
@@ -46,8 +48,7 @@ public slots:
     static void NotifyChildChangedParent(Entity *child, Entity *previousParent);
     static void NotifyChildRemoved(Entity *child);
 
-    static void NotifyMenuBarItemClicked(int itemClcked);
-    void _NotifyMenuBarItemClicked(int itemClicked);
+    static void NotifyMenuBarActionClicked(MenuBar::Action clickedAction);
 
     static void NotifyInspectorSlotChanged(Part *updatedPart, InspectorPartWidget *inspectorItem);
     static void NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities);

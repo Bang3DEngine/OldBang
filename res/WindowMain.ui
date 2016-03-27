@@ -45,8 +45,7 @@
       </property>
       <property name="icon">
        <iconset theme="pause">
-        <normaloff/>
-       </iconset>
+        <normaloff>../../.designer/backup</normaloff>../../.designer/backup</iconset>
       </property>
       <property name="flat">
        <bool>false</bool>
@@ -58,7 +57,7 @@
    <zorder>canvas</zorder>
    <zorder>buttonPauseResume</zorder>
   </widget>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="MenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -78,13 +77,13 @@
      <property name="title">
       <string>Create</string>
      </property>
-     <addaction name="actionPrefab"/>
-     <addaction name="actionPrefab_2"/>
+     <addaction name="actionEmptyEntity"/>
+     <addaction name="actionCreatePrefab"/>
      <addaction name="separator"/>
-     <addaction name="actionMaterial"/>
-     <addaction name="actionMesh"/>
-     <addaction name="actionShaderProgram"/>
-     <addaction name="actionTexture2D"/>
+     <addaction name="actionCreateMaterial"/>
+     <addaction name="actionCreateMesh"/>
+     <addaction name="actionCreateShaderProgram"/>
+     <addaction name="actionCreateTexture2D"/>
     </widget>
     <addaction name="menuCreate"/>
    </widget>
@@ -458,22 +457,22 @@
     <string>Save project</string>
    </property>
   </action>
-  <action name="actionMaterial">
+  <action name="actionCreateMaterial">
    <property name="text">
     <string>Material</string>
    </property>
   </action>
-  <action name="actionMesh">
+  <action name="actionCreateMesh">
    <property name="text">
     <string>Mesh</string>
    </property>
   </action>
-  <action name="actionShaderProgram">
+  <action name="actionCreateShaderProgram">
    <property name="text">
     <string>ShaderProgram</string>
    </property>
   </action>
-  <action name="actionTexture2D">
+  <action name="actionCreateTexture2D">
    <property name="text">
     <string>Texture2D</string>
    </property>
@@ -488,12 +487,12 @@
     <string>Create from prefab</string>
    </property>
   </action>
-  <action name="actionPrefab">
+  <action name="actionEmptyEntity">
    <property name="text">
     <string>Empty Entity</string>
    </property>
   </action>
-  <action name="actionPrefab_2">
+  <action name="actionCreatePrefab">
    <property name="text">
     <string>Prefab</string>
    </property>
@@ -549,6 +548,11 @@
    <extends>QListView</extends>
    <header>Explorer.h</header>
   </customwidget>
+  <customwidget>
+   <class>MenuBar</class>
+   <extends>QMenuBar</extends>
+   <header>MenuBar.h</header>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -585,22 +589,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>menubar</sender>
-   <signal>activated(int)</signal>
-   <receiver>windowEventManager</receiver>
-   <slot>_NotifyMenuBarItemClicked(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>58</x>
-     <y>11</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>355</x>
-     <y>34</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>buttonCreatePrefab</sender>
    <signal>clicked()</signal>
    <receiver>canvas</receiver>
@@ -608,7 +596,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>154</x>
-     <y>432</y>
+     <y>562</y>
     </hint>
     <hint type="destinationlabel">
      <x>356</x>
@@ -623,8 +611,8 @@
    <slot>OnPauseResumeButtonPressed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>356</x>
-     <y>68</y>
+     <x>647</x>
+     <y>271</y>
     </hint>
     <hint type="destinationlabel">
      <x>356</x>
@@ -639,12 +627,12 @@
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>568</x>
-     <y>405</y>
+     <x>922</x>
+     <y>553</y>
     </hint>
     <hint type="destinationlabel">
-     <x>569</x>
-     <y>353</y>
+     <x>922</x>
+     <y>520</y>
     </hint>
    </hints>
   </connection>
