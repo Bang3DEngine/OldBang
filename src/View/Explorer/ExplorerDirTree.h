@@ -24,12 +24,16 @@ private:
     std::string topPath;
     void setDir(const std::string &path);
 
+    void *lastSelectedModelIndexPointer = nullptr;
+
 public:
     ExplorerDirTree(QWidget *parent);
     virtual ~ExplorerDirTree();
 
+    QTimer *checkSelectionTimer;
+
 public slots:
-    void OnDirSelected(const QModelIndex & current, const QModelIndex & previous);
+    void CheckSelection();
     void OnDirLoaded(QString dir);
 };
 

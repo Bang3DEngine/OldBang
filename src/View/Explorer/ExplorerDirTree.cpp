@@ -18,9 +18,13 @@ ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
     this->setColumnHidden(2, true);
     this->setColumnHidden(3, true);
 
-    connect(this, SIGNAL(currentChanged(const QModelIndex, const QModelIndex)),
-            this, SLOT(OnDirSelected(const QModelIndex, const QModelIndex)));
+    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(OnDirSelected()));
     connect(fileSystemModel, SIGNAL(directoryLoaded(QString)), this, SLOT(OnDirLoaded(QString)));
+
+
+    checkSelectionTimer = new QTimer(this); //Every X seconds, update all the slots values
+    connect(checkSelectionTimer, SIGNAL(timeout()), this, SLOT(CheckSelection()));
+    checkSelectionTimer->start(100);
 }
 
 ExplorerDirTree::~ExplorerDirTree()
@@ -28,13 +32,19 @@ ExplorerDirTree::~ExplorerDirTree()
    delete fileSystemModel;
 }
 
-void ExplorerDirTree::OnDirSelected(const QModelIndex & current, const QModelIndex & previous)
+void ExplorerDirTree::CheckSelection()
 {
     explorer = WindowMain::GetInstance()->widgetListExplorer;
-    if(current.isValid())
+    if(selectedIndexes().size() > 0 && selectedIndexes().at(0).isValid())
     {
-        std::string selectedDirPath = fileSystemModel->filePath(current).toStdString();
-        explorer->setDir(selectedDirPath);
+        QModelIndex index = selectedIndexes().at(0);
+        if(lastSelectedModelIndexPointer != index.internalPointer())
+        {
+            lastSelectedModelIndexPointer = index.internalPointer();
+            std::string selectedDirPath =
+                    fileSystemModel->filePath(index).toStdString();
+            explorer->setDir(selectedDirPath);
+        }
     }
 }
 
