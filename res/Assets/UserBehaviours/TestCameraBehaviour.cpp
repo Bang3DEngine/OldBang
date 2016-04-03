@@ -8,6 +8,8 @@
 
 TestCameraBehaviour::TestCameraBehaviour()
 {
+    this->SetFilepath(__FILE__);
+
     time = 0.0f;
 }
 

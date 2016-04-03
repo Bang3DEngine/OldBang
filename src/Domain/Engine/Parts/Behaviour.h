@@ -6,6 +6,9 @@
 
 class Behaviour : public Part
 {
+private:
+    std::string filepath = "";
+
 public:
     Behaviour();
 
@@ -13,9 +16,12 @@ public:
     virtual std::string GetName() const override { return "Behaviour"; }
 
     #ifdef BANG_EDITOR
-        virtual InspectorPartInfo* GetInfo() override { return &inspectorPartInfo; }
-        virtual void OnInspectorSlotChanged(InspectorPartWidget *partWidget) override {}
+        virtual InspectorPartInfo* GetPartInfo() override;
+        virtual void OnInspectorSlotChanged(InspectorPartWidget *partWidget) override;
     #endif
+
+    void SetFilepath(const std::string &filepath);
+    std::string GetFilepath() const;
 };
 
 #endif

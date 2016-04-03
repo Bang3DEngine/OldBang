@@ -139,7 +139,8 @@ HEADERS += \
     src/View/Inspector/InspectorPartFileSW.h \
     src/View/Inspector/FileDialog.h \
     src/View/Inspector/IInspectable.h \
-    src/View/MenuBar.h
+    src/View/MenuBar.h \
+    src/View/Explorer/ExplorerDirTree.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -198,7 +199,8 @@ SOURCES += \
     src/View/Inspector/InspectorPartFileSW.cpp \
     src/View/Inspector/FileDialog.cpp \
     src/View/Inspector/IInspectable.cpp \
-    src/View/MenuBar.cpp
+    src/View/MenuBar.cpp \
+    src/View/Explorer/ExplorerDirTree.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

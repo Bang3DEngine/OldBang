@@ -177,7 +177,7 @@ void Transform::Read(std::istream &f)
 }
 
 #ifdef BANG_EDITOR
-InspectorPartInfo* Transform::GetInfo()
+InspectorPartInfo* Transform::GetPartInfo()
 {
     static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value =
         {position.x, position.y, position.z};

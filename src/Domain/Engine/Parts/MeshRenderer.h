@@ -50,7 +50,7 @@ public:
     virtual std::string GetName() const override { return "MeshRenderer"; }
 
     #ifdef BANG_EDITOR
-    virtual InspectorPartInfo* GetInfo() override;
+    virtual InspectorPartInfo* GetPartInfo() override;
     virtual void OnInspectorSlotChanged(InspectorPartWidget *partWidget) override;
     #endif
 };

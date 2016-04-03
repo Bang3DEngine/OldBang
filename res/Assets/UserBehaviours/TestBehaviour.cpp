@@ -10,6 +10,7 @@
 
 TestBehaviour::TestBehaviour()
 {
+    this->SetFilepath(__FILE__);
     time = 0.0f;
 
     int r = rand()%3;

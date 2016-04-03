@@ -31,7 +31,7 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
     titleLayout->addWidget(enabledCheckbox, 1);
     mainLayout->addLayout(titleLayout);
 
-    for(InspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
+    for(InspectorPartSlotInfo *si : relatedPart->GetPartInfo()->slotInfos)
     {
         InspectorPartSW *ws = nullptr;
 
@@ -90,7 +90,7 @@ int InspectorPartWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
     return 0;
 }
 
-std::string InspectorPartWidget::GetSWAssetFilepath(const std::string &slotLabel)
+std::string InspectorPartWidget::GetSWFileFilepath(const std::string &slotLabel)
 {
     InspectorPartFileSW *w =
             dynamic_cast<InspectorPartFileSW*>(labelsToPartSlots[slotLabel]);
@@ -100,7 +100,7 @@ std::string InspectorPartWidget::GetSWAssetFilepath(const std::string &slotLabel
 
 void InspectorPartWidget::UpdateSlotsValues()
 {
-    for(InspectorPartSlotInfo *si : relatedPart->GetInfo()->slotInfos)
+    for(InspectorPartSlotInfo *si : relatedPart->GetPartInfo()->slotInfos)
     {
         InspectorPartSW *ws = labelsToPartSlots[si->label];
         InspectorPartInfoSlotVecFloat* siv;

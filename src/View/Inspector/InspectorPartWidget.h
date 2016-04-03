@@ -48,7 +48,7 @@ public:
 
     std::vector<float> GetSWVectorFloatValue(const std::string &slotLabel);
     int GetSWSelectedEnumIndex(const std::string &slotLabel);
-    std::string GetSWAssetFilepath(const std::string &slotLabel);
+    std::string GetSWFileFilepath(const std::string &slotLabel);
 
 public slots:
     void UpdateSlotsValues();

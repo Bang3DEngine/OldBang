@@ -126,7 +126,7 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 
 
 #ifdef BANG_EDITOR
-InspectorPartInfo* MeshRenderer::GetInfo()
+InspectorPartInfo* MeshRenderer::GetPartInfo()
 {
     InspectorPartInfoSlotAsset* matInfo, *meshInfo;
     matInfo  = static_cast<InspectorPartInfoSlotAsset*>(inspectorPartInfo.slotInfos[0]);
@@ -169,8 +169,8 @@ InspectorPartInfo* MeshRenderer::GetInfo()
 
 void MeshRenderer::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
 {
-    std::string materialFilepath = partWidget->GetSWAssetFilepath("Material");
-    std::string meshFilepath = partWidget->GetSWAssetFilepath("Mesh");
+    std::string materialFilepath = partWidget->GetSWFileFilepath("Material");
+    std::string meshFilepath = partWidget->GetSWFileFilepath("Mesh");
 
     if(materialFilepath != "")
     {

@@ -12,7 +12,7 @@ protected:
 public:
 
     InspectorPartInfo inspectorPartInfo;
-    virtual InspectorPartInfo* GetInfo()
+    virtual InspectorPartInfo* GetPartInfo()
     {
         return &inspectorPartInfo;
     }

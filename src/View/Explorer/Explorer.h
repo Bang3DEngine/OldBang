@@ -15,6 +15,8 @@ class Explorer : public QListView
 {
     Q_OBJECT
 
+    friend class ExplorerDirTree;
+
 private:
     QFileSystemModel *fileSystemModel = nullptr;
     QToolButton *buttonDirUp;
@@ -26,6 +28,7 @@ private:
 
 public:
     Explorer(QWidget *parent);
+    virtual ~Explorer();
 
     void mouseDoubleClickEvent(QMouseEvent *e) override;
     void dropEvent(QDropEvent *e) override;
@@ -33,6 +36,7 @@ public:
     static std::string GetTopPath() { return topPath; }
 
 public slots:
+    void OnDirLoaded(QString dir);
     void OnButtonDirUpClicked();
     void OnButtonChangeViewModeClicked();
 };

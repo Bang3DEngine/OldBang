@@ -159,7 +159,7 @@ const std::string Camera::ToString() const
 
 
 #ifdef BANG_EDITOR
-InspectorPartInfo* Camera::GetInfo()
+InspectorPartInfo* Camera::GetPartInfo()
 {
     static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value = {fovDegrees};
     static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value = {zNear};

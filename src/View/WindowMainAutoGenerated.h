@@ -17,7 +17,6 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
-#include <QtGui/QListView>
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QPushButton>
@@ -27,6 +26,7 @@
 #include <QtGui/QWidget>
 #include "Canvas.h"
 #include "Explorer.h"
+#include "ExplorerDirTree.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
 #include "ListLogger.h"
@@ -85,7 +85,7 @@ public:
     QWidget *dockWidgetContents_5;
     QVBoxLayout *verticalLayout_10;
     QHBoxLayout *horizontalLayout_3;
-    QListView *widgetListExplorerDirs;
+    ExplorerDirTree *widgetTreeExplorerDirTree;
     QVBoxLayout *verticalLayout_7;
     QHBoxLayout *horizontalLayout_4;
     QToolButton *buttonExplorerDirUp;
@@ -306,10 +306,10 @@ public:
         verticalLayout_10->setObjectName(QString::fromUtf8("verticalLayout_10"));
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-        widgetListExplorerDirs = new QListView(dockWidgetContents_5);
-        widgetListExplorerDirs->setObjectName(QString::fromUtf8("widgetListExplorerDirs"));
+        widgetTreeExplorerDirTree = new ExplorerDirTree(dockWidgetContents_5);
+        widgetTreeExplorerDirTree->setObjectName(QString::fromUtf8("widgetTreeExplorerDirTree"));
 
-        horizontalLayout_3->addWidget(widgetListExplorerDirs);
+        horizontalLayout_3->addWidget(widgetTreeExplorerDirTree);
 
         verticalLayout_7 = new QVBoxLayout();
         verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
@@ -339,6 +339,7 @@ public:
         widgetListExplorer->setDefaultDropAction(Qt::MoveAction);
         widgetListExplorer->setMovement(QListView::Snap);
         widgetListExplorer->setResizeMode(QListView::Adjust);
+        widgetListExplorer->setLayoutMode(QListView::Batched);
         widgetListExplorer->setViewMode(QListView::IconMode);
         widgetListExplorer->setUniformItemSizes(true);
         widgetListExplorer->setWordWrap(true);
@@ -348,7 +349,6 @@ public:
 
         horizontalLayout_3->addLayout(verticalLayout_7);
 
-        horizontalLayout_3->setStretch(0, 2);
         horizontalLayout_3->setStretch(1, 5);
 
         verticalLayout_10->addLayout(horizontalLayout_3);
