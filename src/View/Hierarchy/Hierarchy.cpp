@@ -81,6 +81,8 @@ void Hierarchy::FillDownwards(Stage *currentStage)
 {
     if(currentStage == nullptr) return;
 
+    this->currentStage = currentStage;
+
     entityToTreeItem.clear();
     treeItemToEntity.clear();
     this->clear();
@@ -176,6 +178,23 @@ void Hierarchy::dropEvent(QDropEvent *event)
     }
 }
 
+void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
+{
+    if(clickedAction == MenuBar::Action::CreateEmptyEntity)
+    {
+        OnContextMenuCreateEmptyClicked();
+    }
+}
+
+void Hierarchy::keyPressEvent(QKeyEvent *e)
+{
+    if(e->key() == Qt::Key_Delete)
+    {
+        OnContextMenuDeleteClicked();
+    }
+}
+
+
 void Hierarchy::OnContextMenuCreateEmptyClicked()
 {
     Entity *empty = new Entity();
@@ -185,6 +204,11 @@ void Hierarchy::OnContextMenuCreateEmptyClicked()
     {
         Entity *selected = treeItemToEntity[item];
         selected->AddChild(empty);
+    }
+
+    if(selectedItems().size() == 0)
+    {
+        currentStage->AddChild(empty);
     }
 }
 

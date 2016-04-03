@@ -42,6 +42,19 @@ void Entity::AddPart(Part *p)
     parts.push_back(p);
 }
 
+void Entity::RemovePart(Part *p)
+{
+    for(auto part = parts.begin(); part != parts.end(); ++part)
+    {
+        if(p == *part)
+        {
+            parts.erase(part);
+            break;
+        }
+    }
+}
+
+
 void Entity::AddChildWithoutNoifyingHierarchy(Entity *child)
 {
     child->parent = this;

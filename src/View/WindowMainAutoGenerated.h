@@ -280,6 +280,7 @@ public:
 
         widgetInspector = new Inspector(dockWidgetContents_7);
         widgetInspector->setObjectName(QString::fromUtf8("widgetInspector"));
+        widgetInspector->setContextMenuPolicy(Qt::CustomContextMenu);
         widgetInspector->setDragDropMode(QAbstractItemView::DragOnly);
         widgetInspector->setDefaultDropAction(Qt::IgnoreAction);
         widgetInspector->setAlternatingRowColors(true);
@@ -308,6 +309,9 @@ public:
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         widgetTreeExplorerDirTree = new ExplorerDirTree(dockWidgetContents_5);
         widgetTreeExplorerDirTree->setObjectName(QString::fromUtf8("widgetTreeExplorerDirTree"));
+        widgetTreeExplorerDirTree->setProperty("showDropIndicator", QVariant(true));
+        widgetTreeExplorerDirTree->setSortingEnabled(true);
+        widgetTreeExplorerDirTree->setAllColumnsShowFocus(true);
 
         horizontalLayout_3->addWidget(widgetTreeExplorerDirTree);
 
@@ -392,6 +396,7 @@ public:
 
         dockLogger->setWidget(dockWidgetContents);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockLogger);
+        dockExplorer->raise();
 
         menubar->addAction(menuProject->menuAction());
         menubar->addAction(menuEntity->menuAction());

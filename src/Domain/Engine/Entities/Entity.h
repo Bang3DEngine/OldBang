@@ -74,6 +74,7 @@ public:
     const std::list<Entity*> GetChildren() const { return children; }
 
     void AddPart(Part *p);
+    void RemovePart(Part *p);
 
     template <class T>
     T* AddPart()
@@ -118,6 +119,7 @@ public:
             }
         }
     }
+
 
     bool IsStage() const;
 

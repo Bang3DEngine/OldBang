@@ -54,6 +54,8 @@ void TestBehaviour::OnUpdate()
 {
     time += Time::GetDeltaTime();
     Transform *t = GetOwner()->GetPart<Transform>();
+    if(t == nullptr) return;
+
     /*
     int r = rand()%3;
     if(r == 0)      Logger_Log     (t->GetRotation());

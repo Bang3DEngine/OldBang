@@ -1,4 +1,4 @@
-﻿#ifndef LISTINSPECTORITEMWIDGET_H
+#ifndef LISTINSPECTORITEMWIDGET_H
 #define LISTINSPECTORITEMWIDGET_H
 
 #include "Bang.h"
@@ -51,6 +51,13 @@ public:
     std::string GetSWFileFilepath(const std::string &slotLabel);
 
 public slots:
+
+    void OnCustomContextMenuRequested(QPoint point);
+
+    void OnContextMenuRemovePartSelected();
+    void OnContextMenuMoveUpSelected();
+    void OnContextMenuMoveDownSelected();
+
     void UpdateSlotsValues();
     void OnEnabledCheckboxPressed(bool checked);
     void _NotifyInspectorSlotChanged(double _);

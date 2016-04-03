@@ -123,8 +123,8 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
 #define Logger_Verbose(x) do{\
     std::ostringstream log;\
     log << x;\
-    std::cerr << "[ VERBOSE ]: " << log.str() << _Logger_Suffix;\
-    std::cerr.flush();\
+    /*std::cerr << "[ VERBOSE ]: " << log.str() << _Logger_Suffix;*/\
+    /*std::cerr.flush();*/\
     log.flush();\
     _Verbose_To_ListLogger(log.str()); \
 } while(0)

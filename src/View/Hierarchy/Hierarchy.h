@@ -40,6 +40,8 @@ private:
 
     void UnselectAll();
 
+    Stage *currentStage;
+
 public:
     explicit Hierarchy(QWidget *parent = 0);
     virtual ~Hierarchy();
@@ -54,11 +56,16 @@ public:
 
     void dropEvent(QDropEvent *event);
 
+    void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
+
+    void keyPressEvent(QKeyEvent *e);
+
 public slots:
 
+    void OnCustomContextMenuRequested(QPoint point);
     void OnContextMenuCreateEmptyClicked();
     void OnContextMenuDeleteClicked();
-    void OnCustomContextMenuRequested(QPoint point);
+
 
     void _NotifyHierarchyItemSelectionChanged();
 };

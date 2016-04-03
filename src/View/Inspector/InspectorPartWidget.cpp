@@ -8,6 +8,9 @@
 #include "InspectorPartFloatSW.h"
 #include "InspectorPartVFloatSW.h"
 
+#include "WindowMain.h"
+#include "Entity.h"
+
 InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
     : QWidget()
 {
@@ -63,6 +66,10 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
 
     this->show();
 
+    setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(OnCustomContextMenuRequested(QPoint)));
+
     updateTimer = new QTimer(this); //Every X seconds, update all the slots values
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(UpdateSlotsValues()));
     updateTimer->start(20);
@@ -96,6 +103,40 @@ std::string InspectorPartWidget::GetSWFileFilepath(const std::string &slotLabel)
             dynamic_cast<InspectorPartFileSW*>(labelsToPartSlots[slotLabel]);
     if(w != nullptr) return w->GetValue();
     return "";
+}
+
+void InspectorPartWidget::OnCustomContextMenuRequested(QPoint point)
+{
+    QMenu contextMenu(tr("Widget part context menu"), this);
+
+    QAction actionRemovePart("Remove Part", this);
+    QAction actionMovePartUp("Move up", this);
+    QAction actionMovePartDown("Move down", this);
+
+    connect(&actionRemovePart, SIGNAL(triggered()), this, SLOT(OnContextMenuRemovePartSelected()));
+    connect(&actionMovePartUp, SIGNAL(triggered()), this, SLOT(OnContextMenuMoveUpSelected()));
+    connect(&actionMovePartDown, SIGNAL(triggered()), this, SLOT(OnContextMenuMoveDownSelected()));
+
+    contextMenu.addAction(&actionRemovePart);
+    contextMenu.addAction(&actionMovePartUp);
+    contextMenu.addAction(&actionMovePartDown);
+
+    contextMenu.exec(mapToGlobal(point));
+}
+
+void InspectorPartWidget::OnContextMenuRemovePartSelected()
+{
+    relatedPart->GetOwner()->RemovePart(relatedPart);
+    WindowMain::GetInstance()->widgetInspector->Refresh();
+}
+
+void InspectorPartWidget::OnContextMenuMoveUpSelected()
+{
+}
+
+void InspectorPartWidget::OnContextMenuMoveDownSelected()
+{
+
 }
 
 void InspectorPartWidget::UpdateSlotsValues()

@@ -147,16 +147,6 @@ int Canvas::GetHeight()
     return height;
 }
 
-void Canvas::OnMenuBarActionClicked(MenuBar::Action clickedAction)
-{
-    Logger_Log("Clicked action: " << clickedAction);
-    if(clickedAction == MenuBar::Action::CreateEmptyEntity)
-    {
-        Entity *e = new Entity("Empty Entity");
-        this->currentStage->AddChild(e);
-    }
-}
-
 void Canvas::OnTopKekPressed()
 {
     Prefab *p;

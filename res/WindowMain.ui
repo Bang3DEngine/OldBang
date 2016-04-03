@@ -292,6 +292,9 @@
        </item>
        <item>
         <widget class="Inspector" name="widgetInspector">
+         <property name="contextMenuPolicy">
+          <enum>Qt::CustomContextMenu</enum>
+         </property>
          <property name="dragDropMode">
           <enum>QAbstractItemView::DragOnly</enum>
          </property>
@@ -341,7 +344,17 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,5">
        <item>
-        <widget class="ExplorerDirTree" name="widgetTreeExplorerDirTree"/>
+        <widget class="ExplorerDirTree" name="widgetTreeExplorerDirTree">
+         <property name="showDropIndicator" stdset="0">
+          <bool>true</bool>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="allColumnsShowFocus">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -547,6 +560,7 @@
     <string>Create Empty Entity</string>
    </property>
   </action>
+  <zorder>dockExplorer</zorder>
  </widget>
  <customwidgets>
   <customwidget>

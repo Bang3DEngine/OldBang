@@ -60,8 +60,6 @@ public:
     static int GetWidth();
     static int GetHeight();
 
-    void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
-
 signals:
 
 public slots:
