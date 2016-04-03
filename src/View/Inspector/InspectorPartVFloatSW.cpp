@@ -26,6 +26,7 @@ InspectorPartVFloatSW::InspectorPartVFloatSW(const std::string &labelString,
     }
 
     this->setContentsMargins(0,0,0,0);
+    this->adjustSize();
     this->show();
 }
 

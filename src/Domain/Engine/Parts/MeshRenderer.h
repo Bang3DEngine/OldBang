@@ -16,7 +16,7 @@
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "InspectorPartAssetSW.h"
+#include "InspectorPartFileSW.h"
 #endif
 
 

@@ -60,7 +60,7 @@ public:
     static int GetWidth();
     static int GetHeight();
 
-    void OnMenuBarActionClicked(int clickedAction) override;
+    void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
 
 signals:
 

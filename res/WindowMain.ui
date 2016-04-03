@@ -77,7 +77,6 @@
      <property name="title">
       <string>Create</string>
      </property>
-     <addaction name="actionEmptyEntity"/>
      <addaction name="actionCreatePrefab"/>
      <addaction name="separator"/>
      <addaction name="actionCreateMaterial"/>
@@ -91,6 +90,7 @@
     <property name="title">
      <string>Entities</string>
     </property>
+    <addaction name="actionCreateEmptyEntity"/>
     <addaction name="actionCreate_from_prefab"/>
    </widget>
    <widget class="QMenu" name="menuProject">
@@ -101,9 +101,26 @@
     <addaction name="actionSave_project"/>
     <addaction name="actionProject_Settings"/>
    </widget>
+   <widget class="QMenu" name="menuParts">
+    <property name="title">
+     <string>Parts</string>
+    </property>
+    <widget class="QMenu" name="menuAddPart">
+     <property name="title">
+      <string>Add Part</string>
+     </property>
+     <addaction name="actionAddPartBehaviour"/>
+     <addaction name="actionAddPartCamera"/>
+     <addaction name="actionAddPartMeshRenderer"/>
+     <addaction name="actionAddPartTransform"/>
+    </widget>
+    <addaction name="menuAddPart"/>
+    <addaction name="actionRemovePart"/>
+   </widget>
    <addaction name="menuProject"/>
    <addaction name="menuEntity"/>
    <addaction name="menuAssets"/>
+   <addaction name="menuParts"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="dockHierarchy">
@@ -495,6 +512,36 @@
   <action name="actionCreatePrefab">
    <property name="text">
     <string>Prefab</string>
+   </property>
+  </action>
+  <action name="actionRemovePart">
+   <property name="text">
+    <string>Remove Part</string>
+   </property>
+  </action>
+  <action name="actionAddPartMeshRenderer">
+   <property name="text">
+    <string>Mesh Renderer</string>
+   </property>
+  </action>
+  <action name="actionAddPartCamera">
+   <property name="text">
+    <string>Camera</string>
+   </property>
+  </action>
+  <action name="actionAddPartTransform">
+   <property name="text">
+    <string>Transform</string>
+   </property>
+  </action>
+  <action name="actionAddPartBehaviour">
+   <property name="text">
+    <string>Behaviour</string>
+   </property>
+  </action>
+  <action name="actionCreateEmptyEntity">
+   <property name="text">
+    <string>Create Empty Entity</string>
    </property>
   </action>
  </widget>

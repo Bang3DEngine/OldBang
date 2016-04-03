@@ -136,8 +136,8 @@ HEADERS += \
     src/Persistence/StageReader.h \
     src/Persistence/stb_image.h \
     src/View/Explorer/Explorer.h \
-    src/View/Inspector/InspectorPartAssetSW.h \
-    src/View/Inspector/FileDialogAsset.h \
+    src/View/Inspector/InspectorPartFileSW.h \
+    src/View/Inspector/FileDialog.h \
     src/View/Inspector/IInspectable.h \
     src/View/MenuBar.h
 
@@ -195,8 +195,8 @@ SOURCES += \
     src/Persistence/ReaderWithPointerIds.cpp \
     src/Persistence/StageReader.cpp \
     src/View/Explorer/Explorer.cpp \
-    src/View/Inspector/InspectorPartAssetSW.cpp \
-    src/View/Inspector/FileDialogAsset.cpp \
+    src/View/Inspector/InspectorPartFileSW.cpp \
+    src/View/Inspector/FileDialog.cpp \
     src/View/Inspector/IInspectable.cpp \
     src/View/MenuBar.cpp
 

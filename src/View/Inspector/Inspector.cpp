@@ -2,28 +2,30 @@
 
 #include "Entity.h"
 #include "Part.h"
+#include "Behaviour.h"
+#include "Camera.h"
+#include "MeshRenderer.h"
+#include "Transform.h"
 #include "Logger.h"
 
 Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 {
 }
 
-void Inspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
+void Inspector::Refresh()
 {
-    if(!selectedEntities.empty())
+    QLabel *nameLabel = parent()->findChild<QLabel*>("labelInspectorEntityName");
+    if(currentEntity != nullptr)
     {
-        Entity *selectedEntity = selectedEntities.front();
-
-        QLabel *nameLabel = parent()->findChild<QLabel*>("labelInspectorEntityName");
         if(nameLabel != nullptr)
         {
-            nameLabel->setText(QString::fromStdString("Name: " + selectedEntity->GetName()));
+            nameLabel->setText(QString::fromStdString("Name: " + currentEntity->GetName()));
         }
 
         clear();
 
         //For every part, create a widgetItem by reading its InspectorPartInfo
-        for(Part *p : selectedEntity->GetParts())
+        for(Part *p : currentEntity->GetParts())
         {
             QListWidgetItem *item = new QListWidgetItem();
             addItem(item);
@@ -31,10 +33,72 @@ void Inspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &select
             InspectorPartWidget *iw = new InspectorPartWidget(p);
 
             this->setItemWidget(item, iw);
-            item->setSizeHint(iw->size() * 0.9);
+            item->setSizeHint(iw->size());
 
             this->adjustSize();
             this->show();
         }
     }
+    else
+    {
+        clear();
+        if(nameLabel != nullptr)
+        {
+            nameLabel->setText(QString::fromStdString("No entity selected."));
+        }
+    }
+
+    this->setStyleSheet("/* */"); //without this line we get resize problems :)
+    this->show();
 }
+
+void Inspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
+{
+    if(!selectedEntities.empty())
+    {
+        currentEntity = selectedEntities.front();
+    }
+    else currentEntity = nullptr;
+
+    Refresh();
+}
+
+void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
+{
+    if(clickedAction == MenuBar::Action::AddPartBehaviour)
+    {
+        if(this->currentEntity != nullptr)
+        {
+            Behaviour *b = new Behaviour();
+            currentEntity->AddPart(b);
+        }
+    }
+    else if(clickedAction == MenuBar::Action::AddPartCamera)
+    {
+        if(this->currentEntity != nullptr)
+        {
+            Camera *c = new Camera();
+            currentEntity->AddPart(c);
+        }
+    }
+    else if(clickedAction == MenuBar::Action::AddPartMeshRenderer)
+    {
+        if(this->currentEntity != nullptr)
+        {
+            MeshRenderer *m = new MeshRenderer();
+            currentEntity->AddPart(m);
+        }
+    }
+    else if(clickedAction == MenuBar::Action::AddPartTransform)
+    {
+        if(this->currentEntity != nullptr)
+        {
+            Transform *t = new Transform();
+            currentEntity->AddPart(t);
+        }
+    }
+
+    Refresh();
+}
+
+

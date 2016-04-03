@@ -1,6 +1,7 @@
 #ifndef IWINDOWEVENTMANAGERLISTENER_H
 #define IWINDOWEVENTMANAGERLISTENER_H
 
+#include "MenuBar.h"
 #include "Bang.h"
 #include <list>
 
@@ -13,7 +14,7 @@ protected:
     virtual ~IWindowEventManagerListener();
 
 public:
-    virtual void OnMenuBarActionClicked(int clickedAction) { }
+    virtual void OnMenuBarActionClicked(MenuBar::Action clickedAction) { }
     virtual void OnChildAdded(Entity *child) { }
     virtual void OnChildChangedParent(Entity *child, Entity *previousParent) { }
     virtual void OnChildRemoved(Entity *child) { }

@@ -4,7 +4,7 @@
 
 #include "InspectorPartSW.h"
 #include "InspectorPartEnumSW.h"
-#include "InspectorPartAssetSW.h"
+#include "InspectorPartFileSW.h"
 #include "InspectorPartFloatSW.h"
 #include "InspectorPartVFloatSW.h"
 
@@ -49,7 +49,7 @@ InspectorPartWidget::InspectorPartWidget(Part *relatedPart)
         }
         else if( (sia = dynamic_cast<InspectorPartInfoSlotAsset*>(si)) != nullptr)
         {
-            ws = new InspectorPartAssetSW(sia->label, sia->filepath, sia->fileExtension, this);
+            ws = new InspectorPartFileSW(sia->label, sia->filepath, sia->fileExtension, this);
         }
 
         if(ws != nullptr)
@@ -92,8 +92,8 @@ int InspectorPartWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
 
 std::string InspectorPartWidget::GetSWAssetFilepath(const std::string &slotLabel)
 {
-    InspectorPartAssetSW *w =
-            dynamic_cast<InspectorPartAssetSW*>(labelsToPartSlots[slotLabel]);
+    InspectorPartFileSW *w =
+            dynamic_cast<InspectorPartFileSW*>(labelsToPartSlots[slotLabel]);
     if(w != nullptr) return w->GetValue();
     return "";
 }
@@ -119,7 +119,7 @@ void InspectorPartWidget::UpdateSlotsValues()
         }
         else if( (sia = dynamic_cast<InspectorPartInfoSlotAsset*>(si)) != nullptr)
         {
-            InspectorPartAssetSW *wa = static_cast<InspectorPartAssetSW*>(ws);
+            InspectorPartFileSW *wa = static_cast<InspectorPartFileSW*>(ws);
             wa->SetValue( sia->filepath );
         }
 

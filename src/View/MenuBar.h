@@ -19,7 +19,12 @@ public:
         CreateMaterial,
         CreateMesh,
         CreateShaderProgram,
-        CreateTexture2D
+        CreateTexture2D,
+
+        AddPartBehaviour,
+        AddPartCamera,
+        AddPartMeshRenderer,
+        AddPartTransform,
     };
 
     MenuBar(QWidget *parent = nullptr);
@@ -33,6 +38,11 @@ public slots:
     void OnCreateMesh() const;
     void OnCreateShaderProgram() const;
     void OnCreateTexture2D() const;
+
+    void OnAddPartBehaviour() const;
+    void OnAddPartCamera() const;
+    void OnAddPartMeshRenderer() const;
+    void OnAddPartTransform() const;
 };
 
 #endif // MENUBAR_H
