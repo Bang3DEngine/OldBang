@@ -4,14 +4,20 @@
 #include "Entity.h"
 #include "WindowMain.h"
 
-InspectorPartWidget::InspectorPartWidget(Part *relatedPart) : InspectorWidget(relatedPart)
+InspectorPartWidget::InspectorPartWidget(Part *relatedPart) :
+    InspectorWidget(relatedPart)
 {
     this->relatedPart = relatedPart;
 
     enabledCheckbox = new QCheckBox();
     enabledCheckbox->setChecked(this->relatedPart->IsEnabled());
-    connect(enabledCheckbox, SIGNAL(clicked(bool)), this, SLOT(OnEnabledCheckboxPressed(bool)));
+    connect(enabledCheckbox, SIGNAL(clicked(bool)),
+            this, SLOT(OnEnabledCheckboxPressed(bool)));
     titleLayout->addWidget(enabledCheckbox, 1);
+
+    titleLabel->setText(
+                QString::fromStdString(relatedPart->GetName())
+                );
 }
 
 InspectorPartWidget::~InspectorPartWidget()
@@ -27,9 +33,12 @@ void InspectorPartWidget::OnCustomContextMenuRequested(QPoint point)
     QAction actionMovePartUp("Move up", this);
     QAction actionMovePartDown("Move down", this);
 
-    connect(&actionRemovePart, SIGNAL(triggered()), this, SLOT(OnContextMenuRemovePartSelected()));
-    connect(&actionMovePartUp, SIGNAL(triggered()), this, SLOT(OnContextMenuMoveUpSelected()));
-    connect(&actionMovePartDown, SIGNAL(triggered()), this, SLOT(OnContextMenuMoveDownSelected()));
+    connect(&actionRemovePart, SIGNAL(triggered()),
+            this, SLOT(OnContextMenuRemovePartSelected()));
+    connect(&actionMovePartUp, SIGNAL(triggered()),
+            this, SLOT(OnContextMenuMoveUpSelected()));
+    connect(&actionMovePartDown, SIGNAL(triggered()),
+            this, SLOT(OnContextMenuMoveDownSelected()));
 
     contextMenu.addAction(&actionRemovePart);
     contextMenu.addAction(&actionMovePartUp);

@@ -1,5 +1,5 @@
-#ifndef INSPECTORFLOATPARTSLOTWIDGET_H
-#define INSPECTORFLOATPARTSLOTWIDGET_H
+#ifndef INSPECTORFLOATSLOTWIDGET_H
+#define INSPECTORFLOATSLOTWIDGET_H
 
 #include <string>
 #include <QTimer>
@@ -72,4 +72,4 @@ public slots:
     void SelectAll() { selectAll(); }
 };
 
-#endif // INSPECTORFLOATPARTSLOTWIDGET_H
+#endif // INSPECTORFLOATSLOTWIDGET_H

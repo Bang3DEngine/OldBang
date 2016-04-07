@@ -24,7 +24,7 @@ InspectorEnumSW::InspectorEnumSW(const std::string &labelString,
     }
     comboBox->setCurrentIndex(selectedValue);
     comboBox->show();
-    connect(comboBox, SIGNAL(currentIndexChanged(QString)), parent, SLOT(_NotifyInspectorSlotChanged(QString)));
+    connect(comboBox, SIGNAL(currentIndexChanged(QString)), parent, SLOT(_OnSlotValueChanged(QString)));
 
 
     layout->addWidget(comboBox);

@@ -3,10 +3,10 @@
 Behaviour::Behaviour()
 {
     #ifdef BANG_EDITOR
-    inspectorPartInfo.slotInfos =
+    inspectorPartInfo.SetSlotsInfos(
     {
         new InspectorWidgetInfoSlotAsset( "Script", "cpp" )
-    };
+    });
     #endif
 }
 
@@ -14,7 +14,7 @@ Behaviour::Behaviour()
 InspectorWidgetInfo* Behaviour::GetPartInfo()
 {
     static_cast<InspectorWidgetInfoSlotAsset*>
-            (inspectorPartInfo.slotInfos[0])->filepath = filepath;
+            (inspectorPartInfo.GetSlotInfo(0))->filepath = filepath;
 
     return &inspectorPartInfo;
 }
@@ -40,6 +40,6 @@ const std::string Behaviour::ToString() const
 {
     std::string file =
             static_cast<InspectorWidgetInfoSlotAsset*>
-            (inspectorPartInfo.slotInfos[0])->filepath;
+            (inspectorPartInfo.GetSlotInfo(0))->filepath;
     return "Behaviour ( " + file + ")";
 }

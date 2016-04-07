@@ -60,6 +60,31 @@ void Explorer::OnButtonChangeViewModeClicked()
     }
 }
 
+void Explorer::mouseReleaseEvent(QMouseEvent *e)
+{
+    if(e->button() == Qt::LeftButton)
+    {
+        QModelIndex clickedIndex = this->selectedIndexes().at(0);
+        std::string clickedName = fileSystemModel->fileName(clickedIndex).toStdString();
+
+        bool isFile = !fileSystemModel->isDir(clickedIndex);
+        if(isFile)
+        {
+            InspectorWidgetInfo *info = new InspectorWidgetInfo();
+            info->AddSlotInfo(
+                        new InspectorWidgetInfoSlotAsset("File",
+                                                         ".jpg, .png, .jpeg"
+                                                         )
+                        );
+
+            InspectorWidget *fileWidget = new InspectorWidget(clickedName,
+                                                              info,
+                                                              [](){});
+            WindowMain::GetInstance()->widgetInspector->SetWidget(fileWidget);
+        }
+    }
+}
+
 void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 {
     if(e->button() == Qt::LeftButton)

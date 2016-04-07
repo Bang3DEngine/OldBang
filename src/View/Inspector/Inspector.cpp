@@ -10,61 +10,79 @@
 
 Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 {
+    titleLabel = parent->findChild<QLabel*>("labelInspectorEntityName");
+}
+
+void Inspector::Clear()
+{
+    clear();
+    currentEntity = nullptr;
+    titleLabel->setText(QString::fromStdString("No entity selected."));
+
+    setStyleSheet("/* */"); //without this line we get resize problems :)
+    show();
 }
 
 void Inspector::Refresh()
 {
-    QLabel *nameLabel = parent()->findChild<QLabel*>("labelInspectorEntityName");
-    if(currentEntity != nullptr)
-    {
-        if(nameLabel != nullptr)
-        {
-            nameLabel->setText(QString::fromStdString("Name: " + currentEntity->GetName()));
-        }
-
-        clear();
-
-        //For every part, create a widgetItem by reading its InspectorWidgetInfo
-        for(Part *p : currentEntity->GetParts())
-        {
-            QListWidgetItem *item = new QListWidgetItem();
-            addItem(item);
-
-            InspectorPartWidget *iw = new InspectorPartWidget(p);
-
-            this->setItemWidget(item, iw);
-            item->setSizeHint(iw->size());
-
-            this->adjustSize();
-            this->show();
-        }
-    }
-    else
-    {
-        clear();
-        if(nameLabel != nullptr)
-        {
-            nameLabel->setText(QString::fromStdString("No entity selected."));
-        }
-    }
-
-    this->setStyleSheet("/* */"); //without this line we get resize problems :)
-    this->show();
+    Entity *e = currentEntity;
+    Clear();
+    ShowEntityInfo(e);
 }
 
-void Inspector::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
+void Inspector::ShowEntityInfo(Entity *entity)
 {
+    Clear();
+    currentEntity = entity;
+
+    if(currentEntity == nullptr) return;
+
+    for(Part *p : currentEntity->GetParts())
+    {
+        InspectorPartWidget *w = new InspectorPartWidget(p);
+        AddWidget(w);
+    }
+
+    titleLabel->setText(
+                QString::fromStdString("Name: " + currentEntity->GetName())
+                );
+}
+
+void Inspector::SetWidget(InspectorWidget *widget)
+{
+    Clear();
+    AddWidget(widget);
+}
+
+void Inspector::AddWidget(InspectorWidget *widget)
+{
+    QListWidgetItem *item = new QListWidgetItem();
+    addItem(item);
+
+    setItemWidget(item, widget);
+    item->setSizeHint(widget->size());
+
+    adjustSize();
+    setStyleSheet("/* */"); //without this line we get resize problems :)
+    show();
+}
+
+void Inspector::OnTreeHierarchyEntitiesSelected
+    (const std::list<Entity*> &selectedEntities)
+{
+    Entity *e = nullptr;
     if(!selectedEntities.empty())
     {
-        currentEntity = selectedEntities.front();
+        e = selectedEntities.front();
     }
-    else currentEntity = nullptr;
 
-    Refresh();
+    ShowEntityInfo(e);
 }
 
 void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 {
+    if(currentEntity == nullptr) return;
+
     if(clickedAction == MenuBar::Action::AddPartBehaviour)
     {
         if(this->currentEntity != nullptr)

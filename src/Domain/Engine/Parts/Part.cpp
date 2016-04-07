@@ -8,8 +8,8 @@ Part::Part() : owner(nullptr)
 
 Part::~Part()
 {
-    for(int i = 0; i < inspectorPartInfo.slotInfos.size(); ++i)
-        delete inspectorPartInfo.slotInfos[i];
+    for(int i = 0; i < inspectorPartInfo.GetSlotInfos().size(); ++i)
+        delete inspectorPartInfo.GetSlotInfo(i);
 }
 
 Entity *Part::GetOwner() const

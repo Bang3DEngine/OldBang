@@ -6,6 +6,7 @@
 #include <string>
 #include <iomanip>
 #include <sstream>
+#include <functional>
 
 #include <QLabel>
 #include <QLayout>
@@ -33,36 +34,51 @@ class InspectorWidget : public QWidget
     Q_OBJECT
 
 private:
-    class SlotWidget;
+    //If not null, this function will be called when some slot value changes
+    std::function<void()> *callback = nullptr;
 
-
-    QLabel *titleLabel;
     std::vector<InspectorSW*> partSlots;
     std::map<std::string, InspectorSW*> labelsToPartSlots;
 
-    QTimer *updateTimer;
+    QTimer *updateTimer = nullptr;
+
+    void ConstructFromWidgetInformation(const std::string &title,
+                                        const InspectorWidgetInfo *info);
 
 protected:
-    IInspectable *relatedInspectable; //Set by Inspector when creating it
-    QHBoxLayout *titleLayout;
+    IInspectable *relatedInspectable = nullptr;
+
+    QHBoxLayout *titleLayout = nullptr;
+    QLabel *titleLabel = nullptr;
 
 public:
-    explicit InspectorWidget(Part *relatedPart);
+    explicit InspectorWidget(IInspectable *relatedInspectable);
+
+    //Short handed way to use an Inspector Widget
+    //(no need to create an IInspectable object).
+    explicit InspectorWidget(const std::string &title,
+                             InspectorWidgetInfo *widgetInfo,
+                             std::function<void()> callback);
+
     virtual ~InspectorWidget();
 
     std::vector<float> GetSWVectorFloatValue(const std::string &slotLabel);
     int GetSWSelectedEnumIndex(const std::string &slotLabel);
     std::string GetSWFileFilepath(const std::string &slotLabel);
 
+private slots:
+
+    void Refresh();
+
 public slots:
 
     virtual void OnCustomContextMenuRequested(QPoint point);
 
-    void UpdateSlotsValues();
+    void Refresh(InspectorWidgetInfo *widgetInfo);
 
-    void _NotifyInspectorSlotChanged(double _);
-    void _NotifyInspectorSlotChanged(QString _);
-    void _NotifyInspectorSlotChanged();
+    void _OnSlotValueChanged(double _);
+    void _OnSlotValueChanged(QString _);
+    void _OnSlotValueChanged();
 };
 
 #endif // INSPECTORWIDGET_H

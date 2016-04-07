@@ -68,15 +68,35 @@ public:
 
 
 
-
-
 class InspectorWidgetInfo
 {
-public:
+private:
     std::vector<InspectorPartSlotInfo*> slotInfos;
+
+public:
 
     InspectorWidgetInfo();
     virtual ~InspectorWidgetInfo() {}
+
+    InspectorPartSlotInfo* GetSlotInfo(int i) const
+    {
+        return slotInfos[i];
+    }
+
+    const std::vector<InspectorPartSlotInfo*>& GetSlotInfos() const
+    {
+        return slotInfos;
+    }
+
+    void SetSlotsInfos(const std::vector<InspectorPartSlotInfo*> slotInfos)
+    {
+        this->slotInfos = slotInfos;
+    }
+
+    void AddSlotInfo(InspectorPartSlotInfo* slotInfo)
+    {
+        slotInfos.push_back(slotInfo);
+    }
 };
 
 #endif // LISTINSPECTORITEMINFO_H

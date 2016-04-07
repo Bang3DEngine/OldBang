@@ -40,7 +40,7 @@ void InspectorFileSW::Browse()
     if(selectedFile != "")
     {
         this->SetValue( selectedFile );
-        this->parent->_NotifyInspectorSlotChanged();
+        this->parent->_OnSlotValueChanged();
     }
 }
 

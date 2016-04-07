@@ -66,7 +66,6 @@ public slots:
     void OnContextMenuCreateEmptyClicked();
     void OnContextMenuDeleteClicked();
 
-
     void _NotifyHierarchyItemSelectionChanged();
 };
 

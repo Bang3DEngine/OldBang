@@ -30,10 +30,12 @@ public:
     Explorer(QWidget *parent);
     virtual ~Explorer();
 
+    void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
     void dropEvent(QDropEvent *e) override;
 
     static std::string GetTopPath() { return topPath; }
+
 
 public slots:
     void OnDirLoaded(QString dir);

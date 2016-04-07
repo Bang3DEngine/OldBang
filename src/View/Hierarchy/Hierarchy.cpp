@@ -262,5 +262,6 @@ void Hierarchy::_NotifyHierarchyItemSelectionChanged()
                 selectedEntities.push_back(e);
         }
     }
+
     WindowEventManager::NotifyHierarchyEntitiesSelected(selectedEntities);
 }

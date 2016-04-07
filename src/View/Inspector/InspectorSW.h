@@ -1,5 +1,5 @@
-#ifndef INSPECTORPARTSLOTWIDGET_H
-#define INSPECTORPARTSLOTWIDGET_H
+#ifndef INSPECTORSW_H
+#define INSPECTORSW_H
 
 #include <QWidget>
 
@@ -16,4 +16,4 @@ protected:
     InspectorSW(const std::string &label, InspectorWidget *parent);
 };
 
-#endif // INSPECTORPARTSLOTWIDGET_H
+#endif // INSPECTORSW_H

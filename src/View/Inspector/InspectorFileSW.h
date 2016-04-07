@@ -1,5 +1,5 @@
-#ifndef INSPECTORPARTASSETSW_H
-#define INSPECTORPARTASSETSW_H
+#ifndef INSPECTORASSETSW_H
+#define INSPECTORASSETSW_H
 
 #include <vector>
 #include <string>
@@ -24,9 +24,9 @@ private:
 
 public:
     InspectorFileSW(const std::string &labelString,
-                         const std::string &assetPath,
-                         const std::string &fileExtension,
-                         InspectorWidget *parent);
+                    const std::string &assetPath,
+                    const std::string &fileExtension,
+                    InspectorWidget *parent);
 
     virtual void SetValue(const std::string &assetPath);
     virtual std::string GetValue();
@@ -35,4 +35,4 @@ public slots:
     void Browse();
 };
 
-#endif // INSPECTORPARTASSETSW_H
+#endif // INSPECTORASSETSW_H

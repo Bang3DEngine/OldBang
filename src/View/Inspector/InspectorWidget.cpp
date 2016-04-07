@@ -11,17 +11,40 @@
 #include "WindowMain.h"
 #include "Entity.h"
 
-InspectorWidget::InspectorWidget(Part *relatedInspectable)
+InspectorWidget::InspectorWidget(IInspectable *relatedInspectable)
     : QWidget()
 {
     this->relatedInspectable = relatedInspectable;
 
+    ConstructFromWidgetInformation( "Inspectable",
+                                    relatedInspectable->GetPartInfo() );
+
+    updateTimer = new QTimer(this); //Every X seconds, update all the slots values
+    connect(updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
+    updateTimer->start(20);
+}
+
+InspectorWidget::InspectorWidget(const std::string &title,
+                                 InspectorWidgetInfo *widgetInfo,
+                                 std::function<void ()> callback)
+{
+    this->callback = &callback;
+    this->ConstructFromWidgetInformation(title, widgetInfo);
+}
+
+void InspectorWidget::ConstructFromWidgetInformation(
+        const std::string &title,
+        const InspectorWidgetInfo *info
+        )
+{
     QVBoxLayout *mainLayout = new QVBoxLayout();
     setLayout(mainLayout);
     mainLayout->setSpacing(0); mainLayout->setContentsMargins(10,10,10,20);
 
     titleLayout = new QHBoxLayout();
-    titleLabel = new QLabel(QString::fromStdString(relatedInspectable->GetName()));
+    titleLabel = new QLabel(
+                QString::fromStdString( title )
+                );
     QFont font = titleLabel->font(); font.setBold(true);
     titleLabel->setFont(font); titleLabel->show();
 
@@ -29,7 +52,7 @@ InspectorWidget::InspectorWidget(Part *relatedInspectable)
     titleLayout->addWidget(titleLabel, 10);
     mainLayout->addLayout(titleLayout);
 
-    for(InspectorPartSlotInfo *si : relatedInspectable->GetPartInfo()->slotInfos)
+    for(InspectorPartSlotInfo *si : info->GetSlotInfos())
     {
         InspectorSW *ws = nullptr;
 
@@ -37,17 +60,22 @@ InspectorWidget::InspectorWidget(Part *relatedInspectable)
         InspectorWidgetInfoSlotEnum *sie;
         InspectorWidgetInfoSlotAsset *sia;
 
-        if( (siv = dynamic_cast<InspectorWidgetInfoSlotVecFloat*>(si)) != nullptr)
+        if( (siv = dynamic_cast<InspectorWidgetInfoSlotVecFloat*>(si)) !=
+                nullptr)
         {
             ws = new InspectorVFloatSW(siv->label, siv->value, this);
         }
-        else if( (sie = dynamic_cast<InspectorWidgetInfoSlotEnum*>(si)) != nullptr)
+        else if( (sie = dynamic_cast<InspectorWidgetInfoSlotEnum*>(si)) !=
+                 nullptr)
         {
-            ws = new InspectorEnumSW(sie->label, sie->enumValues, sie->selectedValueIndex, this);
+            ws = new InspectorEnumSW(sie->label, sie->enumValues,
+                                     sie->selectedValueIndex, this);
         }
-        else if( (sia = dynamic_cast<InspectorWidgetInfoSlotAsset*>(si)) != nullptr)
+        else if( (sia = dynamic_cast<InspectorWidgetInfoSlotAsset*>(si)) !=
+                 nullptr)
         {
-            ws = new InspectorFileSW(sia->label, sia->filepath, sia->fileExtension, this);
+            ws = new InspectorFileSW(sia->label, sia->filepath,
+                                     sia->fileExtension, this);
         }
 
         if(ws != nullptr)
@@ -65,9 +93,6 @@ InspectorWidget::InspectorWidget(Part *relatedInspectable)
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(OnCustomContextMenuRequested(QPoint)));
 
-    updateTimer = new QTimer(this); //Every X seconds, update all the slots values
-    connect(updateTimer, SIGNAL(timeout()), this, SLOT(UpdateSlotsValues()));
-    updateTimer->start(20);
 }
 
 InspectorWidget::~InspectorWidget()
@@ -75,7 +100,8 @@ InspectorWidget::~InspectorWidget()
    delete updateTimer;
 }
 
-std::vector<float> InspectorWidget::GetSWVectorFloatValue(const std::string &slotLabel)
+std::vector<float> InspectorWidget::GetSWVectorFloatValue(
+        const std::string &slotLabel)
 {
     InspectorVFloatSW *w =
             dynamic_cast<InspectorVFloatSW*>(labelsToPartSlots[slotLabel]);
@@ -104,26 +130,37 @@ void InspectorWidget::OnCustomContextMenuRequested(QPoint point)
 {
 }
 
-void InspectorWidget::UpdateSlotsValues()
+void InspectorWidget::Refresh()
 {
-    for(InspectorPartSlotInfo *si : relatedInspectable->GetPartInfo()->slotInfos)
+    if(relatedInspectable != nullptr)
+    {
+        Refresh(relatedInspectable->GetPartInfo());
+    }
+}
+
+void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
+{
+    for(InspectorPartSlotInfo *si : widgetInfo->GetSlotInfos())
     {
         InspectorSW *ws = labelsToPartSlots[si->label];
         InspectorWidgetInfoSlotVecFloat* siv;
         InspectorWidgetInfoSlotEnum *sie;
         InspectorWidgetInfoSlotAsset *sia;
 
-        if( (siv = dynamic_cast<InspectorWidgetInfoSlotVecFloat*>(si)) != nullptr)
+        if( (siv = dynamic_cast<InspectorWidgetInfoSlotVecFloat*>(si)) !=
+                nullptr)
         {
             InspectorVFloatSW *wv = static_cast<InspectorVFloatSW*>(ws);
             wv->SetValue( siv->value );
         }
-        else if( (sie = dynamic_cast<InspectorWidgetInfoSlotEnum*>(si)) != nullptr)
+        else if( (sie = dynamic_cast<InspectorWidgetInfoSlotEnum*>(si)) !=
+                 nullptr)
         {
             InspectorEnumSW *we = static_cast<InspectorEnumSW*>(ws);
             we->SetValue( sie->selectedValueIndex );
         }
-        else if( (sia = dynamic_cast<InspectorWidgetInfoSlotAsset*>(si)) != nullptr)
+        else if( (sia = dynamic_cast<InspectorWidgetInfoSlotAsset*>(si)) !=
+                 nullptr)
         {
             InspectorFileSW *wa = static_cast<InspectorFileSW*>(ws);
             wa->SetValue( sia->filepath );
@@ -139,17 +176,17 @@ void InspectorWidget::UpdateSlotsValues()
     }
 }
 
-void InspectorWidget::_NotifyInspectorSlotChanged(double _)
+void InspectorWidget::_OnSlotValueChanged(double _)
 {
     relatedInspectable->OnSlotValueChanged(this);
 }
 
-void InspectorWidget::_NotifyInspectorSlotChanged(QString _)
+void InspectorWidget::_OnSlotValueChanged(QString _)
 {
     relatedInspectable->OnSlotValueChanged(this);
 }
 
-void InspectorWidget::_NotifyInspectorSlotChanged()
+void InspectorWidget::_OnSlotValueChanged()
 {
     relatedInspectable->OnSlotValueChanged(this);
 }

@@ -38,9 +38,9 @@ void InspectorFloatSW::SetValue(float f)
 {
     if(!editing)
     {
-        disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
+        disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
         spinbox->setValue(f);
-        connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
+        connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
     }
 }
 

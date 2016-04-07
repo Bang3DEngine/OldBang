@@ -5,11 +5,11 @@
 MeshRenderer::MeshRenderer()
 {
     #ifdef BANG_EDITOR
-        inspectorPartInfo.slotInfos =
+        inspectorPartInfo.SetSlotsInfos(
         {
             new InspectorWidgetInfoSlotAsset("Material", Material::GetFileExtension()),
             new InspectorWidgetInfoSlotAsset("Mesh", Mesh::GetFileExtension()),
-        };
+        });
     #endif
 }
 
@@ -129,8 +129,8 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
 InspectorWidgetInfo* MeshRenderer::GetPartInfo()
 {
     InspectorWidgetInfoSlotAsset* matInfo, *meshInfo;
-    matInfo  = static_cast<InspectorWidgetInfoSlotAsset*>(inspectorPartInfo.slotInfos[0]);
-    meshInfo = static_cast<InspectorWidgetInfoSlotAsset*>(inspectorPartInfo.slotInfos[1]);
+    matInfo  = static_cast<InspectorWidgetInfoSlotAsset*>(inspectorPartInfo.GetSlotInfo(0));
+    meshInfo = static_cast<InspectorWidgetInfoSlotAsset*>(inspectorPartInfo.GetSlotInfo(1));
 
     if (material != nullptr)
     {
