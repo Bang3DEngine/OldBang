@@ -24,7 +24,7 @@ void Inspector::Refresh()
 
         clear();
 
-        //For every part, create a widgetItem by reading its InspectorPartInfo
+        //For every part, create a widgetItem by reading its InspectorWidgetInfo
         for(Part *p : currentEntity->GetParts())
         {
             QListWidgetItem *item = new QListWidgetItem();

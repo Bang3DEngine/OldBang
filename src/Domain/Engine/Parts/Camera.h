@@ -69,7 +69,7 @@ public:
     virtual std::string GetName() const override { return "Camera"; }
 
     #ifdef BANG_EDITOR
-    virtual InspectorPartInfo* GetPartInfo() override;
+    virtual InspectorWidgetInfo* GetPartInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
     #endif
 };

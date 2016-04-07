@@ -24,6 +24,7 @@ public:
     void OnContextMenuMoveUpSelected();
     void OnContextMenuMoveDownSelected();
 
+public slots:
     void OnEnabledCheckboxPressed(bool checked);
 };
 

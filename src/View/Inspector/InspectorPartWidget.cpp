@@ -6,10 +6,10 @@
 
 InspectorPartWidget::InspectorPartWidget(Part *relatedPart) : InspectorWidget(relatedPart)
 {
-    relatedPart = this->relatedPart;
+    this->relatedPart = relatedPart;
 
     enabledCheckbox = new QCheckBox();
-    enabledCheckbox->setChecked(relatedPart->IsEnabled());
+    enabledCheckbox->setChecked(this->relatedPart->IsEnabled());
     connect(enabledCheckbox, SIGNAL(clicked(bool)), this, SLOT(OnEnabledCheckboxPressed(bool)));
     titleLayout->addWidget(enabledCheckbox, 1);
 }

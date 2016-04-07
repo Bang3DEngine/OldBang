@@ -15,7 +15,7 @@
 
 #include "MenuBar.h"
 #include "InspectorWidget.h"
-#include "InspectorPartInfo.h"
+#include "InspectorWidgetInfo.h"
 #include "IWindowEventManagerListener.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\

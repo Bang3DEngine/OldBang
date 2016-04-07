@@ -13,11 +13,11 @@ Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
     #ifdef BANG_EDITOR
     inspectorPartInfo.slotInfos =
     {
-        new InspectorPartInfoSlotVecFloat( "FOV", {fovDegrees} ),
-        new InspectorPartInfoSlotVecFloat( "Z Near", {zNear} ),
-        new InspectorPartInfoSlotVecFloat( "Z Far", {zFar} ),
-        new InspectorPartInfoSlotVecFloat( "Aspect Ratio", {aspectRatio} ),
-        new InspectorPartInfoSlotEnum( "Projection Mode", {"Orthographic", "Perspective"} )
+        new InspectorWidgetInfoSlotVecFloat( "FOV", {fovDegrees} ),
+        new InspectorWidgetInfoSlotVecFloat( "Z Near", {zNear} ),
+        new InspectorWidgetInfoSlotVecFloat( "Z Far", {zFar} ),
+        new InspectorWidgetInfoSlotVecFloat( "Aspect Ratio", {aspectRatio} ),
+        new InspectorWidgetInfoSlotEnum( "Projection Mode", {"Orthographic", "Perspective"} )
     };
     #endif
 }
@@ -159,13 +159,13 @@ const std::string Camera::ToString() const
 
 
 #ifdef BANG_EDITOR
-InspectorPartInfo* Camera::GetPartInfo()
+InspectorWidgetInfo* Camera::GetPartInfo()
 {
-    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value = {fovDegrees};
-    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value = {zNear};
-    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[2])->value = {zFar};
-    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[3])->value = {aspectRatio};
-    static_cast<InspectorPartInfoSlotEnum*>(inspectorPartInfo.slotInfos[4])->selectedValueIndex = projMode;
+    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value = {fovDegrees};
+    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value = {zNear};
+    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[2])->value = {zFar};
+    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[3])->value = {aspectRatio};
+    static_cast<InspectorWidgetInfoSlotEnum*>(inspectorPartInfo.slotInfos[4])->selectedValueIndex = projMode;
 
     return &inspectorPartInfo;
 }

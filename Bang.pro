@@ -122,21 +122,21 @@ HEADERS += \
     src/Domain/Engine/Quaternion.h \
     src/View/Inspector/Inspector.h \
     src/View/Hierarchy/Hierarchy.h \
-    src/View/Inspector/InspectorPartInfo.h \
+    src/View/Inspector/InspectorWidgetInfo.h \
     src/View/Inspector/InspectorPartWidget.h \
-    src/View/Inspector/InspectorPartSW.h \
-    src/View/Inspector/InspectorPartFloatSW.h \
-    src/View/Inspector/InspectorPartVFloatSW.h \
+    src/View/Inspector/InspectorSW.h \
+    src/View/Inspector/InspectorFloatSW.h \
+    src/View/Inspector/InspectorVFloatSW.h \
     src/View/Logger/ListLogger.h \
     src/View/Logger/LoggerWidget.h \
-    src/View/Inspector/InspectorPartEnumSW.h \
+    src/View/Inspector/InspectorEnumSW.h \
     src/Persistence/AssetsManager.h \
     src/Persistence/FileReader.h \
     src/Persistence/ReaderWithPointerIds.h \
     src/Persistence/StageReader.h \
     src/Persistence/stb_image.h \
     src/View/Explorer/Explorer.h \
-    src/View/Inspector/InspectorPartFileSW.h \
+    src/View/Inspector/InspectorFileSW.h \
     src/View/Inspector/FileDialog.h \
     src/View/Inspector/IInspectable.h \
     src/View/MenuBar.h \
@@ -183,21 +183,21 @@ SOURCES += \
     src/Domain/Engine/Quaternion.cpp \
     src/View/Inspector/Inspector.cpp \
     src/View/Hierarchy/Hierarchy.cpp \
-    src/View/Inspector/InspectorPartInfo.cpp \
+    src/View/Inspector/InspectorWidgetInfo.cpp \
     src/View/Inspector/InspectorPartWidget.cpp \
-    src/View/Inspector/InspectorPartSW.cpp \
-    src/View/Inspector/InspectorPartFloatSW.cpp \
-    src/View/Inspector/InspectorPartVFloatSW.cpp \
+    src/View/Inspector/InspectorSW.cpp \
+    src/View/Inspector/InspectorFloatSW.cpp \
+    src/View/Inspector/InspectorVFloatSW.cpp \
     src/View/Logger/ListLogger.cpp \
     src/View/Logger/LoggerWidget.cpp \
-    src/View/Inspector/InspectorPartEnumSW.cpp \
+    src/View/Inspector/InspectorEnumSW.cpp \
     src/Persistence/stb_image.cpp \
     src/Persistence/AssetsManager.cpp \
     src/Persistence/FileReader.cpp \
     src/Persistence/ReaderWithPointerIds.cpp \
     src/Persistence/StageReader.cpp \
     src/View/Explorer/Explorer.cpp \
-    src/View/Inspector/InspectorPartFileSW.cpp \
+    src/View/Inspector/InspectorFileSW.cpp \
     src/View/Inspector/FileDialog.cpp \
     src/View/Inspector/IInspectable.cpp \
     src/View/MenuBar.cpp \

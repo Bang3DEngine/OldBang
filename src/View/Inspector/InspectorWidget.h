@@ -18,14 +18,14 @@
 #include <QDoubleSpinBox>
 
 #include "Logger.h"
-#include "InspectorPartInfo.h"
+#include "InspectorWidgetInfo.h"
 
 #include "IInspectable.h"
 #include "IWindowEventManagerListener.h"
 
 class Part;
 class WindowEventManager;
-class InspectorPartSW;
+class InspectorSW;
 class InspectorWidget : public QWidget
 {
     //Every part widget, has many slots,
@@ -37,8 +37,8 @@ private:
 
 
     QLabel *titleLabel;
-    std::vector<InspectorPartSW*> partSlots;
-    std::map<std::string, InspectorPartSW*> labelsToPartSlots;
+    std::vector<InspectorSW*> partSlots;
+    std::map<std::string, InspectorSW*> labelsToPartSlots;
 
     QTimer *updateTimer;
 

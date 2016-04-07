@@ -16,7 +16,7 @@
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "InspectorPartFileSW.h"
+#include "InspectorFileSW.h"
 #endif
 
 
@@ -50,7 +50,7 @@ public:
     virtual std::string GetName() const override { return "MeshRenderer"; }
 
     #ifdef BANG_EDITOR
-    virtual InspectorPartInfo* GetPartInfo() override;
+    virtual InspectorWidgetInfo* GetPartInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
     #endif
 };

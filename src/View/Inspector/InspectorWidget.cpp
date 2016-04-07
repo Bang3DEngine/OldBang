@@ -2,11 +2,11 @@
 #include "WindowEventManager.h"
 #include "Part.h"
 
-#include "InspectorPartSW.h"
-#include "InspectorPartEnumSW.h"
-#include "InspectorPartFileSW.h"
-#include "InspectorPartFloatSW.h"
-#include "InspectorPartVFloatSW.h"
+#include "InspectorSW.h"
+#include "InspectorEnumSW.h"
+#include "InspectorFileSW.h"
+#include "InspectorFloatSW.h"
+#include "InspectorVFloatSW.h"
 
 #include "WindowMain.h"
 #include "Entity.h"
@@ -31,23 +31,23 @@ InspectorWidget::InspectorWidget(Part *relatedInspectable)
 
     for(InspectorPartSlotInfo *si : relatedInspectable->GetPartInfo()->slotInfos)
     {
-        InspectorPartSW *ws = nullptr;
+        InspectorSW *ws = nullptr;
 
-        InspectorPartInfoSlotVecFloat *siv;
-        InspectorPartInfoSlotEnum *sie;
-        InspectorPartInfoSlotAsset *sia;
+        InspectorWidgetInfoSlotVecFloat *siv;
+        InspectorWidgetInfoSlotEnum *sie;
+        InspectorWidgetInfoSlotAsset *sia;
 
-        if( (siv = dynamic_cast<InspectorPartInfoSlotVecFloat*>(si)) != nullptr)
+        if( (siv = dynamic_cast<InspectorWidgetInfoSlotVecFloat*>(si)) != nullptr)
         {
-            ws = new InspectorPartVFloatSW(siv->label, siv->value, this);
+            ws = new InspectorVFloatSW(siv->label, siv->value, this);
         }
-        else if( (sie = dynamic_cast<InspectorPartInfoSlotEnum*>(si)) != nullptr)
+        else if( (sie = dynamic_cast<InspectorWidgetInfoSlotEnum*>(si)) != nullptr)
         {
-            ws = new InspectorPartEnumSW(sie->label, sie->enumValues, sie->selectedValueIndex, this);
+            ws = new InspectorEnumSW(sie->label, sie->enumValues, sie->selectedValueIndex, this);
         }
-        else if( (sia = dynamic_cast<InspectorPartInfoSlotAsset*>(si)) != nullptr)
+        else if( (sia = dynamic_cast<InspectorWidgetInfoSlotAsset*>(si)) != nullptr)
         {
-            ws = new InspectorPartFileSW(sia->label, sia->filepath, sia->fileExtension, this);
+            ws = new InspectorFileSW(sia->label, sia->filepath, sia->fileExtension, this);
         }
 
         if(ws != nullptr)
@@ -77,8 +77,8 @@ InspectorWidget::~InspectorWidget()
 
 std::vector<float> InspectorWidget::GetSWVectorFloatValue(const std::string &slotLabel)
 {
-    InspectorPartVFloatSW *w =
-            dynamic_cast<InspectorPartVFloatSW*>(labelsToPartSlots[slotLabel]);
+    InspectorVFloatSW *w =
+            dynamic_cast<InspectorVFloatSW*>(labelsToPartSlots[slotLabel]);
     std::vector<float> r;
     if(w != nullptr) r = w->GetValue();
     return r;
@@ -86,16 +86,16 @@ std::vector<float> InspectorWidget::GetSWVectorFloatValue(const std::string &slo
 
 int InspectorWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
 {
-    InspectorPartEnumSW *w =
-            dynamic_cast<InspectorPartEnumSW*>(labelsToPartSlots[slotLabel]);
+    InspectorEnumSW *w =
+            dynamic_cast<InspectorEnumSW*>(labelsToPartSlots[slotLabel]);
     if(w != nullptr) return w->GetValue();
     return 0;
 }
 
 std::string InspectorWidget::GetSWFileFilepath(const std::string &slotLabel)
 {
-    InspectorPartFileSW *w =
-            dynamic_cast<InspectorPartFileSW*>(labelsToPartSlots[slotLabel]);
+    InspectorFileSW *w =
+            dynamic_cast<InspectorFileSW*>(labelsToPartSlots[slotLabel]);
     if(w != nullptr) return w->GetValue();
     return "";
 }
@@ -108,24 +108,24 @@ void InspectorWidget::UpdateSlotsValues()
 {
     for(InspectorPartSlotInfo *si : relatedInspectable->GetPartInfo()->slotInfos)
     {
-        InspectorPartSW *ws = labelsToPartSlots[si->label];
-        InspectorPartInfoSlotVecFloat* siv;
-        InspectorPartInfoSlotEnum *sie;
-        InspectorPartInfoSlotAsset *sia;
+        InspectorSW *ws = labelsToPartSlots[si->label];
+        InspectorWidgetInfoSlotVecFloat* siv;
+        InspectorWidgetInfoSlotEnum *sie;
+        InspectorWidgetInfoSlotAsset *sia;
 
-        if( (siv = dynamic_cast<InspectorPartInfoSlotVecFloat*>(si)) != nullptr)
+        if( (siv = dynamic_cast<InspectorWidgetInfoSlotVecFloat*>(si)) != nullptr)
         {
-            InspectorPartVFloatSW *wv = static_cast<InspectorPartVFloatSW*>(ws);
+            InspectorVFloatSW *wv = static_cast<InspectorVFloatSW*>(ws);
             wv->SetValue( siv->value );
         }
-        else if( (sie = dynamic_cast<InspectorPartInfoSlotEnum*>(si)) != nullptr)
+        else if( (sie = dynamic_cast<InspectorWidgetInfoSlotEnum*>(si)) != nullptr)
         {
-            InspectorPartEnumSW *we = static_cast<InspectorPartEnumSW*>(ws);
+            InspectorEnumSW *we = static_cast<InspectorEnumSW*>(ws);
             we->SetValue( sie->selectedValueIndex );
         }
-        else if( (sia = dynamic_cast<InspectorPartInfoSlotAsset*>(si)) != nullptr)
+        else if( (sia = dynamic_cast<InspectorWidgetInfoSlotAsset*>(si)) != nullptr)
         {
-            InspectorPartFileSW *wa = static_cast<InspectorPartFileSW*>(ws);
+            InspectorFileSW *wa = static_cast<InspectorFileSW*>(ws);
             wa->SetValue( sia->filepath );
         }
 

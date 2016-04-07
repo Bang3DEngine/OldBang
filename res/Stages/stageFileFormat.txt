@@ -7,8 +7,8 @@
     <children>                      #children of the Stage
         <Entity>                    #begin of an Entity
             e1                      #id of the entity, to refer it from other parts of the xml
-            nameOfEntityInspectorPartVFloatSW      #name
-            <children>              #children of Entity nameOfEntityInspectorPartVFloatSW
+            nameOfEntityInspectorVFloatSW      #name
+            <children>              #children of Entity nameOfEntityInspectorVFloatSW
                 <Entity>            #begin of an Entity
                     e0              #id of the entity, to refer it from other parts of the xml
                     nameOfEntity    #name

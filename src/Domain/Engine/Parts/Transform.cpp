@@ -10,13 +10,13 @@ Transform::Transform() : position(glm::vec3(0.0f)),
     glm::vec3 euler = glm::eulerAngles(rotation);
     inspectorPartInfo.slotInfos =
     {
-        new InspectorPartInfoSlotVecFloat(
+        new InspectorWidgetInfoSlotVecFloat(
             "Position", {position.x, position.y, position.z}
         ),
-        new InspectorPartInfoSlotVecFloat(
+        new InspectorWidgetInfoSlotVecFloat(
             "Rotation", {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)}
         ),
-        new InspectorPartInfoSlotVecFloat(
+        new InspectorWidgetInfoSlotVecFloat(
             "Scale", {scale.x, scale.y, scale.z}
         )
     };
@@ -177,14 +177,14 @@ void Transform::Read(std::istream &f)
 }
 
 #ifdef BANG_EDITOR
-InspectorPartInfo* Transform::GetPartInfo()
+InspectorWidgetInfo* Transform::GetPartInfo()
 {
-    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value =
+    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[0])->value =
         {position.x, position.y, position.z};
     glm::vec3 euler = glm::eulerAngles(rotation);
-    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value =
+    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[1])->value =
         {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)};
-    static_cast<InspectorPartInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[2])->value =
+    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.slotInfos[2])->value =
         {scale.x, scale.y, scale.z};
 
     return &inspectorPartInfo;

@@ -1,7 +1,7 @@
 #ifndef IINSPECTABLE_H
 #define IINSPECTABLE_H
 
-#include "InspectorPartInfo.h"
+#include "InspectorWidgetInfo.h"
 
 class InspectorWidget;
 class IInspectable
@@ -10,12 +10,12 @@ protected:
     IInspectable() {}
 
 public:
-    InspectorPartInfo inspectorPartInfo;
+    InspectorWidgetInfo inspectorPartInfo;
 
     //Value was changed by the user, using input in inspector
     virtual void OnSlotValueChanged(InspectorWidget *source) = 0;
 
-    virtual InspectorPartInfo* GetPartInfo()
+    virtual InspectorWidgetInfo* GetPartInfo()
     {
         return &inspectorPartInfo;
     }
