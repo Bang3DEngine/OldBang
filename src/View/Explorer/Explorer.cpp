@@ -68,18 +68,15 @@ void Explorer::mouseReleaseEvent(QMouseEvent *e)
         std::string clickedName = fileSystemModel->fileName(clickedIndex).toStdString();
 
         bool isFile = !fileSystemModel->isDir(clickedIndex);
+        InspectorWidget *fileWidget = nullptr;
         if(isFile)
         {
-            InspectorWidgetInfo *info = new InspectorWidgetInfo();
-            info->AddSlotInfo(
-                        new InspectorAssetSWInfo("File",
-                                                         ".jpg, .png, .jpeg"
-                                                         )
-                        );
 
-            InspectorWidget *fileWidget = new InspectorWidget(clickedName,
-                                                              info,
-                                                              [](){});
+            fileWidget = new InspectorTexture2DWidget(clickedName);
+        }
+
+        if(fileWidget != nullptr)
+        {
             WindowMain::GetInstance()->widgetInspector->SetWidget(fileWidget);
         }
     }

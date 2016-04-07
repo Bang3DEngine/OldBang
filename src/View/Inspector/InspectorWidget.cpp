@@ -11,22 +11,24 @@
 #include "WindowMain.h"
 #include "Entity.h"
 
+InspectorWidget::InspectorWidget() : QWidget()
+{
+}
+
 InspectorWidget::InspectorWidget(IInspectable *relatedInspectable)
-    : QWidget()
+    : InspectorWidget()
 {
     this->relatedInspectable = relatedInspectable;
 
     ConstructFromWidgetInformation( "Inspectable",
                                     relatedInspectable->GetPartInfo() );
 
-    updateTimer = new QTimer(this); //Every X seconds, update all the slots values
-    connect(updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
-    updateTimer->start(20);
 }
 
 InspectorWidget::InspectorWidget(const std::string &title,
                                  InspectorWidgetInfo *widgetInfo,
                                  std::function<void ()> callback)
+    : InspectorWidget()
 {
     this->callback = &callback;
     this->ConstructFromWidgetInformation(title, widgetInfo);
@@ -39,17 +41,17 @@ void InspectorWidget::ConstructFromWidgetInformation(
 {
     QVBoxLayout *mainLayout = new QVBoxLayout();
     setLayout(mainLayout);
-    mainLayout->setSpacing(0); mainLayout->setContentsMargins(10,10,10,20);
+    mainLayout->setSpacing(0);
+    mainLayout->setContentsMargins(10,10,10,20);
 
-    titleLayout = new QHBoxLayout();
-    titleLabel = new QLabel(
-                QString::fromStdString( title )
-                );
+    titleLabel = new QLabel( QString::fromStdString( title ) );
     QFont font = titleLabel->font(); font.setBold(true);
     titleLabel->setFont(font); titleLabel->show();
 
+    titleLayout = new QHBoxLayout();
     titleLayout->setContentsMargins(0,0,0,0);
     titleLayout->addWidget(titleLabel, 10);
+
     mainLayout->addLayout(titleLayout);
 
     for(InspectorSWInfo *si : info->GetSlotInfos())
@@ -93,6 +95,10 @@ void InspectorWidget::ConstructFromWidgetInformation(
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(OnCustomContextMenuRequested(QPoint)));
 
+
+    updateTimer = new QTimer(this); //Every X seconds, update all the slots values
+    connect(updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
+    updateTimer->start(20);
 }
 
 InspectorWidget::~InspectorWidget()

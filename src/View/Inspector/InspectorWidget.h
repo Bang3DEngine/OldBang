@@ -24,6 +24,7 @@
 #include "IInspectable.h"
 #include "IWindowEventManagerListener.h"
 
+
 class Part;
 class WindowEventManager;
 class InspectorSW;
@@ -42,16 +43,17 @@ private:
 
     QTimer *updateTimer = nullptr;
 
-    void ConstructFromWidgetInformation(const std::string &title,
-                                        const InspectorWidgetInfo *info);
-
 protected:
     IInspectable *relatedInspectable = nullptr;
 
     QHBoxLayout *titleLayout = nullptr;
     QLabel *titleLabel = nullptr;
 
+    void ConstructFromWidgetInformation(const std::string &title,
+                                        const InspectorWidgetInfo *info);
+
 public:
+    InspectorWidget();
     explicit InspectorWidget(IInspectable *relatedInspectable);
 
     //Short handed way to use an Inspector Widget

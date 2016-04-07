@@ -11,6 +11,8 @@
 #include "Bang.h"
 #include "Logger.h"
 
+#include "InspectorTexture2DWidget.h"
+
 class Explorer : public QListView
 {
     Q_OBJECT
