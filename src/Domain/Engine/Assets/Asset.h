@@ -25,6 +25,7 @@ class Asset : public IToString, public IFileable
 public:
     const static std::string GetFileExtension() { return "basset"; }
 
+    void OnSlotValueChanged(InspectorWidget *source) {}
 
 protected:
     std::string filepath;

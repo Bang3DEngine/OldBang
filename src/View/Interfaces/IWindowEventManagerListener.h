@@ -1,12 +1,15 @@
 #ifndef IWINDOWEVENTMANAGERLISTENER_H
 #define IWINDOWEVENTMANAGERLISTENER_H
 
-#include "MenuBar.h"
-#include "Bang.h"
 #include <list>
 
+#include "Bang.h"
+
+#include "MenuBar.h"
+
+
 class Entity;
-class InspectorPartWidget;
+class InspectorWidget;
 class IWindowEventManagerListener
 {
 protected:
@@ -19,7 +22,7 @@ public:
     virtual void OnChildChangedParent(Entity *child, Entity *previousParent) { }
     virtual void OnChildRemoved(Entity *child) { }
 
-    virtual void OnInspectorSlotChanged(InspectorPartWidget *inspectorItem)  { }
+    virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem)  { }
     virtual void OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities) { }
 };
 

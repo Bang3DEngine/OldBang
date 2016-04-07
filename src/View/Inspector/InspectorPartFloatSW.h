@@ -19,7 +19,7 @@ private:
 
 public:
     InspectorPartFloatSW(const std::string &labelString, float initialValue,
-                                 InspectorPartWidget *parent);
+                                 InspectorWidget *parent);
 
     virtual void SetValue(float f);
     virtual float GetValue();

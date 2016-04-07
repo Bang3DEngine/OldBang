@@ -2,7 +2,7 @@
 
 InspectorPartVFloatSW::InspectorPartVFloatSW(const std::string &labelString,
                                            std::vector<float> initialValues,
-                                           InspectorPartWidget *parent) : InspectorPartSW(labelString, parent)
+                                           InspectorWidget *parent) : InspectorPartSW(labelString, parent)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0);

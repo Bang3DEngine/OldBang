@@ -167,10 +167,10 @@ InspectorPartInfo* MeshRenderer::GetPartInfo()
     return &inspectorPartInfo;
 }
 
-void MeshRenderer::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
+void MeshRenderer::OnSlotValueChanged(InspectorWidget *source)
 {
-    std::string materialFilepath = partWidget->GetSWFileFilepath("Material");
-    std::string meshFilepath = partWidget->GetSWFileFilepath("Mesh");
+    std::string materialFilepath = source->GetSWFileFilepath("Material");
+    std::string meshFilepath = source->GetSWFileFilepath("Mesh");
 
     if(materialFilepath != "")
     {

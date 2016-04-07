@@ -19,9 +19,9 @@ InspectorPartInfo* Behaviour::GetPartInfo()
     return &inspectorPartInfo;
 }
 
-void Behaviour::OnInspectorSlotChanged(InspectorPartWidget *partWidget)
+void Behaviour::OnSlotValueChanged(InspectorWidget *source)
 {
-    filepath = partWidget->GetSWFileFilepath("Script");
+    filepath = source->GetSWFileFilepath("Script");
 }
 
 void Behaviour::SetFilepath(const std::string &filepath)

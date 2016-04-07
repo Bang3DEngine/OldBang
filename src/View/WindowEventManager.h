@@ -14,6 +14,7 @@
 #include <QTreeWidgetItem>
 
 #include "MenuBar.h"
+#include "InspectorWidget.h"
 #include "InspectorPartInfo.h"
 #include "IWindowEventManagerListener.h"
 
@@ -50,7 +51,7 @@ public slots:
 
     static void NotifyMenuBarActionClicked(MenuBar::Action clickedAction);
 
-    static void NotifyInspectorSlotChanged(Part *updatedPart, InspectorPartWidget *inspectorItem);
+    static void NotifyInspectorSlotChanged(Part *updatedPart, InspectorWidget *inspectorItem);
     static void NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities);
 };
 

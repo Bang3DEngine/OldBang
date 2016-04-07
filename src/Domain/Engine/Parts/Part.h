@@ -10,7 +10,7 @@
 
 #ifdef BANG_EDITOR
 #include "IInspectable.h"
-#include "InspectorPartWidget.h"
+#include "InspectorWidget.h"
 #include "IWindowEventManagerListener.h"
 #endif
 

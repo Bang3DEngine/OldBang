@@ -3,7 +3,7 @@
 InspectorPartEnumSW::InspectorPartEnumSW(const std::string &labelString,
                                          const std::vector<std::string> &enumValues,
                                          const int selectedValue,
-                                         InspectorPartWidget *parent) : InspectorPartSW(labelString, parent)
+                                         InspectorWidget *parent) : InspectorPartSW(labelString, parent)
 {
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);

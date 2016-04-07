@@ -57,7 +57,7 @@ void WindowEventManager::NotifyMenuBarActionClicked(MenuBar::Action clickedActio
     PROPAGATE_EVENT_PAR(OnMenuBarActionClicked(clickedAction), wem->listeners);
 }
 
-void WindowEventManager::NotifyInspectorSlotChanged(Part *updatedPart, InspectorPartWidget *inspectorItem)
+void WindowEventManager::NotifyInspectorSlotChanged(Part *updatedPart, InspectorWidget *inspectorItem)
 {
     updatedPart->OnInspectorSlotChanged(inspectorItem);
 }

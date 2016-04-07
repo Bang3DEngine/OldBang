@@ -26,7 +26,7 @@ public:
     InspectorPartFileSW(const std::string &labelString,
                          const std::string &assetPath,
                          const std::string &fileExtension,
-                         InspectorPartWidget *parent);
+                         InspectorWidget *parent);
 
     virtual void SetValue(const std::string &assetPath);
     virtual std::string GetValue();

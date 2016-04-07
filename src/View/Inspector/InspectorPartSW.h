@@ -10,10 +10,10 @@ class InspectorPartSW : public QWidget
     Q_OBJECT
 
 protected:
-    std::string label;
-    InspectorPartWidget *parent;
+    std::string label = "";
+    InspectorWidget *parent = nullptr;
 
-    InspectorPartSW(const std::string &label, InspectorPartWidget *parent);
+    InspectorPartSW(const std::string &label, InspectorWidget *parent);
 };
 
 #endif // INSPECTORPARTSLOTWIDGET_H

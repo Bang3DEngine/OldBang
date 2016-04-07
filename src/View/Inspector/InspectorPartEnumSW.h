@@ -18,7 +18,7 @@ public:
     InspectorPartEnumSW(const std::string &labelString,
                                 const std::vector<std::string> &initialValue,
                                 const int selectedValue,
-                                InspectorPartWidget *parent);
+                                InspectorWidget *parent);
 
     virtual void SetValue(int index);
     virtual int GetValue();
