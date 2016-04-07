@@ -72,7 +72,7 @@ void Explorer::mouseReleaseEvent(QMouseEvent *e)
         {
             InspectorWidgetInfo *info = new InspectorWidgetInfo();
             info->AddSlotInfo(
-                        new InspectorWidgetInfoSlotAsset("File",
+                        new InspectorAssetSWInfo("File",
                                                          ".jpg, .png, .jpeg"
                                                          )
                         );

@@ -13,11 +13,11 @@ Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
     #ifdef BANG_EDITOR
     inspectorPartInfo.SetSlotsInfos(
     {
-        new InspectorWidgetInfoSlotVecFloat( "FOV", {fovDegrees} ),
-        new InspectorWidgetInfoSlotVecFloat( "Z Near", {zNear} ),
-        new InspectorWidgetInfoSlotVecFloat( "Z Far", {zFar} ),
-        new InspectorWidgetInfoSlotVecFloat( "Aspect Ratio", {aspectRatio} ),
-        new InspectorWidgetInfoSlotEnum( "Projection Mode", {"Orthographic", "Perspective"} )
+        new InspectorVFloatSWInfo( "FOV", {fovDegrees} ),
+        new InspectorVFloatSWInfo( "Z Near", {zNear} ),
+        new InspectorVFloatSWInfo( "Z Far", {zFar} ),
+        new InspectorVFloatSWInfo( "Aspect Ratio", {aspectRatio} ),
+        new InspectorEnumSWInfo( "Projection Mode", {"Orthographic", "Perspective"} )
     });
     #endif
 }
@@ -161,11 +161,11 @@ const std::string Camera::ToString() const
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* Camera::GetPartInfo()
 {
-    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.GetSlotInfo(0))->value = {fovDegrees};
-    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.GetSlotInfo(1))->value = {zNear};
-    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.GetSlotInfo(2))->value = {zFar};
-    static_cast<InspectorWidgetInfoSlotVecFloat*>(inspectorPartInfo.GetSlotInfo(3))->value = {aspectRatio};
-    static_cast<InspectorWidgetInfoSlotEnum*>(inspectorPartInfo.GetSlotInfo(4))->selectedValueIndex = projMode;
+    static_cast<InspectorVFloatSWInfo*>(inspectorPartInfo.GetSlotInfo(0))->value = {fovDegrees};
+    static_cast<InspectorVFloatSWInfo*>(inspectorPartInfo.GetSlotInfo(1))->value = {zNear};
+    static_cast<InspectorVFloatSWInfo*>(inspectorPartInfo.GetSlotInfo(2))->value = {zFar};
+    static_cast<InspectorVFloatSWInfo*>(inspectorPartInfo.GetSlotInfo(3))->value = {aspectRatio};
+    static_cast<InspectorEnumSWInfo*>(inspectorPartInfo.GetSlotInfo(4))->selectedValueIndex = projMode;
 
     return &inspectorPartInfo;
 }

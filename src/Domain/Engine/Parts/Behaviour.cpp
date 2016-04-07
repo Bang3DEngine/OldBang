@@ -5,7 +5,7 @@ Behaviour::Behaviour()
     #ifdef BANG_EDITOR
     inspectorPartInfo.SetSlotsInfos(
     {
-        new InspectorWidgetInfoSlotAsset( "Script", "cpp" )
+        new InspectorAssetSWInfo( "Script", "cpp" )
     });
     #endif
 }
@@ -13,7 +13,7 @@ Behaviour::Behaviour()
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* Behaviour::GetPartInfo()
 {
-    static_cast<InspectorWidgetInfoSlotAsset*>
+    static_cast<InspectorAssetSWInfo*>
             (inspectorPartInfo.GetSlotInfo(0))->filepath = filepath;
 
     return &inspectorPartInfo;
@@ -39,7 +39,7 @@ std::string Behaviour::GetFilepath() const
 const std::string Behaviour::ToString() const
 {
     std::string file =
-            static_cast<InspectorWidgetInfoSlotAsset*>
+            static_cast<InspectorAssetSWInfo*>
             (inspectorPartInfo.GetSlotInfo(0))->filepath;
     return "Behaviour ( " + file + ")";
 }

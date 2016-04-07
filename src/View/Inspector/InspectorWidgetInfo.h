@@ -6,94 +6,93 @@
 
 #include "Logger.h"
 
-class InspectorPartSlotInfo
+class InspectorSWInfo
 {
 protected:
-    InspectorPartSlotInfo(const std::string &label) : label(label){ }
+    InspectorSWInfo(const std::string &label) : label(label){ }
 
 public:
     std::string label;
     virtual bool IsOfTypeVecFloat() = 0;
 
-    virtual ~InspectorPartSlotInfo() {}
+    virtual ~InspectorSWInfo() {}
 };
 
-class InspectorWidgetInfoSlotVecFloat : public InspectorPartSlotInfo
+class InspectorVFloatSWInfo : public InspectorSWInfo
 {
 public:
     std::vector<float> value;
 
-    InspectorWidgetInfoSlotVecFloat(const std::string &label,
-                                  const std::vector<float> &initialValues) : InspectorPartSlotInfo(label)
+    InspectorVFloatSWInfo(const std::string &label,
+                                  const std::vector<float> &initialValues) : InspectorSWInfo(label)
     {
         this->value = initialValues;
     }
-    virtual ~InspectorWidgetInfoSlotVecFloat() {}
+    virtual ~InspectorVFloatSWInfo() {}
 
     bool IsOfTypeVecFloat() override { return true; }
 };
 
 
-class InspectorWidgetInfoSlotEnum : public InspectorPartSlotInfo
+class InspectorEnumSWInfo : public InspectorSWInfo
 {
 public:
     std::vector<std::string> enumValues;
     int selectedValueIndex = 0;
 
-    InspectorWidgetInfoSlotEnum(const std::string &label,
-                              const std::vector<std::string> &initialValues) : InspectorPartSlotInfo(label)
+    InspectorEnumSWInfo(const std::string &label,
+                              const std::vector<std::string> &initialValues) : InspectorSWInfo(label)
     {
         this->enumValues = initialValues;
     }
-    virtual ~InspectorWidgetInfoSlotEnum() {}
+    virtual ~InspectorEnumSWInfo() {}
 
     bool IsOfTypeVecFloat() override { return false; }
 };
 
-class InspectorWidgetInfoSlotAsset: public InspectorPartSlotInfo
+class InspectorAssetSWInfo: public InspectorSWInfo
 {
 public:
     std::string filepath = "";
     std::string fileExtension = "*";
 
-    InspectorWidgetInfoSlotAsset(const std::string& label, const std::string& fileExtension) : InspectorPartSlotInfo(label)
+    InspectorAssetSWInfo(const std::string& label, const std::string& fileExtension) : InspectorSWInfo(label)
     {
         this->fileExtension = fileExtension;
     }
 
-    virtual ~InspectorWidgetInfoSlotAsset() {}
+    virtual ~InspectorAssetSWInfo() {}
 
     bool IsOfTypeVecFloat() override { return false; }
 };
 
-
-
+//Contains all SWInfos
 class InspectorWidgetInfo
 {
 private:
-    std::vector<InspectorPartSlotInfo*> slotInfos;
+    std::vector<InspectorSWInfo*> slotInfos;
 
 public:
 
     InspectorWidgetInfo();
     virtual ~InspectorWidgetInfo() {}
 
-    InspectorPartSlotInfo* GetSlotInfo(int i) const
+    InspectorSWInfo* GetSlotInfo(int i) const
     {
         return slotInfos[i];
     }
 
-    const std::vector<InspectorPartSlotInfo*>& GetSlotInfos() const
+    const std::vector<InspectorSWInfo*>& GetSlotInfos() const
     {
         return slotInfos;
     }
 
-    void SetSlotsInfos(const std::vector<InspectorPartSlotInfo*> slotInfos)
+    void SetSlotsInfos(const std::vector<InspectorSWInfo*> slotInfos)
     {
         this->slotInfos = slotInfos;
     }
 
-    void AddSlotInfo(InspectorPartSlotInfo* slotInfo)
+    void AddSlotInfo(InspectorSWInfo* slotInfo)
     {
         slotInfos.push_back(slotInfo);
     }
