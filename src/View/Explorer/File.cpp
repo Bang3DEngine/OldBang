@@ -21,6 +21,14 @@ bool File::IsImage() const
             (
             extension == "jpg" || extension == "jpeg" ||
             extension == "png" || extension == "bmp"
+                );
+}
+
+bool File::IsMesh() const
+{
+    return  isFile &&
+            (
+            extension == "obj"
             );
 }
 

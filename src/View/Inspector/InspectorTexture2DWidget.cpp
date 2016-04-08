@@ -9,15 +9,15 @@ InspectorTexture2DWidget(const FileImage &fileImage) :
 
     inspectorInfo.SetSlotsInfos(
     {
+        new InspectorStringSWInfo("File name",
+                    fileImage.GetName() + "." + fileImage.GetExtension(), true),
+        new InspectorStringSWInfo("Path", fileImage.GetPath(), true),
         new InspectorStringSWInfo("Dimensions",
                      std::to_string(fileImage.GetWidth()) +
                      "x" + std::to_string(fileImage.GetHeight()),
                      true, false
                     ),
-        new InspectorStringSWInfo("Mode", mode, true, false),
-        new InspectorStringSWInfo("File name",
-                    fileImage.GetName() + "." + fileImage.GetExtension(), true),
-        new InspectorStringSWInfo("Path", fileImage.GetPath(), true)
+        new InspectorStringSWInfo("Mode", mode, true, false)
     }
     );
 

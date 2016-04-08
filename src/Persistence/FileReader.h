@@ -25,13 +25,20 @@ class FileReader
 private:
     FileReader() {}
 
-    static void GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *hasNormals, bool *isTriangles);
-
     static void TrimStringLeft(std::string *str);
 
 public:
 
-    static unsigned char* ReadImage(const std::string& filepath, int *components, int *width, int *height);
+    static void GetImageFormat(const std::string& filepath, int *width,
+                               int *height, int *numComponents);
+    static unsigned char* ReadImage(const std::string& filepath,
+                                    int *width, int *height,
+                                    int *components);
+
+    static void GetOBJFormat(const std::string& filepath, bool *hasUvs,
+                             bool *hasNormals, bool *isTriangles);
+
+    static int GetOBJNumFaces(const std::string& filepath);
 
     static bool ReadOBJ(const std::string& filepath,
                         std::vector<glm::vec3> *vertexPos,

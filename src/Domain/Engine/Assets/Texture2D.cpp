@@ -17,7 +17,9 @@ void Texture2D::LoadFromFile(const std::string &filepath)
 {
     Bind();
     this->filepath = filepath;
-    unsigned char *loadedData = FileReader::ReadImage(filepath, &numComponents, &width, &height);
+    unsigned char *loadedData = FileReader::ReadImage(filepath,
+                                                      &width, &height,
+                                                      &numComponents);
     Fill(loadedData, width, height, numComponents);
     UnBind();
 }
@@ -32,7 +34,9 @@ void Texture2D::Resize(int width, int height)
     Fill(data, width, height, numComponents);
 }
 
-void Texture2D::Fill(unsigned char *newData, int width, int height, int numComponents)
+void Texture2D::Fill(unsigned char *newData,
+                     int width, int height,
+                     int numComponents)
 {
     if(this->data != nullptr && this->data != newData)
         delete this->data;
@@ -43,7 +47,9 @@ void Texture2D::Fill(unsigned char *newData, int width, int height, int numCompo
     this->numComponents = numComponents;
 
     Bind();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+                 width, height, 0,
+                 GL_RGB, GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(GL_TEXTURE_2D);
     UnBind();
 }

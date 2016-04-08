@@ -15,6 +15,7 @@ public:
     File(const QFileSystemModel *model, const QModelIndex *index);
 
     bool IsImage() const;
+    bool IsMesh() const;
 
     bool IsDir() const;
     bool IsFile() const;

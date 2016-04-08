@@ -76,6 +76,11 @@ void Explorer::mouseReleaseEvent(QMouseEvent *e)
                 FileImage fi(fileSystemModel, &clickedIndex);
                 fileWidget = new InspectorTexture2DWidget(fi);
             }
+            else if(f.IsMesh())
+            {
+                FileMesh fm(fileSystemModel, &clickedIndex);
+                fileWidget = new InspectorMeshFileWidget(fm);
+            }
         }
 
         if(fileWidget != nullptr)

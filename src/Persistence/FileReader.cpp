@@ -2,18 +2,23 @@
 #include "stb_image.h"
 #include "Stage.h"
 
-unsigned char* FileReader::ReadImage(const std::string& filepath, int *components, int *width, int *height)
+unsigned char* FileReader::ReadImage(const std::string& filepath,
+                                     int *width, int *height, int *components)
 {
-    unsigned char* data = stbi_load(filepath.c_str(), width, height, components, 0);
+    unsigned char* data = stbi_load(filepath.c_str(),
+                                    width, height,
+                                    components, 0);
     if(data == nullptr)
     {
-        Logger_Error("Error loading the texture '" << filepath << "', couldn't open/read the file.");
+        Logger_Error("Error loading the texture '" << filepath <<
+                     "', couldn't open/read the file.");
         return data;
     }
     return data;
 }
 
-void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *hasNormals, bool *isTriangles)
+void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs,
+                              bool *hasNormals, bool *isTriangles)
 {
     std::FILE *f;
     f = fopen(filepath.c_str(), "r");
@@ -37,7 +42,8 @@ void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *h
             while(fgetc(f) == ' '); //Leemos espacios despues de 'f'
             fseek(f, -1, SEEK_CUR);
             foo = fscanf(f, "%d", &foo); //Leemos primer indice
-            if(fgetc(f) == ' ') *hasUvs = *hasNormals = false; //Solo un indice, sin barras
+             //Solo un indice, sin barras
+            if(fgetc(f) == ' ') *hasUvs = *hasNormals = false;
             else //Hay algo tal que asi:  5/*
             {
                 *hasUvs = (fgetc(f) != '/');
@@ -73,20 +79,43 @@ void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs, bool *h
     *isTriangles = true;
 }
 
-bool FileReader::ReadOBJ(const std::string& filepath, std::vector<glm::vec3> *vertexPos,
+int FileReader::GetOBJNumFaces(const std::string &filepath)
+{
+    std::ifstream f(filepath, std::ios::in);
+    if(!f.is_open())
+        Logger_Error("Error opening the mesh file '" << filepath << "'");
+
+    int numFaces = 0;
+    std::string line;
+    while(std::getline(f, line))
+    {
+        if(line.at(0) == 'f')
+        {
+            ++numFaces;
+        }
+    }
+
+    return numFaces;
+}
+
+bool FileReader::ReadOBJ(const std::string& filepath,
+                         std::vector<glm::vec3> *vertexPos,
                          std::vector<glm::vec3> *vertexNormals,
                          std::vector<glm::vec2> *vertexUvs,
                          bool *isTriangles)
 {
     std::vector<glm::vec3> disorderedVertexPos, disorderedVertexNormals;
     std::vector<glm::vec2> disorderedVertexUvs;
-    std::vector<unsigned int> vertexPosIndexes, vertexUvsIndexes, vertexNormIndexes;
+    std::vector<unsigned int> vertexPosIndexes,
+                              vertexUvsIndexes,
+                              vertexNormIndexes;
     bool hasUvs, hasNormals;
 
     GetOBJFormat(filepath, &hasUvs, &hasNormals, isTriangles);
 
     std::ifstream f(filepath, std::ios::in);
-    if(!f.is_open()) Logger_Error("Error opening the mesh file '" << filepath << "'");
+    if(!f.is_open())
+        Logger_Error("Error opening the mesh file '" << filepath << "'");
     std::string line;
 
     while(std::getline(f, line))
@@ -192,7 +221,8 @@ bool FileReader::ReadOBJ(const std::string& filepath, std::vector<glm::vec3> *ve
     {
         for(unsigned int i = 0; i < vertexNormIndexes.size(); ++i)
         {
-            vertexNormals->push_back(disorderedVertexNormals[vertexNormIndexes[i]-1]);
+            vertexNormals->push_back(
+                        disorderedVertexNormals[vertexNormIndexes[i]-1]);
         }
     }
 
@@ -217,6 +247,12 @@ void FileReader::TrimStringLeft(std::string *str)
     *str = str->substr(i, str->length() - i);
 }
 
+void FileReader::GetImageFormat(const std::string &filepath, int *width,
+                                int *height, int *numComponents)
+{
+    stbi_info(filepath.c_str(), width, height, numComponents);
+}
+
 std::string FileReader::ReadNextLine(std::istream &f)
 {
     std::string line;
@@ -225,7 +261,8 @@ std::string FileReader::ReadNextLine(std::istream &f)
         std::getline(f, line);
         TrimStringLeft(&line);
     }
-    while( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') && f.peek() != EOF); //Skip all empty/comment lines
+    while( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') &&
+           f.peek() != EOF); //Skip all empty/comment lines
 
     return line;
 }

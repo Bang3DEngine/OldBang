@@ -13,6 +13,8 @@
 #include "Logger.h"
 
 #include "File.h"
+#include "FileMesh.h"
+#include "InspectorMeshFileWidget.h"
 #include "InspectorTexture2DWidget.h"
 
 class Explorer : public QListView
