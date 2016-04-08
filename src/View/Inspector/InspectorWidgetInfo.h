@@ -24,7 +24,7 @@ public:
     std::vector<float> value;
 
     InspectorVFloatSWInfo(const std::string &label,
-                                  const std::vector<float> &initialValues) : InspectorSWInfo(label)
+                          const std::vector<float> &initialValues) : InspectorSWInfo(label)
     {
         this->value = initialValues;
     }

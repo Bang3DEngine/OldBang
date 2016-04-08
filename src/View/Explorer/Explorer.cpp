@@ -11,7 +11,6 @@ Explorer::Explorer(QWidget *parent) : QListView(parent)
     topPath = QT_PROJECT_PATH;
     topPath += "/res/Assets";
 
-
     buttonDirUp = WindowMain::GetInstance()->buttonExplorerDirUp;
     buttonChangeViewMode = WindowMain::GetInstance()->buttonExplorerChangeViewMode;
 
@@ -64,15 +63,19 @@ void Explorer::mouseReleaseEvent(QMouseEvent *e)
 {
     if(e->button() == Qt::LeftButton)
     {
+        if(this->selectedIndexes().size() <= 0) return;
+
         QModelIndex clickedIndex = this->selectedIndexes().at(0);
-        std::string clickedName = fileSystemModel->fileName(clickedIndex).toStdString();
+        File f(fileSystemModel, &clickedIndex);
 
-        bool isFile = !fileSystemModel->isDir(clickedIndex);
         InspectorWidget *fileWidget = nullptr;
-        if(isFile)
+        if(f.IsFile())
         {
-
-            fileWidget = new InspectorTexture2DWidget(clickedName);
+            if(f.IsImage())
+            {
+                FileImage fi(fileSystemModel, &clickedIndex);
+                fileWidget = new InspectorTexture2DWidget(fi);
+            }
         }
 
         if(fileWidget != nullptr)

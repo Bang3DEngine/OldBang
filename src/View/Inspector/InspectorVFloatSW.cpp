@@ -21,7 +21,9 @@ InspectorVFloatSW::InspectorVFloatSW(const std::string &labelString,
         InspectorFloatSW *s = new InspectorFloatSW("", initialValues[i], parent);
         floatSlots.push_back(s);
 
-        s->setContentsMargins(0,0,0,0); s->show();
+        s->SetValue(initialValues[i]);
+        s->setContentsMargins(0,0,0,0);
+        s->show();
         hLayout->addWidget(s);
     }
 

@@ -9,8 +9,10 @@
 #include <QFileSystemModel>
 
 #include "Bang.h"
+
 #include "Logger.h"
 
+#include "File.h"
 #include "InspectorTexture2DWidget.h"
 
 class Explorer : public QListView

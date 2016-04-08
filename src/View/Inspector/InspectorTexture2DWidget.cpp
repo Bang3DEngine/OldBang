@@ -1,22 +1,25 @@
 #include "InspectorTexture2DWidget.h"
 
 InspectorTexture2DWidget::
-InspectorTexture2DWidget(const std::string &filename) :
+InspectorTexture2DWidget(const FileImage &fileImage) :
     InspectorWidget()
 {
-    inspectorInfo = new InspectorWidgetInfo();
-    inspectorInfo->SetSlotsInfos(
+    std::string mode = fileImage.GetNumComponents() == 3 ?
+                "RGB" : "RGBA";
+
+    inspectorInfo.SetSlotsInfos(
     {
         new InspectorAssetSWInfo("File", ".jpg, .png, .jpeg, .bmp"),
-        new InspectorVFloatSWInfo("Dimensions", {16.0f, 16.0f})
+        new InspectorVFloatSWInfo("Dimensions",
+                    {fileImage.GetWidth(),
+                     fileImage.GetHeight()}),
+        new InspectorEnumSWInfo("Mode", {mode})
     }
     );
 
-    this->ConstructFromWidgetInformation(filename, inspectorInfo);
+    this->ConstructFromWidgetInformation(fileImage.GetName(), &inspectorInfo);
 }
 
 InspectorTexture2DWidget::~InspectorTexture2DWidget()
 {
-    if(inspectorInfo != nullptr)
-        delete inspectorInfo;
 }

@@ -2,7 +2,8 @@
 
 InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
                                            float initialValue,
-                                           InspectorWidget *parent) : InspectorSW(labelString, parent)
+                                           InspectorWidget *parent) :
+    InspectorSW(labelString, parent)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
@@ -19,8 +20,8 @@ InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
     spinbox = new FloatPartSlotSpinBox();
     spinbox->setValue(initialValue);
     spinbox->setAlignment(Qt::AlignHCenter);
-    spinbox->setMinimum(-999999999.9);
-    spinbox->setMaximum(999999999.9);
+    spinbox->setMinimum(-9999999.9);
+    spinbox->setMaximum(9999999.9);
     spinbox->setAccelerated(true);
     spinbox->setMinimumWidth(50);
     spinbox->setContentsMargins(0,0,0,0);
@@ -40,6 +41,7 @@ void InspectorFloatSW::SetValue(float f)
     {
         disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
         spinbox->setValue(f);
+        spinbox->show();
         connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
     }
 }
@@ -57,9 +59,9 @@ void InspectorFloatSW::OnSpinBoxFocusIn()
 void InspectorFloatSW::OnSpinBoxFocusOut()
 {
     editing = false;
-    connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
+    connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
     spinbox->setValue(spinbox->value());
-    disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_NotifyInspectorSlotChanged(double)));
+    disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
 }
 
 QSize InspectorFloatSW::sizeHint() const { return QSize(30, 30); }
