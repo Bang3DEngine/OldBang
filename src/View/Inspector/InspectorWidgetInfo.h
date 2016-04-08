@@ -50,18 +50,38 @@ public:
     bool IsOfTypeVecFloat() override { return false; }
 };
 
-class InspectorAssetSWInfo: public InspectorSWInfo
+class InspectorStringSWInfo: public InspectorSWInfo
+{
+public:
+
+    bool readonly = false, inlined = false;
+    std::string value = "";
+
+    InspectorStringSWInfo(const std::string& label, const std::string& initialValue,
+                          bool readonly = false, bool inlined = false) : InspectorSWInfo(label)
+    {
+        this->value = initialValue;
+        this->readonly = readonly;
+        this->inlined = inlined;
+    }
+    virtual ~InspectorStringSWInfo() {}
+
+    bool IsOfTypeVecFloat() override { return false; }
+};
+
+
+class InspectorFileSWInfo: public InspectorSWInfo
 {
 public:
     std::string filepath = "";
     std::string fileExtension = "*";
 
-    InspectorAssetSWInfo(const std::string& label, const std::string& fileExtension) : InspectorSWInfo(label)
+    InspectorFileSWInfo(const std::string& label, const std::string& fileExtension) : InspectorSWInfo(label)
     {
         this->fileExtension = fileExtension;
     }
 
-    virtual ~InspectorAssetSWInfo() {}
+    virtual ~InspectorFileSWInfo() {}
 
     bool IsOfTypeVecFloat() override { return false; }
 };

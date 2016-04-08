@@ -9,14 +9,15 @@ InspectorTexture2DWidget(const FileImage &fileImage) :
 
     inspectorInfo.SetSlotsInfos(
     {
-        new InspectorAssetSWInfo("File", ".jpg, .png, .jpeg, .bmp"),
-        new InspectorVFloatSWInfo("Dimensions",
-                    {fileImage.GetWidth(),
-                     fileImage.GetHeight()}),
-        new InspectorEnumSWInfo("Mode", {mode}),
-        new InspectorEnumSWInfo("File name", {fileImage.GetName()}),
-        new InspectorEnumSWInfo("Extension", {fileImage.GetExtension()}),
-        new InspectorEnumSWInfo("Path", {fileImage.GetPath()})
+        new InspectorStringSWInfo("Dimensions",
+                     std::to_string(fileImage.GetWidth()) +
+                     "x" + std::to_string(fileImage.GetHeight()),
+                     true, false
+                    ),
+        new InspectorStringSWInfo("Mode", mode, true, false),
+        new InspectorStringSWInfo("File name",
+                    fileImage.GetName() + "." + fileImage.GetExtension(), true),
+        new InspectorStringSWInfo("Path", fileImage.GetPath(), true)
     }
     );
 

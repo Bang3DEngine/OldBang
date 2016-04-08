@@ -6,6 +6,7 @@
 #include "InspectorEnumSW.h"
 #include "InspectorFileSW.h"
 #include "InspectorFloatSW.h"
+#include "InspectorStringSW.h"
 #include "InspectorVFloatSW.h"
 
 #include "WindowMain.h"
@@ -58,9 +59,10 @@ void InspectorWidget::ConstructFromWidgetInformation(
     {
         InspectorSW *ws = nullptr;
 
-        InspectorVFloatSWInfo *siv;
-        InspectorEnumSWInfo *sie;
-        InspectorAssetSWInfo *sia;
+        InspectorVFloatSWInfo *siv = nullptr;
+        InspectorEnumSWInfo *sie = nullptr;
+        InspectorFileSWInfo *sif = nullptr;
+        InspectorStringSWInfo *sis = nullptr;
 
         if( (siv = dynamic_cast<InspectorVFloatSWInfo*>(si)) !=
                 nullptr)
@@ -73,11 +75,16 @@ void InspectorWidget::ConstructFromWidgetInformation(
             ws = new InspectorEnumSW(sie->label, sie->enumValues,
                                      sie->selectedValueIndex, this);
         }
-        else if( (sia = dynamic_cast<InspectorAssetSWInfo*>(si)) !=
+        else if( (sif = dynamic_cast<InspectorFileSWInfo*>(si)) !=
                  nullptr)
         {
-            ws = new InspectorFileSW(sia->label, sia->filepath,
-                                     sia->fileExtension, this);
+            ws = new InspectorFileSW(sif->label, sif->filepath,
+                                     sif->fileExtension, this);
+        }
+        else if( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) !=
+                 nullptr)
+        {
+            ws = new InspectorStringSW(sis->label, sis->value, this, sis->readonly, sis->inlined);
         }
 
         if(ws != nullptr)
@@ -149,9 +156,10 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
     for(InspectorSWInfo *si : widgetInfo->GetSlotInfos())
     {
         InspectorSW *ws = labelsToPartSlots[si->label];
-        InspectorVFloatSWInfo* siv;
-        InspectorEnumSWInfo *sie;
-        InspectorAssetSWInfo *sia;
+        InspectorVFloatSWInfo* siv = nullptr;
+        InspectorEnumSWInfo *sie = nullptr;
+        InspectorFileSWInfo *sia = nullptr;
+        InspectorStringSWInfo *sis = nullptr;
 
         if( (siv = dynamic_cast<InspectorVFloatSWInfo*>(si)) !=
                 nullptr)
@@ -165,11 +173,17 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
             InspectorEnumSW *we = static_cast<InspectorEnumSW*>(ws);
             we->SetValue( sie->selectedValueIndex );
         }
-        else if( (sia = dynamic_cast<InspectorAssetSWInfo*>(si)) !=
+        else if( (sia = dynamic_cast<InspectorFileSWInfo*>(si)) !=
                  nullptr)
         {
             InspectorFileSW *wa = static_cast<InspectorFileSW*>(ws);
             wa->SetValue( sia->filepath );
+        }
+        else if( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) !=
+                 nullptr)
+        {
+            InspectorStringSW *ws = static_cast<InspectorStringSW*>(ws);
+            ws->SetValue( sis->value );
         }
 
         if(ws != nullptr)

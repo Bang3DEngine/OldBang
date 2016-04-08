@@ -144,7 +144,8 @@ HEADERS += \
     src/View/Inspector/InspectorWidget.h \
     src/View/Inspector/InspectorTexture2DWidget.h \
     src/View/Explorer/File.h \
-    src/View/Explorer/FileImage.h
+    src/View/Explorer/FileImage.h \
+    src/View/Inspector/InspectorStringSW.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -208,7 +209,8 @@ SOURCES += \
     src/View/Inspector/InspectorWidget.cpp \
     src/View/Inspector/InspectorTexture2DWidget.cpp \
     src/View/Explorer/File.cpp \
-    src/View/Explorer/FileImage.cpp
+    src/View/Explorer/FileImage.cpp \
+    src/View/Inspector/InspectorStringSW.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

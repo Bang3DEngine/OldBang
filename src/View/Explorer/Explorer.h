@@ -27,6 +27,7 @@ private:
     QToolButton *buttonChangeViewMode;
 
     static std::string topPath;
+
     void setDir(const std::string &path);
     std::string getCurrentDir() const;
 
