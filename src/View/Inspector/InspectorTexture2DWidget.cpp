@@ -13,7 +13,10 @@ InspectorTexture2DWidget(const FileImage &fileImage) :
         new InspectorVFloatSWInfo("Dimensions",
                     {fileImage.GetWidth(),
                      fileImage.GetHeight()}),
-        new InspectorEnumSWInfo("Mode", {mode})
+        new InspectorEnumSWInfo("Mode", {mode}),
+        new InspectorEnumSWInfo("File name", {fileImage.GetName()}),
+        new InspectorEnumSWInfo("Extension", {fileImage.GetExtension()}),
+        new InspectorEnumSWInfo("Path", {fileImage.GetPath()})
     }
     );
 
