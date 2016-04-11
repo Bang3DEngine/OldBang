@@ -33,6 +33,9 @@ private:
     void setDir(const std::string &path);
     std::string getCurrentDir() const;
 
+    std::string lastSelectedFileName = "";
+    QTimer *updateTimer = nullptr;
+
 public:
     Explorer(QWidget *parent);
     virtual ~Explorer();
@@ -43,8 +46,12 @@ public:
 
     static std::string GetTopPath() { return topPath; }
 
+    //Updates the Inspector with the selected file info
+    void RefreshInspector();
 
 public slots:
+    void Refresh();
+
     void OnDirLoaded(QString dir);
     void OnButtonDirUpClicked();
     void OnButtonChangeViewModeClicked();

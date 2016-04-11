@@ -102,7 +102,6 @@ void InspectorWidget::ConstructFromWidgetInformation(
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(OnCustomContextMenuRequested(QPoint)));
 
-
     updateTimer = new QTimer(this); //Every X seconds, update all the slots values
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
     updateTimer->start(20);

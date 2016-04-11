@@ -23,6 +23,10 @@ Explorer::Explorer(QWidget *parent) : QListView(parent)
 
     connect(fileSystemModel, SIGNAL(directoryLoaded(QString)), this, SLOT(OnDirLoaded(QString)));
     setDir(topPath);
+
+    updateTimer = new QTimer(this); //Every X seconds, update all the slots values
+    connect(updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
+    updateTimer->start(100);
 }
 
 Explorer::~Explorer()
@@ -63,30 +67,7 @@ void Explorer::mouseReleaseEvent(QMouseEvent *e)
 {
     if(e->button() == Qt::LeftButton)
     {
-        if(this->selectedIndexes().size() <= 0) return;
-
-        QModelIndex clickedIndex = this->selectedIndexes().at(0);
-        File f(fileSystemModel, &clickedIndex);
-
-        InspectorWidget *fileWidget = nullptr;
-        if(f.IsFile())
-        {
-            if(f.IsImage())
-            {
-                FileImage fi(fileSystemModel, &clickedIndex);
-                fileWidget = new InspectorTexture2DWidget(fi);
-            }
-            else if(f.IsMesh())
-            {
-                FileMesh fm(fileSystemModel, &clickedIndex);
-                fileWidget = new InspectorMeshFileWidget(fm);
-            }
-        }
-
-        if(fileWidget != nullptr)
-        {
-            WindowMain::GetInstance()->widgetInspector->SetWidget(fileWidget);
-        }
+        RefreshInspector();
     }
 }
 
@@ -117,6 +98,47 @@ void Explorer::dropEvent(QDropEvent *e)
     }
 
     Logger_Log("Drop event in explorer " << e->source());
+}
+
+void Explorer::RefreshInspector()
+{
+    if(this->selectedIndexes().size() <= 0) return;
+
+    QModelIndex clickedIndex = this->selectedIndexes().at(0);
+    File f(fileSystemModel, &clickedIndex);
+
+    InspectorWidget *fileWidget = nullptr;
+    if(f.IsFile())
+    {
+        if(f.IsImage())
+        {
+            FileImage fi(fileSystemModel, &clickedIndex);
+            fileWidget = new InspectorTexture2DWidget(fi);
+        }
+        else if(f.IsMesh())
+        {
+            FileMesh fm(fileSystemModel, &clickedIndex);
+            fileWidget = new InspectorMeshFileWidget(fm);
+        }
+    }
+
+    if(fileWidget != nullptr)
+    {
+        WindowMain::GetInstance()->widgetInspector->SetWidget(fileWidget);
+    }
+}
+
+void Explorer::Refresh()
+{
+    if(selectedIndexes().length() > 0)
+    {
+       QModelIndex index = selectedIndexes().at(0);
+       File f(fileSystemModel, &index);
+       if(f.GetName() != lastSelectedFileName)
+       {
+           RefreshInspector();
+       }
+    }
 }
 
 void Explorer::setDir(const std::string &path)
