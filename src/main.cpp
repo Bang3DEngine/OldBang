@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 
     Stage *stage = nullptr;
 
-    #ifdef BANG_EDITOR
+    #ifndef BANG_EDITOR
     stage = new Stage();
     #else
     stage = new EditorStage();

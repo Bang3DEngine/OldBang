@@ -3,31 +3,6 @@
     MainStage
 
     <children>
-
-        #Camera
-        <Entity>
-            e1
-            camera
-            <parts>
-                <Transform>
-                    t1
-                    0.0 0.0 9.0       #position
-                    0.0 0.0 0.0 1.0   #rotation
-                    1.0 1.0 1.0       #scale
-                </Transform>
-
-                <Camera>
-                    cam0
-                    60.0                #fov
-                    0.5                 #zNear
-                    40.0                #zFar
-                    Perspective         #Projection mode
-                    -1.0 1.0 -1.0 1.0   #OrthoRect
-                </Camera>
-                <TestCameraBehaviour>
-                </TestCameraBehaviour>
-            </parts>
-        </Entity>
     </children>
 
     <cameraEntity>

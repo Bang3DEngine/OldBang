@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "Canvas.h"
 
-Stage::Stage() : cameraEntity(nullptr)
+Stage::Stage()
 {
     isStage = true;
     gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());

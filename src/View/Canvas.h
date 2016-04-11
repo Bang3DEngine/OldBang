@@ -32,16 +32,16 @@ private:
     static int width, height;
     static unsigned long long lastRenderTime;
 
-    bool paused;
+    bool paused = false;
     std::list<Stage*> stages;
 
-    Stage *currentStage;
+    Stage *currentStage = nullptr;
     QTimer drawTimer;
 
 public:
 
     glm::vec4 clearColor;
-    WindowMain *windowMain;
+    WindowMain *windowMain = nullptr;
 
     explicit Canvas(QWidget *parent = 0);
 

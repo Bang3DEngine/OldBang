@@ -8,7 +8,7 @@ int Canvas::RedrawDelay = 1;
 float Canvas::aspectRatio = 1.0f;
 unsigned long long Canvas::lastRenderTime = 0;
 
-Canvas::Canvas(QWidget* parent) : QGLWidget(parent), paused(false), currentStage(nullptr)
+Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
     clearColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);

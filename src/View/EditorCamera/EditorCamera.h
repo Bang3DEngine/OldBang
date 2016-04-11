@@ -4,9 +4,12 @@
 #include "Camera.h"
 #include "EditorEntity.h"
 
-//Camera that you can control in the editor
+//ENTITY Camera that you can control in the editor
 class EditorCamera : public EditorEntity
 {
+private:
+    Camera *cam = nullptr;
+
 public:
     EditorCamera();
     virtual ~EditorCamera();

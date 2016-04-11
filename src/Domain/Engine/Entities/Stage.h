@@ -22,10 +22,10 @@ friend class Canvas;
 protected:
 
     //Framebuffer for positions, normals, uvs and diffuse
-    GBuffer *gbuffer;
+    GBuffer *gbuffer = nullptr;
 
-    const Canvas *canvas; //set by canvas when added to it
-    const Entity *cameraEntity;
+    const Canvas *canvas = nullptr; //set by canvas when added to it
+    const Entity *cameraEntity = nullptr;
 
     void _OnResize(int newWidth, int newHeight);
 
