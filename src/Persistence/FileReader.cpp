@@ -89,7 +89,7 @@ int FileReader::GetOBJNumFaces(const std::string &filepath)
     std::string line;
     while(std::getline(f, line))
     {
-        if(line.at(0) == 'f')
+        if(line.length() > 0 && line.at(0) == 'f')
         {
             ++numFaces;
         }

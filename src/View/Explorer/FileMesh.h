@@ -21,22 +21,3 @@ public:
 };
 
 #endif // FILEMESH_H
-#ifndef FILEIMAGE_H
-#define FILEIMAGE_H
-
-
-class FileImage : public File
-{
-private:
-    int width = 0, height = 0;
-    int numComponents = 3;
-
-public:
-    FileImage(const QFileSystemModel *model, const QModelIndex *index);
-
-    int GetWidth() const;
-    int GetHeight() const;
-    int GetNumComponents() const;
-};
-
-#endif // FILEIMAGE_H
