@@ -25,6 +25,9 @@ INCLUDEPATH += \
     $$PWD/src/View/Hierarchy/ \
     $$PWD/src/View/Explorer/ \
     $$PWD/src/View/Logger/ \
+    $$PWD/src/View/EditorCamera/ \
+    $$PWD/src/View/EditorEntity/ \
+    $$PWD/src/View/EditorStage/ \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/src/Domain/Graphics/Interfaces/ \
@@ -147,7 +150,10 @@ HEADERS += \
     src/View/Explorer/FileImage.h \
     src/View/Inspector/InspectorStringSW.h \
     src/View/Inspector/InspectorMeshFileWidget.h \
-    src/View/Explorer/FileMesh.h
+    src/View/Explorer/FileMesh.h \
+    src/View/EditorCamera/EditorCamera.h \
+    src/View/EditorEntity/EditorEntity.h \
+    src/View/EditorStage/EditorStage.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -214,7 +220,10 @@ SOURCES += \
     src/View/Explorer/FileImage.cpp \
     src/View/Inspector/InspectorStringSW.cpp \
     src/View/Inspector/InspectorMeshFileWidget.cpp \
-    src/View/Explorer/FileMesh.cpp
+    src/View/Explorer/FileMesh.cpp \
+    src/View/EditorCamera/EditorCamera.cpp \
+    src/View/EditorEntity/EditorEntity.cpp \
+    src/View/EditorStage/EditorStage.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

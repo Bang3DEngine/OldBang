@@ -24,7 +24,7 @@ protected:
     //Framebuffer for positions, normals, uvs and diffuse
     GBuffer *gbuffer;
 
-    const Canvas *canvas; //set by canvas when added to ti
+    const Canvas *canvas; //set by canvas when added to it
     const Entity *cameraEntity;
 
     void _OnResize(int newWidth, int newHeight);
