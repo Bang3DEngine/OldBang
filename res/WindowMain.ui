@@ -13,6 +13,12 @@
     <height>594</height>
    </rect>
   </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::StrongFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>Bang Editor</string>
   </property>
@@ -36,6 +42,12 @@
         <verstretch>1</verstretch>
        </sizepolicy>
       </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
      </widget>
     </item>
     <item>
@@ -54,8 +66,8 @@
     </item>
    </layout>
    <zorder></zorder>
-   <zorder>canvas</zorder>
    <zorder>buttonPauseResume</zorder>
+   <zorder>canvas</zorder>
   </widget>
   <widget class="MenuBar" name="menubar">
    <property name="geometry">

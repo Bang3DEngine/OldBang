@@ -18,6 +18,7 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     drawTimer.start();
 
     windowMain = WindowMain::GetInstance();
+    Input::Init();
 }
 
 void Canvas::initializeGL()
@@ -55,7 +56,21 @@ void Canvas::updateGL()
         currentStage->_OnRender();
     }
 
+    if(Input::GetMouseButtonDown(Input::MouseButton::MLeft)) {
+        Logger_Log("Down");
+    }
+    else if(Input::GetMouseButtonUp(Input::MouseButton::MLeft)) {
+        Logger_Log("Up");
+    }
+    else if(Input::GetMouseButton(Input::MouseButton::MLeft)) {
+        Logger_Log("Pressed");
+        Logger_Log(Input::GetMouseCoords());
+    }
+    else Logger_Log("-");
+
     QGLWidget::swapBuffers();
+
+    Input::OnNewFrame();
 }
 
 void Canvas::resizeGL(int w, int h)
@@ -145,6 +160,36 @@ int Canvas::GetWidth()
 int Canvas::GetHeight()
 {
     return height;
+}
+
+void Canvas::mouseMoveEvent(QMouseEvent *event)
+{
+    Input::HandleInputMouseMove(event);
+    QGLWidget::mouseMoveEvent(event);
+}
+
+void Canvas::mousePressEvent(QMouseEvent *event)
+{
+    Input::HandleInputMousePress(event);
+    QGLWidget::mousePressEvent(event);
+}
+
+void Canvas::mouseReleaseEvent(QMouseEvent *event)
+{
+    Input::HandleInputMouseRelease(event);
+    QGLWidget::mouseReleaseEvent(event);
+}
+
+void Canvas::keyPressEvent(QKeyEvent *event)
+{
+    Input::HandleInputKeyPress(event);
+    QGLWidget::keyPressEvent(event);
+}
+
+void Canvas::keyReleaseEvent(QKeyEvent *event)
+{
+    Input::HandleInputKeyReleased(event);
+    QGLWidget::keyReleaseEvent(event);
 }
 
 void Canvas::OnTopKekPressed()

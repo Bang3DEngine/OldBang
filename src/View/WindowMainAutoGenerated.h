@@ -106,6 +106,8 @@ public:
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
         WindowMain->resize(941, 594);
+        WindowMain->setMouseTracking(true);
+        WindowMain->setFocusPolicy(Qt::StrongFocus);
         actionOpen_project = new QAction(WindowMain);
         actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
         actionSave_project = new QAction(WindowMain);
@@ -160,6 +162,8 @@ public:
         sizePolicy.setVerticalStretch(1);
         sizePolicy.setHeightForWidth(canvas->sizePolicy().hasHeightForWidth());
         canvas->setSizePolicy(sizePolicy);
+        canvas->setMouseTracking(true);
+        canvas->setFocusPolicy(Qt::StrongFocus);
 
         verticalLayout->addWidget(canvas);
 
@@ -178,8 +182,8 @@ public:
         verticalLayout->addWidget(buttonPauseResume);
 
         WindowMain->setCentralWidget(centralwidget);
-        canvas->raise();
         buttonPauseResume->raise();
+        canvas->raise();
         menubar = new MenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 941, 25));

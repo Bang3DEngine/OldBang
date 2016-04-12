@@ -153,7 +153,8 @@ HEADERS += \
     src/View/Explorer/FileMesh.h \
     src/View/EditorCamera/EditorCamera.h \
     src/View/EditorEntity/EditorEntity.h \
-    src/View/EditorStage/EditorStage.h
+    src/View/EditorStage/EditorStage.h \
+    src/Domain/Engine/Others/Input.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -223,7 +224,8 @@ SOURCES += \
     src/View/Explorer/FileMesh.cpp \
     src/View/EditorCamera/EditorCamera.cpp \
     src/View/EditorEntity/EditorEntity.cpp \
-    src/View/EditorStage/EditorStage.cpp
+    src/View/EditorStage/EditorStage.cpp \
+    src/Domain/Engine/Others/Input.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

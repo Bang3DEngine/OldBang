@@ -13,12 +13,13 @@
 #include <QApplication>
 
 #include "VAO.h"
-#include "Shader.h"
-#include "Stage.h"
 #include "Time.h"
+#include "Input.h"
+#include "Stage.h"
 #include "Prefab.h"
-#include "ShaderProgram.h"
+#include "Shader.h"
 #include "MeshRenderer.h"
+#include "ShaderProgram.h"
 #include "IWindowEventManagerListener.h"
 
 class WindowMain;
@@ -60,7 +61,11 @@ public:
     static int GetWidth();
     static int GetHeight();
 
-signals:
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
 public slots:
     void updateGL() override;
