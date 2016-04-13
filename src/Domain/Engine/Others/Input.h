@@ -113,12 +113,14 @@ private:
 
     static std::map<Key, ButtonInfo> keyInfos;
 
+    static float lastMouseWheelDelta;
     static glm::vec2 mouseCoords;
     static std::map<MouseButton, ButtonInfo> mouseInfo;
 
     static void Init();
     static void OnNewFrame();
 
+    static void HandleInputMousWheel(QWheelEvent *event);
     static void HandleInputMouseMove(QMouseEvent *event);
     static void HandleInputMousePress(QMouseEvent *event);
     static void HandleInputMouseRelease(QMouseEvent *event);
@@ -130,6 +132,8 @@ public:
     static bool GetKey(Key k);
     static bool GetKeyUp(Key k);
     static bool GetKeyDown(Key k);
+
+    static float GetMouseWheel();
 
     static bool GetMouseButton(MouseButton mb);
     static bool GetMouseButtonUp(MouseButton mb);

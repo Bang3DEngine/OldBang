@@ -2,6 +2,7 @@
 
 std::map<Input::Key, Input::ButtonInfo> Input::keyInfos;
 
+float Input::lastMouseWheelDelta = 0.0f;
 glm::vec2 Input::mouseCoords;
 std::map<Input::MouseButton, Input::ButtonInfo> Input::mouseInfo;
 
@@ -38,6 +39,13 @@ void Input::OnNewFrame()
             mbInfo.down = false; //Not down anymore, just pressed.
         }
     }
+
+    lastMouseWheelDelta = 0.0f;
+}
+
+void Input::HandleInputMousWheel(QWheelEvent *event)
+{
+    lastMouseWheelDelta = float(event->delta()) / (24.0f * 15.0f);
 }
 
 void Input::HandleInputMouseMove(QMouseEvent *event)
@@ -107,7 +115,12 @@ bool Input::GetKeyUp(Input::Key k)
 bool Input::GetKeyDown(Input::Key k)
 {
     return keyInfos.find(k) != keyInfos.end() &&
-           keyInfos[k].down;
+            keyInfos[k].down;
+}
+
+float Input::GetMouseWheel()
+{
+    return lastMouseWheelDelta;
 }
 
 

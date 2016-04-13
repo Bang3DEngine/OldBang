@@ -56,18 +56,6 @@ void Canvas::updateGL()
         currentStage->_OnRender();
     }
 
-    if(Input::GetMouseButtonDown(Input::MouseButton::MLeft)) {
-        Logger_Log("Down");
-    }
-    else if(Input::GetMouseButtonUp(Input::MouseButton::MLeft)) {
-        Logger_Log("Up");
-    }
-    else if(Input::GetMouseButton(Input::MouseButton::MLeft)) {
-        Logger_Log("Pressed");
-        Logger_Log(Input::GetMouseCoords());
-    }
-    else Logger_Log("-");
-
     QGLWidget::swapBuffers();
 
     Input::OnNewFrame();
@@ -160,6 +148,12 @@ int Canvas::GetWidth()
 int Canvas::GetHeight()
 {
     return height;
+}
+
+void Canvas::wheelEvent(QWheelEvent *event)
+{
+    Input::HandleInputMousWheel(event);
+    QGLWidget::wheelEvent(event);
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent *event)
