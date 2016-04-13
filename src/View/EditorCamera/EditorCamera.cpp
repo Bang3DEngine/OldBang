@@ -51,24 +51,17 @@ void EditorCamera::OnUpdate()
     //ROTATION WITH MOUSE HANDLING
     if(Input::GetMouseButton(Input::MouseButton::MRight))
     {
-        //We move the camera in x, y in view space.
-        //Then we translate from view to world space.
-
+        float r = glm::distance(t->GetPosition(), glm::vec3(0.0f));
         float mx = Input::GetMouseAxisX() * mouseRotBoost * Time::GetDeltaTime();
         float my = Input::GetMouseAxisY() * mouseRotBoost * Time::GetDeltaTime();
 
-        glm::mat4 viewMatrix, viewMatrixInverse;
-        cam->GetViewMatrix(viewMatrix);
-        viewMatrixInverse = glm::inverse(viewMatrix);
+        float dx = r * sin(mx) * cos(my);
+        float dy = r * cos(my) * sin(mx);
+        float dz = r * cos(mx);
 
-        glm::vec3 posViewSpace = ( viewMatrix *
-                                   glm::vec4(t->GetPosition(), 1.0f) ).xyz();
-        glm::vec3 newPosViewSpace = posViewSpace + glm::vec3(-mx, -my, 0.0f);
-        glm::vec3 newPosWorldSpace = ( viewMatrixInverse *
-                                       glm::vec4(newPosViewSpace, 1.0f) ).xyz();
-
-        t->SetPosition(newPosWorldSpace);
-        t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+        glm::vec3 newPosition = glm::vec3(dx, dy, dz);
+        t->SetPosition(newPosition);
+        //t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
     }
     //
 
