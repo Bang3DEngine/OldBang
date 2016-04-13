@@ -18,6 +18,7 @@ private:
     float moveAccel = 0.1f;
     float moveSpeed = 0.0f;
 
+    float mouseRotBoost = 500.0f;
     float mouseWheelBoost = 100.0f;
 
 public:
