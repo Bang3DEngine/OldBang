@@ -1,9 +1,12 @@
 #include "Input.h"
 
+#include "Canvas.h"
+
 std::map<Input::Key, Input::ButtonInfo> Input::keyInfos;
 
 float Input::lastMouseWheelDelta = 0.0f;
-glm::vec2 Input::mouseCoords;
+glm::vec2 Input::mouseCoords = glm::vec2(0.0f);
+glm::vec2 Input::lastMouseCoords = glm::vec2(0.0f);
 std::map<Input::MouseButton, Input::ButtonInfo> Input::mouseInfo;
 
 Input::Input() {} //private, never called
@@ -41,6 +44,7 @@ void Input::OnNewFrame()
     }
 
     lastMouseWheelDelta = 0.0f;
+    lastMouseCoords = mouseCoords;
 }
 
 void Input::HandleInputMousWheel(QWheelEvent *event)
@@ -139,7 +143,27 @@ bool Input::GetMouseButtonUp(Input::MouseButton mb)
 bool Input::GetMouseButtonDown(Input::MouseButton mb)
 {
     return mouseInfo.find(mb) != mouseInfo.end() &&
-           mouseInfo[mb].down;
+            mouseInfo[mb].down;
+}
+
+float Input::GetMouseAxisX()
+{
+    return GetMouseDeltaX() / Canvas::GetWidth();
+}
+
+float Input::GetMouseAxisY()
+{
+    return GetMouseDeltaY() / Canvas::GetHeight();
+}
+
+float Input::GetMouseDeltaX()
+{
+    return mouseCoords.x - lastMouseCoords.x;
+}
+
+float Input::GetMouseDeltaY()
+{
+    return mouseCoords.y - lastMouseCoords.y;
 }
 
 glm::vec2 Input::GetMouseCoords()

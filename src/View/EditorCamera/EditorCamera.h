@@ -18,7 +18,7 @@ private:
     float moveAccel = 0.1f;
     float moveSpeed = 0.0f;
 
-    float mouseWheelBoost = 3.0f;
+    float mouseWheelBoost = 100.0f;
 
 public:
     EditorCamera();

@@ -53,6 +53,8 @@ void EditorCamera::OnUpdate()
         moveStep += moveSpeed * t->GetRight() * Time::GetDeltaTime();
     }
 
+    Logger_Log(Input::GetMouseAxisX());
+
     bool someKeyPressed = glm::length(moveStep) != 0.0f;
     if(!someKeyPressed)
     {
