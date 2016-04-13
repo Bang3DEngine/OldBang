@@ -67,9 +67,8 @@ void EditorCamera::OnUpdate()
         glm::vec3 newPosWorldSpace = ( viewMatrixInverse *
                                        glm::vec4(newPosViewSpace, 1.0f) ).xyz();
 
-        t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
-
         t->SetPosition(newPosWorldSpace);
+        t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
     }
     //
 
