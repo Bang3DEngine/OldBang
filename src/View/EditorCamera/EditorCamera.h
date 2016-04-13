@@ -18,8 +18,10 @@ private:
     float moveAccel = 0.1f;
     float moveSpeed = 0.0f;
 
-    float mouseRotBoost = 40000.0f;
+    float mouseRotBoost = 100.0f;
     float mouseWheelBoost = 100.0f;
+
+    glm::vec2 mouseRotationRads = glm::vec2(0.0f);
 
 public:
     EditorCamera();

@@ -51,17 +51,15 @@ void EditorCamera::OnUpdate()
     //ROTATION WITH MOUSE HANDLING
     if(Input::GetMouseButton(Input::MouseButton::MRight))
     {
-        float r = glm::distance(t->GetPosition(), glm::vec3(0.0f));
         float mx = Input::GetMouseAxisX() * mouseRotBoost * Time::GetDeltaTime();
         float my = Input::GetMouseAxisY() * mouseRotBoost * Time::GetDeltaTime();
 
-        float dx = r * sin(mx) * cos(my);
-        float dy = r * cos(my) * sin(mx);
-        float dz = r * cos(mx);
+        mouseRotationRads += glm::vec2(mx, my);
 
-        glm::vec3 newPosition = glm::vec3(dx, dy, dz);
-        t->SetPosition(newPosition);
-        //t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+        t->SetLeftMatrix(glm::rotate(mouseRotationRads.x, t->GetUp()) *
+                         glm::rotate(mouseRotationRads.y, t->GetRight()));
+
+        t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
     }
     //
 

@@ -52,13 +52,23 @@ void Transform::SetScale(const glm::vec3 &s)
     scale = s;
 }
 
+void Transform::SetLeftMatrix(const glm::mat4 &leftMatrix)
+{
+    this->leftMatrix = leftMatrix;
+}
+
+void Transform::SetRightMatrix(const glm::mat4 &rightMatrix)
+{
+    this->rightMatrix = rightMatrix;
+}
+
 void Transform::GetMatrix(glm::mat4 &m) const
 {
     glm::mat4 T = glm::translate(glm::mat4(1.0f), position);
     glm::mat4 R = glm::mat4_cast(rotation);
     glm::mat4 S = glm::scale(glm::mat4(1.0f), scale);
 
-    m = T * R * S;
+    m = leftMatrix * T * R * S * rightMatrix;
 
     Entity *parent = GetOwner()->GetParent();
     if(parent != nullptr)
@@ -79,10 +89,12 @@ void Transform::GetNormalMatrix(glm::mat4 &m) const
     m = glm::transpose(glm::inverse(m));
 }
 
-void Transform::LookAt(glm::vec3 target)
+void Transform::LookAt(glm::vec3 target, glm::vec3 up)
 {
     Assert(target != position, "LookAt target is the same as position.", return);
 
+    SetRotation( glm::quat_cast( glm::inverse( glm::lookAt(GetPosition(), target, up)) ) );
+    /*
     glm::vec3 direction = glm::normalize(target - position);
     float dot = glm::dot(glm::vec3(0, 0, -1), direction);
 
@@ -100,6 +112,7 @@ void Transform::LookAt(glm::vec3 target)
     float angle = -glm::acos(dot);
     glm::vec3 cross = glm::normalize(glm::cross(glm::vec3(0, 0, -1), direction));
     rotation = glm::conjugate(glm::normalize(glm::angleAxis(angle, cross)));
+    */
 }
 
 glm::vec3 Transform::GetPosition() const
