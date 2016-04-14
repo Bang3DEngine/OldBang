@@ -61,7 +61,7 @@ void EditorCamera::OnUpdate()
 
         glm::vec3 newPosition = glm::vec3(dx, dy, dz);
         t->SetPosition(newPosition);
-        //t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+        t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
     }
     //
 

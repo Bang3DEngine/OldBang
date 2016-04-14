@@ -55,7 +55,7 @@ void InspectorStringSW::SetValue(const std::string &value)
     }
 }
 
-const std::string& InspectorStringSW::GetValue() const
+const std::string InspectorStringSW::GetValue() const
 {
     std::string str = strField->text().toStdString();
     return str;

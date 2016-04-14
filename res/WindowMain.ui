@@ -75,7 +75,7 @@
      <x>0</x>
      <y>0</y>
      <width>941</width>
-     <height>25</height>
+     <height>32</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -109,8 +109,8 @@
     <property name="title">
      <string>Project</string>
     </property>
-    <addaction name="actionOpen_project"/>
-    <addaction name="actionSave_project"/>
+    <addaction name="actionOpenStage"/>
+    <addaction name="actionSaveCurrentStage"/>
     <addaction name="actionProject_Settings"/>
    </widget>
    <widget class="QMenu" name="menuParts">
@@ -339,7 +339,7 @@
    <property name="minimumSize">
     <size>
      <width>493</width>
-     <height>191</height>
+     <height>210</height>
     </size>
    </property>
    <property name="features">
@@ -492,14 +492,14 @@
     </layout>
    </widget>
   </widget>
-  <action name="actionOpen_project">
+  <action name="actionOpenStage">
    <property name="text">
-    <string>Open project</string>
+    <string>Open stage</string>
    </property>
   </action>
-  <action name="actionSave_project">
+  <action name="actionSaveCurrentStage">
    <property name="text">
-    <string>Save project</string>
+    <string>Save current stage</string>
    </property>
   </action>
   <action name="actionCreateMaterial">

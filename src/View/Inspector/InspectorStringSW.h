@@ -25,7 +25,7 @@ public:
                       bool inlined = false);
 
     virtual void SetValue(const std::string &value);
-    virtual const std::string& GetValue() const;
+    virtual const std::string GetValue() const;
 
     virtual void OnFocusIn();
     virtual void OnFocusOut();

@@ -6,6 +6,7 @@ int Canvas::width = 0;
 int Canvas::height = 0;
 int Canvas::RedrawDelay = 1;
 float Canvas::aspectRatio = 1.0f;
+Canvas *Canvas::stCanvas = nullptr;
 unsigned long long Canvas::lastRenderTime = 0;
 
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
@@ -19,6 +20,8 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 
     windowMain = WindowMain::GetInstance();
     Input::Init();
+
+    stCanvas = this;
 }
 
 void Canvas::initializeGL()
@@ -133,6 +136,11 @@ void Canvas::RemoveStage(const std::string &name)
     {
         if((*it)->name == name) { stages.erase(it); return; }
     }
+}
+
+Canvas *Canvas::GetInstance()
+{
+    return stCanvas;
 }
 
 float Canvas::GetAspectRatio()

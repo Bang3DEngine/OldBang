@@ -39,6 +39,8 @@ public:
 
     Camera* GetCamera() const;
     const Canvas* GetCanvas() const;
+
+    void Write(std::ostream os) const override;
 };
 
 #endif // STAGE_H

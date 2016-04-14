@@ -66,3 +66,26 @@ const Canvas *Stage::GetCanvas() const
     return canvas;
 }
 
+
+
+void Stage::Write(std::ostream os) const
+{
+    f << "<Stage>" << std::endl;
+    f << this << std::endl;            //internal file id
+    f << this->GetName() << std::endl; //stage name
+
+    //Children come now
+    f << "<children>" << std::endl;
+    for(Entity *e : children)
+    {
+        e->Write(f);
+    }
+    f << "</children>" << std::endl;
+
+    //Not used ftm
+    f << "<cameraEntity>" << std::endl;
+    f << "</cameraEntity>" << std::endl;
+
+    f << "</Stage>" << std::endl;
+}
+

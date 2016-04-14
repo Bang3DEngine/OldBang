@@ -178,7 +178,27 @@ bool Entity::IsStage() const
 
 void Entity::Write(std::ostream &f) const
 {
+    f << "<Entity>" << std::endl;
+    f << this << std::endl;            //internal file id
+    f << this->GetName() << std::endl; //stage name
 
+    //Children
+    f << "<children>" << std::endl;
+    for(Entity *e : children)
+    {
+        e->Write(f);
+    }
+    f << "</children>" << std::endl;
+
+    //Parts
+    f << "<parts>" << std::endl;
+    for(Part *p : parts)
+    {
+        p->Write(f);
+    }
+    f << "</parts>" << std::endl;
+
+    f << "</Entity>" << std::endl;
 }
 
 void Entity::Read(std::istream &f)

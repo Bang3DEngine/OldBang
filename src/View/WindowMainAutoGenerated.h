@@ -39,8 +39,8 @@ QT_BEGIN_NAMESPACE
 class Ui_WindowMain
 {
 public:
-    QAction *actionOpen_project;
-    QAction *actionSave_project;
+    QAction *actionOpenStage;
+    QAction *actionSaveCurrentStage;
     QAction *actionCreateMaterial;
     QAction *actionCreateMesh;
     QAction *actionCreateShaderProgram;
@@ -108,10 +108,10 @@ public:
         WindowMain->resize(941, 594);
         WindowMain->setMouseTracking(true);
         WindowMain->setFocusPolicy(Qt::StrongFocus);
-        actionOpen_project = new QAction(WindowMain);
-        actionOpen_project->setObjectName(QString::fromUtf8("actionOpen_project"));
-        actionSave_project = new QAction(WindowMain);
-        actionSave_project->setObjectName(QString::fromUtf8("actionSave_project"));
+        actionOpenStage = new QAction(WindowMain);
+        actionOpenStage->setObjectName(QString::fromUtf8("actionOpenStage"));
+        actionSaveCurrentStage = new QAction(WindowMain);
+        actionSaveCurrentStage->setObjectName(QString::fromUtf8("actionSaveCurrentStage"));
         actionCreateMaterial = new QAction(WindowMain);
         actionCreateMaterial->setObjectName(QString::fromUtf8("actionCreateMaterial"));
         actionCreateMesh = new QAction(WindowMain);
@@ -186,7 +186,7 @@ public:
         canvas->raise();
         menubar = new MenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 941, 25));
+        menubar->setGeometry(QRect(0, 0, 941, 32));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -303,7 +303,7 @@ public:
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockInspector);
         dockExplorer = new QDockWidget(WindowMain);
         dockExplorer->setObjectName(QString::fromUtf8("dockExplorer"));
-        dockExplorer->setMinimumSize(QSize(493, 191));
+        dockExplorer->setMinimumSize(QSize(493, 210));
         dockExplorer->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockWidgetContents_5 = new QWidget();
         dockWidgetContents_5->setObjectName(QString::fromUtf8("dockWidgetContents_5"));
@@ -415,8 +415,8 @@ public:
         menuCreate->addAction(actionCreateTexture2D);
         menuEntity->addAction(actionCreateEmptyEntity);
         menuEntity->addAction(actionCreate_from_prefab);
-        menuProject->addAction(actionOpen_project);
-        menuProject->addAction(actionSave_project);
+        menuProject->addAction(actionOpenStage);
+        menuProject->addAction(actionSaveCurrentStage);
         menuProject->addAction(actionProject_Settings);
         menuParts->addAction(menuAddPart->menuAction());
         menuParts->addAction(actionRemovePart);
@@ -438,8 +438,8 @@ public:
     void retranslateUi(QMainWindow *WindowMain)
     {
         WindowMain->setWindowTitle(QApplication::translate("WindowMain", "Bang Editor", 0, QApplication::UnicodeUTF8));
-        actionOpen_project->setText(QApplication::translate("WindowMain", "Open project", 0, QApplication::UnicodeUTF8));
-        actionSave_project->setText(QApplication::translate("WindowMain", "Save project", 0, QApplication::UnicodeUTF8));
+        actionOpenStage->setText(QApplication::translate("WindowMain", "Open stage", 0, QApplication::UnicodeUTF8));
+        actionSaveCurrentStage->setText(QApplication::translate("WindowMain", "Save current stage", 0, QApplication::UnicodeUTF8));
         actionCreateMaterial->setText(QApplication::translate("WindowMain", "Material", 0, QApplication::UnicodeUTF8));
         actionCreateMesh->setText(QApplication::translate("WindowMain", "Mesh", 0, QApplication::UnicodeUTF8));
         actionCreateShaderProgram->setText(QApplication::translate("WindowMain", "ShaderProgram", 0, QApplication::UnicodeUTF8));

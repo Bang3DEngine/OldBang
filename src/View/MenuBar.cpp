@@ -1,10 +1,17 @@
 #include "MenuBar.h"
+
 #include "WindowEventManager.h"
 #include "WindowMain.h"
+#include "Canvas.h"
+
+#include "FileWriter.h"
 
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 {
     WindowMain *w = WindowMain::GetInstance();
+    connect(w->actionOpenStage,  SIGNAL(triggered()), this, SLOT(OnOpenStage()));
+    connect(w->actionSaveCurrentStage,  SIGNAL(triggered()), this, SLOT(OnSaveCurrentStage()));
+
     connect(w->actionCreateEmptyEntity,  SIGNAL(triggered()), this, SLOT(OnCreateEmptyEntity()));
     connect(w->actionCreatePrefab,  SIGNAL(triggered()), this, SLOT(OnCreatePrefab()));
     connect(w->actionCreateMaterial,  SIGNAL(triggered()), this, SLOT(OnCreateMaterial()));
@@ -16,6 +23,29 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
     connect(w->actionAddPartCamera,  SIGNAL(triggered()), this, SLOT(OnAddPartCamera()));
     connect(w->actionAddPartMeshRenderer,  SIGNAL(triggered()), this, SLOT(OnAddPartMeshRenderer()));
     connect(w->actionAddPartTransform,  SIGNAL(triggered()), this, SLOT(OnAddPartTransform()));
+}
+
+void MenuBar::OnOpenStage() const
+{
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::OpenStage);
+}
+
+void MenuBar::OnSaveCurrentStage() const
+{
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveCurrentStage);
+
+
+    Stage *stage = Canvas::GetInstance()->GetCurrentStage();
+    if(stage == nullptr) return;
+
+    std::string filename =
+            QFileDialog::getSaveFileName(WindowMain::GetMainWindow(),
+                                         "Save current stage",
+                                         QString::fromStdString(Explorer::GetTopPath())
+                                         ).toStdString();
+    if(filename == "") return;
+
+    FileWriter::SaveStage(filename, stage);
 }
 
 void MenuBar::OnCreateEmptyEntity() const

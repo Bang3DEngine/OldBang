@@ -60,19 +60,6 @@ Material *MeshRenderer::GetMaterial()
     return material;
 }
 
-void MeshRenderer::Write(std::ostream &f) const
-{
-
-}
-
-void MeshRenderer::Read(std::istream &f)
-{
-    StageReader::RegisterNextPointerId(f, this);
-    SetMesh( AssetsManager::GetAsset<Mesh>( FileReader::ReadString(f) ) );
-    SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
-    FileReader::ReadNextLine(f); //Consume close tag
-}
-
 const std::string MeshRenderer::ToString() const
 {
     return "MeshRenderer";
@@ -184,4 +171,22 @@ void MeshRenderer::OnSlotValueChanged(InspectorWidget *source)
     }
     else { }
 }
+
+
+void MeshRenderer::Write(std::ostream &f) const
+{
+    f << "<MeshRenderer>" << std::endl;
+    f << this << std::endl;
+
+    f << "</MeshRenderer>" << std::endl;
+}
+
+void MeshRenderer::Read(std::istream &f)
+{
+    StageReader::RegisterNextPointerId(f, this);
+    SetMesh( AssetsManager::GetAsset<Mesh>( FileReader::ReadString(f) ) );
+    SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
+    FileReader::ReadNextLine(f); //Consume close tag
+}
+
 #endif

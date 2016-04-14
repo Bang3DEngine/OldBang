@@ -43,15 +43,15 @@ public:
     void SetMaterial(Material *m);
     Material* GetMaterial();
 
-    void Write(std::ostream &f) const;
-    void Read(std::istream &f);
-
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override { return "MeshRenderer"; }
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetPartInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
+
+    void Write(std::ostream &f) const;
+    void Read(std::istream &f);
     #endif
 };
 

@@ -14,6 +14,9 @@ public:
 
     enum Action
     {
+        OpenStage,
+        SaveCurrentStage,
+
         CreateEmptyEntity,
         CreatePrefab,
         CreateMaterial,
@@ -31,6 +34,9 @@ public:
 
 
 public slots:
+
+    void OnOpenStage () const;
+    void OnSaveCurrentStage () const;
 
     void OnCreateEmptyEntity () const;
     void OnCreatePrefab() const;

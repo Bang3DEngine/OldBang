@@ -1,6 +1,7 @@
 #include "WindowMain.h"
 
 WindowMain *WindowMain::win = nullptr;
+QMainWindow *WindowMain::mainWindow = nullptr;
 
 WindowMain::WindowMain()  : Ui_WindowMain()
 {
@@ -12,7 +13,9 @@ void WindowMain::Init(QMainWindow *window)
     {
         win = new WindowMain();
         win->setupUi(window);
-        window->showMaximized();
+
+        mainWindow = window;
+        mainWindow->showMaximized();
     }
 }
 
@@ -23,4 +26,9 @@ WindowMain *WindowMain::GetInstance()
         win = new WindowMain();
     }
     return win;
+}
+
+QMainWindow *WindowMain::GetMainWindow()
+{
+    return mainWindow;
 }

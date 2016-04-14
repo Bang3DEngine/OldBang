@@ -29,6 +29,7 @@ class Canvas : public QGLWidget, public IWindowEventManagerListener
 
 private:
     static int RedrawDelay;
+    static Canvas *stCanvas;
     static float aspectRatio;
     static int width, height;
     static unsigned long long lastRenderTime;
@@ -57,9 +58,10 @@ public:
     Stage* GetStage(const std::string &name) const;
     void RemoveStage(const std::string &name);
 
+    static Canvas *GetInstance();
     static float GetAspectRatio();
-    static int GetWidth();
     static int GetHeight();
+    static int GetWidth();
 
     void wheelEvent(QWheelEvent* event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
