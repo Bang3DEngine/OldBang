@@ -10,6 +10,7 @@
 *.dll
 *.dylib
 nohup.out
+Bang
 
 # Qt-es
 

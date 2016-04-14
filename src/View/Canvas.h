@@ -1,4 +1,4 @@
-#ifndef CANVAS_H
+﻿#ifndef CANVAS_H
 #define CANVAS_H
 
 #include "Bang.h"
@@ -54,14 +54,16 @@ public:
     Stage* AddStage(const std::string &name);
     void AddStage(Stage* stage);
     void SetCurrentStage(const std::string &name);
-    Stage* GetCurrentStage() const;
-    Stage* GetStage(const std::string &name) const;
     void RemoveStage(const std::string &name);
 
     static Canvas *GetInstance();
+    Stage* GetCurrentStage() const;
+    Stage* GetStage(const std::string &name) const;
     static float GetAspectRatio();
     static int GetHeight();
     static int GetWidth();
+
+    static void SetCursor(Qt::CursorShape cs);
 
     void wheelEvent(QWheelEvent* event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

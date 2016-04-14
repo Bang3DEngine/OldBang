@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "Input.h"
+#include "Canvas.h"
 #include "Camera.h"
 #include "EditorEntity.h"
 
@@ -18,8 +19,12 @@ private:
     float moveAccel = 0.1f;
     float moveSpeed = 0.0f;
 
-    float mouseRotBoost = 40000.0f;
+    float mouseCamPlaneMoveBoost = 100.0f; //Movement with middle button
+    float mouseRotBoost = 50.0f;
     float mouseWheelBoost = 100.0f;
+
+    //Only used if using cam orbitting behaviour
+    glm::vec2 mouseRotationRads = glm::vec2(0.0f);
 
 public:
     EditorCamera();

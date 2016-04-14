@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     app.setFont(font);
 
     QMainWindow *window = new QMainWindow;
-    WindowMain::Init(window); //init window main
+    WindowMain::Init(window, &app); //init window main
     WindowMain *windowMain = WindowMain::GetInstance();
 
     Stage *stage = nullptr;

@@ -22,6 +22,11 @@ private:
     glm::quat rotation;
     glm::vec3 scale;
 
+    // L * MODEL * R, user can edit those in order to
+    // apply its own post/pre transformations
+    glm::mat4 leftMatrix;
+    glm::mat4 rightMatrix;
+
 public:
 
     Transform();
@@ -30,12 +35,15 @@ public:
     void GetMatrix(glm::mat4 &m) const;
     void GetNormalMatrix(glm::mat4 &m) const;
 
-    void LookAt(glm::vec3 target);
+    void LookAt(glm::vec3 target,
+                glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
 
     void SetPosition(const glm::vec3 &p);
     void SetRotation(const glm::vec3 &euler);
     void SetRotation(const glm::quat &r);
     void SetScale(const glm::vec3 &s);
+    void SetLeftMatrix(const glm::mat4 &leftMatrix);
+    void SetRightMatrix(const glm::mat4 &rightMatrix);
 
     glm::vec3 GetForward() const;
     glm::vec3 GetBack() const;

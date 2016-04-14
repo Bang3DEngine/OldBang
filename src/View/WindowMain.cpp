@@ -1,13 +1,16 @@
 #include "WindowMain.h"
 
+#include <QApplication>
+
 WindowMain *WindowMain::win = nullptr;
 QMainWindow *WindowMain::mainWindow = nullptr;
+QApplication *WindowMain::app = nullptr;
 
 WindowMain::WindowMain()  : Ui_WindowMain()
 {
 }
 
-void WindowMain::Init(QMainWindow *window)
+void WindowMain::Init(QMainWindow *window, QApplication *application)
 {
     if(win == nullptr)
     {
@@ -31,4 +34,9 @@ WindowMain *WindowMain::GetInstance()
 QMainWindow *WindowMain::GetMainWindow()
 {
     return mainWindow;
+}
+
+QApplication *WindowMain::GetApplication() const
+{
+    return app;
 }

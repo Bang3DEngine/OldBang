@@ -158,6 +158,12 @@ int Canvas::GetHeight()
     return height;
 }
 
+void Canvas::SetCursor(Qt::CursorShape cs)
+{
+    WindowMain::GetInstance()->GetApplication()->
+                setOverrideCursor( cs );
+}
+
 void Canvas::wheelEvent(QWheelEvent *event)
 {
     Input::HandleInputMousWheel(event);
