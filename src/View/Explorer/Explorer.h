@@ -44,7 +44,7 @@ public:
     void mouseDoubleClickEvent(QMouseEvent *e) override;
     void dropEvent(QDropEvent *e) override;
 
-    static std::string GetTopPath() { return topPath; }
+    static std::string GetTopPath();
 
     //Updates the Inspector with the selected file info
     void RefreshInspector();

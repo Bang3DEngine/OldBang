@@ -40,7 +40,7 @@ class Ui_WindowMain
 {
 public:
     QAction *actionOpenStage;
-    QAction *actionSaveCurrentStage;
+    QAction *actionSaveStageAs;
     QAction *actionCreateMaterial;
     QAction *actionCreateMesh;
     QAction *actionCreateShaderProgram;
@@ -110,8 +110,8 @@ public:
         WindowMain->setFocusPolicy(Qt::StrongFocus);
         actionOpenStage = new QAction(WindowMain);
         actionOpenStage->setObjectName(QString::fromUtf8("actionOpenStage"));
-        actionSaveCurrentStage = new QAction(WindowMain);
-        actionSaveCurrentStage->setObjectName(QString::fromUtf8("actionSaveCurrentStage"));
+        actionSaveStageAs = new QAction(WindowMain);
+        actionSaveStageAs->setObjectName(QString::fromUtf8("actionSaveStageAs"));
         actionCreateMaterial = new QAction(WindowMain);
         actionCreateMaterial->setObjectName(QString::fromUtf8("actionCreateMaterial"));
         actionCreateMesh = new QAction(WindowMain);
@@ -186,7 +186,7 @@ public:
         canvas->raise();
         menubar = new MenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 941, 32));
+        menubar->setGeometry(QRect(0, 0, 941, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -215,20 +215,6 @@ public:
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         widgetHierarchy = new Hierarchy(dockWidgetContents_4);
-        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
-        __qtreewidgetitem->setText(0, QString::fromUtf8("1"));
-        widgetHierarchy->setHeaderItem(__qtreewidgetitem);
-        QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem(widgetHierarchy);
-        QTreeWidgetItem *__qtreewidgetitem2 = new QTreeWidgetItem(__qtreewidgetitem1);
-        new QTreeWidgetItem(__qtreewidgetitem2);
-        new QTreeWidgetItem(__qtreewidgetitem1);
-        QTreeWidgetItem *__qtreewidgetitem3 = new QTreeWidgetItem(widgetHierarchy);
-        QTreeWidgetItem *__qtreewidgetitem4 = new QTreeWidgetItem(__qtreewidgetitem3);
-        QTreeWidgetItem *__qtreewidgetitem5 = new QTreeWidgetItem(__qtreewidgetitem4);
-        new QTreeWidgetItem(__qtreewidgetitem5);
-        new QTreeWidgetItem(__qtreewidgetitem5);
-        new QTreeWidgetItem(__qtreewidgetitem4);
-        new QTreeWidgetItem(__qtreewidgetitem4);
         widgetHierarchy->setObjectName(QString::fromUtf8("widgetHierarchy"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy1.setHorizontalStretch(0);
@@ -416,7 +402,7 @@ public:
         menuEntity->addAction(actionCreateEmptyEntity);
         menuEntity->addAction(actionCreate_from_prefab);
         menuProject->addAction(actionOpenStage);
-        menuProject->addAction(actionSaveCurrentStage);
+        menuProject->addAction(actionSaveStageAs);
         menuProject->addAction(actionProject_Settings);
         menuParts->addAction(menuAddPart->menuAction());
         menuParts->addAction(actionRemovePart);
@@ -438,8 +424,8 @@ public:
     void retranslateUi(QMainWindow *WindowMain)
     {
         WindowMain->setWindowTitle(QApplication::translate("WindowMain", "Bang Editor", 0, QApplication::UnicodeUTF8));
-        actionOpenStage->setText(QApplication::translate("WindowMain", "Open stage", 0, QApplication::UnicodeUTF8));
-        actionSaveCurrentStage->setText(QApplication::translate("WindowMain", "Save current stage", 0, QApplication::UnicodeUTF8));
+        actionOpenStage->setText(QApplication::translate("WindowMain", "Open stage...", 0, QApplication::UnicodeUTF8));
+        actionSaveStageAs->setText(QApplication::translate("WindowMain", "Save stage as...", 0, QApplication::UnicodeUTF8));
         actionCreateMaterial->setText(QApplication::translate("WindowMain", "Material", 0, QApplication::UnicodeUTF8));
         actionCreateMesh->setText(QApplication::translate("WindowMain", "Mesh", 0, QApplication::UnicodeUTF8));
         actionCreateShaderProgram->setText(QApplication::translate("WindowMain", "ShaderProgram", 0, QApplication::UnicodeUTF8));
@@ -462,33 +448,6 @@ public:
         menuParts->setTitle(QApplication::translate("WindowMain", "Parts", 0, QApplication::UnicodeUTF8));
         menuAddPart->setTitle(QApplication::translate("WindowMain", "Add Part", 0, QApplication::UnicodeUTF8));
         dockHierarchy->setWindowTitle(QApplication::translate("WindowMain", "Hierarchy", 0, QApplication::UnicodeUTF8));
-
-        const bool __sortingEnabled = widgetHierarchy->isSortingEnabled();
-        widgetHierarchy->setSortingEnabled(false);
-        QTreeWidgetItem *___qtreewidgetitem = widgetHierarchy->topLevelItem(0);
-        ___qtreewidgetitem->setText(0, QApplication::translate("WindowMain", "aaaaaa", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem1 = ___qtreewidgetitem->child(0);
-        ___qtreewidgetitem1->setText(0, QApplication::translate("WindowMain", "bbbbbb", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem2 = ___qtreewidgetitem1->child(0);
-        ___qtreewidgetitem2->setText(0, QApplication::translate("WindowMain", "cccccc", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem3 = ___qtreewidgetitem->child(1);
-        ___qtreewidgetitem3->setText(0, QApplication::translate("WindowMain", "dddddd", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem4 = widgetHierarchy->topLevelItem(1);
-        ___qtreewidgetitem4->setText(0, QApplication::translate("WindowMain", "xxxxxxxx", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem5 = ___qtreewidgetitem4->child(0);
-        ___qtreewidgetitem5->setText(0, QApplication::translate("WindowMain", "wwwwwwwwwwwww", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem6 = ___qtreewidgetitem5->child(0);
-        ___qtreewidgetitem6->setText(0, QApplication::translate("WindowMain", "eeeeeeeeeeeeeee", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem7 = ___qtreewidgetitem6->child(0);
-        ___qtreewidgetitem7->setText(0, QApplication::translate("WindowMain", "rrrrrrrrrrrrrrrrrr", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem8 = ___qtreewidgetitem6->child(1);
-        ___qtreewidgetitem8->setText(0, QApplication::translate("WindowMain", "wwwwwwww", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem9 = ___qtreewidgetitem5->child(1);
-        ___qtreewidgetitem9->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqq", 0, QApplication::UnicodeUTF8));
-        QTreeWidgetItem *___qtreewidgetitem10 = ___qtreewidgetitem5->child(2);
-        ___qtreewidgetitem10->setText(0, QApplication::translate("WindowMain", "qqqqqqqqqqqqqssssssssssssss", 0, QApplication::UnicodeUTF8));
-        widgetHierarchy->setSortingEnabled(__sortingEnabled);
-
         dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0, QApplication::UnicodeUTF8));
         labelInspectorEntityName->setText(QApplication::translate("WindowMain", "Entity Name", 0, QApplication::UnicodeUTF8));
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));

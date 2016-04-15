@@ -75,7 +75,7 @@
      <x>0</x>
      <y>0</y>
      <width>941</width>
-     <height>32</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -110,7 +110,7 @@
      <string>Project</string>
     </property>
     <addaction name="actionOpenStage"/>
-    <addaction name="actionSaveCurrentStage"/>
+    <addaction name="actionSaveStageAs"/>
     <addaction name="actionProject_Settings"/>
    </widget>
    <widget class="QMenu" name="menuParts">
@@ -196,66 +196,6 @@
          <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
-          </property>
-         </column>
-         <item>
-          <property name="text">
-           <string>aaaaaa</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>bbbbbb</string>
-           </property>
-           <item>
-            <property name="text">
-             <string>cccccc</string>
-            </property>
-           </item>
-          </item>
-          <item>
-           <property name="text">
-            <string>dddddd</string>
-           </property>
-          </item>
-         </item>
-         <item>
-          <property name="text">
-           <string>xxxxxxxx</string>
-          </property>
-          <item>
-           <property name="text">
-            <string>wwwwwwwwwwwww</string>
-           </property>
-           <item>
-            <property name="text">
-             <string>eeeeeeeeeeeeeee</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>rrrrrrrrrrrrrrrrrr</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>wwwwwwww</string>
-             </property>
-            </item>
-           </item>
-           <item>
-            <property name="text">
-             <string>qqqqqqqqqqqq</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>qqqqqqqqqqqqqssssssssssssss</string>
-            </property>
-           </item>
-          </item>
-         </item>
         </widget>
        </item>
       </layout>
@@ -494,12 +434,12 @@
   </widget>
   <action name="actionOpenStage">
    <property name="text">
-    <string>Open stage</string>
+    <string>Open stage...</string>
    </property>
   </action>
-  <action name="actionSaveCurrentStage">
+  <action name="actionSaveStageAs">
    <property name="text">
-    <string>Save current stage</string>
+    <string>Save stage as...</string>
    </property>
   </action>
   <action name="actionCreateMaterial">

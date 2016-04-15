@@ -13,7 +13,7 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 {
     WindowMain *w = WindowMain::GetInstance();
     connect(w->actionOpenStage,  SIGNAL(triggered()), this, SLOT(OnOpenStage()));
-    connect(w->actionSaveCurrentStage,  SIGNAL(triggered()), this, SLOT(OnSaveCurrentStage()));
+    connect(w->actionSaveStageAs,  SIGNAL(triggered()), this, SLOT(OnSaveStageAs()));
 
     connect(w->actionCreateEmptyEntity,  SIGNAL(triggered()), this, SLOT(OnCreateEmptyEntity()));
     connect(w->actionCreatePrefab,  SIGNAL(triggered()), this, SLOT(OnCreatePrefab()));
@@ -32,17 +32,11 @@ void MenuBar::OnOpenStage() const
 {
     WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::OpenStage);
 
-    QFileDialog qfd(WindowMain::GetMainWindow(),
-                    QString::fromStdString("Open stage"),
-                    QString::fromStdString(Explorer::GetTopPath()));
-    qfd.setModal(true);
-
-    QTimer timer; //Every X seconds, refresh the fileDialog window
-    connect(&timer, SIGNAL(timeout()), &qfd, SLOT(repaint()));
-    timer.start(50);
-
-    std::string filename = qfd.getOpenFileName().toStdString();
-
+    std::string filename =
+            QFileDialog::getOpenFileName(WindowMain::GetMainWindow(),
+                                        QString::fromStdString("Open stage"),
+                                        QString::fromStdString(Explorer::GetTopPath()))
+            .toStdString();
     if(filename == "") return;
 
     EditorStage *stage = new EditorStage();
@@ -58,7 +52,7 @@ void MenuBar::OnOpenStage() const
     }
 }
 
-void MenuBar::OnSaveCurrentStage() const
+void MenuBar::OnSaveStageAs() const
 {
     WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveCurrentStage);
 
@@ -66,20 +60,12 @@ void MenuBar::OnSaveCurrentStage() const
     Stage *stage = Canvas::GetInstance()->GetCurrentStage();
     if(stage == nullptr) return;
 
-    QFileDialog qfd(WindowMain::GetMainWindow(),
-                    QString::fromStdString("Save current stage"),
-                    QString::fromStdString(Explorer::GetTopPath()));
-    qfd.setModal(true);
-
-    QTimer timer; //Every X seconds, refresh the fileDialog window
-    connect(&timer, SIGNAL(timeout()), &qfd, SLOT(repaint()));
-    timer.start(50);
-
-    std::string filename = qfd.getSaveFileName().toStdString();
-
-
+    std::string filename =
+            QFileDialog::getSaveFileName(WindowMain::GetMainWindow(),
+                                        QString::fromStdString("Save stage as..."),
+                                        QString::fromStdString(Explorer::GetTopPath()))
+            .toStdString();
     if(filename == "") return;
-
     FileWriter::SaveStage(filename, stage);
 }
 

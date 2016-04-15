@@ -36,7 +36,7 @@ public:
 public slots:
 
     void OnOpenStage () const;
-    void OnSaveCurrentStage () const;
+    void OnSaveStageAs () const;
 
     void OnCreateEmptyEntity () const;
     void OnCreatePrefab() const;

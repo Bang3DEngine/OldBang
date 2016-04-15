@@ -100,6 +100,11 @@ void Explorer::dropEvent(QDropEvent *e)
     Logger_Log("Drop event in explorer " << e->source());
 }
 
+std::string Explorer::GetTopPath()
+{
+    return topPath;
+}
+
 void Explorer::RefreshInspector()
 {
     if(this->selectedIndexes().size() <= 0) return;
