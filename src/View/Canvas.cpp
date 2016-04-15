@@ -4,7 +4,7 @@
 
 int Canvas::width = 0;
 int Canvas::height = 0;
-int Canvas::RedrawDelay = 1;
+int Canvas::RedrawDelay = 30;
 float Canvas::aspectRatio = 1.0f;
 Canvas *Canvas::stCanvas = nullptr;
 unsigned long long Canvas::lastRenderTime = 0;
@@ -22,6 +22,10 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     Input::Init();
 
     stCanvas = this;
+
+     // SEPARATE THREAD!
+    //drawTimer.moveToThread(workingThread);
+    //workingThread->start();
 }
 
 void Canvas::initializeGL()
@@ -59,9 +63,9 @@ void Canvas::updateGL()
         currentStage->_OnRender();
     }
 
-    QGLWidget::swapBuffers();
-
     Input::OnNewFrame();
+
+    QGLWidget::swapBuffers();
 }
 
 void Canvas::resizeGL(int w, int h)

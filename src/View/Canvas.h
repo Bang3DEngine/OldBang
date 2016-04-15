@@ -1,6 +1,8 @@
 ﻿#ifndef CANVAS_H
 #define CANVAS_H
 
+#include <QThread>
+
 #include "Bang.h"
 
 #include <GL/glew.h>
@@ -37,6 +39,7 @@ private:
     bool paused = false;
     std::list<Stage*> stages;
 
+    QThread *workingThread = new QThread();
     Stage *currentStage = nullptr;
     QTimer drawTimer;
 
