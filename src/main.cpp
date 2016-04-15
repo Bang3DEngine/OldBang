@@ -37,17 +37,17 @@ int main(int argc, char *argv[])
     WindowMain::Init(window, &app); //init window main
     WindowMain *windowMain = WindowMain::GetInstance();
 
+    /*
     Stage *stage = nullptr;
-
     #ifndef BANG_EDITOR
     stage = new Stage();
     #else
     stage = new EditorStage();
     #endif
-
     StageReader::ReadStage("res/Assets/stageTest", stage);
     windowMain->canvas->AddStage(stage);
     windowMain->canvas->SetCurrentStage("MainStage");
+    **/
     ///////
 
     return app.exec();

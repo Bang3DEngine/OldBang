@@ -7,7 +7,7 @@
 class EditorStage : public Stage
 {
 private:
-    EditorCamera *editorCamera = nullptr;
+    EditorCamera *cameraEntity = nullptr;
 
 public:
     EditorStage();

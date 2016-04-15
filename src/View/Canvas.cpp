@@ -90,6 +90,21 @@ void Canvas::AddStage(Stage *stage)
     stages.push_back(stage);
 }
 
+void Canvas::SetCurrentStage(Stage *stage)
+{
+    if(currentStage != nullptr)
+    {
+        currentStage->_OnDestroy();
+    }
+
+    currentStage = stage;
+    if(currentStage != nullptr)
+    {
+        currentStage->_OnStart();
+        WindowMain::GetInstance()->widgetHierarchy->FillDownwards(currentStage);
+    }
+}
+
 void Canvas::SetCurrentStage(const std::string &name)
 {
     if(currentStage != nullptr)
@@ -101,13 +116,7 @@ void Canvas::SetCurrentStage(const std::string &name)
     {
         if((*it)->name == name)
         {
-            if(currentStage != (*it))
-            {
-                currentStage = (*it);
-                currentStage->_OnStart();
-
-                WindowMain::GetInstance()->widgetHierarchy->FillDownwards(currentStage);
-            }
+            SetCurrentStage((*it));
             return;
         }
     }

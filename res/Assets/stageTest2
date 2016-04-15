@@ -3,28 +3,6 @@
 MainStage
 <children>
 <Entity>
-0xf69bb0
-EditorCamera
-<children>
-</children>
-<parts>
-<Camera>
-0xf7ec90
-60
-0.1
-100
-Perspective
--1 1 -1 1
-</Camera>
-<Transform>
-0xf8f440
-1.01031 -2.55912 0.496305
-0.232593 0.0173271 -0.0041445 0.972411
-1 1 1
-</Transform>
-</parts>
-</Entity>
-<Entity>
 0xe58320
 Boy
 <children>

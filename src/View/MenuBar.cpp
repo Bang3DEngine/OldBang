@@ -2,8 +2,10 @@
 
 #include "WindowEventManager.h"
 #include "WindowMain.h"
-#include "Canvas.h"
 
+
+#include "Canvas.h"
+#include "EditorStage.h"
 #include "StageReader.h"
 #include "FileWriter.h"
 
@@ -43,12 +45,12 @@ void MenuBar::OnOpenStage() const
 
     if(filename == "") return;
 
-    Stage *stage = new Stage();
+    EditorStage *stage = new EditorStage();
     StageReader::ReadStage(filename, stage);
     if(stage != nullptr)
     {
         Canvas::GetInstance()->AddStage(stage);
-        Canvas::GetInstance()->SetCurrentStage(stage->GetName());
+        Canvas::GetInstance()->SetCurrentStage(stage);
     }
     else
     {

@@ -2,12 +2,11 @@
 
 EditorStage::EditorStage() : Stage()
 {
-    editorCamera = new EditorCamera();
-    AddChild(editorCamera);
-    SetCameraChild(editorCamera->GetName());
+    cameraEntity = new EditorCamera();
+    AddChild(cameraEntity);
+    SetCameraChild(cameraEntity->GetName());
 }
 
 EditorStage::~EditorStage()
 {
-    delete editorCamera;
 }

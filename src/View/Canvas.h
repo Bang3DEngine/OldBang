@@ -53,6 +53,7 @@ public:
 
     Stage* AddStage(const std::string &name);
     void AddStage(Stage* stage);
+    void SetCurrentStage(Stage *stage);
     void SetCurrentStage(const std::string &name);
     void RemoveStage(const std::string &name);
 
