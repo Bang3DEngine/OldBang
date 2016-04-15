@@ -299,6 +299,7 @@ glm::quat FileReader::ReadQuat(std::istream &f)
 
 Rect FileReader::ReadRect(std::istream &f)
 {
+    //Left, right, bottom, top
     glm::quat q = ReadQuat(f);
     return Rect(q.x, q.y, q.z, q.w);
 }

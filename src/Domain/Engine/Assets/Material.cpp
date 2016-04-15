@@ -59,8 +59,11 @@ void Material::Read(std::istream &f)
 
     SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
     Texture2D *tex = AssetsManager::GetAsset<Texture2D>( texFilepath );
-    tex->SetTextureSlot(0);
-    SetTexture(tex);
+    if(tex != nullptr)
+    {
+        tex->SetTextureSlot(0);
+        SetTexture(tex);
+    }
 }
 
 void Material::SetShaderProgram(const ShaderProgram *program)

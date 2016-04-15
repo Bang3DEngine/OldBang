@@ -40,7 +40,9 @@ public:
     Camera* GetCamera() const;
     const Canvas* GetCanvas() const;
 
+    #ifdef BANG_EDITOR
     void Write(std::ostream &f) const override;
+    #endif
 };
 
 #endif // STAGE_H

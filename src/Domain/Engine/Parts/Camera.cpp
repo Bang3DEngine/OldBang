@@ -134,24 +134,6 @@ bool Camera::GetAutoUpdateAspectRatio() const
     return autoUpdateAspectRatio;
 }
 
-void Camera::Write(std::ostream &f) const
-{
-
-}
-
-void Camera::Read(std::istream &f)
-{
-    StageReader::RegisterNextPointerId(f, this);
-    SetFovDegrees( FileReader::ReadFloat(f) );
-    SetZNear( FileReader::ReadFloat(f) );
-    SetZFar( FileReader::ReadFloat(f) );
-    SetProjectionMode( FileReader::ReadString(f) == "Perspective" ?
-                                            Camera::ProjectionMode::Perspective :
-                                            Camera::ProjectionMode::Orthographic);
-    SetOrthoRect( FileReader::ReadRect(f) );
-    FileReader::ReadNextLine(f); //Consume close tag
-}
-
 const std::string Camera::ToString() const
 {
     return "Camera";
@@ -177,5 +159,31 @@ void Camera::OnSlotValueChanged(InspectorWidget *source)
     zFar = source->GetSWVectorFloatValue("Z Far")[0];
     aspectRatio = source->GetSWVectorFloatValue("Aspect Ratio")[0];
     projMode =  static_cast<Camera::ProjectionMode>(source->GetSWSelectedEnumIndex("Projection Mode"));
+}
+
+void Camera::Write(std::ostream &f) const
+{
+    f << "<Camera>" << std::endl;
+    f << ((void*)this) << std::endl;
+    FileWriter::Write(fovDegrees, f);
+    FileWriter::Write(zNear, f);
+    FileWriter::Write(zFar, f);
+    FileWriter::Write(projMode == ProjectionMode::Perspective ?
+                          "Perspective" : "Orthographic", f);
+    FileWriter::Write(orthoRect, f);
+    f << "</Camera>" << std::endl;
+}
+
+void Camera::Read(std::istream &f)
+{
+    StageReader::RegisterNextPointerId(f, this);
+    SetFovDegrees( FileReader::ReadFloat(f) );
+    SetZNear( FileReader::ReadFloat(f) );
+    SetZFar( FileReader::ReadFloat(f) );
+    SetProjectionMode( FileReader::ReadString(f) == "Perspective" ?
+                                            Camera::ProjectionMode::Perspective :
+                                            Camera::ProjectionMode::Orthographic);
+    SetOrthoRect( FileReader::ReadRect(f) );
+    FileReader::ReadNextLine(f); //Consume close tag
 }
 #endif

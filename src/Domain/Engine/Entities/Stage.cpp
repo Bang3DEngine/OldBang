@@ -66,12 +66,11 @@ const Canvas *Stage::GetCanvas() const
     return canvas;
 }
 
-
-
+#ifdef BANG_EDITOR
 void Stage::Write(std::ostream &f) const
 {
     f << "<Stage>" << std::endl;
-    f << this << std::endl;            //internal file id
+    f << ((void*)this) << std::endl;            //internal file id
     f << this->GetName() << std::endl; //stage name
 
     //Children come now
@@ -83,9 +82,9 @@ void Stage::Write(std::ostream &f) const
     f << "</children>" << std::endl;
 
     //Not used ftm
-    f << "<cameraEntity>" << std::endl;
-    f << "</cameraEntity>" << std::endl;
+    //f << "<cameraEntity>" << std::endl;
+    //f << "</cameraEntity>" << std::endl;
 
     f << "</Stage>" << std::endl;
 }
-
+#endif

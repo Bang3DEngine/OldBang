@@ -176,8 +176,9 @@ void MeshRenderer::OnSlotValueChanged(InspectorWidget *source)
 void MeshRenderer::Write(std::ostream &f) const
 {
     f << "<MeshRenderer>" << std::endl;
-    f << this << std::endl;
-
+    f << ((void*)this) << std::endl;
+    FileWriter::Write(mesh->GetFilepath(), f);
+    FileWriter::Write(material->GetFilepath(), f);
     f << "</MeshRenderer>" << std::endl;
 }
 
@@ -185,7 +186,9 @@ void MeshRenderer::Read(std::istream &f)
 {
     StageReader::RegisterNextPointerId(f, this);
     SetMesh( AssetsManager::GetAsset<Mesh>( FileReader::ReadString(f) ) );
+    Logger_Log(mesh->GetFilepath());
     SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
+    Logger_Log("HIAR2");
     FileReader::ReadNextLine(f); //Consume close tag
 }
 

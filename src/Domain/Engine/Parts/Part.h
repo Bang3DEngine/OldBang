@@ -9,6 +9,7 @@
 #include "IStageEventListener.h"
 
 #ifdef BANG_EDITOR
+#include "FileWriter.h"
 #include "IInspectable.h"
 #include "InspectorWidget.h"
 #include "IWindowEventManagerListener.h"

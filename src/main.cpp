@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     stage = new EditorStage();
     #endif
 
-    StageReader::ReadStage("res/Stages/stageTest1.stage", stage);
+    StageReader::ReadStage("res/Assets/stageTest", stage);
     windowMain->canvas->AddStage(stage);
     windowMain->canvas->SetCurrentStage("MainStage");
     ///////

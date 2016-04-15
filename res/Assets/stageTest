@@ -1,1 +1,28 @@
-<Stage></Stage>
+<Stage>
+mstage
+MainStage
+<children>
+<Entity>
+0x184f912
+Boy
+<children>
+</children>
+<parts>
+<Transform>
+0x1c73e40
+0.633 -0.836 -0.892
+0 0 -0.959228 0.282634
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x1c758d0
+res/Assets/boyMesh.bmesh
+-
+</MeshRenderer>
+</parts>
+</Entity>
+</children>
+<cameraEntity>
+-
+</cameraEntity>
+</Stage>

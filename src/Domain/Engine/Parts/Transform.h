@@ -59,14 +59,14 @@ public:
 
     const std::string ToString() const override;
 
-    void Write(std::ostream &f) const override;
-    void Read(std::istream &f) override;
 
     virtual std::string GetName() const override { return "Transform"; }
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetPartInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
+    void Write(std::ostream &f) const override;
+    void Read(std::istream &f) override;
     #endif
 };
 

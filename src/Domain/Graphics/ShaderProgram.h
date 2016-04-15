@@ -13,14 +13,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class ShaderProgram : public IGLIdable, public IGLBindable, public IToString, public IFileable
+class ShaderProgram : public IGLIdable, public IGLBindable,
+                      public IToString, public IFileable
 {
 private:
     Shader *vshader, *fshader;
 
 public:
     ShaderProgram();
-    ShaderProgram(const std::string &vshaderPath, const std::string &fshaderPath);
+    ShaderProgram(const std::string &vshaderPath,
+                  const std::string &fshaderPath);
     virtual ~ShaderProgram();
 
     void BindVertexShader(Shader *vshader);

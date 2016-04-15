@@ -33,19 +33,23 @@ private:
     template <class T>
     static T* ReadAssetFile(const std::string &filepath)
     {
-        std::ifstream f (filepath);
-        if ( !f.is_open() )
+        if(filepath != "-")
         {
-            Logger_Error("Could not open the file '" << filepath << "' to load this asset.");
-            return nullptr;
-        }
+            std::ifstream f (filepath);
+            if ( !f.is_open() )
+            {
+                Logger_Error("Could not open the file '" << filepath <<
+                             "' to load this asset.");
+                return nullptr;
+            }
 
-        Asset *a = ReadAsset<T>(f);
-        if(a != nullptr)
-        {
-            AssetsManager::SaveAsset(filepath, a);
-            a->filepath = filepath;
-            return dynamic_cast<T*>(a);
+            Asset *a = ReadAsset<T>(f);
+            if(a != nullptr)
+            {
+                AssetsManager::SaveAsset(filepath, a);
+                a->filepath = filepath;
+                return dynamic_cast<T*>(a);
+            }
         }
 
         return nullptr;
@@ -59,15 +63,18 @@ public:
     static T* GetAsset(const std::string &filepath)
     {
         Asset *a = nullptr;
-        if(filepathToAssetPointer.find(filepath) == filepathToAssetPointer.end())
+        if(filepath != "-")
         {
-            //Doesnt have the Asset created. Read, and save it
-            a = ReadAssetFile<T>(filepath);
-            SaveAsset(filepath, a);
-        }
-        else
-        {
-            a = filepathToAssetPointer[filepath];
+            if(filepathToAssetPointer.find(filepath) == filepathToAssetPointer.end())
+            {
+                //Doesnt have the Asset created. Read, and save it
+                a = ReadAssetFile<T>(filepath);
+                SaveAsset(filepath, a);
+            }
+            else
+            {
+                a = filepathToAssetPointer[filepath];
+            }
         }
 
         return a == nullptr ? nullptr : dynamic_cast<T*>(a);

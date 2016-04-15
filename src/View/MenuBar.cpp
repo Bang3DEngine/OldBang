@@ -4,6 +4,7 @@
 #include "WindowMain.h"
 #include "Canvas.h"
 
+#include "StageReader.h"
 #include "FileWriter.h"
 
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
@@ -28,6 +29,31 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 void MenuBar::OnOpenStage() const
 {
     WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::OpenStage);
+
+    QFileDialog qfd(WindowMain::GetMainWindow(),
+                    QString::fromStdString("Open stage"),
+                    QString::fromStdString(Explorer::GetTopPath()));
+    qfd.setModal(true);
+
+    QTimer timer; //Every X seconds, refresh the fileDialog window
+    connect(&timer, SIGNAL(timeout()), &qfd, SLOT(repaint()));
+    timer.start(50);
+
+    std::string filename = qfd.getOpenFileName().toStdString();
+
+    if(filename == "") return;
+
+    Stage *stage = new Stage();
+    StageReader::ReadStage(filename, stage);
+    if(stage != nullptr)
+    {
+        Canvas::GetInstance()->AddStage(stage);
+        Canvas::GetInstance()->SetCurrentStage(stage->GetName());
+    }
+    else
+    {
+        Logger_Error("Stage from file '" << filename << "' could not be loaded.");
+    }
 }
 
 void MenuBar::OnSaveCurrentStage() const
@@ -38,11 +64,18 @@ void MenuBar::OnSaveCurrentStage() const
     Stage *stage = Canvas::GetInstance()->GetCurrentStage();
     if(stage == nullptr) return;
 
-    std::string filename =
-            QFileDialog::getSaveFileName(WindowMain::GetMainWindow(),
-                                         "Save current stage",
-                                         QString::fromStdString(Explorer::GetTopPath())
-                                         ).toStdString();
+    QFileDialog qfd(WindowMain::GetMainWindow(),
+                    QString::fromStdString("Save current stage"),
+                    QString::fromStdString(Explorer::GetTopPath()));
+    qfd.setModal(true);
+
+    QTimer timer; //Every X seconds, refresh the fileDialog window
+    connect(&timer, SIGNAL(timeout()), &qfd, SLOT(repaint()));
+    timer.start(50);
+
+    std::string filename = qfd.getSaveFileName().toStdString();
+
+
     if(filename == "") return;
 
     FileWriter::SaveStage(filename, stage);

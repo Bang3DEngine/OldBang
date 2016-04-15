@@ -5,7 +5,8 @@ ShaderProgram::ShaderProgram() : vshader(nullptr), fshader(nullptr)
     idgl = glCreateProgram();
 }
 
-ShaderProgram::ShaderProgram(const std::string &vshaderPath, const std::string &fshaderPath) : ShaderProgram()
+ShaderProgram::ShaderProgram(const std::string &vshaderPath,
+                             const std::string &fshaderPath) : ShaderProgram()
 {
     Shader *vs = new Shader(Shader::Type::Vertex, vshaderPath);
     BindVertexShader(vs);

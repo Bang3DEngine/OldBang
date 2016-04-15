@@ -62,8 +62,6 @@ public:
     ProjectionMode GetProjectionMode() const;
     bool  GetAutoUpdateAspectRatio() const;
 
-    void Write(std::ostream &f) const;
-    void Read(std::istream &f);
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override { return "Camera"; }
@@ -71,6 +69,8 @@ public:
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetPartInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
+    void Write(std::ostream &f) const;
+    void Read(std::istream &f);
     #endif
 };
 

@@ -85,6 +85,7 @@ void StageReader::ReadChildren(std::istream &f, Entity *e)
 
 void StageReader::ReadStage(const std::string &filepath, Stage* stage)
 {
+    Logger_Log("Reading stage '" << filepath << "'");
     ClearPointerIds();
 
     std::ifstream f (filepath);
@@ -118,8 +119,10 @@ void StageReader::ReadStage(const std::string &filepath, Stage* stage)
             else
             {
             }
+            Logger_Log(line);
         }
     }
+    Logger_Log("Finished reading stage.");
 }
 
 void StageReader::SaveStage(const std::string &filepath, const Stage *stage)

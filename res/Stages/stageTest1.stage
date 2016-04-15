@@ -1,11 +1,182 @@
 <Stage>
-    s0
-    MainStage
+ [Entity:'MainStage']
+MainStage
+<children>
+<Entity>
+ [Entity:'EditorCamera']
+EditorCamera
+<children>
+</children>
+<parts>
+<Camera>
+0x21de170
+60
+0.1
+100
+Perspective
+-1 1 -1 1
+</Camera>
+<Transform>
+0x22205b0
+0 0 4.65
+0 0 0 1
+1 1 1
+</Transform>
+</parts>
+</Entity>
+<Entity>
+ [Entity:'Boy']
+Boy
+<children>
+<Entity>
+ [Entity:'Boy']
+Boy
+<children>
+</children>
+<parts>
+<Transform>
+0x2a8b5b0
+0.221 -0.775 -0.361
+0.915809 0 -0.401613 0
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x2892e00
+res/Assets/boyMesh.bmesh
 
-    <children>
-    </children>
+</MeshRenderer>
+</parts>
+</Entity>
+</children>
+<parts>
+<Transform>
+0x25648e0
+-0.265 0.572 0.843
+0.360873 0 -0.932615 0
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x20239f0
+res/Assets/boyMesh.bmesh
 
-    <cameraEntity>
-        e1
-    </cameraEntity>
+</MeshRenderer>
+</parts>
+</Entity>
+<Entity>
+ [Entity:'Boy']
+Boy
+<children>
+</children>
+<parts>
+<Transform>
+0x29c28f0
+-0.684 -0.141 0.161
+0 0 -0.0712162 -0.997461
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x290b170
+res/Assets/boyMesh.bmesh
+
+</MeshRenderer>
+</parts>
+</Entity>
+<Entity>
+ [Entity:'Boy']
+Boy
+<children>
+</children>
+<parts>
+<Transform>
+0x2874ec0
+0.358 0.448 -0.937
+0.994224 0 0.107329 0
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x27abb20
+res/Assets/boyMesh.bmesh
+
+</MeshRenderer>
+</parts>
+</Entity>
+<Entity>
+ [Entity:'Boy']
+Boy
+<children>
+</children>
+<parts>
+<Transform>
+0x284de10
+0.985 -0.58 0.725
+0 0 0.442189 -0.896922
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x29d6490
+res/Assets/boyMesh.bmesh
+
+</MeshRenderer>
+</parts>
+</Entity>
+<Entity>
+ [Entity:'Boy']
+Boy
+<children>
+<Entity>
+ [Entity:'Boy']
+Boy
+<children>
+<Entity>
+ [Entity:'Boy']
+Boy
+<children>
+</children>
+<parts>
+<Transform>
+0x2873b20
+0.732 -0.059 -0.275
+0 -0.714396 0.699742 0
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x2859470
+res/Assets/boyMesh.bmesh
+
+</MeshRenderer>
+</parts>
+</Entity>
+</children>
+<parts>
+<Transform>
+0x2984450
+0.491 0.371 -0.612
+0 -0.769948 0.638107 0
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x29fb3f0
+res/Assets/boyMesh.bmesh
+
+</MeshRenderer>
+</parts>
+</Entity>
+</children>
+<parts>
+<Transform>
+0x2984630
+-0.579 0.211 -0.734
+0 0 0.557639 -0.830084
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x27e16a0
+res/Assets/boyMesh.bmesh
+
+</MeshRenderer>
+</parts>
+</Entity>
+</children>
+<cameraEntity>
+</cameraEntity>
 </Stage>

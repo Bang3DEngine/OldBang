@@ -214,7 +214,12 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
 
 void Transform::Write(std::ostream &f) const
 {
-
+    f << "<Transform>" << std::endl;
+    f << ((void*)this) << std::endl;
+    FileWriter::Write(GetPosition(), f);
+    FileWriter::Write(GetRotation(), f);
+    FileWriter::Write(GetScale(), f);
+    f << "</Transform>" << std::endl;
 }
 
 void Transform::Read(std::istream &f)

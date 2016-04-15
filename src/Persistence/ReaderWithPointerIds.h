@@ -43,6 +43,11 @@ public:
     static T* GetNextPointerAddress(std::istream &f)
     {
         std::string id = FileReader::ReadString(f);
+        if(id == "-")
+        {
+            return nullptr;
+        }
+
         if(idToPointers.find(id) == idToPointers.end()) return nullptr;
         return (T*)(idToPointers[id]);
     }

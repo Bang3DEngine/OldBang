@@ -24,6 +24,20 @@ void Behaviour::OnSlotValueChanged(InspectorWidget *source)
     filepath = source->GetSWFileFilepath("Script");
 }
 
+void Behaviour::Write(std::ostream &f) const
+{
+    /*
+    f << "<Behaviour>" << std::endl;
+    f << ((void*)this) << std::endl;
+    f << "</Behaviour>" << std::endl;
+    */
+}
+
+void Behaviour::Read(std::istream &f)
+{
+
+}
+
 void Behaviour::SetFilepath(const std::string &filepath)
 {
     this->filepath = filepath;
