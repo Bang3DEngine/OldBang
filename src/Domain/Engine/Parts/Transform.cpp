@@ -89,9 +89,11 @@ void Transform::GetNormalMatrix(glm::mat4 &m) const
     m = glm::transpose(glm::inverse(m));
 }
 
-void Transform::LookAt(glm::vec3 target, glm::vec3 up)
+void Transform::LookAt(glm::vec3 target, glm::vec3 _up)
 {
     Assert(target != position, "LookAt target is the same as position.", return);
+
+    glm::vec3 up = glm::normalize(_up);
 
     SetRotation( glm::quat_cast( glm::inverse( glm::lookAt(GetPosition(), target, up)) ) );
     /*
@@ -123,6 +125,11 @@ glm::vec3 Transform::GetPosition() const
 glm::quat Transform::GetRotation() const
 {
     return rotation;
+}
+
+glm::vec3 Transform::GetEuler() const
+{
+    return glm::eulerAngles(rotation);
 }
 
 glm::vec3 Transform::GetScale() const
@@ -177,21 +184,8 @@ const std::string Transform::ToString() const
     return msg.str();
 }
 
-void Transform::Write(std::ostream &f) const
-{
-
-}
-
-void Transform::Read(std::istream &f)
-{
-    StageReader::RegisterNextPointerId(f, this);
-    SetPosition(FileReader::ReadVec3(f));
-    SetRotation(FileReader::ReadQuat(f));
-    SetScale(FileReader::ReadVec3(f));
-    FileReader::ReadNextLine(f); //Consume close tag
-}
-
 #ifdef BANG_EDITOR
+
 InspectorWidgetInfo* Transform::GetPartInfo()
 {
     static_cast<InspectorVFloatSWInfo*>(inspectorPartInfo.GetSlotInfo(0))->value =
@@ -217,4 +211,19 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
     v = source->GetSWVectorFloatValue("Scale");
     scale = glm::vec3(v[0], v[1], v[2]);
 }
+
+void Transform::Write(std::ostream &f) const
+{
+
+}
+
+void Transform::Read(std::istream &f)
+{
+    StageReader::RegisterNextPointerId(f, this);
+    SetPosition(FileReader::ReadVec3(f));
+    SetRotation(FileReader::ReadQuat(f));
+    SetScale(FileReader::ReadVec3(f));
+    FileReader::ReadNextLine(f); //Consume close tag
+}
+
 #endif

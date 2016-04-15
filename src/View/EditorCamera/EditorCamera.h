@@ -3,6 +3,8 @@
 
 #include <cmath>
 
+#include "Bang.h"
+
 #include "Input.h"
 #include "Canvas.h"
 #include "Camera.h"

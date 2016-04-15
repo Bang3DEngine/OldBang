@@ -114,6 +114,8 @@ private:
     static std::map<Key, ButtonInfo> keyInfos;
 
     static float lastMouseWheelDelta;
+    static bool lockMouseMovement;
+    static int framesMouseStopped;
     static glm::vec2 mouseCoords, lastMouseCoords;
     static std::map<MouseButton, ButtonInfo> mouseInfo;
 
@@ -143,6 +145,9 @@ public:
     static float GetMouseAxisY();
     static float GetMouseDeltaX();
     static float GetMouseDeltaY();
+
+    static void LockMouseMovement(bool lock);
+    static bool IsLockMouseMovement();
 
     static glm::vec2 GetMouseCoords();
 };

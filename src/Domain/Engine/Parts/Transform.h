@@ -54,6 +54,7 @@ public:
 
     glm::vec3 GetPosition() const;
     glm::quat GetRotation() const;
+    glm::vec3 GetEuler() const; // Gets rotation in euler angles
     glm::vec3 GetScale() const;
 
     const std::string ToString() const override;

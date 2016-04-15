@@ -5,6 +5,8 @@
 std::map<Input::Key, Input::ButtonInfo> Input::keyInfos;
 
 float Input::lastMouseWheelDelta = 0.0f;
+bool Input::lockMouseMovement = false;
+int Input::framesMouseStopped = 0;
 glm::vec2 Input::mouseCoords = glm::vec2(0.0f);
 glm::vec2 Input::lastMouseCoords = glm::vec2(0.0f);
 std::map<Input::MouseButton, Input::ButtonInfo> Input::mouseInfo;
@@ -44,7 +46,23 @@ void Input::OnNewFrame()
     }
 
     lastMouseWheelDelta = 0.0f;
-    lastMouseCoords = mouseCoords;
+    if(!lockMouseMovement)
+    {
+        lastMouseCoords = mouseCoords;
+    }
+    else if(framesMouseStopped > 3)
+    {
+        //For the case of mouse movement locking, this
+        //avoids a bug of axisX/Y getting stuck when mouse
+        //does: lock/moving/stop_moving => axisX/Y think mouse is still moving
+        lastMouseCoords = mouseCoords;
+    }
+    ++framesMouseStopped;
+
+
+   // Logger_Log("Locked: " << lockMouseMovement);
+   // Logger_Log("Axis: (" << GetMouseAxisX() << ", " << GetMouseAxisY() << ")");
+   // Logger_Log("---------------------------------");
 }
 
 void Input::HandleInputMousWheel(QWheelEvent *event)
@@ -54,8 +72,35 @@ void Input::HandleInputMousWheel(QWheelEvent *event)
 
 void Input::HandleInputMouseMove(QMouseEvent *event)
 {
-    mouseCoords.x = event->x();
-    mouseCoords.y = event->y();
+    framesMouseStopped = 0;
+
+    //Used to ignore QCursor::setPos call to mouseMove event
+    static bool fakeMoveEvent = false;
+    if(fakeMoveEvent)
+    {
+        fakeMoveEvent = false;
+        return;
+    }
+
+    /*Logger_Log("MMEvent: lastMouseCoords" << lastMouseCoords << ", evxy:" << glm::vec2(event->x(), event->y()) );
+    if(lockMouseMovement &&
+       lastMouseCoords == glm::vec2(event->x(), event->y()))
+    {
+        fakeCall = false;
+        return;
+    }*/
+
+    mouseCoords = glm::vec2(event->x(), event->y());
+
+    if(lockMouseMovement)
+    {
+        QPoint glob = QPoint(lastMouseCoords.x,
+                             lastMouseCoords.y);
+        glob = Canvas::GetInstance()->mapToGlobal(glob);
+
+        fakeMoveEvent = true;
+        QCursor::setPos(glob);
+    }
 }
 
 void Input::HandleInputMousePress(QMouseEvent *event)
@@ -164,6 +209,16 @@ float Input::GetMouseDeltaX()
 float Input::GetMouseDeltaY()
 {
     return mouseCoords.y - lastMouseCoords.y;
+}
+
+void Input::LockMouseMovement(bool lock)
+{
+    lockMouseMovement = lock;
+}
+
+bool Input::IsLockMouseMovement()
+{
+    return lockMouseMovement;
 }
 
 glm::vec2 Input::GetMouseCoords()
