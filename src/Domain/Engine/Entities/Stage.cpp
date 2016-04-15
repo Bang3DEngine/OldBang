@@ -68,7 +68,7 @@ const Canvas *Stage::GetCanvas() const
 
 
 
-void Stage::Write(std::ostream os) const
+void Stage::Write(std::ostream &f) const
 {
     f << "<Stage>" << std::endl;
     f << this << std::endl;            //internal file id
