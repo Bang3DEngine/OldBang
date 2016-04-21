@@ -11,7 +11,8 @@ void FileWriter::WriteStage(std::string filename, Stage *stage)
     ofs.open(filename);
     if(!ofs.is_open())
     {
-        Logger_Error("There was an error when opening file '" << filename << "'");
+        Logger_Error("There was an error when saving file '" << filename << "'");
+        ofs.close();
         return;
     }
 

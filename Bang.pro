@@ -228,7 +228,8 @@ SOURCES += \
     src/View/EditorEntity/EditorEntity.cpp \
     src/View/EditorStage/EditorStage.cpp \
     src/Domain/Engine/Others/Input.cpp \
-    src/Persistence/FileWriter.cpp
+    src/Persistence/FileWriter.cpp \
+    src/Persistence/Persistence.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

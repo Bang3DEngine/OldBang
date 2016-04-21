@@ -1,0 +1,17 @@
+<Stage>
+0x127e620
+Stage
+<children>
+<Entity>
+0x1b553e0
+Empty
+<children>
+</children>
+<parts>
+<MeshRenderer>
+0x1cb7650
+./res/Assets/boyMesh.bmesh
+./res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+<MeshRenderer>
+0x1cb48a0

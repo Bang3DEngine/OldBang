@@ -5,51 +5,30 @@
 
 class Persistence
 {
+
+private:
+   static std::string currentStageFilepath;
+
 public:
 
-    static std::string GetProjectRootPathAbsolute()
-    {
-        return QT_PROJECT_PATH;
-    }
+    static bool IsAbsolute(const std::string &path);
 
-    static std::string GetAssetsRelativePathFromProjectRoot()
-    {
-        return "/res/Assets";
-    }
+    static std::string GetProjectRootPathAbsolute();
 
-    static std::string GetAssetsPathAbsolute()
-    {
-        return GetProjectRootPathAbsolute() +
-                GetAssetsRelativePathFromProjectRoot();
-    }
+    static std::string GetAssetsRelativePathFromProjectRoot();
 
-    static bool IsAbsolute(const std::string &path)
-    {
-        return path[0] == '/';
-    }
+    static std::string GetAssetsPathAbsolute();
+
 
     // ./res/Assets/lolol/a.bmesh => /home/wololo/MyProject/res/Assets/lolol/a.bmesh
-    static std::string ProjectRootRelativeToAbsolute(const std::string &relPath)
-    {
-        if(IsAbsolute(relPath)) return relPath;
-
-        return GetProjectRootPathAbsolute() +
-                relPath.substr(1, relPath.length() -1); //No beginning "."
-    }
+    static std::string ProjectRootRelativeToAbsolute(const std::string &relPath);
 
     // /home/wololo/MyProject/res/Assets/lolol/a.bmesh => ./res/Assets/lolol/a.bmesh
-    static std::string ProjectRootAbsoluteToRelative(const std::string &absPath)
-    {
-        if(!IsAbsolute(absPath)) return absPath;
+    static std::string ProjectRootAbsoluteToRelative(const std::string &absPath);
 
-        std::size_t pos = absPath.find(GetAssetsRelativePathFromProjectRoot());
-        if(pos == std::string::npos) return absPath;
 
-        return "." + absPath.substr(
-                        pos,
-                        absPath.length() -
-                                GetAssetsRelativePathFromProjectRoot().length());
-    }
+    static void SetCurrentStageFilepath(const std::string &stagePath);
+    static std::string GetCurrentStageFilepath();
 };
 
 #endif // PERSISTENCE_H

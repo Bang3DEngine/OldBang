@@ -2,7 +2,7 @@
 #include "Entity.h"
 #include "Canvas.h"
 
-Stage::Stage()
+Stage::Stage() : Entity("Stage")
 {
     isStage = true;
     gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());

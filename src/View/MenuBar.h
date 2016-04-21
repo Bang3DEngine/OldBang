@@ -4,6 +4,7 @@
 #include "Bang.h"
 
 #include <QMenuBar>
+#include <QMessageBox>
 
 class MenuBar : public QMenuBar
 {
@@ -14,8 +15,10 @@ public:
 
     enum Action
     {
+        NewStage,
         OpenStage,
-        SaveCurrentStage,
+        SaveStage,
+        SaveStageAs,
 
         CreateEmptyEntity,
         CreatePrefab,
@@ -32,10 +35,14 @@ public:
 
     MenuBar(QWidget *parent = nullptr);
 
+    void CreateNewStage () const;
+    QMessageBox::StandardButton AskForSavingCurrentStage () const;
 
 public slots:
 
+    void OnNewStage () const;
     void OnOpenStage () const;
+    void OnSaveStage () const;
     void OnSaveStageAs () const;
 
     void OnCreateEmptyEntity () const;

@@ -13,7 +13,9 @@
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 {
     WindowMain *w = WindowMain::GetInstance();
+    connect(w->actionNewStage,  SIGNAL(triggered()), this, SLOT(OnNewStage()));
     connect(w->actionOpenStage,  SIGNAL(triggered()), this, SLOT(OnOpenStage()));
+    connect(w->actionSaveStage,  SIGNAL(triggered()), this, SLOT(OnSaveStage()));
     connect(w->actionSaveStageAs,  SIGNAL(triggered()), this, SLOT(OnSaveStageAs()));
 
     connect(w->actionCreateEmptyEntity,  SIGNAL(triggered()), this, SLOT(OnCreateEmptyEntity()));
@@ -29,17 +31,60 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
     connect(w->actionAddPartTransform,  SIGNAL(triggered()), this, SLOT(OnAddPartTransform()));
 }
 
+
+
+void MenuBar::CreateNewStage() const
+{
+    Stage *stage = new EditorStage();
+    Canvas::GetInstance()->SetCurrentStage(stage);
+    Persistence::SetCurrentStageFilepath("");
+}
+
+QMessageBox::StandardButton MenuBar::AskForSavingCurrentStage() const
+{
+    QMessageBox::StandardButton reply =
+            QMessageBox::question(WindowMain::GetMainWindow(),
+                                  "Save Stage",
+                                  "Do you want to save your current Stage?",
+                                  (QMessageBox::Yes |
+                                   QMessageBox::No |
+                                   QMessageBox::Cancel
+                                   )
+                                  );
+
+    if (reply == QMessageBox::Yes)
+    {
+        OnSaveStage();
+    }
+
+    return reply;
+}
+
+
+
+
+void MenuBar::OnNewStage() const
+{
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::NewStage);
+
+    if(AskForSavingCurrentStage() == QMessageBox::Cancel) return;
+    CreateNewStage();
+}
+
 void MenuBar::OnOpenStage() const
 {
+    if(AskForSavingCurrentStage() == QMessageBox::Cancel) return;
+
     WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::OpenStage);
 
     std::string filename =
         QFileDialog::getOpenFileName(
                         WindowMain::GetMainWindow(),
-                        QString::fromStdString("Open stage"),
+                        QString::fromStdString("Open stage..."),
                         QString::fromStdString(Persistence::GetAssetsPathAbsolute()))
             .toStdString();
     if(filename == "") return;
+
 
     EditorStage *stage = new EditorStage();
     StageReader::ReadStage(filename, stage);
@@ -47,6 +92,7 @@ void MenuBar::OnOpenStage() const
     {
         Canvas::GetInstance()->AddStage(stage);
         Canvas::GetInstance()->SetCurrentStage(stage);
+        Persistence::SetCurrentStageFilepath(filename);
     }
     else
     {
@@ -54,10 +100,26 @@ void MenuBar::OnOpenStage() const
     }
 }
 
+void MenuBar::OnSaveStage() const
+{
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveStage);
+
+    std::string filename = Persistence::GetCurrentStageFilepath();
+    if( filename == "" ) //Give the stage a name
+    {
+        OnSaveStageAs();
+    }
+    else //Save directly
+    {
+        Stage *stage = Canvas::GetInstance()->GetCurrentStage();
+        if(stage == nullptr) return;
+        FileWriter::WriteStage(filename, stage);
+    }
+}
+
 void MenuBar::OnSaveStageAs() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveCurrentStage);
-
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveStageAs);
 
     Stage *stage = Canvas::GetInstance()->GetCurrentStage();
     if(stage == nullptr) return;
@@ -69,6 +131,7 @@ void MenuBar::OnSaveStageAs() const
                 QString::fromStdString(Persistence::GetAssetsPathAbsolute()))
             .toStdString();
     if(filename == "") return;
+
     FileWriter::WriteStage(filename, stage);
 }
 

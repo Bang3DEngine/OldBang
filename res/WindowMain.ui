@@ -75,7 +75,7 @@
      <x>0</x>
      <y>0</y>
      <width>941</width>
-     <height>25</height>
+     <height>32</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -103,15 +103,18 @@
      <string>Entities</string>
     </property>
     <addaction name="actionCreateEmptyEntity"/>
-    <addaction name="actionCreate_from_prefab"/>
+    <addaction name="actionCreateFromPrefab"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
      <string>Project</string>
     </property>
+    <addaction name="actionNewStage"/>
     <addaction name="actionOpenStage"/>
+    <addaction name="actionSaveStage"/>
     <addaction name="actionSaveStageAs"/>
-    <addaction name="actionProject_Settings"/>
+    <addaction name="separator"/>
+    <addaction name="actionProjectSettings"/>
    </widget>
    <widget class="QMenu" name="menuParts">
     <property name="title">
@@ -196,6 +199,11 @@
          <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>
+         <column>
+          <property name="text">
+           <string notr="true">1</string>
+          </property>
+         </column>
         </widget>
        </item>
       </layout>
@@ -434,12 +442,12 @@
   </widget>
   <action name="actionOpenStage">
    <property name="text">
-    <string>Open stage...</string>
+    <string>Open Stage...</string>
    </property>
   </action>
   <action name="actionSaveStageAs">
    <property name="text">
-    <string>Save stage as...</string>
+    <string>Save Stage as...</string>
    </property>
   </action>
   <action name="actionCreateMaterial">
@@ -462,12 +470,12 @@
     <string>Texture2D</string>
    </property>
   </action>
-  <action name="actionProject_Settings">
+  <action name="actionProjectSettings">
    <property name="text">
     <string>Project Settings</string>
    </property>
   </action>
-  <action name="actionCreate_from_prefab">
+  <action name="actionCreateFromPrefab">
    <property name="text">
     <string>Create from prefab</string>
    </property>
@@ -510,6 +518,16 @@
   <action name="actionCreateEmptyEntity">
    <property name="text">
     <string>Create Empty Entity</string>
+   </property>
+  </action>
+  <action name="actionNewStage">
+   <property name="text">
+    <string>New Stage</string>
+   </property>
+  </action>
+  <action name="actionSaveStage">
+   <property name="text">
+    <string>Save Stage</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

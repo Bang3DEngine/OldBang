@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
     QMainWindow *window = new QMainWindow;
     WindowMain::Init(window, &app); //init window main
     WindowMain *windowMain = WindowMain::GetInstance();
+    windowMain->menubar->CreateNewStage();
 
     /*
     Stage *stage = nullptr;
