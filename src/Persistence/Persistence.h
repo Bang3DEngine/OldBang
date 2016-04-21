@@ -29,6 +29,9 @@ public:
 
     static void SetCurrentStageFilepath(const std::string &stagePath);
     static std::string GetCurrentStageFilepath();
+
+    //Appends an extension to a filepath only if that filename does not contain the extension
+    static std::string AppendExtension(const std::string &filepath, const std::string extNoDot);
 };
 
 #endif // PERSISTENCE_H

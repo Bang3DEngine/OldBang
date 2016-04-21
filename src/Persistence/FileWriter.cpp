@@ -8,6 +8,10 @@ FileWriter::FileWriter()
 void FileWriter::WriteStage(std::string filename, Stage *stage)
 {
     std::ofstream ofs;
+
+    filename = Persistence::AppendExtension(filename,
+                                            Stage::GetFileExtension());
+
     ofs.open(filename);
     if(!ofs.is_open())
     {

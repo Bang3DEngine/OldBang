@@ -18,8 +18,8 @@
 #include "Logger.h"
 
 FileDialog::FileDialog(const std::string& topDir,
-                                 const std::string& fileExtension,
-                                 QWidget *parent) : QFileDialog(parent)
+                       const std::string& fileExtension,
+                       QWidget *parent) : QFileDialog(parent)
 {
     connect(this, SIGNAL(directoryEntered(QString)), this, SLOT(CheckHistory()));
     connect(this, SIGNAL(directoryEntered(QString)), this, SLOT(CheckGoToParent()));

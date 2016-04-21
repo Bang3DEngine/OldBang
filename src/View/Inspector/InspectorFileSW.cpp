@@ -1,9 +1,9 @@
 #include "InspectorFileSW.h"
 
 InspectorFileSW::InspectorFileSW(const std::string &labelString,
-                                           const std::string &assetPath,
-                                           const std::string &fileExtension,
-                                           InspectorWidget *parent) :
+                                 const std::string &assetPath,
+                                 const std::string &fileExtension,
+                                 InspectorWidget *parent) :
     InspectorSW(labelString, parent)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();

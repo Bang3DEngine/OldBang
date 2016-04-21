@@ -30,6 +30,8 @@ protected:
     void _OnResize(int newWidth, int newHeight);
 
 public:
+    const static std::string GetFileExtension() { return "bstage"; }
+
     Stage();
     virtual ~Stage();
 

@@ -54,3 +54,12 @@ std::string Persistence::GetCurrentStageFilepath()
 {
     return currentStageFilepath;
 }
+
+std::string Persistence::AppendExtension(const std::string &filepath, const std::string extNoDot)
+{
+    if(filepath.find("." + extNoDot) != std::string::npos) return filepath;
+    return filepath + "." + extNoDot;
+}
+
+
+

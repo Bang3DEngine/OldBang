@@ -77,11 +77,15 @@ void MenuBar::OnOpenStage() const
 
     WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::OpenStage);
 
+    std::string ext = Stage::GetFileExtension();
     std::string filename =
-        QFileDialog::getOpenFileName(
+        QFileDialog::getOpenFileName
+            (
                         WindowMain::GetMainWindow(),
                         QString::fromStdString("Open stage..."),
-                        QString::fromStdString(Persistence::GetAssetsPathAbsolute()))
+                        QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
+                        QString::fromStdString( ext + "(*." + ext + ")" )
+                        )
             .toStdString();
     if(filename == "") return;
 
@@ -124,11 +128,15 @@ void MenuBar::OnSaveStageAs() const
     Stage *stage = Canvas::GetInstance()->GetCurrentStage();
     if(stage == nullptr) return;
 
+    std::string ext = Stage::GetFileExtension();
     std::string filename =
-        QFileDialog::getSaveFileName(
+        QFileDialog::getSaveFileName
+            (
                 WindowMain::GetMainWindow(),
                 QString::fromStdString("Save stage as..."),
-                QString::fromStdString(Persistence::GetAssetsPathAbsolute()))
+                QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
+                QString::fromStdString( ext + "(*." + ext + ")" )
+            )
             .toStdString();
     if(filename == "") return;
 

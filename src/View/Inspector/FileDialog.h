@@ -13,8 +13,8 @@ class FileDialog : public QFileDialog
 
 public:
     explicit FileDialog(const std::string& topDir,
-                             const std::string& fileExtension,
-                             QWidget *parent = nullptr);
+                        const std::string& fileExtension,
+                        QWidget *parent = nullptr);
 
     QString topDir;
     std::string fileExtension;
