@@ -308,8 +308,8 @@ Rect FileReader::ReadRect(std::istream &f)
 
 std::string FileReader::ReadString(std::istream &f)
 {
-    std::istringstream iss(ReadNextLine(f));
     std::string str;
-    iss >> str;
+    std::getline(f, str);
+    TrimStringLeft(&str);
     return str;
 }

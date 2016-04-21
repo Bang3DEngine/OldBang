@@ -5,7 +5,8 @@
 
 Hierarchy::Hierarchy(QWidget *parent)
 {
-
+    connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
+            this, SLOT(OnItemNameChanged(QTreeWidgetItem*,int)));
 }
 
 Hierarchy::~Hierarchy()
@@ -25,11 +26,11 @@ void Hierarchy::ExpandRecursiveUpwards(QTreeWidgetItem *item)
 QTreeWidgetItem* Hierarchy::FillRecursiveDownwards(Entity *e)
 {
     const std::list<Entity*> children = e->GetChildren();
+
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
-    std::ostringstream log;
-    log << ((void*)e);
-    //e->SetName(log.str());
     eRoot->setText(0, QString::fromStdString(e->GetName()));
+    eRoot->setFlags(eRoot->flags() | Qt::ItemFlag::ItemIsEditable);
+
     for(auto it = children.begin(); it != children.end(); ++it)
     {
         eRoot->addChild( FillRecursiveDownwards( (*it) ) );
@@ -102,6 +103,7 @@ void Hierarchy::OnChildAdded(Entity *child)
     Entity *parent = child->GetParent();
     if(entityToTreeItem.find(parent) != entityToTreeItem.end())
     {
+        //if the parent is found, redo all the childs from the parent
         entityToTreeItem[parent]->addChild( FillRecursiveDownwards(child) );
         ExpandRecursiveUpwards(entityToTreeItem[parent]);
 
@@ -110,7 +112,8 @@ void Hierarchy::OnChildAdded(Entity *child)
     }
     else
     {
-        FillDownwards(child->GetStage()); //if the parent isnt found, just redo all the hierarchy
+        //if the parent isnt found, just redo all the hierarchy
+        FillDownwards(child->GetStage());
     }
 }
 
@@ -194,6 +197,13 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
     }
 }
 
+void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
+{
+    if(treeItemToEntity.find(item) != treeItemToEntity.end())
+    {   //Change the name of the Entity itself, not just the item text
+        treeItemToEntity[item]->SetName(item->text(column).toStdString());
+    }
+}
 
 void Hierarchy::OnContextMenuCreateEmptyClicked()
 {

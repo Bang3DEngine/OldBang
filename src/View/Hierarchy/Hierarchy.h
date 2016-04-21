@@ -62,6 +62,8 @@ public:
 
 public slots:
 
+    void OnItemNameChanged(QTreeWidgetItem *item, int column);
+
     void OnCustomContextMenuRequested(QPoint point);
     void OnContextMenuCreateEmptyClicked();
     void OnContextMenuDeleteClicked();

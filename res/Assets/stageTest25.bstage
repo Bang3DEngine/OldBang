@@ -1,22 +1,41 @@
 <Stage>
-0x1b672a0
+0x13ea230
 Stage
 <children>
 <Entity>
-0x1b60830
-Empty
+0x111cb00
+NinioLuigiado
+<children>
+<Entity>
+0x111c240
+Wood Boy
 <children>
 </children>
 <parts>
+<Transform>
+0x14e42b0
+0.685 0.843 0.016
+0 -0.61376 0.789493 0
+0.35 0.35 0.35
+</Transform>
 <MeshRenderer>
-0x1b58500
+0x14b8220
+res/Assets/boyMesh.bmesh
+./res/Assets/testMaterial2.bmat
+</MeshRenderer>
+</parts>
+</Entity>
+</children>
+<parts>
+<MeshRenderer>
+0x1430200
 ./res/Assets/boyMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
 <Transform>
-0x1fe5f20
+0x1457f70
 0 0 0
-0 1 0 0
+1 0 0 0
 1 1 1
 </Transform>
 </parts>
