@@ -54,6 +54,7 @@ void Texture2D::Fill(unsigned char *newData,
     UnBind();
 }
 
+#ifdef BANG_EDITOR
 void Texture2D::Write(std::ostream &f) const
 {
 
@@ -65,3 +66,4 @@ void Texture2D::Read(std::istream &f)
     Logger_Log("Texture 2D read: " << filepath);
     LoadFromFile(filepath );
 }
+#endif

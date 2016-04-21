@@ -2,6 +2,8 @@
 #include "stb_image.h"
 #include "Stage.h"
 
+#include "Explorer.h"
+
 unsigned char* FileReader::ReadImage(const std::string& filepath,
                                      int *width, int *height, int *components)
 {

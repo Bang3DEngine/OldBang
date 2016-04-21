@@ -34,7 +34,7 @@ InspectorFileSW::InspectorFileSW(const std::string &labelString,
 
 void InspectorFileSW::Browse()
 {
-    FileDialog fda(Explorer::GetTopPath(), fileExtension, this);
+    FileDialog fda(Persistence::GetAssetsPathAbsolute(), fileExtension, this);
 
     std::string selectedFile = fda.GetOpenFileName();
     if(selectedFile != "")

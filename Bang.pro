@@ -155,7 +155,8 @@ HEADERS += \
     src/View/EditorEntity/EditorEntity.h \
     src/View/EditorStage/EditorStage.h \
     src/Domain/Engine/Others/Input.h \
-    src/Persistence/FileWriter.h
+    src/Persistence/FileWriter.h \
+    src/Persistence/Persistence.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \

@@ -55,8 +55,6 @@ public:
     static glm::quat ReadQuat(std::istream &f);
     static Rect ReadRect(std::istream &f);
     static std::string ReadString(std::istream &f);
-
-
 };
 
 #endif // FILEREADER_H

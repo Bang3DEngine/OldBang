@@ -46,6 +46,7 @@ void Material::UnBind() const
     }
 }
 
+#ifdef BANG_EDITOR
 void Material::Write(std::ostream &f) const
 {
 
@@ -65,6 +66,7 @@ void Material::Read(std::istream &f)
         SetTexture(tex);
     }
 }
+#endif
 
 void Material::SetShaderProgram(const ShaderProgram *program)
 {

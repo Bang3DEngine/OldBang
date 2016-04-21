@@ -1,0 +1,25 @@
+<Stage>
+0x2b70630
+MainStage
+<children>
+<Entity>
+0x3095bb0
+Boy
+<children>
+</children>
+<parts>
+<Transform>
+0x29ed360
+0.633 -0.836 -0.892
+0 -0.959228 0.282634 0
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x2b4ac60
+res/Assets/boyMesh.bmesh
+/home/sephirot47/Bang/res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+</parts>
+</Entity>
+</children>
+</Stage>

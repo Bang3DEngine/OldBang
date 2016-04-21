@@ -2,29 +2,36 @@
 
 #include "WindowMain.h"
 
-std::string Explorer::topPath = "";
-
 Explorer::Explorer(QWidget *parent) : QListView(parent)
 {
     fileSystemModel = new QFileSystemModel();
 
-    topPath = QT_PROJECT_PATH;
-    topPath += "/res/Assets";
-
     buttonDirUp = WindowMain::GetInstance()->buttonExplorerDirUp;
-    buttonChangeViewMode = WindowMain::GetInstance()->buttonExplorerChangeViewMode;
+    buttonChangeViewMode =
+            WindowMain::GetInstance()->buttonExplorerChangeViewMode;
 
     connect(buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
-    connect(buttonChangeViewMode, SIGNAL(clicked()), this, SLOT(OnButtonChangeViewModeClicked()));
+    connect(buttonChangeViewMode, SIGNAL(clicked()),
+            this, SLOT(OnButtonChangeViewModeClicked()));
 
     setModel(fileSystemModel);
     fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDot);
     fileSystemModel->setReadOnly(false);
 
-    connect(fileSystemModel, SIGNAL(directoryLoaded(QString)), this, SLOT(OnDirLoaded(QString)));
-    setDir(topPath);
+    connect(fileSystemModel, SIGNAL(directoryLoaded(QString)),
+            this, SLOT(OnDirLoaded(QString)));
+    setDir(Persistence::GetAssetsPathAbsolute());
 
-    updateTimer = new QTimer(this); //Every X seconds, update all the slots values
+    std::string f = "/home/jfonslocal/Bang/res/Assets/myMesh.bmesh";
+    Logger_Log(f);
+    f = Persistence::ProjectRootAbsoluteToRelative(f);
+    Logger_Log(f);
+    f = Persistence::ProjectRootRelativeToAbsolute(f);
+    Logger_Log(f);
+    f = Persistence::ProjectRootAbsoluteToRelative(f);
+    Logger_Log(f);
+
+    updateTimer = new QTimer(this); //Every X secs, update all the slots values
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
     updateTimer->start(100);
 }
@@ -79,7 +86,8 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
         bool isDir = fileSystemModel->isDir(clickedIndex);
         if(isDir)
         {
-            std::string clickedDirName = fileSystemModel->fileName(clickedIndex).toStdString();
+            std::string clickedDirName =
+                    fileSystemModel->fileName(clickedIndex).toStdString();
             setDir(getCurrentDir() + "/" + clickedDirName);
         }
     }
@@ -98,11 +106,6 @@ void Explorer::dropEvent(QDropEvent *e)
     }
 
     Logger_Log("Drop event in explorer " << e->source());
-}
-
-std::string Explorer::GetTopPath()
-{
-    return topPath;
 }
 
 void Explorer::RefreshInspector()
@@ -153,7 +156,7 @@ void Explorer::setDir(const std::string &path)
 
 void Explorer::OnDirLoaded(QString dir)
 {
-    if(getCurrentDir().length() <= topPath.length())
+    if(getCurrentDir().length() <= Persistence::GetAssetsPathAbsolute().length())
     {
         buttonDirUp->setEnabled(false);
         fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);

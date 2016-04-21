@@ -23,6 +23,7 @@ Entity *Prefab::Instantiate() const
     return nullptr;
 }
 
+#ifdef BANG_EDITOR
 void Prefab::Write(std::ostream &f) const
 {
 
@@ -40,3 +41,4 @@ void Prefab::Read(std::istream &f)
     }
     assetDescription += line + "\n"; // copy last line "</Entity>"
 }
+#endif

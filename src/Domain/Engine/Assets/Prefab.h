@@ -31,8 +31,10 @@ public:
 
     Entity* Instantiate() const;
 
+#ifdef BANG_EDITOR
     void Write(std::ostream &f) const;
     void Read(std::istream &f);
+#endif
 };
 
 #endif // BANGFAB_H

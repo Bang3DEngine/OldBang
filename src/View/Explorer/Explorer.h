@@ -12,6 +12,8 @@
 
 #include "Logger.h"
 
+#include "Persistence.h"
+
 #include "File.h"
 #include "FileMesh.h"
 #include "InspectorMeshFileWidget.h"
@@ -28,8 +30,6 @@ private:
     QToolButton *buttonDirUp;
     QToolButton *buttonChangeViewMode;
 
-    static std::string topPath;
-
     void setDir(const std::string &path);
     std::string getCurrentDir() const;
 
@@ -43,8 +43,6 @@ public:
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
     void dropEvent(QDropEvent *e) override;
-
-    static std::string GetTopPath();
 
     //Updates the Inspector with the selected file info
     void RefreshInspector();

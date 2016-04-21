@@ -5,6 +5,7 @@
 
 
 #include "Canvas.h"
+#include "Persistence.h"
 #include "EditorStage.h"
 #include "StageReader.h"
 #include "FileWriter.h"
@@ -33,9 +34,10 @@ void MenuBar::OnOpenStage() const
     WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::OpenStage);
 
     std::string filename =
-            QFileDialog::getOpenFileName(WindowMain::GetMainWindow(),
-                                        QString::fromStdString("Open stage"),
-                                        QString::fromStdString(Explorer::GetTopPath()))
+        QFileDialog::getOpenFileName(
+                        WindowMain::GetMainWindow(),
+                        QString::fromStdString("Open stage"),
+                        QString::fromStdString(Persistence::GetAssetsPathAbsolute()))
             .toStdString();
     if(filename == "") return;
 
@@ -61,9 +63,10 @@ void MenuBar::OnSaveStageAs() const
     if(stage == nullptr) return;
 
     std::string filename =
-            QFileDialog::getSaveFileName(WindowMain::GetMainWindow(),
-                                        QString::fromStdString("Save stage as..."),
-                                        QString::fromStdString(Explorer::GetTopPath()))
+        QFileDialog::getSaveFileName(
+                WindowMain::GetMainWindow(),
+                QString::fromStdString("Save stage as..."),
+                QString::fromStdString(Persistence::GetAssetsPathAbsolute()))
             .toStdString();
     if(filename == "") return;
     FileWriter::SaveStage(filename, stage);

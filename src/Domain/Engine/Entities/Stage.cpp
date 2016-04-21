@@ -70,7 +70,7 @@ const Canvas *Stage::GetCanvas() const
 void Stage::Write(std::ostream &f) const
 {
     f << "<Stage>" << std::endl;
-    f << ((void*)this) << std::endl;            //internal file id
+    f << ((void*)this) << std::endl;   //internal file id
     f << this->GetName() << std::endl; //stage name
 
     //Children come now

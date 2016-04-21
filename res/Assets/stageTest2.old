@@ -1,0 +1,44 @@
+<Stage>
+0xf410b0
+MainStage
+<children>
+<Entity>
+0xe58320
+Boy
+<children>
+<Entity>
+0x14c0b40
+Luigi
+<children>
+</children>
+<parts>
+<Transform>
+0x14c6380
+-0.826 -0.372 -0.85
+0.90979 0 -0.415068 0
+0.03 0.03 0.03
+</Transform>
+<MeshRenderer>
+0x13d1b30
+res/Assets/luigiMesh.bmesh
+res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+</parts>
+</Entity>
+</children>
+<parts>
+<Transform>
+0xf8f630
+0.633 -0.836 -0.892
+0 -0.959228 0.282634 0
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0xf7fdd0
+res/Assets/boyMesh.bmesh
+/home/sephirot47/Bang/res/Assets/testMaterial.bmat
+</MeshRenderer>
+</parts>
+</Entity>
+</children>
+</Stage>
