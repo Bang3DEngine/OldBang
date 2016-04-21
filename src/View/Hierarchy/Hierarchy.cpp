@@ -29,7 +29,6 @@ QTreeWidgetItem* Hierarchy::FillRecursiveDownwards(Entity *e)
 
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
     eRoot->setText(0, QString::fromStdString(e->GetName()));
-    eRoot->setFlags(eRoot->flags() | Qt::ItemFlag::ItemIsEditable);
 
     for(auto it = children.begin(); it != children.end(); ++it)
     {
@@ -191,9 +190,24 @@ void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 
 void Hierarchy::keyPressEvent(QKeyEvent *e)
 {
-    if(e->key() == Qt::Key_Delete)
+    if(e->key() == Qt::Key_Delete) // Delete item
     {
         OnContextMenuDeleteClicked();
+    }
+    else if(e->key() == Qt::Key_F2) // Edit name
+    {
+        if(this->selectedItems().length() <= 0) return;
+        QTreeWidgetItem *selected = this->selectedItems().at(0);
+        if(selected != nullptr)
+        {
+            Qt::ItemFlags oldFlags = selected->flags();
+            selected->setFlags(oldFlags | Qt::ItemFlag::ItemIsEditable);
+
+            this->editItem(selected, 0); // Name can be edited now
+
+            //Restore not editable by click
+            selected->setFlags(oldFlags);
+        }
     }
 }
 
