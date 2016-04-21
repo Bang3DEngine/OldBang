@@ -69,7 +69,7 @@ void MenuBar::OnSaveStageAs() const
                 QString::fromStdString(Persistence::GetAssetsPathAbsolute()))
             .toStdString();
     if(filename == "") return;
-    FileWriter::SaveStage(filename, stage);
+    FileWriter::WriteStage(filename, stage);
 }
 
 void MenuBar::OnCreateEmptyEntity() const

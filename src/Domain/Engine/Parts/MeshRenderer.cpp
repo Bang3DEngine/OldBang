@@ -177,8 +177,8 @@ void MeshRenderer::Write(std::ostream &f) const
 {
     f << "<MeshRenderer>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::Write(mesh->GetFilepath(), f);
-    FileWriter::Write(material->GetFilepath(), f);
+    FileWriter::WriteFilepath(mesh->GetFilepath(), f);
+    FileWriter::WriteFilepath(material->GetFilepath(), f);
     f << "</MeshRenderer>" << std::endl;
 }
 

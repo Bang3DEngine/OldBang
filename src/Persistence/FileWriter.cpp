@@ -5,7 +5,7 @@ FileWriter::FileWriter()
 {
 }
 
-void FileWriter::SaveStage(std::string filename, Stage *stage)
+void FileWriter::WriteStage(std::string filename, Stage *stage)
 {
     std::ofstream ofs;
     ofs.open(filename);
@@ -55,4 +55,9 @@ void FileWriter::Write(const std::string &str, std::ostream &f)
     {
         f << "-" << std::endl;
     }
+}
+
+void FileWriter::WriteFilepath(const std::string &path, std::ostream &f)
+{
+    Write(Persistence::ProjectRootAbsoluteToRelative(path), f);
 }
