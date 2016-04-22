@@ -28,6 +28,7 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
     connect(w->actionAddPartBehaviour,  SIGNAL(triggered()), this, SLOT(OnAddPartBehaviour()));
     connect(w->actionAddPartCamera,  SIGNAL(triggered()), this, SLOT(OnAddPartCamera()));
     connect(w->actionAddPartMeshRenderer,  SIGNAL(triggered()), this, SLOT(OnAddPartMeshRenderer()));
+    connect(w->actionAddPartLineRenderer,  SIGNAL(triggered()), this, SLOT(OnAddPartLineRenderer()));
     connect(w->actionAddPartTransform,  SIGNAL(triggered()), this, SLOT(OnAddPartTransform()));
 }
 
@@ -180,6 +181,10 @@ void MenuBar::OnAddPartCamera() const
 void MenuBar::OnAddPartMeshRenderer() const
 {
     WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddPartMeshRenderer);
+}
+void MenuBar::OnAddPartLineRenderer() const
+{
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddPartLineRenderer);
 }
 void MenuBar::OnAddPartTransform() const
 {

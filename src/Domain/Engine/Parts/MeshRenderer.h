@@ -14,36 +14,33 @@
 #include "ShaderProgram.h"
 #include "ShaderContract.h"
 #include "AssetsManager.h"
+#include "Renderer.h"
 
 #ifdef BANG_EDITOR
 #include "InspectorFileSW.h"
 #endif
 
 
-class MeshRenderer : public Part
+class MeshRenderer : public Renderer
 {
 private:
-
     Mesh *mesh = nullptr;
-    Material *material = nullptr;
+
+    void Render() const override;
 
 protected:
-
     void _OnRender() override;
 
 public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
-    void Render(Mesh::RenderMode drawingMode = Mesh::RenderMode::Triangles) const;
+    void SetMaterial(Material *m) override;
 
-    void SetMesh(Mesh *m);
-    const Mesh* GetMesh();
+    virtual void SetMesh(Mesh *m);
+    virtual const Mesh* GetMesh();
 
-    void SetMaterial(Material *m);
-    Material* GetMaterial();
-
-    virtual const std::string ToString() const override;
+    virtual const std::string ToString() const override { return "MeshRenderer"; }
     virtual std::string GetName() const override { return "MeshRenderer"; }
 
     #ifdef BANG_EDITOR

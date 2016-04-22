@@ -5,6 +5,7 @@
 #include "Behaviour.h"
 #include "Camera.h"
 #include "MeshRenderer.h"
+#include "LineRenderer.h"
 #include "Transform.h"
 #include "Logger.h"
 
@@ -105,6 +106,14 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
         {
             MeshRenderer *m = new MeshRenderer();
             currentEntity->AddPart(m);
+        }
+    }
+    else if(clickedAction == MenuBar::Action::AddPartLineRenderer)
+    {
+        if(this->currentEntity != nullptr)
+        {
+            LineRenderer *lr = new LineRenderer();
+            currentEntity->AddPart(lr);
         }
     }
     else if(clickedAction == MenuBar::Action::AddPartTransform)

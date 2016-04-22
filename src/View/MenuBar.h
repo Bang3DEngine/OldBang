@@ -30,6 +30,7 @@ public:
         AddPartBehaviour,
         AddPartCamera,
         AddPartMeshRenderer,
+        AddPartLineRenderer,
         AddPartTransform,
     };
 
@@ -55,6 +56,7 @@ public slots:
     void OnAddPartBehaviour() const;
     void OnAddPartCamera() const;
     void OnAddPartMeshRenderer() const;
+    void OnAddPartLineRenderer() const;
     void OnAddPartTransform() const;
 };
 

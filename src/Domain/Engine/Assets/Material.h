@@ -16,6 +16,7 @@
 class Material : public IGLBindable, public Asset
 {
 friend class MeshRenderer;
+friend class LineRenderer;
 
 public:
     const static std::string GetFileExtension() { return "bmat"; }

@@ -21,9 +21,9 @@ private:
     float moveAccel = 0.1f;
     float moveSpeed = 0.0f;
 
-    float mouseCamPlaneMoveBoost = 100.0f; //Movement with middle button
-    float mouseRotBoost = 50.0f;
-    float mouseWheelBoost = 100.0f;
+    float mouseCamPlaneMoveBoost = 60.0f; //Movement with middle button
+    float mouseRotBoost = 5.0f;
+    float mouseWheelBoost = 50.0f;
 
     //Only used if using cam orbitting behaviour
     glm::vec2 mouseRotationRads = glm::vec2(0.0f);

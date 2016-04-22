@@ -14,7 +14,7 @@ public:
     VBO();
     virtual ~VBO();
 
-    void Fill(void *data, int dataSize, GLenum usage = GL_STATIC_DRAW);
+    void Fill(const void *data, int dataSize, GLenum usage = GL_STATIC_DRAW);
 
     void Bind() const override;
     void UnBind() const override;

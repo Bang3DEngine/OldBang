@@ -17,18 +17,12 @@ MeshRenderer::~MeshRenderer()
 {
 }
 
-void MeshRenderer::_OnRender()
+void MeshRenderer::SetMaterial(Material *m)
 {
-    Stage *stage = GetOwner()->GetStage();
-    Camera *cam = stage->GetCamera();
-    if(CAN_USE_PART(cam))
+    material = m;
+    if(mesh != nullptr && material != nullptr && material->GetShaderProgram() != nullptr)
     {
-        Render(Mesh::RenderMode::Triangles);
-    }
-    else
-    {
-        Logger_Warn("Can't render " << GetOwner() << " because "
-                       << stage << " does not have a set Camera.");
+        mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
     }
 }
 
@@ -46,26 +40,22 @@ const Mesh *MeshRenderer::GetMesh()
     return mesh;
 }
 
-void MeshRenderer::SetMaterial(Material *m)
+void MeshRenderer::_OnRender()
 {
-    material = m;
-    if(mesh != nullptr && material != nullptr && material->GetShaderProgram() != nullptr)
+    Stage *stage = GetOwner()->GetStage();
+    Camera *cam = stage->GetCamera();
+    if(CAN_USE_PART(cam))
     {
-        mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
+        Render();
+    }
+    else
+    {
+        Logger_Warn("Can't render " << GetOwner() << " because "
+                       << stage << " does not have a set Camera.");
     }
 }
 
-Material *MeshRenderer::GetMaterial()
-{
-    return material;
-}
-
-const std::string MeshRenderer::ToString() const
-{
-    return "MeshRenderer";
-}
-
-void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
+void MeshRenderer::Render() const
 {
     Transform *t = owner->GetPart<Transform>();
     if(!CAN_USE_PART(t) || mesh == nullptr || material == nullptr)
@@ -82,32 +72,23 @@ void MeshRenderer::Render(Mesh::RenderMode drawingMode) const
     }
 
     glm::mat4 model; t->GetMatrix(model);
-    glm::mat4 view(1.0f);
-    glm::mat4 projection(1.0f);
-
-    //In case the parent stage has a camera, retrieve the view and proj matrices
+    glm::mat4 view(1.0f), projection(1.0f);
     Camera *camera = owner->GetStage()->GetCamera();
     if( CAN_USE_PART(camera) )
     {
         camera->GetViewMatrix(view);
         camera->GetProjectionMatrix(projection);
     }
-
     glm::mat4 pvm = projection * view * model;
 
     mesh->GetVAO()->Bind();
-
     material->Bind();
-
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
-
-    glDrawArrays(drawingMode, 0, mesh->GetVertexCount());
-
+    glDrawArrays(mesh->GetRenderMode(), 0, mesh->GetVertexCount());
     material->UnBind();
-
     mesh->GetVAO()->UnBind();
 }
 
@@ -186,9 +167,7 @@ void MeshRenderer::Read(std::istream &f)
 {
     StageReader::RegisterNextPointerId(f, this);
     SetMesh( AssetsManager::GetAsset<Mesh>( FileReader::ReadString(f) ) );
-    Logger_Log(mesh->GetFilepath());
     SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
-    Logger_Log("HIAR2");
     FileReader::ReadNextLine(f); //Consume close tag
 }
 

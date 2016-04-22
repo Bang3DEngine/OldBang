@@ -25,6 +25,8 @@ public:
 
     enum RenderMode
     {
+        Points = GL_POINTS,
+        Lines = GL_LINES,
         Triangles = GL_TRIANGLES,
         Quads = GL_QUADS
     };

@@ -156,7 +156,10 @@ HEADERS += \
     src/View/EditorStage/EditorStage.h \
     src/Domain/Engine/Others/Input.h \
     src/Persistence/FileWriter.h \
-    src/Persistence/Persistence.h
+    src/Persistence/Persistence.h \
+    src/View/EditorEntity/EditorAxis.h \
+    src/Domain/Engine/Parts/LineRenderer.h \
+    src/Domain/Engine/Parts/Renderer.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -229,7 +232,10 @@ SOURCES += \
     src/View/EditorStage/EditorStage.cpp \
     src/Domain/Engine/Others/Input.cpp \
     src/Persistence/FileWriter.cpp \
-    src/Persistence/Persistence.cpp
+    src/Persistence/Persistence.cpp \
+    src/View/EditorEntity/EditorAxis.cpp \
+    src/Domain/Engine/Parts/LineRenderer.cpp \
+    src/Domain/Engine/Parts/Renderer.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

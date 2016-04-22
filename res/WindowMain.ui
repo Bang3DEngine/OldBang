@@ -128,6 +128,7 @@
      <addaction name="actionAddPartCamera"/>
      <addaction name="actionAddPartMeshRenderer"/>
      <addaction name="actionAddPartTransform"/>
+     <addaction name="actionAddPartLineRenderer"/>
     </widget>
     <addaction name="menuAddPart"/>
     <addaction name="actionRemovePart"/>
@@ -528,6 +529,11 @@
   <action name="actionSaveStage">
    <property name="text">
     <string>Save Stage</string>
+   </property>
+  </action>
+  <action name="actionAddPartLineRenderer">
+   <property name="text">
+    <string>Line Renderer</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

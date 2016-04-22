@@ -34,20 +34,20 @@ void EditorCamera::OnUpdate()
     //KEY HANDLING
     if(Input::GetKey(Input::Key::W))
     {
-        moveStep += moveSpeed * t->GetForward() * Time::GetDeltaTime();
+        moveStep += moveSpeed * t->GetForward();
     }
     else if(Input::GetKey(Input::Key::S))
     {
-        moveStep -= moveSpeed * t->GetForward() * Time::GetDeltaTime();
+        moveStep -= moveSpeed * t->GetForward();
     }
 
     if(Input::GetKey(Input::Key::A))
     {
-        moveStep -= moveSpeed * t->GetRight() * Time::GetDeltaTime();
+        moveStep -= moveSpeed * t->GetRight();
     }
     else if(Input::GetKey(Input::Key::D))
     {
-        moveStep += moveSpeed * t->GetRight() * Time::GetDeltaTime();
+        moveStep += moveSpeed * t->GetRight();
     }
     doingSomeAction = glm::length(moveStep) != 0;
     //
@@ -56,9 +56,9 @@ void EditorCamera::OnUpdate()
     if(Input::GetMouseButton(Input::MouseButton::MRight))
     {
         float mx = -Input::GetMouseAxisX() *
-                    mouseRotBoost * Time::GetDeltaTime();
+                    mouseRotBoost;
         float my = -Input::GetMouseAxisY() *
-                    mouseRotBoost * Time::GetDeltaTime();
+                    mouseRotBoost;
 
 
         //Orbitting Behaviour
@@ -92,10 +92,8 @@ void EditorCamera::OnUpdate()
     else  //CAM PLANE MOVEMENT  -  MIDDLE PRESS MOVEMENT HANDLING
         if(Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        float mx =  Input::GetMouseAxisX() * mouseCamPlaneMoveBoost *
-                    Time::GetDeltaTime();
-        float my = -Input::GetMouseAxisY() * mouseCamPlaneMoveBoost *
-                    Time::GetDeltaTime();
+        float mx =  Input::GetMouseAxisX() * mouseCamPlaneMoveBoost;
+        float my = -Input::GetMouseAxisY() * mouseCamPlaneMoveBoost;
 
         t->SetPosition(t->GetPosition()   +
                        t->GetRight() * mx +
@@ -115,7 +113,7 @@ void EditorCamera::OnUpdate()
     if(mouseWheel != 0.0f)
     {
         moveStep += mouseWheelBoost * mouseWheel *
-                    moveSpeed * t->GetForward() * Time::GetDeltaTime();
+                    moveSpeed * t->GetForward();
         doingSomeAction = true;
     }
     //

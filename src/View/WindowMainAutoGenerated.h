@@ -57,6 +57,7 @@ public:
     QAction *actionCreateEmptyEntity;
     QAction *actionNewStage;
     QAction *actionSaveStage;
+    QAction *actionAddPartLineRenderer;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
@@ -146,6 +147,8 @@ public:
         actionNewStage->setObjectName(QString::fromUtf8("actionNewStage"));
         actionSaveStage = new QAction(WindowMain);
         actionSaveStage->setObjectName(QString::fromUtf8("actionSaveStage"));
+        actionAddPartLineRenderer = new QAction(WindowMain);
+        actionAddPartLineRenderer->setObjectName(QString::fromUtf8("actionAddPartLineRenderer"));
         centralwidget = new QWidget(WindowMain);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -422,6 +425,7 @@ public:
         menuAddPart->addAction(actionAddPartCamera);
         menuAddPart->addAction(actionAddPartMeshRenderer);
         menuAddPart->addAction(actionAddPartTransform);
+        menuAddPart->addAction(actionAddPartLineRenderer);
 
         retranslateUi(WindowMain);
         QObject::connect(widgetHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
@@ -454,6 +458,7 @@ public:
         actionCreateEmptyEntity->setText(QApplication::translate("WindowMain", "Create Empty Entity", 0, QApplication::UnicodeUTF8));
         actionNewStage->setText(QApplication::translate("WindowMain", "New Stage", 0, QApplication::UnicodeUTF8));
         actionSaveStage->setText(QApplication::translate("WindowMain", "Save Stage", 0, QApplication::UnicodeUTF8));
+        actionAddPartLineRenderer->setText(QApplication::translate("WindowMain", "Line Renderer", 0, QApplication::UnicodeUTF8));
         buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0, QApplication::UnicodeUTF8));
         menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
         menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));
