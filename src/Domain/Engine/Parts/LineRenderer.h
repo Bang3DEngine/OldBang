@@ -26,6 +26,8 @@ private:
     VBO *vbo = nullptr;
     VAO *vao = nullptr;
 
+    float width = 0.0f;
+
     void BindPointsToVAO() const;
 
 protected:
@@ -45,6 +47,9 @@ public:
 
     void SetOrigin(glm::vec3 o);
     void SetDestiny(glm::vec3 d);
+
+    float GetLineWidth() const;
+    void SetLineWidth(float w);
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetPartInfo() override;

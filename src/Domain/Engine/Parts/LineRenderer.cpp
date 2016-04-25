@@ -7,7 +7,8 @@ LineRenderer::LineRenderer()
         {
             new InspectorFileSWInfo("Material", Material::GetFileExtension()),
             new InspectorVFloatSWInfo("Origin", {0.0f, 0.0f, 0.0f}),
-            new InspectorVFloatSWInfo("Destiny", {0.0f, 0.0f, 0.0f})
+            new InspectorVFloatSWInfo("Destiny", {0.0f, 0.0f, 0.0f}),
+            new InspectorVFloatSWInfo("Line Width", {0.0f})
         });
     #endif
 
@@ -18,6 +19,8 @@ LineRenderer::LineRenderer()
 
     vao = new VAO();
     vao->BindVBO(vbo, 0, 3 * points.size(), GL_FLOAT);
+
+    glEnable(GL_LINE_SMOOTH); //Line antialiasing
 }
 
 LineRenderer::~LineRenderer()
@@ -80,7 +83,10 @@ void LineRenderer::Render() const
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
     material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
+
+    glLineWidth(width);
     glDrawArrays(Mesh::RenderMode::Lines, 0, points.size());
+
     material->UnBind();
     vao->UnBind();
 }
@@ -101,6 +107,16 @@ void LineRenderer::SetDestiny(glm::vec3 d)
 {
     points[1] = d;
     BindPointsToVAO();
+}
+
+float LineRenderer::GetLineWidth() const
+{
+    return width;
+}
+
+void LineRenderer::SetLineWidth(float w)
+{
+    width = w;
 }
 
 #ifdef BANG_EDITOR
@@ -133,6 +149,10 @@ InspectorWidgetInfo* LineRenderer::GetPartInfo()
             static_cast<InspectorVFloatSWInfo*>(inspectorPartInfo.GetSlotInfo(2));
     destinyInfo->value = {points[1].x, points[1].y, points[1].z};
 
+    InspectorVFloatSWInfo *widthInfo  =
+            static_cast<InspectorVFloatSWInfo*>(inspectorPartInfo.GetSlotInfo(3));
+    widthInfo->value = {GetLineWidth()};
+
     return &inspectorPartInfo;
 }
 
@@ -150,6 +170,9 @@ void LineRenderer::OnSlotValueChanged(InspectorWidget *source)
 
     std::vector<float> destiny = source->GetSWVectorFloatValue("Destiny");
     points[1] = glm::vec3(destiny[0], destiny[1], destiny[2]);
+
+    std::vector<float> widthInfo = source->GetSWVectorFloatValue("Line Width");
+    SetLineWidth(widthInfo[0]);
 }
 
 
@@ -160,6 +183,7 @@ void LineRenderer::Write(std::ostream &f) const
     FileWriter::WriteFilepath(material->GetFilepath(), f);
     FileWriter::Write(glm::vec3(points[0].x, points[0].y, points[0].z), f);
     FileWriter::Write(glm::vec3(points[1].x, points[1].y, points[1].z), f);
+    FileWriter::Write(GetLineWidth(), f);
     f << "</LineRenderer>" << std::endl;
 }
 
@@ -169,6 +193,7 @@ void LineRenderer::Read(std::istream &f)
     SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
     SetOrigin(FileReader::ReadVec3(f));
     SetDestiny(FileReader::ReadVec3(f));
+    SetLineWidth(FileReader::ReadFloat(f));
     FileReader::ReadNextLine(f); //Consume close tag
 }
 
