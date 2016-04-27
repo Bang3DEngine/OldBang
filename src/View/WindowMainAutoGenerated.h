@@ -195,7 +195,7 @@ public:
         canvas->raise();
         menubar = new MenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 941, 32));
+        menubar->setGeometry(QRect(0, 0, 941, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -235,12 +235,15 @@ public:
         widgetHierarchy->setSizePolicy(sizePolicy1);
         widgetHierarchy->setContextMenuPolicy(Qt::CustomContextMenu);
         widgetHierarchy->setAcceptDrops(true);
+        widgetHierarchy->setAutoScroll(false);
         widgetHierarchy->setDragEnabled(true);
         widgetHierarchy->setDragDropMode(QAbstractItemView::DragDrop);
         widgetHierarchy->setDefaultDropAction(Qt::MoveAction);
         widgetHierarchy->setAlternatingRowColors(false);
         widgetHierarchy->setSelectionMode(QAbstractItemView::ExtendedSelection);
         widgetHierarchy->setSelectionBehavior(QAbstractItemView::SelectRows);
+        widgetHierarchy->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+        widgetHierarchy->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
         widgetHierarchy->setIndentation(10);
         widgetHierarchy->setRootIsDecorated(true);
         widgetHierarchy->setAnimated(true);
@@ -283,10 +286,13 @@ public:
         widgetInspector = new Inspector(dockWidgetContents_7);
         widgetInspector->setObjectName(QString::fromUtf8("widgetInspector"));
         widgetInspector->setContextMenuPolicy(Qt::CustomContextMenu);
+        widgetInspector->setAutoScroll(false);
         widgetInspector->setDragDropMode(QAbstractItemView::DragOnly);
         widgetInspector->setDefaultDropAction(Qt::IgnoreAction);
         widgetInspector->setAlternatingRowColors(true);
         widgetInspector->setSelectionMode(QAbstractItemView::NoSelection);
+        widgetInspector->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+        widgetInspector->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
         widgetInspector->setMovement(QListView::Snap);
         widgetInspector->setFlow(QListView::TopToBottom);
         widgetInspector->setViewMode(QListView::ListMode);
@@ -311,6 +317,7 @@ public:
         horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
         widgetTreeExplorerDirTree = new ExplorerDirTree(dockWidgetContents_5);
         widgetTreeExplorerDirTree->setObjectName(QString::fromUtf8("widgetTreeExplorerDirTree"));
+        widgetTreeExplorerDirTree->setAutoScroll(false);
         widgetTreeExplorerDirTree->setProperty("showDropIndicator", QVariant(true));
         widgetTreeExplorerDirTree->setSortingEnabled(true);
         widgetTreeExplorerDirTree->setAllColumnsShowFocus(true);
@@ -339,6 +346,7 @@ public:
         sizePolicy2.setHeightForWidth(widgetListExplorer->sizePolicy().hasHeightForWidth());
         widgetListExplorer->setSizePolicy(sizePolicy2);
         widgetListExplorer->setAcceptDrops(true);
+        widgetListExplorer->setAutoScroll(false);
         widgetListExplorer->setProperty("showDropIndicator", QVariant(true));
         widgetListExplorer->setDragEnabled(true);
         widgetListExplorer->setDragDropMode(QAbstractItemView::DragDrop);

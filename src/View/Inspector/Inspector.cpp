@@ -1,5 +1,7 @@
 #include "Inspector.h"
 
+#include <QScrollBar>
+
 #include "Entity.h"
 #include "Part.h"
 #include "Behaviour.h"
@@ -9,9 +11,16 @@
 #include "Transform.h"
 #include "Logger.h"
 
+
 Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 {
     titleLabel = parent->findChild<QLabel*>("labelInspectorEntityName");
+}
+
+void Inspector::updateGeometries()
+{
+    QListWidget::updateGeometries();
+    verticalScrollBar()->setSingleStep(3);
 }
 
 void Inspector::Clear()

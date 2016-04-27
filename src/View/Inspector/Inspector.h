@@ -21,8 +21,13 @@ private:
 
     std::map<InspectorWidget*, QListWidgetItem*> widgetToItem;
 
+protected:
+    //To set the scroll step to a smaller one
+    virtual void updateGeometries() override;
+
 public:
     explicit Inspector(QWidget *parent = 0);
+
 
     void Clear();
     void Refresh();

@@ -1,5 +1,7 @@
 #include "Explorer.h"
 
+#include <QScrollBar>
+
 #include "WindowMain.h"
 
 Explorer::Explorer(QWidget *parent) : QListView(parent)
@@ -171,4 +173,10 @@ void Explorer::OnDirLoaded(QString dir)
 std::string Explorer::getCurrentDir() const
 {
     return fileSystemModel->rootPath().toStdString();
+}
+
+void Explorer::updateGeometries()
+{
+    QListView::updateGeometries();
+    verticalScrollBar()->setSingleStep(3);
 }

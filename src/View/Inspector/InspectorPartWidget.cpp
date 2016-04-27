@@ -29,20 +29,20 @@ void InspectorPartWidget::OnCustomContextMenuRequested(QPoint point)
 {
     QMenu contextMenu(tr("Widget part context menu"), this);
 
-    QAction actionRemovePart("Remove Part", this);
     QAction actionMovePartUp("Move up", this);
     QAction actionMovePartDown("Move down", this);
+    QAction actionRemovePart("Remove Part", this);
 
-    connect(&actionRemovePart, SIGNAL(triggered()),
-            this, SLOT(OnContextMenuRemovePartSelected()));
     connect(&actionMovePartUp, SIGNAL(triggered()),
             this, SLOT(OnContextMenuMoveUpSelected()));
     connect(&actionMovePartDown, SIGNAL(triggered()),
             this, SLOT(OnContextMenuMoveDownSelected()));
+    connect(&actionRemovePart, SIGNAL(triggered()),
+            this, SLOT(OnContextMenuRemovePartSelected()));
 
-    contextMenu.addAction(&actionRemovePart);
     contextMenu.addAction(&actionMovePartUp);
     contextMenu.addAction(&actionMovePartDown);
+    contextMenu.addAction(&actionRemovePart);
 
     contextMenu.exec(mapToGlobal(point));
 }

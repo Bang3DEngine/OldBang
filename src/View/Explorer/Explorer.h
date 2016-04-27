@@ -36,6 +36,10 @@ private:
     std::string lastSelectedFileName = "";
     QTimer *updateTimer = nullptr;
 
+protected:
+    //To set the scroll step to a smaller one
+    virtual void updateGeometries() override;
+
 public:
     Explorer(QWidget *parent);
     virtual ~Explorer();
