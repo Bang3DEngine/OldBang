@@ -78,7 +78,9 @@ OTHER_FILES += \
     res/Assets/luigiPrefab.asset \
     res/Assets/luigiMesh.asset \
     res/Assets/luigiMaterial.asset \
-    res/Assets/luigiTexture.asset
+    res/Assets/luigiTexture.asset \
+    res/Shaders/lines.frag \
+    res/Shaders/lines.vert
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
