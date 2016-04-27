@@ -14,11 +14,19 @@ protected:
 public:
     File(const QFileSystemModel *model, const QModelIndex *index);
 
-    bool IsImage() const;
-    bool IsMesh() const;
+    bool IsTexture2DAsset() const;
+    bool IsImageFile() const;
+
+    bool IsMeshAsset() const;
+    bool IsMeshFile() const;
+
+    bool IsMaterialAsset() const;
+
+    bool IsPrefabAsset() const;
 
     bool IsDir() const;
     bool IsFile() const;
+
     const std::string& GetPath() const;
     const std::string& GetName() const;
     const std::string& GetExtension() const;

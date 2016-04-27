@@ -1,5 +1,10 @@
 #include "File.h"
 
+#include "Mesh.h"
+#include "Prefab.h"
+#include "Material.h"
+#include "Texture2D.h"
+
 File::File(const QFileSystemModel *model, const QModelIndex *index)
 {
     isFile = !model->isDir(*index);
@@ -15,21 +20,38 @@ File::File(const QFileSystemModel *model, const QModelIndex *index)
     }
 }
 
-bool File::IsImage() const
+bool File::IsTexture2DAsset() const
 {
-    return  isFile &&
-            (
-            extension == "jpg" || extension == "jpeg" ||
-            extension == "png" || extension == "bmp"
-                );
+    return  isFile && extension == Texture2D::GetFileExtension();
 }
 
-bool File::IsMesh() const
+bool File::IsImageFile() const
 {
     return  isFile &&
             (
-            extension == "obj"
+             extension == "jpg" || extension == "jpeg" ||
+             extension == "png" || extension == "bmp"  ||
             );
+}
+
+bool File::IsMeshAsset() const
+{
+    return  isFile && Mesh::GetFileExtension();
+}
+
+bool File::IsMeshFile() const
+{
+    return  isFile && (extension == "obj");
+}
+
+bool File::IsMaterialAsset() const
+{
+    return ifFile && extension == Material::GetFileExtension();
+}
+
+bool File::IsPrefabAsset() const
+{
+    return ifFile && extension == Prefab::GetFileExtension();
 }
 
 bool File::IsDir() const

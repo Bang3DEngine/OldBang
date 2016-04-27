@@ -17,7 +17,7 @@
 #include "File.h"
 #include "FileMesh.h"
 #include "InspectorMeshFileWidget.h"
-#include "InspectorTexture2DWidget.h"
+#include "InspectorImageFileWidget.h"
 
 class Explorer : public QListView
 {

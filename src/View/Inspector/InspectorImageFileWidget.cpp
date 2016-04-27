@@ -1,7 +1,7 @@
-#include "InspectorTexture2DWidget.h"
+#include "InspectorImageFileWidget.h"
 
-InspectorTexture2DWidget::
-InspectorTexture2DWidget(const FileImage &fileImage) :
+InspectorImageFileWidget::
+InspectorImageFileWidget(const FileImage &fileImage) :
     InspectorWidget()
 {
     std::string mode = fileImage.GetNumComponents() == 3 ?
@@ -24,6 +24,6 @@ InspectorTexture2DWidget(const FileImage &fileImage) :
     this->ConstructFromWidgetInformation(fileImage.GetName(), &inspectorInfo);
 }
 
-InspectorTexture2DWidget::~InspectorTexture2DWidget()
+InspectorImageFileWidget::~InspectorImageFileWidget()
 {
 }

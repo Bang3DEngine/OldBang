@@ -8,7 +8,7 @@
 
 class FileImage : public File
 {
-private:
+protected:
     int width = 0, height = 0;
     int numComponents = 3;
 

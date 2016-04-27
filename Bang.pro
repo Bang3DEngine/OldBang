@@ -147,7 +147,7 @@ HEADERS += \
     src/View/MenuBar.h \
     src/View/Explorer/ExplorerDirTree.h \
     src/View/Inspector/InspectorWidget.h \
-    src/View/Inspector/InspectorTexture2DWidget.h \
+    src/View/Inspector/InspectorImageFileWidget.h \
     src/View/Explorer/File.h \
     src/View/Explorer/FileImage.h \
     src/View/Inspector/InspectorStringSW.h \
@@ -161,7 +161,9 @@ HEADERS += \
     src/Persistence/Persistence.h \
     src/View/EditorEntity/EditorAxis.h \
     src/Domain/Engine/Parts/LineRenderer.h \
-    src/Domain/Engine/Parts/Renderer.h
+    src/Domain/Engine/Parts/Renderer.h \
+    src/View/Explorer/FileTexture2DAsset.h \
+    src/View/Inspector/InspectorTexture2DAssetWidget.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -223,7 +225,7 @@ SOURCES += \
     src/View/MenuBar.cpp \
     src/View/Explorer/ExplorerDirTree.cpp \
     src/View/Inspector/InspectorWidget.cpp \
-    src/View/Inspector/InspectorTexture2DWidget.cpp \
+    src/View/Inspector/InspectorImageFileWidget.cpp \
     src/View/Explorer/File.cpp \
     src/View/Explorer/FileImage.cpp \
     src/View/Inspector/InspectorStringSW.cpp \
@@ -237,7 +239,9 @@ SOURCES += \
     src/Persistence/Persistence.cpp \
     src/View/EditorEntity/EditorAxis.cpp \
     src/Domain/Engine/Parts/LineRenderer.cpp \
-    src/Domain/Engine/Parts/Renderer.cpp
+    src/Domain/Engine/Parts/Renderer.cpp \
+    src/View/Explorer/FileTexture2DAsset.cpp \
+    src/View/Inspector/InspectorTexture2DAssetWidget.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

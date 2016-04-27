@@ -24,15 +24,6 @@ Explorer::Explorer(QWidget *parent) : QListView(parent)
             this, SLOT(OnDirLoaded(QString)));
     setDir(Persistence::GetAssetsPathAbsolute());
 
-    std::string f = "/home/jfonslocal/Bang/res/Assets/myMesh.bmesh";
-    Logger_Log(f);
-    f = Persistence::ProjectRootAbsoluteToRelative(f);
-    Logger_Log(f);
-    f = Persistence::ProjectRootRelativeToAbsolute(f);
-    Logger_Log(f);
-    f = Persistence::ProjectRootAbsoluteToRelative(f);
-    Logger_Log(f);
-
     updateTimer = new QTimer(this); //Every X secs, update all the slots values
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
     updateTimer->start(100);
@@ -118,19 +109,26 @@ void Explorer::RefreshInspector()
     File f(fileSystemModel, &clickedIndex);
 
     InspectorWidget *fileWidget = nullptr;
-    if(f.IsFile())
+    if(f.IsImageFile())
     {
-        if(f.IsImage())
-        {
-            FileImage fi(fileSystemModel, &clickedIndex);
-            fileWidget = new InspectorTexture2DWidget(fi);
-        }
-        else if(f.IsMesh())
-        {
-            FileMesh fm(fileSystemModel, &clickedIndex);
-            fileWidget = new InspectorMeshFileWidget(fm);
-        }
+        FileImage fi(fileSystemModel, &clickedIndex);
+        fileWidget = new InspectorImageFileWidget(fi);
     }
+    else if(f.IsTexture2DAsset())
+    {
+        FileTexture2DAsset ft(fileSystemModel, &clickedIndex);
+        fileWidget = new InspectorTexture2DAssetWidget(ft);
+    }
+    else if(f.IsMeshFile())
+    {
+        FileMesh fm(fileSystemModel, &clickedIndex);
+        fileWidget = new InspectorMeshFileWidget(fm);
+    }
+    /*else if(f.IsMeshAsset())
+    {
+        FileMeshAsset ft(fileSystemModel, &clickedIndex);
+        fileWidget = new InspectorMeshFileWidget(ft);
+    }*/
 
     if(fileWidget != nullptr)
     {

@@ -6,14 +6,14 @@
 #include "FileImage.h"
 #include "InspectorWidget.h"
 
-class InspectorTexture2DWidget : public InspectorWidget
+class InspectorImageFileWidget : public InspectorWidget
 {
 private:
     InspectorWidgetInfo inspectorInfo;
 
 public:
-    InspectorTexture2DWidget(const FileImage &fileImage);
-    virtual ~InspectorTexture2DWidget();
+    InspectorImageFileWidget(const FileImage &fileImage);
+    virtual ~InspectorImageFileWidget();
 };
 
 #endif // INSPECTORTEXTURE2DWIDGET_H
