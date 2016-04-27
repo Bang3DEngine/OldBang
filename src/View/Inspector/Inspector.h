@@ -1,6 +1,8 @@
 #ifndef LISTINSPECTOR_H
 #define LISTINSPECTOR_H
 
+#include <map>
+
 #include "Bang.h"
 
 #include <QLabel>
@@ -17,6 +19,8 @@ private:
     QLabel *titleLabel = nullptr;
     Entity *currentEntity = nullptr;
 
+    std::map<InspectorWidget*, QListWidgetItem*> widgetToItem;
+
 public:
     explicit Inspector(QWidget *parent = 0);
 
@@ -27,6 +31,9 @@ public:
 
     void SetWidget(InspectorWidget *widget);
     void AddWidget(InspectorWidget *widget);
+
+    void MoveUp(InspectorWidget *w);
+    void MoveDown(InspectorWidget *w);
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
     void OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities) override;

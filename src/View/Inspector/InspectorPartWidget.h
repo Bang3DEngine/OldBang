@@ -20,12 +20,13 @@ public:
 
     virtual void OnCustomContextMenuRequested(QPoint point) override;
 
+public slots:
+    void OnEnabledCheckboxPressed(bool checked);
+
     void OnContextMenuRemovePartSelected();
     void OnContextMenuMoveUpSelected();
     void OnContextMenuMoveDownSelected();
 
-public slots:
-    void OnEnabledCheckboxPressed(bool checked);
 };
 
 #endif // LISTINSPECTORITEM_H

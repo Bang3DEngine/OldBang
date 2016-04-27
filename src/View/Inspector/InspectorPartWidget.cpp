@@ -63,10 +63,13 @@ void InspectorPartWidget::OnContextMenuRemovePartSelected()
 
 void InspectorPartWidget::OnContextMenuMoveUpSelected()
 {
+    relatedPart->GetOwner()->MovePart(relatedPart, -1);
+    WindowMain::GetInstance()->widgetInspector->Refresh();
 }
 
 void InspectorPartWidget::OnContextMenuMoveDownSelected()
 {
-
+    relatedPart->GetOwner()->MovePart(relatedPart, 1);
+    WindowMain::GetInstance()->widgetInspector->Refresh();
 }
 

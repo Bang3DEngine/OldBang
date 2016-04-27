@@ -42,6 +42,22 @@ void Entity::AddPart(Part *p)
     parts.push_back(p);
 }
 
+void Entity::MovePart(Part *p, int distance)
+{
+    for(auto part = parts.begin(); part != parts.end(); ++part)
+    {
+        if(p == *part)
+        {
+            auto part1 = part;
+            std::advance(part1, 1);
+            parts.erase(part, part1);
+            std::advance(part1, distance);
+            parts.insert(part1, 1, p);
+            break;
+        }
+    }
+}
+
 void Entity::RemovePart(Part *p)
 {
     for(auto part = parts.begin(); part != parts.end(); ++part)

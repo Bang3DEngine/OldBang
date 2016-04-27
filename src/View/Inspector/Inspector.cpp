@@ -17,6 +17,7 @@ Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 void Inspector::Clear()
 {
     clear();
+    widgetToItem.clear();
     currentEntity = nullptr;
     titleLabel->setText(QString::fromStdString("No entity selected."));
 
@@ -58,6 +59,7 @@ void Inspector::SetWidget(InspectorWidget *widget)
 void Inspector::AddWidget(InspectorWidget *widget)
 {
     QListWidgetItem *item = new QListWidgetItem();
+    widgetToItem[widget] = item;
     addItem(item);
 
     setItemWidget(item, widget);
@@ -66,6 +68,22 @@ void Inspector::AddWidget(InspectorWidget *widget)
     adjustSize();
     setStyleSheet("/* */"); //without this line we get resize problems :)
     show();
+}
+
+void Inspector::MoveUp(InspectorWidget *w)
+{
+    int lastRow = row(widgetToItem[w]);
+    if(lastRow == 0) return;
+    QListWidgetItem *item = takeItem(lastRow);
+    insertItem(lastRow-1, item);
+}
+
+void Inspector::MoveDown(InspectorWidget *w)
+{
+    int lastRow = row(widgetToItem[w]);
+    if(lastRow == this->count()) return;
+    QListWidgetItem *item = takeItem(lastRow);
+    insertItem(lastRow+1, item);
 }
 
 void Inspector::OnTreeHierarchyEntitiesSelected

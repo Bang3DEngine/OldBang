@@ -74,6 +74,8 @@ public:
     const std::list<Entity*> GetChildren() const { return children; }
 
     void AddPart(Part *p);
+    void MovePart(Part *p, int distance); //Mainly used to move the parts
+                                          //up(-1) and down(1) in the inspector
     void RemovePart(Part *p);
 
     template <class T>
