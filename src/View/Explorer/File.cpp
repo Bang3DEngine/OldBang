@@ -30,13 +30,13 @@ bool File::IsImageFile() const
     return  isFile &&
             (
              extension == "jpg" || extension == "jpeg" ||
-             extension == "png" || extension == "bmp"  ||
+             extension == "png" || extension == "bmp"
             );
 }
 
 bool File::IsMeshAsset() const
 {
-    return  isFile && Mesh::GetFileExtension();
+    return  isFile && extension == Mesh::GetFileExtension();
 }
 
 bool File::IsMeshFile() const
@@ -46,12 +46,12 @@ bool File::IsMeshFile() const
 
 bool File::IsMaterialAsset() const
 {
-    return ifFile && extension == Material::GetFileExtension();
+    return isFile && extension == Material::GetFileExtension();
 }
 
 bool File::IsPrefabAsset() const
 {
-    return ifFile && extension == Prefab::GetFileExtension();
+    return isFile && extension == Prefab::GetFileExtension();
 }
 
 bool File::IsDir() const

@@ -1,4 +1,5 @@
 #include "Texture2D.h"
+#include "Persistence.h"
 
 Texture2D::Texture2D() : Texture(TextureType::Texture2D)
 {
@@ -13,11 +14,11 @@ Texture2D::~Texture2D()
 {
 }
 
-void Texture2D::LoadFromFile(const std::string &filepath)
+void Texture2D::LoadFromFile(const std::string &imageFilepath)
 {
     Bind();
-    this->filepath = filepath;
-    unsigned char *loadedData = FileReader::ReadImage(filepath,
+    this->imageFilepath = imageFilepath;
+    unsigned char *loadedData = FileReader::ReadImage(imageFilepath,
                                                       &width, &height,
                                                       &numComponents);
     Fill(loadedData, width, height, numComponents);
@@ -54,6 +55,11 @@ void Texture2D::Fill(unsigned char *newData,
     UnBind();
 }
 
+std::string Texture2D::GetImageRelativeFilepath() const
+{
+    return imageFilepath;
+}
+
 #ifdef BANG_EDITOR
 void Texture2D::Write(std::ostream &f) const
 {
@@ -62,8 +68,7 @@ void Texture2D::Write(std::ostream &f) const
 
 void Texture2D::Read(std::istream &f)
 {
-    filepath = FileReader::ReadString(f);
-    Logger_Log("Texture 2D read: " << filepath);
-    LoadFromFile(filepath );
+    imageFilepath = FileReader::ReadString(f);
+    LoadFromFile(imageFilepath);
 }
 #endif

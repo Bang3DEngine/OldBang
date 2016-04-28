@@ -7,16 +7,30 @@
 #include <map>
 
 #include "Asset.h"
+#include "Persistence.h"
 
 class AssetsManager
 {
 
 private:
 
-    //For every filepath, it contains a pointer to the asset
+    //For every RELATIVE filepath, it contains a pointer to the asset
     // created when the assets were loaded.
     static std::map<std::string, Asset*> filepathToAssetPointer;
 
+    //Filepath is parsed to RELATIVE, which is how cache works,
+    //so you should try to use this method, to avoid using the
+    //ABSOLUTE filepath instead of the RELATIVE one
+    template <class T>
+    static T* GetAssetFromMap(const std::string &filepath)
+    {
+        std::string f = Persistence::ProjectRootAbsoluteToRelative(filepath);
+
+        if(!ExistsAssetInCache(f)) return nullptr;
+        else return dynamic_cast<T*>(filepathToAssetPointer[f]);
+    }
+
+    //Reads an asset (*.btex2d, *.bmesh, etc.) from an stream
     //The input must not have the opening tag!
     template <class T>
     static T* ReadAsset(std::istream &f)
@@ -29,7 +43,8 @@ private:
     }
 
 
-    //Reads a specific asset file (*.asset)
+    //Reads a specific asset file (*.btex2d, *.bmesh, etc.)
+    // from a filepath
     template <class T>
     static T* ReadAssetFile(const std::string &filepath)
     {
@@ -59,25 +74,58 @@ private:
 
 public:
 
+    static bool ExistsAssetInCache(const std::string &filepath);
+
+    //Tries to retrieve an Asset from the AssetsManager cache
+    //If there's no such Asset, it is loaded, added to the cache, and returned
+    //If the file can't be read, nullptr is returned
     template <class T>
     static T* GetAsset(const std::string &filepath)
     {
         Asset *a = nullptr;
         if(filepath != "-")
         {
-            if(filepathToAssetPointer.find(filepath) == filepathToAssetPointer.end())
+            if(!ExistsAssetInCache(filepath))
             {
-                //Doesnt have the Asset created. Read, and save it
+                //It doesnt have the Asset loaded. Read, and save it to cache.
                 a = ReadAssetFile<T>(filepath);
                 SaveAsset(filepath, a);
             }
             else
             {
-                a = filepathToAssetPointer[filepath];
+                a = GetCachedAsset<T>(filepath);
             }
         }
 
         return a == nullptr ? nullptr : dynamic_cast<T*>(a);
+    }
+
+    //Tries to retrieve an Asset from the AssetsManager cache.
+    //If there's no such Asset, nothing is loaded, it just returns nullptr.
+    template <class T>
+    static T* GetCachedAsset(const std::string &filepath)
+    {
+        Logger_Log("OSTIA");
+        Logger_Log(filepathToAssetPointer);
+        if(ExistsAssetInCache(filepath))
+        {
+            Logger_Log("Correcto");
+        }
+        return GetAssetFromMap<T>(filepath);
+    }
+
+
+    //Read an Asset, but you can later delete it, because it won't
+    //use the AssetsManager cache, so nobody will be using the returned Asset
+    template <class T>
+    static T* ReadTmpAsset(const std::string &filepath)
+    {
+        std::ifstream is;
+        is.open(filepath.c_str());
+        if(!is.is_open()) return nullptr;
+        T *a = ReadAsset<T>(is);
+        is.close();
+        return a;
     }
 
     static void SaveAsset(const std::string &filepath, Asset* pointerToAsset);

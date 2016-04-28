@@ -35,14 +35,14 @@ std::ostream &operator<<(std::ostream &log, const IToString *s);
 template <class T>
 std::ostream &operator<<(std::ostream &log, const std::list<T> *l)
 {
-    log << "List("; bool first = true;
+    log << "{"; bool first = true;
     for(auto it = l->begin(); it != l->end(); ++it)
     {
         if(!first) log << ", ";
         log << (*it);
         first = false;
     }
-    log <<")";
+    log <<"}";
     return log;
 }
 template <class T>
@@ -50,23 +50,39 @@ std::ostream &operator<<(std::ostream &log, const std::list<T> &l)
 {
     return log << (&l);
 }
-
 template <class T>
 std::ostream &operator<<(std::ostream &log, const std::vector<T> *v)
 {
-    log << "Vector(";
+    log << "{";
     for(int i = 0; i < v->size(); ++i)
     {
         if(i != 0) log << ", ";
         log << (*v)[i];
     }
-    log << ")";
+    log << "}";
     return log;
 }
 template <class T>
 std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
 {
     return log << (&v);
+}
+template <class T, class S>
+std::ostream &operator<<(std::ostream &log, const std::map<T,S> *m)
+{
+    log << "{";
+    for(auto it = m->begin(); it != m->end(); ++it)
+    {
+        if(it != m->begin()) log << ", ";
+        log << (it->first) << ":" << (it->second);
+    }
+    log << ")";
+    return log;
+}
+template <class T, class S>
+std::ostream &operator<<(std::ostream &log, const std::map<T,S> &m)
+{
+    return log << (&m);
 }
 
 

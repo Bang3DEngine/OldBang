@@ -37,7 +37,8 @@ InspectorWidget::InspectorWidget(const std::string &title,
 
 void InspectorWidget::ConstructFromWidgetInformation(
         const std::string &title,
-        const InspectorWidgetInfo *info
+        const InspectorWidgetInfo *info,
+        bool autoUpdate
         )
 {
     QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -102,9 +103,12 @@ void InspectorWidget::ConstructFromWidgetInformation(
     connect(this, SIGNAL(customContextMenuRequested(QPoint)),
             this, SLOT(OnCustomContextMenuRequested(QPoint)));
 
-    updateTimer = new QTimer(this); //Every X seconds, update all the slots values
-    connect(updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
-    updateTimer->start(20);
+    if(autoUpdate)
+    {
+        updateTimer = new QTimer(this); //Every X seconds, update all the slots values
+        connect(updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
+        updateTimer->start(20);
+    }
 }
 
 InspectorWidget::~InspectorWidget()
@@ -197,15 +201,16 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
 
 void InspectorWidget::_OnSlotValueChanged(double _)
 {
-    relatedInspectable->OnSlotValueChanged(this);
+    _OnSlotValueChanged();
 }
 
 void InspectorWidget::_OnSlotValueChanged(QString _)
 {
-    relatedInspectable->OnSlotValueChanged(this);
+    _OnSlotValueChanged();
 }
 
 void InspectorWidget::_OnSlotValueChanged()
 {
+    if(relatedInspectable == nullptr) return;
     relatedInspectable->OnSlotValueChanged(this);
 }

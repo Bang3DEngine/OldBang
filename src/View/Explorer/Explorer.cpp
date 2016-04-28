@@ -129,6 +129,10 @@ void Explorer::RefreshInspector()
         FileMeshAsset ft(fileSystemModel, &clickedIndex);
         fileWidget = new InspectorMeshFileWidget(ft);
     }*/
+    else
+    {
+        WindowMain::GetInstance()->widgetInspector->Clear();
+    }
 
     if(fileWidget != nullptr)
     {
@@ -144,6 +148,7 @@ void Explorer::Refresh()
        File f(fileSystemModel, &index);
        if(f.GetName() != lastSelectedFileName)
        {
+           lastSelectedFileName = f.GetName();
            RefreshInspector();
        }
     }

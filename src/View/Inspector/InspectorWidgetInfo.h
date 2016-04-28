@@ -41,9 +41,11 @@ public:
     int selectedValueIndex = 0;
 
     InspectorEnumSWInfo(const std::string &label,
-                              const std::vector<std::string> &initialValues) : InspectorSWInfo(label)
+                        const std::vector<std::string> &enumValues,
+                        int initialSelectedIndex = 0) : InspectorSWInfo(label)
     {
-        this->enumValues = initialValues;
+        this->enumValues = enumValues;
+        this->selectedValueIndex = initialSelectedIndex;
     }
     virtual ~InspectorEnumSWInfo() {}
 

@@ -9,11 +9,16 @@
 class InspectorTexture2DAssetWidget : public InspectorWidget
 {
 private:
+    std::string assetFilepath = "";
     InspectorWidgetInfo inspectorInfo;
 
 public:
     InspectorTexture2DAssetWidget(const FileTexture2DAsset &fileTex);
     virtual ~InspectorTexture2DAssetWidget();
+
+public slots:
+    void _OnSlotValueChanged() override;
+
 };
 
 #endif // INSPECTORTEXTURE2DASSETWIDGET_H

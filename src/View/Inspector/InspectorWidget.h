@@ -50,7 +50,8 @@ protected:
     QLabel *titleLabel = nullptr;
 
     void ConstructFromWidgetInformation(const std::string &title,
-                                        const InspectorWidgetInfo *info);
+                                        const InspectorWidgetInfo *info,
+                                        bool autoUpdate = true);
 
 public:
     InspectorWidget();
@@ -71,16 +72,15 @@ public:
 private slots:
 
     void Refresh();
+    void _OnSlotValueChanged(double _);
+    void _OnSlotValueChanged(QString _);
 
 public slots:
 
     virtual void OnCustomContextMenuRequested(QPoint point);
 
     void Refresh(InspectorWidgetInfo *widgetInfo);
-
-    void _OnSlotValueChanged(double _);
-    void _OnSlotValueChanged(QString _);
-    void _OnSlotValueChanged();
+    virtual void _OnSlotValueChanged();
 };
 
 #endif // INSPECTORWIDGET_H

@@ -11,7 +11,7 @@ InspectorMeshFileWidget::InspectorMeshFileWidget(const FileMesh &fileMesh) :
         new InspectorStringSWInfo("Mode",
                     fileMesh.IsTriangles() ? "Triangles" : "Quads", true),
         new InspectorStringSWInfo("Faces",
-                    std::to_string(fileMesh.GetNumFaces()), true),
+                    std::to_string(fileMesh.GetNumFaces()), true)
 
     }
     );
