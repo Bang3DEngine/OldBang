@@ -1,6 +1,6 @@
 <Material>
-    res/Shaders/pvm_pos_normal_uv.vert
-    res/Shaders/pass_pos_normal_uv.frag
-    res/Assets/luigiTexture.btex2d
+    ./res/Shaders/pvm_pos_normal_uv.vert
+    ./res/Shaders/pass_pos_normal_uv.frag
+    ./res/Assets/luigiTexture.btex2d
 </Material>
 

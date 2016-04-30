@@ -10,7 +10,7 @@ echo "---------------------------------"
 cd BangPreprocessor
 qmake
 make clean
-(make -j4 && ./BangPreprocessor) || exit -1
+(make -j8 && ./BangPreprocessor) || exit -1
 cd ..
 
 echo ; echo "---------------------------------"; echo
@@ -22,4 +22,4 @@ echo "MAKE AND RUN OF BANG"
 echo "-----------------------------"
 qmake
 make clean
-(make -j4 && ./Bang) || exit -1
+(make -j8 && ./Bang) || exit -1

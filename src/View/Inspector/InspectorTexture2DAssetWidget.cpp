@@ -7,7 +7,6 @@
 InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
     (const FileTexture2DAsset &fileTex) : InspectorWidget()
 {
-    Logger_Log("b!!");
     assetFilepath = fileTex.GetPath();
     assetFilepath = Persistence::ProjectRootAbsoluteToRelative(assetFilepath);
 
@@ -27,10 +26,8 @@ InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
 
     delete tex;
 
-    Logger_Log("Hola!!");
     this->ConstructFromWidgetInformation(fileTex.GetName(), &inspectorInfo,
                                          false);
-    Logger_Log("WOLOLO!!");
 }
 
 InspectorTexture2DAssetWidget::~InspectorTexture2DAssetWidget()
@@ -40,7 +37,6 @@ InspectorTexture2DAssetWidget::~InspectorTexture2DAssetWidget()
 
 void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
 {
-    Logger_Log("HEHE!!");
     //First we have to update the instance in the AssetsManager, (if any)
     //To enable a live change ingame of the Asset being used by Parts/Entities
     Texture2D *currentTex = AssetsManager::
@@ -59,5 +55,4 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
 
     //Later, save the changes to the file
     Logger_Log("Have to save changes to file");
-    Logger_Log("HUHU!!");
 }

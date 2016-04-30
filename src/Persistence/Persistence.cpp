@@ -34,7 +34,11 @@ std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPat
 
 std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPath)
 {
-    if(!IsAbsolute(absPath)) return absPath;
+    // /home/wololo/MyProject/res/Assets/lolol/a.bmesh => ./res/Assets/lolol/a.bmesh
+    if(!IsAbsolute(absPath) && absPath[0] == '.')
+    {
+        return absPath;
+    }
 
     std::size_t pos = absPath.find(GetAssetsRelativePathFromProjectRoot());
     if(pos == std::string::npos) return absPath;

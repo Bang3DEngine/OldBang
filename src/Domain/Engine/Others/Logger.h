@@ -74,7 +74,7 @@ std::ostream &operator<<(std::ostream &log, const std::map<T,S> *m)
     for(auto it = m->begin(); it != m->end(); ++it)
     {
         if(it != m->begin()) log << ", ";
-        log << (it->first) << ":" << (it->second);
+        log << (it->first) << ": " << (it->second);
     }
     log << ")";
     return log;

@@ -11,8 +11,8 @@
 
         <MeshRenderer>
             -
-            res/Assets/luigiMesh.bmesh
-            res/Assets/luigiMaterial.bmat
+            ./res/Assets/luigiMesh.bmesh
+            ./res/Assets/luigiMaterial.bmat
         </MeshRenderer>
 
         <Behaviour>

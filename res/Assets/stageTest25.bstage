@@ -20,7 +20,7 @@ Wood Boy
 </Transform>
 <MeshRenderer>
 0x14b8220
-res/Assets/boyMesh.bmesh
+./res/Assets/boyMesh.bmesh
 ./res/Assets/testMaterial2.bmat
 </MeshRenderer>
 </parts>

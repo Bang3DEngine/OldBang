@@ -26,6 +26,7 @@ private:
     {
         std::string f = Persistence::ProjectRootAbsoluteToRelative(filepath);
 
+        Logger_Log("To relative: " << f);
         if(!ExistsAssetInCache(f)) return nullptr;
         else return dynamic_cast<T*>(filepathToAssetPointer[f]);
     }
@@ -105,7 +106,7 @@ public:
     template <class T>
     static T* GetCachedAsset(const std::string &filepath)
     {
-        Logger_Log("OSTIA");
+        Logger_Log(filepath);
         Logger_Log(filepathToAssetPointer);
         if(ExistsAssetInCache(filepath))
         {

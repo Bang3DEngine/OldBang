@@ -185,8 +185,8 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
         else if( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) !=
                  nullptr)
         {
-            InspectorStringSW *ws = static_cast<InspectorStringSW*>(ws);
-            ws->SetValue( sis->value );
+            InspectorStringSW *wss = static_cast<InspectorStringSW*>(ws);
+            wss->SetValue( sis->value );
         }
 
         if(ws != nullptr)
