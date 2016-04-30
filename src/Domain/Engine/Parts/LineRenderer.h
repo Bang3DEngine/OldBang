@@ -26,7 +26,7 @@ private:
     VBO *vbo = nullptr;
     VAO *vao = nullptr;
 
-    float width = 0.0f;
+    float width;
 
     void BindPointsToVAO() const;
 

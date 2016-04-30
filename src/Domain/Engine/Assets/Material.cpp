@@ -49,7 +49,24 @@ void Material::UnBind() const
 #ifdef BANG_EDITOR
 void Material::Write(std::ostream &f) const
 {
+    FileWriter::Write("<Material>", f);
+    std::string vsFile =  "", fsFile = "";
+    if(this->shaderProgram)
+    {
+        if(this->shaderProgram->GetVertexShader())
+        {
+            vsFile = this->shaderProgram->GetVertexShader()->GetFilepath();
+        }
 
+        if(this->shaderProgram->GetFragmentShader())
+        {
+            fsFile = this->shaderProgram->GetFragmentShader()->GetFilepath();
+        }
+    }
+    FileWriter::Write(vsFile, f);
+    FileWriter::Write(fsFile, f);
+    FileWriter::Write(diffuseColor, f);
+    FileWriter::Write("</Material>", f);
 }
 
 void Material::Read(std::istream &f)
@@ -57,6 +74,7 @@ void Material::Read(std::istream &f)
     std::string vshaderFilepath = FileReader::ReadString(f);
     std::string fshaderFilepath = FileReader::ReadString(f);
     std::string texFilepath = FileReader::ReadString(f);
+    glm::vec4 diffColor = FileReader::ReadVec4(f);
 
     SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
     Texture2D *tex = AssetsManager::GetAsset<Texture2D>( texFilepath );
@@ -65,6 +83,8 @@ void Material::Read(std::istream &f)
         tex->SetTextureSlot(0);
         SetTexture(tex);
     }
+
+    SetDiffuseColor(diffColor);
 }
 #endif
 

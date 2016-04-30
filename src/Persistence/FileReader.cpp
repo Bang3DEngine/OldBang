@@ -291,6 +291,14 @@ glm::vec3 FileReader::ReadVec3(std::istream &f)
     return glm::vec3(x, y, z);
 }
 
+glm::vec4 FileReader::ReadVec4(std::istream &f)
+{
+    std::istringstream iss(ReadNextLine(f));
+    float x,y,z,w;
+    iss >> x >> y >> z >> w;
+    return glm::vec4(x, y, z, w);
+}
+
 glm::quat FileReader::ReadQuat(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));

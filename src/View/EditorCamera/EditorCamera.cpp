@@ -74,14 +74,7 @@ void EditorCamera::OnUpdate()
         glm::quat rotY = glm::angleAxis(mouseRotationRads.y, glm::vec3(1,0,0));
         glm::quat rotX = glm::angleAxis(mouseRotationRads.x, glm::vec3(0,1,0));
         t->SetRotation( rotY * rotX );
-        //t->SetRotation( rotX * t->GetRotation() );
-        //glm::vec3 euler = t->GetEuler();
-        //t->SetRotation(euler);
-
-        // No camera roll, always with up=(0,1,0)
-        /*t->LookAt(t->GetPosition() + t->GetForward() * 99999.9f,
-                  glm::vec3(0.0f, 1.0f, 0.0f));
-        *///
+        //
 
         Canvas::SetCursor(Qt::BlankCursor);
         doingSomeAction = true;

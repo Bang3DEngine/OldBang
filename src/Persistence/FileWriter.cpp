@@ -54,6 +54,12 @@ void FileWriter::Write(const glm::vec3 &v, std::ostream &f)
     f << v.x << " " << v.y << " " << v.z << std::endl;
 }
 
+void FileWriter::Write(const glm::vec4 &v, std::ostream &f)
+{
+    f << v.x << " " << v.y << " " << v.z << " " << v.w << std::endl;
+}
+
+
 void FileWriter::Write(const glm::quat &q, std::ostream &f)
 {
     f << q.x << " " << q.y << " " << q.z << " " << q.w << std::endl;

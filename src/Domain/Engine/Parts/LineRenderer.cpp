@@ -1,18 +1,19 @@
 #include "LineRenderer.h"
 
-LineRenderer::LineRenderer()
+LineRenderer::LineRenderer() : width(2.0f)
 {
     #ifdef BANG_EDITOR
         inspectorPartInfo.SetSlotsInfos(
         {
             new InspectorFileSWInfo("Material", Material::GetFileExtensionStatic()),
             new InspectorVFloatSWInfo("Origin", {0.0f, 0.0f, 0.0f}),
-            new InspectorVFloatSWInfo("Destiny", {0.0f, 0.0f, 0.0f}),
+            new InspectorVFloatSWInfo("Destiny", {999.9f, 999.9f, 999.9f}),
             new InspectorVFloatSWInfo("Line Width", {0.0f})
         });
     #endif
 
     points.resize(2);
+    points[1] = glm::vec3(999.9f);
 
     vbo = new VBO();
     vbo->Fill(points.data(), points.size() * sizeof(glm::vec3));
@@ -21,6 +22,9 @@ LineRenderer::LineRenderer()
     vao->BindVBO(vbo, 0, 3 * points.size(), GL_FLOAT);
 
     glEnable(GL_LINE_SMOOTH); //Line antialiasing
+
+    Material *m = AssetsManager::GetAsset<Material>("./res/Materials/lines.bmat");
+    SetMaterial(m);
 }
 
 LineRenderer::~LineRenderer()
