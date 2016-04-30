@@ -105,12 +105,6 @@ public:
     template <class T>
     static T* GetCachedAsset(const std::string &filepath)
     {
-        Logger_Log(filepath);
-        Logger_Log(filepathToAssetPointer);
-        if(ExistsAssetInCache(filepath))
-        {
-            Logger_Log("Correcto");
-        }
         return GetAssetFromMap<T>(filepath);
     }
 

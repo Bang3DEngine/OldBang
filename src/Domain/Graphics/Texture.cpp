@@ -1,20 +1,23 @@
 #include "Texture.h"
 
-Texture::Texture(TextureType glTextureTarget) :
-                                                width(0),
-                                                height(0),
-                                                numComponents(0),
-                                                filterMode(FilterMode::Linear),
-                                                wrapMode(WrapMode::Repeat),
-                                                textureSlot(0),
-                                                data(nullptr),
-                                                glTextureType(glTextureTarget)
-
+Texture::Texture() :
+  width(0),
+  height(0),
+  numComponents(0),
+  filterMode(FilterMode::Linear),
+  wrapMode(WrapMode::Repeat),
+  textureSlot(0),
+  data(nullptr)
 {
     glGenTextures(1, &idgl);
     SetFilterMode(filterMode);
     SetWrapMode(wrapMode);
+    glTextureGetIntegerType = GL_TEXTURE_2D;
+}
 
+Texture::Texture(TextureType glTextureTarget) : Texture()
+{
+    glTextureType = glTextureTarget;
     if(glTextureType == Texture1D)
         glTextureGetIntegerType = GL_TEXTURE_BINDING_1D;
     else if(glTextureType == Texture2D)

@@ -7,6 +7,18 @@ Mesh::Mesh() : vertexPositionsVBO(nullptr), vertexNormalsVBO(nullptr), vertexUvs
     vao = new VAO();
 }
 
+Mesh::Mesh(const Mesh &m)
+{
+    SetRenderMode(m.GetRenderMode());
+
+    //TODO, do copy of VAO and VBO's
+    vao = m.GetVAO();
+    vertexPositionsVBO = m.vertexPositionsVBO;
+    vertexNormalsVBO = m.vertexNormalsVBO;
+    vertexUvsVBO = m.vertexUvsVBO;
+    vertexCount = m.vertexCount;
+}
+
 Mesh::~Mesh()
 {
     if(vertexPositionsVBO != nullptr) delete vertexPositionsVBO;

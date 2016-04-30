@@ -33,6 +33,7 @@ private:
 
 public:
     Material();
+    Material(const Material &m);
     virtual ~Material();
 
     void SetShaderProgram(const ShaderProgram *program);

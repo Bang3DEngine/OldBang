@@ -10,6 +10,11 @@
 
 class Texture : public IGLBindable, public IGLIdable
 {
+
+private:
+    //NON COPYABLE:
+    Texture(const Texture &t) {}
+
 public:
     enum TextureType
     {
@@ -48,6 +53,7 @@ protected:
     TextureType glTextureType;
 
 public:
+    Texture();
     Texture(TextureType glTextureType);
     virtual ~Texture();
 

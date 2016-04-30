@@ -20,6 +20,9 @@ class Texture2D : public Texture, public Asset
 private:
     std::string imageFilepath = "-"; //"-" means proced. created, or no image
 
+    //NON COPYABLE:
+    Texture2D(const Texture2D &t) : Texture2D() {}
+
 public:
     const static std::string GetFileExtensionStatic() { return "btex2d"; }
     const virtual std::string GetFileExtension()

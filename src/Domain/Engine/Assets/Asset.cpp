@@ -20,7 +20,6 @@ const std::string Asset::ToString() const
     return "Asset '" + filepath + "'.";
 }
 
-
 void Asset::Write(std::ostream &f) const
 {
 }

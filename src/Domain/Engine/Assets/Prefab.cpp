@@ -5,6 +5,11 @@ Prefab::Prefab()
 
 }
 
+Prefab::Prefab(const Prefab &p)
+{
+
+}
+
 Prefab::Prefab(const std::string &assetDescription)
 {
     this->assetDescription = assetDescription;

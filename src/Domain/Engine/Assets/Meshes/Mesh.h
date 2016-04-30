@@ -47,6 +47,7 @@ protected:
 
 public:
     Mesh();
+    Mesh(const Mesh& m);
     virtual ~Mesh();
 
     void LoadFromFile(const std::string &filepath);

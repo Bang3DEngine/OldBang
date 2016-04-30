@@ -6,6 +6,18 @@ Material::Material() : Asset(),
 {
 }
 
+Material::Material(const Material &m)
+{
+    SetDiffuseColor(m.GetDiffuseColor());
+
+    //This is a copy of the pointers,
+    // not the textures themselves
+    textures = m.textures;
+
+    //TODO: copy shaderProgram
+    SetShaderProgram(m.GetShaderProgram());
+}
+
 Material::~Material()
 {
 

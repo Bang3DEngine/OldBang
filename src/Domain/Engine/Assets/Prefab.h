@@ -32,6 +32,7 @@ private:
 
 public:
     Prefab();
+    Prefab(const Prefab &p);
     Prefab(const std::string &assetDescription);
 
     Entity* Instantiate() const;

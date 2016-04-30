@@ -9,6 +9,10 @@
 class EditorAxis : public EditorEntity
 {
 private:
+    Material *matx = nullptr;
+    Material *maty = nullptr;
+    Material *matz = nullptr;
+
     Transform *transform = nullptr;
     LineRenderer *xAxisLine = nullptr;
     LineRenderer *yAxisLine = nullptr;
