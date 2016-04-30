@@ -10,6 +10,7 @@
 #include "Persistence.h"
 
 class Stage;
+class Asset;
 class FileWriter
 {
 private:
@@ -17,6 +18,7 @@ private:
 
 public:
     static void WriteStage(std::string filename, Stage *stage);
+    static void WriteAsset(std::string filename, Asset *a);
 
     static void Write(float v, std::ostream &f);
     static void Write(const glm::vec2 &v, std::ostream &f);

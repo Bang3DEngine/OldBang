@@ -1,5 +1,6 @@
 #include "FileWriter.h"
 #include "Stage.h"
+#include "Asset.h"
 
 FileWriter::FileWriter()
 {
@@ -8,10 +9,8 @@ FileWriter::FileWriter()
 void FileWriter::WriteStage(std::string filename, Stage *stage)
 {
     std::ofstream ofs;
-
     filename = Persistence::AppendExtension(filename,
                                             Stage::GetFileExtension());
-
     ofs.open(filename);
     if(!ofs.is_open())
     {
@@ -19,9 +18,24 @@ void FileWriter::WriteStage(std::string filename, Stage *stage)
         ofs.close();
         return;
     }
-
     stage->Write(ofs);
+    ofs.close();
+}
 
+void FileWriter::WriteAsset(std::string filename, Asset *a)
+{
+    std::ofstream ofs;
+    filename = Persistence::AppendExtension(filename,
+                                            a->GetFileExtension());
+    Logger_Log(a->GetFileExtensionStatic());
+    ofs.open(filename);
+    if(!ofs.is_open())
+    {
+        Logger_Error("There was an error when saving file '" << filename << "'");
+        ofs.close();
+        return;
+    }
+    a->Write(ofs);
     ofs.close();
 }
 

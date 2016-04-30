@@ -5,7 +5,7 @@ LineRenderer::LineRenderer()
     #ifdef BANG_EDITOR
         inspectorPartInfo.SetSlotsInfos(
         {
-            new InspectorFileSWInfo("Material", Material::GetFileExtension()),
+            new InspectorFileSWInfo("Material", Material::GetFileExtensionStatic()),
             new InspectorVFloatSWInfo("Origin", {0.0f, 0.0f, 0.0f}),
             new InspectorVFloatSWInfo("Destiny", {0.0f, 0.0f, 0.0f}),
             new InspectorVFloatSWInfo("Line Width", {0.0f})

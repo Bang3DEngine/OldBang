@@ -5,6 +5,7 @@
 
 #include <string>
 
+#include "FileWriter.h"
 #include "FileReader.h"
 
 #include "IToString.h"
@@ -23,7 +24,11 @@ class Asset : public IToString, public IFileable
     friend class AssetsManager;
 
 public:
-    const static std::string GetFileExtension() { return "basset"; }
+    const static std::string GetFileExtensionStatic() { return "basset"; }
+    const virtual std::string GetFileExtension()
+    {
+        return Asset::GetFileExtensionStatic();
+    }
 
     void OnSlotValueChanged(InspectorWidget *source) {}
 

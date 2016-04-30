@@ -21,7 +21,11 @@ class Mesh : public Asset
 friend class MeshRenderer;
 
 public:
-    const static std::string GetFileExtension() { return "bmesh"; }
+    const static std::string GetFileExtensionStatic() { return "bmesh"; }
+    const virtual std::string GetFileExtension()
+    {
+        return Mesh::GetFileExtensionStatic();
+    }
 
     enum RenderMode
     {

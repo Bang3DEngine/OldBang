@@ -7,8 +7,8 @@ MeshRenderer::MeshRenderer()
     #ifdef BANG_EDITOR
         inspectorPartInfo.SetSlotsInfos(
         {
-            new InspectorFileSWInfo("Material", Material::GetFileExtension()),
-            new InspectorFileSWInfo("Mesh", Mesh::GetFileExtension()),
+            new InspectorFileSWInfo("Material", Material::GetFileExtensionStatic()),
+            new InspectorFileSWInfo("Mesh", Mesh::GetFileExtensionStatic()),
         });
     #endif
 }

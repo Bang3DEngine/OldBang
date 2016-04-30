@@ -43,7 +43,6 @@ private:
         return dynamic_cast<T*>(a);
     }
 
-
     //Reads a specific asset file (*.btex2d, *.bmesh, etc.)
     // from a filepath
     template <class T>

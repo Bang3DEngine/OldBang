@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "FileWriter.h"
 #include "FileTexture2DAsset.h"
 #include "InspectorWidget.h"
 

@@ -10,4 +10,4 @@ cd ..
 
 # Make and run Bang
 qmake
-make -j4 && ./Bang
+make -j4 && (./Bang &)

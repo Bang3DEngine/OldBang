@@ -1,3 +1,4 @@
 <Texture2D>
-    ./res/Assets/Textures/testTexture.png
+./res/Assets/Textures/testTexture.png
+Nearest
 </Texture2D>

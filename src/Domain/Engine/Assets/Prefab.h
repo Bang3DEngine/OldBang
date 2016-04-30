@@ -18,7 +18,12 @@ class Prefab : public Asset
 {
 
 public:
-    const static std::string GetFileExtension() { return "bprefab"; }
+    const static std::string GetFileExtensionStatic() { return "bprefab"; }
+    const virtual std::string GetFileExtension()
+    {
+        return Prefab::GetFileExtensionStatic();
+    }
+
 
 private:
     //This variable contains the description inside the

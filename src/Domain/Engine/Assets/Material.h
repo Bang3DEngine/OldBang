@@ -19,7 +19,11 @@ friend class MeshRenderer;
 friend class LineRenderer;
 
 public:
-    const static std::string GetFileExtension() { return "bmat"; }
+    const static std::string GetFileExtensionStatic() { return "bmat"; }
+    const virtual std::string GetFileExtension()
+    {
+        return Material::GetFileExtensionStatic();
+    }
 
 private:
     glm::vec4 diffuseColor;

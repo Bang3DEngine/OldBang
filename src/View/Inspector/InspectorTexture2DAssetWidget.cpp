@@ -42,6 +42,14 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
     Texture2D *currentTex = AssetsManager::
             GetCachedAsset<Texture2D>(assetFilepath);
 
+    bool tmpAssetLoaded = false;
+    if(currentTex == nullptr)
+    {
+        //Load a tmp asset, to be able to save it to a file.
+        tmpAssetLoaded = true;
+        currentTex = AssetsManager::ReadTmpAsset<Texture2D>(assetFilepath);
+    }
+
     if(currentTex != nullptr)
     {
         //Only update the current Asset instance being used if it exists
@@ -50,9 +58,12 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
                     Texture2D::FilterMode::Nearest :
                     Texture2D::FilterMode::Linear;
         currentTex->SetFilterMode(fm);
-        Logger_Log("yupiiiiiiiiiiiii!!");
-    }
 
-    //Later, save the changes to the file
-    Logger_Log("Have to save changes to file");
+        //Save the modified asset
+        FileWriter::WriteAsset(assetFilepath, currentTex);
+        if(tmpAssetLoaded)
+        {
+            delete currentTex;
+        }
+    }
 }

@@ -1,3 +1,4 @@
 <Texture2D>
-    ./res/Assets/Textures/luigiTexture.jpg
+./res/Assets/Textures/luigiTexture.jpg
+Linear
 </Texture2D>

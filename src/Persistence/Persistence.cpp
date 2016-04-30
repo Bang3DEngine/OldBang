@@ -35,7 +35,7 @@ std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPat
 std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPath)
 {
     // /home/wololo/MyProject/res/Assets/lolol/a.bmesh => ./res/Assets/lolol/a.bmesh
-    if(!IsAbsolute(absPath) && absPath[0] == '.')
+    if(!IsAbsolute(absPath))
     {
         return absPath;
     }

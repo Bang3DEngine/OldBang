@@ -21,7 +21,12 @@ private:
     std::string imageFilepath = "-"; //"-" means proced. created, or no image
 
 public:
-    const static std::string GetFileExtension() { return "btex2d"; }
+    const static std::string GetFileExtensionStatic() { return "btex2d"; }
+    const virtual std::string GetFileExtension()
+    {
+        return Texture2D::GetFileExtensionStatic();
+    }
+
 
 public:
     Texture2D();

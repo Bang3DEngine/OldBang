@@ -63,12 +63,26 @@ std::string Texture2D::GetImageRelativeFilepath() const
 #ifdef BANG_EDITOR
 void Texture2D::Write(std::ostream &f) const
 {
-
+    f << "<Texture2D>" << std::endl;
+    FileWriter::WriteFilepath(this->imageFilepath, f);
+    std::string fm = GetFilterMode() == FilterMode::Nearest ?
+                "Nearest" : "Linear";
+    FileWriter::Write(fm, f);
+    f << "</Texture2D>" << std::endl;
 }
 
 void Texture2D::Read(std::istream &f)
 {
     imageFilepath = FileReader::ReadString(f);
     LoadFromFile(imageFilepath);
+    std::string filterMode = FileReader::ReadString(f);
+    if(filterMode == "Nearest")
+    {
+        SetFilterMode(FilterMode::Nearest);
+    }
+    else if(filterMode == "Linear")
+    {
+        SetFilterMode(FilterMode::Linear);
+    }
 }
 #endif

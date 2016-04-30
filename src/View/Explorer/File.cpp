@@ -22,7 +22,7 @@ File::File(const QFileSystemModel *model, const QModelIndex *index)
 
 bool File::IsTexture2DAsset() const
 {
-    return  isFile && extension == Texture2D::GetFileExtension();
+    return  isFile && extension == Texture2D::GetFileExtensionStatic();
 }
 
 bool File::IsImageFile() const
@@ -36,7 +36,7 @@ bool File::IsImageFile() const
 
 bool File::IsMeshAsset() const
 {
-    return  isFile && extension == Mesh::GetFileExtension();
+    return  isFile && extension == Mesh::GetFileExtensionStatic();
 }
 
 bool File::IsMeshFile() const
@@ -46,12 +46,12 @@ bool File::IsMeshFile() const
 
 bool File::IsMaterialAsset() const
 {
-    return isFile && extension == Material::GetFileExtension();
+    return isFile && extension == Material::GetFileExtensionStatic();
 }
 
 bool File::IsPrefabAsset() const
 {
-    return isFile && extension == Prefab::GetFileExtension();
+    return isFile && extension == Prefab::GetFileExtensionStatic();
 }
 
 bool File::IsDir() const

@@ -1,3 +1,4 @@
 <Texture2D>
-    res/Assets/Textures/textureCarpet.jpg
+./res/Assets/Textures/textureCarpet.jpg
+Linear
 </Texture2D>
