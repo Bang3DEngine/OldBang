@@ -83,7 +83,7 @@ public:
     {
         T *part = new T();
         parts.push_back(part);
-        part->parent = this;
+        part->owner = this;
         return part;
     }
 

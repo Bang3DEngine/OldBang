@@ -4,14 +4,13 @@ EditorCamera::EditorCamera()
 {
     this->SetName("EditorCamera");
 
-    cam = new Camera();
-    AddPart(cam);
-
+    cam = AddPart<Camera>();
     cam->SetAutoUpdateAspectRatio(true);
     cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
-    Transform *t = new Transform();
-    AddPart(t);
+    Transform *t = AddPart<Transform>();
+    t->SetPosition(glm::vec3(10.0f, 10.0f, 10.0f));
+    t->LookAt(glm::vec3(0));
 }
 
 EditorCamera::~EditorCamera()
