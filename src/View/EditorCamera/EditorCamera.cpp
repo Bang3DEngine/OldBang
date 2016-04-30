@@ -61,9 +61,9 @@ void EditorCamera::OnUpdate()
                     mouseRotBoost;
 
 
+        mouseRotationRads += glm::vec2(mx, my);
         //Orbitting Behaviour
         /*
-        mouseRotationRads += glm::vec2(mx, my);
         t->SetLeftMatrix(glm::rotate(mouseRotationRads.x, t->GetUp()) *
                          glm::rotate(mouseRotationRads.y, t->GetRight()));
         t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -71,16 +71,17 @@ void EditorCamera::OnUpdate()
         //
 
         //Cam rotation Behaviour
-        glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-        glm::vec3 right = t->GetRight();
-        glm::quat rotX = glm::angleAxis(mx, up);
-        glm::quat rotY = glm::angleAxis(my, right);
-        t->SetRotation( rotX * rotY * t->GetRotation() );
+        glm::quat rotY = glm::angleAxis(mouseRotationRads.y, glm::vec3(1,0,0));
+        glm::quat rotX = glm::angleAxis(mouseRotationRads.x, glm::vec3(0,1,0));
+        t->SetRotation( rotY * rotX );
+        //t->SetRotation( rotX * t->GetRotation() );
+        //glm::vec3 euler = t->GetEuler();
+        //t->SetRotation(euler);
 
         // No camera roll, always with up=(0,1,0)
-        t->LookAt(t->GetPosition() + t->GetForward() * 99999.9f,
+        /*t->LookAt(t->GetPosition() + t->GetForward() * 99999.9f,
                   glm::vec3(0.0f, 1.0f, 0.0f));
-        //
+        *///
 
         Canvas::SetCursor(Qt::BlankCursor);
         doingSomeAction = true;

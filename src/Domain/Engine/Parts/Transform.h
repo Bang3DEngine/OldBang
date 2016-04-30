@@ -39,7 +39,7 @@ public:
                 glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
 
     void SetPosition(const glm::vec3 &p);
-    void SetRotation(const glm::vec3 &euler);
+    void SetRotation(const glm::vec3 &degreesEuler);
     void SetRotation(const glm::quat &r);
     void SetScale(const glm::vec3 &s);
     void SetLeftMatrix(const glm::mat4 &leftMatrix);

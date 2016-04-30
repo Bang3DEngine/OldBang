@@ -34,11 +34,11 @@ void Transform::SetPosition(const glm::vec3 &p)
     position = p;
 }
 
-void Transform::SetRotation(const glm::vec3 &euler)
+void Transform::SetRotation(const glm::vec3 &degreesEuler)
 {
-    glm::quat qx = glm::angleAxis(glm::radians(euler.x), glm::vec3(1,0,0));
-    glm::quat qy = glm::angleAxis(glm::radians(euler.y), glm::vec3(0,1,0));
-    glm::quat qz = glm::angleAxis(glm::radians(euler.z), glm::vec3(0,0,1));
+    glm::quat qx = glm::angleAxis(glm::radians(degreesEuler.x), glm::vec3(1,0,0));
+    glm::quat qy = glm::angleAxis(glm::radians(degreesEuler.y), glm::vec3(0,1,0));
+    glm::quat qz = glm::angleAxis(glm::radians(degreesEuler.z), glm::vec3(0,0,1));
     SetRotation(qz * qy * qx);
 }
 
@@ -129,7 +129,7 @@ glm::quat Transform::GetRotation() const
 
 glm::vec3 Transform::GetEuler() const
 {
-    return glm::eulerAngles(rotation);
+    return glm::degrees(glm::eulerAngles(rotation));
 }
 
 glm::vec3 Transform::GetScale() const

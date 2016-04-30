@@ -38,6 +38,16 @@ int main(int argc, char *argv[])
     WindowMain *windowMain = WindowMain::GetInstance();
     windowMain->menubar->CreateNewStage();
 
+    Stage *stage = new EditorStage();
+    std::string filename = "./res/Assets/stageTest25.bstage";
+    StageReader::ReadStage(filename , stage);
+    if(stage != nullptr)
+    {
+        Canvas::GetInstance()->AddStage(stage);
+        Canvas::GetInstance()->SetCurrentStage(stage);
+        Persistence::SetCurrentStageFilepath(filename);
+    }
+
     /*
     Stage *stage = nullptr;
     #ifndef BANG_EDITOR

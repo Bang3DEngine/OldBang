@@ -42,6 +42,7 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
     Texture2D *currentTex = AssetsManager::
             GetCachedAsset<Texture2D>(assetFilepath);
 
+
     bool tmpAssetLoaded = false;
     if(currentTex == nullptr)
     {
