@@ -33,5 +33,7 @@ EditorAxis::EditorAxis() : EditorEntity()
 
 EditorAxis::~EditorAxis()
 {
-    delete matx, maty, matz;
+    delete matx;
+    delete maty;
+    delete matz;
 }

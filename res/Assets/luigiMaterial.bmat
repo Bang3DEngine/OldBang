@@ -2,6 +2,6 @@
     ./res/Shaders/pvm_pos_normal_uv.vert
     ./res/Shaders/pass_pos_normal_uv.frag
     ./res/Assets/luigiTexture.btex2d
-    1.0 1.0 1.0 1.0
+    0.0 0.0 0.0 0.0
 </Material>
 

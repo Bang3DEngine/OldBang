@@ -85,8 +85,8 @@ void EditorCamera::OnUpdate()
     else  //CAM PLANE MOVEMENT  -  MIDDLE PRESS MOVEMENT HANDLING
         if(Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        float mx =  Input::GetMouseAxisX() * mouseCamPlaneMoveBoost;
-        float my = -Input::GetMouseAxisY() * mouseCamPlaneMoveBoost;
+        float mx = -Input::GetMouseAxisX() * mouseCamPlaneMoveBoost;
+        float my = Input::GetMouseAxisY() * mouseCamPlaneMoveBoost;
 
         t->SetPosition(t->GetPosition()   +
                        t->GetRight() * mx +

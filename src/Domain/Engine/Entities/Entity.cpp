@@ -4,6 +4,8 @@
 #include "StageReader.h"
 #include "WindowEventManager.h"
 
+#include "EditorAxis.h"
+
 Entity::Entity() : Entity("")
 {
 }
@@ -195,6 +197,7 @@ bool Entity::IsStage() const
 #ifdef BANG_EDITOR
 void Entity::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
 {
+    bool wasSelected = (selectedMaterial != nullptr);
     bool isSelected = false;
     for(auto it = selectedEntities.begin(); it != selectedEntities.end(); ++it)
     {
@@ -205,26 +208,43 @@ void Entity::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedE
         }
     }
 
-    Material *mat = nullptr;
-    if(this->HasPart<MeshRenderer>())
+    //TODO: change this, not really a good way of doing it....
+    if(HasPart<MeshRenderer>())
     {
-        mat = this->GetPart<MeshRenderer>()->GetMaterial();
-    }
+        if(isSelected)
+        {
+            if(nonSelectedMaterial == nullptr)
+            {
+                nonSelectedMaterial = GetPart<MeshRenderer>()->GetMaterial();
+            }
 
-    if(isSelected)
-    {
-        if(mat != nullptr)
+            if(!wasSelected)
+            {
+                if(nonSelectedMaterial != nullptr)
+                {
+                    //Create a copy of its material, and modify its properties
+                    selectedMaterial = new Material(*nonSelectedMaterial);
+                    selectedMaterial->SetDiffuseColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
+
+                    nonSelectedMaterial = GetPart<MeshRenderer>()->GetMaterial();
+                    GetPart<MeshRenderer>()->SetMaterial(selectedMaterial);
+                }
+            }
+        }
+        else
         {
-            mat->SetDiffuseColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.7f));
+            if(wasSelected)
+            {
+                if(nonSelectedMaterial != nullptr)
+                {
+                    delete selectedMaterial;
+                    selectedMaterial = nullptr;
+                    GetPart<MeshRenderer>()->SetMaterial(nonSelectedMaterial);
+                }
+            }
         }
     }
-    else
-    {
-        if(mat != nullptr)
-        {
-            mat->SetDiffuseColor(glm::vec4(0.0f));
-        }
-    }
+    //
 }
 
 void Entity::Write(std::ostream &f) const

@@ -12,6 +12,8 @@
 #include "IToString.h"
 #include "IStageEventListener.h"
 
+#include "Material.h"
+
 #ifdef BANG_EDITOR
 #include "IWindowEventManagerListener.h"
 #endif
@@ -29,6 +31,12 @@ friend class Canvas;
 friend class Prefab;
 friend class Stage;
 private:
+
+    #ifdef BANG_EDITOR
+    //To keep track when changing materials between selected/nonselected
+    Material *nonSelectedMaterial = nullptr;
+    Material *selectedMaterial = nullptr;
+    #endif
 
     virtual void _OnStart() override;
     virtual void _OnUpdate() override;
