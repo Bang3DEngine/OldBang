@@ -21,6 +21,8 @@ public:
         SaveStageAs,
 
         CreateEmptyEntity,
+        CreateFromPrefab,
+
         CreatePrefab,
         CreateMaterial,
         CreateMesh,
@@ -47,6 +49,8 @@ public slots:
     void OnSaveStageAs () const;
 
     void OnCreateEmptyEntity () const;
+    void OnCreateFromPrefab () const;
+
     void OnCreatePrefab() const;
     void OnCreateMaterial() const;
     void OnCreateMesh() const;

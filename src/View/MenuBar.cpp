@@ -19,6 +19,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
     connect(w->actionSaveStageAs,  SIGNAL(triggered()), this, SLOT(OnSaveStageAs()));
 
     connect(w->actionCreateEmptyEntity,  SIGNAL(triggered()), this, SLOT(OnCreateEmptyEntity()));
+    connect(w->actionCreateFromPrefab,  SIGNAL(triggered()), this, SLOT(OnCreateFromPrefab()));
+
     connect(w->actionCreatePrefab,  SIGNAL(triggered()), this, SLOT(OnCreatePrefab()));
     connect(w->actionCreateMaterial,  SIGNAL(triggered()), this, SLOT(OnCreateMaterial()));
     connect(w->actionCreateMesh,  SIGNAL(triggered()), this, SLOT(OnCreateMesh()));
@@ -148,6 +150,62 @@ void MenuBar::OnCreateEmptyEntity() const
 {
     WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateEmptyEntity);
 }
+void MenuBar::OnCreateFromPrefab() const
+{
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
+
+    std::string ext = Prefab::GetFileExtensionStatic();
+    std::string filename =
+        QFileDialog::getOpenFileName
+            (
+                        WindowMain::GetMainWindow(),
+                        QString::fromStdString("Create from prefab..."),
+                        QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
+                        QString::fromStdString( ext + "(*." + ext + ")" )
+            )
+            .toStdString();
+    if(filename == "") return;
+
+    Logger_Log("OSTIA HAHAHAHHAHA");
+    std::fstream f;
+    f.open(filename);
+    if(f.is_open())
+    {
+        Prefab *p = new Prefab();
+        Logger_Log("HIAHIA");
+        p->Read(f);
+        Logger_Log("WOLOLITO");
+        Entity *e = p->Instantiate();
+        Logger_Log("holitaaa");
+        Entity *selectedEntity = WindowMain::GetInstance()->widgetHierarchy->
+                GetFirstSelectedEntity();
+        Logger_Log("ESTUPIDO");
+        if(selectedEntity != nullptr)
+        {
+            selectedEntity->AddChild(e);
+            Logger_Log("ENGREIDO");
+        }
+        else
+        {
+            Stage *currentStage = Canvas::GetInstance()->GetCurrentStage();
+            if(currentStage != nullptr)
+            {
+                Logger_Log("MEC");
+                currentStage->AddChild(e);
+                Logger_Log("MOC");
+            }
+        }
+        Logger_Log("KA");
+        delete p;
+        Logger_Log("KKI");
+    }
+    else
+    {
+        Logger_Error("Prefab file '" << filename << "' is corrupt or can't be read.");
+    }
+    Logger_Log("DONEEEE");
+}
+
 void MenuBar::OnCreatePrefab() const
 {
     WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreatePrefab);

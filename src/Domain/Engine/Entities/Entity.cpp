@@ -17,10 +17,10 @@ Entity::Entity(const std::string &name) : name(name), parent(nullptr), isStage(f
 Entity::~Entity()
 {
     this->_OnDestroy();
-    for(auto it = children.begin(); it != children.end(); ++it)
+    for(auto it = children.begin(); it != children.end();)
     {
         Entity *child = *it;
-        this->RemoveChild(child->GetName());
+        it = this->RemoveChildWithoutNotifyingHierarchy(it);
         delete child;
     }
 }
@@ -107,7 +107,7 @@ void Entity::MoveChild(Entity *child, Entity *newParent)
     {
         if((*it) == child)
         {
-            RemoveChildWithoutNoifyingHierarchy(it);
+            RemoveChildWithoutNotifyingHierarchy(it);
             newParent->AddChildWithoutNoifyingHierarchy(child);
 
             #ifdef BANG_EDITOR
@@ -119,20 +119,23 @@ void Entity::MoveChild(Entity *child, Entity *newParent)
     }
 }
 
-void Entity::RemoveChildWithoutNoifyingHierarchy(std::list<Entity*>::iterator &it)
+std::list<Entity*>::iterator Entity::RemoveChildWithoutNotifyingHierarchy(
+        std::list<Entity*>::iterator &it)
 {
     Entity *child = (*it);
     child->parent = nullptr;
-    children.erase(it);
+    return children.erase(it);
 }
 
 
-void Entity::RemoveChild(std::list<Entity*>::iterator &it)
+std::list<Entity*>::iterator Entity::RemoveChild(
+        std::list<Entity*>::iterator &it)
 {
-    RemoveChildWithoutNoifyingHierarchy(it);
+    auto itret = RemoveChildWithoutNotifyingHierarchy(it);
     #ifdef BANG_EDITOR
     WindowEventManager::NotifyChildRemoved((*it));
     #endif
+    return itret;
 }
 
 void Entity::RemoveChild(const std::string &name)
@@ -227,7 +230,7 @@ void Entity::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedE
                     selectedMaterial->SetDiffuseColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
 
                     nonSelectedMaterial = GetPart<MeshRenderer>()->GetMaterial();
-                    GetPart<MeshRenderer>()->SetMaterial(selectedMaterial);
+                    //GetPart<MeshRenderer>()->SetMaterial(selectedMaterial);
                 }
             }
         }
@@ -239,7 +242,7 @@ void Entity::OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedE
                 {
                     delete selectedMaterial;
                     selectedMaterial = nullptr;
-                    GetPart<MeshRenderer>()->SetMaterial(nonSelectedMaterial);
+                    //GetPart<MeshRenderer>()->SetMaterial(nonSelectedMaterial);
                 }
             }
         }
@@ -327,6 +330,7 @@ void Entity::_OnRender()
 void Entity::_OnDestroy()
 {
     PROPAGATE_EVENT(_OnDestroy, parts);
-    PROPAGATE_EVENT(_OnDestroy, children);
+    //No need to propagate _OnDestroy to children,
+    //since the "delete child" itself propagates it (look at the destructor)
     OnDestroy();
 }

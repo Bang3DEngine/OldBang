@@ -67,6 +67,7 @@ public slots:
     void OnCustomContextMenuRequested(QPoint point);
     void OnContextMenuCreateEmptyClicked();
     void OnContextMenuDeleteClicked();
+    void OnContextMenuCreatePrefab();
 
     void _NotifyHierarchyItemSelectionChanged();
 };

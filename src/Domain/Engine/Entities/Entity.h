@@ -45,8 +45,9 @@ private:
 
 
     void AddChildWithoutNoifyingHierarchy(Entity *child);
-    void RemoveChildWithoutNoifyingHierarchy(std::list<Entity*>::iterator &it);
-    void RemoveChild(std::list<Entity*>::iterator &it);
+    std::list<Entity*>::iterator RemoveChildWithoutNotifyingHierarchy(
+            std::list<Entity*>::iterator &it);
+    std::list<Entity*>::iterator RemoveChild(std::list<Entity*>::iterator &it);
 
 protected:
     std::string name;

@@ -1,7 +1,8 @@
 #include "Hierarchy.h"
 
-#include "WindowEventManager.h"
 #include "Logger.h"
+#include "WindowMain.h"
+#include "WindowEventManager.h"
 
 Hierarchy::Hierarchy(QWidget *parent)
 {
@@ -250,6 +251,35 @@ void Hierarchy::OnContextMenuDeleteClicked()
     }
 }
 
+void Hierarchy::OnContextMenuCreatePrefab()
+{
+    Entity *e = GetFirstSelectedEntity();
+    Prefab *prefab = new Prefab(e);
+
+    std::string ext = Prefab::GetFileExtensionStatic();
+    QFileDialog fd;
+    std::string filename = QFileDialog::getSaveFileName
+            (
+                WindowMain::GetMainWindow(),
+                QString::fromStdString("Create Prefab..."),
+                QString::fromStdString(
+                    Persistence::GetAssetsPathAbsolute() + "/" + e->GetName()),
+                QString::fromStdString( ext + "(*." + ext + ")" )
+            )
+            .toStdString();
+    if(filename == "") return;
+
+    std::fstream f;
+    f.open(filename, std::fstream::out);
+    if(f.is_open())
+    {
+        prefab->Write(f);
+        f.close();
+    }
+
+    delete prefab;
+}
+
 void Hierarchy::OnCustomContextMenuRequested(QPoint point)
 {
     QTreeWidgetItem *item = itemAt(point);
@@ -260,6 +290,7 @@ void Hierarchy::OnCustomContextMenuRequested(QPoint point)
 
         QAction actionCreateEmpty("Create empty", this);
         QAction actionDelete("Delete", this);
+        QAction actionCreatePrefab("Create Prefab...", this);
 
         connect(&actionCreateEmpty, SIGNAL(triggered()), this, SLOT(OnContextMenuCreateEmptyClicked()));
         contextMenu.addAction(&actionCreateEmpty);
@@ -268,6 +299,12 @@ void Hierarchy::OnCustomContextMenuRequested(QPoint point)
         {
             connect(&actionDelete, SIGNAL(triggered()), this, SLOT(OnContextMenuDeleteClicked()));
             contextMenu.addAction(&actionDelete);
+
+            if(selectedItems().length() == 1)
+            {
+                connect(&actionCreatePrefab, SIGNAL(triggered()), this, SLOT(OnContextMenuCreatePrefab()));
+                contextMenu.addAction(&actionCreatePrefab);
+            }
         }
 
         contextMenu.exec(mapToGlobal(point));

@@ -27,15 +27,17 @@ public:
 
 private:
     //This variable contains the description inside the
-    //corresponding *.asset file (without the opening/closing tags)
-    std::string assetDescription;
+    //corresponding *.bprefab file (without the opening/closing tags)
+    std::string assetDescription = "";
 
 public:
     Prefab();
     Prefab(const Prefab &p);
+    Prefab(Entity *e);
     Prefab(const std::string &assetDescription);
 
     Entity* Instantiate() const;
+    Entity* InstantiateWithoutStarting() const;
 
 #ifdef BANG_EDITOR
     void Write(std::ostream &f) const;
