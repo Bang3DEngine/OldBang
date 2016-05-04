@@ -13,6 +13,7 @@ void StageReader::ReadParts(std::istream &f, Entity *e)
     std::string line;
     while( (line = FileReader::ReadNextLine(f)) != "</parts>" )
     {
+        Logger_Log(line);
         Part *p = nullptr;
         if(line == "<Transform>")
         {
@@ -65,7 +66,7 @@ void StageReader::ReadParts(std::istream &f, Entity *e)
 void StageReader::ReadChildren(std::istream &f, Entity *e)
 {
     std::string line;
-    while( (line = FileReader::ReadNextLine(f)) != "</children>" )
+    while( (line = FileReader::ReadNextLine(f)) != "</children>")
     {
         if(line == "<Entity>")
         {
@@ -85,7 +86,6 @@ void StageReader::ReadChildren(std::istream &f, Entity *e)
 
 void StageReader::ReadStage(const std::string &filepath, Stage* stage)
 {
-    Logger_Log("Reading stage '" << filepath << "'");
     ClearPointerIds();
 
     std::ifstream f (filepath);
@@ -119,10 +119,8 @@ void StageReader::ReadStage(const std::string &filepath, Stage* stage)
             else
             {
             }
-            Logger_Log(line);
         }
     }
-    Logger_Log("Finished reading stage.");
 }
 
 void StageReader::SaveStage(const std::string &filepath, const Stage *stage)

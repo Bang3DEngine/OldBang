@@ -8,5 +8,5 @@ out vec4 BANG_position_raw_vout_fin;
 void main()
 {
     BANG_position_raw_vout_fin = vec4(BANG_position_raw_vin, 1.0);
-    gl_Position = BANG_matrix_pvm * BANG_position_raw_vout_fin;
+    gl_Position = BANG_matrix_pvm * vec4(BANG_position_raw_vin, 1.0);
 }

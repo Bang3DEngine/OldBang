@@ -166,44 +166,33 @@ void MenuBar::OnCreateFromPrefab() const
             .toStdString();
     if(filename == "") return;
 
-    Logger_Log("OSTIA HAHAHAHHAHA");
     std::fstream f;
     f.open(filename);
     if(f.is_open())
     {
         Prefab *p = new Prefab();
-        Logger_Log("HIAHIA");
         p->Read(f);
-        Logger_Log("WOLOLITO");
-        Entity *e = p->Instantiate();
-        Logger_Log("holitaaa");
+        Entity *e = p->InstantiateWithoutStarting();
         Entity *selectedEntity = WindowMain::GetInstance()->widgetHierarchy->
                 GetFirstSelectedEntity();
-        Logger_Log("ESTUPIDO");
         if(selectedEntity != nullptr)
         {
             selectedEntity->AddChild(e);
-            Logger_Log("ENGREIDO");
         }
         else
         {
             Stage *currentStage = Canvas::GetInstance()->GetCurrentStage();
             if(currentStage != nullptr)
             {
-                Logger_Log("MEC");
                 currentStage->AddChild(e);
-                Logger_Log("MOC");
             }
         }
-        Logger_Log("KA");
         delete p;
-        Logger_Log("KKI");
     }
     else
     {
         Logger_Error("Prefab file '" << filename << "' is corrupt or can't be read.");
     }
-    Logger_Log("DONEEEE");
 }
 
 void MenuBar::OnCreatePrefab() const

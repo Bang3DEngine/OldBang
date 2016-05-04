@@ -269,6 +269,21 @@ std::string FileReader::ReadNextLine(std::istream &f)
     return line;
 }
 
+bool FileReader::ReadNextLine(std::istream &f, std::string *line)
+{
+    if(f.peek() == EOF) return false;
+
+    do
+    {
+        std::getline(f, *line);
+        TrimStringLeft(line);
+    }
+    while( (line->empty() || line->at(0) == '#' || line->at(0) == '\n') &&
+           f.peek() != EOF); //Skip all empty/comment lines
+
+    return true;
+}
+
 float FileReader::ReadFloat(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));

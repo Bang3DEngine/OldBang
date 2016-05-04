@@ -9,8 +9,8 @@ EditorCamera::EditorCamera()
     cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
     Transform *t = AddPart<Transform>();
-    t->SetPosition(glm::vec3(10.0f, 10.0f, 10.0f));
-    t->LookAt(glm::vec3(0));
+    t->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    //t->LookAt(glm::vec3(0));
 }
 
 EditorCamera::~EditorCamera()
@@ -60,7 +60,7 @@ void EditorCamera::OnUpdate()
                     mouseRotBoost;
 
 
-        mouseRotationRads += glm::vec2(mx, my);
+        mouseRotationDegrees += glm::vec2(mx, my);
         //Orbitting Behaviour
         /*
         t->SetLeftMatrix(glm::rotate(mouseRotationRads.x, t->GetUp()) *
@@ -70,9 +70,15 @@ void EditorCamera::OnUpdate()
         //
 
         //Cam rotation Behaviour
-        glm::quat rotY = glm::angleAxis(mouseRotationRads.y, glm::vec3(1,0,0));
-        glm::quat rotX = glm::angleAxis(mouseRotationRads.x, glm::vec3(0,1,0));
-        t->SetRotation( rotY * rotX );
+        glm::quat rotY = glm::angleAxis(my, t->GetRight());
+        t->SetRotation( rotY * t->GetRotation() );
+        glm::quat rotX = glm::angleAxis(mx, t->GetUp());
+        t->SetRotation( rotX * t->GetRotation() );
+
+        //Remove roll from camera
+        glm::vec3 target = t->GetPosition() + t->GetForward() * 99.9f;
+        glm::vec3 dir = t->GetForward();
+        //t->LookAt()
         //
 
         Canvas::SetCursor(Qt::BlankCursor);
@@ -102,12 +108,15 @@ void EditorCamera::OnUpdate()
     //
 
     //WHEEL HANDLING
-    float mouseWheel = Input::GetMouseWheel();
-    if(mouseWheel != 0.0f)
+    if(!Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        moveStep += mouseWheelBoost * mouseWheel *
-                    moveSpeed * t->GetForward();
-        doingSomeAction = true;
+        float mouseWheel = Input::GetMouseWheel();
+        if(mouseWheel != 0.0f)
+        {
+            moveStep += mouseWheelBoost * mouseWheel *
+                        moveSpeed * t->GetForward();
+            doingSomeAction = true;
+        }
     }
     //
 

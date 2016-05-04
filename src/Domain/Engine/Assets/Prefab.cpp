@@ -62,13 +62,12 @@ void Prefab::Read(std::istream &f)
 {
     //Copy contents of the read file in assetDescription,
     //to be able to use it from Instantiate()
+    std::string line;
     assetDescription = "";
-    std::string line = FileReader::ReadNextLine(f);
-    if(line != "<Entity>") return;
-
-    while( (line = FileReader::ReadNextLine(f)) != "</Entity>")
+    while( FileReader::ReadNextLine(f, &line) )
     {
         assetDescription += line + "\n";
     }
+    assetDescription += line + "\n";
 }
 #endif

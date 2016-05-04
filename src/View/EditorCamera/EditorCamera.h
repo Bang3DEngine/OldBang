@@ -22,11 +22,11 @@ private:
     float moveSpeed = 0.0f;
 
     float mouseCamPlaneMoveBoost = 25.0f; //Movement with middle button
-    float mouseRotBoost = 5.0f;
+    float mouseRotBoost = 4.0f;
     float mouseWheelBoost = 25.0f;
 
     //Only used if using cam orbitting behaviour
-    glm::vec2 mouseRotationRads = glm::vec2(0.0f);
+    glm::vec2 mouseRotationDegrees = glm::vec2(0.0f);
 
 public:
     EditorCamera();

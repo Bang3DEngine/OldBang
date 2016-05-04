@@ -22,7 +22,7 @@ EditorAxis::EditorAxis() : EditorEntity()
     zAxisLine->SetMaterial(matz);
 
 
-    float axisLength = 9999.0f;
+    float axisLength = 5.0f;
     xAxisLine->SetDestiny(glm::vec3(1,0,0) * axisLength);
     yAxisLine->SetDestiny(glm::vec3(0,1,0) * axisLength);
     zAxisLine->SetDestiny(glm::vec3(0,0,-1) * axisLength);

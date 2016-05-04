@@ -1,38 +1,39 @@
 <Entity>
-0x4260050
-0x360f110
-<children>
-<Entity>
-0x3b118c0
-Wood Boy
-<children>
-</children>
-<parts>
-<Transform>
-0x4203a10
-0.685 0.843 0.016
-0.789493 0 0 -0.61376
-0.35 0.35 0.35
-</Transform>
-<MeshRenderer>
-0x37af450
-./res/Assets/boyMesh.bmesh
-./res/Assets/testMaterial2.bmat
-</MeshRenderer>
-</parts>
+	0x2a76580
+	NinioLuigiado
+	<children>
+		<Entity>
+			0x2519700
+			Wood Boy
+			<children>
+			</children>
+			<parts>
+				<Transform>
+					0x20f5bb0
+					0.685 0.843 0.016
+					0.789493 0 0 -0.61376
+					0.35 0.35 0.35
+				</Transform>
+				<MeshRenderer>
+					0x212bad0
+					./res/Assets/boyMesh.bmesh
+					./res/Assets/testMaterial2.bmat
+				</MeshRenderer>
+			</parts>
+		</Entity>
+	</children>
+	<parts>
+		<MeshRenderer>
+			0x24d6960
+			./res/Assets/boyMesh.bmesh
+			./res/Assets/luigiMaterial.bmat
+		</MeshRenderer>
+		<Transform>
+			0x28af250
+			0 0 0
+			0 0 1 0
+			1 1 1
+		</Transform>
+	</parts>
 </Entity>
-</children>
-<parts>
-<MeshRenderer>
-0x2f16f70
-./res/Assets/boyMesh.bmesh
-./res/Assets/luigiMaterial.bmat
-</MeshRenderer>
-<Transform>
-0x3beda50
-0 0 0
-0 0 1 0
-1 1 1
-</Transform>
-</parts>
-</Entity>
+

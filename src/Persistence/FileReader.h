@@ -48,6 +48,7 @@ public:
 
     //READ PRIMITIVE VALUES
     static std::string ReadNextLine(std::istream &f);
+    static bool ReadNextLine(std::istream &f, std::string *line);
 
     static float ReadFloat(std::istream &f);
     static glm::vec2 ReadVec2(std::istream &f);

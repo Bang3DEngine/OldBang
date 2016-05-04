@@ -27,7 +27,7 @@ public:
 
 private:
     //This variable contains the description inside the
-    //corresponding *.bprefab file (without the opening/closing tags)
+    //corresponding *.bprefab file (including the opening/closing tags)
     std::string assetDescription = "";
 
 public:
