@@ -10,12 +10,12 @@ Prefab::Prefab(const Prefab &p)
     this->assetDescription = p.assetDescription;
 }
 
-Prefab::Prefab(GameObject *e)
+Prefab::Prefab(GameObject *o)
 {
-    if(e != nullptr)
+    if(o != nullptr)
     {
         std::ostringstream oss;
-        e->Write(oss);
+        o->Write(oss);
         assetDescription = oss.str();
     }
 }
@@ -27,12 +27,12 @@ Prefab::Prefab(const std::string &assetDescription)
 
 GameObject *Prefab::Instantiate() const
 {
-    GameObject *e = InstantiateWithoutStarting();
-    if(e != nullptr)
+    GameObject *o = InstantiateWithoutStarting();
+    if(o != nullptr)
     {
-        e->_OnStart();
+        o->_OnStart();
     }
-    return e;
+    return o;
 }
 
 GameObject *Prefab::InstantiateWithoutStarting() const
@@ -40,9 +40,10 @@ GameObject *Prefab::InstantiateWithoutStarting() const
     if(assetDescription != "")
     {
         std::istringstream iss (assetDescription);
-        GameObject *e = new GameObject();
-        e->Read(iss);
-        return e;
+        GameObject *o = new GameObject();
+        FileReader::ReadNextLine(iss); //Consume opening tag
+        o->Read(iss);
+        return o;
     }
     return nullptr;
 }
@@ -50,11 +51,11 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 #ifdef BANG_EDITOR
 void Prefab::Write(std::ostream &f) const
 {
-    GameObject *e = InstantiateWithoutStarting();
-    if(e != nullptr)
+    GameObject *o = InstantiateWithoutStarting();
+    if(o != nullptr)
     {
-        e->Write(f);
-        delete e;
+        o->Write(f);
+        delete o;
     }
 }
 

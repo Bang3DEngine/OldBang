@@ -33,7 +33,7 @@ private:
 public:
     Prefab();
     Prefab(const Prefab &p);
-    Prefab(GameObject *e);
+    Prefab(GameObject *o);
     Prefab(const std::string &assetDescription);
 
     GameObject* Instantiate() const;
