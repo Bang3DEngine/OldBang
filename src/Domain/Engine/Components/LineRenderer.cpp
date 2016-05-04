@@ -193,7 +193,7 @@ void LineRenderer::Write(std::ostream &f) const
 
 void LineRenderer::Read(std::istream &f)
 {
-    SceneReader::RegisterNextPointerId(f, this);
+    FileReader::RegisterNextPointerId(f, this);
     SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
     SetOrigin(FileReader::ReadVec3(f));
     SetDestiny(FileReader::ReadVec3(f));

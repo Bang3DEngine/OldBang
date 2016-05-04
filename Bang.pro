@@ -137,8 +137,6 @@ HEADERS += \
     src/View/Inspector/InspectorEnumSW.h \
     src/Persistence/AssetsManager.h \
     src/Persistence/FileReader.h \
-    src/Persistence/ReaderWithPointerIds.h \
-    src/Persistence/SceneReader.h \
     src/Persistence/stb_image.h \
     src/View/Explorer/Explorer.h \
     src/View/Inspector/InspectorFileSW.h \
@@ -216,8 +214,6 @@ SOURCES += \
     src/Persistence/stb_image.cpp \
     src/Persistence/AssetsManager.cpp \
     src/Persistence/FileReader.cpp \
-    src/Persistence/ReaderWithPointerIds.cpp \
-    src/Persistence/SceneReader.cpp \
     src/View/Explorer/Explorer.cpp \
     src/View/Inspector/InspectorFileSW.cpp \
     src/View/Inspector/FileDialog.cpp \

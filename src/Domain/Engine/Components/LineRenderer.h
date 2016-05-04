@@ -13,7 +13,7 @@
 #include "ShaderProgram.h"
 #include "ShaderContract.h"
 #include "AssetsManager.h"
-#include "SceneReader.h"
+#include "FileReader.h"
 #include "ShaderContract.h"
 
 #include "Renderer.h"

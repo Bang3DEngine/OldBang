@@ -17,7 +17,7 @@
 #include "Framebuffer.h"
 #include "Texture2D.h"
 #include "TestBehaviour.h"
-#include "SceneReader.h"
+#include "FileReader.h"
 #include "TestCameraBehaviour.h"
 
 #include "EditorScene.h"
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
     Scene *scene = new EditorScene();
     std::string filename = "./res/Assets/sceneTest25.bscene";
-    SceneReader::ReadScene(filename , scene);
+    FileReader::ReadScene(filename , scene);
     if(scene != nullptr)
     {
         Canvas::GetInstance()->AddScene(scene);
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     #else
     scene = new EditorScene();
     #endif
-    SceneReader::ReadScene("res/Assets/sceneTest", scene);
+    FileReader::ReadScene("res/Assets/sceneTest", scene);
     windowMain->canvas->AddScene(scene);
     windowMain->canvas->SetCurrentScene("MainScene");
     **/

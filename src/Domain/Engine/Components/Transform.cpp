@@ -1,5 +1,5 @@
 #include "Transform.h"
-#include "SceneReader.h"
+#include "FileReader.h"
 #include "GameObject.h"
 
 Transform::Transform() : position(glm::vec3(0.0f)),
@@ -224,7 +224,7 @@ void Transform::Write(std::ostream &f) const
 
 void Transform::Read(std::istream &f)
 {
-    SceneReader::RegisterNextPointerId(f, this);
+    FileReader::RegisterNextPointerId(f, this);
     SetPosition(FileReader::ReadVec3(f));
     SetRotation(FileReader::ReadQuat(f));
     SetScale(FileReader::ReadVec3(f));

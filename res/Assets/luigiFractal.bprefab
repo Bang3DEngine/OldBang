@@ -1,0 +1,114 @@
+<GameObject>
+0x3812ff0
+Luigi
+<children>
+<GameObject>
+0x31058b0
+Luigi
+<children>
+<GameObject>
+0x4107ea0
+Luigi
+<children>
+<GameObject>
+0x31dac30
+Luigi
+<children>
+<GameObject>
+0x4042130
+Luigi
+<children>
+<GameObject>
+0x32b2760
+Luigi
+<children>
+</children>
+<components>
+<Transform>
+0x32fb900
+0 0 0
+0 0.258819 0.965926 0
+0.9 0.9 0.9
+</Transform>
+<MeshRenderer>
+0x4489600
+./res/Assets/luigiMesh.bmesh
+./res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+</components>
+</GameObject>
+</children>
+<components>
+<Transform>
+0x339e760
+0 0 0
+0 0.258819 0.965926 0
+0.9 0.9 0.9
+</Transform>
+<MeshRenderer>
+0x33456e0
+./res/Assets/luigiMesh.bmesh
+./res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+</components>
+</GameObject>
+</children>
+<components>
+<Transform>
+0x3398660
+0 0 0
+0 0.258819 0.965926 0
+0.9 0.9 0.9
+</Transform>
+<MeshRenderer>
+0x446c990
+./res/Assets/luigiMesh.bmesh
+./res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+</components>
+</GameObject>
+</children>
+<components>
+<Transform>
+0x31d6c20
+0 0 0
+0 0.258819 0.965926 0
+0.9 0.9 0.9
+</Transform>
+<MeshRenderer>
+0x3db3100
+./res/Assets/luigiMesh.bmesh
+./res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+</components>
+</GameObject>
+</children>
+<components>
+<Transform>
+0x3144b90
+0 0 0
+0 0.258819 0.965926 0
+0.9 0.9 0.9
+</Transform>
+<MeshRenderer>
+0x3f31e10
+./res/Assets/luigiMesh.bmesh
+./res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+</components>
+</GameObject>
+</children>
+<components>
+<Transform>
+0x3ee1b80
+0 0 0
+0 0.258819 0.965926 0
+0.9 0.9 0.9
+</Transform>
+<MeshRenderer>
+0x3ee0380
+./res/Assets/luigiMesh.bmesh
+./res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+</components>
+</GameObject>

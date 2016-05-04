@@ -1,7 +1,7 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include "Component.h"
-#include "SceneReader.h"
+#include "FileReader.h"
 #include "WindowEventManager.h"
 
 #include "EditorAxis.h"
@@ -275,18 +275,18 @@ void GameObject::Write(std::ostream &f) const
 
 void GameObject::Read(std::istream &f)
 {
-    SceneReader::RegisterNextPointerId(f, this); //Read GameObject id
+    FileReader::RegisterNextPointerId(f, this); //Read GameObject id
     SetName( FileReader::ReadString(f) );  //Read GameObject name
     std::string line;
     while( (line = FileReader::ReadNextLine(f)) != "</GameObject>")
     {
         if(line == "<children>")
         {
-            SceneReader::ReadChildren(f, this);
+            FileReader::ReadChildren(f, this);
         }
         else if(line == "<components>")
         {
-            SceneReader::ReadComponents(f, this);
+            FileReader::ReadComponents(f, this);
         }
         else
         {

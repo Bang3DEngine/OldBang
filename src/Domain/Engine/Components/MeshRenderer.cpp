@@ -1,6 +1,6 @@
 #include "MeshRenderer.h"
 #include "GameObject.h"
-#include "SceneReader.h"
+#include "FileReader.h"
 
 MeshRenderer::MeshRenderer()
 {
@@ -165,7 +165,7 @@ void MeshRenderer::Write(std::ostream &f) const
 
 void MeshRenderer::Read(std::istream &f)
 {
-    SceneReader::RegisterNextPointerId(f, this);
+    FileReader::RegisterNextPointerId(f, this);
     SetMesh( AssetsManager::GetAsset<Mesh>( FileReader::ReadString(f) ) );
     SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
     FileReader::ReadNextLine(f); //Consume close tag

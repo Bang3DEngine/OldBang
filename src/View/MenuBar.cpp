@@ -7,7 +7,7 @@
 #include "Canvas.h"
 #include "Persistence.h"
 #include "EditorScene.h"
-#include "SceneReader.h"
+#include "FileReader.h"
 #include "FileWriter.h"
 
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
@@ -94,7 +94,7 @@ void MenuBar::OnOpenScene() const
 
 
     EditorScene *scene = new EditorScene();
-    SceneReader::ReadScene(filename, scene);
+    FileReader::ReadScene(filename, scene);
     if(scene != nullptr)
     {
         Canvas::GetInstance()->AddScene(scene);

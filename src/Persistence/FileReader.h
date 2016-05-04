@@ -20,21 +20,30 @@
 #include "Logger.h"
 
 class Scene;
+class GameObject;
 class FileReader
 {
 private:
     FileReader() {}
 
+    static const std::string NoRegisterId;
+    static std::map<std::string, void*> idToPointers;
+    static void *lastIstreamDir;
+
     static void TrimStringLeft(std::string *str);
 
 public:
 
+    //IMAGE STUFF
     static void GetImageFormat(const std::string& filepath, int *width,
                                int *height, int *numComponents);
     static unsigned char* ReadImage(const std::string& filepath,
                                     int *width, int *height,
                                     int *components);
+    //
 
+
+    //3D STUFF
     static void GetOBJFormat(const std::string& filepath, bool *hasUvs,
                              bool *hasNormals, bool *isTriangles);
 
@@ -45,6 +54,27 @@ public:
                         std::vector<glm::vec3> *vertexNormals,
                         std::vector<glm::vec2> *vertexUvs,
                         bool *isTriangles);
+    //
+
+
+    //SCENE AND GAMEOBJECTS RELATED STUFF
+
+    //They all start from the first line inside the tag
+    // (you must consume the initial tag),
+    // and they consume the closing tag.
+
+    //COMPONENTS
+    static void ReadComponents(std::istream &f, GameObject *o);
+
+    //ENTITIES
+    static void ReadChildren(std::istream &f, GameObject *o);
+    // ////////////////////
+
+    //Scene must be a created object before being passed to these functions (new Scene)
+    static void ReadScene(const std::string &filepath, Scene* scene);
+    static void SaveScene(const std::string &filepath, const Scene *scene);
+
+    //
 
     //READ PRIMITIVE VALUES
     static std::string ReadNextLine(std::istream &f);
@@ -57,6 +87,27 @@ public:
     static glm::quat ReadQuat(std::istream &f);
     static Rect ReadRect(std::istream &f);
     static std::string ReadString(std::istream &f);
+
+
+    //To be used when we have a reference to another element in the
+    // same file (0xu234783 instead of /home/ashjdas/res/Assets/dkjfdf.b* or '-')
+    template <class T>
+    static T* GetNextPointerAddress(std::istream &f)
+    {
+        std::string id = ReadString(f);
+        if(id == "-")
+        {
+            return nullptr;
+        }
+
+        if(idToPointers.find(id) == idToPointers.end()) return nullptr;
+        return (T*)(idToPointers[id]);
+    }
+
+    //This saves the next pointer id into the map.
+    // this is the 0x3473274 that comes just before the name.
+    static void RegisterNextPointerId(std::istream &f, void *pointer);
+    //
 };
 
 #endif // FILEREADER_H

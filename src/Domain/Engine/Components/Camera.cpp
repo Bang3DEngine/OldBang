@@ -1,6 +1,6 @@
 #include "Camera.h"
 #include "Canvas.h"
-#include "SceneReader.h"
+#include "FileReader.h"
 
 Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
                    fovDegrees(60.0f),
@@ -176,7 +176,7 @@ void Camera::Write(std::ostream &f) const
 
 void Camera::Read(std::istream &f)
 {
-    SceneReader::RegisterNextPointerId(f, this);
+    FileReader::RegisterNextPointerId(f, this);
     SetFovDegrees( FileReader::ReadFloat(f) );
     SetZNear( FileReader::ReadFloat(f) );
     SetZFar( FileReader::ReadFloat(f) );
