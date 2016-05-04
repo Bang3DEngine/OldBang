@@ -5,15 +5,15 @@
 
 #include <string>
 
-#include "Entity.h"
+#include "GameObject.h"
 #include "Asset.h"
 
-//Represents an Entity that can be saved as an asset, and
+//Represents an GameObject that can be saved as an asset, and
 //can be instantiated.
 //In fact its asset file will be of the form
-//<Entity>
+//<GameObject>
 //  ...
-//</Entity>
+//</GameObject>
 class Prefab : public Asset
 {
 
@@ -33,11 +33,11 @@ private:
 public:
     Prefab();
     Prefab(const Prefab &p);
-    Prefab(Entity *e);
+    Prefab(GameObject *e);
     Prefab(const std::string &assetDescription);
 
-    Entity* Instantiate() const;
-    Entity* InstantiateWithoutStarting() const;
+    GameObject* Instantiate() const;
+    GameObject* InstantiateWithoutStarting() const;
 
 #ifdef BANG_EDITOR
     void Write(std::ostream &f) const;

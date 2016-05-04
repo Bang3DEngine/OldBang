@@ -1,6 +1,6 @@
 #include "WindowEventManager.h"
 
-#include "Entity.h"
+#include "GameObject.h"
 #include "WindowMain.h"
 
 WindowEventManager *WindowEventManager::wem = nullptr;
@@ -37,17 +37,17 @@ WindowEventManager *WindowEventManager::GetInstance()
     return wem;
 }
 
-void WindowEventManager::NotifyChildAdded(Entity *child)
+void WindowEventManager::NotifyChildAdded(GameObject *child)
 {
     PROPAGATE_EVENT_PAR(OnChildAdded(child), wem->listeners);
 }
 
-void WindowEventManager::NotifyChildChangedParent(Entity *child, Entity *previousParent)
+void WindowEventManager::NotifyChildChangedParent(GameObject *child, GameObject *previousParent)
 {
     PROPAGATE_EVENT_PAR(OnChildChangedParent(child, previousParent), wem->listeners);
 }
 
-void WindowEventManager::NotifyChildRemoved(Entity *child)
+void WindowEventManager::NotifyChildRemoved(GameObject *child)
 {
     PROPAGATE_EVENT_PAR(OnChildRemoved(child), wem->listeners);
 }
@@ -57,12 +57,12 @@ void WindowEventManager::NotifyMenuBarActionClicked(MenuBar::Action clickedActio
     PROPAGATE_EVENT_PAR(OnMenuBarActionClicked(clickedAction), wem->listeners);
 }
 
-void WindowEventManager::NotifyInspectorSlotChanged(Part *updatedPart, InspectorWidget *inspectorItem)
+void WindowEventManager::NotifyInspectorSlotChanged(Component *updatedComponent, InspectorWidget *inspectorItem)
 {
-    updatedPart->OnInspectorSlotChanged(inspectorItem);
+    updatedComponent->OnInspectorSlotChanged(inspectorItem);
 }
 
-void WindowEventManager::NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities)
+void WindowEventManager::NotifyHierarchyEntitiesSelected(const std::list<GameObject*> &selectedEntities)
 {
     PROPAGATE_EVENT_PAR(OnTreeHierarchyEntitiesSelected(selectedEntities), wem->listeners);
 }

@@ -19,7 +19,7 @@
 #include "Rect.h"
 #include "Logger.h"
 
-class Stage;
+class Scene;
 class FileReader
 {
 private:

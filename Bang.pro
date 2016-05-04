@@ -26,15 +26,15 @@ INCLUDEPATH += \
     $$PWD/src/View/Explorer/ \
     $$PWD/src/View/Logger/ \
     $$PWD/src/View/EditorCamera/ \
-    $$PWD/src/View/EditorEntity/ \
-    $$PWD/src/View/EditorStage/ \
+    $$PWD/src/View/EditorGameObject/ \
+    $$PWD/src/View/EditorScene/ \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/src/Domain/Graphics/Interfaces/ \
     $$PWD/src/Domain/Engine/Interfaces/ \
-    $$PWD/src/Domain/Engine/Entities/ \
+    $$PWD/src/Domain/Engine/GameObjects/ \
     $$PWD/src/Domain/Engine/Others/ \
-    $$PWD/src/Domain/Engine/Parts/ \
+    $$PWD/src/Domain/Engine/Components/ \
     $$PWD/src/Domain/Engine/Readers/ \
     $$PWD/src/Domain/Engine/Assets/ \
     $$PWD/src/Domain/Engine/Assets/Meshes/ \
@@ -51,9 +51,9 @@ OTHER_FILES += \
     run.sh \
     updateUI.sh \
     src/Domain \
-    res/Stages/stageTest1.stage \
-    res/Stages/stageFileFormat.txt \
-    res/Stages/assetsTest.assets \
+    res/Scenes/sceneTest1.scene \
+    res/Scenes/sceneFileFormat.txt \
+    res/Scenes/assetsTest.assets \
     res/Assets/Meshes/Pyramid.obj \
     res/Shaders/pass_pos.frag \
     res/Shaders/pass_pos_normal.frag \
@@ -87,12 +87,12 @@ HEADERS += \
     src/View/Canvas.h \
     src/View/WindowMain.h \
     src/Domain/Interfaces/IToString.h \
-    src/Domain/Engine/Interfaces/IStageEventListener.h \
+    src/Domain/Engine/Interfaces/ISceneEventListener.h \
     src/Domain/Engine/Others/Logger.h \
     src/Domain/Engine/Others/Timer.h \
     src/Domain/Engine/Others/Time.h \
-    src/Domain/Engine/Entities/Entity.h \
-    src/Domain/Engine/Entities/Stage.h \
+    src/Domain/Engine/GameObjects/GameObject.h \
+    src/Domain/Engine/GameObjects/Scene.h \
     src/Domain/Graphics/ShaderContract.h \
     src/Domain/Graphics/ShaderProgram.h \
     src/Domain/Graphics/Texture.h \
@@ -106,17 +106,17 @@ HEADERS += \
     src/Domain/Graphics/Interfaces/IGLBindable.h \
     src/Domain/Graphics/Interfaces/IToString.h \
     src/Domain/Graphics/Interfaces/IGLIdable.h \
-    src/Domain/Engine/Parts/Transform.h \
-    src/Domain/Engine/Parts/Part.h \
-    src/Domain/Engine/Parts/MeshRenderer.h \
-    src/Domain/Engine/Parts/Camera.h \
+    src/Domain/Engine/Components/Transform.h \
+    src/Domain/Engine/Components/Component.h \
+    src/Domain/Engine/Components/MeshRenderer.h \
+    src/Domain/Engine/Components/Camera.h \
     src/Domain/Engine/Assets/Asset.h \
     src/Domain/Engine/Assets/Material.h \
     src/Domain/Engine/Assets/Meshes/Mesh.h \
     src/Domain/Engine/Assets/Meshes/MeshPlane.h \
     src/Domain/Engine/Assets/Meshes/MeshPyramid.h \
     src/Domain/Engine/Assets/Meshes/MeshScreenPlane.h \
-    src/Domain/Engine/Parts/Behaviour.h \
+    src/Domain/Engine/Components/Behaviour.h \
     src/Domain/Engine/Interfaces/IFileable.h \
     src/Domain/Engine/Assets/Texture2D.h \
     src/Domain/Engine/Assets/Prefab.h \
@@ -128,7 +128,7 @@ HEADERS += \
     src/View/Inspector/Inspector.h \
     src/View/Hierarchy/Hierarchy.h \
     src/View/Inspector/InspectorWidgetInfo.h \
-    src/View/Inspector/InspectorPartWidget.h \
+    src/View/Inspector/InspectorComponentWidget.h \
     src/View/Inspector/InspectorSW.h \
     src/View/Inspector/InspectorFloatSW.h \
     src/View/Inspector/InspectorVFloatSW.h \
@@ -138,7 +138,7 @@ HEADERS += \
     src/Persistence/AssetsManager.h \
     src/Persistence/FileReader.h \
     src/Persistence/ReaderWithPointerIds.h \
-    src/Persistence/StageReader.h \
+    src/Persistence/SceneReader.h \
     src/Persistence/stb_image.h \
     src/View/Explorer/Explorer.h \
     src/View/Inspector/InspectorFileSW.h \
@@ -154,14 +154,14 @@ HEADERS += \
     src/View/Inspector/InspectorMeshFileWidget.h \
     src/View/Explorer/FileMesh.h \
     src/View/EditorCamera/EditorCamera.h \
-    src/View/EditorEntity/EditorEntity.h \
-    src/View/EditorStage/EditorStage.h \
+    src/View/EditorGameObject/EditorGameObject.h \
+    src/View/EditorScene/EditorScene.h \
     src/Domain/Engine/Others/Input.h \
     src/Persistence/FileWriter.h \
     src/Persistence/Persistence.h \
-    src/View/EditorEntity/EditorAxis.h \
-    src/Domain/Engine/Parts/LineRenderer.h \
-    src/Domain/Engine/Parts/Renderer.h \
+    src/View/EditorGameObject/EditorAxis.h \
+    src/Domain/Engine/Components/LineRenderer.h \
+    src/Domain/Engine/Components/Renderer.h \
     src/View/Explorer/FileTexture2DAsset.h \
     src/View/Inspector/InspectorTexture2DAssetWidget.h
 
@@ -171,8 +171,8 @@ SOURCES += \
     src/Domain/Engine/Others/Logger.cpp \
     src/Domain/Engine/Others/Timer.cpp \
     src/Domain/Engine/Others/Time.cpp \
-    src/Domain/Engine/Entities/Entity.cpp \
-    src/Domain/Engine/Entities/Stage.cpp \
+    src/Domain/Engine/GameObjects/GameObject.cpp \
+    src/Domain/Engine/GameObjects/Scene.cpp \
     src/Domain/Graphics/ShaderProgram.cpp \
     src/Domain/Graphics/ShaderContract.cpp \
     src/Domain/Graphics/GBuffer.cpp \
@@ -184,10 +184,10 @@ SOURCES += \
     src/Domain/Graphics/TextureDepth.cpp \
     src/Domain/Graphics/VBO.cpp \
     src/Domain/Graphics/Interfaces/IGLBindable.cpp \
-    src/Domain/Engine/Parts/Transform.cpp \
-    src/Domain/Engine/Parts/Part.cpp \
-    src/Domain/Engine/Parts/MeshRenderer.cpp \
-    src/Domain/Engine/Parts/Camera.cpp \
+    src/Domain/Engine/Components/Transform.cpp \
+    src/Domain/Engine/Components/Component.cpp \
+    src/Domain/Engine/Components/MeshRenderer.cpp \
+    src/Domain/Engine/Components/Camera.cpp \
     src/main.cpp \
     src/Domain/Engine/Assets/Asset.cpp \
     src/Domain/Engine/Assets/Meshes/Mesh.cpp \
@@ -195,7 +195,7 @@ SOURCES += \
     src/Domain/Engine/Assets/Meshes/MeshScreenPlane.cpp \
     src/Domain/Engine/Assets/Meshes/MeshPyramid.cpp \
     src/Domain/Engine/Assets/Material.cpp \
-    src/Domain/Engine/Parts/Behaviour.cpp \
+    src/Domain/Engine/Components/Behaviour.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
     src/Domain/Engine/Assets/Prefab.cpp \
     $$files(res/Assets/UserBehaviours/*.cpp,true) \
@@ -206,7 +206,7 @@ SOURCES += \
     src/View/Inspector/Inspector.cpp \
     src/View/Hierarchy/Hierarchy.cpp \
     src/View/Inspector/InspectorWidgetInfo.cpp \
-    src/View/Inspector/InspectorPartWidget.cpp \
+    src/View/Inspector/InspectorComponentWidget.cpp \
     src/View/Inspector/InspectorSW.cpp \
     src/View/Inspector/InspectorFloatSW.cpp \
     src/View/Inspector/InspectorVFloatSW.cpp \
@@ -217,7 +217,7 @@ SOURCES += \
     src/Persistence/AssetsManager.cpp \
     src/Persistence/FileReader.cpp \
     src/Persistence/ReaderWithPointerIds.cpp \
-    src/Persistence/StageReader.cpp \
+    src/Persistence/SceneReader.cpp \
     src/View/Explorer/Explorer.cpp \
     src/View/Inspector/InspectorFileSW.cpp \
     src/View/Inspector/FileDialog.cpp \
@@ -232,14 +232,14 @@ SOURCES += \
     src/View/Inspector/InspectorMeshFileWidget.cpp \
     src/View/Explorer/FileMesh.cpp \
     src/View/EditorCamera/EditorCamera.cpp \
-    src/View/EditorEntity/EditorEntity.cpp \
-    src/View/EditorStage/EditorStage.cpp \
+    src/View/EditorGameObject/EditorGameObject.cpp \
+    src/View/EditorScene/EditorScene.cpp \
     src/Domain/Engine/Others/Input.cpp \
     src/Persistence/FileWriter.cpp \
     src/Persistence/Persistence.cpp \
-    src/View/EditorEntity/EditorAxis.cpp \
-    src/Domain/Engine/Parts/LineRenderer.cpp \
-    src/Domain/Engine/Parts/Renderer.cpp \
+    src/View/EditorGameObject/EditorAxis.cpp \
+    src/Domain/Engine/Components/LineRenderer.cpp \
+    src/Domain/Engine/Components/Renderer.cpp \
     src/View/Explorer/FileTexture2DAsset.cpp \
     src/View/Inspector/InspectorTexture2DAssetWidget.cpp
 

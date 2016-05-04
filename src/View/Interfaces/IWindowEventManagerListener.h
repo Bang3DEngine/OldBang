@@ -8,7 +8,7 @@
 #include "MenuBar.h"
 
 
-class Entity;
+class GameObject;
 class InspectorWidget;
 class IWindowEventManagerListener
 {
@@ -18,12 +18,12 @@ protected:
 
 public:
     virtual void OnMenuBarActionClicked(MenuBar::Action clickedAction) { }
-    virtual void OnChildAdded(Entity *child) { }
-    virtual void OnChildChangedParent(Entity *child, Entity *previousParent) { }
-    virtual void OnChildRemoved(Entity *child) { }
+    virtual void OnChildAdded(GameObject *child) { }
+    virtual void OnChildChangedParent(GameObject *child, GameObject *previousParent) { }
+    virtual void OnChildRemoved(GameObject *child) { }
 
     virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem)  { }
-    virtual void OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities) { }
+    virtual void OnTreeHierarchyEntitiesSelected(const std::list<GameObject*> &selectedEntities) { }
 };
 
 #endif // IWINDOWEVENTMANAGERLISTENER_H

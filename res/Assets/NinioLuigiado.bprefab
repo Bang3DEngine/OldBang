@@ -1,13 +1,13 @@
-<Entity>
+<GameObject>
 	0x2a76580
 	NinioLuigiado
 	<children>
-		<Entity>
+		<GameObject>
 			0x2519700
 			Wood Boy
 			<children>
 			</children>
-			<parts>
+			<components>
 				<Transform>
 					0x20f5bb0
 					0.685 0.843 0.016
@@ -19,10 +19,10 @@
 					./res/Assets/boyMesh.bmesh
 					./res/Assets/testMaterial2.bmat
 				</MeshRenderer>
-			</parts>
-		</Entity>
+			</components>
+		</GameObject>
 	</children>
-	<parts>
+	<components>
 		<MeshRenderer>
 			0x24d6960
 			./res/Assets/boyMesh.bmesh
@@ -34,6 +34,6 @@
 			0 0 1 0
 			1 1 1
 		</Transform>
-	</parts>
-</Entity>
+	</components>
+</GameObject>
 

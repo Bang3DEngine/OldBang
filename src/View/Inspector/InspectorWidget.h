@@ -25,12 +25,12 @@
 #include "IWindowEventManagerListener.h"
 
 
-class Part;
+class Component;
 class WindowEventManager;
 class InspectorSW;
 class InspectorWidget : public QWidget
 {
-    //Every part widget, has many slots,
+    //Every comp widget, has many slots,
     // representing all its attributes (vectors, strings, integers, etc.)
     Q_OBJECT
 
@@ -38,8 +38,8 @@ private:
     //If not null, this function will be called when some slot value changes
     std::function<void()> *callback = nullptr;
 
-    std::vector<InspectorSW*> partSlots;
-    std::map<std::string, InspectorSW*> labelsToPartSlots;
+    std::vector<InspectorSW*> compSlots;
+    std::map<std::string, InspectorSW*> labelsToComponentSlots;
 
     QTimer *updateTimer = nullptr;
 

@@ -38,7 +38,7 @@ InspectorTexture2DAssetWidget::~InspectorTexture2DAssetWidget()
 void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
 {
     //First we have to update the instance in the AssetsManager, (if any)
-    //To enable a live change ingame of the Asset being used by Parts/Entities
+    //To enable a live change ingame of the Asset being used by Components/Entities
     Texture2D *currentTex = AssetsManager::
             GetCachedAsset<Texture2D>(assetFilepath);
 

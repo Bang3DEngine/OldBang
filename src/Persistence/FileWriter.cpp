@@ -1,16 +1,16 @@
 #include "FileWriter.h"
-#include "Stage.h"
+#include "Scene.h"
 #include "Asset.h"
 
 FileWriter::FileWriter()
 {
 }
 
-void FileWriter::WriteStage(std::string filename, Stage *stage)
+void FileWriter::WriteScene(std::string filename, Scene *scene)
 {
     std::ofstream ofs;
     filename = Persistence::AppendExtension(filename,
-                                            Stage::GetFileExtension());
+                                            Scene::GetFileExtension());
     ofs.open(filename);
     if(!ofs.is_open())
     {
@@ -18,7 +18,7 @@ void FileWriter::WriteStage(std::string filename, Stage *stage)
         ofs.close();
         return;
     }
-    stage->Write(ofs);
+    scene->Write(ofs);
     ofs.close();
 }
 

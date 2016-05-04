@@ -98,45 +98,45 @@
     </widget>
     <addaction name="menuCreate"/>
    </widget>
-   <widget class="QMenu" name="menuEntity">
+   <widget class="QMenu" name="menuGameObject">
     <property name="title">
      <string>Entities</string>
     </property>
-    <addaction name="actionCreateEmptyEntity"/>
+    <addaction name="actionCreateEmptyGameObject"/>
     <addaction name="actionCreateFromPrefab"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
      <string>Project</string>
     </property>
-    <addaction name="actionNewStage"/>
-    <addaction name="actionOpenStage"/>
-    <addaction name="actionSaveStage"/>
-    <addaction name="actionSaveStageAs"/>
+    <addaction name="actionNewScene"/>
+    <addaction name="actionOpenScene"/>
+    <addaction name="actionSaveScene"/>
+    <addaction name="actionSaveSceneAs"/>
     <addaction name="separator"/>
     <addaction name="actionProjectSettings"/>
    </widget>
-   <widget class="QMenu" name="menuParts">
+   <widget class="QMenu" name="menuComponents">
     <property name="title">
-     <string>Parts</string>
+     <string>Components</string>
     </property>
-    <widget class="QMenu" name="menuAddPart">
+    <widget class="QMenu" name="menuAddComponent">
      <property name="title">
-      <string>Add Part</string>
+      <string>Add Component</string>
      </property>
-     <addaction name="actionAddPartBehaviour"/>
-     <addaction name="actionAddPartCamera"/>
-     <addaction name="actionAddPartMeshRenderer"/>
-     <addaction name="actionAddPartTransform"/>
-     <addaction name="actionAddPartLineRenderer"/>
+     <addaction name="actionAddComponentBehaviour"/>
+     <addaction name="actionAddComponentCamera"/>
+     <addaction name="actionAddComponentMeshRenderer"/>
+     <addaction name="actionAddComponentTransform"/>
+     <addaction name="actionAddComponentLineRenderer"/>
     </widget>
-    <addaction name="menuAddPart"/>
-    <addaction name="actionRemovePart"/>
+    <addaction name="menuAddComponent"/>
+    <addaction name="actionRemoveComponent"/>
    </widget>
    <addaction name="menuProject"/>
-   <addaction name="menuEntity"/>
+   <addaction name="menuGameObject"/>
    <addaction name="menuAssets"/>
-   <addaction name="menuParts"/>
+   <addaction name="menuComponents"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="dockHierarchy">
@@ -254,9 +254,9 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
        <item>
-        <widget class="QLabel" name="labelInspectorEntityName">
+        <widget class="QLabel" name="labelInspectorGameObjectName">
          <property name="text">
-          <string>Entity Name</string>
+          <string>GameObject Name</string>
          </property>
         </widget>
        </item>
@@ -465,14 +465,14 @@
     </layout>
    </widget>
   </widget>
-  <action name="actionOpenStage">
+  <action name="actionOpenScene">
    <property name="text">
-    <string>Open Stage...</string>
+    <string>Open Scene...</string>
    </property>
   </action>
-  <action name="actionSaveStageAs">
+  <action name="actionSaveSceneAs">
    <property name="text">
-    <string>Save Stage as...</string>
+    <string>Save Scene as...</string>
    </property>
   </action>
   <action name="actionCreateMaterial">
@@ -505,9 +505,9 @@
     <string>Create from prefab</string>
    </property>
   </action>
-  <action name="actionEmptyEntity">
+  <action name="actionEmptyGameObject">
    <property name="text">
-    <string>Empty Entity</string>
+    <string>Empty GameObject</string>
    </property>
   </action>
   <action name="actionCreatePrefab">
@@ -515,47 +515,47 @@
     <string>Prefab</string>
    </property>
   </action>
-  <action name="actionRemovePart">
+  <action name="actionRemoveComponent">
    <property name="text">
-    <string>Remove Part</string>
+    <string>Remove Component</string>
    </property>
   </action>
-  <action name="actionAddPartMeshRenderer">
+  <action name="actionAddComponentMeshRenderer">
    <property name="text">
     <string>Mesh Renderer</string>
    </property>
   </action>
-  <action name="actionAddPartCamera">
+  <action name="actionAddComponentCamera">
    <property name="text">
     <string>Camera</string>
    </property>
   </action>
-  <action name="actionAddPartTransform">
+  <action name="actionAddComponentTransform">
    <property name="text">
     <string>Transform</string>
    </property>
   </action>
-  <action name="actionAddPartBehaviour">
+  <action name="actionAddComponentBehaviour">
    <property name="text">
     <string>Behaviour</string>
    </property>
   </action>
-  <action name="actionCreateEmptyEntity">
+  <action name="actionCreateEmptyGameObject">
    <property name="text">
-    <string>Create Empty Entity</string>
+    <string>Create Empty GameObject</string>
    </property>
   </action>
-  <action name="actionNewStage">
+  <action name="actionNewScene">
    <property name="text">
-    <string>New Stage</string>
+    <string>New Scene</string>
    </property>
   </action>
-  <action name="actionSaveStage">
+  <action name="actionSaveScene">
    <property name="text">
-    <string>Save Stage</string>
+    <string>Save Scene</string>
    </property>
   </action>
-  <action name="actionAddPartLineRenderer">
+  <action name="actionAddComponentLineRenderer">
    <property name="text">
     <string>Line Renderer</string>
    </property>

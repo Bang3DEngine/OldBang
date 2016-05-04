@@ -25,8 +25,8 @@
     }\
 } while(0)
 
-class Part;
-class Entity;
+class Component;
+class GameObject;
 class WindowEventManager : public QGLWidget
 {
     Q_OBJECT
@@ -45,14 +45,14 @@ public:
 
 public slots:
 
-    static void NotifyChildAdded(Entity *child);
-    static void NotifyChildChangedParent(Entity *child, Entity *previousParent);
-    static void NotifyChildRemoved(Entity *child);
+    static void NotifyChildAdded(GameObject *child);
+    static void NotifyChildChangedParent(GameObject *child, GameObject *previousParent);
+    static void NotifyChildRemoved(GameObject *child);
 
     static void NotifyMenuBarActionClicked(MenuBar::Action clickedAction);
 
-    static void NotifyInspectorSlotChanged(Part *updatedPart, InspectorWidget *inspectorItem);
-    static void NotifyHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities);
+    static void NotifyInspectorSlotChanged(Component *updatedComponent, InspectorWidget *inspectorItem);
+    static void NotifyHierarchyEntitiesSelected(const std::list<GameObject*> &selectedEntities);
 };
 
 #endif // WINDOWEVENTMANAGER_H

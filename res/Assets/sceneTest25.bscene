@@ -1,0 +1,44 @@
+<Scene>
+0x13ea230
+Scene
+<children>
+<GameObject>
+0x111cb00
+NinioLuigiado
+<children>
+<GameObject>
+0x111c240
+Wood Boy
+<children>
+</children>
+<components>
+<Transform>
+0x14e42b0
+0.685 0.843 0.016
+0 -0.61376 0.789493 0
+0.35 0.35 0.35
+</Transform>
+<MeshRenderer>
+0x14b8220
+./res/Assets/boyMesh.bmesh
+./res/Assets/testMaterial2.bmat
+</MeshRenderer>
+</components>
+</GameObject>
+</children>
+<components>
+<MeshRenderer>
+0x1430200
+./res/Assets/boyMesh.bmesh
+./res/Assets/luigiMaterial.bmat
+</MeshRenderer>
+<Transform>
+0x1457f70
+0 0 0
+1 0 0 0
+1 1 1
+</Transform>
+</components>
+</GameObject>
+</children>
+</Scene>

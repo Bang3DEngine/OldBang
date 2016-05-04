@@ -9,7 +9,7 @@
 #include "Rect.h"
 #include "Persistence.h"
 
-class Stage;
+class Scene;
 class Asset;
 class FileWriter
 {
@@ -17,7 +17,7 @@ private:
     FileWriter();
 
 public:
-    static void WriteStage(std::string filename, Stage *stage);
+    static void WriteScene(std::string filename, Scene *scene);
     static void WriteAsset(std::string filename, Asset *a);
 
     static void Write(float v, std::ostream &f);

@@ -52,15 +52,15 @@ void Canvas::updateGL()
 
     Time::deltaTime = float(Time::GetNow() - lastRenderTime) / 1000.0f;
 
-    if(currentStage != nullptr)
+    if(currentScene != nullptr)
     {
         lastRenderTime = Time::GetNow();
         if(!paused)
         {
-            currentStage->_OnUpdate();
+            currentScene->_OnUpdate();
         }
 
-        currentStage->_OnRender();
+        currentScene->_OnRender();
     }
 
     Input::OnNewFrame();
@@ -75,79 +75,79 @@ void Canvas::resizeGL(int w, int h)
     height = h;
     aspectRatio = float(w) / h;
 
-    if(currentStage != nullptr)
+    if(currentScene != nullptr)
     {
-        currentStage->_OnResize(w,h);
+        currentScene->_OnResize(w,h);
     }
 }
 
-Stage *Canvas::AddStage(const std::string &name)
+Scene *Canvas::AddScene(const std::string &name)
 {
-    Stage *st = new Stage();
+    Scene *st = new Scene();
     st->name = name;
-    stages.push_back(st);
+    scenes.push_back(st);
     return st;
 }
 
-void Canvas::AddStage(Stage *stage)
+void Canvas::AddScene(Scene *scene)
 {
-    stages.push_back(stage);
+    scenes.push_back(scene);
 }
 
-void Canvas::SetCurrentStage(Stage *stage)
+void Canvas::SetCurrentScene(Scene *scene)
 {
-    if(currentStage != nullptr)
+    if(currentScene != nullptr)
     {
-        currentStage->_OnDestroy();
+        currentScene->_OnDestroy();
     }
 
-    currentStage = stage;
-    if(currentStage != nullptr)
+    currentScene = scene;
+    if(currentScene != nullptr)
     {
-        currentStage->_OnStart();
-        WindowMain::GetInstance()->widgetHierarchy->FillDownwards(currentStage);
+        currentScene->_OnStart();
+        WindowMain::GetInstance()->widgetHierarchy->FillDownwards(currentScene);
     }
 }
 
-void Canvas::SetCurrentStage(const std::string &name)
+void Canvas::SetCurrentScene(const std::string &name)
 {
-    if(currentStage != nullptr)
+    if(currentScene != nullptr)
     {
-        currentStage->_OnDestroy();
+        currentScene->_OnDestroy();
     }
 
-    for(auto it = stages.begin(); it != stages.end(); ++it)
+    for(auto it = scenes.begin(); it != scenes.end(); ++it)
     {
         if((*it)->name == name)
         {
-            SetCurrentStage((*it));
+            SetCurrentScene((*it));
             return;
         }
     }
 
-    Logger_Warn("Could not change Stage to '" << name << "', "<<
-                   "because no stage with this name is added to the Canvas.");
+    Logger_Warn("Could not change Scene to '" << name << "', "<<
+                   "because no scene with this name is added to the Canvas.");
 }
 
-Stage *Canvas::GetCurrentStage() const
+Scene *Canvas::GetCurrentScene() const
 {
-    return currentStage;
+    return currentScene;
 }
 
-Stage *Canvas::GetStage(const std::string &name) const
+Scene *Canvas::GetScene(const std::string &name) const
 {
-    for(auto it = stages.begin(); it != stages.end(); ++it)
+    for(auto it = scenes.begin(); it != scenes.end(); ++it)
     {
         if((*it)->name == name) return (*it);
     }
     return nullptr;
 }
 
-void Canvas::RemoveStage(const std::string &name)
+void Canvas::RemoveScene(const std::string &name)
 {
-    for(auto it = stages.begin(); it != stages.end(); ++it)
+    for(auto it = scenes.begin(); it != scenes.end(); ++it)
     {
-        if((*it)->name == name) { stages.erase(it); return; }
+        if((*it)->name == name) { scenes.erase(it); return; }
     }
 }
 
@@ -221,12 +221,12 @@ void Canvas::OnTopKekPressed()
     else
         p = AssetsManager::GetAsset<Prefab>("res/Assets/luigiPrefab.bprefab");
 
-    Entity *e = p->Instantiate();
+    GameObject *e = p->Instantiate();
 
-    Entity *selected = WindowMain::GetInstance()->widgetHierarchy->GetFirstSelectedEntity();
+    GameObject *selected = WindowMain::GetInstance()->widgetHierarchy->GetFirstSelectedGameObject();
 
     if(selected != nullptr) selected->AddChild(e);
-    else currentStage->AddChild(e);
+    else currentScene->AddChild(e);
 }
 
 void Canvas::OnPauseResumeButtonPressed()

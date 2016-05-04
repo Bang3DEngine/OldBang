@@ -601,7 +601,7 @@ static stbi_uc *hdr_to_ldr(float   *data, int x, int y, int comp)
 //      - doesn't support delayed output of y-dimension
 //      - simple interface (only one output format: 8-bit interleaved RGB)
 //      - doesn't try to recover corrupt jpegs
-//      - doesn't allow partial loading, loading multiple at once
+//      - doesn't allow compial loading, loading multiple at once
 //      - still fast on x86 (copying globals into locals doesn't help x86)
 //      - allocates lots of intermediate memory (full size of all components)
 //        - non-interleaved case requires this anyway
@@ -1930,7 +1930,7 @@ static void init_defaults(void)
    for (i=0; i <=  31; ++i)     default_distance[i] = 5;
 }
 
-int stbi_png_partial; // a quick hack to only allow decoding some of a PNG... I should implement real streaming support instead
+int stbi_png_compial; // a quick hack to only allow decoding some of a PNG... I should implement real streaming support instead
 static int parse_zlib(zbuf *a, int parse_header)
 {
    int final, type;
@@ -1956,7 +1956,7 @@ static int parse_zlib(zbuf *a, int parse_header)
          }
          if (!parse_huffman_block(a)) return 0;
       }
-      if (stbi_png_partial && a->zout - a->zout_start > 65536)
+      if (stbi_png_compial && a->zout - a->zout_start > 65536)
          break;
    } while (!final);
    return 1;
@@ -2119,10 +2119,10 @@ static int create_png_image_raw(png *a, uint8 *raw, uint32 raw_len, int out_n, u
    int k;
    int img_n = s->img_n; // copy it into a local for later
    assert(out_n == s->img_n || out_n == s->img_n+1);
-   if (stbi_png_partial) y = 1;
+   if (stbi_png_compial) y = 1;
    a->out = (uint8 *) malloc(x * y * out_n);
    if (!a->out) return e("outofmem", "Out of memory");
-   if (!stbi_png_partial) {
+   if (!stbi_png_compial) {
       if (s->img_x == x && s->img_y == y) {
          if (raw_len != (img_n * x + 1) * y) return e("not enough pixels","Corrupt PNG");
       } else { // interlaced:
@@ -2196,8 +2196,8 @@ static int create_png_image(png *a, uint8 *raw, uint32 raw_len, int out_n, int i
    int save;
    if (!interlaced)
       return create_png_image_raw(a, raw, raw_len, out_n, a->s->img_x, a->s->img_y);
-   save = stbi_png_partial;
-   stbi_png_partial = 0;
+   save = stbi_png_compial;
+   stbi_png_compial = 0;
 
    // de-interlacing
    final = (uint8 *) malloc(a->s->img_x * a->s->img_y * out_n);
@@ -2226,7 +2226,7 @@ static int create_png_image(png *a, uint8 *raw, uint32 raw_len, int out_n, int i
    }
    a->out = final;
 
-   stbi_png_partial = save;
+   stbi_png_compial = save;
    return 1;
 }
 
@@ -4267,9 +4267,9 @@ int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int
       1.33 (2011-07-14)
              make stbi_is_hdr work in STBI_NO_HDR (as specified), minor compiler-friendly improvements
       1.32 (2011-07-13)
-             support for "info" function for all supported filetypes (SpartanJ)
+             support for "info" function for all supported filetypes (ScompanJ)
       1.31 (2011-06-20)
-             a few more leak fixes, bug in PNG handling (SpartanJ)
+             a few more leak fixes, bug in PNG handling (ScompanJ)
       1.30 (2011-06-11)
              added ability to load files via callbacks to accomidate custom input streams (Ben Wenger)
              removed deprecated format-specific test/load functions
@@ -4279,11 +4279,11 @@ int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int
       1.29 (2010-08-16)
              various warning fixes from Aurelien Pocheville
       1.28 (2010-08-01)
-             fix bug in GIF palette transparency (SpartanJ)
+             fix bug in GIF palette transparency (ScompanJ)
       1.27 (2010-08-01)
              cast-to-uint8 to fix warnings
       1.26 (2010-07-24)
-             fix bug in file buffering for PNG reported by SpartanJ
+             fix bug in file buffering for PNG reported by ScompanJ
       1.25 (2010-07-17)
              refix trans_data warning (Won Chun)
       1.24 (2010-07-12)
@@ -4327,7 +4327,7 @@ int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int
       0.99   correct handling of alpha in palette
       0.98   TGA loader by lonesock; dynamically add loaders (untested)
       0.97   jpeg errors on too large a file; also catch another malloc failure
-      0.96   fix detection of invalid v value - particleman@mollyrocket forum
+      0.96   fix detection of invalid v value - compicleman@mollyrocket forum
       0.95   during header scan, seek to markers in case of padding
       0.94   STBI_NO_STDIO to disable stdio usage; rename all #defines the same
       0.93   handle jpegtran output; verbose errors

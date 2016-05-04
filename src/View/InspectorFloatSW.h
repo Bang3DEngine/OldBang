@@ -1,5 +1,5 @@
-#ifndef INSPECTORFLOATPARTSLOTWIDGET_H
-#define INSPECTORFLOATPARTSLOTWIDGET_H
+#ifndef INSPECTORFLOATCOMPONENTSLOTWIDGET_H
+#define INSPECTORFLOATCOMPONENTSLOTWIDGET_H
 
 #include <string>
 #include <QTimer>
@@ -8,18 +8,18 @@
 
 #include "InspectorSW.h"
 
-class FloatPartSlotSpinBox;
+class FloatComponentSlotSpinBox;
 class InspectorFloatSW : public InspectorSW //Slot for a float (label + float)
 {
     Q_OBJECT
 
 private:
-    FloatPartSlotSpinBox *spinbox = nullptr;
+    FloatComponentSlotSpinBox *spinbox = nullptr;
     bool editing =false;
 
 public:
     InspectorFloatSW(const std::string &labelString, float initialValue,
-                                 InspectorPartWidget *parent);
+                                 InspectorComponentWidget *parent);
 
     virtual void SetValue(float f);
     virtual float GetValue();
@@ -29,12 +29,12 @@ public:
     QSize sizeHint() const override;
 };
 
-class FloatPartSlotSpinBox : public QDoubleSpinBox //Slot for a float (label + float)
+class FloatComponentSlotSpinBox : public QDoubleSpinBox //Slot for a float (label + float)
 {
     Q_OBJECT
 
 public:
-    FloatPartSlotSpinBox() : QDoubleSpinBox()
+    FloatComponentSlotSpinBox() : QDoubleSpinBox()
     {
         connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
         AdjustStep(value());
@@ -72,4 +72,4 @@ public slots:
     void SelectAll() { selectAll(); }
 };
 
-#endif // INSPECTORFLOATPARTSLOTWIDGET_H
+#endif // INSPECTORFLOATCOMPONENTSLOTWIDGET_H

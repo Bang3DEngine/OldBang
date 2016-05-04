@@ -2,7 +2,7 @@
 
 InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
                                                            float initialValue,
-                                                           InspectorPartWidget *parent) : InspectorSW(parent)
+                                                           InspectorComponentWidget *parent) : InspectorSW(parent)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
@@ -16,7 +16,7 @@ InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
         layout->addWidget(textLabel);
     }
 
-    spinbox = new FloatPartSlotSpinBox();
+    spinbox = new FloatComponentSlotSpinBox();
     spinbox->setValue(initialValue);
     spinbox->setAlignment(Qt::AlignHCenter);
     spinbox->setMinimum(-999999999.9);

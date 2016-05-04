@@ -15,12 +15,12 @@ public:
 
     enum Action
     {
-        NewStage,
-        OpenStage,
-        SaveStage,
-        SaveStageAs,
+        NewScene,
+        OpenScene,
+        SaveScene,
+        SaveSceneAs,
 
-        CreateEmptyEntity,
+        CreateEmptyGameObject,
         CreateFromPrefab,
 
         CreatePrefab,
@@ -29,26 +29,26 @@ public:
         CreateShaderProgram,
         CreateTexture2D,
 
-        AddPartBehaviour,
-        AddPartCamera,
-        AddPartMeshRenderer,
-        AddPartLineRenderer,
-        AddPartTransform,
+        AddComponentBehaviour,
+        AddComponentCamera,
+        AddComponentMeshRenderer,
+        AddComponentLineRenderer,
+        AddComponentTransform,
     };
 
     MenuBar(QWidget *parent = nullptr);
 
-    void CreateNewStage () const;
-    QMessageBox::StandardButton AskForSavingCurrentStage () const;
+    void CreateNewScene () const;
+    QMessageBox::StandardButton AskForSavingCurrentScene () const;
 
 public slots:
 
-    void OnNewStage () const;
-    void OnOpenStage () const;
-    void OnSaveStage () const;
-    void OnSaveStageAs () const;
+    void OnNewScene () const;
+    void OnOpenScene () const;
+    void OnSaveScene () const;
+    void OnSaveSceneAs () const;
 
-    void OnCreateEmptyEntity () const;
+    void OnCreateEmptyGameObject () const;
     void OnCreateFromPrefab () const;
 
     void OnCreatePrefab() const;
@@ -57,11 +57,11 @@ public slots:
     void OnCreateShaderProgram() const;
     void OnCreateTexture2D() const;
 
-    void OnAddPartBehaviour() const;
-    void OnAddPartCamera() const;
-    void OnAddPartMeshRenderer() const;
-    void OnAddPartLineRenderer() const;
-    void OnAddPartTransform() const;
+    void OnAddComponentBehaviour() const;
+    void OnAddComponentCamera() const;
+    void OnAddComponentMeshRenderer() const;
+    void OnAddComponentLineRenderer() const;
+    void OnAddComponentTransform() const;
 };
 
 #endif // MENUBAR_H

@@ -1,6 +1,6 @@
 #include "InspectorWidget.h"
 #include "WindowEventManager.h"
-#include "Part.h"
+#include "Component.h"
 
 #include "InspectorSW.h"
 #include "InspectorEnumSW.h"
@@ -10,7 +10,7 @@
 #include "InspectorVFloatSW.h"
 
 #include "WindowMain.h"
-#include "Entity.h"
+#include "GameObject.h"
 
 InspectorWidget::InspectorWidget() : QWidget()
 {
@@ -22,7 +22,7 @@ InspectorWidget::InspectorWidget(IInspectable *relatedInspectable)
     this->relatedInspectable = relatedInspectable;
 
     ConstructFromWidgetInformation( "Inspectable",
-                                    relatedInspectable->GetPartInfo() );
+                                    relatedInspectable->GetComponentInfo() );
 
 }
 
@@ -92,8 +92,8 @@ void InspectorWidget::ConstructFromWidgetInformation(
         {
             ws->show();
             mainLayout->addWidget(ws);
-            partSlots.push_back(ws);
-            labelsToPartSlots[si->label] = ws;
+            compSlots.push_back(ws);
+            labelsToComponentSlots[si->label] = ws;
         }
     }
 
@@ -120,7 +120,7 @@ std::vector<float> InspectorWidget::GetSWVectorFloatValue(
         const std::string &slotLabel)
 {
     InspectorVFloatSW *w =
-            dynamic_cast<InspectorVFloatSW*>(labelsToPartSlots[slotLabel]);
+            dynamic_cast<InspectorVFloatSW*>(labelsToComponentSlots[slotLabel]);
     std::vector<float> r;
     if(w != nullptr) r = w->GetValue();
     return r;
@@ -129,7 +129,7 @@ std::vector<float> InspectorWidget::GetSWVectorFloatValue(
 int InspectorWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
 {
     InspectorEnumSW *w =
-            dynamic_cast<InspectorEnumSW*>(labelsToPartSlots[slotLabel]);
+            dynamic_cast<InspectorEnumSW*>(labelsToComponentSlots[slotLabel]);
     if(w != nullptr) return w->GetValue();
     return 0;
 }
@@ -137,7 +137,7 @@ int InspectorWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
 std::string InspectorWidget::GetSWFileFilepath(const std::string &slotLabel)
 {
     InspectorFileSW *w =
-            dynamic_cast<InspectorFileSW*>(labelsToPartSlots[slotLabel]);
+            dynamic_cast<InspectorFileSW*>(labelsToComponentSlots[slotLabel]);
     if(w != nullptr) return w->GetValue();
     return "";
 }
@@ -150,7 +150,7 @@ void InspectorWidget::Refresh()
 {
     if(relatedInspectable != nullptr)
     {
-        Refresh(relatedInspectable->GetPartInfo());
+        Refresh(relatedInspectable->GetComponentInfo());
     }
 }
 
@@ -158,7 +158,7 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
 {
     for(InspectorSWInfo *si : widgetInfo->GetSlotInfos())
     {
-        InspectorSW *ws = labelsToPartSlots[si->label];
+        InspectorSW *ws = labelsToComponentSlots[si->label];
         InspectorVFloatSWInfo* siv = nullptr;
         InspectorEnumSWInfo *sie = nullptr;
         InspectorFileSWInfo *sia = nullptr;
@@ -193,8 +193,8 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
         {
             ws->show();
             layout()->addWidget(ws);
-            partSlots.push_back(ws);
-            labelsToPartSlots[si->label] = ws;
+            compSlots.push_back(ws);
+            labelsToComponentSlots[si->label] = ws;
         }
     }
 }

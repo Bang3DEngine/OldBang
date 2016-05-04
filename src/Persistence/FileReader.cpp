@@ -1,6 +1,6 @@
 #include "FileReader.h"
 #include "stb_image.h"
-#include "Stage.h"
+#include "Scene.h"
 
 #include "Explorer.h"
 

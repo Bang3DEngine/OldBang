@@ -7,7 +7,7 @@ class Persistence
 {
 
 private:
-   static std::string currentStageFilepath;
+   static std::string currentSceneFilepath;
 
 public:
 
@@ -27,8 +27,8 @@ public:
     static std::string ProjectRootAbsoluteToRelative(const std::string &absPath);
 
 
-    static void SetCurrentStageFilepath(const std::string &stagePath);
-    static std::string GetCurrentStageFilepath();
+    static void SetCurrentSceneFilepath(const std::string &scenePath);
+    static std::string GetCurrentSceneFilepath();
 
     //Appends an extension to a filepath only if that filename does not contain the extension
     static std::string AppendExtension(const std::string &filepath, const std::string extNoDot);

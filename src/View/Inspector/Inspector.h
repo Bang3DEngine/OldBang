@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QListWidget>
 
-#include "InspectorPartWidget.h"
+#include "InspectorComponentWidget.h"
 #include "IWindowEventManagerListener.h"
 
 class Inspector : public QListWidget, public IWindowEventManagerListener
@@ -17,7 +17,7 @@ class Inspector : public QListWidget, public IWindowEventManagerListener
 
 private:
     QLabel *titleLabel = nullptr;
-    Entity *currentEntity = nullptr;
+    GameObject *currentGameObject = nullptr;
 
     std::map<InspectorWidget*, QListWidgetItem*> widgetToItem;
 
@@ -32,7 +32,7 @@ public:
     void Clear();
     void Refresh();
 
-    void ShowEntityInfo(Entity *entity);
+    void ShowGameObjectInfo(GameObject *gameObject);
 
     void SetWidget(InspectorWidget *widget);
     void AddWidget(InspectorWidget *widget);
@@ -41,7 +41,7 @@ public:
     void MoveDown(InspectorWidget *w);
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
-    void OnTreeHierarchyEntitiesSelected(const std::list<Entity*> &selectedEntities) override;
+    void OnTreeHierarchyEntitiesSelected(const std::list<GameObject*> &selectedEntities) override;
 };
 
 #endif // LISTINSPECTOR_H

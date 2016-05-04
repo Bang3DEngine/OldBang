@@ -21,17 +21,17 @@ protected:
 
 
     //For every id(first line after a tag in the file)
-    // it saves a pointer to the corresponding Part, Entity, etc.
+    // it saves a pointer to the corresponding Component, GameObject, etc.
     static std::map<std::string, void*> idToPointers;
 
     ReaderWithPointerIds() {}
 
 public:
 
-    //Since we have Prefab's and Entity's,
-    // that use the same method Entity::Read(),
+    //Since we have Prefab's and GameObject's,
+    // that use the same method GameObject::Read(),
     // we need to have a way to avoid registering
-    // the id into the StageReader, when calling
+    // the id into the SceneReader, when calling
     // Read() from Prefab. This is one way :)
     // (So, in prefab files, all XMLs internal ids will be NoRegisterId)
     static const std::string NoRegisterId;

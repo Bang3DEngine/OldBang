@@ -17,8 +17,8 @@
 #include <QApplication>
 #include <QDropEvent>
 
-#include "Stage.h"
-#include "Entity.h"
+#include "Scene.h"
+#include "GameObject.h"
 #include "IWindowEventManagerListener.h"
 
 class Hierarchy : public QTreeWidget, public IWindowEventManagerListener
@@ -26,13 +26,13 @@ class Hierarchy : public QTreeWidget, public IWindowEventManagerListener
     Q_OBJECT
 
 private:
-    //For every entity, we have the associated treeItem,
+    //For every gameObject, we have the associated treeItem,
     //in order to update :)
-    mutable std::map<Entity*, QTreeWidgetItem*> entityToTreeItem;
-    mutable std::map<QTreeWidgetItem*,Entity*> treeItemToEntity;
+    mutable std::map<GameObject*, QTreeWidgetItem*> gameObjectToTreeItem;
+    mutable std::map<QTreeWidgetItem*,GameObject*> treeItemToGameObject;
 
     void ExpandRecursiveUpwards(QTreeWidgetItem *item);
-    QTreeWidgetItem* FillRecursiveDownwards(Entity *e);
+    QTreeWidgetItem* FillRecursiveDownwards(GameObject *e);
 
     //Useful for example, for RemoveChild
     //(we just need to remove the parent/s of all the selected entities)
@@ -40,19 +40,19 @@ private:
 
     void UnselectAll();
 
-    Stage *currentStage;
+    Scene *currentScene;
 
 public:
     explicit Hierarchy(QWidget *parent = 0);
     virtual ~Hierarchy();
 
-    void FillDownwards(Stage *currentStage);
+    void FillDownwards(Scene *currentScene);
 
-    Entity* GetFirstSelectedEntity() const;
+    GameObject* GetFirstSelectedGameObject() const;
 
-    void OnChildAdded(Entity *child) override;
-    void OnChildChangedParent(Entity *child, Entity *previousParent) override;
-    void OnChildRemoved(Entity *child) override;
+    void OnChildAdded(GameObject *child) override;
+    void OnChildChangedParent(GameObject *child, GameObject *previousParent) override;
+    void OnChildRemoved(GameObject *child) override;
 
     void dropEvent(QDropEvent *event);
 

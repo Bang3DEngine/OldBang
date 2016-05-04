@@ -5,7 +5,7 @@
 #include "Material.h"
 #include "Logger.h"
 #include "Canvas.h"
-#include "Stage.h"
+#include "Scene.h"
 #include "Time.h"
 
 TestBehaviour::TestBehaviour()
@@ -23,7 +23,7 @@ TestBehaviour::TestBehaviour()
 
 void TestBehaviour::OnStart()
 {
-    originalScale = GetOwner()->GetPart<Transform>()->GetScale().x;
+    originalScale = GetOwner()->GetComponent<Transform>()->GetScale().x;
 
     if(originalScale > 0.1f)
     {
@@ -42,10 +42,10 @@ void TestBehaviour::OnStart()
         else
             m->SetTexture( AssetsManager::GetAsset<Texture2D>("res/Assets/carpetTexture.btex2d") );
 
-        GetOwner()->GetPart<MeshRenderer>()->SetMaterial(m);
+        GetOwner()->GetComponent<MeshRenderer>()->SetMaterial(m);
     }
 
-    GetOwner()->GetPart<Transform>()->SetPosition(glm::vec3(float(rand()%2000-1000)/1000 * 1.0f,
+    GetOwner()->GetComponent<Transform>()->SetPosition(glm::vec3(float(rand()%2000-1000)/1000 * 1.0f,
                                                             float(rand()%2000-1000)/1000 * 1.0f,
                                                             float(rand()%2000-1000)/1000 * 1.0f));
 }
@@ -53,7 +53,7 @@ void TestBehaviour::OnStart()
 void TestBehaviour::OnUpdate()
 {
     time += Time::GetDeltaTime();
-    Transform *t = GetOwner()->GetPart<Transform>();
+    Transform *t = GetOwner()->GetComponent<Transform>();
     if(t == nullptr) return;
 
     /*

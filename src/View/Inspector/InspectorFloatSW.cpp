@@ -17,7 +17,7 @@ InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
         layout->addWidget(textLabel);
     }
 
-    spinbox = new FloatPartSlotSpinBox();
+    spinbox = new FloatComponentSlotSpinBox();
     spinbox->setValue(initialValue);
     spinbox->setAlignment(Qt::AlignHCenter);
     spinbox->setMinimum(-9999999.9);

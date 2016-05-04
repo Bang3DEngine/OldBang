@@ -43,7 +43,7 @@ public:
         Uniform_Texture_Prefix,
 
         // When rendering to screen after Deferred Rendering passes.
-        // This texture will hold the definitive color values of the rendered stage
+        // This texture will hold the definitive color values of the rendered scene
         Uniform_Texture_Final_Color,
         Uniform_Material_Diffuse_Color,
 

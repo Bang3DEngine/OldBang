@@ -8,10 +8,10 @@
 #include "Input.h"
 #include "Canvas.h"
 #include "Camera.h"
-#include "EditorEntity.h"
+#include "EditorGameObject.h"
 
-//ENTITY Camera that you can control in the editor
-class EditorCamera : public EditorEntity
+//GAMEOBJECT Camera that you can control in the editor
+class EditorCamera : public EditorGameObject
 {
 private:
     Camera *cam = nullptr;

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "InspectorPartWidget.h"
+#include "InspectorComponentWidget.h"
 
 class InspectorSW : public QWidget
 {

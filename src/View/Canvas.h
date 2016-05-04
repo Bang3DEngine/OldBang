@@ -17,7 +17,7 @@
 #include "VAO.h"
 #include "Time.h"
 #include "Input.h"
-#include "Stage.h"
+#include "Scene.h"
 #include "Prefab.h"
 #include "Shader.h"
 #include "MeshRenderer.h"
@@ -37,10 +37,10 @@ private:
     static unsigned long long lastRenderTime;
 
     bool paused = false;
-    std::list<Stage*> stages;
+    std::list<Scene*> scenes;
 
     QThread *workingThread = new QThread();
-    Stage *currentStage = nullptr;
+    Scene *currentScene = nullptr;
     QTimer drawTimer;
 
 public:
@@ -54,15 +54,15 @@ public:
     void paintGL() override;
     void resizeGL(int w, int h) override;
 
-    Stage* AddStage(const std::string &name);
-    void AddStage(Stage* stage);
-    void SetCurrentStage(Stage *stage);
-    void SetCurrentStage(const std::string &name);
-    void RemoveStage(const std::string &name);
+    Scene* AddScene(const std::string &name);
+    void AddScene(Scene* scene);
+    void SetCurrentScene(Scene *scene);
+    void SetCurrentScene(const std::string &name);
+    void RemoveScene(const std::string &name);
 
     static Canvas *GetInstance();
-    Stage* GetCurrentStage() const;
-    Stage* GetStage(const std::string &name) const;
+    Scene* GetCurrentScene() const;
+    Scene* GetScene(const std::string &name) const;
     static float GetAspectRatio();
     static int GetHeight();
     static int GetWidth();

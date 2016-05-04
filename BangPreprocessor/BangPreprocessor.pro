@@ -26,7 +26,7 @@ INCLUDEPATH += \
     $$PWD/../src/Domain/Engine/Interfaces/ \
     $$PWD/../src/Domain/Engine/Entities/ \
     $$PWD/../src/Domain/Engine/Others/ \
-    $$PWD/../src/Domain/Engine/Parts/ \
+    $$PWD/../src/Domain/Engine/Components/ \
     $$PWD/../src/Domain/Engine/Readers/ \
     $$PWD/../src/Domain/Engine/Assets/ \
     $$PWD/../src/Domain/Engine/Assets/Meshes/ \
@@ -35,4 +35,4 @@ INCLUDEPATH += \
     $$PWD/../src/Domain/Graphics/ \
 
 OTHER_FILES += \
-    GeneratedFiles/BP_StageReader_cpp_UserBehaviours_elseifs.bp
+    GeneratedFiles/BP_SceneReader_cpp_UserBehaviours_elseifs.bp

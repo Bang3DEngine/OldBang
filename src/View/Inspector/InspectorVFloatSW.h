@@ -1,9 +1,9 @@
-#ifndef INSPECTORVECTORFLOATPARTSLOTWIDGET_H
-#define INSPECTORVECTORFLOATPARTSLOTWIDGET_H
+#ifndef INSPECTORVECTORFLOATCOMPONENTSLOTWIDGET_H
+#define INSPECTORVECTORFLOATCOMPONENTSLOTWIDGET_H
 
 #include <vector>
 
-#include "InspectorPartWidget.h"
+#include "InspectorComponentWidget.h"
 #include "InspectorFloatSW.h"
 
 class InspectorVFloatSW : public InspectorSW //Slot for a vector of size N
@@ -19,4 +19,4 @@ class InspectorVFloatSW : public InspectorSW //Slot for a vector of size N
         virtual std::vector<float> GetValue();
 };
 
-#endif // INSPECTORVECTORFLOATPARTSLOTWIDGET_H
+#endif // INSPECTORVECTORFLOATCOMPONENTSLOTWIDGET_H

@@ -77,7 +77,7 @@ int InspectorFloatSW::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     return _id;
 }
-static const uint qt_meta_data_FloatPartSlotSpinBox[] = {
+static const uint qt_meta_data_FloatComponentSlotSpinBox[] = {
 
  // content:
        6,       // revision
@@ -97,16 +97,16 @@ static const uint qt_meta_data_FloatPartSlotSpinBox[] = {
        0        // eod
 };
 
-static const char qt_meta_stringdata_FloatPartSlotSpinBox[] = {
-    "FloatPartSlotSpinBox\0\0v\0AdjustStep(double)\0"
+static const char qt_meta_stringdata_FloatComponentSlotSpinBox[] = {
+    "FloatComponentSlotSpinBox\0\0v\0AdjustStep(double)\0"
     "SelectAll()\0"
 };
 
-void FloatPartSlotSpinBox::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void FloatComponentSlotSpinBox::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         Q_ASSERT(staticMetaObject.cast(_o));
-        FloatPartSlotSpinBox *_t = static_cast<FloatPartSlotSpinBox *>(_o);
+        FloatComponentSlotSpinBox *_t = static_cast<FloatComponentSlotSpinBox *>(_o);
         switch (_id) {
         case 0: _t->AdjustStep((*reinterpret_cast< double(*)>(_a[1]))); break;
         case 1: _t->SelectAll(); break;
@@ -115,33 +115,33 @@ void FloatPartSlotSpinBox::qt_static_metacall(QObject *_o, QMetaObject::Call _c,
     }
 }
 
-const QMetaObjectExtraData FloatPartSlotSpinBox::staticMetaObjectExtraData = {
+const QMetaObjectExtraData FloatComponentSlotSpinBox::staticMetaObjectExtraData = {
     0,  qt_static_metacall 
 };
 
-const QMetaObject FloatPartSlotSpinBox::staticMetaObject = {
-    { &QDoubleSpinBox::staticMetaObject, qt_meta_stringdata_FloatPartSlotSpinBox,
-      qt_meta_data_FloatPartSlotSpinBox, &staticMetaObjectExtraData }
+const QMetaObject FloatComponentSlotSpinBox::staticMetaObject = {
+    { &QDoubleSpinBox::staticMetaObject, qt_meta_stringdata_FloatComponentSlotSpinBox,
+      qt_meta_data_FloatComponentSlotSpinBox, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &FloatPartSlotSpinBox::getStaticMetaObject() { return staticMetaObject; }
+const QMetaObject &FloatComponentSlotSpinBox::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *FloatPartSlotSpinBox::metaObject() const
+const QMetaObject *FloatComponentSlotSpinBox::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *FloatPartSlotSpinBox::qt_metacast(const char *_clname)
+void *FloatComponentSlotSpinBox::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_FloatPartSlotSpinBox))
-        return static_cast<void*>(const_cast< FloatPartSlotSpinBox*>(this));
+    if (!strcmp(_clname, qt_meta_stringdata_FloatComponentSlotSpinBox))
+        return static_cast<void*>(const_cast< FloatComponentSlotSpinBox*>(this));
     return QDoubleSpinBox::qt_metacast(_clname);
 }
 
-int FloatPartSlotSpinBox::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int FloatComponentSlotSpinBox::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QDoubleSpinBox::qt_metacall(_c, _id, _a);
     if (_id < 0)

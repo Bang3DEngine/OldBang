@@ -2,8 +2,8 @@
 
 #include <QScrollBar>
 
-#include "Entity.h"
-#include "Part.h"
+#include "GameObject.h"
+#include "Component.h"
 #include "Behaviour.h"
 #include "Camera.h"
 #include "MeshRenderer.h"
@@ -14,7 +14,7 @@
 
 Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 {
-    titleLabel = parent->findChild<QLabel*>("labelInspectorEntityName");
+    titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
 }
 
 void Inspector::updateGeometries()
@@ -27,8 +27,8 @@ void Inspector::Clear()
 {
     clear();
     widgetToItem.clear();
-    currentEntity = nullptr;
-    titleLabel->setText(QString::fromStdString("No entity selected."));
+    currentGameObject = nullptr;
+    titleLabel->setText(QString::fromStdString("No gameObject selected."));
 
     setStyleSheet("/* */"); //without this line we get resize problems :)
     show();
@@ -36,26 +36,26 @@ void Inspector::Clear()
 
 void Inspector::Refresh()
 {
-    Entity *e = currentEntity;
+    GameObject *e = currentGameObject;
     Clear();
-    ShowEntityInfo(e);
+    ShowGameObjectInfo(e);
 }
 
-void Inspector::ShowEntityInfo(Entity *entity)
+void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
     Clear();
-    currentEntity = entity;
+    currentGameObject = gameObject;
 
-    if(currentEntity == nullptr) return;
+    if(currentGameObject == nullptr) return;
 
-    for(Part *p : currentEntity->GetParts())
+    for(Component *p : currentGameObject->GetComponents())
     {
-        InspectorPartWidget *w = new InspectorPartWidget(p);
+        InspectorComponentWidget *w = new InspectorComponentWidget(p);
         AddWidget(w);
     }
 
     titleLabel->setText(
-                QString::fromStdString("Name: " + currentEntity->GetName())
+                QString::fromStdString("Name: " + currentGameObject->GetName())
                 );
 }
 
@@ -96,59 +96,59 @@ void Inspector::MoveDown(InspectorWidget *w)
 }
 
 void Inspector::OnTreeHierarchyEntitiesSelected
-    (const std::list<Entity*> &selectedEntities)
+    (const std::list<GameObject*> &selectedEntities)
 {
-    Entity *e = nullptr;
+    GameObject *e = nullptr;
     if(!selectedEntities.empty())
     {
         e = selectedEntities.front();
     }
 
-    ShowEntityInfo(e);
+    ShowGameObjectInfo(e);
 }
 
 void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 {
-    if(currentEntity == nullptr) return;
+    if(currentGameObject == nullptr) return;
 
-    if(clickedAction == MenuBar::Action::AddPartBehaviour)
+    if(clickedAction == MenuBar::Action::AddComponentBehaviour)
     {
-        if(this->currentEntity != nullptr)
+        if(this->currentGameObject != nullptr)
         {
             Behaviour *b = new Behaviour();
-            currentEntity->AddPart(b);
+            currentGameObject->AddComponent(b);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddPartCamera)
+    else if(clickedAction == MenuBar::Action::AddComponentCamera)
     {
-        if(this->currentEntity != nullptr)
+        if(this->currentGameObject != nullptr)
         {
             Camera *c = new Camera();
-            currentEntity->AddPart(c);
+            currentGameObject->AddComponent(c);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddPartMeshRenderer)
+    else if(clickedAction == MenuBar::Action::AddComponentMeshRenderer)
     {
-        if(this->currentEntity != nullptr)
+        if(this->currentGameObject != nullptr)
         {
             MeshRenderer *m = new MeshRenderer();
-            currentEntity->AddPart(m);
+            currentGameObject->AddComponent(m);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddPartLineRenderer)
+    else if(clickedAction == MenuBar::Action::AddComponentLineRenderer)
     {
-        if(this->currentEntity != nullptr)
+        if(this->currentGameObject != nullptr)
         {
             LineRenderer *lr = new LineRenderer();
-            currentEntity->AddPart(lr);
+            currentGameObject->AddComponent(lr);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddPartTransform)
+    else if(clickedAction == MenuBar::Action::AddComponentTransform)
     {
-        if(this->currentEntity != nullptr)
+        if(this->currentGameObject != nullptr)
         {
             Transform *t = new Transform();
-            currentEntity->AddPart(t);
+            currentGameObject->AddComponent(t);
         }
     }
 

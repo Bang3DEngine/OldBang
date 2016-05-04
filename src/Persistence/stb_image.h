@@ -23,14 +23,14 @@
 
    Latest revisions:
       1.33 (2011-07-14) minor fixes suggested by Dave Moore
-      1.32 (2011-07-13) info support for all filetypes (SpartanJ)
-      1.31 (2011-06-19) a few more leak fixes, bug in PNG handling (SpartanJ)
+      1.32 (2011-07-13) info support for all filetypes (ScompanJ)
+      1.31 (2011-06-19) a few more leak fixes, bug in PNG handling (ScompanJ)
       1.30 (2011-06-11) added ability to load files via io callbacks (Ben Wenger)
       1.29 (2010-08-16) various warning fixes from Aurelien Pocheville
-      1.28 (2010-08-01) fix bug in GIF palette transparency (SpartanJ)
+      1.28 (2010-08-01) fix bug in GIF palette transparency (ScompanJ)
       1.27 (2010-08-01) cast-to-uint8 to fix warnings (Laurent Gomila)
                         allow trailing 0s at end of image data (Laurent Gomila)
-      1.26 (2010-07-24) fix bug in file buffering for PNG reported by SpartanJ
+      1.26 (2010-07-24) fix bug in file buffering for PNG reported by ScompanJ
 
    See end of file for full revision history.
 
@@ -53,7 +53,7 @@
     Jetro Lauha (stbi_info)                      Jonathan Blow
     James "moose2000" Brown (iPhone PNG)         Laurent Gomila
     Ben "Disch" Wenger (io callbacks)            Aruelien Pocheville
-    Martin "SpartanJ" Golini                     Ryamond Barbiero
+    Martin "ScompanJ" Golini                     Ryamond Barbiero
                                                  David Woo
 
 

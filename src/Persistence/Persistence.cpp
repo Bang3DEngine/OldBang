@@ -1,6 +1,6 @@
 #include "Persistence.h"
 
-std::string Persistence::currentStageFilepath = "";
+std::string Persistence::currentSceneFilepath = "";
 
 bool Persistence::IsAbsolute(const std::string &path)
 {
@@ -49,14 +49,14 @@ std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPat
                 GetAssetsRelativePathFromProjectRoot().length());
 }
 
-void Persistence::SetCurrentStageFilepath(const std::string &stagePath)
+void Persistence::SetCurrentSceneFilepath(const std::string &scenePath)
 {
-    currentStageFilepath = stagePath;
+    currentSceneFilepath = scenePath;
 }
 
-std::string Persistence::GetCurrentStageFilepath()
+std::string Persistence::GetCurrentSceneFilepath()
 {
-    return currentStageFilepath;
+    return currentSceneFilepath;
 }
 
 std::string Persistence::AppendExtension(const std::string &filepath, const std::string extNoDot)

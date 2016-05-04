@@ -3,7 +3,7 @@
 #include "Transform.h"
 #include "Logger.h"
 #include "Canvas.h"
-#include "Stage.h"
+#include "Scene.h"
 #include "Time.h"
 
 TestCameraBehaviour::TestCameraBehaviour()
@@ -17,21 +17,21 @@ TestCameraBehaviour::TestCameraBehaviour()
 void TestCameraBehaviour::OnUpdate()
 {
     /*
-    Stage *st = GetParent()->GetStage();
-    Entity *pyramid = st->GetChild("pyramid");
+    Scene *st = GetParent()->GetScene();
+    GameObject *pyramid = st->GetChild("pyramid");
 
 
     if(pyramid != nullptr)
     {
-        Transform *t = GetParent()->GetPart<Transform>();
+        Transform *t = GetParent()->GetComponent<Transform>();
         float R = 4.0f;
         time += Time::GetDeltaTime();
         t->SetPosition(glm::vec3(t->GetPosition().x,
-                                 pyramid->GetPart<Transform>()->GetPosition().y + sin(time) * R,
-                                 pyramid->GetPart<Transform>()->GetPosition().z + cos(time) * R));
+                                 pyramid->GetComponent<Transform>()->GetPosition().y + sin(time) * R,
+                                 pyramid->GetComponent<Transform>()->GetPosition().z + cos(time) * R));
 
         //Logger_Log(t);
-        t->LookAt(pyramid->GetPart<Transform>()->GetPosition());
+        t->LookAt(pyramid->GetComponent<Transform>()->GetPosition());
     }
         */
 }

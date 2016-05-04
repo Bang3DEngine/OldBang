@@ -5,7 +5,7 @@
 
 const std::string GeneratedFilesDir = "GeneratedFiles/";
 
-const std::string UserBehaviourElseIfsFilepath = GeneratedFilesDir + "BP_StageReader_cpp_UserBehaviours_elseifs.bp";
+const std::string UserBehaviourElseIfsFilepath = GeneratedFilesDir + "BP_SceneReader_cpp_UserBehaviours_elseifs.bp";
 const std::string userBehavioursFilePath = "../res/Assets/userBehavioursNamesList.ubnl";
 
 
@@ -29,7 +29,7 @@ void GetAllUserBehaviourClassNames(std::vector<std::string> *behaviourClassNames
     }
 }
 
-void Preprocess_BP_StageReader_cpp_UserBehaviours_elseifs()
+void Preprocess_BP_SceneReader_cpp_UserBehaviours_elseifs()
 {
     std::vector<std::string> userBehaviourNames;
     GetAllUserBehaviourClassNames(&userBehaviourNames);
@@ -69,7 +69,7 @@ int main()
     std::cerr << ":::::::::::::::::::::::::::::::::::::::::::" << std::endl << std::endl;
 
     std::cerr << "Running Bang Preprocessor on file '" << UserBehaviourElseIfsFilepath << "'..." << std::endl;
-    Preprocess_BP_StageReader_cpp_UserBehaviours_elseifs();
+    Preprocess_BP_SceneReader_cpp_UserBehaviours_elseifs();
     std::cerr << "Successfully run Bang Preprocessor on file '" << UserBehaviourElseIfsFilepath << "'." << std::endl;
 
     std::cerr << std::endl;

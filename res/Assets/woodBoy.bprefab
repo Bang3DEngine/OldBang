@@ -1,9 +1,9 @@
-<Entity>
+<GameObject>
 0x39725a0
 0x3827160
 <children>
 </children>
-<parts>
+<components>
 <Transform>
 0x3a886d0
 0.685 0.843 0.016
@@ -15,5 +15,5 @@
 ./res/Assets/boyMesh.bmesh
 ./res/Assets/testMaterial2.bmat
 </MeshRenderer>
-</parts>
-</Entity>
+</components>
+</GameObject>

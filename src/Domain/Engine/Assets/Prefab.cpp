@@ -10,7 +10,7 @@ Prefab::Prefab(const Prefab &p)
     this->assetDescription = p.assetDescription;
 }
 
-Prefab::Prefab(Entity *e)
+Prefab::Prefab(GameObject *e)
 {
     if(e != nullptr)
     {
@@ -25,9 +25,9 @@ Prefab::Prefab(const std::string &assetDescription)
     this->assetDescription = assetDescription;
 }
 
-Entity *Prefab::Instantiate() const
+GameObject *Prefab::Instantiate() const
 {
-    Entity *e = InstantiateWithoutStarting();
+    GameObject *e = InstantiateWithoutStarting();
     if(e != nullptr)
     {
         e->_OnStart();
@@ -35,12 +35,12 @@ Entity *Prefab::Instantiate() const
     return e;
 }
 
-Entity *Prefab::InstantiateWithoutStarting() const
+GameObject *Prefab::InstantiateWithoutStarting() const
 {
     if(assetDescription != "")
     {
         std::istringstream iss (assetDescription);
-        Entity *e = new Entity();
+        GameObject *e = new GameObject();
         e->Read(iss);
         return e;
     }
@@ -50,7 +50,7 @@ Entity *Prefab::InstantiateWithoutStarting() const
 #ifdef BANG_EDITOR
 void Prefab::Write(std::ostream &f) const
 {
-    Entity *e = InstantiateWithoutStarting();
+    GameObject *e = InstantiateWithoutStarting();
     if(e != nullptr)
     {
         e->Write(f);

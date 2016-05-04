@@ -6,19 +6,19 @@
 
 #include "Canvas.h"
 #include "Persistence.h"
-#include "EditorStage.h"
-#include "StageReader.h"
+#include "EditorScene.h"
+#include "SceneReader.h"
 #include "FileWriter.h"
 
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 {
     WindowMain *w = WindowMain::GetInstance();
-    connect(w->actionNewStage,  SIGNAL(triggered()), this, SLOT(OnNewStage()));
-    connect(w->actionOpenStage,  SIGNAL(triggered()), this, SLOT(OnOpenStage()));
-    connect(w->actionSaveStage,  SIGNAL(triggered()), this, SLOT(OnSaveStage()));
-    connect(w->actionSaveStageAs,  SIGNAL(triggered()), this, SLOT(OnSaveStageAs()));
+    connect(w->actionNewScene,  SIGNAL(triggered()), this, SLOT(OnNewScene()));
+    connect(w->actionOpenScene,  SIGNAL(triggered()), this, SLOT(OnOpenScene()));
+    connect(w->actionSaveScene,  SIGNAL(triggered()), this, SLOT(OnSaveScene()));
+    connect(w->actionSaveSceneAs,  SIGNAL(triggered()), this, SLOT(OnSaveSceneAs()));
 
-    connect(w->actionCreateEmptyEntity,  SIGNAL(triggered()), this, SLOT(OnCreateEmptyEntity()));
+    connect(w->actionCreateEmptyGameObject,  SIGNAL(triggered()), this, SLOT(OnCreateEmptyGameObject()));
     connect(w->actionCreateFromPrefab,  SIGNAL(triggered()), this, SLOT(OnCreateFromPrefab()));
 
     connect(w->actionCreatePrefab,  SIGNAL(triggered()), this, SLOT(OnCreatePrefab()));
@@ -27,28 +27,28 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
     connect(w->actionCreateShaderProgram,  SIGNAL(triggered()), this, SLOT(OnCreateShaderProgram()));
     connect(w->actionCreateTexture2D,  SIGNAL(triggered()), this, SLOT(OnCreateTexture2D()));
 
-    connect(w->actionAddPartBehaviour,  SIGNAL(triggered()), this, SLOT(OnAddPartBehaviour()));
-    connect(w->actionAddPartCamera,  SIGNAL(triggered()), this, SLOT(OnAddPartCamera()));
-    connect(w->actionAddPartMeshRenderer,  SIGNAL(triggered()), this, SLOT(OnAddPartMeshRenderer()));
-    connect(w->actionAddPartLineRenderer,  SIGNAL(triggered()), this, SLOT(OnAddPartLineRenderer()));
-    connect(w->actionAddPartTransform,  SIGNAL(triggered()), this, SLOT(OnAddPartTransform()));
+    connect(w->actionAddComponentBehaviour,  SIGNAL(triggered()), this, SLOT(OnAddComponentBehaviour()));
+    connect(w->actionAddComponentCamera,  SIGNAL(triggered()), this, SLOT(OnAddComponentCamera()));
+    connect(w->actionAddComponentMeshRenderer,  SIGNAL(triggered()), this, SLOT(OnAddComponentMeshRenderer()));
+    connect(w->actionAddComponentLineRenderer,  SIGNAL(triggered()), this, SLOT(OnAddComponentLineRenderer()));
+    connect(w->actionAddComponentTransform,  SIGNAL(triggered()), this, SLOT(OnAddComponentTransform()));
 }
 
 
 
-void MenuBar::CreateNewStage() const
+void MenuBar::CreateNewScene() const
 {
-    Stage *stage = new EditorStage();
-    Canvas::GetInstance()->SetCurrentStage(stage);
-    Persistence::SetCurrentStageFilepath("");
+    Scene *scene = new EditorScene();
+    Canvas::GetInstance()->SetCurrentScene(scene);
+    Persistence::SetCurrentSceneFilepath("");
 }
 
-QMessageBox::StandardButton MenuBar::AskForSavingCurrentStage() const
+QMessageBox::StandardButton MenuBar::AskForSavingCurrentScene() const
 {
     QMessageBox::StandardButton reply =
             QMessageBox::question(WindowMain::GetMainWindow(),
-                                  "Save Stage",
-                                  "Do you want to save your current Stage?",
+                                  "Save Scene",
+                                  "Do you want to save your current Scene?",
                                   (QMessageBox::Yes |
                                    QMessageBox::No |
                                    QMessageBox::Cancel
@@ -57,7 +57,7 @@ QMessageBox::StandardButton MenuBar::AskForSavingCurrentStage() const
 
     if (reply == QMessageBox::Yes)
     {
-        OnSaveStage();
+        OnSaveScene();
     }
 
     return reply;
@@ -66,26 +66,26 @@ QMessageBox::StandardButton MenuBar::AskForSavingCurrentStage() const
 
 
 
-void MenuBar::OnNewStage() const
+void MenuBar::OnNewScene() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::NewStage);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::NewScene);
 
-    if(AskForSavingCurrentStage() == QMessageBox::Cancel) return;
-    CreateNewStage();
+    if(AskForSavingCurrentScene() == QMessageBox::Cancel) return;
+    CreateNewScene();
 }
 
-void MenuBar::OnOpenStage() const
+void MenuBar::OnOpenScene() const
 {
-    if(AskForSavingCurrentStage() == QMessageBox::Cancel) return;
+    if(AskForSavingCurrentScene() == QMessageBox::Cancel) return;
 
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::OpenStage);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::OpenScene);
 
-    std::string ext = Stage::GetFileExtension();
+    std::string ext = Scene::GetFileExtension();
     std::string filename =
         QFileDialog::getOpenFileName
             (
                         WindowMain::GetMainWindow(),
-                        QString::fromStdString("Open stage..."),
+                        QString::fromStdString("Open scene..."),
                         QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
                         QString::fromStdString( ext + "(*." + ext + ")" )
                         )
@@ -93,62 +93,62 @@ void MenuBar::OnOpenStage() const
     if(filename == "") return;
 
 
-    EditorStage *stage = new EditorStage();
-    StageReader::ReadStage(filename, stage);
-    if(stage != nullptr)
+    EditorScene *scene = new EditorScene();
+    SceneReader::ReadScene(filename, scene);
+    if(scene != nullptr)
     {
-        Canvas::GetInstance()->AddStage(stage);
-        Canvas::GetInstance()->SetCurrentStage(stage);
-        Persistence::SetCurrentStageFilepath(filename);
+        Canvas::GetInstance()->AddScene(scene);
+        Canvas::GetInstance()->SetCurrentScene(scene);
+        Persistence::SetCurrentSceneFilepath(filename);
     }
     else
     {
-        Logger_Error("Stage from file '" << filename << "' could not be loaded.");
+        Logger_Error("Scene from file '" << filename << "' could not be loaded.");
     }
 }
 
-void MenuBar::OnSaveStage() const
+void MenuBar::OnSaveScene() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveStage);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveScene);
 
-    std::string filename = Persistence::GetCurrentStageFilepath();
-    if( filename == "" ) //Give the stage a name
+    std::string filename = Persistence::GetCurrentSceneFilepath();
+    if( filename == "" ) //Give the scene a name
     {
-        OnSaveStageAs();
+        OnSaveSceneAs();
     }
     else //Save directly
     {
-        Stage *stage = Canvas::GetInstance()->GetCurrentStage();
-        if(stage == nullptr) return;
-        FileWriter::WriteStage(filename, stage);
+        Scene *scene = Canvas::GetInstance()->GetCurrentScene();
+        if(scene == nullptr) return;
+        FileWriter::WriteScene(filename, scene);
     }
 }
 
-void MenuBar::OnSaveStageAs() const
+void MenuBar::OnSaveSceneAs() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveStageAs);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveSceneAs);
 
-    Stage *stage = Canvas::GetInstance()->GetCurrentStage();
-    if(stage == nullptr) return;
+    Scene *scene = Canvas::GetInstance()->GetCurrentScene();
+    if(scene == nullptr) return;
 
-    std::string ext = Stage::GetFileExtension();
+    std::string ext = Scene::GetFileExtension();
     std::string filename =
         QFileDialog::getSaveFileName
             (
                 WindowMain::GetMainWindow(),
-                QString::fromStdString("Save stage as..."),
+                QString::fromStdString("Save scene as..."),
                 QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
                 QString::fromStdString( ext + "(*." + ext + ")" )
             )
             .toStdString();
     if(filename == "") return;
 
-    FileWriter::WriteStage(filename, stage);
+    FileWriter::WriteScene(filename, scene);
 }
 
-void MenuBar::OnCreateEmptyEntity() const
+void MenuBar::OnCreateEmptyGameObject() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateEmptyEntity);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateEmptyGameObject);
 }
 void MenuBar::OnCreateFromPrefab() const
 {
@@ -172,19 +172,19 @@ void MenuBar::OnCreateFromPrefab() const
     {
         Prefab *p = new Prefab();
         p->Read(f);
-        Entity *e = p->InstantiateWithoutStarting();
-        Entity *selectedEntity = WindowMain::GetInstance()->widgetHierarchy->
-                GetFirstSelectedEntity();
-        if(selectedEntity != nullptr)
+        GameObject *e = p->InstantiateWithoutStarting();
+        GameObject *selectedGameObject = WindowMain::GetInstance()->widgetHierarchy->
+                GetFirstSelectedGameObject();
+        if(selectedGameObject != nullptr)
         {
-            selectedEntity->AddChild(e);
+            selectedGameObject->AddChild(e);
         }
         else
         {
-            Stage *currentStage = Canvas::GetInstance()->GetCurrentStage();
-            if(currentStage != nullptr)
+            Scene *currentScene = Canvas::GetInstance()->GetCurrentScene();
+            if(currentScene != nullptr)
             {
-                currentStage->AddChild(e);
+                currentScene->AddChild(e);
             }
         }
         delete p;
@@ -217,23 +217,23 @@ void MenuBar::OnCreateTexture2D() const
 }
 
 
-void MenuBar::OnAddPartBehaviour() const
+void MenuBar::OnAddComponentBehaviour() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddPartBehaviour);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentBehaviour);
 }
-void MenuBar::OnAddPartCamera() const
+void MenuBar::OnAddComponentCamera() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddPartCamera);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentCamera);
 }
-void MenuBar::OnAddPartMeshRenderer() const
+void MenuBar::OnAddComponentMeshRenderer() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddPartMeshRenderer);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentMeshRenderer);
 }
-void MenuBar::OnAddPartLineRenderer() const
+void MenuBar::OnAddComponentLineRenderer() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddPartLineRenderer);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentLineRenderer);
 }
-void MenuBar::OnAddPartTransform() const
+void MenuBar::OnAddComponentTransform() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddPartTransform);
+    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentTransform);
 }
