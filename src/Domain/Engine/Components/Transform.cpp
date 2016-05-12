@@ -4,19 +4,19 @@
 
 Transform::Transform() : position(glm::vec3(0.0f)),
                          rotation(glm::quat()),
-                         scale(glm::vec3(1.0f))
+                         scale(glm::vec3(1.0f)),
+                         inspectorEulerDeg(glm::vec3(0.0f))
 {
     #ifdef BANG_EDITOR
-    glm::vec3 euler = glm::eulerAngles(rotation);
     inspectorComponentInfo.SetSlotsInfos(
     {
         new InspectorVFloatSWInfo(
             "Position", {position.x, position.y, position.z}
         ),
         new InspectorVFloatSWInfo(
-            "Rotation", {glm::degrees(euler.x),
-                         glm::degrees(euler.y),
-                         glm::degrees(euler.z)}
+            "Rotation", {inspectorEulerDeg.x,
+                         inspectorEulerDeg.y,
+                         inspectorEulerDeg.z}
         ),
         new InspectorVFloatSWInfo(
             "Scale", {scale.x, scale.y, scale.z}
@@ -34,24 +34,25 @@ void Transform::SetPosition(const glm::vec3 &p)
     position = p;
 }
 
+void Transform::SetRotationFromInspector(const glm::quat &q)
+{
+    rotation = glm::normalize(q);
+}
+
 void Transform::SetRotation(const glm::vec3 &degreesEuler)
 {
-    glm::vec3 e = glm::radians(degreesEuler);
-    glm::quat qx = glm::angleAxis(e.x, glm::vec3(1,0,0));
-    glm::quat qy = glm::angleAxis(e.y, glm::vec3(0,1,0));
-    glm::quat qz = glm::angleAxis(e.z, glm::vec3(0,0,1));
-    SetRotation(qz * qy * qx);
+    inspectorEulerDeg = degreesEuler;
+    glm::vec3 rads = glm::radians(inspectorEulerDeg);
+    glm::quat qx = glm::angleAxis(rads.x, glm::vec3(1,0,0));
+    glm::quat qy = glm::angleAxis(rads.y, glm::vec3(0,1,0));
+    glm::quat qz = glm::angleAxis(rads.z, glm::vec3(0,0,1));
+    SetRotationFromInspector(qz * qy * qx);
 }
-
-glm::vec3 threeaxisrot(double r11, double r12, double r21, double r31, double r32){
-  return glm::vec3(atan2( r31, r32 ), asin ( r21 ), atan2( r11, r12 ));
-}
-
 
 void Transform::SetRotation(const glm::quat &q)
 {
     rotation = glm::normalize(q);
-    Logger_Log(glm::degrees(glm::eulerAngles(rotation)));
+    inspectorEulerDeg = glm::degrees(glm::eulerAngles(rotation));
 }
 
 void Transform::SetScale(const glm::vec3 &s)
@@ -136,15 +137,7 @@ glm::quat Transform::GetRotation() const
 
 glm::vec3 Transform::GetEuler() const
 {
-    const glm::quat &q = rotation;
-    glm::vec3 euler = threeaxisrot(
-                       -2*(q.y*q.z - q.w*q.x),
-                        q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z,
-                        2*(q.x*q.z + q.w*q.y),
-                       -2*(q.x*q.y - q.w*q.z),
-                        q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z);
-    Logger_Log(glm::degrees(glm::eulerAngles(rotation)));
-    return glm::degrees(euler);
+    return inspectorEulerDeg;
 }
 
 glm::vec3 Transform::GetScale() const
@@ -206,9 +199,9 @@ InspectorWidgetInfo* Transform::GetComponentInfo()
     static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(0))->value =
         {position.x, position.y, position.z};
 
-    glm::vec3 euler = glm::eulerAngles(rotation);
+    glm::vec3 e = inspectorEulerDeg;
     static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(1))->value =
-        {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)};
+        {e.x, e.y, e.z};
 
     static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(2))->value =
         {scale.x, scale.y, scale.z};

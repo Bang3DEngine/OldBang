@@ -22,6 +22,9 @@ private:
     glm::quat rotation;
     glm::vec3 scale;
 
+    // euler angles in degrees set by user in the inspector
+    glm::vec3 inspectorEulerDeg;
+
     // L * MODEL * R, user can edit those in order to
     // apply its own post/pre transformations
     glm::mat4 leftMatrix;
@@ -32,18 +35,28 @@ public:
     Transform();
     virtual ~Transform();
 
-    void GetMatrix(glm::mat4 &m) const;
-    void GetNormalMatrix(glm::mat4 &m) const;
-
     void LookAt(glm::vec3 target,
                 glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
 
+
+
     void SetPosition(const glm::vec3 &p);
+
+    //These wont change the input inspectorEulerDeg of the user
     void SetRotation(const glm::vec3 &degreesEuler);
+    void SetRotationFromInspector(const glm::quat &q);
+
+    //This will change inspectorEulerDeg to the quat->eulerAngles conversion
     void SetRotation(const glm::quat &r);
+
     void SetScale(const glm::vec3 &s);
     void SetLeftMatrix(const glm::mat4 &leftMatrix);
     void SetRightMatrix(const glm::mat4 &rightMatrix);
+
+
+
+    void GetMatrix(glm::mat4 &m) const;
+    void GetNormalMatrix(glm::mat4 &m) const;
 
     glm::vec3 GetForward() const;
     glm::vec3 GetBack() const;
@@ -67,7 +80,7 @@ public:
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
     void Write(std::ostream &f) const override;
     void Read(std::istream &f) override;
-    #endif
+#endif
 };
 
 #endif // TRANSFORM_H
