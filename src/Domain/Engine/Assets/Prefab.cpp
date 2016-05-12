@@ -39,6 +39,7 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 {
     if(assetDescription != "")
     {
+        Logger_Log("----------------" << std::endl << assetDescription << std::endl << "-------------------" << std::endl);
         std::istringstream iss (assetDescription);
         GameObject *o = new GameObject();
         FileReader::ReadNextLine(iss); //Consume opening tag
@@ -69,6 +70,6 @@ void Prefab::Read(std::istream &f)
     {
         assetDescription += line + "\n";
     }
-    assetDescription += line + "\n";
+    //assetDescription += line + "\n";
 }
 #endif

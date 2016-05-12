@@ -36,13 +36,14 @@ class FloatComponentSlotSpinBox : public QDoubleSpinBox //Slot for a float (labe
 public:
     FloatComponentSlotSpinBox() : QDoubleSpinBox()
     {
-        connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
+        //connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
         AdjustStep(value());
     }
 
     virtual void focusInEvent(QFocusEvent * event) override
     {
         QDoubleSpinBox::focusInEvent(event);
+        AdjustStep(value());
         QTimer::singleShot(50, this, SLOT(SelectAll()));
         static_cast<InspectorFloatSW*>(parent())->OnSpinBoxFocusIn();
     }
@@ -50,16 +51,13 @@ public:
     virtual void focusOutEvent(QFocusEvent * event) override
     {
         QDoubleSpinBox::focusOutEvent(event);
+        AdjustStep(value());
         static_cast<InspectorFloatSW*>(parent())->OnSpinBoxFocusOut();
     }
 
     virtual void  keyPressEvent(QKeyEvent *event) override
     {
         QDoubleSpinBox::keyPressEvent(event);
-        if(event->key() == QKeyEvent::Enter)
-        {
-            static_cast<InspectorFloatSW*>(parent())->OnSpinBoxFocusOut();
-        }
     }
 
 public slots:
