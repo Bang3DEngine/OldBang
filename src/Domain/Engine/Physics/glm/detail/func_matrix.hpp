@@ -18,7 +18,7 @@
 /// 
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A COMPONENTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -72,19 +72,19 @@ namespace detail
 	template <typename T, precision P>
 	struct outerProduct_trait<T, P, tvec2, tvec3>
 	{
-		typedef tmat2x3<T, P> type;
+		typedef tmat3x2<T, P> type;
 	};
 
 	template <typename T, precision P>
 	struct outerProduct_trait<T, P, tvec2, tvec4>
 	{
-		typedef tmat2x4<T, P> type;
+		typedef tmat4x2<T, P> type;
 	};
 
 	template <typename T, precision P>
 	struct outerProduct_trait<T, P, tvec3, tvec2>
 	{
-		typedef tmat3x2<T, P> type;
+		typedef tmat2x3<T, P> type;
 	};
 
 	template <typename T, precision P>
@@ -96,19 +96,19 @@ namespace detail
 	template <typename T, precision P>
 	struct outerProduct_trait<T, P, tvec3, tvec4>
 	{
-		typedef tmat3x4<T, P> type;
+		typedef tmat4x3<T, P> type;
 	};
 
 	template <typename T, precision P>
 	struct outerProduct_trait<T, P, tvec4, tvec2>
 	{
-		typedef tmat4x2<T, P> type;
+		typedef tmat2x4<T, P> type;
 	};
 
 	template <typename T, precision P>
 	struct outerProduct_trait<T, P, tvec4, tvec3>
 	{
-		typedef tmat4x3<T, P> type;
+		typedef tmat3x4<T, P> type;
 	};
 
 	template <typename T, precision P>

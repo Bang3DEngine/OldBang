@@ -18,7 +18,7 @@
 /// 
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A COMPONENTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -161,7 +161,7 @@ namespace glm
     /// Extracts the (X * Y * Z) Euler angles from the rotation matrix M
     /// @see gtx_euler_angles
     template <typename T>
-    GLM_FUNC_DECL void extractEulerAngleXYZ(tmat4x4<T, defaultp> const & M,
+    GLM_FUNC_DECL void extractEulerAngleXYZ(tmat4x4<T, defaultp> & M,
                                             T & t1,
                                             T & t2,
                                             T & t3);

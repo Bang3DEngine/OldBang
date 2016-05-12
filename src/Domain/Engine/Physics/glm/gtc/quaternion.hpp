@@ -18,7 +18,7 @@
 /// 
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A COMPONENTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -75,26 +75,6 @@ namespace glm
 		// -- Data --
 
 		T x, y, z, w;
-
-#		ifdef GLM_STATIC_CONST_MEMBERS
-		static const type ZERO;
-		static const type IDGAMEOBJECT;
-		static const type X;
-		static const type Y;
-		static const type Z;
-		static const type W;
-		static const type XY;
-		static const type XZ;
-		static const type XW;
-		static const type YZ;
-		static const type YW;
-		static const type ZW;
-		static const type XYZ;
-		static const type XYW;
-		static const type XZW;
-		static const type YZW;
-		static const type XYZW;
-#		endif
 
 		// -- Component accesses --
 
@@ -203,6 +183,14 @@ namespace glm
 
 	template <typename T, precision P>
 	GLM_FUNC_DECL tquat<T, P> operator/(tquat<T, P> const & q, T const & s);
+
+	// -- Boolean operators --
+
+	template <typename T, precision P>
+	GLM_FUNC_DECL bool operator==(tquat<T, P> const & q1, tquat<T, P> const & q2);
+
+	template <typename T, precision P>
+	GLM_FUNC_DECL bool operator!=(tquat<T, P> const & q1, tquat<T, P> const & q2);
 
 	/// Returns the length of the quaternion.
 	/// 
@@ -397,16 +385,6 @@ namespace glm
 	template <typename T, precision P>
 	GLM_FUNC_DECL tvec4<bool, P> notEqual(tquat<T, P> const & x, tquat<T, P> const & y);
 	/// @}
-
-	// -- Is type --
-
-	template <typename T, precision P>
-	struct type<T, P, tquat>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = false;
-		static bool const is_quat = true;
-	};
 } //namespace glm
 
 #include "quaternion.inl"

@@ -18,7 +18,7 @@
 ///
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A COMPONENTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -144,16 +144,16 @@ namespace glm
 	GLM_FUNC_DECL tdualquat<T, P> operator*(tdualquat<T, P> const & q, tdualquat<T, P> const & p);
 
 	template <typename T, precision P>
-	GLM_FUNC_DECL tvec3<T, P> operator*(tquat<T, P> const & q, tvec3<T, P> const & v);
+	GLM_FUNC_DECL tvec3<T, P> operator*(tdualquat<T, P> const & q, tvec3<T, P> const & v);
 
 	template <typename T, precision P>
-	GLM_FUNC_DECL tvec3<T, P> operator*(tvec3<T, P> const & v, tquat<T, P> const & q);
+	GLM_FUNC_DECL tvec3<T, P> operator*(tvec3<T, P> const & v, tdualquat<T, P> const & q);
 
 	template <typename T, precision P>
-	GLM_FUNC_DECL tvec4<T, P> operator*(tquat<T, P> const & q, tvec4<T, P> const & v);
+	GLM_FUNC_DECL tvec4<T, P> operator*(tdualquat<T, P> const & q, tvec4<T, P> const & v);
 
 	template <typename T, precision P>
-	GLM_FUNC_DECL tvec4<T, P> operator*(tvec4<T, P> const & v, tquat<T, P> const & q);
+	GLM_FUNC_DECL tvec4<T, P> operator*(tvec4<T, P> const & v, tdualquat<T, P> const & q);
 
 	template <typename T, precision P>
 	GLM_FUNC_DECL tdualquat<T, P> operator*(tdualquat<T, P> const & q, T const & s);
@@ -163,6 +163,14 @@ namespace glm
 
 	template <typename T, precision P>
 	GLM_FUNC_DECL tdualquat<T, P> operator/(tdualquat<T, P> const & q, T const & s);
+
+	// -- Boolean operators --
+
+	template <typename T, precision P>
+	GLM_FUNC_DECL bool operator==(tdualquat<T, P> const & q1, tdualquat<T, P> const & q2);
+
+	template <typename T, precision P>
+	GLM_FUNC_DECL bool operator!=(tdualquat<T, P> const & q1, tdualquat<T, P> const & q2);
 
 	/// Returns the normalized quaternion.
 	///
@@ -295,16 +303,6 @@ namespace glm
 #endif
 
 	/// @}
-
-	// -- Is type --
-
-	template <typename T, precision P>
-	struct type<T, P, tdualquat>
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = false;
-		static bool const is_quat = true;
-	};
 } //namespace glm
 
 #include "dual_quaternion.inl"

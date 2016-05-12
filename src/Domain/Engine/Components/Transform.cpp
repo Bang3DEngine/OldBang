@@ -36,15 +36,22 @@ void Transform::SetPosition(const glm::vec3 &p)
 
 void Transform::SetRotation(const glm::vec3 &degreesEuler)
 {
-    glm::quat qx = glm::angleAxis(glm::radians(degreesEuler.x), glm::vec3(1,0,0));
-    glm::quat qy = glm::angleAxis(glm::radians(degreesEuler.y), glm::vec3(0,1,0));
-    glm::quat qz = glm::angleAxis(glm::radians(degreesEuler.z), glm::vec3(0,0,1));
+    glm::vec3 e = glm::radians(degreesEuler);
+    glm::quat qx = glm::angleAxis(e.x, glm::vec3(1,0,0));
+    glm::quat qy = glm::angleAxis(e.y, glm::vec3(0,1,0));
+    glm::quat qz = glm::angleAxis(e.z, glm::vec3(0,0,1));
     SetRotation(qz * qy * qx);
 }
+
+glm::vec3 threeaxisrot(double r11, double r12, double r21, double r31, double r32){
+  return glm::vec3(atan2( r31, r32 ), asin ( r21 ), atan2( r11, r12 ));
+}
+
 
 void Transform::SetRotation(const glm::quat &q)
 {
     rotation = glm::normalize(q);
+    Logger_Log(glm::degrees(glm::eulerAngles(rotation)));
 }
 
 void Transform::SetScale(const glm::vec3 &s)
@@ -129,7 +136,15 @@ glm::quat Transform::GetRotation() const
 
 glm::vec3 Transform::GetEuler() const
 {
-    return glm::degrees(glm::eulerAngles(rotation));
+    const glm::quat &q = rotation;
+    glm::vec3 euler = threeaxisrot(
+                       -2*(q.y*q.z - q.w*q.x),
+                        q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z,
+                        2*(q.x*q.z + q.w*q.y),
+                       -2*(q.x*q.y - q.w*q.z),
+                        q.w*q.w + q.x*q.x - q.y*q.y - q.z*q.z);
+    Logger_Log(glm::degrees(glm::eulerAngles(rotation)));
+    return glm::degrees(euler);
 }
 
 glm::vec3 Transform::GetScale() const
@@ -190,9 +205,11 @@ InspectorWidgetInfo* Transform::GetComponentInfo()
 {
     static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(0))->value =
         {position.x, position.y, position.z};
+
     glm::vec3 euler = glm::eulerAngles(rotation);
     static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(1))->value =
         {glm::degrees(euler.x), glm::degrees(euler.y), glm::degrees(euler.z)};
+
     static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(2))->value =
         {scale.x, scale.y, scale.z};
 

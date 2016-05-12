@@ -18,7 +18,7 @@
 /// 
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A COMPONENTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -41,13 +41,5 @@ namespace glm
 		lowp,
 		simd,
 		defaultp = highp
-	};
-
-	template <typename T, precision P, template <typename, precision> class genType>
-	struct type
-	{
-		static bool const is_vec = false;
-		static bool const is_mat = false;
-		static bool const is_quat = false;
 	};
 }//namespace glm

@@ -18,7 +18,7 @@
 /// 
 /// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 /// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-/// FITNESS FOR A COMPONENTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+/// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 /// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 /// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -60,20 +60,13 @@ namespace glm
 	/// 
 	/// @param Min 
 	/// @param Max 
-	/// @tparam genType Value type. Currently supported: float or double scalars.
+	/// @tparam genType Value type. Currently supported: half (not recommanded), float or double scalars and vectors.
 	/// @see gtc_random
 	template <typename genTYpe>
 	GLM_FUNC_DECL genTYpe linearRand(
 		genTYpe Min,
 		genTYpe Max);
 
-	/// Generate random numbers in the interval [Min, Max], according a linear distribution 
-	/// 
-	/// @param Min 
-	/// @param Max 
-	/// @tparam T Value type. Currently supported: float or double.
-	/// @tparam vecType A vertor type: tvec1, tvec2, tvec3, tvec4 or compatible
-	/// @see gtc_random
 	template <typename T, precision P, template <typename, precision> class vecType>
 	GLM_FUNC_DECL vecType<T, P> linearRand(
 		vecType<T, P> const & Min,

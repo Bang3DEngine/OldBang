@@ -71,13 +71,12 @@ void EditorCamera::OnUpdate()
 
         //Cam rotation Behaviour
         glm::quat rotY = glm::angleAxis(my, t->GetRight());
-        t->SetRotation( rotY * t->GetRotation() );
         glm::quat rotX = glm::angleAxis(mx, t->GetUp());
-        t->SetRotation( rotX * t->GetRotation() );
+        t->SetRotation( rotY * rotX * t->GetRotation() );
 
         //Remove roll from camera
-        glm::vec3 target = t->GetPosition() + t->GetForward() * 99.9f;
-        glm::vec3 dir = t->GetForward();
+        //glm::vec3 target = t->GetPosition() + t->GetForward() * 99.9f;
+        //glm::vec3 dir = t->GetForward();
         //t->LookAt()
         //
 

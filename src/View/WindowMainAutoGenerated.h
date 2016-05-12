@@ -409,8 +409,8 @@ public:
         dockExplorer->raise();
 
         menubar->addAction(menuProject->menuAction());
-        menubar->addAction(menuGameObject->menuAction());
         menubar->addAction(menuAssets->menuAction());
+        menubar->addAction(menuGameObject->menuAction());
         menubar->addAction(menuComponents->menuAction());
         menuAssets->addAction(menuCreate->menuAction());
         menuCreate->addAction(actionCreatePrefab);
@@ -470,7 +470,7 @@ public:
         buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0, QApplication::UnicodeUTF8));
         menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
         menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));
-        menuGameObject->setTitle(QApplication::translate("WindowMain", "Entities", 0, QApplication::UnicodeUTF8));
+        menuGameObject->setTitle(QApplication::translate("WindowMain", "GameObjects", 0, QApplication::UnicodeUTF8));
         menuProject->setTitle(QApplication::translate("WindowMain", "Project", 0, QApplication::UnicodeUTF8));
         menuComponents->setTitle(QApplication::translate("WindowMain", "Components", 0, QApplication::UnicodeUTF8));
         menuAddComponent->setTitle(QApplication::translate("WindowMain", "Add Component", 0, QApplication::UnicodeUTF8));

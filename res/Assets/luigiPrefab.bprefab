@@ -1,6 +1,8 @@
 <GameObject>
-    -
+    hjgsajhsad
     Luigi
+    <children>
+    </children>
     <components>
         <Transform>
             -

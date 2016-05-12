@@ -100,7 +100,7 @@
    </widget>
    <widget class="QMenu" name="menuGameObject">
     <property name="title">
-     <string>Entities</string>
+     <string>GameObjects</string>
     </property>
     <addaction name="actionCreateEmptyGameObject"/>
     <addaction name="actionCreateFromPrefab"/>
@@ -134,8 +134,8 @@
     <addaction name="actionRemoveComponent"/>
    </widget>
    <addaction name="menuProject"/>
-   <addaction name="menuGameObject"/>
    <addaction name="menuAssets"/>
+   <addaction name="menuGameObject"/>
    <addaction name="menuComponents"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
