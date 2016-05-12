@@ -60,7 +60,7 @@ void EditorCamera::OnUpdate()
                     mouseRotBoost;
 
 
-        mouseRotationDegrees += glm::vec2(mx, my);
+        mouseRotationDegrees += glm::vec2(mx, my) * mouseRotBoost;
         //Orbitting Behaviour
         /*
         t->SetLeftMatrix(glm::rotate(mouseRotationRads.x, t->GetUp()) *
@@ -73,6 +73,21 @@ void EditorCamera::OnUpdate()
         glm::quat rotY = glm::angleAxis(my, t->GetRight());
         glm::quat rotX = glm::angleAxis(mx, t->GetUp());
         t->SetRotation( rotY * rotX * t->GetRotation() );
+
+        glm::vec3 right = t->GetRight();
+        glm::vec3 forward = t->GetForward();
+        Logger_Log(forward);
+
+        glm::vec3 localEuler = t->GetEuler();
+        glm::quat undoRoll = glm::angleAxis(glm::radians(localEuler.z), glm::vec3(0,0,1));
+        t->SetRotation(undoRoll * t->GetRotation());
+
+        glm::vec3 worldEulerNoRoll = glm::inverse(t->GetRotation()) * localEuler;
+        //t->SetRotation(worldEulerNoRoll);
+        //t->SetRotation(localEuler);
+        //Logger_Log(localEuler);// << " -> " << worldEulerNoRoll);
+
+        //t->SetRotation( glm::vec3(mouseRotationDegrees.y, mouseRotationDegrees.x, 0.0f) );
 
         //Remove roll from camera
         //glm::vec3 target = t->GetPosition() + t->GetForward() * 99.9f;
