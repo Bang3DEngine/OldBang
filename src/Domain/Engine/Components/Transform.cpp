@@ -312,9 +312,9 @@ void Transform::Write(std::ostream &f) const
 {
     f << "<Transform>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::Write(GetPosition(), f);
-    FileWriter::Write(GetRotation(), f);
-    FileWriter::Write(GetScale(), f);
+    FileWriter::Write(GetLocalPosition(), f);
+    FileWriter::Write(GetLocalRotation(), f);
+    FileWriter::Write(GetLocalScale(), f);
     f << "</Transform>" << std::endl;
 }
 

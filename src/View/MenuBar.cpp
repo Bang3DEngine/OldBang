@@ -3,35 +3,53 @@
 #include "WindowEventManager.h"
 #include "WindowMain.h"
 
-
 #include "Canvas.h"
 #include "Persistence.h"
 #include "EditorScene.h"
 #include "FileReader.h"
 #include "FileWriter.h"
+#include "FileDialog.h"
 
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 {
+    wem = WindowEventManager::GetInstance();
+
     WindowMain *w = WindowMain::GetInstance();
-    connect(w->actionNewScene,  SIGNAL(triggered()), this, SLOT(OnNewScene()));
-    connect(w->actionOpenScene,  SIGNAL(triggered()), this, SLOT(OnOpenScene()));
-    connect(w->actionSaveScene,  SIGNAL(triggered()), this, SLOT(OnSaveScene()));
-    connect(w->actionSaveSceneAs,  SIGNAL(triggered()), this, SLOT(OnSaveSceneAs()));
+    connect(w->actionNewScene,  SIGNAL(triggered()),
+            this, SLOT(OnNewScene()));
+    connect(w->actionOpenScene,  SIGNAL(triggered()),
+            this, SLOT(OnOpenScene()));
+    connect(w->actionSaveScene,  SIGNAL(triggered()),
+            this, SLOT(OnSaveScene()));
+    connect(w->actionSaveSceneAs,  SIGNAL(triggered()),
+            this, SLOT(OnSaveSceneAs()));
 
-    connect(w->actionCreateEmptyGameObject,  SIGNAL(triggered()), this, SLOT(OnCreateEmptyGameObject()));
-    connect(w->actionCreateFromPrefab,  SIGNAL(triggered()), this, SLOT(OnCreateFromPrefab()));
+    connect(w->actionCreateEmptyGameObject,  SIGNAL(triggered()),
+            this, SLOT(OnCreateEmptyGameObject()));
+    connect(w->actionCreateFromPrefab,  SIGNAL(triggered()),
+            this, SLOT(OnCreateFromPrefab()));
 
-    connect(w->actionCreatePrefab,  SIGNAL(triggered()), this, SLOT(OnCreatePrefab()));
-    connect(w->actionCreateMaterial,  SIGNAL(triggered()), this, SLOT(OnCreateMaterial()));
-    connect(w->actionCreateMesh,  SIGNAL(triggered()), this, SLOT(OnCreateMesh()));
-    connect(w->actionCreateShaderProgram,  SIGNAL(triggered()), this, SLOT(OnCreateShaderProgram()));
-    connect(w->actionCreateTexture2D,  SIGNAL(triggered()), this, SLOT(OnCreateTexture2D()));
+    connect(w->actionCreatePrefab,  SIGNAL(triggered()),
+            this, SLOT(OnCreatePrefab()));
+    connect(w->actionCreateMaterial,  SIGNAL(triggered()),
+            this, SLOT(OnCreateMaterial()));
+    connect(w->actionCreateMesh,  SIGNAL(triggered()),
+            this, SLOT(OnCreateMesh()));
+    connect(w->actionCreateShaderProgram,  SIGNAL(triggered()),
+            this, SLOT(OnCreateShaderProgram()));
+    connect(w->actionCreateTexture2D,  SIGNAL(triggered()),
+            this, SLOT(OnCreateTexture2D()));
 
-    connect(w->actionAddComponentBehaviour,  SIGNAL(triggered()), this, SLOT(OnAddComponentBehaviour()));
-    connect(w->actionAddComponentCamera,  SIGNAL(triggered()), this, SLOT(OnAddComponentCamera()));
-    connect(w->actionAddComponentMeshRenderer,  SIGNAL(triggered()), this, SLOT(OnAddComponentMeshRenderer()));
-    connect(w->actionAddComponentLineRenderer,  SIGNAL(triggered()), this, SLOT(OnAddComponentLineRenderer()));
-    connect(w->actionAddComponentTransform,  SIGNAL(triggered()), this, SLOT(OnAddComponentTransform()));
+    connect(w->actionAddComponentBehaviour,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentBehaviour()));
+    connect(w->actionAddComponentCamera,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentCamera()));
+    connect(w->actionAddComponentMeshRenderer,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentMeshRenderer()));
+    connect(w->actionAddComponentLineRenderer,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentLineRenderer()));
+    connect(w->actionAddComponentTransform,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentTransform()));
 }
 
 
@@ -49,10 +67,8 @@ QMessageBox::StandardButton MenuBar::AskForSavingCurrentScene() const
             QMessageBox::question(WindowMain::GetMainWindow(),
                                   "Save Scene",
                                   "Do you want to save your current Scene?",
-                                  (QMessageBox::Yes |
-                                   QMessageBox::No |
-                                   QMessageBox::Cancel
-                                   )
+                                  (QMessageBox::Yes |  QMessageBox::No |
+                                   QMessageBox::Cancel )
                                   );
 
     if (reply == QMessageBox::Yes)
@@ -68,7 +84,7 @@ QMessageBox::StandardButton MenuBar::AskForSavingCurrentScene() const
 
 void MenuBar::OnNewScene() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::NewScene);
+    wem->NotifyMenuBarActionClicked(Action::NewScene);
 
     if(AskForSavingCurrentScene() == QMessageBox::Cancel) return;
     CreateNewScene();
@@ -78,20 +94,11 @@ void MenuBar::OnOpenScene() const
 {
     if(AskForSavingCurrentScene() == QMessageBox::Cancel) return;
 
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::OpenScene);
+    wem->NotifyMenuBarActionClicked(Action::OpenScene);
 
-    std::string ext = Scene::GetFileExtension();
-    std::string filename =
-        QFileDialog::getOpenFileName
-            (
-                        WindowMain::GetMainWindow(),
-                        QString::fromStdString("Open scene..."),
-                        QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
-                        QString::fromStdString( ext + "(*." + ext + ")" )
-                        )
-            .toStdString();
+    FileDialog fd("Open scene...", Scene::GetFileExtension());
+    std::string filename = fd.GetOpenFilename();
     if(filename == "") return;
-
 
     EditorScene *scene = new EditorScene();
     FileReader::ReadScene(filename, scene);
@@ -103,13 +110,14 @@ void MenuBar::OnOpenScene() const
     }
     else
     {
-        Logger_Error("Scene from file '" << filename << "' could not be loaded.");
+        Logger_Error("Scene from file '" << filename <<
+                     "' could not be loaded.");
     }
 }
 
 void MenuBar::OnSaveScene() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveScene);
+    wem->NotifyMenuBarActionClicked(Action::SaveScene);
 
     std::string filename = Persistence::GetCurrentSceneFilepath();
     if( filename == "" ) //Give the scene a name
@@ -126,21 +134,13 @@ void MenuBar::OnSaveScene() const
 
 void MenuBar::OnSaveSceneAs() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::SaveSceneAs);
+    wem->NotifyMenuBarActionClicked(Action::SaveSceneAs);
 
     Scene *scene = Canvas::GetInstance()->GetCurrentScene();
     if(scene == nullptr) return;
 
-    std::string ext = Scene::GetFileExtension();
-    std::string filename =
-        QFileDialog::getSaveFileName
-            (
-                WindowMain::GetMainWindow(),
-                QString::fromStdString("Save scene as..."),
-                QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
-                QString::fromStdString( ext + "(*." + ext + ")" )
-            )
-            .toStdString();
+    FileDialog fd("Save scene as...", Scene::GetFileExtension());
+    std::string filename = fd.GetOpenFilename();
     if(filename == "") return;
 
     FileWriter::WriteScene(filename, scene);
@@ -148,22 +148,14 @@ void MenuBar::OnSaveSceneAs() const
 
 void MenuBar::OnCreateEmptyGameObject() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateEmptyGameObject);
+    wem->NotifyMenuBarActionClicked(Action::CreateEmptyGameObject);
 }
 void MenuBar::OnCreateFromPrefab() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
+    wem->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
 
-    std::string ext = Prefab::GetFileExtensionStatic();
-    std::string filename =
-        QFileDialog::getOpenFileName
-            (
-                        WindowMain::GetMainWindow(),
-                        QString::fromStdString("Create from prefab..."),
-                        QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
-                        QString::fromStdString( ext + "(*." + ext + ")" )
-            )
-            .toStdString();
+    FileDialog fd("Create from prefab...", Prefab::GetFileExtensionStatic());
+    std::string filename = fd.GetOpenFilename();
     if(filename == "") return;
 
     std::fstream f;
@@ -173,8 +165,9 @@ void MenuBar::OnCreateFromPrefab() const
         Prefab *p = new Prefab();
         p->Read(f);
         GameObject *e = p->InstantiateWithoutStarting();
-        GameObject *selectedGameObject = WindowMain::GetInstance()->widgetHierarchy->
-                GetFirstSelectedGameObject();
+        GameObject *selectedGameObject = WindowMain::GetInstance()->
+                widgetHierarchy->GetFirstSelectedGameObject();
+
         if(selectedGameObject != nullptr)
         {
             selectedGameObject->AddChild(e);
@@ -191,49 +184,50 @@ void MenuBar::OnCreateFromPrefab() const
     }
     else
     {
-        Logger_Error("Prefab file '" << filename << "' is corrupt or can't be read.");
+        Logger_Error("Prefab file '" << filename <<
+                     "' is corrupt or can't be read.");
     }
 }
 
 void MenuBar::OnCreatePrefab() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreatePrefab);
+    wem->NotifyMenuBarActionClicked(Action::CreatePrefab);
 }
 void MenuBar::OnCreateMaterial() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateMaterial);
+    wem->NotifyMenuBarActionClicked(Action::CreateMaterial);
 }
 void MenuBar::OnCreateMesh() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateMesh);
+    wem->NotifyMenuBarActionClicked(Action::CreateMesh);
 }
 void MenuBar::OnCreateShaderProgram() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateShaderProgram);
+    wem->NotifyMenuBarActionClicked(Action::CreateShaderProgram);
 }
 void MenuBar::OnCreateTexture2D() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::CreateTexture2D);
+    wem->NotifyMenuBarActionClicked(Action::CreateTexture2D);
 }
 
 
 void MenuBar::OnAddComponentBehaviour() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentBehaviour);
+    wem->NotifyMenuBarActionClicked(Action::AddComponentBehaviour);
 }
 void MenuBar::OnAddComponentCamera() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentCamera);
+    wem->NotifyMenuBarActionClicked(Action::AddComponentCamera);
 }
 void MenuBar::OnAddComponentMeshRenderer() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentMeshRenderer);
+    wem->NotifyMenuBarActionClicked(Action::AddComponentMeshRenderer);
 }
 void MenuBar::OnAddComponentLineRenderer() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentLineRenderer);
+    wem->NotifyMenuBarActionClicked(Action::AddComponentLineRenderer);
 }
 void MenuBar::OnAddComponentTransform() const
 {
-    WindowEventManager::GetInstance()->NotifyMenuBarActionClicked(Action::AddComponentTransform);
+    wem->NotifyMenuBarActionClicked(Action::AddComponentTransform);
 }

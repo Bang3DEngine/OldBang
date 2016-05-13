@@ -1,37 +1,37 @@
 <GameObject>
-0x3812ff0
+0x273f790
 Luigi
 <children>
 <GameObject>
-0x31058b0
+0x2678fc0
 Luigi
 <children>
 <GameObject>
-0x4107ea0
+0x26a6e00
 Luigi
 <children>
 <GameObject>
-0x31dac30
+0x27028f0
 Luigi
 <children>
 <GameObject>
-0x4042130
+0x2887440
 Luigi
 <children>
 <GameObject>
-0x32b2760
+0x2a489e0
 Luigi
 <children>
 </children>
 <components>
 <Transform>
-0x32fb900
+0x2d0f400
 0 0 0
-0 0.258819 0.965926 0
+0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x4489600
+0x2cad990
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -40,13 +40,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x339e760
+0x2700400
 0 0 0
-0 0.258819 0.965926 0
+0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x33456e0
+0x2887580
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -55,13 +55,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x3398660
+0x28926f0
 0 0 0
-0 0.258819 0.965926 0
+0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x446c990
+0x2ae5960
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -70,13 +70,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x31d6c20
+0x260f5d0
 0 0 0
-0 0.258819 0.965926 0
+0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x3db3100
+0x2c4d9a0
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -85,13 +85,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x3144b90
+0x2b39d10
 0 0 0
-0 0.258819 0.965926 0
+0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x3f31e10
+0x2a2c940
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -100,13 +100,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x3ee1b80
-0 0 0
-0 0.258819 0.965926 0
-0.9 0.9 0.9
+0x2879620
+6.5 0 0
+0.183013 0.683013 -0.183013 0.683013
+0.05 0.05 0.05
 </Transform>
 <MeshRenderer>
-0x3ee0380
+0x2a82540
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>

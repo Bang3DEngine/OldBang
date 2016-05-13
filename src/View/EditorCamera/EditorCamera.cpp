@@ -37,20 +37,20 @@ void EditorCamera::OnUpdate()
     //KEY HANDLING
     if(Input::GetKey(Input::Key::W))
     {
-        moveStep += moveSpeed * camt->GetForward();
+        moveStep += moveSpeed  * Time::GetDeltaTime() * camt->GetForward();
     }
     else if(Input::GetKey(Input::Key::S))
     {
-        moveStep -= moveSpeed * camt->GetForward();
+        moveStep -= moveSpeed * Time::GetDeltaTime() * camt->GetForward();
     }
 
     if(Input::GetKey(Input::Key::A))
     {
-        moveStep -= moveSpeed * camt->GetRight();
+        moveStep -= moveSpeed * Time::GetDeltaTime() * camt->GetRight();
     }
     else if(Input::GetKey(Input::Key::D))
     {
-        moveStep += moveSpeed * camt->GetRight();
+        moveStep += moveSpeed * Time::GetDeltaTime() * camt->GetRight();
     }
     doingSomeAction = glm::length(moveStep) != 0;
     //
@@ -59,12 +59,12 @@ void EditorCamera::OnUpdate()
     if(Input::GetMouseButton(Input::MouseButton::MRight))
     {
         float mx = -Input::GetMouseAxisX() *
-                    mouseRotBoost;
+                    mouseRotBoost  * Time::GetDeltaTime();
         float my = -Input::GetMouseAxisY() *
-                    mouseRotBoost;
+                    mouseRotBoost  * Time::GetDeltaTime();
 
 
-        mouseRotationDegrees += glm::vec2(mx, my) * mouseRotBoost * Time::GetDeltaTime();
+        mouseRotationDegrees += glm::vec2(mx, my) * mouseRotBoost;
         //Orbitting Behaviour
         /*
         t->SetLeftMatrix(glm::rotate(mouseRotationRads.x, t->GetUp()) *

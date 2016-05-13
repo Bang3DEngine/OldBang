@@ -257,24 +257,17 @@ void Hierarchy::OnContextMenuCreatePrefab()
     Prefab *prefab = new Prefab(e);
 
     std::string ext = Prefab::GetFileExtensionStatic();
-    QFileDialog fd;
-    std::string filename = QFileDialog::getSaveFileName
-            (
-                WindowMain::GetMainWindow(),
-                QString::fromStdString("Create Prefab..."),
-                QString::fromStdString(
-                    Persistence::GetAssetsPathAbsolute() + "/" + e->GetName()),
-                QString::fromStdString( ext + "(*." + ext + ")" )
-            )
-            .toStdString();
-    if(filename == "") return;
-
-    std::fstream f;
-    f.open(filename, std::fstream::out);
-    if(f.is_open())
+    FileDialog fd("Create Prefab...", Prefab::GetFileExtensionStatic());
+    std::string filename = fd.GetSaveFilename(e->GetName());
+    if(filename != "")
     {
-        prefab->Write(f);
-        f.close();
+        std::fstream f;
+        f.open(filename, std::fstream::out);
+        if(f.is_open())
+        {
+            prefab->Write(f);
+            f.close();
+        }
     }
 
     delete prefab;

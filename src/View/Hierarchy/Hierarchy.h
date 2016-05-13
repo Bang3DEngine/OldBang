@@ -18,6 +18,7 @@
 #include <QDropEvent>
 
 #include "Scene.h"
+#include "FileDialog.h"
 #include "GameObject.h"
 #include "IWindowEventManagerListener.h"
 

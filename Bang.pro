@@ -21,6 +21,7 @@ INCLUDEPATH += \
     $$PWD/src/ \
     $$PWD/src/View/ \
     $$PWD/src/View/Interfaces/ \
+    $$PWD/src/View/Dialogs/ \
     $$PWD/src/View/Inspector/ \
     $$PWD/src/View/Hierarchy/ \
     $$PWD/src/View/Explorer/ \
@@ -140,7 +141,6 @@ HEADERS += \
     src/Persistence/stb_image.h \
     src/View/Explorer/Explorer.h \
     src/View/Inspector/InspectorFileSW.h \
-    src/View/Inspector/FileDialog.h \
     src/View/Inspector/IInspectable.h \
     src/View/MenuBar.h \
     src/View/Explorer/ExplorerDirTree.h \
@@ -161,7 +161,8 @@ HEADERS += \
     src/Domain/Engine/Components/LineRenderer.h \
     src/Domain/Engine/Components/Renderer.h \
     src/View/Explorer/FileTexture2DAsset.h \
-    src/View/Inspector/InspectorTexture2DAssetWidget.h
+    src/View/Inspector/InspectorTexture2DAssetWidget.h \
+    src/View/Dialogs/FileDialog.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -216,7 +217,6 @@ SOURCES += \
     src/Persistence/FileReader.cpp \
     src/View/Explorer/Explorer.cpp \
     src/View/Inspector/InspectorFileSW.cpp \
-    src/View/Inspector/FileDialog.cpp \
     src/View/Inspector/IInspectable.cpp \
     src/View/MenuBar.cpp \
     src/View/Explorer/ExplorerDirTree.cpp \
@@ -237,7 +237,8 @@ SOURCES += \
     src/Domain/Engine/Components/LineRenderer.cpp \
     src/Domain/Engine/Components/Renderer.cpp \
     src/View/Explorer/FileTexture2DAsset.cpp \
-    src/View/Inspector/InspectorTexture2DAssetWidget.cpp
+    src/View/Inspector/InspectorTexture2DAssetWidget.cpp \
+    src/View/Dialogs/FileDialog.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

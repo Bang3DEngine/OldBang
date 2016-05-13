@@ -6,9 +6,13 @@
 #include <QMenuBar>
 #include <QMessageBox>
 
+class WindowEventManager;
 class MenuBar : public QMenuBar
 {
     Q_OBJECT
+
+private:
+    WindowEventManager *wem = nullptr;
 
 public:
     Q_ENUMS(Action);

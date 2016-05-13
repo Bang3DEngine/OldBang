@@ -452,7 +452,7 @@ glm::quat FileReader::ReadQuat(std::istream &f)
     std::istringstream iss(ReadNextLine(f));
     float x,y,z,w;
     iss >> x >> y >> z >> w;
-    return glm::quat(x, y, z, w);
+    return glm::quat(w, x, y, z);
 }
 
 Rect FileReader::ReadRect(std::istream &f)
