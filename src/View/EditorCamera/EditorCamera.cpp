@@ -64,7 +64,7 @@ void EditorCamera::OnUpdate()
                     mouseRotBoost;
 
 
-        mouseRotationDegrees += glm::vec2(mx, my) * mouseRotBoost;
+        mouseRotationDegrees += glm::vec2(mx, my) * mouseRotBoost * Time::GetDeltaTime();
         //Orbitting Behaviour
         /*
         t->SetLeftMatrix(glm::rotate(mouseRotationRads.x, t->GetUp()) *
@@ -73,53 +73,10 @@ void EditorCamera::OnUpdate()
         */
         //
 
-        //Cam rotation Behaviour
-        //mouseRotX += mx;
-        //mouseRotY += my;
-
-        //glm::quat oldRot = t->GetRotation()
-
-        glm::quat rotY = glm::angleAxis(my, t->GetRight());
-        t->SetRotation(rotY * t->GetLocalRotation());;
-
-        glm::quat rotX = glm::angleAxis(mx, camt->GetUp());
-        camt->SetRotation(rotX * camt->GetLocalRotation());
-        Logger_Log(camt->GetEuler());
-
-        //glm::quat rotY = glm::angleAxis(my, glm::vec3(1,0,0));
-        //glm::quat rotX = glm::angleAxis(mx, glm::vec3(0,1,0));
-        //t->SetRotation( rotY * rotX * t->GetRotation() );
-
-        //glm::vec3 forward = t->GetForward();
-        //glm::vec3 localEuler = t->GetEuler();
-        //glm::quat undoRoll = glm::angleAxis(glm::radians(localEuler.z), t->GetForward());
-        //t->SetRotation(undoRoll * t->GetRotation());
-
-        //glm::vec3 worldEulerNoRoll = glm::inverse(t->GetRotation()) * localEuler;
-        //t->SetRotation(worldEulerNoRoll);
-        //t->SetRotation(localEuler);
-        //Logger_Log(localEuler);// << " -> " << worldEulerNoRoll);
-
-        //glm::vec3 up(0,1,0);
-        //Logger_Log("Forward: " << t->GetForward() << ", Up: " << up);
-        //float dot = glm::dot(t->GetForward(), glm::vec3(0,1,0));
-        /*if(abs(dot) > 0.9f)
-        {
-            //undo rotation
-            //Logger_Log("UNDO");
-            //t->SetRotation(oldRot);
-        }
-        else
-        {
-        }*/
-
-        //t->SetRotation( glm::vec3(mouseRotationDegrees.y, mouseRotationDegrees.x, 0.0f) );
-
-        //Remove roll from camera
-        //glm::vec3 target = t->GetPosition() + t->GetForward() * 99.9f;
-        //glm::vec3 dir = t->GetForward();
-        //t->LookAt()
-        //
+        glm::quat rotX = glm::angleAxis(mouseRotationDegrees.x, glm::vec3(0,1,0));
+        t->SetRotation( rotX  );
+        glm::quat rotY = glm::angleAxis(mouseRotationDegrees.y, camt->GetRight());
+        t->Rotate( rotY );
 
         Canvas::SetCursor(Qt::BlankCursor);
         doingSomeAction = true;
@@ -131,8 +88,8 @@ void EditorCamera::OnUpdate()
     else  //CAM PLANE MOVEMENT  -  MIDDLE PRESS MOVEMENT HANDLING
         if(Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        float mx = -Input::GetMouseAxisX() * mouseCamPlaneMoveBoost;
-        float my = Input::GetMouseAxisY() * mouseCamPlaneMoveBoost;
+        float mx = -Input::GetMouseAxisX() * mouseCamPlaneMoveBoost * Time::GetDeltaTime();
+        float my = Input::GetMouseAxisY() * mouseCamPlaneMoveBoost * Time::GetDeltaTime();
 
         t->SetPosition(t->GetPosition()   +
                        camt->GetRight() * mx +
