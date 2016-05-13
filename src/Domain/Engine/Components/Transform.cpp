@@ -55,6 +55,12 @@ void Transform::SetRotation(const glm::quat &q)
     inspectorEulerDeg = glm::degrees(glm::eulerAngles(rotation));
 }
 
+void Transform::Rotate(const glm::quat &r)
+{
+    SetRotation(r * GetLocalRotation());
+    inspectorEulerDeg = glm::degrees(glm::eulerAngles(rotation));
+}
+
 void Transform::SetScale(const glm::vec3 &s)
 {
     scale = s;
@@ -70,21 +76,25 @@ void Transform::SetRightMatrix(const glm::mat4 &rightMatrix)
     this->rightMatrix = rightMatrix;
 }
 
-void Transform::GetMatrix(glm::mat4 &m) const
+void Transform::GetLocalMatrix(glm::mat4 &m) const
 {
-    glm::mat4 T = glm::translate(glm::mat4(1.0f), position);
-    glm::mat4 R = glm::mat4_cast(rotation);
-    glm::mat4 S = glm::scale(glm::mat4(1.0f), scale);
+    glm::mat4 T = glm::translate(glm::mat4(1.0f), GetLocalPosition());
+    glm::mat4 R = glm::mat4_cast(GetLocalRotation());
+    glm::mat4 S = glm::scale(glm::mat4(1.0f), GetLocalScale());
 
     m = leftMatrix * T * R * S * rightMatrix;
+}
 
+void Transform::GetMatrix(glm::mat4 &m) const
+{
+    GetLocalMatrix(m);
     GameObject *parent = GetOwner()->GetParent();
     if(parent != nullptr)
     {
         Transform *tp = parent->GetComponent<Transform>();
         if(tp != nullptr)
         {
-            glm::mat4 mp = glm::mat4(1.0f);
+            glm::mat4 mp;
             tp->GetMatrix(mp);
             m = mp * m;
         }
@@ -96,6 +106,7 @@ void Transform::GetNormalMatrix(glm::mat4 &m) const
     GetMatrix(m);
     m = glm::transpose(glm::inverse(m));
 }
+
 
 void Transform::LookAt(glm::vec3 target, glm::vec3 _up)
 {
@@ -125,28 +136,83 @@ void Transform::LookAt(glm::vec3 target, glm::vec3 _up)
     */
 }
 
-glm::vec3 Transform::GetPosition() const
+glm::vec3 Transform::GetLocalPosition() const
 {
     return position;
 }
 
-glm::quat Transform::GetRotation() const
+glm::vec3 Transform::GetPosition() const
+{
+    GameObject *parent = GetOwner()->GetParent();
+    if(parent != nullptr)
+    {
+        Transform *pt = GetOwner()->GetParent()->GetComponent<Transform>();
+        if(pt != nullptr) return pt->GetPosition() + GetLocalPosition();
+    }
+    return GetLocalPosition();
+}
+
+glm::quat Transform::GetLocalRotation() const
 {
     return rotation;
 }
 
-glm::vec3 Transform::GetEuler() const
+glm::quat Transform::GetRotation() const
+{
+    GameObject *parent = GetOwner()->GetParent();
+    if(parent != nullptr)
+    {
+        Transform *pt = GetOwner()->GetParent()->GetComponent<Transform>();
+        if(pt != nullptr) return pt->GetRotation() * GetLocalRotation();
+    }
+    return GetLocalRotation();
+}
+
+glm::vec3 Transform::GetLocalEuler() const
 {
     return inspectorEulerDeg;
 }
 
-glm::vec3 Transform::GetScale() const
+glm::vec3 Transform::GetEuler() const
+{
+    GameObject *parent = GetOwner()->GetParent();
+    if(parent != nullptr)
+    {
+        Transform *pt = GetOwner()->GetParent()->GetComponent<Transform>();
+        if(pt != nullptr) return pt->GetEuler() + GetLocalEuler();
+    }
+    return GetLocalEuler();
+}
+
+glm::vec3 Transform::GetLocalScale() const
 {
     return scale;
 }
+
+glm::vec3 Transform::GetScale() const
+{
+    GameObject *parent = GetOwner()->GetParent();
+    if(parent != nullptr)
+    {
+        Transform *pt = GetOwner()->GetParent()->GetComponent<Transform>();
+        if(pt != nullptr) return pt->GetScale() * GetLocalScale();
+    }
+    return GetLocalScale();
+}
+
+glm::vec3 Transform::GetLocalForward() const
+{
+    return glm::normalize(GetLocalRotation() * glm::vec3(0.0f, 0.0f, -1.0f));
+}
+
 glm::vec3 Transform::GetForward() const
 {
-    return glm::normalize(rotation * glm::vec3(0.0f, 0.0f, -1.0f));
+    return GetRotation() * GetLocalForward();
+}
+
+glm::vec3 Transform::GetLocalBack() const
+{
+    return -GetLocalForward();
 }
 
 glm::vec3 Transform::GetBack() const
@@ -154,9 +220,19 @@ glm::vec3 Transform::GetBack() const
     return -GetForward();
 }
 
+glm::vec3 Transform::GetLocalRight() const
+{
+    return glm::normalize(GetLocalRotation() * glm::vec3(1.0f, 0.0f, 0.0f));
+}
+
 glm::vec3 Transform::GetRight() const
 {
-    return glm::normalize(rotation * glm::vec3(1.0f, 0.0f, 0.0f));
+    return GetRotation() * GetLocalRight();
+}
+
+glm::vec3 Transform::GetLocalLeft() const
+{
+    return -GetLocalRight();
 }
 
 glm::vec3 Transform::GetLeft() const
@@ -164,9 +240,19 @@ glm::vec3 Transform::GetLeft() const
     return -GetRight();
 }
 
+glm::vec3 Transform::GetLocalUp() const
+{
+    return glm::normalize(GetLocalRotation() * glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
 glm::vec3 Transform::GetUp() const
 {
-    return glm::normalize(rotation * glm::vec3(0.0f, 1.0f, 0.0f));
+    return GetRotation() * GetLocalUp();
+}
+
+glm::vec3 Transform::GetLocalDown() const
+{
+    return -GetLocalUp();
 }
 
 glm::vec3 Transform::GetDown() const

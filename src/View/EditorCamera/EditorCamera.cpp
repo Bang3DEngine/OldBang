@@ -4,12 +4,17 @@ EditorCamera::EditorCamera()
 {
     this->SetName("EditorCamera");
 
-    cam = AddComponent<Camera>();
+    yawNode = new GameObject("EditorYawNode");
+    AddChild(yawNode);
+
+    cam = yawNode->AddComponent<Camera>();
     cam->SetAutoUpdateAspectRatio(true);
     cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
     Transform *t = AddComponent<Transform>();
     t->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+
+    camt = yawNode->AddComponent<Transform>();
     //t->LookAt(glm::vec3(0));
 }
 
@@ -20,7 +25,6 @@ EditorCamera::~EditorCamera()
 void EditorCamera::OnUpdate()
 {
     Transform *t = GetComponent<Transform>();
-    if(t == nullptr) return;
 
     bool doingSomeAction = false;
     bool mustUnlockMouse = true;
@@ -33,20 +37,20 @@ void EditorCamera::OnUpdate()
     //KEY HANDLING
     if(Input::GetKey(Input::Key::W))
     {
-        moveStep += moveSpeed * t->GetForward();
+        moveStep += moveSpeed * camt->GetForward();
     }
     else if(Input::GetKey(Input::Key::S))
     {
-        moveStep -= moveSpeed * t->GetForward();
+        moveStep -= moveSpeed * camt->GetForward();
     }
 
     if(Input::GetKey(Input::Key::A))
     {
-        moveStep -= moveSpeed * t->GetRight();
+        moveStep -= moveSpeed * camt->GetRight();
     }
     else if(Input::GetKey(Input::Key::D))
     {
-        moveStep += moveSpeed * t->GetRight();
+        moveStep += moveSpeed * camt->GetRight();
     }
     doingSomeAction = glm::length(moveStep) != 0;
     //
@@ -70,22 +74,44 @@ void EditorCamera::OnUpdate()
         //
 
         //Cam rotation Behaviour
+        //mouseRotX += mx;
+        //mouseRotY += my;
+
+        //glm::quat oldRot = t->GetRotation()
+
         glm::quat rotY = glm::angleAxis(my, t->GetRight());
-        glm::quat rotX = glm::angleAxis(mx, t->GetUp());
-        t->SetRotation( rotY * rotX * t->GetRotation() );
+        t->SetRotation(rotY * t->GetLocalRotation());;
 
-        glm::vec3 right = t->GetRight();
-        glm::vec3 forward = t->GetForward();
-        Logger_Log(forward);
+        glm::quat rotX = glm::angleAxis(mx, camt->GetUp());
+        camt->SetRotation(rotX * camt->GetLocalRotation());
+        Logger_Log(camt->GetEuler());
 
-        glm::vec3 localEuler = t->GetEuler();
-        glm::quat undoRoll = glm::angleAxis(glm::radians(localEuler.z), glm::vec3(0,0,1));
-        t->SetRotation(undoRoll * t->GetRotation());
+        //glm::quat rotY = glm::angleAxis(my, glm::vec3(1,0,0));
+        //glm::quat rotX = glm::angleAxis(mx, glm::vec3(0,1,0));
+        //t->SetRotation( rotY * rotX * t->GetRotation() );
 
-        glm::vec3 worldEulerNoRoll = glm::inverse(t->GetRotation()) * localEuler;
+        //glm::vec3 forward = t->GetForward();
+        //glm::vec3 localEuler = t->GetEuler();
+        //glm::quat undoRoll = glm::angleAxis(glm::radians(localEuler.z), t->GetForward());
+        //t->SetRotation(undoRoll * t->GetRotation());
+
+        //glm::vec3 worldEulerNoRoll = glm::inverse(t->GetRotation()) * localEuler;
         //t->SetRotation(worldEulerNoRoll);
         //t->SetRotation(localEuler);
         //Logger_Log(localEuler);// << " -> " << worldEulerNoRoll);
+
+        //glm::vec3 up(0,1,0);
+        //Logger_Log("Forward: " << t->GetForward() << ", Up: " << up);
+        //float dot = glm::dot(t->GetForward(), glm::vec3(0,1,0));
+        /*if(abs(dot) > 0.9f)
+        {
+            //undo rotation
+            //Logger_Log("UNDO");
+            //t->SetRotation(oldRot);
+        }
+        else
+        {
+        }*/
 
         //t->SetRotation( glm::vec3(mouseRotationDegrees.y, mouseRotationDegrees.x, 0.0f) );
 
@@ -109,8 +135,8 @@ void EditorCamera::OnUpdate()
         float my = Input::GetMouseAxisY() * mouseCamPlaneMoveBoost;
 
         t->SetPosition(t->GetPosition()   +
-                       t->GetRight() * mx +
-                       t->GetUp() * my);
+                       camt->GetRight() * mx +
+                       camt->GetUp() * my);
 
         //Canvas::SetCursor(Qt::SizeAllCursor);
         Canvas::SetCursor(Qt::BlankCursor);
@@ -128,7 +154,7 @@ void EditorCamera::OnUpdate()
         if(mouseWheel != 0.0f)
         {
             moveStep += mouseWheelBoost * mouseWheel *
-                        moveSpeed * t->GetForward();
+                        moveSpeed * camt->GetForward();
             doingSomeAction = true;
         }
     }
@@ -148,6 +174,11 @@ void EditorCamera::OnUpdate()
     {
         t->SetPosition(t->GetPosition() + moveStep);
     }
+}
+
+Camera *EditorCamera::GetCamera()
+{
+    return yawNode->GetComponent<Camera>();
 }
 
 

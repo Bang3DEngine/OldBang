@@ -37,7 +37,7 @@ public:
 
     void _OnRender() override;
 
-    void SetCameraChild(const std::string &cameraChildName);
+    void SetCamera(const Camera *cam);
 
     Camera* GetCamera() const;
     const Canvas* GetCanvas() const;

@@ -38,21 +38,9 @@ void Scene::_OnRender()
     gbuffer->RenderToScreen();
 }
 
-void Scene::SetCameraChild(const std::string &cameraChildName)
+void Scene::SetCamera(const Camera *cam)
 {
-    GameObject *cameraGameObject = GetChild(cameraChildName);
-    if(cameraGameObject != nullptr)
-    {
-        if(cameraGameObject->HasComponent<Camera>())
-        {
-            this->cameraGameObject = cameraGameObject;
-        }
-        else
-        {
-            Logger_Error("Can't set " << cameraGameObject <<
-                         " as camera because it does not have a Camera component.");
-        }
-    }
+    this->cameraGameObject = cam->GetOwner();
 }
 
 Camera *Scene::GetCamera() const

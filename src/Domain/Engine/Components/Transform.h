@@ -42,32 +42,43 @@ public:
 
     void SetPosition(const glm::vec3 &p);
 
-    //These wont change the input inspectorEulerDeg of the user
+    //These wont change the input inspectorEulerDeg of the
+    void Rotate(const glm::vec3 &degreesEuler);
     void SetRotation(const glm::vec3 &degreesEuler);
     void SetRotationFromInspector(const glm::quat &q);
 
     //This will change inspectorEulerDeg to the quat->eulerAngles conversion
     void SetRotation(const glm::quat &r);
+    void Rotate(const glm::quat &r);
 
     void SetScale(const glm::vec3 &s);
     void SetLeftMatrix(const glm::mat4 &leftMatrix);
     void SetRightMatrix(const glm::mat4 &rightMatrix);
 
-
-
+    void GetLocalMatrix(glm::mat4 &m) const;
     void GetMatrix(glm::mat4 &m) const;
     void GetNormalMatrix(glm::mat4 &m) const;
 
+    glm::vec3 GetLocalForward() const;
     glm::vec3 GetForward() const;
+    glm::vec3 GetLocalBack() const;
     glm::vec3 GetBack() const;
+    glm::vec3 GetLocalRight() const;
     glm::vec3 GetRight() const;
+    glm::vec3 GetLocalLeft() const;
     glm::vec3 GetLeft() const;
+    glm::vec3 GetLocalUp() const;
     glm::vec3 GetUp() const;
+    glm::vec3 GetLocalDown() const;
     glm::vec3 GetDown() const;
 
+    glm::vec3 GetLocalPosition() const;
     glm::vec3 GetPosition() const;
+    glm::quat GetLocalRotation() const;
     glm::quat GetRotation() const;
+    glm::vec3 GetLocalEuler() const;
     glm::vec3 GetEuler() const; // Gets rotation in euler angles
+    glm::vec3 GetLocalScale() const;
     glm::vec3 GetScale() const;
 
     const std::string ToString() const override;

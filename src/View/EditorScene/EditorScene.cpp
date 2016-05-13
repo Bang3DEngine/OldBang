@@ -4,7 +4,7 @@ EditorScene::EditorScene() : Scene()
 {
     cameraGameObject = new EditorCamera();
     AddChild(cameraGameObject);
-    SetCameraChild(cameraGameObject->GetName());
+    SetCamera(cameraGameObject->GetCamera());
 
     axises = new EditorAxis();
     AddChild(axises);

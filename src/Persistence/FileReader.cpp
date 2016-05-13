@@ -355,7 +355,7 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
                 GameObject *camChild = GetNextPointerAddress<GameObject>(f);
                 if(camChild != nullptr)
                 {
-                    scene->SetCameraChild(camChild->GetName());
+                    scene->SetCamera(camChild->GetComponent<Camera>());
                 }
                 FileReader::ReadString(f);
             }
