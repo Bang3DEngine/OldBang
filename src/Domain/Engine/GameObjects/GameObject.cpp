@@ -40,6 +40,11 @@ GameObject *GameObject::GetParent() const
 
 const std::string GameObject::GetName() const { return name; }
 
+unsigned char GameObject::GetRenderLayer() const
+{
+    return renderLayer;
+}
+
 const std::list<Component *> &GameObject::GetComponents() const { return comps; }
 
 const std::list<GameObject *> GameObject::GetChildren() const
@@ -198,7 +203,12 @@ void GameObject::SetParent(GameObject *newParent)
 
     #ifdef BANG_EDITOR
     WindowEventManager::NotifyChildChangedParent(this, previousParent);
-    #endif
+#endif
+}
+
+void GameObject::SetRenderLayer(unsigned char layer)
+{
+    this->renderLayer = layer;
 }
 
 void GameObject::SetName(const std::string &name)
@@ -368,18 +378,26 @@ void GameObject::_OnUpdate()
     OnUpdate();
 }
 
-void GameObject::_OnPreRender()
+void GameObject::_OnPreRender(unsigned char renderLayer)
 {
-    PROPAGATE_EVENT(_OnPreRender, comps);
-    PROPAGATE_EVENT(_OnPreRender, children);
-    OnPreRender();
+    PROPAGATE_EVENT_WITH_RENDER_LAYER(renderLayer, _OnPreRender, children);
+
+    if(this->renderLayer == renderLayer)
+    {
+        PROPAGATE_EVENT(_OnPreRender, comps);
+        OnPreRender();
+    }
 }
 
-void GameObject::_OnRender()
+void GameObject::_OnRender(unsigned char renderLayer)
 {
-    PROPAGATE_EVENT(_OnRender, comps);
-    PROPAGATE_EVENT(_OnRender, children);
-    OnRender();
+    PROPAGATE_EVENT_WITH_RENDER_LAYER(renderLayer, _OnRender, children);
+
+    if(this->renderLayer == renderLayer)
+    {
+        PROPAGATE_EVENT(_OnRender, comps);
+        OnRender();
+    }
 }
 
 void GameObject::_OnDestroy()

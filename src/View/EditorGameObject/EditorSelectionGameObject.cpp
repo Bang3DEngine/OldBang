@@ -7,6 +7,7 @@ EditorSelectionGameObject::EditorSelectionGameObject() :
 
     axis = new EditorAxis();
     AddChildWithoutNotifyingHierarchy(axis);
+    axis->SetRenderLayer(5);
 
     bbox = new EditorBBox();
     AddChildWithoutNotifyingHierarchy(bbox);

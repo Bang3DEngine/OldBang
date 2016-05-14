@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Canvas.h"
 
+
 Scene::Scene() : GameObject("Scene")
 {
     isScene = true;
@@ -18,11 +19,12 @@ Scene::~Scene()
     this->_OnDestroy();
 }
 
-void Scene::_OnRender()
+void Scene::_OnRender(unsigned char _renderLayer)
 {
     gbuffer->Bind();
-    //All the mesh renderers now will render stuff into the geometryFramebuffer
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
     if(cameraGameObject != nullptr)
     {
         Camera *cam = cameraGameObject->GetComponent<Camera>();
@@ -32,7 +34,14 @@ void Scene::_OnRender()
         }
     }
 
-    PROPAGATE_EVENT(_OnRender, children);
+    //From 0 to 9
+    for(unsigned char renderLayer = 0; renderLayer <= 9; ++renderLayer)
+    {
+        glClear(GL_DEPTH_BUFFER_BIT);
+        PROPAGATE_EVENT_WITH_RENDER_LAYER(renderLayer, _OnPreRender, children);
+        PROPAGATE_EVENT_WITH_RENDER_LAYER(renderLayer, _OnRender, children);
+    }
+
     gbuffer->UnBind();
 
     gbuffer->RenderToScreen();

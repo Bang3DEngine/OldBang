@@ -35,7 +35,7 @@ public:
     Scene();
     virtual ~Scene();
 
-    void _OnRender() override;
+    void _OnRender(unsigned char renderLayer = 255) override;
 
     void SetCamera(const Camera *cam);
 

@@ -42,8 +42,8 @@ private:
 
     virtual void _OnStart() override;
     virtual void _OnUpdate() override;
-    virtual void _OnPreRender() override;
-    virtual void _OnRender() override;
+    virtual void _OnPreRender(unsigned char renderLayer) override;
+    virtual void _OnRender(unsigned char renderLayer) override;
     virtual void _OnDestroy() override;
 
 protected:
@@ -51,6 +51,15 @@ protected:
     std::list<Component*> comps;
     std::list<GameObject*> children;
     GameObject* parent = nullptr;
+
+    /**
+     * @brief A RenderLayer is the order in which gameObjects will
+     * be drawn on screen. First all GameObjects on layer 0 are drawn, then
+     * all GameObjects on layer 1, etc. GameObjects rendered on layer N will
+     * not take into account the depth in layer N-1.
+     *  (the depth buffer will be cleared after completely rendering each layer.)
+     */
+    unsigned char renderLayer = 0;
 
     bool enabled = true;
     bool isScene = false;
@@ -75,6 +84,7 @@ public:
     void RemoveChild(GameObject *child);
 
     void SetParent(GameObject *parent);
+    void SetRenderLayer(unsigned char layer);
     void SetName(const std::string &name);
 
     const std::string ToString() const;
@@ -82,6 +92,7 @@ public:
     Scene* GetScene();
     GameObject* GetParent() const;
     const std::string GetName() const;
+    unsigned char GetRenderLayer() const;
     const std::list<Component*>& GetComponents() const;
     const std::list<GameObject*> GetChildren() const;
 

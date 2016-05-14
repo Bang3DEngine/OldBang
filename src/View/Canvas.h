@@ -39,7 +39,6 @@ private:
     bool paused = false;
     std::list<Scene*> scenes;
 
-    QThread *workingThread = new QThread();
     Scene *currentScene = nullptr;
     QTimer drawTimer;
 

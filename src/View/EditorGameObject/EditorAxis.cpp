@@ -8,7 +8,6 @@ EditorAxis::EditorAxis() : EditorGameObject()
     yAxisLine = AddComponent<LineRenderer>();
     zAxisLine = AddComponent<LineRenderer>();
 
-
     matx = new Material(*xAxisLine->GetMaterial());
     maty = new Material(*yAxisLine->GetMaterial());
     matz = new Material(*zAxisLine->GetMaterial());

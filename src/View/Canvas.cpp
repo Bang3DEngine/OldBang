@@ -22,10 +22,6 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     Input::Init();
 
     stCanvas = this;
-
-     // SEPARATE THREAD!
-    //drawTimer.moveToThread(workingThread);
-    //workingThread->start();
 }
 
 void Canvas::initializeGL()
@@ -58,12 +54,12 @@ void Canvas::updateGL()
         {
             currentScene->_OnUpdate();
         }
-        currentScene->_OnPreRender();
+
+        //Called from scene _OnRender: currentScene->_OnPreRender();
         currentScene->_OnRender();
     }
 
     Input::OnNewFrame();
-
     QGLWidget::swapBuffers();
 }
 
