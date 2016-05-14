@@ -52,8 +52,11 @@ void GBuffer::RenderToScreen() const
     renderToScreenMaterial->SetTexture(depthTex,    GBuffer::Attachment::Depth);    //4
     renderToScreenMaterial->Bind();
 
+    glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
     //Render the screen plane!
-    glDrawArrays(renderToScreenPlaneMesh->GetRenderMode(), 0, renderToScreenPlaneMesh->GetVertexCount());
+    glDrawArrays(GL_TRIANGLES, 0, renderToScreenPlaneMesh->GetVertexCount());
 
     renderToScreenMaterial->UnBind();
     renderToScreenPlaneMesh->GetVAO()->UnBind();

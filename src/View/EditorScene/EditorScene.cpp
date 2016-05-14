@@ -13,3 +13,8 @@ EditorScene::EditorScene() : Scene()
 EditorScene::~EditorScene()
 {
 }
+
+bool EditorScene::IsEditorGameObject() const
+{
+    return true;
+}

@@ -27,7 +27,6 @@ void FileWriter::WriteAsset(std::string filename, Asset *a)
     std::ofstream ofs;
     filename = Persistence::AppendExtension(filename,
                                             a->GetFileExtension());
-    Logger_Log(a->GetFileExtensionStatic());
     ofs.open(filename);
     if(!ofs.is_open())
     {
@@ -67,7 +66,7 @@ void FileWriter::Write(const glm::quat &q, std::ostream &f)
 
 void FileWriter::Write(const Rect &r, std::ostream &f)
 {
-    f << r.left << " " << r.right << " " << r.bottom << " " << r.top << std::endl;
+    f << r.minx << " " << r.maxx << " " << r.miny << " " << r.maxy << std::endl;
 }
 
 void FileWriter::Write(const std::string &str, std::ostream &f)

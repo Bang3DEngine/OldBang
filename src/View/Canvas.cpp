@@ -51,7 +51,6 @@ void Canvas::updateGL()
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     Time::deltaTime = float(Time::GetNow() - lastRenderTime) / 1000.0f;
-
     if(currentScene != nullptr)
     {
         lastRenderTime = Time::GetNow();
@@ -59,7 +58,7 @@ void Canvas::updateGL()
         {
             currentScene->_OnUpdate();
         }
-
+        currentScene->_OnPreRender();
         currentScene->_OnRender();
     }
 
@@ -105,7 +104,7 @@ void Canvas::SetCurrentScene(Scene *scene)
     if(currentScene != nullptr)
     {
         currentScene->_OnStart();
-        WindowMain::GetInstance()->widgetHierarchy->FillDownwards(currentScene);
+        WindowMain::GetInstance()->widgetHierarchy->Refresh(currentScene);
     }
 }
 

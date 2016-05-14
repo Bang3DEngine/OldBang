@@ -23,25 +23,26 @@
 
 class MeshRenderer : public Renderer
 {
+
 private:
     Mesh *mesh = nullptr;
 
-    void Render() const override;
-
 protected:
-    void _OnRender() override;
+
+    virtual void ActivateStatesBeforeRendering() const override;
+    virtual void OnRender() override;
+    virtual void Render() const override;
 
 public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
     void SetMaterial(Material *m) override;
-
     virtual void SetMesh(Mesh *m);
-    virtual const Mesh* GetMesh();
 
-    virtual const std::string ToString() const override { return "MeshRenderer"; }
-    virtual std::string GetName() const override { return "MeshRenderer"; }
+    virtual const Mesh* GetMesh();
+    virtual const std::string ToString() const override;
+    virtual std::string GetName() const override;
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;

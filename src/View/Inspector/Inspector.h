@@ -41,7 +41,7 @@ public:
     void MoveDown(InspectorWidget *w);
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
-    void OnTreeHierarchyEntitiesSelected(const std::list<GameObject*> &selectedEntities) override;
+    void OnTreeHierarchyEntitiesSelected(std::list<GameObject*> &selectedEntities);
 };
 
 #endif // LISTINSPECTOR_H

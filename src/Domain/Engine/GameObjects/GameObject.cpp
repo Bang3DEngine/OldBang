@@ -4,13 +4,13 @@
 #include "FileReader.h"
 #include "WindowEventManager.h"
 
-#include "EditorAxis.h"
+#include "EditorSelectionGameObject.h"
 
 GameObject::GameObject() : GameObject("")
 {
 }
 
-GameObject::GameObject(const std::string &name) : name(name), parent(nullptr), isScene(false)
+GameObject::GameObject(const std::string &name) : name(name)
 {
 }
 
@@ -36,6 +36,20 @@ Scene *GameObject::GetScene()
 GameObject *GameObject::GetParent() const
 {
     return parent;
+}
+
+const std::string GameObject::GetName() const { return name; }
+
+const std::list<Component *> &GameObject::GetComponents() const { return comps; }
+
+const std::list<GameObject *> GameObject::GetChildren() const
+{
+    std::list<GameObject *> cc;
+    for(auto c = children.begin(); c != children.end(); ++c)
+    {
+        if(!(*c)->IsEditorGameObject()) cc.push_back(*c);
+    }
+    return cc;
 }
 
 void GameObject::AddComponent(Component *c)
@@ -73,7 +87,7 @@ void GameObject::RemoveComponent(Component *c)
 }
 
 
-void GameObject::AddChildWithoutNoifyingHierarchy(GameObject *child)
+void GameObject::AddChildWithoutNotifyingHierarchy(GameObject *child)
 {
     child->parent = this;
     children.push_back(child);
@@ -81,7 +95,7 @@ void GameObject::AddChildWithoutNoifyingHierarchy(GameObject *child)
 
 void GameObject::AddChild(GameObject *child)
 {
-    AddChildWithoutNoifyingHierarchy(child);
+    AddChildWithoutNotifyingHierarchy(child);
 
     #ifdef BANG_EDITOR
     WindowEventManager::NotifyChildAdded(child);
@@ -108,7 +122,7 @@ void GameObject::MoveChild(GameObject *child, GameObject *newParent)
         if((*it) == child)
         {
             RemoveChildWithoutNotifyingHierarchy(it);
-            newParent->AddChildWithoutNoifyingHierarchy(child);
+            newParent->AddChildWithoutNotifyingHierarchy(child);
 
             #ifdef BANG_EDITOR
             WindowEventManager::NotifyChildChangedParent(child, this);
@@ -192,63 +206,97 @@ void GameObject::SetName(const std::string &name)
     this->name = name;
 }
 
+bool GameObject::IsEditorGameObject() const
+{
+    return false;
+}
+
 bool GameObject::IsScene() const
 {
     return isScene;
 }
 
 #ifdef BANG_EDITOR
-void GameObject::OnTreeHierarchyEntitiesSelected(const std::list<GameObject*> &selectedEntities)
+void GameObject::OnTreeHierarchyEntitiesSelected(
+        std::list<GameObject*> &selectedEntities )
 {
-    bool wasSelected = (selectedMaterial != nullptr);
-    bool isSelected = false;
-    for(auto it = selectedEntities.begin(); it != selectedEntities.end(); ++it)
+    if(IsScene()) return;
+
+    bool selected = false;
+    for(auto it : selectedEntities)
     {
-        if((*it) == this)
+        if( it == this )
         {
-            isSelected = true;
+            selected = true;
             break;
         }
     }
 
+    if(selected)
+    {
+        if(!ed_wasSelectedInHierarchy)
+        {
+            ed_selectionGameObject = new EditorSelectionGameObject();
+            //AddChildWithoutNotifyingHierarchy(ed_bbox);
+            AddChildWithoutNotifyingHierarchy(ed_selectionGameObject);
+        }
+    }
+    else
+    {
+        if(ed_wasSelectedInHierarchy)
+        {
+            RemoveChild(ed_selectionGameObject);
+        }
+    }
+
+
     //TODO: change this, not really a good way of doing it....
+    /*
     if(HasComponent<MeshRenderer>())
     {
-        if(isSelected)
+        if(selected)
         {
-            if(nonSelectedMaterial == nullptr)
+            if(ed_nonSelectedMaterial == nullptr)
             {
-                nonSelectedMaterial = GetComponent<MeshRenderer>()->GetMaterial();
+                ed_nonSelectedMaterial =
+                        GetComponent<MeshRenderer>()->GetMaterial();
             }
 
-            if(!wasSelected)
+            if(!ed_wasSelectedInHierarchy)
             {
-                if(nonSelectedMaterial != nullptr)
+                if(ed_nonSelectedMaterial != nullptr)
                 {
                     //Create a copy of its material, and modify its properties
-                    selectedMaterial = new Material(*nonSelectedMaterial);
-                    selectedMaterial->SetDiffuseColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
+                    ed_selectedMaterial = new Material(*ed_nonSelectedMaterial);
+                    ed_selectedMaterial->SetDiffuseColor(
+                                glm::vec4(0.0f, 0.0f, 1.0f, 0.5f)
+                                );
 
-                    nonSelectedMaterial = GetComponent<MeshRenderer>()->GetMaterial();
+                    ed_nonSelectedMaterial =
+                            GetComponent<MeshRenderer>()->GetMaterial();
                     //GetComponent<MeshRenderer>()->SetMaterial(selectedMaterial);
                 }
             }
         }
         else
         {
-            if(wasSelected)
+            if(ed_wasSelectedInHierarchy)
             {
-                if(nonSelectedMaterial != nullptr)
+                if(ed_nonSelectedMaterial != nullptr)
                 {
-                    delete selectedMaterial;
-                    selectedMaterial = nullptr;
+                    delete ed_selectedMaterial;
+                    ed_selectedMaterial = nullptr;
                     //GetComponent<MeshRenderer>()->SetMaterial(nonSelectedMaterial);
                 }
             }
         }
     }
     //
+    */
+
+    ed_wasSelectedInHierarchy = selected;
 }
+#endif
 
 void GameObject::Write(std::ostream &f) const
 {
@@ -295,7 +343,9 @@ void GameObject::Read(std::istream &f)
     }
 }
 
-#endif
+void GameObject::SetEnabled(bool enabled) { this->enabled = enabled; }
+
+bool GameObject::IsEnabled() { return enabled; }
 
 
 const std::string GameObject::ToString() const
@@ -316,6 +366,13 @@ void GameObject::_OnUpdate()
     PROPAGATE_EVENT(_OnUpdate, comps);
     PROPAGATE_EVENT(_OnUpdate, children);
     OnUpdate();
+}
+
+void GameObject::_OnPreRender()
+{
+    PROPAGATE_EVENT(_OnPreRender, comps);
+    PROPAGATE_EVENT(_OnPreRender, children);
+    OnPreRender();
 }
 
 void GameObject::_OnRender()

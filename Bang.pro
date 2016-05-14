@@ -162,7 +162,10 @@ HEADERS += \
     src/Domain/Engine/Components/Renderer.h \
     src/View/Explorer/FileTexture2DAsset.h \
     src/View/Inspector/InspectorTexture2DAssetWidget.h \
-    src/View/Dialogs/FileDialog.h
+    src/View/Dialogs/FileDialog.h \
+    src/View/EditorGameObject/EditorBBox.h \
+    src/Domain/Engine/Physics/Box.h \
+    src/View/EditorGameObject/EditorSelectionGameObject.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -238,7 +241,10 @@ SOURCES += \
     src/Domain/Engine/Components/Renderer.cpp \
     src/View/Explorer/FileTexture2DAsset.cpp \
     src/View/Inspector/InspectorTexture2DAssetWidget.cpp \
-    src/View/Dialogs/FileDialog.cpp
+    src/View/Dialogs/FileDialog.cpp \
+    src/View/EditorGameObject/EditorBBox.cpp \
+    src/Domain/Engine/Physics/Box.cpp \
+    src/View/EditorGameObject/EditorSelectionGameObject.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

@@ -37,18 +37,14 @@ public:
 
     virtual const std::string ToString() const override;
 
-    virtual void Write(std::ostream &f) const override {}
-    virtual void Read(std::istream &f) override {}
-
-    virtual void _OnStart() override { OnStart(); }
-    virtual void _OnRender() override { OnRender(); }
-    virtual void _OnUpdate() override { OnUpdate(); }
-    virtual void _OnDestroy() override { OnDestroy(); }
 
     virtual std::string GetName() const { return "Component"; }
 
     void SetEnabled(bool enabled) { this->enabled = enabled; }
     bool IsEnabled() { return enabled; }
+
+    virtual void Write(std::ostream &f) const override {}
+    virtual void Read(std::istream &f) override {}
 };
 
 #endif // COMPONENT_H

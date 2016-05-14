@@ -8,10 +8,14 @@
 class Rect : public IToString
 {
 public:
-    float left, right, bottom, top;
+    float minx = 0.0f;
+    float maxx = 0.0f;
+    float miny = 0.0f;
+    float maxy = 0.0f;
 
     Rect();
-    Rect(float left, float right, float bottom, float top);
+    Rect(float minx, float maxx,
+         float miny, float maxy);
 
     float GetWidth() const;
     float GetHeight() const;

@@ -51,3 +51,10 @@ std::ostream &operator<<(std::ostream &log, const IToString *s)
     log << s->ToString();
     return log;
 }
+
+
+std::ostream &operator<<(std::ostream &log, const IToString &s)
+{
+    log << s.ToString();
+    return log;
+}

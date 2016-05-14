@@ -96,7 +96,7 @@ void Inspector::MoveDown(InspectorWidget *w)
 }
 
 void Inspector::OnTreeHierarchyEntitiesSelected
-    (const std::list<GameObject*> &selectedEntities)
+    (std::list<GameObject*> &selectedEntities)
 {
     GameObject *e = nullptr;
     if(!selectedEntities.empty())

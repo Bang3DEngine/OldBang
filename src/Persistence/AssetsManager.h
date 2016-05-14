@@ -13,26 +13,24 @@ class AssetsManager
 {
 
 private:
+    /** For every RELATIVE id, it contains a pointer to the asset
+      * created when the assets were loaded. **/
+    static std::map<std::string, Asset*> idToAssetPointer;
 
-    //For every RELATIVE filepath, it contains a pointer to the asset
-    // created when the assets were loaded.
-    static std::map<std::string, Asset*> filepathToAssetPointer;
-
-    //Filepath is parsed to RELATIVE, which is how cache works,
-    //so you should try to use this method, to avoid using the
-    //ABSOLUTE filepath instead of the RELATIVE one
+    /** Filepath is parsed to RELATIVE, which is how cache works,
+      * so you should try to use this method, to avoid using the
+      * ABSOLUTE filepath instead of the RELATIVE one. **/
     template <class T>
     static T* GetAssetFromMap(const std::string &filepath)
     {
         std::string f = Persistence::ProjectRootAbsoluteToRelative(filepath);
 
-        Logger_Log("To relative: " << f);
         if(!ExistsAssetInCache(f)) return nullptr;
-        else return dynamic_cast<T*>(filepathToAssetPointer[f]);
+        else return dynamic_cast<T*>(idToAssetPointer[f]);
     }
 
-    //Reads an asset (*.btex2d, *.bmesh, etc.) from an stream
-    //The input must not have the opening tag!
+    /** Reads an asset (*.btex2d, *.bmesh, etc.) from an stream
+      * The input must not have the opening tag!. **/
     template <class T>
     static T* ReadAsset(std::istream &f)
     {
@@ -43,8 +41,8 @@ private:
         return dynamic_cast<T*>(a);
     }
 
-    //Reads a specific asset file (*.btex2d, *.bmesh, etc.)
-    // from a filepath
+    /** Reads a specific asset file (*.btex2d, *.bmesh, etc.)
+      * from a filepath. **/
     template <class T>
     static T* ReadAssetFile(const std::string &filepath)
     {
@@ -76,9 +74,17 @@ public:
 
     static bool ExistsAssetInCache(const std::string &filepath);
 
-    //Tries to retrieve an Asset from the AssetsManager cache
-    //If there's no such Asset, it is loaded, added to the cache, and returned
-    //If the file can't be read, nullptr is returned
+    /** Tries to retrieve an Asset from the AssetsManager cache.
+      * It won't try to read any file. If it fails, it just returns nullptr **/
+    template <class T>
+    static T* GetRuntimeAsset(const std::string &id)
+    {
+        return GetAssetFromMap<T>(id);
+    }
+
+    /** Tries to retrieve an Asset from the AssetsManager cache
+      * If there's no such Asset, it is loaded, added to the cache, and returned
+      * If the file can't be read, nullptr is returned  **/
     template <class T>
     static T* GetAsset(const std::string &filepath)
     {
@@ -100,17 +106,16 @@ public:
         return a == nullptr ? nullptr : dynamic_cast<T*>(a);
     }
 
-    //Tries to retrieve an Asset from the AssetsManager cache.
-    //If there's no such Asset, nothing is loaded, it just returns nullptr.
+    /** Tries to retrieve an Asset from the AssetsManager cache.
+      * If there's no such Asset, nothing is loaded, it just returns nullptr. **/
     template <class T>
-    static T* GetCachedAsset(const std::string &filepath)
+    static T* GetCachedAsset(const std::string &id)
     {
-        return GetAssetFromMap<T>(filepath);
+        return GetAssetFromMap<T>(id);
     }
 
-
-    //Read an Asset, but you can later delete it, because it won't
-    //use the AssetsManager cache, so nobody will be using the returned Asset
+    /** Read an Asset, but you can later delete it, because it won't
+      * use the AssetsManager cache, so nobody will be using the returned Asset. **/
     template <class T>
     static T* ReadTmpAsset(const std::string &filepath)
     {
@@ -122,6 +127,7 @@ public:
         return a;
     }
 
+    static void SaveRuntimeAsset(const std::string &uniqueId, Asset* pointerToAsset);
     static void SaveAsset(const std::string &filepath, Asset* pointerToAsset);
 };
 

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sleep 5
+
 ./updateUI.sh
 
 # Make and run BangPreprocessor

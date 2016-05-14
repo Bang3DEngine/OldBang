@@ -1,18 +1,16 @@
 #include "Mesh.h"
 #include "MeshPyramid.h"
 
-Mesh::Mesh() : vertexPositionsVBO(nullptr), vertexNormalsVBO(nullptr), vertexUvsVBO(nullptr),
-               renderMode(RenderMode::Triangles)
+Mesh::Mesh()
 {
     vao = new VAO();
 }
 
 Mesh::Mesh(const Mesh &m)
 {
-    SetRenderMode(m.GetRenderMode());
-
     //TODO, do copy of VAO and VBO's
     vao = m.GetVAO();
+    bbox = m.bbox;
     vertexPositionsVBO = m.vertexPositionsVBO;
     vertexNormalsVBO = m.vertexNormalsVBO;
     vertexUvsVBO = m.vertexUvsVBO;
@@ -32,16 +30,13 @@ void Mesh::LoadFromFile(const std::string &filepath)
     std::vector<glm::vec3> normals;
     std::vector<glm::vec2> uvs;
 
-    bool trianglesMode;
-
     if( FileReader::ReadOBJ(filepath,
                             &positions, &normals, &uvs,
-                            &trianglesMode))
+                            &trisModel))
     {
         LoadPositions(positions);
         LoadNormals(normals);
         LoadUvs(uvs);
-        renderMode = trianglesMode ? RenderMode::Triangles : RenderMode::Quads;
     }
     else
     {
@@ -56,6 +51,8 @@ void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
     vertexPositionsVBO = new VBO();
     vertexPositionsVBO->Fill((void*)(&positions[0]), positions.size() * sizeof(float) * 3);
     vertexCount = positions.size();
+
+    bbox.FillFromBoundingBox(positions);
 }
 
 void Mesh::LoadNormals(const std::vector<glm::vec3> &normals)
@@ -108,24 +105,24 @@ void Mesh::BindAllVBOsToShaderProgram(const ShaderProgram &sp)
     BindUvsToShaderProgram(ShaderContract::Vertex_In_Uv_Raw, sp);
 }
 
-void Mesh::SetRenderMode(Mesh::RenderMode renderMode)
-{
-    this->renderMode = renderMode;
-}
-
 VAO *Mesh::GetVAO() const
 {
     return vao;
 }
 
-Mesh::RenderMode Mesh::GetRenderMode() const
-{
-    return renderMode;
-}
-
 int Mesh::GetVertexCount() const
 {
     return vertexCount;
+}
+
+bool Mesh::IsATrianglesModel() const
+{
+    return trisModel;
+}
+
+const Box &Mesh::GetBoundingBox() const
+{
+    return bbox;
 }
 
 void Mesh::Write(std::ostream &f) const

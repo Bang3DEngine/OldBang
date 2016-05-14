@@ -14,6 +14,8 @@ private:
 public:
     EditorScene();
     virtual ~EditorScene();
+
+    bool IsEditorGameObject() const override;
 };
 
 #endif // EDITORSCENE_H

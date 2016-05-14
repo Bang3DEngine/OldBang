@@ -3,6 +3,7 @@
 #include "Logger.h"
 #include "WindowMain.h"
 #include "WindowEventManager.h"
+#include "EditorScene.h"
 
 Hierarchy::Hierarchy(QWidget *parent)
 {
@@ -24,20 +25,30 @@ void Hierarchy::ExpandRecursiveUpwards(QTreeWidgetItem *item)
     }
 }
 
-QTreeWidgetItem* Hierarchy::FillRecursiveDownwards(GameObject *e)
+QTreeWidgetItem* Hierarchy::FillDownwards(GameObject *o)
 {
-    const std::list<GameObject*> children = e->GetChildren();
+    Logger_Log(o);
+    if(o->IsEditorGameObject() && false)
+    {   //The scene is an editor object, but must pass this point
+        if(dynamic_cast<EditorScene*>(o) == nullptr) return nullptr;
+    }
+
+    const std::list<GameObject*> children = o->GetChildren();
 
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
-    eRoot->setText(0, QString::fromStdString(e->GetName()));
+    eRoot->setText(0, QString::fromStdString(o->GetName()));
 
     for(auto it = children.begin(); it != children.end(); ++it)
     {
-        eRoot->addChild( FillRecursiveDownwards( (*it) ) );
+        QTreeWidgetItem *c = FillDownwards(*it);
+        if(c != nullptr)
+        {
+            eRoot->addChild(c);
+        }
     }
 
-    gameObjectToTreeItem[e] = eRoot;
-    treeItemToGameObject[eRoot] = e;
+    gameObjectToTreeItem[o] = eRoot;
+    treeItemToGameObject[eRoot] = o;
     return eRoot;
 }
 
@@ -78,17 +89,14 @@ void Hierarchy::UnselectAll()
     }
 }
 
-void Hierarchy::FillDownwards(Scene *currentScene)
+void Hierarchy::Refresh(Scene *currentScene)
 {
     if(currentScene == nullptr) return;
-
     this->currentScene = currentScene;
-
     gameObjectToTreeItem.clear();
     treeItemToGameObject.clear();
     this->clear();
-
-    this->addTopLevelItem( FillRecursiveDownwards(currentScene) );
+    this->addTopLevelItem( FillDownwards(currentScene) );
 }
 
 GameObject *Hierarchy::GetFirstSelectedGameObject() const
@@ -104,7 +112,10 @@ void Hierarchy::OnChildAdded(GameObject *child)
     if(gameObjectToTreeItem.find(parent) != gameObjectToTreeItem.end())
     {
         //if the parent is found, redo all the childs from the parent
-        gameObjectToTreeItem[parent]->addChild( FillRecursiveDownwards(child) );
+        QTreeWidgetItem *item = FillDownwards(child);
+        if(item == nullptr) return;
+
+        gameObjectToTreeItem[parent]->addChild(item);
         ExpandRecursiveUpwards(gameObjectToTreeItem[parent]);
 
         UnselectAll();
@@ -113,7 +124,7 @@ void Hierarchy::OnChildAdded(GameObject *child)
     else
     {
         //if the parent isnt found, just redo all the hierarchy
-        FillDownwards(child->GetScene());
+        Refresh(child->GetScene());
     }
 }
 

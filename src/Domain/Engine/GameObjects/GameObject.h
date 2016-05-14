@@ -18,8 +18,9 @@
 #include "IWindowEventManagerListener.h"
 #endif
 
-class Component;
 class Scene;
+class Component;
+class EditorSelectionGameObject;
 class GameObject : public ISceneEventListener,
                public IToString,
                public IFileable
@@ -33,30 +34,32 @@ friend class Scene;
 private:
 
     #ifdef BANG_EDITOR
-    //To keep track when changing materials between selected/nonselected
-    Material *nonSelectedMaterial = nullptr;
-    Material *selectedMaterial = nullptr;
+    Material *ed_nonSelectedMaterial = nullptr;
+    Material *ed_selectedMaterial = nullptr;
+    bool ed_wasSelectedInHierarchy = false;
+    EditorSelectionGameObject *ed_selectionGameObject = nullptr;
     #endif
 
     virtual void _OnStart() override;
     virtual void _OnUpdate() override;
+    virtual void _OnPreRender() override;
     virtual void _OnRender() override;
     virtual void _OnDestroy() override;
 
-
-    void AddChildWithoutNoifyingHierarchy(GameObject *child);
-    std::list<GameObject*>::iterator RemoveChildWithoutNotifyingHierarchy(
-            std::list<GameObject*>::iterator &it);
-    std::list<GameObject*>::iterator RemoveChild(std::list<GameObject*>::iterator &it);
-
 protected:
-    std::string name;
+    std::string name = "";
     std::list<Component*> comps;
     std::list<GameObject*> children;
-    GameObject* parent;
+    GameObject* parent = nullptr;
 
     bool enabled = true;
-    bool isScene;
+    bool isScene = false;
+
+    void AddChildWithoutNotifyingHierarchy(GameObject *child);
+    std::list<GameObject*>::iterator RemoveChildWithoutNotifyingHierarchy(
+            std::list<GameObject*>::iterator &it);
+    std::list<GameObject*>::iterator RemoveChild(
+            std::list<GameObject*>::iterator &it);
 
 public:
 
@@ -78,15 +81,30 @@ public:
 
     Scene* GetScene();
     GameObject* GetParent() const;
-    const std::string GetName() const { return name; }
-    const std::list<Component*> GetComponents() const { return comps; }
-    const std::list<GameObject*> GetChildren() const { return children; }
+    const std::string GetName() const;
+    const std::list<Component*>& GetComponents() const;
+    const std::list<GameObject*> GetChildren() const;
 
+    /**
+     * Adds the Component c to this.
+     */
     void AddComponent(Component *c);
-    void MoveComponent(Component *c, int distance); //Mainly used to move the comps
-                                          //up(-1) and down(1) in the inspector
+
+    /**
+     * Moves the Component c upwards(-N), or downwards(N).
+     * Used only for Inspector showing order purposes
+     */
+    void MoveComponent(Component *c, int distance);
+
+    /**
+     * Removes the Component c
+     */
     void RemoveComponent(Component *c);
 
+    /**
+     * Creates a Component of type T, adds it to this,
+     * and returns a pointer to it
+     */
     template <class T>
     T* AddComponent()
     {
@@ -96,26 +114,95 @@ public:
         return comp;
     }
 
+    /**
+     * Returns the first Component<T> found in this
+     */
     template <class T>
     T* GetComponent() const
     {
         for(auto comp = comps.begin(); comp != comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if(tp != nullptr)
-            {
-                return tp;
-            }
+            if(tp != nullptr) return tp;
         }
         return nullptr;
     }
 
+    /**
+     * Returns all the Components<T> in this
+     */
+    template <class T>
+    std::list<T*> GetComponents() const
+    {
+        std::list<T*> comps_l;
+        for(auto comp = comps.begin(); comp != comps.end(); ++comp)
+        {
+            T *tp = dynamic_cast<T*>(*comp);
+            if(tp != nullptr) comps_l.push_back(tp);
+        }
+        return comps_l;
+    }
+
+    /**
+     * Returns the first Component<T> found in children
+     */
+    template <class T>
+    T* GetComponentInChildren() const
+    {
+        for(auto c = children.begin(); c != children.end(); ++c)
+        {
+            if((*c)->IsEditorGameObject()) continue;
+
+            Component *comp = (*c)->GetComponent<T>();
+            if(comp != nullptr) return comp;
+            comp = (*c)->GetComponentInChildren<T>();
+            if(comp != nullptr) return comp;
+        }
+        return nullptr;
+    }
+
+    /**
+     * Returns all the Components<T> of its children
+     */
+    template <class T>
+    std::list<T*> GetComponentsInChildren() const
+    {
+        std::list<T*> comps_l;
+        for(auto c = children.begin(); c != children.end(); ++c)
+        {
+            comps_l.splice(comps_l.end(),
+                           (*c)->GetComponents<T>()); //concat
+            comps_l.splice(comps_l.end(),
+                           (*c)->GetComponentsInChildren<T>()); //concat
+        }
+        return comps_l;
+    }
+
+    /**
+     * Returns all the Components<T> of this,
+     * and all the Components<T> of its children
+     */
+    template <class T>
+    std::list<T*> GetComponentsInThisAndChildren() const
+    {
+        std::list<T*> comps_l = GetComponents<T>();
+        comps_l.splice(comps_l.end(),
+                       GetComponentsInChildren<T>()); //concat
+        return comps_l;
+    }
+
+    /**
+     * Returns whether this has one or more Components of type T or not
+     */
     template <class T>
     bool HasComponent() const
     {
         return GetComponent<T>() != nullptr;
     }
 
+    /**
+     * Removes the first found Component of type T
+     */
     template <class T>
     void RemoveComponent()
     {
@@ -131,17 +218,18 @@ public:
         }
     }
 
-
+    virtual bool IsEditorGameObject() const;
     bool IsScene() const;
 
     void Write(std::ostream &f) const override;
     void Read(std::istream &f) override;
 
-    void SetEnabled(bool enabled) { this->enabled = enabled; }
-    bool IsEnabled() { return enabled; }
+    void SetEnabled(bool enabled);
+    bool IsEnabled();
 
     #ifdef BANG_EDITOR
-    void OnTreeHierarchyEntitiesSelected(const std::list<GameObject*> &selectedEntities) override;
+    void OnTreeHierarchyEntitiesSelected(
+            std::list<GameObject*> &selectedEntities) override;
     #endif
 };
 

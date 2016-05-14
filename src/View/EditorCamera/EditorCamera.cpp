@@ -1,9 +1,7 @@
 #include "EditorCamera.h"
 
-EditorCamera::EditorCamera()
+EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
 {
-    this->SetName("EditorCamera");
-
     yawNode = new GameObject("EditorYawNode");
     AddChild(yawNode);
 

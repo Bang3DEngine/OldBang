@@ -62,7 +62,7 @@ void WindowEventManager::NotifyInspectorSlotChanged(Component *updatedComponent,
     updatedComponent->OnInspectorSlotChanged(inspectorItem);
 }
 
-void WindowEventManager::NotifyHierarchyEntitiesSelected(const std::list<GameObject*> &selectedEntities)
+void WindowEventManager::NotifyHierarchyEntitiesSelected(std::list<GameObject*> &selectedEntities)
 {
     PROPAGATE_EVENT_PAR(OnTreeHierarchyEntitiesSelected(selectedEntities), wem->listeners);
 }

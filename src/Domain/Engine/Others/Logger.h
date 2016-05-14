@@ -31,6 +31,7 @@ std::ostream& operator<<(std::ostream &log, const glm::vec4 &v);
 std::ostream& operator<<(std::ostream &log, const glm::quat &q);
 std::ostream& operator<<(std::ostream &log, const glm::mat4 &v);
 std::ostream &operator<<(std::ostream &log, const IToString *s);
+std::ostream &operator<<(std::ostream &log, const IToString &s);
 
 template <class T>
 std::ostream &operator<<(std::ostream &log, const std::list<T> *l)

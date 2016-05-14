@@ -24,11 +24,13 @@ protected:
 
     virtual void _OnStart()   { OnStart();   }
     virtual void _OnUpdate()  { OnUpdate();  }
+    virtual void _OnPreRender() { OnPreRender(); }
     virtual void _OnRender() { OnRender(); }
     virtual void _OnDestroy() { OnDestroy(); }
 
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
+    virtual void OnPreRender() {}
     virtual void OnRender() {}
     virtual void OnDestroy() {}
 };

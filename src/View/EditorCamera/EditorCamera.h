@@ -27,7 +27,7 @@ private:
     float moveAccel = 0.1f;
     float moveSpeed = 0.0f;
 
-    float mouseCamPlaneMoveBoost = 150.0f; //Movement with middle button
+    const float mouseCamPlaneMoveBoost = 150.0f; //Movement with middle button
     float mouseRotBoost = 15.0f;
     float mouseWheelBoost = 24.0f;
 

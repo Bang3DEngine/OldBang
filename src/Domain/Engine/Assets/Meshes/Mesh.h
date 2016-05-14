@@ -4,6 +4,7 @@
 #include "Bang.h"
 
 #include <GL/glew.h>
+#include <vector>
 
 #include "glm/glm.hpp"
 
@@ -13,8 +14,7 @@
 #include "Asset.h"
 #include "VAO.h"
 #include "VBO.h"
-
-#include <vector>
+#include "Box.h"
 
 class Mesh : public Asset
 {
@@ -27,23 +27,16 @@ public:
         return Mesh::GetFileExtensionStatic();
     }
 
-    enum RenderMode
-    {
-        Points = GL_POINTS,
-        Lines = GL_LINES,
-        Triangles = GL_TRIANGLES,
-        Quads = GL_QUADS
-    };
-
 private:
-    VAO *vao;
-    VBO *vertexPositionsVBO;
-    VBO *vertexNormalsVBO;
-    VBO *vertexUvsVBO;
-    int vertexCount;
+    Box bbox;
 
-protected:
-    Mesh::RenderMode renderMode;
+    VAO *vao = nullptr;
+    VBO *vertexPositionsVBO = nullptr;
+    VBO *vertexNormalsVBO = nullptr;
+    VBO *vertexUvsVBO = nullptr;
+    int vertexCount = 0;
+
+    bool trisModel = false;
 
 public:
     Mesh();
@@ -61,11 +54,10 @@ public:
 
     void BindAllVBOsToShaderProgram(const ShaderProgram &sp);
 
-    void SetRenderMode(RenderMode renderMode);
-
     VAO *GetVAO() const;
-    RenderMode GetRenderMode() const;
     int GetVertexCount() const;
+    bool IsATrianglesModel() const;
+    const Box& GetBoundingBox() const;
 
     void Write(std::ostream &f) const;
     void Read(std::istream &f);

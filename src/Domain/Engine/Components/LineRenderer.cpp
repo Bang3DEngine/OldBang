@@ -1,11 +1,12 @@
 #include "LineRenderer.h"
 
-LineRenderer::LineRenderer() : width(2.0f)
+LineRenderer::LineRenderer()
 {
     #ifdef BANG_EDITOR
         inspectorComponentInfo.SetSlotsInfos(
         {
-            new InspectorFileSWInfo("Material", Material::GetFileExtensionStatic()),
+            new InspectorFileSWInfo("Material",
+                        Material::GetFileExtensionStatic()),
             new InspectorVFloatSWInfo("Origin", {0.0f, 0.0f, 0.0f}),
             new InspectorVFloatSWInfo("Destiny", {999.9f, 999.9f, 999.9f}),
             new InspectorVFloatSWInfo("Line Width", {0.0f})
@@ -21,9 +22,10 @@ LineRenderer::LineRenderer() : width(2.0f)
     vao = new VAO();
     vao->BindVBO(vbo, 0, 3 * points.size(), GL_FLOAT);
 
-    glEnable(GL_LINE_SMOOTH); //Line antialiasing
+    SetLineWidth(2.0f);
 
-    Material *m = AssetsManager::GetAsset<Material>("./res/Materials/lines.bmat");
+    Material *m = AssetsManager::GetAsset<Material>(
+                "./res/Materials/lines.bmat" );
     SetMaterial(m);
 }
 
@@ -31,6 +33,13 @@ LineRenderer::~LineRenderer()
 {
 
 }
+
+const std::string LineRenderer::ToString() const
+{
+    return "LineRenderer";
+}
+
+std::string LineRenderer::GetName() const { return "LineRenderer"; }
 
 void LineRenderer::BindPointsToVAO() const
 {
@@ -44,53 +53,62 @@ void LineRenderer::BindPointsToVAO() const
     }
 }
 
-void LineRenderer::_OnRender()
+void LineRenderer::ActivateStatesBeforeRendering() const
+{
+    Renderer::ActivateStatesBeforeRendering();
+}
+
+void LineRenderer::OnRender()
 {
     Scene *scene = GetOwner()->GetScene();
     Camera *cam = scene->GetCamera();
-    if(CAN_USE_COMPONENT(cam))
-    {
-        Render();
-    }
-    else
+    if(!CAN_USE_COMPONENT(cam))
     {
         Logger_Warn("Can't render " << GetOwner() << " because "
                        << scene << " does not have a set Camera.");
     }
-}
 
-void LineRenderer::Render() const
-{
     if(material == nullptr)
     {
-        Logger_Verbose(owner << " could not be rendered because it does not have a Material (or it's disabled')");
+        Logger_Verbose(owner << " could not be rendered because it does " <<
+                       "not have a Material (or it's disabled')");
         return;
     }
     else if(material->GetShaderProgram() == nullptr)
     {
-        Logger_Error(owner << " has a Material with no ShaderProgram. Can't render.");
+        Logger_Error(owner << " has a Material with no ShaderProgram." <<
+                     "Can't render.");
         return;
     }
+    Render();
+}
 
-    glm::mat4 view(1.0f), projection(1.0f);
-    Camera *camera = owner->GetScene()->GetCamera();
-    if( CAN_USE_COMPONENT(camera) )
-    {
-        camera->GetViewMatrix(view);
-        camera->GetProjectionMatrix(projection);
-    }
+void LineRenderer::Render() const
+{
+    ActivateStatesBeforeRendering();
+
+    Camera *cam = owner->GetScene()->GetCamera();
+
+    material->shaderProgram->SetUniformMat4(
+                ShaderContract::Uniform_Matrix_Model, glm::mat4(1.0f), false);
+
+    glm::mat4 view(1.0f);
+    cam->GetViewMatrix(view);
+    material->shaderProgram->SetUniformMat4(
+                ShaderContract::Uniform_Matrix_View, view, false);
+
+    glm::mat4 projection(1.0f);
+    cam->GetProjectionMatrix(projection);
+    material->shaderProgram->SetUniformMat4(
+                ShaderContract::Uniform_Matrix_Projection, projection, false);
+
     glm::mat4 pvm = projection * view;
+    material->shaderProgram->SetUniformMat4(
+                ShaderContract::Uniform_Matrix_PVM, pvm, false);
 
     vao->Bind();
     material->Bind();
-    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, glm::mat4(1.0f), false);
-    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
-    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
-    material->shaderProgram->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
-
-    glLineWidth(width);
-    glDrawArrays(Mesh::RenderMode::Lines, 0, points.size());
-
+    glDrawArrays(Renderer::RenderMode::Lines, 0, points.size());
     material->UnBind();
     vao->UnBind();
 }
@@ -113,21 +131,12 @@ void LineRenderer::SetDestiny(glm::vec3 d)
     BindPointsToVAO();
 }
 
-float LineRenderer::GetLineWidth() const
-{
-    return width;
-}
-
-void LineRenderer::SetLineWidth(float w)
-{
-    width = w;
-}
-
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* LineRenderer::GetComponentInfo()
 {
     InspectorFileSWInfo* matInfo =
-            static_cast<InspectorFileSWInfo*>(inspectorComponentInfo.GetSlotInfo(0));
+            static_cast<InspectorFileSWInfo*>(
+                inspectorComponentInfo.GetSlotInfo(0));
 
     if (material != nullptr)
     {
@@ -146,15 +155,18 @@ InspectorWidgetInfo* LineRenderer::GetComponentInfo()
     }
 
     InspectorVFloatSWInfo *originInfo  =
-            static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(1));
+            static_cast<InspectorVFloatSWInfo*>(
+                inspectorComponentInfo.GetSlotInfo(1));
     originInfo->value = {points[0].x, points[0].y, points[0].z};
 
     InspectorVFloatSWInfo *destinyInfo  =
-            static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(2));
+            static_cast<InspectorVFloatSWInfo*>(
+                inspectorComponentInfo.GetSlotInfo(2));
     destinyInfo->value = {points[1].x, points[1].y, points[1].z};
 
     InspectorVFloatSWInfo *widthInfo  =
-            static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(3));
+            static_cast<InspectorVFloatSWInfo*>(
+                inspectorComponentInfo.GetSlotInfo(3));
     widthInfo->value = {GetLineWidth()};
 
     return &inspectorComponentInfo;
@@ -194,7 +206,7 @@ void LineRenderer::Write(std::ostream &f) const
 void LineRenderer::Read(std::istream &f)
 {
     FileReader::RegisterNextPointerId(f, this);
-    SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
+    SetMaterial( AssetsManager::GetAsset<Material>(FileReader::ReadString(f)));
     SetOrigin(FileReader::ReadVec3(f));
     SetDestiny(FileReader::ReadVec3(f));
     SetLineWidth(FileReader::ReadFloat(f));

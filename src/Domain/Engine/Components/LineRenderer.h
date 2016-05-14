@@ -26,30 +26,25 @@ private:
     VBO *vbo = nullptr;
     VAO *vao = nullptr;
 
-    float width;
-
     void BindPointsToVAO() const;
 
 protected:
 
-    virtual void _OnRender() override;
+    virtual void ActivateStatesBeforeRendering() const override;
+    virtual void OnRender() override;
+    virtual void Render() const override;
 
 public:
     LineRenderer();
     virtual ~LineRenderer();
 
-    virtual void Render() const override;
-
-    virtual const std::string ToString() const override { return "LineRenderer"; }
-    virtual std::string GetName() const override { return "LineRenderer"; }
+    virtual const std::string ToString() const override;
+    virtual std::string GetName() const override;
 
     virtual void SetMaterial(Material *m) override;
 
     void SetOrigin(glm::vec3 o);
     void SetDestiny(glm::vec3 d);
-
-    float GetLineWidth() const;
-    void SetLineWidth(float w);
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;

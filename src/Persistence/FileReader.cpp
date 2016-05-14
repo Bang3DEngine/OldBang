@@ -258,7 +258,6 @@ void FileReader::ReadComponents(std::istream &f, GameObject *e)
     std::string line;
     while( (line = FileReader::ReadNextLine(f)) != "</components>" )
     {
-        Logger_Log(line);
         Component *p = nullptr;
         if(line == "<Transform>")
         {

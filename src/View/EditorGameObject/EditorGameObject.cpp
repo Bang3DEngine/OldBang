@@ -2,22 +2,13 @@
 
 EditorGameObject::EditorGameObject() : GameObject()
 {
-
 }
 
-EditorGameObject::~EditorGameObject()
+EditorGameObject::EditorGameObject(const std::string &name) : GameObject(name)
 {
-
 }
 
-#ifdef BANG_EDITOR
-void EditorGameObject::Write(std::ostream &f) const
+bool EditorGameObject::IsEditorGameObject() const
 {
-
+    return true;
 }
-
-void EditorGameObject::Read(std::istream &f)
-{
-
-}
-#endif

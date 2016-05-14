@@ -52,8 +52,8 @@ void Camera::GetProjectionMatrix(glm::mat4 &proj) const
     }
     else //Ortho
     {
-        proj = glm::ortho(orthoRect.left, orthoRect.right,
-                          orthoRect.bottom, orthoRect.top,
+        proj = glm::ortho(orthoRect.minx, orthoRect.maxx,
+                          orthoRect.miny, orthoRect.maxy,
                           zNear, zFar);
     }
 }
