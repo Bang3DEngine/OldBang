@@ -52,7 +52,7 @@ void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
     vertexPositionsVBO->Fill((void*)(&positions[0]), positions.size() * sizeof(float) * 3);
     vertexCount = positions.size();
 
-    bbox.FillFromBoundingBox(positions);
+    bbox.FillFromPositions(positions);
 }
 
 void Mesh::LoadNormals(const std::vector<glm::vec3> &normals)

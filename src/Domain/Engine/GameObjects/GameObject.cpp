@@ -58,6 +58,34 @@ const std::list<GameObject *> GameObject::GetChildren() const
     return cc;
 }
 
+Box GameObject::GetObjectBoundingBox() const
+{
+    Box b;
+    MeshRenderer *mr = GetComponent<MeshRenderer>();
+    if(CAN_USE_COMPONENT(mr))
+    {
+        const Mesh *m = mr->GetMesh();
+        if(m != nullptr)
+        {
+            b = m->GetBoundingBox();
+        }
+    }
+    return b;
+}
+
+Box GameObject::GetLocalBoundingBox() const
+{
+    Box b = GetObjectBoundingBox();
+    Transform *t = GetComponent<Transform>();
+    if(CAN_USE_COMPONENT(t))
+    {
+        glm::mat4 mat;
+        t->GetLocalMatrix(mat);
+        b = mat * b; //Apply transform to Box
+    }
+    return b;
+}
+
 void GameObject::AddComponent(Component *c)
 {
     c->owner = this;

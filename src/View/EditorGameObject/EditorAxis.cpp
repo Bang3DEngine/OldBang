@@ -20,19 +20,15 @@ EditorAxis::EditorAxis() : EditorGameObject()
     yAxisLine->SetMaterial(maty);
     zAxisLine->SetMaterial(matz);
 
-    float axisLength = 5.0f;
+    float axisLength = 3.0f;
     xAxisLine->SetDestiny(glm::vec3(1,0,0) * axisLength);
     yAxisLine->SetDestiny(glm::vec3(0,1,0) * axisLength);
-    zAxisLine->SetDestiny(glm::vec3(0,0,-1) * axisLength);
+    zAxisLine->SetDestiny(glm::vec3(0,0,1) * axisLength);
 
     transform = AddComponent<Transform>();
     transform->SetPosition(glm::vec3(0));
 
     this->SetRenderLayer(5);
-
-    //The scale will be always the same, no matter the size of the gameObject
-    transform->ignoreParentTransformMask =
-            Transform::IgnoreParentTransformMask::IgnoreScale;
 }
 
 EditorAxis::~EditorAxis()
@@ -41,3 +37,34 @@ EditorAxis::~EditorAxis()
     delete maty;
     delete matz;
 }
+
+void EditorAxis::OnStart()
+{
+
+}
+
+void EditorAxis::OnUpdate()
+{
+    //Parent scale
+    GameObject *parent = GetParent();
+    if(parent != nullptr)
+    {
+        Transform *pt = parent->GetComponent<Transform>();
+        Transform *t = GetComponent<Transform>();
+        if(pt != nullptr)
+        {
+            t->SetScale(1.0f / pt->GetScale());
+        }
+
+        GameObject *selected = parent->GetParent();
+        if(selected != nullptr)
+        {
+            Box bbox = selected->GetObjectBoundingBox();
+            t->SetPosition( bbox.GetCenter() );
+        }
+    }
+}
+
+
+
+

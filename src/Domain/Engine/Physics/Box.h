@@ -46,9 +46,11 @@ public:
      * Bounding Box of the positions vector.
      * @param positions
      */
-    void FillFromBoundingBox(const std::vector<glm::vec3> &positions);
+    void FillFromPositions(const std::vector<glm::vec3> &positions);
 
     const std::string ToString() const override;
 };
+
+Box operator*(const glm::mat4 &m, const Box &b);
 
 #endif // BOX_H

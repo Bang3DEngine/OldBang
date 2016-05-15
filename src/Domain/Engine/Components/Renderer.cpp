@@ -50,20 +50,19 @@ void Renderer::GetMatrices(glm::mat4 &model,
 
     Camera *cam = owner->GetScene()->GetCamera();
 
-    model = glm::mat4(1.0f);
     if(!ignoreModelMatrix)
     {
         Transform *t = owner->GetComponent<Transform>();
         if(t != nullptr) t->GetMatrix(model);
     }
+    else model = glm::mat4(1.0f);
 
-    view = glm::mat4(1.0f);
     if(!ignoreViewMatrix)
     {
         cam->GetViewMatrix(view);
     }
+    else view = glm::mat4(1.0f);
 
-    projection = glm::mat4(1.0f);
     cam->GetProjectionMatrix(projection);
 
     pvm = projection * view * model;

@@ -21,6 +21,9 @@ private:
 public:
     EditorAxis();
     virtual ~EditorAxis();
+
+    void OnStart() override;
+    void OnUpdate() override;
 };
 
 #endif // EDITORAXIS_H

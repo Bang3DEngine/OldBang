@@ -13,6 +13,7 @@
 #include "ISceneEventListener.h"
 
 #include "Material.h"
+#include "Box.h"
 
 #ifdef BANG_EDITOR
 #include "IWindowEventManagerListener.h"
@@ -95,6 +96,21 @@ public:
     unsigned char GetRenderLayer() const;
     const std::list<Component*>& GetComponents() const;
     const std::list<GameObject*> GetChildren() const;
+
+    /**
+     * @brief Returns this GameObject's bounding box in Object space, without
+     * applying any Transform (equivalent to Mesh->GetBoundingBox())
+     * @return
+     */
+    Box GetObjectBoundingBox() const;
+
+    /**
+     * @brief Returns this GameObject's bounding box, applying only the
+     * transformations of this GameObject's Transform
+     * (not parents' transforms included here).
+     * @return
+     */
+    Box GetLocalBoundingBox() const;
 
     /**
      * Adds the Component c to this.

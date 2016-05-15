@@ -81,37 +81,27 @@ void Transform::SetRightMatrix(const glm::mat4 &rightMatrix)
     this->rightMatrix = rightMatrix;
 }
 
-void Transform::GetLocalMatrix(glm::mat4 &m,
-                               IgnoreParentTransformMask mask) const
+void Transform::GetLocalMatrix(glm::mat4 &m) const
 {
-    glm::mat4 T(1.0f), R(1.0f), S(1.0f);
-
-    if(mask & IgnorePosition > 0)
-        T = glm::translate(glm::mat4(1.0f), GetLocalPosition());
-
-    if(mask & IgnoreRotation > 0)
-        R = glm::mat4_cast(GetLocalRotation());
-
-    if(mask & IgnoreScale > 0)
-        S = glm::scale(glm::mat4(1.0f), GetLocalScale());
+    glm::mat4 T = glm::translate(glm::mat4(1.0f), GetLocalPosition());
+    glm::mat4 R = glm::mat4_cast(GetLocalRotation());
+    glm::mat4 S = glm::scale(glm::mat4(1.0f), GetLocalScale());
 
     m = leftMatrix * T * R * S * rightMatrix;
 }
 
-void Transform::GetMatrix(glm::mat4 &m, bool _firstCall) const
+void Transform::GetMatrix(glm::mat4 &m) const
 {
-    if(_firstCall) GetLocalMatrix(m);
-    else //We are computing parent's transform, take into account ignore masks
-        GetLocalMatrix(m, ignoreParentTransformMask);
+    GetLocalMatrix(m);
 
-    GameObject *parent = GetOwner()->GetParent();
+    GameObject *parent = owner->GetParent();
     if(parent != nullptr)
     {
         Transform *tp = parent->GetComponent<Transform>();
         if(tp != nullptr)
         {
             glm::mat4 mp;
-            tp->GetMatrix(mp, false); //Next recursion, firstCall=false
+            tp->GetMatrix(mp);
             m = mp * m;
         }
     }
@@ -159,10 +149,10 @@ glm::vec3 Transform::GetLocalPosition() const
 
 glm::vec3 Transform::GetPosition() const
 {
-    GameObject *parent = GetOwner()->GetParent();
+    GameObject *parent = owner->GetParent();
     if(parent != nullptr)
     {
-        Transform *pt = GetOwner()->GetParent()->GetComponent<Transform>();
+        Transform *pt = parent->GetComponent<Transform>();
         if(pt != nullptr) return pt->GetPosition() + GetLocalPosition();
     }
     return GetLocalPosition();
@@ -175,10 +165,10 @@ glm::quat Transform::GetLocalRotation() const
 
 glm::quat Transform::GetRotation() const
 {
-    GameObject *parent = GetOwner()->GetParent();
+    GameObject *parent = owner->GetParent();
     if(parent != nullptr)
     {
-        Transform *pt = GetOwner()->GetParent()->GetComponent<Transform>();
+        Transform *pt = parent->GetComponent<Transform>();
         if(pt != nullptr) return pt->GetRotation() * GetLocalRotation();
     }
     return GetLocalRotation();
@@ -191,10 +181,10 @@ glm::vec3 Transform::GetLocalEuler() const
 
 glm::vec3 Transform::GetEuler() const
 {
-    GameObject *parent = GetOwner()->GetParent();
+    GameObject *parent = owner->GetParent();
     if(parent != nullptr)
     {
-        Transform *pt = GetOwner()->GetParent()->GetComponent<Transform>();
+        Transform *pt = parent->GetComponent<Transform>();
         if(pt != nullptr) return pt->GetEuler() + GetLocalEuler();
     }
     return GetLocalEuler();
@@ -207,10 +197,10 @@ glm::vec3 Transform::GetLocalScale() const
 
 glm::vec3 Transform::GetScale() const
 {
-    GameObject *parent = GetOwner()->GetParent();
+    GameObject *parent = owner->GetParent();
     if(parent != nullptr)
     {
-        Transform *pt = GetOwner()->GetParent()->GetComponent<Transform>();
+        Transform *pt = parent->GetComponent<Transform>();
         if(pt != nullptr) return pt->GetScale() * GetLocalScale();
     }
     return GetLocalScale();

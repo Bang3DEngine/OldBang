@@ -1,5 +1,7 @@
 #include "Box.h"
 
+#include "Logger.h"
+
 Box::Box()
 {
 }
@@ -8,12 +10,9 @@ const std::string Box::ToString() const
 {
     std::ostringstream oss;
     oss << "Box: [" << std::endl <<
-           "  minx:" << minx << std::endl <<
-           "  maxx:" << maxx << std::endl <<
-           "  miny:" << miny << std::endl <<
-           "  maxy:" << maxy << std::endl <<
-           "  minz:" << minz << std::endl <<
-           "  maxz:" << maxz << std::endl <<
+           "  x(" << minx << ", " << maxx << ")" << std::endl <<
+           "  y(" << miny << ", " << maxy << ")" << std::endl <<
+           "  z(" << minz << ", " << maxz << ")" << std::endl <<
            "]" << std::endl;
 
     return oss.str();
@@ -86,7 +85,7 @@ Box Box::Union(const Box &b1, const Box &b2)
         std::min(b1.minz, b2.minz), std::max(b1.maxz, b2.maxz));
 }
 
-void Box::FillFromBoundingBox(const std::vector<glm::vec3> &positions)
+void Box::FillFromPositions(const std::vector<glm::vec3> &positions)
 {
     minx = maxx = miny = maxy = minz = maxz = 0.0f;
     for(const glm::vec3 &v : positions)
@@ -101,4 +100,20 @@ void Box::FillFromBoundingBox(const std::vector<glm::vec3> &positions)
         maxz = std::max(maxz, v.z);
     }
 }
+
+
+
+Box operator*(const glm::mat4 &m, const Box &b)
+{
+    glm::vec4 bMinCoords = glm::vec4(b.minx, b.miny, b.minz, 1.0f);
+    glm::vec4 bMaxCoords = glm::vec4(b.maxx, b.maxy, b.maxz, 1.0f);
+    glm::vec4 v1 = m * bMinCoords;
+    glm::vec4 v2 = m * bMaxCoords;
+
+    Box br(std::min(v1.x, v2.x), std::max(v1.x, v2.x),
+           std::min(v1.y, v2.y), std::max(v1.y, v2.y),
+           std::min(v1.z, v2.z), std::max(v1.z, v2.z));
+    return br;
+}
+
 
