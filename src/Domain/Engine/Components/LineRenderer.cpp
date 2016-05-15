@@ -41,6 +41,7 @@ const std::string LineRenderer::ToString() const
 
 std::string LineRenderer::GetName() const { return "LineRenderer"; }
 
+
 void LineRenderer::BindPointsToVAO() const
 {
     if(material != nullptr && material->GetShaderProgram() != nullptr)
@@ -87,24 +88,9 @@ void LineRenderer::Render() const
 {
     ActivateStatesBeforeRendering();
 
-    Camera *cam = owner->GetScene()->GetCamera();
-
-    material->shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_Model, glm::mat4(1.0f), false);
-
-    glm::mat4 view(1.0f);
-    cam->GetViewMatrix(view);
-    material->shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_View, view, false);
-
-    glm::mat4 projection(1.0f);
-    cam->GetProjectionMatrix(projection);
-    material->shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_Projection, projection, false);
-
-    glm::mat4 pvm = projection * view;
-    material->shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_PVM, pvm, false);
+    glm::mat4 model, view, projection, pvm;
+    GetMatrices(model, view, projection, pvm);
+    SetMatricesUniforms(model, view, projection, pvm);
 
     vao->Bind();
     material->Bind();

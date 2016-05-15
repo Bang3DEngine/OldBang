@@ -4,6 +4,7 @@
 #include "FileReader.h"
 #include "WindowEventManager.h"
 
+#include "WindowMain.h"
 #include "EditorSelectionGameObject.h"
 
 GameObject::GameObject() : GameObject("")
@@ -230,7 +231,7 @@ bool GameObject::IsScene() const
 void GameObject::OnTreeHierarchyEntitiesSelected(
         std::list<GameObject*> &selectedEntities )
 {
-    if(IsScene()) return;
+    if(IsEditorGameObject() || IsScene()) return;
 
     bool selected = false;
     for(auto it : selectedEntities)
@@ -247,7 +248,6 @@ void GameObject::OnTreeHierarchyEntitiesSelected(
         if(!ed_wasSelectedInHierarchy)
         {
             ed_selectionGameObject = new EditorSelectionGameObject();
-            //AddChildWithoutNotifyingHierarchy(ed_bbox);
             AddChildWithoutNotifyingHierarchy(ed_selectionGameObject);
         }
     }

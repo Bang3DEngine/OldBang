@@ -20,7 +20,6 @@ EditorAxis::EditorAxis() : EditorGameObject()
     yAxisLine->SetMaterial(maty);
     zAxisLine->SetMaterial(matz);
 
-
     float axisLength = 5.0f;
     xAxisLine->SetDestiny(glm::vec3(1,0,0) * axisLength);
     yAxisLine->SetDestiny(glm::vec3(0,1,0) * axisLength);
@@ -28,6 +27,12 @@ EditorAxis::EditorAxis() : EditorGameObject()
 
     transform = AddComponent<Transform>();
     transform->SetPosition(glm::vec3(0));
+
+    this->SetRenderLayer(5);
+
+    //The scale will be always the same, no matter the size of the gameObject
+    transform->ignoreParentTransformMask =
+            Transform::IgnoreParentTransformMask::IgnoreScale;
 }
 
 EditorAxis::~EditorAxis()

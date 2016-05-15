@@ -16,6 +16,21 @@
 
 class Transform : public Component
 {
+public:
+    enum IgnoreParentTransformMask
+    {
+        IgnoreNothing = 0,
+        IgnorePosition = 1,
+        IgnoreRotation = 2,
+        IgnoreScale = 4,
+        IgnorePositionRotation = IgnorePosition | IgnoreRotation,
+        IgnorePositionScale =    IgnorePosition | IgnoreScale,
+        IgnoreRotationScale =    IgnoreRotation | IgnoreScale,
+        IgnoreAll = IgnorePosition | IgnoreRotation | IgnoreScale
+    };
+
+    IgnoreParentTransformMask ignoreParentTransformMask = IgnoreNothing;
+
 private:
 
     glm::vec3 position;
@@ -51,12 +66,17 @@ public:
     void SetRotation(const glm::quat &r);
     void Rotate(const glm::quat &r);
 
+    void SetScale(float s);
     void SetScale(const glm::vec3 &s);
     void SetLeftMatrix(const glm::mat4 &leftMatrix);
     void SetRightMatrix(const glm::mat4 &rightMatrix);
 
-    void GetLocalMatrix(glm::mat4 &m) const;
-    void GetMatrix(glm::mat4 &m) const;
+    void GetLocalMatrix(glm::mat4 &m,
+                        IgnoreParentTransformMask mask = IgnoreNothing) const;
+
+    void GetMatrix(glm::mat4 &m,
+                   bool _firstCall = true) const;
+
     void GetNormalMatrix(glm::mat4 &m) const;
 
     glm::vec3 GetLocalForward() const;

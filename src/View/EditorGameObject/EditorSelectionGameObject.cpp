@@ -1,14 +1,19 @@
 #include "EditorSelectionGameObject.h"
 
+#include "WindowMain.h"
+
 EditorSelectionGameObject::EditorSelectionGameObject() :
     EditorGameObject("EditorSelectionGameObject")
 {
     AddComponent<Transform>();
 
     axis = new EditorAxis();
-    AddChildWithoutNotifyingHierarchy(axis);
-    axis->SetRenderLayer(5);
+    AddChild(axis);
 
     bbox = new EditorBBox();
-    AddChildWithoutNotifyingHierarchy(bbox);
+    //AddChild(bbox);
+
+    EditorBBox *bbox2 = new EditorBBox();
+    bbox2->GetComponent<MeshRenderer>()->GetMaterial()->SetDiffuseColor(glm::vec4(1,0,0,1));
+    AddChild(bbox2);
 }

@@ -27,7 +27,6 @@ void Hierarchy::ExpandRecursiveUpwards(QTreeWidgetItem *item)
 
 QTreeWidgetItem* Hierarchy::FillDownwards(GameObject *o)
 {
-    Logger_Log(o);
     if(o->IsEditorGameObject() && false)
     {   //The scene is an editor object, but must pass this point
         if(dynamic_cast<EditorScene*>(o) == nullptr) return nullptr;
@@ -118,8 +117,11 @@ void Hierarchy::OnChildAdded(GameObject *child)
         gameObjectToTreeItem[parent]->addChild(item);
         ExpandRecursiveUpwards(gameObjectToTreeItem[parent]);
 
-        UnselectAll();
-        gameObjectToTreeItem[child]->setSelected(true);
+        if(!child->IsEditorGameObject())
+        {
+            UnselectAll();
+            gameObjectToTreeItem[child]->setSelected(true);
+        }
     }
     else
     {

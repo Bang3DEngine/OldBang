@@ -61,6 +61,11 @@ void Transform::Rotate(const glm::quat &r)
     inspectorEulerDeg = glm::degrees(glm::eulerAngles(rotation));
 }
 
+void Transform::SetScale(float s)
+{
+    SetScale(glm::vec3(s));
+}
+
 void Transform::SetScale(const glm::vec3 &s)
 {
     scale = s;
@@ -76,18 +81,29 @@ void Transform::SetRightMatrix(const glm::mat4 &rightMatrix)
     this->rightMatrix = rightMatrix;
 }
 
-void Transform::GetLocalMatrix(glm::mat4 &m) const
+void Transform::GetLocalMatrix(glm::mat4 &m,
+                               IgnoreParentTransformMask mask) const
 {
-    glm::mat4 T = glm::translate(glm::mat4(1.0f), GetLocalPosition());
-    glm::mat4 R = glm::mat4_cast(GetLocalRotation());
-    glm::mat4 S = glm::scale(glm::mat4(1.0f), GetLocalScale());
+    glm::mat4 T(1.0f), R(1.0f), S(1.0f);
+
+    if(mask & IgnorePosition > 0)
+        T = glm::translate(glm::mat4(1.0f), GetLocalPosition());
+
+    if(mask & IgnoreRotation > 0)
+        R = glm::mat4_cast(GetLocalRotation());
+
+    if(mask & IgnoreScale > 0)
+        S = glm::scale(glm::mat4(1.0f), GetLocalScale());
 
     m = leftMatrix * T * R * S * rightMatrix;
 }
 
-void Transform::GetMatrix(glm::mat4 &m) const
+void Transform::GetMatrix(glm::mat4 &m, bool _firstCall) const
 {
-    GetLocalMatrix(m);
+    if(_firstCall) GetLocalMatrix(m);
+    else //We are computing parent's transform, take into account ignore masks
+        GetLocalMatrix(m, ignoreParentTransformMask);
+
     GameObject *parent = GetOwner()->GetParent();
     if(parent != nullptr)
     {
@@ -95,7 +111,7 @@ void Transform::GetMatrix(glm::mat4 &m) const
         if(tp != nullptr)
         {
             glm::mat4 mp;
-            tp->GetMatrix(mp);
+            tp->GetMatrix(mp, false); //Next recursion, firstCall=false
             m = mp * m;
         }
     }
