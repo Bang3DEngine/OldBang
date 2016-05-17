@@ -70,7 +70,8 @@ public slots:
     void OnContextMenuDeleteClicked();
     void OnContextMenuCreatePrefab();
 
-    void _NotifyHierarchyItemSelectionChanged();
+    void _NotifyHierarchyGameObjectSelectionChanged();
+    void _NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column);
 };
 
 #endif // TREEHIERARCHY_H

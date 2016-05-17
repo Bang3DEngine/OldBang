@@ -255,7 +255,7 @@ public:
     bool IsEnabled();
 
     #ifdef BANG_EDITOR
-    void OnTreeHierarchyEntitiesSelected(
+    void OnTreeHierarchyGameObjectsSelected(
             std::list<GameObject*> &selectedEntities) override;
     #endif
 };

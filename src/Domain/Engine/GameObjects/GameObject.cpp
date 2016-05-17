@@ -256,7 +256,7 @@ bool GameObject::IsScene() const
 }
 
 #ifdef BANG_EDITOR
-void GameObject::OnTreeHierarchyEntitiesSelected(
+void GameObject::OnTreeHierarchyGameObjectsSelected(
         std::list<GameObject*> &selectedEntities )
 {
     if(IsEditorGameObject() || IsScene()) return;

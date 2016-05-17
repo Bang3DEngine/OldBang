@@ -9,6 +9,9 @@ Hierarchy::Hierarchy(QWidget *parent)
 {
     connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
             this, SLOT(OnItemNameChanged(QTreeWidgetItem*,int)));
+
+    connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
+            this ,SLOT(_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem*,int)));
 }
 
 Hierarchy::~Hierarchy()
@@ -317,18 +320,35 @@ void Hierarchy::OnCustomContextMenuRequested(QPoint point)
     }
 }
 
-void Hierarchy::_NotifyHierarchyItemSelectionChanged()
+void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
 {
-    std::list<GameObject*> selectedEntities;
+    std::list<GameObject*> selectedGameObjects;
     foreach(QTreeWidgetItem *item, selectedItems())
     {
         if(treeItemToGameObject.find(item) != treeItemToGameObject.end())
         {
             GameObject *e = treeItemToGameObject[item];
             if(e != nullptr)
-                selectedEntities.push_back(e);
+                selectedGameObjects.push_back(e);
         }
     }
 
-    WindowEventManager::NotifyHierarchyEntitiesSelected(selectedEntities);
+    Logger_Log("s: " << selectedGameObjects.size());
+    if(selectedGameObjects.size() == 1)
+    {
+        GameObject *go = selectedGameObjects.front();
+        QTreeWidgetItem *item = gameObjectToTreeItem[go];
+        item->setExpanded(true);
+    }
+
+    WindowEventManager::NotifyHierarchyGameObjectsSelected(selectedGameObjects);
+}
+
+void Hierarchy::_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    if(treeItemToGameObject.find(item) != treeItemToGameObject.end())
+    {
+        GameObject *selected = treeItemToGameObject[item];
+        WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(selected);
+    }
 }

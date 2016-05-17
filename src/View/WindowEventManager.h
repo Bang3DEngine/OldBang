@@ -52,7 +52,8 @@ public slots:
     static void NotifyMenuBarActionClicked(MenuBar::Action clickedAction);
 
     static void NotifyInspectorSlotChanged(Component *updatedComponent, InspectorWidget *inspectorItem);
-    static void NotifyHierarchyEntitiesSelected(std::list<GameObject*> &selectedEntities);
+    static void NotifyHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects);
+    static void NotifyHierarchyGameObjectDoubleClicked(GameObject *selected);
 };
 
 #endif // WINDOWEVENTMANAGER_H

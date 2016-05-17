@@ -95,7 +95,7 @@ void Inspector::MoveDown(InspectorWidget *w)
     insertItem(lastRow+1, item);
 }
 
-void Inspector::OnTreeHierarchyEntitiesSelected
+void Inspector::OnTreeHierarchyGameObjectsSelected
     (std::list<GameObject*> &selectedEntities)
 {
     GameObject *e = nullptr;
