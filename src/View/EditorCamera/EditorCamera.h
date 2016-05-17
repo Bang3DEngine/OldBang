@@ -9,6 +9,7 @@
 #include "Canvas.h"
 #include "Camera.h"
 #include "EditorGameObject.h"
+#include "IWindowEventManagerListener.h"
 
 //Pre-built GameObject, with a Camera that you can control in the editor
 //This camera has a parent "Pitch-Node", which rotates in y
@@ -45,6 +46,10 @@ public:
      * Gets the Camera Component inside the "Yaw-Node".
      **/
     Camera *GetCamera();
+
+#ifdef BANG_EDITOR
+    void OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected) override;
+#endif
 };
 
 #endif // EDITORCAMERA_H

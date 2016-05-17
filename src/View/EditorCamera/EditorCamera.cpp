@@ -136,6 +136,19 @@ Camera *EditorCamera::GetCamera()
     return yawNode->GetComponent<Camera>();
 }
 
+#ifdef BANG_EDITOR
+void EditorCamera::OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected)
+{
+    if(selected == nullptr) return;
+
+    Transform *t = GetComponent<Transform>();
+    Transform *st = selected->GetComponent<Transform>();
+    if(st != nullptr)
+    {
+        t->LookAt(st->GetPosition());
+    }
+}
+#endif
 
 
 

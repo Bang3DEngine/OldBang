@@ -10,8 +10,13 @@ Hierarchy::Hierarchy(QWidget *parent)
     connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
             this, SLOT(OnItemNameChanged(QTreeWidgetItem*,int)));
 
+    connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+            this, SLOT(OnSelectionChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
-            this ,SLOT(_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem*,int)));
+            this ,SLOT(_NotifyHierarchyGameObjectDoubleClicked(
+                           QTreeWidgetItem*,int)));
+
 }
 
 Hierarchy::~Hierarchy()
@@ -320,6 +325,11 @@ void Hierarchy::OnCustomContextMenuRequested(QPoint point)
     }
 }
 
+void Hierarchy::OnSelectionChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+    QTimer::singleShot(100, this, SLOT(_NotifyHierarchyGameObjectSelectionChanged()));
+}
+
 void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
 {
     std::list<GameObject*> selectedGameObjects;
@@ -333,13 +343,13 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
         }
     }
 
-    Logger_Log("s: " << selectedGameObjects.size());
+    /* Expand with one click
     if(selectedGameObjects.size() == 1)
     {
         GameObject *go = selectedGameObjects.front();
         QTreeWidgetItem *item = gameObjectToTreeItem[go];
         item->setExpanded(true);
-    }
+    }*/
 
     WindowEventManager::NotifyHierarchyGameObjectsSelected(selectedGameObjects);
 }

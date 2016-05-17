@@ -41,7 +41,7 @@ private:
 
     void UnselectAll();
 
-    Scene *currentScene;
+    Scene *currentScene = nullptr;
 
 public:
     explicit Hierarchy(QWidget *parent = 0);
@@ -70,6 +70,7 @@ public slots:
     void OnContextMenuDeleteClicked();
     void OnContextMenuCreatePrefab();
 
+    void OnSelectionChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void _NotifyHierarchyGameObjectSelectionChanged();
     void _NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column);
 };
