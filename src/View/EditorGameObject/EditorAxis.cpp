@@ -26,7 +26,6 @@ EditorAxis::EditorAxis() : EditorGameObject()
     zAxisLine->SetDestiny(glm::vec3(0,0,1) * axisLength);
 
     transform = AddComponent<Transform>();
-    transform->SetPosition(glm::vec3(0));
 
     this->SetRenderLayer(5);
 }
@@ -49,18 +48,18 @@ void EditorAxis::OnUpdate()
     GameObject *parent = GetParent();
     if(parent != nullptr)
     {
-        Transform *pt = parent->GetComponent<Transform>();
-        Transform *t = GetComponent<Transform>();
-        if(pt != nullptr)
-        {
-            t->SetScale(1.0f / pt->GetScale());
-        }
-
         GameObject *selected = parent->GetParent();
         if(selected != nullptr)
         {
-            Box bbox = selected->GetObjectBoundingBox();
-            t->SetPosition( bbox.GetCenter() );
+            Transform *st = selected->GetComponent<Transform>();
+            if(st != nullptr)
+            {
+                Transform *t = GetComponent<Transform>();
+                Box bbox = selected->GetObjectBoundingBox();
+                t->SetPosition( bbox.GetCenter() );
+                t->SetRotation( glm::inverse(st->GetLocalRotation()) );
+                t->SetScale(1.0f / st->GetScale());
+            }
         }
     }
 }
