@@ -151,6 +151,10 @@ void EditorCamera::OnUpdate()
         t->SetPosition(t->GetPosition() + moveStep);
     }
 
+    if(Input::GetKeyDown(Input::Key::T))
+    {
+        GetScene()->DebugDrawLine(Vector3(0.0f), Vector3(5.0f));
+    }
 
     //Look At Focus
     if(currentLookAtFocus != nullptr)
