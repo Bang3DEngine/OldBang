@@ -33,6 +33,5 @@ Quaternion Quaternion::AngleAxis(float angleDeg, const Vector3 &axis)
 
 Quaternion operator*(Quaternion q1, const Quaternion &q2)
 {
-    return Quaternion(glm::quat(q1.w, q1.x, q1.y, q1.z) *
-                      glm::quat(q2.w, q2.x, q2.y, q2.z));
+    return Quaternion(glm::quat(q1) * glm::quat(q2));
 }

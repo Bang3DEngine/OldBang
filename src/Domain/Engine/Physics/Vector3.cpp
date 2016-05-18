@@ -26,71 +26,70 @@ float Vector3::Length() const
 
 Vector3 Vector3::Normalized() const
 {
-    return Vector3(glm::normalize(glm::vec3(x,y,z)));
+    return Vector3(glm::normalize(glm::vec3(*this)));
 }
 
 Vector3 Vector3::ToDegrees() const
 {
-    return Vector3(glm::degrees(glm::vec3(x,y,z)));
+    return Vector3(glm::degrees(glm::vec3(*this)));
 }
 
 Vector3 Vector3::ToRadians() const
 {
-    return Vector3(glm::radians(glm::vec3(x,y,z)));
+    return Vector3(glm::radians(glm::vec3(*this)));
 }
 
 Vector3 operator*(Quaternion q, const Vector3 &rhs)
 {
-    glm::vec3 v = q * glm::vec3(rhs.x, rhs.y, rhs.z);
-    return Vector3(v.x,v.y,v.z);
+    return Vector3(q * glm::vec3(rhs.x, rhs.y, rhs.z));
 }
 
 
 Vector3 operator+(const Vector3 & v1, const Vector3 &v2)
 {
-    return Vector3(v1.x + v2.x, v1.y + v2.y, v1.z + v2.z);
+    return Vector3(glm::vec3(v1) + glm::vec3(v2));
 }
 
 
 Vector3 operator*(const Vector3 &v1, const Vector3 &v2)
 {
-    return Vector3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+    return Vector3(glm::vec3(v1) * glm::vec3(v2));
 }
 
 
 Vector3 operator-(const Vector3 &v)
 {
-    return Vector3(-v.x, -v.y, -v.z);
+    return Vector3(-glm::vec3(v));
 }
 
 
 Vector3 operator*(float a, const Vector3 &v)
 {
-    return Vector3(a * v.x, a * v.y, a * v.z);
+    return Vector3(a * glm::vec3(v));
 }
 
 
 Vector3 operator*(const Vector3 &v, float a)
 {
-    return Vector3(a * v.x, a * v.y, a * v.z);
+    return Vector3(a * glm::vec3(v));
 }
 
 
 Vector3 operator/(float a, const Vector3 &v)
 {
-    return Vector3(a / v.x, a / v.y, a / v.z);
+    return Vector3(a / glm::vec3(v));
 }
 
 
 Vector3 operator/(const Vector3 &v, float a)
 {
-    return Vector3(v.x / a, v.y / a, v.z / a);
+    return Vector3(glm::vec3(v) / a);
 }
 
 
 Vector3 operator/(const Vector3 &v1, const Vector3 &v2)
 {
-    return Vector3(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
+    return Vector3(glm::vec3(v1) * glm::vec3(v2));
 }
 
 
