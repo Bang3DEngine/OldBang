@@ -19,7 +19,7 @@ Quaternion Quaternion::Normalized() const
     return Quaternion(glm::normalize(glm::quat(*this)));
 }
 
-Quaternion Quaternion::Lerp(const Quaternion &from, const Quaternion &to, float progression)
+Quaternion Quaternion::Slerp(const Quaternion &from, const Quaternion &to, float progression)
 {
     return Quaternion(glm::mix(glm::quat(from), glm::quat(to), progression));
 }

@@ -14,7 +14,7 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
     clearColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
-    connect(&drawTimer, SIGNAL(timeout()), this, SLOT(updateGL()));
+    connect(&drawTimer, SIGNAL(timeout()), this, SLOT(update()));
     drawTimer.setInterval(Canvas::RedrawDelay);
     drawTimer.start();
 
@@ -39,10 +39,6 @@ void Canvas::initializeGL()
 
 void Canvas::paintGL()
 {
-}
-
-void Canvas::updateGL()
-{
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
@@ -60,7 +56,10 @@ void Canvas::updateGL()
     }
 
     Input::OnNewFrame();
-    QGLWidget::swapBuffers();
+}
+
+void Canvas::updateGL()
+{
 }
 
 void Canvas::resizeGL(int w, int h)

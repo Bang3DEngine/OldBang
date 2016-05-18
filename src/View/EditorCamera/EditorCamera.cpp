@@ -119,7 +119,7 @@ void EditorCamera::OnUpdate()
 
     if(Input::GetKey(Input::Key::X))
     {
-        t->SetRotation( Quaternion::Lerp(t->GetRotation(),
+        t->SetRotation( Quaternion::Slerp(t->GetRotation(),
                                          Quaternion::LookAt(Vector3::right),
                                          Time::GetDeltaTime()
                                         )
@@ -127,7 +127,7 @@ void EditorCamera::OnUpdate()
     }
     if(Input::GetKey(Input::Key::Z))
     {
-        t->SetRotation( Quaternion::Lerp(t->GetRotation(),
+        t->SetRotation( Quaternion::Slerp(t->GetRotation(),
                                          Quaternion::LookAt(Vector3::up),
                                          Time::GetDeltaTime()
                                         )

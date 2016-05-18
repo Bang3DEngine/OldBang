@@ -17,7 +17,7 @@ public:
 
 
     static Vector3 EulerAngles(const Quaternion &q);
-    static Quaternion Lerp(const Quaternion &from,
+    static Quaternion Slerp(const Quaternion &from,
                            const Quaternion &to,
                            float progression);
     static Quaternion FromTo(const Vector3 &from, const Vector3 &to);
