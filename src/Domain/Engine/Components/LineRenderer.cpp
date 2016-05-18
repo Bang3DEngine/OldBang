@@ -14,10 +14,10 @@ LineRenderer::LineRenderer()
     #endif
 
     points.resize(2);
-    points[1] = glm::vec3(999.9f);
+    points[1] = Vector3(999.9f);
 
     vbo = new VBO();
-    vbo->Fill(points.data(), points.size() * sizeof(glm::vec3));
+    vbo->Fill(points.data(), points.size() * sizeof(Vector3));
 
     vao = new VAO();
     vao->BindVBO(vbo, 0, 3 * points.size(), GL_FLOAT);
@@ -46,7 +46,7 @@ void LineRenderer::BindPointsToVAO() const
 {
     if(material != nullptr && material->GetShaderProgram() != nullptr)
     {
-        vbo->Fill(points.data(), points.size() * sizeof(glm::vec3));
+        vbo->Fill(points.data(), points.size() * sizeof(Vector3));
         GLint verticesShaderLocation = material->GetShaderProgram()->
                 GetLocation(ShaderContract::Vertex_In_Position_Raw);
         vao->UnBindVBO(verticesShaderLocation);
@@ -105,13 +105,13 @@ void LineRenderer::SetMaterial(Material *m)
     BindPointsToVAO();
 }
 
-void LineRenderer::SetOrigin(glm::vec3 o)
+void LineRenderer::SetOrigin(Vector3 o)
 {
     points[0] = o;
     BindPointsToVAO();
 }
 
-void LineRenderer::SetDestiny(glm::vec3 d)
+void LineRenderer::SetDestiny(Vector3 d)
 {
     points[1] = d;
     BindPointsToVAO();
@@ -168,10 +168,10 @@ void LineRenderer::OnSlotValueChanged(InspectorWidget *source)
     else { }
 
     std::vector<float> origin = source->GetSWVectorFloatValue("Origin");
-    points[0] = glm::vec3(origin[0], origin[1], origin[2]);
+    points[0] = Vector3(origin[0], origin[1], origin[2]);
 
     std::vector<float> destiny = source->GetSWVectorFloatValue("Destiny");
-    points[1] = glm::vec3(destiny[0], destiny[1], destiny[2]);
+    points[1] = Vector3(destiny[0], destiny[1], destiny[2]);
 
     std::vector<float> widthInfo = source->GetSWVectorFloatValue("Line Width");
     SetLineWidth(widthInfo[0]);
@@ -183,8 +183,8 @@ void LineRenderer::Write(std::ostream &f) const
     f << "<LineRenderer>" << std::endl;
     f << ((void*)this) << std::endl;
     FileWriter::WriteFilepath(material->GetFilepath(), f);
-    FileWriter::Write(glm::vec3(points[0].x, points[0].y, points[0].z), f);
-    FileWriter::Write(glm::vec3(points[1].x, points[1].y, points[1].z), f);
+    FileWriter::Write(Vector3(points[0].x, points[0].y, points[0].z), f);
+    FileWriter::Write(Vector3(points[1].x, points[1].y, points[1].z), f);
     FileWriter::Write(GetLineWidth(), f);
     f << "</LineRenderer>" << std::endl;
 }

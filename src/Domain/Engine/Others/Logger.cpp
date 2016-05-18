@@ -12,7 +12,7 @@ std::ostream& operator<<(std::ostream &log, const glm::vec2 &v)
     return log;
 }
 
-std::ostream& operator<<(std::ostream &log, const glm::vec3 &v)
+std::ostream& operator<<(std::ostream &log, const Vector3 &v)
 {
     log << "(" << v.x << ", " << v.y << ", " << v.z << ")";
     return log;
@@ -24,7 +24,7 @@ std::ostream& operator<<(std::ostream &log, const glm::vec4 &v)
     return log;
 }
 
-std::ostream& operator<<(std::ostream &log, const glm::quat &q)
+std::ostream& operator<<(std::ostream &log, const Quaternion &q)
 {
     log << "(" << q.x << ", " << q.y << ", " << q.z << ", " << q.w << ")";
     return log;

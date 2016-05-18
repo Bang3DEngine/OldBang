@@ -49,10 +49,10 @@ float Box::GetDepth() const
     return (maxz-minz);
 }
 
-glm::vec3 Box::GetCenter() const
+Vector3 Box::GetCenter() const
 {
     return
-       glm::vec3(
+       Vector3(
           (minx + maxx)/2,
           (miny + maxy)/2,
           (minz + maxz)/2
@@ -85,10 +85,10 @@ Box Box::Union(const Box &b1, const Box &b2)
         std::min(b1.minz, b2.minz), std::max(b1.maxz, b2.maxz));
 }
 
-void Box::FillFromPositions(const std::vector<glm::vec3> &positions)
+void Box::FillFromPositions(const std::vector<Vector3> &positions)
 {
     minx = maxx = miny = maxy = minz = maxz = 0.0f;
-    for(const glm::vec3 &v : positions)
+    for(const Vector3 &v : positions)
     {
         minx = std::min(minx, v.x);
         maxx = std::max(maxx, v.x);

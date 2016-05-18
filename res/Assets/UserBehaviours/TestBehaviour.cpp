@@ -14,15 +14,16 @@ TestBehaviour::TestBehaviour()
     time = 0.0f;
 
     int r = rand()%3;
-    if(r == 0) randomAxis = glm::vec3(1.0, 0.0, 0.0);
-    if(r == 1) randomAxis = glm::vec3(0.0, 1.0, 0.0);
-    if(r == 2) randomAxis = glm::vec3(0.0, 0.0, 1.0);
+    if(r == 0) randomAxis = Vector3(1.0, 0.0, 0.0);
+    if(r == 1) randomAxis = Vector3(0.0, 1.0, 0.0);
+    if(r == 2) randomAxis = Vector3(0.0, 0.0, 1.0);
 
-    randomAxis = glm::normalize(randomAxis);
+    randomAxis = randomAxis.Normalized();
 }
 
 void TestBehaviour::OnStart()
 {
+    /*
     originalScale = GetOwner()->GetComponent<Transform>()->GetScale().x;
 
     if(originalScale > 0.1f)
@@ -45,26 +46,28 @@ void TestBehaviour::OnStart()
         GetOwner()->GetComponent<MeshRenderer>()->SetMaterial(m);
     }
 
-    GetOwner()->GetComponent<Transform>()->SetPosition(glm::vec3(float(rand()%2000-1000)/1000 * 1.0f,
+    GetOwner()->GetComponent<Transform>()->SetPosition(Vector3(float(rand()%2000-1000)/1000 * 1.0f,
                                                             float(rand()%2000-1000)/1000 * 1.0f,
                                                             float(rand()%2000-1000)/1000 * 1.0f));
+*/
 }
 
 void TestBehaviour::OnUpdate()
 {
+    /*
     time += Time::GetDeltaTime();
     Transform *t = GetOwner()->GetComponent<Transform>();
     if(t == nullptr) return;
-
+    */
     /*
     int r = rand()%3;
     if(r == 0)      Logger_Log     (t->GetRotation());
     else if(r == 1) Logger_Warn    (t->GetRotation());
     else            Logger_Error   (t->GetRotation());
     */
-    t->SetRotation(glm::angleAxis(1.0f * Time::GetDeltaTime(), randomAxis) * t->GetRotation());
-    //t->SetScale(glm::vec3(originalScale) * (float(sin(time)) * 0.5f + 0.5f + 0.2f));
-    //t->SetPosition(t->GetPosition() + glm::vec3(sin(time) * 0.05f, 0.0f, 0.0f));
+    //t->SetRotation(glm::angleAxis(1.0f * Time::GetDeltaTime(), randomAxis) * t->GetRotation());
+    //t->SetScale(Vector3(originalScale) * (float(sin(time)) * 0.5f + 0.5f + 0.2f));
+    //t->SetPosition(t->GetPosition() + Vector3(sin(time) * 0.05f, 0.0f, 0.0f));
 }
 
 void TestBehaviour::OnDestroy()

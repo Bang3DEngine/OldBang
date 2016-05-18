@@ -9,8 +9,8 @@
 class MeshPyramid : public Mesh
 {
 public:
-    static const std::vector<glm::vec3> pyramidPositions;
-    static const std::vector<glm::vec3> pyramidNormals;
+    static const std::vector<Vector3> pyramidPositions;
+    static const std::vector<Vector3> pyramidNormals;
     static const std::vector<glm::vec2> pyramidUvs;
 
 public:

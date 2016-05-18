@@ -125,7 +125,6 @@ HEADERS += \
     src/View/WindowEventManager.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/Bang.h \
-    src/Domain/Engine/Quaternion.h \
     src/View/Inspector/Inspector.h \
     src/View/Hierarchy/Hierarchy.h \
     src/View/Inspector/InspectorWidgetInfo.h \
@@ -165,7 +164,9 @@ HEADERS += \
     src/View/Dialogs/FileDialog.h \
     src/View/EditorGameObject/EditorBBox.h \
     src/Domain/Engine/Physics/Box.h \
-    src/View/EditorGameObject/EditorSelectionGameObject.h
+    src/View/EditorGameObject/EditorSelectionGameObject.h \
+    src/Domain/Engine/Physics/Vector3.h \
+    src/Domain/Engine/Physics/Quaternion.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -204,7 +205,6 @@ SOURCES += \
     src/View/WindowMain.cpp \
     src/View/WindowEventManager.cpp \
     src/View/Interfaces/IWindowEventManagerListener.cpp \
-    src/Domain/Engine/Quaternion.cpp \
     src/View/Inspector/Inspector.cpp \
     src/View/Hierarchy/Hierarchy.cpp \
     src/View/Inspector/InspectorWidgetInfo.cpp \
@@ -244,7 +244,9 @@ SOURCES += \
     src/View/Dialogs/FileDialog.cpp \
     src/View/EditorGameObject/EditorBBox.cpp \
     src/Domain/Engine/Physics/Box.cpp \
-    src/View/EditorGameObject/EditorSelectionGameObject.cpp
+    src/View/EditorGameObject/EditorSelectionGameObject.cpp \
+    src/Domain/Engine/Physics/Vector3.cpp \
+    src/Domain/Engine/Physics/Quaternion.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

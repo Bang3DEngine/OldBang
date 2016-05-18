@@ -8,70 +8,70 @@ MeshPyramid::MeshPyramid()
     LoadUvs(pyramidUvs);
 }
 
-const std::vector<glm::vec3> MeshPyramid::pyramidPositions =
+const std::vector<Vector3> MeshPyramid::pyramidPositions =
 {
     //RIGHT
-    glm::vec3(0.0f,  0.5f,  0.0f),
-    glm::vec3(0.5f, -0.5f,  0.5f),
-    glm::vec3(0.5f, -0.5f, -0.5f),
+    Vector3(0.0f,  0.5f,  0.0f),
+    Vector3(0.5f, -0.5f,  0.5f),
+    Vector3(0.5f, -0.5f, -0.5f),
 
     //LEFT
-    glm::vec3( 0.0f,  0.5f,  0.0f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f,  0.5f),
+    Vector3( 0.0f,  0.5f,  0.0f),
+    Vector3(-0.5f, -0.5f, -0.5f),
+    Vector3(-0.5f, -0.5f,  0.5f),
 
     //FRONT
-    glm::vec3( 0.0f,  0.5f, 0.0f),
-    glm::vec3(-0.5f, -0.5f, 0.5f),
-    glm::vec3( 0.5f, -0.5f, 0.5f),
+    Vector3( 0.0f,  0.5f, 0.0f),
+    Vector3(-0.5f, -0.5f, 0.5f),
+    Vector3( 0.5f, -0.5f, 0.5f),
 
     //BACK
-    glm::vec3( 0.0f,  0.5f,  0.0f),
-    glm::vec3( 0.5f, -0.5f, -0.5f),
-    glm::vec3(-0.5f, -0.5f, -0.5f),
+    Vector3( 0.0f,  0.5f,  0.0f),
+    Vector3( 0.5f, -0.5f, -0.5f),
+    Vector3(-0.5f, -0.5f, -0.5f),
 
     //BOTTOM FRONT
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f, -0.5f,  0.5f),
+    Vector3(-0.5f, -0.5f, -0.5f),
+    Vector3( 0.5f, -0.5f, -0.5f),
+    Vector3( 0.5f, -0.5f,  0.5f),
 
     //BOTTOM BACK
-    glm::vec3(-0.5f, -0.5f, -0.5f),
-    glm::vec3( 0.5f, -0.5f,  0.5f),
-    glm::vec3(-0.5f, -0.5f,  0.5f)
+    Vector3(-0.5f, -0.5f, -0.5f),
+    Vector3( 0.5f, -0.5f,  0.5f),
+    Vector3(-0.5f, -0.5f,  0.5f)
 };
 
-const std::vector<glm::vec3> MeshPyramid::pyramidNormals =
+const std::vector<Vector3> MeshPyramid::pyramidNormals =
 {
     //RIGHT
-    glm::vec3(1.0f,  0.0f,  0.0f),
-    glm::vec3(1.0f,  0.0f,  0.0f),
-    glm::vec3(1.0f,  0.0f,  0.0f),
+    Vector3(1.0f,  0.0f,  0.0f),
+    Vector3(1.0f,  0.0f,  0.0f),
+    Vector3(1.0f,  0.0f,  0.0f),
 
     //LEFT
-    glm::vec3(-1.0f,  0.0f,  0.0f),
-    glm::vec3(-1.0f,  0.0f,  0.0f),
-    glm::vec3(-1.0f,  0.0f,  0.0f),
+    Vector3(-1.0f,  0.0f,  0.0f),
+    Vector3(-1.0f,  0.0f,  0.0f),
+    Vector3(-1.0f,  0.0f,  0.0f),
 
     //FRONT
-    glm::vec3(0.0f,  0.0f, -1.0f),
-    glm::vec3(0.0f,  0.0f, -1.0f),
-    glm::vec3(0.0f,  0.0f, -1.0f),
+    Vector3(0.0f,  0.0f, -1.0f),
+    Vector3(0.0f,  0.0f, -1.0f),
+    Vector3(0.0f,  0.0f, -1.0f),
 
     //BACK
-    glm::vec3(0.0f,  0.0f,  1.0f),
-    glm::vec3(0.0f,  0.0f,  1.0f),
-    glm::vec3(0.0f,  0.0f,  1.0f),
+    Vector3(0.0f,  0.0f,  1.0f),
+    Vector3(0.0f,  0.0f,  1.0f),
+    Vector3(0.0f,  0.0f,  1.0f),
 
     //BOTTOM FRONT
-    glm::vec3(0.0f, -1.0f, 0.0f),
-    glm::vec3(0.0f, -1.0f, 0.0f),
-    glm::vec3(0.0f, -1.0f, 0.0f),
+    Vector3(0.0f, -1.0f, 0.0f),
+    Vector3(0.0f, -1.0f, 0.0f),
+    Vector3(0.0f, -1.0f, 0.0f),
 
     //BOTTOM BACK
-    glm::vec3(0.0f, -1.0f, 0.0f),
-    glm::vec3(0.0f, -1.0f, 0.0f),
-    glm::vec3(0.0f, -1.0f, 0.0f)
+    Vector3(0.0f, -1.0f, 0.0f),
+    Vector3(0.0f, -1.0f, 0.0f),
+    Vector3(0.0f, -1.0f, 0.0f)
 };
 
 const std::vector<glm::vec2> MeshPyramid::pyramidUvs =

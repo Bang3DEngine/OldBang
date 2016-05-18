@@ -6,6 +6,8 @@
 #include <cmath>
 #include <vector>
 
+#include "Vector3.h"
+
 #include "IToString.h"
 
 class Box : public IToString
@@ -27,7 +29,7 @@ public:
     float GetWidth() const;
     float GetHeight() const;
     float GetDepth() const;
-    glm::vec3 GetCenter() const;
+    Vector3 GetCenter() const;
     float GetArea() const;
     float GetVolume() const;
     /**
@@ -46,7 +48,7 @@ public:
      * Bounding Box of the positions vector.
      * @param positions
      */
-    void FillFromPositions(const std::vector<glm::vec3> &positions);
+    void FillFromPositions(const std::vector<Vector3> &positions);
 
     const std::string ToString() const override;
 };

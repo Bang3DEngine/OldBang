@@ -5,10 +5,13 @@
 
 #include "Bang.h"
 
+#include "Vector3.h"
+
 #include "Input.h"
 #include "Canvas.h"
 #include "Camera.h"
 #include "EditorGameObject.h"
+
 
 //Pre-built GameObject, with a Camera that you can control in the editor
 //This camera has a parent "Pitch-Node", which rotates in y

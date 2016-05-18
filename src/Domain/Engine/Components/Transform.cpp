@@ -2,10 +2,10 @@
 #include "FileReader.h"
 #include "GameObject.h"
 
-Transform::Transform() : position(glm::vec3(0.0f)),
-                         rotation(glm::quat()),
-                         scale(glm::vec3(1.0f)),
-                         inspectorEulerDeg(glm::vec3(0.0f))
+Transform::Transform() : position(Vector3(0.0f)),
+                         rotation(Quaternion()),
+                         scale(Vector3(1.0f)),
+                         inspectorEulerDeg(Vector3(0.0f))
 {
     #ifdef BANG_EDITOR
     inspectorComponentInfo.SetSlotsInfos(
@@ -29,44 +29,43 @@ Transform::~Transform()
 {
 }
 
-void Transform::SetPosition(const glm::vec3 &p)
+void Transform::SetPosition(const Vector3 &p)
 {
     position = p;
 }
 
-void Transform::SetRotationFromInspector(const glm::quat &q)
+void Transform::SetRotationFromInspector(const Quaternion &q)
 {
-    rotation = glm::normalize(q);
+    rotation = q.Normalized();
 }
 
-void Transform::SetRotation(const glm::vec3 &degreesEuler)
+void Transform::SetRotation(const Vector3 &degreesEuler)
 {
     inspectorEulerDeg = degreesEuler;
-    glm::vec3 rads = glm::radians(inspectorEulerDeg);
-    glm::quat qx = glm::angleAxis(rads.x, glm::vec3(1,0,0));
-    glm::quat qy = glm::angleAxis(rads.y, glm::vec3(0,1,0));
-    glm::quat qz = glm::angleAxis(rads.z, glm::vec3(0,0,1));
+    Vector3 rads = inspectorEulerDeg.ToRadians();
+    Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3(1,0,0));
+    Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3(0,1,0));
+    Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3(0,0,1));
     SetRotationFromInspector(qz * qy * qx);
 }
 
-void Transform::SetRotation(const glm::quat &q)
+void Transform::SetRotation(const Quaternion &q)
 {
-    rotation = glm::normalize(q);
-    inspectorEulerDeg = glm::degrees(glm::eulerAngles(rotation));
+    rotation = q.Normalized();
+    inspectorEulerDeg = Quaternion::EulerAngles(rotation).ToDegrees();
 }
 
-void Transform::Rotate(const glm::quat &r)
+void Transform::Rotate(const Quaternion &r)
 {
     SetRotation(r * GetLocalRotation());
-    inspectorEulerDeg = glm::degrees(glm::eulerAngles(rotation));
 }
 
 void Transform::SetScale(float s)
 {
-    SetScale(glm::vec3(s));
+    SetScale(Vector3(s));
 }
 
-void Transform::SetScale(const glm::vec3 &s)
+void Transform::SetScale(const Vector3 &s)
 {
     scale = s;
 }
@@ -114,40 +113,40 @@ void Transform::GetNormalMatrix(glm::mat4 &m) const
 }
 
 
-void Transform::LookAt(glm::vec3 target, glm::vec3 _up)
+void Transform::LookAt(Vector3 target, Vector3 _up)
 {
     Assert(target != position, "LookAt target is the same as position.", return);
 
-    glm::vec3 up = glm::normalize(_up);
+    Vector3 up = _up.Normalized();
 
-    SetRotation( glm::quat_cast( glm::inverse( glm::lookAt(GetPosition(), target, up)) ) );
+    SetRotation( Quaternion(glm::quat_cast( glm::inverse( glm::lookAt(GetPosition(), target, up)) )) );
     /*
-    glm::vec3 direction = glm::normalize(target - position);
-    float dot = glm::dot(glm::vec3(0, 0, -1), direction);
+    Vector3 direction = glm::normalize(target - position);
+    float dot = glm::dot(Vector3(0, 0, -1), direction);
 
     if (fabs(dot - (-1.0f)) < 0.000001f)
     {
-        rotation = glm::angleAxis(3.141592f, glm::vec3(0, 1, 0));
+        rotation = glm::angleAxis(3.141592f, Vector3(0, 1, 0));
         return;
     }
     else if (fabs(dot - (1.0f)) < 0.000001f)
     {
-        rotation = glm::quat();
+        rotation = Quaternion();
         return;
     }
 
     float angle = -glm::acos(dot);
-    glm::vec3 cross = glm::normalize(glm::cross(glm::vec3(0, 0, -1), direction));
+    Vector3 cross = glm::normalize(glm::cross(Vector3(0, 0, -1), direction));
     rotation = glm::conjugate(glm::normalize(glm::angleAxis(angle, cross)));
     */
 }
 
-glm::vec3 Transform::GetLocalPosition() const
+Vector3 Transform::GetLocalPosition() const
 {
     return position;
 }
 
-glm::vec3 Transform::GetPosition() const
+Vector3 Transform::GetPosition() const
 {
     GameObject *parent = owner->GetParent();
     if(parent != nullptr)
@@ -158,12 +157,12 @@ glm::vec3 Transform::GetPosition() const
     return GetLocalPosition();
 }
 
-glm::quat Transform::GetLocalRotation() const
+Quaternion Transform::GetLocalRotation() const
 {
     return rotation;
 }
 
-glm::quat Transform::GetRotation() const
+Quaternion Transform::GetRotation() const
 {
     GameObject *parent = owner->GetParent();
     if(parent != nullptr)
@@ -174,12 +173,12 @@ glm::quat Transform::GetRotation() const
     return GetLocalRotation();
 }
 
-glm::vec3 Transform::GetLocalEuler() const
+Vector3 Transform::GetLocalEuler() const
 {
     return inspectorEulerDeg;
 }
 
-glm::vec3 Transform::GetEuler() const
+Vector3 Transform::GetEuler() const
 {
     GameObject *parent = owner->GetParent();
     if(parent != nullptr)
@@ -190,12 +189,12 @@ glm::vec3 Transform::GetEuler() const
     return GetLocalEuler();
 }
 
-glm::vec3 Transform::GetLocalScale() const
+Vector3 Transform::GetLocalScale() const
 {
     return scale;
 }
 
-glm::vec3 Transform::GetScale() const
+Vector3 Transform::GetScale() const
 {
     GameObject *parent = owner->GetParent();
     if(parent != nullptr)
@@ -206,62 +205,62 @@ glm::vec3 Transform::GetScale() const
     return GetLocalScale();
 }
 
-glm::vec3 Transform::GetLocalForward() const
+Vector3 Transform::GetLocalForward() const
 {
-    return glm::normalize(GetLocalRotation() * glm::vec3(0.0f, 0.0f, -1.0f));
+    return (GetLocalRotation() * Vector3(0.0f, 0.0f, -1.0f)).Normalized();
 }
 
-glm::vec3 Transform::GetForward() const
+Vector3 Transform::GetForward() const
 {
-    return GetRotation() * GetLocalForward();
+    return  (GetRotation() * Vector3(0.0f, 0.0f, -1.0f)).Normalized();
 }
 
-glm::vec3 Transform::GetLocalBack() const
+Vector3 Transform::GetLocalBack() const
 {
     return -GetLocalForward();
 }
 
-glm::vec3 Transform::GetBack() const
+Vector3 Transform::GetBack() const
 {
     return -GetForward();
 }
 
-glm::vec3 Transform::GetLocalRight() const
+Vector3 Transform::GetLocalRight() const
 {
-    return glm::normalize(GetLocalRotation() * glm::vec3(1.0f, 0.0f, 0.0f));
+    return (GetLocalRotation() * Vector3(1.0f, 0.0f, 0.0f)).Normalized();
 }
 
-glm::vec3 Transform::GetRight() const
+Vector3 Transform::GetRight() const
 {
-    return GetRotation() * GetLocalRight();
+    return  (GetRotation() * Vector3(1.0f, 0.0f, 0.0f)).Normalized();
 }
 
-glm::vec3 Transform::GetLocalLeft() const
+Vector3 Transform::GetLocalLeft() const
 {
     return -GetLocalRight();
 }
 
-glm::vec3 Transform::GetLeft() const
+Vector3 Transform::GetLeft() const
 {
     return -GetRight();
 }
 
-glm::vec3 Transform::GetLocalUp() const
+Vector3 Transform::GetLocalUp() const
 {
-    return glm::normalize(GetLocalRotation() * glm::vec3(0.0f, 1.0f, 0.0f));
+    return (GetLocalRotation() * Vector3(0.0f, 1.0f, 0.0f)).Normalized();
 }
 
-glm::vec3 Transform::GetUp() const
+Vector3 Transform::GetUp() const
 {
-    return GetRotation() * GetLocalUp();
+    return (GetRotation() * Vector3(0.0f, 1.0f, 0.0f)).Normalized();
 }
 
-glm::vec3 Transform::GetLocalDown() const
+Vector3 Transform::GetLocalDown() const
 {
     return -GetLocalUp();
 }
 
-glm::vec3 Transform::GetDown() const
+Vector3 Transform::GetDown() const
 {
     return -GetUp();
 }
@@ -273,7 +272,7 @@ const std::string Transform::ToString() const
 
     std::ostringstream msg;
 
-    glm::vec3 euler = glm::eulerAngles(rotation);
+    Vector3 euler = Quaternion::EulerAngles(rotation);
     msg << "[" <<
            "Transform: " << std::endl <<
            "   Position: (" << position.x << ", " << position.y << ", " << position.z << ")"  << std::endl <<
@@ -291,7 +290,7 @@ InspectorWidgetInfo* Transform::GetComponentInfo()
     static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(0))->value =
         {position.x, position.y, position.z};
 
-    glm::vec3 e = inspectorEulerDeg;
+    Vector3 e = inspectorEulerDeg;
     static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(1))->value =
         {e.x, e.y, e.z};
 
@@ -305,13 +304,13 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
 {
     std::vector<float> v;
     v = source->GetSWVectorFloatValue("Position");
-    position = glm::vec3(v[0], v[1], v[2]);
+    position = Vector3(v[0], v[1], v[2]);
 
     v = source->GetSWVectorFloatValue("Rotation");
-    SetRotation(glm::vec3(v[0], v[1], v[2]));
+    SetRotation(Vector3(v[0], v[1], v[2]));
 
     v = source->GetSWVectorFloatValue("Scale");
-    scale = glm::vec3(v[0], v[1], v[2]);
+    scale = Vector3(v[0], v[1], v[2]);
 }
 
 void Transform::Write(std::ostream &f) const

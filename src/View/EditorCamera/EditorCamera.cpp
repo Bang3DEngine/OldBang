@@ -10,10 +10,10 @@ EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
     cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
     Transform *t = AddComponent<Transform>();
-    t->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    t->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
     camt = yawNode->AddComponent<Transform>();
-    //t->LookAt(glm::vec3(0));
+    //t->LookAt(Vector3(0));
 }
 
 EditorCamera::~EditorCamera()
@@ -30,7 +30,7 @@ void EditorCamera::OnUpdate()
     moveSpeed += moveAccel; //TODO: must do this in FixedUpdate which does not exist yet
     moveSpeed = glm::clamp(moveSpeed, minMoveSpeed, maxMoveSpeed);
 
-    glm::vec3 moveStep(0.0f);
+    Vector3 moveStep(0.0f);
 
     //KEY HANDLING
     if(Input::GetKey(Input::Key::W))
@@ -50,7 +50,7 @@ void EditorCamera::OnUpdate()
     {
         moveStep += moveSpeed * Time::GetDeltaTime() * camt->GetRight();
     }
-    doingSomeAction = glm::length(moveStep) != 0;
+    doingSomeAction = moveStep.Length() != 0;
     //
 
     //ROTATION WITH MOUSE HANDLING
@@ -67,13 +67,15 @@ void EditorCamera::OnUpdate()
         /*
         t->SetLeftMatrix(glm::rotate(mouseRotationRads.x, t->GetUp()) *
                          glm::rotate(mouseRotationRads.y, t->GetRight()));
-        t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+        t->LookAt(Vector3(0.0f, 0.0f, 0.0f));
         */
         //
 
-        glm::quat rotX = glm::angleAxis(mouseRotationDegrees.x, glm::vec3(0,1,0));
+        Quaternion rotX = Quaternion::AngleAxis(mouseRotationDegrees.x,
+                                                Vector3(0,1,0));
         t->SetRotation( rotX  );
-        glm::quat rotY = glm::angleAxis(mouseRotationDegrees.y, camt->GetRight());
+        Quaternion rotY = Quaternion::AngleAxis(mouseRotationDegrees.y,
+                                                camt->GetRight());
         t->Rotate( rotY );
 
         Canvas::SetCursor(Qt::BlankCursor);

@@ -111,7 +111,7 @@ bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v,
     }
 }
 
-bool ShaderProgram::SetUniformVec3 (const std::string &name, const glm::vec3& v, bool warn) const
+bool ShaderProgram::SetUniformVec3 (const std::string &name, const Vector3& v, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)

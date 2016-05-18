@@ -114,12 +114,12 @@ int FileReader::GetOBJNumFaces(const std::string &filepath)
 }
 
 bool FileReader::ReadOBJ(const std::string& filepath,
-                         std::vector<glm::vec3> *vertexPos,
-                         std::vector<glm::vec3> *vertexNormals,
+                         std::vector<Vector3> *vertexPos,
+                         std::vector<Vector3> *vertexNormals,
                          std::vector<glm::vec2> *vertexUvs,
                          bool *isTriangles)
 {
-    std::vector<glm::vec3> disorderedVertexPos, disorderedVertexNormals;
+    std::vector<Vector3> disorderedVertexPos, disorderedVertexNormals;
     std::vector<glm::vec2> disorderedVertexUvs;
     std::vector<unsigned int> vertexPosIndexes,
                               vertexUvsIndexes,
@@ -140,7 +140,7 @@ bool FileReader::ReadOBJ(const std::string& filepath,
         if(!(ss >> lineHeader)) continue;
         if(lineHeader == "v")
         {
-            glm::vec3 pos;
+            Vector3 pos;
             ss >> pos.x >> pos.y >> pos.z;
             disorderedVertexPos.push_back(pos);
         }
@@ -152,7 +152,7 @@ bool FileReader::ReadOBJ(const std::string& filepath,
         }
         else if(hasNormals && lineHeader == "vn") //Cargamos normals
         {
-            glm::vec3 normal;
+            Vector3 normal;
             ss >> normal.x >> normal.y >> normal.z;
             disorderedVertexNormals.push_back(normal);
         }
@@ -430,12 +430,12 @@ glm::vec2 FileReader::ReadVec2(std::istream &f)
     return glm::vec2(x, y);
 }
 
-glm::vec3 FileReader::ReadVec3(std::istream &f)
+Vector3 FileReader::ReadVec3(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
     float x,y,z;
     iss >> x >> y >> z;
-    return glm::vec3(x, y, z);
+    return Vector3(x, y, z);
 }
 
 glm::vec4 FileReader::ReadVec4(std::istream &f)
@@ -446,18 +446,18 @@ glm::vec4 FileReader::ReadVec4(std::istream &f)
     return glm::vec4(x, y, z, w);
 }
 
-glm::quat FileReader::ReadQuat(std::istream &f)
+Quaternion FileReader::ReadQuat(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
     float x,y,z,w;
     iss >> x >> y >> z >> w;
-    return glm::quat(w, x, y, z);
+    return Quaternion(w, x, y, z);
 }
 
 Rect FileReader::ReadRect(std::istream &f)
 {
     //Left, right, bottom, top
-    glm::quat q = ReadQuat(f);
+    Quaternion q = ReadQuat(f);
     return Rect(q.x, q.y, q.z, q.w);
 }
 

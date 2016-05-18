@@ -6,6 +6,7 @@
 
 #include <string>
 
+#include "Vector3.h"
 #include "Rect.h"
 #include "Persistence.h"
 
@@ -22,9 +23,9 @@ public:
 
     static void Write(float v, std::ostream &f);
     static void Write(const glm::vec2 &v, std::ostream &f);
-    static void Write(const glm::vec3 &v, std::ostream &f);
+    static void Write(const Vector3 &v, std::ostream &f);
     static void Write(const glm::vec4 &v, std::ostream &f);
-    static void Write(const glm::quat &q, std::ostream &f);
+    static void Write(const Quaternion &q, std::ostream &f);
     static void Write(const Rect &r, std::ostream &f);
     static void Write(const std::string &str, std::ostream &f);
     static void WriteFilepath(const std::string &path, std::ostream &f);
