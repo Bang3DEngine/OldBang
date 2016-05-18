@@ -14,7 +14,14 @@ public:
     Quaternion(float w, float x, float y, float z);
 
     Quaternion Normalized() const;
+
+
     static Vector3 EulerAngles(const Quaternion &q);
+    static Quaternion Lerp(const Quaternion &from,
+                           const Quaternion &to,
+                           float progression);
+    static Quaternion FromTo(const Vector3 &from, const Vector3 &to);
+    static Quaternion LookAt(const Vector3 &dir);
     static Quaternion AngleAxis(float angleDeg, const Vector3 &axis);
 };
 

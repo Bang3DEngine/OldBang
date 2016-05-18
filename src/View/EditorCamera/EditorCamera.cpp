@@ -117,6 +117,24 @@ void EditorCamera::OnUpdate()
     }
     //
 
+    if(Input::GetKey(Input::Key::X))
+    {
+        t->SetRotation( Quaternion::Lerp(t->GetRotation(),
+                                         Quaternion::LookAt(Vector3::right),
+                                         Time::GetDeltaTime()
+                                        )
+                      );
+    }
+    if(Input::GetKey(Input::Key::Z))
+    {
+        t->SetRotation( Quaternion::Lerp(t->GetRotation(),
+                                         Quaternion::LookAt(Vector3::up),
+                                         Time::GetDeltaTime()
+                                        )
+                      );
+    }
+
+
     if(mustUnlockMouse)
     {
         Input::LockMouseMovement(false);
