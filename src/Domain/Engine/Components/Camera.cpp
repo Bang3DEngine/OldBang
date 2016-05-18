@@ -22,24 +22,24 @@ Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
     #endif
 }
 
-void Camera::GetViewMatrix(glm::mat4 &view) const
+void Camera::GetViewMatrix(Matrix4 &view) const
 {
     Transform *t = GetOwner()->GetComponent<Transform>();
     if(CAN_USE_COMPONENT(t))
     {
         t->GetMatrix(view);
-        view = glm::inverse(view);
+        view = view.Inversed();
     }
     else
     {
         Logger_Verbose(GetOwner() << " has a Camera but does not have a transform. " <<
                        "View matrix will be the idgameObject matrix.");
 
-        view = glm::mat4(1.0f);
+        view = Matrix4(1.0f);
     }
 }
 
-void Camera::GetProjectionMatrix(glm::mat4 &proj) const
+void Camera::GetProjectionMatrix(Matrix4 &proj) const
 {
     if(projMode == ProjectionMode::Perspective)
     {
@@ -48,11 +48,11 @@ void Camera::GetProjectionMatrix(glm::mat4 &proj) const
             aspectRatio = Canvas::GetAspectRatio();
         }
 
-        proj = glm::perspective(glm::radians(fovDegrees), aspectRatio, zNear, zFar);
+        proj = Matrix4::Perspective(glm::radians(fovDegrees), aspectRatio, zNear, zFar);
     }
     else //Ortho
     {
-        proj = glm::ortho(orthoRect.minx, orthoRect.maxx,
+        proj = Matrix4::Ortho(orthoRect.minx, orthoRect.maxx,
                           orthoRect.miny, orthoRect.maxy,
                           zNear, zFar);
     }

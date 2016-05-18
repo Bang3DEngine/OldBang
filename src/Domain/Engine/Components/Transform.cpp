@@ -70,26 +70,26 @@ void Transform::SetScale(const Vector3 &s)
     scale = s;
 }
 
-void Transform::SetLeftMatrix(const glm::mat4 &leftMatrix)
+void Transform::SetLeftMatrix(const Matrix4 &leftMatrix)
 {
     this->leftMatrix = leftMatrix;
 }
 
-void Transform::SetRightMatrix(const glm::mat4 &rightMatrix)
+void Transform::SetRightMatrix(const Matrix4 &rightMatrix)
 {
     this->rightMatrix = rightMatrix;
 }
 
-void Transform::GetLocalMatrix(glm::mat4 &m) const
+void Transform::GetLocalMatrix(Matrix4 &m) const
 {
-    glm::mat4 T = glm::translate(glm::mat4(1.0f), GetLocalPosition());
-    glm::mat4 R = glm::mat4_cast(GetLocalRotation());
-    glm::mat4 S = glm::scale(glm::mat4(1.0f), GetLocalScale());
+    Matrix4 T = Matrix4::TranslateMatrix(GetLocalPosition());
+    Matrix4 R = Matrix4::RotateMatrix(GetLocalRotation());
+    Matrix4 S = Matrix4::ScaleMatrix(GetLocalScale());
 
     m = leftMatrix * T * R * S * rightMatrix;
 }
 
-void Transform::GetMatrix(glm::mat4 &m) const
+void Transform::GetMatrix(Matrix4 &m) const
 {
     GetLocalMatrix(m);
 
@@ -99,17 +99,17 @@ void Transform::GetMatrix(glm::mat4 &m) const
         Transform *tp = parent->GetComponent<Transform>();
         if(tp != nullptr)
         {
-            glm::mat4 mp;
+            Matrix4 mp;
             tp->GetMatrix(mp);
             m = mp * m;
         }
     }
 }
 
-void Transform::GetNormalMatrix(glm::mat4 &m) const
+void Transform::GetNormalMatrix(Matrix4 &m) const
 {
     GetMatrix(m);
-    m = glm::transpose(glm::inverse(m));
+    m = m.Inversed().Transposed();
 }
 
 

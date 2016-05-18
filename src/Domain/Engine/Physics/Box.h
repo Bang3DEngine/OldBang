@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Vector3.h"
+#include "Matrix4.h"
 
 #include "IToString.h"
 
@@ -53,6 +54,6 @@ public:
     const std::string ToString() const override;
 };
 
-Box operator*(const glm::mat4 &m, const Box &b);
+Box operator*(const Matrix4 &m, const Box &b);
 
 #endif // BOX_H

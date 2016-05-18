@@ -19,6 +19,6 @@ public:
 };
 
 
-Quaternion operator*(Quaternion q1, const Quaternion& q2);
+Quaternion operator*(const Quaternion &q1, const Quaternion& q2);
 
 #endif // QUATERNION_H

@@ -103,7 +103,7 @@ void Box::FillFromPositions(const std::vector<Vector3> &positions)
 
 
 
-Box operator*(const glm::mat4 &m, const Box &b)
+Box operator*(const Matrix4 &m, const Box &b)
 {
     glm::vec4 bMinCoords = glm::vec4(b.minx, b.miny, b.minz, 1.0f);
     glm::vec4 bMaxCoords = glm::vec4(b.maxx, b.maxy, b.maxz, 1.0f);

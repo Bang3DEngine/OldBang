@@ -8,6 +8,7 @@
 #include <ostream>
 
 #include "Vector3.h"
+#include "Matrix4.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Quaternion.h"
@@ -29,8 +30,8 @@ private:
 
     // L * MODEL * R, user can edit those in order to
     // apply its own post/pre transformations
-    glm::mat4 leftMatrix;
-    glm::mat4 rightMatrix;
+    Matrix4 leftMatrix;
+    Matrix4 rightMatrix;
 
 public:
 
@@ -55,13 +56,13 @@ public:
 
     void SetScale(float s);
     void SetScale(const Vector3 &s);
-    void SetLeftMatrix(const glm::mat4 &leftMatrix);
-    void SetRightMatrix(const glm::mat4 &rightMatrix);
+    void SetLeftMatrix(const Matrix4 &leftMatrix);
+    void SetRightMatrix(const Matrix4 &rightMatrix);
 
-    void GetLocalMatrix(glm::mat4 &m) const;
-    void GetMatrix(glm::mat4 &m) const;
+    void GetLocalMatrix(Matrix4 &m) const;
+    void GetMatrix(Matrix4 &m) const;
 
-    void GetNormalMatrix(glm::mat4 &m) const;
+    void GetNormalMatrix(Matrix4 &m) const;
 
     Vector3 GetLocalForward() const;
     Vector3 GetForward() const;

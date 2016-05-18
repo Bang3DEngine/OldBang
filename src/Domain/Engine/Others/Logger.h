@@ -14,6 +14,7 @@
 #include <list>
 
 #include "Vector3.h"
+#include "Matrix4.h"
 #include "Quaternion.h"
 #include "glm/glm.hpp"
 
@@ -30,7 +31,7 @@ std::ostream& operator<<(std::ostream &log, const glm::vec2 &v);
 std::ostream& operator<<(std::ostream &log, const Vector3 &v);
 std::ostream& operator<<(std::ostream &log, const glm::vec4 &v);
 std::ostream& operator<<(std::ostream &log, const Quaternion &q);
-std::ostream& operator<<(std::ostream &log, const glm::mat4 &v);
+std::ostream& operator<<(std::ostream &log, const Matrix4 &v);
 std::ostream &operator<<(std::ostream &log, const IToString *s);
 std::ostream &operator<<(std::ostream &log, const IToString &s);
 

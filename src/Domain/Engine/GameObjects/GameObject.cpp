@@ -79,7 +79,7 @@ Box GameObject::GetLocalBoundingBox() const
     Transform *t = GetComponent<Transform>();
     if(CAN_USE_COMPONENT(t))
     {
-        glm::mat4 mat;
+        Matrix4 mat;
         t->GetLocalMatrix(mat);
         b = mat * b; //Apply transform to Box
     }

@@ -41,10 +41,10 @@ void Renderer::ActivateStatesBeforeRendering() const
     }
 }
 
-void Renderer::GetMatrices(glm::mat4 &model,
-                           glm::mat4 &view,
-                           glm::mat4 &projection,
-                           glm::mat4 &pvm) const
+void Renderer::GetMatrices(Matrix4 &model,
+                           Matrix4 &view,
+                           Matrix4 &projection,
+                           Matrix4 &pvm) const
 {
     //We assume cam, scene and transform do exist.
 
@@ -55,23 +55,23 @@ void Renderer::GetMatrices(glm::mat4 &model,
         Transform *t = owner->GetComponent<Transform>();
         if(t != nullptr) t->GetMatrix(model);
     }
-    else model = glm::mat4(1.0f);
+    else model = Matrix4(1.0f);
 
     if(!ignoreViewMatrix)
     {
         cam->GetViewMatrix(view);
     }
-    else view = glm::mat4(1.0f);
+    else view = Matrix4(1.0f);
 
     cam->GetProjectionMatrix(projection);
 
     pvm = projection * view * model;
 }
 
-void Renderer::SetMatricesUniforms(const glm::mat4 &model,
-                                   const glm::mat4 &view,
-                                   const glm::mat4 &projection,
-                                   const glm::mat4 &pvm) const
+void Renderer::SetMatricesUniforms(const Matrix4 &model,
+                                   const Matrix4 &view,
+                                   const Matrix4 &projection,
+                                   const Matrix4 &pvm) const
 {
     material->shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Model, model, false);
