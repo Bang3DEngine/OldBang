@@ -1,13 +1,6 @@
 #include "Texture.h"
 
-Texture::Texture() :
-  width(0),
-  height(0),
-  numComponents(0),
-  filterMode(FilterMode::Linear),
-  wrapMode(WrapMode::Repeat),
-  textureSlot(0),
-  data(nullptr)
+Texture::Texture()
 {
     glGenTextures(1, &idgl);
     SetFilterMode(filterMode);

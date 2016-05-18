@@ -11,7 +11,7 @@
 class EditorBBox : public EditorGameObject
 {
 private:
-    static std::vector<glm::vec3> boxVertices;
+    static std::vector<Vector3> boxVertices;
 
 public:
     EditorBBox();

@@ -21,9 +21,9 @@ EditorAxis::EditorAxis() : EditorGameObject()
     zAxisLine->SetMaterial(matz);
 
     float axisLength = 3.0f;
-    xAxisLine->SetDestiny(glm::vec3(1,0,0) * axisLength);
-    yAxisLine->SetDestiny(glm::vec3(0,1,0) * axisLength);
-    zAxisLine->SetDestiny(glm::vec3(0,0,1) * axisLength);
+    xAxisLine->SetDestiny(Vector3(1,0,0) * axisLength);
+    yAxisLine->SetDestiny(Vector3(0,1,0) * axisLength);
+    zAxisLine->SetDestiny(Vector3(0,0,1) * axisLength);
 
     transform = AddComponent<Transform>();
 
@@ -57,7 +57,7 @@ void EditorAxis::OnUpdate()
                 Transform *t = GetComponent<Transform>();
                 Box bbox = selected->GetObjectBoundingBox();
                 t->SetPosition( bbox.GetCenter() );
-                t->SetRotation( glm::inverse(st->GetLocalRotation()) );
+                t->SetRotation( st->GetLocalRotation().Inversed() );
                 t->SetScale(1.0f / st->GetScale());
             }
         }

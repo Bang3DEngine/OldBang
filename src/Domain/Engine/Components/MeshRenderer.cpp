@@ -106,7 +106,7 @@ void MeshRenderer::Render() const
 {
     ActivateStatesBeforeRendering();
 
-    glm::mat4 model, view, projection, pvm;
+    Matrix4 model, view, projection, pvm;
     GetMatrices(model, view, projection, pvm);
     SetMatricesUniforms(model, view, projection, pvm);
 

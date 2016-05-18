@@ -7,26 +7,26 @@ MeshPlane::MeshPlane()
     LoadUvs(planeUvs);
 }
 
-const std::vector<glm::vec3> MeshPlane::planePositions =
+const std::vector<Vector3> MeshPlane::planePositions =
 {
-    glm::vec3(-0.5f, -0.5f,  0.0f),
-    glm::vec3( 0.5f, -0.5f,  0.0f),
-    glm::vec3( 0.5f,  0.5f,  0.0f),
+    Vector3(-0.5f, -0.5f,  0.0f),
+    Vector3( 0.5f, -0.5f,  0.0f),
+    Vector3( 0.5f,  0.5f,  0.0f),
 
-    glm::vec3(-0.5f, -0.5f,  0.0f),
-    glm::vec3( 0.5f,  0.5f,  0.0f),
-    glm::vec3(-0.5f,  0.5f,  0.0f)
+    Vector3(-0.5f, -0.5f,  0.0f),
+    Vector3( 0.5f,  0.5f,  0.0f),
+    Vector3(-0.5f,  0.5f,  0.0f)
 };
 
-const std::vector<glm::vec3> MeshPlane::planeNormals =
+const std::vector<Vector3> MeshPlane::planeNormals =
 {
-    glm::vec3(0.0f, 0.0f, 1.0f),
-    glm::vec3(0.0f, 0.0f, 1.0f),
-    glm::vec3(0.0f, 0.0f, 1.0f),
+    Vector3(0.0f, 0.0f, 1.0f),
+    Vector3(0.0f, 0.0f, 1.0f),
+    Vector3(0.0f, 0.0f, 1.0f),
 
-    glm::vec3(0.0f, 0.0f, 1.0f),
-    glm::vec3(0.0f, 0.0f, 1.0f),
-    glm::vec3(0.0f, 0.0f, 1.0f)
+    Vector3(0.0f, 0.0f, 1.0f),
+    Vector3(0.0f, 0.0f, 1.0f),
+    Vector3(0.0f, 0.0f, 1.0f)
 };
 
 const std::vector<glm::vec2> MeshPlane::planeUvs =

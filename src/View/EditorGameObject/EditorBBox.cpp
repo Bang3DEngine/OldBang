@@ -74,10 +74,10 @@ void EditorBBox::OnUpdate()
 
         Transform *t = GetComponent<Transform>();
 
-        glm::vec3 center = bbox.GetCenter();
+        Vector3 center = bbox.GetCenter();
         t->SetPosition(center);
 
-        glm::vec3 scale = glm::vec3(bbox.GetWidth(),
+        Vector3 scale = Vector3(bbox.GetWidth(),
                                     bbox.GetHeight(),
                                     bbox.GetDepth());
         t->SetScale(scale);
@@ -85,57 +85,57 @@ void EditorBBox::OnUpdate()
 }
 
 
-std::vector<glm::vec3> EditorBBox::boxVertices =
+std::vector<Vector3> EditorBBox::boxVertices =
 {
-    glm::vec3( 0.5f, 0.5f, 0.5f),
-    glm::vec3( 0.5f,-0.5f,-0.5f),
-    glm::vec3( 0.5f, 0.5f,-0.5f),
+    Vector3( 0.5f, 0.5f, 0.5f),
+    Vector3( 0.5f,-0.5f,-0.5f),
+    Vector3( 0.5f, 0.5f,-0.5f),
 
-    glm::vec3( 0.5f,-0.5f,-0.5f),
-    glm::vec3( 0.5f, 0.5f, 0.5f),
-    glm::vec3( 0.5f,-0.5f, 0.5f),
+    Vector3( 0.5f,-0.5f,-0.5f),
+    Vector3( 0.5f, 0.5f, 0.5f),
+    Vector3( 0.5f,-0.5f, 0.5f),
 
-    glm::vec3(-0.5f,-0.5f,-0.5f),
-    glm::vec3(-0.5f,-0.5f, 0.5f),
-    glm::vec3(-0.5f, 0.5f, 0.5f),
+    Vector3(-0.5f,-0.5f,-0.5f),
+    Vector3(-0.5f,-0.5f, 0.5f),
+    Vector3(-0.5f, 0.5f, 0.5f),
 
-    glm::vec3(-0.5f,-0.5f,-0.5f),
-    glm::vec3(-0.5f, 0.5f, 0.5f),
-    glm::vec3(-0.5f, 0.5f,-0.5f),
-
-
-
-    glm::vec3( 0.5f, 0.5f, 0.5f),
-    glm::vec3( 0.5f, 0.5f,-0.5f),
-    glm::vec3(-0.5f, 0.5f,-0.5f),
-
-    glm::vec3( 0.5f, 0.5f, 0.5f),
-    glm::vec3(-0.5f, 0.5f,-0.5f),
-    glm::vec3(-0.5f, 0.5f, 0.5f),
-
-    glm::vec3( 0.5f,-0.5f, 0.5f),
-    glm::vec3(-0.5f,-0.5f,-0.5f),
-    glm::vec3( 0.5f,-0.5f,-0.5f),
-
-    glm::vec3( 0.5f,-0.5f, 0.5f),
-    glm::vec3(-0.5f,-0.5f, 0.5f),
-    glm::vec3(-0.5f,-0.5f,-0.5f),
+    Vector3(-0.5f,-0.5f,-0.5f),
+    Vector3(-0.5f, 0.5f, 0.5f),
+    Vector3(-0.5f, 0.5f,-0.5f),
 
 
 
-    glm::vec3(-0.5f, 0.5f, 0.5f),
-    glm::vec3(-0.5f,-0.5f, 0.5f),
-    glm::vec3( 0.5f,-0.5f, 0.5f),
+    Vector3( 0.5f, 0.5f, 0.5f),
+    Vector3( 0.5f, 0.5f,-0.5f),
+    Vector3(-0.5f, 0.5f,-0.5f),
 
-    glm::vec3( 0.5f, 0.5f, 0.5f),
-    glm::vec3(-0.5f, 0.5f, 0.5f),
-    glm::vec3( 0.5f,-0.5f, 0.5f),
+    Vector3( 0.5f, 0.5f, 0.5f),
+    Vector3(-0.5f, 0.5f,-0.5f),
+    Vector3(-0.5f, 0.5f, 0.5f),
 
-    glm::vec3( 0.5f, 0.5f,-0.5f),
-    glm::vec3(-0.5f,-0.5f,-0.5f),
-    glm::vec3(-0.5f, 0.5f,-0.5f),
+    Vector3( 0.5f,-0.5f, 0.5f),
+    Vector3(-0.5f,-0.5f,-0.5f),
+    Vector3( 0.5f,-0.5f,-0.5f),
 
-    glm::vec3( 0.5f, 0.5f,-0.5f),
-    glm::vec3( 0.5f,-0.5f,-0.5f),
-    glm::vec3(-0.5f,-0.5f,-0.5f)
+    Vector3( 0.5f,-0.5f, 0.5f),
+    Vector3(-0.5f,-0.5f, 0.5f),
+    Vector3(-0.5f,-0.5f,-0.5f),
+
+
+
+    Vector3(-0.5f, 0.5f, 0.5f),
+    Vector3(-0.5f,-0.5f, 0.5f),
+    Vector3( 0.5f,-0.5f, 0.5f),
+
+    Vector3( 0.5f, 0.5f, 0.5f),
+    Vector3(-0.5f, 0.5f, 0.5f),
+    Vector3( 0.5f,-0.5f, 0.5f),
+
+    Vector3( 0.5f, 0.5f,-0.5f),
+    Vector3(-0.5f,-0.5f,-0.5f),
+    Vector3(-0.5f, 0.5f,-0.5f),
+
+    Vector3( 0.5f, 0.5f,-0.5f),
+    Vector3( 0.5f,-0.5f,-0.5f),
+    Vector3(-0.5f,-0.5f,-0.5f)
 };

@@ -111,7 +111,7 @@ bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v,
     }
 }
 
-bool ShaderProgram::SetUniformVec3 (const std::string &name, const glm::vec3& v, bool warn) const
+bool ShaderProgram::SetUniformVec3 (const std::string &name, const Vector3& v, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
@@ -147,13 +147,13 @@ bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v,
     }
 }
 
-bool ShaderProgram::SetUniformMat4 (const std::string &name, const glm::mat4& m, bool warn) const
+bool ShaderProgram::SetUniformMat4 (const std::string &name, const Matrix4& m, bool warn) const
 {
     int location = glGetUniformLocation(idgl, name.c_str());
     if(location >= 0)
     {
         Bind();
-        glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(m));
+        glUniformMatrix4fv(location, 1, GL_FALSE, m.GetFirstAddress());
         UnBind();
         return true;
     }

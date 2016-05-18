@@ -26,7 +26,7 @@ void TestCameraBehaviour::OnUpdate()
         Transform *t = GetParent()->GetComponent<Transform>();
         float R = 4.0f;
         time += Time::GetDeltaTime();
-        t->SetPosition(glm::vec3(t->GetPosition().x,
+        t->SetPosition(Vector3(t->GetPosition().x,
                                  pyramid->GetComponent<Transform>()->GetPosition().y + sin(time) * R,
                                  pyramid->GetComponent<Transform>()->GetPosition().z + cos(time) * R));
 

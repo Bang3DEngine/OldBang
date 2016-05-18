@@ -10,10 +10,10 @@ EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
     cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
     Transform *t = AddComponent<Transform>();
-    t->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+    t->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 
     camt = yawNode->AddComponent<Transform>();
-    //t->LookAt(glm::vec3(0));
+    //t->LookAt(Vector3(0));
 }
 
 EditorCamera::~EditorCamera()
@@ -30,7 +30,7 @@ void EditorCamera::OnUpdate()
     moveSpeed += moveAccel; //TODO: must do this in FixedUpdate which does not exist yet
     moveSpeed = glm::clamp(moveSpeed, minMoveSpeed, maxMoveSpeed);
 
-    glm::vec3 moveStep(0.0f);
+    Vector3 moveStep(0.0f);
 
     //KEY HANDLING
     if(Input::GetKey(Input::Key::W))
@@ -50,7 +50,7 @@ void EditorCamera::OnUpdate()
     {
         moveStep += moveSpeed * Time::GetDeltaTime() * camt->GetRight();
     }
-    doingSomeAction = glm::length(moveStep) != 0;
+    doingSomeAction = moveStep.Length() != 0;
     //
 
     //ROTATION WITH MOUSE HANDLING
@@ -67,13 +67,15 @@ void EditorCamera::OnUpdate()
         /*
         t->SetLeftMatrix(glm::rotate(mouseRotationRads.x, t->GetUp()) *
                          glm::rotate(mouseRotationRads.y, t->GetRight()));
-        t->LookAt(glm::vec3(0.0f, 0.0f, 0.0f));
+        t->LookAt(Vector3(0.0f, 0.0f, 0.0f));
         */
         //
 
-        glm::quat rotX = glm::angleAxis(mouseRotationDegrees.x, glm::vec3(0,1,0));
+        Quaternion rotX = Quaternion::AngleAxis(mouseRotationDegrees.x,
+                                                Vector3(0,1,0));
         t->SetRotation( rotX  );
-        glm::quat rotY = glm::angleAxis(mouseRotationDegrees.y, camt->GetRight());
+        Quaternion rotY = Quaternion::AngleAxis(mouseRotationDegrees.y,
+                                                camt->GetRight());
         t->Rotate( rotY );
 
         Canvas::SetCursor(Qt::BlankCursor);
@@ -115,6 +117,24 @@ void EditorCamera::OnUpdate()
     }
     //
 
+    if(Input::GetKey(Input::Key::X))
+    {
+        t->SetRotation( Quaternion::Slerp(t->GetRotation(),
+                                         Quaternion::LookDirection(Vector3::right),
+                                         Time::GetDeltaTime()
+                                        )
+                      );
+    }
+    if(Input::GetKey(Input::Key::Z))
+    {
+        t->SetRotation( Quaternion::Slerp(t->GetRotation(),
+                                         Quaternion::LookDirection(Vector3::up),
+                                         Time::GetDeltaTime()
+                                        )
+                      );
+    }
+
+
     if(mustUnlockMouse)
     {
         Input::LockMouseMovement(false);
@@ -127,8 +147,59 @@ void EditorCamera::OnUpdate()
     }
     else
     {
+        currentLookAtFocus = nullptr; //No more lookAt
         t->SetPosition(t->GetPosition() + moveStep);
     }
+
+
+    //Look At Focus
+    if(currentLookAtFocus != nullptr)
+    {
+        Camera *cam = yawNode->GetComponent<Camera>();
+        Transform *ft = currentLookAtFocus->GetComponent<Transform>();
+        if(ft != nullptr)
+        {
+            Box focusBBox = currentLookAtFocus->GetBoundingBox();
+            //Matrix4 viewMat; cam->GetViewMatrix(viewMat);
+            //focusBBox = viewMat * focusBBox;
+
+            Vector3 thisPos = t->GetPosition();
+            Vector3 focusPos = focusBBox.GetCenter(); //ft->GetPosition();
+            Vector3 focusDir = (focusPos - thisPos).Normalized();
+
+            //LookAt Rotation
+            if(thisPos != focusPos)
+            {
+                Quaternion origin = t->GetRotation();
+                Quaternion dest = Quaternion::LookDirection(focusDir);
+                Quaternion final = Quaternion::Slerp( origin, dest,
+                            Time::GetDeltaTime() * lookAtRotSpeed);
+
+                t->SetRotation(final);
+            }
+
+            //Move
+            float halfHeight = focusBBox.GetHeight() / 2;
+            float d = Vector3::Distance(thisPos, focusPos);
+            float minDist;
+            if(cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
+            {
+                float fov = glm::radians(cam->GetFovDegrees());
+                minDist = halfHeight / std::tan(fov);
+            }
+
+            minDist = std::max(minDist, 0.5f); //In case boundingBox is empty
+            t->SetPosition(
+                        Vector3::Lerp(
+                            thisPos,
+                            focusPos - focusDir * minDist,
+                            Time::GetDeltaTime() * lookAtMoveSpeed)
+                        );
+        }
+    }
+
+
+    //
 }
 
 Camera *EditorCamera::GetCamera()
@@ -141,12 +212,7 @@ void EditorCamera::OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
     if(selected == nullptr) return;
 
-    Transform *t = GetComponent<Transform>();
-    Transform *st = selected->GetComponent<Transform>();
-    if(st != nullptr)
-    {
-        t->LookAt(st->GetPosition());
-    }
+    currentLookAtFocus = selected;
 }
 #endif
 

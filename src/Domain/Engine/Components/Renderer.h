@@ -57,16 +57,16 @@ protected:
     virtual void OnRender() override = 0;
     virtual void Render() const = 0;
 
-    void GetMatrices(glm::mat4 &model,
-                     glm::mat4 &view,
-                     glm::mat4 &projection,
-                     glm::mat4 &pvm) const;
+    void GetMatrices(Matrix4 &model,
+                     Matrix4 &view,
+                     Matrix4 &projection,
+                     Matrix4 &pvm) const;
 
     void SetMatricesUniforms(
-            const glm::mat4 &model,
-            const glm::mat4 &view,
-            const glm::mat4 &projection,
-            const glm::mat4 &pvm) const;
+            const Matrix4 &model,
+            const Matrix4 &view,
+            const Matrix4 &projection,
+            const Matrix4 &pvm) const;
 
 public:
     Renderer();

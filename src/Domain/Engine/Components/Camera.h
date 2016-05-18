@@ -38,8 +38,8 @@ private:
 public:
     Camera();
 
-    void GetViewMatrix(glm::mat4 &view) const;
-    void GetProjectionMatrix(glm::mat4 &proj) const;
+    void GetViewMatrix(Matrix4 &view) const;
+    void GetProjectionMatrix(Matrix4 &proj) const;
 
 
     void SetOrthoRect(const Rect& rect);

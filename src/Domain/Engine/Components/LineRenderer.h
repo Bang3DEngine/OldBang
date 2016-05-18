@@ -21,7 +21,7 @@
 class LineRenderer : public Renderer
 {
 private:
-    std::vector<glm::vec3> points;
+    std::vector<Vector3> points;
 
     VBO *vbo = nullptr;
     VAO *vao = nullptr;
@@ -43,8 +43,8 @@ public:
 
     virtual void SetMaterial(Material *m) override;
 
-    void SetOrigin(glm::vec3 o);
-    void SetDestiny(glm::vec3 d);
+    void SetOrigin(Vector3 o);
+    void SetDestiny(Vector3 d);
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;

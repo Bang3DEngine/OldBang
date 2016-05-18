@@ -113,6 +113,12 @@ public:
     Box GetLocalBoundingBox() const;
 
     /**
+     * @brief Returns this GameObject's bounding box in world space
+     * @return
+     */
+    Box GetBoundingBox() const;
+
+    /**
      * Adds the Component c to this.
      */
     void AddComponent(Component *c);

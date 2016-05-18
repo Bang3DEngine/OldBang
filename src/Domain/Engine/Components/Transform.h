@@ -7,9 +7,11 @@
 #include <sstream>
 #include <ostream>
 
+#include "Vector3.h"
+#include "Matrix4.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/quaternion.hpp"
+#include "Quaternion.h"
 
 #include "FileReader.h"
 #include "Component.h"
@@ -19,70 +21,70 @@ class Transform : public Component
 
 private:
 
-    glm::vec3 position;
-    glm::quat rotation;
-    glm::vec3 scale;
+    Vector3 position;
+    Quaternion rotation;
+    Vector3 scale;
 
     // euler angles in degrees set by user in the inspector
-    glm::vec3 inspectorEulerDeg;
+    Vector3 inspectorEulerDeg;
 
     // L * MODEL * R, user can edit those in order to
     // apply its own post/pre transformations
-    glm::mat4 leftMatrix;
-    glm::mat4 rightMatrix;
+    Matrix4 leftMatrix;
+    Matrix4 rightMatrix;
 
 public:
 
     Transform();
     virtual ~Transform();
 
-    void LookAt(glm::vec3 target,
-                glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
+    void LookAt(Vector3 target,
+                Vector3 up = Vector3(0.0f, 1.0f, 0.0f));
 
 
 
-    void SetPosition(const glm::vec3 &p);
+    void SetPosition(const Vector3 &p);
 
     //These wont change the input inspectorEulerDeg of the
-    void Rotate(const glm::vec3 &degreesEuler);
-    void SetRotation(const glm::vec3 &degreesEuler);
-    void SetRotationFromInspector(const glm::quat &q);
+    void Rotate(const Vector3 &degreesEuler);
+    void SetRotation(const Vector3 &degreesEuler);
+    void SetRotationFromInspector(const Quaternion &q);
 
     //This will change inspectorEulerDeg to the quat->eulerAngles conversion
-    void SetRotation(const glm::quat &r);
-    void Rotate(const glm::quat &r);
+    void SetRotation(const Quaternion &r);
+    void Rotate(const Quaternion &r);
 
     void SetScale(float s);
-    void SetScale(const glm::vec3 &s);
-    void SetLeftMatrix(const glm::mat4 &leftMatrix);
-    void SetRightMatrix(const glm::mat4 &rightMatrix);
+    void SetScale(const Vector3 &s);
+    void SetLeftMatrix(const Matrix4 &leftMatrix);
+    void SetRightMatrix(const Matrix4 &rightMatrix);
 
-    void GetLocalMatrix(glm::mat4 &m) const;
-    void GetMatrix(glm::mat4 &m) const;
+    void GetLocalMatrix(Matrix4 &m) const;
+    void GetMatrix(Matrix4 &m) const;
 
-    void GetNormalMatrix(glm::mat4 &m) const;
+    void GetNormalMatrix(Matrix4 &m) const;
 
-    glm::vec3 GetLocalForward() const;
-    glm::vec3 GetForward() const;
-    glm::vec3 GetLocalBack() const;
-    glm::vec3 GetBack() const;
-    glm::vec3 GetLocalRight() const;
-    glm::vec3 GetRight() const;
-    glm::vec3 GetLocalLeft() const;
-    glm::vec3 GetLeft() const;
-    glm::vec3 GetLocalUp() const;
-    glm::vec3 GetUp() const;
-    glm::vec3 GetLocalDown() const;
-    glm::vec3 GetDown() const;
+    Vector3 GetLocalForward() const;
+    Vector3 GetForward() const;
+    Vector3 GetLocalBack() const;
+    Vector3 GetBack() const;
+    Vector3 GetLocalRight() const;
+    Vector3 GetRight() const;
+    Vector3 GetLocalLeft() const;
+    Vector3 GetLeft() const;
+    Vector3 GetLocalUp() const;
+    Vector3 GetUp() const;
+    Vector3 GetLocalDown() const;
+    Vector3 GetDown() const;
 
-    glm::vec3 GetLocalPosition() const;
-    glm::vec3 GetPosition() const;
-    glm::quat GetLocalRotation() const;
-    glm::quat GetRotation() const;
-    glm::vec3 GetLocalEuler() const;
-    glm::vec3 GetEuler() const; // Gets rotation in euler angles
-    glm::vec3 GetLocalScale() const;
-    glm::vec3 GetScale() const;
+    Vector3 GetLocalPosition() const;
+    Vector3 GetPosition() const;
+    Quaternion GetLocalRotation() const;
+    Quaternion GetRotation() const;
+    Vector3 GetLocalEuler() const;
+    Vector3 GetEuler() const; // Gets rotation in euler angles
+    Vector3 GetLocalScale() const;
+    Vector3 GetScale() const;
 
     const std::string ToString() const override;
 

@@ -37,20 +37,20 @@ public:
     };
 
 private:
-    GLint glTextureGetIntegerType;
+    GLint glTextureGetIntegerType = 0;
 
 protected:
-    int width;
-    int height;
-    int numComponents;
+    int width = 0;
+    int height = 0;
+    int numComponents = 0;
 
-    FilterMode filterMode;
-    WrapMode wrapMode;
-    int textureSlot;
+    FilterMode filterMode = FilterMode::Nearest;
+    WrapMode wrapMode = WrapMode::Repeat;
+    int textureSlot = 0;
 
-    unsigned char *data;
+    unsigned char *data = nullptr;
 
-    TextureType glTextureType;
+    TextureType glTextureType = TextureType::Texture2D;
 
 public:
     Texture();

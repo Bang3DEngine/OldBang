@@ -5,11 +5,14 @@
 
 #include "Bang.h"
 
+#include "Vector3.h"
+
 #include "Input.h"
 #include "Canvas.h"
 #include "Camera.h"
 #include "EditorGameObject.h"
 #include "IWindowEventManagerListener.h"
+
 
 //Pre-built GameObject, with a Camera that you can control in the editor
 //This camera has a parent "Pitch-Node", which rotates in y
@@ -22,6 +25,10 @@ private:
     GameObject *yawNode = nullptr;
     Camera *cam = nullptr;
     Transform *camt = nullptr; //YawNode transform
+
+    GameObject *currentLookAtFocus = nullptr;
+    float lookAtRotSpeed = 5.0f;
+    float lookAtMoveSpeed = 4.0f;
 
     float maxMoveSpeed = 1.0f;
     float minMoveSpeed = 0.1f;

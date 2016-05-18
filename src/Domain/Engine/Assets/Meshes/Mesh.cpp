@@ -26,8 +26,8 @@ Mesh::~Mesh()
 
 void Mesh::LoadFromFile(const std::string &filepath)
 {
-    std::vector<glm::vec3> positions;
-    std::vector<glm::vec3> normals;
+    std::vector<Vector3> positions;
+    std::vector<Vector3> normals;
     std::vector<glm::vec2> uvs;
 
     if( FileReader::ReadOBJ(filepath,
@@ -44,7 +44,7 @@ void Mesh::LoadFromFile(const std::string &filepath)
     }
 }
 
-void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
+void Mesh::LoadPositions(const std::vector<Vector3>& positions)
 {
     if(vertexPositionsVBO != nullptr) delete vertexPositionsVBO;
 
@@ -55,7 +55,7 @@ void Mesh::LoadPositions(const std::vector<glm::vec3>& positions)
     bbox.FillFromPositions(positions);
 }
 
-void Mesh::LoadNormals(const std::vector<glm::vec3> &normals)
+void Mesh::LoadNormals(const std::vector<Vector3> &normals)
 {
     if(vertexNormalsVBO != nullptr) delete vertexNormalsVBO;
 
