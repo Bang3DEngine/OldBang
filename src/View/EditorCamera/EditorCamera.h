@@ -22,9 +22,10 @@
 class EditorCamera : public EditorGameObject
 {
 private:
-    GameObject *yawNode = nullptr;
+    Transform *t = nullptr; //YawNode transform
     Camera *cam = nullptr;
     Transform *camt = nullptr; //YawNode transform
+    GameObject *yawNode = nullptr;
 
     GameObject *currentLookAtFocus = nullptr;
     float lookAtRotSpeed = 5.0f;
@@ -46,6 +47,38 @@ private:
 public:
     EditorCamera();
     virtual ~EditorCamera();
+
+    /**
+     * @brief Handles camera 'zoom' with mouse wheel
+     * If it has moved, hasMoved = true.
+     */
+    void HandleWheelZoom(Vector3 *moveStep, bool *hasMoved);
+
+    /**
+     * @brief Handles camera rotation with right mouse click
+     * If it has rotated, hasMoved = true.
+     * If it has rotated, unlockMouse = false
+     * @return Returns if the cam has rotated or not
+     */
+    bool HandleMouseRotation(bool *hasMoved, bool *unlockMouse);
+
+    /**
+     * @brief Handles camera panning (moving in the plane
+     * perpendicular to cam's forward) with middle mouse click
+     * If it has moved, hasMoved = true.
+     * If it has moved, unlockMouse = false
+     */
+    void HandleMousePanning(bool *hasMoved, bool *unlockMouse);
+
+    /**
+     * @brief Handles key movement with WASD
+     */
+    void HandleKeyMovement(Vector3 *moveStep, bool *hasMoved);
+
+    /**
+     * @brief Handles LookAt behaviour when focusing a GameObject.
+     */
+    void HandleLookAtFocus();
 
     void OnUpdate() override;
 

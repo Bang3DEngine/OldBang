@@ -168,7 +168,8 @@ HEADERS += \
     src/Domain/Engine/Physics/Vector3.h \
     src/Domain/Engine/Physics/Quaternion.h \
     src/Domain/Engine/Physics/Matrix4.h \
-    src/View/EditorScene/EditorDebugGameObject.h
+    src/View/EditorScene/EditorDebugGameObject.h \
+    src/Domain/Engine/Physics/Sphere.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -250,7 +251,8 @@ SOURCES += \
     src/Domain/Engine/Physics/Vector3.cpp \
     src/Domain/Engine/Physics/Quaternion.cpp \
     src/Domain/Engine/Physics/Matrix4.cpp \
-    src/View/EditorScene/EditorDebugGameObject.cpp
+    src/View/EditorScene/EditorDebugGameObject.cpp \
+    src/Domain/Engine/Physics/Sphere.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

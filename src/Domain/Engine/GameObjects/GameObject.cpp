@@ -99,6 +99,21 @@ Box GameObject::GetBoundingBox() const
     return b;
 }
 
+Sphere GameObject::GetObjectBoundingSphere() const
+{
+    return Sphere::FromBox(GetObjectBoundingBox());
+}
+
+Sphere GameObject::GetLocalBoundingSphere() const
+{
+    return Sphere::FromBox(GetLocalBoundingBox());
+}
+
+Sphere GameObject::GetBoundingSphere() const
+{
+    return Sphere::FromBox(GetBoundingBox());
+}
+
 void GameObject::AddComponent(Component *c)
 {
     c->owner = this;

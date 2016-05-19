@@ -10,7 +10,8 @@ Mesh::Mesh(const Mesh &m)
 {
     //TODO, do copy of VAO and VBO's
     vao = m.GetVAO();
-    bbox = m.bbox;
+    bBox = m.bBox;
+    bSphere = m.bSphere;
     vertexPositionsVBO = m.vertexPositionsVBO;
     vertexNormalsVBO = m.vertexNormalsVBO;
     vertexUvsVBO = m.vertexUvsVBO;
@@ -52,7 +53,8 @@ void Mesh::LoadPositions(const std::vector<Vector3>& positions)
     vertexPositionsVBO->Fill((void*)(&positions[0]), positions.size() * sizeof(float) * 3);
     vertexCount = positions.size();
 
-    bbox.FillFromPositions(positions);
+    bBox.FillFromPositions(positions);
+    bSphere.FillFromBox(bBox);
 }
 
 void Mesh::LoadNormals(const std::vector<Vector3> &normals)
@@ -122,7 +124,12 @@ bool Mesh::IsATrianglesModel() const
 
 const Box &Mesh::GetBoundingBox() const
 {
-    return bbox;
+    return bBox;
+}
+
+const Sphere &Mesh::GetBoundingSphere() const
+{
+    return bSphere;
 }
 
 void Mesh::Write(std::ostream &f) const

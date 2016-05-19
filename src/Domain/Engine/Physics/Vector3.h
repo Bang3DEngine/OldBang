@@ -71,6 +71,8 @@ public:
     const static Vector3 left;
     const static Vector3 forward;
     const static Vector3 back;
+    const static Vector3 zero;
+    const static Vector3 one;
 };
 
 Vector3 operator+(float a, const Vector3& v);

@@ -13,6 +13,7 @@
 #include "ISceneEventListener.h"
 
 #include "Material.h"
+#include "Sphere.h"
 #include "Box.h"
 
 #ifdef BANG_EDITOR
@@ -117,6 +118,27 @@ public:
      * @return
      */
     Box GetBoundingBox() const;
+
+    /**
+     * @brief Returns this GameObject's bounding sphere in Object space, without
+     * applying any Transform (equivalent to Mesh->GetBoundingBox())
+     * @return
+     */
+    Sphere GetObjectBoundingSphere() const;
+
+    /**
+     * @brief Returns this GameObject's bounding sphere, applying only the
+     * transformations of this GameObject's Transform
+     * (not parents' transforms included here).
+     * @return
+     */
+    Sphere GetLocalBoundingSphere() const;
+
+    /**
+     * @brief Returns this GameObject's bounding sphere in world space
+     * @return
+     */
+    Sphere GetBoundingSphere() const;
 
     /**
      * Adds the Component c to this.

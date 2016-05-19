@@ -6,57 +6,60 @@ Box::Box()
 {
 }
 
-const std::string Box::ToString() const
-{
-    std::ostringstream oss;
-    oss << "Box: [" << std::endl <<
-           "  x(" << minx << ", " << maxx << ")" << std::endl <<
-           "  y(" << miny << ", " << maxy << ")" << std::endl <<
-           "  z(" << minz << ", " << maxz << ")" << std::endl <<
-           "]" << std::endl;
-
-    return oss.str();
-}
-
 Box::Box(float minx, float maxx,
          float miny, float maxy,
          float minz, float maxz) :
-    minx(minx), maxx(maxx),
-    miny(miny), maxy(maxy),
-    minz(minz), maxz(maxz)
+
+    Box(Vector3(minx, miny, minz),
+        Vector3(maxx, maxy, maxz))
 {
+}
+
+Box::Box(const Vector3 &min, const Vector3 &max)
+{
+    this->minv = min;
+    this->maxv = max;
 }
 
 Box::Box(const Box &b)
 {
-    minx = b.minx; maxx = b.maxx;
-    miny = b.miny; maxy = b.maxy;
-    minz = b.minz; maxz = b.maxz;
+    minv = b.minv;
+    maxv = b.maxv;
+}
+
+Vector3 Box::GetMin() const
+{
+    return minv;
+}
+
+Vector3 Box::GetMax() const
+{
+    return maxv;
+}
+
+Vector3 Box::GetDiagonal() const
+{
+    return maxv - minv;
 }
 
 float Box::GetWidth() const
 {
-    return (maxx-minx);
+    return (maxv.x - minv.x);
 }
 
 float Box::GetHeight() const
 {
-    return (maxy-miny);
+    return (maxv.y - minv.y);
 }
 
 float Box::GetDepth() const
 {
-    return (maxz-minz);
+    return (maxv.z - minv.z);
 }
 
 Vector3 Box::GetCenter() const
 {
-    return
-       Vector3(
-          (minx + maxx)/2,
-          (miny + maxy)/2,
-          (minz + maxz)/2
-       );
+    return (minv + maxv) / 2.0f;
 }
 
 float Box::GetArea() const
@@ -80,33 +83,34 @@ float Box::GetVolume() const
 Box Box::Union(const Box &b1, const Box &b2)
 {
     return
-    Box(std::min(b1.minx, b2.minx), std::max(b1.maxx, b2.maxx),
-        std::min(b1.miny, b2.miny), std::max(b1.maxy, b2.maxy),
-        std::min(b1.minz, b2.minz), std::max(b1.maxz, b2.maxz));
+    Box(std::min(b1.minv.x, b2.minv.x), std::max(b1.maxv.x, b2.maxv.x),
+        std::min(b1.minv.y, b2.minv.y), std::max(b1.maxv.y, b2.maxv.y),
+        std::min(b1.minv.z, b2.minv.z), std::max(b1.maxv.z, b2.maxv.z));
 }
 
 void Box::FillFromPositions(const std::vector<Vector3> &positions)
 {
-    minx = maxx = miny = maxy = minz = maxz = 0.0f;
+    minv = maxv = Vector3::zero;
     for(const Vector3 &v : positions)
     {
-        minx = std::min(minx, v.x);
-        maxx = std::max(maxx, v.x);
+        minv.x = std::min(minv.x, v.x);
+        maxv.x = std::max(maxv.x, v.x);
 
-        miny = std::min(miny, v.y);
-        maxy = std::max(maxy, v.y);
+        minv.y = std::min(minv.y, v.y);
+        maxv.y = std::max(maxv.y, v.y);
 
-        minz = std::min(minz, v.z);
-        maxz = std::max(maxz, v.z);
+        minv.z = std::min(minv.z, v.z);
+        maxv.z = std::max(maxv.z, v.z);
     }
 }
 
 
-
 Box operator*(const Matrix4 &m, const Box &b)
 {
-    glm::vec4 bMinCoords = glm::vec4(b.minx, b.miny, b.minz, 1.0f);
-    glm::vec4 bMaxCoords = glm::vec4(b.maxx, b.maxy, b.maxz, 1.0f);
+    Vector3 minv = b.GetMin();
+    Vector3 maxv = b.GetMax();
+    glm::vec4 bMinCoords = glm::vec4(minv.x, minv.y, minv.z, 1.0f);
+    glm::vec4 bMaxCoords = glm::vec4(maxv.x, maxv.y, maxv.z, 1.0f);
     glm::vec4 v1 = m * bMinCoords;
     glm::vec4 v2 = m * bMaxCoords;
 
@@ -117,3 +121,14 @@ Box operator*(const Matrix4 &m, const Box &b)
 }
 
 
+
+const std::string Box::ToString() const
+{
+    std::ostringstream oss;
+    oss << "Box: [" << std::endl <<
+           "  min: " << minv << std::endl <<
+           "  max" << maxv << std::endl <<
+           "]" << std::endl;
+
+    return oss.str();
+}

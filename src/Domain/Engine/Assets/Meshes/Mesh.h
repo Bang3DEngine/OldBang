@@ -11,6 +11,7 @@
 #include "ShaderContract.h"
 #include "IFileable.h"
 #include "FileReader.h"
+#include "Sphere.h"
 #include "Asset.h"
 #include "VAO.h"
 #include "VBO.h"
@@ -28,7 +29,8 @@ public:
     }
 
 private:
-    Box bbox;
+    Box bBox;
+    Sphere bSphere;
 
     VAO *vao = nullptr;
     VBO *vertexPositionsVBO = nullptr;
@@ -58,6 +60,7 @@ public:
     int GetVertexCount() const;
     bool IsATrianglesModel() const;
     const Box& GetBoundingBox() const;
+    const Sphere& GetBoundingSphere() const;
 
     void Write(std::ostream &f) const;
     void Read(std::istream &f);

@@ -13,26 +13,28 @@
 
 class Box : public IToString
 {
+private:
+    Vector3 minv, maxv;
+
 public:
-    float minx = 0.0f;
-    float maxx = 0.0f;
-    float miny = 0.0f;
-    float maxy = 0.0f;
-    float minz = 0.0f;
-    float maxz = 0.0f;
 
     Box();
     Box(float minx, float maxx,
         float miny, float maxy,
         float minz, float maxz);
+    Box(const Vector3 &min, const Vector3 &max);
     Box(const Box& b);
 
+    Vector3 GetMin() const;
+    Vector3 GetMax() const;
+    Vector3 GetDiagonal() const;
     float GetWidth() const;
     float GetHeight() const;
     float GetDepth() const;
     Vector3 GetCenter() const;
     float GetArea() const;
     float GetVolume() const;
+
     /**
      * @brief For every coord, it gets the max and min values of b1 and b2.
      * For example
