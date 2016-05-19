@@ -28,12 +28,22 @@ Vector3::Vector3(float x, float y, float z) : glm::vec3(x,y,z)
 
 float Vector3::Length() const
 {
-    return glm::length(glm::vec3(x,y,z));
+    return float(glm::sqrt(x*x + y*y + z*z));
+}
+
+void Vector3::Normalize()
+{
+    float l = Length();
+    x /= l;
+    y /= l;
+    z /= l;
 }
 
 Vector3 Vector3::Normalized() const
 {
-    return Vector3(glm::normalize(glm::vec3(*this)));
+    Vector3 v(*this);
+    v.Normalize();
+    return v;
 }
 
 Vector3 Vector3::ToDegrees() const
@@ -44,6 +54,15 @@ Vector3 Vector3::ToDegrees() const
 Vector3 Vector3::ToRadians() const
 {
     return Vector3(glm::radians(glm::vec3(*this)));
+}
+
+Vector3 Vector3::OrthoNormalize(Vector3 &v1, Vector3 &v2)
+{
+    //Not sure if this is working...
+    v1.Normalize();
+    v2.Normalize();
+    Vector3 aux = Vector3::Cross(v1, v2).Normalized();
+    v2 = Vector3::Cross(aux, v1).Normalized();
 }
 
 Vector3 Vector3::Lerp(const Vector3 &v1,

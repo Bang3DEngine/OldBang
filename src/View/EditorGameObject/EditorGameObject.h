@@ -10,6 +10,8 @@ public:
     EditorGameObject(const std::string &name);
 
     virtual bool IsEditorGameObject() const override;
+
+    void Write(std::ostream &f) const override;
 };
 
 #endif // EDITORGAMEOBJECT_H

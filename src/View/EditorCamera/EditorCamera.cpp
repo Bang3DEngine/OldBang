@@ -175,7 +175,7 @@ void EditorCamera::OnUpdate()
             if(thisPos != focusPos)
             {
                 Quaternion origin = t->GetRotation();
-                Quaternion dest = Quaternion::LookDirection(focusDir);
+                Quaternion dest = Quaternion::LookDirection(focusDir, Vector3::up);
                 Quaternion final = Quaternion::Slerp( origin, dest,
                             Time::GetDeltaTime() * lookAtRotSpeed);
 
@@ -183,26 +183,23 @@ void EditorCamera::OnUpdate()
             }
 
             //Move
+            float minDist = 0.0f;
             float halfHeight = focusBBox.GetHeight() / 2;
-            float d = Vector3::Distance(thisPos, focusPos);
-            float minDist;
             if(cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
             {
-                float fov = glm::radians(cam->GetFovDegrees());
+                float fov = glm::radians(cam->GetFovDegrees() / 2.0f);
                 minDist = halfHeight / std::tan(fov);
             }
 
-            minDist = std::max(minDist, 0.5f); //In case boundingBox is empty
+            minDist = std::max(minDist, 0.5f) * 1.5f; //In case boundingBox is empty
             t->SetPosition(
                         Vector3::Lerp(
                             thisPos,
-                            focusPos - focusDir * minDist,
+                            focusPos - (focusDir * minDist),
                             Time::GetDeltaTime() * lookAtMoveSpeed)
                         );
         }
     }
-
-
     //
 }
 

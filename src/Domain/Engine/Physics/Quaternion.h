@@ -1,11 +1,12 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
 
-
 #include "glm/glm.hpp"
+#include "glm/gtx/transform.hpp"
 #include "glm/gtc/quaternion.hpp"
 
-class Vector3;
+#include "Vector3.h"
+
 class Quaternion : public glm::quat
 {
 public:
@@ -13,6 +14,7 @@ public:
     explicit Quaternion(const glm::quat &q);
     Quaternion(float w, float x, float y, float z);
 
+    Quaternion Conjugated() const;
     Quaternion Normalized() const;
     Quaternion Inversed() const;
 
@@ -21,7 +23,8 @@ public:
                             const Quaternion &to,
                             float progression);
     static Quaternion FromTo(const Vector3 &from, const Vector3 &to);
-    static Quaternion LookDirection(const Vector3 &dir);
+    static Quaternion LookDirection(const Vector3 &_forward,
+                                    const Vector3 &_up = Vector3::up);
     static Quaternion AngleAxis(float angleDeg, const Vector3 &axis);
 };
 

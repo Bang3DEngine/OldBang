@@ -116,29 +116,8 @@ void Transform::GetNormalMatrix(Matrix4 &m) const
 void Transform::LookAt(Vector3 target, Vector3 _up)
 {
     Assert(target != position, "LookAt target is the same as position.", return);
-
     Vector3 up = _up.Normalized();
-
-    SetRotation( Quaternion(glm::quat_cast( glm::inverse( glm::lookAt(GetPosition(), target, up)) )) );
-    /*
-    Vector3 direction = glm::normalize(target - position);
-    float dot = glm::dot(Vector3(0, 0, -1), direction);
-
-    if (fabs(dot - (-1.0f)) < 0.000001f)
-    {
-        rotation = glm::angleAxis(3.141592f, Vector3(0, 1, 0));
-        return;
-    }
-    else if (fabs(dot - (1.0f)) < 0.000001f)
-    {
-        rotation = Quaternion();
-        return;
-    }
-
-    float angle = -glm::acos(dot);
-    Vector3 cross = glm::normalize(glm::cross(Vector3(0, 0, -1), direction));
-    rotation = glm::conjugate(glm::normalize(glm::angleAxis(angle, cross)));
-    */
+    SetRotation( Quaternion::LookDirection(target - GetPosition(), up) );
 }
 
 Vector3 Transform::GetLocalPosition() const

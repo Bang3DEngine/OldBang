@@ -1,25 +1,25 @@
 <Scene>
-0x1aeaf20
+0x2eee160
 Scene
 <children>
 <GameObject>
-0x210ddc0
+0x3288e10
 NinioLuigiado
 <children>
 <GameObject>
-0x2125700
+0x328de20
 Wood Boy
 <children>
 </children>
 <components>
 <Transform>
-0x21209a0
+0x32be230
 -0.01 0.04 6.62
 0.5 -0.5 0.5 -0.5
 0.5 0.5 0.5
 </Transform>
 <MeshRenderer>
-0x1a7d8b0
+0x32da720
 ./res/Assets/boyMesh.bmesh
 ./res/Assets/testMaterial2.bmat
 </MeshRenderer>
@@ -28,12 +28,12 @@ Wood Boy
 </children>
 <components>
 <MeshRenderer>
-0x216bb30
+0x3346440
 ./res/Assets/boyMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
 <Transform>
-0x21fa140
+0x3348360
 0 0 0
 -0.707107 0 0 0.707107
 1 1 1
@@ -41,31 +41,31 @@ Wood Boy
 </components>
 </GameObject>
 <GameObject>
-0x1c83b60
+0x2e20c60
 LuigiFractal
 <children>
 <GameObject>
-0x221cca0
+0x33a1010
 Luigi
 <children>
 <GameObject>
-0x221cea0
+0x33a0e10
 Luigi
 <children>
 <GameObject>
-0x221d020
+0x33a1210
 Luigi
 <children>
 </children>
 <components>
 <Transform>
-0x212ddc0
+0x33a13b0
 0 0 0
 0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x212e120
+0x33a1820
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -74,13 +74,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x212e360
+0x33a1a50
 0 0 0
 0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x212e6c0
+0x339a190
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -89,13 +89,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x212e900
+0x339a3d0
 0 0 0
 0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x212ec60
+0x339a720
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -104,44 +104,44 @@ Luigi
 </children>
 <components>
 <Transform>
-0x2217320
+0x339a960
 6.5 0 0
 0.183013 0.683013 -0.183013 0.683013
 0.05 0.05 0.05
 </Transform>
 <MeshRenderer>
-0x2217690
+0x3339800
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
 </components>
 </GameObject>
 <GameObject>
-0x2219070
+0x333a1d0
 LuigiFractal
 <children>
 <GameObject>
-0x22191b0
+0x333a310
 Luigi
 <children>
 <GameObject>
-0x2219300
+0x333a460
 Luigi
 <children>
 <GameObject>
-0x2219480
+0x333a5e0
 Luigi
 <children>
 </children>
 <components>
 <Transform>
-0x2212050
+0x333a7b0
 0 0 0
 0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x22123b0
+0x333abc0
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -150,13 +150,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x22125f0
+0x333ae00
 0 0 0
 0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x2212950
+0x333b160
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -165,13 +165,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x2212b90
+0x333b3a0
 0 0 0
 0.258819 0 0 0.965926
 0.9 0.9 0.9
 </Transform>
 <MeshRenderer>
-0x2212ef0
+0x333b700
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>
@@ -180,13 +180,13 @@ Luigi
 </children>
 <components>
 <Transform>
-0x2213130
+0x33b4d80
 -6 0 0
 0 0.707107 0 0.707107
 0.05 0.05 0.05
 </Transform>
 <MeshRenderer>
-0x2213490
+0x33b50e0
 ./res/Assets/luigiMesh.bmesh
 ./res/Assets/luigiMaterial.bmat
 </MeshRenderer>

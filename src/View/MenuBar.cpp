@@ -140,7 +140,7 @@ void MenuBar::OnSaveSceneAs() const
     if(scene == nullptr) return;
 
     FileDialog fd("Save scene as...", Scene::GetFileExtension());
-    std::string filename = fd.GetOpenFilename();
+    std::string filename = fd.GetSaveFilename(scene->GetName());
     if(filename == "") return;
 
     FileWriter::WriteScene(filename, scene);

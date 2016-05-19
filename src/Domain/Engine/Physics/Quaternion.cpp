@@ -14,6 +14,11 @@ Quaternion::Quaternion(float w, float x, float y, float z) : glm::quat(w,x,y,z)
 {
 }
 
+Quaternion Quaternion::Conjugated() const
+{
+    return Quaternion(glm::conjugate(glm::quat(*this)));
+}
+
 Quaternion Quaternion::Normalized() const
 {
     return Quaternion(glm::normalize(glm::quat(*this)));
@@ -58,9 +63,24 @@ Quaternion Quaternion::FromTo(const Vector3 &from, const Vector3 &to)
     return Quaternion(s * 0.5f, c.x, c.y, c.z).Normalized();
 }
 
-Quaternion Quaternion::LookDirection(const Vector3 &dir)
+Quaternion Quaternion::LookDirection(const Vector3 &_forward, const Vector3 &_up)
 {
-    return FromTo(Vector3::forward, dir.Normalized());
+    Vector3 forward = _forward;
+    Vector3 up = _up;
+/*
+    Vector3::OrthoNormalize(up, forward);
+    Vector3 right = Vector3::Cross(up, forward);
+
+    Quaternion ret;
+    ret.w = glm::sqrt(1.0f + right.x + up.y + forward.z) * 0.5f;
+    float w4_recip = 1.0f / (4.0f * ret.w);
+    ret.x = (up.z - forward.y) * w4_recip;
+    ret.y = (forward.x - right.z) * w4_recip;
+    ret.z = (right.y - up.x) * w4_recip;
+    return ret;
+*/
+    Vector3 eye(0.0f);
+    return Quaternion( glm::quat_cast( glm::inverse(glm::lookAt(eye, forward, up)) ) );
 }
 
 Vector3 Quaternion::EulerAngles(const Quaternion &q)
