@@ -10,14 +10,21 @@ EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
     cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
     t = AddComponent<Transform>();
-    t->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+    t->SetPosition(Vector3(10.0f, 10.0f, 10.0f));
+    t->LookAt(Vector3(0));
+    UpdateRotationVariables();
 
     camt = yawNode->AddComponent<Transform>();
-    //t->LookAt(Vector3(0));
 }
 
 EditorCamera::~EditorCamera()
 {
+}
+
+void EditorCamera::UpdateRotationVariables()
+{
+    mouseRotationDegrees = glm::vec2(0.0f);
+    startingRotation = t->GetLocalRotation();
 }
 
 void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
@@ -42,8 +49,9 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unlockMouse)
         float my = -Input::GetMouseAxisY() * mouseRotBoost  * Time::GetDeltaTime();
 
         mouseRotationDegrees += glm::vec2(mx, my) * mouseRotBoost;
+        t->SetRotation(startingRotation);
         Quaternion rotX = Quaternion::AngleAxis(mouseRotationDegrees.x, Vector3::up);
-        t->SetRotation(rotX);
+        t->Rotate(rotX);
         Quaternion rotY = Quaternion::AngleAxis(mouseRotationDegrees.y,  camt->GetRight());
         t->Rotate(rotY);
 
@@ -63,8 +71,8 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unlockMouse)
 {
     if(Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        float mx = -Input::GetMouseAxisX() * mouseCamPlaneMoveBoost * Time::GetDeltaTime();
-        float my = Input::GetMouseAxisY() * mouseCamPlaneMoveBoost * Time::GetDeltaTime();
+        float mx = -Input::GetMouseAxisX() * mousePanBoost * Time::GetDeltaTime();
+        float my = Input::GetMouseAxisY() * mousePanBoost * Time::GetDeltaTime();
 
         t->SetPosition(t->GetPosition()   +
                        camt->GetRight() * mx +
@@ -161,6 +169,10 @@ void EditorCamera::OnUpdate()
     HandleWheelZoom(&moveStep, &hasMoved);
 
     HandleLookAtFocus();
+    if(currentLookAtFocus != nullptr)
+    {   //Update all needed variables in case we are doing a lookAt.
+        UpdateRotationVariables();
+    }
 
     moveSpeed += moveAccel; //TODO: must do this in FixedUpdate which does not exist yet
     moveSpeed = glm::clamp(moveSpeed, minMoveSpeed, maxMoveSpeed);

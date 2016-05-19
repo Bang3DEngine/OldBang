@@ -36,17 +36,24 @@ private:
     float moveAccel = 0.1f;
     float moveSpeed = 0.0f;
 
-    const float mouseCamPlaneMoveBoost = 150.0f; //Movement with middle button
-    float mouseRotBoost = 15.0f;
-    float mouseWheelBoost = 24.0f;
+    const float mousePanBoost = 150.0f; //Movement with middle button
 
-    //Only used if using cam orbitting behaviour
     glm::vec2 mouseRotationDegrees = glm::vec2(0.0f);
-    float mouseRotX, mouseRotY;
+    Quaternion startingRotation;
+    float mouseRotBoost = 15.0f;
+
+    float mouseWheelBoost = 24.0f;
 
 public:
     EditorCamera();
     virtual ~EditorCamera();
+
+    /**
+     * @brief Called after every change on the camera rotation which is not
+     * from user's input. This is to update all internal variables related with
+     * rotation handling.
+     */
+    void UpdateRotationVariables();
 
     /**
      * @brief Handles camera 'zoom' with mouse wheel
