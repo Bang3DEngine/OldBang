@@ -1,5 +1,7 @@
 #include "EditorCamera.h"
 
+#include "Canvas.h"
+
 EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
 {
     yawNode = new GameObject("EditorYawNode");
@@ -21,9 +23,18 @@ EditorCamera::~EditorCamera()
 {
 }
 
+void EditorCamera::AdjustSpeeds()
+{
+    Canvas *c = Canvas::GetInstance();
+    int cw = c->GetWidth();
+    int ch = c->GetHeight();
+    mouseRotDegreesPerPixel.x = 360.0f / cw;
+    mouseRotDegreesPerPixel.y = 360.0f / ch;
+}
+
 void EditorCamera::UpdateRotationVariables()
 {
-    mouseRotationDegrees = glm::vec2(0.0f);
+    mouseRotDegreesAccum = glm::vec2(0.0f);
     startingRotation = t->GetLocalRotation();
 }
 
@@ -34,56 +45,57 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
         float mouseWheel = Input::GetMouseWheel();
         if(mouseWheel != 0.0f)
         {
-            *moveStep += mouseWheelBoost * mouseWheel *
+            *moveStep += mouseZoomPerDeltaWheel * mouseWheel *
                          moveSpeed * camt->GetForward();
             *hasMoved  = true;
         }
     }
 }
 
-bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unlockMouse)
+bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 {
     if(Input::GetMouseButton(Input::MouseButton::MRight))
     {
-        float mx = -Input::GetMouseAxisX() * mouseRotBoost  * Time::GetDeltaTime();
-        float my = -Input::GetMouseAxisY() * mouseRotBoost  * Time::GetDeltaTime();
+        Input::SetMouseWrapping(true);
 
-        mouseRotationDegrees += glm::vec2(mx, my) * mouseRotBoost;
+        float mx = -Input::GetMouseDeltaX() * mouseRotDegreesPerPixel.x;
+        float my = -Input::GetMouseDeltaY() * mouseRotDegreesPerPixel.y;
+        glm::vec2 delta = glm::vec2(mx, my);
+        mouseRotDegreesAccum += delta;
+
         t->SetRotation(startingRotation);
-        Quaternion rotX = Quaternion::AngleAxis(mouseRotationDegrees.x, Vector3::up);
+        Quaternion rotX = Quaternion::AngleAxis(glm::radians(mouseRotDegreesAccum.x),
+                                                Vector3::up);
         t->Rotate(rotX);
-        Quaternion rotY = Quaternion::AngleAxis(mouseRotationDegrees.y,  camt->GetRight());
+
+        Quaternion rotY = Quaternion::AngleAxis(glm::radians(mouseRotDegreesAccum.y),
+                                                camt->GetRight());
         t->Rotate(rotY);
 
-        Canvas::SetCursor(Qt::BlankCursor);
         *hasMoved  = true;
-
-        *unlockMouse = *unlockMouse || false;
-        Input::LockMouseMovement(true);
-
+        *unwrapMouse = false;
         return true;
     }
-
     return false;
 }
 
-void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unlockMouse)
+void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
 {
     if(Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        float mx = -Input::GetMouseAxisX() * mousePanBoost * Time::GetDeltaTime();
-        float my = Input::GetMouseAxisY() * mousePanBoost * Time::GetDeltaTime();
+        Input::SetMouseWrapping(true);
+
+        float mx = -Input::GetMouseAxisX() * mousePanPerPixel * Time::GetDeltaTime();
+        float my = Input::GetMouseAxisY() * mousePanPerPixel * Time::GetDeltaTime();
 
         t->SetPosition(t->GetPosition()   +
                        camt->GetRight() * mx +
                        camt->GetUp() * my);
 
-        //Canvas::SetCursor(Qt::SizeAllCursor);
-        Canvas::SetCursor(Qt::BlankCursor);
+        Canvas::SetCursor(Qt::SizeAllCursor);
         *hasMoved  = true;
 
-        *unlockMouse = false;
-        Input::LockMouseMovement(true);
+        *unwrapMouse = false;
     }
 }
 
@@ -155,15 +167,17 @@ void EditorCamera::HandleLookAtFocus()
 
 void EditorCamera::OnUpdate()
 {
+    AdjustSpeeds();
+
     Vector3 moveStep(0.0f);
     bool hasMoved = false;
-    bool unlockMouse = true;
+    bool unwrapMouse = true;
 
     HandleKeyMovement(&moveStep, &hasMoved); //WASD
 
-    if(!HandleMouseRotation(&hasMoved, &unlockMouse)) //Mouse rot with right click
+    if(!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
     {
-        HandleMousePanning(&hasMoved, &unlockMouse); //Mouse move with mid click
+        HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
     }
 
     HandleWheelZoom(&moveStep, &hasMoved);
@@ -177,11 +191,15 @@ void EditorCamera::OnUpdate()
     moveSpeed += moveAccel; //TODO: must do this in FixedUpdate which does not exist yet
     moveSpeed = glm::clamp(moveSpeed, minMoveSpeed, maxMoveSpeed);
 
-    if(unlockMouse) Input::LockMouseMovement(false);
+    if(unwrapMouse)
+    {
+        Canvas::SetCursor( Qt::ArrowCursor ); //cursor visible
+        Input::SetMouseWrapping(false);
+    }
+
     if(!hasMoved )
     {
         moveSpeed = 0.0f; //reset speed
-        Canvas::SetCursor( Qt::ArrowCursor ); //cursor visible
     }
     else
     {

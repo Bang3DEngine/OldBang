@@ -106,6 +106,8 @@ std::ostream &operator<<(std::ostream &log, const std::map<T,S> &m)
     #define _Verbose_To_ListLogger(x) do{}while(0);
 #endif
 
+#define CMA <<", "<<
+
 #define Logger_Log(x) do{\
     std::ostringstream log;\
     log << x;\

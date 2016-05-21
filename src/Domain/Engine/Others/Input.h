@@ -96,6 +96,11 @@ public:
 private:
     Input();
 
+    /**
+     * @brief Struct to keep track of a Button state.
+     * A button can either be a key or a mouse button,
+     * and it contains the states up, down and pressed.
+     */
     struct ButtonInfo
     {
         bool up;   //just one frame
@@ -111,17 +116,38 @@ private:
         }
     };
 
+    /**
+     * @brief For every Key, we have a ButtonInfo
+     * assigned to it
+     */
     static std::map<Key, ButtonInfo> keyInfos;
+
+
+    /**
+     * @brief If true, mouse will loop in x and y when
+     * going outside the Canvas.
+     */
+    static bool mouseWrapping;
 
     static float lastMouseWheelDelta;
     static bool lockMouseMovement;
     static int framesMouseStopped;
+
+    /**
+     * @brief Mouse coordinates in Canvas space.
+     */
     static glm::vec2 mouseCoords, lastMouseCoords;
+
+    /**
+     * @brief For every MouseButton, we have a ButtonInfo
+     * assigned to it
+     */
     static std::map<MouseButton, ButtonInfo> mouseInfo;
 
     static void Init();
     static void OnNewFrame();
 
+    static void HandleMouseWrapping();
     static void HandleInputMousWheel(QWheelEvent *event);
     static void HandleInputMouseMove(QMouseEvent *event);
     static void HandleInputMousePress(QMouseEvent *event);
@@ -130,6 +156,9 @@ private:
     static void HandleInputKeyReleased(QKeyEvent *event);
 
 public:
+
+    static bool GetMouseWrapping();
+    static void SetMouseWrapping(bool mouseWrapping);
 
     static bool GetKey(Key k);
     static bool GetKeyUp(Key k);

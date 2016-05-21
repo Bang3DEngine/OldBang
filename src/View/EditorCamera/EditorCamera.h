@@ -14,15 +14,16 @@
 #include "IWindowEventManagerListener.h"
 
 
-//Pre-built GameObject, with a Camera that you can control in the editor
-//This camera has a parent "Pitch-Node", which rotates in y
-// and a child "Yaw-Node", which rotates in x.
-// The Yaw-Node contains the camera Component itself
-
+/**
+ * Pre-built GameObject, with a Camera that you can control in the editor
+ * This camera has a parent "Pitch-Node", which rotates in y
+ * and a child "Yaw-Node", which rotates in x.
+ * The Yaw-Node contains the camera Component itself
+**/
 class EditorCamera : public EditorGameObject
 {
 private:
-    Transform *t = nullptr; //YawNode transform
+    Transform *t = nullptr;
     Camera *cam = nullptr;
     Transform *camt = nullptr; //YawNode transform
     GameObject *yawNode = nullptr;
@@ -36,17 +37,38 @@ private:
     float moveAccel = 0.1f;
     float moveSpeed = 0.0f;
 
-    const float mousePanBoost = 150.0f; //Movement with middle button
+    /**
+     * @brief How many units in world space do we have to move,
+     * for every panned pixel?
+     */
+    const float mousePanPerPixel = 150.0f; //Movement with middle button
 
-    glm::vec2 mouseRotationDegrees = glm::vec2(0.0f);
-    Quaternion startingRotation;
-    float mouseRotBoost = 15.0f;
+    /**
+     * @brief startingRotation changes after every lookAt.
+     * It indicates the initial offset to sum to the user's rotation
+     * of mouse right click.
+     */
+    Quaternion startingRotation;                         //starting offset
+    glm::vec2 mouseRotDegreesAccum = glm::vec2(0.0f);    //User input
+    glm::vec2 mouseRotDegreesPerPixel = glm::vec2(0.0f); //Parameter
 
-    float mouseWheelBoost = 24.0f;
+    /**
+     * @brief How many units in world space do we have to move
+     * in camera's forward direction, for every user wheel delta?
+     */
+    float mouseZoomPerDeltaWheel = 24.0f;
 
 public:
     EditorCamera();
     virtual ~EditorCamera();
+
+    /**
+     * @brief Adjust different camera parameters based
+     * on the current camera position, focus, etc. For example,
+     * it adjusts the rotation speed based on the canvas size,
+     * to make it more comfortable for the user.
+     */
+    void AdjustSpeeds();
 
     /**
      * @brief Called after every change on the camera rotation which is not
@@ -67,7 +89,7 @@ public:
      * If it has rotated, unlockMouse = false
      * @return Returns if the cam has rotated or not
      */
-    bool HandleMouseRotation(bool *hasMoved, bool *unlockMouse);
+    bool HandleMouseRotation(bool *hasMoved, bool *unwrapMouse);
 
     /**
      * @brief Handles camera panning (moving in the plane
@@ -75,7 +97,7 @@ public:
      * If it has moved, hasMoved = true.
      * If it has moved, unlockMouse = false
      */
-    void HandleMousePanning(bool *hasMoved, bool *unlockMouse);
+    void HandleMousePanning(bool *hasMoved, bool *unwrapMouse);
 
     /**
      * @brief Handles key movement with WASD

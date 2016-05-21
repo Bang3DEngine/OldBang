@@ -1,9 +1,11 @@
 #include "Input.h"
 
+#include "WindowMain.h"
 #include "Canvas.h"
 
 std::map<Input::Key, Input::ButtonInfo> Input::keyInfos;
 
+bool Input::mouseWrapping = false;
 float Input::lastMouseWheelDelta = 0.0f;
 bool Input::lockMouseMovement = false;
 int Input::framesMouseStopped = 0;
@@ -59,10 +61,49 @@ void Input::OnNewFrame()
     }
     ++framesMouseStopped;
 
+    HandleMouseWrapping();
+}
 
-   // Logger_Log("Locked: " << lockMouseMovement);
-   // Logger_Log("Axis: (" << GetMouseAxisX() << ", " << GetMouseAxisY() << ")");
-   // Logger_Log("---------------------------------");
+void Input::HandleMouseWrapping()
+{
+    if(mouseWrapping)
+    {
+        QCursor cursor = WindowMain::GetMainWindow()->cursor();
+        WindowMain *w = WindowMain::GetInstance();
+        Canvas *canvas = w->canvas;
+        int cw = canvas->GetWidth();
+        int ch = canvas->GetHeight();
+
+        bool wrapped = false;
+        if(mouseCoords.x >= cw)
+        {
+            cursor.setPos(canvas->mapToGlobal(QPoint(0, mouseCoords.y)));
+            wrapped = true;
+        }
+        else if(mouseCoords.x < 0)
+        {
+            cursor.setPos(canvas->mapToGlobal(QPoint(cw, mouseCoords.y)));
+            wrapped = true;
+        }
+
+        if(mouseCoords.y >= ch)
+        {
+            cursor.setPos(canvas->mapToGlobal(QPoint(mouseCoords.x, 0)));
+            wrapped = true;
+        }
+        else if(mouseCoords.y < 0)
+        {
+            cursor.setPos(canvas->mapToGlobal(QPoint(mouseCoords.x, ch)));
+            wrapped = true;
+        }
+
+        if(wrapped)
+        {
+            QPoint newCoords = canvas->mapFromGlobal(cursor.pos());
+            mouseCoords = glm::vec2(newCoords.x(), newCoords.y());
+            lastMouseCoords = mouseCoords;
+        }
+    }
 }
 
 void Input::HandleInputMousWheel(QWheelEvent *event)
@@ -81,14 +122,6 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
         fakeMoveEvent = false;
         return;
     }
-
-    /*Logger_Log("MMEvent: lastMouseCoords" << lastMouseCoords << ", evxy:" << glm::vec2(event->x(), event->y()) );
-    if(lockMouseMovement &&
-       lastMouseCoords == glm::vec2(event->x(), event->y()))
-    {
-        fakeCall = false;
-        return;
-    }*/
 
     mouseCoords = glm::vec2(event->x(), event->y());
 
@@ -146,6 +179,16 @@ void Input::HandleInputKeyReleased(QKeyEvent *event)
     {   //Only if it was pressed before
         keyInfos[k] = ButtonInfo(true, false, false);
     }
+}
+
+bool Input::GetMouseWrapping()
+{
+    return mouseWrapping;
+}
+
+void Input::SetMouseWrapping(bool mouseWrapping)
+{
+    Input::mouseWrapping = mouseWrapping;
 }
 
 
