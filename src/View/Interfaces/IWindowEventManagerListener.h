@@ -23,7 +23,7 @@ public:
     virtual void OnChildRemoved(GameObject *child) { }
 
     virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem)  { }
-    virtual void OnTreeHierarchyGameObjectsSelected(std::list<GameObject*> &selectedEntities) { }
+    virtual void OnTreeHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects) { }
     virtual void OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected) { }
 };
 

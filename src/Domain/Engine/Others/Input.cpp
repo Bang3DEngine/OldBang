@@ -244,6 +244,11 @@ float Input::GetMouseAxisY()
     return GetMouseDeltaY() / Canvas::GetHeight();
 }
 
+glm::vec2 Input::GetMouseAxis()
+{
+    return glm::vec2(GetMouseAxisX(), GetMouseAxisY());
+}
+
 float Input::GetMouseDeltaX()
 {
     return mouseCoords.x - lastMouseCoords.x;
@@ -252,6 +257,11 @@ float Input::GetMouseDeltaX()
 float Input::GetMouseDeltaY()
 {
     return mouseCoords.y - lastMouseCoords.y;
+}
+
+glm::vec2 Input::GetMouseDelta()
+{
+    return glm::vec2(GetMouseDeltaX(), GetMouseDeltaY());
 }
 
 void Input::LockMouseMovement(bool lock)

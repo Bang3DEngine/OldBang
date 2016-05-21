@@ -170,10 +170,31 @@ public:
     static bool GetMouseButtonUp(MouseButton mb);
     static bool GetMouseButtonDown(MouseButton mb);
 
+    /**
+     * @brief GetMouseAxisX
+     * @return Mouse movement in x divided by canvas width [0.0f, 1.0f]
+     */
     static float GetMouseAxisX();
+
+    /**
+     * @brief GetMouseDeltaY
+     * @return Mouse movement in y divided by canvas height [0.0f, 1.0f]
+     */
     static float GetMouseAxisY();
+    static glm::vec2 GetMouseAxis();
+
+    /**
+     * @brief GetMouseDeltaX
+     * @return Mouse movement in x in pixels [0.0f, canvasWidth]
+     */
     static float GetMouseDeltaX();
+
+    /**
+     * @brief GetMouseDeltaY
+     * @return Mouse movement in y in pixels [0.0f, canvasHeight]
+     */
     static float GetMouseDeltaY();
+    static glm::vec2 GetMouseDelta();
 
     static void LockMouseMovement(bool lock);
     static bool IsLockMouseMovement();

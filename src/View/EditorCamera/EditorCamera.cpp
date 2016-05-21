@@ -28,8 +28,25 @@ void EditorCamera::AdjustSpeeds()
     Canvas *c = Canvas::GetInstance();
     int cw = c->GetWidth();
     int ch = c->GetHeight();
+
     mouseRotDegreesPerPixel.x = 360.0f / cw;
     mouseRotDegreesPerPixel.y = 360.0f / ch;
+
+    mousePanPerPixel = glm::vec2(0.1f, 0.1f);
+    if(currentFocus != nullptr)
+    {
+        Transform *ft = currentFocus->GetComponent<Transform>();
+        if(ft != nullptr)
+        {
+            Vector3 focusPoint = ft->GetPosition();
+            float d = Vector3::Distance(focusPoint, t->GetPosition());
+            float ar = c->GetAspectRatio();
+            float halfFov = glm::radians(cam->GetFovDegrees()/2.0f);
+            float halfHeightInWorldSpace = glm::tan(halfFov) * d;
+            mousePanPerPixel.y = (halfHeightInWorldSpace * 2) / ch;
+            mousePanPerPixel.x = mousePanPerPixel.y * ch * ar / cw;
+        }
+    }
 }
 
 void EditorCamera::UpdateRotationVariables()
@@ -56,11 +73,7 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 {
     if(Input::GetMouseButton(Input::MouseButton::MRight))
     {
-        Input::SetMouseWrapping(true);
-
-        float mx = -Input::GetMouseDeltaX() * mouseRotDegreesPerPixel.x;
-        float my = -Input::GetMouseDeltaY() * mouseRotDegreesPerPixel.y;
-        glm::vec2 delta = glm::vec2(mx, my);
+        glm::vec2 delta = -Input::GetMouseDelta() * mouseRotDegreesPerPixel;
         mouseRotDegreesAccum += delta;
 
         t->SetRotation(startingRotation);
@@ -72,6 +85,7 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
                                                 camt->GetRight());
         t->Rotate(rotY);
 
+        Input::SetMouseWrapping(true);
         *hasMoved  = true;
         *unwrapMouse = false;
         return true;
@@ -83,18 +97,17 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
 {
     if(Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        Input::SetMouseWrapping(true);
-
-        float mx = -Input::GetMouseAxisX() * mousePanPerPixel * Time::GetDeltaTime();
-        float my = Input::GetMouseAxisY() * mousePanPerPixel * Time::GetDeltaTime();
+        glm::vec2 delta = -Input::GetMouseDelta() * mousePanPerPixel;
+        delta.y *= -1.0f;
 
         t->SetPosition(t->GetPosition()   +
-                       camt->GetRight() * mx +
-                       camt->GetUp() * my);
+                       camt->GetRight() * delta.x +
+                       camt->GetUp() * delta.y);
+
 
         Canvas::SetCursor(Qt::SizeAllCursor);
+        Input::SetMouseWrapping(true);
         *hasMoved  = true;
-
         *unwrapMouse = false;
     }
 }
@@ -104,7 +117,7 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
     Vector3 m(0);
     if(Input::GetKey(Input::Key::W))
     {
-        m += moveSpeed  * Time::GetDeltaTime() * camt->GetForward();
+        m += moveSpeed * Time::GetDeltaTime() * camt->GetForward();
     }
     else if(Input::GetKey(Input::Key::S))
     {
@@ -126,12 +139,12 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
 
 void EditorCamera::HandleLookAtFocus()
 {
-    if(currentLookAtFocus != nullptr)
+    if(doingLookAt)
     {
         Camera *cam = GetCamera();
-        if(currentLookAtFocus->HasComponent<Transform>())
+        if(currentFocus->HasComponent<Transform>())
         {
-            Sphere focusBSphere = currentLookAtFocus->GetBoundingSphere();
+            Sphere focusBSphere = currentFocus->GetBoundingSphere();
 
             Vector3 thisPos = t->GetPosition();
             Vector3 focusPos = focusBSphere.GetCenter();
@@ -183,7 +196,7 @@ void EditorCamera::OnUpdate()
     HandleWheelZoom(&moveStep, &hasMoved);
 
     HandleLookAtFocus();
-    if(currentLookAtFocus != nullptr)
+    if(doingLookAt)
     {   //Update all needed variables in case we are doing a lookAt.
         UpdateRotationVariables();
     }
@@ -203,7 +216,7 @@ void EditorCamera::OnUpdate()
     }
     else
     {
-        currentLookAtFocus = nullptr; //No more lookAt
+        doingLookAt = false; //No more lookAt
         t->SetPosition(t->GetPosition() + moveStep); //Move camera the amount gathered
     }
 }
@@ -214,11 +227,23 @@ Camera *EditorCamera::GetCamera()
 }
 
 #ifdef BANG_EDITOR
+
+void EditorCamera::OnTreeHierarchyGameObjectsSelected
+    (std::list<GameObject *> &selectedGameObjects)
+{
+    if(selectedGameObjects.size() != 1) return;
+
+    GameObject *selected = selectedGameObjects.front();
+    currentFocus = selected;
+    doingLookAt = false;
+}
+
+
 void EditorCamera::OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
     if(selected == nullptr) return;
-
-    currentLookAtFocus = selected;
+    currentFocus = selected;
+    doingLookAt = true;
 }
 #endif
 

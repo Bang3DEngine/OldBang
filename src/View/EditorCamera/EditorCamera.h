@@ -28,7 +28,8 @@ private:
     Transform *camt = nullptr; //YawNode transform
     GameObject *yawNode = nullptr;
 
-    GameObject *currentLookAtFocus = nullptr;
+    GameObject *currentFocus = nullptr;
+    bool doingLookAt = false;
     float lookAtRotSpeed = 5.0f;
     float lookAtMoveSpeed = 4.0f;
 
@@ -41,7 +42,7 @@ private:
      * @brief How many units in world space do we have to move,
      * for every panned pixel?
      */
-    const float mousePanPerPixel = 150.0f; //Movement with middle button
+    glm::vec2 mousePanPerPixel = glm::vec2(100.0f); //Movement with middle button
 
     /**
      * @brief startingRotation changes after every lookAt.
@@ -65,8 +66,7 @@ public:
     /**
      * @brief Adjust different camera parameters based
      * on the current camera position, focus, etc. For example,
-     * it adjusts the rotation speed based on the canvas size,
-     * to make it more comfortable for the user.
+     * it adjusts mousePanPerPixel. mouseRotDegreesPerPixel, etc.
      */
     void AdjustSpeeds();
 
@@ -117,6 +117,8 @@ public:
     Camera *GetCamera();
 
 #ifdef BANG_EDITOR
+    void OnTreeHierarchyGameObjectsSelected
+                (std::list<GameObject*> &selectedGameObjects) override;
     void OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected) override;
 #endif
 };
