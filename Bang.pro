@@ -81,7 +81,9 @@ OTHER_FILES += \
     res/Assets/luigiMaterial.asset \
     res/Assets/luigiTexture.asset \
     res/Shaders/lines.frag \
-    res/Shaders/lines.vert
+    res/Shaders/lines.vert \
+    res/Shaders/pvm_pos.vert \
+    res/Shaders/selection.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -169,7 +171,8 @@ HEADERS += \
     src/Domain/Engine/Physics/Quaternion.h \
     src/Domain/Engine/Physics/Matrix4.h \
     src/View/EditorScene/EditorDebugGameObject.h \
-    src/Domain/Engine/Physics/Sphere.h
+    src/Domain/Engine/Physics/Sphere.h \
+    src/Domain/Graphics/SelectionFramebuffer.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -252,7 +255,8 @@ SOURCES += \
     src/Domain/Engine/Physics/Quaternion.cpp \
     src/Domain/Engine/Physics/Matrix4.cpp \
     src/View/EditorScene/EditorDebugGameObject.cpp \
-    src/Domain/Engine/Physics/Sphere.cpp
+    src/Domain/Engine/Physics/Sphere.cpp \
+    src/Domain/Graphics/SelectionFramebuffer.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

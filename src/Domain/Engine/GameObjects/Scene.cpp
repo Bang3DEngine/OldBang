@@ -6,7 +6,11 @@
 Scene::Scene() : GameObject("Scene")
 {
     isScene = true;
-    gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
+    gbuffer = new GBuffer(Canvas::GetWidth(),
+                          Canvas::GetHeight());
+    selectionFramebuffer =
+            new SelectionFramebuffer(Canvas::GetWidth(),
+                                     Canvas::GetHeight());
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)
@@ -43,8 +47,12 @@ void Scene::_OnRender(unsigned char _renderLayer)
     }
 
     gbuffer->UnBind();
-
     gbuffer->RenderToScreen();
+
+    selectionFramebuffer->Bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    selectionFramebuffer->RenderSelectionBuffer(this);
+    selectionFramebuffer->UnBind();
 }
 
 void Scene::SetCamera(const Camera *cam)

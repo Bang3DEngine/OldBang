@@ -96,6 +96,13 @@ public:
     const std::string GetName() const;
     unsigned char GetRenderLayer() const;
     const std::list<Component*>& GetComponents() const;
+
+    /**
+     * TODO: Change so this method returns a reference, putting
+     *       editorGameObjects into another list...
+     * @brief GetChildren
+     * @return
+     */
     const std::list<GameObject*> GetChildren() const;
 
     /**

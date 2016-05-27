@@ -25,6 +25,7 @@
 #include "IWindowEventManagerListener.h"
 
 class WindowMain;
+class SelectionFramebuffer;
 class Canvas : public QGLWidget, public IWindowEventManagerListener
 {
     Q_OBJECT

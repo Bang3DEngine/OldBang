@@ -1,5 +1,6 @@
 #include "Canvas.h"
 
+#include "SelectionFramebuffer.h"
 #include "WindowMain.h"
 
 int Canvas::width = 0;
@@ -17,6 +18,7 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     connect(&drawTimer, SIGNAL(timeout()), this, SLOT(update()));
     drawTimer.setInterval(Canvas::RedrawDelay);
     drawTimer.start();
+
 
     windowMain = WindowMain::GetInstance();
     Input::Init();
@@ -53,6 +55,10 @@ void Canvas::paintGL()
 
         //Called from scene _OnRender: currentScene->_OnPreRender();
         currentScene->_OnRender();
+
+        #ifdef BANG_EDITOR
+            selectionFramebuffer->RenderSelectionBuffer(currentScene);
+        #endif
     }
 
     Input::OnNewFrame();

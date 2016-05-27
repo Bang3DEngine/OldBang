@@ -48,6 +48,8 @@ public:
         Uniform_Material_Diffuse_Color,
 
 
+        Filepath_Shader_Fragment_Selection,
+
         Filepath_Shader_Vertex_Render_To_Screen,
         Filepath_Shader_Fragment_Render_To_Screen,
 
@@ -55,6 +57,7 @@ public:
         Filepath_Shader_Vertex_Pass_Position_Normal,
         Filepath_Shader_Vertex_Model_Position,
         Filepath_Shader_Vertex_Model_Position_Normal,
+        Filepath_Shader_Vertex_PVM_Position,
         Filepath_Shader_Vertex_PVM_Position_Normal,
         Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
 
