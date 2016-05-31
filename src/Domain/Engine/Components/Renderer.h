@@ -8,6 +8,8 @@
 
 class Renderer : public Component
 {
+friend class SelectionFramebuffer;
+
 public:
     enum RenderMode
     {
@@ -55,6 +57,7 @@ protected:
 
     virtual void ActivateStatesBeforeRendering() const;
     virtual void OnRender() override = 0;
+    virtual void RenderWithoutBindingMaterial() const = 0;
     virtual void Render() const = 0;
 
     void GetMatrices(Matrix4 &model,

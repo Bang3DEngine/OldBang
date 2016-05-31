@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "Canvas.h"
+#include "SelectionFramebuffer.h"
 
 
 Scene::Scene() : GameObject("Scene")
@@ -25,10 +26,6 @@ Scene::~Scene()
 
 void Scene::_OnRender(unsigned char _renderLayer)
 {
-    gbuffer->Bind();
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     if(cameraGameObject != nullptr)
     {
         Camera *cam = cameraGameObject->GetComponent<Camera>();
@@ -37,6 +34,9 @@ void Scene::_OnRender(unsigned char _renderLayer)
             cam->SetAspectRatio( canvas->GetAspectRatio() );
         }
     }
+
+    gbuffer->Bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //From 0 to 9
     for(unsigned char renderLayer = 0; renderLayer <= 9; ++renderLayer)
@@ -49,10 +49,13 @@ void Scene::_OnRender(unsigned char _renderLayer)
     gbuffer->UnBind();
     gbuffer->RenderToScreen();
 
-    selectionFramebuffer->Bind();
+#ifdef BANG_EDITOR
+    //selectionFramebuffer->Bind();
+    glClearColor(1,0,0,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     selectionFramebuffer->RenderSelectionBuffer(this);
-    selectionFramebuffer->UnBind();
+    //selectionFramebuffer->UnBind();
+#endif
 }
 
 void Scene::SetCamera(const Camera *cam)

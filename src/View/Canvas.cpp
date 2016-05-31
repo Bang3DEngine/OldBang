@@ -55,10 +55,6 @@ void Canvas::paintGL()
 
         //Called from scene _OnRender: currentScene->_OnPreRender();
         currentScene->_OnRender();
-
-        #ifdef BANG_EDITOR
-            selectionFramebuffer->RenderSelectionBuffer(currentScene);
-        #endif
     }
 
     Input::OnNewFrame();

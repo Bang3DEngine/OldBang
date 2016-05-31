@@ -15,6 +15,7 @@
 #include "Material.h"
 
 class Canvas;
+class SelectionFramebuffer;
 class Scene : public GameObject
 {
 friend class Canvas;

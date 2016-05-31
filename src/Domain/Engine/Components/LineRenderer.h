@@ -31,6 +31,7 @@ private:
 protected:
 
     virtual void ActivateStatesBeforeRendering() const override;
+    virtual void RenderWithoutBindingMaterial() const override;
     virtual void OnRender() override;
     virtual void Render() const override;
 

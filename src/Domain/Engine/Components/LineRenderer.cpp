@@ -59,6 +59,19 @@ void LineRenderer::ActivateStatesBeforeRendering() const
     Renderer::ActivateStatesBeforeRendering();
 }
 
+void LineRenderer::RenderWithoutBindingMaterial() const
+{
+    ActivateStatesBeforeRendering();
+
+    Matrix4 model, view, projection, pvm;
+    GetMatrices(model, view, projection, pvm);
+    SetMatricesUniforms(model, view, projection, pvm);
+
+    vao->Bind();
+    glDrawArrays(Renderer::RenderMode::Lines, 0, points.size());
+    vao->UnBind();
+}
+
 void LineRenderer::OnRender()
 {
     Scene *scene = GetOwner()->GetScene();
@@ -86,17 +99,9 @@ void LineRenderer::OnRender()
 
 void LineRenderer::Render() const
 {
-    ActivateStatesBeforeRendering();
-
-    Matrix4 model, view, projection, pvm;
-    GetMatrices(model, view, projection, pvm);
-    SetMatricesUniforms(model, view, projection, pvm);
-
-    vao->Bind();
     material->Bind();
-    glDrawArrays(Renderer::RenderMode::Lines, 0, points.size());
+    RenderWithoutBindingMaterial();
     material->UnBind();
-    vao->UnBind();
 }
 
 void LineRenderer::SetMaterial(Material *m)

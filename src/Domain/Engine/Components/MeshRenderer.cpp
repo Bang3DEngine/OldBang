@@ -66,6 +66,19 @@ void MeshRenderer::ActivateStatesBeforeRendering() const
     Renderer::ActivateStatesBeforeRendering();
 }
 
+void MeshRenderer::RenderWithoutBindingMaterial() const
+{
+    ActivateStatesBeforeRendering();
+
+    Matrix4 model, view, projection, pvm;
+    GetMatrices(model, view, projection, pvm);
+    SetMatricesUniforms(model, view, projection, pvm);
+
+    mesh->GetVAO()->Bind();
+    glDrawArrays(renderMode, 0, mesh->GetVertexCount());
+    mesh->GetVAO()->UnBind();
+}
+
 void MeshRenderer::OnRender()
 {
     Camera *cam = GetOwner()->GetScene()->GetCamera();
@@ -104,17 +117,9 @@ void MeshRenderer::OnRender()
 
 void MeshRenderer::Render() const
 {
-    ActivateStatesBeforeRendering();
-
-    Matrix4 model, view, projection, pvm;
-    GetMatrices(model, view, projection, pvm);
-    SetMatricesUniforms(model, view, projection, pvm);
-
-    mesh->GetVAO()->Bind();
     material->Bind();
-    glDrawArrays(renderMode, 0, mesh->GetVertexCount());
+    RenderWithoutBindingMaterial();
     material->UnBind();
-    mesh->GetVAO()->UnBind();
 }
 
 #ifdef BANG_EDITOR

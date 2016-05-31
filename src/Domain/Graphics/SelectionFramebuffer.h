@@ -17,17 +17,17 @@ private:
     ShaderProgram *program;
 
     long idCount = 0;
-    std::map<GameObject, long> gameObjectsToId;
-    std::map<long, GameObject> idToGameObject;
+    std::map<GameObject*, long> gameObjectsToId;
+    std::map<long, GameObject*> idToGameObject;
 
     static glm::vec4 MapIdToColor(long id);
     static long MapColorToId(const glm::vec4 &color);
 
 public:
-    SelectionFramebuffer();
+    SelectionFramebuffer(int width, int height);
     virtual ~SelectionFramebuffer();
 
-    void RenderSelectionBuffer(const Scene *scene) const;
+    void RenderSelectionBuffer(const Scene *scene);
 
     void OnChildAdded(GameObject *child) override;
 };
