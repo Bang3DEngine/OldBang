@@ -17,6 +17,7 @@ Scene::Scene() : GameObject("Scene")
 void Scene::_OnResize(int newWidth, int newHeight)
 {
     gbuffer->Resize(newWidth, newHeight);
+    selectionFramebuffer->Resize(newWidth, newHeight);
 }
 
 Scene::~Scene()
@@ -50,11 +51,23 @@ void Scene::_OnRender(unsigned char _renderLayer)
     gbuffer->RenderToScreen();
 
 #ifdef BANG_EDITOR
-    //selectionFramebuffer->Bind();
-    glClearColor(1,0,0,1);
+    selectionFramebuffer->Bind();
+
+    glClearColor(1,0,1,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     selectionFramebuffer->RenderSelectionBuffer(this);
-    //selectionFramebuffer->UnBind();
+
+    if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+    {
+        glm::vec2 coords = Input::GetMouseCoords();
+        Logger_Log(selectionFramebuffer->ReadPixel(coords.x, Canvas::GetHeight()-coords.y, 0, false));
+    }
+
+    selectionFramebuffer->UnBind();
+
+    glClearColor(1,1,0,1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    selectionFramebuffer->RenderSelectionBuffer(this);
 #endif
 }
 

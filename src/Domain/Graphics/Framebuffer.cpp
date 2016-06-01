@@ -73,6 +73,23 @@ TextureRender *Framebuffer::GetTextureAttachment(int framebufferAttachmentNum) c
     return textureAttachments[framebufferAttachmentNum];
 }
 
+void Framebuffer::SetReadBuffer(int attachmentId) const
+{
+    glReadBuffer(boundAttachments[attachmentId]);
+}
+
+//TODO: Fix Bind and UnBind, if you call it repeatedly it does not work
+Vector3 Framebuffer::ReadPixel(int x, int y, int attachmentId, bool haveToBind) const
+{
+    if(haveToBind) Bind();
+    unsigned char color[3];
+    SetReadBuffer(attachmentId);
+    glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &color[0]);
+    if(haveToBind) UnBind();
+
+    return Vector3(color[0], color[1], color[2]);
+}
+
 void Framebuffer::Resize(int width, int height)
 {
     this->width = width;

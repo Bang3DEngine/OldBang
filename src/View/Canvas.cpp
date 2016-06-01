@@ -53,7 +53,7 @@ void Canvas::paintGL()
             currentScene->_OnUpdate();
         }
 
-        //Called from scene _OnRender: currentScene->_OnPreRender();
+        //currentScene->_OnPreRender() is called from scene _OnRender
         currentScene->_OnRender();
     }
 
