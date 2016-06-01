@@ -233,6 +233,15 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
     }
 }
 
+void Hierarchy::SelectGameObject(GameObject *go)
+{
+    this->clearSelection();
+    if(gameObjectToTreeItem.find(go) != gameObjectToTreeItem.end())
+    {
+        gameObjectToTreeItem[go]->setSelected(true);
+    }
+}
+
 void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
 {
     if(treeItemToGameObject.find(item) != treeItemToGameObject.end())

@@ -20,14 +20,15 @@ private:
     std::map<GameObject*, long> gameObjectsToId;
     std::map<long, GameObject*> idToGameObject;
 
-    static glm::vec4 MapIdToColor(long id);
-    static long MapColorToId(const glm::vec4 &color);
+    static Vector3 MapIdToColor(long id);
+    static long MapColorToId(const Vector3 &charColor);
 
 public:
     SelectionFramebuffer(int width, int height);
     virtual ~SelectionFramebuffer();
 
     void RenderSelectionBuffer(const Scene *scene);
+    void ProcessSelection();
 
     void OnChildAdded(GameObject *child) override;
 };

@@ -61,6 +61,8 @@ public:
 
     void keyPressEvent(QKeyEvent *e);
 
+    void SelectGameObject(GameObject *go);
+
 public slots:
 
     void OnItemNameChanged(QTreeWidgetItem *item, int column);
