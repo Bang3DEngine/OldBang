@@ -26,7 +26,7 @@ class Component : public ISceneEventListener, public IToString, public IFileable
 {
 friend class GameObject;
 protected:
-    GameObject *owner;
+    GameObject *owner = nullptr;
     bool enabled = true;
 
     Component();

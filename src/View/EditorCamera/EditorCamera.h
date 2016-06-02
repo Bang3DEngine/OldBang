@@ -26,7 +26,7 @@ private:
     Transform *t = nullptr;
     Camera *cam = nullptr;
     Transform *camt = nullptr; //YawNode transform
-    GameObject *yawNode = nullptr;
+    EditorGameObject *yawNode = nullptr;
 
     GameObject *currentFocus = nullptr;
     bool doingLookAt = false;

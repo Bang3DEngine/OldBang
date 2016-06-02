@@ -1,9 +1,7 @@
 #include "EditorAxis.h"
 
-EditorAxis::EditorAxis() : EditorGameObject()
+EditorAxis::EditorAxis() : EditorGameObject("EditorAxis")
 {
-    SetName("EditorAxis");
-
     xAxisLine = AddComponent<LineRenderer>();
     yAxisLine = AddComponent<LineRenderer>();
     zAxisLine = AddComponent<LineRenderer>();

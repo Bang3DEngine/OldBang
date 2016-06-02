@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 
-Component::Component() : owner(nullptr)
+Component::Component()
 {
 }
 

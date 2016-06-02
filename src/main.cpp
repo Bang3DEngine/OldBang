@@ -36,10 +36,10 @@ int main(int argc, char *argv[])
     QMainWindow *window = new QMainWindow;
     WindowMain::Init(window, &app); //init window main
     WindowMain *windowMain = WindowMain::GetInstance();
-    windowMain->menubar->CreateNewScene();
 
+    //windowMain->menubar->CreateNewScene();
     Scene *scene = new EditorScene();
-    std::string filename = "./res/Assets/sceneTest25.bscene";
+    std::string filename = "./res/Assets/selectionScene.bscene";
     FileReader::ReadScene(filename , scene);
     if(scene != nullptr)
     {

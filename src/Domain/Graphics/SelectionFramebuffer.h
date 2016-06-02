@@ -17,7 +17,7 @@ private:
     ShaderProgram *program;
 
     long idCount = 0;
-    std::map<GameObject*, long> gameObjectsToId;
+    std::map<GameObject*, long> gameObjectToId;
     std::map<long, GameObject*> idToGameObject;
 
     static Vector3 MapIdToColor(long id);

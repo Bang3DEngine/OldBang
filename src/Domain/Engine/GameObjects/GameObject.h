@@ -171,8 +171,7 @@ public:
     T* AddComponent()
     {
         T *comp = new T();
-        comps.push_back(comp);
-        comp->owner = this;
+        AddComponent(comp);
         return comp;
     }
 

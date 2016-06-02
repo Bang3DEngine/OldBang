@@ -4,7 +4,7 @@
 
 EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
 {
-    yawNode = new GameObject("EditorYawNode");
+    yawNode = new EditorGameObject("EditorYawNode");
     AddChild(yawNode);
 
     cam = yawNode->AddComponent<Camera>();

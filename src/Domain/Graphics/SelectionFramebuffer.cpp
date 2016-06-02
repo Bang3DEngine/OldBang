@@ -23,7 +23,6 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     glClearColor(1,1,1,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //Logger_Log("______________");
     program->Bind();
     std::list<Renderer*> childrenRenderers =
             scene->GetComponentsInChildren<Renderer>();
@@ -43,12 +42,12 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
                                 pvm, false);
 
         GameObject *go = renderer->GetOwner();
-        renderer->RenderWithoutBindingMaterial();
-        //Logger_Log(gameObjectsToId[go]);
-        Vector3 selectionColor = MapIdToColor(gameObjectsToId[go]);
-        program->SetUniformVec3("selectionColor", selectionColor);
-
-        //Logger_Log(renderer->GetOwner()->GetName());
+        if(gameObjectToId.find(go) != gameObjectToId.end())
+        {
+            Vector3 selectionColor = MapIdToColor(gameObjectToId[go]);
+            program->SetUniformVec3("selectionColor", selectionColor);
+            renderer->RenderWithoutBindingMaterial();
+        }
     }
     program->UnBind();
 }
@@ -58,15 +57,16 @@ void SelectionFramebuffer::ProcessSelection()
     if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
         glm::vec2 coords = Input::GetMouseCoords();
-        Vector3 selectedColor = ReadPixel(coords.x, Canvas::GetHeight()-coords.y, 0, false);
-        Logger_Log(selectedColor);
+        Vector3 selectedColor = ReadPixel(coords.x,
+                                          Canvas::GetHeight()-coords.y, 0, false);
 
         if(selectedColor.r < 254 || selectedColor.g < 254 || selectedColor.b < 254)
         {
             int id = MapColorToId(selectedColor);
             if(idToGameObject.find(id) != idToGameObject.end())
             {
-                WindowMain::GetInstance()->widgetHierarchy->SelectGameObject(idToGameObject[id]);
+                WindowMain::GetInstance()->
+                        widgetHierarchy->SelectGameObject(idToGameObject[id]);
             }
         }
     }
@@ -74,11 +74,11 @@ void SelectionFramebuffer::ProcessSelection()
 
 void SelectionFramebuffer::OnChildAdded(GameObject *child)
 {
-    gameObjectsToId[child] = idCount;
+    if(child->IsEditorGameObject()) return;
+
+    gameObjectToId[child] = idCount;
     idToGameObject[idCount] = child;
     ++idCount;
-
-    //Logger_Log("Received " << child);
 }
 
 Vector3 SelectionFramebuffer::MapIdToColor(long id)

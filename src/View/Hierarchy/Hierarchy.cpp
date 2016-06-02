@@ -236,9 +236,19 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
 void Hierarchy::SelectGameObject(GameObject *go)
 {
     this->clearSelection();
+
+
     if(gameObjectToTreeItem.find(go) != gameObjectToTreeItem.end())
     {
+        GameObject *parent = go->GetParent();
+        if(parent != nullptr)
+        {
+            ExpandRecursiveUpwards(gameObjectToTreeItem[parent]);
+        }
+
+        UnselectAll();
         gameObjectToTreeItem[go]->setSelected(true);
+        _NotifyHierarchyGameObjectSelectionChanged();
     }
 }
 
