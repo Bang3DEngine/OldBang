@@ -94,6 +94,8 @@ void Hierarchy::UnselectAll()
     {
         item->setSelected(false);
     }
+
+    _NotifyHierarchyGameObjectSelectionChanged();
 }
 
 void Hierarchy::Refresh(Scene *currentScene)

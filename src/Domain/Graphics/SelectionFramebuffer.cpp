@@ -69,6 +69,11 @@ void SelectionFramebuffer::ProcessSelection()
                         widgetHierarchy->SelectGameObject(idToGameObject[id]);
             }
         }
+        else  //Background has been pressed
+        {
+            WindowMain::GetInstance()->
+                    widgetHierarchy->UnselectAll();
+        }
     }
 }
 

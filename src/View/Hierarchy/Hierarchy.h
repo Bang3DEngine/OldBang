@@ -39,8 +39,6 @@ private:
     //(we just need to remove the parent/s of all the selected entities)
     void LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items);
 
-    void UnselectAll();
-
     Scene *currentScene = nullptr;
 
 public:
@@ -62,6 +60,7 @@ public:
     void keyPressEvent(QKeyEvent *e);
 
     void SelectGameObject(GameObject *go);
+    void UnselectAll();
 
 public slots:
 
