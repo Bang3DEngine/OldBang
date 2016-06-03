@@ -118,7 +118,7 @@ void Input::HandleMouseWrapping()
 
 void Input::HandleInputMouseWheel(QWheelEvent *event)
 {
-    lastMouseWheelDelta = float(event->delta()) / (24.0f * 15.0f);
+    lastMouseWheelDelta = float(event->delta()) / (360.0f);
 }
 
 void Input::HandleInputMouseMove(QMouseEvent *event)

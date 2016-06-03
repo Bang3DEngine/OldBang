@@ -29,8 +29,8 @@ void EditorCamera::AdjustSpeeds()
     int cw = c->GetWidth();
     int ch = c->GetHeight();
 
-    mouseRotDegreesPerPixel.x = 360.0f / cw;
-    mouseRotDegreesPerPixel.y = 360.0f / ch;
+    mouseRotDegreesPerPixel.x = 180.0f / cw;
+    mouseRotDegreesPerPixel.y = 180.0f / ch;
 
     mousePanPerPixel = glm::vec2(0.1f, 0.1f);
     if(currentFocus != nullptr)
@@ -62,8 +62,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
         float mouseWheel = Input::GetMouseWheel();
         if(mouseWheel != 0.0f)
         {
-            *moveStep += mouseZoomPerDeltaWheel * mouseWheel *
-                         moveSpeed * camt->GetForward();
+            *moveStep += mouseZoomPerDeltaWheel * mouseWheel * camt->GetForward();
             *hasMoved  = true;
         }
     }
@@ -117,20 +116,20 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
     Vector3 m(0);
     if(Input::GetKey(Input::Key::W))
     {
-        m += moveSpeed * Time::GetDeltaTime() * camt->GetForward();
+        m += keysMoveSpeed * Time::GetDeltaTime() * camt->GetForward();
     }
     else if(Input::GetKey(Input::Key::S))
     {
-        m -= moveSpeed * Time::GetDeltaTime() * camt->GetForward();
+        m -= keysMoveSpeed * Time::GetDeltaTime() * camt->GetForward();
     }
 
     if(Input::GetKey(Input::Key::A))
     {
-        m -= moveSpeed * Time::GetDeltaTime() * camt->GetRight();
+        m -= keysMoveSpeed * Time::GetDeltaTime() * camt->GetRight();
     }
     else if(Input::GetKey(Input::Key::D))
     {
-        m += moveSpeed * Time::GetDeltaTime() * camt->GetRight();
+        m += keysMoveSpeed * Time::GetDeltaTime() * camt->GetRight();
     }
 
     *moveStep += m;
@@ -201,8 +200,8 @@ void EditorCamera::OnUpdate()
         UpdateRotationVariables();
     }
 
-    moveSpeed += moveAccel; //TODO: must do this in FixedUpdate which does not exist yet
-    moveSpeed = glm::clamp(moveSpeed, minMoveSpeed, maxMoveSpeed);
+    keysMoveSpeed += keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
+    keysMoveSpeed = glm::clamp(keysMoveSpeed, minMoveSpeed, maxMoveSpeed);
 
     if(unwrapMouse)
     {
@@ -212,7 +211,7 @@ void EditorCamera::OnUpdate()
 
     if(!hasMoved )
     {
-        moveSpeed = 0.0f; //reset speed
+        keysMoveSpeed = 0.0f; //reset speed
     }
     else
     {

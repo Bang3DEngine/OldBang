@@ -35,8 +35,8 @@ private:
 
     float maxMoveSpeed = 1.0f;
     float minMoveSpeed = 0.1f;
-    float moveAccel = 0.1f;
-    float moveSpeed = 0.0f;
+    float keysMoveAccel = 0.1f;
+    float keysMoveSpeed = 0.0f;
 
     /**
      * @brief How many units in world space do we have to move,
@@ -57,7 +57,7 @@ private:
      * @brief How many units in world space do we have to move
      * in camera's forward direction, for every user wheel delta?
      */
-    float mouseZoomPerDeltaWheel = 24.0f;
+    float mouseZoomPerDeltaWheel = 5.0f;
 
 public:
     EditorCamera();
