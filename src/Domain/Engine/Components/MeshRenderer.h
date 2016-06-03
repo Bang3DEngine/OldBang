@@ -41,6 +41,8 @@ public:
     void SetMaterial(Material *m) override;
     virtual void SetMesh(Mesh *m);
 
+    virtual Box GetBoundingBox() const override;
+
     virtual const Mesh* GetMesh();
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override;

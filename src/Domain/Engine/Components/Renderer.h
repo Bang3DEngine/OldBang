@@ -3,6 +3,7 @@
 
 #include <vector>
 
+#include "Box.h"
 #include "Material.h"
 #include "Component.h"
 
@@ -79,6 +80,8 @@ public:
 
     void SetDrawWireframe(bool drawWireframe);
     bool GetDrawWireframe() const;
+
+    virtual Box GetBoundingBox() const = 0;
 
     void SetCullMode(CullMode cullMode);
     CullMode GetCullMode() const;

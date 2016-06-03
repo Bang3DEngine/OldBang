@@ -55,21 +55,15 @@ void EditorBBox::OnUpdate()
     {
         //Adjust transform to wrap all the vertices of the parent and children
         Box bbox;
-        std::list<MeshRenderer*> mrs =
-                //parent->GetComponentsInThisAndChildren<MeshRenderer>();
-                parent->GetComponents<MeshRenderer>();
+        std::list<Renderer*> rends = parent->GetComponents<Renderer>();
 
-        for(auto it_mr = mrs.begin(); it_mr != mrs.end(); ++it_mr)
+        for(auto it_r = rends.begin(); it_r != rends.end(); ++it_r)
         {
-            MeshRenderer *mr = *it_mr;
-            if(CAN_USE_COMPONENT(mr))
+            Renderer *r = *it_r;
+            if(CAN_USE_COMPONENT(r))
             {
-                const Mesh *m = mr->GetMesh();
-                if(m->GetVertexCount() > 0)
-                {
-                    Box mbox = m->GetBoundingBox();
-                    bbox = Box::Union(bbox, mbox);
-                }
+                Box mbox = r->GetBoundingBox();
+                bbox = Box::Union(bbox, mbox);
             }
         }
 

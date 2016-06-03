@@ -41,6 +41,18 @@ void MeshRenderer::SetMesh(Mesh *m)
                       RenderMode::Triangles : RenderMode::Quads);
 }
 
+Box MeshRenderer::GetBoundingBox() const
+{
+    if(mesh != nullptr)
+    {
+        return mesh->GetBoundingBox();
+    }
+    else
+    {
+        return Box();
+    }
+}
+
 const Mesh *MeshRenderer::GetMesh()
 {
     return mesh;

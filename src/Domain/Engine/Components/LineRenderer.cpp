@@ -110,6 +110,11 @@ void LineRenderer::SetMaterial(Material *m)
     BindPointsToVAO();
 }
 
+Box LineRenderer::GetBoundingBox() const
+{
+    return Box(points[0], points[1]);
+}
+
 void LineRenderer::SetOrigin(Vector3 o)
 {
     points[0] = o;

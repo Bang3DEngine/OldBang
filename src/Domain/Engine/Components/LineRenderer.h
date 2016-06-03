@@ -44,6 +44,8 @@ public:
 
     virtual void SetMaterial(Material *m) override;
 
+    virtual Box GetBoundingBox() const override;
+
     void SetOrigin(Vector3 o);
     void SetDestiny(Vector3 d);
 

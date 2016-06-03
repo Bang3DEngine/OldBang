@@ -315,51 +315,6 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
         }
     }
 
-
-    //TODO: change this, not really a good way of doing it....
-    /*
-    if(HasComponent<MeshRenderer>())
-    {
-        if(selected)
-        {
-            if(ed_nonSelectedMaterial == nullptr)
-            {
-                ed_nonSelectedMaterial =
-                        GetComponent<MeshRenderer>()->GetMaterial();
-            }
-
-            if(!ed_wasSelectedInHierarchy)
-            {
-                if(ed_nonSelectedMaterial != nullptr)
-                {
-                    //Create a copy of its material, and modify its properties
-                    ed_selectedMaterial = new Material(*ed_nonSelectedMaterial);
-                    ed_selectedMaterial->SetDiffuseColor(
-                                glm::vec4(0.0f, 0.0f, 1.0f, 0.5f)
-                                );
-
-                    ed_nonSelectedMaterial =
-                            GetComponent<MeshRenderer>()->GetMaterial();
-                    //GetComponent<MeshRenderer>()->SetMaterial(selectedMaterial);
-                }
-            }
-        }
-        else
-        {
-            if(ed_wasSelectedInHierarchy)
-            {
-                if(ed_nonSelectedMaterial != nullptr)
-                {
-                    delete ed_selectedMaterial;
-                    ed_selectedMaterial = nullptr;
-                    //GetComponent<MeshRenderer>()->SetMaterial(nonSelectedMaterial);
-                }
-            }
-        }
-    }
-    //
-    */
-
     ed_wasSelectedInHierarchy = selected;
 }
 #endif
