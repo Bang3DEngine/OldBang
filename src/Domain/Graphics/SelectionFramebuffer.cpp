@@ -20,6 +20,8 @@ SelectionFramebuffer::~SelectionFramebuffer()
 
 void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 {
+    Bind();
+
     glClearColor(1,1,1,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -50,6 +52,8 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         }
     }
     program->UnBind();
+
+    UnBind();
 }
 
 void SelectionFramebuffer::ProcessSelection()
@@ -58,7 +62,7 @@ void SelectionFramebuffer::ProcessSelection()
     {
         glm::vec2 coords = Input::GetMouseCoords();
         Vector3 selectedColor = ReadPixel(coords.x,
-                                          Canvas::GetHeight()-coords.y, 0, false);
+                                          Canvas::GetHeight()-coords.y, 0);
 
         if(selectedColor.r < 254 || selectedColor.g < 254 || selectedColor.b < 254)
         {

@@ -84,15 +84,15 @@ int Texture::GetTextureSlot() const
 
 void Texture::Bind() const
 {
-    PreBind(GL_ACTIVE_TEXTURE, 1);
+    PreBind(GL_ACTIVE_TEXTURE);
     glActiveTexture(GL_TEXTURE0 + textureSlot);
 
-    PreBind(GL_TEXTURE_BINDING_2D, 0);
+    PreBind(GL_TEXTURE_BINDING_2D);
     glBindTexture(GL_TEXTURE_2D, idgl);
 }
 
 void Texture::UnBind() const
 {
-    glBindTexture(glTextureType, PreUnBind(0));
-    glActiveTexture( PreUnBind(1) );
+    glBindTexture(glTextureType, PreUnBind(GL_TEXTURE_BINDING_2D));
+    glActiveTexture( PreUnBind(GL_ACTIVE_TEXTURE) );
 }

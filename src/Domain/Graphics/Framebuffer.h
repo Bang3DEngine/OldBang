@@ -44,7 +44,7 @@ public:
     TextureRender* GetTextureAttachment(int framebufferAttachmentNum) const;
 
     void SetReadBuffer(int attachmentId) const;
-    Vector3 ReadPixel(int x, int y, int attachmentId, bool haveToBind) const;
+    Vector3 ReadPixel(int x, int y, int attachmentId) const;
     void Resize(int width, int height);
 
     virtual void Bind() const override;

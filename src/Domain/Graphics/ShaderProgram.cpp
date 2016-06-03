@@ -205,7 +205,7 @@ void ShaderProgram::Bind() const
 
 void ShaderProgram::UnBind() const
 {
-    glUseProgram(PreUnBind());
+    glUseProgram(PreUnBind(GL_CURRENT_PROGRAM));
 }
 
 

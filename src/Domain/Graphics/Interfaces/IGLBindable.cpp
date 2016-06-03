@@ -1,20 +1,30 @@
 #include "IGLBindable.h"
+#include "Logger.h"
 
 IGLBindable::IGLBindable() {}
 
-void IGLBindable::CreateEnoughLatestBoundIdsPositions(unsigned int index) const
+void IGLBindable::PreBind(GLenum bindTarget) const
 {
-    while(latestBoundId.size() <= index)
-        latestBoundId.push_back(0);
+    if(boundIds.find(bindTarget) == boundIds.end())
+    {
+        boundIds[bindTarget] = std::stack<GLint>();
+    }
+
+    GLint currentBoundId = 0;
+    glGetIntegerv(bindTarget, &currentBoundId);
+    boundIds[bindTarget].push(currentBoundId);
 }
 
-void IGLBindable::PreBind(GLenum bindTarget, unsigned int index) const
+GLint IGLBindable::PreUnBind(GLenum bindTarget) const
 {
-    CreateEnoughLatestBoundIdsPositions(index);
-    glGetIntegerv(bindTarget, &latestBoundId[index]);
-}
+    if(boundIds.find(bindTarget) == boundIds.end() ||
+       boundIds[bindTarget].empty())
+    {
+        Logger_Warn("Unbinding non-binded GL target.");
+        return 0;
+    }
 
-GLint IGLBindable::PreUnBind(unsigned int index) const
-{
-    return latestBoundId[index];
+    GLint id = boundIds[bindTarget].top();
+    boundIds[bindTarget].pop();
+    return id;
 }

@@ -31,10 +31,10 @@ void EditorScene::_OnRender(unsigned char _renderLayer)
 {
     Scene::_OnRender(_renderLayer);
 
-    selectionFramebuffer->Bind();
+    //selectionFramebuffer->Bind();
     selectionFramebuffer->RenderSelectionBuffer(this);
     selectionFramebuffer->ProcessSelection();
-    selectionFramebuffer->UnBind();
+    //selectionFramebuffer->UnBind();
 }
 
 void EditorScene::DebugDrawLine(const Vector3 &origin,

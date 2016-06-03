@@ -59,7 +59,7 @@ void VAO::Bind() const
 
 void VAO::UnBind() const
 {
-    glBindVertexArray(PreUnBind());
+    glBindVertexArray(PreUnBind(GL_VERTEX_ARRAY_BINDING));
 }
 
 const VBO* VAO::GetVBOByLocation(GLint location) const

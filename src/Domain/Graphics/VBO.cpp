@@ -24,5 +24,5 @@ void VBO::Bind() const
 }
 void VBO::UnBind() const
 {
-    glBindBuffer(GL_ARRAY_BUFFER, PreUnBind());
+    glBindBuffer(GL_ARRAY_BUFFER, PreUnBind(GL_ARRAY_BUFFER));
 }
