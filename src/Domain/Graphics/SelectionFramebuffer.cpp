@@ -64,19 +64,27 @@ void SelectionFramebuffer::ProcessSelection()
         Vector3 selectedColor = ReadPixel(coords.x,
                                           Canvas::GetHeight()-coords.y, 0);
 
+        GameObject *selected = nullptr;
         if(selectedColor.r < 254 || selectedColor.g < 254 || selectedColor.b < 254)
         {
             int id = MapColorToId(selectedColor);
             if(idToGameObject.find(id) != idToGameObject.end())
             {
-                WindowMain::GetInstance()->
-                        widgetHierarchy->SelectGameObject(idToGameObject[id]);
+                selected = idToGameObject[id];
             }
         }
         else  //Background has been pressed
         {
-            WindowMain::GetInstance()->
-                    widgetHierarchy->UnselectAll();
+            WindowMain::GetInstance()->widgetHierarchy->UnselectAll();
+        }
+
+        if(selected != nullptr)
+        {
+            WindowMain::GetInstance()->widgetHierarchy->SelectGameObject(selected);
+            if(Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft))
+            {
+                WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(selected);
+            }
         }
     }
 }

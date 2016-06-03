@@ -175,7 +175,7 @@ void Canvas::SetCursor(Qt::CursorShape cs)
 
 void Canvas::wheelEvent(QWheelEvent *event)
 {
-    Input::HandleInputMousWheel(event);
+    Input::HandleInputMouseWheel(event);
     QGLWidget::wheelEvent(event);
 }
 

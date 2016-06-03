@@ -6,9 +6,16 @@
 std::map<Input::Key, Input::ButtonInfo> Input::keyInfos;
 
 bool Input::mouseWrapping = false;
+
+bool Input::isADoubleClick = false;
+float Input::secsSinceLastMouseDown = 0.0f;
+const float Input::doubleClickMaxSeconds = 0.3f;
+
 float Input::lastMouseWheelDelta = 0.0f;
+
 bool Input::lockMouseMovement = false;
 int Input::framesMouseStopped = 0;
+
 glm::vec2 Input::mouseCoords = glm::vec2(0.0f);
 glm::vec2 Input::lastMouseCoords = glm::vec2(0.0f);
 std::map<Input::MouseButton, Input::ButtonInfo> Input::mouseInfo;
@@ -43,8 +50,9 @@ void Input::OnNewFrame()
         }
         else if(mbInfo.down)
         {
-            mbInfo.down = false; //Not down anymore, just pressed.
+            mbInfo.down = false; // Not down anymore, just pressed.
         }
+        isADoubleClick = false; // Reset double click
     }
 
     lastMouseWheelDelta = 0.0f;
@@ -60,6 +68,8 @@ void Input::OnNewFrame()
         lastMouseCoords = mouseCoords;
     }
     ++framesMouseStopped;
+
+    secsSinceLastMouseDown += Time::GetDeltaTime();
 
     HandleMouseWrapping();
 }
@@ -106,7 +116,7 @@ void Input::HandleMouseWrapping()
     }
 }
 
-void Input::HandleInputMousWheel(QWheelEvent *event)
+void Input::HandleInputMouseWheel(QWheelEvent *event)
 {
     lastMouseWheelDelta = float(event->delta()) / (24.0f * 15.0f);
 }
@@ -140,8 +150,15 @@ void Input::HandleInputMousePress(QMouseEvent *event)
 {
     MouseButton mb = static_cast<MouseButton>(event->button());
     if(mouseInfo.find(mb) == mouseInfo.end())
-    {   //Only if it was not down/pressed before
+    {
+        //Only if it was not down/pressed before
         mouseInfo[mb] = ButtonInfo(false, true, true);
+
+        if(secsSinceLastMouseDown <= doubleClickMaxSeconds)
+        {
+            isADoubleClick = true;
+        }
+        secsSinceLastMouseDown = 0; // Restart time since last click counter
     }
 }
 
@@ -150,7 +167,8 @@ void Input::HandleInputMouseRelease(QMouseEvent *event)
     MouseButton mb = static_cast<MouseButton>(event->button());
     if(mouseInfo.find(mb) != mouseInfo.end() &&
        mouseInfo[mb].pressed)
-    {   //Only if it was pressed before
+    {
+        //Only if it was pressed before
         mouseInfo[mb] = ButtonInfo(true, false, false);
     }
 }
@@ -232,6 +250,11 @@ bool Input::GetMouseButtonDown(Input::MouseButton mb)
 {
     return mouseInfo.find(mb) != mouseInfo.end() &&
             mouseInfo[mb].down;
+}
+
+bool Input::GetMouseButtonDoubleClick(Input::MouseButton mb)
+{
+    return GetMouseButtonDown(mb) && isADoubleClick;
 }
 
 float Input::GetMouseAxisX()

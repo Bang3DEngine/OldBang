@@ -129,14 +129,37 @@ private:
      */
     static bool mouseWrapping;
 
+    /**
+     * @brief isADoubleClick will be true in the frame where
+     * there's the second click of a double click
+     */
+    static bool isADoubleClick;
+
+    /**
+     * @brief Used to handle double click timing
+     */
+    static float secsSinceLastMouseDown;
+
+    /**
+     * @brief Max time in seconds between 2 clicks to
+     * be considered double-click
+     */
+    static const float doubleClickMaxSeconds;
+
     static float lastMouseWheelDelta;
+
     static bool lockMouseMovement;
+
+    /**
+     * @brief Used to fix an issue with lockMouseMovement
+     */
     static int framesMouseStopped;
 
     /**
      * @brief Mouse coordinates in Canvas space.
      */
     static glm::vec2 mouseCoords, lastMouseCoords;
+
 
     /**
      * @brief For every MouseButton, we have a ButtonInfo
@@ -148,7 +171,7 @@ private:
     static void OnNewFrame();
 
     static void HandleMouseWrapping();
-    static void HandleInputMousWheel(QWheelEvent *event);
+    static void HandleInputMouseWheel(QWheelEvent *event);
     static void HandleInputMouseMove(QMouseEvent *event);
     static void HandleInputMousePress(QMouseEvent *event);
     static void HandleInputMouseRelease(QMouseEvent *event);
@@ -169,6 +192,7 @@ public:
     static bool GetMouseButton(MouseButton mb);
     static bool GetMouseButtonUp(MouseButton mb);
     static bool GetMouseButtonDown(MouseButton mb);
+    static bool GetMouseButtonDoubleClick(MouseButton mb);
 
     /**
      * @brief GetMouseAxisX

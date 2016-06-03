@@ -1,4 +1,4 @@
 <Texture2D>
 ./res/Assets/Textures/testTexture.png
-Nearest
+Linear
 </Texture2D>
