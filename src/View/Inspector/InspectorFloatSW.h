@@ -63,8 +63,8 @@ public:
 public slots:
     void AdjustStep(double v)
     {
-        if(abs(v) <= 1.0f) setSingleStep(0.1f);
-        else setSingleStep( pow(10.0, int(log10(v == 0.0f ? 0.1f : abs(v)))-1) );
+        if(std::abs(v) <= 1.0f) setSingleStep(0.1f);
+        else setSingleStep( pow(10.0, int(log10(v == 0.0f ? 0.1f : std::abs(v)))-1) );
     }
 
     void SelectAll() { selectAll(); }

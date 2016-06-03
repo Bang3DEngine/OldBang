@@ -56,7 +56,8 @@ void EditorBBox::OnUpdate()
         //Adjust transform to wrap all the vertices of the parent and children
         Box bbox;
         std::list<MeshRenderer*> mrs =
-                parent->GetComponentsInThisAndChildren<MeshRenderer>();
+                //parent->GetComponentsInThisAndChildren<MeshRenderer>();
+                parent->GetComponents<MeshRenderer>();
 
         for(auto it_mr = mrs.begin(); it_mr != mrs.end(); ++it_mr)
         {
@@ -78,8 +79,8 @@ void EditorBBox::OnUpdate()
         t->SetPosition(center);
 
         Vector3 scale = Vector3(bbox.GetWidth(),
-                                    bbox.GetHeight(),
-                                    bbox.GetDepth());
+                                bbox.GetHeight(),
+                                bbox.GetDepth());
         t->SetScale(scale);
     }
 }

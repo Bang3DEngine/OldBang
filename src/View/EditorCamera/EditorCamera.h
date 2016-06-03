@@ -33,6 +33,10 @@ private:
     float lookAtRotSpeed = 5.0f;
     float lookAtMoveSpeed = 4.0f;
 
+    /**
+     * These 4 variables are related to the speed when moving
+     * the camera with WASD
+     */
     float maxMoveSpeed = 1.0f;
     float minMoveSpeed = 0.1f;
     float keysMoveAccel = 0.1f;
