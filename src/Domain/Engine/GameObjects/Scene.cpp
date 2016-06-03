@@ -1,28 +1,22 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "Canvas.h"
-#include "SelectionFramebuffer.h"
 
 Scene::Scene() : GameObject("Scene")
 {
     isScene = true;
     gbuffer = new GBuffer(Canvas::GetWidth(),
                           Canvas::GetHeight());
-    selectionFramebuffer =
-            new SelectionFramebuffer(Canvas::GetWidth(),
-                                     Canvas::GetHeight());
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)
 {
     gbuffer->Resize(newWidth, newHeight);
-    selectionFramebuffer->Resize(newWidth, newHeight);
 }
 
 Scene::~Scene()
 {
     this->_OnDestroy();
-    delete selectionFramebuffer;
     delete gbuffer;
 }
 
@@ -50,13 +44,6 @@ void Scene::_OnRender(unsigned char _renderLayer)
 
     gbuffer->UnBind();
     gbuffer->RenderToScreen();
-
-#ifdef BANG_EDITOR
-    selectionFramebuffer->Bind();
-    selectionFramebuffer->RenderSelectionBuffer(this);
-    selectionFramebuffer->ProcessSelection();
-    selectionFramebuffer->UnBind();
-#endif
 }
 
 void Scene::SetCamera(const Camera *cam)

@@ -5,6 +5,7 @@
 #include "EditorAxis.h"
 #include "EditorCamera.h"
 #include "EditorDebugGameObject.h"
+#include "SelectionFramebuffer.h"
 
 class EditorScene : public Scene
 {
@@ -13,9 +14,14 @@ private:
     EditorCamera *cameraGameObject = nullptr;
     EditorAxis *axises = nullptr;
 
+    SelectionFramebuffer *selectionFramebuffer = nullptr;
+
 public:
     EditorScene();
     virtual ~EditorScene();
+
+    void _OnResize(int newWidth, int newHeight) override;
+    void _OnRender(unsigned char _renderLayer) override;
 
     void DebugDrawLine(const Vector3 &origin,
                        const Vector3 &destiny,

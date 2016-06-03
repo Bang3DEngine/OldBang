@@ -11,10 +11,30 @@ EditorScene::EditorScene() : Scene()
 
     axises = new EditorAxis();
     AddChild(axises);
+
+    selectionFramebuffer =
+            new SelectionFramebuffer(Canvas::GetWidth(),
+                                     Canvas::GetHeight());
 }
 
 EditorScene::~EditorScene()
 {
+    delete selectionFramebuffer;
+}
+
+void EditorScene::_OnResize(int newWidth, int newHeight)
+{
+    Scene::_OnResize(newWidth, newHeight);
+    selectionFramebuffer->Resize(newWidth, newHeight);
+}
+void EditorScene::_OnRender(unsigned char _renderLayer)
+{
+    Scene::_OnRender(_renderLayer);
+
+    selectionFramebuffer->Bind();
+    selectionFramebuffer->RenderSelectionBuffer(this);
+    selectionFramebuffer->ProcessSelection();
+    selectionFramebuffer->UnBind();
 }
 
 void EditorScene::DebugDrawLine(const Vector3 &origin,

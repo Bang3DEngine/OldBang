@@ -24,15 +24,12 @@ protected:
 
     //Framebuffer for positions, normals, uvs and diffuse
     GBuffer *gbuffer = nullptr;
-    #ifdef BANG_EDITOR
-    SelectionFramebuffer *selectionFramebuffer = nullptr;
-    #endif
 
 
     const Canvas *canvas = nullptr; //set by canvas when added to it
     const GameObject *cameraGameObject = nullptr;
 
-    void _OnResize(int newWidth, int newHeight);
+    virtual void _OnResize(int newWidth, int newHeight);
 
 public:
     const static std::string GetFileExtension() { return "bscene"; }
