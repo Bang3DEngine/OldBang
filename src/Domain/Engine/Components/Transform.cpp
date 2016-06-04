@@ -34,6 +34,11 @@ void Transform::SetPosition(const Vector3 &p)
     position = p;
 }
 
+void Transform::Translate(const Vector3 &translation)
+{
+    SetPosition(GetPosition() + translation);
+}
+
 void Transform::SetRotationFromInspector(const Quaternion &q)
 {
     rotation = q.Normalized();

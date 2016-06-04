@@ -2,17 +2,17 @@
 #define EDITORSCENE_H
 
 #include "Scene.h"
-#include "EditorAxis.h"
 #include "EditorCamera.h"
-#include "EditorDebugGameObject.h"
+#include "EditorAxisGroup.h"
 #include "SelectionFramebuffer.h"
+#include "EditorDebugGameObject.h"
 
 class EditorScene : public Scene
 {
 private:
     EditorDebugGameObject *debugGameObject = nullptr;
     EditorCamera *cameraGameObject = nullptr;
-    EditorAxis *axises = nullptr;
+    EditorAxisGroup *axises = nullptr;
 
     SelectionFramebuffer *selectionFramebuffer = nullptr;
 

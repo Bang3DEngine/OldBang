@@ -1,8 +1,8 @@
 #ifndef EDITORSELECTIONGAMEOBJECT_H
 #define EDITORSELECTIONGAMEOBJECT_H
 
-#include "EditorAxis.h"
 #include "EditorBBox.h"
+#include "EditorAxisGroup.h"
 #include "EditorGameObject.h"
 
 /**
@@ -15,7 +15,7 @@
 class EditorSelectionGameObject : public EditorGameObject
 {
 private:
-    EditorAxis *axis = nullptr;
+    EditorAxisGroup *axisGroup = nullptr;
     EditorBBox *bbox = nullptr;
 
 public:

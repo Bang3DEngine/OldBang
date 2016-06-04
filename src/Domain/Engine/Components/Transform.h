@@ -44,6 +44,7 @@ public:
 
 
     void SetPosition(const Vector3 &p);
+    void Translate(const Vector3 &translation);
 
     //These wont change the input inspectorEulerDeg of the
     void Rotate(const Vector3 &degreesEuler);

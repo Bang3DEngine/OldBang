@@ -1,29 +1,46 @@
 #ifndef EDITORAXIS_H
 #define EDITORAXIS_H
 
-#include "Transform.h"
-#include "MeshRenderer.h"
-#include "LineRenderer.h"
 #include "EditorGameObject.h"
+#include "LineRenderer.h"
+#include "Transform.h"
+#include "Material.h"
+#include "Matrix4.h"
 
 class EditorAxis : public EditorGameObject
 {
 private:
-    Material *matx = nullptr;
-    Material *maty = nullptr;
-    Material *matz = nullptr;
-
     Transform *transform = nullptr;
-    LineRenderer *xAxisLine = nullptr;
-    LineRenderer *yAxisLine = nullptr;
-    LineRenderer *zAxisLine = nullptr;
+    LineRenderer *line = nullptr;
+    Material *material = nullptr;
+
+    /**
+     * @brief To know when the user is grabbing the axis with the mouse
+     */
+    bool grabbed = false;
+
+    /**
+     * @brief Line color will be multiplied by this when axis not being hovered.
+     */
+    Vector3 lineColorFadingNotHover = Vector3(0.5f);
+    /**
+     * @brief Line color will be multiplied by this when axis being hovered, but not grabbed.
+     */
+    Vector3 lineColorFadingNotGrabbed = Vector3(0.75f);
+    Vector3 lineColor;
+
+    Vector3 axisDirection;
+
+    bool mouseIsOver = false;
 
 public:
-    EditorAxis();
-    virtual ~EditorAxis();
+    enum EditorAxisDirection { X, Y, Z };
+    EditorAxis(EditorAxisDirection dir);
 
-    void OnStart() override;
     void OnUpdate() override;
+
+    void OnMouseEnter() override;
+    void OnMouseExit() override;
 };
 
 #endif // EDITORAXIS_H

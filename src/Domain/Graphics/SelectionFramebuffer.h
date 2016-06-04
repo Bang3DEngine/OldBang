@@ -23,6 +23,12 @@ private:
     static Vector3 MapIdToColor(long id);
     static long MapColorToId(const Vector3 &charColor);
 
+    /**
+     * @brief Keeps track of the last GameObject the mouse was over.
+     * This lets us inform of mouseOut events.
+     */
+    GameObject *lastMouseOverGO = nullptr;
+
 public:
     SelectionFramebuffer(int width, int height);
     virtual ~SelectionFramebuffer();

@@ -58,41 +58,58 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 
 void SelectionFramebuffer::ProcessSelection()
 {
+    //Get mouse coordinates and read pixel color
+    glm::vec2 coords = Input::GetMouseCoords();
+    Vector3 mouseOverColor = ReadPixel(coords.x, Canvas::GetHeight()-coords.y, 0);
+
+    GameObject *mouseOverGO = nullptr;
+    //If color over is not the background (255, 255, 255)
+    if(mouseOverColor.r < 254 || mouseOverColor.g < 254 || mouseOverColor.b < 254)
+    {
+        int id = MapColorToId(mouseOverColor);
+        if(idToGameObject.find(id) != idToGameObject.end())
+        {
+            mouseOverGO = idToGameObject[id];
+        }
+    }
+
+    // MouseOver and MouseOut events
+    if(lastMouseOverGO != nullptr && lastMouseOverGO != mouseOverGO)
+    {
+        lastMouseOverGO->OnMouseOut();
+    }
+
+    if(mouseOverGO != nullptr)
+    {
+        mouseOverGO->OnMouseOver();
+        lastMouseOverGO = mouseOverGO;
+    }
+    //
+
+    // Selection (clicking over) Here we just handle non-EditorGameObjects
     if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
-        glm::vec2 coords = Input::GetMouseCoords();
-        Vector3 selectedColor = ReadPixel(coords.x,
-                                          Canvas::GetHeight()-coords.y, 0);
-
-        GameObject *selected = nullptr;
-        if(selectedColor.r < 254 || selectedColor.g < 254 || selectedColor.b < 254)
+        if(mouseOverGO != nullptr)
         {
-            int id = MapColorToId(selectedColor);
-            if(idToGameObject.find(id) != idToGameObject.end())
+            if(!mouseOverGO->IsEditorGameObject()) //Selection of a GameObject
             {
-                selected = idToGameObject[id];
+                WindowMain::GetInstance()->widgetHierarchy->SelectGameObject(mouseOverGO);
+                if(Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft)) // Double clicking
+                {
+                    WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(mouseOverGO);
+                }
             }
         }
-        else  //Background has been pressed
+        else //Background has been pressed
         {
             WindowMain::GetInstance()->widgetHierarchy->UnselectAll();
         }
-
-        if(selected != nullptr)
-        {
-            WindowMain::GetInstance()->widgetHierarchy->SelectGameObject(selected);
-            if(Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft))
-            {
-                WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(selected);
-            }
-        }
     }
+    //
 }
 
 void SelectionFramebuffer::OnChildAdded(GameObject *child)
 {
-    if(child->IsEditorGameObject()) return;
-
     gameObjectToId[child] = idCount;
     idToGameObject[idCount] = child;
     ++idCount;

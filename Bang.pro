@@ -158,7 +158,6 @@ HEADERS += \
     src/Domain/Engine/Others/Input.h \
     src/Persistence/FileWriter.h \
     src/Persistence/Persistence.h \
-    src/View/EditorGameObject/EditorAxis.h \
     src/Domain/Engine/Components/LineRenderer.h \
     src/Domain/Engine/Components/Renderer.h \
     src/View/Explorer/FileTexture2DAsset.h \
@@ -172,7 +171,9 @@ HEADERS += \
     src/Domain/Engine/Physics/Matrix4.h \
     src/View/EditorScene/EditorDebugGameObject.h \
     src/Domain/Engine/Physics/Sphere.h \
-    src/Domain/Graphics/SelectionFramebuffer.h
+    src/Domain/Graphics/SelectionFramebuffer.h \
+    src/View/EditorGameObject/EditorAxisGroup.h \
+    src/View/EditorGameObject/EditorAxis.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -242,7 +243,6 @@ SOURCES += \
     src/Domain/Engine/Others/Input.cpp \
     src/Persistence/FileWriter.cpp \
     src/Persistence/Persistence.cpp \
-    src/View/EditorGameObject/EditorAxis.cpp \
     src/Domain/Engine/Components/LineRenderer.cpp \
     src/Domain/Engine/Components/Renderer.cpp \
     src/View/Explorer/FileTexture2DAsset.cpp \
@@ -256,7 +256,9 @@ SOURCES += \
     src/Domain/Engine/Physics/Matrix4.cpp \
     src/View/EditorScene/EditorDebugGameObject.cpp \
     src/Domain/Engine/Physics/Sphere.cpp \
-    src/Domain/Graphics/SelectionFramebuffer.cpp
+    src/Domain/Graphics/SelectionFramebuffer.cpp \
+    src/View/EditorGameObject/EditorAxisGroup.cpp \
+    src/View/EditorGameObject/EditorAxis.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro
