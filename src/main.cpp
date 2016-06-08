@@ -48,6 +48,9 @@ int main(int argc, char *argv[])
         Persistence::SetCurrentSceneFilepath(filename);
     }
 
+    Behaviour *b = new Behaviour();
+    b->Compile("res/Assets/UserBehaviours/TestCameraBehaviour.cpp");
+
     /*
     Scene *scene = nullptr;
     #ifndef BANG_EDITOR

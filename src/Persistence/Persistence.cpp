@@ -23,13 +23,49 @@ std::string Persistence::GetAssetsPathAbsolute()
             GetAssetsRelativePathFromProjectRoot();
 }
 
+std::string Persistence::GetDir(const std::string &filepath)
+{
+    std::string directory = "";
+    const size_t lastSlash = filepath.rfind('/');
+    if (lastSlash != std::string::npos)
+    {
+        directory = filepath.substr(0, lastSlash);
+    }
+    return directory;
+}
+
+std::string Persistence::GetFileNameWithExtension(const std::string &filepath)
+{
+    std::string filename = "";
+    const size_t lastSlash = filepath.rfind('/');
+    if (lastSlash != std::string::npos)
+    {
+        filename = filepath.substr(lastSlash + 1);
+    }
+    return filename;
+}
+
 
 std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPath)
 {
     if(IsAbsolute(relPath)) return relPath;
 
-    return GetProjectRootPathAbsolute() +
-            relPath.substr(1, relPath.length() -1); //No starting "."
+    if(relPath[0] == '.')
+    {
+        return GetProjectRootPathAbsolute() +
+                relPath.substr(1, relPath.length() -1); //No starting "."
+    }
+    else
+    {
+        if(relPath[0] == '/')
+        {
+            return GetProjectRootPathAbsolute() + relPath;
+        }
+        else
+        {
+            return GetProjectRootPathAbsolute() + "/" + relPath;
+        }
+    }
 }
 
 std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPath)
