@@ -23,6 +23,7 @@ TestBehaviour::TestBehaviour()
 
 void TestBehaviour::OnStart()
 {
+    Logger_Log("HOLAAAAAAAAAAAA");
     /*
     originalScale = GetOwner()->GetComponent<Transform>()->GetScale().x;
 

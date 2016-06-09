@@ -10,7 +10,7 @@
 #include "Logger.h"
 #include "GameObject.h"
 
-#include "BP_SceneReader_cpp_UserBehaviours_elseifs.bp"
+//#include "BP_SceneReader_cpp_UserBehaviours_elseifs.bp"
 
 const std::string FileReader::NoRegisterId = "-";
 std::map<std::string, void*> FileReader::idToPointers;
@@ -279,7 +279,7 @@ void FileReader::ReadComponents(std::istream &f, GameObject *e)
         }
         else
         {
-            BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS();
+            //BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS();
 
             /*
             BANG_PREPROCESSOR

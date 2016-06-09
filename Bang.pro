@@ -11,9 +11,9 @@ QT += core gui opengl
 
 CONFIG += qt
 
-QMAKE_CXXFLAGS += -g --std=c++11 -Wno-unused-parameter -Wno-sign-compare
+QMAKE_CXXFLAGS += -g --std=c++11 -Wno-unused-parameter -Wno-sign-compare -fPIC
 
-LIBS += -lGLEW
+LIBS += -lGLEW -ldl
 
 DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
 
@@ -44,7 +44,7 @@ INCLUDEPATH += \
     $$PWD/src/Persistence/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/BangPreprocessor/GeneratedFiles/ \
-    $$PWD/res/Assets/UserBehaviours/
+    #$$PWD/res/Assets/UserBehaviours/
 
 
 OTHER_FILES += \
@@ -75,7 +75,7 @@ OTHER_FILES += \
     res/Assets/carpetTexture.asset \
     res/Assets/testMaterial2.asset \
     res/Assets/prefabTest.asset \
-    res/Assets/userBehavioursNamesList.ubnl \
+    #res/Assets/userBehavioursNamesList.ubnl \
     res/Assets/luigiPrefab.asset \
     res/Assets/luigiMesh.asset \
     res/Assets/luigiMaterial.asset \
@@ -123,7 +123,7 @@ HEADERS += \
     src/Domain/Engine/Interfaces/IFileable.h \
     src/Domain/Engine/Assets/Texture2D.h \
     src/Domain/Engine/Assets/Prefab.h \
-    $$files(res/Assets/UserBehaviours/*.h,true) \
+    #$$files(res/Assets/UserBehaviours/*.h,true) \
     src/View/WindowEventManager.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/Bang.h \
@@ -208,7 +208,7 @@ SOURCES += \
     src/Domain/Engine/Components/Behaviour.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
     src/Domain/Engine/Assets/Prefab.cpp \
-    $$files(res/Assets/UserBehaviours/*.cpp,true) \
+    #$$files(res/Assets/UserBehaviours/*.cpp,true) \
     src/View/WindowMain.cpp \
     src/View/WindowEventManager.cpp \
     src/View/Interfaces/IWindowEventManagerListener.cpp \

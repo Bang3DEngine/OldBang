@@ -16,9 +16,11 @@
 #include "Timer.h"
 #include "Framebuffer.h"
 #include "Texture2D.h"
-#include "TestBehaviour.h"
 #include "FileReader.h"
-#include "TestCameraBehaviour.h"
+
+#include "Behaviour.h"
+//#include "TestBehaviour.h"
+//#include "TestCameraBehaviour.h"
 
 #include "EditorScene.h"
 #include "WindowMain.h"
@@ -49,7 +51,8 @@ int main(int argc, char *argv[])
     }
 
     Behaviour *b = new Behaviour();
-    b->Compile("res/Assets/UserBehaviours/TestCameraBehaviour.cpp");
+    std::string so = b->CompileToSharedObject("res/Assets/UserBehaviours/TestCameraBehaviour.cpp");
+    b->Link(so);
 
     /*
     Scene *scene = nullptr;

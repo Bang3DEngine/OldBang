@@ -1,5 +1,4 @@
-#include "TestBehaviour.h"
-#include "TestCameraBehaviour.h"
+/*
 #define BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS() \
 if(line == "<TestBehaviour>")\
 {\
@@ -10,3 +9,6 @@ if(line == "<TestBehaviour>")\
      p = new TestCameraBehaviour();\
      FileReader::ReadNextLine(f);\
 } else { }
+*/
+
+#define BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS() {} \

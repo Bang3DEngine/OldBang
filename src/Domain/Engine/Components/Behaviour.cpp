@@ -7,7 +7,15 @@ Behaviour::Behaviour()
     {
         new InspectorFileSWInfo( "Script", "cpp" )
     });
-    #endif
+#endif
+}
+
+Behaviour::~Behaviour()
+{
+    if(library)
+    {
+        dlclose(library);
+    }
 }
 
 #ifdef BANG_EDITOR
@@ -21,7 +29,9 @@ InspectorWidgetInfo* Behaviour::GetComponentInfo()
 
 void Behaviour::OnSlotValueChanged(InspectorWidget *source)
 {
-    filepath = source->GetSWFileFilepath("Script");
+    std::string scriptFilepath = source->GetSWFileFilepath("Script");
+    std::string soFilepath = CompileToSharedObject(scriptFilepath);
+    Link(soFilepath);
 }
 
 void Behaviour::Write(std::ostream &f) const
@@ -33,9 +43,11 @@ void Behaviour::Write(std::ostream &f) const
     */
 }
 
-void Behaviour::Compile(const std::string &filepathFromProjectRoot) const
+std::string Behaviour::CompileToSharedObject(const std::string &filepathFromProjectRoot) const
 {
-    //Get all subdirs recursively in a single line, and add -I in front of every path
+
+    // GET INCLUDES
+    // Get all subdirs recursively in a single line, and add -I in front of every path
     std::string cmdGetAllSubDirs = "";
     cmdGetAllSubDirs = "find " +                                    // Find recursively
                         Persistence::GetProjectRootPathAbsolute() + // From project root
@@ -45,16 +57,15 @@ void Behaviour::Compile(const std::string &filepathFromProjectRoot) const
 
     bool ok = false;
     std::string allSubDirs = "";
-    System(cmdGetAllSubDirs, allSubDirs, ok);
+    Behaviour::System(cmdGetAllSubDirs, allSubDirs, ok);
 
     if(!ok)
     {
-        Logger_Error(allSubDirs);
         Logger_Error("Error trying to find include directories to compile " << this);
-        return;
+        return "";
     }
 
-    //Add -I in front of every path
+    // Add -I in front of every path
     std::string includes = "-I" + allSubDirs;
     for(int i = 0; i < includes.length(); ++i)
     {
@@ -66,22 +77,38 @@ void Behaviour::Compile(const std::string &filepathFromProjectRoot) const
     }
     //
 
-    std::replace(includes.begin(), includes.end(), '\n', ' ');
-
     includes += " -I.";
 
     #ifdef BANG_EDITOR
-    //Qt includes
+    // Qt includes
     includes += " -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui";
     includes += " -I/usr/include/qt4/QtOpenGL -I/usr/include/qt4";
     //
     #endif
+    //
 
-    // Add objs
+    // GET OBJS (*.o)
+    std::string cmdGetAllObjects = "";
+    cmdGetAllObjects = "find " +                                    // Find recursively
+                        Persistence::GetProjectRootPathAbsolute() + // From project root
+                        " -type f " +                               // Only files
+                        " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
+                        " | grep -E -v \"Preprocessor\" " +         // Temporal fix with colliding .o's TODO
+                        " | grep -E \"\\.o$\"" +                    // Only .o files
+                        " | xargs";                                 // Inline
+    std::string objs = "";
+    Behaviour::System(cmdGetAllObjects, objs, ok);
+
+    if(!ok)
+    {
+        Logger_Error("Error trying to find object files to compile " << this);
+        return "";
+    }
     //
 
     // Gather options
     std::string options = "";
+    options += " " + objs;
     options += " -O1";
     options += " --std=c++11";
     options += " " + includes;
@@ -96,22 +123,44 @@ void Behaviour::Compile(const std::string &filepathFromProjectRoot) const
     std::string scriptName = Persistence::GetFileNameWithExtension(filepath);
 
     // Compile
+    std::string sharedObjectFilepath = "";
+    sharedObjectFilepath += scriptDir + "/" + scriptName + ".so";
+
     std::string cmd = "";
     cmd += "/usr/bin/g++ -shared ";
-    cmd += filepath + " " + options + " -o " + scriptDir + "/" + scriptName + ".so";
+    cmd += filepath + " " + options + " -o " + sharedObjectFilepath;
 
-    std::string output;
+    std::string output = "";
+    std::replace(cmd.begin(), cmd.end(), '\n', ' '); // Remove line breaks
     Behaviour::System(cmd, output, ok);
+    Logger_Log(cmd);
+    if(output != "")
+    {
+        Logger_Error(output);
+    }
 
     if (!ok && output != "")
     {
         Logger_Error(output);
+        return "";
     }
+
+    return sharedObjectFilepath;
 }
 
-void Behaviour::Link() const
+void Behaviour::Link(const std::string &sharedObjectFilepath)
 {
+    library = dlopen(sharedObjectFilepath.c_str(), RTLD_LAZY);
 
+    char *error = dlerror();
+    if(error != nullptr)
+    {
+        std::string error = error;
+        if(library == nullptr)
+        {
+            Logger_Error(error);
+        }
+    }
 }
 
 void Behaviour::Read(std::istream &f)
@@ -141,7 +190,7 @@ const std::string Behaviour::ToString() const
 
 void Behaviour::System(const std::string &command, std::string &output, bool &success)
 {
-    const int buff_size = 1024 * 1024;
+    const int buff_size = 1024 * 512;
     char buff[buff_size + 1];
     memset((char*)&buff, 0, buff_size + 1);
 
@@ -205,5 +254,22 @@ void Behaviour::System(const std::string &command, std::string &output, bool &su
     dup2(STDOUT_FILENO, old_fd[1]);
     dup2(STDERR_FILENO, old_fd[2]);
 
-    output = std::string(ret);
+    if(ret != nullptr && strlen(ret) != 0)
+    {
+        output = std::string(ret);
+    }
+}
+
+void Behaviour::Call(const std::string &methodName)
+{
+    if(library == nullptr)
+    {
+        return;
+    }
+
+    dlsym(library, methodName.c_str());
+    /*if(f != nullptr)
+    {
+        f();
+    }*/
 }

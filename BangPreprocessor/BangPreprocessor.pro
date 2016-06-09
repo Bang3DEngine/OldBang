@@ -8,7 +8,7 @@ QT += core gui opengl
 
 CONFIG += qt
 
-QMAKE_CXXFLAGS += -g --std=c++11
+QMAKE_CXXFLAGS += -g --std=c++11 -fPIC
 
 
 include(deployment.pri)

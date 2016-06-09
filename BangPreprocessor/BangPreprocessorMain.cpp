@@ -63,6 +63,9 @@ void Preprocess_BP_SceneReader_cpp_UserBehaviours_elseifs()
 
 int main()
 {
+    std::cerr << "Bang preprocessor currently disabled..." << std::endl;
+    return 0;
+
     std::cerr << std::endl;
     std::cerr << ":::::::::::::::::::::::::::::::::::::::::::" << std::endl;
     std::cerr << "::::::::::: Bang Preprocessor :::::::::::::" << std::endl;
