@@ -112,6 +112,27 @@ void Framebuffer::Resize(int width, int height)
     }
 }
 
+void Framebuffer::Clear() const
+{
+    Bind();
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    UnBind();
+}
+
+void Framebuffer::ClearDepth() const
+{
+    Bind();
+    glClear(GL_DEPTH_BUFFER_BIT);
+    UnBind();
+}
+
+void Framebuffer::ClearColor() const
+{
+    Bind();
+    glClear(GL_COLOR_BUFFER_BIT);
+    UnBind();
+}
+
 void Framebuffer::CheckFramebufferError() const
 {
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)

@@ -389,22 +389,22 @@ void GameObject::_OnUpdate()
     OnUpdate();
 }
 
-void GameObject::_OnPreRender(unsigned char renderLayer)
+void GameObject::_OnPreRender ()
 {
-    PROPAGATE_EVENT_WITH_RENDER_LAYER(renderLayer, _OnPreRender, children);
+    PROPAGATE_EVENT(_OnPreRender, children);
 
-    if(this->renderLayer == renderLayer)
+    if(this->renderLayer == GetScene()->currentRenderLayer)
     {
         PROPAGATE_EVENT(_OnPreRender, comps);
         OnPreRender();
     }
 }
 
-void GameObject::_OnRender(unsigned char renderLayer)
+void GameObject::_OnRender ()
 {
-    PROPAGATE_EVENT_WITH_RENDER_LAYER(renderLayer, _OnRender, children);
+    PROPAGATE_EVENT(_OnRender, children);
 
-    if(this->renderLayer == renderLayer)
+    if(this->renderLayer == GetScene()->currentRenderLayer)
     {
         PROPAGATE_EVENT(_OnRender, comps);
         OnRender();

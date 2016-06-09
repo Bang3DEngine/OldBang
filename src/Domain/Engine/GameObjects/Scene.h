@@ -18,40 +18,48 @@ class Canvas;
 class SelectionFramebuffer;
 class Scene : public GameObject
 {
+
 friend class Canvas;
+friend class GameObject;
+friend class SelectionFramebuffer;
 
 protected:
 
+    /**
+     * @brief currentRenderLayer is a variable that indicates
+     * the currentRenderLayer being used to render, so GameObjects
+     * can decide wether to render or not.
+     */
+    int currentRenderLayer = 0;
+
     //Framebuffer for positions, normals, uvs and diffuse
     GBuffer *gbuffer = nullptr;
-
-
     const Canvas *canvas = nullptr; //set by canvas when added to it
     const GameObject *cameraGameObject = nullptr;
 
-    virtual void _OnResize(int newWidth, int newHeight);
+    virtual void _OnResize (int newWidth, int newHeight);
 
 public:
-    const static std::string GetFileExtension() { return "bscene"; }
+    const static std::string GetFileExtension () { return "bscene"; }
 
     Scene();
     virtual ~Scene();
 
-    void _OnRender(unsigned char renderLayer = 255) override;
+    void _OnRender () override;
 
-    void SetCamera(const Camera *cam);
+    void SetCamera (const Camera *cam);
 
-    Camera* GetCamera() const;
-    const Canvas* GetCanvas() const;
+    Camera* GetCamera () const;
+    const Canvas* GetCanvas () const;
 
-    virtual void DebugDrawLine(const Vector3 &origin,
-                               const Vector3 &destiny,
-                               float lineWidth = 1.0f,
-                               int msTime = -1,
-                               bool depthTest = true) {}
+    virtual void DebugDrawLine (const Vector3 &origin,
+                                const Vector3 &destiny,
+                                float lineWidth = 1.0f,
+                                int msTime = -1,
+                                bool depthTest = true) {}
 
     #ifdef BANG_EDITOR
-    void Write(std::ostream &f) const override;
+    void Write (std::ostream &f) const override;
     #endif
 };
 

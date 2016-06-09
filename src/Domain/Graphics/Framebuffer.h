@@ -47,6 +47,10 @@ public:
     Vector3 ReadPixel(int x, int y, int attachmentId) const;
     void Resize(int width, int height);
 
+    void Clear() const;
+    void ClearDepth() const;
+    void ClearColor() const;
+
     virtual void Bind() const override;
     virtual void UnBind() const override;
 };

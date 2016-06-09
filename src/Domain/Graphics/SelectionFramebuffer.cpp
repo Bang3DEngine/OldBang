@@ -22,33 +22,33 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 {
     Bind();
 
-    glClearColor(1,1,1,1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     program->Bind();
     std::list<Renderer*> childrenRenderers =
             scene->GetComponentsInChildren<Renderer>();
     for(auto it = childrenRenderers.begin(); it != childrenRenderers.end(); ++it)
     {
         Renderer *renderer = *it;
-        Matrix4 model, view, projection, pvm;
-        renderer->GetMatrices(model, view, projection, pvm);
-
-        program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
-                                model, false);
-        program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
-                                view, false);
-        program->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
-                                projection, false);
-        program->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM,
-                                pvm, false);
-
-        GameObject *go = renderer->GetOwner();
-        if(gameObjectToId.find(go) != gameObjectToId.end())
+        if(renderer->GetOwner()->GetRenderLayer() == scene->currentRenderLayer)
         {
-            Vector3 selectionColor = MapIdToColor(gameObjectToId[go]);
-            program->SetUniformVec3("selectionColor", selectionColor);
-            renderer->RenderWithoutBindingMaterial();
+            Matrix4 model, view, projection, pvm;
+            renderer->GetMatrices(model, view, projection, pvm);
+
+            program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
+                                    model, false);
+            program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
+                                    view, false);
+            program->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
+                                    projection, false);
+            program->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM,
+                                    pvm, false);
+
+            GameObject *go = renderer->GetOwner();
+            if(gameObjectToId.find(go) != gameObjectToId.end())
+            {
+                Vector3 selectionColor = MapIdToColor(gameObjectToId[go]);
+                program->SetUniformVec3("selectionColor", selectionColor);
+                renderer->RenderWithoutBindingMaterial();
+            }
         }
     }
     program->UnBind();
@@ -58,12 +58,12 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 
 void SelectionFramebuffer::ProcessSelection()
 {
-    //Get mouse coordinates and read pixel color
+    // Get mouse coordinates and read pixel color
     glm::vec2 coords = Input::GetMouseCoords();
     Vector3 mouseOverColor = ReadPixel(coords.x, Canvas::GetHeight()-coords.y, 0);
 
     GameObject *mouseOverGO = nullptr;
-    //If color over is not the background (255, 255, 255)
+    // If color over is not the background (255, 255, 255)
     if(mouseOverColor.r < 254 || mouseOverColor.g < 254 || mouseOverColor.b < 254)
     {
         int id = MapColorToId(mouseOverColor);
@@ -76,12 +76,12 @@ void SelectionFramebuffer::ProcessSelection()
     // MouseOver and MouseOut events
     if(lastMouseOverGO != nullptr && lastMouseOverGO != mouseOverGO)
     {
-        lastMouseOverGO->OnMouseOut();
+        lastMouseOverGO->OnMouseExit();
     }
 
     if(mouseOverGO != nullptr)
     {
-        mouseOverGO->OnMouseOver();
+        mouseOverGO->OnMouseEnter();
         lastMouseOverGO = mouseOverGO;
     }
     //
@@ -91,7 +91,7 @@ void SelectionFramebuffer::ProcessSelection()
     {
         if(mouseOverGO != nullptr)
         {
-            if(!mouseOverGO->IsEditorGameObject()) //Selection of a GameObject
+            if(!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
             {
                 WindowMain::GetInstance()->widgetHierarchy->SelectGameObject(mouseOverGO);
                 if(Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft)) // Double clicking
@@ -100,7 +100,7 @@ void SelectionFramebuffer::ProcessSelection()
                 }
             }
         }
-        else //Background has been pressed
+        else // Background has been pressed
         {
             WindowMain::GetInstance()->widgetHierarchy->UnselectAll();
         }

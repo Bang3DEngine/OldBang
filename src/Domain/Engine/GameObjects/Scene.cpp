@@ -20,7 +20,7 @@ Scene::~Scene()
     delete gbuffer;
 }
 
-void Scene::_OnRender(unsigned char _renderLayer)
+void Scene::_OnRender()
 {
     if(cameraGameObject != nullptr)
     {
@@ -35,11 +35,11 @@ void Scene::_OnRender(unsigned char _renderLayer)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //From 0 to 9
-    for(unsigned char renderLayer = 0; renderLayer <= 9; ++renderLayer)
+    for(currentRenderLayer = 0; currentRenderLayer <= 9; ++currentRenderLayer)
     {
         glClear(GL_DEPTH_BUFFER_BIT);
-        PROPAGATE_EVENT_WITH_RENDER_LAYER(renderLayer, _OnPreRender, children);
-        PROPAGATE_EVENT_WITH_RENDER_LAYER(renderLayer, _OnRender, children);
+        PROPAGATE_EVENT(_OnPreRender, children);
+        PROPAGATE_EVENT(_OnRender, children);
     }
 
     gbuffer->UnBind();

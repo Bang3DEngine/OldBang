@@ -27,14 +27,20 @@ void EditorScene::_OnResize(int newWidth, int newHeight)
     Scene::_OnResize(newWidth, newHeight);
     selectionFramebuffer->Resize(newWidth, newHeight);
 }
-void EditorScene::_OnRender(unsigned char _renderLayer)
-{
-    Scene::_OnRender(_renderLayer);
 
-    //selectionFramebuffer->Bind();
-    selectionFramebuffer->RenderSelectionBuffer(this);
+void EditorScene::_OnRender()
+{
+    Scene::_OnRender();
+
+    //From 0 to 9
+    selectionFramebuffer->Clear();
+    for(currentRenderLayer = 0; currentRenderLayer <= 9; ++currentRenderLayer)
+    {
+        selectionFramebuffer->ClearDepth();
+        selectionFramebuffer->RenderSelectionBuffer(this);
+    }
+
     selectionFramebuffer->ProcessSelection();
-    //selectionFramebuffer->UnBind();
 }
 
 void EditorScene::DebugDrawLine(const Vector3 &origin,

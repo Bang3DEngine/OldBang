@@ -20,8 +20,8 @@ public:
     EditorScene();
     virtual ~EditorScene();
 
-    void _OnResize(int newWidth, int newHeight) override;
-    void _OnRender(unsigned char _renderLayer) override;
+    void _OnResize (int newWidth, int newHeight) override;
+    void _OnRender () override;
 
     void DebugDrawLine(const Vector3 &origin,
                        const Vector3 &destiny,

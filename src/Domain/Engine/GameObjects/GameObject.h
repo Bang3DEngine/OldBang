@@ -30,9 +30,11 @@ class GameObject : public ISceneEventListener,
                 ,public IWindowEventManagerListener
                #endif
 {
+
 friend class Canvas;
 friend class Prefab;
 friend class Scene;
+
 private:
 
     #ifdef BANG_EDITOR
@@ -42,11 +44,11 @@ private:
     EditorSelectionGameObject *ed_selectionGameObject = nullptr;
     #endif
 
-    virtual void _OnStart() override;
-    virtual void _OnUpdate() override;
-    virtual void _OnPreRender(unsigned char renderLayer) override;
-    virtual void _OnRender(unsigned char renderLayer) override;
-    virtual void _OnDestroy() override;
+    virtual void _OnStart () override;
+    virtual void _OnUpdate () override;
+    virtual void _OnPreRender () override;
+    virtual void _OnRender () override;
+    virtual void _OnDestroy () override;
 
 protected:
     std::string name = "";
