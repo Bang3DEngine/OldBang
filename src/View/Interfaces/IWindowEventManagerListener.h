@@ -7,7 +7,6 @@
 
 #include "MenuBar.h"
 
-
 class GameObject;
 class InspectorWidget;
 class IWindowEventManagerListener

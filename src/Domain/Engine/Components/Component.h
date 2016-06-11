@@ -19,9 +19,13 @@
 
 class GameObject;
 
-class Component : public ISceneEventListener, public IToString, public IFileable, public IWindowEventManagerListener
+class Component :
+              public ISceneEventListener
+             ,public IToString
+             ,public IFileable
+             ,public IWindowEventManagerListener
              #ifdef BANG_EDITOR
-             , public IInspectable
+             ,public IInspectable
              #endif
 {
 friend class GameObject;

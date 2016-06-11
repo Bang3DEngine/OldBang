@@ -16,6 +16,8 @@
 #include "Bang.h"
 #include "Component.h"
 
+#include "WindowMain.h"
+
 class Behaviour : public Component
 {
 private:

@@ -3,40 +3,38 @@
 #include <QApplication>
 
 WindowMain *WindowMain::win = nullptr;
-QMainWindow *WindowMain::mainWindow = nullptr;
-QApplication *WindowMain::app = nullptr;
-
-WindowMain::WindowMain()  : Ui_WindowMain()
-{
-}
 
 void WindowMain::Init(QMainWindow *window, QApplication *application)
 {
-    if(win == nullptr)
-    {
-        win = new WindowMain();
-        win->setupUi(window);
+    Logger_Log("WindowMain Init");
 
-        mainWindow = window;
-        mainWindow->showMaximized();
-    }
+    win = new WindowMain();
+    win->setupUi(window);
+
+    win->mainWindow = window;
+    win->mainWindow->showMaximized();
+
+    win->app = application;
+}
+
+void WindowMain::Init(WindowMain *singletonWindowMain)
+{
+    win = singletonWindowMain;
 }
 
 WindowMain *WindowMain::GetInstance()
 {
-    if(win == nullptr)
-    {
-        win = new WindowMain();
-    }
+    //This will always be initialized, since main inits it using WindowMain::Init()
+   // Logger_Log("GetInstance: " << win);
     return win;
 }
 
 QMainWindow *WindowMain::GetMainWindow()
 {
-    return mainWindow;
+    return GetInstance()->mainWindow;
 }
 
 QApplication *WindowMain::GetApplication() const
 {
-    return app;
+    return GetInstance()->app;
 }

@@ -10,11 +10,11 @@
 /**
  * @brief This is the buffer where each GameObject is drawn into with a unique colour.
  */
-class SelectionFramebuffer : public Framebuffer,
-                             public IWindowEventManagerListener
+class SelectionFramebuffer : public Framebuffer
+                             ,public IWindowEventManagerListener
 {
 private:
-    ShaderProgram *program;
+    ShaderProgram *program = nullptr;
 
     long idCount = 0;
     std::map<GameObject*, long> gameObjectToId;

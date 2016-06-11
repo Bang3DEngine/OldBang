@@ -11,7 +11,7 @@ private:
 public:
     TestCameraBehaviour();
 
-    void OnUpdate() override;
+    void OnUpdate();// override;
 };
 
 #endif // TESTCAMERABEHAVIOUR_H

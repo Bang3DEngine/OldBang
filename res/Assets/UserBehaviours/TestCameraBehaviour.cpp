@@ -1,16 +1,19 @@
 #include "TestCameraBehaviour.h"
 
+#include "WindowMain.h"
+
+#include "GameObject.h"
 #include "Transform.h"
 #include "Logger.h"
 #include "Canvas.h"
 #include "Scene.h"
+#include "Box.h"
 #include "Time.h"
 
 TestCameraBehaviour::TestCameraBehaviour()
 {
-    this->SetFilepath(__FILE__);
-
-    time = 0.0f;
+    //this->SetFilepath(__FILE__);
+    //time = 0.0f;
 }
 
 
@@ -35,3 +38,20 @@ void TestCameraBehaviour::OnUpdate()
     }
         */
 }
+
+extern "C" Behaviour *CreateDynamically(WindowMain *singletonWindowMain)
+{
+    Logger_Log("Creating D...");
+
+    WindowMain::Init(singletonWindowMain);
+    Behaviour *b = new Behaviour();
+
+    Logger_Log("Finished!");
+    return b;
+}
+
+extern "C" void DeleteDynamically(int *b)
+{
+    delete b;
+}
+

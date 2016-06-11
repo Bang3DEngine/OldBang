@@ -4,7 +4,6 @@
 #include "FileReader.h"
 #include "WindowEventManager.h"
 
-#include "WindowMain.h"
 #include "EditorSelectionGameObject.h"
 
 GameObject::GameObject() : GameObject("")

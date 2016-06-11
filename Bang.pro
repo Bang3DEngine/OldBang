@@ -11,7 +11,7 @@ QT += core gui opengl
 
 CONFIG += qt
 
-QMAKE_CXXFLAGS += -g --std=c++11 -Wno-unused-parameter -Wno-sign-compare -fPIC
+QMAKE_CXXFLAGS += -g -Wl,--export-dynamic --std=c++11 -Wno-unused-parameter -Wno-sign-compare -fPIC
 
 LIBS += -lGLEW -ldl
 

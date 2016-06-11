@@ -25,6 +25,7 @@
     }\
 } while(0)
 
+
 class Component;
 class GameObject;
 class WindowEventManager : public QGLWidget

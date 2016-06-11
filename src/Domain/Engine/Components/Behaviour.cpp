@@ -7,7 +7,7 @@ Behaviour::Behaviour()
     {
         new InspectorFileSWInfo( "Script", "cpp" )
     });
-#endif
+    #endif
 }
 
 Behaviour::~Behaviour()
@@ -29,9 +29,10 @@ InspectorWidgetInfo* Behaviour::GetComponentInfo()
 
 void Behaviour::OnSlotValueChanged(InspectorWidget *source)
 {
-    std::string scriptFilepath = source->GetSWFileFilepath("Script");
-    std::string soFilepath = CompileToSharedObject(scriptFilepath);
+    filepath = source->GetSWFileFilepath("Script");
+    std::string soFilepath = CompileToSharedObject(filepath);
     Link(soFilepath);
+    Call("CreateDynamically");
 }
 
 void Behaviour::Write(std::ostream &f) const
@@ -94,6 +95,7 @@ std::string Behaviour::CompileToSharedObject(const std::string &filepathFromProj
                         " -type f " +                               // Only files
                         " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
                         " | grep -E -v \"Preprocessor\" " +         // Temporal fix with colliding .o's TODO
+                        " | grep -E -v \"main\\.o\" " +             // Temporal fix with colliding .o's TODO
                         " | grep -E \"\\.o$\"" +                    // Only .o files
                         " | xargs";                                 // Inline
     std::string objs = "";
@@ -110,10 +112,13 @@ std::string Behaviour::CompileToSharedObject(const std::string &filepathFromProj
     std::string options = "";
     options += " " + objs;
     options += " -O1";
+    options += " -g ";
+    options += " -Wl,--export-dynamic ";
     options += " --std=c++11";
     options += " " + includes;
     options += " -L/usr/lib/x86_64-linux-gnu -L/usr/X11R6/lib64 ";
     options += " -lGLEW -lQtOpenGL -lQtGui -lQtCore -lGL -lpthread ";
+    //options += " -rdynamic ";
     options += " -fPIC"; // Shared linking stuff
     //
 
@@ -136,13 +141,12 @@ std::string Behaviour::CompileToSharedObject(const std::string &filepathFromProj
     Logger_Log(cmd);
     if(output != "")
     {
-        Logger_Error(output);
-    }
-
-    if (!ok && output != "")
-    {
-        Logger_Error(output);
-        return "";
+        Logger_Log(output);
+        if (!ok)
+        {
+            Logger_Error(output);
+            return "";
+        }
     }
 
     return sharedObjectFilepath;
@@ -150,16 +154,13 @@ std::string Behaviour::CompileToSharedObject(const std::string &filepathFromProj
 
 void Behaviour::Link(const std::string &sharedObjectFilepath)
 {
-    library = dlopen(sharedObjectFilepath.c_str(), RTLD_LAZY);
+    dlerror();
+    library = dlopen(sharedObjectFilepath.c_str(), RTLD_LAZY | RTLD_GLOBAL);
 
-    char *error = dlerror();
-    if(error != nullptr)
+    char *err = dlerror();
+    if(err != nullptr)
     {
-        std::string error = error;
-        if(library == nullptr)
-        {
-            Logger_Error(error);
-        }
+        Logger_Error(err);
     }
 }
 
@@ -212,7 +213,7 @@ void Behaviour::System(const std::string &command, std::string &output, bool &su
     old_fd[2] = dup(STDERR_FILENO);
 
     int pid = fork();
-    if(pid == 0)
+    if(pid == 0) // Child
     {
         close(fd[0]);
         close(STDOUT_FILENO);
@@ -221,7 +222,6 @@ void Behaviour::System(const std::string &command, std::string &output, bool &su
         dup2(fd[1], STDERR_FILENO);
 
         int r = system(cmd);
-        success = (r == 0);
 
         close (fd[1]);
         exit(1);
@@ -232,7 +232,7 @@ void Behaviour::System(const std::string &command, std::string &output, bool &su
         exit(1);
     }
 
-    if(pid != 0)
+    if(pid != 0) // Parent
     {
         close(fd[1]);
         dup2(fd[0], STDIN_FILENO);
@@ -267,9 +267,20 @@ void Behaviour::Call(const std::string &methodName)
         return;
     }
 
-    dlsym(library, methodName.c_str());
-    /*if(f != nullptr)
+    dlerror();
+    //void* (*f)() = (void* (*)()) (dlsym(library, methodName.c_str()));
+    Behaviour* (*f)(WindowMain*) = (Behaviour* (*)(WindowMain*)) (dlsym(library, methodName.c_str()));
+    char *error = dlerror();
+    if(error != nullptr)
     {
-        f();
-    }*/
+        Logger_Error(error);
+        return;
+    }
+
+    if(f != nullptr)
+    {
+        Logger_Log("Calling '" << methodName << "'...");
+        Behaviour *b = f(WindowMain::GetInstance());
+        Logger_Log("Called");
+    }
 }
