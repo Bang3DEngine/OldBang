@@ -3,12 +3,7 @@
 #include "SelectionFramebuffer.h"
 #include "WindowMain.h"
 
-int Canvas::width = 0;
-int Canvas::height = 0;
-int Canvas::RedrawDelay = 30;
-float Canvas::aspectRatio = 1.0f;
-Canvas *Canvas::stCanvas = nullptr;
-unsigned long long Canvas::lastRenderTime = 0;
+Canvas *Canvas::mainBinaryCanvas = nullptr;
 
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
@@ -19,16 +14,18 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     drawTimer.setInterval(Canvas::RedrawDelay);
     drawTimer.start();
 
-
-    windowMain = WindowMain::GetInstance();
     Input::Init();
+}
 
-    stCanvas = this;
+void Canvas::InitFromMainBinary()
+{
+    Canvas::mainBinaryCanvas = WindowMain::GetInstance()->canvas;
 }
 
 void Canvas::initializeGL()
 {
-    windowMain->buttonPauseResume->setText( (paused ? QString("Resume") : QString("Pause")) );
+    WindowMain::GetInstance()->buttonPauseResume
+            ->setText( (paused ? QString("Resume") : QString("Pause")) );
 
     glewExperimental = GL_TRUE;
     glewInit();
@@ -44,7 +41,9 @@ void Canvas::paintGL()
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-    Time::deltaTime = float(Time::GetNow() - lastRenderTime) / 1000.0f;
+    Time::GetInstance()->deltaTime = float(Time::GetNow() -
+                                           lastRenderTime) / 1000.0f;
+
     if(currentScene != nullptr)
     {
         lastRenderTime = Time::GetNow();
@@ -149,22 +148,22 @@ void Canvas::RemoveScene(const std::string &name)
 
 Canvas *Canvas::GetInstance()
 {
-    return stCanvas;
+    return Canvas::mainBinaryCanvas;
 }
 
 float Canvas::GetAspectRatio()
 {
-    return aspectRatio;
+    return Canvas::mainBinaryCanvas->aspectRatio;
 }
 
 int Canvas::GetWidth()
 {
-    return width;
+    return Canvas::mainBinaryCanvas->width;
 }
 
 int Canvas::GetHeight()
 {
-    return height;
+    return Canvas::mainBinaryCanvas->height;
 }
 
 void Canvas::SetCursor(Qt::CursorShape cs)
@@ -215,7 +214,8 @@ void Canvas::OnTopKekPressed()
 
     GameObject *e = p->Instantiate();
 
-    GameObject *selected = WindowMain::GetInstance()->widgetHierarchy->GetFirstSelectedGameObject();
+    GameObject *selected = WindowMain::GetInstance()->widgetHierarchy->
+            GetFirstSelectedGameObject();
 
     if(selected != nullptr) selected->AddChild(e);
     else currentScene->AddChild(e);

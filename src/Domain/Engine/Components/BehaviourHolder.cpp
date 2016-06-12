@@ -15,13 +15,21 @@ BehaviourHolder::BehaviourHolder()
 
 BehaviourHolder::~BehaviourHolder()
 {
+    if(currentOpenLibrary != nullptr)
+    {
+        SystemUtils::CloseLibrary(currentOpenLibrary);
+    }
+
+    if(behaviour != nullptr)
+    {
+        delete behaviour;
+    }
 }
 
 void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
 {
     if(behaviour != nullptr)
     {
-        behaviour->behaviourHolder = nullptr;
         delete behaviour;
     }
 
@@ -57,19 +65,39 @@ void BehaviourHolder::Refresh()
     }
 
     // Create new Behaviour
-    Behaviour *b = SystemUtils::CreateDynamicBehaviour(soFilepath);
-    ChangeBehaviour(b); // To newly created or nullptr, depending on success
+    void *openLibrary = nullptr;
+    Behaviour *createdBehaviour = nullptr;
+    SystemUtils::CreateDynamicBehaviour(soFilepath,
+                                        &createdBehaviour,
+                                        &openLibrary);
 
-    if(behaviour != nullptr)
+    if(createdBehaviour != nullptr)
     {
-        behaviour->SetSourceFilepath(sourceFilepath);
-        behaviour->_OnStart();
+        if(currentOpenLibrary != nullptr)
+        {
+            SystemUtils::CloseLibrary(currentOpenLibrary);
+        }
+        currentOpenLibrary = openLibrary;
+    }
+
+    Logger_Log("Old behaviour: " << behaviour);
+    ChangeBehaviour(createdBehaviour); // To newly created or nullptr, depending on success
+    Logger_Log("New behaviour: " << (void*)behaviour);
+
+    if(createdBehaviour != nullptr)
+    {
+        if(behaviour != nullptr)
+        {
+            behaviour->SetSourceFilepath(sourceFilepath);
+            behaviour->_OnStart();
+        }
     }
     else
     {
         Logger_Error("Behaviour " << sourceFilepath <<
                      " could not be refreshed. See errors above");
     }
+    Logger_Log("created");
 }
 
 

@@ -38,11 +38,13 @@ int main(int argc, char *argv[])
     font.setPixelSize(10);
     app.setFont(font);
 
-    QMainWindow *window = new QMainWindow();
 
     // Init SINGLETON's
-    SingletonManager::Init();
+    SingletonManager::InitFromMainBinary();
+    QMainWindow *window = new QMainWindow();
     WindowMain::InitFromMainBinary(window, &app);
+    Canvas::InitFromMainBinary();
+    Time::InitFromMainBinary();
     //
 
     Scene *scene = new EditorScene();

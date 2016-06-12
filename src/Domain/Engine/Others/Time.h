@@ -8,13 +8,18 @@
 class Time
 {
 friend class Canvas;
+friend class TestBehaviour;
 
 private:
-    static float deltaTime;
+    float deltaTime = 0.0f;
 
     Time() {}
+    static Time* GetInstance();
 
 public:
+
+    static void InitFromMainBinary();
+
     /**
      * @brief Returns the number of seconds that have passed between
      *        the last frame and the current one (the delta time)

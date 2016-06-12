@@ -28,7 +28,6 @@ private:
     static SingletonManager *mainBinarySM;
 
     WindowMain *mainBinaryWindowMain = nullptr;
-    Logger *mainBinaryLogger = nullptr;
     Time *mainBinaryTime = nullptr;
 
     SingletonManager() {}
@@ -42,7 +41,6 @@ public:
      */
 
     void SetWindowMainSingleton(WindowMain* mainBinaryWM);
-    void SetLoggerSingleton(Logger* mainBinaryL);
     void SetTimeSingleton(Time* mainBinaryT);
 
     /**
@@ -51,7 +49,6 @@ public:
      */
 
     WindowMain* GetWindowMainSingleton();
-    Logger* GetLoggerSingleton();
     Time* GetTimeSingleton();
 
     /**
@@ -65,7 +62,7 @@ public:
     /**
      * @brief This method should be called ONLY by the main binary.
      */
-    static SingletonManager* Init();
+    static SingletonManager* InitFromMainBinary();
 
     /**
      * @brief This method should be called ONLY by the main binary, and passed

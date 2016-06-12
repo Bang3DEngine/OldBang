@@ -11,7 +11,8 @@ private:
 public:
     TestCameraBehaviour();
 
-    void OnUpdate();// override;
+    void OnStart() override;
+    void OnUpdate() override;
 };
 
 BANG_BEHAVIOUR_CLASS(TestCameraBehaviour)

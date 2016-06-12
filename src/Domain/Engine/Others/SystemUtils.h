@@ -43,10 +43,16 @@ public:
      * passed as parameter. This method CreateDynamically should be defined
      * in the XXXBehaviour.cpp file, as extern "C".
      * @param The filepath to the sharedObject
+     * @param The created Behaviour. If error, nullptr.
+     * @param The library that has been opened. You must keep this to close the library
+     * later with CloseLibrary. If error, nullptr.
      * @return The created Behaviour.
      */
-    static Behaviour* CreateDynamicBehaviour(const std::string &sharedObjectFilepath);
+    static void CreateDynamicBehaviour(const std::string &sharedObjectFilepath,
+                                       Behaviour **createdBehaviour,
+                                       void **openLibrary);
 
+    static void CloseLibrary(void *library);
 };
 
 #endif // SYSTEMUTILS_H

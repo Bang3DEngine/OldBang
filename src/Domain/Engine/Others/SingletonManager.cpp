@@ -8,11 +8,6 @@ void SingletonManager::SetWindowMainSingleton(WindowMain *mainBinaryWM)
     mainBinaryWindowMain = mainBinaryWM;
 }
 
-void SingletonManager::SetLoggerSingleton(Logger *mainBinaryL)
-{
-    mainBinaryLogger = mainBinaryL;
-}
-
 void SingletonManager::SetTimeSingleton(Time *mainBinaryT)
 {
     mainBinaryTime = mainBinaryT;
@@ -24,11 +19,6 @@ void SingletonManager::SetTimeSingleton(Time *mainBinaryT)
 WindowMain* SingletonManager::GetWindowMainSingleton()
 {
     return mainBinaryWindowMain;
-}
-
-Logger* SingletonManager::GetLoggerSingleton()
-{
-    return mainBinaryLogger;
 }
 
 Time* SingletonManager::GetTimeSingleton()
@@ -43,7 +33,7 @@ SingletonManager* SingletonManager::
 }
 
 
-SingletonManager *SingletonManager::Init()
+SingletonManager *SingletonManager::InitFromMainBinary()
 {
     SingletonManager::mainBinarySM = new SingletonManager();
 }

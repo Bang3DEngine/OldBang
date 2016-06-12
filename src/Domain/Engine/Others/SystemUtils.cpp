@@ -198,44 +198,53 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     return sharedObjectFilepath;
 }
 
-Behaviour* SystemUtils::CreateDynamicBehaviour(const std::string &sharedObjectFilepath)
+void SystemUtils::CreateDynamicBehaviour(const std::string &sharedObjectFilepath,
+                                         Behaviour **createdBehaviour,
+                                         void **openLibrary)
 {
     dlerror(); // Clear last error just in case
 
     // Open library
-    void *lib = dlopen(sharedObjectFilepath.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+    *openLibrary = dlopen(sharedObjectFilepath.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+    if(*openLibrary == nullptr) return;
 
     // Error Check
     char *err = dlerror();
     if(err != nullptr)
     {
         Logger_Error(err);
-        return nullptr;
+        dlclose(*openLibrary);
+        *openLibrary = *createdBehaviour = nullptr;
+        return;
     }
 
-    if(lib == nullptr) return nullptr;
 
     // Get the pointer to the CreateDynamically function
     Behaviour* (*createFunction)(SingletonManager*) =
-            (Behaviour* (*)(SingletonManager*)) (dlsym(lib, "CreateDynamically"));
+            (Behaviour* (*)(SingletonManager*)) (dlsym(*openLibrary, "CreateDynamically"));
 
     // Error Check
     err = dlerror();
     if(err != nullptr)
     {
         Logger_Error(err);
-        return nullptr;
+        dlclose(*openLibrary);
+        *openLibrary = *createdBehaviour = nullptr;
+        return;
     }
 
     // Call it and get the pointer to the created Behaviour
-    Behaviour *b = nullptr;
+    *createdBehaviour = nullptr;
     if(createFunction != nullptr)
     {
         // Create the Behaviour, passing to it the SingletonManager
         // of this main binary, so it can link it.
-        b = createFunction(SingletonManager::GetInstance());
+        *createdBehaviour = createFunction(SingletonManager::GetInstance());
     }
+}
 
-    return b;
+void SystemUtils::CloseLibrary(void *library)
+{
+    dlclose(library);
 }
 

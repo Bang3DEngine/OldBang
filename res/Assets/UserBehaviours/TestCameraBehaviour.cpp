@@ -16,6 +16,11 @@ TestCameraBehaviour::TestCameraBehaviour()
     //time = 0.0f;
 }
 
+void TestCameraBehaviour::OnStart()
+{
+    Logger_Log("Started Camera behaviour !!!");
+}
+
 
 void TestCameraBehaviour::OnUpdate()
 {

@@ -24,7 +24,7 @@ TestBehaviour::TestBehaviour()
 
 void TestBehaviour::OnStart()
 {
-    Logger_Log("HOLAAAAAAAAAAAA");
+    Logger_Log("ON START!222 SDASADDSADSASDA");
     /*
     originalScale = GetOwner()->GetComponent<Transform>()->GetScale().x;
 
@@ -59,8 +59,8 @@ void TestBehaviour::OnUpdate()
     time += Time::GetDeltaTime();
     Transform *t = GetOwner()->GetComponent<Transform>();
     if(t == nullptr) return;
-    Logger_Log(time);
-    t->SetRotation(Vector3(sin(time), cos(time), 0.0f));
+    t->SetRotation(Vector3(0.0f, time, 0.0f));
+
     /*
     int r = rand()%3;
     if(r == 0)      Logger_Log     (t->GetRotation());

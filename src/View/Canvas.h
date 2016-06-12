@@ -31,11 +31,15 @@ class Canvas : public QGLWidget, public IWindowEventManagerListener
     Q_OBJECT
 
 private:
-    static int RedrawDelay;
-    static Canvas *stCanvas;
-    static float aspectRatio;
-    static int width, height;
-    static unsigned long long lastRenderTime;
+
+    static Canvas *mainBinaryCanvas;
+
+    const int RedrawDelay = 30;
+
+    int width = 0;
+    int height = 0;
+    float aspectRatio = 1.0f;
+    unsigned long long lastRenderTime = 0;
 
     bool paused = false;
     std::list<Scene*> scenes;
@@ -46,9 +50,9 @@ private:
 public:
 
     glm::vec4 clearColor;
-    WindowMain *windowMain = nullptr;
 
     explicit Canvas(QWidget *parent = 0);
+    static void InitFromMainBinary();
 
     void initializeGL() override;
     void paintGL() override;
@@ -60,9 +64,9 @@ public:
     void SetCurrentScene(const std::string &name);
     void RemoveScene(const std::string &name);
 
-    static Canvas *GetInstance();
     Scene* GetCurrentScene() const;
     Scene* GetScene(const std::string &name) const;
+    static Canvas *GetInstance();
     static float GetAspectRatio();
     static int GetHeight();
     static int GetWidth();

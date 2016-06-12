@@ -16,7 +16,7 @@ GameObject *Behaviour::GetOwner() const
     return behaviourHolder->GetOwner();
 }
 
-void Behaviour::SetSourceFilepath(const std::string &filepath)
+void Behaviour::SetSourceFilepath(const std::string &sourceFilepath)
 {
     this->sourceFilepath = sourceFilepath;
 }
