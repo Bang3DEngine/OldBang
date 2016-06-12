@@ -27,15 +27,13 @@ private:
 
 public:
 
-    static void Init(QMainWindow *window, QApplication *app);
-
     /**
-     * @brief This must be called by the behaviours linked to the
-     * main binary in runtime.
-     * @param singletonWindowMain
+     * @brief This must be called by main() in the mainBinary.
+     * This method will register the WindowMain singleton into the
+     * SingletonManager, for later use in shared libraries.
+     * @return The created Singleton,
      */
-    static void Init(WindowMain *singletonWindowMain);
-
+    static void InitFromMainBinary(QMainWindow *window, QApplication *app);
 
     static WindowMain *GetInstance();
     static QMainWindow *GetMainWindow();

@@ -1,7 +1,7 @@
 #include "SystemUtils.h"
 
 #include "Behaviour.h"
-#include "WindowMain.h"
+#include "SingletonManager.h"
 
 // TODO: Fix System success variable (it does not do what it's supposed to do)
 void SystemUtils::System(const std::string &command, std::string &output, bool &success)
@@ -216,8 +216,8 @@ Behaviour* SystemUtils::CreateDynamicBehaviour(const std::string &sharedObjectFi
     if(lib == nullptr) return nullptr;
 
     // Get the pointer to the CreateDynamically function
-    Behaviour* (*createFunction)(WindowMain*) =
-            (Behaviour* (*)(WindowMain*)) (dlsym(lib, "CreateDynamically"));
+    Behaviour* (*createFunction)(SingletonManager*) =
+            (Behaviour* (*)(SingletonManager*)) (dlsym(lib, "CreateDynamically"));
 
     // Error Check
     err = dlerror();
@@ -231,7 +231,9 @@ Behaviour* SystemUtils::CreateDynamicBehaviour(const std::string &sharedObjectFi
     Behaviour *b = nullptr;
     if(createFunction != nullptr)
     {
-        b = createFunction(WindowMain::GetInstance());
+        // Create the Behaviour, passing to it the SingletonManager
+        // of this main binary, so it can link it.
+        b = createFunction(SingletonManager::GetInstance());
     }
 
     return b;

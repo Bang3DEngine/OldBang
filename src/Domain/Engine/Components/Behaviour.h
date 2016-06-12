@@ -4,6 +4,7 @@
 #include "Bang.h"
 #include "Logger.h"
 #include "WindowMain.h"
+#include "SingletonManager.h"
 #include "ISceneEventListener.h"
 #include "IWindowEventManagerListener.h"
 
@@ -50,11 +51,13 @@ public:
 // DEFINES
 
 #define BANG_BEHAVIOUR_CLASS(CLASS_NAME) \
-extern "C" Behaviour *CreateDynamically(WindowMain *singletonWindowMain) \
+extern "C" Behaviour *CreateDynamically(SingletonManager *mainBinarySingletonManager) \
 { \
     Logger_Log("Creating behaviour dinamycally..."); \
 \
-    WindowMain::Init(singletonWindowMain); \
+    /* This line links the SingletonManager in the main binary to the SingletonManager \
+       in the behaviour loaded library. */ \
+    SingletonManager::SetInstanceFromBehaviourLibrary(mainBinarySingletonManager); \
     Behaviour *b = new CLASS_NAME(); \
 \
     Logger_Log("Dynamic behaviour successfully created!"); \
