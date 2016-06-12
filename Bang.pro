@@ -11,7 +11,7 @@ QT += core gui opengl
 
 CONFIG += qt
 
-QMAKE_CXXFLAGS += -g -Wl,--export-dynamic --std=c++11 -Wno-unused-parameter -Wno-sign-compare -fPIC
+QMAKE_CXXFLAGS += -g -Wl,--export-dynamic --std=c++11 -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
 
 LIBS += -lGLEW -ldl
 
@@ -173,7 +173,9 @@ HEADERS += \
     src/Domain/Engine/Physics/Sphere.h \
     src/Domain/Graphics/SelectionFramebuffer.h \
     src/View/EditorGameObject/EditorAxisGroup.h \
-    src/View/EditorGameObject/EditorAxis.h
+    src/View/EditorGameObject/EditorAxis.h \
+    src/Domain/Engine/Others/SystemUtils.h \
+    src/Domain/Engine/Components/BehaviourHolder.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -258,7 +260,9 @@ SOURCES += \
     src/Domain/Engine/Physics/Sphere.cpp \
     src/Domain/Graphics/SelectionFramebuffer.cpp \
     src/View/EditorGameObject/EditorAxisGroup.cpp \
-    src/View/EditorGameObject/EditorAxis.cpp
+    src/View/EditorGameObject/EditorAxis.cpp \
+    src/Domain/Engine/Others/SystemUtils.cpp \
+    src/Domain/Engine/Components/BehaviourHolder.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

@@ -14,11 +14,14 @@ TestCameraBehaviour::TestCameraBehaviour()
 {
     //this->SetFilepath(__FILE__);
     //time = 0.0f;
+    Logger_Log("HOLA");
 }
 
 
 void TestCameraBehaviour::OnUpdate()
 {
+    Logger_Log(GetOwner());
+    GetOwner()->GetComponent<Transform>()->Translate(GetOwner()->GetComponent<Transform>()->GetForward());
     /*
     Scene *st = GetParent()->GetScene();
     GameObject *pyramid = st->GetChild("pyramid");
@@ -41,12 +44,12 @@ void TestCameraBehaviour::OnUpdate()
 
 extern "C" Behaviour *CreateDynamically(WindowMain *singletonWindowMain)
 {
-    Logger_Log("Creating D...");
+    Logger_Log("Creating behaviour dinamycally...");
 
     WindowMain::Init(singletonWindowMain);
-    Behaviour *b = new Behaviour();
+    Behaviour *b = new TestCameraBehaviour();
 
-    Logger_Log("Finished!");
+    Logger_Log("Dynamic behaviour successfully created!");
     return b;
 }
 

@@ -1,76 +1,50 @@
 #ifndef BEHAVIOUR_H
 #define BEHAVIOUR_H
 
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <sys/stat.h>
-#include <dlfcn.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <algorithm>
-
 #include "Bang.h"
-#include "Component.h"
+#include "ISceneEventListener.h"
+#include "IWindowEventManagerListener.h"
 
-#include "WindowMain.h"
 
-class Behaviour : public Component
+class BehaviourHolder;
+
+/**
+ * @brief The Behaviour class is a base class which will be inherited by all
+ * the User Behaviour classes. This lets the engine handle Behaviours uniformly.
+ */
+class Behaviour : public ISceneEventListener
+                 ,public IWindowEventManagerListener  // To receive events!
 {
+friend class BehaviourHolder;
+
 private:
-    std::string filepath = "";
-    void *library = nullptr;
+    /**
+     * @brief Filepath of the source code (*.cpp usually).
+     * Just for info purposes for the BehaviourHolder.
+     * Semantically it makes more sense to me saving it here.
+     */
+    std::string sourceFilepath = "";
+
+    /**
+     * @brief Set directly by BehaviourHolder (its a friend class), when
+     * adding this Behaviour to itself.
+     */
+    BehaviourHolder *behaviourHolder = nullptr;
 
 public:
     Behaviour();
     virtual ~Behaviour();
 
-    virtual const std::string ToString() const override;
-    virtual std::string GetName() const override { return "Behaviour"; }
+    /**
+     * @brief Remember that Behaviour is not a Component.
+     * However, we need to give the user access to the gameObject which has the
+     * BehaviourHolder which has this Behaviour...
+     * @return The owner of the BehaviourHolder of this Behaviour
+     */
+    GameObject* GetOwner() const;
 
-    #ifdef BANG_EDITOR
-
-        virtual InspectorWidgetInfo* GetComponentInfo() override;
-        virtual void OnSlotValueChanged(InspectorWidget *source) override;
-
-        /**
-         * @brief Executes a system command.
-         * @param The command to be executed.
-         * @param The output of the command.
-         * @param Whether it's been successful or not
-         */
-        static void System(const std::string &command, std::string &output, bool &success);
-
-        /**
-         * @brief Call calls a function of the loaded library (if it exists).
-         * @param methodName
-         */
-        void Call(const std::string &methodName);
-
-        /**
-         * @brief Compiles the passed script into a shared library, whom path is
-         * returned.
-         * @param filepath of the script to compile. Relative to the project root.
-         * @return
-         */
-        std::string CompileToSharedObject(const std::string &filepathFromProjectRoot) const;
-
-        /**
-         * @brief Links the specified library and saves it into the internal library pointer,
-         * so we can later call functions of it.
-         * @param Shared library to link.
-         */
-        void Link(const std::string &sharedObjectFilepath);
-
-        void Write(std::ostream &f) const override;
-        void Read(std::istream &f) override;
-    #endif
-
-    void SetFilepath(const std::string &filepath);
-    std::string GetFilepath() const;
+    void SetSourceFilepath(const std::string &sourceFilepath);
+    std::string GetSourceFilepath() const;
 };
 
 #endif

@@ -4,7 +4,7 @@
 
 #include "GameObject.h"
 #include "Component.h"
-#include "Behaviour.h"
+#include "BehaviourHolder.h"
 #include "Camera.h"
 #include "MeshRenderer.h"
 #include "LineRenderer.h"
@@ -115,8 +115,8 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     {
         if(this->currentGameObject != nullptr)
         {
-            Behaviour *b = new Behaviour();
-            currentGameObject->AddComponent(b);
+            BehaviourHolder *bh = new BehaviourHolder();
+            currentGameObject->AddComponent(bh);
         }
     }
     else if(clickedAction == MenuBar::Action::AddComponentCamera)
