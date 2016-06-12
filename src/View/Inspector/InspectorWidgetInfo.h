@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <functional>
 
 #include "Logger.h"
 
@@ -13,11 +14,19 @@ protected:
 
 public:
     std::string label;
-    virtual bool IsOfTypeVecFloat() = 0;
+
+    /**
+     * @brief Does this Component needs its label printed on top of it?
+     * @return
+     */
+    virtual bool NeedsWrittenLabel() = 0;
 
     virtual ~InspectorSWInfo() {}
 };
 
+/**
+ * @brief Info if your Component needs a Vector of N Floats.
+ */
 class InspectorVFloatSWInfo : public InspectorSWInfo
 {
 public:
@@ -30,10 +39,12 @@ public:
     }
     virtual ~InspectorVFloatSWInfo() {}
 
-    bool IsOfTypeVecFloat() override { return true; }
+    bool NeedsWrittenLabel() override { return true; }
 };
 
-
+/**
+ * @brief Info if your Component needs a Enum field.
+ */
 class InspectorEnumSWInfo : public InspectorSWInfo
 {
 public:
@@ -49,9 +60,12 @@ public:
     }
     virtual ~InspectorEnumSWInfo() {}
 
-    bool IsOfTypeVecFloat() override { return false; }
+    bool NeedsWrittenLabel() override { return true; }
 };
 
+/**
+ * @brief Info if your Component needs a String (either readonly or editable)
+ */
 class InspectorStringSWInfo: public InspectorSWInfo
 {
 public:
@@ -68,27 +82,53 @@ public:
     }
     virtual ~InspectorStringSWInfo() {}
 
-    bool IsOfTypeVecFloat() override { return false; }
+    bool NeedsWrittenLabel() override { return true; }
 };
 
 
+/**
+ * @brief Info if your Component needs a File slot to Browse for one
+ */
 class InspectorFileSWInfo: public InspectorSWInfo
 {
 public:
     std::string filepath = "";
     std::string fileExtension = "*";
 
-    InspectorFileSWInfo(const std::string& label, const std::string& fileExtension) : InspectorSWInfo(label)
+    InspectorFileSWInfo(const std::string& label,
+                        const std::string& fileExtension) : InspectorSWInfo(label)
     {
         this->fileExtension = fileExtension;
     }
 
     virtual ~InspectorFileSWInfo() {}
 
-    bool IsOfTypeVecFloat() override { return false; }
+    bool NeedsWrittenLabel() override { return true; }
 };
 
-//Contains all SWInfos
+/**
+ * @brief Info if your Component needs a Button
+ */
+class InspectorButtonSWInfo: public InspectorSWInfo
+{
+public:
+    std::function<void()> onClickFunction;
+
+    InspectorButtonSWInfo(const std::string& label,
+                          std::function<void()> onClickFunction) : InspectorSWInfo(label)
+    {
+        this->onClickFunction = onClickFunction;
+    }
+
+    virtual ~InspectorButtonSWInfo() {}
+
+    bool NeedsWrittenLabel() override { return false; }
+};
+
+/**
+ * @brief The InspectorWidgetInfo class represents a Container
+ * for all the WidgetInfo's a Component can contain.
+ */
 class InspectorWidgetInfo
 {
 private:

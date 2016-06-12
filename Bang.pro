@@ -175,7 +175,8 @@ HEADERS += \
     src/View/EditorGameObject/EditorAxisGroup.h \
     src/View/EditorGameObject/EditorAxis.h \
     src/Domain/Engine/Others/SystemUtils.h \
-    src/Domain/Engine/Components/BehaviourHolder.h
+    src/Domain/Engine/Components/BehaviourHolder.h \
+    src/View/Inspector/InspectorButtonSW.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -262,7 +263,8 @@ SOURCES += \
     src/View/EditorGameObject/EditorAxisGroup.cpp \
     src/View/EditorGameObject/EditorAxis.cpp \
     src/Domain/Engine/Others/SystemUtils.cpp \
-    src/Domain/Engine/Components/BehaviourHolder.cpp
+    src/Domain/Engine/Components/BehaviourHolder.cpp \
+    src/View/Inspector/InspectorButtonSW.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

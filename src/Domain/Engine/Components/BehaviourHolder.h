@@ -29,6 +29,7 @@ public:
     virtual std::string GetName() const override { return "Behaviour"; }
 
     #ifdef BANG_EDITOR
+        void OnCompileButtonClicked();
         virtual InspectorWidgetInfo* GetComponentInfo() override;
         virtual void OnSlotValueChanged(InspectorWidget *source) override;
 

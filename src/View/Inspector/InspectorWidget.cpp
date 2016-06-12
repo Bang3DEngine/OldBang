@@ -8,6 +8,7 @@
 #include "InspectorFloatSW.h"
 #include "InspectorStringSW.h"
 #include "InspectorVFloatSW.h"
+#include "InspectorButtonSW.h"
 
 #include "WindowMain.h"
 #include "GameObject.h"
@@ -56,6 +57,7 @@ void InspectorWidget::ConstructFromWidgetInformation(
 
     mainLayout->addLayout(titleLayout);
 
+    // TODO: Improve THIS :(
     for(InspectorSWInfo *si : info->GetSlotInfos())
     {
         InspectorSW *ws = nullptr;
@@ -64,6 +66,7 @@ void InspectorWidget::ConstructFromWidgetInformation(
         InspectorEnumSWInfo *sie = nullptr;
         InspectorFileSWInfo *sif = nullptr;
         InspectorStringSWInfo *sis = nullptr;
+        InspectorButtonSWInfo *sib = nullptr;
 
         if( (siv = dynamic_cast<InspectorVFloatSWInfo*>(si)) !=
                 nullptr)
@@ -85,7 +88,14 @@ void InspectorWidget::ConstructFromWidgetInformation(
         else if( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) !=
                  nullptr)
         {
-            ws = new InspectorStringSW(sis->label, sis->value, this, sis->readonly, sis->inlined);
+            ws = new InspectorStringSW(sis->label, sis->value, this,
+                                       sis->readonly, sis->inlined);
+        }
+        else if( (sib = dynamic_cast<InspectorButtonSWInfo*>(si)) !=
+                 nullptr)
+        {
+            ws = new InspectorButtonSW(sib->label, this,
+                                       sib->onClickFunction);
         }
 
         if(ws != nullptr)

@@ -5,8 +5,11 @@ BehaviourHolder::BehaviourHolder()
     #ifdef BANG_EDITOR
     inspectorComponentInfo.SetSlotsInfos(
     {
-        new InspectorFileSWInfo( "Behaviour", "cpp" )
-    });
+        new InspectorFileSWInfo( "Behaviour", "cpp" ),
+        new InspectorButtonSWInfo( "CompileButton",
+                    std::bind(&BehaviourHolder::OnCompileButtonClicked, this) )
+    }
+    );
     #endif
 }
 
@@ -36,6 +39,11 @@ const std::string BehaviourHolder::ToString() const
             static_cast<InspectorFileSWInfo*>
             (inspectorComponentInfo.GetSlotInfo(0))->filepath;
     return "BehaviourHolder ( " + file + ")";
+}
+
+void BehaviourHolder::OnCompileButtonClicked()
+{
+    Logger_Log("CLICKED");
 }
 
 
@@ -68,6 +76,7 @@ void BehaviourHolder::OnSlotValueChanged(InspectorWidget *source)
     Behaviour *b = SystemUtils::CreateDynamicBehaviour(soFilepath);
     ChangeBehaviour(b);
     behaviour->SetSourceFilepath(sourceFilepath);
+    behaviour->_OnStart();
 }
 
 void BehaviourHolder::Write(std::ostream &f) const
