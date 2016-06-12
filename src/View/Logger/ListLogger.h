@@ -17,6 +17,7 @@ public:
     static void AddWarn(const std::string &str);
     static void AddError(const std::string &str);
 
+    static ListLogger* GetInstance();
     static void DecorateLastItem(const QColor &color);
 };
 

@@ -53,14 +53,15 @@ public:
 #define BANG_BEHAVIOUR_CLASS(CLASS_NAME) \
 extern "C" Behaviour *CreateDynamically(SingletonManager *mainBinarySingletonManager) \
 { \
-    Logger_Log("Creating behaviour dinamycally..."); \
 \
     /* This line links the SingletonManager in the main binary to the SingletonManager \
        in the behaviour loaded library. */ \
     SingletonManager::SetInstanceFromBehaviourLibrary(mainBinarySingletonManager); \
-    Behaviour *b = new CLASS_NAME(); \
 \
+    Logger_Log("Creating behaviour dinamycally..."); \
+    Behaviour *b = new CLASS_NAME(); \
     Logger_Log("Dynamic behaviour successfully created!"); \
+\
     return b; \
 } \
 \

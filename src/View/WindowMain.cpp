@@ -21,7 +21,7 @@ void WindowMain::InitFromMainBinary(QMainWindow *window, QApplication *applicati
 
 WindowMain *WindowMain::GetInstance()
 {
-    //This will always be initialized,
+    // This will always be initialized,
     // since main inits it using WindowMain::InitFromMainBinary()
     return SingletonManager::GetInstance()->GetWindowMainSingleton();
 }
