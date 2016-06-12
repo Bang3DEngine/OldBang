@@ -2,9 +2,10 @@
 #define BEHAVIOUR_H
 
 #include "Bang.h"
+#include "Logger.h"
+#include "WindowMain.h"
 #include "ISceneEventListener.h"
 #include "IWindowEventManagerListener.h"
-
 
 class BehaviourHolder;
 
@@ -18,11 +19,7 @@ class Behaviour : public ISceneEventListener
 friend class BehaviourHolder;
 
 private:
-    /**
-     * @brief Filepath of the source code (*.cpp usually).
-     * Just for info purposes for the BehaviourHolder.
-     * Semantically it makes more sense to me saving it here.
-     */
+
     std::string sourceFilepath = "";
 
     /**
@@ -48,3 +45,35 @@ public:
 };
 
 #endif
+
+
+// DEFINES
+
+#define BANG_BEHAVIOUR_CLASS(CLASS_NAME) \
+extern "C" Behaviour *CreateDynamically(WindowMain *singletonWindowMain) \
+{ \
+    Logger_Log("Creating behaviour dinamycally..."); \
+\
+    WindowMain::Init(singletonWindowMain); \
+    Behaviour *b = new CLASS_NAME(); \
+\
+    Logger_Log("Dynamic behaviour successfully created!"); \
+    return b; \
+} \
+\
+extern "C" void DeleteDynamically(int *b) \
+{ \
+    delete b; \
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -18,4 +18,5 @@ public:
     void OnDestroy() override;
 };
 
+BANG_BEHAVIOUR_CLASS(TestBehaviour)
 #endif // TESTBEHAVIOUR_H

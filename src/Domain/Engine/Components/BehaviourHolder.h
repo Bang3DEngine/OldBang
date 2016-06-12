@@ -9,8 +9,12 @@
 
 /**
  * @brief The BehaviourHolder class is the responsible of holding
- * dynamically loaded Behaviours, loading them, and passing its events to them,
+ * a UNIQUE dynamically loaded Behaviour, loading them, and passing its events to them,
  * in case they do exist.
+ *
+ * A GameObject actually contains a Component that is a BehaviourHolder.
+ * In case the BehaviourHolder has a Behaviour correctly loaded, it will
+ * pass the events to the behaviour. Otherwise, it will just do nothing.
  */
 class BehaviourHolder : public Component
 {
@@ -19,6 +23,13 @@ private:
      * @brief The dynamically loaded Behaviour
      */
     Behaviour *behaviour = nullptr;
+
+    /**
+     * @brief Path to the Behaviour source file.
+     * It is indicated using the Inspector
+     */
+    std::string sourceFilepath = "";
+
     void ChangeBehaviour(Behaviour *newBehaviour);
 
 public:
@@ -29,10 +40,11 @@ public:
     virtual std::string GetName() const override { return "Behaviour"; }
 
     #ifdef BANG_EDITOR
-        void OnCompileButtonClicked();
+        void Refresh();
         virtual InspectorWidgetInfo* GetComponentInfo() override;
         virtual void OnSlotValueChanged(InspectorWidget *source) override;
 
+        // TODO: Add Write and Read for BehaviourHolder
         void Write(std::ostream &f) const override;
         void Read(std::istream &f) override;
     #endif

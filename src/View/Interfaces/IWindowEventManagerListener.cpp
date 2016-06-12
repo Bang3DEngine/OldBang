@@ -4,7 +4,6 @@
 
 IWindowEventManagerListener::IWindowEventManagerListener()
 {
-    Logger_Log("Registering..." << (void*)this << " to " << (void*)(WindowEventManager::GetInstance()));
     WindowEventManager::GetInstance()->AddListener(this);
 }
 

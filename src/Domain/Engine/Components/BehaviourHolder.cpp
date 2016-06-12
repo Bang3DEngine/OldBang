@@ -6,8 +6,8 @@ BehaviourHolder::BehaviourHolder()
     inspectorComponentInfo.SetSlotsInfos(
     {
         new InspectorFileSWInfo( "Behaviour", "cpp" ),
-        new InspectorButtonSWInfo( "CompileButton",
-                    std::bind(&BehaviourHolder::OnCompileButtonClicked, this) )
+        new InspectorButtonSWInfo( "Refresh",
+                    std::bind(&BehaviourHolder::Refresh, this) )
     }
     );
     #endif
@@ -41,42 +41,50 @@ const std::string BehaviourHolder::ToString() const
     return "BehaviourHolder ( " + file + ")";
 }
 
-void BehaviourHolder::OnCompileButtonClicked()
+void BehaviourHolder::Refresh()
 {
-    Logger_Log("CLICKED");
+    if(sourceFilepath == "") return;
+
+    // Compile
+    std::string soFilepath =
+            SystemUtils::CompileToSharedObject(sourceFilepath);
+    if(soFilepath == "")
+    {
+        ChangeBehaviour(nullptr);
+        Logger_Error("There was an error compiling the Behaviour "
+                     << sourceFilepath);
+        return;
+    }
+
+    // Create new Behaviour
+    Behaviour *b = SystemUtils::CreateDynamicBehaviour(soFilepath);
+    ChangeBehaviour(b); // To newly created or nullptr, depending on success
+
+    if(behaviour != nullptr)
+    {
+        behaviour->SetSourceFilepath(sourceFilepath);
+        behaviour->_OnStart();
+    }
+    else
+    {
+        Logger_Error("Behaviour " << sourceFilepath <<
+                     " could not be refreshed. See errors above");
+    }
 }
 
 
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* BehaviourHolder::GetComponentInfo()
 {
-    std::string bFilepath = "";
-    if(behaviour != nullptr)
-    {
-        bFilepath = behaviour->GetSourceFilepath();
-    }
-
     static_cast<InspectorFileSWInfo*>
-            (inspectorComponentInfo.GetSlotInfo(0))->filepath = bFilepath;
+            (inspectorComponentInfo.GetSlotInfo(0))->filepath = sourceFilepath;
 
     return &inspectorComponentInfo;
 }
 
 void BehaviourHolder::OnSlotValueChanged(InspectorWidget *source)
 {
-    std::string sourceFilepath = source->GetSWFileFilepath("Behaviour");
-
-    std::string soFilepath = SystemUtils::CompileToSharedObject(sourceFilepath);
-    if(soFilepath == "")
-    {
-        ChangeBehaviour(nullptr);
-        return;
-    }
-
-    Behaviour *b = SystemUtils::CreateDynamicBehaviour(soFilepath);
-    ChangeBehaviour(b);
-    behaviour->SetSourceFilepath(sourceFilepath);
-    behaviour->_OnStart();
+    sourceFilepath = source->GetSWFileFilepath("Behaviour");
 }
 
 void BehaviourHolder::Write(std::ostream &f) const

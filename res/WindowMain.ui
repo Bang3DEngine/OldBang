@@ -642,22 +642,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>widgetHierarchy</sender>
-   <signal>itemSelectionChanged()</signal>
-   <receiver>widgetHierarchy</receiver>
-   <slot>_NotifyHierarchyItemSelectionChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>87</x>
-     <y>164</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>87</x>
-     <y>164</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>buttonCreatePrefab</sender>
    <signal>clicked()</signal>
    <receiver>canvas</receiver>

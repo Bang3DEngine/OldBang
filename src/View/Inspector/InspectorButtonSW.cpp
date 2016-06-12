@@ -11,21 +11,7 @@ InspectorButtonSW::InspectorButtonSW(const std::string &label,
     this->setLayout(layout);
 
     this->onClickFunction = onClickFunction;
-    Logger_Log("HOLA");
-/*
-    QLabel *labelField = new QLabel(QString::fromStdString(labelString));
-    labelField->setAlignment(Qt::AlignLeft);
-    labelField->setContentsMargins(0,0,0,0);
-    labelField->show();
 
-    strField = new LabelStringSW(); //Right side
-    strField->setText( QString::fromStdString(initialValue) );
-    strField->setReadOnly(readonly);
-    strField->setAlignment(Qt::AlignRight);
-    strField->setMinimumWidth(50);
-    strField->setContentsMargins(0,0,0,0);
-    strField->show();
-*/
     button = new QPushButton(QString::fromStdString(label));
     connect(button, SIGNAL(clicked(bool)),
             this, SLOT(OnButtonClicked(bool)));

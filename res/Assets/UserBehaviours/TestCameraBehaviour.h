@@ -14,4 +14,6 @@ public:
     void OnUpdate();// override;
 };
 
+BANG_BEHAVIOUR_CLASS(TestCameraBehaviour)
+
 #endif // TESTCAMERABEHAVIOUR_H

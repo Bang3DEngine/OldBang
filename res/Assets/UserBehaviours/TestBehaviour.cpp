@@ -10,7 +10,6 @@
 
 TestBehaviour::TestBehaviour()
 {
-    this->SetFilepath(__FILE__);
     time = 0.0f;
 
     int r = rand()%3;
@@ -19,6 +18,8 @@ TestBehaviour::TestBehaviour()
     if(r == 2) randomAxis = Vector3(0.0, 0.0, 1.0);
 
     randomAxis = randomAxis.Normalized();
+
+    int asljd = 0;
 }
 
 void TestBehaviour::OnStart()
@@ -55,11 +56,11 @@ void TestBehaviour::OnStart()
 
 void TestBehaviour::OnUpdate()
 {
-    /*
     time += Time::GetDeltaTime();
     Transform *t = GetOwner()->GetComponent<Transform>();
     if(t == nullptr) return;
-    */
+    Logger_Log(time);
+    t->SetRotation(Vector3(sin(time), cos(time), 0.0f));
     /*
     int r = rand()%3;
     if(r == 0)      Logger_Log     (t->GetRotation());
