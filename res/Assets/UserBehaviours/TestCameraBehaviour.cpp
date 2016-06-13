@@ -16,6 +16,11 @@ TestCameraBehaviour::TestCameraBehaviour()
     //time = 0.0f;
 }
 
+TestCameraBehaviour::~TestCameraBehaviour()
+{
+
+}
+
 void TestCameraBehaviour::OnStart()
 {
     Logger_Log("Started Camera behaviour !!!");
@@ -24,7 +29,7 @@ void TestCameraBehaviour::OnStart()
 
 void TestCameraBehaviour::OnUpdate()
 {
-    GetOwner()->GetComponent<Transform>()->Translate(
+    GetOwner()->GetComponent<Transform>()->Translate( -1 *
                 GetOwner()->GetComponent<Transform>()->GetForward()
                 );
 }

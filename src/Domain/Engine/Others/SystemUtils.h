@@ -53,6 +53,16 @@ public:
                                        Behaviour **createdBehaviour,
                                        void **openLibrary);
 
+    /**
+     * @brief Delete dynamic Behaviour from a sharedObject passed as parameter.
+     * @param The Behaviour you want to delete
+     * @param The library that has been opened for the Behaviour you want to delete.
+     * @return Success or not.
+     */
+    static bool DeleteDynamicBehaviour(Behaviour *b,    // NOT USED FTM
+                                       void *openLibrary);
+
+
     static void CloseLibrary(void *library);
 };
 

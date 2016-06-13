@@ -24,7 +24,7 @@ TestBehaviour::TestBehaviour()
 
 void TestBehaviour::OnStart()
 {
-    Logger_Log("ON START!222 SDASADDSADSASDA");
+    Logger_Log("ON START !");
     /*
     originalScale = GetOwner()->GetComponent<Transform>()->GetScale().x;
 

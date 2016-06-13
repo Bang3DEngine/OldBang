@@ -58,14 +58,11 @@ extern "C" Behaviour *CreateDynamically(SingletonManager *mainBinarySingletonMan
        in the behaviour loaded library. */ \
     SingletonManager::SetInstanceFromBehaviourLibrary(mainBinarySingletonManager); \
 \
-    Logger_Log("Creating behaviour dinamycally..."); \
     Behaviour *b = new CLASS_NAME(); \
-    Logger_Log("Dynamic behaviour successfully created!"); \
-\
     return b; \
 } \
 \
-extern "C" void DeleteDynamically(int *b) \
+extern "C" void DeleteDynamically(Behaviour *b) \
 { \
     delete b; \
 }

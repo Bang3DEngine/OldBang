@@ -15,14 +15,14 @@ BehaviourHolder::BehaviourHolder()
 
 BehaviourHolder::~BehaviourHolder()
 {
-    if(currentOpenLibrary != nullptr)
-    {
-        SystemUtils::CloseLibrary(currentOpenLibrary);
-    }
-
     if(behaviour != nullptr)
     {
         delete behaviour;
+    }
+
+    if(currentOpenLibrary != nullptr)
+    {
+        SystemUtils::CloseLibrary(currentOpenLibrary);
     }
 }
 
@@ -71,6 +71,8 @@ void BehaviourHolder::Refresh()
                                         &createdBehaviour,
                                         &openLibrary);
 
+    ChangeBehaviour(createdBehaviour); // To newly created or nullptr, depending on success
+
     if(createdBehaviour != nullptr)
     {
         if(currentOpenLibrary != nullptr)
@@ -79,10 +81,6 @@ void BehaviourHolder::Refresh()
         }
         currentOpenLibrary = openLibrary;
     }
-
-    Logger_Log("Old behaviour: " << behaviour);
-    ChangeBehaviour(createdBehaviour); // To newly created or nullptr, depending on success
-    Logger_Log("New behaviour: " << (void*)behaviour);
 
     if(createdBehaviour != nullptr)
     {
@@ -97,7 +95,6 @@ void BehaviourHolder::Refresh()
         Logger_Error("Behaviour " << sourceFilepath <<
                      " could not be refreshed. See errors above");
     }
-    Logger_Log("created");
 }
 
 

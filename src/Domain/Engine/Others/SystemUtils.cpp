@@ -93,7 +93,6 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     bool ok = false;
     std::string allSubDirs = "";
     SystemUtils::System(cmdGetAllSubDirs, allSubDirs, ok);
-
     if(!ok)
     {
         Logger_Error("Error trying to find include directories to compile " <<
@@ -164,7 +163,9 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
 
     // Compile
     std::string sharedObjectFilepath = "";
-    sharedObjectFilepath += scriptDir + "/" + scriptName + ".so";
+    sharedObjectFilepath += scriptDir + "/" + scriptName + "_" +
+                            ".so." + std::to_string(Time::GetNow()) + ".1.1";
+
 
     std::string cmd = "";
     cmd += "/usr/bin/g++ -shared ";
@@ -198,14 +199,14 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     return sharedObjectFilepath;
 }
 
-void SystemUtils::CreateDynamicBehaviour(const std::string &sharedObjectFilepath,
+void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepath,
                                          Behaviour **createdBehaviour,
                                          void **openLibrary)
 {
     dlerror(); // Clear last error just in case
 
     // Open library
-    *openLibrary = dlopen(sharedObjectFilepath.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+    *openLibrary = dlopen(sharedObjectFilepath.c_str(), RTLD_NOW);
     if(*openLibrary == nullptr) return;
 
     // Error Check
@@ -243,8 +244,48 @@ void SystemUtils::CreateDynamicBehaviour(const std::string &sharedObjectFilepath
     }
 }
 
+bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, void *openLibrary)
+{
+    dlerror(); // Clear last error just in case
+
+    // Error Check
+    char *err = dlerror();
+    if(err != nullptr)
+    {
+        Logger_Error(err);
+        return false;
+    }
+
+
+    // Get the pointer to the CreateDynamically function
+    void (*deleteFunction)(Behaviour*) =
+            (void (*)(Behaviour*)) (dlsym(openLibrary, "DeleteDynamically"));
+
+    // Error Check
+    err = dlerror();
+    if(err != nullptr)
+    {
+        Logger_Error(err);
+        return false;
+    }
+
+    if(deleteFunction != nullptr)
+    {
+        deleteFunction(b);
+    }
+    else return false;
+
+    return true;
+}
+
 void SystemUtils::CloseLibrary(void *library)
 {
+    dlerror();
     dlclose(library);
+    char *err = dlerror();
+    if(err != nullptr)
+    {
+        Logger_Error(err);
+    }
 }
 

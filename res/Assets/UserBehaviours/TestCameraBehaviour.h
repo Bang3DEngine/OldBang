@@ -10,6 +10,7 @@ private:
 
 public:
     TestCameraBehaviour();
+    virtual ~TestCameraBehaviour();
 
     void OnStart() override;
     void OnUpdate() override;
