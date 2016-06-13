@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <algorithm>
+#include <string>
 
 class Behaviour;
 class SystemUtils
