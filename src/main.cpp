@@ -1,7 +1,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
+
 #include <QApplication>
+#include <QTextStream>
 
 #include "glm/glm.hpp"
 
@@ -38,13 +40,26 @@ int main(int argc, char *argv[])
     font.setPixelSize(10);
     app.setFont(font);
 
-
     // Init SINGLETON's
     SingletonManager::InitFromMainBinary();
     QMainWindow *window = new QMainWindow();
     WindowMain::InitFromMainBinary(window, &app);
     Canvas::InitFromMainBinary();
     Time::InitFromMainBinary();
+    //
+
+    // Load dark Window theme
+    QFile f("res/qdarkstyle/style.qss");
+    if (!f.exists())
+    {
+        Logger_Error("Unable to set dark stylesheet, stylesheet not found.");
+    }
+    else
+    {
+        f.open(QFile::ReadOnly | QFile::Text);
+        QTextStream ts(&f);
+        app.setStyleSheet(ts.readAll());
+    }
     //
 
     Scene *scene = new EditorScene();

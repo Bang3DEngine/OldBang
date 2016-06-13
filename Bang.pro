@@ -49,6 +49,7 @@ INCLUDEPATH += \
 
 OTHER_FILES += \
     .gitignore \
+    res/qdarkstyle/style.qrc \
     run.sh \
     updateUI.sh \
     src/Domain \
