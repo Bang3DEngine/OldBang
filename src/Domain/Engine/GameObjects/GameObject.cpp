@@ -92,7 +92,7 @@ Box GameObject::GetBoundingBox() const
     if(CAN_USE_COMPONENT(t))
     {
         Matrix4 mat;
-        t->GetMatrix(mat);
+        t->GetModelMatrix(mat);
         b = mat * b;
     }
     return b;

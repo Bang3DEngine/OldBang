@@ -27,7 +27,7 @@ void Camera::GetViewMatrix(Matrix4 &view) const
     Transform *t = GetOwner()->GetComponent<Transform>();
     if(CAN_USE_COMPONENT(t))
     {
-        t->GetMatrix(view);
+        t->GetModelMatrix(view);
         view = view.Inversed();
     }
     else

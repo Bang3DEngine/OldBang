@@ -110,6 +110,7 @@ InspectorWidgetInfo* BehaviourHolder::GetComponentInfo()
 void BehaviourHolder::OnSlotValueChanged(InspectorWidget *source)
 {
     sourceFilepath = source->GetSWFileFilepath("Behaviour");
+    Refresh();
 }
 
 void BehaviourHolder::Write(std::ostream &f) const

@@ -94,7 +94,7 @@ void Transform::GetLocalMatrix(Matrix4 &m) const
     m = leftMatrix * T * R * S * rightMatrix;
 }
 
-void Transform::GetMatrix(Matrix4 &m) const
+void Transform::GetModelMatrix(Matrix4 &m) const
 {
     GetLocalMatrix(m);
 
@@ -105,7 +105,7 @@ void Transform::GetMatrix(Matrix4 &m) const
         if(tp != nullptr)
         {
             Matrix4 mp;
-            tp->GetMatrix(mp);
+            tp->GetModelMatrix(mp);
             m = mp * m;
         }
     }
@@ -113,7 +113,7 @@ void Transform::GetMatrix(Matrix4 &m) const
 
 void Transform::GetNormalMatrix(Matrix4 &m) const
 {
-    GetMatrix(m);
+    GetModelMatrix(m);
     m = m.Inversed().Transposed();
 }
 

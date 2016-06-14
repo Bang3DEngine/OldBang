@@ -30,6 +30,6 @@ void TestCameraBehaviour::OnStart()
 void TestCameraBehaviour::OnUpdate()
 {
     GetOwner()->GetComponent<Transform>()->Translate( -1 *
-                GetOwner()->GetComponent<Transform>()->GetForward()
+                GetOwner()->GetComponent<Transform>()->GetForward() * 0.01f
                 );
 }

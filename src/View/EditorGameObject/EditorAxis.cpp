@@ -84,14 +84,16 @@ void EditorAxis::OnUpdate()
             if(glm::length(mouseDelta) > 0.0f)
             {
                 // Obtain model, view and proj matrices
-                Matrix4 viewMatrix, projMatrix;
+                Matrix4 projMatrix, viewMatrix, modelMatrix;
+                Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
                 cam->GetProjectionMatrix(projMatrix);
                 cam->GetViewMatrix(viewMatrix);
-                Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
+                attachedGameObject->GetComponent<Transform>()->GetModelMatrix(modelMatrix);
                 Matrix4 projView = projMatrix * viewMatrix;
 
                 //Get axis in world space and eye space
-                glm::vec4 worldAxisDir = glm::vec4(axisDirection, 0.0f);
+                glm::vec4 worldAxisDir = glm::normalize(modelMatrix.Inversed() *
+                                                        glm::vec4(axisDirection, 0.0f));
                 glm::vec2 screenAxisDir = glm::normalize((projView * worldAxisDir).xy());
 
                 // Move the GameObject, depending on how aligned is
@@ -99,7 +101,7 @@ void EditorAxis::OnUpdate()
                 float alignment = glm::dot(screenAxisDir, glm::normalize(mouseDelta));
                 Vector3 camPos = cam->GetOwner()->GetComponent<Transform>()->GetPosition();
                 Transform *goTrans = attachedGameObject->GetComponent<Transform>();
-                Vector3 worldMove = alignment * axisDirection *
+                Vector3 worldMove = alignment * Vector3(worldAxisDir.xyz()) *
                                     glm::length(mouseDelta) *
                                     Vector3::Distance(camPos, goTrans->GetPosition()) * 0.002f;
                 goTrans->Translate(worldMove);

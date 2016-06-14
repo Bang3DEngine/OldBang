@@ -53,7 +53,7 @@ void Renderer::GetMatrices(Matrix4 &model,
     if(!ignoreModelMatrix)
     {
         Transform *t = owner->GetComponent<Transform>();
-        if(t != nullptr) t->GetMatrix(model);
+        if(t != nullptr) t->GetModelMatrix(model);
     }
     else model = Matrix4(1.0f);
 

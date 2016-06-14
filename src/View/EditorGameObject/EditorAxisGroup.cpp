@@ -29,7 +29,7 @@ void EditorAxisGroup::OnUpdate()
             Transform *t = GetComponent<Transform>();
             Box bbox = attGameObject->GetObjectBoundingBox();
             t->SetPosition( bbox.GetCenter() );
-            t->SetRotation( st->GetLocalRotation().Inversed() );
+            //t->SetRotation( st->GetLocalRotation().Inversed() );
             t->SetScale(1.0f / st->GetScale());
         }
     }
