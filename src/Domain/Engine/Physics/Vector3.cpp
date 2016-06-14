@@ -58,6 +58,11 @@ Vector3 Vector3::ToRadians() const
     return Vector3(glm::radians(glm::vec3(*this)));
 }
 
+glm::vec3 Vector3::ToGlmVec3() const
+{
+    return glm::vec3(x,y,z);
+}
+
 Vector3 Vector3::OrthoNormalize(Vector3 &v1, Vector3 &v2)
 {
     //Not sure if this is working...

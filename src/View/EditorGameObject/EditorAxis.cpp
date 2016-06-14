@@ -79,29 +79,31 @@ void EditorAxis::OnUpdate()
             GameObject *attachedGameObject = GetAttachedGameObject();
 
             // Normalized mouse movement in the last frame
-            glm::vec2 mouseAxis = Input::GetMouseAxis() * glm::vec2(1.0f, -1.0f); // Invert y
+            glm::vec2 mouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f); // Invert y
 
-            // Obtain model, view and proj matrices to know how
-            // the axis is in eye space
-            Matrix4 modelMatrix, viewMatrix, projMatrix;
-            attachedGameObject->GetComponent<Transform>()->GetMatrix(modelMatrix);
-            Canvas::GetInstance()->GetCurrentScene()->GetCamera()->GetViewMatrix(viewMatrix);
-            Canvas::GetInstance()->GetCurrentScene()->GetCamera()->GetProjectionMatrix(projMatrix);
+            if(glm::length(mouseDelta) > 0.0f)
+            {
+                // Obtain model, view and proj matrices
+                Matrix4 viewMatrix, projMatrix;
+                cam->GetProjectionMatrix(projMatrix);
+                cam->GetViewMatrix(viewMatrix);
+                Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
+                Matrix4 projView = projMatrix * viewMatrix;
 
-            //Get axis in world space and eye space
-            glm::vec4 worldDir = glm::normalize(glm::vec4(axisDirection, 0.0f));
-            //glm::normalize((modelMatrix * glm::vec4(axisDirection, 0.0f)));
-            glm::vec4 eyeDir = glm::normalize((viewMatrix * worldDir));
-            glm::vec4 screenDir4 = glm::normalize((projMatrix * eyeDir));
-            glm::vec2 screenDir = glm::vec2(screenDir4.x, screenDir4.y);
+                //Get axis in world space and eye space
+                glm::vec4 worldAxisDir = glm::vec4(axisDirection, 0.0f);
+                glm::vec2 screenAxisDir = glm::normalize((projView * worldAxisDir).xy());
 
-            // Move the GameObject, depending on how aligned is
-            // the mouse movement vs the axis in screen space (what user sees)
-            float alignment = glm::dot(screenDir, mouseAxis);
-            attachedGameObject->
-                    GetComponent<Transform>()->Translate(alignment * Vector3(worldDir.x,
-                                                                             worldDir.y,
-                                                                             worldDir.z));
+                // Move the GameObject, depending on how aligned is
+                // the mouse movement vs the axis in screen space (what user sees)
+                float alignment = glm::dot(screenAxisDir, glm::normalize(mouseDelta));
+                Vector3 camPos = cam->GetOwner()->GetComponent<Transform>()->GetPosition();
+                Transform *goTrans = attachedGameObject->GetComponent<Transform>();
+                Vector3 worldMove = alignment * axisDirection *
+                                    glm::length(mouseDelta) *
+                                    Vector3::Distance(camPos, goTrans->GetPosition()) * 0.002f;
+                goTrans->Translate(worldMove);
+            }
         }
     }
 }

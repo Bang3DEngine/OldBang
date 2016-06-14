@@ -40,6 +40,8 @@ public:
      */
     Vector3 ToRadians() const;
 
+    glm::vec3 ToGlmVec3() const;
+
     /**
      * @brief Makes v1 and v2 orthogonal and normalizes them.
      * @param v1 First Vector
