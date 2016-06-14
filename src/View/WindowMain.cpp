@@ -17,6 +17,8 @@ void WindowMain::InitFromMainBinary(QMainWindow *window, QApplication *applicati
 
     win->app = application;
 
+   // QObject::connect(win->buttonGlobalCoords, SIGNAL(triggered(QAction*)),
+     //                win->windowEventManager, SLOT(NotifyButtonGlobalCoordsClicked(QAction*)));
 }
 
 WindowMain *WindowMain::GetInstance()

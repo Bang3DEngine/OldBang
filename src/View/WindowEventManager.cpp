@@ -57,6 +57,11 @@ void WindowEventManager::NotifyMenuBarActionClicked(MenuBar::Action clickedActio
     PROPAGATE_EVENT_PAR(OnMenuBarActionClicked(clickedAction), wem->listeners);
 }
 
+void WindowEventManager::NotifyButtonGlobalCoordsClicked(QAction *a)
+{
+    PROPAGATE_EVENT_PAR(OnButtonGlobalCoordsClicked(a->isChecked()), wem->listeners);
+}
+
 void WindowEventManager::NotifyInspectorSlotChanged(Component *updatedComponent, InspectorWidget *inspectorItem)
 {
     updatedComponent->OnInspectorSlotChanged(inspectorItem);

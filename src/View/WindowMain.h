@@ -38,6 +38,7 @@ public:
     static WindowMain *GetInstance();
     static QMainWindow *GetMainWindow();
     QApplication *GetApplication() const;
+
 };
 
 #endif // WINDOWMAIN_H

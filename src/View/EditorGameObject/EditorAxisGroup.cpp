@@ -28,10 +28,25 @@ void EditorAxisGroup::OnUpdate()
         {
             Transform *t = GetComponent<Transform>();
             Box bbox = attGameObject->GetObjectBoundingBox();
+
             t->SetPosition( bbox.GetCenter() );
-            //t->SetRotation( st->GetLocalRotation().Inversed() );
+
+            if(globalCoords)
+            {
+                t->SetRotation( st->GetLocalRotation().Inversed() );
+            }
+            else
+            {
+                t->SetRotation( Quaternion() );
+            }
+
             t->SetScale(1.0f / st->GetScale());
         }
     }
+}
+
+void EditorAxisGroup::OnButtonGlobalCoordsClicked(bool globalCoords)
+{
+    this->globalCoords = globalCoords;
 }
 

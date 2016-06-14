@@ -31,8 +31,8 @@ class Explorer : public QListView
 
 private:
     QFileSystemModel *fileSystemModel = nullptr;
-    QToolButton *buttonDirUp;
-    QToolButton *buttonChangeViewMode;
+    QToolButton *buttonDirUp = nullptr;
+    QToolButton *buttonChangeViewMode = nullptr;
 
     void setDir(const std::string &path);
     std::string getCurrentDir() const;

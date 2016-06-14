@@ -161,6 +161,8 @@ void Explorer::setDir(const std::string &path)
 
 void Explorer::OnDirLoaded(QString dir)
 {
+    if(WindowMain::GetInstance() == nullptr) return;
+
     if(getCurrentDir().length() <= Persistence::GetAssetsPathAbsolute().length())
     {
         buttonDirUp->setEnabled(false);

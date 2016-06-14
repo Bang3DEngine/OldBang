@@ -16,6 +16,8 @@
 class EditorAxisGroup : public EditorGameObject
 {
 private:
+    bool globalCoords = false;
+
     EditorAxis *axisX;
     EditorAxis *axisY;
     EditorAxis *axisZ;
@@ -25,6 +27,8 @@ public:
     virtual ~EditorAxisGroup();
 
     void OnUpdate() override;
+
+    void OnButtonGlobalCoordsClicked(bool globalCoords) override;
 };
 
 #endif // EDITORAXIS_H

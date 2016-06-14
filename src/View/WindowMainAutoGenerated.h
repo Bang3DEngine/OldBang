@@ -62,6 +62,8 @@ public:
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
     WindowEventManager *windowEventManager;
+    QHBoxLayout *horizontalLayout;
+    QToolButton *buttonGlobalCoords;
     Canvas *canvas;
     QPushButton *buttonPauseResume;
     MenuBar *menubar;
@@ -160,8 +162,18 @@ public:
 
         verticalLayout_3->addWidget(windowEventManager);
 
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        buttonGlobalCoords = new QToolButton(centralwidget);
+        buttonGlobalCoords->setObjectName(QString::fromUtf8("buttonGlobalCoords"));
+        buttonGlobalCoords->setCheckable(true);
+        buttonGlobalCoords->setChecked(true);
+        buttonGlobalCoords->setAutoExclusive(false);
 
-        verticalLayout->addLayout(verticalLayout_3);
+        horizontalLayout->addWidget(buttonGlobalCoords);
+
+
+        verticalLayout_3->addLayout(horizontalLayout);
 
         canvas = new Canvas(centralwidget);
         canvas->setObjectName(QString::fromUtf8("canvas"));
@@ -174,7 +186,10 @@ public:
         canvas->setMouseTracking(true);
         canvas->setFocusPolicy(Qt::StrongFocus);
 
-        verticalLayout->addWidget(canvas);
+        verticalLayout_3->addWidget(canvas);
+
+
+        verticalLayout->addLayout(verticalLayout_3);
 
         buttonPauseResume = new QPushButton(centralwidget);
         buttonPauseResume->setObjectName(QString::fromUtf8("buttonPauseResume"));
@@ -192,7 +207,6 @@ public:
 
         WindowMain->setCentralWidget(centralwidget);
         buttonPauseResume->raise();
-        canvas->raise();
         menubar = new MenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 941, 25));
@@ -466,6 +480,7 @@ public:
         actionNewScene->setText(QApplication::translate("WindowMain", "New Scene", 0, QApplication::UnicodeUTF8));
         actionSaveScene->setText(QApplication::translate("WindowMain", "Save Scene", 0, QApplication::UnicodeUTF8));
         actionAddComponentLineRenderer->setText(QApplication::translate("WindowMain", "Line Renderer", 0, QApplication::UnicodeUTF8));
+        buttonGlobalCoords->setText(QApplication::translate("WindowMain", "G", 0, QApplication::UnicodeUTF8));
         buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0, QApplication::UnicodeUTF8));
         menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
         menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));
