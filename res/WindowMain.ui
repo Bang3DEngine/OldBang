@@ -32,9 +32,9 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QToolButton" name="buttonGlobalCoords">
+         <widget class="QPushButton" name="buttonGlobalCoords">
           <property name="text">
-           <string>G</string>
+           <string>Use global coords</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -599,6 +599,7 @@
    <container>1</container>
    <slots>
     <slot>_NotifyMenuBarItemClicked(int)</slot>
+    <slot>NotifyButtonGlobalCoordsClicked(QAction*)</slot>
    </slots>
   </customwidget>
   <customwidget>

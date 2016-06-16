@@ -57,9 +57,21 @@ void WindowEventManager::NotifyMenuBarActionClicked(MenuBar::Action clickedActio
     PROPAGATE_EVENT_PAR(OnMenuBarActionClicked(clickedAction), wem->listeners);
 }
 
-void WindowEventManager::NotifyButtonGlobalCoordsClicked(QAction *a)
+void WindowEventManager::NotifyButtonGlobalCoordsClicked()
 {
-    PROPAGATE_EVENT_PAR(OnButtonGlobalCoordsClicked(a->isChecked()), wem->listeners);
+    QPushButton *b = WindowMain::GetInstance()->buttonGlobalCoords;
+    std::string bText = b->text().toStdString();
+    bool globalCoords = bText.find("lobal") != std::string::npos;
+    if(globalCoords)
+    {
+        b->setText("Use local coords");
+    }
+    else
+    {
+        b->setText("Use global coords");
+    }
+
+    PROPAGATE_EVENT_PAR(OnButtonGlobalCoordsClicked(globalCoords), wem->listeners);
 }
 
 void WindowEventManager::NotifyInspectorSlotChanged(Component *updatedComponent, InspectorWidget *inspectorItem)

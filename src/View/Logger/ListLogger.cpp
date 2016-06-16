@@ -12,7 +12,7 @@ void ListLogger::AddLog(const std::string &str)
     listLogger = ListLogger::GetInstance();
 
     listLogger->addItem(QString::fromStdString("LOG:\t" + str));
-    DecorateLastItem(QColor::fromRgb(255, 255, 255, 255));
+    //DecorateLastItem(QColor::fromRgb(255, 255, 255, 255));
 }
 
 void ListLogger::AddWarn(const std::string &str)

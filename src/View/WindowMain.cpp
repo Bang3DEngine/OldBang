@@ -1,7 +1,7 @@
 #include "WindowMain.h"
 
-#include <QApplication>
 #include "SingletonManager.h"
+#include "WindowEventManager.h"
 
 WindowMain *WindowMain::win = nullptr;
 
@@ -17,8 +17,10 @@ void WindowMain::InitFromMainBinary(QMainWindow *window, QApplication *applicati
 
     win->app = application;
 
-   // QObject::connect(win->buttonGlobalCoords, SIGNAL(triggered(QAction*)),
-     //                win->windowEventManager, SLOT(NotifyButtonGlobalCoordsClicked(QAction*)));
+    win->windowEventManager->connect(
+                     win->buttonGlobalCoords, SIGNAL(clicked()),
+                     win->windowEventManager,
+                     SLOT(NotifyButtonGlobalCoordsClicked()));
 }
 
 WindowMain *WindowMain::GetInstance()

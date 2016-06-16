@@ -63,7 +63,7 @@ public:
     QVBoxLayout *verticalLayout_3;
     WindowEventManager *windowEventManager;
     QHBoxLayout *horizontalLayout;
-    QToolButton *buttonGlobalCoords;
+    QPushButton *buttonGlobalCoords;
     Canvas *canvas;
     QPushButton *buttonPauseResume;
     MenuBar *menubar;
@@ -164,7 +164,7 @@ public:
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        buttonGlobalCoords = new QToolButton(centralwidget);
+        buttonGlobalCoords = new QPushButton(centralwidget);
         buttonGlobalCoords->setObjectName(QString::fromUtf8("buttonGlobalCoords"));
         buttonGlobalCoords->setCheckable(true);
         buttonGlobalCoords->setChecked(true);
@@ -480,7 +480,7 @@ public:
         actionNewScene->setText(QApplication::translate("WindowMain", "New Scene", 0, QApplication::UnicodeUTF8));
         actionSaveScene->setText(QApplication::translate("WindowMain", "Save Scene", 0, QApplication::UnicodeUTF8));
         actionAddComponentLineRenderer->setText(QApplication::translate("WindowMain", "Line Renderer", 0, QApplication::UnicodeUTF8));
-        buttonGlobalCoords->setText(QApplication::translate("WindowMain", "G", 0, QApplication::UnicodeUTF8));
+        buttonGlobalCoords->setText(QApplication::translate("WindowMain", "Use global coords", 0, QApplication::UnicodeUTF8));
         buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0, QApplication::UnicodeUTF8));
         menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
         menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));

@@ -1,6 +1,8 @@
 #ifndef WINDOWMAIN_H
 #define WINDOWMAIN_H
 
+#include <QApplication>
+
 #include "Bang.h"
 
 #include "Logger.h"

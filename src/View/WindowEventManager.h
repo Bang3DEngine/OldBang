@@ -51,7 +51,7 @@ public slots:
     static void NotifyChildRemoved(GameObject *child);
 
     static void NotifyMenuBarActionClicked(MenuBar::Action clickedAction);
-    static void NotifyButtonGlobalCoordsClicked(QAction *a);
+    static void NotifyButtonGlobalCoordsClicked();
 
     static void NotifyInspectorSlotChanged(Component *updatedComponent, InspectorWidget *inspectorItem);
     static void NotifyHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects);

@@ -629,7 +629,7 @@ QPushButton:disabled
     padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    /*border-radius: 2px;*/
+    border-radius: 2px;
     color: #454545;
 }
 
@@ -637,6 +637,17 @@ QPushButton:focus {
     background-color: #3d8ec9;
     color: white;
 }
+
+QPushButton:checked{
+    background-color: #4A4949;
+    border-color: #6A6969;
+}
+
+QPushButton:pressed
+{
+    background-color: #484846;
+}
+
 
 QComboBox
 {
@@ -649,10 +660,6 @@ QComboBox
     min-width: 75px;
 }
 
-QPushButton:checked{
-    background-color: #4A4949;
-    border-color: #6A6969;
-}
 
 QComboBox:hover,QPushButton:hover,QAbstractSpinBox:hover,QLineEdit:hover,QTextEdit:hover,QPlainTextEdit:hover,QAbstractView:hover,QTreeView:hover
 {
@@ -698,11 +705,6 @@ QComboBox::down-arrow:on, QComboBox::down-arrow:hover,
 QComboBox::down-arrow:focus
 {
     image: url(:/qss_icons/rc/down_arrow.png);
-}
-
-QPushButton:pressed
-{
-    background-color: #484846;
 }
 
 QAbstractSpinBox {
@@ -754,6 +756,8 @@ QAbstractSpinBox::down-arrow:hover
 
 QLabel
 {
+    background:transparent;
+    background-color:transparent;
     border: 0px solid black;
 }
 
