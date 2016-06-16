@@ -20,6 +20,7 @@
 #include <QtGui/QMainWindow>
 #include <QtGui/QMenu>
 #include <QtGui/QPushButton>
+#include <QtGui/QSpacerItem>
 #include <QtGui/QStatusBar>
 #include <QtGui/QToolButton>
 #include <QtGui/QVBoxLayout>
@@ -63,9 +64,13 @@ public:
     QVBoxLayout *verticalLayout_3;
     WindowEventManager *windowEventManager;
     QHBoxLayout *horizontalLayout;
+    QToolButton *buttonTranslateMode;
+    QToolButton *buttonRotateMode;
+    QToolButton *buttonScaleMode;
     QPushButton *buttonGlobalCoords;
-    Canvas *canvas;
+    QSpacerItem *horizontalSpacer;
     QPushButton *buttonPauseResume;
+    Canvas *canvas;
     MenuBar *menubar;
     QMenu *menuAssets;
     QMenu *menuCreate;
@@ -96,7 +101,6 @@ public:
     QToolButton *buttonExplorerDirUp;
     QToolButton *buttonExplorerChangeViewMode;
     Explorer *widgetListExplorer;
-    QPushButton *buttonCreatePrefab;
     QDockWidget *dockLogger;
     QWidget *dockWidgetContents;
     QVBoxLayout *verticalLayout_5;
@@ -164,6 +168,21 @@ public:
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        buttonTranslateMode = new QToolButton(centralwidget);
+        buttonTranslateMode->setObjectName(QString::fromUtf8("buttonTranslateMode"));
+
+        horizontalLayout->addWidget(buttonTranslateMode);
+
+        buttonRotateMode = new QToolButton(centralwidget);
+        buttonRotateMode->setObjectName(QString::fromUtf8("buttonRotateMode"));
+
+        horizontalLayout->addWidget(buttonRotateMode);
+
+        buttonScaleMode = new QToolButton(centralwidget);
+        buttonScaleMode->setObjectName(QString::fromUtf8("buttonScaleMode"));
+
+        horizontalLayout->addWidget(buttonScaleMode);
+
         buttonGlobalCoords = new QPushButton(centralwidget);
         buttonGlobalCoords->setObjectName(QString::fromUtf8("buttonGlobalCoords"));
         buttonGlobalCoords->setCheckable(true);
@@ -171,6 +190,24 @@ public:
         buttonGlobalCoords->setAutoExclusive(false);
 
         horizontalLayout->addWidget(buttonGlobalCoords);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+        buttonPauseResume = new QPushButton(centralwidget);
+        buttonPauseResume->setObjectName(QString::fromUtf8("buttonPauseResume"));
+        QIcon icon;
+        QString iconThemeName = QString::fromUtf8("pause");
+        if (QIcon::hasThemeIcon(iconThemeName)) {
+            icon = QIcon::fromTheme(iconThemeName);
+        } else {
+            icon.addFile(QString::fromUtf8("../../.designer/backup"), QSize(), QIcon::Normal, QIcon::Off);
+        }
+        buttonPauseResume->setIcon(icon);
+        buttonPauseResume->setFlat(false);
+
+        horizontalLayout->addWidget(buttonPauseResume);
 
 
         verticalLayout_3->addLayout(horizontalLayout);
@@ -191,22 +228,7 @@ public:
 
         verticalLayout->addLayout(verticalLayout_3);
 
-        buttonPauseResume = new QPushButton(centralwidget);
-        buttonPauseResume->setObjectName(QString::fromUtf8("buttonPauseResume"));
-        QIcon icon;
-        QString iconThemeName = QString::fromUtf8("pause");
-        if (QIcon::hasThemeIcon(iconThemeName)) {
-            icon = QIcon::fromTheme(iconThemeName);
-        } else {
-            icon.addFile(QString::fromUtf8("../../.designer/backup"), QSize(), QIcon::Normal, QIcon::Off);
-        }
-        buttonPauseResume->setIcon(icon);
-        buttonPauseResume->setFlat(false);
-
-        verticalLayout->addWidget(buttonPauseResume);
-
         WindowMain->setCentralWidget(centralwidget);
-        buttonPauseResume->raise();
         menubar = new MenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 941, 25));
@@ -229,7 +251,7 @@ public:
         WindowMain->setStatusBar(statusbar);
         dockHierarchy = new QDockWidget(WindowMain);
         dockHierarchy->setObjectName(QString::fromUtf8("dockHierarchy"));
-        dockHierarchy->setFeatures(QDockWidget::AllDockWidgetFeatures);
+        dockHierarchy->setFeatures(QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable);
         dockHierarchy->setAllowedAreas(Qt::AllDockWidgetAreas);
         dockWidgetContents_4 = new QWidget();
         dockWidgetContents_4->setObjectName(QString::fromUtf8("dockWidgetContents_4"));
@@ -272,16 +294,22 @@ public:
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(1), dockHierarchy);
         dockInspector = new QDockWidget(WindowMain);
         dockInspector->setObjectName(QString::fromUtf8("dockInspector"));
+        QSizePolicy sizePolicy2(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(dockInspector->sizePolicy().hasHeightForWidth());
+        dockInspector->setSizePolicy(sizePolicy2);
+        dockInspector->setMinimumSize(QSize(300, 162));
         dockInspector->setFloating(false);
-        dockInspector->setFeatures(QDockWidget::AllDockWidgetFeatures);
+        dockInspector->setFeatures(QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable);
         dockInspector->setAllowedAreas(Qt::AllDockWidgetAreas);
         dockWidgetContents_7 = new QWidget();
         dockWidgetContents_7->setObjectName(QString::fromUtf8("dockWidgetContents_7"));
-        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(dockWidgetContents_7->sizePolicy().hasHeightForWidth());
-        dockWidgetContents_7->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(dockWidgetContents_7->sizePolicy().hasHeightForWidth());
+        dockWidgetContents_7->setSizePolicy(sizePolicy3);
         dockWidgetContents_7->setContextMenuPolicy(Qt::DefaultContextMenu);
         verticalLayout_9 = new QVBoxLayout(dockWidgetContents_7);
         verticalLayout_9->setObjectName(QString::fromUtf8("verticalLayout_9"));
@@ -299,7 +327,13 @@ public:
 
         widgetInspector = new Inspector(dockWidgetContents_7);
         widgetInspector->setObjectName(QString::fromUtf8("widgetInspector"));
+        sizePolicy1.setHeightForWidth(widgetInspector->sizePolicy().hasHeightForWidth());
+        widgetInspector->setSizePolicy(sizePolicy1);
+        widgetInspector->setMinimumSize(QSize(0, 0));
         widgetInspector->setContextMenuPolicy(Qt::CustomContextMenu);
+        widgetInspector->setLineWidth(4);
+        widgetInspector->setMidLineWidth(4);
+        widgetInspector->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         widgetInspector->setAutoScroll(false);
         widgetInspector->setDragDropMode(QAbstractItemView::DragOnly);
         widgetInspector->setDefaultDropAction(Qt::IgnoreAction);
@@ -322,7 +356,7 @@ public:
         dockExplorer = new QDockWidget(WindowMain);
         dockExplorer->setObjectName(QString::fromUtf8("dockExplorer"));
         dockExplorer->setMinimumSize(QSize(493, 210));
-        dockExplorer->setFeatures(QDockWidget::AllDockWidgetFeatures);
+        dockExplorer->setFeatures(QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable);
         dockWidgetContents_5 = new QWidget();
         dockWidgetContents_5->setObjectName(QString::fromUtf8("dockWidgetContents_5"));
         verticalLayout_10 = new QVBoxLayout(dockWidgetContents_5);
@@ -357,8 +391,8 @@ public:
 
         widgetListExplorer = new Explorer(dockWidgetContents_5);
         widgetListExplorer->setObjectName(QString::fromUtf8("widgetListExplorer"));
-        sizePolicy2.setHeightForWidth(widgetListExplorer->sizePolicy().hasHeightForWidth());
-        widgetListExplorer->setSizePolicy(sizePolicy2);
+        sizePolicy3.setHeightForWidth(widgetListExplorer->sizePolicy().hasHeightForWidth());
+        widgetListExplorer->setSizePolicy(sizePolicy3);
         widgetListExplorer->setAcceptDrops(true);
         widgetListExplorer->setAutoScroll(false);
         widgetListExplorer->setProperty("showDropIndicator", QVariant(true));
@@ -381,19 +415,12 @@ public:
 
         verticalLayout_10->addLayout(horizontalLayout_3);
 
-        buttonCreatePrefab = new QPushButton(dockWidgetContents_5);
-        buttonCreatePrefab->setObjectName(QString::fromUtf8("buttonCreatePrefab"));
-        sizePolicy2.setHeightForWidth(buttonCreatePrefab->sizePolicy().hasHeightForWidth());
-        buttonCreatePrefab->setSizePolicy(sizePolicy2);
-        buttonCreatePrefab->setDefault(true);
-
-        verticalLayout_10->addWidget(buttonCreatePrefab);
-
         verticalLayout_10->setStretch(0, 1);
         dockExplorer->setWidget(dockWidgetContents_5);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockExplorer);
         dockLogger = new QDockWidget(WindowMain);
         dockLogger->setObjectName(QString::fromUtf8("dockLogger"));
+        dockLogger->setFeatures(QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable);
         dockWidgetContents = new QWidget();
         dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
         verticalLayout_5 = new QVBoxLayout(dockWidgetContents);
@@ -451,7 +478,6 @@ public:
 
         retranslateUi(WindowMain);
         QObject::connect(widgetHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
-        QObject::connect(buttonCreatePrefab, SIGNAL(clicked()), canvas, SLOT(OnTopKekPressed()));
         QObject::connect(buttonPauseResume, SIGNAL(clicked()), canvas, SLOT(OnPauseResumeButtonPressed()));
         QObject::connect(buttonLoggerClear, SIGNAL(clicked()), listLogger, SLOT(clear()));
 
@@ -480,7 +506,10 @@ public:
         actionNewScene->setText(QApplication::translate("WindowMain", "New Scene", 0, QApplication::UnicodeUTF8));
         actionSaveScene->setText(QApplication::translate("WindowMain", "Save Scene", 0, QApplication::UnicodeUTF8));
         actionAddComponentLineRenderer->setText(QApplication::translate("WindowMain", "Line Renderer", 0, QApplication::UnicodeUTF8));
-        buttonGlobalCoords->setText(QApplication::translate("WindowMain", "Use global coords", 0, QApplication::UnicodeUTF8));
+        buttonTranslateMode->setText(QApplication::translate("WindowMain", "T", 0, QApplication::UnicodeUTF8));
+        buttonRotateMode->setText(QApplication::translate("WindowMain", "R", 0, QApplication::UnicodeUTF8));
+        buttonScaleMode->setText(QApplication::translate("WindowMain", "S", 0, QApplication::UnicodeUTF8));
+        buttonGlobalCoords->setText(QApplication::translate("WindowMain", "Global", 0, QApplication::UnicodeUTF8));
         buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0, QApplication::UnicodeUTF8));
         menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
         menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));
@@ -494,7 +523,6 @@ public:
         dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0, QApplication::UnicodeUTF8));
         buttonExplorerDirUp->setText(QApplication::translate("WindowMain", "Up", 0, QApplication::UnicodeUTF8));
         buttonExplorerChangeViewMode->setText(QApplication::translate("WindowMain", "Change view mode", 0, QApplication::UnicodeUTF8));
-        buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Create prefab", 0, QApplication::UnicodeUTF8));
         dockLogger->setWindowTitle(QApplication::translate("WindowMain", "Logger", 0, QApplication::UnicodeUTF8));
         buttonLoggerClear->setText(QApplication::translate("WindowMain", "Clear", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

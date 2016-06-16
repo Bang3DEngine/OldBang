@@ -38,6 +38,7 @@ public:
     {
         //connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
         AdjustStep(value());
+        this->installEventFilter(this);
     }
 
     virtual void focusInEvent(QFocusEvent * event) override
@@ -58,6 +59,16 @@ public:
     virtual void  keyPressEvent(QKeyEvent *event) override
     {
         QDoubleSpinBox::keyPressEvent(event);
+    }
+
+    bool eventFilter(QObject *obj, QEvent *event)
+    {
+        if(event->type() == QEvent::Wheel && obj == this)
+        {
+            return true; // Block wheel event :D
+        }
+
+        return false;
     }
 
 public slots:

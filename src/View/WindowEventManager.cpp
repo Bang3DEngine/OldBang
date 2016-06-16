@@ -64,11 +64,11 @@ void WindowEventManager::NotifyButtonGlobalCoordsClicked()
     bool globalCoords = bText.find("lobal") != std::string::npos;
     if(globalCoords)
     {
-        b->setText("Use local coords");
+        b->setText("Local");
     }
     else
     {
-        b->setText("Use global coords");
+        b->setText("Global");
     }
 
     PROPAGATE_EVENT_PAR(OnButtonGlobalCoordsClicked(globalCoords), wem->listeners);

@@ -32,9 +32,30 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
+         <widget class="QToolButton" name="buttonTranslateMode">
+          <property name="text">
+           <string>T</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="buttonRotateMode">
+          <property name="text">
+           <string>R</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="buttonScaleMode">
+          <property name="text">
+           <string>S</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="buttonGlobalCoords">
           <property name="text">
-           <string>Use global coords</string>
+           <string>Global</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -43,6 +64,33 @@
            <bool>true</bool>
           </property>
           <property name="autoExclusive">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonPauseResume">
+          <property name="text">
+           <string>Pause</string>
+          </property>
+          <property name="icon">
+           <iconset theme="pause">
+            <normaloff>../../.designer/backup</normaloff>../../.designer/backup</iconset>
+          </property>
+          <property name="flat">
            <bool>false</bool>
           </property>
          </widget>
@@ -70,23 +118,8 @@
       </item>
      </layout>
     </item>
-    <item>
-     <widget class="QPushButton" name="buttonPauseResume">
-      <property name="text">
-       <string>Pause</string>
-      </property>
-      <property name="icon">
-       <iconset theme="pause">
-        <normaloff>../../.designer/backup</normaloff>../../.designer/backup</iconset>
-      </property>
-      <property name="flat">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
    </layout>
    <zorder></zorder>
-   <zorder>buttonPauseResume</zorder>
   </widget>
   <widget class="MenuBar" name="menubar">
    <property name="geometry">
@@ -160,7 +193,7 @@
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="dockHierarchy">
    <property name="features">
-    <set>QDockWidget::AllDockWidgetFeatures</set>
+    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::AllDockWidgetAreas</set>
@@ -241,11 +274,23 @@
    </widget>
   </widget>
   <widget class="QDockWidget" name="dockInspector">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>300</width>
+     <height>162</height>
+    </size>
+   </property>
    <property name="floating">
     <bool>false</bool>
    </property>
    <property name="features">
-    <set>QDockWidget::AllDockWidgetFeatures</set>
+    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::AllDockWidgetAreas</set>
@@ -281,8 +326,29 @@
        </item>
        <item>
         <widget class="Inspector" name="widgetInspector">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="contextMenuPolicy">
           <enum>Qt::CustomContextMenu</enum>
+         </property>
+         <property name="lineWidth">
+          <number>4</number>
+         </property>
+         <property name="midLineWidth">
+          <number>4</number>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
          </property>
          <property name="autoScroll">
           <bool>false</bool>
@@ -329,7 +395,7 @@
     </size>
    </property>
    <property name="features">
-    <set>QDockWidget::AllDockWidgetFeatures</set>
+    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="windowTitle">
     <string>Explorer</string>
@@ -338,7 +404,7 @@
     <number>8</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_5">
-    <layout class="QVBoxLayout" name="verticalLayout_10" stretch="1,0">
+    <layout class="QVBoxLayout" name="verticalLayout_10" stretch="1">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,5">
        <item>
@@ -427,26 +493,13 @@
        </item>
       </layout>
      </item>
-     <item>
-      <widget class="QPushButton" name="buttonCreatePrefab">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Create prefab</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
   </widget>
   <widget class="QDockWidget" name="dockLogger">
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
+   </property>
    <property name="windowTitle">
     <string>Logger</string>
    </property>
@@ -658,22 +711,6 @@
     <hint type="destinationlabel">
      <x>87</x>
      <y>127</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonCreatePrefab</sender>
-   <signal>clicked()</signal>
-   <receiver>canvas</receiver>
-   <slot>OnTopKekPressed()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>154</x>
-     <y>562</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>356</x>
-     <y>219</y>
     </hint>
    </hints>
   </connection>

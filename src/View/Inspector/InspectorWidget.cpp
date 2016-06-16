@@ -45,7 +45,7 @@ void InspectorWidget::ConstructFromWidgetInformation(
     QVBoxLayout *mainLayout = new QVBoxLayout();
     setLayout(mainLayout);
     mainLayout->setSpacing(0);
-    mainLayout->setContentsMargins(10,10,10,20);
+    mainLayout->setContentsMargins(5,5,5,10);
 
     titleLabel = new QLabel( QString::fromStdString( title ) );
     QFont font = titleLabel->font(); font.setBold(true);
