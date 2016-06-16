@@ -38,7 +38,6 @@ void Canvas::initializeGL()
 
 void Canvas::paintGL()
 {
-    Logger_Log(Time::GetDeltaTime());
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
@@ -53,7 +52,7 @@ void Canvas::paintGL()
             currentScene->_OnUpdate();
         }
 
-        //currentScene->_OnPreRender() is called from scene _OnRender
+        //Note: _OnPreRender() is called from scene _OnRender
         currentScene->_OnRender();
     }
 

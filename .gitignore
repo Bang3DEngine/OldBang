@@ -1,6 +1,5 @@
 # C++ objects and libs
 
-Bang
 *.slo
 *.lo
 *.o
@@ -13,6 +12,7 @@ Bang
 *.dylib
 nohup.out
 Bang
+BangPreprocessor
 
 # Qt-es
 

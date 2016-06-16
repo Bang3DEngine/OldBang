@@ -85,7 +85,7 @@ void Transform::SetRightMatrix(const Matrix4 &rightMatrix)
     this->rightMatrix = rightMatrix;
 }
 
-void Transform::GetLocalMatrix(Matrix4 &m) const
+void Transform::GetLocalModelMatrix(Matrix4 &m) const
 {
     Matrix4 T = Matrix4::TranslateMatrix(GetLocalPosition());
     Matrix4 R = Matrix4::RotateMatrix(GetLocalRotation());
@@ -96,7 +96,7 @@ void Transform::GetLocalMatrix(Matrix4 &m) const
 
 void Transform::GetModelMatrix(Matrix4 &m) const
 {
-    GetLocalMatrix(m);
+    GetLocalModelMatrix(m);
 
     GameObject *parent = owner->GetParent();
     if(parent != nullptr)

@@ -77,7 +77,6 @@ void EditorAxis::OnUpdate()
         else
         {
             GameObject *attachedGameObject = GetAttachedGameObject();
-
             // Normalized mouse movement in the last frame
             glm::vec2 mouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f); // Invert y
 
@@ -88,11 +87,12 @@ void EditorAxis::OnUpdate()
                 Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
                 cam->GetProjectionMatrix(projMatrix);
                 cam->GetViewMatrix(viewMatrix);
-                attachedGameObject->GetComponent<Transform>()->GetModelMatrix(modelMatrix);
+                GameObject *axisGroup = GetParent();
+                axisGroup->GetComponent<Transform>()->GetModelMatrix(modelMatrix);
                 Matrix4 projView = projMatrix * viewMatrix;
 
                 //Get axis in world space and eye space
-                glm::vec4 worldAxisDir = glm::normalize(modelMatrix.Inversed() *
+                glm::vec4 worldAxisDir = glm::normalize(modelMatrix *
                                                         glm::vec4(axisDirection, 0.0f));
                 glm::vec2 screenAxisDir = glm::normalize((projView * worldAxisDir).xy());
 

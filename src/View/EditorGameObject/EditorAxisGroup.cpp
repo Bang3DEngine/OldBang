@@ -1,5 +1,7 @@
 #include "EditorAxisGroup.h"
 
+#include "WindowMain.h"
+
 EditorAxisGroup::EditorAxisGroup() : EditorGameObject("EditorAxisGroup")
 {
     axisX = new EditorAxis(EditorAxis::EditorAxisDirection::X);
@@ -11,6 +13,9 @@ EditorAxisGroup::EditorAxisGroup() : EditorGameObject("EditorAxisGroup")
     AddChild(axisZ);
 
     AddComponent<Transform>();
+
+    globalCoords = !WindowMain::GetInstance()->buttonGlobalCoords->
+                    text().contains("lobal");
 }
 
 EditorAxisGroup::~EditorAxisGroup()

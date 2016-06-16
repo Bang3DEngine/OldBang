@@ -60,7 +60,7 @@ public:
     void SetLeftMatrix(const Matrix4 &leftMatrix);
     void SetRightMatrix(const Matrix4 &rightMatrix);
 
-    void GetLocalMatrix(Matrix4 &m) const;
+    void GetLocalModelMatrix(Matrix4 &m) const;
     void GetModelMatrix(Matrix4 &m) const;
 
     void GetNormalMatrix(Matrix4 &m) const;

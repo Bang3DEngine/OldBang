@@ -17,6 +17,8 @@ LIBS += -lGLEW -ldl
 
 DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
 
+RESOURCES = res/qdarkstyle/style.qrc
+
 INCLUDEPATH += \
     $$PWD/src/ \
     $$PWD/src/View/ \
