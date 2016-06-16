@@ -20,6 +20,20 @@ class SystemUtils
 private:
     SystemUtils() {}
 
+    /**
+     * @brief AddInFrontOfWords
+     * Adds the passed particle in front of every word.
+     * For example: ("-I", "file1 dir/file2 dir/file3") is converted to
+     * "-Ifile1 -Idir/file2 -Idir/file3"
+     */
+    static void AddInFrontOfWords(std::string particle, std::string *str);
+
+    static std::string GetAllProjectObjects(const std::string &filepathFromProjectRoot);
+    static std::string GetAllProjectSubDirs(const std::string &filepathFromProjectRoot);
+
+    static std::string GetQtIncludes();
+    static std::string GetQtLibraries();
+
 public:
 
     /**
