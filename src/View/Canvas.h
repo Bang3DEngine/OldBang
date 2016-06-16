@@ -71,6 +71,8 @@ public:
     static int GetHeight();
     static int GetWidth();
 
+    bool IsPaused() const;
+
     static void SetCursor(Qt::CursorShape cs);
 
     void wheelEvent(QWheelEvent* event) override;

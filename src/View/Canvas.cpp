@@ -47,10 +47,7 @@ void Canvas::paintGL()
     if(currentScene != nullptr)
     {
         lastRenderTime = Time::GetNow();
-        if(!paused)
-        {
-            currentScene->_OnUpdate();
-        }
+        currentScene->_OnUpdate();
 
         //Note: _OnPreRender() is called from scene _OnRender
         currentScene->_OnRender();
@@ -159,6 +156,11 @@ float Canvas::GetAspectRatio()
 int Canvas::GetWidth()
 {
     return Canvas::mainBinaryCanvas->width;
+}
+
+bool Canvas::IsPaused() const
+{
+    return paused;
 }
 
 int Canvas::GetHeight()

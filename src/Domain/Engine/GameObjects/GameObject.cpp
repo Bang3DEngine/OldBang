@@ -383,9 +383,21 @@ void GameObject::_OnStart()
 
 void GameObject::_OnUpdate()
 {
-    PROPAGATE_EVENT(_OnUpdate, comps);
+    bool canUpdate =
+            !Canvas::GetInstance()->IsPaused() ||
+            IsEditorGameObject();
+
+    if(canUpdate)
+    {
+        PROPAGATE_EVENT(_OnUpdate, comps);
+    }
+
     PROPAGATE_EVENT(_OnUpdate, children);
-    OnUpdate();
+
+    if(canUpdate)
+    {
+        OnUpdate();
+    }
 }
 
 void GameObject::_OnPreRender ()
