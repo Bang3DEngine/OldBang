@@ -7,15 +7,24 @@
 void SystemUtils::AddInFrontOfWords(std::string particle, std::string *str)
 {
     std::string &phrase = *str;
-    phrase.insert(0, particle);
-    for(int i = 0; i < phrase.length(); ++i)
+    if(phrase.length() > 0 && phrase[0] != ' ')
     {
-        if(phrase[i] == ' ')
+        phrase.insert(0, particle);
+    }
+
+    for(int i = 0; i < phrase.length() -1; ++i)
+    {
+        if(phrase[i] == ' ' && phrase[i+1] != ' ')
         {
             phrase.insert(i+1, particle);
             i += 2; // Sorry
         }
     }
+}
+
+void SystemUtils::RemoveLineBreaks(std::string *str)
+{
+    std::replace(str->begin(), str->end(), '\n', ' '); // Remove line breaks
 }
 
 std::string SystemUtils::GetAllProjectObjects(const std::string &filepathFromProjectRoot)
@@ -76,9 +85,19 @@ std::string SystemUtils::GetQtIncludes()
     return qtIncludeDirs;
 }
 
-std::string SystemUtils::GetQtLibraries()
+std::string SystemUtils::GetQtLibrariesDirs()
 {
-    return "";
+    std::string qtLibDirs = "";
+    //std::string cmdGetQtLibDirs = "find $(qmake -query QT_INSTALL_LIBS) -type d";
+    std::string cmdGetQtLibDirs = "qmake -query QT_INSTALL_LIBS";
+    bool ok = false;
+    SystemUtils::System(cmdGetQtLibDirs, qtLibDirs, ok);
+    if(!ok)
+    {
+        Logger_Error("Error trying to find Qt library directories to compile.");
+    }
+
+    return qtLibDirs;
 }
 
 void SystemUtils::System(const std::string &command, std::string &output, bool &success)
@@ -168,13 +187,16 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     #ifdef BANG_EDITOR
     includes += GetQtIncludes();
     #endif
-
+    RemoveLineBreaks(&includes);
+    Logger_Log("INCLUDES: " << includes);
     AddInFrontOfWords("-I", &includes);
 
     std::string objs = GetAllProjectObjects(filepathFromProjectRoot);
+    RemoveLineBreaks(&objs);
 
-    std::string qtLibs = GetQtLibraries();
-    AddInFrontOfWords("-l", &qtLibs);
+    std::string qtLibDirs = GetQtLibrariesDirs();
+    RemoveLineBreaks(&qtLibDirs);
+    AddInFrontOfWords("-L", &qtLibDirs);
 
     // Gather options
     std::string options = "";
@@ -184,9 +206,9 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     options += " -Wl,--export-dynamic ";
     options += " --std=c++11";
     options += " " + includes + " ";
-    options += " -L/usr/lib/x86_64-linux-gnu -L/usr/X11R6/lib64 ";
+    //options += " -L/usr/lib/x86_64-linux-gnu -L/usr/X11R6/lib64 ";
     options += " -lGLEW -lGL -lpthread ";
-    options += " " + qtLibs + " ";
+    options += " " + qtLibDirs + " ";
     options += " -fPIC"; // Shared linking stuff
     //
 
@@ -206,9 +228,10 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     cmd += filepath + " " + options + " -o " + sharedObjectFilepath;
 
     std::string output = "";
-    std::replace(cmd.begin(), cmd.end(), '\n', ' '); // Remove line breaks
+    RemoveLineBreaks(&cmd);
 
     bool ok = false;
+    Logger_Log(cmd);
     SystemUtils::System(cmd, output, ok);
     if (ok)
     {
