@@ -4,6 +4,102 @@
 #include "SingletonManager.h"
 
 // TODO: Fix System success variable (it does not do what it's supposed to do)
+void SystemUtils::AddInFrontOfWords(std::string particle, std::string *str)
+{
+    std::string &phrase = *str;
+    if(phrase.length() > 0 && phrase[0] != ' ')
+    {
+        phrase.insert(0, particle);
+    }
+
+    for(int i = 0; i < phrase.length() -1; ++i)
+    {
+        if(phrase[i] == ' ' && phrase[i+1] != ' ')
+        {
+            phrase.insert(i+1, particle);
+            i += 2; // Sorry
+        }
+    }
+}
+
+void SystemUtils::RemoveLineBreaks(std::string *str)
+{
+    std::replace(str->begin(), str->end(), '\n', ' '); // Remove line breaks
+}
+
+std::string SystemUtils::GetAllProjectObjects(const std::string &filepathFromProjectRoot)
+{
+    std::string cmdGetAllObjects = "";
+    cmdGetAllObjects = "find " +                                    // Find recursively
+                        Persistence::GetProjectRootPathAbsolute() + // From project root
+                        " -type f " +                               // Only files
+                        " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
+                        " | grep -E -v \"Preprocessor\" " +         // Temporal fix with colliding .o's TODO
+                        " | grep -E -v \"main\\.o\" " +             // Temporal fix with colliding .o's TODO
+                        " | grep -E \"\\.o$\"" +                    // Only .o files
+                        " | xargs";                                 // Inline
+
+    bool ok = false;
+    std::string objs = "";
+    SystemUtils::System(cmdGetAllObjects, objs, ok);
+    if(!ok)
+    {
+        Logger_Error("Error trying to find object files to compile " <<
+                     filepathFromProjectRoot);
+    }
+    return objs;
+}
+
+std::string SystemUtils::GetAllProjectSubDirs(const std::string &filepathFromProjectRoot)
+{
+    std::string cmdGetAllSubDirs = "";
+    cmdGetAllSubDirs = "find " +                                    // Find recursively
+                        Persistence::GetProjectRootPathAbsolute() + // From project root
+                        " -type d " +                               // Only directories
+                        " | grep -E -v \"\\.\" " +                  // Not including hidden dirs
+                        " | xargs";                                 // Inline
+
+    bool ok = false;
+    std::string allSubDirs = "";
+    SystemUtils::System(cmdGetAllSubDirs, allSubDirs, ok);
+    if(!ok)
+    {
+        Logger_Error("Error trying to find include directories to compile " <<
+                     filepathFromProjectRoot);
+    }
+
+    return allSubDirs;
+}
+
+std::string SystemUtils::GetQtIncludes()
+{
+    std::string qtIncludeDirs = "";
+    std::string cmdGetQtIncludeDirs = "find $(qmake -query QT_INSTALL_HEADERS) -type d";
+    bool ok = false;
+    SystemUtils::System(cmdGetQtIncludeDirs, qtIncludeDirs, ok);
+    if(!ok)
+    {
+        Logger_Error("Error trying to find Qt include directories to compile.");
+    }
+
+    return qtIncludeDirs;
+}
+
+std::string SystemUtils::GetQtLibrariesDirs()
+{
+    std::string qtLibDirs = "";
+    //std::string cmdGetQtLibDirs = "find $(qmake -query QT_INSTALL_LIBS) -type d";
+    std::string cmdGetQtLibDirs = "qmake -query QT_INSTALL_LIBS";
+    bool ok = false;
+    SystemUtils::System(cmdGetQtLibDirs, qtLibDirs, ok);
+    if(!ok)
+    {
+        Logger_Error("Error trying to find Qt library directories to compile.");
+    }
+
+    return qtLibDirs;
+}
+
 void SystemUtils::System(const std::string &command, std::string &output, bool &success)
 {
     int fd[2];
@@ -83,76 +179,36 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
 {
     // GET INCLUDES
     // Get all subdirs recursively in a single line, and add -I in front of every path
-    std::string cmdGetAllSubDirs = "";
-    cmdGetAllSubDirs = "find " +                                    // Find recursively
-                        Persistence::GetProjectRootPathAbsolute() + // From project root
-                        " -type d " +                               // Only directories
-                        " | grep -E -v \"\\.\" " +                  // Not including hidden dirs
-                        " | xargs";                                 // Inline
 
-    bool ok = false;
-    std::string allSubDirs = "";
-    SystemUtils::System(cmdGetAllSubDirs, allSubDirs, ok);
-    if(!ok)
-    {
-        Logger_Error("Error trying to find include directories to compile " <<
-                     filepathFromProjectRoot);
-        return "";
-    }
 
-    // Add -I in front of every path
-    std::string includes = "-I" + allSubDirs;
-    for(int i = 0; i < includes.length(); ++i)
-    {
-        if(includes[i] == ' ')
-        {
-            includes.insert(i+1, "-I");
-            i += 2; // Sorry
-        }
-    }
-    //
-
-    includes += " -I.";
-
+    std::string includes = "";
+    includes += GetAllProjectSubDirs(filepathFromProjectRoot);
+    includes += " . ";
     #ifdef BANG_EDITOR
-    // Qt includes
-    includes += " -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui";
-    includes += " -I/usr/include/qt4/QtOpenGL -I/usr/include/qt4";
-    //
+    includes += GetQtIncludes();
     #endif
-    //
+    RemoveLineBreaks(&includes);
+    Logger_Log("INCLUDES: " << includes);
+    AddInFrontOfWords("-I", &includes);
 
-    // GET OBJS (*.o)
-    std::string cmdGetAllObjects = "";
-    cmdGetAllObjects = "find " +                                    // Find recursively
-                        Persistence::GetProjectRootPathAbsolute() + // From project root
-                        " -type f " +                               // Only files
-                        " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
-                        " | grep -E -v \"Preprocessor\" " +         // Temporal fix with colliding .o's TODO
-                        " | grep -E -v \"main\\.o\" " +             // Temporal fix with colliding .o's TODO
-                        " | grep -E \"\\.o$\"" +                    // Only .o files
-                        " | xargs";                                 // Inline
-    std::string objs = "";
-    SystemUtils::System(cmdGetAllObjects, objs, ok);
+    std::string objs = GetAllProjectObjects(filepathFromProjectRoot);
+    RemoveLineBreaks(&objs);
 
-    if(!ok)
-    {
-        Logger_Error("Error trying to find object files to compile " <<
-                     filepathFromProjectRoot);
-        return "";
-    }
-    //
+    std::string qtLibDirs = GetQtLibrariesDirs();
+    RemoveLineBreaks(&qtLibDirs);
+    AddInFrontOfWords("-L", &qtLibDirs);
 
     // Gather options
     std::string options = "";
-    options += " " + objs;
+    options += " " + objs  + " ";
     options += " -O1";
     options += " -g ";
     options += " -Wl,--export-dynamic ";
     options += " --std=c++11";
-    options += " " + includes;
-    options += " -L/usr/lib/x86_64-linux-gnu -L/usr/X11R6/lib64 ";
-    options += " -lGLEW -lQtOpenGL -lQtGui -lQtCore -lGL -lpthread ";
+    options += " " + includes + " ";
+    //options += " -L/usr/lib/x86_64-linux-gnu -L/usr/X11R6/lib64 ";
+    options += " -lGLEW -lGL -lpthread ";
+    options += " " + qtLibDirs + " ";
     options += " -fPIC"; // Shared linking stuff
     //
 
@@ -172,9 +228,11 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     cmd += filepath + " " + options + " -o " + sharedObjectFilepath;
 
     std::string output = "";
-    std::replace(cmd.begin(), cmd.end(), '\n', ' '); // Remove line breaks
-    SystemUtils::System(cmd, output, ok);
+    RemoveLineBreaks(&cmd);
 
+    bool ok = false;
+    Logger_Log(cmd);
+    SystemUtils::System(cmd, output, ok);
     if (ok)
     {
         if(output != "")
@@ -182,7 +240,7 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
             Logger_Warn(output);
         }
     }
-    else
+    else // There has been an error
     {
         if(output != "")
         {

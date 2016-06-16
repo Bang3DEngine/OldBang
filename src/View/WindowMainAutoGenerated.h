@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'WindowMain.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created by: Qt User Interface Compiler version 5.4.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,20 +10,20 @@
 #define UI_WINDOWMAIN_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDockWidget>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-#include <QtGui/QPushButton>
-#include <QtGui/QStatusBar>
-#include <QtGui/QToolButton>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDockWidget>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 #include "Canvas.h"
 #include "Explorer.h"
 #include "ExplorerDirTree.h"
@@ -108,64 +108,70 @@ public:
     void setupUi(QMainWindow *WindowMain)
     {
         if (WindowMain->objectName().isEmpty())
-            WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
+            WindowMain->setObjectName(QStringLiteral("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
         WindowMain->resize(941, 594);
         WindowMain->setMouseTracking(true);
         WindowMain->setFocusPolicy(Qt::StrongFocus);
         actionOpenScene = new QAction(WindowMain);
-        actionOpenScene->setObjectName(QString::fromUtf8("actionOpenScene"));
+        actionOpenScene->setObjectName(QStringLiteral("actionOpenScene"));
         actionSaveSceneAs = new QAction(WindowMain);
-        actionSaveSceneAs->setObjectName(QString::fromUtf8("actionSaveSceneAs"));
+        actionSaveSceneAs->setObjectName(QStringLiteral("actionSaveSceneAs"));
         actionCreateMaterial = new QAction(WindowMain);
-        actionCreateMaterial->setObjectName(QString::fromUtf8("actionCreateMaterial"));
+        actionCreateMaterial->setObjectName(QStringLiteral("actionCreateMaterial"));
         actionCreateMesh = new QAction(WindowMain);
-        actionCreateMesh->setObjectName(QString::fromUtf8("actionCreateMesh"));
+        actionCreateMesh->setObjectName(QStringLiteral("actionCreateMesh"));
         actionCreateShaderProgram = new QAction(WindowMain);
-        actionCreateShaderProgram->setObjectName(QString::fromUtf8("actionCreateShaderProgram"));
+        actionCreateShaderProgram->setObjectName(QStringLiteral("actionCreateShaderProgram"));
         actionCreateTexture2D = new QAction(WindowMain);
-        actionCreateTexture2D->setObjectName(QString::fromUtf8("actionCreateTexture2D"));
+        actionCreateTexture2D->setObjectName(QStringLiteral("actionCreateTexture2D"));
         actionProjectSettings = new QAction(WindowMain);
-        actionProjectSettings->setObjectName(QString::fromUtf8("actionProjectSettings"));
+        actionProjectSettings->setObjectName(QStringLiteral("actionProjectSettings"));
         actionCreateFromPrefab = new QAction(WindowMain);
-        actionCreateFromPrefab->setObjectName(QString::fromUtf8("actionCreateFromPrefab"));
+        actionCreateFromPrefab->setObjectName(QStringLiteral("actionCreateFromPrefab"));
         actionEmptyGameObject = new QAction(WindowMain);
-        actionEmptyGameObject->setObjectName(QString::fromUtf8("actionEmptyGameObject"));
+        actionEmptyGameObject->setObjectName(QStringLiteral("actionEmptyGameObject"));
         actionCreatePrefab = new QAction(WindowMain);
-        actionCreatePrefab->setObjectName(QString::fromUtf8("actionCreatePrefab"));
+        actionCreatePrefab->setObjectName(QStringLiteral("actionCreatePrefab"));
         actionRemoveComponent = new QAction(WindowMain);
-        actionRemoveComponent->setObjectName(QString::fromUtf8("actionRemoveComponent"));
+        actionRemoveComponent->setObjectName(QStringLiteral("actionRemoveComponent"));
         actionAddComponentMeshRenderer = new QAction(WindowMain);
-        actionAddComponentMeshRenderer->setObjectName(QString::fromUtf8("actionAddComponentMeshRenderer"));
+        actionAddComponentMeshRenderer->setObjectName(QStringLiteral("actionAddComponentMeshRenderer"));
         actionAddComponentCamera = new QAction(WindowMain);
-        actionAddComponentCamera->setObjectName(QString::fromUtf8("actionAddComponentCamera"));
+        actionAddComponentCamera->setObjectName(QStringLiteral("actionAddComponentCamera"));
         actionAddComponentTransform = new QAction(WindowMain);
-        actionAddComponentTransform->setObjectName(QString::fromUtf8("actionAddComponentTransform"));
+        actionAddComponentTransform->setObjectName(QStringLiteral("actionAddComponentTransform"));
         actionAddComponentBehaviour = new QAction(WindowMain);
-        actionAddComponentBehaviour->setObjectName(QString::fromUtf8("actionAddComponentBehaviour"));
+        actionAddComponentBehaviour->setObjectName(QStringLiteral("actionAddComponentBehaviour"));
         actionCreateEmptyGameObject = new QAction(WindowMain);
-        actionCreateEmptyGameObject->setObjectName(QString::fromUtf8("actionCreateEmptyGameObject"));
+        actionCreateEmptyGameObject->setObjectName(QStringLiteral("actionCreateEmptyGameObject"));
         actionNewScene = new QAction(WindowMain);
-        actionNewScene->setObjectName(QString::fromUtf8("actionNewScene"));
+        actionNewScene->setObjectName(QStringLiteral("actionNewScene"));
         actionSaveScene = new QAction(WindowMain);
-        actionSaveScene->setObjectName(QString::fromUtf8("actionSaveScene"));
+        actionSaveScene->setObjectName(QStringLiteral("actionSaveScene"));
         actionAddComponentLineRenderer = new QAction(WindowMain);
-        actionAddComponentLineRenderer->setObjectName(QString::fromUtf8("actionAddComponentLineRenderer"));
+        actionAddComponentLineRenderer->setObjectName(QStringLiteral("actionAddComponentLineRenderer"));
         centralwidget = new QWidget(WindowMain);
-        centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        centralwidget->setObjectName(QStringLiteral("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout_3 = new QVBoxLayout();
-        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         windowEventManager = new WindowEventManager(centralwidget);
-        windowEventManager->setObjectName(QString::fromUtf8("windowEventManager"));
+        windowEventManager->setObjectName(QStringLiteral("windowEventManager"));
 
         verticalLayout_3->addWidget(windowEventManager);
 
         horizontalLayout = new QHBoxLayout();
+<<<<<<< HEAD
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         buttonGlobalCoords = new QPushButton(centralwidget);
         buttonGlobalCoords->setObjectName(QString::fromUtf8("buttonGlobalCoords"));
+=======
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        buttonGlobalCoords = new QToolButton(centralwidget);
+        buttonGlobalCoords->setObjectName(QStringLiteral("buttonGlobalCoords"));
+>>>>>>> 6f50cbcd40ca8495d6c2ac43daaccf93479d4ab1
         buttonGlobalCoords->setCheckable(true);
         buttonGlobalCoords->setChecked(true);
         buttonGlobalCoords->setAutoExclusive(false);
@@ -176,7 +182,7 @@ public:
         verticalLayout_3->addLayout(horizontalLayout);
 
         canvas = new Canvas(centralwidget);
-        canvas->setObjectName(QString::fromUtf8("canvas"));
+        canvas->setObjectName(QStringLiteral("canvas"));
         canvas->setEnabled(true);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(1);
@@ -192,13 +198,13 @@ public:
         verticalLayout->addLayout(verticalLayout_3);
 
         buttonPauseResume = new QPushButton(centralwidget);
-        buttonPauseResume->setObjectName(QString::fromUtf8("buttonPauseResume"));
+        buttonPauseResume->setObjectName(QStringLiteral("buttonPauseResume"));
         QIcon icon;
-        QString iconThemeName = QString::fromUtf8("pause");
+        QString iconThemeName = QStringLiteral("pause");
         if (QIcon::hasThemeIcon(iconThemeName)) {
             icon = QIcon::fromTheme(iconThemeName);
         } else {
-            icon.addFile(QString::fromUtf8("../../.designer/backup"), QSize(), QIcon::Normal, QIcon::Off);
+            icon.addFile(QStringLiteral("../../.designer/backup"), QSize(), QIcon::Normal, QIcon::Off);
         }
         buttonPauseResume->setIcon(icon);
         buttonPauseResume->setFlat(false);
@@ -208,40 +214,40 @@ public:
         WindowMain->setCentralWidget(centralwidget);
         buttonPauseResume->raise();
         menubar = new MenuBar(WindowMain);
-        menubar->setObjectName(QString::fromUtf8("menubar"));
+        menubar->setObjectName(QStringLiteral("menubar"));
         menubar->setGeometry(QRect(0, 0, 941, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
-        menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
+        menuAssets->setObjectName(QStringLiteral("menuAssets"));
         menuCreate = new QMenu(menuAssets);
-        menuCreate->setObjectName(QString::fromUtf8("menuCreate"));
+        menuCreate->setObjectName(QStringLiteral("menuCreate"));
         menuGameObject = new QMenu(menubar);
-        menuGameObject->setObjectName(QString::fromUtf8("menuGameObject"));
+        menuGameObject->setObjectName(QStringLiteral("menuGameObject"));
         menuProject = new QMenu(menubar);
-        menuProject->setObjectName(QString::fromUtf8("menuProject"));
+        menuProject->setObjectName(QStringLiteral("menuProject"));
         menuComponents = new QMenu(menubar);
-        menuComponents->setObjectName(QString::fromUtf8("menuComponents"));
+        menuComponents->setObjectName(QStringLiteral("menuComponents"));
         menuAddComponent = new QMenu(menuComponents);
-        menuAddComponent->setObjectName(QString::fromUtf8("menuAddComponent"));
+        menuAddComponent->setObjectName(QStringLiteral("menuAddComponent"));
         WindowMain->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowMain);
-        statusbar->setObjectName(QString::fromUtf8("statusbar"));
+        statusbar->setObjectName(QStringLiteral("statusbar"));
         WindowMain->setStatusBar(statusbar);
         dockHierarchy = new QDockWidget(WindowMain);
-        dockHierarchy->setObjectName(QString::fromUtf8("dockHierarchy"));
+        dockHierarchy->setObjectName(QStringLiteral("dockHierarchy"));
         dockHierarchy->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockHierarchy->setAllowedAreas(Qt::AllDockWidgetAreas);
         dockWidgetContents_4 = new QWidget();
-        dockWidgetContents_4->setObjectName(QString::fromUtf8("dockWidgetContents_4"));
+        dockWidgetContents_4->setObjectName(QStringLiteral("dockWidgetContents_4"));
         verticalLayout_8 = new QVBoxLayout(dockWidgetContents_4);
-        verticalLayout_8->setObjectName(QString::fromUtf8("verticalLayout_8"));
+        verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
         verticalLayout_4 = new QVBoxLayout();
-        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
         widgetHierarchy = new Hierarchy(dockWidgetContents_4);
         QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
-        __qtreewidgetitem->setText(0, QString::fromUtf8("1"));
+        __qtreewidgetitem->setText(0, QStringLiteral("1"));
         widgetHierarchy->setHeaderItem(__qtreewidgetitem);
-        widgetHierarchy->setObjectName(QString::fromUtf8("widgetHierarchy"));
+        widgetHierarchy->setObjectName(QStringLiteral("widgetHierarchy"));
         QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
@@ -271,12 +277,12 @@ public:
         dockHierarchy->setWidget(dockWidgetContents_4);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(1), dockHierarchy);
         dockInspector = new QDockWidget(WindowMain);
-        dockInspector->setObjectName(QString::fromUtf8("dockInspector"));
+        dockInspector->setObjectName(QStringLiteral("dockInspector"));
         dockInspector->setFloating(false);
         dockInspector->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockInspector->setAllowedAreas(Qt::AllDockWidgetAreas);
         dockWidgetContents_7 = new QWidget();
-        dockWidgetContents_7->setObjectName(QString::fromUtf8("dockWidgetContents_7"));
+        dockWidgetContents_7->setObjectName(QStringLiteral("dockWidgetContents_7"));
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Preferred);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
@@ -284,21 +290,21 @@ public:
         dockWidgetContents_7->setSizePolicy(sizePolicy2);
         dockWidgetContents_7->setContextMenuPolicy(Qt::DefaultContextMenu);
         verticalLayout_9 = new QVBoxLayout(dockWidgetContents_7);
-        verticalLayout_9->setObjectName(QString::fromUtf8("verticalLayout_9"));
+        verticalLayout_9->setObjectName(QStringLiteral("verticalLayout_9"));
         widget = new QWidget(dockWidgetContents_7);
-        widget->setObjectName(QString::fromUtf8("widget"));
+        widget->setObjectName(QStringLiteral("widget"));
 
         verticalLayout_9->addWidget(widget);
 
         verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         labelInspectorGameObjectName = new QLabel(dockWidgetContents_7);
-        labelInspectorGameObjectName->setObjectName(QString::fromUtf8("labelInspectorGameObjectName"));
+        labelInspectorGameObjectName->setObjectName(QStringLiteral("labelInspectorGameObjectName"));
 
         verticalLayout_2->addWidget(labelInspectorGameObjectName);
 
         widgetInspector = new Inspector(dockWidgetContents_7);
-        widgetInspector->setObjectName(QString::fromUtf8("widgetInspector"));
+        widgetInspector->setObjectName(QStringLiteral("widgetInspector"));
         widgetInspector->setContextMenuPolicy(Qt::CustomContextMenu);
         widgetInspector->setAutoScroll(false);
         widgetInspector->setDragDropMode(QAbstractItemView::DragOnly);
@@ -320,17 +326,17 @@ public:
         dockInspector->setWidget(dockWidgetContents_7);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(2), dockInspector);
         dockExplorer = new QDockWidget(WindowMain);
-        dockExplorer->setObjectName(QString::fromUtf8("dockExplorer"));
+        dockExplorer->setObjectName(QStringLiteral("dockExplorer"));
         dockExplorer->setMinimumSize(QSize(493, 210));
         dockExplorer->setFeatures(QDockWidget::AllDockWidgetFeatures);
         dockWidgetContents_5 = new QWidget();
-        dockWidgetContents_5->setObjectName(QString::fromUtf8("dockWidgetContents_5"));
+        dockWidgetContents_5->setObjectName(QStringLiteral("dockWidgetContents_5"));
         verticalLayout_10 = new QVBoxLayout(dockWidgetContents_5);
-        verticalLayout_10->setObjectName(QString::fromUtf8("verticalLayout_10"));
+        verticalLayout_10->setObjectName(QStringLiteral("verticalLayout_10"));
         horizontalLayout_3 = new QHBoxLayout();
-        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         widgetTreeExplorerDirTree = new ExplorerDirTree(dockWidgetContents_5);
-        widgetTreeExplorerDirTree->setObjectName(QString::fromUtf8("widgetTreeExplorerDirTree"));
+        widgetTreeExplorerDirTree->setObjectName(QStringLiteral("widgetTreeExplorerDirTree"));
         widgetTreeExplorerDirTree->setAutoScroll(false);
         widgetTreeExplorerDirTree->setProperty("showDropIndicator", QVariant(true));
         widgetTreeExplorerDirTree->setSortingEnabled(true);
@@ -339,16 +345,16 @@ public:
         horizontalLayout_3->addWidget(widgetTreeExplorerDirTree);
 
         verticalLayout_7 = new QVBoxLayout();
-        verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
         horizontalLayout_4 = new QHBoxLayout();
-        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
         buttonExplorerDirUp = new QToolButton(dockWidgetContents_5);
-        buttonExplorerDirUp->setObjectName(QString::fromUtf8("buttonExplorerDirUp"));
+        buttonExplorerDirUp->setObjectName(QStringLiteral("buttonExplorerDirUp"));
 
         horizontalLayout_4->addWidget(buttonExplorerDirUp);
 
         buttonExplorerChangeViewMode = new QToolButton(dockWidgetContents_5);
-        buttonExplorerChangeViewMode->setObjectName(QString::fromUtf8("buttonExplorerChangeViewMode"));
+        buttonExplorerChangeViewMode->setObjectName(QStringLiteral("buttonExplorerChangeViewMode"));
 
         horizontalLayout_4->addWidget(buttonExplorerChangeViewMode);
 
@@ -356,7 +362,7 @@ public:
         verticalLayout_7->addLayout(horizontalLayout_4);
 
         widgetListExplorer = new Explorer(dockWidgetContents_5);
-        widgetListExplorer->setObjectName(QString::fromUtf8("widgetListExplorer"));
+        widgetListExplorer->setObjectName(QStringLiteral("widgetListExplorer"));
         sizePolicy2.setHeightForWidth(widgetListExplorer->sizePolicy().hasHeightForWidth());
         widgetListExplorer->setSizePolicy(sizePolicy2);
         widgetListExplorer->setAcceptDrops(true);
@@ -382,7 +388,7 @@ public:
         verticalLayout_10->addLayout(horizontalLayout_3);
 
         buttonCreatePrefab = new QPushButton(dockWidgetContents_5);
-        buttonCreatePrefab->setObjectName(QString::fromUtf8("buttonCreatePrefab"));
+        buttonCreatePrefab->setObjectName(QStringLiteral("buttonCreatePrefab"));
         sizePolicy2.setHeightForWidth(buttonCreatePrefab->sizePolicy().hasHeightForWidth());
         buttonCreatePrefab->setSizePolicy(sizePolicy2);
         buttonCreatePrefab->setDefault(true);
@@ -393,17 +399,17 @@ public:
         dockExplorer->setWidget(dockWidgetContents_5);
         WindowMain->addDockWidget(static_cast<Qt::DockWidgetArea>(8), dockExplorer);
         dockLogger = new QDockWidget(WindowMain);
-        dockLogger->setObjectName(QString::fromUtf8("dockLogger"));
+        dockLogger->setObjectName(QStringLiteral("dockLogger"));
         dockWidgetContents = new QWidget();
-        dockWidgetContents->setObjectName(QString::fromUtf8("dockWidgetContents"));
+        dockWidgetContents->setObjectName(QStringLiteral("dockWidgetContents"));
         verticalLayout_5 = new QVBoxLayout(dockWidgetContents);
-        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
         widgetLogger = new LoggerWidget(dockWidgetContents);
-        widgetLogger->setObjectName(QString::fromUtf8("widgetLogger"));
+        widgetLogger->setObjectName(QStringLiteral("widgetLogger"));
         verticalLayout_6 = new QVBoxLayout(widgetLogger);
-        verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
+        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
         listLogger = new ListLogger(widgetLogger);
-        listLogger->setObjectName(QString::fromUtf8("listLogger"));
+        listLogger->setObjectName(QStringLiteral("listLogger"));
         listLogger->setAlternatingRowColors(false);
         listLogger->setSelectionMode(QAbstractItemView::SingleSelection);
         listLogger->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -411,7 +417,7 @@ public:
         verticalLayout_6->addWidget(listLogger);
 
         buttonLoggerClear = new QPushButton(widgetLogger);
-        buttonLoggerClear->setObjectName(QString::fromUtf8("buttonLoggerClear"));
+        buttonLoggerClear->setObjectName(QStringLiteral("buttonLoggerClear"));
 
         verticalLayout_6->addWidget(buttonLoggerClear);
 
@@ -460,6 +466,7 @@ public:
 
     void retranslateUi(QMainWindow *WindowMain)
     {
+<<<<<<< HEAD
         WindowMain->setWindowTitle(QApplication::translate("WindowMain", "Bang Editor", 0, QApplication::UnicodeUTF8));
         actionOpenScene->setText(QApplication::translate("WindowMain", "Open Scene...", 0, QApplication::UnicodeUTF8));
         actionSaveSceneAs->setText(QApplication::translate("WindowMain", "Save Scene as...", 0, QApplication::UnicodeUTF8));
@@ -497,6 +504,45 @@ public:
         buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Create prefab", 0, QApplication::UnicodeUTF8));
         dockLogger->setWindowTitle(QApplication::translate("WindowMain", "Logger", 0, QApplication::UnicodeUTF8));
         buttonLoggerClear->setText(QApplication::translate("WindowMain", "Clear", 0, QApplication::UnicodeUTF8));
+=======
+        WindowMain->setWindowTitle(QApplication::translate("WindowMain", "Bang Editor", 0));
+        actionOpenScene->setText(QApplication::translate("WindowMain", "Open Scene...", 0));
+        actionSaveSceneAs->setText(QApplication::translate("WindowMain", "Save Scene as...", 0));
+        actionCreateMaterial->setText(QApplication::translate("WindowMain", "Material", 0));
+        actionCreateMesh->setText(QApplication::translate("WindowMain", "Mesh", 0));
+        actionCreateShaderProgram->setText(QApplication::translate("WindowMain", "ShaderProgram", 0));
+        actionCreateTexture2D->setText(QApplication::translate("WindowMain", "Texture2D", 0));
+        actionProjectSettings->setText(QApplication::translate("WindowMain", "Project Settings", 0));
+        actionCreateFromPrefab->setText(QApplication::translate("WindowMain", "Create from prefab", 0));
+        actionEmptyGameObject->setText(QApplication::translate("WindowMain", "Empty GameObject", 0));
+        actionCreatePrefab->setText(QApplication::translate("WindowMain", "Prefab", 0));
+        actionRemoveComponent->setText(QApplication::translate("WindowMain", "Remove Component", 0));
+        actionAddComponentMeshRenderer->setText(QApplication::translate("WindowMain", "Mesh Renderer", 0));
+        actionAddComponentCamera->setText(QApplication::translate("WindowMain", "Camera", 0));
+        actionAddComponentTransform->setText(QApplication::translate("WindowMain", "Transform", 0));
+        actionAddComponentBehaviour->setText(QApplication::translate("WindowMain", "Behaviour", 0));
+        actionCreateEmptyGameObject->setText(QApplication::translate("WindowMain", "Create Empty GameObject", 0));
+        actionNewScene->setText(QApplication::translate("WindowMain", "New Scene", 0));
+        actionSaveScene->setText(QApplication::translate("WindowMain", "Save Scene", 0));
+        actionAddComponentLineRenderer->setText(QApplication::translate("WindowMain", "Line Renderer", 0));
+        buttonGlobalCoords->setText(QApplication::translate("WindowMain", "G", 0));
+        buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0));
+        menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0));
+        menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0));
+        menuGameObject->setTitle(QApplication::translate("WindowMain", "GameObjects", 0));
+        menuProject->setTitle(QApplication::translate("WindowMain", "Project", 0));
+        menuComponents->setTitle(QApplication::translate("WindowMain", "Components", 0));
+        menuAddComponent->setTitle(QApplication::translate("WindowMain", "Add Component", 0));
+        dockHierarchy->setWindowTitle(QApplication::translate("WindowMain", "Hierarchy", 0));
+        dockInspector->setWindowTitle(QApplication::translate("WindowMain", "Inspector", 0));
+        labelInspectorGameObjectName->setText(QApplication::translate("WindowMain", "GameObject Name", 0));
+        dockExplorer->setWindowTitle(QApplication::translate("WindowMain", "Explorer", 0));
+        buttonExplorerDirUp->setText(QApplication::translate("WindowMain", "Up", 0));
+        buttonExplorerChangeViewMode->setText(QApplication::translate("WindowMain", "Change view mode", 0));
+        buttonCreatePrefab->setText(QApplication::translate("WindowMain", "Create prefab", 0));
+        dockLogger->setWindowTitle(QApplication::translate("WindowMain", "Logger", 0));
+        buttonLoggerClear->setText(QApplication::translate("WindowMain", "Clear", 0));
+>>>>>>> 6f50cbcd40ca8495d6c2ac43daaccf93479d4ab1
     } // retranslateUi
 
 };
