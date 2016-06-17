@@ -60,6 +60,7 @@ public:
     QAction *actionNewScene;
     QAction *actionSaveScene;
     QAction *actionAddComponentLineRenderer;
+    QAction *actionAddComponentCircleRenderer;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
@@ -158,6 +159,8 @@ public:
         actionSaveScene->setObjectName(QString::fromUtf8("actionSaveScene"));
         actionAddComponentLineRenderer = new QAction(WindowMain);
         actionAddComponentLineRenderer->setObjectName(QString::fromUtf8("actionAddComponentLineRenderer"));
+        actionAddComponentCircleRenderer = new QAction(WindowMain);
+        actionAddComponentCircleRenderer->setObjectName(QString::fromUtf8("actionAddComponentCircleRenderer"));
         centralwidget = new QWidget(WindowMain);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -487,11 +490,16 @@ public:
         menuProject->addAction(actionProjectSettings);
         menuComponents->addAction(menuAddComponent->menuAction());
         menuComponents->addAction(actionRemoveComponent);
-        menuAddComponent->addAction(actionAddComponentBehaviour);
-        menuAddComponent->addAction(actionAddComponentCamera);
-        menuAddComponent->addAction(actionAddComponentMeshRenderer);
         menuAddComponent->addAction(actionAddComponentTransform);
+        menuAddComponent->addSeparator();
+        menuAddComponent->addAction(actionAddComponentBehaviour);
+        menuAddComponent->addSeparator();
+        menuAddComponent->addAction(actionAddComponentCamera);
+        menuAddComponent->addSeparator();
+        menuAddComponent->addAction(actionAddComponentMeshRenderer);
         menuAddComponent->addAction(actionAddComponentLineRenderer);
+        menuAddComponent->addAction(actionAddComponentCircleRenderer);
+        menuAddComponent->addSeparator();
 
         retranslateUi(WindowMain);
         QObject::connect(widgetHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
@@ -522,6 +530,7 @@ public:
         actionNewScene->setText(QApplication::translate("WindowMain", "New Scene", 0, QApplication::UnicodeUTF8));
         actionSaveScene->setText(QApplication::translate("WindowMain", "Save Scene", 0, QApplication::UnicodeUTF8));
         actionAddComponentLineRenderer->setText(QApplication::translate("WindowMain", "Line Renderer", 0, QApplication::UnicodeUTF8));
+        actionAddComponentCircleRenderer->setText(QApplication::translate("WindowMain", "Circle Renderer", 0, QApplication::UnicodeUTF8));
         buttonTranslateMode->setText(QApplication::translate("WindowMain", "T", 0, QApplication::UnicodeUTF8));
         buttonRotateMode->setText(QApplication::translate("WindowMain", "R", 0, QApplication::UnicodeUTF8));
         buttonScaleMode->setText(QApplication::translate("WindowMain", "S", 0, QApplication::UnicodeUTF8));

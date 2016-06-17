@@ -203,11 +203,16 @@
      <property name="title">
       <string>Add Component</string>
      </property>
-     <addaction name="actionAddComponentBehaviour"/>
-     <addaction name="actionAddComponentCamera"/>
-     <addaction name="actionAddComponentMeshRenderer"/>
      <addaction name="actionAddComponentTransform"/>
+     <addaction name="separator"/>
+     <addaction name="actionAddComponentBehaviour"/>
+     <addaction name="separator"/>
+     <addaction name="actionAddComponentCamera"/>
+     <addaction name="separator"/>
+     <addaction name="actionAddComponentMeshRenderer"/>
      <addaction name="actionAddComponentLineRenderer"/>
+     <addaction name="actionAddComponentCircleRenderer"/>
+     <addaction name="separator"/>
     </widget>
     <addaction name="menuAddComponent"/>
     <addaction name="actionRemoveComponent"/>
@@ -657,6 +662,11 @@
   <action name="actionAddComponentLineRenderer">
    <property name="text">
     <string>Line Renderer</string>
+   </property>
+  </action>
+  <action name="actionAddComponentCircleRenderer">
+   <property name="text">
+    <string>Circle Renderer</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

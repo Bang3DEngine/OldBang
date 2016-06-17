@@ -16,6 +16,7 @@ public:
     {
         Points = GL_POINTS,
         Lines = GL_LINES,
+        LineStrip = GL_LINE_STRIP,
         Triangles = GL_TRIANGLES,
         Quads = GL_QUADS
     };

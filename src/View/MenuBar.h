@@ -35,9 +35,10 @@ public:
 
         AddComponentBehaviour,
         AddComponentCamera,
+        AddComponentTransform,
         AddComponentMeshRenderer,
         AddComponentLineRenderer,
-        AddComponentTransform,
+        AddComponentCircleRenderer
     };
 
     MenuBar(QWidget *parent = nullptr);
@@ -63,9 +64,10 @@ public slots:
 
     void OnAddComponentBehaviour() const;
     void OnAddComponentCamera() const;
+    void OnAddComponentTransform() const;
     void OnAddComponentMeshRenderer() const;
     void OnAddComponentLineRenderer() const;
-    void OnAddComponentTransform() const;
+    void OnAddComponentCircleRenderer() const;
 };
 
 #endif // MENUBAR_H

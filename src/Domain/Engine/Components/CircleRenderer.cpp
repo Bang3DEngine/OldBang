@@ -1,26 +1,21 @@
-#include "LineRenderer.h"
+#include "CircleRenderer.h"
 
-LineRenderer::LineRenderer()
+CircleRenderer::CircleRenderer()
 {
     #ifdef BANG_EDITOR
         inspectorComponentInfo.SetSlotsInfos(
         {
             new InspectorFileSWInfo("Material",
                         Material::GetFileExtensionStatic()),
-            new InspectorVFloatSWInfo("Origin", {0.0f, 0.0f, 0.0f}),
-            new InspectorVFloatSWInfo("Destiny", {999.9f, 999.9f, 999.9f}),
-            new InspectorVFloatSWInfo("Line Width", {0.0f})
+            new InspectorVFloatSWInfo("Radius", {1.0f}),
+            new InspectorVFloatSWInfo("Segments", {32.0f}),
+            new InspectorVFloatSWInfo("Line Width", {1.0f})
         });
     #endif
 
-    points.resize(2);
-    points[1] = Vector3(999.9f);
-
     vbo = new VBO();
-    vbo->Fill(points.data(), points.size() * sizeof(Vector3));
-
     vao = new VAO();
-    vao->BindVBO(vbo, 0, 3, GL_FLOAT);
+    BindPointsToVAO();
 
     SetLineWidth(2.0f);
 
@@ -29,24 +24,27 @@ LineRenderer::LineRenderer()
     SetMaterial(m);
 }
 
-LineRenderer::~LineRenderer()
+CircleRenderer::~CircleRenderer()
 {
 
 }
 
-const std::string LineRenderer::ToString() const
+const std::string CircleRenderer::ToString() const
 {
-    return "LineRenderer";
+    return "CircleRenderer";
 }
 
-std::string LineRenderer::GetName() const { return "LineRenderer"; }
+std::string CircleRenderer::GetName() const { return "CircleRenderer"; }
 
 
-void LineRenderer::BindPointsToVAO() const
+void CircleRenderer::BindPointsToVAO() const
 {
     if(material != nullptr && material->GetShaderProgram() != nullptr)
     {
-        vbo->Fill(points.data(), points.size() * sizeof(Vector3));
+        std::vector<Vector3> vertices;
+        GenerateVertices(&vertices);
+
+        vbo->Fill(vertices.data(), vertices.size() * sizeof(Vector3));
         GLint verticesShaderLocation = material->GetShaderProgram()->
                 GetLocation(ShaderContract::Vertex_In_Position_Raw);
         vao->UnBindVBO(verticesShaderLocation);
@@ -54,12 +52,25 @@ void LineRenderer::BindPointsToVAO() const
     }
 }
 
-void LineRenderer::ActivateStatesBeforeRendering() const
+void CircleRenderer::GenerateVertices(std::vector<Vector3> *verts) const
+{
+    std::vector<Vector3> &vertices = *verts;
+    vertices.clear();
+    vertices.resize(segments + 1);
+
+    float step = (2.0f * 3.141592f) / segments;
+    for(int i = 0;  i < segments + 1; ++i)
+    {
+        vertices[i] = Vector3(glm::cos(step*i), glm::sin(step*i), 0.0f) * radius;
+    }
+}
+
+void CircleRenderer::ActivateStatesBeforeRendering() const
 {
     Renderer::ActivateStatesBeforeRendering();
 }
 
-void LineRenderer::RenderWithoutBindingMaterial() const
+void CircleRenderer::RenderWithoutBindingMaterial() const
 {
     ActivateStatesBeforeRendering();
 
@@ -68,11 +79,11 @@ void LineRenderer::RenderWithoutBindingMaterial() const
     SetMatricesUniforms(model, view, projection, pvm);
 
     vao->Bind();
-    glDrawArrays(Renderer::RenderMode::Lines, 0, points.size());
+    glDrawArrays(Renderer::RenderMode::LineStrip, 0, segments + 1);
     vao->UnBind();
 }
 
-void LineRenderer::OnRender()
+void CircleRenderer::OnRender()
 {
     Scene *scene = GetOwner()->GetScene();
     Camera *cam = scene->GetCamera();
@@ -94,41 +105,43 @@ void LineRenderer::OnRender()
                      "Can't render.");
         return;
     }
+
     Render();
 }
 
-void LineRenderer::Render() const
+void CircleRenderer::Render() const
 {
     material->Bind();
     RenderWithoutBindingMaterial();
     material->UnBind();
 }
 
-void LineRenderer::SetMaterial(Material *m)
+void CircleRenderer::SetMaterial(Material *m)
 {
     material = m;
     BindPointsToVAO();
 }
 
-Box LineRenderer::GetBoundingBox() const
+Box CircleRenderer::GetBoundingBox() const
 {
-    return Box(points[0], points[1]);
+    return Box(Vector3(-radius, -radius, 0.0001f),
+               Vector3(radius, radius, 0.0001f));
 }
 
-void LineRenderer::SetOrigin(Vector3 o)
+void CircleRenderer::SetRadius(float radius)
 {
-    points[0] = o;
+    this->radius = radius;
     BindPointsToVAO();
 }
 
-void LineRenderer::SetDestiny(Vector3 d)
+void CircleRenderer::SetSegments(int segments)
 {
-    points[1] = d;
+    this->segments = segments;
     BindPointsToVAO();
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* LineRenderer::GetComponentInfo()
+InspectorWidgetInfo* CircleRenderer::GetComponentInfo()
 {
     InspectorFileSWInfo* matInfo =
             static_cast<InspectorFileSWInfo*>(
@@ -150,15 +163,15 @@ InspectorWidgetInfo* LineRenderer::GetComponentInfo()
         matInfo->filepath = "-";
     }
 
-    InspectorVFloatSWInfo *originInfo  =
+    InspectorVFloatSWInfo *radiusInfo  =
             static_cast<InspectorVFloatSWInfo*>(
                 inspectorComponentInfo.GetSlotInfo(1));
-    originInfo->value = {points[0].x, points[0].y, points[0].z};
+    radiusInfo->value = {radius};
 
-    InspectorVFloatSWInfo *destinyInfo  =
+    InspectorVFloatSWInfo *segmentsInfo =
             static_cast<InspectorVFloatSWInfo*>(
                 inspectorComponentInfo.GetSlotInfo(2));
-    destinyInfo->value = {points[1].x, points[1].y, points[1].z};
+    segmentsInfo->value = {segments};
 
     InspectorVFloatSWInfo *widthInfo  =
             static_cast<InspectorVFloatSWInfo*>(
@@ -168,7 +181,7 @@ InspectorWidgetInfo* LineRenderer::GetComponentInfo()
     return &inspectorComponentInfo;
 }
 
-void LineRenderer::OnSlotValueChanged(InspectorWidget *source)
+void CircleRenderer::OnSlotValueChanged(InspectorWidget *source)
 {
     std::string materialFilepath = source->GetSWFileFilepath("Material");
     if(materialFilepath != "")
@@ -177,34 +190,31 @@ void LineRenderer::OnSlotValueChanged(InspectorWidget *source)
     }
     else { }
 
-    std::vector<float> origin = source->GetSWVectorFloatValue("Origin");
-    points[0] = Vector3(origin[0], origin[1], origin[2]);
-
-    std::vector<float> destiny = source->GetSWVectorFloatValue("Destiny");
-    points[1] = Vector3(destiny[0], destiny[1], destiny[2]);
+    SetRadius(source->GetSWVectorFloatValue("Radius")[0]);
+    SetSegments(int(source->GetSWVectorFloatValue("Segments")[0]));
 
     float width = source->GetSWVectorFloatValue("Line Width")[0];
     SetLineWidth(width);
 }
 
 
-void LineRenderer::Write(std::ostream &f) const
+void CircleRenderer::Write(std::ostream &f) const
 {
-    f << "<LineRenderer>" << std::endl;
+    f << "<CircleRenderer>" << std::endl;
     f << ((void*)this) << std::endl;
     FileWriter::WriteFilepath(material->GetFilepath(), f);
-    FileWriter::Write(Vector3(points[0].x, points[0].y, points[0].z), f);
-    FileWriter::Write(Vector3(points[1].x, points[1].y, points[1].z), f);
+    FileWriter::Write(radius, f);
+    FileWriter::Write(segments, f);
     FileWriter::Write(GetLineWidth(), f);
-    f << "</LineRenderer>" << std::endl;
+    f << "</CircleRenderer>" << std::endl;
 }
 
-void LineRenderer::Read(std::istream &f)
+void CircleRenderer::Read(std::istream &f)
 {
     FileReader::RegisterNextPointerId(f, this);
     SetMaterial( AssetsManager::GetAsset<Material>(FileReader::ReadString(f)));
-    SetOrigin(FileReader::ReadVec3(f));
-    SetDestiny(FileReader::ReadVec3(f));
+    SetRadius(FileReader::ReadFloat(f));
+    SetSegments(FileReader::ReadFloat(f));
     SetLineWidth(FileReader::ReadFloat(f));
     FileReader::ReadNextLine(f); //Consume close tag
 }

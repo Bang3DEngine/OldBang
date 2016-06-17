@@ -6,9 +6,10 @@
 #include "Component.h"
 #include "BehaviourHolder.h"
 #include "Camera.h"
+#include "Transform.h"
 #include "MeshRenderer.h"
 #include "LineRenderer.h"
-#include "Transform.h"
+#include "CircleRenderer.h"
 #include "Logger.h"
 
 
@@ -127,6 +128,14 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
             currentGameObject->AddComponent(c);
         }
     }
+    else if(clickedAction == MenuBar::Action::AddComponentTransform)
+    {
+        if(this->currentGameObject != nullptr)
+        {
+            Transform *t = new Transform();
+            currentGameObject->AddComponent(t);
+        }
+    }
     else if(clickedAction == MenuBar::Action::AddComponentMeshRenderer)
     {
         if(this->currentGameObject != nullptr)
@@ -143,12 +152,12 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
             currentGameObject->AddComponent(lr);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddComponentTransform)
+    else if(clickedAction == MenuBar::Action::AddComponentCircleRenderer)
     {
         if(this->currentGameObject != nullptr)
         {
-            Transform *t = new Transform();
-            currentGameObject->AddComponent(t);
+            CircleRenderer *cr = new CircleRenderer();
+            currentGameObject->AddComponent(cr);
         }
     }
 
