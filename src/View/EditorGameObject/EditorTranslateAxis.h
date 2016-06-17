@@ -7,7 +7,7 @@
 #include "Material.h"
 #include "Matrix4.h"
 
-class EditorAxis : public EditorGameObject
+class EditorTranslateAxis : public EditorGameObject
 {
 private:
     Transform *transform = nullptr;
@@ -34,8 +34,8 @@ private:
     bool mouseIsOver = false;
 
 public:
-    enum EditorAxisDirection { X, Y, Z };
-    EditorAxis(EditorAxisDirection dir);
+    enum EditorTranslateAxisDirection { X, Y, Z };
+    EditorTranslateAxis(EditorTranslateAxisDirection dir);
 
     void OnUpdate() override;
 

@@ -7,7 +7,7 @@ EditorSelectionGameObject::EditorSelectionGameObject() :
 {
     AddComponent<Transform>();
 
-    axisGroup = new EditorAxisGroup();
+    axisGroup = new EditorTranslateAxisGroup();
     AddChild(axisGroup);
 
     bbox = new EditorBBox();

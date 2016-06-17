@@ -9,13 +9,13 @@
  * @brief Contains all the GameObjects that are added
  * to the selected GameObject when selecting it.
  * It contains:
- *      - EditorAxis
+ *      - EditorTranslateAxis
  *      - EditorBBox
  */
 class EditorSelectionGameObject : public EditorGameObject
 {
 private:
-    EditorAxisGroup *axisGroup = nullptr;
+    EditorTranslateAxisGroup *axisGroup = nullptr;
     EditorBBox *bbox = nullptr;
 
 public:

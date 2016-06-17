@@ -26,14 +26,13 @@ Time* SingletonManager::GetTimeSingleton()
     return mainBinaryTime;
 }
 
-SingletonManager* SingletonManager::
-    SetInstanceFromBehaviourLibrary(SingletonManager *mainBinarySM)
+void SingletonManager::SetInstanceFromBehaviourLibrary(SingletonManager *mainBinarySM)
 {
     SingletonManager::mainBinarySM = mainBinarySM;
 }
 
 
-SingletonManager *SingletonManager::InitFromMainBinary()
+void SingletonManager::InitFromMainBinary()
 {
     SingletonManager::mainBinarySM = new SingletonManager();
 }

@@ -55,14 +55,13 @@ public:
      * @brief This method should be called ONLY by the behaviour libraries.
      * This will link the main binary singleton's with the behaviour singleton's.
      */
-    static SingletonManager* SetInstanceFromBehaviourLibrary(
-                                    SingletonManager *mainBinarySM);
+    static void SetInstanceFromBehaviourLibrary(SingletonManager *mainBinarySM);
 
 
     /**
      * @brief This method should be called ONLY by the main binary.
      */
-    static SingletonManager* InitFromMainBinary();
+    static void InitFromMainBinary();
 
     /**
      * @brief This method should be called ONLY by the main binary, and passed

@@ -1,6 +1,6 @@
-#include "EditorAxis.h"
+#include "EditorTranslateAxis.h"
 
-EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir) :
+EditorTranslateAxis::EditorTranslateAxis(EditorTranslateAxis::EditorTranslateAxisDirection dir) :
     EditorGameObject()
 {
     transform = AddComponent<Transform>();
@@ -10,23 +10,23 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir) :
     line->SetMaterial(material);
 
     std::string name;
-    if(dir == EditorAxisDirection::X)
+    if(dir == EditorTranslateAxisDirection::X)
     {
         lineColor = Vector3(1,0,0);
         axisDirection = Vector3(1,0,0);
-        name = "EditorAxisX";
+        name = "EditorTranslateAxisX";
     }
-    else if (dir == EditorAxisDirection::Y)
+    else if (dir == EditorTranslateAxisDirection::Y)
     {
         lineColor = Vector3(0,1,0);
         axisDirection = Vector3(0,1,0);
-        name = "EditorAxisY";
+        name = "EditorTranslateAxisY";
     }
     else
     {
         lineColor = Vector3(0,0,1);
         axisDirection = Vector3(0,0,1);
-        name = "EditorAxisZ";
+        name = "EditorTranslateAxisZ";
     }
 
     material->SetDiffuseColor(glm::vec4(lineColor, 1));
@@ -38,7 +38,7 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir) :
 }
 
 
-void EditorAxis::OnUpdate()
+void EditorTranslateAxis::OnUpdate()
 {
     // Process line color
     if(mouseIsOver)
@@ -110,7 +110,7 @@ void EditorAxis::OnUpdate()
     }
 }
 
-void EditorAxis::OnMouseEnter()
+void EditorTranslateAxis::OnMouseEnter()
 {
     mouseIsOver = true;
     if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
@@ -119,7 +119,7 @@ void EditorAxis::OnMouseEnter()
     }
 }
 
-void EditorAxis::OnMouseExit()
+void EditorTranslateAxis::OnMouseExit()
 {
     mouseIsOver = false;
 }

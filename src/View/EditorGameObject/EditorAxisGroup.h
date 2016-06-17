@@ -1,34 +1,31 @@
 #ifndef EDITORAXISGROUP_H
 #define EDITORAXISGROUP_H
 
+#include "Toolbar.h"
 #include "Transform.h"
-#include "EditorAxis.h"
+#include "EditorTranslateAxis.h"
 #include "MeshRenderer.h"
 #include "LineRenderer.h"
 #include "EditorGameObject.h"
 
 /**
- * @brief The EditorAxisGroup class represents a group of EditorAxises.
- * There will be X,Y,Z EditorAxis, which will be children of this EditorGameObject.
+ * @brief The EditorTranslateAxisGroup class represents a group of EditorTranslateAxises.
+ * There will be X,Y,Z EditorTranslateAxis, which will be children of this EditorGameObject.
  * We need to handle them separately to be able to detect the mouse events separately
  * on each one.
  */
-class EditorAxisGroup : public EditorGameObject
+class EditorTranslateAxisGroup : public EditorGameObject
 {
 private:
-    bool globalCoords = false;
-
-    EditorAxis *axisX;
-    EditorAxis *axisY;
-    EditorAxis *axisZ;
+    EditorTranslateAxis *axisX;
+    EditorTranslateAxis *axisY;
+    EditorTranslateAxis *axisZ;
 
 public:
-    EditorAxisGroup();
-    virtual ~EditorAxisGroup();
+    EditorTranslateAxisGroup();
+    virtual ~EditorTranslateAxisGroup();
 
     void OnUpdate() override;
-
-    void OnButtonGlobalCoordsClicked(bool globalCoords) override;
 };
 
 #endif // EDITORAXIS_H

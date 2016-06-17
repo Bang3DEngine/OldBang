@@ -176,11 +176,12 @@ HEADERS += \
     src/Domain/Engine/Physics/Sphere.h \
     src/Domain/Graphics/SelectionFramebuffer.h \
     src/View/EditorGameObject/EditorAxisGroup.h \
-    src/View/EditorGameObject/EditorAxis.h \
+    src/View/EditorGameObject/EditorTranslateAxis.h \
     src/Domain/Engine/Others/SystemUtils.h \
     src/Domain/Engine/Components/BehaviourHolder.h \
     src/View/Inspector/InspectorButtonSW.h \
-    src/Domain/Engine/Others/SingletonManager.h
+    src/Domain/Engine/Others/SingletonManager.h \
+    src/View/Toolbar.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -265,11 +266,12 @@ SOURCES += \
     src/Domain/Engine/Physics/Sphere.cpp \
     src/Domain/Graphics/SelectionFramebuffer.cpp \
     src/View/EditorGameObject/EditorAxisGroup.cpp \
-    src/View/EditorGameObject/EditorAxis.cpp \
+    src/View/EditorGameObject/EditorTranslateAxis.cpp \
     src/Domain/Engine/Others/SystemUtils.cpp \
     src/Domain/Engine/Components/BehaviourHolder.cpp \
     src/View/Inspector/InspectorButtonSW.cpp \
-    src/Domain/Engine/Others/SingletonManager.cpp
+    src/Domain/Engine/Others/SingletonManager.cpp \
+    src/View/Toolbar.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

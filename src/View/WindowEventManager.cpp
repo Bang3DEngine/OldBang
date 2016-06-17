@@ -57,21 +57,19 @@ void WindowEventManager::NotifyMenuBarActionClicked(MenuBar::Action clickedActio
     PROPAGATE_EVENT_PAR(OnMenuBarActionClicked(clickedAction), wem->listeners);
 }
 
-void WindowEventManager::NotifyButtonGlobalCoordsClicked()
+void WindowEventManager::NotifyButtonTranslateModeSelected()
 {
-    QPushButton *b = WindowMain::GetInstance()->buttonGlobalCoords;
-    std::string bText = b->text().toStdString();
-    bool globalCoords = bText.find("lobal") != std::string::npos;
-    if(globalCoords)
-    {
-        b->setText("Local");
-    }
-    else
-    {
-        b->setText("Global");
-    }
+    PROPAGATE_EVENT_PAR(OnButtonTranslateModeSelected(), wem->listeners);
+}
 
-    PROPAGATE_EVENT_PAR(OnButtonGlobalCoordsClicked(globalCoords), wem->listeners);
+void WindowEventManager::NotifyButtonRotateModeSelected()
+{
+    PROPAGATE_EVENT_PAR(OnButtonRotateModeSelected(), wem->listeners);
+}
+
+void WindowEventManager::NotifyButtonScaleModeSelected()
+{
+    PROPAGATE_EVENT_PAR(OnButtonScaleModeSelected(), wem->listeners);
 }
 
 void WindowEventManager::NotifyInspectorSlotChanged(Component *updatedComponent, InspectorWidget *inspectorItem)

@@ -2,27 +2,24 @@
 
 #include "WindowMain.h"
 
-EditorAxisGroup::EditorAxisGroup() : EditorGameObject("EditorAxisGroup")
+EditorTranslateAxisGroup::EditorTranslateAxisGroup() : EditorGameObject("EditorAxisGroup")
 {
-    axisX = new EditorAxis(EditorAxis::EditorAxisDirection::X);
-    axisY = new EditorAxis(EditorAxis::EditorAxisDirection::Y);
-    axisZ = new EditorAxis(EditorAxis::EditorAxisDirection::Z);
+    axisX = new EditorTranslateAxis(EditorTranslateAxis::EditorTranslateAxisDirection::X);
+    axisY = new EditorTranslateAxis(EditorTranslateAxis::EditorTranslateAxisDirection::Y);
+    axisZ = new EditorTranslateAxis(EditorTranslateAxis::EditorTranslateAxisDirection::Z);
 
     AddChild(axisX);
     AddChild(axisY);
     AddChild(axisZ);
 
     AddComponent<Transform>();
-
-    globalCoords = !WindowMain::GetInstance()->buttonGlobalCoords->
-                    text().contains("lobal");
 }
 
-EditorAxisGroup::~EditorAxisGroup()
+EditorTranslateAxisGroup::~EditorTranslateAxisGroup()
 {
 }
 
-void EditorAxisGroup::OnUpdate()
+void EditorTranslateAxisGroup::OnUpdate()
 {
     //Attached GameObject positioning and scaling
     GameObject *attGameObject = GetAttachedGameObject();
@@ -36,7 +33,7 @@ void EditorAxisGroup::OnUpdate()
 
             t->SetPosition( bbox.GetCenter() );
 
-            if(globalCoords)
+            if(Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
                 t->SetRotation( st->GetLocalRotation().Inversed() );
             }
@@ -48,10 +45,5 @@ void EditorAxisGroup::OnUpdate()
             t->SetScale(1.0f / st->GetScale());
         }
     }
-}
-
-void EditorAxisGroup::OnButtonGlobalCoordsClicked(bool globalCoords)
-{
-    this->globalCoords = globalCoords;
 }
 

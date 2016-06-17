@@ -33,6 +33,7 @@
 #include "ListLogger.h"
 #include "LoggerWidget.h"
 #include "MenuBar.h"
+#include "Toolbar.h"
 #include "WindowEventManager.h"
 
 QT_BEGIN_NAMESPACE
@@ -63,11 +64,13 @@ public:
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
     WindowEventManager *windowEventManager;
+    Toolbar *widgetToolbar;
+    QHBoxLayout *horizontalLayout_2;
     QHBoxLayout *horizontalLayout;
     QToolButton *buttonTranslateMode;
     QToolButton *buttonRotateMode;
     QToolButton *buttonScaleMode;
-    QPushButton *buttonGlobalCoords;
+    QToolButton *buttonGlobalCoords;
     QSpacerItem *horizontalSpacer;
     QPushButton *buttonPauseResume;
     Canvas *canvas;
@@ -166,24 +169,35 @@ public:
 
         verticalLayout_3->addWidget(windowEventManager);
 
+        widgetToolbar = new Toolbar(centralwidget);
+        widgetToolbar->setObjectName(QString::fromUtf8("widgetToolbar"));
+        horizontalLayout_2 = new QHBoxLayout(widgetToolbar);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        buttonTranslateMode = new QToolButton(centralwidget);
+        buttonTranslateMode = new QToolButton(widgetToolbar);
         buttonTranslateMode->setObjectName(QString::fromUtf8("buttonTranslateMode"));
+        buttonTranslateMode->setCheckable(true);
+        buttonTranslateMode->setPopupMode(QToolButton::DelayedPopup);
+        buttonTranslateMode->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        buttonTranslateMode->setAutoRaise(false);
+        buttonTranslateMode->setArrowType(Qt::NoArrow);
 
         horizontalLayout->addWidget(buttonTranslateMode);
 
-        buttonRotateMode = new QToolButton(centralwidget);
+        buttonRotateMode = new QToolButton(widgetToolbar);
         buttonRotateMode->setObjectName(QString::fromUtf8("buttonRotateMode"));
+        buttonRotateMode->setCheckable(true);
 
         horizontalLayout->addWidget(buttonRotateMode);
 
-        buttonScaleMode = new QToolButton(centralwidget);
+        buttonScaleMode = new QToolButton(widgetToolbar);
         buttonScaleMode->setObjectName(QString::fromUtf8("buttonScaleMode"));
+        buttonScaleMode->setCheckable(true);
 
         horizontalLayout->addWidget(buttonScaleMode);
 
-        buttonGlobalCoords = new QPushButton(centralwidget);
+        buttonGlobalCoords = new QToolButton(widgetToolbar);
         buttonGlobalCoords->setObjectName(QString::fromUtf8("buttonGlobalCoords"));
         buttonGlobalCoords->setCheckable(true);
         buttonGlobalCoords->setChecked(true);
@@ -195,7 +209,7 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
-        buttonPauseResume = new QPushButton(centralwidget);
+        buttonPauseResume = new QPushButton(widgetToolbar);
         buttonPauseResume->setObjectName(QString::fromUtf8("buttonPauseResume"));
         QIcon icon;
         QString iconThemeName = QString::fromUtf8("pause");
@@ -210,7 +224,10 @@ public:
         horizontalLayout->addWidget(buttonPauseResume);
 
 
-        verticalLayout_3->addLayout(horizontalLayout);
+        horizontalLayout_2->addLayout(horizontalLayout);
+
+
+        verticalLayout_3->addWidget(widgetToolbar);
 
         canvas = new Canvas(centralwidget);
         canvas->setObjectName(QString::fromUtf8("canvas"));
@@ -478,7 +495,6 @@ public:
 
         retranslateUi(WindowMain);
         QObject::connect(widgetHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
-        QObject::connect(buttonPauseResume, SIGNAL(clicked()), canvas, SLOT(OnPauseResumeButtonPressed()));
         QObject::connect(buttonLoggerClear, SIGNAL(clicked()), listLogger, SLOT(clear()));
 
         QMetaObject::connectSlotsByName(WindowMain);

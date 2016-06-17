@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 
     QFont font;
     font.setFamily(font.defaultFamily());
-    font.setPixelSize(10);
+    font.setPixelSize(11);
     app.setFont(font);
 
     // Init SINGLETON's

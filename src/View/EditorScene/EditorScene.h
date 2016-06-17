@@ -12,7 +12,7 @@ class EditorScene : public Scene
 private:
     EditorDebugGameObject *debugGameObject = nullptr;
     EditorCamera *cameraGameObject = nullptr;
-    EditorAxisGroup *axises = nullptr;
+    EditorTranslateAxisGroup *axises = nullptr;
 
     SelectionFramebuffer *selectionFramebuffer = nullptr;
 

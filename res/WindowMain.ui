@@ -30,72 +30,99 @@
        <widget class="WindowEventManager" name="windowEventManager" native="true"/>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QToolButton" name="buttonTranslateMode">
-          <property name="text">
-           <string>T</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="buttonRotateMode">
-          <property name="text">
-           <string>R</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QToolButton" name="buttonScaleMode">
-          <property name="text">
-           <string>S</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonGlobalCoords">
-          <property name="text">
-           <string>Global</string>
-          </property>
-          <property name="checkable">
-           <bool>true</bool>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-          <property name="autoExclusive">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonPauseResume">
-          <property name="text">
-           <string>Pause</string>
-          </property>
-          <property name="icon">
-           <iconset theme="pause">
-            <normaloff>../../.designer/backup</normaloff>../../.designer/backup</iconset>
-          </property>
-          <property name="flat">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="Toolbar" name="widgetToolbar" native="true">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QToolButton" name="buttonTranslateMode">
+             <property name="text">
+              <string>T</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="popupMode">
+              <enum>QToolButton::DelayedPopup</enum>
+             </property>
+             <property name="toolButtonStyle">
+              <enum>Qt::ToolButtonIconOnly</enum>
+             </property>
+             <property name="autoRaise">
+              <bool>false</bool>
+             </property>
+             <property name="arrowType">
+              <enum>Qt::NoArrow</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="buttonRotateMode">
+             <property name="text">
+              <string>R</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="buttonScaleMode">
+             <property name="text">
+              <string>S</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="buttonGlobalCoords">
+             <property name="text">
+              <string>Global</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="buttonPauseResume">
+             <property name="text">
+              <string>Pause</string>
+             </property>
+             <property name="icon">
+              <iconset theme="pause">
+               <normaloff>../../.designer/backup</normaloff>../../.designer/backup</iconset>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
       </item>
       <item>
        <widget class="Canvas" name="canvas" native="true">
@@ -695,6 +722,12 @@
    <extends>QTreeView</extends>
    <header>ExplorerDirTree.h</header>
   </customwidget>
+  <customwidget>
+   <class>Toolbar</class>
+   <extends>QWidget</extends>
+   <header>Toolbar.h</header>
+   <container>1</container>
+  </customwidget>
  </customwidgets>
  <resources/>
  <connections>
@@ -711,22 +744,6 @@
     <hint type="destinationlabel">
      <x>87</x>
      <y>127</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonPauseResume</sender>
-   <signal>clicked()</signal>
-   <receiver>canvas</receiver>
-   <slot>OnPauseResumeButtonPressed()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>647</x>
-     <y>271</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>356</x>
-     <y>217</y>
     </hint>
    </hints>
   </connection>

@@ -638,7 +638,7 @@ QPushButton:disabled
 }
 
 QPushButton:focus {
-    background-color: #3d8ec9;
+    /*background-color: #3d8ec9;*/
     color: white;
 }
 
@@ -1031,12 +1031,13 @@ QSlider::handle:vertical {
     border-radius: 2px;
 }
 
-QToolButton {
+
+QToolButton, QToolButton:hover, QToolButton::menu-button:hover {
     background-color: transparent;
-    border: 1px transparent #4A4949;
     border-radius: 2px;
     margin: 3px;
     padding: 3px;
+    border: 1px solid #78879b;
 }
 
 QToolButton[popupMode="1"] { /* only for MenuButtonPopup */
@@ -1050,11 +1051,6 @@ QToolButton[popupMode="2"] { /* only for InstantPopup */
  border: 1px transparent #4A4949;
 }
 
-
-QToolButton:hover, QToolButton::menu-button:hover {
-    background-color: transparent;
-    border: 1px solid #78879b;
-}
 
 QToolButton:checked, QToolButton:pressed,
         QToolButton::menu-button:pressed {

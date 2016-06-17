@@ -21,7 +21,9 @@ public:
     virtual void OnChildChangedParent(GameObject *child, GameObject *previousParent) { }
     virtual void OnChildRemoved(GameObject *child) { }
 
-    virtual void OnButtonGlobalCoordsClicked(bool globalCoords) { }
+    virtual void OnButtonTranslateModeSelected() {}
+    virtual void OnButtonRotateModeSelected() {}
+    virtual void OnButtonScaleModeSelected() {}
 
     virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem)  { }
     virtual void OnTreeHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects) { }
