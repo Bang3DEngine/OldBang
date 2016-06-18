@@ -4,7 +4,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorTranslateAxis::EditorTranslateAxi
     EditorGameObject()
 {
     transform = AddComponent<Transform>();
-    line = AddComponent<LineRenderer>();
+    line = AddComponent<SingleLineRenderer>();
 
     material = new Material(*line->GetMaterial());
     line->SetMaterial(material);

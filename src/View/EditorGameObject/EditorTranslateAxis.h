@@ -2,7 +2,7 @@
 #define EDITORAXIS_H
 
 #include "EditorGameObject.h"
-#include "LineRenderer.h"
+#include "SingleLineRenderer.h"
 #include "Transform.h"
 #include "Material.h"
 #include "Matrix4.h"
@@ -11,7 +11,7 @@ class EditorTranslateAxis : public EditorGameObject
 {
 private:
     Transform *transform = nullptr;
-    LineRenderer *line = nullptr;
+    SingleLineRenderer *line = nullptr;
     Material *material = nullptr;
 
     /**

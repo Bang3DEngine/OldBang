@@ -182,7 +182,9 @@ HEADERS += \
     src/View/Inspector/InspectorButtonSW.h \
     src/Domain/Engine/Others/SingletonManager.h \
     src/View/Toolbar.h \
-    src/Domain/Engine/Components/CircleRenderer.h
+    src/Domain/Engine/Components/CircleRenderer.h \
+    src/Domain/Engine/Components/SingleLineRenderer.h \
+    src/Domain/Engine/Components/LineStripRenderer.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -273,7 +275,9 @@ SOURCES += \
     src/View/Inspector/InspectorButtonSW.cpp \
     src/Domain/Engine/Others/SingletonManager.cpp \
     src/View/Toolbar.cpp \
-    src/Domain/Engine/Components/CircleRenderer.cpp
+    src/Domain/Engine/Components/CircleRenderer.cpp \
+    src/Domain/Engine/Components/SingleLineRenderer.cpp \
+    src/Domain/Engine/Components/LineStripRenderer.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

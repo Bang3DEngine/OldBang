@@ -5,13 +5,13 @@
 
 #include <vector>
 
-#include "LineRenderer.h"
+#include "SingleLineRenderer.h"
 #include "EditorGameObject.h"
 
 class EditorDebugGameObject : public EditorGameObject
 {
 private:
-    std::vector<LineRenderer*> lineRenderers;
+    std::vector<SingleLineRenderer*> singleLineRenderers;
 
 public:
 

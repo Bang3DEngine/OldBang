@@ -11,10 +11,10 @@ void EditorDebugGameObject::DrawLine(const Vector3 &origin,
                                      int msTime,
                                      bool depthTest)
 {
-    LineRenderer *lr = AddComponent<LineRenderer>();
-    lr->SetOrigin(origin);
-    lr->SetDestiny(destiny);
-    lr->SetLineWidth(lineWidth);
+    SingleLineRenderer *slr = AddComponent<SingleLineRenderer>();
+    slr->SetOrigin(origin);
+    slr->SetDestiny(destiny);
+    slr->SetLineWidth(lineWidth);
 
-    lineRenderers.push_back(lr);
+    singleLineRenderers.push_back(slr);
 }

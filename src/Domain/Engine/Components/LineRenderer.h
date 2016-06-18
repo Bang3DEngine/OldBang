@@ -20,16 +20,13 @@
 
 class LineRenderer : public Renderer
 {
-private:
+protected:
     std::vector<Vector3> points;
 
     VBO *vbo = nullptr;
     VAO *vao = nullptr;
 
-    void BindPointsToVAO() const;
-
-protected:
-
+    virtual void BindPointsToVAO() const;
     virtual void ActivateStatesBeforeRendering() const override;
     virtual void RenderWithoutBindingMaterial() const override;
     virtual void OnRender() override;
@@ -46,15 +43,12 @@ public:
 
     virtual Box GetBoundingBox() const override;
 
-    void SetOrigin(Vector3 o);
-    void SetDestiny(Vector3 d);
-
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
 
-    void Write(std::ostream &f) const;
-    void Read(std::istream &f);
+    void Write(std::ostream &f) const = 0;
+    void Read(std::istream &f) = 0;
     #endif
 };
 

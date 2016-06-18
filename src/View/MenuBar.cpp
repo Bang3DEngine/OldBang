@@ -49,7 +49,7 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
     connect(w->actionAddComponentMeshRenderer,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentMeshRenderer()));
     connect(w->actionAddComponentLineRenderer,  SIGNAL(triggered()),
-            this, SLOT(OnAddComponentLineRenderer()));
+            this, SLOT(OnAddComponentSingleLineRenderer()));
     connect(w->actionAddComponentCircleRenderer,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentCircleRenderer()));
 }
@@ -229,9 +229,9 @@ void MenuBar::OnAddComponentMeshRenderer() const
 {
     wem->NotifyMenuBarActionClicked(Action::AddComponentMeshRenderer);
 }
-void MenuBar::OnAddComponentLineRenderer() const
+void MenuBar::OnAddComponentSingleLineRenderer() const
 {
-    wem->NotifyMenuBarActionClicked(Action::AddComponentLineRenderer);
+    wem->NotifyMenuBarActionClicked(Action::AddComponenSingleLineRenderer);
 }
 void MenuBar::OnAddComponentCircleRenderer() const
 {

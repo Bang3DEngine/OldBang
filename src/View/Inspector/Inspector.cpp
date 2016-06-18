@@ -8,7 +8,7 @@
 #include "Camera.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
-#include "LineRenderer.h"
+#include "SingleLineRenderer.h"
 #include "CircleRenderer.h"
 #include "Logger.h"
 
@@ -144,12 +144,12 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
             currentGameObject->AddComponent(m);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddComponentLineRenderer)
+    else if(clickedAction == MenuBar::Action::AddComponenSingleLineRenderer)
     {
         if(this->currentGameObject != nullptr)
         {
-            LineRenderer *lr = new LineRenderer();
-            currentGameObject->AddComponent(lr);
+            SingleLineRenderer *slr = new SingleLineRenderer();
+            currentGameObject->AddComponent(slr);
         }
     }
     else if(clickedAction == MenuBar::Action::AddComponentCircleRenderer)
