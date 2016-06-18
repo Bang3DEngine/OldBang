@@ -63,7 +63,7 @@ InspectorWidgetInfo* CircleRenderer::GetComponentInfo()
     InspectorVFloatSWInfo *segmentsInfo =
             static_cast<InspectorVFloatSWInfo*>(
                 inspectorComponentInfo.GetSlotInfo(3));
-    segmentsInfo->value = {segments};
+    segmentsInfo->value = {float(segments)};
 
     return &inspectorComponentInfo;
 }

@@ -175,7 +175,7 @@ HEADERS += \
     src/View/EditorScene/EditorDebugGameObject.h \
     src/Domain/Engine/Physics/Sphere.h \
     src/Domain/Graphics/SelectionFramebuffer.h \
-    src/View/EditorGameObject/EditorAxisGroup.h \
+    src/View/EditorGameObject/EditorTranslateAxisGroup.h \
     src/View/EditorGameObject/EditorTranslateAxis.h \
     src/Domain/Engine/Others/SystemUtils.h \
     src/Domain/Engine/Components/BehaviourHolder.h \
@@ -184,7 +184,10 @@ HEADERS += \
     src/View/Toolbar.h \
     src/Domain/Engine/Components/CircleRenderer.h \
     src/Domain/Engine/Components/SingleLineRenderer.h \
-    src/Domain/Engine/Components/LineStripRenderer.h
+    src/Domain/Engine/Components/LineStripRenderer.h \
+    src/View/EditorGameObject/EditorRotateAxisGroup.h \
+    src/View/EditorGameObject/EditorRotateAxis.h \
+    src/View/EditorGameObject/EditorAxisGroup.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -268,7 +271,7 @@ SOURCES += \
     src/View/EditorScene/EditorDebugGameObject.cpp \
     src/Domain/Engine/Physics/Sphere.cpp \
     src/Domain/Graphics/SelectionFramebuffer.cpp \
-    src/View/EditorGameObject/EditorAxisGroup.cpp \
+    src/View/EditorGameObject/EditorTranslateAxisGroup.cpp \
     src/View/EditorGameObject/EditorTranslateAxis.cpp \
     src/Domain/Engine/Others/SystemUtils.cpp \
     src/Domain/Engine/Components/BehaviourHolder.cpp \
@@ -277,7 +280,10 @@ SOURCES += \
     src/View/Toolbar.cpp \
     src/Domain/Engine/Components/CircleRenderer.cpp \
     src/Domain/Engine/Components/SingleLineRenderer.cpp \
-    src/Domain/Engine/Components/LineStripRenderer.cpp
+    src/Domain/Engine/Components/LineStripRenderer.cpp \
+    src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
+    src/View/EditorGameObject/EditorRotateAxis.cpp \
+    src/View/EditorGameObject/EditorAxisGroup.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

@@ -3,7 +3,7 @@
 
 #include "Scene.h"
 #include "EditorCamera.h"
-#include "EditorAxisGroup.h"
+#include "EditorTranslateAxisGroup.h"
 #include "SelectionFramebuffer.h"
 #include "EditorDebugGameObject.h"
 

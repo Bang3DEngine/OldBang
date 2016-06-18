@@ -2,7 +2,7 @@
 #define EDITORSELECTIONGAMEOBJECT_H
 
 #include "EditorBBox.h"
-#include "EditorAxisGroup.h"
+#include "EditorTranslateAxisGroup.h"
 #include "EditorGameObject.h"
 
 /**

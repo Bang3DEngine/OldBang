@@ -1,31 +1,17 @@
 #ifndef EDITORAXISGROUP_H
 #define EDITORAXISGROUP_H
 
-#include "Toolbar.h"
-#include "Transform.h"
-#include "EditorTranslateAxis.h"
-#include "MeshRenderer.h"
-#include "LineRenderer.h"
-#include "EditorGameObject.h"
-
 /**
- * @brief The EditorTranslateAxisGroup class represents a group of EditorTranslateAxises.
- * There will be X,Y,Z EditorTranslateAxis, which will be children of this EditorGameObject.
- * We need to handle them separately to be able to detect the mouse events separately
- * on each one.
+ * @brief The EditorAxisGroup class contains the Translate, Rotate
+ * and Scale Axis Groups.
+ *
+ * This is the responsible of enabling or disabling them, depending on
+ * the mode selected in the Toolbar
  */
-class EditorTranslateAxisGroup : public EditorGameObject
+class EditorAxisGroup
 {
-private:
-    EditorTranslateAxis *axisX;
-    EditorTranslateAxis *axisY;
-    EditorTranslateAxis *axisZ;
-
 public:
-    EditorTranslateAxisGroup();
-    virtual ~EditorTranslateAxisGroup();
-
-    void OnUpdate() override;
+    EditorAxisGroup();
 };
 
-#endif // EDITORAXIS_H
+#endif // EDITORAXISGROUP_H
