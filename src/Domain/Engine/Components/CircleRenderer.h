@@ -16,27 +16,16 @@
 #include "FileReader.h"
 #include "ShaderContract.h"
 
-#include "Renderer.h"
+#include "LineRenderer.h"
 
-class CircleRenderer : public Renderer
+class CircleRenderer : public LineRenderer
 {
 private:
 
     float radius = 1.0f;
     int segments = 32;
 
-    VBO *vbo = nullptr;
-    VAO *vao = nullptr;
-
-    void GenerateVertices(std::vector<Vector3> *vertices) const;
-    void BindPointsToVAO() const;
-
-protected:
-
-    virtual void ActivateStatesBeforeRendering() const override;
-    virtual void RenderWithoutBindingMaterial() const override;
-    virtual void OnRender() override;
-    virtual void Render() const override;
+    void GeneratePoints();
 
 public:
     CircleRenderer();
@@ -44,10 +33,6 @@ public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override;
-
-    virtual void SetMaterial(Material *m) override;
-
-    virtual Box GetBoundingBox() const override;
 
     void SetRadius(float radius);
     void SetSegments(int segments);

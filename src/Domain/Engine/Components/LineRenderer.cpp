@@ -36,7 +36,8 @@ std::string LineRenderer::GetName() const { return "LineRenderer"; }
 
 void LineRenderer::BindPointsToVAO() const
 {
-    if(material != nullptr && material->GetShaderProgram() != nullptr)
+    if(points.size() >= 2 &&
+       material != nullptr && material->GetShaderProgram() != nullptr)
     {
         vbo->Fill(points.data(), points.size() * sizeof(Vector3));
         GLint verticesShaderLocation = material->GetShaderProgram()->
@@ -60,7 +61,7 @@ void LineRenderer::RenderWithoutBindingMaterial() const
     SetMatricesUniforms(model, view, projection, pvm);
 
     vao->Bind();
-    glDrawArrays(Renderer::RenderMode::Lines, 0, points.size());
+    glDrawArrays(drawLinesMode, 0, points.size());
     vao->UnBind();
 }
 
@@ -145,7 +146,7 @@ InspectorWidgetInfo* LineRenderer::GetComponentInfo()
 
     InspectorVFloatSWInfo *widthInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                inspectorComponentInfo.GetSlotInfo(3));
+                inspectorComponentInfo.GetSlotInfo(1));
     widthInfo->value = {GetLineWidth()};
 
     return &inspectorComponentInfo;

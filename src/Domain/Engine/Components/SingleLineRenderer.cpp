@@ -12,6 +12,8 @@ SingleLineRenderer::SingleLineRenderer()
     points.resize(2);
     points[0] = Vector3(0.0f);
     points[1] = Vector3(1.0f);
+
+    this->drawLinesMode = RenderMode::Lines;
 }
 
 SingleLineRenderer::~SingleLineRenderer()
@@ -45,12 +47,12 @@ InspectorWidgetInfo* SingleLineRenderer::GetComponentInfo()
 
     InspectorVFloatSWInfo *originInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                inspectorComponentInfo.GetSlotInfo(1));
+                inspectorComponentInfo.GetSlotInfo(2));
     originInfo->value = {points[0].x, points[0].y, points[0].z};
 
     InspectorVFloatSWInfo *destinyInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                inspectorComponentInfo.GetSlotInfo(2));
+                inspectorComponentInfo.GetSlotInfo(3));
     destinyInfo->value = {points[1].x, points[1].y, points[1].z};
 
     return &inspectorComponentInfo;

@@ -26,6 +26,8 @@ protected:
     VBO *vbo = nullptr;
     VAO *vao = nullptr;
 
+    RenderMode drawLinesMode = RenderMode::Lines;
+
     virtual void BindPointsToVAO() const;
     virtual void ActivateStatesBeforeRendering() const override;
     virtual void RenderWithoutBindingMaterial() const override;
