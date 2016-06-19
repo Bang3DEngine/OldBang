@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QToolButton>
 
+#include "Input.h"
 #include "IWindowEventManagerListener.h"
 
 class Toolbar : public QWidget
@@ -21,6 +22,7 @@ public:
 private:
     static Toolbar *tb;
 
+    QTimer *keyTimer = nullptr;
     QToolButton *buttonTranslateMode = nullptr;
     QToolButton *buttonRotateMode    = nullptr;
     QToolButton *buttonScaleMode     = nullptr;
@@ -32,7 +34,7 @@ private:
 
 public:
     explicit Toolbar(QWidget *parent = nullptr);
-    virtual ~Toolbar() {}
+    virtual ~Toolbar();
 
     static void Init();
     static Toolbar* GetInstance();
@@ -40,13 +42,12 @@ public:
     TransformMode GetSelectedTransformMode();
     bool GetGlobalCoordsMode();
 
-    void keyPressEvent(QKeyEvent *e) override;
-
 public slots:
 
     void OnTranslateClicked();
     void OnRotateClicked();
     void OnScaleClicked();
+    void CheckKeyPressed();
 };
 
 #endif // TOOLBAR_H

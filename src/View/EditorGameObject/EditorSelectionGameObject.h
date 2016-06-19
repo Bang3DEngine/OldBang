@@ -2,7 +2,7 @@
 #define EDITORSELECTIONGAMEOBJECT_H
 
 #include "EditorBBox.h"
-#include "EditorTranslateAxisGroup.h"
+#include "EditorAxisGroup.h"
 #include "EditorGameObject.h"
 
 /**
@@ -15,8 +15,7 @@
 class EditorSelectionGameObject : public EditorGameObject
 {
 private:
-    EditorTranslateAxisGroup *axisGroup = nullptr;
-    EditorBBox *bbox = nullptr;
+    EditorAxisGroup *axisGroup = nullptr;
 
 public:
     EditorSelectionGameObject();

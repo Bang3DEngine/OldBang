@@ -6,6 +6,11 @@ Toolbar *Toolbar::tb = nullptr;
 
 Toolbar::Toolbar(QWidget *parent) : QWidget(parent) { }
 
+Toolbar::~Toolbar()
+{
+    delete keyTimer;
+}
+
 void Toolbar::Init()
 {
     WindowMain *w = WindowMain::GetInstance();
@@ -16,6 +21,11 @@ void Toolbar::Init()
     Toolbar::tb->buttonScaleMode     = w->buttonScaleMode;
     Toolbar::tb->buttonGlobalCoords  = w->buttonGlobalCoords;
 
+    Toolbar::tb->keyTimer = new QTimer();
+    Toolbar::tb->keyTimer->start(10);
+    connect(Toolbar::tb->keyTimer, SIGNAL(timeout()),
+            Toolbar::tb, SLOT(CheckKeyPressed()));
+
     connect(Toolbar::tb->buttonTranslateMode, SIGNAL(clicked()),
             Toolbar::tb, SLOT(OnTranslateClicked()));
 
@@ -24,6 +34,8 @@ void Toolbar::Init()
 
     connect(Toolbar::tb->buttonScaleMode, SIGNAL(clicked()),
             Toolbar::tb, SLOT(OnScaleClicked()));
+
+    Toolbar::tb->setFocusPolicy(Qt::ClickFocus);
 }
 
 void Toolbar::UnCheckTransformModeButtons()
@@ -74,18 +86,19 @@ void Toolbar::OnScaleClicked()
     currentTransformMode = TransformMode::Scale;
 }
 
-void Toolbar::keyPressEvent(QKeyEvent *e)
+void Toolbar::CheckKeyPressed()
 {
-    if (e->key() == Qt::Key_W)
+    if(Input::GetKeyDown(Input::Key::W))
     {
         buttonTranslateMode->click();
     }
-    else if (e->key() == Qt::Key_E)
+    else if(Input::GetKeyDown(Input::Key::E))
     {
         buttonRotateMode->click();
     }
-    else if (e->key() == Qt::Key_R)
+    else if(Input::GetKeyDown(Input::Key::R))
     {
         buttonScaleMode->click();
     }
 }
+
