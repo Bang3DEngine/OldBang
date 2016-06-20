@@ -29,6 +29,11 @@ Quaternion Quaternion::Inversed() const
     return Quaternion(glm::inverse(glm::quat(*this)));
 }
 
+Vector3 Quaternion::EulerAngles() const
+{
+    return Quaternion::EulerAngles(*this);
+}
+
 Quaternion Quaternion::Slerp(const Quaternion &from, const Quaternion &to, float progression)
 {
     return Quaternion(glm::mix(glm::quat(from), glm::quat(to), progression));

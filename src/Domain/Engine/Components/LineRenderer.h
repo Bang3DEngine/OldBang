@@ -44,6 +44,7 @@ public:
     virtual void SetMaterial(Material *m) override;
 
     virtual Box GetBoundingBox() const override;
+    const std::vector<Vector3>& GetPoints() const;
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;

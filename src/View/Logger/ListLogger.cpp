@@ -12,7 +12,7 @@ void ListLogger::AddLog(const std::string &str)
     listLogger = ListLogger::GetInstance();
 
     listLogger->addItem(QString::fromStdString("LOG:\t" + str));
-    //DecorateLastItem(QColor::fromRgb(255, 255, 255, 255));
+    listLogger->scrollToBottom();
 }
 
 void ListLogger::AddWarn(const std::string &str)
@@ -39,11 +39,15 @@ ListLogger *ListLogger::GetInstance()
 void ListLogger::DecorateLastItem(const QColor &color)
 {
     listLogger = ListLogger::GetInstance();
+    QColor inverse(255 - color.red(),
+                   255 - color.green(),
+                   255 - color.blue());
 
     QListWidgetItem *item = listLogger->item(listLogger->count()-1);
     if(item != nullptr)
     {
         item->setBackgroundColor(color);
+        item->setTextColor(inverse);
     }
 
     listLogger->scrollToBottom();

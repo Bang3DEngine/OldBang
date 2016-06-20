@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <vector>
+#include <list>
 
 #include "SingleLineRenderer.h"
 #include "EditorGameObject.h"
@@ -11,17 +11,31 @@
 class EditorDebugGameObject : public EditorGameObject
 {
 private:
-    std::vector<SingleLineRenderer*> singleLineRenderers;
+    struct DebugLine
+    {
+        SingleLineRenderer *slr = nullptr;
+        float elapsedTimeSecs = 0;
+        float livingTimeSecs = 0;
+
+        DebugLine(SingleLineRenderer *slr, int livingTimeSecs) :
+            slr(slr), livingTimeSecs(livingTimeSecs) {}
+    };
+
+    std::list<DebugLine> debugLines;
 
 public:
 
     EditorDebugGameObject();
+    virtual ~EditorDebugGameObject();
 
     void DrawLine(const Vector3 &origin,
                   const Vector3 &destiny,
+                  const Vector3 &color = Vector3::zero,
                   float lineWidth = 1.0f,
-                  int msTime = -1,
+                  float livintTimeSecs = -1.0f,
                   bool depthTest = true);
+
+    void OnUpdate() override;
 };
 
 #endif // EDITORDEBUGGAMEOBJECT_H

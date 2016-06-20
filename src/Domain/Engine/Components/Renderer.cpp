@@ -39,6 +39,18 @@ void Renderer::ActivateStatesBeforeRendering() const
     {
         glDisable(GL_CULL_FACE);
     }
+
+    Scene *scene = Canvas::GetCurrentScene();
+    Camera *camera = scene->GetCamera();
+    if(camera != nullptr)
+    {
+        Transform *t = camera->GetOwner()->GetComponent<Transform>();
+        if(t != nullptr)
+        {
+            material->shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
+                                                    t->GetPosition(), false);
+        }
+    }
 }
 
 void Renderer::GetMatrices(Matrix4 &model,
@@ -76,9 +88,15 @@ void Renderer::SetMatricesUniforms(const Matrix4 &model,
     material->shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Model, model, false);
     material->shaderProgram->SetUniformMat4(
+                ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);
+    material->shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_View, view, false);
     material->shaderProgram->SetUniformMat4(
+                ShaderContract::Uniform_Matrix_View_Inverse, view.Inversed(), false);
+    material->shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Projection, projection, false);
+    material->shaderProgram->SetUniformMat4(
+                ShaderContract::Uniform_Matrix_Projection_Inverse, projection.Inversed(), false);
     material->shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_PVM, pvm, false);
 }

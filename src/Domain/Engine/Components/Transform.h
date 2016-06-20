@@ -52,6 +52,7 @@ public:
     void SetRotationFromInspector(const Quaternion &q);
 
     //This will change inspectorEulerDeg to the quat->eulerAngles conversion
+    void SetRotation(float x, float y, float z);
     void SetRotation(const Quaternion &r);
     void Rotate(const Quaternion &r);
 

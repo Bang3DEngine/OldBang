@@ -38,7 +38,7 @@ EditorBBox::EditorBBox() : EditorGameObject("EditorBBox")
     }
 
     mr->SetMesh(mesh);
-    mr->SetCullMode(Renderer::CullMode::None);
+    mr->SetCullMode(Renderer::CullMode::Back);
     mr->SetDrawWireframe(true);
     mr->SetRenderMode(Renderer::RenderMode::Triangles);
 }

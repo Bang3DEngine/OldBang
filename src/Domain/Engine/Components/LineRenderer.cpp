@@ -121,6 +121,11 @@ Box LineRenderer::GetBoundingBox() const
     return Box(minp, maxp);
 }
 
+const std::vector<Vector3> &LineRenderer::GetPoints() const
+{
+    return points;
+}
+
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* LineRenderer::GetComponentInfo()
 {

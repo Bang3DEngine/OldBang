@@ -39,9 +39,19 @@ void Transform::Translate(const Vector3 &translation)
     SetPosition(GetPosition() + translation);
 }
 
+void Transform::Rotate(const Vector3 &degreesEuler)
+{
+    SetRotation(GetLocalEuler() + degreesEuler);
+}
+
 void Transform::SetRotationFromInspector(const Quaternion &q)
 {
     rotation = q.Normalized();
+}
+
+void Transform::SetRotation(float x, float y, float z)
+{
+    SetRotation(Vector3(x,y,z));
 }
 
 void Transform::SetRotation(const Vector3 &degreesEuler)

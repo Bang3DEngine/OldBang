@@ -8,7 +8,7 @@ Canvas *Canvas::mainBinaryCanvas = nullptr;
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
-    clearColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    clearColor = glm::vec4(1.0f) * 0.8f;
 
     connect(&drawTimer, SIGNAL(timeout()), this, SLOT(update()));
     drawTimer.setInterval(Canvas::RedrawDelay);
@@ -121,9 +121,9 @@ void Canvas::SetCurrentScene(const std::string &name)
                    "because no scene with this name is added to the Canvas.");
 }
 
-Scene *Canvas::GetCurrentScene() const
+Scene *Canvas::GetCurrentScene()
 {
-    return currentScene;
+    return Canvas::GetInstance()->currentScene;
 }
 
 Scene *Canvas::GetScene(const std::string &name) const

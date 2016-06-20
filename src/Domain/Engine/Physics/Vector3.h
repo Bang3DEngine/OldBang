@@ -42,13 +42,14 @@ public:
 
     glm::vec3 ToGlmVec3() const;
 
+    float Distance(const Vector3 &p) const;
+
     /**
      * @brief Makes v1 and v2 orthogonal and normalizes them.
      * @param v1 First Vector
      * @param v2 Second Vector
-     * @return
      */
-    static Vector3 OrthoNormalize(Vector3 &v1, Vector3 &v2);
+    static void OrthoNormalize(Vector3 &v1, Vector3 &v2);
 
     /**
      * @brief If progression == 0, returns v1.

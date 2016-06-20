@@ -18,6 +18,8 @@ public:
     Quaternion Normalized() const;
     Quaternion Inversed() const;
 
+    Vector3 EulerAngles() const;
+
     static Vector3 EulerAngles(const Quaternion &q);
     static Quaternion Slerp(const Quaternion &from,
                             const Quaternion &to,

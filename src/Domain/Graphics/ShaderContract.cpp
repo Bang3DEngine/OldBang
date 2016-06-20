@@ -51,12 +51,18 @@ const std::string ShaderContract::Uniform_Position_Camera =
 
 const std::string ShaderContract::Uniform_Matrix_Model =
         ShaderContract::ShaderNames_Prefix + "matrix_model";
+const std::string ShaderContract::Uniform_Matrix_Model_Inverse =
+        ShaderContract::ShaderNames_Prefix + "matrix_model_inv";
 
 const std::string ShaderContract::Uniform_Matrix_View =
         ShaderContract::ShaderNames_Prefix + "matrix_view";
+const std::string ShaderContract::Uniform_Matrix_View_Inverse =
+        ShaderContract::ShaderNames_Prefix + "matrix_view_inv";
 
 const std::string ShaderContract::Uniform_Matrix_Projection =
         ShaderContract::ShaderNames_Prefix + "matrix_projection";
+const std::string ShaderContract::Uniform_Matrix_Projection_Inverse =
+        ShaderContract::ShaderNames_Prefix + "matrix_projection_inv";
 
 const std::string ShaderContract::Uniform_Matrix_PVM =
         ShaderContract::ShaderNames_Prefix + "matrix_pvm";

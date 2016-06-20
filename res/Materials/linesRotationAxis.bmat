@@ -1,0 +1,6 @@
+<Material>
+    ./res/Shaders/linesRotationAxis.vert
+    ./res/Shaders/linesRotationAxis.frag
+    -
+    0.0 0.0 0.0 1.0
+</Material>

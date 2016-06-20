@@ -64,7 +64,7 @@ public:
     void SetCurrentScene(const std::string &name);
     void RemoveScene(const std::string &name);
 
-    Scene* GetCurrentScene() const;
+    static Scene* GetCurrentScene();
     Scene* GetScene(const std::string &name) const;
     static Canvas *GetInstance();
     static float GetAspectRatio();
