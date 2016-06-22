@@ -29,10 +29,55 @@ void CircleRenderer::GeneratePoints()
     points.clear();
     points.resize(segments + 1);
 
-    float step = (2.0f * 3.141592f) / segments;
+    float step = (2.0f * 3.141592f) / (segments);
     for(int i = 0;  i < segments + 1; ++i)
     {
         points[i] = Vector3(glm::cos(step*i), glm::sin(step*i), 0.0f) * radius;
+    }
+}
+
+float CircleRenderer::GetDistanceInScreenSpace(const glm::vec2 &sOrigin,
+                                              int pointIndex,
+                                              const Matrix4 &modelViewProjMatrix) const
+{
+    Vector3 objP = points[pointIndex];
+    glm::vec4 sP_4 = modelViewProjMatrix * glm::vec4(objP, 1.0f);
+    glm::vec2 sP = sP_4.xy() / sP_4.w;
+    sP = sP * 0.5f + 0.5f;
+
+    return glm::distance(sOrigin, sP);
+}
+
+void CircleRenderer::GetTwoClosestPointsInScreenSpace(
+        const glm::vec2 &sOrigin,
+        const Matrix4 &modelViewProjMatrix,
+        glm::vec2 *p0, int *i0,
+        glm::vec2 *p1, int *i1) const
+{
+    float d0, d1; d0 = d1 = 99999.9f;
+    for (int i = 0; i < points.size() - 1; ++i) // -1 because the last point is repeated
+    {
+        Vector3 objP = points[i];
+        glm::vec4 sP_4 = modelViewProjMatrix * glm::vec4(objP, 1.0f);
+        glm::vec2 sP = sP_4.xy() / sP_4.w;
+        sP = sP * 0.5f + 0.5f;
+        float d = glm::distance(sP, sOrigin);
+        if(d < d0)
+        {
+            *p1 = *p0;
+            *i1 = *i0;
+            d1 = d0;
+
+            *p0 = sP;
+            *i0 = i;
+            d0 = d;
+        }
+        else if(d < d1)
+        {
+            *p1 = sP;
+            *i1 = i;
+            d1 = d;
+        }
     }
 }
 
