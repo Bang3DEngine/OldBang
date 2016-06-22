@@ -23,9 +23,7 @@ void main()
     float maxDist = distance(BANG_position_camera, wMaxDistPoint);
     float dToV = distance(BANG_position_camera, wPos);
 
-    //BANG_diffuse_fout_gbufferin = vec3(dot(vec3(0,1,0), normalize(wPos-wCircleCenter)));
-    //if(dToV > maxDist) discard;
-
+    if(dToV > maxDist) discard;
 
     BANG_position_fout_gbufferin = BANG_position_raw_vout_fin.xyz;
     BANG_normal_fout_gbufferin = vec3(0.0f);

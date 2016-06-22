@@ -40,35 +40,14 @@ EditorTranslateAxis::EditorTranslateAxis(EditorTranslateAxis::EditorTranslateAxi
 
 void EditorTranslateAxis::OnUpdate()
 {
-    // Process line color
-    if(mouseIsOver)
+    if(mouseIsOver && Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
-        if(grabbed)
-        {
-            material->SetDiffuseColor(glm::vec4(lineColor, 1));
-        }
-        else
-        {
-            material->SetDiffuseColor(glm::vec4(lineColor * lineColorFadingNotGrabbed, 1));
-        }
+        grabbed = true;
     }
-    else
-    {
-        if(grabbed)
-        {
-            material->SetDiffuseColor(glm::vec4(lineColor, 1));
-        }
-        else
-        {
-            material->SetDiffuseColor(glm::vec4(lineColor * lineColorFadingNotHover, 1));
-        }
-    }
-
 
     // Process grabbing movement
     if(grabbed)
     {
-        Input::SetMouseWrapping(true);
         if(Input::GetMouseButtonUp(Input::MouseButton::MLeft))
         {
             grabbed = false;
@@ -76,7 +55,10 @@ void EditorTranslateAxis::OnUpdate()
         }
         else
         {
+            Input::SetMouseWrapping(true);
+
             GameObject *attachedGameObject = GetAttachedGameObject();
+
             // Normalized mouse movement in the last frame
             glm::vec2 mouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f); // Invert y
 
@@ -108,15 +90,35 @@ void EditorTranslateAxis::OnUpdate()
             }
         }
     }
+
+    // Process line color
+    if(mouseIsOver)
+    {
+        if(grabbed)
+        {
+            material->SetDiffuseColor(glm::vec4(lineColor, 1));
+        }
+        else
+        {
+            material->SetDiffuseColor(glm::vec4(lineColor * lineColorFadingNotGrabbed, 1));
+        }
+    }
+    else
+    {
+        if(grabbed)
+        {
+            material->SetDiffuseColor(glm::vec4(lineColor, 1));
+        }
+        else
+        {
+            material->SetDiffuseColor(glm::vec4(lineColor * lineColorFadingNotHover, 1));
+        }
+    }
 }
 
 void EditorTranslateAxis::OnMouseEnter()
 {
     mouseIsOver = true;
-    if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
-    {
-        grabbed = true;
-    }
 }
 
 void EditorTranslateAxis::OnMouseExit()

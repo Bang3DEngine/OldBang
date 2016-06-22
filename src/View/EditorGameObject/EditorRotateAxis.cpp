@@ -6,6 +6,7 @@ EditorRotateAxis::EditorRotateAxis(EditorRotateAxisDirection dir)
     circle = AddComponent<CircleRenderer>();
 
     material = AssetsManager::GetAsset<Material>("res/Materials/linesRotationAxis.bmat");
+    material = new Material(*material);
     circle->SetMaterial(material);
 
     std::string name;
@@ -19,7 +20,7 @@ EditorRotateAxis::EditorRotateAxis(EditorRotateAxisDirection dir)
     else if (dir == EditorRotateAxisDirection::Y)
     {
         lineColor = Vector3(0,1,0);
-        axisDirection = Vector3(0,-1,0);
+        axisDirection = Vector3(0,1,0);
         transform->SetRotation(90.0f, 0.0f, 0.0f);
         name = "EditorRotateAxisY";
     }
@@ -31,14 +32,19 @@ EditorRotateAxis::EditorRotateAxis(EditorRotateAxisDirection dir)
         name = "EditorRotateAxisZ";
     }
 
-    glEnable(GL_CULL_FACE);
     material->SetDiffuseColor(glm::vec4(lineColor, 1));
-    circle->SetSegments(16);
+    circle->SetSegments(64);
     SetName(name);
 
+    material->SetDiffuseColor(glm::vec4(0,1,0, 1));
     circle->SetLineWidth(3.0f);
 
     this->SetRenderLayer(0);
+}
+
+EditorRotateAxis::~EditorRotateAxis()
+{
+    delete material;
 }
 
 
@@ -49,8 +55,10 @@ void EditorRotateAxis::OnUpdate()
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
     cam->GetProjectionMatrix(projMatrix);
     cam->GetViewMatrix(viewMatrix);
-    Transform *axisTrans = GetComponent<Transform>();
-    axisTrans->GetModelMatrix(modelMatrix);
+    GameObject *axisGroup = GetParent();
+    Transform *axisGroupTrans = GetComponent<Transform>();
+    axisGroupTrans = axisGroup->GetComponent<Transform>();
+    axisGroupTrans->GetModelMatrix(modelMatrix);
     Matrix4 projView = projMatrix * viewMatrix;
     Matrix4 pvm =  projView * modelMatrix;
 
@@ -73,12 +81,15 @@ void EditorRotateAxis::OnUpdate()
                     &sAnchorPoint0, &anchorIndex0,
                     &sAnchorPoint1, &anchorIndex1);
 
-        // achorIndex0 will always be less then anchorIndex1
+        // achorIndex0 will always be less than anchorIndex1
         if (anchorIndex1 < anchorIndex0)
         {
             std::swap(sAnchorPoint0, sAnchorPoint1);
             std::swap(anchorIndex0, anchorIndex1);
         }
+
+        currentAxisDirection = Vector3((modelMatrix *
+                                        glm::vec4(axisDirection, 0.0f)).xyz()).Normalized();
     }
 
     GameObject *attachedGameObject = GetAttachedGameObject();
@@ -114,9 +125,12 @@ void EditorRotateAxis::OnUpdate()
                 glm::vec2 mouseDir = glm::normalize(sMouseDelta);
                 float alignment = glm::dot(anchorPointsDir, mouseDir);
 
+                Vector3 worldAxisDir = Vector3((glm::normalize(
+                                                    modelMatrix *
+                                                    glm::vec4(currentAxisDirection, 0.0f))).xyz());
                 // Rotate the model
                 Transform *goTrans = attachedGameObject->GetComponent<Transform>();
-                goTrans->Rotate(axisDirection * alignment * rotationBoost * -1.0f);
+                goTrans->Rotate(worldAxisDir * alignment * rotationBoost * -1.0f);
             }
         }
     }

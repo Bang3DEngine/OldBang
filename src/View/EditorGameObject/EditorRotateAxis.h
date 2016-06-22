@@ -56,11 +56,18 @@ private:
      */
     glm::vec2 sAnchorPoint0, sAnchorPoint1;
 
+    /**
+     * @brief When working with local coords system activated, we must save the initial axis which
+     * the user started to rotate with. Otherwise, it will do unexpected things for the user.
+     */
+    Vector3 currentAxisDirection;
+
     bool mouseIsOver = false;
 
 public:
     enum EditorRotateAxisDirection { X, Y, Z };
     EditorRotateAxis(EditorRotateAxisDirection dir);
+    virtual ~EditorRotateAxis();
 
     void OnUpdate() override;
 
