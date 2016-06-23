@@ -30,14 +30,14 @@ void SystemUtils::RemoveLineBreaks(std::string *str)
 std::string SystemUtils::GetAllProjectObjects(const std::string &filepathFromProjectRoot)
 {
     std::string cmdGetAllObjects = "";
-    cmdGetAllObjects = "find " +                                    // Find recursively
-                        Persistence::GetProjectRootPathAbsolute() + // From project root
-                        " -type f " +                               // Only files
-                        " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
-                        " | grep -E -v \"Preprocessor\" " +         // Temporal fix with colliding .o's TODO
-                        " | grep -E -v \"main\\.o\" " +             // Temporal fix with colliding .o's TODO
-                        " | grep -E \"\\.o$\"" +                    // Only .o files
-                        " | xargs";                                 // Inline
+    cmdGetAllObjects = " find " +                                  // Find recursively
+                       Persistence::GetProjectRootPathAbsolute() + // From project root
+                       " -type f " +                               // Only files
+                       " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
+                       " | grep -E -v \"Preprocessor\" " +         // Temporal fix with colliding .o's TODO
+                       " | grep -E -v \"main\\.o\" " +             // Temporal fix with colliding .o's TODO
+                       " | grep -E \"\\.o$\"" +                    // Only .o files
+                       " | xargs";                                 // Inline
 
     bool ok = false;
     std::string objs = "";
@@ -52,12 +52,14 @@ std::string SystemUtils::GetAllProjectObjects(const std::string &filepathFromPro
 
 std::string SystemUtils::GetAllProjectSubDirs(const std::string &filepathFromProjectRoot)
 {
+    // It sometimes gets stuck while reading, I guess the pipe isn't being closed.
+    // TODO: Improve this, ftm I will assume that when we have a bit read, we can go on...
     std::string cmdGetAllSubDirs = "";
-    cmdGetAllSubDirs = "find " +                                    // Find recursively
-                        Persistence::GetProjectRootPathAbsolute() + // From project root
-                        " -type d " +                               // Only directories
-                        " | grep -E -v \"\\.\" " +                  // Not including hidden dirs
-                        " | xargs";                                 // Inline
+    cmdGetAllSubDirs = " find " +                                  // Find recursively
+                       Persistence::GetProjectRootPathAbsolute() + // From project root
+                       " -type d " +                               // Only directories
+                       " | grep -E -v \"\\.\" " +                  // Not including hidden dirs
+                       " | xargs";                                 // Inline
 
     bool ok = false;
     std::string allSubDirs = "";
@@ -74,7 +76,10 @@ std::string SystemUtils::GetAllProjectSubDirs(const std::string &filepathFromPro
 std::string SystemUtils::GetQtIncludes()
 {
     std::string qtIncludeDirs = "";
-    std::string cmdGetQtIncludeDirs = "find $(qmake -query QT_INSTALL_HEADERS) -type d";
+    std::string cmdGetQtIncludeDirs = "";
+    cmdGetQtIncludeDirs =  "find $(qmake -query QT_INSTALL_HEADERS) -type d";
+    cmdGetQtIncludeDirs += " | grep -E \"qt|QT|Qt\"";
+
     bool ok = false;
     SystemUtils::System(cmdGetQtIncludeDirs, qtIncludeDirs, ok);
     if(!ok)
@@ -88,7 +93,8 @@ std::string SystemUtils::GetQtIncludes()
 std::string SystemUtils::GetQtLibrariesDirs()
 {
     std::string qtLibDirs = "";
-    //std::string cmdGetQtLibDirs = "find $(qmake -query QT_INSTALL_LIBS) -type d";
+    //std::string cmdGetQtLibDirs = "find $(qmake -query QT_INSTALL_LIBS) -type d " +
+    //                              "grep -E \"qt|QT|Qt\"";
     std::string cmdGetQtLibDirs = "qmake -query QT_INSTALL_LIBS";
     bool ok = false;
     SystemUtils::System(cmdGetQtLibDirs, qtLibDirs, ok);
@@ -115,6 +121,8 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
     int pid = fork();
     if (pid == 0) // Child
     {
+        system("echo \"begin\" > test.out");
+
         close(fd[0]);
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
@@ -122,39 +130,35 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
         dup2(fd[1], STDERR_FILENO);
 
         int result = system(command.c_str());
-
         close (fd[1]);
 
         // This is needed, because exit receives a uchar,
         // while result can be > 255. There are cases in which
         // the overflow can make it return 0 when its not 0 but a
         // larger number.
-        if(result > 0) exit(1);
-        exit(0);
+        if(result > 0) quick_exit(1);
+        quick_exit(0);
     }
     else if (pid == -1)
     {
         Logger_Error("There was an error doing a fork to compile the Behaviour.");
-        exit(1);
+        quick_exit(1);
     }
-
-    // From here, no other process but the original one is executing
 
     close(fd[1]);
     dup2(fd[0], STDIN_FILENO);
 
     // Get system's output
-    std::string str = "";
-    const int buff_size = 1024 * 512;
-    char buff[buff_size + 1];
-    memset((char*)&buff, 0, buff_size + 1);
-    while (read(fd[0], buff, buff_size))
+    std::string retString = "";
+    const int bufferSize = 1024;
+    char buff[bufferSize + 1];
+    memset((char*) &buff, 0, bufferSize + 1);
+
+    while ( read(fd[0], buff, bufferSize) )
     {
-        str.append(buff);
-        memset(buff, 0, buff_size);
+        retString.append(buff);
+        memset(buff, 0, bufferSize);
     }
-    char *ret = (char*) malloc( str.size() );
-    strcpy(ret, (char*) str.c_str());
 
     // Wait for child and get its ret value
     int result = 1;
@@ -169,17 +173,13 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
 
     // Set output parameters
     success = (result == 0);
-    if(ret != nullptr) // Set output var
-    {
-        output = std::string(ret);
-    }
+    output = retString;
 }
 
 std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromProjectRoot)
 {
     // GET INCLUDES
     // Get all subdirs recursively in a single line, and add -I in front of every path
-
 
     std::string includes = "";
     includes += GetAllProjectSubDirs(filepathFromProjectRoot);
@@ -188,7 +188,6 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     includes += GetQtIncludes();
     #endif
     RemoveLineBreaks(&includes);
-    Logger_Log("INCLUDES: " << includes);
     AddInFrontOfWords("-I", &includes);
 
     std::string objs = GetAllProjectObjects(filepathFromProjectRoot);
@@ -231,7 +230,6 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     RemoveLineBreaks(&cmd);
 
     bool ok = false;
-    Logger_Log(cmd);
     SystemUtils::System(cmd, output, ok);
     if (ok)
     {

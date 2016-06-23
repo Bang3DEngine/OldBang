@@ -10,9 +10,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <algorithm>
 #include <string>
+#include <string.h>
 
 class Behaviour;
 class SystemUtils
@@ -34,6 +34,8 @@ private:
 
     static std::string GetQtIncludes();
     static std::string GetQtLibrariesDirs();
+
+    static const std::string SYSTEM_OUTPUT_END_MARK;
 
 public:
 
