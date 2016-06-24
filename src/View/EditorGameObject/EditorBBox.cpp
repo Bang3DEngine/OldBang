@@ -75,7 +75,7 @@ void EditorBBox::OnUpdate()
         Vector3 scale = Vector3(bbox.GetWidth(),
                                 bbox.GetHeight(),
                                 bbox.GetDepth());
-        t->SetScale(scale);
+        t->SetLocalScale(scale);
     }
 }
 

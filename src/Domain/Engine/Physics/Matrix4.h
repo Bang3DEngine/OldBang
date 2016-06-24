@@ -28,6 +28,8 @@ public:
     static Matrix4 TranslateMatrix(const Vector3 &v);
     static Matrix4 RotateMatrix(const Quaternion &q);
     static Matrix4 ScaleMatrix(const Vector3 &v);
+
+    static Matrix4 identity;
 };
 
 Matrix4 operator*(const Matrix4 &m1, const Matrix4& m2);

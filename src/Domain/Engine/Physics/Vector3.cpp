@@ -84,6 +84,16 @@ Vector3 Vector3::Lerp(const Vector3 &v1,
     return Vector3(glm::mix(glm::vec3(v1), glm::vec3(v2), progression));
 }
 
+Vector3 Vector3::Abs() const
+{
+    return Vector3(glm::abs(x), glm::abs(y), glm::abs(z));
+}
+
+Vector3 Vector3::Abs(const Vector3 &v)
+{
+    return v.Abs();
+}
+
 Vector3 Vector3::Cross(const Vector3 &v1, const Vector3 &v2)
 {
     return Vector3(glm::cross(glm::vec3(v1), glm::vec3(v2)));

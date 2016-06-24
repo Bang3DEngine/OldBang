@@ -3,10 +3,11 @@
 
 #include "Toolbar.h"
 #include "Transform.h"
-#include "EditorTranslateAxis.h"
+#include "EditorAxis.h"
 #include "MeshRenderer.h"
 #include "LineRenderer.h"
 #include "EditorGameObject.h"
+#include "EditorTranslateAxis.h"
 
 /**
  * @brief The EditorTranslateAxisGroup class represents a group of EditorTranslateAxises.

@@ -189,7 +189,8 @@ HEADERS += \
     src/Domain/Engine/Components/LineStripRenderer.h \
     src/View/EditorGameObject/EditorRotateAxisGroup.h \
     src/View/EditorGameObject/EditorRotateAxis.h \
-    src/View/EditorGameObject/EditorAxisGroup.h
+    src/View/EditorGameObject/EditorAxisGroup.h \
+    src/View/EditorGameObject/EditorAxis.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -285,7 +286,8 @@ SOURCES += \
     src/Domain/Engine/Components/LineStripRenderer.cpp \
     src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
     src/View/EditorGameObject/EditorRotateAxis.cpp \
-    src/View/EditorGameObject/EditorAxisGroup.cpp
+    src/View/EditorGameObject/EditorAxisGroup.cpp \
+    src/View/EditorGameObject/EditorAxis.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

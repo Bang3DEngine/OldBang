@@ -64,6 +64,9 @@ public:
                         const Vector3 &v2,
                         float progression);
 
+    Vector3 Abs() const;
+
+    static Vector3 Abs(const Vector3 &v);
     static Vector3 Cross(const Vector3 &v1, const Vector3 &v2);
     static float Dot(const Vector3 &v1, const Vector3 &v2);
     static float Distance(const Vector3 &v1, const Vector3 &v2);

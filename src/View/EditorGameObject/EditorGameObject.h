@@ -18,7 +18,7 @@ public:
      * is not an EditorGameObject.
      * @return The attached GameObject to this axis
      */
-    virtual GameObject *GetAttachedGameObject();
+    virtual GameObject *GetAttachedGameObject() const;
 
     void Write(std::ostream &f) const override;
 };

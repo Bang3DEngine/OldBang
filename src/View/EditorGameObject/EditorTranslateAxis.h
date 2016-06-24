@@ -1,46 +1,29 @@
-#ifndef EDITORAXIS_H
-#define EDITORAXIS_H
+#ifndef EDITORTRANSLATEAXIS_H
+#define EDITORTRANSLATEAXIS_H
 
+#include "Bang.h"
+
+#include "Matrix4.h"
+#include "Material.h"
+#include "Transform.h"
+#include "EditorAxis.h"
 #include "EditorGameObject.h"
 #include "SingleLineRenderer.h"
-#include "Transform.h"
-#include "Material.h"
-#include "Matrix4.h"
 
-class EditorTranslateAxis : public EditorGameObject
+class EditorTranslateAxis : public EditorAxis
 {
 private:
-    Transform *transform = nullptr;
     SingleLineRenderer *line = nullptr;
-    Material *material = nullptr;
 
-    /**
-     * @brief To know when the user is grabbing the axis with the mouse
-     */
-    bool grabbed = false;
+protected:
 
-    /**
-     * @brief Line color will be multiplied by this when axis not being hovered.
-     */
-    Vector3 lineColorFadingNotHover = Vector3(0.5f);
-    /**
-     * @brief Line color will be multiplied by this when axis being hovered, but not grabbed.
-     */
-    Vector3 lineColorFadingNotGrabbed = Vector3(0.75f);
-    Vector3 lineColor;
-
-    Vector3 axisDirection;
-
-    bool mouseIsOver = false;
+    virtual Renderer *GetAxisRenderer() const override;
 
 public:
-    enum EditorTranslateAxisDirection { X, Y, Z };
-    EditorTranslateAxis(EditorTranslateAxisDirection dir);
+    EditorTranslateAxis(EditorAxis::EditorAxisDirection dir);
+    virtual ~EditorTranslateAxis();
 
     void OnUpdate() override;
-
-    void OnMouseEnter() override;
-    void OnMouseExit() override;
 };
 
-#endif // EDITORAXIS_H
+#endif // EDITORTRANSLATEAXIS_H

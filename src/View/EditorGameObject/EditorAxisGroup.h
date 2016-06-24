@@ -16,6 +16,8 @@ class EditorAxisGroup : public EditorGameObject
 {
 
 private:
+    float sizeBoost = 0.2f;
+
     EditorTranslateAxisGroup *etag = nullptr;
     EditorRotateAxisGroup *erag = nullptr;
     void DisableAllGroups();

@@ -47,17 +47,31 @@ public:
     void Translate(const Vector3 &translation);
 
     //These wont change the input inspectorEulerDeg of the
+    /**
+     * @brief Rotate around global axis (axis in world space).
+     * Same goes for all methods without "Local"
+     */
     void Rotate(const Vector3 &degreesEuler);
     void SetRotation(const Vector3 &degreesEuler);
     void SetRotationFromInspector(const Quaternion &q);
 
+    /**
+     * @brief Rotate around local axis (axis in object space)
+     * Same goes for all methods wiith "Local"
+     */
+    void RotateLocal(const Vector3 &degreesEuler);
+    void SetRotationLocal(const Vector3 &degreesEuler);
+
     //This will change inspectorEulerDeg to the quat->eulerAngles conversion
     void SetRotation(float x, float y, float z);
+    void SetRotationLocal(float x, float y, float z);
     void SetRotation(const Quaternion &r);
+    void SetRotationLocal(const Quaternion &r);
     void Rotate(const Quaternion &r);
+    void RotateLocal(const Quaternion &r);
 
-    void SetScale(float s);
-    void SetScale(const Vector3 &s);
+    void SetLocalScale(float s);
+    void SetLocalScale(const Vector3 &s);
     void SetLeftMatrix(const Matrix4 &leftMatrix);
     void SetRightMatrix(const Matrix4 &rightMatrix);
 

@@ -43,6 +43,10 @@ void Transform::Rotate(const Vector3 &degreesEuler)
 {
     SetRotation(GetLocalEuler() + degreesEuler);
 }
+void Transform::RotateLocal(const Vector3 &degreesEuler)
+{
+    SetRotationLocal(GetLocalEuler() + degreesEuler);
+}
 
 void Transform::SetRotationFromInspector(const Quaternion &q)
 {
@@ -52,6 +56,10 @@ void Transform::SetRotationFromInspector(const Quaternion &q)
 void Transform::SetRotation(float x, float y, float z)
 {
     SetRotation(Vector3(x,y,z));
+}
+void Transform::SetRotationLocal(float x, float y, float z)
+{
+    SetRotationLocal(Vector3(x,y,z));
 }
 
 void Transform::SetRotation(const Vector3 &degreesEuler)
@@ -63,8 +71,23 @@ void Transform::SetRotation(const Vector3 &degreesEuler)
     Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3(0,0,1));
     SetRotationFromInspector(qz * qy * qx);
 }
+void Transform::SetRotationLocal(const Vector3 &degreesEuler)
+{
+    inspectorEulerDeg = degreesEuler;
+    Vector3 rads = inspectorEulerDeg.ToRadians();
+    Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3(1,0,0));
+    Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3(0,1,0));
+    Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3(0,0,1));
+    SetRotationFromInspector(qz * qy * qx);
+}
+
 
 void Transform::SetRotation(const Quaternion &q)
+{
+    rotation = q.Normalized();
+    inspectorEulerDeg = Quaternion::EulerAngles(rotation).ToDegrees();
+}
+void Transform::SetRotationLocal(const Quaternion &q)
 {
     rotation = q.Normalized();
     inspectorEulerDeg = Quaternion::EulerAngles(rotation).ToDegrees();
@@ -72,15 +95,19 @@ void Transform::SetRotation(const Quaternion &q)
 
 void Transform::Rotate(const Quaternion &r)
 {
+    SetRotation(r * GetLocalRotation());
+}
+void Transform::RotateLocal(const Quaternion &r)
+{
     SetRotation(GetLocalRotation() * r);
 }
 
-void Transform::SetScale(float s)
+void Transform::SetLocalScale(float s)
 {
-    SetScale(Vector3(s));
+    SetLocalScale(Vector3(s));
 }
 
-void Transform::SetScale(const Vector3 &s)
+void Transform::SetLocalScale(const Vector3 &s)
 {
     scale = s;
 }
@@ -322,7 +349,7 @@ void Transform::Read(std::istream &f)
     FileReader::RegisterNextPointerId(f, this);
     SetPosition(FileReader::ReadVec3(f));
     SetRotation(FileReader::ReadQuat(f));
-    SetScale(FileReader::ReadVec3(f));
+    SetLocalScale(FileReader::ReadVec3(f));
     FileReader::ReadNextLine(f); //Consume close tag
 }
 
