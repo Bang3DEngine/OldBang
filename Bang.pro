@@ -190,7 +190,9 @@ HEADERS += \
     src/View/EditorGameObject/EditorRotateAxisGroup.h \
     src/View/EditorGameObject/EditorRotateAxis.h \
     src/View/EditorGameObject/EditorAxisGroup.h \
-    src/View/EditorGameObject/EditorAxis.h
+    src/View/EditorGameObject/EditorAxis.h \
+    src/View/EditorGameObject/EditorScaleAxisGroup.h \
+    src/View/EditorGameObject/EditorScaleAxis.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -287,7 +289,9 @@ SOURCES += \
     src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
     src/View/EditorGameObject/EditorRotateAxis.cpp \
     src/View/EditorGameObject/EditorAxisGroup.cpp \
-    src/View/EditorGameObject/EditorAxis.cpp
+    src/View/EditorGameObject/EditorAxis.cpp \
+    src/View/EditorGameObject/EditorScaleAxisGroup.cpp \
+    src/View/EditorGameObject/EditorScaleAxis.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

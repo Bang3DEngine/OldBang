@@ -9,7 +9,7 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir) : Editor
 
     circle = AddComponent<CircleRenderer>();
     circle->SetRadius(0.5f);
-    circle->SetSegments(32);
+    circle->SetSegments(128);
     circle->SetLineWidth(3.0f);
     circle->SetMaterial(material);
 
@@ -101,10 +101,10 @@ void EditorRotateAxis::OnUpdate()
             float alignment = glm::dot(anchorPointsDir, mouseDir);
 
             // Avoids rotation trembling when not aligned at all
-            if(glm::abs(alignment) > 0.1)
+            if(glm::abs(alignment) > 0.2)
             {
                 // Rotate the model
-                Quaternion q = Quaternion::AngleAxis(rotationBoost * alignment * -1.0f,
+                Quaternion q = Quaternion::AngleAxis(rotationBoost * alignment,
                                                      currentOAxisDirection);
                 attachedGameObject->GetComponent<Transform>()->RotateLocal(q);
             }

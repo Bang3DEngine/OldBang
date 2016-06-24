@@ -22,7 +22,7 @@ void Toolbar::Init()
     Toolbar::tb->buttonGlobalCoords  = w->buttonGlobalCoords;
 
     Toolbar::tb->keyTimer = new QTimer();
-    Toolbar::tb->keyTimer->start(10);
+    Toolbar::tb->keyTimer->start(1);
     connect(Toolbar::tb->keyTimer, SIGNAL(timeout()),
             Toolbar::tb, SLOT(CheckKeyPressed()));
 

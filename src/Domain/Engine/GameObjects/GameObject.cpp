@@ -364,8 +364,10 @@ void GameObject::Read(std::istream &f)
 }
 
 void GameObject::SetEnabled(bool enabled) { this->enabled = enabled; }
-
-bool GameObject::IsEnabled() { return enabled; }
+bool GameObject::IsEnabled()
+{
+    return enabled && (parent == nullptr ? true : parent->IsEnabled());
+}
 
 
 const std::string GameObject::ToString() const

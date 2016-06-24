@@ -70,6 +70,8 @@ public:
     void Rotate(const Quaternion &r);
     void RotateLocal(const Quaternion &r);
 
+    void Scale(float s);
+    void Scale(const Vector3 &v);
     void SetLocalScale(float s);
     void SetLocalScale(const Vector3 &s);
     void SetLeftMatrix(const Matrix4 &leftMatrix);

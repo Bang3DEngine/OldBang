@@ -102,6 +102,16 @@ void Transform::RotateLocal(const Quaternion &r)
     SetRotation(GetLocalRotation() * r);
 }
 
+void Transform::Scale(float s)
+{
+    Scale(Vector3(s));
+}
+
+void Transform::Scale(const Vector3 &v)
+{
+    SetLocalScale(GetLocalScale() * v);
+}
+
 void Transform::SetLocalScale(float s)
 {
     SetLocalScale(Vector3(s));

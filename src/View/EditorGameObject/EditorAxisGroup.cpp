@@ -4,11 +4,13 @@ EditorAxisGroup::EditorAxisGroup()
 {
     etag = new EditorTranslateAxisGroup();
     erag = new EditorRotateAxisGroup();
+    esag = new EditorScaleAxisGroup();
 
     AddChild(etag);
     AddChild(erag);
+    AddChild(esag);
 
-    erag->SetEnabled(false);
+    DisableAllGroups();
 
     AddComponent<Transform>();
 }
@@ -17,6 +19,7 @@ void EditorAxisGroup::DisableAllGroups()
 {
     etag->SetEnabled(false);
     erag->SetEnabled(false);
+    esag->SetEnabled(false);
 }
 
 void EditorAxisGroup::OnUpdate()
@@ -37,6 +40,7 @@ void EditorAxisGroup::OnUpdate()
     else if (tm == Toolbar::TransformMode::Scale)
     {
         DisableAllGroups();
+        esag->SetEnabled(true);
     }
 
     //Attached GameObject positioning and scaling

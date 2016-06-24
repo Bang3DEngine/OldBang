@@ -43,7 +43,8 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
                                     pvm, false);
 
             GameObject *go = renderer->GetOwner();
-            if(gameObjectToId.find(go) != gameObjectToId.end())
+            if(gameObjectToId.find(go) != gameObjectToId.end() &&
+               go->IsEnabled())
             {
                 Vector3 selectionColor = MapIdToColor(gameObjectToId[go]);
                 program->SetUniformVec3("selectionColor", selectionColor);

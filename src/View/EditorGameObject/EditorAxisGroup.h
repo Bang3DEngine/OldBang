@@ -2,6 +2,7 @@
 #define EDITORAXISGROUP_H
 
 #include "Toolbar.h"
+#include "EditorScaleAxisGroup.h"
 #include "EditorRotateAxisGroup.h"
 #include "EditorTranslateAxisGroup.h"
 
@@ -20,6 +21,8 @@ private:
 
     EditorTranslateAxisGroup *etag = nullptr;
     EditorRotateAxisGroup *erag = nullptr;
+    EditorScaleAxisGroup *esag = nullptr;
+
     void DisableAllGroups();
 
 public:

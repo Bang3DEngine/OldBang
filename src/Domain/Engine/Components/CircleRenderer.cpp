@@ -54,8 +54,17 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
         glm::vec2 *p0, int *i0,
         glm::vec2 *p1, int *i1) const
 {
+    /**
+     * @brief We calculate this step in order to avoid sampling
+     * points that are too close to each other, since this will
+     * make the rotation axis losing precision in screen terms...
+     */
+
+    int step = points.size() / 8; // Sample 8 circle points evenly spaced
+    step = glm::max(step, 1); // In case segments < 8
+
     float d0, d1; d0 = d1 = 99999.9f;
-    for (int i = 0; i < points.size() - 1; ++i) // -1 because the last point is repeated
+    for (int i = 0; i < points.size() - 1; i += step) // -1 because the last point is repeated
     {
         Vector3 objP = points[i];
         glm::vec4 sP_4 = modelViewProjMatrix * glm::vec4(objP, 1.0f);
