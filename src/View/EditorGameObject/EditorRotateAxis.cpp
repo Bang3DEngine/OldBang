@@ -1,5 +1,7 @@
 #include "EditorRotateAxis.h"
 
+#include "Toolbar.h"
+
 EditorRotateAxis::EditorRotateAxis(EditorRotateAxisDirection dir)
 {
     transform = AddComponent<Transform>();
@@ -13,21 +15,21 @@ EditorRotateAxis::EditorRotateAxis(EditorRotateAxisDirection dir)
     if(dir == EditorRotateAxisDirection::X)
     {
         lineColor = Vector3(1,0,0);
-        axisDirection = Vector3(1,0,0);
+        oAxisDirection = Vector3(1,0,0);
         transform->SetRotation(0.0f, 90.0f, 0.0f);
         name = "EditorRotateAxisX";
     }
     else if (dir == EditorRotateAxisDirection::Y)
     {
         lineColor = Vector3(0,1,0);
-        axisDirection = Vector3(0,1,0);
+        oAxisDirection = Vector3(0,1,0);
         transform->SetRotation(90.0f, 0.0f, 0.0f);
         name = "EditorRotateAxisY";
     }
     else
     {
         lineColor = Vector3(0,0,1);
-        axisDirection = Vector3(0,0,1);
+        oAxisDirection = Vector3(0,0,1);
         transform->SetRotation(0.0f, 0.0f, 0.0f);
         name = "EditorRotateAxisZ";
     }
@@ -52,15 +54,19 @@ void EditorRotateAxis::OnUpdate()
 {
     // Obtain model, view and proj matrices, for next calculations
     Matrix4 projMatrix, viewMatrix, modelMatrix;
+
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
     cam->GetProjectionMatrix(projMatrix);
     cam->GetViewMatrix(viewMatrix);
-    GameObject *axisGroup = GetParent();
-    Transform *axisGroupTrans = GetComponent<Transform>();
-    axisGroupTrans = axisGroup->GetComponent<Transform>();
-    axisGroupTrans->GetModelMatrix(modelMatrix);
+
+    GameObject *attachedGameObject = GetAttachedGameObject();
+    Transform *goTrans = attachedGameObject->GetComponent<Transform>();
+    attachedGameObject->GetComponent<Transform>()->GetModelMatrix(modelMatrix);
+
     Matrix4 projView = projMatrix * viewMatrix;
     Matrix4 pvm =  projView * modelMatrix;
+
+
 
     // Obtain mousePos in screen space for next calculations
     glm::vec2 sMousePos= Input::GetMouseCoords();
@@ -88,11 +94,18 @@ void EditorRotateAxis::OnUpdate()
             std::swap(anchorIndex0, anchorIndex1);
         }
 
-        currentAxisDirection = Vector3((modelMatrix *
-                                        glm::vec4(axisDirection, 0.0f)).xyz()).Normalized();
+        if(Toolbar::GetInstance()->GetGlobalCoordsMode())
+        {
+            currentOAxisDirection =
+                    Vector3((modelMatrix.Inversed() *
+                             glm::vec4(oAxisDirection,0.0f)).xyz()).Normalized();
+        }
+        else
+        {
+            currentOAxisDirection = oAxisDirection;
+        }
     }
 
-    GameObject *attachedGameObject = GetAttachedGameObject();
     Sphere bSphere = attachedGameObject->GetBoundingSphere();
     float radius = bSphere.GetRadius() / 2.0f * 1.0f;
     circle->SetRadius(radius);
@@ -125,12 +138,10 @@ void EditorRotateAxis::OnUpdate()
                 glm::vec2 mouseDir = glm::normalize(sMouseDelta);
                 float alignment = glm::dot(anchorPointsDir, mouseDir);
 
-                Vector3 worldAxisDir = Vector3((glm::normalize(
-                                                    modelMatrix *
-                                                    glm::vec4(currentAxisDirection, 0.0f))).xyz());
                 // Rotate the model
-                Transform *goTrans = attachedGameObject->GetComponent<Transform>();
-                goTrans->Rotate(worldAxisDir * alignment * rotationBoost * -1.0f);
+                Quaternion q = Quaternion::AngleAxis(rotationBoost * alignment * -1.0f,
+                                                     currentOAxisDirection);
+                goTrans->Rotate(q);
             }
         }
     }

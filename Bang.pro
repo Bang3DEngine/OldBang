@@ -86,6 +86,8 @@ OTHER_FILES += \
     res/Shaders/lines.frag \
     res/Shaders/lines.vert \
     res/Shaders/pvm_pos.vert \
+    $$PWD/res/Assets/UserBehaviours/TestBehaviour.cpp / \
+    $$PWD/res/Assets/UserBehaviours/TestBehaviour.h / \
     res/Shaders/selection.frag
 
 HEADERS += \

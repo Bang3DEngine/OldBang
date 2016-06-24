@@ -72,7 +72,7 @@ void Transform::SetRotation(const Quaternion &q)
 
 void Transform::Rotate(const Quaternion &r)
 {
-    SetRotation(r * GetLocalRotation());
+    SetRotation(GetLocalRotation() * r);
 }
 
 void Transform::SetScale(float s)

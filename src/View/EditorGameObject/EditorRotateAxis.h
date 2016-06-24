@@ -9,7 +9,7 @@ class EditorRotateAxis : public EditorGameObject
 {
 private:
 
-    const float rotationBoost = 10.0f;
+    const float rotationBoost = 0.1f;
 
     Transform *transform = nullptr;
     CircleRenderer *circle = nullptr;
@@ -30,7 +30,7 @@ private:
     Vector3 lineColorFadingNotGrabbed = Vector3(0.75f);
     Vector3 lineColor;
 
-    Vector3 axisDirection;
+    Vector3 oAxisDirection;
 
     /**
      * @brief These anchorIndexes refer to indexes of the Circle rendered by the CircleRenderer.
@@ -60,7 +60,7 @@ private:
      * @brief When working with local coords system activated, we must save the initial axis which
      * the user started to rotate with. Otherwise, it will do unexpected things for the user.
      */
-    Vector3 currentAxisDirection;
+    Vector3 currentOAxisDirection;
 
     bool mouseIsOver = false;
 

@@ -23,6 +23,7 @@ void EditorAxisGroup::OnUpdate()
 {
     Toolbar::TransformMode tm = Toolbar::GetInstance()->
                                 GetSelectedTransformMode();
+
     if (tm == Toolbar::TransformMode::Translate)
     {
         DisableAllGroups();
@@ -37,6 +38,10 @@ void EditorAxisGroup::OnUpdate()
     {
         DisableAllGroups();
     }
+
+
+    Transform *t = GetComponent<Transform>();
+    //t->SetScale();
 }
 
 

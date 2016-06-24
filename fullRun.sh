@@ -12,6 +12,7 @@ cd ..
 
 # Make and run Bang
 qmake
+rm obj/*
 make clean
 
 ./run.sh

@@ -121,8 +121,6 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
     int pid = fork();
     if (pid == 0) // Child
     {
-        system("echo \"begin\" > test.out");
-
         close(fd[0]);
         close(STDOUT_FILENO);
         close(STDERR_FILENO);
@@ -149,14 +147,14 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
     dup2(fd[0], STDIN_FILENO);
 
     // Get system's output
-    std::string retString = "";
+    output = "";
     const int bufferSize = 1024;
     char buff[bufferSize + 1];
     memset((char*) &buff, 0, bufferSize + 1);
 
     while ( read(fd[0], buff, bufferSize) )
     {
-        retString.append(buff);
+        output.append(buff);
         memset(buff, 0, bufferSize);
     }
 
@@ -173,7 +171,6 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
 
     // Set output parameters
     success = (result == 0);
-    output = retString;
 }
 
 std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromProjectRoot)
@@ -205,7 +202,6 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     options += " -Wl,--export-dynamic ";
     options += " --std=c++11";
     options += " " + includes + " ";
-    //options += " -L/usr/lib/x86_64-linux-gnu -L/usr/X11R6/lib64 ";
     options += " -lGLEW -lGL -lpthread ";
     options += " " + qtLibDirs + " ";
     options += " -fPIC"; // Shared linking stuff
@@ -263,10 +259,21 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
 
     // Open library
     *openLibrary = dlopen(sharedObjectFilepath.c_str(), RTLD_NOW);
+    char *err = dlerror();
+    if(err != nullptr)
+    {
+        Logger_Error(err);
+        if(*openLibrary != nullptr)
+        {
+            dlclose(*openLibrary);
+            *openLibrary = *createdBehaviour = nullptr;
+        }
+        return;
+    }
     if(*openLibrary == nullptr) return;
 
     // Error Check
-    char *err = dlerror();
+    err = dlerror();
     if(err != nullptr)
     {
         Logger_Error(err);
