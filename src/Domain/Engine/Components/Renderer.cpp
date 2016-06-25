@@ -17,7 +17,6 @@ Material *Renderer::GetMaterial()
 void Renderer::ActivateStatesBeforeRendering() const
 {
     glLineWidth(lineWidth);
-    glEnable(GL_LINE_SMOOTH); //Line antialiasing
 
     //Set polygon mode
     if(drawWireframe)

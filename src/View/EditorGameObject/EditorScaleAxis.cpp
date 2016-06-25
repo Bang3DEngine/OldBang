@@ -38,7 +38,7 @@ void EditorScaleAxis::OnUpdate()
             Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
 
             // Get axis in world space and eye space
-            if(Toolbar::GetInstance()->GetGlobalCoordsMode())
+            if(!Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
                 modelMatrix = Matrix4::identity;
             }
@@ -52,10 +52,12 @@ void EditorScaleAxis::OnUpdate()
             float alignment = glm::dot(screenAxisDir, glm::normalize(mouseDelta));
             Vector3 camPos = cam->GetOwner()->GetComponent<Transform>()->GetPosition();
             Transform *goTrans = GetAttachedGameObject()->GetComponent<Transform>();
-            Vector3 worldMove = alignment * Vector3(worldAxisDir.xyz()) *
-                                glm::length(mouseDelta) *
-                                Vector3::Distance(camPos, goTrans->GetPosition()) * 0.002f;
-            goTrans->Scale(worldMove);
+            Vector3 scaling = alignment * Vector3(worldAxisDir.xyz()) *
+                              glm::length(mouseDelta) *
+                              Vector3::Distance(camPos, goTrans->GetPosition()) * 0.001f;
+
+            scaling.z *= -1;
+            goTrans->SetLocalScale(goTrans->GetLocalScale() + scaling);
         }
     }
 }

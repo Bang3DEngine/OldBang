@@ -16,7 +16,7 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 
     renderToScreenPlaneMesh = new MeshScreenPlane();
     renderToScreenPlaneMesh->BindPositionsToShaderProgram(ShaderContract::Vertex_In_Position_Raw,
-                                                          *(renderToScreenMaterial->GetShaderProgram()));
+                                                        *(renderToScreenMaterial->GetShaderProgram()));
 }
 
 GBuffer::~GBuffer()
