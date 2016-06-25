@@ -23,7 +23,7 @@ unsigned char* FileReader::ReadImage(const std::string& filepath,
     unsigned char* data = stbi_load(filepath.c_str(),
                                     width, height,
                                     components, 0);
-    if(data == nullptr)
+    if(!data)
     {
         Logger_Error("Error loading the texture '" << filepath <<
                      "', couldn't open/read the file.");

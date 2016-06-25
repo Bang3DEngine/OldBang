@@ -31,14 +31,11 @@ Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir) const
 void EditorAxis::GetMatrices(Matrix4 &pvm, Matrix4 &pv,
                              Matrix4 &p, Matrix4 &v, Matrix4 &m) const
 {
-    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
-    if (cam == nullptr) return;
-
+    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     cam->GetProjectionMatrix(p);
     cam->GetViewMatrix(v);
 
-    Transform *attTrans = GetAttachedGameObject()->GetComponent<Transform>();
-    if(attTrans == nullptr) return;
+    Transform *attTrans = GetAttachedGameObject()->GetComponent<Transform>(); NONULL(attTrans);
 
     attTrans->GetModelMatrix(m);
 

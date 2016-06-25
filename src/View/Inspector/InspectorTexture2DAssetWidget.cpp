@@ -44,7 +44,7 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
 
 
     bool tmpAssetLoaded = false;
-    if(currentTex == nullptr)
+    if(!currentTex)
     {
         //Load a tmp asset, to be able to save it to a file.
         tmpAssetLoaded = true;

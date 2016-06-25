@@ -260,17 +260,17 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
     // Open library
     *openLibrary = dlopen(sharedObjectFilepath.c_str(), RTLD_NOW);
     char *err = dlerror();
-    if(err )
+    if(err)
     {
         Logger_Error(err);
-        if(*openLibrary )
+        if (*openLibrary)
         {
             dlclose(*openLibrary);
             *openLibrary = *createdBehaviour = nullptr;
         }
         return;
     }
-    if(*openLibrary == nullptr) return;
+    NONULL(*openLibrary);
 
     // Error Check
     err = dlerror();

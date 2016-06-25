@@ -53,7 +53,7 @@ void Scene::SetCamera(const Camera *cam)
 
 Camera *Scene::GetCamera() const
 {
-    if(cameraGameObject == nullptr) return nullptr;
+    if(!cameraGameObject) return nullptr;
     return cameraGameObject->GetComponent<Camera>();
 }
 

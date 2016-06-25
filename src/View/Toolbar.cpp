@@ -47,7 +47,7 @@ void Toolbar::UnCheckTransformModeButtons()
 
 Toolbar *Toolbar::GetInstance()
 {
-    if (tb == nullptr)
+    if (!tb)
     {
         Toolbar::Init();
     }

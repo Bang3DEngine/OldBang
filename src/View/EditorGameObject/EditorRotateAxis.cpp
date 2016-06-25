@@ -43,15 +43,11 @@ void EditorRotateAxis::OnUpdate()
 
     // Obtain mousePos in screen space for next calculations
 
-    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
-    if (cam == nullptr) return;
-    Transform *camTransform = cam->GetOwner()->GetComponent<Transform>();
-    if(camTransform == nullptr) return;
-    Vector3 camPos = camTransform->GetPosition();
+    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
+    Transform *camTransform = cam->GetOwner()->GetComponent<Transform>(); NONULL(camTransform);
 
     GameObject *attachedGameObject = GetAttachedGameObject();
-    Transform *attTrans = attachedGameObject->GetComponent<Transform>();
-    if(attTrans == nullptr) return;
+    Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
 
     Sphere bSphere = attachedGameObject->GetBoundingSphere();
     float radius = bSphere.GetRadius() / 2.0f * 1.0f;

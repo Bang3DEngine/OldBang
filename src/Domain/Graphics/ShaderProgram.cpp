@@ -32,13 +32,13 @@ void ShaderProgram::BindFragmentShader(Shader *fshader)
 
 bool ShaderProgram::Link()
 {
-    if(vshader == nullptr)
+    if(!vshader)
     {
         Logger_Error("Vertex shader not set. Can't link shader program.");
         return false;
     }
 
-    if(fshader == nullptr)
+    if(!fshader)
     {
         Logger_Error("Fragment shader not set. Can't link shader program.");
         return false;

@@ -47,7 +47,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     Clear();
     currentGameObject = gameObject;
 
-    if(currentGameObject == nullptr) return;
+    NONULL(currentGameObject);
 
     for(Component *p : currentGameObject->GetComponents())
     {
@@ -110,7 +110,7 @@ void Inspector::OnTreeHierarchyGameObjectsSelected
 
 void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 {
-    if(currentGameObject == nullptr) return;
+    NONULL(currentGameObject);
 
     if(clickedAction == MenuBar::Action::AddComponentBehaviour)
     {

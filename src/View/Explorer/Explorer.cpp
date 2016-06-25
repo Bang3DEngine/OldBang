@@ -163,7 +163,7 @@ void Explorer::setDir(const std::string &path)
 
 void Explorer::OnDirLoaded(QString dir)
 {
-    if(WindowMain::GetInstance() == nullptr) return;
+    NONULL(WindowMain::GetInstance());
 
     if(getCurrentDir().length() <= Persistence::GetAssetsPathAbsolute().length())
     {

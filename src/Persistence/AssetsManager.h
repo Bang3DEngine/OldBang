@@ -103,7 +103,7 @@ public:
             }
         }
 
-        return a == nullptr ? nullptr : dynamic_cast<T*>(a);
+        return !a ? nullptr : dynamic_cast<T*>(a);
     }
 
     /** Tries to retrieve an Asset from the AssetsManager cache.

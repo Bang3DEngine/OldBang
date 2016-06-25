@@ -29,7 +29,7 @@ void WindowEventManager::RemoveListener(IWindowEventManagerListener *listener)
 
 WindowEventManager *WindowEventManager::GetInstance()
 {
-    if(wem == nullptr)
+    if(!wem)
     {
         wem = WindowMain::GetInstance()->windowEventManager;
     }

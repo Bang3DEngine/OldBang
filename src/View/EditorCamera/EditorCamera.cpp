@@ -240,7 +240,7 @@ void EditorCamera::OnTreeHierarchyGameObjectsSelected
 
 void EditorCamera::OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
-    if(selected == nullptr) return;
+    NONULL(selected);
     currentFocus = selected;
     doingLookAt = true;
 }

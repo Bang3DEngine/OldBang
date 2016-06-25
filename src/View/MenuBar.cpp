@@ -134,8 +134,7 @@ void MenuBar::OnSaveScene() const
     }
     else //Save directly
     {
-        Scene *scene = Canvas::GetInstance()->GetCurrentScene();
-        if(scene == nullptr) return;
+        Scene *scene = Canvas::GetInstance()->GetCurrentScene(); NONULL(scene);
         FileWriter::WriteScene(filename, scene);
     }
 }
@@ -144,8 +143,7 @@ void MenuBar::OnSaveSceneAs() const
 {
     wem->NotifyMenuBarActionClicked(Action::SaveSceneAs);
 
-    Scene *scene = Canvas::GetInstance()->GetCurrentScene();
-    if(scene == nullptr) return;
+    Scene *scene = Canvas::GetInstance()->GetCurrentScene(); NONULL(scene);
 
     FileDialog fd("Save scene as...", Scene::GetFileExtension());
     std::string filename = fd.GetSaveFilename(scene->GetName());

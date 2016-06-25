@@ -366,7 +366,7 @@ void GameObject::Read(std::istream &f)
 void GameObject::SetEnabled(bool enabled) { this->enabled = enabled; }
 bool GameObject::IsEnabled()
 {
-    return enabled && (parent == nullptr ? true : parent->IsEnabled());
+    return enabled && (!parent ? true : parent->IsEnabled());
 }
 
 

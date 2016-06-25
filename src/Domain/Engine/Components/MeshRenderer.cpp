@@ -95,6 +95,8 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
 
 void MeshRenderer::OnRender()
 {
+    NONULL(mesh); NONULL(material); NONULL(material->GetShaderProgram());
+
     Camera *cam = GetOwner()->GetScene()->GetCamera();
     if(!CAN_USE_COMPONENT(cam))
     {
@@ -103,25 +105,11 @@ void MeshRenderer::OnRender()
     }
 
     Transform *t = owner->GetComponent<Transform>();
-    if(!CAN_USE_COMPONENT(t) || mesh == nullptr || material == nullptr)
+    if(!CAN_USE_COMPONENT(t))
     {
         if(!CAN_USE_COMPONENT(t))
             Logger_Verbose(owner << " could not be rendered because it does" <<
                            "not have a Transform (or it's disabled')");
-        if(mesh == nullptr)
-            Logger_Verbose(owner << " could not be rendered because it does" <<
-                           "not have a Mesh (or it's disabled')");
-
-        if(material == nullptr)
-            Logger_Verbose(owner << " could not be rendered because it does" <<
-                           "not have a Material (or it's disabled')");
-
-        return;
-    }
-    else if(material->GetShaderProgram() == nullptr)
-    {
-        Logger_Error(owner << " has a Material with no ShaderProgram." <<
-                     "Can't render.");
         return;
     }
 

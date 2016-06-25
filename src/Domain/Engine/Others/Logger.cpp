@@ -42,7 +42,7 @@ std::ostream& operator<<(std::ostream &log, const Matrix4 &v)
 
 std::ostream &operator<<(std::ostream &log, const IToString *s)
 {
-    if(s == nullptr)
+    if(!s)
     {
         log << "Null";
         return log;

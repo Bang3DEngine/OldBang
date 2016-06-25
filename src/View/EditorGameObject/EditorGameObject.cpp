@@ -26,7 +26,7 @@ GameObject *EditorGameObject::GetAttachedGameObject() const
     {
         while(parent->IsEditorGameObject())
         {
-            if(parent->GetParent() == nullptr) break;
+            if(!parent->GetParent()) break;
             parent = parent->GetParent();
         }
     }

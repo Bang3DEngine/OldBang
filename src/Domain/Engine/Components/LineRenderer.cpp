@@ -75,18 +75,8 @@ void LineRenderer::OnRender()
                        << scene << " does not have a set Camera.");
     }
 
-    if(material == nullptr)
-    {
-        Logger_Verbose(owner << " could not be rendered because it does " <<
-                       "not have a Material (or it's disabled')");
-        return;
-    }
-    else if(material->GetShaderProgram() == nullptr)
-    {
-        Logger_Error(owner << " has a Material with no ShaderProgram." <<
-                     "Can't render.");
-        return;
-    }
+    NONULL(material); NONULL(material->GetShaderProgram());
+
     Render();
 }
 

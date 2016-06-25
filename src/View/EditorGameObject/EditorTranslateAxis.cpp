@@ -27,14 +27,11 @@ void EditorTranslateAxis::OnUpdate()
     Matrix4 pvm, projView, projMatrix, viewMatrix, modelMatrix;
     GetMatrices(pvm, projView, projMatrix, viewMatrix, modelMatrix);
 
-    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
-    if (cam == nullptr) return;
-    Transform *camTransform = cam->GetOwner()->GetComponent<Transform>();
-    if(camTransform == nullptr) return;
+    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
+    Transform *camTransform = cam->GetOwner()->GetComponent<Transform>(); NONULL(camTransform);
     Vector3 camPos = camTransform->GetPosition();
 
-    Transform *attTrans = GetAttachedGameObject()->GetComponent<Transform>();
-    if(attTrans == nullptr) return;
+    Transform *attTrans = GetAttachedGameObject()->GetComponent<Transform>(); NONULL(attTrans);
 
     // Process grabbing movement
     if(grabbed)

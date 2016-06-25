@@ -221,6 +221,6 @@ void InspectorWidget::_OnSlotValueChanged(QString _)
 
 void InspectorWidget::_OnSlotValueChanged()
 {
-    if(relatedInspectable == nullptr) return;
+    NONULL(relatedInspectable);
     relatedInspectable->OnSlotValueChanged(this);
 }

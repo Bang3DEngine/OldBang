@@ -30,8 +30,7 @@ void TestBehaviour::OnStart()
 void TestBehaviour::OnUpdate()
 {
     time += Time::GetDeltaTime();
-    Transform *t = GetOwner()->GetComponent<Transform>();
-    if(t == nullptr) return;
+    Transform *t = GetOwner()->GetComponent<Transform>(); NONULL(t);
 
     float speed = 5.0f;
     Logger_Log("AAAAAAAAA");

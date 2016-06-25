@@ -100,7 +100,8 @@ void Hierarchy::UnselectAll()
 
 void Hierarchy::Refresh(Scene *currentScene)
 {
-    if(currentScene == nullptr) return;
+    NONULL(currentScene);
+
     this->currentScene = currentScene;
     gameObjectToTreeItem.clear();
     treeItemToGameObject.clear();
@@ -121,8 +122,7 @@ void Hierarchy::OnChildAdded(GameObject *child)
     if(gameObjectToTreeItem.find(parent) != gameObjectToTreeItem.end())
     {
         //if the parent is found, redo all the childs from the parent
-        QTreeWidgetItem *item = FillDownwards(child);
-        if(item == nullptr) return;
+        QTreeWidgetItem *item = FillDownwards(child); NONULL(item);
 
         gameObjectToTreeItem[parent]->addChild(item);
         ExpandRecursiveUpwards(gameObjectToTreeItem[parent]);
