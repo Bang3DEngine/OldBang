@@ -8,7 +8,7 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir)
 
     oAxisDirection = GetVectorFromDir(dir);
 
-    material = AssetsManager::GetAsset<Material>("res/Materials/lines.bmat");
+    material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/lines.bmat");
     material = new Material(*material);
 
     lineColor = oAxisDirection.Abs();
@@ -32,10 +32,15 @@ void EditorAxis::GetMatrices(Matrix4 &pvm, Matrix4 &pv,
                              Matrix4 &p, Matrix4 &v, Matrix4 &m) const
 {
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
+    if (cam == nullptr) return;
+
     cam->GetProjectionMatrix(p);
     cam->GetViewMatrix(v);
 
-    GetAttachedGameObject()->GetComponent<Transform>()->GetModelMatrix(m);
+    Transform *attTrans = GetAttachedGameObject()->GetComponent<Transform>();
+    if(attTrans == nullptr) return;
+
+    attTrans->GetModelMatrix(m);
 
     pv = p * v;
     pvm =  pv * m;

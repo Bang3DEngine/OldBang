@@ -31,16 +31,13 @@ void MeshRenderer::SetMaterial(Material *m)
 void MeshRenderer::SetMesh(Mesh *m)
 {
     mesh = m;
-    if(mesh != nullptr && material != nullptr &&
-       material->GetShaderProgram() != nullptr)
-    {
-        mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
-    }
+    NONULL(mesh); NONULL(material); NONULL(material->GetShaderProgram());
 
-    if(m->GetFilepath().length() > 0)
+    mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
+    if(mesh->GetFilepath().length() > 0)
     {
-        SetRenderMode(m->IsATrianglesModel() ?
-                          RenderMode::Triangles : RenderMode::Quads);
+        SetRenderMode(mesh->IsATrianglesModel() ?
+                      RenderMode::Triangles : RenderMode::Quads);
     }
 }
 
@@ -83,6 +80,8 @@ void MeshRenderer::ActivateStatesBeforeRendering() const
 
 void MeshRenderer::RenderWithoutBindingMaterial() const
 {
+    NONULL(mesh);
+
     ActivateStatesBeforeRendering();
 
     Matrix4 model, view, projection, pvm;

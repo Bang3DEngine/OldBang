@@ -77,19 +77,19 @@ const std::string ShaderContract::Uniform_Material_Diffuse_Color =
         ShaderContract::ShaderNames_Prefix + "material_diffuse_color";
 
 
-const std::string ShaderContract::Filepath_Shader_Fragment_Selection = "res/Shaders/selection.frag";
-const std::string ShaderContract::Filepath_Shader_Vertex_Render_To_Screen = "res/Shaders/render_to_screen.vert";
-const std::string ShaderContract::Filepath_Shader_Fragment_Render_To_Screen = "res/Shaders/render_to_screen.frag";
+const std::string ShaderContract::Filepath_Shader_Fragment_Selection = "Assets/Engine/Shaders/selection.frag";
+const std::string ShaderContract::Filepath_Shader_Vertex_Render_To_Screen = "Assets/Engine/Shaders/render_to_screen.vert";
+const std::string ShaderContract::Filepath_Shader_Fragment_Render_To_Screen = "Assets/Engine/Shaders/render_to_screen.frag";
 
-const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position   = "res/Shaders/pass_pos.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position_Normal = "res/Shaders/pass_pos_normal.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position  = "res/Shaders/model_pos.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position_Normal  = "res/Shaders/model_pos_normal.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position  = "res/Shaders/pvm_pos.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal  = "res/Shaders/pvm_pos_normal.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv = "res/Shaders/pvm_pos_normal_uv.vert";
+const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position   = "Assets/Engine/Shaders/pass_pos.vert";
+const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position_Normal = "Assets/Engine/Shaders/pass_pos_normal.vert";
+const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position  = "Assets/Engine/Shaders/model_pos.vert";
+const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position_Normal  = "Assets/Engine/Shaders/model_pos_normal.vert";
+const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position  = "Assets/Engine/Shaders/pvm_pos.vert";
+const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal  = "Assets/Engine/Shaders/pvm_pos_normal.vert";
+const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv = "Assets/Engine/Shaders/pvm_pos_normal_uv.vert";
 
-const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position  = "res/Shaders/pass_pos.frag";
-const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal  = "res/Shaders/pass_pos_normal.frag";
-const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv  = "res/Shaders/pass_pos_normal_uv.frag";
+const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position  = "Assets/Engine/Shaders/pass_pos.frag";
+const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal  = "Assets/Engine/Shaders/pass_pos_normal.frag";
+const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv  = "Assets/Engine/Shaders/pass_pos_normal_uv.frag";
 

@@ -1,6 +1,0 @@
-<Material>
-    ./res/Shaders/lines.vert
-    ./res/Shaders/lines.frag
-    -
-    0.0 0.0 0.0 1.0
-</Material>

@@ -1,61 +1,61 @@
 <Scene>
-0x180ee10
+0x265fba0
 Scene
 <children>
 <GameObject>
-0x1b7b450
-LuigiA
+0x2af2fc0
+Luigi
 <children>
 </children>
 <components>
 <Transform>
-0x1b9bbe0
-0 0 0
+0x2afce90
+-10.202 0 0
 0 0 0 1
-0.03 0.03 0.03
+0.1 0.1 0.1
 </Transform>
 <MeshRenderer>
-0x1b77e50
-./res/Assets/luigiMesh.bmesh
-./res/Assets/luigiMaterial.bmat
+0x2af3df0
+./Assets/Meshes/luigiMesh.bmesh
+./Assets/Materials/luigiMaterial.bmat
 </MeshRenderer>
 </components>
 </GameObject>
 <GameObject>
-0x1bdaa70
-LuigiB
-<children>
-</children>
-<components>
-<Transform>
-0x1bda920
-2 0 0
-0 0 0 1
-0.03 0.03 0.03
-</Transform>
-<MeshRenderer>
-0x1bda6a0
-./res/Assets/luigiMesh.bmesh
-./res/Assets/luigiMaterial.bmat
-</MeshRenderer>
-</components>
-</GameObject>
-<GameObject>
-0x1bd0d90
+0x272d160
 Boy
 <children>
 </children>
 <components>
 <Transform>
-0x1bd0e10
--2 0 0
+0x2b12f10
+2.79 0 0
 -0.707107 0 0 0.707107
-0.7 0.7 0.7
+3 3 3
 </Transform>
 <MeshRenderer>
-0x1bd10f0
-./res/Assets/boyMesh.bmesh
-./res/Assets/luigiMaterial.bmat
+0x265e840
+./Assets/Meshes/boyMesh.bmesh
+./Assets/Materials/luigiMaterial.bmat
+</MeshRenderer>
+</components>
+</GameObject>
+<GameObject>
+0x2dd66e0
+Boy
+<children>
+</children>
+<components>
+<Transform>
+0x2e58ef0
+15.7845 0 -11.3376
+-0.707107 0 0 0.707107
+3 3 3
+</Transform>
+<MeshRenderer>
+0x2e19d20
+./Assets/Meshes/boyMesh.bmesh
+./Assets/Materials/luigiMaterial.bmat
 </MeshRenderer>
 </components>
 </GameObject>

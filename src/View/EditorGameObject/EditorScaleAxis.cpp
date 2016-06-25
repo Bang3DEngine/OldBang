@@ -27,6 +27,15 @@ void EditorScaleAxis::OnUpdate()
     Matrix4 pvm, projView, projMatrix, viewMatrix, modelMatrix;
     GetMatrices(pvm, projView, projMatrix, viewMatrix, modelMatrix);
 
+    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
+    if (cam == nullptr) return;
+    Transform *camTransform = cam->GetOwner()->GetComponent<Transform>();
+    if(camTransform == nullptr) return;
+    Vector3 camPos = camTransform->GetPosition();
+
+    Transform *attTrans = GetAttachedGameObject()->GetComponent<Transform>();
+    if(attTrans == nullptr) return;
+
     // Process grabbing movement
     if(grabbed)
     {
@@ -35,8 +44,6 @@ void EditorScaleAxis::OnUpdate()
 
         if(glm::length(mouseDelta) > 0.0f)
         {
-            Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
-
             // Get axis in world space and eye space
             if(!Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
@@ -50,16 +57,14 @@ void EditorScaleAxis::OnUpdate()
             // Move the GameObject, depending on how aligned is
             // the mouse movement vs the axis in screen space (what user sees)
             float alignment = glm::dot(screenAxisDir, glm::normalize(mouseDelta));
-            Vector3 camPos = cam->GetOwner()->GetComponent<Transform>()->GetPosition();
-            Transform *goTrans = GetAttachedGameObject()->GetComponent<Transform>();
             Vector3 scaling = alignment * Vector3(worldAxisDir.xyz()) *
                               glm::length(mouseDelta) *
-                              Vector3::Distance(camPos, goTrans->GetPosition()) * 0.001f;
+                              Vector3::Distance(camPos, attTrans->GetPosition()) * 0.001f;
 
             scaling.z *= -1;
 
             //TODO: solve problem with negative scaling and depth :/
-            goTrans->SetLocalScale(goTrans->GetLocalScale() + scaling);
+            attTrans->SetLocalScale(attTrans->GetLocalScale() + scaling);
         }
     }
 }

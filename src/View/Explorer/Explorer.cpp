@@ -75,6 +75,8 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 {
     if(e->button() == Qt::LeftButton)
     {
+        if(this->selectedIndexes().length() <= 0) return;
+
         QModelIndex clickedIndex = this->selectedIndexes().at(0);
         bool isDir = fileSystemModel->isDir(clickedIndex);
         if(isDir)

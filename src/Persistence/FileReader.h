@@ -90,7 +90,7 @@ public:
 
 
     //To be used when we have a reference to another element in the
-    // same file (0xu234783 instead of /home/ashjdas/res/Assets/dkjfdf.b* or '-')
+    // same file (0xu234783 instead of /home/ashjdas/Assets/dkjfdf.b* or '-')
     template <class T>
     static T* GetNextPointerAddress(std::istream &f)
     {

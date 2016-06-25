@@ -14,7 +14,7 @@ std::string Persistence::GetProjectRootPathAbsolute()
 
 std::string Persistence::GetAssetsRelativePathFromProjectRoot()
 {
-    return "/res/Assets";
+    return "/Assets";
 }
 
 std::string Persistence::GetAssetsPathAbsolute()
@@ -70,7 +70,7 @@ std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPat
 
 std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPath)
 {
-    // /home/wololo/MyProject/res/Assets/lolol/a.bmesh => ./res/Assets/lolol/a.bmesh
+    // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
     if(!IsAbsolute(absPath))
     {
         return absPath;

@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     //
 
     // Load dark Window theme
-    QFile f("res/qdarkstyle/style.qss");
+    QFile f("Assets/Engine/qdarkstyle/style.qss");
     if (!f.exists())
     {
         Logger_Error("Unable to set dark stylesheet, stylesheet not found.");
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     //
 
     Scene *scene = new EditorScene();
-    std::string filename = "./res/Assets/selectionScene.bscene";
+    std::string filename = "./Assets/Scenes/test.bscene";
     FileReader::ReadScene(filename , scene);
     if(scene != nullptr)
     {

@@ -17,7 +17,7 @@ LIBS += -lGLEW -ldl
 
 DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
 
-RESOURCES = res/qdarkstyle/style.qrc
+RESOURCES = Assets/Engine/qdarkstyle/style.qrc
 
 INCLUDEPATH += \
     $$PWD/src/ \
@@ -45,51 +45,37 @@ INCLUDEPATH += \
     $$PWD/src/Domain/Engine/Physics/ \
     $$PWD/src/Persistence/ \
     $$PWD/src/Domain/Graphics/ \
-    $$PWD/BangPreprocessor/GeneratedFiles/ \
-    #$$PWD/res/Assets/UserBehaviours/
+    $$PWD/BangPreprocessor/GeneratedFiles/
 
 
 OTHER_FILES += \
     .gitignore \
-    res/qdarkstyle/style.qss \
+    Assets/Engine/qdarkstyle/style.qss \
     run.sh \
     updateUI.sh \
     src/Domain \
-    res/Scenes/sceneTest1.scene \
-    res/Scenes/sceneFileFormat.txt \
-    res/Scenes/assetsTest.assets \
-    res/Assets/Meshes/Pyramid.obj \
-    res/Materials \
-    res/Shaders/pass_pos.frag \
-    res/Shaders/pass_pos_normal.frag \
-    res/Shaders/pass_pos_normal_uv.frag \
-    res/Shaders/render_to_screen.frag \
-    res/Shaders/model_pos.vert \
-    res/Shaders/model_pos_normal.vert \
-    res/Shaders/pass_pos.vert \
-    res/Shaders/pass_pos_normal.vert \
-    res/Shaders/pvm_pos_normal.vert \
-    res/Shaders/pvm_pos_normal_uv.vert \
-    res/Shaders/render_to_screen.vert \
-    res/Assets/Meshes/Gandalf.obj \
-    res/Assets/Meshes/Boy.obj \
-    res/Assets/testMaterial.asset \
-    res/Assets/woodTexture.asset \
-    res/Assets/boyMesh.asset \
-    res/Assets/carpetTexture.asset \
-    res/Assets/testMaterial2.asset \
-    res/Assets/prefabTest.asset \
-    #res/Assets/userBehavioursNamesList.ubnl \
-    res/Assets/luigiPrefab.asset \
-    res/Assets/luigiMesh.asset \
-    res/Assets/luigiMaterial.asset \
-    res/Assets/luigiTexture.asset \
-    res/Shaders/lines.frag \
-    res/Shaders/lines.vert \
-    res/Shaders/pvm_pos.vert \
-    $$PWD/res/Assets/UserBehaviours/TestBehaviour.cpp / \
-    $$PWD/res/Assets/UserBehaviours/TestBehaviour.h / \
-    res/Shaders/selection.frag
+    Assets/Scenes/sceneTest1.scene \
+    Assets/Scenes/sceneFileFormat.txt \
+    Assets/Scenes/assetsTest.assets \
+    Assets/Assets/Meshes/Pyramid.obj \
+    Assets/Engine/Materials \
+    Assets/Engine/Shaders/pass_pos.frag \
+    Assets/Engine/Shaders/pass_pos_normal.frag \
+    Assets/Engine/Shaders/pass_pos_normal_uv.frag \
+    Assets/Engine/Shaders/render_to_screen.frag \
+    Assets/Engine/Shaders/model_pos.vert \
+    Assets/Engine/Shaders/model_pos_normal.vert \
+    Assets/Engine/Shaders/pass_pos.vert \
+    Assets/Engine/Shaders/pass_pos_normal.vert \
+    Assets/Engine/Shaders/pvm_pos_normal.vert \
+    Assets/Engine/Shaders/pvm_pos_normal_uv.vert \
+    Assets/Engine/Shaders/render_to_screen.vert \
+    Assets/Engine/Shaders/lines.frag \
+    Assets/Engine/Shaders/lines.vert \
+    Assets/Engine/Shaders/pvm_pos.vert \
+    $$PWD/Assets/Behaviours/TestBehaviour.cpp / \
+    $$PWD/Assets/Behaviours/TestBehaviour.h / \
+    Assets/Engine/Shaders/selection.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -127,7 +113,6 @@ HEADERS += \
     src/Domain/Engine/Interfaces/IFileable.h \
     src/Domain/Engine/Assets/Texture2D.h \
     src/Domain/Engine/Assets/Prefab.h \
-    #$$files(res/Assets/UserBehaviours/*.h,true) \
     src/View/WindowEventManager.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/Bang.h \
@@ -225,7 +210,6 @@ SOURCES += \
     src/Domain/Engine/Components/Behaviour.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
     src/Domain/Engine/Assets/Prefab.cpp \
-    #$$files(res/Assets/UserBehaviours/*.cpp,true) \
     src/View/WindowMain.cpp \
     src/View/WindowEventManager.cpp \
     src/View/Interfaces/IWindowEventManagerListener.cpp \

@@ -22,10 +22,10 @@ public:
     static std::string GetDir(const std::string &filepath);
     static std::string GetFileNameWithExtension(const std::string &filepath);
 
-    // ./res/Assets/lolol/a.bmesh => /home/wololo/MyProject/res/Assets/lolol/a.bmesh
+    // ./Assets/lolol/a.bmesh => /home/wololo/MyProject/Assets/lolol/a.bmesh
     static std::string ProjectRootRelativeToAbsolute(const std::string &relPath);
 
-    // /home/wololo/MyProject/res/Assets/lolol/a.bmesh => ./res/Assets/lolol/a.bmesh
+    // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
     static std::string ProjectRootAbsoluteToRelative(const std::string &absPath);
 
 

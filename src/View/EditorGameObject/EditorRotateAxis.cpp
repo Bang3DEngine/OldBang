@@ -4,7 +4,7 @@
 
 EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir) : EditorAxis(dir)
 {
-    material = AssetsManager::GetAsset<Material>("res/Materials/linesRotationAxis.bmat");
+    material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/linesRotationAxis.bmat");
     material = new Material(*material);
 
     circle = AddComponent<CircleRenderer>();
@@ -43,7 +43,16 @@ void EditorRotateAxis::OnUpdate()
 
     // Obtain mousePos in screen space for next calculations
 
+    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
+    if (cam == nullptr) return;
+    Transform *camTransform = cam->GetOwner()->GetComponent<Transform>();
+    if(camTransform == nullptr) return;
+    Vector3 camPos = camTransform->GetPosition();
+
     GameObject *attachedGameObject = GetAttachedGameObject();
+    Transform *attTrans = attachedGameObject->GetComponent<Transform>();
+    if(attTrans == nullptr) return;
+
     Sphere bSphere = attachedGameObject->GetBoundingSphere();
     float radius = bSphere.GetRadius() / 2.0f * 1.0f;
     material->GetShaderProgram()->SetUniformVec3("wCircleCenter", bSphere.GetCenter(), false);
@@ -106,7 +115,7 @@ void EditorRotateAxis::OnUpdate()
                 // Rotate the model
                 Quaternion q = Quaternion::AngleAxis(rotationBoost * alignment,
                                                      currentOAxisDirection);
-                attachedGameObject->GetComponent<Transform>()->RotateLocal(q);
+                attTrans->RotateLocal(q);
             }
         }
     }

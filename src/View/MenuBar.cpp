@@ -211,7 +211,7 @@ void MenuBar::OnCreatePlane() const
     m->LoadNormals(normals);
     m->LoadUvs(uvs);
 
-    Material *mat = AssetsManager::GetAsset<Material>("res/Materials/default.bmat");
+    Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/default.bmat");
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
     r->SetRenderMode(MeshRenderer::RenderMode::Triangles);
@@ -236,7 +236,7 @@ void MenuBar::OnCreateCube() const
     m->LoadNormals(normals);
     m->LoadUvs(uvs);
 
-    Material *mat = AssetsManager::GetAsset<Material>("res/Materials/default.bmat");
+    Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/default.bmat");
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
     r->SetRenderMode(MeshRenderer::RenderMode::Triangles);

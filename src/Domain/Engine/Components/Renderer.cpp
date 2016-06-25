@@ -41,7 +41,7 @@ void Renderer::ActivateStatesBeforeRendering() const
 
     Scene *scene = Canvas::GetCurrentScene();
     Camera *camera = scene->GetCamera();
-    if(camera != nullptr)
+    if(camera != nullptr && material != nullptr && material->shaderProgram != nullptr)
     {
         Transform *t = camera->GetOwner()->GetComponent<Transform>();
         if(t != nullptr)

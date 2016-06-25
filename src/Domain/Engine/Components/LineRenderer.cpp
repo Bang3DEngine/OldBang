@@ -15,7 +15,7 @@ LineRenderer::LineRenderer()
     vao = new VAO();
 
     Material *m = AssetsManager::GetAsset<Material>(
-                "./res/Materials/lines.bmat" );
+                "./Assets/Engine/Materials/lines.bmat" );
     SetMaterial(m);
 
     SetLineWidth(2.0f);

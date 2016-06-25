@@ -24,7 +24,6 @@ void main()
     vec3 diffTex = texture2D(BANG_texture_0, BANG_uv_raw_vout_fin).rgb * texApport;
     vec3 diffColor = BANG_material_diffuse_color.rgb * BANG_material_diffuse_color.a;
     BANG_diffuse_fout_gbufferin  = diffTex + diffColor;
-    BANG_diffuse_fout_gbufferin  = vec3(BANG_uv_raw_vout_fin,0);
 
     BANG_depth_fout_gbufferin    = gl_FragCoord.z;
 }

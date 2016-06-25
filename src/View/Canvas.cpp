@@ -212,7 +212,7 @@ void Canvas::keyReleaseEvent(QKeyEvent *event)
 
 void Canvas::OnTopKekPressed()
 {
-    Prefab *p = AssetsManager::GetAsset<Prefab>("res/Assets/luigiPrefab.bprefab");
+    Prefab *p = AssetsManager::GetAsset<Prefab>("Assets/Prefabs/luigiPrefab.bprefab");
 
     GameObject *e = p->Instantiate();
 

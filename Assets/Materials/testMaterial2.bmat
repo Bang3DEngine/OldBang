@@ -1,0 +1,6 @@
+<Material>
+    ./Assets/Engine/Shaders/pvm_pos_normal_uv.vert
+    ./Assets/Engine/Shaders/pass_pos_normal_uv.frag
+    ./Assets/Textures/woodTexture.btex2d
+    0.0 0.0 0.0 0.0
+</Material>

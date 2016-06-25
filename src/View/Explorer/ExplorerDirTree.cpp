@@ -7,7 +7,7 @@ ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
     fileSystemModel = new QFileSystemModel();
 
     topPath = QT_PROJECT_PATH;
-    topPath += "/res/Assets";
+    topPath += "/Assets";
 
     setModel(fileSystemModel);
     setDir(topPath);
