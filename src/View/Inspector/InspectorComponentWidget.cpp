@@ -49,7 +49,7 @@ void InspectorComponentWidget::OnCustomContextMenuRequested(QPoint point)
 
 void InspectorComponentWidget::OnEnabledCheckboxPressed(bool checked)
 {
-    if(relatedComponent != nullptr)
+    if(relatedComponent )
     {
         relatedComponent->SetEnabled(checked);
     }

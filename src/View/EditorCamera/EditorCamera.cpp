@@ -33,10 +33,10 @@ void EditorCamera::AdjustSpeeds()
     mouseRotDegreesPerPixel.y = 180.0f / ch;
 
     mousePanPerPixel = glm::vec2(0.1f, 0.1f);
-    if(currentFocus != nullptr)
+    if(currentFocus )
     {
         Transform *ft = currentFocus->GetComponent<Transform>();
-        if(ft != nullptr)
+        if(ft )
         {
             Vector3 focusPoint = ft->GetPosition();
             float d = Vector3::Distance(focusPoint, t->GetPosition());

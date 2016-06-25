@@ -186,7 +186,7 @@ public:
         for(auto comp = comps.begin(); comp != comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if(tp != nullptr) return tp;
+            if(tp ) return tp;
         }
         return nullptr;
     }
@@ -201,7 +201,7 @@ public:
         for(auto comp = comps.begin(); comp != comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if(tp != nullptr) comps_l.push_back(tp);
+            if(tp ) comps_l.push_back(tp);
         }
         return comps_l;
     }
@@ -217,9 +217,9 @@ public:
             if((*c)->IsEditorGameObject()) continue;
 
             Component *comp = (*c)->GetComponent<T>();
-            if(comp != nullptr) return comp;
+            if(comp ) return comp;
             comp = (*c)->GetComponentInChildren<T>();
-            if(comp != nullptr) return comp;
+            if(comp ) return comp;
         }
         return nullptr;
     }
@@ -260,7 +260,7 @@ public:
     template <class T>
     bool HasComponent() const
     {
-        return GetComponent<T>() != nullptr;
+        return GetComponent<T>() ;
     }
 
     /**
@@ -272,7 +272,7 @@ public:
         for(auto comp = comps.begin(); comp != comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if(tp != nullptr)
+            if(tp )
             {
                 comps.erase(comp);
                 delete tp;

@@ -260,10 +260,10 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
     // Open library
     *openLibrary = dlopen(sharedObjectFilepath.c_str(), RTLD_NOW);
     char *err = dlerror();
-    if(err != nullptr)
+    if(err )
     {
         Logger_Error(err);
-        if(*openLibrary != nullptr)
+        if(*openLibrary )
         {
             dlclose(*openLibrary);
             *openLibrary = *createdBehaviour = nullptr;
@@ -274,7 +274,7 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
 
     // Error Check
     err = dlerror();
-    if(err != nullptr)
+    if(err )
     {
         Logger_Error(err);
         dlclose(*openLibrary);
@@ -289,7 +289,7 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
 
     // Error Check
     err = dlerror();
-    if(err != nullptr)
+    if(err )
     {
         Logger_Error(err);
         dlclose(*openLibrary);
@@ -299,7 +299,7 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
 
     // Call it and get the pointer to the created Behaviour
     *createdBehaviour = nullptr;
-    if(createFunction != nullptr)
+    if(createFunction )
     {
         // Create the Behaviour, passing to it the SingletonManager
         // of this main binary, so it can link it.
@@ -313,7 +313,7 @@ bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, void *openLibrary)
 
     // Error Check
     char *err = dlerror();
-    if(err != nullptr)
+    if(err )
     {
         Logger_Error(err);
         return false;
@@ -326,13 +326,13 @@ bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, void *openLibrary)
 
     // Error Check
     err = dlerror();
-    if(err != nullptr)
+    if(err )
     {
         Logger_Error(err);
         return false;
     }
 
-    if(deleteFunction != nullptr)
+    if(deleteFunction )
     {
         deleteFunction(b);
     }
@@ -346,7 +346,7 @@ void SystemUtils::CloseLibrary(void *library)
     dlerror();
     dlclose(library);
     char *err = dlerror();
-    if(err != nullptr)
+    if(err )
     {
         Logger_Error(err);
     }

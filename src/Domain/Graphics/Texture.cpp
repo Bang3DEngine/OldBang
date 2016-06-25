@@ -24,7 +24,7 @@ Texture::Texture(TextureType glTextureTarget) : Texture()
 
 Texture::~Texture()
 {
-    if(data != nullptr) delete data;
+    if(data ) delete data;
     glDeleteTextures(1, &idgl);
 }
 

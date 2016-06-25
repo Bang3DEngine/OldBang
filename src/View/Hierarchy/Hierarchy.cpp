@@ -26,7 +26,7 @@ Hierarchy::~Hierarchy()
 
 void Hierarchy::ExpandRecursiveUpwards(QTreeWidgetItem *item)
 {
-    if(item != nullptr)
+    if(item )
     {
         item->setExpanded(true);
         ExpandRecursiveUpwards(item->parent());
@@ -48,7 +48,7 @@ QTreeWidgetItem* Hierarchy::FillDownwards(GameObject *o)
     for(auto it = children.begin(); it != children.end(); ++it)
     {
         QTreeWidgetItem *c = FillDownwards(*it);
-        if(c != nullptr)
+        if(c )
         {
             eRoot->addChild(c);
         }
@@ -67,7 +67,7 @@ void Hierarchy::LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items)
     for(auto it = items->begin(); it != items->end(); ++it)
     {
         QTreeWidgetItem *parent = (*it)->parent();
-        if(parent != nullptr)
+        if(parent )
         {
             bool hasItsParentInTheList = false;
             for(auto it2 = items->begin(); it2 != items->end(); ++it2)
@@ -147,7 +147,7 @@ void Hierarchy::OnChildChangedParent(GameObject *child, GameObject *previousPare
 void Hierarchy::OnChildRemoved(GameObject *child)
 {
     QTreeWidgetItem *item = gameObjectToTreeItem[child];
-    if(item != nullptr)
+    if(item )
     {
         item->parent()->removeChild(item);
         treeItemToGameObject.erase(item);
@@ -161,7 +161,7 @@ void Hierarchy::dropEvent(QDropEvent *event)
     LeaveOnlyTopLevelItems(&sourceItems);
 
     QTreeWidgetItem *targetItem = itemAt(event->pos());
-    if(targetItem != nullptr && !sourceItems.empty())
+    if(targetItem  && !sourceItems.empty())
     {
         GameObject *target = treeItemToGameObject[targetItem];
         DropIndicatorPosition dropPos = dropIndicatorPosition();
@@ -178,7 +178,7 @@ void Hierarchy::dropEvent(QDropEvent *event)
         }
 
         //Only if the user is not trying to put it on the same level as scene.
-        if(targetItem != nullptr) //Trying to put it on the same level as scene. STOP
+        if(targetItem ) //Trying to put it on the same level as scene. STOP
         {
             for(auto it = sourceItems.begin(); it != sourceItems.end(); ++it)
             {
@@ -186,8 +186,8 @@ void Hierarchy::dropEvent(QDropEvent *event)
                 if(sourceItem != targetItem)
                 {
                     GameObject *source = treeItemToGameObject[sourceItem];
-                    if(source != nullptr && target != nullptr &&
-                       source->GetParent() != nullptr)
+                    if(source  && target  &&
+                       source->GetParent() )
                     {
                         source->GetParent()->MoveChild(source, target);
                     }
@@ -197,7 +197,7 @@ void Hierarchy::dropEvent(QDropEvent *event)
     }
 
     //Only if the user is not trying to put it on the same level as scene.
-    if(targetItem != nullptr)
+    if(targetItem )
     {
         QTreeWidget::dropEvent(event); //super
         event->acceptProposedAction();
@@ -222,7 +222,7 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
     {
         if(this->selectedItems().length() <= 0) return;
         QTreeWidgetItem *selected = this->selectedItems().at(0);
-        if(selected != nullptr)
+        if(selected )
         {
             Qt::ItemFlags oldFlags = selected->flags();
             selected->setFlags(oldFlags | Qt::ItemFlag::ItemIsEditable);
@@ -243,7 +243,7 @@ void Hierarchy::SelectGameObject(GameObject *go)
     if(gameObjectToTreeItem.find(go) != gameObjectToTreeItem.end())
     {
         GameObject *parent = go->GetParent();
-        if(parent != nullptr)
+        if(parent )
         {
             ExpandRecursiveUpwards(gameObjectToTreeItem[parent]);
         }
@@ -286,7 +286,7 @@ void Hierarchy::OnContextMenuDeleteClicked()
     foreach(QTreeWidgetItem *item, items)
     {
         GameObject *selected = treeItemToGameObject[item];
-        if(selected->GetParent() != nullptr)
+        if(selected->GetParent() )
         {
             selected->GetParent()->RemoveChild(selected);
         }
@@ -318,7 +318,7 @@ void Hierarchy::OnContextMenuCreatePrefab()
 void Hierarchy::OnCustomContextMenuRequested(QPoint point)
 {
     QTreeWidgetItem *item = itemAt(point);
-    if (item != nullptr)
+    if (item )
     {
         GameObject *e = treeItemToGameObject[item];
         QMenu contextMenu(tr("GameObject hierarchy context menu"), this);
@@ -359,7 +359,7 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
         if(treeItemToGameObject.find(item) != treeItemToGameObject.end())
         {
             GameObject *e = treeItemToGameObject[item];
-            if(e != nullptr)
+            if(e )
                 selectedGameObjects.push_back(e);
         }
     }

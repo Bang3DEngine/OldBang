@@ -110,7 +110,7 @@ void MenuBar::OnOpenScene() const
 
     EditorScene *scene = new EditorScene();
     FileReader::ReadScene(filename, scene);
-    if(scene != nullptr)
+    if(scene )
     {
         Canvas::GetInstance()->AddScene(scene);
         Canvas::GetInstance()->SetCurrentScene(scene);
@@ -176,14 +176,14 @@ void MenuBar::OnCreateFromPrefab() const
         GameObject *selectedGameObject = WindowMain::GetInstance()->
                 widgetHierarchy->GetFirstSelectedGameObject();
 
-        if(selectedGameObject != nullptr)
+        if(selectedGameObject )
         {
             selectedGameObject->AddChild(e);
         }
         else
         {
             Scene *currentScene = Canvas::GetInstance()->GetCurrentScene();
-            if(currentScene != nullptr)
+            if(currentScene )
             {
                 currentScene->AddChild(e);
             }

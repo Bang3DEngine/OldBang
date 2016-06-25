@@ -15,12 +15,12 @@ BehaviourHolder::BehaviourHolder()
 
 BehaviourHolder::~BehaviourHolder()
 {
-    if(behaviour != nullptr)
+    if(behaviour )
     {
         delete behaviour;
     }
 
-    if(currentOpenLibrary != nullptr)
+    if(currentOpenLibrary )
     {
         SystemUtils::CloseLibrary(currentOpenLibrary);
     }
@@ -28,13 +28,13 @@ BehaviourHolder::~BehaviourHolder()
 
 void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
 {
-    if(behaviour != nullptr)
+    if(behaviour )
     {
         delete behaviour;
     }
 
     behaviour = newBehaviour;
-    if(behaviour != nullptr)
+    if(behaviour )
     {
         behaviour->behaviourHolder = this;
     }
@@ -73,18 +73,18 @@ void BehaviourHolder::Refresh()
 
     ChangeBehaviour(createdBehaviour); // To newly created or nullptr, depending on success
 
-    if(createdBehaviour != nullptr)
+    if(createdBehaviour )
     {
-        if(currentOpenLibrary != nullptr)
+        if(currentOpenLibrary )
         {
             SystemUtils::CloseLibrary(currentOpenLibrary);
         }
         currentOpenLibrary = openLibrary;
     }
 
-    if(createdBehaviour != nullptr)
+    if(createdBehaviour )
     {
-        if(behaviour != nullptr)
+        if(behaviour )
         {
             behaviour->SetSourceFilepath(sourceFilepath);
             behaviour->_OnStart();
@@ -132,7 +132,7 @@ void BehaviourHolder::Read(std::istream &f)
 void BehaviourHolder::_OnStart()
 {
     Component::_OnStart();
-    if(behaviour != nullptr)
+    if(behaviour )
     {
         behaviour->_OnStart();
     }
@@ -141,7 +141,7 @@ void BehaviourHolder::_OnStart()
 void BehaviourHolder::_OnUpdate()
 {
     Component::_OnUpdate();
-    if(behaviour != nullptr)
+    if(behaviour )
     {
         behaviour->_OnUpdate();
     }
@@ -150,7 +150,7 @@ void BehaviourHolder::_OnUpdate()
 void BehaviourHolder::_OnPreRender()
 {
     Component::_OnPreRender();
-    if(behaviour != nullptr)
+    if(behaviour )
     {
         behaviour->_OnPreRender();
     }
@@ -159,7 +159,7 @@ void BehaviourHolder::_OnPreRender()
 void BehaviourHolder::_OnRender()
 {
     Component::_OnRender();
-    if(behaviour != nullptr)
+    if(behaviour )
     {
         behaviour->_OnRender();
     }
@@ -168,7 +168,7 @@ void BehaviourHolder::_OnRender()
 void BehaviourHolder::_OnDestroy()
 {
     Component::_OnDestroy();
-    if(behaviour != nullptr)
+    if(behaviour )
     {
         behaviour->_OnDestroy();
     }

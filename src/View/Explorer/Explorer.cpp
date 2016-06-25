@@ -136,7 +136,7 @@ void Explorer::RefreshInspector()
         WindowMain::GetInstance()->widgetInspector->Clear();
     }
 
-    if(fileWidget != nullptr)
+    if(fileWidget )
     {
         WindowMain::GetInstance()->widgetInspector->SetWidget(fileWidget);
     }

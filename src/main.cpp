@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     Scene *scene = new EditorScene();
     std::string filename = "./Assets/Scenes/test.bscene";
     FileReader::ReadScene(filename , scene);
-    if(scene != nullptr)
+    if(scene )
     {
         Canvas::GetInstance()->AddScene(scene);
         Canvas::GetInstance()->SetCurrentScene(scene);

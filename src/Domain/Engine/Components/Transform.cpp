@@ -146,10 +146,10 @@ void Transform::GetModelMatrix(Matrix4 &m) const
     GetLocalModelMatrix(m);
 
     GameObject *parent = owner->GetParent();
-    if(parent != nullptr)
+    if(parent )
     {
         Transform *tp = parent->GetComponent<Transform>();
-        if(tp != nullptr)
+        if(tp )
         {
             Matrix4 mp;
             tp->GetModelMatrix(mp);
@@ -180,10 +180,10 @@ Vector3 Transform::GetLocalPosition() const
 Vector3 Transform::GetPosition() const
 {
     GameObject *parent = owner->GetParent();
-    if(parent != nullptr)
+    if(parent )
     {
         Transform *pt = parent->GetComponent<Transform>();
-        if(pt != nullptr) return pt->GetPosition() + GetLocalPosition();
+        if(pt ) return pt->GetPosition() + GetLocalPosition();
     }
     return GetLocalPosition();
 }
@@ -196,10 +196,10 @@ Quaternion Transform::GetLocalRotation() const
 Quaternion Transform::GetRotation() const
 {
     GameObject *parent = owner->GetParent();
-    if(parent != nullptr)
+    if(parent )
     {
         Transform *pt = parent->GetComponent<Transform>();
-        if(pt != nullptr) return pt->GetRotation() * GetLocalRotation();
+        if(pt ) return pt->GetRotation() * GetLocalRotation();
     }
     return GetLocalRotation();
 }
@@ -212,10 +212,10 @@ Vector3 Transform::GetLocalEuler() const
 Vector3 Transform::GetEuler() const
 {
     GameObject *parent = owner->GetParent();
-    if(parent != nullptr)
+    if(parent )
     {
         Transform *pt = parent->GetComponent<Transform>();
-        if(pt != nullptr) return pt->GetEuler() + GetLocalEuler();
+        if(pt ) return pt->GetEuler() + GetLocalEuler();
     }
     return GetLocalEuler();
 }
@@ -228,10 +228,10 @@ Vector3 Transform::GetLocalScale() const
 Vector3 Transform::GetScale() const
 {
     GameObject *parent = owner->GetParent();
-    if(parent != nullptr)
+    if(parent )
     {
         Transform *pt = parent->GetComponent<Transform>();
-        if(pt != nullptr) return pt->GetScale() * GetLocalScale();
+        if(pt ) return pt->GetScale() * GetLocalScale();
     }
     return GetLocalScale();
 }

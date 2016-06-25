@@ -98,7 +98,7 @@ void InspectorWidget::ConstructFromWidgetInformation(
                                        sib->onClickFunction);
         }
 
-        if(ws != nullptr)
+        if(ws )
         {
             ws->show();
             mainLayout->addWidget(ws);
@@ -132,7 +132,7 @@ std::vector<float> InspectorWidget::GetSWVectorFloatValue(
     InspectorVFloatSW *w =
             dynamic_cast<InspectorVFloatSW*>(labelsToComponentSlots[slotLabel]);
     std::vector<float> r;
-    if(w != nullptr) r = w->GetValue();
+    if(w ) r = w->GetValue();
     return r;
 }
 
@@ -140,7 +140,7 @@ int InspectorWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
 {
     InspectorEnumSW *w =
             dynamic_cast<InspectorEnumSW*>(labelsToComponentSlots[slotLabel]);
-    if(w != nullptr) return w->GetValue();
+    if(w ) return w->GetValue();
     return 0;
 }
 
@@ -148,7 +148,7 @@ std::string InspectorWidget::GetSWFileFilepath(const std::string &slotLabel)
 {
     InspectorFileSW *w =
             dynamic_cast<InspectorFileSW*>(labelsToComponentSlots[slotLabel]);
-    if(w != nullptr) return w->GetValue();
+    if(w ) return w->GetValue();
     return "";
 }
 
@@ -158,7 +158,7 @@ void InspectorWidget::OnCustomContextMenuRequested(QPoint point)
 
 void InspectorWidget::Refresh()
 {
-    if(relatedInspectable != nullptr)
+    if(relatedInspectable )
     {
         Refresh(relatedInspectable->GetComponentInfo());
     }
@@ -199,7 +199,7 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
             wss->SetValue( sis->value );
         }
 
-        if(ws != nullptr)
+        if(ws )
         {
             ws->show();
             layout()->addWidget(ws);

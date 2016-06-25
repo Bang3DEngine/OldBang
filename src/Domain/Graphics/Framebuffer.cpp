@@ -98,7 +98,7 @@ void Framebuffer::Resize(int width, int height)
     this->height = height;
     for(Texture *t : textureAttachments)
     {
-        if(t != nullptr)
+        if(t )
         {
             t->Resize(width, height);
         }

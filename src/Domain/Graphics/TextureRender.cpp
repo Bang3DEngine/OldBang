@@ -23,7 +23,7 @@ void TextureRender::Resize(int width, int height)
 
 void TextureRender::Fill(unsigned char *newData, int width, int height, int numComponents)
 {
-    if(this->data != nullptr && this->data != newData)
+    if(this->data  && this->data != newData)
         delete this->data;
 
     this->data = newData;

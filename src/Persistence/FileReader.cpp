@@ -300,7 +300,7 @@ void FileReader::ReadComponents(std::istream &f, GameObject *e)
             */
         }
 
-        if(p != nullptr)
+        if(p )
         {
             e->AddComponent(p);
         }
@@ -352,7 +352,7 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
             else if(line == "<cameraGameObject>")
             {
                 GameObject *camChild = GetNextPointerAddress<GameObject>(f);
-                if(camChild != nullptr)
+                if(camChild )
                 {
                     scene->SetCamera(camChild->GetComponent<Camera>());
                 }

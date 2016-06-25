@@ -41,10 +41,10 @@ void Renderer::ActivateStatesBeforeRendering() const
 
     Scene *scene = Canvas::GetCurrentScene();
     Camera *camera = scene->GetCamera();
-    if(camera != nullptr && material != nullptr && material->shaderProgram != nullptr)
+    if(camera  && material  && material->shaderProgram )
     {
         Transform *t = camera->GetOwner()->GetComponent<Transform>();
-        if(t != nullptr)
+        if(t )
         {
             material->shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
                                                     t->GetPosition(), false);
@@ -64,7 +64,7 @@ void Renderer::GetMatrices(Matrix4 &model,
     if(!ignoreModelMatrix)
     {
         Transform *t = owner->GetComponent<Transform>();
-        if(t != nullptr) t->GetModelMatrix(model);
+        if(t ) t->GetModelMatrix(model);
     }
     else model = Matrix4(1.0f);
 

@@ -12,7 +12,7 @@ Prefab::Prefab(const Prefab &p)
 
 Prefab::Prefab(GameObject *o)
 {
-    if(o != nullptr)
+    if(o )
     {
         std::ostringstream oss;
         o->Write(oss);
@@ -28,7 +28,7 @@ Prefab::Prefab(const std::string &assetDescription)
 GameObject *Prefab::Instantiate() const
 {
     GameObject *o = InstantiateWithoutStarting();
-    if(o != nullptr)
+    if(o )
     {
         o->_OnStart();
     }
@@ -52,7 +52,7 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 void Prefab::Write(std::ostream &f) const
 {
     GameObject *o = InstantiateWithoutStarting();
-    if(o != nullptr)
+    if(o )
     {
         o->Write(f);
         delete o;

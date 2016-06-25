@@ -22,10 +22,10 @@ Scene::~Scene()
 
 void Scene::_OnRender()
 {
-    if(cameraGameObject != nullptr)
+    if(cameraGameObject )
     {
         Camera *cam = cameraGameObject->GetComponent<Camera>();
-        if(cam != nullptr && cam->GetAutoUpdateAspectRatio())
+        if(cam  && cam->GetAutoUpdateAspectRatio())
         {
             cam->SetAspectRatio( canvas->GetAspectRatio() );
         }

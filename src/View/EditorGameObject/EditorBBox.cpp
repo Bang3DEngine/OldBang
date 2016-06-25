@@ -51,7 +51,7 @@ void EditorBBox::OnUpdate()
         parent = parent->GetParent();
     }
 
-    if(parent != nullptr)
+    if(parent )
     {
         //Adjust transform to wrap all the vertices of the parent and children
         Box bbox;

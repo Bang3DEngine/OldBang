@@ -21,8 +21,8 @@ MeshRenderer::~MeshRenderer()
 void MeshRenderer::SetMaterial(Material *m)
 {
     material = m;
-    if(mesh != nullptr && material != nullptr &&
-       material->GetShaderProgram() != nullptr)
+    if(mesh  && material  &&
+       material->GetShaderProgram() )
     {
         mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
     }
@@ -43,7 +43,7 @@ void MeshRenderer::SetMesh(Mesh *m)
 
 Box MeshRenderer::GetBoundingBox() const
 {
-    if(mesh != nullptr)
+    if(mesh )
     {
         return mesh->GetBoundingBox();
     }
@@ -143,7 +143,7 @@ InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
     matInfo  = static_cast<InspectorFileSWInfo*>(inspectorComponentInfo.GetSlotInfo(0));
     meshInfo = static_cast<InspectorFileSWInfo*>(inspectorComponentInfo.GetSlotInfo(1));
 
-    if (material != nullptr)
+    if (material )
     {
         if(material->GetFilepath() != "")
         {
@@ -159,7 +159,7 @@ InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
         matInfo->filepath = "-";
     }
 
-    if (mesh != nullptr)
+    if (mesh )
     {
         if(mesh->GetFilepath() != "")
         {

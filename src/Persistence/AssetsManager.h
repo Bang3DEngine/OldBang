@@ -57,7 +57,7 @@ private:
             }
 
             Asset *a = ReadAsset<T>(f);
-            if(a != nullptr)
+            if(a )
             {
                 AssetsManager::SaveAsset(filepath, a);
                 a->filepath = filepath;

@@ -51,7 +51,7 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
         currentTex = AssetsManager::ReadTmpAsset<Texture2D>(assetFilepath);
     }
 
-    if(currentTex != nullptr)
+    if(currentTex )
     {
         //Only update the current Asset instance being used if it exists
         int filterModeIndex = this->GetSWSelectedEnumIndex("Filter");

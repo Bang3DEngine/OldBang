@@ -15,7 +15,7 @@
 #include "IWindowEventManagerListener.h"
 #endif
 
-#define CAN_USE_COMPONENT(comp)  ( comp != nullptr && comp->IsEnabled() )
+#define CAN_USE_COMPONENT(comp)  ( comp  && comp->IsEnabled() )
 
 class GameObject;
 

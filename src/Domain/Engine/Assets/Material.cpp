@@ -25,14 +25,14 @@ Material::~Material()
 
 void Material::Bind() const
 {
-    if(shaderProgram != nullptr)
+    if(shaderProgram )
     {
         shaderProgram->Bind();
 
         for(unsigned int i = 0; i < textures.size(); ++i)
         {
             const Texture *t = textures[i];
-            if(t != nullptr)
+            if(t )
             {
                 std::string texName = ShaderContract::Uniform_Texture_Prefix + std::to_string(i);
                 shaderProgram->SetUniformTexture(texName, t, false); //Set the uniform with the texture slot
@@ -47,12 +47,12 @@ void Material::Bind() const
 
 void Material::UnBind() const
 {
-    if(shaderProgram != nullptr)
+    if(shaderProgram )
     {
         shaderProgram->UnBind();
         for(unsigned int i = 0; i < textures.size(); ++i)
         {
-            if(textures[i] != nullptr)
+            if(textures[i] )
                 textures[i]->UnBind();
         }
     }
@@ -90,7 +90,7 @@ void Material::Read(std::istream &f)
 
     SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
     Texture2D *tex = AssetsManager::GetAsset<Texture2D>( texFilepath );
-    if(tex != nullptr)
+    if(tex )
     {
         tex->SetTextureSlot(0);
         SetTexture(tex);

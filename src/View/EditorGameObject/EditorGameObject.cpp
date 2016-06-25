@@ -22,7 +22,7 @@ bool EditorGameObject::IsEditorGameObject() const
 GameObject *EditorGameObject::GetAttachedGameObject() const
 {
     GameObject *parent = GetParent();
-    if(parent != nullptr)
+    if(parent )
     {
         while(parent->IsEditorGameObject())
         {

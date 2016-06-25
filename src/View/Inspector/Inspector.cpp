@@ -114,7 +114,7 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 
     if(clickedAction == MenuBar::Action::AddComponentBehaviour)
     {
-        if(this->currentGameObject != nullptr)
+        if(this->currentGameObject )
         {
             BehaviourHolder *bh = new BehaviourHolder();
             currentGameObject->AddComponent(bh);
@@ -122,7 +122,7 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     }
     else if(clickedAction == MenuBar::Action::AddComponentCamera)
     {
-        if(this->currentGameObject != nullptr)
+        if(this->currentGameObject )
         {
             Camera *c = new Camera();
             currentGameObject->AddComponent(c);
@@ -130,7 +130,7 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     }
     else if(clickedAction == MenuBar::Action::AddComponentTransform)
     {
-        if(this->currentGameObject != nullptr)
+        if(this->currentGameObject )
         {
             Transform *t = new Transform();
             currentGameObject->AddComponent(t);
@@ -138,7 +138,7 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     }
     else if(clickedAction == MenuBar::Action::AddComponentMeshRenderer)
     {
-        if(this->currentGameObject != nullptr)
+        if(this->currentGameObject )
         {
             MeshRenderer *m = new MeshRenderer();
             currentGameObject->AddComponent(m);
@@ -146,7 +146,7 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     }
     else if(clickedAction == MenuBar::Action::AddComponenSingleLineRenderer)
     {
-        if(this->currentGameObject != nullptr)
+        if(this->currentGameObject )
         {
             SingleLineRenderer *slr = new SingleLineRenderer();
             currentGameObject->AddComponent(slr);
@@ -154,7 +154,7 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     }
     else if(clickedAction == MenuBar::Action::AddComponentCircleRenderer)
     {
-        if(this->currentGameObject != nullptr)
+        if(this->currentGameObject )
         {
             CircleRenderer *cr = new CircleRenderer();
             currentGameObject->AddComponent(cr);

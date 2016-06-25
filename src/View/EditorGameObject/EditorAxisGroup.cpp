@@ -46,10 +46,10 @@ void EditorAxisGroup::OnUpdate()
     //Attached GameObject positioning and scaling
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
     GameObject *attGameObject = GetAttachedGameObject();
-    if(attGameObject != nullptr)
+    if(attGameObject )
     {
         Transform *st = attGameObject->GetComponent<Transform>();
-        if(st != nullptr)
+        if(st )
         {
             Transform *t = GetComponent<Transform>();
             Box bbox = attGameObject->GetObjectBoundingBox();

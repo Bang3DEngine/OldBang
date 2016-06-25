@@ -44,7 +44,7 @@ void Canvas::paintGL()
     Time::GetInstance()->deltaTime = float(Time::GetNow() -
                                            lastRenderTime) / 1000.0f;
 
-    if(currentScene != nullptr)
+    if(currentScene )
     {
         lastRenderTime = Time::GetNow();
         currentScene->_OnUpdate();
@@ -67,7 +67,7 @@ void Canvas::resizeGL(int w, int h)
     height = h;
     aspectRatio = float(w) / h;
 
-    if(currentScene != nullptr)
+    if(currentScene )
     {
         currentScene->_OnResize(w,h);
     }
@@ -88,13 +88,13 @@ void Canvas::AddScene(Scene *scene)
 
 void Canvas::SetCurrentScene(Scene *scene)
 {
-    if(currentScene != nullptr)
+    if(currentScene )
     {
         currentScene->_OnDestroy();
     }
 
     currentScene = scene;
-    if(currentScene != nullptr)
+    if(currentScene )
     {
         currentScene->_OnStart();
         WindowMain::GetInstance()->widgetHierarchy->Refresh(currentScene);
@@ -103,7 +103,7 @@ void Canvas::SetCurrentScene(Scene *scene)
 
 void Canvas::SetCurrentScene(const std::string &name)
 {
-    if(currentScene != nullptr)
+    if(currentScene )
     {
         currentScene->_OnDestroy();
     }
@@ -219,7 +219,7 @@ void Canvas::OnTopKekPressed()
     GameObject *selected = WindowMain::GetInstance()->widgetHierarchy->
             GetFirstSelectedGameObject();
 
-    if(selected != nullptr) selected->AddChild(e);
+    if(selected ) selected->AddChild(e);
     else currentScene->AddChild(e);
 }
 

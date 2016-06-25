@@ -25,8 +25,8 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 
 GBuffer::~GBuffer()
 {
-    if(renderToScreenMaterial != nullptr) delete renderToScreenMaterial;
-    if(renderToScreenPlaneMesh != nullptr) delete renderToScreenPlaneMesh;
+    if(renderToScreenMaterial ) delete renderToScreenMaterial;
+    if(renderToScreenPlaneMesh ) delete renderToScreenPlaneMesh;
 }
 
 void GBuffer::RenderToScreen() const

@@ -37,7 +37,7 @@ std::string LineRenderer::GetName() const { return "LineRenderer"; }
 void LineRenderer::BindPointsToVAO() const
 {
     if(points.size() >= 2 &&
-       material != nullptr && material->GetShaderProgram() != nullptr)
+       material  && material->GetShaderProgram() )
     {
         vbo->Fill(points.data(), points.size() * sizeof(Vector3));
         GLint verticesShaderLocation = material->GetShaderProgram()->
@@ -133,7 +133,7 @@ InspectorWidgetInfo* LineRenderer::GetComponentInfo()
             static_cast<InspectorFileSWInfo*>(
                 inspectorComponentInfo.GetSlotInfo(0));
 
-    if (material != nullptr)
+    if (material )
     {
         if(material->GetFilepath() != "")
         {

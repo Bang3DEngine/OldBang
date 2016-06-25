@@ -20,9 +20,9 @@ Mesh::Mesh(const Mesh &m)
 
 Mesh::~Mesh()
 {
-    if(vertexPositionsVBO != nullptr) delete vertexPositionsVBO;
-    if(vertexNormalsVBO != nullptr)   delete vertexNormalsVBO;
-    if(vertexNormalsVBO != nullptr)   delete vertexUvsVBO;
+    if(vertexPositionsVBO ) delete vertexPositionsVBO;
+    if(vertexNormalsVBO )   delete vertexNormalsVBO;
+    if(vertexNormalsVBO )   delete vertexUvsVBO;
 }
 
 void Mesh::LoadFromFile(const std::string &filepath)
@@ -47,7 +47,7 @@ void Mesh::LoadFromFile(const std::string &filepath)
 
 void Mesh::LoadPositions(const std::vector<Vector3>& positions)
 {
-    if(vertexPositionsVBO != nullptr) delete vertexPositionsVBO;
+    if(vertexPositionsVBO ) delete vertexPositionsVBO;
 
     vertexPositionsVBO = new VBO();
     vertexPositionsVBO->Fill((void*)(&positions[0]), positions.size() * sizeof(float) * 3);
@@ -59,7 +59,7 @@ void Mesh::LoadPositions(const std::vector<Vector3>& positions)
 
 void Mesh::LoadNormals(const std::vector<Vector3> &normals)
 {
-    if(vertexNormalsVBO != nullptr) delete vertexNormalsVBO;
+    if(vertexNormalsVBO ) delete vertexNormalsVBO;
 
     vertexNormalsVBO = new VBO();
     vertexNormalsVBO->Fill((void*)(&normals[0]), normals.size() * sizeof(float) * 3);
@@ -67,7 +67,7 @@ void Mesh::LoadNormals(const std::vector<Vector3> &normals)
 
 void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
 {
-    if(vertexUvsVBO != nullptr) delete vertexUvsVBO;
+    if(vertexUvsVBO ) delete vertexUvsVBO;
 
     vertexUvsVBO = new VBO();
     vertexUvsVBO->Fill((void*)(&uvs[0]), uvs.size() * sizeof(float) * 2);
@@ -75,7 +75,7 @@ void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
 
 void Mesh::BindPositionsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
 {
-    if(vertexPositionsVBO != nullptr)
+    if(vertexPositionsVBO )
     {
         GLint location = sp.GetLocation(nameInShader);
         vao->BindVBO(vertexPositionsVBO, location, 3);
@@ -84,7 +84,7 @@ void Mesh::BindPositionsToShaderProgram(const std::string &nameInShader, const S
 
 void Mesh::BindNormalsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
 {
-    if(vertexNormalsVBO != nullptr)
+    if(vertexNormalsVBO )
     {
         GLint location = sp.GetLocation(nameInShader);
         vao->BindVBO(vertexNormalsVBO, location, 3);
@@ -93,7 +93,7 @@ void Mesh::BindNormalsToShaderProgram(const std::string &nameInShader, const Sha
 
 void Mesh::BindUvsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
 {
-    if(vertexUvsVBO != nullptr)
+    if(vertexUvsVBO )
     {
         GLint location = sp.GetLocation(nameInShader);
         vao->BindVBO(vertexUvsVBO, location, 2);

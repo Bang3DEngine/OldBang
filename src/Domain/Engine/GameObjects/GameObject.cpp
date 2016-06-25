@@ -29,7 +29,7 @@ GameObject::~GameObject()
 Scene *GameObject::GetScene()
 {
     if(isScene) { return (Scene*) this; }
-    if(parent != nullptr) return parent->GetScene();
+    if(parent ) return parent->GetScene();
     return nullptr;
 }
 
@@ -64,7 +64,7 @@ Box GameObject::GetObjectBoundingBox() const
     if(CAN_USE_COMPONENT(mr))
     {
         const Mesh *m = mr->GetMesh();
-        if(m != nullptr)
+        if(m )
         {
             b = m->GetBoundingBox();
         }
@@ -241,16 +241,16 @@ void GameObject::RemoveChild(GameObject *child)
 void GameObject::SetParent(GameObject *newParent)
 {
     GameObject *previousParent = parent;
-    if(parent != nullptr)
+    if(parent )
     {
-        if(newParent != nullptr)
+        if(newParent )
         {
             parent->MoveChild(this, newParent);
         }
         else
         {
             Scene *st = GetScene();
-            if(st != nullptr)
+            if(st )
             {
                 parent->MoveChild(this, newParent);
             }
