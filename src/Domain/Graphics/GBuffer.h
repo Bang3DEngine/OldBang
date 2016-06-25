@@ -3,8 +3,9 @@
 
 #include "Bang.h"
 
+#include "Mesh.h"
 #include "Material.h"
-#include "MeshScreenPlane.h"
+#include "MeshFactory.h"
 #include "Framebuffer.h"
 
 class GBuffer : public Framebuffer
@@ -22,7 +23,7 @@ public:
 private:
 
     Material *renderToScreenMaterial;
-    MeshScreenPlane *renderToScreenPlaneMesh;
+    Mesh *renderToScreenPlaneMesh;
 
 public:
     GBuffer(int width, int height);

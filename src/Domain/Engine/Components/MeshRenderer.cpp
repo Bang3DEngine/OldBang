@@ -37,8 +37,11 @@ void MeshRenderer::SetMesh(Mesh *m)
         mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
     }
 
-    SetRenderMode(m->IsATrianglesModel() ?
-                      RenderMode::Triangles : RenderMode::Quads);
+    if(m->GetFilepath().length() > 0)
+    {
+        SetRenderMode(m->IsATrianglesModel() ?
+                          RenderMode::Triangles : RenderMode::Quads);
+    }
 }
 
 Box MeshRenderer::GetBoundingBox() const

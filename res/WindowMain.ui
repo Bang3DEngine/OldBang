@@ -181,8 +181,19 @@
     <property name="title">
      <string>GameObjects</string>
     </property>
-    <addaction name="actionCreateEmptyGameObject"/>
-    <addaction name="actionCreateFromPrefab"/>
+    <widget class="QMenu" name="menuCreate_2">
+     <property name="title">
+      <string>Create</string>
+     </property>
+     <addaction name="actionCreateEmptyGameObject"/>
+     <addaction name="separator"/>
+     <addaction name="actionCreateFromPrefab"/>
+     <addaction name="separator"/>
+     <addaction name="actionCreatePlane"/>
+     <addaction name="actionCreateCube"/>
+     <addaction name="actionCreateSphere"/>
+    </widget>
+    <addaction name="menuCreate_2"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
@@ -604,16 +615,6 @@
     <string>Project Settings</string>
    </property>
   </action>
-  <action name="actionCreateFromPrefab">
-   <property name="text">
-    <string>Create from prefab</string>
-   </property>
-  </action>
-  <action name="actionEmptyGameObject">
-   <property name="text">
-    <string>Empty GameObject</string>
-   </property>
-  </action>
   <action name="actionCreatePrefab">
    <property name="text">
     <string>Prefab</string>
@@ -644,11 +645,6 @@
     <string>Behaviour</string>
    </property>
   </action>
-  <action name="actionCreateEmptyGameObject">
-   <property name="text">
-    <string>Create Empty GameObject</string>
-   </property>
-  </action>
   <action name="actionNewScene">
    <property name="text">
     <string>New Scene</string>
@@ -667,6 +663,31 @@
   <action name="actionAddComponentCircleRenderer">
    <property name="text">
     <string>Circle Renderer</string>
+   </property>
+  </action>
+  <action name="actionCreateFromPrefab">
+   <property name="text">
+    <string>From Prefab</string>
+   </property>
+  </action>
+  <action name="actionCreateEmptyGameObject">
+   <property name="text">
+    <string>Empty</string>
+   </property>
+  </action>
+  <action name="actionCreatePlane">
+   <property name="text">
+    <string>Plane</string>
+   </property>
+  </action>
+  <action name="actionCreateCube">
+   <property name="text">
+    <string>Cube</string>
+   </property>
+  </action>
+  <action name="actionCreateSphere">
+   <property name="text">
+    <string>Sphere</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

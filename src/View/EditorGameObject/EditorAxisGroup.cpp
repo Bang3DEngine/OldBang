@@ -68,6 +68,7 @@ void EditorAxisGroup::OnUpdate()
             Vector3 camPos = cam->GetOwner()->GetComponent<Transform>()->GetPosition();
             Vector3 attPos = attGameObject->GetComponent<Transform>()->GetPosition();
             float distanceToCamera = Vector3::Distance(camPos, attPos);
+
             t->SetLocalScale((1.0f / st->GetScale()) * distanceToCamera * sizeBoost);
         }
     }

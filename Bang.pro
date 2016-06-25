@@ -59,6 +59,7 @@ OTHER_FILES += \
     res/Scenes/sceneFileFormat.txt \
     res/Scenes/assetsTest.assets \
     res/Assets/Meshes/Pyramid.obj \
+    res/Materials \
     res/Shaders/pass_pos.frag \
     res/Shaders/pass_pos_normal.frag \
     res/Shaders/pass_pos_normal_uv.frag \
@@ -121,9 +122,7 @@ HEADERS += \
     src/Domain/Engine/Assets/Asset.h \
     src/Domain/Engine/Assets/Material.h \
     src/Domain/Engine/Assets/Meshes/Mesh.h \
-    src/Domain/Engine/Assets/Meshes/MeshPlane.h \
     src/Domain/Engine/Assets/Meshes/MeshPyramid.h \
-    src/Domain/Engine/Assets/Meshes/MeshScreenPlane.h \
     src/Domain/Engine/Components/Behaviour.h \
     src/Domain/Engine/Interfaces/IFileable.h \
     src/Domain/Engine/Assets/Texture2D.h \
@@ -192,7 +191,8 @@ HEADERS += \
     src/View/EditorGameObject/EditorAxisGroup.h \
     src/View/EditorGameObject/EditorAxis.h \
     src/View/EditorGameObject/EditorScaleAxisGroup.h \
-    src/View/EditorGameObject/EditorScaleAxis.h
+    src/View/EditorGameObject/EditorScaleAxis.h \
+    src/Domain/Engine/Assets/Meshes/MeshFactory.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -220,8 +220,6 @@ SOURCES += \
     src/main.cpp \
     src/Domain/Engine/Assets/Asset.cpp \
     src/Domain/Engine/Assets/Meshes/Mesh.cpp \
-    src/Domain/Engine/Assets/Meshes/MeshPlane.cpp \
-    src/Domain/Engine/Assets/Meshes/MeshScreenPlane.cpp \
     src/Domain/Engine/Assets/Meshes/MeshPyramid.cpp \
     src/Domain/Engine/Assets/Material.cpp \
     src/Domain/Engine/Components/Behaviour.cpp \
@@ -291,7 +289,8 @@ SOURCES += \
     src/View/EditorGameObject/EditorAxisGroup.cpp \
     src/View/EditorGameObject/EditorAxis.cpp \
     src/View/EditorGameObject/EditorScaleAxisGroup.cpp \
-    src/View/EditorGameObject/EditorScaleAxis.cpp
+    src/View/EditorGameObject/EditorScaleAxis.cpp \
+    src/Domain/Engine/Assets/Meshes/MeshFactory.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

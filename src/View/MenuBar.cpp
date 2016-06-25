@@ -28,6 +28,12 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnCreateEmptyGameObject()));
     connect(w->actionCreateFromPrefab,  SIGNAL(triggered()),
             this, SLOT(OnCreateFromPrefab()));
+    connect(w->actionCreatePlane,  SIGNAL(triggered()),
+            this, SLOT(OnCreatePlane()));
+    connect(w->actionCreateCube,  SIGNAL(triggered()),
+            this, SLOT(OnCreateCube()));
+    connect(w->actionCreateSphere,  SIGNAL(triggered()),
+            this, SLOT(OnCreateSphere()));
 
     connect(w->actionCreatePrefab,  SIGNAL(triggered()),
             this, SLOT(OnCreatePrefab()));
@@ -189,6 +195,61 @@ void MenuBar::OnCreateFromPrefab() const
         Logger_Error("Prefab file '" << filename <<
                      "' is corrupt or can't be read.");
     }
+}
+
+void MenuBar::OnCreatePlane() const
+{
+    // wem->NotifyMenuBarActionClicked(Action::CreatePlane);
+
+    GameObject *go = new GameObject();
+    go->AddComponent<Transform>();
+
+    Mesh *m = new Mesh();
+    std::vector<Vector3> pos, normals; std::vector<glm::vec2> uvs;
+    MeshFactory::GetPlaneTris(1.0f, pos, normals, uvs);
+    m->LoadPositions(pos);
+    m->LoadNormals(normals);
+    m->LoadUvs(uvs);
+
+    Material *mat = AssetsManager::GetAsset<Material>("res/Materials/default.bmat");
+
+    MeshRenderer *r = go->AddComponent<MeshRenderer>();
+    r->SetRenderMode(MeshRenderer::RenderMode::Triangles);
+    r->SetMaterial(mat);
+    r->SetMesh(m);
+
+    go->SetName("Plane");
+    Canvas::GetInstance()->GetCurrentScene()->AddChild(go);
+}
+
+void MenuBar::OnCreateCube() const
+{
+    // wem->NotifyMenuBarActionClicked(Action::CreateCube);
+
+    GameObject *go = new GameObject();
+    go->AddComponent<Transform>();
+
+    Mesh *m = new Mesh();
+    std::vector<Vector3> pos, normals; std::vector<glm::vec2> uvs;
+    MeshFactory::GetCubeTris(1.0f, pos, normals, uvs);
+    m->LoadPositions(pos);
+    m->LoadNormals(normals);
+    m->LoadUvs(uvs);
+
+    Material *mat = AssetsManager::GetAsset<Material>("res/Materials/default.bmat");
+
+    MeshRenderer *r = go->AddComponent<MeshRenderer>();
+    r->SetRenderMode(MeshRenderer::RenderMode::Triangles);
+    r->SetMaterial(mat);
+    r->SetMesh(m);
+
+    go->SetName("Cube");
+    Canvas::GetInstance()->GetCurrentScene()->AddChild(go);
+}
+
+void MenuBar::OnCreateSphere() const
+{
+    // wem->NotifyMenuBarActionClicked(Action::CreateSphere);
 }
 
 void MenuBar::OnCreatePrefab() const

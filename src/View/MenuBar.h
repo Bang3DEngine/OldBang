@@ -26,6 +26,9 @@ public:
 
         CreateEmptyGameObject,
         CreateFromPrefab,
+        CreatePlane,
+        CreateCube,
+        CreateSphere,
 
         CreatePrefab,
         CreateMaterial,
@@ -55,6 +58,9 @@ public slots:
 
     void OnCreateEmptyGameObject () const;
     void OnCreateFromPrefab () const;
+    void OnCreatePlane () const;
+    void OnCreateCube () const;
+    void OnCreateSphere () const;
 
     void OnCreatePrefab() const;
     void OnCreateMaterial() const;

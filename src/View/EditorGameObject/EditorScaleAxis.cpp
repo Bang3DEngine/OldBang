@@ -57,6 +57,8 @@ void EditorScaleAxis::OnUpdate()
                               Vector3::Distance(camPos, goTrans->GetPosition()) * 0.001f;
 
             scaling.z *= -1;
+
+            //TODO: solve problem with negative scaling and depth :/
             goTrans->SetLocalScale(goTrans->GetLocalScale() + scaling);
         }
     }

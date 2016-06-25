@@ -7,12 +7,11 @@
 #include <string>
 
 #include "Logger.h"
-#include "GameObject.h"
 #include "Camera.h"
 #include "Canvas.h"
 #include "GBuffer.h"
-#include "MeshScreenPlane.h"
 #include "Material.h"
+#include "GameObject.h"
 
 class Canvas;
 class SelectionFramebuffer;
