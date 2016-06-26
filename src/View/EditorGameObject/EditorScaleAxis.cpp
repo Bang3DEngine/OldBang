@@ -5,6 +5,8 @@
 EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir) :
     EditorAxis(dir)
 {
+    SetName("EditorScaleAxisGroup" + EditorAxis::GetStringFromDir(dir));
+
     line = AddComponent<SingleLineRenderer>();
     line->SetDestiny(oAxisDirection);
     line->SetMaterial(material);

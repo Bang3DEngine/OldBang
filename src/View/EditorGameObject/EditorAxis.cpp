@@ -6,7 +6,7 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir)
 {
     AddComponent<Transform>();
 
-    oAxisDirection = GetVectorFromDir(dir);
+    oAxisDirection = EditorAxis::GetVectorFromDir(dir);
 
     material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/lines.bmat");
     material = new Material(*material);
@@ -21,7 +21,14 @@ EditorAxis::~EditorAxis()
     delete material;
 }
 
-Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir) const
+std::string EditorAxis::GetStringFromDir(EditorAxis::EditorAxisDirection dir)
+{
+    if(dir == EditorAxisDirection::X) return "X";
+    else if (dir == EditorAxisDirection::Y) return "Y";
+    else return "Z";
+}
+
+Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir)
 {
     if(dir == EditorAxisDirection::X) return Vector3::right;
     else if (dir == EditorAxisDirection::Y) return Vector3::up;
@@ -36,7 +43,6 @@ void EditorAxis::GetMatrices(Matrix4 &pvm, Matrix4 &pv,
     cam->GetViewMatrix(v);
 
     Transform *attTrans = GetAttachedGameObject()->GetComponent<Transform>(); NONULL(attTrans);
-
     attTrans->GetModelMatrix(m);
 
     pv = p * v;

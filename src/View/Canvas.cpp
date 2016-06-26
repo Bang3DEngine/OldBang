@@ -39,12 +39,12 @@ void Canvas::initializeGL()
 void Canvas::paintGL()
 {
     glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     Time::GetInstance()->deltaTime = float(Time::GetNow() -
                                            lastRenderTime) / 1000.0f;
 
-    if(currentScene )
+    if(currentScene)
     {
         lastRenderTime = Time::GetNow();
         currentScene->_OnUpdate();

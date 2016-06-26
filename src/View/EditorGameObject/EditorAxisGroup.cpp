@@ -1,6 +1,6 @@
 #include "EditorAxisGroup.h"
 
-EditorAxisGroup::EditorAxisGroup()
+EditorAxisGroup::EditorAxisGroup() : EditorGameObject("EditorAxisGroup")
 {
     etag = new EditorTranslateAxisGroup();
     erag = new EditorRotateAxisGroup();

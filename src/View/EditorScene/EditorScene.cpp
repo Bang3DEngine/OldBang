@@ -33,12 +33,14 @@ void EditorScene::_OnRender()
     Scene::_OnRender();
 
     //From 0 to 9
+    selectionFramebuffer->Bind();
     selectionFramebuffer->Clear();
     for(currentRenderLayer = 0; currentRenderLayer <= 9; ++currentRenderLayer)
     {
         selectionFramebuffer->ClearDepth();
         selectionFramebuffer->RenderSelectionBuffer(this);
     }
+    selectionFramebuffer->UnBind();
 
     selectionFramebuffer->ProcessSelection();
 }

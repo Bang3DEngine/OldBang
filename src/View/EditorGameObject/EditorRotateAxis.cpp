@@ -4,6 +4,8 @@
 
 EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir) : EditorAxis(dir)
 {
+    SetName("EditorRotateAxisGroup" + EditorAxis::GetStringFromDir(dir));
+
     material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/linesRotationAxis.bmat");
     material = new Material(*material);
 

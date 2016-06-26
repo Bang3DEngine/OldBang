@@ -5,6 +5,8 @@
 EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir) :
     EditorAxis(dir)
 {
+    SetName("EditorTranslateAxisGroup" + EditorAxis::GetStringFromDir(dir));
+
     line = AddComponent<SingleLineRenderer>();
     line->SetDestiny(oAxisDirection);
     line->SetMaterial(material);

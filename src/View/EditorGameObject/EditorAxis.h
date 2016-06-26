@@ -14,10 +14,10 @@ class EditorAxis : public EditorGameObject
 public:
     enum EditorAxisDirection { X, Y, Z };
 
-private:
-    Vector3 GetVectorFromDir(EditorAxisDirection dir) const;
-
 protected:
+    static std::string GetStringFromDir(EditorAxisDirection dir);
+    static Vector3 GetVectorFromDir(EditorAxisDirection dir);
+
     void GetMatrices(Matrix4 &pvm, Matrix4 &pv,
                      Matrix4 &p, Matrix4 &v, Matrix4 &m) const;
 

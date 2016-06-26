@@ -16,7 +16,7 @@ class SelectionFramebuffer : public Framebuffer
 private:
     ShaderProgram *program = nullptr;
 
-    long idCount = 0;
+    long idCount = 0; // TODO: Dynamic id handling (OnChildRemoved, be aware that its id becomes free)
     std::map<GameObject*, long> gameObjectToId;
     std::map<long, GameObject*> idToGameObject;
 

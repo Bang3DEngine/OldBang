@@ -4,6 +4,8 @@
 
 EditorScaleAxisGroup::EditorScaleAxisGroup() : EditorGameObject("EditorScaleAxisGroup")
 {
+    SetName("EditorScaleAxisGroup");
+
     axisX = new EditorScaleAxis(EditorAxis::EditorAxisDirection::X);
     axisY = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Y);
     axisZ = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Z);

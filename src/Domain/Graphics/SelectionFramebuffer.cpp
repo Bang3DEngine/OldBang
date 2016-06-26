@@ -20,41 +20,49 @@ SelectionFramebuffer::~SelectionFramebuffer()
 
 void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 {
-    Bind();
-
     program->Bind();
-    std::list<Renderer*> childrenRenderers =
-            scene->GetComponentsInChildren<Renderer>();
-    for(auto it = childrenRenderers.begin(); it != childrenRenderers.end(); ++it)
+
+    // Assign id's
+    int id = 0;
+    gameObjectToId.clear();
+    idToGameObject.clear();
+    std::list<Renderer*> childrenRenderers = scene->GetComponentsInChildren<Renderer>();
+    for(Renderer *renderer : childrenRenderers)
     {
-        Renderer *renderer = *it;
+        GameObject *go = renderer->GetOwner();
+        gameObjectToId[go] = id;
+        idToGameObject[id] = go;
+        ++id;
+    }
+
+    // Paint objects
+    for(Renderer *renderer : childrenRenderers)
+    {
         if(renderer->GetOwner()->GetRenderLayer() == scene->currentRenderLayer)
         {
-            Matrix4 model, view, projection, pvm;
-            renderer->GetMatrices(model, view, projection, pvm);
-
-            program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
-                                    model, false);
-            program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
-                                    view, false);
-            program->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
-                                    projection, false);
-            program->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM,
-                                    pvm, false);
-
             GameObject *go = renderer->GetOwner();
-            if(gameObjectToId.find(go) != gameObjectToId.end() &&
-               go->IsEnabled())
+            if(gameObjectToId.find(go) != gameObjectToId.end() && go->IsEnabled())
             {
+                Matrix4 model, view, projection, pvm;
+                renderer->GetMatrices(model, view, projection, pvm);
+
+                program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
+                                        model, false);
+                program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
+                                        view, false);
+                program->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
+                                        projection, false);
+                program->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM,
+                                        pvm, false);
+
                 Vector3 selectionColor = MapIdToColor(gameObjectToId[go]);
                 program->SetUniformVec3("selectionColor", selectionColor);
                 renderer->RenderWithoutBindingMaterial();
             }
         }
     }
-    program->UnBind();
 
-    UnBind();
+    program->UnBind();
 }
 
 void SelectionFramebuffer::ProcessSelection()
@@ -64,14 +72,10 @@ void SelectionFramebuffer::ProcessSelection()
     Vector3 mouseOverColor = ReadPixel(coords.x, Canvas::GetHeight()-coords.y, 0);
 
     GameObject *mouseOverGO = nullptr;
-    // If color over is not the background (255, 255, 255)
-    if(mouseOverColor.r < 254 || mouseOverColor.g < 254 || mouseOverColor.b < 254)
+    int id = MapColorToId(mouseOverColor);
+    if(idToGameObject.find(id) != idToGameObject.end())
     {
-        int id = MapColorToId(mouseOverColor);
-        if(idToGameObject.find(id) != idToGameObject.end())
-        {
-            mouseOverGO = idToGameObject[id];
-        }
+        mouseOverGO = idToGameObject[id];
     }
 
     // MouseOver and MouseOut events
@@ -111,9 +115,6 @@ void SelectionFramebuffer::ProcessSelection()
 
 void SelectionFramebuffer::OnChildAdded(GameObject *child)
 {
-    gameObjectToId[child] = idCount;
-    idToGameObject[idCount] = child;
-    ++idCount;
 }
 
 Vector3 SelectionFramebuffer::MapIdToColor(long id)

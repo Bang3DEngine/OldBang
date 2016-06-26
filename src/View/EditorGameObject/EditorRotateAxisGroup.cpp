@@ -2,6 +2,8 @@
 
 EditorRotateAxisGroup::EditorRotateAxisGroup()
 {
+    SetName("EditorRotateAxisGroup");
+
     axisX = new EditorRotateAxis(EditorAxis::EditorAxisDirection::X);
     axisY = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Y);
     axisZ = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Z);
