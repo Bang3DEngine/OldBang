@@ -37,15 +37,18 @@ private:
 
     //Useful for example, for RemoveChild
     //(we just need to remove the parent/s of all the selected entities)
-    void LeaveOnlyTopLevelItems(std::list<QTreeWidgetItem*> *items);
+    void LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items);
 
+    QTreeWidgetItem *lastSelectedItem = nullptr;
     Scene *currentScene = nullptr;
+
+    std::list<GameObject*> copiedGameObjects;
 
 public:
     explicit Hierarchy(QWidget *parent = 0);
     virtual ~Hierarchy();
 
-    void Refresh(Scene *currentScene);
+    void Refresh();
 
     GameObject* GetFirstSelectedGameObject() const;
 
@@ -62,14 +65,21 @@ public:
     void SelectGameObject(GameObject *go);
     void UnselectAll();
 
+    void OnGameObjectNameChanged(GameObject *go);
+
+    static Hierarchy *GetInstance();
+
 public slots:
 
     void OnItemNameChanged(QTreeWidgetItem *item, int column);
 
     void OnCustomContextMenuRequested(QPoint point);
     void OnContextMenuCreateEmptyClicked();
-    void OnContextMenuDeleteClicked();
+    void OnContextMenuCopyClicked();
+    void OnContextMenuPasteClicked();
+    void OnContextMenuDuplicateClicked();
     void OnContextMenuCreatePrefab();
+    void OnContextMenuDeleteClicked();
 
     void OnSelectionChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void _NotifyHierarchyGameObjectSelectionChanged();

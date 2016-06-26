@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Component.h"
 #include "FileReader.h"
+#include "Hierarchy.h"
 #include "WindowEventManager.h"
 
 #include "EditorSelectionGameObject.h"
@@ -12,6 +13,33 @@ GameObject::GameObject() : GameObject("")
 
 GameObject::GameObject(const std::string &name) : name(name)
 {
+}
+
+void GameObject::CloneInto(ICloneable *clone) const
+{
+    GameObject *go = static_cast<GameObject*>(clone);
+    for(GameObject *child : children)
+    {
+        if(child->IsEditorGameObject()) continue;
+        go->AddChildWithoutNotifyingHierarchy( static_cast<GameObject*>(child->Clone()) );
+    }
+
+    for(Component *comp : comps)
+    {
+        go->AddComponent( static_cast<Component*>(comp->Clone()) );
+    }
+
+    go->SetName(name);
+    go->SetRenderLayer(renderLayer);
+    go->isScene = isScene;
+    go->parent = parent;
+}
+
+ICloneable* GameObject::Clone() const
+{
+    GameObject *clone = new GameObject();
+    CloneInto(clone);
+    return clone;
 }
 
 GameObject::~GameObject()
@@ -270,6 +298,7 @@ void GameObject::SetRenderLayer(unsigned char layer)
 void GameObject::SetName(const std::string &name)
 {
     this->name = name;
+    Hierarchy::GetInstance()->OnGameObjectNameChanged(this);
 }
 
 bool GameObject::IsEditorGameObject() const

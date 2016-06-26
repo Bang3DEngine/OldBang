@@ -1,5 +1,7 @@
 #include "EditorGameObject.h"
 
+#include "Component.h"
+
 EditorGameObject::EditorGameObject() : GameObject()
 {
 }
@@ -7,6 +9,20 @@ EditorGameObject::EditorGameObject() : GameObject()
 EditorGameObject::EditorGameObject(const std::string &name) : GameObject(name)
 {
 }
+
+void EditorGameObject::CloneInto(ICloneable *clone) const
+{
+    GameObject::CloneInto(clone);
+    EditorGameObject *go = static_cast<EditorGameObject*>(clone);
+}
+
+ICloneable* EditorGameObject::Clone() const
+{
+    EditorGameObject *clone = new EditorGameObject();
+    CloneInto(clone);
+    return clone;
+}
+
 
 void EditorGameObject::Write(std::ostream &f) const
 {

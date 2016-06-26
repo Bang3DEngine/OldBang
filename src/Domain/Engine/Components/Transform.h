@@ -36,11 +36,12 @@ private:
 public:
 
     Transform();
+    virtual void CloneInto(ICloneable *clone) const override;
+    virtual ICloneable *Clone() const override;
     virtual ~Transform();
 
     void LookAt(Vector3 target,
                 Vector3 up = Vector3(0.0f, 1.0f, 0.0f));
-
 
 
     void SetPosition(const Vector3 &p);
@@ -105,8 +106,6 @@ public:
     Vector3 GetScale() const;
 
     const std::string ToString() const override;
-
-
     virtual std::string GetName() const override { return "Transform"; }
 
     #ifdef BANG_EDITOR

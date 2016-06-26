@@ -9,6 +9,9 @@ public:
     EditorGameObject();
     EditorGameObject(const std::string &name);
 
+    virtual void CloneInto(ICloneable *clone) const override;
+    virtual ICloneable* Clone() const;
+
     virtual bool IsEditorGameObject() const override;
 
     /**

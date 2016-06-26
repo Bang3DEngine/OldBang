@@ -49,6 +49,11 @@ const std::string BehaviourHolder::ToString() const
     return "BehaviourHolder ( " + file + ")";
 }
 
+ICloneable *BehaviourHolder::Clone() const
+{
+    return new BehaviourHolder();
+}
+
 void BehaviourHolder::Refresh()
 {
     if(sourceFilepath == "") return;

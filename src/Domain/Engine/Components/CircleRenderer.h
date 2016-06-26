@@ -49,6 +49,7 @@ public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override;
+    virtual ICloneable *Clone() const override;
 
     void SetRadius(float radius);
     void SetSegments(int segments);

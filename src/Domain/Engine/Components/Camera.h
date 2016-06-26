@@ -65,6 +65,7 @@ public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override { return "Camera"; }
+    virtual ICloneable *Clone() const override;
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;

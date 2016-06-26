@@ -43,6 +43,7 @@ public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override { return "Behaviour"; }
+    virtual ICloneable *Clone() const override;
 
     #ifdef BANG_EDITOR
         void Refresh();

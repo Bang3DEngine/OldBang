@@ -22,7 +22,24 @@ Transform::Transform() : position(Vector3(0.0f)),
             "Scale", {scale.x, scale.y, scale.z}
         )
     });
-    #endif
+#endif
+}
+
+void Transform::CloneInto(ICloneable *clone) const
+{
+    Component::CloneInto(clone);
+    Transform *t = static_cast<Transform*>(clone);
+    t->SetPosition(GetLocalPosition());
+    t->SetRotation(GetLocalRotation());
+    t->SetLocalScale(GetLocalScale());
+}
+
+
+ICloneable *Transform::Clone() const
+{
+    Transform *t = new Transform();
+    CloneInto(t);
+    return t;
 }
 
 Transform::~Transform()
@@ -313,7 +330,6 @@ const std::string Transform::ToString() const
 
     return msg.str();
 }
-
 #ifdef BANG_EDITOR
 
 InspectorWidgetInfo* Transform::GetComponentInfo()

@@ -139,6 +139,11 @@ const std::string Camera::ToString() const
     return "Camera";
 }
 
+ICloneable *Camera::Clone() const
+{
+    return new Camera();
+}
+
 
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* Camera::GetComponentInfo()

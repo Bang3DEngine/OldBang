@@ -22,6 +22,11 @@ const std::string CircleRenderer::ToString() const
     return "CircleRenderer";
 }
 
+ICloneable *CircleRenderer::Clone() const
+{
+    return new CircleRenderer();
+}
+
 std::string CircleRenderer::GetName() const { return "CircleRenderer"; }
 
 void CircleRenderer::GeneratePoints()

@@ -48,7 +48,8 @@ void Scene::_OnRender()
 
 void Scene::SetCamera(const Camera *cam)
 {
-    this->cameraGameObject = cam->GetOwner();
+    if(!cam) this->cameraGameObject = nullptr;
+    else this->cameraGameObject = cam->GetOwner();
 }
 
 Camera *Scene::GetCamera() const

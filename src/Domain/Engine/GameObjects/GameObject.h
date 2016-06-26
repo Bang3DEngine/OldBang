@@ -10,6 +10,7 @@
 
 #include "IFileable.h"
 #include "IToString.h"
+#include "ICloneable.h"
 #include "ISceneEventListener.h"
 
 #include "Material.h"
@@ -23,14 +24,17 @@
 class Scene;
 class Component;
 class EditorSelectionGameObject;
-class GameObject : public ISceneEventListener,
-               public IToString,
-               public IFileable
+class GameObject :
+                public ISceneEventListener
+               ,public IToString
+               ,public IFileable
+               ,public ICloneable
                #ifdef BANG_EDITOR
-                ,public IWindowEventManagerListener
+               ,public IWindowEventManagerListener
                #endif
 {
 
+friend class Hierarchy;
 friend class Canvas;
 friend class Prefab;
 friend class Scene;
@@ -38,8 +42,6 @@ friend class Scene;
 private:
 
     #ifdef BANG_EDITOR
-    Material *ed_nonSelectedMaterial = nullptr;
-    Material *ed_selectedMaterial = nullptr;
     bool ed_wasSelectedInHierarchy = false;
     EditorSelectionGameObject *ed_selectionGameObject = nullptr;
     #endif
@@ -78,6 +80,9 @@ public:
 
     GameObject();
     GameObject(const std::string &name);
+    GameObject(const GameObject &go);
+    virtual void CloneInto(ICloneable *clone) const override;
+    virtual ICloneable *Clone() const override;
 
     virtual ~GameObject();
 
@@ -92,6 +97,7 @@ public:
     void SetName(const std::string &name);
 
     const std::string ToString() const;
+
 
     Scene* GetScene();
     GameObject* GetParent() const;

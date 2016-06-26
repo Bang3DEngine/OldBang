@@ -40,6 +40,7 @@ public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override;
+    virtual ICloneable *Clone() const override = 0;
 
     virtual void SetMaterial(Material *m) override;
 

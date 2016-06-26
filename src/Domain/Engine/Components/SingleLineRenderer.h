@@ -27,6 +27,7 @@ public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override;
+    virtual ICloneable *Clone() const override;
 
     void SetOrigin(Vector3 o);
     void SetDestiny(Vector3 d);

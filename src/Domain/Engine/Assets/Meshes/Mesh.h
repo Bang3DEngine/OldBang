@@ -49,6 +49,9 @@ public:
     void LoadPositions(const std::vector<Vector3>& positions);
     void LoadNormals(const std::vector<Vector3>& normals);
     void LoadUvs(const std::vector<glm::vec2>& uvs);
+    void LoadAll(const std::vector<Vector3>& positions,
+                 const std::vector<Vector3>& normals,
+                 const std::vector<glm::vec2>& uvs);
 
     void BindPositionsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
     void BindNormalsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);

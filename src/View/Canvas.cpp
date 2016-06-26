@@ -97,7 +97,7 @@ void Canvas::SetCurrentScene(Scene *scene)
     if(currentScene )
     {
         currentScene->_OnStart();
-        WindowMain::GetInstance()->widgetHierarchy->Refresh(currentScene);
+        WindowMain::GetInstance()->widgetHierarchy->Refresh();
     }
 }
 

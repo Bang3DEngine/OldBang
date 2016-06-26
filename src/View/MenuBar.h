@@ -6,6 +6,8 @@
 #include <QMenuBar>
 #include <QMessageBox>
 
+#include "Mesh.h"
+
 class WindowEventManager;
 class MenuBar : public QMenuBar
 {
@@ -13,6 +15,11 @@ class MenuBar : public QMenuBar
 
 private:
     WindowEventManager *wem = nullptr;
+
+    /**
+     * @brief Shared code to create a Plane, Cube, Sphere, etc.
+     */
+    GameObject* CreatePrimitiveGameObject(Mesh *m) const;
 
 public:
     Q_ENUMS(Action);
@@ -48,6 +55,7 @@ public:
 
     void CreateNewScene () const;
     QMessageBox::StandardButton AskForSavingCurrentScene () const;
+
 
 public slots:
 

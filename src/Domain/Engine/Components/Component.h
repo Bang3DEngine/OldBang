@@ -6,6 +6,7 @@
 #include "Logger.h"
 #include "IFileable.h"
 #include "IToString.h"
+#include "ICloneable.h"
 #include "ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
@@ -23,6 +24,7 @@ class Component :
               public ISceneEventListener
              ,public IToString
              ,public IFileable
+             ,public ICloneable
              ,public IWindowEventManagerListener
              #ifdef BANG_EDITOR
              ,public IInspectable
@@ -37,10 +39,12 @@ protected:
     virtual ~Component();
 
 public:
+    virtual void CloneInto(ICloneable *clone) const override;
+    virtual ICloneable *Clone() const override = 0;
+
     GameObject* GetOwner() const;
 
     virtual const std::string ToString() const override;
-
 
     virtual std::string GetName() const { return "Component"; }
 

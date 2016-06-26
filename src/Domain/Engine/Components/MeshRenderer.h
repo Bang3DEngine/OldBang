@@ -36,6 +36,8 @@ protected:
 
 public:
     MeshRenderer();
+    virtual void CloneInto(ICloneable *clone) const override;
+    virtual ICloneable *Clone() const override;
     virtual ~MeshRenderer();
 
     void SetMaterial(Material *m) override;

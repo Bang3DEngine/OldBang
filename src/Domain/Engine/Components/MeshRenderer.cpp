@@ -11,7 +11,21 @@ MeshRenderer::MeshRenderer()
                                     Material::GetFileExtensionStatic()),
             new InspectorFileSWInfo("Mesh", Mesh::GetFileExtensionStatic()),
         });
-    #endif
+#endif
+}
+
+void MeshRenderer::CloneInto(ICloneable *clone) const
+{
+    Renderer::CloneInto(clone);
+    MeshRenderer *mr = static_cast<MeshRenderer*>(clone);
+    mr->SetMesh(mesh);
+}
+
+ICloneable *MeshRenderer::Clone() const
+{
+    MeshRenderer *mr = new MeshRenderer();
+    CloneInto(mr);
+    return mr;
 }
 
 MeshRenderer::~MeshRenderer()

@@ -20,9 +20,9 @@ Mesh::Mesh(const Mesh &m)
 
 Mesh::~Mesh()
 {
-    if(vertexPositionsVBO ) delete vertexPositionsVBO;
-    if(vertexNormalsVBO )   delete vertexNormalsVBO;
-    if(vertexNormalsVBO )   delete vertexUvsVBO;
+    if(vertexPositionsVBO) delete vertexPositionsVBO;
+    if(vertexNormalsVBO)   delete vertexNormalsVBO;
+    if(vertexNormalsVBO)   delete vertexUvsVBO;
 }
 
 void Mesh::LoadFromFile(const std::string &filepath)
@@ -47,7 +47,7 @@ void Mesh::LoadFromFile(const std::string &filepath)
 
 void Mesh::LoadPositions(const std::vector<Vector3>& positions)
 {
-    if(vertexPositionsVBO ) delete vertexPositionsVBO;
+    if(vertexPositionsVBO) delete vertexPositionsVBO;
 
     vertexPositionsVBO = new VBO();
     vertexPositionsVBO->Fill((void*)(&positions[0]), positions.size() * sizeof(float) * 3);
@@ -59,7 +59,7 @@ void Mesh::LoadPositions(const std::vector<Vector3>& positions)
 
 void Mesh::LoadNormals(const std::vector<Vector3> &normals)
 {
-    if(vertexNormalsVBO ) delete vertexNormalsVBO;
+    if(vertexNormalsVBO) delete vertexNormalsVBO;
 
     vertexNormalsVBO = new VBO();
     vertexNormalsVBO->Fill((void*)(&normals[0]), normals.size() * sizeof(float) * 3);
@@ -67,10 +67,19 @@ void Mesh::LoadNormals(const std::vector<Vector3> &normals)
 
 void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
 {
-    if(vertexUvsVBO ) delete vertexUvsVBO;
+    if(vertexUvsVBO) delete vertexUvsVBO;
 
     vertexUvsVBO = new VBO();
     vertexUvsVBO->Fill((void*)(&uvs[0]), uvs.size() * sizeof(float) * 2);
+}
+
+void Mesh::LoadAll(const std::vector<Vector3> &positions,
+                   const std::vector<Vector3> &normals,
+                   const std::vector<glm::vec2> &uvs)
+{
+    LoadPositions(positions);
+    LoadNormals(normals);
+    LoadUvs(uvs);
 }
 
 void Mesh::BindPositionsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)

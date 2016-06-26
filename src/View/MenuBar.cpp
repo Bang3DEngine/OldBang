@@ -1,14 +1,13 @@
 #include "MenuBar.h"
 
-#include "WindowEventManager.h"
-#include "WindowMain.h"
-
 #include "Canvas.h"
-#include "Persistence.h"
-#include "EditorScene.h"
+#include "WindowMain.h"
 #include "FileReader.h"
 #include "FileWriter.h"
 #include "FileDialog.h"
+#include "Persistence.h"
+#include "EditorScene.h"
+#include "WindowEventManager.h"
 
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 {
@@ -187,6 +186,8 @@ void MenuBar::OnCreateFromPrefab() const
             }
         }
         delete p;
+
+        Hierarchy::GetInstance()->SelectGameObject(e);
     }
     else
     {
@@ -195,19 +196,11 @@ void MenuBar::OnCreateFromPrefab() const
     }
 }
 
-void MenuBar::OnCreatePlane() const
-{
-    // wem->NotifyMenuBarActionClicked(Action::CreatePlane);
 
+GameObject* MenuBar::CreatePrimitiveGameObject(Mesh *m) const
+{
     GameObject *go = new GameObject();
     go->AddComponent<Transform>();
-
-    Mesh *m = new Mesh();
-    std::vector<Vector3> pos, normals; std::vector<glm::vec2> uvs;
-    MeshFactory::GetPlaneTris(1.0f, pos, normals, uvs);
-    m->LoadPositions(pos);
-    m->LoadNormals(normals);
-    m->LoadUvs(uvs);
 
     Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/default.bmat");
 
@@ -216,38 +209,39 @@ void MenuBar::OnCreatePlane() const
     r->SetMaterial(mat);
     r->SetMesh(m);
 
-    go->SetName("Plane");
     Canvas::GetInstance()->GetCurrentScene()->AddChild(go);
+    Hierarchy::GetInstance()->SelectGameObject(go);
+    return go;
+}
+
+void MenuBar::OnCreatePlane() const
+{
+    Mesh *m = new Mesh();
+    std::vector<Vector3> pos, normals; std::vector<glm::vec2> uvs;
+    MeshFactory::GetPlaneTris(1.0f, pos, normals, uvs);
+    m->LoadAll(pos, normals, uvs);
+    GameObject *go = CreatePrimitiveGameObject(m);
+    go->SetName("Plane");
 }
 
 void MenuBar::OnCreateCube() const
 {
-    // wem->NotifyMenuBarActionClicked(Action::CreateCube);
-
-    GameObject *go = new GameObject();
-    go->AddComponent<Transform>();
-
     Mesh *m = new Mesh();
     std::vector<Vector3> pos, normals; std::vector<glm::vec2> uvs;
     MeshFactory::GetCubeTris(1.0f, pos, normals, uvs);
-    m->LoadPositions(pos);
-    m->LoadNormals(normals);
-    m->LoadUvs(uvs);
-
-    Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/default.bmat");
-
-    MeshRenderer *r = go->AddComponent<MeshRenderer>();
-    r->SetRenderMode(MeshRenderer::RenderMode::Triangles);
-    r->SetMaterial(mat);
-    r->SetMesh(m);
-
+    m->LoadAll(pos, normals, uvs);
+    GameObject *go = CreatePrimitiveGameObject(m);
     go->SetName("Cube");
-    Canvas::GetInstance()->GetCurrentScene()->AddChild(go);
 }
 
 void MenuBar::OnCreateSphere() const
 {
-    // wem->NotifyMenuBarActionClicked(Action::CreateSphere);
+    Mesh *m = new Mesh();
+    std::vector<Vector3> pos, normals; std::vector<glm::vec2> uvs;
+    MeshFactory::GetCubeTris(1.0f, pos, normals, uvs);
+    m->LoadAll(pos, normals, uvs);
+    GameObject *go = CreatePrimitiveGameObject(m);
+    go->SetName("Sphere");
 }
 
 void MenuBar::OnCreatePrefab() const

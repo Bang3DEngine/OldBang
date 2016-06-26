@@ -28,6 +28,11 @@ const std::string SingleLineRenderer::ToString() const
 
 std::string SingleLineRenderer::GetName() const { return "SingleLineRenderer"; }
 
+ICloneable *SingleLineRenderer::Clone() const
+{
+    return new SingleLineRenderer();
+}
+
 void SingleLineRenderer::SetOrigin(Vector3 o)
 {
     points[0] = o;

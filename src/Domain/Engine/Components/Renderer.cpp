@@ -9,6 +9,20 @@ Renderer::Renderer()
 {
 }
 
+void Renderer::CloneInto(ICloneable *clone) const
+{
+    Component::CloneInto(clone);
+    Renderer *r = static_cast<Renderer*>(clone);
+    Component::CloneInto(r);
+    r->SetMaterial(material);
+    r->SetDrawWireframe(drawWireframe);
+    r->SetCullMode(cullMode);
+    r->SetRenderMode(renderMode);
+    r->SetLineWidth(lineWidth);
+    r->SetIgnoreModelMatrix(ignoreModelMatrix);
+    r->SetIgnoreViewMatrix(ignoreViewMatrix);
+}
+
 Material *Renderer::GetMaterial()
 {
     return material;

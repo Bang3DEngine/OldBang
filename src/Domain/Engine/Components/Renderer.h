@@ -75,6 +75,7 @@ protected:
 
 public:
     Renderer();
+    virtual void CloneInto(ICloneable *clone) const override;
 
     virtual void SetMaterial(Material *m) = 0;
     virtual Material* GetMaterial();
@@ -101,6 +102,7 @@ public:
 
     virtual const std::string ToString() const override { return "Renderer"; }
     virtual std::string GetName() const override { return "Renderer"; }
+    virtual ICloneable *Clone() const override = 0;
 };
 
 #endif // RENDERER_H

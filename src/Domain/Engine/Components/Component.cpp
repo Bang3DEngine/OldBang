@@ -12,6 +12,13 @@ Component::~Component()
         delete inspectorComponentInfo.GetSlotInfo(i);
 }
 
+void Component::CloneInto(ICloneable *clone) const
+{
+    Component *c = static_cast<Component*>(clone);
+    c->SetEnabled(enabled);
+    c->owner = nullptr;
+}
+
 GameObject *Component::GetOwner() const
 {
     return owner;
