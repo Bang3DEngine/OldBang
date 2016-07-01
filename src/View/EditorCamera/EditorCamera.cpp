@@ -82,7 +82,7 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 
         Quaternion rotY = Quaternion::AngleAxis(glm::radians(mouseRotDegreesAccum.y),
                                                 camt->GetRight());
-        t->RotateLocal(rotY);
+        t->Rotate(rotY);
 
         Input::SetMouseWrapping(true);
         *hasMoved  = true;

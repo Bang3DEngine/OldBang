@@ -97,7 +97,7 @@ void Transform::SetRotation(const Quaternion &q)
     if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
-        if (pt) SetLocalRotation(Quaternion(q.Normalized() * -pt->GetRotation()));
+        if (pt) SetLocalRotation(Quaternion(-pt->GetRotation() * q.Normalized()));
         else SetLocalRotation(q);
     }
     else SetLocalRotation(q);
@@ -120,7 +120,7 @@ void Transform::SetEuler(float x, float y, float z)
 
 void Transform::RotateLocal(const Quaternion &r)
 {
-    SetLocalRotation(Quaternion(r.Normalized() * GetLocalRotation()));
+    SetLocalRotation(Quaternion(GetLocalRotation() * r.Normalized()));
 }
 void Transform::RotateLocalEuler(const Vector3 &degreesEuler)
 {

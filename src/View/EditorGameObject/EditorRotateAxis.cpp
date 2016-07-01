@@ -52,7 +52,7 @@ void EditorRotateAxis::OnUpdate()
     Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
 
     Sphere bSphere = attachedGameObject->GetBoundingSphere();
-    float radius = bSphere.GetRadius() / 2.0f * 1.0f;
+    float radius = bSphere.GetRadius() / 2.0f;
     material->GetShaderProgram()->SetUniformVec3("wCircleCenter", bSphere.GetCenter(), false);
     material->GetShaderProgram()->SetUniformVec3("boundingSphereRadius", radius, false);
 
@@ -80,16 +80,7 @@ void EditorRotateAxis::OnUpdate()
                 std::swap(anchorIndex0, anchorIndex1);
             }
 
-            if (Toolbar::GetInstance()->GetGlobalCoordsMode())
-            {
-                currentOAxisDirection =
-                        Vector3((modelMatrix.Inversed() *
-                                 glm::vec4(oAxisDirection,0.0f)).xyz()).Normalized();
-            }
-            else
-            {
-                currentOAxisDirection = oAxisDirection;
-            }
+            currentOAxisDirection = oAxisDirection;
         }
 
 
@@ -113,7 +104,15 @@ void EditorRotateAxis::OnUpdate()
                 // Rotate the model
                 Quaternion q = Quaternion::AngleAxis(rotationBoost * alignment,
                                                      currentOAxisDirection);
-                attTrans->RotateLocal(q);
+
+                if (Toolbar::GetInstance()->GetGlobalCoordsMode())
+                {
+                    attTrans->Rotate(q);
+                }
+                else
+                {
+                    attTrans->RotateLocal(q);
+                }
             }
         }
     }
