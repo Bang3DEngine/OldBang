@@ -46,23 +46,23 @@ void EditorAxisGroup::OnUpdate()
     //Attached GameObject positioning and scaling
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
     GameObject *attGameObject = GetAttachedGameObject();
-    if(attGameObject )
+    if (attGameObject)
     {
         Transform *st = attGameObject->GetComponent<Transform>();
-        if(st )
+        if (st)
         {
             Transform *t = GetComponent<Transform>();
             Box bbox = attGameObject->GetObjectBoundingBox();
 
-            t->SetPosition( bbox.GetCenter() );
+            t->SetLocalPosition( bbox.GetCenter() );
 
-            if(Toolbar::GetInstance()->GetGlobalCoordsMode())
+            if (Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
-                t->SetRotation( st->GetLocalRotation().Inversed() );
+                t->SetLocalRotation( st->GetLocalRotation().Inversed() );
             }
             else
             {
-                t->SetRotation( Quaternion() );
+                t->SetLocalRotation( Quaternion() );
             }
 
             Vector3 camPos = cam->GetOwner()->GetComponent<Transform>()->GetPosition();

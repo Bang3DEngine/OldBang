@@ -6,7 +6,7 @@ EditorBBox::EditorBBox() : EditorGameObject("EditorBBox")
 
     MeshRenderer *mr = AddComponent<MeshRenderer>();
 
-    //Copy the lines material to the box material, and save it in cache
+    // Copy the lines material to the box material, and save it in cache
     // only the first time. The rest of the times, load it from cache
     Material *linesMaterial =
             AssetsManager::GetAsset<Material>("Assets/Engine/Materials/linesMaterial.bmat");
@@ -45,38 +45,30 @@ EditorBBox::EditorBBox() : EditorGameObject("EditorBBox")
 
 void EditorBBox::OnUpdate()
 {
-    GameObject *parent = this;
-    while(parent->IsEditorGameObject() && !parent->IsScene())
-    { //Find the closest nonEditor parent, stop at top scene
-        parent = parent->GetParent();
-    }
+    GameObject *attGameObject = GetAttachedGameObject(); NONULL(attGameObject);
 
-    if(parent )
+    // Adjust transform to wrap all the vertices of the parent and children
+    Box bbox;
+    std::list<Renderer*> rends = attGameObject->GetComponents<Renderer>();
+    for(auto it_r = rends.begin(); it_r != rends.end(); ++it_r)
     {
-        //Adjust transform to wrap all the vertices of the parent and children
-        Box bbox;
-        std::list<Renderer*> rends = parent->GetComponents<Renderer>();
-
-        for(auto it_r = rends.begin(); it_r != rends.end(); ++it_r)
+        Renderer *r = *it_r;
+        if(CAN_USE_COMPONENT(r))
         {
-            Renderer *r = *it_r;
-            if(CAN_USE_COMPONENT(r))
-            {
-                Box mbox = r->GetBoundingBox();
-                bbox = Box::Union(bbox, mbox);
-            }
+            Box mbox = r->GetBoundingBox();
+            bbox = Box::Union(bbox, mbox);
         }
-
-        Transform *t = GetComponent<Transform>();
-
-        Vector3 center = bbox.GetCenter();
-        t->SetPosition(center);
-
-        Vector3 scale = Vector3(bbox.GetWidth(),
-                                bbox.GetHeight(),
-                                bbox.GetDepth());
-        t->SetLocalScale(scale);
     }
+
+    Transform *t = GetComponent<Transform>();
+
+    Vector3 center = bbox.GetCenter();
+    t->SetLocalPosition(center);
+
+    Vector3 scale = Vector3(bbox.GetWidth(),
+                            bbox.GetHeight(),
+                            bbox.GetDepth());
+    t->SetLocalScale(scale);
 }
 
 
