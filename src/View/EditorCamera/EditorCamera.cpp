@@ -75,14 +75,14 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
         glm::vec2 delta = -Input::GetMouseDelta() * mouseRotDegreesPerPixel;
         mouseRotDegreesAccum += delta;
 
-        t->SetRotation(startingRotation);
+        t->SetLocalRotation(startingRotation);
         Quaternion rotX = Quaternion::AngleAxis(glm::radians(mouseRotDegreesAccum.x),
                                                 Vector3::up);
         t->Rotate(rotX);
 
         Quaternion rotY = Quaternion::AngleAxis(glm::radians(mouseRotDegreesAccum.y),
                                                 camt->GetRight());
-        t->Rotate(rotY);
+        t->RotateLocal(rotY);
 
         Input::SetMouseWrapping(true);
         *hasMoved  = true;
@@ -99,10 +99,7 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
         glm::vec2 delta = -Input::GetMouseDelta() * mousePanPerPixel;
         delta.y *= -1.0f;
 
-        t->SetPosition(t->GetPosition()   +
-                       camt->GetRight() * delta.x +
-                       camt->GetUp() * delta.y);
-
+        t->Translate(camt->GetRight() * delta.x + camt->GetUp() * delta.y);
 
         Canvas::SetCursor(Qt::SizeAllCursor);
         Input::SetMouseWrapping(true);
@@ -157,7 +154,7 @@ void EditorCamera::HandleLookAtFocus()
                 Quaternion final = Quaternion::Slerp( origin, dest,
                             Time::GetDeltaTime() * lookAtRotSpeed);
 
-                t->SetRotation(final);
+                t->SetLocalRotation(final);
             }
 
             //LookAt Move

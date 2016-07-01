@@ -30,7 +30,6 @@ public:
     static Quaternion AngleAxis(float angleDeg, const Vector3 &axis);
 };
 
-
 Quaternion operator*(const Quaternion &q1, const Quaternion& q2);
 
 #endif // QUATERNION_H

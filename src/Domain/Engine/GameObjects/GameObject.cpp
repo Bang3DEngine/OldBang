@@ -45,7 +45,7 @@ ICloneable* GameObject::Clone() const
 GameObject::~GameObject()
 {
     this->_OnDestroy();
-    for(auto it = children.begin(); it != children.end();)
+    for (auto it = children.begin(); it != children.end();)
     {
         GameObject *child = *it;
         it = this->RemoveChildWithoutNotifyingHierarchy(it);
@@ -56,8 +56,8 @@ GameObject::~GameObject()
 
 Scene *GameObject::GetScene()
 {
-    if(isScene) { return (Scene*) this; }
-    if(parent ) return parent->GetScene();
+    if (isScene) { return (Scene*) this; }
+    if (parent) return parent->GetScene();
     return nullptr;
 }
 
@@ -78,9 +78,9 @@ const std::list<Component *> &GameObject::GetComponents() const { return comps; 
 const std::list<GameObject *> GameObject::GetChildren() const
 {
     std::list<GameObject *> cc;
-    for(auto c = children.begin(); c != children.end(); ++c)
+    for (auto c = children.begin(); c != children.end(); ++c)
     {
-        if(!(*c)->IsEditorGameObject()) cc.push_back(*c);
+        if (!(*c)->IsEditorGameObject()) cc.push_back(*c);
     }
     return cc;
 }
@@ -89,14 +89,15 @@ Box GameObject::GetObjectBoundingBox() const
 {
     Box b;
     MeshRenderer *mr = GetComponent<MeshRenderer>();
-    if(CAN_USE_COMPONENT(mr))
+    if (CAN_USE_COMPONENT(mr))
     {
         const Mesh *m = mr->GetMesh();
-        if(m )
+        if (m)
         {
             b = m->GetBoundingBox();
         }
     }
+
     return b;
 }
 

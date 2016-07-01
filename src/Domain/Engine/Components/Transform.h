@@ -44,35 +44,28 @@ public:
                 Vector3 up = Vector3(0.0f, 1.0f, 0.0f));
 
 
+    void SetLocalPosition(const Vector3 &p);
     void SetPosition(const Vector3 &p);
+    void TranslateLocal(const Vector3 &translation);
     void Translate(const Vector3 &translation);
 
-    //These wont change the input inspectorEulerDeg of the
-    /**
-     * @brief Rotate around global axis (axis in world space).
-     * Same goes for all methods without "Local"
-     */
-    void Rotate(const Vector3 &degreesEuler);
-    void SetRotation(const Vector3 &degreesEuler);
-    void SetRotationFromInspector(const Quaternion &q);
+    void SetLocalRotation(const Quaternion &r);
+    void SetLocalEuler(const Vector3 &degreesEuler);
+    void SetLocalEuler(float x, float y, float z);
 
-    /**
-     * @brief Rotate around local axis (axis in object space)
-     * Same goes for all methods wiith "Local"
-     */
-    void RotateLocal(const Vector3 &degreesEuler);
-    void SetRotationLocal(const Vector3 &degreesEuler);
-
-    //This will change inspectorEulerDeg to the quat->eulerAngles conversion
-    void SetRotation(float x, float y, float z);
-    void SetRotationLocal(float x, float y, float z);
     void SetRotation(const Quaternion &r);
-    void SetRotationLocal(const Quaternion &r);
-    void Rotate(const Quaternion &r);
-    void RotateLocal(const Quaternion &r);
+    void SetEuler(const Vector3 &degreesEuler);
+    void SetEuler(float x, float y, float z);
 
-    void Scale(float s);
-    void Scale(const Vector3 &v);
+    void RotateLocal(const Quaternion &r);
+    void RotateLocalEuler(const Vector3 &degreesEuler);
+    void Rotate(const Quaternion &r);
+    void RotateEuler(const Vector3 &degreesEuler);
+
+    void SetLocalRotationFromInspector(const Quaternion &q);
+
+    void SetScale(float s);
+    void SetScale(const Vector3 &v);
     void SetLocalScale(float s);
     void SetLocalScale(const Vector3 &s);
     void SetLeftMatrix(const Matrix4 &leftMatrix);

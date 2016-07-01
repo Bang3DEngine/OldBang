@@ -46,87 +46,114 @@ Transform::~Transform()
 {
 }
 
-void Transform::SetPosition(const Vector3 &p)
+void Transform::SetLocalPosition(const Vector3 &p)
 {
     position = p;
 }
-
+void Transform::SetPosition(const Vector3 &p)
+{
+    GameObject *parent = owner->GetParent();
+    if(parent)
+    {
+        Transform *pt = parent->GetComponent<Transform>();
+        if(pt) SetLocalPosition(-pt->GetPosition() + p);
+        else SetLocalPosition(p);
+    }
+}
+void Transform::TranslateLocal(const Vector3 &translation)
+{
+    SetLocalPosition(GetLocalPosition() + translation);
+}
 void Transform::Translate(const Vector3 &translation)
 {
     SetPosition(GetPosition() + translation);
 }
 
-void Transform::Rotate(const Vector3 &degreesEuler)
-{
-    SetRotation(GetLocalEuler() + degreesEuler);
-}
-void Transform::RotateLocal(const Vector3 &degreesEuler)
-{
-    SetRotationLocal(GetLocalEuler() + degreesEuler);
-}
 
-void Transform::SetRotationFromInspector(const Quaternion &q)
+
+void Transform::SetLocalRotation(const Quaternion &q)
 {
     rotation = q.Normalized();
+    inspectorEulerDeg = Quaternion::EulerAngles(rotation).ToDegrees();
 }
-
-void Transform::SetRotation(float x, float y, float z)
-{
-    SetRotation(Vector3(x,y,z));
-}
-void Transform::SetRotationLocal(float x, float y, float z)
-{
-    SetRotationLocal(Vector3(x,y,z));
-}
-
-void Transform::SetRotation(const Vector3 &degreesEuler)
+void Transform::SetLocalEuler(const Vector3 &degreesEuler)
 {
     inspectorEulerDeg = degreesEuler;
     Vector3 rads = inspectorEulerDeg.ToRadians();
-    Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3(1,0,0));
-    Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3(0,1,0));
-    Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3(0,0,1));
-    SetRotationFromInspector(qz * qy * qx);
+    Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::right);
+    Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3::up);
+    Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3::forward);
+    rotation = (qz * qy * qx).Normalized();
 }
-void Transform::SetRotationLocal(const Vector3 &degreesEuler)
+void Transform::SetLocalEuler(float x, float y, float z)
 {
-    inspectorEulerDeg = degreesEuler;
-    Vector3 rads = inspectorEulerDeg.ToRadians();
-    Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3(1,0,0));
-    Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3(0,1,0));
-    Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3(0,0,1));
-    SetRotationFromInspector(qz * qy * qx);
+    SetLocalEuler(Vector3(x,y,z));
 }
-
 
 void Transform::SetRotation(const Quaternion &q)
 {
-    rotation = q.Normalized();
-    inspectorEulerDeg = Quaternion::EulerAngles(rotation).ToDegrees();
+    GameObject *parent = owner->GetParent();
+    if(parent)
+    {
+        Transform *pt = parent->GetComponent<Transform>();
+        if(pt) SetLocalRotation(Quaternion(q.Normalized() * -pt->GetRotation()));
+        else SetLocalRotation(q);
+    }
 }
-void Transform::SetRotationLocal(const Quaternion &q)
+void Transform::SetEuler(const Vector3 &degreesEuler)
 {
-    rotation = q.Normalized();
-    inspectorEulerDeg = Quaternion::EulerAngles(rotation).ToDegrees();
+    GameObject *parent = owner->GetParent();
+    if(parent)
+    {
+        Transform *pt = parent->GetComponent<Transform>();
+        if(pt) SetLocalEuler(-pt->GetEuler() + degreesEuler);
+        else SetLocalEuler(degreesEuler);
+    }
+}
+void Transform::SetEuler(float x, float y, float z)
+{
+    SetEuler(Vector3(x,y,z));
 }
 
-void Transform::Rotate(const Quaternion &r)
-{
-    SetRotation(r * GetLocalRotation());
-}
 void Transform::RotateLocal(const Quaternion &r)
 {
-    SetRotation(GetLocalRotation() * r);
+    SetLocalRotation(Quaternion(r.Normalized() * GetLocalRotation()));
+}
+void Transform::RotateLocalEuler(const Vector3 &degreesEuler)
+{
+    SetLocalEuler(GetLocalEuler() + degreesEuler);
+}
+void Transform::Rotate(const Quaternion &r)
+{
+    SetRotation(Quaternion(r.Normalized() * GetRotation()));
+}
+void Transform::RotateEuler(const Vector3 &degreesEuler)
+{
+    SetEuler(-GetEuler() + degreesEuler);
 }
 
-void Transform::Scale(float s)
+void Transform::SetLocalRotationFromInspector(const Quaternion &q)
 {
-    Scale(Vector3(s));
+    rotation = q.Normalized();
 }
 
-void Transform::Scale(const Vector3 &v)
+
+
+
+void Transform::SetScale(float s)
 {
-    SetLocalScale(GetLocalScale() * v);
+    SetScale(Vector3(s));
+}
+
+void Transform::SetScale(const Vector3 &v)
+{
+    GameObject *parent = owner->GetParent();
+    if(parent)
+    {
+        Transform *pt = parent->GetComponent<Transform>();
+        if(pt) SetLocalScale(1.0f / pt->GetScale() * v);
+        else SetLocalScale(v);
+    }
 }
 
 void Transform::SetLocalScale(float s)
@@ -186,7 +213,7 @@ void Transform::LookAt(Vector3 target, Vector3 _up)
 {
     Assert(target != position, "LookAt target is the same as position.", return);
     Vector3 up = _up.Normalized();
-    SetRotation( Quaternion::LookDirection(target - GetPosition(), up) );
+    SetRotation(Quaternion::LookDirection(target - GetPosition(), up) );
 }
 
 Vector3 Transform::GetLocalPosition() const
@@ -197,10 +224,10 @@ Vector3 Transform::GetLocalPosition() const
 Vector3 Transform::GetPosition() const
 {
     GameObject *parent = owner->GetParent();
-    if(parent )
+    if(parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
-        if(pt ) return pt->GetPosition() + GetLocalPosition();
+        if(pt) return pt->GetPosition() + GetLocalPosition();
     }
     return GetLocalPosition();
 }
@@ -255,12 +282,12 @@ Vector3 Transform::GetScale() const
 
 Vector3 Transform::GetLocalForward() const
 {
-    return (GetLocalRotation() * Vector3(0.0f, 0.0f, -1.0f)).Normalized();
+    return (GetLocalRotation() * Vector3::forward).Normalized();
 }
 
 Vector3 Transform::GetForward() const
 {
-    return  (GetRotation() * Vector3(0.0f, 0.0f, -1.0f)).Normalized();
+    return  (GetRotation() * Vector3::forward).Normalized();
 }
 
 Vector3 Transform::GetLocalBack() const
@@ -275,12 +302,12 @@ Vector3 Transform::GetBack() const
 
 Vector3 Transform::GetLocalRight() const
 {
-    return (GetLocalRotation() * Vector3(1.0f, 0.0f, 0.0f)).Normalized();
+    return (GetLocalRotation() * Vector3::right).Normalized();
 }
 
 Vector3 Transform::GetRight() const
 {
-    return  (GetRotation() * Vector3(1.0f, 0.0f, 0.0f)).Normalized();
+    return  (GetRotation() * Vector3::right).Normalized();
 }
 
 Vector3 Transform::GetLocalLeft() const
@@ -295,12 +322,12 @@ Vector3 Transform::GetLeft() const
 
 Vector3 Transform::GetLocalUp() const
 {
-    return (GetLocalRotation() * Vector3(0.0f, 1.0f, 0.0f)).Normalized();
+    return (GetLocalRotation() * Vector3::up).Normalized();
 }
 
 Vector3 Transform::GetUp() const
 {
-    return (GetRotation() * Vector3(0.0f, 1.0f, 0.0f)).Normalized();
+    return (GetRotation() * Vector3::up).Normalized();
 }
 
 Vector3 Transform::GetLocalDown() const
@@ -354,7 +381,7 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
     position = Vector3(v[0], v[1], v[2]);
 
     v = source->GetSWVectorFloatValue("Rotation");
-    SetRotation(Vector3(v[0], v[1], v[2]));
+    SetEuler(Vector3(v[0], v[1], v[2]));
 
     v = source->GetSWVectorFloatValue("Scale");
     scale = Vector3(v[0], v[1], v[2]);
@@ -373,8 +400,8 @@ void Transform::Write(std::ostream &f) const
 void Transform::Read(std::istream &f)
 {
     FileReader::RegisterNextPointerId(f, this);
-    SetPosition(FileReader::ReadVec3(f));
-    SetRotation(FileReader::ReadQuat(f));
+    SetLocalPosition(FileReader::ReadVec3(f));
+    SetLocalRotation(FileReader::ReadQuat(f));
     SetLocalScale(FileReader::ReadVec3(f));
     FileReader::ReadNextLine(f); //Consume close tag
 }

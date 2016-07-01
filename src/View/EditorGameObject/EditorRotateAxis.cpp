@@ -17,15 +17,15 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir) : Editor
 
     if(dir == EditorAxisDirection::X)
     {
-        GetComponent<Transform>()->SetRotation(Vector3::up * 90.0f);
+        GetComponent<Transform>()->SetLocalEuler(Vector3::up * 90.0f);
     }
     else if(dir == EditorAxisDirection::Y)
     {
-        GetComponent<Transform>()->SetRotation(Vector3::right * 90.0f);
+        GetComponent<Transform>()->SetLocalEuler(Vector3::right * 90.0f);
     }
     else
     {
-        GetComponent<Transform>()->SetRotation(Vector3::up * 180.0f);
+        GetComponent<Transform>()->SetLocalEuler(Vector3::up * 180.0f);
     }
 
     this->SetRenderLayer(5);
