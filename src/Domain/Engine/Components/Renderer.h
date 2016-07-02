@@ -48,6 +48,13 @@ private:
      */
     bool ignoreViewMatrix = false;
 
+    /**
+     * @brief If ignoreViewMatrix == true, when drawing the Renderer
+     * will ignore view matrix.
+     * So it won't take into account camera's translation, rotation or scale.
+     */
+    bool ignoreProjectionMatrix = false;
+
 
 protected:
 
@@ -99,6 +106,10 @@ public:
 
     void SetIgnoreViewMatrix(bool ignore);
     bool GetIgnoreViewMatrix() const;
+
+    void SetIgnoreProjectionMatrix(bool ignore);
+    bool GetIgnoreProjectionMatrix() const;
+
 
     virtual const std::string ToString() const override { return "Renderer"; }
     virtual std::string GetName() const override { return "Renderer"; }

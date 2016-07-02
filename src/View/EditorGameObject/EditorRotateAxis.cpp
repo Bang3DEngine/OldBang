@@ -56,9 +56,15 @@ void EditorRotateAxis::OnUpdate()
     material->GetShaderProgram()->SetUniformVec3("wCircleCenter", bSphere.GetCenter(), false);
     material->GetShaderProgram()->SetUniformVec3("boundingSphereRadius", radius, false);
 
+    Canvas::GetCurrentScene()->DebugDrawScreenLine(glm::vec2(-0.5f), glm::vec2(0.5f), 1.0f, 0.5f);
+    //Canvas::GetCurrentScene()->DebugDrawScreenLine(glm::vec2(-0.5f), glm::vec2(0.5f), 1.0f, 0.5f);
+    //Canvas::GetCurrentScene()->DebugDrawScreenLine(glm::vec2(-99.9f), glm::vec2(99.9f), 1.0f, 0.5f);
+
     if(grabbed)
     {
-        if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+        Vector3 wAnchorPoint0, wAnchorPoint1;
+        //if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+        if(Input::GetMouseButton(Input::MouseButton::MLeft))
         {
             // This will be done once every grab
             glm::vec2 sMousePos= Input::GetMouseCoords();
@@ -70,8 +76,8 @@ void EditorRotateAxis::OnUpdate()
             // by the user in screen space.
             circle->GetTwoClosestPointsInScreenSpace(
                         sMousePos , pvm,
-                        &sAnchorPoint0, &anchorIndex0,
-                        &sAnchorPoint1, &anchorIndex1);
+                        &sAnchorPoint0, &wAnchorPoint0, &anchorIndex0,
+                        &sAnchorPoint1, &wAnchorPoint1, &anchorIndex1);
 
             // achorIndex0 will always be less than anchorIndex1
             if (anchorIndex1 < anchorIndex0)
@@ -80,10 +86,15 @@ void EditorRotateAxis::OnUpdate()
                 std::swap(anchorIndex0, anchorIndex1);
             }
 
+            Logger_Log(anchorIndex1 << ", " << anchorIndex0);
             currentOAxisDirection = oAxisDirection;
+
+            Logger_Log(wAnchorPoint0 <<  ", " << wAnchorPoint1);
         }
 
 
+        Canvas::GetCurrentScene()->DebugDrawLine(bSphere.GetCenter(), wAnchorPoint0, 1.0f, 0.2f);
+        Canvas::GetCurrentScene()->DebugDrawLine(bSphere.GetCenter(), wAnchorPoint1, 1.0f, 0.2f);
         // Process grabbing rotation movement
         // Normalized mouse movement in the last frame
         glm::vec2 sMouseDelta = Input::GetMouseDelta();
@@ -94,7 +105,7 @@ void EditorRotateAxis::OnUpdate()
             sMouseDelta.y *= -1;
 
             // Get how aligned is the user movement with the anchor points
-            glm::vec2 anchorPointsDir = glm::normalize(sAnchorPoint0 - sAnchorPoint1);
+            glm::vec2 anchorPointsDir = glm::normalize(sAnchorPoint1 - sAnchorPoint0);
             glm::vec2 mouseDir = glm::normalize(sMouseDelta);
             float alignment = glm::dot(anchorPointsDir, mouseDir);
 

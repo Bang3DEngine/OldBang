@@ -57,6 +57,13 @@ public:
                                 int msTime = -1,
                                 bool depthTest = true) {}
 
+    virtual void DebugDrawScreenLine (
+                                const glm::vec2 &origin,
+                                const glm::vec2 &destiny,
+                                float lineWidth = 1.0f,
+                                int msTime = -1,
+                                bool depthTest = true) {}
+
     #ifdef BANG_EDITOR
     void Write (std::ostream &f) const override;
     #endif

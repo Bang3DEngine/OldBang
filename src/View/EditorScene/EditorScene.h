@@ -29,6 +29,13 @@ public:
                        int msTime = -1,
                        bool depthTest = true) override;
 
+    virtual void DebugDrawScreenLine (
+                                const glm::vec2 &origin,
+                                const glm::vec2 &destiny,
+                                float lineWidth = 1.0f,
+                                int msTime = -1,
+                                bool depthTest = true);
+
     bool IsEditorGameObject() const override;
 };
 

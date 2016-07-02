@@ -54,6 +54,12 @@ void EditorScene::DebugDrawLine(const Vector3 &origin,
     debugGameObject->DrawLine(origin, destiny, lineWidth, msTime, depthTest);
 }
 
+void EditorScene::DebugDrawScreenLine(const glm::vec2 &origin, const glm::vec2 &destiny,
+                                      float lineWidth, int msTime, bool depthTest)
+{
+    debugGameObject->DrawLineScreen(origin, destiny, lineWidth, msTime, depthTest);
+}
+
 bool EditorScene::IsEditorGameObject() const
 {
     return true;

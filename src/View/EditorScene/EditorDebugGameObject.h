@@ -32,7 +32,15 @@ public:
                   const Vector3 &destiny,
                   const Vector3 &color = Vector3::zero,
                   float lineWidth = 1.0f,
-                  float livintTimeSecs = -1.0f,
+                  float livingTimeSecs = -1.0f,
+                  bool depthTest = true);
+
+    void DrawLineScreen(
+                  const glm::vec2 &origin,
+                  const glm::vec2 &destiny,
+                  const Vector3 &color = Vector3::zero,
+                  float lineWidth = 1.0f,
+                  float livingTimeSecs = -1.0f,
                   bool depthTest = true);
 
     void OnUpdate() override;

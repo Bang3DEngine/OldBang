@@ -88,7 +88,11 @@ void Renderer::GetMatrices(Matrix4 &model,
     }
     else view = Matrix4(1.0f);
 
-    cam->GetProjectionMatrix(projection);
+    if(!ignoreProjectionMatrix)
+    {
+        cam->GetProjectionMatrix(projection);
+    }
+    else projection = Matrix4(1.0f);
 
     pvm = projection * view * model;
 }
@@ -171,4 +175,14 @@ void Renderer::SetIgnoreViewMatrix(bool ignore)
 bool Renderer::GetIgnoreViewMatrix() const
 {
     return ignoreViewMatrix;
+}
+
+void Renderer::SetIgnoreProjectionMatrix(bool ignore)
+{
+    ignoreProjectionMatrix = ignore;
+}
+
+bool Renderer::GetIgnoreProjectionMatrix() const
+{
+    return ignoreProjectionMatrix;
 }
