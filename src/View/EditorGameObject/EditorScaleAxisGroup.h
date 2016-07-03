@@ -23,7 +23,7 @@ private:
     EditorScaleAxis *axisZ;
 
 public:
-    EditorScaleAxisGroup();
+    EditorScaleAxisGroup(GameObject *attachedGameObject);
     virtual ~EditorScaleAxisGroup();
 
     void OnUpdate() override;

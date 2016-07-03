@@ -2,7 +2,9 @@
 
 #include "Toolbar.h"
 
-EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir) : EditorAxis(dir)
+EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
+                                   GameObject *attachedGameObject)
+    : EditorAxis(dir, attachedGameObject)
 {
     SetName("EditorRotateAxisGroup" + EditorAxis::GetStringFromDir(dir));
 
@@ -53,7 +55,6 @@ void EditorRotateAxis::OnUpdate()
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->GetOwner()->GetComponent<Transform>(); NONULL(camTransform);
 
-    GameObject *attachedGameObject = GetAttachedGameObject();
     Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
 
     Sphere bSphere = attachedGameObject->GetBoundingSphere();
@@ -63,7 +64,6 @@ void EditorRotateAxis::OnUpdate()
 
     if(grabbed)
     {
-        Vector3 wAnchorPoint0, wAnchorPoint1;
         if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
         {
             // This will be done once every grab

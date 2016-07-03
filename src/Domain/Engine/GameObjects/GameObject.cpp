@@ -332,15 +332,15 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
     {
         if(!ed_wasSelectedInHierarchy)
         {
-            ed_selectionGameObject = new EditorSelectionGameObject();
-            AddChildWithoutNotifyingHierarchy(ed_selectionGameObject);
+            ed_selectionGameObject = new EditorSelectionGameObject(this);
+            Canvas::GetCurrentScene()->AddChildWithoutNotifyingHierarchy(ed_selectionGameObject);
         }
     }
     else
     {
         if(ed_wasSelectedInHierarchy)
         {
-            RemoveChild(ed_selectionGameObject);
+            Canvas::GetCurrentScene()->RemoveChild(ed_selectionGameObject);
         }
     }
 

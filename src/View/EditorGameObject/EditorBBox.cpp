@@ -1,7 +1,9 @@
 #include "EditorBBox.h"
 
-EditorBBox::EditorBBox() : EditorGameObject("EditorBBox")
+EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("EditorBBox")
 {
+    this->attachedGameObject = attachedGameObject;
+
     AddComponent<Transform>();
 
     MeshRenderer *mr = AddComponent<MeshRenderer>();
@@ -22,7 +24,6 @@ EditorBBox::EditorBBox() : EditorGameObject("EditorBBox")
                 AssetsManager::GetRuntimeAsset<Material>("EditorBBox_Mat");
     }
     mr->SetMaterial(boxMaterial);
-
 
     //Create the box mesh, and save it to cache
     // only the first time. The rest of the times, load it from cache.
@@ -45,11 +46,11 @@ EditorBBox::EditorBBox() : EditorGameObject("EditorBBox")
 
 void EditorBBox::OnUpdate()
 {
-    GameObject *attGameObject = GetAttachedGameObject(); NONULL(attGameObject);
+    NONULL(attachedGameObject);
 
     // Adjust transform to wrap all the vertices of the parent and children
     Box bbox;
-    std::list<Renderer*> rends = attGameObject->GetComponents<Renderer>();
+    std::list<Renderer*> rends = attachedGameObject->GetComponents<Renderer>();
     for(auto it_r = rends.begin(); it_r != rends.end(); ++it_r)
     {
         Renderer *r = *it_r;

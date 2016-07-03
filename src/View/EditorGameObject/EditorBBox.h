@@ -12,9 +12,10 @@ class EditorBBox : public EditorGameObject
 {
 private:
     static std::vector<Vector3> boxVertices;
+    GameObject *attachedGameObject = nullptr;
 
 public:
-    EditorBBox();
+    EditorBBox(GameObject *attachedGameObject);
 
     void OnUpdate() override;
 };

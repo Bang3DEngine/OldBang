@@ -20,7 +20,7 @@ protected:
     virtual Renderer *GetAxisRenderer() const override;
 
 public:
-    EditorScaleAxis(EditorAxis::EditorAxisDirection dir);
+    EditorScaleAxis(EditorAxis::EditorAxisDirection dir, GameObject *attachedGameObject);
     virtual ~EditorScaleAxis();
 
     void OnUpdate() override;

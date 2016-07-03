@@ -2,8 +2,9 @@
 
 #include "Toolbar.h"
 
-EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir) :
-    EditorAxis(dir)
+EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
+                                 GameObject *attachedGameObject)
+    : EditorAxis(dir, attachedGameObject)
 {
     SetName("EditorScaleAxisGroup" + EditorAxis::GetStringFromDir(dir));
 
@@ -39,7 +40,7 @@ void EditorScaleAxis::OnUpdate()
     Transform *camTransform = cam->GetOwner()->GetComponent<Transform>(); NONULL(camTransform);
     Vector3 camPos = camTransform->GetPosition();
 
-    Transform *attTrans = GetAttachedGameObject()->GetComponent<Transform>(); NONULL(attTrans);
+    Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
 
     // Process grabbing movement
     if(grabbed)

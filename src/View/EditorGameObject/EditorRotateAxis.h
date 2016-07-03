@@ -48,7 +48,7 @@ protected:
     Renderer *GetAxisRenderer() const override;
 
 public:
-    EditorRotateAxis(EditorAxis::EditorAxisDirection dir);
+    EditorRotateAxis(EditorAxis::EditorAxisDirection dir, GameObject *attachedGameObject);
     virtual ~EditorRotateAxis();
 
     void OnUpdate() override;

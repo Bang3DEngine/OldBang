@@ -34,19 +34,3 @@ bool EditorGameObject::IsEditorGameObject() const
 {
     return true;
 }
-
-GameObject *EditorGameObject::GetAttachedGameObject() const
-{
-    GameObject *parent = GetParent();
-    if(parent )
-    {
-        while(parent->IsEditorGameObject())
-        {
-            if(!parent->GetParent()) break;
-            parent = parent->GetParent();
-        }
-    }
-
-    if(!parent->IsEditorGameObject()) return parent;
-    return nullptr;
-}

@@ -1,12 +1,11 @@
 #include "EditorRotateAxisGroup.h"
 
-EditorRotateAxisGroup::EditorRotateAxisGroup()
+EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
+    : EditorGameObject("EditorRotateAxisGroup")
 {
-    SetName("EditorRotateAxisGroup");
-
-    axisX = new EditorRotateAxis(EditorAxis::EditorAxisDirection::X);
-    axisY = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Y);
-    axisZ = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Z);
+    axisX = new EditorRotateAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
+    axisY = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
+    axisZ = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
 
     this->AddChild(axisX);
     this->AddChild(axisY);

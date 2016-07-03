@@ -19,6 +19,8 @@ class EditorAxisGroup : public EditorGameObject
 private:
     float sizeBoost = 0.2f;
 
+    GameObject *attachedGameObject = nullptr;
+
     EditorTranslateAxisGroup *etag = nullptr;
     EditorRotateAxisGroup *erag = nullptr;
     EditorScaleAxisGroup *esag = nullptr;
@@ -26,7 +28,7 @@ private:
     void DisableAllGroups();
 
 public:
-    EditorAxisGroup();
+    EditorAxisGroup(GameObject *attachedGameObject);
 
     virtual void OnUpdate() override;
 };

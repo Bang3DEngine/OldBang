@@ -1,10 +1,11 @@
 #include "EditorAxisGroup.h"
 
-EditorAxisGroup::EditorAxisGroup() : EditorGameObject("EditorAxisGroup")
+EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObject("EditorAxisGroup")
 {
-    etag = new EditorTranslateAxisGroup();
-    erag = new EditorRotateAxisGroup();
-    esag = new EditorScaleAxisGroup();
+    this->attachedGameObject = attachedGameObject;
+    etag = new EditorTranslateAxisGroup(attachedGameObject);
+    erag = new EditorRotateAxisGroup(attachedGameObject);
+    esag = new EditorScaleAxisGroup(attachedGameObject);
 
     AddChild(etag);
     AddChild(erag);
@@ -43,33 +44,34 @@ void EditorAxisGroup::OnUpdate()
         esag->SetEnabled(true);
     }
 
-    //Attached GameObject positioning and scaling
-    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera();
-    GameObject *attGameObject = GetAttachedGameObject();
-    if (attGameObject)
+    //Attached GameObject positioning
+    if (attachedGameObject)
     {
-        Transform *st = attGameObject->GetComponent<Transform>();
-        if (st)
+        Transform *at = attachedGameObject->GetComponent<Transform>();
+        if (at)
         {
-            Transform *t = GetComponent<Transform>();
-            Box bbox = attGameObject->GetObjectBoundingBox();
 
-            t->SetLocalPosition( bbox.GetCenter() );
+            Transform *t = GetComponent<Transform>();
+
+            t->SetPosition(at->GetPosition()); // Pivot
+            Box bbox = attachedGameObject->GetBoundingBox();
+            t->SetPosition( bbox.GetCenter() ); // Center
 
             if (Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
-                t->SetLocalRotation( st->GetLocalRotation().Inversed() );
+                t->SetLocalRotation( Quaternion() );
             }
             else
             {
-                t->SetLocalRotation( Quaternion() );
+                t->SetLocalRotation( at->GetRotation() );
             }
 
+            Camera *cam = Canvas::GetCurrentScene()->GetCamera();
             Vector3 camPos = cam->GetOwner()->GetComponent<Transform>()->GetPosition();
-            Vector3 attPos = attGameObject->GetComponent<Transform>()->GetPosition();
+            Vector3 attPos = attachedGameObject->GetComponent<Transform>()->GetPosition();
             float distanceToCamera = Vector3::Distance(camPos, attPos);
 
-            t->SetLocalScale((1.0f / st->GetScale()) * distanceToCamera * sizeBoost);
+            t->SetScale(distanceToCamera * sizeBoost);
         }
     }
 }

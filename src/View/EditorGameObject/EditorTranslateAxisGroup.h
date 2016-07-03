@@ -23,7 +23,7 @@ private:
     EditorTranslateAxis *axisZ;
 
 public:
-    EditorTranslateAxisGroup();
+    EditorTranslateAxisGroup(GameObject *attachedGameObject);
     virtual ~EditorTranslateAxisGroup();
 
     void OnUpdate() override;

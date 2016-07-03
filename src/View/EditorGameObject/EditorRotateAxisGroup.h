@@ -13,7 +13,7 @@ private:
     EditorRotateAxis *axisZ = nullptr;
 
 public:
-    EditorRotateAxisGroup();
+    EditorRotateAxisGroup(GameObject *attachedGameObject);
 
     void OnUpdate() override;
 };

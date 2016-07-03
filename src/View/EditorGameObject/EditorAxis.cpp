@@ -2,8 +2,11 @@
 
 #include "Canvas.h"
 
-EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir)
+EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
+                       GameObject *attachedGameObject)
 {
+    this->attachedGameObject = attachedGameObject;
+
     AddComponent<Transform>();
 
     oAxisDirection = EditorAxis::GetVectorFromDir(dir);

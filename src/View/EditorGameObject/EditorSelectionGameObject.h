@@ -18,7 +18,7 @@ private:
     EditorAxisGroup *axisGroup = nullptr;
 
 public:
-    EditorSelectionGameObject();
+    EditorSelectionGameObject(GameObject *attachedGameObject);
 };
 
 #endif // EDITORSELECTIONGAMEOBJECT_H

@@ -9,7 +9,7 @@ EditorScene::EditorScene() : Scene()
     AddChild(cameraGameObject);
     SetCamera(cameraGameObject->GetCamera());
 
-    axises = new EditorTranslateAxisGroup();
+    //axises = new EditorTranslateAxisGroup();
     //AddChild(axises);
 
     selectionFramebuffer =

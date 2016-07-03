@@ -15,13 +15,16 @@ public:
     enum EditorAxisDirection { X, Y, Z };
 
 protected:
+
+    Material *material = nullptr;
+    GameObject *attachedGameObject = nullptr;
+
     static std::string GetStringFromDir(EditorAxisDirection dir);
     static Vector3 GetVectorFromDir(EditorAxisDirection dir);
 
     void GetMatrices(Matrix4 &pvm, Matrix4 &pv,
                      Matrix4 &p, Matrix4 &v, Matrix4 &m) const;
 
-    Material *material = nullptr;
 
     /**
      * @brief To know when the user is grabbing the axis with the mouse
@@ -53,7 +56,7 @@ protected:
     virtual Renderer *GetAxisRenderer() const = 0;
 
 public:
-    EditorAxis(EditorAxisDirection dir);
+    EditorAxis(EditorAxisDirection dir, GameObject *attachedGameObject);
     virtual ~EditorAxis();
 
     virtual void OnUpdate() override;

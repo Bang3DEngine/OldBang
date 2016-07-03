@@ -2,13 +2,12 @@
 
 #include "WindowMain.h"
 
-EditorTranslateAxisGroup::EditorTranslateAxisGroup() : EditorGameObject("EditorTranslateAxisGroup")
+EditorTranslateAxisGroup::EditorTranslateAxisGroup(GameObject *attachedGameObject)
+    : EditorGameObject("EditorTranslateAxisGroup")
 {
-    SetName("EditorTranslateAxisGroup");
-
-    axisX = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::X);
-    axisY = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Y);
-    axisZ = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Z);
+    axisX = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
+    axisY = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
+    axisZ = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
 
     AddChild(axisX);
     AddChild(axisY);

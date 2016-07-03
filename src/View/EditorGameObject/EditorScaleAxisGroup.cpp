@@ -2,13 +2,13 @@
 
 #include "WindowMain.h"
 
-EditorScaleAxisGroup::EditorScaleAxisGroup() : EditorGameObject("EditorScaleAxisGroup")
+EditorScaleAxisGroup::EditorScaleAxisGroup(GameObject *attachedGameObject) :
+    EditorGameObject("EditorScaleAxisGroup")
 {
-    SetName("EditorScaleAxisGroup");
 
-    axisX = new EditorScaleAxis(EditorAxis::EditorAxisDirection::X);
-    axisY = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Y);
-    axisZ = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Z);
+    axisX = new EditorScaleAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
+    axisY = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
+    axisZ = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
 
     AddChild(axisX);
     AddChild(axisY);

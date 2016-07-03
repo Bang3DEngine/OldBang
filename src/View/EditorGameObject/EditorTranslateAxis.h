@@ -20,7 +20,7 @@ protected:
     virtual Renderer *GetAxisRenderer() const override;
 
 public:
-    EditorTranslateAxis(EditorAxis::EditorAxisDirection dir);
+    EditorTranslateAxis(EditorAxis::EditorAxisDirection dir, GameObject *attachedGameObject);
     virtual ~EditorTranslateAxis();
 
     void OnUpdate() override;
