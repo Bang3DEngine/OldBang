@@ -11,9 +11,15 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir) : Editor
 
     circle = AddComponent<CircleRenderer>();
     circle->SetRadius(0.5f);
-    circle->SetSegments(128);
-    circle->SetLineWidth(1.0f);
+    circle->SetSegments(64);
+    circle->SetLineWidth(2.0f);
     circle->SetMaterial(material);
+
+    circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
+        {
+            glLineWidth(25.0f);
+        }
+    );
 
     if(dir == EditorAxisDirection::X)
     {

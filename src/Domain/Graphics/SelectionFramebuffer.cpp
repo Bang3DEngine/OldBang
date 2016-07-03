@@ -58,6 +58,10 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 
                 Vector3 selectionColor = MapIdToColor(gameObjectToId[go]);
                 program->SetUniformVec3("selectionColor", selectionColor);
+
+                renderer->ActivateGLStatesBeforeRendering();
+                if(renderer->ActivateGLStatesBeforeRenderingForSelection)
+                    renderer->ActivateGLStatesBeforeRenderingForSelection();
                 renderer->RenderWithoutBindingMaterial();
             }
         }

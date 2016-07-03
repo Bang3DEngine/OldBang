@@ -10,7 +10,13 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir) :
     line = AddComponent<SingleLineRenderer>();
     line->SetDestiny(oAxisDirection);
     line->SetMaterial(material);
-    line->SetLineWidth(1.0f);
+    line->SetLineWidth(2.0f);
+
+    line->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
+        {
+            glLineWidth(25.0f);
+        }
+    );
 
     this->SetRenderLayer(5);
 }

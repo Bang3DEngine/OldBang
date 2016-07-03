@@ -74,7 +74,7 @@ void EditorAxis::OnUpdate()
     // Process line color
     if (mouseIsOver)
     {
-        GetAxisRenderer()->SetLineWidth(axisLineWidth * 1.5f);
+        GetAxisRenderer()->SetLineWidth(axisLineWidth * 2.0f);
 
         if (grabbed)
         {

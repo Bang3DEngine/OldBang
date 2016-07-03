@@ -46,15 +46,8 @@ void LineRenderer::BindPointsToVAO() const
     }
 }
 
-void LineRenderer::ActivateStatesBeforeRendering() const
-{
-    Renderer::ActivateStatesBeforeRendering();
-}
-
 void LineRenderer::RenderWithoutBindingMaterial() const
 {
-    ActivateStatesBeforeRendering();
-
     Matrix4 model, view, projection, pvm;
     GetMatrices(model, view, projection, pvm);
     SetMatricesUniforms(model, view, projection, pvm);
@@ -62,28 +55,6 @@ void LineRenderer::RenderWithoutBindingMaterial() const
     vao->Bind();
     glDrawArrays(drawLinesMode, 0, points.size());
     vao->UnBind();
-}
-
-void LineRenderer::OnRender()
-{
-    Scene *scene = GetOwner()->GetScene();
-    Camera *cam = scene->GetCamera();
-    if(!CAN_USE_COMPONENT(cam))
-    {
-        Logger_Warn("Can't render " << GetOwner() << " because "
-                       << scene << " does not have a set Camera.");
-    }
-
-    NONULL(material); NONULL(material->GetShaderProgram());
-
-    Render();
-}
-
-void LineRenderer::Render() const
-{
-    material->Bind();
-    RenderWithoutBindingMaterial();
-    material->UnBind();
 }
 
 void LineRenderer::SetMaterial(Material *m)

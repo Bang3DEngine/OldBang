@@ -87,16 +87,9 @@ std::string MeshRenderer::GetName() const
     return "MeshRenderer";
 }
 
-void MeshRenderer::ActivateStatesBeforeRendering() const
-{
-    Renderer::ActivateStatesBeforeRendering();
-}
-
 void MeshRenderer::RenderWithoutBindingMaterial() const
 {
     NONULL(mesh);
-
-    ActivateStatesBeforeRendering();
 
     Matrix4 model, view, projection, pvm;
     GetMatrices(model, view, projection, pvm);
@@ -105,37 +98,6 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
     mesh->GetVAO()->Bind();
     glDrawArrays(renderMode, 0, mesh->GetVertexCount());
     mesh->GetVAO()->UnBind();
-}
-
-void MeshRenderer::OnRender()
-{
-    NONULL(mesh); NONULL(material); NONULL(material->GetShaderProgram());
-
-    Camera *cam = GetOwner()->GetScene()->GetCamera();
-    if(!CAN_USE_COMPONENT(cam))
-    {
-        Logger_Warn("Can't render " << GetOwner() << " because "
-             << GetOwner()->GetScene() << " does not have a set Camera.");
-    }
-
-    Transform *t = owner->GetComponent<Transform>();
-    if(!CAN_USE_COMPONENT(t))
-    {
-        if(!CAN_USE_COMPONENT(t))
-            Logger_Verbose(owner << " could not be rendered because it does" <<
-                           "not have a Transform (or it's disabled')");
-        return;
-    }
-
-    //Pass all the checks in order to render ok
-    Render();
-}
-
-void MeshRenderer::Render() const
-{
-    material->Bind();
-    RenderWithoutBindingMaterial();
-    material->UnBind();
 }
 
 #ifdef BANG_EDITOR

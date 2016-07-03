@@ -29,10 +29,7 @@ protected:
     RenderMode drawLinesMode = RenderMode::Lines;
 
     virtual void BindPointsToVAO() const;
-    virtual void ActivateStatesBeforeRendering() const override;
     virtual void RenderWithoutBindingMaterial() const override;
-    virtual void OnRender() override;
-    virtual void Render() const override;
 
 public:
     LineRenderer();

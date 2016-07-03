@@ -29,7 +29,7 @@ Material *Renderer::GetMaterial()
     return material;
 }
 
-void Renderer::ActivateStatesBeforeRendering() const
+void Renderer::ActivateGLStatesBeforeRendering() const
 {
     //Set polygon mode
     if(drawWireframe)
@@ -66,6 +66,21 @@ void Renderer::ActivateStatesBeforeRendering() const
 
     glLineWidth(lineWidth);
 
+}
+
+void Renderer::OnRender()
+{
+    Render();
+}
+
+void Renderer::Render() const
+{
+    NONULL(material); NONULL(material->GetShaderProgram());
+
+    ActivateGLStatesBeforeRendering();
+    material->Bind();
+    RenderWithoutBindingMaterial();
+    material->UnBind();
 }
 
 void Renderer::GetMatrices(Matrix4 &model,
@@ -187,4 +202,9 @@ void Renderer::SetIgnoreProjectionMatrix(bool ignore)
 bool Renderer::GetIgnoreProjectionMatrix() const
 {
     return ignoreProjectionMatrix;
+}
+
+void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f)
+{
+    ActivateGLStatesBeforeRenderingForSelection = f;
 }
