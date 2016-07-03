@@ -56,8 +56,8 @@ float CircleRenderer::GetDistanceInScreenSpace(const glm::vec2 &sOrigin,
 void CircleRenderer::GetTwoClosestPointsInScreenSpace(
         const glm::vec2 &sOrigin,
         const Matrix4 &modelViewProjMatrix,
-        glm::vec2 *p0, Vector3 *wp0, int *i0,
-        glm::vec2 *p1, Vector3 *wp1, int *i1) const
+        glm::vec2 *p0, int *i0,
+        glm::vec2 *p1, int *i1) const
 {
     /**
      * @brief We calculate this step in order to avoid sampling
@@ -65,18 +65,18 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
      * make the rotation axis losing precision in screen terms...
      */
 
-    const int pointsToSample = 16;
-    int step = points.size() / pointsToSample; // Sample pointsToSample circle points evenly spaced
-    step = glm::max(step, 1); // In case segments < pointsToSample
+    //const int pointsToSample = 16;
+    //int step = points.size() / pointsToSample; // Sample pointsToSample circle points evenly spaced
+    //step = glm::max(step, 1); // In case segments < pointsToSample
+    int step = 1;
 
-    Logger_Log("Getting AnchorPoints...");
     float d0, d1; d0 = d1 = 99999.9f;
     for (int i = 0; i < points.size() - 1; i += step) // -1 because the last point is repeated
     {
         Vector3 objP = points[i];
         glm::vec4 sP_4 = modelViewProjMatrix * glm::vec4(objP, 1.0f);
         glm::vec2 sP = sP_4.xy() / sP_4.w;
-        sP = sP * 0.5f + 0.5f;
+
         float d = glm::distance(sP, sOrigin);
         if(d < d0)
         {
@@ -95,15 +95,6 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
             d1 = d;
         }
     }
-
-    Matrix4 m;
-    owner->GetComponent<Transform>()->GetModelMatrix(m);
-    //*wp0 = m * points[*i0];
-    //*wp1 = m * points[*i1];
-    *wp0 = Vector3((m * glm::vec4(points[*i0].ToGlmVec3(), 1.0f)).xyz());
-    *wp1 = Vector3((m * glm::vec4(points[*i1].ToGlmVec3(), 1.0f)).xyz());
-
-    Logger_Log("Finsihed getting AnchorPoints...");
 }
 
 void CircleRenderer::SetRadius(float radius)

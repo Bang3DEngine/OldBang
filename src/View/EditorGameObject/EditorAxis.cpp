@@ -42,8 +42,8 @@ void EditorAxis::GetMatrices(Matrix4 &pvm, Matrix4 &pv,
     cam->GetProjectionMatrix(p);
     cam->GetViewMatrix(v);
 
-    Transform *attTrans = GetAttachedGameObject()->GetComponent<Transform>(); NONULL(attTrans);
-    attTrans->GetModelMatrix(m);
+    Transform *t = GetComponent<Transform>(); NONULL(t);
+    t->GetModelMatrix(m);
 
     pv = p * v;
     pvm =  pv * m;

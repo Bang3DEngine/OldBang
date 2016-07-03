@@ -40,8 +40,8 @@ private:
     void GetTwoClosestPointsInScreenSpace(
             const glm::vec2 &sOrigin,
             const Matrix4 &modelViewProjMatrix,
-            glm::vec2 *p0, Vector3 *wp0, int *i0,
-            glm::vec2 *p1, Vector3 *wp1, int *i1 ) const;
+            glm::vec2 *p0, int *i0,
+            glm::vec2 *p1, int *i1 ) const;
 
 public:
     CircleRenderer();
