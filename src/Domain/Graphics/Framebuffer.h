@@ -13,7 +13,7 @@
 
 class Framebuffer : public IGLBindable, public IGLIdable
 {
-public:
+private:
     enum AttachmentType
     {
         Color = GL_COLOR_ATTACHMENT0, //For position, normal, uv, diffuse, etc.
@@ -36,8 +36,7 @@ public:
     Framebuffer(int width, int height);
     virtual ~Framebuffer();
 
-    void CreateTextureAttachment(int framebufferAttachmentNum,
-                                 AttachmentType attachmentType = AttachmentType::Color);
+    void CreateColorAttachment(int framebufferAttachmentNum);
 
     void CreateDepthBufferAttachment();
 

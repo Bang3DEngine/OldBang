@@ -10,7 +10,8 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
                 ShaderContract::Filepath_Shader_Vertex_PVM_Position,
                 ShaderContract::Filepath_Shader_Fragment_Selection);
 
-    CreateTextureAttachment(0, AttachmentType::Color);
+    CreateColorAttachment(0);
+    CreateDepthBufferAttachment();
 }
 
 SelectionFramebuffer::~SelectionFramebuffer()
@@ -23,9 +24,9 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     program->Bind();
 
     // Assign id's
-    int id = 0;
     gameObjectToId.clear();
     idToGameObject.clear();
+    int id = 0;
     std::list<Renderer*> childrenRenderers = scene->GetComponentsInChildren<Renderer>();
     for(Renderer *renderer : childrenRenderers)
     {
@@ -69,7 +70,8 @@ void SelectionFramebuffer::ProcessSelection()
 {
     // Get mouse coordinates and read pixel color
     glm::vec2 coords = Input::GetMouseCoords();
-    Vector3 mouseOverColor = ReadPixel(coords.x, Canvas::GetHeight()-coords.y, 0);
+    coords = glm::vec2(coords.x, Canvas::GetHeight()-coords.y);
+    Vector3 mouseOverColor = ReadPixel(coords.x, coords.y, 0);
 
     GameObject *mouseOverGO = nullptr;
     int id = MapColorToId(mouseOverColor);
@@ -110,29 +112,26 @@ void SelectionFramebuffer::ProcessSelection()
             WindowMain::GetInstance()->widgetHierarchy->UnselectAll();
         }
     }
-    //
-}
-
-void SelectionFramebuffer::OnChildAdded(GameObject *child)
-{
 }
 
 Vector3 SelectionFramebuffer::MapIdToColor(long id)
 {
+    const int C = 256;
     Vector3 charColor =
             Vector3(
-                    double(id % 256),
-                    double((id / 256) % 256),
-                    double(((id / 256) / 256) % 256)
+                    double(id % C),
+                    double((id / C) % C),
+                    double(((id / C) / C) % C)
                    );
 
-   return charColor / 256.0d;
+   return charColor / C;
 }
 
 long SelectionFramebuffer::MapColorToId(const Vector3 &charColor)
 {
+    const int C = 256;
     Vector3 color = charColor / 256.0d;
-    return long(color.r * 256) +
-           long(color.g * 256 * 256) +
-           long(color.b * 256 * 256 * 256);
+    return long(color.r * C) +
+           long(color.g * C * C) +
+           long(color.b * C * C * C);
 }

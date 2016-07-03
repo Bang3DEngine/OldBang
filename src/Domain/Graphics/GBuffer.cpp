@@ -2,11 +2,11 @@
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
-    CreateTextureAttachment(Attachment::Position);
-    CreateTextureAttachment(Attachment::Normal);
-    CreateTextureAttachment(Attachment::Uv);
-    CreateTextureAttachment(Attachment::Diffuse);
-    CreateTextureAttachment(Attachment::Depth);
+    CreateColorAttachment(Attachment::Position);
+    CreateColorAttachment(Attachment::Normal);
+    CreateColorAttachment(Attachment::Uv);
+    CreateColorAttachment(Attachment::Diffuse);
+    CreateColorAttachment(Attachment::Depth);
     CreateDepthBufferAttachment();
 
     renderToScreenMaterial = new Material();

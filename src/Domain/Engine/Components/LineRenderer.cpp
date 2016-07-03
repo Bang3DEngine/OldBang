@@ -17,8 +17,7 @@ LineRenderer::LineRenderer()
     Material *m = AssetsManager::GetAsset<Material>(
                 "./Assets/Engine/Materials/lines.bmat" );
     SetMaterial(m);
-
-    SetLineWidth(2.0f);
+    SetLineWidth(1.0f);
 }
 
 LineRenderer::~LineRenderer()

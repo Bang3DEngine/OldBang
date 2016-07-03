@@ -21,6 +21,7 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetLineWidth(lineWidth);
     r->SetIgnoreModelMatrix(ignoreModelMatrix);
     r->SetIgnoreViewMatrix(ignoreViewMatrix);
+    r->SetIgnoreProjectionMatrix(ignoreProjectionMatrix);
 }
 
 Material *Renderer::GetMaterial()
@@ -30,8 +31,6 @@ Material *Renderer::GetMaterial()
 
 void Renderer::ActivateStatesBeforeRendering() const
 {
-    glLineWidth(lineWidth);
-
     //Set polygon mode
     if(drawWireframe)
     {
@@ -64,6 +63,9 @@ void Renderer::ActivateStatesBeforeRendering() const
                                                     t->GetPosition(), false);
         }
     }
+
+    glLineWidth(lineWidth);
+
 }
 
 void Renderer::GetMatrices(Matrix4 &model,

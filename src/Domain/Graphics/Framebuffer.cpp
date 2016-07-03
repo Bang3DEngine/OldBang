@@ -20,7 +20,7 @@ Framebuffer::~Framebuffer()
     glDeleteFramebuffers(1, &idgl);
 }
 
-void Framebuffer::CreateTextureAttachment(int framebufferAttachmentNum, AttachmentType attachmentType)
+void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum)
 {
     while(int(textureAttachments.size()) <= framebufferAttachmentNum)
         textureAttachments.push_back(nullptr);
@@ -34,19 +34,10 @@ void Framebuffer::CreateTextureAttachment(int framebufferAttachmentNum, Attachme
 
 
     //Attach it to framebuffer itself
-    GLuint attachment;
-    if(attachmentType == AttachmentType::Color)
-    {
-        attachment = GL_COLOR_ATTACHMENT0 + framebufferAttachmentNum;
-    }
-    else
-    {
-        attachment = GL_DEPTH_ATTACHMENT;
-    }
+    GLuint attachment = GL_COLOR_ATTACHMENT0 + framebufferAttachmentNum;
     glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, tex->GetGLId(), 0);
     boundAttachments.push_back(attachment);
     //
-
 
     CheckFramebufferError();
 

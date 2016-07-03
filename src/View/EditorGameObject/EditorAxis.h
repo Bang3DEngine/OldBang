@@ -45,7 +45,7 @@ protected:
 
     bool mouseIsOver = false;
 
-    float lineWidth = 3.0f;
+    float axisLineWidth = 1.0f;
 
     /**
      * @brief To be filled by child classes

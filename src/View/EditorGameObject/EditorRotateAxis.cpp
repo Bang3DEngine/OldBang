@@ -12,7 +12,7 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir) : Editor
     circle = AddComponent<CircleRenderer>();
     circle->SetRadius(0.5f);
     circle->SetSegments(128);
-    circle->SetLineWidth(3.0f);
+    circle->SetLineWidth(1.0f);
     circle->SetMaterial(material);
 
     if(dir == EditorAxisDirection::X)

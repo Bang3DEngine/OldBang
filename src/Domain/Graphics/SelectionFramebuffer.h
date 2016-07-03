@@ -35,8 +35,6 @@ public:
 
     void RenderSelectionBuffer(const Scene *scene);
     void ProcessSelection();
-
-    void OnChildAdded(GameObject *child) override;
 };
 
 #endif // SELECTIONFRAMEBUFFER_H

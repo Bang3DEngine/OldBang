@@ -74,7 +74,7 @@ void EditorAxis::OnUpdate()
     // Process line color
     if (mouseIsOver)
     {
-        GetAxisRenderer()->SetLineWidth(lineWidth * 1.5f);
+        GetAxisRenderer()->SetLineWidth(axisLineWidth * 1.5f);
 
         if (grabbed)
         {
@@ -93,7 +93,7 @@ void EditorAxis::OnUpdate()
         }
         else
         {
-            GetAxisRenderer()->SetLineWidth(lineWidth);
+            GetAxisRenderer()->SetLineWidth(axisLineWidth);
             material->SetDiffuseColor(glm::vec4(lineColor * lineColorFadingNotHover, 1));
         }
     }
