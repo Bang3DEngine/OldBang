@@ -54,14 +54,14 @@ public:
     virtual void DebugDrawLine (const Vector3 &origin,
                                 const Vector3 &destiny,
                                 float lineWidth = 1.0f,
-                                int msTime = -1,
+                                float secsTime = 1.0f,
                                 bool depthTest = true) {}
 
     virtual void DebugDrawScreenLine (
                                 const glm::vec2 &origin,
                                 const glm::vec2 &destiny,
                                 float lineWidth = 1.0f,
-                                int msTime = -1,
+                                float secsTime = 1.0f,
                                 bool depthTest = true) {}
 
     #ifdef BANG_EDITOR

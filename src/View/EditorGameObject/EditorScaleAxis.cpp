@@ -43,34 +43,42 @@ void EditorScaleAxis::OnUpdate()
     Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
 
     // Process grabbing movement
-    if(grabbed)
+    if (grabbed)
     {
         // Normalized mouse movement in the last frame
         glm::vec2 mouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f); // Invert y
 
-        if(glm::length(mouseDelta) > 0.0f)
+        if (glm::length(mouseDelta) > 0.0f)
         {
             // Get axis in world space and eye space
-            if(!Toolbar::GetInstance()->GetGlobalCoordsMode())
+            Matrix4 modelMatrix2;
+            if (!Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
                 modelMatrix = Matrix4::identity;
+                attTrans->GetModelMatrix(modelMatrix2);
+            }
+            else
+            {
+                attTrans->GetModelMatrix(modelMatrix);
+                modelMatrix2 = Matrix4::identity;
             }
 
-            glm::vec4 worldAxisDir = glm::normalize(modelMatrix *
-                                                    glm::vec4(oAxisDirection, 0.0f));
-            glm::vec2 screenAxisDir = glm::normalize((projView * worldAxisDir).xy());
+            glm::vec4 finalAxisDir = glm::normalize(modelMatrix * glm::vec4(oAxisDirection, 0.0f));
+            glm::vec2 screenAxisDir = glm::normalize((projView * modelMatrix2 * glm::vec4(oAxisDirection, 0.0f)).xy());
 
-            // Move the GameObject, depending on how aligned is
-            // the mouse movement vs the axis in screen space (what user sees)
             float alignment = glm::dot(screenAxisDir, glm::normalize(mouseDelta));
-            Vector3 scaling = alignment * Vector3(worldAxisDir.xyz()) *
+            Vector3 scaling = Vector3::one +
+                              alignment * Vector3(finalAxisDir.xyz()) *
                               glm::length(mouseDelta) *
                               Vector3::Distance(camPos, attTrans->GetPosition()) * 0.001f;
 
-            scaling.z *= -1;
+            Logger_Log(alignment);
+            Canvas::GetInstance()->GetCurrentScene()->DebugDrawScreenLine(glm::vec2(0,0),
+                                                                          glm::vec2(0,0) + screenAxisDir,
+                                                                          1.0f, 1.0f);
 
             //TODO: solve problem with negative scaling and depth :/
-            attTrans->SetLocalScale(attTrans->GetLocalScale() + scaling);
+            attTrans->SetLocalScale(attTrans->GetLocalScale() * scaling);
         }
     }
 }

@@ -43,21 +43,20 @@ void EditorTranslateAxis::OnUpdate()
     Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
 
     // Process grabbing movement
-    if(grabbed)
+    if (grabbed)
     {
         // Normalized mouse movement in the last frame
         glm::vec2 mouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f); // Invert y
 
-        if(glm::length(mouseDelta) > 0.0f)
+        if (glm::length(mouseDelta) > 0.0f)
         {
             // Get axis in world space and eye space
-            if(Toolbar::GetInstance()->GetGlobalCoordsMode())
+            if (Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
                 modelMatrix = Matrix4::identity;
             }
 
-            glm::vec4 worldAxisDir = glm::normalize(modelMatrix *
-                                                    glm::vec4(oAxisDirection, 0.0f));
+            glm::vec4 worldAxisDir = glm::normalize(modelMatrix * glm::vec4(oAxisDirection, 0.0f));
             glm::vec2 screenAxisDir = glm::normalize((projView * worldAxisDir).xy());
 
             // Move the GameObject, depending on how aligned is

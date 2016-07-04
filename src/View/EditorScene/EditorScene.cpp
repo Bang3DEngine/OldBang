@@ -49,16 +49,16 @@ void EditorScene::_OnRender()
 void EditorScene::DebugDrawLine(const Vector3 &origin,
                                 const Vector3 &destiny,
                                 float lineWidth,
-                                int msTime,
+                                float secsTime,
                                 bool depthTest)
 {
-    debugGameObject->DrawLine(origin, destiny, lineWidth, msTime, depthTest);
+    debugGameObject->DrawLine(origin, destiny, lineWidth, secsTime, depthTest);
 }
 
 void EditorScene::DebugDrawScreenLine(const glm::vec2 &origin, const glm::vec2 &destiny,
-                                      float lineWidth, int msTime, bool depthTest)
+                                      float lineWidth, float secsTime, bool depthTest)
 {
-    debugGameObject->DrawLineScreen(origin, destiny, lineWidth, msTime, depthTest);
+    debugGameObject->DrawLineScreen(origin, destiny, lineWidth, secsTime, depthTest);
 }
 
 bool EditorScene::IsEditorGameObject() const
