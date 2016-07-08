@@ -170,14 +170,52 @@ void Transform::SetLocalScale(const Vector3 &s)
     localScale = s;
 }
 
-void Transform::SetLeftMatrix(const Matrix4 &leftMatrix)
+Vector3 Transform::TransformDirection(const Vector3 &dir)
 {
-    this->leftMatrix = leftMatrix;
+    Matrix4 m;
+    GetModelMatrix(m);
+    return Vector3((m * glm::vec4(dir, 0)).xyz());
 }
 
-void Transform::SetRightMatrix(const Matrix4 &rightMatrix)
+Vector3 Transform::InverseTransformDirection(const Vector3 &dir)
 {
-    this->rightMatrix = rightMatrix;
+    Matrix4 m;
+    GetModelMatrix(m);
+    return Vector3((m.Inversed() * glm::vec4(dir, 0)).xyz());
+}
+
+Vector3 Transform::TransformPoint(const Vector3 &point)
+{
+    Matrix4 m;
+    GetModelMatrix(m);
+    return Vector3((m * glm::vec4(point, 1)).xyz());
+}
+
+Vector3 Transform::InverseTransformPoint(const Vector3 &point)
+{
+    Matrix4 m;
+    GetModelMatrix(m);
+    return Vector3((m.Inversed() * glm::vec4(point, 1)).xyz());
+}
+
+Vector3 Transform::LocalToWorldDirection(const Vector3 &dir)
+{
+    return TransformDirection(dir);
+}
+
+Vector3 Transform::WorldToLocalDirection(const Vector3 &dir)
+{
+    return InverseTransformDirection(dir);
+}
+
+Vector3 Transform::LocalToWorldPoint(const Vector3 &point)
+{
+    return TransformPoint(point);
+}
+
+Vector3 Transform::WorldToLocalPoint(const Vector3 &point)
+{
+    return InverseTransformPoint(point);
 }
 
 void Transform::GetLocalModelMatrix(Matrix4 &m) const
@@ -186,7 +224,7 @@ void Transform::GetLocalModelMatrix(Matrix4 &m) const
     Matrix4 R = Matrix4::RotateMatrix(GetLocalRotation());
     Matrix4 S = Matrix4::ScaleMatrix(GetLocalScale());
 
-    m = leftMatrix * T * R * S * rightMatrix;
+    m = T * R * S;
 }
 
 void Transform::GetModelMatrix(Matrix4 &m) const
@@ -228,10 +266,10 @@ Vector3 Transform::GetLocalPosition() const
 Vector3 Transform::GetPosition() const
 {
     GameObject *parent = owner->GetParent();
-    if(parent)
+    if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
-        if(pt) return pt->GetPosition() + GetLocalPosition();
+        if (pt) return pt->GetPosition() + GetLocalPosition();
     }
     return GetLocalPosition();
 }
@@ -298,7 +336,6 @@ Vector3 Transform::GetLocalBack() const
 {
     return -GetLocalForward();
 }
-
 Vector3 Transform::GetBack() const
 {
     return -GetForward();

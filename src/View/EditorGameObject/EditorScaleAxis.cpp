@@ -32,15 +32,11 @@ void EditorScaleAxis::OnUpdate()
 {
     EditorAxis::OnUpdate();
 
-    // Obtain model, view and proj matrices, for next calculations
-    Matrix4 pvm, projView, projMatrix, viewMatrix, modelMatrix;
-    GetMatrices(pvm, projView, projMatrix, viewMatrix, modelMatrix);
-
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->GetOwner()->GetComponent<Transform>(); NONULL(camTransform);
-    Vector3 camPos = camTransform->GetPosition();
-
     Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
+    Transform *transform = GetComponent<Transform>(); NONULL(transform);
+    Vector3 camPos = camTransform->GetPosition();
 
     // Process grabbing movement
     if (grabbed)
@@ -50,35 +46,35 @@ void EditorScaleAxis::OnUpdate()
 
         if (glm::length(mouseDelta) > 0.0f)
         {
-            // Get axis in world space and eye space
-            Matrix4 modelMatrix2;
-            if (!Toolbar::GetInstance()->GetGlobalCoordsMode())
+            Vector3 oAxisDir, wAxisDir;
+            if (Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
-                modelMatrix = Matrix4::identity;
-                attTrans->GetModelMatrix(modelMatrix2);
+                oAxisDir = attTrans->WorldToLocalDirection(oAxisDirection);
+                wAxisDir = oAxisDirection;
             }
             else
             {
-                attTrans->GetModelMatrix(modelMatrix);
-                modelMatrix2 = Matrix4::identity;
+                oAxisDir = oAxisDirection;
+                wAxisDir = transform->LocalToWorldDirection(oAxisDirection);
             }
+            oAxisDir.z *= -1; oAxisDir.Normalize();
+            wAxisDir.Normalize();
 
-            glm::vec4 finalAxisDir = glm::normalize(modelMatrix * glm::vec4(oAxisDirection, 0.0f));
-            glm::vec2 screenAxisDir = glm::normalize((projView * modelMatrix2 * glm::vec4(oAxisDirection, 0.0f)).xy());
-
+            // Alignment
+            Vector3 wAxisCenter = transform->GetPosition();
+            glm::vec2 screenAxisDir = cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
+                                      cam->WorldToScreenNDCPoint(wAxisCenter);
+            screenAxisDir = glm::normalize(screenAxisDir);
             float alignment = glm::dot(screenAxisDir, glm::normalize(mouseDelta));
-            Vector3 scaling = Vector3::one +
-                              alignment * Vector3(finalAxisDir.xyz()) *
+            //
+
+
+            Vector3 scaling = Vector3::one + alignment * oAxisDir *
                               glm::length(mouseDelta) *
                               Vector3::Distance(camPos, attTrans->GetPosition()) * 0.001f;
 
-            Logger_Log(alignment);
-            Canvas::GetInstance()->GetCurrentScene()->DebugDrawScreenLine(glm::vec2(0,0),
-                                                                          glm::vec2(0,0) + screenAxisDir,
-                                                                          1.0f, 1.0f);
-
             //TODO: solve problem with negative scaling and depth :/
-            attTrans->SetLocalScale(attTrans->GetLocalScale() * scaling);
+            attTrans->SetScale(attTrans->GetScale() * scaling);
         }
     }
 }

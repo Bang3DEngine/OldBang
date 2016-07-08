@@ -28,11 +28,6 @@ private:
     // euler angles in degrees set by user in the inspector
     Vector3 inspectorEulerDeg;
 
-    // L * MODEL * R, user can edit those in order to
-    // apply its own post/pre transformations
-    Matrix4 leftMatrix;
-    Matrix4 rightMatrix;
-
 public:
 
     Transform();
@@ -68,8 +63,22 @@ public:
     void SetScale(const Vector3 &v);
     void SetLocalScale(float s);
     void SetLocalScale(const Vector3 &s);
-    void SetLeftMatrix(const Matrix4 &leftMatrix);
-    void SetRightMatrix(const Matrix4 &rightMatrix);
+
+    /**
+     * @brief Transforms the passed direction from local space to world space.
+     * @return
+     */
+    Vector3 TransformDirection(const Vector3 &dir);
+    Vector3 InverseTransformDirection(const Vector3 &dir);
+    Vector3 TransformPoint(const Vector3 &point);
+    Vector3 InverseTransformPoint(const Vector3 &point);
+
+    // These are aliases of the above
+    Vector3 LocalToWorldDirection(const Vector3 &dir);
+    Vector3 WorldToLocalDirection(const Vector3 &dir);
+    Vector3 LocalToWorldPoint(const Vector3 &point);
+    Vector3 WorldToLocalPoint(const Vector3 &point);
+
 
     void GetLocalModelMatrix(Matrix4 &m) const;
     void GetModelMatrix(Matrix4 &m) const;

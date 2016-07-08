@@ -53,8 +53,8 @@ void Camera::GetProjectionMatrix(Matrix4 &proj) const
     else //Ortho
     {
         proj = Matrix4::Ortho(orthoRect.minx, orthoRect.maxx,
-                          orthoRect.miny, orthoRect.maxy,
-                          zNear, zFar);
+                              orthoRect.miny, orthoRect.maxy,
+                              zNear, zFar);
     }
 }
 
@@ -132,6 +132,17 @@ Camera::ProjectionMode Camera::GetProjectionMode() const
 bool Camera::GetAutoUpdateAspectRatio() const
 {
     return autoUpdateAspectRatio;
+}
+
+glm::vec2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
+{
+    Matrix4 p, v;
+    GetProjectionMatrix(p);
+    GetViewMatrix(v);
+    glm::vec4 v_4 = p * v * glm::vec4(position, 1);
+    v_4 /= v_4.w;
+
+    return v_4.xy();
 }
 
 const std::string Camera::ToString() const

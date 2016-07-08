@@ -32,15 +32,11 @@ void EditorTranslateAxis::OnUpdate()
 {
     EditorAxis::OnUpdate();
 
-    // Obtain model, view and proj matrices, for next calculations
-    Matrix4 pvm, projView, projMatrix, viewMatrix, modelMatrix;
-    GetMatrices(pvm, projView, projMatrix, viewMatrix, modelMatrix);
-
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->GetOwner()->GetComponent<Transform>(); NONULL(camTransform);
-    Vector3 camPos = camTransform->GetPosition();
-
     Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
+    Transform *transform = GetComponent<Transform>(); NONULL(transform);
+    Vector3 camPos = camTransform->GetPosition();
 
     // Process grabbing movement
     if (grabbed)
@@ -50,19 +46,25 @@ void EditorTranslateAxis::OnUpdate()
 
         if (glm::length(mouseDelta) > 0.0f)
         {
-            // Get axis in world space and eye space
+            Vector3 wAxisDir;
             if (Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
-                modelMatrix = Matrix4::identity;
+                wAxisDir = oAxisDirection;
+            }
+            else
+            {
+                wAxisDir = transform->LocalToWorldDirection(oAxisDirection);
             }
 
-            glm::vec4 worldAxisDir = glm::normalize(modelMatrix * glm::vec4(oAxisDirection, 0.0f));
-            glm::vec2 screenAxisDir = glm::normalize((projView * worldAxisDir).xy());
-
-            // Move the GameObject, depending on how aligned is
-            // the mouse movement vs the axis in screen space (what user sees)
+            // Alignment
+            Vector3 wAxisCenter = transform->GetPosition();
+            glm::vec2 screenAxisDir = cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
+                                      cam->WorldToScreenNDCPoint(wAxisCenter);
+            screenAxisDir = glm::normalize(screenAxisDir);
             float alignment = glm::dot(screenAxisDir, glm::normalize(mouseDelta));
-            Vector3 worldMove = alignment * Vector3(worldAxisDir.xyz()) *
+            //
+
+            Vector3 worldMove = alignment * wAxisDir *
                                 glm::length(mouseDelta) *
                                 Vector3::Distance(camPos, attTrans->GetPosition()) * 0.002f;
             attTrans->Translate(worldMove);

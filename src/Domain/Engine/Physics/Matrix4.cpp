@@ -33,19 +33,14 @@ float *Matrix4::GetFirstAddress() const
     return (float*)(&(this[0][0]));
 }
 
-Matrix4 Matrix4::Perspective(float fovY, float aspect,
-                             float zNear, float zFar)
+Matrix4 Matrix4::Perspective(float fovY, float aspect, float zNear, float zFar)
 {
     return Matrix4(glm::perspective(fovY, aspect, zNear, zFar));
 }
 
-Matrix4 Matrix4::Ortho(float left, float right,
-                       float bottom, float top,
-                       float zNear, float zFar)
+Matrix4 Matrix4::Ortho(float left, float right, float bottom, float top, float zNear, float zFar)
 {
-    return Matrix4(glm::ortho(left, right,
-                              bottom, top,
-                              zNear, zFar));
+    return Matrix4(glm::ortho(left, right, bottom, top, zNear, zFar));
 }
 
 Matrix4 Matrix4::TranslateMatrix(const Vector3 &v)

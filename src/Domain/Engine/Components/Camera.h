@@ -62,6 +62,11 @@ public:
     ProjectionMode GetProjectionMode() const;
     bool  GetAutoUpdateAspectRatio() const;
 
+    /**
+     * @brief Converts a point from world coods to Screen NDC.
+     *        NDC: Normalized Device Coordinates [(-1,-1) -> (1,1)]
+    **/
+    glm::vec2 WorldToScreenNDCPoint(const Vector3 &position);
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override { return "Camera"; }
