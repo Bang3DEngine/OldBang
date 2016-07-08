@@ -18,8 +18,6 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
             glLineWidth(25.0f);
         }
     );
-
-    this->SetRenderLayer(5);
 }
 
 EditorTranslateAxis::~EditorTranslateAxis()
@@ -36,15 +34,12 @@ void EditorTranslateAxis::OnUpdate()
     Transform *camTransform = cam->GetOwner()->GetComponent<Transform>(); NONULL(camTransform);
     Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
     Transform *transform = GetComponent<Transform>(); NONULL(transform);
-    Vector3 camPos = camTransform->GetPosition();
+    Vector3 wCamPos = camTransform->GetPosition();
 
-    // Process grabbing movement
     if (grabbed)
     {
-        // Normalized mouse movement in the last frame
-        glm::vec2 mouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f); // Invert y
-
-        if (glm::length(mouseDelta) > 0.0f)
+        glm::vec2 sMouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f);
+        if (glm::length(sMouseDelta) > 0.0f)
         {
             Vector3 wAxisDir;
             if (Toolbar::GetInstance()->GetGlobalCoordsMode())
@@ -61,12 +56,12 @@ void EditorTranslateAxis::OnUpdate()
             glm::vec2 screenAxisDir = cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
                                       cam->WorldToScreenNDCPoint(wAxisCenter);
             screenAxisDir = glm::normalize(screenAxisDir);
-            float alignment = glm::dot(screenAxisDir, glm::normalize(mouseDelta));
+            float alignment = glm::dot(screenAxisDir, glm::normalize(sMouseDelta));
             //
 
             Vector3 worldMove = alignment * wAxisDir *
-                                glm::length(mouseDelta) *
-                                Vector3::Distance(camPos, attTrans->GetPosition()) * 0.002f;
+                                glm::length(sMouseDelta) *
+                                Vector3::Distance(wCamPos, attTrans->GetPosition()) * 0.002f;
             attTrans->Translate(worldMove);
         }
     }

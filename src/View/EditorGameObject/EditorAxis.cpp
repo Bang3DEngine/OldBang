@@ -16,7 +16,7 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
 
     lineColor = oAxisDirection.Abs();
 
-    SetName(name);
+    this->SetRenderLayer(5);
 }
 
 EditorAxis::~EditorAxis()
@@ -36,20 +36,6 @@ Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir)
     if(dir == EditorAxisDirection::X) return Vector3::right;
     else if (dir == EditorAxisDirection::Y) return Vector3::up;
     else return Vector3::forward;
-}
-
-void EditorAxis::GetMatrices(Matrix4 &pvm, Matrix4 &pv,
-                             Matrix4 &p, Matrix4 &v, Matrix4 &m) const
-{
-    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    cam->GetProjectionMatrix(p);
-    cam->GetViewMatrix(v);
-
-    Transform *t = GetComponent<Transform>(); NONULL(t);
-    t->GetModelMatrix(m);
-
-    pv = p * v;
-    pvm =  pv * m;
 }
 
 void EditorAxis::OnUpdate()
