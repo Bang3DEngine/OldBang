@@ -10,10 +10,10 @@ Behaviour::~Behaviour()
 {
 }
 
-GameObject *Behaviour::GetOwner() const
+void Behaviour::Init(BehaviourHolder *bh)
 {
-    if(behaviourHolder == nullptr) return nullptr;
-    return behaviourHolder->GetOwner();
+    this->behaviourHolder = bh;
+    gameObject = bh->gameObject;
 }
 
 void Behaviour::SetSourceFilepath(const std::string &sourceFilepath)

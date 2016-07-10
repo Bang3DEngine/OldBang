@@ -62,7 +62,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
         float mouseWheel = Input::GetMouseWheel();
         if(mouseWheel != 0.0f)
         {
-            *moveStep += mouseZoomPerDeltaWheel * mouseWheel * camt->GetForward();
+            *moveStep -= mouseZoomPerDeltaWheel * mouseWheel * camt->GetForward();
             *hasMoved  = true;
         }
     }

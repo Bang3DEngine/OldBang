@@ -50,7 +50,6 @@ public:
         virtual InspectorWidgetInfo* GetComponentInfo() override;
         virtual void OnSlotValueChanged(InspectorWidget *source) override;
 
-        // TODO: Add Write and Read for BehaviourHolder
         void Write(std::ostream &f) const override;
         void Read(std::istream &f) override;
     #endif

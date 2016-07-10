@@ -32,17 +32,16 @@ class Component :
 {
 friend class GameObject;
 protected:
-    GameObject *owner = nullptr;
     bool enabled = true;
 
     Component();
     virtual ~Component();
 
 public:
+    GameObject *gameObject = nullptr;
+
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override = 0;
-
-    GameObject* GetOwner() const;
 
     virtual const std::string ToString() const override;
 

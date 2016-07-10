@@ -25,24 +25,32 @@ TestBehaviour::TestBehaviour()
 void TestBehaviour::OnStart()
 {
     Logger_Log("ON START!");
+    Logger_Log(gameObject);
 }
 
 void TestBehaviour::OnUpdate()
 {
     time += Time::GetDeltaTime();
-    Transform *t = GetOwner()->GetComponent<Transform>(); NONULL(t);
+    Transform *t = gameObject->GetComponent<Transform>(); NONULL(t);
 
-    float speed = 5.0f;
-    Logger_Log("AAAAAAAAA");
+    float rotSpeed = 5.0f;
+    if (Input::GetKey(Input::Key::A))
+    {
+        t->RotateLocalEuler(Vector3::up * rotSpeed);
+    }
+    else if (Input::GetKey(Input::Key::D))
+    {
+        t->RotateLocalEuler(Vector3::up * -rotSpeed);
+    }
+
+    float speed = 50.0f;
     if (Input::GetKey(Input::Key::W))
     {
-        Logger_Log("bbbbbbbbbbbb");
-        t->Rotate(Vector3::right * speed);
+        t->Translate(t->GetForward() * speed * Time::GetDeltaTime());
     }
     else if (Input::GetKey(Input::Key::S))
     {
-        Logger_Log("cccccccccccc");
-        t->Rotate(Vector3::left * speed);
+        t->Translate(t->GetForward() * -speed * Time::GetDeltaTime());
     }
 }
 

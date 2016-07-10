@@ -9,11 +9,11 @@ InspectorComponentWidget::InspectorComponentWidget(Component *relatedComponent) 
 {
     this->relatedComponent = relatedComponent;
 
-    enabledCheckbox = new QCheckBox();
-    enabledCheckbox->setChecked(this->relatedComponent->IsEnabled());
-    connect(enabledCheckbox, SIGNAL(clicked(bool)),
+    IsEnabledCheckbox = new QCheckBox();
+    IsEnabledCheckbox->setChecked(this->relatedComponent->IsEnabled());
+    connect(IsEnabledCheckbox, SIGNAL(clicked(bool)),
             this, SLOT(OnEnabledCheckboxPressed(bool)));
-    titleLayout->addWidget(enabledCheckbox, 1);
+    titleLayout->addWidget(IsEnabledCheckbox, 1);
 
     titleLabel->setText(
                 QString::fromStdString(relatedComponent->GetName())
@@ -57,19 +57,19 @@ void InspectorComponentWidget::OnEnabledCheckboxPressed(bool checked)
 
 void InspectorComponentWidget::OnContextMenuRemoveComponentSelected()
 {
-    relatedComponent->GetOwner()->RemoveComponent(relatedComponent);
+    relatedComponent->gameObject->RemoveComponent(relatedComponent);
     WindowMain::GetInstance()->widgetInspector->Refresh();
 }
 
 void InspectorComponentWidget::OnContextMenuMoveUpSelected()
 {
-    relatedComponent->GetOwner()->MoveComponent(relatedComponent, -1);
+    relatedComponent->gameObject->MoveComponent(relatedComponent, -1);
     WindowMain::GetInstance()->widgetInspector->Refresh();
 }
 
 void InspectorComponentWidget::OnContextMenuMoveDownSelected()
 {
-    relatedComponent->GetOwner()->MoveComponent(relatedComponent, 1);
+    relatedComponent->gameObject->MoveComponent(relatedComponent, 1);
     WindowMain::GetInstance()->widgetInspector->Refresh();
 }
 

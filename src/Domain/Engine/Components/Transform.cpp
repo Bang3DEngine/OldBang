@@ -29,8 +29,8 @@ void Transform::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
     Transform *t = static_cast<Transform*>(clone);
-    t->SetPosition(GetLocalPosition());
-    t->SetRotation(GetLocalRotation());
+    t->SetLocalPosition(GetLocalPosition());
+    t->SetLocalRotation(GetLocalRotation());
     t->SetLocalScale(GetLocalScale());
 }
 
@@ -52,7 +52,7 @@ void Transform::SetLocalPosition(const Vector3 &p)
 }
 void Transform::SetPosition(const Vector3 &p)
 {
-    GameObject *parent = owner->GetParent();
+    GameObject *parent = gameObject->GetParent();
     if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
@@ -93,7 +93,7 @@ void Transform::SetLocalEuler(float x, float y, float z)
 
 void Transform::SetRotation(const Quaternion &q)
 {
-    GameObject *parent = owner->GetParent();
+    GameObject *parent = gameObject->GetParent();
     if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
@@ -104,7 +104,7 @@ void Transform::SetRotation(const Quaternion &q)
 }
 void Transform::SetEuler(const Vector3 &degreesEuler)
 {
-    GameObject *parent = owner->GetParent();
+    GameObject *parent = gameObject->GetParent();
     if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
@@ -150,7 +150,7 @@ void Transform::SetScale(float s)
 
 void Transform::SetScale(const Vector3 &v)
 {
-    GameObject *parent = owner->GetParent();
+    GameObject *parent = gameObject->GetParent();
     if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
@@ -170,50 +170,50 @@ void Transform::SetLocalScale(const Vector3 &s)
     localScale = s;
 }
 
-Vector3 Transform::TransformDirection(const Vector3 &dir)
+Vector3 Transform::TransformDirection(const Vector3 &dir) const
 {
     Matrix4 m;
     GetModelMatrix(m);
     return Vector3((m * glm::vec4(dir, 0)).xyz());
 }
 
-Vector3 Transform::InverseTransformDirection(const Vector3 &dir)
+Vector3 Transform::InverseTransformDirection(const Vector3 &dir) const
 {
     Matrix4 m;
     GetModelMatrix(m);
     return Vector3((m.Inversed() * glm::vec4(dir, 0)).xyz());
 }
 
-Vector3 Transform::TransformPoint(const Vector3 &point)
+Vector3 Transform::TransformPoint(const Vector3 &point) const
 {
     Matrix4 m;
     GetModelMatrix(m);
     return Vector3((m * glm::vec4(point, 1)).xyz());
 }
 
-Vector3 Transform::InverseTransformPoint(const Vector3 &point)
+Vector3 Transform::InverseTransformPoint(const Vector3 &point) const
 {
     Matrix4 m;
     GetModelMatrix(m);
     return Vector3((m.Inversed() * glm::vec4(point, 1)).xyz());
 }
 
-Vector3 Transform::LocalToWorldDirection(const Vector3 &dir)
+Vector3 Transform::LocalToWorldDirection(const Vector3 &dir) const
 {
     return TransformDirection(dir);
 }
 
-Vector3 Transform::WorldToLocalDirection(const Vector3 &dir)
+Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 {
     return InverseTransformDirection(dir);
 }
 
-Vector3 Transform::LocalToWorldPoint(const Vector3 &point)
+Vector3 Transform::LocalToWorldPoint(const Vector3 &point) const
 {
     return TransformPoint(point);
 }
 
-Vector3 Transform::WorldToLocalPoint(const Vector3 &point)
+Vector3 Transform::WorldToLocalPoint(const Vector3 &point) const
 {
     return InverseTransformPoint(point);
 }
@@ -231,7 +231,7 @@ void Transform::GetModelMatrix(Matrix4 &m) const
 {
     GetLocalModelMatrix(m);
 
-    GameObject *parent = owner->GetParent();
+    GameObject *parent = gameObject->GetParent();
     if (parent)
     {
         Transform *tp = parent->GetComponent<Transform>();
@@ -265,7 +265,7 @@ Vector3 Transform::GetLocalPosition() const
 
 Vector3 Transform::GetPosition() const
 {
-    GameObject *parent = owner->GetParent();
+    GameObject *parent = gameObject->GetParent();
     if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
@@ -281,7 +281,7 @@ Quaternion Transform::GetLocalRotation() const
 
 Quaternion Transform::GetRotation() const
 {
-    GameObject *parent = owner->GetParent();
+    GameObject *parent = gameObject->GetParent();
     if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
@@ -297,7 +297,7 @@ Vector3 Transform::GetLocalEuler() const
 
 Vector3 Transform::GetEuler() const
 {
-    GameObject *parent = owner->GetParent();
+    GameObject *parent = gameObject->GetParent();
     if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
@@ -313,7 +313,7 @@ Vector3 Transform::GetLocalScale() const
 
 Vector3 Transform::GetScale() const
 {
-    GameObject *parent = owner->GetParent();
+    GameObject *parent = gameObject->GetParent();
     if (parent)
     {
         Transform *pt = parent->GetComponent<Transform>();
@@ -322,38 +322,19 @@ Vector3 Transform::GetScale() const
     return GetLocalScale();
 }
 
-Vector3 Transform::GetLocalForward() const
-{
-    return (GetLocalRotation() * Vector3::forward).Normalized();
-}
-
 Vector3 Transform::GetForward() const
 {
-    return  (GetRotation() * Vector3::forward).Normalized();
+    return  LocalToWorldDirection(Vector3::forward).Normalized();
 }
 
-Vector3 Transform::GetLocalBack() const
-{
-    return -GetLocalForward();
-}
 Vector3 Transform::GetBack() const
 {
     return -GetForward();
 }
 
-Vector3 Transform::GetLocalRight() const
-{
-    return (GetLocalRotation() * Vector3::right).Normalized();
-}
-
 Vector3 Transform::GetRight() const
 {
-    return  (GetRotation() * Vector3::right).Normalized();
-}
-
-Vector3 Transform::GetLocalLeft() const
-{
-    return -GetLocalRight();
+    return  LocalToWorldDirection(Vector3::right).Normalized();
 }
 
 Vector3 Transform::GetLeft() const
@@ -361,19 +342,9 @@ Vector3 Transform::GetLeft() const
     return -GetRight();
 }
 
-Vector3 Transform::GetLocalUp() const
-{
-    return (GetLocalRotation() * Vector3::up).Normalized();
-}
-
 Vector3 Transform::GetUp() const
 {
-    return (GetRotation() * Vector3::up).Normalized();
-}
-
-Vector3 Transform::GetLocalDown() const
-{
-    return -GetLocalUp();
+    return LocalToWorldDirection(Vector3::up).Normalized();
 }
 
 Vector3 Transform::GetDown() const

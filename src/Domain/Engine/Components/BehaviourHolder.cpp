@@ -15,12 +15,12 @@ BehaviourHolder::BehaviourHolder()
 
 BehaviourHolder::~BehaviourHolder()
 {
-    if(behaviour )
+    if (behaviour)
     {
         delete behaviour;
     }
 
-    if(currentOpenLibrary )
+    if (currentOpenLibrary)
     {
         SystemUtils::CloseLibrary(currentOpenLibrary);
     }
@@ -28,16 +28,12 @@ BehaviourHolder::~BehaviourHolder()
 
 void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
 {
-    if(behaviour )
+    if (behaviour)
     {
         delete behaviour;
     }
 
     behaviour = newBehaviour;
-    if(behaviour )
-    {
-        behaviour->behaviourHolder = this;
-    }
 }
 
 
@@ -56,12 +52,12 @@ ICloneable *BehaviourHolder::Clone() const
 
 void BehaviourHolder::Refresh()
 {
-    if(sourceFilepath == "") return;
+    if (sourceFilepath == "") return;
 
     // Compile
     std::string soFilepath =
             SystemUtils::CompileToSharedObject(sourceFilepath);
-    if(soFilepath == "")
+    if (soFilepath == "")
     {
         ChangeBehaviour(nullptr);
         Logger_Error("There was an error compiling the Behaviour "
@@ -78,19 +74,20 @@ void BehaviourHolder::Refresh()
 
     ChangeBehaviour(createdBehaviour); // To newly created or nullptr, depending on success
 
-    if(createdBehaviour )
+    if (createdBehaviour)
     {
-        if(currentOpenLibrary )
+        if (currentOpenLibrary)
         {
             SystemUtils::CloseLibrary(currentOpenLibrary);
         }
         currentOpenLibrary = openLibrary;
     }
 
-    if(createdBehaviour )
+    if (createdBehaviour)
     {
-        if(behaviour )
+        if (behaviour)
         {
+            behaviour->Init(this);
             behaviour->SetSourceFilepath(sourceFilepath);
             behaviour->_OnStart();
         }
@@ -120,16 +117,17 @@ void BehaviourHolder::OnSlotValueChanged(InspectorWidget *source)
 
 void BehaviourHolder::Write(std::ostream &f) const
 {
-    /*
     f << "<BehaviourHolder>" << std::endl;
     f << ((void*)this) << std::endl;
+    FileWriter::Write(sourceFilepath, f);
     f << "</BehaviourHolder>" << std::endl;
-    */
 }
 
 void BehaviourHolder::Read(std::istream &f)
 {
-
+    FileReader::RegisterNextPointerId(f, this);
+    sourceFilepath = FileReader::ReadString(f);
+    FileReader::ReadNextLine(f); //Consume close tag
 }
 
 #endif
@@ -137,16 +135,13 @@ void BehaviourHolder::Read(std::istream &f)
 void BehaviourHolder::_OnStart()
 {
     Component::_OnStart();
-    if(behaviour )
-    {
-        behaviour->_OnStart();
-    }
+    Refresh();
 }
 
 void BehaviourHolder::_OnUpdate()
 {
     Component::_OnUpdate();
-    if(behaviour )
+    if (behaviour)
     {
         behaviour->_OnUpdate();
     }
@@ -155,7 +150,7 @@ void BehaviourHolder::_OnUpdate()
 void BehaviourHolder::_OnPreRender()
 {
     Component::_OnPreRender();
-    if(behaviour )
+    if (behaviour)
     {
         behaviour->_OnPreRender();
     }
@@ -164,7 +159,7 @@ void BehaviourHolder::_OnPreRender()
 void BehaviourHolder::_OnRender()
 {
     Component::_OnRender();
-    if(behaviour )
+    if (behaviour)
     {
         behaviour->_OnRender();
     }
@@ -173,7 +168,7 @@ void BehaviourHolder::_OnRender()
 void BehaviourHolder::_OnDestroy()
 {
     Component::_OnDestroy();
-    if(behaviour )
+    if (behaviour)
     {
         behaviour->_OnDestroy();
     }

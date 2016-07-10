@@ -13,8 +13,6 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     connect(&drawTimer, SIGNAL(timeout()), this, SLOT(update()));
     drawTimer.setInterval(Canvas::RedrawDelay);
     drawTimer.start();
-
-    Input::Init();
 }
 
 void Canvas::InitFromMainBinary()
@@ -53,7 +51,7 @@ void Canvas::paintGL()
         currentScene->_OnRender();
     }
 
-    Input::OnNewFrame();
+    Input::GetInstance()->OnNewFrame();
 }
 
 void Canvas::updateGL()
@@ -176,37 +174,37 @@ void Canvas::SetCursor(Qt::CursorShape cs)
 
 void Canvas::wheelEvent(QWheelEvent *event)
 {
-    Input::HandleInputMouseWheel(event);
+    Input::GetInstance()->HandleInputMouseWheel(event);
     QGLWidget::wheelEvent(event);
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent *event)
 {
-    Input::HandleInputMouseMove(event);
+    Input::GetInstance()->HandleInputMouseMove(event);
     QGLWidget::mouseMoveEvent(event);
 }
 
 void Canvas::mousePressEvent(QMouseEvent *event)
 {
-    Input::HandleInputMousePress(event);
+    Input::GetInstance()->HandleInputMousePress(event);
     QGLWidget::mousePressEvent(event);
 }
 
 void Canvas::mouseReleaseEvent(QMouseEvent *event)
 {
-    Input::HandleInputMouseRelease(event);
+    Input::GetInstance()->HandleInputMouseRelease(event);
     QGLWidget::mouseReleaseEvent(event);
 }
 
 void Canvas::keyPressEvent(QKeyEvent *event)
 {
-    Input::HandleInputKeyPress(event);
+    Input::GetInstance()->HandleInputKeyPress(event);
     QGLWidget::keyPressEvent(event);
 }
 
 void Canvas::keyReleaseEvent(QKeyEvent *event)
 {
-    Input::HandleInputKeyReleased(event);
+    Input::GetInstance()->HandleInputKeyReleased(event);
     QGLWidget::keyReleaseEvent(event);
 }
 

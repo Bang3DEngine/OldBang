@@ -67,7 +67,7 @@ void EditorAxisGroup::OnUpdate()
             }
 
             Camera *cam = Canvas::GetCurrentScene()->GetCamera();
-            Vector3 camPos = cam->GetOwner()->GetComponent<Transform>()->GetPosition();
+            Vector3 camPos = cam->gameObject->GetComponent<Transform>()->GetPosition();
             Vector3 attPos = attachedGameObject->GetComponent<Transform>()->GetPosition();
             float distanceToCamera = Vector3::Distance(camPos, attPos);
 

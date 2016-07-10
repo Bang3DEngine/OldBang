@@ -12,7 +12,7 @@ class InspectorComponentWidget : public InspectorWidget
 
 private:
     Component *relatedComponent;
-    QCheckBox *enabledCheckbox;
+    QCheckBox *IsEnabledCheckbox;
 
 public:
     explicit InspectorComponentWidget(Component *relatedComponent);

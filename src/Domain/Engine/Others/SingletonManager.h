@@ -20,6 +20,7 @@
 
 class WindowMain;
 class Logger;
+class Input;
 class Time;
 class SingletonManager
 {
@@ -29,6 +30,7 @@ private:
 
     WindowMain *mainBinaryWindowMain = nullptr;
     Time *mainBinaryTime = nullptr;
+    Input *mainBinaryInput = nullptr;
 
     SingletonManager() {}
 
@@ -40,8 +42,9 @@ public:
      * So, they should be called in the main() function.
      */
 
-    void SetWindowMainSingleton(WindowMain* mainBinaryWM);
-    void SetTimeSingleton(Time* mainBinaryT);
+    void SetWindowMainSingleton(WindowMain* mainBinaryWindowMain);
+    void SetTimeSingleton(Time* mainBinaryTime);
+    void SetInputSingleton(Input* mainBinaryInput);
 
     /**
      * The GetXXXXSingleton methods should only be called by the method that
@@ -50,18 +53,20 @@ public:
 
     WindowMain* GetWindowMainSingleton();
     Time* GetTimeSingleton();
+    Input* GetInputSingleton();
+
 
     /**
      * @brief This method should be called ONLY by the behaviour libraries.
      * This will link the main binary singleton's with the behaviour singleton's.
      */
-    static void SetInstanceFromBehaviourLibrary(SingletonManager *mainBinarySM);
+    static void SetSingletonManagerInstanceFromBehaviourLibrary(SingletonManager *mainBinarySM);
 
 
     /**
      * @brief This method should be called ONLY by the main binary.
      */
-    static void InitFromMainBinary();
+    static void InitSingletonMangerFromMainBinary();
 
     /**
      * @brief This method should be called ONLY by the main binary, and passed

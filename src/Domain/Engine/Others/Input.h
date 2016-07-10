@@ -94,6 +94,7 @@ public:
     };
 
 private:
+
     Input();
 
     /**
@@ -120,65 +121,67 @@ private:
      * @brief For every Key, we have a ButtonInfo
      * assigned to it
      */
-    static std::map<Key, ButtonInfo> keyInfos;
+    std::map<Key, ButtonInfo> keyInfos;
 
 
     /**
      * @brief If true, mouse will loop in x and y when
      * going outside the Canvas.
      */
-    static bool mouseWrapping;
+    bool mouseWrapping = false;
 
     /**
      * @brief isADoubleClick will be true in the frame where
      * there's the second click of a double click
      */
-    static bool isADoubleClick;
+    bool isADoubleClick = false;
 
     /**
      * @brief Used to handle double click timing
      */
-    static float secsSinceLastMouseDown;
+    float secsSinceLastMouseDown = 0.0f;
 
     /**
      * @brief Max time in seconds between 2 clicks to
      * be considered double-click
      */
-    static const float doubleClickMaxSeconds;
-
-    static float lastMouseWheelDelta;
-
-    static bool lockMouseMovement;
+    const float doubleClickMaxSeconds = 0.3f;
+    float lastMouseWheelDelta = 0.0f;
+    bool lockMouseMovement = false;
 
     /**
      * @brief Used to fix an issue with lockMouseMovement
      */
-    static int framesMouseStopped;
+    int framesMouseStopped = 0  ;
 
     /**
      * @brief Mouse coordinates in Canvas space.
      */
-    static glm::vec2 mouseCoords, lastMouseCoords;
+    glm::vec2 mouseCoords, lastMouseCoords;
 
 
     /**
      * @brief For every MouseButton, we have a ButtonInfo
      * assigned to it
      */
-    static std::map<MouseButton, ButtonInfo> mouseInfo;
-
-    static void Init();
-    static void OnNewFrame();
-
-    static void HandleMouseWrapping();
-    static void HandleInputMouseWheel(QWheelEvent *event);
-    static void HandleInputMouseMove(QMouseEvent *event);
-    static void HandleInputMousePress(QMouseEvent *event);
-    static void HandleInputMouseRelease(QMouseEvent *event);
-    static void HandleInputKeyPress(QKeyEvent *event);
-    static void HandleInputKeyReleased(QKeyEvent *event);
+    std::map<MouseButton, ButtonInfo> mouseInfo;
 
 public:
+    static void InitFromMainBinary();
+
+private:
+    void OnNewFrame();
+
+    void HandleMouseWrapping();
+    void HandleInputMouseWheel(QWheelEvent *event);
+    void HandleInputMouseMove(QMouseEvent *event);
+    void HandleInputMousePress(QMouseEvent *event);
+    void HandleInputMouseRelease(QMouseEvent *event);
+    void HandleInputKeyPress(QKeyEvent *event);
+    void HandleInputKeyReleased(QKeyEvent *event);
+
+public:
+    static Input* GetInstance();
 
     static bool GetMouseWrapping();
     static void SetMouseWrapping(bool mouseWrapping);

@@ -68,16 +68,16 @@ public:
      * @brief Transforms the passed direction from local space to world space.
      * @return
      */
-    Vector3 TransformDirection(const Vector3 &dir);
-    Vector3 InverseTransformDirection(const Vector3 &dir);
-    Vector3 TransformPoint(const Vector3 &point);
-    Vector3 InverseTransformPoint(const Vector3 &point);
+    Vector3 TransformDirection(const Vector3 &dir) const;
+    Vector3 InverseTransformDirection(const Vector3 &dir) const;
+    Vector3 TransformPoint(const Vector3 &point) const;
+    Vector3 InverseTransformPoint(const Vector3 &point) const;
 
     // These are aliases of the above
-    Vector3 LocalToWorldDirection(const Vector3 &dir);
-    Vector3 WorldToLocalDirection(const Vector3 &dir);
-    Vector3 LocalToWorldPoint(const Vector3 &point);
-    Vector3 WorldToLocalPoint(const Vector3 &point);
+    Vector3 LocalToWorldDirection(const Vector3 &dir) const;
+    Vector3 WorldToLocalDirection(const Vector3 &dir) const;
+    Vector3 LocalToWorldPoint(const Vector3 &point) const;
+    Vector3 WorldToLocalPoint(const Vector3 &point) const;
 
 
     void GetLocalModelMatrix(Matrix4 &m) const;
@@ -85,17 +85,11 @@ public:
 
     void GetNormalMatrix(Matrix4 &m) const;
 
-    Vector3 GetLocalForward() const;
     Vector3 GetForward() const;
-    Vector3 GetLocalBack() const;
     Vector3 GetBack() const;
-    Vector3 GetLocalRight() const;
     Vector3 GetRight() const;
-    Vector3 GetLocalLeft() const;
     Vector3 GetLeft() const;
-    Vector3 GetLocalUp() const;
     Vector3 GetUp() const;
-    Vector3 GetLocalDown() const;
     Vector3 GetDown() const;
 
     Vector3 GetLocalPosition() const;

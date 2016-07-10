@@ -144,8 +144,9 @@ Sphere GameObject::GetBoundingSphere() const
 
 void GameObject::AddComponent(Component *c)
 {
-    c->owner = this;
+    c->gameObject = this;
     comps.push_back(c);
+    c->_OnStart();
 }
 
 void GameObject::MoveComponent(Component *c, int distance)
@@ -407,7 +408,6 @@ const std::string GameObject::ToString() const
 
 void GameObject::_OnStart()
 {
-    PROPAGATE_EVENT(_OnStart, comps);
     PROPAGATE_EVENT(_OnStart, children);
     OnStart();
 }

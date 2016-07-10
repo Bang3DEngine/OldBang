@@ -41,11 +41,12 @@ int main(int argc, char *argv[])
     app.setFont(font);
 
     // Init SINGLETON's
-    SingletonManager::InitFromMainBinary();
+    SingletonManager::InitSingletonMangerFromMainBinary();
     QMainWindow *window = new QMainWindow();
     WindowMain::InitFromMainBinary(window, &app);
     Canvas::InitFromMainBinary();
     Time::InitFromMainBinary();
+    Input::InitFromMainBinary();
     //
 
     // Load dark Window theme
@@ -63,7 +64,7 @@ int main(int argc, char *argv[])
     //
 
     Scene *scene = new EditorScene();
-    std::string filename = "./Assets/Scenes/test.bscene";
+    std::string filename = "./Assets/Scenes/test2.bscene";
     FileReader::ReadScene(filename , scene);
     if(scene )
     {

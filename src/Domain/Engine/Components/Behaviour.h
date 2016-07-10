@@ -29,18 +29,20 @@ private:
      */
     BehaviourHolder *behaviourHolder = nullptr;
 
+/**
+ * These variables must be copied from BehaviourHolder
+ */
+protected:
+    GameObject *gameObject = nullptr;
+/**
+*/
+
 public:
     Behaviour();
     virtual ~Behaviour();
 
-    /**
-     * @brief Remember that Behaviour is not a Component.
-     * However, we need to give the user access to the gameObject which has the
-     * BehaviourHolder which has this Behaviour...
-     * @return The owner of the BehaviourHolder of this Behaviour
-     */
-    GameObject* GetOwner() const;
-
+private:
+    void Init(BehaviourHolder *bh);
     void SetSourceFilepath(const std::string &sourceFilepath);
     std::string GetSourceFilepath() const;
 };
@@ -56,7 +58,7 @@ extern "C" Behaviour *CreateDynamically(SingletonManager *mainBinarySingletonMan
 \
     /* This line links the SingletonManager in the main binary to the SingletonManager \
        in the behaviour loaded library. */ \
-    SingletonManager::SetInstanceFromBehaviourLibrary(mainBinarySingletonManager); \
+    SingletonManager::SetSingletonManagerInstanceFromBehaviourLibrary(mainBinarySingletonManager); \
 \
     Behaviour *b = new CLASS_NAME(); \
     return b; \

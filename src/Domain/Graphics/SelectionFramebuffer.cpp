@@ -30,7 +30,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     std::list<Renderer*> childrenRenderers = scene->GetComponentsInChildren<Renderer>();
     for(Renderer *renderer : childrenRenderers)
     {
-        GameObject *go = renderer->GetOwner();
+        GameObject *go = renderer->gameObject;
         gameObjectToId[go] = id;
         idToGameObject[id] = go;
         ++id;
@@ -39,9 +39,9 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     // Paint objects
     for(Renderer *renderer : childrenRenderers)
     {
-        if(renderer->GetOwner()->GetRenderLayer() == scene->currentRenderLayer)
+        if(renderer->gameObject->GetRenderLayer() == scene->currentRenderLayer)
         {
-            GameObject *go = renderer->GetOwner();
+            GameObject *go = renderer->gameObject;
             if(gameObjectToId.find(go) != gameObjectToId.end() && go->IsEnabled())
             {
                 Matrix4 model, view, projection, pvm;

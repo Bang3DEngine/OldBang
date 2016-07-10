@@ -24,7 +24,7 @@ Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
 
 void Camera::GetViewMatrix(Matrix4 &view) const
 {
-    Transform *t = GetOwner()->GetComponent<Transform>();
+    Transform *t = gameObject->GetComponent<Transform>();
     if(CAN_USE_COMPONENT(t))
     {
         t->GetModelMatrix(view);
@@ -32,7 +32,7 @@ void Camera::GetViewMatrix(Matrix4 &view) const
     }
     else
     {
-        Logger_Verbose(GetOwner() << " has a Camera but does not have a transform. " <<
+        Logger_Verbose(gameObject << " has a Camera but does not have a transform. " <<
                        "View matrix will be the idgameObject matrix.");
 
         view = Matrix4(1.0f);

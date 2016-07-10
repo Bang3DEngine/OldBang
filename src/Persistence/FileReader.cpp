@@ -8,6 +8,7 @@
 #include "Texture2D.h"
 #include "Camera.h"
 #include "Logger.h"
+#include "BehaviourHolder.h"
 #include "GameObject.h"
 
 //#include "BP_SceneReader_cpp_UserBehaviours_elseifs.bp"
@@ -23,7 +24,7 @@ unsigned char* FileReader::ReadImage(const std::string& filepath,
     unsigned char* data = stbi_load(filepath.c_str(),
                                     width, height,
                                     components, 0);
-    if(!data)
+    if (!data)
     {
         Logger_Error("Error loading the texture '" << filepath <<
                      "', couldn't open/read the file.");
@@ -37,7 +38,7 @@ void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs,
 {
     std::FILE *f;
     f = fopen(filepath.c_str(), "r");
-    if(!f)
+    if (!f)
     {
         Logger_Error("Error trying to open '" << filepath << "'");
         return;
@@ -47,41 +48,41 @@ void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs,
     int n = 1;
 
     char c, lastChar;
-    while(ftell(f) > 0)
+    while (ftell(f) > 0)
     {
         lastChar = fgetc(f);
         c = fgetc(f);
-        if((lastChar == '\n' || lastChar == '\r') && c == 'f')
+        if ((lastChar == '\n' || lastChar == '\r') && c == 'f')
         {
             int foo;
-            while(fgetc(f) == ' '); //Leemos espacios despues de 'f'
+            while (fgetc(f) == ' '); // Read spaces after 'f'
             fseek(f, -1, SEEK_CUR);
-            foo = fscanf(f, "%d", &foo); //Leemos primer indice
-             //Solo un indice, sin barras
-            if(fgetc(f) == ' ') *hasUvs = *hasNormals = false;
-            else //Hay algo tal que asi:  5/*
+            foo = fscanf(f, "%d", &foo); // Read first index
+             // Single index without slashes
+            if (fgetc(f) == ' ') *hasUvs = *hasNormals = false;
+            else //  Something like  5/*
             {
                 *hasUvs = (fgetc(f) != '/');
-                if(!*hasUvs) *hasNormals = true; //Es tal que asi 5//8
-                if(*hasUvs) //Es algo tal que asi 5/8*
+                if (!*hasUvs) *hasNormals = true; // Something like 5//8
+                if (*hasUvs) // Something like 5/8*
                 {
                     fseek(f, -1, SEEK_CUR);
-                    foo = fscanf(f, "%d", &foo); //Leemos segundo indice
-                    if(fgetc(f) == '/') //Es algo tal que asi 5/8/11
+                    foo = fscanf(f, "%d", &foo); // Read second index
+                    if (fgetc(f) == '/') // Something like 5/8/11
                     {
                         fseek(f, -1, SEEK_CUR);
-                        foo = fscanf(f, "%d", &foo); //Leemos ultimo indice
+                        foo = fscanf(f, "%d", &foo); // Read last index
                         *hasNormals = true;
                     }
                     else *hasNormals = false;
                 }
             }
 
-            //Son triangulos o quads?
+            // Are they tris or quads?
             lastChar = c;
-            while(!feof(f) && (c = fgetc(f)) != '\n')
+            while (!feof(f) && (c = fgetc(f)) != '\n')
             {
-                if(lastChar == ' ' && c != ' ') ++n;
+                if (lastChar == ' ' && c != ' ') ++n;
                 lastChar = c;
             }
             *isTriangles = (n <= 3);
@@ -97,14 +98,14 @@ void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs,
 int FileReader::GetOBJNumFaces(const std::string &filepath)
 {
     std::ifstream f(filepath, std::ios::in);
-    if(!f.is_open())
+    if (!f.is_open())
         Logger_Error("Error opening the mesh file '" << filepath << "'");
 
     int numFaces = 0;
     std::string line;
-    while(std::getline(f, line))
+    while (std::getline(f, line))
     {
-        if(line.length() > 0 && line.at(0) == 'f')
+        if (line.length() > 0 && line.at(0) == 'f')
         {
             ++numFaces;
         }
@@ -129,34 +130,34 @@ bool FileReader::ReadOBJ(const std::string& filepath,
     GetOBJFormat(filepath, &hasUvs, &hasNormals, isTriangles);
 
     std::ifstream f(filepath, std::ios::in);
-    if(!f.is_open())
+    if (!f.is_open())
         Logger_Error("Error opening the mesh file '" << filepath << "'");
     std::string line;
 
-    while(std::getline(f, line))
+    while (std::getline(f, line))
     {
         std::stringstream ss(line);
         std::string lineHeader;
-        if(!(ss >> lineHeader)) continue;
-        if(lineHeader == "v")
+        if (!(ss >> lineHeader)) continue;
+        if (lineHeader == "v")
         {
             Vector3 pos;
             ss >> pos.x >> pos.y >> pos.z;
             disorderedVertexPos.push_back(pos);
         }
-        else if(hasUvs && lineHeader == "vt") //Cargamos uvs
+        else if (hasUvs && lineHeader == "vt") //Cargamos uvs
         {
             glm::vec2 uv;
             ss >> uv.x >> uv.y;
             disorderedVertexUvs.push_back(uv);
         }
-        else if(hasNormals && lineHeader == "vn") //Cargamos normals
+        else if (hasNormals && lineHeader == "vn") //Cargamos normals
         {
             Vector3 normal;
             ss >> normal.x >> normal.y >> normal.z;
             disorderedVertexNormals.push_back(normal);
         }
-        else if(lineHeader == "f")
+        else if (lineHeader == "f")
         {
             unsigned int posIndices[4];
             unsigned int uvIndices[4];
@@ -165,7 +166,7 @@ bool FileReader::ReadOBJ(const std::string& filepath,
             for (int i = 0; i < 3; ++i)
             {
                 ss >> posIndices[i];
-                if(hasUvs)
+                if (hasUvs)
                 {
                     while(ss.peek() == '/') ss.ignore();  //Read the '/'s
                     ss >> uvIndices[i];
@@ -179,7 +180,7 @@ bool FileReader::ReadOBJ(const std::string& filepath,
             }
 
             //Vertices 0,1 same for tris and quads in CCW
-            for(int j = 0; j <= 1; ++j)
+            for (int j = 0; j <= 1; ++j)
             {
                 vertexPosIndexes.push_back(posIndices[j]);
                 vertexUvsIndexes.push_back(uvIndices[j]);
@@ -191,17 +192,17 @@ bool FileReader::ReadOBJ(const std::string& filepath,
                 ss.ignore();
             theresAFaceLeft = (ss.peek() != EOF);
 
-            if(theresAFaceLeft)
+            if (theresAFaceLeft)
             {
                 //QUAD FOUND, turn it into two triangles
                 //Finish first triangle in CCW
                 ss >> posIndices[3];
-                if(hasUvs)
+                if (hasUvs)
                 {
                     while(ss.peek() == '/') ss.ignore();
                     ss >> uvIndices[3];
                 }
-                if(hasNormals)
+                if (hasNormals)
                 {
                     while(ss.peek() == '/') ss.ignore();
                     ss >> normalIndices[3];
@@ -211,7 +212,7 @@ bool FileReader::ReadOBJ(const std::string& filepath,
                 vertexNormIndexes.push_back(normalIndices[3]);
 
                 //Make second triangle in CCW
-                for(int j = 1; j <= 3; ++j) //3,2,1
+                for (int j = 1; j <= 3; ++j) //3,2,1
                 {
                     vertexPosIndexes.push_back(posIndices[j]);
                     vertexUvsIndexes.push_back(uvIndices[j]);
@@ -227,23 +228,23 @@ bool FileReader::ReadOBJ(const std::string& filepath,
         }
     }
 
-    for(unsigned int i = 0; i < vertexPosIndexes.size(); ++i)
+    for (unsigned int i = 0; i < vertexPosIndexes.size(); ++i)
     {
         vertexPos->push_back(disorderedVertexPos[vertexPosIndexes[i]-1]);
     }
 
-    if(hasNormals)
+    if (hasNormals)
     {
-        for(unsigned int i = 0; i < vertexNormIndexes.size(); ++i)
+        for (unsigned int i = 0; i < vertexNormIndexes.size(); ++i)
         {
             vertexNormals->push_back(
                         disorderedVertexNormals[vertexNormIndexes[i]-1]);
         }
     }
 
-    if(hasUvs)
+    if (hasUvs)
     {
-        for(unsigned int i = 0; i < vertexUvsIndexes.size(); ++i)
+        for (unsigned int i = 0; i < vertexUvsIndexes.size(); ++i)
         {
             vertexUvs->push_back(disorderedVertexUvs[vertexUvsIndexes[i]-1]);
         }
@@ -256,26 +257,33 @@ bool FileReader::ReadOBJ(const std::string& filepath,
 void FileReader::ReadComponents(std::istream &f, GameObject *e)
 {
     std::string line;
-    while( (line = FileReader::ReadNextLine(f)) != "</components>" )
+    while ( (line = FileReader::ReadNextLine(f)) != "</components>" )
     {
         Component *p = nullptr;
-        if(line == "<Transform>")
+
+        if (line == "<Transform>")
         {
             Transform *t = new Transform();
             t->Read(f);
             p = t;
         }
-        else if(line == "<MeshRenderer>")
+        else if (line == "<MeshRenderer>")
         {
             MeshRenderer *mr = new MeshRenderer();
             mr->Read(f);
             p = mr;
         }
-        else if(line == "<Camera>")
+        else if (line == "<Camera>")
         {
             Camera *cam = new Camera();
             cam->Read(f);
             p = cam;
+        }
+        else if (line == "<BehaviourHolder>")
+        {
+            BehaviourHolder *bh = new BehaviourHolder();
+            bh->Read(f);
+            p = bh;
         }
         else
         {
@@ -285,12 +293,12 @@ void FileReader::ReadComponents(std::istream &f, GameObject *e)
             BANG_PREPROCESSOR
             Here the BangPreprocessor with the macro BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS
             will write something like this:
-                 if(line == "<UserBehaviour1>")
+                 if (line == "<UserBehaviour1>")
                  {
                       p = new UserBehaviour1();
                       ReadNextLine(f);
                  }
-                 else if(line == "<UserBehaviour2>")
+                 else if (line == "<UserBehaviour2>")
                  {
                       p = new UserBehaviour2();
                       ReadNextLine(f);
@@ -300,7 +308,7 @@ void FileReader::ReadComponents(std::istream &f, GameObject *e)
             */
         }
 
-        if(p )
+        if (p)
         {
             e->AddComponent(p);
         }
@@ -312,13 +320,13 @@ void FileReader::ReadChildren(std::istream &f, GameObject *e)
     std::string line;
     while( (line = FileReader::ReadNextLine(f)) != "</children>")
     {
-        if(line == "<GameObject>")
+        if (line == "<GameObject>")
         {
             GameObject *child = new GameObject();
             child->Read(f);
             e->AddChild(child);
         }
-        else if(line == "<GameObjectPrefab>")
+        else if (line == "<GameObjectPrefab>")
         {
             std::string prefabFilepath = FileReader::ReadString(f);
             Prefab *p = AssetsManager::GetAsset<Prefab>(prefabFilepath);
@@ -343,16 +351,16 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
 
         while( (line = FileReader::ReadNextLine(f)) != "</Scene>")
         {
-            if(line == "") continue; //Skip blank lines
+            if (line == "") continue; //Skip blank lines
 
-            if(line == "<children>")
+            if (line == "<children>")
             {
                 ReadChildren(f, (GameObject*)scene);
             }
-            else if(line == "<cameraGameObject>")
+            else if (line == "<cameraGameObject>")
             {
                 GameObject *camChild = GetNextPointerAddress<GameObject>(f);
-                if(camChild )
+                if (camChild )
                 {
                     scene->SetCamera(camChild->GetComponent<Camera>());
                 }
@@ -374,9 +382,9 @@ void FileReader::SaveScene(const std::string &filepath, const Scene *scene)
 void FileReader::TrimStringLeft(std::string *str)
 {
     unsigned int i = 0;
-    for(; i < str->length(); ++i)
+    for (; i < str->length(); ++i)
     {
-        if(str->at(i) != ' ' && str->at(i) != '\t') break;
+        if (str->at(i) != ' ' && str->at(i) != '\t') break;
     }
     *str = str->substr(i, str->length() - i);
 }
@@ -403,7 +411,7 @@ std::string FileReader::ReadNextLine(std::istream &f)
 
 bool FileReader::ReadNextLine(std::istream &f, std::string *line)
 {
-    if(f.peek() == EOF) return false;
+    if (f.peek() == EOF) return false;
 
     do
     {
@@ -472,7 +480,7 @@ std::string FileReader::ReadString(std::istream &f)
 void FileReader::RegisterNextPointerId(std::istream &f, void *pointer)
 {
 
-    if(&f != lastIstreamDir)
+    if (&f != lastIstreamDir)
     {
         //We are reading a new file!
         idToPointers.clear();
@@ -480,6 +488,6 @@ void FileReader::RegisterNextPointerId(std::istream &f, void *pointer)
     lastIstreamDir = &f;
 
     std::string id = ReadString(f);
-    if(id != NoRegisterId)
+    if (id != NoRegisterId)
         idToPointers[id] = pointer;
 }

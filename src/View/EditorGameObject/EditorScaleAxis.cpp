@@ -31,7 +31,7 @@ void EditorScaleAxis::OnUpdate()
     EditorAxis::OnUpdate();
 
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    Transform *camTransform = cam->GetOwner()->GetComponent<Transform>(); NONULL(camTransform);
+    Transform *camTransform = cam->gameObject->GetComponent<Transform>(); NONULL(camTransform);
     Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
     Transform *transform = GetComponent<Transform>(); NONULL(transform);
     Vector3 wCamPos = camTransform->GetPosition();

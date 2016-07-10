@@ -903,11 +903,11 @@ QTabBar::tab:right:!selected:hover {
     background-color: #48576b;
 }
 
-QTabBar QToolButton::right-arrow:enabled {
+QTabBar QToolButton::right-arrow:IsEnabled {
      image: url(:/qss_icons/rc/right_arrow.png);
  }
 
- QTabBar QToolButton::left-arrow:enabled {
+ QTabBar QToolButton::left-arrow:IsEnabled {
      image: url(:/qss_icons/rc/left_arrow.png);
  }
 

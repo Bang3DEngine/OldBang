@@ -1,7 +1,6 @@
 #include "Component.h"
 #include "GameObject.h"
 
-
 Component::Component()
 {
 }
@@ -15,13 +14,8 @@ Component::~Component()
 void Component::CloneInto(ICloneable *clone) const
 {
     Component *c = static_cast<Component*>(clone);
-    c->SetEnabled(enabled);
-    c->owner = nullptr;
-}
-
-GameObject *Component::GetOwner() const
-{
-    return owner;
+    c->enabled = enabled;
+    c->gameObject = nullptr;
 }
 
 const std::string Component::ToString() const
