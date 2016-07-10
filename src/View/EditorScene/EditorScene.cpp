@@ -12,6 +12,9 @@ EditorScene::EditorScene() : Scene()
     //axises = new EditorTranslateAxisGroup();
     //AddChild(axises);
 
+    floor = new EditorFloor();
+    AddChild(floor);
+
     selectionFramebuffer =
             new SelectionFramebuffer(Canvas::GetWidth(),
                                      Canvas::GetHeight());

@@ -178,7 +178,8 @@ HEADERS += \
     src/View/EditorGameObject/EditorScaleAxisGroup.h \
     src/View/EditorGameObject/EditorScaleAxis.h \
     src/Domain/Engine/Assets/Meshes/MeshFactory.h \
-    src/Domain/Engine/Interfaces/ICloneable.h
+    src/Domain/Engine/Interfaces/ICloneable.h \
+    src/View/EditorScene/EditorFloor.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
@@ -276,7 +277,8 @@ SOURCES += \
     src/View/EditorGameObject/EditorScaleAxisGroup.cpp \
     src/View/EditorGameObject/EditorScaleAxis.cpp \
     src/Domain/Engine/Assets/Meshes/MeshFactory.cpp \
-    src/Domain/Engine/Interfaces/ICloneable.cpp
+    src/Domain/Engine/Interfaces/ICloneable.cpp \
+    src/View/EditorScene/EditorFloor.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

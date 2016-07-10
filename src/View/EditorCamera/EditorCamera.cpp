@@ -17,6 +17,7 @@ EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
     UpdateRotationVariables();
 
     camt = yawNode->AddComponent<Transform>();
+    cam->SetZFar(999.9f);
 }
 
 EditorCamera::~EditorCamera()

@@ -2,10 +2,11 @@
 #define EDITORSCENE_H
 
 #include "Scene.h"
+#include "EditorFloor.h"
 #include "EditorCamera.h"
-#include "EditorTranslateAxisGroup.h"
 #include "SelectionFramebuffer.h"
 #include "EditorDebugGameObject.h"
+#include "EditorTranslateAxisGroup.h"
 
 class EditorScene : public Scene
 {
@@ -13,6 +14,7 @@ private:
     EditorDebugGameObject *debugGameObject = nullptr;
     EditorCamera *cameraGameObject = nullptr;
     EditorTranslateAxisGroup *axises = nullptr;
+    EditorFloor *floor = nullptr;
 
     SelectionFramebuffer *selectionFramebuffer = nullptr;
 
