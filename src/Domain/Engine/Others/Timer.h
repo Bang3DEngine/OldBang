@@ -10,14 +10,14 @@
 class Timer
 {
 private:
-    std::function<void()> func;
-    float secDelay;
-    int repeatCount;
-    bool waitOneDelayTime;
+    std::function<void()> m_func;
+    float m_secDelay;
+    int m_repeatCount;
+    bool m_waitOneDelayTime;
 
-    mutable bool stop;
+    mutable bool m_stop = true;
 
-    std::thread timerThread;
+    std::thread m_timerThread;
 
     void TimerLoop() const;
 

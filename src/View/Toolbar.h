@@ -20,15 +20,15 @@ public:
     };
 
 private:
-    static Toolbar *tb;
+    static Toolbar *s_tb;
 
-    QTimer *keyTimer = nullptr;
-    QToolButton *buttonTranslateMode = nullptr;
-    QToolButton *buttonRotateMode    = nullptr;
-    QToolButton *buttonScaleMode     = nullptr;
-    TransformMode currentTransformMode = TransformMode::Translate;
+    QTimer *p_keyTimer = nullptr;
+    QToolButton *p_buttonTranslateMode = nullptr;
+    QToolButton *p_buttonRotateMode    = nullptr;
+    QToolButton *p_buttonScaleMode     = nullptr;
+    QToolButton *p_buttonGlobalCoords  = nullptr;
 
-    QToolButton *buttonGlobalCoords  = nullptr;
+    TransformMode m_currentTransformMode = TransformMode::Translate;
 
     void UnCheckTransformModeButtons();
 

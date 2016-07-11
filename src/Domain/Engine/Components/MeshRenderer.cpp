@@ -5,7 +5,7 @@
 MeshRenderer::MeshRenderer()
 {
     #ifdef BANG_EDITOR
-        inspectorComponentInfo.SetSlotsInfos(
+        m_inspectorComponentInfo.SetSlotsInfos(
         {
             new InspectorFileSWInfo("Material",
                                     Material::GetFileExtensionStatic()),
@@ -18,7 +18,7 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
 {
     Renderer::CloneInto(clone);
     MeshRenderer *mr = static_cast<MeshRenderer*>(clone);
-    mr->SetMesh(mesh);
+    mr->SetMesh(m_mesh);
 }
 
 ICloneable *MeshRenderer::Clone() const
@@ -34,32 +34,32 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::SetMaterial(Material *m)
 {
-    material = m;
-    if(mesh  && material  &&
-       material->GetShaderProgram() )
+    p_material = m;
+    if(m_mesh  && p_material  &&
+       p_material->GetShaderProgram() )
     {
-        mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
+        m_mesh->BindAllVBOsToShaderProgram(*(p_material->GetShaderProgram()));
     }
 }
 
 void MeshRenderer::SetMesh(Mesh *m)
 {
-    mesh = m;
-    NONULL(mesh); NONULL(material); NONULL(material->GetShaderProgram());
+    m_mesh = m;
+    NONULL(m_mesh); NONULL(p_material); NONULL(p_material->GetShaderProgram());
 
-    mesh->BindAllVBOsToShaderProgram(*(material->GetShaderProgram()));
-    if(mesh->GetFilepath().length() > 0)
+    m_mesh->BindAllVBOsToShaderProgram(*(p_material->GetShaderProgram()));
+    if(m_mesh->GetFilepath().length() > 0)
     {
-        SetRenderMode(mesh->IsATrianglesModel() ?
+        SetRenderMode(m_mesh->IsATrianglesModel() ?
                       RenderMode::Triangles : RenderMode::Quads);
     }
 }
 
 Box MeshRenderer::GetBoundingBox() const
 {
-    if(mesh )
+    if(m_mesh )
     {
-        return mesh->GetBoundingBox();
+        return m_mesh->GetBoundingBox();
     }
     else
     {
@@ -69,15 +69,15 @@ Box MeshRenderer::GetBoundingBox() const
 
 const Mesh *MeshRenderer::GetMesh()
 {
-    return mesh;
+    return m_mesh;
 }
 
 const std::string MeshRenderer::ToString() const
 {
     std::ostringstream oss;
     oss << "MeshRenderer: [" << std::endl <<
-           "   " << mesh << std::endl <<
-           "   " << material << std::endl <<
+           "   " << m_mesh << std::endl <<
+           "   " << p_material << std::endl <<
            "]";
     return oss.str();
 }
@@ -89,33 +89,33 @@ std::string MeshRenderer::GetName() const
 
 void MeshRenderer::RenderWithoutBindingMaterial() const
 {
-    NONULL(mesh);
+    NONULL(m_mesh);
 
     Matrix4 model, view, projection, pvm;
     GetMatrices(model, view, projection, pvm);
     SetMatricesUniforms(model, view, projection, pvm);
 
-    mesh->GetVAO()->Bind();
-    glDrawArrays(renderMode, 0, mesh->GetVertexCount());
-    mesh->GetVAO()->UnBind();
+    m_mesh->GetVAO()->Bind();
+    glDrawArrays(m_renderMode, 0, m_mesh->GetVertexCount());
+    m_mesh->GetVAO()->UnBind();
 }
 
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
 {
     InspectorFileSWInfo* matInfo, *meshInfo;
-    matInfo  = static_cast<InspectorFileSWInfo*>(inspectorComponentInfo.GetSlotInfo(0));
-    meshInfo = static_cast<InspectorFileSWInfo*>(inspectorComponentInfo.GetSlotInfo(1));
+    matInfo  = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0));
+    meshInfo = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1));
 
-    if (material )
+    if (p_material )
     {
-        if(material->GetFilepath() != "")
+        if(p_material->GetFilepath() != "")
         {
-            matInfo->filepath = material->GetFilepath();
+            matInfo->filepath = p_material->GetFilepath();
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            Logger_GetString(matInfo->filepath, (void*)material);
+            Logger_GetString(matInfo->filepath, (void*)p_material);
         }
     }
     else
@@ -123,15 +123,15 @@ InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
         matInfo->filepath = "-";
     }
 
-    if (mesh )
+    if (m_mesh )
     {
-        if(mesh->GetFilepath() != "")
+        if(m_mesh->GetFilepath() != "")
         {
-            meshInfo->filepath = mesh->GetFilepath();
+            meshInfo->filepath = m_mesh->GetFilepath();
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            Logger_GetString(meshInfo->filepath, (void*)mesh);
+            Logger_GetString(meshInfo->filepath, (void*)m_mesh);
         }
     }
     else
@@ -139,7 +139,7 @@ InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
         meshInfo->filepath = "-";
     }
 
-    return &inspectorComponentInfo;
+    return &m_inspectorComponentInfo;
 }
 
 void MeshRenderer::OnSlotValueChanged(InspectorWidget *source)
@@ -165,8 +165,8 @@ void MeshRenderer::Write(std::ostream &f) const
 {
     f << "<MeshRenderer>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::WriteFilepath(mesh->GetFilepath(), f);
-    FileWriter::WriteFilepath(material->GetFilepath(), f);
+    FileWriter::WriteFilepath(m_mesh->GetFilepath(), f);
+    FileWriter::WriteFilepath(p_material->GetFilepath(), f);
     f << "</MeshRenderer>" << std::endl;
 }
 

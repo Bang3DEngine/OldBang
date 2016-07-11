@@ -13,7 +13,7 @@
 class EditorScaleAxis : public EditorAxis
 {
 private:
-    SingleLineRenderer *line = nullptr;
+    SingleLineRenderer *p_line = nullptr;
 
 protected:
 

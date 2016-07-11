@@ -2,33 +2,33 @@
 
 EditorScene::EditorScene() : Scene()
 {
-    debugGameObject = new EditorDebugGameObject();
-    AddChild(debugGameObject);
+    p_debugGameObject = new EditorDebugGameObject();
+    AddChild(p_debugGameObject);
 
-    cameraGameObject = new EditorCamera();
-    AddChild(cameraGameObject);
-    SetCamera(cameraGameObject->GetCamera());
+    p_cameraGameObject = new EditorCamera();
+    AddChild(p_cameraGameObject);
+    SetCamera(p_cameraGameObject->GetCamera());
 
     //axises = new EditorTranslateAxisGroup();
     //AddChild(axises);
 
-    floor = new EditorFloor();
-    AddChild(floor);
+    p_floor = new EditorFloor();
+    AddChild(p_floor);
 
-    selectionFramebuffer =
+    p_selectionFramebuffer =
             new SelectionFramebuffer(Canvas::GetWidth(),
                                      Canvas::GetHeight());
 }
 
 EditorScene::~EditorScene()
 {
-    delete selectionFramebuffer;
+    delete p_selectionFramebuffer;
 }
 
 void EditorScene::_OnResize(int newWidth, int newHeight)
 {
     Scene::_OnResize(newWidth, newHeight);
-    selectionFramebuffer->Resize(newWidth, newHeight);
+    p_selectionFramebuffer->Resize(newWidth, newHeight);
 }
 
 void EditorScene::_OnRender()
@@ -36,17 +36,17 @@ void EditorScene::_OnRender()
     Scene::_OnRender();
 
     //From 0 to 9
-    selectionFramebuffer->Bind();
+    p_selectionFramebuffer->Bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    selectionFramebuffer->Clear();
-    for(currentRenderLayer = 0; currentRenderLayer <= 9; ++currentRenderLayer)
+    p_selectionFramebuffer->Clear();
+    for(m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
     {
-        selectionFramebuffer->ClearDepth();
-        selectionFramebuffer->RenderSelectionBuffer(this);
+        p_selectionFramebuffer->ClearDepth();
+        p_selectionFramebuffer->RenderSelectionBuffer(this);
     }
-    selectionFramebuffer->UnBind();
+    p_selectionFramebuffer->UnBind();
 
-    selectionFramebuffer->ProcessSelection();
+    p_selectionFramebuffer->ProcessSelection();
 }
 
 void EditorScene::DebugDrawLine(const Vector3 &origin,
@@ -55,13 +55,13 @@ void EditorScene::DebugDrawLine(const Vector3 &origin,
                                 float secsTime,
                                 bool depthTest)
 {
-    debugGameObject->DrawLine(origin, destiny, lineWidth, secsTime, depthTest);
+    p_debugGameObject->DrawLine(origin, destiny, lineWidth, secsTime, depthTest);
 }
 
 void EditorScene::DebugDrawScreenLine(const glm::vec2 &origin, const glm::vec2 &destiny,
                                       float lineWidth, float secsTime, bool depthTest)
 {
-    debugGameObject->DrawLineScreen(origin, destiny, lineWidth, secsTime, depthTest);
+    p_debugGameObject->DrawLineScreen(origin, destiny, lineWidth, secsTime, depthTest);
 }
 
 bool EditorScene::IsEditorGameObject() const

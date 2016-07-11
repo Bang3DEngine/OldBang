@@ -13,7 +13,7 @@ class VAO : public IGLIdable, IGLBindable
 {
 private:
 
-    std::vector<const VBO*> vbos;
+    std::vector<const VBO*> m_vbos;
 
 public:
 
@@ -35,7 +35,7 @@ public:
 
     const VBO *GetVBOByLocation(int location) const;
 
-    int GetVBOCount() const { return vbos.size(); }
+    int GetVBOCount() const { return m_vbos.size(); }
 };
 
 #endif // VAO_H

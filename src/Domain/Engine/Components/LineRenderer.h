@@ -21,12 +21,12 @@
 class LineRenderer : public Renderer
 {
 protected:
-    std::vector<Vector3> points;
+    std::vector<Vector3> m_points;
 
-    VBO *vbo = nullptr;
-    VAO *vao = nullptr;
+    VBO *p_vbo = nullptr;
+    VAO *p_vao = nullptr;
 
-    RenderMode drawLinesMode = RenderMode::Lines;
+    RenderMode m_drawLinesMode = RenderMode::Lines;
 
     virtual void BindPointsToVAO() const;
     virtual void RenderWithoutBindingMaterial() const override;

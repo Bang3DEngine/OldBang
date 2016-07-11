@@ -17,7 +17,7 @@ private:
      * There can be several targets for the same bindable, and they must
      * be separated in this map.
      */
-    mutable std::map< GLenum, std::stack<GLint> > boundIds;
+    mutable std::map< GLenum, std::stack<GLint> > m_boundIds;
 
 protected:
     IGLBindable();

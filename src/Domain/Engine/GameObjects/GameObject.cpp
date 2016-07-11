@@ -436,7 +436,7 @@ void GameObject::_OnPreRender ()
 {
     PROPAGATE_EVENT(_OnPreRender, m_children);
 
-    if(this->m_renderLayer == GetScene()->currentRenderLayer)
+    if(this->m_renderLayer == GetScene()->m_currentRenderLayer)
     {
         PROPAGATE_EVENT(_OnPreRender, m_comps);
         OnPreRender();
@@ -447,7 +447,7 @@ void GameObject::_OnRender ()
 {
     PROPAGATE_EVENT(_OnRender, m_children);
 
-    if(this->m_renderLayer == GetScene()->currentRenderLayer)
+    if(this->m_renderLayer == GetScene()->m_currentRenderLayer)
     {
         PROPAGATE_EVENT(_OnRender, m_comps);
         OnRender();

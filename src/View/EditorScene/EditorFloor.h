@@ -13,10 +13,10 @@ class EditorFloor : public EditorGameObject
 {
 public:
 
-    const float TileSize = 15.0f;
-    const int GridSize = 30;     // Number of lines
+    const float c_tileSize = 15.0f;
+    const int c_gridSize = 30;     // Number of lines
 
-    std::vector<SingleLineRenderer*> lineRenderers;
+    std::vector<SingleLineRenderer*> m_lineRenderers;
 
     EditorFloor();
     ~EditorFloor();

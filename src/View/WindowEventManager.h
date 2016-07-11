@@ -32,8 +32,8 @@ class WindowEventManager : public QGLWidget
 {
     Q_OBJECT
 private:
-    static WindowEventManager *wem;
-    std::list<IWindowEventManagerListener*> listeners;
+    static WindowEventManager *s_wem;
+    std::list<IWindowEventManagerListener*> m_listeners;
 
 public:
     explicit WindowEventManager(QWidget *parent = 0);

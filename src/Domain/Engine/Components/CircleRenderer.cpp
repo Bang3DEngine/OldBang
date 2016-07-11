@@ -3,13 +3,13 @@
 CircleRenderer::CircleRenderer()
 {
     #ifdef BANG_EDITOR
-        inspectorComponentInfo.AddSlotInfo(
+        m_inspectorComponentInfo.AddSlotInfo(
             new InspectorVFloatSWInfo("Radius", {1.0f}));
-        inspectorComponentInfo.AddSlotInfo(
+        m_inspectorComponentInfo.AddSlotInfo(
             new InspectorVFloatSWInfo("Segments", {32.0f}));
     #endif
 
-    this->drawLinesMode = RenderMode::LineStrip;
+    this->m_drawLinesMode = RenderMode::LineStrip;
 }
 
 CircleRenderer::~CircleRenderer()
@@ -31,13 +31,13 @@ std::string CircleRenderer::GetName() const { return "CircleRenderer"; }
 
 void CircleRenderer::GeneratePoints()
 {
-    points.clear();
-    points.resize(segments + 1);
+    m_points.clear();
+    m_points.resize(m_segments + 1);
 
-    float step = (2.0f * 3.141592f) / (segments);
-    for(int i = 0;  i < segments + 1; ++i)
+    float step = (2.0f * 3.141592f) / (m_segments);
+    for(int i = 0;  i < m_segments + 1; ++i)
     {
-        points[i] = Vector3(glm::cos(step*i), glm::sin(step*i), 0.0f) * radius;
+        m_points[i] = Vector3(glm::cos(step*i), glm::sin(step*i), 0.0f) * m_radius;
     }
 }
 
@@ -45,7 +45,7 @@ float CircleRenderer::GetDistanceInScreenSpace(const glm::vec2 &sOrigin,
                                               int pointIndex,
                                               const Matrix4 &modelViewProjMatrix) const
 {
-    Vector3 objP = points[pointIndex];
+    Vector3 objP = m_points[pointIndex];
     glm::vec4 sP_4 = modelViewProjMatrix * glm::vec4(objP, 1.0f);
     glm::vec2 sP = sP_4.xy() / sP_4.w;
     sP = sP * 0.5f + 0.5f;
@@ -71,9 +71,9 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
     int step = 1;
 
     float d0, d1; d0 = d1 = 99999.9f;
-    for (int i = 0; i < points.size() - 1; i += step) // -1 because the last point is repeated
+    for (int i = 0; i < m_points.size() - 1; i += step) // -1 because the last point is repeated
     {
-        Vector3 objP = points[i];
+        Vector3 objP = m_points[i];
         glm::vec4 sP_4 = modelViewProjMatrix * glm::vec4(objP, 1.0f);
         glm::vec2 sP = sP_4.xy() / sP_4.w;
 
@@ -99,14 +99,14 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
 
 void CircleRenderer::SetRadius(float radius)
 {
-    this->radius = radius;
+    this->m_radius = radius;
     GeneratePoints();
     BindPointsToVAO();
 }
 
 void CircleRenderer::SetSegments(int segments)
 {
-    this->segments = segments;
+    this->m_segments = segments;
     GeneratePoints();
     BindPointsToVAO();
 }
@@ -118,15 +118,15 @@ InspectorWidgetInfo* CircleRenderer::GetComponentInfo()
 
     InspectorVFloatSWInfo *radiusInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                inspectorComponentInfo.GetSlotInfo(2));
-    radiusInfo->value = {radius};
+                m_inspectorComponentInfo.GetSlotInfo(2));
+    radiusInfo->m_value = {m_radius};
 
     InspectorVFloatSWInfo *segmentsInfo =
             static_cast<InspectorVFloatSWInfo*>(
-                inspectorComponentInfo.GetSlotInfo(3));
-    segmentsInfo->value = {float(segments)};
+                m_inspectorComponentInfo.GetSlotInfo(3));
+    segmentsInfo->m_value = {float(m_segments)};
 
-    return &inspectorComponentInfo;
+    return &m_inspectorComponentInfo;
 }
 
 void CircleRenderer::OnSlotValueChanged(InspectorWidget *source)
@@ -142,9 +142,9 @@ void CircleRenderer::Write(std::ostream &f) const
 {
     f << "<CircleRenderer>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::WriteFilepath(material->GetFilepath(), f);
-    FileWriter::Write(radius, f);
-    FileWriter::Write(segments, f);
+    FileWriter::WriteFilepath(p_material->GetFilepath(), f);
+    FileWriter::Write(m_radius, f);
+    FileWriter::Write(m_segments, f);
     FileWriter::Write(GetLineWidth(), f);
     f << "</CircleRenderer>" << std::endl;
 }

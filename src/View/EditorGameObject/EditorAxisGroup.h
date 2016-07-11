@@ -17,18 +17,18 @@ class EditorAxisGroup : public EditorGameObject
 {
 
 private:
-    float sizeBoost = 0.2f;
+    const float c_sizeBoost = 0.2f;
 
-    GameObject *attachedGameObject = nullptr;
+    GameObject *p_attachedGameObject = nullptr;
 
-    EditorTranslateAxisGroup *etag = nullptr;
-    EditorRotateAxisGroup *erag = nullptr;
-    EditorScaleAxisGroup *esag = nullptr;
+    EditorTranslateAxisGroup *p_etag = nullptr;
+    EditorRotateAxisGroup *p_erag = nullptr;
+    EditorScaleAxisGroup *p_esag = nullptr;
 
     void DisableAllGroups();
 
 public:
-    EditorAxisGroup(GameObject *attachedGameObject);
+    EditorAxisGroup(GameObject *p_attachedGameObject);
 
     virtual void OnUpdate() override;
 };

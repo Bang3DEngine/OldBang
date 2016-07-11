@@ -25,8 +25,8 @@ friend class EditorRotateAxis;
 
 private:
 
-    float radius = 1.0f;
-    int segments = 32;
+    float m_radius = 1.0f;
+    int m_segments = 32;
 
     void GeneratePoints();
 
@@ -51,8 +51,8 @@ public:
     virtual std::string GetName() const override;
     virtual ICloneable *Clone() const override;
 
-    void SetRadius(float radius);
-    void SetSegments(int segments);
+    void SetRadius(float m_radius);
+    void SetSegments(int m_segments);
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;

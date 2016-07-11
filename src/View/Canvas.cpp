@@ -3,27 +3,27 @@
 #include "SelectionFramebuffer.h"
 #include "WindowMain.h"
 
-Canvas *Canvas::mainBinaryCanvas = nullptr;
+Canvas *Canvas::p_mainBinaryCanvas = nullptr;
 
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
-    clearColor = glm::vec4(1.0f) * 0.8f;
+    m_clearColor = glm::vec4(1.0f) * 0.8f;
 
-    connect(&drawTimer, SIGNAL(timeout()), this, SLOT(update()));
-    drawTimer.setInterval(Canvas::RedrawDelay);
-    drawTimer.start();
+    connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(update()));
+    m_drawTimer.setInterval(Canvas::c_redrawDelay);
+    m_drawTimer.start();
 }
 
 void Canvas::InitFromMainBinary()
 {
-    Canvas::mainBinaryCanvas = WindowMain::GetInstance()->canvas;
+    Canvas::p_mainBinaryCanvas = WindowMain::GetInstance()->canvas;
 }
 
 void Canvas::initializeGL()
 {
     WindowMain::GetInstance()->buttonPauseResume
-            ->setText( (paused ? QString("Resume") : QString("Pause")) );
+            ->setText( (m_paused ? QString("Resume") : QString("Pause")) );
 
     glewExperimental = GL_TRUE;
     glewInit();
@@ -31,24 +31,24 @@ void Canvas::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-    lastRenderTime = Time::GetNow();
+    m_lastRenderTime = Time::GetNow();
 }
 
 void Canvas::paintGL()
 {
-    glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.a);
+    glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, m_clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Time::GetInstance()->deltaTime = float(Time::GetNow() -
-                                           lastRenderTime) / 1000.0f;
+    Time::GetInstance()->m_deltaTime = float(Time::GetNow() -
+                                             m_lastRenderTime) / 1000.0f;
 
-    if(currentScene)
+    if(p_currentScene)
     {
-        lastRenderTime = Time::GetNow();
-        currentScene->_OnUpdate();
+        m_lastRenderTime = Time::GetNow();
+        p_currentScene->_OnUpdate();
 
         //Note: _OnPreRender() is called from scene _OnRender
-        currentScene->_OnRender();
+        p_currentScene->_OnRender();
     }
 
     Input::GetInstance()->OnNewFrame();
@@ -61,13 +61,13 @@ void Canvas::updateGL()
 void Canvas::resizeGL(int w, int h)
 {
     glViewport(0, 0, (GLint)w, (GLint)h);
-    width = w;
-    height = h;
-    aspectRatio = float(w) / h;
+    m_width = w;
+    m_height = h;
+    m_aspectRatio = float(w) / h;
 
-    if(currentScene )
+    if(p_currentScene )
     {
-        currentScene->_OnResize(w,h);
+        p_currentScene->_OnResize(w,h);
     }
 }
 
@@ -75,38 +75,38 @@ Scene *Canvas::AddScene(const std::string &name)
 {
     Scene *st = new Scene();
     st->m_name = name;
-    scenes.push_back(st);
+    m_scenes.push_back(st);
     return st;
 }
 
 void Canvas::AddScene(Scene *scene)
 {
-    scenes.push_back(scene);
+    m_scenes.push_back(scene);
 }
 
 void Canvas::SetCurrentScene(Scene *scene)
 {
-    if(currentScene )
+    if(p_currentScene )
     {
-        currentScene->_OnDestroy();
+        p_currentScene->_OnDestroy();
     }
 
-    currentScene = scene;
-    if(currentScene )
+    p_currentScene = scene;
+    if(p_currentScene )
     {
-        currentScene->_OnStart();
+        p_currentScene->_OnStart();
         WindowMain::GetInstance()->widgetHierarchy->Refresh();
     }
 }
 
 void Canvas::SetCurrentScene(const std::string &name)
 {
-    if(currentScene )
+    if(p_currentScene )
     {
-        currentScene->_OnDestroy();
+        p_currentScene->_OnDestroy();
     }
 
-    for(auto it = scenes.begin(); it != scenes.end(); ++it)
+    for(auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
         if((*it)->name == name)
         {
@@ -121,12 +121,12 @@ void Canvas::SetCurrentScene(const std::string &name)
 
 Scene *Canvas::GetCurrentScene()
 {
-    return Canvas::GetInstance()->currentScene;
+    return Canvas::GetInstance()->p_currentScene;
 }
 
 Scene *Canvas::GetScene(const std::string &name) const
 {
-    for(auto it = scenes.begin(); it != scenes.end(); ++it)
+    for(auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
         if((*it)->name == name) return (*it);
     }
@@ -135,35 +135,35 @@ Scene *Canvas::GetScene(const std::string &name) const
 
 void Canvas::RemoveScene(const std::string &name)
 {
-    for(auto it = scenes.begin(); it != scenes.end(); ++it)
+    for(auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if((*it)->name == name) { scenes.erase(it); return; }
+        if((*it)->name == name) { m_scenes.erase(it); return; }
     }
 }
 
 Canvas *Canvas::GetInstance()
 {
-    return Canvas::mainBinaryCanvas;
+    return Canvas::p_mainBinaryCanvas;
 }
 
 float Canvas::GetAspectRatio()
 {
-    return Canvas::mainBinaryCanvas->aspectRatio;
+    return Canvas::p_mainBinaryCanvas->m_aspectRatio;
 }
 
 int Canvas::GetWidth()
 {
-    return Canvas::mainBinaryCanvas->width;
+    return Canvas::p_mainBinaryCanvas->m_width;
 }
 
 bool Canvas::IsPaused() const
 {
-    return paused;
+    return m_paused;
 }
 
 int Canvas::GetHeight()
 {
-    return Canvas::mainBinaryCanvas->height;
+    return Canvas::p_mainBinaryCanvas->m_height;
 }
 
 void Canvas::SetCursor(Qt::CursorShape cs)
@@ -218,11 +218,11 @@ void Canvas::OnTopKekPressed()
             GetFirstSelectedGameObject();
 
     if(selected ) selected->AddChild(e);
-    else currentScene->AddChild(e);
+    else p_currentScene->AddChild(e);
 }
 
 void Canvas::OnPauseResumeButtonPressed()
 {
-    paused = !paused;
-    WindowMain::GetInstance()->buttonPauseResume->setText( (paused ? QString("Resume") : QString("Pause")) );
+    m_paused = !m_paused;
+    WindowMain::GetInstance()->buttonPauseResume->setText( (m_paused ? QString("Resume") : QString("Pause")) );
 }

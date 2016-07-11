@@ -33,7 +33,7 @@ public:
     void OnSlotValueChanged(InspectorWidget *source) {}
 
 protected:
-    std::string filepath = "";
+    std::string m_filepath = "";
 
     Asset();
     virtual ~Asset();

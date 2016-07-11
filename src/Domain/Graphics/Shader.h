@@ -25,9 +25,9 @@ public:
     };
 
 private:
-    std::string sourceCode;
-    std::string filepath;
-    Type type;
+    std::string m_sourceCode;
+    std::string m_filepath;
+    Type m_type;
 
 public:
 

@@ -12,13 +12,13 @@
 class InspectorEnumSW  : public InspectorSW
 {
 private:
-    QComboBox *comboBox = nullptr;
+    QComboBox *p_comboBox = nullptr;
 
 public:
     InspectorEnumSW(const std::string &labelString,
                                 const std::vector<std::string> &initialValue,
                                 const int selectedValue,
-                                InspectorWidget *parent);
+                                InspectorWidget *p_parent);
 
     virtual void SetValue(int index);
     virtual int GetValue();

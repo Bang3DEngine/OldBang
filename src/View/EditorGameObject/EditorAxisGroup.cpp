@@ -2,14 +2,14 @@
 
 EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObject("EditorAxisGroup")
 {
-    this->attachedGameObject = attachedGameObject;
-    etag = new EditorTranslateAxisGroup(attachedGameObject);
-    erag = new EditorRotateAxisGroup(attachedGameObject);
-    esag = new EditorScaleAxisGroup(attachedGameObject);
+    this->p_attachedGameObject = attachedGameObject;
+    p_etag = new EditorTranslateAxisGroup(attachedGameObject);
+    p_erag = new EditorRotateAxisGroup(attachedGameObject);
+    p_esag = new EditorScaleAxisGroup(attachedGameObject);
 
-    AddChild(etag);
-    AddChild(erag);
-    AddChild(esag);
+    AddChild(p_etag);
+    AddChild(p_erag);
+    AddChild(p_esag);
 
     DisableAllGroups();
 
@@ -18,9 +18,9 @@ EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObj
 
 void EditorAxisGroup::DisableAllGroups()
 {
-    etag->SetEnabled(false);
-    erag->SetEnabled(false);
-    esag->SetEnabled(false);
+    p_etag->SetEnabled(false);
+    p_erag->SetEnabled(false);
+    p_esag->SetEnabled(false);
 }
 
 void EditorAxisGroup::OnUpdate()
@@ -31,30 +31,30 @@ void EditorAxisGroup::OnUpdate()
     if (tm == Toolbar::TransformMode::Translate)
     {
         DisableAllGroups();
-        etag->SetEnabled(true);
+        p_etag->SetEnabled(true);
     }
     else if (tm == Toolbar::TransformMode::Rotate)
     {
         DisableAllGroups();
-        erag->SetEnabled(true);
+        p_erag->SetEnabled(true);
     }
     else if (tm == Toolbar::TransformMode::Scale)
     {
         DisableAllGroups();
-        esag->SetEnabled(true);
+        p_esag->SetEnabled(true);
     }
 
     //Attached GameObject positioning
-    if (attachedGameObject)
+    if (p_attachedGameObject)
     {
-        Transform *at = attachedGameObject->GetComponent<Transform>();
+        Transform *at = p_attachedGameObject->GetComponent<Transform>();
         if (at)
         {
 
             Transform *t = GetComponent<Transform>();
 
             t->SetPosition(at->GetPosition()); // Pivot
-            Box bbox = attachedGameObject->GetBoundingBox();
+            Box bbox = p_attachedGameObject->GetBoundingBox();
             t->SetPosition( bbox.GetCenter() ); // Center
 
             if (Toolbar::GetInstance()->GetGlobalCoordsMode())
@@ -68,10 +68,10 @@ void EditorAxisGroup::OnUpdate()
 
             Camera *cam = Canvas::GetCurrentScene()->GetCamera();
             Vector3 camPos = cam->gameObject->GetComponent<Transform>()->GetPosition();
-            Vector3 attPos = attachedGameObject->GetComponent<Transform>()->GetPosition();
+            Vector3 attPos = p_attachedGameObject->GetComponent<Transform>()->GetPosition();
             float distanceToCamera = Vector3::Distance(camPos, attPos);
 
-            t->SetScale(distanceToCamera * sizeBoost);
+            t->SetScale(distanceToCamera * c_sizeBoost);
         }
     }
 }

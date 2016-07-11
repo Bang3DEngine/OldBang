@@ -8,8 +8,8 @@
 class FileDialog : public QFileDialog
 {
 private:
-    std::string title = "";
-    std::string extension = "";
+    std::string m_title = "";
+    std::string m_extension = "";
 
     std::string GetExtensionFilterString(const std::string &extension);
 

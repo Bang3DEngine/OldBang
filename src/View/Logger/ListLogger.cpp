@@ -1,7 +1,7 @@
 #include "ListLogger.h"
 #include "WindowMain.h"
 
-QListWidget *ListLogger::listLogger = nullptr;
+QListWidget *ListLogger::s_listLogger = nullptr;
 
 ListLogger::ListLogger(QWidget *parent) : QListWidget(parent)
 {
@@ -9,25 +9,25 @@ ListLogger::ListLogger(QWidget *parent) : QListWidget(parent)
 
 void ListLogger::AddLog(const std::string &str)
 {
-    listLogger = ListLogger::GetInstance();
+    s_listLogger = ListLogger::GetInstance();
 
-    listLogger->addItem(QString::fromStdString("LOG:\t" + str));
-    listLogger->scrollToBottom();
+    s_listLogger->addItem(QString::fromStdString("LOG:\t" + str));
+    s_listLogger->scrollToBottom();
 }
 
 void ListLogger::AddWarn(const std::string &str)
 {
-    listLogger = ListLogger::GetInstance();
+    s_listLogger = ListLogger::GetInstance();
 
-    listLogger->addItem(QString::fromStdString("WARNING:\t" + str));
+    s_listLogger->addItem(QString::fromStdString("WARNING:\t" + str));
     DecorateLastItem(QColor::fromRgb(255, 255, 200, 255));
 }
 
 void ListLogger::AddError(const std::string &str)
 {
-    listLogger = ListLogger::GetInstance();
+    s_listLogger = ListLogger::GetInstance();
 
-    listLogger->addItem(QString::fromStdString("ERROR:\t" + str));
+    s_listLogger->addItem(QString::fromStdString("ERROR:\t" + str));
     DecorateLastItem(QColor::fromRgb(255, 200, 200, 255));
 }
 
@@ -38,17 +38,17 @@ ListLogger *ListLogger::GetInstance()
 
 void ListLogger::DecorateLastItem(const QColor &color)
 {
-    listLogger = ListLogger::GetInstance();
+    s_listLogger = ListLogger::GetInstance();
     QColor inverse(255 - color.red(),
                    255 - color.green(),
                    255 - color.blue());
 
-    QListWidgetItem *item = listLogger->item(listLogger->count()-1);
+    QListWidgetItem *item = s_listLogger->item(s_listLogger->count()-1);
     if(item )
     {
         item->setBackgroundColor(color);
         item->setTextColor(inverse);
     }
 
-    listLogger->scrollToBottom();
+    s_listLogger->scrollToBottom();
 }

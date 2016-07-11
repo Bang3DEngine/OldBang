@@ -1,43 +1,41 @@
 #include "Sphere.h"
 
-const float Sphere::PI = 3.1415926f;
-
 Sphere::Sphere()
 {
 
 }
 
 Sphere::Sphere(float radius) :
-    radius(radius)
+    m_radius(radius)
 {
 }
 
 Sphere::Sphere(Vector3 center, float radius) :
-    center(center),
-    radius(radius)
+    m_center(center),
+    m_radius(radius)
 {
 
 }
 
 float Sphere::GetDiameter() const
 {
-    return 2 * radius;
+    return 2 * m_radius;
 }
 
 float Sphere::GetArea() const
 {
-    return 2 * PI * radius;
+    return 2 * glm::pi<float>() * m_radius;
 }
 
 float Sphere::GetVolume() const
 {
-    return PI * radius * radius;
+    return glm::pi<float>() * m_radius * m_radius;
 }
 
 void Sphere::FillFromBox(const Box &box)
 {
-    radius = box.GetDiagonal().Length();
-    center = box.GetCenter();
+    m_radius = box.GetDiagonal().Length();
+    m_center = box.GetCenter();
 }
 
 Sphere Sphere::FromBox(const Box &box)
@@ -49,20 +47,20 @@ Sphere Sphere::FromBox(const Box &box)
 
 void Sphere::SetCenter(const Vector3 &center)
 {
-    this->center = center;
+    this->m_center = center;
 }
 
 Vector3 Sphere::GetCenter() const
 {
-    return center;
+    return m_center;
 }
 
 void Sphere::SetRadius(float radius)
 {
-    this->radius = radius;
+    this->m_radius = radius;
 }
 
 float Sphere::GetRadius() const
 {
-    return radius;
+    return m_radius;
 }

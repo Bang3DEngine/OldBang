@@ -14,7 +14,7 @@
 class Box : public IToString
 {
 private:
-    Vector3 minv, maxv;
+    Vector3 m_minv, m_maxv;
 
 public:
 

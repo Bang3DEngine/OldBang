@@ -22,8 +22,8 @@ public:
 
 private:
 
-    Material *renderToScreenMaterial;
-    Mesh *renderToScreenPlaneMesh;
+    Material *p_renderToScreenMaterial;
+    Mesh *p_renderToScreenPlaneMesh;
 
 public:
     GBuffer(int width, int height);

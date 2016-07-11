@@ -9,10 +9,10 @@ class IGLIdable
 {
 protected:
     IGLIdable() {}
-    GLuint idgl;
+    GLuint m_idGL;
 
 public:
-    GLuint GetGLId() const { return idgl; }
+    GLuint GetGLId() const { return m_idGL; }
 };
 
 #endif // GLIDABLE_H

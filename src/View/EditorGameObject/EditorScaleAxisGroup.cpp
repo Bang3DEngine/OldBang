@@ -6,13 +6,13 @@ EditorScaleAxisGroup::EditorScaleAxisGroup(GameObject *attachedGameObject) :
     EditorGameObject("EditorScaleAxisGroup")
 {
 
-    axisX = new EditorScaleAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
-    axisY = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
-    axisZ = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
+    p_axisX = new EditorScaleAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
+    p_axisY = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
+    p_axisZ = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
 
-    AddChild(axisX);
-    AddChild(axisY);
-    AddChild(axisZ);
+    AddChild(p_axisX);
+    AddChild(p_axisY);
+    AddChild(p_axisZ);
 
     AddComponent<Transform>();
 }

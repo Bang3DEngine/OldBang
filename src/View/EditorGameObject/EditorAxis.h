@@ -16,35 +16,36 @@ public:
 
 protected:
 
-    Material *material = nullptr;
-    GameObject *attachedGameObject = nullptr;
-
-    static std::string GetStringFromDir(EditorAxisDirection dir);
-    static Vector3 GetVectorFromDir(EditorAxisDirection dir);
+    Material *p_material = nullptr;
+    GameObject *p_attachedGameObject = nullptr;
 
     /**
      * @brief To know when the user is grabbing the axis with the mouse
      */
-    bool grabbed = false;
+    bool m_grabbed = false;
 
     /**
      * @brief Line color will be multiplied by this when axis not being hovered.
      */
-    Vector3 lineColorFadingNotHover = Vector3(0.7f);
+    const Vector3 c_lineColorFadingNotHover = Vector3(0.7f);
     /**
      * @brief Line color will be multiplied by this when axis being hovered, but not grabbed.
      */
-    Vector3 lineColorFadingNotGrabbed = Vector3(0.9f);
-    Vector3 lineColor;
+    const Vector3 c_lineColorFadingNotGrabbed = Vector3(0.9f);
+    Vector3 m_lineColor;
 
     /**
      * @brief Axis direction in obj space.
      */
-    Vector3 oAxisDirection;
+    Vector3 m_oAxisDirection;
 
-    bool mouseIsOver = false;
+    bool m_mouseIsOver = false;
 
-    float axisLineWidth = 1.0f;
+    float m_axisLineWidth = 1.0f;
+
+    static std::string GetStringFromDir(EditorAxisDirection dir);
+    static Vector3 GetVectorFromDir(EditorAxisDirection dir);
+
 
     /**
      * @brief To be filled by child classes
@@ -52,7 +53,7 @@ protected:
     virtual Renderer *GetAxisRenderer() const = 0;
 
 public:
-    EditorAxis(EditorAxisDirection dir, GameObject *attachedGameObject);
+    EditorAxis(EditorAxisDirection dir, GameObject *p_attachedGameObject);
     virtual ~EditorAxis();
 
     virtual void OnUpdate() override;

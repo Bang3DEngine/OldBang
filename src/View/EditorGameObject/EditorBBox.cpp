@@ -2,7 +2,7 @@
 
 EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("EditorBBox")
 {
-    this->attachedGameObject = attachedGameObject;
+    this->p_attachedGameObject = attachedGameObject;
 
     AddComponent<Transform>();
 
@@ -31,7 +31,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
     if(!AssetsManager::ExistsAssetInCache("EditorBBox_Mesh"))
     {
         mesh = new Mesh();
-        mesh->LoadPositions(boxVertices);
+        mesh->LoadPositions(s_boxVertices);
     }
     else
     {
@@ -46,11 +46,11 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
 
 void EditorBBox::OnUpdate()
 {
-    NONULL(attachedGameObject);
+    NONULL(p_attachedGameObject);
 
     // Adjust transform to wrap all the vertices of the parent and children
     Box bbox;
-    std::list<Renderer*> rends = attachedGameObject->GetComponents<Renderer>();
+    std::list<Renderer*> rends = p_attachedGameObject->GetComponents<Renderer>();
     for(auto it_r = rends.begin(); it_r != rends.end(); ++it_r)
     {
         Renderer *r = *it_r;
@@ -73,7 +73,7 @@ void EditorBBox::OnUpdate()
 }
 
 
-std::vector<Vector3> EditorBBox::boxVertices =
+std::vector<Vector3> EditorBBox::s_boxVertices =
 {
     Vector3( 0.5f, 0.5f, 0.5f),
     Vector3( 0.5f,-0.5f,-0.5f),

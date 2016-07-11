@@ -3,13 +3,13 @@
 EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     : EditorGameObject("EditorRotateAxisGroup")
 {
-    axisX = new EditorRotateAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
-    axisY = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
-    axisZ = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
+    p_axisX = new EditorRotateAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
+    p_axisY = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
+    p_axisZ = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
 
-    this->AddChild(axisX);
-    this->AddChild(axisY);
-    this->AddChild(axisZ);
+    this->AddChild(p_axisX);
+    this->AddChild(p_axisY);
+    this->AddChild(p_axisZ);
 
     AddComponent<Transform>();
 }

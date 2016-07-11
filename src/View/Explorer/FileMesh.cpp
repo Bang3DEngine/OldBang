@@ -3,26 +3,26 @@
 FileMesh::FileMesh(const QFileSystemModel *model, const QModelIndex *index)
     :File(model, index)
 {
-    FileReader::GetOBJFormat(path, &hasUvs, &hasNormals, &isTris);
-    numFaces = FileReader::GetOBJNumFaces(path);
+    FileReader::GetOBJFormat(m_path, &m_hasUvs, &m_hasNormals, &m_isTris);
+    m_numFaces = FileReader::GetOBJNumFaces(m_path);
 }
 
 bool FileMesh::IsTriangles() const
 {
-    return isTris;
+    return m_isTris;
 }
 
 bool FileMesh::HasUvs() const
 {
-    return hasUvs;
+    return m_hasUvs;
 }
 
 bool FileMesh::HasNormals() const
 {
-    return hasNormals;
+    return m_hasNormals;
 }
 
 int FileMesh::GetNumFaces() const
 {
-    return numFaces;
+    return m_numFaces;
 }

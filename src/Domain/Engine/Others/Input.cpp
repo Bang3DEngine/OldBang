@@ -15,12 +15,12 @@ void Input::InitFromMainBinary() // Called from Canvas
 
 void Input::OnNewFrame()
 {
-    for (auto it = keyInfos.begin(); it != keyInfos.end(); ++it)
+    for (auto it = m_keyInfos.begin(); it != m_keyInfos.end(); ++it)
     {
         ButtonInfo &kInfo = it->second;
         if (kInfo.up) //After a frame where it was Up
         {
-            keyInfos.erase(it);
+            m_keyInfos.erase(it);
         }
         else if (kInfo.down)
         {
@@ -28,43 +28,43 @@ void Input::OnNewFrame()
         }
     }
 
-    for (auto it = mouseInfo.begin(); it != mouseInfo.end(); ++it)
+    for (auto it = m_mouseInfo.begin(); it != m_mouseInfo.end(); ++it)
     {
         ButtonInfo &mbInfo = it->second;
         if (mbInfo.up) //After a frame where it was Up
         {
-            mouseInfo.erase(it);
+            m_mouseInfo.erase(it);
         }
         else if (mbInfo.down)
         {
             mbInfo.down = false; // Not down anymore, just pressed.
         }
 
-        isADoubleClick = false; // Reset double click
+        m_isADoubleClick = false; // Reset double click
     }
 
-    lastMouseWheelDelta = 0.0f;
-    if (!lockMouseMovement)
+    m_lastMouseWheelDelta = 0.0f;
+    if (!m_lockMouseMovement)
     {
-        lastMouseCoords = mouseCoords;
+        m_lastMouseCoords = m_mouseCoords;
     }
-    else if (framesMouseStopped > 3)
+    else if (m_framesMouseStopped > 3)
     {
         //For the case of mouse movement locking, this
         //avoids a bug of axisX/Y getting stuck when mouse
         //does: lock/moving/stop_moving => axisX/Y think mouse is still moving
-        lastMouseCoords = mouseCoords;
+        m_lastMouseCoords = m_mouseCoords;
     }
-    ++framesMouseStopped;
+    ++m_framesMouseStopped;
 
-    secsSinceLastMouseDown += Time::GetDeltaTime();
+    m_secsSinceLastMouseDown += Time::GetDeltaTime();
 
     HandleMouseWrapping();
 }
 
 void Input::HandleMouseWrapping()
 {
-    if(mouseWrapping)
+    if(m_mouseWrapping)
     {
         QCursor cursor = WindowMain::GetMainWindow()->cursor();
         WindowMain *w = WindowMain::GetInstance();
@@ -73,45 +73,45 @@ void Input::HandleMouseWrapping()
         int ch = canvas->GetHeight();
 
         bool wrapped = false;
-        if(mouseCoords.x >= cw)
+        if(m_mouseCoords.x >= cw)
         {
-            cursor.setPos(canvas->mapToGlobal(QPoint(0, mouseCoords.y)));
+            cursor.setPos(canvas->mapToGlobal(QPoint(0, m_mouseCoords.y)));
             wrapped = true;
         }
-        else if(mouseCoords.x < 0)
+        else if(m_mouseCoords.x < 0)
         {
-            cursor.setPos(canvas->mapToGlobal(QPoint(cw, mouseCoords.y)));
+            cursor.setPos(canvas->mapToGlobal(QPoint(cw, m_mouseCoords.y)));
             wrapped = true;
         }
 
-        if(mouseCoords.y >= ch)
+        if(m_mouseCoords.y >= ch)
         {
-            cursor.setPos(canvas->mapToGlobal(QPoint(mouseCoords.x, 0)));
+            cursor.setPos(canvas->mapToGlobal(QPoint(m_mouseCoords.x, 0)));
             wrapped = true;
         }
-        else if(mouseCoords.y < 0)
+        else if(m_mouseCoords.y < 0)
         {
-            cursor.setPos(canvas->mapToGlobal(QPoint(mouseCoords.x, ch)));
+            cursor.setPos(canvas->mapToGlobal(QPoint(m_mouseCoords.x, ch)));
             wrapped = true;
         }
 
         if(wrapped)
         {
             QPoint newCoords = canvas->mapFromGlobal(cursor.pos());
-            mouseCoords = glm::vec2(newCoords.x(), newCoords.y());
-            lastMouseCoords = mouseCoords;
+            m_mouseCoords = glm::vec2(newCoords.x(), newCoords.y());
+            m_lastMouseCoords = m_mouseCoords;
         }
     }
 }
 
 void Input::HandleInputMouseWheel(QWheelEvent *event)
 {
-    lastMouseWheelDelta = float(event->delta()) / (360.0f);
+    m_lastMouseWheelDelta = float(event->delta()) / (360.0f);
 }
 
 void Input::HandleInputMouseMove(QMouseEvent *event)
 {
-    framesMouseStopped = 0;
+    m_framesMouseStopped = 0;
 
     //Used to ignore QCursor::setPos call to mouseMove event
     static bool fakeMoveEvent = false;
@@ -121,12 +121,12 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
         return;
     }
 
-    mouseCoords = glm::vec2(event->x(), event->y());
+    m_mouseCoords = glm::vec2(event->x(), event->y());
 
-    if(lockMouseMovement)
+    if(m_lockMouseMovement)
     {
-        QPoint glob = QPoint(lastMouseCoords.x,
-                             lastMouseCoords.y);
+        QPoint glob = QPoint(m_lastMouseCoords.x,
+                             m_lastMouseCoords.y);
         glob = Canvas::GetInstance()->mapToGlobal(glob);
 
         fakeMoveEvent = true;
@@ -137,27 +137,27 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
 void Input::HandleInputMousePress(QMouseEvent *event)
 {
     MouseButton mb = static_cast<MouseButton>(event->button());
-    if(mouseInfo.find(mb) == mouseInfo.end())
+    if(m_mouseInfo.find(mb) == m_mouseInfo.end())
     {
         //Only if it was not down/pressed before
-        mouseInfo[mb] = ButtonInfo(false, true, true);
+        m_mouseInfo[mb] = ButtonInfo(false, true, true);
 
-        if(secsSinceLastMouseDown <= doubleClickMaxSeconds)
+        if(m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds)
         {
-            isADoubleClick = true;
+            m_isADoubleClick = true;
         }
-        secsSinceLastMouseDown = 0; // Restart time since last click counter
+        m_secsSinceLastMouseDown = 0; // Restart time since last click counter
     }
 }
 
 void Input::HandleInputMouseRelease(QMouseEvent *event)
 {
     MouseButton mb = static_cast<MouseButton>(event->button());
-    if(mouseInfo.find(mb) != mouseInfo.end() &&
-       mouseInfo[mb].pressed)
+    if(m_mouseInfo.find(mb) != m_mouseInfo.end() &&
+       m_mouseInfo[mb].pressed)
     {
         //Only if it was pressed before
-        mouseInfo[mb] = ButtonInfo(true, false, false);
+        m_mouseInfo[mb] = ButtonInfo(true, false, false);
     }
 }
 
@@ -168,9 +168,9 @@ void Input::HandleInputKeyPress(QKeyEvent *event)
     if(event->isAutoRepeat()) return;
 
     Key k = static_cast<Key>(event->key());
-    if(keyInfos.find(k) == keyInfos.end())
+    if(m_keyInfos.find(k) == m_keyInfos.end())
     {   //Only if it was not down/pressed before
-        keyInfos[k] = ButtonInfo(false, true, true);
+        m_keyInfos[k] = ButtonInfo(false, true, true);
     }
 }
 
@@ -180,10 +180,10 @@ void Input::HandleInputKeyReleased(QKeyEvent *event)
     if(event->isAutoRepeat()) return;
 
     Key k = static_cast<Key>(event->key());
-    if(keyInfos.find(k) != keyInfos.end() &&
-       keyInfos[k].pressed)
+    if(m_keyInfos.find(k) != m_keyInfos.end() &&
+       m_keyInfos[k].pressed)
     {   //Only if it was pressed before
-        keyInfos[k] = ButtonInfo(true, false, false);
+        m_keyInfos[k] = ButtonInfo(true, false, false);
     }
 }
 
@@ -195,69 +195,69 @@ Input *Input::GetInstance()
 bool Input::GetMouseWrapping()
 {
     Input *inp = Input::GetInstance();
-    return inp->mouseWrapping;
+    return inp->m_mouseWrapping;
 }
 
 void Input::SetMouseWrapping(bool mouseWrapping)
 {
     Input *inp = Input::GetInstance();
-    inp->mouseWrapping = mouseWrapping;
+    inp->m_mouseWrapping = mouseWrapping;
 }
 
 
 bool Input::GetKey(Input::Key k)
 {
     Input *inp = Input::GetInstance();
-    return inp->keyInfos.find(k) != inp->keyInfos.end() &&
-           inp->keyInfos[k].pressed;
+    return inp->m_keyInfos.find(k) != inp->m_keyInfos.end() &&
+           inp->m_keyInfos[k].pressed;
 }
 
 bool Input::GetKeyUp(Input::Key k)
 {
     Input *inp = Input::GetInstance();
-    return inp->keyInfos.find(k) != inp->keyInfos.end() &&
-           inp-> keyInfos[k].up;
+    return inp->m_keyInfos.find(k) != inp->m_keyInfos.end() &&
+           inp-> m_keyInfos[k].up;
 }
 
 bool Input::GetKeyDown(Input::Key k)
 {
     Input *inp = Input::GetInstance();
-    return inp->keyInfos.find(k) != inp->keyInfos.end() &&
-           inp->keyInfos[k].down;
+    return inp->m_keyInfos.find(k) != inp->m_keyInfos.end() &&
+           inp->m_keyInfos[k].down;
 }
 
 float Input::GetMouseWheel()
 {
     Input *inp = Input::GetInstance();
-    return inp->lastMouseWheelDelta;
+    return inp->m_lastMouseWheelDelta;
 }
 
 
 bool Input::GetMouseButton(Input::MouseButton mb)
 {
     Input *inp = Input::GetInstance();
-    return inp->mouseInfo.find(mb) != inp->mouseInfo.end() &&
-           inp->mouseInfo[mb].pressed;
+    return inp->m_mouseInfo.find(mb) != inp->m_mouseInfo.end() &&
+           inp->m_mouseInfo[mb].pressed;
 }
 
 bool Input::GetMouseButtonUp(Input::MouseButton mb)
 {
     Input *inp = Input::GetInstance();
-    return inp->mouseInfo.find(mb) != inp->mouseInfo.end() &&
-           inp->mouseInfo[mb].up;
+    return inp->m_mouseInfo.find(mb) != inp->m_mouseInfo.end() &&
+           inp->m_mouseInfo[mb].up;
 }
 
 bool Input::GetMouseButtonDown(Input::MouseButton mb)
 {
     Input *inp = Input::GetInstance();
-    return inp->mouseInfo.find(mb) != inp->mouseInfo.end() &&
-           inp->mouseInfo[mb].down;
+    return inp->m_mouseInfo.find(mb) != inp->m_mouseInfo.end() &&
+           inp->m_mouseInfo[mb].down;
 }
 
 bool Input::GetMouseButtonDoubleClick(Input::MouseButton mb)
 {
     Input *inp = Input::GetInstance();
-    return Input::GetMouseButtonDown(mb) && inp->isADoubleClick;
+    return Input::GetMouseButtonDown(mb) && inp->m_isADoubleClick;
 }
 
 float Input::GetMouseAxisX()
@@ -278,13 +278,13 @@ glm::vec2 Input::GetMouseAxis()
 float Input::GetMouseDeltaX()
 {
     Input *inp = Input::GetInstance();
-    return inp->mouseCoords.x - inp->lastMouseCoords.x;
+    return inp->m_mouseCoords.x - inp->m_lastMouseCoords.x;
 }
 
 float Input::GetMouseDeltaY()
 {
     Input *inp = Input::GetInstance();
-    return inp->mouseCoords.y - inp->lastMouseCoords.y;
+    return inp->m_mouseCoords.y - inp->m_lastMouseCoords.y;
 }
 
 glm::vec2 Input::GetMouseDelta()
@@ -295,17 +295,17 @@ glm::vec2 Input::GetMouseDelta()
 void Input::LockMouseMovement(bool lock)
 {
     Input *inp = Input::GetInstance();
-    inp->lockMouseMovement = lock;
+    inp->m_lockMouseMovement = lock;
 }
 
 bool Input::IsLockMouseMovement()
 {
     Input *inp = Input::GetInstance();
-    return inp->lockMouseMovement;
+    return inp->m_lockMouseMovement;
 }
 
 glm::vec2 Input::GetMouseCoords()
 {
     Input *inp = Input::GetInstance();
-    return inp->mouseCoords;
+    return inp->m_mouseCoords;
 }

@@ -10,15 +10,15 @@ InspectorButtonSW::InspectorButtonSW(const std::string &label,
     layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
-    this->onClickFunction = onClickFunction;
+    this->m_onClickFunction = onClickFunction;
 
-    button = new QPushButton(QString::fromStdString(label));
-    connect(button, SIGNAL(clicked(bool)),
+    p_button = new QPushButton(QString::fromStdString(label));
+    connect(p_button, SIGNAL(clicked(bool)),
             this, SLOT(OnButtonClicked(bool)));
-    button->setContentsMargins(0,0,0,0);
-    button->show();
+    p_button->setContentsMargins(0,0,0,0);
+    p_button->show();
 
-    layout->addWidget(button);
+    layout->addWidget(p_button);
 
     this->setContentsMargins(0,0,0,0);
     this->show();
@@ -28,7 +28,7 @@ InspectorButtonSW::InspectorButtonSW(const std::string &label,
 
 void InspectorButtonSW::OnButtonClicked(bool _)
 {
-    onClickFunction();
+    m_onClickFunction();
 }
 
 QSize InspectorButtonSW::sizeHint() const

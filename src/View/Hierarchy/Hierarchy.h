@@ -29,8 +29,13 @@ class Hierarchy : public QTreeWidget, public IWindowEventManagerListener
 private:
     //For every gameObject, we have the associated treeItem,
     //in order to update :)
-    mutable std::map<GameObject*, QTreeWidgetItem*> gameObjectToTreeItem;
-    mutable std::map<QTreeWidgetItem*,GameObject*> treeItemToGameObject;
+    mutable std::map<GameObject*, QTreeWidgetItem*> m_gameObjectToTreeItem;
+    mutable std::map<QTreeWidgetItem*,GameObject*> m_treeItemToGameObject;
+
+    QTreeWidgetItem *p_lastSelectedItem = nullptr;
+    Scene *p_currentScene = nullptr;
+
+    std::list<GameObject*> m_copiedGameObjects;
 
     void ExpandRecursiveUpwards(QTreeWidgetItem *item);
     QTreeWidgetItem* FillDownwards(GameObject *e);
@@ -38,11 +43,6 @@ private:
     //Useful for example, for RemoveChild
     //(we just need to remove the parent/s of all the selected entities)
     void LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items);
-
-    QTreeWidgetItem *lastSelectedItem = nullptr;
-    Scene *currentScene = nullptr;
-
-    std::list<GameObject*> copiedGameObjects;
 
 public:
     explicit Hierarchy(QWidget *parent = 0);

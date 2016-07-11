@@ -2,97 +2,97 @@
 
 Texture::Texture()
 {
-    glGenTextures(1, &idgl);
-    SetFilterMode(filterMode);
-    SetWrapMode(wrapMode);
-    glTextureGetIntegerType = GL_TEXTURE_2D;
+    glGenTextures(1, &m_idGL);
+    SetFilterMode(m_filterMode);
+    SetWrapMode(m_wrapMode);
+    m_glTextureGetIntegerType = GL_TEXTURE_2D;
 }
 
 Texture::Texture(TextureType glTextureTarget) : Texture()
 {
-    glTextureType = glTextureTarget;
-    if(glTextureType == Texture1D)
-        glTextureGetIntegerType = GL_TEXTURE_BINDING_1D;
-    else if(glTextureType == Texture2D)
-        glTextureGetIntegerType = GL_TEXTURE_BINDING_2D;
-    else if(glTextureType == Texture3D)
-        glTextureGetIntegerType = GL_TEXTURE_BINDING_3D;
-    else if(glTextureType == TextureCubeMap)
-        glTextureGetIntegerType = GL_TEXTURE_BINDING_CUBE_MAP;
+    m_glTextureType = glTextureTarget;
+    if(m_glTextureType == Texture1D)
+        m_glTextureGetIntegerType = GL_TEXTURE_BINDING_1D;
+    else if(m_glTextureType == Texture2D)
+        m_glTextureGetIntegerType = GL_TEXTURE_BINDING_2D;
+    else if(m_glTextureType == Texture3D)
+        m_glTextureGetIntegerType = GL_TEXTURE_BINDING_3D;
+    else if(m_glTextureType == TextureCubeMap)
+        m_glTextureGetIntegerType = GL_TEXTURE_BINDING_CUBE_MAP;
 
 }
 
 Texture::~Texture()
 {
-    if(data ) delete data;
-    glDeleteTextures(1, &idgl);
+    if(p_data ) delete p_data;
+    glDeleteTextures(1, &m_idGL);
 }
 
 void Texture::SetFilterMode(Texture::FilterMode filterMode)
 {
-    this->filterMode = filterMode;
+    this->m_filterMode = filterMode;
     Bind();
-    glTexParameteri(glTextureType, GL_TEXTURE_MAG_FILTER, filterMode);
-    glTexParameteri(glTextureType, GL_TEXTURE_MIN_FILTER, filterMode);
+    glTexParameteri(m_glTextureType, GL_TEXTURE_MAG_FILTER, filterMode);
+    glTexParameteri(m_glTextureType, GL_TEXTURE_MIN_FILTER, filterMode);
     UnBind();
 }
 
 void Texture::SetWrapMode(Texture::WrapMode wrapMode)
 {
-    this->wrapMode = wrapMode;
+    this->m_wrapMode = wrapMode;
     Bind();
-    glTexParameteri(glTextureType, GL_TEXTURE_WRAP_S, wrapMode);
-    glTexParameteri(glTextureType, GL_TEXTURE_WRAP_T, wrapMode);
-    glTexParameteri(glTextureType, GL_TEXTURE_WRAP_R, wrapMode);
+    glTexParameteri(m_glTextureType, GL_TEXTURE_WRAP_S, wrapMode);
+    glTexParameteri(m_glTextureType, GL_TEXTURE_WRAP_T, wrapMode);
+    glTexParameteri(m_glTextureType, GL_TEXTURE_WRAP_R, wrapMode);
     UnBind();
 }
 
 void Texture::SetTextureSlot(int textureSlot)
 {
-    this->textureSlot = textureSlot;
+    this->m_textureSlot = textureSlot;
 }
 
 int Texture::GetWidth() const
 {
-    return width;
+    return m_width;
 }
 
 int Texture::GetHeight() const
 {
-    return height;
+    return m_height;
 }
 
 int Texture::GetNumComponents() const
 {
-    return numComponents;
+    return m_numComponents;
 }
 
 Texture::FilterMode Texture::GetFilterMode() const
 {
-    return filterMode;
+    return m_filterMode;
 }
 
 Texture::WrapMode Texture::GetWrapMode() const
 {
-    return wrapMode;
+    return m_wrapMode;
 }
 
 int Texture::GetTextureSlot() const
 {
-    return textureSlot;
+    return m_textureSlot;
 }
 
 void Texture::Bind() const
 {
     PreBind(GL_ACTIVE_TEXTURE);
-    glActiveTexture(GL_TEXTURE0 + textureSlot);
+    glActiveTexture(GL_TEXTURE0 + m_textureSlot);
 
     PreBind(GL_TEXTURE_BINDING_2D);
-    glBindTexture(GL_TEXTURE_2D, idgl);
+    glBindTexture(GL_TEXTURE_2D, m_idGL);
 }
 
 void Texture::UnBind() const
 {
-    glBindTexture(glTextureType, PreUnBind(GL_TEXTURE_BINDING_2D));
+    glBindTexture(m_glTextureType, PreUnBind(GL_TEXTURE_BINDING_2D));
     glActiveTexture( PreUnBind(GL_ACTIVE_TEXTURE) );
 }

@@ -16,10 +16,10 @@ class Inspector : public QListWidget, public IWindowEventManagerListener
     Q_OBJECT
 
 private:
-    QLabel *titleLabel = nullptr;
-    GameObject *currentGameObject = nullptr;
+    QLabel *p_titleLabel = nullptr;
+    GameObject *p_currentGameObject = nullptr;
 
-    std::map<InspectorWidget*, QListWidgetItem*> widgetToItem;
+    std::map<InspectorWidget*, QListWidgetItem*> m_widgetToItem;
 
 protected:
     //To set the scroll step to a smaller one

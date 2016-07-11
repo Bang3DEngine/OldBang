@@ -8,12 +8,12 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
 {
     SetName("EditorTranslateAxisGroup" + EditorAxis::GetStringFromDir(dir));
 
-    line = AddComponent<SingleLineRenderer>();
-    line->SetDestiny(oAxisDirection);
-    line->SetMaterial(material);
-    line->SetLineWidth(2.0f);
+    p_line = AddComponent<SingleLineRenderer>();
+    p_line->SetDestiny(m_oAxisDirection);
+    p_line->SetMaterial(p_material);
+    p_line->SetLineWidth(2.0f);
 
-    line->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
+    p_line->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
             glLineWidth(25.0f);
         }
@@ -32,11 +32,11 @@ void EditorTranslateAxis::OnUpdate()
 
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->gameObject->GetComponent<Transform>(); NONULL(camTransform);
-    Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
+    Transform *attTrans = p_attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
     Transform *transform = GetComponent<Transform>(); NONULL(transform);
     Vector3 wCamPos = camTransform->GetPosition();
 
-    if (grabbed)
+    if (m_grabbed)
     {
         glm::vec2 sMouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f);
         if (glm::length(sMouseDelta) > 0.0f)
@@ -44,11 +44,11 @@ void EditorTranslateAxis::OnUpdate()
             Vector3 wAxisDir;
             if (Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
-                wAxisDir = oAxisDirection;
+                wAxisDir = m_oAxisDirection;
             }
             else
             {
-                wAxisDir = transform->LocalToWorldDirection(oAxisDirection);
+                wAxisDir = transform->LocalToWorldDirection(m_oAxisDirection);
             }
 
             // Alignment
@@ -69,6 +69,6 @@ void EditorTranslateAxis::OnUpdate()
 
 Renderer *EditorTranslateAxis::GetAxisRenderer() const
 {
-    return line;
+    return p_line;
 }
 

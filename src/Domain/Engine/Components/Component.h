@@ -32,7 +32,7 @@ class Component :
 {
 friend class GameObject;
 protected:
-    bool enabled = true;
+    bool m_enabled = true;
 
     Component();
     virtual ~Component();
@@ -49,8 +49,8 @@ public:
 
     virtual std::string GetName() const { return "Component"; }
 
-    void SetEnabled(bool enabled) { this->enabled = enabled; }
-    bool IsEnabled() { return enabled; }
+    void SetEnabled(bool enabled) { this->m_enabled = enabled; }
+    bool IsEnabled() { return m_enabled; }
 
     virtual void Write(std::ostream &f) const override {}
     virtual void Read(std::istream &f) override {}

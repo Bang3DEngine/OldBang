@@ -7,7 +7,7 @@ class EditorGameObject : public GameObject
 {
 public:
     EditorGameObject();
-    EditorGameObject(const std::string &m_name);
+    EditorGameObject(const std::string &name);
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable* Clone() const;

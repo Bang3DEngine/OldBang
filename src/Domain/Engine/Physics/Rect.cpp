@@ -6,34 +6,34 @@ Rect::Rect()
 
 Rect::Rect(float minx, float maxx,
            float miny, float maxy) :
-    minx(minx), maxx(maxx),
-    miny(miny), maxy(maxy)
+    m_minx(minx), m_maxx(maxx),
+    m_miny(miny), m_maxy(maxy)
 {
 }
 
 float Rect::GetWidth() const
 {
-    return (maxx-minx);
+    return (m_maxx-m_minx);
 }
 
 float Rect::GetHeight() const
 {
-    return (maxy-miny);
+    return (m_maxy-m_miny);
 }
 
 float Rect::GetArea() const
 {
-    return (maxx-minx) * (maxy-miny);
+    return (m_maxx-m_minx) * (m_maxy-m_miny);
 }
 
 const std::string Rect::ToString() const
 {
     std::ostringstream oss;
     oss << "Rect: [" << std::endl <<
-           "  minx:" << minx << std::endl <<
-           "  maxx:" << maxx << std::endl <<
-           "  miny:" << miny << std::endl <<
-           "  maxy:" << maxy << std::endl <<
+           "  minx:" << m_minx << std::endl <<
+           "  maxx:" << m_maxx << std::endl <<
+           "  miny:" << m_miny << std::endl <<
+           "  maxy:" << m_maxy << std::endl <<
            "]" << std::endl;
 
     return oss.str();

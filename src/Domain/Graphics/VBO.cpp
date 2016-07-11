@@ -2,12 +2,12 @@
 
 VBO::VBO()
 {
-    glGenBuffers(1, &idgl);
+    glGenBuffers(1, &m_idGL);
 }
 
 VBO::~VBO()
 {
-    glDeleteBuffers(1, &idgl);
+    glDeleteBuffers(1, &m_idGL);
 }
 
 void VBO::Fill(const void *data, int dataSize, GLenum usage)
@@ -20,7 +20,7 @@ void VBO::Fill(const void *data, int dataSize, GLenum usage)
 void VBO::Bind() const
 {
     PreBind(GL_ARRAY_BUFFER);
-    glBindBuffer(GL_ARRAY_BUFFER, idgl);
+    glBindBuffer(GL_ARRAY_BUFFER, m_idGL);
 }
 void VBO::UnBind() const
 {

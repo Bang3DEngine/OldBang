@@ -7,8 +7,8 @@ FileDialog::FileDialog(const std::string &title,
                        const std::string &extension) :
     QFileDialog(WindowMain::GetMainWindow())
 {
-    this->title = title;
-    this->extension = extension;
+    this->m_title = title;
+    this->m_extension = extension;
 }
 
 std::string FileDialog::GetExtensionFilterString(const std::string &extension)
@@ -22,9 +22,9 @@ std::string FileDialog::GetOpenFilename()
     std::string filepath =
             this->getOpenFileName(
                 WindowMain::GetMainWindow(),
-                QString::fromStdString(title),
+                QString::fromStdString(m_title),
                 QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
-                QString::fromStdString(GetExtensionFilterString(extension))
+                QString::fromStdString(GetExtensionFilterString(m_extension))
             ).toStdString();
 
     return filepath;
@@ -38,13 +38,13 @@ std::string FileDialog::GetSaveFilename(const std::string &suggestedFilename)
     std::string filepath =
             this->getSaveFileName(
                 WindowMain::GetMainWindow(),
-                QString::fromStdString(title),
+                QString::fromStdString(m_title),
                 QString::fromStdString(dirpath),
-                QString::fromStdString(GetExtensionFilterString(extension))
+                QString::fromStdString(GetExtensionFilterString(m_extension))
             ).toStdString();
 
     //This function auto detects if it was in the filepath already.
-    filepath = Persistence::AppendExtension(filepath, extension);
+    filepath = Persistence::AppendExtension(filepath, m_extension);
 
     return filepath;
 }

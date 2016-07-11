@@ -15,7 +15,7 @@
 
 Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 {
-    titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
+    p_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
 }
 
 void Inspector::updateGeometries()
@@ -27,9 +27,9 @@ void Inspector::updateGeometries()
 void Inspector::Clear()
 {
     clear();
-    widgetToItem.clear();
-    currentGameObject = nullptr;
-    titleLabel->setText(QString::fromStdString("No gameObject selected."));
+    m_widgetToItem.clear();
+    p_currentGameObject = nullptr;
+    p_titleLabel->setText(QString::fromStdString("No gameObject selected."));
 
     setStyleSheet("/* */"); //without this line we get resize problems :)
     show();
@@ -37,7 +37,7 @@ void Inspector::Clear()
 
 void Inspector::Refresh()
 {
-    GameObject *e = currentGameObject;
+    GameObject *e = p_currentGameObject;
     Clear();
     ShowGameObjectInfo(e);
 }
@@ -45,18 +45,18 @@ void Inspector::Refresh()
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
     Clear();
-    currentGameObject = gameObject;
+    p_currentGameObject = gameObject;
 
-    NONULL(currentGameObject);
+    NONULL(p_currentGameObject);
 
-    for(Component *p : currentGameObject->GetComponents())
+    for(Component *p : p_currentGameObject->GetComponents())
     {
         InspectorComponentWidget *w = new InspectorComponentWidget(p);
         AddWidget(w);
     }
 
-    titleLabel->setText(
-                QString::fromStdString("Name: " + currentGameObject->GetName())
+    p_titleLabel->setText(
+                QString::fromStdString("Name: " + p_currentGameObject->GetName())
                 );
 }
 
@@ -69,7 +69,7 @@ void Inspector::SetWidget(InspectorWidget *widget)
 void Inspector::AddWidget(InspectorWidget *widget)
 {
     QListWidgetItem *item = new QListWidgetItem();
-    widgetToItem[widget] = item;
+    m_widgetToItem[widget] = item;
     addItem(item);
 
     setItemWidget(item, widget);
@@ -82,7 +82,7 @@ void Inspector::AddWidget(InspectorWidget *widget)
 
 void Inspector::MoveUp(InspectorWidget *w)
 {
-    int lastRow = row(widgetToItem[w]);
+    int lastRow = row(m_widgetToItem[w]);
     if(lastRow == 0) return;
     QListWidgetItem *item = takeItem(lastRow);
     insertItem(lastRow-1, item);
@@ -90,7 +90,7 @@ void Inspector::MoveUp(InspectorWidget *w)
 
 void Inspector::MoveDown(InspectorWidget *w)
 {
-    int lastRow = row(widgetToItem[w]);
+    int lastRow = row(m_widgetToItem[w]);
     if(lastRow == this->count()) return;
     QListWidgetItem *item = takeItem(lastRow);
     insertItem(lastRow+1, item);
@@ -110,54 +110,54 @@ void Inspector::OnTreeHierarchyGameObjectsSelected
 
 void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 {
-    NONULL(currentGameObject);
+    NONULL(p_currentGameObject);
 
     if(clickedAction == MenuBar::Action::AddComponentBehaviour)
     {
-        if(this->currentGameObject )
+        if(this->p_currentGameObject )
         {
             BehaviourHolder *bh = new BehaviourHolder();
-            currentGameObject->AddComponent(bh);
+            p_currentGameObject->AddComponent(bh);
         }
     }
     else if(clickedAction == MenuBar::Action::AddComponentCamera)
     {
-        if(this->currentGameObject )
+        if(this->p_currentGameObject )
         {
             Camera *c = new Camera();
-            currentGameObject->AddComponent(c);
+            p_currentGameObject->AddComponent(c);
         }
     }
     else if(clickedAction == MenuBar::Action::AddComponentTransform)
     {
-        if(this->currentGameObject )
+        if(this->p_currentGameObject )
         {
             Transform *t = new Transform();
-            currentGameObject->AddComponent(t);
+            p_currentGameObject->AddComponent(t);
         }
     }
     else if(clickedAction == MenuBar::Action::AddComponentMeshRenderer)
     {
-        if(this->currentGameObject )
+        if(this->p_currentGameObject )
         {
             MeshRenderer *m = new MeshRenderer();
-            currentGameObject->AddComponent(m);
+            p_currentGameObject->AddComponent(m);
         }
     }
     else if(clickedAction == MenuBar::Action::AddComponenSingleLineRenderer)
     {
-        if(this->currentGameObject )
+        if(this->p_currentGameObject )
         {
             SingleLineRenderer *slr = new SingleLineRenderer();
-            currentGameObject->AddComponent(slr);
+            p_currentGameObject->AddComponent(slr);
         }
     }
     else if(clickedAction == MenuBar::Action::AddComponentCircleRenderer)
     {
-        if(this->currentGameObject )
+        if(this->p_currentGameObject )
         {
             CircleRenderer *cr = new CircleRenderer();
-            currentGameObject->AddComponent(cr);
+            p_currentGameObject->AddComponent(cr);
         }
     }
 

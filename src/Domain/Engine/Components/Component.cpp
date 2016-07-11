@@ -7,14 +7,14 @@ Component::Component()
 
 Component::~Component()
 {
-    for(int i = 0; i < inspectorComponentInfo.GetSlotInfos().size(); ++i)
-        delete inspectorComponentInfo.GetSlotInfo(i);
+    for(int i = 0; i < m_inspectorComponentInfo.GetSlotInfos().size(); ++i)
+        delete m_inspectorComponentInfo.GetSlotInfo(i);
 }
 
 void Component::CloneInto(ICloneable *clone) const
 {
     Component *c = static_cast<Component*>(clone);
-    c->enabled = enabled;
+    c->m_enabled = m_enabled;
 }
 
 const std::string Component::ToString() const

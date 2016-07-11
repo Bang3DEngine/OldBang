@@ -17,17 +17,17 @@ InspectorEnumSW::InspectorEnumSW(const std::string &labelString,
         layout->addWidget(textLabel);
     }
 
-    comboBox = new QComboBox();
+    p_comboBox = new QComboBox();
     for(std::string enumString : enumValues)
     {
-        comboBox->addItem( QString::fromStdString(enumString) );
+        p_comboBox->addItem( QString::fromStdString(enumString) );
     }
-    comboBox->setCurrentIndex(selectedValue);
-    comboBox->show();
-    connect(comboBox, SIGNAL(currentIndexChanged(QString)), parent, SLOT(_OnSlotValueChanged(QString)));
+    p_comboBox->setCurrentIndex(selectedValue);
+    p_comboBox->show();
+    connect(p_comboBox, SIGNAL(currentIndexChanged(QString)), parent, SLOT(_OnSlotValueChanged(QString)));
 
 
-    layout->addWidget(comboBox);
+    layout->addWidget(p_comboBox);
 
     this->setContentsMargins(0,0,0,0);
     this->show();
@@ -35,11 +35,11 @@ InspectorEnumSW::InspectorEnumSW(const std::string &labelString,
 
 void InspectorEnumSW::SetValue(int index)
 {
-    comboBox->setCurrentIndex(index);
+    p_comboBox->setCurrentIndex(index);
 }
 
 int InspectorEnumSW::GetValue()
 {
-    return comboBox->currentIndex();
+    return p_comboBox->currentIndex();
 }
 

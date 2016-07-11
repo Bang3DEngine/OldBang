@@ -2,24 +2,24 @@
 #include "FileReader.h"
 #include "GameObject.h"
 
-Transform::Transform() : localPosition(Vector3(0.0f)),
-                         localRotation(Quaternion()),
-                         localScale(Vector3(1.0f)),
-                         inspectorEulerDeg(Vector3(0.0f))
+Transform::Transform() : m_localPosition(Vector3(0.0f)),
+                         m_localRotation(Quaternion()),
+                         m_localScale(Vector3(1.0f)),
+                         m_inspectorEulerDeg(Vector3(0.0f))
 {
     #ifdef BANG_EDITOR
-    inspectorComponentInfo.SetSlotsInfos(
+    m_inspectorComponentInfo.SetSlotsInfos(
     {
         new InspectorVFloatSWInfo(
-            "Position", {localPosition.x, localPosition.y, localPosition.z}
+            "Position", {m_localPosition.x, m_localPosition.y, m_localPosition.z}
         ),
         new InspectorVFloatSWInfo(
-            "Rotation", {inspectorEulerDeg.x,
-                         inspectorEulerDeg.y,
-                         inspectorEulerDeg.z}
+            "Rotation", {m_inspectorEulerDeg.x,
+                         m_inspectorEulerDeg.y,
+                         m_inspectorEulerDeg.z}
         ),
         new InspectorVFloatSWInfo(
-            "Scale", {localScale.x, localScale.y, localScale.z}
+            "Scale", {m_localScale.x, m_localScale.y, m_localScale.z}
         )
     });
 #endif
@@ -48,7 +48,7 @@ Transform::~Transform()
 
 void Transform::SetLocalPosition(const Vector3 &p)
 {
-    localPosition = p;
+    m_localPosition = p;
 }
 void Transform::SetPosition(const Vector3 &p)
 {
@@ -74,17 +74,17 @@ void Transform::Translate(const Vector3 &translation)
 
 void Transform::SetLocalRotation(const Quaternion &q)
 {
-    localRotation = q.Normalized();
-    inspectorEulerDeg = Quaternion::EulerAngles(localRotation).ToDegrees();
+    m_localRotation = q.Normalized();
+    m_inspectorEulerDeg = Quaternion::EulerAngles(m_localRotation).ToDegrees();
 }
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
 {
-    inspectorEulerDeg = degreesEuler;
-    Vector3 rads = inspectorEulerDeg.ToRadians();
+    m_inspectorEulerDeg = degreesEuler;
+    Vector3 rads = m_inspectorEulerDeg.ToRadians();
     Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::right);
     Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3::up);
     Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3::forward);
-    localRotation = (qz * qy * qx).Normalized();
+    m_localRotation = (qz * qy * qx).Normalized();
 }
 void Transform::SetLocalEuler(float x, float y, float z)
 {
@@ -137,7 +137,7 @@ void Transform::RotateEuler(const Vector3 &degreesEuler)
 
 void Transform::SetLocalRotationFromInspector(const Quaternion &q)
 {
-    localRotation = q.Normalized();
+    m_localRotation = q.Normalized();
 }
 
 
@@ -167,7 +167,7 @@ void Transform::SetLocalScale(float s)
 
 void Transform::SetLocalScale(const Vector3 &s)
 {
-    localScale = s;
+    m_localScale = s;
 }
 
 Vector3 Transform::TransformDirection(const Vector3 &dir) const
@@ -253,14 +253,14 @@ void Transform::GetNormalMatrix(Matrix4 &m) const
 
 void Transform::LookAt(Vector3 target, Vector3 _up)
 {
-    Assert(target != localPosition, "LookAt target is the same as position.", return);
+    Assert(target != m_localPosition, "LookAt target is the same as position.", return);
     Vector3 up = _up.Normalized();
     SetRotation(Quaternion::LookDirection(target - GetPosition(), up) );
 }
 
 Vector3 Transform::GetLocalPosition() const
 {
-    return localPosition;
+    return m_localPosition;
 }
 
 Vector3 Transform::GetPosition() const
@@ -276,7 +276,7 @@ Vector3 Transform::GetPosition() const
 
 Quaternion Transform::GetLocalRotation() const
 {
-    return localRotation;
+    return m_localRotation;
 }
 
 Quaternion Transform::GetRotation() const
@@ -292,7 +292,7 @@ Quaternion Transform::GetRotation() const
 
 Vector3 Transform::GetLocalEuler() const
 {
-    return inspectorEulerDeg;
+    return m_inspectorEulerDeg;
 }
 
 Vector3 Transform::GetEuler() const
@@ -308,7 +308,7 @@ Vector3 Transform::GetEuler() const
 
 Vector3 Transform::GetLocalScale() const
 {
-    return localScale;
+    return m_localScale;
 }
 
 Vector3 Transform::GetScale() const
@@ -359,12 +359,12 @@ const std::string Transform::ToString() const
 
     std::ostringstream msg;
 
-    Vector3 euler = Quaternion::EulerAngles(localRotation);
+    Vector3 euler = Quaternion::EulerAngles(m_localRotation);
     msg << "[" <<
            "Transform: " << std::endl <<
-           "   Position: (" << localPosition.x << ", " << localPosition.y << ", " << localPosition.z << ")"  << std::endl <<
+           "   Position: (" << m_localPosition.x << ", " << m_localPosition.y << ", " << m_localPosition.z << ")"  << std::endl <<
            "   Rotation: (" << glm::degrees(euler.x) << ", " << glm::degrees(euler.y) << ", " << glm::degrees(euler.z) << ")" << std::endl <<
-           "   Scale: (" << localScale.x << ", " << localScale.y << ", " << localScale.z << ")" << std::endl <<
+           "   Scale: (" << m_localScale.x << ", " << m_localScale.y << ", " << m_localScale.z << ")" << std::endl <<
            "]" << std::endl;
 
     return msg.str();
@@ -373,30 +373,30 @@ const std::string Transform::ToString() const
 
 InspectorWidgetInfo* Transform::GetComponentInfo()
 {
-    static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(0))->value =
-        {localPosition.x, localPosition.y, localPosition.z};
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value =
+        {m_localPosition.x, m_localPosition.y, m_localPosition.z};
 
-    Vector3 e = inspectorEulerDeg;
-    static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(1))->value =
+    Vector3 e = m_inspectorEulerDeg;
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1))->m_value =
         {e.x, e.y, e.z};
 
-    static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(2))->value =
-        {localScale.x, localScale.y, localScale.z};
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(2))->m_value =
+        {m_localScale.x, m_localScale.y, m_localScale.z};
 
-    return &inspectorComponentInfo;
+    return &m_inspectorComponentInfo;
 }
 
 void Transform::OnSlotValueChanged(InspectorWidget *source)
 {
     std::vector<float> v;
     v = source->GetSWVectorFloatValue("Position");
-    localPosition = Vector3(v[0], v[1], v[2]);
+    m_localPosition = Vector3(v[0], v[1], v[2]);
 
     v = source->GetSWVectorFloatValue("Rotation");
     SetEuler(Vector3(v[0], v[1], v[2]));
 
     v = source->GetSWVectorFloatValue("Scale");
-    localScale = Vector3(v[0], v[1], v[2]);
+    m_localScale = Vector3(v[0], v[1], v[2]);
 }
 
 void Transform::Write(std::ostream &f) const

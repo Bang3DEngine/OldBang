@@ -10,7 +10,7 @@ class EditorRotateAxis : public EditorAxis
 {
 private:
 
-    const float rotationBoost = 0.1f;
+    const float c_rotationBoost = 0.1f;
 
     CircleRenderer *circle = nullptr;
 
@@ -25,13 +25,13 @@ private:
      * releases its mouse button)
      * In Screen Space.
      */
-    glm::vec2 sAnchorPoint0, sAnchorPoint1;
+    glm::vec2 m_sAnchorPoint0, m_sAnchorPoint1;
 
 protected:
     Renderer *GetAxisRenderer() const override;
 
 public:
-    EditorRotateAxis(EditorAxis::EditorAxisDirection dir, GameObject *attachedGameObject);
+    EditorRotateAxis(EditorAxis::EditorAxisDirection dir, GameObject *p_attachedGameObject);
     virtual ~EditorRotateAxis();
 
     void OnUpdate() override;

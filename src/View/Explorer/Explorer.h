@@ -30,15 +30,15 @@ class Explorer : public QListView
     friend class ExplorerDirTree;
 
 private:
-    QFileSystemModel *fileSystemModel = nullptr;
-    QToolButton *buttonDirUp = nullptr;
-    QToolButton *buttonChangeViewMode = nullptr;
+    QFileSystemModel *p_fileSystemModel = nullptr;
+    QToolButton *p_buttonDirUp = nullptr;
+    QToolButton *p_buttonChangeViewMode = nullptr;
 
-    void setDir(const std::string &path);
-    std::string getCurrentDir() const;
+    std::string m_lastSelectedFileName = "";
+    QTimer *p_updateTimer = nullptr;
 
-    std::string lastSelectedFileName = "";
-    QTimer *updateTimer = nullptr;
+    void SetDir(const std::string &path);
+    std::string GetCurrentDir() const;
 
 protected:
     //To set the scroll step to a smaller one

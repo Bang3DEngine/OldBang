@@ -25,7 +25,7 @@ class MeshRenderer : public Renderer
 {
 
 private:
-    Mesh *mesh = nullptr;
+    Mesh *m_mesh = nullptr;
 
 protected:
 

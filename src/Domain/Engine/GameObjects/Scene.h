@@ -29,12 +29,12 @@ protected:
      * the currentRenderLayer being used to render, so GameObjects
      * can decide wether to render or not.
      */
-    int currentRenderLayer = 0;
+    int m_currentRenderLayer = 0;
 
     //Framebuffer for positions, normals, uvs and diffuse
-    GBuffer *gbuffer = nullptr;
-    const Canvas *canvas = nullptr; //set by canvas when added to it
-    const GameObject *cameraGameObject = nullptr;
+    GBuffer *p_gbuffer = nullptr;
+    const Canvas *p_canvas = nullptr; //set by canvas when added to it
+    const GameObject *p_cameraGameObject = nullptr;
 
     virtual void _OnResize (int newWidth, int newHeight);
 

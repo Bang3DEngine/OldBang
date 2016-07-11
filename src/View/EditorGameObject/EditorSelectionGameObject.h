@@ -15,7 +15,7 @@
 class EditorSelectionGameObject : public EditorGameObject
 {
 private:
-    EditorAxisGroup *axisGroup = nullptr;
+    EditorAxisGroup *p_axisGroup = nullptr;
 
 public:
     EditorSelectionGameObject(GameObject *attachedGameObject);

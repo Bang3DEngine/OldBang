@@ -1,21 +1,21 @@
 #include "SingletonManager.h"
 
-SingletonManager *SingletonManager::mainBinarySM = nullptr;
+SingletonManager *SingletonManager::s_mainBinarySM = nullptr;
 
 
 void SingletonManager::SetWindowMainSingleton(WindowMain *mainBinaryWindowMain)
 {
-    this->mainBinaryWindowMain = mainBinaryWindowMain;
+    this->m_mainBinaryWindowMain = mainBinaryWindowMain;
 }
 
 void SingletonManager::SetTimeSingleton(Time *mainBinaryTime)
 {
-    this->mainBinaryTime = mainBinaryTime;
+    this->m_mainBinaryTime = mainBinaryTime;
 }
 
 void SingletonManager::SetInputSingleton(Input *mainBinaryInput)
 {
-    this->mainBinaryInput = mainBinaryInput;
+    this->m_mainBinaryInput = mainBinaryInput;
 }
 
 
@@ -24,31 +24,31 @@ void SingletonManager::SetInputSingleton(Input *mainBinaryInput)
 
 WindowMain* SingletonManager::GetWindowMainSingleton()
 {
-    return mainBinaryWindowMain;
+    return m_mainBinaryWindowMain;
 }
 
 Time* SingletonManager::GetTimeSingleton()
 {
-    return mainBinaryTime;
+    return m_mainBinaryTime;
 }
 
 Input *SingletonManager::GetInputSingleton()
 {
-    return mainBinaryInput;
+    return m_mainBinaryInput;
 }
 
 void SingletonManager::SetSingletonManagerInstanceFromBehaviourLibrary(SingletonManager *mainBinarySM)
 {
-    SingletonManager::mainBinarySM = mainBinarySM;
+    SingletonManager::s_mainBinarySM = mainBinarySM;
 }
 
 
 void SingletonManager::InitSingletonMangerFromMainBinary()
 {
-    SingletonManager::mainBinarySM = new SingletonManager();
+    SingletonManager::s_mainBinarySM = new SingletonManager();
 }
 
 SingletonManager* SingletonManager::GetInstance()
 {
-    return SingletonManager::mainBinarySM;
+    return SingletonManager::s_mainBinarySM;
 }

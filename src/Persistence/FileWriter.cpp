@@ -66,7 +66,7 @@ void FileWriter::Write(const Quaternion &q, std::ostream &f)
 
 void FileWriter::Write(const Rect &r, std::ostream &f)
 {
-    f << r.minx << " " << r.maxx << " " << r.miny << " " << r.maxy << std::endl;
+    f << r.m_minx << " " << r.m_maxx << " " << r.m_miny << " " << r.m_maxy << std::endl;
 }
 
 void FileWriter::Write(const std::string &str, std::ostream &f)

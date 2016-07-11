@@ -12,12 +12,12 @@ Asset::~Asset()
 
 std::string Asset::GetFilepath() const
 {
-    return filepath;
+    return m_filepath;
 }
 
 const std::string Asset::ToString() const
 {
-    return "Asset '" + filepath + "'.";
+    return "Asset '" + m_filepath + "'.";
 }
 
 void Asset::Write(std::ostream &f) const

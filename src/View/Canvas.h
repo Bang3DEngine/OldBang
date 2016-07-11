@@ -32,24 +32,24 @@ class Canvas : public QGLWidget, public IWindowEventManagerListener
 
 private:
 
-    static Canvas *mainBinaryCanvas;
+    static Canvas *p_mainBinaryCanvas;
 
-    const int RedrawDelay = 30;
+    const int c_redrawDelay = 30;
 
-    int width = 0;
-    int height = 0;
-    float aspectRatio = 1.0f;
-    unsigned long long lastRenderTime = 0;
+    int m_width = 0;
+    int m_height = 0;
+    float m_aspectRatio = 1.0f;
+    unsigned long long m_lastRenderTime = 0;
 
-    bool paused = false;
-    std::list<Scene*> scenes;
+    bool m_paused = false;
+    std::list<Scene*> m_scenes;
 
-    Scene *currentScene = nullptr;
-    QTimer drawTimer;
+    Scene *p_currentScene = nullptr;
+    QTimer m_drawTimer;
 
 public:
 
-    glm::vec4 clearColor;
+    glm::vec4 m_clearColor;
 
     explicit Canvas(QWidget *parent = 0);
     static void InitFromMainBinary();

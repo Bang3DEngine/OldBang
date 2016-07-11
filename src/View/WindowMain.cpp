@@ -5,19 +5,19 @@
 
 #include "Toolbar.h"
 
-WindowMain *WindowMain::win = nullptr;
+WindowMain *WindowMain::s_p_win = nullptr;
 
 void WindowMain::InitFromMainBinary(QMainWindow *window, QApplication *application)
 {
-    win = new WindowMain();
-    SingletonManager::GetInstance()->SetWindowMainSingleton(win);
+    s_p_win = new WindowMain();
+    SingletonManager::GetInstance()->SetWindowMainSingleton(s_p_win);
 
-    win->setupUi(window);
+    s_p_win->setupUi(window);
 
-    win->mainWindow = window;
-    win->mainWindow->showMaximized();
+    s_p_win->p_mainWindow = window;
+    s_p_win->p_mainWindow->showMaximized();
 
-    win->app = application;
+    s_p_win->p_app = application;
 
     Toolbar::Init();
 }
@@ -31,10 +31,10 @@ WindowMain *WindowMain::GetInstance()
 
 QMainWindow *WindowMain::GetMainWindow()
 {
-    return GetInstance()->mainWindow;
+    return GetInstance()->p_mainWindow;
 }
 
 QApplication *WindowMain::GetApplication() const
 {
-    return GetInstance()->app;
+    return GetInstance()->p_app;
 }

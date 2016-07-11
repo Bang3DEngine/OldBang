@@ -23,17 +23,17 @@ public:
 
 private:
 
-    Rect orthoRect;
+    Rect m_orthoRect;
 
-    float fovDegrees;
-    float zNear;
-    float zFar;
+    float m_fovDegrees;
+    float m_zNear;
+    float m_zFar;
 
-    mutable float aspectRatio;
+    mutable float m_aspectRatio;
 
-    ProjectionMode projMode;
+    ProjectionMode m_projMode;
 
-    bool autoUpdateAspectRatio;
+    bool m_autoUpdateAspectRatio;
 
 public:
     Camera();
@@ -44,15 +44,15 @@ public:
 
     void SetOrthoRect(const Rect& rect);
 
-    void SetFovDegrees(float fovDegrees);
-    void SetZNear(float zNear);
-    void SetZFar(float zFar);
+    void SetFovDegrees(float m_fovDegrees);
+    void SetZNear(float m_zNear);
+    void SetZFar(float m_zFar);
 
-    void SetProjectionMode(ProjectionMode projMode);
+    void SetProjectionMode(ProjectionMode m_projMode);
 
-    void SetAspectRatio(float aspectRatio);
+    void SetAspectRatio(float m_aspectRatio);
 
-    void SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio);
+    void SetAutoUpdateAspectRatio(bool m_autoUpdateAspectRatio);
 
 
     float GetFovDegrees() const;

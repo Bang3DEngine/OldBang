@@ -22,18 +22,18 @@ private:
     /**
      * @brief The dynamically loaded Behaviour
      */
-    Behaviour *behaviour = nullptr;
+    Behaviour *p_behaviour = nullptr;
 
     /**
      * @brief The currently open library to load the Behaviour, if any.
      */
-    void *currentOpenLibrary = nullptr;
+    void *p_currentOpenLibrary = nullptr;
 
     /**
      * @brief Path to the Behaviour source file.
      * It is indicated using the Inspector
      */
-    std::string sourceFilepath = "";
+    std::string m_sourceFilepath = "";
 
     void ChangeBehaviour(Behaviour *newBehaviour);
 

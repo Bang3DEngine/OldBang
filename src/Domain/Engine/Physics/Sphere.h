@@ -7,16 +7,15 @@
 class Sphere
 {
 private:
-    const static float PI;
 
-    Vector3 center = Vector3(0.0f);
-    float radius = 0.0f;
+    Vector3 m_center = Vector3(0.0f);
+    float m_radius = 0.0f;
 
 public:
 
     Sphere();
-    Sphere(float radius);
-    Sphere(Vector3 center, float radius);
+    Sphere(float m_radius);
+    Sphere(Vector3 m_center, float m_radius);
 
     float GetDiameter() const;
     float GetArea() const;
@@ -31,10 +30,10 @@ public:
 
     static Sphere FromBox(const Box &box);
 
-    void SetCenter(const Vector3 &center);
+    void SetCenter(const Vector3 &m_center);
     Vector3 GetCenter() const;
 
-    void SetRadius(float radius);
+    void SetRadius(float m_radius);
     float GetRadius() const;
 };
 

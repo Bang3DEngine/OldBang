@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-Shader::Shader(Shader::Type t) : sourceCode(""), filepath(""), type(t)
+Shader::Shader(Shader::Type t) : m_sourceCode(""), m_filepath(""), m_type(t)
 {
 }
 
@@ -11,7 +11,7 @@ Shader::Shader(Shader::Type t, const std::string &shaderPath) : Shader(t)
 
 bool Shader::LoadFromFile(const std::string& filepath)
 {
-    this->filepath = filepath;
+    this->m_filepath = filepath;
 
     std::ifstream f;
     f.open(filepath);
@@ -23,29 +23,29 @@ bool Shader::LoadFromFile(const std::string& filepath)
 
     std::stringstream ss;
     ss << f.rdbuf();
-    sourceCode = ss.str();
+    m_sourceCode = ss.str();
 
 
-    idgl = glCreateShader(type);
+    m_idGL = glCreateShader(m_type);
 
-    const GLchar *source = (const GLchar*)(sourceCode.c_str());
-    GLint size = sourceCode.length();
-    glShaderSource(idgl, 1, &source, &size);
-    glCompileShader(idgl);
+    const GLchar *source = (const GLchar*)(m_sourceCode.c_str());
+    GLint size = m_sourceCode.length();
+    glShaderSource(m_idGL, 1, &source, &size);
+    glCompileShader(m_idGL);
 
     GLint ok;
-    glGetShaderiv(idgl, GL_COMPILE_STATUS, &ok);
+    glGetShaderiv(m_idGL, GL_COMPILE_STATUS, &ok);
     if (not ok)
     {
         GLint maxLength = 0;
-        glGetShaderiv(idgl, GL_INFO_LOG_LENGTH, &maxLength);
+        glGetShaderiv(m_idGL, GL_INFO_LOG_LENGTH, &maxLength);
 
         std::vector<GLchar> v(maxLength);
-        glGetShaderInfoLog(idgl, maxLength, &maxLength, &v[0]);
+        glGetShaderInfoLog(m_idGL, maxLength, &maxLength, &v[0]);
 
         std::string errorStr(v.begin(), v.end());
         Logger_Error("Failed to compile shader: '" + filepath + "': " + errorStr);
-        glDeleteShader(idgl);
+        glDeleteShader(m_idGL);
         return false;
     }
 
@@ -54,21 +54,21 @@ bool Shader::LoadFromFile(const std::string& filepath)
 
 const std::string& Shader::GetSourceCode() const
 {
-    return sourceCode;
+    return m_sourceCode;
 }
 
 const std::string& Shader::GetFilepath() const
 {
-    return filepath;
+    return m_filepath;
 }
 
 Shader::Type Shader::GetType() const
 {
-    return type;
+    return m_type;
 }
 
 const std::string Shader::ToString() const
 {
-    if(type == Type::Vertex) return "Vertex Shader: '" + filepath + "'";
-    return "Fragment Shader: '" + filepath + "'";
+    if(m_type == Type::Vertex) return "Vertex Shader: '" + m_filepath + "'";
+    return "Fragment Shader: '" + m_filepath + "'";
 }

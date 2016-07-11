@@ -1,8 +1,8 @@
 #include "ShaderProgram.h"
 
-ShaderProgram::ShaderProgram() : vshader(nullptr), fshader(nullptr)
+ShaderProgram::ShaderProgram() : p_vshader(nullptr), p_fshader(nullptr)
 {
-    idgl = glCreateProgram();
+    m_idGL = glCreateProgram();
 }
 
 ShaderProgram::ShaderProgram(const std::string &vshaderPath,
@@ -17,49 +17,49 @@ ShaderProgram::ShaderProgram(const std::string &vshaderPath,
 
 ShaderProgram::~ShaderProgram()
 {
-    glDeleteProgram(idgl);
+    glDeleteProgram(m_idGL);
 }
 
 void ShaderProgram::BindVertexShader(Shader *vshader)
 {
-    this->vshader = vshader;
+    this->p_vshader = vshader;
 }
 
 void ShaderProgram::BindFragmentShader(Shader *fshader)
 {
-    this->fshader = fshader;
+    this->p_fshader = fshader;
 }
 
 bool ShaderProgram::Link()
 {
-    if(!vshader)
+    if(!p_vshader)
     {
         Logger_Error("Vertex shader not set. Can't link shader program.");
         return false;
     }
 
-    if(!fshader)
+    if(!p_fshader)
     {
         Logger_Error("Fragment shader not set. Can't link shader program.");
         return false;
     }
 
-    glAttachShader(idgl, vshader->GetGLId());
-    glAttachShader(idgl, fshader->GetGLId());
+    glAttachShader(m_idGL, p_vshader->GetGLId());
+    glAttachShader(m_idGL, p_fshader->GetGLId());
 
-    glLinkProgram(idgl);
+    glLinkProgram(m_idGL);
 
     GLint linked;
-    glGetProgramiv(idgl, GL_LINK_STATUS, &linked);
+    glGetProgramiv(m_idGL, GL_LINK_STATUS, &linked);
     if(not linked)
     {
        GLint errorLength = 0;
-       glGetProgramiv(idgl, GL_INFO_LOG_LENGTH, &errorLength);
+       glGetProgramiv(m_idGL, GL_INFO_LOG_LENGTH, &errorLength);
 
        if(errorLength > 1)
         {
           char* errorLog = (char*) (malloc(sizeof(char) * errorLength));
-          glGetProgramInfoLog(idgl, errorLength, NULL, errorLog);
+          glGetProgramInfoLog(m_idGL, errorLength, NULL, errorLog);
 
           std::string errorStr(errorLog);
           Logger_Error("Can't link " << std::endl << this << std::endl <<
@@ -68,7 +68,7 @@ bool ShaderProgram::Link()
           free(errorLog);
         }
 
-        glDeleteProgram(idgl);
+        glDeleteProgram(m_idGL);
         return false;
     }
 
@@ -77,7 +77,7 @@ bool ShaderProgram::Link()
 
 bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn) const
 {
-    int location = glGetUniformLocation(idgl, name.c_str());
+    int location = glGetUniformLocation(m_idGL, name.c_str());
     if(location >= 0)
     {
         Bind();
@@ -95,7 +95,7 @@ bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn)
 
 bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v, bool warn) const
 {
-    int location = glGetUniformLocation(idgl, name.c_str());
+    int location = glGetUniformLocation(m_idGL, name.c_str());
     if(location >= 0)
     {
         Bind();
@@ -113,7 +113,7 @@ bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v,
 
 bool ShaderProgram::SetUniformVec3 (const std::string &name, const Vector3& v, bool warn) const
 {
-    int location = glGetUniformLocation(idgl, name.c_str());
+    int location = glGetUniformLocation(m_idGL, name.c_str());
     if(location >= 0)
     {
         Bind();
@@ -131,7 +131,7 @@ bool ShaderProgram::SetUniformVec3 (const std::string &name, const Vector3& v, b
 
 bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v, bool warn) const
 {
-    int location = glGetUniformLocation(idgl, name.c_str());
+    int location = glGetUniformLocation(m_idGL, name.c_str());
     if(location >= 0)
     {
         Bind();
@@ -149,7 +149,7 @@ bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v,
 
 bool ShaderProgram::SetUniformMat4 (const std::string &name, const Matrix4& m, bool warn) const
 {
-    int location = glGetUniformLocation(idgl, name.c_str());
+    int location = glGetUniformLocation(m_idGL, name.c_str());
     if(location >= 0)
     {
         Bind();
@@ -167,7 +167,7 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const Matrix4& m, b
 
 bool ShaderProgram::SetUniformTexture(const std::string &name, const Texture *texture, bool warn) const
 {
-    int location = glGetUniformLocation(idgl, name.c_str());
+    int location = glGetUniformLocation(m_idGL, name.c_str());
     if(location >= 0)
     {
         Bind();
@@ -192,15 +192,15 @@ const std::string ShaderProgram::ToString() const
 {
     std::ostringstream oss;
     oss << "Shader program: " << std::endl <<
-           "   " << vshader << std::endl <<
-           "   " << fshader << std::endl;
+           "   " << p_vshader << std::endl <<
+           "   " << p_fshader << std::endl;
     return oss.str();
 }
 
 void ShaderProgram::Bind() const
 {
     PreBind(GL_CURRENT_PROGRAM);
-    glUseProgram(idgl);
+    glUseProgram(m_idGL);
 }
 
 void ShaderProgram::UnBind() const

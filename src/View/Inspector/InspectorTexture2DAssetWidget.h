@@ -10,8 +10,8 @@
 class InspectorTexture2DAssetWidget : public InspectorWidget
 {
 private:
-    std::string assetFilepath = "";
-    InspectorWidgetInfo inspectorInfo;
+    std::string m_assetFilepath = "";
+    InspectorWidgetInfo m_inspectorInfo;
 
 public:
     InspectorTexture2DAssetWidget(const FileTexture2DAsset &fileTex);

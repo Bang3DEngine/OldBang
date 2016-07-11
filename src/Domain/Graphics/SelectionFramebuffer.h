@@ -11,23 +11,22 @@
  * @brief This is the buffer where each GameObject is drawn into with a unique colour.
  */
 class SelectionFramebuffer : public Framebuffer
-                             ,public IWindowEventManagerListener
+                            ,public IWindowEventManagerListener
 {
 private:
-    ShaderProgram *program = nullptr;
-
-    long idCount = 0; // TODO: Dynamic id handling (OnChildRemoved, be aware that its id becomes free)
-    std::map<GameObject*, long> gameObjectToId;
-    std::map<long, GameObject*> idToGameObject;
-
-    static Vector3 MapIdToColor(long id);
-    static long MapColorToId(const Vector3 &charColor);
+    ShaderProgram *p_program = nullptr;
 
     /**
      * @brief Keeps track of the last GameObject the mouse was over.
      * This lets us inform of mouseOut events.
      */
-    GameObject *lastMouseOverGO = nullptr;
+    GameObject *p_lastMouseOverGO = nullptr;
+
+    std::map<GameObject*, long> m_gameObjectToId;
+    std::map<long, GameObject*> m_idToGameObject;
+
+    static Vector3 MapIdToColor(long id);
+    static long MapColorToId(const Vector3 &charColor);
 
 public:
     SelectionFramebuffer(int width, int height);

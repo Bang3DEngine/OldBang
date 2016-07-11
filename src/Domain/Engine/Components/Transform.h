@@ -21,12 +21,12 @@ class Transform : public Component
 
 private:
 
-    Vector3 localPosition;
-    Quaternion localRotation;
-    Vector3 localScale;
+    Vector3 m_localPosition;
+    Quaternion m_localRotation;
+    Vector3 m_localScale;
 
     // euler angles in degrees set by user in the inspector
-    Vector3 inspectorEulerDeg;
+    Vector3 m_inspectorEulerDeg;
 
 public:
 

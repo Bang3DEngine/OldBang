@@ -18,8 +18,6 @@ class Texture2D : public Texture, public Asset
 {
 
 private:
-    std::string imageFilepath = "-"; //"-" means proced. created, or no image
-
     //NON COPYABLE:
     Texture2D(const Texture2D &t) : Texture2D() {}
 
@@ -33,13 +31,13 @@ public:
 
 public:
     Texture2D();
-    Texture2D(const std::string &imageFilepath);
+    Texture2D(const std::string &m_filepath);
     virtual ~Texture2D();
 
-    void LoadFromFile(const std::string &imageFilepath);
-    void CreateEmpty(int width, int height) override;
-    void Resize(int width, int height) override;
-    void Fill(unsigned char *newData, int width, int height, int numComponents);
+    void LoadFromFile(const std::string &m_filepath);
+    void CreateEmpty(int m_width, int m_height) override;
+    void Resize(int m_width, int m_height) override;
+    void Fill(unsigned char *newData, int m_width, int m_height, int m_numComponents);
 
     std::string GetImageRelativeFilepath() const;
 

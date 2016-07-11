@@ -21,7 +21,7 @@ void EditorDebugGameObject::DrawLine(const Vector3 &origin,
     slr->SetDestiny(destiny);
     slr->SetLineWidth(lineWidth);
 
-    debugLines.push_back(DebugLine(slr, livingTimeSecs));
+    m_debugLines.push_back(DebugLine(slr, livingTimeSecs));
 }
 
 void EditorDebugGameObject::DrawLineScreen(const glm::vec2 &origin, const glm::vec2 &destiny,
@@ -36,20 +36,20 @@ void EditorDebugGameObject::DrawLineScreen(const glm::vec2 &origin, const glm::v
     slr->SetDestiny(Vector3(destiny.x, destiny.y, 0.0f));
     slr->SetLineWidth(lineWidth);
 
-    debugLines.push_back(DebugLine(slr, livingTimeSecs));
+    m_debugLines.push_back(DebugLine(slr, livingTimeSecs));
 }
 
 void EditorDebugGameObject::OnUpdate()
 {
     float dTime = Time::GetDeltaTime();
-    for (auto it = debugLines.begin(); it != debugLines.end(); ++it)
+    for (auto it = m_debugLines.begin(); it != m_debugLines.end(); ++it)
     {
         DebugLine &dl = *it;
         dl.elapsedTimeSecs += dTime;
         if(dl.elapsedTimeSecs >= dl.livingTimeSecs)
         {
             RemoveComponent(dl.slr);
-            it = debugLines.erase(it);
+            it = m_debugLines.erase(it);
         }
     }
 }

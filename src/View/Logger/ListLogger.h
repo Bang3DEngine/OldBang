@@ -8,7 +8,7 @@ class ListLogger : public QListWidget
     Q_OBJECT
 
 private:
-     static QListWidget *listLogger;
+     static QListWidget *s_listLogger;
 
 public:
     explicit ListLogger(QWidget *parent = nullptr);

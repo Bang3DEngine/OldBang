@@ -10,10 +10,10 @@
 class InspectorSWInfo
 {
 protected:
-    InspectorSWInfo(const std::string &label) : label(label){ }
+    InspectorSWInfo(const std::string &label) : m_label(label){ }
 
 public:
-    std::string label;
+    std::string m_label;
 
     /**
      * @brief Does this Component needs its label printed on top of it?
@@ -30,12 +30,12 @@ public:
 class InspectorVFloatSWInfo : public InspectorSWInfo
 {
 public:
-    std::vector<float> value;
+    std::vector<float> m_value;
 
     InspectorVFloatSWInfo(const std::string &label,
                           const std::vector<float> &initialValues) : InspectorSWInfo(label)
     {
-        this->value = initialValues;
+        this->m_value = initialValues;
     }
     virtual ~InspectorVFloatSWInfo() {}
 

@@ -14,7 +14,7 @@ class MenuBar : public QMenuBar
     Q_OBJECT
 
 private:
-    WindowEventManager *wem = nullptr;
+    WindowEventManager *p_wem = nullptr;
 
     /**
      * @brief Shared code to create a Plane, Cube, Sphere, etc.

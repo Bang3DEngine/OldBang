@@ -5,23 +5,23 @@
 EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
                        GameObject *attachedGameObject)
 {
-    this->attachedGameObject = attachedGameObject;
+    this->p_attachedGameObject = attachedGameObject;
 
     AddComponent<Transform>();
 
-    oAxisDirection = EditorAxis::GetVectorFromDir(dir);
+    m_oAxisDirection = EditorAxis::GetVectorFromDir(dir);
 
-    material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/lines.bmat");
-    material = new Material(*material);
+    p_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/lines.bmat");
+    p_material = new Material(*p_material);
 
-    lineColor = oAxisDirection.Abs();
+    m_lineColor = m_oAxisDirection.Abs();
 
     this->SetRenderLayer(5);
 }
 
 EditorAxis::~EditorAxis()
 {
-    delete material;
+    delete p_material;
 }
 
 std::string EditorAxis::GetStringFromDir(EditorAxis::EditorAxisDirection dir)
@@ -41,17 +41,17 @@ Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir)
 void EditorAxis::OnUpdate()
 {
     // Process grabbing
-    if(mouseIsOver && Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+    if(m_mouseIsOver && Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
         // User has clicked on me!
-        grabbed = true;
+        m_grabbed = true;
     }
 
-    if(grabbed)
+    if(m_grabbed)
     {
         if(Input::GetMouseButtonUp(Input::MouseButton::MLeft))
         {
-            grabbed = false;
+            m_grabbed = false;
             Input::SetMouseWrapping(false);
         }
         else
@@ -61,39 +61,39 @@ void EditorAxis::OnUpdate()
     }
 
     // Process line color
-    if (mouseIsOver)
+    if (m_mouseIsOver)
     {
-        GetAxisRenderer()->SetLineWidth(axisLineWidth * 2.0f);
+        GetAxisRenderer()->SetLineWidth(m_axisLineWidth * 2.0f);
 
-        if (grabbed)
+        if (m_grabbed)
         {
-            material->SetDiffuseColor(glm::vec4(lineColor, 1));
+            p_material->SetDiffuseColor(glm::vec4(m_lineColor, 1));
         }
         else
         {
-            material->SetDiffuseColor(glm::vec4(lineColor * lineColorFadingNotGrabbed, 1));
+            p_material->SetDiffuseColor(glm::vec4(m_lineColor * c_lineColorFadingNotGrabbed, 1));
         }
     }
     else
     {
-        if (grabbed)
+        if (m_grabbed)
         {
-            material->SetDiffuseColor(glm::vec4(lineColor, 1));
+            p_material->SetDiffuseColor(glm::vec4(m_lineColor, 1));
         }
         else
         {
-            GetAxisRenderer()->SetLineWidth(axisLineWidth);
-            material->SetDiffuseColor(glm::vec4(lineColor * lineColorFadingNotHover, 1));
+            GetAxisRenderer()->SetLineWidth(m_axisLineWidth);
+            p_material->SetDiffuseColor(glm::vec4(m_lineColor * c_lineColorFadingNotHover, 1));
         }
     }
 }
 
 void EditorAxis::OnMouseEnter()
 {
-    mouseIsOver = true;
+    m_mouseIsOver = true;
 }
 
 void EditorAxis::OnMouseExit()
 {
-    mouseIsOver = false;
+    m_mouseIsOver = false;
 }

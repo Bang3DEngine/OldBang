@@ -3,17 +3,17 @@
 SingleLineRenderer::SingleLineRenderer()
 {
     #ifdef BANG_EDITOR
-        inspectorComponentInfo.AddSlotInfo(
+        m_inspectorComponentInfo.AddSlotInfo(
             new InspectorVFloatSWInfo("Origin", {0.0f, 0.0f, 0.0f}));
-        inspectorComponentInfo.AddSlotInfo(
+        m_inspectorComponentInfo.AddSlotInfo(
             new InspectorVFloatSWInfo("Destiny", {0.0f, 0.0f, 0.0f}));
     #endif
 
-    points.resize(2);
-    points[0] = Vector3(0.0f);
-    points[1] = Vector3(1.0f);
+    m_points.resize(2);
+    m_points[0] = Vector3(0.0f);
+    m_points[1] = Vector3(1.0f);
 
-    this->drawLinesMode = RenderMode::Lines;
+    this->m_drawLinesMode = RenderMode::Lines;
 }
 
 SingleLineRenderer::~SingleLineRenderer()
@@ -35,13 +35,13 @@ ICloneable *SingleLineRenderer::Clone() const
 
 void SingleLineRenderer::SetOrigin(Vector3 o)
 {
-    points[0] = o;
+    m_points[0] = o;
     BindPointsToVAO();
 }
 
 void SingleLineRenderer::SetDestiny(Vector3 d)
 {
-    points[1] = d;
+    m_points[1] = d;
     BindPointsToVAO();
 }
 
@@ -52,15 +52,15 @@ InspectorWidgetInfo* SingleLineRenderer::GetComponentInfo()
 
     InspectorVFloatSWInfo *originInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                inspectorComponentInfo.GetSlotInfo(2));
-    originInfo->value = {points[0].x, points[0].y, points[0].z};
+                m_inspectorComponentInfo.GetSlotInfo(2));
+    originInfo->m_value = {m_points[0].x, m_points[0].y, m_points[0].z};
 
     InspectorVFloatSWInfo *destinyInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                inspectorComponentInfo.GetSlotInfo(3));
-    destinyInfo->value = {points[1].x, points[1].y, points[1].z};
+                m_inspectorComponentInfo.GetSlotInfo(3));
+    destinyInfo->m_value = {m_points[1].x, m_points[1].y, m_points[1].z};
 
-    return &inspectorComponentInfo;
+    return &m_inspectorComponentInfo;
 }
 
 void SingleLineRenderer::OnSlotValueChanged(InspectorWidget *source)
@@ -68,10 +68,10 @@ void SingleLineRenderer::OnSlotValueChanged(InspectorWidget *source)
     LineRenderer::OnSlotValueChanged(source);
 
     std::vector<float> origin = source->GetSWVectorFloatValue("Origin");
-    points[0] = Vector3(origin[0], origin[1], origin[2]);
+    m_points[0] = Vector3(origin[0], origin[1], origin[2]);
 
     std::vector<float> destiny = source->GetSWVectorFloatValue("Destiny");
-    points[1] = Vector3(destiny[0], destiny[1], destiny[2]);
+    m_points[1] = Vector3(destiny[0], destiny[1], destiny[2]);
 }
 
 
@@ -79,9 +79,9 @@ void SingleLineRenderer::Write(std::ostream &f) const
 {
     f << "<SingleLineRenderer>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::WriteFilepath(material->GetFilepath(), f);
-    FileWriter::Write(Vector3(points[0].x, points[0].y, points[0].z), f);
-    FileWriter::Write(Vector3(points[1].x, points[1].y, points[1].z), f);
+    FileWriter::WriteFilepath(p_material->GetFilepath(), f);
+    FileWriter::Write(Vector3(m_points[0].x, m_points[0].y, m_points[0].z), f);
+    FileWriter::Write(Vector3(m_points[1].x, m_points[1].y, m_points[1].z), f);
     FileWriter::Write(GetLineWidth(), f);
     f << "</SingleLineRenderer>" << std::endl;
 }

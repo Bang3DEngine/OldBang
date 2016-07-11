@@ -2,103 +2,103 @@
 
 #include "WindowMain.h"
 
-Toolbar *Toolbar::tb = nullptr;
+Toolbar *Toolbar::s_tb = nullptr;
 
 Toolbar::Toolbar(QWidget *parent) : QWidget(parent) { }
 
 Toolbar::~Toolbar()
 {
-    delete keyTimer;
+    delete p_keyTimer;
 }
 
 void Toolbar::Init()
 {
     WindowMain *w = WindowMain::GetInstance();
-    Toolbar::tb = w->widgetToolbar;
-    Toolbar::tb->buttonTranslateMode = w->buttonTranslateMode;
-    Toolbar::tb->buttonTranslateMode->setChecked(true);
-    Toolbar::tb->buttonRotateMode    = w->buttonRotateMode;
-    Toolbar::tb->buttonScaleMode     = w->buttonScaleMode;
-    Toolbar::tb->buttonGlobalCoords  = w->buttonGlobalCoords;
+    Toolbar::s_tb = w->widgetToolbar;
+    Toolbar::s_tb->p_buttonTranslateMode = w->buttonTranslateMode;
+    Toolbar::s_tb->p_buttonTranslateMode->setChecked(true);
+    Toolbar::s_tb->p_buttonRotateMode    = w->buttonRotateMode;
+    Toolbar::s_tb->p_buttonScaleMode     = w->buttonScaleMode;
+    Toolbar::s_tb->p_buttonGlobalCoords  = w->buttonGlobalCoords;
 
-    Toolbar::tb->keyTimer = new QTimer();
-    Toolbar::tb->keyTimer->start(1);
-    connect(Toolbar::tb->keyTimer, SIGNAL(timeout()),
-            Toolbar::tb, SLOT(CheckKeyPressed()));
+    Toolbar::s_tb->p_keyTimer = new QTimer();
+    Toolbar::s_tb->p_keyTimer->start(1);
+    connect(Toolbar::s_tb->p_keyTimer, SIGNAL(timeout()),
+            Toolbar::s_tb, SLOT(CheckKeyPressed()));
 
-    connect(Toolbar::tb->buttonTranslateMode, SIGNAL(clicked()),
-            Toolbar::tb, SLOT(OnTranslateClicked()));
+    connect(Toolbar::s_tb->p_buttonTranslateMode, SIGNAL(clicked()),
+            Toolbar::s_tb, SLOT(OnTranslateClicked()));
 
-    connect(Toolbar::tb->buttonRotateMode, SIGNAL(clicked()),
-            Toolbar::tb, SLOT(OnRotateClicked()));
+    connect(Toolbar::s_tb->p_buttonRotateMode, SIGNAL(clicked()),
+            Toolbar::s_tb, SLOT(OnRotateClicked()));
 
-    connect(Toolbar::tb->buttonScaleMode, SIGNAL(clicked()),
-            Toolbar::tb, SLOT(OnScaleClicked()));
+    connect(Toolbar::s_tb->p_buttonScaleMode, SIGNAL(clicked()),
+            Toolbar::s_tb, SLOT(OnScaleClicked()));
 
-    Toolbar::tb->setFocusPolicy(Qt::ClickFocus);
+    Toolbar::s_tb->setFocusPolicy(Qt::ClickFocus);
 }
 
 void Toolbar::UnCheckTransformModeButtons()
 {
-    buttonTranslateMode->setChecked(false);
-    buttonRotateMode->setChecked(false);
-    buttonScaleMode->setChecked(false);
+    p_buttonTranslateMode->setChecked(false);
+    p_buttonRotateMode->setChecked(false);
+    p_buttonScaleMode->setChecked(false);
 }
 
 Toolbar *Toolbar::GetInstance()
 {
-    if (!tb)
+    if (!s_tb)
     {
         Toolbar::Init();
     }
 
-    return tb;
+    return s_tb;
 }
 
 Toolbar::TransformMode Toolbar::GetSelectedTransformMode()
 {
-    return currentTransformMode;
+    return m_currentTransformMode;
 }
 
 bool Toolbar::GetGlobalCoordsMode()
 {
-    return buttonGlobalCoords->isChecked();
+    return p_buttonGlobalCoords->isChecked();
 }
 
 void Toolbar::OnTranslateClicked()
 {
     UnCheckTransformModeButtons();
-    buttonTranslateMode->setChecked(true);
-    currentTransformMode = TransformMode::Translate;
+    p_buttonTranslateMode->setChecked(true);
+    m_currentTransformMode = TransformMode::Translate;
 }
 
 void Toolbar::OnRotateClicked()
 {
     UnCheckTransformModeButtons();
-    buttonRotateMode->setChecked(true);
-    currentTransformMode = TransformMode::Rotate;
+    p_buttonRotateMode->setChecked(true);
+    m_currentTransformMode = TransformMode::Rotate;
 }
 
 void Toolbar::OnScaleClicked()
 {
     UnCheckTransformModeButtons();
-    buttonScaleMode->setChecked(true);
-    currentTransformMode = TransformMode::Scale;
+    p_buttonScaleMode->setChecked(true);
+    m_currentTransformMode = TransformMode::Scale;
 }
 
 void Toolbar::CheckKeyPressed()
 {
     if(Input::GetKeyDown(Input::Key::W))
     {
-        buttonTranslateMode->click();
+        p_buttonTranslateMode->click();
     }
     else if(Input::GetKeyDown(Input::Key::E))
     {
-        buttonRotateMode->click();
+        p_buttonRotateMode->click();
     }
     else if(Input::GetKeyDown(Input::Key::R))
     {
-        buttonScaleMode->click();
+        p_buttonScaleMode->click();
     }
 }
 

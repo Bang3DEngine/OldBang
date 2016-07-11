@@ -3,20 +3,20 @@
 FileImage::FileImage(const QFileSystemModel *model, const QModelIndex *index)
     : File(model, index)
 {
-    stbi_info(path.c_str(), &width, &height, &numComponents);
+    stbi_info(m_path.c_str(), &m_width, &m_height, &m_numComponents);
 }
 
 int FileImage::GetWidth() const
 {
-    return width;
+    return m_width;
 }
 
 int FileImage::GetHeight() const
 {
-    return height;
+    return m_height;
 }
 
 int FileImage::GetNumComponents() const
 {
-    return numComponents;
+    return m_numComponents;
 }

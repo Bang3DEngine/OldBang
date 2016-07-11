@@ -26,11 +26,11 @@ class SingletonManager
 {
 private:
 
-    static SingletonManager *mainBinarySM;
+    static SingletonManager *s_mainBinarySM;
 
-    WindowMain *mainBinaryWindowMain = nullptr;
-    Time *mainBinaryTime = nullptr;
-    Input *mainBinaryInput = nullptr;
+    WindowMain *m_mainBinaryWindowMain = nullptr;
+    Time *m_mainBinaryTime = nullptr;
+    Input *m_mainBinaryInput = nullptr;
 
     SingletonManager() {}
 

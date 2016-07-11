@@ -14,23 +14,26 @@ class AssetsManager
 
 private:
     /** For every RELATIVE id, it contains a pointer to the asset
-      * created when the assets were loaded. **/
-    static std::map<std::string, Asset*> idToAssetPointer;
+      * created when the assets were loaded.
+    **/
+    static std::map<std::string, Asset*> m_idToAssetPointer;
 
     /** Filepath is parsed to RELATIVE, which is how cache works,
       * so you should try to use this method, to avoid using the
-      * ABSOLUTE filepath instead of the RELATIVE one. **/
+      * ABSOLUTE filepath instead of the RELATIVE one.
+    **/
     template <class T>
     static T* GetAssetFromMap(const std::string &filepath)
     {
         std::string f = Persistence::ProjectRootAbsoluteToRelative(filepath);
 
         if(!ExistsAssetInCache(f)) return nullptr;
-        else return dynamic_cast<T*>(idToAssetPointer[f]);
+        else return dynamic_cast<T*>(m_idToAssetPointer[f]);
     }
 
     /** Reads an asset (*.btex2d, *.bmesh, etc.) from an stream
-      * The input must not have the opening tag!. **/
+      * The input must not have the opening tag!.
+    **/
     template <class T>
     static T* ReadAsset(std::istream &f)
     {
@@ -42,7 +45,8 @@ private:
     }
 
     /** Reads a specific asset file (*.btex2d, *.bmesh, etc.)
-      * from a filepath. **/
+      * from a filepath.
+    **/
     template <class T>
     static T* ReadAssetFile(const std::string &filepath)
     {
@@ -60,7 +64,7 @@ private:
             if(a )
             {
                 AssetsManager::SaveAsset(filepath, a);
-                a->filepath = filepath;
+                a->m_filepath = filepath;
                 return dynamic_cast<T*>(a);
             }
         }

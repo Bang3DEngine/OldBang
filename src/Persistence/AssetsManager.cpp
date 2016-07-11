@@ -1,11 +1,11 @@
 #include "AssetsManager.h"
 
-std::map<std::string, Asset*> AssetsManager::idToAssetPointer;
+std::map<std::string, Asset*> AssetsManager::m_idToAssetPointer;
 
 bool AssetsManager::ExistsAssetInCache(const std::string &id)
 {
     std::string f = Persistence::ProjectRootAbsoluteToRelative(id);
-    return (idToAssetPointer.find(f) != idToAssetPointer.end());
+    return (m_idToAssetPointer.find(f) != m_idToAssetPointer.end());
 }
 
 void AssetsManager::SaveRuntimeAsset(const std::string &uniqueId,
@@ -17,5 +17,5 @@ void AssetsManager::SaveRuntimeAsset(const std::string &uniqueId,
 void AssetsManager::SaveAsset(const std::string &filepath,
                               Asset *pointerToAsset) {
     std::string f = Persistence::ProjectRootAbsoluteToRelative(filepath);
-    idToAssetPointer[filepath] = pointerToAsset;
+    m_idToAssetPointer[filepath] = pointerToAsset;
 }

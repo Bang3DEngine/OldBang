@@ -19,7 +19,7 @@ InspectorVFloatSW::InspectorVFloatSW(const std::string &labelString,
     for(unsigned int i = 0; i < initialValues.size(); ++i)
     {
         InspectorFloatSW *s = new InspectorFloatSW("", initialValues[i], parent);
-        floatSlots.push_back(s);
+        m_floatSlots.push_back(s);
 
         s->SetValue(initialValues[i]);
         s->setContentsMargins(0,0,0,0);
@@ -34,18 +34,18 @@ InspectorVFloatSW::InspectorVFloatSW(const std::string &labelString,
 
 void InspectorVFloatSW::SetValue(const std::vector<float> &v)
 {
-    for(unsigned int i = 0; i < floatSlots.size(); ++i)
+    for(unsigned int i = 0; i < m_floatSlots.size(); ++i)
     {
-        floatSlots[i]->SetValue(v[i]);
+        m_floatSlots[i]->SetValue(v[i]);
     }
 }
 
 std::vector<float>  InspectorVFloatSW::GetValue()
 {
     std::vector<float> result;
-    for(unsigned int i = 0; i < floatSlots.size(); ++i)
+    for(unsigned int i = 0; i < m_floatSlots.size(); ++i)
     {
-        float f = floatSlots[i]->GetValue();
+        float f = m_floatSlots[i]->GetValue();
         result.push_back(f);
     }
     return result;

@@ -13,14 +13,14 @@
 class EditorTranslateAxis : public EditorAxis
 {
 private:
-    SingleLineRenderer *line = nullptr;
+    SingleLineRenderer *p_line = nullptr;
 
 protected:
 
     virtual Renderer *GetAxisRenderer() const override;
 
 public:
-    EditorTranslateAxis(EditorAxis::EditorAxisDirection dir, GameObject *attachedGameObject);
+    EditorTranslateAxis(EditorAxis::EditorAxisDirection dir, GameObject *p_attachedGameObject);
     virtual ~EditorTranslateAxis();
 
     void OnUpdate() override;

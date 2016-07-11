@@ -9,13 +9,13 @@ class InspectorButtonSW : public InspectorSW
     Q_OBJECT
 
 private:
-    QPushButton *button = nullptr;
-    std::function<void()> onClickFunction;
+    QPushButton *p_button = nullptr;
+    std::function<void()> m_onClickFunction;
 
 public:
-    InspectorButtonSW(const std::string &label,
-                      InspectorWidget *parent,
-                      std::function<void()> onClickFunction);
+    InspectorButtonSW(const std::string &m_label,
+                      InspectorWidget *p_parent,
+                      std::function<void()> m_onClickFunction);
 
     QSize sizeHint() const;
 

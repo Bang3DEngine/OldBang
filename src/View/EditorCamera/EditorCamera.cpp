@@ -4,20 +4,20 @@
 
 EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
 {
-    yawNode = new EditorGameObject("EditorYawNode");
-    AddChild(yawNode);
+    p_yawNode = new EditorGameObject("EditorYawNode");
+    AddChild(p_yawNode);
 
-    cam = yawNode->AddComponent<Camera>();
-    cam->SetAutoUpdateAspectRatio(true);
-    cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
+    p_cam = p_yawNode->AddComponent<Camera>();
+    p_cam->SetAutoUpdateAspectRatio(true);
+    p_cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
-    t = AddComponent<Transform>();
-    t->SetPosition(Vector3(10.0f, 10.0f, 10.0f));
-    t->LookAt(Vector3(0));
+    p_t = AddComponent<Transform>();
+    p_t->SetPosition(Vector3(10.0f, 10.0f, 10.0f));
+    p_t->LookAt(Vector3(0));
     UpdateRotationVariables();
 
-    camt = yawNode->AddComponent<Transform>();
-    cam->SetZFar(999.9f);
+    p_camt = p_yawNode->AddComponent<Transform>();
+    p_cam->SetZFar(999.9f);
 }
 
 EditorCamera::~EditorCamera()
@@ -30,30 +30,30 @@ void EditorCamera::AdjustSpeeds()
     int cw = c->GetWidth();
     int ch = c->GetHeight();
 
-    mouseRotDegreesPerPixel.x = 180.0f / cw;
-    mouseRotDegreesPerPixel.y = 180.0f / ch;
+    m_mouseRotDegreesPerPixel.x = 180.0f / cw;
+    m_mouseRotDegreesPerPixel.y = 180.0f / ch;
 
-    mousePanPerPixel = glm::vec2(0.1f, 0.1f);
-    if(currentFocus )
+    m_mousePanPerPixel = glm::vec2(0.1f, 0.1f);
+    if(p_currentFocus)
     {
-        Transform *ft = currentFocus->GetComponent<Transform>();
+        Transform *ft = p_currentFocus->GetComponent<Transform>();
         if(ft )
         {
             Vector3 focusPoint = ft->GetPosition();
-            float d = Vector3::Distance(focusPoint, t->GetPosition());
+            float d = Vector3::Distance(focusPoint, p_t->GetPosition());
             float ar = c->GetAspectRatio();
-            float halfFov = glm::radians(cam->GetFovDegrees()/2.0f);
+            float halfFov = glm::radians(p_cam->GetFovDegrees()/2.0f);
             float halfHeightInWorldSpace = glm::tan(halfFov) * d;
-            mousePanPerPixel.y = (halfHeightInWorldSpace * 2) / ch;
-            mousePanPerPixel.x = mousePanPerPixel.y * ch * ar / cw;
+            m_mousePanPerPixel.y = (halfHeightInWorldSpace * 2) / ch;
+            m_mousePanPerPixel.x = m_mousePanPerPixel.y * ch * ar / cw;
         }
     }
 }
 
 void EditorCamera::UpdateRotationVariables()
 {
-    mouseRotDegreesAccum = glm::vec2(0.0f);
-    startingRotation = t->GetLocalRotation();
+    m_mouseRotDegreesAccum = glm::vec2(0.0f);
+    m_startingRotation = p_t->GetLocalRotation();
 }
 
 void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
@@ -63,7 +63,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
         float mouseWheel = Input::GetMouseWheel();
         if(mouseWheel != 0.0f)
         {
-            *moveStep -= mouseZoomPerDeltaWheel * mouseWheel * camt->GetForward();
+            *moveStep -= m_mouseZoomPerDeltaWheel * mouseWheel * p_camt->GetForward();
             *hasMoved  = true;
         }
     }
@@ -73,17 +73,17 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 {
     if(Input::GetMouseButton(Input::MouseButton::MRight))
     {
-        glm::vec2 delta = -Input::GetMouseDelta() * mouseRotDegreesPerPixel;
-        mouseRotDegreesAccum += delta;
+        glm::vec2 delta = -Input::GetMouseDelta() * m_mouseRotDegreesPerPixel;
+        m_mouseRotDegreesAccum += delta;
 
-        t->SetLocalRotation(startingRotation);
-        Quaternion rotX = Quaternion::AngleAxis(glm::radians(mouseRotDegreesAccum.x),
+        p_t->SetLocalRotation(m_startingRotation);
+        Quaternion rotX = Quaternion::AngleAxis(glm::radians(m_mouseRotDegreesAccum.x),
                                                 Vector3::up);
-        t->Rotate(rotX);
+        p_t->Rotate(rotX);
 
-        Quaternion rotY = Quaternion::AngleAxis(glm::radians(mouseRotDegreesAccum.y),
-                                                camt->GetRight());
-        t->Rotate(rotY);
+        Quaternion rotY = Quaternion::AngleAxis(glm::radians(m_mouseRotDegreesAccum.y),
+                                                p_camt->GetRight());
+        p_t->Rotate(rotY);
 
         Input::SetMouseWrapping(true);
         *hasMoved  = true;
@@ -97,10 +97,10 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
 {
     if(Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        glm::vec2 delta = -Input::GetMouseDelta() * mousePanPerPixel;
+        glm::vec2 delta = -Input::GetMouseDelta() * m_mousePanPerPixel;
         delta.y *= -1.0f;
 
-        t->Translate(camt->GetRight() * delta.x + camt->GetUp() * delta.y);
+        p_t->Translate(p_camt->GetRight() * delta.x + p_camt->GetUp() * delta.y);
 
         Canvas::SetCursor(Qt::SizeAllCursor);
         Input::SetMouseWrapping(true);
@@ -114,20 +114,20 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
     Vector3 m(0);
     if(Input::GetKey(Input::Key::W))
     {
-        m += keysMoveSpeed * Time::GetDeltaTime() * camt->GetForward();
+        m += m_keysMoveSpeed * Time::GetDeltaTime() * p_camt->GetForward();
     }
     else if(Input::GetKey(Input::Key::S))
     {
-        m -= keysMoveSpeed * Time::GetDeltaTime() * camt->GetForward();
+        m -= m_keysMoveSpeed * Time::GetDeltaTime() * p_camt->GetForward();
     }
 
     if(Input::GetKey(Input::Key::A))
     {
-        m -= keysMoveSpeed * Time::GetDeltaTime() * camt->GetRight();
+        m -= m_keysMoveSpeed * Time::GetDeltaTime() * p_camt->GetRight();
     }
     else if(Input::GetKey(Input::Key::D))
     {
-        m += keysMoveSpeed * Time::GetDeltaTime() * camt->GetRight();
+        m += m_keysMoveSpeed * Time::GetDeltaTime() * p_camt->GetRight();
     }
 
     *moveStep += m;
@@ -136,26 +136,26 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
 
 void EditorCamera::HandleLookAtFocus()
 {
-    if(doingLookAt)
+    if(m_doingLookAt)
     {
         Camera *cam = GetCamera();
-        if(currentFocus->HasComponent<Transform>())
+        if(p_currentFocus->HasComponent<Transform>())
         {
-            Sphere focusBSphere = currentFocus->GetBoundingSphere();
+            Sphere focusBSphere = p_currentFocus->GetBoundingSphere();
 
-            Vector3 thisPos = t->GetPosition();
+            Vector3 thisPos = p_t->GetPosition();
             Vector3 focusPos = focusBSphere.GetCenter();
             Vector3 focusDir = (focusPos - thisPos).Normalized();
 
             //LookAt Rotation
             if(thisPos != focusPos)
             {
-                Quaternion origin = t->GetRotation();
+                Quaternion origin = p_t->GetRotation();
                 Quaternion dest = Quaternion::LookDirection(focusDir, Vector3::up);
                 Quaternion final = Quaternion::Slerp( origin, dest,
-                            Time::GetDeltaTime() * lookAtRotSpeed);
+                            Time::GetDeltaTime() * m_lookAtRotSpeed);
 
-                t->SetLocalRotation(final);
+                p_t->SetLocalRotation(final);
             }
 
             //LookAt Move
@@ -169,8 +169,8 @@ void EditorCamera::HandleLookAtFocus()
 
             minDist = std::max(minDist, 0.5f); //In case boundingBox is empty
             Vector3 dest = focusPos - (focusDir * minDist);
-            t->SetPosition( Vector3::Lerp( thisPos, dest,
-                            Time::GetDeltaTime() * lookAtMoveSpeed));
+            p_t->SetPosition( Vector3::Lerp( thisPos, dest,
+                            Time::GetDeltaTime() * m_lookAtMoveSpeed));
         }
     }
 }
@@ -193,13 +193,13 @@ void EditorCamera::OnUpdate()
     HandleWheelZoom(&moveStep, &hasMoved);
 
     HandleLookAtFocus();
-    if(doingLookAt)
+    if(m_doingLookAt)
     {   //Update all needed variables in case we are doing a lookAt.
         UpdateRotationVariables();
     }
 
-    keysMoveSpeed += keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
-    keysMoveSpeed = glm::clamp(keysMoveSpeed, minMoveSpeed, maxMoveSpeed);
+    m_keysMoveSpeed += m_keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
+    m_keysMoveSpeed = glm::clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
 
     if(unwrapMouse)
     {
@@ -209,18 +209,18 @@ void EditorCamera::OnUpdate()
 
     if(!hasMoved )
     {
-        keysMoveSpeed = 0.0f; //reset speed
+        m_keysMoveSpeed = 0.0f; //reset speed
     }
     else
     {
-        doingLookAt = false; //No more lookAt
-        t->SetPosition(t->GetPosition() + moveStep); //Move camera the amount gathered
+        m_doingLookAt = false; //No more lookAt
+        p_t->SetPosition(p_t->GetPosition() + moveStep); //Move camera the amount gathered
     }
 }
 
 Camera *EditorCamera::GetCamera()
 {
-    return yawNode->GetComponent<Camera>();
+    return p_yawNode->GetComponent<Camera>();
 }
 
 #ifdef BANG_EDITOR
@@ -231,16 +231,16 @@ void EditorCamera::OnTreeHierarchyGameObjectsSelected
     if(selectedGameObjects.size() != 1) return;
 
     GameObject *selected = selectedGameObjects.front();
-    currentFocus = selected;
-    doingLookAt = false;
+    p_currentFocus = selected;
+    m_doingLookAt = false;
 }
 
 
 void EditorCamera::OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
     NONULL(selected);
-    currentFocus = selected;
-    doingLookAt = true;
+    p_currentFocus = selected;
+    m_doingLookAt = true;
 }
 #endif
 

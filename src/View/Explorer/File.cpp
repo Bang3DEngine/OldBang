@@ -7,74 +7,74 @@
 
 File::File(const QFileSystemModel *model, const QModelIndex *index)
 {
-    isFile = !model->isDir(*index);
+    m_isFile = !model->isDir(*index);
 
-    path = model->filePath(*index).toStdString();
-    name = model->fileName(*index).toStdString();
+    m_path = model->filePath(*index).toStdString();
+    m_name = model->fileName(*index).toStdString();
 
-    std::string::size_type p = name.find('.');
+    std::string::size_type p = m_name.find('.');
     if(p != std::string::npos)
     {
-        extension = name.substr(p+1, name.length() - p - 1);
-        name = name.substr(0, p);
+        m_extension = m_name.substr(p+1, m_name.length() - p - 1);
+        m_name = m_name.substr(0, p);
     }
 }
 
 bool File::IsTexture2DAsset() const
 {
-    return  isFile && extension == Texture2D::GetFileExtensionStatic();
+    return  m_isFile && m_extension == Texture2D::GetFileExtensionStatic();
 }
 
 bool File::IsImageFile() const
 {
-    return  isFile &&
+    return  m_isFile &&
             (
-             extension == "jpg" || extension == "jpeg" ||
-             extension == "png" || extension == "bmp"
+             m_extension == "jpg" || m_extension == "jpeg" ||
+             m_extension == "png" || m_extension == "bmp"
             );
 }
 
 bool File::IsMeshAsset() const
 {
-    return  isFile && extension == Mesh::GetFileExtensionStatic();
+    return  m_isFile && m_extension == Mesh::GetFileExtensionStatic();
 }
 
 bool File::IsMeshFile() const
 {
-    return  isFile && (extension == "obj");
+    return  m_isFile && (m_extension == "obj");
 }
 
 bool File::IsMaterialAsset() const
 {
-    return isFile && extension == Material::GetFileExtensionStatic();
+    return m_isFile && m_extension == Material::GetFileExtensionStatic();
 }
 
 bool File::IsPrefabAsset() const
 {
-    return isFile && extension == Prefab::GetFileExtensionStatic();
+    return m_isFile && m_extension == Prefab::GetFileExtensionStatic();
 }
 
 bool File::IsDir() const
 {
-    return !isFile;
+    return !m_isFile;
 }
 
 bool File::IsFile() const
 {
-    return isFile;
+    return m_isFile;
 }
 
 const std::string &File::GetName() const
 {
-    return name;
+    return m_name;
 }
 
 const std::string &File::GetPath() const
 {
-    return path;
+    return m_path;
 }
 
 const std::string &File::GetExtension() const
 {
-    return extension;
+    return m_extension;
 }

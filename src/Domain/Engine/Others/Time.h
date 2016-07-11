@@ -11,7 +11,7 @@ friend class Canvas;
 friend class TestBehaviour;
 
 private:
-    float deltaTime = 0.0f;
+    float m_deltaTime = 0.0f;
 
     Time() {}
     static Time* GetInstance();

@@ -21,7 +21,7 @@ private:
             slr(slr), livingTimeSecs(livingTimeSecs) {}
     };
 
-    std::list<DebugLine> debugLines;
+    std::list<DebugLine> m_debugLines;
 
 public:
 

@@ -8,10 +8,10 @@
 class Rect : public IToString
 {
 public:
-    float minx = 0.0f;
-    float maxx = 0.0f;
-    float miny = 0.0f;
-    float maxy = 0.0f;
+    float m_minx = 0.0f;
+    float m_maxx = 0.0f;
+    float m_miny = 0.0f;
+    float m_maxy = 0.0f;
 
     Rect();
     Rect(float minx, float maxx,

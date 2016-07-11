@@ -12,16 +12,16 @@ Behaviour::~Behaviour()
 
 void Behaviour::Init(BehaviourHolder *bh)
 {
-    this->behaviourHolder = bh;
+    p_behaviourHolder = bh;
     gameObject = bh->gameObject;
 }
 
 void Behaviour::SetSourceFilepath(const std::string &sourceFilepath)
 {
-    this->sourceFilepath = sourceFilepath;
+    m_sourceFilepath = sourceFilepath;
 }
 
 std::string Behaviour::GetSourceFilepath() const
 {
-    return sourceFilepath;
+    return m_sourceFilepath;
 }

@@ -35,26 +35,26 @@ private:
      * @brief Width of the lines if rendering with Lines RenderMode
      * or if rendering with wireframe.
      */
-    float lineWidth = 1.0f;
+    float m_lineWidth = 1.0f;
 
     /**
      * @brief ignoreModelMatrix
      */
-    bool ignoreModelMatrix = false;
+    bool m_ignoreModelMatrix = false;
 
     /**
      * @brief If ignoreViewMatrix == true, when drawing the Renderer
      * will ignore view matrix.
      * So it won't take into account camera's translation, rotation or scale.
      */
-    bool ignoreViewMatrix = false;
+    bool m_ignoreViewMatrix = false;
 
     /**
      * @brief If ignoreViewMatrix == true, when drawing the Renderer
      * will ignore view matrix.
      * So it won't take into account camera's translation, rotation or scale.
      */
-    bool ignoreProjectionMatrix = false;
+    bool m_ignoreProjectionMatrix = false;
 
     /**
      * @brief Called by SelectionFramebuffer.
@@ -69,11 +69,11 @@ private:
 
 protected:
 
-    Material *material = nullptr;
+    Material *p_material = nullptr;
 
-    bool drawWireframe = false;
-    CullMode cullMode = CullMode::Back;
-    RenderMode renderMode = RenderMode::Triangles;
+    bool m_drawWireframe = false;
+    CullMode m_cullMode = CullMode::Back;
+    RenderMode m_renderMode = RenderMode::Triangles;
 
     virtual void ActivateGLStatesBeforeRendering() const;
     virtual void RenderWithoutBindingMaterial() const = 0;
@@ -99,15 +99,15 @@ public:
     virtual void SetMaterial(Material *m) = 0;
     virtual Material* GetMaterial();
 
-    void SetDrawWireframe(bool drawWireframe);
+    void SetDrawWireframe(bool m_drawWireframe);
     bool GetDrawWireframe() const;
 
     virtual Box GetBoundingBox() const = 0;
 
-    void SetCullMode(CullMode cullMode);
+    void SetCullMode(CullMode m_cullMode);
     CullMode GetCullMode() const;
 
-    void SetRenderMode(RenderMode renderMode);
+    void SetRenderMode(RenderMode m_renderMode);
     RenderMode GetRenderMode() const;
 
     void SetLineWidth(float w);

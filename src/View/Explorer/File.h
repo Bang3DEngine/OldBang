@@ -8,8 +8,10 @@ class File
 {
 protected:
 
-    bool isFile = true;
-    std::string path = "", name = "", extension = "";
+    bool m_isFile = true;
+    std::string m_path = "";
+    std::string m_name = "";
+    std::string  m_extension = "";
 
 public:
     File(const QFileSystemModel *model, const QModelIndex *index);

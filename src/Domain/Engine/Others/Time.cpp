@@ -14,7 +14,7 @@ Time* Time::GetInstance()
 
 float Time::GetDeltaTime()
 {
-    return Time::GetInstance()->deltaTime;
+    return Time::GetInstance()->m_deltaTime;
 }
 
 unsigned long long Time::GetNow()

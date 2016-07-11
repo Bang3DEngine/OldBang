@@ -121,50 +121,50 @@ private:
      * @brief For every Key, we have a ButtonInfo
      * assigned to it
      */
-    std::map<Key, ButtonInfo> keyInfos;
+    std::map<Key, ButtonInfo> m_keyInfos;
 
 
     /**
      * @brief If true, mouse will loop in x and y when
      * going outside the Canvas.
      */
-    bool mouseWrapping = false;
+    bool m_mouseWrapping = false;
 
     /**
      * @brief isADoubleClick will be true in the frame where
      * there's the second click of a double click
      */
-    bool isADoubleClick = false;
+    bool m_isADoubleClick = false;
 
     /**
      * @brief Used to handle double click timing
      */
-    float secsSinceLastMouseDown = 0.0f;
+    float m_secsSinceLastMouseDown = 0.0f;
 
     /**
      * @brief Max time in seconds between 2 clicks to
      * be considered double-click
      */
-    const float doubleClickMaxSeconds = 0.3f;
-    float lastMouseWheelDelta = 0.0f;
-    bool lockMouseMovement = false;
+    const float c_doubleClickMaxSeconds = 0.3f;
+    float m_lastMouseWheelDelta = 0.0f;
+    bool m_lockMouseMovement = false;
 
     /**
      * @brief Used to fix an issue with lockMouseMovement
      */
-    int framesMouseStopped = 0  ;
+    int m_framesMouseStopped = 0  ;
 
     /**
      * @brief Mouse coordinates in Canvas space.
      */
-    glm::vec2 mouseCoords, lastMouseCoords;
+    glm::vec2 m_mouseCoords, m_lastMouseCoords;
 
 
     /**
      * @brief For every MouseButton, we have a ButtonInfo
      * assigned to it
      */
-    std::map<MouseButton, ButtonInfo> mouseInfo;
+    std::map<MouseButton, ButtonInfo> m_mouseInfo;
 
 public:
     static void InitFromMainBinary();
@@ -184,7 +184,7 @@ public:
     static Input* GetInstance();
 
     static bool GetMouseWrapping();
-    static void SetMouseWrapping(bool mouseWrapping);
+    static void SetMouseWrapping(bool m_mouseWrapping);
 
     static bool GetKey(Key k);
     static bool GetKeyUp(Key k);

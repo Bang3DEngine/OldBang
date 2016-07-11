@@ -25,10 +25,10 @@ public:
     }
 
 private:
-    glm::vec4 diffuseColor;
+    glm::vec4 m_diffuseColor;
 
-    const ShaderProgram *shaderProgram;
-    std::vector<const Texture*> textures;
+    const ShaderProgram *p_shaderProgram;
+    std::vector<const Texture*> m_textures;
 
 public:
     Material();
@@ -38,7 +38,7 @@ public:
     void SetShaderProgram(const ShaderProgram *program);
     void SetTexture(const Texture *texture, unsigned int index = 0);
 
-    void SetDiffuseColor(const glm::vec4 &diffuseColor);
+    void SetDiffuseColor(const glm::vec4 &m_diffuseColor);
 
     const ShaderProgram* GetShaderProgram() const;
     const Texture* GetTexture(unsigned int index = 0) const;

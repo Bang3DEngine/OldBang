@@ -2,21 +2,21 @@
 #include "Canvas.h"
 #include "FileReader.h"
 
-Camera::Camera() : orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
-                   fovDegrees(60.0f),
-                   zNear(0.1f),
-                   zFar(100.0f),
-                   aspectRatio(1.0f),
-                   projMode(ProjectionMode::Perspective),
-                   autoUpdateAspectRatio(true)
+Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
+                   m_fovDegrees(60.0f),
+                   m_zNear(0.1f),
+                   m_zFar(100.0f),
+                   m_aspectRatio(1.0f),
+                   m_projMode(ProjectionMode::Perspective),
+                   m_autoUpdateAspectRatio(true)
 {
     #ifdef BANG_EDITOR
-    inspectorComponentInfo.SetSlotsInfos(
+    m_inspectorComponentInfo.SetSlotsInfos(
     {
-        new InspectorVFloatSWInfo( "FOV", {fovDegrees} ),
-        new InspectorVFloatSWInfo( "Z Near", {zNear} ),
-        new InspectorVFloatSWInfo( "Z Far", {zFar} ),
-        new InspectorVFloatSWInfo( "Aspect Ratio", {aspectRatio} ),
+        new InspectorVFloatSWInfo( "FOV", {m_fovDegrees} ),
+        new InspectorVFloatSWInfo( "Z Near", {m_zNear} ),
+        new InspectorVFloatSWInfo( "Z Far", {m_zFar} ),
+        new InspectorVFloatSWInfo( "Aspect Ratio", {m_aspectRatio} ),
         new InspectorEnumSWInfo( "Projection Mode", {"Orthographic", "Perspective"} )
     });
     #endif
@@ -41,26 +41,26 @@ void Camera::GetViewMatrix(Matrix4 &view) const
 
 void Camera::GetProjectionMatrix(Matrix4 &proj) const
 {
-    if(projMode == ProjectionMode::Perspective)
+    if(m_projMode == ProjectionMode::Perspective)
     {
-        if(autoUpdateAspectRatio)
+        if(m_autoUpdateAspectRatio)
         {
-            aspectRatio = Canvas::GetAspectRatio();
+            m_aspectRatio = Canvas::GetAspectRatio();
         }
 
-        proj = Matrix4::Perspective(glm::radians(fovDegrees), aspectRatio, zNear, zFar);
+        proj = Matrix4::Perspective(glm::radians(m_fovDegrees), m_aspectRatio, m_zNear, m_zFar);
     }
     else //Ortho
     {
-        proj = Matrix4::Ortho(orthoRect.minx, orthoRect.maxx,
-                              orthoRect.miny, orthoRect.maxy,
-                              zNear, zFar);
+        proj = Matrix4::Ortho(m_orthoRect.m_minx, m_orthoRect.m_maxx,
+                              m_orthoRect.m_miny, m_orthoRect.m_maxy,
+                              m_zNear, m_zFar);
     }
 }
 
 void Camera::SetOrthoRect(const Rect &rect)
 {
-    orthoRect = rect;
+    m_orthoRect = rect;
 }
 
 
@@ -71,32 +71,32 @@ void Camera::SetOrthoRect(const Rect &rect)
 
 void Camera::SetFovDegrees(float fovDegrees)
 {
-    this->fovDegrees = fovDegrees;
+    this->m_fovDegrees = fovDegrees;
 }
 
 void Camera::SetAspectRatio(float aspectRatio)
 {
-    this->aspectRatio = aspectRatio;
+    this->m_aspectRatio = aspectRatio;
 }
 
 void Camera::SetZNear(float zNear)
 {
-    this->zNear = zNear;
+    this->m_zNear = zNear;
 }
 
 void Camera::SetZFar(float zFar)
 {
-    this->zFar = zFar;
+    this->m_zFar = zFar;
 }
 
 void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
 {
-    this->projMode = projMode;
+    this->m_projMode = projMode;
 }
 
 void Camera::SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio)
 {
-    this->autoUpdateAspectRatio = autoUpdateAspectRatio;
+    this->m_autoUpdateAspectRatio = autoUpdateAspectRatio;
 }
 
 
@@ -106,32 +106,32 @@ void Camera::SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio)
 
 float Camera::GetFovDegrees() const
 {
-    return fovDegrees;
+    return m_fovDegrees;
 }
 
 float Camera::GetAspectRatio() const
 {
-    return aspectRatio;
+    return m_aspectRatio;
 }
 
 float Camera::GetZNear() const
 {
-    return zNear;
+    return m_zNear;
 }
 
 float Camera::GetZFar() const
 {
-    return zFar;
+    return m_zFar;
 }
 
 Camera::ProjectionMode Camera::GetProjectionMode() const
 {
-    return projMode;
+    return m_projMode;
 }
 
 bool Camera::GetAutoUpdateAspectRatio() const
 {
-    return autoUpdateAspectRatio;
+    return m_autoUpdateAspectRatio;
 }
 
 glm::vec2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
@@ -159,34 +159,34 @@ ICloneable *Camera::Clone() const
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* Camera::GetComponentInfo()
 {
-    static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(0))->value = {fovDegrees};
-    static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(1))->value = {zNear};
-    static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(2))->value = {zFar};
-    static_cast<InspectorVFloatSWInfo*>(inspectorComponentInfo.GetSlotInfo(3))->value = {aspectRatio};
-    static_cast<InspectorEnumSWInfo*>(inspectorComponentInfo.GetSlotInfo(4))->selectedValueIndex = projMode;
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value = {m_fovDegrees};
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1))->m_value = {m_zNear};
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(2))->m_value = {m_zFar};
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(3))->m_value = {m_aspectRatio};
+    static_cast<InspectorEnumSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(4))->selectedValueIndex = m_projMode;
 
-    return &inspectorComponentInfo;
+    return &m_inspectorComponentInfo;
 }
 
 void Camera::OnSlotValueChanged(InspectorWidget *source)
 {
-    fovDegrees = source->GetSWVectorFloatValue("FOV")[0];
-    zNear = source->GetSWVectorFloatValue("Z Near")[0];
-    zFar = source->GetSWVectorFloatValue("Z Far")[0];
-    aspectRatio = source->GetSWVectorFloatValue("Aspect Ratio")[0];
-    projMode =  static_cast<Camera::ProjectionMode>(source->GetSWSelectedEnumIndex("Projection Mode"));
+    m_fovDegrees = source->GetSWVectorFloatValue("FOV")[0];
+    m_zNear = source->GetSWVectorFloatValue("Z Near")[0];
+    m_zFar = source->GetSWVectorFloatValue("Z Far")[0];
+    m_aspectRatio = source->GetSWVectorFloatValue("Aspect Ratio")[0];
+    m_projMode =  static_cast<Camera::ProjectionMode>(source->GetSWSelectedEnumIndex("Projection Mode"));
 }
 
 void Camera::Write(std::ostream &f) const
 {
     f << "<Camera>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::Write(fovDegrees, f);
-    FileWriter::Write(zNear, f);
-    FileWriter::Write(zFar, f);
-    FileWriter::Write(projMode == ProjectionMode::Perspective ?
+    FileWriter::Write(m_fovDegrees, f);
+    FileWriter::Write(m_zNear, f);
+    FileWriter::Write(m_zFar, f);
+    FileWriter::Write(m_projMode == ProjectionMode::Perspective ?
                           "Perspective" : "Orthographic", f);
-    FileWriter::Write(orthoRect, f);
+    FileWriter::Write(m_orthoRect, f);
     f << "</Camera>" << std::endl;
 }
 

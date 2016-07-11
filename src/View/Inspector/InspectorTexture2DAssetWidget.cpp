@@ -7,15 +7,15 @@
 InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
     (const FileTexture2DAsset &fileTex) : InspectorWidget()
 {
-    assetFilepath = fileTex.GetPath();
-    assetFilepath = Persistence::ProjectRootAbsoluteToRelative(assetFilepath);
+    m_assetFilepath = fileTex.GetPath();
+    m_assetFilepath = Persistence::ProjectRootAbsoluteToRelative(m_assetFilepath);
 
     //Temp tex to get the needed values
     Texture2D *tex =
             AssetsManager::ReadTmpAsset<Texture2D>(fileTex.GetPath());
     std::string imgFilepath = tex->GetImageRelativeFilepath();
 
-    inspectorInfo.SetSlotsInfos(
+    m_inspectorInfo.SetSlotsInfos(
         {
             new InspectorStringSWInfo("Image path", imgFilepath, true),
             new InspectorEnumSWInfo("Filter", {"Nearest", "Linear"},
@@ -26,7 +26,7 @@ InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
 
     delete tex;
 
-    this->ConstructFromWidgetInformation(fileTex.GetName(), &inspectorInfo,
+    this->ConstructFromWidgetInformation(fileTex.GetName(), &m_inspectorInfo,
                                          false);
 }
 
@@ -40,7 +40,7 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
     //First we have to update the instance in the AssetsManager, (if any)
     //To enable a live change ingame of the Asset being used by Components/Entities
     Texture2D *currentTex = AssetsManager::
-            GetCachedAsset<Texture2D>(assetFilepath);
+            GetCachedAsset<Texture2D>(m_assetFilepath);
 
 
     bool tmpAssetLoaded = false;
@@ -48,7 +48,7 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
     {
         //Load a tmp asset, to be able to save it to a file.
         tmpAssetLoaded = true;
-        currentTex = AssetsManager::ReadTmpAsset<Texture2D>(assetFilepath);
+        currentTex = AssetsManager::ReadTmpAsset<Texture2D>(m_assetFilepath);
     }
 
     if(currentTex )
@@ -61,7 +61,7 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
         currentTex->SetFilterMode(fm);
 
         //Save the modified asset
-        FileWriter::WriteAsset(assetFilepath, currentTex);
+        FileWriter::WriteAsset(m_assetFilepath, currentTex);
         if(tmpAssetLoaded)
         {
             delete currentTex;

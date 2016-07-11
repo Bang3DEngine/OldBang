@@ -21,19 +21,19 @@ friend class BehaviourHolder;
 
 private:
 
-    std::string sourceFilepath = "";
+    std::string m_sourceFilepath = "";
 
     /**
      * @brief Set directly by BehaviourHolder (its a friend class), when
      * adding this Behaviour to itself.
      */
-    BehaviourHolder *behaviourHolder = nullptr;
+    BehaviourHolder *p_behaviourHolder = nullptr;
 
 /**
  * These variables must be copied from BehaviourHolder
  */
 protected:
-    GameObject *gameObject = nullptr;
+    GameObject* gameObject = nullptr;
 /**
 */
 
@@ -43,7 +43,7 @@ public:
 
 private:
     void Init(BehaviourHolder *bh);
-    void SetSourceFilepath(const std::string &sourceFilepath);
+    void SetSourceFilepath(const std::string &m_sourceFilepath);
     std::string GetSourceFilepath() const;
 };
 

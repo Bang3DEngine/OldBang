@@ -9,24 +9,24 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateColorAttachment(Attachment::Depth);
     CreateDepthBufferAttachment();
 
-    renderToScreenMaterial = new Material();
+    p_renderToScreenMaterial = new Material();
     ShaderProgram *sp = new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_Render_To_Screen,
                                           ShaderContract::Filepath_Shader_Fragment_Render_To_Screen);
-    renderToScreenMaterial->SetShaderProgram(sp);
+    p_renderToScreenMaterial->SetShaderProgram(sp);
 
-    renderToScreenPlaneMesh = new Mesh();
+    p_renderToScreenPlaneMesh = new Mesh();
     std::vector<Vector3> positions, normals; std::vector<glm::vec2> uvs;
     MeshFactory::GetPlaneTris(2.0f, positions, normals, uvs);
-    renderToScreenPlaneMesh->LoadPositions(positions);
+    p_renderToScreenPlaneMesh->LoadPositions(positions);
 
-    renderToScreenPlaneMesh->BindPositionsToShaderProgram(ShaderContract::Vertex_In_Position_Raw,
-                                                        *(renderToScreenMaterial->GetShaderProgram()));
+    p_renderToScreenPlaneMesh->BindPositionsToShaderProgram(ShaderContract::Vertex_In_Position_Raw,
+                                                        *(p_renderToScreenMaterial->GetShaderProgram()));
 }
 
 GBuffer::~GBuffer()
 {
-    if(renderToScreenMaterial ) delete renderToScreenMaterial;
-    if(renderToScreenPlaneMesh ) delete renderToScreenPlaneMesh;
+    if(p_renderToScreenMaterial ) delete p_renderToScreenMaterial;
+    if(p_renderToScreenPlaneMesh ) delete p_renderToScreenPlaneMesh;
 }
 
 void GBuffer::RenderToScreen() const
@@ -37,7 +37,7 @@ void GBuffer::RenderToScreen() const
     TextureRender *diffuseTex  = GetTextureAttachment(GBuffer::Attachment::Diffuse);
     TextureRender *depthTex    = GetTextureAttachment(GBuffer::Attachment::Depth);
 
-    renderToScreenPlaneMesh->GetVAO()->Bind();
+    p_renderToScreenPlaneMesh->GetVAO()->Bind();
 
     //Pass the textures to the render to screen shaderProgram, through the Material
     //First set the corresponding texture slots for every texture
@@ -49,19 +49,19 @@ void GBuffer::RenderToScreen() const
 
     //Now attach to the material, with its corresponding index for the name (BANG_texture_0)
     //which in this case are the same as each respective texture slot
-    renderToScreenMaterial->SetTexture(positionTex, GBuffer::Attachment::Position); //0
-    renderToScreenMaterial->SetTexture(normalTex,   GBuffer::Attachment::Normal);   //1
-    renderToScreenMaterial->SetTexture(uvTex,       GBuffer::Attachment::Uv);       //2
-    renderToScreenMaterial->SetTexture(diffuseTex,  GBuffer::Attachment::Diffuse);  //3
-    renderToScreenMaterial->SetTexture(depthTex,    GBuffer::Attachment::Depth);    //4
-    renderToScreenMaterial->Bind();
+    p_renderToScreenMaterial->SetTexture(positionTex, GBuffer::Attachment::Position); //0
+    p_renderToScreenMaterial->SetTexture(normalTex,   GBuffer::Attachment::Normal);   //1
+    p_renderToScreenMaterial->SetTexture(uvTex,       GBuffer::Attachment::Uv);       //2
+    p_renderToScreenMaterial->SetTexture(diffuseTex,  GBuffer::Attachment::Diffuse);  //3
+    p_renderToScreenMaterial->SetTexture(depthTex,    GBuffer::Attachment::Depth);    //4
+    p_renderToScreenMaterial->Bind();
 
     glEnable(GL_CULL_FACE);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     //Render the screen plane!
-    glDrawArrays(GL_TRIANGLES, 0, renderToScreenPlaneMesh->GetVertexCount());
+    glDrawArrays(GL_TRIANGLES, 0, p_renderToScreenPlaneMesh->GetVertexCount());
 
-    renderToScreenMaterial->UnBind();
-    renderToScreenPlaneMesh->GetVAO()->UnBind();
+    p_renderToScreenMaterial->UnBind();
+    p_renderToScreenPlaneMesh->GetVAO()->UnBind();
 }

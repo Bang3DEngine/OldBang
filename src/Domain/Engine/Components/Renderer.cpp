@@ -14,25 +14,25 @@ void Renderer::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     Renderer *r = static_cast<Renderer*>(clone);
     Component::CloneInto(r);
-    r->SetMaterial(material);
-    r->SetDrawWireframe(drawWireframe);
-    r->SetCullMode(cullMode);
-    r->SetRenderMode(renderMode);
-    r->SetLineWidth(lineWidth);
-    r->SetIgnoreModelMatrix(ignoreModelMatrix);
-    r->SetIgnoreViewMatrix(ignoreViewMatrix);
-    r->SetIgnoreProjectionMatrix(ignoreProjectionMatrix);
+    r->SetMaterial(p_material);
+    r->SetDrawWireframe(m_drawWireframe);
+    r->SetCullMode(m_cullMode);
+    r->SetRenderMode(m_renderMode);
+    r->SetLineWidth(m_lineWidth);
+    r->SetIgnoreModelMatrix(m_ignoreModelMatrix);
+    r->SetIgnoreViewMatrix(m_ignoreViewMatrix);
+    r->SetIgnoreProjectionMatrix(m_ignoreProjectionMatrix);
 }
 
 Material *Renderer::GetMaterial()
 {
-    return material;
+    return p_material;
 }
 
 void Renderer::ActivateGLStatesBeforeRendering() const
 {
     //Set polygon mode
-    if(drawWireframe)
+    if(m_drawWireframe)
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
@@ -42,10 +42,10 @@ void Renderer::ActivateGLStatesBeforeRendering() const
     }
 
     //Set culling mode
-    if(cullMode != CullMode::None)
+    if(m_cullMode != CullMode::None)
     {
         glEnable(GL_CULL_FACE);
-        glCullFace(cullMode);
+        glCullFace(m_cullMode);
     }
     else
     {
@@ -54,17 +54,17 @@ void Renderer::ActivateGLStatesBeforeRendering() const
 
     Scene *scene = Canvas::GetCurrentScene();
     Camera *camera = scene->GetCamera();
-    if(camera  && material  && material->shaderProgram )
+    if(camera  && p_material  && p_material->p_shaderProgram )
     {
         Transform *t = camera->gameObject->GetComponent<Transform>();
-        if(t )
+        if(t)
         {
-            material->shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
+            p_material->p_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
                                                     t->GetPosition(), false);
         }
     }
 
-    glLineWidth(lineWidth);
+    glLineWidth(m_lineWidth);
 
 }
 
@@ -75,12 +75,12 @@ void Renderer::OnRender()
 
 void Renderer::Render() const
 {
-    NONULL(material); NONULL(material->GetShaderProgram());
+    NONULL(p_material); NONULL(p_material->GetShaderProgram());
 
     ActivateGLStatesBeforeRendering();
-    material->Bind();
+    p_material->Bind();
     RenderWithoutBindingMaterial();
-    material->UnBind();
+    p_material->UnBind();
 }
 
 void Renderer::GetMatrices(Matrix4 &model,
@@ -92,20 +92,20 @@ void Renderer::GetMatrices(Matrix4 &model,
 
     Camera *cam = gameObject->GetScene()->GetCamera();
 
-    if(!ignoreModelMatrix)
+    if(!m_ignoreModelMatrix)
     {
         Transform *t = gameObject->GetComponent<Transform>();
-        if(t ) t->GetModelMatrix(model);
+        if(t) t->GetModelMatrix(model);
     }
     else model = Matrix4(1.0f);
 
-    if(!ignoreViewMatrix)
+    if(!m_ignoreViewMatrix)
     {
         cam->GetViewMatrix(view);
     }
     else view = Matrix4(1.0f);
 
-    if(!ignoreProjectionMatrix)
+    if(!m_ignoreProjectionMatrix)
     {
         cam->GetProjectionMatrix(projection);
     }
@@ -119,89 +119,89 @@ void Renderer::SetMatricesUniforms(const Matrix4 &model,
                                    const Matrix4 &projection,
                                    const Matrix4 &pvm) const
 {
-    material->shaderProgram->SetUniformMat4(
+    p_material->p_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Model, model, false);
-    material->shaderProgram->SetUniformMat4(
+    p_material->p_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);
-    material->shaderProgram->SetUniformMat4(
+    p_material->p_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_View, view, false);
-    material->shaderProgram->SetUniformMat4(
+    p_material->p_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_View_Inverse, view.Inversed(), false);
-    material->shaderProgram->SetUniformMat4(
+    p_material->p_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Projection, projection, false);
-    material->shaderProgram->SetUniformMat4(
+    p_material->p_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Projection_Inverse, projection.Inversed(), false);
-    material->shaderProgram->SetUniformMat4(
+    p_material->p_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_PVM, pvm, false);
 }
 
 void Renderer::SetDrawWireframe(bool drawWireframe)
 {
-    this->drawWireframe = drawWireframe;
+    m_drawWireframe = drawWireframe;
 }
 bool Renderer::GetDrawWireframe() const
 {
-    return drawWireframe;
+    return m_drawWireframe;
 }
 
 
 void Renderer::SetCullMode(Renderer::CullMode cullMode)
 {
-    this->cullMode = cullMode;
+    m_cullMode = cullMode;
 }
 Renderer::CullMode Renderer::GetCullMode() const
 {
-    return cullMode;
+    return m_cullMode;
 }
 
 
 void Renderer::SetRenderMode(Renderer::RenderMode renderMode)
 {
-    this->renderMode = renderMode;
+    m_renderMode = renderMode;
 }
 Renderer::RenderMode Renderer::GetRenderMode() const
 {
-    return renderMode;
+    return m_renderMode;
 }
 
 
 void Renderer::SetLineWidth(float w)
 {
-    lineWidth = w;
+    m_lineWidth = w;
 }
 float Renderer::GetLineWidth() const
 {
-    return lineWidth;
+    return m_lineWidth;
 }
 
 void Renderer::SetIgnoreModelMatrix(bool ignore)
 {
-    this->ignoreModelMatrix = ignore;
+    this->m_ignoreModelMatrix = ignore;
 }
 
 bool Renderer::GetIgnoreModelMatrix() const
 {
-    return ignoreModelMatrix;
+    return m_ignoreModelMatrix;
 }
 
 void Renderer::SetIgnoreViewMatrix(bool ignore)
 {
-    ignoreViewMatrix = ignore;
+    m_ignoreViewMatrix = ignore;
 }
 
 bool Renderer::GetIgnoreViewMatrix() const
 {
-    return ignoreViewMatrix;
+    return m_ignoreViewMatrix;
 }
 
 void Renderer::SetIgnoreProjectionMatrix(bool ignore)
 {
-    ignoreProjectionMatrix = ignore;
+    m_ignoreProjectionMatrix = ignore;
 }
 
 bool Renderer::GetIgnoreProjectionMatrix() const
 {
-    return ignoreProjectionMatrix;
+    return m_ignoreProjectionMatrix;
 }
 
 void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f)

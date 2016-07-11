@@ -17,17 +17,17 @@ InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
         layout->addWidget(textLabel);
     }
 
-    spinbox = new FloatComponentSlotSpinBox();
-    spinbox->setValue(initialValue);
-    spinbox->setAlignment(Qt::AlignHCenter);
-    spinbox->setMinimum(-9999999.9);
-    spinbox->setMaximum(9999999.9);
-    spinbox->setAccelerated(true);
-    spinbox->setMinimumWidth(50);
-    spinbox->setContentsMargins(0,0,0,0);
-    spinbox->show();
+    p_spinbox = new FloatComponentSlotSpinBox();
+    p_spinbox->setValue(initialValue);
+    p_spinbox->setAlignment(Qt::AlignHCenter);
+    p_spinbox->setMinimum(-9999999.9);
+    p_spinbox->setMaximum(9999999.9);
+    p_spinbox->setAccelerated(true);
+    p_spinbox->setMinimumWidth(50);
+    p_spinbox->setContentsMargins(0,0,0,0);
+    p_spinbox->show();
 
-    layout->addWidget(spinbox);
+    layout->addWidget(p_spinbox);
 
     this->setContentsMargins(0,0,0,0);
     this->show();
@@ -37,31 +37,31 @@ InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
 
 void InspectorFloatSW::SetValue(float f)
 {
-    if(!editing)
+    if(!_editing)
     {
-        disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
-        spinbox->setValue(f);
-        spinbox->show();
-        connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
+        disconnect(p_spinbox, SIGNAL(valueChanged(double)), p_parent, SLOT(_OnSlotValueChanged(double)));
+        p_spinbox->setValue(f);
+        p_spinbox->show();
+        connect(p_spinbox, SIGNAL(valueChanged(double)), p_parent, SLOT(_OnSlotValueChanged(double)));
     }
 }
 
 float InspectorFloatSW::GetValue()
 {
-    return spinbox->value();
+    return p_spinbox->value();
 }
 
 void InspectorFloatSW::OnSpinBoxFocusIn()
 {
-    editing = true;
+    _editing = true;
 }
 
 void InspectorFloatSW::OnSpinBoxFocusOut()
 {
-    editing = false;
-    connect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
-    spinbox->setValue(spinbox->value());
-    disconnect(spinbox, SIGNAL(valueChanged(double)), parent, SLOT(_OnSlotValueChanged(double)));
+    _editing = false;
+    connect(p_spinbox, SIGNAL(valueChanged(double)), p_parent, SLOT(_OnSlotValueChanged(double)));
+    p_spinbox->setValue(p_spinbox->value());
+    disconnect(p_spinbox, SIGNAL(valueChanged(double)), p_parent, SLOT(_OnSlotValueChanged(double)));
 }
 
 QSize InspectorFloatSW::sizeHint() const { return QSize(20, 30); }

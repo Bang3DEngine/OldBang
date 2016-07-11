@@ -1,42 +1,42 @@
 #include "Framebuffer.h"
 
-Framebuffer::Framebuffer(int width, int height) : width(width),
-                                                  height(height),
-                                                  depthBufferAttachmentId(0)
+Framebuffer::Framebuffer(int width, int height) : m_width(width),
+                                                  m_height(height),
+                                                  m_depthBufferAttachmentId(0)
 {
-    glGenFramebuffers(1, &idgl);
+    glGenFramebuffers(1, &m_idGL);
 }
 
 Framebuffer::~Framebuffer()
 {
-    for(TextureRender *t : textureAttachments)
+    for(TextureRender *t : m_textureAttachments)
     {
         delete t;
     }
 
-    if(depthBufferAttachmentId != 0)
-        glDeleteRenderbuffers(1, &depthBufferAttachmentId);
+    if(m_depthBufferAttachmentId != 0)
+        glDeleteRenderbuffers(1, &m_depthBufferAttachmentId);
 
-    glDeleteFramebuffers(1, &idgl);
+    glDeleteFramebuffers(1, &m_idGL);
 }
 
 void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum)
 {
-    while(int(textureAttachments.size()) <= framebufferAttachmentNum)
-        textureAttachments.push_back(nullptr);
+    while(int(m_textureAttachments.size()) <= framebufferAttachmentNum)
+        m_textureAttachments.push_back(nullptr);
 
     Bind();
 
     //Create texture
     TextureRender *tex = new TextureRender();
-    tex->CreateEmpty(width, height);
-    textureAttachments[framebufferAttachmentNum] = tex;
+    tex->CreateEmpty(m_width, m_height);
+    m_textureAttachments[framebufferAttachmentNum] = tex;
 
 
     //Attach it to framebuffer itself
     GLuint attachment = GL_COLOR_ATTACHMENT0 + framebufferAttachmentNum;
     glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, tex->GetGLId(), 0);
-    boundAttachments.push_back(attachment);
+    m_boundAttachments.push_back(attachment);
     //
 
     CheckFramebufferError();
@@ -48,11 +48,11 @@ void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum)
 void Framebuffer::CreateDepthBufferAttachment()
 {
     Bind();
-    glGenRenderbuffers(1, &depthBufferAttachmentId);
+    glGenRenderbuffers(1, &m_depthBufferAttachmentId);
     //TODO:  respect former bindings of renderbuffers
-    glBindRenderbuffer(GL_RENDERBUFFER, depthBufferAttachmentId);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBufferAttachmentId);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_depthBufferAttachmentId);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_width, m_height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthBufferAttachmentId);
 
     CheckFramebufferError();
     UnBind();
@@ -60,14 +60,14 @@ void Framebuffer::CreateDepthBufferAttachment()
 
 TextureRender *Framebuffer::GetTextureAttachment(int framebufferAttachmentNum) const
 {
-    if(framebufferAttachmentNum >= int(textureAttachments.size())) return nullptr;
-    return textureAttachments[framebufferAttachmentNum];
+    if(framebufferAttachmentNum >= int(m_textureAttachments.size())) return nullptr;
+    return m_textureAttachments[framebufferAttachmentNum];
 }
 
 void Framebuffer::SetReadBuffer(int attachmentId) const
 {
     Bind();
-    glReadBuffer(boundAttachments[attachmentId]);
+    glReadBuffer(m_boundAttachments[attachmentId]);
     UnBind();
 }
 
@@ -85,9 +85,9 @@ Vector3 Framebuffer::ReadPixel(int x, int y, int attachmentId) const
 
 void Framebuffer::Resize(int width, int height)
 {
-    this->width = width;
-    this->height = height;
-    for(Texture *t : textureAttachments)
+    this->m_width = width;
+    this->m_height = height;
+    for(Texture *t : m_textureAttachments)
     {
         if(t )
         {
@@ -95,10 +95,10 @@ void Framebuffer::Resize(int width, int height)
         }
     }
 
-    if(depthBufferAttachmentId != 0)
+    if(m_depthBufferAttachmentId != 0)
     {
         //TODO:  respect former bindings of renderbuffers
-        glBindRenderbuffer(GL_RENDERBUFFER, depthBufferAttachmentId);
+        glBindRenderbuffer(GL_RENDERBUFFER, m_depthBufferAttachmentId);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
     }
 }
@@ -135,11 +135,11 @@ void Framebuffer::CheckFramebufferError() const
 void Framebuffer::Bind() const
 {
     PreBind(GL_FRAMEBUFFER_BINDING);
-    glBindFramebuffer(GL_FRAMEBUFFER, idgl);
-    glViewport(0, 0, width, height);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_idGL);
+    glViewport(0, 0, m_width, m_height);
 
     //Tell openGL which draw buffer attachments we do want to use
-    glDrawBuffers(boundAttachments.size(), &boundAttachments[0]);
+    glDrawBuffers(m_boundAttachments.size(), &m_boundAttachments[0]);
 }
 
 void Framebuffer::UnBind() const

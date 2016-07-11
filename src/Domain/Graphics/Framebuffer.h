@@ -22,11 +22,11 @@ private:
 
 private:
 
-    int width, height;
-    GLuint depthBufferAttachmentId;
+    int m_width, m_height;
+    GLuint m_depthBufferAttachmentId;
 
-    std::vector<GLuint> boundAttachments;
-    std::vector<TextureRender*> textureAttachments;
+    std::vector<GLuint> m_boundAttachments;
+    std::vector<TextureRender*> m_textureAttachments;
 
 protected:
 

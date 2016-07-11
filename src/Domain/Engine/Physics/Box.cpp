@@ -17,49 +17,49 @@ Box::Box(float minx, float maxx,
 
 Box::Box(const Vector3 &min, const Vector3 &max)
 {
-    this->minv = min;
-    this->maxv = max;
+    this->m_minv = min;
+    this->m_maxv = max;
 }
 
 Box::Box(const Box &b)
 {
-    minv = b.minv;
-    maxv = b.maxv;
+    m_minv = b.m_minv;
+    m_maxv = b.m_maxv;
 }
 
 Vector3 Box::GetMin() const
 {
-    return minv;
+    return m_minv;
 }
 
 Vector3 Box::GetMax() const
 {
-    return maxv;
+    return m_maxv;
 }
 
 Vector3 Box::GetDiagonal() const
 {
-    return maxv - minv;
+    return m_maxv - m_minv;
 }
 
 float Box::GetWidth() const
 {
-    return (maxv.x - minv.x);
+    return (m_maxv.x - m_minv.x);
 }
 
 float Box::GetHeight() const
 {
-    return (maxv.y - minv.y);
+    return (m_maxv.y - m_minv.y);
 }
 
 float Box::GetDepth() const
 {
-    return (maxv.z - minv.z);
+    return (m_maxv.z - m_minv.z);
 }
 
 Vector3 Box::GetCenter() const
 {
-    return (minv + maxv) / 2.0f;
+    return (m_minv + m_maxv) / 2.0f;
 }
 
 float Box::GetArea() const
@@ -83,24 +83,24 @@ float Box::GetVolume() const
 Box Box::Union(const Box &b1, const Box &b2)
 {
     return
-    Box(std::min(b1.minv.x, b2.minv.x), std::max(b1.maxv.x, b2.maxv.x),
-        std::min(b1.minv.y, b2.minv.y), std::max(b1.maxv.y, b2.maxv.y),
-        std::min(b1.minv.z, b2.minv.z), std::max(b1.maxv.z, b2.maxv.z));
+    Box(std::min(b1.m_minv.x, b2.m_minv.x), std::max(b1.m_maxv.x, b2.m_maxv.x),
+        std::min(b1.m_minv.y, b2.m_minv.y), std::max(b1.m_maxv.y, b2.m_maxv.y),
+        std::min(b1.m_minv.z, b2.m_minv.z), std::max(b1.m_maxv.z, b2.m_maxv.z));
 }
 
 void Box::FillFromPositions(const std::vector<Vector3> &positions)
 {
-    minv = maxv = Vector3::zero;
+    m_minv = m_maxv = Vector3::zero;
     for(const Vector3 &v : positions)
     {
-        minv.x = std::min(minv.x, v.x);
-        maxv.x = std::max(maxv.x, v.x);
+        m_minv.x = std::min(m_minv.x, v.x);
+        m_maxv.x = std::max(m_maxv.x, v.x);
 
-        minv.y = std::min(minv.y, v.y);
-        maxv.y = std::max(maxv.y, v.y);
+        m_minv.y = std::min(m_minv.y, v.y);
+        m_maxv.y = std::max(m_maxv.y, v.y);
 
-        minv.z = std::min(minv.z, v.z);
-        maxv.z = std::max(maxv.z, v.z);
+        m_minv.z = std::min(m_minv.z, v.z);
+        m_maxv.z = std::max(m_maxv.z, v.z);
     }
 }
 
@@ -126,8 +126,8 @@ const std::string Box::ToString() const
 {
     std::ostringstream oss;
     oss << "Box: [" << std::endl <<
-           "  min: " << minv << std::endl <<
-           "  max" << maxv << std::endl <<
+           "  min: " << m_minv << std::endl <<
+           "  max" << m_maxv << std::endl <<
            "]" << std::endl;
 
     return oss.str();

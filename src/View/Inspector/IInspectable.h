@@ -10,14 +10,14 @@ protected:
     IInspectable() {}
 
 public:
-    InspectorWidgetInfo inspectorComponentInfo;
+    InspectorWidgetInfo m_inspectorComponentInfo;
 
     //Value was changed by the user, using input in inspector
     virtual void OnSlotValueChanged(InspectorWidget *source) = 0;
 
     virtual InspectorWidgetInfo* GetComponentInfo()
     {
-        return &inspectorComponentInfo;
+        return &m_inspectorComponentInfo;
     }
 };
 

@@ -4,44 +4,44 @@
 
 ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
 {
-    fileSystemModel = new QFileSystemModel();
+    p_fileSystemModel = new QFileSystemModel();
 
-    topPath = QT_PROJECT_PATH;
-    topPath += "/Assets";
+    m_topPath = QT_PROJECT_PATH;
+    m_topPath += "/Assets";
 
-    setModel(fileSystemModel);
-    setDir(topPath);
+    setModel(p_fileSystemModel);
+    setDir(m_topPath);
 
-    fileSystemModel->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot);
+    p_fileSystemModel->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot);
 
     this->setColumnHidden(1, true);
     this->setColumnHidden(2, true);
     this->setColumnHidden(3, true);
 
-    connect(fileSystemModel, SIGNAL(directoryLoaded(QString)), this, SLOT(OnDirLoaded(QString)));
+    connect(p_fileSystemModel, SIGNAL(directoryLoaded(QString)), this, SLOT(OnDirLoaded(QString)));
 
-    checkSelectionTimer = new QTimer(this); //Every X seconds, update all the slots values
-    connect(checkSelectionTimer, SIGNAL(timeout()), this, SLOT(CheckSelection()));
-    checkSelectionTimer->start(100);
+    p_checkSelectionTimer = new QTimer(this); //Every X seconds, update all the slots values
+    connect(p_checkSelectionTimer, SIGNAL(timeout()), this, SLOT(CheckSelection()));
+    p_checkSelectionTimer->start(100);
 }
 
 ExplorerDirTree::~ExplorerDirTree()
 {
-   delete fileSystemModel;
+   delete p_fileSystemModel;
 }
 
 void ExplorerDirTree::CheckSelection()
 {
-    explorer = WindowMain::GetInstance()->widgetListExplorer;
+    p_explorer = WindowMain::GetInstance()->widgetListExplorer;
     if(selectedIndexes().size() > 0 && selectedIndexes().at(0).isValid())
     {
         QModelIndex index = selectedIndexes().at(0);
-        if(lastSelectedModelIndexPointer != index.internalPointer())
+        if(p_lastSelectedModelIndexPointer != index.internalPointer())
         {
-            lastSelectedModelIndexPointer = index.internalPointer();
+            p_lastSelectedModelIndexPointer = index.internalPointer();
             std::string selectedDirPath =
-                    fileSystemModel->filePath(index).toStdString();
-            explorer->setDir(selectedDirPath);
+                    p_fileSystemModel->filePath(index).toStdString();
+            p_explorer->SetDir(selectedDirPath);
         }
     }
 }
@@ -53,5 +53,5 @@ void ExplorerDirTree::OnDirLoaded(QString dir)
 
 void ExplorerDirTree::setDir(const std::string &path)
 {
-    setRootIndex(fileSystemModel->setRootPath(QString::fromStdString(path)));
+    setRootIndex(p_fileSystemModel->setRootPath(QString::fromStdString(path)));
 }

@@ -7,15 +7,15 @@
 InspectorComponentWidget::InspectorComponentWidget(Component *relatedComponent) :
     InspectorWidget(relatedComponent)
 {
-    this->relatedComponent = relatedComponent;
+    this->p_relatedComponent = relatedComponent;
 
-    IsEnabledCheckbox = new QCheckBox();
-    IsEnabledCheckbox->setChecked(this->relatedComponent->IsEnabled());
-    connect(IsEnabledCheckbox, SIGNAL(clicked(bool)),
+    p_IsEnabledCheckbox = new QCheckBox();
+    p_IsEnabledCheckbox->setChecked(this->p_relatedComponent->IsEnabled());
+    connect(p_IsEnabledCheckbox, SIGNAL(clicked(bool)),
             this, SLOT(OnEnabledCheckboxPressed(bool)));
-    titleLayout->addWidget(IsEnabledCheckbox, 1);
+    p_titleLayout->addWidget(p_IsEnabledCheckbox, 1);
 
-    titleLabel->setText(
+    p_titleLabel->setText(
                 QString::fromStdString(relatedComponent->GetName())
                 );
 }
@@ -49,27 +49,27 @@ void InspectorComponentWidget::OnCustomContextMenuRequested(QPoint point)
 
 void InspectorComponentWidget::OnEnabledCheckboxPressed(bool checked)
 {
-    if(relatedComponent )
+    if(p_relatedComponent )
     {
-        relatedComponent->SetEnabled(checked);
+        p_relatedComponent->SetEnabled(checked);
     }
 }
 
 void InspectorComponentWidget::OnContextMenuRemoveComponentSelected()
 {
-    relatedComponent->gameObject->RemoveComponent(relatedComponent);
+    p_relatedComponent->gameObject->RemoveComponent(p_relatedComponent);
     WindowMain::GetInstance()->widgetInspector->Refresh();
 }
 
 void InspectorComponentWidget::OnContextMenuMoveUpSelected()
 {
-    relatedComponent->gameObject->MoveComponent(relatedComponent, -1);
+    p_relatedComponent->gameObject->MoveComponent(p_relatedComponent, -1);
     WindowMain::GetInstance()->widgetInspector->Refresh();
 }
 
 void InspectorComponentWidget::OnContextMenuMoveDownSelected()
 {
-    relatedComponent->gameObject->MoveComponent(relatedComponent, 1);
+    p_relatedComponent->gameObject->MoveComponent(p_relatedComponent, 1);
     WindowMain::GetInstance()->widgetInspector->Refresh();
 }
 

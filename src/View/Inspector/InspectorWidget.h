@@ -36,18 +36,18 @@ class InspectorWidget : public QWidget
 
 private:
     //If not null, this function will be called when some slot value changes
-    std::function<void()> *callback = nullptr;
+    std::function<void()> *p_callback = nullptr;
 
-    std::vector<InspectorSW*> compSlots;
-    std::map<std::string, InspectorSW*> labelsToComponentSlots;
+    std::vector<InspectorSW*> m_compSlots;
+    std::map<std::string, InspectorSW*> m_labelsToComponentSlots;
 
-    QTimer *updateTimer = nullptr;
+    QTimer *p_updateTimer = nullptr;
 
 protected:
-    IInspectable *relatedInspectable = nullptr;
+    IInspectable *p_relatedInspectable = nullptr;
 
-    QHBoxLayout *titleLayout = nullptr;
-    QLabel *titleLabel = nullptr;
+    QHBoxLayout *p_titleLayout = nullptr;
+    QLabel *p_titleLabel = nullptr;
 
     void ConstructFromWidgetInformation(const std::string &title,
                                         const InspectorWidgetInfo *info,
@@ -55,13 +55,13 @@ protected:
 
 public:
     InspectorWidget();
-    explicit InspectorWidget(IInspectable *relatedInspectable);
+    explicit InspectorWidget(IInspectable *p_relatedInspectable);
 
     //Short handed way to use an Inspector Widget
     //(no need to create an IInspectable object).
     explicit InspectorWidget(const std::string &title,
                              InspectorWidgetInfo *widgetInfo,
-                             std::function<void()> callback);
+                             std::function<void()> p_callback);
 
     virtual ~InspectorWidget();
 

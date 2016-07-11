@@ -9,8 +9,8 @@
 class FileImage : public File
 {
 protected:
-    int width = 0, height = 0;
-    int numComponents = 3;
+    int m_width = 0, m_height = 0;
+    int m_numComponents = 3;
 
 public:
     FileImage(const QFileSystemModel *model, const QModelIndex *index);

@@ -7,7 +7,7 @@ class Persistence
 {
 
 private:
-   static std::string currentSceneFilepath;
+   static std::string s_currentSceneFilepath;
 
 public:
 

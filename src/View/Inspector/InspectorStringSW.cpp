@@ -27,16 +27,16 @@ InspectorStringSW::InspectorStringSW(const std::string &labelString,
     labelField->setContentsMargins(0,0,0,0);
     labelField->show();
 
-    strField = new LabelStringSW(); //Right side
-    strField->setText( QString::fromStdString(initialValue) );
-    strField->setReadOnly(readonly);
-    strField->setAlignment(Qt::AlignRight);
-    strField->setMinimumWidth(50);
-    strField->setContentsMargins(0,0,0,0);
-    strField->show();
+    p_strField = new LabelStringSW(); //Right side
+    p_strField->setText( QString::fromStdString(initialValue) );
+    p_strField->setReadOnly(readonly);
+    p_strField->setAlignment(Qt::AlignRight);
+    p_strField->setMinimumWidth(50);
+    p_strField->setContentsMargins(0,0,0,0);
+    p_strField->show();
 
     layout->addWidget(labelField);
-    layout->addWidget(strField);
+    layout->addWidget(p_strField);
 
     this->setContentsMargins(0,0,0,0);
     this->show();
@@ -46,29 +46,29 @@ InspectorStringSW::InspectorStringSW(const std::string &labelString,
 
 void InspectorStringSW::SetValue(const std::string &value)
 {
-    if(!editing)
+    if(!m_editing)
     {
-        disconnect(strField, SIGNAL(valueChanged(QString)), parent, SLOT(_OnSlotValueChanged(QString)));
-        strField->setText( QString::fromStdString(value) );
-        strField->show();
-        connect(strField, SIGNAL(valueChanged(QString)), parent, SLOT(_OnSlotValueChanged(QString)));
+        disconnect(p_strField, SIGNAL(valueChanged(QString)), p_parent, SLOT(_OnSlotValueChanged(QString)));
+        p_strField->setText( QString::fromStdString(value) );
+        p_strField->show();
+        connect(p_strField, SIGNAL(valueChanged(QString)), p_parent, SLOT(_OnSlotValueChanged(QString)));
     }
 }
 
 const std::string InspectorStringSW::GetValue() const
 {
-    std::string str = strField->text().toStdString();
+    std::string str = p_strField->text().toStdString();
     return str;
 }
 
 void InspectorStringSW::OnFocusIn()
 {
-    editing = true;
+    m_editing = true;
 }
 
 void InspectorStringSW::OnFocusOut()
 {
-    editing = false;
+    m_editing = false;
     //parent->_OnSlotValueChanged();
 }
 

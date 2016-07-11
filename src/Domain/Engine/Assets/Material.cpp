@@ -1,8 +1,8 @@
 #include "Material.h"
 
 Material::Material() : Asset(),
-                       diffuseColor(glm::vec4(0.0f)),
-                       shaderProgram(nullptr)
+                       m_diffuseColor(glm::vec4(0.0f)),
+                       p_shaderProgram(nullptr)
 {
 }
 
@@ -12,7 +12,7 @@ Material::Material(const Material &m)
 
     //This is a copy of the pointers,
     // not the textures themselves
-    textures = m.textures;
+    m_textures = m.m_textures;
 
     //TODO: copy shaderProgram
     SetShaderProgram(m.GetShaderProgram());
@@ -25,35 +25,35 @@ Material::~Material()
 
 void Material::Bind() const
 {
-    if(shaderProgram )
+    if(p_shaderProgram )
     {
-        shaderProgram->Bind();
+        p_shaderProgram->Bind();
 
-        for(unsigned int i = 0; i < textures.size(); ++i)
+        for(unsigned int i = 0; i < m_textures.size(); ++i)
         {
-            const Texture *t = textures[i];
+            const Texture *t = m_textures[i];
             if(t )
             {
                 std::string texName = ShaderContract::Uniform_Texture_Prefix + std::to_string(i);
-                shaderProgram->SetUniformTexture(texName, t, false); //Set the uniform with the texture slot
+                p_shaderProgram->SetUniformTexture(texName, t, false); //Set the uniform with the texture slot
                 t->Bind(); //Leave it bound
             }
         }
 
-        shaderProgram->SetUniformVec4(ShaderContract::Uniform_Material_Diffuse_Color,
-                                      diffuseColor, false);
+        p_shaderProgram->SetUniformVec4(ShaderContract::Uniform_Material_Diffuse_Color,
+                                      m_diffuseColor, false);
     }
 }
 
 void Material::UnBind() const
 {
-    if(shaderProgram )
+    if(p_shaderProgram )
     {
-        shaderProgram->UnBind();
-        for(unsigned int i = 0; i < textures.size(); ++i)
+        p_shaderProgram->UnBind();
+        for(unsigned int i = 0; i < m_textures.size(); ++i)
         {
-            if(textures[i] )
-                textures[i]->UnBind();
+            if(m_textures[i] )
+                m_textures[i]->UnBind();
         }
     }
 }
@@ -63,21 +63,21 @@ void Material::Write(std::ostream &f) const
 {
     FileWriter::Write("<Material>", f);
     std::string vsFile =  "", fsFile = "";
-    if(this->shaderProgram)
+    if(this->p_shaderProgram)
     {
-        if(this->shaderProgram->GetVertexShader())
+        if(this->p_shaderProgram->GetVertexShader())
         {
-            vsFile = this->shaderProgram->GetVertexShader()->GetFilepath();
+            vsFile = this->p_shaderProgram->GetVertexShader()->GetFilepath();
         }
 
-        if(this->shaderProgram->GetFragmentShader())
+        if(this->p_shaderProgram->GetFragmentShader())
         {
-            fsFile = this->shaderProgram->GetFragmentShader()->GetFilepath();
+            fsFile = this->p_shaderProgram->GetFragmentShader()->GetFilepath();
         }
     }
     FileWriter::Write(vsFile, f);
     FileWriter::Write(fsFile, f);
-    FileWriter::Write(diffuseColor, f);
+    FileWriter::Write(m_diffuseColor, f);
     FileWriter::Write("</Material>", f);
 }
 
@@ -102,32 +102,32 @@ void Material::Read(std::istream &f)
 
 void Material::SetShaderProgram(const ShaderProgram *program)
 {
-    shaderProgram = program;
+    p_shaderProgram = program;
 }
 
 void Material::SetTexture(const Texture *texture, unsigned int index)
 {
-    while(textures.size() <= index) textures.push_back(nullptr);
-    textures[index] = texture;
+    while(m_textures.size() <= index) m_textures.push_back(nullptr);
+    m_textures[index] = texture;
 }
 
 void Material::SetDiffuseColor(const glm::vec4 &diffuseColor)
 {
-    this->diffuseColor = diffuseColor;
+    this->m_diffuseColor = diffuseColor;
 }
 
 const ShaderProgram *Material::GetShaderProgram() const
 {
-    return shaderProgram;
+    return p_shaderProgram;
 }
 
 const Texture *Material::GetTexture(unsigned int index) const
 {
-    if(index >= textures.size()) return nullptr;
-    return textures[index];
+    if(index >= m_textures.size()) return nullptr;
+    return m_textures[index];
 }
 
 glm::vec4 Material::GetDiffuseColor() const
 {
-    return diffuseColor;
+    return m_diffuseColor;
 }

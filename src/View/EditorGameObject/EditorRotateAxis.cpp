@@ -8,14 +8,14 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 {
     SetName("EditorRotateAxisGroup" + EditorAxis::GetStringFromDir(dir));
 
-    material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/linesRotationAxis.bmat");
-    material = new Material(*material);
+    p_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/linesRotationAxis.bmat");
+    p_material = new Material(*p_material);
 
     circle = AddComponent<CircleRenderer>();
     circle->SetRadius(0.5f);
     circle->SetSegments(64);
     circle->SetLineWidth(2.0f);
-    circle->SetMaterial(material);
+    circle->SetMaterial(p_material);
 
     circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
@@ -48,7 +48,7 @@ void EditorRotateAxis::OnUpdate()
     // Obtain mousePos in screen space for next calculations
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->gameObject->GetComponent<Transform>(); NONULL(camTransform);
-    Transform *attTrans = attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
+    Transform *attTrans = p_attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
     Transform *transform = GetComponent<Transform>(); NONULL(transform);
 
     Matrix4 p, v, m;
@@ -57,7 +57,7 @@ void EditorRotateAxis::OnUpdate()
     transform->GetModelMatrix(m);
     Matrix4 pvm =  p * v * m;
 
-    if(grabbed)
+    if(m_grabbed)
     {
         if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
         {
@@ -72,12 +72,12 @@ void EditorRotateAxis::OnUpdate()
             // by the user in screen space.
             int anchorIndex0, anchorIndex1;
             circle->GetTwoClosestPointsInScreenSpace(sMousePos , pvm,
-                        &sAnchorPoint0, &anchorIndex0, &sAnchorPoint1, &anchorIndex1);
+                        &m_sAnchorPoint0, &anchorIndex0, &m_sAnchorPoint1, &anchorIndex1);
 
             // This is needed to properly compute the rotation
             if (anchorIndex1 < anchorIndex0)
             {
-                std::swap(sAnchorPoint0, sAnchorPoint1);
+                std::swap(m_sAnchorPoint0, m_sAnchorPoint1);
                 std::swap(anchorIndex0, anchorIndex1);
             }
         }
@@ -86,11 +86,11 @@ void EditorRotateAxis::OnUpdate()
         if (glm::length(sMouseDelta) > 0.0f)
         {
             // Get how aligned is the user movement with the anchor points
-            glm::vec2 anchorPointsDir = glm::normalize(sAnchorPoint1 - sAnchorPoint0);
+            glm::vec2 anchorPointsDir = glm::normalize(m_sAnchorPoint1 - m_sAnchorPoint0);
             float alignment = glm::dot(anchorPointsDir, glm::normalize(sMouseDelta));
 
             // Avoids rotation trembling when not aligned at all
-            Quaternion q = Quaternion::AngleAxis(rotationBoost * alignment, oAxisDirection);
+            Quaternion q = Quaternion::AngleAxis(c_rotationBoost * alignment, m_oAxisDirection);
             if (Toolbar::GetInstance()->GetGlobalCoordsMode())
             {
                 attTrans->Rotate(q);
@@ -103,10 +103,10 @@ void EditorRotateAxis::OnUpdate()
     }
 
     // Pass some uniforms to the shader that renders the rotation circles
-    Sphere bSphere = attachedGameObject->GetBoundingSphere();
+    Sphere bSphere = p_attachedGameObject->GetBoundingSphere();
     float radius = bSphere.GetRadius() / 2.0f;
-    material->GetShaderProgram()->SetUniformVec3("wCircleCenter", bSphere.GetCenter(), false);
-    material->GetShaderProgram()->SetUniformVec3("boundingSphereRadius", radius, false);
+    p_material->GetShaderProgram()->SetUniformVec3("wCircleCenter", bSphere.GetCenter(), false);
+    p_material->GetShaderProgram()->SetUniformVec3("boundingSphereRadius", radius, false);
 }
 
 Renderer *EditorRotateAxis::GetAxisRenderer() const

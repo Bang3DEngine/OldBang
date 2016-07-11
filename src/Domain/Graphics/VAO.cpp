@@ -2,12 +2,12 @@
 
 VAO::VAO()
 {
-    glGenVertexArrays(1, &idgl);
+    glGenVertexArrays(1, &m_idGL);
 }
 
 VAO::~VAO()
 {
-    glDeleteVertexArrays(1, &idgl);
+    glDeleteVertexArrays(1, &m_idGL);
 }
 
 void VAO::BindVBO(const VBO *vbo,
@@ -35,18 +35,18 @@ void VAO::BindVBO(const VBO *vbo,
 
     this->UnBind();
 
-    while(vbos.size() <= location) vbos.push_back(nullptr);
-    vbos[location] = vbo;
+    while(m_vbos.size() <= location) m_vbos.push_back(nullptr);
+    m_vbos[location] = vbo;
 }
 
 void VAO::UnBindVBO(GLint location)
 {
-    if(location >= 0 && location < vbos.size())
+    if(location >= 0 && location < m_vbos.size())
     {
         this->Bind();
         glDisableVertexAttribArray(location);
         this->UnBind();
-        vbos[location] = nullptr;
+        m_vbos[location] = nullptr;
     }
 }
 
@@ -54,7 +54,7 @@ void VAO::UnBindVBO(GLint location)
 void VAO::Bind() const
 {
     PreBind(GL_VERTEX_ARRAY_BINDING);
-    glBindVertexArray(idgl);
+    glBindVertexArray(m_idGL);
 }
 
 void VAO::UnBind() const
@@ -64,6 +64,6 @@ void VAO::UnBind() const
 
 const VBO* VAO::GetVBOByLocation(GLint location) const
 {
-    if(location >= vbos.size()) return nullptr;
-    else return vbos[location];
+    if(location >= m_vbos.size()) return nullptr;
+    else return m_vbos[location];
 }

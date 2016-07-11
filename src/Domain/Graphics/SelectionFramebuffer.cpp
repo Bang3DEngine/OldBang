@@ -6,7 +6,7 @@
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
-    program = new ShaderProgram(
+    p_program = new ShaderProgram(
                 ShaderContract::Filepath_Shader_Vertex_PVM_Position,
                 ShaderContract::Filepath_Shader_Fragment_Selection);
 
@@ -16,48 +16,48 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
 
 SelectionFramebuffer::~SelectionFramebuffer()
 {
-    delete program;
+    delete p_program;
 }
 
 void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 {
-    program->Bind();
+    p_program->Bind();
 
     // Assign id's
-    gameObjectToId.clear();
-    idToGameObject.clear();
+    m_gameObjectToId.clear();
+    m_idToGameObject.clear();
     int id = 0;
     std::list<Renderer*> childrenRenderers = scene->GetComponentsInChildren<Renderer>();
     for(Renderer *renderer : childrenRenderers)
     {
         GameObject *go = renderer->gameObject;
-        gameObjectToId[go] = id;
-        idToGameObject[id] = go;
+        m_gameObjectToId[go] = id;
+        m_idToGameObject[id] = go;
         ++id;
     }
 
     // Paint objects
     for(Renderer *renderer : childrenRenderers)
     {
-        if(renderer->gameObject->GetRenderLayer() == scene->currentRenderLayer)
+        if(renderer->gameObject->GetRenderLayer() == scene->m_currentRenderLayer)
         {
             GameObject *go = renderer->gameObject;
-            if(gameObjectToId.find(go) != gameObjectToId.end() && go->IsEnabled())
+            if(m_gameObjectToId.find(go) != m_gameObjectToId.end() && go->IsEnabled())
             {
                 Matrix4 model, view, projection, pvm;
                 renderer->GetMatrices(model, view, projection, pvm);
 
-                program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
+                p_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
                                         model, false);
-                program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
+                p_program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
                                         view, false);
-                program->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
+                p_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
                                         projection, false);
-                program->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM,
+                p_program->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM,
                                         pvm, false);
 
-                Vector3 selectionColor = MapIdToColor(gameObjectToId[go]);
-                program->SetUniformVec3("selectionColor", selectionColor);
+                Vector3 selectionColor = MapIdToColor(m_gameObjectToId[go]);
+                p_program->SetUniformVec3("selectionColor", selectionColor);
 
                 renderer->ActivateGLStatesBeforeRendering();
                 if(renderer->ActivateGLStatesBeforeRenderingForSelection)
@@ -67,7 +67,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         }
     }
 
-    program->UnBind();
+    p_program->UnBind();
 }
 
 void SelectionFramebuffer::ProcessSelection()
@@ -79,21 +79,21 @@ void SelectionFramebuffer::ProcessSelection()
 
     GameObject *mouseOverGO = nullptr;
     int id = MapColorToId(mouseOverColor);
-    if(idToGameObject.find(id) != idToGameObject.end())
+    if(m_idToGameObject.find(id) != m_idToGameObject.end())
     {
-        mouseOverGO = idToGameObject[id];
+        mouseOverGO = m_idToGameObject[id];
     }
 
     // MouseOver and MouseOut events
-    if(lastMouseOverGO  && lastMouseOverGO != mouseOverGO)
+    if(p_lastMouseOverGO  && p_lastMouseOverGO != mouseOverGO)
     {
-        lastMouseOverGO->OnMouseExit();
+        p_lastMouseOverGO->OnMouseExit();
     }
 
     if(mouseOverGO )
     {
         mouseOverGO->OnMouseEnter();
-        lastMouseOverGO = mouseOverGO;
+        p_lastMouseOverGO = mouseOverGO;
     }
     //
 
