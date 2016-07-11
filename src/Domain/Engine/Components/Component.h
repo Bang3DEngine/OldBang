@@ -38,7 +38,9 @@ protected:
     virtual ~Component();
 
 public:
-    GameObject *gameObject = nullptr;
+
+    GameObject *p_gameObject = nullptr;
+    GameObject* const& gameObject = p_gameObject;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override = 0;

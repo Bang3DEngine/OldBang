@@ -4,7 +4,7 @@
 
 Scene::Scene() : GameObject("Scene")
 {
-    isScene = true;
+    m_isScene = true;
     gbuffer = new GBuffer(Canvas::GetWidth(),
                           Canvas::GetHeight());
 }
@@ -38,8 +38,8 @@ void Scene::_OnRender()
     for(currentRenderLayer = 0; currentRenderLayer <= 9; ++currentRenderLayer)
     {
         glClear(GL_DEPTH_BUFFER_BIT);
-        PROPAGATE_EVENT(_OnPreRender, children);
-        PROPAGATE_EVENT(_OnRender, children);
+        PROPAGATE_EVENT(_OnPreRender, m_children);
+        PROPAGATE_EVENT(_OnRender, m_children);
     }
 
     gbuffer->UnBind();
@@ -71,7 +71,7 @@ void Scene::Write(std::ostream &f) const
     f << this->GetName() << std::endl; //scene name
 
     f << "<children>" << std::endl;
-    for(GameObject *e : children)
+    for(GameObject *e : m_children)
     {
         e->Write(f);
     }

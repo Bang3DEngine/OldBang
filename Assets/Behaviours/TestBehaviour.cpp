@@ -24,8 +24,6 @@ TestBehaviour::TestBehaviour()
 
 void TestBehaviour::OnStart()
 {
-    Logger_Log("ON START!");
-    Logger_Log(gameObject);
 }
 
 void TestBehaviour::OnUpdate()

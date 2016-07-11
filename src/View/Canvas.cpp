@@ -74,7 +74,7 @@ void Canvas::resizeGL(int w, int h)
 Scene *Canvas::AddScene(const std::string &name)
 {
     Scene *st = new Scene();
-    st->name = name;
+    st->m_name = name;
     scenes.push_back(st);
     return st;
 }

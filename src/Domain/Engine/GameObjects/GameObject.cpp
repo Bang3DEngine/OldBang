@@ -11,28 +11,28 @@ GameObject::GameObject() : GameObject("")
 {
 }
 
-GameObject::GameObject(const std::string &name) : name(name)
+GameObject::GameObject(const std::string &name) : m_name(name)
 {
 }
 
 void GameObject::CloneInto(ICloneable *clone) const
 {
     GameObject *go = static_cast<GameObject*>(clone);
-    for(GameObject *child : children)
+    for(GameObject *child : m_children)
     {
         if(child->IsEditorGameObject()) continue;
         go->AddChildWithoutNotifyingHierarchy( static_cast<GameObject*>(child->Clone()) );
     }
 
-    for(Component *comp : comps)
+    for(Component *comp : m_comps)
     {
         go->AddComponent( static_cast<Component*>(comp->Clone()) );
     }
 
-    go->SetName(name);
-    go->SetRenderLayer(renderLayer);
-    go->isScene = isScene;
-    go->parent = parent;
+    go->SetName(m_name);
+    go->SetRenderLayer(m_renderLayer);
+    go->m_isScene = m_isScene;
+    go->p_parent = p_parent;
 }
 
 ICloneable* GameObject::Clone() const
@@ -45,7 +45,7 @@ ICloneable* GameObject::Clone() const
 GameObject::~GameObject()
 {
     this->_OnDestroy();
-    for (auto it = children.begin(); it != children.end();)
+    for (auto it = m_children.begin(); it != m_children.end();)
     {
         GameObject *child = *it;
         it = this->RemoveChildWithoutNotifyingHierarchy(it);
@@ -56,29 +56,29 @@ GameObject::~GameObject()
 
 Scene *GameObject::GetScene()
 {
-    if (isScene) { return (Scene*) this; }
-    if (parent) return parent->GetScene();
+    if (m_isScene) { return (Scene*) this; }
+    if (p_parent) return p_parent->GetScene();
     return nullptr;
 }
 
 GameObject *GameObject::GetParent() const
 {
-    return parent;
+    return p_parent;
 }
 
-const std::string GameObject::GetName() const { return name; }
+const std::string GameObject::GetName() const { return m_name; }
 
 unsigned char GameObject::GetRenderLayer() const
 {
-    return renderLayer;
+    return m_renderLayer;
 }
 
-const std::list<Component *> &GameObject::GetComponents() const { return comps; }
+const std::list<Component *> &GameObject::GetComponents() const { return m_comps; }
 
 const std::list<GameObject *> GameObject::GetChildren() const
 {
     std::list<GameObject *> cc;
-    for (auto c = children.begin(); c != children.end(); ++c)
+    for (auto c = m_children.begin(); c != m_children.end(); ++c)
     {
         if (!(*c)->IsEditorGameObject()) cc.push_back(*c);
     }
@@ -144,22 +144,22 @@ Sphere GameObject::GetBoundingSphere() const
 
 void GameObject::AddComponent(Component *c)
 {
-    c->gameObject = this;
-    comps.push_back(c);
+    c->p_gameObject = this;
+    m_comps.push_back(c);
     c->_OnStart();
 }
 
 void GameObject::MoveComponent(Component *c, int distance)
 {
-    for(auto comp = comps.begin(); comp != comps.end(); ++comp)
+    for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
     {
         if(c == *comp)
         {
             auto comp1 = comp;
             std::advance(comp1, 1);
-            comps.erase(comp, comp1);
+            m_comps.erase(comp, comp1);
             std::advance(comp1, distance);
-            comps.insert(comp1, 1, c);
+            m_comps.insert(comp1, 1, c);
             break;
         }
     }
@@ -167,11 +167,11 @@ void GameObject::MoveComponent(Component *c, int distance)
 
 void GameObject::RemoveComponent(Component *c)
 {
-    for(auto comp = comps.begin(); comp != comps.end(); ++comp)
+    for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
     {
         if(c == *comp)
         {
-            comps.erase(comp);
+            m_comps.erase(comp);
             break;
         }
     }
@@ -180,8 +180,8 @@ void GameObject::RemoveComponent(Component *c)
 
 void GameObject::AddChildWithoutNotifyingHierarchy(GameObject *child)
 {
-    child->parent = this;
-    children.push_back(child);
+    child->p_parent = this;
+    m_children.push_back(child);
 }
 
 void GameObject::AddChild(GameObject *child)
@@ -195,10 +195,10 @@ void GameObject::AddChild(GameObject *child)
 
 GameObject *GameObject::GetChild(const std::string &name) const
 {
-    for(auto it = children.begin(); it != children.end(); ++it)
+    for(auto it = m_children.begin(); it != m_children.end(); ++it)
     {
         GameObject *child = (*it);
-        if(child->name == name)
+        if(child->m_name == name)
         {
             return child;
         }
@@ -208,7 +208,7 @@ GameObject *GameObject::GetChild(const std::string &name) const
 
 void GameObject::MoveChild(GameObject *child, GameObject *newParent)
 {
-    for(auto it = children.begin(); it != children.end(); ++it)
+    for(auto it = m_children.begin(); it != m_children.end(); ++it)
     {
         if((*it) == child)
         {
@@ -228,8 +228,8 @@ std::list<GameObject*>::iterator GameObject::RemoveChildWithoutNotifyingHierarch
         std::list<GameObject*>::iterator &it)
 {
     GameObject *child = (*it);
-    child->parent = nullptr;
-    return children.erase(it);
+    child->p_parent = nullptr;
+    return m_children.erase(it);
 }
 
 
@@ -245,10 +245,10 @@ std::list<GameObject*>::iterator GameObject::RemoveChild(
 
 void GameObject::RemoveChild(const std::string &name)
 {
-    for(auto it = children.begin(); it != children.end(); ++it)
+    for(auto it = m_children.begin(); it != m_children.end(); ++it)
     {
         GameObject *child = (*it);
-        if(child->name == name)
+        if(child->m_name == name)
         {
             RemoveChild(it);
             break;
@@ -258,7 +258,7 @@ void GameObject::RemoveChild(const std::string &name)
 
 void GameObject::RemoveChild(GameObject *child)
 {
-    for(auto it = children.begin(); it != children.end(); ++it)
+    for(auto it = m_children.begin(); it != m_children.end(); ++it)
     {
         if((*it) == child)
         {
@@ -270,19 +270,19 @@ void GameObject::RemoveChild(GameObject *child)
 
 void GameObject::SetParent(GameObject *newParent)
 {
-    GameObject *previousParent = parent;
-    if(parent )
+    GameObject *previousParent = p_parent;
+    if(p_parent )
     {
         if(newParent )
         {
-            parent->MoveChild(this, newParent);
+            p_parent->MoveChild(this, newParent);
         }
         else
         {
             Scene *st = GetScene();
             if(st )
             {
-                parent->MoveChild(this, newParent);
+                p_parent->MoveChild(this, newParent);
             }
         }
     }
@@ -294,12 +294,12 @@ void GameObject::SetParent(GameObject *newParent)
 
 void GameObject::SetRenderLayer(unsigned char layer)
 {
-    this->renderLayer = layer;
+    this->m_renderLayer = layer;
 }
 
 void GameObject::SetName(const std::string &name)
 {
-    this->name = name;
+    this->m_name = name;
     Hierarchy::GetInstance()->OnGameObjectNameChanged(this);
 }
 
@@ -310,7 +310,7 @@ bool GameObject::IsEditorGameObject() const
 
 bool GameObject::IsScene() const
 {
-    return isScene;
+    return m_isScene;
 }
 
 #ifdef BANG_EDITOR
@@ -331,21 +331,21 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
 
     if(selected)
     {
-        if(!ed_wasSelectedInHierarchy)
+        if(!m_wasSelectedInHierarchy)
         {
-            ed_selectionGameObject = new EditorSelectionGameObject(this);
-            Canvas::GetCurrentScene()->AddChildWithoutNotifyingHierarchy(ed_selectionGameObject);
+            m_selectionGameObject = new EditorSelectionGameObject(this);
+            Canvas::GetCurrentScene()->AddChildWithoutNotifyingHierarchy(m_selectionGameObject);
         }
     }
     else
     {
-        if(ed_wasSelectedInHierarchy)
+        if(m_wasSelectedInHierarchy)
         {
-            Canvas::GetCurrentScene()->RemoveChild(ed_selectionGameObject);
+            Canvas::GetCurrentScene()->RemoveChild(m_selectionGameObject);
         }
     }
 
-    ed_wasSelectedInHierarchy = selected;
+    m_wasSelectedInHierarchy = selected;
 }
 #endif
 
@@ -356,14 +356,14 @@ void GameObject::Write(std::ostream &f) const
     f << this->GetName() << std::endl; //Print name
 
     f << "<children>" << std::endl;
-    for(GameObject *e : children)
+    for(GameObject *e : m_children)
     {
         e->Write(f);
     }
     f << "</children>" << std::endl;
 
     f << "<components>" << std::endl;
-    for(Component *p : comps)
+    for(Component *p : m_comps)
     {
         p->Write(f);
     }
@@ -394,21 +394,21 @@ void GameObject::Read(std::istream &f)
     }
 }
 
-void GameObject::SetEnabled(bool enabled) { this->enabled = enabled; }
+void GameObject::SetEnabled(bool enabled) { this->m_enabled = enabled; }
 bool GameObject::IsEnabled()
 {
-    return enabled && (!parent ? true : parent->IsEnabled());
+    return m_enabled && (!p_parent ? true : p_parent->IsEnabled());
 }
 
 
 const std::string GameObject::ToString() const
 {
-    return " [GameObject:'" + name + "']";
+    return " [GameObject:'" + m_name + "']";
 }
 
 void GameObject::_OnStart()
 {
-    PROPAGATE_EVENT(_OnStart, children);
+    PROPAGATE_EVENT(_OnStart, m_children);
     OnStart();
 }
 
@@ -421,10 +421,10 @@ void GameObject::_OnUpdate()
 
     if(canUpdate)
     {
-        PROPAGATE_EVENT(_OnUpdate, comps);
+        PROPAGATE_EVENT(_OnUpdate, m_comps);
     }
 
-    PROPAGATE_EVENT(_OnUpdate, children);
+    PROPAGATE_EVENT(_OnUpdate, m_children);
 
     if(canUpdate)
     {
@@ -434,29 +434,29 @@ void GameObject::_OnUpdate()
 
 void GameObject::_OnPreRender ()
 {
-    PROPAGATE_EVENT(_OnPreRender, children);
+    PROPAGATE_EVENT(_OnPreRender, m_children);
 
-    if(this->renderLayer == GetScene()->currentRenderLayer)
+    if(this->m_renderLayer == GetScene()->currentRenderLayer)
     {
-        PROPAGATE_EVENT(_OnPreRender, comps);
+        PROPAGATE_EVENT(_OnPreRender, m_comps);
         OnPreRender();
     }
 }
 
 void GameObject::_OnRender ()
 {
-    PROPAGATE_EVENT(_OnRender, children);
+    PROPAGATE_EVENT(_OnRender, m_children);
 
-    if(this->renderLayer == GetScene()->currentRenderLayer)
+    if(this->m_renderLayer == GetScene()->currentRenderLayer)
     {
-        PROPAGATE_EVENT(_OnRender, comps);
+        PROPAGATE_EVENT(_OnRender, m_comps);
         OnRender();
     }
 }
 
 void GameObject::_OnDestroy()
 {
-    PROPAGATE_EVENT(_OnDestroy, comps);
+    PROPAGATE_EVENT(_OnDestroy, m_comps);
     //No need to propagate _OnDestroy to children,
     //since the "delete child" itself propagates it (look at the destructor)
     OnDestroy();

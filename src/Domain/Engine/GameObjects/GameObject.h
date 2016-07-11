@@ -42,8 +42,8 @@ friend class Scene;
 private:
 
     #ifdef BANG_EDITOR
-    bool ed_wasSelectedInHierarchy = false;
-    EditorSelectionGameObject *ed_selectionGameObject = nullptr;
+    bool m_wasSelectedInHierarchy = false;
+    EditorSelectionGameObject *m_selectionGameObject = nullptr;
     #endif
 
     virtual void _OnStart () override;
@@ -53,10 +53,10 @@ private:
     virtual void _OnDestroy () override;
 
 protected:
-    std::string name = "";
-    std::list<Component*> comps;
-    std::list<GameObject*> children;
-    GameObject* parent = nullptr;
+    std::string m_name = "";
+    std::list<Component*> m_comps;
+    std::list<GameObject*> m_children;
+    GameObject* p_parent = nullptr;
 
     /**
      * @brief A RenderLayer is the order in which gameObjects will
@@ -65,10 +65,10 @@ protected:
      * not take into account the depth in layer N-1.
      *  (the depth buffer will be cleared after completely rendering each layer.)
      */
-    unsigned char renderLayer = 0;
+    unsigned char m_renderLayer = 0;
 
-    bool enabled = true;
-    bool isScene = false;
+    bool m_enabled = true;
+    bool m_isScene = false;
 
     void AddChildWithoutNotifyingHierarchy(GameObject *child);
     std::list<GameObject*>::iterator RemoveChildWithoutNotifyingHierarchy(
@@ -77,9 +77,11 @@ protected:
             std::list<GameObject*>::iterator &it);
 
 public:
+    std::string const& name   = m_name;
+    GameObject* const& parent = p_parent;
 
     GameObject();
-    GameObject(const std::string &name);
+    GameObject(const std::string &m_name);
     GameObject(const GameObject &go);
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
@@ -87,17 +89,16 @@ public:
     virtual ~GameObject();
 
     void AddChild(GameObject *child);
-    GameObject* GetChild(const std::string &name) const;
+    GameObject* GetChild(const std::string &m_name) const;
     void MoveChild(GameObject *child, GameObject *newParent);
-    void RemoveChild(const std::string &name);
+    void RemoveChild(const std::string &m_name);
     void RemoveChild(GameObject *child);
 
-    void SetParent(GameObject *parent);
+    void SetParent(GameObject *p_parent);
     void SetRenderLayer(unsigned char layer);
-    void SetName(const std::string &name);
+    void SetName(const std::string &m_name);
 
     const std::string ToString() const;
-
 
     Scene* GetScene();
     GameObject* GetParent() const;
@@ -189,7 +190,7 @@ public:
     template <class T>
     T* GetComponent() const
     {
-        for(auto comp = comps.begin(); comp != comps.end(); ++comp)
+        for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
             if(tp ) return tp;
@@ -204,7 +205,7 @@ public:
     std::list<T*> GetComponents() const
     {
         std::list<T*> comps_l;
-        for(auto comp = comps.begin(); comp != comps.end(); ++comp)
+        for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
             if(tp ) comps_l.push_back(tp);
@@ -218,7 +219,7 @@ public:
     template <class T>
     T* GetComponentInChildren() const
     {
-        for(auto c = children.begin(); c != children.end(); ++c)
+        for(auto c = m_children.begin(); c != m_children.end(); ++c)
         {
             if((*c)->IsEditorGameObject()) continue;
 
@@ -237,7 +238,7 @@ public:
     std::list<T*> GetComponentsInChildren() const
     {
         std::list<T*> comps_l;
-        for(auto c = children.begin(); c != children.end(); ++c)
+        for(auto c = m_children.begin(); c != m_children.end(); ++c)
         {
             comps_l.splice(comps_l.end(),
                            (*c)->GetComponents<T>()); //concat
@@ -275,12 +276,12 @@ public:
     template <class T>
     void RemoveComponent()
     {
-        for(auto comp = comps.begin(); comp != comps.end(); ++comp)
+        for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
             if(tp )
             {
-                comps.erase(comp);
+                m_comps.erase(comp);
                 delete tp;
                 break;
             }
@@ -296,7 +297,7 @@ public:
     void Write(std::ostream &f) const override;
     void Read(std::istream &f) override;
 
-    void SetEnabled(bool enabled);
+    void SetEnabled(bool m_enabled);
     bool IsEnabled();
 
     #ifdef BANG_EDITOR
