@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>941</width>
+    <width>1008</width>
     <height>594</height>
    </rect>
   </property>
@@ -93,6 +93,16 @@
             </widget>
            </item>
            <item>
+            <widget class="QToolButton" name="buttonLocalCoords">
+             <property name="text">
+              <string>Local</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -106,16 +116,25 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="buttonPauseResume">
+            <widget class="QToolButton" name="buttonPlay">
              <property name="text">
-              <string>Pause</string>
+              <string>Play</string>
              </property>
-             <property name="icon">
-              <iconset theme="pause">
-               <normaloff>../../.designer/backup</normaloff>../../.designer/backup</iconset>
+             <property name="checkable">
+              <bool>true</bool>
              </property>
-             <property name="flat">
-              <bool>false</bool>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="buttonStop">
+             <property name="text">
+              <string>Stop</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -153,8 +172,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>941</width>
-     <height>25</height>
+     <width>1008</width>
+     <height>32</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -326,7 +345,7 @@
    <property name="minimumSize">
     <size>
      <width>300</width>
-     <height>162</height>
+     <height>178</height>
     </size>
    </property>
    <property name="floating">
@@ -555,6 +574,13 @@
       <widget class="LoggerWidget" name="widgetLogger" native="true">
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
+         <widget class="QPushButton" name="buttonLoggerClear">
+          <property name="text">
+           <string>Clear</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="ListLogger" name="listLogger">
           <property name="alternatingRowColors">
            <bool>false</bool>
@@ -564,13 +590,6 @@
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonLoggerClear">
-          <property name="text">
-           <string>Clear</string>
           </property>
          </widget>
         </item>

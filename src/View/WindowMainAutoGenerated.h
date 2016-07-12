@@ -74,8 +74,10 @@ public:
     QToolButton *buttonRotateMode;
     QToolButton *buttonScaleMode;
     QToolButton *buttonGlobalCoords;
+    QToolButton *buttonLocalCoords;
     QSpacerItem *horizontalSpacer;
-    QPushButton *buttonPauseResume;
+    QToolButton *buttonPlay;
+    QToolButton *buttonStop;
     Canvas *canvas;
     MenuBar *menubar;
     QMenu *menuAssets;
@@ -113,15 +115,15 @@ public:
     QVBoxLayout *verticalLayout_5;
     LoggerWidget *widgetLogger;
     QVBoxLayout *verticalLayout_6;
-    ListLogger *listLogger;
     QPushButton *buttonLoggerClear;
+    ListLogger *listLogger;
 
     void setupUi(QMainWindow *WindowMain)
     {
         if (WindowMain->objectName().isEmpty())
             WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
         WindowMain->setWindowModality(Qt::NonModal);
-        WindowMain->resize(941, 594);
+        WindowMain->resize(1008, 594);
         WindowMain->setMouseTracking(true);
         WindowMain->setFocusPolicy(Qt::StrongFocus);
         actionOpenScene = new QAction(WindowMain);
@@ -215,23 +217,28 @@ public:
 
         horizontalLayout->addWidget(buttonGlobalCoords);
 
+        buttonLocalCoords = new QToolButton(widgetToolbar);
+        buttonLocalCoords->setObjectName(QString::fromUtf8("buttonLocalCoords"));
+        buttonLocalCoords->setCheckable(true);
+
+        horizontalLayout->addWidget(buttonLocalCoords);
+
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
 
-        buttonPauseResume = new QPushButton(widgetToolbar);
-        buttonPauseResume->setObjectName(QString::fromUtf8("buttonPauseResume"));
-        QIcon icon;
-        QString iconThemeName = QString::fromUtf8("pause");
-        if (QIcon::hasThemeIcon(iconThemeName)) {
-            icon = QIcon::fromTheme(iconThemeName);
-        } else {
-            icon.addFile(QString::fromUtf8("../../.designer/backup"), QSize(), QIcon::Normal, QIcon::Off);
-        }
-        buttonPauseResume->setIcon(icon);
-        buttonPauseResume->setFlat(false);
+        buttonPlay = new QToolButton(widgetToolbar);
+        buttonPlay->setObjectName(QString::fromUtf8("buttonPlay"));
+        buttonPlay->setCheckable(true);
 
-        horizontalLayout->addWidget(buttonPauseResume);
+        horizontalLayout->addWidget(buttonPlay);
+
+        buttonStop = new QToolButton(widgetToolbar);
+        buttonStop->setObjectName(QString::fromUtf8("buttonStop"));
+        buttonStop->setCheckable(true);
+        buttonStop->setChecked(true);
+
+        horizontalLayout->addWidget(buttonStop);
 
 
         horizontalLayout_2->addLayout(horizontalLayout);
@@ -258,7 +265,7 @@ public:
         WindowMain->setCentralWidget(centralwidget);
         menubar = new MenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 941, 25));
+        menubar->setGeometry(QRect(0, 0, 1008, 32));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -328,7 +335,7 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(dockInspector->sizePolicy().hasHeightForWidth());
         dockInspector->setSizePolicy(sizePolicy2);
-        dockInspector->setMinimumSize(QSize(300, 162));
+        dockInspector->setMinimumSize(QSize(300, 178));
         dockInspector->setFloating(false);
         dockInspector->setFeatures(QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable);
         dockInspector->setAllowedAreas(Qt::AllDockWidgetAreas);
@@ -458,6 +465,11 @@ public:
         widgetLogger->setObjectName(QString::fromUtf8("widgetLogger"));
         verticalLayout_6 = new QVBoxLayout(widgetLogger);
         verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
+        buttonLoggerClear = new QPushButton(widgetLogger);
+        buttonLoggerClear->setObjectName(QString::fromUtf8("buttonLoggerClear"));
+
+        verticalLayout_6->addWidget(buttonLoggerClear);
+
         listLogger = new ListLogger(widgetLogger);
         listLogger->setObjectName(QString::fromUtf8("listLogger"));
         listLogger->setAlternatingRowColors(false);
@@ -465,11 +477,6 @@ public:
         listLogger->setSelectionBehavior(QAbstractItemView::SelectRows);
 
         verticalLayout_6->addWidget(listLogger);
-
-        buttonLoggerClear = new QPushButton(widgetLogger);
-        buttonLoggerClear->setObjectName(QString::fromUtf8("buttonLoggerClear"));
-
-        verticalLayout_6->addWidget(buttonLoggerClear);
 
 
         verticalLayout_5->addWidget(widgetLogger);
@@ -552,7 +559,9 @@ public:
         buttonRotateMode->setText(QApplication::translate("WindowMain", "R", 0, QApplication::UnicodeUTF8));
         buttonScaleMode->setText(QApplication::translate("WindowMain", "S", 0, QApplication::UnicodeUTF8));
         buttonGlobalCoords->setText(QApplication::translate("WindowMain", "Global", 0, QApplication::UnicodeUTF8));
-        buttonPauseResume->setText(QApplication::translate("WindowMain", "Pause", 0, QApplication::UnicodeUTF8));
+        buttonLocalCoords->setText(QApplication::translate("WindowMain", "Local", 0, QApplication::UnicodeUTF8));
+        buttonPlay->setText(QApplication::translate("WindowMain", "Play", 0, QApplication::UnicodeUTF8));
+        buttonStop->setText(QApplication::translate("WindowMain", "Stop", 0, QApplication::UnicodeUTF8));
         menuAssets->setTitle(QApplication::translate("WindowMain", "Assets", 0, QApplication::UnicodeUTF8));
         menuCreate->setTitle(QApplication::translate("WindowMain", "Create", 0, QApplication::UnicodeUTF8));
         menuGameObject->setTitle(QApplication::translate("WindowMain", "GameObjects", 0, QApplication::UnicodeUTF8));

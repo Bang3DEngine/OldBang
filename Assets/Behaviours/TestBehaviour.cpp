@@ -31,14 +31,14 @@ void TestBehaviour::OnUpdate()
     time += Time::GetDeltaTime();
     Transform *t = gameObject->GetComponent<Transform>(); NONULL(t);
 
-    float rotSpeed = 5.0f;
+    float rotSpeed = 50.0f;
     if (Input::GetKey(Input::Key::A))
     {
-        t->RotateLocalEuler(Vector3::up * rotSpeed);
+        t->RotateLocalEuler(Vector3::up * rotSpeed * Time::GetDeltaTime());
     }
     else if (Input::GetKey(Input::Key::D))
     {
-        t->RotateLocalEuler(Vector3::up * -rotSpeed);
+        t->RotateLocalEuler(Vector3::up * -rotSpeed * Time::GetDeltaTime());
     }
 
     float speed = 50.0f;
@@ -50,6 +50,8 @@ void TestBehaviour::OnUpdate()
     {
         t->Translate(t->GetForward() * -speed * Time::GetDeltaTime());
     }
+
+    t->RotateLocalEuler(Vector3::up * rotSpeed * Time::GetDeltaTime() * 0.3f);
 }
 
 void TestBehaviour::OnDestroy()

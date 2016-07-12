@@ -42,7 +42,7 @@ void EditorTranslateAxis::OnUpdate()
         if (glm::length(sMouseDelta) > 0.0f)
         {
             Vector3 wAxisDir;
-            if (Toolbar::GetInstance()->GetGlobalCoordsMode())
+            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 wAxisDir = m_oAxisDirection;
             }

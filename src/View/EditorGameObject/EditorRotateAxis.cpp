@@ -91,7 +91,7 @@ void EditorRotateAxis::OnUpdate()
 
             // Avoids rotation trembling when not aligned at all
             Quaternion q = Quaternion::AngleAxis(c_rotationBoost * alignment, m_oAxisDirection);
-            if (Toolbar::GetInstance()->GetGlobalCoordsMode())
+            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 attTrans->Rotate(q);
             }

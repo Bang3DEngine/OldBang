@@ -42,7 +42,7 @@ void EditorScaleAxis::OnUpdate()
         if (glm::length(sMouseDelta) > 0.0f)
         {
             Vector3 oAxisDir, wAxisDir;
-            if (Toolbar::GetInstance()->GetGlobalCoordsMode())
+            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 oAxisDir = attTrans->WorldToLocalDirection(m_oAxisDirection);
                 wAxisDir = m_oAxisDirection;

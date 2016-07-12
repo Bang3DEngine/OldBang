@@ -41,7 +41,6 @@ private:
     float m_aspectRatio = 1.0f;
     unsigned long long m_lastRenderTime = 0;
 
-    bool m_paused = false;
     std::list<Scene*> m_scenes;
 
     Scene *p_currentScene = nullptr;
@@ -71,8 +70,6 @@ public:
     static int GetHeight();
     static int GetWidth();
 
-    bool IsPaused() const;
-
     static void SetCursor(Qt::CursorShape cs);
 
     void wheelEvent(QWheelEvent* event) override;
@@ -84,8 +81,6 @@ public:
 
 public slots:
     void updateGL() override;
-    void OnTopKekPressed();
-    void OnPauseResumeButtonPressed();
 };
 
 #endif // CANVAS_H

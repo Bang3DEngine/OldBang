@@ -415,9 +415,7 @@ void GameObject::_OnStart()
 
 void GameObject::_OnUpdate()
 {
-    bool canUpdate =
-            !Canvas::GetInstance()->IsPaused() ||
-            IsEditorGameObject();
+    bool canUpdate = Toolbar::GetInstance()->IsPlaying() || IsEditorGameObject();
 
     if(canUpdate)
     {

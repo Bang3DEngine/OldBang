@@ -88,7 +88,6 @@ void BehaviourHolder::Refresh()
         if (p_behaviour)
         {
             p_behaviour->Init(this);
-            p_behaviour->SetSourceFilepath(m_sourceFilepath);
             p_behaviour->_OnStart();
         }
     }
