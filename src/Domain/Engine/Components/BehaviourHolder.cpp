@@ -119,7 +119,7 @@ void BehaviourHolder::Write(std::ostream &f) const
 {
     f << "<BehaviourHolder>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::Write(m_sourceFilepath, f);
+    FileWriter::WriteFilepath(m_sourceFilepath, f);
     f << "</BehaviourHolder>" << std::endl;
 }
 
