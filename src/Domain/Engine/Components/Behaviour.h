@@ -21,8 +21,6 @@ friend class BehaviourHolder;
 
 private:
 
-    std::string m_sourceFilepath = "";
-
     /**
      * @brief Set directly by BehaviourHolder (its a friend class), when
      * adding this Behaviour to itself.

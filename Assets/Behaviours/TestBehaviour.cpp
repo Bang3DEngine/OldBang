@@ -50,6 +50,8 @@ void TestBehaviour::OnUpdate()
     {
         transform->Translate(transform->GetForward() * -speed * Time::deltaTime);
     }
+
+    transform->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime * 0.3f);
 }
 
 void TestBehaviour::OnDestroy()

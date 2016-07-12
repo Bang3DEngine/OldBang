@@ -57,7 +57,7 @@ void EditorAxisGroup::OnUpdate()
             Box bbox = p_attachedGameObject->GetBoundingBox();
             t->SetPosition( bbox.GetCenter() ); // Center
 
-            if (Toolbar::GetInstance()->GetGlobalCoordsMode())
+            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 t->SetLocalRotation( Quaternion() );
             }

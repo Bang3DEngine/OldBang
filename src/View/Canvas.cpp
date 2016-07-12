@@ -22,9 +22,6 @@ void Canvas::InitFromMainBinary()
 
 void Canvas::initializeGL()
 {
-    WindowMain::GetInstance()->buttonPauseResume
-            ->setText( (m_paused ? QString("Resume") : QString("Pause")) );
-
     glewExperimental = GL_TRUE;
     glewInit();
 
@@ -156,11 +153,6 @@ int Canvas::GetWidth()
     return Canvas::p_mainBinaryCanvas->m_width;
 }
 
-bool Canvas::IsPaused() const
-{
-    return m_paused;
-}
-
 int Canvas::GetHeight()
 {
     return Canvas::p_mainBinaryCanvas->m_height;
@@ -206,23 +198,4 @@ void Canvas::keyReleaseEvent(QKeyEvent *event)
 {
     Input::GetInstance()->HandleInputKeyReleased(event);
     QGLWidget::keyReleaseEvent(event);
-}
-
-void Canvas::OnTopKekPressed()
-{
-    Prefab *p = AssetsManager::GetAsset<Prefab>("Assets/Prefabs/luigiPrefab.bprefab");
-
-    GameObject *e = p->Instantiate();
-
-    GameObject *selected = WindowMain::GetInstance()->widgetHierarchy->
-            GetFirstSelectedGameObject();
-
-    if(selected ) selected->AddChild(e);
-    else p_currentScene->AddChild(e);
-}
-
-void Canvas::OnPauseResumeButtonPressed()
-{
-    m_paused = !m_paused;
-    WindowMain::GetInstance()->buttonPauseResume->setText( (m_paused ? QString("Resume") : QString("Pause")) );
 }

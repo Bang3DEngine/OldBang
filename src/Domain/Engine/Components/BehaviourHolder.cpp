@@ -88,7 +88,6 @@ void BehaviourHolder::Refresh()
         if (p_behaviour)
         {
             p_behaviour->Init(this);
-            p_behaviour->SetSourceFilepath(m_sourceFilepath);
             p_behaviour->_OnStart();
         }
     }
@@ -119,7 +118,7 @@ void BehaviourHolder::Write(std::ostream &f) const
 {
     f << "<BehaviourHolder>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::Write(m_sourceFilepath, f);
+    FileWriter::WriteFilepath(m_sourceFilepath, f);
     f << "</BehaviourHolder>" << std::endl;
 }
 
