@@ -2,6 +2,9 @@
 
 #include "SingletonManager.h"
 
+float Time::s_deltaTime = 0.0f;
+float const& Time::deltaTime = Time::s_deltaTime;
+
 void Time::InitFromMainBinary()
 {
    SingletonManager::GetInstance()->SetTimeSingleton(new Time());

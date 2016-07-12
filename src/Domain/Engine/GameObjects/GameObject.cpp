@@ -4,6 +4,7 @@
 #include "FileReader.h"
 #include "Hierarchy.h"
 #include "WindowEventManager.h"
+#include "Transform.h"
 
 #include "EditorSelectionGameObject.h"
 
@@ -147,6 +148,12 @@ void GameObject::AddComponent(Component *c)
     c->p_gameObject = this;
     m_comps.push_back(c);
     c->_OnStart();
+
+    Transform *t = dynamic_cast<Transform*>(c);
+    if (t)
+    {
+        p_transform = t;
+    }
 }
 
 void GameObject::MoveComponent(Component *c, int distance)
@@ -174,6 +181,12 @@ void GameObject::RemoveComponent(Component *c)
             m_comps.erase(comp);
             break;
         }
+    }
+
+    Transform *t = dynamic_cast<Transform*>(c);
+    if (t)
+    {
+        p_transform = nullptr;
     }
 }
 

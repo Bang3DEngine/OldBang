@@ -23,6 +23,7 @@
 
 class Scene;
 class Component;
+class Transform;
 class EditorSelectionGameObject;
 class GameObject :
                 public ISceneEventListener
@@ -56,6 +57,7 @@ protected:
     std::string m_name = "";
     std::list<Component*> m_comps;
     std::list<GameObject*> m_children;
+    Transform* p_transform = nullptr;
     GameObject* p_parent = nullptr;
 
     /**
@@ -79,6 +81,7 @@ protected:
 public:
     std::string const& name   = m_name;
     GameObject* const& parent = p_parent;
+    Transform* const& transform = p_transform;
 
     GameObject();
     GameObject(const std::string &m_name);

@@ -8,15 +8,19 @@
 class Time
 {
 friend class Canvas;
-friend class TestBehaviour;
+friend class Behaviour;
 
 private:
     float m_deltaTime = 0.0f;
+    static float zero;
 
     Time() {}
     static Time* GetInstance();
 
 public:
+
+    static float s_deltaTime;
+    static float const& deltaTime;
 
     static void InitFromMainBinary();
 

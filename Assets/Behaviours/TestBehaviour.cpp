@@ -18,37 +18,37 @@ TestBehaviour::TestBehaviour()
     if(r == 2) randomAxis = Vector3(0.0, 0.0, 1.0);
 
     randomAxis = randomAxis.Normalized();
-
-    int asljd = 0;
 }
 
 void TestBehaviour::OnStart()
 {
+    Behaviour::OnStart();
 }
 
 void TestBehaviour::OnUpdate()
 {
-    time += Time::GetDeltaTime();
-    Transform *t = gameObject->GetComponent<Transform>(); NONULL(t);
+    Behaviour::OnUpdate();
 
-    float rotSpeed = 5.0f;
+    time += Time::deltaTime;
+
+    float rotSpeed = 50.0f;
     if (Input::GetKey(Input::Key::A))
     {
-        t->RotateLocalEuler(Vector3::up * rotSpeed);
+        transform->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime);
     }
     else if (Input::GetKey(Input::Key::D))
     {
-        t->RotateLocalEuler(Vector3::up * -rotSpeed);
+        transform->RotateLocalEuler(Vector3::up * -rotSpeed * Time::deltaTime);
     }
 
     float speed = 50.0f;
     if (Input::GetKey(Input::Key::W))
     {
-        t->Translate(t->GetForward() * speed * Time::GetDeltaTime());
+        transform->Translate(transform->GetForward() * speed * Time::deltaTime);
     }
     else if (Input::GetKey(Input::Key::S))
     {
-        t->Translate(t->GetForward() * -speed * Time::GetDeltaTime());
+        transform->Translate(transform->GetForward() * -speed * Time::deltaTime);
     }
 }
 

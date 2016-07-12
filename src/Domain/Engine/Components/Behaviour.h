@@ -29,11 +29,21 @@ private:
      */
     BehaviourHolder *p_behaviourHolder = nullptr;
 
+
+    void Init(BehaviourHolder *bh);
+    void SetSourceFilepath(const std::string &m_sourceFilepath);
+    std::string GetSourceFilepath() const;
+
 /**
  * These variables must be copied from BehaviourHolder
  */
+private:
+    GameObject* p_gameObject = nullptr;
+    Transform*  p_transform  = nullptr;
+
 protected:
-    GameObject* gameObject = nullptr;
+    GameObject* const& gameObject = p_gameObject;
+    Transform*  const& transform  = p_transform;
 /**
 */
 
@@ -41,10 +51,8 @@ public:
     Behaviour();
     virtual ~Behaviour();
 
-private:
-    void Init(BehaviourHolder *bh);
-    void SetSourceFilepath(const std::string &m_sourceFilepath);
-    std::string GetSourceFilepath() const;
+protected:
+    virtual void OnUpdate() override;
 };
 
 #endif
