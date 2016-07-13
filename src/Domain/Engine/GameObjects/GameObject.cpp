@@ -4,6 +4,7 @@
 #include "FileReader.h"
 #include "Hierarchy.h"
 #include "WindowEventManager.h"
+#include "SingletonManager.h"
 #include "Transform.h"
 
 #include "EditorSelectionGameObject.h"

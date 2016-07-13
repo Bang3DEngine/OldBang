@@ -51,6 +51,9 @@ public:
 
 protected:
     virtual void OnUpdate() override;
+
+private:
+    virtual void _OnUpdate() override;
 };
 
 #endif

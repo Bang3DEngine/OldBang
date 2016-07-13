@@ -31,9 +31,8 @@ void EditorTranslateAxis::OnUpdate()
     EditorAxis::OnUpdate();
 
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    Transform *camTransform = cam->gameObject->GetComponent<Transform>(); NONULL(camTransform);
+    Transform *camTransform = cam->gameObject->transform; NONULL(camTransform);
     Transform *attTrans = p_attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
-    Transform *transform = GetComponent<Transform>(); NONULL(transform);
     Vector3 wCamPos = camTransform->GetPosition();
 
     if (m_grabbed)
@@ -59,9 +58,11 @@ void EditorTranslateAxis::OnUpdate()
             float alignment = glm::dot(screenAxisDir, glm::normalize(sMouseDelta));
             //
 
-            Vector3 worldMove = alignment * wAxisDir *
+            Vector3 worldMove = alignment *
+                                wAxisDir *
                                 glm::length(sMouseDelta) *
-                                Vector3::Distance(wCamPos, attTrans->GetPosition()) * 0.002f;
+                                Vector3::Distance(wCamPos, attTrans->GetPosition()) *
+                                Time::deltaTime * 0.02f;
             attTrans->Translate(worldMove);
         }
     }

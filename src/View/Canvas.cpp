@@ -36,16 +36,17 @@ void Canvas::paintGL()
     glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, m_clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Time::GetInstance()->m_deltaTime = float(Time::GetNow() -
-                                             m_lastRenderTime) / 1000.0f;
+    float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
+    Time::GetInstance()->m_deltaTime = deltaTime;
+    // Update mainBinary static deltaTime, for internal engine use
+    // (this is not Behaviours' static deltaTime, theirs is updated in Behaviour _OnUpdate)
+    Time::s_deltaTime = deltaTime;
 
     if(p_currentScene)
     {
         m_lastRenderTime = Time::GetNow();
         p_currentScene->_OnUpdate();
-
-        //Note: _OnPreRender() is called from scene _OnRender
-        p_currentScene->_OnRender();
+        p_currentScene->_OnRender(); //Note: _OnPreRender() is called from scene _OnRender
     }
 
     Input::GetInstance()->OnNewFrame();

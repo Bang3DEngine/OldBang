@@ -109,8 +109,7 @@ Hierarchy *Hierarchy::GetInstance()
 
 void Hierarchy::Refresh()
 {
-    p_currentScene = Canvas::GetInstance()->GetCurrentScene();
-    NONULL(p_currentScene);
+    p_currentScene = Canvas::GetInstance()->GetCurrentScene(); NONULL(p_currentScene);
 
     m_gameObjectToTreeItem.clear();
     m_treeItemToGameObject.clear();
@@ -160,10 +159,17 @@ void Hierarchy::OnChildRemoved(GameObject *child)
 {
     if(child->IsEditorGameObject()) return;
 
-    QTreeWidgetItem *item = m_gameObjectToTreeItem[child];
-    NONULL(item);
-    if (!item->parent()) removeItemWidget(item, 0);
-    else item->parent()->removeChild(item);
+    Logger_Log("OnChildRemoved: " << child);
+    QTreeWidgetItem *item = m_gameObjectToTreeItem[child]; NONULL(item);
+    if (!item->parent())
+    {
+        removeItemWidget(item, 0);
+    }
+    else
+    {
+        item->parent()->removeChild(item);
+    }
+
     m_treeItemToGameObject.erase(item);
     m_gameObjectToTreeItem.erase(child);
 }
@@ -341,9 +347,9 @@ void Hierarchy::OnContextMenuDeleteClicked()
     foreach(QTreeWidgetItem *item, items)
     {
         GameObject *selected = m_treeItemToGameObject[item];
-        if(selected->GetParent())
+        if(selected->parent)
         {
-            selected->GetParent()->RemoveChild(selected);
+            selected->parent->RemoveChild(selected);
         }
     }
 }

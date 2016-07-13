@@ -35,6 +35,8 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     {
         GetComponent<Transform>()->SetLocalEuler(Vector3::up * 180.0f);
     }
+
+    m_oAxisDirection.z *= -1;
 }
 
 EditorRotateAxis::~EditorRotateAxis()
@@ -47,9 +49,8 @@ void EditorRotateAxis::OnUpdate()
 
     // Obtain mousePos in screen space for next calculations
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    Transform *camTransform = cam->gameObject->GetComponent<Transform>(); NONULL(camTransform);
+    Transform *camTransform = cam->gameObject->transform; NONULL(camTransform);
     Transform *attTrans = p_attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
-    Transform *transform = GetComponent<Transform>(); NONULL(transform);
 
     Matrix4 p, v, m;
     cam->GetProjectionMatrix(p);
@@ -89,8 +90,12 @@ void EditorRotateAxis::OnUpdate()
             glm::vec2 anchorPointsDir = glm::normalize(m_sAnchorPoint1 - m_sAnchorPoint0);
             float alignment = glm::dot(anchorPointsDir, glm::normalize(sMouseDelta));
 
+            float rotAngle = alignment *
+                             c_rotationBoost *
+                             Time::deltaTime * 10.0f;
+
             // Avoids rotation trembling when not aligned at all
-            Quaternion q = Quaternion::AngleAxis(c_rotationBoost * alignment, m_oAxisDirection);
+            Quaternion q = Quaternion::AngleAxis(rotAngle, m_oAxisDirection);
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 attTrans->Rotate(q);

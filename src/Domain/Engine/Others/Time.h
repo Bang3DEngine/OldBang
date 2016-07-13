@@ -9,6 +9,7 @@ class Time
 {
 friend class Canvas;
 friend class Behaviour;
+friend class GameObject;
 
 private:
     float m_deltaTime = 0.0f;

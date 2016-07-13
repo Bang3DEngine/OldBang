@@ -31,9 +31,8 @@ void EditorScaleAxis::OnUpdate()
     EditorAxis::OnUpdate();
 
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    Transform *camTransform = cam->gameObject->GetComponent<Transform>(); NONULL(camTransform);
+    Transform *camTransform = cam->gameObject->transform; NONULL(camTransform);
     Transform *attTrans = p_attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
-    Transform *transform = GetComponent<Transform>(); NONULL(transform);
     Vector3 wCamPos = camTransform->GetPosition();
 
     if (m_grabbed)
@@ -52,7 +51,7 @@ void EditorScaleAxis::OnUpdate()
                 oAxisDir = m_oAxisDirection;
                 wAxisDir = transform->LocalToWorldDirection(m_oAxisDirection);
             }
-            oAxisDir.z *= -1; oAxisDir.Normalize();
+            oAxisDir.Normalize();
             wAxisDir.Normalize();
 
             // Alignment
@@ -64,9 +63,12 @@ void EditorScaleAxis::OnUpdate()
             //
 
 
-            Vector3 scaling = Vector3::one + alignment * oAxisDir *
+            Vector3 scaling = Vector3::one +
+                              alignment *
+                              oAxisDir *
                               glm::length(sMouseDelta) *
-                              Vector3::Distance(wCamPos, attTrans->GetPosition()) * 0.001f;
+                              Vector3::Distance(wCamPos, attTrans->GetPosition()) *
+                              Time::deltaTime * 0.02f;
 
             //TODO: solve problem with negative scaling and depth :/
             attTrans->SetScale(attTrans->GetScale() * scaling);

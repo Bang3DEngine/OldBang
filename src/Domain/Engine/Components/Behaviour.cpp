@@ -12,7 +12,15 @@ Behaviour::~Behaviour()
 
 void Behaviour::OnUpdate()
 {
+}
+
+void Behaviour::_OnUpdate()
+{
+    ISceneEventListener::_OnUpdate();
+
+    // Update static Time::deltaTime variable with mainBinary deltaTime
     Time::s_deltaTime = SingletonManager::GetInstance()->GetTimeSingleton()->m_deltaTime;
+    Logger_Log(Time::s_deltaTime);
 }
 
 void Behaviour::Init(BehaviourHolder *bh)
