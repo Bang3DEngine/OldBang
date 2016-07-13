@@ -5,6 +5,7 @@
 #include "FileReader.h"
 #include "FileWriter.h"
 #include "FileDialog.h"
+#include "SystemUtils.h"
 #include "Persistence.h"
 #include "EditorScene.h"
 #include "WindowEventManager.h"
@@ -22,6 +23,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnSaveScene()));
     connect(w->actionSaveSceneAs,  SIGNAL(triggered()),
             this, SLOT(OnSaveSceneAs()));
+    connect(w->actionBuild,  SIGNAL(triggered()),
+            this, SLOT(OnBuild()));
 
     connect(w->actionCreateEmptyGameObject,  SIGNAL(triggered()),
             this, SLOT(OnCreateEmptyGameObject()));
@@ -146,9 +149,20 @@ void MenuBar::OnSaveSceneAs() const
 
     FileDialog fd("Save scene as...", Scene::GetFileExtension());
     std::string filename = fd.GetSaveFilename(scene->GetName());
-    if(filename == "") return;
+    if (filename == "") return;
 
     FileWriter::WriteScene(filename, scene);
+}
+
+void MenuBar::OnBuild() const
+{
+    Logger_Log("Building...");
+
+    bool success = false;
+    std::string output = "";
+    GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute());
+
+    Logger_Log("Finished building!");
 }
 
 void MenuBar::OnCreateEmptyGameObject() const

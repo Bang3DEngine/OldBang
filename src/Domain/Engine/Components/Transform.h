@@ -26,7 +26,9 @@ private:
     Vector3 m_localScale;
 
     // euler angles in degrees set by user in the inspector
+#ifdef BANG_EDITOR
     Vector3 m_inspectorEulerDeg;
+#endif
 
 public:
 
@@ -57,7 +59,9 @@ public:
     void Rotate(const Quaternion &r);
     void RotateEuler(const Vector3 &degreesEuler);
 
+#ifdef BANG_EDITOR
     void SetLocalRotationFromInspector(const Quaternion &q);
+#endif
 
     void SetScale(float s);
     void SetScale(const Vector3 &v);

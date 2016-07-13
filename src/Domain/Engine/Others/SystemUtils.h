@@ -10,9 +10,10 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <algorithm>
 #include <string>
 #include <string.h>
+
+#include "StringUtils.h"
 
 class Behaviour;
 class SystemUtils
@@ -20,24 +21,13 @@ class SystemUtils
 private:
     SystemUtils() {}
 
-    /**
-     * @brief AddInFrontOfWords
-     * Adds the passed particle in front of every word.
-     * For example: ("-I", "file1 dir/file2 dir/file3") is converted to
-     * "-Ifile1 -Idir/file2 -Idir/file3"
-     */
-    static void AddInFrontOfWords(std::string particle, std::string *str);
-    static void RemoveLineBreaks(std::string *str);
+public:
 
-    static std::string GetAllProjectObjects(const std::string &filepathFromProjectRoot);
-    static std::string GetAllProjectSubDirs(const std::string &filepathFromProjectRoot);
+    static std::string GetAllProjectObjects();
+    static std::string GetAllProjectSubDirs();
 
     static std::string GetQtIncludes();
     static std::string GetQtLibrariesDirs();
-
-    static const std::string SYSTEM_OUTPUT_END_MARK;
-
-public:
 
     /**
      * @brief Executes a system command.

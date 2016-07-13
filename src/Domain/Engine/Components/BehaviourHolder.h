@@ -46,13 +46,14 @@ public:
     virtual ICloneable *Clone() const override;
 
     #ifdef BANG_EDITOR
-        void Refresh();
-        virtual InspectorWidgetInfo* GetComponentInfo() override;
-        virtual void OnSlotValueChanged(InspectorWidget *source) override;
-
-        void Write(std::ostream &f) const override;
-        void Read(std::istream &f) override;
+    virtual InspectorWidgetInfo* GetComponentInfo() override;
+    virtual void OnSlotValueChanged(InspectorWidget *source) override;
     #endif
+
+    void Refresh();
+
+    void Write(std::ostream &f) const override;
+    void Read(std::istream &f) override;
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;

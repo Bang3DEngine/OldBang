@@ -1,8 +1,8 @@
 #include "Input.h"
 
-#include "SingletonManager.h"
-#include "WindowMain.h"
 #include "Canvas.h"
+#include "WindowMain.h"
+#include "SingletonManager.h"
 
 Input::Input()
 {

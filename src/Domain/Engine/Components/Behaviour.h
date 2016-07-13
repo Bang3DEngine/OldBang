@@ -2,11 +2,17 @@
 #define BEHAVIOUR_H
 
 #include "Bang.h"
+
 #include "Logger.h"
-#include "WindowMain.h"
+#include "Transform.h"
+#include "GameObject.h"
 #include "SingletonManager.h"
 #include "ISceneEventListener.h"
+
+#ifdef BANG_EDITOR
+#include "WindowMain.h"
 #include "IWindowEventManagerListener.h"
+#endif
 
 class BehaviourHolder;
 
@@ -15,7 +21,6 @@ class BehaviourHolder;
  * the User Behaviour classes. This lets the engine handle Behaviours uniformly.
  */
 class Behaviour : public ISceneEventListener
-                 ,public IWindowEventManagerListener  // To receive events!
 {
 friend class BehaviourHolder;
 

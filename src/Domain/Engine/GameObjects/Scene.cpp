@@ -63,7 +63,6 @@ const Canvas *Scene::GetCanvas() const
     return p_canvas;
 }
 
-#ifdef BANG_EDITOR
 void Scene::Write(std::ostream &f) const
 {
     f << "<Scene>" << std::endl;
@@ -83,4 +82,3 @@ void Scene::Write(std::ostream &f) const
 
     f << "</Scene>" << std::endl;
 }
-#endif

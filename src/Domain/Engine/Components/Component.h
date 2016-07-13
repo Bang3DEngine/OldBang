@@ -7,10 +7,10 @@
 #include "IFileable.h"
 #include "IToString.h"
 #include "ICloneable.h"
+#include "FileWriter.h"
 #include "ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
-#include "FileWriter.h"
 #include "IInspectable.h"
 #include "InspectorWidget.h"
 #include "IWindowEventManagerListener.h"
@@ -25,10 +25,10 @@ class Component :
              ,public IToString
              ,public IFileable
              ,public ICloneable
+            #ifdef BANG_EDITOR
              ,public IWindowEventManagerListener
-             #ifdef BANG_EDITOR
              ,public IInspectable
-             #endif
+            #endif
 {
 friend class GameObject;
 protected:

@@ -22,11 +22,17 @@
 #include "Shader.h"
 #include "MeshRenderer.h"
 #include "ShaderProgram.h"
+
+#ifdef BANG_EDITOR
 #include "IWindowEventManagerListener.h"
+#endif
 
 class WindowMain;
 class SelectionFramebuffer;
-class Canvas : public QGLWidget, public IWindowEventManagerListener
+class Canvas : public QGLWidget
+              #ifdef BANG_EDITOR
+               ,public IWindowEventManagerListener
+              #endif
 {
     Q_OBJECT
 

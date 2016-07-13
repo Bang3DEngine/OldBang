@@ -63,6 +63,7 @@ public:
     QAction *actionCreatePlane;
     QAction *actionCreateCube;
     QAction *actionCreateSphere;
+    QAction *actionBuild;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
@@ -170,6 +171,8 @@ public:
         actionCreateCube->setObjectName(QString::fromUtf8("actionCreateCube"));
         actionCreateSphere = new QAction(WindowMain);
         actionCreateSphere->setObjectName(QString::fromUtf8("actionCreateSphere"));
+        actionBuild = new QAction(WindowMain);
+        actionBuild->setObjectName(QString::fromUtf8("actionBuild"));
         centralwidget = new QWidget(WindowMain);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -265,7 +268,7 @@ public:
         WindowMain->setCentralWidget(centralwidget);
         menubar = new MenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1008, 32));
+        menubar->setGeometry(QRect(0, 0, 1008, 25));
         menubar->setNativeMenuBar(false);
         menuAssets = new QMenu(menubar);
         menuAssets->setObjectName(QString::fromUtf8("menuAssets"));
@@ -509,6 +512,8 @@ public:
         menuProject->addAction(actionSaveScene);
         menuProject->addAction(actionSaveSceneAs);
         menuProject->addSeparator();
+        menuProject->addAction(actionBuild);
+        menuProject->addSeparator();
         menuProject->addAction(actionProjectSettings);
         menuComponents->addAction(menuAddComponent->menuAction());
         menuComponents->addAction(actionRemoveComponent);
@@ -555,6 +560,7 @@ public:
         actionCreatePlane->setText(QApplication::translate("WindowMain", "Plane", 0, QApplication::UnicodeUTF8));
         actionCreateCube->setText(QApplication::translate("WindowMain", "Cube", 0, QApplication::UnicodeUTF8));
         actionCreateSphere->setText(QApplication::translate("WindowMain", "Sphere", 0, QApplication::UnicodeUTF8));
+        actionBuild->setText(QApplication::translate("WindowMain", "Build", 0, QApplication::UnicodeUTF8));
         buttonTranslateMode->setText(QApplication::translate("WindowMain", "T", 0, QApplication::UnicodeUTF8));
         buttonRotateMode->setText(QApplication::translate("WindowMain", "R", 0, QApplication::UnicodeUTF8));
         buttonScaleMode->setText(QApplication::translate("WindowMain", "S", 0, QApplication::UnicodeUTF8));

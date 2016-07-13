@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <map>
 
 #include "Vector3.h"
 #include "Matrix4.h"

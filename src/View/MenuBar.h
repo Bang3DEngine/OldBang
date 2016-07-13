@@ -6,6 +6,7 @@
 #include <QMenuBar>
 #include <QMessageBox>
 
+#include "GameBuilder.h"
 #include "Mesh.h"
 
 class WindowEventManager;
@@ -30,6 +31,7 @@ public:
         OpenScene,
         SaveScene,
         SaveSceneAs,
+        Build,
 
         CreateEmptyGameObject,
         CreateFromPrefab,
@@ -63,6 +65,7 @@ public slots:
     void OnOpenScene () const;
     void OnSaveScene () const;
     void OnSaveSceneAs () const;
+    void OnBuild () const;
 
     void OnCreateEmptyGameObject () const;
     void OnCreateFromPrefab () const;

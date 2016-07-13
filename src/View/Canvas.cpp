@@ -1,7 +1,10 @@
 #include "Canvas.h"
 
-#include "SelectionFramebuffer.h"
 #include "WindowMain.h"
+
+#ifdef BANG_EDITOR
+#include "SelectionFramebuffer.h"
+#endif
 
 Canvas *Canvas::p_mainBinaryCanvas = nullptr;
 
@@ -93,7 +96,9 @@ void Canvas::SetCurrentScene(Scene *scene)
     if(p_currentScene )
     {
         p_currentScene->_OnStart();
+        #ifdef BANG_EDITOR
         WindowMain::GetInstance()->widgetHierarchy->Refresh();
+        #endif
     }
 }
 

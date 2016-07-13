@@ -56,7 +56,6 @@ void TestBehaviour::OnUpdate()
 
 void TestBehaviour::OnDestroy()
 {
-
 }
 
 

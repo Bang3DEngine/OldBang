@@ -1,14 +1,17 @@
 #include "WindowMain.h"
 
 #include "SingletonManager.h"
-#include "WindowEventManager.h"
 
+#ifdef BANG_EDITOR
 #include "Toolbar.h"
+#include "WindowEventManager.h"
+#endif
 
 WindowMain *WindowMain::s_p_win = nullptr;
 
 void WindowMain::InitFromMainBinary(QMainWindow *window, QApplication *application)
 {
+    #ifdef BANG_EDITOR
     s_p_win = new WindowMain();
     SingletonManager::GetInstance()->SetWindowMainSingleton(s_p_win);
 
@@ -20,6 +23,7 @@ void WindowMain::InitFromMainBinary(QMainWindow *window, QApplication *applicati
     s_p_win->p_app = application;
 
     Toolbar::Init();
+    #endif
 }
 
 WindowMain *WindowMain::GetInstance()

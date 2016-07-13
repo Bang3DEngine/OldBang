@@ -1,15 +1,18 @@
-#include "FileReader.h"
-#include "stb_image.h"
-#include "Scene.h"
-#include "Explorer.h"
 #include "Mesh.h"
+#include "Scene.h"
+#include "Camera.h"
+#include "Logger.h"
+#include "stb_image.h"
 #include "Behaviour.h"
 #include "Transform.h"
 #include "Texture2D.h"
-#include "Camera.h"
-#include "Logger.h"
-#include "BehaviourHolder.h"
+#include "FileReader.h"
 #include "GameObject.h"
+#include "BehaviourHolder.h"
+
+#ifdef BANG_EDITOR
+#include "Explorer.h"
+#endif
 
 //#include "BP_SceneReader_cpp_UserBehaviours_elseifs.bp"
 

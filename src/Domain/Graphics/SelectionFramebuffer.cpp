@@ -1,7 +1,10 @@
 #include "SelectionFramebuffer.h"
 
 #include "WindowMain.h"
+
+#ifdef BANG_EDITOR
 #include "Hierarchy.h"
+#endif
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)

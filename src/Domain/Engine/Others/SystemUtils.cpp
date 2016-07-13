@@ -3,31 +3,7 @@
 #include "Behaviour.h"
 #include "SingletonManager.h"
 
-// TODO: Fix System success variable (it does not do what it's supposed to do)
-void SystemUtils::AddInFrontOfWords(std::string particle, std::string *str)
-{
-    std::string &phrase = *str;
-    if(phrase.length() > 0 && phrase[0] != ' ')
-    {
-        phrase.insert(0, particle);
-    }
-
-    for(int i = 0; i < phrase.length() -1; ++i)
-    {
-        if(phrase[i] == ' ' && phrase[i+1] != ' ')
-        {
-            phrase.insert(i+1, particle);
-            i += 2; // Sorry
-        }
-    }
-}
-
-void SystemUtils::RemoveLineBreaks(std::string *str)
-{
-    std::replace(str->begin(), str->end(), '\n', ' '); // Remove line breaks
-}
-
-std::string SystemUtils::GetAllProjectObjects(const std::string &filepathFromProjectRoot)
+std::string SystemUtils::GetAllProjectObjects()
 {
     std::string cmdGetAllObjects = "";
     cmdGetAllObjects = " find " +                                  // Find recursively
@@ -44,16 +20,13 @@ std::string SystemUtils::GetAllProjectObjects(const std::string &filepathFromPro
     SystemUtils::System(cmdGetAllObjects, objs, ok);
     if(!ok)
     {
-        Logger_Error("Error trying to find object files to compile " <<
-                     filepathFromProjectRoot);
+        Logger_Error("Error trying to find object files to compile");
     }
     return objs;
 }
 
-std::string SystemUtils::GetAllProjectSubDirs(const std::string &filepathFromProjectRoot)
+std::string SystemUtils::GetAllProjectSubDirs()
 {
-    // It sometimes gets stuck while reading, I guess the pipe isn't being closed.
-    // TODO: Improve this, ftm I will assume that when we have a bit read, we can go on...
     std::string cmdGetAllSubDirs = "";
     cmdGetAllSubDirs = " find " +                                  // Find recursively
                        Persistence::GetProjectRootPathAbsolute() + // From project root
@@ -66,8 +39,7 @@ std::string SystemUtils::GetAllProjectSubDirs(const std::string &filepathFromPro
     SystemUtils::System(cmdGetAllSubDirs, allSubDirs, ok);
     if(!ok)
     {
-        Logger_Error("Error trying to find include directories to compile " <<
-                     filepathFromProjectRoot);
+        Logger_Error("Error trying to find include directories to compile.");
     }
 
     return allSubDirs;
@@ -179,25 +151,23 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     // Get all subdirs recursively in a single line, and add -I in front of every path
 
     std::string includes = "";
-    includes += GetAllProjectSubDirs(filepathFromProjectRoot);
+    includes += SystemUtils::GetAllProjectSubDirs();
     includes += " . ";
-    #ifdef BANG_EDITOR
-    includes += GetQtIncludes();
-    #endif
-    RemoveLineBreaks(&includes);
-    AddInFrontOfWords("-I", &includes);
+    includes += SystemUtils::GetQtIncludes();
+    StringUtils::RemoveLineBreaks(&includes);
+    StringUtils::AddInFrontOfWords("-I", &includes);
 
-    std::string objs = GetAllProjectObjects(filepathFromProjectRoot);
-    RemoveLineBreaks(&objs);
+    std::string objs = SystemUtils::GetAllProjectObjects();
+    StringUtils::RemoveLineBreaks(&objs);
 
-    std::string qtLibDirs = GetQtLibrariesDirs();
-    RemoveLineBreaks(&qtLibDirs);
-    AddInFrontOfWords("-L", &qtLibDirs);
+    std::string qtLibDirs = SystemUtils::GetQtLibrariesDirs();
+    StringUtils::RemoveLineBreaks(&qtLibDirs);
+    StringUtils::AddInFrontOfWords("-L", &qtLibDirs);
 
     // Gather options
     std::string options = "";
     options += " " + objs  + " ";
-    options += " -O1";
+    options += " -O2";
     options += " -g ";
     options += " -Wl,--export-dynamic ";
     options += " --std=c++11";
@@ -221,12 +191,12 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     std::string cmd = "";
     cmd += "/usr/bin/g++ -shared ";
     cmd += filepath + " " + options + " -o " + sharedObjectFilepath;
+    StringUtils::RemoveLineBreaks(&cmd);
 
     std::string output = "";
-    RemoveLineBreaks(&cmd);
-
     bool ok = false;
     SystemUtils::System(cmd, output, ok);
+
     if (ok)
     {
         if(output != "")

@@ -2,10 +2,12 @@
 #include "FileReader.h"
 #include "GameObject.h"
 
-Transform::Transform() : m_localPosition(Vector3(0.0f)),
-                         m_localRotation(Quaternion()),
-                         m_localScale(Vector3(1.0f)),
-                         m_inspectorEulerDeg(Vector3(0.0f))
+Transform::Transform() : m_localPosition(Vector3(0.0f))
+                        ,m_localRotation(Quaternion())
+                        ,m_localScale(Vector3(1.0f))
+                        #ifdef BANG_EDITOR
+                        ,m_inspectorEulerDeg(Vector3(0.0f))
+                        #endif
 {
     #ifdef BANG_EDITOR
     m_inspectorComponentInfo.SetSlotsInfos(
@@ -22,7 +24,7 @@ Transform::Transform() : m_localPosition(Vector3(0.0f)),
             "Scale", {m_localScale.x, m_localScale.y, m_localScale.z}
         )
     });
-#endif
+    #endif
 }
 
 void Transform::CloneInto(ICloneable *clone) const
@@ -75,12 +77,16 @@ void Transform::Translate(const Vector3 &translation)
 void Transform::SetLocalRotation(const Quaternion &q)
 {
     m_localRotation = q.Normalized();
+#ifdef BANG_EDITOR
     m_inspectorEulerDeg = Quaternion::EulerAngles(m_localRotation).ToDegrees();
+#endif
 }
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
 {
+#ifdef BANG_EDITOR
     m_inspectorEulerDeg = degreesEuler;
-    Vector3 rads = m_inspectorEulerDeg.ToRadians();
+#endif
+    Vector3 rads = degreesEuler.ToRadians();
     Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::right);
     Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3::up);
     Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3::forward);
@@ -135,10 +141,12 @@ void Transform::RotateEuler(const Vector3 &degreesEuler)
     SetEuler(GetEuler() + degreesEuler);
 }
 
+#ifdef BANG_EDITOR
 void Transform::SetLocalRotationFromInspector(const Quaternion &q)
 {
     m_localRotation = q.Normalized();
 }
+#endif
 
 
 
@@ -292,7 +300,11 @@ Quaternion Transform::GetRotation() const
 
 Vector3 Transform::GetLocalEuler() const
 {
-    return m_inspectorEulerDeg;
+    #ifdef BANG_EDITOR
+        return m_inspectorEulerDeg;
+    #else
+        return m_localRotation.EulerAngles();
+    #endif
 }
 
 Vector3 Transform::GetEuler() const

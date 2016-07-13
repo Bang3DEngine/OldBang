@@ -2,12 +2,14 @@
 #include "Scene.h"
 #include "Component.h"
 #include "FileReader.h"
-#include "Hierarchy.h"
-#include "WindowEventManager.h"
 #include "SingletonManager.h"
 #include "Transform.h"
 
+#ifdef BANG_EDITOR
+#include "Hierarchy.h"
+#include "WindowEventManager.h"
 #include "EditorSelectionGameObject.h"
+#endif
 
 GameObject::GameObject() : GameObject("")
 {
@@ -285,16 +287,16 @@ void GameObject::RemoveChild(GameObject *child)
 void GameObject::SetParent(GameObject *newParent)
 {
     GameObject *previousParent = p_parent;
-    if(p_parent )
+    if(p_parent)
     {
-        if(newParent )
+        if(newParent)
         {
             p_parent->MoveChild(this, newParent);
         }
         else
         {
             Scene *st = GetScene();
-            if(st )
+            if(st)
             {
                 p_parent->MoveChild(this, newParent);
             }
@@ -303,7 +305,7 @@ void GameObject::SetParent(GameObject *newParent)
 
     #ifdef BANG_EDITOR
     WindowEventManager::NotifyChildChangedParent(this, previousParent);
-#endif
+    #endif
 }
 
 void GameObject::SetRenderLayer(unsigned char layer)
@@ -314,7 +316,9 @@ void GameObject::SetRenderLayer(unsigned char layer)
 void GameObject::SetName(const std::string &name)
 {
     this->m_name = name;
+    #ifdef BANG_EDITOR
     Hierarchy::GetInstance()->OnGameObjectNameChanged(this);
+    #endif
 }
 
 bool GameObject::IsEditorGameObject() const
@@ -429,7 +433,12 @@ void GameObject::_OnStart()
 
 void GameObject::_OnUpdate()
 {
+
+#ifdef BANG_EDITOR
     bool canUpdate = Toolbar::GetInstance()->IsPlaying() || IsEditorGameObject();
+#else
+    bool canUpdate = true;
+#endif
 
     if(canUpdate)
     {

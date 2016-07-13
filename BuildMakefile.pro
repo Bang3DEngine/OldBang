@@ -2,7 +2,8 @@ TEMPLATE = app
 
 QT_VERSION = 4
 
-OBJECTS_DIR = obj/
+TARGET = Game.exe
+OBJECTS_DIR = obj-buildGame/
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -11,27 +12,17 @@ QT += core gui opengl
 
 CONFIG += qt
 
-QMAKE_CXXFLAGS += -g -Wl,--export-dynamic --std=c++11 -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
+QMAKE_CXXFLAGS += -g --std=c++11 -Wno-unused-parameter -Wunused-variable -Wno-sign-compare
 
 LIBS += -lGLEW -ldl
 
 DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
-DEFINES += BANG_EDITOR
 
 RESOURCES = Assets/Engine/qdarkstyle/style.qrc
 
 INCLUDEPATH += \
     $$PWD/src/ \
     $$PWD/src/View/ \
-    $$PWD/src/View/Interfaces/ \
-    $$PWD/src/View/Dialogs/ \
-    $$PWD/src/View/Inspector/ \
-    $$PWD/src/View/Hierarchy/ \
-    $$PWD/src/View/Explorer/ \
-    $$PWD/src/View/Logger/ \
-    $$PWD/src/View/EditorCamera/ \
-    $$PWD/src/View/EditorGameObject/ \
-    $$PWD/src/View/EditorScene/ \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/src/Domain/Graphics/Interfaces/ \
@@ -47,7 +38,6 @@ INCLUDEPATH += \
     $$PWD/src/Persistence/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/BangPreprocessor/GeneratedFiles/
-
 
 OTHER_FILES += \
     .gitignore \
@@ -74,14 +64,10 @@ OTHER_FILES += \
     Assets/Engine/Shaders/lines.frag \
     Assets/Engine/Shaders/lines.vert \
     Assets/Engine/Shaders/pvm_pos.vert \
-    $$PWD/Assets/Behaviours/TestBehaviour.cpp / \
-    $$PWD/Assets/Behaviours/TestBehaviour.h / \
     Assets/Engine/Shaders/selection.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
-    src/View/Canvas.h \
-    src/View/WindowMain.h \
     src/Domain/Interfaces/IToString.h \
     src/Domain/Engine/Interfaces/ISceneEventListener.h \
     src/Domain/Engine/Others/Logger.h \
@@ -114,79 +100,35 @@ HEADERS += \
     src/Domain/Engine/Interfaces/IFileable.h \
     src/Domain/Engine/Assets/Texture2D.h \
     src/Domain/Engine/Assets/Prefab.h \
-    src/View/WindowEventManager.h \
-    src/View/Interfaces/IWindowEventManagerListener.h \
     src/Bang.h \
-    src/View/Inspector/Inspector.h \
-    src/View/Hierarchy/Hierarchy.h \
-    src/View/Inspector/InspectorWidgetInfo.h \
-    src/View/Inspector/InspectorComponentWidget.h \
-    src/View/Inspector/InspectorSW.h \
-    src/View/Inspector/InspectorFloatSW.h \
-    src/View/Inspector/InspectorVFloatSW.h \
-    src/View/Logger/ListLogger.h \
-    src/View/Logger/LoggerWidget.h \
-    src/View/Inspector/InspectorEnumSW.h \
     src/Persistence/AssetsManager.h \
     src/Persistence/FileReader.h \
     src/Persistence/stb_image.h \
-    src/View/Explorer/Explorer.h \
-    src/View/Inspector/InspectorFileSW.h \
-    src/View/Inspector/IInspectable.h \
-    src/View/MenuBar.h \
-    src/View/Explorer/ExplorerDirTree.h \
-    src/View/Inspector/InspectorWidget.h \
-    src/View/Inspector/InspectorImageFileWidget.h \
-    src/View/Explorer/File.h \
-    src/View/Explorer/FileImage.h \
-    src/View/Inspector/InspectorStringSW.h \
-    src/View/Inspector/InspectorMeshFileWidget.h \
-    src/View/Explorer/FileMesh.h \
-    src/View/EditorCamera/EditorCamera.h \
-    src/View/EditorGameObject/EditorGameObject.h \
-    src/View/EditorScene/EditorScene.h \
     src/Domain/Engine/Others/Input.h \
     src/Persistence/FileWriter.h \
     src/Persistence/Persistence.h \
     src/Domain/Engine/Components/LineRenderer.h \
     src/Domain/Engine/Components/Renderer.h \
-    src/View/Explorer/FileTexture2DAsset.h \
-    src/View/Inspector/InspectorTexture2DAssetWidget.h \
-    src/View/Dialogs/FileDialog.h \
-    src/View/EditorGameObject/EditorBBox.h \
     src/Domain/Engine/Physics/Box.h \
-    src/View/EditorGameObject/EditorSelectionGameObject.h \
     src/Domain/Engine/Physics/Vector3.h \
     src/Domain/Engine/Physics/Quaternion.h \
     src/Domain/Engine/Physics/Matrix4.h \
-    src/View/EditorScene/EditorDebugGameObject.h \
     src/Domain/Engine/Physics/Sphere.h \
-    src/Domain/Graphics/SelectionFramebuffer.h \
-    src/View/EditorGameObject/EditorTranslateAxisGroup.h \
-    src/View/EditorGameObject/EditorTranslateAxis.h \
     src/Domain/Engine/Others/SystemUtils.h \
     src/Domain/Engine/Components/BehaviourHolder.h \
-    src/View/Inspector/InspectorButtonSW.h \
     src/Domain/Engine/Others/SingletonManager.h \
-    src/View/Toolbar.h \
     src/Domain/Engine/Components/CircleRenderer.h \
     src/Domain/Engine/Components/SingleLineRenderer.h \
     src/Domain/Engine/Components/LineStripRenderer.h \
-    src/View/EditorGameObject/EditorRotateAxisGroup.h \
-    src/View/EditorGameObject/EditorRotateAxis.h \
-    src/View/EditorGameObject/EditorAxisGroup.h \
-    src/View/EditorGameObject/EditorAxis.h \
-    src/View/EditorGameObject/EditorScaleAxisGroup.h \
-    src/View/EditorGameObject/EditorScaleAxis.h \
     src/Domain/Engine/Assets/Meshes/MeshFactory.h \
     src/Domain/Engine/Interfaces/ICloneable.h \
-    src/View/EditorScene/EditorFloor.h \
     src/Domain/Engine/Others/GameBuilder.h \
     src/Domain/Engine/Others/StringUtils.h
+ 
+HEADERS += src/View/Canvas.h src/View/WindowMain.h
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
-    src/View/Canvas.cpp \
     src/Domain/Engine/Others/Logger.cpp \
     src/Domain/Engine/Others/Timer.cpp \
     src/Domain/Engine/Others/Time.cpp \
@@ -215,75 +157,31 @@ SOURCES += \
     src/Domain/Engine/Components/Behaviour.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
     src/Domain/Engine/Assets/Prefab.cpp \
-    src/View/WindowMain.cpp \
-    src/View/WindowEventManager.cpp \
-    src/View/Interfaces/IWindowEventManagerListener.cpp \
-    src/View/Inspector/Inspector.cpp \
-    src/View/Hierarchy/Hierarchy.cpp \
-    src/View/Inspector/InspectorWidgetInfo.cpp \
-    src/View/Inspector/InspectorComponentWidget.cpp \
-    src/View/Inspector/InspectorSW.cpp \
-    src/View/Inspector/InspectorFloatSW.cpp \
-    src/View/Inspector/InspectorVFloatSW.cpp \
-    src/View/Logger/ListLogger.cpp \
-    src/View/Logger/LoggerWidget.cpp \
-    src/View/Inspector/InspectorEnumSW.cpp \
     src/Persistence/stb_image.cpp \
     src/Persistence/AssetsManager.cpp \
     src/Persistence/FileReader.cpp \
-    src/View/Explorer/Explorer.cpp \
-    src/View/Inspector/InspectorFileSW.cpp \
-    src/View/Inspector/IInspectable.cpp \
-    src/View/MenuBar.cpp \
-    src/View/Explorer/ExplorerDirTree.cpp \
-    src/View/Inspector/InspectorWidget.cpp \
-    src/View/Inspector/InspectorImageFileWidget.cpp \
-    src/View/Explorer/File.cpp \
-    src/View/Explorer/FileImage.cpp \
-    src/View/Inspector/InspectorStringSW.cpp \
-    src/View/Inspector/InspectorMeshFileWidget.cpp \
-    src/View/Explorer/FileMesh.cpp \
-    src/View/EditorCamera/EditorCamera.cpp \
-    src/View/EditorGameObject/EditorGameObject.cpp \
-    src/View/EditorScene/EditorScene.cpp \
     src/Domain/Engine/Others/Input.cpp \
     src/Persistence/FileWriter.cpp \
     src/Persistence/Persistence.cpp \
     src/Domain/Engine/Components/LineRenderer.cpp \
     src/Domain/Engine/Components/Renderer.cpp \
-    src/View/Explorer/FileTexture2DAsset.cpp \
-    src/View/Inspector/InspectorTexture2DAssetWidget.cpp \
-    src/View/Dialogs/FileDialog.cpp \
-    src/View/EditorGameObject/EditorBBox.cpp \
     src/Domain/Engine/Physics/Box.cpp \
-    src/View/EditorGameObject/EditorSelectionGameObject.cpp \
     src/Domain/Engine/Physics/Vector3.cpp \
     src/Domain/Engine/Physics/Quaternion.cpp \
     src/Domain/Engine/Physics/Matrix4.cpp \
-    src/View/EditorScene/EditorDebugGameObject.cpp \
     src/Domain/Engine/Physics/Sphere.cpp \
-    src/Domain/Graphics/SelectionFramebuffer.cpp \
-    src/View/EditorGameObject/EditorTranslateAxisGroup.cpp \
-    src/View/EditorGameObject/EditorTranslateAxis.cpp \
     src/Domain/Engine/Others/SystemUtils.cpp \
     src/Domain/Engine/Components/BehaviourHolder.cpp \
-    src/View/Inspector/InspectorButtonSW.cpp \
     src/Domain/Engine/Others/SingletonManager.cpp \
-    src/View/Toolbar.cpp \
     src/Domain/Engine/Components/CircleRenderer.cpp \
     src/Domain/Engine/Components/SingleLineRenderer.cpp \
     src/Domain/Engine/Components/LineStripRenderer.cpp \
-    src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
-    src/View/EditorGameObject/EditorRotateAxis.cpp \
-    src/View/EditorGameObject/EditorAxisGroup.cpp \
-    src/View/EditorGameObject/EditorAxis.cpp \
-    src/View/EditorGameObject/EditorScaleAxisGroup.cpp \
-    src/View/EditorGameObject/EditorScaleAxis.cpp \
     src/Domain/Engine/Assets/Meshes/MeshFactory.cpp \
     src/Domain/Engine/Interfaces/ICloneable.cpp \
-    src/View/EditorScene/EditorFloor.cpp \
     src/Domain/Engine/Others/GameBuilder.cpp \
     src/Domain/Engine/Others/StringUtils.cpp
+
+SOURCES += src/View/Canvas.cpp src/View/WindowMain.cpp
 
 SUBDIRS += \
     BangPreprocessor/BangPreprocessor.pro

@@ -14,13 +14,17 @@
 #include "GameObject.h"
 
 class Canvas;
+#ifdef BANG_EDITOR
 class SelectionFramebuffer;
+#endif
 class Scene : public GameObject
 {
 
 friend class Canvas;
 friend class GameObject;
+#ifdef BANG_EDITOR
 friend class SelectionFramebuffer;
+#endif
 
 protected:
 
@@ -64,9 +68,7 @@ public:
                                 float secsTime = 1.0f,
                                 bool depthTest = true) {}
 
-    #ifdef BANG_EDITOR
     void Write (std::ostream &f) const override;
-    #endif
 };
 
 #endif // SCENE_H

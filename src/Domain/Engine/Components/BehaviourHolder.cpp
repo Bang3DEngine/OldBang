@@ -39,10 +39,7 @@ void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
 
 const std::string BehaviourHolder::ToString() const
 {
-    std::string file =
-            static_cast<InspectorFileSWInfo*>
-            (m_inspectorComponentInfo.GetSlotInfo(0))->filepath;
-    return "BehaviourHolder ( " + file + ")";
+    return "BehaviourHolder ( " + m_sourceFilepath + ")";
 }
 
 ICloneable *BehaviourHolder::Clone() const
@@ -113,6 +110,7 @@ void BehaviourHolder::OnSlotValueChanged(InspectorWidget *source)
     m_sourceFilepath = source->GetSWFileFilepath("Behaviour");
     Refresh();
 }
+#endif
 
 void BehaviourHolder::Write(std::ostream &f) const
 {
@@ -128,8 +126,6 @@ void BehaviourHolder::Read(std::istream &f)
     m_sourceFilepath = FileReader::ReadString(f);
     FileReader::ReadNextLine(f); //Consume close tag
 }
-
-#endif
 
 void BehaviourHolder::_OnStart()
 {

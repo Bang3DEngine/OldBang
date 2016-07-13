@@ -1,5 +1,7 @@
 # C++ objects and libs
 
+BuildGameMakefile
+*.exe
 *.slo
 *.lo
 *.o

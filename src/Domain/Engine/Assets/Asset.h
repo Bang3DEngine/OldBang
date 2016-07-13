@@ -16,7 +16,8 @@
 #endif
 
 class AssetsManager;
-class Asset : public IToString, public IFileable
+class Asset : public IToString
+              ,public IFileable
               #ifdef BANG_EDITOR
               , public IInspectable
               #endif
@@ -30,7 +31,9 @@ public:
         return Asset::GetFileExtensionStatic();
     }
 
+#ifdef BANG_EDITOR
     void OnSlotValueChanged(InspectorWidget *source) {}
+#endif
 
 protected:
     std::string m_filepath = "";

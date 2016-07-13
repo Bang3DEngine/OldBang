@@ -8,6 +8,4 @@
 #define GLM_SWIZZLE
 #include <glm/gtx/euler_angles.hpp>
 
-#define BANG_EDITOR
-
 #endif // BANG_H
