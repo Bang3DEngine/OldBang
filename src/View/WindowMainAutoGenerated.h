@@ -64,6 +64,7 @@ public:
     QAction *actionCreateCube;
     QAction *actionCreateSphere;
     QAction *actionBuild;
+    QAction *actionBuildAndRun;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
@@ -173,6 +174,8 @@ public:
         actionCreateSphere->setObjectName(QString::fromUtf8("actionCreateSphere"));
         actionBuild = new QAction(WindowMain);
         actionBuild->setObjectName(QString::fromUtf8("actionBuild"));
+        actionBuildAndRun = new QAction(WindowMain);
+        actionBuildAndRun->setObjectName(QString::fromUtf8("actionBuildAndRun"));
         centralwidget = new QWidget(WindowMain);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -513,6 +516,7 @@ public:
         menuProject->addAction(actionSaveSceneAs);
         menuProject->addSeparator();
         menuProject->addAction(actionBuild);
+        menuProject->addAction(actionBuildAndRun);
         menuProject->addSeparator();
         menuProject->addAction(actionProjectSettings);
         menuComponents->addAction(menuAddComponent->menuAction());
@@ -561,6 +565,7 @@ public:
         actionCreateCube->setText(QApplication::translate("WindowMain", "Cube", 0, QApplication::UnicodeUTF8));
         actionCreateSphere->setText(QApplication::translate("WindowMain", "Sphere", 0, QApplication::UnicodeUTF8));
         actionBuild->setText(QApplication::translate("WindowMain", "Build", 0, QApplication::UnicodeUTF8));
+        actionBuildAndRun->setText(QApplication::translate("WindowMain", "Build and Run", 0, QApplication::UnicodeUTF8));
         buttonTranslateMode->setText(QApplication::translate("WindowMain", "T", 0, QApplication::UnicodeUTF8));
         buttonRotateMode->setText(QApplication::translate("WindowMain", "R", 0, QApplication::UnicodeUTF8));
         buttonScaleMode->setText(QApplication::translate("WindowMain", "S", 0, QApplication::UnicodeUTF8));

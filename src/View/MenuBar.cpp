@@ -26,6 +26,9 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnSaveSceneAs()));
     connect(w->actionBuild,  SIGNAL(triggered()),
             this, SLOT(OnBuild()));
+    connect(w->actionBuildAndRun,  SIGNAL(triggered()),
+            this, SLOT(OnBuildAndRun()));
+
 
     connect(w->actionCreateEmptyGameObject,  SIGNAL(triggered()),
             this, SLOT(OnCreateEmptyGameObject()));
@@ -158,15 +161,15 @@ void MenuBar::OnSaveSceneAs() const
 void MenuBar::OnBuild() const
 {
     Logger_Log("Building Game...");
-
-    std::string output = "";
-    bool success = GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute());
-
-    if(success)
-    {
-        Logger_Log("Game has been built into Game.exe");
-    }
+    GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute());
 }
+
+void MenuBar::OnBuildAndRun() const
+{
+    Logger_Log("Building and running Game...");
+    GameBuilder::BuildAndRunGame(Persistence::GetProjectRootPathAbsolute());
+}
+
 
 void MenuBar::OnCreateEmptyGameObject() const
 {

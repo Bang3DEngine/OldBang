@@ -32,6 +32,7 @@ public:
         SaveScene,
         SaveSceneAs,
         Build,
+        BuildAndRun,
 
         CreateEmptyGameObject,
         CreateFromPrefab,
@@ -66,6 +67,7 @@ public slots:
     void OnSaveScene () const;
     void OnSaveSceneAs () const;
     void OnBuild () const;
+    void OnBuildAndRun () const;
 
     void OnCreateEmptyGameObject () const;
     void OnCreateFromPrefab () const;

@@ -224,6 +224,7 @@
     <addaction name="actionSaveSceneAs"/>
     <addaction name="separator"/>
     <addaction name="actionBuild"/>
+    <addaction name="actionBuildAndRun"/>
     <addaction name="separator"/>
     <addaction name="actionProjectSettings"/>
    </widget>
@@ -714,6 +715,11 @@
   <action name="actionBuild">
    <property name="text">
     <string>Build</string>
+   </property>
+  </action>
+  <action name="actionBuildAndRun">
+   <property name="text">
+    <string>Build and Run</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

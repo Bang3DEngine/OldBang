@@ -1,6 +1,21 @@
 #include "GameBuilder.h"
 
-bool GameBuilder::BuildGame(const std::string &absoluteDir)
+BuildGameThread GameBuilder::buildThread;
+
+void GameBuilder::BuildGame(const std::string &absoluteDir)
+{
+    GameBuilder::buildThread.runGame = false;
+    GameBuilder::buildThread.start();
+}
+
+void GameBuilder::BuildAndRunGame(const std::string &absoluteDir)
+{
+    GameBuilder::buildThread.runGame = true;
+    GameBuilder::buildThread.start();
+}
+
+
+void BuildGameThread::run()
 {
     bool ok = false;
     std::string output = "";
@@ -10,67 +25,25 @@ bool GameBuilder::BuildGame(const std::string &absoluteDir)
     {
         Logger_Error(output);
     }
-
-    return ok;
-
-    /*
-    std::string includes = "";
-    includes += SystemUtils::GetAllProjectSubDirs();
-    includes += " . ";
-    includes += SystemUtils::GetQtIncludes();
-    StringUtils::RemoveLineBreaks(&includes);
-    StringUtils::AddInFrontOfWords("-I", &includes);
-
-    std::string objs = SystemUtils::GetAllProjectObjects();
-    StringUtils::RemoveLineBreaks(&objs);
-
-    std::string qtLibDirs = SystemUtils::GetQtLibrariesDirs();
-    StringUtils::RemoveLineBreaks(&qtLibDirs);
-    StringUtils::AddInFrontOfWords("-L", &qtLibDirs);
-
-    // Gather options
-    std::string options = "";
-    options += " " + objs  + " ";
-    options += " -O2";
-    options += " -g ";
-    // options += " -Wl,--export-dynamic ";
-    options += " --std=c++11";
-    options += " " + includes + " ";
-    options += " -lGLEW -lGL -lpthread ";
-    options += " " + qtLibDirs + " ";
-    // options += " -fPIC"; // Shared linking stuff
-    //
-
-    std::string gameFilepath = absoluteDir + "/" + "game.exe";
-
-    std::string cmd = "";
-    cmd += "/usr/bin/g++ -shared ";
-    cmd += filepath + " " + options + " -o " + gameFilepath;
-    StringUtils::RemoveLineBreaks(&cmd);
-
-    std::string output = "";
-    bool ok = false;
-    SystemUtils::System(cmd, output, ok);
-
-    if (ok)
+    else
     {
-        if(output != "")
-        {
-            Logger_Warn(output);
-        }
+        Logger_Log("Game has been built!");
     }
-    else // There has been an error
+
+    if(runGame)
     {
-        if(output != "")
+        bool ok = false;
+        std::string output = "";
+        Logger_Log("Running Game...");
+        SystemUtils::System("./Game.exe &", output, ok);
+
+        if(!ok)
         {
             Logger_Error(output);
         }
         else
         {
-            Logger_Error("There was an error compiling the Behaviour...");
+            Logger_Log("Game is running!");
         }
     }
-    return ok;
-*/
-    return true;
 }

@@ -13,4 +13,4 @@ cd ..
 # Make and run Bang
 rm obj*/*
 
-./compile.sh
+./compile.sh $1
