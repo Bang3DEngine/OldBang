@@ -6,7 +6,7 @@ Transform::Transform() : m_localPosition(Vector3(0.0f))
                         ,m_localRotation(Quaternion())
                         ,m_localScale(Vector3(1.0f))
                         #ifdef BANG_EDITOR
-                        ,m_inspectorEulerDeg(Vector3(0.0f))
+                        ,m_localEuler(Vector3(0.0f))
                         #endif
 {
     #ifdef BANG_EDITOR
@@ -16,9 +16,7 @@ Transform::Transform() : m_localPosition(Vector3(0.0f))
             "Position", {m_localPosition.x, m_localPosition.y, m_localPosition.z}
         ),
         new InspectorVFloatSWInfo(
-            "Rotation", {m_inspectorEulerDeg.x,
-                         m_inspectorEulerDeg.y,
-                         m_inspectorEulerDeg.z}
+            "Rotation", {m_localEuler.x, m_localEuler.y, m_localEuler.z}
         ),
         new InspectorVFloatSWInfo(
             "Scale", {m_localScale.x, m_localScale.y, m_localScale.z}
@@ -380,7 +378,7 @@ InspectorWidgetInfo* Transform::GetComponentInfo()
     static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value =
         {m_localPosition.x, m_localPosition.y, m_localPosition.z};
 
-    Vector3 e = m_inspectorEulerDeg;
+    Vector3 e = m_localEuler;
     static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1))->m_value =
         {e.x, e.y, e.z};
 

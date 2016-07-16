@@ -2,8 +2,16 @@ TEMPLATE = app
 QT_VERSION = 4
 QT += core gui opengl
 
-#CONFIG += EDITOR
-CONFIG += GAME
+# Call this qmake using either:
+#   qmake "BUILD_MODE=EDITOR"
+#   qmake "BUILD_MODE=GAME"
+
+# $$BUILD_MODE:
+#    EDITOR
+#    GAME
+
+message(Building $$BUILD_MODE ...)
+CONFIG += $$BUILD_MODE
 
 include(deployment.pri)
 qtcAddDeployment()

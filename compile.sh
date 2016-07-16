@@ -1,6 +1,14 @@
 #!/bin/bash
 
 ./updateUI.sh
+echo 
+
+if [ -z $1 ] 
+then
+	echo "[ ERROR ]: Please specify as first argument: EDITOR or GAME"
+	echo 
+	exit 1
+fi
 
 # Make and run BangPreprocessor
 cd BangPreprocessor
@@ -9,5 +17,5 @@ qmake
 cd ..
 
 # Make and run Bang
-qmake
+qmake "BUILD_MODE=$1"
 make -j4

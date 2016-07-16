@@ -1,8 +1,7 @@
 #include "WindowMain.h"
 
-#include "SingletonManager.h"
-
 #include "Toolbar.h"
+#include "SingletonManager.h"
 #include "WindowEventManager.h"
 
 WindowMain *WindowMain::s_p_win = nullptr;
@@ -31,7 +30,7 @@ WindowMain *WindowMain::GetInstance()
 {
     // This will always be initialized,
     // since main inits it using WindowMain::InitFromMainBinary()
-    return SingletonManager::GetInstance()->GetWindowSingleton();
+    return static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton());
 }
 
 QMainWindow *WindowMain::GetMainWindow() const

@@ -41,7 +41,7 @@ void GameWindow::InitFromMainBinary(QMainWindow *window, QApplication *applicati
 
 GameWindow *GameWindow::GetInstance()
 {
-    return s_p_win;
+    return static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton());
 }
 
 QMainWindow *GameWindow::GetMainWindow() const

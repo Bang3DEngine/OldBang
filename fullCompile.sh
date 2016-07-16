@@ -11,7 +11,6 @@ make clean
 cd ..
 
 # Make and run Bang
-qmake
-make clean
+rm obj*/*
 
 ./compile.sh

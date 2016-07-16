@@ -15,6 +15,7 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
     p_wem = WindowEventManager::GetInstance();
 
     WindowMain *w = WindowMain::GetInstance();
+
     connect(w->actionNewScene,  SIGNAL(triggered()),
             this, SLOT(OnNewScene()));
     connect(w->actionOpenScene,  SIGNAL(triggered()),
@@ -181,11 +182,12 @@ void MenuBar::OnCreateFromPrefab() const
     f.open(filename);
     if(f.is_open())
     {
+        WindowMain *w = WindowMain::GetInstance();
+
         Prefab *p = new Prefab();
         p->Read(f);
         GameObject *e = p->InstantiateWithoutStarting();
-        GameObject *selectedGameObject = WindowMain::GetInstance()->
-                widgetHierarchy->GetFirstSelectedGameObject();
+        GameObject *selectedGameObject = w->widgetHierarchy->GetFirstSelectedGameObject();
 
         if(selectedGameObject )
         {
