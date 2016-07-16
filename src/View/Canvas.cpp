@@ -1,9 +1,17 @@
 #include "Canvas.h"
 
-#include "WindowMain.h"
 
 #ifdef BANG_EDITOR
+#include "WindowMain.h"
 #include "SelectionFramebuffer.h"
+#else
+#include "GameWindow.h"
+#endif
+
+#ifdef BANG_EDITOR
+WindowMain *Canvas::s_p_window = nullptr;
+#else
+GameWindow *Canvas::s_p_window = nullptr;
 #endif
 
 Canvas *Canvas::p_mainBinaryCanvas = nullptr;
@@ -16,11 +24,17 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(update()));
     m_drawTimer.setInterval(Canvas::c_redrawDelay);
     m_drawTimer.start();
+
+    #ifdef BANG_EDITOR
+    Canvas::s_p_window = WindowMain::GetInstance();
+    #else
+    Canvas::s_p_window = GameWindow::GetInstance();
+    #endif
 }
 
 void Canvas::InitFromMainBinary()
 {
-    Canvas::p_mainBinaryCanvas = WindowMain::GetInstance()->canvas;
+    Canvas::p_mainBinaryCanvas = Canvas::s_p_window->canvas;
 }
 
 void Canvas::initializeGL()
@@ -87,17 +101,17 @@ void Canvas::AddScene(Scene *scene)
 
 void Canvas::SetCurrentScene(Scene *scene)
 {
-    if(p_currentScene )
+    if(p_currentScene)
     {
         p_currentScene->_OnDestroy();
     }
 
     p_currentScene = scene;
-    if(p_currentScene )
+    if(p_currentScene)
     {
         p_currentScene->_OnStart();
         #ifdef BANG_EDITOR
-        WindowMain::GetInstance()->widgetHierarchy->Refresh();
+        Canvas::s_p_window->widgetHierarchy->Refresh();
         #endif
     }
 }
@@ -166,8 +180,7 @@ int Canvas::GetHeight()
 
 void Canvas::SetCursor(Qt::CursorShape cs)
 {
-    WindowMain::GetInstance()->GetApplication()->
-                setOverrideCursor( cs );
+    Canvas::s_p_window->GetApplication()->setOverrideCursor( cs );
 }
 
 void Canvas::wheelEvent(QWheelEvent *event)

@@ -5,8 +5,7 @@
 Scene::Scene() : GameObject("Scene")
 {
     m_isScene = true;
-    p_gbuffer = new GBuffer(Canvas::GetWidth(),
-                          Canvas::GetHeight());
+    p_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)

@@ -11,7 +11,9 @@
  * @brief This is the buffer where each GameObject is drawn into with a unique colour.
  */
 class SelectionFramebuffer : public Framebuffer
+                            #ifdef BANG_EDITOR
                             ,public IWindowEventManagerListener
+                            #endif
 {
 private:
     ShaderProgram *p_program = nullptr;

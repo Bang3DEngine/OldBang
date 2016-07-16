@@ -2,8 +2,7 @@
 
 SingletonManager *SingletonManager::s_mainBinarySM = nullptr;
 
-
-void SingletonManager::SetWindowMainSingleton(WindowMain *mainBinaryWindowMain)
+void SingletonManager::SetWindowMainSingleton(IWindow *mainBinaryWindowMain)
 {
     this->m_mainBinaryWindowMain = mainBinaryWindowMain;
 }
@@ -22,7 +21,7 @@ void SingletonManager::SetInputSingleton(Input *mainBinaryInput)
 
 
 
-WindowMain* SingletonManager::GetWindowMainSingleton()
+IWindow* SingletonManager::GetWindowSingleton()
 {
     return m_mainBinaryWindowMain;
 }

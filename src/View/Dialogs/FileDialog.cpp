@@ -5,7 +5,7 @@
 
 FileDialog::FileDialog(const std::string &title,
                        const std::string &extension) :
-    QFileDialog(WindowMain::GetMainWindow())
+    QFileDialog(WindowMain::GetInstance()->GetMainWindow())
 {
     this->m_title = title;
     this->m_extension = extension;
@@ -21,7 +21,7 @@ std::string FileDialog::GetOpenFilename()
 {
     std::string filepath =
             this->getOpenFileName(
-                WindowMain::GetMainWindow(),
+                WindowMain::GetInstance()->GetMainWindow(),
                 QString::fromStdString(m_title),
                 QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
                 QString::fromStdString(GetExtensionFilterString(m_extension))
@@ -37,7 +37,7 @@ std::string FileDialog::GetSaveFilename(const std::string &suggestedFilename)
 
     std::string filepath =
             this->getSaveFileName(
-                WindowMain::GetMainWindow(),
+                WindowMain::GetInstance()->GetMainWindow(),
                 QString::fromStdString(m_title),
                 QString::fromStdString(dirpath),
                 QString::fromStdString(GetExtensionFilterString(m_extension))

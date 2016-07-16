@@ -14,17 +14,13 @@
 #include "GameObject.h"
 
 class Canvas;
-#ifdef BANG_EDITOR
 class SelectionFramebuffer;
-#endif
 class Scene : public GameObject
 {
 
 friend class Canvas;
 friend class GameObject;
-#ifdef BANG_EDITOR
 friend class SelectionFramebuffer;
-#endif
 
 protected:
 

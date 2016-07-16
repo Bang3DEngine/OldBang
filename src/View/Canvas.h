@@ -28,6 +28,7 @@
 #endif
 
 class WindowMain;
+class GameWindow;
 class SelectionFramebuffer;
 class Canvas : public QGLWidget
               #ifdef BANG_EDITOR
@@ -39,6 +40,12 @@ class Canvas : public QGLWidget
 private:
 
     static Canvas *p_mainBinaryCanvas;
+
+    #ifdef BANG_EDITOR
+    static WindowMain *s_p_window;
+    #else
+    static GameWindow *s_p_window;
+    #endif
 
     const int c_redrawDelay = 30;
 

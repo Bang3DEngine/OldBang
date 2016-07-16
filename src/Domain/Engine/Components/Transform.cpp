@@ -77,15 +77,15 @@ void Transform::Translate(const Vector3 &translation)
 void Transform::SetLocalRotation(const Quaternion &q)
 {
     m_localRotation = q.Normalized();
-#ifdef BANG_EDITOR
+    #ifdef BANG_EDITOR
     m_inspectorEulerDeg = Quaternion::EulerAngles(m_localRotation).ToDegrees();
-#endif
+    #endif
 }
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
 {
-#ifdef BANG_EDITOR
+    #ifdef BANG_EDITOR
     m_inspectorEulerDeg = degreesEuler;
-#endif
+    #endif
     Vector3 rads = degreesEuler.ToRadians();
     Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::right);
     Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3::up);

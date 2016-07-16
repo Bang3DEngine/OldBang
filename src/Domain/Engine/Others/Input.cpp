@@ -1,8 +1,13 @@
 #include "Input.h"
 
 #include "Canvas.h"
-#include "WindowMain.h"
 #include "SingletonManager.h"
+
+#ifdef BANG_EDITOR
+#include "WindowMain.h"
+#else
+#include "GameWindow.h"
+#endif
 
 Input::Input()
 {
@@ -66,8 +71,14 @@ void Input::HandleMouseWrapping()
 {
     if(m_mouseWrapping)
     {
-        QCursor cursor = WindowMain::GetMainWindow()->cursor();
+        #ifdef BANG_EDITOR
         WindowMain *w = WindowMain::GetInstance();
+        #else
+        GameWindow *w = GameWindow::GetInstance();
+        #endif
+
+        QCursor cursor = w->GetMainWindow()->cursor();
+
         Canvas *canvas = w->canvas;
         int cw = canvas->GetWidth();
         int ch = canvas->GetHeight();

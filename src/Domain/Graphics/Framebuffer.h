@@ -11,7 +11,8 @@
 #include "TextureRender.h"
 #include "TextureDepth.h"
 
-class Framebuffer : public IGLBindable, public IGLIdable
+class Framebuffer : public IGLBindable
+                   ,public IGLIdable
 {
 private:
     enum AttachmentType

@@ -19,6 +19,7 @@
  */
 
 class WindowMain;
+class IWindow;
 class Logger;
 class Input;
 class Time;
@@ -28,7 +29,7 @@ private:
 
     static SingletonManager *s_mainBinarySM;
 
-    WindowMain *m_mainBinaryWindowMain = nullptr;
+    IWindow *m_mainBinaryWindowMain = nullptr;
     Time *m_mainBinaryTime = nullptr;
     Input *m_mainBinaryInput = nullptr;
 
@@ -42,7 +43,7 @@ public:
      * So, they should be called in the main() function.
      */
 
-    void SetWindowMainSingleton(WindowMain* mainBinaryWindowMain);
+    void SetWindowMainSingleton(IWindow* mainBinaryWindowMain);
     void SetTimeSingleton(Time* mainBinaryTime);
     void SetInputSingleton(Input* mainBinaryInput);
 
@@ -51,7 +52,7 @@ public:
      * creates dynamically a user Behaviour.
      */
 
-    WindowMain* GetWindowMainSingleton();
+    IWindow* GetWindowSingleton();
     Time* GetTimeSingleton();
     Input* GetInputSingleton();
 

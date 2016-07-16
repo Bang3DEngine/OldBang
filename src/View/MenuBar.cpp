@@ -74,7 +74,7 @@ void MenuBar::CreateNewScene() const
 QMessageBox::StandardButton MenuBar::AskForSavingCurrentScene() const
 {
     QMessageBox::StandardButton reply =
-            QMessageBox::question(WindowMain::GetMainWindow(),
+            QMessageBox::question(WindowMain::GetInstance()->GetMainWindow(),
                                   "Save Scene",
                                   "Do you want to save your current Scene?",
                                   (QMessageBox::Yes |  QMessageBox::No |
