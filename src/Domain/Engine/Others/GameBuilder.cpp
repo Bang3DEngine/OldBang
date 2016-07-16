@@ -2,6 +2,17 @@
 
 bool GameBuilder::BuildGame(const std::string &absoluteDir)
 {
+    bool ok = false;
+    std::string output = "";
+    SystemUtils::System("qmake \"BUILD_MODE=GAME\" && make", output, ok);
+
+    if(!ok)
+    {
+        Logger_Error(output);
+    }
+
+    return ok;
+
     /*
     std::string includes = "";
     includes += SystemUtils::GetAllProjectSubDirs();

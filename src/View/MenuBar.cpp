@@ -157,13 +157,15 @@ void MenuBar::OnSaveSceneAs() const
 
 void MenuBar::OnBuild() const
 {
-    Logger_Log("Building...");
+    Logger_Log("Building Game...");
 
-    bool success = false;
     std::string output = "";
-    GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute());
+    bool success = GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute());
 
-    Logger_Log("Finished building!");
+    if(success)
+    {
+        Logger_Log("Game has been built into Game.exe");
+    }
 }
 
 void MenuBar::OnCreateEmptyGameObject() const
