@@ -58,7 +58,6 @@ void Material::UnBind() const
     }
 }
 
-#ifdef BANG_EDITOR
 void Material::Write(std::ostream &f) const
 {
     FileWriter::Write("<Material>", f);
@@ -98,7 +97,6 @@ void Material::Read(std::istream &f)
 
     SetDiffuseColor(diffColor);
 }
-#endif
 
 void Material::SetShaderProgram(const ShaderProgram *program)
 {

@@ -28,7 +28,6 @@ void TestBehaviour::OnStart()
 void TestBehaviour::OnUpdate()
 {
     Behaviour::OnUpdate();
-    /*
 
     time += Time::deltaTime;
 
@@ -53,7 +52,6 @@ void TestBehaviour::OnUpdate()
     }
 
     transform->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime * 0.3f);
-    */
 }
 
 void TestBehaviour::OnDestroy()

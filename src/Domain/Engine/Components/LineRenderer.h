@@ -47,10 +47,10 @@ public:
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
+#endif
 
     void Write(std::ostream &f) const = 0;
     void Read(std::istream &f) = 0;
-    #endif
 };
 
 #endif // LINERENDERER_H

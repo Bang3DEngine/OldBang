@@ -2,6 +2,7 @@
 
 #include "SingletonManager.h"
 
+#include <QLabel>
 #include <QLayout>
 
 GameWindow *GameWindow::s_p_win = nullptr;
@@ -19,18 +20,10 @@ GameWindow::GameWindow(QMainWindow *window)
 void GameWindow::SetupUI()
 {
     canvas = new Canvas(GameWindow::GetInstance()->p_mainWindow);
-    canvas->setObjectName(QString::fromUtf8("canvas"));
-    canvas->setEnabled(true);
-    /*QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    sizePolicy.setHorizontalStretch(1);
-    sizePolicy.setVerticalStretch(1);
-    sizePolicy.setHeightForWidth(canvas->sizePolicy().hasHeightForWidth());
-    canvas->setSizePolicy(sizePolicy);*/
     canvas->setMouseTracking(true);
     canvas->setFocusPolicy(Qt::StrongFocus);
-    canvas->showFullScreen();
 
-    GameWindow::GetInstance()->p_mainWindow->layout()->addWidget(canvas);
+    GameWindow::GetInstance()->p_mainWindow->setCentralWidget(canvas);
 }
 
 

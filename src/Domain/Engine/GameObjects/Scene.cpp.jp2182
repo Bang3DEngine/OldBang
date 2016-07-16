@@ -8,7 +8,7 @@ Scene::Scene() : GameObject("Scene")
 
     m_defaultCamera = new GameObject();
     m_defaultCamera->AddComponent<Transform>();
-    m_defaultCamera->transform->SetPosition(Vector3(30));
+    m_defaultCamera->transform->SetPosition(Vector3(-100));
     m_defaultCamera->transform->LookAt(Vector3::zero);
 
     Camera *cam = m_defaultCamera->AddComponent<Camera>();
@@ -23,6 +23,7 @@ Scene::Scene() : GameObject("Scene")
 void Scene::_OnResize(int newWidth, int newHeight)
 {
     p_gbuffer->Resize(newWidth, newHeight);
+    Logger_Log(newWidth << ", " << newHeight);
 }
 
 Scene::~Scene()
@@ -42,7 +43,7 @@ void Scene::_OnRender()
 
     p_gbuffer->Bind();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+/*
     //From 0 to 9
     for(m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
     {
@@ -50,6 +51,7 @@ void Scene::_OnRender()
         PROPAGATE_EVENT(_OnPreRender, m_children);
         PROPAGATE_EVENT(_OnRender, m_children);
     }
+*/
 
     p_gbuffer->UnBind();
     p_gbuffer->RenderToScreen();

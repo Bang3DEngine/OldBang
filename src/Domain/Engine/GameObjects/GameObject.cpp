@@ -433,12 +433,11 @@ void GameObject::_OnStart()
 
 void GameObject::_OnUpdate()
 {
-
-#ifdef BANG_EDITOR
+    #ifdef BANG_EDITOR
     bool canUpdate = Toolbar::GetInstance()->IsPlaying() || IsEditorGameObject();
-#else
+    #else
     bool canUpdate = true;
-#endif
+    #endif
 
     if(canUpdate)
     {

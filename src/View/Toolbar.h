@@ -22,7 +22,12 @@ public:
 private:
     static Toolbar *s_tb;
     bool m_globalCoords = false;
+
+    #ifdef BANG_EDITOR
     bool m_playing = false;
+    #else
+    bool m_playing = true;
+    #endif
 
     QTimer *p_keyTimer = nullptr;
     QToolButton *p_buttonTranslateMode = nullptr;

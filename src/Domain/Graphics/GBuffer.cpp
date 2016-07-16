@@ -60,6 +60,7 @@ void GBuffer::RenderToScreen() const
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
     //Render the screen plane!
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawArrays(GL_TRIANGLES, 0, p_renderToScreenPlaneMesh->GetVertexCount());
 
     p_renderToScreenMaterial->UnBind();

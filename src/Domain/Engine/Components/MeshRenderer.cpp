@@ -159,6 +159,7 @@ void MeshRenderer::OnSlotValueChanged(InspectorWidget *source)
     }
     else { }
 }
+#endif
 
 
 void MeshRenderer::Write(std::ostream &f) const
@@ -178,4 +179,3 @@ void MeshRenderer::Read(std::istream &f)
     FileReader::ReadNextLine(f); //Consume close tag
 }
 
-#endif

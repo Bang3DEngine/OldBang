@@ -176,6 +176,7 @@ void Camera::OnSlotValueChanged(InspectorWidget *source)
     m_aspectRatio = source->GetSWVectorFloatValue("Aspect Ratio")[0];
     m_projMode =  static_cast<Camera::ProjectionMode>(source->GetSWSelectedEnumIndex("Projection Mode"));
 }
+#endif
 
 void Camera::Write(std::ostream &f) const
 {
@@ -202,4 +203,3 @@ void Camera::Read(std::istream &f)
     SetOrthoRect( FileReader::ReadRect(f) );
     FileReader::ReadNextLine(f); //Consume close tag
 }
-#endif

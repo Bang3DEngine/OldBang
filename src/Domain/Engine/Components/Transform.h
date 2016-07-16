@@ -25,10 +25,8 @@ private:
     Quaternion m_localRotation;
     Vector3 m_localScale;
 
-    // euler angles in degrees set by user in the inspector
-#ifdef BANG_EDITOR
-    Vector3 m_inspectorEulerDeg;
-#endif
+    // Used in inspector too
+    Vector3 m_localEuler;
 
 public:
 
@@ -111,9 +109,10 @@ public:
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
+    #endif
+
     void Write(std::ostream &f) const override;
     void Read(std::istream &f) override;
-#endif
 };
 
 #endif // TRANSFORM_H

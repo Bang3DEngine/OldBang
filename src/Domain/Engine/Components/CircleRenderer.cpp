@@ -136,7 +136,7 @@ void CircleRenderer::OnSlotValueChanged(InspectorWidget *source)
     SetRadius(source->GetSWVectorFloatValue("Radius")[0]);
     SetSegments(int(source->GetSWVectorFloatValue("Segments")[0]));
 }
-
+#endif
 
 void CircleRenderer::Write(std::ostream &f) const
 {
@@ -159,4 +159,3 @@ void CircleRenderer::Read(std::istream &f)
     FileReader::ReadNextLine(f); //Consume close tag
 }
 
-#endif

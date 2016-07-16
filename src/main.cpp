@@ -41,6 +41,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     SingletonManager::InitSingletonMangerFromMainBinary();
 
+    QMainWindow *window = new QMainWindow();
+
     #ifdef BANG_EDITOR
 
     QFont font;
@@ -48,14 +50,10 @@ int main(int argc, char *argv[])
     font.setPixelSize(11);
     app.setFont(font);
 
-    // Init SINGLETON's
-    QMainWindow *window = new QMainWindow();
     WindowMain::InitFromMainBinary(window, &app);
-    //
 
     #else
 
-    QMainWindow *window = new QMainWindow();
     GameWindow::InitFromMainBinary(window, &app);
 
     #endif
@@ -96,20 +94,14 @@ int main(int argc, char *argv[])
 
     #else
 
-    std::cout << "HOLA!1" << std::endl;
     Scene *scene = new Scene();
-    std::cout << "HOLA!2" << std::endl;
     std::string filename = "./Assets/Scenes/test2.bscene";
     FileReader::ReadScene(filename , scene);
-    std::cout << "HOLA!3" << std::endl;
     if(scene)
     {
         Canvas::GetInstance()->AddScene(scene);
-        std::cout << "HOLA!4" << std::endl;
         Canvas::GetInstance()->SetCurrentScene(scene);
-        std::cout << "HOLA!5" << std::endl;
         Persistence::SetCurrentSceneFilepath(filename);
-        std::cout << "HOLA!6" << std::endl;
     }
     #endif
 

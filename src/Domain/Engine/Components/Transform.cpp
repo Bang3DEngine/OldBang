@@ -77,15 +77,11 @@ void Transform::Translate(const Vector3 &translation)
 void Transform::SetLocalRotation(const Quaternion &q)
 {
     m_localRotation = q.Normalized();
-    #ifdef BANG_EDITOR
-    m_inspectorEulerDeg = Quaternion::EulerAngles(m_localRotation).ToDegrees();
-    #endif
+    m_localEuler = Quaternion::EulerAngles(m_localRotation).ToDegrees();
 }
 void Transform::SetLocalEuler(const Vector3 &degreesEuler)
 {
-    #ifdef BANG_EDITOR
-    m_inspectorEulerDeg = degreesEuler;
-    #endif
+    m_localEuler = degreesEuler;
     Vector3 rads = degreesEuler.ToRadians();
     Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::right);
     Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3::up);
@@ -300,11 +296,7 @@ Quaternion Transform::GetRotation() const
 
 Vector3 Transform::GetLocalEuler() const
 {
-    #ifdef BANG_EDITOR
-        return m_inspectorEulerDeg;
-    #else
-        return m_localRotation.EulerAngles();
-    #endif
+    return m_localEuler;
 }
 
 Vector3 Transform::GetEuler() const
@@ -410,6 +402,7 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
     v = source->GetSWVectorFloatValue("Scale");
     m_localScale = Vector3(v[0], v[1], v[2]);
 }
+#endif
 
 void Transform::Write(std::ostream &f) const
 {
@@ -429,5 +422,3 @@ void Transform::Read(std::istream &f)
     SetLocalScale(FileReader::ReadVec3(f));
     FileReader::ReadNextLine(f); //Consume close tag
 }
-
-#endif

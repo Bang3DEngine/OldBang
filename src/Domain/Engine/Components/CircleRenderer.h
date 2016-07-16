@@ -57,10 +57,10 @@ public:
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
+#endif
 
     void Write(std::ostream &f) const;
     void Read(std::istream &f);
-    #endif
 };
 
 #endif // CIRCLERENDERER_H

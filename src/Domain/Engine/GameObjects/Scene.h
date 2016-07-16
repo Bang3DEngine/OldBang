@@ -24,6 +24,8 @@ friend class SelectionFramebuffer;
 
 protected:
 
+    GameObject *m_defaultCamera = nullptr;
+
     /**
      * @brief currentRenderLayer is a variable that indicates
      * the currentRenderLayer being used to render, so GameObjects
@@ -34,7 +36,7 @@ protected:
     //Framebuffer for positions, normals, uvs and diffuse
     GBuffer *p_gbuffer = nullptr;
     const Canvas *p_canvas = nullptr; //set by canvas when added to it
-    const GameObject *p_cameraGameObject = nullptr;
+    GameObject *p_cameraGameObject = nullptr;
 
     virtual void _OnResize (int newWidth, int newHeight);
 

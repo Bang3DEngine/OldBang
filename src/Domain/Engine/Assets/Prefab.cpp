@@ -48,7 +48,6 @@ GameObject *Prefab::InstantiateWithoutStarting() const
     return nullptr;
 }
 
-#ifdef BANG_EDITOR
 void Prefab::Write(std::ostream &f) const
 {
     GameObject *o = InstantiateWithoutStarting();
@@ -71,4 +70,3 @@ void Prefab::Read(std::istream &f)
     }
     //assetDescription += line + "\n";
 }
-#endif

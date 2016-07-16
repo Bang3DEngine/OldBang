@@ -73,7 +73,7 @@ void SingleLineRenderer::OnSlotValueChanged(InspectorWidget *source)
     std::vector<float> destiny = source->GetSWVectorFloatValue("Destiny");
     m_points[1] = Vector3(destiny[0], destiny[1], destiny[2]);
 }
-
+#endif
 
 void SingleLineRenderer::Write(std::ostream &f) const
 {
@@ -96,4 +96,3 @@ void SingleLineRenderer::Read(std::istream &f)
     FileReader::ReadNextLine(f); //Consume close tag
 }
 
-#endif

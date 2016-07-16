@@ -60,7 +60,6 @@ std::string Texture2D::GetImageRelativeFilepath() const
     return m_filepath;
 }
 
-#ifdef BANG_EDITOR
 void Texture2D::Write(std::ostream &f) const
 {
     f << "<Texture2D>" << std::endl;
@@ -85,4 +84,3 @@ void Texture2D::Read(std::istream &f)
         SetFilterMode(FilterMode::Linear);
     }
 }
-#endif

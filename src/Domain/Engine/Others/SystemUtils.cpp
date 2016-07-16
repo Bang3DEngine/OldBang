@@ -12,7 +12,7 @@ std::string SystemUtils::GetAllProjectObjects()
                        " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
                        " | grep -E -v \"Preprocessor\" " +         // Temporal fix with colliding .o's TODO
                        " | grep -E -v \"main\\.o\" " +             // Temporal fix with colliding .o's TODO
-                       " | grep -E \"objEditor\"" +                    // In objEditor directory
+                       " | grep -E \"objGame\"" +                    // In objEditor directory
                        " | grep -E \"\\.o$\"" +                    // Only .o files
                        " | xargs";                                 // Inline
 
