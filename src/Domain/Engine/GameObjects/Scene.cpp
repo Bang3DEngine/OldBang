@@ -17,6 +17,8 @@ Scene::Scene() : GameObject("Scene")
     cam->SetZFar(99999.0f);
     SetCamera(cam);
 
+    AddComponent<Transform>();
+
     p_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
 

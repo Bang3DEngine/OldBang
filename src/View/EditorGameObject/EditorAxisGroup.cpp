@@ -47,31 +47,28 @@ void EditorAxisGroup::OnUpdate()
     //Attached GameObject positioning
     if (p_attachedGameObject)
     {
-        Transform *at = p_attachedGameObject->GetComponent<Transform>();
+        Transform *at = p_attachedGameObject->transform;
         if (at)
         {
-
-            Transform *t = GetComponent<Transform>();
-
-            t->SetPosition(at->GetPosition()); // Pivot
+            transform->SetPosition(at->GetPosition()); // Pivot
             Box bbox = p_attachedGameObject->GetBoundingBox();
-            t->SetPosition( bbox.GetCenter() ); // Center
+            transform->SetPosition( bbox.GetCenter() ); // Center
 
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
-                t->SetLocalRotation( Quaternion() );
+                transform->SetLocalRotation( Quaternion() );
             }
             else
             {
-                t->SetLocalRotation( at->GetRotation() );
+                transform->SetLocalRotation( at->GetRotation() );
             }
 
             Camera *cam = Canvas::GetCurrentScene()->GetCamera();
-            Vector3 camPos = cam->gameObject->GetComponent<Transform>()->GetPosition();
-            Vector3 attPos = p_attachedGameObject->GetComponent<Transform>()->GetPosition();
+            Vector3 camPos = cam->gameObject->transform->GetPosition();
+            Vector3 attPos = at->GetPosition();
             float distanceToCamera = Vector3::Distance(camPos, attPos);
 
-            t->SetScale(distanceToCamera * c_sizeBoost);
+            transform->SetScale(distanceToCamera * c_sizeBoost);
         }
     }
 }

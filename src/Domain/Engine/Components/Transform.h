@@ -77,8 +77,12 @@ public:
 
     // These are aliases of the above
     Vector3 LocalToWorldDirection(const Vector3 &dir) const;
+    Vector3 LocalToParentDirection(const Vector3 &dir) const;
+    Vector3 ParentToLocalDirection(const Vector3 &dir) const;
     Vector3 WorldToLocalDirection(const Vector3 &dir) const;
     Vector3 LocalToWorldPoint(const Vector3 &point) const;
+    Vector3 ParentToLocalPoint(const Vector3 &point) const;
+    Vector3 LocalToParentPoint(const Vector3 &point) const;
     Vector3 WorldToLocalPoint(const Vector3 &point) const;
 
 

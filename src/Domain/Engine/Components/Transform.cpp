@@ -205,6 +205,20 @@ Vector3 Transform::LocalToWorldDirection(const Vector3 &dir) const
     return TransformDirection(dir);
 }
 
+Vector3 Transform::LocalToParentDirection(const Vector3 &dir) const
+{
+    Matrix4 m;
+    GetLocalModelMatrix(m);
+    return Vector3((m * glm::vec4(dir, 0)).xyz());
+}
+
+Vector3 Transform::ParentToLocalDirection(const Vector3 &dir) const
+{
+    Matrix4 m;
+    GetLocalModelMatrix(m);
+    return Vector3((m.Inversed() * glm::vec4(dir, 0)).xyz());
+}
+
 Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 {
     return InverseTransformDirection(dir);
@@ -213,6 +227,20 @@ Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 Vector3 Transform::LocalToWorldPoint(const Vector3 &point) const
 {
     return TransformPoint(point);
+}
+
+Vector3 Transform::ParentToLocalPoint(const Vector3 &point) const
+{
+    Matrix4 m;
+    GetLocalModelMatrix(m);
+    return Vector3((m.Inversed() * glm::vec4(point, 1)).xyz());
+}
+
+Vector3 Transform::LocalToParentPoint(const Vector3 &point) const
+{
+    Matrix4 m;
+    GetLocalModelMatrix(m);
+    return Vector3((m * glm::vec4(point, 1)).xyz());
 }
 
 Vector3 Transform::WorldToLocalPoint(const Vector3 &point) const

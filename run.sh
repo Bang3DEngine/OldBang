@@ -1,2 +1,2 @@
 #!/bin/bash
-./compile.sh && (./Bang.exe)
+./compile.sh EDITOR && ./BangEditor.exe

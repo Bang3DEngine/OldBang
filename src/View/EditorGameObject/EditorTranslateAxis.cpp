@@ -32,7 +32,8 @@ void EditorTranslateAxis::OnUpdate()
 
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->gameObject->transform; NONULL(camTransform);
-    Transform *attTrans = p_attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
+    GameObject *ago = p_attachedGameObject;
+    Transform *at = ago->transform; NONULL(at);
     Vector3 wCamPos = camTransform->GetPosition();
 
     if (m_grabbed)
@@ -41,14 +42,19 @@ void EditorTranslateAxis::OnUpdate()
         if (glm::length(sMouseDelta) > 0.0f)
         {
             Vector3 wAxisDir;
+            Vector3 parentAxisDir;
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 wAxisDir = m_oAxisDirection;
+                parentAxisDir = ago->parent->transform->WorldToLocalDirection(m_oAxisDirection);
             }
             else
             {
-                wAxisDir = transform->LocalToWorldDirection(m_oAxisDirection);
+                wAxisDir = ago->transform->LocalToWorldDirection(m_oAxisDirection);
+                parentAxisDir = ago->transform->LocalToParentDirection(m_oAxisDirection);
             }
+            wAxisDir.Normalize();
+            parentAxisDir.Normalize();
 
             // Alignment
             Vector3 wAxisCenter = transform->GetPosition();
@@ -59,11 +65,11 @@ void EditorTranslateAxis::OnUpdate()
             //
 
             Vector3 worldMove = alignment *
-                                wAxisDir *
+                                parentAxisDir *
                                 glm::length(sMouseDelta) *
-                                Vector3::Distance(wCamPos, attTrans->GetPosition()) *
+                                Vector3::Distance(wCamPos, at->GetPosition()) *
                                 Time::deltaTime * 0.02f;
-            attTrans->Translate(worldMove);
+            ago->transform->Translate(worldMove);
         }
     }
 }
