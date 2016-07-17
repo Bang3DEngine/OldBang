@@ -31,8 +31,8 @@ void EditorTranslateAxis::OnUpdate()
     EditorAxis::OnUpdate();
 
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    Transform *camTransform = cam->gameObject->transform; NONULL(camTransform);
-    GameObject *ago = p_attachedGameObject; NONULL(ago->transform);
+    Transform *camTransform = cam->gameObject->transform;
+    GameObject *ago = p_attachedGameObject;
     Vector3 wCamPos = camTransform->GetPosition();
 
     if (m_grabbed)

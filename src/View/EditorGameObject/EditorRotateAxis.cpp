@@ -49,8 +49,8 @@ void EditorRotateAxis::OnUpdate()
 
     // Obtain mousePos in screen space for next calculations
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    Transform *camTransform = cam->gameObject->transform; NONULL(camTransform);
-    Transform *attTrans = p_attachedGameObject->transform; NONULL(attTrans);
+    Transform *camTransform = cam->gameObject->transform;
+    GameObject *ago = p_attachedGameObject;
 
     Matrix4 p, v, m;
     cam->GetProjectionMatrix(p);
@@ -95,15 +95,18 @@ void EditorRotateAxis::OnUpdate()
                              Time::deltaTime * 10.0f;
 
             // Avoids rotation trembling when not aligned at all
-            Quaternion q = Quaternion::AngleAxis(rotAngle, m_oAxisDirection);
+            Vector3 parentAxisDir;
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
-                attTrans->Rotate(q);
+                parentAxisDir = ago->transform->WorldToObjectDirection(m_oAxisDirection);
             }
             else
             {
-                attTrans->RotateLocal(q);
+                parentAxisDir = m_oAxisDirection;
             }
+
+            Quaternion q = Quaternion::AngleAxis(rotAngle, parentAxisDir);
+            ago->transform->RotateLocal(q);
         }
     }
 
