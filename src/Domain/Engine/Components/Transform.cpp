@@ -420,13 +420,13 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
 {
     std::vector<float> v;
     v = source->GetSWVectorFloatValue("Position");
-    m_localPosition = Vector3(v[0], v[1], v[2]);
+    SetLocalPosition(Vector3(v[0], v[1], v[2]));
 
     v = source->GetSWVectorFloatValue("Rotation");
-    SetEuler(Vector3(v[0], v[1], v[2]));
+    SetLocalEuler(Vector3(v[0], v[1], v[2]));
 
     v = source->GetSWVectorFloatValue("Scale");
-    m_localScale = Vector3(v[0], v[1], v[2]);
+    SetLocalScale(Vector3(v[0], v[1], v[2]));
 }
 #endif
 

@@ -32,8 +32,7 @@ void EditorTranslateAxis::OnUpdate()
 
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->gameObject->transform; NONULL(camTransform);
-    GameObject *ago = p_attachedGameObject;
-    Transform *at = ago->transform; NONULL(at);
+    GameObject *ago = p_attachedGameObject; NONULL(ago->transform);
     Vector3 wCamPos = camTransform->GetPosition();
 
     if (m_grabbed)
@@ -41,8 +40,7 @@ void EditorTranslateAxis::OnUpdate()
         glm::vec2 sMouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f);
         if (glm::length(sMouseDelta) > 0.0f)
         {
-            Vector3 wAxisDir;
-            Vector3 parentAxisDir;
+            Vector3 wAxisDir, parentAxisDir;
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 wAxisDir = m_oAxisDirection;
@@ -67,7 +65,7 @@ void EditorTranslateAxis::OnUpdate()
             Vector3 worldMove = alignment *
                                 parentAxisDir *
                                 glm::length(sMouseDelta) *
-                                Vector3::Distance(wCamPos, at->GetPosition()) *
+                                Vector3::Distance(wCamPos, ago->transform->GetPosition()) *
                                 Time::deltaTime * 0.02f;
             ago->transform->Translate(worldMove);
         }

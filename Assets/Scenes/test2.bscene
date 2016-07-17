@@ -1,48 +1,48 @@
 <Scene>
-0xcb0780
+0x158f9b0
 Scene
 <children>
 <GameObject>
-0x1198380
+0x1a6dc60
 Luigi
 <children>
 </children>
 <components>
 <Transform>
-0x118bf20
+0x1a74a50
 -10.202 0 0
 0 -0.223766 0 0.974643
 0.1 0.1 0.1
 </Transform>
 <MeshRenderer>
-0x118ec90
+0x1a68200
 ./Assets/Meshes/luigiMesh.bmesh
 ./Assets/Materials/luigiMaterial.bmat
 </MeshRenderer>
 <BehaviourHolder>
-0x11aed90
+0x1a9be90
 ./Assets/Behaviours/TestBehaviour.cpp
 </BehaviourHolder>
 </components>
 </GameObject>
 <GameObject>
-0x11aa4f0
+0x1a889d0
 Boy
 <children>
 <GameObject>
-0x11ab640
+0x1a5f440
 Boy
 <children>
 </children>
 <components>
 <Transform>
-0x11a44b0
-0 0 0
--0.707107 0 0 0.707107
+0x1a72b60
+0.01 0 0
+0 0.707107 0 0.707107
 0.8 0.8 0.8
 </Transform>
 <MeshRenderer>
-0x11b7fa0
+0x1a691f0
 ./Assets/Meshes/boyMesh.bmesh
 ./Assets/Materials/luigiMaterial.bmat
 </MeshRenderer>
@@ -51,13 +51,13 @@ Boy
 </children>
 <components>
 <Transform>
-0x11f1600
+0x14b5f30
 8.53 0 -0.75
 0.707107 0 0 0.707107
 3 3 3
 </Transform>
 <MeshRenderer>
-0xbbc560
+0x149b8c0
 ./Assets/Meshes/boyMesh.bmesh
 ./Assets/Materials/luigiMaterial.bmat
 </MeshRenderer>
