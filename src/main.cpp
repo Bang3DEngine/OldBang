@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
     Scene *scene = new EditorScene();
     std::string filename = "./Assets/Scenes/test2.bscene";
-    FileReader::ReadScene(filename , scene);
+    FileReader::ReadScene(filename, scene);
     if(scene)
     {
         Canvas::GetInstance()->AddScene(scene);
@@ -96,12 +96,23 @@ int main(int argc, char *argv[])
 
     Scene *scene = new Scene();
     std::string filename = "./Assets/Scenes/test2.bscene";
-    FileReader::ReadScene(filename , scene);
+    FileReader::ReadScene(filename, scene);
     if(scene)
     {
         Canvas::GetInstance()->AddScene(scene);
         Canvas::GetInstance()->SetCurrentScene(scene);
         Persistence::SetCurrentSceneFilepath(filename);
+
+        GameObject *m_defaultCamera = new GameObject("DefaultCamera");
+        m_defaultCamera->transform->SetPosition(Vector3(30));
+        m_defaultCamera->transform->LookAt(Vector3::zero);
+        AddChild(m_defaultCamera);
+
+        Camera *cam = m_defaultCamera->AddComponent<Camera>();
+        cam->SetFovDegrees(60.0f);
+        cam->SetZNear(0.1f);
+        cam->SetZFar(99999.0f);
+        SetCamera(cam);
     }
     #endif
 

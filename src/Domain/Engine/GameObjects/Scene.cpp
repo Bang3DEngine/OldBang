@@ -4,18 +4,6 @@
 
 Scene::Scene() : GameObject("Scene")
 {
-    m_isScene = true;
-
-    m_defaultCamera = new GameObject();
-    m_defaultCamera->transform->SetPosition(Vector3(30));
-    m_defaultCamera->transform->LookAt(Vector3::zero);
-
-    Camera *cam = m_defaultCamera->AddComponent<Camera>();
-    cam->SetFovDegrees(60.0f);
-    cam->SetZNear(0.1f);
-    cam->SetZFar(99999.0f);
-    SetCamera(cam);
-
     p_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
 
@@ -64,6 +52,7 @@ void Scene::SetCamera(const Camera *cam)
     else
     {
         this->p_cameraGameObject = cam->gameObject;
+        Logger_Log(this->p_cameraGameObject);
     }
 }
 
@@ -80,6 +69,11 @@ Camera *Scene::GetCamera() const
 const Canvas *Scene::GetCanvas() const
 {
     return p_canvas;
+}
+
+bool Scene::IsScene() const
+{
+    return true;
 }
 
 void Scene::Write(std::ostream &f) const

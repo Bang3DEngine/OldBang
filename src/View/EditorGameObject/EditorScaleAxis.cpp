@@ -44,18 +44,15 @@ void EditorScaleAxis::OnUpdate()
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 wAxisDir = m_oAxisDirection;
-                parentAxisDir = ago->transform->WorldToLocalDirection(m_oAxisDirection);
+                parentAxisDir = ago->transform->WorldToObjectDirection(m_oAxisDirection);
             }
             else
             {
-                wAxisDir = ago->transform->LocalToWorldDirection(m_oAxisDirection);
+                wAxisDir = ago->transform->ObjectToWorldDirection(m_oAxisDirection);
                 parentAxisDir = m_oAxisDirection;
             }
             wAxisDir.Normalize();
             parentAxisDir.Normalize();
-
-            Canvas::GetInstance()->GetCurrentScene()->DebugDrawLine(
-                        transform->GetPosition(), transform->GetPosition() + wAxisDir * 999, 1.0f, 0.05f);
 
             // Alignment
             Vector3 wAxisCenter = transform->GetPosition();
@@ -64,11 +61,6 @@ void EditorScaleAxis::OnUpdate()
             screenAxisDir = glm::normalize(screenAxisDir);
             float alignment = glm::dot(screenAxisDir, glm::normalize(sMouseDelta));
             //
-
-            Logger_Log(m_oAxisDirection << " ->" <<
-                       " parent:" << parentAxisDir <<
-                       ", world:" << wAxisDir <<
-                       ", align:" << alignment);
 
             Vector3 scaling = alignment *
                               parentAxisDir.Abs() *

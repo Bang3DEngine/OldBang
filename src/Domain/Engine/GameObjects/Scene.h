@@ -53,6 +53,8 @@ public:
     Camera* GetCamera () const;
     const Canvas* GetCanvas () const;
 
+    bool IsScene() const override;
+
     virtual void DebugDrawLine (const Vector3 &origin,
                                 const Vector3 &destiny,
                                 float lineWidth = 1.0f,

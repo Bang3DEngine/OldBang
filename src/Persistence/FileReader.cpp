@@ -359,7 +359,7 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
 
             if (line == "<children>")
             {
-                ReadChildren(f, (GameObject*)scene);
+                ReadChildren(f, (GameObject*) scene);
             }
             else if (line == "<cameraGameObject>")
             {

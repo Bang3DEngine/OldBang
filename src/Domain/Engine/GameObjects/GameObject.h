@@ -70,7 +70,6 @@ protected:
     unsigned char m_renderLayer = 0;
 
     bool m_enabled = true;
-    bool m_isScene = false;
 
     void AddChildWithoutNotifyingHierarchy(GameObject *child);
     std::list<GameObject*>::iterator RemoveChildWithoutNotifyingHierarchy(
@@ -314,7 +313,7 @@ public:
     virtual void OnMouseExit() {}
 
     virtual bool IsEditorGameObject() const;
-    bool IsScene() const;
+    virtual bool IsScene() const;
 
     void Write(std::ostream &f) const override;
     void Read(std::istream &f) override;

@@ -20,6 +20,7 @@ GameObject::GameObject(const std::string &name) : m_name(name)
     AddComponent<Transform>();
 }
 
+
 void GameObject::CloneInto(ICloneable *clone) const
 {
     GameObject *go = static_cast<GameObject*>(clone);
@@ -36,7 +37,6 @@ void GameObject::CloneInto(ICloneable *clone) const
 
     go->SetName(m_name);
     go->SetRenderLayer(m_renderLayer);
-    go->m_isScene = m_isScene;
     go->p_parent = p_parent;
 }
 
@@ -61,7 +61,7 @@ GameObject::~GameObject()
 
 Scene *GameObject::GetScene()
 {
-    if (m_isScene) { return (Scene*) this; }
+    if (IsScene()) { return (Scene*) this; }
     if (p_parent) return p_parent->GetScene();
     return nullptr;
 }
@@ -113,7 +113,7 @@ Box GameObject::GetLocalBoundingBox() const
     if(CAN_USE_COMPONENT(t))
     {
         Matrix4 mat;
-        t->GetLocalModelMatrix(mat);
+        t->GetObjectModelMatrix(mat);
         b = mat * b; //Apply transform to Box
     }
     return b;
@@ -204,16 +204,27 @@ void GameObject::RemoveComponent(Component *c)
 
 void GameObject::AddChildWithoutNotifyingHierarchy(GameObject *child)
 {
-    child->p_parent = this;
-    m_children.push_back(child);
+    if (child->p_parent)
+    {
+        child->p_parent->MoveChild(child, this);
+    }
+    else
+    {
+        child->p_parent = this;
+        m_children.push_back(child);
+    }
 }
 
 void GameObject::AddChild(GameObject *child)
 {
+    bool moved = child->p_parent;
     AddChildWithoutNotifyingHierarchy(child);
 
     #ifdef BANG_EDITOR
-    WindowEventManager::NotifyChildAdded(child);
+    if(!moved)
+    {
+        WindowEventManager::NotifyChildAdded(child);
+    }
     #endif
 }
 
@@ -336,7 +347,7 @@ bool GameObject::IsEditorGameObject() const
 
 bool GameObject::IsScene() const
 {
-    return m_isScene;
+    return false;
 }
 
 #ifdef BANG_EDITOR

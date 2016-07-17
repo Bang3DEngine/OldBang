@@ -67,26 +67,32 @@ public:
     void SetLocalScale(const Vector3 &s);
 
     /**
-     * @brief Transforms the passed direction from local space to world space.
+     * @brief Transforms the passed direction from local(parent) space to world space.
      * @return
      */
-    Vector3 TransformDirection(const Vector3 &dir) const;
-    Vector3 InverseTransformDirection(const Vector3 &dir) const;
     Vector3 TransformPoint(const Vector3 &point) const;
     Vector3 InverseTransformPoint(const Vector3 &point) const;
+    Vector3 TransformDirection(const Vector3 &dir) const;
+    Vector3 InverseTransformDirection(const Vector3 &dir) const;
 
     // These are aliases of the above
-    Vector3 LocalToWorldDirection(const Vector3 &dir) const;
-    Vector3 LocalToParentDirection(const Vector3 &dir) const;
-    Vector3 ParentToLocalDirection(const Vector3 &dir) const;
-    Vector3 WorldToLocalDirection(const Vector3 &dir) const;
     Vector3 LocalToWorldPoint(const Vector3 &point) const;
-    Vector3 ParentToLocalPoint(const Vector3 &point) const;
-    Vector3 LocalToParentPoint(const Vector3 &point) const;
     Vector3 WorldToLocalPoint(const Vector3 &point) const;
+    Vector3 LocalToWorldDirection(const Vector3 &dir) const;
+    Vector3 WorldToLocalDirection(const Vector3 &dir) const;
+
+    Vector3 LocalToObjectPoint(const Vector3 &point) const;
+    Vector3 LocalToObjectDirection(const Vector3 &dir) const;
+    Vector3 ObjectToLocalPoint(const Vector3 &point) const;
+    Vector3 ObjectToLocalDirection(const Vector3 &dir) const;
+
+    Vector3 ObjectToWorldPoint(const Vector3 &point) const;
+    Vector3 ObjectToWorldDirection(const Vector3 &dir) const;
+    Vector3 WorldToObjectPoint(const Vector3 &point) const;
+    Vector3 WorldToObjectDirection(const Vector3 &dir) const;
 
 
-    void GetLocalModelMatrix(Matrix4 &m) const;
+    void GetObjectModelMatrix(Matrix4 &m) const;
     void GetModelMatrix(Matrix4 &m) const;
 
     void GetNormalMatrix(Matrix4 &m) const;
