@@ -7,8 +7,6 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
 {
     this->p_attachedGameObject = attachedGameObject;
 
-    AddComponent<Transform>();
-
     m_oAxisDirection = EditorAxis::GetVectorFromDir(dir);
 
     p_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/lines.bmat");

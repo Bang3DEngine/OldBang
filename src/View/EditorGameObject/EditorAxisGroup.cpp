@@ -12,8 +12,6 @@ EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObj
     AddChild(p_esag);
 
     DisableAllGroups();
-
-    AddComponent<Transform>();
 }
 
 void EditorAxisGroup::DisableAllGroups()

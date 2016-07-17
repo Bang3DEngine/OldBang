@@ -273,6 +273,25 @@ public:
         return GetComponent<T>() ;
     }
 
+
+    /**
+     * Returns the number of Components of type T
+     */
+    template <class T>
+    int CountComponents() const
+    {
+        int count = 0;
+        for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+        {
+            T *tp = dynamic_cast<T*>(*comp);
+            if(tp)
+            {
+                ++count;
+            }
+        }
+        return count;
+    }
+
     /**
      * Removes the first found Component of type T
      */
@@ -282,7 +301,7 @@ public:
         for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if(tp )
+            if(tp)
             {
                 m_comps.erase(comp);
                 delete tp;

@@ -25,15 +25,15 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 
     if(dir == EditorAxisDirection::X)
     {
-        GetComponent<Transform>()->SetLocalEuler(Vector3::up * 90.0f);
+        transform->SetLocalEuler(Vector3::up * 90.0f);
     }
     else if(dir == EditorAxisDirection::Y)
     {
-        GetComponent<Transform>()->SetLocalEuler(Vector3::right * -90.0f);
+        transform->SetLocalEuler(Vector3::right * -90.0f);
     }
     else
     {
-        GetComponent<Transform>()->SetLocalEuler(Vector3::up * 180.0f);
+        transform->SetLocalEuler(Vector3::up * 180.0f);
     }
 
     m_oAxisDirection.z *= -1;
@@ -50,7 +50,7 @@ void EditorRotateAxis::OnUpdate()
     // Obtain mousePos in screen space for next calculations
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->gameObject->transform; NONULL(camTransform);
-    Transform *attTrans = p_attachedGameObject->GetComponent<Transform>(); NONULL(attTrans);
+    Transform *attTrans = p_attachedGameObject->transform; NONULL(attTrans);
 
     Matrix4 p, v, m;
     cam->GetProjectionMatrix(p);

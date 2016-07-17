@@ -17,6 +17,7 @@ GameObject::GameObject() : GameObject("")
 
 GameObject::GameObject(const std::string &name) : m_name(name)
 {
+    AddComponent<Transform>();
 }
 
 void GameObject::CloneInto(ICloneable *clone) const
@@ -108,7 +109,7 @@ Box GameObject::GetObjectBoundingBox() const
 Box GameObject::GetLocalBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
-    Transform *t = GetComponent<Transform>();
+    Transform *t = transform;
     if(CAN_USE_COMPONENT(t))
     {
         Matrix4 mat;
@@ -121,7 +122,7 @@ Box GameObject::GetLocalBoundingBox() const
 Box GameObject::GetBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
-    Transform *t = GetComponent<Transform>();
+    Transform *t = transform;
     if(CAN_USE_COMPONENT(t))
     {
         Matrix4 mat;
@@ -148,15 +149,22 @@ Sphere GameObject::GetBoundingSphere() const
 
 void GameObject::AddComponent(Component *c)
 {
-    c->p_gameObject = this;
-    m_comps.push_back(c);
-    c->_OnStart();
-
     Transform *t = dynamic_cast<Transform*>(c);
     if (t)
     {
+        if(HasComponent<Transform>())
+        {
+            Logger_Error("A gameObject can only contain one unique Transform.");
+            delete c;
+            return;
+        }
+
         p_transform = t;
     }
+
+    c->p_gameObject = this;
+    m_comps.push_back(c);
+    c->_OnStart();
 }
 
 void GameObject::MoveComponent(Component *c, int distance)

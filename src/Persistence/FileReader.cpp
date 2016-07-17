@@ -263,12 +263,13 @@ void FileReader::ReadComponents(std::istream &f, GameObject *e)
     while ( (line = FileReader::ReadNextLine(f)) != "</components>" )
     {
         Component *p = nullptr;
+        bool addComp = true;
 
         if (line == "<Transform>")
         {
-            Transform *t = new Transform();
-            t->Read(f);
-            p = t;
+            e->transform->Read(f); // Read on top of existing default Transform
+            p = e->transform;
+            addComp = false;
         }
         else if (line == "<MeshRenderer>")
         {
@@ -311,7 +312,7 @@ void FileReader::ReadComponents(std::istream &f, GameObject *e)
             */
         }
 
-        if (p)
+        if (p && addComp)
         {
             e->AddComponent(p);
         }

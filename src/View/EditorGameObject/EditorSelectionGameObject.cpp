@@ -5,8 +5,6 @@
 EditorSelectionGameObject::EditorSelectionGameObject(GameObject *attachedGameObject) :
     EditorGameObject("EditorSelectionGameObject")
 {
-    AddComponent<Transform>();
-
     p_axisGroup = new EditorAxisGroup(attachedGameObject);
     AddChild(p_axisGroup);
 

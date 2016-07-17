@@ -67,7 +67,7 @@ void EditorTranslateAxis::OnUpdate()
                                 glm::length(sMouseDelta) *
                                 Vector3::Distance(wCamPos, ago->transform->GetPosition()) *
                                 Time::deltaTime * 0.02f;
-            ago->transform->Translate(worldMove);
+            ago->transform->TranslateLocal(worldMove);
         }
     }
 }

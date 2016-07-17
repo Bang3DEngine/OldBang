@@ -52,14 +52,21 @@ void Transform::SetLocalPosition(const Vector3 &p)
 }
 void Transform::SetPosition(const Vector3 &p)
 {
-    GameObject *parent = gameObject->GetParent();
-    if (parent)
+    Vector3 localPos = p;
+    if (gameObject->parent)
     {
-        Transform *pt = parent->GetComponent<Transform>();
-        if (pt) SetLocalPosition(-pt->GetPosition() + p);
-        else SetLocalPosition(p);
+        Transform *pt = gameObject->parent->transform;
+        if (pt) localPos = pt->WorldToLocalPoint(p);
     }
-    else SetLocalPosition(p);
+    SetLocalPosition(localPos);
+    /*
+    if (gameObject->parent)
+    {
+        Transform *pt = gameObject->parent->transform;
+        if (pt) SetLocalPosition(-pt->GetPosition() + localPos);
+        else SetLocalPosition(localPos);
+    }
+    else SetLocalPosition(localPos);*/
 }
 void Transform::TranslateLocal(const Vector3 &translation)
 {
@@ -93,10 +100,9 @@ void Transform::SetLocalEuler(float x, float y, float z)
 
 void Transform::SetRotation(const Quaternion &q)
 {
-    GameObject *parent = gameObject->GetParent();
-    if (parent)
+    if (gameObject->parent)
     {
-        Transform *pt = parent->GetComponent<Transform>();
+        Transform *pt = gameObject->parent->transform;
         if (pt) SetLocalRotation(Quaternion(-pt->GetRotation() * q.Normalized()));
         else SetLocalRotation(q);
     }
@@ -104,10 +110,9 @@ void Transform::SetRotation(const Quaternion &q)
 }
 void Transform::SetEuler(const Vector3 &degreesEuler)
 {
-    GameObject *parent = gameObject->GetParent();
-    if (parent)
+    if (gameObject->parent)
     {
-        Transform *pt = parent->GetComponent<Transform>();
+        Transform *pt = gameObject->parent->transform;
         if (pt) SetLocalEuler(-pt->GetEuler() + degreesEuler);
         else SetLocalEuler(degreesEuler);
     }
@@ -152,10 +157,9 @@ void Transform::SetScale(float s)
 
 void Transform::SetScale(const Vector3 &v)
 {
-    GameObject *parent = gameObject->GetParent();
-    if (parent)
+    if (gameObject->parent)
     {
-        Transform *pt = parent->GetComponent<Transform>();
+        Transform *pt = gameObject->parent->transform;
         if (pt) SetLocalScale(1.0f / pt->GetScale() * v);
         else SetLocalScale(v);
     }
@@ -261,10 +265,9 @@ void Transform::GetModelMatrix(Matrix4 &m) const
 {
     GetLocalModelMatrix(m);
 
-    GameObject *parent = gameObject->GetParent();
-    if (parent)
+    if (gameObject->parent)
     {
-        Transform *tp = parent->GetComponent<Transform>();
+        Transform *tp = gameObject->parent->transform;
         if (tp)
         {
             Matrix4 mp;
@@ -295,10 +298,9 @@ Vector3 Transform::GetLocalPosition() const
 
 Vector3 Transform::GetPosition() const
 {
-    GameObject *parent = gameObject->GetParent();
-    if (parent)
+    if (gameObject->parent)
     {
-        Transform *pt = parent->GetComponent<Transform>();
+        Transform *pt = gameObject->parent->transform;
         if (pt) return pt->GetPosition() + GetLocalPosition();
     }
     return GetLocalPosition();
@@ -311,10 +313,9 @@ Quaternion Transform::GetLocalRotation() const
 
 Quaternion Transform::GetRotation() const
 {
-    GameObject *parent = gameObject->GetParent();
-    if (parent)
+    if (gameObject->parent)
     {
-        Transform *pt = parent->GetComponent<Transform>();
+        Transform *pt = gameObject->parent->transform;
         if (pt) return pt->GetRotation() * GetLocalRotation();
     }
     return GetLocalRotation();
@@ -327,10 +328,9 @@ Vector3 Transform::GetLocalEuler() const
 
 Vector3 Transform::GetEuler() const
 {
-    GameObject *parent = gameObject->GetParent();
-    if (parent)
+    if (gameObject->parent)
     {
-        Transform *pt = parent->GetComponent<Transform>();
+        Transform *pt = gameObject->parent->transform;
         if (pt) return pt->GetEuler() + GetLocalEuler();
     }
     return GetLocalEuler();
@@ -343,10 +343,9 @@ Vector3 Transform::GetLocalScale() const
 
 Vector3 Transform::GetScale() const
 {
-    GameObject *parent = gameObject->GetParent();
-    if (parent)
+    if (gameObject->parent)
     {
-        Transform *pt = parent->GetComponent<Transform>();
+        Transform *pt = gameObject->parent->transform;
         if (pt) return pt->GetScale() * GetLocalScale();
     }
     return GetLocalScale();
@@ -403,15 +402,18 @@ const std::string Transform::ToString() const
 
 InspectorWidgetInfo* Transform::GetComponentInfo()
 {
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value =
-        {m_localPosition.x, m_localPosition.y, m_localPosition.z};
+    Vector3 pos = GetPosition();
+    Vector3 rotEuler = GetEuler();
+    Vector3 scale = GetScale();
 
-    Vector3 e = m_localEuler;
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value =
+        {pos.x, pos.y, pos.z};
+
     static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1))->m_value =
-        {e.x, e.y, e.z};
+        {rotEuler.x, rotEuler.y, rotEuler.z};
 
     static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(2))->m_value =
-        {m_localScale.x, m_localScale.y, m_localScale.z};
+        {scale.x, scale.y, scale.z};
 
     return &m_inspectorComponentInfo;
 }
@@ -420,13 +422,13 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
 {
     std::vector<float> v;
     v = source->GetSWVectorFloatValue("Position");
-    SetLocalPosition(Vector3(v[0], v[1], v[2]));
+    SetPosition(Vector3(v[0], v[1], v[2]));
 
     v = source->GetSWVectorFloatValue("Rotation");
-    SetLocalEuler(Vector3(v[0], v[1], v[2]));
+    SetEuler(Vector3(v[0], v[1], v[2]));
 
     v = source->GetSWVectorFloatValue("Scale");
-    SetLocalScale(Vector3(v[0], v[1], v[2]));
+    SetScale(Vector3(v[0], v[1], v[2]));
 }
 #endif
 

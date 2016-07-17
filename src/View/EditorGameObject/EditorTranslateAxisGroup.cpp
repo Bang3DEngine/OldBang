@@ -12,8 +12,6 @@ EditorTranslateAxisGroup::EditorTranslateAxisGroup(GameObject *attachedGameObjec
     AddChild(p_axisX);
     AddChild(p_axisY);
     AddChild(p_axisZ);
-
-    AddComponent<Transform>();
 }
 
 EditorTranslateAxisGroup::~EditorTranslateAxisGroup()

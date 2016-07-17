@@ -10,8 +10,6 @@ EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     this->AddChild(p_axisX);
     this->AddChild(p_axisY);
     this->AddChild(p_axisZ);
-
-    AddComponent<Transform>();
 }
 
 void EditorRotateAxisGroup::OnUpdate()

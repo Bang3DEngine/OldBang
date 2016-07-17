@@ -4,8 +4,6 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
 {
     this->p_attachedGameObject = attachedGameObject;
 
-    AddComponent<Transform>();
-
     MeshRenderer *mr = AddComponent<MeshRenderer>();
 
     // Copy the lines material to the box material, and save it in cache
@@ -61,7 +59,7 @@ void EditorBBox::OnUpdate()
         }
     }
 
-    Transform *t = GetComponent<Transform>();
+    Transform *t = transform;
 
     Vector3 center = bbox.GetCenter();
     t->SetLocalPosition(center);

@@ -13,8 +13,6 @@ EditorScaleAxisGroup::EditorScaleAxisGroup(GameObject *attachedGameObject) :
     AddChild(p_axisX);
     AddChild(p_axisY);
     AddChild(p_axisZ);
-
-    AddComponent<Transform>();
 }
 
 EditorScaleAxisGroup::~EditorScaleAxisGroup()

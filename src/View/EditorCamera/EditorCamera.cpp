@@ -11,12 +11,12 @@ EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
     p_cam->SetAutoUpdateAspectRatio(true);
     p_cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
-    p_t = AddComponent<Transform>();
+    p_t = transform;
     p_t->SetPosition(Vector3(10.0f, 10.0f, 10.0f));
     p_t->LookAt(Vector3(0));
     UpdateRotationVariables();
 
-    p_camt = p_yawNode->AddComponent<Transform>();
+    p_camt = p_yawNode->transform;
     p_cam->SetZFar(999.9f);
 }
 
@@ -36,7 +36,7 @@ void EditorCamera::AdjustSpeeds()
     m_mousePanPerPixel = glm::vec2(0.1f, 0.1f);
     if(p_currentFocus)
     {
-        Transform *ft = p_currentFocus->GetComponent<Transform>();
+        Transform *ft = p_currentFocus->transform;
         if(ft )
         {
             Vector3 focusPoint = ft->GetPosition();
@@ -169,8 +169,8 @@ void EditorCamera::HandleLookAtFocus()
 
             minDist = std::max(minDist, 0.5f); //In case boundingBox is empty
             Vector3 dest = focusPos - (focusDir * minDist);
-            p_t->SetPosition( Vector3::Lerp( thisPos, dest,
-                            Time::GetDeltaTime() * m_lookAtMoveSpeed));
+            float t = Time::GetDeltaTime() * m_lookAtMoveSpeed;
+            p_t->SetPosition( Vector3::Lerp(thisPos, dest, t) );
         }
     }
 }

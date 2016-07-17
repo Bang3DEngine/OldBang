@@ -9,8 +9,6 @@ EditorFloor::EditorFloor()
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
         m_lineRenderers[i]->GetMaterial()->SetDiffuseColor(glm::vec4(glm::vec3(0.4f), 1));
     }
-
-    AddComponent<Transform>();
 }
 
 EditorFloor::~EditorFloor()
@@ -23,7 +21,7 @@ void EditorFloor::OnUpdate()
     EditorGameObject::OnUpdate();
 
     Camera *cam  = Canvas::GetCurrentScene()->GetCamera();
-    Transform *camt = cam->gameObject->GetComponent<Transform>();
+    Transform *camt = cam->gameObject->transform;
 
     const float LineSize2 = (c_gridSize * c_tileSize) / 2.0f; // Half line length
 

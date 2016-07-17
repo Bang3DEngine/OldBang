@@ -221,7 +221,6 @@ void MenuBar::OnCreateFromPrefab() const
 GameObject* MenuBar::CreatePrimitiveGameObject(Mesh *m) const
 {
     GameObject *go = new GameObject();
-    go->AddComponent<Transform>();
 
     Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/default.bmat");
 

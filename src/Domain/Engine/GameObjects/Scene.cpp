@@ -7,7 +7,6 @@ Scene::Scene() : GameObject("Scene")
     m_isScene = true;
 
     m_defaultCamera = new GameObject();
-    m_defaultCamera->AddComponent<Transform>();
     m_defaultCamera->transform->SetPosition(Vector3(30));
     m_defaultCamera->transform->LookAt(Vector3::zero);
 
@@ -16,8 +15,6 @@ Scene::Scene() : GameObject("Scene")
     cam->SetZNear(0.1f);
     cam->SetZFar(99999.0f);
     SetCamera(cam);
-
-    AddComponent<Transform>();
 
     p_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
