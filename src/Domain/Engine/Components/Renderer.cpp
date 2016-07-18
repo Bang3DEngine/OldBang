@@ -204,6 +204,16 @@ bool Renderer::GetIgnoreProjectionMatrix() const
     return m_ignoreProjectionMatrix;
 }
 
+void Renderer::SetReceiveLighting(bool receiveLighting)
+{
+    m_receiveLighting = receiveLighting;
+}
+
+bool Renderer::GetReceiveLighting() const
+{
+    return m_receiveLighting;
+}
+
 void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f)
 {
     ActivateGLStatesBeforeRenderingForSelection = f;

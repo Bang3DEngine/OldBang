@@ -72,8 +72,10 @@ protected:
     Material *p_material = nullptr;
 
     bool m_drawWireframe = false;
+    bool m_receiveLighting = true;
     CullMode m_cullMode = CullMode::Back;
     RenderMode m_renderMode = RenderMode::Triangles;
+
 
     virtual void ActivateGLStatesBeforeRendering() const;
     virtual void RenderWithoutBindingMaterial() const = 0;
@@ -121,6 +123,9 @@ public:
 
     void SetIgnoreProjectionMatrix(bool ignore);
     bool GetIgnoreProjectionMatrix() const;
+
+    void SetReceiveLighting(bool receiveLighting);
+    bool GetReceiveLighting() const;
 
     void SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f);
 
