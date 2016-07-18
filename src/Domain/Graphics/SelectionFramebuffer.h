@@ -16,7 +16,8 @@ class SelectionFramebuffer : public Framebuffer
                             #endif
 {
 private:
-    ShaderProgram *p_program = nullptr;
+    ShaderProgram *m_program = nullptr;
+    Material *m_material = nullptr;
 
     /**
      * @brief Keeps track of the last GameObject the mouse was over.

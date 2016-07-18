@@ -9,9 +9,12 @@
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
-    p_program = new ShaderProgram(
+    m_program = new ShaderProgram(
                 ShaderContract::Filepath_Shader_Vertex_PVM_Position,
                 ShaderContract::Filepath_Shader_Fragment_Selection);
+
+    m_material = new Material();
+    m_material->SetShaderProgram(m_program);
 
     CreateColorAttachment(0);
     CreateDepthBufferAttachment();
@@ -19,12 +22,12 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
 
 SelectionFramebuffer::~SelectionFramebuffer()
 {
-    delete p_program;
+    delete m_program;
 }
 
 void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 {
-    p_program->Bind();
+    m_material->Bind();
 
     // Assign id's
     m_gameObjectToId.clear();
@@ -50,17 +53,17 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
                 Matrix4 model, view, projection, pvm;
                 renderer->GetMatrices(model, view, projection, pvm);
 
-                p_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
+                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
                                         model, false);
-                p_program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
+                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
                                         view, false);
-                p_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
+                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
                                         projection, false);
-                p_program->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM,
+                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM,
                                         pvm, false);
 
                 Vector3 selectionColor = MapIdToColor(m_gameObjectToId[go]);
-                p_program->SetUniformVec3("selectionColor", selectionColor);
+                m_program->SetUniformVec3("selectionColor", selectionColor);
 
                 renderer->ActivateGLStatesBeforeRendering();
                 if(renderer->ActivateGLStatesBeforeRenderingForSelection)
@@ -70,7 +73,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         }
     }
 
-    p_program->UnBind();
+    m_material->UnBind();
 }
 
 void SelectionFramebuffer::ProcessSelection()
@@ -145,5 +148,6 @@ long SelectionFramebuffer::MapColorToId(const Vector3 &charColor)
     Vector3 color = charColor / 256.0d;
     return long(color.r * C) +
            long(color.g * C * C) +
-           long(color.b * C * C * C);
+           long(color.b * C * C * C) +
+           1; // This +1 is because of the TextureRender GL_RGBA32F format. If its GL_RGB, then we dont need it :/
 }

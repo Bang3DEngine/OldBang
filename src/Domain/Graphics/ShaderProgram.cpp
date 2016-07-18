@@ -51,7 +51,7 @@ bool ShaderProgram::Link()
 
     GLint linked;
     glGetProgramiv(m_idGL, GL_LINK_STATUS, &linked);
-    if(not linked)
+    if(!linked)
     {
        GLint errorLength = 0;
        glGetProgramiv(m_idGL, GL_INFO_LOG_LENGTH, &errorLength);
@@ -165,13 +165,16 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const Matrix4& m, b
     }
 }
 
-bool ShaderProgram::SetUniformTexture(const std::string &name, const Texture *texture, bool warn) const
+bool ShaderProgram::SetUniformTexture(const std::string &name, Texture *texture, int slot, bool warn) const
 {
     int location = glGetUniformLocation(m_idGL, name.c_str());
     if(location >= 0)
     {
         Bind();
-        glUniform1i(location, texture->GetTextureSlot());
+        int newSlot = slot;
+        if(slot == -1) newSlot = location;
+        glUniform1i(location, newSlot);
+        texture->SetTextureSlot(newSlot);
         UnBind();
         return true;
     }

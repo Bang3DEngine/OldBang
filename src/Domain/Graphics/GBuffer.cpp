@@ -33,21 +33,13 @@ void GBuffer::BindTexturesTo(Material *mat) const
     TextureRender *diffuseTex  = GetTextureAttachment(GBuffer::Attachment::Diffuse);
     TextureRender *depthTex    = GetTextureAttachment(GBuffer::Attachment::Depth);
 
-    //Pass the textures to mat
-    //First set the corresponding texture slots for every texture
-    positionTex->SetTextureSlot(GBuffer::Attachment::Position); //0
-    normalTex->SetTextureSlot(GBuffer::Attachment::Normal);     //1
-    uvTex->SetTextureSlot(GBuffer::Attachment::Uv);             //2
-    diffuseTex->SetTextureSlot(GBuffer::Attachment::Diffuse);   //3
-    depthTex->SetTextureSlot(GBuffer::Attachment::Depth);       //4
-
     //Now attach to the material, with its corresponding index for the name (BANG_texture_0)
     //which in this case are the same as each respective texture slot
-    mat->SetTexture(positionTex, GBuffer::Attachment::Position); //0
-    mat->SetTexture(normalTex,   GBuffer::Attachment::Normal);   //1
-    mat->SetTexture(uvTex,       GBuffer::Attachment::Uv);       //2
-    mat->SetTexture(diffuseTex,  GBuffer::Attachment::Diffuse);  //3
-    mat->SetTexture(depthTex,    GBuffer::Attachment::Depth);    //4
+    mat->SetTexture(positionTex, "BANG_gout_fin_position");
+    mat->SetTexture(normalTex,   "BANG_gout_fin_normal");
+    mat->SetTexture(uvTex,       "BANG_gout_fin_uv");
+    mat->SetTexture(diffuseTex,  "BANG_gout_fin_diffuse");
+    mat->SetTexture(depthTex,    "BANG_gout_fin_depth");
     mat->Bind();
 }
 
