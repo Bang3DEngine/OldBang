@@ -106,7 +106,13 @@ OTHER_FILES += \
     Assets/Engine/Meshes/Cube.bmesh \
     Assets/Engine/Meshes/Cone.bmesh \
     Assets/Engine/Meshes/Sphere.bmesh \
-    Assets/Engine/Meshes/Pyramid.bmesh
+    Assets/Engine/Meshes/Pyramid.bmesh \
+    Assets/Engine/Shaders/directional_light.frag \
+    Assets/Engine/Materials/linesRotationAxis.bmat \
+    Assets/Engine/Materials/linesMaterial.bmat \
+    Assets/Engine/Materials/lines.bmat \
+    Assets/Engine/Materials/default.bmat \
+    Assets/Engine/Materials/directionalLight.bmat
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -168,7 +174,8 @@ HEADERS += \
     src/Domain/Engine/Others/GameBuilder.h \
     src/View/Canvas.h \
     src/Domain/Engine/Others/StringUtils.h \
-    src/View/IWindow.h
+    src/View/IWindow.h \
+    src/Domain/Engine/Components/DirectionalLight.h
 
 EDITOR {
 HEADERS += \
@@ -279,7 +286,8 @@ SOURCES += \
     src/Domain/Engine/Others/GameBuilder.cpp \
     src/View/Canvas.cpp \
     src/Domain/Engine/Others/StringUtils.cpp \
-    src/View/IWindow.cpp
+    src/View/IWindow.cpp \
+    src/Domain/Engine/Components/DirectionalLight.cpp
 
 EDITOR {
     SOURCES += \

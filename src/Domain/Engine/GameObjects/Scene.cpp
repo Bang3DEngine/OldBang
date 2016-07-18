@@ -2,8 +2,14 @@
 #include "GameObject.h"
 #include "Canvas.h"
 
+#include "DirectionalLight.h"
+
 Scene::Scene() : GameObject("Scene")
 {
+    GameObject *test = new GameObject("LightTest");
+    test->AddComponent<DirectionalLight>();
+    AddChild(test);
+
     p_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
 
@@ -38,6 +44,14 @@ void Scene::_OnRender()
         PROPAGATE_EVENT(_OnRender, m_children);
     }
 
+    // Apply lights to gbuffer
+    std::list<DirectionalLight*> childrenLights =
+            GetComponentsInChildren<DirectionalLight>();
+    for (DirectionalLight *light : childrenLights)
+    {
+        light->ApplyLight(p_gbuffer);
+    }
+
     p_gbuffer->UnBind();
     p_gbuffer->RenderToScreen();
 }
@@ -52,7 +66,6 @@ void Scene::SetCamera(const Camera *cam)
     else
     {
         this->p_cameraGameObject = cam->gameObject;
-        Logger_Log(this->p_cameraGameObject);
     }
 }
 

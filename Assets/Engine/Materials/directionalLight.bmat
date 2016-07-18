@@ -1,0 +1,6 @@
+<Material>
+    ./Assets/Engine/Shaders/render_to_screen.vert
+    ./Assets/Engine/Shaders/directional_light.frag
+    -
+    1.0 1.0 1.0 1.0
+</Material>

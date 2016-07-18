@@ -16,5 +16,6 @@ void main()
     vec3  BANG_diffuse  = texture2D(BANG_texture_3, BANG_uv_raw_vout_fin).rgb;
     float BANG_depth    = texture2D(BANG_texture_4, BANG_uv_raw_vout_fin).x ;
 
-    gl_FragColor = vec4(BANG_diffuse, 1);
+    float lightDot = dot(BANG_normal, normalize(vec3(1, 1, 1)));
+    gl_FragColor = vec4(BANG_diffuse * lightDot, 1);
 }

@@ -1,5 +1,6 @@
 #include "TextureRender.h"
 #include "Logger.h"
+
 TextureRender::TextureRender() : Texture(TextureType::Texture2D)
 {
     SetFilterMode(Texture::FilterMode::Nearest);
@@ -32,6 +33,6 @@ void TextureRender::Fill(unsigned char *newData, int width, int height, int numC
     this->m_numComponents = numComponents;
 
     Bind();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, p_data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, p_data);
     UnBind();
 }
