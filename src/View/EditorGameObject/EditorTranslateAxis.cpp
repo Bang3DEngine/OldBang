@@ -19,24 +19,24 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
         }
     );
 
-    m_arrowCap = MeshFactory::GetConeEditorGameObject();
-    AddChild(m_arrowCap);
+    m_axisCap = MeshFactory::GetConeEditorGameObject();
+    AddChild(m_axisCap);
     if(dir == EditorAxis::EditorAxisDirection::X)
     {
-        m_arrowCap->transform->SetLocalEuler(Vector3(90.0f, 90.0f, 0.0f));
+        m_axisCap->transform->SetLocalEuler(Vector3(90.0f, 90.0f, 0.0f));
     }
     else if(dir == EditorAxis::EditorAxisDirection::Y)
     {
-        m_arrowCap->transform->SetLocalEuler(Vector3(0.0f, 0.0f, 0.0f));
+        m_axisCap->transform->SetLocalEuler(Vector3(0.0f, 0.0f, 0.0f));
     }
     else if(dir == EditorAxis::EditorAxisDirection::Z)
     {
-        m_arrowCap->transform->SetLocalEuler(Vector3(90.0f, 0.0f, 0.0f));
+        m_axisCap->transform->SetLocalEuler(Vector3(90.0f, 0.0f, 0.0f));
     }
-    m_arrowCap->transform->SetLocalPosition(m_oAxisDirection);
-    m_arrowCap->transform->SetLocalScale(Vector3(0.3f, 0.6f, 0.3f));
-    m_arrowCap->GetComponent<MeshRenderer>()->SetMaterial(p_material);
-    m_arrowCap->SetRenderLayer(5);
+    m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
+    m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.15f);
+    m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(p_material);
+    m_axisCap->SetRenderLayer(5);
 }
 
 EditorTranslateAxis::~EditorTranslateAxis()

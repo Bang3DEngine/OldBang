@@ -88,14 +88,14 @@ void EditorAxis::OnUpdate()
     }
 }
 
-void EditorAxis::OnMouseOver()
+void EditorAxis::OnMouseEnter(bool fromChildren)
 {
-    EditorGameObject::OnMouseOver();
+    EditorGameObject::OnMouseEnter(fromChildren);
     m_mouseIsOver = true;
 }
 
-void EditorAxis::OnMouseExit()
+void EditorAxis::OnMouseExit(bool fromChildren)
 {
-    EditorGameObject::OnMouseExit();
+    EditorGameObject::OnMouseExit(fromChildren);
     m_mouseIsOver = false;
 }

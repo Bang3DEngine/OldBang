@@ -87,24 +87,23 @@ void SelectionFramebuffer::ProcessSelection()
         mouseOverGO = m_idToGameObject[id];
     }
 
-    bool mouseExit = (p_lastMouseOverGO  && p_lastMouseOverGO != mouseOverGO);
-    // MouseOver and MouseOut events
+    if(p_lastMouseOverGO  && p_lastMouseOverGO != mouseOverGO)
+    {
+        p_lastMouseOverGO->OnMouseExit(false);
+    }
+
     if(mouseOverGO)
     {
         if(p_lastMouseOverGO != mouseOverGO)
         {
-            mouseOverGO->OnMouseEnter();
+            mouseOverGO->OnMouseEnter(false);
         }
 
-        mouseOverGO->OnMouseOver();
-        p_lastMouseOverGO = mouseOverGO;
+        mouseOverGO->OnMouseOver(false);
     }
-    //
 
-    if(mouseExit)
-    {
-        p_lastMouseOverGO->OnMouseExit();
-    }
+    p_lastMouseOverGO = mouseOverGO;
+
 
     // Selection (clicking over) Here we just handle non-EditorGameObjects
     if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))

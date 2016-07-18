@@ -58,8 +58,8 @@ public:
 
     virtual void OnUpdate() override;
 
-    void OnMouseOver() override;
-    void OnMouseExit() override;
+    void OnMouseEnter(bool fromChildren) override;
+    void OnMouseExit(bool fromChildren) override;
 };
 
 #endif // EDITORAXIS_H

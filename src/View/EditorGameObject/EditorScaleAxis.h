@@ -13,6 +13,7 @@
 class EditorScaleAxis : public EditorAxis
 {
 private:
+    EditorGameObject *m_axisCap = nullptr;
     SingleLineRenderer *p_line = nullptr;
 
 protected:

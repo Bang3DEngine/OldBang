@@ -18,6 +18,13 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
             glLineWidth(25.0f);
         }
     );
+
+    m_axisCap = MeshFactory::GetCubeEditorGameObject();
+    AddChild(m_axisCap);
+    m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
+    m_axisCap->transform->SetLocalScale(Vector3(0.1f));
+    m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(p_material);
+    m_axisCap->SetRenderLayer(5);
 }
 
 EditorScaleAxis::~EditorScaleAxis()
