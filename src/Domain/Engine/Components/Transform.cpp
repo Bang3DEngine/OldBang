@@ -273,11 +273,28 @@ void Transform::GetNormalMatrix(Matrix4 &m) const
 }
 
 
-void Transform::LookAt(Vector3 target, Vector3 _up)
+void Transform::LookAt(const Vector3 &target, const Vector3 &_up)
 {
     Assert(target != m_localPosition, "LookAt target is the same as position.", return);
     Vector3 up = _up.Normalized();
     SetRotation(Quaternion::LookDirection(target - GetPosition(), up) );
+}
+
+void Transform::LookAtLocal(const Vector3 &target, const Vector3 &_up)
+{
+    Assert(target != m_localPosition, "LookAt target is the same as position.", return);
+    Vector3 up = _up.Normalized();
+    SetLocalRotation(Quaternion::LookDirection(target - GetLocalPosition(), up) );
+}
+
+void Transform::LookInDirection(const Vector3 &dir, const Vector3 &up)
+{
+    LookAt(GetPosition() + dir * 99, up);
+}
+
+void Transform::LookInLocalDirection(const Vector3 &dir, const Vector3 &up)
+{
+    LookAtLocal(GetLocalPosition() + dir * 99, up);
 }
 
 Vector3 Transform::GetLocalPosition() const

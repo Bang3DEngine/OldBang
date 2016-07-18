@@ -58,7 +58,7 @@ public:
 
     virtual void OnUpdate() override;
 
-    void OnMouseEnter() override;
+    void OnMouseOver() override;
     void OnMouseExit() override;
 };
 

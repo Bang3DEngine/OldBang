@@ -443,6 +443,22 @@ const std::string GameObject::ToString() const
     return " [GameObject:'" + m_name + "']";
 }
 
+void GameObject::OnMouseEnter()
+{
+}
+
+void GameObject::OnMouseOver()
+{
+    if (parent)
+    {
+        parent->OnMouseOver();
+    }
+}
+
+void GameObject::OnMouseExit()
+{
+}
+
 void GameObject::_OnStart()
 {
     PROPAGATE_EVENT(_OnStart, m_children);

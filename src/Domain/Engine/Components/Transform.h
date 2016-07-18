@@ -35,8 +35,14 @@ public:
     virtual ICloneable *Clone() const override;
     virtual ~Transform();
 
-    void LookAt(Vector3 target,
-                Vector3 up = Vector3(0.0f, 1.0f, 0.0f));
+    void LookAt(const Vector3 &target,
+                const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
+    void LookAtLocal(const Vector3 &target,
+                const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
+    void LookInDirection(const Vector3 &dir,
+                const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
+    void LookInLocalDirection(const Vector3 &dir,
+                const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
 
 
     void SetLocalPosition(const Vector3 &p);

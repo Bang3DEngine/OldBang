@@ -13,6 +13,7 @@
 class EditorTranslateAxis : public EditorAxis
 {
 private:
+    EditorGameObject *m_arrowCap = nullptr;
     SingleLineRenderer *p_line = nullptr;
 
 protected:

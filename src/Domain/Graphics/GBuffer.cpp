@@ -14,13 +14,9 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
                                           ShaderContract::Filepath_Shader_Fragment_Render_To_Screen);
     p_renderToScreenMaterial->SetShaderProgram(sp);
 
-    p_renderToScreenPlaneMesh = new Mesh();
-    std::vector<Vector3> positions, normals; std::vector<glm::vec2> uvs;
-    MeshFactory::GetPlaneTris(2.0f, positions, normals, uvs);
-    p_renderToScreenPlaneMesh->LoadPositions(positions);
-
+    p_renderToScreenPlaneMesh = MeshFactory::GetPlane();
     p_renderToScreenPlaneMesh->BindPositionsToShaderProgram(ShaderContract::Vertex_In_Position_Raw,
-                                                        *(p_renderToScreenMaterial->GetShaderProgram()));
+                                                            *(p_renderToScreenMaterial->GetShaderProgram()));
 }
 
 GBuffer::~GBuffer()

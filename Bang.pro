@@ -98,7 +98,15 @@ OTHER_FILES += \
     Assets/Engine/Shaders/pvm_pos.vert \
     $$PWD/Assets/Behaviours/TestBehaviour.cpp / \
     $$PWD/Assets/Behaviours/TestBehaviour.h / \
-    Assets/Engine/Shaders/selection.frag
+    Assets/Engine/Shaders/selection.frag \
+    Assets/Engine/Meshes/Pyramid.obj \
+    Assets/Engine/Meshes/Cube.obj \
+    Assets/Engine/Meshes/Cone.obj \
+    Assets/Engine/Meshes/Sphere.obj \
+    Assets/Engine/Meshes/Cube.bmesh \
+    Assets/Engine/Meshes/Cone.bmesh \
+    Assets/Engine/Meshes/Sphere.bmesh \
+    Assets/Engine/Meshes/Pyramid.bmesh
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

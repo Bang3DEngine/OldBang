@@ -2,27 +2,46 @@
 #define MESHFACTORY_H
 
 #include <vector>
+#include <string>
 
-#include "Vector3.h"
+class Mesh;
+class Vector3;
+class Material;
+class GameObject;
+class MeshRenderer;
+class AssetsManager;
+class EditorGameObject;
 
 class MeshFactory
 {
+friend class MenuBar;
+
 private:
     MeshFactory() {}
+    static GameObject* CreatePrimitiveGameObject(Mesh *m, const std::string &name);
+
+    #ifdef BANG_EDITOR
+    static EditorGameObject* CreatePrimitiveEditorGameObject(Mesh *m, const std::string &name);
+    #endif
 
 public:
 
-    static
-    void GetPlaneTris(float size,
-                      std::vector<Vector3> &positions,
-                      std::vector<Vector3> &normals,
-                      std::vector<glm::vec2> &uvs);
-    static
-    void GetCubeTris(float size,
-                     std::vector<Vector3> &positions,
-                     std::vector<Vector3> &normals,
-                     std::vector<glm::vec2> &uvs);
+    static Mesh* GetPlane();
+    static Mesh* GetCube();
+    static Mesh* GetSphere();
+    static Mesh* GetCone();
 
+    static GameObject* GetPlaneGameObject();
+    static GameObject* GetCubeGameObject();
+    static GameObject* GetSphereGameObject();
+    static GameObject* GetConeGameObject();
+
+    #ifdef BANG_EDITOR
+    static EditorGameObject* GetPlaneEditorGameObject();
+    static EditorGameObject* GetCubeEditorGameObject();
+    static EditorGameObject* GetSphereEditorGameObject();
+    static EditorGameObject* GetConeEditorGameObject();
+    #endif
 };
 
 #endif // MESHFACTORY_H

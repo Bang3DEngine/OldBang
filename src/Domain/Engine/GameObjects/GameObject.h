@@ -309,8 +309,9 @@ public:
         }
     }
 
-    virtual void OnMouseEnter() {}
-    virtual void OnMouseExit() {}
+    virtual void OnMouseEnter();
+    virtual void OnMouseOver();
+    virtual void OnMouseExit();
 
     virtual bool IsEditorGameObject() const;
     virtual bool IsScene() const;

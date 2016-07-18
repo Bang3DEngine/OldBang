@@ -20,7 +20,7 @@ private:
     /**
      * @brief Shared code to create a Plane, Cube, Sphere, etc.
      */
-    GameObject* CreatePrimitiveGameObject(Mesh *m) const;
+    GameObject* CreatePrimitiveGameObject(Mesh *m, const std::string &name) const;
 
 public:
     Q_ENUMS(Action);
@@ -39,6 +39,7 @@ public:
         CreatePlane,
         CreateCube,
         CreateSphere,
+        CreateCone,
 
         CreatePrefab,
         CreateMaterial,
@@ -74,6 +75,7 @@ public slots:
     void OnCreatePlane () const;
     void OnCreateCube () const;
     void OnCreateSphere () const;
+    void OnCreateCone () const;
 
     void OnCreatePrefab() const;
     void OnCreateMaterial() const;

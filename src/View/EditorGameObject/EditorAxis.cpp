@@ -38,6 +38,8 @@ Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir)
 
 void EditorAxis::OnUpdate()
 {
+    EditorGameObject::OnUpdate();
+
     // Process grabbing
     if(m_mouseIsOver && Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
@@ -86,12 +88,14 @@ void EditorAxis::OnUpdate()
     }
 }
 
-void EditorAxis::OnMouseEnter()
+void EditorAxis::OnMouseOver()
 {
+    EditorGameObject::OnMouseOver();
     m_mouseIsOver = true;
 }
 
 void EditorAxis::OnMouseExit()
 {
+    EditorGameObject::OnMouseExit();
     m_mouseIsOver = false;
 }
