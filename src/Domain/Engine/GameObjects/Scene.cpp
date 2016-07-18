@@ -45,9 +45,8 @@ void Scene::_OnRender()
     }
 
     // Apply lights to gbuffer
-    std::list<DirectionalLight*> childrenLights =
-            GetComponentsInChildren<DirectionalLight>();
-    for (DirectionalLight *light : childrenLights)
+    std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
+    for (Light *light : childrenLights)
     {
         light->ApplyLight(p_gbuffer);
     }

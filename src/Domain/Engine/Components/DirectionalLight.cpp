@@ -1,29 +1,12 @@
 #include "DirectionalLight.h"
 
-DirectionalLight::DirectionalLight()
+DirectionalLight::DirectionalLight() : Light()
 {
-    material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/directionalLight.bmat");
-    color = Vector3::one;
+    m_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/directionalLight.bmat");
 
     #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.SetSlotsInfos(
-    {
-        new InspectorVFloatSWInfo( "Color", {1,1,1} )
-    });
+    // m_inspectorComponentInfo.AddSlotInfo();
     #endif
-}
-
-void DirectionalLight::ApplyLight(GBuffer *gbuffer)
-{
-    gbuffer->Bind();
-
-    gbuffer->BindTexturesTo(material);
-
-    material->Bind();
-    gbuffer->RenderToScreenWithoutMaterial();
-    material->UnBind();
-
-    gbuffer->UnBind();
 }
 
 const std::string DirectionalLight::ToString() const
@@ -38,7 +21,7 @@ ICloneable *DirectionalLight::Clone() const
 
 InspectorWidgetInfo *DirectionalLight::GetComponentInfo()
 {
-    Component::GetComponentInfo();
+    Light::GetComponentInfo();
     return &m_inspectorComponentInfo;
 }
 

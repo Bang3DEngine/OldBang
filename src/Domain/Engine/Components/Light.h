@@ -1,13 +1,21 @@
-#ifndef DIRECTIONALLIGHT_H
-#define DIRECTIONALLIGHT_H
+#ifndef LIGHT_H
+#define LIGHT_H
 
-#include "Light.h"
+#include "GBuffer.h"
+#include "Component.h"
 
-class DirectionalLight : public Light
+class Light : public Component
 {
+friend class Scene;
+
+protected:
+    Vector3 m_color;
+    Material *m_material = nullptr;
+
+    virtual void ApplyLight(GBuffer *gbuffer) const;
 
 public:
-    DirectionalLight();
+    Light();
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override { return "Directional Light"; }
@@ -22,4 +30,4 @@ public:
     virtual void Read(std::istream &f);
 };
 
-#endif // DIRECTIONALLIGHT_H
+#endif // LIGHT_H

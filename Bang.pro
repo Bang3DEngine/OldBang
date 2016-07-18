@@ -175,7 +175,8 @@ HEADERS += \
     src/View/Canvas.h \
     src/Domain/Engine/Others/StringUtils.h \
     src/View/IWindow.h \
-    src/Domain/Engine/Components/DirectionalLight.h
+    src/Domain/Engine/Components/DirectionalLight.h \
+    src/Domain/Engine/Components/Light.h
 
 EDITOR {
 HEADERS += \
@@ -287,7 +288,8 @@ SOURCES += \
     src/View/Canvas.cpp \
     src/Domain/Engine/Others/StringUtils.cpp \
     src/View/IWindow.cpp \
-    src/Domain/Engine/Components/DirectionalLight.cpp
+    src/Domain/Engine/Components/DirectionalLight.cpp \
+    src/Domain/Engine/Components/Light.cpp
 
 EDITOR {
     SOURCES += \
