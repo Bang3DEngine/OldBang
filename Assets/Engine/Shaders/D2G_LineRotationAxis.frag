@@ -1,5 +1,8 @@
 B_DRAW_TO_GBUFFER_FS_DECLARE();
 
+uniform vec3  B_world_circleCenter;
+uniform float B_boundingSphereRadius;
+
 struct B_VertexIn
 {
     vec4 position_world;
