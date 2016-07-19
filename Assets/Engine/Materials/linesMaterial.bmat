@@ -1,6 +1,0 @@
-<Material>
-    ./Assets/Engine/Shaders/lines.vert
-    ./Assets/Engine/Shaders/lines.frag
-    -
-    0.0 0.0 0.0 1.0
-</Material>

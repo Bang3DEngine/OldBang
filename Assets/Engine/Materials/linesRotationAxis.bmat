@@ -1,6 +1,0 @@
-<Material>
-    ./Assets/Engine/Shaders/linesRotationAxis.vert
-    ./Assets/Engine/Shaders/linesRotationAxis.frag
-    -
-    0.0 0.0 0.0 1.0
-</Material>

@@ -17,21 +17,21 @@ public:
     const static std::string \
         ShaderNames_Prefix,
 
-        Vertex_In_Position_Raw,
-        Vertex_In_Normal_Raw,
-        Vertex_In_Uv_Raw,
+        Attr_Vertex_In_Position_Raw,
+        Attr_Vertex_In_Normal_Raw,
+        Attr_Vertex_In_Uv_Raw,
 
-        Vertex_Out_Fragment_In_Vertex_Position_Raw,
-        Vertex_Out_Fragment_In_Vertex_Position_Model,
-        Vertex_Out_Fragment_In_Vertex_Position_View,
-        Vertex_Out_Fragment_In_Vertex_Position_Projection,
-        Vertex_Out_Fragment_In_Vertex_Normal_Raw,
-        Vertex_Out_Fragment_In_Vertex_Uv_Raw,
+        Attr_Vertex_Out_Fragment_In_Vertex_Position_Raw,
+        Attr_Vertex_Out_Fragment_In_Vertex_Position_Model,
+        Attr_Vertex_Out_Fragment_In_Vertex_Position_View,
+        Attr_Vertex_Out_Fragment_In_Vertex_Position_Projection,
+        Attr_Vertex_Out_Fragment_In_Vertex_Normal_Raw,
+        Attr_Vertex_Out_Fragment_In_Vertex_Uv_Raw,
 
-        Fragment_Out_GBuffer_In_Position,
-        Fragment_Out_GBuffer_In_Normal,
-        Fragment_Out_GBuffer_In_Uv,
-        Fragment_Out_GBuffer_In_Diffuse,
+        Attr_Fragment_Out_GBuffer_In_Position,
+        Attr_Fragment_Out_GBuffer_In_Normal,
+        Attr_Fragment_Out_GBuffer_In_Uv,
+        Attr_Fragment_Out_GBuffer_In_Diffuse,
 
         Uniform_Position_Camera,
 
@@ -68,22 +68,15 @@ public:
         Macro_Post_Render_FS_Declare_Content,
         Macro_Post_Render_FS_Init_Main_Content,
 
-        Filepath_Shader_Fragment_Selection,
 
-        Filepath_Shader_Vertex_Render_To_Screen,
-        Filepath_Shader_Fragment_Render_To_Screen,
+        Filepath_Shader_SelectionBuffer_VS,
+        Filepath_Shader_SelectionBuffer_FS,
 
-        Filepath_Shader_Vertex_Pass_Position,
-        Filepath_Shader_Vertex_Pass_Position_Normal,
-        Filepath_Shader_Vertex_Model_Position,
-        Filepath_Shader_Vertex_Model_Position_Normal,
-        Filepath_Shader_Vertex_PVM_Position,
-        Filepath_Shader_Vertex_PVM_Position_Normal,
-        Filepath_Shader_Vertex_PVM_Position_Normal_Uv,
+        Filepath_Shader_PR_Default_VS,
+        Filepath_Shader_PR_Default_FS,
 
-        Filepath_Shader_Fragment_Pass_Position,
-        Filepath_Shader_Fragment_Pass_Position_Normal,
-        Filepath_Shader_Fragment_Pass_Position_Normal_Uv
+        Filepath_Shader_D2G_Default_VS,
+        Filepath_Shader_D2G_Default_FS
     ;
 };
 

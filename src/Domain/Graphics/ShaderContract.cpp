@@ -3,45 +3,45 @@
 const std::string ShaderContract::ShaderNames_Prefix = "B_";
 
 
-const std::string ShaderContract::Vertex_In_Position_Raw =
+const std::string ShaderContract::Attr_Vertex_In_Position_Raw =
         ShaderContract::ShaderNames_Prefix + "position_raw_vin";
 
-const std::string ShaderContract::Vertex_In_Normal_Raw =
+const std::string ShaderContract::Attr_Vertex_In_Normal_Raw =
         ShaderContract::ShaderNames_Prefix + "normal_raw_vin";
 
-const std::string ShaderContract::Vertex_In_Uv_Raw =
+const std::string ShaderContract::Attr_Vertex_In_Uv_Raw =
         ShaderContract::ShaderNames_Prefix + "uv_raw_vin";
 
 
 
-const std::string ShaderContract::Vertex_Out_Fragment_In_Vertex_Position_Raw =
+const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Position_Raw =
         ShaderContract::ShaderNames_Prefix + "position_raw_vout_fin";
 
-const std::string ShaderContract::Vertex_Out_Fragment_In_Vertex_Position_Model =
+const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Position_Model =
         ShaderContract::ShaderNames_Prefix + "position_model_vout_fin";
 
-const std::string ShaderContract::Vertex_Out_Fragment_In_Vertex_Position_View =
+const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Position_View =
         ShaderContract::ShaderNames_Prefix + "position_view_vout_fin";
 
-const std::string ShaderContract::Vertex_Out_Fragment_In_Vertex_Position_Projection =
+const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Position_Projection =
         ShaderContract::ShaderNames_Prefix + "position_projection_vout_fin";
 
-const std::string ShaderContract::Vertex_Out_Fragment_In_Vertex_Normal_Raw =
+const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Normal_Raw =
         ShaderContract::ShaderNames_Prefix + "normal_raw_vout_fin";
 
-const std::string ShaderContract::Vertex_Out_Fragment_In_Vertex_Uv_Raw =
+const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Uv_Raw =
         ShaderContract::ShaderNames_Prefix + "uv_raw_vout_fin";
 
-const std::string ShaderContract::Fragment_Out_GBuffer_In_Position =
+const std::string ShaderContract::Attr_Fragment_Out_GBuffer_In_Position =
         ShaderContract::ShaderNames_Prefix + "position_fout_gbufferin";
 
-const std::string ShaderContract::Fragment_Out_GBuffer_In_Normal =
+const std::string ShaderContract::Attr_Fragment_Out_GBuffer_In_Normal =
         ShaderContract::ShaderNames_Prefix + "normal_fout_gbufferin";
 
-const std::string ShaderContract::Fragment_Out_GBuffer_In_Uv =
+const std::string ShaderContract::Attr_Fragment_Out_GBuffer_In_Uv =
         ShaderContract::ShaderNames_Prefix + "uv_fout_gbufferin";
 
-const std::string ShaderContract::Fragment_Out_GBuffer_In_Diffuse =
+const std::string ShaderContract::Attr_Fragment_Out_GBuffer_In_Diffuse =
         ShaderContract::ShaderNames_Prefix + "diffuse_fout_gbufferin";
 
 
@@ -165,30 +165,13 @@ B_gVertex.normal = normalize(B_gVertex.normal); \n\
 ";
 
 
+const std::string ShaderContract::Filepath_Shader_SelectionBuffer_VS = "Assets/Engine/Shaders/SelectionBuffer.vert";
+const std::string ShaderContract::Filepath_Shader_SelectionBuffer_FS = "Assets/Engine/Shaders/SelectionBuffer.frag";
+
+const std::string ShaderContract::Filepath_Shader_PR_Default_VS = "Assets/Engine/Shaders/PR_Default.vert";
+const std::string ShaderContract::Filepath_Shader_PR_Default_FS = "Assets/Engine/Shaders/PR_Default.frag";
 
 
-
-
-
-
-
-
-
-
-
-const std::string ShaderContract::Filepath_Shader_Fragment_Selection = "Assets/Engine/Shaders/selection.frag";
-const std::string ShaderContract::Filepath_Shader_Vertex_Render_To_Screen = "Assets/Engine/Shaders/render_to_screen.vert";
-const std::string ShaderContract::Filepath_Shader_Fragment_Render_To_Screen = "Assets/Engine/Shaders/render_to_screen.frag";
-
-const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position   = "Assets/Engine/Shaders/pass_pos.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_Pass_Position_Normal = "Assets/Engine/Shaders/pass_pos_normal.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position  = "Assets/Engine/Shaders/model_pos.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_Model_Position_Normal  = "Assets/Engine/Shaders/model_pos_normal.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position  = "Assets/Engine/Shaders/pvm_pos.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal  = "Assets/Engine/Shaders/pvm_pos_normal.vert";
-const std::string ShaderContract::Filepath_Shader_Vertex_PVM_Position_Normal_Uv = "Assets/Engine/Shaders/pvm_pos_normal_uv.vert";
-
-const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position  = "Assets/Engine/Shaders/pass_pos.frag";
-const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal  = "Assets/Engine/Shaders/pass_pos_normal.frag";
-const std::string ShaderContract::Filepath_Shader_Fragment_Pass_Position_Normal_Uv  = "Assets/Engine/Shaders/pass_pos_normal_uv.frag";
+const std::string ShaderContract::Filepath_Shader_D2G_Default_VS = "Assets/Engine/Shaders/D2G_Default.vert";
+const std::string ShaderContract::Filepath_Shader_D2G_Default_FS  = "Assets/Engine/Shaders/D2G_Default.frag";
 

@@ -2,27 +2,21 @@
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
-    /*CreateColorAttachment(Attachment::Position, GL_RGBA32F, GL_RGBA);
-    CreateColorAttachment(Attachment::Normal, GL_RGBA32F, GL_RGBA);
-    CreateColorAttachment(Attachment::Uv, GL_RGBA32F, GL_RGBA);
-    CreateColorAttachment(Attachment::Diffuse, GL_RGBA32F, GL_RGBA);
+    CreateColorAttachment(Attachment::Position,      GL_RGBA32F, GL_RGBA);
+    CreateColorAttachment(Attachment::Normal,        GL_RGBA32F, GL_RGBA);
+    CreateColorAttachment(Attachment::Uv,            GL_RGBA32F, GL_RGBA);
+    CreateColorAttachment(Attachment::Diffuse,       GL_RGBA32F, GL_RGBA);
     CreateColorAttachment(Attachment::MaterialBools, GL_RGBA32F, GL_RGBA);
-    CreateColorAttachment(Attachment::Depth, GL_RGBA32F, GL_RGBA);
-    */CreateColorAttachment(Attachment::Position, GL_RGB, GL_RGB);
-    CreateColorAttachment(Attachment::Normal, GL_RGB, GL_RGB);
-    CreateColorAttachment(Attachment::Uv, GL_RGB, GL_RGB);
-    CreateColorAttachment(Attachment::Diffuse, GL_RGB, GL_RGB);
-    CreateColorAttachment(Attachment::MaterialBools, GL_RGB, GL_RGB);
-    CreateColorAttachment(Attachment::Depth, GL_RGB, GL_RGB);
+    CreateColorAttachment(Attachment::Depth,         GL_RGBA32F, GL_RGBA);
     CreateDepthBufferAttachment();
 
     p_renderToScreenMaterial = new Material();
-    ShaderProgram *sp = new ShaderProgram(ShaderContract::Filepath_Shader_Vertex_Render_To_Screen,
-                                          ShaderContract::Filepath_Shader_Fragment_Render_To_Screen);
+    ShaderProgram *sp = new ShaderProgram(ShaderContract::Filepath_Shader_PR_Default_VS,
+                                          ShaderContract::Filepath_Shader_PR_Default_FS);
     p_renderToScreenMaterial->SetShaderProgram(sp);
 
     p_renderToScreenPlaneMesh = MeshFactory::GetPlane();
-    p_renderToScreenPlaneMesh->BindPositionsToShaderProgram(ShaderContract::Vertex_In_Position_Raw,
+    p_renderToScreenPlaneMesh->BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                                             *(p_renderToScreenMaterial->GetShaderProgram()));
 }
 

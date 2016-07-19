@@ -15,7 +15,7 @@ LineRenderer::LineRenderer()
     p_vao = new VAO();
 
     Material *m = AssetsManager::GetAsset<Material>(
-                "./Assets/Engine/Materials/lines.bmat" );
+                "./Assets/Engine/Materials/Line.bmat" );
     SetMaterial(m);
     SetLineWidth(1.0f);
 }
@@ -40,7 +40,7 @@ void LineRenderer::BindPointsToVAO() const
     {
         p_vbo->Fill(m_points.data(), m_points.size() * sizeof(Vector3));
         GLint verticesShaderLocation = p_material->GetShaderProgram()->
-                GetLocation(ShaderContract::Vertex_In_Position_Raw);
+                GetLocation(ShaderContract::Attr_Vertex_In_Position_Raw);
         p_vao->UnBindVBO(verticesShaderLocation);
         p_vao->BindVBO(p_vbo, verticesShaderLocation, 3, GL_FLOAT);
     }

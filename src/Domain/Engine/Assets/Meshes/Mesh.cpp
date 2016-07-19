@@ -111,9 +111,9 @@ void Mesh::BindUvsToShaderProgram(const std::string &nameInShader, const ShaderP
 
 void Mesh::BindAllVBOsToShaderProgram(const ShaderProgram &sp)
 {
-    BindPositionsToShaderProgram(ShaderContract::Vertex_In_Position_Raw, sp);
-    BindNormalsToShaderProgram(ShaderContract::Vertex_In_Normal_Raw, sp);
-    BindUvsToShaderProgram(ShaderContract::Vertex_In_Uv_Raw, sp);
+    BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw, sp);
+    BindNormalsToShaderProgram(ShaderContract::Attr_Vertex_In_Normal_Raw, sp);
+    BindUvsToShaderProgram(ShaderContract::Attr_Vertex_In_Uv_Raw, sp);
 }
 
 VAO *Mesh::GetVAO() const

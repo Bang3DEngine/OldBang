@@ -34,7 +34,7 @@ GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const std::string &n
 {
     GameObject *go = new GameObject(name);
 
-    Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/default.bmat");
+    Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/Default.bmat");
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
     r->SetRenderMode(MeshRenderer::RenderMode::Triangles);
@@ -50,7 +50,7 @@ EditorGameObject* MeshFactory::CreatePrimitiveEditorGameObject(Mesh *m, const st
 {
     EditorGameObject *go = new EditorGameObject(name);
 
-    Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/default.bmat");
+    Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/Default.bmat");
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
     r->SetRenderMode(MeshRenderer::RenderMode::Triangles);

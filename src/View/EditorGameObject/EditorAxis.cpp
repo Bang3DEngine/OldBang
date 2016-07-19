@@ -9,7 +9,7 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
 
     m_oAxisDirection = EditorAxis::GetVectorFromDir(dir);
 
-    p_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/lines.bmat");
+    p_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/Line.bmat");
     p_material = new Material(*p_material);
 
     m_lineColor = m_oAxisDirection.Abs();

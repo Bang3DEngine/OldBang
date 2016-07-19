@@ -10,8 +10,8 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
     m_program = new ShaderProgram(
-                ShaderContract::Filepath_Shader_Vertex_PVM_Position,
-                ShaderContract::Filepath_Shader_Fragment_Selection);
+                ShaderContract::Filepath_Shader_SelectionBuffer_VS,
+                ShaderContract::Filepath_Shader_SelectionBuffer_FS);
 
     m_material = new Material();
     m_material->SetShaderProgram(m_program);

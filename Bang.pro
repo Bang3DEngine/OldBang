@@ -82,23 +82,8 @@ OTHER_FILES += \
     Assets/Scenes/assetsTest.assets \
     Assets/Assets/Meshes/Pyramid.obj \
     Assets/Engine/Materials \
-    Assets/Engine/Shaders/pass_pos.frag \
-    Assets/Engine/Shaders/pass_pos_normal.frag \
-    Assets/Engine/Shaders/pass_pos_normal_uv.frag \
-    Assets/Engine/Shaders/render_to_screen.frag \
-    Assets/Engine/Shaders/model_pos.vert \
-    Assets/Engine/Shaders/model_pos_normal.vert \
-    Assets/Engine/Shaders/pass_pos.vert \
-    Assets/Engine/Shaders/pass_pos_normal.vert \
-    Assets/Engine/Shaders/pvm_pos_normal.vert \
-    Assets/Engine/Shaders/pvm_pos_normal_uv.vert \
-    Assets/Engine/Shaders/render_to_screen.vert \
-    Assets/Engine/Shaders/lines.frag \
-    Assets/Engine/Shaders/lines.vert \
-    Assets/Engine/Shaders/pvm_pos.vert \
     $$PWD/Assets/Behaviours/TestBehaviour.cpp / \
     $$PWD/Assets/Behaviours/TestBehaviour.h / \
-    Assets/Engine/Shaders/selection.frag \
     Assets/Engine/Meshes/Pyramid.obj \
     Assets/Engine/Meshes/Cube.obj \
     Assets/Engine/Meshes/Cone.obj \
@@ -107,15 +92,23 @@ OTHER_FILES += \
     Assets/Engine/Meshes/Cone.bmesh \
     Assets/Engine/Meshes/Sphere.bmesh \
     Assets/Engine/Meshes/Pyramid.bmesh \
-    Assets/Engine/Shaders/directional_light.frag \
-    Assets/Engine/Materials/linesRotationAxis.bmat \
-    Assets/Engine/Materials/linesMaterial.bmat \
-    Assets/Engine/Materials/lines.bmat \
-    Assets/Engine/Materials/default.bmat \
-    Assets/Engine/Materials/directionalLight.bmat \
-    Assets/Engine/Shaders/linesRotationAxis.frag \
-    Assets/Engine/Shaders/linesRotationAxis.vert \
-    Assets/Engine/Shaders/render_to_screen_outline.frag
+    Assets/Engine/Shaders/PR_DirectionalLight.frag \
+    Assets/Engine/Materials/DirectionalLight.bmat \
+    Assets/Engine/Materials/Default.bmat \
+    Assets/Engine/Materials/Line.bmat \
+    Assets/Engine/Materials/LineRotationAxis.bmat \
+    Assets/Engine/Shaders/D2G_Line.frag \
+    Assets/Engine/Shaders/D2G_Line.vert \
+    Assets/Engine/Shaders/D2G_LineRotationAxis.frag \
+    Assets/Engine/Shaders/D2G_LineRotationAxis.vert \
+    Assets/Engine/Shaders/D2G_Default.frag \
+    Assets/Engine/Shaders/D2G_Default.vert \
+    Assets/Engine/Shaders/PR_Default.frag \
+    Assets/Engine/Shaders/PR_Default.vert \
+    Assets/Materials/luigiMaterial.bmat \
+    Assets/Materials/testMaterial.bmat \
+    Assets/Materials/testMaterial2.bmat \
+    Assets/Engine/Shaders/SelectionBuffer.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
