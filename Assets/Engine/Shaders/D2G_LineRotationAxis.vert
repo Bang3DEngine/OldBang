@@ -1,19 +1,29 @@
 B_DRAW_TO_GBUFFER_VS_DECLARE();
 
-uniform mat4 B_matrix_pvm;
-uniform mat4 B_matrix_model;
-uniform vec3 B_world_circleCenter;
+uniform vec3  B_world_circleCenter;
+uniform float B_boundingSphereRadius;
 
-in vec3 B_position_raw_vin;
+struct B_VertexIn
+{
+    vec3 position_object;
+    vec3 normal_object;
+    vec2 uv;
+};
 
-out vec3 B_world_position;
-out vec4 B_position_raw_vout_fin;
+struct B_VertexOut_FragmentIn
+{
+    vec4 position_world;
+    vec4 normal_world;
+    vec2 uv;
+
+    vec4 position_pvm;
+};
+
+B_VertexIn             B_vin;
+B_VertexOut_FragmentIn B_vout;
 
 void main()
 {
     B_DRAW_TO_GBUFFER_VS_INIT_MAIN();
-
-    B_position_raw_vout_fin = vec4(B_position_raw_vin, 1);
-    gl_Position = B_matrix_pvm * vec4(B_position_raw_vin, 1);
-    B_world_position = (B_matrix_model * vec4(B_position_raw_vin, 1)).xyz;
+    B_DRAW_TO_GBUFFER_VS_END_MAIN();
 }
