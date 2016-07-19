@@ -22,9 +22,6 @@ public:
         Attr_Vertex_In_Uv_Raw,
 
         Attr_Vertex_Out_Fragment_In_Vertex_Position_Raw,
-        Attr_Vertex_Out_Fragment_In_Vertex_Position_Model,
-        Attr_Vertex_Out_Fragment_In_Vertex_Position_View,
-        Attr_Vertex_Out_Fragment_In_Vertex_Position_Projection,
         Attr_Vertex_Out_Fragment_In_Vertex_Normal_Raw,
         Attr_Vertex_Out_Fragment_In_Vertex_Uv_Raw,
 

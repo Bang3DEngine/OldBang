@@ -50,7 +50,6 @@ void EditorRotateAxis::OnUpdate()
 
     // Obtain mousePos in screen space for next calculations
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    Transform *camTransform = cam->gameObject->transform;
     GameObject *ago = p_attachedGameObject;
 
     Matrix4 p, v, m;
@@ -114,8 +113,8 @@ void EditorRotateAxis::OnUpdate()
     // Pass some uniforms to the shader that renders the rotation circles
     Sphere bSphere = p_attachedGameObject->GetBoundingSphere();
     float radius = bSphere.GetRadius() / 2.0f;
-    p_material->GetShaderProgram()->SetUniformVec3("wCircleCenter", bSphere.GetCenter(), false);
-    p_material->GetShaderProgram()->SetUniformVec3("boundingSphereRadius", radius, false);
+    p_material->GetShaderProgram()->SetUniformVec3("B_world_circleCenter", bSphere.GetCenter(), false);
+    p_material->GetShaderProgram()->SetUniformVec3("B_boundingSphereRadius", radius, false);
 }
 
 Renderer *EditorRotateAxis::GetAxisRenderer() const

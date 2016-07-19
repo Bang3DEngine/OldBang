@@ -41,7 +41,7 @@ void GBuffer::BindTexturesTo(Material *mat) const
     mat->SetTexture(normalTex,    "B_gout_fin_normal");
     mat->SetTexture(uvTex,        "B_gout_fin_uv");
     mat->SetTexture(diffuseTex,   "B_gout_fin_diffuse");
-    mat->SetTexture(matBoolsTex,  "B_gout_fin_material_bools");
+    mat->SetTexture(matBoolsTex,  "B_gout_fin_materialBools");
     mat->SetTexture(depthTex,     "B_gout_fin_depth");
     mat->Bind();
 }

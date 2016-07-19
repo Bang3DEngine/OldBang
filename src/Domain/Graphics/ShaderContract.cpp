@@ -17,15 +17,6 @@ const std::string ShaderContract::Attr_Vertex_In_Uv_Raw =
 const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Position_Raw =
         ShaderContract::ShaderNames_Prefix + "position_raw_vout_fin";
 
-const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Position_Model =
-        ShaderContract::ShaderNames_Prefix + "position_model_vout_fin";
-
-const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Position_View =
-        ShaderContract::ShaderNames_Prefix + "position_view_vout_fin";
-
-const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Position_Projection =
-        ShaderContract::ShaderNames_Prefix + "position_projection_vout_fin";
-
 const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Normal_Raw =
         ShaderContract::ShaderNames_Prefix + "normal_raw_vout_fin";
 
@@ -33,16 +24,16 @@ const std::string ShaderContract::Attr_Vertex_Out_Fragment_In_Vertex_Uv_Raw =
         ShaderContract::ShaderNames_Prefix + "uv_raw_vout_fin";
 
 const std::string ShaderContract::Attr_Fragment_Out_GBuffer_In_Position =
-        ShaderContract::ShaderNames_Prefix + "position_fout_gbufferin";
+        ShaderContract::ShaderNames_Prefix + "position_fout_gin";
 
 const std::string ShaderContract::Attr_Fragment_Out_GBuffer_In_Normal =
-        ShaderContract::ShaderNames_Prefix + "normal_fout_gbufferin";
+        ShaderContract::ShaderNames_Prefix + "normal_fout_gin";
 
 const std::string ShaderContract::Attr_Fragment_Out_GBuffer_In_Uv =
-        ShaderContract::ShaderNames_Prefix + "uv_fout_gbufferin";
+        ShaderContract::ShaderNames_Prefix + "uv_fout_gin";
 
 const std::string ShaderContract::Attr_Fragment_Out_GBuffer_In_Diffuse =
-        ShaderContract::ShaderNames_Prefix + "diffuse_fout_gbufferin";
+        ShaderContract::ShaderNames_Prefix + "diffuse_fout_gin";
 
 
 const std::string ShaderContract::Uniform_Position_Camera =
@@ -100,6 +91,7 @@ const std::string ShaderContract::Macro_Post_Render_FS_Init_Main =
 
 const std::string ShaderContract::Macro_Draw_To_GBuffer_VS_Declare_Content =
 "\
+#version 130 \n\
 \n\
 ";
 
@@ -110,6 +102,7 @@ const std::string ShaderContract::Macro_Draw_To_GBuffer_VS_Init_Main_Content =
 
 const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Declare_Content =
 "\
+#version 130 \n\
 \n\
 ";
 
@@ -120,6 +113,7 @@ const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Init_Main_Content =
 
 const std::string ShaderContract::Macro_Post_Render_VS_Declare_Content =
 "\
+#version 130 \n\
 \n\
 ";
 
@@ -135,18 +129,18 @@ uniform sampler2D B_gout_fin_position; \n\
 uniform sampler2D B_gout_fin_normal; \n\
 uniform sampler2D B_gout_fin_uv; \n\
 uniform sampler2D B_gout_fin_diffuse;\n\
-uniform sampler2D B_gout_fin_material_bools; \n\
+uniform sampler2D B_gout_fin_materialBools; \n\
 uniform sampler2D B_gout_fin_depth; \n\
 \n\
-in vec2 B_uv_raw_vout_fin; \n\
-vec2 B_screen_uv = B_uv_raw_vout_fin; \n\
+in vec2 B_uvRaw_vout_fin; \n\
+vec2 B_screen_uv = B_uvRaw_vout_fin; \n\
 \n\
 struct B_GVertex \n\
 { \n\
     vec3 pos; \n\
     vec3 normal; \n\
     vec2 uv; \n\
-    vec3 diffColor; \n\
+    vec3 diffuseColor; \n\
     float receivesLighting; \n\
     float depth; \n\
 }; \n\
@@ -155,12 +149,12 @@ B_GVertex B_gVertex; \n\
 
 const std::string ShaderContract::Macro_Post_Render_FS_Init_Main_Content =
 "\
-B_gVertex.pos              = texture2D(B_gout_fin_position,       B_screen_uv).xyz; \n\
-B_gVertex.normal           = texture2D(B_gout_fin_normal,         B_screen_uv).xyz; \n\
-B_gVertex.uv               = texture2D(B_gout_fin_uv,             B_screen_uv).xy;  \n\
-B_gVertex.diffColor        = texture2D(B_gout_fin_diffuse,        B_screen_uv).rgb; \n\
-B_gVertex.receivesLighting = texture2D(B_gout_fin_material_bools, B_screen_uv).x;   \n\
-B_gVertex.depth            = texture2D(B_gout_fin_depth,          B_screen_uv).x;   \n\
+B_gVertex.pos                 = texture2D(B_gout_fin_position,       B_screen_uv).xyz; \n\
+B_gVertex.normal              = texture2D(B_gout_fin_normal,         B_screen_uv).xyz; \n\
+B_gVertex.uv                  = texture2D(B_gout_fin_uv,             B_screen_uv).xy;  \n\
+B_gVertex.diffuseColor        = texture2D(B_gout_fin_diffuse,        B_screen_uv).rgb; \n\
+B_gVertex.receivesLighting    = texture2D(B_gout_fin_materialBools, B_screen_uv).x;   \n\
+B_gVertex.depth               = texture2D(B_gout_fin_depth,          B_screen_uv).x;   \n\
 B_gVertex.normal = normalize(B_gVertex.normal); \n\
 ";
 
