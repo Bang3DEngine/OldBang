@@ -20,7 +20,8 @@ Framebuffer::~Framebuffer()
     glDeleteFramebuffers(1, &m_idGL);
 }
 
-void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum)
+void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum,
+                                        GLint glInternalFormat, GLint glFormat)
 {
     while(int(m_textureAttachments.size()) <= framebufferAttachmentNum)
         m_textureAttachments.push_back(nullptr);
@@ -29,6 +30,17 @@ void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum)
 
     //Create texture
     TextureRender *tex = new TextureRender();
+
+    if(glInternalFormat != -1)
+    {
+        tex->SetGLInternalFormat(glInternalFormat);
+    }
+
+    if(glFormat != -1)
+    {
+        tex->SetGLFormat(glFormat);
+    }
+
     tex->CreateEmpty(m_width, m_height);
     m_textureAttachments[framebufferAttachmentNum] = tex;
 

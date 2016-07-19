@@ -16,7 +16,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     m_material = new Material();
     m_material->SetShaderProgram(m_program);
 
-    CreateColorAttachment(0);
+    CreateColorAttachment(0, GL_RGB, GL_RGB);
     CreateDepthBufferAttachment();
 }
 
@@ -148,6 +148,5 @@ long SelectionFramebuffer::MapColorToId(const Vector3 &charColor)
     Vector3 color = charColor / 256.0d;
     return long(color.r * C) +
            long(color.g * C * C) +
-           long(color.b * C * C * C) +
-           1; // This +1 is because of the TextureRender GL_RGBA32F format. If its GL_RGB, then we dont need it :/
+           long(color.b * C * C * C); // This +1 is because of the TextureRender GL_RGBA32F format. If its GL_RGB, then we dont need it :/
 }

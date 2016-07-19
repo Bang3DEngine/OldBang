@@ -48,9 +48,7 @@ void Texture2D::Fill(unsigned char *newData,
     this->m_numComponents = numComponents;
 
     Bind();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-                 width, height, 0,
-                 GL_RGB, GL_UNSIGNED_BYTE, p_data);
+    glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0, m_format, GL_UNSIGNED_BYTE, p_data);
     glGenerateMipmap(GL_TEXTURE_2D);
     UnBind();
 }

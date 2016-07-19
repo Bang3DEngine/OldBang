@@ -16,6 +16,7 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     circle->SetSegments(64);
     circle->SetLineWidth(2.0f);
     circle->SetMaterial(p_material);
+    circle->SetReceivesLighting(false);
 
     circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {

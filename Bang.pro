@@ -112,7 +112,9 @@ OTHER_FILES += \
     Assets/Engine/Materials/linesMaterial.bmat \
     Assets/Engine/Materials/lines.bmat \
     Assets/Engine/Materials/default.bmat \
-    Assets/Engine/Materials/directionalLight.bmat
+    Assets/Engine/Materials/directionalLight.bmat \
+    Assets/Engine/Shaders/linesRotationAxis.frag \
+    Assets/Engine/Shaders/linesRotationAxis.vert
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

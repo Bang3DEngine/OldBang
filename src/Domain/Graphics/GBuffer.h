@@ -17,6 +17,8 @@ public:
         Normal,
         Uv,
         Diffuse,
+        MaterialBools, // (receivesLighting, -, -, -)
+        MaterialLightProperties, // ()
         Depth
     };
 

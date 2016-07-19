@@ -28,6 +28,16 @@ Texture::~Texture()
     glDeleteTextures(1, &m_idGL);
 }
 
+void Texture::SetGLInternalFormat(GLint glInternalFormat)
+{
+    m_internalFormat = glInternalFormat;
+}
+
+void Texture::SetGLFormat(GLint glFormat)
+{
+    m_format = glFormat;
+}
+
 void Texture::SetFilterMode(Texture::FilterMode filterMode)
 {
     this->m_filterMode = filterMode;
@@ -65,6 +75,16 @@ int Texture::GetHeight() const
 int Texture::GetNumComponents() const
 {
     return m_numComponents;
+}
+
+GLint Texture::GetGLInternalFormat() const
+{
+    return m_internalFormat;
+}
+
+GLint Texture::GetGLFormat() const
+{
+    return m_format;
 }
 
 Texture::FilterMode Texture::GetFilterMode() const

@@ -57,15 +57,14 @@ void Renderer::ActivateGLStatesBeforeRendering() const
     if(camera  && p_material  && p_material->p_shaderProgram )
     {
         Transform *t = camera->gameObject->transform;
-        if(t)
-        {
-            p_material->p_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
+        p_material->p_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
                                                     t->GetPosition(), false);
-        }
+
+        p_material->p_shaderProgram->SetUniformFloat("BANG_renderer_receivesLighting",
+                                                      m_receivesLighting ? 1.0f : 0.0f, false);
     }
 
     glLineWidth(m_lineWidth);
-
 }
 
 void Renderer::OnRender()
@@ -204,14 +203,14 @@ bool Renderer::GetIgnoreProjectionMatrix() const
     return m_ignoreProjectionMatrix;
 }
 
-void Renderer::SetReceiveLighting(bool receiveLighting)
+void Renderer::SetReceivesLighting(bool receivesLighting)
 {
-    m_receiveLighting = receiveLighting;
+    m_receivesLighting = receivesLighting;
 }
 
-bool Renderer::GetReceiveLighting() const
+bool Renderer::GetReceivesLighting() const
 {
-    return m_receiveLighting;
+    return m_receivesLighting;
 }
 
 void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f)

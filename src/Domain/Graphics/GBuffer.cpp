@@ -2,11 +2,18 @@
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
-    CreateColorAttachment(Attachment::Position);
-    CreateColorAttachment(Attachment::Normal);
-    CreateColorAttachment(Attachment::Uv);
-    CreateColorAttachment(Attachment::Diffuse);
-    CreateColorAttachment(Attachment::Depth);
+    /*CreateColorAttachment(Attachment::Position, GL_RGBA32F, GL_RGBA);
+    CreateColorAttachment(Attachment::Normal, GL_RGBA32F, GL_RGBA);
+    CreateColorAttachment(Attachment::Uv, GL_RGBA32F, GL_RGBA);
+    CreateColorAttachment(Attachment::Diffuse, GL_RGBA32F, GL_RGBA);
+    CreateColorAttachment(Attachment::MaterialBools, GL_RGBA32F, GL_RGBA);
+    CreateColorAttachment(Attachment::Depth, GL_RGBA32F, GL_RGBA);
+    */CreateColorAttachment(Attachment::Position, GL_RGB, GL_RGB);
+    CreateColorAttachment(Attachment::Normal, GL_RGB, GL_RGB);
+    CreateColorAttachment(Attachment::Uv, GL_RGB, GL_RGB);
+    CreateColorAttachment(Attachment::Diffuse, GL_RGB, GL_RGB);
+    CreateColorAttachment(Attachment::MaterialBools, GL_RGB, GL_RGB);
+    CreateColorAttachment(Attachment::Depth, GL_RGB, GL_RGB);
     CreateDepthBufferAttachment();
 
     p_renderToScreenMaterial = new Material();
@@ -27,19 +34,21 @@ GBuffer::~GBuffer()
 
 void GBuffer::BindTexturesTo(Material *mat) const
 {
-    TextureRender *positionTex = GetTextureAttachment(GBuffer::Attachment::Position);
-    TextureRender *normalTex   = GetTextureAttachment(GBuffer::Attachment::Normal);
-    TextureRender *uvTex       = GetTextureAttachment(GBuffer::Attachment::Uv);
-    TextureRender *diffuseTex  = GetTextureAttachment(GBuffer::Attachment::Diffuse);
-    TextureRender *depthTex    = GetTextureAttachment(GBuffer::Attachment::Depth);
+    TextureRender *positionTex  = GetTextureAttachment(GBuffer::Attachment::Position);
+    TextureRender *normalTex    = GetTextureAttachment(GBuffer::Attachment::Normal);
+    TextureRender *uvTex        = GetTextureAttachment(GBuffer::Attachment::Uv);
+    TextureRender *diffuseTex   = GetTextureAttachment(GBuffer::Attachment::Diffuse);
+    TextureRender *matBoolsTex  = GetTextureAttachment(GBuffer::Attachment::MaterialBools);
+    TextureRender *depthTex     = GetTextureAttachment(GBuffer::Attachment::Depth);
 
     //Now attach to the material, with its corresponding index for the name (BANG_texture_0)
     //which in this case are the same as each respective texture slot
-    mat->SetTexture(positionTex, "BANG_gout_fin_position");
-    mat->SetTexture(normalTex,   "BANG_gout_fin_normal");
-    mat->SetTexture(uvTex,       "BANG_gout_fin_uv");
-    mat->SetTexture(diffuseTex,  "BANG_gout_fin_diffuse");
-    mat->SetTexture(depthTex,    "BANG_gout_fin_depth");
+    mat->SetTexture(positionTex,  "BANG_gout_fin_position");
+    mat->SetTexture(normalTex,    "BANG_gout_fin_normal");
+    mat->SetTexture(uvTex,        "BANG_gout_fin_uv");
+    mat->SetTexture(diffuseTex,   "BANG_gout_fin_diffuse");
+    mat->SetTexture(matBoolsTex,  "BANG_gout_fin_material_bools");
+    mat->SetTexture(depthTex,     "BANG_gout_fin_depth");
     mat->Bind();
 }
 

@@ -40,6 +40,10 @@ private:
     GLint m_glTextureGetIntegerType = 0;
 
 protected:
+protected:
+    GLint m_internalFormat = GL_RGB;
+    GLint m_format = GL_RGB;
+
     int m_width = 0;
     int m_height = 0;
     int m_numComponents = 0;
@@ -60,6 +64,8 @@ public:
     virtual void CreateEmpty(int width, int height) = 0;
     virtual void Resize(int width, int height) = 0;
 
+    void SetGLInternalFormat(GLint glInternalFormat);
+    void SetGLFormat(GLint glFormat);
     void SetFilterMode(FilterMode filterMode);
     void SetWrapMode(WrapMode wrapMode);
     void SetTextureSlot(int textureSlot);
@@ -67,6 +73,8 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     int GetNumComponents() const;
+    GLint GetGLInternalFormat() const;
+    GLint GetGLFormat() const;
     FilterMode GetFilterMode() const;
     WrapMode GetWrapMode() const;
     int GetTextureSlot() const;

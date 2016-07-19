@@ -46,6 +46,15 @@ void EditorScene::_OnRender()
     p_selectionFramebuffer->UnBind();
 
     p_selectionFramebuffer->ProcessSelection();
+
+    /*
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    for(m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
+    {
+        p_selectionFramebuffer->ClearDepth();
+        p_selectionFramebuffer->RenderSelectionBuffer(this);
+    }
+    */
 }
 
 void EditorScene::DebugDrawLine(const Vector3 &origin,

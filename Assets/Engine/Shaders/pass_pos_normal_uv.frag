@@ -2,15 +2,17 @@
 
 uniform sampler2D BANG_texture_0;
 uniform vec4 BANG_material_diffuse_color;
+uniform float BANG_renderer_receivesLighting;
 
 in vec4 BANG_position_raw_vout_fin;
 in vec4 BANG_normal_raw_vout_fin;
 in vec2 BANG_uv_raw_vout_fin;
 
-out vec3 BANG_position_fout_gbufferin;
-out vec3 BANG_normal_fout_gbufferin;
-out vec2 BANG_uv_fout_gbufferin;
-out vec3 BANG_diffuse_fout_gbufferin;
+out vec3  BANG_position_fout_gbufferin;
+out vec3  BANG_normal_fout_gbufferin;
+out vec2  BANG_uv_fout_gbufferin;
+out vec3  BANG_diffuse_fout_gbufferin;
+out vec4  BANG_material_bools_fout_gbufferin;
 out float BANG_depth_fout_gbufferin;
 
 
@@ -24,6 +26,8 @@ void main()
     vec3 diffTex = texture2D(BANG_texture_0, BANG_uv_raw_vout_fin).rgb * texApport;
     vec3 diffColor = BANG_material_diffuse_color.rgb * BANG_material_diffuse_color.a;
     BANG_diffuse_fout_gbufferin  = diffTex + diffColor;
+
+    BANG_material_bools_fout_gbufferin.x = BANG_renderer_receivesLighting;
 
     BANG_depth_fout_gbufferin    = gl_FragCoord.z;
 }

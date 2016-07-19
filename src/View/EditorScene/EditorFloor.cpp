@@ -7,6 +7,7 @@ EditorFloor::EditorFloor()
     for (int i = 0; i < GridSize2; ++i)
     {
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
+        m_lineRenderers[i]->SetReceivesLighting(false);
         m_lineRenderers[i]->GetMaterial()->SetDiffuseColor(glm::vec4(glm::vec3(0.4f), 1));
     }
 }

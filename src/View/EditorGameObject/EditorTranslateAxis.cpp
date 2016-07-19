@@ -12,6 +12,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     p_line->SetDestiny(m_oAxisDirection);
     p_line->SetMaterial(p_material);
     p_line->SetLineWidth(2.0f);
+    p_line->SetReceivesLighting(false);
 
     p_line->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
@@ -36,6 +37,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
     m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.15f);
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(p_material);
+    m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(false);
     m_axisCap->SetRenderLayer(5);
 }
 
