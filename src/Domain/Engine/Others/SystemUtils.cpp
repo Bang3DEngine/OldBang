@@ -10,7 +10,7 @@ std::string SystemUtils::GetAllProjectObjects()
                        Persistence::GetProjectRootPathAbsolute() + // From project root
                        " -type f " +                               // Only files
                        " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
-                       " | grep -E -v \"Preprocessor\" " +         // Temporal fix with colliding .o's TODO
+                       " | grep -E -v \"BangPreprocessor\" " +     // Temporal fix with colliding .o's TODO
                        " | grep -E -v \"main\\.o\" " +             // Temporal fix with colliding .o's TODO
                        #ifdef BANG_EDITOR
                        " | grep -E \"objEditor\"" +

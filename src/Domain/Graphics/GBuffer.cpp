@@ -43,12 +43,12 @@ void GBuffer::BindTexturesTo(Material *mat) const
 
     //Now attach to the material, with its corresponding index for the name (BANG_texture_0)
     //which in this case are the same as each respective texture slot
-    mat->SetTexture(positionTex,  "BANG_gout_fin_position");
-    mat->SetTexture(normalTex,    "BANG_gout_fin_normal");
-    mat->SetTexture(uvTex,        "BANG_gout_fin_uv");
-    mat->SetTexture(diffuseTex,   "BANG_gout_fin_diffuse");
-    mat->SetTexture(matBoolsTex,  "BANG_gout_fin_material_bools");
-    mat->SetTexture(depthTex,     "BANG_gout_fin_depth");
+    mat->SetTexture(positionTex,  "B_gout_fin_position");
+    mat->SetTexture(normalTex,    "B_gout_fin_normal");
+    mat->SetTexture(uvTex,        "B_gout_fin_uv");
+    mat->SetTexture(diffuseTex,   "B_gout_fin_diffuse");
+    mat->SetTexture(matBoolsTex,  "B_gout_fin_material_bools");
+    mat->SetTexture(depthTex,     "B_gout_fin_depth");
     mat->Bind();
 }
 

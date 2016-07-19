@@ -220,5 +220,4 @@ void ShaderProgram::Write(std::ostream &f) const
 
 void ShaderProgram::Read(std::istream &f)
 {
-
 }

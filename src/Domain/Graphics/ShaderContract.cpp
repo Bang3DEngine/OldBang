@@ -1,7 +1,6 @@
 #include "ShaderContract.h"
 
-const std::string ShaderContract::ShaderNames_Prefix = "BANG_";
-
+const std::string ShaderContract::ShaderNames_Prefix = "B_";
 
 
 const std::string ShaderContract::Vertex_In_Position_Raw =
@@ -75,6 +74,106 @@ const std::string ShaderContract::Uniform_Texture_Final_Color =
 
 const std::string ShaderContract::Uniform_Material_Diffuse_Color =
         ShaderContract::ShaderNames_Prefix + "material_diffuse_color";
+
+
+
+
+
+
+
+const std::string ShaderContract::Macro_Draw_To_GBuffer_VS_Declare =
+        ShaderContract::ShaderNames_Prefix + "DRAW_TO_GBUFFER_VS_DECLARE()";
+const std::string ShaderContract::Macro_Draw_To_GBuffer_VS_Init_Main =
+        ShaderContract::ShaderNames_Prefix + "DRAW_TO_GBUFFER_VS_INIT_MAIN()";
+const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Declare =
+        ShaderContract::ShaderNames_Prefix + "DRAW_TO_GBUFFER_FS_DECLARE()";
+const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Init_Main =
+        ShaderContract::ShaderNames_Prefix + "DRAW_TO_GBUFFER_FS_INIT_MAIN()";
+const std::string ShaderContract::Macro_Post_Render_VS_Declare =
+        ShaderContract::ShaderNames_Prefix + "POST_RENDER_VS_DECLARE()";
+const std::string ShaderContract::Macro_Post_Render_VS_Init_Main =
+        ShaderContract::ShaderNames_Prefix + "POST_RENDER_VS_INIT_MAIN()";
+const std::string ShaderContract::Macro_Post_Render_FS_Declare =
+        ShaderContract::ShaderNames_Prefix + "POST_RENDER_FS_DECLARE()";
+const std::string ShaderContract::Macro_Post_Render_FS_Init_Main =
+        ShaderContract::ShaderNames_Prefix + "POST_RENDER_FS_INIT_MAIN()";
+
+const std::string ShaderContract::Macro_Draw_To_GBuffer_VS_Declare_Content =
+"\
+\n\
+";
+
+const std::string ShaderContract::Macro_Draw_To_GBuffer_VS_Init_Main_Content =
+"\
+\n\
+";
+
+const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Declare_Content =
+"\
+\n\
+";
+
+const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Init_Main_Content =
+"\
+\n\
+";
+
+const std::string ShaderContract::Macro_Post_Render_VS_Declare_Content =
+"\
+\n\
+";
+
+const std::string ShaderContract::Macro_Post_Render_VS_Init_Main_Content =
+"\
+\n\
+";
+const std::string ShaderContract::Macro_Post_Render_FS_Declare_Content =
+"\
+#version 130 \n\
+\n\
+uniform sampler2D B_gout_fin_position; \n\
+uniform sampler2D B_gout_fin_normal; \n\
+uniform sampler2D B_gout_fin_uv; \n\
+uniform sampler2D B_gout_fin_diffuse;\n\
+uniform sampler2D B_gout_fin_material_bools; \n\
+uniform sampler2D B_gout_fin_depth; \n\
+\n\
+in vec2 B_uv_raw_vout_fin; \n\
+vec2 B_screen_uv = B_uv_raw_vout_fin; \n\
+\n\
+struct B_GVertex \n\
+{ \n\
+    vec3 pos; \n\
+    vec3 normal; \n\
+    vec2 uv; \n\
+    vec3 diffColor; \n\
+    float receivesLighting; \n\
+    float depth; \n\
+}; \n\
+B_GVertex B_gVertex; \n\
+";
+
+const std::string ShaderContract::Macro_Post_Render_FS_Init_Main_Content =
+"\
+B_gVertex.pos              = texture2D(B_gout_fin_position,       B_screen_uv).xyz; \n\
+B_gVertex.normal           = texture2D(B_gout_fin_normal,         B_screen_uv).xyz; \n\
+B_gVertex.uv               = texture2D(B_gout_fin_uv,             B_screen_uv).xy;  \n\
+B_gVertex.diffColor        = texture2D(B_gout_fin_diffuse,        B_screen_uv).rgb; \n\
+B_gVertex.receivesLighting = texture2D(B_gout_fin_material_bools, B_screen_uv).x;   \n\
+B_gVertex.depth            = texture2D(B_gout_fin_depth,          B_screen_uv).x;   \n\
+B_gVertex.normal = normalize(B_gVertex.normal); \n\
+";
+
+
+
+
+
+
+
+
+
+
+
 
 
 const std::string ShaderContract::Filepath_Shader_Fragment_Selection = "Assets/Engine/Shaders/selection.frag";

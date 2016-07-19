@@ -1,17 +1,17 @@
 #version 130
 
-uniform mat4 BANG_matrix_model;
+uniform mat4 B_matrix_model;
 
-in vec4 BANG_position_raw_vout_fin;
-in vec4 BANG_normal_raw_vout_fin;
+in vec4 B_position_raw_vout_fin;
+in vec4 B_normal_raw_vout_fin;
 
-out vec3 BANG_position_fout_gbufferin;
-out vec3 BANG_normal_fout_gbufferin;
-out vec2 BANG_uv_fout_gbufferin;
-out vec3 BANG_diffuse_fout_gbufferin;
+out vec3 B_position_fout_gbufferin;
+out vec3 B_normal_fout_gbufferin;
+out vec2 B_uv_fout_gbufferin;
+out vec3 B_diffuse_fout_gbufferin;
 
 void main()
 {
-    BANG_position_fout_gbufferin = BANG_position_raw_vout_fin.xyz;
-    BANG_normal_fout_gbufferin = BANG_normal_raw_vout_fin.xyz;
+    B_position_fout_gbufferin = B_position_raw_vout_fin.xyz;
+    B_normal_fout_gbufferin = B_normal_raw_vout_fin.xyz;
 }

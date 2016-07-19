@@ -114,7 +114,8 @@ OTHER_FILES += \
     Assets/Engine/Materials/default.bmat \
     Assets/Engine/Materials/directionalLight.bmat \
     Assets/Engine/Shaders/linesRotationAxis.frag \
-    Assets/Engine/Shaders/linesRotationAxis.vert
+    Assets/Engine/Shaders/linesRotationAxis.vert \
+    Assets/Engine/Shaders/render_to_screen_outline.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -178,7 +179,8 @@ HEADERS += \
     src/Domain/Engine/Others/StringUtils.h \
     src/View/IWindow.h \
     src/Domain/Engine/Components/DirectionalLight.h \
-    src/Domain/Engine/Components/Light.h
+    src/Domain/Engine/Components/Light.h \
+    src/Domain/Graphics/ShaderPreprocessor.h
 
 EDITOR {
 HEADERS += \
@@ -291,7 +293,8 @@ SOURCES += \
     src/Domain/Engine/Others/StringUtils.cpp \
     src/View/IWindow.cpp \
     src/Domain/Engine/Components/DirectionalLight.cpp \
-    src/Domain/Engine/Components/Light.cpp
+    src/Domain/Engine/Components/Light.cpp \
+    src/Domain/Graphics/ShaderPreprocessor.cpp
 
 EDITOR {
     SOURCES += \

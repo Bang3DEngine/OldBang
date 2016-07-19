@@ -14,6 +14,7 @@
 #include "Logger.h"
 #include "IGLIdable.h"
 #include "IToString.h"
+#include "ShaderPreprocessor.h"
 
 class Shader : public IToString, public IGLIdable
 {

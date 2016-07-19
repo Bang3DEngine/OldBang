@@ -50,6 +50,23 @@ public:
         Uniform_Texture_Final_Color,
         Uniform_Material_Diffuse_Color,
 
+        Macro_Draw_To_GBuffer_VS_Declare,
+        Macro_Draw_To_GBuffer_VS_Init_Main,
+        Macro_Draw_To_GBuffer_FS_Declare,
+        Macro_Draw_To_GBuffer_FS_Init_Main,
+        Macro_Post_Render_VS_Declare,
+        Macro_Post_Render_VS_Init_Main,
+        Macro_Post_Render_FS_Declare,
+        Macro_Post_Render_FS_Init_Main,
+
+        Macro_Draw_To_GBuffer_VS_Declare_Content,
+        Macro_Draw_To_GBuffer_VS_Init_Main_Content,
+        Macro_Draw_To_GBuffer_FS_Declare_Content,
+        Macro_Draw_To_GBuffer_FS_Init_Main_Content,
+        Macro_Post_Render_VS_Declare_Content,
+        Macro_Post_Render_VS_Init_Main_Content,
+        Macro_Post_Render_FS_Declare_Content,
+        Macro_Post_Render_FS_Init_Main_Content,
 
         Filepath_Shader_Fragment_Selection,
 

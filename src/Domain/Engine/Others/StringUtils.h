@@ -19,6 +19,7 @@ public:
      */
     static void AddInFrontOfWords(std::string particle, std::string *str);
     static void RemoveLineBreaks(std::string *str);
+    static void Replace(std::string *content, const std::string &toFind, const std::string &replaceWithThis);
 };
 
 #endif // STRINGUTILS_H

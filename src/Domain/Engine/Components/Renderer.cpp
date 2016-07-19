@@ -60,7 +60,7 @@ void Renderer::ActivateGLStatesBeforeRendering() const
         p_material->p_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
                                                     t->GetPosition(), false);
 
-        p_material->p_shaderProgram->SetUniformFloat("BANG_renderer_receivesLighting",
+        p_material->p_shaderProgram->SetUniformFloat("B_renderer_receivesLighting",
                                                       m_receivesLighting ? 1.0f : 0.0f, false);
     }
 

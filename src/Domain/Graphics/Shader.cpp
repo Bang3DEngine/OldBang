@@ -25,6 +25,7 @@ bool Shader::LoadFromFile(const std::string& filepath)
     ss << f.rdbuf();
     m_sourceCode = ss.str();
 
+    ShaderPreprocessor::PreprocessShaderCode(&m_sourceCode);
 
     m_idGL = glCreateShader(m_type);
 
@@ -35,8 +36,9 @@ bool Shader::LoadFromFile(const std::string& filepath)
 
     GLint ok;
     glGetShaderiv(m_idGL, GL_COMPILE_STATUS, &ok);
-    if (not ok)
+    if (!ok)
     {
+        Logger_Log(m_sourceCode);
         GLint maxLength = 0;
         glGetShaderiv(m_idGL, GL_INFO_LOG_LENGTH, &maxLength);
 

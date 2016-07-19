@@ -24,3 +24,12 @@ void StringUtils::RemoveLineBreaks(std::string *str)
 {
     std::replace(str->begin(), str->end(), '\n', ' ');
 }
+
+void StringUtils::Replace(std::string *content, const std::string &toFind, const std::string &replaceWithThis)
+{
+    std::string::size_type i;
+    while ( (i = content->find(toFind)) != std::string::npos)
+    {
+        content->replace(i, toFind.length(), replaceWithThis);
+    }
+}
