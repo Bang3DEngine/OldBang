@@ -2,12 +2,13 @@
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
-    CreateColorAttachment(Attachment::Position,      GL_RGBA32F, GL_RGBA);
-    CreateColorAttachment(Attachment::Normal,        GL_RGBA32F, GL_RGBA);
-    CreateColorAttachment(Attachment::Uv,            GL_RGBA32F, GL_RGBA);
-    CreateColorAttachment(Attachment::Diffuse,       GL_RGBA32F, GL_RGBA);
-    CreateColorAttachment(Attachment::MaterialBools, GL_RGBA32F, GL_RGBA);
-    CreateColorAttachment(Attachment::Depth,         GL_RGBA32F, GL_RGBA);
+    const GLint texInternalType = GL_FLOAT;
+    CreateColorAttachment(Attachment::Position,      GL_RGBA32F, GL_RGB,  texInternalType);
+    CreateColorAttachment(Attachment::Normal,        GL_RGBA32F, GL_RGB,  texInternalType);
+    CreateColorAttachment(Attachment::Uv,            GL_RGB,     GL_RGB,  texInternalType);
+    CreateColorAttachment(Attachment::Diffuse,       GL_RGBA,    GL_RGBA, texInternalType);
+    CreateColorAttachment(Attachment::MaterialBools, GL_RGBA,    GL_RGBA, texInternalType);
+    CreateColorAttachment(Attachment::Depth,         GL_RGBA,    GL_RGBA, texInternalType);
     CreateDepthBufferAttachment();
 
     p_renderToScreenMaterial = new Material();
@@ -16,8 +17,6 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     p_renderToScreenMaterial->SetShaderProgram(sp);
 
     p_renderToScreenPlaneMesh = MeshFactory::GetPlane();
-    p_renderToScreenPlaneMesh->BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
-                                                            *(p_renderToScreenMaterial->GetShaderProgram()));
 }
 
 GBuffer::~GBuffer()
@@ -43,30 +42,38 @@ void GBuffer::BindTexturesTo(Material *mat) const
     mat->SetTexture(diffuseTex,   "B_gout_fin_diffuse");
     mat->SetTexture(matBoolsTex,  "B_gout_fin_materialBools");
     mat->SetTexture(depthTex,     "B_gout_fin_depth");
-    mat->Bind();
 }
 
-void GBuffer::RenderToScreenWithoutMaterial() const
+void GBuffer::RenderToScreenWithMaterial(Material *mat) const
 {
+    if(mat)
+    {
+        p_renderToScreenPlaneMesh->
+                BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
+                                             *(mat->GetShaderProgram()));
+        BindTexturesTo(mat);
+        mat->Bind();
+    }
+
     p_renderToScreenPlaneMesh->GetVAO()->Bind();
 
     glEnable(GL_CULL_FACE);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-    glDepthFunc(GL_LEQUAL);
+    glPolygonMode(GL_FRONT, GL_FILL);
 
     //Render the screen plane!
+    glDepthFunc(GL_LEQUAL);
     glDrawArrays(GL_TRIANGLES, 0, p_renderToScreenPlaneMesh->GetVertexCount());
 
     p_renderToScreenPlaneMesh->GetVAO()->UnBind();
+
+    if(mat)
+    {
+        mat->UnBind();
+    }
 }
 
 void GBuffer::RenderToScreen() const
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    BindTexturesTo(p_renderToScreenMaterial);
-
-    p_renderToScreenMaterial->Bind();
-    RenderToScreenWithoutMaterial();
-    p_renderToScreenMaterial->UnBind();
+    RenderToScreenWithMaterial(p_renderToScreenMaterial);
 }

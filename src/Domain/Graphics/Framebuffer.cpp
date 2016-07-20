@@ -21,7 +21,7 @@ Framebuffer::~Framebuffer()
 }
 
 void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum,
-                                        GLint glInternalFormat, GLint glFormat)
+                                        GLint glInternalFormat, GLint glFormat, GLint glInternalType)
 {
     while(int(m_textureAttachments.size()) <= framebufferAttachmentNum)
         m_textureAttachments.push_back(nullptr);
@@ -39,6 +39,11 @@ void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum,
     if(glFormat != -1)
     {
         tex->SetGLFormat(glFormat);
+    }
+
+    if(glInternalType != -1)
+    {
+        tex->SetGLInternalType(glInternalType);
     }
 
     tex->CreateEmpty(m_width, m_height);

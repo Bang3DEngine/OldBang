@@ -41,6 +41,7 @@ private:
 
 protected:
 protected:
+    GLint m_internalType = GL_UNSIGNED_BYTE;
     GLint m_internalFormat = GL_RGB;
     GLint m_format = GL_RGB;
 
@@ -64,6 +65,7 @@ public:
     virtual void CreateEmpty(int width, int height) = 0;
     virtual void Resize(int width, int height) = 0;
 
+    void SetGLInternalType(GLint glInternalType);
     void SetGLInternalFormat(GLint glInternalFormat);
     void SetGLFormat(GLint glFormat);
     void SetFilterMode(FilterMode filterMode);
@@ -73,6 +75,7 @@ public:
     int GetWidth() const;
     int GetHeight() const;
     int GetNumComponents() const;
+    GLint GetGLInternalType() const;
     GLint GetGLInternalFormat() const;
     GLint GetGLFormat() const;
     FilterMode GetFilterMode() const;

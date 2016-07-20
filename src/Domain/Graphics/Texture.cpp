@@ -28,6 +28,11 @@ Texture::~Texture()
     glDeleteTextures(1, &m_idGL);
 }
 
+void Texture::SetGLInternalType(GLint glInternalType)
+{
+    m_internalType = glInternalType;
+}
+
 void Texture::SetGLInternalFormat(GLint glInternalFormat)
 {
     m_internalFormat = glInternalFormat;
@@ -75,6 +80,11 @@ int Texture::GetHeight() const
 int Texture::GetNumComponents() const
 {
     return m_numComponents;
+}
+
+GLint Texture::GetGLInternalType() const
+{
+    return m_internalType;
 }
 
 GLint Texture::GetGLInternalFormat() const

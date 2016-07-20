@@ -38,7 +38,7 @@ public:
     virtual ~Framebuffer();
 
     void CreateColorAttachment(int framebufferAttachmentNum,
-                               GLint glInternalFormat = -1, GLint glFormat = -1);
+                               GLint glInternalFormat = -1, GLint glFormat = -1,  GLint glInternalType = -1);
 
     void CreateDepthBufferAttachment();
 

@@ -14,15 +14,14 @@ Light::Light()
 
 void Light::ApplyLight(GBuffer *gbuffer) const
 {
-    gbuffer->Bind();
+    //gbuffer->Bind();
 
-    gbuffer->BindTexturesTo(m_material);
+    //gbuffer->BindTexturesTo(m_material);
 
-    m_material->Bind();
-    gbuffer->RenderToScreenWithoutMaterial();
-    m_material->UnBind();
+    gbuffer->RenderToScreenWithMaterial(m_material);
+    //gbuffer->RenderToScreen();
 
-    gbuffer->UnBind();
+    //gbuffer->UnBind();
 }
 
 const std::string Light::ToString() const

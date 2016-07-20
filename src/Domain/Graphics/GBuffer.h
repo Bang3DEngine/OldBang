@@ -32,7 +32,7 @@ public:
     virtual ~GBuffer();
 
     void BindTexturesTo(Material *mat) const;
-    void RenderToScreenWithoutMaterial() const;
+    void RenderToScreenWithMaterial(Material *mat) const;
     void RenderToScreen() const;
 };
 

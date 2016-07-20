@@ -8,6 +8,8 @@ struct B_VertexIn  // GBuffer stored properties
     vec3 diffuseColor;
     float receivesLighting;
     float depth;
+
+    vec2 uv_screen;
 };
 
 struct B_VertexOut

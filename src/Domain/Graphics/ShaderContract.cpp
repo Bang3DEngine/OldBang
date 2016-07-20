@@ -139,7 +139,7 @@ gl_Position               = B_vout.position_pvm; \n\
 
 
 const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Declare_Content =
-"\
+"\n\
 #version 130 \n\
 \n\
 uniform mat4  B_matrix_model; \n\
@@ -154,16 +154,16 @@ in vec4 B_position_world_vout_fin; \n\
 in vec4 B_normal_world_vout_fin; \n\
 in vec2 B_uv_vout_fin; \n\
 \n\
-out vec3  B_position_fout_gin; \n\
-out vec3  B_normal_fout_gin; \n\
-out vec2  B_uv_fout_gin; \n\
-out vec3  B_diffuse_fout_gin; \n\
-out vec3  B_materialBools_fout_gin; \n\
-out float B_depth_fout_gin; \n\
+out vec4 B_position_fout_gin; \n\
+out vec4 B_normal_fout_gin; \n\
+out vec4 B_uv_fout_gin; \n\
+out vec4 B_diffuse_fout_gin; \n\
+out vec4 B_materialBools_fout_gin; \n\
+out vec4 B_depth_fout_gin; \n\
 ";
 
 const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Init_Main_Content =
-"\
+"\n\
 /* Fill vin vin */ \n\
 B_vin.position_world = B_position_world_vout_fin; \n\
 B_vin.normal_world   = B_normal_world_vout_fin; \n\
@@ -178,13 +178,13 @@ B_vout.depth            = gl_FragCoord.z;  \n\
 ";
 
 const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_End_Main_Content =
-"\
-B_position_fout_gin = B_vout.position_world; \n\
-B_normal_fout_gin = B_vout.normal_world; \n\
-B_uv_fout_gin = B_vout.uv; \n\
-B_diffuse_fout_gin = B_vout.diffuseColor; \n\
-B_materialBools_fout_gin.x = B_vout.receivesLighting; \n\
-B_depth_fout_gin = B_vout.depth; \n\
+"\n\
+B_position_fout_gin       = vec4(B_vout.position_world, 1); \n\
+B_normal_fout_gin         = vec4(B_vout.normal_world, 0); \n\
+B_uv_fout_gin             = vec4(B_vout.uv, 0, 0); \n\
+B_diffuse_fout_gin        = vec4(B_vout.diffuseColor, 1); \n\
+B_materialBools_fout_gin  = vec4(B_vout.receivesLighting, 0, 0, 0); \n\
+B_depth_fout_gin          = vec4(B_vout.depth); \n\
 ";
 
 
@@ -226,18 +226,18 @@ uniform sampler2D B_gout_fin_depth; \n\
 \n\
 in vec3 B_position_raw_vin; \n\
 in vec2 B_uv_raw_vout_fin; \n\
-vec2 B_screen_uv = B_uv_raw_vout_fin; \n\
 \n\
 ";
 
 const std::string ShaderContract::Macro_Post_Render_FS_Init_Main_Content =
 "\
-B_vin.position_world      = texture2D(B_gout_fin_position,       B_screen_uv).xyz; \n\
-B_vin.normal_world        = texture2D(B_gout_fin_normal,         B_screen_uv).xyz; \n\
-B_vin.uv                  = texture2D(B_gout_fin_uv,             B_screen_uv).xy;  \n\
-B_vin.diffuseColor        = texture2D(B_gout_fin_diffuse,        B_screen_uv).rgb; \n\
-B_vin.receivesLighting    = texture2D(B_gout_fin_materialBools,  B_screen_uv).x;   \n\
-B_vin.depth               = texture2D(B_gout_fin_depth,          B_screen_uv).x;   \n\
+B_vin.uv_screen           = B_uv_raw_vout_fin; \n\
+B_vin.position_world      = texture2D(B_gout_fin_position,       B_vin.uv_screen).xyz; \n\
+B_vin.normal_world        = texture2D(B_gout_fin_normal,         B_vin.uv_screen).xyz; \n\
+B_vin.uv                  = texture2D(B_gout_fin_uv,             B_vin.uv_screen).xy;  \n\
+B_vin.diffuseColor        = texture2D(B_gout_fin_diffuse,        B_vin.uv_screen).rgb; \n\
+B_vin.receivesLighting    = texture2D(B_gout_fin_materialBools,  B_vin.uv_screen).x;   \n\
+B_vin.depth               = texture2D(B_gout_fin_depth,          B_vin.uv_screen).x;   \n\
 B_vin.normal_world        = normalize(B_vin.normal_world); \n\
 ";
 const std::string ShaderContract::Macro_Post_Render_FS_End_Main_Content =
