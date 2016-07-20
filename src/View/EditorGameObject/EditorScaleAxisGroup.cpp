@@ -10,9 +10,9 @@ EditorScaleAxisGroup::EditorScaleAxisGroup(GameObject *attachedGameObject) :
     p_axisY = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
     p_axisZ = new EditorScaleAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
 
-    AddChild(p_axisX);
-    AddChild(p_axisY);
-    AddChild(p_axisZ);
+    p_axisX->SetParent(this);
+    p_axisY->SetParent(this);
+    p_axisZ->SetParent(this);
 }
 
 EditorScaleAxisGroup::~EditorScaleAxisGroup()

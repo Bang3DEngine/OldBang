@@ -196,14 +196,14 @@ void MenuBar::OnCreateFromPrefab() const
 
         if(selectedGameObject )
         {
-            selectedGameObject->AddChild(e);
+            e->SetParent(selectedGameObject);
         }
         else
         {
             Scene *currentScene = Canvas::GetInstance()->GetCurrentScene();
             if(currentScene )
             {
-                currentScene->AddChild(e);
+                e->SetParent(currentScene);
             }
         }
         delete p;
@@ -222,7 +222,7 @@ GameObject* MenuBar::CreatePrimitiveGameObject(Mesh *m, const std::string &name)
 {
     GameObject *go = MeshFactory::CreatePrimitiveGameObject(m, name);
 
-    Canvas::GetInstance()->GetCurrentScene()->AddChild(go);
+    go->SetParent(Canvas::GetInstance()->GetCurrentScene());
     Hierarchy::GetInstance()->SelectGameObject(go);
     return go;
 }

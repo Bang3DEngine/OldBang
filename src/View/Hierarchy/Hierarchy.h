@@ -10,6 +10,8 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <algorithm>
+
 #include <QTimer>
 #include <QAction>
 #include <QMenu>
@@ -20,6 +22,7 @@
 #include "Scene.h"
 #include "FileDialog.h"
 #include "GameObject.h"
+#include "CopyPasteGameObjectManager.h"
 #include "IWindowEventManagerListener.h"
 
 class Hierarchy : public QTreeWidget, public IWindowEventManagerListener
@@ -35,12 +38,10 @@ private:
     QTreeWidgetItem *p_lastSelectedItem = nullptr;
     Scene *p_currentScene = nullptr;
 
-    std::list<GameObject*> m_copiedGameObjects;
-
     void ExpandRecursiveUpwards(QTreeWidgetItem *item);
     QTreeWidgetItem* FillDownwards(GameObject *e);
 
-    //Useful for example, for RemoveChild
+    //Useful for example, for Removing a Child
     //(we just need to remove the parent/s of all the selected entities)
     void LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items);
 
@@ -62,6 +63,7 @@ public:
 
     void keyPressEvent(QKeyEvent *e);
 
+    std::list<GameObject*> GetSelectedGameObjects(bool excludeInternal = false);
     void SelectGameObject(GameObject *go);
     void UnselectAll();
 

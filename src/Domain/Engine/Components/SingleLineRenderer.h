@@ -27,10 +27,15 @@ public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override;
+
+    virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
 
-    void SetOrigin(Vector3 o);
-    void SetDestiny(Vector3 d);
+    void SetOrigin(const Vector3 &o);
+    void SetDestiny(const Vector3 &d);
+
+    Vector3 GetOrigin() const;
+    Vector3 GetDestiny() const;
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;

@@ -7,9 +7,9 @@ EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObj
     p_erag = new EditorRotateAxisGroup(attachedGameObject);
     p_esag = new EditorScaleAxisGroup(attachedGameObject);
 
-    AddChild(p_etag);
-    AddChild(p_erag);
-    AddChild(p_esag);
+    p_etag->SetParent(this);
+    p_erag->SetParent(this);
+    p_esag->SetParent(this);
 
     DisableAllGroups();
 }

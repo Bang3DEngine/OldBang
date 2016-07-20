@@ -42,9 +42,19 @@ const std::string BehaviourHolder::ToString() const
     return "BehaviourHolder ( " + m_sourceFilepath + ")";
 }
 
+void BehaviourHolder::CloneInto(ICloneable *clone) const
+{
+    Component::CloneInto(clone);
+    BehaviourHolder *bh = static_cast<BehaviourHolder*>(clone);
+    bh->m_sourceFilepath = m_sourceFilepath;
+    bh->Refresh();
+}
+
 ICloneable *BehaviourHolder::Clone() const
 {
-    return new BehaviourHolder();
+    BehaviourHolder *bh = new BehaviourHolder();
+    CloneInto(bh);
+    return bh;
 }
 
 void BehaviourHolder::Refresh()

@@ -5,7 +5,7 @@
 EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
 {
     p_yawNode = new EditorGameObject("EditorYawNode");
-    AddChild(p_yawNode);
+    p_yawNode->SetParent(this);
 
     p_cam = p_yawNode->AddComponent<Camera>();
     p_cam->SetAutoUpdateAspectRatio(true);

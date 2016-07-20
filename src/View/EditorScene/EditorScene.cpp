@@ -3,17 +3,17 @@
 EditorScene::EditorScene() : Scene()
 {
     p_debugGameObject = new EditorDebugGameObject();
-    AddChild(p_debugGameObject);
+    p_debugGameObject->SetParent(this);
 
     p_cameraGameObject = new EditorCamera();
-    AddChild(p_cameraGameObject);
+    p_cameraGameObject->SetParent(this);
     SetCamera(p_cameraGameObject->GetCamera());
 
     //axises = new EditorTranslateAxisGroup();
-    //AddChild(axises);
+    //axises->SetParent(this);
 
     p_floor = new EditorFloor();
-    AddChild(p_floor);
+    p_floor->SetParent(this);
 
     p_selectionFramebuffer =
             new SelectionFramebuffer(Canvas::GetWidth(),

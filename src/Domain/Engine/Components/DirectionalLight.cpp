@@ -14,9 +14,17 @@ const std::string DirectionalLight::ToString() const
     return "DirectionalLight";
 }
 
+void DirectionalLight::CloneInto(ICloneable *clone) const
+{
+    Light::CloneInto(clone);
+    DirectionalLight *dl = static_cast<DirectionalLight*>(clone);
+}
+
 ICloneable *DirectionalLight::Clone() const
 {
-    return new DirectionalLight();
+    DirectionalLight *dl = new DirectionalLight();
+    CloneInto(dl);
+    return dl;
 }
 
 InspectorWidgetInfo *DirectionalLight::GetComponentInfo()

@@ -19,12 +19,18 @@ public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override { return "Directional Light"; }
+
+    virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
     #endif
+
+    virtual void SetColor(const Vector3 &color);
+
+    Vector3 GetColor() const;
 
     virtual void Write(std::ostream &f) const;
     virtual void Read(std::istream &f);

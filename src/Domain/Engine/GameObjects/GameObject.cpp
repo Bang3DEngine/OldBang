@@ -24,20 +24,30 @@ GameObject::GameObject(const std::string &name) : m_name(name)
 void GameObject::CloneInto(ICloneable *clone) const
 {
     GameObject *go = static_cast<GameObject*>(clone);
+
     for(GameObject *child : m_children)
     {
         if(child->IsEditorGameObject()) continue;
-        go->AddChildWithoutNotifyingHierarchy( static_cast<GameObject*>(child->Clone()) );
+        GameObject *childClone = static_cast<GameObject*>(child->Clone());
+        childClone->SetParent(go);
     }
 
     for(Component *comp : m_comps)
     {
-        go->AddComponent( static_cast<Component*>(comp->Clone()) );
+        Transform* t = dynamic_cast<Transform*>(comp);
+        if(!t)
+        {
+            go->AddComponent( static_cast<Component*>(comp->Clone()) );
+        }
+        else
+        {
+            transform->CloneInto(go->transform);
+        }
     }
 
     go->SetName(m_name);
     go->SetRenderLayer(m_renderLayer);
-    go->p_parent = p_parent;
+    go->SetParent(nullptr);
 }
 
 ICloneable* GameObject::Clone() const
@@ -50,11 +60,38 @@ ICloneable* GameObject::Clone() const
 GameObject::~GameObject()
 {
     this->_OnDestroy();
-    for (auto it = m_children.begin(); it != m_children.end();)
+
+    while (m_children.size() > 0)
     {
-        GameObject *child = *it;
-        it = this->RemoveChildWithoutNotifyingHierarchy(it);
+        GameObject *child = *(m_children.begin());
+        child->SetParent(nullptr);
         delete child;
+    }
+}
+
+void GameObject::SetParent(GameObject *parent)
+{
+    if(p_parent != parent)
+    {
+        if (p_parent)
+        {
+            p_parent->m_children.remove(this);
+
+            #ifdef BANG_EDITOR
+            WindowEventManager::NotifyChildRemoved(this);
+            #endif
+        }
+
+        p_parent = parent;
+
+        if(p_parent)
+        {
+            p_parent->m_children.push_back(this);
+
+            #ifdef BANG_EDITOR
+            WindowEventManager::NotifyChildAdded(this);
+            #endif
+        }
     }
 }
 
@@ -201,33 +238,6 @@ void GameObject::RemoveComponent(Component *c)
     }
 }
 
-
-void GameObject::AddChildWithoutNotifyingHierarchy(GameObject *child)
-{
-    if (child->p_parent)
-    {
-        child->p_parent->MoveChild(child, this);
-    }
-    else
-    {
-        child->p_parent = this;
-        m_children.push_back(child);
-    }
-}
-
-void GameObject::AddChild(GameObject *child)
-{
-    bool moved = child->p_parent;
-    AddChildWithoutNotifyingHierarchy(child);
-
-    #ifdef BANG_EDITOR
-    if(!moved)
-    {
-        WindowEventManager::NotifyChildAdded(child);
-    }
-    #endif
-}
-
 GameObject *GameObject::GetChild(const std::string &name) const
 {
     for(auto it = m_children.begin(); it != m_children.end(); ++it)
@@ -239,92 +249,6 @@ GameObject *GameObject::GetChild(const std::string &name) const
         }
     }
     return nullptr;
-}
-
-void GameObject::MoveChild(GameObject *child, GameObject *newParent)
-{
-    for(auto it = m_children.begin(); it != m_children.end(); ++it)
-    {
-        if((*it) == child)
-        {
-            RemoveChildWithoutNotifyingHierarchy(it);
-            newParent->AddChildWithoutNotifyingHierarchy(child);
-
-            #ifdef BANG_EDITOR
-            WindowEventManager::NotifyChildChangedParent(child, this);
-            #endif
-
-            break;
-        }
-    }
-}
-
-std::list<GameObject*>::iterator GameObject::RemoveChildWithoutNotifyingHierarchy(
-        std::list<GameObject*>::iterator &it)
-{
-    GameObject *child = (*it);
-    child->p_parent = nullptr;
-    return m_children.erase(it);
-}
-
-
-std::list<GameObject*>::iterator GameObject::RemoveChild(
-        std::list<GameObject*>::iterator &it)
-{
-    auto itret = RemoveChildWithoutNotifyingHierarchy(it);
-    #ifdef BANG_EDITOR
-    WindowEventManager::NotifyChildRemoved((*it));
-    #endif
-    return itret;
-}
-
-void GameObject::RemoveChild(const std::string &name)
-{
-    for(auto it = m_children.begin(); it != m_children.end(); ++it)
-    {
-        GameObject *child = (*it);
-        if(child->m_name == name)
-        {
-            RemoveChild(it);
-            break;
-        }
-    }
-}
-
-void GameObject::RemoveChild(GameObject *child)
-{
-    for(auto it = m_children.begin(); it != m_children.end(); ++it)
-    {
-        if((*it) == child)
-        {
-            RemoveChild(it);
-            break;
-        }
-    }
-}
-
-void GameObject::SetParent(GameObject *newParent)
-{
-    GameObject *previousParent = p_parent;
-    if(p_parent)
-    {
-        if(newParent)
-        {
-            p_parent->MoveChild(this, newParent);
-        }
-        else
-        {
-            Scene *st = GetScene();
-            if(st)
-            {
-                p_parent->MoveChild(this, newParent);
-            }
-        }
-    }
-
-    #ifdef BANG_EDITOR
-    WindowEventManager::NotifyChildChangedParent(this, previousParent);
-    #endif
 }
 
 void GameObject::SetRenderLayer(unsigned char layer)
@@ -371,14 +295,14 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
         if(!m_wasSelectedInHierarchy)
         {
             m_selectionGameObject = new EditorSelectionGameObject(this);
-            Canvas::GetCurrentScene()->AddChildWithoutNotifyingHierarchy(m_selectionGameObject);
+            m_selectionGameObject->SetParent(Canvas::GetCurrentScene());
         }
     }
     else
     {
         if(m_wasSelectedInHierarchy)
         {
-            Canvas::GetCurrentScene()->RemoveChild(m_selectionGameObject);
+            m_selectionGameObject->SetParent(nullptr);
         }
     }
 

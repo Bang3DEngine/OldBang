@@ -8,7 +8,7 @@ Scene::Scene() : GameObject("Scene")
 {
     GameObject *test = new GameObject("LightTest");
     test->AddComponent<DirectionalLight>();
-    AddChild(test);
+    test->SetParent(this);
 
     p_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }

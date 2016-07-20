@@ -328,14 +328,14 @@ void FileReader::ReadChildren(std::istream &f, GameObject *e)
         {
             GameObject *child = new GameObject();
             child->Read(f);
-            e->AddChild(child);
+            child->SetParent(e);
         }
         else if (line == "<GameObjectPrefab>")
         {
             std::string prefabFilepath = FileReader::ReadString(f);
             Prefab *p = AssetsManager::GetAsset<Prefab>(prefabFilepath);
             GameObject *child = p->Instantiate();
-            e->AddChild(child);
+            child->SetParent(e);
         }
     }
 }

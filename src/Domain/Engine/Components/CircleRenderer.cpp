@@ -22,12 +22,23 @@ const std::string CircleRenderer::ToString() const
     return "CircleRenderer";
 }
 
-ICloneable *CircleRenderer::Clone() const
+std::string CircleRenderer::GetName() const { return "CircleRenderer"; }
+
+void CircleRenderer::CloneInto(ICloneable *clone) const
 {
-    return new CircleRenderer();
+    LineRenderer::CloneInto(clone);
+    CircleRenderer *cr = static_cast<CircleRenderer*>(clone);
+    cr->SetRadius(GetRadius());
+    cr->SetSegments(GetSegments());
 }
 
-std::string CircleRenderer::GetName() const { return "CircleRenderer"; }
+ICloneable *CircleRenderer::Clone() const
+{
+    CircleRenderer *cr = new CircleRenderer();
+    CloneInto(cr);
+    return cr;
+}
+
 
 void CircleRenderer::GeneratePoints()
 {
@@ -109,6 +120,16 @@ void CircleRenderer::SetSegments(int segments)
     this->m_segments = segments;
     GeneratePoints();
     BindPointsToVAO();
+}
+
+float CircleRenderer::GetRadius() const
+{
+    return m_radius;
+}
+
+int CircleRenderer::GetSegments() const
+{
+    return m_segments;
 }
 
 #ifdef BANG_EDITOR

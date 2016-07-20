@@ -150,9 +150,20 @@ const std::string Camera::ToString() const
     return "Camera";
 }
 
+void Camera::CloneInto(ICloneable *clone) const
+{
+    Component::CloneInto(clone);
+    Camera *cam = static_cast<Camera*>(clone);
+    cam->SetAspectRatio(GetAspectRatio());
+    cam->SetAutoUpdateAspectRatio(GetAutoUpdateAspectRatio());
+
+}
+
 ICloneable *Camera::Clone() const
 {
-    return new Camera();
+    Camera *cam = new Camera();
+    CloneInto(cam);
+    return cam;
 }
 
 

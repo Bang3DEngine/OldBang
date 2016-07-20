@@ -21,7 +21,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     );
 
     m_axisCap = MeshFactory::GetConeEditorGameObject();
-    AddChild(m_axisCap);
+    m_axisCap->SetParent(this);
     if(dir == EditorAxis::EditorAxisDirection::X)
     {
         m_axisCap->transform->SetLocalEuler(Vector3(90.0f, 90.0f, 0.0f));

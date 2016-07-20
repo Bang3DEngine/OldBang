@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
         GameObject *m_defaultCamera = new GameObject("DefaultCamera");
         m_defaultCamera->transform->SetPosition(Vector3(30));
         m_defaultCamera->transform->LookAt(Vector3::zero);
-        AddChild(m_defaultCamera);
+        m_defaultCamera->SetParent(this);
 
         Camera *cam = m_defaultCamera->AddComponent<Camera>();
         cam->SetFovDegrees(60.0f);

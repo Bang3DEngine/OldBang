@@ -173,7 +173,8 @@ HEADERS += \
     src/View/IWindow.h \
     src/Domain/Engine/Components/DirectionalLight.h \
     src/Domain/Engine/Components/Light.h \
-    src/Domain/Graphics/ShaderPreprocessor.h
+    src/Domain/Graphics/ShaderPreprocessor.h \
+    src/View/CopyPasteGameObjectManager.h
 
 EDITOR {
 HEADERS += \
@@ -287,7 +288,8 @@ SOURCES += \
     src/View/IWindow.cpp \
     src/Domain/Engine/Components/DirectionalLight.cpp \
     src/Domain/Engine/Components/Light.cpp \
-    src/Domain/Graphics/ShaderPreprocessor.cpp
+    src/Domain/Graphics/ShaderPreprocessor.cpp \
+    src/View/CopyPasteGameObjectManager.cpp
 
 EDITOR {
     SOURCES += \

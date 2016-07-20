@@ -9,9 +9,9 @@ EditorTranslateAxisGroup::EditorTranslateAxisGroup(GameObject *attachedGameObjec
     p_axisY = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
     p_axisZ = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
 
-    AddChild(p_axisX);
-    AddChild(p_axisY);
-    AddChild(p_axisZ);
+    p_axisX->SetParent(this);
+    p_axisY->SetParent(this);
+    p_axisZ->SetParent(this);
 }
 
 EditorTranslateAxisGroup::~EditorTranslateAxisGroup()

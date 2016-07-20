@@ -29,9 +29,28 @@ const std::string Light::ToString() const
     return "Light";
 }
 
+void Light::CloneInto(ICloneable *clone) const
+{
+    Component::CloneInto(clone);
+    Light *l = static_cast<Light*>(clone);
+    l->SetColor(GetColor());
+}
+
 ICloneable *Light::Clone() const
 {
-    return new Light();
+    Light *l = new Light();
+    CloneInto(l);
+    return l;
+}
+
+void Light::SetColor(const Vector3 &color)
+{
+    m_color = color;
+}
+
+Vector3 Light::GetColor() const
+{
+    return m_color;
 }
 
 InspectorWidgetInfo *Light::GetComponentInfo()

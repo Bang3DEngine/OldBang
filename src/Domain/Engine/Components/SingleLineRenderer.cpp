@@ -28,21 +28,41 @@ const std::string SingleLineRenderer::ToString() const
 
 std::string SingleLineRenderer::GetName() const { return "SingleLineRenderer"; }
 
-ICloneable *SingleLineRenderer::Clone() const
+void SingleLineRenderer::CloneInto(ICloneable *clone) const
 {
-    return new SingleLineRenderer();
+    LineRenderer::CloneInto(clone);
+    SingleLineRenderer *slr = static_cast<SingleLineRenderer*>(clone);
+    slr->SetOrigin(GetOrigin());
+    slr->SetDestiny(GetDestiny());
 }
 
-void SingleLineRenderer::SetOrigin(Vector3 o)
+ICloneable *SingleLineRenderer::Clone() const
+{
+    SingleLineRenderer *slr = new SingleLineRenderer();
+    CloneInto(slr);
+    return slr;
+}
+
+void SingleLineRenderer::SetOrigin(const Vector3 &o)
 {
     m_points[0] = o;
     BindPointsToVAO();
 }
 
-void SingleLineRenderer::SetDestiny(Vector3 d)
+void SingleLineRenderer::SetDestiny(const Vector3 &d)
 {
     m_points[1] = d;
     BindPointsToVAO();
+}
+
+Vector3 SingleLineRenderer::GetOrigin() const
+{
+    return m_points[0];
+}
+
+Vector3 SingleLineRenderer::GetDestiny() const
+{
+    return m_points[1];
 }
 
 #ifdef BANG_EDITOR

@@ -71,12 +71,6 @@ protected:
 
     bool m_enabled = true;
 
-    void AddChildWithoutNotifyingHierarchy(GameObject *child);
-    std::list<GameObject*>::iterator RemoveChildWithoutNotifyingHierarchy(
-            std::list<GameObject*>::iterator &it);
-    std::list<GameObject*>::iterator RemoveChild(
-            std::list<GameObject*>::iterator &it);
-
 public:
     std::string const& name   = m_name;
     GameObject* const& parent = p_parent;
@@ -85,18 +79,15 @@ public:
     GameObject();
     GameObject(const std::string &m_name);
     GameObject(const GameObject &go);
+
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
 
     virtual ~GameObject();
 
-    void AddChild(GameObject *child);
+    void SetParent(GameObject *parent);
     GameObject* GetChild(const std::string &m_name) const;
-    void MoveChild(GameObject *child, GameObject *newParent);
-    void RemoveChild(const std::string &m_name);
-    void RemoveChild(GameObject *child);
 
-    void SetParent(GameObject *p_parent);
     void SetRenderLayer(unsigned char layer);
     void SetName(const std::string &m_name);
 

@@ -49,10 +49,15 @@ public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override;
+
+    virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
 
     void SetRadius(float m_radius);
     void SetSegments(int m_segments);
+
+    float GetRadius() const;
+    int GetSegments() const;
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;
