@@ -1,14 +1,14 @@
-#include "CopyPasteGameObjectManager.h"
+#include "ClipboardGameObject.h"
 
-std::list<GameObject*> CopyPasteGameObjectManager::s_copiedGameObjects;
-std::map<GameObject*, GameObject*> CopyPasteGameObjectManager::s_goCopyToItsParent;
+std::list<GameObject*> ClipboardGameObject::s_copiedGameObjects;
+std::map<GameObject*, GameObject*> ClipboardGameObject::s_goCopyToItsParent;
 
-bool CopyPasteGameObjectManager::HasSomethingCopied()
+bool ClipboardGameObject::HasSomethingCopied()
 {
     return s_copiedGameObjects.size() > 0;
 }
 
-void CopyPasteGameObjectManager::CopyGameObjects(const std::list<GameObject*> &whatToCopy)
+void ClipboardGameObject::CopyGameObjects(const std::list<GameObject*> &whatToCopy)
 {
     s_copiedGameObjects.clear();
     s_goCopyToItsParent.clear();
@@ -26,7 +26,7 @@ void CopyPasteGameObjectManager::CopyGameObjects(const std::list<GameObject*> &w
     }
 }
 
-void CopyPasteGameObjectManager::PasteCopiedGameObjectsInto(GameObject *parent)
+void ClipboardGameObject::PasteCopiedGameObjectsInto(GameObject *parent)
 {
     // We first store all the copies of the copies into a local list,
     // to avoid modifying the original copy which can be pasted multiple times.
@@ -44,7 +44,7 @@ void CopyPasteGameObjectManager::PasteCopiedGameObjectsInto(GameObject *parent)
     }
 }
 
-void CopyPasteGameObjectManager::DuplicateCopiedGameObjects()
+void ClipboardGameObject::DuplicateCopiedGameObjects()
 {
     std::list<GameObject*> localCopies;
     for (GameObject *copy : s_copiedGameObjects)

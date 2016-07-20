@@ -5,10 +5,10 @@
 #include <list>
 #include "GameObject.h"
 
-class CopyPasteGameObjectManager
+class ClipboardGameObject
 {
 private:
-    CopyPasteGameObjectManager() {}
+    ClipboardGameObject() {}
 
 private:
 

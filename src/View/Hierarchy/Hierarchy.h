@@ -22,7 +22,7 @@
 #include "Scene.h"
 #include "FileDialog.h"
 #include "GameObject.h"
-#include "CopyPasteGameObjectManager.h"
+#include "ClipboardGameObject.h"
 #include "IWindowEventManagerListener.h"
 
 class Hierarchy : public QTreeWidget, public IWindowEventManagerListener

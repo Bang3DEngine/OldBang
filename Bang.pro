@@ -174,7 +174,8 @@ HEADERS += \
     src/Domain/Engine/Components/DirectionalLight.h \
     src/Domain/Engine/Components/Light.h \
     src/Domain/Graphics/ShaderPreprocessor.h \
-    src/View/CopyPasteGameObjectManager.h
+    src/View/CopyPasteGameObjectManager.h \
+    src/View/ClipboardGameObject.h
 
 EDITOR {
 HEADERS += \
@@ -289,7 +290,7 @@ SOURCES += \
     src/Domain/Engine/Components/DirectionalLight.cpp \
     src/Domain/Engine/Components/Light.cpp \
     src/Domain/Graphics/ShaderPreprocessor.cpp \
-    src/View/CopyPasteGameObjectManager.cpp
+    src/View/ClipboardGameObject.cpp
 
 EDITOR {
     SOURCES += \

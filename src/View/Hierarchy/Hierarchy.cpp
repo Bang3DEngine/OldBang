@@ -308,7 +308,7 @@ void Hierarchy::OnContextMenuCreateEmptyClicked()
 void Hierarchy::OnContextMenuCopyClicked()
 {
     std::list<GameObject*> whatToCopy = GetSelectedGameObjects(true);
-    CopyPasteGameObjectManager::CopyGameObjects(whatToCopy);
+    ClipboardGameObject::CopyGameObjects(whatToCopy);
 }
 
 void Hierarchy::OnContextMenuPasteClicked()
@@ -318,20 +318,20 @@ void Hierarchy::OnContextMenuPasteClicked()
     {
         for(GameObject *sel : selected)
         {
-            CopyPasteGameObjectManager::PasteCopiedGameObjectsInto(sel);
+            ClipboardGameObject::PasteCopiedGameObjectsInto(sel);
         }
     }
     else
     {
-        CopyPasteGameObjectManager::PasteCopiedGameObjectsInto(p_currentScene);
+        ClipboardGameObject::PasteCopiedGameObjectsInto(p_currentScene);
     }
 }
 
 void Hierarchy::OnContextMenuDuplicateClicked()
 {
     std::list<GameObject*> selected = GetSelectedGameObjects(true);
-    CopyPasteGameObjectManager::CopyGameObjects(selected);
-    CopyPasteGameObjectManager::DuplicateCopiedGameObjects();
+    ClipboardGameObject::CopyGameObjects(selected);
+    ClipboardGameObject::DuplicateCopiedGameObjects();
 }
 
 void Hierarchy::OnContextMenuDeleteClicked()
@@ -381,7 +381,7 @@ void Hierarchy::OnCustomContextMenuRequested(QPoint point)
     QAction actionCreateEmpty("Create empty", this);
     QAction actionCopy("Copy", this);
     QAction actionPaste("Paste", this);
-    actionPaste.setEnabled(CopyPasteGameObjectManager::HasSomethingCopied());
+    actionPaste.setEnabled(ClipboardGameObject::HasSomethingCopied());
     QAction actionDuplicate("Duplicate", this);
     QAction actionCreatePrefab("Create Prefab...", this);
     QAction actionDelete("Delete", this);
