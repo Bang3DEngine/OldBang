@@ -12,6 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
+CONFIG += EDITOR
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -174,7 +175,6 @@ HEADERS += \
     src/Domain/Engine/Components/DirectionalLight.h \
     src/Domain/Engine/Components/Light.h \
     src/Domain/Graphics/ShaderPreprocessor.h \
-    src/View/CopyPasteGameObjectManager.h \
     src/View/ClipboardGameObject.h
 
 EDITOR {

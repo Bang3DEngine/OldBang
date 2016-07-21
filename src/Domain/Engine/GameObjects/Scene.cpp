@@ -33,15 +33,12 @@ void Scene::_OnRender()
         cam->SetAspectRatio( p_canvas->GetAspectRatio() );
     }
 
-    glDisable(GL_BLEND);
     p_gbuffer->Bind();
-    glDisable(GL_BLEND);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //From 0 to 9
     for(m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
     {
-        glDisable(GL_BLEND);
         glClear(GL_DEPTH_BUFFER_BIT);
         PROPAGATE_EVENT(_OnPreRender, m_children);
         PROPAGATE_EVENT(_OnRender, m_children);
@@ -51,13 +48,13 @@ void Scene::_OnRender()
     std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
     for (Light *light : childrenLights)
     {
-        glDisable(GL_BLEND);
-        light->ApplyLight(p_gbuffer);
+        if(CAN_USE_COMPONENT(light))
+        {
+            light->ApplyLight(p_gbuffer);
+        }
     }
 
-    glDisable(GL_BLEND);
     p_gbuffer->UnBind();
-    glDisable(GL_BLEND);
     p_gbuffer->RenderToScreen();
 }
 

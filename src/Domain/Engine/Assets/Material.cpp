@@ -123,7 +123,7 @@ void Material::Read(std::istream &f)
     SetDiffuseColor(diffColor);
 }
 
-void Material::SetShaderProgram(const ShaderProgram *program)
+void Material::SetShaderProgram(ShaderProgram *program)
 {
     p_shaderProgram = program;
 }
@@ -144,7 +144,7 @@ void Material::SetDiffuseColor(const glm::vec4 &diffuseColor)
     this->m_diffuseColor = diffuseColor;
 }
 
-const ShaderProgram *Material::GetShaderProgram() const
+ShaderProgram *Material::GetShaderProgram() const
 {
     return p_shaderProgram;
 }

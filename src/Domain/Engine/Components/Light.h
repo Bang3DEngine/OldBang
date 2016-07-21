@@ -3,15 +3,18 @@
 
 #include "GBuffer.h"
 #include "Component.h"
+#include "InspectorWidget.h"
 
 class Light : public Component
 {
 friend class Scene;
 
 protected:
-    Vector3 m_color;
+    float m_intensity = 1.0f;
+    Vector3 m_color = Vector3::one;
     Material *m_material = nullptr;
 
+    virtual void SetUniformsBeforeApplyingLight() const;
     virtual void ApplyLight(GBuffer *gbuffer) const;
 
 public:

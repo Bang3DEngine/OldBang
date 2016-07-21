@@ -24,6 +24,7 @@ void main()
 {
     B_POST_RENDER_FS_INIT_MAIN();
 
+    vec3 ambientLight = vec3(0.1f);
     B_vout.color = vec4(B_vin.diffuseColor.rgb, 1);
 
     B_POST_RENDER_FS_END_MAIN();

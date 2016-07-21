@@ -136,6 +136,7 @@ GameObject *Hierarchy::GetFirstSelectedGameObject() const
 void Hierarchy::OnChildAdded(GameObject *child)
 {
     if(child->IsEditorGameObject()) return;
+    Logger_Log("added " << child);
 
     QTreeWidgetItem *item = FillDownwards(child); NONULL(item);
 
@@ -165,14 +166,13 @@ void Hierarchy::OnChildRemoved(GameObject *child)
     if(child->IsEditorGameObject()) return;
 
     QTreeWidgetItem *item = m_gameObjectToTreeItem[child]; NONULL(item);
-    if (item->parent())
+
+    if(item->isSelected())
     {
-        item->parent()->removeChild(item);
+        item->setSelected(false);
     }
-    else
-    {
-        removeItemWidget(item, 0);
-    }
+
+    delete item;
 
     m_treeItemToGameObject.erase(item);
     m_gameObjectToTreeItem.erase(child);

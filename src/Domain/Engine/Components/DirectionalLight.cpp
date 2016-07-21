@@ -35,7 +35,7 @@ InspectorWidgetInfo *DirectionalLight::GetComponentInfo()
 
 void DirectionalLight::OnSlotValueChanged(InspectorWidget *source)
 {
-
+    Light::OnSlotValueChanged(source);
 }
 
 void DirectionalLight::Write(std::ostream &f) const

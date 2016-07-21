@@ -1,5 +1,10 @@
 B_POST_RENDER_FS_DECLARE();
 
+uniform float B_light_intensity;
+uniform vec3  B_light_color;
+uniform vec3  B_light_forward_world;
+uniform vec3  B_light_position_world;
+
 struct B_VertexIn  // GBuffer stored properties
 {
     vec3 position_world;
@@ -26,8 +31,11 @@ void main()
 
     if(B_vin.receivesLighting > 0.5f)
     {
-        float lightDot = dot(B_vin.normal_world, normalize(vec3(1, 1, 1)));
-        B_vout.color = vec4(B_vin.diffuseColor * lightDot, 1);
+        float lightDot = dot(B_vin.normal_world, normalize(B_light_forward_world));
+        B_vout.color = vec4(B_vin.diffuseColor *
+                            lightDot *
+                            B_light_intensity *
+                            B_light_color, 1);
     }
     else
     {
