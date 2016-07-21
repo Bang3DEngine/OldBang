@@ -19,20 +19,23 @@ public:
         Diffuse,
         MaterialBools, // (receivesLighting, -, -, -)
         MaterialLightProperties, // ()
-        Depth
+        Depth,
+        Color
     };
 
 private:
 
-    Material *p_renderToScreenMaterial;
-    Mesh *p_renderToScreenPlaneMesh;
+    Material *p_renderGBufferToScreenMaterial;
+    Mesh *p_planeMeshToRenderEntireScreen;
+
+    void RenderScreenPlane() const;
 
 public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    void BindTexturesTo(Material *mat) const;
-    void RenderToScreenWithMaterial(Material *mat) const;
+    void BindInTexturesTo(Material *mat) const;
+    void RenderPassWithMaterial(Material *mat) const;
     void RenderToScreen() const;
 };
 

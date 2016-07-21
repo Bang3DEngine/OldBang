@@ -109,7 +109,9 @@ OTHER_FILES += \
     Assets/Materials/luigiMaterial.bmat \
     Assets/Materials/testMaterial.bmat \
     Assets/Materials/testMaterial2.bmat \
-    Assets/Engine/Shaders/SelectionBuffer.frag
+    Assets/Engine/Shaders/SelectionBuffer.frag \
+    Assets/Engine/Materials/RenderGBufferToScreen.bmat \
+    Assets/Engine/Shaders/RenderGBufferToScreen.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

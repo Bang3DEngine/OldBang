@@ -13,6 +13,7 @@ struct B_VertexIn  // GBuffer stored properties
     vec3 diffuseColor;
     float receivesLighting;
     float depth;
+    vec4 color;
 
     vec2 uv_screen;
 };
@@ -32,14 +33,12 @@ void main()
     if(B_vin.receivesLighting > 0.5f)
     {
         float lightDot = dot(B_vin.normal_world, normalize(B_light_forward_world));
-        B_vout.color = vec4(B_vin.diffuseColor *
-                            lightDot *
-                            B_light_intensity *
-                            B_light_color, 1);
+        B_vout.color = vec4(B_vin.color.rgb +
+                            B_vin.diffuseColor.rgb * lightDot * B_light_intensity * B_light_color, 1);
     }
     else
     {
-        B_vout.color = vec4(B_vin.diffuseColor, 1);
+        B_vout.color = vec4(B_vin.color.rgb, 1);
     }
 
     B_POST_RENDER_FS_END_MAIN();

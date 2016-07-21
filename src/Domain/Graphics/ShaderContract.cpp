@@ -160,6 +160,7 @@ out vec4 B_uv_fout_gin; \n\
 out vec4 B_diffuse_fout_gin; \n\
 out vec4 B_materialBools_fout_gin; \n\
 out vec4 B_depth_fout_gin; \n\
+out vec4 B_color_fout_gin; \n\
 ";
 
 const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Init_Main_Content =
@@ -182,9 +183,10 @@ const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_End_Main_Content =
 B_position_fout_gin       = vec4(B_vout.position_world, 1); \n\
 B_normal_fout_gin         = vec4(B_vout.normal_world, 0); \n\
 B_uv_fout_gin             = vec4(B_vout.uv, 0, 0); \n\
-B_diffuse_fout_gin        = vec4(B_vout.diffuseColor, 1); \n\
+B_diffuse_fout_gin        = vec4(B_vout.diffuseColor.rgb, 1); \n\
 B_materialBools_fout_gin  = vec4(B_vout.receivesLighting, 0, 0, 0); \n\
 B_depth_fout_gin          = vec4(B_vout.depth); \n\
+B_color_fout_gin          = vec4(0,0,0,1); \n\
 ";
 
 
@@ -223,9 +225,12 @@ uniform sampler2D B_gout_fin_uv; \n\
 uniform sampler2D B_gout_fin_diffuse;\n\
 uniform sampler2D B_gout_fin_materialBools; \n\
 uniform sampler2D B_gout_fin_depth; \n\
+uniform sampler2D B_gout_fin_color; \n\
 \n\
 in vec3 B_position_raw_vin; \n\
 in vec2 B_uv_raw_vout_fin; \n\
+\n\
+out vec4 B_fout_gin_color; /*Accumulated color*/ \n\
 \n\
 ";
 
@@ -238,15 +243,20 @@ B_vin.uv                  = texture2D(B_gout_fin_uv,             B_vin.uv_screen
 B_vin.diffuseColor        = texture2D(B_gout_fin_diffuse,        B_vin.uv_screen).rgb; \n\
 B_vin.receivesLighting    = texture2D(B_gout_fin_materialBools,  B_vin.uv_screen).x;   \n\
 B_vin.depth               = texture2D(B_gout_fin_depth,          B_vin.uv_screen).x;   \n\
+B_vin.color               = texture2D(B_gout_fin_color,          B_vin.uv_screen).xyzw;   \n\
 B_vin.normal_world        = normalize(B_vin.normal_world); \n\
+\n\
+B_vout.color              = vec4(B_vin.diffuseColor.rgb, 1); \n\
 ";
 const std::string ShaderContract::Macro_Post_Render_FS_End_Main_Content =
 "\
-gl_FragColor = B_vout.color; \n\
+B_fout_gin_color = B_vout.color; \n\
 ";
 
 const std::string ShaderContract::Filepath_Shader_SelectionBuffer_VS = "Assets/Engine/Shaders/SelectionBuffer.vert";
 const std::string ShaderContract::Filepath_Shader_SelectionBuffer_FS = "Assets/Engine/Shaders/SelectionBuffer.frag";
+
+const std::string ShaderContract::Filepath_Shader_Render_GBuffer_To_Screen_FS = "Assets/Engine/Shaders/RenderGBufferToScreen.frag";
 
 const std::string ShaderContract::Filepath_Shader_PR_Default_VS = "Assets/Engine/Shaders/PR_Default.vert";
 const std::string ShaderContract::Filepath_Shader_PR_Default_FS = "Assets/Engine/Shaders/PR_Default.frag";

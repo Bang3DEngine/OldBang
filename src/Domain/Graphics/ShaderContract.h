@@ -80,6 +80,8 @@ public:
     Filepath_Shader_PR_Default_VS,
     Filepath_Shader_PR_Default_FS,
 
+    Filepath_Shader_Render_GBuffer_To_Screen_FS,
+
     Filepath_Shader_D2G_Default_VS,
     Filepath_Shader_D2G_Default_FS
     ;

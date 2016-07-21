@@ -81,6 +81,17 @@ TextureRender *Framebuffer::GetTextureAttachment(int framebufferAttachmentNum) c
     return m_textureAttachments[framebufferAttachmentNum];
 }
 
+void Framebuffer::SetDrawBuffers(const std::vector<GLuint> &attachmentIds) const
+{
+    std::vector<GLuint> drawBuffers;
+    for(GLint att : attachmentIds)
+    {
+        drawBuffers.push_back(att);
+    }
+
+    glDrawBuffers(drawBuffers.size(), &drawBuffers[0]);
+}
+
 void Framebuffer::SetReadBuffer(int attachmentId) const
 {
     Bind();
@@ -156,7 +167,8 @@ void Framebuffer::Bind() const
     glViewport(0, 0, m_width, m_height);
 
     //Tell openGL which draw buffer attachments we do want to use
-    glDrawBuffers(m_boundAttachments.size(), &m_boundAttachments[0]);
+    SetDrawBuffers(m_boundAttachments); // By default
+    //lDrawBuffers(m_boundAttachments.size(), &m_boundAttachments[0]);
 }
 
 void Framebuffer::UnBind() const

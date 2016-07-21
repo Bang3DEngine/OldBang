@@ -27,7 +27,7 @@ void Light::SetUniformsBeforeApplyingLight() const
 void Light::ApplyLight(GBuffer *gbuffer) const
 {
     SetUniformsBeforeApplyingLight();
-    gbuffer->RenderToScreenWithMaterial(m_material);
+    gbuffer->RenderPassWithMaterial(m_material);
 }
 
 const std::string Light::ToString() const
