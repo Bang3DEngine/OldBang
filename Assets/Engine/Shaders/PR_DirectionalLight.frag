@@ -36,10 +36,8 @@ void main()
         B_vout.color = vec4(B_vin.color.rgb +
                             B_vin.diffuseColor.rgb * lightDot * B_light_intensity * B_light_color, 1);
     }
-    else
-    {
-        B_vout.color = vec4(B_vin.color.rgb, 1);
-    }
+
+    B_vout.color = vec4(1,0,0,1);
 
     B_POST_RENDER_FS_END_MAIN();
 }

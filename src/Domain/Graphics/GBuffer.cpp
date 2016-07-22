@@ -3,9 +3,9 @@
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
     const GLint texInternalType = GL_FLOAT;
-    CreateColorAttachment(Attachment::Position,      GL_RGBA32F, GL_RGB,  texInternalType);
-    CreateColorAttachment(Attachment::Normal,        GL_RGBA32F, GL_RGB,  texInternalType);
-    CreateColorAttachment(Attachment::Uv,            GL_RGB,     GL_RGB,  texInternalType);
+    CreateColorAttachment(Attachment::Position,      GL_RGBA32F, GL_RGBA,  texInternalType);
+    CreateColorAttachment(Attachment::Normal,        GL_RGBA32F, GL_RGBA,  texInternalType);
+    CreateColorAttachment(Attachment::Uv,            GL_RGBA32F, GL_RGBA,  texInternalType);
     CreateColorAttachment(Attachment::Diffuse,       GL_RGBA,    GL_RGBA, texInternalType);
     CreateColorAttachment(Attachment::MaterialBools, GL_RGBA,    GL_RGBA, texInternalType);
     CreateColorAttachment(Attachment::Depth,         GL_RGBA,    GL_RGBA, texInternalType);
@@ -22,7 +22,7 @@ GBuffer::~GBuffer()
     if(p_planeMeshToRenderEntireScreen) delete p_planeMeshToRenderEntireScreen;
 }
 
-void GBuffer::BindInTexturesTo(Material *mat) const
+void GBuffer::BindGBufferInTexturesTo(Material *mat) const
 {
     TextureRender *positionTex  = GetTextureAttachment(GBuffer::Attachment::Position);
     TextureRender *normalTex    = GetTextureAttachment(GBuffer::Attachment::Normal);
@@ -34,13 +34,13 @@ void GBuffer::BindInTexturesTo(Material *mat) const
 
     //Now attach to the material, with its corresponding index for the name (BANG_texture_0)
     //which in this case are the same as each respective texture slot
-    mat->SetTexture(positionTex,  "B_gout_fin_position");
-    mat->SetTexture(normalTex,    "B_gout_fin_normal");
-    mat->SetTexture(uvTex,        "B_gout_fin_uv");
-    mat->SetTexture(diffuseTex,   "B_gout_fin_diffuse");
-    mat->SetTexture(matBoolsTex,  "B_gout_fin_materialBools");
-    mat->SetTexture(depthTex,     "B_gout_fin_depth");
-    mat->SetTexture(colorTex,     "B_gout_fin_color");
+    mat->SetTexture(positionTex,  "B_position_gout_fin");
+    mat->SetTexture(normalTex,    "B_normal_gout_fin");
+    mat->SetTexture(uvTex,        "B_uv_gout_fin");
+    mat->SetTexture(diffuseTex,   "B_diffuse_gout_fin");
+    mat->SetTexture(matBoolsTex,  "B_materialBools_gout_fin");
+    mat->SetTexture(depthTex,     "B_depth_gout_fin");
+    mat->SetTexture(colorTex,     "B_color_gout_fin");
 }
 
 void GBuffer::RenderPassWithMaterial(Material *mat) const
@@ -50,11 +50,11 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
         p_planeMeshToRenderEntireScreen->
                 BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                              *(mat->GetShaderProgram()));
-        BindInTexturesTo(mat);
+        BindGBufferInTexturesTo(mat);
         mat->Bind();
     }
 
-    // Set as only draw output: "B_fout_gin_color"
+    // Set as only draw output: "B_color_gout_gin"
     // To accumulate color in there
     SetDrawBuffers({GBuffer::Attachment::Color});
 
@@ -80,7 +80,6 @@ void GBuffer::RenderScreenPlane() const
 void GBuffer::RenderToScreen() const
 {
     // Assumes gbuffer is not bound, hence directly writing to screen
-    glClearColor(0,1,0,1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     p_planeMeshToRenderEntireScreen->
@@ -88,7 +87,7 @@ void GBuffer::RenderToScreen() const
                                              *(p_renderGBufferToScreenMaterial->GetShaderProgram()));
 
     TextureRender *colorTex = GetTextureAttachment(GBuffer::Attachment::Color);
-    p_renderGBufferToScreenMaterial->SetTexture(colorTex, "B_gout_fin_color");
+    p_renderGBufferToScreenMaterial->SetTexture(colorTex, "B_color_gout_fin");
 
     p_renderGBufferToScreenMaterial->Bind();
     RenderScreenPlane();

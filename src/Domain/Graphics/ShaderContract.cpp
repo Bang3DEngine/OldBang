@@ -175,7 +175,9 @@ B_vout.position_world   = B_vin.position_world.xyz; \n\
 B_vout.normal_world     = B_vin.normal_world.xyz; \n\
 B_vout.uv               = B_vin.uv; \n\
 B_vout.receivesLighting = B_renderer_receivesLighting; \n\
+B_vout.diffuseColor     = vec3(1,0,1); \n\
 B_vout.depth            = gl_FragCoord.z;  \n\
+\n\
 ";
 
 const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_End_Main_Content =
@@ -186,7 +188,9 @@ B_uv_fout_gin             = vec4(B_vout.uv, 0, 0); \n\
 B_diffuse_fout_gin        = vec4(B_vout.diffuseColor.rgb, 1); \n\
 B_materialBools_fout_gin  = vec4(B_vout.receivesLighting, 0, 0, 0); \n\
 B_depth_fout_gin          = vec4(B_vout.depth); \n\
-B_color_fout_gin          = vec4(0,0,0,1); \n\
+\n\
+float ambientLight = (B_vout.receivesLighting > 0.5f) ? 0.5f : 1.0f; \n\
+B_color_fout_gin   = vec4(B_vout.diffuseColor.rgb * ambientLight, 1);  \n\
 ";
 
 
@@ -219,38 +223,41 @@ uniform mat4  B_matrix_view; \n\
 uniform mat4  B_matrix_projection; \n\
 uniform mat4  B_matrix_pvm; \n\
 \n\
-uniform sampler2D B_gout_fin_position; \n\
-uniform sampler2D B_gout_fin_normal; \n\
-uniform sampler2D B_gout_fin_uv; \n\
-uniform sampler2D B_gout_fin_diffuse;\n\
-uniform sampler2D B_gout_fin_materialBools; \n\
-uniform sampler2D B_gout_fin_depth; \n\
-uniform sampler2D B_gout_fin_color; \n\
+uniform sampler2D B_position_gout_fin; \n\
+uniform sampler2D B_normal_gout_fin; \n\
+uniform sampler2D B_uv_gout_fin; \n\
+uniform sampler2D B_diffuse_gout_fin;\n\
+uniform sampler2D B_materialBools_gout_fin; \n\
+uniform sampler2D B_depth_gout_fin; \n\
+uniform sampler2D B_color_gout_fin; \n\
 \n\
 in vec3 B_position_raw_vin; \n\
 in vec2 B_uv_raw_vout_fin; \n\
 \n\
-out vec4 B_fout_gin_color; /*Accumulated color*/ \n\
+out vec4 B_color_gout_gin; /*Accumulated color*/ \n\
 \n\
 ";
 
 const std::string ShaderContract::Macro_Post_Render_FS_Init_Main_Content =
 "\
 B_vin.uv_screen           = B_uv_raw_vout_fin; \n\
-B_vin.position_world      = texture2D(B_gout_fin_position,       B_vin.uv_screen).xyz; \n\
-B_vin.normal_world        = texture2D(B_gout_fin_normal,         B_vin.uv_screen).xyz; \n\
-B_vin.uv                  = texture2D(B_gout_fin_uv,             B_vin.uv_screen).xy;  \n\
-B_vin.diffuseColor        = texture2D(B_gout_fin_diffuse,        B_vin.uv_screen).rgb; \n\
-B_vin.receivesLighting    = texture2D(B_gout_fin_materialBools,  B_vin.uv_screen).x;   \n\
-B_vin.depth               = texture2D(B_gout_fin_depth,          B_vin.uv_screen).x;   \n\
-B_vin.color               = texture2D(B_gout_fin_color,          B_vin.uv_screen).xyzw;   \n\
+B_vin.position_world      = texture2D(B_position_gout_fin,       B_vin.uv_screen).xyz; \n\
+B_vin.normal_world        = texture2D(B_normal_gout_fin,         B_vin.uv_screen).xyz; \n\
+B_vin.uv                  = texture2D(B_uv_gout_fin,             B_vin.uv_screen).xy;  \n\
+B_vin.diffuseColor        = texture2D(B_diffuse_gout_fin,        B_vin.uv_screen).rgb; \n\
+B_vin.receivesLighting    = texture2D(B_materialBools_gout_fin,  B_vin.uv_screen).x;   \n\
+B_vin.depth               = texture2D(B_depth_gout_fin,          B_vin.uv_screen).x;   \n\
+B_vin.color               = texture2D(B_color_gout_fin,          B_vin.uv_screen).xyzw;   \n\
 B_vin.normal_world        = normalize(B_vin.normal_world); \n\
 \n\
-B_vout.color              = vec4(B_vin.diffuseColor.rgb, 1); \n\
+/*Default value*/\n\
+B_vout.color              = vec4(B_vin.color.rgb, 1); \n\
 ";
+
 const std::string ShaderContract::Macro_Post_Render_FS_End_Main_Content =
 "\
-B_fout_gin_color = B_vout.color; \n\
+B_color_gout_gin = B_vout.color; \n\
+B_color_gout_gin = vec4(0,0,1,1); \n\
 ";
 
 const std::string ShaderContract::Filepath_Shader_SelectionBuffer_VS = "Assets/Engine/Shaders/SelectionBuffer.vert";

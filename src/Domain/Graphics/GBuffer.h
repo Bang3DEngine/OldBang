@@ -34,7 +34,7 @@ public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    void BindInTexturesTo(Material *mat) const;
+    void BindGBufferInTexturesTo(Material *mat) const;
     void RenderPassWithMaterial(Material *mat) const;
     void RenderToScreen() const;
 };
