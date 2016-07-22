@@ -1,5 +1,4 @@
 #include "Mesh.h"
-#include "MeshPyramid.h"
 
 Mesh::Mesh()
 {

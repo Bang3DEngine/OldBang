@@ -3,7 +3,7 @@
 BehaviourHolder::BehaviourHolder()
 {
     #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.SetSlotsInfos(
+    m_inspectorComponentInfo.AddSlotInfos(
     {
         new InspectorFileSWInfo( "Behaviour", "cpp" ),
         new InspectorButtonSWInfo( "Refresh",

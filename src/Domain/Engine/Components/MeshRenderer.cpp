@@ -5,7 +5,7 @@
 MeshRenderer::MeshRenderer()
 {
     #ifdef BANG_EDITOR
-        m_inspectorComponentInfo.SetSlotsInfos(
+        m_inspectorComponentInfo.AddSlotInfos(
         {
             new InspectorFileSWInfo("Material",
                                     Material::GetFileExtensionStatic()),

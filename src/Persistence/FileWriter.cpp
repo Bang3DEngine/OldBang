@@ -43,48 +43,48 @@ void FileWriter::WriteBool(bool v, std::ostream &f)
     f << s << std::endl;
 }
 
-void FileWriter::Write(int v, std::ostream &f)
+void FileWriter::WriteInt(int v, std::ostream &f)
 {
     f << v << std::endl;
 }
 
-void FileWriter::Write(float v, std::ostream &f)
+void FileWriter::WriteFloat(float v, std::ostream &f)
 {
     f << v << std::endl;
 }
 
-void FileWriter::Write(void *v, std::ostream &f)
+void FileWriter::WritePointer(void *v, std::ostream &f)
 {
     f << v << std::endl;
 }
 
-void FileWriter::Write(const glm::vec2 &v, std::ostream &f)
+void FileWriter::WriteVector2(const glm::vec2 &v, std::ostream &f)
 {
     f << v.x << " " << v.y << std::endl;
 }
 
-void FileWriter::Write(const Vector3 &v, std::ostream &f)
+void FileWriter::WriteVector3(const Vector3 &v, std::ostream &f)
 {
     f << v.x << " " << v.y << " " << v.z << std::endl;
 }
 
-void FileWriter::Write(const glm::vec4 &v, std::ostream &f)
+void FileWriter::WriteVector4(const glm::vec4 &v, std::ostream &f)
 {
     f << v.x << " " << v.y << " " << v.z << " " << v.w << std::endl;
 }
 
 
-void FileWriter::Write(const Quaternion &q, std::ostream &f)
+void FileWriter::WriteQuaternion(const Quaternion &q, std::ostream &f)
 {
     f << q.x << " " << q.y << " " << q.z << " " << q.w << std::endl;
 }
 
-void FileWriter::Write(const Rect &r, std::ostream &f)
+void FileWriter::WriteRect(const Rect &r, std::ostream &f)
 {
     f << r.m_minx << " " << r.m_maxx << " " << r.m_miny << " " << r.m_maxy << std::endl;
 }
 
-void FileWriter::Write(const std::string &str, std::ostream &f)
+void FileWriter::WriteString(const std::string &str, std::ostream &f)
 {
     if (str != "")
     {
@@ -98,5 +98,5 @@ void FileWriter::Write(const std::string &str, std::ostream &f)
 
 void FileWriter::WriteFilepath(const std::string &path, std::ostream &f)
 {
-    Write(Persistence::ProjectRootAbsoluteToRelative(path), f);
+    FileWriter::WriteString(Persistence::ProjectRootAbsoluteToRelative(path), f);
 }

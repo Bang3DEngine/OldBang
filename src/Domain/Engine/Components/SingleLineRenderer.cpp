@@ -100,9 +100,9 @@ void SingleLineRenderer::WriteInternal(std::ostream &f) const
     LineRenderer::WriteInternal(f);
     f << ((void*)this) << std::endl;
     FileWriter::WriteFilepath(m_material->GetFilepath(), f);
-    FileWriter::Write(Vector3(m_points[0].x, m_points[0].y, m_points[0].z), f);
-    FileWriter::Write(Vector3(m_points[1].x, m_points[1].y, m_points[1].z), f);
-    FileWriter::Write(GetLineWidth(), f);
+    FileWriter::WriteVector3(Vector3(m_points[0].x, m_points[0].y, m_points[0].z), f);
+    FileWriter::WriteVector3(Vector3(m_points[1].x, m_points[1].y, m_points[1].z), f);
+    FileWriter::WriteFloat(GetLineWidth(), f);
 }
 
 void SingleLineRenderer::ReadInternal(std::istream &f)

@@ -164,9 +164,9 @@ void CircleRenderer::WriteInternal(std::ostream &f) const
     LineRenderer::WriteInternal(f);
     f << ((void*)this) << std::endl;
     FileWriter::WriteFilepath(m_material->GetFilepath(), f);
-    FileWriter::Write(m_radius, f);
-    FileWriter::Write(m_segments, f);
-    FileWriter::Write(GetLineWidth(), f);
+    FileWriter::WriteFloat(m_radius, f);
+    FileWriter::WriteInt(m_segments, f);
+    FileWriter::WriteFloat(GetLineWidth(), f);
 }
 
 void CircleRenderer::ReadInternal(std::istream &f)

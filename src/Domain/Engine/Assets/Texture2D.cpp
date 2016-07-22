@@ -79,7 +79,7 @@ void Texture2D::WriteInternal(std::ostream &f) const
     {
         fmName = "Linear";
     }
-    FileWriter::Write(fmName, f);
+    FileWriter::WriteString(fmName, f);
 }
 
 void Texture2D::ReadInternal(std::istream &f)

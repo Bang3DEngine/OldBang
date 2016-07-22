@@ -11,7 +11,7 @@ Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
                    m_autoUpdateAspectRatio(true)
 {
     #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.SetSlotsInfos(
+    m_inspectorComponentInfo.AddSlotInfos(
     {
         new InspectorVFloatSWInfo( "FOV", {m_fovDegrees} ),
         new InspectorVFloatSWInfo( "Z Near", {m_zNear} ),
@@ -193,11 +193,11 @@ void Camera::WriteInternal(std::ostream &f) const
 {
     Component::WriteInternal(f);
     f << ((void*)this) << std::endl;
-    FileWriter::Write(m_fovDegrees, f);
-    FileWriter::Write(m_zNear, f);
-    FileWriter::Write(m_zFar, f);
-    FileWriter::Write((m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic") , f);
-    FileWriter::Write(m_orthoRect, f);
+    FileWriter::WriteFloat(m_fovDegrees, f);
+    FileWriter::WriteFloat(m_zNear, f);
+    FileWriter::WriteFloat(m_zFar, f);
+    FileWriter::WriteString((m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic") , f);
+    FileWriter::WriteRect(m_orthoRect, f);
 }
 
 void Camera::ReadInternal(std::istream &f)

@@ -143,7 +143,6 @@ HEADERS += \
     src/Domain/Engine/Assets/Asset.h \
     src/Domain/Engine/Assets/Material.h \
     src/Domain/Engine/Assets/Meshes/Mesh.h \
-    src/Domain/Engine/Assets/Meshes/MeshPyramid.h \
     src/Domain/Engine/Components/Behaviour.h \
     src/Domain/Engine/Interfaces/IFileable.h \
     src/Domain/Engine/Assets/Texture2D.h \
@@ -177,7 +176,8 @@ HEADERS += \
     src/Domain/Engine/Components/DirectionalLight.h \
     src/Domain/Engine/Components/Light.h \
     src/Domain/Graphics/ShaderPreprocessor.h \
-    src/View/ClipboardGameObject.h
+    src/View/ClipboardGameObject.h \
+    src/Domain/Engine/Components/PointLight.h
 
 EDITOR {
 HEADERS += \
@@ -259,7 +259,6 @@ SOURCES += \
     src/main.cpp \
     src/Domain/Engine/Assets/Asset.cpp \
     src/Domain/Engine/Assets/Meshes/Mesh.cpp \
-    src/Domain/Engine/Assets/Meshes/MeshPyramid.cpp \
     src/Domain/Engine/Assets/Material.cpp \
     src/Domain/Engine/Components/Behaviour.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
@@ -293,7 +292,8 @@ SOURCES += \
     src/Domain/Engine/Components/Light.cpp \
     src/Domain/Graphics/ShaderPreprocessor.cpp \
     src/View/ClipboardGameObject.cpp \
-    src/Domain/Engine/Interfaces/IFileable.cpp
+    src/Domain/Engine/Interfaces/IFileable.cpp \
+    src/Domain/Engine/Components/PointLight.cpp
 
 EDITOR {
     SOURCES += \

@@ -317,9 +317,9 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
 
 void GameObject::WriteInternal(std::ostream &f) const
 {
-    FileWriter::Write(((void*)this), f);
+    FileWriter::WritePointer(((void*)this), f);
     FileWriter::WriteBool(m_enabled, f);
-    FileWriter::Write(name, f);
+    FileWriter::WriteString(name, f);
 
     f << "<children>" << std::endl;
     for (GameObject *go : m_children)

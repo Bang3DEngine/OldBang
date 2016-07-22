@@ -15,7 +15,7 @@ InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
             AssetsManager::ReadTmpAsset<Texture2D>(fileTex.GetPath());
     std::string imgFilepath = tex->GetImageRelativeFilepath();
 
-    m_inspectorInfo.SetSlotsInfos(
+    m_inspectorInfo.AddSlotInfos(
         {
             new InspectorStringSWInfo("Image path", imgFilepath, true),
             new InspectorEnumSWInfo("Filter", {"Nearest", "Linear"},

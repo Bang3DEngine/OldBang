@@ -7,7 +7,7 @@ InspectorImageFileWidget(const FileImage &fileImage) :
     std::string mode = fileImage.GetNumComponents() == 3 ?
                 "RGB" : "RGBA";
 
-    m_inspectorInfo.SetSlotsInfos(
+    m_inspectorInfo.AddSlotInfos(
     {
         new InspectorStringSWInfo("File name",
                     fileImage.GetName() + "." + fileImage.GetExtension(), true),

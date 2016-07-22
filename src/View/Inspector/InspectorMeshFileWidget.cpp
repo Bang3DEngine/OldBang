@@ -3,7 +3,7 @@
 InspectorMeshFileWidget::InspectorMeshFileWidget(const FileMesh &fileMesh) :
     InspectorWidget()
 {
-    m_inspectorInfo.SetSlotsInfos(
+    m_inspectorInfo.AddSlotInfos(
     {
         new InspectorStringSWInfo("File name",
                     fileMesh.GetName() + "." + fileMesh.GetExtension(), true),

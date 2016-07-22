@@ -1,0 +1,7 @@
+<Material>
+    ./Assets/Engine/Shaders/D2G_Default.vert
+    ./Assets/Engine/Shaders/D2G_Default.frag
+    1
+    ./Assets/Textures/victor.btex2d
+    0.0 0.0 0.0 0.0
+</Material>

@@ -97,15 +97,15 @@ void Scene::WriteInternal(std::ostream &f) const
 {
     // GameObject::WriteInternal(f);
 
-    FileWriter::Write((void*)this, f);   //internal file id
-    FileWriter::Write(name, f);
+    FileWriter::WritePointer((void*)this, f);   //internal file id
+    FileWriter::WriteString(name, f);
 
-    FileWriter::Write("<children>", f);
+    FileWriter::WriteString("<children>", f);
     for (GameObject *go : m_children)
     {
         go->Write(f);
     }
-    FileWriter::Write("</children>", f);
+    FileWriter::WriteString("</children>", f);
 
     //Not used ftm
     //f << "<cameraGameObject>" << std::endl;

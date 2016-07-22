@@ -12,7 +12,6 @@
 #include "SingletonManager.h"
 #include "ShaderProgram.h"
 #include "MeshRenderer.h"
-#include "MeshPyramid.h"
 #include "Framebuffer.h"
 #include "GameObject.h"
 #include "FileReader.h"

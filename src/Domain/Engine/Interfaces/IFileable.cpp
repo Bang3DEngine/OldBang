@@ -5,9 +5,9 @@
 
 void IFileable::Write(std::ostream &f) const
 {
-    FileWriter::Write("<" + GetTag() + ">", f);
+    FileWriter::WriteString("<" + GetTag() + ">", f);
     WriteInternal(f);
-    FileWriter::Write("</" + GetTag() + ">", f);
+    FileWriter::WriteString("</" + GetTag() + ">", f);
 }
 
 void IFileable::Read(std::istream &f)

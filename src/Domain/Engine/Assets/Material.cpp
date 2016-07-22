@@ -55,11 +55,11 @@ void Material::WriteInternal(std::ostream &f) const
             fsFile = this->m_shaderProgram->GetFragmentShader()->GetFilepath();
         }
     }
-    FileWriter::Write(vsFile, f);
-    FileWriter::Write(fsFile, f);
-    FileWriter::Write(m_diffuseColor, f);
-    FileWriter::Write(1, f);
-    FileWriter::Write(m_texture->GetFilepath(), f);
+    FileWriter::WriteFilepath(vsFile, f);
+    FileWriter::WriteFilepath(fsFile, f);
+    FileWriter::WriteVector4(m_diffuseColor, f);
+    FileWriter::WriteInt(1, f);
+    FileWriter::WriteFilepath(m_texture->GetFilepath(), f);
 }
 
 void Material::ReadInternal(std::istream &f)

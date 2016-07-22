@@ -8,9 +8,10 @@ Light::Light()
     m_color = Vector3::one;
 
     #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.SetSlotsInfos(
+    m_inspectorComponentInfo.AddSlotInfos(
     {
-        new InspectorVFloatSWInfo( "Color", {1,1,1} )
+        new InspectorVFloatSWInfo("Intensity", {1.0f} )
+       ,new InspectorVFloatSWInfo("Color", {1,0,0} )
     });
     #endif
 }
@@ -63,13 +64,21 @@ Vector3 Light::GetColor() const
 InspectorWidgetInfo *Light::GetComponentInfo()
 {
     Component::GetComponentInfo();
+
     static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value =
+        {m_intensity};
+
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1))->m_value =
         {m_color.r, m_color.g, m_color.b};
+
     return &m_inspectorComponentInfo;
 }
 
 void Light::OnSlotValueChanged(InspectorWidget *source)
 {
+    std::vector<float> intensity = source->GetSWVectorFloatValue("Intensity");
+    m_intensity = intensity[0];
+
     std::vector<float> color = source->GetSWVectorFloatValue("Color");
     m_color = Vector3(color[0], color[1], color[2]);
 }
@@ -78,9 +87,9 @@ void Light::OnSlotValueChanged(InspectorWidget *source)
 void Light::WriteInternal(std::ostream &f) const
 {
     Component::WriteInternal(f);
-    FileWriter::Write(m_intensity, f);
-    FileWriter::Write(m_color, f);
-    FileWriter::Write(m_material->GetFilepath(), f);
+    FileWriter::WriteFloat(m_intensity, f);
+    FileWriter::WriteVector3(m_color, f);
+    FileWriter::WriteFilepath(m_material->GetFilepath(), f);
 }
 
 void Light::ReadInternal(std::istream &f)

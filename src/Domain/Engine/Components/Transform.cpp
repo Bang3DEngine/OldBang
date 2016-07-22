@@ -10,7 +10,7 @@ Transform::Transform() : m_localPosition(Vector3(0.0f))
                         #endif
 {
     #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.SetSlotsInfos(
+    m_inspectorComponentInfo.AddSlotInfos(
     {
         new InspectorVFloatSWInfo(
             "Position", {m_localPosition.x, m_localPosition.y, m_localPosition.z}
@@ -425,9 +425,9 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
 void Transform::WriteInternal(std::ostream &f) const
 {
     Component::WriteInternal(f);
-    FileWriter::Write(GetLocalPosition(), f);
-    FileWriter::Write(GetLocalRotation(), f);
-    FileWriter::Write(GetLocalScale(), f);
+    FileWriter::WriteVector3(GetLocalPosition(), f);
+    FileWriter::WriteQuaternion(GetLocalRotation(), f);
+    FileWriter::WriteVector3(GetLocalScale(), f);
 }
 
 void Transform::ReadInternal(std::istream &f)

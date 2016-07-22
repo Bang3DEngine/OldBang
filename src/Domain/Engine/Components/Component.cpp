@@ -48,7 +48,7 @@ std::string Component::GetTag() const
 
 void Component::WriteInternal(std::ostream &f) const
 {
-    FileWriter::Write(((void*)this), f);
+    FileWriter::WritePointer(((void*)this), f);
     FileWriter::WriteBool(m_enabled, f);
 }
 

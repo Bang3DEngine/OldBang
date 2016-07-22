@@ -152,14 +152,17 @@ public:
         return slotInfos;
     }
 
-    void SetSlotsInfos(const std::vector<InspectorSWInfo*> slotInfos)
-    {
-        this->slotInfos = slotInfos;
-    }
-
     void AddSlotInfo(InspectorSWInfo* slotInfo)
     {
         slotInfos.push_back(slotInfo);
+    }
+
+    void AddSlotInfos(const std::vector<InspectorSWInfo*> &slotInfos)
+    {
+        for (InspectorSWInfo *slotInfo : slotInfos)
+        {
+            AddSlotInfo(slotInfo);
+        }
     }
 };
 
