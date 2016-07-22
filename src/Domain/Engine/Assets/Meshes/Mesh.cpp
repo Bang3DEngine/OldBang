@@ -141,13 +141,19 @@ const Sphere &Mesh::GetBoundingSphere() const
     return m_bSphere;
 }
 
-void Mesh::Write(std::ostream &f) const
+std::string Mesh::GetTag() const
 {
-
+    return "Mesh";
 }
 
-void Mesh::Read(std::istream &f)
+void Mesh::WriteInternal(std::ostream &f) const
 {
+    Asset::WriteInternal(f);
+}
+
+void Mesh::ReadInternal(std::istream &f)
+{
+    Asset::ReadInternal(f);
     m_filepath = FileReader::ReadString(f);
     LoadFromFile(m_filepath);
 }

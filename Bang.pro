@@ -292,7 +292,8 @@ SOURCES += \
     src/Domain/Engine/Components/DirectionalLight.cpp \
     src/Domain/Engine/Components/Light.cpp \
     src/Domain/Graphics/ShaderPreprocessor.cpp \
-    src/View/ClipboardGameObject.cpp
+    src/View/ClipboardGameObject.cpp \
+    src/Domain/Engine/Interfaces/IFileable.cpp
 
 EDITOR {
     SOURCES += \

@@ -16,8 +16,12 @@ protected:
     IFileable() {}
 
 public:
-    virtual void Write(std::ostream &f) const = 0;
-    virtual void Read(std::istream &f) = 0;
+
+    virtual std::string GetTag() const = 0;
+    virtual void Write(std::ostream &f) const;
+    virtual void WriteInternal(std::ostream &f) const = 0; // Write without open/close tags
+    virtual void Read(std::istream &f);
+    virtual void ReadInternal(std::istream &f) = 0;                // Read without open/close tags
 };
 
 #endif // IFILEABLE_H

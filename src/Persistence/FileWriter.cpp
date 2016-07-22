@@ -9,8 +9,7 @@ FileWriter::FileWriter()
 void FileWriter::WriteScene(std::string filename, Scene *scene)
 {
     std::ofstream ofs;
-    filename = Persistence::AppendExtension(filename,
-                                            Scene::GetFileExtension());
+    filename = Persistence::AppendExtension(filename, Scene::GetFileExtension());
     ofs.open(filename);
     if (!ofs.is_open())
     {
@@ -38,7 +37,23 @@ void FileWriter::WriteAsset(std::string filename, Asset *a)
     ofs.close();
 }
 
+void FileWriter::WriteBool(bool v, std::ostream &f)
+{
+    std::string s = v ? "true" : "false";
+    f << s << std::endl;
+}
+
+void FileWriter::Write(int v, std::ostream &f)
+{
+    f << v << std::endl;
+}
+
 void FileWriter::Write(float v, std::ostream &f)
+{
+    f << v << std::endl;
+}
+
+void FileWriter::Write(void *v, std::ostream &f)
 {
     f << v << std::endl;
 }

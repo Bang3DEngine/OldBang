@@ -35,8 +35,8 @@ public:
 
     Vector3 GetColor() const;
 
-    virtual void Write(std::ostream &f) const;
-    virtual void Read(std::istream &f);
+    virtual void WriteInternal(std::ostream &f) const;
+    virtual void ReadInternal(std::istream &f);
 };
 
 #endif // LIGHT_H

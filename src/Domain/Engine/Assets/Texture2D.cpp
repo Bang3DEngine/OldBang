@@ -58,9 +58,15 @@ std::string Texture2D::GetImageRelativeFilepath() const
     return m_filepath;
 }
 
-void Texture2D::Write(std::ostream &f) const
+std::string Texture2D::GetTag() const
 {
-    f << "<Texture2D>" << std::endl;
+    return "Texture2D";
+}
+
+void Texture2D::WriteInternal(std::ostream &f) const
+{
+    Asset::WriteInternal(f);
+
     FileWriter::WriteFilepath(this->m_filepath, f);
 
     FilterMode filterMode = GetFilterMode();
@@ -74,12 +80,12 @@ void Texture2D::Write(std::ostream &f) const
         fmName = "Linear";
     }
     FileWriter::Write(fmName, f);
-
-    f << "</Texture2D>" << std::endl;
 }
 
-void Texture2D::Read(std::istream &f)
+void Texture2D::ReadInternal(std::istream &f)
 {
+    Asset::ReadInternal(f);
+
     m_filepath = FileReader::ReadString(f);
     LoadFromFile(m_filepath);
     std::string filterMode = FileReader::ReadString(f);

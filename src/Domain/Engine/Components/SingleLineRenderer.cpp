@@ -95,24 +95,22 @@ void SingleLineRenderer::OnSlotValueChanged(InspectorWidget *source)
 }
 #endif
 
-void SingleLineRenderer::Write(std::ostream &f) const
+void SingleLineRenderer::WriteInternal(std::ostream &f) const
 {
-    f << "<SingleLineRenderer>" << std::endl;
+    LineRenderer::WriteInternal(f);
     f << ((void*)this) << std::endl;
     FileWriter::WriteFilepath(m_material->GetFilepath(), f);
     FileWriter::Write(Vector3(m_points[0].x, m_points[0].y, m_points[0].z), f);
     FileWriter::Write(Vector3(m_points[1].x, m_points[1].y, m_points[1].z), f);
     FileWriter::Write(GetLineWidth(), f);
-    f << "</SingleLineRenderer>" << std::endl;
 }
 
-void SingleLineRenderer::Read(std::istream &f)
+void SingleLineRenderer::ReadInternal(std::istream &f)
 {
-    FileReader::RegisterNextPointerId(f, this);
+    LineRenderer::ReadInternal(f);
     SetMaterial( AssetsManager::GetAsset<Material>(FileReader::ReadString(f)));
     SetOrigin(FileReader::ReadVec3(f));
     SetDestiny(FileReader::ReadVec3(f));
     SetLineWidth(FileReader::ReadFloat(f));
-    FileReader::ReadNextLine(f); //Consume close tag
 }
 

@@ -49,8 +49,8 @@ public:
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
 #endif
 
-    void Write(std::ostream &f) const = 0;
-    void Read(std::istream &f) = 0;
+    virtual void WriteInternal(std::ostream &f) const;
+    virtual void ReadInternal(std::istream &f);
 };
 
 #endif // LINERENDERER_H

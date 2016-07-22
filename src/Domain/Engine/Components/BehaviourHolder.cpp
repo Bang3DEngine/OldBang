@@ -42,6 +42,11 @@ const std::string BehaviourHolder::ToString() const
     return "BehaviourHolder ( " + m_sourceFilepath + ")";
 }
 
+std::string BehaviourHolder::GetName() const
+{
+    return "BehaviourHolder";
+}
+
 void BehaviourHolder::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
@@ -122,19 +127,16 @@ void BehaviourHolder::OnSlotValueChanged(InspectorWidget *source)
 }
 #endif
 
-void BehaviourHolder::Write(std::ostream &f) const
+void BehaviourHolder::WriteInternal(std::ostream &f) const
 {
-    f << "<BehaviourHolder>" << std::endl;
-    f << ((void*)this) << std::endl;
+    Component::WriteInternal(f);
     FileWriter::WriteFilepath(m_sourceFilepath, f);
-    f << "</BehaviourHolder>" << std::endl;
 }
 
-void BehaviourHolder::Read(std::istream &f)
+void BehaviourHolder::ReadInternal(std::istream &f)
 {
-    FileReader::RegisterNextPointerId(f, this);
+    Component::ReadInternal(f);
     m_sourceFilepath = FileReader::ReadString(f);
-    FileReader::ReadNextLine(f); //Consume close tag
 }
 
 void BehaviourHolder::_OnStart()

@@ -64,10 +64,10 @@ public:
     // and they consume the closing tag.
 
     //COMPONENTS
-    static void ReadComponents(std::istream &f, GameObject *o);
+    static void ReadComponents(std::istream &f, GameObject *go);
 
     //ENTITIES
-    static void ReadChildren(std::istream &f, GameObject *o);
+    static void ReadChildren(std::istream &f, GameObject *go);
     // ////////////////////
 
     //Scene must be a created object before being passed to these functions (new Scene)
@@ -77,9 +77,11 @@ public:
     //
 
     //READ PRIMITIVE VALUES
+    static std::string PeekNextLine(std::istream &f);
     static std::string ReadNextLine(std::istream &f);
     static bool ReadNextLine(std::istream &f, std::string *line);
 
+    static bool ReadBool(std::istream &f);
     static int ReadInt(std::istream &f);
     static float ReadFloat(std::istream &f);
     static glm::vec2 ReadVec2(std::istream &f);

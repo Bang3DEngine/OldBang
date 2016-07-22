@@ -132,6 +132,9 @@ public:
     virtual const std::string ToString() const override { return "Renderer"; }
     virtual std::string GetName() const override { return "Renderer"; }
     virtual ICloneable *Clone() const override = 0;
+
+    virtual void WriteInternal(std::ostream &f) const;
+    virtual void ReadInternal(std::istream &f);
 };
 
 #endif // RENDERER_H

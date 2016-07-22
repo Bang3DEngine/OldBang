@@ -192,7 +192,7 @@ Shader *ShaderProgram::GetFragmentShader() const
 
 GLint ShaderProgram::GetUniformLocation(const std::string &name) const
 {
-    glGetUniformLocation(m_idGL, name.c_str());
+    return glGetUniformLocation(m_idGL, name.c_str());
 }
 
 GLint ShaderProgram::GetAttribLocation(const std::string &name) const
@@ -238,10 +238,3 @@ void ShaderProgram::UnBind() const
     glUseProgram(PreUnBind(GL_CURRENT_PROGRAM));
 }
 
-void ShaderProgram::Write(std::ostream &f) const
-{
-}
-
-void ShaderProgram::Read(std::istream &f)
-{
-}

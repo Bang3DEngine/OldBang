@@ -65,8 +65,9 @@ public:
     const Box& GetBoundingBox() const;
     const Sphere& GetBoundingSphere() const;
 
-    void Write(std::ostream &f) const;
-    void Read(std::istream &f);
+    virtual std::string GetTag() const override;
+    virtual void WriteInternal(std::ostream &f) const;
+    virtual void ReadInternal(std::istream &f);
 };
 
 #endif // MESH_H

@@ -162,20 +162,17 @@ void MeshRenderer::OnSlotValueChanged(InspectorWidget *source)
 #endif
 
 
-void MeshRenderer::Write(std::ostream &f) const
+void MeshRenderer::WriteInternal(std::ostream &f) const
 {
-    f << "<MeshRenderer>" << std::endl;
-    f << ((void*)this) << std::endl;
+    Renderer::WriteInternal(f);
     FileWriter::WriteFilepath(m_mesh->GetFilepath(), f);
     FileWriter::WriteFilepath(m_material->GetFilepath(), f);
-    f << "</MeshRenderer>" << std::endl;
 }
 
-void MeshRenderer::Read(std::istream &f)
+void MeshRenderer::ReadInternal(std::istream &f)
 {
-    FileReader::RegisterNextPointerId(f, this);
+    Renderer::ReadInternal(f);
     SetMesh( AssetsManager::GetAsset<Mesh>( FileReader::ReadString(f) ) );
     SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
-    FileReader::ReadNextLine(f); //Consume close tag
 }
 

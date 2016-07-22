@@ -10,7 +10,7 @@ public:
     DirectionalLight();
 
     virtual const std::string ToString() const override;
-    virtual std::string GetName() const override { return "Directional Light"; }
+    virtual std::string GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
@@ -20,8 +20,8 @@ public:
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
     #endif
 
-    virtual void Write(std::ostream &f) const;
-    virtual void Read(std::istream &f);
+    virtual void WriteInternal(std::ostream &f) const;
+    virtual void ReadInternal(std::istream &f);
 };
 
 #endif // DIRECTIONALLIGHT_H

@@ -42,7 +42,7 @@ public:
     virtual ~BehaviourHolder();
 
     virtual const std::string ToString() const override;
-    virtual std::string GetName() const override { return "Behaviour"; }
+    virtual std::string GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
@@ -54,8 +54,8 @@ public:
 
     void Refresh();
 
-    void Write(std::ostream &f) const override;
-    void Read(std::istream &f) override;
+    void WriteInternal(std::ostream &f) const override;
+    void ReadInternal(std::istream &f) override;
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;

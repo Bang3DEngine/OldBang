@@ -14,6 +14,11 @@ const std::string DirectionalLight::ToString() const
     return "DirectionalLight";
 }
 
+std::string DirectionalLight::GetName() const
+{
+    return "DirectionalLight";
+}
+
 void DirectionalLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);
@@ -38,12 +43,12 @@ void DirectionalLight::OnSlotValueChanged(InspectorWidget *source)
     Light::OnSlotValueChanged(source);
 }
 
-void DirectionalLight::Write(std::ostream &f) const
+void DirectionalLight::WriteInternal(std::ostream &f) const
 {
-
+    Light::WriteInternal(f);
 }
 
-void DirectionalLight::Read(std::istream &f)
+void DirectionalLight::ReadInternal(std::istream &f)
 {
-
+    Light::ReadInternal(f);
 }

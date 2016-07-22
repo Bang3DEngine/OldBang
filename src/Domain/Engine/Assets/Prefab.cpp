@@ -15,7 +15,7 @@ Prefab::Prefab(GameObject *o)
     if (o )
     {
         std::ostringstream oss;
-        o->Write(oss);
+        o->WriteInternal(oss);
         m_assetDescription = oss.str();
     }
 }
@@ -42,24 +42,33 @@ GameObject *Prefab::InstantiateWithoutStarting() const
         std::istringstream iss (m_assetDescription);
         GameObject *o = new GameObject();
         FileReader::ReadNextLine(iss); //Consume opening tag
-        o->Read(iss);
+        o->ReadInternal(iss);
         return o;
     }
     return nullptr;
 }
 
-void Prefab::Write(std::ostream &f) const
+std::string Prefab::GetTag() const
 {
+    return "Prefab";
+}
+
+void Prefab::WriteInternal(std::ostream &f) const
+{
+    Asset::WriteInternal(f);
+
     GameObject *o = InstantiateWithoutStarting();
     if (o )
     {
-        o->Write(f);
+        o->WriteInternal(f);
         delete o;
     }
 }
 
-void Prefab::Read(std::istream &f)
+void Prefab::ReadInternal(std::istream &f)
 {
+    Asset::ReadInternal(f);
+
     //Copy contents of the read file in assetDescription,
     //to be able to use it from Instantiate()
     std::string line;

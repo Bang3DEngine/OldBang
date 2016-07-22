@@ -9,14 +9,14 @@
 
 #include "Shader.h"
 #include "Texture.h"
-#include "IFileable.h"
 #include "IGLBindable.h"
 
 #include <string>
 
 
-class ShaderProgram : public IGLIdable, public IGLBindable,
-                      public IToString, public IFileable
+class ShaderProgram : public IGLIdable
+                     ,public IGLBindable
+                     ,public IToString
 {
 private:
     Shader *m_vshader;
@@ -52,9 +52,6 @@ public:
     GLint GetAttribLocation(const std::string &name) const;
 
     const std::string ToString() const override;
-
-    void Write(std::ostream &f) const;
-    void Read(std::istream &f);
 };
 
 #endif // SHADERPROGRAM_H

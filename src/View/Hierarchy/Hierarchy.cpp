@@ -362,7 +362,7 @@ void Hierarchy::OnContextMenuCreatePrefab()
         f.open(filename, std::fstream::out);
         if (f.is_open())
         {
-            prefab->Write(f);
+            prefab->WriteInternal(f);
             f.close();
         }
     }

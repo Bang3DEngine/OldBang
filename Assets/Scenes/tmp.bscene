@@ -1,59 +1,96 @@
 <Scene>
-0x265fba0
+0x234bba0
 Scene
 <children>
 <GameObject>
-0x2af2fc0
+0x2832f20
+true
+LightTest
+<children>
+</children>
+<components>
+<Transform>
+0x2843da0
+true
+0 0 0
+0 0 0 1
+1 1 1
+</Transform>
+<DirectionalLight>
+0x2832ae0
+true
+1
+1 1 1
+Assets/Engine/Materials/DirectionalLight.bmat
+</DirectionalLight>
+</components>
+</GameObject>
+<GameObject>
+0x2846e00
+true
 Luigi
 <children>
 </children>
 <components>
 <Transform>
-0x2afce90
--10.202 0 0
-0 0 0 1
+0x2838e00
+true
+-3.20652 0 0
+0 -0.223766 0 0.974643
 0.1 0.1 0.1
 </Transform>
 <MeshRenderer>
-0x2af3df0
+0x282fa20
+true
 ./Assets/Meshes/luigiMesh.bmesh
 ./Assets/Materials/luigiMaterial.bmat
 </MeshRenderer>
+<BehaviourHolder>
+0x2890820
+true
+./Assets/Behaviours/TestBehaviour.cpp
+</BehaviourHolder>
 </components>
 </GameObject>
 <GameObject>
-0x272d160
+0x2882820
+true
 Boy
+<children>
+<GameObject>
+0x286c730
+true
+BoyInside
 <children>
 </children>
 <components>
 <Transform>
-0x2b12f10
-2.79 0 0
--0.707107 0 0 0.707107
-3 3 3
+0x288ad70
+true
+0.01 0 0
+0 0.707107 0 0.707107
+0.8 0.8 0.8
 </Transform>
 <MeshRenderer>
-0x265e840
+0x287d120
+true
 ./Assets/Meshes/boyMesh.bmesh
 ./Assets/Materials/luigiMaterial.bmat
 </MeshRenderer>
 </components>
 </GameObject>
-<GameObject>
-0x2dd66e0
-Boy
-<children>
 </children>
 <components>
 <Transform>
-0x2e58ef0
-15.7845 0 -11.3376
--0.707107 0 0 0.707107
+0x286e340
+true
+8.53 0 -0.75
+0.707107 0 0 0.707107
 3 3 3
 </Transform>
 <MeshRenderer>
-0x2e19d20
+0x22721e0
+true
 ./Assets/Meshes/boyMesh.bmesh
 ./Assets/Materials/luigiMaterial.bmat
 </MeshRenderer>

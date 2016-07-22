@@ -39,7 +39,7 @@ private:
     {
         Asset *a = new T();
         FileReader::ReadNextLine(f); //Consume open tag
-        a->Read(f);
+        a->ReadInternal(f);
         FileReader::ReadNextLine(f); //Consume close tag
         return dynamic_cast<T*>(a);
     }

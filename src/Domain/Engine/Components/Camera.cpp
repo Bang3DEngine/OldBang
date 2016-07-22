@@ -189,22 +189,20 @@ void Camera::OnSlotValueChanged(InspectorWidget *source)
 }
 #endif
 
-void Camera::Write(std::ostream &f) const
+void Camera::WriteInternal(std::ostream &f) const
 {
-    f << "<Camera>" << std::endl;
+    Component::WriteInternal(f);
     f << ((void*)this) << std::endl;
     FileWriter::Write(m_fovDegrees, f);
     FileWriter::Write(m_zNear, f);
     FileWriter::Write(m_zFar, f);
-    FileWriter::Write(m_projMode == ProjectionMode::Perspective ?
-                          "Perspective" : "Orthographic", f);
+    FileWriter::Write((m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic") , f);
     FileWriter::Write(m_orthoRect, f);
-    f << "</Camera>" << std::endl;
 }
 
-void Camera::Read(std::istream &f)
+void Camera::ReadInternal(std::istream &f)
 {
-    FileReader::RegisterNextPointerId(f, this);
+    Component::ReadInternal(f);
     SetFovDegrees( FileReader::ReadFloat(f) );
     SetZNear( FileReader::ReadFloat(f) );
     SetZFar( FileReader::ReadFloat(f) );
@@ -212,5 +210,4 @@ void Camera::Read(std::istream &f)
                                             Camera::ProjectionMode::Perspective :
                                             Camera::ProjectionMode::Orthographic);
     SetOrthoRect( FileReader::ReadRect(f) );
-    FileReader::ReadNextLine(f); //Consume close tag
 }

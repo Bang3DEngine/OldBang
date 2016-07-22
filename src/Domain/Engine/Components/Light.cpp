@@ -75,12 +75,21 @@ void Light::OnSlotValueChanged(InspectorWidget *source)
 }
 #endif
 
-void Light::Write(std::ostream &f) const
+void Light::WriteInternal(std::ostream &f) const
 {
-
+    Component::WriteInternal(f);
+    FileWriter::Write(m_intensity, f);
+    FileWriter::Write(m_color, f);
+    FileWriter::Write(m_material->GetFilepath(), f);
 }
 
-void Light::Read(std::istream &f)
+void Light::ReadInternal(std::istream &f)
 {
+    Component::ReadInternal(f);
+    m_intensity = FileReader::ReadFloat(f);
+    m_color = FileReader::ReadVec3(f);
+
+    std::string materialFilepath = FileReader::ReadString(f);
+    m_material = AssetsManager::GetAsset<Material>(materialFilepath);
 
 }

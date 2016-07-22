@@ -68,7 +68,8 @@ public:
                                 float secsTime = 1.0f,
                                 bool depthTest = true) {}
 
-    void Write (std::ostream &f) const override;
+    virtual std::string GetTag() const override;
+    virtual void WriteInternal (std::ostream &f) const override;
 };
 
 #endif // SCENE_H

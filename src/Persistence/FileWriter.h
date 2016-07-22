@@ -21,7 +21,10 @@ public:
     static void WriteScene(std::string filename, Scene *scene);
     static void WriteAsset(std::string filename, Asset *a);
 
+    static void WriteBool(bool v, std::ostream &f);
+    static void Write(int v, std::ostream &f);
     static void Write(float v, std::ostream &f);
+    static void Write(void *v, std::ostream &f);
     static void Write(const glm::vec2 &v, std::ostream &f);
     static void Write(const Vector3 &v, std::ostream &f);
     static void Write(const glm::vec4 &v, std::ostream &f);

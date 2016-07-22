@@ -6,10 +6,6 @@
 
 Scene::Scene() : GameObject("Scene")
 {
-    GameObject *test = new GameObject("LightTest");
-    test->AddComponent<DirectionalLight>();
-    test->SetParent(this);
-
     m_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
 
@@ -92,22 +88,26 @@ bool Scene::IsScene() const
     return true;
 }
 
-void Scene::Write(std::ostream &f) const
+std::string Scene::GetTag() const
 {
-    f << "<Scene>" << std::endl;
-    f << ((void*)this) << std::endl;   //internal file id
-    f << this->GetName() << std::endl; //scene name
+    return "Scene";
+}
 
-    f << "<children>" << std::endl;
-    for (GameObject *e : m_children)
+void Scene::WriteInternal(std::ostream &f) const
+{
+    // GameObject::WriteInternal(f);
+
+    FileWriter::Write((void*)this, f);   //internal file id
+    FileWriter::Write(name, f);
+
+    FileWriter::Write("<children>", f);
+    for (GameObject *go : m_children)
     {
-        e->Write(f);
+        go->Write(f);
     }
-    f << "</children>" << std::endl;
+    FileWriter::Write("</children>", f);
 
     //Not used ftm
     //f << "<cameraGameObject>" << std::endl;
     //f << "</cameraGameObject>" << std::endl;
-
-    f << "</Scene>" << std::endl;
 }

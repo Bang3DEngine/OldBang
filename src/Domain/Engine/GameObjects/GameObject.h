@@ -293,7 +293,7 @@ public:
             T *tp = dynamic_cast<T*>(*comp);
             if (tp)
             {
-                m_comps.erase(comp);
+                  m_comps.erase(comp);
                 delete tp;
                 break;
             }
@@ -307,8 +307,9 @@ public:
     virtual bool IsEditorGameObject() const;
     virtual bool IsScene() const;
 
-    void Write(std::ostream &f) const override;
-    void Read(std::istream &f) override;
+    virtual std::string GetTag() const override;
+    virtual void WriteInternal(std::ostream &f) const override;
+    virtual void ReadInternal(std::istream &f) override;
 
     void SetEnabled(bool m_enabled);
     bool IsEnabled();

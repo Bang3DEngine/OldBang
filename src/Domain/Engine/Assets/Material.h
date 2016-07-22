@@ -13,7 +13,8 @@
 
 #include "AssetsManager.h"
 
-class Material : public IGLBindable, public Asset
+class Material : public IGLBindable
+                ,public Asset
 {
 friend class Renderer;
 
@@ -48,8 +49,9 @@ public:
     void Bind() const override;
     void UnBind() const override;
 
-    void Write(std::ostream &f) const;
-    void Read(std::istream &f);
+    virtual std::string GetTag() const override;
+    virtual void WriteInternal(std::ostream &f) const;
+    virtual void ReadInternal(std::istream &f);
 };
 
 #endif // MATERIAL_H

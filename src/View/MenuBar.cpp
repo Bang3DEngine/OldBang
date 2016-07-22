@@ -190,7 +190,7 @@ void MenuBar::OnCreateFromPrefab() const
         WindowMain *w = WindowMain::GetInstance();
 
         Prefab *p = new Prefab();
-        p->Read(f);
+        p->ReadInternal(f);
         GameObject *e = p->InstantiateWithoutStarting();
         GameObject *selectedGameObject = w->widgetHierarchy->GetFirstSelectedGameObject();
 

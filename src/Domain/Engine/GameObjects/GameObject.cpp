@@ -274,6 +274,11 @@ bool GameObject::IsScene() const
     return false;
 }
 
+std::string GameObject::GetTag() const
+{
+    return "GameObject";
+}
+
 #ifdef BANG_EDITOR
 void GameObject::OnTreeHierarchyGameObjectsSelected(
         std::list<GameObject*> &selectedEntities )
@@ -310,36 +315,36 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
 }
 #endif
 
-void GameObject::Write(std::ostream &f) const
+void GameObject::WriteInternal(std::ostream &f) const
 {
-    f << "<GameObject>" << std::endl;
-    f << ((void*)this) << std::endl;   //internal file id
-    f << this->GetName() << std::endl; //Print name
+    FileWriter::Write(((void*)this), f);
+    FileWriter::WriteBool(m_enabled, f);
+    FileWriter::Write(name, f);
 
     f << "<children>" << std::endl;
-    for (GameObject *e : m_children)
+    for (GameObject *go : m_children)
     {
-        e->Write(f);
+        go->Write(f);
     }
     f << "</children>" << std::endl;
 
     f << "<components>" << std::endl;
-    for (Component *p : m_comps)
+    for (Component *c : m_comps)
     {
-        p->Write(f);
+        c->Write(f);
     }
     f << "</components>" << std::endl;
-
-    f << "</GameObject>" << std::endl;
 }
 
-void GameObject::Read(std::istream &f)
+void GameObject::ReadInternal(std::istream &f)
 {
-    FileReader::RegisterNextPointerId(f, this); //Read GameObject id
+    FileReader::RegisterNextPointerId(f, this);
+    m_enabled = FileReader::ReadBool(f);
     SetName( FileReader::ReadString(f) );  //Read GameObject name
-    std::string line;
-    while ( (line = FileReader::ReadNextLine(f)) != "</GameObject>")
+
+    while ( FileReader::PeekNextLine(f) != "</GameObject>" )
     {
+        std::string line = FileReader::ReadNextLine(f);
         if (line == "<children>")
         {
             FileReader::ReadChildren(f, this);

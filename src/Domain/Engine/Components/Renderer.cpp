@@ -217,3 +217,13 @@ void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std:
 {
     ActivateGLStatesBeforeRenderingForSelection = f;
 }
+
+void Renderer::WriteInternal(std::ostream &f) const
+{
+    Component::WriteInternal(f);
+}
+
+void Renderer::ReadInternal(std::istream &f)
+{
+    Component::ReadInternal(f);
+}

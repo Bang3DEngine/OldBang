@@ -79,8 +79,8 @@ public:
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
     #endif
 
-    void Write(std::ostream &f) const;
-    void Read(std::istream &f);
+    void WriteInternal(std::ostream &f) const;
+    void ReadInternal(std::istream &f);
 };
 
 #endif // CAMERA_H

@@ -9,6 +9,7 @@
 #include "FileReader.h"
 #include "GameObject.h"
 #include "BehaviourHolder.h"
+#include "DirectionalLight.h"
 
 #ifdef BANG_EDITOR
 #include "Explorer.h"
@@ -257,69 +258,53 @@ bool FileReader::ReadOBJ(const std::string& filepath,
 }
 
 
-void FileReader::ReadComponents(std::istream &f, GameObject *e)
+void FileReader::ReadComponents(std::istream &f, GameObject *go)
 {
     std::string line;
     while ( (line = FileReader::ReadNextLine(f)) != "</components>" )
     {
-        Component *p = nullptr;
-        bool addComp = true;
+        Component *c = nullptr;
+        bool isTransform = false;
 
         if (line == "<Transform>")
         {
-            e->transform->Read(f); // Read on top of existing default Transform
-            p = e->transform;
-            addComp = false;
+            go->transform->Read(f); // Read on top of existing default Transform
+            c = go->transform;
+            isTransform = true;
         }
         else if (line == "<MeshRenderer>")
         {
             MeshRenderer *mr = new MeshRenderer();
             mr->Read(f);
-            p = mr;
+            c = mr;
         }
         else if (line == "<Camera>")
         {
             Camera *cam = new Camera();
             cam->Read(f);
-            p = cam;
+            c = cam;
         }
         else if (line == "<BehaviourHolder>")
         {
             BehaviourHolder *bh = new BehaviourHolder();
             bh->Read(f);
-            p = bh;
+            c = bh;
         }
-        else
+        else if (line == "<DirectionalLight>")
         {
-            //BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS();
-
-            /*
-            BANG_PREPROCESSOR
-            Here the BangPreprocessor with the macro BANG_PREPROCESSOR_USERBEHAVIOURS_ELSEIFS
-            will write something like this:
-                 if (line == "<UserBehaviour1>")
-                 {
-                      p = new UserBehaviour1();
-                      ReadNextLine(f);
-                 }
-                 else if (line == "<UserBehaviour2>")
-                 {
-                      p = new UserBehaviour2();
-                      ReadNextLine(f);
-                 }
-                 ...
-            In order to complete the rest of the else if, for the custom user behaviours!!!
-            */
+            DirectionalLight *dl = new DirectionalLight();
+            dl->Read(f);
+            c = dl;
         }
 
-        if (p && addComp)
+        if (c && !isTransform)
         {
-            e->AddComponent(p);
+            go->AddComponent(c);
         }
     }
 }
 
-void FileReader::ReadChildren(std::istream &f, GameObject *e)
+void FileReader::ReadChildren(std::istream &f, GameObject *go)
 {
     std::string line;
     while ( (line = FileReader::ReadNextLine(f)) != "</children>")
@@ -328,14 +313,14 @@ void FileReader::ReadChildren(std::istream &f, GameObject *e)
         {
             GameObject *child = new GameObject();
             child->Read(f);
-            child->SetParent(e);
+            child->SetParent(go);
         }
         else if (line == "<GameObjectPrefab>")
         {
             std::string prefabFilepath = FileReader::ReadString(f);
             Prefab *p = AssetsManager::GetAsset<Prefab>(prefabFilepath);
             GameObject *child = p->Instantiate();
-            child->SetParent(e);
+            child->SetParent(go);
         }
     }
 }
@@ -350,7 +335,7 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
     else
     {
         std::string line = FileReader::ReadNextLine(f); // Skip <Scene> line
-        RegisterNextPointerId(f, scene); // Read Scene id
+        FileReader:: RegisterNextPointerId(f, scene); // Read Scene id
         scene->SetName( FileReader::ReadString(f) ); //Read Scene name
 
         while ( (line = FileReader::ReadNextLine(f)) != "</Scene>")
@@ -380,6 +365,23 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
 void FileReader::SaveScene(const std::string &filepath, const Scene *scene)
 {
 
+}
+
+std::string FileReader::PeekNextLine(std::istream &f)
+{
+    std::streampos beginningOfLine = f.tellg();
+    std::string line;
+    do
+    {
+        beginningOfLine = f.tellg();
+        std::getline(f, line);
+        TrimStringLeft(&line);
+    }
+    while ( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') &&
+           f.peek() != EOF); //Skip all empty/comment lines
+
+    f.seekg(beginningOfLine);
+    return line;
 }
 
 
@@ -426,6 +428,12 @@ bool FileReader::ReadNextLine(std::istream &f, std::string *line)
            f.peek() != EOF); //Skip all empty/comment lines
 
     return true;
+}
+
+bool FileReader::ReadBool(std::istream &f)
+{
+    std::istringstream iss(ReadNextLine(f));
+    std::string b; iss >> b;  return (b == "true");
 }
 
 int FileReader::ReadInt(std::istream &f)

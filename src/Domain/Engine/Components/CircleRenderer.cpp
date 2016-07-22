@@ -159,24 +159,22 @@ void CircleRenderer::OnSlotValueChanged(InspectorWidget *source)
 }
 #endif
 
-void CircleRenderer::Write(std::ostream &f) const
+void CircleRenderer::WriteInternal(std::ostream &f) const
 {
-    f << "<CircleRenderer>" << std::endl;
+    LineRenderer::WriteInternal(f);
     f << ((void*)this) << std::endl;
     FileWriter::WriteFilepath(m_material->GetFilepath(), f);
     FileWriter::Write(m_radius, f);
     FileWriter::Write(m_segments, f);
     FileWriter::Write(GetLineWidth(), f);
-    f << "</CircleRenderer>" << std::endl;
 }
 
-void CircleRenderer::Read(std::istream &f)
+void CircleRenderer::ReadInternal(std::istream &f)
 {
-    FileReader::RegisterNextPointerId(f, this);
+    LineRenderer::ReadInternal(f);
     SetMaterial( AssetsManager::GetAsset<Material>(FileReader::ReadString(f)));
     SetRadius(FileReader::ReadFloat(f));
     SetSegments(FileReader::ReadFloat(f));
     SetLineWidth(FileReader::ReadFloat(f));
-    FileReader::ReadNextLine(f); //Consume close tag
 }
 

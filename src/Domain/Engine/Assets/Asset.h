@@ -17,9 +17,9 @@
 
 class AssetsManager;
 class Asset : public IToString
-              ,public IFileable
+             ,public IFileable
               #ifdef BANG_EDITOR
-              , public IInspectable
+             ,public IInspectable
               #endif
 {
     friend class AssetsManager;
@@ -47,8 +47,9 @@ public:
 
     virtual const std::string ToString() const override;
 
-    virtual void Write(std::ostream &f) const override;
-    virtual void Read(std::istream &f) override;
+    virtual std::string GetTag() const override;
+    virtual void WriteInternal(std::ostream &f) const override;
+    virtual void ReadInternal(std::istream &f) override;
 };
 
 #endif // ASSET_H

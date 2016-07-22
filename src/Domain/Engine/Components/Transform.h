@@ -127,8 +127,8 @@ public:
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
     #endif
 
-    void Write(std::ostream &f) const override;
-    void Read(std::istream &f) override;
+    void WriteInternal(std::ostream &f) const override;
+    void ReadInternal(std::istream &f) override;
 };
 
 #endif // TRANSFORM_H

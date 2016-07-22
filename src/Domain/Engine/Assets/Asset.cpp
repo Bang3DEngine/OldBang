@@ -20,10 +20,15 @@ const std::string Asset::ToString() const
     return "Asset '" + m_filepath + "'.";
 }
 
-void Asset::Write(std::ostream &f) const
+std::string Asset::GetTag() const
+{
+    return "Asset";
+}
+
+void Asset::WriteInternal(std::ostream &f) const
 {
 }
 
-void Asset::Read(std::istream &f)
+void Asset::ReadInternal(std::istream &f)
 {
 }

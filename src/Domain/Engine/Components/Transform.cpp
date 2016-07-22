@@ -422,21 +422,18 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
 }
 #endif
 
-void Transform::Write(std::ostream &f) const
+void Transform::WriteInternal(std::ostream &f) const
 {
-    f << "<Transform>" << std::endl;
-    f << ((void*)this) << std::endl;
+    Component::WriteInternal(f);
     FileWriter::Write(GetLocalPosition(), f);
     FileWriter::Write(GetLocalRotation(), f);
     FileWriter::Write(GetLocalScale(), f);
-    f << "</Transform>" << std::endl;
 }
 
-void Transform::Read(std::istream &f)
+void Transform::ReadInternal(std::istream &f)
 {
-    FileReader::RegisterNextPointerId(f, this);
+    Component::ReadInternal(f);
     SetLocalPosition(FileReader::ReadVec3(f));
     SetLocalRotation(FileReader::ReadQuat(f));
     SetLocalScale(FileReader::ReadVec3(f));
-    FileReader::ReadNextLine(f); //Consume close tag
 }

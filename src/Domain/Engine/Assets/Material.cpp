@@ -33,9 +33,15 @@ void Material::UnBind() const
     }
 }
 
-void Material::Write(std::ostream &f) const
+std::string Material::GetTag() const
 {
-    FileWriter::Write("<Material>", f);
+    return "Material";
+}
+
+void Material::WriteInternal(std::ostream &f) const
+{
+    Asset::WriteInternal(f);
+
     std::string vsFile =  "", fsFile = "";
     if (this->m_shaderProgram)
     {
@@ -54,12 +60,12 @@ void Material::Write(std::ostream &f) const
     FileWriter::Write(m_diffuseColor, f);
     FileWriter::Write(1, f);
     FileWriter::Write(m_texture->GetFilepath(), f);
-
-    FileWriter::Write("</Material>", f);
 }
 
-void Material::Read(std::istream &f)
+void Material::ReadInternal(std::istream &f)
 {
+    Asset::ReadInternal(f);
+
     std::string vshaderFilepath = FileReader::ReadString(f);
     std::string fshaderFilepath = FileReader::ReadString(f);
     SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));

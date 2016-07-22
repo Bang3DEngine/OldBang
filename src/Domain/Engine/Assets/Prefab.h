@@ -39,8 +39,9 @@ public:
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;
 
-    void Write(std::ostream &f) const;
-    void Read(std::istream &f);
+    virtual std::string GetTag() const override;
+    virtual void WriteInternal(std::ostream &f) const;
+    virtual void ReadInternal(std::istream &f);
 };
 
 #endif // BANGFAB_H
