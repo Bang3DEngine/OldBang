@@ -22,6 +22,8 @@ private:
     Shader *p_vshader;
     Shader *p_fshader;
 
+    mutable std::map<std::string, Texture*> m_namesToTextures;
+
 public:
     ShaderProgram();
     ShaderProgram(const std::string &vshaderPath,
@@ -41,12 +43,13 @@ public:
     bool SetUniformVec3    (const std::string &name, const Vector3& v,       bool warn = true) const;
     bool SetUniformVec4    (const std::string &name, const glm::vec4& v,     bool warn = true) const;
     bool SetUniformMat4    (const std::string &name, const Matrix4& m,       bool warn = true) const;
-    bool SetUniformTexture (const std::string &name, Texture *texture, int slot = -1, bool warn = true) const;
+    bool SetUniformTexture (const std::string &name, Texture *texture,       bool warn = true) const;
 
-    Shader* GetVertexShader() const { return p_vshader; }
-    Shader* GetFragmentShader() const { return p_fshader; }
+    Shader* GetVertexShader() const;
+    Shader* GetFragmentShader() const;
 
-    GLint GetLocation(const std::string &name) const;
+    GLint GetUniformLocation(const std::string &name) const;
+    GLint GetAttribLocation(const std::string &name) const;
 
     const std::string ToString() const override;
 

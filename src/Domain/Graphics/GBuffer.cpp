@@ -32,15 +32,17 @@ void GBuffer::BindGBufferInTexturesTo(Material *mat) const
     TextureRender *depthTex     = GetTextureAttachment(GBuffer::Attachment::Depth);
     TextureRender *colorTex     = GetTextureAttachment(GBuffer::Attachment::Color);
 
+    ShaderProgram *sp =mat->GetShaderProgram(); NONULL(sp);
+
     //Now attach to the material, with its corresponding index for the name (BANG_texture_0)
     //which in this case are the same as each respective texture slot
-    mat->SetTexture("B_position_gout_fin",      positionTex);
-    mat->SetTexture("B_normal_gout_fin",        normalTex);
-    mat->SetTexture("B_uv_gout_fin",            uvTex);
-    mat->SetTexture("B_diffuse_gout_fin",       diffuseTex);
-    mat->SetTexture("B_materialBools_gout_fin", matBoolsTex);
-    mat->SetTexture("B_depth_gout_fin",         depthTex);
-    mat->SetTexture("B_color_gout_fin",         colorTex);
+    sp->SetUniformTexture("B_position_gout_fin",      positionTex, false);
+    sp->SetUniformTexture("B_normal_gout_fin",        normalTex,   false);
+    sp->SetUniformTexture("B_uv_gout_fin",            uvTex,       false);
+    sp->SetUniformTexture("B_diffuse_gout_fin",       diffuseTex,  false);
+    sp->SetUniformTexture("B_materialBools_gout_fin", matBoolsTex, false);
+    sp->SetUniformTexture("B_depth_gout_fin",         depthTex,    false);
+    sp->SetUniformTexture("B_color_gout_fin",         colorTex,    false);
 }
 
 void GBuffer::RenderPassWithMaterial(Material *mat) const
@@ -83,7 +85,8 @@ void GBuffer::RenderToScreen() const
                                              *(p_renderGBufferToScreenMaterial->GetShaderProgram()));
 
     TextureRender *colorTex = GetTextureAttachment(GBuffer::Attachment::Color);
-    p_renderGBufferToScreenMaterial->SetTexture("B_color_gout_fin", colorTex);
+    ShaderProgram *sp =p_renderGBufferToScreenMaterial->GetShaderProgram(); NONULL(sp);
+    sp->SetUniformTexture("B_color_gout_fin", colorTex, false);
 
     p_renderGBufferToScreenMaterial->Bind();
     RenderScreenPlane();

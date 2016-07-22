@@ -27,8 +27,8 @@ public:
 private:
     glm::vec4 m_diffuseColor;
 
-    ShaderProgram *p_shaderProgram;
-    mutable std::map<std::string, Texture*> m_namesToTextures;
+    ShaderProgram *p_shaderProgram = nullptr;
+    Texture2D *m_texture = nullptr; // Currently supporting just one texture
 
 public:
     Material();
@@ -36,12 +36,12 @@ public:
     virtual ~Material();
 
     void SetShaderProgram(ShaderProgram *program);
-    void SetTexture(const std::string &nameInShader, Texture *texture);
+    void SetTexture(Texture2D *m_texture);
 
     void SetDiffuseColor(const glm::vec4 &m_diffuseColor);
 
     ShaderProgram* GetShaderProgram() const;
-    const Texture* GetTexture(const std::string &nameInShader) const;
+    const Texture* GetTexture() const;
 
     glm::vec4 GetDiffuseColor() const;
 

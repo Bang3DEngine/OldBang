@@ -69,126 +69,135 @@ bool ShaderProgram::Link()
         }
 
         glDeleteProgram(m_idGL);
-        return false;
     }
 
-    return true;
+    return linked;
 }
 
 bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn) const
 {
-    int location = glGetUniformLocation(m_idGL, name.c_str());
+    int location = GetUniformLocation(name);
     if (location >= 0)
     {
         Bind();
         glUniform1fv(location, 1, &v);
         UnBind();
-        return true;
     }
     else
     {
         if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
-        return false;
     }
+
+    return (location >= 0);
 }
 
 bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v, bool warn) const
 {
-    int location = glGetUniformLocation(m_idGL, name.c_str());
+    int location = GetUniformLocation(name);
     if (location >= 0)
     {
         Bind();
         glUniform2fv(location, 1, &v[0]);
         UnBind();
-        return true;
     }
     else
     {
         if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
-        return false;
     }
+
+    return (location >= 0);
 }
 
 bool ShaderProgram::SetUniformVec3 (const std::string &name, const Vector3& v, bool warn) const
 {
-    int location = glGetUniformLocation(m_idGL, name.c_str());
+    int location = GetUniformLocation(name);
     if (location >= 0)
     {
         Bind();
         glUniform3fv(location, 1, &v[0]);
         UnBind();
-        return true;
     }
     else
     {
         if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
-        return false;
     }
+
+    return (location >= 0);
 }
 
 bool ShaderProgram::SetUniformVec4 (const std::string &name, const glm::vec4& v, bool warn) const
 {
-    int location = glGetUniformLocation(m_idGL, name.c_str());
+    int location = GetUniformLocation(name);
     if (location >= 0)
     {
         Bind();
         glUniform4fv(location, 1, &v[0]);
         UnBind();
-        return true;
     }
     else
     {
         if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
-        return false;
     }
+
+    return (location >= 0);
 }
 
 bool ShaderProgram::SetUniformMat4 (const std::string &name, const Matrix4& m, bool warn) const
 {
-    int location = glGetUniformLocation(m_idGL, name.c_str());
+    int location = GetUniformLocation(name);
     if (location >= 0)
     {
         Bind();
         glUniformMatrix4fv(location, 1, GL_FALSE, m.GetFirstAddress());
         UnBind();
-        return true;
     }
     else
     {
         if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
-        return false;
     }
+
+    return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformTexture(const std::string &name, Texture *texture, int slot, bool warn) const
+bool ShaderProgram::SetUniformTexture(const std::string &name, Texture *texture, bool warn) const
 {
-    int location = glGetUniformLocation(m_idGL, name.c_str());
+    int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        Bind();
-        int newSlot = slot;
-        if (slot == -1) newSlot = location;
-        glUniform1i(location, newSlot);
-        texture->SetTextureUnit(newSlot);
-        UnBind();
-        return true;
+        m_namesToTextures[name] = texture;
     }
     else
     {
         if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
-        return false;
     }
+
+    return (location >= 0);
 }
 
-GLint ShaderProgram::GetLocation(const std::string &name) const
+Shader *ShaderProgram::GetVertexShader() const
 {
-    return glGetAttribLocation(GetGLId(), name.c_str());
+    return p_vshader;
+}
+
+Shader *ShaderProgram::GetFragmentShader() const
+{
+    return p_fshader;
+}
+
+GLint ShaderProgram::GetUniformLocation(const std::string &name) const
+{
+    glGetUniformLocation(m_idGL, name.c_str());
+}
+
+GLint ShaderProgram::GetAttribLocation(const std::string &name) const
+{
+    return glGetAttribLocation(m_idGL, name.c_str());
 }
 
 const std::string ShaderProgram::ToString() const
@@ -204,6 +213,24 @@ void ShaderProgram::Bind() const
 {
     PreBind(GL_CURRENT_PROGRAM);
     glUseProgram(m_idGL);
+
+    // Bind textures at the moment we bind the shader program
+    int textureUnit = 1;
+    for (auto it = m_namesToTextures.begin(); it != m_namesToTextures.end(); ++it)
+    {
+        std::string texName = it->first;
+        Texture *tex = it->second;
+        if (tex)
+        {
+            int location = GetUniformLocation(texName);
+
+            glUniform1i(location, textureUnit);
+
+            //Set the uniform with the texture slot
+            tex->BindToTextureUnit(textureUnit); //Leave it bound
+            textureUnit++;
+        }
+    }
 }
 
 void ShaderProgram::UnBind() const
