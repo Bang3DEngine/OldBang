@@ -23,7 +23,7 @@ std::string SystemUtils::GetAllProjectObjects()
     bool ok = false;
     std::string objs = "";
     SystemUtils::System(cmdGetAllObjects, objs, ok);
-    if(!ok)
+    if (!ok)
     {
         Logger_Error("Error trying to find object files to compile");
     }
@@ -42,7 +42,7 @@ std::string SystemUtils::GetAllProjectSubDirs()
     bool ok = false;
     std::string allSubDirs = "";
     SystemUtils::System(cmdGetAllSubDirs, allSubDirs, ok);
-    if(!ok)
+    if (!ok)
     {
         Logger_Error("Error trying to find include directories to compile.");
     }
@@ -59,7 +59,7 @@ std::string SystemUtils::GetQtIncludes()
 
     bool ok = false;
     SystemUtils::System(cmdGetQtIncludeDirs, qtIncludeDirs, ok);
-    if(!ok)
+    if (!ok)
     {
         Logger_Error("Error trying to find Qt include directories to compile.");
     }
@@ -75,7 +75,7 @@ std::string SystemUtils::GetQtLibrariesDirs()
     std::string cmdGetQtLibDirs = "qmake -query QT_INSTALL_LIBS";
     bool ok = false;
     SystemUtils::System(cmdGetQtLibDirs, qtLibDirs, ok);
-    if(!ok)
+    if (!ok)
     {
         Logger_Error("Error trying to find Qt library directories to compile.");
     }
@@ -111,7 +111,7 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
         // while result can be > 255. There are cases in which
         // the overflow can make it return 0 when its not 0 but a
         // larger number.
-        if(result > 0) quick_exit(1);
+        if (result > 0) quick_exit(1);
         quick_exit(0);
     }
     else if (pid == -1)
@@ -204,14 +204,14 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
 
     if (ok)
     {
-        if(output != "")
+        if (output != "")
         {
             Logger_Warn(output);
         }
     }
     else // There has been an error
     {
-        if(output != "")
+        if (output != "")
         {
             Logger_Error(output);
         }
@@ -235,7 +235,7 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
     // Open library
     *openLibrary = dlopen(sharedObjectFilepath.c_str(), RTLD_NOW);
     char *err = dlerror();
-    if(err)
+    if (err)
     {
         Logger_Error(err);
         if (*openLibrary)
@@ -249,7 +249,7 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
 
     // Error Check
     err = dlerror();
-    if(err )
+    if (err )
     {
         Logger_Error(err);
         dlclose(*openLibrary);
@@ -264,7 +264,7 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
 
     // Error Check
     err = dlerror();
-    if(err )
+    if (err )
     {
         Logger_Error(err);
         dlclose(*openLibrary);
@@ -274,7 +274,7 @@ void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepat
 
     // Call it and get the pointer to the created Behaviour
     *createdBehaviour = nullptr;
-    if(createFunction )
+    if (createFunction )
     {
         // Create the Behaviour, passing to it the SingletonManager
         // of this main binary, so it can link it.
@@ -288,7 +288,7 @@ bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, void *openLibrary)
 
     // Error Check
     char *err = dlerror();
-    if(err )
+    if (err )
     {
         Logger_Error(err);
         return false;
@@ -301,13 +301,13 @@ bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, void *openLibrary)
 
     // Error Check
     err = dlerror();
-    if(err )
+    if (err )
     {
         Logger_Error(err);
         return false;
     }
 
-    if(deleteFunction )
+    if (deleteFunction )
     {
         deleteFunction(b);
     }
@@ -321,7 +321,7 @@ void SystemUtils::CloseLibrary(void *library)
     dlerror();
     dlclose(library);
     char *err = dlerror();
-    if(err )
+    if (err )
     {
         Logger_Error(err);
     }

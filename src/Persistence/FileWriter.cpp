@@ -12,7 +12,7 @@ void FileWriter::WriteScene(std::string filename, Scene *scene)
     filename = Persistence::AppendExtension(filename,
                                             Scene::GetFileExtension());
     ofs.open(filename);
-    if(!ofs.is_open())
+    if (!ofs.is_open())
     {
         Logger_Error("There was an error when saving file '" << filename << "'");
         ofs.close();
@@ -28,7 +28,7 @@ void FileWriter::WriteAsset(std::string filename, Asset *a)
     filename = Persistence::AppendExtension(filename,
                                             a->GetFileExtension());
     ofs.open(filename);
-    if(!ofs.is_open())
+    if (!ofs.is_open())
     {
         Logger_Error("There was an error when saving file '" << filename << "'");
         ofs.close();
@@ -71,7 +71,7 @@ void FileWriter::Write(const Rect &r, std::ostream &f)
 
 void FileWriter::Write(const std::string &str, std::ostream &f)
 {
-    if(str != "")
+    if (str != "")
     {
         f << str << std::endl;
     }

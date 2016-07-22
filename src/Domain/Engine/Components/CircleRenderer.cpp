@@ -46,7 +46,7 @@ void CircleRenderer::GeneratePoints()
     m_points.resize(m_segments + 1);
 
     float step = (2.0f * 3.141592f) / (m_segments);
-    for(int i = 0;  i < m_segments + 1; ++i)
+    for (int i = 0;  i < m_segments + 1; ++i)
     {
         m_points[i] = Vector3(glm::cos(step*i), glm::sin(step*i), 0.0f) * m_radius;
     }
@@ -89,7 +89,7 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
         glm::vec2 sP = sP_4.xy() / sP_4.w;
 
         float d = glm::distance(sP, sOrigin);
-        if(d < d0)
+        if (d < d0)
         {
             *p1 = *p0;
             *i1 = *i0;
@@ -99,7 +99,7 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
             *i0 = i;
             d0 = d;
         }
-        else if(d < d1)
+        else if (d < d1)
         {
             *p1 = sP;
             *i1 = i;

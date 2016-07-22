@@ -9,12 +9,12 @@ Framebuffer::Framebuffer(int width, int height) : m_width(width),
 
 Framebuffer::~Framebuffer()
 {
-    for(TextureRender *t : m_textureAttachments)
+    for (TextureRender *t : m_textureAttachments)
     {
         delete t;
     }
 
-    if(m_depthBufferAttachmentId != 0)
+    if (m_depthBufferAttachmentId != 0)
         glDeleteRenderbuffers(1, &m_depthBufferAttachmentId);
 
     glDeleteFramebuffers(1, &m_idGL);
@@ -23,7 +23,7 @@ Framebuffer::~Framebuffer()
 void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum,
                                         GLint glInternalFormat, GLint glFormat, GLint glInternalType)
 {
-    while(int(m_textureAttachments.size()) <= framebufferAttachmentNum)
+    while (int(m_textureAttachments.size()) <= framebufferAttachmentNum)
         m_textureAttachments.push_back(nullptr);
 
     Bind();
@@ -31,17 +31,17 @@ void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum,
     //Create texture
     TextureRender *tex = new TextureRender();
 
-    if(glInternalFormat != -1)
+    if (glInternalFormat != -1)
     {
         tex->SetGLInternalFormat(glInternalFormat);
     }
 
-    if(glFormat != -1)
+    if (glFormat != -1)
     {
         tex->SetGLFormat(glFormat);
     }
 
-    if(glInternalType != -1)
+    if (glInternalType != -1)
     {
         tex->SetGLInternalType(glInternalType);
     }
@@ -77,14 +77,14 @@ void Framebuffer::CreateDepthBufferAttachment()
 
 TextureRender *Framebuffer::GetTextureAttachment(int framebufferAttachmentNum) const
 {
-    if(framebufferAttachmentNum >= int(m_textureAttachments.size())) return nullptr;
+    if (framebufferAttachmentNum >= int(m_textureAttachments.size())) return nullptr;
     return m_textureAttachments[framebufferAttachmentNum];
 }
 
 void Framebuffer::SetAllDrawBuffers() const
 {
     std::vector<int> attachmentIds;
-    for(int i = 0; i < m_boundAttachments.size(); ++i)
+    for (int i = 0; i < m_boundAttachments.size(); ++i)
     {
         attachmentIds.push_back(i);
     }
@@ -95,7 +95,7 @@ void Framebuffer::SetDrawBuffers(const std::vector<int> &attachmentIds) const
 {
     Bind();
     std::vector<GLuint> drawBuffers;
-    for(GLint att : attachmentIds)
+    for (GLint att : attachmentIds)
     {
         drawBuffers.push_back(m_boundAttachments[att]);
     }
@@ -129,15 +129,15 @@ void Framebuffer::Resize(int width, int height)
 {
     this->m_width = width;
     this->m_height = height;
-    for(Texture *t : m_textureAttachments)
+    for (Texture *t : m_textureAttachments)
     {
-        if(t )
+        if (t )
         {
             t->Resize(width, height);
         }
     }
 
-    if(m_depthBufferAttachmentId != 0)
+    if (m_depthBufferAttachmentId != 0)
     {
         //TODO:  respect former bindings of renderbuffers
         glBindRenderbuffer(GL_RENDERBUFFER, m_depthBufferAttachmentId);
@@ -168,7 +168,7 @@ void Framebuffer::ClearColor() const
 
 void Framebuffer::CheckFramebufferError() const
 {
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
         Logger_Error("There was an error when creating an attachment for a Framebuffer.");
     }

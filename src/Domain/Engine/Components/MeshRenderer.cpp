@@ -35,7 +35,7 @@ MeshRenderer::~MeshRenderer()
 void MeshRenderer::SetMaterial(Material *m)
 {
     p_material = m;
-    if(m_mesh  && p_material  &&
+    if (m_mesh  && p_material  &&
        p_material->GetShaderProgram() )
     {
         m_mesh->BindAllVBOsToShaderProgram(*(p_material->GetShaderProgram()));
@@ -48,7 +48,7 @@ void MeshRenderer::SetMesh(Mesh *m)
     NONULL(m_mesh); NONULL(p_material); NONULL(p_material->GetShaderProgram());
 
     m_mesh->BindAllVBOsToShaderProgram(*(p_material->GetShaderProgram()));
-    if(m_mesh->GetFilepath().length() > 0)
+    if (m_mesh->GetFilepath().length() > 0)
     {
         SetRenderMode(m_mesh->IsATrianglesModel() ?
                       RenderMode::Triangles : RenderMode::Quads);
@@ -57,7 +57,7 @@ void MeshRenderer::SetMesh(Mesh *m)
 
 Box MeshRenderer::GetBoundingBox() const
 {
-    if(m_mesh )
+    if (m_mesh )
     {
         return m_mesh->GetBoundingBox();
     }
@@ -109,7 +109,7 @@ InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
 
     if (p_material )
     {
-        if(p_material->GetFilepath() != "")
+        if (p_material->GetFilepath() != "")
         {
             matInfo->filepath = p_material->GetFilepath();
         }
@@ -125,7 +125,7 @@ InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
 
     if (m_mesh )
     {
-        if(m_mesh->GetFilepath() != "")
+        if (m_mesh->GetFilepath() != "")
         {
             meshInfo->filepath = m_mesh->GetFilepath();
         }
@@ -147,13 +147,13 @@ void MeshRenderer::OnSlotValueChanged(InspectorWidget *source)
     std::string materialFilepath = source->GetSWFileFilepath("Material");
     std::string meshFilepath = source->GetSWFileFilepath("Mesh");
 
-    if(materialFilepath != "")
+    if (materialFilepath != "")
     {
         SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
     }
     else { }
 
-    if(meshFilepath != "")
+    if (meshFilepath != "")
     {
         SetMesh( AssetsManager::GetAsset<Mesh>(meshFilepath) );
     }

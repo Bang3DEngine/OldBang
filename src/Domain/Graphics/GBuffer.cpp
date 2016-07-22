@@ -18,8 +18,8 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 
 GBuffer::~GBuffer()
 {
-    if(p_renderGBufferToScreenMaterial) delete p_renderGBufferToScreenMaterial;
-    if(p_planeMeshToRenderEntireScreen) delete p_planeMeshToRenderEntireScreen;
+    if (p_renderGBufferToScreenMaterial) delete p_renderGBufferToScreenMaterial;
+    if (p_planeMeshToRenderEntireScreen) delete p_planeMeshToRenderEntireScreen;
 }
 
 void GBuffer::BindGBufferInTexturesTo(Material *mat) const
@@ -34,13 +34,13 @@ void GBuffer::BindGBufferInTexturesTo(Material *mat) const
 
     //Now attach to the material, with its corresponding index for the name (BANG_texture_0)
     //which in this case are the same as each respective texture slot
-    mat->SetTexture(positionTex,  "B_position_gout_fin");
-    mat->SetTexture(normalTex,    "B_normal_gout_fin");
-    mat->SetTexture(uvTex,        "B_uv_gout_fin");
-    mat->SetTexture(diffuseTex,   "B_diffuse_gout_fin");
-    mat->SetTexture(matBoolsTex,  "B_materialBools_gout_fin");
-    mat->SetTexture(depthTex,     "B_depth_gout_fin");
-    mat->SetTexture(colorTex,     "B_color_gout_fin");
+    mat->SetTexture("B_position_gout_fin",      positionTex);
+    mat->SetTexture("B_normal_gout_fin",        normalTex);
+    mat->SetTexture("B_uv_gout_fin",            uvTex);
+    mat->SetTexture("B_diffuse_gout_fin",       diffuseTex);
+    mat->SetTexture("B_materialBools_gout_fin", matBoolsTex);
+    mat->SetTexture("B_depth_gout_fin",         depthTex);
+    mat->SetTexture("B_color_gout_fin",         colorTex);
 }
 
 void GBuffer::RenderPassWithMaterial(Material *mat) const
@@ -83,7 +83,7 @@ void GBuffer::RenderToScreen() const
                                              *(p_renderGBufferToScreenMaterial->GetShaderProgram()));
 
     TextureRender *colorTex = GetTextureAttachment(GBuffer::Attachment::Color);
-    p_renderGBufferToScreenMaterial->SetTexture(colorTex, "B_color_gout_fin");
+    p_renderGBufferToScreenMaterial->SetTexture("B_color_gout_fin", colorTex);
 
     p_renderGBufferToScreenMaterial->Bind();
     RenderScreenPlane();

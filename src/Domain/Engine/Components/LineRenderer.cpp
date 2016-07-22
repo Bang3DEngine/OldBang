@@ -35,7 +35,7 @@ std::string LineRenderer::GetName() const { return "LineRenderer"; }
 
 void LineRenderer::BindPointsToVAO() const
 {
-    if(m_points.size() >= 2 &&
+    if (m_points.size() >= 2 &&
        p_material  && p_material->GetShaderProgram() )
     {
         p_vbo->Fill(m_points.data(), m_points.size() * sizeof(Vector3));
@@ -67,15 +67,15 @@ Box LineRenderer::GetBoundingBox() const
 {
     Vector3 minp(999999.9f);
     Vector3 maxp(-999999.9f);
-    for(int i = 0; i < m_points.size(); ++i)
+    for (int i = 0; i < m_points.size(); ++i)
     {
         Vector3 p = m_points[i];
-        if(p.x < minp.x) minp.x = p.x;
-        if(p.y < minp.y) minp.y = p.y;
-        if(p.z < minp.z) minp.z = p.z;
-        if(p.x > minp.x) maxp.x = p.x;
-        if(p.y > minp.y) maxp.y = p.y;
-        if(p.z > minp.z) maxp.z = p.z;
+        if (p.x < minp.x) minp.x = p.x;
+        if (p.y < minp.y) minp.y = p.y;
+        if (p.z < minp.z) minp.z = p.z;
+        if (p.x > minp.x) maxp.x = p.x;
+        if (p.y > minp.y) maxp.y = p.y;
+        if (p.z > minp.z) maxp.z = p.z;
     }
 
     return Box(minp, maxp);
@@ -95,7 +95,7 @@ InspectorWidgetInfo* LineRenderer::GetComponentInfo()
 
     if (p_material )
     {
-        if(p_material->GetFilepath() != "")
+        if (p_material->GetFilepath() != "")
         {
             matInfo->filepath = p_material->GetFilepath();
         }
@@ -120,7 +120,7 @@ InspectorWidgetInfo* LineRenderer::GetComponentInfo()
 void LineRenderer::OnSlotValueChanged(InspectorWidget *source)
 {
     std::string materialFilepath = source->GetSWFileFilepath("Material");
-    if(materialFilepath != "")
+    if (materialFilepath != "")
     {
         SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
     }

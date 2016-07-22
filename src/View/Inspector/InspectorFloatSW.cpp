@@ -9,7 +9,7 @@ InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
-    if(labelString != "")
+    if (labelString != "")
     {
         QLabel *textLabel = new QLabel(QString::fromStdString(labelString));
         textLabel->setContentsMargins(0,0,0,0);
@@ -37,7 +37,7 @@ InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
 
 void InspectorFloatSW::SetValue(float f)
 {
-    if(!_editing)
+    if (!_editing)
     {
         disconnect(p_spinbox, SIGNAL(valueChanged(double)), p_parent, SLOT(_OnSlotValueChanged(double)));
         p_spinbox->setValue(f);

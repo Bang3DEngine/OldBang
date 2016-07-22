@@ -30,7 +30,7 @@ void main()
 {
     B_POST_RENDER_FS_INIT_MAIN();
 
-    if(B_vin.receivesLighting > 0.5f)
+    if (B_vin.receivesLighting > 0.5f)
     {
         float lightDot = dot(B_vin.normal_world, normalize(B_light_forward_world));
         B_vout.color = vec4(B_vin.color.rgb +

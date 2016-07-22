@@ -32,7 +32,7 @@ Material *Renderer::GetMaterial()
 void Renderer::ActivateGLStatesBeforeRendering() const
 {
     //Set polygon mode
-    if(m_drawWireframe)
+    if (m_drawWireframe)
     {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
@@ -42,7 +42,7 @@ void Renderer::ActivateGLStatesBeforeRendering() const
     }
 
     //Set culling mode
-    if(m_cullMode != CullMode::None)
+    if (m_cullMode != CullMode::None)
     {
         glEnable(GL_CULL_FACE);
         glCullFace(m_cullMode);
@@ -54,7 +54,7 @@ void Renderer::ActivateGLStatesBeforeRendering() const
 
     Scene *scene = Canvas::GetCurrentScene();
     Camera *camera = scene->GetCamera();
-    if(camera  && p_material  && p_material->p_shaderProgram )
+    if (camera  && p_material  && p_material->p_shaderProgram )
     {
         Transform *t = camera->gameObject->transform;
         p_material->p_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
@@ -91,20 +91,20 @@ void Renderer::GetMatrices(Matrix4 &model,
 
     Camera *cam = gameObject->GetScene()->GetCamera();
 
-    if(!m_ignoreModelMatrix)
+    if (!m_ignoreModelMatrix)
     {
         Transform *t = gameObject->transform;
-        if(t) t->GetModelMatrix(model);
+        if (t) t->GetModelMatrix(model);
     }
     else model = Matrix4(1.0f);
 
-    if(!m_ignoreViewMatrix)
+    if (!m_ignoreViewMatrix)
     {
         cam->GetViewMatrix(view);
     }
     else view = Matrix4(1.0f);
 
-    if(!m_ignoreProjectionMatrix)
+    if (!m_ignoreProjectionMatrix)
     {
         cam->GetProjectionMatrix(projection);
     }

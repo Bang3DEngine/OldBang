@@ -139,7 +139,7 @@ public:
     InspectorWidgetInfo() {}
     virtual ~InspectorWidgetInfo()
     {
-        for(int i = 0; i < slotInfos.size(); ++i) delete slotInfos[i];
+        for (int i = 0; i < slotInfos.size(); ++i) delete slotInfos[i];
     }
 
     InspectorSWInfo* GetSlotInfo(int i) const

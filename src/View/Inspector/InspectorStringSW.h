@@ -58,7 +58,7 @@ public:
     virtual void  keyPressEvent(QKeyEvent *event) override
     {
         QLineEdit::keyPressEvent(event);
-        if(event->key() == QKeyEvent::Enter)
+        if (event->key() == QKeyEvent::Enter)
         {
             static_cast<InspectorStringSW*>(parent())->OnFocusOut();
         }
@@ -68,7 +68,7 @@ public slots:
 
     void SelectAll()
     {
-        if(!this->isReadOnly())
+        if (!this->isReadOnly())
         {
             this->selectAll();
         }

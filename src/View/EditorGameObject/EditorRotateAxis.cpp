@@ -24,11 +24,11 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
         }
     );
 
-    if(dir == EditorAxisDirection::X)
+    if (dir == EditorAxisDirection::X)
     {
         transform->SetLocalEuler(Vector3::up * 90.0f);
     }
-    else if(dir == EditorAxisDirection::Y)
+    else if (dir == EditorAxisDirection::Y)
     {
         transform->SetLocalEuler(Vector3::right * -90.0f);
     }
@@ -58,9 +58,9 @@ void EditorRotateAxis::OnUpdate()
     transform->GetModelMatrix(m);
     Matrix4 pvm =  p * v * m;
 
-    if(m_grabbed)
+    if (m_grabbed)
     {
-        if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+        if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
         {
             // This will be done once every grab
             glm::vec2 sMousePos= Input::GetMouseCoords();

@@ -17,9 +17,9 @@ void WindowEventManager::AddListener(IWindowEventManagerListener *listener)
 
 void WindowEventManager::RemoveListener(IWindowEventManagerListener *listener)
 {
-    for(auto it = m_listeners.begin(); it != m_listeners.end(); ++it)
+    for (auto it = m_listeners.begin(); it != m_listeners.end(); ++it)
     {
-        if((*it) == listener)
+        if ((*it) == listener)
         {
             m_listeners.erase(it);
             break;
@@ -29,7 +29,7 @@ void WindowEventManager::RemoveListener(IWindowEventManagerListener *listener)
 
 WindowEventManager *WindowEventManager::GetInstance()
 {
-    if(!s_wem)
+    if (!s_wem)
     {
         s_wem = WindowMain::GetInstance()->windowEventManager;
     }

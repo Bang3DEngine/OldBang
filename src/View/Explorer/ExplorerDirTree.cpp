@@ -33,10 +33,10 @@ ExplorerDirTree::~ExplorerDirTree()
 void ExplorerDirTree::CheckSelection()
 {
     p_explorer = WindowMain::GetInstance()->widgetListExplorer;
-    if(selectedIndexes().size() > 0 && selectedIndexes().at(0).isValid())
+    if (selectedIndexes().size() > 0 && selectedIndexes().at(0).isValid())
     {
         QModelIndex index = selectedIndexes().at(0);
-        if(p_lastSelectedModelIndexPointer != index.internalPointer())
+        if (p_lastSelectedModelIndexPointer != index.internalPointer())
         {
             p_lastSelectedModelIndexPointer = index.internalPointer();
             std::string selectedDirPath =

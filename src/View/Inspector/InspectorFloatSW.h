@@ -62,7 +62,7 @@ public:
 
     bool eventFilter(QObject *obj, QEvent *event)
     {
-        if(event->type() == QEvent::Wheel && obj == this)
+        if (event->type() == QEvent::Wheel && obj == this)
         {
             return true; // Block wheel event :D
         }
@@ -73,7 +73,7 @@ public:
 public slots:
     void AdjustStep(double v)
     {
-        if(std::abs(v) <= 1.0f) setSingleStep(0.1f);
+        if (std::abs(v) <= 1.0f) setSingleStep(0.1f);
         else setSingleStep( pow(10.0, int(log10(v == 0.0f ? 0.1f : std::abs(v)))-1) );
     }
 

@@ -39,7 +39,7 @@ void Texture2D::Fill(unsigned char *newData,
                      int width, int height,
                      int numComponents)
 {
-    if(this->p_data  && this->p_data != newData)
+    if (this->p_data  && this->p_data != newData)
         delete this->p_data;
 
     this->p_data = newData;
@@ -73,11 +73,11 @@ void Texture2D::Read(std::istream &f)
     m_filepath = FileReader::ReadString(f);
     LoadFromFile(m_filepath);
     std::string filterMode = FileReader::ReadString(f);
-    if(filterMode == "Nearest")
+    if (filterMode == "Nearest")
     {
         SetFilterMode(FilterMode::Nearest);
     }
-    else if(filterMode == "Linear")
+    else if (filterMode == "Linear")
     {
         SetFilterMode(FilterMode::Linear);
     }

@@ -183,10 +183,10 @@ public:
     template <class T>
     T* GetComponent() const
     {
-        for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+        for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if(tp ) return tp;
+            if (tp ) return tp;
         }
         return nullptr;
     }
@@ -198,10 +198,10 @@ public:
     std::list<T*> GetComponents() const
     {
         std::list<T*> comps_l;
-        for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+        for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if(tp ) comps_l.push_back(tp);
+            if (tp ) comps_l.push_back(tp);
         }
         return comps_l;
     }
@@ -212,14 +212,14 @@ public:
     template <class T>
     T* GetComponentInChildren() const
     {
-        for(auto c = m_children.begin(); c != m_children.end(); ++c)
+        for (auto c = m_children.begin(); c != m_children.end(); ++c)
         {
-            if((*c)->IsEditorGameObject()) continue;
+            if ((*c)->IsEditorGameObject()) continue;
 
             Component *comp = (*c)->GetComponent<T>();
-            if(comp ) return comp;
+            if (comp ) return comp;
             comp = (*c)->GetComponentInChildren<T>();
-            if(comp ) return comp;
+            if (comp ) return comp;
         }
         return nullptr;
     }
@@ -231,7 +231,7 @@ public:
     std::list<T*> GetComponentsInChildren() const
     {
         std::list<T*> comps_l;
-        for(auto c = m_children.begin(); c != m_children.end(); ++c)
+        for (auto c = m_children.begin(); c != m_children.end(); ++c)
         {
             comps_l.splice(comps_l.end(),
                            (*c)->GetComponents<T>()); //concat
@@ -271,10 +271,10 @@ public:
     int CountComponents() const
     {
         int count = 0;
-        for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+        for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if(tp)
+            if (tp)
             {
                 ++count;
             }
@@ -288,10 +288,10 @@ public:
     template <class T>
     void RemoveComponent()
     {
-        for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+        for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if(tp)
+            if (tp)
             {
                 m_comps.erase(comp);
                 delete tp;

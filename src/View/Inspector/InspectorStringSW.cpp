@@ -9,7 +9,7 @@ InspectorStringSW::InspectorStringSW(const std::string &labelString,
 {
 
     QLayout *layout = nullptr;
-    if(inlined)
+    if (inlined)
     {
         layout = new QHBoxLayout();
     }
@@ -46,7 +46,7 @@ InspectorStringSW::InspectorStringSW(const std::string &labelString,
 
 void InspectorStringSW::SetValue(const std::string &value)
 {
-    if(!m_editing)
+    if (!m_editing)
     {
         disconnect(p_strField, SIGNAL(valueChanged(QString)), p_parent, SLOT(_OnSlotValueChanged(QString)));
         p_strField->setText( QString::fromStdString(value) );

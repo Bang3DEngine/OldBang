@@ -36,7 +36,7 @@ void InspectorFileSW::Browse()
 {
     FileDialog fd(Persistence::GetAssetsPathAbsolute(), m_fileExtension);
     std::string selectedFile = fd.GetOpenFilename();
-    if(selectedFile != "")
+    if (selectedFile != "")
     {
         this->SetValue( selectedFile );
         this->p_parent->_OnSlotValueChanged();
@@ -45,7 +45,7 @@ void InspectorFileSW::Browse()
 
 void InspectorFileSW::SetValue(const std::string &assetPath)
 {
-    if(this->m_assetPath != assetPath)
+    if (this->m_assetPath != assetPath)
     {
         this->m_assetPath = assetPath;
         p_filepathLineEdit->setText(QString::fromStdString(assetPath));

@@ -38,7 +38,7 @@ void EditorScene::_OnRender()
     //From 0 to 9
     p_selectionFramebuffer->Bind();
     p_selectionFramebuffer->Clear();
-    for(m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
+    for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
     {
         p_selectionFramebuffer->ClearDepth();
         p_selectionFramebuffer->RenderSelectionBuffer(this);
@@ -49,7 +49,7 @@ void EditorScene::_OnRender()
 
     /*
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    for(m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
+    for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
     {
         p_selectionFramebuffer->ClearDepth();
         p_selectionFramebuffer->RenderSelectionBuffer(this);

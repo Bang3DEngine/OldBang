@@ -15,7 +15,7 @@ bool Shader::LoadFromFile(const std::string& filepath)
 
     std::ifstream f;
     f.open(filepath);
-    if(!f.is_open())
+    if (!f.is_open())
     {
         Logger_Error("Could not open shader file '" + filepath + "'. Does it exist / is reachable?");
         return false;
@@ -71,6 +71,6 @@ Shader::Type Shader::GetType() const
 
 const std::string Shader::ToString() const
 {
-    if(m_type == Type::Vertex) return "Vertex Shader: '" + m_filepath + "'";
+    if (m_type == Type::Vertex) return "Vertex Shader: '" + m_filepath + "'";
     return "Fragment Shader: '" + m_filepath + "'";
 }

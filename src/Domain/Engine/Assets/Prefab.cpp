@@ -12,7 +12,7 @@ Prefab::Prefab(const Prefab &p)
 
 Prefab::Prefab(GameObject *o)
 {
-    if(o )
+    if (o )
     {
         std::ostringstream oss;
         o->Write(oss);
@@ -28,7 +28,7 @@ Prefab::Prefab(const std::string &assetDescription)
 GameObject *Prefab::Instantiate() const
 {
     GameObject *o = InstantiateWithoutStarting();
-    if(o )
+    if (o )
     {
         o->_OnStart();
     }
@@ -37,7 +37,7 @@ GameObject *Prefab::Instantiate() const
 
 GameObject *Prefab::InstantiateWithoutStarting() const
 {
-    if(m_assetDescription != "")
+    if (m_assetDescription != "")
     {
         std::istringstream iss (m_assetDescription);
         GameObject *o = new GameObject();
@@ -51,7 +51,7 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 void Prefab::Write(std::ostream &f) const
 {
     GameObject *o = InstantiateWithoutStarting();
-    if(o )
+    if (o )
     {
         o->Write(f);
         delete o;
@@ -64,7 +64,7 @@ void Prefab::Read(std::istream &f)
     //to be able to use it from Instantiate()
     std::string line;
     m_assetDescription = "";
-    while( FileReader::ReadNextLine(f, &line) )
+    while ( FileReader::ReadNextLine(f, &line) )
     {
         m_assetDescription += line + "\n";
     }

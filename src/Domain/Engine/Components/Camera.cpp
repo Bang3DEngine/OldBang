@@ -25,7 +25,7 @@ Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
 void Camera::GetViewMatrix(Matrix4 &view) const
 {
     Transform *t = gameObject->transform;
-    if(CAN_USE_COMPONENT(t))
+    if (CAN_USE_COMPONENT(t))
     {
         t->GetModelMatrix(view);
         view = view.Inversed();
@@ -41,9 +41,9 @@ void Camera::GetViewMatrix(Matrix4 &view) const
 
 void Camera::GetProjectionMatrix(Matrix4 &proj) const
 {
-    if(m_projMode == ProjectionMode::Perspective)
+    if (m_projMode == ProjectionMode::Perspective)
     {
-        if(m_autoUpdateAspectRatio)
+        if (m_autoUpdateAspectRatio)
         {
             m_aspectRatio = Canvas::GetAspectRatio();
         }

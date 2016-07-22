@@ -11,20 +11,20 @@ Texture::Texture()
 Texture::Texture(TextureType glTextureTarget) : Texture()
 {
     m_glTextureType = glTextureTarget;
-    if(m_glTextureType == Texture1D)
+    if (m_glTextureType == Texture1D)
         m_glTextureGetIntegerType = GL_TEXTURE_BINDING_1D;
-    else if(m_glTextureType == Texture2D)
+    else if (m_glTextureType == Texture2D)
         m_glTextureGetIntegerType = GL_TEXTURE_BINDING_2D;
-    else if(m_glTextureType == Texture3D)
+    else if (m_glTextureType == Texture3D)
         m_glTextureGetIntegerType = GL_TEXTURE_BINDING_3D;
-    else if(m_glTextureType == TextureCubeMap)
+    else if (m_glTextureType == TextureCubeMap)
         m_glTextureGetIntegerType = GL_TEXTURE_BINDING_CUBE_MAP;
 
 }
 
 Texture::~Texture()
 {
-    if(p_data ) delete p_data;
+    if (p_data ) delete p_data;
     glDeleteTextures(1, &m_idGL);
 }
 

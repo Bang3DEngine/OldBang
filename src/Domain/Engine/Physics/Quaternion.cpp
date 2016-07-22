@@ -45,15 +45,15 @@ Quaternion Quaternion::FromTo(const Vector3 &from, const Vector3 &to)
     Vector3 v1 = to.Normalized();
 
     const float d = Vector3::Dot(v0, v1);
-    if(d >= 1.0f)
+    if (d >= 1.0f)
     {
         return Quaternion();
     }
-    else if(d <= -1.0f) // exactly opposite
+    else if (d <= -1.0f) // exactly opposite
     {
         Vector3 axis(1,0,0);
         axis = Vector3::Cross(axis, v0);
-        if(axis.Length() == 0)
+        if (axis.Length() == 0)
         {
             axis = Vector3(0,1,0);
             axis = Vector3::Cross(axis, v0);

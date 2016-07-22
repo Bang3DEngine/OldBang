@@ -19,11 +19,11 @@
 #include "IWindowEventManagerListener.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
-    for(auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
+    for (auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
     {\
-        if((*it) ) (*it)->FUNCTION;\
+        if ((*it) ) (*it)->FUNCTION;\
     }\
-} while(0)
+} while (0)
 
 
 class Component;

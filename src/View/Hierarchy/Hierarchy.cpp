@@ -33,17 +33,17 @@ void Hierarchy::ExpandRecursiveUpwards(QTreeWidgetItem *item)
 
 QTreeWidgetItem* Hierarchy::FillDownwards(GameObject *o)
 {
-    if(o->IsEditorGameObject()) return nullptr;
+    if (o->IsEditorGameObject()) return nullptr;
 
     const std::list<GameObject*> children = o->GetChildren();
 
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
     eRoot->setText(0, QString::fromStdString(o->name));
 
-    for(GameObject* go : children)
+    for (GameObject* go : children)
     {
         QTreeWidgetItem *c = FillDownwards(go);
-        if(c)
+        if (c)
         {
             eRoot->addChild(c);
         }
@@ -60,15 +60,15 @@ void Hierarchy::LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items)
     //For each item, it will be a top level item,
     //if none of the selected items is its parent
     std::list<QTreeWidgetItem*> result;
-    for(QTreeWidgetItem *item : *items)
+    for (QTreeWidgetItem *item : *items)
     {
         bool hasItsParentInTheList = false;
         QTreeWidgetItem *parent = item->parent();
-        if(parent)
+        if (parent)
         {
-            for(QTreeWidgetItem *item2 : *items)
+            for (QTreeWidgetItem *item2 : *items)
             {
-                if(parent == item2)
+                if (parent == item2)
                 {
                     hasItsParentInTheList = true;
                     break;
@@ -76,7 +76,7 @@ void Hierarchy::LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items)
             }
         }
 
-        if(!hasItsParentInTheList)
+        if (!hasItsParentInTheList)
         {
             result.push_back(item);
         }
@@ -96,7 +96,7 @@ void Hierarchy::UnselectAll()
 
 void Hierarchy::OnGameObjectNameChanged(GameObject *go)
 {
-    if(m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
+    if (m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
     {
         QTreeWidgetItem *item = m_gameObjectToTreeItem[go];
         item->setText(0, QString::fromStdString(go->GetName()) );
@@ -117,9 +117,9 @@ void Hierarchy::Refresh()
     this->clear();
 
     std::list<GameObject*> sceneChildren = p_currentScene->GetChildren();
-    for(GameObject* go : sceneChildren)
+    for (GameObject* go : sceneChildren)
     {
-        if(!go->IsEditorGameObject())
+        if (!go->IsEditorGameObject())
         {
             this->addTopLevelItem( FillDownwards(go) );
         }
@@ -128,23 +128,22 @@ void Hierarchy::Refresh()
 
 GameObject *Hierarchy::GetFirstSelectedGameObject() const
 {
-    if(!selectedItems().empty()) return m_treeItemToGameObject[selectedItems().at(0)];
+    if (!selectedItems().empty()) return m_treeItemToGameObject[selectedItems().at(0)];
     return nullptr;
 }
 
 
 void Hierarchy::OnChildAdded(GameObject *child)
 {
-    if(child->IsEditorGameObject()) return;
-    Logger_Log("added " << child);
+    if (child->IsEditorGameObject()) return;
 
     QTreeWidgetItem *item = FillDownwards(child); NONULL(item);
 
-    if(child->parent)
+    if (child->parent)
     {
-        if(!child->parent->IsScene())
+        if (!child->parent->IsScene())
         {
-            if(m_gameObjectToTreeItem.find(child->parent) != m_gameObjectToTreeItem.end())
+            if (m_gameObjectToTreeItem.find(child->parent) != m_gameObjectToTreeItem.end())
             {
                 m_gameObjectToTreeItem[child->parent]->addChild(item);
                 ExpandRecursiveUpwards(m_gameObjectToTreeItem[child->parent]);
@@ -163,11 +162,11 @@ void Hierarchy::OnChildChangedParent(GameObject *child, GameObject *previousPare
 
 void Hierarchy::OnChildRemoved(GameObject *child)
 {
-    if(child->IsEditorGameObject()) return;
+    if (child->IsEditorGameObject()) return;
 
     QTreeWidgetItem *item = m_gameObjectToTreeItem[child]; NONULL(item);
 
-    if(item->isSelected())
+    if (item->isSelected())
     {
         item->setSelected(false);
     }
@@ -184,7 +183,7 @@ void Hierarchy::dropEvent(QDropEvent *event)
     LeaveOnlyOuterMostItems(&sourceItems);
 
     QTreeWidgetItem *targetItem = itemAt(event->pos());
-    if(targetItem  && !sourceItems.empty())
+    if (targetItem  && !sourceItems.empty())
     {
         GameObject *target = m_treeItemToGameObject[targetItem];
         DropIndicatorPosition dropPos = dropIndicatorPosition();
@@ -192,16 +191,16 @@ void Hierarchy::dropEvent(QDropEvent *event)
         {
             //Not putting inside, but below or above. Thus take its parent.
             targetItem = targetItem->parent();
-            if(targetItem) target = m_treeItemToGameObject[targetItem];
+            if (targetItem) target = m_treeItemToGameObject[targetItem];
             else target = p_currentScene;
         }
 
-        for(QTreeWidgetItem *sourceItem : sourceItems)
+        for (QTreeWidgetItem *sourceItem : sourceItems)
         {
-            if(sourceItem != targetItem)
+            if (sourceItem != targetItem)
             {
                 GameObject *source = m_treeItemToGameObject[sourceItem];
-                if(source && target && source->parent)
+                if (source && target && source->parent)
                 {
                     source->SetParent(target);
                 }
@@ -215,7 +214,7 @@ void Hierarchy::dropEvent(QDropEvent *event)
 
 void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 {
-    if(clickedAction == MenuBar::Action::CreateEmptyGameObject)
+    if (clickedAction == MenuBar::Action::CreateEmptyGameObject)
     {
         OnContextMenuCreateEmptyClicked();
     }
@@ -223,15 +222,15 @@ void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 
 void Hierarchy::keyPressEvent(QKeyEvent *e)
 {
-    if(e->key() == Qt::Key_Delete) // Delete item
+    if (e->key() == Qt::Key_Delete) // Delete item
     {
         OnContextMenuDeleteClicked();
     }
-    else if(e->key() == Qt::Key_F2) // Edit name
+    else if (e->key() == Qt::Key_F2) // Edit name
     {
-        if(this->selectedItems().length() <= 0) return;
+        if (this->selectedItems().length() <= 0) return;
         QTreeWidgetItem *selected = this->selectedItems().at(0);
-        if(selected )
+        if (selected )
         {
             Qt::ItemFlags oldFlags = selected->flags();
             selected->setFlags(oldFlags | Qt::ItemFlag::ItemIsEditable);
@@ -247,13 +246,13 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
 std::list<GameObject *> Hierarchy::GetSelectedGameObjects(bool excludeInternal)
 {
     std::list<QTreeWidgetItem*> selected = selectedItems().toStdList();
-    if(excludeInternal)
+    if (excludeInternal)
     {
         LeaveOnlyOuterMostItems(&selected);
     }
 
     std::list<GameObject*> selectedGos;
-    for(QTreeWidgetItem *sel : selected)
+    for (QTreeWidgetItem *sel : selected)
     {
         selectedGos.push_back(m_treeItemToGameObject[sel]);
     }
@@ -266,10 +265,10 @@ void Hierarchy::SelectGameObject(GameObject *go)
     this->clearSelection();
 
 
-    if(m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
+    if (m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
     {
         GameObject *parent = go->GetParent();
-        if(parent )
+        if (parent )
         {
             ExpandRecursiveUpwards(m_gameObjectToTreeItem[parent]);
         }
@@ -282,7 +281,7 @@ void Hierarchy::SelectGameObject(GameObject *go)
 
 void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
 {
-    if(m_treeItemToGameObject.find(item) != m_treeItemToGameObject.end())
+    if (m_treeItemToGameObject.find(item) != m_treeItemToGameObject.end())
     {   //Change the name of the GameObject itself, not just the item text
         m_treeItemToGameObject[item]->SetName(item->text(column).toStdString());
     }
@@ -299,7 +298,7 @@ void Hierarchy::OnContextMenuCreateEmptyClicked()
         empty->SetParent(selected);
     }
 
-    if(selectedItems().size() == 0)
+    if (selectedItems().size() == 0)
     {
         empty->SetParent(p_currentScene);
     }
@@ -314,9 +313,9 @@ void Hierarchy::OnContextMenuCopyClicked()
 void Hierarchy::OnContextMenuPasteClicked()
 {
     std::list<GameObject*> selected = GetSelectedGameObjects(false);
-    if(selected.size() > 0)
+    if (selected.size() > 0)
     {
-        for(GameObject *sel : selected)
+        for (GameObject *sel : selected)
         {
             ClipboardGameObject::PasteCopiedGameObjectsInto(sel);
         }
@@ -341,7 +340,7 @@ void Hierarchy::OnContextMenuDeleteClicked()
     foreach(QTreeWidgetItem *item, items)
     {
         GameObject *selected = m_treeItemToGameObject[item];
-        if(selected->parent)
+        if (selected->parent)
         {
             selected->SetParent(nullptr);
         }
@@ -357,11 +356,11 @@ void Hierarchy::OnContextMenuCreatePrefab()
     std::string ext = Prefab::GetFileExtensionStatic();
     FileDialog fd("Create Prefab...", Prefab::GetFileExtensionStatic());
     std::string filename = fd.GetSaveFilename(e->GetName());
-    if(filename != "")
+    if (filename != "")
     {
         std::fstream f;
         f.open(filename, std::fstream::out);
-        if(f.is_open())
+        if (f.is_open())
         {
             prefab->Write(f);
             f.close();
@@ -422,16 +421,16 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
     std::list<GameObject*> selectedGameObjects;
     foreach(QTreeWidgetItem *item, selectedItems())
     {
-        if(m_treeItemToGameObject.find(item) != m_treeItemToGameObject.end())
+        if (m_treeItemToGameObject.find(item) != m_treeItemToGameObject.end())
         {
             GameObject *e = m_treeItemToGameObject[item];
-            if(e )
+            if (e )
                 selectedGameObjects.push_back(e);
         }
     }
 
     /* Expand with one click
-    if(selectedGameObjects.size() == 1)
+    if (selectedGameObjects.size() == 1)
     {
         GameObject *go = selectedGameObjects.front();
         QTreeWidgetItem *item = gameObjectToTreeItem[go];
@@ -443,7 +442,7 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
 
 void Hierarchy::_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column)
 {
-    if(m_treeItemToGameObject.find(item) != m_treeItemToGameObject.end())
+    if (m_treeItemToGameObject.find(item) != m_treeItemToGameObject.end())
     {
         GameObject *selected = m_treeItemToGameObject[item];
         WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(selected);

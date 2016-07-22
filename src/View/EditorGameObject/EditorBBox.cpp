@@ -11,7 +11,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
     Material *linesMaterial =
             AssetsManager::GetAsset<Material>("Assets/Engine/Materials/Line.bmat");
     Material *boxMaterial = nullptr;
-    if(!AssetsManager::ExistsAssetInCache("EditorBBox_Mat"))
+    if (!AssetsManager::ExistsAssetInCache("EditorBBox_Mat"))
     {
         boxMaterial = new Material(*linesMaterial);
         boxMaterial->SetDiffuseColor(glm::vec4(0,1,0,1));
@@ -26,7 +26,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
     //Create the box mesh, and save it to cache
     // only the first time. The rest of the times, load it from cache.
     Mesh *mesh = nullptr;
-    if(!AssetsManager::ExistsAssetInCache("EditorBBox_Mesh"))
+    if (!AssetsManager::ExistsAssetInCache("EditorBBox_Mesh"))
     {
         mesh = new Mesh();
         mesh->LoadPositions(s_boxVertices);
@@ -49,10 +49,10 @@ void EditorBBox::OnUpdate()
     // Adjust transform to wrap all the vertices of the parent and children
     Box bbox;
     std::list<Renderer*> rends = p_attachedGameObject->GetComponents<Renderer>();
-    for(auto it_r = rends.begin(); it_r != rends.end(); ++it_r)
+    for (auto it_r = rends.begin(); it_r != rends.end(); ++it_r)
     {
         Renderer *r = *it_r;
-        if(CAN_USE_COMPONENT(r))
+        if (CAN_USE_COMPONENT(r))
         {
             Box mbox = r->GetBoundingBox();
             bbox = Box::Union(bbox, mbox);

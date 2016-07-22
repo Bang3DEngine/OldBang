@@ -49,7 +49,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 
     NONULL(p_currentGameObject);
 
-    for(Component *p : p_currentGameObject->GetComponents())
+    for (Component *p : p_currentGameObject->GetComponents())
     {
         InspectorComponentWidget *w = new InspectorComponentWidget(p);
         AddWidget(w);
@@ -83,7 +83,7 @@ void Inspector::AddWidget(InspectorWidget *widget)
 void Inspector::MoveUp(InspectorWidget *w)
 {
     int lastRow = row(m_widgetToItem[w]);
-    if(lastRow == 0) return;
+    if (lastRow == 0) return;
     QListWidgetItem *item = takeItem(lastRow);
     insertItem(lastRow-1, item);
 }
@@ -91,7 +91,7 @@ void Inspector::MoveUp(InspectorWidget *w)
 void Inspector::MoveDown(InspectorWidget *w)
 {
     int lastRow = row(m_widgetToItem[w]);
-    if(lastRow == this->count()) return;
+    if (lastRow == this->count()) return;
     QListWidgetItem *item = takeItem(lastRow);
     insertItem(lastRow+1, item);
 }
@@ -100,7 +100,7 @@ void Inspector::OnTreeHierarchyGameObjectsSelected
     (std::list<GameObject*> &selectedEntities)
 {
     GameObject *e = nullptr;
-    if(!selectedEntities.empty())
+    if (!selectedEntities.empty())
     {
         e = selectedEntities.front();
     }
@@ -112,49 +112,49 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 {
     NONULL(p_currentGameObject);
 
-    if(clickedAction == MenuBar::Action::AddComponentBehaviour)
+    if (clickedAction == MenuBar::Action::AddComponentBehaviour)
     {
-        if(this->p_currentGameObject )
+        if (this->p_currentGameObject )
         {
             BehaviourHolder *bh = new BehaviourHolder();
             p_currentGameObject->AddComponent(bh);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddComponentCamera)
+    else if (clickedAction == MenuBar::Action::AddComponentCamera)
     {
-        if(this->p_currentGameObject )
+        if (this->p_currentGameObject )
         {
             Camera *c = new Camera();
             p_currentGameObject->AddComponent(c);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddComponentTransform)
+    else if (clickedAction == MenuBar::Action::AddComponentTransform)
     {
-        if(this->p_currentGameObject )
+        if (this->p_currentGameObject )
         {
             Transform *t = new Transform();
             p_currentGameObject->AddComponent(t);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddComponentMeshRenderer)
+    else if (clickedAction == MenuBar::Action::AddComponentMeshRenderer)
     {
-        if(this->p_currentGameObject )
+        if (this->p_currentGameObject )
         {
             MeshRenderer *m = new MeshRenderer();
             p_currentGameObject->AddComponent(m);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddComponenSingleLineRenderer)
+    else if (clickedAction == MenuBar::Action::AddComponenSingleLineRenderer)
     {
-        if(this->p_currentGameObject )
+        if (this->p_currentGameObject )
         {
             SingleLineRenderer *slr = new SingleLineRenderer();
             p_currentGameObject->AddComponent(slr);
         }
     }
-    else if(clickedAction == MenuBar::Action::AddComponentCircleRenderer)
+    else if (clickedAction == MenuBar::Action::AddComponentCircleRenderer)
     {
-        if(this->p_currentGameObject )
+        if (this->p_currentGameObject )
         {
             CircleRenderer *cr = new CircleRenderer();
             p_currentGameObject->AddComponent(cr);

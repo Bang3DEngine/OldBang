@@ -91,7 +91,7 @@ Box Box::Union(const Box &b1, const Box &b2)
 void Box::FillFromPositions(const std::vector<Vector3> &positions)
 {
     m_minv = m_maxv = Vector3::zero;
-    for(const Vector3 &v : positions)
+    for (const Vector3 &v : positions)
     {
         m_minv.x = std::min(m_minv.x, v.x);
         m_maxv.x = std::max(m_maxv.x, v.x);

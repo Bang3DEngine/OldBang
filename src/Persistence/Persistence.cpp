@@ -48,16 +48,16 @@ std::string Persistence::GetFileNameWithExtension(const std::string &filepath)
 
 std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPath)
 {
-    if(IsAbsolute(relPath)) return relPath;
+    if (IsAbsolute(relPath)) return relPath;
 
-    if(relPath[0] == '.')
+    if (relPath[0] == '.')
     {
         return GetProjectRootPathAbsolute() +
                 relPath.substr(1, relPath.length() -1); //No starting "."
     }
     else
     {
-        if(relPath[0] == '/')
+        if (relPath[0] == '/')
         {
             return GetProjectRootPathAbsolute() + relPath;
         }
@@ -71,13 +71,13 @@ std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPat
 std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPath)
 {
     // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
-    if(!IsAbsolute(absPath))
+    if (!IsAbsolute(absPath))
     {
         return absPath;
     }
 
     std::size_t pos = absPath.find(GetAssetsRelativePathFromProjectRoot());
-    if(pos == std::string::npos) return absPath;
+    if (pos == std::string::npos) return absPath;
 
     return "." + absPath.substr(
                 pos,
@@ -97,7 +97,7 @@ std::string Persistence::GetCurrentSceneFilepath()
 
 std::string Persistence::AppendExtension(const std::string &filepath, const std::string extNoDot)
 {
-    if(filepath.find("." + extNoDot) != std::string::npos) return filepath;
+    if (filepath.find("." + extNoDot) != std::string::npos) return filepath;
     return filepath + "." + extNoDot;
 }
 

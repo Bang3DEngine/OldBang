@@ -46,7 +46,7 @@ void EditorDebugGameObject::OnUpdate()
     {
         DebugLine &dl = *it;
         dl.elapsedTimeSecs += dTime;
-        if(dl.elapsedTimeSecs >= dl.livingTimeSecs)
+        if (dl.elapsedTimeSecs >= dl.livingTimeSecs)
         {
             RemoveComponent(dl.slr);
             it = m_debugLines.erase(it);

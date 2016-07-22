@@ -2,7 +2,7 @@
 #define BANG_H
 
 
-#define NONULL(x) do { if(x == nullptr) { return; } } while(0);
+#define NONULL(x) do { if (x == nullptr) { return; } } while (0);
 
 //.xyz, .yxz, .zy, etc.
 #define GLM_SWIZZLE

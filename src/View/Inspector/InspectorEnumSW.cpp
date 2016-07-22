@@ -9,7 +9,7 @@ InspectorEnumSW::InspectorEnumSW(const std::string &labelString,
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
-    if(labelString != "")
+    if (labelString != "")
     {
         QLabel *textLabel = new QLabel(QString::fromStdString(labelString));
         textLabel->setContentsMargins(0,0,0,0);
@@ -18,7 +18,7 @@ InspectorEnumSW::InspectorEnumSW(const std::string &labelString,
     }
 
     p_comboBox = new QComboBox();
-    for(std::string enumString : enumValues)
+    for (std::string enumString : enumValues)
     {
         p_comboBox->addItem( QString::fromStdString(enumString) );
     }

@@ -171,13 +171,13 @@ bool FileReader::ReadOBJ(const std::string& filepath,
                 ss >> posIndices[i];
                 if (hasUvs)
                 {
-                    while(ss.peek() == '/') ss.ignore();  //Read the '/'s
+                    while (ss.peek() == '/') ss.ignore();  //Read the '/'s
                     ss >> uvIndices[i];
                 }
 
                 if (hasNormals)
                 {
-                    while(ss.peek() == '/') ss.ignore();
+                    while (ss.peek() == '/') ss.ignore();
                     ss >> normalIndices[i];
                 }
             }
@@ -191,7 +191,7 @@ bool FileReader::ReadOBJ(const std::string& filepath,
             }
 
             bool theresAFaceLeft = false;
-            while(ss.peek() == '\n' || ss.peek() == '\r' || ss.peek() == ' ')
+            while (ss.peek() == '\n' || ss.peek() == '\r' || ss.peek() == ' ')
                 ss.ignore();
             theresAFaceLeft = (ss.peek() != EOF);
 
@@ -202,12 +202,12 @@ bool FileReader::ReadOBJ(const std::string& filepath,
                 ss >> posIndices[3];
                 if (hasUvs)
                 {
-                    while(ss.peek() == '/') ss.ignore();
+                    while (ss.peek() == '/') ss.ignore();
                     ss >> uvIndices[3];
                 }
                 if (hasNormals)
                 {
-                    while(ss.peek() == '/') ss.ignore();
+                    while (ss.peek() == '/') ss.ignore();
                     ss >> normalIndices[3];
                 }
                 vertexPosIndexes.push_back(posIndices[3]);
@@ -322,7 +322,7 @@ void FileReader::ReadComponents(std::istream &f, GameObject *e)
 void FileReader::ReadChildren(std::istream &f, GameObject *e)
 {
     std::string line;
-    while( (line = FileReader::ReadNextLine(f)) != "</children>")
+    while ( (line = FileReader::ReadNextLine(f)) != "</children>")
     {
         if (line == "<GameObject>")
         {
@@ -353,7 +353,7 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
         RegisterNextPointerId(f, scene); // Read Scene id
         scene->SetName( FileReader::ReadString(f) ); //Read Scene name
 
-        while( (line = FileReader::ReadNextLine(f)) != "</Scene>")
+        while ( (line = FileReader::ReadNextLine(f)) != "</Scene>")
         {
             if (line == "") continue; //Skip blank lines
 
@@ -407,7 +407,7 @@ std::string FileReader::ReadNextLine(std::istream &f)
         std::getline(f, line);
         TrimStringLeft(&line);
     }
-    while( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') &&
+    while ( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') &&
            f.peek() != EOF); //Skip all empty/comment lines
 
     return line;
@@ -422,10 +422,16 @@ bool FileReader::ReadNextLine(std::istream &f, std::string *line)
         std::getline(f, *line);
         TrimStringLeft(line);
     }
-    while( (line->empty() || line->at(0) == '#' || line->at(0) == '\n') &&
+    while ( (line->empty() || line->at(0) == '#' || line->at(0) == '\n') &&
            f.peek() != EOF); //Skip all empty/comment lines
 
     return true;
+}
+
+int FileReader::ReadInt(std::istream &f)
+{
+    std::istringstream iss(ReadNextLine(f));
+    int v; iss >> v; return v;
 }
 
 float FileReader::ReadFloat(std::istream &f)

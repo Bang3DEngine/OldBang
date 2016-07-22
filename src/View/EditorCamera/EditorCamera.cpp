@@ -34,10 +34,10 @@ void EditorCamera::AdjustSpeeds()
     m_mouseRotDegreesPerPixel.y = 180.0f / ch;
 
     m_mousePanPerPixel = glm::vec2(0.1f, 0.1f);
-    if(p_currentFocus)
+    if (p_currentFocus)
     {
         Transform *ft = p_currentFocus->transform;
-        if(ft )
+        if (ft )
         {
             Vector3 focusPoint = ft->GetPosition();
             float d = Vector3::Distance(focusPoint, p_t->GetPosition());
@@ -58,10 +58,10 @@ void EditorCamera::UpdateRotationVariables()
 
 void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
 {
-    if(!Input::GetMouseButton(Input::MouseButton::MMiddle))
+    if (!Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
         float mouseWheel = Input::GetMouseWheel();
-        if(mouseWheel != 0.0f)
+        if (mouseWheel != 0.0f)
         {
             *moveStep -= m_mouseZoomPerDeltaWheel * mouseWheel * p_camt->GetForward();
             *hasMoved  = true;
@@ -71,7 +71,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
 
 bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 {
-    if(Input::GetMouseButton(Input::MouseButton::MRight))
+    if (Input::GetMouseButton(Input::MouseButton::MRight))
     {
         glm::vec2 delta = -Input::GetMouseDelta() * m_mouseRotDegreesPerPixel;
         m_mouseRotDegreesAccum += delta;
@@ -95,7 +95,7 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 
 void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
 {
-    if(Input::GetMouseButton(Input::MouseButton::MMiddle))
+    if (Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
         glm::vec2 delta = -Input::GetMouseDelta() * m_mousePanPerPixel;
         delta.y *= -1.0f;
@@ -112,20 +112,20 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
 void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
 {
     Vector3 m(0);
-    if(Input::GetKey(Input::Key::W))
+    if (Input::GetKey(Input::Key::W))
     {
         m += m_keysMoveSpeed * Time::GetDeltaTime() * p_camt->GetForward();
     }
-    else if(Input::GetKey(Input::Key::S))
+    else if (Input::GetKey(Input::Key::S))
     {
         m -= m_keysMoveSpeed * Time::GetDeltaTime() * p_camt->GetForward();
     }
 
-    if(Input::GetKey(Input::Key::A))
+    if (Input::GetKey(Input::Key::A))
     {
         m -= m_keysMoveSpeed * Time::GetDeltaTime() * p_camt->GetRight();
     }
-    else if(Input::GetKey(Input::Key::D))
+    else if (Input::GetKey(Input::Key::D))
     {
         m += m_keysMoveSpeed * Time::GetDeltaTime() * p_camt->GetRight();
     }
@@ -136,10 +136,10 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
 
 void EditorCamera::HandleLookAtFocus()
 {
-    if(m_doingLookAt)
+    if (m_doingLookAt)
     {
         Camera *cam = GetCamera();
-        if(p_currentFocus->HasComponent<Transform>())
+        if (p_currentFocus->HasComponent<Transform>())
         {
             Sphere focusBSphere = p_currentFocus->GetBoundingSphere();
 
@@ -148,7 +148,7 @@ void EditorCamera::HandleLookAtFocus()
             Vector3 focusDir = (focusPos - thisPos).Normalized();
 
             //LookAt Rotation
-            if(thisPos != focusPos)
+            if (thisPos != focusPos)
             {
                 Quaternion origin = p_t->GetRotation();
                 Quaternion dest = Quaternion::LookDirection(focusDir, Vector3::up);
@@ -161,7 +161,7 @@ void EditorCamera::HandleLookAtFocus()
             //LookAt Move
             float minDist = 0.0f;
             float radius = focusBSphere.GetRadius();
-            if(cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
+            if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
             {
                 float fov = glm::radians(cam->GetFovDegrees() / 2.0f);
                 minDist = radius / std::tan(fov);
@@ -185,7 +185,7 @@ void EditorCamera::OnUpdate()
 
     HandleKeyMovement(&moveStep, &hasMoved); //WASD
 
-    if(!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
+    if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
     {
         HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
     }
@@ -193,7 +193,7 @@ void EditorCamera::OnUpdate()
     HandleWheelZoom(&moveStep, &hasMoved);
 
     HandleLookAtFocus();
-    if(m_doingLookAt)
+    if (m_doingLookAt)
     {   //Update all needed variables in case we are doing a lookAt.
         UpdateRotationVariables();
     }
@@ -201,13 +201,13 @@ void EditorCamera::OnUpdate()
     m_keysMoveSpeed += m_keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
     m_keysMoveSpeed = glm::clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
 
-    if(unwrapMouse)
+    if (unwrapMouse)
     {
         Canvas::SetCursor( Qt::ArrowCursor ); //cursor visible
         Input::SetMouseWrapping(false);
     }
 
-    if(!hasMoved )
+    if (!hasMoved )
     {
         m_keysMoveSpeed = 0.0f; //reset speed
     }
@@ -228,7 +228,7 @@ Camera *EditorCamera::GetCamera()
 void EditorCamera::OnTreeHierarchyGameObjectsSelected
     (std::list<GameObject *> &selectedGameObjects)
 {
-    if(selectedGameObjects.size() != 1) return;
+    if (selectedGameObjects.size() != 1) return;
 
     GameObject *selected = selectedGameObjects.front();
     p_currentFocus = selected;

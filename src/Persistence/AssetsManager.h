@@ -27,7 +27,7 @@ private:
     {
         std::string f = Persistence::ProjectRootAbsoluteToRelative(filepath);
 
-        if(!ExistsAssetInCache(f)) return nullptr;
+        if (!ExistsAssetInCache(f)) return nullptr;
         else return dynamic_cast<T*>(m_idToAssetPointer[f]);
     }
 
@@ -50,7 +50,7 @@ private:
     template <class T>
     static T* ReadAssetFile(const std::string &filepath)
     {
-        if(filepath != "-")
+        if (filepath != "-")
         {
             std::ifstream f (filepath);
             if ( !f.is_open() )
@@ -61,7 +61,7 @@ private:
             }
 
             Asset *a = ReadAsset<T>(f);
-            if(a )
+            if (a )
             {
                 AssetsManager::SaveAsset(filepath, a);
                 a->m_filepath = filepath;
@@ -93,9 +93,9 @@ public:
     static T* GetAsset(const std::string &filepath)
     {
         Asset *a = nullptr;
-        if(filepath != "-")
+        if (filepath != "-")
         {
-            if(!ExistsAssetInCache(filepath))
+            if (!ExistsAssetInCache(filepath))
             {
                 //It doesnt have the Asset loaded. Read, and save it to cache.
                 a = ReadAssetFile<T>(filepath);
@@ -125,7 +125,7 @@ public:
     {
         std::ifstream is;
         is.open(filepath.c_str());
-        if(!is.is_open()) return nullptr;
+        if (!is.is_open()) return nullptr;
         T *a = ReadAsset<T>(is);
         is.close();
         return a;

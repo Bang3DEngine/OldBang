@@ -12,13 +12,13 @@ Timer::Timer(std::function<void ()> func, float secDelay, int repeatCount, bool 
 void Timer::TimerLoop() const
 {
     int count = 0;
-    while(m_stop);
+    while (m_stop);
 
-    if(!m_waitOneDelayTime) { ++count; m_func(); }
+    if (!m_waitOneDelayTime) { ++count; m_func(); }
 
-    while( !m_stop && (m_repeatCount == -1 || count < m_repeatCount) )
+    while ( !m_stop && (m_repeatCount == -1 || count < m_repeatCount) )
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(int(m_secDelay * 1000)));
+        std::this_thread::sleep_for (std::chrono::milliseconds(int(m_secDelay * 1000)));
         m_func();
         ++count;
     }

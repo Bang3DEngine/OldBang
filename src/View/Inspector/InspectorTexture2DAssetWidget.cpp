@@ -44,14 +44,14 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
 
 
     bool tmpAssetLoaded = false;
-    if(!currentTex)
+    if (!currentTex)
     {
         //Load a tmp asset, to be able to save it to a file.
         tmpAssetLoaded = true;
         currentTex = AssetsManager::ReadTmpAsset<Texture2D>(m_assetFilepath);
     }
 
-    if(currentTex )
+    if (currentTex )
     {
         //Only update the current Asset instance being used if it exists
         int filterModeIndex = this->GetSWSelectedEnumIndex("Filter");
@@ -62,7 +62,7 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
 
         //Save the modified asset
         FileWriter::WriteAsset(m_assetFilepath, currentTex);
-        if(tmpAssetLoaded)
+        if (tmpAssetLoaded)
         {
             delete currentTex;
         }

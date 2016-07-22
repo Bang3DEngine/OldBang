@@ -69,7 +69,7 @@ void Input::OnNewFrame()
 
 void Input::HandleMouseWrapping()
 {
-    if(m_mouseWrapping)
+    if (m_mouseWrapping)
     {
         #ifdef BANG_EDITOR
         WindowMain *w = WindowMain::GetInstance();
@@ -84,29 +84,29 @@ void Input::HandleMouseWrapping()
         int ch = canvas->GetHeight();
 
         bool wrapped = false;
-        if(m_mouseCoords.x >= cw)
+        if (m_mouseCoords.x >= cw)
         {
             cursor.setPos(canvas->mapToGlobal(QPoint(0, m_mouseCoords.y)));
             wrapped = true;
         }
-        else if(m_mouseCoords.x < 0)
+        else if (m_mouseCoords.x < 0)
         {
             cursor.setPos(canvas->mapToGlobal(QPoint(cw, m_mouseCoords.y)));
             wrapped = true;
         }
 
-        if(m_mouseCoords.y >= ch)
+        if (m_mouseCoords.y >= ch)
         {
             cursor.setPos(canvas->mapToGlobal(QPoint(m_mouseCoords.x, 0)));
             wrapped = true;
         }
-        else if(m_mouseCoords.y < 0)
+        else if (m_mouseCoords.y < 0)
         {
             cursor.setPos(canvas->mapToGlobal(QPoint(m_mouseCoords.x, ch)));
             wrapped = true;
         }
 
-        if(wrapped)
+        if (wrapped)
         {
             QPoint newCoords = canvas->mapFromGlobal(cursor.pos());
             m_mouseCoords = glm::vec2(newCoords.x(), newCoords.y());
@@ -126,7 +126,7 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
 
     //Used to ignore QCursor::setPos call to mouseMove event
     static bool fakeMoveEvent = false;
-    if(fakeMoveEvent)
+    if (fakeMoveEvent)
     {
         fakeMoveEvent = false;
         return;
@@ -134,7 +134,7 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
 
     m_mouseCoords = glm::vec2(event->x(), event->y());
 
-    if(m_lockMouseMovement)
+    if (m_lockMouseMovement)
     {
         QPoint glob = QPoint(m_lastMouseCoords.x,
                              m_lastMouseCoords.y);
@@ -148,12 +148,12 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
 void Input::HandleInputMousePress(QMouseEvent *event)
 {
     MouseButton mb = static_cast<MouseButton>(event->button());
-    if(m_mouseInfo.find(mb) == m_mouseInfo.end())
+    if (m_mouseInfo.find(mb) == m_mouseInfo.end())
     {
         //Only if it was not down/pressed before
         m_mouseInfo[mb] = ButtonInfo(false, true, true);
 
-        if(m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds)
+        if (m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds)
         {
             m_isADoubleClick = true;
         }
@@ -164,7 +164,7 @@ void Input::HandleInputMousePress(QMouseEvent *event)
 void Input::HandleInputMouseRelease(QMouseEvent *event)
 {
     MouseButton mb = static_cast<MouseButton>(event->button());
-    if(m_mouseInfo.find(mb) != m_mouseInfo.end() &&
+    if (m_mouseInfo.find(mb) != m_mouseInfo.end() &&
        m_mouseInfo[mb].pressed)
     {
         //Only if it was pressed before
@@ -176,10 +176,10 @@ void Input::HandleInputMouseRelease(QMouseEvent *event)
 void Input::HandleInputKeyPress(QKeyEvent *event)
 {
     //Only capture first press, not repeated ones
-    if(event->isAutoRepeat()) return;
+    if (event->isAutoRepeat()) return;
 
     Key k = static_cast<Key>(event->key());
-    if(m_keyInfos.find(k) == m_keyInfos.end())
+    if (m_keyInfos.find(k) == m_keyInfos.end())
     {   //Only if it was not down/pressed before
         m_keyInfos[k] = ButtonInfo(false, true, true);
     }
@@ -188,10 +188,10 @@ void Input::HandleInputKeyPress(QKeyEvent *event)
 void Input::HandleInputKeyReleased(QKeyEvent *event)
 {
     //Only capture actual release, not repeated ones
-    if(event->isAutoRepeat()) return;
+    if (event->isAutoRepeat()) return;
 
     Key k = static_cast<Key>(event->key());
-    if(m_keyInfos.find(k) != m_keyInfos.end() &&
+    if (m_keyInfos.find(k) != m_keyInfos.end() &&
        m_keyInfos[k].pressed)
     {   //Only if it was pressed before
         m_keyInfos[k] = ButtonInfo(true, false, false);

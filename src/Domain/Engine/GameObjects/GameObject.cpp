@@ -25,17 +25,17 @@ void GameObject::CloneInto(ICloneable *clone) const
 {
     GameObject *go = static_cast<GameObject*>(clone);
 
-    for(GameObject *child : m_children)
+    for (GameObject *child : m_children)
     {
-        if(child->IsEditorGameObject()) continue;
+        if (child->IsEditorGameObject()) continue;
         GameObject *childClone = static_cast<GameObject*>(child->Clone());
         childClone->SetParent(go);
     }
 
-    for(Component *comp : m_comps)
+    for (Component *comp : m_comps)
     {
         Transform* t = dynamic_cast<Transform*>(comp);
-        if(!t)
+        if (!t)
         {
             go->AddComponent( static_cast<Component*>(comp->Clone()) );
         }
@@ -71,7 +71,7 @@ GameObject::~GameObject()
 
 void GameObject::SetParent(GameObject *parent)
 {
-    if(p_parent != parent)
+    if (p_parent != parent)
     {
         if (p_parent)
         {
@@ -84,7 +84,7 @@ void GameObject::SetParent(GameObject *parent)
 
         p_parent = parent;
 
-        if(p_parent)
+        if (p_parent)
         {
             p_parent->m_children.push_back(this);
 
@@ -147,7 +147,7 @@ Box GameObject::GetLocalBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
     Transform *t = transform;
-    if(CAN_USE_COMPONENT(t))
+    if (CAN_USE_COMPONENT(t))
     {
         Matrix4 mat;
         t->GetObjectModelMatrix(mat);
@@ -160,7 +160,7 @@ Box GameObject::GetBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
     Transform *t = transform;
-    if(CAN_USE_COMPONENT(t))
+    if (CAN_USE_COMPONENT(t))
     {
         Matrix4 mat;
         t->GetModelMatrix(mat);
@@ -189,7 +189,7 @@ void GameObject::AddComponent(Component *c)
     Transform *t = dynamic_cast<Transform*>(c);
     if (t)
     {
-        if(HasComponent<Transform>())
+        if (HasComponent<Transform>())
         {
             Logger_Error("A gameObject can only contain one unique Transform.");
             delete c;
@@ -206,9 +206,9 @@ void GameObject::AddComponent(Component *c)
 
 void GameObject::MoveComponent(Component *c, int distance)
 {
-    for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
     {
-        if(c == *comp)
+        if (c == *comp)
         {
             auto comp1 = comp;
             std::advance(comp1, 1);
@@ -222,9 +222,9 @@ void GameObject::MoveComponent(Component *c, int distance)
 
 void GameObject::RemoveComponent(Component *c)
 {
-    for(auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
     {
-        if(c == *comp)
+        if (c == *comp)
         {
             m_comps.erase(comp);
             break;
@@ -240,10 +240,10 @@ void GameObject::RemoveComponent(Component *c)
 
 GameObject *GameObject::GetChild(const std::string &name) const
 {
-    for(auto it = m_children.begin(); it != m_children.end(); ++it)
+    for (auto it = m_children.begin(); it != m_children.end(); ++it)
     {
         GameObject *child = (*it);
-        if(child->m_name == name)
+        if (child->m_name == name)
         {
             return child;
         }
@@ -278,21 +278,21 @@ bool GameObject::IsScene() const
 void GameObject::OnTreeHierarchyGameObjectsSelected(
         std::list<GameObject*> &selectedEntities )
 {
-    if(IsEditorGameObject() || IsScene()) return;
+    if (IsEditorGameObject() || IsScene()) return;
 
     bool selected = false;
-    for(auto it : selectedEntities)
+    for (auto it : selectedEntities)
     {
-        if( it == this )
+        if ( it == this )
         {
             selected = true;
             break;
         }
     }
 
-    if(selected)
+    if (selected)
     {
-        if(!m_wasSelectedInHierarchy)
+        if (!m_wasSelectedInHierarchy)
         {
             m_selectionGameObject = new EditorSelectionGameObject(this);
             m_selectionGameObject->SetParent(Canvas::GetCurrentScene());
@@ -300,7 +300,7 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
     }
     else
     {
-        if(m_wasSelectedInHierarchy)
+        if (m_wasSelectedInHierarchy)
         {
             m_selectionGameObject->SetParent(nullptr);
         }
@@ -317,14 +317,14 @@ void GameObject::Write(std::ostream &f) const
     f << this->GetName() << std::endl; //Print name
 
     f << "<children>" << std::endl;
-    for(GameObject *e : m_children)
+    for (GameObject *e : m_children)
     {
         e->Write(f);
     }
     f << "</children>" << std::endl;
 
     f << "<components>" << std::endl;
-    for(Component *p : m_comps)
+    for (Component *p : m_comps)
     {
         p->Write(f);
     }
@@ -338,13 +338,13 @@ void GameObject::Read(std::istream &f)
     FileReader::RegisterNextPointerId(f, this); //Read GameObject id
     SetName( FileReader::ReadString(f) );  //Read GameObject name
     std::string line;
-    while( (line = FileReader::ReadNextLine(f)) != "</GameObject>")
+    while ( (line = FileReader::ReadNextLine(f)) != "</GameObject>")
     {
-        if(line == "<children>")
+        if (line == "<children>")
         {
             FileReader::ReadChildren(f, this);
         }
-        else if(line == "<components>")
+        else if (line == "<components>")
         {
             FileReader::ReadComponents(f, this);
         }
@@ -406,14 +406,14 @@ void GameObject::_OnUpdate()
     bool canUpdate = true;
     #endif
 
-    if(canUpdate)
+    if (canUpdate)
     {
         PROPAGATE_EVENT(_OnUpdate, m_comps);
     }
 
     PROPAGATE_EVENT(_OnUpdate, m_children);
 
-    if(canUpdate)
+    if (canUpdate)
     {
         OnUpdate();
     }
@@ -423,7 +423,7 @@ void GameObject::_OnPreRender ()
 {
     PROPAGATE_EVENT(_OnPreRender, m_children);
 
-    if(this->m_renderLayer == GetScene()->m_currentRenderLayer)
+    if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
     {
         PROPAGATE_EVENT(_OnPreRender, m_comps);
         OnPreRender();
@@ -434,7 +434,7 @@ void GameObject::_OnRender ()
 {
     PROPAGATE_EVENT(_OnRender, m_children);
 
-    if(this->m_renderLayer == GetScene()->m_currentRenderLayer)
+    if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
     {
         PROPAGATE_EVENT(_OnRender, m_comps);
         OnRender();

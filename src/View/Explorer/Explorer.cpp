@@ -39,9 +39,9 @@ void Explorer::OnButtonDirUpClicked()
     std::string rootPath = GetCurrentDir();
     std::string parentDirPath = "";
 
-    for(int i = rootPath.length() - 1; i >= 0; --i)
+    for (int i = rootPath.length() - 1; i >= 0; --i)
     {
-        if(rootPath[i] == '/')
+        if (rootPath[i] == '/')
         {
             parentDirPath = rootPath.substr(0, i);
             break;
@@ -53,7 +53,7 @@ void Explorer::OnButtonDirUpClicked()
 
 void Explorer::OnButtonChangeViewModeClicked()
 {
-    if(viewMode() == ViewMode::ListMode)
+    if (viewMode() == ViewMode::ListMode)
     {
         setViewMode(ViewMode::IconMode);
     }
@@ -65,7 +65,7 @@ void Explorer::OnButtonChangeViewModeClicked()
 
 void Explorer::mouseReleaseEvent(QMouseEvent *e)
 {
-    if(e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton)
     {
         RefreshInspector();
     }
@@ -73,13 +73,13 @@ void Explorer::mouseReleaseEvent(QMouseEvent *e)
 
 void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    if(e->button() == Qt::LeftButton)
+    if (e->button() == Qt::LeftButton)
     {
-        if(this->selectedIndexes().length() <= 0) return;
+        if (this->selectedIndexes().length() <= 0) return;
 
         QModelIndex clickedIndex = this->selectedIndexes().at(0);
         bool isDir = p_fileSystemModel->isDir(clickedIndex);
-        if(isDir)
+        if (isDir)
         {
             std::string clickedDirName =
                     p_fileSystemModel->fileName(clickedIndex).toStdString();
@@ -105,28 +105,28 @@ void Explorer::dropEvent(QDropEvent *e)
 
 void Explorer::RefreshInspector()
 {
-    if(this->selectedIndexes().size() <= 0) return;
+    if (this->selectedIndexes().size() <= 0) return;
 
     QModelIndex clickedIndex = this->selectedIndexes().at(0);
     File f(p_fileSystemModel, &clickedIndex);
 
     InspectorWidget *fileWidget = nullptr;
-    if(f.IsImageFile())
+    if (f.IsImageFile())
     {
         FileImage fi(p_fileSystemModel, &clickedIndex);
         fileWidget = new InspectorImageFileWidget(fi);
     }
-    else if(f.IsTexture2DAsset())
+    else if (f.IsTexture2DAsset())
     {
         FileTexture2DAsset ft(p_fileSystemModel, &clickedIndex);
         fileWidget = new InspectorTexture2DAssetWidget(ft);
     }
-    else if(f.IsMeshFile())
+    else if (f.IsMeshFile())
     {
         FileMesh fm(p_fileSystemModel, &clickedIndex);
         fileWidget = new InspectorMeshFileWidget(fm);
     }
-    /*else if(f.IsMeshAsset())
+    /*else if (f.IsMeshAsset())
     {
         FileMeshAsset ft(fileSystemModel, &clickedIndex);
         fileWidget = new InspectorMeshFileWidget(ft);
@@ -136,7 +136,7 @@ void Explorer::RefreshInspector()
         WindowMain::GetInstance()->widgetInspector->Clear();
     }
 
-    if(fileWidget )
+    if (fileWidget )
     {
         WindowMain::GetInstance()->widgetInspector->SetWidget(fileWidget);
     }
@@ -144,11 +144,11 @@ void Explorer::RefreshInspector()
 
 void Explorer::Refresh()
 {
-    if(selectedIndexes().length() > 0)
+    if (selectedIndexes().length() > 0)
     {
        QModelIndex index = selectedIndexes().at(0);
        File f(p_fileSystemModel, &index);
-       if(f.GetName() != m_lastSelectedFileName)
+       if (f.GetName() != m_lastSelectedFileName)
        {
            m_lastSelectedFileName = f.GetName();
            RefreshInspector();
@@ -165,7 +165,7 @@ void Explorer::OnDirLoaded(QString dir)
 {
     NONULL(WindowMain::GetInstance());
 
-    if(GetCurrentDir().length() <= Persistence::GetAssetsPathAbsolute().length())
+    if (GetCurrentDir().length() <= Persistence::GetAssetsPathAbsolute().length())
     {
         p_buttonDirUp->setEnabled(false);
         p_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);

@@ -100,23 +100,23 @@ void MenuBar::OnNewScene() const
 {
     p_wem->NotifyMenuBarActionClicked(Action::NewScene);
 
-    if(AskForSavingCurrentScene() == QMessageBox::Cancel) return;
+    if (AskForSavingCurrentScene() == QMessageBox::Cancel) return;
     CreateNewScene();
 }
 
 void MenuBar::OnOpenScene() const
 {
-    if(AskForSavingCurrentScene() == QMessageBox::Cancel) return;
+    if (AskForSavingCurrentScene() == QMessageBox::Cancel) return;
 
     p_wem->NotifyMenuBarActionClicked(Action::OpenScene);
 
     FileDialog fd("Open scene...", Scene::GetFileExtension());
     std::string filename = fd.GetOpenFilename();
-    if(filename == "") return;
+    if (filename == "") return;
 
     EditorScene *scene = new EditorScene();
     FileReader::ReadScene(filename, scene);
-    if(scene )
+    if (scene )
     {
         Canvas::GetInstance()->AddScene(scene);
         Canvas::GetInstance()->SetCurrentScene(scene);
@@ -134,7 +134,7 @@ void MenuBar::OnSaveScene() const
     p_wem->NotifyMenuBarActionClicked(Action::SaveScene);
 
     std::string filename = Persistence::GetCurrentSceneFilepath();
-    if( filename == "" ) //Give the scene a name
+    if ( filename == "" ) //Give the scene a name
     {
         OnSaveSceneAs();
     }
@@ -181,11 +181,11 @@ void MenuBar::OnCreateFromPrefab() const
 
     FileDialog fd("Create from prefab...", Prefab::GetFileExtensionStatic());
     std::string filename = fd.GetOpenFilename();
-    if(filename == "") return;
+    if (filename == "") return;
 
     std::fstream f;
     f.open(filename);
-    if(f.is_open())
+    if (f.is_open())
     {
         WindowMain *w = WindowMain::GetInstance();
 
@@ -194,14 +194,14 @@ void MenuBar::OnCreateFromPrefab() const
         GameObject *e = p->InstantiateWithoutStarting();
         GameObject *selectedGameObject = w->widgetHierarchy->GetFirstSelectedGameObject();
 
-        if(selectedGameObject )
+        if (selectedGameObject )
         {
             e->SetParent(selectedGameObject);
         }
         else
         {
             Scene *currentScene = Canvas::GetInstance()->GetCurrentScene();
-            if(currentScene )
+            if (currentScene )
             {
                 e->SetParent(currentScene);
             }

@@ -42,8 +42,8 @@ public:
 
     std::string GetImageRelativeFilepath() const;
 
-    void Write(std::ostream &f) const;
-    void Read(std::istream &f);
+    void Write(std::ostream &f) const override;
+    void Read(std::istream &f) override;
 };
 
 #endif // TEXTURE2D_H

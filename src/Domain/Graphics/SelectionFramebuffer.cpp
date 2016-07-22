@@ -34,7 +34,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     m_idToGameObject.clear();
     int id = 0;
     std::list<Renderer*> childrenRenderers = scene->GetComponentsInChildren<Renderer>();
-    for(Renderer *renderer : childrenRenderers)
+    for (Renderer *renderer : childrenRenderers)
     {
         GameObject *go = renderer->gameObject;
         m_gameObjectToId[go] = id;
@@ -43,12 +43,12 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     }
 
     // Paint objects
-    for(Renderer *renderer : childrenRenderers)
+    for (Renderer *renderer : childrenRenderers)
     {
-        if(renderer->gameObject->GetRenderLayer() == scene->m_currentRenderLayer)
+        if (renderer->gameObject->GetRenderLayer() == scene->m_currentRenderLayer)
         {
             GameObject *go = renderer->gameObject;
-            if(m_gameObjectToId.find(go) != m_gameObjectToId.end() && go->IsEnabled())
+            if (m_gameObjectToId.find(go) != m_gameObjectToId.end() && go->IsEnabled())
             {
                 Matrix4 model, view, projection, pvm;
                 renderer->GetMatrices(model, view, projection, pvm);
@@ -66,7 +66,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
                 m_program->SetUniformVec3("selectionColor", selectionColor);
 
                 renderer->ActivateGLStatesBeforeRendering();
-                if(renderer->ActivateGLStatesBeforeRenderingForSelection)
+                if (renderer->ActivateGLStatesBeforeRenderingForSelection)
                     renderer->ActivateGLStatesBeforeRenderingForSelection();
                 renderer->RenderWithoutBindingMaterial();
             }
@@ -85,19 +85,19 @@ void SelectionFramebuffer::ProcessSelection()
 
     GameObject *mouseOverGO = nullptr;
     int id = MapColorToId(mouseOverColor);
-    if(m_idToGameObject.find(id) != m_idToGameObject.end())
+    if (m_idToGameObject.find(id) != m_idToGameObject.end())
     {
         mouseOverGO = m_idToGameObject[id];
     }
 
-    if(p_lastMouseOverGO  && p_lastMouseOverGO != mouseOverGO)
+    if (p_lastMouseOverGO  && p_lastMouseOverGO != mouseOverGO)
     {
         p_lastMouseOverGO->OnMouseExit(false);
     }
 
-    if(mouseOverGO)
+    if (mouseOverGO)
     {
-        if(p_lastMouseOverGO != mouseOverGO)
+        if (p_lastMouseOverGO != mouseOverGO)
         {
             mouseOverGO->OnMouseEnter(false);
         }
@@ -109,14 +109,14 @@ void SelectionFramebuffer::ProcessSelection()
 
 
     // Selection (clicking over) Here we just handle non-EditorGameObjects
-    if(Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+    if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
-        if(mouseOverGO )
+        if (mouseOverGO )
         {
-            if(!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
+            if (!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
             {
                 WindowMain::GetInstance()->widgetHierarchy->SelectGameObject(mouseOverGO);
-                if(Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft)) // Double clicking
+                if (Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft)) // Double clicking
                 {
                     WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(mouseOverGO);
                 }

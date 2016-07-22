@@ -80,6 +80,7 @@ public:
     static std::string ReadNextLine(std::istream &f);
     static bool ReadNextLine(std::istream &f, std::string *line);
 
+    static int ReadInt(std::istream &f);
     static float ReadFloat(std::istream &f);
     static glm::vec2 ReadVec2(std::istream &f);
     static Vector3 ReadVec3(std::istream &f);
@@ -95,12 +96,12 @@ public:
     static T* GetNextPointerAddress(std::istream &f)
     {
         std::string id = ReadString(f);
-        if(id == "-")
+        if (id == "-")
         {
             return nullptr;
         }
 
-        if(idToPointers.find(id) == idToPointers.end()) return nullptr;
+        if (idToPointers.find(id) == idToPointers.end()) return nullptr;
         return (T*)(idToPointers[id]);
     }
 

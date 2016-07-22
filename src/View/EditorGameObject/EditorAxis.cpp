@@ -24,14 +24,14 @@ EditorAxis::~EditorAxis()
 
 std::string EditorAxis::GetStringFromDir(EditorAxis::EditorAxisDirection dir)
 {
-    if(dir == EditorAxisDirection::X) return "X";
+    if (dir == EditorAxisDirection::X) return "X";
     else if (dir == EditorAxisDirection::Y) return "Y";
     else return "Z";
 }
 
 Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir)
 {
-    if(dir == EditorAxisDirection::X) return Vector3::right;
+    if (dir == EditorAxisDirection::X) return Vector3::right;
     else if (dir == EditorAxisDirection::Y) return Vector3::up;
     else return Vector3::forward;
 }
@@ -41,15 +41,15 @@ void EditorAxis::OnUpdate()
     EditorGameObject::OnUpdate();
 
     // Process grabbing
-    if(m_mouseIsOver && Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+    if (m_mouseIsOver && Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
         // User has clicked on me!
         m_grabbed = true;
     }
 
-    if(m_grabbed)
+    if (m_grabbed)
     {
-        if(Input::GetMouseButtonUp(Input::MouseButton::MLeft))
+        if (Input::GetMouseButtonUp(Input::MouseButton::MLeft))
         {
             m_grabbed = false;
             Input::SetMouseWrapping(false);

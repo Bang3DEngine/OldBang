@@ -52,7 +52,7 @@ void Transform::SetLocalPosition(const Vector3 &p)
 }
 void Transform::SetPosition(const Vector3 &p)
 {
-    if(!gameObject->parent) SetLocalPosition(p);
+    if (!gameObject->parent) SetLocalPosition(p);
     else SetLocalPosition(-gameObject->parent->transform->GetPosition() + p);
 }
 void Transform::TranslateLocal(const Vector3 &translation)
@@ -87,12 +87,12 @@ void Transform::SetLocalEuler(float x, float y, float z)
 
 void Transform::SetRotation(const Quaternion &q)
 {
-    if(!gameObject->parent) SetLocalRotation(q.Normalized());
+    if (!gameObject->parent) SetLocalRotation(q.Normalized());
     else SetLocalRotation(Quaternion(-gameObject->parent->transform->GetRotation() * q.Normalized()));
 }
 void Transform::SetEuler(const Vector3 &degreesEuler)
 {
-    if(!gameObject->parent) SetLocalEuler(degreesEuler);
+    if (!gameObject->parent) SetLocalEuler(degreesEuler);
     else SetLocalEuler(-gameObject->parent->transform->GetEuler() + degreesEuler);
 }
 void Transform::SetEuler(float x, float y, float z)
@@ -153,28 +153,28 @@ void Transform::SetLocalScale(const Vector3 &s)
 Vector3 Transform::TransformPoint(const Vector3 &point) const
 {
     Matrix4 m;
-    if(!gameObject->parent) return point;
+    if (!gameObject->parent) return point;
     gameObject->parent->transform->GetModelMatrix(m);
     return Vector3((m * glm::vec4(point, 1)).xyz());
 }
 Vector3 Transform::InverseTransformPoint(const Vector3 &point) const
 {
     Matrix4 m;
-    if(!gameObject->parent) return point;
+    if (!gameObject->parent) return point;
     gameObject->parent->transform->GetModelMatrix(m);
     return Vector3((m.Inversed() * glm::vec4(point, 1)).xyz());
 }
 Vector3 Transform::TransformDirection(const Vector3 &dir) const
 {
     Matrix4 m;
-    if(!gameObject->parent) return dir;
+    if (!gameObject->parent) return dir;
     gameObject->parent->transform->GetModelMatrix(m);
     return Vector3((m * glm::vec4(dir, 0)).xyz());
 }
 Vector3 Transform::InverseTransformDirection(const Vector3 &dir) const
 {
     Matrix4 m;
-    if(!gameObject->parent) return dir;
+    if (!gameObject->parent) return dir;
     gameObject->parent->transform->GetModelMatrix(m);
     return Vector3((m.Inversed() * glm::vec4(dir, 0)).xyz());
 }

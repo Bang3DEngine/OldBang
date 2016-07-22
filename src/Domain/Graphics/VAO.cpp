@@ -20,7 +20,7 @@ void VAO::BindVBO(const VBO *vbo,
 {
     UnBindVBO(location); //unbind in case its a vbo replacement
 
-    if(location < 0) return;
+    if (location < 0) return;
 
     this->Bind();
 
@@ -35,13 +35,13 @@ void VAO::BindVBO(const VBO *vbo,
 
     this->UnBind();
 
-    while(m_vbos.size() <= location) m_vbos.push_back(nullptr);
+    while (m_vbos.size() <= location) m_vbos.push_back(nullptr);
     m_vbos[location] = vbo;
 }
 
 void VAO::UnBindVBO(GLint location)
 {
-    if(location >= 0 && location < m_vbos.size())
+    if (location >= 0 && location < m_vbos.size())
     {
         this->Bind();
         glDisableVertexAttribArray(location);
@@ -64,6 +64,6 @@ void VAO::UnBind() const
 
 const VBO* VAO::GetVBOByLocation(GLint location) const
 {
-    if(location >= m_vbos.size()) return nullptr;
+    if (location >= m_vbos.size()) return nullptr;
     else return m_vbos[location];
 }

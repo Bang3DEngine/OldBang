@@ -58,7 +58,7 @@ void Canvas::paintGL()
     // (this is not Behaviours' static deltaTime, theirs is updated in Behaviour _OnUpdate)
     Time::s_deltaTime = deltaTime;
 
-    if(p_currentScene)
+    if (p_currentScene)
     {
         m_lastRenderTime = Time::GetNow();
         p_currentScene->_OnUpdate();
@@ -79,7 +79,7 @@ void Canvas::resizeGL(int w, int h)
     m_height = h;
     m_aspectRatio = float(w) / h;
 
-    if(p_currentScene )
+    if (p_currentScene )
     {
         p_currentScene->_OnResize(w,h);
     }
@@ -100,13 +100,13 @@ void Canvas::AddScene(Scene *scene)
 
 void Canvas::SetCurrentScene(Scene *scene)
 {
-    if(p_currentScene)
+    if (p_currentScene)
     {
         p_currentScene->_OnDestroy();
     }
 
     p_currentScene = scene;
-    if(p_currentScene)
+    if (p_currentScene)
     {
         p_currentScene->_OnStart();
         #ifdef BANG_EDITOR
@@ -117,14 +117,14 @@ void Canvas::SetCurrentScene(Scene *scene)
 
 void Canvas::SetCurrentScene(const std::string &name)
 {
-    if(p_currentScene )
+    if (p_currentScene )
     {
         p_currentScene->_OnDestroy();
     }
 
-    for(auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
+    for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if((*it)->name == name)
+        if ((*it)->name == name)
         {
             SetCurrentScene((*it));
             return;
@@ -142,18 +142,18 @@ Scene *Canvas::GetCurrentScene()
 
 Scene *Canvas::GetScene(const std::string &name) const
 {
-    for(auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
+    for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if((*it)->name == name) return (*it);
+        if ((*it)->name == name) return (*it);
     }
     return nullptr;
 }
 
 void Canvas::RemoveScene(const std::string &name)
 {
-    for(auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
+    for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if((*it)->name == name) { m_scenes.erase(it); return; }
+        if ((*it)->name == name) { m_scenes.erase(it); return; }
     }
 }
 

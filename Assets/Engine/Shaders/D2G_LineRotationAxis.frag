@@ -33,7 +33,7 @@ void main()
     float maxDist = distance(B_position_camera, world_maxDistPoint);
     float dToV    = distance(B_position_camera, B_position_world_vout_fin.xyz);
 
-    if(dToV > maxDist) discard;
+    if (dToV > maxDist) discard;
 
     B_vout.diffuseColor = B_material_diffuse_color.rgb;
 

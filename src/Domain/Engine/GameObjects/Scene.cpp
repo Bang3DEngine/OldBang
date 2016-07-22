@@ -28,7 +28,7 @@ Scene::~Scene()
 void Scene::_OnRender()
 {
     Camera *cam = p_cameraGameObject->GetComponent<Camera>();
-    if(cam  && cam->GetAutoUpdateAspectRatio())
+    if (cam  && cam->GetAutoUpdateAspectRatio())
     {
         cam->SetAspectRatio( p_canvas->GetAspectRatio() );
     }
@@ -38,7 +38,7 @@ void Scene::_OnRender()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //From 0 to 9
-    for(m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
+    for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
     {
         glClear(GL_DEPTH_BUFFER_BIT);
         PROPAGATE_EVENT(_OnPreRender, m_children);
@@ -49,7 +49,7 @@ void Scene::_OnRender()
     std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
     for (Light *light : childrenLights)
     {
-        if(CAN_USE_COMPONENT(light))
+        if (CAN_USE_COMPONENT(light))
         {
             light->ApplyLight(p_gbuffer);
         }
@@ -61,7 +61,7 @@ void Scene::_OnRender()
 
 void Scene::SetCamera(const Camera *cam)
 {
-    if(!cam)
+    if (!cam)
     {
         this->p_cameraGameObject = nullptr;
         SetCamera(m_defaultCamera->GetComponent<Camera>());
@@ -74,7 +74,7 @@ void Scene::SetCamera(const Camera *cam)
 
 Camera *Scene::GetCamera() const
 {
-    if(!p_cameraGameObject)
+    if (!p_cameraGameObject)
     {
         return nullptr;
     }
@@ -99,7 +99,7 @@ void Scene::Write(std::ostream &f) const
     f << this->GetName() << std::endl; //scene name
 
     f << "<children>" << std::endl;
-    for(GameObject *e : m_children)
+    for (GameObject *e : m_children)
     {
         e->Write(f);
     }

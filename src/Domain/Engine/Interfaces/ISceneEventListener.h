@@ -8,13 +8,13 @@
 #include <functional>
 
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
-    for(auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
+    for (auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
     {\
-        if((*it)->IsEnabled()) { \
+        if ((*it)->IsEnabled()) { \
             (*it)->FUNCTION();   \
         } \
     }\
-} while(0)
+} while (0)
 
 class ISceneEventListener
 {

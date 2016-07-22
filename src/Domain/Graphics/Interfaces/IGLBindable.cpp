@@ -5,7 +5,7 @@ IGLBindable::IGLBindable() {}
 
 void IGLBindable::PreBind(GLenum bindTarget) const
 {
-    if(m_boundIds.find(bindTarget) == m_boundIds.end())
+    if (m_boundIds.find(bindTarget) == m_boundIds.end())
     {
         m_boundIds[bindTarget] = std::stack<GLint>();
     }
@@ -17,7 +17,7 @@ void IGLBindable::PreBind(GLenum bindTarget) const
 
 GLint IGLBindable::PreUnBind(GLenum bindTarget) const
 {
-    if(m_boundIds.find(bindTarget) == m_boundIds.end() ||
+    if (m_boundIds.find(bindTarget) == m_boundIds.end() ||
        m_boundIds[bindTarget].empty())
     {
         Logger_Warn("Unbinding non-binded GL target.");

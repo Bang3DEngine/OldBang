@@ -13,7 +13,7 @@ File::File(const QFileSystemModel *model, const QModelIndex *index)
     m_name = model->fileName(*index).toStdString();
 
     std::string::size_type p = m_name.find('.');
-    if(p != std::string::npos)
+    if (p != std::string::npos)
     {
         m_extension = m_name.substr(p+1, m_name.length() - p - 1);
         m_name = m_name.substr(0, p);

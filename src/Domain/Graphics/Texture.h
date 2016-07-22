@@ -40,7 +40,6 @@ private:
     GLint m_glTextureGetIntegerType = 0;
 
 protected:
-protected:
     GLint m_internalType = GL_UNSIGNED_BYTE;
     GLint m_internalFormat = GL_RGB;
     GLint m_format = GL_RGB;

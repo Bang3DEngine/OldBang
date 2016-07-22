@@ -40,9 +40,9 @@ template <class T>
 std::ostream &operator<<(std::ostream &log, const std::list<T> *l)
 {
     log << "("; bool first = true;
-    for(auto it = l->begin(); it != l->end(); ++it)
+    for (auto it = l->begin(); it != l->end(); ++it)
     {
-        if(!first) log << ", ";
+        if (!first) log << ", ";
         log << (*it);
         first = false;
     }
@@ -58,9 +58,9 @@ template <class T>
 std::ostream &operator<<(std::ostream &log, const std::vector<T> *v)
 {
     log << "[";
-    for(int i = 0; i < v->size(); ++i)
+    for (int i = 0; i < v->size(); ++i)
     {
-        if(i != 0) log << ", ";
+        if (i != 0) log << ", ";
         log << (*v)[i];
     }
     log << "]";
@@ -75,9 +75,9 @@ template <class T, class S>
 std::ostream &operator<<(std::ostream &log, const std::map<T,S> *m)
 {
     log << "{";
-    for(auto it = m->begin(); it != m->end(); ++it)
+    for (auto it = m->begin(); it != m->end(); ++it)
     {
-        if(it != m->begin()) log << ", ";
+        if (it != m->begin()) log << ", ";
         log << (it->first) << ": " << (it->second);
     }
     log << "}";
@@ -99,12 +99,12 @@ std::ostream &operator<<(std::ostream &log, const std::map<T,S> &m)
     #define _Log_To_ListLogger(x)   ListLogger::AddLog(x);
     #define _Warn_To_ListLogger(x)  ListLogger::AddWarn(x);
     #define _Error_To_ListLogger(x) ListLogger::AddError(x);
-    #define _Verbose_To_ListLogger(x) do{}while(0);
+    #define _Verbose_To_ListLogger(x) do{}while (0);
 #else
-    #define _Log_To_ListLogger(x) do{}while(0);
-    #define _Warn_To_ListLogger(x) do{}while(0);
-    #define _Error_To_ListLogger(x) do{}while(0);
-    #define _Verbose_To_ListLogger(x) do{}while(0);
+    #define _Log_To_ListLogger(x) do{}while (0);
+    #define _Warn_To_ListLogger(x) do{}while (0);
+    #define _Error_To_ListLogger(x) do{}while (0);
+    #define _Verbose_To_ListLogger(x) do{}while (0);
 #endif
 
 #define CMA <<", "<<
@@ -116,7 +116,7 @@ std::ostream &operator<<(std::ostream &log, const std::map<T,S> &m)
     std::cerr.flush();\
     log.flush();\
     _Log_To_ListLogger(log.str()); \
-} while(0)
+} while (0)
 
 #define Logger_Warn(x) do{\
     std::ostringstream log;\
@@ -125,13 +125,13 @@ std::ostream &operator<<(std::ostream &log, const std::map<T,S> &m)
     std::cerr.flush();\
     log.flush();\
     _Warn_To_ListLogger(log.str()); \
-} while(0)
+} while (0)
 
 #define Logger_GetString(strVar, x) do{\
     std::ostringstream log;\
     log << x;\
     strVar = log.str(); \
-} while(0)
+} while (0)
 
 #define Logger_Error(x) do{\
     std::ostringstream log;\
@@ -140,7 +140,7 @@ std::ostream &operator<<(std::ostream &log, const std::map<T,S> &m)
     std::cerr.flush();\
     log.flush();\
     _Error_To_ListLogger(log.str()); \
-} while(0)
+} while (0)
 
 #define Logger_Verbose(x) do{\
     std::ostringstream log;\
@@ -149,13 +149,13 @@ std::ostream &operator<<(std::ostream &log, const std::map<T,S> &m)
     /*std::cerr.flush();*/\
     log.flush();\
     _Verbose_To_ListLogger(log.str()); \
-} while(0)
+} while (0)
 
 #define Assert(mustBeTrue, message, returnAction) do{\
-    if(!(mustBeTrue)) {\
+    if (!(mustBeTrue)) {\
         Logger_Error("Assertion failed: " << message);\
         returnAction;\
     }\
-} while(0)
+} while (0)
 
 #endif //LOGGER_H
