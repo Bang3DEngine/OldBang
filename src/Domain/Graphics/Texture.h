@@ -8,7 +8,8 @@
 #include "IGLBindable.h"
 #include "IGLIdable.h"
 
-class Texture : public IGLBindable, public IGLIdable
+class Texture : public IGLIdable
+               ,protected IGLBindable // Only for internal use
 {
 
 private:
@@ -50,7 +51,7 @@ protected:
 
     FilterMode m_filterMode = FilterMode::Nearest;
     WrapMode m_wrapMode = WrapMode::Repeat;
-    int m_textureSlot = 0;
+    int m_textureUnit = 0;
 
     unsigned char *p_data = nullptr;
 
@@ -69,7 +70,7 @@ public:
     void SetGLFormat(GLint glFormat);
     void SetFilterMode(FilterMode filterMode);
     void SetWrapMode(WrapMode wrapMode);
-    void SetTextureSlot(int textureSlot);
+    void SetTextureUnit(int textureSlot);
 
     int GetWidth() const;
     int GetHeight() const;
@@ -79,10 +80,14 @@ public:
     GLint GetGLFormat() const;
     FilterMode GetFilterMode() const;
     WrapMode GetWrapMode() const;
-    int GetTextureSlot() const;
+    int GetTextureUnit() const;
 
+protected:
     void Bind() const override;
     void UnBind() const override;
+
+public:
+    void BindToTextureUnit(int textureUnit) const;
 };
 
 #endif // TEXTURE_H

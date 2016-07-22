@@ -62,9 +62,9 @@ void Texture::SetWrapMode(Texture::WrapMode wrapMode)
     UnBind();
 }
 
-void Texture::SetTextureSlot(int textureSlot)
+void Texture::SetTextureUnit(int textureSlot)
 {
-    this->m_textureSlot = textureSlot;
+    this->m_textureUnit = textureSlot;
 }
 
 int Texture::GetWidth() const
@@ -107,16 +107,20 @@ Texture::WrapMode Texture::GetWrapMode() const
     return m_wrapMode;
 }
 
-int Texture::GetTextureSlot() const
+int Texture::GetTextureUnit() const
 {
-    return m_textureSlot;
+    return m_textureUnit;
 }
+
+void Texture::BindToTextureUnit(int textureUnit) const
+{
+    glActiveTexture(GL_TEXTURE0 + textureUnit);
+    glBindTexture(GL_TEXTURE_2D, m_idGL);
+}
+
 
 void Texture::Bind() const
 {
-    PreBind(GL_ACTIVE_TEXTURE);
-    glActiveTexture(GL_TEXTURE0 + m_textureSlot);
-
     PreBind(GL_TEXTURE_BINDING_2D);
     glBindTexture(GL_TEXTURE_2D, m_idGL);
 }
@@ -124,5 +128,4 @@ void Texture::Bind() const
 void Texture::UnBind() const
 {
     glBindTexture(m_glTextureType, PreUnBind(GL_TEXTURE_BINDING_2D));
-    glActiveTexture( PreUnBind(GL_ACTIVE_TEXTURE) );
 }

@@ -62,9 +62,19 @@ void Texture2D::Write(std::ostream &f) const
 {
     f << "<Texture2D>" << std::endl;
     FileWriter::WriteFilepath(this->m_filepath, f);
-    std::string fm = GetFilterMode() == FilterMode::Nearest ?
-                "Nearest" : "Linear";
-    FileWriter::Write(fm, f);
+
+    FilterMode filterMode = GetFilterMode();
+    std::string fmName = "";
+    if (filterMode == FilterMode::Nearest)
+    {
+        fmName = "Nearest";
+    }
+    else if (filterMode == FilterMode::Linear)
+    {
+        fmName = "Linear";
+    }
+    FileWriter::Write(fmName, f);
+
     f << "</Texture2D>" << std::endl;
 }
 

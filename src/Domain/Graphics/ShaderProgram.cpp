@@ -174,7 +174,7 @@ bool ShaderProgram::SetUniformTexture(const std::string &name, Texture *texture,
         int newSlot = slot;
         if (slot == -1) newSlot = location;
         glUniform1i(location, newSlot);
-        texture->SetTextureSlot(newSlot);
+        texture->SetTextureUnit(newSlot);
         UnBind();
         return true;
     }
@@ -210,9 +210,6 @@ void ShaderProgram::UnBind() const
 {
     glUseProgram(PreUnBind(GL_CURRENT_PROGRAM));
 }
-
-
-
 
 void ShaderProgram::Write(std::ostream &f) const
 {

@@ -29,36 +29,30 @@ void Material::Bind() const
     {
         p_shaderProgram->Bind();
 
-        int slot = 1;
+        int textureSlot = 1;
         for (auto it = m_namesToTextures.begin(); it != m_namesToTextures.end(); ++it)
         {
             std::string texName = it->first;
             Texture *t = it->second;
             if (t)
             {
-                p_shaderProgram->SetUniformTexture(texName, t, slot, false); //Set the uniform with the texture slot
-                t->Bind(); //Leave it bound
+                //Set the uniform with the texture slot
+                p_shaderProgram->SetUniformTexture(texName, t, textureSlot, false);
+                t->BindToTextureUnit(textureSlot); //Leave it bound
+                textureSlot++;
             }
-            slot++;
         }
 
         p_shaderProgram->SetUniformVec4(ShaderContract::Uniform_Material_Diffuse_Color,
-                                      m_diffuseColor, false);
+                                        m_diffuseColor, false);
     }
 }
 
 void Material::UnBind() const
 {
-    if (p_shaderProgram )
+    if (p_shaderProgram)
     {
-        for (auto it = m_namesToTextures.begin(); it != m_namesToTextures.end(); ++it)
-        {
-            const Texture *t = it->second;
-            if (t)
-            {
-                t->UnBind();
-            }
-        }
+        p_shaderProgram->UnBind();
     }
 }
 
@@ -102,14 +96,11 @@ void Material::Read(std::istream &f)
 
     int numTextures = FileReader::ReadInt(f);
 
-    Logger_Log("Number of texs: " << numTextures);
     for(int i = 0; i < numTextures; ++i)
     {
         std::string texName = FileReader::ReadString(f);
-        std::string texFilepath = FileReader::ReadString(f);
-        Logger_Log("Name: " << texName);
-        Logger_Log("Filepath: " << texFilepath);
-        Texture2D *tex = AssetsManager::GetAsset<Texture2D>(texFilepath);
+        std::string texAssetFilepath = FileReader::ReadString(f);
+        Texture2D *tex = AssetsManager::GetAsset<Texture2D>(texAssetFilepath);
         if (tex)
         {
             SetTexture(texName, tex);
