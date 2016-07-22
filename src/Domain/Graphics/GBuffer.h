@@ -18,7 +18,6 @@ public:
         Uv,
         Diffuse,
         MaterialBools, // (receivesLighting, -, -, -)
-        MaterialLightProperties, // ()
         Depth,
         Color
     };

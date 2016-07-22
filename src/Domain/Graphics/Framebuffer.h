@@ -45,7 +45,7 @@ public:
     TextureRender* GetTextureAttachment(int framebufferAttachmentNum) const;
 
     void SetAllDrawBuffers() const;
-    void SetDrawBuffers(const std::vector<GLuint> &attachmentIds) const;
+    void SetDrawBuffers(const std::vector<int> &attachmentIds) const;
     void SetReadBuffer(GLuint attachmentId) const;
 
     Vector3 ReadPixel(int x, int y, int attachmentId) const;

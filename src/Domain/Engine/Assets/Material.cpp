@@ -40,7 +40,7 @@ void Material::Bind() const
             }
         }
 
-        int slot = 0;
+        int slot = 1;
         for(auto it = m_namesToTextures.begin(); it != m_namesToTextures.end(); ++it)
         {
             std::string texName = it->first;
@@ -50,7 +50,7 @@ void Material::Bind() const
                 p_shaderProgram->SetUniformTexture(texName, t, slot, false); //Set the uniform with the texture slot
                 t->Bind(); //Leave it bound
             }
-            ++slot;
+            slot++;
         }
 
         p_shaderProgram->SetUniformVec4(ShaderContract::Uniform_Material_Diffuse_Color,

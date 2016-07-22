@@ -175,7 +175,7 @@ B_vout.position_world   = B_vin.position_world.xyz; \n\
 B_vout.normal_world     = B_vin.normal_world.xyz; \n\
 B_vout.uv               = B_vin.uv; \n\
 B_vout.receivesLighting = B_renderer_receivesLighting; \n\
-B_vout.diffuseColor     = vec3(1,0,1); \n\
+B_vout.diffuseColor     = B_material_diffuse_color.rgb; \n\
 B_vout.depth            = gl_FragCoord.z;  \n\
 \n\
 ";
@@ -241,13 +241,13 @@ out vec4 B_color_gout_gin; /*Accumulated color*/ \n\
 const std::string ShaderContract::Macro_Post_Render_FS_Init_Main_Content =
 "\
 B_vin.uv_screen           = B_uv_raw_vout_fin; \n\
-B_vin.position_world      = texture2D(B_position_gout_fin,       B_vin.uv_screen).xyz; \n\
-B_vin.normal_world        = texture2D(B_normal_gout_fin,         B_vin.uv_screen).xyz; \n\
-B_vin.uv                  = texture2D(B_uv_gout_fin,             B_vin.uv_screen).xy;  \n\
-B_vin.diffuseColor        = texture2D(B_diffuse_gout_fin,        B_vin.uv_screen).rgb; \n\
-B_vin.receivesLighting    = texture2D(B_materialBools_gout_fin,  B_vin.uv_screen).x;   \n\
-B_vin.depth               = texture2D(B_depth_gout_fin,          B_vin.uv_screen).x;   \n\
-B_vin.color               = texture2D(B_color_gout_fin,          B_vin.uv_screen).xyzw;   \n\
+B_vin.position_world      = texture2D(B_position_gout_fin,       B_vin.uv_screen).xyz;  \n\
+B_vin.normal_world        = texture2D(B_normal_gout_fin,         B_vin.uv_screen).xyz;  \n\
+B_vin.uv                  = texture2D(B_uv_gout_fin,             B_vin.uv_screen).xy;   \n\
+B_vin.diffuseColor        = texture2D(B_diffuse_gout_fin,        B_vin.uv_screen).rgb;  \n\
+B_vin.receivesLighting    = texture2D(B_materialBools_gout_fin,  B_vin.uv_screen).x;    \n\
+B_vin.depth               = texture2D(B_depth_gout_fin,          B_vin.uv_screen).x;    \n\
+B_vin.color               = texture2D(B_color_gout_fin,          B_vin.uv_screen).rgba; \n\
 B_vin.normal_world        = normalize(B_vin.normal_world); \n\
 \n\
 /*Default value*/\n\
@@ -257,7 +257,6 @@ B_vout.color              = vec4(B_vin.color.rgb, 1); \n\
 const std::string ShaderContract::Macro_Post_Render_FS_End_Main_Content =
 "\
 B_color_gout_gin = B_vout.color; \n\
-B_color_gout_gin = vec4(0,0,1,1); \n\
 ";
 
 const std::string ShaderContract::Filepath_Shader_SelectionBuffer_VS = "Assets/Engine/Shaders/SelectionBuffer.vert";

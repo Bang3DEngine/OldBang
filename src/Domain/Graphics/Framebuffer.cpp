@@ -83,10 +83,15 @@ TextureRender *Framebuffer::GetTextureAttachment(int framebufferAttachmentNum) c
 
 void Framebuffer::SetAllDrawBuffers() const
 {
-    SetDrawBuffers(m_boundAttachments);
+    std::vector<int> attachmentIds;
+    for(int i = 0; i < m_boundAttachments.size(); ++i)
+    {
+        attachmentIds.push_back(i);
+    }
+    SetDrawBuffers(attachmentIds);
 }
 
-void Framebuffer::SetDrawBuffers(const std::vector<GLuint> &attachmentIds) const
+void Framebuffer::SetDrawBuffers(const std::vector<int> &attachmentIds) const
 {
     Bind();
     std::vector<GLuint> drawBuffers;

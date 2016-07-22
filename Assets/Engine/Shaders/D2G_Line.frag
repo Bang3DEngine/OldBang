@@ -23,8 +23,5 @@ B_VertexOut_GBufferIn B_vout;
 void main()
 {
     B_DRAW_TO_GBUFFER_FS_INIT_MAIN();
-
-    B_vout.diffuseColor = B_material_diffuse_color.rgb;
-
     B_DRAW_TO_GBUFFER_FS_END_MAIN();
 }

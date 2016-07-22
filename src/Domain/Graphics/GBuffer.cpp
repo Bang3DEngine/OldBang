@@ -45,32 +45,28 @@ void GBuffer::BindGBufferInTexturesTo(Material *mat) const
 
 void GBuffer::RenderPassWithMaterial(Material *mat) const
 {
-    if(mat)
-    {
-        p_planeMeshToRenderEntireScreen->
-                BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
-                                             *(mat->GetShaderProgram()));
-        BindGBufferInTexturesTo(mat);
-        mat->Bind();
-    }
+    NONULL(mat);
 
-    // Set as only draw output: "B_color_gout_gin"
-    // To accumulate color in there
+    p_planeMeshToRenderEntireScreen->
+            BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
+                                         *(mat->GetShaderProgram()));
+
+    BindGBufferInTexturesTo(mat);
+
+    mat->Bind();
+
+    // Set as only draw output: "B_color_gout_gin". To accumulate color in there
     SetDrawBuffers({GBuffer::Attachment::Color});
 
     RenderScreenPlane();
 
-    if(mat)
-    {
-        mat->UnBind();
-    }
+    mat->UnBind();
 }
 
 void GBuffer::RenderScreenPlane() const
 {
     p_planeMeshToRenderEntireScreen->GetVAO()->Bind();
 
-    glEnable(GL_CULL_FACE); glPolygonMode(GL_FRONT, GL_FILL);
     glDepthFunc(GL_LEQUAL); //Overwrite last screen plane!
     glDrawArrays(GL_TRIANGLES, 0, p_planeMeshToRenderEntireScreen->GetVertexCount());
 
