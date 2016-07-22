@@ -6,32 +6,32 @@
 
 Explorer::Explorer(QWidget *parent) : QListView(parent)
 {
-    p_fileSystemModel = new QFileSystemModel();
+    m_fileSystemModel = new QFileSystemModel();
 
-    p_buttonDirUp = WindowMain::GetInstance()->buttonExplorerDirUp;
-    p_buttonChangeViewMode =
+    m_buttonDirUp = WindowMain::GetInstance()->buttonExplorerDirUp;
+    m_buttonChangeViewMode =
             WindowMain::GetInstance()->buttonExplorerChangeViewMode;
 
-    connect(p_buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
-    connect(p_buttonChangeViewMode, SIGNAL(clicked()),
+    connect(m_buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
+    connect(m_buttonChangeViewMode, SIGNAL(clicked()),
             this, SLOT(OnButtonChangeViewModeClicked()));
 
-    setModel(p_fileSystemModel);
-    p_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDot);
-    p_fileSystemModel->setReadOnly(false);
+    setModel(m_fileSystemModel);
+    m_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDot);
+    m_fileSystemModel->setReadOnly(false);
 
-    connect(p_fileSystemModel, SIGNAL(directoryLoaded(QString)),
+    connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
             this, SLOT(OnDirLoaded(QString)));
     SetDir(Persistence::GetAssetsPathAbsolute());
 
-    p_updateTimer = new QTimer(this); //Every X secs, update all the slots values
-    connect(p_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
-    p_updateTimer->start(100);
+    m_updateTimer = new QTimer(this); //Every X secs, update all the slots values
+    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
+    m_updateTimer->start(100);
 }
 
 Explorer::~Explorer()
 {
-   delete p_fileSystemModel;
+   delete m_fileSystemModel;
 }
 
 void Explorer::OnButtonDirUpClicked()
@@ -78,11 +78,11 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
         if (this->selectedIndexes().length() <= 0) return;
 
         QModelIndex clickedIndex = this->selectedIndexes().at(0);
-        bool isDir = p_fileSystemModel->isDir(clickedIndex);
+        bool isDir = m_fileSystemModel->isDir(clickedIndex);
         if (isDir)
         {
             std::string clickedDirName =
-                    p_fileSystemModel->fileName(clickedIndex).toStdString();
+                    m_fileSystemModel->fileName(clickedIndex).toStdString();
             SetDir(GetCurrentDir() + "/" + clickedDirName);
         }
     }
@@ -108,22 +108,22 @@ void Explorer::RefreshInspector()
     if (this->selectedIndexes().size() <= 0) return;
 
     QModelIndex clickedIndex = this->selectedIndexes().at(0);
-    File f(p_fileSystemModel, &clickedIndex);
+    File f(m_fileSystemModel, &clickedIndex);
 
     InspectorWidget *fileWidget = nullptr;
     if (f.IsImageFile())
     {
-        FileImage fi(p_fileSystemModel, &clickedIndex);
+        FileImage fi(m_fileSystemModel, &clickedIndex);
         fileWidget = new InspectorImageFileWidget(fi);
     }
     else if (f.IsTexture2DAsset())
     {
-        FileTexture2DAsset ft(p_fileSystemModel, &clickedIndex);
+        FileTexture2DAsset ft(m_fileSystemModel, &clickedIndex);
         fileWidget = new InspectorTexture2DAssetWidget(ft);
     }
     else if (f.IsMeshFile())
     {
-        FileMesh fm(p_fileSystemModel, &clickedIndex);
+        FileMesh fm(m_fileSystemModel, &clickedIndex);
         fileWidget = new InspectorMeshFileWidget(fm);
     }
     /*else if (f.IsMeshAsset())
@@ -147,7 +147,7 @@ void Explorer::Refresh()
     if (selectedIndexes().length() > 0)
     {
        QModelIndex index = selectedIndexes().at(0);
-       File f(p_fileSystemModel, &index);
+       File f(m_fileSystemModel, &index);
        if (f.GetName() != m_lastSelectedFileName)
        {
            m_lastSelectedFileName = f.GetName();
@@ -158,7 +158,7 @@ void Explorer::Refresh()
 
 void Explorer::SetDir(const std::string &path)
 {
-    setRootIndex(p_fileSystemModel->setRootPath(QString::fromStdString(path)));
+    setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(path)));
 }
 
 void Explorer::OnDirLoaded(QString dir)
@@ -167,19 +167,19 @@ void Explorer::OnDirLoaded(QString dir)
 
     if (GetCurrentDir().length() <= Persistence::GetAssetsPathAbsolute().length())
     {
-        p_buttonDirUp->setEnabled(false);
-        p_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
+        m_buttonDirUp->setEnabled(false);
+        m_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
     }
     else
     {
-        p_buttonDirUp->setEnabled(true);
-        p_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDot);
+        m_buttonDirUp->setEnabled(true);
+        m_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDot);
     }
 }
 
 std::string Explorer::GetCurrentDir() const
 {
-    return p_fileSystemModel->rootPath().toStdString();
+    return m_fileSystemModel->rootPath().toStdString();
 }
 
 void Explorer::updateGeometries()

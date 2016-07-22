@@ -23,12 +23,12 @@
 class EditorCamera : public EditorGameObject
 {
 private:
-    Transform *p_t = nullptr;
-    Camera *p_cam = nullptr;
-    Transform *p_camt = nullptr; //YawNode transform
-    EditorGameObject *p_yawNode = nullptr;
+    Transform *m_t = nullptr;
+    Camera *m_cam = nullptr;
+    Transform *m_camt = nullptr; //YawNode transform
+    EditorGameObject *m_yawNode = nullptr;
 
-    GameObject *p_currentFocus = nullptr;
+    GameObject *m_currentFocus = nullptr;
     bool m_doingLookAt = false;
     float m_lookAtRotSpeed = 5.0f;
     float m_lookAtMoveSpeed = 4.0f;

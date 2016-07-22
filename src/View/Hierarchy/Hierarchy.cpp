@@ -110,13 +110,13 @@ Hierarchy *Hierarchy::GetInstance()
 
 void Hierarchy::Refresh()
 {
-    p_currentScene = Canvas::GetInstance()->GetCurrentScene(); NONULL(p_currentScene);
+    m_currentScene = Canvas::GetInstance()->GetCurrentScene(); NONULL(m_currentScene);
 
     m_gameObjectToTreeItem.clear();
     m_treeItemToGameObject.clear();
     this->clear();
 
-    std::list<GameObject*> sceneChildren = p_currentScene->GetChildren();
+    std::list<GameObject*> sceneChildren = m_currentScene->GetChildren();
     for (GameObject* go : sceneChildren)
     {
         if (!go->IsEditorGameObject())
@@ -192,7 +192,7 @@ void Hierarchy::dropEvent(QDropEvent *event)
             //Not putting inside, but below or above. Thus take its parent.
             targetItem = targetItem->parent();
             if (targetItem) target = m_treeItemToGameObject[targetItem];
-            else target = p_currentScene;
+            else target = m_currentScene;
         }
 
         for (QTreeWidgetItem *sourceItem : sourceItems)
@@ -300,7 +300,7 @@ void Hierarchy::OnContextMenuCreateEmptyClicked()
 
     if (selectedItems().size() == 0)
     {
-        empty->SetParent(p_currentScene);
+        empty->SetParent(m_currentScene);
     }
 }
 
@@ -322,7 +322,7 @@ void Hierarchy::OnContextMenuPasteClicked()
     }
     else
     {
-        ClipboardGameObject::PasteCopiedGameObjectsInto(p_currentScene);
+        ClipboardGameObject::PasteCopiedGameObjectsInto(m_currentScene);
     }
 }
 
@@ -412,7 +412,7 @@ void Hierarchy::OnCustomContextMenuRequested(QPoint point)
 
 void Hierarchy::OnSelectionChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-    p_lastSelectedItem = current;
+    m_lastSelectedItem = current;
     QTimer::singleShot(100, this, SLOT(_NotifyHierarchyGameObjectSelectionChanged()));
 }
 

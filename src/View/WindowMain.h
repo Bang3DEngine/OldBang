@@ -24,7 +24,7 @@ class WindowMain : public Ui_WindowMain
 private:
     WindowMain();
 
-    static WindowMain *s_p_win;
+    static WindowMain *s_m_win;
 
 public:
 
@@ -34,7 +34,7 @@ public:
      * SingletonManager, for later use in shared libraries.
      * @return The created Singleton,
      */
-    static void InitFromMainBinary(QMainWindow *window, QApplication *p_app);
+    static void InitFromMainBinary(QMainWindow *window, QApplication *m_app);
 
     static WindowMain *GetInstance();
     QMainWindow *GetMainWindow() const override;

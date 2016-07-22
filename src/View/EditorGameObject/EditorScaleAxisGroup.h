@@ -18,9 +18,9 @@
 class EditorScaleAxisGroup : public EditorGameObject
 {
 private:
-    EditorScaleAxis *p_axisX;
-    EditorScaleAxis *p_axisY;
-    EditorScaleAxis *p_axisZ;
+    EditorScaleAxis *m_axisX;
+    EditorScaleAxis *m_axisY;
+    EditorScaleAxis *m_axisZ;
 
 public:
     EditorScaleAxisGroup(GameObject *attachedGameObject);

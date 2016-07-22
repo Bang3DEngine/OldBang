@@ -53,7 +53,7 @@ protected:
     WrapMode m_wrapMode = WrapMode::Repeat;
     int m_textureUnit = 0;
 
-    unsigned char *p_data = nullptr;
+    unsigned char *m_data = nullptr;
 
     TextureType m_glTextureType = TextureType::Texture2D;
 

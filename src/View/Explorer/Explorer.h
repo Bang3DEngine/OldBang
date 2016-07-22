@@ -30,12 +30,12 @@ class Explorer : public QListView
     friend class ExplorerDirTree;
 
 private:
-    QFileSystemModel *p_fileSystemModel = nullptr;
-    QToolButton *p_buttonDirUp = nullptr;
-    QToolButton *p_buttonChangeViewMode = nullptr;
+    QFileSystemModel *m_fileSystemModel = nullptr;
+    QToolButton *m_buttonDirUp = nullptr;
+    QToolButton *m_buttonChangeViewMode = nullptr;
 
     std::string m_lastSelectedFileName = "";
-    QTimer *p_updateTimer = nullptr;
+    QTimer *m_updateTimer = nullptr;
 
     void SetDir(const std::string &path);
     std::string GetCurrentDir() const;

@@ -2,7 +2,7 @@
 
 EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("EditorBBox")
 {
-    this->p_attachedGameObject = attachedGameObject;
+    this->m_attachedGameObject = attachedGameObject;
 
     MeshRenderer *mr = AddComponent<MeshRenderer>();
 
@@ -44,11 +44,11 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
 
 void EditorBBox::OnUpdate()
 {
-    NONULL(p_attachedGameObject);
+    NONULL(m_attachedGameObject);
 
     // Adjust transform to wrap all the vertices of the parent and children
     Box bbox;
-    std::list<Renderer*> rends = p_attachedGameObject->GetComponents<Renderer>();
+    std::list<Renderer*> rends = m_attachedGameObject->GetComponents<Renderer>();
     for (auto it_r = rends.begin(); it_r != rends.end(); ++it_r)
     {
         Renderer *r = *it_r;

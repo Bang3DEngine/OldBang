@@ -12,7 +12,7 @@
 class GameWindow : public IWindow
 {
 private:
-    static GameWindow *s_p_win;
+    static GameWindow *s_m_win;
     void SetupUI();
 
 public:

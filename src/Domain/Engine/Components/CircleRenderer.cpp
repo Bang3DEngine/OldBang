@@ -163,7 +163,7 @@ void CircleRenderer::Write(std::ostream &f) const
 {
     f << "<CircleRenderer>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::WriteFilepath(p_material->GetFilepath(), f);
+    FileWriter::WriteFilepath(m_material->GetFilepath(), f);
     FileWriter::Write(m_radius, f);
     FileWriter::Write(m_segments, f);
     FileWriter::Write(GetLineWidth(), f);

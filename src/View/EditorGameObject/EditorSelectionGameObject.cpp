@@ -5,8 +5,8 @@
 EditorSelectionGameObject::EditorSelectionGameObject(GameObject *attachedGameObject) :
     EditorGameObject("EditorSelectionGameObject")
 {
-    p_axisGroup = new EditorAxisGroup(attachedGameObject);
-    p_axisGroup->SetParent(this);
+    m_axisGroup = new EditorAxisGroup(attachedGameObject);
+    m_axisGroup->SetParent(this);
 
     //EditorBBox *bbox = new EditorBBox(attachedGameObject);
     //bbox->GetComponent<MeshRenderer>()->GetMaterial()->SetDiffuseColor(glm::vec4(1,0,0,1));

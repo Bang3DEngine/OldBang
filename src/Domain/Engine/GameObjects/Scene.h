@@ -34,9 +34,9 @@ protected:
     int m_currentRenderLayer = 0;
 
     //Framebuffer for positions, normals, uvs and diffuse
-    GBuffer *p_gbuffer = nullptr;
-    const Canvas *p_canvas = nullptr; //set by canvas when added to it
-    GameObject *p_cameraGameObject = nullptr;
+    GBuffer *m_gbuffer = nullptr;
+    const Canvas *m_canvas = nullptr; //set by canvas when added to it
+    GameObject *m_cameraGameObject = nullptr;
 
     virtual void _OnResize (int newWidth, int newHeight);
 

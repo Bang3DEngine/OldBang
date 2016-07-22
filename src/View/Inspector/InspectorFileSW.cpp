@@ -18,9 +18,9 @@ InspectorFileSW::InspectorFileSW(const std::string &labelString,
     hLayout->setSpacing(0); hLayout->setContentsMargins(0,0,0,0);
     vLayout->addLayout(hLayout);
 
-    p_filepathLineEdit = new QLineEdit();
-    p_filepathLineEdit->setReadOnly(true);
-    hLayout->addWidget(p_filepathLineEdit);
+    m_filepathLineEdit = new QLineEdit();
+    m_filepathLineEdit->setReadOnly(true);
+    hLayout->addWidget(m_filepathLineEdit);
 
     QPushButton *browseButton = new QPushButton(QString::fromStdString("Browse"));
     connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
@@ -39,7 +39,7 @@ void InspectorFileSW::Browse()
     if (selectedFile != "")
     {
         this->SetValue( selectedFile );
-        this->p_parent->_OnSlotValueChanged();
+        this->m_parent->_OnSlotValueChanged();
     }
 }
 
@@ -48,7 +48,7 @@ void InspectorFileSW::SetValue(const std::string &assetPath)
     if (this->m_assetPath != assetPath)
     {
         this->m_assetPath = assetPath;
-        p_filepathLineEdit->setText(QString::fromStdString(assetPath));
+        m_filepathLineEdit->setText(QString::fromStdString(assetPath));
     }
 }
 

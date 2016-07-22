@@ -7,8 +7,8 @@
 class IWindow
 {
 protected:
-    QMainWindow *p_mainWindow = nullptr;
-    QApplication *p_app = nullptr;
+    QMainWindow *m_mainWindow = nullptr;
+    QApplication *m_app = nullptr;
 
     IWindow() {}
 

@@ -8,14 +8,14 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 {
     SetName("EditorRotateAxisGroup" + EditorAxis::GetStringFromDir(dir));
 
-    p_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/LineRotationAxis.bmat");
-    p_material = new Material(*p_material);
+    m_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/LineRotationAxis.bmat");
+    m_material = new Material(*m_material);
 
     circle = AddComponent<CircleRenderer>();
     circle->SetRadius(0.5f);
     circle->SetSegments(64);
     circle->SetLineWidth(2.0f);
-    circle->SetMaterial(p_material);
+    circle->SetMaterial(m_material);
     circle->SetReceivesLighting(false);
 
     circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
@@ -50,7 +50,7 @@ void EditorRotateAxis::OnUpdate()
 
     // Obtain mousePos in screen space for next calculations
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    GameObject *ago = p_attachedGameObject;
+    GameObject *ago = m_attachedGameObject;
 
     Matrix4 p, v, m;
     cam->GetProjectionMatrix(p);
@@ -111,10 +111,10 @@ void EditorRotateAxis::OnUpdate()
     }
 
     // Pass some uniforms to the shader that renders the rotation circles
-    Sphere bSphere = p_attachedGameObject->GetBoundingSphere();
+    Sphere bSphere = m_attachedGameObject->GetBoundingSphere();
     float radius = bSphere.GetRadius() / 2.0f;
-    p_material->GetShaderProgram()->SetUniformVec3("B_world_circleCenter", bSphere.GetCenter(), false);
-    p_material->GetShaderProgram()->SetUniformVec3("B_boundingSphereRadius", radius, false);
+    m_material->GetShaderProgram()->SetUniformVec3("B_world_circleCenter", bSphere.GetCenter(), false);
+    m_material->GetShaderProgram()->SetUniformVec3("B_boundingSphereRadius", radius, false);
 }
 
 Renderer *EditorRotateAxis::GetAxisRenderer() const

@@ -3,26 +3,26 @@
 
 Mesh::Mesh()
 {
-    p_vao = new VAO();
+    m_vao = new VAO();
 }
 
 Mesh::Mesh(const Mesh &m)
 {
     //TODO, do copy of VAO and VBO's
-    p_vao = m.GetVAO();
+    m_vao = m.GetVAO();
     m_bBox = m.m_bBox;
     m_bSphere = m.m_bSphere;
-    p_vertexPositionsVBO = m.p_vertexPositionsVBO;
-    p_vertexNormalsVBO = m.p_vertexNormalsVBO;
-    p_vertexUvsVBO = m.p_vertexUvsVBO;
+    m_vertexPositionsVBO = m.m_vertexPositionsVBO;
+    m_vertexNormalsVBO = m.m_vertexNormalsVBO;
+    m_vertexUvsVBO = m.m_vertexUvsVBO;
     m_vertexCount = m.m_vertexCount;
 }
 
 Mesh::~Mesh()
 {
-    if (p_vertexPositionsVBO) delete p_vertexPositionsVBO;
-    if (p_vertexNormalsVBO)   delete p_vertexNormalsVBO;
-    if (p_vertexNormalsVBO)   delete p_vertexUvsVBO;
+    if (m_vertexPositionsVBO) delete m_vertexPositionsVBO;
+    if (m_vertexNormalsVBO)   delete m_vertexNormalsVBO;
+    if (m_vertexNormalsVBO)   delete m_vertexUvsVBO;
 }
 
 void Mesh::LoadFromFile(const std::string &filepath)
@@ -47,10 +47,10 @@ void Mesh::LoadFromFile(const std::string &filepath)
 
 void Mesh::LoadPositions(const std::vector<Vector3>& positions)
 {
-    if (p_vertexPositionsVBO) delete p_vertexPositionsVBO;
+    if (m_vertexPositionsVBO) delete m_vertexPositionsVBO;
 
-    p_vertexPositionsVBO = new VBO();
-    p_vertexPositionsVBO->Fill((void*)(&positions[0]), positions.size() * sizeof(float) * 3);
+    m_vertexPositionsVBO = new VBO();
+    m_vertexPositionsVBO->Fill((void*)(&positions[0]), positions.size() * sizeof(float) * 3);
     m_vertexCount = positions.size();
 
     m_bBox.FillFromPositions(positions);
@@ -59,18 +59,18 @@ void Mesh::LoadPositions(const std::vector<Vector3>& positions)
 
 void Mesh::LoadNormals(const std::vector<Vector3> &normals)
 {
-    if (p_vertexNormalsVBO) delete p_vertexNormalsVBO;
+    if (m_vertexNormalsVBO) delete m_vertexNormalsVBO;
 
-    p_vertexNormalsVBO = new VBO();
-    p_vertexNormalsVBO->Fill((void*)(&normals[0]), normals.size() * sizeof(float) * 3);
+    m_vertexNormalsVBO = new VBO();
+    m_vertexNormalsVBO->Fill((void*)(&normals[0]), normals.size() * sizeof(float) * 3);
 }
 
 void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
 {
-    if (p_vertexUvsVBO) delete p_vertexUvsVBO;
+    if (m_vertexUvsVBO) delete m_vertexUvsVBO;
 
-    p_vertexUvsVBO = new VBO();
-    p_vertexUvsVBO->Fill((void*)(&uvs[0]), uvs.size() * sizeof(float) * 2);
+    m_vertexUvsVBO = new VBO();
+    m_vertexUvsVBO->Fill((void*)(&uvs[0]), uvs.size() * sizeof(float) * 2);
 }
 
 void Mesh::LoadAll(const std::vector<Vector3> &positions,
@@ -84,28 +84,28 @@ void Mesh::LoadAll(const std::vector<Vector3> &positions,
 
 void Mesh::BindPositionsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
 {
-    if (p_vertexPositionsVBO )
+    if (m_vertexPositionsVBO )
     {
         GLint location = sp.GetAttribLocation(nameInShader);
-        p_vao->BindVBO(p_vertexPositionsVBO, location, 3);
+        m_vao->BindVBO(m_vertexPositionsVBO, location, 3);
     }
 }
 
 void Mesh::BindNormalsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
 {
-    if (p_vertexNormalsVBO )
+    if (m_vertexNormalsVBO )
     {
         GLint location = sp.GetAttribLocation(nameInShader);
-        p_vao->BindVBO(p_vertexNormalsVBO, location, 3);
+        m_vao->BindVBO(m_vertexNormalsVBO, location, 3);
     }
 }
 
 void Mesh::BindUvsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
 {
-    if (p_vertexUvsVBO )
+    if (m_vertexUvsVBO )
     {
         GLint location = sp.GetAttribLocation(nameInShader);
-        p_vao->BindVBO(p_vertexUvsVBO, location, 2);
+        m_vao->BindVBO(m_vertexUvsVBO, location, 2);
     }
 }
 
@@ -118,7 +118,7 @@ void Mesh::BindAllVBOsToShaderProgram(const ShaderProgram &sp)
 
 VAO *Mesh::GetVAO() const
 {
-    return p_vao;
+    return m_vao;
 }
 
 int Mesh::GetVertexCount() const

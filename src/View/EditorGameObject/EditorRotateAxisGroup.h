@@ -8,9 +8,9 @@
 class EditorRotateAxisGroup : public EditorGameObject
 {
 private:
-    EditorRotateAxis *p_axisX = nullptr;
-    EditorRotateAxis *p_axisY = nullptr;
-    EditorRotateAxis *p_axisZ = nullptr;
+    EditorRotateAxis *m_axisX = nullptr;
+    EditorRotateAxis *m_axisY = nullptr;
+    EditorRotateAxis *m_axisZ = nullptr;
 
 public:
     EditorRotateAxisGroup(GameObject *attachedGameObject);

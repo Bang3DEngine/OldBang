@@ -19,8 +19,8 @@ class ShaderProgram : public IGLIdable, public IGLBindable,
                       public IToString, public IFileable
 {
 private:
-    Shader *p_vshader;
-    Shader *p_fshader;
+    Shader *m_vshader;
+    Shader *m_fshader;
 
     mutable std::map<std::string, Texture*> m_namesToTextures;
 

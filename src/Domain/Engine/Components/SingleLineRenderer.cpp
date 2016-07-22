@@ -99,7 +99,7 @@ void SingleLineRenderer::Write(std::ostream &f) const
 {
     f << "<SingleLineRenderer>" << std::endl;
     f << ((void*)this) << std::endl;
-    FileWriter::WriteFilepath(p_material->GetFilepath(), f);
+    FileWriter::WriteFilepath(m_material->GetFilepath(), f);
     FileWriter::Write(Vector3(m_points[0].x, m_points[0].y, m_points[0].z), f);
     FileWriter::Write(Vector3(m_points[1].x, m_points[1].y, m_points[1].z), f);
     FileWriter::Write(GetLineWidth(), f);

@@ -18,19 +18,19 @@ class ExplorerDirTree : public QTreeView
     Q_OBJECT
 
 private:
-    QFileSystemModel *p_fileSystemModel = nullptr;
-    Explorer *p_explorer;
+    QFileSystemModel *m_fileSystemModel = nullptr;
+    Explorer *m_explorer;
 
     std::string m_topPath;
     void setDir(const std::string &path);
 
-    void *p_lastSelectedModelIndexPointer = nullptr;
+    void *m_lastSelectedModelIndexPointer = nullptr;
 
 public:
     ExplorerDirTree(QWidget *parent);
     virtual ~ExplorerDirTree();
 
-    QTimer *p_checkSelectionTimer;
+    QTimer *m_checkSelectionTimer;
 
 public slots:
     void CheckSelection();

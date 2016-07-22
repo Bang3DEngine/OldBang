@@ -14,7 +14,7 @@ void Renderer::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     Renderer *r = static_cast<Renderer*>(clone);
     Component::CloneInto(r);
-    r->SetMaterial(p_material);
+    r->SetMaterial(m_material);
     r->SetDrawWireframe(m_drawWireframe);
     r->SetCullMode(m_cullMode);
     r->SetRenderMode(m_renderMode);
@@ -26,7 +26,7 @@ void Renderer::CloneInto(ICloneable *clone) const
 
 Material *Renderer::GetMaterial()
 {
-    return p_material;
+    return m_material;
 }
 
 void Renderer::ActivateGLStatesBeforeRendering() const
@@ -54,13 +54,13 @@ void Renderer::ActivateGLStatesBeforeRendering() const
 
     Scene *scene = Canvas::GetCurrentScene();
     Camera *camera = scene->GetCamera();
-    if (camera  && p_material  && p_material->p_shaderProgram )
+    if (camera  && m_material  && m_material->m_shaderProgram )
     {
         Transform *t = camera->gameObject->transform;
-        p_material->p_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
+        m_material->m_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
                                                     t->GetPosition(), false);
 
-        p_material->p_shaderProgram->SetUniformFloat("B_renderer_receivesLighting",
+        m_material->m_shaderProgram->SetUniformFloat("B_renderer_receivesLighting",
                                                       m_receivesLighting ? 1.0f : 0.0f, false);
     }
 
@@ -74,12 +74,12 @@ void Renderer::OnRender()
 
 void Renderer::Render() const
 {
-    NONULL(p_material); NONULL(p_material->GetShaderProgram());
+    NONULL(m_material); NONULL(m_material->GetShaderProgram());
 
     ActivateGLStatesBeforeRendering();
-    p_material->Bind();
+    m_material->Bind();
     RenderWithoutBindingMaterial();
-    p_material->UnBind();
+    m_material->UnBind();
 }
 
 void Renderer::GetMatrices(Matrix4 &model,
@@ -118,19 +118,19 @@ void Renderer::SetMatricesUniforms(const Matrix4 &model,
                                    const Matrix4 &projection,
                                    const Matrix4 &pvm) const
 {
-    p_material->p_shaderProgram->SetUniformMat4(
+    m_material->m_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Model, model, false);
-    p_material->p_shaderProgram->SetUniformMat4(
+    m_material->m_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);
-    p_material->p_shaderProgram->SetUniformMat4(
+    m_material->m_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_View, view, false);
-    p_material->p_shaderProgram->SetUniformMat4(
+    m_material->m_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_View_Inverse, view.Inversed(), false);
-    p_material->p_shaderProgram->SetUniformMat4(
+    m_material->m_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Projection, projection, false);
-    p_material->p_shaderProgram->SetUniformMat4(
+    m_material->m_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Projection_Inverse, projection.Inversed(), false);
-    p_material->p_shaderProgram->SetUniformMat4(
+    m_material->m_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_PVM, pvm, false);
 }
 

@@ -20,7 +20,7 @@ InspectorWidget::InspectorWidget() : QWidget()
 InspectorWidget::InspectorWidget(IInspectable *relatedInspectable)
     : InspectorWidget()
 {
-    this->p_relatedInspectable = relatedInspectable;
+    this->m_relatedInspectable = relatedInspectable;
 
     ConstructFromWidgetInformation( "Inspectable",
                                     relatedInspectable->GetComponentInfo() );
@@ -32,7 +32,7 @@ InspectorWidget::InspectorWidget(const std::string &title,
                                  std::function<void ()> callback)
     : InspectorWidget()
 {
-    this->p_callback = &callback;
+    this->m_callback = &callback;
     this->ConstructFromWidgetInformation(title, widgetInfo);
 }
 
@@ -47,15 +47,15 @@ void InspectorWidget::ConstructFromWidgetInformation(
     mainLayout->setSpacing(0);
     mainLayout->setContentsMargins(5,5,5,10);
 
-    p_titleLabel = new QLabel( QString::fromStdString( title ) );
-    QFont font = p_titleLabel->font(); font.setBold(true);
-    p_titleLabel->setFont(font); p_titleLabel->show();
+    m_titleLabel = new QLabel( QString::fromStdString( title ) );
+    QFont font = m_titleLabel->font(); font.setBold(true);
+    m_titleLabel->setFont(font); m_titleLabel->show();
 
-    p_titleLayout = new QHBoxLayout();
-    p_titleLayout->setContentsMargins(0,0,0,0);
-    p_titleLayout->addWidget(p_titleLabel, 10);
+    m_titleLayout = new QHBoxLayout();
+    m_titleLayout->setContentsMargins(0,0,0,0);
+    m_titleLayout->addWidget(m_titleLabel, 10);
 
-    mainLayout->addLayout(p_titleLayout);
+    mainLayout->addLayout(m_titleLayout);
 
     // TODO: Improve THIS :(
     for (InspectorSWInfo *si : info->GetSlotInfos())
@@ -115,15 +115,15 @@ void InspectorWidget::ConstructFromWidgetInformation(
 
     if (autoUpdate)
     {
-        p_updateTimer = new QTimer(this); //Every X seconds, update all the slots values
-        connect(p_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
-        p_updateTimer->start(20);
+        m_updateTimer = new QTimer(this); //Every X seconds, update all the slots values
+        connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
+        m_updateTimer->start(20);
     }
 }
 
 InspectorWidget::~InspectorWidget()
 {
-   delete p_updateTimer;
+   delete m_updateTimer;
 }
 
 std::vector<float> InspectorWidget::GetSWVectorFloatValue(
@@ -158,9 +158,9 @@ void InspectorWidget::OnCustomContextMenuRequested(QPoint point)
 
 void InspectorWidget::Refresh()
 {
-    if (p_relatedInspectable )
+    if (m_relatedInspectable )
     {
-        Refresh(p_relatedInspectable->GetComponentInfo());
+        Refresh(m_relatedInspectable->GetComponentInfo());
     }
 }
 
@@ -221,6 +221,6 @@ void InspectorWidget::_OnSlotValueChanged(QString _)
 
 void InspectorWidget::_OnSlotValueChanged()
 {
-    NONULL(p_relatedInspectable);
-    p_relatedInspectable->OnSlotValueChanged(this);
+    NONULL(m_relatedInspectable);
+    m_relatedInspectable->OnSlotValueChanged(this);
 }

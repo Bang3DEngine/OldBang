@@ -1,6 +1,6 @@
 #include "ShaderProgram.h"
 
-ShaderProgram::ShaderProgram() : p_vshader(nullptr), p_fshader(nullptr)
+ShaderProgram::ShaderProgram() : m_vshader(nullptr), m_fshader(nullptr)
 {
     m_idGL = glCreateProgram();
 }
@@ -22,30 +22,30 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::BindVertexShader(Shader *vshader)
 {
-    this->p_vshader = vshader;
+    this->m_vshader = vshader;
 }
 
 void ShaderProgram::BindFragmentShader(Shader *fshader)
 {
-    this->p_fshader = fshader;
+    this->m_fshader = fshader;
 }
 
 bool ShaderProgram::Link()
 {
-    if (!p_vshader)
+    if (!m_vshader)
     {
         Logger_Error("Vertex shader not set. Can't link shader program.");
         return false;
     }
 
-    if (!p_fshader)
+    if (!m_fshader)
     {
         Logger_Error("Fragment shader not set. Can't link shader program.");
         return false;
     }
 
-    glAttachShader(m_idGL, p_vshader->GetGLId());
-    glAttachShader(m_idGL, p_fshader->GetGLId());
+    glAttachShader(m_idGL, m_vshader->GetGLId());
+    glAttachShader(m_idGL, m_fshader->GetGLId());
 
     glLinkProgram(m_idGL);
 
@@ -182,12 +182,12 @@ bool ShaderProgram::SetUniformTexture(const std::string &name, Texture *texture,
 
 Shader *ShaderProgram::GetVertexShader() const
 {
-    return p_vshader;
+    return m_vshader;
 }
 
 Shader *ShaderProgram::GetFragmentShader() const
 {
-    return p_fshader;
+    return m_fshader;
 }
 
 GLint ShaderProgram::GetUniformLocation(const std::string &name) const
@@ -204,8 +204,8 @@ const std::string ShaderProgram::ToString() const
 {
     std::ostringstream oss;
     oss << "Shader program: " << std::endl <<
-           "   " << p_vshader << std::endl <<
-           "   " << p_fshader << std::endl;
+           "   " << m_vshader << std::endl <<
+           "   " << m_fshader << std::endl;
     return oss.str();
 }
 

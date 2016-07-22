@@ -30,7 +30,7 @@ private:
      * @brief Set directly by BehaviourHolder (its a friend class), when
      * adding this Behaviour to itself.
      */
-    BehaviourHolder *p_behaviourHolder = nullptr;
+    BehaviourHolder *m_behaviourHolder = nullptr;
 
 
     void Init(BehaviourHolder *bh);
@@ -41,12 +41,12 @@ private:
  * These variables must be copied from BehaviourHolder
  */
 private:
-    GameObject* p_gameObject = nullptr;
-    Transform*  p_transform  = nullptr;
+    GameObject* m_gameObject = nullptr;
+    Transform*  m_transform  = nullptr;
 
 protected:
-    GameObject* const& gameObject = p_gameObject;
-    Transform*  const& transform  = p_transform;
+    GameObject* const& gameObject = m_gameObject;
+    Transform*  const& transform  = m_transform;
 /**
 */
 

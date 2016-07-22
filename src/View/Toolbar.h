@@ -29,14 +29,14 @@ private:
     bool m_playing = true;
     #endif
 
-    QTimer *p_keyTimer = nullptr;
-    QToolButton *p_buttonTranslateMode = nullptr;
-    QToolButton *p_buttonRotateMode    = nullptr;
-    QToolButton *p_buttonScaleMode     = nullptr;
-    QToolButton *p_buttonGlobalCoords  = nullptr;
-    QToolButton *p_buttonLocalCoords   = nullptr;
-    QToolButton *p_buttonPlay          = nullptr;
-    QToolButton *p_buttonStop         = nullptr;
+    QTimer *m_keyTimer = nullptr;
+    QToolButton *m_buttonTranslateMode = nullptr;
+    QToolButton *m_buttonRotateMode    = nullptr;
+    QToolButton *m_buttonScaleMode     = nullptr;
+    QToolButton *m_buttonGlobalCoords  = nullptr;
+    QToolButton *m_buttonLocalCoords   = nullptr;
+    QToolButton *m_buttonPlay          = nullptr;
+    QToolButton *m_buttonStop         = nullptr;
 
     TransformMode m_currentTransformMode = TransformMode::Translate;
 

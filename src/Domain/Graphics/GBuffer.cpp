@@ -12,14 +12,14 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateColorAttachment(Attachment::Color,         GL_RGBA,    GL_RGBA, texInternalType);
     CreateDepthBufferAttachment();
 
-    p_renderGBufferToScreenMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/RenderGBufferToScreen.bmat");
-    p_planeMeshToRenderEntireScreen = MeshFactory::GetPlane();
+    m_renderGBufferToScreenMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/RenderGBufferToScreen.bmat");
+    m_planeMeshToRenderEntireScreen = MeshFactory::GetPlane();
 }
 
 GBuffer::~GBuffer()
 {
-    if (p_renderGBufferToScreenMaterial) delete p_renderGBufferToScreenMaterial;
-    if (p_planeMeshToRenderEntireScreen) delete p_planeMeshToRenderEntireScreen;
+    if (m_renderGBufferToScreenMaterial) delete m_renderGBufferToScreenMaterial;
+    if (m_planeMeshToRenderEntireScreen) delete m_planeMeshToRenderEntireScreen;
 }
 
 void GBuffer::BindGBufferInTexturesTo(Material *mat) const
@@ -49,7 +49,7 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
 {
     NONULL(mat);
 
-    p_planeMeshToRenderEntireScreen->
+    m_planeMeshToRenderEntireScreen->
             BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                          *(mat->GetShaderProgram()));
 
@@ -67,12 +67,12 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
 
 void GBuffer::RenderScreenPlane() const
 {
-    p_planeMeshToRenderEntireScreen->GetVAO()->Bind();
+    m_planeMeshToRenderEntireScreen->GetVAO()->Bind();
 
     glDepthFunc(GL_LEQUAL); //Overwrite last screen plane!
-    glDrawArrays(GL_TRIANGLES, 0, p_planeMeshToRenderEntireScreen->GetVertexCount());
+    glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());
 
-    p_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
+    m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
 }
 
 void GBuffer::RenderToScreen() const
@@ -80,17 +80,17 @@ void GBuffer::RenderToScreen() const
     // Assumes gbuffer is not bound, hence directly writing to screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    p_planeMeshToRenderEntireScreen->
+    m_planeMeshToRenderEntireScreen->
                 BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
-                                             *(p_renderGBufferToScreenMaterial->GetShaderProgram()));
+                                             *(m_renderGBufferToScreenMaterial->GetShaderProgram()));
 
     TextureRender *colorTex = GetTextureAttachment(GBuffer::Attachment::Color);
-    ShaderProgram *sp =p_renderGBufferToScreenMaterial->GetShaderProgram(); NONULL(sp);
+    ShaderProgram *sp =m_renderGBufferToScreenMaterial->GetShaderProgram(); NONULL(sp);
     sp->SetUniformTexture("B_color_gout_fin", colorTex, false);
 
-    p_renderGBufferToScreenMaterial->Bind();
+    m_renderGBufferToScreenMaterial->Bind();
     RenderScreenPlane();
-    p_renderGBufferToScreenMaterial->UnBind();
+    m_renderGBufferToScreenMaterial->UnBind();
 }
 
 void GBuffer::ClearBuffersAndBackground(const glm::vec4 &backgroundColor, const glm::vec4 &clearValue)

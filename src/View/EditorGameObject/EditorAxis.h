@@ -16,8 +16,8 @@ public:
 
 protected:
 
-    Material *p_material = nullptr;
-    GameObject *p_attachedGameObject = nullptr;
+    Material *m_material = nullptr;
+    GameObject *m_attachedGameObject = nullptr;
 
     /**
      * @brief To know when the user is grabbing the axis with the mouse
@@ -53,7 +53,7 @@ protected:
     virtual Renderer *GetAxisRenderer() const = 0;
 
 public:
-    EditorAxis(EditorAxisDirection dir, GameObject *p_attachedGameObject);
+    EditorAxis(EditorAxisDirection dir, GameObject *m_attachedGameObject);
     virtual ~EditorAxis();
 
     virtual void OnUpdate() override;

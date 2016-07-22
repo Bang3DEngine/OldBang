@@ -8,13 +8,13 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
 {
     SetName("EditorTranslateAxisGroup" + EditorAxis::GetStringFromDir(dir));
 
-    p_line = AddComponent<SingleLineRenderer>();
-    p_line->SetDestiny(m_oAxisDirection);
-    p_line->SetMaterial(p_material);
-    p_line->SetLineWidth(2.0f);
-    p_line->SetReceivesLighting(false);
+    m_line = AddComponent<SingleLineRenderer>();
+    m_line->SetDestiny(m_oAxisDirection);
+    m_line->SetMaterial(m_material);
+    m_line->SetLineWidth(2.0f);
+    m_line->SetReceivesLighting(false);
 
-    p_line->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
+    m_line->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
             glLineWidth(25.0f);
         }
@@ -36,7 +36,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     }
     m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
     m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.15f);
-    m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(p_material);
+    m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(m_material);
     m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
     m_axisCap->SetRenderLayer(5);
 }
@@ -53,7 +53,7 @@ void EditorTranslateAxis::OnUpdate()
 
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->gameObject->transform;
-    GameObject *ago = p_attachedGameObject;
+    GameObject *ago = m_attachedGameObject;
     Vector3 wCamPos = camTransform->GetPosition();
 
     if (m_grabbed)
@@ -95,6 +95,6 @@ void EditorTranslateAxis::OnUpdate()
 
 Renderer *EditorTranslateAxis::GetAxisRenderer() const
 {
-    return p_line;
+    return m_line;
 }
 

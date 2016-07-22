@@ -5,12 +5,12 @@
 EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
                        GameObject *attachedGameObject)
 {
-    this->p_attachedGameObject = attachedGameObject;
+    this->m_attachedGameObject = attachedGameObject;
 
     m_oAxisDirection = EditorAxis::GetVectorFromDir(dir);
 
-    p_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/Line.bmat");
-    p_material = new Material(*p_material);
+    m_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/Line.bmat");
+    m_material = new Material(*m_material);
 
     m_lineColor = m_oAxisDirection.Abs();
 
@@ -19,7 +19,7 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
 
 EditorAxis::~EditorAxis()
 {
-    delete p_material;
+    delete m_material;
 }
 
 std::string EditorAxis::GetStringFromDir(EditorAxis::EditorAxisDirection dir)
@@ -67,23 +67,23 @@ void EditorAxis::OnUpdate()
 
         if (m_grabbed)
         {
-            p_material->SetDiffuseColor(glm::vec4(m_lineColor, 1));
+            m_material->SetDiffuseColor(glm::vec4(m_lineColor, 1));
         }
         else
         {
-            p_material->SetDiffuseColor(glm::vec4(m_lineColor * c_lineColorFadingNotGrabbed, 1));
+            m_material->SetDiffuseColor(glm::vec4(m_lineColor * c_lineColorFadingNotGrabbed, 1));
         }
     }
     else
     {
         if (m_grabbed)
         {
-            p_material->SetDiffuseColor(glm::vec4(m_lineColor, 1));
+            m_material->SetDiffuseColor(glm::vec4(m_lineColor, 1));
         }
         else
         {
             GetAxisRenderer()->SetLineWidth(m_axisLineWidth);
-            p_material->SetDiffuseColor(glm::vec4(m_lineColor * c_lineColorFadingNotHover, 1));
+            m_material->SetDiffuseColor(glm::vec4(m_lineColor * c_lineColorFadingNotHover, 1));
         }
     }
 }

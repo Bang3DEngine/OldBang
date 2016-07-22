@@ -23,7 +23,7 @@ private:
      * @brief Keeps track of the last GameObject the mouse was over.
      * This lets us inform of mouseOut events.
      */
-    GameObject *p_lastMouseOverGO = nullptr;
+    GameObject *m_lastMouseOverGO = nullptr;
 
     std::map<GameObject*, long> m_gameObjectToId;
     std::map<long, GameObject*> m_idToGameObject;

@@ -19,20 +19,20 @@ void TextureRender::CreateEmpty(int width, int height)
 
 void TextureRender::Resize(int width, int height)
 {
-    Fill(p_data, width, height, m_numComponents);
+    Fill(m_data, width, height, m_numComponents);
 }
 
 void TextureRender::Fill(unsigned char *newData, int width, int height, int numComponents)
 {
-    if (this->p_data  && this->p_data != newData)
-        delete this->p_data;
+    if (this->m_data  && this->m_data != newData)
+        delete this->m_data;
 
-    this->p_data = newData;
+    this->m_data = newData;
     this->m_width = width;
     this->m_height = height;
     this->m_numComponents = numComponents;
 
     Bind();
-    glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0, m_format, GL_UNSIGNED_BYTE, p_data);
+    glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0, m_format, GL_UNSIGNED_BYTE, m_data);
     UnBind();
 }

@@ -5,13 +5,13 @@
 EditorTranslateAxisGroup::EditorTranslateAxisGroup(GameObject *attachedGameObject)
     : EditorGameObject("EditorTranslateAxisGroup")
 {
-    p_axisX = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
-    p_axisY = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
-    p_axisZ = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
+    m_axisX = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
+    m_axisY = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
+    m_axisZ = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Z, attachedGameObject);
 
-    p_axisX->SetParent(this);
-    p_axisY->SetParent(this);
-    p_axisZ->SetParent(this);
+    m_axisX->SetParent(this);
+    m_axisY->SetParent(this);
+    m_axisZ->SetParent(this);
 }
 
 EditorTranslateAxisGroup::~EditorTranslateAxisGroup()

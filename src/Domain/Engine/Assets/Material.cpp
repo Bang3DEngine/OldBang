@@ -17,19 +17,19 @@ Material::~Material()
 
 void Material::Bind() const
 {
-    if (p_shaderProgram )
+    if (m_shaderProgram )
     {
-        p_shaderProgram->Bind();
-        p_shaderProgram->SetUniformVec4(ShaderContract::Uniform_Material_Diffuse_Color,
+        m_shaderProgram->Bind();
+        m_shaderProgram->SetUniformVec4(ShaderContract::Uniform_Material_Diffuse_Color,
                                         m_diffuseColor, false);
     }
 }
 
 void Material::UnBind() const
 {
-    if (p_shaderProgram)
+    if (m_shaderProgram)
     {
-        p_shaderProgram->UnBind();
+        m_shaderProgram->UnBind();
     }
 }
 
@@ -37,16 +37,16 @@ void Material::Write(std::ostream &f) const
 {
     FileWriter::Write("<Material>", f);
     std::string vsFile =  "", fsFile = "";
-    if (this->p_shaderProgram)
+    if (this->m_shaderProgram)
     {
-        if (this->p_shaderProgram->GetVertexShader())
+        if (this->m_shaderProgram->GetVertexShader())
         {
-            vsFile = this->p_shaderProgram->GetVertexShader()->GetFilepath();
+            vsFile = this->m_shaderProgram->GetVertexShader()->GetFilepath();
         }
 
-        if (this->p_shaderProgram->GetFragmentShader())
+        if (this->m_shaderProgram->GetFragmentShader())
         {
-            fsFile = this->p_shaderProgram->GetFragmentShader()->GetFilepath();
+            fsFile = this->m_shaderProgram->GetFragmentShader()->GetFilepath();
         }
     }
     FileWriter::Write(vsFile, f);
@@ -69,7 +69,7 @@ void Material::Read(std::istream &f)
     {
         std::string texAssetFilepath = FileReader::ReadString(f);
         Texture2D *texture = AssetsManager::GetAsset<Texture2D>(texAssetFilepath);
-        p_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
+        m_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
     }
 
     glm::vec4 diffColor = FileReader::ReadVec4(f);
@@ -78,7 +78,7 @@ void Material::Read(std::istream &f)
 
 void Material::SetShaderProgram(ShaderProgram *program)
 {
-    p_shaderProgram = program;
+    m_shaderProgram = program;
 }
 
 void Material::SetTexture(Texture2D *texture)
@@ -86,7 +86,7 @@ void Material::SetTexture(Texture2D *texture)
     m_texture = texture;
     if(m_texture)
     {
-        p_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
+        m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
     }
 }
 
@@ -97,7 +97,7 @@ void Material::SetDiffuseColor(const glm::vec4 &diffuseColor)
 
 ShaderProgram *Material::GetShaderProgram() const
 {
-    return p_shaderProgram;
+    return m_shaderProgram;
 }
 
 const Texture *Material::GetTexture() const

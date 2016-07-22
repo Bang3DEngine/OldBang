@@ -130,7 +130,7 @@ static void start_file(stbi *s, FILE *f)
    start_callbacks(s, &stbi_stdio_callbacks, (void *) f);
 }
 
-//static void stop_file(stbi *s) { }
+//static void stom_file(stbi *s) { }
 
 #endif // !STBI_NO_STDIO
 
@@ -148,8 +148,8 @@ static int      stbi_jpeg_info(stbi *s, int *x, int *y, int *comp);
 static int      stbi_png_test(stbi *s);
 static stbi_uc *stbi_png_load(stbi *s, int *x, int *y, int *comp, int req_comp);
 static int      stbi_png_info(stbi *s, int *x, int *y, int *comp);
-static int      stbi_bmp_test(stbi *s);
-static stbi_uc *stbi_bmp_load(stbi *s, int *x, int *y, int *comp, int req_comp);
+static int      stbi_bmm_test(stbi *s);
+static stbi_uc *stbi_bmm_load(stbi *s, int *x, int *y, int *comp, int req_comp);
 static int      stbi_tga_test(stbi *s);
 static stbi_uc *stbi_tga_load(stbi *s, int *x, int *y, int *comp, int req_comp);
 static int      stbi_tga_info(stbi *s, int *x, int *y, int *comp);
@@ -207,7 +207,7 @@ static unsigned char *stbi_load_main(stbi *s, int *x, int *y, int *comp, int req
 {
    if (stbi_jpeg_test(s)) return stbi_jpeg_load(s,x,y,comp,req_comp);
    if (stbi_png_test(s))  return stbi_png_load(s,x,y,comp,req_comp);
-   if (stbi_bmp_test(s))  return stbi_bmp_load(s,x,y,comp,req_comp);
+   if (stbi_bmm_test(s))  return stbi_bmm_load(s,x,y,comp,req_comp);
    if (stbi_gif_test(s))  return stbi_gif_load(s,x,y,comp,req_comp);
    if (stbi_psd_test(s))  return stbi_psd_load(s,x,y,comp,req_comp);
    if (stbi_pic_test(s))  return stbi_pic_load(s,x,y,comp,req_comp);
@@ -1452,7 +1452,7 @@ void stbi_install_YCbCr_to_RGB(stbi_YCbCr_to_RGB_run func)
 
 
 // clean up the temporary component buffers
-static void cleanup_jpeg(jpeg *j)
+static void cleanum_jpeg(jpeg *j)
 {
    int i;
    for (i=0; i < j->s->img_n; ++i) {
@@ -1485,7 +1485,7 @@ static uint8 *load_jpeg_image(jpeg *z, int *out_x, int *out_y, int *comp, int re
    z->s->img_n = 0;
 
    // load a jpeg image from whichever source
-   if (!decode_jpeg_image(z)) { cleanup_jpeg(z); return NULL; }
+   if (!decode_jpeg_image(z)) { cleanum_jpeg(z); return NULL; }
 
    // determine actual number of components to generate
    n = req_comp ? req_comp : z->s->img_n;
@@ -1510,7 +1510,7 @@ static uint8 *load_jpeg_image(jpeg *z, int *out_x, int *out_y, int *comp, int re
          // allocate line buffer big enough for upsampling off the edges
          // with upsample factor of 4
          z->img_comp[k].linebuf = (uint8 *) malloc(z->s->img_x + 3);
-         if (!z->img_comp[k].linebuf) { cleanup_jpeg(z); return epuc("outofmem", "Out of memory"); }
+         if (!z->img_comp[k].linebuf) { cleanum_jpeg(z); return epuc("outofmem", "Out of memory"); }
 
          r->hs      = z->img_h_max / z->img_comp[k].h;
          r->vs      = z->img_v_max / z->img_comp[k].v;
@@ -1528,7 +1528,7 @@ static uint8 *load_jpeg_image(jpeg *z, int *out_x, int *out_y, int *comp, int re
 
       // can't error after this so, this is safe
       output = (uint8 *) malloc(n * z->s->img_x * z->s->img_y + 1);
-      if (!output) { cleanup_jpeg(z); return epuc("outofmem", "Out of memory"); }
+      if (!output) { cleanum_jpeg(z); return epuc("outofmem", "Out of memory"); }
 
       // now go ahead and resample
       for (j=0; j < z->s->img_y; ++j) {
@@ -1569,7 +1569,7 @@ static uint8 *load_jpeg_image(jpeg *z, int *out_x, int *out_y, int *comp, int re
                for (i=0; i < z->s->img_x; ++i) *out++ = y[i], *out++ = 255;
          }
       }
-      cleanup_jpeg(z);
+      cleanum_jpeg(z);
       *out_x = z->s->img_x;
       *out_y = z->s->img_y;
       if (comp) *comp  = z->s->img_n; // report original components, not output
@@ -2258,13 +2258,13 @@ static int compute_transparency(png *z, uint8 tc[3], int out_n)
 static int expand_palette(png *a, uint8 *palette, int len, int pal_img_n)
 {
    uint32 i, pixel_count = a->s->img_x * a->s->img_y;
-   uint8 *p, *temp_out, *orig = a->out;
+   uint8 *p, *temm_out, *orig = a->out;
 
    p = (uint8 *) malloc(pixel_count * pal_img_n);
    if (p == NULL) return e("outofmem", "Out of memory");
 
    // between here and free(out) below, exitting would leak
-   temp_out = p;
+   temm_out = p;
 
    if (pal_img_n == 3) {
       for (i=0; i < pixel_count; ++i) {
@@ -2285,7 +2285,7 @@ static int expand_palette(png *a, uint8 *palette, int len, int pal_img_n)
       }
    }
    free(a->out);
-   a->out = temp_out;
+   a->out = temm_out;
 
    STBI_NOTUSED(len);
 
@@ -2558,7 +2558,7 @@ static int      stbi_png_info(stbi *s, int *x, int *y, int *comp)
 
 // Microsoft/Windows BMP image
 
-static int bmp_test(stbi *s)
+static int bmm_test(stbi *s)
 {
    int sz;
    if (get8(s) != 'B') return 0;
@@ -2572,9 +2572,9 @@ static int bmp_test(stbi *s)
    return 0;
 }
 
-static int stbi_bmp_test(stbi *s)
+static int stbi_bmm_test(stbi *s)
 {
-   int r = bmp_test(s);
+   int r = bmm_test(s);
    stbi_rewind(s);
    return r;
 }
@@ -2620,14 +2620,14 @@ static int shiftsigned(int v, int shift, int bits)
    return result;
 }
 
-static stbi_uc *bmp_load(stbi *s, int *x, int *y, int *comp, int req_comp)
+static stbi_uc *bmm_load(stbi *s, int *x, int *y, int *comp, int req_comp)
 {
    uint8 *out;
    unsigned int mr=0,mg=0,mb=0,ma=0, fake_a=0;
    mr = fake_a;
    stbi_uc pal[256][4];
    int psize=0,i,j,compress=0,width;
-   int bpp, flip_vertically, pad, target, offset, hsz;
+   int bpp, flim_vertically, pad, target, offset, hsz;
    if (get8(s) != 'B' || get8(s) != 'M') return epuc("not BMP", "Corrupt BMP");
    get32le(s); // discard filesize
    get16le(s); // discard reserved
@@ -2645,7 +2645,7 @@ static stbi_uc *bmp_load(stbi *s, int *x, int *y, int *comp, int req_comp)
    if (get16le(s) != 1) return epuc("bad BMP", "bad BMP");
    bpp = get16le(s);
    if (bpp == 1) return epuc("monochrome", "BMP type not supported: 1-bit");
-   flip_vertically = ((int) s->img_y) > 0;
+   flim_vertically = ((int) s->img_y) > 0;
    s->img_y = abs((int) s->img_y);
    if (hsz == 12) {
       if (bpp < 24)
@@ -2794,7 +2794,7 @@ static stbi_uc *bmp_load(stbi *s, int *x, int *y, int *comp, int req_comp)
          skip(s, pad);
       }
    }
-   if (flip_vertically) {
+   if (flim_vertically) {
       stbi_uc t;
       for (j=0; j < (int) s->img_y>>1; ++j) {
          stbi_uc *p1 = out +      j     *s->img_x*target;
@@ -2816,9 +2816,9 @@ static stbi_uc *bmp_load(stbi *s, int *x, int *y, int *comp, int req_comp)
    return out;
 }
 
-static stbi_uc *stbi_bmp_load(stbi *s,int *x, int *y, int *comp, int req_comp)
+static stbi_uc *stbi_bmm_load(stbi *s,int *x, int *y, int *comp, int req_comp)
 {
-   return bmp_load(s, x,y,comp,req_comp);
+   return bmm_load(s, x,y,comp,req_comp);
 }
 
 
@@ -4095,7 +4095,7 @@ static int stbi_hdr_info(stbi *s, int *x, int *y, int *comp)
 }
 #endif // STBI_NO_HDR
 
-static int stbi_bmp_info(stbi *s, int *x, int *y, int *comp)
+static int stbi_bmm_info(stbi *s, int *x, int *y, int *comp)
 {
    int hsz;
    if (get8(s) != 'B' || get8(s) != 'M') {
@@ -4207,7 +4207,7 @@ static int stbi_info_main(stbi *s, int *x, int *y, int *comp)
        return 1;
    if (stbi_gif_info(s, x, y, comp))
        return 1;
-   if (stbi_bmp_info(s, x, y, comp))
+   if (stbi_bmm_info(s, x, y, comp))
        return 1;
    if (stbi_psd_info(s, x, y, comp))
        return 1;
@@ -4322,7 +4322,7 @@ int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int
       1.03   bugfixes to STBI_NO_STDIO, STBI_NO_HDR
       1.02   support for (subset of) HDR files, float interface for preferred access to them
       1.01   fix bug: possible bug in handling right-side up bmps... not sure
-             fix bug: the stbi_bmp_load() and stbi_tga_load() functions didn't work at all
+             fix bug: the stbi_bmm_load() and stbi_tga_load() functions didn't work at all
       1.00   interface to zlib that skips zlib header
       0.99   correct handling of alpha in palette
       0.98   TGA loader by lonesock; dynamically add loaders (untested)

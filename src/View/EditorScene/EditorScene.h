@@ -11,12 +11,12 @@
 class EditorScene : public Scene
 {
 private:
-    EditorDebugGameObject *p_debugGameObject = nullptr;
-    EditorCamera *p_cameraGameObject = nullptr;
-    EditorTranslateAxisGroup *p_axises = nullptr;
-    EditorFloor *p_floor = nullptr;
+    EditorDebugGameObject *m_debugGameObject = nullptr;
+    EditorCamera *m_cameraGameObject = nullptr;
+    EditorTranslateAxisGroup *m_axises = nullptr;
+    EditorFloor *m_floor = nullptr;
 
-    SelectionFramebuffer *p_selectionFramebuffer = nullptr;
+    SelectionFramebuffer *m_selectionFramebuffer = nullptr;
 
 public:
     EditorScene();

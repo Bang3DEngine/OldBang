@@ -22,12 +22,12 @@ private:
     /**
      * @brief The dynamically loaded Behaviour
      */
-    Behaviour *p_behaviour = nullptr;
+    Behaviour *m_behaviour = nullptr;
 
     /**
      * @brief The currently open library to load the Behaviour, if any.
      */
-    void *p_currentOpenLibrary = nullptr;
+    void *m_currentOpenLibrary = nullptr;
 
     /**
      * @brief Path to the Behaviour source file.

@@ -18,9 +18,9 @@
 class EditorTranslateAxisGroup : public EditorGameObject
 {
 private:
-    EditorTranslateAxis *p_axisX;
-    EditorTranslateAxis *p_axisY;
-    EditorTranslateAxis *p_axisZ;
+    EditorTranslateAxis *m_axisX;
+    EditorTranslateAxis *m_axisY;
+    EditorTranslateAxis *m_axisZ;
 
 public:
     EditorTranslateAxisGroup(GameObject *attachedGameObject);

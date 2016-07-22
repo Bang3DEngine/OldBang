@@ -12,13 +12,13 @@ InspectorButtonSW::InspectorButtonSW(const std::string &label,
 
     this->m_onClickFunction = onClickFunction;
 
-    p_button = new QPushButton(QString::fromStdString(label));
-    connect(p_button, SIGNAL(clicked(bool)),
+    m_button = new QPushButton(QString::fromStdString(label));
+    connect(m_button, SIGNAL(clicked(bool)),
             this, SLOT(OnButtonClicked(bool)));
-    p_button->setContentsMargins(0,0,0,0);
-    p_button->show();
+    m_button->setContentsMargins(0,0,0,0);
+    m_button->show();
 
-    layout->addWidget(p_button);
+    layout->addWidget(m_button);
 
     this->setContentsMargins(0,0,0,0);
     this->show();

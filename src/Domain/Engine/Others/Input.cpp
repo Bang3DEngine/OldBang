@@ -57,7 +57,7 @@ void Input::OnNewFrame()
     {
         //For the case of mouse movement locking, this
         //avoids a bug of axisX/Y getting stuck when mouse
-        //does: lock/moving/stop_moving => axisX/Y think mouse is still moving
+        //does: lock/moving/stom_moving => axisX/Y think mouse is still moving
         m_lastMouseCoords = m_mouseCoords;
     }
     ++m_framesMouseStopped;

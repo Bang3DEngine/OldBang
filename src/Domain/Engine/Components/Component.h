@@ -39,8 +39,8 @@ protected:
 
 public:
 
-    GameObject *p_gameObject = nullptr;
-    GameObject* const& gameObject = p_gameObject;
+    GameObject *m_gameObject = nullptr;
+    GameObject* const& gameObject = m_gameObject;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override = 0;

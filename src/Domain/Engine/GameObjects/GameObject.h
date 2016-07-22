@@ -57,8 +57,8 @@ protected:
     std::string m_name = "";
     std::list<Component*> m_comps;
     std::list<GameObject*> m_children;
-    Transform* p_transform = nullptr;
-    GameObject* p_parent = nullptr;
+    Transform* m_transform = nullptr;
+    GameObject* m_parent = nullptr;
 
     /**
      * @brief A RenderLayer is the order in which gameObjects will
@@ -73,8 +73,8 @@ protected:
 
 public:
     std::string const& name   = m_name;
-    GameObject* const& parent = p_parent;
-    Transform* const& transform = p_transform;
+    GameObject* const& parent = m_parent;
+    Transform* const& transform = m_transform;
 
     GameObject();
     GameObject(const std::string &m_name);

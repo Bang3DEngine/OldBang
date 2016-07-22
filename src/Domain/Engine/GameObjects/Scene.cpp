@@ -10,32 +10,32 @@ Scene::Scene() : GameObject("Scene")
     test->AddComponent<DirectionalLight>();
     test->SetParent(this);
 
-    p_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
+    m_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)
 {
-    p_gbuffer->Resize(newWidth, newHeight);
+    m_gbuffer->Resize(newWidth, newHeight);
 }
 
 Scene::~Scene()
 {
     this->_OnDestroy();
     delete m_defaultCamera;
-    delete p_gbuffer;
+    delete m_gbuffer;
 }
 
 void Scene::_OnRender()
 {
-    Camera *cam = p_cameraGameObject->GetComponent<Camera>();
+    Camera *cam = m_cameraGameObject->GetComponent<Camera>();
     if (cam  && cam->GetAutoUpdateAspectRatio())
     {
-        cam->SetAspectRatio( p_canvas->GetAspectRatio() );
+        cam->SetAspectRatio( m_canvas->GetAspectRatio() );
     }
 
-    p_gbuffer->Bind();
-    p_gbuffer->ClearBuffersAndBackground(glm::vec4(0.9f,0.9f,0.9f,1));
-    p_gbuffer->SetAllDrawBuffers();
+    m_gbuffer->Bind();
+    m_gbuffer->ClearBuffersAndBackground(glm::vec4(0.9f,0.9f,0.9f,1));
+    m_gbuffer->SetAllDrawBuffers();
 
     //From 0 to 9
     for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
@@ -51,40 +51,40 @@ void Scene::_OnRender()
     {
         if (CAN_USE_COMPONENT(light))
         {
-            light->ApplyLight(p_gbuffer);
+            light->ApplyLight(m_gbuffer);
         }
     }
 
-    p_gbuffer->UnBind();
-    p_gbuffer->RenderToScreen();
+    m_gbuffer->UnBind();
+    m_gbuffer->RenderToScreen();
 }
 
 void Scene::SetCamera(const Camera *cam)
 {
     if (!cam)
     {
-        this->p_cameraGameObject = nullptr;
+        this->m_cameraGameObject = nullptr;
         SetCamera(m_defaultCamera->GetComponent<Camera>());
     }
     else
     {
-        this->p_cameraGameObject = cam->gameObject;
+        this->m_cameraGameObject = cam->gameObject;
     }
 }
 
 Camera *Scene::GetCamera() const
 {
-    if (!p_cameraGameObject)
+    if (!m_cameraGameObject)
     {
         return nullptr;
     }
 
-    return p_cameraGameObject->GetComponent<Camera>();
+    return m_cameraGameObject->GetComponent<Camera>();
 }
 
 const Canvas *Scene::GetCanvas() const
 {
-    return p_canvas;
+    return m_canvas;
 }
 
 bool Scene::IsScene() const

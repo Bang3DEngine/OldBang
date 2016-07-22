@@ -12,7 +12,7 @@
 
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 {
-    p_wem = WindowEventManager::GetInstance();
+    m_wem = WindowEventManager::GetInstance();
 
     WindowMain *w = WindowMain::GetInstance();
 
@@ -98,7 +98,7 @@ QMessageBox::StandardButton MenuBar::AskForSavingCurrentScene() const
 
 void MenuBar::OnNewScene() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::NewScene);
+    m_wem->NotifyMenuBarActionClicked(Action::NewScene);
 
     if (AskForSavingCurrentScene() == QMessageBox::Cancel) return;
     CreateNewScene();
@@ -108,7 +108,7 @@ void MenuBar::OnOpenScene() const
 {
     if (AskForSavingCurrentScene() == QMessageBox::Cancel) return;
 
-    p_wem->NotifyMenuBarActionClicked(Action::OpenScene);
+    m_wem->NotifyMenuBarActionClicked(Action::OpenScene);
 
     FileDialog fd("Open scene...", Scene::GetFileExtension());
     std::string filename = fd.GetOpenFilename();
@@ -131,7 +131,7 @@ void MenuBar::OnOpenScene() const
 
 void MenuBar::OnSaveScene() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::SaveScene);
+    m_wem->NotifyMenuBarActionClicked(Action::SaveScene);
 
     std::string filename = Persistence::GetCurrentSceneFilepath();
     if ( filename == "" ) //Give the scene a name
@@ -147,7 +147,7 @@ void MenuBar::OnSaveScene() const
 
 void MenuBar::OnSaveSceneAs() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::SaveSceneAs);
+    m_wem->NotifyMenuBarActionClicked(Action::SaveSceneAs);
 
     Scene *scene = Canvas::GetInstance()->GetCurrentScene(); NONULL(scene);
 
@@ -173,11 +173,11 @@ void MenuBar::OnBuildAndRun() const
 
 void MenuBar::OnCreateEmptyGameObject() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::CreateEmptyGameObject);
+    m_wem->NotifyMenuBarActionClicked(Action::CreateEmptyGameObject);
 }
 void MenuBar::OnCreateFromPrefab() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
+    m_wem->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
 
     FileDialog fd("Create from prefab...", Prefab::GetFileExtensionStatic());
     std::string filename = fd.GetOpenFilename();
@@ -249,47 +249,47 @@ void MenuBar::OnCreateCone() const
 
 void MenuBar::OnCreatePrefab() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::CreatePrefab);
+    m_wem->NotifyMenuBarActionClicked(Action::CreatePrefab);
 }
 void MenuBar::OnCreateMaterial() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::CreateMaterial);
+    m_wem->NotifyMenuBarActionClicked(Action::CreateMaterial);
 }
 void MenuBar::OnCreateMesh() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::CreateMesh);
+    m_wem->NotifyMenuBarActionClicked(Action::CreateMesh);
 }
 void MenuBar::OnCreateShaderProgram() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::CreateShaderProgram);
+    m_wem->NotifyMenuBarActionClicked(Action::CreateShaderProgram);
 }
 void MenuBar::OnCreateTexture2D() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::CreateTexture2D);
+    m_wem->NotifyMenuBarActionClicked(Action::CreateTexture2D);
 }
 
 
 void MenuBar::OnAddComponentBehaviour() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::AddComponentBehaviour);
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentBehaviour);
 }
 void MenuBar::OnAddComponentCamera() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::AddComponentCamera);
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentCamera);
 }
 void MenuBar::OnAddComponentTransform() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::AddComponentTransform);
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentTransform);
 }
 void MenuBar::OnAddComponentMeshRenderer() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::AddComponentMeshRenderer);
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentMeshRenderer);
 }
 void MenuBar::OnAddComponentSingleLineRenderer() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::AddComponenSingleLineRenderer);
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponenSingleLineRenderer);
 }
 void MenuBar::OnAddComponentCircleRenderer() const
 {
-    p_wem->NotifyMenuBarActionClicked(Action::AddComponentCircleRenderer);
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentCircleRenderer);
 }

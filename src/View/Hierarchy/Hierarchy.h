@@ -35,8 +35,8 @@ private:
     mutable std::map<GameObject*, QTreeWidgetItem*> m_gameObjectToTreeItem;
     mutable std::map<QTreeWidgetItem*,GameObject*> m_treeItemToGameObject;
 
-    QTreeWidgetItem *p_lastSelectedItem = nullptr;
-    Scene *p_currentScene = nullptr;
+    QTreeWidgetItem *m_lastSelectedItem = nullptr;
+    Scene *m_currentScene = nullptr;
 
     void ExpandRecursiveUpwards(QTreeWidgetItem *item);
     QTreeWidgetItem* FillDownwards(GameObject *e);

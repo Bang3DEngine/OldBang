@@ -23,8 +23,8 @@ class LineRenderer : public Renderer
 protected:
     std::vector<Vector3> m_points;
 
-    VBO *p_vbo = nullptr;
-    VAO *p_vao = nullptr;
+    VBO *m_vbo = nullptr;
+    VAO *m_vao = nullptr;
 
     RenderMode m_drawLinesMode = RenderMode::Lines;
 

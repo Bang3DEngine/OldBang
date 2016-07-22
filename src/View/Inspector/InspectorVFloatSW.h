@@ -13,7 +13,7 @@ class InspectorVFloatSW : public InspectorSW //Slot for a vector of size N
 
         InspectorVFloatSW(const std::string &labelString,
                               std::vector<float> initialValues,
-                              InspectorWidget *p_parent);
+                              InspectorWidget *m_parent);
 
         virtual void SetValue(const std::vector<float> &v);
         virtual std::vector<float> GetValue();

@@ -24,8 +24,8 @@ public:
 
 private:
 
-    Material *p_renderGBufferToScreenMaterial;
-    Mesh *p_planeMeshToRenderEntireScreen;
+    Material *m_renderGBufferToScreenMaterial;
+    Mesh *m_planeMeshToRenderEntireScreen;
 
     void RenderScreenPlane() const;
 

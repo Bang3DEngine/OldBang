@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QLayout>
 
-GameWindow *GameWindow::s_p_win = nullptr;
+GameWindow *GameWindow::s_m_win = nullptr;
 
 GameWindow::GameWindow(QMainWindow *window)
 {
@@ -19,24 +19,24 @@ GameWindow::GameWindow(QMainWindow *window)
 
 void GameWindow::SetupUI()
 {
-    canvas = new Canvas(GameWindow::GetInstance()->p_mainWindow);
+    canvas = new Canvas(GameWindow::GetInstance()->m_mainWindow);
     canvas->setMouseTracking(true);
     canvas->setFocusPolicy(Qt::StrongFocus);
 
-    GameWindow::GetInstance()->p_mainWindow->setCentralWidget(canvas);
+    GameWindow::GetInstance()->m_mainWindow->setCentralWidget(canvas);
 }
 
 
 void GameWindow::InitFromMainBinary(QMainWindow *window, QApplication *application)
 {
-    GameWindow::s_p_win = new GameWindow(window);
-    SingletonManager::GetInstance()->SetWindowMainSingleton(GameWindow::s_p_win);
+    GameWindow::s_m_win = new GameWindow(window);
+    SingletonManager::GetInstance()->SetWindowMainSingleton(GameWindow::s_m_win);
 
-    GameWindow::s_p_win->p_mainWindow = window;
-    GameWindow::s_p_win->SetupUI();
-    GameWindow::s_p_win->p_mainWindow->showMaximized();
+    GameWindow::s_m_win->m_mainWindow = window;
+    GameWindow::s_m_win->SetupUI();
+    GameWindow::s_m_win->m_mainWindow->showMaximized();
 
-    GameWindow::s_p_win->p_app = application;
+    GameWindow::s_m_win->m_app = application;
 }
 
 GameWindow *GameWindow::GetInstance()
@@ -46,10 +46,10 @@ GameWindow *GameWindow::GetInstance()
 
 QMainWindow *GameWindow::GetMainWindow() const
 {
-    return GameWindow::GetInstance()->p_mainWindow;
+    return GameWindow::GetInstance()->m_mainWindow;
 }
 
 QApplication *GameWindow::GetApplication() const
 {
-    return GameWindow::GetInstance()->p_app;
+    return GameWindow::GetInstance()->m_app;
 }

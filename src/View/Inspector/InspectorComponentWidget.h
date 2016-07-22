@@ -11,8 +11,8 @@ class InspectorComponentWidget : public InspectorWidget
     Q_OBJECT
 
 private:
-    Component *p_relatedComponent;
-    QCheckBox *p_IsEnabledCheckbox;
+    Component *m_relatedComponent;
+    QCheckBox *m_IsEnabledCheckbox;
 
 public:
     explicit InspectorComponentWidget(Component *relatedComponent);

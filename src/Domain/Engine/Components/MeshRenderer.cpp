@@ -34,20 +34,20 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::SetMaterial(Material *m)
 {
-    p_material = m;
-    if (m_mesh  && p_material  &&
-       p_material->GetShaderProgram() )
+    m_material = m;
+    if (m_mesh  && m_material  &&
+       m_material->GetShaderProgram() )
     {
-        m_mesh->BindAllVBOsToShaderProgram(*(p_material->GetShaderProgram()));
+        m_mesh->BindAllVBOsToShaderProgram(*(m_material->GetShaderProgram()));
     }
 }
 
 void MeshRenderer::SetMesh(Mesh *m)
 {
     m_mesh = m;
-    NONULL(m_mesh); NONULL(p_material); NONULL(p_material->GetShaderProgram());
+    NONULL(m_mesh); NONULL(m_material); NONULL(m_material->GetShaderProgram());
 
-    m_mesh->BindAllVBOsToShaderProgram(*(p_material->GetShaderProgram()));
+    m_mesh->BindAllVBOsToShaderProgram(*(m_material->GetShaderProgram()));
     if (m_mesh->GetFilepath().length() > 0)
     {
         SetRenderMode(m_mesh->IsATrianglesModel() ?
@@ -77,7 +77,7 @@ const std::string MeshRenderer::ToString() const
     std::ostringstream oss;
     oss << "MeshRenderer: [" << std::endl <<
            "   " << m_mesh << std::endl <<
-           "   " << p_material << std::endl <<
+           "   " << m_material << std::endl <<
            "]";
     return oss.str();
 }
@@ -107,15 +107,15 @@ InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
     matInfo  = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0));
     meshInfo = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1));
 
-    if (p_material )
+    if (m_material )
     {
-        if (p_material->GetFilepath() != "")
+        if (m_material->GetFilepath() != "")
         {
-            matInfo->filepath = p_material->GetFilepath();
+            matInfo->filepath = m_material->GetFilepath();
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            Logger_GetString(matInfo->filepath, (void*)p_material);
+            Logger_GetString(matInfo->filepath, (void*)m_material);
         }
     }
     else
@@ -167,7 +167,7 @@ void MeshRenderer::Write(std::ostream &f) const
     f << "<MeshRenderer>" << std::endl;
     f << ((void*)this) << std::endl;
     FileWriter::WriteFilepath(m_mesh->GetFilepath(), f);
-    FileWriter::WriteFilepath(p_material->GetFilepath(), f);
+    FileWriter::WriteFilepath(m_material->GetFilepath(), f);
     f << "</MeshRenderer>" << std::endl;
 }
 

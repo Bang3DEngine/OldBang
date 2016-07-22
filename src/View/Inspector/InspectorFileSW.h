@@ -20,13 +20,13 @@ class InspectorFileSW : public InspectorSW
 private:
     std::string m_fileExtension;
     std::string m_assetPath;
-    QLineEdit *p_filepathLineEdit;
+    QLineEdit *m_filepathLineEdit;
 
 public:
     InspectorFileSW(const std::string &labelString,
                     const std::string &assetPath,
                     const std::string &fileExtension,
-                    InspectorWidget *p_parent);
+                    InspectorWidget *m_parent);
 
     virtual void SetValue(const std::string &assetPath);
     virtual std::string GetValue();

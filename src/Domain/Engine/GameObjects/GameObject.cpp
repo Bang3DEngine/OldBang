@@ -71,22 +71,22 @@ GameObject::~GameObject()
 
 void GameObject::SetParent(GameObject *newParent)
 {
-    if (p_parent != newParent)
+    if (m_parent != newParent)
     {
-        if (p_parent)
+        if (m_parent)
         {
-            p_parent->m_children.remove(this);
+            m_parent->m_children.remove(this);
 
             #ifdef BANG_EDITOR
             WindowEventManager::NotifyChildRemoved(this);
             #endif
         }
 
-        p_parent = newParent;
+        m_parent = newParent;
 
-        if (p_parent)
+        if (m_parent)
         {
-            p_parent->m_children.push_back(this);
+            m_parent->m_children.push_back(this);
 
             #ifdef BANG_EDITOR
             WindowEventManager::NotifyChildAdded(this);
@@ -99,13 +99,13 @@ void GameObject::SetParent(GameObject *newParent)
 Scene *GameObject::GetScene()
 {
     if (IsScene()) { return (Scene*) this; }
-    if (p_parent) return p_parent->GetScene();
+    if (m_parent) return m_parent->GetScene();
     return nullptr;
 }
 
 GameObject *GameObject::GetParent() const
 {
-    return p_parent;
+    return m_parent;
 }
 
 const std::string GameObject::GetName() const { return m_name; }
@@ -196,10 +196,10 @@ void GameObject::AddComponent(Component *c)
             return;
         }
 
-        p_transform = t;
+        m_transform = t;
     }
 
-    c->p_gameObject = this;
+    c->m_gameObject = this;
     m_comps.push_back(c);
     c->_OnStart();
 }
@@ -234,7 +234,7 @@ void GameObject::RemoveComponent(Component *c)
     Transform *t = dynamic_cast<Transform*>(c);
     if (t)
     {
-        p_transform = nullptr;
+        m_transform = nullptr;
     }
 }
 
@@ -358,7 +358,7 @@ void GameObject::Read(std::istream &f)
 void GameObject::SetEnabled(bool enabled) { this->m_enabled = enabled; }
 bool GameObject::IsEnabled()
 {
-    return m_enabled && (!p_parent ? true : p_parent->IsEnabled());
+    return m_enabled && (!m_parent ? true : m_parent->IsEnabled());
 }
 
 

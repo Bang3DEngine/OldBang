@@ -11,7 +11,7 @@ class InspectorSW : public QWidget
 
 protected:
     std::string m_label = "";
-    InspectorWidget *p_parent = nullptr;
+    InspectorWidget *m_parent = nullptr;
 
     InspectorSW(const std::string &label, InspectorWidget *parent);
 };

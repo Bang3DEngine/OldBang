@@ -32,10 +32,10 @@ private:
     Box m_bBox;
     Sphere m_bSphere;
 
-    VAO *p_vao = nullptr;
-    VBO *p_vertexPositionsVBO = nullptr;
-    VBO *p_vertexNormalsVBO = nullptr;
-    VBO *p_vertexUvsVBO = nullptr;
+    VAO *m_vao = nullptr;
+    VBO *m_vertexPositionsVBO = nullptr;
+    VBO *m_vertexNormalsVBO = nullptr;
+    VBO *m_vertexUvsVBO = nullptr;
     int m_vertexCount = 0;
 
     bool m_trisModel = false;

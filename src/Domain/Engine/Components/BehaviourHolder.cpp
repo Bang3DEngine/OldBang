@@ -15,25 +15,25 @@ BehaviourHolder::BehaviourHolder()
 
 BehaviourHolder::~BehaviourHolder()
 {
-    if (p_behaviour)
+    if (m_behaviour)
     {
-        delete p_behaviour;
+        delete m_behaviour;
     }
 
-    if (p_currentOpenLibrary)
+    if (m_currentOpenLibrary)
     {
-        SystemUtils::CloseLibrary(p_currentOpenLibrary);
+        SystemUtils::CloseLibrary(m_currentOpenLibrary);
     }
 }
 
 void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
 {
-    if (p_behaviour)
+    if (m_behaviour)
     {
-        delete p_behaviour;
+        delete m_behaviour;
     }
 
-    p_behaviour = newBehaviour;
+    m_behaviour = newBehaviour;
 }
 
 
@@ -83,19 +83,19 @@ void BehaviourHolder::Refresh()
 
     if (createdBehaviour)
     {
-        if (p_currentOpenLibrary)
+        if (m_currentOpenLibrary)
         {
-            SystemUtils::CloseLibrary(p_currentOpenLibrary);
+            SystemUtils::CloseLibrary(m_currentOpenLibrary);
         }
-        p_currentOpenLibrary = openLibrary;
+        m_currentOpenLibrary = openLibrary;
     }
 
     if (createdBehaviour)
     {
-        if (p_behaviour)
+        if (m_behaviour)
         {
-            p_behaviour->Init(this);
-            p_behaviour->_OnStart();
+            m_behaviour->Init(this);
+            m_behaviour->_OnStart();
         }
     }
     else
@@ -146,35 +146,35 @@ void BehaviourHolder::_OnStart()
 void BehaviourHolder::_OnUpdate()
 {
     Component::_OnUpdate();
-    if (p_behaviour)
+    if (m_behaviour)
     {
-        p_behaviour->_OnUpdate();
+        m_behaviour->_OnUpdate();
     }
 }
 
 void BehaviourHolder::_OnPreRender()
 {
     Component::_OnPreRender();
-    if (p_behaviour)
+    if (m_behaviour)
     {
-        p_behaviour->_OnPreRender();
+        m_behaviour->_OnPreRender();
     }
 }
 
 void BehaviourHolder::_OnRender()
 {
     Component::_OnRender();
-    if (p_behaviour)
+    if (m_behaviour)
     {
-        p_behaviour->_OnRender();
+        m_behaviour->_OnRender();
     }
 }
 
 void BehaviourHolder::_OnDestroy()
 {
     Component::_OnDestroy();
-    if (p_behaviour)
+    if (m_behaviour)
     {
-        p_behaviour->_OnDestroy();
+        m_behaviour->_OnDestroy();
     }
 }

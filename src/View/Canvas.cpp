@@ -9,12 +9,12 @@
 #endif
 
 #ifdef BANG_EDITOR
-WindowMain *Canvas::s_p_window = nullptr;
+WindowMain *Canvas::s_m_window = nullptr;
 #else
-GameWindow *Canvas::s_p_window = nullptr;
+GameWindow *Canvas::s_m_window = nullptr;
 #endif
 
-Canvas *Canvas::p_mainBinaryCanvas = nullptr;
+Canvas *Canvas::m_mainBinaryCanvas = nullptr;
 
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
@@ -26,15 +26,15 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     m_drawTimer.start();
 
     #ifdef BANG_EDITOR
-    Canvas::s_p_window = WindowMain::GetInstance();
+    Canvas::s_m_window = WindowMain::GetInstance();
     #else
-    Canvas::s_p_window = GameWindow::GetInstance();
+    Canvas::s_m_window = GameWindow::GetInstance();
     #endif
 }
 
 void Canvas::InitFromMainBinary()
 {
-    Canvas::p_mainBinaryCanvas = Canvas::s_p_window->canvas;
+    Canvas::m_mainBinaryCanvas = Canvas::s_m_window->canvas;
 }
 
 void Canvas::initializeGL()
@@ -58,11 +58,11 @@ void Canvas::paintGL()
     // (this is not Behaviours' static deltaTime, theirs is updated in Behaviour _OnUpdate)
     Time::s_deltaTime = deltaTime;
 
-    if (p_currentScene)
+    if (m_currentScene)
     {
         m_lastRenderTime = Time::GetNow();
-        p_currentScene->_OnUpdate();
-        p_currentScene->_OnRender(); //Note: _OnPreRender() is called from scene _OnRender
+        m_currentScene->_OnUpdate();
+        m_currentScene->_OnRender(); //Note: _OnPreRender() is called from scene _OnRender
     }
 
     Input::GetInstance()->OnNewFrame();
@@ -79,9 +79,9 @@ void Canvas::resizeGL(int w, int h)
     m_height = h;
     m_aspectRatio = float(w) / h;
 
-    if (p_currentScene )
+    if (m_currentScene )
     {
-        p_currentScene->_OnResize(w,h);
+        m_currentScene->_OnResize(w,h);
     }
 }
 
@@ -100,26 +100,26 @@ void Canvas::AddScene(Scene *scene)
 
 void Canvas::SetCurrentScene(Scene *scene)
 {
-    if (p_currentScene)
+    if (m_currentScene)
     {
-        p_currentScene->_OnDestroy();
+        m_currentScene->_OnDestroy();
     }
 
-    p_currentScene = scene;
-    if (p_currentScene)
+    m_currentScene = scene;
+    if (m_currentScene)
     {
-        p_currentScene->_OnStart();
+        m_currentScene->_OnStart();
         #ifdef BANG_EDITOR
-        Canvas::s_p_window->widgetHierarchy->Refresh();
+        Canvas::s_m_window->widgetHierarchy->Refresh();
         #endif
     }
 }
 
 void Canvas::SetCurrentScene(const std::string &name)
 {
-    if (p_currentScene )
+    if (m_currentScene )
     {
-        p_currentScene->_OnDestroy();
+        m_currentScene->_OnDestroy();
     }
 
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
@@ -137,7 +137,7 @@ void Canvas::SetCurrentScene(const std::string &name)
 
 Scene *Canvas::GetCurrentScene()
 {
-    return Canvas::GetInstance()->p_currentScene;
+    return Canvas::GetInstance()->m_currentScene;
 }
 
 Scene *Canvas::GetScene(const std::string &name) const
@@ -159,27 +159,27 @@ void Canvas::RemoveScene(const std::string &name)
 
 Canvas *Canvas::GetInstance()
 {
-    return Canvas::p_mainBinaryCanvas;
+    return Canvas::m_mainBinaryCanvas;
 }
 
 float Canvas::GetAspectRatio()
 {
-    return Canvas::p_mainBinaryCanvas->m_aspectRatio;
+    return Canvas::m_mainBinaryCanvas->m_aspectRatio;
 }
 
 int Canvas::GetWidth()
 {
-    return Canvas::p_mainBinaryCanvas->m_width;
+    return Canvas::m_mainBinaryCanvas->m_width;
 }
 
 int Canvas::GetHeight()
 {
-    return Canvas::p_mainBinaryCanvas->m_height;
+    return Canvas::m_mainBinaryCanvas->m_height;
 }
 
 void Canvas::SetCursor(Qt::CursorShape cs)
 {
-    Canvas::s_p_window->GetApplication()->setOverrideCursor( cs );
+    Canvas::s_m_window->GetApplication()->setOverrideCursor( cs );
 }
 
 void Canvas::wheelEvent(QWheelEvent *event)

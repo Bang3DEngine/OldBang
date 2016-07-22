@@ -11,8 +11,8 @@ LineRenderer::LineRenderer()
     });
 #endif
 
-    p_vbo = new VBO();
-    p_vao = new VAO();
+    m_vbo = new VBO();
+    m_vao = new VAO();
 
     Material *m = AssetsManager::GetAsset<Material>(
                 "./Assets/Engine/Materials/Line.bmat" );
@@ -36,13 +36,13 @@ std::string LineRenderer::GetName() const { return "LineRenderer"; }
 void LineRenderer::BindPointsToVAO() const
 {
     if (m_points.size() >= 2 &&
-       p_material  && p_material->GetShaderProgram() )
+       m_material  && m_material->GetShaderProgram() )
     {
-        p_vbo->Fill(m_points.data(), m_points.size() * sizeof(Vector3));
-        GLint verticesShaderLocation = p_material->GetShaderProgram()->
+        m_vbo->Fill(m_points.data(), m_points.size() * sizeof(Vector3));
+        GLint verticesShaderLocation = m_material->GetShaderProgram()->
                 GetAttribLocation(ShaderContract::Attr_Vertex_In_Position_Raw);
-        p_vao->UnBindVBO(verticesShaderLocation);
-        p_vao->BindVBO(p_vbo, verticesShaderLocation, 3, GL_FLOAT);
+        m_vao->UnBindVBO(verticesShaderLocation);
+        m_vao->BindVBO(m_vbo, verticesShaderLocation, 3, GL_FLOAT);
     }
 }
 
@@ -52,14 +52,14 @@ void LineRenderer::RenderWithoutBindingMaterial() const
     GetMatrices(model, view, projection, pvm);
     SetMatricesUniforms(model, view, projection, pvm);
 
-    p_vao->Bind();
+    m_vao->Bind();
     glDrawArrays(m_drawLinesMode, 0, m_points.size());
-    p_vao->UnBind();
+    m_vao->UnBind();
 }
 
 void LineRenderer::SetMaterial(Material *m)
 {
-    p_material = m;
+    m_material = m;
     BindPointsToVAO();
 }
 
@@ -93,15 +93,15 @@ InspectorWidgetInfo* LineRenderer::GetComponentInfo()
             static_cast<InspectorFileSWInfo*>(
                 m_inspectorComponentInfo.GetSlotInfo(0));
 
-    if (p_material )
+    if (m_material )
     {
-        if (p_material->GetFilepath() != "")
+        if (m_material->GetFilepath() != "")
         {
-            matInfo->filepath = p_material->GetFilepath();
+            matInfo->filepath = m_material->GetFilepath();
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            Logger_GetString(matInfo->filepath, (void*)p_material);
+            Logger_GetString(matInfo->filepath, (void*)m_material);
         }
     }
     else

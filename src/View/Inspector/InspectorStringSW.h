@@ -14,13 +14,13 @@ class InspectorStringSW : public InspectorSW
     Q_OBJECT
 
 private:
-    LabelStringSW *p_strField = nullptr;
+    LabelStringSW *m_strField = nullptr;
     bool m_editing = false;
 
 public:
     InspectorStringSW(const std::string &labelString,
                       const std::string &initialValue,
-                      InspectorWidget *p_parent,
+                      InspectorWidget *m_parent,
                       bool readonly = false,
                       bool inlined = false);
 

@@ -27,16 +27,16 @@ InspectorStringSW::InspectorStringSW(const std::string &labelString,
     labelField->setContentsMargins(0,0,0,0);
     labelField->show();
 
-    p_strField = new LabelStringSW(); //Right side
-    p_strField->setText( QString::fromStdString(initialValue) );
-    p_strField->setReadOnly(readonly);
-    p_strField->setAlignment(Qt::AlignRight);
-    p_strField->setMinimumWidth(50);
-    p_strField->setContentsMargins(0,0,0,0);
-    p_strField->show();
+    m_strField = new LabelStringSW(); //Right side
+    m_strField->setText( QString::fromStdString(initialValue) );
+    m_strField->setReadOnly(readonly);
+    m_strField->setAlignment(Qt::AlignRight);
+    m_strField->setMinimumWidth(50);
+    m_strField->setContentsMargins(0,0,0,0);
+    m_strField->show();
 
     layout->addWidget(labelField);
-    layout->addWidget(p_strField);
+    layout->addWidget(m_strField);
 
     this->setContentsMargins(0,0,0,0);
     this->show();
@@ -48,16 +48,16 @@ void InspectorStringSW::SetValue(const std::string &value)
 {
     if (!m_editing)
     {
-        disconnect(p_strField, SIGNAL(valueChanged(QString)), p_parent, SLOT(_OnSlotValueChanged(QString)));
-        p_strField->setText( QString::fromStdString(value) );
-        p_strField->show();
-        connect(p_strField, SIGNAL(valueChanged(QString)), p_parent, SLOT(_OnSlotValueChanged(QString)));
+        disconnect(m_strField, SIGNAL(valueChanged(QString)), m_parent, SLOT(_OnSlotValueChanged(QString)));
+        m_strField->setText( QString::fromStdString(value) );
+        m_strField->show();
+        connect(m_strField, SIGNAL(valueChanged(QString)), m_parent, SLOT(_OnSlotValueChanged(QString)));
     }
 }
 
 const std::string InspectorStringSW::GetValue() const
 {
-    std::string str = p_strField->text().toStdString();
+    std::string str = m_strField->text().toStdString();
     return str;
 }
 

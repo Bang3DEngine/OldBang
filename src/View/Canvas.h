@@ -39,12 +39,12 @@ class Canvas : public QGLWidget
 
 private:
 
-    static Canvas *p_mainBinaryCanvas;
+    static Canvas *m_mainBinaryCanvas;
 
     #ifdef BANG_EDITOR
-    static WindowMain *s_p_window;
+    static WindowMain *s_m_window;
     #else
-    static GameWindow *s_p_window;
+    static GameWindow *s_m_window;
     #endif
 
     const int c_redrawDelay = 25;
@@ -56,7 +56,7 @@ private:
 
     std::list<Scene*> m_scenes;
 
-    Scene *p_currentScene = nullptr;
+    Scene *m_currentScene = nullptr;
     QTimer m_drawTimer;
 
 public:

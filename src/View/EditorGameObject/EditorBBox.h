@@ -12,7 +12,7 @@ class EditorBBox : public EditorGameObject
 {
 private:
     static std::vector<Vector3> s_boxVertices;
-    GameObject *p_attachedGameObject = nullptr;
+    GameObject *m_attachedGameObject = nullptr;
 
 public:
     EditorBBox(GameObject *attachedGameObject);

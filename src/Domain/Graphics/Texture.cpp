@@ -24,7 +24,7 @@ Texture::Texture(TextureType glTextureTarget) : Texture()
 
 Texture::~Texture()
 {
-    if (p_data ) delete p_data;
+    if (m_data ) delete m_data;
     glDeleteTextures(1, &m_idGL);
 }
 

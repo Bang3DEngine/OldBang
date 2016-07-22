@@ -14,11 +14,11 @@ class InspectorFloatSW : public InspectorSW //Slot for a float (label + float)
     Q_OBJECT
 
 private:
-    FloatComponentSlotSpinBox *p_spinbox = nullptr;
+    FloatComponentSlotSpinBox *m_spinbox = nullptr;
     bool _editing = false;
 
 public:
-    InspectorFloatSW(const std::string &labelString, float initialValue, InspectorWidget *p_parent);
+    InspectorFloatSW(const std::string &labelString, float initialValue, InspectorWidget *m_parent);
 
     virtual void SetValue(float f);
     virtual float GetValue();

@@ -69,7 +69,7 @@ private:
 
 protected:
 
-    Material *p_material = nullptr;
+    Material *m_material = nullptr;
 
     bool m_drawWireframe = false;
     bool m_receivesLighting = true;

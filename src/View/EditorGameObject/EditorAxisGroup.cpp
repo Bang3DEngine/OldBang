@@ -2,23 +2,23 @@
 
 EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObject("EditorAxisGroup")
 {
-    this->p_attachedGameObject = attachedGameObject;
-    p_etag = new EditorTranslateAxisGroup(attachedGameObject);
-    p_erag = new EditorRotateAxisGroup(attachedGameObject);
-    p_esag = new EditorScaleAxisGroup(attachedGameObject);
+    this->m_attachedGameObject = attachedGameObject;
+    m_etag = new EditorTranslateAxisGroup(attachedGameObject);
+    m_erag = new EditorRotateAxisGroup(attachedGameObject);
+    m_esag = new EditorScaleAxisGroup(attachedGameObject);
 
-    p_etag->SetParent(this);
-    p_erag->SetParent(this);
-    p_esag->SetParent(this);
+    m_etag->SetParent(this);
+    m_erag->SetParent(this);
+    m_esag->SetParent(this);
 
     DisableAllGroups();
 }
 
 void EditorAxisGroup::DisableAllGroups()
 {
-    p_etag->SetEnabled(false);
-    p_erag->SetEnabled(false);
-    p_esag->SetEnabled(false);
+    m_etag->SetEnabled(false);
+    m_erag->SetEnabled(false);
+    m_esag->SetEnabled(false);
 }
 
 void EditorAxisGroup::OnUpdate()
@@ -29,27 +29,27 @@ void EditorAxisGroup::OnUpdate()
     if (tm == Toolbar::TransformMode::Translate)
     {
         DisableAllGroups();
-        p_etag->SetEnabled(true);
+        m_etag->SetEnabled(true);
     }
     else if (tm == Toolbar::TransformMode::Rotate)
     {
         DisableAllGroups();
-        p_erag->SetEnabled(true);
+        m_erag->SetEnabled(true);
     }
     else if (tm == Toolbar::TransformMode::Scale)
     {
         DisableAllGroups();
-        p_esag->SetEnabled(true);
+        m_esag->SetEnabled(true);
     }
 
     //Attached GameObject positioning
-    if (p_attachedGameObject)
+    if (m_attachedGameObject)
     {
-        Transform *at = p_attachedGameObject->transform;
+        Transform *at = m_attachedGameObject->transform;
         if (at)
         {
             transform->SetPosition(at->GetPosition()); // Pivot
-            Box bbox = p_attachedGameObject->GetBoundingBox();
+            Box bbox = m_attachedGameObject->GetBoundingBox();
             transform->SetPosition( bbox.GetCenter() ); // Center
 
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
