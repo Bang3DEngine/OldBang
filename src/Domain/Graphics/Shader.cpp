@@ -38,7 +38,6 @@ bool Shader::LoadFromFile(const std::string& filepath)
     glGetShaderiv(m_idGL, GL_COMPILE_STATUS, &ok);
     if (!ok)
     {
-        Logger_Log(m_sourceCode);
         GLint maxLength = 0;
         glGetShaderiv(m_idGL, GL_INFO_LOG_LENGTH, &maxLength);
 

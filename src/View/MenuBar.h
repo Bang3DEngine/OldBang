@@ -52,7 +52,9 @@ public:
         AddComponentTransform,
         AddComponentMeshRenderer,
         AddComponenSingleLineRenderer,
-        AddComponentCircleRenderer
+        AddComponentCircleRenderer,
+        AddComponentDirectionalLight,
+        AddComponentPointLight
     };
 
     MenuBar(QWidget *parent = nullptr);
@@ -89,6 +91,8 @@ public slots:
     void OnAddComponentMeshRenderer() const;
     void OnAddComponentSingleLineRenderer() const;
     void OnAddComponentCircleRenderer() const;
+    void OnAddComponentDirectionalLight() const;
+    void OnAddComponentPointLight() const;
 };
 
 #endif // MENUBAR_H

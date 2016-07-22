@@ -10,6 +10,8 @@
 #include "MeshRenderer.h"
 #include "SingleLineRenderer.h"
 #include "CircleRenderer.h"
+#include "DirectionalLight.h"
+#include "PointLight.h"
 #include "Logger.h"
 
 
@@ -158,6 +160,22 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
         {
             CircleRenderer *cr = new CircleRenderer();
             m_currentGameObject->AddComponent(cr);
+        }
+    }
+    else if (clickedAction == MenuBar::Action::AddComponentDirectionalLight)
+    {
+        if (this->m_currentGameObject )
+        {
+            DirectionalLight *dl = new DirectionalLight();
+            m_currentGameObject->AddComponent(dl);
+        }
+    }
+    else if (clickedAction == MenuBar::Action::AddComponentPointLight)
+    {
+        if (this->m_currentGameObject )
+        {
+            PointLight *pl = new PointLight();
+            m_currentGameObject->AddComponent(pl);
         }
     }
 

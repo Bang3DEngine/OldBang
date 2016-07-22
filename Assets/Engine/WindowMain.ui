@@ -246,6 +246,8 @@
      <addaction name="actionAddComponentLineRenderer"/>
      <addaction name="actionAddComponentCircleRenderer"/>
      <addaction name="separator"/>
+     <addaction name="actionAddComponentDirectionalLight"/>
+     <addaction name="actionAddComponentPointLight"/>
     </widget>
     <addaction name="menuAddComponent"/>
     <addaction name="actionRemoveComponent"/>
@@ -720,6 +722,16 @@
   <action name="actionBuildAndRun">
    <property name="text">
     <string>Build and Run</string>
+   </property>
+  </action>
+  <action name="actionAddComponentDirectionalLight">
+   <property name="text">
+    <string>Directional Light</string>
+   </property>
+  </action>
+  <action name="actionAddComponentPointLight">
+   <property name="text">
+    <string>Point Light</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

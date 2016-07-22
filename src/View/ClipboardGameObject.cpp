@@ -40,7 +40,6 @@ void ClipboardGameObject::PasteCopiedGameObjectsInto(GameObject *parent)
     for (GameObject *localCopy : localCopies)
     {
         GameObject *paste = static_cast<GameObject*>(localCopy);
-        Logger_Log("Setting parent of " << paste << " to " << parent);
         paste->SetParent(parent);
     }
 }

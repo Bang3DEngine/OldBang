@@ -1,0 +1,6 @@
+<Material>
+    ./Assets/Engine/Shaders/PR_Default.vert
+    ./Assets/Engine/Shaders/PR_PointLight.frag
+    0
+    1.0 1.0 1.0 1.0
+</Material>

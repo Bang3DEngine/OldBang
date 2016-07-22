@@ -65,6 +65,8 @@ public:
     QAction *actionCreateSphere;
     QAction *actionBuild;
     QAction *actionBuildAndRun;
+    QAction *actionAddComponentDirectionalLight;
+    QAction *actionAddComponentPointLight;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
@@ -176,6 +178,10 @@ public:
         actionBuild->setObjectName(QString::fromUtf8("actionBuild"));
         actionBuildAndRun = new QAction(WindowMain);
         actionBuildAndRun->setObjectName(QString::fromUtf8("actionBuildAndRun"));
+        actionAddComponentDirectionalLight = new QAction(WindowMain);
+        actionAddComponentDirectionalLight->setObjectName(QString::fromUtf8("actionAddComponentDirectionalLight"));
+        actionAddComponentPointLight = new QAction(WindowMain);
+        actionAddComponentPointLight->setObjectName(QString::fromUtf8("actionAddComponentPointLight"));
         centralwidget = new QWidget(WindowMain);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -531,6 +537,8 @@ public:
         menuAddComponent->addAction(actionAddComponentLineRenderer);
         menuAddComponent->addAction(actionAddComponentCircleRenderer);
         menuAddComponent->addSeparator();
+        menuAddComponent->addAction(actionAddComponentDirectionalLight);
+        menuAddComponent->addAction(actionAddComponentPointLight);
 
         retranslateUi(WindowMain);
         QObject::connect(widgetHierarchy, SIGNAL(customContextMenuRequested(QPoint)), widgetHierarchy, SLOT(OnCustomContextMenuRequested(QPoint)));
@@ -566,6 +574,8 @@ public:
         actionCreateSphere->setText(QApplication::translate("WindowMain", "Sphere", 0, QApplication::UnicodeUTF8));
         actionBuild->setText(QApplication::translate("WindowMain", "Build", 0, QApplication::UnicodeUTF8));
         actionBuildAndRun->setText(QApplication::translate("WindowMain", "Build and Run", 0, QApplication::UnicodeUTF8));
+        actionAddComponentDirectionalLight->setText(QApplication::translate("WindowMain", "Directional Light", 0, QApplication::UnicodeUTF8));
+        actionAddComponentPointLight->setText(QApplication::translate("WindowMain", "Point Light", 0, QApplication::UnicodeUTF8));
         buttonTranslateMode->setText(QApplication::translate("WindowMain", "T", 0, QApplication::UnicodeUTF8));
         buttonRotateMode->setText(QApplication::translate("WindowMain", "R", 0, QApplication::UnicodeUTF8));
         buttonScaleMode->setText(QApplication::translate("WindowMain", "S", 0, QApplication::UnicodeUTF8));

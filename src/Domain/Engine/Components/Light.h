@@ -12,7 +12,7 @@ friend class Scene;
 protected:
     float m_intensity = 1.0f;
     Vector3 m_color = Vector3::one;
-    Material *m_material = nullptr;
+    Material *m_lightMaterial = nullptr;
 
     virtual void SetUniformsBeforeApplyingLight() const;
     virtual void ApplyLight(GBuffer *gbuffer) const;

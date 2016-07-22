@@ -8,6 +8,8 @@ class PointLight : public Light
 protected:
     float m_range = 1.0f;
 
+    virtual void SetUniformsBeforeApplyingLight() const override;
+
 public:
     PointLight();
 

@@ -5,8 +5,6 @@
 
 Light::Light()
 {
-    m_color = Vector3::one;
-
     #ifdef BANG_EDITOR
     m_inspectorComponentInfo.AddSlotInfos(
     {
@@ -18,7 +16,7 @@ Light::Light()
 
 void Light::SetUniformsBeforeApplyingLight() const
 {
-    ShaderProgram *sp = m_material->GetShaderProgram();
+    ShaderProgram *sp = m_lightMaterial->GetShaderProgram();
     sp->SetUniformFloat("B_light_intensity",      m_intensity,                          false);
     sp->SetUniformVec3 ("B_light_color",          m_color,                              false);
     sp->SetUniformVec3 ("B_light_forward_world",  gameObject->transform->GetForward(),  false);
@@ -28,7 +26,7 @@ void Light::SetUniformsBeforeApplyingLight() const
 void Light::ApplyLight(GBuffer *gbuffer) const
 {
     SetUniformsBeforeApplyingLight();
-    gbuffer->RenderPassWithMaterial(m_material);
+    gbuffer->RenderPassWithMaterial(m_lightMaterial);
 }
 
 const std::string Light::ToString() const
@@ -89,7 +87,7 @@ void Light::WriteInternal(std::ostream &f) const
     Component::WriteInternal(f);
     FileWriter::WriteFloat(m_intensity, f);
     FileWriter::WriteVector3(m_color, f);
-    FileWriter::WriteFilepath(m_material->GetFilepath(), f);
+    FileWriter::WriteFilepath(m_lightMaterial->GetFilepath(), f);
 }
 
 void Light::ReadInternal(std::istream &f)
@@ -99,6 +97,6 @@ void Light::ReadInternal(std::istream &f)
     m_color = FileReader::ReadVec3(f);
 
     std::string materialFilepath = FileReader::ReadString(f);
-    m_material = AssetsManager::GetAsset<Material>(materialFilepath);
+    m_lightMaterial = AssetsManager::GetAsset<Material>(materialFilepath);
 
 }

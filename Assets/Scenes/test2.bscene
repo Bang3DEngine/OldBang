@@ -1,51 +1,51 @@
 <Scene>
-0xf1a6a0
+0x1437690
 Scene
 <children>
 <GameObject>
-0x1406320
+0x1930140
 true
 DirectionalLight
 <children>
 </children>
 <components>
 <Transform>
-0x141a290
+0x1926750
 true
-45.2107 31.1341 18.5354
--0.0910237 0.377327 0.129025 0.912519
+0 0 0
+0.57003 -0.703735 -0.126693 0.404687
 1 1 1
 </Transform>
 <DirectionalLight>
-0x1408350
+0x191dc10
 true
-1
+0.8
 1 1 1
 Assets/Engine/Materials/DirectionalLight.bmat
 </DirectionalLight>
 </components>
 </GameObject>
 <GameObject>
-0x144c5d0
+0x195d4d0
 true
 Characters
 <children>
 <GameObject>
-0x142eb50
+0x1948fe0
 true
 Boy
 <children>
 </children>
 <components>
 <Transform>
-0x14291b0
+0x193e730
 true
 18.1223 0 -8.53226
 -0.707107 0 0 0.707107
 3 3 3
 </Transform>
 <MeshRenderer>
-0x144f180
+0x1951790
 true
 ./Assets/Meshes/boyMesh.bmesh
 ./Assets/Materials/testMaterial2.bmat
@@ -53,48 +53,48 @@ true
 </components>
 </GameObject>
 <GameObject>
-0x1413bf0
+0x191a720
 true
 Luigi
 <children>
 </children>
 <components>
 <Transform>
-0x142def0
+0x19430c0
 true
 -1.88384 0 0
 0 0 0 1
 0.1 0.1 0.1
 </Transform>
 <MeshRenderer>
-0x13dc110
+0x197cf70
 true
 ./Assets/Meshes/luigiMesh.bmesh
 ./Assets/Materials/luigiMaterial.bmat
 </MeshRenderer>
 <BehaviourHolder>
-0x1460f30
+0x19750e0
 true
 ./Assets/Behaviours/TestBehaviour.cpp
 </BehaviourHolder>
 </components>
 </GameObject>
 <GameObject>
-0x1413000
+0x1997480
 true
 Boy2
 <children>
 </children>
 <components>
 <Transform>
-0x14a6350
+0x19b4fe0
 true
 7.87224 0 9.94133
 -0.707107 0 0 0.707107
 2 2 2
 </Transform>
 <MeshRenderer>
-0x148de50
+0x19a00e0
 true
 ./Assets/Meshes/boyMesh.bmesh
 ./Assets/Materials/luigiMaterial.bmat
@@ -104,7 +104,7 @@ true
 </children>
 <components>
 <Transform>
-0x144af90
+0x195cf20
 true
 11.9338 0 0
 0 0 0 1
@@ -113,26 +113,26 @@ true
 </components>
 </GameObject>
 <GameObject>
-0x14d4620
+0x1984db0
 true
 Scenario
 <children>
 <GameObject>
-0xe41960
+0x19a5fc0
 true
 Cube
 <children>
 </children>
 <components>
 <Transform>
-0xe41700
+0x19aa2f0
 true
 20.5534 -1.34279 0
 0 0 0 1
 50.0266 2.92969 47.9093
 </Transform>
 <MeshRenderer>
-0xe9a880
+0x19b0360
 true
 Assets/Engine/Meshes/Cube.bmesh
 ./Assets/Materials/testMaterial2.bmat
@@ -140,21 +140,21 @@ Assets/Engine/Meshes/Cube.bmesh
 </components>
 </GameObject>
 <GameObject>
-0x1454ff0
+0x135ed40
 true
 Cube
 <children>
 </children>
 <components>
 <Transform>
-0x1434100
+0x135eb50
 true
 -2.98428 16.1519 -4.75032
 0 0 0 1
 2.47143 32.717 53.3688
 </Transform>
 <MeshRenderer>
-0x143fab0
+0x19bf430
 true
 Assets/Engine/Meshes/Cube.bmesh
 ./Assets/Materials/testMaterial2.bmat
@@ -162,21 +162,21 @@ Assets/Engine/Meshes/Cube.bmesh
 </components>
 </GameObject>
 <GameObject>
-0x14d3480
+0x19c48d0
 true
 Cube
 <children>
 </children>
 <components>
 <Transform>
-0x148a5a0
+0x19c0900
 true
 21.1006 16.1519 -25.7697
 0 0 0 1
 48.0919 32.717 4.14004
 </Transform>
 <MeshRenderer>
-0x149adc0
+0x192b5d0
 true
 Assets/Engine/Meshes/Cube.bmesh
 ./Assets/Materials/testMaterial2.bmat
@@ -186,7 +186,7 @@ Assets/Engine/Meshes/Cube.bmesh
 </children>
 <components>
 <Transform>
-0x14705f0
+0x195ad40
 true
 0 0 0
 0 0 0 1
@@ -195,25 +195,71 @@ true
 </components>
 </GameObject>
 <GameObject>
-0x14147c0
+0x197f000
 true
-Plane
+MeHuehue
 <children>
 </children>
 <components>
 <Transform>
-0x146e6b0
+0x19eda00
 true
-19 18.24 -22.92
+19 20.0849 -22.92
 0 0 0 1
 20.39 19.86 1
 </Transform>
 <MeshRenderer>
-0x1470b00
+0x19ea220
 true
 Assets/Engine/Meshes/Plane.bmesh
 ./Assets/Materials/victor.bmat
 </MeshRenderer>
+</components>
+</GameObject>
+<GameObject>
+0x19d25b0
+true
+PointLight_Green
+<children>
+</children>
+<components>
+<Transform>
+0x19b98e0
+true
+4.66308 2.41692 -15.0082
+0 0 0 1
+1 1 1
+</Transform>
+<PointLight>
+0x19d8ff0
+true
+2.3
+0.2 1 1
+Assets/Engine/Materials/PointLight.bmat
+</PointLight>
+</components>
+</GameObject>
+<GameObject>
+0x1d8aee0
+true
+PointLight_Red
+<children>
+</children>
+<components>
+<Transform>
+0x1d016e0
+true
+14.2064 4.16982 5.74118
+0 0 0 1
+1 1 1
+</Transform>
+<PointLight>
+0x1d8b040
+true
+0.2
+1 0.1 0.1
+Assets/Engine/Materials/PointLight.bmat
+</PointLight>
 </components>
 </GameObject>
 </children>

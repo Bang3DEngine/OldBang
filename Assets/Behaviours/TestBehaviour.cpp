@@ -27,8 +27,6 @@ void TestBehaviour::OnStart()
 
 void TestBehaviour::OnUpdate()
 {
-    Logger_Log(gameObject->GetChildren());
-
     Behaviour::OnUpdate();
 
     time += Time::deltaTime;

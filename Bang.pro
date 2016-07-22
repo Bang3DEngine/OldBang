@@ -111,7 +111,9 @@ OTHER_FILES += \
     Assets/Materials/testMaterial2.bmat \
     Assets/Engine/Shaders/SelectionBuffer.frag \
     Assets/Engine/Materials/RenderGBufferToScreen.bmat \
-    Assets/Engine/Shaders/RenderGBufferToScreen.frag
+    Assets/Engine/Shaders/RenderGBufferToScreen.frag \
+    Assets/Engine/Materials/PointLight.bmat \
+    Assets/Engine/Shaders/PR_PointLight.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

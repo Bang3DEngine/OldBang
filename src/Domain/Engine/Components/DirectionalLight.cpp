@@ -2,10 +2,10 @@
 
 DirectionalLight::DirectionalLight() : Light()
 {
-    m_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/DirectionalLight.bmat");
+    m_lightMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/DirectionalLight.bmat");
 
     #ifdef BANG_EDITOR
-    // m_inspectorComponentInfo.AddSlotInfo();
+    // m_inspectorComponentInfo.AddSlotInfos();
     #endif
 }
 
