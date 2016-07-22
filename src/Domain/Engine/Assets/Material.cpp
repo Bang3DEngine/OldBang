@@ -65,10 +65,12 @@ void Material::Read(std::istream &f)
     SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
 
     int numTextures = FileReader::ReadInt(f);
-    std::string texAssetFilepath = FileReader::ReadString(f);
-    Texture2D *texture = AssetsManager::GetAsset<Texture2D>(texAssetFilepath);
-    p_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
-
+    if(numTextures == 1)
+    {
+        std::string texAssetFilepath = FileReader::ReadString(f);
+        Texture2D *texture = AssetsManager::GetAsset<Texture2D>(texAssetFilepath);
+        p_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
+    }
 
     glm::vec4 diffColor = FileReader::ReadVec4(f);
     SetDiffuseColor(diffColor);
