@@ -92,3 +92,18 @@ void GBuffer::RenderToScreen() const
     RenderScreenPlane();
     p_renderGBufferToScreenMaterial->UnBind();
 }
+
+void GBuffer::ClearBuffersAndBackground(const glm::vec4 &backgroundColor, const glm::vec4 &clearValue)
+{
+    Bind();
+
+    SetAllDrawBuffers();
+    glClearColor(clearValue.x, clearValue.y, clearValue.z, clearValue.w);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    SetDrawBuffers({GBuffer::Attachment::Color});
+    glClearColor(backgroundColor.x, backgroundColor.y, backgroundColor.z, backgroundColor.w);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    UnBind();
+}

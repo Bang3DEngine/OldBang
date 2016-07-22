@@ -25,6 +25,10 @@ void GameObject::CloneInto(ICloneable *clone) const
 {
     GameObject *go = static_cast<GameObject*>(clone);
 
+    go->SetName(m_name);
+    go->SetRenderLayer(m_renderLayer);
+    go->SetParent(nullptr);
+
     for (GameObject *child : m_children)
     {
         if (child->IsEditorGameObject()) continue;
@@ -44,10 +48,6 @@ void GameObject::CloneInto(ICloneable *clone) const
             transform->CloneInto(go->transform);
         }
     }
-
-    go->SetName(m_name);
-    go->SetRenderLayer(m_renderLayer);
-    go->SetParent(nullptr);
 }
 
 ICloneable* GameObject::Clone() const
@@ -69,9 +69,9 @@ GameObject::~GameObject()
     }
 }
 
-void GameObject::SetParent(GameObject *parent)
+void GameObject::SetParent(GameObject *newParent)
 {
-    if (p_parent != parent)
+    if (p_parent != newParent)
     {
         if (p_parent)
         {
@@ -82,7 +82,7 @@ void GameObject::SetParent(GameObject *parent)
             #endif
         }
 
-        p_parent = parent;
+        p_parent = newParent;
 
         if (p_parent)
         {
@@ -364,7 +364,9 @@ bool GameObject::IsEnabled()
 
 const std::string GameObject::ToString() const
 {
-    return " [GameObject:'" + m_name + "']";
+    std::ostringstream oss;
+    oss << "GameObject: " << name << "(" << ((void*)this) << ")";
+    return oss.str();
 }
 
 void GameObject::OnMouseEnter(bool fromChildren)

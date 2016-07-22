@@ -17,7 +17,6 @@ void Component::CloneInto(ICloneable *clone) const
 {
     Component *c = static_cast<Component*>(clone);
     c->m_enabled = m_enabled;
-    c->p_gameObject = p_gameObject;
 }
 
 const std::string Component::ToString() const

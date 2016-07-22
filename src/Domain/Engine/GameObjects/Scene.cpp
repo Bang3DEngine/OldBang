@@ -34,8 +34,8 @@ void Scene::_OnRender()
     }
 
     p_gbuffer->Bind();
+    p_gbuffer->ClearBuffersAndBackground(glm::vec4(0.9f,0.9f,0.9f,1));
     p_gbuffer->SetAllDrawBuffers();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //From 0 to 9
     for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)

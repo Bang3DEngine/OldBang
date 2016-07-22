@@ -36,6 +36,8 @@ public:
     void BindGBufferInTexturesTo(Material *mat) const;
     void RenderPassWithMaterial(Material *mat) const;
     void RenderToScreen() const;
+
+    void ClearBuffersAndBackground(const glm::vec4 &backgroundColor, const glm::vec4 &clearValue = glm::vec4(0.0f));
 };
 
 #endif // GBUFFER_H

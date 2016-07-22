@@ -40,17 +40,16 @@ void ClipboardGameObject::PasteCopiedGameObjectsInto(GameObject *parent)
     for (GameObject *localCopy : localCopies)
     {
         GameObject *paste = static_cast<GameObject*>(localCopy);
+        Logger_Log("Setting parent of " << paste << " to " << parent);
         paste->SetParent(parent);
     }
 }
 
 void ClipboardGameObject::DuplicateCopiedGameObjects()
 {
-    std::list<GameObject*> localCopies;
     for (GameObject *copy : s_copiedGameObjects)
     {
         GameObject *localCopy = static_cast<GameObject*>(copy->Clone());
         localCopy->SetParent(s_goCopyToItsParent[copy]);
-        localCopies.push_back(localCopy);
     }
 }

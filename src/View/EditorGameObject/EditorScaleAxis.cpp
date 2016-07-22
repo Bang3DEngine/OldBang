@@ -25,7 +25,7 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
     m_axisCap->transform->SetLocalScale(Vector3(0.1f));
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(p_material);
-    m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(false);
+    m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
     m_axisCap->SetRenderLayer(5);
 }
 

@@ -424,8 +424,10 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
         if (m_treeItemToGameObject.find(item) != m_treeItemToGameObject.end())
         {
             GameObject *e = m_treeItemToGameObject[item];
-            if (e )
+            if (e)
+            {
                 selectedGameObjects.push_back(e);
+            }
         }
     }
 

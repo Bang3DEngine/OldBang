@@ -148,6 +148,7 @@ void Framebuffer::Resize(int width, int height)
 void Framebuffer::Clear() const
 {
     Bind();
+    SetAllDrawBuffers();
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     UnBind();
 }
@@ -155,6 +156,7 @@ void Framebuffer::Clear() const
 void Framebuffer::ClearDepth() const
 {
     Bind();
+    SetAllDrawBuffers();
     glClear(GL_DEPTH_BUFFER_BIT);
     UnBind();
 }
@@ -162,6 +164,7 @@ void Framebuffer::ClearDepth() const
 void Framebuffer::ClearColor() const
 {
     Bind();
+    SetAllDrawBuffers();
     glClear(GL_COLOR_BUFFER_BIT);
     UnBind();
 }

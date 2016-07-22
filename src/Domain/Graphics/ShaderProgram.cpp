@@ -215,7 +215,7 @@ void ShaderProgram::Bind() const
     glUseProgram(m_idGL);
 
     // Bind textures at the moment we bind the shader program
-    int textureUnit = 1;
+    int textureUnit = 0;
     for (auto it = m_namesToTextures.begin(); it != m_namesToTextures.end(); ++it)
     {
         std::string texName = it->first;
