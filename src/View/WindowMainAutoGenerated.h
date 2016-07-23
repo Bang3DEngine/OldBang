@@ -484,9 +484,11 @@ public:
 
         listLogger = new ListLogger(widgetLogger);
         listLogger->setObjectName(QString::fromUtf8("listLogger"));
-        listLogger->setAlternatingRowColors(false);
-        listLogger->setSelectionMode(QAbstractItemView::SingleSelection);
+        listLogger->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        listLogger->setProperty("showDropIndicator", QVariant(false));
         listLogger->setSelectionBehavior(QAbstractItemView::SelectRows);
+        listLogger->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+        listLogger->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
         verticalLayout_6->addWidget(listLogger);
 

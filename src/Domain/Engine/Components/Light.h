@@ -3,7 +3,10 @@
 
 #include "GBuffer.h"
 #include "Component.h"
+
+#ifdef BANG_EDITOR
 #include "InspectorWidget.h"
+#endif
 
 class Light : public Component
 {

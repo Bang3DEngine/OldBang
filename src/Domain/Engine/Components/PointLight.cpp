@@ -46,6 +46,7 @@ ICloneable *PointLight::Clone() const
     return pl;
 }
 
+#ifdef BANG_EDITOR
 InspectorWidgetInfo *PointLight::GetComponentInfo()
 {
     Light::GetComponentInfo();
@@ -64,6 +65,7 @@ void PointLight::OnSlotValueChanged(InspectorWidget *source)
     m_range = range[0];
 
 }
+#endif
 
 void PointLight::SetRange(float range)
 {

@@ -1,6 +1,5 @@
 #include "Canvas.h"
 
-
 #ifdef BANG_EDITOR
 #include "WindowMain.h"
 #include "SelectionFramebuffer.h"

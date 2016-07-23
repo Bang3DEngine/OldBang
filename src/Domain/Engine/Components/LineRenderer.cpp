@@ -129,6 +129,7 @@ void LineRenderer::OnSlotValueChanged(InspectorWidget *source)
     float width = source->GetSWVectorFloatValue("Line Width")[0];
     SetLineWidth(width);
 }
+#endif
 
 void LineRenderer::WriteInternal(std::ostream &f) const
 {
@@ -139,5 +140,3 @@ void LineRenderer::ReadInternal(std::istream &f)
 {
     Component::ReadInternal(f);
 }
-
-#endif

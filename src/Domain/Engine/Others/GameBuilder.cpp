@@ -19,7 +19,7 @@ void BuildGameThread::run()
 {
     bool ok = false;
     std::string output = "";
-    SystemUtils::System("qmake \"BUILD_MODE=GAME\" && make", output, ok);
+    SystemUtils::System("qmake \"BUILD_MODE=GAME\" && make -j8", output, ok);
 
     if (!ok)
     {
@@ -30,9 +30,9 @@ void BuildGameThread::run()
         Logger_Log("Game has been built!");
     }
 
-    if (runGame)
+    if (ok && runGame)
     {
-        bool ok = false;
+        ok = false;
         std::string output = "";
         Logger_Log("Running Game...");
         SystemUtils::System("./Game.exe &", output, ok);

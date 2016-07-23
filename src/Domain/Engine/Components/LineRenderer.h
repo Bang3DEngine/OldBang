@@ -47,7 +47,7 @@ public:
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* GetComponentInfo() override;
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
-#endif
+    #endif
 
     virtual void WriteInternal(std::ostream &f) const;
     virtual void ReadInternal(std::istream &f);

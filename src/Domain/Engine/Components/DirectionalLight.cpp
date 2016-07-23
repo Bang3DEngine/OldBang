@@ -32,6 +32,7 @@ ICloneable *DirectionalLight::Clone() const
     return dl;
 }
 
+#ifdef BANG_EDITOR
 InspectorWidgetInfo *DirectionalLight::GetComponentInfo()
 {
     Light::GetComponentInfo();
@@ -42,6 +43,7 @@ void DirectionalLight::OnSlotValueChanged(InspectorWidget *source)
 {
     Light::OnSlotValueChanged(source);
 }
+#endif
 
 void DirectionalLight::WriteInternal(std::ostream &f) const
 {

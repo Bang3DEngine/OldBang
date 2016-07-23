@@ -121,15 +121,15 @@ int main(int argc, char *argv[])
         Persistence::SetCurrentSceneFilepath(filename);
 
         GameObject *m_defaultCamera = new GameObject("DefaultCamera");
-        m_defaultCamera->transform->SetPosition(Vector3(30));
+        m_defaultCamera->transform->SetPosition(Vector3(40));
         m_defaultCamera->transform->LookAt(Vector3::zero);
-        m_defaultCamera->SetParent(this);
+        m_defaultCamera->SetParent(scene);
 
         Camera *cam = m_defaultCamera->AddComponent<Camera>();
         cam->SetFovDegrees(60.0f);
         cam->SetZNear(0.1f);
         cam->SetZFar(99999.0f);
-        SetCamera(cam);
+        scene->SetCamera(cam);
     }
     #endif
 

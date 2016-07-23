@@ -164,13 +164,13 @@ void MenuBar::OnSaveSceneAs() const
 
 void MenuBar::OnBuild() const
 {
-    Logger_Log("Building Game...");
+    Logger_Log("Building Game... (This could take a while)");
     GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute());
 }
 
 void MenuBar::OnBuildAndRun() const
 {
-    Logger_Log("Building and running Game...");
+    Logger_Log("Building and running Game... (This could take a while)");
     GameBuilder::BuildAndRunGame(Persistence::GetProjectRootPathAbsolute());
 }
 
