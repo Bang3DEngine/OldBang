@@ -24,5 +24,8 @@ B_VertexOut B_vout;
 void main()
 {
     B_POST_RENDER_FS_INIT_MAIN();
+
+    // HERE YOUR CODE
+
     B_POST_RENDER_FS_END_MAIN();
 }

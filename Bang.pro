@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-# CONFIG += EDITOR
+CONFIG += EDITOR
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -94,28 +94,31 @@ OTHER_FILES += \
     Assets/Engine/Meshes/Sphere.bmesh \
     Assets/Engine/Meshes/Pyramid.bmesh \
     Assets/Engine/Shaders/PR_DirectionalLight.frag \
-    Assets/Engine/Materials/DirectionalLight.bmat \
-    Assets/Engine/Materials/Default.bmat \
-    Assets/Engine/Materials/Line.bmat \
-    Assets/Engine/Materials/LineRotationAxis.bmat \
     Assets/Engine/Shaders/D2G_Line.frag \
     Assets/Engine/Shaders/D2G_Line.vert \
     Assets/Engine/Shaders/D2G_LineRotationAxis.frag \
     Assets/Engine/Shaders/D2G_LineRotationAxis.vert \
     Assets/Engine/Shaders/D2G_Default.frag \
     Assets/Engine/Shaders/D2G_Default.vert \
-    Assets/Engine/Shaders/PR_Default.frag \
-    Assets/Engine/Shaders/PR_Default.vert \
+    Assets/Engine/Shaders/PR_DrawScreenPlane.vert \
     Assets/Materials/luigiMaterial.bmat \
     Assets/Materials/testMaterial.bmat \
     Assets/Materials/testMaterial2.bmat \
     Assets/Engine/Shaders/SelectionBuffer.frag \
     Assets/Engine/Materials/RenderGBufferToScreen.bmat \
     Assets/Engine/Shaders/RenderGBufferToScreen.frag \
-    Assets/Engine/Materials/PointLight.bmat \
     Assets/Engine/Shaders/PR_PointLight.frag \
     Assets/Scenes/tmp.bscene \
-    Assets/Scenes/test2.bscene
+    Assets/Scenes/test2.bscene \
+    Assets/Engine/Materials/D2G_Default.bmat \
+    Assets/Engine/Materials/D2G_Line.bmat \
+    Assets/Engine/Materials/D2G_LineMaterial.bmat \
+    Assets/Engine/Materials/D2G_LineRotationAxis.bmat \
+    Assets/Engine/Materials/PR_AfterLighting.bmat \
+    Assets/Engine/Materials/PR_DirectionalLight.bmat \
+    Assets/Engine/Materials/PR_PointLight.bmat \
+    Assets/Engine/Shaders/PR_AfterLighting.frag \
+    Assets/Engine/Shaders/PR_DrawScreenPlane.vert
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

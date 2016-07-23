@@ -7,6 +7,8 @@
 Scene::Scene() : GameObject("Scene")
 {
     m_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
+
+    m_materialAfterLighting = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/PR_AfterLighting.bmat");
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)
@@ -17,6 +19,7 @@ void Scene::_OnResize(int newWidth, int newHeight)
 Scene::~Scene()
 {
     this->_OnDestroy();
+    delete m_materialAfterLighting;
     delete m_defaultCamera;
     delete m_gbuffer;
 }
@@ -50,6 +53,8 @@ void Scene::_OnRender()
             light->ApplyLight(m_gbuffer);
         }
     }
+
+    m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
 
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen();

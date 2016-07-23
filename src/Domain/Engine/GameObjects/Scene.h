@@ -25,6 +25,7 @@ friend class SelectionFramebuffer;
 protected:
 
     GameObject *m_defaultCamera = nullptr;
+    Material *m_materialAfterLighting = nullptr;
 
     /**
      * @brief currentRenderLayer is a variable that indicates

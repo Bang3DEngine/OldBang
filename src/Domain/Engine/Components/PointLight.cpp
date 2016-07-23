@@ -2,7 +2,7 @@
 
 PointLight::PointLight() : Light()
 {
-    m_lightMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/PointLight.bmat");
+    m_lightMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/PR_PointLight.bmat");
 
     #ifdef BANG_EDITOR
     m_inspectorComponentInfo.AddSlotInfos(

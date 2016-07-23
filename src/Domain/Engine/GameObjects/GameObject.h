@@ -43,7 +43,7 @@ friend class Scene;
 private:
 
     #ifdef BANG_EDITOR
-    bool m_wasSelectedInHierarchy = false;
+    bool m_isSelectedInHierarchy = false;
     EditorSelectionGameObject *m_selectionGameObject = nullptr;
     #endif
 
@@ -315,6 +315,7 @@ public:
     bool IsEnabled();
 
     #ifdef BANG_EDITOR
+    bool IsSelectedInHierarchy() const;
     void OnTreeHierarchyGameObjectsSelected(
             std::list<GameObject*> &selectedEntities) override;
     #endif

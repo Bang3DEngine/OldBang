@@ -79,7 +79,7 @@ public:
     Filepath_Shader_SelectionBuffer_VS,
     Filepath_Shader_SelectionBuffer_FS,
 
-    Filepath_Shader_PR_Default_VS,
+    Filepath_Shader_PR_DrawScreenPlane_VS,
     Filepath_Shader_PR_Default_FS,
 
     Filepath_Shader_Render_GBuffer_To_Screen_FS,

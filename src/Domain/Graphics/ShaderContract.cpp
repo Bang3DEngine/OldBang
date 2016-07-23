@@ -154,13 +154,19 @@ const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Declare_Content =
 #version 130 \n\
 \n\
 uniform mat4  B_matrix_model; \n\
+uniform mat4  B_matrix_model_inv; \n\
 uniform mat4  B_matrix_normal; \n\
+uniform mat4  B_matrix_normal_inv; \n\
 uniform mat4  B_matrix_view; \n\
+uniform mat4  B_matrix_view_inv; \n\
 uniform mat4  B_matrix_projection; \n\
+uniform mat4  B_matrix_projection_inv; \n\
 uniform mat4  B_matrix_pvm; \n\
+\n\
 uniform vec3  B_position_camera; \n\
 uniform vec4  B_material_diffuse_color; \n\
 uniform float B_renderer_receivesLighting; \n\
+uniform float B_gameObject_isSelected; \n\
 \n\
 in vec4 B_position_world_vout_fin; \n\
 in vec4 B_normal_world_vout_fin; \n\
@@ -198,7 +204,7 @@ B_position_fout_gin       = vec4(B_vout.position_world, 1); \n\
 B_normal_fout_gin         = vec4(B_vout.normal_world, 0); \n\
 B_uv_fout_gin             = vec4(B_vout.uv, 0, 0); \n\
 B_diffuse_fout_gin        = vec4(B_vout.diffuseColor.rgb, 1); \n\
-B_materialBools_fout_gin  = vec4(B_vout.receivesLighting, 0, 0, 0); \n\
+B_materialBools_fout_gin  = vec4(B_vout.receivesLighting, 0, 0, B_materialBools_fout_gin.w); \n\
 B_depth_fout_gin          = vec4(B_vout.depth); \n\
 \n\
 float ambientLight = (B_vout.receivesLighting > 0.5f) ? 0.5f : 1.0f; \n\
@@ -211,8 +217,13 @@ const std::string ShaderContract::Macro_Post_Render_VS_Declare_Content =
 #version 130 \n\
 \n\
 uniform mat4  B_matrix_model; \n\
+uniform mat4  B_matrix_model_inv; \n\
+uniform mat4  B_matrix_normal; \n\
+uniform mat4  B_matrix_normal_inv; \n\
 uniform mat4  B_matrix_view; \n\
+uniform mat4  B_matrix_view_inv; \n\
 uniform mat4  B_matrix_projection; \n\
+uniform mat4  B_matrix_projection_inv; \n\
 uniform mat4  B_matrix_pvm; \n\
 \n\
 ";
@@ -230,15 +241,16 @@ const std::string ShaderContract::Macro_Post_Render_FS_Declare_Content =
 "\
 #version 130 \n\
 \n\
-uniform mat4  B_matrix_model; \n\
-uniform mat4  B_matrix_model_inv; \n\
-uniform mat4  B_matrix_normal; \n\
-uniform mat4  B_matrix_normal_inv; \n\
-uniform mat4  B_matrix_view; \n\
-uniform mat4  B_matrix_view_inv; \n\
-uniform mat4  B_matrix_projection; \n\
-uniform mat4  B_matrix_projection_inv; \n\
-uniform mat4  B_matrix_pvm; \n\
+uniform mat4 B_matrix_view; \n\
+uniform mat4 B_matrix_view_inv; \n\
+uniform mat4 B_matrix_projection; \n\
+uniform mat4 B_matrix_projection_inv; \n\
+uniform mat4 B_matrix_pvm; \n\
+\n\
+uniform vec2 B_screen_size; \n\
+vec2 B_screen_coord = gl_FragCoord.xy; \n\
+vec2 B_screen_coord_norm = B_screen_coord / B_screen_size; \n\
+vec2 B_pixel_step = 1.0f / B_screen_size; \n\
 \n\
 uniform sampler2D B_position_gout_fin; \n\
 uniform sampler2D B_normal_gout_fin; \n\
@@ -281,7 +293,7 @@ const std::string ShaderContract::Filepath_Shader_SelectionBuffer_FS = "Assets/E
 
 const std::string ShaderContract::Filepath_Shader_Render_GBuffer_To_Screen_FS = "Assets/Engine/Shaders/RenderGBufferToScreen.frag";
 
-const std::string ShaderContract::Filepath_Shader_PR_Default_VS = "Assets/Engine/Shaders/PR_Default.vert";
+const std::string ShaderContract::Filepath_Shader_PR_DrawScreenPlane_VS = "Assets/Engine/Shaders/PR_DrawScreenPlane.vert";
 const std::string ShaderContract::Filepath_Shader_PR_Default_FS = "Assets/Engine/Shaders/PR_Default.frag";
 
 

@@ -1,5 +1,7 @@
 #include "GBuffer.h"
 
+#include "Canvas.h"
+
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
     const GLint texInternalType = GL_FLOAT;
@@ -59,6 +61,8 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
 
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
     SetDrawBuffers({GBuffer::Attachment::Color});
+
+    mat->GetShaderProgram()->SetUniformVec2("B_screen_size", glm::vec2(Canvas::GetWidth(), Canvas::GetHeight()), false);
 
     RenderScreenPlane();
 

@@ -62,6 +62,9 @@ void Renderer::ActivateGLStatesBeforeRendering() const
 
         m_material->m_shaderProgram->SetUniformFloat("B_renderer_receivesLighting",
                                                       m_receivesLighting ? 1.0f : 0.0f, false);
+
+        m_material->m_shaderProgram->SetUniformFloat("B_gameObject_isSelected",
+                                                      gameObject->IsSelectedInHierarchy() ? 1.0f : 0.0f, false);
     }
 
     glLineWidth(m_lineWidth);

@@ -21,7 +21,7 @@ true
 false
 0.9
 1 1 1
-Assets/Engine/Materials/DirectionalLight.bmat
+Assets/Engine/Materials/PR_DirectionalLight.bmat
 </DirectionalLight>
 </components>
 </GameObject>
@@ -76,7 +76,7 @@ true
 true
 5
 1 0.2 0.2
-Assets/Engine/Materials/PointLight.bmat
+Assets/Engine/Materials/PR_PointLight.bmat
 10
 </PointLight>
 </components>

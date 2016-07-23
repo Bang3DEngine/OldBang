@@ -8,7 +8,7 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 {
     SetName("EditorRotateAxisGroup" + EditorAxis::GetStringFromDir(dir));
 
-    m_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/LineRotationAxis.bmat");
+    m_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/D2G_LineRotationAxis.bmat");
     m_material = new Material(*m_material);
 
     circle = AddComponent<CircleRenderer>();

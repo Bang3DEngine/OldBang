@@ -311,7 +311,7 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
 
     if (selected)
     {
-        if (!m_wasSelectedInHierarchy)
+        if (!m_isSelectedInHierarchy)
         {
             m_selectionGameObject = new EditorSelectionGameObject(this);
             m_selectionGameObject->SetParent(Canvas::GetCurrentScene());
@@ -319,13 +319,13 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
     }
     else
     {
-        if (m_wasSelectedInHierarchy)
+        if (m_isSelectedInHierarchy)
         {
             m_selectionGameObject->SetParent(nullptr);
         }
     }
 
-    m_wasSelectedInHierarchy = selected;
+    m_isSelectedInHierarchy = selected;
 }
 #endif
 
@@ -378,6 +378,11 @@ void GameObject::SetEnabled(bool enabled) { this->m_enabled = enabled; }
 bool GameObject::IsEnabled()
 {
     return m_enabled && (!m_parent ? true : m_parent->IsEnabled());
+}
+
+bool GameObject::IsSelectedInHierarchy() const
+{
+    return m_isSelectedInHierarchy;
 }
 
 
