@@ -69,7 +69,7 @@ GameObject::~GameObject()
     }
 }
 
-void GameObject::SetParent(GameObject *newParent)
+void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
 {
     if (m_parent != newParent)
     {
@@ -82,11 +82,27 @@ void GameObject::SetParent(GameObject *newParent)
             #endif
         }
 
+        if(keepWorldTransform)
+        {
+            transform->SetLocalPosition(transform->LocalToWorldPoint(transform->GetLocalPosition()));
+            // TODO
+            // SetRotation
+            // SetScale
+        }
+
         m_parent = newParent;
 
         if (m_parent)
         {
             m_parent->m_children.push_back(this);
+
+            if(keepWorldTransform)
+            {
+                transform->SetLocalPosition(transform->WorldToLocalPoint(transform->GetLocalPosition()));
+                // TODO
+                // SetRotation
+                // SetScale
+            }
 
             #ifdef BANG_EDITOR
             WindowEventManager::NotifyChildAdded(this);
@@ -146,11 +162,10 @@ Box GameObject::GetObjectBoundingBox() const
 Box GameObject::GetLocalBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
-    Transform *t = transform;
-    if (CAN_USE_COMPONENT(t))
+    if (CAN_USE_COMPONENT(transform))
     {
         Matrix4 mat;
-        t->GetObjectModelMatrix(mat);
+        transform->GetObjectModelMatrix(&mat);
         b = mat * b; //Apply transform to Box
     }
     return b;
@@ -159,11 +174,10 @@ Box GameObject::GetLocalBoundingBox() const
 Box GameObject::GetBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
-    Transform *t = transform;
-    if (CAN_USE_COMPONENT(t))
+    if (CAN_USE_COMPONENT(transform))
     {
         Matrix4 mat;
-        t->GetModelMatrix(mat);
+        transform->GetModelMatrix(&mat);
         b = mat * b;
     }
     return b;

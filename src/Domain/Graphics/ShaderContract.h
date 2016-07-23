@@ -34,6 +34,8 @@ public:
 
     Uniform_Matrix_Model,
     Uniform_Matrix_Model_Inverse,
+    Uniform_Matrix_Normal,
+    Uniform_Matrix_Normal_Inverse,
     Uniform_Matrix_View,
     Uniform_Matrix_View_Inverse,
     Uniform_Matrix_Projection,

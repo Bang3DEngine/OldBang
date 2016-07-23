@@ -91,6 +91,24 @@ int main(int argc, char *argv[])
         Persistence::SetCurrentSceneFilepath(filename);
     }
 
+    /* TEST STUFF
+    GameObject *go1 = new GameObject();
+    GameObject *go2 = new GameObject();
+    go2->SetParent(go1);
+    go1->transform->SetPosition(Vector3(5,5,5));
+    go2->transform->SetPosition(Vector3(0,0,0));
+
+    Logger_Log("GO1: ");
+    Logger_Log(go1->transform);
+    Logger_Log(go1->transform->GetPosition());
+    Logger_Log("");
+
+    Logger_Log("GO2: ");
+    Logger_Log(go2->transform);
+    Logger_Log(go2->transform->GetPosition());
+    Logger_Log("");
+    */
+
     #else
 
     Scene *scene = new Scene();

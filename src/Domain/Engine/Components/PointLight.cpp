@@ -36,6 +36,7 @@ void PointLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);
     PointLight *pl = static_cast<PointLight*>(clone);
+    pl->SetRange(GetRange());
 }
 
 ICloneable *PointLight::Clone() const
@@ -64,12 +65,24 @@ void PointLight::OnSlotValueChanged(InspectorWidget *source)
 
 }
 
+void PointLight::SetRange(float range)
+{
+    m_range = range;
+}
+
+float PointLight::GetRange() const
+{
+    return m_range;
+}
+
 void PointLight::WriteInternal(std::ostream &f) const
 {
     Light::WriteInternal(f);
+    FileWriter::WriteFloat(m_range, f);
 }
 
 void PointLight::ReadInternal(std::istream &f)
 {
     Light::ReadInternal(f);
+    m_range = FileReader::ReadFloat(f);
 }

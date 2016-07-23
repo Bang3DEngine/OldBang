@@ -98,10 +98,10 @@ public:
     Vector3 WorldToObjectDirection(const Vector3 &dir) const;
 
 
-    void GetObjectModelMatrix(Matrix4 &m) const;
-    void GetModelMatrix(Matrix4 &m) const;
+    void GetObjectModelMatrix(Matrix4 *m) const;
+    void GetModelMatrix(Matrix4 *m) const;
 
-    void GetNormalMatrix(Matrix4 &m) const;
+    void GetNormalMatrix(Matrix4 *m) const;
 
     Vector3 GetForward() const;
     Vector3 GetBack() const;

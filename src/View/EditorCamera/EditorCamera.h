@@ -23,7 +23,6 @@
 class EditorCamera : public EditorGameObject
 {
 private:
-    Transform *m_t = nullptr;
     Camera *m_cam = nullptr;
     Transform *m_camt = nullptr; //YawNode transform
     EditorGameObject *m_yawNode = nullptr;

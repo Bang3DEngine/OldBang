@@ -16,7 +16,6 @@ Hierarchy::Hierarchy(QWidget *parent)
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this ,SLOT(_NotifyHierarchyGameObjectDoubleClicked(
                            QTreeWidgetItem*,int)));
-
 }
 
 Hierarchy::~Hierarchy()
@@ -183,16 +182,24 @@ void Hierarchy::dropEvent(QDropEvent *event)
     LeaveOnlyOuterMostItems(&sourceItems);
 
     QTreeWidgetItem *targetItem = itemAt(event->pos());
-    if (targetItem  && !sourceItems.empty())
+    if (!sourceItems.empty())
     {
-        GameObject *target = m_treeItemToGameObject[targetItem];
-        DropIndicatorPosition dropPos = dropIndicatorPosition();
-        if (dropPos == BelowItem || dropPos == AboveItem)
+        GameObject *target = nullptr;
+        if (targetItem)
         {
-            //Not putting inside, but below or above. Thus take its parent.
-            targetItem = targetItem->parent();
-            if (targetItem) target = m_treeItemToGameObject[targetItem];
-            else target = m_currentScene;
+            target = m_treeItemToGameObject[targetItem];
+            DropIndicatorPosition dropPos = dropIndicatorPosition();
+            if (dropPos == BelowItem || dropPos == AboveItem)
+            {
+                //Not putting inside, but below or above. Thus take its parent.
+                targetItem = targetItem->parent();
+                if (targetItem) target = m_treeItemToGameObject[targetItem];
+                else target = m_currentScene;
+            }
+        }
+        else
+        {
+            target = m_currentScene;
         }
 
         for (QTreeWidgetItem *sourceItem : sourceItems)
@@ -202,7 +209,7 @@ void Hierarchy::dropEvent(QDropEvent *event)
                 GameObject *source = m_treeItemToGameObject[sourceItem];
                 if (source && target && source->parent)
                 {
-                    source->SetParent(target);
+                    source->SetParent(target, true);
                 }
             }
         }

@@ -53,7 +53,10 @@ void Transform::SetLocalPosition(const Vector3 &p)
 void Transform::SetPosition(const Vector3 &p)
 {
     if (!gameObject->parent) SetLocalPosition(p);
-    else SetLocalPosition(-gameObject->parent->transform->GetPosition() + p);
+    else
+    {
+        SetLocalPosition(WorldToLocalPoint(p));
+    }
 }
 void Transform::TranslateLocal(const Vector3 &translation)
 {
@@ -152,30 +155,30 @@ void Transform::SetLocalScale(const Vector3 &s)
 
 Vector3 Transform::TransformPoint(const Vector3 &point) const
 {
-    Matrix4 m;
     if (!gameObject->parent) return point;
-    gameObject->parent->transform->GetModelMatrix(m);
+    Matrix4 m;
+    gameObject->parent->transform->GetModelMatrix(&m);
     return Vector3((m * glm::vec4(point, 1)).xyz());
 }
 Vector3 Transform::InverseTransformPoint(const Vector3 &point) const
 {
-    Matrix4 m;
     if (!gameObject->parent) return point;
-    gameObject->parent->transform->GetModelMatrix(m);
+    Matrix4 m;
+    gameObject->parent->transform->GetModelMatrix(&m);
     return Vector3((m.Inversed() * glm::vec4(point, 1)).xyz());
 }
 Vector3 Transform::TransformDirection(const Vector3 &dir) const
 {
-    Matrix4 m;
     if (!gameObject->parent) return dir;
-    gameObject->parent->transform->GetModelMatrix(m);
+    Matrix4 m;
+    gameObject->parent->transform->GetModelMatrix(&m);
     return Vector3((m * glm::vec4(dir, 0)).xyz());
 }
 Vector3 Transform::InverseTransformDirection(const Vector3 &dir) const
 {
-    Matrix4 m;
     if (!gameObject->parent) return dir;
-    gameObject->parent->transform->GetModelMatrix(m);
+    Matrix4 m;
+    gameObject->parent->transform->GetModelMatrix(&m);
     return Vector3((m.Inversed() * glm::vec4(dir, 0)).xyz());
 }
 
@@ -203,25 +206,25 @@ Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 Vector3 Transform::LocalToObjectPoint(const Vector3 &point) const
 {
     Matrix4 m;
-    GetObjectModelMatrix(m);
+    GetObjectModelMatrix(&m);
     return Vector3((m.Inversed() * glm::vec4(point, 1)).xyz());
 }
 Vector3 Transform::LocalToObjectDirection(const Vector3 &dir) const
 {
     Matrix4 m;
-    GetObjectModelMatrix(m);
+    GetObjectModelMatrix(&m);
     return Vector3((m.Inversed() * glm::vec4(dir, 0)).xyz());
 }
 Vector3 Transform::ObjectToLocalPoint(const Vector3 &point) const
 {
     Matrix4 m;
-    GetObjectModelMatrix(m);
+    GetObjectModelMatrix(&m);
     return Vector3((m * glm::vec4(point, 1)).xyz());
 }
 Vector3 Transform::ObjectToLocalDirection(const Vector3 &dir) const
 {
     Matrix4 m;
-    GetObjectModelMatrix(m);
+    GetObjectModelMatrix(&m);
     return Vector3((m * glm::vec4(dir, 0)).xyz());
 }
 
@@ -246,30 +249,30 @@ Vector3 Transform::WorldToObjectDirection(const Vector3 &dir) const
 
 
 
-void Transform::GetObjectModelMatrix(Matrix4 &m) const
+void Transform::GetObjectModelMatrix(Matrix4 *m) const
 {
     Matrix4 T = Matrix4::TranslateMatrix(GetLocalPosition());
     Matrix4 R = Matrix4::RotateMatrix(GetLocalRotation());
     Matrix4 S = Matrix4::ScaleMatrix(GetLocalScale());
 
-    m = T * R * S;
+    *m = T * R * S;
 }
 
-void Transform::GetModelMatrix(Matrix4 &m) const
+void Transform::GetModelMatrix(Matrix4 *m) const
 {
     GetObjectModelMatrix(m);
     if (gameObject->parent)
     {
         Matrix4 mp;
-        gameObject->parent->transform->GetModelMatrix(mp);
-        m = mp * m;
+        gameObject->parent->transform->GetModelMatrix(&mp);
+        *m = mp * (*m);
     }
 }
 
-void Transform::GetNormalMatrix(Matrix4 &m) const
+void Transform::GetNormalMatrix(Matrix4 *m) const
 {
     GetModelMatrix(m);
-    m = m.Inversed().Transposed();
+    *m = m->Inversed().Transposed();
 }
 
 
@@ -304,8 +307,15 @@ Vector3 Transform::GetLocalPosition() const
 
 Vector3 Transform::GetPosition() const
 {
-    if (!gameObject->parent) return GetLocalPosition();
-    return gameObject->parent->transform->GetPosition() + GetLocalPosition();
+    if (!gameObject->parent)
+    {
+        return GetLocalPosition();
+    }
+    else
+    {
+        return LocalToWorldPoint(GetLocalPosition());
+    }
+    //return gameObject->parent->transform->GetPosition() + GetLocalPosition();
 }
 
 Quaternion Transform::GetLocalRotation() const
@@ -315,8 +325,14 @@ Quaternion Transform::GetLocalRotation() const
 
 Quaternion Transform::GetRotation() const
 {
-    if (!gameObject->parent) return GetLocalRotation();
-    return gameObject->parent->transform->GetRotation() * GetLocalRotation();
+    if (!gameObject->parent)
+    {
+        return GetLocalRotation();
+    }
+    else
+    {
+        return gameObject->parent->transform->GetRotation() * GetLocalRotation();
+    }
 }
 
 Vector3 Transform::GetLocalEuler() const
@@ -326,8 +342,14 @@ Vector3 Transform::GetLocalEuler() const
 
 Vector3 Transform::GetEuler() const
 {
-    if (!gameObject->parent) return GetLocalEuler();
-    return gameObject->parent->transform->GetEuler() + GetLocalEuler();
+    if (!gameObject->parent)
+    {
+        return GetLocalEuler();
+    }
+    else
+    {
+        return gameObject->parent->transform->GetEuler() + GetLocalEuler();
+    }
 }
 
 Vector3 Transform::GetLocalScale() const
@@ -337,8 +359,14 @@ Vector3 Transform::GetLocalScale() const
 
 Vector3 Transform::GetScale() const
 {
-    if (!gameObject->parent) return GetLocalScale();
-    return gameObject->parent->transform->GetScale() * GetLocalScale();
+    if (!gameObject->parent)
+    {
+        return GetLocalScale();
+    }
+    else
+    {
+        return gameObject->parent->transform->GetScale() * GetLocalScale();
+    }
 }
 
 Vector3 Transform::GetForward() const
@@ -392,9 +420,9 @@ const std::string Transform::ToString() const
 
 InspectorWidgetInfo* Transform::GetComponentInfo()
 {
-    Vector3 pos = GetPosition();
-    Vector3 rotEuler = GetEuler();
-    Vector3 scale = GetScale();
+    Vector3 pos = GetLocalPosition();
+    Vector3 rotEuler = GetLocalEuler();
+    Vector3 scale = GetLocalScale();
 
     static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value =
         {pos.x, pos.y, pos.z};
@@ -412,13 +440,13 @@ void Transform::OnSlotValueChanged(InspectorWidget *source)
 {
     std::vector<float> v;
     v = source->GetSWVectorFloatValue("Position");
-    SetPosition(Vector3(v[0], v[1], v[2]));
+    SetLocalPosition(Vector3(v[0], v[1], v[2]));
 
     v = source->GetSWVectorFloatValue("Rotation");
-    SetEuler(Vector3(v[0], v[1], v[2]));
+    SetLocalEuler(Vector3(v[0], v[1], v[2]));
 
     v = source->GetSWVectorFloatValue("Scale");
-    SetScale(Vector3(v[0], v[1], v[2]));
+    SetLocalScale(Vector3(v[0], v[1], v[2]));
 }
 #endif
 

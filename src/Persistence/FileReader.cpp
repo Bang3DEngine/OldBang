@@ -8,6 +8,7 @@
 #include "Texture2D.h"
 #include "FileReader.h"
 #include "GameObject.h"
+#include "PointLight.h"
 #include "BehaviourHolder.h"
 #include "DirectionalLight.h"
 
@@ -295,6 +296,12 @@ void FileReader::ReadComponents(std::istream &f, GameObject *go)
             DirectionalLight *dl = new DirectionalLight();
             dl->Read(f);
             c = dl;
+        }
+        else if (line == "<PointLight>")
+        {
+            PointLight *pl = new PointLight();
+            pl->Read(f);
+            c = pl;
         }
 
         if (c && !isTransform)

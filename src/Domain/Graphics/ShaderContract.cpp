@@ -44,6 +44,11 @@ const std::string ShaderContract::Uniform_Matrix_Model =
 const std::string ShaderContract::Uniform_Matrix_Model_Inverse =
         ShaderContract::ShaderNames_Prefix + "matrix_model_inv";
 
+const std::string ShaderContract::Uniform_Matrix_Normal =
+        ShaderContract::ShaderNames_Prefix + "matrix_normal";
+const std::string ShaderContract::Uniform_Matrix_Normal_Inverse =
+        ShaderContract::ShaderNames_Prefix + "matrix_normal_inv";
+
 const std::string ShaderContract::Uniform_Matrix_View =
         ShaderContract::ShaderNames_Prefix + "matrix_view";
 const std::string ShaderContract::Uniform_Matrix_View_Inverse =
@@ -102,9 +107,15 @@ const std::string ShaderContract::Macro_Draw_To_GBuffer_VS_Declare_Content =
 #version 130 \n\
 \n\
 uniform mat4  B_matrix_model; \n\
+uniform mat4  B_matrix_model_inv; \n\
+uniform mat4  B_matrix_normal; \n\
+uniform mat4  B_matrix_normal_inv; \n\
 uniform mat4  B_matrix_view; \n\
+uniform mat4  B_matrix_view_inv; \n\
 uniform mat4  B_matrix_projection; \n\
+uniform mat4  B_matrix_projection_inv; \n\
 uniform mat4  B_matrix_pvm; \n\
+uniform mat4  B_matrix_pvm_inv; \n\
 in vec3 B_position_raw_vin; \n\
 in vec3 B_normal_raw_vin; \n\
 in vec2 B_uv_raw_vin; \n\
@@ -123,7 +134,7 @@ B_vin.uv              = B_uv_raw_vin; \n\
  \n\
 /* Some default values */ \n\
 B_vout.position_world = B_matrix_model * vec4(B_vin.position_object, 1.0); \n\
-B_vout.normal_world   = B_matrix_model * vec4(B_vin.normal_object,   0.0); \n\
+B_vout.normal_world   = B_matrix_normal * vec4(B_vin.normal_object,   0.0); \n\
 B_vout.uv             = vec2(B_vin.uv.x, 1.0f - B_vin.uv.y); \n\
 B_vout.position_pvm   = B_matrix_pvm * vec4(B_vin.position_object,   1.0); \n\
 ";
@@ -143,6 +154,7 @@ const std::string ShaderContract::Macro_Draw_To_GBuffer_FS_Declare_Content =
 #version 130 \n\
 \n\
 uniform mat4  B_matrix_model; \n\
+uniform mat4  B_matrix_normal; \n\
 uniform mat4  B_matrix_view; \n\
 uniform mat4  B_matrix_projection; \n\
 uniform mat4  B_matrix_pvm; \n\
@@ -219,8 +231,13 @@ const std::string ShaderContract::Macro_Post_Render_FS_Declare_Content =
 #version 130 \n\
 \n\
 uniform mat4  B_matrix_model; \n\
+uniform mat4  B_matrix_model_inv; \n\
+uniform mat4  B_matrix_normal; \n\
+uniform mat4  B_matrix_normal_inv; \n\
 uniform mat4  B_matrix_view; \n\
+uniform mat4  B_matrix_view_inv; \n\
 uniform mat4  B_matrix_projection; \n\
+uniform mat4  B_matrix_projection_inv; \n\
 uniform mat4  B_matrix_pvm; \n\
 \n\
 uniform sampler2D B_position_gout_fin; \n\

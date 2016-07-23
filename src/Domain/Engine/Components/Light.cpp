@@ -53,9 +53,19 @@ void Light::SetColor(const Vector3 &color)
     m_color = color;
 }
 
+void Light::SetIntensity(float intensity)
+{
+    m_intensity = intensity;
+}
+
 Vector3 Light::GetColor() const
 {
     return m_color;
+}
+
+float Light::GetIntensity() const
+{
+    return m_intensity;
 }
 
 #ifdef BANG_EDITOR

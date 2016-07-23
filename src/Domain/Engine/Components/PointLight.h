@@ -24,6 +24,9 @@ public:
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
     #endif
 
+    void SetRange(float range);
+    float GetRange() const;
+
     virtual void WriteInternal(std::ostream &f) const;
     virtual void ReadInternal(std::istream &f);
 };

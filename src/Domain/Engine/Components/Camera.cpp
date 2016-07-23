@@ -22,24 +22,24 @@ Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
     #endif
 }
 
-void Camera::GetViewMatrix(Matrix4 &view) const
+void Camera::GetViewMatrix(Matrix4 *view) const
 {
     Transform *t = gameObject->transform;
     if (CAN_USE_COMPONENT(t))
     {
         t->GetModelMatrix(view);
-        view = view.Inversed();
+        *view = view->Inversed();
     }
     else
     {
         Logger_Verbose(gameObject << " has a Camera but does not have a transform. " <<
                        "View matrix will be the idgameObject matrix.");
 
-        view = Matrix4(1.0f);
+        *view = Matrix4(1.0f);
     }
 }
 
-void Camera::GetProjectionMatrix(Matrix4 &proj) const
+void Camera::GetProjectionMatrix(Matrix4 *proj) const
 {
     if (m_projMode == ProjectionMode::Perspective)
     {
@@ -48,13 +48,13 @@ void Camera::GetProjectionMatrix(Matrix4 &proj) const
             m_aspectRatio = Canvas::GetAspectRatio();
         }
 
-        proj = Matrix4::Perspective(glm::radians(m_fovDegrees), m_aspectRatio, m_zNear, m_zFar);
+        *proj = Matrix4::Perspective(glm::radians(m_fovDegrees), m_aspectRatio, m_zNear, m_zFar);
     }
     else //Ortho
     {
-        proj = Matrix4::Ortho(m_orthoRect.m_minx, m_orthoRect.m_maxx,
-                              m_orthoRect.m_miny, m_orthoRect.m_maxy,
-                              m_zNear, m_zFar);
+        *proj = Matrix4::Ortho(m_orthoRect.m_minx, m_orthoRect.m_maxx,
+                               m_orthoRect.m_miny, m_orthoRect.m_maxy,
+                               m_zNear, m_zFar);
     }
 }
 
@@ -137,8 +137,8 @@ bool Camera::GetAutoUpdateAspectRatio() const
 glm::vec2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
 {
     Matrix4 p, v;
-    GetProjectionMatrix(p);
-    GetViewMatrix(v);
+    GetProjectionMatrix(&p);
+    GetViewMatrix(&v);
     glm::vec4 v_4 = p * v * glm::vec4(position, 1);
     v_4 /= v_4.w;
 

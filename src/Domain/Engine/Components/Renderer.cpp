@@ -82,10 +82,11 @@ void Renderer::Render() const
     m_material->UnBind();
 }
 
-void Renderer::GetMatrices(Matrix4 &model,
-                           Matrix4 &view,
-                           Matrix4 &projection,
-                           Matrix4 &pvm) const
+void Renderer::GetMatrices(Matrix4 *model,
+                           Matrix4 *normal,
+                           Matrix4 *view,
+                           Matrix4 *projection,
+                           Matrix4 *pvm) const
 {
     //We assume cam, scene and transform do exist.
 
@@ -93,27 +94,38 @@ void Renderer::GetMatrices(Matrix4 &model,
 
     if (!m_ignoreModelMatrix)
     {
-        Transform *t = gameObject->transform;
-        if (t) t->GetModelMatrix(model);
+        gameObject->transform->GetModelMatrix(model);
+        gameObject->transform->GetNormalMatrix(normal);
     }
-    else model = Matrix4(1.0f);
+    else
+    {
+        *model = Matrix4(1.0f);
+        *normal = Matrix4(1.0f);
+    }
 
     if (!m_ignoreViewMatrix)
     {
         cam->GetViewMatrix(view);
     }
-    else view = Matrix4(1.0f);
+    else
+    {
+        *view = Matrix4(1.0f);
+    }
 
     if (!m_ignoreProjectionMatrix)
     {
         cam->GetProjectionMatrix(projection);
     }
-    else projection = Matrix4(1.0f);
+    else
+    {
+        *projection = Matrix4(1.0f);
+    }
 
-    pvm = projection * view * model;
+    *pvm = (*projection) * (*view) * (*model);
 }
 
 void Renderer::SetMatricesUniforms(const Matrix4 &model,
+                                   const Matrix4 &normal,
                                    const Matrix4 &view,
                                    const Matrix4 &projection,
                                    const Matrix4 &pvm) const
@@ -122,6 +134,10 @@ void Renderer::SetMatricesUniforms(const Matrix4 &model,
                 ShaderContract::Uniform_Matrix_Model, model, false);
     m_material->m_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);
+    m_material->m_shaderProgram->SetUniformMat4(
+                ShaderContract::Uniform_Matrix_Normal, normal, false);
+    m_material->m_shaderProgram->SetUniformMat4(
+                ShaderContract::Uniform_Matrix_Normal_Inverse, normal.Inversed(), false);
     m_material->m_shaderProgram->SetUniformMat4(
                 ShaderContract::Uniform_Matrix_View, view, false);
     m_material->m_shaderProgram->SetUniformMat4(

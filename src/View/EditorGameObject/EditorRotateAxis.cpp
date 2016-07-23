@@ -53,9 +53,9 @@ void EditorRotateAxis::OnUpdate()
     GameObject *ago = m_attachedGameObject;
 
     Matrix4 p, v, m;
-    cam->GetProjectionMatrix(p);
-    cam->GetViewMatrix(v);
-    transform->GetModelMatrix(m);
+    cam->GetProjectionMatrix(&p);
+    cam->GetViewMatrix(&v);
+    transform->GetModelMatrix(&m);
     Matrix4 pvm =  p * v * m;
 
     if (m_grabbed)

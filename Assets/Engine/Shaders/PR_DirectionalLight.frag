@@ -31,7 +31,7 @@ void main()
 
     if (B_vin.receivesLighting > 0.5f)
     {
-        float lightDot = dot(B_vin.normal_world, normalize(-B_light_forward_world));
+        float lightDot = max(0.0f, dot(B_vin.normal_world, normalize(-B_light_forward_world)));
         B_vout.color = vec4(B_vin.color.rgb +
                             B_vin.diffuseColor.rgb * lightDot * B_light_intensity * B_light_color, 1);
     }

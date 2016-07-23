@@ -91,9 +91,9 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
 {
     NONULL(m_mesh);
 
-    Matrix4 model, view, projection, pvm;
-    GetMatrices(model, view, projection, pvm);
-    SetMatricesUniforms(model, view, projection, pvm);
+    Matrix4 model, normal, view, projection, pvm;
+    GetMatrices(&model, &normal, &view, &projection, &pvm);
+    SetMatricesUniforms(model, normal, view, projection, pvm);
 
     m_mesh->GetVAO()->Bind();
     glDrawArrays(m_renderMode, 0, m_mesh->GetVertexCount());

@@ -31,9 +31,11 @@ public:
     virtual void OnSlotValueChanged(InspectorWidget *source) override;
     #endif
 
-    virtual void SetColor(const Vector3 &color);
+    void SetColor(const Vector3 &color);
+    void SetIntensity(float intensity);
 
     Vector3 GetColor() const;
+    float GetIntensity() const;
 
     virtual void WriteInternal(std::ostream &f) const;
     virtual void ReadInternal(std::istream &f);

@@ -85,7 +85,7 @@ public:
 
     virtual ~GameObject();
 
-    void SetParent(GameObject *parent);
+    void SetParent(GameObject *parent, bool keepWorldTransform = false);
     GameObject* GetChild(const std::string &m_name) const;
 
     void SetRenderLayer(unsigned char layer);

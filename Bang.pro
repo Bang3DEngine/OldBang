@@ -113,7 +113,9 @@ OTHER_FILES += \
     Assets/Engine/Materials/RenderGBufferToScreen.bmat \
     Assets/Engine/Shaders/RenderGBufferToScreen.frag \
     Assets/Engine/Materials/PointLight.bmat \
-    Assets/Engine/Shaders/PR_PointLight.frag
+    Assets/Engine/Shaders/PR_PointLight.frag \
+    Assets/Scenes/tmp.bscene \
+    Assets/Scenes/test2.bscene
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

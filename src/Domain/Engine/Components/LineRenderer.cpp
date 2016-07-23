@@ -48,9 +48,9 @@ void LineRenderer::BindPointsToVAO() const
 
 void LineRenderer::RenderWithoutBindingMaterial() const
 {
-    Matrix4 model, view, projection, pvm;
-    GetMatrices(model, view, projection, pvm);
-    SetMatricesUniforms(model, view, projection, pvm);
+    Matrix4 model, normal, view, projection, pvm;
+    GetMatrices(&model, &normal, &view, &projection, &pvm);
+    SetMatricesUniforms(model, normal, view, projection, pvm);
 
     m_vao->Bind();
     glDrawArrays(m_drawLinesMode, 0, m_points.size());

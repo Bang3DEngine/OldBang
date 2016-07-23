@@ -50,10 +50,12 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
             GameObject *go = renderer->gameObject;
             if (m_gameObjectToId.find(go) != m_gameObjectToId.end() && go->IsEnabled())
             {
-                Matrix4 model, view, projection, pvm;
-                renderer->GetMatrices(model, view, projection, pvm);
+                Matrix4 model, normal, view, projection, pvm;
+                renderer->GetMatrices(&model, &normal, &view, &projection, &pvm);
 
                 m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
+                                        model, false);
+                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal,
                                         model, false);
                 m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
                                         view, false);
