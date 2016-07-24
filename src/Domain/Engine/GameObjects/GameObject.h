@@ -13,6 +13,7 @@
 #include "ICloneable.h"
 #include "ISceneEventListener.h"
 
+#include "Property.h"
 #include "Material.h"
 #include "Sphere.h"
 #include "Box.h"
@@ -57,8 +58,8 @@ protected:
     std::string m_name = "";
     std::list<Component*> m_comps;
     std::list<GameObject*> m_children;
-    Transform* m_transform = nullptr;
-    GameObject* m_parent = nullptr;
+    Transform *m_transform = nullptr;
+    GameObject *m_parent = nullptr;
 
     /**
      * @brief A RenderLayer is the order in which gameObjects will
@@ -72,9 +73,6 @@ protected:
     bool m_enabled = true;
 
 public:
-    std::string const& name   = m_name;
-    GameObject* const& parent = m_parent;
-    Transform* const& transform = m_transform;
 
     GameObject();
     GameObject(const std::string &m_name);
@@ -300,12 +298,17 @@ public:
         }
     }
 
+    Transform* GetTransform() const;
+
     virtual void OnMouseEnter(bool fromChildren);
     virtual void OnMouseOver(bool fromChildren);
     virtual void OnMouseExit(bool fromChildren);
 
     virtual bool IsEditorGameObject() const;
     virtual bool IsScene() const;
+
+    static GameObject *Find(const std::string &name);
+    GameObject *FindInChildren(const std::string &name);
 
     virtual std::string GetTag() const override;
     virtual void WriteInternal(std::ostream &f) const override;
@@ -319,6 +322,7 @@ public:
     void OnTreeHierarchyGameObjectsSelected(
             std::list<GameObject*> &selectedEntities) override;
     #endif
+
 };
 
 #endif // GAMEOBJECT_H

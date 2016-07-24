@@ -56,15 +56,17 @@ void Renderer::ActivateGLStatesBeforeRendering() const
     Camera *camera = scene->GetCamera();
     if (camera  && m_material  && m_material->m_shaderProgram )
     {
-        Transform *t = camera->gameObject->transform;
+        Transform *t = camera->gameObject->GetTransform();
         m_material->m_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
                                                     t->GetPosition(), false);
 
         m_material->m_shaderProgram->SetUniformFloat("B_renderer_receivesLighting",
                                                       m_receivesLighting ? 1.0f : 0.0f, false);
 
+        #ifdef BANG_EDITOR
         m_material->m_shaderProgram->SetUniformFloat("B_gameObject_isSelected",
                                                       gameObject->IsSelectedInHierarchy() ? 1.0f : 0.0f, false);
+        #endif
     }
 
     glLineWidth(m_lineWidth);
@@ -97,8 +99,8 @@ void Renderer::GetMatrices(Matrix4 *model,
 
     if (!m_ignoreModelMatrix)
     {
-        gameObject->transform->GetModelMatrix(model);
-        gameObject->transform->GetNormalMatrix(normal);
+        gameObject->GetTransform()->GetModelMatrix(model);
+        gameObject->GetTransform()->GetNormalMatrix(normal);
     }
     else
     {

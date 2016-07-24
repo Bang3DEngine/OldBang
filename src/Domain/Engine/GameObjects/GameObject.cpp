@@ -15,7 +15,8 @@ GameObject::GameObject() : GameObject("")
 {
 }
 
-GameObject::GameObject(const std::string &name) : m_name(name)
+GameObject::GameObject(const std::string &name) :
+    m_name(name)
 {
     AddComponent<Transform>();
 }
@@ -45,7 +46,7 @@ void GameObject::CloneInto(ICloneable *clone) const
         }
         else
         {
-            transform->CloneInto(go->transform);
+            m_transform->CloneInto(go->GetTransform());
         }
     }
 }
@@ -84,7 +85,7 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
 
         if(keepWorldTransform)
         {
-            transform->SetLocalPosition(transform->LocalToWorldPoint(transform->GetLocalPosition()));
+            m_transform->SetLocalPosition(m_transform->LocalToWorldPoint(m_transform->GetLocalPosition()));
             // TODO
             // SetRotation
             // SetScale
@@ -98,7 +99,7 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
 
             if(keepWorldTransform)
             {
-                transform->SetLocalPosition(transform->WorldToLocalPoint(transform->GetLocalPosition()));
+                m_transform->SetLocalPosition(m_transform->WorldToLocalPoint(m_transform->GetLocalPosition()));
                 // TODO
                 // SetRotation
                 // SetScale
@@ -162,10 +163,10 @@ Box GameObject::GetObjectBoundingBox() const
 Box GameObject::GetLocalBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
-    if (CAN_USE_COMPONENT(transform))
+    if (CAN_USE_COMPONENT(m_transform))
     {
         Matrix4 mat;
-        transform->GetObjectModelMatrix(&mat);
+        m_transform->GetObjectModelMatrix(&mat);
         b = mat * b; //Apply transform to Box
     }
     return b;
@@ -174,10 +175,10 @@ Box GameObject::GetLocalBoundingBox() const
 Box GameObject::GetBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
-    if (CAN_USE_COMPONENT(transform))
+    if (CAN_USE_COMPONENT(m_transform))
     {
         Matrix4 mat;
-        transform->GetModelMatrix(&mat);
+        m_transform->GetModelMatrix(&mat);
         b = mat * b;
     }
     return b;
@@ -234,6 +235,11 @@ void GameObject::MoveComponent(Component *c, int distance)
     }
 }
 
+Transform *GameObject::GetTransform() const
+{
+    return m_transform;
+}
+
 void GameObject::RemoveComponent(Component *c)
 {
     for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
@@ -288,12 +294,43 @@ bool GameObject::IsScene() const
     return false;
 }
 
+GameObject *GameObject::Find(const std::string &name)
+{
+    Scene *scene = Canvas::GetCurrentScene();
+    return scene->FindInChildren(name);
+}
+
+GameObject *GameObject::FindInChildren(const std::string &name)
+{
+    for (GameObject *child : GetChildren())
+    {
+        if (child->GetName() == name)
+        {
+            return child;
+        }
+        else
+        {
+            GameObject *found = child->FindInChildren(name);
+            if (found)
+            {
+                return found;
+            }
+        }
+    }
+    return nullptr;
+}
+
 std::string GameObject::GetTag() const
 {
     return "GameObject";
 }
 
 #ifdef BANG_EDITOR
+bool GameObject::IsSelectedInHierarchy() const
+{
+    return m_isSelectedInHierarchy;
+}
+
 void GameObject::OnTreeHierarchyGameObjectsSelected(
         std::list<GameObject*> &selectedEntities )
 {
@@ -333,7 +370,7 @@ void GameObject::WriteInternal(std::ostream &f) const
 {
     FileWriter::WritePointer(((void*)this), f);
     FileWriter::WriteBool(m_enabled, f);
-    FileWriter::WriteString(name, f);
+    FileWriter::WriteString(m_name, f);
 
     f << "<children>" << std::endl;
     for (GameObject *go : m_children)
@@ -374,46 +411,44 @@ void GameObject::ReadInternal(std::istream &f)
     }
 }
 
-void GameObject::SetEnabled(bool enabled) { this->m_enabled = enabled; }
+void GameObject::SetEnabled(bool enabled)
+{
+    m_enabled = enabled;
+}
+
 bool GameObject::IsEnabled()
 {
     return m_enabled && (!m_parent ? true : m_parent->IsEnabled());
 }
 
-bool GameObject::IsSelectedInHierarchy() const
-{
-    return m_isSelectedInHierarchy;
-}
-
-
 const std::string GameObject::ToString() const
 {
     std::ostringstream oss;
-    oss << "GameObject: " << name << "(" << ((void*)this) << ")";
+    oss << "GameObject: " << m_name << "(" << ((void*)this) << ")";
     return oss.str();
 }
 
 void GameObject::OnMouseEnter(bool fromChildren)
 {
-    if (parent)
+    if (m_parent)
     {
-        parent->OnMouseEnter(true);
+        m_parent->OnMouseEnter(true);
     }
 }
 
 void GameObject::OnMouseOver(bool fromChildren)
 {
-    if (parent)
+    if (m_parent)
     {
-        parent->OnMouseOver(true);
+        m_parent->OnMouseOver(true);
     }
 }
 
 void GameObject::OnMouseExit(bool fromChildren)
 {
-    if (parent)
+    if (m_parent)
     {
-        parent->OnMouseExit(true);
+        m_parent->OnMouseExit(true);
     }
 }
 

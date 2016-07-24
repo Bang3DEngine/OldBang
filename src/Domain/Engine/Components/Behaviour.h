@@ -40,7 +40,8 @@ private:
 /**
  * These variables must be copied from BehaviourHolder
  */
-private:
+protected:
+    GameObject* m_parent = nullptr;
     GameObject* m_gameObject = nullptr;
     Transform*  m_transform  = nullptr;
 

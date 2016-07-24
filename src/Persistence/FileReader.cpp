@@ -269,8 +269,8 @@ void FileReader::ReadComponents(std::istream &f, GameObject *go)
 
         if (line == "<Transform>")
         {
-            go->transform->Read(f); // Read on top of existing default Transform
-            c = go->transform;
+            go->GetTransform()->Read(f); // Read on top of existing default Transform
+            c = go->GetTransform();
             isTransform = true;
         }
         else if (line == "<MeshRenderer>")

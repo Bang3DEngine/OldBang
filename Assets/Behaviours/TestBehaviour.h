@@ -19,4 +19,5 @@ public:
 };
 
 BANG_BEHAVIOUR_CLASS(TestBehaviour)
+
 #endif // TESTBEHAVIOUR_H

@@ -24,7 +24,7 @@ Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
 
 void Camera::GetViewMatrix(Matrix4 *view) const
 {
-    Transform *t = gameObject->transform;
+    Transform *t = gameObject->GetTransform();
     if (CAN_USE_COMPONENT(t))
     {
         t->GetModelMatrix(view);

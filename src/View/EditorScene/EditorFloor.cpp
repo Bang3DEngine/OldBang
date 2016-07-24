@@ -22,7 +22,7 @@ void EditorFloor::OnUpdate()
     EditorGameObject::OnUpdate();
 
     Camera *cam  = Canvas::GetCurrentScene()->GetCamera();
-    Transform *camt = cam->gameObject->transform;
+    Transform *camt = cam->gameObject->GetTransform();
 
     const float LineSize2 = (c_gridSize * c_tileSize) / 2.0f; // Half line length
 

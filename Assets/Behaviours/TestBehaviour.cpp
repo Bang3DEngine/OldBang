@@ -23,6 +23,7 @@ TestBehaviour::TestBehaviour()
 void TestBehaviour::OnStart()
 {
     Behaviour::OnStart();
+
 }
 
 void TestBehaviour::OnUpdate()
@@ -31,27 +32,25 @@ void TestBehaviour::OnUpdate()
 
     time += Time::deltaTime;
 
-    float rotSpeed = 50.0f;
+    float rotSpeed = 150.0f;
     if (Input::GetKey(Input::Key::A))
     {
-        transform->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime);
+        gameObject->GetTransform()->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime);
     }
     else if (Input::GetKey(Input::Key::D))
     {
-        transform->RotateLocalEuler(Vector3::up * -rotSpeed * Time::deltaTime);
+        gameObject->GetTransform()->RotateLocalEuler(Vector3::up * -rotSpeed * Time::deltaTime);
     }
 
     float speed = 50.0f;
     if (Input::GetKey(Input::Key::W))
     {
-        transform->Translate(transform->GetForward() * speed * Time::deltaTime);
+        gameObject->GetTransform()->Translate(gameObject->GetTransform()->GetForward() * speed * Time::deltaTime);
     }
     else if (Input::GetKey(Input::Key::S))
     {
-        transform->Translate(transform->GetForward() * -speed * Time::deltaTime);
+        gameObject->GetTransform()->Translate(gameObject->GetTransform()->GetForward() * -speed * Time::deltaTime);
     }
-
-    transform->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime * 0.3f);
 }
 
 void TestBehaviour::OnDestroy()

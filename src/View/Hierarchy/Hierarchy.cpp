@@ -37,7 +37,7 @@ QTreeWidgetItem* Hierarchy::FillDownwards(GameObject *o)
     const std::list<GameObject*> children = o->GetChildren();
 
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
-    eRoot->setText(0, QString::fromStdString(o->name));
+    eRoot->setText(0, QString::fromStdString(o->GetName()));
 
     for (GameObject* go : children)
     {
@@ -138,14 +138,14 @@ void Hierarchy::OnChildAdded(GameObject *child)
 
     QTreeWidgetItem *item = FillDownwards(child); NONULL(item);
 
-    if (child->parent)
+    if (child->GetParent())
     {
-        if (!child->parent->IsScene())
+        if (!child->GetParent()->IsScene())
         {
-            if (m_gameObjectToTreeItem.find(child->parent) != m_gameObjectToTreeItem.end())
+            if (m_gameObjectToTreeItem.find(child->GetParent()) != m_gameObjectToTreeItem.end())
             {
-                m_gameObjectToTreeItem[child->parent]->addChild(item);
-                ExpandRecursiveUpwards(m_gameObjectToTreeItem[child->parent]);
+                m_gameObjectToTreeItem[child->GetParent()]->addChild(item);
+                ExpandRecursiveUpwards(m_gameObjectToTreeItem[child->GetParent()]);
             }
         }
         else
@@ -207,7 +207,7 @@ void Hierarchy::dropEvent(QDropEvent *event)
             if (sourceItem != targetItem)
             {
                 GameObject *source = m_treeItemToGameObject[sourceItem];
-                if (source && target && source->parent)
+                if (source && target && source->GetParent())
                 {
                     source->SetParent(target, true);
                 }
@@ -347,7 +347,7 @@ void Hierarchy::OnContextMenuDeleteClicked()
     foreach(QTreeWidgetItem *item, items)
     {
         GameObject *selected = m_treeItemToGameObject[item];
-        if (selected->parent)
+        if (selected->GetParent())
         {
             selected->SetParent(nullptr);
         }

@@ -195,6 +195,7 @@ B_vout.uv               = B_vin.uv; \n\
 B_vout.receivesLighting = B_renderer_receivesLighting; \n\
 B_vout.diffuseColor     = B_material_diffuse_color.rgb; \n\
 B_vout.depth            = gl_FragCoord.z;  \n\
+B_materialBools_fout_gin.w = 0.0f; \n\
 \n\
 ";
 

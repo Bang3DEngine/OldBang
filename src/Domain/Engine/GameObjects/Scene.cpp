@@ -103,7 +103,7 @@ void Scene::WriteInternal(std::ostream &f) const
     // GameObject::WriteInternal(f);
 
     FileWriter::WritePointer((void*)this, f);   //internal file id
-    FileWriter::WriteString(name, f);
+    FileWriter::WriteString(m_name, f);
 
     FileWriter::WriteString("<children>", f);
     for (GameObject *go : m_children)

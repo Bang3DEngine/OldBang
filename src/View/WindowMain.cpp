@@ -13,6 +13,8 @@ WindowMain::WindowMain() : Ui_WindowMain()
 
 void WindowMain::InitFromMainBinary(QMainWindow *window, QApplication *application)
 {
+    IWindow::InitFromMainBinary(window, application);
+
     WindowMain::s_m_win = new WindowMain();
     SingletonManager::GetInstance()->SetWindowMainSingleton(WindowMain::s_m_win);
 

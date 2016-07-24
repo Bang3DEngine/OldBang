@@ -1,5 +1,7 @@
 #include "SingletonManager.h"
 
+#include "Logger.h"
+
 SingletonManager *SingletonManager::s_mainBinarySM = nullptr;
 
 void SingletonManager::SetWindowMainSingleton(IWindow *mainBinaryWindowMain)

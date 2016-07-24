@@ -34,7 +34,7 @@ public:
      * SingletonManager, for later use in shared libraries.
      * @return The created Singleton,
      */
-    static void InitFromMainBinary(QMainWindow *window, QApplication *m_app);
+    static void InitFromMainBinary(QMainWindow *window, QApplication *app);
 
     static WindowMain *GetInstance();
     QMainWindow *GetMainWindow() const override;

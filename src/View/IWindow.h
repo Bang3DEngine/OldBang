@@ -10,13 +10,13 @@ protected:
     QMainWindow *m_mainWindow = nullptr;
     QApplication *m_app = nullptr;
 
-    IWindow() {}
+    IWindow();
 
 public:
 
-    static void InitFromMainBinary(QMainWindow *window, QApplication *application) { }
+    static void InitFromMainBinary(QMainWindow *window, QApplication *application);
 
-    static IWindow *GetInstance() { return nullptr; }
+    static IWindow *GetInstance();
     virtual QMainWindow *GetMainWindow() const = 0;
     virtual QApplication *GetApplication() const = 0;
 };

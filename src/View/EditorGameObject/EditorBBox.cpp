@@ -59,7 +59,7 @@ void EditorBBox::OnUpdate()
         }
     }
 
-    Transform *t = transform;
+    Transform *t = GetTransform();
 
     Vector3 center = bbox.GetCenter();
     t->SetLocalPosition(center);

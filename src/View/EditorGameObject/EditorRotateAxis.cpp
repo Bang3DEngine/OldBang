@@ -26,15 +26,15 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 
     if (dir == EditorAxisDirection::X)
     {
-        transform->SetLocalEuler(Vector3::up * 90.0f);
+        GetTransform()->SetLocalEuler(Vector3::up * 90.0f);
     }
     else if (dir == EditorAxisDirection::Y)
     {
-        transform->SetLocalEuler(Vector3::right * -90.0f);
+        GetTransform()->SetLocalEuler(Vector3::right * -90.0f);
     }
     else
     {
-        transform->SetLocalEuler(Vector3::up * 180.0f);
+        GetTransform()->SetLocalEuler(Vector3::up * 180.0f);
     }
 
     m_oAxisDirection.z *= -1;
@@ -55,7 +55,7 @@ void EditorRotateAxis::OnUpdate()
     Matrix4 p, v, m;
     cam->GetProjectionMatrix(&p);
     cam->GetViewMatrix(&v);
-    transform->GetModelMatrix(&m);
+    GetTransform()->GetModelMatrix(&m);
     Matrix4 pvm =  p * v * m;
 
     if (m_grabbed)
@@ -98,7 +98,7 @@ void EditorRotateAxis::OnUpdate()
             Vector3 parentAxisDir;
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
-                parentAxisDir = ago->transform->WorldToObjectDirection(m_oAxisDirection);
+                parentAxisDir = ago->GetTransform()->WorldToObjectDirection(m_oAxisDirection);
             }
             else
             {
@@ -106,7 +106,7 @@ void EditorRotateAxis::OnUpdate()
             }
 
             Quaternion q = Quaternion::AngleAxis(rotAngle, parentAxisDir);
-            ago->transform->RotateLocal(q);
+            ago->GetTransform()->RotateLocal(q);
         }
     }
 

@@ -24,18 +24,18 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->SetParent(this);
     if (dir == EditorAxis::EditorAxisDirection::X)
     {
-        m_axisCap->transform->SetLocalEuler(Vector3(90.0f, 90.0f, 0.0f));
+        m_axisCap->GetTransform()->SetLocalEuler(Vector3(90.0f, 90.0f, 0.0f));
     }
     else if (dir == EditorAxis::EditorAxisDirection::Y)
     {
-        m_axisCap->transform->SetLocalEuler(Vector3(0.0f, 0.0f, 0.0f));
+        m_axisCap->GetTransform()->SetLocalEuler(Vector3(0.0f, 0.0f, 0.0f));
     }
     else if (dir == EditorAxis::EditorAxisDirection::Z)
     {
-        m_axisCap->transform->SetLocalEuler(Vector3(90.0f, 0.0f, 0.0f));
+        m_axisCap->GetTransform()->SetLocalEuler(Vector3(-90.0f, 0.0f, 0.0f));
     }
-    m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
-    m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.15f);
+    m_axisCap->GetTransform()->SetLocalPosition(m_oAxisDirection);
+    m_axisCap->GetTransform()->SetLocalScale(Vector3(1,2,1) * 0.15f);
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(m_material);
     m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
     m_axisCap->SetRenderLayer(5);
@@ -52,7 +52,7 @@ void EditorTranslateAxis::OnUpdate()
     EditorAxis::OnUpdate();
 
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
-    Transform *camTransform = cam->gameObject->transform;
+    Transform *camTransform = cam->gameObject->GetTransform();
     GameObject *ago = m_attachedGameObject;
     Vector3 wCamPos = camTransform->GetPosition();
 
@@ -65,18 +65,18 @@ void EditorTranslateAxis::OnUpdate()
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 wAxisDir = m_oAxisDirection;
-                parentAxisDir = ago->transform->WorldToLocalDirection(m_oAxisDirection);
+                parentAxisDir = ago->GetTransform()->WorldToLocalDirection(m_oAxisDirection);
             }
             else
             {
-                wAxisDir = ago->transform->ObjectToWorldDirection(m_oAxisDirection);
-                parentAxisDir = ago->transform->ObjectToLocalDirection(m_oAxisDirection);
+                wAxisDir = ago->GetTransform()->ObjectToWorldDirection(m_oAxisDirection);
+                parentAxisDir = ago->GetTransform()->ObjectToLocalDirection(m_oAxisDirection);
             }
             wAxisDir.Normalize();
             parentAxisDir.Normalize();
 
             // Alignment
-            Vector3 wAxisCenter = transform->GetPosition();
+            Vector3 wAxisCenter = GetTransform()->GetPosition();
             glm::vec2 screenAxisDir = cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
                                       cam->WorldToScreenNDCPoint(wAxisCenter);
             screenAxisDir = glm::normalize(screenAxisDir);
@@ -86,9 +86,9 @@ void EditorTranslateAxis::OnUpdate()
             Vector3 worldMove = alignment *
                                 parentAxisDir *
                                 glm::length(sMouseDelta) *
-                                Vector3::Distance(wCamPos, ago->transform->GetPosition()) *
+                                Vector3::Distance(wCamPos, ago->GetTransform()->GetPosition()) *
                                 Time::deltaTime * 0.02f;
-            ago->transform->TranslateLocal(worldMove);
+            ago->GetTransform()->TranslateLocal(worldMove);
         }
     }
 }

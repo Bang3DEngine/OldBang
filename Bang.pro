@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-CONFIG += EDITOR
+# CONFIG += EDITOR
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -85,6 +85,8 @@ OTHER_FILES += \
     Assets/Engine/Materials \
     $$PWD/Assets/Behaviours/TestBehaviour.cpp / \
     $$PWD/Assets/Behaviours/TestBehaviour.h / \
+    $$PWD/Assets/Behaviours/LookAtLuigi.h \
+    $$PWD/Assets/Behaviours/LookAtLuigi.cpp \
     Assets/Engine/Meshes/Pyramid.obj \
     Assets/Engine/Meshes/Cube.obj \
     Assets/Engine/Meshes/Cone.obj \
@@ -184,7 +186,8 @@ HEADERS += \
     src/Domain/Engine/Components/Light.h \
     src/Domain/Graphics/ShaderPreprocessor.h \
     src/View/ClipboardGameObject.h \
-    src/Domain/Engine/Components/PointLight.h
+    src/Domain/Engine/Components/PointLight.h \
+    src/Domain/Engine/Others/Property.h
 
 EDITOR {
 HEADERS += \
@@ -300,7 +303,8 @@ SOURCES += \
     src/Domain/Graphics/ShaderPreprocessor.cpp \
     src/View/ClipboardGameObject.cpp \
     src/Domain/Engine/Interfaces/IFileable.cpp \
-    src/Domain/Engine/Components/PointLight.cpp
+    src/Domain/Engine/Components/PointLight.cpp \
+    src/Domain/Engine/Others/Property.cpp
 
 EDITOR {
     SOURCES += \

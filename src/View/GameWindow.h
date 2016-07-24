@@ -16,7 +16,6 @@ private:
     void SetupUI();
 
 public:
-    Canvas *canvas = nullptr;
 
     GameWindow(QMainWindow *window);
 

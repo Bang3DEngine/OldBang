@@ -37,11 +37,7 @@ public:
 
     void LookAt(const Vector3 &target,
                 const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
-    void LookAtLocal(const Vector3 &target,
-                const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
     void LookInDirection(const Vector3 &dir,
-                const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
-    void LookInLocalDirection(const Vector3 &dir,
                 const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
 
 

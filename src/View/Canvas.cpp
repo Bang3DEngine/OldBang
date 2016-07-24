@@ -7,6 +7,8 @@
 #include "GameWindow.h"
 #endif
 
+#include "SingletonManager.h"
+
 #ifdef BANG_EDITOR
 WindowMain *Canvas::s_m_window = nullptr;
 #else
@@ -33,7 +35,11 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 
 void Canvas::InitFromMainBinary()
 {
-    Canvas::m_mainBinaryCanvas = Canvas::s_m_window->canvas;
+    #ifdef BANG_EDITOR
+    Canvas::m_mainBinaryCanvas = static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton())->canvas;
+    #else
+    Canvas::m_mainBinaryCanvas = static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->canvas;
+    #endif
 }
 
 void Canvas::initializeGL()
@@ -123,7 +129,7 @@ void Canvas::SetCurrentScene(const std::string &name)
 
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if ((*it)->name == name)
+        if ((*it)->GetName() == name)
         {
             SetCurrentScene((*it));
             return;
@@ -136,14 +142,15 @@ void Canvas::SetCurrentScene(const std::string &name)
 
 Scene *Canvas::GetCurrentScene()
 {
-    return Canvas::GetInstance()->m_currentScene;
+    Canvas *c = Canvas::GetInstance();
+    return c ? c->m_currentScene : nullptr;
 }
 
 Scene *Canvas::GetScene(const std::string &name) const
 {
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if ((*it)->name == name) return (*it);
+        if ((*it)->GetName() == name) return (*it);
     }
     return nullptr;
 }
@@ -152,13 +159,17 @@ void Canvas::RemoveScene(const std::string &name)
 {
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if ((*it)->name == name) { m_scenes.erase(it); return; }
+        if ((*it)->GetName() == name) { m_scenes.erase(it); return; }
     }
 }
 
 Canvas *Canvas::GetInstance()
 {
-    return Canvas::m_mainBinaryCanvas;
+    #ifdef BANG_EDITOR
+    return static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton())->canvas;
+    #else
+    return static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->canvas;
+    #endif
 }
 
 float Canvas::GetAspectRatio()
