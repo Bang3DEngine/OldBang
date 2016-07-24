@@ -120,6 +120,8 @@ OTHER_FILES += \
     Assets/Engine/Materials/PR_DirectionalLight.bmat \
     Assets/Engine/Materials/PR_PointLight.bmat \
     Assets/Engine/Shaders/PR_AfterLighting.frag \
+    Assets/Behaviours/RandomScale.h \
+    Assets/Behaviours/RandomScale.cpp \
     Assets/Engine/Shaders/PR_DrawScreenPlane.vert
 
 HEADERS += \
