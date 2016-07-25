@@ -461,6 +461,7 @@ void GameObject::_OnStart()
 
 void GameObject::_OnUpdate()
 {
+
     #ifdef BANG_EDITOR
     bool canUpdate = Toolbar::GetInstance()->IsPlaying() || IsEditorGameObject();
     #else
@@ -509,3 +510,4 @@ void GameObject::_OnDestroy()
     //since the "delete child" itself propagates it (look at the destructor)
     OnDestroy();
 }
+

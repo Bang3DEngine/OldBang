@@ -174,6 +174,9 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     options += " " + objs  + " ";
     options += " -O2";
     options += " -g ";
+    #ifdef BANG_EDITOR
+    options += " -D BANG_EDITOR ";
+    #endif
     options += " -Wl,--export-dynamic ";
     options += " --std=c++11";
     options += " " + includes + " ";

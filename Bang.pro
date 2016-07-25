@@ -19,7 +19,7 @@ qtcAddDeployment()
 
 CONFIG += qt
 
-QMAKE_CXXFLAGS += -g -Wl,--export-dynamic --std=c++11 -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
+QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic --std=c++11 -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC -O2
 
 LIBS += -lGLEW -ldl
 
