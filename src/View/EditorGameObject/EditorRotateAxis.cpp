@@ -90,9 +90,7 @@ void EditorRotateAxis::OnUpdate()
             glm::vec2 anchorPointsDir = glm::normalize(m_sAnchorPoint1 - m_sAnchorPoint0);
             float alignment = glm::dot(anchorPointsDir, glm::normalize(sMouseDelta));
 
-            float rotAngle = alignment *
-                             c_rotationBoost *
-                             Time::deltaTime * 10.0f;
+            float rotAngle = alignment * c_rotationBoost;
 
             // Avoids rotation trembling when not aligned at all
             Vector3 parentAxisDir;

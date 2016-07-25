@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-# CONFIG += EDITOR
+CONFIG += EDITOR
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -122,7 +122,8 @@ OTHER_FILES += \
     Assets/Engine/Shaders/PR_AfterLighting.frag \
     Assets/Behaviours/RandomScale.h \
     Assets/Behaviours/RandomScale.cpp \
-    Assets/Engine/Shaders/PR_DrawScreenPlane.vert
+    Assets/Engine/Shaders/PR_DrawScreenPlane.vert \
+    Assets/Materials/victor.bmat
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

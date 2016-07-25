@@ -86,8 +86,7 @@ void EditorTranslateAxis::OnUpdate()
             Vector3 worldMove = alignment *
                                 parentAxisDir *
                                 glm::length(sMouseDelta) *
-                                Vector3::Distance(wCamPos, ago->transform->GetPosition()) *
-                                Time::deltaTime * 0.02f;
+                                Vector3::Distance(wCamPos, ago->transform->GetPosition()) * 0.002f;
             ago->transform->TranslateLocal(worldMove);
         }
     }

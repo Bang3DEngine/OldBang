@@ -74,8 +74,7 @@ void EditorScaleAxis::OnUpdate()
             Vector3 scaling = alignment *
                               parentAxisDir.Abs() *
                               glm::length(sMouseDelta) *
-                              Vector3::Distance(wCamPos, ago->transform->GetPosition()) *
-                              Time::deltaTime * 0.02f;
+                              Vector3::Distance(wCamPos, ago->transform->GetPosition()) * 0.002f;
 
             //TODO: solve problem with negative scaling and depth :/
             ago->transform->SetLocalScale(ago->transform->GetLocalScale() + scaling);

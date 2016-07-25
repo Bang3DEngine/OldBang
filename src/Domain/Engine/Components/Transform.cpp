@@ -12,15 +12,9 @@ Transform::Transform() : m_localPosition(Vector3(0.0f))
     #ifdef BANG_EDITOR
     m_inspectorComponentInfo.AddSlotInfos(
     {
-        new InspectorVFloatSWInfo(
-            "Position", {m_localPosition.x, m_localPosition.y, m_localPosition.z}
-        ),
-        new InspectorVFloatSWInfo(
-            "Rotation", {m_localEuler.x, m_localEuler.y, m_localEuler.z}
-        ),
-        new InspectorVFloatSWInfo(
-            "Scale", {m_localScale.x, m_localScale.y, m_localScale.z}
-        )
+        new InspectorVFloatSWInfo("Position", 3),
+        new InspectorVFloatSWInfo("Rotation", 3),
+        new InspectorVFloatSWInfo("Scale", 3)
     });
     #endif
 }
@@ -412,13 +406,13 @@ InspectorWidgetInfo* Transform::GetComponentInfo()
     Vector3 rotEuler = GetLocalEuler();
     Vector3 scale = GetLocalScale();
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value =
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Position"))->m_value =
         {pos.x, pos.y, pos.z};
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1))->m_value =
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Rotation"))->m_value =
         {rotEuler.x, rotEuler.y, rotEuler.z};
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(2))->m_value =
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Scale"))->m_value =
         {scale.x, scale.y, scale.z};
 
     return &m_inspectorComponentInfo;

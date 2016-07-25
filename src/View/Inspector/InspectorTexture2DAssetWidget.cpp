@@ -17,12 +17,16 @@ InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
 
     m_inspectorInfo.AddSlotInfos(
         {
-            new InspectorStringSWInfo("Image path", imgFilepath, true),
-            new InspectorEnumSWInfo("Filter", {"Nearest", "Linear"},
-                  tex->GetFilterMode() == Texture2D::FilterMode::Nearest ?
-                    0 : 1)
+            new InspectorStringSWInfo("Image path", true),
+            new InspectorEnumSWInfo("Filter", {"Nearest", "Linear"})
         }
     );
+
+    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("Image path"))->m_value =
+            imgFilepath;
+
+    static_cast<InspectorEnumSWInfo*>(m_inspectorInfo.GetSlotInfo("Filter"))->m_selectedValueIndex =
+            tex->GetFilterMode() == Texture2D::FilterMode::Nearest ? 0 : 1;
 
     delete tex;
 

@@ -4,9 +4,9 @@ SingleLineRenderer::SingleLineRenderer()
 {
     #ifdef BANG_EDITOR
         m_inspectorComponentInfo.AddSlotInfo(
-            new InspectorVFloatSWInfo("Origin", {0.0f, 0.0f, 0.0f}));
+            new InspectorVFloatSWInfo("Origin", 3));
         m_inspectorComponentInfo.AddSlotInfo(
-            new InspectorVFloatSWInfo("Destiny", {0.0f, 0.0f, 0.0f}));
+            new InspectorVFloatSWInfo("Destiny", 3));
     #endif
 
     m_points.resize(2);
@@ -72,12 +72,12 @@ InspectorWidgetInfo* SingleLineRenderer::GetComponentInfo()
 
     InspectorVFloatSWInfo *originInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo(2));
+                m_inspectorComponentInfo.GetSlotInfo("Origin"));
     originInfo->m_value = {m_points[0].x, m_points[0].y, m_points[0].z};
 
     InspectorVFloatSWInfo *destinyInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo(3));
+                m_inspectorComponentInfo.GetSlotInfo("Destiny"));
     destinyInfo->m_value = {m_points[1].x, m_points[1].y, m_points[1].z};
 
     return &m_inspectorComponentInfo;

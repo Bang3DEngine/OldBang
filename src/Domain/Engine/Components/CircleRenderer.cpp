@@ -4,9 +4,9 @@ CircleRenderer::CircleRenderer()
 {
     #ifdef BANG_EDITOR
         m_inspectorComponentInfo.AddSlotInfo(
-            new InspectorVFloatSWInfo("Radius", {1.0f}));
+            new InspectorVFloatSWInfo("Radius", 1));
         m_inspectorComponentInfo.AddSlotInfo(
-            new InspectorVFloatSWInfo("Segments", {32.0f}));
+            new InspectorVFloatSWInfo("Segments", 1));
     #endif
 
     this->m_drawLinesMode = RenderMode::LineStrip;
@@ -84,9 +84,10 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
     float d0, d1; d0 = d1 = 99999.9f;
     for (int i = 0; i < m_points.size() - 1; i += step) // -1 because the last point is repeated
     {
+        // TODO: not working
         Vector3 objP = m_points[i];
         glm::vec4 sP_4 = modelViewProjMatrix * glm::vec4(objP, 1.0f);
-        glm::vec2 sP = sP_4.xy() / sP_4.w;
+        glm::vec2 sP = Canvas::GetCurrentScene()->GetCamera()->WorldToScreenNDCPoint(Vector3(sP_4.xyz()));
 
         float d = glm::distance(sP, sOrigin);
         if (d < d0)
@@ -139,12 +140,12 @@ InspectorWidgetInfo* CircleRenderer::GetComponentInfo()
 
     InspectorVFloatSWInfo *radiusInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo(2));
+                m_inspectorComponentInfo.GetSlotInfo("Radius"));
     radiusInfo->m_value = {m_radius};
 
     InspectorVFloatSWInfo *segmentsInfo =
             static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo(3));
+                m_inspectorComponentInfo.GetSlotInfo("Segments"));
     segmentsInfo->m_value = {float(m_segments)};
 
     return &m_inspectorComponentInfo;

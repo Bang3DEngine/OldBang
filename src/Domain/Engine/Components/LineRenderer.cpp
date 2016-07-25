@@ -7,7 +7,7 @@ LineRenderer::LineRenderer()
     {
         new InspectorFileSWInfo("Material",
                     Material::GetFileExtensionStatic()),
-        new InspectorVFloatSWInfo("Line Width", {0.0f})
+        new InspectorVFloatSWInfo("Line Width", 1)
     });
 #endif
 
@@ -91,27 +91,27 @@ InspectorWidgetInfo* LineRenderer::GetComponentInfo()
 {
     InspectorFileSWInfo* matInfo =
             static_cast<InspectorFileSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo(0));
+                m_inspectorComponentInfo.GetSlotInfo("Material"));
 
     if (m_material )
     {
         if (m_material->GetFilepath() != "")
         {
-            matInfo->filepath = m_material->GetFilepath();
+            matInfo->m_filepath = m_material->GetFilepath();
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            Logger_GetString(matInfo->filepath, (void*)m_material);
+            Logger_GetString(matInfo->m_filepath, (void*)m_material);
         }
     }
     else
     {
-        matInfo->filepath = "-";
+        matInfo->m_filepath = "-";
     }
 
     InspectorVFloatSWInfo *widthInfo  =
             static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo(1));
+                m_inspectorComponentInfo.GetSlotInfo("Line Width"));
     widthInfo->m_value = {GetLineWidth()};
 
     return &m_inspectorComponentInfo;

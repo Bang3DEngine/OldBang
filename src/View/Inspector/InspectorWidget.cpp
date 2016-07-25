@@ -58,8 +58,10 @@ void InspectorWidget::ConstructFromWidgetInformation(
     mainLayout->addLayout(m_titleLayout);
 
     // TODO: Improve THIS :(
-    for (InspectorSWInfo *si : info->GetSlotInfos())
+    //std::map<std::string, Inspector> infos;
+    for (auto it : info->GetSlotInfos())
     {
+        InspectorSWInfo *si = it.second;
         InspectorSW *ws = nullptr;
 
         InspectorVFloatSWInfo *siv = nullptr;
@@ -76,26 +78,26 @@ void InspectorWidget::ConstructFromWidgetInformation(
         else if ( (sie = dynamic_cast<InspectorEnumSWInfo*>(si)) !=
                  nullptr)
         {
-            ws = new InspectorEnumSW(sie->m_label, sie->enumValues,
-                                     sie->selectedValueIndex, this);
+            ws = new InspectorEnumSW(sie->m_label, sie->m_enumValues,
+                                     sie->m_selectedValueIndex, this);
         }
         else if ( (sif = dynamic_cast<InspectorFileSWInfo*>(si)) !=
                  nullptr)
         {
-            ws = new InspectorFileSW(sif->m_label, sif->filepath,
-                                     sif->fileExtension, this);
+            ws = new InspectorFileSW(sif->m_label, sif->m_filepath,
+                                     sif->m_fileExtension, this);
         }
         else if ( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) !=
                  nullptr)
         {
-            ws = new InspectorStringSW(sis->m_label, sis->value, this,
-                                       sis->readonly, sis->inlined);
+            ws = new InspectorStringSW(sis->m_label, sis->m_value, this,
+                                       sis->m_readonly, sis->m_inlined);
         }
         else if ( (sib = dynamic_cast<InspectorButtonSWInfo*>(si)) !=
                  nullptr)
         {
             ws = new InspectorButtonSW(sib->m_label, this,
-                                       sib->onClickFunction);
+                                       sib->m_onClickFunction);
         }
 
         if (ws )
@@ -132,7 +134,7 @@ std::vector<float> InspectorWidget::GetSWVectorFloatValue(
     InspectorVFloatSW *w =
             dynamic_cast<InspectorVFloatSW*>(m_labelsToComponentSlots[slotLabel]);
     std::vector<float> r;
-    if (w ) r = w->GetValue();
+    if (w) r = w->GetValue();
     return r;
 }
 
@@ -140,7 +142,7 @@ int InspectorWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
 {
     InspectorEnumSW *w =
             dynamic_cast<InspectorEnumSW*>(m_labelsToComponentSlots[slotLabel]);
-    if (w ) return w->GetValue();
+    if (w) return w->GetValue();
     return 0;
 }
 
@@ -148,7 +150,7 @@ std::string InspectorWidget::GetSWFileFilepath(const std::string &slotLabel)
 {
     InspectorFileSW *w =
             dynamic_cast<InspectorFileSW*>(m_labelsToComponentSlots[slotLabel]);
-    if (w ) return w->GetValue();
+    if (w) return w->GetValue();
     return "";
 }
 
@@ -158,7 +160,7 @@ void InspectorWidget::OnCustomContextMenuRequested(QPoint point)
 
 void InspectorWidget::Refresh()
 {
-    if (m_relatedInspectable )
+    if (m_relatedInspectable)
     {
         Refresh(m_relatedInspectable->GetComponentInfo());
     }
@@ -166,8 +168,10 @@ void InspectorWidget::Refresh()
 
 void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
 {
-    for (InspectorSWInfo *si : widgetInfo->GetSlotInfos())
+    for (auto it : widgetInfo->GetSlotInfos())
     {
+        InspectorSWInfo *si = it.second;
+
         InspectorSW *ws = m_labelsToComponentSlots[si->m_label];
         InspectorVFloatSWInfo* siv = nullptr;
         InspectorEnumSWInfo *sie = nullptr;
@@ -184,19 +188,19 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
                  nullptr)
         {
             InspectorEnumSW *we = static_cast<InspectorEnumSW*>(ws);
-            we->SetValue( sie->selectedValueIndex );
+            we->SetValue( sie->m_selectedValueIndex );
         }
         else if ( (sia = dynamic_cast<InspectorFileSWInfo*>(si)) !=
                  nullptr)
         {
             InspectorFileSW *wa = static_cast<InspectorFileSW*>(ws);
-            wa->SetValue( sia->filepath );
+            wa->SetValue( sia->m_filepath );
         }
         else if ( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) !=
                  nullptr)
         {
             InspectorStringSW *wss = static_cast<InspectorStringSW*>(ws);
-            wss->SetValue( sis->value );
+            wss->SetValue( sis->m_value );
         }
 
         if (ws )

@@ -8,8 +8,8 @@ Light::Light()
     #ifdef BANG_EDITOR
     m_inspectorComponentInfo.AddSlotInfos(
     {
-        new InspectorVFloatSWInfo("Intensity", {1.0f} )
-       ,new InspectorVFloatSWInfo("Color", {1,0,0} )
+        new InspectorVFloatSWInfo("Intensity", 1)
+       ,new InspectorVFloatSWInfo("Color", 3)
     });
     #endif
 }
@@ -73,10 +73,10 @@ InspectorWidgetInfo *Light::GetComponentInfo()
 {
     Component::GetComponentInfo();
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value =
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Intensity"))->m_value =
         {m_intensity};
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1))->m_value =
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Color"))->m_value =
         {m_color.r, m_color.g, m_color.b};
 
     return &m_inspectorComponentInfo;

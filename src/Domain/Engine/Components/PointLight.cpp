@@ -7,7 +7,7 @@ PointLight::PointLight() : Light()
     #ifdef BANG_EDITOR
     m_inspectorComponentInfo.AddSlotInfos(
     {
-        new InspectorVFloatSWInfo("Range", {m_range} )
+        new InspectorVFloatSWInfo("Range", 1 )
     });
     #endif
 }
@@ -51,7 +51,7 @@ InspectorWidgetInfo *PointLight::GetComponentInfo()
 {
     Light::GetComponentInfo();
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(2))->m_value =
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Range"))->m_value =
         {m_range};
 
     return &m_inspectorComponentInfo;

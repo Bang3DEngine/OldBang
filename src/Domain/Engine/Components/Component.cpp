@@ -7,10 +7,6 @@ Component::Component()
 
 Component::~Component()
 {
-#ifdef BANG_EDITOR
-    for (int i = 0; i < m_inspectorComponentInfo.GetSlotInfos().size(); ++i)
-        delete m_inspectorComponentInfo.GetSlotInfo(i);
-#endif
 }
 
 void Component::CloneInto(ICloneable *clone) const

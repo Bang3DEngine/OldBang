@@ -104,39 +104,39 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
 InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
 {
     InspectorFileSWInfo* matInfo, *meshInfo;
-    matInfo  = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0));
-    meshInfo = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1));
+    matInfo  = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Material"));
+    meshInfo = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Mesh"));
 
     if (m_material )
     {
         if (m_material->GetFilepath() != "")
         {
-            matInfo->filepath = m_material->GetFilepath();
+            matInfo->m_filepath = m_material->GetFilepath();
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            Logger_GetString(matInfo->filepath, (void*)m_material);
+            Logger_GetString(matInfo->m_filepath, (void*)m_material);
         }
     }
     else
     {
-        matInfo->filepath = "-";
+        matInfo->m_filepath = "-";
     }
 
     if (m_mesh )
     {
         if (m_mesh->GetFilepath() != "")
         {
-            meshInfo->filepath = m_mesh->GetFilepath();
+            meshInfo->m_filepath = m_mesh->GetFilepath();
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            Logger_GetString(meshInfo->filepath, (void*)m_mesh);
+            Logger_GetString(meshInfo->m_filepath, (void*)m_mesh);
         }
     }
     else
     {
-        meshInfo->filepath = "-";
+        meshInfo->m_filepath = "-";
     }
 
     return &m_inspectorComponentInfo;

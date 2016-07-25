@@ -115,7 +115,7 @@ void BehaviourHolder::Refresh()
 InspectorWidgetInfo* BehaviourHolder::GetComponentInfo()
 {
     static_cast<InspectorFileSWInfo*>
-            (m_inspectorComponentInfo.GetSlotInfo(0))->filepath = m_sourceFilepath;
+            (m_inspectorComponentInfo.GetSlotInfo("Behaviour"))->m_filepath = m_sourceFilepath;
 
     return &m_inspectorComponentInfo;
 }

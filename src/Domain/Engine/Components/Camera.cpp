@@ -13,10 +13,10 @@ Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
     #ifdef BANG_EDITOR
     m_inspectorComponentInfo.AddSlotInfos(
     {
-        new InspectorVFloatSWInfo( "FOV", {m_fovDegrees} ),
-        new InspectorVFloatSWInfo( "Z Near", {m_zNear} ),
-        new InspectorVFloatSWInfo( "Z Far", {m_zFar} ),
-        new InspectorVFloatSWInfo( "Aspect Ratio", {m_aspectRatio} ),
+        new InspectorVFloatSWInfo( "FOV", 1),
+        new InspectorVFloatSWInfo( "Z Near", 1),
+        new InspectorVFloatSWInfo( "Z Far", 1),
+        new InspectorVFloatSWInfo( "Aspect Ratio", 1),
         new InspectorEnumSWInfo( "Projection Mode", {"Orthographic", "Perspective"} )
     });
     #endif
@@ -170,11 +170,11 @@ ICloneable *Camera::Clone() const
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* Camera::GetComponentInfo()
 {
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(0))->m_value = {m_fovDegrees};
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(1))->m_value = {m_zNear};
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(2))->m_value = {m_zFar};
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(3))->m_value = {m_aspectRatio};
-    static_cast<InspectorEnumSWInfo*>(m_inspectorComponentInfo.GetSlotInfo(4))->selectedValueIndex = m_projMode;
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("FOV"))->m_value = {m_fovDegrees};
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Z Near"))->m_value = {m_zNear};
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Z Far"))->m_value = {m_zFar};
+    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Aspect Ratio"))->m_value = {m_aspectRatio};
+    static_cast<InspectorEnumSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Projection Mode"))->m_selectedValueIndex = m_projMode;
 
     return &m_inspectorComponentInfo;
 }

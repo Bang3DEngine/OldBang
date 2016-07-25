@@ -20,8 +20,6 @@ public:
      * @return
      */
     virtual bool NeedsWrittenLabel() = 0;
-
-    virtual ~InspectorSWInfo() {}
 };
 
 /**
@@ -32,12 +30,10 @@ class InspectorVFloatSWInfo : public InspectorSWInfo
 public:
     std::vector<float> m_value;
 
-    InspectorVFloatSWInfo(const std::string &label,
-                          const std::vector<float> &initialValues) : InspectorSWInfo(label)
+    InspectorVFloatSWInfo(const std::string &label, int numComponents) : InspectorSWInfo(label)
     {
-        this->m_value = initialValues;
+        m_value.resize(numComponents);
     }
-    virtual ~InspectorVFloatSWInfo() {}
 
     bool NeedsWrittenLabel() override { return true; }
 };
@@ -48,17 +44,15 @@ public:
 class InspectorEnumSWInfo : public InspectorSWInfo
 {
 public:
-    std::vector<std::string> enumValues;
-    int selectedValueIndex = 0;
+    std::vector<std::string> m_enumValues;
+    int m_selectedValueIndex = 0;
 
     InspectorEnumSWInfo(const std::string &label,
-                        const std::vector<std::string> &enumValues,
-                        int initialSelectedIndex = 0) : InspectorSWInfo(label)
+                        const std::vector<std::string> &enumValues)
+                        : InspectorSWInfo(label)
     {
-        this->enumValues = enumValues;
-        this->selectedValueIndex = initialSelectedIndex;
+        m_enumValues = enumValues;
     }
-    virtual ~InspectorEnumSWInfo() {}
 
     bool NeedsWrittenLabel() override { return true; }
 };
@@ -70,17 +64,16 @@ class InspectorStringSWInfo: public InspectorSWInfo
 {
 public:
 
-    bool readonly = false, inlined = false;
-    std::string value = "";
+    bool m_readonly = false, m_inlined = false;
+    std::string m_value = "";
 
-    InspectorStringSWInfo(const std::string& label, const std::string& initialValue,
+    InspectorStringSWInfo(const std::string& label,
                           bool readonly = false, bool inlined = false) : InspectorSWInfo(label)
     {
-        this->value = initialValue;
-        this->readonly = readonly;
-        this->inlined = inlined;
+        m_value = "";
+        m_readonly = readonly;
+        m_inlined = inlined;
     }
-    virtual ~InspectorStringSWInfo() {}
 
     bool NeedsWrittenLabel() override { return true; }
 };
@@ -92,16 +85,14 @@ public:
 class InspectorFileSWInfo: public InspectorSWInfo
 {
 public:
-    std::string filepath = "";
-    std::string fileExtension = "*";
+    std::string m_filepath = "";
+    std::string m_fileExtension = "*";
 
     InspectorFileSWInfo(const std::string& label,
                         const std::string& fileExtension) : InspectorSWInfo(label)
     {
-        this->fileExtension = fileExtension;
+        m_fileExtension = fileExtension;
     }
-
-    virtual ~InspectorFileSWInfo() {}
 
     bool NeedsWrittenLabel() override { return true; }
 };
@@ -112,15 +103,13 @@ public:
 class InspectorButtonSWInfo: public InspectorSWInfo
 {
 public:
-    std::function<void()> onClickFunction;
+    std::function<void()> m_onClickFunction;
 
     InspectorButtonSWInfo(const std::string& label,
                           std::function<void()> onClickFunction) : InspectorSWInfo(label)
     {
-        this->onClickFunction = onClickFunction;
+        m_onClickFunction = onClickFunction;
     }
-
-    virtual ~InspectorButtonSWInfo() {}
 
     bool NeedsWrittenLabel() override { return false; }
 };
@@ -132,29 +121,26 @@ public:
 class InspectorWidgetInfo
 {
 private:
-    std::vector<InspectorSWInfo*> slotInfos;
+    mutable std::map<std::string, InspectorSWInfo*> slotInfos;
 
 public:
 
     InspectorWidgetInfo() {}
-    virtual ~InspectorWidgetInfo()
+    virtual ~InspectorWidgetInfo() {}
+
+    InspectorSWInfo* GetSlotInfo(const std::string &slotName) const
     {
-        for (int i = 0; i < slotInfos.size(); ++i) delete slotInfos[i];
+        return slotInfos[slotName];
     }
 
-    InspectorSWInfo* GetSlotInfo(int i) const
-    {
-        return slotInfos[i];
-    }
-
-    const std::vector<InspectorSWInfo*>& GetSlotInfos() const
+    const std::map<std::string, InspectorSWInfo*>& GetSlotInfos() const
     {
         return slotInfos;
     }
 
     void AddSlotInfo(InspectorSWInfo* slotInfo)
     {
-        slotInfos.push_back(slotInfo);
+        slotInfos[slotInfo->m_label] = slotInfo;
     }
 
     void AddSlotInfos(const std::vector<InspectorSWInfo*> &slotInfos)
