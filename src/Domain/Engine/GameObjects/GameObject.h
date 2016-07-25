@@ -74,6 +74,12 @@ protected:
 
 public:
 
+    // PROPERTIES
+    std::string const& name   = m_name;
+    GameObject* const& parent = m_parent;
+    Transform* const& transform = m_transform;
+    //
+
     GameObject();
     GameObject(const std::string &m_name);
     GameObject(const GameObject &go);

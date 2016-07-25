@@ -19,8 +19,8 @@ void Light::SetUniformsBeforeApplyingLight() const
     ShaderProgram *sp = m_lightMaterial->GetShaderProgram();
     sp->SetUniformFloat("B_light_intensity",      m_intensity,                          false);
     sp->SetUniformVec3 ("B_light_color",          m_color,                              false);
-    sp->SetUniformVec3 ("B_light_forward_world",  gameObject->GetTransform()->GetForward(),  false);
-    sp->SetUniformVec3 ("B_light_position_world", gameObject->GetTransform()->GetPosition(), false);
+    sp->SetUniformVec3 ("B_light_forward_world",  gameObject->transform->GetForward(),  false);
+    sp->SetUniformVec3 ("B_light_position_world", gameObject->transform->GetPosition(), false);
 }
 
 void Light::ApplyLight(GBuffer *gbuffer) const

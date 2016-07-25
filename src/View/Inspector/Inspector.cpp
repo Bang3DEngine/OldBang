@@ -58,7 +58,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     }
 
     m_titleLabel->setText(
-                QString::fromStdString("Name: " + m_currentGameObject->GetName())
+                QString::fromStdString("Name: " + m_currentGameObject->name)
                 );
 }
 

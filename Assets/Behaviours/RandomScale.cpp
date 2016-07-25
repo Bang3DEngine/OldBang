@@ -4,7 +4,7 @@ void RandomScale::OnStart()
 {
     Behaviour::OnStart();
 
-    originalScale = gameObject->GetTransform()->GetLocalScale();
+    originalScale = gameObject->transform->GetLocalScale();
 }
 
 
@@ -13,6 +13,6 @@ void RandomScale::OnUpdate()
     Behaviour::OnUpdate();
 
     time += Time::GetDeltaTime();
-    gameObject->GetTransform()->SetLocalScale(originalScale + (sin(time) * 0.5f + 0.51f) * scaleAmplitude);
+    gameObject->transform->SetLocalScale(originalScale + (sin(time) * 0.5f + 0.51f) * scaleAmplitude);
 }
 

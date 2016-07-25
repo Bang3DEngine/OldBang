@@ -156,7 +156,7 @@ void MenuBar::OnSaveSceneAs() const
     Scene *scene = Canvas::GetInstance()->GetCurrentScene(); NONULL(scene);
 
     FileDialog fd("Save scene as...", Scene::GetFileExtension());
-    std::string filename = fd.GetSaveFilename(scene->GetName());
+    std::string filename = fd.GetSaveFilename(scene->name);
     if (filename == "") return;
 
     FileWriter::WriteScene(filename, scene);

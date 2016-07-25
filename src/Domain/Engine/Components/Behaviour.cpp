@@ -25,7 +25,7 @@ void Behaviour::_OnUpdate()
 void Behaviour::Init(BehaviourHolder *bh)
 {
     m_behaviourHolder = bh;
-    m_parent = bh->gameObject->GetParent();
+    m_parent = bh->gameObject->parent;
     m_gameObject = bh->gameObject;
-    m_transform = bh->gameObject->GetTransform();
+    m_transform = bh->gameObject->transform;
 }

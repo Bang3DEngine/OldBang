@@ -16,7 +16,7 @@ void ClipboardGameObject::CopyGameObjects(const std::list<GameObject*> &whatToCo
     for (GameObject *go : whatToCopy)
     {
         GameObject *copy = static_cast<GameObject*>(go->Clone());
-        s_goCopyToItsParent[copy] = go->GetParent();
+        s_goCopyToItsParent[copy] = go->parent;
         s_copiedGameObjects.push_back(copy);
     }
 

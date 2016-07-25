@@ -95,17 +95,17 @@ int main(int argc, char *argv[])
     GameObject *go1 = new GameObject();
     GameObject *go2 = new GameObject();
     go2->SetParent(go1);
-    go1->GetTransform()->SetPosition(Vector3(5,5,5));
-    go2->GetTransform()->SetPosition(Vector3(0,0,0));
+    go1->transform->SetPosition(Vector3(5,5,5));
+    go2->transform->SetPosition(Vector3(0,0,0));
 
     Logger_Log("GO1: ");
-    Logger_Log(go1->GetTransform());
-    Logger_Log(go1->GetTransform()->GetPosition());
+    Logger_Log(go1->transform);
+    Logger_Log(go1->transform->GetPosition());
     Logger_Log("");
 
     Logger_Log("GO2: ");
-    Logger_Log(go2->GetTransform());
-    Logger_Log(go2->GetTransform()->GetPosition());
+    Logger_Log(go2->transform);
+    Logger_Log(go2->transform->GetPosition());
     Logger_Log("");
     */
 
@@ -121,8 +121,8 @@ int main(int argc, char *argv[])
         Persistence::SetCurrentSceneFilepath(filename);
 
         GameObject *m_defaultCamera = new GameObject("DefaultCamera");
-        m_defaultCamera->GetTransform()->SetPosition(Vector3(90));
-        m_defaultCamera->GetTransform()->LookAt(Vector3::zero);
+        m_defaultCamera->transform->SetPosition(Vector3(90));
+        m_defaultCamera->transform->LookAt(Vector3::zero);
         m_defaultCamera->SetParent(scene);
 
         Camera *cam = m_defaultCamera->AddComponent<Camera>();

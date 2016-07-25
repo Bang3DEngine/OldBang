@@ -11,11 +11,11 @@ EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
     m_cam->SetAutoUpdateAspectRatio(true);
     m_cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
-    GetTransform()->SetPosition(Vector3(10.0f, 10.0f, 10.0f));
-    GetTransform()->LookAt(Vector3(0));
+    transform->SetPosition(Vector3(10.0f, 10.0f, 10.0f));
+    transform->LookAt(Vector3(0));
     UpdateRotationVariables();
 
-    m_camt = m_yawNode->GetTransform();
+    m_camt = m_yawNode->transform;
     m_cam->SetZFar(999.9f);
 }
 
@@ -35,11 +35,11 @@ void EditorCamera::AdjustSpeeds()
     m_mousePanPerPixel = glm::vec2(0.1f, 0.1f);
     if (m_currentFocus)
     {
-        Transform *ft = m_currentFocus->GetTransform();
+        Transform *ft = m_currentFocus->transform;
         if (ft )
         {
             Vector3 focusPoint = ft->GetPosition();
-            float d = Vector3::Distance(focusPoint, GetTransform()->GetPosition());
+            float d = Vector3::Distance(focusPoint, transform->GetPosition());
             float ar = c->GetAspectRatio();
             float halfFov = glm::radians(m_cam->GetFovDegrees()/2.0f);
             float halfHeightInWorldSpace = glm::tan(halfFov) * d;
@@ -52,7 +52,7 @@ void EditorCamera::AdjustSpeeds()
 void EditorCamera::UpdateRotationVariables()
 {
     m_mouseRotDegreesAccum = glm::vec2(0.0f);
-    m_startingRotation =GetTransform()->GetLocalRotation();
+    m_startingRotation =transform->GetLocalRotation();
 }
 
 void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
@@ -75,14 +75,14 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
         glm::vec2 delta = -Input::GetMouseDelta() * m_mouseRotDegreesPerPixel;
         m_mouseRotDegreesAccum += delta;
 
-        GetTransform()->SetLocalRotation(m_startingRotation);
+        transform->SetLocalRotation(m_startingRotation);
         Quaternion rotX = Quaternion::AngleAxis(glm::radians(m_mouseRotDegreesAccum.x),
                                                 Vector3::up);
-        GetTransform()->Rotate(rotX);
+        transform->Rotate(rotX);
 
         Quaternion rotY = Quaternion::AngleAxis(glm::radians(m_mouseRotDegreesAccum.y),
                                                 m_camt->GetRight());
-        GetTransform()->Rotate(rotY);
+        transform->Rotate(rotY);
 
         Input::SetMouseWrapping(true);
         *hasMoved  = true;
@@ -99,7 +99,7 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
         glm::vec2 delta = -Input::GetMouseDelta() * m_mousePanPerPixel;
         delta.y *= -1.0f;
 
-        GetTransform()->Translate(m_camt->GetRight() * delta.x + m_camt->GetUp() * delta.y);
+        transform->Translate(m_camt->GetRight() * delta.x + m_camt->GetUp() * delta.y);
 
         Canvas::SetCursor(Qt::SizeAllCursor);
         Input::SetMouseWrapping(true);
@@ -142,19 +142,19 @@ void EditorCamera::HandleLookAtFocus()
         {
             Sphere focusBSphere = m_currentFocus->GetBoundingSphere();
 
-            Vector3 thisPos = GetTransform()->GetPosition();
+            Vector3 thisPos = transform->GetPosition();
             Vector3 focusPos = focusBSphere.GetCenter();
             Vector3 focusDir = (focusPos - thisPos).Normalized();
 
             //LookAt Rotation
             if (thisPos != focusPos)
             {
-                Quaternion origin = GetTransform()->GetRotation();
+                Quaternion origin = transform->GetRotation();
                 Quaternion dest = Quaternion::LookDirection(focusDir, Vector3::up);
                 Quaternion final = Quaternion::Slerp( origin, dest,
                             Time::GetDeltaTime() * m_lookAtRotSpeed);
 
-                GetTransform()->SetLocalRotation(final);
+                transform->SetLocalRotation(final);
             }
 
             //LookAt Move
@@ -169,7 +169,7 @@ void EditorCamera::HandleLookAtFocus()
             minDist = std::max(minDist, 0.5f); //In case boundingBox is empty
             Vector3 dest = focusPos - (focusDir * minDist);
             float t = Time::GetDeltaTime() * m_lookAtMoveSpeed;
-            GetTransform()->SetPosition( Vector3::Lerp(thisPos, dest, t) );
+            transform->SetPosition( Vector3::Lerp(thisPos, dest, t) );
         }
     }
 }
@@ -213,7 +213,7 @@ void EditorCamera::OnUpdate()
     else
     {
         m_doingLookAt = false; //No more lookAt
-        GetTransform()->Translate(moveStep);
+        transform->Translate(moveStep);
     }
 }
 

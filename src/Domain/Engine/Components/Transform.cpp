@@ -52,7 +52,7 @@ void Transform::SetLocalPosition(const Vector3 &p)
 }
 void Transform::SetPosition(const Vector3 &p)
 {
-    if (!gameObject->GetParent()) SetLocalPosition(p);
+    if (!gameObject->parent) SetLocalPosition(p);
     else
     {
         SetLocalPosition(WorldToLocalPoint(p));
@@ -90,13 +90,13 @@ void Transform::SetLocalEuler(float x, float y, float z)
 
 void Transform::SetRotation(const Quaternion &q)
 {
-    if (!gameObject->GetParent()) SetLocalRotation(q.Normalized());
-    else SetLocalRotation(Quaternion(-gameObject->GetParent()->GetTransform()->GetRotation() * q.Normalized()));
+    if (!gameObject->parent) SetLocalRotation(q.Normalized());
+    else SetLocalRotation(Quaternion(-gameObject->parent->transform->GetRotation() * q.Normalized()));
 }
 void Transform::SetEuler(const Vector3 &degreesEuler)
 {
-    if (!gameObject->GetParent()) SetLocalEuler(degreesEuler);
-    else SetLocalEuler(-gameObject->GetParent()->GetTransform()->GetEuler() + degreesEuler);
+    if (!gameObject->parent) SetLocalEuler(degreesEuler);
+    else SetLocalEuler(-gameObject->parent->transform->GetEuler() + degreesEuler);
 }
 void Transform::SetEuler(float x, float y, float z)
 {
@@ -137,7 +137,7 @@ void Transform::SetScale(float s)
 
 void Transform::SetScale(const Vector3 &v)
 {
-    SetLocalScale(1.0f / gameObject->GetParent()->GetTransform()->GetScale() * v);
+    SetLocalScale(1.0f / gameObject->parent->transform->GetScale() * v);
 }
 
 void Transform::SetLocalScale(float s)
@@ -155,30 +155,30 @@ void Transform::SetLocalScale(const Vector3 &s)
 
 Vector3 Transform::TransformPoint(const Vector3 &point) const
 {
-    if (!gameObject->GetParent()) return point;
+    if (!gameObject->parent) return point;
     Matrix4 m;
-    gameObject->GetParent()->GetTransform()->GetModelMatrix(&m);
+    gameObject->parent->transform->GetModelMatrix(&m);
     return Vector3((m * glm::vec4(point, 1)).xyz());
 }
 Vector3 Transform::InverseTransformPoint(const Vector3 &point) const
 {
-    if (!gameObject->GetParent()) return point;
+    if (!gameObject->parent) return point;
     Matrix4 m;
-    gameObject->GetParent()->GetTransform()->GetModelMatrix(&m);
+    gameObject->parent->transform->GetModelMatrix(&m);
     return Vector3((m.Inversed() * glm::vec4(point, 1)).xyz());
 }
 Vector3 Transform::TransformDirection(const Vector3 &dir) const
 {
-    if (!gameObject->GetParent()) return dir;
+    if (!gameObject->parent) return dir;
     Matrix4 m;
-    gameObject->GetParent()->GetTransform()->GetModelMatrix(&m);
+    gameObject->parent->transform->GetModelMatrix(&m);
     return Vector3((m * glm::vec4(dir, 0)).xyz());
 }
 Vector3 Transform::InverseTransformDirection(const Vector3 &dir) const
 {
-    if (!gameObject->GetParent()) return dir;
+    if (!gameObject->parent) return dir;
     Matrix4 m;
-    gameObject->GetParent()->GetTransform()->GetModelMatrix(&m);
+    gameObject->parent->transform->GetModelMatrix(&m);
     return Vector3((m.Inversed() * glm::vec4(dir, 0)).xyz());
 }
 
@@ -261,10 +261,10 @@ void Transform::GetObjectModelMatrix(Matrix4 *m) const
 void Transform::GetModelMatrix(Matrix4 *m) const
 {
     GetObjectModelMatrix(m);
-    if (gameObject->GetParent())
+    if (gameObject->parent)
     {
         Matrix4 mp;
-        gameObject->GetParent()->GetTransform()->GetModelMatrix(&mp);
+        gameObject->parent->transform->GetModelMatrix(&mp);
         *m = mp * (*m);
     }
 }
@@ -295,7 +295,7 @@ Vector3 Transform::GetLocalPosition() const
 
 Vector3 Transform::GetPosition() const
 {
-    if (!gameObject->GetParent())
+    if (!gameObject->parent)
     {
         return GetLocalPosition();
     }
@@ -303,7 +303,7 @@ Vector3 Transform::GetPosition() const
     {
         return LocalToWorldPoint(GetLocalPosition());
     }
-    //return gameObject->GetParent()->GetTransform()->GetPosition() + GetLocalPosition();
+    //return gameObject->parent->transform->GetPosition() + GetLocalPosition();
 }
 
 Quaternion Transform::GetLocalRotation() const
@@ -313,13 +313,13 @@ Quaternion Transform::GetLocalRotation() const
 
 Quaternion Transform::GetRotation() const
 {
-    if (!gameObject->GetParent())
+    if (!gameObject->parent)
     {
         return GetLocalRotation();
     }
     else
     {
-        return gameObject->GetParent()->GetTransform()->GetRotation() * GetLocalRotation();
+        return gameObject->parent->transform->GetRotation() * GetLocalRotation();
     }
 }
 
@@ -330,13 +330,13 @@ Vector3 Transform::GetLocalEuler() const
 
 Vector3 Transform::GetEuler() const
 {
-    if (!gameObject->GetParent())
+    if (!gameObject->parent)
     {
         return GetLocalEuler();
     }
     else
     {
-        return gameObject->GetParent()->GetTransform()->GetEuler() + GetLocalEuler();
+        return gameObject->parent->transform->GetEuler() + GetLocalEuler();
     }
 }
 
@@ -347,13 +347,13 @@ Vector3 Transform::GetLocalScale() const
 
 Vector3 Transform::GetScale() const
 {
-    if (!gameObject->GetParent())
+    if (!gameObject->parent)
     {
         return GetLocalScale();
     }
     else
     {
-        return gameObject->GetParent()->GetTransform()->GetScale() * GetLocalScale();
+        return gameObject->parent->transform->GetScale() * GetLocalScale();
     }
 }
 

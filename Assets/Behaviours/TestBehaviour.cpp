@@ -35,21 +35,21 @@ void TestBehaviour::OnUpdate()
     float rotSpeed = 150.0f;
     if (Input::GetKey(Input::Key::A))
     {
-        gameObject->GetTransform()->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime);
+        gameObject->transform->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime);
     }
     else if (Input::GetKey(Input::Key::D))
     {
-        gameObject->GetTransform()->RotateLocalEuler(Vector3::up * -rotSpeed * Time::deltaTime);
+        gameObject->transform->RotateLocalEuler(Vector3::up * -rotSpeed * Time::deltaTime);
     }
 
     float speed = 50.0f;
     if (Input::GetKey(Input::Key::W))
     {
-        gameObject->GetTransform()->Translate(gameObject->GetTransform()->GetForward() * speed * Time::deltaTime);
+        gameObject->transform->Translate(gameObject->transform->GetForward() * speed * Time::deltaTime);
     }
     else if (Input::GetKey(Input::Key::S))
     {
-        gameObject->GetTransform()->Translate(gameObject->GetTransform()->GetForward() * -speed * Time::deltaTime);
+        gameObject->transform->Translate(gameObject->transform->GetForward() * -speed * Time::deltaTime);
     }
 }
 

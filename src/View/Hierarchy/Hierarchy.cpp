@@ -37,7 +37,7 @@ QTreeWidgetItem* Hierarchy::FillDownwards(GameObject *o)
     const std::list<GameObject*> children = o->GetChildren();
 
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
-    eRoot->setText(0, QString::fromStdString(o->GetName()));
+    eRoot->setText(0, QString::fromStdString(o->name));
 
     for (GameObject* go : children)
     {
@@ -98,7 +98,7 @@ void Hierarchy::OnGameObjectNameChanged(GameObject *go)
     if (m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
     {
         QTreeWidgetItem *item = m_gameObjectToTreeItem[go];
-        item->setText(0, QString::fromStdString(go->GetName()) );
+        item->setText(0, QString::fromStdString(go->name) );
     }
 }
 
@@ -138,14 +138,14 @@ void Hierarchy::OnChildAdded(GameObject *child)
 
     QTreeWidgetItem *item = FillDownwards(child); NONULL(item);
 
-    if (child->GetParent())
+    if (child->parent)
     {
-        if (!child->GetParent()->IsScene())
+        if (!child->parent->IsScene())
         {
-            if (m_gameObjectToTreeItem.find(child->GetParent()) != m_gameObjectToTreeItem.end())
+            if (m_gameObjectToTreeItem.find(child->parent) != m_gameObjectToTreeItem.end())
             {
-                m_gameObjectToTreeItem[child->GetParent()]->addChild(item);
-                ExpandRecursiveUpwards(m_gameObjectToTreeItem[child->GetParent()]);
+                m_gameObjectToTreeItem[child->parent]->addChild(item);
+                ExpandRecursiveUpwards(m_gameObjectToTreeItem[child->parent]);
             }
         }
         else
@@ -207,7 +207,7 @@ void Hierarchy::dropEvent(QDropEvent *event)
             if (sourceItem != targetItem)
             {
                 GameObject *source = m_treeItemToGameObject[sourceItem];
-                if (source && target && source->GetParent())
+                if (source && target && source->parent)
                 {
                     source->SetParent(target, true);
                 }
@@ -274,7 +274,7 @@ void Hierarchy::SelectGameObject(GameObject *go)
 
     if (m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
     {
-        GameObject *parent = go->GetParent();
+        GameObject *parent = go->parent;
         if (parent )
         {
             ExpandRecursiveUpwards(m_gameObjectToTreeItem[parent]);
@@ -347,7 +347,7 @@ void Hierarchy::OnContextMenuDeleteClicked()
     foreach(QTreeWidgetItem *item, items)
     {
         GameObject *selected = m_treeItemToGameObject[item];
-        if (selected->GetParent())
+        if (selected->parent)
         {
             selected->SetParent(nullptr);
         }
@@ -362,7 +362,7 @@ void Hierarchy::OnContextMenuCreatePrefab()
 
     std::string ext = Prefab::GetFileExtensionStatic();
     FileDialog fd("Create Prefab...", Prefab::GetFileExtensionStatic());
-    std::string filename = fd.GetSaveFilename(e->GetName());
+    std::string filename = fd.GetSaveFilename(e->name);
     if (filename != "")
     {
         std::fstream f;

@@ -56,7 +56,7 @@ void Renderer::ActivateGLStatesBeforeRendering() const
     Camera *camera = scene->GetCamera();
     if (camera  && m_material  && m_material->m_shaderProgram )
     {
-        Transform *t = camera->gameObject->GetTransform();
+        Transform *t = camera->gameObject->transform;
         m_material->m_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
                                                     t->GetPosition(), false);
 
@@ -99,8 +99,8 @@ void Renderer::GetMatrices(Matrix4 *model,
 
     if (!m_ignoreModelMatrix)
     {
-        gameObject->GetTransform()->GetModelMatrix(model);
-        gameObject->GetTransform()->GetNormalMatrix(normal);
+        gameObject->transform->GetModelMatrix(model);
+        gameObject->transform->GetNormalMatrix(normal);
     }
     else
     {

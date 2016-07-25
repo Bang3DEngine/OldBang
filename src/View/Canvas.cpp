@@ -129,7 +129,7 @@ void Canvas::SetCurrentScene(const std::string &name)
 
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if ((*it)->GetName() == name)
+        if ((*it)->name == name)
         {
             SetCurrentScene((*it));
             return;
@@ -150,7 +150,7 @@ Scene *Canvas::GetScene(const std::string &name) const
 {
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if ((*it)->GetName() == name) return (*it);
+        if ((*it)->name == name) return (*it);
     }
     return nullptr;
 }
@@ -159,7 +159,7 @@ void Canvas::RemoveScene(const std::string &name)
 {
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
-        if ((*it)->GetName() == name) { m_scenes.erase(it); return; }
+        if ((*it)->name == name) { m_scenes.erase(it); return; }
     }
 }
 

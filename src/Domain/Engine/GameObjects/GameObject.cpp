@@ -46,7 +46,7 @@ void GameObject::CloneInto(ICloneable *clone) const
         }
         else
         {
-            m_transform->CloneInto(go->GetTransform());
+            m_transform->CloneInto(go->transform);
         }
     }
 }
@@ -125,7 +125,10 @@ GameObject *GameObject::GetParent() const
     return m_parent;
 }
 
-const std::string GameObject::GetName() const { return m_name; }
+const std::string GameObject::GetName() const
+{
+    return m_name;
+}
 
 unsigned char GameObject::GetRenderLayer() const
 {
@@ -304,7 +307,7 @@ GameObject *GameObject::FindInChildren(const std::string &name)
 {
     for (GameObject *child : GetChildren())
     {
-        if (child->GetName() == name)
+        if (child->name == name)
         {
             return child;
         }
