@@ -84,14 +84,14 @@ public:
 class InspectorEnumSWInfo : public InspectorSWInfo
 {
 public:
-    std::vector<std::string> m_enumValues;
+    std::vector<std::string> m_enumNames;
     int m_selectedValueIndex = 0;
 
     InspectorEnumSWInfo(const std::string &label,
                         const std::vector<std::string> &enumValues)
                         : InspectorSWInfo(label)
     {
-        m_enumValues = enumValues;
+        m_enumNames = enumValues;
     }
 
     void SetValue(void *index) override
@@ -193,6 +193,10 @@ public:
         return slotInfos[slotName];
     }
 
+    int GetEnumSelectedIndex(const std::string &slotName) const
+    {
+        return static_cast<InspectorEnumSWInfo*>(slotInfos[slotName])->m_selectedValueIndex;
+    }
     float GetFloat(const std::string &slotName) const
     {
         return static_cast<InspectorVFloatSWInfo*>(slotInfos[slotName])->m_value[0];

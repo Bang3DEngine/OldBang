@@ -413,17 +413,11 @@ InspectorWidgetInfo* Transform::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void Transform::OnInspectorInfoChanged(InspectorWidget *source)
+void Transform::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    std::vector<float> v;
-    v = source->GetSWVectorFloatValue("Position");
-    SetLocalPosition(Vector3(v[0], v[1], v[2]));
-
-    v = source->GetSWVectorFloatValue("Rotation");
-    SetLocalEuler(Vector3(v[0], v[1], v[2]));
-
-    v = source->GetSWVectorFloatValue("Scale");
-    SetLocalScale(Vector3(v[0], v[1], v[2]));
+    SetLocalPosition(info->GetVector3("Position"));
+    SetLocalEuler(info->GetVector3("Rotation"));
+    SetLocalScale(info->GetVector3("Scale"));
 }
 #endif
 

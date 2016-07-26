@@ -1,7 +1,7 @@
 #include "IInspectable.h"
 
 #ifdef BANG_EDITOR
-void IInspectable::OnInspectorInfoChanged(InspectorWidget *source)
+void IInspectable::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
 }
 

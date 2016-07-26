@@ -144,12 +144,12 @@ InspectorWidgetInfo* CircleRenderer::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void CircleRenderer::OnInspectorInfoChanged(InspectorWidget *source)
+void CircleRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    LineRenderer::OnInspectorInfoChanged(source);
+    LineRenderer::OnInspectorInfoChanged(info);
 
-    SetRadius(source->GetSWVectorFloatValue("Radius")[0]);
-    SetSegments(int(source->GetSWVectorFloatValue("Segments")[0]));
+    SetRadius(info->GetFloat("Radius"));
+    SetSegments(int(info->GetFloat("Segments")));
 }
 #endif
 

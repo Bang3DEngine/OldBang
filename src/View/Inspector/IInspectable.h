@@ -14,7 +14,7 @@ public:
 
     //Value was changed by the user, using input in inspector
     #ifdef BANG_EDITOR
-    virtual void OnInspectorInfoChanged(InspectorWidget *source);
+    virtual void OnInspectorInfoChanged(InspectorWidgetInfo *info);
     virtual InspectorWidgetInfo* OnInspectorInfoNeeded();
     #endif
 };

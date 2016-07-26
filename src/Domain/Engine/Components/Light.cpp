@@ -79,11 +79,10 @@ InspectorWidgetInfo *Light::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void Light::OnInspectorInfoChanged(InspectorWidget *source)
+void Light::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    m_intensity = source->GetSWVectorFloatValue("Intensity")[0];
-    std::vector<float> color = source->GetSWVectorFloatValue("Color");
-    m_color = Vector3(color[0], color[1], color[2]);
+    m_intensity = info->GetFloat("Intensity");
+    m_color = info->GetVector3("Color");
 }
 #endif
 

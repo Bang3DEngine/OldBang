@@ -78,7 +78,7 @@ void InspectorWidget::ConstructFromWidgetInformation(
         else if ( (sie = dynamic_cast<InspectorEnumSWInfo*>(si)) !=
                  nullptr)
         {
-            ws = new InspectorEnumSW(sie->m_label, sie->m_enumValues,
+            ws = new InspectorEnumSW(sie->m_label, sie->m_enumNames,
                                      sie->m_selectedValueIndex, this);
         }
         else if ( (sif = dynamic_cast<InspectorFileSWInfo*>(si)) !=
@@ -226,5 +226,5 @@ void InspectorWidget::_OnSlotValueChanged(QString _)
 void InspectorWidget::_OnSlotValueChanged()
 {
     NONULL(m_relatedInspectable);
-    m_relatedInspectable->OnInspectorInfoChanged(this);
+    m_relatedInspectable->OnInspectorInfoChanged(&(m_relatedInspectable->m_inspectorInfo));
 }

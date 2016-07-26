@@ -76,15 +76,12 @@ InspectorWidgetInfo* SingleLineRenderer::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void SingleLineRenderer::OnInspectorInfoChanged(InspectorWidget *source)
+void SingleLineRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    LineRenderer::OnInspectorInfoChanged(source);
+    LineRenderer::OnInspectorInfoChanged(info);
 
-    std::vector<float> origin = source->GetSWVectorFloatValue("Origin");
-    m_points[0] = Vector3(origin[0], origin[1], origin[2]);
-
-    std::vector<float> destiny = source->GetSWVectorFloatValue("Destiny");
-    m_points[1] = Vector3(destiny[0], destiny[1], destiny[2]);
+    m_points[0] = info->GetVector3("Origin");
+    m_points[1] = info->GetVector3("Destiny");
 }
 #endif
 

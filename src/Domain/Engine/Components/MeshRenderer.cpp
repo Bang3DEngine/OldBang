@@ -127,11 +127,11 @@ InspectorWidgetInfo* MeshRenderer::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void MeshRenderer::OnInspectorInfoChanged(InspectorWidget *source)
+void MeshRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    Renderer::OnInspectorInfoChanged(source);
+    Renderer::OnInspectorInfoChanged(info);
 
-    std::string meshFilepath = source->GetSWFileFilepath("Mesh");
+    std::string meshFilepath = info->GetString("Mesh");
     if (meshFilepath != "")
     {
         SetMesh( AssetsManager::GetAsset<Mesh>(meshFilepath) );

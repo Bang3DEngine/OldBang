@@ -32,7 +32,7 @@ public:
     }
 
 #ifdef BANG_EDITOR
-    void OnInspectorInfoChanged(InspectorWidget *source) {}
+    void OnInspectorInfoChanged(InspectorWidgetInfo *info) {}
 #endif
 
 protected:

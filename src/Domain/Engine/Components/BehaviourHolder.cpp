@@ -118,9 +118,9 @@ InspectorWidgetInfo* BehaviourHolder::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void BehaviourHolder::OnInspectorInfoChanged(InspectorWidget *source)
+void BehaviourHolder::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    m_sourceFilepath = source->GetSWFileFilepath("Behaviour");
+    m_sourceFilepath = info->GetString("Behaviour");
     Refresh();
 }
 #endif

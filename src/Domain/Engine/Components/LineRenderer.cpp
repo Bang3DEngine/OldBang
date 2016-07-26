@@ -94,10 +94,10 @@ InspectorWidgetInfo* LineRenderer::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void LineRenderer::OnInspectorInfoChanged(InspectorWidget *source)
+void LineRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    Renderer::OnInspectorInfoChanged(source);
-    SetLineWidth(source->GetSWVectorFloatValue("Line Width")[0]);
+    Renderer::OnInspectorInfoChanged(info);
+    SetLineWidth(info->GetFloat("Line Width"));
 }
 #endif
 

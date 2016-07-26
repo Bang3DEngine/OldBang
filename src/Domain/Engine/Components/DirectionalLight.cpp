@@ -39,9 +39,9 @@ InspectorWidgetInfo *DirectionalLight::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void DirectionalLight::OnInspectorInfoChanged(InspectorWidget *source)
+void DirectionalLight::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    Light::OnInspectorInfoChanged(source);
+    Light::OnInspectorInfoChanged(info);
 }
 #endif
 

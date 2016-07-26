@@ -266,10 +266,10 @@ InspectorWidgetInfo *Renderer::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void Renderer::OnInspectorInfoChanged(InspectorWidget *source)
+void Renderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    Component::OnInspectorInfoChanged(source);
-    std::string materialFilepath = source->GetSWFileFilepath("Material");
+    Component::OnInspectorInfoChanged(info);
+    std::string materialFilepath = info->GetString("Material");
     if (materialFilepath != "")
     {
         SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );

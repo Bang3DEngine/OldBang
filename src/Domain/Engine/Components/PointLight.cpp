@@ -54,10 +54,10 @@ InspectorWidgetInfo *PointLight::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void PointLight::OnInspectorInfoChanged(InspectorWidget *source)
+void PointLight::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    Light::OnInspectorInfoChanged(source);
-    m_range = source->GetSWVectorFloatValue("Range")[0];
+    Light::OnInspectorInfoChanged(info);
+    m_range = info->GetFloat("Range");
 
 }
 #endif

@@ -179,13 +179,13 @@ InspectorWidgetInfo* Camera::OnInspectorInfoNeeded()
     return &m_inspectorInfo;
 }
 
-void Camera::OnInspectorInfoChanged(InspectorWidget *source)
+void Camera::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
-    m_fovDegrees = source->GetSWVectorFloatValue("FOV")[0];
-    m_zNear = source->GetSWVectorFloatValue("Z Near")[0];
-    m_zFar = source->GetSWVectorFloatValue("Z Far")[0];
-    m_aspectRatio = source->GetSWVectorFloatValue("Aspect Ratio")[0];
-    m_projMode =  static_cast<Camera::ProjectionMode>(source->GetSWSelectedEnumIndex("Projection Mode"));
+    m_fovDegrees = info->GetFloat("FOV");
+    m_zNear = info->GetFloat("Z Near");
+    m_zFar = info->GetFloat("Z Far");
+    m_aspectRatio = info->GetFloat("Aspect Ratio");
+    m_projMode =  static_cast<Camera::ProjectionMode>(info->GetEnumSelectedIndex("Projection Mode"));
 }
 #endif
 

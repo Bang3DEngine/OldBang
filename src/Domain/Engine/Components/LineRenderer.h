@@ -46,7 +46,7 @@ public:
 
     #ifdef BANG_EDITOR
     virtual InspectorWidgetInfo* OnInspectorInfoNeeded() override;
-    virtual void OnInspectorInfoChanged(InspectorWidget *source) override;
+    virtual void OnInspectorInfoChanged(InspectorWidgetInfo *info) override;
     #endif
 
     virtual void WriteInternal(std::ostream &f) const;
