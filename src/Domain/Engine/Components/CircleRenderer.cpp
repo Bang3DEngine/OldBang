@@ -3,9 +3,9 @@
 CircleRenderer::CircleRenderer()
 {
     #ifdef BANG_EDITOR
-        m_inspectorComponentInfo.AddSlotInfo(
+        m_inspectorInfo.AddSlotInfo(
             new InspectorVFloatSWInfo("Radius", 1));
-        m_inspectorComponentInfo.AddSlotInfo(
+        m_inspectorInfo.AddSlotInfo(
             new InspectorVFloatSWInfo("Segments", 1));
     #endif
 
@@ -134,26 +134,19 @@ int CircleRenderer::GetSegments() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* CircleRenderer::GetComponentInfo()
+InspectorWidgetInfo* CircleRenderer::OnInspectorInfoNeeded()
 {
-    LineRenderer::GetComponentInfo();
+    LineRenderer::OnInspectorInfoNeeded();
 
-    InspectorVFloatSWInfo *radiusInfo  =
-            static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo("Radius"));
-    radiusInfo->m_value = {m_radius};
+    m_inspectorInfo.GetSlotInfo("Radius")->SetFloatValue(m_radius);
+    m_inspectorInfo.GetSlotInfo("Segments")->SetFloatValue(m_segments);
 
-    InspectorVFloatSWInfo *segmentsInfo =
-            static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo("Segments"));
-    segmentsInfo->m_value = {float(m_segments)};
-
-    return &m_inspectorComponentInfo;
+    return &m_inspectorInfo;
 }
 
-void CircleRenderer::OnSlotValueChanged(InspectorWidget *source)
+void CircleRenderer::OnInspectorInfoChanged(InspectorWidget *source)
 {
-    LineRenderer::OnSlotValueChanged(source);
+    LineRenderer::OnInspectorInfoChanged(source);
 
     SetRadius(source->GetSWVectorFloatValue("Radius")[0]);
     SetSegments(int(source->GetSWVectorFloatValue("Segments")[0]));

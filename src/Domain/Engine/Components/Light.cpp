@@ -6,7 +6,7 @@
 Light::Light()
 {
     #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.AddSlotInfos(
+    m_inspectorInfo.AddSlotInfos(
     {
         new InspectorVFloatSWInfo("Intensity", 1)
        ,new InspectorVFloatSWInfo("Color", 3)
@@ -69,24 +69,19 @@ float Light::GetIntensity() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo *Light::GetComponentInfo()
+InspectorWidgetInfo *Light::OnInspectorInfoNeeded()
 {
-    Component::GetComponentInfo();
+    Component::OnInspectorInfoNeeded();
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Intensity"))->m_value =
-        {m_intensity};
+    m_inspectorInfo.GetSlotInfo("Intensity")->SetFloatValue(m_intensity);
+    m_inspectorInfo.GetSlotInfo("Color")->SetVector3Value(m_color);
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Color"))->m_value =
-        {m_color.r, m_color.g, m_color.b};
-
-    return &m_inspectorComponentInfo;
+    return &m_inspectorInfo;
 }
 
-void Light::OnSlotValueChanged(InspectorWidget *source)
+void Light::OnInspectorInfoChanged(InspectorWidget *source)
 {
-    std::vector<float> intensity = source->GetSWVectorFloatValue("Intensity");
-    m_intensity = intensity[0];
-
+    m_intensity = source->GetSWVectorFloatValue("Intensity")[0];
     std::vector<float> color = source->GetSWVectorFloatValue("Color");
     m_color = Vector3(color[0], color[1], color[2]);
 }

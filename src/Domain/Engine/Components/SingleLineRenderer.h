@@ -38,8 +38,8 @@ public:
     Vector3 GetDestiny() const;
 
     #ifdef BANG_EDITOR
-    virtual InspectorWidgetInfo* GetComponentInfo() override;
-    virtual void OnSlotValueChanged(InspectorWidget *source) override;
+    virtual InspectorWidgetInfo* OnInspectorInfoNeeded() override;
+    virtual void OnInspectorInfoChanged(InspectorWidget *source) override;
     #endif
 
     void WriteInternal(std::ostream &f) const;

@@ -131,6 +131,11 @@ public:
 
     void SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f);
 
+    #ifdef BANG_EDITOR
+    virtual InspectorWidgetInfo* OnInspectorInfoNeeded() override;
+    virtual void OnInspectorInfoChanged(InspectorWidget *source) override;
+    #endif
+
     virtual const std::string ToString() const override { return "Renderer"; }
     virtual std::string GetName() const override { return "Renderer"; }
     virtual ICloneable *Clone() const override = 0;

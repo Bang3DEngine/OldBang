@@ -3,7 +3,7 @@
 BehaviourHolder::BehaviourHolder()
 {
     #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.AddSlotInfos(
+    m_inspectorInfo.AddSlotInfos(
     {
         new InspectorFileSWInfo( "Behaviour", "cpp" ),
         new InspectorButtonSWInfo( "Refresh",
@@ -112,15 +112,13 @@ void BehaviourHolder::Refresh()
 
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* BehaviourHolder::GetComponentInfo()
+InspectorWidgetInfo* BehaviourHolder::OnInspectorInfoNeeded()
 {
-    static_cast<InspectorFileSWInfo*>
-            (m_inspectorComponentInfo.GetSlotInfo("Behaviour"))->m_filepath = m_sourceFilepath;
-
-    return &m_inspectorComponentInfo;
+    m_inspectorInfo.GetSlotInfo("Behaviour")->SetStringValue(m_sourceFilepath);
+    return &m_inspectorInfo;
 }
 
-void BehaviourHolder::OnSlotValueChanged(InspectorWidget *source)
+void BehaviourHolder::OnInspectorInfoChanged(InspectorWidget *source)
 {
     m_sourceFilepath = source->GetSWFileFilepath("Behaviour");
     Refresh();

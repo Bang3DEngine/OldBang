@@ -5,7 +5,7 @@
 MeshRenderer::MeshRenderer()
 {
     #ifdef BANG_EDITOR
-        m_inspectorComponentInfo.AddSlotInfos(
+        m_inspectorInfo.AddSlotInfos(
         {
             new InspectorFileSWInfo("Material",
                                     Material::GetFileExtensionStatic()),
@@ -101,63 +101,41 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* MeshRenderer::GetComponentInfo()
+InspectorWidgetInfo* MeshRenderer::OnInspectorInfoNeeded()
 {
-    InspectorFileSWInfo* matInfo, *meshInfo;
-    matInfo  = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Material"));
-    meshInfo = static_cast<InspectorFileSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Mesh"));
+    Renderer::OnInspectorInfoNeeded();
 
-    if (m_material )
-    {
-        if (m_material->GetFilepath() != "")
-        {
-            matInfo->m_filepath = m_material->GetFilepath();
-        }
-        else //In case the asset is created in runtime, write its mem address
-        {
-            Logger_GetString(matInfo->m_filepath, (void*)m_material);
-        }
-    }
-    else
-    {
-        matInfo->m_filepath = "-";
-    }
-
-    if (m_mesh )
+    InspectorSWInfo *meshInfo = m_inspectorInfo.GetSlotInfo("Mesh");
+    if (m_mesh)
     {
         if (m_mesh->GetFilepath() != "")
         {
-            meshInfo->m_filepath = m_mesh->GetFilepath();
+            meshInfo->SetStringValue(m_mesh->GetFilepath());
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            Logger_GetString(meshInfo->m_filepath, (void*)m_mesh);
+            std::string memAddress;
+            Logger_GetString(memAddress, (void*)m_mesh);
+            meshInfo->SetStringValue(memAddress);
         }
     }
     else
     {
-        meshInfo->m_filepath = "-";
+        meshInfo->SetStringValue("-");
     }
 
-    return &m_inspectorComponentInfo;
+    return &m_inspectorInfo;
 }
 
-void MeshRenderer::OnSlotValueChanged(InspectorWidget *source)
+void MeshRenderer::OnInspectorInfoChanged(InspectorWidget *source)
 {
-    std::string materialFilepath = source->GetSWFileFilepath("Material");
+    Renderer::OnInspectorInfoChanged(source);
+
     std::string meshFilepath = source->GetSWFileFilepath("Mesh");
-
-    if (materialFilepath != "")
-    {
-        SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
-    }
-    else { }
-
     if (meshFilepath != "")
     {
         SetMesh( AssetsManager::GetAsset<Mesh>(meshFilepath) );
     }
-    else { }
 }
 #endif
 

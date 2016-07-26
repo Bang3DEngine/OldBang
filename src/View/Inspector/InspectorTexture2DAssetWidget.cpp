@@ -22,10 +22,8 @@ InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
         }
     );
 
-    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("Image path"))->m_value =
-            imgFilepath;
-
-    static_cast<InspectorEnumSWInfo*>(m_inspectorInfo.GetSlotInfo("Filter"))->m_selectedValueIndex =
+    m_inspectorInfo.GetStringSWSlotInfo("Image path")->m_value = imgFilepath;
+    m_inspectorInfo.GetEnumSWSlotInfo("Filter")->m_selectedValueIndex =
             tex->GetFilterMode() == Texture2D::FilterMode::Nearest ? 0 : 1;
 
     delete tex;

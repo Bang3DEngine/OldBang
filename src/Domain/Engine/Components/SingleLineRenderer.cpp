@@ -3,9 +3,9 @@
 SingleLineRenderer::SingleLineRenderer()
 {
     #ifdef BANG_EDITOR
-        m_inspectorComponentInfo.AddSlotInfo(
+        m_inspectorInfo.AddSlotInfo(
             new InspectorVFloatSWInfo("Origin", 3));
-        m_inspectorComponentInfo.AddSlotInfo(
+        m_inspectorInfo.AddSlotInfo(
             new InspectorVFloatSWInfo("Destiny", 3));
     #endif
 
@@ -66,26 +66,19 @@ Vector3 SingleLineRenderer::GetDestiny() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* SingleLineRenderer::GetComponentInfo()
+InspectorWidgetInfo* SingleLineRenderer::OnInspectorInfoNeeded()
 {
-    LineRenderer::GetComponentInfo();
+    LineRenderer::OnInspectorInfoNeeded();
 
-    InspectorVFloatSWInfo *originInfo  =
-            static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo("Origin"));
-    originInfo->m_value = {m_points[0].x, m_points[0].y, m_points[0].z};
+    m_inspectorInfo.GetSlotInfo("Origin")->SetVector3Value(m_points[0]);
+    m_inspectorInfo.GetSlotInfo("Destiny")->SetVector3Value(m_points[1]);
 
-    InspectorVFloatSWInfo *destinyInfo  =
-            static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo("Destiny"));
-    destinyInfo->m_value = {m_points[1].x, m_points[1].y, m_points[1].z};
-
-    return &m_inspectorComponentInfo;
+    return &m_inspectorInfo;
 }
 
-void SingleLineRenderer::OnSlotValueChanged(InspectorWidget *source)
+void SingleLineRenderer::OnInspectorInfoChanged(InspectorWidget *source)
 {
-    LineRenderer::OnSlotValueChanged(source);
+    LineRenderer::OnInspectorInfoChanged(source);
 
     std::vector<float> origin = source->GetSWVectorFloatValue("Origin");
     m_points[0] = Vector3(origin[0], origin[1], origin[2]);

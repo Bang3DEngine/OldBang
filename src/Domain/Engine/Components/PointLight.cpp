@@ -5,7 +5,7 @@ PointLight::PointLight() : Light()
     m_lightMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/PR_PointLight.bmat");
 
     #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.AddSlotInfos(
+    m_inspectorInfo.AddSlotInfos(
     {
         new InspectorVFloatSWInfo("Range", 1 )
     });
@@ -47,22 +47,17 @@ ICloneable *PointLight::Clone() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo *PointLight::GetComponentInfo()
+InspectorWidgetInfo *PointLight::OnInspectorInfoNeeded()
 {
-    Light::GetComponentInfo();
-
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Range"))->m_value =
-        {m_range};
-
-    return &m_inspectorComponentInfo;
+    Light::OnInspectorInfoNeeded();
+    m_inspectorInfo.GetSlotInfo("Range")->SetFloatValue(m_range);
+    return &m_inspectorInfo;
 }
 
-void PointLight::OnSlotValueChanged(InspectorWidget *source)
+void PointLight::OnInspectorInfoChanged(InspectorWidget *source)
 {
-    Light::OnSlotValueChanged(source);
-
-    std::vector<float> range = source->GetSWVectorFloatValue("Range");
-    m_range = range[0];
+    Light::OnInspectorInfoChanged(source);
+    m_range = source->GetSWVectorFloatValue("Range")[0];
 
 }
 #endif

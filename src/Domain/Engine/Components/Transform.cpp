@@ -10,7 +10,7 @@ Transform::Transform() : m_localPosition(Vector3(0.0f))
                         #endif
 {
     #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.AddSlotInfos(
+    m_inspectorInfo.AddSlotInfos(
     {
         new InspectorVFloatSWInfo("Position", 3),
         new InspectorVFloatSWInfo("Rotation", 3),
@@ -400,25 +400,20 @@ const std::string Transform::ToString() const
 }
 #ifdef BANG_EDITOR
 
-InspectorWidgetInfo* Transform::GetComponentInfo()
+InspectorWidgetInfo* Transform::OnInspectorInfoNeeded()
 {
     Vector3 pos = GetLocalPosition();
     Vector3 rotEuler = GetLocalEuler();
     Vector3 scale = GetLocalScale();
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Position"))->m_value =
-        {pos.x, pos.y, pos.z};
+    m_inspectorInfo.GetSlotInfo("Position")->SetVector3Value(pos);
+    m_inspectorInfo.GetSlotInfo("Rotation")->SetVector3Value(rotEuler);
+    m_inspectorInfo.GetSlotInfo("Scale")->SetVector3Value(scale);
 
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Rotation"))->m_value =
-        {rotEuler.x, rotEuler.y, rotEuler.z};
-
-    static_cast<InspectorVFloatSWInfo*>(m_inspectorComponentInfo.GetSlotInfo("Scale"))->m_value =
-        {scale.x, scale.y, scale.z};
-
-    return &m_inspectorComponentInfo;
+    return &m_inspectorInfo;
 }
 
-void Transform::OnSlotValueChanged(InspectorWidget *source)
+void Transform::OnInspectorInfoChanged(InspectorWidget *source)
 {
     std::vector<float> v;
     v = source->GetSWVectorFloatValue("Position");

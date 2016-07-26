@@ -3,7 +3,7 @@
 LineRenderer::LineRenderer()
 {
 #ifdef BANG_EDITOR
-    m_inspectorComponentInfo.AddSlotInfos(
+    m_inspectorInfo.AddSlotInfos(
     {
         new InspectorFileSWInfo("Material",
                     Material::GetFileExtensionStatic()),
@@ -87,47 +87,17 @@ const std::vector<Vector3> &LineRenderer::GetPoints() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* LineRenderer::GetComponentInfo()
+InspectorWidgetInfo* LineRenderer::OnInspectorInfoNeeded()
 {
-    InspectorFileSWInfo* matInfo =
-            static_cast<InspectorFileSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo("Material"));
-
-    if (m_material )
-    {
-        if (m_material->GetFilepath() != "")
-        {
-            matInfo->m_filepath = m_material->GetFilepath();
-        }
-        else //In case the asset is created in runtime, write its mem address
-        {
-            Logger_GetString(matInfo->m_filepath, (void*)m_material);
-        }
-    }
-    else
-    {
-        matInfo->m_filepath = "-";
-    }
-
-    InspectorVFloatSWInfo *widthInfo  =
-            static_cast<InspectorVFloatSWInfo*>(
-                m_inspectorComponentInfo.GetSlotInfo("Line Width"));
-    widthInfo->m_value = {GetLineWidth()};
-
-    return &m_inspectorComponentInfo;
+    Renderer::OnInspectorInfoNeeded();
+    m_inspectorInfo.GetSlotInfo("Line Width")->SetFloatValue(GetLineWidth());
+    return &m_inspectorInfo;
 }
 
-void LineRenderer::OnSlotValueChanged(InspectorWidget *source)
+void LineRenderer::OnInspectorInfoChanged(InspectorWidget *source)
 {
-    std::string materialFilepath = source->GetSWFileFilepath("Material");
-    if (materialFilepath != "")
-    {
-        SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
-    }
-    else { }
-
-    float width = source->GetSWVectorFloatValue("Line Width")[0];
-    SetLineWidth(width);
+    Renderer::OnInspectorInfoChanged(source);
+    SetLineWidth(source->GetSWVectorFloatValue("Line Width")[0]);
 }
 #endif
 

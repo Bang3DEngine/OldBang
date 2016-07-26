@@ -10,15 +10,13 @@ protected:
     IInspectable() {}
 
 public:
-    InspectorWidgetInfo m_inspectorComponentInfo;
+    InspectorWidgetInfo m_inspectorInfo;
 
     //Value was changed by the user, using input in inspector
-    virtual void OnSlotValueChanged(InspectorWidget *source) = 0;
-
-    virtual InspectorWidgetInfo* GetComponentInfo()
-    {
-        return &m_inspectorComponentInfo;
-    }
+    #ifdef BANG_EDITOR
+    virtual void OnInspectorInfoChanged(InspectorWidget *source);
+    virtual InspectorWidgetInfo* OnInspectorInfoNeeded();
+    #endif
 };
 
 #endif // IINSPECTABLE_H

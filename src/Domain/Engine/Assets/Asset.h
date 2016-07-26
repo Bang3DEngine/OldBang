@@ -32,7 +32,7 @@ public:
     }
 
 #ifdef BANG_EDITOR
-    void OnSlotValueChanged(InspectorWidget *source) {}
+    void OnInspectorInfoChanged(InspectorWidget *source) {}
 #endif
 
 protected:

@@ -33,15 +33,15 @@ ICloneable *DirectionalLight::Clone() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo *DirectionalLight::GetComponentInfo()
+InspectorWidgetInfo *DirectionalLight::OnInspectorInfoNeeded()
 {
-    Light::GetComponentInfo();
-    return &m_inspectorComponentInfo;
+    Light::OnInspectorInfoNeeded();
+    return &m_inspectorInfo;
 }
 
-void DirectionalLight::OnSlotValueChanged(InspectorWidget *source)
+void DirectionalLight::OnInspectorInfoChanged(InspectorWidget *source)
 {
-    Light::OnSlotValueChanged(source);
+    Light::OnInspectorInfoChanged(source);
 }
 #endif
 

@@ -23,7 +23,7 @@ InspectorWidget::InspectorWidget(IInspectable *relatedInspectable)
     this->m_relatedInspectable = relatedInspectable;
 
     ConstructFromWidgetInformation( "Inspectable",
-                                    relatedInspectable->GetComponentInfo() );
+                                    relatedInspectable->OnInspectorInfoNeeded() );
 
 }
 
@@ -162,7 +162,7 @@ void InspectorWidget::Refresh()
 {
     if (m_relatedInspectable)
     {
-        Refresh(m_relatedInspectable->GetComponentInfo());
+        Refresh(m_relatedInspectable->OnInspectorInfoNeeded());
     }
 }
 
@@ -203,7 +203,7 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
             wss->SetValue( sis->m_value );
         }
 
-        if (ws )
+        if (ws)
         {
             ws->show();
             layout()->addWidget(ws);
@@ -226,5 +226,5 @@ void InspectorWidget::_OnSlotValueChanged(QString _)
 void InspectorWidget::_OnSlotValueChanged()
 {
     NONULL(m_relatedInspectable);
-    m_relatedInspectable->OnSlotValueChanged(this);
+    m_relatedInspectable->OnInspectorInfoChanged(this);
 }

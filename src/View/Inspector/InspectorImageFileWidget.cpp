@@ -14,16 +14,12 @@ InspectorImageFileWidget(const FileImage &fileImage) :
     }
     );
 
-    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("File name"))->m_value =
+    m_inspectorInfo.GetStringSWSlotInfo("File name")->m_value =
             fileImage.GetName() + "." + fileImage.GetExtension();
-
-    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("Path"))->m_value =
-            fileImage.GetPath();
-
-    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("Dimensions"))->m_value =
+    m_inspectorInfo.GetStringSWSlotInfo("Path")->m_value = fileImage.GetPath();
+    m_inspectorInfo.GetStringSWSlotInfo("Dimensions")->m_value =
             std::to_string(fileImage.GetWidth()) + "x" + std::to_string(fileImage.GetHeight());
-
-    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("Mode"))->m_value =
+    m_inspectorInfo.GetStringSWSlotInfo("Mode")->m_value =
             fileImage.GetNumComponents() == 3 ? "RGB" : "RGBA";
 
     this->ConstructFromWidgetInformation(fileImage.GetName(), &m_inspectorInfo);

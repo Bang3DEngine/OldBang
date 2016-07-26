@@ -239,6 +239,44 @@ void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std:
     ActivateGLStatesBeforeRenderingForSelection = f;
 }
 
+InspectorWidgetInfo *Renderer::OnInspectorInfoNeeded()
+{
+    Component::OnInspectorInfoNeeded();
+
+    InspectorSWInfo *matInfo  = m_inspectorInfo.GetSlotInfo("Material");
+
+    if (m_material)
+    {
+        if (m_material->GetFilepath() != "")
+        {
+            matInfo->SetStringValue(m_material->GetFilepath());
+        }
+        else //In case the asset is created in runtime, write its mem address
+        {
+            std::string memAddress;
+            Logger_GetString(memAddress, (void*)m_material);
+            matInfo->SetStringValue(memAddress);
+        }
+    }
+    else
+    {
+        matInfo->SetStringValue("-");
+    }
+
+    return &m_inspectorInfo;
+}
+
+void Renderer::OnInspectorInfoChanged(InspectorWidget *source)
+{
+    Component::OnInspectorInfoChanged(source);
+    std::string materialFilepath = source->GetSWFileFilepath("Material");
+    if (materialFilepath != "")
+    {
+        SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
+    }
+    else { }
+}
+
 void Renderer::WriteInternal(std::ostream &f) const
 {
     Component::WriteInternal(f);

@@ -13,16 +13,12 @@ InspectorMeshFileWidget::InspectorMeshFileWidget(const FileMesh &fileMesh) :
     }
     );
 
-    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("File name"))->m_value =
+    m_inspectorInfo.GetStringSWSlotInfo("File name")->m_value =
             fileMesh.GetName() + "." + fileMesh.GetExtension();
-
-    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("Path"))->m_value =
-            fileMesh.GetPath();
-
-    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("Mode"))->m_value =
+    m_inspectorInfo.GetStringSWSlotInfo("Path")->m_value = fileMesh.GetPath();
+    m_inspectorInfo.GetStringSWSlotInfo("Mode")->m_value =
             fileMesh.IsTriangles() ? "Triangles" : "Quads";
-
-    static_cast<InspectorStringSWInfo*>(m_inspectorInfo.GetSlotInfo("Faces"))->m_value =
+    m_inspectorInfo.GetStringSWSlotInfo("Faces")->m_value =
             std::to_string(fileMesh.GetNumFaces());
 
     this->ConstructFromWidgetInformation(fileMesh.GetName(), &m_inspectorInfo);
