@@ -7,7 +7,7 @@ XMLNode::XMLNode(const std::string &tagName) :
 {
 }
 
-void XMLNode::AddChild(XMLNode node)
+void XMLNode::AddChild(XMLNode *node)
 {
     m_children.push_back(node);
 }
@@ -18,13 +18,26 @@ void XMLNode::AddAttribute(const std::string &attributeName,
     m_attributes[attributeName] = attributeValue;
 }
 
-const std::string XMLNode::GetAttributeValue(const std::string &attributeName)
+const std::string XMLNode::GetAttributeValue(const std::string &attributeName) const
 {
     if (m_attributes.find(attributeName) != m_attributes.end())
     {
         return m_attributes[attributeName];
     }
     return "";
+}
+
+const XMLNode *XMLNode::GetChild(const std::string &name) const
+{
+    for (XMLNode *node : m_children)
+    {
+        if (node->GetTagName() == name)
+        {
+            return node;
+        }
+    }
+
+    return nullptr;
 }
 
 std::string XMLNode::ToString(const std::string& indent) const
@@ -39,9 +52,9 @@ std::string XMLNode::ToString(const std::string& indent) const
     str += ">\n";
 
     const std::string newIndent = indent + " ";
-    for(const XMLNode &child : m_children)
+    for(XMLNode *child : m_children)
     {
-        str += indent + child.ToString(newIndent);
+        str += child->ToString(newIndent);
     }
     str += indent + "<" + m_tagName + "/>\n";
     return str;
@@ -62,7 +75,7 @@ const std::map<std::string, std::string> &XMLNode::GetAttributes() const
     return m_attributes;
 }
 
-const std::list<XMLNode>& XMLNode::GetChildren() const
+const std::list<XMLNode*>& XMLNode::GetChildren() const
 {
     return m_children;
 }

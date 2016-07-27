@@ -1,5 +1,7 @@
 #include "XMLParser.h"
 
+const std::string XMLParser::TOKEN_SPACE = " \t\n";
+
 XMLParser::XMLParser()
 {
 }
@@ -7,8 +9,8 @@ XMLParser::XMLParser()
 std::string XMLParser::GetTagName(const std::string &tag, int *tagNameBegin, int *tagNameEnd)
 {
     int tagBegin = tag.find_first_of('<');
-    int nameBegin = tag.find_first_not_of(" \t", tagBegin + 1);
-    int nameEnd = tag.find_first_of(" >/", nameBegin + 1);
+    int nameBegin = tag.find_first_not_of(TOKEN_SPACE, tagBegin + 1);
+    int nameEnd = tag.find_first_of(TOKEN_SPACE + ">/", nameBegin + 1);
 
     if (tagNameBegin) *tagNameBegin = nameBegin;
     if (tagNameEnd) *tagNameEnd = nameEnd;
@@ -28,10 +30,10 @@ void XMLParser::GetFirstAttribute(const std::string &tag,
         attribute->second = "";
     }
 
-    int attrNameBegin = tag.find_first_not_of(" \t", startPosition);
+    int attrNameBegin = tag.find_first_not_of(TOKEN_SPACE, startPosition);
     if (attrNameBegin == -1) { return; }
 
-    int attrNameEnd = tag.find_first_of(" =", attrNameBegin + 1);
+    int attrNameEnd = tag.find_first_of(TOKEN_SPACE + "=", attrNameBegin + 1);
     if (attrNameEnd == -1) { return; }
 
     int attrValueBegin = tag.find_first_of("\"", attrNameEnd + 1) + 1;
@@ -66,12 +68,13 @@ void XMLParser::GetCloseTag(const std::string &xml,
     *endPosition   = -1;
 
     std::string resultTag = "";
+    int end = startPosition;
     int resultBegin = -1, resultEnd = -1;
     while (true)
     {
-        std::string tag = "";
-        int begin, end;
-        XMLParser::GetNextOpenTag(xml, startPosition, &tag, &begin, &end);
+        std::string tag;
+        int begin;
+        XMLParser::GetNextTag(xml, end, &tag, &begin, &end);
         if (end != -1 && !XMLParser::IsOpenTag(tag))
         {
             std::string name = XMLParser::GetTagName(tag);
@@ -97,6 +100,36 @@ void XMLParser::GetCloseTag(const std::string &xml,
 void XMLParser::GetNextOpenTag(const std::string &xml,
                                int startPosition,
                                std::string *tag,
+                               int *beginTagPosition,
+                               int *endTagPosition)
+{
+    std::string resultTag = "";
+    int end = startPosition;
+    while (end != -1)
+    {
+        XMLParser::GetNextTag(xml, end, &resultTag, beginTagPosition, &end);
+        if (XMLParser::IsOpenTag(resultTag))
+        {
+            break;
+        }
+    }
+
+    if (end == -1)
+    {
+        *tag = "";
+        *beginTagPosition = -1;
+        *endTagPosition = -1;
+    }
+    else
+    {
+        *tag = resultTag;
+        *endTagPosition = end;
+    }
+}
+
+void XMLParser::GetNextTag(const std::string &xml,
+                               int startPosition,
+                               std::string *tag,
                                int *beginPosition,
                                int *endTagPosition)
 {
@@ -118,15 +151,19 @@ void XMLParser::GetNextOpenTag(const std::string &xml,
     }
 }
 
-XMLNode XMLParser::FromXML(const std::string &xml)
+XMLNode* XMLParser::FromXML(const std::string &xml)
 {
-    XMLNode root;
+    XMLNode* root = new XMLNode();
 
     //Read name
     std::string tag;
     int rootOpenTagBegin, rootOpenTagEnd;
     XMLParser::GetNextOpenTag(xml, 0, &tag,
                               &rootOpenTagBegin, &rootOpenTagEnd);
+    if (rootOpenTagEnd == -1)
+    {
+        return nullptr;
+    }
 
     int tagNameEnd;
     std::string tagName = XMLParser::GetTagName(tag, nullptr, &tagNameEnd);
@@ -134,7 +171,7 @@ XMLNode XMLParser::FromXML(const std::string &xml)
     XMLParser::GetCloseTag(xml, rootOpenTagEnd, tagName,
                            &rootCloseTagBegin, &rootCloseTagEnd);
 
-    root.SetTagName(tagName);
+    root->SetTagName(tagName);
 
     //Read attributes
     int attrEnd = tagNameEnd;
@@ -142,33 +179,41 @@ XMLNode XMLParser::FromXML(const std::string &xml)
     {
         //Logger_Log("attrEnd: " << attrEnd);
         std::pair<std::string, std::string> attr;
-        XMLParser::GetFirstAttribute(xml, attrEnd + 1, &attr, &attrEnd);
+        XMLParser::GetFirstAttribute(tag, attrEnd + 1, &attr, &attrEnd);
         if(attrEnd == -1)
         {
             break;
         }
 
-        root.AddAttribute(attr.first, attr.second);
+        root->AddAttribute(attr.first, attr.second);
     }
 
     //Read children
-    std::string innerXML = xml.substr(rootOpenTagEnd, rootCloseTagBegin-rootOpenTagEnd+1);
+    std::string innerXML = xml.substr(rootOpenTagEnd+1, rootCloseTagBegin-rootOpenTagEnd-1);
     int innerLastPos = 0;
     while (true)
     {
         std::string innerTag;
         int childOpenTagBegin, childOpenTagEnd;
-        XMLParser::GetNextOpenTag(innerXML, innerLastPos, &innerTag,
-                                  &childOpenTagBegin, &childOpenTagEnd);
+        XMLParser::GetNextTag(innerXML, innerLastPos, &innerTag,
+                              &childOpenTagBegin, &childOpenTagEnd);
+        if (childOpenTagBegin == -1)
+        {
+            break;
+        }
 
         std::string tagName = XMLParser::GetTagName(innerTag);
         int childCloseTagBegin, childCloseTagEnd;
         XMLParser::GetCloseTag(innerXML, innerLastPos, tagName,
                                &childCloseTagBegin, &childCloseTagEnd);
 
-        std::string childXML = innerXML.substr(childCloseTagBegin, childCloseTagEnd-childCloseTagBegin+1);
-        XMLNode child = XMLParser::FromXML(childXML);
-        root.AddChild(child);
+        std::string childXML = innerXML.substr(childOpenTagBegin, childCloseTagEnd-childOpenTagBegin);
+
+        XMLNode *child = XMLParser::FromXML(childXML);
+        if (child)
+        {
+            root->AddChild(child);
+        }
 
         innerLastPos = childCloseTagEnd;
     }

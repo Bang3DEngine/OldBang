@@ -8,8 +8,17 @@
 
 class XMLParser
 {
+private:
+    static const std::string TOKEN_SPACE;
+
 public:
     static void GetNextOpenTag(const std::string &xml,
+                               int startPosition,
+                               std::string *tag,
+                               int *beginPosition,
+                               int *endTagPosition);
+
+    static void GetNextTag(const std::string &xml,
                                int startPosition,
                                std::string *tag,
                                int *beginPosition,
@@ -33,7 +42,7 @@ public:
 
     static std::string GetTagName(const std::string &tag,
                                   int *tagNameBegin = nullptr, int *tagNameEnd = nullptr);
-    static XMLNode FromXML(const std::string &xml);
+    static XMLNode* FromXML(const std::string &xml);
 };
 
 #endif // XMLPARSER_H
