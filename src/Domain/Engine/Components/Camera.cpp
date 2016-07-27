@@ -170,11 +170,11 @@ ICloneable *Camera::Clone() const
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* Camera::OnInspectorInfoNeeded()
 {
-    m_inspectorInfo.GetSlotInfo("FOV")->SetFloatValue(m_fovDegrees);
-    m_inspectorInfo.GetSlotInfo("Z Near")->SetFloatValue(m_zNear);
-    m_inspectorInfo.GetSlotInfo("Z Far")->SetFloatValue(m_zFar);
-    m_inspectorInfo.GetSlotInfo("Aspect Ratio")->SetFloatValue(m_aspectRatio);
-    m_inspectorInfo.GetSlotInfo("Projection Mode")->SetIntValue(m_projMode);
+    m_inspectorInfo.GetSlotInfo("FOV")->SetFloat(m_fovDegrees);
+    m_inspectorInfo.GetSlotInfo("Z Near")->SetFloat(m_zNear);
+    m_inspectorInfo.GetSlotInfo("Z Far")->SetFloat(m_zFar);
+    m_inspectorInfo.GetSlotInfo("Aspect Ratio")->SetFloat(m_aspectRatio);
+    m_inspectorInfo.GetSlotInfo("Projection Mode")->SetInt(m_projMode);
 
     return &m_inspectorInfo;
 }

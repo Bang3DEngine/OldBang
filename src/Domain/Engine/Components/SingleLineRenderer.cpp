@@ -70,8 +70,8 @@ InspectorWidgetInfo* SingleLineRenderer::OnInspectorInfoNeeded()
 {
     LineRenderer::OnInspectorInfoNeeded();
 
-    m_inspectorInfo.GetSlotInfo("Origin")->SetVector3Value(m_points[0]);
-    m_inspectorInfo.GetSlotInfo("Destiny")->SetVector3Value(m_points[1]);
+    m_inspectorInfo.GetSlotInfo("Origin")->SetVector3(m_points[0]);
+    m_inspectorInfo.GetSlotInfo("Destiny")->SetVector3(m_points[1]);
 
     return &m_inspectorInfo;
 }

@@ -90,7 +90,7 @@ const std::vector<Vector3> &LineRenderer::GetPoints() const
 InspectorWidgetInfo* LineRenderer::OnInspectorInfoNeeded()
 {
     Renderer::OnInspectorInfoNeeded();
-    m_inspectorInfo.GetSlotInfo("Line Width")->SetFloatValue(GetLineWidth());
+    m_inspectorInfo.GetSlotInfo("Line Width")->SetFloat(GetLineWidth());
     return &m_inspectorInfo;
 }
 

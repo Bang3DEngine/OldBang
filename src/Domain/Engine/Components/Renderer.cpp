@@ -249,18 +249,18 @@ InspectorWidgetInfo *Renderer::OnInspectorInfoNeeded()
     {
         if (m_material->GetFilepath() != "")
         {
-            matInfo->SetStringValue(m_material->GetFilepath());
+            matInfo->SetString(m_material->GetFilepath());
         }
         else //In case the asset is created in runtime, write its mem address
         {
             std::string memAddress;
             Logger_GetString(memAddress, (void*)m_material);
-            matInfo->SetStringValue(memAddress);
+            matInfo->SetString(memAddress);
         }
     }
     else
     {
-        matInfo->SetStringValue("-");
+        matInfo->SetString("-");
     }
 
     return &m_inspectorInfo;

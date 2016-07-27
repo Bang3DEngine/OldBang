@@ -114,7 +114,7 @@ void BehaviourHolder::Refresh()
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* BehaviourHolder::OnInspectorInfoNeeded()
 {
-    m_inspectorInfo.GetSlotInfo("Behaviour")->SetStringValue(m_sourceFilepath);
+    m_inspectorInfo.GetSlotInfo("Behaviour")->SetString(m_sourceFilepath);
     return &m_inspectorInfo;
 }
 

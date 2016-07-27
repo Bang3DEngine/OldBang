@@ -406,9 +406,9 @@ InspectorWidgetInfo* Transform::OnInspectorInfoNeeded()
     Vector3 rotEuler = GetLocalEuler();
     Vector3 scale = GetLocalScale();
 
-    m_inspectorInfo.GetSlotInfo("Position")->SetVector3Value(pos);
-    m_inspectorInfo.GetSlotInfo("Rotation")->SetVector3Value(rotEuler);
-    m_inspectorInfo.GetSlotInfo("Scale")->SetVector3Value(scale);
+    m_inspectorInfo.GetSlotInfo("Position")->SetVector3(pos);
+    m_inspectorInfo.GetSlotInfo("Rotation")->SetVector3(rotEuler);
+    m_inspectorInfo.GetSlotInfo("Scale")->SetVector3(scale);
 
     return &m_inspectorInfo;
 }

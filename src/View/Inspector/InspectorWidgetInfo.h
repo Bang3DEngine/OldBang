@@ -25,32 +25,32 @@ public:
      */
     virtual bool NeedsWrittenLabel() = 0;
 
-    void SetIntValue(const int &value)
+    void SetInt(const int &value)
     {
         int tmp = value;
         SetValue(&tmp);
     }
-    void SetStringValue(const std::string &value)
+    void SetString(const std::string &value)
     {
         std::string tmp = value;
         SetValue(&tmp);
     }
-    void SetFloatValue(const float &value)
+    void SetFloat(const float &value)
     {
         std::vector<float> tmp = {value};
         SetValue(&tmp);
     }
-    void SetVector2Value(const glm::vec2 &value)
+    void SetVector2(const glm::vec2 &value)
     {
         std::vector<float> tmp = {value.x, value.y};
         SetValue(&tmp);
     }
-    void SetVector3Value(const Vector3 &value)
+    void SetVector3(const Vector3 &value)
     {
         std::vector<float> tmp = {value.x, value.y, value.z};
         SetValue(&tmp);
     }
-    void SetVector4Value(const glm::vec4 &value)
+    void SetVector4(const glm::vec4 &value)
     {
         std::vector<float> tmp = {value.x, value.y, value.z, value.w};
         SetValue(&tmp);

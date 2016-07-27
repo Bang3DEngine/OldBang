@@ -138,8 +138,8 @@ InspectorWidgetInfo* CircleRenderer::OnInspectorInfoNeeded()
 {
     LineRenderer::OnInspectorInfoNeeded();
 
-    m_inspectorInfo.GetSlotInfo("Radius")->SetFloatValue(m_radius);
-    m_inspectorInfo.GetSlotInfo("Segments")->SetFloatValue(m_segments);
+    m_inspectorInfo.GetSlotInfo("Radius")->SetFloat(m_radius);
+    m_inspectorInfo.GetSlotInfo("Segments")->SetFloat(m_segments);
 
     return &m_inspectorInfo;
 }

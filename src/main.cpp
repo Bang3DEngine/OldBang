@@ -17,6 +17,8 @@
 #include "FileReader.h"
 #include "Behaviour.h"
 #include "Texture2D.h"
+#include "XMLParser.h"
+#include "XMLNode.h"
 #include "Camera.h"
 #include "Canvas.h"
 #include "Shader.h"
@@ -64,6 +66,31 @@ int main(int argc, char *argv[])
     Input::InitFromMainBinary();
 
 
+    XMLNode node1, node2, node3, node4;
+    node1.SetTagName("Hola");
+    node2.SetTagName("Que");
+    node4.SetTagName("InsideQue");
+    node3.SetTagName("Tal");
+    node1.AddAttribute("position","Vector3(0,0,0)");
+    node1.AddAttribute("rotation","Vector3(0,0,0)");
+    node1.AddAttribute("scale","Vector3(0,0,0)");
+    node4.AddAttribute("holy", "shit");
+    node2.AddChild(node4);
+    node1.AddChild(node2);
+    node1.AddChild(node3);
+
+    std::string node1xml = node1.ToString();
+    std::cerr << node1xml << std::endl;
+    std::cerr << "_____________" << std::endl;
+
+    int begin, end;
+    std::pair<std::string, std::string> attr;
+    XMLParser::GetFirstAttribute("< wololooooA position=\"Vector3(0,2,3)\" scale=\"Vector2(1,2)\">", 12, &attr, &end);
+    std::cerr << "Attr name: *" << attr.first << "*, Attr value: *" << attr.second << "*" << std::endl;
+    std::cerr << "Begin: " << begin << ", End: " << end << std::endl;
+
+    //XMLNode parsed = XMLParser::FromXML(node1.ToString());
+    //std::cerr << parsed.ToString() << std::endl;
 
     #ifdef BANG_EDITOR
 

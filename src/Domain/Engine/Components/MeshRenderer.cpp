@@ -110,18 +110,18 @@ InspectorWidgetInfo* MeshRenderer::OnInspectorInfoNeeded()
     {
         if (m_mesh->GetFilepath() != "")
         {
-            meshInfo->SetStringValue(m_mesh->GetFilepath());
+            meshInfo->SetString(m_mesh->GetFilepath());
         }
         else //In case the asset is created in runtime, write its mem address
         {
             std::string memAddress;
             Logger_GetString(memAddress, (void*)m_mesh);
-            meshInfo->SetStringValue(memAddress);
+            meshInfo->SetString(memAddress);
         }
     }
     else
     {
-        meshInfo->SetStringValue("-");
+        meshInfo->SetString("-");
     }
 
     return &m_inspectorInfo;

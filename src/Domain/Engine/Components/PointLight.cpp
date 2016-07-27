@@ -50,7 +50,7 @@ ICloneable *PointLight::Clone() const
 InspectorWidgetInfo *PointLight::OnInspectorInfoNeeded()
 {
     Light::OnInspectorInfoNeeded();
-    m_inspectorInfo.GetSlotInfo("Range")->SetFloatValue(m_range);
+    m_inspectorInfo.GetSlotInfo("Range")->SetFloat(m_range);
     return &m_inspectorInfo;
 }
 

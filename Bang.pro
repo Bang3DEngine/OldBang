@@ -190,7 +190,14 @@ HEADERS += \
     src/Domain/Graphics/ShaderPreprocessor.h \
     src/View/ClipboardGameObject.h \
     src/Domain/Engine/Components/PointLight.h \
-    src/Domain/Engine/Others/Property.h
+    src/Domain/Engine/Others/Property.h \
+    src/Persistence/File.h \
+    src/Persistence/FileImage.h \
+    src/Persistence/FileMesh.h \
+    src/Persistence/FileTexture2DAsset.h \
+    src/Persistence/FileMeshAsset.h \
+    src/Persistence/XMLParser.h \
+    src/Persistence/XMLNode.h
 
 EDITOR {
 HEADERS += \
@@ -219,15 +226,11 @@ HEADERS += \
     src/View/Explorer/ExplorerDirTree.h \
     src/View/Inspector/InspectorWidget.h \
     src/View/Inspector/InspectorImageFileWidget.h \
-    src/View/Explorer/File.h \
-    src/View/Explorer/FileImage.h \
     src/View/Inspector/InspectorStringSW.h \
     src/View/Inspector/InspectorMeshFileWidget.h \
-    src/View/Explorer/FileMesh.h \
     src/View/EditorCamera/EditorCamera.h \
     src/View/EditorGameObject/EditorGameObject.h \
     src/View/EditorScene/EditorScene.h \
-    src/View/Explorer/FileTexture2DAsset.h \
     src/Domain/Graphics/SelectionFramebuffer.h \
     src/View/Inspector/InspectorTexture2DAssetWidget.h \
     src/View/Dialogs/FileDialog.h \
@@ -307,7 +310,14 @@ SOURCES += \
     src/View/ClipboardGameObject.cpp \
     src/Domain/Engine/Interfaces/IFileable.cpp \
     src/Domain/Engine/Components/PointLight.cpp \
-    src/Domain/Engine/Others/Property.cpp
+    src/Domain/Engine/Others/Property.cpp \
+    src/Persistence/File.cpp \
+    src/Persistence/FileImage.cpp \
+    src/Persistence/FileMesh.cpp \
+    src/Persistence/FileTexture2DAsset.cpp \
+    src/Persistence/FileMeshAsset.cpp \
+    src/Persistence/XMLParser.cpp \
+    src/Persistence/XMLNode.cpp
 
 EDITOR {
     SOURCES += \
@@ -339,15 +349,11 @@ EDITOR {
         src/View/Explorer/ExplorerDirTree.cpp \
         src/View/Inspector/InspectorWidget.cpp \
         src/View/Inspector/InspectorImageFileWidget.cpp \
-        src/View/Explorer/File.cpp \
-        src/View/Explorer/FileImage.cpp \
         src/View/Inspector/InspectorStringSW.cpp \
         src/View/Inspector/InspectorMeshFileWidget.cpp \
-        src/View/Explorer/FileMesh.cpp \
         src/View/EditorCamera/EditorCamera.cpp \
         src/View/EditorGameObject/EditorGameObject.cpp \
         src/View/EditorScene/EditorScene.cpp \
-        src/View/Explorer/FileTexture2DAsset.cpp \
         src/View/Inspector/InspectorTexture2DAssetWidget.cpp \
         src/View/Dialogs/FileDialog.cpp \
         src/View/EditorGameObject/EditorBBox.cpp \

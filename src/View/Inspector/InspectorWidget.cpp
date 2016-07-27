@@ -21,10 +21,7 @@ InspectorWidget::InspectorWidget(IInspectable *relatedInspectable)
     : InspectorWidget()
 {
     this->m_relatedInspectable = relatedInspectable;
-
-    ConstructFromWidgetInformation( "Inspectable",
-                                    relatedInspectable->OnInspectorInfoNeeded() );
-
+    ConstructFromWidgetInformation("Inspectable", relatedInspectable->OnInspectorInfoNeeded());
 }
 
 InspectorWidget::InspectorWidget(const std::string &title,
@@ -58,7 +55,6 @@ void InspectorWidget::ConstructFromWidgetInformation(
     mainLayout->addLayout(m_titleLayout);
 
     // TODO: Improve THIS :(
-    //std::map<std::string, Inspector> infos;
     for (auto it : info->GetSlotInfos())
     {
         InspectorSWInfo *si = it.second;
@@ -70,37 +66,32 @@ void InspectorWidget::ConstructFromWidgetInformation(
         InspectorStringSWInfo *sis = nullptr;
         InspectorButtonSWInfo *sib = nullptr;
 
-        if ( (siv = dynamic_cast<InspectorVFloatSWInfo*>(si)) !=
-                nullptr)
+        if ( (siv = dynamic_cast<InspectorVFloatSWInfo*>(si)) )
         {
             ws = new InspectorVFloatSW(siv->m_label, siv->m_value, this);
         }
-        else if ( (sie = dynamic_cast<InspectorEnumSWInfo*>(si)) !=
-                 nullptr)
+        else if ( (sie = dynamic_cast<InspectorEnumSWInfo*>(si)) )
         {
             ws = new InspectorEnumSW(sie->m_label, sie->m_enumNames,
                                      sie->m_selectedValueIndex, this);
         }
-        else if ( (sif = dynamic_cast<InspectorFileSWInfo*>(si)) !=
-                 nullptr)
+        else if ( (sif = dynamic_cast<InspectorFileSWInfo*>(si)) )
         {
             ws = new InspectorFileSW(sif->m_label, sif->m_filepath,
                                      sif->m_fileExtension, this);
         }
-        else if ( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) !=
-                 nullptr)
+        else if ( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) )
         {
             ws = new InspectorStringSW(sis->m_label, sis->m_value, this,
                                        sis->m_readonly, sis->m_inlined);
         }
-        else if ( (sib = dynamic_cast<InspectorButtonSWInfo*>(si)) !=
-                 nullptr)
+        else if ( (sib = dynamic_cast<InspectorButtonSWInfo*>(si)) )
         {
             ws = new InspectorButtonSW(sib->m_label, this,
                                        sib->m_onClickFunction);
         }
 
-        if (ws )
+        if (ws)
         {
             ws->show();
             mainLayout->addWidget(ws);
@@ -128,30 +119,22 @@ InspectorWidget::~InspectorWidget()
    delete m_updateTimer;
 }
 
-std::vector<float> InspectorWidget::GetSWVectorFloatValue(
-        const std::string &slotLabel)
+std::vector<float> InspectorWidget::GetSWVectorFloatValue(const std::string &slotLabel)
 {
-    InspectorVFloatSW *w =
-            dynamic_cast<InspectorVFloatSW*>(m_labelsToComponentSlots[slotLabel]);
-    std::vector<float> r;
-    if (w) r = w->GetValue();
-    return r;
+    InspectorVFloatSW *w = dynamic_cast<InspectorVFloatSW*>(m_labelsToComponentSlots[slotLabel]);
+    return w ? w->GetValue() : std::vector<float>();
 }
 
 int InspectorWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
 {
-    InspectorEnumSW *w =
-            dynamic_cast<InspectorEnumSW*>(m_labelsToComponentSlots[slotLabel]);
-    if (w) return w->GetValue();
-    return 0;
+    InspectorEnumSW *w = dynamic_cast<InspectorEnumSW*>(m_labelsToComponentSlots[slotLabel]);
+    return w ? w->GetValue() : 0;
 }
 
 std::string InspectorWidget::GetSWFileFilepath(const std::string &slotLabel)
 {
-    InspectorFileSW *w =
-            dynamic_cast<InspectorFileSW*>(m_labelsToComponentSlots[slotLabel]);
-    if (w) return w->GetValue();
-    return "";
+    InspectorFileSW *w = dynamic_cast<InspectorFileSW*>(m_labelsToComponentSlots[slotLabel]);
+    return w ? w->GetValue() : "";
 }
 
 void InspectorWidget::OnCustomContextMenuRequested(QPoint point)
@@ -178,26 +161,22 @@ void InspectorWidget::Refresh(InspectorWidgetInfo *widgetInfo)
         InspectorFileSWInfo *sia = nullptr;
         InspectorStringSWInfo *sis = nullptr;
 
-        if ( (siv = dynamic_cast<InspectorVFloatSWInfo*>(si)) !=
-                nullptr)
+        if ( (siv = dynamic_cast<InspectorVFloatSWInfo*>(si)) )
         {
             InspectorVFloatSW *wv = static_cast<InspectorVFloatSW*>(ws);
             wv->SetValue( siv->m_value );
         }
-        else if ( (sie = dynamic_cast<InspectorEnumSWInfo*>(si)) !=
-                 nullptr)
+        else if ( (sie = dynamic_cast<InspectorEnumSWInfo*>(si)) )
         {
             InspectorEnumSW *we = static_cast<InspectorEnumSW*>(ws);
             we->SetValue( sie->m_selectedValueIndex );
         }
-        else if ( (sia = dynamic_cast<InspectorFileSWInfo*>(si)) !=
-                 nullptr)
+        else if ( (sia = dynamic_cast<InspectorFileSWInfo*>(si)) )
         {
             InspectorFileSW *wa = static_cast<InspectorFileSW*>(ws);
             wa->SetValue( sia->m_filepath );
         }
-        else if ( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) !=
-                 nullptr)
+        else if ( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) )
         {
             InspectorStringSW *wss = static_cast<InspectorStringSW*>(ws);
             wss->SetValue( sis->m_value );

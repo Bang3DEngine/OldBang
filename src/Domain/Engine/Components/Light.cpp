@@ -73,8 +73,8 @@ InspectorWidgetInfo *Light::OnInspectorInfoNeeded()
 {
     Component::OnInspectorInfoNeeded();
 
-    m_inspectorInfo.GetSlotInfo("Intensity")->SetFloatValue(m_intensity);
-    m_inspectorInfo.GetSlotInfo("Color")->SetVector3Value(m_color);
+    m_inspectorInfo.GetSlotInfo("Intensity")->SetFloat(m_intensity);
+    m_inspectorInfo.GetSlotInfo("Color")->SetVector3(m_color);
 
     return &m_inspectorInfo;
 }
