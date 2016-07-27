@@ -9,6 +9,8 @@
 #include "Vector3.h"
 #include "Rect.h"
 #include "Persistence.h"
+#include "XMLParser.h"
+#include "XMLNode.h"
 
 class Scene;
 class Asset;
@@ -21,6 +23,7 @@ public:
     static void WriteScene(std::string filename, Scene *scene);
     static void WriteAsset(std::string filename, Asset *a);
 
+    static void WriteXMLNode(XMLNode *xmlNode, std::ostream &f);
     static void WriteBool(bool v, std::ostream &f);
     static void WriteInt(int v, std::ostream &f);
     static void WriteFloat(float v, std::ostream &f);

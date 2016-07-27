@@ -369,7 +369,10 @@ void Hierarchy::OnContextMenuCreatePrefab()
         f.open(filename, std::fstream::out);
         if (f.is_open())
         {
-            prefab->WriteInternal(f);
+            XMLNode *node = new XMLNode();
+            prefab->GetXMLNode(node);
+            f << node->ToString();
+            delete node;
             f.close();
         }
     }

@@ -69,8 +69,8 @@ public:
                                 float secsTime = 1.0f,
                                 bool depthTest = true) {}
 
-    virtual std::string GetTag() const override;
-    virtual void WriteInternal (std::ostream &f) const override;
+    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
+    virtual void GetXMLNode(XMLNode *xmlNode) const override;
 };
 
 #endif // SCENE_H

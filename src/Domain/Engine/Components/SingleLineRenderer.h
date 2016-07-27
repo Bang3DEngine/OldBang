@@ -42,8 +42,8 @@ public:
     virtual void OnInspectorInfoChanged(InspectorWidgetInfo *info) override;
     #endif
 
-    void WriteInternal(std::ostream &f) const;
-    void ReadInternal(std::istream &f);
+    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
+    virtual void GetXMLNode(XMLNode *xmlNode) const override;
 };
 
 #endif // SINGLELINERENDERER_H

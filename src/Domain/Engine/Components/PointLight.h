@@ -27,8 +27,8 @@ public:
     void SetRange(float range);
     float GetRange() const;
 
-    virtual void WriteInternal(std::ostream &f) const;
-    virtual void ReadInternal(std::istream &f);
+    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
+    virtual void GetXMLNode(XMLNode *xmlNode) const override;
 };
 
 #endif // POINTLIGHT_H

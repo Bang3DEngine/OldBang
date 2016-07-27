@@ -277,12 +277,16 @@ void Renderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
     else { }
 }
 
-void Renderer::WriteInternal(std::ostream &f) const
+void Renderer::ReadXMLNode(const XMLNode *xmlNode)
 {
-    Component::WriteInternal(f);
+    Component::ReadXMLNode(xmlNode);
+    SetLineWidth(xmlNode->GetFloat("lineWidth"));
 }
 
-void Renderer::ReadInternal(std::istream &f)
+void Renderer::GetXMLNode(XMLNode *xmlNode) const
 {
-    Component::ReadInternal(f);
+    Component::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("Renderer");
+
+    xmlNode->AddAttribute("lineWidth", GetLineWidth());
 }

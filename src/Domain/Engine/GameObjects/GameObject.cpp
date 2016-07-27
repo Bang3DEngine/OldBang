@@ -5,6 +5,10 @@
 #include "SingletonManager.h"
 #include "Transform.h"
 
+#include "DirectionalLight.h"
+#include "BehaviourHolder.h"
+#include "PointLight.h"
+
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
 #include "WindowEventManager.h"
@@ -323,10 +327,92 @@ GameObject *GameObject::FindInChildren(const std::string &name)
     return nullptr;
 }
 
-std::string GameObject::GetTag() const
+void GameObject::ReadXMLNode(const XMLNode *xmlNode)
 {
-    return "GameObject";
+    // FileReader::RegisterNextPointerId(f, this);
+    m_enabled = xmlNode->GetBool("enabled");
+    SetName( xmlNode->GetString("name") );  //Read GameObject name
+
+    for ( XMLNode *xmlChild : xmlNode->GetChildren() )
+    {
+        std::string tagName = xmlChild->GetTagName();
+        if (tagName == "GameObject") // It's a child
+        {
+            GameObject *child = new GameObject();
+            child->ReadXMLNode(xmlChild);
+            child->SetParent(this);
+        }
+        else // It's a Component
+        {
+            Component *c = nullptr;
+            bool isTransform = false;
+            if (tagName == "Transform")
+            {
+                transform->ReadXMLNode(xmlChild);
+                c = transform;
+                isTransform = true;
+            }
+            else if (tagName == "MeshRenderer")
+            {
+                MeshRenderer *mr = new MeshRenderer();
+                mr->ReadXMLNode(xmlChild);
+                c = mr;
+            }
+            else if (tagName == "Camera")
+            {
+                Camera *cam = new Camera();
+                cam->ReadXMLNode(xmlChild);
+                c = cam;
+            }
+            else if (tagName == "BehaviourHolder")
+            {
+                BehaviourHolder *bh = new BehaviourHolder();
+                bh->ReadXMLNode(xmlChild);
+                c = bh;
+            }
+            else if (tagName == "DirectionalLight")
+            {
+                DirectionalLight *dl = new DirectionalLight();
+                dl->ReadXMLNode(xmlChild);
+                c = dl;
+            }
+            else if (tagName == "PointLight")
+            {
+                PointLight *pl = new PointLight();
+                pl->ReadXMLNode(xmlChild);
+                c = pl;
+            }
+
+            if (c && !isTransform)
+            {
+                AddComponent(c);
+            }
+        }
+    }
 }
+
+void GameObject::GetXMLNode(XMLNode *xmlNode) const
+{
+    xmlNode->SetTagName("GameObject");
+    xmlNode->AddAttribute("id", this);
+    xmlNode->AddAttribute("enabled", m_enabled);
+    xmlNode->AddAttribute("name", m_name);
+
+    for (Component *c : m_comps)
+    {
+        XMLNode *xmlComp = new XMLNode();
+        c->GetXMLNode(xmlComp);
+        xmlNode->AddChild(xmlComp);
+    }
+
+    for (GameObject *go : m_children)
+    {
+        XMLNode *child = new XMLNode();
+        go->GetXMLNode(child);
+        xmlNode->AddChild(child);
+    }
+}
+
 
 #ifdef BANG_EDITOR
 bool GameObject::IsSelectedInHierarchy() const
@@ -368,51 +454,6 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
     m_isSelectedInHierarchy = selected;
 }
 #endif
-
-void GameObject::WriteInternal(std::ostream &f) const
-{
-    FileWriter::WritePointer(((void*)this), f);
-    FileWriter::WriteBool(m_enabled, f);
-    FileWriter::WriteString(m_name, f);
-
-    f << "<children>" << std::endl;
-    for (GameObject *go : m_children)
-    {
-        go->Write(f);
-    }
-    f << "</children>" << std::endl;
-
-    f << "<components>" << std::endl;
-    for (Component *c : m_comps)
-    {
-        c->Write(f);
-    }
-    f << "</components>" << std::endl;
-}
-
-void GameObject::ReadInternal(std::istream &f)
-{
-    FileReader::RegisterNextPointerId(f, this);
-    m_enabled = FileReader::ReadBool(f);
-    SetName( FileReader::ReadString(f) );  //Read GameObject name
-
-    while ( FileReader::PeekNextLine(f) != "</GameObject>" )
-    {
-        std::string line = FileReader::ReadNextLine(f);
-        if (line == "<children>")
-        {
-            FileReader::ReadChildren(f, this);
-        }
-        else if (line == "<components>")
-        {
-            FileReader::ReadComponents(f, this);
-        }
-        else
-        {
-
-        }
-    }
-}
 
 void GameObject::SetEnabled(bool enabled)
 {

@@ -9,6 +9,8 @@
 #include <fstream>
 #include <string>
 
+#include "XMLParser.h"
+
 //Describes something than can be written and read to/from a file
 class IFileable
 {
@@ -16,12 +18,8 @@ protected:
     IFileable() {}
 
 public:
-
-    virtual std::string GetTag() const = 0;
-    virtual void Write(std::ostream &f) const;
-    virtual void WriteInternal(std::ostream &f) const = 0; // Write without open/close tags
-    virtual void Read(std::istream &f);
-    virtual void ReadInternal(std::istream &f) = 0;                // Read without open/close tags
+    virtual void ReadXMLNode(const XMLNode *xmlNode) = 0;
+    virtual void GetXMLNode(XMLNode *xmlNode) const = 0;
 };
 
 #endif // IFILEABLE_H

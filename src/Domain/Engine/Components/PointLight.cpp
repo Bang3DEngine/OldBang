@@ -72,14 +72,16 @@ float PointLight::GetRange() const
     return m_range;
 }
 
-void PointLight::WriteInternal(std::ostream &f) const
+void PointLight::ReadXMLNode(const XMLNode *xmlNode)
 {
-    Light::WriteInternal(f);
-    FileWriter::WriteFloat(m_range, f);
+    Light::ReadXMLNode(xmlNode);
+    SetRange(xmlNode->GetFloat("range"));
 }
 
-void PointLight::ReadInternal(std::istream &f)
+void PointLight::GetXMLNode(XMLNode *xmlNode) const
 {
-    Light::ReadInternal(f);
-    m_range = FileReader::ReadFloat(f);
+    Light::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("PointLight");
+
+    xmlNode->AddAttribute("range", m_range);
 }

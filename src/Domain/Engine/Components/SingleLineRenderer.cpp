@@ -85,22 +85,23 @@ void SingleLineRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 }
 #endif
 
-void SingleLineRenderer::WriteInternal(std::ostream &f) const
+
+void SingleLineRenderer::ReadXMLNode(const XMLNode *xmlNode)
 {
-    LineRenderer::WriteInternal(f);
-    f << ((void*)this) << std::endl;
-    FileWriter::WriteFilepath(m_material->GetFilepath(), f);
-    FileWriter::WriteVector3(Vector3(m_points[0].x, m_points[0].y, m_points[0].z), f);
-    FileWriter::WriteVector3(Vector3(m_points[1].x, m_points[1].y, m_points[1].z), f);
-    FileWriter::WriteFloat(GetLineWidth(), f);
+    LineRenderer::ReadXMLNode(xmlNode);
+    SetMaterial( AssetsManager::GetAsset<Material>(xmlNode->GetString("materialFilepath") ) );
+    SetOrigin(xmlNode->GetVector3("origin"));
+    SetDestiny(xmlNode->GetVector3("destiny"));
 }
 
-void SingleLineRenderer::ReadInternal(std::istream &f)
+void SingleLineRenderer::GetXMLNode(XMLNode *xmlNode) const
 {
-    LineRenderer::ReadInternal(f);
-    SetMaterial( AssetsManager::GetAsset<Material>(FileReader::ReadString(f)));
-    SetOrigin(FileReader::ReadVec3(f));
-    SetDestiny(FileReader::ReadVec3(f));
-    SetLineWidth(FileReader::ReadFloat(f));
+    LineRenderer::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("SingleLineRenderer");
+
+    xmlNode->AddAttribute("id", this);
+    xmlNode->AddAttribute("materialFilepath", m_material->GetFilepath());
+    xmlNode->AddAttribute("origin", GetOrigin());
+    xmlNode->AddAttribute("destiny", GetDestiny());
 }
 

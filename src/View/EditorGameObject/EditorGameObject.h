@@ -14,7 +14,7 @@ public:
 
     virtual bool IsEditorGameObject() const override;
 
-    void Write(std::ostream &f) const override;
+    virtual void GetXMLNode(XMLNode *xmlNode) const override;
 };
 
 #endif // EDITORGAMEOBJECT_H

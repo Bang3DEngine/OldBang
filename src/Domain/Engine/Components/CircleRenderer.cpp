@@ -151,24 +151,25 @@ void CircleRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
     SetRadius(info->GetFloat("Radius"));
     SetSegments(int(info->GetFloat("Segments")));
 }
+
+void CircleRenderer::ReadXMLNode(const XMLNode *xmlNode)
+{
+    LineRenderer::ReadXMLNode(xmlNode);
+    SetMaterial(AssetsManager::GetAsset<Material>(xmlNode->GetString("materialFilepath")));
+    SetRadius(xmlNode->GetFloat("radius"));
+    SetSegments(xmlNode->GetFloat("segments"));
+    SetLineWidth(xmlNode->GetFloat("lineWidth"));
+}
+
+void CircleRenderer::GetXMLNode(XMLNode *xmlNode) const
+{
+    LineRenderer::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("CircleRenderer");
+
+    xmlNode->AddAttribute("id", this);
+    xmlNode->AddAttribute("materialFilepath", m_material->GetFilepath());
+    xmlNode->AddAttribute("radius", GetRadius());
+    xmlNode->AddAttribute("segments", GetSegments());
+    xmlNode->AddAttribute("lineWidth", GetLineWidth());
+}
 #endif
-
-void CircleRenderer::WriteInternal(std::ostream &f) const
-{
-    LineRenderer::WriteInternal(f);
-    f << ((void*)this) << std::endl;
-    FileWriter::WriteFilepath(m_material->GetFilepath(), f);
-    FileWriter::WriteFloat(m_radius, f);
-    FileWriter::WriteInt(m_segments, f);
-    FileWriter::WriteFloat(GetLineWidth(), f);
-}
-
-void CircleRenderer::ReadInternal(std::istream &f)
-{
-    LineRenderer::ReadInternal(f);
-    SetMaterial( AssetsManager::GetAsset<Material>(FileReader::ReadString(f)));
-    SetRadius(FileReader::ReadFloat(f));
-    SetSegments(FileReader::ReadFloat(f));
-    SetLineWidth(FileReader::ReadFloat(f));
-}
-

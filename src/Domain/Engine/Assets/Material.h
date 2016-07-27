@@ -49,9 +49,8 @@ public:
     void Bind() const override;
     void UnBind() const override;
 
-    virtual std::string GetTag() const override;
-    virtual void WriteInternal(std::ostream &f) const;
-    virtual void ReadInternal(std::istream &f);
+    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
+    virtual void GetXMLNode(XMLNode *xmlNode) const override;
 };
 
 #endif // MATERIAL_H

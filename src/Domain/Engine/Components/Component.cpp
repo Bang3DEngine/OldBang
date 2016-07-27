@@ -37,19 +37,15 @@ bool Component::IsEnabled()
     return m_enabled;
 }
 
-std::string Component::GetTag() const
+void Component::ReadXMLNode(const XMLNode *xmlNode)
 {
-    return GetName();
+    // FileReader::RegisterNextPointerId(f, this);
+    m_enabled = xmlNode->GetBool("enabled");
 }
 
-void Component::WriteInternal(std::ostream &f) const
+void Component::GetXMLNode(XMLNode *xmlNode) const
 {
-    FileWriter::WritePointer(((void*)this), f);
-    FileWriter::WriteBool(m_enabled, f);
-}
-
-void Component::ReadInternal(std::istream &f)
-{
-    FileReader::RegisterNextPointerId(f, this);
-    m_enabled = FileReader::ReadBool(f);
+    xmlNode->SetTagName("Component");
+    xmlNode->AddAttribute("id", this);
+    xmlNode->AddAttribute("enabled", m_enabled);
 }

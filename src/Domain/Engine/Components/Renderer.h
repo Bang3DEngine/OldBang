@@ -140,8 +140,8 @@ public:
     virtual std::string GetName() const override { return "Renderer"; }
     virtual ICloneable *Clone() const override = 0;
 
-    virtual void WriteInternal(std::ostream &f) const;
-    virtual void ReadInternal(std::istream &f);
+    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
+    virtual void GetXMLNode(XMLNode *xmlNode) const override;
 };
 
 #endif // RENDERER_H

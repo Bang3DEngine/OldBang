@@ -10,6 +10,7 @@
 #include "Persistence.h"
 
 class AssetsManager
+
 {
 
 private:
@@ -35,13 +36,13 @@ private:
       * The input must not have the opening tag!.
     **/
     template <class T>
-    static T* ReadAsset(std::istream &f)
+    static T* ReadAsset(const std::string &fileContents)
     {
         Asset *a = new T();
-        FileReader::ReadNextLine(f); //Consume open tag
-        a->ReadInternal(f);
-        FileReader::ReadNextLine(f); //Consume close tag
-        return dynamic_cast<T*>(a);
+        XMLNode *xmlNode = XMLParser::FromXML(fileContents);
+        a->ReadXMLNode(xmlNode);
+        delete xmlNode;
+        return static_cast<T*>(a);
     }
 
     /** Reads a specific asset file (*.btex2d, *.bmesh, etc.)
@@ -60,7 +61,9 @@ private:
                 return nullptr;
             }
 
-            Asset *a = ReadAsset<T>(f);
+            std::string contents((std::istreambuf_iterator<char>(f)),
+                                  std::istreambuf_iterator<char>());
+            Asset *a = ReadAsset<T>(contents);
             if (a )
             {
                 AssetsManager::SaveAsset(filepath, a);
@@ -123,11 +126,14 @@ public:
     template <class T>
     static T* ReadTmpAsset(const std::string &filepath)
     {
-        std::ifstream is;
-        is.open(filepath.c_str());
-        if (!is.is_open()) return nullptr;
-        T *a = ReadAsset<T>(is);
-        is.close();
+        std::ifstream f;
+        f.open(filepath.c_str());
+        if (!f.is_open()) return nullptr;
+
+        std::string contents((std::istreambuf_iterator<char>(f)),
+                              std::istreambuf_iterator<char>());
+        T *a = ReadAsset<T>(contents);
+        f.close();
         return a;
     }
 

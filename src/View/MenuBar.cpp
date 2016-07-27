@@ -194,7 +194,12 @@ void MenuBar::OnCreateFromPrefab() const
         WindowMain *w = WindowMain::GetInstance();
 
         Prefab *p = new Prefab();
-        p->ReadInternal(f);
+        std::string contents((std::istreambuf_iterator<char>(f)),
+                              std::istreambuf_iterator<char>());
+        XMLNode *xmlNode = XMLParser::FromXML(contents);
+        p->ReadXMLNode(xmlNode);
+        delete xmlNode;
+
         GameObject *e = p->InstantiateWithoutStarting();
         GameObject *selectedGameObject = w->widgetHierarchy->GetFirstSelectedGameObject();
 

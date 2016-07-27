@@ -52,9 +52,8 @@ public:
     void SetEnabled(bool enabled);
     bool IsEnabled();
 
-    virtual std::string GetTag() const override;
-    virtual void WriteInternal(std::ostream &f) const override;
-    virtual void ReadInternal(std::istream &f) override;
+    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
+    virtual void GetXMLNode(XMLNode *xmlNode) const override;
 };
 
 #endif // COMPONENT_H

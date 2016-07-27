@@ -68,6 +68,24 @@ float Light::GetIntensity() const
     return m_intensity;
 }
 
+void Light::ReadXMLNode(const XMLNode *xmlNode)
+{
+    Component::ReadXMLNode(xmlNode);
+    SetIntensity(xmlNode->GetFloat("intensity"));
+    SetColor(xmlNode->GetFloat("color"));
+    m_lightMaterial = AssetsManager::GetAsset<Material>(xmlNode->GetString("lightMaterial"));
+}
+
+void Light::GetXMLNode(XMLNode *xmlNode) const
+{
+    Component::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("Light");
+
+    xmlNode->AddAttribute("intensity", GetIntensity());
+    xmlNode->AddAttribute("color", GetColor());
+    xmlNode->AddAttribute("lightMaterial", m_lightMaterial->GetFilepath());
+}
+
 #ifdef BANG_EDITOR
 InspectorWidgetInfo *Light::OnInspectorInfoNeeded()
 {
@@ -85,22 +103,3 @@ void Light::OnInspectorInfoChanged(InspectorWidgetInfo *info)
     m_color = info->GetVector3("Color");
 }
 #endif
-
-void Light::WriteInternal(std::ostream &f) const
-{
-    Component::WriteInternal(f);
-    FileWriter::WriteFloat(m_intensity, f);
-    FileWriter::WriteVector3(m_color, f);
-    FileWriter::WriteFilepath(m_lightMaterial->GetFilepath(), f);
-}
-
-void Light::ReadInternal(std::istream &f)
-{
-    Component::ReadInternal(f);
-    m_intensity = FileReader::ReadFloat(f);
-    m_color = FileReader::ReadVec3(f);
-
-    std::string materialFilepath = FileReader::ReadString(f);
-    m_lightMaterial = AssetsManager::GetAsset<Material>(materialFilepath);
-
-}

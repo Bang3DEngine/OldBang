@@ -23,14 +23,14 @@ ICloneable* EditorGameObject::Clone() const
     return clone;
 }
 
-
-void EditorGameObject::Write(std::ostream &f) const
-{
-    // Won't be written (can't be saved)
-    // So we need this method to be empty
-}
-
 bool EditorGameObject::IsEditorGameObject() const
 {
     return true;
+}
+
+void EditorGameObject::GetXMLNode(XMLNode *xmlNode) const
+{
+    xmlNode = nullptr;
+    // Won't be written (can't be saved)
+    // So we need this method to be "empty"
 }

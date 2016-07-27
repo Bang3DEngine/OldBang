@@ -139,18 +139,18 @@ void MeshRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 }
 #endif
 
-
-void MeshRenderer::WriteInternal(std::ostream &f) const
+void MeshRenderer::ReadXMLNode(const XMLNode *xmlNode)
 {
-    Renderer::WriteInternal(f);
-    FileWriter::WriteFilepath(m_mesh->GetFilepath(), f);
-    FileWriter::WriteFilepath(m_material->GetFilepath(), f);
+    Renderer::ReadXMLNode(xmlNode);
+    SetMesh( AssetsManager::GetAsset<Mesh>( xmlNode->GetString("meshAssetFilepath") ) );
+    SetMaterial( AssetsManager::GetAsset<Material>( xmlNode->GetString("materialAssetFilepath") ) );
 }
 
-void MeshRenderer::ReadInternal(std::istream &f)
+void MeshRenderer::GetXMLNode(XMLNode *xmlNode) const
 {
-    Renderer::ReadInternal(f);
-    SetMesh( AssetsManager::GetAsset<Mesh>( FileReader::ReadString(f) ) );
-    SetMaterial( AssetsManager::GetAsset<Material>( FileReader::ReadString(f) ) );
-}
+    Renderer::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("MeshRenderer");
 
+    xmlNode->AddAttribute("meshAssetFilepath", m_mesh ? m_mesh->GetFilepath() : "");
+    xmlNode->AddAttribute("materialAssetFilepath", m_material ? m_material->GetFilepath() : "");
+}

@@ -140,19 +140,15 @@ const Sphere &Mesh::GetBoundingSphere() const
     return m_bSphere;
 }
 
-std::string Mesh::GetTag() const
+void Mesh::ReadXMLNode(const XMLNode *xmlNode)
 {
-    return "Mesh";
-}
-
-void Mesh::WriteInternal(std::ostream &f) const
-{
-    Asset::WriteInternal(f);
-}
-
-void Mesh::ReadInternal(std::istream &f)
-{
-    Asset::ReadInternal(f);
-    m_filepath = FileReader::ReadString(f);
+    Asset::ReadXMLNode(xmlNode);
+    m_filepath = xmlNode->GetString("filepath");
     LoadFromFile(m_filepath);
+}
+
+void Mesh::GetXMLNode(XMLNode *xmlNode) const
+{
+    Asset::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("Mesh");
 }

@@ -33,14 +33,30 @@ void Material::UnBind() const
     }
 }
 
-std::string Material::GetTag() const
+void Material::ReadXMLNode(const XMLNode *xmlNode)
 {
-    return "Material";
+    Asset::ReadXMLNode(xmlNode);
+
+    std::string vshaderFilepath = xmlNode->GetString("vertexShader");
+    std::string fshaderFilepath = xmlNode->GetString("fragmentShader");;
+    SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
+
+    int numTextures = xmlNode->GetInt("textureCount");
+    if(numTextures == 1)
+    {
+        std::string texAssetFilepath = xmlNode->GetString("texture1");
+        Texture2D *texture = AssetsManager::GetAsset<Texture2D>(texAssetFilepath);
+        m_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
+    }
+
+    glm::vec4 diffColor = xmlNode->GetVector4("diffuseColor");
+    SetDiffuseColor(diffColor);
 }
 
-void Material::WriteInternal(std::ostream &f) const
+void Material::GetXMLNode(XMLNode *xmlNode) const
 {
-    Asset::WriteInternal(f);
+    Asset::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("Material");
 
     std::string vsFile =  "", fsFile = "";
     if (this->m_shaderProgram)
@@ -55,31 +71,12 @@ void Material::WriteInternal(std::ostream &f) const
             fsFile = this->m_shaderProgram->GetFragmentShader()->GetFilepath();
         }
     }
-    FileWriter::WriteFilepath(vsFile, f);
-    FileWriter::WriteFilepath(fsFile, f);
-    FileWriter::WriteVector4(m_diffuseColor, f);
-    FileWriter::WriteInt(1, f);
-    FileWriter::WriteFilepath(m_texture->GetFilepath(), f);
-}
 
-void Material::ReadInternal(std::istream &f)
-{
-    Asset::ReadInternal(f);
-
-    std::string vshaderFilepath = FileReader::ReadString(f);
-    std::string fshaderFilepath = FileReader::ReadString(f);
-    SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
-
-    int numTextures = FileReader::ReadInt(f);
-    if(numTextures == 1)
-    {
-        std::string texAssetFilepath = FileReader::ReadString(f);
-        Texture2D *texture = AssetsManager::GetAsset<Texture2D>(texAssetFilepath);
-        m_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
-    }
-
-    glm::vec4 diffColor = FileReader::ReadVec4(f);
-    SetDiffuseColor(diffColor);
+    xmlNode->AddAttribute("vertexShader", vsFile);
+    xmlNode->AddAttribute("fragmentShader", fsFile);
+    xmlNode->AddAttribute("textureCount", 1);
+    xmlNode->AddAttribute("texture1", m_texture->GetFilepath());
+    xmlNode->AddAttribute("diffuseColor", m_diffuseColor);
 }
 
 void Material::SetShaderProgram(ShaderProgram *program)

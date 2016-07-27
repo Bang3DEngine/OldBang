@@ -258,82 +258,9 @@ bool FileReader::ReadOBJ(const std::string& filepath,
     return true;
 }
 
-
-void FileReader::ReadComponents(std::istream &f, GameObject *go)
-{
-    std::string line;
-    while ( (line = FileReader::ReadNextLine(f)) != "</components>" )
-    {
-        Component *c = nullptr;
-        bool isTransform = false;
-
-        if (line == "<Transform>")
-        {
-            go->transform->Read(f); // Read on top of existing default Transform
-            c = go->transform;
-            isTransform = true;
-        }
-        else if (line == "<MeshRenderer>")
-        {
-            MeshRenderer *mr = new MeshRenderer();
-            mr->Read(f);
-            c = mr;
-        }
-        else if (line == "<Camera>")
-        {
-            Camera *cam = new Camera();
-            cam->Read(f);
-            c = cam;
-        }
-        else if (line == "<BehaviourHolder>")
-        {
-            BehaviourHolder *bh = new BehaviourHolder();
-            bh->Read(f);
-            c = bh;
-        }
-        else if (line == "<DirectionalLight>")
-        {
-            DirectionalLight *dl = new DirectionalLight();
-            dl->Read(f);
-            c = dl;
-        }
-        else if (line == "<PointLight>")
-        {
-            PointLight *pl = new PointLight();
-            pl->Read(f);
-            c = pl;
-        }
-
-        if (c && !isTransform)
-        {
-            go->AddComponent(c);
-        }
-    }
-}
-
-void FileReader::ReadChildren(std::istream &f, GameObject *go)
-{
-    std::string line;
-    while ( (line = FileReader::ReadNextLine(f)) != "</children>")
-    {
-        if (line == "<GameObject>")
-        {
-            GameObject *child = new GameObject();
-            child->Read(f);
-            child->SetParent(go);
-        }
-        else if (line == "<GameObjectPrefab>")
-        {
-            std::string prefabFilepath = FileReader::ReadString(f);
-            Prefab *p = AssetsManager::GetAsset<Prefab>(prefabFilepath);
-            GameObject *child = p->Instantiate();
-            child->SetParent(go);
-        }
-    }
-}
-
 void FileReader::ReadScene(const std::string &filepath, Scene* scene)
 {
+    /*
     std::ifstream f (filepath);
     if ( !f.is_open() )
     {
@@ -367,6 +294,7 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
             }
         }
     }
+    */
 }
 
 void FileReader::SaveScene(const std::string &filepath, const Scene *scene)
@@ -504,7 +432,6 @@ std::string FileReader::ReadString(std::istream &f)
 
 void FileReader::RegisterNextPointerId(std::istream &f, void *pointer)
 {
-
     if (&f != lastIstreamDir)
     {
         //We are reading a new file!

@@ -1,6 +1,21 @@
 #include "StringUtils.h"
 
 
+std::vector<std::string> StringUtils::Split(const std::string &content, char splitter)
+{
+    std::vector<std::string> result;
+    int lastIndexFound = 0;
+    while (lastIndexFound != -1)
+    {
+        int indexFound = content.find_first_of(splitter, lastIndexFound - indexFound + 1);
+        if (indexFound == std::string::npos)
+        {
+            break;
+        }
+        lastIndexFound = indexFound;
+    }
+    return result;
+}
 
 void StringUtils::AddInFrontOfWords(std::string particle, std::string *str)
 {

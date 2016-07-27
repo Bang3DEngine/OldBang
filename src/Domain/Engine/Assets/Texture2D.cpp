@@ -58,16 +58,28 @@ std::string Texture2D::GetImageRelativeFilepath() const
     return m_filepath;
 }
 
-std::string Texture2D::GetTag() const
+void Texture2D::ReadXMLNode(const XMLNode *xmlNode)
 {
-    return "Texture2D";
+    Asset::ReadXMLNode(xmlNode);
+
+    m_filepath = xmlNode->GetString("textureFilepath");
+    LoadFromFile(m_filepath);
+
+    std::string filterMode = xmlNode->GetString("filterMode");
+    if (filterMode == "Nearest")
+    {
+        SetFilterMode(FilterMode::Nearest);
+    }
+    else if (filterMode == "Linear")
+    {
+        SetFilterMode(FilterMode::Linear);
+    }
 }
 
-void Texture2D::WriteInternal(std::ostream &f) const
+void Texture2D::GetXMLNode(XMLNode *xmlNode) const
 {
-    Asset::WriteInternal(f);
-
-    FileWriter::WriteFilepath(this->m_filepath, f);
+    Asset::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("Texture2D");
 
     FilterMode filterMode = GetFilterMode();
     std::string fmName = "";
@@ -79,22 +91,5 @@ void Texture2D::WriteInternal(std::ostream &f) const
     {
         fmName = "Linear";
     }
-    FileWriter::WriteString(fmName, f);
-}
-
-void Texture2D::ReadInternal(std::istream &f)
-{
-    Asset::ReadInternal(f);
-
-    m_filepath = FileReader::ReadString(f);
-    LoadFromFile(m_filepath);
-    std::string filterMode = FileReader::ReadString(f);
-    if (filterMode == "Nearest")
-    {
-        SetFilterMode(FilterMode::Nearest);
-    }
-    else if (filterMode == "Linear")
-    {
-        SetFilterMode(FilterMode::Linear);
-    }
+    xmlNode->AddAttribute("filterMode", fmName);
 }

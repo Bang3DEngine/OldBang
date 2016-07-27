@@ -45,12 +45,14 @@ void DirectionalLight::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 }
 #endif
 
-void DirectionalLight::WriteInternal(std::ostream &f) const
+
+void DirectionalLight::ReadXMLNode(const XMLNode *xmlNode)
 {
-    Light::WriteInternal(f);
+    Light::ReadXMLNode(xmlNode);
 }
 
-void DirectionalLight::ReadInternal(std::istream &f)
+void DirectionalLight::GetXMLNode(XMLNode *xmlNode) const
 {
-    Light::ReadInternal(f);
+    Light::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("DirectionalLight");
 }

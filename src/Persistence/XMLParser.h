@@ -8,10 +8,10 @@
 
 class XMLParser
 {
-private:
+public:
     static const std::string TOKEN_SPACE;
 
-public:
+private:
     static void GetNextOpenTag(const std::string &xml,
                                int startPosition,
                                std::string *tag,

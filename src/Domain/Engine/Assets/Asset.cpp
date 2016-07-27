@@ -20,15 +20,13 @@ const std::string Asset::ToString() const
     return "Asset '" + m_filepath + "'.";
 }
 
-std::string Asset::GetTag() const
-{
-    return "Asset";
-}
 
-void Asset::WriteInternal(std::ostream &f) const
+void Asset::ReadXMLNode(const XMLNode *xmlNode)
 {
 }
 
-void Asset::ReadInternal(std::istream &f)
+void Asset::GetXMLNode(XMLNode *xmlNode) const
 {
+    xmlNode->SetTagName("Asset");
+    xmlNode->AddAttribute("filepath", m_filepath);
 }

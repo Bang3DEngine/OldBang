@@ -93,26 +93,13 @@ bool Scene::IsScene() const
     return true;
 }
 
-std::string Scene::GetTag() const
+void Scene::ReadXMLNode(const XMLNode *xmlNode)
 {
-    return "Scene";
+    GameObject::ReadXMLNode(xmlNode);
 }
 
-void Scene::WriteInternal(std::ostream &f) const
+void Scene::GetXMLNode(XMLNode *xmlNode) const
 {
-    // GameObject::WriteInternal(f);
-
-    FileWriter::WritePointer((void*)this, f);   //internal file id
-    FileWriter::WriteString(m_name, f);
-
-    FileWriter::WriteString("<children>", f);
-    for (GameObject *go : m_children)
-    {
-        go->Write(f);
-    }
-    FileWriter::WriteString("</children>", f);
-
-    //Not used ftm
-    //f << "<cameraGameObject>" << std::endl;
-    //f << "</cameraGameObject>" << std::endl;
+    GameObject::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("Scene");
 }

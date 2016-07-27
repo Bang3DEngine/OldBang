@@ -110,6 +110,20 @@ void BehaviourHolder::Refresh()
     }
 }
 
+void BehaviourHolder::ReadXMLNode(const XMLNode *xmlNode)
+{
+    Component::ReadXMLNode(xmlNode);
+    m_sourceFilepath = xmlNode->GetString("sourceFilepath");
+}
+
+void BehaviourHolder::GetXMLNode(XMLNode *xmlNode) const
+{
+    Component::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("BehaviourHolder");
+
+    xmlNode->AddAttribute("sourceFilepath", m_sourceFilepath);
+}
+
 
 #ifdef BANG_EDITOR
 InspectorWidgetInfo* BehaviourHolder::OnInspectorInfoNeeded()
@@ -124,18 +138,6 @@ void BehaviourHolder::OnInspectorInfoChanged(InspectorWidgetInfo *info)
     Refresh();
 }
 #endif
-
-void BehaviourHolder::WriteInternal(std::ostream &f) const
-{
-    Component::WriteInternal(f);
-    FileWriter::WriteFilepath(m_sourceFilepath, f);
-}
-
-void BehaviourHolder::ReadInternal(std::istream &f)
-{
-    Component::ReadInternal(f);
-    m_sourceFilepath = FileReader::ReadString(f);
-}
 
 void BehaviourHolder::_OnStart()
 {

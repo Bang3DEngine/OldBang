@@ -10,13 +10,13 @@ Prefab::Prefab(const Prefab &p)
     this->m_assetDescription = p.m_assetDescription;
 }
 
-Prefab::Prefab(GameObject *o)
+Prefab::Prefab(GameObject *go)
 {
-    if (o )
+    if (go)
     {
-        std::ostringstream oss;
-        o->WriteInternal(oss);
-        m_assetDescription = oss.str();
+        XMLNode *xmlNode = new XMLNode();
+        go->GetXMLNode(xmlNode);
+        m_assetDescription = xmlNode->ToString();
     }
 }
 
@@ -27,55 +27,41 @@ Prefab::Prefab(const std::string &assetDescription)
 
 GameObject *Prefab::Instantiate() const
 {
-    GameObject *o = InstantiateWithoutStarting();
-    if (o )
+    GameObject *go = InstantiateWithoutStarting();
+    if (go)
     {
-        o->_OnStart();
+        go->_OnStart();
     }
-    return o;
+    return go;
 }
 
 GameObject *Prefab::InstantiateWithoutStarting() const
 {
     if (m_assetDescription != "")
     {
-        std::istringstream iss (m_assetDescription);
-        GameObject *o = new GameObject();
-        FileReader::ReadNextLine(iss); //Consume opening tag
-        o->ReadInternal(iss);
-        return o;
+        GameObject *go = new GameObject();
+        XMLNode *xmlNode = XMLParser::FromXML(m_assetDescription); go->GetXMLNode(xmlNode);
+        return go;
     }
     return nullptr;
 }
 
-std::string Prefab::GetTag() const
+void Prefab::ReadXMLNode(const XMLNode *xmlNode)
 {
-    return "Prefab";
+    Asset::ReadXMLNode(xmlNode);
+
+    m_assetDescription = xmlNode->ToString();
 }
 
-void Prefab::WriteInternal(std::ostream &f) const
+void Prefab::GetXMLNode(XMLNode *xmlNode) const
 {
-    Asset::WriteInternal(f);
+    Asset::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("Prefab");
 
-    GameObject *o = InstantiateWithoutStarting();
-    if (o )
+    GameObject *go = InstantiateWithoutStarting();
+    if (go)
     {
-        o->WriteInternal(f);
-        delete o;
+        go->GetXMLNode(xmlNode);
+        delete go;
     }
-}
-
-void Prefab::ReadInternal(std::istream &f)
-{
-    Asset::ReadInternal(f);
-
-    //Copy contents of the read file in assetDescription,
-    //to be able to use it from Instantiate()
-    std::string line;
-    m_assetDescription = "";
-    while ( FileReader::ReadNextLine(f, &line) )
-    {
-        m_assetDescription += line + "\n";
-    }
-    //assetDescription += line + "\n";
 }

@@ -17,7 +17,10 @@ void FileWriter::WriteScene(std::string filename, Scene *scene)
         ofs.close();
         return;
     }
-    scene->Write(ofs);
+
+    XMLNode *xmlNode = new XMLNode();
+    scene->GetXMLNode(xmlNode);
+    ofs << xmlNode->ToString();
     ofs.close();
 }
 
@@ -33,8 +36,17 @@ void FileWriter::WriteAsset(std::string filename, Asset *a)
         ofs.close();
         return;
     }
-    a->Write(ofs);
+
+    XMLNode *xmlNode = new XMLNode();
+    a->GetXMLNode(xmlNode);
+    ofs << xmlNode->ToString();
     ofs.close();
+}
+
+void FileWriter::WriteXMLNode(XMLNode *xmlNode, std::ostream &f)
+{
+    NONULL(xmlNode);
+    f << xmlNode->ToString();
 }
 
 void FileWriter::WriteBool(bool v, std::ostream &f)

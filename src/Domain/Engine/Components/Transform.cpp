@@ -419,20 +419,22 @@ void Transform::OnInspectorInfoChanged(InspectorWidgetInfo *info)
     SetLocalEuler(info->GetVector3("Rotation"));
     SetLocalScale(info->GetVector3("Scale"));
 }
+
+void Transform::ReadXMLNode(const XMLNode *xmlNode)
+{
+    Component::ReadXMLNode(xmlNode);
+    SetLocalPosition(xmlNode->GetVector3("localPosition"));
+    SetLocalRotation(xmlNode->GetQuaternion("localRotation"));
+    SetLocalScale(xmlNode->GetVector3("localScale"));
+}
+
+void Transform::GetXMLNode(XMLNode *xmlNode) const
+{
+    Component::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("Transform");
+
+    xmlNode->AddAttribute("localPosition", GetLocalPosition());
+    xmlNode->AddAttribute("localRotation", GetLocalRotation());
+    xmlNode->AddAttribute("localScale",    GetLocalScale());
+}
 #endif
-
-void Transform::WriteInternal(std::ostream &f) const
-{
-    Component::WriteInternal(f);
-    FileWriter::WriteVector3(GetLocalPosition(), f);
-    FileWriter::WriteQuaternion(GetLocalRotation(), f);
-    FileWriter::WriteVector3(GetLocalScale(), f);
-}
-
-void Transform::ReadInternal(std::istream &f)
-{
-    Component::ReadInternal(f);
-    SetLocalPosition(FileReader::ReadVec3(f));
-    SetLocalRotation(FileReader::ReadQuat(f));
-    SetLocalScale(FileReader::ReadVec3(f));
-}

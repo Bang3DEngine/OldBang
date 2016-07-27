@@ -187,27 +187,30 @@ void Camera::OnInspectorInfoChanged(InspectorWidgetInfo *info)
     m_aspectRatio = info->GetFloat("Aspect Ratio");
     m_projMode =  static_cast<Camera::ProjectionMode>(info->GetEnumSelectedIndex("Projection Mode"));
 }
+
+void Camera::ReadXMLNode(const XMLNode *xmlNode)
+{
+    Component::ReadXMLNode(xmlNode);
+
+    SetFovDegrees(xmlNode->GetFloat("fovDegrees"));
+    SetZNear(xmlNode->GetFloat("zNear"));
+    SetZFar(xmlNode->GetFloat("zFar"));
+    SetProjectionMode(xmlNode->GetString("projMode")  == "Perspective" ?
+                          Camera::ProjectionMode::Perspective :
+                          Camera::ProjectionMode::Orthographic);
+    SetOrthoRect( xmlNode->GetRect("orthoRect") );
+}
+
+void Camera::GetXMLNode(XMLNode *xmlNode) const
+{
+    Component::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("Camera");
+
+    xmlNode->AddAttribute("id", this);
+    xmlNode->AddAttribute("fovDegrees", m_fovDegrees);
+    xmlNode->AddAttribute("zNear", m_zNear);
+    xmlNode->AddAttribute("zFar", m_zFar);
+    xmlNode->AddAttribute("projMode", (m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic"));
+    xmlNode->AddAttribute("orthoRect", m_orthoRect);
+}
 #endif
-
-void Camera::WriteInternal(std::ostream &f) const
-{
-    Component::WriteInternal(f);
-    f << ((void*)this) << std::endl;
-    FileWriter::WriteFloat(m_fovDegrees, f);
-    FileWriter::WriteFloat(m_zNear, f);
-    FileWriter::WriteFloat(m_zFar, f);
-    FileWriter::WriteString((m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic") , f);
-    FileWriter::WriteRect(m_orthoRect, f);
-}
-
-void Camera::ReadInternal(std::istream &f)
-{
-    Component::ReadInternal(f);
-    SetFovDegrees( FileReader::ReadFloat(f) );
-    SetZNear( FileReader::ReadFloat(f) );
-    SetZFar( FileReader::ReadFloat(f) );
-    SetProjectionMode( FileReader::ReadString(f) == "Perspective" ?
-                                            Camera::ProjectionMode::Perspective :
-                                            Camera::ProjectionMode::Orthographic);
-    SetOrthoRect( FileReader::ReadRect(f) );
-}

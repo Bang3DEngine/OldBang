@@ -185,7 +185,7 @@ XMLNode* XMLParser::FromXML(const std::string &xml)
             break;
         }
 
-        root->AddAttribute(attr.first, attr.second);
+        root->AddGenericAttribute(attr.first, attr.second);
     }
 
     //Read children

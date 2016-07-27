@@ -101,12 +101,13 @@ void LineRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 }
 #endif
 
-void LineRenderer::WriteInternal(std::ostream &f) const
+void LineRenderer::ReadXMLNode(const XMLNode *xmlNode)
 {
-    Component::WriteInternal(f);
+    Component::ReadXMLNode(xmlNode);
 }
 
-void LineRenderer::ReadInternal(std::istream &f)
+void LineRenderer::GetXMLNode(XMLNode *xmlNode) const
 {
-    Component::ReadInternal(f);
+    Component::GetXMLNode(xmlNode);
+    xmlNode->SetTagName("LineRenderer");
 }

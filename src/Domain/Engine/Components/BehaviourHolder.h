@@ -54,8 +54,8 @@ public:
 
     void Refresh();
 
-    void WriteInternal(std::ostream &f) const override;
-    void ReadInternal(std::istream &f) override;
+    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
+    virtual void GetXMLNode(XMLNode *xmlNode) const override;
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;

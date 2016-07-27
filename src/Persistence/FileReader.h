@@ -63,13 +63,6 @@ public:
     // (you must consume the initial tag),
     // and they consume the closing tag.
 
-    //COMPONENTS
-    static void ReadComponents(std::istream &f, GameObject *go);
-
-    //ENTITIES
-    static void ReadChildren(std::istream &f, GameObject *go);
-    // ////////////////////
-
     //Scene must be a created object before being passed to these functions (new Scene)
     static void ReadScene(const std::string &filepath, Scene* scene);
     static void SaveScene(const std::string &filepath, const Scene *scene);

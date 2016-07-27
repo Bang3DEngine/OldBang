@@ -65,41 +65,16 @@ int main(int argc, char *argv[])
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
 
+    GameObject *go = new GameObject("test1");
+    go->AddComponent<Camera>();
 
-    XMLNode *node1 = new XMLNode();
-    XMLNode *node2 = new XMLNode();
-    XMLNode *node3 = new XMLNode();
-    XMLNode *node4 = new XMLNode();
-    XMLNode *node5 = new XMLNode();
-    XMLNode *node6 = new XMLNode();
-    node1->SetTagName("Hola");
-    node2->SetTagName("Que");
-    node4->SetTagName("InsideQue");
-    node6->SetTagName("InsideQue");
-    node5->SetTagName("Que");
-    node3->SetTagName("Tal");
-    node1->AddAttribute("position","Vector3(0,0,0)");
-    node1->AddAttribute("rotation","Vector3(0,0,0)");
-    node1->AddAttribute("scale","Vector3(0,0,0)");
-    node6->AddAttribute("rotation","Vector3(0,0,0)");
-    node6->AddAttribute("scale","Vector3(0,0,0)");
-    node4->AddAttribute("holy", "shit");
-    node5->AddChild(node6);
-    node4->AddChild(node5);
-    node2->AddChild(node4);
-    node1->AddChild(node2);
-    node1->AddChild(node3);
+    GameObject *go2 = new GameObject("test2");
+    go2->SetParent(go);
+    go2->AddComponent<MeshRenderer>();
 
-    std::string node1xml = node1->ToString();
-    std::cerr << node1xml << std::endl;
-    std::cerr << "_____________" << std::endl;
-
-    int begin, end;
-    std::pair<std::string, std::string> attr;
-
-    XMLNode *parsed = XMLParser::FromXML(node1->ToString());
-    if (parsed) std::cerr << parsed->ToString() << std::endl;
-    else std::cerr << "Error" << std::endl;
+    XMLNode *xmlNode = new XMLNode();
+    go->GetXMLNode(xmlNode);
+    std::cerr << xmlNode->ToString() << std::endl;
 
     #ifdef BANG_EDITOR
 
