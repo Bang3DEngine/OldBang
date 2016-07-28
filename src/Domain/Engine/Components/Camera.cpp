@@ -187,10 +187,10 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
     Component::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Camera");
 
-    xmlInfo->SetAttribute("id", this);
-    xmlInfo->SetAttribute("fovDegrees", m_fovDegrees);
-    xmlInfo->SetAttribute("zNear", m_zNear);
-    xmlInfo->SetAttribute("zFar", m_zFar);
-    xmlInfo->SetAttribute("projMode", (m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic"));
-    xmlInfo->SetAttribute("orthoRect", m_orthoRect);
+    xmlInfo->SetPointer("id", this);
+    xmlInfo->SetFloat("fovDegrees", m_fovDegrees);
+    xmlInfo->SetFloat("zNear", m_zNear);
+    xmlInfo->SetFloat("zFar", m_zFar);
+    xmlInfo->SetString("projMode", (m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic"));
+    xmlInfo->SetRect("orthoRect", m_orthoRect);
 }

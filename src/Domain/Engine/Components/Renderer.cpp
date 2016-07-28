@@ -277,19 +277,19 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
     {
         if (m_material->GetFilepath() != "")
         {
-            xmlInfo->SetAttribute("Material", m_material->GetFilepath());
+            xmlInfo->SetFilepath("Material", m_material->GetFilepath());
         }
         else //In case the asset is created in runtime, write its mem address
         {
             std::string memAddress;
             Logger_GetString(memAddress, (void*)m_material);
-            xmlInfo->SetAttribute("Material", memAddress);
+            xmlInfo->SetFilepath("Material", memAddress);
         }
     }
     else
     {
-        xmlInfo->SetAttribute("Material", "-");
+        xmlInfo->SetFilepath("Material", "-");
     }
 
-    xmlInfo->SetAttribute("LineWidth", GetLineWidth());
+    xmlInfo->SetFloat("LineWidth", GetLineWidth());
 }

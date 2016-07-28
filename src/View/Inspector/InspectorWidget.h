@@ -50,7 +50,7 @@ protected:
     QLabel *m_titleLabel = nullptr;
 
     void ConstructFromWidgetXMLInfo(const std::string &title,
-                                    const XMLNode &info,
+                                    XMLNode &info,
                                     bool autoUpdate = true);
 
 public:
@@ -60,7 +60,7 @@ public:
     //Short handed way to use an Inspector Widget
     //(no need to create an IInspectable object).
     explicit InspectorWidget(const std::string &title,
-                             const XMLNode &widgetXMLInfo,
+                             XMLNode &widgetXMLInfo,
                              std::function<void()> m_callback);
 
     virtual ~InspectorWidget();
@@ -71,6 +71,7 @@ public:
 
 private slots:
 
+    void CreateWidgetSlots(XMLNode &xmlInfo);
     void RefreshWidgetValues();
     void _OnSlotValueChanged(double _);
     void _OnSlotValueChanged(QString _);
@@ -79,7 +80,7 @@ public slots:
 
     virtual void OnCustomContextMenuRequested(QPoint point);
 
-    void RefreshWidgetValues(const XMLNode &xmlInfo);
+    void RefreshWidgetValues(XMLNode &xmlInfo);
     virtual void _OnSlotValueChanged();
 };
 

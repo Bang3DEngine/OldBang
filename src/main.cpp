@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
 
+    /*
     GameObject *go = new GameObject("test1");
     go->AddComponent<Camera>();
     GameObject *go2 = new GameObject("test2");
@@ -85,6 +86,7 @@ int main(int argc, char *argv[])
     bool b = (xml2->ToString() == xmlInfo->ToString());
     std::cerr << (b ? "PASS" : "NOPASS") << std::endl;
     exit(0);
+    */
 
     #ifdef BANG_EDITOR
 

@@ -29,26 +29,28 @@ public:
     void SetGenericAttribute(const std::string &attributeName,
                              const std::string &attributeValue,
                              XMLAttribute::Type type);
-    void SetAttribute(const std::string &attributeName,
-                      void *value);
-    void SetAttribute(const std::string &attributeName,
-                      bool value);
-    void SetAttribute(const std::string &attributeName,
-                      int value);
-    void SetAttribute(const std::string &attributeName,
-                      float value);
-    void SetAttribute(const std::string &attributeName,
-                      const std::string &value);
-    void SetAttribute(const std::string &attributeName,
-                      const glm::vec2 &value);
-    void SetAttribute(const std::string &attributeName,
-                      const Vector3 &value);
-    void SetAttribute(const std::string &attributeName,
-                      const glm::vec4 &value);
-    void SetAttribute(const std::string &attributeName,
-                      const Quaternion &value);
-    void SetAttribute(const std::string &attributeName,
-                      const Rect &value);
+    void SetPointer(const std::string &attributeName,
+                    const void *value);
+    void SetBool(const std::string &attributeName,
+                 bool value);
+    void SetInt(const std::string &attributeName,
+                int value);
+    void SetFloat(const std::string &attributeName,
+                  float value);
+    void SetString(const std::string &attributeName,
+                   const std::string &value);
+    void SetVector2(const std::string &attributeName,
+                    const glm::vec2 &value);
+    void SetVector3(const std::string &attributeName,
+                    const Vector3 &value);
+    void SetVector4(const std::string &attributeName,
+                    const glm::vec4 &value);
+    void SetQuaternion(const std::string &attributeName,
+                       const Quaternion &value);
+    void SetRect(const std::string &attributeName,
+                 const Rect &value);
+    void SetFilepath(const std::string &attributeName,
+                     const std::string &filepath);
 
 
     std::string GetAttributeValue(const std::string& attributeName) const;

@@ -28,5 +28,5 @@ void Asset::ReadXMLInfo(const XMLNode *xmlInfo)
 void Asset::FillXMLInfo(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Asset");
-    xmlInfo->SetAttribute("filepath", m_filepath);
+    xmlInfo->SetFilepath("filepath", m_filepath);
 }

@@ -394,9 +394,9 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("GameObject");
-    xmlInfo->SetAttribute("id", this);
-    xmlInfo->SetAttribute("enabled", m_enabled);
-    xmlInfo->SetAttribute("name", m_name);
+    xmlInfo->SetPointer("id", this);
+    xmlInfo->SetBool("enabled", m_enabled);
+    xmlInfo->SetString("name", m_name);
 
     for (Component *c : m_comps)
     {

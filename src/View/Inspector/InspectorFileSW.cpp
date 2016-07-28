@@ -39,7 +39,7 @@ void InspectorFileSW::Browse()
     std::string selectedFile = fd.GetOpenFilename();
     if (selectedFile != "")
     {
-        SetValue( selectedFile );
+        SetValue(selectedFile);
         m_parent->_OnSlotValueChanged();
     }
 }
@@ -48,7 +48,6 @@ void InspectorFileSW::SetValue(const std::string &assetPath)
 {
     if (m_assetPath != assetPath)
     {
-        Logger_Log("InspectorFileSW::SetValue " << assetPath);
         m_assetPath = assetPath;
         m_filepathLineEdit->setText(QString::fromStdString(assetPath));
     }

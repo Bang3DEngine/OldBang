@@ -39,7 +39,7 @@ private:
     static T* ReadAsset(const std::string &fileContents)
     {
         Asset *a = new T();
-        Logger_Log("Reading asset: \n" << fileContents);
+        //Logger_Log("Reading asset: \n" << fileContents);
         XMLNode *xmlInfo = XMLParser::FromXML(fileContents);
         a->ReadXMLInfo(xmlInfo);
         delete xmlInfo;
@@ -85,7 +85,7 @@ public:
     static T* GetAsset(const std::string &filepath)
     {
         Asset *a = nullptr;
-        Logger_Log("Getting asset: " << filepath);
+        //Logger_Log("Getting asset: " << filepath);
         if (filepath != "-")
         {
             if (!ExistsAssetInCache(filepath))

@@ -46,6 +46,6 @@ void Component::ReadXMLInfo(const XMLNode *xmlInfo)
 void Component::FillXMLInfo(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Component");
-    xmlInfo->SetAttribute("id", this);
-    xmlInfo->SetAttribute("enabled", m_enabled);
+    xmlInfo->SetPointer("id", this);
+    xmlInfo->SetBool("enabled", m_enabled);
 }

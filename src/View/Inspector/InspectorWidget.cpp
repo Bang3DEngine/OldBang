@@ -27,7 +27,7 @@ InspectorWidget::InspectorWidget(IInspectable *relatedInspectable)
 }
 
 InspectorWidget::InspectorWidget(const std::string &title,
-                                 const XMLNode &widgetXMLInfo,
+                                 XMLNode &widgetXMLInfo,
                                  std::function<void ()> callback)
     : InspectorWidget()
 {
@@ -37,7 +37,7 @@ InspectorWidget::InspectorWidget(const std::string &title,
 
 void InspectorWidget::ConstructFromWidgetXMLInfo(
         const std::string &title,
-        const XMLNode &xmlInfo,
+        XMLNode &xmlInfo,
         bool autoUpdate
         )
 {
@@ -55,9 +55,8 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     m_titleLayout->addWidget(m_titleLabel, 10);
 
     mainLayout->addLayout(m_titleLayout);
-
-    RefreshWidgetValues(xmlInfo);
-
+    CreateWidgetSlots(xmlInfo);
+    this->adjustSize();
     this->show();
 
     setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
@@ -91,18 +90,24 @@ void InspectorWidget::RefreshWidgetValues()
     }
 }
 
-void InspectorWidget::RefreshWidgetValues(const XMLNode &xmlInfo)
+void InspectorWidget::RefreshWidgetValues(XMLNode &xmlInfo)
 {
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         std::string attrName  = itAttr.first;
+        if( m_attrNameToComponentSlots.find(attrName) == m_attrNameToComponentSlots.end())
+        {
+            continue;
+        }
+
         InspectorSW *ws = m_attrNameToComponentSlots[attrName];
 
         XMLAttribute attribute = itAttr.second;
         if (attribute.GetType() == XMLAttribute::Type::Float   ||
             attribute.GetType() == XMLAttribute::Type::Vector2 ||
             attribute.GetType() == XMLAttribute::Type::Vector3 ||
-            attribute.GetType() == XMLAttribute::Type::Vector4 )
+            attribute.GetType() == XMLAttribute::Type::Vector4 ||
+            attribute.GetType() == XMLAttribute::Type::Quaternion )
         {
             InspectorVFloatSW *wv = static_cast<InspectorVFloatSW*>(ws);
             if (attribute.GetType() == XMLAttribute::Type::Float)
@@ -120,34 +125,36 @@ void InspectorWidget::RefreshWidgetValues(const XMLNode &xmlInfo)
                 Vector3 v = xmlInfo.GetVector3(attrName);
                 wv->SetValue({v.x, v.y, v.z});
             }
-            else if (attribute.GetType() == XMLAttribute::Type::Vector4)
+            else if (attribute.GetType() == XMLAttribute::Type::Vector4 ||
+                     attribute.GetType() == XMLAttribute::Type::Quaternion)
             {
                 glm::vec4 v = xmlInfo.GetVector4(attrName);
                 wv->SetValue({v.x, v.y, v.z, v.w});
             }
+            ws = wv;
         }
         else if (attribute.GetType() == XMLAttribute::Type::Enum)
         {
             InspectorEnumSW *we = static_cast<InspectorEnumSW*>(ws);
             we->SetValue( xmlInfo.GetInt(attrName) );
+            ws = we;
         }
         else if (attribute.GetType() == XMLAttribute::Type::File)
         {
             InspectorFileSW *wa = static_cast<InspectorFileSW*>(ws);
             wa->SetValue( xmlInfo.GetFilepath(attrName) );
+            ws = wa;
         }
         else if (attribute.GetType() == XMLAttribute::Type::String)
         {
             InspectorStringSW *wss = static_cast<InspectorStringSW*>(ws);
             wss->SetValue( xmlInfo.GetString(attrName) );
+            ws = wss;
         }
 
         if (ws)
         {
             ws->show();
-            layout()->addWidget(ws);
-            m_compSlots.push_back(ws);
-            m_attrNameToComponentSlots[attrName] = ws;
         }
     }
 }
@@ -168,6 +175,50 @@ std::string InspectorWidget::GetSWFileFilepath(const std::string &slotLabel)
 {
     InspectorFileSW *w = dynamic_cast<InspectorFileSW*>(m_attrNameToComponentSlots[slotLabel]);
     return w ? w->GetValue() : "";
+}
+
+void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
+{
+    for (auto itAttr : xmlInfo.GetAttributes())
+    {
+        std::string attrName  = itAttr.first;
+        InspectorSW *ws = nullptr;
+
+        XMLAttribute attribute = itAttr.second;
+        if (attribute.GetType() == XMLAttribute::Type::Float)
+        {
+            ws = new InspectorVFloatSW(attrName, {0}, this, &xmlInfo);
+        }
+        else if (attribute.GetType() == XMLAttribute::Type::Vector2)
+        {
+            ws = new InspectorVFloatSW(attrName, {0,0}, this, &xmlInfo);
+        }
+        else if (attribute.GetType() == XMLAttribute::Type::Vector3)
+        {
+            ws = new InspectorVFloatSW(attrName, {0,0,0}, this, &xmlInfo);
+        }
+        else if (attribute.GetType() == XMLAttribute::Type::Vector4 ||
+                 attribute.GetType() == XMLAttribute::Type::Quaternion)
+        {
+            ws = new InspectorVFloatSW(attrName, {0,0,0,0}, this, &xmlInfo);
+        }
+        else if (attribute.GetType() == XMLAttribute::Type::File)
+        {
+            ws = new InspectorFileSW(attrName, "", "", this, &xmlInfo);
+        }
+        else if (attribute.GetType() == XMLAttribute::Type::String)
+        {
+            ws = new InspectorStringSW(attrName, "", this, &xmlInfo, false, false);
+        }
+
+        if (ws)
+        {
+            ws->show();
+            layout()->addWidget(ws);
+            m_compSlots.push_back(ws);
+            m_attrNameToComponentSlots[attrName] = ws;
+        }
+    }
 }
 
 

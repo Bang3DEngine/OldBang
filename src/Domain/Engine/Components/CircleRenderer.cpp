@@ -149,8 +149,8 @@ void CircleRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     LineRenderer::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("CircleRenderer");
 
-    xmlInfo->SetAttribute("materialFilepath", m_material->GetFilepath());
-    xmlInfo->SetAttribute("radius", GetRadius());
-    xmlInfo->SetAttribute("segments", GetSegments());
+    xmlInfo->SetFilepath("materialFilepath", m_material->GetFilepath());
+    xmlInfo->SetFloat("radius", GetRadius());
+    xmlInfo->SetInt("segments", GetSegments());
 }
 #endif

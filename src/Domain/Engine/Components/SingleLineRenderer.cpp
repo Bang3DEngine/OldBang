@@ -74,9 +74,8 @@ void SingleLineRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void SingleLineRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     LineRenderer::ReadXMLInfo(xmlInfo);
-    SetMaterial( AssetsManager::GetAsset<Material>(xmlInfo->GetString("materialFilepath") ) );
-    SetOrigin(xmlInfo->GetVector3("origin"));
-    SetDestiny(xmlInfo->GetVector3("destiny"));
+    SetOrigin(xmlInfo->GetVector3("Origin"));
+    SetDestiny(xmlInfo->GetVector3("Destiny"));
 }
 
 void SingleLineRenderer::FillXMLInfo(XMLNode *xmlInfo) const
@@ -84,9 +83,7 @@ void SingleLineRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     LineRenderer::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("SingleLineRenderer");
 
-    xmlInfo->SetAttribute("id", this);
-    xmlInfo->SetAttribute("materialFilepath", m_material->GetFilepath());
-    xmlInfo->SetAttribute("origin", GetOrigin());
-    xmlInfo->SetAttribute("destiny", GetDestiny());
+    xmlInfo->SetVector3("Origin", GetOrigin());
+    xmlInfo->SetVector3("Destiny", GetDestiny());
 }
 

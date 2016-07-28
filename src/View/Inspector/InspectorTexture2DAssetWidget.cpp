@@ -15,8 +15,8 @@ InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
             AssetsManager::ReadTmpAsset<Texture2D>(fileTex.GetPath());
     std::string imgFilepath = tex->GetImageRelativeFilepath();
 
-    xmlInfo.SetAttribute("ImagePath", imgFilepath);
-    xmlInfo.SetAttribute("Filter", tex->GetFilterMode() == Texture2D::FilterMode::Nearest ? 0 : 1);
+    xmlInfo.SetFilepath("ImagePath", imgFilepath);
+    xmlInfo.SetString("Filter", tex->GetFilterMode() == Texture2D::FilterMode::Nearest ? "Nearest" : "Linear");
 
     delete tex;
 
@@ -34,7 +34,6 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
     //To enable a live change ingame of the Asset being used by Components/Entities
     Texture2D *currentTex = AssetsManager::
             GetCachedAsset<Texture2D>(m_assetFilepath);
-
 
     bool tmpAssetLoaded = false;
     if (!currentTex)

@@ -4,7 +4,7 @@
 const std::vector< std::string >  XMLAttribute::TypeNames =
     {"Bool", "Int", "String", "Float",
      "Vector2", "Vector3", "Vector4",
-     "Quaternion", "Rect", "Enum", "File"};
+     "Quaternion", "Rect", "File"};
 
 XMLAttribute::Type XMLAttribute::GetTypeFromString(const std::string &typeString)
 {

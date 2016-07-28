@@ -62,7 +62,7 @@ void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
 
-    m_filepath = xmlInfo->GetString("textureFilepath");
+    m_filepath = xmlInfo->GetFilepath("textureFilepath");
     LoadFromFile(m_filepath);
 
     std::string filterMode = xmlInfo->GetString("filterMode");
@@ -91,5 +91,5 @@ void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
     {
         fmName = "Linear";
     }
-    xmlInfo->SetAttribute("filterMode", fmName);
+    xmlInfo->SetString("filterMode", fmName);
 }

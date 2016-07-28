@@ -406,9 +406,9 @@ void Transform::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void Transform::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
-    SetLocalPosition(xmlInfo->GetVector3("localPosition"));
-    SetLocalRotation(xmlInfo->GetQuaternion("localRotation"));
-    SetLocalScale(xmlInfo->GetVector3("localScale"));
+    SetLocalPosition(xmlInfo->GetVector3("Position"));
+    SetLocalEuler(xmlInfo->GetVector3("Rotation"));
+    SetLocalScale(xmlInfo->GetVector3("Scale"));
 }
 
 void Transform::FillXMLInfo(XMLNode *xmlInfo) const
@@ -416,8 +416,8 @@ void Transform::FillXMLInfo(XMLNode *xmlInfo) const
     Component::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Transform");
 
-    xmlInfo->SetAttribute("localPosition", GetLocalPosition());
-    xmlInfo->SetAttribute("localRotation", GetLocalRotation());
-    xmlInfo->SetAttribute("localScale",    GetLocalScale());
+    xmlInfo->SetVector3("Position", GetLocalPosition());
+    xmlInfo->SetVector3("Rotation", GetLocalEuler());
+    xmlInfo->SetVector3("Scale",    GetLocalScale());
 }
 #endif

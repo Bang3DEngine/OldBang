@@ -72,5 +72,5 @@ void PointLight::FillXMLInfo(XMLNode *xmlInfo) const
     Light::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("PointLight");
 
-    xmlInfo->SetAttribute("range", m_range);
+    xmlInfo->SetFloat("range", m_range);
 }

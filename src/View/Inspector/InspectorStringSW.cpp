@@ -49,10 +49,10 @@ void InspectorStringSW::SetValue(const std::string &value)
 {
     if (!m_editing)
     {
-        disconnect(m_strField, SIGNAL(valueChanged(QString)), m_parent, SLOT(_OnSlotValueChanged(QString)));
+        //disconnect(m_strField, SIGNAL(valueChanged(QString)), m_parent, SLOT(_OnSlotValueChanged(QString)));
         m_strField->setText( QString::fromStdString(value) );
         m_strField->show();
-        connect(m_strField, SIGNAL(valueChanged(QString)), m_parent, SLOT(_OnSlotValueChanged(QString)));
+        //connect(m_strField, SIGNAL(valueChanged(QString)), m_parent, SLOT(_OnSlotValueChanged(QString)));
     }
 }
 

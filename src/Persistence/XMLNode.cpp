@@ -31,41 +31,33 @@ void XMLNode::SetGenericAttribute(const std::string &attributeName,
     m_attributes[attributeName] = attr;
 }
 
-void XMLNode::SetAttribute(const std::string &attributeName, void *value)
+void XMLNode::SetPointer(const std::string &attributeName, const void *value)
 {
     std::ostringstream oss;
     oss << value;
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::String);
 }
 
-void XMLNode::SetAttribute(const std::string &attributeName, bool value)
+void XMLNode::SetBool(const std::string &attributeName, bool value)
 {
      SetGenericAttribute(attributeName, value ? "true" : "false", XMLAttribute::Type::Bool);
 }
 
-void XMLNode::SetAttribute(const std::string &attributeName, int value)
+void XMLNode::SetInt(const std::string &attributeName, int value)
 {
     std::ostringstream oss;
     oss << value;
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Int);
 }
 
-
-void XMLNode::SetAttribute(const std::string &attributeName, const std::string &value)
-{
-    std::ostringstream oss;
-    oss << value;
-    SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::String);
-}
-
-void XMLNode::SetAttribute(const std::string &attributeName, float value)
+void XMLNode::SetFloat(const std::string &attributeName, float value)
 {
     std::ostringstream oss;
     oss << value;
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Float);
 }
 
-void XMLNode::SetAttribute(const std::string &attributeName, const glm::vec2 &value)
+void XMLNode::SetVector2(const std::string &attributeName, const glm::vec2 &value)
 {
     std::ostringstream oss;
     oss << "(" << value.x << ", " <<
@@ -73,7 +65,7 @@ void XMLNode::SetAttribute(const std::string &attributeName, const glm::vec2 &va
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Vector2);
 }
 
-void XMLNode::SetAttribute(const std::string &attributeName, const Vector3 &value)
+void XMLNode::SetVector3(const std::string &attributeName, const Vector3 &value)
 {
     std::ostringstream oss;
     oss << "(" << value.x << ", " <<
@@ -82,7 +74,7 @@ void XMLNode::SetAttribute(const std::string &attributeName, const Vector3 &valu
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Vector3);
 }
 
-void XMLNode::SetAttribute(const std::string &attributeName, const glm::vec4 &value)
+void XMLNode::SetVector4(const std::string &attributeName, const glm::vec4 &value)
 {
     std::ostringstream oss;
     oss << "(" << value.x << ", " <<
@@ -92,7 +84,7 @@ void XMLNode::SetAttribute(const std::string &attributeName, const glm::vec4 &va
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Vector4);
 }
 
-void XMLNode::SetAttribute(const std::string &attributeName, const Quaternion &value)
+void XMLNode::SetQuaternion(const std::string &attributeName, const Quaternion &value)
 {
     std::ostringstream oss;
     oss << "(" << value.w << ", " <<
@@ -102,7 +94,7 @@ void XMLNode::SetAttribute(const std::string &attributeName, const Quaternion &v
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Quaternion);
 }
 
-void XMLNode::SetAttribute(const std::string &attributeName, const Rect &value)
+void XMLNode::SetRect(const std::string &attributeName, const Rect &value)
 {
     std::ostringstream oss;
     oss << "(" << value.m_minx << ", " <<
@@ -110,6 +102,16 @@ void XMLNode::SetAttribute(const std::string &attributeName, const Rect &value)
                   value.m_maxx << ", " <<
                   value.m_maxy << ")";
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Rect);
+}
+
+void XMLNode::SetString(const std::string &attributeName, const std::string &value)
+{
+    SetGenericAttribute(attributeName, value, XMLAttribute::Type::String);
+}
+
+void XMLNode::SetFilepath(const std::string &attributeName, const std::string &filepath)
+{
+    SetGenericAttribute(attributeName, filepath, XMLAttribute::Type::File);
 }
 
 std::string XMLNode::GetAttributeValue(const std::string &attributeName) const

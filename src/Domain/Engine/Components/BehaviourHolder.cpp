@@ -114,7 +114,7 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     Component::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("BehaviourHolder");
 
-    xmlInfo->SetAttribute("sourceFilepath", m_sourceFilepath);
+    xmlInfo->SetFilepath("sourceFilepath", m_sourceFilepath);
 }
 
 
