@@ -1,12 +1,12 @@
 #include "IInspectable.h"
 
 #ifdef BANG_EDITOR
-void IInspectable::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void IInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
 }
 
-InspectorWidgetInfo *IInspectable::OnInspectorInfoNeeded()
+void IInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    return &m_inspectorInfo;
+
 }
 #endif

@@ -33,30 +33,30 @@ void Material::UnBind() const
     }
 }
 
-void Material::ReadXMLNode(const XMLNode *xmlNode)
+void Material::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLNode(xmlNode);
+    Asset::ReadXMLInfo(xmlInfo);
 
-    std::string vshaderFilepath = xmlNode->GetString("vertexShader");
-    std::string fshaderFilepath = xmlNode->GetString("fragmentShader");
+    std::string vshaderFilepath = xmlInfo->GetString("vertexShader");
+    std::string fshaderFilepath = xmlInfo->GetString("fragmentShader");
     SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
 
-    int numTextures = xmlNode->GetInt("textureCount");
+    int numTextures = xmlInfo->GetInt("textureCount");
     if(numTextures == 1)
     {
-        std::string texAssetFilepath = xmlNode->GetString("texture1");
+        std::string texAssetFilepath = xmlInfo->GetString("texture1");
         Texture2D *texture = AssetsManager::GetAsset<Texture2D>(texAssetFilepath);
         m_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
     }
 
-    glm::vec4 diffColor = xmlNode->GetVector4("diffuseColor");
+    glm::vec4 diffColor = xmlInfo->GetVector4("diffuseColor");
     SetDiffuseColor(diffColor);
 }
 
-void Material::GetXMLNode(XMLNode *xmlNode) const
+void Material::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Asset::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("Material");
+    Asset::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("Material");
 
     std::string vsFile =  "", fsFile = "";
     if (this->m_shaderProgram)
@@ -72,11 +72,11 @@ void Material::GetXMLNode(XMLNode *xmlNode) const
         }
     }
 
-    xmlNode->SetAttribute("vertexShader", vsFile);
-    xmlNode->SetAttribute("fragmentShader", fsFile);
-    xmlNode->SetAttribute("textureCount", 1);
-    xmlNode->SetAttribute("texture1", m_texture->GetFilepath());
-    xmlNode->SetAttribute("diffuseColor", m_diffuseColor);
+    xmlInfo->SetAttribute("vertexShader", vsFile);
+    xmlInfo->SetAttribute("fragmentShader", fsFile);
+    xmlInfo->SetAttribute("textureCount", 1);
+    xmlInfo->SetAttribute("texture1", m_texture->GetFilepath());
+    xmlInfo->SetAttribute("diffuseColor", m_diffuseColor);
 }
 
 void Material::SetShaderProgram(ShaderProgram *program)

@@ -10,16 +10,6 @@ Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
                    m_projMode(ProjectionMode::Perspective),
                    m_autoUpdateAspectRatio(true)
 {
-    #ifdef BANG_EDITOR
-    m_inspectorInfo.AddSlotInfos(
-    {
-        new InspectorVFloatSWInfo( "FOV", 1),
-        new InspectorVFloatSWInfo( "Z Near", 1),
-        new InspectorVFloatSWInfo( "Z Far", 1),
-        new InspectorVFloatSWInfo( "Aspect Ratio", 1),
-        new InspectorEnumSWInfo( "Projection Mode", {"Orthographic", "Perspective"} )
-    });
-    #endif
 }
 
 void Camera::GetViewMatrix(Matrix4 *view) const
@@ -168,49 +158,39 @@ ICloneable *Camera::Clone() const
 
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* Camera::OnInspectorInfoNeeded()
+void Camera::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    m_inspectorInfo.GetSlotInfo("FOV")->SetFloat(m_fovDegrees);
-    m_inspectorInfo.GetSlotInfo("Z Near")->SetFloat(m_zNear);
-    m_inspectorInfo.GetSlotInfo("Z Far")->SetFloat(m_zFar);
-    m_inspectorInfo.GetSlotInfo("Aspect Ratio")->SetFloat(m_aspectRatio);
-    m_inspectorInfo.GetSlotInfo("Projection Mode")->SetInt(m_projMode);
-
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void Camera::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void Camera::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    m_fovDegrees = info->GetFloat("FOV");
-    m_zNear = info->GetFloat("Z Near");
-    m_zFar = info->GetFloat("Z Far");
-    m_aspectRatio = info->GetFloat("Aspect Ratio");
-    m_projMode =  static_cast<Camera::ProjectionMode>(info->GetEnumSelectedIndex("Projection Mode"));
-}
-
-void Camera::ReadXMLNode(const XMLNode *xmlNode)
-{
-    Component::ReadXMLNode(xmlNode);
-
-    SetFovDegrees(xmlNode->GetFloat("fovDegrees"));
-    SetZNear(xmlNode->GetFloat("zNear"));
-    SetZFar(xmlNode->GetFloat("zFar"));
-    SetProjectionMode(xmlNode->GetString("projMode")  == "Perspective" ?
-                          Camera::ProjectionMode::Perspective :
-                          Camera::ProjectionMode::Orthographic);
-    SetOrthoRect( xmlNode->GetRect("orthoRect") );
-}
-
-void Camera::GetXMLNode(XMLNode *xmlNode) const
-{
-    Component::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("Camera");
-
-    xmlNode->SetAttribute("id", this);
-    xmlNode->SetAttribute("fovDegrees", m_fovDegrees);
-    xmlNode->SetAttribute("zNear", m_zNear);
-    xmlNode->SetAttribute("zFar", m_zFar);
-    xmlNode->SetAttribute("projMode", (m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic"));
-    xmlNode->SetAttribute("orthoRect", m_orthoRect);
+    ReadXMLInfo(xmlInfo);
 }
 #endif
+
+void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
+{
+    Component::ReadXMLInfo(xmlInfo);
+
+    SetFovDegrees(xmlInfo->GetFloat("fovDegrees"));
+    SetZNear(xmlInfo->GetFloat("zNear"));
+    SetZFar(xmlInfo->GetFloat("zFar"));
+    SetProjectionMode(xmlInfo->GetString("projMode")  == "Perspective" ?
+                          Camera::ProjectionMode::Perspective :
+                          Camera::ProjectionMode::Orthographic);
+    SetOrthoRect( xmlInfo->GetRect("orthoRect") );
+}
+
+void Camera::FillXMLInfo(XMLNode *xmlInfo) const
+{
+    Component::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("Camera");
+
+    xmlInfo->SetAttribute("id", this);
+    xmlInfo->SetAttribute("fovDegrees", m_fovDegrees);
+    xmlInfo->SetAttribute("zNear", m_zNear);
+    xmlInfo->SetAttribute("zFar", m_zFar);
+    xmlInfo->SetAttribute("projMode", (m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic"));
+    xmlInfo->SetAttribute("orthoRect", m_orthoRect);
+}

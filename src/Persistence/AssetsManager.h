@@ -40,9 +40,9 @@ private:
     {
         Asset *a = new T();
         Logger_Log("Reading asset: \n" << fileContents);
-        XMLNode *xmlNode = XMLParser::FromXML(fileContents);
-        a->ReadXMLNode(xmlNode);
-        delete xmlNode;
+        XMLNode *xmlInfo = XMLParser::FromXML(fileContents);
+        a->ReadXMLInfo(xmlInfo);
+        delete xmlInfo;
         return static_cast<T*>(a);
     }
 
@@ -52,9 +52,9 @@ private:
     template <class T>
     static T* ReadAssetFile(const std::string &filepath)
     {
-        XMLNode *xmlNode = XMLParser::FromFile(filepath);
-        Asset *a = ReadAsset<T>(xmlNode->ToString());
-        delete xmlNode;
+        XMLNode *xmlInfo = XMLParser::FromFile(filepath);
+        Asset *a = ReadAsset<T>(xmlInfo->ToString());
+        delete xmlInfo;
         if (a)
         {
             AssetsManager::SaveAsset(filepath, a);

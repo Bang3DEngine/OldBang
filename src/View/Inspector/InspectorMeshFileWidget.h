@@ -9,7 +9,7 @@
 class InspectorMeshFileWidget: public InspectorWidget
 {
 private:
-    InspectorWidgetInfo m_inspectorInfo;
+    XMLNode *xmlInfo;
 
 public:
     InspectorMeshFileWidget(const FileMesh &fileMesh);

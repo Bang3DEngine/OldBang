@@ -3,10 +3,10 @@
 InspectorStringSW::InspectorStringSW(const std::string &labelString,
                                      const std::string &initialValue,
                                      InspectorWidget *parent,
-                                     InspectorWidgetInfo *relatedInfo,
+                                     XMLNode *relatedXMLInfo,
                                      bool readonly,
                                      bool inlined) :
-    InspectorSW(labelString, parent, relatedInfo)
+    InspectorSW(labelString, parent, relatedXMLInfo)
 {
 
     QLayout *layout = nullptr;

@@ -15,21 +15,12 @@ InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
             AssetsManager::ReadTmpAsset<Texture2D>(fileTex.GetPath());
     std::string imgFilepath = tex->GetImageRelativeFilepath();
 
-    m_inspectorInfo.AddSlotInfos(
-        {
-            new InspectorStringSWInfo("Image path", true),
-            new InspectorEnumSWInfo("Filter", {"Nearest", "Linear"})
-        }
-    );
-
-    m_inspectorInfo.GetStringSWSlotInfo("Image path")->m_value = imgFilepath;
-    m_inspectorInfo.GetEnumSWSlotInfo("Filter")->m_selectedValueIndex =
-            tex->GetFilterMode() == Texture2D::FilterMode::Nearest ? 0 : 1;
+    xmlInfo.SetAttribute("ImagePath", imgFilepath);
+    xmlInfo.SetAttribute("Filter", tex->GetFilterMode() == Texture2D::FilterMode::Nearest ? 0 : 1);
 
     delete tex;
 
-    this->ConstructFromWidgetInformation(fileTex.GetName(), &m_inspectorInfo,
-                                         false);
+    ConstructFromWidgetXMLInfo(fileTex.GetName(), xmlInfo, false);
 }
 
 InspectorTexture2DAssetWidget::~InspectorTexture2DAssetWidget()

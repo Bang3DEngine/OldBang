@@ -5,13 +5,6 @@
 
 Light::Light()
 {
-    #ifdef BANG_EDITOR
-    m_inspectorInfo.AddSlotInfos(
-    {
-        new InspectorVFloatSWInfo("Intensity", 1)
-       ,new InspectorVFloatSWInfo("Color", 3)
-    });
-    #endif
 }
 
 void Light::SetUniformsBeforeApplyingLight() const
@@ -68,38 +61,32 @@ float Light::GetIntensity() const
     return m_intensity;
 }
 
-void Light::ReadXMLNode(const XMLNode *xmlNode)
-{
-    Component::ReadXMLNode(xmlNode);
-    SetIntensity(xmlNode->GetFloat("intensity"));
-    SetColor(xmlNode->GetFloat("color"));
-    m_lightMaterial = AssetsManager::GetAsset<Material>(xmlNode->GetString("lightMaterial"));
-}
-
-void Light::GetXMLNode(XMLNode *xmlNode) const
-{
-    Component::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("Light");
-
-    xmlNode->SetAttribute("intensity", GetIntensity());
-    xmlNode->SetAttribute("color", GetColor());
-    xmlNode->SetAttribute("lightMaterial", m_lightMaterial->GetFilepath());
-}
-
 #ifdef BANG_EDITOR
-InspectorWidgetInfo *Light::OnInspectorInfoNeeded()
+void Light::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    Component::OnInspectorInfoNeeded();
-
-    m_inspectorInfo.GetSlotInfo("Intensity")->SetFloat(m_intensity);
-    m_inspectorInfo.GetSlotInfo("Color")->SetVector3(m_color);
-
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void Light::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void Light::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    m_intensity = info->GetFloat("Intensity");
-    m_color = info->GetVector3("Color");
+    ReadXMLInfo(xmlInfo);
 }
 #endif
+
+void Light::ReadXMLInfo(const XMLNode *xmlInfo)
+{
+    Component::ReadXMLInfo(xmlInfo);
+    SetIntensity(xmlInfo->GetFloat("intensity"));
+    SetColor(xmlInfo->GetFloat("color"));
+    m_lightMaterial = AssetsManager::GetAsset<Material>(xmlInfo->GetString("lightMaterial"));
+}
+
+void Light::FillXMLInfo(XMLNode *xmlInfo) const
+{
+    Component::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("Light");
+
+    xmlInfo->SetAttribute("intensity", GetIntensity());
+    xmlInfo->SetAttribute("color", GetColor());
+    xmlInfo->SetAttribute("lightMaterial", m_lightMaterial->GetFilepath());
+}

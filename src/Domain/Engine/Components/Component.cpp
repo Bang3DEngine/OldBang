@@ -37,15 +37,15 @@ bool Component::IsEnabled()
     return m_enabled;
 }
 
-void Component::ReadXMLNode(const XMLNode *xmlNode)
+void Component::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     // FileReader::RegisterNextPointerId(f, this);
-    m_enabled = xmlNode->GetBool("enabled");
+    m_enabled = xmlInfo->GetBool("enabled");
 }
 
-void Component::GetXMLNode(XMLNode *xmlNode) const
+void Component::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    xmlNode->SetTagName("Component");
-    xmlNode->SetAttribute("id", this);
-    xmlNode->SetAttribute("enabled", m_enabled);
+    xmlInfo->SetTagName("Component");
+    xmlInfo->SetAttribute("id", this);
+    xmlInfo->SetAttribute("enabled", m_enabled);
 }

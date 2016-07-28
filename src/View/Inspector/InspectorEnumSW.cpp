@@ -4,7 +4,7 @@ InspectorEnumSW::InspectorEnumSW(const std::string &labelString,
                                  const std::vector<std::string> &enumValues,
                                  const int selectedValue,
                                  InspectorWidget *parent,
-                                 InspectorWidgetInfo *relatedInfo) : InspectorSW(labelString, parent, relatedInfo)
+                                 XMLNode *relatedXMLInfo) : InspectorSW(labelString, parent, relatedXMLInfo)
 {
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);

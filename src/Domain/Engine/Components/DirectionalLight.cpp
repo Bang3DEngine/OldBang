@@ -33,26 +33,25 @@ ICloneable *DirectionalLight::Clone() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo *DirectionalLight::OnInspectorInfoNeeded()
+void DirectionalLight::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    Light::OnInspectorInfoNeeded();
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void DirectionalLight::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void DirectionalLight::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    Light::OnInspectorInfoChanged(info);
+    ReadXMLInfo(xmlInfo);
 }
 #endif
 
 
-void DirectionalLight::ReadXMLNode(const XMLNode *xmlNode)
+void DirectionalLight::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Light::ReadXMLNode(xmlNode);
+    Light::ReadXMLInfo(xmlInfo);
 }
 
-void DirectionalLight::GetXMLNode(XMLNode *xmlNode) const
+void DirectionalLight::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Light::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("DirectionalLight");
+    Light::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("DirectionalLight");
 }

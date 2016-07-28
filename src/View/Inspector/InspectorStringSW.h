@@ -21,7 +21,7 @@ public:
     InspectorStringSW(const std::string &labelString,
                       const std::string &initialValue,
                       InspectorWidget *m_parent,
-                      InspectorWidgetInfo *relatedInfo,
+                      XMLNode *relatedXMLInfo,
                       bool readonly = false,
                       bool inlined = false);
 

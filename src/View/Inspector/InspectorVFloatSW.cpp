@@ -3,8 +3,8 @@
 InspectorVFloatSW::InspectorVFloatSW(const std::string &labelString,
                                      std::vector<float> initialValues,
                                      InspectorWidget *parent,
-                                     InspectorWidgetInfo *relatedInfo) :
-    InspectorSW(labelString, parent, relatedInfo)
+                                     XMLNode *relatedXMLInfo) :
+    InspectorSW(labelString, parent, relatedXMLInfo)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0);
@@ -20,7 +20,7 @@ InspectorVFloatSW::InspectorVFloatSW(const std::string &labelString,
 
     for (unsigned int i = 0; i < initialValues.size(); ++i)
     {
-        InspectorFloatSW *s = new InspectorFloatSW("", initialValues[i], parent);
+        InspectorFloatSW *s = new InspectorFloatSW("", initialValues[i], parent, relatedXMLInfo);
         m_floatSlots.push_back(s);
 
         s->SetValue(initialValues[i]);

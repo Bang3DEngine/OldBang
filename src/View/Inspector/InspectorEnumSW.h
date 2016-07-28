@@ -19,7 +19,7 @@ public:
                     const std::vector<std::string> &initialValue,
                     const int selectedValue,
                     InspectorWidget *m_parent,
-                    InspectorWidgetInfo *relatedInfo);
+                    XMLNode *relatedXMLInfo);
 
     virtual void SetValue(int index);
     virtual int GetValue();

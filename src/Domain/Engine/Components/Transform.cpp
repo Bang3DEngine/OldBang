@@ -9,14 +9,7 @@ Transform::Transform() : m_localPosition(Vector3(0.0f))
                         ,m_localEuler(Vector3(0.0f))
                         #endif
 {
-    #ifdef BANG_EDITOR
-    m_inspectorInfo.AddSlotInfos(
-    {
-        new InspectorVFloatSWInfo("Position", 3),
-        new InspectorVFloatSWInfo("Rotation", 3),
-        new InspectorVFloatSWInfo("Scale", 3)
-    });
-    #endif
+
 }
 
 void Transform::CloneInto(ICloneable *clone) const
@@ -400,41 +393,31 @@ const std::string Transform::ToString() const
 }
 #ifdef BANG_EDITOR
 
-InspectorWidgetInfo* Transform::OnInspectorInfoNeeded()
+void Transform::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    Vector3 pos = GetLocalPosition();
-    Vector3 rotEuler = GetLocalEuler();
-    Vector3 scale = GetLocalScale();
-
-    m_inspectorInfo.GetSlotInfo("Position")->SetVector3(pos);
-    m_inspectorInfo.GetSlotInfo("Rotation")->SetVector3(rotEuler);
-    m_inspectorInfo.GetSlotInfo("Scale")->SetVector3(scale);
-
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void Transform::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void Transform::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    SetLocalPosition(info->GetVector3("Position"));
-    SetLocalEuler(info->GetVector3("Rotation"));
-    SetLocalScale(info->GetVector3("Scale"));
+    ReadXMLInfo(xmlInfo);
 }
 
-void Transform::ReadXMLNode(const XMLNode *xmlNode)
+void Transform::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLNode(xmlNode);
-    SetLocalPosition(xmlNode->GetVector3("localPosition"));
-    SetLocalRotation(xmlNode->GetQuaternion("localRotation"));
-    SetLocalScale(xmlNode->GetVector3("localScale"));
+    Component::ReadXMLInfo(xmlInfo);
+    SetLocalPosition(xmlInfo->GetVector3("localPosition"));
+    SetLocalRotation(xmlInfo->GetQuaternion("localRotation"));
+    SetLocalScale(xmlInfo->GetVector3("localScale"));
 }
 
-void Transform::GetXMLNode(XMLNode *xmlNode) const
+void Transform::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Component::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("Transform");
+    Component::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("Transform");
 
-    xmlNode->SetAttribute("localPosition", GetLocalPosition());
-    xmlNode->SetAttribute("localRotation", GetLocalRotation());
-    xmlNode->SetAttribute("localScale",    GetLocalScale());
+    xmlInfo->SetAttribute("localPosition", GetLocalPosition());
+    xmlInfo->SetAttribute("localRotation", GetLocalRotation());
+    xmlInfo->SetAttribute("localScale",    GetLocalScale());
 }
 #endif

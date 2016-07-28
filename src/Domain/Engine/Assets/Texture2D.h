@@ -42,8 +42,8 @@ public:
 
     std::string GetImageRelativeFilepath() const;
 
-    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
-    virtual void GetXMLNode(XMLNode *xmlNode) const override;
+    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
+    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 };
 
 #endif // TEXTURE2D_H

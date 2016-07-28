@@ -4,8 +4,8 @@ InspectorFileSW::InspectorFileSW(const std::string &labelString,
                                  const std::string &assetPath,
                                  const std::string &fileExtension,
                                  InspectorWidget *parent,
-                                 InspectorWidgetInfo *relatedInfo) :
-    InspectorSW(labelString, parent, relatedInfo)
+                                 XMLNode *relatedXMLInfo) :
+    InspectorSW(labelString, parent, relatedXMLInfo)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0);

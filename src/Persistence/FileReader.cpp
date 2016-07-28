@@ -260,10 +260,10 @@ bool FileReader::ReadOBJ(const std::string& filepath,
 
 void FileReader::ReadScene(const std::string &filepath, Scene* scene)
 {
-    XMLNode *xmlNode = XMLParser::FromFile(filepath);
-    if (xmlNode)
+    XMLNode *xmlInfo = XMLParser::FromFile(filepath);
+    if (xmlInfo)
     {
-        scene->ReadXMLNode(xmlNode);
+        scene->ReadXMLInfo(xmlInfo);
     }
     /*
     std::ifstream f (filepath);

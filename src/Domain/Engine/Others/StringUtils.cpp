@@ -1,5 +1,35 @@
 #include "StringUtils.h"
 
+bool StringUtils::Contains(const std::string &str, const std::string &whatToFind)
+{
+    if (str.length() == 0) return false;
+    if (whatToFind.length() == 0) return true;
+
+    int i = 0;
+    int j = i;
+    for (; i < str.length(); ++i)
+    {
+        char ci = str[i];
+        char cj = whatToFind[j];
+
+        if (ci == cj)
+        {
+            ++j;
+        }
+        else
+        {
+            j = 0;
+        }
+
+        if (j == whatToFind.length())
+        {
+            break;
+        }
+    }
+
+    return (j == whatToFind.length());
+}
+
 float StringUtils::ToFloat(const std::string &str)
 {
     std::string number = str;

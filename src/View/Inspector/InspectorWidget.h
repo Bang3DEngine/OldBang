@@ -19,7 +19,7 @@
 #include <QDoubleSpinBox>
 
 #include "Logger.h"
-#include "InspectorWidgetInfo.h"
+#include "XMLNode.h"
 
 #include "IInspectable.h"
 #include "IWindowEventManagerListener.h"
@@ -39,7 +39,7 @@ private:
     std::function<void()> *m_callback = nullptr;
 
     std::vector<InspectorSW*> m_compSlots;
-    std::map<std::string, InspectorSW*> m_labelsToComponentSlots;
+    std::map<std::string, InspectorSW*> m_attrNameToComponentSlots;
 
     QTimer *m_updateTimer = nullptr;
 
@@ -49,18 +49,18 @@ protected:
     QHBoxLayout *m_titleLayout = nullptr;
     QLabel *m_titleLabel = nullptr;
 
-    void ConstructFromWidgetInformation(const std::string &title,
-                                        const InspectorWidgetInfo *info,
-                                        bool autoUpdate = true);
+    void ConstructFromWidgetXMLInfo(const std::string &title,
+                                    const XMLNode &info,
+                                    bool autoUpdate = true);
 
 public:
     InspectorWidget();
-    explicit InspectorWidget(IInspectable *m_relatedInspectable);
+    explicit InspectorWidget(IInspectable *relatedInspectable);
 
     //Short handed way to use an Inspector Widget
     //(no need to create an IInspectable object).
     explicit InspectorWidget(const std::string &title,
-                             InspectorWidgetInfo *widgetInfo,
+                             const XMLNode &widgetXMLInfo,
                              std::function<void()> m_callback);
 
     virtual ~InspectorWidget();
@@ -71,7 +71,7 @@ public:
 
 private slots:
 
-    void Refresh();
+    void RefreshWidgetValues();
     void _OnSlotValueChanged(double _);
     void _OnSlotValueChanged(QString _);
 
@@ -79,7 +79,7 @@ public slots:
 
     virtual void OnCustomContextMenuRequested(QPoint point);
 
-    void Refresh(InspectorWidgetInfo *widgetInfo);
+    void RefreshWidgetValues(const XMLNode &xmlInfo);
     virtual void _OnSlotValueChanged();
 };
 

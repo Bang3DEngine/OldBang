@@ -7,13 +7,6 @@
 
 Renderer::Renderer()
 {
-    #ifdef BANG_EDITOR
-        m_inspectorInfo.AddSlotInfos(
-        {
-            new InspectorFileSWInfo("Material",
-                                    Material::GetFileExtensionStatic())
-        });
-    #endif
 }
 
 void Renderer::CloneInto(ICloneable *clone) const
@@ -247,54 +240,56 @@ void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std:
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo *Renderer::OnInspectorInfoNeeded()
+void Renderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    Component::OnInspectorInfoNeeded();
-    InspectorSWInfo *matInfo  = m_inspectorInfo.GetSlotInfo("Material");
+    FillXMLInfo(xmlInfo);
+}
+
+void Renderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
+{
+    ReadXMLInfo(xmlInfo);
+}
+#endif
+
+void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
+{
+    Component::ReadXMLInfo(xmlInfo);
+
+    std::string materialFilepath = xmlInfo->GetFilepath("Material");
+    if (materialFilepath != "-")
+    {
+        SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
+    }
+    else
+    {
+        SetMaterial (nullptr);
+    }
+
+    SetLineWidth(xmlInfo->GetFloat("LineWidth"));
+}
+
+void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
+{
+    Component::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("Renderer");
+
     if (m_material)
     {
         if (m_material->GetFilepath() != "")
         {
-            matInfo->SetString(m_material->GetFilepath());
+            xmlInfo->SetAttribute("Material", m_material->GetFilepath());
         }
         else //In case the asset is created in runtime, write its mem address
         {
             std::string memAddress;
             Logger_GetString(memAddress, (void*)m_material);
-            matInfo->SetString(memAddress);
+            xmlInfo->SetAttribute("Material", memAddress);
         }
     }
     else
     {
-        matInfo->SetString("-");
+        xmlInfo->SetAttribute("Material", "-");
     }
 
-    return &m_inspectorInfo;
-}
-
-void Renderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
-{
-    Component::OnInspectorInfoChanged(info);
-    std::string materialFilepath = info->GetFilepath("Material");
-    Logger_Log("Renderer::OnInspectorInfoChanged");
-    Logger_Log("materialFilepath: *" << materialFilepath << "*");
-    if (materialFilepath != "-")
-    {
-        SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
-    }
-}
-#endif
-
-void Renderer::ReadXMLNode(const XMLNode *xmlNode)
-{
-    Component::ReadXMLNode(xmlNode);
-    SetLineWidth(xmlNode->GetFloat("lineWidth"));
-}
-
-void Renderer::GetXMLNode(XMLNode *xmlNode) const
-{
-    Component::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("Renderer");
-
-    xmlNode->SetAttribute("lineWidth", GetLineWidth());
+    xmlInfo->SetAttribute("LineWidth", GetLineWidth());
 }

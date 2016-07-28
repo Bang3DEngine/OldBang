@@ -140,17 +140,17 @@ const Sphere &Mesh::GetBoundingSphere() const
     return m_bSphere;
 }
 
-void Mesh::ReadXMLNode(const XMLNode *xmlNode)
+void Mesh::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLNode(xmlNode);
-    m_filepath = xmlNode->GetString("meshFilepath");
+    Asset::ReadXMLInfo(xmlInfo);
+    m_filepath = xmlInfo->GetString("meshFilepath");
     LoadFromFile(m_filepath);
 }
 
-void Mesh::GetXMLNode(XMLNode *xmlNode) const
+void Mesh::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Asset::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("Mesh");
+    Asset::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("Mesh");
 
-    xmlNode->SetAttribute("meshFilepath", m_filepath);
+    xmlInfo->SetAttribute("meshFilepath", m_filepath);
 }

@@ -327,19 +327,19 @@ GameObject *GameObject::FindInChildren(const std::string &name)
     return nullptr;
 }
 
-void GameObject::ReadXMLNode(const XMLNode *xmlNode)
+void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     // FileReader::RegisterNextPointerId(f, this);
-    m_enabled = xmlNode->GetBool("enabled");
-    SetName( xmlNode->GetString("name") );  //Read GameObject name
+    m_enabled = xmlInfo->GetBool("enabled");
+    SetName( xmlInfo->GetString("name") );  //Read GameObject name
 
-    for ( XMLNode *xmlChild : xmlNode->GetChildren() )
+    for ( XMLNode *xmlChild : xmlInfo->GetChildren() )
     {
         std::string tagName = xmlChild->GetTagName();
         if (tagName == "GameObject") // It's a child
         {
             GameObject *child = new GameObject();
-            child->ReadXMLNode(xmlChild);
+            child->ReadXMLInfo(xmlChild);
             child->SetParent(this);
         }
         else // It's a Component
@@ -348,38 +348,38 @@ void GameObject::ReadXMLNode(const XMLNode *xmlNode)
             bool isTransform = false;
             if (tagName == "Transform")
             {
-                transform->ReadXMLNode(xmlChild);
+                transform->ReadXMLInfo(xmlChild);
                 c = transform;
                 isTransform = true;
             }
             else if (tagName == "MeshRenderer")
             {
                 MeshRenderer *mr = new MeshRenderer();
-                mr->ReadXMLNode(xmlChild);
+                mr->ReadXMLInfo(xmlChild);
                 c = mr;
             }
             else if (tagName == "Camera")
             {
                 Camera *cam = new Camera();
-                cam->ReadXMLNode(xmlChild);
+                cam->ReadXMLInfo(xmlChild);
                 c = cam;
             }
             else if (tagName == "BehaviourHolder")
             {
                 BehaviourHolder *bh = new BehaviourHolder();
-                bh->ReadXMLNode(xmlChild);
+                bh->ReadXMLInfo(xmlChild);
                 c = bh;
             }
             else if (tagName == "DirectionalLight")
             {
                 DirectionalLight *dl = new DirectionalLight();
-                dl->ReadXMLNode(xmlChild);
+                dl->ReadXMLInfo(xmlChild);
                 c = dl;
             }
             else if (tagName == "PointLight")
             {
                 PointLight *pl = new PointLight();
-                pl->ReadXMLNode(xmlChild);
+                pl->ReadXMLInfo(xmlChild);
                 c = pl;
             }
 
@@ -391,25 +391,25 @@ void GameObject::ReadXMLNode(const XMLNode *xmlNode)
     }
 }
 
-void GameObject::GetXMLNode(XMLNode *xmlNode) const
+void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    xmlNode->SetTagName("GameObject");
-    xmlNode->SetAttribute("id", this);
-    xmlNode->SetAttribute("enabled", m_enabled);
-    xmlNode->SetAttribute("name", m_name);
+    xmlInfo->SetTagName("GameObject");
+    xmlInfo->SetAttribute("id", this);
+    xmlInfo->SetAttribute("enabled", m_enabled);
+    xmlInfo->SetAttribute("name", m_name);
 
     for (Component *c : m_comps)
     {
         XMLNode *xmlComp = new XMLNode();
-        c->GetXMLNode(xmlComp);
-        xmlNode->AddChild(xmlComp);
+        c->FillXMLInfo(xmlComp);
+        xmlInfo->AddChild(xmlComp);
     }
 
     for (GameObject *go : m_children)
     {
         XMLNode *child = new XMLNode();
-        go->GetXMLNode(child);
-        xmlNode->AddChild(child);
+        go->FillXMLInfo(child);
+        xmlInfo->AddChild(child);
     }
 }
 

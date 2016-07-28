@@ -3,8 +3,8 @@
 InspectorButtonSW::InspectorButtonSW(const std::string &label,
                                      InspectorWidget *parent,
                                      std::function<void()> onClickFunction,
-                                     InspectorWidgetInfo *relatedInfo) :
-    InspectorSW("", parent, relatedInfo)
+                                     XMLNode *relatedXMLInfo) :
+    InspectorSW("", parent, relatedXMLInfo)
 {
     QLayout *layout = new QVBoxLayout();
     layout->setSpacing(0);

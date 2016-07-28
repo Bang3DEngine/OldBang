@@ -18,8 +18,8 @@ protected:
     IFileable() {}
 
 public:
-    virtual void ReadXMLNode(const XMLNode *xmlNode) = 0;
-    virtual void GetXMLNode(XMLNode *xmlNode) const = 0;
+    virtual void ReadXMLInfo(const XMLNode *xmlInfo) = 0;
+    virtual void FillXMLInfo(XMLNode *xmlInfo) const = 0;
 };
 
 #endif // IFILEABLE_H

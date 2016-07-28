@@ -13,6 +13,7 @@ private:
 
 public:
 
+    static bool Contains(const std::string &str, const std::string &whatToFind);
     static float ToFloat(const std::string &str);
 
     static void TrimLeft(std::string *str);

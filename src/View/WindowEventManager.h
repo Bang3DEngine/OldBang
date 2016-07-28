@@ -14,8 +14,8 @@
 #include <QTreeWidgetItem>
 
 #include "MenuBar.h"
+#include "XMLNode.h"
 #include "InspectorWidget.h"
-#include "InspectorWidgetInfo.h"
 #include "IWindowEventManagerListener.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\

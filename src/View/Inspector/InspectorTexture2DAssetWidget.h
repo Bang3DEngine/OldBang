@@ -11,7 +11,7 @@ class InspectorTexture2DAssetWidget : public InspectorWidget
 {
 private:
     std::string m_assetFilepath = "";
-    InspectorWidgetInfo m_inspectorInfo;
+    XMLNode xmlInfo;
 
 public:
     InspectorTexture2DAssetWidget(const FileTexture2DAsset &fileTex);

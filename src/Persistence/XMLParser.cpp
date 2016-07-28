@@ -161,8 +161,8 @@ XMLNode *XMLParser::FromFile(const std::string &filepath)
     {
         std::string contents((std::istreambuf_iterator<char>(f)),
                               std::istreambuf_iterator<char>());
-        XMLNode *xmlNode = XMLParser::FromXML(contents);
-        return xmlNode;
+        XMLNode *xmlInfo = XMLParser::FromXML(contents);
+        return xmlInfo;
     }
     return nullptr;
 }
@@ -199,8 +199,7 @@ XMLNode* XMLParser::FromXML(const std::string &xml)
         {
             break;
         }
-
-        root->SetGenericAttribute(attr.first, attr.second);
+        root->SetGenericAttribute(attr.first, attr.second, XMLAttribute::Float);
     }
 
     //Read children

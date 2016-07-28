@@ -58,14 +58,14 @@ std::string Texture2D::GetImageRelativeFilepath() const
     return m_filepath;
 }
 
-void Texture2D::ReadXMLNode(const XMLNode *xmlNode)
+void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLNode(xmlNode);
+    Asset::ReadXMLInfo(xmlInfo);
 
-    m_filepath = xmlNode->GetString("textureFilepath");
+    m_filepath = xmlInfo->GetString("textureFilepath");
     LoadFromFile(m_filepath);
 
-    std::string filterMode = xmlNode->GetString("filterMode");
+    std::string filterMode = xmlInfo->GetString("filterMode");
     if (filterMode == "Nearest")
     {
         SetFilterMode(FilterMode::Nearest);
@@ -76,10 +76,10 @@ void Texture2D::ReadXMLNode(const XMLNode *xmlNode)
     }
 }
 
-void Texture2D::GetXMLNode(XMLNode *xmlNode) const
+void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Asset::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("Texture2D");
+    Asset::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("Texture2D");
 
     FilterMode filterMode = GetFilterMode();
     std::string fmName = "";
@@ -91,5 +91,5 @@ void Texture2D::GetXMLNode(XMLNode *xmlNode) const
     {
         fmName = "Linear";
     }
-    xmlNode->SetAttribute("filterMode", fmName);
+    xmlInfo->SetAttribute("filterMode", fmName);
 }

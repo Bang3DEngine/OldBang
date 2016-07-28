@@ -4,12 +4,6 @@
 
 MeshRenderer::MeshRenderer()
 {
-    #ifdef BANG_EDITOR
-        m_inspectorInfo.AddSlotInfos(
-        {
-            new InspectorFileSWInfo("Mesh", Mesh::GetFileExtensionStatic())
-        });
-    #endif
 }
 
 void MeshRenderer::CloneInto(ICloneable *clone) const
@@ -99,54 +93,29 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* MeshRenderer::OnInspectorInfoNeeded()
+void MeshRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    Renderer::OnInspectorInfoNeeded();
-    InspectorSWInfo *meshInfo = m_inspectorInfo.GetSlotInfo("Mesh");
-    if (m_mesh)
-    {
-        if (m_mesh->GetFilepath() != "")
-        {
-            meshInfo->SetString(m_mesh->GetFilepath());
-        }
-        else //In case the asset is created in runtime, write its mem address
-        {
-            std::string memAddress;
-            Logger_GetString(memAddress, (void*)m_mesh);
-            meshInfo->SetString(memAddress);
-        }
-    }
-    else
-    {
-        meshInfo->SetString("-");
-    }
-
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void MeshRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void MeshRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    Renderer::OnInspectorInfoChanged(info);
-    std::string meshFilepath = info->GetFilepath("Mesh");
-    if (meshFilepath != "-")
-    {
-        SetMesh( AssetsManager::GetAsset<Mesh>(meshFilepath) );
-    }
+    ReadXMLInfo(xmlInfo);
 }
 #endif
 
-void MeshRenderer::ReadXMLNode(const XMLNode *xmlNode)
+void MeshRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Renderer::ReadXMLNode(xmlNode);
-    SetMesh( AssetsManager::GetAsset<Mesh>( xmlNode->GetString("meshAssetFilepath") ) );
-    SetMaterial( AssetsManager::GetAsset<Material>( xmlNode->GetString("materialAssetFilepath") ) );
+    Renderer::ReadXMLInfo(xmlInfo);
+    SetMesh( AssetsManager::GetAsset<Mesh>( xmlInfo->GetString("meshAssetFilepath") ) );
+    SetMaterial( AssetsManager::GetAsset<Material>( xmlInfo->GetString("materialAssetFilepath") ) );
 }
 
-void MeshRenderer::GetXMLNode(XMLNode *xmlNode) const
+void MeshRenderer::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Renderer::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("MeshRenderer");
+    Renderer::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("MeshRenderer");
 
-    xmlNode->SetAttribute("meshAssetFilepath", m_mesh ? m_mesh->GetFilepath() : "");
-    xmlNode->SetAttribute("materialAssetFilepath", m_material ? m_material->GetFilepath() : "");
+    xmlInfo->SetAttribute("meshAssetFilepath", m_mesh ? m_mesh->GetFilepath() : "");
+    xmlInfo->SetAttribute("materialAssetFilepath", m_material ? m_material->GetFilepath() : "");
 }

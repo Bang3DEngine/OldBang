@@ -9,7 +9,7 @@
 class InspectorImageFileWidget : public InspectorWidget
 {
 private:
-    InspectorWidgetInfo m_inspectorInfo;
+    XMLNode *xmlInfo;
 
 public:
     InspectorImageFileWidget(const FileImage &fileImage);

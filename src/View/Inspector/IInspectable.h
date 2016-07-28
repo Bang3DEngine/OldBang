@@ -1,7 +1,7 @@
 #ifndef IINSPECTABLE_H
 #define IINSPECTABLE_H
 
-#include "InspectorWidgetInfo.h"
+#include "XMLNode.h"
 
 class InspectorWidget;
 class IInspectable
@@ -10,12 +10,13 @@ protected:
     IInspectable() {}
 
 public:
-    InspectorWidgetInfo m_inspectorInfo;
 
-    //Value was changed by the user, using input in inspector
     #ifdef BANG_EDITOR
-    virtual void OnInspectorInfoChanged(InspectorWidgetInfo *info);
-    virtual InspectorWidgetInfo* OnInspectorInfoNeeded();
+    // Value was changed by the user, using input in inspector
+    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo);
+
+    // Inspector want to update its values
+    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const;
     #endif
 };
 

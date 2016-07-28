@@ -197,7 +197,8 @@ HEADERS += \
     src/Persistence/FileTexture2DAsset.h \
     src/Persistence/FileMeshAsset.h \
     src/Persistence/XMLParser.h \
-    src/Persistence/XMLNode.h
+    src/Persistence/XMLNode.h \
+    src/Persistence/XMLAttribute.h
 
 EDITOR {
 HEADERS += \
@@ -211,7 +212,6 @@ HEADERS += \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/View/Inspector/Inspector.h \
     src/View/Hierarchy/Hierarchy.h \
-    src/View/Inspector/InspectorWidgetInfo.h \
     src/View/Inspector/InspectorComponentWidget.h \
     src/View/Inspector/InspectorSW.h \
     src/View/Inspector/InspectorFloatSW.h \
@@ -317,7 +317,8 @@ SOURCES += \
     src/Persistence/FileTexture2DAsset.cpp \
     src/Persistence/FileMeshAsset.cpp \
     src/Persistence/XMLParser.cpp \
-    src/Persistence/XMLNode.cpp
+    src/Persistence/XMLNode.cpp \
+    src/Persistence/XMLAttribute.cpp
 
 EDITOR {
     SOURCES += \
@@ -333,7 +334,6 @@ EDITOR {
         src/View/Interfaces/IWindowEventManagerListener.cpp \
         src/View/Inspector/Inspector.cpp \
         src/View/Hierarchy/Hierarchy.cpp \
-        src/View/Inspector/InspectorWidgetInfo.cpp \
         src/Domain/Graphics/SelectionFramebuffer.cpp \
         src/View/Inspector/InspectorComponentWidget.cpp \
         src/View/Inspector/InspectorSW.cpp \

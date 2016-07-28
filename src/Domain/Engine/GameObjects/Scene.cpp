@@ -92,13 +92,13 @@ bool Scene::IsScene() const
     return true;
 }
 
-void Scene::ReadXMLNode(const XMLNode *xmlNode)
+void Scene::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    GameObject::ReadXMLNode(xmlNode);
+    GameObject::ReadXMLInfo(xmlInfo);
 }
 
-void Scene::GetXMLNode(XMLNode *xmlNode) const
+void Scene::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    GameObject::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("Scene");
+    GameObject::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("Scene");
 }

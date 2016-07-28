@@ -2,13 +2,6 @@
 
 LineRenderer::LineRenderer()
 {
-#ifdef BANG_EDITOR
-    m_inspectorInfo.AddSlotInfos(
-    {
-       new InspectorVFloatSWInfo("Line Width", 1)
-    });
-#endif
-
     m_vbo = new VBO();
     m_vao = new VAO();
 
@@ -85,27 +78,24 @@ const std::vector<Vector3> &LineRenderer::GetPoints() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* LineRenderer::OnInspectorInfoNeeded()
+void LineRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    Renderer::OnInspectorInfoNeeded();
-    m_inspectorInfo.GetSlotInfo("Line Width")->SetFloat(GetLineWidth());
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void LineRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void LineRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    Renderer::OnInspectorInfoChanged(info);
-    SetLineWidth(info->GetFloat("Line Width"));
+    ReadXMLInfo(xmlInfo);
 }
 #endif
 
-void LineRenderer::ReadXMLNode(const XMLNode *xmlNode)
+void LineRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLNode(xmlNode);
+    Renderer::ReadXMLInfo(xmlInfo);
 }
 
-void LineRenderer::GetXMLNode(XMLNode *xmlNode) const
+void LineRenderer::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Component::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("LineRenderer");
+    Renderer::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("LineRenderer");
 }

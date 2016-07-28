@@ -3,13 +3,6 @@
 PointLight::PointLight() : Light()
 {
     m_lightMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/PR_PointLight.bmat");
-
-    #ifdef BANG_EDITOR
-    m_inspectorInfo.AddSlotInfos(
-    {
-        new InspectorVFloatSWInfo("Range", 1 )
-    });
-    #endif
 }
 
 
@@ -47,18 +40,14 @@ ICloneable *PointLight::Clone() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo *PointLight::OnInspectorInfoNeeded()
+void PointLight::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    Light::OnInspectorInfoNeeded();
-    m_inspectorInfo.GetSlotInfo("Range")->SetFloat(m_range);
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void PointLight::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void PointLight::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    Light::OnInspectorInfoChanged(info);
-    m_range = info->GetFloat("Range");
-
+    ReadXMLInfo(xmlInfo);
 }
 #endif
 
@@ -72,16 +61,16 @@ float PointLight::GetRange() const
     return m_range;
 }
 
-void PointLight::ReadXMLNode(const XMLNode *xmlNode)
+void PointLight::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Light::ReadXMLNode(xmlNode);
-    SetRange(xmlNode->GetFloat("range"));
+    Light::ReadXMLInfo(xmlInfo);
+    SetRange(xmlInfo->GetFloat("range"));
 }
 
-void PointLight::GetXMLNode(XMLNode *xmlNode) const
+void PointLight::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Light::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("PointLight");
+    Light::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("PointLight");
 
-    xmlNode->SetAttribute("range", m_range);
+    xmlInfo->SetAttribute("range", m_range);
 }

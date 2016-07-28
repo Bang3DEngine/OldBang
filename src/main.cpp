@@ -71,9 +71,9 @@ int main(int argc, char *argv[])
     GameObject *go2 = new GameObject("test2");
     go2->SetParent(go);
     go2->AddComponent<MeshRenderer>();
-    XMLNode *xmlNode = new XMLNode();
-    go->GetXMLNode(xmlNode);
-    std::cerr << xmlNode->ToString() << std::endl;
+    XMLNode *xmlInfo = new XMLNode();
+    go->GetXMLNode(xmlInfo);
+    std::cerr << xmlInfo->ToString() << std::endl;
     */
 
     #ifdef BANG_EDITOR

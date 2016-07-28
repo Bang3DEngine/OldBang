@@ -14,9 +14,9 @@ Prefab::Prefab(GameObject *go)
 {
     if (go)
     {
-        XMLNode *xmlNode = new XMLNode();
-        go->GetXMLNode(xmlNode);
-        m_assetDescription = xmlNode->ToString();
+        XMLNode *xmlInfo = new XMLNode();
+        go->FillXMLInfo(xmlInfo);
+        m_assetDescription = xmlInfo->ToString();
     }
 }
 
@@ -40,28 +40,28 @@ GameObject *Prefab::InstantiateWithoutStarting() const
     if (m_assetDescription != "")
     {
         GameObject *go = new GameObject();
-        XMLNode *xmlNode = XMLParser::FromXML(m_assetDescription); go->GetXMLNode(xmlNode);
+        XMLNode *xmlInfo = XMLParser::FromXML(m_assetDescription); go->FillXMLInfo(xmlInfo);
         return go;
     }
     return nullptr;
 }
 
-void Prefab::ReadXMLNode(const XMLNode *xmlNode)
+void Prefab::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLNode(xmlNode);
+    Asset::ReadXMLInfo(xmlInfo);
 
-    m_assetDescription = xmlNode->ToString();
+    m_assetDescription = xmlInfo->ToString();
 }
 
-void Prefab::GetXMLNode(XMLNode *xmlNode) const
+void Prefab::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Asset::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("Prefab");
+    Asset::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("Prefab");
 
     GameObject *go = InstantiateWithoutStarting();
     if (go)
     {
-        go->GetXMLNode(xmlNode);
+        go->FillXMLInfo(xmlInfo);
         delete go;
     }
 }

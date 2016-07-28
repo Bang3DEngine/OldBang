@@ -190,11 +190,11 @@ void MenuBar::OnCreateFromPrefab() const
 
     Prefab *p = new Prefab();
 
-    XMLNode *xmlNode = XMLParser::FromFile(filename);
-    if (xmlNode)
+    XMLNode *xmlInfo = XMLParser::FromFile(filename);
+    if (xmlInfo)
     {
-        p->ReadXMLNode(xmlNode);
-        delete xmlNode;
+        p->ReadXMLInfo(xmlInfo);
+        delete xmlInfo;
 
         GameObject *e = p->InstantiateWithoutStarting();
         GameObject *selectedGameObject = w->widgetHierarchy->GetFirstSelectedGameObject();

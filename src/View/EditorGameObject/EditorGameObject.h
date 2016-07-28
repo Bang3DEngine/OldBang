@@ -14,7 +14,7 @@ public:
 
     virtual bool IsEditorGameObject() const override;
 
-    virtual void GetXMLNode(XMLNode *xmlNode) const override;
+    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 };
 
 #endif // EDITORGAMEOBJECT_H

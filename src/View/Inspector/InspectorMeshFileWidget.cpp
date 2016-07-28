@@ -3,24 +3,12 @@
 InspectorMeshFileWidget::InspectorMeshFileWidget(const FileMesh &fileMesh) :
     InspectorWidget()
 {
-    m_inspectorInfo.AddSlotInfos(
-    {
-        new InspectorStringSWInfo("File name", true),
-        new InspectorStringSWInfo("Path", true),
-        new InspectorStringSWInfo("Mode", true),
-        new InspectorStringSWInfo("Faces", true)
-    }
-    );
+    xmlInfo->SetAttribute("FileName", fileMesh.GetName() + "." + fileMesh.GetExtension());
+    xmlInfo->SetAttribute("Path", fileMesh.GetPath());
+    xmlInfo->SetAttribute("Mode", fileMesh.IsTriangles() ? "Triangles" : "Quads");
+    xmlInfo->SetAttribute("Faces",  std::to_string(fileMesh.GetNumFaces()));
 
-    m_inspectorInfo.GetStringSWSlotInfo("File name")->m_value =
-            fileMesh.GetName() + "." + fileMesh.GetExtension();
-    m_inspectorInfo.GetStringSWSlotInfo("Path")->m_value = fileMesh.GetPath();
-    m_inspectorInfo.GetStringSWSlotInfo("Mode")->m_value =
-            fileMesh.IsTriangles() ? "Triangles" : "Quads";
-    m_inspectorInfo.GetStringSWSlotInfo("Faces")->m_value =
-            std::to_string(fileMesh.GetNumFaces());
-
-    this->ConstructFromWidgetInformation(fileMesh.GetName(), &m_inspectorInfo);
+    ConstructFromWidgetXMLInfo(fileMesh.GetName(), *xmlInfo);
 }
 
 InspectorMeshFileWidget::~InspectorMeshFileWidget()

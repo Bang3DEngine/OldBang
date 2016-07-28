@@ -2,6 +2,8 @@
 #define INSPECTORBUTTONSW_H
 
 #include <QPushButton>
+
+#include "XMLNode.h"
 #include "InspectorSW.h"
 
 class InspectorButtonSW : public InspectorSW
@@ -16,7 +18,7 @@ public:
     InspectorButtonSW(const std::string &m_label,
                       InspectorWidget *m_parent,
                       std::function<void()> m_onClickFunction,
-                      InspectorWidgetInfo *relatedInfo);
+                      XMLNode *relatedXMLInfo);
 
     QSize sizeHint() const;
 

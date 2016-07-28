@@ -7,16 +7,18 @@
 #include <string>
 #include <sstream>
 
+
 #include "Rect.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "StringUtils.h"
+#include "XMLAttribute.h"
 
 class XMLNode
 {
 private:
     std::string m_tagName = "";
-    mutable std::map<std::string, std::string> m_attributes;
+    mutable std::map<std::string, XMLAttribute> m_attributes;
     std::list<XMLNode*> m_children;
 
 public:
@@ -25,7 +27,8 @@ public:
 
     void AddChild(XMLNode *node);
     void SetGenericAttribute(const std::string &attributeName,
-                             const std::string &attributeValue);
+                             const std::string &attributeValue,
+                             XMLAttribute::Type type);
     void SetAttribute(const std::string &attributeName,
                       void *value);
     void SetAttribute(const std::string &attributeName,
@@ -52,6 +55,7 @@ public:
     bool GetBool(const std::string& attributeName) const;
     int GetInt(const std::string& attributeName) const;
     float GetFloat(const std::string& attributeName) const;
+    std::string GetFilepath(const std::string& attributeName) const;
     std::string GetString(const std::string& attributeName) const;
     glm::vec2 GetVector2(const std::string& attributeName) const;
     Vector3 GetVector3(const std::string& attributeName) const;
@@ -64,7 +68,7 @@ public:
     std::string ToString(const std::string& indent = "") const;
 
     const std::string& GetTagName() const;
-    const std::map<std::string, std::string>& GetAttributes() const;
+    const std::map<std::string, XMLAttribute>& GetAttributes() const;
     const std::list<XMLNode*>& GetChildren() const;
 };
 

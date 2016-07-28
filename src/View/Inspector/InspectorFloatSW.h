@@ -21,7 +21,7 @@ public:
     InspectorFloatSW(const std::string &labelString,
                      float initialValue,
                      InspectorWidget *m_parent,
-                     InspectorWidgetInfo *relatedInfo);
+                     XMLNode *relatedXMLInfo);
 
     virtual void SetValue(float f);
     virtual float GetValue();

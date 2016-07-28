@@ -39,8 +39,8 @@ public:
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;
 
-    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
-    virtual void GetXMLNode(XMLNode *xmlNode) const override;
+    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
+    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 };
 
 #endif // BANGFAB_H

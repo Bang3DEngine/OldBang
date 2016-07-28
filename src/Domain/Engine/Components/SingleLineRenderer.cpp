@@ -2,13 +2,6 @@
 
 SingleLineRenderer::SingleLineRenderer()
 {
-    #ifdef BANG_EDITOR
-        m_inspectorInfo.AddSlotInfo(
-            new InspectorVFloatSWInfo("Origin", 3));
-        m_inspectorInfo.AddSlotInfo(
-            new InspectorVFloatSWInfo("Destiny", 3));
-    #endif
-
     m_points.resize(2);
     m_points[0] = Vector3(0.0f);
     m_points[1] = Vector3(1.0f);
@@ -66,42 +59,34 @@ Vector3 SingleLineRenderer::GetDestiny() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* SingleLineRenderer::OnInspectorInfoNeeded()
+void SingleLineRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    LineRenderer::OnInspectorInfoNeeded();
-
-    m_inspectorInfo.GetSlotInfo("Origin")->SetVector3(m_points[0]);
-    m_inspectorInfo.GetSlotInfo("Destiny")->SetVector3(m_points[1]);
-
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void SingleLineRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void SingleLineRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    LineRenderer::OnInspectorInfoChanged(info);
-
-    m_points[0] = info->GetVector3("Origin");
-    m_points[1] = info->GetVector3("Destiny");
+    ReadXMLInfo(xmlInfo);
 }
 #endif
 
 
-void SingleLineRenderer::ReadXMLNode(const XMLNode *xmlNode)
+void SingleLineRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    LineRenderer::ReadXMLNode(xmlNode);
-    SetMaterial( AssetsManager::GetAsset<Material>(xmlNode->GetString("materialFilepath") ) );
-    SetOrigin(xmlNode->GetVector3("origin"));
-    SetDestiny(xmlNode->GetVector3("destiny"));
+    LineRenderer::ReadXMLInfo(xmlInfo);
+    SetMaterial( AssetsManager::GetAsset<Material>(xmlInfo->GetString("materialFilepath") ) );
+    SetOrigin(xmlInfo->GetVector3("origin"));
+    SetDestiny(xmlInfo->GetVector3("destiny"));
 }
 
-void SingleLineRenderer::GetXMLNode(XMLNode *xmlNode) const
+void SingleLineRenderer::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    LineRenderer::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("SingleLineRenderer");
+    LineRenderer::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("SingleLineRenderer");
 
-    xmlNode->SetAttribute("id", this);
-    xmlNode->SetAttribute("materialFilepath", m_material->GetFilepath());
-    xmlNode->SetAttribute("origin", GetOrigin());
-    xmlNode->SetAttribute("destiny", GetDestiny());
+    xmlInfo->SetAttribute("id", this);
+    xmlInfo->SetAttribute("materialFilepath", m_material->GetFilepath());
+    xmlInfo->SetAttribute("origin", GetOrigin());
+    xmlInfo->SetAttribute("destiny", GetDestiny());
 }
 

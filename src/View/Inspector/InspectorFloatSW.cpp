@@ -3,8 +3,8 @@
 InspectorFloatSW::InspectorFloatSW(const std::string &labelString,
                                    float initialValue,
                                    InspectorWidget *parent,
-                                   InspectorWidgetInfo *relatedInfo) :
-    InspectorSW(labelString, parent, relatedInfo)
+                                   XMLNode *relatedXMLInfo) :
+    InspectorSW(labelString, parent, relatedXMLInfo)
 {
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);

@@ -316,8 +316,8 @@ public:
     static GameObject *Find(const std::string &name);
     GameObject *FindInChildren(const std::string &name);
 
-    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
-    virtual void GetXMLNode(XMLNode *xmlNode) const override;
+    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
+    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
     void SetEnabled(bool m_enabled);
     bool IsEnabled();

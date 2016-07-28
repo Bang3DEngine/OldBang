@@ -21,12 +21,12 @@ const std::string Asset::ToString() const
 }
 
 
-void Asset::ReadXMLNode(const XMLNode *xmlNode)
+void Asset::ReadXMLInfo(const XMLNode *xmlInfo)
 {
 }
 
-void Asset::GetXMLNode(XMLNode *xmlNode) const
+void Asset::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    xmlNode->SetTagName("Asset");
-    xmlNode->SetAttribute("filepath", m_filepath);
+    xmlInfo->SetTagName("Asset");
+    xmlInfo->SetAttribute("filepath", m_filepath);
 }

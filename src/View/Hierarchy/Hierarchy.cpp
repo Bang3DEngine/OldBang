@@ -370,7 +370,7 @@ void Hierarchy::OnContextMenuCreatePrefab()
         if (f.is_open())
         {
             XMLNode *node = new XMLNode();
-            prefab->GetXMLNode(node);
+            prefab->FillXMLInfo(node);
             f << node->ToString();
             delete node;
             f.close();

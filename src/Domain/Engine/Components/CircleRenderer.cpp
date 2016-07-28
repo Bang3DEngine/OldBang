@@ -2,13 +2,6 @@
 
 CircleRenderer::CircleRenderer()
 {
-    #ifdef BANG_EDITOR
-        m_inspectorInfo.AddSlotInfo(
-            new InspectorVFloatSWInfo("Radius", 1));
-        m_inspectorInfo.AddSlotInfo(
-            new InspectorVFloatSWInfo("Segments", 1));
-    #endif
-
     this->m_drawLinesMode = RenderMode::LineStrip;
 }
 
@@ -134,42 +127,30 @@ int CircleRenderer::GetSegments() const
 }
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* CircleRenderer::OnInspectorInfoNeeded()
+void CircleRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    LineRenderer::OnInspectorInfoNeeded();
-
-    m_inspectorInfo.GetSlotInfo("Radius")->SetFloat(m_radius);
-    m_inspectorInfo.GetSlotInfo("Segments")->SetFloat(m_segments);
-
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void CircleRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void CircleRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    LineRenderer::OnInspectorInfoChanged(info);
-
-    SetRadius(info->GetFloat("Radius"));
-    SetSegments(int(info->GetFloat("Segments")));
+    ReadXMLInfo(xmlInfo);
 }
 
-void CircleRenderer::ReadXMLNode(const XMLNode *xmlNode)
+void CircleRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    LineRenderer::ReadXMLNode(xmlNode);
-    SetMaterial(AssetsManager::GetAsset<Material>(xmlNode->GetString("materialFilepath")));
-    SetRadius(xmlNode->GetFloat("radius"));
-    SetSegments(xmlNode->GetFloat("segments"));
-    SetLineWidth(xmlNode->GetFloat("lineWidth"));
+    LineRenderer::ReadXMLInfo(xmlInfo);
+    SetRadius(xmlInfo->GetFloat("radius"));
+    SetSegments(xmlInfo->GetFloat("segments"));
 }
 
-void CircleRenderer::GetXMLNode(XMLNode *xmlNode) const
+void CircleRenderer::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    LineRenderer::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("CircleRenderer");
+    LineRenderer::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("CircleRenderer");
 
-    xmlNode->SetAttribute("id", this);
-    xmlNode->SetAttribute("materialFilepath", m_material->GetFilepath());
-    xmlNode->SetAttribute("radius", GetRadius());
-    xmlNode->SetAttribute("segments", GetSegments());
-    xmlNode->SetAttribute("lineWidth", GetLineWidth());
+    xmlInfo->SetAttribute("materialFilepath", m_material->GetFilepath());
+    xmlInfo->SetAttribute("radius", GetRadius());
+    xmlInfo->SetAttribute("segments", GetSegments());
 }
 #endif

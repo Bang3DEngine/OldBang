@@ -28,9 +28,9 @@ bool EditorGameObject::IsEditorGameObject() const
     return true;
 }
 
-void EditorGameObject::GetXMLNode(XMLNode *xmlNode) const
+void EditorGameObject::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    xmlNode = nullptr;
+    xmlInfo = nullptr;
     // Won't be written (can't be saved)
     // So we need this method to be "empty"
 }

@@ -4,25 +4,13 @@ InspectorImageFileWidget::
 InspectorImageFileWidget(const FileImage &fileImage) :
     InspectorWidget()
 {
+    xmlInfo->SetAttribute("FileName", fileImage.GetName() + "." + fileImage.GetExtension());
+    xmlInfo->SetAttribute("Path", fileImage.GetPath());
+    xmlInfo->SetAttribute("Dimensions", std::to_string(fileImage.GetWidth()) + "x" +
+                                     std::to_string(fileImage.GetHeight()));
+    xmlInfo->SetAttribute("Mode", fileImage.GetNumComponents() == 3 ? "RGB" : "RGBA");
 
-    m_inspectorInfo.AddSlotInfos(
-    {
-        new InspectorStringSWInfo("File name", true),
-        new InspectorStringSWInfo("Path", true),
-        new InspectorStringSWInfo("Dimensions", true, false),
-        new InspectorStringSWInfo("Mode", true, false)
-    }
-    );
-
-    m_inspectorInfo.GetStringSWSlotInfo("File name")->m_value =
-            fileImage.GetName() + "." + fileImage.GetExtension();
-    m_inspectorInfo.GetStringSWSlotInfo("Path")->m_value = fileImage.GetPath();
-    m_inspectorInfo.GetStringSWSlotInfo("Dimensions")->m_value =
-            std::to_string(fileImage.GetWidth()) + "x" + std::to_string(fileImage.GetHeight());
-    m_inspectorInfo.GetStringSWSlotInfo("Mode")->m_value =
-            fileImage.GetNumComponents() == 3 ? "RGB" : "RGBA";
-
-    this->ConstructFromWidgetInformation(fileImage.GetName(), &m_inspectorInfo);
+    ConstructFromWidgetXMLInfo(fileImage.GetName(), *xmlInfo);
 }
 
 InspectorImageFileWidget::~InspectorImageFileWidget()

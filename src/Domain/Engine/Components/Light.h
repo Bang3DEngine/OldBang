@@ -30,8 +30,8 @@ public:
     virtual ICloneable *Clone() const override;
 
     #ifdef BANG_EDITOR
-    virtual InspectorWidgetInfo* OnInspectorInfoNeeded() override;
-    virtual void OnInspectorInfoChanged(InspectorWidgetInfo *info) override;
+    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
+    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
 
     void SetColor(const Vector3 &color);
@@ -40,8 +40,8 @@ public:
     Vector3 GetColor() const;
     float GetIntensity() const;
 
-    virtual void ReadXMLNode(const XMLNode *xmlNode) override;
-    virtual void GetXMLNode(XMLNode *xmlNode) const override;
+    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
+    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 };
 
 #endif // LIGHT_H

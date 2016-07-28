@@ -2,15 +2,8 @@
 
 BehaviourHolder::BehaviourHolder()
 {
-    #ifdef BANG_EDITOR
-    m_inspectorInfo.AddSlotInfos(
-    {
-        new InspectorFileSWInfo( "Behaviour", "cpp" ),
-        new InspectorButtonSWInfo( "Refresh",
-                    std::bind(&BehaviourHolder::Refresh, this) )
-    }
-    );
-    #endif
+    //    new InspectorButtonSWInfo( "Refresh",
+    //                std::bind(&BehaviourHolder::Refresh, this) )
 }
 
 BehaviourHolder::~BehaviourHolder()
@@ -110,31 +103,30 @@ void BehaviourHolder::Refresh()
     }
 }
 
-void BehaviourHolder::ReadXMLNode(const XMLNode *xmlNode)
+void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLNode(xmlNode);
-    m_sourceFilepath = xmlNode->GetString("sourceFilepath");
+    Component::ReadXMLInfo(xmlInfo);
+    m_sourceFilepath = xmlInfo->GetString("sourceFilepath");
 }
 
-void BehaviourHolder::GetXMLNode(XMLNode *xmlNode) const
+void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Component::GetXMLNode(xmlNode);
-    xmlNode->SetTagName("BehaviourHolder");
+    Component::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("BehaviourHolder");
 
-    xmlNode->SetAttribute("sourceFilepath", m_sourceFilepath);
+    xmlInfo->SetAttribute("sourceFilepath", m_sourceFilepath);
 }
 
 
 #ifdef BANG_EDITOR
-InspectorWidgetInfo* BehaviourHolder::OnInspectorInfoNeeded()
+void BehaviourHolder::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    m_inspectorInfo.GetSlotInfo("Behaviour")->SetString(m_sourceFilepath);
-    return &m_inspectorInfo;
+    FillXMLInfo(xmlInfo);
 }
 
-void BehaviourHolder::OnInspectorInfoChanged(InspectorWidgetInfo *info)
+void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    m_sourceFilepath = info->GetString("Behaviour");
+    ReadXMLInfo(xmlInfo);
     Refresh();
 }
 #endif
