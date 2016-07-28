@@ -1,4 +1,3 @@
-<Texture2D>
-./Assets/Textures/steel.jpg
-Linear
+<Texture2D textureFilepath="./Assets/Textures/steel.jpg"
+           filterMode="Linear">
 </Texture2D>

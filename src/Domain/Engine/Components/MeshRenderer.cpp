@@ -7,11 +7,9 @@ MeshRenderer::MeshRenderer()
     #ifdef BANG_EDITOR
         m_inspectorInfo.AddSlotInfos(
         {
-            new InspectorFileSWInfo("Material",
-                                    Material::GetFileExtensionStatic()),
-            new InspectorFileSWInfo("Mesh", Mesh::GetFileExtensionStatic()),
+            new InspectorFileSWInfo("Mesh", Mesh::GetFileExtensionStatic())
         });
-#endif
+    #endif
 }
 
 void MeshRenderer::CloneInto(ICloneable *clone) const
@@ -104,7 +102,6 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
 InspectorWidgetInfo* MeshRenderer::OnInspectorInfoNeeded()
 {
     Renderer::OnInspectorInfoNeeded();
-
     InspectorSWInfo *meshInfo = m_inspectorInfo.GetSlotInfo("Mesh");
     if (m_mesh)
     {
@@ -130,9 +127,8 @@ InspectorWidgetInfo* MeshRenderer::OnInspectorInfoNeeded()
 void MeshRenderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
     Renderer::OnInspectorInfoChanged(info);
-
-    std::string meshFilepath = info->GetString("Mesh");
-    if (meshFilepath != "")
+    std::string meshFilepath = info->GetFilepath("Mesh");
+    if (meshFilepath != "-")
     {
         SetMesh( AssetsManager::GetAsset<Mesh>(meshFilepath) );
     }
@@ -151,6 +147,6 @@ void MeshRenderer::GetXMLNode(XMLNode *xmlNode) const
     Renderer::GetXMLNode(xmlNode);
     xmlNode->SetTagName("MeshRenderer");
 
-    xmlNode->AddAttribute("meshAssetFilepath", m_mesh ? m_mesh->GetFilepath() : "");
-    xmlNode->AddAttribute("materialAssetFilepath", m_material ? m_material->GetFilepath() : "");
+    xmlNode->SetAttribute("meshAssetFilepath", m_mesh ? m_mesh->GetFilepath() : "");
+    xmlNode->SetAttribute("materialAssetFilepath", m_material ? m_material->GetFilepath() : "");
 }

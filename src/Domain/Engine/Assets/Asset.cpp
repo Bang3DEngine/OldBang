@@ -28,5 +28,5 @@ void Asset::ReadXMLNode(const XMLNode *xmlNode)
 void Asset::GetXMLNode(XMLNode *xmlNode) const
 {
     xmlNode->SetTagName("Asset");
-    xmlNode->AddAttribute("filepath", m_filepath);
+    xmlNode->SetAttribute("filepath", m_filepath);
 }

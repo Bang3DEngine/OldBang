@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <fstream>
 
 #include "XMLNode.h"
 
@@ -42,6 +43,8 @@ public:
 
     static std::string GetTagName(const std::string &tag,
                                   int *tagNameBegin = nullptr, int *tagNameEnd = nullptr);
+
+    static XMLNode* FromFile(const std::string &filepath);
     static XMLNode* FromXML(const std::string &xml);
 };
 

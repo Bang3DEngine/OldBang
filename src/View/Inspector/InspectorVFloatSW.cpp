@@ -1,8 +1,10 @@
 #include "InspectorVFloatSW.h"
 
 InspectorVFloatSW::InspectorVFloatSW(const std::string &labelString,
-                                           std::vector<float> initialValues,
-                                           InspectorWidget *parent) : InspectorSW(labelString, parent)
+                                     std::vector<float> initialValues,
+                                     InspectorWidget *parent,
+                                     InspectorWidgetInfo *relatedInfo) :
+    InspectorSW(labelString, parent, relatedInfo)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0);

@@ -185,18 +185,14 @@ void MenuBar::OnCreateFromPrefab() const
 
     FileDialog fd("Create from prefab...", Prefab::GetFileExtensionStatic());
     std::string filename = fd.GetOpenFilename();
-    if (filename == "") return;
 
-    std::fstream f;
-    f.open(filename);
-    if (f.is_open())
+    WindowMain *w = WindowMain::GetInstance();
+
+    Prefab *p = new Prefab();
+
+    XMLNode *xmlNode = XMLParser::FromFile(filename);
+    if (xmlNode)
     {
-        WindowMain *w = WindowMain::GetInstance();
-
-        Prefab *p = new Prefab();
-        std::string contents((std::istreambuf_iterator<char>(f)),
-                              std::istreambuf_iterator<char>());
-        XMLNode *xmlNode = XMLParser::FromXML(contents);
         p->ReadXMLNode(xmlNode);
         delete xmlNode;
 
@@ -221,8 +217,7 @@ void MenuBar::OnCreateFromPrefab() const
     }
     else
     {
-        Logger_Error("Prefab file '" << filename <<
-                     "' is corrupt or can't be read.");
+        Logger_Error("Prefab file '" << filename << "' can't be read.");
     }
 }
 

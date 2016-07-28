@@ -1,6 +1,5 @@
-<Material>
-    ./Assets/Engine/Shaders/PR_DrawScreenPlane.vert
-    ./Assets/Engine/Shaders/PR_AfterLighting.frag
-    0
-    1.0 1.0 1.0 1.0
+<Material vertexShader="./Assets/Engine/Shaders/PR_DrawScreenPlane.vert"
+          fragmentShader="./Assets/Engine/Shaders/PR_AfterLighting.frag"
+          textureCount="0"
+          diffuseColor="Vector4(1,1,1,1)">
 </Material>

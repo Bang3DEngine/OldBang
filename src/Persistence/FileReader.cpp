@@ -260,6 +260,11 @@ bool FileReader::ReadOBJ(const std::string& filepath,
 
 void FileReader::ReadScene(const std::string &filepath, Scene* scene)
 {
+    XMLNode *xmlNode = XMLParser::FromFile(filepath);
+    if (xmlNode)
+    {
+        scene->ReadXMLNode(xmlNode);
+    }
     /*
     std::ifstream f (filepath);
     if ( !f.is_open() )
@@ -310,24 +315,13 @@ std::string FileReader::PeekNextLine(std::istream &f)
     {
         beginningOfLine = f.tellg();
         std::getline(f, line);
-        TrimStringLeft(&line);
+        StringUtils::TrimLeft(&line);
     }
     while ( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') &&
            f.peek() != EOF); //Skip all empty/comment lines
 
     f.seekg(beginningOfLine);
     return line;
-}
-
-
-void FileReader::TrimStringLeft(std::string *str)
-{
-    unsigned int i = 0;
-    for (; i < str->length(); ++i)
-    {
-        if (str->at(i) != ' ' && str->at(i) != '\t') break;
-    }
-    *str = str->substr(i, str->length() - i);
 }
 
 void FileReader::GetImageFormat(const std::string &filepath, int *width,
@@ -342,7 +336,7 @@ std::string FileReader::ReadNextLine(std::istream &f)
     do
     {
         std::getline(f, line);
-        TrimStringLeft(&line);
+        StringUtils::TrimLeft(&line);
     }
     while ( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') &&
            f.peek() != EOF); //Skip all empty/comment lines
@@ -357,7 +351,7 @@ bool FileReader::ReadNextLine(std::istream &f, std::string *line)
     do
     {
         std::getline(f, *line);
-        TrimStringLeft(line);
+        StringUtils::TrimLeft(line);
     }
     while ( (line->empty() || line->at(0) == '#' || line->at(0) == '\n') &&
            f.peek() != EOF); //Skip all empty/comment lines
@@ -426,7 +420,7 @@ std::string FileReader::ReadString(std::istream &f)
 {
     std::string str;
     std::getline(f, str);
-    TrimStringLeft(&str);
+    StringUtils::TrimLeft(&str);
     return str;
 }
 

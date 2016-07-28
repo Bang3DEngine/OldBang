@@ -30,8 +30,6 @@ private:
     static std::map<std::string, void*> idToPointers;
     static void *lastIstreamDir;
 
-    static void TrimStringLeft(std::string *str);
-
 public:
 
     //IMAGE STUFF

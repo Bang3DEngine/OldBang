@@ -220,6 +220,10 @@ public:
     {
         return static_cast<InspectorStringSWInfo*>(slotInfos[slotName])->m_value;
     }
+    std::string GetFilepath(const std::string &slotName) const
+    {
+        return static_cast<InspectorFileSWInfo*>(slotInfos[slotName])->m_filepath;
+    }
     InspectorVFloatSWInfo* GetVFloatSWSlotInfo(const std::string &slotName) const
     {
         return static_cast<InspectorVFloatSWInfo*>(slotInfos[slotName]);

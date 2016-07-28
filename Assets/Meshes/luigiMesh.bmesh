@@ -1,3 +1,2 @@
-<Mesh>
-    ./Assets/Meshes/Luigi.obj
+<Mesh meshFilepath="Assets/Meshes/Luigi.obj">
 </Mesh>

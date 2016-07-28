@@ -206,11 +206,11 @@ void Camera::GetXMLNode(XMLNode *xmlNode) const
     Component::GetXMLNode(xmlNode);
     xmlNode->SetTagName("Camera");
 
-    xmlNode->AddAttribute("id", this);
-    xmlNode->AddAttribute("fovDegrees", m_fovDegrees);
-    xmlNode->AddAttribute("zNear", m_zNear);
-    xmlNode->AddAttribute("zFar", m_zFar);
-    xmlNode->AddAttribute("projMode", (m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic"));
-    xmlNode->AddAttribute("orthoRect", m_orthoRect);
+    xmlNode->SetAttribute("id", this);
+    xmlNode->SetAttribute("fovDegrees", m_fovDegrees);
+    xmlNode->SetAttribute("zNear", m_zNear);
+    xmlNode->SetAttribute("zFar", m_zFar);
+    xmlNode->SetAttribute("projMode", (m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic"));
+    xmlNode->SetAttribute("orthoRect", m_orthoRect);
 }
 #endif

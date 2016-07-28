@@ -433,8 +433,8 @@ void Transform::GetXMLNode(XMLNode *xmlNode) const
     Component::GetXMLNode(xmlNode);
     xmlNode->SetTagName("Transform");
 
-    xmlNode->AddAttribute("localPosition", GetLocalPosition());
-    xmlNode->AddAttribute("localRotation", GetLocalRotation());
-    xmlNode->AddAttribute("localScale",    GetLocalScale());
+    xmlNode->SetAttribute("localPosition", GetLocalPosition());
+    xmlNode->SetAttribute("localRotation", GetLocalRotation());
+    xmlNode->SetAttribute("localScale",    GetLocalScale());
 }
 #endif

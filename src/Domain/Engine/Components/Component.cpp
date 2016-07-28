@@ -46,6 +46,6 @@ void Component::ReadXMLNode(const XMLNode *xmlNode)
 void Component::GetXMLNode(XMLNode *xmlNode) const
 {
     xmlNode->SetTagName("Component");
-    xmlNode->AddAttribute("id", this);
-    xmlNode->AddAttribute("enabled", m_enabled);
+    xmlNode->SetAttribute("id", this);
+    xmlNode->SetAttribute("enabled", m_enabled);
 }

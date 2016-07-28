@@ -83,5 +83,5 @@ void PointLight::GetXMLNode(XMLNode *xmlNode) const
     Light::GetXMLNode(xmlNode);
     xmlNode->SetTagName("PointLight");
 
-    xmlNode->AddAttribute("range", m_range);
+    xmlNode->SetAttribute("range", m_range);
 }

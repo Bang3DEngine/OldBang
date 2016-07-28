@@ -1,0 +1,26 @@
+<Scene enabled="true"
+       id="true"
+       name=""
+      >
+  <Transform enabled="true"
+             id="true"
+             localPosition="Vector3(0, 0, 0)"
+             localRotation="Quaternion(1, 0, 0, 0)"
+             localScale="Vector3(1, 1, 1)"
+            >
+  <Transform/>
+  <GameObject enabled="true"
+              id="true"
+              name="Luigi"
+             >
+    <Transform enabled="true"
+               id="true"
+               localPosition="Vector3(0, 0, 0)"
+               localRotation="Quaternion(1, 0, 0, 0)"
+               localScale="Vector3(1, 1, 1)"
+              >
+    <Transform/>
+  <GameObject/>
+  <>
+  </>
+<Scene/>

@@ -1,6 +1,5 @@
-<Material>
-    ./Assets/Engine/Shaders/D2G_Line.vert
-    ./Assets/Engine/Shaders/D2G_Line.frag
-    -
-    0.0 0.0 0.0 1.0
+<Material vertexShader="./Assets/Engine/Shaders/D2G_Line.vert"
+          fragmentShader="./Assets/Engine/Shaders/D2G_Line.frag"
+          textureCount="0"
+          diffuseColor="Vector4(0,0,0,1)">
 </Material>

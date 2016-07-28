@@ -1,4 +1,3 @@
-<Texture2D>
-./Assets/Textures/textureCarpet.jpg
-Nearest
+<Texture2D textureFilepath="./Assets/Textures/textureCarpet.jpg"
+           filterMode="Linear">
 </Texture2D>

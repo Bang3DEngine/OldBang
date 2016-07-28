@@ -10,6 +10,7 @@
 #include "Rect.h"
 #include "Vector3.h"
 #include "Quaternion.h"
+#include "StringUtils.h"
 
 class XMLNode
 {
@@ -23,27 +24,27 @@ public:
     virtual ~XMLNode();
 
     void AddChild(XMLNode *node);
-    void AddGenericAttribute(const std::string &attributeName,
+    void SetGenericAttribute(const std::string &attributeName,
                              const std::string &attributeValue);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       void *value);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       bool value);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       int value);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       float value);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       const std::string &value);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       const glm::vec2 &value);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       const Vector3 &value);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       const glm::vec4 &value);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       const Quaternion &value);
-    void AddAttribute(const std::string &attributeName,
+    void SetAttribute(const std::string &attributeName,
                       const Rect &value);
 
 

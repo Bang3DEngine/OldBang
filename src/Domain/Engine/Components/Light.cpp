@@ -81,9 +81,9 @@ void Light::GetXMLNode(XMLNode *xmlNode) const
     Component::GetXMLNode(xmlNode);
     xmlNode->SetTagName("Light");
 
-    xmlNode->AddAttribute("intensity", GetIntensity());
-    xmlNode->AddAttribute("color", GetColor());
-    xmlNode->AddAttribute("lightMaterial", m_lightMaterial->GetFilepath());
+    xmlNode->SetAttribute("intensity", GetIntensity());
+    xmlNode->SetAttribute("color", GetColor());
+    xmlNode->SetAttribute("lightMaterial", m_lightMaterial->GetFilepath());
 }
 
 #ifdef BANG_EDITOR

@@ -1,9 +1,10 @@
 #include "InspectorEnumSW.h"
 
 InspectorEnumSW::InspectorEnumSW(const std::string &labelString,
-                                         const std::vector<std::string> &enumValues,
-                                         const int selectedValue,
-                                         InspectorWidget *parent) : InspectorSW(labelString, parent)
+                                 const std::vector<std::string> &enumValues,
+                                 const int selectedValue,
+                                 InspectorWidget *parent,
+                                 InspectorWidgetInfo *relatedInfo) : InspectorSW(labelString, parent, relatedInfo)
 {
     QHBoxLayout *layout = new QHBoxLayout();
     layout->setSpacing(0); layout->setContentsMargins(0,0,0,0);

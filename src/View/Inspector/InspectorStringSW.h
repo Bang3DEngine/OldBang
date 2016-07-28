@@ -21,6 +21,7 @@ public:
     InspectorStringSW(const std::string &labelString,
                       const std::string &initialValue,
                       InspectorWidget *m_parent,
+                      InspectorWidgetInfo *relatedInfo,
                       bool readonly = false,
                       bool inlined = false);
 

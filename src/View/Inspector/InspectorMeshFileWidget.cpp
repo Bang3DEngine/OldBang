@@ -9,7 +9,6 @@ InspectorMeshFileWidget::InspectorMeshFileWidget(const FileMesh &fileMesh) :
         new InspectorStringSWInfo("Path", true),
         new InspectorStringSWInfo("Mode", true),
         new InspectorStringSWInfo("Faces", true)
-
     }
     );
 

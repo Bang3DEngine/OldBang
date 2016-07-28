@@ -1,6 +1,5 @@
-<Material>
-    ./Assets/Engine/Shaders/D2G_Default.vert
-    ./Assets/Engine/Shaders/D2G_Default.frag
-    0
-    1.0 1.0 1.0 1.0
+<Material vertexShader="./Assets/Engine/Shaders/D2G_Default.vert"
+          fragmentShader="./Assets/Engine/Shaders/D2G_Default.frag"
+          textureCount="0"
+          diffuseColor="Vector4(1,1,1,1)">
 </Material>

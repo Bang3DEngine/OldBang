@@ -16,9 +16,10 @@ private:
 
 public:
     InspectorEnumSW(const std::string &labelString,
-                                const std::vector<std::string> &initialValue,
-                                const int selectedValue,
-                                InspectorWidget *m_parent);
+                    const std::vector<std::string> &initialValue,
+                    const int selectedValue,
+                    InspectorWidget *m_parent,
+                    InspectorWidgetInfo *relatedInfo);
 
     virtual void SetValue(int index);
     virtual int GetValue();

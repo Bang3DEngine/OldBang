@@ -91,5 +91,5 @@ void Texture2D::GetXMLNode(XMLNode *xmlNode) const
     {
         fmName = "Linear";
     }
-    xmlNode->AddAttribute("filterMode", fmName);
+    xmlNode->SetAttribute("filterMode", fmName);
 }

@@ -121,7 +121,7 @@ void BehaviourHolder::GetXMLNode(XMLNode *xmlNode) const
     Component::GetXMLNode(xmlNode);
     xmlNode->SetTagName("BehaviourHolder");
 
-    xmlNode->AddAttribute("sourceFilepath", m_sourceFilepath);
+    xmlNode->SetAttribute("sourceFilepath", m_sourceFilepath);
 }
 
 

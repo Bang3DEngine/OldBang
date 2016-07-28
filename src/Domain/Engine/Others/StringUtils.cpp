@@ -1,18 +1,58 @@
 #include "StringUtils.h"
 
+float StringUtils::ToFloat(const std::string &str)
+{
+    std::string number = str;
+    StringUtils::Trim(&number);
+    std::istringstream iss(number);
+    float v;
+    iss >> v;
+    return v;
+}
+
+void StringUtils::TrimLeft(std::string *str)
+{
+    unsigned int i = 0;
+    for (; i < str->length(); ++i)
+    {
+        if (str->at(i) != ' ' && str->at(i) != '\t') break;
+    }
+    *str = str->substr(i, str->length() - i);
+}
+
+void StringUtils::TrimRight(std::string *str)
+{
+    unsigned int i = str->length()-1;
+    for (; i >= 0; --i)
+    {
+        if (str->at(i) != ' ' && str->at(i) != '\t') break;
+    }
+    *str = str->substr(0, i-1);
+}
+
+void StringUtils::Trim(std::string *str)
+{
+    StringUtils::TrimLeft(str);
+    StringUtils::TrimRight(str);
+}
+
 
 std::vector<std::string> StringUtils::Split(const std::string &content, char splitter)
 {
     std::vector<std::string> result;
+    bool lastParticle = false;
     int lastIndexFound = 0;
-    while (lastIndexFound != -1)
+    while (!lastParticle)
     {
-        int indexFound = content.find_first_of(splitter, lastIndexFound - indexFound + 1);
+        int indexFound = content.find_first_of(splitter, lastIndexFound);
         if (indexFound == std::string::npos)
         {
-            break;
+            lastParticle = true;
+            indexFound = content.length();
         }
-        lastIndexFound = indexFound;
+        std::string particle = content.substr(lastIndexFound, indexFound - lastIndexFound);
+        result.push_back(particle);
+        lastIndexFound = indexFound + 1;
     }
     return result;
 }

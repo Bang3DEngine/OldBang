@@ -99,9 +99,9 @@ void SingleLineRenderer::GetXMLNode(XMLNode *xmlNode) const
     LineRenderer::GetXMLNode(xmlNode);
     xmlNode->SetTagName("SingleLineRenderer");
 
-    xmlNode->AddAttribute("id", this);
-    xmlNode->AddAttribute("materialFilepath", m_material->GetFilepath());
-    xmlNode->AddAttribute("origin", GetOrigin());
-    xmlNode->AddAttribute("destiny", GetDestiny());
+    xmlNode->SetAttribute("id", this);
+    xmlNode->SetAttribute("materialFilepath", m_material->GetFilepath());
+    xmlNode->SetAttribute("origin", GetOrigin());
+    xmlNode->SetAttribute("destiny", GetDestiny());
 }
 

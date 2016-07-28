@@ -5,9 +5,7 @@ LineRenderer::LineRenderer()
 #ifdef BANG_EDITOR
     m_inspectorInfo.AddSlotInfos(
     {
-        new InspectorFileSWInfo("Material",
-                    Material::GetFileExtensionStatic()),
-        new InspectorVFloatSWInfo("Line Width", 1)
+       new InspectorVFloatSWInfo("Line Width", 1)
     });
 #endif
 

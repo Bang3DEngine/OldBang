@@ -18,7 +18,10 @@ private:
     bool _editing = false;
 
 public:
-    InspectorFloatSW(const std::string &labelString, float initialValue, InspectorWidget *m_parent);
+    InspectorFloatSW(const std::string &labelString,
+                     float initialValue,
+                     InspectorWidget *m_parent,
+                     InspectorWidgetInfo *relatedInfo);
 
     virtual void SetValue(float f);
     virtual float GetValue();

@@ -1,3 +1,2 @@
-<Mesh>
-    Assets/Engine/Meshes/Plane.obj
+<Mesh meshFilepath="Assets/Engine/Meshes/Plane.obj">
 </Mesh>

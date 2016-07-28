@@ -38,7 +38,7 @@ void Material::ReadXMLNode(const XMLNode *xmlNode)
     Asset::ReadXMLNode(xmlNode);
 
     std::string vshaderFilepath = xmlNode->GetString("vertexShader");
-    std::string fshaderFilepath = xmlNode->GetString("fragmentShader");;
+    std::string fshaderFilepath = xmlNode->GetString("fragmentShader");
     SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
 
     int numTextures = xmlNode->GetInt("textureCount");
@@ -72,11 +72,11 @@ void Material::GetXMLNode(XMLNode *xmlNode) const
         }
     }
 
-    xmlNode->AddAttribute("vertexShader", vsFile);
-    xmlNode->AddAttribute("fragmentShader", fsFile);
-    xmlNode->AddAttribute("textureCount", 1);
-    xmlNode->AddAttribute("texture1", m_texture->GetFilepath());
-    xmlNode->AddAttribute("diffuseColor", m_diffuseColor);
+    xmlNode->SetAttribute("vertexShader", vsFile);
+    xmlNode->SetAttribute("fragmentShader", fsFile);
+    xmlNode->SetAttribute("textureCount", 1);
+    xmlNode->SetAttribute("texture1", m_texture->GetFilepath());
+    xmlNode->SetAttribute("diffuseColor", m_diffuseColor);
 }
 
 void Material::SetShaderProgram(ShaderProgram *program)

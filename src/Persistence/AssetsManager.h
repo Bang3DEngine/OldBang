@@ -39,6 +39,7 @@ private:
     static T* ReadAsset(const std::string &fileContents)
     {
         Asset *a = new T();
+        Logger_Log("Reading asset: \n" << fileContents);
         XMLNode *xmlNode = XMLParser::FromXML(fileContents);
         a->ReadXMLNode(xmlNode);
         delete xmlNode;
@@ -51,27 +52,15 @@ private:
     template <class T>
     static T* ReadAssetFile(const std::string &filepath)
     {
-        if (filepath != "-")
+        XMLNode *xmlNode = XMLParser::FromFile(filepath);
+        Asset *a = ReadAsset<T>(xmlNode->ToString());
+        delete xmlNode;
+        if (a)
         {
-            std::ifstream f (filepath);
-            if ( !f.is_open() )
-            {
-                Logger_Error("Could not open the file '" << filepath <<
-                             "' to load this asset.");
-                return nullptr;
-            }
-
-            std::string contents((std::istreambuf_iterator<char>(f)),
-                                  std::istreambuf_iterator<char>());
-            Asset *a = ReadAsset<T>(contents);
-            if (a )
-            {
-                AssetsManager::SaveAsset(filepath, a);
-                a->m_filepath = filepath;
-                return dynamic_cast<T*>(a);
-            }
+            AssetsManager::SaveAsset(filepath, a);
+            a->m_filepath = filepath;
+            return static_cast<T*>(a);
         }
-
         return nullptr;
     }
 
@@ -96,6 +85,7 @@ public:
     static T* GetAsset(const std::string &filepath)
     {
         Asset *a = nullptr;
+        Logger_Log("Getting asset: " << filepath);
         if (filepath != "-")
         {
             if (!ExistsAssetInCache(filepath))
@@ -110,7 +100,7 @@ public:
             }
         }
 
-        return !a ? nullptr : dynamic_cast<T*>(a);
+        return a ? static_cast<T*>(a) : nullptr;
     }
 
     /** Tries to retrieve an Asset from the AssetsManager cache.

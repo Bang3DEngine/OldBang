@@ -1,8 +1,7 @@
-<Material>
-    ./Assets/Engine/Shaders/D2G_Default.vert
-    ./Assets/Engine/Shaders/D2G_Default.frag
-    1
-    ./Assets/Textures/luigiTexture.btex2d
-    0.0 0.0 0.0 0.0
+<Material vertexShader="./Assets/Engine/Shaders/D2G_Default.vert"
+          fragmentShader="./Assets/Engine/Shaders/D2G_Default.frag"
+          textureCount="1"
+          texture1="./Assets/Textures/luigiTexture.btex2d"
+          diffuseColor="Vector4(0,0,0,0)">
 </Material>
 

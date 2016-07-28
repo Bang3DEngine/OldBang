@@ -394,9 +394,9 @@ void GameObject::ReadXMLNode(const XMLNode *xmlNode)
 void GameObject::GetXMLNode(XMLNode *xmlNode) const
 {
     xmlNode->SetTagName("GameObject");
-    xmlNode->AddAttribute("id", this);
-    xmlNode->AddAttribute("enabled", m_enabled);
-    xmlNode->AddAttribute("name", m_name);
+    xmlNode->SetAttribute("id", this);
+    xmlNode->SetAttribute("enabled", m_enabled);
+    xmlNode->SetAttribute("name", m_name);
 
     for (Component *c : m_comps)
     {

@@ -68,26 +68,26 @@ void InspectorWidget::ConstructFromWidgetInformation(
 
         if ( (siv = dynamic_cast<InspectorVFloatSWInfo*>(si)) )
         {
-            ws = new InspectorVFloatSW(siv->m_label, siv->m_value, this);
+            ws = new InspectorVFloatSW(siv->m_label, siv->m_value, info, this);
         }
         else if ( (sie = dynamic_cast<InspectorEnumSWInfo*>(si)) )
         {
             ws = new InspectorEnumSW(sie->m_label, sie->m_enumNames,
-                                     sie->m_selectedValueIndex, this);
+                                     sie->m_selectedValueIndex, info, this);
         }
         else if ( (sif = dynamic_cast<InspectorFileSWInfo*>(si)) )
         {
             ws = new InspectorFileSW(sif->m_label, sif->m_filepath,
-                                     sif->m_fileExtension, this);
+                                     sif->m_fileExtension, info, this);
         }
         else if ( (sis = dynamic_cast<InspectorStringSWInfo*>(si)) )
         {
-            ws = new InspectorStringSW(sis->m_label, sis->m_value, this,
+            ws = new InspectorStringSW(sis->m_label, sis->m_value, this, info,
                                        sis->m_readonly, sis->m_inlined);
         }
         else if ( (sib = dynamic_cast<InspectorButtonSWInfo*>(si)) )
         {
-            ws = new InspectorButtonSW(sib->m_label, this,
+            ws = new InspectorButtonSW(sib->m_label, info, this,
                                        sib->m_onClickFunction);
         }
 

@@ -7,6 +7,13 @@
 
 Renderer::Renderer()
 {
+    #ifdef BANG_EDITOR
+        m_inspectorInfo.AddSlotInfos(
+        {
+            new InspectorFileSWInfo("Material",
+                                    Material::GetFileExtensionStatic())
+        });
+    #endif
 }
 
 void Renderer::CloneInto(ICloneable *clone) const
@@ -239,12 +246,11 @@ void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std:
     ActivateGLStatesBeforeRenderingForSelection = f;
 }
 
+#ifdef BANG_EDITOR
 InspectorWidgetInfo *Renderer::OnInspectorInfoNeeded()
 {
     Component::OnInspectorInfoNeeded();
-
     InspectorSWInfo *matInfo  = m_inspectorInfo.GetSlotInfo("Material");
-
     if (m_material)
     {
         if (m_material->GetFilepath() != "")
@@ -269,13 +275,15 @@ InspectorWidgetInfo *Renderer::OnInspectorInfoNeeded()
 void Renderer::OnInspectorInfoChanged(InspectorWidgetInfo *info)
 {
     Component::OnInspectorInfoChanged(info);
-    std::string materialFilepath = info->GetString("Material");
-    if (materialFilepath != "")
+    std::string materialFilepath = info->GetFilepath("Material");
+    Logger_Log("Renderer::OnInspectorInfoChanged");
+    Logger_Log("materialFilepath: *" << materialFilepath << "*");
+    if (materialFilepath != "-")
     {
         SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
     }
-    else { }
 }
+#endif
 
 void Renderer::ReadXMLNode(const XMLNode *xmlNode)
 {
@@ -288,5 +296,5 @@ void Renderer::GetXMLNode(XMLNode *xmlNode) const
     Component::GetXMLNode(xmlNode);
     xmlNode->SetTagName("Renderer");
 
-    xmlNode->AddAttribute("lineWidth", GetLineWidth());
+    xmlNode->SetAttribute("lineWidth", GetLineWidth());
 }

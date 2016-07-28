@@ -1,3 +1,2 @@
-<Mesh>
-    Assets/Meshes/Boy.obj
+<Mesh meshFilepath="Assets/Meshes/Boy.obj">
 </Mesh>

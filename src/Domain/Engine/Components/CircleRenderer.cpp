@@ -166,10 +166,10 @@ void CircleRenderer::GetXMLNode(XMLNode *xmlNode) const
     LineRenderer::GetXMLNode(xmlNode);
     xmlNode->SetTagName("CircleRenderer");
 
-    xmlNode->AddAttribute("id", this);
-    xmlNode->AddAttribute("materialFilepath", m_material->GetFilepath());
-    xmlNode->AddAttribute("radius", GetRadius());
-    xmlNode->AddAttribute("segments", GetSegments());
-    xmlNode->AddAttribute("lineWidth", GetLineWidth());
+    xmlNode->SetAttribute("id", this);
+    xmlNode->SetAttribute("materialFilepath", m_material->GetFilepath());
+    xmlNode->SetAttribute("radius", GetRadius());
+    xmlNode->SetAttribute("segments", GetSegments());
+    xmlNode->SetAttribute("lineWidth", GetLineWidth());
 }
 #endif

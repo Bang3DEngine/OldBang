@@ -3,9 +3,10 @@
 InspectorStringSW::InspectorStringSW(const std::string &labelString,
                                      const std::string &initialValue,
                                      InspectorWidget *parent,
+                                     InspectorWidgetInfo *relatedInfo,
                                      bool readonly,
                                      bool inlined) :
-    InspectorSW(labelString, parent)
+    InspectorSW(labelString, parent, relatedInfo)
 {
 
     QLayout *layout = nullptr;

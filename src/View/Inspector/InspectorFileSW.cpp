@@ -3,8 +3,9 @@
 InspectorFileSW::InspectorFileSW(const std::string &labelString,
                                  const std::string &assetPath,
                                  const std::string &fileExtension,
-                                 InspectorWidget *parent) :
-    InspectorSW(labelString, parent)
+                                 InspectorWidget *parent,
+                                 InspectorWidgetInfo *relatedInfo) :
+    InspectorSW(labelString, parent, relatedInfo)
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setSpacing(0);
@@ -26,10 +27,10 @@ InspectorFileSW::InspectorFileSW(const std::string &labelString,
     connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
     hLayout->addWidget(browseButton);
 
-    this->m_fileExtension = fileExtension;
-    this->setContentsMargins(0,0,0,0);
-    this->show();
-    this->SetValue(assetPath);
+    m_fileExtension = fileExtension;
+    setContentsMargins(0,0,0,0);
+    show();
+    SetValue(assetPath);
 }
 
 void InspectorFileSW::Browse()
@@ -38,16 +39,17 @@ void InspectorFileSW::Browse()
     std::string selectedFile = fd.GetOpenFilename();
     if (selectedFile != "")
     {
-        this->SetValue( selectedFile );
-        this->m_parent->_OnSlotValueChanged();
+        SetValue( selectedFile );
+        m_parent->_OnSlotValueChanged();
     }
 }
 
 void InspectorFileSW::SetValue(const std::string &assetPath)
 {
-    if (this->m_assetPath != assetPath)
+    if (m_assetPath != assetPath)
     {
-        this->m_assetPath = assetPath;
+        Logger_Log("InspectorFileSW::SetValue " << assetPath);
+        m_assetPath = assetPath;
         m_filepathLineEdit->setText(QString::fromStdString(assetPath));
     }
 }

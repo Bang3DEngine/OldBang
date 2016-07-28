@@ -15,7 +15,8 @@ private:
 public:
     InspectorButtonSW(const std::string &m_label,
                       InspectorWidget *m_parent,
-                      std::function<void()> m_onClickFunction);
+                      std::function<void()> m_onClickFunction,
+                      InspectorWidgetInfo *relatedInfo);
 
     QSize sizeHint() const;
 

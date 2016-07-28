@@ -151,6 +151,22 @@ void XMLParser::GetNextTag(const std::string &xml,
     }
 }
 
+XMLNode *XMLParser::FromFile(const std::string &filepath)
+{
+    if (filepath == "") return nullptr;
+
+    std::fstream f;
+    f.open(filepath);
+    if (f.is_open())
+    {
+        std::string contents((std::istreambuf_iterator<char>(f)),
+                              std::istreambuf_iterator<char>());
+        XMLNode *xmlNode = XMLParser::FromXML(contents);
+        return xmlNode;
+    }
+    return nullptr;
+}
+
 XMLNode* XMLParser::FromXML(const std::string &xml)
 {
     XMLNode* root = new XMLNode();
@@ -177,7 +193,6 @@ XMLNode* XMLParser::FromXML(const std::string &xml)
     int attrEnd = tagNameEnd;
     while (attrEnd != -1)
     {
-        //Logger_Log("attrEnd: " << attrEnd);
         std::pair<std::string, std::string> attr;
         XMLParser::GetFirstAttribute(tag, attrEnd + 1, &attr, &attrEnd);
         if(attrEnd == -1)
@@ -185,7 +200,7 @@ XMLNode* XMLParser::FromXML(const std::string &xml)
             break;
         }
 
-        root->AddGenericAttribute(attr.first, attr.second);
+        root->SetGenericAttribute(attr.first, attr.second);
     }
 
     //Read children

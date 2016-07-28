@@ -65,16 +65,16 @@ int main(int argc, char *argv[])
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
 
+    /*
     GameObject *go = new GameObject("test1");
     go->AddComponent<Camera>();
-
     GameObject *go2 = new GameObject("test2");
     go2->SetParent(go);
     go2->AddComponent<MeshRenderer>();
-
     XMLNode *xmlNode = new XMLNode();
     go->GetXMLNode(xmlNode);
     std::cerr << xmlNode->ToString() << std::endl;
+    */
 
     #ifdef BANG_EDITOR
 
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     //
 
     Scene *scene = new EditorScene();
-    std::string filename = "./Assets/Scenes/test2.bscene";
+    std::string filename = "./Assets/Scenes/test.bscene";
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
@@ -101,6 +101,7 @@ int main(int argc, char *argv[])
         Canvas::GetInstance()->SetCurrentScene(scene);
         Persistence::SetCurrentSceneFilepath(filename);
     }
+
 
     /* TEST STUFF
     GameObject *go1 = new GameObject();
