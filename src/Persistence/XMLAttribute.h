@@ -2,6 +2,7 @@
 #define XMLATTRIBUTE_H
 
 #include <string>
+#include <vector>
 
 class XMLAttribute
 {
@@ -21,7 +22,9 @@ public:
         File
     };
 
-    static const std::string TypeNames[11];
+    static const std::vector< std::string > TypeNames;
+
+    static XMLAttribute::Type GetTypeFromString(const std::string &typeString);
 
 private:
     std::string m_name = "";
@@ -37,6 +40,8 @@ public:
     void SetName(const std::string &name);
     void SetValue(const std::string &value);
     void SetType(const XMLAttribute::Type &type);
+
+    std::string ToString() const;
 
     const std::string& GetName() const;
     const std::string& GetValue() const;

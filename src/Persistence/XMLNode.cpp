@@ -68,47 +68,47 @@ void XMLNode::SetAttribute(const std::string &attributeName, float value)
 void XMLNode::SetAttribute(const std::string &attributeName, const glm::vec2 &value)
 {
     std::ostringstream oss;
-    oss << "Vector2(" << value.x << ", " <<
-                         value.y << ")";
+    oss << "(" << value.x << ", " <<
+                  value.y << ")";
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Vector2);
 }
 
 void XMLNode::SetAttribute(const std::string &attributeName, const Vector3 &value)
 {
     std::ostringstream oss;
-    oss << "Vector3(" << value.x << ", " <<
-                         value.y << ", " <<
-                         value.z << ")";
+    oss << "(" << value.x << ", " <<
+                  value.y << ", " <<
+                  value.z << ")";
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Vector3);
 }
 
 void XMLNode::SetAttribute(const std::string &attributeName, const glm::vec4 &value)
 {
     std::ostringstream oss;
-    oss << "Vector4(" << value.x << ", " <<
-                         value.y << ", " <<
-                         value.z << ", " <<
-                         value.w << ")";
+    oss << "(" << value.x << ", " <<
+                  value.y << ", " <<
+                  value.z << ", " <<
+                  value.w << ")";
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Vector4);
 }
 
 void XMLNode::SetAttribute(const std::string &attributeName, const Quaternion &value)
 {
     std::ostringstream oss;
-    oss << "Quaternion(" << value.w << ", " <<
-                            value.x << ", " <<
-                            value.y << ", " <<
-                            value.z << ")";
+    oss << "(" << value.w << ", " <<
+                  value.x << ", " <<
+                  value.y << ", " <<
+                  value.z << ")";
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Quaternion);
 }
 
 void XMLNode::SetAttribute(const std::string &attributeName, const Rect &value)
 {
     std::ostringstream oss;
-    oss << "Rect(" << value.m_minx << ", " <<
-                      value.m_miny << ", " <<
-                      value.m_maxx << ", " <<
-                      value.m_maxy << ")";
+    oss << "(" << value.m_minx << ", " <<
+                  value.m_miny << ", " <<
+                  value.m_maxx << ", " <<
+                  value.m_maxy << ")";
     SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Rect);
 }
 
@@ -248,10 +248,7 @@ std::string XMLNode::ToString(const std::string& indent) const
     for(auto itAttr : m_attributes)
     {
         XMLAttribute attr = itAttr.second;
-        std::string name = attr.GetName();
-        std::string type = attr.GetTypeName();
-        std::string value = attr.GetValue();
-        str += ( " " + name + ":" + type +  "=\"" + value + "\"\n");
+        str += " " + attr.ToString() + "\n";
         for (int i = 0; i < m_tagName.length() + indent.length() + 1; ++i )
         {
             str += " ";
@@ -259,7 +256,7 @@ std::string XMLNode::ToString(const std::string& indent) const
     }
     str += ">\n";
 
-    const std::string newIndent = indent + "  ";
+    const std::string newIndent = indent + "    ";
     for(XMLNode *child : m_children)
     {
         str += child->ToString(newIndent);

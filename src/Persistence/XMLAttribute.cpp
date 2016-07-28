@@ -1,10 +1,22 @@
 #include "XMLAttribute.h"
 
 
-const std::string XMLAttribute::TypeNames[11] =
+const std::vector< std::string >  XMLAttribute::TypeNames =
     {"Bool", "Int", "String", "Float",
      "Vector2", "Vector3", "Vector4",
      "Quaternion", "Rect", "Enum", "File"};
+
+XMLAttribute::Type XMLAttribute::GetTypeFromString(const std::string &typeString)
+{
+    for (int i = 0; i < TypeNames.size(); ++i)
+    {
+        if (typeString == TypeNames[i])
+        {
+            return static_cast<XMLAttribute::Type>(i);
+        }
+    }
+    return XMLAttribute::Type::Bool;
+}
 
 XMLAttribute::XMLAttribute()
 {
@@ -32,6 +44,18 @@ void XMLAttribute::SetValue(const std::string &value)
 void XMLAttribute::SetType(const XMLAttribute::Type &type)
 {
     m_type = type;
+}
+
+std::string XMLAttribute::ToString() const
+{
+    std::string str = "";
+    str += GetName();
+    str += ":";
+    str += GetTypeName();
+    str += "=\"";
+    str += GetValue();
+    str += "\"";
+    return str;
 }
 
 const std::string& XMLAttribute::GetName() const

@@ -25,15 +25,15 @@ private:
                                int *beginPosition,
                                int *endTagPosition);
 
-    static void GetCloseTag(const std::string &xml,
-                            int startPosition,
-                            std::string tagName,
-                            int *beginPosition,
-                            int *endPosition);
+    static void GetCorrespondingCloseTag(const std::string &xml,
+                                         int startPositionAfterOpenTag,
+                                         std::string tagName,
+                                         int *beginPosition,
+                                         int *endPosition);
 
     static void GetFirstAttribute(const std::string &tag,
                                   int startPosition,
-                                  std::pair<std::string, std::string> *attribute,
+                                  XMLAttribute *attribute,
                                   int *attributeEnd);
 
     static bool IsOpenTag(const std::string &tag);
