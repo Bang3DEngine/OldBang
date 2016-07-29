@@ -42,22 +42,32 @@ float StringUtils::ToFloat(const std::string &str)
 
 void StringUtils::TrimLeft(std::string *str)
 {
-    unsigned int i = 0;
+    if(str->length() == 0)
+    {
+        return;
+    }
+
+    int i = 0;
     for (; i < str->length(); ++i)
     {
         if (str->at(i) != ' ' && str->at(i) != '\t') break;
     }
-    *str = str->substr(i, str->length() - i);
+    *str = i == str->length() ? "" : str->substr(i, str->length() - i);
 }
 
 void StringUtils::TrimRight(std::string *str)
 {
-    unsigned int i = str->length()-1;
+    if(str->length() == 0)
+    {
+        return;
+    }
+
+    int i = str->length()-1;
     for (; i >= 0; --i)
     {
         if (str->at(i) != ' ' && str->at(i) != '\t') break;
     }
-    *str = str->substr(0, i-1);
+    *str = i < 0 ? "" : str->substr(0, i+1);
 }
 
 void StringUtils::Trim(std::string *str)
@@ -70,6 +80,11 @@ void StringUtils::Trim(std::string *str)
 std::vector<std::string> StringUtils::Split(const std::string &content, char splitter)
 {
     std::vector<std::string> result;
+    if(content == "")
+    {
+        return result; // Empty
+    }
+
     bool lastParticle = false;
     int lastIndexFound = 0;
     while (!lastParticle)

@@ -65,9 +65,8 @@ int main(int argc, char *argv[])
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
 
-    /*
     GameObject *go = new GameObject("test1");
-    go->AddComponent<Camera>();
+    go->AddComponent<SingleLineRenderer>();
     GameObject *go2 = new GameObject("test2");
     go2->SetParent(go);
     go2->AddComponent<MeshRenderer>();
@@ -75,18 +74,17 @@ int main(int argc, char *argv[])
     go3->SetParent(go2);
     GameObject *go4 = new GameObject("test4");
     go4->SetParent(go3);
-    GameObject *go5 = new GameObject("test5"); // This is failing, must add stack to getclosetag!
+    GameObject *go5 = new GameObject("test5");
     go5->SetParent(go2);
     XMLNode *xmlInfo = new XMLNode();
     go->FillXMLInfo(xmlInfo);
-    std::cerr << xmlInfo->ToString() << std::endl;
+    std::cerr << xmlInfo << std::endl;
     std::cerr << "---------------------------------------" << std::endl;
     XMLNode *xml2 = XMLParser::FromXML(xmlInfo->ToString());
-    std::cerr << xml2->ToString() << std::endl;
+    std::cerr << xml2 << std::endl;
     bool b = (xml2->ToString() == xmlInfo->ToString());
     std::cerr << (b ? "PASS" : "NOPASS") << std::endl;
     exit(0);
-    */
 
     #ifdef BANG_EDITOR
 
@@ -113,25 +111,6 @@ int main(int argc, char *argv[])
         Canvas::GetInstance()->SetCurrentScene(scene);
         Persistence::SetCurrentSceneFilepath(filename);
     }
-
-
-    /* TEST STUFF
-    GameObject *go1 = new GameObject();
-    GameObject *go2 = new GameObject();
-    go2->SetParent(go1);
-    go1->transform->SetPosition(Vector3(5,5,5));
-    go2->transform->SetPosition(Vector3(0,0,0));
-
-    Logger_Log("GO1: ");
-    Logger_Log(go1->transform);
-    Logger_Log(go1->transform->GetPosition());
-    Logger_Log("");
-
-    Logger_Log("GO2: ");
-    Logger_Log(go2->transform);
-    Logger_Log(go2->transform->GetPosition());
-    Logger_Log("");
-    */
 
     #else
 

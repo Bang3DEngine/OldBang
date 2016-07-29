@@ -3,10 +3,17 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
-class XMLAttribute
+#include "IToString.h"
+
+class XMLAttribute : public IToString
 {
 public:
+
+    const static std::string PropertyHidden;
+    const static std::string PropertyReadonly;
+
     enum Type
     {
         Bool = 0,
@@ -18,7 +25,6 @@ public:
         Vector4,
         Quaternion,
         Rect,
-        Enum,
         File
     };
 
@@ -28,26 +34,31 @@ public:
 
 private:
     std::string m_name = "";
-    std::string m_value = "";
     XMLAttribute::Type m_type = XMLAttribute::Type::Bool;
+    std::string m_value = "";
+    std::vector<std::string> m_properties;
 
 public:
     XMLAttribute();
     XMLAttribute(const std::string &name,
                  const std::string &value,
-                 XMLAttribute::Type type);
+                 XMLAttribute::Type type,
+                 const std::vector<std::string> &properties = {});
 
     void SetName(const std::string &name);
-    void SetValue(const std::string &value);
     void SetType(const XMLAttribute::Type &type);
+    void SetValue(const std::string &value);
+    void SetProperty(const std::string &property);
+    bool HasProperty(const std::string &property) const;
+    void RemoveProperty(const std::string &property);
 
-    std::string ToString() const;
+    const std::string ToString() const override;
 
     const std::string& GetName() const;
-    const std::string& GetValue() const;
     const XMLAttribute::Type& GetType() const;
     const std::string& GetTypeName() const;
-
+    const std::string& GetValue() const;
+    const std::vector<std::string>& GetProperties() const;
 };
 
 #endif // XMLATTRIBUTE_H

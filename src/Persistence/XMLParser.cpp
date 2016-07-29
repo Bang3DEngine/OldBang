@@ -49,16 +49,29 @@ void XMLParser::GetFirstAttribute(const std::string &tag,
     int attrValueEnd = tag.find_first_of("\"", attrValueBegin);
     if (attrValueEnd == -1) { return; }
 
+    int attrPropertiesBegin = tag.find_first_of("{", attrValueEnd) + 1;
+    if (attrPropertiesBegin == -1) { return; }
+
+    int attrPropertiesEnd = tag.find_first_of("}", attrPropertiesBegin);
+    if (attrPropertiesEnd == -1) { return; }
+
     std::string name = tag.substr(attrNameBegin, attrNameEnd - attrNameBegin);
     std::string typeString = tag.substr(attrTypeBegin, attrTypeEnd - attrTypeBegin);
     std::string value = tag.substr(attrValueBegin, attrValueEnd - attrValueBegin);
+    std::string propertiesString = tag.substr(attrPropertiesBegin, attrPropertiesEnd - attrPropertiesBegin);
+    std::vector<std::string> properties = StringUtils::Split(propertiesString, ',');
 
-    if (attributeEnd) *attributeEnd = attrValueEnd;
+    if (attributeEnd) *attributeEnd = attrPropertiesEnd + 1;
     if (attribute)
     {
         attribute->SetName(name);
         attribute->SetType(XMLAttribute::GetTypeFromString(typeString));
         attribute->SetValue(value);
+        for (std::string &prop : properties)
+        {
+            StringUtils::Trim(&prop);
+            attribute->SetProperty(prop);
+        }
     }
 }
 
@@ -217,7 +230,7 @@ XMLNode* XMLParser::FromXML(const std::string &xml)
         {
             break;
         }
-        root->SetGenericAttribute(attr.GetName(), attr.GetValue(), attr.GetType());
+        root->SetGenericAttribute(attr.GetName(), attr.GetValue(), attr.GetType(), attr.GetProperties());
     }
 
     //Read children

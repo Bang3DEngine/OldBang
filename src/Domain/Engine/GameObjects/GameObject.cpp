@@ -394,7 +394,7 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("GameObject");
-    xmlInfo->SetPointer("id", this);
+    xmlInfo->SetPointer("id", this, {XMLAttribute::PropertyHidden, XMLAttribute::PropertyReadonly});
     xmlInfo->SetBool("enabled", m_enabled);
     xmlInfo->SetString("name", m_name);
 

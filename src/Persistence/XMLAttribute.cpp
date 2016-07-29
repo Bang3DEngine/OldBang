@@ -1,5 +1,7 @@
 #include "XMLAttribute.h"
 
+const std::string XMLAttribute::PropertyHidden = "Hidden";
+const std::string XMLAttribute::PropertyReadonly = "Readonly";
 
 const std::vector< std::string >  XMLAttribute::TypeNames =
     {"Bool", "Int", "String", "Float",
@@ -25,10 +27,14 @@ XMLAttribute::XMLAttribute()
 
 XMLAttribute::XMLAttribute(const std::string &name,
                            const std::string &value,
-                           XMLAttribute::Type type) :
-    m_name(name), m_value(value), m_type(type)
+                           XMLAttribute::Type type,
+                           const std::vector<std::string> &properties) :
+    m_name(name), m_type(type),  m_value(value)
 {
-
+    for (const std::string &prop : properties)
+    {
+        SetProperty(prop);
+    }
 }
 
 void XMLAttribute::SetName(const std::string &name)
@@ -41,12 +47,49 @@ void XMLAttribute::SetValue(const std::string &value)
     m_value = value;
 }
 
+void XMLAttribute::SetProperty(const std::string &property)
+{
+    for (const std::string& prop : m_properties)
+    {
+        if (prop == property)
+        {
+            return;
+        }
+    }
+
+    m_properties.push_back(property);
+}
+
+bool XMLAttribute::HasProperty(const std::string &property) const
+{
+    for (const std::string &prop : m_properties)
+    {
+        if (prop == property)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void XMLAttribute::RemoveProperty(const std::string &property)
+{
+    for (auto it = m_properties.begin(); it != m_properties.end(); ++it)
+    {
+        if (*it == property)
+        {
+            m_properties.erase(it);
+            return;
+        }
+    }
+}
+
 void XMLAttribute::SetType(const XMLAttribute::Type &type)
 {
     m_type = type;
 }
 
-std::string XMLAttribute::ToString() const
+const std::string XMLAttribute::ToString() const
 {
     std::string str = "";
     str += GetName();
@@ -54,7 +97,20 @@ std::string XMLAttribute::ToString() const
     str += GetTypeName();
     str += "=\"";
     str += GetValue();
-    str += "\"";
+    str += "\"{";
+    bool first = true;
+    for (const std::string &prop : GetProperties())
+    {
+        //std::cerr << "PROP: " << prop << std::endl;
+        if (!first)
+        {
+            str += ",";
+        }
+        str += prop.c_str();
+        first = false;
+    }
+    str += "}";
+    //std::cerr << "STR: " << str << std::endl;
     return str;
 }
 
@@ -66,6 +122,11 @@ const std::string& XMLAttribute::GetName() const
 const std::string& XMLAttribute::GetValue() const
 {
     return m_value;
+}
+
+const std::vector<std::string> &XMLAttribute::GetProperties() const
+{
+    return m_properties;
 }
 
 const XMLAttribute::Type& XMLAttribute::GetType() const

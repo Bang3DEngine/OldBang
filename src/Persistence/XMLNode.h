@@ -13,8 +13,9 @@
 #include "Quaternion.h"
 #include "StringUtils.h"
 #include "XMLAttribute.h"
+#include "IToString.h"
 
-class XMLNode
+class XMLNode : public IToString
 {
 private:
     std::string m_tagName = "";
@@ -28,29 +29,41 @@ public:
     void AddChild(XMLNode *node);
     void SetGenericAttribute(const std::string &attributeName,
                              const std::string &attributeValue,
-                             XMLAttribute::Type type);
+                             XMLAttribute::Type type,
+                             const std::vector<std::string>& properties = {});
     void SetPointer(const std::string &attributeName,
-                    const void *value);
+                    const void *value,
+                    const std::vector<std::string>& properties = {});
     void SetBool(const std::string &attributeName,
-                 bool value);
+                 bool value,
+                 const std::vector<std::string>& properties = {});
     void SetInt(const std::string &attributeName,
-                int value);
+                int value,
+                const std::vector<std::string>& properties = {});
     void SetFloat(const std::string &attributeName,
-                  float value);
+                  float value,
+                  const std::vector<std::string>& properties = {});
     void SetString(const std::string &attributeName,
-                   const std::string &value);
+                   const std::string &value,
+                   const std::vector<std::string>& properties = {});
     void SetVector2(const std::string &attributeName,
-                    const glm::vec2 &value);
+                    const glm::vec2 &value,
+                    const std::vector<std::string>& properties = {});
     void SetVector3(const std::string &attributeName,
-                    const Vector3 &value);
+                    const Vector3 &value,
+                    const std::vector<std::string>& properties = {});
     void SetVector4(const std::string &attributeName,
-                    const glm::vec4 &value);
+                    const glm::vec4 &value,
+                    const std::vector<std::string>& properties = {});
     void SetQuaternion(const std::string &attributeName,
-                       const Quaternion &value);
+                       const Quaternion &value,
+                       const std::vector<std::string>& properties = {});
     void SetRect(const std::string &attributeName,
-                 const Rect &value);
+                 const Rect &value,
+                 const std::vector<std::string>& properties = {});
     void SetFilepath(const std::string &attributeName,
-                     const std::string &filepath);
+                     const std::string &filepath,
+                     const std::vector<std::string>& properties = {});
 
 
     std::string GetAttributeValue(const std::string& attributeName) const;
@@ -67,7 +80,8 @@ public:
 
     const XMLNode *GetChild(const std::string &name) const;
     void SetTagName(const std::string tagName);
-    std::string ToString(const std::string& indent = "") const;
+    const std::string ToString() const override;
+    const std::string ToString(const std::string& indent) const;
 
     const std::string& GetTagName() const;
     const std::map<std::string, XMLAttribute>& GetAttributes() const;

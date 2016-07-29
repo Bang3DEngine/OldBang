@@ -133,12 +133,14 @@ void InspectorWidget::RefreshWidgetValues(XMLNode &xmlInfo)
             }
             ws = wv;
         }
+        /*
         else if (attribute.GetType() == XMLAttribute::Type::Enum)
         {
             InspectorEnumSW *we = static_cast<InspectorEnumSW*>(ws);
             we->SetValue( xmlInfo.GetInt(attrName) );
             ws = we;
         }
+        */
         else if (attribute.GetType() == XMLAttribute::Type::File)
         {
             InspectorFileSW *wa = static_cast<InspectorFileSW*>(ws);
