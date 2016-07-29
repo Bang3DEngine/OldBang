@@ -54,7 +54,7 @@ void Renderer::ActivateGLStatesBeforeRendering() const
 
     Scene *scene = Canvas::GetCurrentScene();
     Camera *camera = scene->GetCamera();
-    if (camera  && m_material  && m_material->m_shaderProgram )
+    if (camera && m_material  && m_material->m_shaderProgram )
     {
         Transform *t = camera->gameObject->transform;
         m_material->m_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,

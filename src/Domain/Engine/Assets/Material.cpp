@@ -39,10 +39,6 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
 
     std::string vshaderFilepath = xmlInfo->GetFilepath("vertexShader");
     std::string fshaderFilepath = xmlInfo->GetFilepath("fragmentShader");
-    Logger_Log("-------");
-    Logger_Log(m_filepath);
-    Logger_Log(vshaderFilepath);
-    Logger_Log(fshaderFilepath);
     SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
 
     int numTextures = xmlInfo->GetInt("textureCount");

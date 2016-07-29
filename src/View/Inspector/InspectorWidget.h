@@ -39,6 +39,7 @@ private:
     std::function<void()> *m_callback = nullptr;
 
     std::vector<InspectorSW*> m_compSlots;
+    std::vector<XMLAttribute> m_attributes;
     std::map<std::string, InspectorSW*> m_attrNameToComponentSlots;
     std::map<InspectorSW*, XMLAttribute> m_componentSlotsToAttribute;
 

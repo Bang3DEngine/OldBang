@@ -186,50 +186,49 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         XMLAttribute attribute = itAttr.second;
-        if (attribute.HasProperty(XMLProperty::Hidden))
+        m_attributes.push_back(attribute);
+        if (!attribute.HasProperty(XMLProperty::Hidden))
         {
-            continue;
-        }
+            std::string attrName  = attribute.GetName();
+            XMLAttribute::Type attrType = attribute.GetType();
+            InspectorSW *ws = nullptr;
 
-        std::string attrName  = attribute.GetName();
-        XMLAttribute::Type attrType = attribute.GetType();
-        InspectorSW *ws = nullptr;
+            if (attrType == XMLAttribute::Type::TFloat)
+            {
+                ws = new InspectorVFloatSW(attrName, {0}, this, &xmlInfo);
+            }
+            else if (attrType == XMLAttribute::Type::TVector2)
+            {
+                ws = new InspectorVFloatSW(attrName, {0,0}, this, &xmlInfo);
+            }
+            else if (attrType == XMLAttribute::Type::TVector3)
+            {
+                ws = new InspectorVFloatSW(attrName, {0,0,0}, this, &xmlInfo);
+            }
+            else if (attrType == XMLAttribute::Type::TVector4 ||
+                     attrType == XMLAttribute::Type::TQuaternion)
+            {
+                ws = new InspectorVFloatSW(attrName, {0,0,0,0}, this, &xmlInfo);
+            }
+            else if (attrType == XMLAttribute::Type::TFile)
+            {
+                std::string fileExtension =
+                        attribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
+                ws = new InspectorFileSW(attrName, "", fileExtension, this, &xmlInfo);
+            }
+            else if (attrType == XMLAttribute::Type::TString)
+            {
+                ws = new InspectorStringSW(attrName, "", this, &xmlInfo, false, false);
+            }
 
-        if (attrType == XMLAttribute::Type::TFloat)
-        {
-            ws = new InspectorVFloatSW(attrName, {0}, this, &xmlInfo);
-        }
-        else if (attrType == XMLAttribute::Type::TVector2)
-        {
-            ws = new InspectorVFloatSW(attrName, {0,0}, this, &xmlInfo);
-        }
-        else if (attrType == XMLAttribute::Type::TVector3)
-        {
-            ws = new InspectorVFloatSW(attrName, {0,0,0}, this, &xmlInfo);
-        }
-        else if (attrType == XMLAttribute::Type::TVector4 ||
-                 attrType == XMLAttribute::Type::TQuaternion)
-        {
-            ws = new InspectorVFloatSW(attrName, {0,0,0,0}, this, &xmlInfo);
-        }
-        else if (attrType == XMLAttribute::Type::TFile)
-        {
-            std::string fileExtension =
-                    attribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
-            ws = new InspectorFileSW(attrName, "", fileExtension, this, &xmlInfo);
-        }
-        else if (attrType == XMLAttribute::Type::TString)
-        {
-            ws = new InspectorStringSW(attrName, "", this, &xmlInfo, false, false);
-        }
-
-        if (ws)
-        {
-            ws->show();
-            layout()->addWidget(ws);
-            m_compSlots.push_back(ws);
-            m_attrNameToComponentSlots[attrName] = ws;
-            m_componentSlotsToAttribute[ws] = attribute;
+            if (ws)
+            {
+                ws->show();
+                layout()->addWidget(ws);
+                m_compSlots.push_back(ws);
+                m_attrNameToComponentSlots[attrName] = ws;
+                m_componentSlotsToAttribute[ws] = attribute;
+            }
         }
     }
 }
@@ -252,64 +251,62 @@ void InspectorWidget::_OnSlotValueChanged()
     // Create the xmlInfo with all the updated values!
     XMLNode xmlInfo;
     //Logger_Log(m_componentSlotsToAttribute);
-    for (auto it : m_componentSlotsToAttribute)
+    for (XMLAttribute attribute : m_attributes)
     {
-        InspectorSW *ws = it.first;
-        XMLAttribute attribute = it.second;
         std::string attrName = attribute.GetName();
-        XMLAttribute::Type attrType = attribute.GetType();
-        Logger_Log("NAME: " << attrName);
+        if (m_attrNameToComponentSlots.find(attrName) != m_attrNameToComponentSlots.end())
+        {
+            InspectorSW *ws = m_attrNameToComponentSlots[attrName];
+            XMLAttribute::Type attrType = attribute.GetType();
 
-        if (attrType == XMLAttribute::Type::TFloat   ||
-            attrType == XMLAttribute::Type::TVector2 ||
-            attrType == XMLAttribute::Type::TVector3 ||
-            attrType == XMLAttribute::Type::TVector4 ||
-            attrType == XMLAttribute::Type::TQuaternion )
-        {
-            InspectorVFloatSW *wv = static_cast<InspectorVFloatSW*>(ws);
-            std::vector<float> v = wv->GetValue();
-            if (attrType == XMLAttribute::Type::TFloat)
+            if (attrType == XMLAttribute::Type::TFloat   ||
+                attrType == XMLAttribute::Type::TVector2 ||
+                attrType == XMLAttribute::Type::TVector3 ||
+                attrType == XMLAttribute::Type::TVector4 ||
+                attrType == XMLAttribute::Type::TQuaternion )
             {
-                attribute.SetFloat(v[0],
-                                   attribute.GetProperties());
+                InspectorVFloatSW *wv = static_cast<InspectorVFloatSW*>(ws);
+                std::vector<float> v = wv->GetValue();
+                if (attrType == XMLAttribute::Type::TFloat)
+                {
+                    attribute.SetFloat(v[0],
+                                       attribute.GetProperties());
+                }
+                else if (attrType == XMLAttribute::Type::TVector2)
+                {
+                    attribute.SetVector2(glm::vec2(v[0], v[1]),
+                                         attribute.GetProperties());
+                }
+                else if (attrType == XMLAttribute::Type::TVector3)
+                {
+                    attribute.SetVector3(Vector3(v[0], v[1], v[2]),
+                                         attribute.GetProperties());
+                }
+                else if (attrType == XMLAttribute::Type::TVector4 ||
+                         attrType == XMLAttribute::Type::TQuaternion)
+                {
+                    attribute.SetVector4(glm::vec4(v[0], v[1], v[2], v[3]),
+                                         attribute.GetProperties());
+                }
             }
-            else if (attrType == XMLAttribute::Type::TVector2)
+            /*
+            else if (attrType == XMLAttribute::Type::Enum)
             {
-                attribute.SetVector2(glm::vec2(v[0], v[1]),
-                                     attribute.GetProperties());
+                InspectorEnumSW *we = static_cast<InspectorEnumSW*>(ws);
             }
-            else if (attrType == XMLAttribute::Type::TVector3)
+            */
+            else if (attrType == XMLAttribute::Type::TFile)
             {
-                attribute.SetVector3(Vector3(v[0], v[1], v[2]),
-                                     attribute.GetProperties());
+                InspectorFileSW *wf = static_cast<InspectorFileSW*>(ws);
+                attribute.SetFilepath(wf->GetValue(),
+                                      attribute.GetPropertyValue(XMLProperty::FileExtension.GetName()),
+                                      attribute.GetProperties());
             }
-            else if (attrType == XMLAttribute::Type::TVector4 ||
-                     attrType == XMLAttribute::Type::TQuaternion)
+            else if (attrType == XMLAttribute::Type::TString)
             {
-                attribute.SetVector4(glm::vec4(v[0], v[1], v[2], v[3]),
-                                     attribute.GetProperties());
+                InspectorStringSW *wss = static_cast<InspectorStringSW*>(ws);
+                attribute.SetString(wss->GetValue(), attribute.GetProperties());
             }
-            Logger_Log("Changed " << attrName << " to " << v);
-        }
-        /*
-        else if (attrType == XMLAttribute::Type::Enum)
-        {
-            InspectorEnumSW *we = static_cast<InspectorEnumSW*>(ws);
-        }
-        */
-        else if (attrType == XMLAttribute::Type::TFile)
-        {
-            InspectorFileSW *wf = static_cast<InspectorFileSW*>(ws);
-            attribute.SetFilepath(wf->GetValue(),
-                                  attribute.GetPropertyValue(XMLProperty::FileExtension.GetName()),
-                                  attribute.GetProperties());
-            Logger_Log("Changed " << attrName << " to " << wf->GetValue());
-        }
-        else if (attrType == XMLAttribute::Type::TString)
-        {
-            InspectorStringSW *wss = static_cast<InspectorStringSW*>(ws);
-            attribute.SetString(wss->GetValue(), attribute.GetProperties());
-            Logger_Log("Changed " << attrName << " to " << wss->GetValue());
         }
 
         xmlInfo.SetAttribute(attribute);

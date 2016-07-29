@@ -14,7 +14,6 @@ EditorFloor::EditorFloor()
 
 EditorFloor::~EditorFloor()
 {
-
 }
 
 void EditorFloor::OnUpdate()

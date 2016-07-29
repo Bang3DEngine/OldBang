@@ -106,7 +106,7 @@ void BehaviourHolder::Refresh()
 void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
-    m_sourceFilepath = xmlInfo->GetString("sourceFilepath");
+    m_sourceFilepath = xmlInfo->GetString("BehaviourScript");
 }
 
 void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
@@ -114,7 +114,7 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     Component::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("BehaviourHolder");
 
-    xmlInfo->SetFilepath("sourceFilepath", m_sourceFilepath);
+    xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "cpp");
 }
 
 

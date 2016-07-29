@@ -50,7 +50,7 @@ public:
     virtual std::string GetName() const;
 
     void SetEnabled(bool enabled);
-    bool IsEnabled();
+    bool IsEnabled() const;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

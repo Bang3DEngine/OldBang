@@ -15,8 +15,10 @@ InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
             AssetsManager::ReadTmpAsset<Texture2D>(fileTex.GetPath());
     std::string imgFilepath = tex->GetImageRelativeFilepath();
 
-    xmlInfo.SetFilepath("ImagePath", imgFilepath);
-    xmlInfo.SetString("Filter", tex->GetFilterMode() == Texture2D::FilterMode::Nearest ? "Nearest" : "Linear");
+    xmlInfo.SetString("ImagePath", imgFilepath, {XMLProperty::Readonly});
+    xmlInfo.SetString("Filter", tex->GetFilterMode() ==
+                                 Texture2D::FilterMode::Nearest ? "Nearest" : "Linear",
+                      {XMLProperty::Readonly});
 
     delete tex;
 

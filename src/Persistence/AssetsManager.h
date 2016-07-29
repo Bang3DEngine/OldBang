@@ -88,7 +88,7 @@ public:
     static T* GetAsset(const std::string &filepath)
     {
         Asset *a = nullptr;
-        Logger_Log("Getting asset: " << filepath);
+        //Logger_Log("Getting asset: " << filepath);
         if (filepath != "-")
         {
             if (!ExistsAssetInCache(filepath))

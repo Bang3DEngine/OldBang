@@ -391,6 +391,7 @@ const std::string Transform::ToString() const
 
     return msg.str();
 }
+
 #ifdef BANG_EDITOR
 
 void Transform::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
@@ -402,6 +403,8 @@ void Transform::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);
 }
+
+#endif
 
 void Transform::ReadXMLInfo(const XMLNode *xmlInfo)
 {
@@ -420,4 +423,3 @@ void Transform::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetVector3("Rotation", GetLocalEuler());
     xmlInfo->SetVector3("Scale",    GetLocalScale());
 }
-#endif

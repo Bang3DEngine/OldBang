@@ -32,7 +32,7 @@ void Component::SetEnabled(bool enabled)
     this->m_enabled = enabled;
 }
 
-bool Component::IsEnabled()
+bool Component::IsEnabled() const
 {
     return m_enabled;
 }
@@ -40,7 +40,7 @@ bool Component::IsEnabled()
 void Component::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     // FileReader::RegisterNextPointerId(f, this);
-    m_enabled = xmlInfo->GetBool("enabled");
+    SetEnabled(xmlInfo->GetBool("enabled"));
 }
 
 void Component::FillXMLInfo(XMLNode *xmlInfo) const
@@ -49,7 +49,7 @@ void Component::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetPointer("id", this,
                         {XMLProperty::Hidden,
                          XMLProperty::Readonly});
-    xmlInfo->SetBool("enabled", m_enabled,
+    xmlInfo->SetBool("enabled", IsEnabled(),
                      {XMLProperty::Hidden,
                       XMLProperty::Readonly});
 }

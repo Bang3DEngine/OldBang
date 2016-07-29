@@ -19,7 +19,7 @@ public:
     std::vector<SingleLineRenderer*> m_lineRenderers;
 
     EditorFloor();
-    ~EditorFloor();
+    virtual ~EditorFloor();
 
     void OnUpdate() override;
 };

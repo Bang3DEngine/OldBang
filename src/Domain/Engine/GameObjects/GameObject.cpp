@@ -329,13 +329,12 @@ GameObject *GameObject::FindInChildren(const std::string &name)
 
 void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    // FileReader::RegisterNextPointerId(f, this);
-    m_enabled = xmlInfo->GetBool("enabled");
+    // FileReader::RegisterNextPointerId(f, this)
+    SetEnabled( xmlInfo->GetBool("enabled") );
     SetName( xmlInfo->GetString("name") );  //Read GameObject name
 
     for ( XMLNode *xmlChild : xmlInfo->GetChildren() )
     {
-        //Logger_Log("READING CHILD: " << xmlChild);
         std::string tagName = xmlChild->GetTagName();
         if (tagName == "GameObject") // It's a child
         {

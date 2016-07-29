@@ -136,6 +136,7 @@ void CircleRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);
 }
+#endif
 
 void CircleRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
@@ -153,4 +154,3 @@ void CircleRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("radius", GetRadius());
     xmlInfo->SetInt("segments", GetSegments());
 }
-#endif
