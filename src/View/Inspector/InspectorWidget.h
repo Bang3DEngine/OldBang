@@ -40,6 +40,7 @@ private:
 
     std::vector<InspectorSW*> m_compSlots;
     std::map<std::string, InspectorSW*> m_attrNameToComponentSlots;
+    std::map<InspectorSW*, XMLAttribute> m_componentSlotsToAttribute;
 
     QTimer *m_updateTimer = nullptr;
 

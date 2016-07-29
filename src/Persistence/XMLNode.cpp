@@ -23,107 +23,147 @@ void XMLNode::AddChild(XMLNode *node)
     m_children.push_back(node);
 }
 
+void XMLNode::UpdateAttributeValue(const std::string &attributeName,
+                                   const std::string &newAttributeValue)
+{
+    XMLAttribute *attr = GetAttribute(attributeName);
+    if (attr)
+    {
+        attr->SetValue(newAttributeValue);
+    }
+}
+
+void XMLNode::SetAttribute(const XMLAttribute &attribute)
+{
+    RemoveAttribute(attribute.GetName()); // Just in case
+    m_attributes[attribute.GetName()] = attribute;
+}
+
 void XMLNode::SetGenericAttribute(const std::string &attributeName,
                                   const std::string &attributeValue,
                                   XMLAttribute::Type type,
-                                  const std::vector<std::string>& properties)
+                                  const std::vector<XMLProperty>& properties)
 {
     XMLAttribute attr(attributeName, attributeValue, type, properties);
-    m_attributes[attributeName] = attr;
+    SetAttribute(attr);
 }
 
 void XMLNode::SetPointer(const std::string &attributeName, const void *value,
-                         const std::vector<std::string>& properties)
+                         const std::vector<XMLProperty>& properties)
 {
-    std::ostringstream oss;
-    oss << value;
-    SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::String, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetPointer(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetBool(const std::string &attributeName, bool value,
-                      const std::vector<std::string>& properties)
+                      const std::vector<XMLProperty>& properties)
 {
-     SetGenericAttribute(attributeName, value ? "true" : "false", XMLAttribute::Type::Bool, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetBool(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetInt(const std::string &attributeName, int value,
-                     const std::vector<std::string>& properties)
+                     const std::vector<XMLProperty>& properties)
 {
-    std::ostringstream oss;
-    oss << value;
-    SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Int, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetInt(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetFloat(const std::string &attributeName, float value,
-                       const std::vector<std::string>& properties)
+                       const std::vector<XMLProperty>& properties)
 {
-    std::ostringstream oss;
-    oss << value;
-    SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Float, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetFloat(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetVector2(const std::string &attributeName, const glm::vec2 &value,
-                         const std::vector<std::string>& properties)
+                         const std::vector<XMLProperty>& properties)
 {
-    std::ostringstream oss;
-    oss << "(" << value.x << ", " <<
-                  value.y << ")";
-    SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Vector2, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetVector2(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetVector3(const std::string &attributeName, const Vector3 &value,
-                         const std::vector<std::string>& properties)
+                         const std::vector<XMLProperty>& properties)
 {
-    std::ostringstream oss;
-    oss << "(" << value.x << ", " <<
-                  value.y << ", " <<
-                  value.z << ")";
-    SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Vector3, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetVector3(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetVector4(const std::string &attributeName, const glm::vec4 &value,
-                         const std::vector<std::string>& properties)
+                         const std::vector<XMLProperty>& properties)
 {
-    std::ostringstream oss;
-    oss << "(" << value.x << ", " <<
-                  value.y << ", " <<
-                  value.z << ", " <<
-                  value.w << ")";
-    SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Vector4, properties);
+    XMLAttribute attr; attr.SetVector4(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetQuaternion(const std::string &attributeName, const Quaternion &value,
-                            const std::vector<std::string>& properties)
+                            const std::vector<XMLProperty>& properties)
 {
-    std::ostringstream oss;
-    oss << "(" << value.w << ", " <<
-                  value.x << ", " <<
-                  value.y << ", " <<
-                  value.z << ")";
-    SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Quaternion, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetQuaternion(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetRect(const std::string &attributeName, const Rect &value,
-                      const std::vector<std::string>& properties)
+                      const std::vector<XMLProperty>& properties)
 {
-    std::ostringstream oss;
-    oss << "(" << value.m_minx << ", " <<
-                  value.m_miny << ", " <<
-                  value.m_maxx << ", " <<
-                  value.m_maxy << ")";
-    SetGenericAttribute(attributeName, oss.str(), XMLAttribute::Type::Rect, properties);
+    XMLAttribute attr; attr.SetRect(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetString(const std::string &attributeName, const std::string &value,
-                        const std::vector<std::string>& properties)
+                        const std::vector<XMLProperty>& properties)
 {
-    SetGenericAttribute(attributeName, value, XMLAttribute::Type::String, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetString(value, properties);
+    SetAttribute(attr);
 }
 
 void XMLNode::SetFilepath(const std::string &attributeName, const std::string &filepath,
-                          const std::vector<std::string>& properties)
+                          const std::string &fileExtension,
+                          const std::vector<XMLProperty>& properties)
 {
-    SetGenericAttribute(attributeName, filepath, XMLAttribute::Type::File, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetFilepath(filepath, fileExtension, properties);
+    SetAttribute(attr);
+}
+
+XMLAttribute* XMLNode::GetAttribute(const std::string &attributeName) const
+{
+    XMLAttribute *attr = nullptr;
+    if (m_attributes.find(attributeName) != m_attributes.end())
+    {
+        attr = &(m_attributes[attributeName]);
+    }
+    return attr;
+}
+
+void XMLNode::RemoveAttribute(const std::string &attributeName)
+{
+    for (auto it = m_attributes.begin(); it != m_attributes.end(); ++it)
+    {
+        XMLAttribute &attr = it->second;
+        if (attr.GetName() == attributeName)
+        {
+            it = m_attributes.erase(it);
+        }
+    }
 }
 
 std::string XMLNode::GetAttributeValue(const std::string &attributeName) const
@@ -137,108 +177,62 @@ std::string XMLNode::GetAttributeValue(const std::string &attributeName) const
 
 bool XMLNode::GetBool(const std::string &attributeName) const
 {
-    if (m_attributes.find(attributeName) != m_attributes.end())
-    {
-        std::string value = m_attributes[attributeName].GetValue();
-        return value == "true";
-    }
-    return "";
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetBool() : false;
 }
 
 int XMLNode::GetInt(const std::string &attributeName) const
 {
-    if (m_attributes.find(attributeName) != m_attributes.end())
-    {
-        std::string value = m_attributes[attributeName].GetValue();
-        std::istringstream iss(value);
-        int v; iss >> v;
-        return v;
-    }
-    return -1;
-}
-
-float XMLNode::GetFloat(const std::string &attributeName) const
-{
-    if (m_attributes.find(attributeName) != m_attributes.end())
-    {
-        std::string value = m_attributes[attributeName].GetValue();
-        return StringUtils::ToFloat(value);
-    }
-    return -1.0f;
-}
-
-std::string XMLNode::GetFilepath(const std::string &attributeName) const
-{
-    return GetString(attributeName);
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetInt() : 0;
 }
 
 std::string XMLNode::GetString(const std::string &attributeName) const
 {
-    if  (m_attributes.find(attributeName) != m_attributes.end())
-    {
-        return m_attributes[attributeName].GetValue();
-    }
-    return "";
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetString() : "";
+}
+
+std::string XMLNode::GetFilepath(const std::string &attributeName) const
+{
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetFilepath() : "";
+}
+
+float XMLNode::GetFloat(const std::string &attributeName) const
+{
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetFloat() : 0.0f;
 }
 
 glm::vec2 XMLNode::GetVector2(const std::string &attributeName) const
 {
-    float x = 0, y = 0;
-    if  (m_attributes.find(attributeName) != m_attributes.end())
-    {
-        std::string value = m_attributes[attributeName].GetValue();
-        std::string insidePars = StringUtils::Split(value, '(')[1];
-        insidePars =  StringUtils::Split(insidePars, ')')[0];
-        std::vector<std::string> numbers = StringUtils::Split(insidePars, ',');
-        x = StringUtils::ToFloat(numbers[0]);
-        y = StringUtils::ToFloat(numbers[1]);
-    }
-    return glm::vec2(x,y);
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetVector2() : glm::vec2(0);
 }
 
 Vector3 XMLNode::GetVector3(const std::string &attributeName) const
 {
-    float x = 0, y = 0, z = 0;
-    if  (m_attributes.find(attributeName) != m_attributes.end())
-    {
-        std::string value = m_attributes[attributeName].GetValue();
-        std::string insidePars = StringUtils::Split(value, '(')[1];
-        insidePars =  StringUtils::Split(insidePars, ')')[0];
-        std::vector<std::string> numbers = StringUtils::Split(insidePars, ',');
-        x = StringUtils::ToFloat(numbers[0]);
-        y = StringUtils::ToFloat(numbers[1]);
-        z = StringUtils::ToFloat(numbers[2]);
-    }
-    return Vector3(x,y,z);
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetVector3() : Vector3::zero;
 }
 
 glm::vec4 XMLNode::GetVector4(const std::string &attributeName) const
 {
-    float x = 0, y = 0, z = 0, w = 0;
-    if  (m_attributes.find(attributeName) != m_attributes.end())
-    {
-        std::string value = m_attributes[attributeName].GetValue();
-        std::string insidePars = StringUtils::Split(value, '(')[1];
-        insidePars =  StringUtils::Split(insidePars, ')')[0];
-        std::vector<std::string> numbers = StringUtils::Split(insidePars, ',');
-        x = StringUtils::ToFloat(numbers[0]);
-        y = StringUtils::ToFloat(numbers[1]);
-        z = StringUtils::ToFloat(numbers[2]);
-        w = StringUtils::ToFloat(numbers[3]);
-    }
-    return glm::vec4(x,y,z,w);
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetVector4() : glm::vec4(0);
 }
 
 Quaternion XMLNode::GetQuaternion(const std::string &attributeName) const
 {
-    glm::vec4 v = GetVector4(attributeName);
-    return Quaternion(v.w, v.x, v.y, v.z);
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetQuaternion() : Quaternion();
 }
 
 Rect XMLNode::GetRect(const std::string &attributeName) const
 {
-    glm::vec4 v = GetVector4(attributeName);
-    return Rect(v.x, v.y, v.z, v.w);
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetRect() : Rect();
 }
 
 const XMLNode *XMLNode::GetChild(const std::string &name) const

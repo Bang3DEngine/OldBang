@@ -198,7 +198,8 @@ HEADERS += \
     src/Persistence/FileMeshAsset.h \
     src/Persistence/XMLParser.h \
     src/Persistence/XMLNode.h \
-    src/Persistence/XMLAttribute.h
+    src/Persistence/XMLAttribute.h \
+    src/Persistence/XMLProperty.h
 
 EDITOR {
 HEADERS += \
@@ -318,7 +319,8 @@ SOURCES += \
     src/Persistence/FileMeshAsset.cpp \
     src/Persistence/XMLParser.cpp \
     src/Persistence/XMLNode.cpp \
-    src/Persistence/XMLAttribute.cpp
+    src/Persistence/XMLAttribute.cpp \
+    src/Persistence/XMLProperty.cpp
 
 EDITOR {
     SOURCES += \

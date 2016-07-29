@@ -1,26 +1,43 @@
-<Scene enabled="true"
-       id="true"
-       name=""
+<Scene enabled:Bool="true"{Hidden,Readonly}
+       id:String="0x92fcc90"{Hidden,Readonly}
+       name:String="Scene"{Hidden,Readonly}
       >
-  <Transform enabled="true"
-             id="true"
-             localPosition="Vector3(0, 0, 0)"
-             localRotation="Quaternion(1, 0, 0, 0)"
-             localScale="Vector3(1, 1, 1)"
-            >
-  <Transform/>
-  <GameObject enabled="true"
-              id="true"
-              name="Luigi"
-             >
-    <Transform enabled="true"
-               id="true"
-               localPosition="Vector3(0, 0, 0)"
-               localRotation="Quaternion(1, 0, 0, 0)"
-               localScale="Vector3(1, 1, 1)"
+    <Transform Position:Vector3="(0, 0, 0)"{}
+               Rotation:Vector3="(0, 0, 0)"{}
+               Scale:Vector3="(0, 0, 0)"{}
+               enabled:Bool="true"{Hidden,Readonly}
+               id:String="0x8bf36c8"{Hidden,Readonly}
               >
     <Transform/>
-  <GameObject/>
-  <>
-  </>
+    <GameObject enabled:Bool="true"{Hidden,Readonly}
+                id:String="0x9491a48"{Hidden,Readonly}
+                name:String="Luigi"{Hidden,Readonly}
+               >
+        <Transform Position:Vector3="(0, 0, 0)"{}
+                   Rotation:Vector3="(0, 0, 0)"{}
+                   Scale:Vector3="(0, 0, 0)"{}
+                   enabled:Bool="true"{Hidden,Readonly}
+                   id:String="0x9491a98"{Hidden,Readonly}
+                  >
+        <Transform/>
+    <GameObject/>
+    <GameObject enabled:Bool="true"{Hidden,Readonly}
+                id:String="0x9a3dde0"{Hidden,Readonly}
+                name:String="Cubito"{Hidden,Readonly}
+               >
+        <Transform Position:Vector3="(0, 0, 0)"{}
+                   Rotation:Vector3="(0, 0, 0)"{}
+                   Scale:Vector3="(1, 1, 1)"{}
+                   enabled:Bool="true"{Hidden,Readonly}
+                   id:String="0x9a3de30"{Hidden,Readonly}
+                  >
+        <Transform/>
+        <MeshRenderer LineWidth:Float="1"{}
+                      Material:File="Assets/Engine/Materials/D2G_Default.bmat"{FileExtension:"bmat"}
+                      enabled:Bool="true"{Hidden,Readonly}
+                      id:String="0x955bf88"{Hidden,Readonly}
+                      Mesh:File="Assets/Engine/Meshes/Cube.bmesh"{FileExtension:"bmesh"}
+                     >
+        <MeshRenderer/>
+    <GameObject/>
 <Scene/>

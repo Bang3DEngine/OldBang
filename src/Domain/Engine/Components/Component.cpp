@@ -46,6 +46,10 @@ void Component::ReadXMLInfo(const XMLNode *xmlInfo)
 void Component::FillXMLInfo(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Component");
-    xmlInfo->SetPointer("id", this,        {XMLAttribute::PropertyHidden});
-    xmlInfo->SetBool("enabled", m_enabled, {XMLAttribute::PropertyHidden});
+    xmlInfo->SetPointer("id", this,
+                        {XMLProperty::Hidden,
+                         XMLProperty::Readonly});
+    xmlInfo->SetBool("enabled", m_enabled,
+                     {XMLProperty::Hidden,
+                      XMLProperty::Readonly});
 }

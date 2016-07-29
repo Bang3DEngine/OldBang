@@ -7,6 +7,5 @@ void IInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 
 void IInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-
 }
 #endif

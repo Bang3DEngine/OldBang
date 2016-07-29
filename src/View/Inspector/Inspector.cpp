@@ -130,14 +130,6 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
             m_currentGameObject->AddComponent(c);
         }
     }
-    else if (clickedAction == MenuBar::Action::AddComponentTransform)
-    {
-        if (this->m_currentGameObject )
-        {
-            Transform *t = new Transform();
-            m_currentGameObject->AddComponent(t);
-        }
-    }
     else if (clickedAction == MenuBar::Action::AddComponentMeshRenderer)
     {
         if (this->m_currentGameObject )

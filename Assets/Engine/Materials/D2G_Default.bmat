@@ -1,5 +1,5 @@
-<Material vertexShader:File="./Assets/Engine/Shaders/D2G_Default.vert"
-          fragmentShader:File="./Assets/Engine/Shaders/D2G_Default.frag"
-          textureCount:Int="0"
-          diffuseColor:Vector4="(1,1,1,1)">
+<Material vertexShader:File="./Assets/Engine/Shaders/D2G_Default.vert"{FileExtension:"vert"}
+          fragmentShader:File="./Assets/Engine/Shaders/D2G_Default.frag"{FileExtension:"frag"}
+          textureCount:Int="0"{}
+          diffuseColor:Vector4="(1,1,1,1)"{}>
 </Material>

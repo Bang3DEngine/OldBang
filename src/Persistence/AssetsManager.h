@@ -53,13 +53,16 @@ private:
     static T* ReadAssetFile(const std::string &filepath)
     {
         XMLNode *xmlInfo = XMLParser::FromFile(filepath);
-        Asset *a = ReadAsset<T>(xmlInfo->ToString());
-        delete xmlInfo;
-        if (a)
+        if (xmlInfo)
         {
-            AssetsManager::SaveAsset(filepath, a);
-            a->m_filepath = filepath;
-            return static_cast<T*>(a);
+            Asset *a = ReadAsset<T>(xmlInfo->ToString());
+            delete xmlInfo;
+            if (a)
+            {
+                AssetsManager::SaveAsset(filepath, a);
+                a->m_filepath = filepath;
+                return static_cast<T*>(a);
+            }
         }
         return nullptr;
     }
@@ -85,7 +88,7 @@ public:
     static T* GetAsset(const std::string &filepath)
     {
         Asset *a = nullptr;
-        //Logger_Log("Getting asset: " << filepath);
+        Logger_Log("Getting asset: " << filepath);
         if (filepath != "-")
         {
             if (!ExistsAssetInCache(filepath))

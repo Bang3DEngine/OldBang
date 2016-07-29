@@ -335,6 +335,7 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 
     for ( XMLNode *xmlChild : xmlInfo->GetChildren() )
     {
+        //Logger_Log("READING CHILD: " << xmlChild);
         std::string tagName = xmlChild->GetTagName();
         if (tagName == "GameObject") // It's a child
         {
@@ -394,9 +395,15 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("GameObject");
-    xmlInfo->SetPointer("id", this, {XMLAttribute::PropertyHidden, XMLAttribute::PropertyReadonly});
-    xmlInfo->SetBool("enabled", m_enabled);
-    xmlInfo->SetString("name", m_name);
+    xmlInfo->SetPointer("id", this,
+                        {XMLProperty::Hidden,
+                         XMLProperty::Readonly});
+    xmlInfo->SetBool("enabled", m_enabled,
+                     {XMLProperty::Hidden,
+                      XMLProperty::Readonly});
+    xmlInfo->SetString("name", m_name,
+                       {XMLProperty::Hidden,
+                        XMLProperty::Readonly});
 
     for (Component *c : m_comps)
     {
@@ -405,11 +412,14 @@ void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
         xmlInfo->AddChild(xmlComp);
     }
 
-    for (GameObject *go : m_children)
+    for (GameObject *child : m_children)
     {
-        XMLNode *child = new XMLNode();
-        go->FillXMLInfo(child);
-        xmlInfo->AddChild(child);
+        if (!child->IsEditorGameObject())
+        {
+            XMLNode *xmlChild = new XMLNode();
+            child->FillXMLInfo(xmlChild);
+            xmlInfo->AddChild(xmlChild);
+        }
     }
 }
 

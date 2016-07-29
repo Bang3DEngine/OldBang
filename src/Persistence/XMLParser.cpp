@@ -27,7 +27,7 @@ void XMLParser::GetFirstAttribute(const std::string &tag,
     if (attribute)
     {
         attribute->SetName("");
-        attribute->SetType(XMLAttribute::Bool); // For example
+        attribute->SetType(XMLAttribute::TBool); // For example
         attribute->SetValue("");
     }
 
@@ -67,10 +67,20 @@ void XMLParser::GetFirstAttribute(const std::string &tag,
         attribute->SetName(name);
         attribute->SetType(XMLAttribute::GetTypeFromString(typeString));
         attribute->SetValue(value);
-        for (std::string &prop : properties)
+        for (std::string &propString : properties)
         {
-            StringUtils::Trim(&prop);
-            attribute->SetProperty(prop);
+            StringUtils::Trim(&propString);
+            if (propString[propString.length()-1] == '\"')
+            { // Is a property with value
+                std::string propName = StringUtils::Split(propString, ':')[0];
+                std::string propValue = StringUtils::Split(propString, ':')[1];
+                propValue = propValue.substr(1, propValue.length()-2);
+                attribute->SetProperty(propName, propValue);
+            }
+            else
+            {
+                attribute->SetProperty(propString);
+            }
         }
     }
 }

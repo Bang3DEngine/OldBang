@@ -1,5 +1,5 @@
-<Material vertexShader:File="./Assets/Engine/Shaders/D2G_LineRotationAxis.vert"
-          fragmentShader:File="./Assets/Engine/Shaders/D2G_LineRotationAxis.frag"
-          textureCount:Int="0"
-          diffuseColor:Vector4="(0,0,0,1)">
+<Material vertexShader:File="./Assets/Engine/Shaders/D2G_LineRotationAxis.vert"{FileExtension:"vert"}
+          fragmentShader:File="./Assets/Engine/Shaders/D2G_LineRotationAxis.frag"{FileExtension:"frag"}
+          textureCount:Int="0"{}
+          diffuseColor:Vector4="(0,0,0,1)"{}>
 </Material>

@@ -7,10 +7,10 @@
 InspectorComponentWidget::InspectorComponentWidget(Component *relatedComponent) :
     InspectorWidget(relatedComponent)
 {
-    this->m_relatedComponent = relatedComponent;
+    m_relatedComponent = relatedComponent;
 
     m_IsEnabledCheckbox = new QCheckBox();
-    m_IsEnabledCheckbox->setChecked(this->m_relatedComponent->IsEnabled());
+    m_IsEnabledCheckbox->setChecked(m_relatedComponent->IsEnabled());
     connect(m_IsEnabledCheckbox, SIGNAL(clicked(bool)),
             this, SLOT(OnEnabledCheckboxPressed(bool)));
     m_titleLayout->addWidget(m_IsEnabledCheckbox, 1);
