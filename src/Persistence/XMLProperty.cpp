@@ -1,6 +1,7 @@
 #include "XMLProperty.h"
 
 const XMLProperty XMLProperty::Hidden("Hidden");
+const XMLProperty XMLProperty::Inline("Inline");
 const XMLProperty XMLProperty::Readonly("Readonly");
 const XMLProperty XMLProperty::FileExtension("FileExtension");
 

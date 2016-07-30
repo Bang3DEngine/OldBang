@@ -6,14 +6,16 @@
 #include "FileMesh.h"
 #include "InspectorWidget.h"
 
-class InspectorMeshFileWidget: public InspectorWidget
+class InspectorMeshFileWidget: public IInspectable
 {
 private:
-    XMLNode *xmlInfo;
+    FileMesh m_fileMesh;
 
 public:
     InspectorMeshFileWidget(const FileMesh &fileMesh);
-    virtual ~InspectorMeshFileWidget();
+
+    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo);
+    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const;
 };
 
 #endif // INSPECTORMESHFILEWIDGET_H

@@ -1,20 +1,22 @@
 #include "InspectorMeshFileWidget.h"
 
 InspectorMeshFileWidget::InspectorMeshFileWidget(const FileMesh &fileMesh) :
-    InspectorWidget()
+    m_fileMesh(fileMesh)
 {
-    xmlInfo->SetString("FileName", fileMesh.GetName() + "." + fileMesh.GetExtension(),
-                       {XMLProperty::Readonly});
-    xmlInfo->SetString("Path", fileMesh.GetPath(), {XMLProperty::Readonly});
-    xmlInfo->SetString("Mode", fileMesh.IsTriangles() ? "Triangles" : "Quads",
-                       {XMLProperty::Readonly});
-    xmlInfo->SetString("Faces",  std::to_string(fileMesh.GetNumFaces()),
-                       {XMLProperty::Readonly});
-
-    ConstructFromWidgetXMLInfo(fileMesh.GetName(), *xmlInfo);
 }
 
-InspectorMeshFileWidget::~InspectorMeshFileWidget()
+void InspectorMeshFileWidget::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
+    // They all are readonly properties, so we wont do anything here
+}
 
+void InspectorMeshFileWidget::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
+{
+    xmlInfo->SetString("FileName", m_fileMesh.GetName() + "." + m_fileMesh.GetExtension(),
+                      {XMLProperty::Readonly});
+    xmlInfo->SetString("Path", m_fileMesh.GetPath(), {XMLProperty::Readonly});
+    xmlInfo->SetString("Mode", m_fileMesh.IsTriangles() ? "Triangles" : "Quads",
+                      {XMLProperty::Readonly});
+    xmlInfo->SetString("Faces",  std::to_string(m_fileMesh.GetNumFaces()),
+                      {XMLProperty::Readonly});
 }

@@ -20,30 +20,28 @@
 
 #include "Logger.h"
 #include "XMLNode.h"
-
 #include "IInspectable.h"
-#include "IWindowEventManagerListener.h"
-
 
 class Component;
 class WindowEventManager;
-class InspectorSW;
+class AttributeWidget;
+/**
+ * @brief Represents a widget that can be put in the Inspector.
+ * It tracks the attributes and attributeWidget it contains.
+ */
 class InspectorWidget : public QWidget
 {
-    //Every comp widget, has many slots,
-    // representing all its attributes (vectors, strings, integers, etc.)
     Q_OBJECT
 
 private:
-    //If not null, this function will be called when some slot value changes
-    std::function<void()> *m_callback = nullptr;
 
     std::vector<XMLAttribute> m_attributes;
-    std::vector<InspectorSW*> m_attributeWidgets;
-    std::map<std::string, InspectorSW*> m_attrNameToAttrWidget;
-    std::map<InspectorSW*, XMLAttribute> m_attrWidgetToAttribute;
+    mutable std::map<std::string, AttributeWidget*> m_attrNameToAttrWidget;
 
     QTimer *m_updateTimer = nullptr;
+
+    void CreateWidgetSlots(XMLNode &xmlInfo);
+    void ConstructFromWidgetXMLInfo(const std::string &title, XMLNode &info, bool autoUpdate = true);
 
 protected:
     IInspectable *m_relatedInspectable = nullptr;
@@ -51,30 +49,33 @@ protected:
     QHBoxLayout *m_titleLayout = nullptr;
     QLabel *m_titleLabel = nullptr;
 
-    void ConstructFromWidgetXMLInfo(const std::string &title,
-                                    XMLNode &info,
-                                    bool autoUpdate = true);
-
 public:
     InspectorWidget();
-    explicit InspectorWidget(IInspectable *relatedInspectable);
-
-    //Short handed way to use an Inspector Widget
-    //(no need to create an IInspectable object).
     explicit InspectorWidget(const std::string &title,
-                             XMLNode &widgetXMLInfo,
-                             std::function<void()> m_callback);
+                             IInspectable *relatedInspectable);
 
     virtual ~InspectorWidget();
 
-    std::vector<float> GetSWVectorFloatValue(const std::string &slotLabel);
-    int GetSWSelectedEnumIndex(const std::string &slotLabel);
-    std::string GetSWFileFilepath(const std::string &slotLabel);
+    /**
+     * @brief GetUpdatedWidgetXMLInfo
+     * @return An XMLNode with the information of the related IInspectable.
+     *         It's not updated.
+     */
+    XMLNode GetInspectableXMLInfo() const;
+
+    /**
+     * @brief GetUpdatedWidgetXMLInfo
+     * @return An XMLNode with the updated information
+     */
+    XMLNode GetWidgetXMLInfo() const;
 
 private slots:
 
-    void CreateWidgetSlots(XMLNode &xmlInfo);
+    /**
+     * @brief Refreshes all the widget values with the related IInspectable current values.
+     */
     void RefreshWidgetValues();
+
     void _OnSlotValueChanged(double _);
     void _OnSlotValueChanged(QString _);
 
@@ -82,7 +83,6 @@ public slots:
 
     virtual void OnCustomContextMenuRequested(QPoint point);
 
-    void RefreshWidgetValues(XMLNode &xmlInfo);
     virtual void _OnSlotValueChanged();
 };
 

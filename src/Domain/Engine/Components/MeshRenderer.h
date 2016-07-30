@@ -17,7 +17,7 @@
 #include "Renderer.h"
 
 #ifdef BANG_EDITOR
-#include "InspectorFileSW.h"
+#include "AttrWidgetFile.h"
 #endif
 
 

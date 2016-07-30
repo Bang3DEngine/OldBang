@@ -56,8 +56,6 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnAddComponentBehaviour()));
     connect(w->actionAddComponentCamera,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentCamera()));
-    connect(w->actionAddComponentTransform,  SIGNAL(triggered()),
-            this, SLOT(OnAddComponentTransform()));
     connect(w->actionAddComponentMeshRenderer,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentMeshRenderer()));
     connect(w->actionAddComponentLineRenderer,  SIGNAL(triggered()),
@@ -280,10 +278,6 @@ void MenuBar::OnAddComponentBehaviour() const
 void MenuBar::OnAddComponentCamera() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AddComponentCamera);
-}
-void MenuBar::OnAddComponentTransform() const
-{
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentTransform);
 }
 void MenuBar::OnAddComponentMeshRenderer() const
 {

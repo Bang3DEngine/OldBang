@@ -231,6 +231,30 @@ void XMLAttribute::SetFilepath(const std::string &filepath,
     }
 }
 
+bool XMLAttribute::HasVectoredType() const
+{
+    return m_type == XMLAttribute::Type::TFloat   ||
+           m_type == XMLAttribute::Type::TVector2 ||
+           m_type == XMLAttribute::Type::TVector3 ||
+           m_type == XMLAttribute::Type::TVector4 ||
+            m_type == XMLAttribute::Type::TQuaternion;
+}
+
+int XMLAttribute::GetNumberOfFieldsOfType() const
+{
+    if (m_type == XMLAttribute::Type::TBool)            return 1;
+    else if (m_type == XMLAttribute::Type::TInt)        return 1;
+    else if (m_type == XMLAttribute::Type::TString)     return 1;
+    else if (m_type == XMLAttribute::Type::TFloat)      return 1;
+    else if (m_type == XMLAttribute::Type::TVector2)    return 2;
+    else if (m_type == XMLAttribute::Type::TVector3)    return 3;
+    else if (m_type == XMLAttribute::Type::TVector4)    return 4;
+    else if (m_type == XMLAttribute::Type::TQuaternion) return 4;
+    else if (m_type == XMLAttribute::Type::TRect)       return 4;
+    else if (m_type == XMLAttribute::Type::TFile)       return 1;
+    return -1;
+}
+
 
 void XMLAttribute::SetType(const XMLAttribute::Type &type)
 {

@@ -23,6 +23,17 @@ public:
     static std::vector<std::string> Split(const std::string &content, char splitter);
 
     /**
+     * @brief FormatInspectorLabel
+     * @param labelString
+     * @return Returns the label formatted. It replaces "_" with spaces.
+     */
+    static std::string FormatInspectorLabel(const std::string &labelString);
+
+    static bool IsNumber(char c);
+    static bool IsLetter(char c);
+    static bool IsCap(char c);
+
+    /**
      * @brief AddInFrontOfWords
      * Adds the passed particle in front of every word.
      * For example: ("-I", "file1 dir/file2 dir/file3") is converted to

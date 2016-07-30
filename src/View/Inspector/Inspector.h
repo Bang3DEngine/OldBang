@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QListWidget>
 
-#include "InspectorComponentWidget.h"
+#include "ComponentWidget.h"
 #include "IWindowEventManagerListener.h"
 
 class Inspector : public QListWidget, public IWindowEventManagerListener
@@ -21,6 +21,8 @@ private:
 
     std::map<InspectorWidget*, QListWidgetItem*> m_widgetToItem;
 
+    void AddWidget(InspectorWidget *widget);
+
 protected:
     //To set the scroll step to a smaller one
     virtual void updateGeometries() override;
@@ -28,14 +30,11 @@ protected:
 public:
     explicit Inspector(QWidget *parent = 0);
 
-
     void Clear();
     void Refresh();
 
+    void SetInspectable(IInspectable *inspectable, const std::string &title = "");
     void ShowGameObjectInfo(GameObject *gameObject);
-
-    void SetWidget(InspectorWidget *widget);
-    void AddWidget(InspectorWidget *widget);
 
     void MoveUp(InspectorWidget *w);
     void MoveDown(InspectorWidget *w);

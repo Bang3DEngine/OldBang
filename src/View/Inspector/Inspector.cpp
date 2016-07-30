@@ -14,7 +14,6 @@
 #include "PointLight.h"
 #include "Logger.h"
 
-
 Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 {
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
@@ -31,7 +30,7 @@ void Inspector::Clear()
     clear();
     m_widgetToItem.clear();
     m_currentGameObject = nullptr;
-    m_titleLabel->setText(QString::fromStdString("No gameObject selected."));
+    m_titleLabel->setText(QString::fromStdString(""));
 
     setStyleSheet("/* */"); //without this line we get resize problems :)
     show();
@@ -44,6 +43,14 @@ void Inspector::Refresh()
     ShowGameObjectInfo(e);
 }
 
+void Inspector::SetInspectable(IInspectable *inspectable, const std::string &title)
+{
+    InspectorWidget *iw = new InspectorWidget(title, inspectable);
+
+    Clear();
+    AddWidget(iw);
+}
+
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
     Clear();
@@ -53,20 +60,13 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 
     for (Component *p : m_currentGameObject->GetComponents())
     {
-        InspectorComponentWidget *w = new InspectorComponentWidget(p);
+        ComponentWidget *w = new ComponentWidget(p);
         AddWidget(w);
     }
 
-    m_titleLabel->setText(
-                QString::fromStdString("Name: " + m_currentGameObject->name)
-                );
+    m_titleLabel->setText(QString(m_currentGameObject->name.c_str()));
 }
 
-void Inspector::SetWidget(InspectorWidget *widget)
-{
-    Clear();
-    AddWidget(widget);
-}
 
 void Inspector::AddWidget(InspectorWidget *widget)
 {

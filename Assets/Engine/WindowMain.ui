@@ -236,8 +236,6 @@
      <property name="title">
       <string>Add Component</string>
      </property>
-     <addaction name="actionAddComponentTransform"/>
-     <addaction name="separator"/>
      <addaction name="actionAddComponentBehaviour"/>
      <addaction name="separator"/>
      <addaction name="actionAddComponentCamera"/>

@@ -265,47 +265,6 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
     {
         scene->ReadXMLInfo(xmlInfo);
     }
-
-    /*
-    std::ifstream f (filepath);
-    if ( !f.is_open() )
-    {
-        Logger_Error("Could not open the file '" << filepath << "' to load the scene.");
-    }
-    else
-    {
-        std::string line = FileReader::ReadNextLine(f); // Skip <Scene> line
-        FileReader:: RegisterNextPointerId(f, scene); // Read Scene id
-        scene->SetName( FileReader::ReadString(f) ); //Read Scene name
-
-        while ( (line = FileReader::ReadNextLine(f)) != "</Scene>")
-        {
-            if (line == "") continue; //Skip blank lines
-
-            if (line == "<children>")
-            {
-                ReadChildren(f, (GameObject*) scene);
-            }
-            else if (line == "<cameraGameObject>")
-            {
-                GameObject *camChild = GetNextPointerAddress<GameObject>(f);
-                if (camChild )
-                {
-                    scene->SetCamera(camChild->GetComponent<Camera>());
-                }
-                FileReader::ReadString(f);
-            }
-            else
-            {
-            }
-        }
-    }
-    */
-}
-
-void FileReader::SaveScene(const std::string &filepath, const Scene *scene)
-{
-
 }
 
 std::string FileReader::PeekNextLine(std::istream &f)

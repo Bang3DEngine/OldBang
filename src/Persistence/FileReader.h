@@ -63,8 +63,6 @@ public:
 
     //Scene must be a created object before being passed to these functions (new Scene)
     static void ReadScene(const std::string &filepath, Scene* scene);
-    static void SaveScene(const std::string &filepath, const Scene *scene);
-
     //
 
     //READ PRIMITIVE VALUES

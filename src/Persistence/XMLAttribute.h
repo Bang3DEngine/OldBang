@@ -78,6 +78,19 @@ public:
     void SetFilepath(const std::string &filepath, const std::string &fileExtension = "",
                      const std::vector<XMLProperty>& properties = {});
 
+
+    /**
+     * @brief HasVectorLikeType
+     * @return Whether the type is either Float, Vector*, or Quaternion.
+     */
+    bool HasVectoredType() const;
+
+    /**
+     * @brief GetNumberOfFields
+     * @return The number of fields of the type. For example: TFloat=1, TVector2=2, TQuaternion=4, etc.
+     */
+    int GetNumberOfFieldsOfType() const;
+
     const std::string ToString() const override;
 
     const std::string& GetName() const;

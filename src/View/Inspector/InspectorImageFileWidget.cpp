@@ -1,7 +1,6 @@
 #include "InspectorImageFileWidget.h"
 
-InspectorImageFileWidget::
-InspectorImageFileWidget(const FileImage &fileImage) :
+InspectorImageFileWidget::InspectorImageFileWidget(const FileImage &fileImage) :
     InspectorWidget()
 {
     xmlInfo->SetString("FileName", fileImage.GetName() + "." + fileImage.GetExtension(),
@@ -13,7 +12,7 @@ InspectorImageFileWidget(const FileImage &fileImage) :
     xmlInfo->SetString("Mode", fileImage.GetNumComponents() == 3 ? "RGB" : "RGBA",
                        {XMLProperty::Readonly});
 
-    ConstructFromWidgetXMLInfo(fileImage.GetName(), *xmlInfo);
+    //ConstructFromWidgetXMLInfo(fileImage.GetName(), *xmlInfo);
 }
 
 InspectorImageFileWidget::~InspectorImageFileWidget()

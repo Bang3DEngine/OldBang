@@ -1,7 +1,7 @@
 #include "FileMesh.h"
 
 FileMesh::FileMesh(const QFileSystemModel *model, const QModelIndex *index)
-    :File(model, index)
+    : File(model, index)
 {
     FileReader::GetOBJFormat(m_path, &m_hasUvs, &m_hasNormals, &m_isTris);
     m_numFaces = FileReader::GetOBJNumFaces(m_path);

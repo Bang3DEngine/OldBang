@@ -529,8 +529,6 @@ public:
         menuProject->addAction(actionProjectSettings);
         menuComponents->addAction(menuAddComponent->menuAction());
         menuComponents->addAction(actionRemoveComponent);
-        menuAddComponent->addAction(actionAddComponentTransform);
-        menuAddComponent->addSeparator();
         menuAddComponent->addAction(actionAddComponentBehaviour);
         menuAddComponent->addSeparator();
         menuAddComponent->addAction(actionAddComponentCamera);

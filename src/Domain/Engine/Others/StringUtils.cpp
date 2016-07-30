@@ -102,6 +102,41 @@ std::vector<std::string> StringUtils::Split(const std::string &content, char spl
     return result;
 }
 
+std::string StringUtils::FormatInspectorLabel(const std::string &labelString)
+{
+    std::string labelFormatted = labelString;
+    StringUtils::Replace(&labelFormatted, "_", " ");
+
+    //Add space before any cap that does not have a space to its left
+    for (auto it = labelFormatted.begin(); it != labelFormatted.end(); ++it)
+    {
+        if (IsCap(*it) && it != labelFormatted.begin())
+        {
+            it = labelFormatted.insert(it, ' ');
+            ++it;
+        }
+    }
+
+    StringUtils::Replace(&labelFormatted, "  ", " ");
+
+    return labelFormatted;
+}
+
+bool StringUtils::IsNumber(char c)
+{
+    return c >= 48 && c <= 57;
+}
+
+bool StringUtils::IsLetter(char c)
+{
+    return (c >= 97 && c <= 122) || IsCap(c);
+}
+
+bool StringUtils::IsCap(char c)
+{
+    return c >= 65 && c <= 90;
+}
+
 void StringUtils::AddInFrontOfWords(std::string particle, std::string *str)
 {
     std::string &phrase = *str;

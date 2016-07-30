@@ -59,8 +59,6 @@ int main(int argc, char *argv[])
 
     #endif
 
-
-
     Canvas::InitFromMainBinary();
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();

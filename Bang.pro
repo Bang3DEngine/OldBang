@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-#CONFIG += EDITOR
+CONFIG += EDITOR
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -207,27 +207,27 @@ HEADERS += \
     src/View/EditorScene/EditorDebugGameObject.h \
     src/View/EditorGameObject/EditorTranslateAxis.h \
     src/View/EditorGameObject/EditorTranslateAxisGroup.h \
-    src/View/Inspector/InspectorButtonSW.h \
+    src/View/Inspector/AttrWidgetButton.h \
     src/View/Toolbar.h \
     src/View/WindowEventManager.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/View/Inspector/Inspector.h \
     src/View/Hierarchy/Hierarchy.h \
-    src/View/Inspector/InspectorComponentWidget.h \
-    src/View/Inspector/InspectorSW.h \
-    src/View/Inspector/InspectorFloatSW.h \
-    src/View/Inspector/InspectorVFloatSW.h \
+    src/View/Inspector/ComponentWidget.h \
+    src/View/Inspector/AttributeWidget.h \
+    src/View/Inspector/AttrWidgetFloat.h \
+    src/View/Inspector/AttrWidgetVectorFloat.h \
     src/View/Logger/ListLogger.h \
     src/View/Logger/LoggerWidget.h \
-    src/View/Inspector/InspectorEnumSW.h \
+    src/View/Inspector/AttrWidgetEnum.h \
     src/View/Explorer/Explorer.h \
-    src/View/Inspector/InspectorFileSW.h \
+    src/View/Inspector/AttrWidgetFile.h \
     src/View/Inspector/IInspectable.h \
     src/View/MenuBar.h \
     src/View/Explorer/ExplorerDirTree.h \
     src/View/Inspector/InspectorWidget.h \
     src/View/Inspector/InspectorImageFileWidget.h \
-    src/View/Inspector/InspectorStringSW.h \
+    src/View/Inspector/AttrWidgetString.h \
     src/View/Inspector/InspectorMeshFileWidget.h \
     src/View/EditorCamera/EditorCamera.h \
     src/View/EditorGameObject/EditorGameObject.h \
@@ -337,21 +337,21 @@ EDITOR {
         src/View/Inspector/Inspector.cpp \
         src/View/Hierarchy/Hierarchy.cpp \
         src/Domain/Graphics/SelectionFramebuffer.cpp \
-        src/View/Inspector/InspectorComponentWidget.cpp \
-        src/View/Inspector/InspectorSW.cpp \
-        src/View/Inspector/InspectorFloatSW.cpp \
-        src/View/Inspector/InspectorVFloatSW.cpp \
+        src/View/Inspector/ComponentWidget.cpp \
+        src/View/Inspector/AttributeWidget.cpp \
+        src/View/Inspector/AttrWidgetFloat.cpp \
+        src/View/Inspector/AttrWidgetVectorFloat.cpp \
         src/View/Logger/ListLogger.cpp \
         src/View/Logger/LoggerWidget.cpp \
-        src/View/Inspector/InspectorEnumSW.cpp \
+        src/View/Inspector/AttrWidgetEnum.cpp \
         src/View/Explorer/Explorer.cpp \
-        src/View/Inspector/InspectorFileSW.cpp \
+        src/View/Inspector/AttrWidgetFile.cpp \
         src/View/Inspector/IInspectable.cpp \
         src/View/MenuBar.cpp \
         src/View/Explorer/ExplorerDirTree.cpp \
         src/View/Inspector/InspectorWidget.cpp \
         src/View/Inspector/InspectorImageFileWidget.cpp \
-        src/View/Inspector/InspectorStringSW.cpp \
+        src/View/Inspector/AttrWidgetString.cpp \
         src/View/Inspector/InspectorMeshFileWidget.cpp \
         src/View/EditorCamera/EditorCamera.cpp \
         src/View/EditorGameObject/EditorGameObject.cpp \
@@ -364,7 +364,7 @@ EDITOR {
         src/View/EditorGameObject/EditorTranslateAxisGroup.cpp \
         src/View/EditorGameObject/EditorTranslateAxis.cpp \
         src/View/Toolbar.cpp \
-        src/View/Inspector/InspectorButtonSW.cpp
+        src/View/Inspector/AttrWidgetButton.cpp
 }
 
 GAME {

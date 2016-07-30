@@ -124,7 +124,8 @@ void Explorer::RefreshInspector()
     else if (f.IsMeshFile())
     {
         FileMesh fm(m_fileSystemModel, &clickedIndex);
-        fileWidget = new InspectorMeshFileWidget(fm);
+        WindowMain::GetInstance()->widgetInspector->SetInspectable(new InspectorMeshFileWidget(fm));
+        //fileWidget = new InspectorMeshFileWidget(fm);
     }
     /*else if (f.IsMeshAsset())
     {
@@ -136,9 +137,9 @@ void Explorer::RefreshInspector()
         WindowMain::GetInstance()->widgetInspector->Clear();
     }
 
-    if (fileWidget )
+    if (fileWidget)
     {
-        WindowMain::GetInstance()->widgetInspector->SetWidget(fileWidget);
+        //WindowMain::GetInstance()->widgetInspector->AddWidget(fileWidget);
     }
 }
 

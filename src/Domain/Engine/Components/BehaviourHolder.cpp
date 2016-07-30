@@ -2,7 +2,7 @@
 
 BehaviourHolder::BehaviourHolder()
 {
-    //    new InspectorButtonSWInfo( "Refresh",
+    //    new AttrWidgetButtonInfo( "Refresh",
     //                std::bind(&BehaviourHolder::Refresh, this) )
 }
 

@@ -22,7 +22,7 @@ InspectorTexture2DAssetWidget::InspectorTexture2DAssetWidget
 
     delete tex;
 
-    ConstructFromWidgetXMLInfo(fileTex.GetName(), xmlInfo, false);
+    //ConstructFromWidgetXMLInfo(fileTex.GetName(), xmlInfo, false);
 }
 
 InspectorTexture2DAssetWidget::~InspectorTexture2DAssetWidget()
@@ -45,10 +45,10 @@ void InspectorTexture2DAssetWidget::_OnSlotValueChanged()
         currentTex = AssetsManager::ReadTmpAsset<Texture2D>(m_assetFilepath);
     }
 
-    if (currentTex )
+    if (currentTex)
     {
         //Only update the current Asset instance being used if it exists
-        int filterModeIndex = this->GetSWSelectedEnumIndex("Filter");
+        int filterModeIndex = 0; //this->GetSWSelectedEnumIndex("Filter");
         Texture2D::FilterMode fm = filterModeIndex == 0 ?
                     Texture2D::FilterMode::Nearest :
                     Texture2D::FilterMode::Linear;

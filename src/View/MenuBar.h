@@ -49,7 +49,6 @@ public:
 
         AddComponentBehaviour,
         AddComponentCamera,
-        AddComponentTransform,
         AddComponentMeshRenderer,
         AddComponenSingleLineRenderer,
         AddComponentCircleRenderer,
@@ -87,7 +86,6 @@ public slots:
 
     void OnAddComponentBehaviour() const;
     void OnAddComponentCamera() const;
-    void OnAddComponentTransform() const;
     void OnAddComponentMeshRenderer() const;
     void OnAddComponentSingleLineRenderer() const;
     void OnAddComponentCircleRenderer() const;
