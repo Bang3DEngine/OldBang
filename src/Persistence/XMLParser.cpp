@@ -8,9 +8,11 @@ XMLParser::XMLParser()
 
 std::string XMLParser::GetTagName(const std::string &tag, int *tagNameBegin, int *tagNameEnd)
 {
-    int tagBegin = tag.find_first_of('<');
+    int tagBegin = tag.find_first_of("<");
+    int tagBegin2 = tag.find_first_of("/", tagBegin);
+    tagBegin = (tagBegin2 == tagBegin+1) ? tagBegin2 : tagBegin;
     int nameBegin = tag.find_first_not_of(TOKEN_SPACE, tagBegin + 1);
-    int nameEnd = tag.find_first_of(TOKEN_SPACE + ">/", nameBegin + 1);
+    int nameEnd = tag.find_first_of(TOKEN_SPACE + ">", nameBegin + 1);
 
     if (tagNameBegin) *tagNameBegin = nameBegin;
     if (tagNameEnd) *tagNameEnd = nameEnd;
@@ -87,7 +89,7 @@ void XMLParser::GetFirstAttribute(const std::string &tag,
 
 bool XMLParser::IsOpenTag(const std::string &tag)
 {
-    return tag[tag.length()-2] != '/' && tag[tag.length()-1] == '>';
+    return tag[0] == '<' && tag[1] != '/';
 }
 
 void XMLParser::GetCorrespondingCloseTag(const std::string &xml,
@@ -217,10 +219,7 @@ XMLNode* XMLParser::FromXML(const std::string &xml)
     int rootOpenTagBegin, rootOpenTagEnd;
     XMLParser::GetNextOpenTag(xml, 0, &tag,
                               &rootOpenTagBegin, &rootOpenTagEnd);
-    if (rootOpenTagEnd == -1)
-    {
-        return nullptr;
-    }
+    if (rootOpenTagEnd == -1) { delete root; return nullptr; }
 
     int tagNameEnd;
     std::string tagName = XMLParser::GetTagName(tag, nullptr, &tagNameEnd);
@@ -236,10 +235,7 @@ XMLNode* XMLParser::FromXML(const std::string &xml)
     {
         XMLAttribute attr;
         XMLParser::GetFirstAttribute(tag, attrEnd + 1, &attr, &attrEnd);
-        if(attrEnd == -1)
-        {
-            break;
-        }
+        if(attrEnd == -1) { break; }
         root->SetGenericAttribute(attr.GetName(), attr.GetValue(), attr.GetType(), attr.GetProperties());
     }
 
@@ -252,6 +248,7 @@ XMLNode* XMLParser::FromXML(const std::string &xml)
         int childOpenTagBegin, childOpenTagEnd;
         XMLParser::GetNextOpenTag(innerXML, innerLastPos, &innerTag,
                                   &childOpenTagBegin, &childOpenTagEnd);
+        //std::cerr << "nextOpenTag child: " << innerTag << std::endl << std::endl;
         if (childOpenTagBegin == -1) { break; }
 
         std::string tagName = XMLParser::GetTagName(innerTag);

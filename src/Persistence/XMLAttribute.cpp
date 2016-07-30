@@ -3,7 +3,7 @@
 const std::vector< std::string >  XMLAttribute::TypeNames =
     {"Bool", "Int", "String", "Float",
      "Vector2", "Vector3", "Vector4",
-     "Quaternion", "Rect", "File"};
+     "Quaternion", "Rect", "File", "Enum"};
 
 XMLAttribute::Type XMLAttribute::GetTypeFromString(const std::string &typeString)
 {
@@ -231,6 +231,11 @@ void XMLAttribute::SetFilepath(const std::string &filepath,
     }
 }
 
+void XMLAttribute::SetEnum(const std::string &value, const std::vector<XMLProperty> &properties)
+{
+    Set(m_name, value, XMLAttribute::Type::TEnum, properties);
+}
+
 bool XMLAttribute::HasVectoredType() const
 {
     return m_type == XMLAttribute::Type::TFloat   ||
@@ -375,6 +380,11 @@ Rect XMLAttribute::GetRect() const
 {
     glm::vec4 v = GetVector4();
     return Rect(v.x, v.y, v.z, v.w);
+}
+
+std::string XMLAttribute::GetEnum() const
+{
+    return m_value;
 }
 
 const std::vector<XMLProperty> &XMLAttribute::GetProperties() const

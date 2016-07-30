@@ -17,11 +17,13 @@
 #include "File.h"
 #include "FileMesh.h"
 #include "FileImage.h"
-#include "FileTexture2DAsset.h"
+#include "MeshAssetFile.h"
+#include "MeshAssetFileInspectable.h"
+#include "Texture2DAssetFile.h"
 
-#include "InspectorMeshFileWidget.h"
-#include "InspectorImageFileWidget.h"
-#include "InspectorTexture2DAssetWidget.h"
+#include "MeshFileInspectable.h"
+#include "ImageFileInspectable.h"
+#include "Texture2DAssetFileInspectable.h"
 
 class Explorer : public QListView
 {
@@ -33,6 +35,7 @@ private:
     QFileSystemModel *m_fileSystemModel = nullptr;
     QToolButton *m_buttonDirUp = nullptr;
     QToolButton *m_buttonChangeViewMode = nullptr;
+    IInspectable *lastIInspectableInInspector = nullptr;
 
     std::string m_lastSelectedFileName = "";
     QTimer *m_updateTimer = nullptr;

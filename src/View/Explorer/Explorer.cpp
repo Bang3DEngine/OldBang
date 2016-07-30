@@ -110,36 +110,43 @@ void Explorer::RefreshInspector()
     QModelIndex clickedIndex = this->selectedIndexes().at(0);
     File f(m_fileSystemModel, &clickedIndex);
 
-    InspectorWidget *fileWidget = nullptr;
-    if (f.IsImageFile())
+    if (lastIInspectableInInspector)
     {
-        FileImage fi(m_fileSystemModel, &clickedIndex);
-        fileWidget = new InspectorImageFileWidget(fi);
-    }
-    else if (f.IsTexture2DAsset())
-    {
-        FileTexture2DAsset ft(m_fileSystemModel, &clickedIndex);
-        fileWidget = new InspectorTexture2DAssetWidget(ft);
-    }
-    else if (f.IsMeshFile())
-    {
-        FileMesh fm(m_fileSystemModel, &clickedIndex);
-        WindowMain::GetInstance()->widgetInspector->SetInspectable(new InspectorMeshFileWidget(fm));
-        //fileWidget = new InspectorMeshFileWidget(fm);
-    }
-    /*else if (f.IsMeshAsset())
-    {
-        FileMeshAsset ft(fileSystemModel, &clickedIndex);
-        fileWidget = new InspectorMeshFileWidget(ft);
-    }*/
-    else
-    {
-        WindowMain::GetInstance()->widgetInspector->Clear();
+        delete lastIInspectableInInspector;
+        lastIInspectableInInspector = nullptr;
     }
 
-    if (fileWidget)
+    Inspector *inspector = WindowMain::GetInstance()->widgetInspector;
+    IInspectable *newInspectable = nullptr;
+    if (f.IsImageFile()) // jpg, png, etc.
     {
-        //WindowMain::GetInstance()->widgetInspector->AddWidget(fileWidget);
+        FileImage fi(m_fileSystemModel, &clickedIndex);
+        newInspectable = new ImageFileInspectable(fi);
+    }
+    else if (f.IsTexture2DAsset()) // btex2d
+    {
+        Texture2DAssetFile ft(m_fileSystemModel, &clickedIndex);
+        newInspectable = new Texture2DAssetFileInspectable(ft);
+    }
+    else if (f.IsMeshFile()) // obj, etc.
+    {
+        FileMesh fm(m_fileSystemModel, &clickedIndex);
+        newInspectable = new MeshFileInspectable(fm);
+    }
+    else if (f.IsMeshAsset()) // bmesh
+    {
+        MeshAssetFile fm(m_fileSystemModel, &clickedIndex);
+        newInspectable = new MeshAssetFileInspectable(fm);
+    }
+    else
+    {
+        inspector->Clear();
+    }
+
+    if (newInspectable)
+    {
+        inspector->SetInspectable(newInspectable);
+        lastIInspectableInInspector = newInspectable;
     }
 }
 

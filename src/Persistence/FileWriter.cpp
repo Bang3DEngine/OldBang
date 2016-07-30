@@ -6,40 +6,54 @@ FileWriter::FileWriter()
 {
 }
 
-void FileWriter::WriteScene(std::string filename, Scene *scene)
+void FileWriter::WriteScene(const std::string &filepath, Scene *scene)
 {
     std::ofstream ofs;
-    filename = Persistence::AppendExtension(filename, Scene::GetFileExtension());
-    ofs.open(filename);
-    if (!ofs.is_open())
+    std::string fpath = Persistence::AppendExtension(filepath, Scene::GetFileExtension());
+    ofs.open(fpath);
+    if (ofs.is_open())
     {
-        Logger_Error("There was an error when saving file '" << filename << "'");
-        ofs.close();
-        return;
+        XMLNode *xmlInfo = new XMLNode();
+        scene->FillXMLInfo(xmlInfo);
+        ofs << xmlInfo->ToString();
     }
-
-    XMLNode *xmlInfo = new XMLNode();
-    scene->FillXMLInfo(xmlInfo);
-    ofs << xmlInfo->ToString();
+    else
+    {
+        Logger_Error("There was an error when saving file '" << fpath << "'");
+    }
     ofs.close();
 }
 
-void FileWriter::WriteAsset(std::string filename, Asset *a)
+void FileWriter::WriteAsset(const std::string &filepath, Asset *a)
 {
     std::ofstream ofs;
-    filename = Persistence::AppendExtension(filename,
-                                            a->GetFileExtension());
-    ofs.open(filename);
-    if (!ofs.is_open())
+    std::string fpath = Persistence::AppendExtension(filepath, a->GetFileExtension());
+    ofs.open(fpath);
+    if (ofs.is_open())
     {
-        Logger_Error("There was an error when saving file '" << filename << "'");
-        ofs.close();
-        return;
+        XMLNode *xmlInfo = new XMLNode();
+        a->FillXMLInfo(xmlInfo);
+        ofs << xmlInfo->ToString();
     }
+    else
+    {
+        Logger_Error("There was an error when saving file '" << filepath << "'");
+    }
+    ofs.close();
+}
 
-    XMLNode *xmlInfo = new XMLNode();
-    a->FillXMLInfo(xmlInfo);
-    ofs << xmlInfo->ToString();
+void FileWriter::WriteToFile(const std::string &filepath, const std::string &content)
+{
+    std::ofstream ofs;
+    ofs.open(filepath);
+    if (ofs.is_open())
+    {
+        ofs << content;
+    }
+    else
+    {
+        Logger_Error("There was an error when saving file '" << filepath << "'");
+    }
     ofs.close();
 }
 

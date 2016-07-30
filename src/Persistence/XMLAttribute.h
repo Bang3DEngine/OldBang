@@ -29,7 +29,8 @@ public:
         TVector4,
         TQuaternion,
         TRect,
-        TFile
+        TFile,
+        TEnum
     };
 
     static const std::vector< std::string > TypeNames;
@@ -77,6 +78,7 @@ public:
     void SetRect(const Rect &value, const std::vector<XMLProperty>& properties = {});
     void SetFilepath(const std::string &filepath, const std::string &fileExtension = "",
                      const std::vector<XMLProperty>& properties = {});
+    void SetEnum(const std::string& value, const std::vector<XMLProperty>& properties = {});
 
 
     /**
@@ -107,6 +109,7 @@ public:
     glm::vec4 GetVector4() const;
     Quaternion GetQuaternion() const;
     Rect GetRect() const;
+    std::string GetEnum() const;
 
     const std::string& GetTypeName() const;
     const std::vector<XMLProperty>& GetProperties() const;

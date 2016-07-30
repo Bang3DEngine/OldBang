@@ -143,12 +143,12 @@ const Sphere &Mesh::GetBoundingSphere() const
 void Mesh::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
-    m_filepath = xmlInfo->GetString("Mesh");
+    m_filepath = xmlInfo->GetString("MeshFilepath");
     LoadFromFile(m_filepath);
 }
 
 void Mesh::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Asset::FillXMLInfo(xmlInfo);
-    xmlInfo->SetTagName("Mesh");
+    xmlInfo->SetTagName("MeshFilepath");
 }

@@ -11,7 +11,7 @@ protected:
     bool m_isFile = true;
     std::string m_path = "";
     std::string m_name = "";
-    std::string  m_extension = "";
+    std::string m_extension = "";
 
 public:
     File(const QFileSystemModel *model, const QModelIndex *index);

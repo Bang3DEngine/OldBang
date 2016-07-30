@@ -1,2 +1,2 @@
-<Mesh Mesh:File="Assets/Meshes/Boy.obj"{FileExtension:"obj"}>
+<Mesh MeshFilepath:File="Assets/Meshes/Boy.obj"{FileExtension:"obj"}>
 </Mesh>

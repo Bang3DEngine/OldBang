@@ -107,13 +107,14 @@ void MeshRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void MeshRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Renderer::ReadXMLInfo(xmlInfo);
-    SetMesh( AssetsManager::GetAsset<Mesh>( xmlInfo->GetFilepath("Mesh") ) );
+    SetMesh( AssetsManager::GetAsset<Mesh>( xmlInfo->GetFilepath("MeshAssetFilepath") ) );
 }
 
 void MeshRenderer::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Renderer::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("MeshRenderer");
+
     xmlInfo->GetAttribute("LineWidth")->SetProperty(XMLProperty::Hidden);
-    xmlInfo->SetFilepath("Mesh", m_mesh ? m_mesh->GetFilepath() : "", "bmesh");
+    xmlInfo->SetFilepath("MeshAssetFilepath", m_mesh ? m_mesh->GetFilepath() : "", "bmesh");
 }

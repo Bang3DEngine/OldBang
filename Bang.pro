@@ -194,12 +194,13 @@ HEADERS += \
     src/Persistence/File.h \
     src/Persistence/FileImage.h \
     src/Persistence/FileMesh.h \
-    src/Persistence/FileTexture2DAsset.h \
-    src/Persistence/FileMeshAsset.h \
+    src/Persistence/Texture2DAssetFile.h \
+    src/Persistence/MeshAssetFile.h \
     src/Persistence/XMLParser.h \
     src/Persistence/XMLNode.h \
     src/Persistence/XMLAttribute.h \
-    src/Persistence/XMLProperty.h
+    src/Persistence/XMLProperty.h \
+    src/View/Inspector/MeshAssetFileInspectable.h
 
 EDITOR {
 HEADERS += \
@@ -226,14 +227,14 @@ HEADERS += \
     src/View/MenuBar.h \
     src/View/Explorer/ExplorerDirTree.h \
     src/View/Inspector/InspectorWidget.h \
-    src/View/Inspector/InspectorImageFileWidget.h \
+    src/View/Inspector/ImageFileInspectable.h \
     src/View/Inspector/AttrWidgetString.h \
-    src/View/Inspector/InspectorMeshFileWidget.h \
+    src/View/Inspector/MeshFileInspectable.h \
     src/View/EditorCamera/EditorCamera.h \
     src/View/EditorGameObject/EditorGameObject.h \
     src/View/EditorScene/EditorScene.h \
     src/Domain/Graphics/SelectionFramebuffer.h \
-    src/View/Inspector/InspectorTexture2DAssetWidget.h \
+    src/View/Inspector/Texture2DAssetFileInspectable.h \
     src/View/Dialogs/FileDialog.h \
     src/View/EditorGameObject/EditorBBox.h \
     src/View/EditorGameObject/EditorRotateAxisGroup.h \
@@ -315,12 +316,13 @@ SOURCES += \
     src/Persistence/File.cpp \
     src/Persistence/FileImage.cpp \
     src/Persistence/FileMesh.cpp \
-    src/Persistence/FileTexture2DAsset.cpp \
-    src/Persistence/FileMeshAsset.cpp \
+    src/Persistence/Texture2DAssetFile.cpp \
+    src/Persistence/MeshAssetFile.cpp \
     src/Persistence/XMLParser.cpp \
     src/Persistence/XMLNode.cpp \
     src/Persistence/XMLAttribute.cpp \
-    src/Persistence/XMLProperty.cpp
+    src/Persistence/XMLProperty.cpp \
+    src/View/Inspector/MeshAssetFileInspectable.cpp
 
 EDITOR {
     SOURCES += \
@@ -350,13 +352,13 @@ EDITOR {
         src/View/MenuBar.cpp \
         src/View/Explorer/ExplorerDirTree.cpp \
         src/View/Inspector/InspectorWidget.cpp \
-        src/View/Inspector/InspectorImageFileWidget.cpp \
+        src/View/Inspector/ImageFileInspectable.cpp \
         src/View/Inspector/AttrWidgetString.cpp \
-        src/View/Inspector/InspectorMeshFileWidget.cpp \
+        src/View/Inspector/MeshFileInspectable.cpp \
         src/View/EditorCamera/EditorCamera.cpp \
         src/View/EditorGameObject/EditorGameObject.cpp \
         src/View/EditorScene/EditorScene.cpp \
-        src/View/Inspector/InspectorTexture2DAssetWidget.cpp \
+        src/View/Inspector/Texture2DAssetFileInspectable.cpp \
         src/View/Dialogs/FileDialog.cpp \
         src/View/EditorGameObject/EditorBBox.cpp \
         src/View/EditorGameObject/EditorSelectionGameObject.cpp \

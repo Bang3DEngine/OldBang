@@ -11,6 +11,8 @@ protected:
 
 public:
 
+    virtual ~IInspectable() {}
+
     #ifdef BANG_EDITOR
     // Value was changed by the user, using input in inspector
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo);

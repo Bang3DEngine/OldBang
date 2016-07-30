@@ -144,6 +144,14 @@ void XMLNode::SetFilepath(const std::string &attributeName, const std::string &f
     SetAttribute(attr);
 }
 
+void XMLNode::SetEnum(const std::string &attributeName, const std::string &enumFieldName, const std::vector<XMLProperty> &properties)
+{
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetEnum(enumFieldName, properties);
+    SetAttribute(attr);
+}
+
 XMLAttribute* XMLNode::GetAttribute(const std::string &attributeName) const
 {
     XMLAttribute *attr = nullptr;
@@ -235,6 +243,12 @@ Rect XMLNode::GetRect(const std::string &attributeName) const
     return attr ? attr->GetRect() : Rect();
 }
 
+std::string XMLNode::GetEnum(const std::string &attributeName) const
+{
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetEnum() : "";
+}
+
 const XMLNode *XMLNode::GetChild(const std::string &name) const
 {
     for (XMLNode *node : m_children)
@@ -269,7 +283,7 @@ const std::string XMLNode::ToString(const std::string& indent) const
     {
         str += child->ToString(newIndent);
     }
-    str += indent + "<" + m_tagName + "/>\n";
+    str += indent + "</" + m_tagName + ">\n";
     return str;
 }
 
