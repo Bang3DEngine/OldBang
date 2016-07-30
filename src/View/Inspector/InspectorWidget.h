@@ -38,10 +38,10 @@ private:
     //If not null, this function will be called when some slot value changes
     std::function<void()> *m_callback = nullptr;
 
-    std::vector<InspectorSW*> m_compSlots;
     std::vector<XMLAttribute> m_attributes;
-    std::map<std::string, InspectorSW*> m_attrNameToComponentSlots;
-    std::map<InspectorSW*, XMLAttribute> m_componentSlotsToAttribute;
+    std::vector<InspectorSW*> m_attributeWidgets;
+    std::map<std::string, InspectorSW*> m_attrNameToAttrWidget;
+    std::map<InspectorSW*, XMLAttribute> m_attrWidgetToAttribute;
 
     QTimer *m_updateTimer = nullptr;
 

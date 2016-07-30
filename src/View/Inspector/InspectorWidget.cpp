@@ -96,12 +96,12 @@ void InspectorWidget::RefreshWidgetValues(XMLNode &xmlInfo)
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         std::string attrName  = itAttr.first;
-        if( m_attrNameToComponentSlots.find(attrName) == m_attrNameToComponentSlots.end())
+        if( m_attrNameToAttrWidget.find(attrName) == m_attrNameToAttrWidget.end())
         {
             continue;
         }
 
-        InspectorSW *ws = m_attrNameToComponentSlots[attrName];
+        InspectorSW *ws = m_attrNameToAttrWidget[attrName];
 
         XMLAttribute attribute = itAttr.second;
         XMLAttribute::Type attrType = attribute.GetType();
@@ -165,19 +165,19 @@ void InspectorWidget::RefreshWidgetValues(XMLNode &xmlInfo)
 
 std::vector<float> InspectorWidget::GetSWVectorFloatValue(const std::string &slotLabel)
 {
-    InspectorVFloatSW *w = dynamic_cast<InspectorVFloatSW*>(m_attrNameToComponentSlots[slotLabel]);
+    InspectorVFloatSW *w = dynamic_cast<InspectorVFloatSW*>(m_attrNameToAttrWidget[slotLabel]);
     return w ? w->GetValue() : std::vector<float>();
 }
 
 int InspectorWidget::GetSWSelectedEnumIndex(const std::string &slotLabel)
 {
-    InspectorEnumSW *w = dynamic_cast<InspectorEnumSW*>(m_attrNameToComponentSlots[slotLabel]);
+    InspectorEnumSW *w = dynamic_cast<InspectorEnumSW*>(m_attrNameToAttrWidget[slotLabel]);
     return w ? w->GetValue() : 0;
 }
 
 std::string InspectorWidget::GetSWFileFilepath(const std::string &slotLabel)
 {
-    InspectorFileSW *w = dynamic_cast<InspectorFileSW*>(m_attrNameToComponentSlots[slotLabel]);
+    InspectorFileSW *w = dynamic_cast<InspectorFileSW*>(m_attrNameToAttrWidget[slotLabel]);
     return w ? w->GetValue() : "";
 }
 
@@ -225,9 +225,9 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
             {
                 ws->show();
                 layout()->addWidget(ws);
-                m_compSlots.push_back(ws);
-                m_attrNameToComponentSlots[attrName] = ws;
-                m_componentSlotsToAttribute[ws] = attribute;
+                m_attributeWidgets.push_back(ws);
+                m_attrNameToAttrWidget[attrName] = ws;
+                m_attrWidgetToAttribute[ws] = attribute;
             }
         }
     }
@@ -254,9 +254,9 @@ void InspectorWidget::_OnSlotValueChanged()
     for (XMLAttribute attribute : m_attributes)
     {
         std::string attrName = attribute.GetName();
-        if (m_attrNameToComponentSlots.find(attrName) != m_attrNameToComponentSlots.end())
+        if (m_attrNameToAttrWidget.find(attrName) != m_attrNameToAttrWidget.end())
         {
-            InspectorSW *ws = m_attrNameToComponentSlots[attrName];
+            InspectorSW *ws = m_attrNameToAttrWidget[attrName];
             XMLAttribute::Type attrType = attribute.GetType();
 
             if (attrType == XMLAttribute::Type::TFloat   ||

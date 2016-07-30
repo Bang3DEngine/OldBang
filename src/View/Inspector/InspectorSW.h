@@ -5,6 +5,8 @@
 
 #include "InspectorComponentWidget.h"
 
+/*
+*/
 class InspectorSW : public QWidget
 {
     Q_OBJECT

@@ -265,7 +265,7 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
     {
         scene->ReadXMLInfo(xmlInfo);
     }
-    Logger_Log(xmlInfo->ToString());
+
     /*
     std::ifstream f (filepath);
     if ( !f.is_open() )
