@@ -35,10 +35,14 @@ class InspectorWidget : public QWidget
 
 private:
 
+    /** @brief This variable is used to avoid premature OnSlotValueChanged, before creating the widget**/
+    bool m_created = false;
+
+    QTimer *m_updateTimer = nullptr;
+    std::string m_tagName = "";
     std::vector<XMLAttribute> m_attributes;
     mutable std::map<std::string, AttributeWidget*> m_attrNameToAttrWidget;
 
-    QTimer *m_updateTimer = nullptr;
 
     void CreateWidgetSlots(XMLNode &xmlInfo);
     void ConstructFromWidgetXMLInfo(const std::string &title, XMLNode &info, bool autoUpdate = true);

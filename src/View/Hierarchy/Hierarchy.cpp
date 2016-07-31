@@ -361,7 +361,7 @@ void Hierarchy::OnContextMenuCreatePrefab()
     Prefab *prefab = new Prefab(e);
 
     std::string ext = Prefab::GetFileExtensionStatic();
-    FileDialog fd("Create Prefab...", Prefab::GetFileExtensionStatic());
+    FileDialog fd("Create Prefab...", "*." + Prefab::GetFileExtensionStatic());
     std::string filename = fd.GetSaveFilename(e->name);
     if (filename != "")
     {

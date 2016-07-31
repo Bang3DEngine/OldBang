@@ -119,6 +119,8 @@ public:
 
     const std::string& GetTypeName() const;
     const std::vector<XMLProperty>& GetProperties() const;
+
+    static XMLAttribute FromString(const std::string &string);
 };
 
 #endif // XMLATTRIBUTE_H

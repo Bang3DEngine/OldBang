@@ -42,6 +42,8 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
     mainLayout->addLayout(m_titleLayout);
     CreateWidgetSlots(xmlInfo);
+    RefreshWidgetValues(); // Initial catch of values
+    m_created = true;
     show();
 
     //
@@ -74,6 +76,7 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
 {
     // Gather all attributes
     XMLNode xmlInfo;
+    xmlInfo.SetTagName(m_tagName);
     for (XMLAttribute attribute : m_attributes)
     {
         std::string attrName = attribute.GetName();
@@ -136,6 +139,7 @@ void InspectorWidget::OnCustomContextMenuRequested(QPoint point)
 void InspectorWidget::RefreshWidgetValues()
 {
     XMLNode xmlInfo = GetInspectableXMLInfo();
+    xmlInfo.SetTagName(m_tagName);
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         XMLAttribute attribute = itAttr.second;
@@ -173,9 +177,9 @@ void InspectorWidget::RefreshWidgetValues()
             }
             else if (attrType == XMLAttribute::Type::TFile)
             {
-                AttrWidgetFile *wa = static_cast<AttrWidgetFile*>(ws);
-                wa->SetValue( xmlInfo.GetFilepath(attrName) );
-                ws = wa;
+                AttrWidgetFile *wf = static_cast<AttrWidgetFile*>(ws);
+                wf->SetValue( xmlInfo.GetFilepath(attrName) );
+                ws = wf;
             }
             else if (attrType == XMLAttribute::Type::TString)
             {
@@ -196,6 +200,8 @@ void InspectorWidget::RefreshWidgetValues()
 
 void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
 {
+    m_tagName = xmlInfo.GetTagName();
+
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         XMLAttribute attribute = itAttr.second;
@@ -241,8 +247,11 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
 void InspectorWidget::_OnSlotValueChanged()
 {
     NONULL(m_relatedInspectable);
-    XMLNode xmlInfo = GetWidgetXMLInfo();
-    m_relatedInspectable->OnInspectorXMLChanged(&xmlInfo);
+    if (m_created)
+    {
+        XMLNode xmlInfo = GetWidgetXMLInfo();
+        m_relatedInspectable->OnInspectorXMLChanged(&xmlInfo);
+    }
 }
 
 void InspectorWidget::_OnSlotValueChanged(double _)

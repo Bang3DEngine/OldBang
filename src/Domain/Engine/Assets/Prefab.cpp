@@ -40,7 +40,7 @@ GameObject *Prefab::InstantiateWithoutStarting() const
     if (m_assetDescription != "")
     {
         GameObject *go = new GameObject();
-        XMLNode *xmlInfo = XMLParser::FromXML(m_assetDescription); go->FillXMLInfo(xmlInfo);
+        XMLNode *xmlInfo = XMLParser::FromString(m_assetDescription); go->FillXMLInfo(xmlInfo);
         return go;
     }
     return nullptr;

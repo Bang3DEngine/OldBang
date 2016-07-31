@@ -43,8 +43,8 @@
                           >
                 </Transform>
                 <MeshRenderer LineWidth:Float="1"{Hidden}
-                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension:"bmat"}
-                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension:"bmesh"}
+                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension="*.bmat"}
+                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension="*.bmesh"}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9513d10"{Hidden,Readonly}
                              >
@@ -62,8 +62,8 @@
                           >
                 </Transform>
                 <MeshRenderer LineWidth:Float="1"{Hidden}
-                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension:"bmat"}
-                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension:"bmesh"}
+                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension="*.bmat"}
+                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension="*.bmesh"}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9550070"{Hidden,Readonly}
                              >
@@ -81,8 +81,8 @@
                           >
                 </Transform>
                 <MeshRenderer LineWidth:Float="1"{Hidden}
-                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension:"bmat"}
-                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension:"bmesh"}
+                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension="*.bmat"}
+                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension="*.bmesh"}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x95a3a58"{Hidden,Readonly}
                              >
@@ -100,8 +100,8 @@
                           >
                 </Transform>
                 <MeshRenderer LineWidth:Float="1"{Hidden}
-                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension:"bmat"}
-                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension:"bmesh"}
+                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension="*.bmat"}
+                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension="*.bmesh"}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x95dd010"{Hidden,Readonly}
                              >
@@ -119,8 +119,8 @@
                           >
                 </Transform>
                 <MeshRenderer LineWidth:Float="1"{Hidden}
-                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension:"bmat"}
-                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension:"bmesh"}
+                              Material:File="/home/sephirot47/Bang/Assets/Materials/testMaterial2.bmat"{FileExtension="*.bmat"}
+                              MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Engine/Meshes/Cube.bmesh"{FileExtension="*.bmesh"}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x961b438"{Hidden,Readonly}
                              >
@@ -179,13 +179,13 @@
                   >
         </Transform>
         <MeshRenderer LineWidth:Float="1"{Hidden}
-                      Material:File="/home/sephirot47/Bang/Assets/Materials/luigiMaterial.bmat"{FileExtension:"bmat"}
-                      MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Meshes/luigiMesh.bmesh"{FileExtension:"bmesh"}
+                      Material:File="/home/sephirot47/Bang/Assets/Materials/luigiMaterial.bmat"{FileExtension="*.bmat"}
+                      MeshAssetFilepath:File="/home/sephirot47/Bang/Assets/Meshes/luigiMesh.bmesh"{FileExtension="*.bmesh"}
                       enabled:Bool="true"{Hidden,Readonly}
                       id:String="0x96a0d30"{Hidden,Readonly}
                      >
         </MeshRenderer>
-        <BehaviourHolder BehaviourScript:File="/home/sephirot47/Bang/Assets/Behaviours/TestBehaviour.cpp"{FileExtension:"cpp"}
+        <BehaviourHolder BehaviourScript:File="/home/sephirot47/Bang/Assets/Behaviours/TestBehaviour.cpp"{FileExtension="*.cpp"}
                          enabled:Bool="true"{Hidden,Readonly}
                          id:String="0x96ef1b0"{Hidden,Readonly}
                         >
@@ -204,7 +204,7 @@
         </Transform>
         <Camera FOVDegrees:Float="60"{}
                 OrthoRectangle:Rect="(1, 3, 2, 4.7)"{}
-                ProjectionMode:Enum="1"{Readonly,EnumName0:"Orthographic",EnumName1:"Perspective"}
+                ProjectionMode:Enum="1"{Readonly,EnumName0="Orthographic",EnumName1="Perspective"}
                 ZFar:Float="47"{}
                 ZNear:Float="0.22"{}
                 enabled:Bool="true"{Hidden,Readonly}

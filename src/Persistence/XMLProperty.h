@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include  "StringUtils.h"
+
 class XMLProperty
 {
 private:
@@ -23,6 +25,8 @@ public:
 
     const std::string& GetName() const;
     const std::string& GetValue() const;
+
+    static XMLProperty FromString(const std::string &string);
 };
 
 #endif // XMLPROPERTY_H

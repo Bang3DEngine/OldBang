@@ -65,7 +65,7 @@ void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
     m_filepath = xmlInfo->GetFilepath("TextureFilepath");
     LoadFromFile(m_filepath);
 
-    std::string filterMode = xmlInfo->GetString("FilterMode");
+    std::string filterMode = xmlInfo->GetEnumSelectedName("FilterMode");
     if (filterMode == "Nearest")
     {
         SetFilterMode(FilterMode::Nearest);
@@ -82,14 +82,14 @@ void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Texture2D");
 
     FilterMode filterMode = GetFilterMode();
-    std::string fmName = "";
+    int selectedIndex = 0;
     if (filterMode == FilterMode::Nearest)
     {
-        fmName = "Nearest";
+        selectedIndex = 0;
     }
     else if (filterMode == FilterMode::Linear)
     {
-        fmName = "Linear";
+        selectedIndex = 1;
     }
-    xmlInfo->SetString("FilterMode", fmName);
+    xmlInfo->SetEnum("FilterMode", {"Nearest", "Linear"}, selectedIndex, {});
 }

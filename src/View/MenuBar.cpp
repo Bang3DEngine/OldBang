@@ -112,7 +112,7 @@ void MenuBar::OnOpenScene() const
 
     m_wem->NotifyMenuBarActionClicked(Action::OpenScene);
 
-    FileDialog fd("Open scene...", Scene::GetFileExtension());
+    FileDialog fd("Open scene...", "*." + Scene::GetFileExtension());
     std::string filename = fd.GetOpenFilename();
     if (filename == "") return;
 
@@ -153,7 +153,7 @@ void MenuBar::OnSaveSceneAs() const
 
     Scene *scene = Canvas::GetInstance()->GetCurrentScene(); NONULL(scene);
 
-    FileDialog fd("Save scene as...", Scene::GetFileExtension());
+    FileDialog fd("Save scene as...", "*." + Scene::GetFileExtension());
     std::string filename = fd.GetSaveFilename(scene->name);
     if (filename == "") return;
 
@@ -181,7 +181,7 @@ void MenuBar::OnCreateFromPrefab() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
 
-    FileDialog fd("Create from prefab...", Prefab::GetFileExtensionStatic());
+    FileDialog fd("Create from prefab...", "*." + Prefab::GetFileExtensionStatic());
     std::string filename = fd.GetOpenFilename();
 
     WindowMain *w = WindowMain::GetInstance();

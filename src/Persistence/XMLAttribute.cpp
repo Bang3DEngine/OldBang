@@ -314,7 +314,7 @@ const std::string XMLAttribute::ToString() const
         str += prop.GetName();
         if (prop.GetValue().length() > 0)
         {
-            str += ":\"" + prop.GetValue() + "\"";
+            str += "=\"" + prop.GetValue() + "\"";
         }
 
         first = false;
@@ -443,6 +443,54 @@ std::vector<std::string> XMLAttribute::GetEnumNames() const
 const std::vector<XMLProperty> &XMLAttribute::GetProperties() const
 {
     return m_properties;
+}
+
+XMLAttribute XMLAttribute::FromString(const std::string &string)
+{
+    XMLAttribute attribute;
+
+    std::string str = string;
+    StringUtils::Trim(&str);
+
+    int attrNameBegin = str.find_first_not_of(StringUtils::TOKEN_SPACE, 0);
+    if (attrNameBegin == -1) { return attribute; }
+
+    int attrNameEnd = str.find_first_of(StringUtils::TOKEN_SPACE + ":", attrNameBegin + 1);
+    if (attrNameEnd == -1) { return attribute; }
+
+    int attrTypeBegin = str.find_first_not_of(StringUtils::TOKEN_SPACE, attrNameEnd + 1);
+    if (attrTypeBegin == -1) { return attribute; }
+
+    int attrTypeEnd = str.find_first_of(StringUtils::TOKEN_SPACE + "=", attrTypeBegin + 1);
+    if (attrTypeEnd == -1) { return attribute; }
+
+    int attrValueBegin = str.find_first_of("\"", attrTypeEnd + 1) + 1;
+    if (attrValueBegin == -1) { return attribute; }
+
+    int attrValueEnd = str.find_first_of("\"", attrValueBegin);
+    if (attrValueEnd == -1) { return attribute; }
+
+    int attrPropertiesBegin = str.find_first_of("{", attrValueEnd) + 1;
+    if (attrPropertiesBegin == -1) { return attribute; }
+
+    int attrPropertiesEnd = str.find_first_of("}", attrPropertiesBegin);
+    if (attrPropertiesEnd == -1) { return attribute; }
+
+    std::string name = str.substr(attrNameBegin, attrNameEnd - attrNameBegin);
+    std::string typeString = str.substr(attrTypeBegin, attrTypeEnd - attrTypeBegin);
+    std::string value = str.substr(attrValueBegin, attrValueEnd - attrValueBegin);
+    std::string propertiesString = str.substr(attrPropertiesBegin, attrPropertiesEnd - attrPropertiesBegin);
+    std::vector<std::string> properties = StringUtils::Split(propertiesString, ',');
+
+    attribute.SetName(name);
+    attribute.SetType(XMLAttribute::GetTypeFromString(typeString));
+    attribute.SetValue(value);
+
+    for (std::string propString : properties)
+    {
+        XMLProperty prop = XMLProperty::FromString(propString);
+        attribute.SetProperty(prop);
+    }
 }
 
 const XMLAttribute::Type& XMLAttribute::GetType() const

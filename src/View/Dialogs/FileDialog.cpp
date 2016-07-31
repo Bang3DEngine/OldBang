@@ -13,7 +13,7 @@ FileDialog::FileDialog(const std::string &title,
 
 std::string FileDialog::GetExtensionFilterString(const std::string &extension)
 {
-    return extension + "(*." + extension + ")" ;
+    return extension + "(" + extension + ")" ;
 }
 
 

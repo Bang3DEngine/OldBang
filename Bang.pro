@@ -123,7 +123,14 @@ OTHER_FILES += \
     Assets/Behaviours/RandomScale.h \
     Assets/Behaviours/RandomScale.cpp \
     Assets/Engine/Shaders/PR_DrawScreenPlane.vert \
-    Assets/Materials/victor.bmat
+    Assets/Materials/victor.bmat \
+    Assets/Engine/Meshes/Plane.bmesh \
+    Assets/Meshes/luigiMesh.bmesh \
+    Assets/Meshes/boyMesh.bmesh \
+    Assets/Textures/victor.btex2d \
+    Assets/Textures/woodTexture.btex2d \
+    Assets/Textures/luigiTexture.btex2d \
+    Assets/Textures/carpetTexture.btex2d
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

@@ -40,7 +40,7 @@ private:
     {
         Asset *a = new T();
         //Logger_Log("Reading asset: \n" << fileContents);
-        XMLNode *xmlInfo = XMLParser::FromXML(fileContents);
+        XMLNode *xmlInfo = XMLParser::FromString(fileContents);
         a->ReadXMLInfo(xmlInfo);
         delete xmlInfo;
         return static_cast<T*>(a);

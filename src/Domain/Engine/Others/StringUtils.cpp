@@ -1,5 +1,7 @@
 #include "StringUtils.h"
 
+const std::string StringUtils::TOKEN_SPACE = " \t\n";
+
 bool StringUtils::Contains(const std::string &str, const std::string &whatToFind)
 {
     if (str.length() == 0) return false;

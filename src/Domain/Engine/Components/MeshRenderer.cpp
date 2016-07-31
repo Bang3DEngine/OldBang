@@ -116,5 +116,5 @@ void MeshRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("MeshRenderer");
 
     xmlInfo->GetAttribute("LineWidth")->SetProperty(XMLProperty::Hidden);
-    xmlInfo->SetFilepath("MeshAssetFilepath", m_mesh ? m_mesh->GetFilepath() : "", "bmesh");
+    xmlInfo->SetFilepath("MeshAssetFilepath", m_mesh ? m_mesh->GetFilepath() : "", "*.bmesh");
 }

@@ -1,3 +1,3 @@
-<Texture2D TextureFilepath:File="./Assets/Textures/steel.jpg"{}
-           FilterMode:Enum="Linear"{}>
+<Texture2D TextureFilepath:File="./Assets/Textures/steel.jpg"{FileExtension="*.jpg *.png *.bmp"}
+           FilterMode:Enum="1"{EnumName0="Nearest",EnumName1="Linear"}>
 </Texture2D>

@@ -1,7 +1,5 @@
 #include "XMLParser.h"
 
-const std::string XMLParser::TOKEN_SPACE = " \t\n";
-
 XMLParser::XMLParser()
 {
 }
@@ -11,8 +9,8 @@ std::string XMLParser::GetTagName(const std::string &tag, int *tagNameBegin, int
     int tagBegin = tag.find_first_of("<");
     int tagBegin2 = tag.find_first_of("/", tagBegin);
     tagBegin = (tagBegin2 == tagBegin+1) ? tagBegin2 : tagBegin;
-    int nameBegin = tag.find_first_not_of(TOKEN_SPACE, tagBegin + 1);
-    int nameEnd = tag.find_first_of(TOKEN_SPACE + ">", nameBegin + 1);
+    int nameBegin = tag.find_first_not_of(StringUtils::TOKEN_SPACE, tagBegin + 1);
+    int nameEnd = tag.find_first_of(StringUtils::TOKEN_SPACE + ">", nameBegin + 1);
 
     if (tagNameBegin) *tagNameBegin = nameBegin;
     if (tagNameEnd) *tagNameEnd = nameEnd;
@@ -33,57 +31,21 @@ void XMLParser::GetFirstAttribute(const std::string &tag,
         attribute->SetValue("");
     }
 
-    int attrNameBegin = tag.find_first_not_of(TOKEN_SPACE, startPosition);
-    if (attrNameBegin == -1) { return; }
+    int attrEnd = tag.find_first_of("}", startPosition) + 1;
+    if (attrEnd == -1) { return; }
 
-    int attrNameEnd = tag.find_first_of(TOKEN_SPACE + ":", attrNameBegin + 1);
-    if (attrNameEnd == -1) { return; }
+    std::string attrString = tag.substr(startPosition, attrEnd - startPosition);
+    XMLAttribute attr = XMLAttribute::FromString(attrString);
+    if (attr.GetName() == "") { return; }
 
-    int attrTypeBegin = tag.find_first_not_of(TOKEN_SPACE, attrNameEnd + 1);
-    if (attrTypeBegin == -1) { return; }
+    if (attributeEnd)
+    {
+        *attributeEnd = startPosition + attrString.length();
+    }
 
-    int attrTypeEnd = tag.find_first_of(TOKEN_SPACE + "=", attrTypeBegin + 1);
-    if (attrTypeEnd == -1) { return; }
-
-    int attrValueBegin = tag.find_first_of("\"", attrTypeEnd + 1) + 1;
-    if (attrValueBegin == -1) { return; }
-
-    int attrValueEnd = tag.find_first_of("\"", attrValueBegin);
-    if (attrValueEnd == -1) { return; }
-
-    int attrPropertiesBegin = tag.find_first_of("{", attrValueEnd) + 1;
-    if (attrPropertiesBegin == -1) { return; }
-
-    int attrPropertiesEnd = tag.find_first_of("}", attrPropertiesBegin);
-    if (attrPropertiesEnd == -1) { return; }
-
-    std::string name = tag.substr(attrNameBegin, attrNameEnd - attrNameBegin);
-    std::string typeString = tag.substr(attrTypeBegin, attrTypeEnd - attrTypeBegin);
-    std::string value = tag.substr(attrValueBegin, attrValueEnd - attrValueBegin);
-    std::string propertiesString = tag.substr(attrPropertiesBegin, attrPropertiesEnd - attrPropertiesBegin);
-    std::vector<std::string> properties = StringUtils::Split(propertiesString, ',');
-
-    if (attributeEnd) *attributeEnd = attrPropertiesEnd + 1;
     if (attribute)
     {
-        attribute->SetName(name);
-        attribute->SetType(XMLAttribute::GetTypeFromString(typeString));
-        attribute->SetValue(value);
-        for (std::string propString : properties)
-        {
-            StringUtils::Trim(&propString);
-            if (propString[propString.length()-1] == '\"')
-            {   // Is a property with value
-                std::string propName = StringUtils::Split(propString, ':')[0];
-                std::string propValue = StringUtils::Split(propString, ':')[1];
-                propValue = propValue.substr(1, propValue.length()-2);
-                attribute->SetProperty(propName, propValue);
-            }
-            else
-            {
-                attribute->SetProperty(propString);
-            }
-        }
+        *attribute = attr;
     }
 }
 
@@ -204,13 +166,13 @@ XMLNode *XMLParser::FromFile(const std::string &filepath)
     {
         std::string contents((std::istreambuf_iterator<char>(f)),
                               std::istreambuf_iterator<char>());
-        XMLNode *xmlInfo = XMLParser::FromXML(contents);
+        XMLNode *xmlInfo = XMLParser::FromString(contents);
         return xmlInfo;
     }
     return nullptr;
 }
 
-XMLNode* XMLParser::FromXML(const std::string &xml)
+XMLNode* XMLParser::FromString(const std::string &xml)
 {
     XMLNode* root = new XMLNode();
 
@@ -257,7 +219,7 @@ XMLNode* XMLParser::FromXML(const std::string &xml)
                                             &childCloseTagBegin, &childCloseTagEnd);
         std::string childXML = innerXML.substr(childOpenTagBegin, childCloseTagEnd-childOpenTagBegin);
 
-        XMLNode *child = XMLParser::FromXML(childXML);
+        XMLNode *child = XMLParser::FromString(childXML);
         if (child)
         {
             root->AddChild(child);

@@ -34,3 +34,22 @@ const std::string &XMLProperty::GetValue() const
 {
     return m_value;
 }
+
+XMLProperty XMLProperty::FromString(const std::string &string)
+{
+    std::string propString = string;
+
+    StringUtils::Trim(&propString);
+    std::vector<std::string> parts = StringUtils::Split(propString, '=');
+
+    std::string name = parts[0];
+
+    std::string value = "";
+    if (parts.size() > 1)
+    {
+        value = parts[1];
+        value = value.substr(1, value.length()-2); // Strip the "
+    }
+
+    return XMLProperty(name, value);
+}
