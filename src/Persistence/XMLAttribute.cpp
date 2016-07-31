@@ -238,23 +238,28 @@ void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
                            const std::string &selectedEnumName,
                            const std::vector<XMLProperty> &properties)
 {
-    std::vector<XMLProperty> addedProperties = properties;
+    int selectedEnumIndex = -1;
     for (int i = 0; i < enumNames.size(); ++i)
     {
         const std::string& enumName = enumNames[i];
-        XMLProperty prop("EnumName" + std::to_string(i), enumName);
+        if (enumName == selectedEnumName)
+        {
+            selectedEnumIndex = i;
+            break;
+        }
     }
-    Set(m_name, selectedEnumName, XMLAttribute::Type::TEnum, addedProperties);
+    SetEnum(enumNames, selectedEnumIndex, properties);
 }
 
-#include <iostream>
 void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
                            int selectedEnumIndex, const std::vector<XMLProperty> &properties)
 {
-    std::string enumSelectedName =
-            selectedEnumIndex < enumNames.size() ?
-            enumNames[selectedEnumIndex] : enumNames[0];
-    SetEnum(enumNames, enumSelectedName, properties);
+    Set(m_name, std::to_string(selectedEnumIndex), XMLAttribute::Type::TEnum, properties);
+    for (int i = 0; i < enumNames.size(); ++i)
+    {
+        XMLProperty prop("EnumName" + std::to_string(i), enumNames[i]);
+        SetProperty(prop);
+    }
 }
 
 bool XMLAttribute::HasVectoredType() const
@@ -406,26 +411,13 @@ Rect XMLAttribute::GetRect() const
 
 std::string XMLAttribute::GetEnumSelectedName() const
 {
-    return GetValue();
+    std::string propName = "EnumName" + std::to_string(GetEnumSelectedIndex());
+    return GetPropertyValue(propName);
 }
 
 int XMLAttribute::GetEnumSelectedIndex() const
 {
-    std::string selectedName = GetEnumSelectedName();
-    int enumIndex = 0;
-    for (int i = 0; i < m_properties.size(); ++i)
-    {
-        const XMLProperty &prop  = m_properties[i];
-        if (prop.GetName() == "EnumName" + std::to_string(enumIndex))
-        {
-            if (prop.GetValue() == selectedName)
-            {
-                return enumIndex;
-            }
-            ++enumIndex;
-        }
-    }
-    return -1;
+    return std::atoi(GetValue().c_str());
 }
 
 std::vector<std::string> XMLAttribute::GetEnumNames() const
