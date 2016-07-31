@@ -1,2 +1,2 @@
-<Mesh MeshFilepath:File="Assets/Engine/Meshes/Cone.obj"{FileExtension=".*obj"}>
+<Mesh MeshFilepath:File="Assets/Engine/Meshes/Cone.obj"{FileExtension="*.obj"}>
 </Mesh>

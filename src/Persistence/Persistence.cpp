@@ -73,6 +73,10 @@ std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPat
     // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
     if (!IsAbsolute(absPath))
     {
+        if (absPath[0] != '.')
+        {
+            return "./" + absPath;
+        }
         return absPath;
     }
 

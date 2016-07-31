@@ -1,6 +1,7 @@
-<Material VertexShader:File="./Assets/Engine/Shaders/D2G_Default.vert"{FileExtension=".*vert"}
-          FragmentShader:File="./Assets/Engine/Shaders/D2G_Default.frag"{FileExtension=".*frag"}
+<Material DiffuseColor:Vector4="(0, 0, 0, 0)"{}
+          FragmentShader:File="./Assets/Engine/Shaders/D2G_Default.frag"{FileExtension="*.frag"}
+          Texture1:File="./Assets/Textures/woodTexture.btex2d"{FileExtension="*.btex2d"}
           TextureCount:Int="1"{}
-          Texture1:File="./Assets/Textures/woodTexture.btex2d"{FileExtension=".*btex2d"}
-          DiffuseColor:Vector4="(0,0,0,0)"{}>
+          VertexShader:File="./Assets/Engine/Shaders/D2G_Default.vert"{FileExtension="*.vert"}
+         >
 </Material>

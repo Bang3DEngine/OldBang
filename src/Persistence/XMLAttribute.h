@@ -12,6 +12,7 @@
 #include "IToString.h"
 #include "Quaternion.h"
 #include "StringUtils.h"
+#include "Persistence.h"
 #include "XMLProperty.h"
 
 class XMLAttribute : public IToString

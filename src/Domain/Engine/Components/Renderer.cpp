@@ -256,7 +256,7 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
     Component::ReadXMLInfo(xmlInfo);
 
     std::string materialFilepath = xmlInfo->GetFilepath("Material");
-    if (materialFilepath != "-")
+    if (materialFilepath != "")
     {
         SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
     }

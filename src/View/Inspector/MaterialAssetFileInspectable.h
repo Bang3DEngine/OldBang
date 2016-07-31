@@ -2,11 +2,13 @@
 #define MATERIALASSETFILEINSPECTABLE_H
 
 #include "IInspectable.h"
+#include "Material.h"
 #include "MaterialAssetFile.h"
 
 class MaterialAssetFileInspectable : public IInspectable
 {
 private:
+    XMLNode m_xmlInfo;
     MaterialAssetFile m_materialAssetFile;
 
 public:

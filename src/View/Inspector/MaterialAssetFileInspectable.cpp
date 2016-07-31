@@ -4,22 +4,27 @@ MaterialAssetFileInspectable::MaterialAssetFileInspectable
     (const MaterialAssetFile &materialAssetFile) :
         m_materialAssetFile(materialAssetFile)
 {
-
+    XMLNode *xmlMatInfo = XMLParser::FromFile(m_materialAssetFile.GetPath());
+    if (xmlMatInfo)
+    {
+        m_xmlInfo = *xmlMatInfo;
+        delete xmlMatInfo;
+    }
 }
 
 void MaterialAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-
+    // Update live instances currently being used
+    Material *currentMat = AssetsManager::GetCachedAsset<Material>(m_materialAssetFile.GetPath());
+    if (currentMat) // Now we update the asset file.
+    {
+        currentMat->OnInspectorXMLChanged(xmlInfo);
+    }
+    FileWriter::WriteToFile(m_materialAssetFile.GetPath(), xmlInfo->ToString()); //Save
+    m_xmlInfo = *xmlInfo;
 }
 
 void MaterialAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    xmlInfo->SetFilepath("VertexShader", m_materialAssetFile.GetVertexShaderFilepath());
-    xmlInfo->SetFilepath("FragmentShader", m_materialAssetFile.GetFragmentShaderFilepath());
-    std::vector<std::string> textureFilepaths = m_materialAssetFile.GetTextureFilepaths();
-    for (int i = 1; i <= textureFilepaths.size(); ++i)
-    {
-        xmlInfo->SetFilepath("Texture " + std::to_string(i), textureFilepaths[i-1]);
-    }
-    xmlInfo->SetVector4("DiffuseColor", m_materialAssetFile.GetDiffuseColor());
+    *xmlInfo = m_xmlInfo;
 }

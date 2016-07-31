@@ -9,7 +9,7 @@ File::File(const QFileSystemModel *model, const QModelIndex *index)
 {
     m_isFile = !model->isDir(*index);
 
-    m_path = model->filePath(*index).toStdString();
+    m_path = Persistence::ProjectRootAbsoluteToRelative(model->filePath(*index).toStdString());
     m_name = model->fileName(*index).toStdString();
 
     std::string::size_type p = m_name.find('.');
