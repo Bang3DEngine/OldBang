@@ -25,15 +25,15 @@ private:
 
     Rect m_orthoRect;
 
-    float m_fovDegrees;
-    float m_zNear;
-    float m_zFar;
+    float m_fovDegrees = 60.0f;
+    float m_zNear = 0.1f;
+    float m_zFar = 100.0f;
 
-    mutable float m_aspectRatio;
+    mutable float m_aspectRatio = 1.0f;
 
-    ProjectionMode m_projMode;
+    ProjectionMode m_projMode = ProjectionMode::Perspective;
 
-    bool m_autoUpdateAspectRatio;
+    bool m_autoUpdateAspectRatio = true;
 
 public:
     Camera();

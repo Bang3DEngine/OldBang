@@ -121,7 +121,9 @@ void XMLNode::SetQuaternion(const std::string &attributeName, const Quaternion &
 void XMLNode::SetRect(const std::string &attributeName, const Rect &value,
                       const std::vector<XMLProperty>& properties)
 {
-    XMLAttribute attr; attr.SetRect(value, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetRect(value, properties);
     SetAttribute(attr);
 }
 
@@ -144,11 +146,12 @@ void XMLNode::SetFilepath(const std::string &attributeName, const std::string &f
     SetAttribute(attr);
 }
 
-void XMLNode::SetEnum(const std::string &attributeName, const std::string &enumFieldName, const std::vector<XMLProperty> &properties)
+void XMLNode::SetEnum(const std::string &attributeName, const std::vector<std::string>& enumNames,
+                      int selectedEnumIndex, const std::vector<XMLProperty> &properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
-    attr.SetEnum(enumFieldName, properties);
+    attr.SetEnum(enumNames, selectedEnumIndex, properties);
     SetAttribute(attr);
 }
 
@@ -243,10 +246,22 @@ Rect XMLNode::GetRect(const std::string &attributeName) const
     return attr ? attr->GetRect() : Rect();
 }
 
-std::string XMLNode::GetEnum(const std::string &attributeName) const
+int XMLNode::GetEnumSelectedIndex(const std::string &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetEnum() : "";
+    return attr ? attr->GetEnumSelectedIndex() : -1;
+}
+
+std::string XMLNode::GetEnumSelectedName(const std::string &attributeName) const
+{
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetEnumSelectedName() : "";
+}
+
+std::vector<std::string> XMLNode::GetEnumNames(const std::string &attributeName) const
+{
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetEnumNames() : std::vector<std::string>();
 }
 
 const XMLNode *XMLNode::GetChild(const std::string &name) const

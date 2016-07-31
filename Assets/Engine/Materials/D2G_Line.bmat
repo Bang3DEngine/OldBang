@@ -1,5 +1,5 @@
-<Material vertexShader:File="./Assets/Engine/Shaders/D2G_Line.vert"{FileExtension:"vert"}
-          fragmentShader:File="./Assets/Engine/Shaders/D2G_Line.frag"{FileExtension:"frag"}
-          textureCount:Int="0"{}
-          diffuseColor:Vector4="(0,0,0,1)"{}>
+<Material VertexShader:File="./Assets/Engine/Shaders/D2G_Line.vert"{FileExtension:"vert"}
+          FragmentShader:File="./Assets/Engine/Shaders/D2G_Line.frag"{FileExtension:"frag"}
+          TextureCount:Int="0"{}
+          DiffuseColor:Vector4="(0,0,0,1)"{}>
 </Material>

@@ -120,7 +120,7 @@ void Explorer::RefreshInspector()
     IInspectable *newInspectable = nullptr;
     if (f.IsImageFile()) // jpg, png, etc.
     {
-        FileImage fi(m_fileSystemModel, &clickedIndex);
+        ImageFile fi(m_fileSystemModel, &clickedIndex);
         newInspectable = new ImageFileInspectable(fi);
     }
     else if (f.IsTexture2DAsset()) // btex2d
@@ -130,13 +130,18 @@ void Explorer::RefreshInspector()
     }
     else if (f.IsMeshFile()) // obj, etc.
     {
-        FileMesh fm(m_fileSystemModel, &clickedIndex);
+        MeshFile fm(m_fileSystemModel, &clickedIndex);
         newInspectable = new MeshFileInspectable(fm);
     }
     else if (f.IsMeshAsset()) // bmesh
     {
         MeshAssetFile fm(m_fileSystemModel, &clickedIndex);
         newInspectable = new MeshAssetFileInspectable(fm);
+    }
+    else if (f.IsMaterialAsset()) // bmat
+    {
+        MaterialAssetFile fm(m_fileSystemModel, &clickedIndex);
+        newInspectable = new MaterialAssetFileInspectable(fm);
     }
     else
     {

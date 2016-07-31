@@ -75,7 +75,7 @@ void XMLAttribute::SetProperties(const std::vector<XMLProperty> &properties)
     m_properties = properties;
 }
 
-const std::string XMLAttribute::GetPropertyValue(const std::string &propertyName)
+const std::string XMLAttribute::GetPropertyValue(const std::string &propertyName) const
 {
     for (const XMLProperty& prop : m_properties)
     {
@@ -231,9 +231,28 @@ void XMLAttribute::SetFilepath(const std::string &filepath,
     }
 }
 
-void XMLAttribute::SetEnum(const std::string &value, const std::vector<XMLProperty> &properties)
+void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
+                           const std::string &selectedEnumName,
+                           const std::vector<XMLProperty> &properties)
 {
-    Set(m_name, value, XMLAttribute::Type::TEnum, properties);
+    std::vector<XMLProperty> addedProperties = properties;
+    for (int i = 0; i < enumNames.size(); ++i)
+    {
+        const std::string& enumName = enumNames[i];
+        XMLProperty prop("EnumName" + std::to_string(i), enumName);
+        addedProperties.push_back(prop);
+    }
+    Set(m_name, selectedEnumName, XMLAttribute::Type::TEnum, addedProperties);
+}
+
+#include <iostream>
+void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
+                           int selectedEnumIndex, const std::vector<XMLProperty> &properties)
+{
+    std::string enumSelectedName =
+            selectedEnumIndex < enumNames.size() ?
+            enumNames[selectedEnumIndex] : enumNames[0];
+    SetEnum(enumNames, enumSelectedName, properties);
 }
 
 bool XMLAttribute::HasVectoredType() const
@@ -242,7 +261,7 @@ bool XMLAttribute::HasVectoredType() const
            m_type == XMLAttribute::Type::TVector2 ||
            m_type == XMLAttribute::Type::TVector3 ||
            m_type == XMLAttribute::Type::TVector4 ||
-            m_type == XMLAttribute::Type::TQuaternion;
+           m_type == XMLAttribute::Type::TQuaternion;
 }
 
 int XMLAttribute::GetNumberOfFieldsOfType() const
@@ -382,9 +401,48 @@ Rect XMLAttribute::GetRect() const
     return Rect(v.x, v.y, v.z, v.w);
 }
 
-std::string XMLAttribute::GetEnum() const
+std::string XMLAttribute::GetEnumSelectedName() const
 {
-    return m_value;
+    return GetValue();
+}
+
+int XMLAttribute::GetEnumSelectedIndex() const
+{
+    std::string selectedName = GetEnumSelectedName();
+    int enumIndex = 0;
+    for (int i = 0; i < m_properties.size(); ++i)
+    {
+        const XMLProperty &prop  = m_properties[i];
+        if (prop.GetName() == "EnumName" + std::to_string(enumIndex))
+        {
+            if (prop.GetValue() == selectedName)
+            {
+                return enumIndex;
+            }
+            ++enumIndex;
+        }
+    }
+    return -1;
+}
+
+std::vector<std::string> XMLAttribute::GetEnumNames() const
+{
+    std::vector<std::string> enumNames;
+    int i = 0;
+    while (true)
+    {
+        std::string propName = "EnumName" + std::to_string(i);
+        if (HasProperty(propName))
+        {
+            enumNames.push_back( GetPropertyValue(propName) );
+        }
+        else
+        {
+            break;
+        }
+        ++i;
+    }
+    return enumNames;
 }
 
 const std::vector<XMLProperty> &XMLAttribute::GetProperties() const

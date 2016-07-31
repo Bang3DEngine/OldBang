@@ -192,15 +192,17 @@ HEADERS += \
     src/Domain/Engine/Components/PointLight.h \
     src/Domain/Engine/Others/Property.h \
     src/Persistence/File.h \
-    src/Persistence/FileImage.h \
-    src/Persistence/FileMesh.h \
+    src/Persistence/ImageFile.h \
+    src/Persistence/MeshFile.h \
     src/Persistence/Texture2DAssetFile.h \
     src/Persistence/MeshAssetFile.h \
     src/Persistence/XMLParser.h \
     src/Persistence/XMLNode.h \
     src/Persistence/XMLAttribute.h \
     src/Persistence/XMLProperty.h \
-    src/View/Inspector/MeshAssetFileInspectable.h
+    src/View/Inspector/MeshAssetFileInspectable.h \
+    src/Persistence/MaterialAssetFile.h \
+    src/View/Inspector/MaterialAssetFileInspectable.h
 
 EDITOR {
 HEADERS += \
@@ -314,15 +316,17 @@ SOURCES += \
     src/Domain/Engine/Components/PointLight.cpp \
     src/Domain/Engine/Others/Property.cpp \
     src/Persistence/File.cpp \
-    src/Persistence/FileImage.cpp \
-    src/Persistence/FileMesh.cpp \
+    src/Persistence/ImageFile.cpp \
+    src/Persistence/MeshFile.cpp \
     src/Persistence/Texture2DAssetFile.cpp \
     src/Persistence/MeshAssetFile.cpp \
     src/Persistence/XMLParser.cpp \
     src/Persistence/XMLNode.cpp \
     src/Persistence/XMLAttribute.cpp \
     src/Persistence/XMLProperty.cpp \
-    src/View/Inspector/MeshAssetFileInspectable.cpp
+    src/View/Inspector/MeshAssetFileInspectable.cpp \
+    src/Persistence/MaterialAssetFile.cpp \
+    src/View/Inspector/MaterialAssetFileInspectable.cpp
 
 EDITOR {
     SOURCES += \

@@ -2,13 +2,7 @@
 #include "Canvas.h"
 #include "FileReader.h"
 
-Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f)),
-                   m_fovDegrees(60.0f),
-                   m_zNear(0.1f),
-                   m_zFar(100.0f),
-                   m_aspectRatio(1.0f),
-                   m_projMode(ProjectionMode::Perspective),
-                   m_autoUpdateAspectRatio(true)
+Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f))
 {
 }
 
@@ -53,12 +47,6 @@ void Camera::SetOrthoRect(const Rect &rect)
     m_orthoRect = rect;
 }
 
-
-
-
-
-
-
 void Camera::SetFovDegrees(float fovDegrees)
 {
     this->m_fovDegrees = fovDegrees;
@@ -88,10 +76,6 @@ void Camera::SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio)
 {
     this->m_autoUpdateAspectRatio = autoUpdateAspectRatio;
 }
-
-
-
-
 
 
 float Camera::GetFovDegrees() const
@@ -173,12 +157,16 @@ void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
 
+    Logger_Log("GET FLOAT before: " << xmlInfo->GetFloat("ZFar"));
+    Logger_Log("GET ZFAR before: " << GetZFar());
     SetFovDegrees(xmlInfo->GetFloat("FOVDegrees"));
     SetZNear(xmlInfo->GetFloat("ZNear"));
     SetZFar(xmlInfo->GetFloat("ZFar"));
-    SetProjectionMode(xmlInfo->GetString("ProjectionMode")  == "Perspective" ?
-                          Camera::ProjectionMode::Perspective :
-                          Camera::ProjectionMode::Orthographic);
+    Logger_Log("GET FLOAT after: " << xmlInfo->GetFloat("ZFar"));
+    Logger_Log("GET ZFAR after: " << GetZFar());
+    ProjectionMode pm = static_cast<ProjectionMode>(
+                xmlInfo->GetEnumSelectedIndex("ProjectionMode") + Camera::ProjectionMode::Orthographic);
+    SetProjectionMode(pm);
     SetOrthoRect( xmlInfo->GetRect("OrthoRectangle") );
 }
 
@@ -190,7 +178,8 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
     xmlInfo->SetFloat("ZNear", GetZNear());
     xmlInfo->SetFloat("ZFar", GetZFar());
-    xmlInfo->SetString("ProjectionMode", (m_projMode == ProjectionMode::Perspective ? "Perspective" : "Orthographic"),
-                       {XMLProperty::Readonly});
+    Logger_Log("GET ZFAR FILL after: " << GetZFar());
+    xmlInfo->SetEnum("ProjectionMode", {"Orthographic", "Perspective"}, m_projMode - ProjectionMode::Orthographic,
+                     {XMLProperty::Readonly});
     xmlInfo->SetRect("OrthoRectangle", m_orthoRect);
 }

@@ -60,7 +60,7 @@ public:
     void SetProperty(const XMLProperty &property);
     void SetProperty(const std::string &propertyName, const std::string &propertyValue = "");
     void SetProperties(const std::vector<XMLProperty>& properties);
-    const std::string GetPropertyValue(const std::string &propertyName);
+    const std::string GetPropertyValue(const std::string &propertyName) const;
     bool HasProperty(const XMLProperty &property) const;
     bool HasProperty(const std::string &propertyName) const;
     void RemoveProperty(const std::string &propertyName);
@@ -78,7 +78,11 @@ public:
     void SetRect(const Rect &value, const std::vector<XMLProperty>& properties = {});
     void SetFilepath(const std::string &filepath, const std::string &fileExtension = "",
                      const std::vector<XMLProperty>& properties = {});
-    void SetEnum(const std::string& value, const std::vector<XMLProperty>& properties = {});
+    void SetEnum(const std::vector<std::string>& enumNames,
+                 const std::string& selectedEnumName,
+                 const std::vector<XMLProperty>& properties = {});
+    void SetEnum(const std::vector<std::string>& enumNames,
+                 int selectedEnumIndex, const std::vector<XMLProperty>& properties = {});
 
 
     /**
@@ -109,7 +113,9 @@ public:
     glm::vec4 GetVector4() const;
     Quaternion GetQuaternion() const;
     Rect GetRect() const;
-    std::string GetEnum() const;
+    std::string GetEnumSelectedName() const;
+    int GetEnumSelectedIndex() const;
+    std::vector<std::string> GetEnumNames() const;
 
     const std::string& GetTypeName() const;
     const std::vector<XMLProperty>& GetProperties() const;

@@ -37,19 +37,19 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
 
-    std::string vshaderFilepath = xmlInfo->GetFilepath("vertexShader");
-    std::string fshaderFilepath = xmlInfo->GetFilepath("fragmentShader");
+    std::string vshaderFilepath = xmlInfo->GetFilepath("VertexShader");
+    std::string fshaderFilepath = xmlInfo->GetFilepath("FragmentShader");
     SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
 
-    int numTextures = xmlInfo->GetInt("textureCount");
+    int numTextures = xmlInfo->GetInt("TextureCount");
     if(numTextures == 1)
     {
-        std::string texAssetFilepath = xmlInfo->GetString("texture1");
+        std::string texAssetFilepath = xmlInfo->GetString("Texture1");
         Texture2D *texture = AssetsManager::GetAsset<Texture2D>(texAssetFilepath);
         m_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
     }
 
-    glm::vec4 diffColor = xmlInfo->GetVector4("diffuseColor");
+    glm::vec4 diffColor = xmlInfo->GetVector4("DiffuseColor");
     SetDiffuseColor(diffColor);
 }
 
@@ -72,11 +72,11 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
         }
     }
 
-    xmlInfo->SetFilepath("vertexShader", vsFile);
-    xmlInfo->SetFilepath("fragmentShader", fsFile);
-    xmlInfo->SetInt("textureCount", 1);
-    xmlInfo->SetFilepath("texture1", m_texture->GetFilepath());
-    xmlInfo->SetVector4("diffuseColor", m_diffuseColor);
+    xmlInfo->SetFilepath("VertexShader", vsFile);
+    xmlInfo->SetFilepath("FragmentShader", fsFile);
+    xmlInfo->SetInt("TextureCount", 1);
+    xmlInfo->SetFilepath("Texture1", m_texture->GetFilepath());
+    xmlInfo->SetVector4("DiffuseColor", m_diffuseColor);
 }
 
 void Material::SetShaderProgram(ShaderProgram *program)

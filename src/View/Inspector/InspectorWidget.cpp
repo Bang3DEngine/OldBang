@@ -104,12 +104,6 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
                     attribute.SetVector4(glm::vec4(v[0], v[1], v[2], v[3]), attribute.GetProperties());
                 }
             }
-            /*
-            else if (attrType == XMLAttribute::Type::Enum)
-            {
-                AttrWidgetEnum *awe = static_cast<AttrWidgetEnum*>(aw);
-            }
-            */
             else if (attrType == XMLAttribute::Type::TFile)
             {
                 AttrWidgetFile *awf = static_cast<AttrWidgetFile*>(aw);
@@ -121,6 +115,12 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
             {
                 AttrWidgetString *aws = static_cast<AttrWidgetString*>(aw);
                 attribute.SetString(aws->GetValue(), attribute.GetProperties());
+            }
+            else if (attrType == XMLAttribute::Type::TEnum)
+            {
+                AttrWidgetEnum *awe = static_cast<AttrWidgetEnum*>(aw);
+                attribute.SetEnum(attribute.GetEnumNames(), awe->GetValue(), // selected index
+                                  attribute.GetProperties());
             }
         }
         xmlInfo.SetAttribute(attribute);
@@ -183,6 +183,11 @@ void InspectorWidget::RefreshWidgetValues()
                 wss->SetValue( xmlInfo.GetString(attrName) );
                 ws = wss;
             }
+            else if (attrType == XMLAttribute::Type::TEnum)
+            {
+                AttrWidgetEnum *we = static_cast<AttrWidgetEnum*>(ws);
+                we->SetValue(attribute.GetEnumSelectedIndex());
+            }
 
             ws->show();
         }
@@ -216,6 +221,11 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
                 bool readonly = attribute.HasProperty(XMLProperty::Readonly);
                 bool inlined = attribute.HasProperty(XMLProperty::Inline);
                 ws = new AttrWidgetString(attrName, this, readonly, inlined);
+            }
+            else if (attrType == XMLAttribute::Type::TEnum)
+            {
+                ws = new AttrWidgetEnum(attrName,
+                                        xmlInfo.GetEnumNames(attrName), this);
             }
 
             if (ws)

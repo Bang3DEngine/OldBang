@@ -63,7 +63,8 @@ public:
                      const std::string &fileExtension = "",
                      const std::vector<XMLProperty>& properties = {});
     void SetEnum(const std::string &attributeName,
-                 const std::string &enumFieldName,
+                 const std::vector<std::string>& enumNames,
+                 int selectedEnumIndex,
                  const std::vector<XMLProperty>& properties = {});
     void RemoveAttribute(const std::string& attributeName);
     XMLAttribute* GetAttribute(const std::string& attributeName) const;
@@ -79,7 +80,9 @@ public:
     glm::vec4 GetVector4(const std::string& attributeName) const;
     Quaternion GetQuaternion(const std::string& attributeName) const;
     Rect GetRect(const std::string& attributeName) const;
-    std::string GetEnum(const std::string& attributeName) const;
+    int GetEnumSelectedIndex(const std::string& attributeName) const;
+    std::string GetEnumSelectedName(const std::string& attributeName) const;
+    std::vector<std::string> GetEnumNames(const std::string& attributeName) const;
 
     const XMLNode *GetChild(const std::string &name) const;
     void SetTagName(const std::string tagName);
