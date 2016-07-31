@@ -36,9 +36,30 @@
 
 #endif
 
+BANG_ENUM
+(Semana
+,
+   Lunes,
+   Martes,
+   Miercoles,
+   Jueves,
+   Viernes
+)
 
 int main(int argc, char *argv[])
 {
+    std::cerr << SemanaToString(Semana::Lunes) << std::endl;
+    std::cerr << SemanaToString(Semana::Martes) << std::endl;
+    std::cerr << SemanaToString(Semana::Miercoles) << std::endl;
+    std::cerr << SemanaToString(Semana::Jueves) << std::endl;
+    std::cerr << SemanaToString(Semana::Viernes) << std::endl;
+    std::cerr << SemanaFromString("Lunes") << std::endl;
+    std::cerr << SemanaFromString("Martes") << std::endl;
+    std::cerr << SemanaFromString("Miercoles") << std::endl;
+    std::cerr << SemanaFromString("Jueves") << std::endl;
+    std::cerr << SemanaFromString("Viernes") << std::endl;
+    exit(0);
+
     QApplication app(argc, argv);
     SingletonManager::InitSingletonMangerFromMainBinary();
 

@@ -21,8 +21,11 @@ public:
     static void TrimLeft(std::string *str);
     static void TrimRight(std::string *str);
     static void Trim(std::string *str);
+    static std::string Trim(const std::string &str);
 
     static std::vector<std::string> Split(const std::string &content, char splitter);
+    static std::vector<std::string> SplitTrim(const std::string &content, char splitter);
+    static std::vector<std::string> BangEnumVariadicStringToNamesArray(const std::string &_va_args_);
 
     /**
      * @brief FormatInspectorLabel

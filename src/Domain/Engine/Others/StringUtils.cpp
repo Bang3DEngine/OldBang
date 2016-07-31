@@ -78,6 +78,13 @@ void StringUtils::Trim(std::string *str)
     StringUtils::TrimRight(str);
 }
 
+std::string StringUtils::Trim(const std::string &str)
+{
+    std::string strCpy = str;
+    Trim(&strCpy);
+    return str;
+}
+
 
 std::vector<std::string> StringUtils::Split(const std::string &content, char splitter)
 {
@@ -100,6 +107,27 @@ std::vector<std::string> StringUtils::Split(const std::string &content, char spl
         std::string particle = content.substr(lastIndexFound, indexFound - lastIndexFound);
         result.push_back(particle);
         lastIndexFound = indexFound + 1;
+    }
+    return result;
+}
+
+std::vector<std::string> StringUtils::SplitTrim(const std::string &content, char splitter)
+{
+    std::vector<std::string> result = Split(content, splitter);
+    for (std::string &str : result)
+    {
+        Trim(&str);
+    }
+    return result;
+}
+
+std::vector<std::string> StringUtils::BangEnumVariadicStringToNamesArray(const std::string &_va_args_)
+{
+    std::vector<std::string> result = Split(_va_args_, ',');
+    for (std::string &str : result)
+    {
+        str = Split(str, '=')[0]; // In case we have something like BANG_ENUM(Fruit, Apple=10,Pear=47,...)
+        Trim(&str);
     }
     return result;
 }
