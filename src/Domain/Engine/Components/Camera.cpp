@@ -157,13 +157,9 @@ void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
 
-    Logger_Log("GET FLOAT before: " << xmlInfo->GetFloat("ZFar"));
-    Logger_Log("GET ZFAR before: " << GetZFar());
     SetFovDegrees(xmlInfo->GetFloat("FOVDegrees"));
     SetZNear(xmlInfo->GetFloat("ZNear"));
     SetZFar(xmlInfo->GetFloat("ZFar"));
-    Logger_Log("GET FLOAT after: " << xmlInfo->GetFloat("ZFar"));
-    Logger_Log("GET ZFAR after: " << GetZFar());
     ProjectionMode pm = static_cast<ProjectionMode>(
                 xmlInfo->GetEnumSelectedIndex("ProjectionMode") + Camera::ProjectionMode::Orthographic);
     SetProjectionMode(pm);
@@ -178,7 +174,6 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
     xmlInfo->SetFloat("ZNear", GetZNear());
     xmlInfo->SetFloat("ZFar", GetZFar());
-    Logger_Log("GET ZFAR FILL after: " << GetZFar());
     xmlInfo->SetEnum("ProjectionMode", {"Orthographic", "Perspective"}, m_projMode - ProjectionMode::Orthographic,
                      {XMLProperty::Readonly});
     xmlInfo->SetRect("OrthoRectangle", m_orthoRect);

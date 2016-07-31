@@ -203,7 +203,7 @@
                   >
         </Transform>
         <Camera FOVDegrees:Float="60"{}
-                OrthoRectangle:Rect="(0, 0, 0, 0)"{}
+                OrthoRectangle:Rect="(1, 2, 3, 4.7)"{}
                 ProjectionMode:Enum="Perspective"{Readonly,EnumName0:"Orthographic",EnumName1:"Perspective"}
                 ZFar:Float="47"{}
                 ZNear:Float="0.22"{}

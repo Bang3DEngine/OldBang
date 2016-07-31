@@ -152,6 +152,13 @@ void XMLNode::SetEnum(const std::string &attributeName, const std::vector<std::s
     XMLAttribute attr;
     attr.SetName(attributeName);
     attr.SetEnum(enumNames, selectedEnumIndex, properties);
+    for (int i = 0; i < enumNames.size(); ++i)
+    {
+        const std::string &enumName = enumNames[i];
+        XMLProperty prop("EnumName" + std::to_string(i), enumName);
+        attr.SetProperty(prop);
+    }
+
     SetAttribute(attr);
 }
 

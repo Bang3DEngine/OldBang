@@ -58,7 +58,7 @@ void XMLAttribute::SetProperty(const XMLProperty &property)
 
 void XMLAttribute::SetProperty(const std::string &propertyName, const std::string &propertyValue)
 {
-    for (const XMLProperty& prop : m_properties)
+    for (const XMLProperty& prop : m_properties) //Dont add repeated
     {
         if (prop.GetName() == propertyName)
         {
@@ -72,7 +72,10 @@ void XMLAttribute::SetProperty(const std::string &propertyName, const std::strin
 
 void XMLAttribute::SetProperties(const std::vector<XMLProperty> &properties)
 {
-    m_properties = properties;
+    for (const XMLProperty &prop : properties)
+    {
+        SetProperty(prop);
+    }
 }
 
 const std::string XMLAttribute::GetPropertyValue(const std::string &propertyName) const
@@ -240,7 +243,6 @@ void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
     {
         const std::string& enumName = enumNames[i];
         XMLProperty prop("EnumName" + std::to_string(i), enumName);
-        addedProperties.push_back(prop);
     }
     Set(m_name, selectedEnumName, XMLAttribute::Type::TEnum, addedProperties);
 }
@@ -276,6 +278,7 @@ int XMLAttribute::GetNumberOfFieldsOfType() const
     else if (m_type == XMLAttribute::Type::TQuaternion) return 4;
     else if (m_type == XMLAttribute::Type::TRect)       return 4;
     else if (m_type == XMLAttribute::Type::TFile)       return 1;
+    else if (m_type == XMLAttribute::Type::TEnum)       return 1;
     return -1;
 }
 
