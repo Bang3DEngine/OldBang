@@ -160,8 +160,7 @@ void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
     SetFovDegrees(xmlInfo->GetFloat("FOVDegrees"));
     SetZNear(xmlInfo->GetFloat("ZNear"));
     SetZFar(xmlInfo->GetFloat("ZFar"));
-    ProjectionMode pm = static_cast<ProjectionMode>(
-                xmlInfo->GetEnumSelectedIndex("ProjectionMode") + Camera::ProjectionMode::Orthographic);
+    ProjectionMode pm = ProjectionMode_FromString(xmlInfo->GetEnumSelectedName("ProjectionMode"));
     SetProjectionMode(pm);
     SetOrthoRect( xmlInfo->GetRect("OrthoRectangle") );
 }
@@ -174,7 +173,9 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
     xmlInfo->SetFloat("ZNear", GetZNear());
     xmlInfo->SetFloat("ZFar", GetZFar());
-    xmlInfo->SetEnum("ProjectionMode", {"Orthographic", "Perspective"}, m_projMode - ProjectionMode::Orthographic,
+    xmlInfo->SetEnum("ProjectionMode",
+                     ProjectionMode_GetNamesVector(),
+                     ProjectionMode_GetIndexFromValue(m_projMode),
                      {XMLProperty::Readonly});
     xmlInfo->SetRect("OrthoRectangle", m_orthoRect);
 }

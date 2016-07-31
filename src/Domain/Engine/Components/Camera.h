@@ -15,15 +15,7 @@ class Canvas;
 class Camera : public Component
 {
 public:
-    /*
-    enum ProjectionMode
-    {
-        Orthographic,
-        Perspective
-    };
-    */
-
-    NAMED_ENUM (ProjectionMode,
+    NamedEnum (ProjectionMode,
         Orthographic,
         Perspective
     );

@@ -36,32 +36,9 @@
 
 #endif
 
-NAMED_ENUM
-(Semana
-,
-   Lunes=47,
-   Martes=21,
-   Miercoles,
-   Jueves,
-   Viernes=100
-)
-
 
 int main(int argc, char *argv[])
 {
-    std::cerr << SemanaToString(Semana::Lunes) << std::endl;
-    std::cerr << SemanaToString(Semana::Martes) << std::endl;
-    std::cerr << SemanaToString(Semana::Miercoles) << std::endl;
-    std::cerr << SemanaToString(Semana::Jueves) << std::endl;
-    std::cerr << SemanaToString(Semana::Viernes) << std::endl;
-    std::cerr << SemanaFromString("Lunes") << std::endl;
-    std::cerr << SemanaFromString("Martes") << std::endl;
-    std::cerr << SemanaFromString("Miercoles") << std::endl;
-    std::cerr << SemanaFromString("Jueves") << std::endl;
-    std::cerr << SemanaFromString("Viernes") << std::endl;
-    std::cerr << SemanaToString(23) << std::endl;
-    exit(0);
-
     QApplication app(argc, argv);
     SingletonManager::InitSingletonMangerFromMainBinary();
 

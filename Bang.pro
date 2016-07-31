@@ -130,7 +130,8 @@ OTHER_FILES += \
     Assets/Textures/victor.btex2d \
     Assets/Textures/woodTexture.btex2d \
     Assets/Textures/luigiTexture.btex2d \
-    Assets/Textures/carpetTexture.btex2d
+    Assets/Textures/carpetTexture.btex2d \
+    Assets/Scenes/test.bscene
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
