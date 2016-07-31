@@ -89,37 +89,37 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
             {
                 AttrWidgetVectorFloat *awv = static_cast<AttrWidgetVectorFloat*>(aw);
                 std::vector<float> v = awv->GetValue();
-                if (attrType == XMLAttribute::Type::TFloat)
+                if (attrType == XMLAttribute::Type::Float)
                 {
                     attribute.SetFloat(v[0], attribute.GetProperties());
                 }
-                else if (attrType == XMLAttribute::Type::TVector2)
+                else if (attrType == XMLAttribute::Type::Vector2)
                 {
                     attribute.SetVector2(glm::vec2(v[0], v[1]), attribute.GetProperties());
                 }
-                else if (attrType == XMLAttribute::Type::TVector3)
+                else if (attrType == XMLAttribute::Type::Vector3)
                 {
                     attribute.SetVector3(Vector3(v[0], v[1], v[2]), attribute.GetProperties());
                 }
-                else if (attrType == XMLAttribute::Type::TVector4 ||
-                         attrType == XMLAttribute::Type::TQuaternion)
+                else if (attrType == XMLAttribute::Type::Vector4 ||
+                         attrType == XMLAttribute::Type::Quaternion)
                 {
                     attribute.SetVector4(glm::vec4(v[0], v[1], v[2], v[3]), attribute.GetProperties());
                 }
             }
-            else if (attrType == XMLAttribute::Type::TFile)
+            else if (attrType == XMLAttribute::Type::File)
             {
                 AttrWidgetFile *awf = static_cast<AttrWidgetFile*>(aw);
                 attribute.SetFilepath(awf->GetValue(),
                                       attribute.GetPropertyValue(XMLProperty::FileExtension.GetName()),
                                       attribute.GetProperties());
             }
-            else if (attrType == XMLAttribute::Type::TString)
+            else if (attrType == XMLAttribute::Type::String)
             {
                 AttrWidgetString *aws = static_cast<AttrWidgetString*>(aw);
                 attribute.SetString(aws->GetValue(), attribute.GetProperties());
             }
-            else if (attrType == XMLAttribute::Type::TEnum)
+            else if (attrType == XMLAttribute::Type::Enum)
             {
                 AttrWidgetEnum *awe = static_cast<AttrWidgetEnum*>(aw);
                 attribute.SetEnum(attribute.GetEnumNames(), awe->GetValue(), // selected index
@@ -152,42 +152,42 @@ void InspectorWidget::RefreshWidgetValues()
             if (attribute.HasVectoredType())
             {
                 AttrWidgetVectorFloat *wv = static_cast<AttrWidgetVectorFloat*>(ws);
-                if (attrType == XMLAttribute::Type::TFloat)
+                if (attrType == XMLAttribute::Type::Float)
                 {
                     float v = xmlInfo.GetFloat(attrName);
                     wv->SetValue({v});
                 }
-                else if (attrType == XMLAttribute::Type::TVector2)
+                else if (attrType == XMLAttribute::Type::Vector2)
                 {
                     glm::vec2 v = xmlInfo.GetVector2(attrName);
                     wv->SetValue({v.x, v.y});
                 }
-                else if (attrType == XMLAttribute::Type::TVector3)
+                else if (attrType == XMLAttribute::Type::Vector3)
                 {
                     Vector3 v = xmlInfo.GetVector3(attrName);
                     wv->SetValue({v.x, v.y, v.z});
                 }
-                else if (attrType == XMLAttribute::Type::TVector4 ||
-                         attrType == XMLAttribute::Type::TQuaternion)
+                else if (attrType == XMLAttribute::Type::Vector4 ||
+                         attrType == XMLAttribute::Type::Quaternion)
                 {
                     glm::vec4 v = xmlInfo.GetVector4(attrName);
                     wv->SetValue({v.x, v.y, v.z, v.w});
                 }
                 ws = wv;
             }
-            else if (attrType == XMLAttribute::Type::TFile)
+            else if (attrType == XMLAttribute::Type::File)
             {
                 AttrWidgetFile *wf = static_cast<AttrWidgetFile*>(ws);
                 wf->SetValue( xmlInfo.GetFilepath(attrName) );
                 ws = wf;
             }
-            else if (attrType == XMLAttribute::Type::TString)
+            else if (attrType == XMLAttribute::Type::String)
             {
                 AttrWidgetString *wss = static_cast<AttrWidgetString*>(ws);
                 wss->SetValue( xmlInfo.GetString(attrName) );
                 ws = wss;
             }
-            else if (attrType == XMLAttribute::Type::TEnum)
+            else if (attrType == XMLAttribute::Type::Enum)
             {
                 AttrWidgetEnum *we = static_cast<AttrWidgetEnum*>(ws);
                 we->SetValue(attribute.GetEnumSelectedIndex());
@@ -216,19 +216,19 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
                 int numFields = attribute.GetNumberOfFieldsOfType();
                 ws = new AttrWidgetVectorFloat(attrName, numFields, this);
             }
-            else if (attrType == XMLAttribute::Type::TFile)
+            else if (attrType == XMLAttribute::Type::File)
             {
                 std::string fileExtension =
                         attribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
                 ws = new AttrWidgetFile(attrName, fileExtension, this);
             }
-            else if (attrType == XMLAttribute::Type::TString)
+            else if (attrType == XMLAttribute::Type::String)
             {
                 bool readonly = attribute.HasProperty(XMLProperty::Readonly);
                 bool inlined = attribute.HasProperty(XMLProperty::Inline);
                 ws = new AttrWidgetString(attrName, this, readonly, inlined);
             }
-            else if (attrType == XMLAttribute::Type::TEnum)
+            else if (attrType == XMLAttribute::Type::Enum)
             {
                 ws = new AttrWidgetEnum(attrName,
                                         xmlInfo.GetEnumNames(attrName), this);

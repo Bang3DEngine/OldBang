@@ -25,17 +25,15 @@ public:
         TextureCubeMap = GL_TEXTURE_CUBE_MAP,
     };
 
-    enum FilterMode
-    {
+    NamedEnum (FilterMode,
         Nearest = GL_NEAREST,
         Linear = GL_LINEAR
-    };
+    );
 
-    enum WrapMode
-    {
+    NamedEnum (WrapMode,
         Repeat = GL_REPEAT,
         Clamp = GL_CLAMP
-    };
+    );
 
 private:
     GLint m_glTextureGetIntegerType = 0;

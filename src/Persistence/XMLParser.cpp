@@ -27,7 +27,7 @@ void XMLParser::GetFirstAttribute(const std::string &tag,
     if (attribute)
     {
         attribute->SetName("");
-        attribute->SetType(XMLAttribute::TBool); // For example
+        attribute->SetType(XMLAttribute::Type::Bool); // For example
         attribute->SetValue("");
     }
 

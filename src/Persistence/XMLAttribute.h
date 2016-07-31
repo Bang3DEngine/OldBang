@@ -19,28 +19,23 @@ class XMLAttribute : public IToString
 {
 public:
 
-    enum Type
-    {
-        TBool = 0,
-        TInt,
-        TString,
-        TFloat,
-        TVector2,
-        TVector3,
-        TVector4,
-        TQuaternion,
-        TRect,
-        TFile,
-        TEnum
-    };
-
-    static const std::vector< std::string > TypeNames;
-
-    static XMLAttribute::Type GetTypeFromString(const std::string &typeString);
+    NamedEnum (Type,
+        Bool = 0,
+        Int,
+        String,
+        Float,
+        Vector2,
+        Vector3,
+        Vector4,
+        Quaternion,
+        Rect,
+        File,
+        Enum
+    );
 
 private:
     std::string m_name = "";
-    XMLAttribute::Type m_type = XMLAttribute::Type::TBool;
+    XMLAttribute::Type m_type = XMLAttribute::Type::Bool;
     std::string m_value = "";
     std::vector<XMLProperty> m_properties;
 
@@ -118,7 +113,7 @@ public:
     int GetEnumSelectedIndex() const;
     std::vector<std::string> GetEnumNames() const;
 
-    const std::string& GetTypeName() const;
+    std::string GetTypeName() const;
     const std::vector<XMLProperty>& GetProperties() const;
 
     static XMLAttribute FromString(const std::string &string);

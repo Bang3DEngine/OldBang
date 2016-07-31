@@ -45,7 +45,7 @@ void Renderer::ActivateGLStatesBeforeRendering() const
     if (m_cullMode != CullMode::None)
     {
         glEnable(GL_CULL_FACE);
-        glCullFace(m_cullMode);
+        glCullFace(GLint(m_cullMode));
     }
     else
     {

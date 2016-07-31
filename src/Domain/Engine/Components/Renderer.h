@@ -13,22 +13,20 @@ class Renderer : public Component
 friend class SelectionFramebuffer;
 
 public:
-    enum RenderMode
-    {
+    NamedEnum (RenderMode,
         Points = GL_POINTS,
         Lines = GL_LINES,
         LineStrip = GL_LINE_STRIP,
         Triangles = GL_TRIANGLES,
         Quads = GL_QUADS
-    };
+    );
 
-    enum CullMode
-    {
+    NamedEnum (CullMode,
         Front = GL_FRONT,
         Back = GL_BACK,
         FrontAndBack = GL_FRONT_AND_BACK,
         None = GL_NONE
-    };
+    );
 
 private:
     /**

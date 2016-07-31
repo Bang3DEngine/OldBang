@@ -88,7 +88,7 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
     SetMatricesUniforms(model, normal, view, projection, pvm);
 
     m_mesh->GetVAO()->Bind();
-    glDrawArrays(m_renderMode, 0, m_mesh->GetVertexCount());
+    glDrawArrays(GLint(m_renderMode), 0, m_mesh->GetVertexCount());
     m_mesh->GetVAO()->UnBind();
 }
 

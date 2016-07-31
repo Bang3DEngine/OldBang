@@ -44,7 +44,7 @@ void LineRenderer::RenderWithoutBindingMaterial() const
     SetMatricesUniforms(model, normal, view, projection, pvm);
 
     m_vao->Bind();
-    glDrawArrays(m_drawLinesMode, 0, m_points.size());
+    glDrawArrays(GLint(m_drawLinesMode), 0, m_points.size());
     m_vao->UnBind();
 }
 

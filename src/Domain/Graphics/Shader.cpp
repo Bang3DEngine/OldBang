@@ -27,7 +27,7 @@ bool Shader::LoadFromFile(const std::string& filepath)
 
     ShaderPreprocessor::PreprocessShaderCode(&m_sourceCode);
 
-    m_idGL = glCreateShader(m_type);
+    m_idGL = glCreateShader(GLint(m_type));
 
     const GLchar *source = (const GLchar*)(m_sourceCode.c_str());
     GLint size = m_sourceCode.length();

@@ -1,25 +1,7 @@
 #include "XMLAttribute.h"
 
-const std::vector< std::string >  XMLAttribute::TypeNames =
-    {"Bool", "Int", "String", "Float",
-     "Vector2", "Vector3", "Vector4",
-     "Quaternion", "Rect", "File", "Enum"};
-
-XMLAttribute::Type XMLAttribute::GetTypeFromString(const std::string &typeString)
-{
-    for (int i = 0; i < TypeNames.size(); ++i)
-    {
-        if (typeString == TypeNames[i])
-        {
-            return static_cast<XMLAttribute::Type>(i);
-        }
-    }
-    return XMLAttribute::Type::TBool;
-}
-
 XMLAttribute::XMLAttribute()
 {
-
 }
 
 XMLAttribute::XMLAttribute(const std::string &name,
@@ -132,13 +114,13 @@ void XMLAttribute::SetPointer(const void *value,
 {
     std::ostringstream oss;
     oss << value;
-    Set(m_name, oss.str(), XMLAttribute::Type::TString, properties);
+    Set(m_name, oss.str(), XMLAttribute::Type::String, properties);
 }
 
 void XMLAttribute::SetBool(bool value,
                            const std::vector<XMLProperty> &properties)
 {
-    Set(m_name, value ? "true" : "false", XMLAttribute::Type::TBool, properties);
+    Set(m_name, value ? "true" : "false", XMLAttribute::Type::Bool, properties);
 }
 
 void XMLAttribute::SetInt(int value,
@@ -146,13 +128,13 @@ void XMLAttribute::SetInt(int value,
 {
     std::ostringstream oss;
     oss << value;
-    Set(m_name, oss.str(), XMLAttribute::Type::TInt, properties);
+    Set(m_name, oss.str(), XMLAttribute::Type::Int, properties);
 }
 
 void XMLAttribute::SetString(const std::string &value,
                              const std::vector<XMLProperty> &properties)
 {
-    Set(m_name, value, XMLAttribute::Type::TString, properties);
+    Set(m_name, value, XMLAttribute::Type::String, properties);
 }
 
 void XMLAttribute::SetFloat(float value,
@@ -160,7 +142,7 @@ void XMLAttribute::SetFloat(float value,
 {
     std::ostringstream oss;
     oss << value;
-    Set(m_name, oss.str(), XMLAttribute::Type::TFloat, properties);
+    Set(m_name, oss.str(), XMLAttribute::Type::Float, properties);
 }
 
 void XMLAttribute::SetVector2(const glm::vec2 &value,
@@ -169,7 +151,7 @@ void XMLAttribute::SetVector2(const glm::vec2 &value,
     std::ostringstream oss;
     oss << "(" << value.x << ", " <<
                   value.y << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::TVector2, properties);
+    Set(m_name, oss.str(), XMLAttribute::Type::Vector2, properties);
 }
 
 void XMLAttribute::SetVector3(const Vector3 &value,
@@ -179,7 +161,7 @@ void XMLAttribute::SetVector3(const Vector3 &value,
     oss << "(" << value.x << ", " <<
                   value.y << ", " <<
                   value.z << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::TVector3, properties);
+    Set(m_name, oss.str(), XMLAttribute::Type::Vector3, properties);
 }
 
 void XMLAttribute::SetVector4(const glm::vec4 &value,
@@ -190,7 +172,7 @@ void XMLAttribute::SetVector4(const glm::vec4 &value,
                   value.y << ", " <<
                   value.z << ", " <<
                   value.w << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::TVector4, properties);
+    Set(m_name, oss.str(), XMLAttribute::Type::Vector4, properties);
 }
 
 void XMLAttribute::SetQuaternion(const Quaternion &value,
@@ -201,7 +183,7 @@ void XMLAttribute::SetQuaternion(const Quaternion &value,
                   value.x << ", " <<
                   value.y << ", " <<
                   value.z << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::TQuaternion, properties);
+    Set(m_name, oss.str(), XMLAttribute::Type::Quaternion, properties);
 }
 
 void XMLAttribute::SetRect(const Rect &value,
@@ -212,7 +194,7 @@ void XMLAttribute::SetRect(const Rect &value,
                   value.m_miny << ", " <<
                   value.m_maxx << ", " <<
                   value.m_maxy << ")";
-    Set(m_name, oss.str(), XMLAttribute::Type::TRect, properties);
+    Set(m_name, oss.str(), XMLAttribute::Type::Rect, properties);
 }
 
 void XMLAttribute::SetFilepath(const std::string &filepath,
@@ -220,7 +202,7 @@ void XMLAttribute::SetFilepath(const std::string &filepath,
                                const std::vector<XMLProperty> &properties)
 {
     std::string newFilepath = Persistence::ProjectRootAbsoluteToRelative(filepath);
-    Set(m_name, newFilepath, XMLAttribute::Type::TFile, properties);
+    Set(m_name, newFilepath, XMLAttribute::Type::File, properties);
 
     if (!fileExtension.empty())
     {
@@ -250,7 +232,7 @@ void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
 void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
                            int selectedEnumIndex, const std::vector<XMLProperty> &properties)
 {
-    Set(m_name, std::to_string(selectedEnumIndex), XMLAttribute::Type::TEnum, properties);
+    Set(m_name, std::to_string(selectedEnumIndex), XMLAttribute::Type::Enum, properties);
     for (int i = 0; i < enumNames.size(); ++i)
     {
         XMLProperty prop("EnumName" + std::to_string(i), enumNames[i]);
@@ -260,26 +242,26 @@ void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
 
 bool XMLAttribute::HasVectoredType() const
 {
-    return m_type == XMLAttribute::Type::TFloat   ||
-           m_type == XMLAttribute::Type::TVector2 ||
-           m_type == XMLAttribute::Type::TVector3 ||
-           m_type == XMLAttribute::Type::TVector4 ||
-           m_type == XMLAttribute::Type::TQuaternion;
+    return m_type == XMLAttribute::Type::Float   ||
+           m_type == XMLAttribute::Type::Vector2 ||
+           m_type == XMLAttribute::Type::Vector3 ||
+           m_type == XMLAttribute::Type::Vector4 ||
+           m_type == XMLAttribute::Type::Quaternion;
 }
 
 int XMLAttribute::GetNumberOfFieldsOfType() const
 {
-    if (m_type == XMLAttribute::Type::TBool)            return 1;
-    else if (m_type == XMLAttribute::Type::TInt)        return 1;
-    else if (m_type == XMLAttribute::Type::TString)     return 1;
-    else if (m_type == XMLAttribute::Type::TFloat)      return 1;
-    else if (m_type == XMLAttribute::Type::TVector2)    return 2;
-    else if (m_type == XMLAttribute::Type::TVector3)    return 3;
-    else if (m_type == XMLAttribute::Type::TVector4)    return 4;
-    else if (m_type == XMLAttribute::Type::TQuaternion) return 4;
-    else if (m_type == XMLAttribute::Type::TRect)       return 4;
-    else if (m_type == XMLAttribute::Type::TFile)       return 1;
-    else if (m_type == XMLAttribute::Type::TEnum)       return 1;
+    if (m_type == XMLAttribute::Type::Bool)            return 1;
+    else if (m_type == XMLAttribute::Type::Int)        return 1;
+    else if (m_type == XMLAttribute::Type::String)     return 1;
+    else if (m_type == XMLAttribute::Type::Float)      return 1;
+    else if (m_type == XMLAttribute::Type::Vector2)    return 2;
+    else if (m_type == XMLAttribute::Type::Vector3)    return 3;
+    else if (m_type == XMLAttribute::Type::Vector4)    return 4;
+    else if (m_type == XMLAttribute::Type::Quaternion) return 4;
+    else if (m_type == XMLAttribute::Type::Rect)       return 4;
+    else if (m_type == XMLAttribute::Type::File)       return 1;
+    else if (m_type == XMLAttribute::Type::Enum)       return 1;
     return -1;
 }
 
@@ -479,7 +461,7 @@ XMLAttribute XMLAttribute::FromString(const std::string &string)
     std::vector<std::string> properties = StringUtils::Split(propertiesString, ',');
 
     attribute.SetName(name);
-    attribute.SetType(XMLAttribute::GetTypeFromString(typeString));
+    attribute.SetType(XMLAttribute::Type_FromString(typeString));
     attribute.SetValue(value);
 
     for (std::string propString : properties)
@@ -487,6 +469,8 @@ XMLAttribute XMLAttribute::FromString(const std::string &string)
         XMLProperty prop = XMLProperty::FromString(propString);
         attribute.SetProperty(prop);
     }
+
+    return attribute;
 }
 
 const XMLAttribute::Type& XMLAttribute::GetType() const
@@ -494,7 +478,8 @@ const XMLAttribute::Type& XMLAttribute::GetType() const
     return m_type;
 }
 
-const std::string& XMLAttribute::GetTypeName() const
+
+std::string XMLAttribute::GetTypeName() const
 {
-    return XMLAttribute::TypeNames[m_type];
+    return Type_ToString(m_type);
 }

@@ -47,8 +47,8 @@ void Texture::SetFilterMode(Texture::FilterMode filterMode)
 {
     this->m_filterMode = filterMode;
     Bind();
-    glTexParameteri(m_glTextureType, GL_TEXTURE_MAG_FILTER, filterMode);
-    glTexParameteri(m_glTextureType, GL_TEXTURE_MIN_FILTER, filterMode);
+    glTexParameteri(m_glTextureType, GL_TEXTURE_MAG_FILTER, GLint(filterMode));
+    glTexParameteri(m_glTextureType, GL_TEXTURE_MIN_FILTER, GLint(filterMode));
     UnBind();
 }
 
@@ -56,9 +56,9 @@ void Texture::SetWrapMode(Texture::WrapMode wrapMode)
 {
     this->m_wrapMode = wrapMode;
     Bind();
-    glTexParameteri(m_glTextureType, GL_TEXTURE_WRAP_S, wrapMode);
-    glTexParameteri(m_glTextureType, GL_TEXTURE_WRAP_T, wrapMode);
-    glTexParameteri(m_glTextureType, GL_TEXTURE_WRAP_R, wrapMode);
+    glTexParameteri(m_glTextureType, GL_TEXTURE_WRAP_S, GLint(wrapMode));
+    glTexParameteri(m_glTextureType, GL_TEXTURE_WRAP_T, GLint(wrapMode));
+    glTexParameteri(m_glTextureType, GL_TEXTURE_WRAP_R, GLint(wrapMode));
     UnBind();
 }
 

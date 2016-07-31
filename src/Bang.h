@@ -22,7 +22,7 @@
 
         #define NamedEnum(EnumName, ...) \
             \
-            enum EnumName { __VA_ARGS__ }; \
+            enum class EnumName { __VA_ARGS__ }; \
             \
             static const std::string EnumName##_GetEnumName() { \
                 return #EnumName; \
@@ -32,19 +32,19 @@
                 return names; \
             } \
             \
-            static const std::vector<int>& EnumName##_GetValuesVector() { \
-                static const std::vector<int> values = /* Holds the user values of each Enum entry */ \
-                            StringUtils::BangEnumVariadicStringToValuesArray(#__VA_ARGS__); \
+            static const std::vector<EnumName>& EnumName##_GetValuesVector() { \
+                static const std::vector<EnumName> values = /* Holds the user values of each Enum entry */ \
+                            StringUtils::BangEnumVariadicStringToValuesArray<EnumName>(#__VA_ARGS__); \
                 return values; \
             } \
             \
-            static std::map<int,int>& EnumName##_GetEnumValueToIndexMap() { /* For every enum value, it maps to the index inside the Enum. */ \
+            static std::map<EnumName,int>& EnumName##_GetEnumValueToIndexMap() { /* For every enum value, it maps to the index inside the Enum. */ \
                 static bool mapInit = false; \
-                static std::map<int,int> enumValueToIndex; \
+                static std::map<EnumName,int> enumValueToIndex; \
                 if (!mapInit) \
                 { \
                     const std::vector<std::string>& names = EnumName##_GetNamesVector(); \
-                    const std::vector<int>& values = EnumName##_GetValuesVector(); \
+                    const std::vector<EnumName>& values = EnumName##_GetValuesVector(); \
                     for (int i = 0; i < names.size(); ++i) \
                     { \
                         enumValueToIndex[values[i]] = i;  \
@@ -65,25 +65,25 @@
                 return EnumName##_GetNamesVector()[index]; \
             } \
             \
-            static int EnumName##_GetIndexFromValue(int value) { \
-                std::map<int,int>& enumValueToIndex = EnumName##_GetEnumValueToIndexMap(); \
+            static int EnumName##_GetIndexFromValue(EnumName value) { \
+                std::map<EnumName,int>& enumValueToIndex = EnumName##_GetEnumValueToIndexMap(); \
                 return enumValueToIndex[value]; \
             } \
-            static std::string EnumName##_GetNameByValue(int enumValue) { \
+            static std::string EnumName##_GetNameByValue(EnumName enumValue) { \
                 const std::vector<std::string>& names = EnumName##_GetNamesVector(); \
                 return names[EnumName##_GetIndexFromValue(enumValue)]; \
             } \
             \
             static std::string EnumName##_ToString(int v) { \
-                return EnumName##_GetNameByValue(v); \
+                return  EnumName##_ToString(static_cast<EnumName>(v)); \
             } \
             \
             static std::string EnumName##_ToString(EnumName v) { \
-                return EnumName##_ToString(int(v)); \
+                return EnumName##_GetNameByValue(v); \
             } \
             \
             static EnumName EnumName##_FromString(const std::string &name) { \
-                const std::vector<int>& values = EnumName##_GetValuesVector(); \
+                const std::vector<EnumName>& values = EnumName##_GetValuesVector(); \
                 for (int i = 0; i < EnumName##_GetSize(); ++i) { \
                     if (name == EnumName##_GetNameByIndex(i)) { return static_cast<EnumName>(values[i]); } \
                 } \

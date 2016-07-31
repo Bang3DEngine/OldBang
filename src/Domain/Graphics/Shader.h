@@ -20,10 +20,10 @@ class Shader : public IToString, public IGLIdable
 {
 public:
 
-    enum Type {
+    NamedEnum (Type,
         Vertex = GL_VERTEX_SHADER,
         Fragment = GL_FRAGMENT_SHADER
-    };
+    );
 
 private:
     std::string m_sourceCode;
