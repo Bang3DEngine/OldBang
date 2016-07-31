@@ -1,6 +1,7 @@
 <Scene enabled:Bool="true"{Hidden,Readonly}
        id:String="0xa053f38"{Hidden,Readonly}
        name:String="Scene"{Hidden,Readonly}
+       Camera:String="0xa384ca0"{Hidden}
       >
     <Transform Position:Vector3="(0, 0, 0)"{}
                Rotation:Vector3="(0, 0, 0)"{}

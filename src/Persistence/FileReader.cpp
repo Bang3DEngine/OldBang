@@ -16,10 +16,7 @@
 #include "Explorer.h"
 #endif
 
-//#include "BP_SceneReader_cpm_UserBehaviours_elseifs.bp"
-
 const std::string FileReader::NoRegisterId = "-";
-std::map<std::string, void*> FileReader::idToPointers;
 void *FileReader::lastIstreamDir = nullptr;
 
 
@@ -265,6 +262,7 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
     {
         scene->ReadXMLInfo(xmlInfo);
     }
+    scene->PostReadXMLInfo(xmlInfo);
 }
 
 std::string FileReader::PeekNextLine(std::istream &f)
@@ -382,18 +380,4 @@ std::string FileReader::ReadString(std::istream &f)
     std::getline(f, str);
     StringUtils::TrimLeft(&str);
     return str;
-}
-
-void FileReader::RegisterNextPointerId(std::istream &f, void *pointer)
-{
-    if (&f != lastIstreamDir)
-    {
-        //We are reading a new file!
-        idToPointers.clear();
-    }
-    lastIstreamDir = &f;
-
-    std::string id = ReadString(f);
-    if (id != NoRegisterId)
-        idToPointers[id] = pointer;
 }

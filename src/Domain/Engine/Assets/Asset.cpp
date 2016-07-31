@@ -33,10 +33,12 @@ const std::string Asset::ToString() const
 
 void Asset::ReadXMLInfo(const XMLNode *xmlInfo)
 {
+    IFileable::ReadXMLInfo(xmlInfo);
 }
 
 void Asset::FillXMLInfo(XMLNode *xmlInfo) const
 {
+    IFileable::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Asset");
     //xmlInfo->SetFilepath("filepath", m_filepath);
 }

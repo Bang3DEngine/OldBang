@@ -7,9 +7,15 @@
 
 #include "XMLNode.h"
 
+class IFileable;
 class XMLParser
 {
 private:
+public:
+    static std::map<std::string, const IFileable*> m_idToPointer;
+
+    static void ClearPointerIds();
+
     static void GetNextOpenTag(const std::string &xml,
                                int startPosition,
                                std::string *tag,
@@ -37,6 +43,9 @@ private:
 
 public:
     XMLParser();
+
+    static void RegisterId(const XMLNode *xmlInfo, const IFileable *pointer);
+    static const IFileable* GetPointerFromId(const std::string &id);
 
     static std::string GetTagName(const std::string &tag,
                                   int *tagNameBegin = nullptr, int *tagNameEnd = nullptr);

@@ -71,6 +71,7 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void PostReadXMLInfo(const XMLNode *xmlInfo) override;
 };
 
 #endif // SCENE_H

@@ -329,7 +329,8 @@ GameObject *GameObject::FindInChildren(const std::string &name)
 
 void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    // FileReader::RegisterNextPointerId(f, this)
+    IFileable::ReadXMLInfo(xmlInfo);
+
     SetEnabled( xmlInfo->GetBool("enabled") );
     SetName( xmlInfo->GetString("name") );  //Read GameObject name
 
@@ -393,6 +394,7 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 
 void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
 {
+    IFileable::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("GameObject");
     xmlInfo->SetPointer("id", this,
                         {XMLProperty::Hidden,

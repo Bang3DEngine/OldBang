@@ -18,8 +18,17 @@ protected:
     IFileable() {}
 
 public:
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) = 0;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const = 0;
+    virtual void ReadXMLInfo(const XMLNode *xmlInfo);
+    virtual void FillXMLInfo(XMLNode *xmlInfo) const;
+
+    /**
+      This Post stuff is basically for the IFileable's that need info
+      contained in other xmlNodes in the file.
+      For example, a Scene might need to access to its main Camera. If the
+      Camera hasnt been read yet, then Scene wont be able to set it.
+     */
+    virtual void PostReadXMLInfo(const XMLNode *xmlInfo) {}
+    virtual void PostFillXMLInfo(XMLNode *xmlInfo) const {}
 };
 
 #endif // IFILEABLE_H

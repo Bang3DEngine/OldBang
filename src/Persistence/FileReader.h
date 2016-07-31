@@ -27,7 +27,6 @@ private:
     FileReader() {}
 
     static const std::string NoRegisterId;
-    static std::map<std::string, void*> idToPointers;
     static void *lastIstreamDir;
 
 public:
@@ -79,27 +78,6 @@ public:
     static Quaternion ReadQuat(std::istream &f);
     static Rect ReadRect(std::istream &f);
     static std::string ReadString(std::istream &f);
-
-
-    //To be used when we have a reference to another element in the
-    // same file (0xu234783 instead of /home/ashjdas/Assets/dkjfdf.b* or '-')
-    template <class T>
-    static T* GetNextPointerAddress(std::istream &f)
-    {
-        std::string id = ReadString(f);
-        if (id == "-")
-        {
-            return nullptr;
-        }
-
-        if (idToPointers.find(id) == idToPointers.end()) return nullptr;
-        return (T*)(idToPointers[id]);
-    }
-
-    //This saves the next pointer id into the map.
-    // this is the 0x3473274 that comes just before the name.
-    static void RegisterNextPointerId(std::istream &f, void *pointer);
-    //
 };
 
 #endif // FILEREADER_H

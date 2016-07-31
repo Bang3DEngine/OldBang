@@ -1,7 +1,26 @@
 #include "XMLParser.h"
 
+#include "IFileable.h"
+
+std::map<std::string, const IFileable*> XMLParser::m_idToPointer;
+
 XMLParser::XMLParser()
 {
+}
+
+void XMLParser::RegisterId(const XMLNode *xmlInfo, const IFileable *pointer)
+{
+    std::string id = xmlInfo->GetString("id");
+    m_idToPointer[id] = pointer;
+}
+
+const IFileable *XMLParser::GetPointerFromId(const std::string &id)
+{
+    if (m_idToPointer.find(id) != m_idToPointer.end())
+    {
+        return m_idToPointer[id];
+    }
+    return nullptr;
 }
 
 std::string XMLParser::GetTagName(const std::string &tag, int *tagNameBegin, int *tagNameEnd)
@@ -102,6 +121,11 @@ void XMLParser::GetCorrespondingCloseTag(const std::string &xml,
     }
 }
 
+void XMLParser::ClearPointerIds()
+{
+    m_idToPointer.clear();
+}
+
 void XMLParser::GetNextOpenTag(const std::string &xml,
                                int startPosition,
                                std::string *tag,
@@ -174,6 +198,8 @@ XMLNode *XMLParser::FromFile(const std::string &filepath)
 
 XMLNode* XMLParser::FromString(const std::string &xml)
 {
+    ClearPointerIds();
+
     XMLNode* root = new XMLNode();
 
     //Read name
