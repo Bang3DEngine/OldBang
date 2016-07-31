@@ -36,15 +36,16 @@
 
 #endif
 
-BANG_ENUM
+NAMED_ENUM
 (Semana
 ,
-   Lunes,
-   Martes,
+   Lunes=47,
+   Martes=21,
    Miercoles,
    Jueves,
-   Viernes
+   Viernes=100
 )
+
 
 int main(int argc, char *argv[])
 {
@@ -58,6 +59,7 @@ int main(int argc, char *argv[])
     std::cerr << SemanaFromString("Miercoles") << std::endl;
     std::cerr << SemanaFromString("Jueves") << std::endl;
     std::cerr << SemanaFromString("Viernes") << std::endl;
+    std::cerr << SemanaToString(23) << std::endl;
     exit(0);
 
     QApplication app(argc, argv);

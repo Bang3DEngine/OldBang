@@ -123,11 +123,39 @@ std::vector<std::string> StringUtils::SplitTrim(const std::string &content, char
 
 std::vector<std::string> StringUtils::BangEnumVariadicStringToNamesArray(const std::string &_va_args_)
 {
-    std::vector<std::string> result = Split(_va_args_, ',');
+    // We receive something like "Wololo, Apple = 49, Pear=29, Lololo=2193, Banana,Sandwich, Monkey=32"
+    // We want this vector: ["Wololo", "Apple", "Pear", "Lololo", "Banana", "Sandwich", "Monkey"]
+    std::vector<std::string> result = SplitTrim(_va_args_, ',');
     for (std::string &str : result)
     {
-        str = Split(str, '=')[0]; // In case we have something like BANG_ENUM(Fruit, Apple=10,Pear=47,...)
+        str = SplitTrim(str, '=')[0];
+    }
+    return result;
+}
+
+std::vector<int> StringUtils::BangEnumVariadicStringToValuesArray(const std::string &_va_args_)
+{
+    // We receive something like "Wololo, Apple = 49, Pear=29, Lololo=2193, Banana,Sandwich, Monkey=32"
+    // We want this vector: [0, 49, 29, 2193, 2194, 2195, 32]
+    std::vector<int> result;
+    std::vector<std::string> splitted = SplitTrim(_va_args_, ',');
+    int lastValue = 0;
+    for (std::string str : splitted)
+    {
         Trim(&str);
+        std::vector<std::string> equalSplitted = SplitTrim(str, '=');
+        int val;
+        if (equalSplitted.size() == 2) // Has value
+        {
+            val = std::atoi(equalSplitted[1].c_str());
+        }
+        else // Has no value, one more than the last one
+        {
+            val = lastValue + 1;
+        }
+
+        lastValue = val;
+        result.push_back(val);
     }
     return result;
 }

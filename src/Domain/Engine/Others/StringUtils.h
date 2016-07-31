@@ -25,7 +25,9 @@ public:
 
     static std::vector<std::string> Split(const std::string &content, char splitter);
     static std::vector<std::string> SplitTrim(const std::string &content, char splitter);
+
     static std::vector<std::string> BangEnumVariadicStringToNamesArray(const std::string &_va_args_);
+    static std::vector<int> BangEnumVariadicStringToValuesArray(const std::string &_va_args_);
 
     /**
      * @brief FormatInspectorLabel
