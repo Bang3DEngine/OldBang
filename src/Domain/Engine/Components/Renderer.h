@@ -10,6 +10,7 @@
 
 class Renderer : public Component
 {
+friend class Gizmos;
 friend class SelectionFramebuffer;
 
 public:

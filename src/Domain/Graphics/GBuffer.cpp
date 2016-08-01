@@ -74,6 +74,8 @@ void GBuffer::RenderScreenPlane() const
     m_planeMeshToRenderEntireScreen->GetVAO()->Bind();
 
     glDepthFunc(GL_LEQUAL); //Overwrite last screen plane!
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glDisable(GL_CULL_FACE);
     glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());
 
     m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();

@@ -32,6 +32,7 @@ public:
     float GetHeight() const;
     float GetDepth() const;
     Vector3 GetCenter() const;
+    Vector3 GetDimensions() const;
     float GetArea() const;
     float GetVolume() const;
 

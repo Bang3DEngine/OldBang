@@ -35,14 +35,14 @@ private:
     mutable std::map<GameObject*, QTreeWidgetItem*> m_gameObjectToTreeItem;
     mutable std::map<QTreeWidgetItem*,GameObject*> m_treeItemToGameObject;
 
-    Scene *m_currentScene = nullptr;
-
     void ExpandRecursiveUpwards(QTreeWidgetItem *item);
     QTreeWidgetItem* FillDownwards(GameObject *e);
 
     //Useful for example, for Removing a Child
     //(we just need to remove the parent/s of all the selected entities)
     void LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items);
+    GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
+    QTreeWidgetItem *GetItemFromGameObject(GameObject *go) const;
 
 public:
     explicit Hierarchy(QWidget *parent = 0);

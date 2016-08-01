@@ -13,6 +13,7 @@
 #include "ICloneable.h"
 #include "ISceneEventListener.h"
 
+#include "Gizmos.h"
 #include "Property.h"
 #include "Material.h"
 #include "Sphere.h"
@@ -53,6 +54,8 @@ private:
     virtual void _OnPreRender () override;
     virtual void _OnRender () override;
     virtual void _OnDestroy () override;
+    virtual void _OnDrawGizmos () override;
+    virtual void _OnDrawGizmosNoDepth () override;
 
 protected:
     std::string m_name = "";
@@ -321,6 +324,8 @@ public:
 
     void SetEnabled(bool m_enabled);
     bool IsEnabled();
+
+    virtual void OnDrawGizmos() override;
 
     #ifdef BANG_EDITOR
     bool IsSelectedInHierarchy() const;

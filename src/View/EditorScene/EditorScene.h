@@ -22,8 +22,9 @@ public:
     EditorScene();
     virtual ~EditorScene();
 
-    void _OnResize (int newWidth, int newHeight) override;
-    void _OnRender () override;
+    virtual void _OnStart () override;
+    virtual void _OnResize (int newWidth, int newHeight) override;
+    virtual void _OnRender () override;
 
     void DebugDrawLine(const Vector3 &origin,
                        const Vector3 &destiny,

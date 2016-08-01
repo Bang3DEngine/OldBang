@@ -65,7 +65,7 @@ void Renderer::ActivateGLStatesBeforeRendering() const
 
         #ifdef BANG_EDITOR
         m_material->m_shaderProgram->SetUniformFloat("B_gameObject_isSelected",
-                                                      gameObject->IsSelectedInHierarchy() ? 1.0f : 0.0f, false);
+                                                     gameObject->IsSelectedInHierarchy() ? 1.0f : 0.0f, false);
         #endif
     }
 

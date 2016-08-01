@@ -162,6 +162,14 @@ Box GameObject::GetObjectBoundingBox() const
         {
             b = m->GetBoundingBox();
         }
+
+        /*
+        for (GameObject *child : m_children)
+        {
+            Box bc = child->GetBoundingBox();
+            b = Box::Union(b, bc);
+        }
+        */
     }
 
     return b;
@@ -476,6 +484,14 @@ bool GameObject::IsEnabled()
     return m_enabled && (!m_parent ? true : m_parent->IsEnabled());
 }
 
+void GameObject::OnDrawGizmos()
+{
+    Box box = GetBoundingBox();
+   // Logger_Log(name);
+    Gizmos::SetColor(Vector3(1,0,0));
+    Gizmos::DrawBox(box);
+}
+
 const std::string GameObject::ToString() const
 {
     std::ostringstream oss;
@@ -540,7 +556,7 @@ void GameObject::_OnPreRender ()
 {
     PROPAGATE_EVENT(_OnPreRender, m_children);
 
-    if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
+    //if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
     {
         PROPAGATE_EVENT(_OnPreRender, m_components);
         OnPreRender();
@@ -551,7 +567,7 @@ void GameObject::_OnRender ()
 {
     PROPAGATE_EVENT(_OnRender, m_children);
 
-    if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
+    //if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
     {
         PROPAGATE_EVENT(_OnRender, m_components);
         OnRender();
@@ -564,4 +580,20 @@ void GameObject::_OnDestroy()
     //No need to propagate _OnDestroy to children,
     //since the "delete child" itself propagates it (look at the destructor)
     OnDestroy();
+}
+
+void GameObject::_OnDrawGizmos()
+{
+    PROPAGATE_EVENT(_OnDrawGizmos, m_children);
+
+    PROPAGATE_EVENT(_OnDrawGizmos, m_components);
+    OnDrawGizmos();
+}
+
+void GameObject::_OnDrawGizmosNoDepth()
+{
+    PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
+
+    PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_components);
+    OnDrawGizmosNoDepth();
 }

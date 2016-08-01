@@ -62,28 +62,39 @@ void Scene::_OnRender()
     }
 
     m_gbuffer->Bind();
-    m_gbuffer->ClearBuffersAndBackground(glm::vec4(0.9f,0.9f,0.9f,1));
-    m_gbuffer->SetAllDrawBuffers();
 
-    //From 0 to 9
-    for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
-    {
-        glClear(GL_DEPTH_BUFFER_BIT);
-        PROPAGATE_EVENT(_OnPreRender, m_children);
-        PROPAGATE_EVENT(_OnRender, m_children);
-    }
+    // D2G
+        m_gbuffer->ClearBuffersAndBackground(glm::vec4(0.9f,0.9f,0.9f,1));
+        m_gbuffer->SetAllDrawBuffers();
 
-    // Apply lights to gbuffer
-    std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
-    for (Light *light : childrenLights)
-    {
-        if (CAN_USE_COMPONENT(light))
+        //From 0 to 9
+        // for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
         {
-            light->ApplyLight(m_gbuffer);
+            glClear(GL_DEPTH_BUFFER_BIT);
+            PROPAGATE_EVENT(_OnPreRender, m_children);
+            PROPAGATE_EVENT(_OnRender, m_children);
         }
-    }
 
-    m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
+        // Draw Gizmos!
+        PROPAGATE_EVENT(_OnDrawGizmos, m_children);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
+    //
+
+    // PR
+        // Apply lights to gbuffer
+        std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
+        for (Light *light : childrenLights)
+        {
+            if (CAN_USE_COMPONENT(light))
+            {
+                light->ApplyLight(m_gbuffer);
+            }
+        }
+
+        // Selection effects and other stuff
+        m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
+    //
 
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen();

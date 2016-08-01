@@ -36,7 +36,7 @@ void EditorCamera::AdjustSpeeds()
     if (m_currentFocus)
     {
         Transform *ft = m_currentFocus->transform;
-        if (ft )
+        if (ft)
         {
             Vector3 focusPoint = ft->GetPosition();
             float d = Vector3::Distance(focusPoint, transform->GetPosition());

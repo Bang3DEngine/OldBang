@@ -25,6 +25,15 @@ EditorScene::~EditorScene()
     delete m_selectionFramebuffer;
 }
 
+void EditorScene::_OnStart()
+{
+    Scene::_OnStart();
+
+    EditorGameObject *gizmosGo = new EditorGameObject("BANG_GizmosGameObject");
+    gizmosGo->SetParent(this);
+    Gizmos::SetGizmosGameObject(gizmosGo);
+}
+
 void EditorScene::_OnResize(int newWidth, int newHeight)
 {
     Scene::_OnResize(newWidth, newHeight);

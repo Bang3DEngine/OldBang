@@ -62,6 +62,11 @@ Vector3 Box::GetCenter() const
     return (m_minv + m_maxv) / 2.0f;
 }
 
+Vector3 Box::GetDimensions() const
+{
+    return Vector3(GetWidth(), GetHeight(), GetDepth());
+}
+
 float Box::GetArea() const
 {
     float w = GetWidth();

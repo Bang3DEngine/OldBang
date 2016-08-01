@@ -47,11 +47,24 @@ protected:
         OnDestroy();
     }
 
+    virtual void _OnDrawGizmos()
+    {
+        OnDrawGizmos();
+    }
+
+    virtual void _OnDrawGizmosNoDepth()
+    {
+        OnDrawGizmosNoDepth();
+    }
+
+
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
     virtual void OnPreRender() {}
     virtual void OnRender() {}
     virtual void OnDestroy() {}
+    virtual void OnDrawGizmos() {}
+    virtual void OnDrawGizmosNoDepth() {}
 };
 
 #endif // SCENEEVENTLISTENER_H

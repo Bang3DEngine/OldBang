@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-# CONFIG += EDITOR
+CONFIG += EDITOR
 # CONFIG += GAME
 
 include(deployment.pri)
@@ -115,7 +115,6 @@ OTHER_FILES += \
     Assets/Scenes/test2.bscene \
     Assets/Engine/Materials/D2G_Default.bmat \
     Assets/Engine/Materials/D2G_Line.bmat \
-    Assets/Engine/Materials/D2G_LineMaterial.bmat \
     Assets/Engine/Materials/D2G_LineRotationAxis.bmat \
     Assets/Engine/Materials/PR_AfterLighting.bmat \
     Assets/Engine/Materials/PR_DirectionalLight.bmat \
@@ -255,7 +254,8 @@ HEADERS += \
     src/View/EditorGameObject/EditorAxis.h \
     src/View/EditorGameObject/EditorScaleAxisGroup.h \
     src/View/EditorGameObject/EditorScaleAxis.h \
-    src/View/EditorScene/EditorFloor.h
+    src/View/EditorScene/EditorFloor.h \
+    src/Domain/Engine/Others/Gizmos.h
 }
 
 GAME {
@@ -380,7 +380,8 @@ EDITOR {
         src/View/EditorGameObject/EditorTranslateAxisGroup.cpp \
         src/View/EditorGameObject/EditorTranslateAxis.cpp \
         src/View/Toolbar.cpp \
-        src/View/Inspector/AttrWidgetButton.cpp
+        src/View/Inspector/AttrWidgetButton.cpp \
+        src/Domain/Engine/Others/Gizmos.cpp
 }
 
 GAME {
