@@ -40,6 +40,10 @@ public:
         CreateCube,
         CreateSphere,
         CreateCone,
+        CreateDirectionalLight,
+        CreatePointLight,
+        AlignGameObjectWithView,
+        AlignViewWithGameObject,
 
         CreatePrefab,
         CreateMaterial,
@@ -77,6 +81,10 @@ public slots:
     void OnCreateCube () const;
     void OnCreateSphere () const;
     void OnCreateCone () const;
+    void OnCreateDirectionalLight () const;
+    void OnCreatePointLight () const;
+    void OnAlignGameObjectWithView() const;
+    void OnAlignViewWithGameObject() const;
 
     void OnCreatePrefab() const;
     void OnCreateMaterial() const;

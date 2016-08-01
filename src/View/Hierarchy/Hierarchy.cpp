@@ -10,8 +10,7 @@ Hierarchy::Hierarchy(QWidget *parent)
     connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
             this, SLOT(OnItemNameChanged(QTreeWidgetItem*,int)));
 
-    connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-            this, SLOT(OnSelectionChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
+    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(OnSelectionChanged()));
 
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this ,SLOT(_NotifyHierarchyGameObjectDoubleClicked(
@@ -420,10 +419,9 @@ void Hierarchy::OnCustomContextMenuRequested(QPoint point)
     contextMenu.exec(mapToGlobal(point));
 }
 
-void Hierarchy::OnSelectionChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+void Hierarchy::OnSelectionChanged()
 {
-    m_lastSelectedItem = current;
-    QTimer::singleShot(100, this, SLOT(_NotifyHierarchyGameObjectSelectionChanged()));
+    _NotifyHierarchyGameObjectSelectionChanged();
 }
 
 void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()

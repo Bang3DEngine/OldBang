@@ -5,6 +5,8 @@
 #include "FileReader.h"
 #include "FileWriter.h"
 #include "FileDialog.h"
+#include "DirectionalLight.h"
+#include "PointLight.h"
 #include "SystemUtils.h"
 #include "Persistence.h"
 #include "EditorScene.h"
@@ -40,6 +42,14 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnCreateCube()));
     connect(w->actionCreateSphere,  SIGNAL(triggered()),
             this, SLOT(OnCreateSphere()));
+    connect(w->actionCreateDirectionalLight,  SIGNAL(triggered()),
+            this, SLOT(OnCreateDirectionalLight()));
+    connect(w->actionCreatePointLight,  SIGNAL(triggered()),
+            this, SLOT(OnCreatePointLight()));
+    connect(w->actionAlignGameObjectWithView,  SIGNAL(triggered()),
+            this, SLOT(OnAlignGameObjectWithView()));
+    connect(w->actionAlignViewWithGameObject,  SIGNAL(triggered()),
+            this, SLOT(OnAlignViewWithGameObject()));
 
     connect(w->actionCreatePrefab,  SIGNAL(triggered()),
             this, SLOT(OnCreatePrefab()));
@@ -247,6 +257,32 @@ void MenuBar::OnCreateSphere() const
 void MenuBar::OnCreateCone() const
 {
     MenuBar::CreatePrimitiveGameObject(MeshFactory::GetCone(), "Cone");
+}
+
+void MenuBar::OnCreateDirectionalLight() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::CreateDirectionalLight);
+    GameObject *go = new GameObject("DirectionalLight");
+    go->SetParent(Scene::GetCurrentScene());
+    DirectionalLight *dl = go->AddComponent<DirectionalLight>();
+}
+
+void MenuBar::OnCreatePointLight() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::CreatePointLight);
+    GameObject *go = new GameObject("PointLight");
+    go->SetParent(Scene::GetCurrentScene());
+    PointLight *pl = go->AddComponent<PointLight>();
+}
+
+void MenuBar::OnAlignGameObjectWithView() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::AlignGameObjectWithView);
+}
+
+void MenuBar::OnAlignViewWithGameObject() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::AlignViewWithGameObject);
 }
 
 void MenuBar::OnCreatePrefab() const

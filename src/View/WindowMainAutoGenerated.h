@@ -67,6 +67,10 @@ public:
     QAction *actionBuildAndRun;
     QAction *actionAddComponentDirectionalLight;
     QAction *actionAddComponentPointLight;
+    QAction *actionCreateDirectionalLight;
+    QAction *actionCreatePointLight;
+    QAction *actionAlignViewWithGameObject;
+    QAction *actionAlignGameObjectWithView;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QVBoxLayout *verticalLayout_3;
@@ -182,6 +186,14 @@ public:
         actionAddComponentDirectionalLight->setObjectName(QString::fromUtf8("actionAddComponentDirectionalLight"));
         actionAddComponentPointLight = new QAction(WindowMain);
         actionAddComponentPointLight->setObjectName(QString::fromUtf8("actionAddComponentPointLight"));
+        actionCreateDirectionalLight = new QAction(WindowMain);
+        actionCreateDirectionalLight->setObjectName(QString::fromUtf8("actionCreateDirectionalLight"));
+        actionCreatePointLight = new QAction(WindowMain);
+        actionCreatePointLight->setObjectName(QString::fromUtf8("actionCreatePointLight"));
+        actionAlignViewWithGameObject = new QAction(WindowMain);
+        actionAlignViewWithGameObject->setObjectName(QString::fromUtf8("actionAlignViewWithGameObject"));
+        actionAlignGameObjectWithView = new QAction(WindowMain);
+        actionAlignGameObjectWithView->setObjectName(QString::fromUtf8("actionAlignGameObjectWithView"));
         centralwidget = new QWidget(WindowMain);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -511,6 +523,8 @@ public:
         menuCreate->addAction(actionCreateShaderProgram);
         menuCreate->addAction(actionCreateTexture2D);
         menuGameObject->addAction(menuCreate_2->menuAction());
+        menuGameObject->addAction(actionAlignViewWithGameObject);
+        menuGameObject->addAction(actionAlignGameObjectWithView);
         menuCreate_2->addAction(actionCreateEmptyGameObject);
         menuCreate_2->addSeparator();
         menuCreate_2->addAction(actionCreateFromPrefab);
@@ -518,6 +532,9 @@ public:
         menuCreate_2->addAction(actionCreatePlane);
         menuCreate_2->addAction(actionCreateCube);
         menuCreate_2->addAction(actionCreateSphere);
+        menuCreate_2->addSeparator();
+        menuCreate_2->addAction(actionCreateDirectionalLight);
+        menuCreate_2->addAction(actionCreatePointLight);
         menuProject->addAction(actionNewScene);
         menuProject->addAction(actionOpenScene);
         menuProject->addAction(actionSaveScene);
@@ -528,7 +545,6 @@ public:
         menuProject->addSeparator();
         menuProject->addAction(actionProjectSettings);
         menuComponents->addAction(menuAddComponent->menuAction());
-        menuComponents->addAction(actionRemoveComponent);
         menuAddComponent->addAction(actionAddComponentBehaviour);
         menuAddComponent->addSeparator();
         menuAddComponent->addAction(actionAddComponentCamera);
@@ -576,6 +592,10 @@ public:
         actionBuildAndRun->setText(QApplication::translate("WindowMain", "Build and Run", 0, QApplication::UnicodeUTF8));
         actionAddComponentDirectionalLight->setText(QApplication::translate("WindowMain", "Directional Light", 0, QApplication::UnicodeUTF8));
         actionAddComponentPointLight->setText(QApplication::translate("WindowMain", "Point Light", 0, QApplication::UnicodeUTF8));
+        actionCreateDirectionalLight->setText(QApplication::translate("WindowMain", "Directional Light", 0, QApplication::UnicodeUTF8));
+        actionCreatePointLight->setText(QApplication::translate("WindowMain", "Point Light", 0, QApplication::UnicodeUTF8));
+        actionAlignViewWithGameObject->setText(QApplication::translate("WindowMain", "Align View with GameObject", 0, QApplication::UnicodeUTF8));
+        actionAlignGameObjectWithView->setText(QApplication::translate("WindowMain", "Align GameObject with View", 0, QApplication::UnicodeUTF8));
         buttonTranslateMode->setText(QApplication::translate("WindowMain", "T", 0, QApplication::UnicodeUTF8));
         buttonRotateMode->setText(QApplication::translate("WindowMain", "R", 0, QApplication::UnicodeUTF8));
         buttonScaleMode->setText(QApplication::translate("WindowMain", "S", 0, QApplication::UnicodeUTF8));

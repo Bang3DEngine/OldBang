@@ -35,7 +35,6 @@ private:
     mutable std::map<GameObject*, QTreeWidgetItem*> m_gameObjectToTreeItem;
     mutable std::map<QTreeWidgetItem*,GameObject*> m_treeItemToGameObject;
 
-    QTreeWidgetItem *m_lastSelectedItem = nullptr;
     Scene *m_currentScene = nullptr;
 
     void ExpandRecursiveUpwards(QTreeWidgetItem *item);
@@ -83,7 +82,7 @@ public slots:
     void OnContextMenuCreatePrefab();
     void OnContextMenuDeleteClicked();
 
-    void OnSelectionChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+    void OnSelectionChanged();
     void _NotifyHierarchyGameObjectSelectionChanged();
     void _NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column);
 };

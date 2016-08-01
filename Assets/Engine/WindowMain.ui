@@ -211,8 +211,13 @@
      <addaction name="actionCreatePlane"/>
      <addaction name="actionCreateCube"/>
      <addaction name="actionCreateSphere"/>
+     <addaction name="separator"/>
+     <addaction name="actionCreateDirectionalLight"/>
+     <addaction name="actionCreatePointLight"/>
     </widget>
     <addaction name="menuCreate_2"/>
+    <addaction name="actionAlignViewWithGameObject"/>
+    <addaction name="actionAlignGameObjectWithView"/>
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
@@ -248,7 +253,6 @@
      <addaction name="actionAddComponentPointLight"/>
     </widget>
     <addaction name="menuAddComponent"/>
-    <addaction name="actionRemoveComponent"/>
    </widget>
    <addaction name="menuProject"/>
    <addaction name="menuAssets"/>
@@ -736,6 +740,26 @@
   <action name="actionAddComponentPointLight">
    <property name="text">
     <string>Point Light</string>
+   </property>
+  </action>
+  <action name="actionCreateDirectionalLight">
+   <property name="text">
+    <string>Directional Light</string>
+   </property>
+  </action>
+  <action name="actionCreatePointLight">
+   <property name="text">
+    <string>Point Light</string>
+   </property>
+  </action>
+  <action name="actionAlignViewWithGameObject">
+   <property name="text">
+    <string>Align View with GameObject</string>
+   </property>
+  </action>
+  <action name="actionAlignGameObjectWithView">
+   <property name="text">
+    <string>Align GameObject with View</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>
