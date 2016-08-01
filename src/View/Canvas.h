@@ -40,7 +40,7 @@ private:
     static GameWindow *s_m_window;
     #endif
 
-    const int c_redrawDelay = 25;
+    const int c_redrawDelay = 15;
 
     int m_width = 0;
     int m_height = 0;

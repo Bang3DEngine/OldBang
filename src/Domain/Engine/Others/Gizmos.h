@@ -30,11 +30,18 @@ private:
 
     static Material *m_material;
     static Vector3 m_color;
+    static float m_lineWidth;
+    static bool m_receivesLighting;
+
+    static void SetStatesBeforeDrawing();
 
 public:
 
     static void SetColor(const Vector3 &color);
+    static void SetLineWidth(float lineWidth);
+    static void SetReceivesLighting(bool receivesLighting);
     static void DrawBox(const Box &b, bool wireframe = true);
+    static void DrawLine(const Vector3 &origin, const Vector3 &destiny);
 };
 
 #endif // GIZMOS_H

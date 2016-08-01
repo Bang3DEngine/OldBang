@@ -10,9 +10,9 @@ class EditorRotateAxis : public EditorAxis
 {
 private:
 
-    const float c_rotationBoost = 0.1f;
+    const float c_rotationBoost = 0.02f;
 
-    CircleRenderer *circle = nullptr;
+    CircleRenderer *m_circle = nullptr;
 
     /**
      * @brief These anchorPoints refer to points of the Circle rendered by the CircleRenderer.
@@ -35,6 +35,7 @@ public:
     virtual ~EditorRotateAxis();
 
     void OnUpdate() override;
+    void OnDrawGizmosNoDepth() override;
 };
 
 #endif // EDITORROTATEAXIS_H

@@ -27,55 +27,45 @@ SelectionFramebuffer::~SelectionFramebuffer()
 
 void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 {
-    m_material->Bind();
+    m_isPassing = true;
 
     // Assign id's
-    m_gameObjectToId.clear();
-    m_idToGameObject.clear();
     int id = 0;
-    std::list<Renderer*> childrenRenderers = scene->GetComponentsInChildren<Renderer>();
-    for (Renderer *renderer : childrenRenderers)
+    m_gameObjectToId.clear(); m_idToGameObject.clear();
+    std::list<GameObject*> gameObjects = scene->GetChildrenRecursivelyIncludingEditorGameObjects();
+    for (GameObject *go : gameObjects)
     {
-        GameObject *go = renderer->gameObject;
         m_gameObjectToId[go] = id;
         m_idToGameObject[id] = go;
         ++id;
     }
 
-    // Paint objects
-    for (Renderer *renderer : childrenRenderers)
+    for (GameObject *go : gameObjects)
     {
-        if (renderer->gameObject->GetRenderLayer() == scene->m_currentRenderLayer)
+        if (go->IsEnabled())
         {
-            GameObject *go = renderer->gameObject;
-            if (m_gameObjectToId.find(go) != m_gameObjectToId.end() && go->IsEnabled())
-            {
-                Matrix4 model, normal, view, projection, pvm;
-                renderer->GetMatrices(&model, &normal, &view, &projection, &pvm);
-
-                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Model,
-                                        model, false);
-                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal,
-                                        model, false);
-                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
-                                        view, false);
-                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
-                                        projection, false);
-                m_program->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM,
-                                        pvm, false);
-
-                Vector3 selectionColor = MapIdToColor(m_gameObjectToId[go]);
-                m_program->SetUniformVec3("selectionColor", selectionColor);
-
-                renderer->ActivateGLStatesBeforeRendering();
-                if (renderer->ActivateGLStatesBeforeRenderingForSelection)
-                    renderer->ActivateGLStatesBeforeRenderingForSelection();
-                renderer->RenderWithoutBindingMaterial();
-            }
+            go->_OnRender();
         }
     }
 
-    m_material->UnBind();
+    for (GameObject *go : gameObjects)
+    {
+        if (go->IsEnabled())
+        {
+            go->_OnDrawGizmos();
+        }
+    }
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+    for (GameObject *go : gameObjects)
+    {
+        if (go->IsEnabled())
+        {
+            go->_OnDrawGizmosNoDepth();
+        }
+    }
+
+    m_isPassing = false;
 }
 
 void SelectionFramebuffer::ProcessSelection()
@@ -109,11 +99,10 @@ void SelectionFramebuffer::ProcessSelection()
 
     m_lastMouseOverGO = mouseOverGO;
 
-
     // Selection (clicking over) Here we just handle non-EditorGameObjects
     if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
-        if (mouseOverGO )
+        if (mouseOverGO)
         {
             if (!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
             {
@@ -129,6 +118,21 @@ void SelectionFramebuffer::ProcessSelection()
             WindowMain::GetInstance()->widgetHierarchy->UnselectAll();
         }
     }
+}
+
+Vector3 SelectionFramebuffer::GetSelectionColor(GameObject *go)
+{
+    return MapIdToColor(m_gameObjectToId[go]);
+}
+
+Material *SelectionFramebuffer::GetSelectionMaterial()
+{
+    return m_material;
+}
+
+bool SelectionFramebuffer::IsPassing()
+{
+    return m_isPassing;
 }
 
 Vector3 SelectionFramebuffer::MapIdToColor(long id)

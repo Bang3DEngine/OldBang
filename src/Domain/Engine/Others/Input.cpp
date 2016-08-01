@@ -165,10 +165,12 @@ void Input::HandleInputMouseRelease(QMouseEvent *event)
 {
     MouseButton mb = static_cast<MouseButton>(event->button());
     if (m_mouseInfo.find(mb) != m_mouseInfo.end() &&
-       m_mouseInfo[mb].pressed)
+        m_mouseInfo[mb].pressed)
     {
-        //Only if it was pressed before
-        m_mouseInfo[mb] = ButtonInfo(true, false, false);
+        // Only if it was pressed before
+        // We must respect the down and pressed, just in case they happen
+        // in the same frame (this does happen sometimes)
+        m_mouseInfo[mb] = ButtonInfo(true, m_mouseInfo[mb].down, m_mouseInfo[mb].pressed);
     }
 }
 
@@ -194,7 +196,7 @@ void Input::HandleInputKeyReleased(QKeyEvent *event)
     if (m_keyInfos.find(k) != m_keyInfos.end() &&
        m_keyInfos[k].pressed)
     {   //Only if it was pressed before
-        m_keyInfos[k] = ButtonInfo(true, false, false);
+        m_keyInfos[k] = ButtonInfo(true, m_keyInfos[k].down, m_keyInfos[k].pressed);
     }
 }
 

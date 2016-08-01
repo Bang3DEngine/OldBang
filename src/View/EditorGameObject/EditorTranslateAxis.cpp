@@ -38,7 +38,6 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.15f);
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(m_material);
     m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
-    m_axisCap->SetRenderLayer(5);
 }
 
 EditorTranslateAxis::~EditorTranslateAxis()
@@ -90,6 +89,12 @@ void EditorTranslateAxis::OnUpdate()
             ago->transform->TranslateLocal(worldMove);
         }
     }
+}
+
+void EditorTranslateAxis::OnDrawGizmosNoDepth()
+{
+    m_line->Render();
+    m_axisCap->GetComponent<Renderer>()->Render();
 }
 
 Renderer *EditorTranslateAxis::GetAxisRenderer() const

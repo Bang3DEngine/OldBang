@@ -11,14 +11,14 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     m_material = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/D2G_LineRotationAxis.bmat");
     m_material = new Material(*m_material);
 
-    circle = AddComponent<CircleRenderer>();
-    circle->SetRadius(0.5f);
-    circle->SetSegments(64);
-    circle->SetLineWidth(2.0f);
-    circle->SetMaterial(m_material);
-    circle->SetReceivesLighting(false);
+    m_circle = AddComponent<CircleRenderer>();
+    m_circle->SetRadius(0.5f);
+    m_circle->SetSegments(64);
+    m_circle->SetLineWidth(2.0f);
+    m_circle->SetMaterial(m_material);
+    m_circle->SetReceivesLighting(false);
 
-    circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
+    m_circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
             glLineWidth(25.0f);
         }
@@ -72,7 +72,7 @@ void EditorRotateAxis::OnUpdate()
             // Get the two circle's closer points to the selected point
             // by the user in screen space.
             int anchorIndex0, anchorIndex1;
-            circle->GetTwoClosestPointsInScreenSpace(sMousePos , pvm,
+            m_circle->GetTwoClosestPointsInScreenSpace(sMousePos , pvm,
                         &m_sAnchorPoint0, &anchorIndex0, &m_sAnchorPoint1, &anchorIndex1);
 
             // This is needed to properly compute the rotation
@@ -115,8 +115,13 @@ void EditorRotateAxis::OnUpdate()
     m_material->GetShaderProgram()->SetUniformVec3("B_boundingSphereRadius", radius, false);
 }
 
+void EditorRotateAxis::OnDrawGizmosNoDepth()
+{
+    m_circle->Render();
+}
+
 Renderer *EditorRotateAxis::GetAxisRenderer() const
 {
-    return circle;
+    return m_circle;
 }
 

@@ -37,6 +37,7 @@ class GameObject :
                #endif
 {
 
+friend class SelectionFramebuffer;
 friend class Hierarchy;
 friend class Canvas;
 friend class Prefab;
@@ -64,15 +65,6 @@ protected:
     Transform *m_transform = nullptr;
     GameObject *m_parent = nullptr;
 
-    /**
-     * @brief A RenderLayer is the order in which gameObjects will
-     * be drawn on screen. First all GameObjects on layer 0 are drawn, then
-     * all GameObjects on layer 1, etc. GameObjects rendered on layer N will
-     * not take into account the depth in layer N-1.
-     *  (the depth buffer will be cleared after completely rendering each layer.)
-     */
-    unsigned char m_renderLayer = 0;
-
     bool m_enabled = true;
 
 public:
@@ -95,7 +87,6 @@ public:
     void SetParent(GameObject *parent, bool keepWorldTransform = false);
     GameObject* GetChild(const std::string &m_name) const;
 
-    void SetRenderLayer(unsigned char layer);
     void SetName(const std::string &m_name);
 
     const std::string ToString() const;
@@ -103,7 +94,6 @@ public:
     Scene* GetScene();
     GameObject* GetParent() const;
     const std::string GetName() const;
-    unsigned char GetRenderLayer() const;
     const std::list<Component*>& GetComponents() const;
 
     /**
@@ -113,6 +103,17 @@ public:
      * @return
      */
     const std::list<GameObject*> GetChildren() const;
+
+    /**
+     * @brief GetChildrenRecursively
+     * @return
+     */
+    std::list<GameObject*> GetChildrenRecursively() const;
+
+    #ifdef BANG_EDITOR
+    std::list<GameObject*> GetChildrenRecursivelyIncludingEditorGameObjects() const;
+    #endif
+
 
     /**
      * @brief Returns this GameObject's bounding box in Object space, without
@@ -224,9 +225,9 @@ public:
             if ((*c)->IsEditorGameObject()) continue;
 
             Component *comp = (*c)->GetComponent<T>();
-            if (comp ) return comp;
+            if (comp) return comp;
             comp = (*c)->GetComponentInChildren<T>();
-            if (comp ) return comp;
+            if (comp) return comp;
         }
         return nullptr;
     }
@@ -240,10 +241,8 @@ public:
         std::list<T*> comps_l;
         for (auto c = m_children.begin(); c != m_children.end(); ++c)
         {
-            comps_l.splice(comps_l.end(),
-                           (*c)->GetComponents<T>()); //concat
-            comps_l.splice(comps_l.end(),
-                           (*c)->GetComponentsInChildren<T>()); //concat
+            comps_l.splice(comps_l.end(), (*c)->GetComponents<T>()); //concat
+            comps_l.splice(comps_l.end(), (*c)->GetComponentsInChildren<T>()); //concat
         }
         return comps_l;
     }
@@ -256,8 +255,7 @@ public:
     std::list<T*> GetComponentsInThisAndChildren() const
     {
         std::list<T*> comps_l = GetComponents<T>();
-        comps_l.splice(comps_l.end(),
-                       GetComponentsInChildren<T>()); //concat
+        comps_l.splice(comps_l.end(), GetComponentsInChildren<T>()); //concat
         return comps_l;
     }
 

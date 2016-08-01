@@ -26,7 +26,6 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->transform->SetLocalScale(Vector3(0.1f));
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(m_material);
     m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
-    m_axisCap->SetRenderLayer(5);
 }
 
 EditorScaleAxis::~EditorScaleAxis()
@@ -74,12 +73,18 @@ void EditorScaleAxis::OnUpdate()
             Vector3 scaling = alignment *
                               parentAxisDir.Abs() *
                               glm::length(sMouseDelta) *
-                              Vector3::Distance(wCamPos, ago->transform->GetPosition()) * 0.002f;
+                              Vector3::Distance(wCamPos, ago->transform->GetPosition()) * 0.0002f;
 
             //TODO: solve problem with negative scaling and depth :/
             ago->transform->SetLocalScale(ago->transform->GetLocalScale() + scaling);
         }
     }
+}
+
+void EditorScaleAxis::OnDrawGizmosNoDepth()
+{
+    m_line->Render();
+    m_axisCap->GetComponent<Renderer>()->Render();
 }
 
 Renderer *EditorScaleAxis::GetAxisRenderer() const

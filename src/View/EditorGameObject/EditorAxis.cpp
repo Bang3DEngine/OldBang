@@ -1,6 +1,7 @@
 #include "EditorAxis.h"
 
 #include "Canvas.h"
+#include "Toolbar.h"
 
 EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
                        GameObject *attachedGameObject)
@@ -13,8 +14,6 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
     m_material = new Material(*m_material);
 
     m_lineColor = m_oAxisDirection.Abs();
-
-    this->SetRenderLayer(5);
 }
 
 EditorAxis::~EditorAxis()

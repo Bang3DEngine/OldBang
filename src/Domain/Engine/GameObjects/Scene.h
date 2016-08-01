@@ -27,13 +27,6 @@ protected:
     GameObject *m_defaultCamera = nullptr;
     Material *m_materialAfterLighting = nullptr;
 
-    /**
-     * @brief currentRenderLayer is a variable that indicates
-     * the currentRenderLayer being used to render, so GameObjects
-     * can decide wether to render or not.
-     */
-    int m_currentRenderLayer = 0;
-
     //Framebuffer for positions, normals, uvs and diffuse
     GBuffer *m_gbuffer = nullptr;
     const Canvas *m_canvas = nullptr; //set by canvas when added to it

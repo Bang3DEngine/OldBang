@@ -8,9 +8,9 @@
 #include "Material.h"
 #include "Component.h"
 
+class SelectionFramebuffer;
 class Renderer : public Component
 {
-friend class Gizmos;
 friend class SelectionFramebuffer;
 
 public:
@@ -42,6 +42,14 @@ private:
     bool m_ignoreModelMatrix = false;
 
     /**
+     * @brief Bind or not to bind material before drawing. So, if it's true, it will
+     * just render the mesh (without binding its material),
+     * and this way you can externally bind and unbind the Material you want.
+     */
+    bool m_ignoreMaterial = false;
+
+
+    /**
      * @brief If ignoreViewMatrix == true, when drawing the Renderer
      * will ignore view matrix.
      * So it won't take into account camera's translation, rotation or scale.
@@ -55,6 +63,7 @@ private:
      */
     bool m_ignoreProjectionMatrix = false;
 
+    #ifdef BANG_EDITOR
     /**
      * @brief Called by SelectionFramebuffer.
      * Use this if you want to activate
@@ -65,6 +74,7 @@ private:
      * an easier axis grabbing.
      */
     std::function<void()> ActivateGLStatesBeforeRenderingForSelection = nullptr;
+    #endif
 
 protected:
 
@@ -79,7 +89,6 @@ protected:
     virtual void ActivateGLStatesBeforeRendering() const;
     virtual void RenderWithoutBindingMaterial() const = 0;
     void OnRender() override;
-    void Render() const;
 
     void GetMatrices(Matrix4 *model,
                      Matrix4 *normal,
@@ -100,7 +109,7 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
 
     virtual void SetMaterial(Material *m) = 0;
-    virtual Material* GetMaterial();
+    virtual Material* GetMaterial() const;
 
     void SetDrawWireframe(bool m_drawWireframe);
     bool GetDrawWireframe() const;
@@ -116,7 +125,10 @@ public:
     void SetLineWidth(float w);
     float GetLineWidth() const;
 
-    void SetIgnoreModelMatrix(bool worldCoords);
+    void SetIgnoreMaterial(bool ignore);
+    bool GetIgnoreMaterial() const;
+
+    void SetIgnoreModelMatrix(bool ignore);
     bool GetIgnoreModelMatrix() const;
 
     void SetIgnoreViewMatrix(bool ignore);
@@ -128,9 +140,12 @@ public:
     void SetReceivesLighting(bool receivesLighting);
     bool GetReceivesLighting() const;
 
-    void SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f);
+    void Render() const;
 
     #ifdef BANG_EDITOR
+    void RenderSelectionFramebuffer(SelectionFramebuffer *sfb) const;
+    void SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f);
+
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif

@@ -1,9 +1,14 @@
 #include "Renderer.h"
 
-#include "GameObject.h"
 #include "Camera.h"
 #include "Scene.h"
 #include "Transform.h"
+#include "GameObject.h"
+
+#ifdef BANG_EDITOR
+#include "EditorScene.h"
+#include "SelectionFramebuffer.h"
+#endif
 
 Renderer::Renderer()
 {
@@ -14,17 +19,18 @@ void Renderer::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     Renderer *r = static_cast<Renderer*>(clone);
     Component::CloneInto(r);
-    r->SetMaterial(m_material);
-    r->SetDrawWireframe(m_drawWireframe);
-    r->SetCullMode(m_cullMode);
-    r->SetRenderMode(m_renderMode);
-    r->SetLineWidth(m_lineWidth);
-    r->SetIgnoreModelMatrix(m_ignoreModelMatrix);
-    r->SetIgnoreViewMatrix(m_ignoreViewMatrix);
-    r->SetIgnoreProjectionMatrix(m_ignoreProjectionMatrix);
+    r->SetMaterial(GetMaterial());
+    r->SetDrawWireframe(GetDrawWireframe());
+    r->SetCullMode(GetCullMode());
+    r->SetRenderMode(GetRenderMode());
+    r->SetLineWidth(GetLineWidth());
+    r->SetIgnoreMaterial(GetIgnoreMaterial());
+    r->SetIgnoreModelMatrix(GetIgnoreModelMatrix());
+    r->SetIgnoreViewMatrix(GetIgnoreViewMatrix());
+    r->SetIgnoreProjectionMatrix(GetIgnoreProjectionMatrix());
 }
 
-Material *Renderer::GetMaterial()
+Material *Renderer::GetMaterial() const
 {
     return m_material;
 }
@@ -57,15 +63,12 @@ void Renderer::ActivateGLStatesBeforeRendering() const
     if (camera && m_material  && m_material->m_shaderProgram )
     {
         Transform *t = camera->gameObject->transform;
-        m_material->m_shaderProgram->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
-                                                    t->GetPosition(), false);
-
-        m_material->m_shaderProgram->SetUniformFloat("B_renderer_receivesLighting",
-                                                      m_receivesLighting ? 1.0f : 0.0f, false);
+        ShaderProgram *sp = m_material->m_shaderProgram;
+        sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera, t->GetPosition(), false);
+        sp->SetUniformFloat("B_renderer_receivesLighting", m_receivesLighting ? 1.0f : 0.0f, false);
 
         #ifdef BANG_EDITOR
-        m_material->m_shaderProgram->SetUniformFloat("B_gameObject_isSelected",
-                                                     gameObject->IsSelectedInHierarchy() ? 1.0f : 0.0f, false);
+        sp->SetUniformFloat("B_gameObject_isSelected", gameObject->IsSelectedInHierarchy() ? 1.0f : 0.0f, false);
         #endif
     }
 
@@ -79,12 +82,32 @@ void Renderer::OnRender()
 
 void Renderer::Render() const
 {
-    NONULL(m_material); NONULL(m_material->GetShaderProgram());
+    #ifdef BANG_EDITOR
+    EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
+    SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
+    if (sfb && sfb->IsPassing())
+    {
+        RenderSelectionFramebuffer(sfb);
+    }
+    else
+    #endif
+    {
+        ActivateGLStatesBeforeRendering();
 
-    ActivateGLStatesBeforeRendering();
-    m_material->Bind();
-    RenderWithoutBindingMaterial();
-    m_material->UnBind();
+        if (!GetIgnoreMaterial())
+        {
+            NONULL(m_material);
+            NONULL(m_material->GetShaderProgram());
+            m_material->Bind();
+        }
+
+        RenderWithoutBindingMaterial();
+
+        if (!GetIgnoreMaterial())
+        {
+            m_material->UnBind();
+        }
+    }
 }
 
 void Renderer::GetMatrices(Matrix4 *model,
@@ -135,24 +158,16 @@ void Renderer::SetMatricesUniforms(const Matrix4 &model,
                                    const Matrix4 &projection,
                                    const Matrix4 &pvm) const
 {
-    m_material->m_shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_Model, model, false);
-    m_material->m_shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);
-    m_material->m_shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_Normal, normal, false);
-    m_material->m_shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_Normal_Inverse, normal.Inversed(), false);
-    m_material->m_shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_View, view, false);
-    m_material->m_shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_View_Inverse, view.Inversed(), false);
-    m_material->m_shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_Projection, projection, false);
-    m_material->m_shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_Projection_Inverse, projection.Inversed(), false);
-    m_material->m_shaderProgram->SetUniformMat4(
-                ShaderContract::Uniform_Matrix_PVM, pvm, false);
+    ShaderProgram *sp = m_material->m_shaderProgram;
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal, normal, false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal_Inverse, normal.Inversed(), false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_View_Inverse, view.Inversed(), false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection_Inverse, projection.Inversed(), false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
 }
 
 void Renderer::SetDrawWireframe(bool drawWireframe)
@@ -194,9 +209,19 @@ float Renderer::GetLineWidth() const
     return m_lineWidth;
 }
 
+void Renderer::SetIgnoreMaterial(bool ignore)
+{
+    m_ignoreMaterial = ignore;
+}
+
+bool Renderer::GetIgnoreMaterial() const
+{
+    return m_ignoreMaterial;
+}
+
 void Renderer::SetIgnoreModelMatrix(bool ignore)
 {
-    this->m_ignoreModelMatrix = ignore;
+    m_ignoreModelMatrix = ignore;
 }
 
 bool Renderer::GetIgnoreModelMatrix() const
@@ -234,12 +259,40 @@ bool Renderer::GetReceivesLighting() const
     return m_receivesLighting;
 }
 
+#ifdef BANG_EDITOR
+
+void Renderer::RenderSelectionFramebuffer(SelectionFramebuffer *sfb) const
+{
+    Material *selMaterial = sfb->GetSelectionMaterial(); NONULL(selMaterial);
+    ShaderProgram *sp = selMaterial->GetShaderProgram();
+
+    Matrix4 model, normal, view, projection, pvm;
+    GetMatrices(&model, &normal, &view, &projection, &pvm);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal, normal, false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
+    sp->SetUniformVec3("selectionColor", sfb->GetSelectionColor(gameObject));
+
+    //Logger_Log("RenderSelectionFramebuffer "  << sfb->GetSelectionColor(gameObject));
+
+    ActivateGLStatesBeforeRendering();
+    if (ActivateGLStatesBeforeRenderingForSelection)
+        ActivateGLStatesBeforeRenderingForSelection();
+
+    selMaterial->Bind();
+
+    RenderWithoutBindingMaterial();
+
+    selMaterial->UnBind();
+}
+
 void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f)
 {
     ActivateGLStatesBeforeRenderingForSelection = f;
 }
 
-#ifdef BANG_EDITOR
 void Renderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     FillXMLInfo(xmlInfo);

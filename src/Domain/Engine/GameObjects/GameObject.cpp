@@ -31,7 +31,6 @@ void GameObject::CloneInto(ICloneable *clone) const
     GameObject *go = static_cast<GameObject*>(clone);
 
     go->SetName(m_name);
-    go->SetRenderLayer(m_renderLayer);
     go->SetParent(nullptr);
 
     for (GameObject *child : m_children)
@@ -134,10 +133,6 @@ const std::string GameObject::GetName() const
     return m_name;
 }
 
-unsigned char GameObject::GetRenderLayer() const
-{
-    return m_renderLayer;
-}
 
 const std::list<Component *> &GameObject::GetComponents() const { return m_components; }
 
@@ -150,6 +145,30 @@ const std::list<GameObject *> GameObject::GetChildren() const
     }
     return cc;
 }
+
+std::list<GameObject*> GameObject::GetChildrenRecursively() const
+{
+    std::list<GameObject*> cc;
+    for (auto c = m_children.begin(); c != m_children.end(); ++c)
+    {
+        cc.splice(cc.end(), (*c)->GetChildrenRecursively()); //concat
+        if (!(*c)->IsEditorGameObject()) cc.push_back(*c);
+    }
+    return cc;
+}
+
+#ifdef BANG_EDITOR
+std::list<GameObject*> GameObject::GetChildrenRecursivelyIncludingEditorGameObjects() const
+{
+    std::list<GameObject*> cc;
+    for (auto c = m_children.begin(); c != m_children.end(); ++c)
+    {
+        cc.splice(cc.end(), (*c)->GetChildrenRecursivelyIncludingEditorGameObjects());
+        cc.push_back(*c);
+    }
+    return cc;
+}
+#endif
 
 Box GameObject::GetObjectBoundingBox() const
 {
@@ -284,11 +303,6 @@ GameObject *GameObject::GetChild(const std::string &name) const
         }
     }
     return nullptr;
-}
-
-void GameObject::SetRenderLayer(unsigned char layer)
-{
-    this->m_renderLayer = layer;
 }
 
 void GameObject::SetName(const std::string &name)
@@ -486,10 +500,6 @@ bool GameObject::IsEnabled()
 
 void GameObject::OnDrawGizmos()
 {
-    Box box = GetBoundingBox();
-   // Logger_Log(name);
-    Gizmos::SetColor(Vector3(1,0,0));
-    Gizmos::DrawBox(box);
 }
 
 const std::string GameObject::ToString() const
@@ -555,23 +565,15 @@ void GameObject::_OnUpdate()
 void GameObject::_OnPreRender ()
 {
     PROPAGATE_EVENT(_OnPreRender, m_children);
-
-    //if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
-    {
-        PROPAGATE_EVENT(_OnPreRender, m_components);
-        OnPreRender();
-    }
+    PROPAGATE_EVENT(_OnPreRender, m_components);
+    OnPreRender();
 }
 
 void GameObject::_OnRender ()
 {
     PROPAGATE_EVENT(_OnRender, m_children);
-
-    //if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
-    {
-        PROPAGATE_EVENT(_OnRender, m_components);
-        OnRender();
-    }
+    PROPAGATE_EVENT(_OnRender, m_components);
+    OnRender();
 }
 
 void GameObject::_OnDestroy()
@@ -585,7 +587,6 @@ void GameObject::_OnDestroy()
 void GameObject::_OnDrawGizmos()
 {
     PROPAGATE_EVENT(_OnDrawGizmos, m_children);
-
     PROPAGATE_EVENT(_OnDrawGizmos, m_components);
     OnDrawGizmos();
 }
@@ -593,7 +594,6 @@ void GameObject::_OnDrawGizmos()
 void GameObject::_OnDrawGizmosNoDepth()
 {
     PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
-
     PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_components);
     OnDrawGizmosNoDepth();
 }

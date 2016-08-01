@@ -85,9 +85,9 @@ public:
     enum MouseButton
     {
         MNoButton         = 0x00000000,
-        MLeft       = 0x00000001,
-        MRight      = 0x00000002,
-        MMiddle     = 0x00000004,
+        MLeft             = 0x00000001,
+        MRight            = 0x00000002,
+        MMiddle           = 0x00000004,
         MXButton1         = 0x00000008,
         MXButton2         = 0x00000010,
         MMouseButtonMask  = 0x000000ff

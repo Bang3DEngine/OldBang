@@ -26,6 +26,8 @@ public:
     virtual void _OnResize (int newWidth, int newHeight) override;
     virtual void _OnRender () override;
 
+    SelectionFramebuffer* GetSelectionFramebuffer() const;
+
     void DebugDrawLine(const Vector3 &origin,
                        const Vector3 &destiny,
                        float lineWidth = 1.0f,

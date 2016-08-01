@@ -44,26 +44,17 @@ void EditorScene::_OnRender()
 {
     Scene::_OnRender();
 
-    //From 0 to 9
     m_selectionFramebuffer->Bind();
     m_selectionFramebuffer->Clear();
-    for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
-    {
-        m_selectionFramebuffer->ClearDepth();
-        m_selectionFramebuffer->RenderSelectionBuffer(this);
-    }
+    m_selectionFramebuffer->RenderSelectionBuffer(this);
     m_selectionFramebuffer->UnBind();
 
     m_selectionFramebuffer->ProcessSelection();
+}
 
-    /*
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
-    {
-        m_selectionFramebuffer->ClearDepth();
-        m_selectionFramebuffer->RenderSelectionBuffer(this);
-    }
-    */
+SelectionFramebuffer* EditorScene::GetSelectionFramebuffer() const
+{
+    return m_selectionFramebuffer;
 }
 
 void EditorScene::DebugDrawLine(const Vector3 &origin,

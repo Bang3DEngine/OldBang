@@ -64,19 +64,16 @@ void Scene::_OnRender()
     m_gbuffer->Bind();
 
     // D2G
-        m_gbuffer->ClearBuffersAndBackground(glm::vec4(0.9f,0.9f,0.9f,1));
+        m_gbuffer->ClearBuffersAndBackground(glm::vec4(0.9f, 0.9f, 0.9f, 1));
         m_gbuffer->SetAllDrawBuffers();
 
-        //From 0 to 9
-        // for (m_currentRenderLayer = 0; m_currentRenderLayer <= 9; ++m_currentRenderLayer)
-        {
-            glClear(GL_DEPTH_BUFFER_BIT);
-            PROPAGATE_EVENT(_OnPreRender, m_children);
-            PROPAGATE_EVENT(_OnRender, m_children);
-        }
+        glClear(GL_DEPTH_BUFFER_BIT);
+        PROPAGATE_EVENT(_OnPreRender, m_children);
+        PROPAGATE_EVENT(_OnRender, m_children);
 
         // Draw Gizmos!
         PROPAGATE_EVENT(_OnDrawGizmos, m_children);
+
         glClear(GL_DEPTH_BUFFER_BIT);
         PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
     //
