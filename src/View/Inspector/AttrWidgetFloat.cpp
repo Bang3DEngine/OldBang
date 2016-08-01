@@ -18,6 +18,8 @@ AttrWidgetFloat::AttrWidgetFloat(const std::string &labelString,
 
     m_spinbox = new FloatComponentSlotSpinBox();
     m_spinbox->setAlignment(Qt::AlignHCenter);
+    m_spinbox->setMaximum( 9999999999999999.9f);
+    m_spinbox->setMinimum(-9999999999999999.9f);
     m_spinbox->setAccelerated(true);
     m_spinbox->show();
 

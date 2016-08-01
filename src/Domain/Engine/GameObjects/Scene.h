@@ -39,6 +39,7 @@ protected:
     const Canvas *m_canvas = nullptr; //set by canvas when added to it
     GameObject *m_cameraGameObject = nullptr;
 
+    virtual void _OnStart () override;
     virtual void _OnResize (int newWidth, int newHeight);
 
 public:
@@ -47,10 +48,11 @@ public:
     Scene();
     virtual ~Scene();
 
-    void _OnRender () override;
+    virtual void _OnRender () override;
 
     void SetCamera (const Camera *cam);
 
+    static Scene *GetCurrentScene();
     Camera* GetCamera () const;
     const Canvas* GetCanvas () const;
 

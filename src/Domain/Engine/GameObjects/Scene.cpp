@@ -10,6 +10,36 @@ Scene::Scene() : GameObject("Scene")
     m_materialAfterLighting = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/PR_AfterLighting.bmat");
 }
 
+void Scene::_OnStart()
+{
+    GameObject::_OnStart();
+
+    if (!IsEditorGameObject())
+    {
+        std::list<Camera*> cameras = GetComponentsInChildren<Camera>();
+        Logger_Log("Cameras: " << cameras);
+        if (!cameras.empty())
+        {
+            Camera *cam = cameras.front();
+            SetCamera(cam);
+            Logger_Log("Found camera: " << cam);
+        }
+        else // Create default camera
+        {
+            Logger_Log("Creating default camera");
+            GameObject *m_defaultCamera = new GameObject("DefaultCamera");
+            m_defaultCamera->transform->SetPosition(Vector3(90));
+            m_defaultCamera->transform->LookAt(Vector3::zero);
+            m_defaultCamera->SetParent(this);
+
+            Camera *cam = m_defaultCamera->AddComponent<Camera>();
+            cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);
+            cam->SetZFar(99999.0f);
+            SetCamera(cam);
+        }
+    }
+}
+
 void Scene::_OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
@@ -70,6 +100,11 @@ void Scene::SetCamera(const Camera *cam)
     {
         this->m_cameraGameObject = cam->gameObject;
     }
+}
+
+Scene *Scene::GetCurrentScene()
+{
+    return Canvas::GetInstance()->GetCurrentScene();
 }
 
 Camera *Scene::GetCamera() const

@@ -56,7 +56,7 @@ private:
 
 protected:
     std::string m_name = "";
-    std::list<Component*> m_comps;
+    std::list<Component*> m_components;
     std::list<GameObject*> m_children;
     Transform *m_transform = nullptr;
     GameObject *m_parent = nullptr;
@@ -187,7 +187,7 @@ public:
     template <class T>
     T* GetComponent() const
     {
-        for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+        for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
             if (tp ) return tp;
@@ -202,7 +202,7 @@ public:
     std::list<T*> GetComponents() const
     {
         std::list<T*> comps_l;
-        for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+        for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
             if (tp ) comps_l.push_back(tp);
@@ -275,7 +275,7 @@ public:
     int CountComponents() const
     {
         int count = 0;
-        for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+        for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
             if (tp)
@@ -292,12 +292,12 @@ public:
     template <class T>
     void RemoveComponent()
     {
-        for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+        for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
             if (tp)
             {
-                  m_comps.erase(comp);
+                  m_components.erase(comp);
                 delete tp;
                 break;
             }

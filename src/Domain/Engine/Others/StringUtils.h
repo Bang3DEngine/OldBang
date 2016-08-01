@@ -56,7 +56,7 @@ public:
         // We want this vector: [0, 49, 29, 2193, 2194, 2195, 32]
         std::vector<EnumName> result;
         std::vector<std::string> splitted = SplitTrim(_va_args_, ',');
-        int lastValue = 0;
+        int lastValue = -1;
         for (std::string str : splitted)
         {
             Trim(&str);

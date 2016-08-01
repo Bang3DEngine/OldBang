@@ -1,5 +1,4 @@
 #include "GameObject.h"
-#include "Scene.h"
 #include "Component.h"
 #include "FileReader.h"
 #include "SingletonManager.h"
@@ -7,6 +6,7 @@
 
 #include "DirectionalLight.h"
 #include "BehaviourHolder.h"
+#include "MeshRenderer.h"
 #include "PointLight.h"
 
 #ifdef BANG_EDITOR
@@ -41,7 +41,7 @@ void GameObject::CloneInto(ICloneable *clone) const
         childClone->SetParent(go);
     }
 
-    for (Component *comp : m_comps)
+    for (Component *comp : m_components)
     {
         Transform* t = dynamic_cast<Transform*>(comp);
         if (!t)
@@ -139,7 +139,7 @@ unsigned char GameObject::GetRenderLayer() const
     return m_renderLayer;
 }
 
-const std::list<Component *> &GameObject::GetComponents() const { return m_comps; }
+const std::list<Component *> &GameObject::GetComponents() const { return m_components; }
 
 const std::list<GameObject *> GameObject::GetChildren() const
 {
@@ -222,21 +222,21 @@ void GameObject::AddComponent(Component *c)
     }
 
     c->m_gameObject = this;
-    m_comps.push_back(c);
+    m_components.push_back(c);
     c->_OnStart();
 }
 
 void GameObject::MoveComponent(Component *c, int distance)
 {
-    for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
     {
         if (c == *comp)
         {
             auto comp1 = comp;
             std::advance(comp1, 1);
-            m_comps.erase(comp, comp1);
+            m_components.erase(comp, comp1);
             std::advance(comp1, distance);
-            m_comps.insert(comp1, 1, c);
+            m_components.insert(comp1, 1, c);
             break;
         }
     }
@@ -249,11 +249,11 @@ Transform *GameObject::GetTransform() const
 
 void GameObject::RemoveComponent(Component *c)
 {
-    for (auto comp = m_comps.begin(); comp != m_comps.end(); ++comp)
+    for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
     {
         if (c == *comp)
         {
-            m_comps.erase(comp);
+            m_components.erase(comp);
             break;
         }
     }
@@ -406,7 +406,7 @@ void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
                        {XMLProperty::Hidden,
                         XMLProperty::Readonly});
 
-    for (Component *c : m_comps)
+    for (Component *c : m_components)
     {
         XMLNode *xmlComp = new XMLNode();
         c->FillXMLInfo(xmlComp);
@@ -525,7 +525,7 @@ void GameObject::_OnUpdate()
 
     if (canUpdate)
     {
-        PROPAGATE_EVENT(_OnUpdate, m_comps);
+        PROPAGATE_EVENT(_OnUpdate, m_components);
     }
 
     PROPAGATE_EVENT(_OnUpdate, m_children);
@@ -542,7 +542,7 @@ void GameObject::_OnPreRender ()
 
     if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
     {
-        PROPAGATE_EVENT(_OnPreRender, m_comps);
+        PROPAGATE_EVENT(_OnPreRender, m_components);
         OnPreRender();
     }
 }
@@ -553,16 +553,15 @@ void GameObject::_OnRender ()
 
     if (this->m_renderLayer == GetScene()->m_currentRenderLayer)
     {
-        PROPAGATE_EVENT(_OnRender, m_comps);
+        PROPAGATE_EVENT(_OnRender, m_components);
         OnRender();
     }
 }
 
 void GameObject::_OnDestroy()
 {
-    PROPAGATE_EVENT(_OnDestroy, m_comps);
+    PROPAGATE_EVENT(_OnDestroy, m_components);
     //No need to propagate _OnDestroy to children,
     //since the "delete child" itself propagates it (look at the destructor)
     OnDestroy();
 }
-

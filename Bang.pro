@@ -12,14 +12,15 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-CONFIG += EDITOR
+# CONFIG += EDITOR
+# CONFIG += GAME
 
 include(deployment.pri)
 qtcAddDeployment()
 
 CONFIG += qt
 
-QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic --std=c++11 -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC -O2
+QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC -O2
 
 LIBS += -lGLEW -ldl
 
@@ -200,17 +201,11 @@ HEADERS += \
     src/Domain/Engine/Components/PointLight.h \
     src/Domain/Engine/Others/Property.h \
     src/Persistence/File.h \
-    src/Persistence/ImageFile.h \
-    src/Persistence/MeshFile.h \
-    src/Persistence/Texture2DAssetFile.h \
-    src/Persistence/MeshAssetFile.h \
     src/Persistence/XMLParser.h \
     src/Persistence/XMLNode.h \
     src/Persistence/XMLAttribute.h \
     src/Persistence/XMLProperty.h \
-    src/View/Inspector/MeshAssetFileInspectable.h \
-    src/Persistence/MaterialAssetFile.h \
-    src/View/Inspector/MaterialAssetFileInspectable.h
+    src/Domain/Engine/Others/NamedEnum.h
 
 EDITOR {
 HEADERS += \
@@ -235,6 +230,13 @@ HEADERS += \
     src/View/Inspector/AttrWidgetFile.h \
     src/View/Inspector/IInspectable.h \
     src/View/MenuBar.h \
+    src/Persistence/ImageFile.h \
+    src/Persistence/MeshFile.h \
+    src/Persistence/Texture2DAssetFile.h \
+    src/Persistence/MeshAssetFile.h \
+    src/View/Inspector/MeshAssetFileInspectable.h \
+    src/Persistence/MaterialAssetFile.h \
+    src/View/Inspector/MaterialAssetFileInspectable.h \
     src/View/Explorer/ExplorerDirTree.h \
     src/View/Inspector/InspectorWidget.h \
     src/View/Inspector/ImageFileInspectable.h \
@@ -324,17 +326,10 @@ SOURCES += \
     src/Domain/Engine/Components/PointLight.cpp \
     src/Domain/Engine/Others/Property.cpp \
     src/Persistence/File.cpp \
-    src/Persistence/ImageFile.cpp \
-    src/Persistence/MeshFile.cpp \
-    src/Persistence/Texture2DAssetFile.cpp \
-    src/Persistence/MeshAssetFile.cpp \
     src/Persistence/XMLParser.cpp \
     src/Persistence/XMLNode.cpp \
     src/Persistence/XMLAttribute.cpp \
-    src/Persistence/XMLProperty.cpp \
-    src/View/Inspector/MeshAssetFileInspectable.cpp \
-    src/Persistence/MaterialAssetFile.cpp \
-    src/View/Inspector/MaterialAssetFileInspectable.cpp
+    src/Persistence/XMLProperty.cpp
 
 EDITOR {
     SOURCES += \
@@ -372,6 +367,13 @@ EDITOR {
         src/View/EditorScene/EditorScene.cpp \
         src/View/Inspector/Texture2DAssetFileInspectable.cpp \
         src/View/Dialogs/FileDialog.cpp \
+        src/Persistence/ImageFile.cpp \
+        src/Persistence/MeshFile.cpp \
+        src/Persistence/Texture2DAssetFile.cpp \
+        src/Persistence/MeshAssetFile.cpp \
+        src/View/Inspector/MeshAssetFileInspectable.cpp \
+        src/Persistence/MaterialAssetFile.cpp \
+        src/View/Inspector/MaterialAssetFileInspectable.cpp \
         src/View/EditorGameObject/EditorBBox.cpp \
         src/View/EditorGameObject/EditorSelectionGameObject.cpp \
         src/View/EditorScene/EditorDebugGameObject.cpp \
