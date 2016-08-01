@@ -283,7 +283,6 @@ const std::string XMLAttribute::ToString() const
     bool first = true;
     for (const XMLProperty &prop : GetProperties())
     {
-        //std::cerr << "PROP: " << prop << std::endl;
         if (!first)
         {
             str += ",";
@@ -298,7 +297,6 @@ const std::string XMLAttribute::ToString() const
         first = false;
     }
     str += "}";
-    //std::cerr << "STR: " << str << std::endl;
     return str;
 }
 

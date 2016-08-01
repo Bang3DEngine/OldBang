@@ -319,6 +319,7 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
     }
 
     SetLineWidth(xmlInfo->GetFloat("LineWidth"));
+    SetDrawWireframe(xmlInfo->GetBool("DrawWireframe"));
 }
 
 void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
@@ -341,8 +342,9 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
     }
     else
     {
-        xmlInfo->SetFilepath("Material", "-", "*.bmat");
+        xmlInfo->SetFilepath("Material", "", "*.bmat");
     }
 
     xmlInfo->SetFloat("LineWidth", GetLineWidth());
+    xmlInfo->SetBool("DrawWireframe", GetDrawWireframe());
 }

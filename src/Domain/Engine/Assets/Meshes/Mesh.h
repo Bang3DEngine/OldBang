@@ -32,6 +32,10 @@ private:
     Box m_bBox;
     Sphere m_bSphere;
 
+    std::vector<Vector3> m_positions;
+    std::vector<Vector3> m_normals;
+    std::vector<glm::vec2> m_uvs;
+
     VAO *m_vao = nullptr;
     VBO *m_vertexPositionsVBO = nullptr;
     VBO *m_vertexNormalsVBO = nullptr;
@@ -64,6 +68,10 @@ public:
     bool IsATrianglesModel() const;
     const Box& GetBoundingBox() const;
     const Sphere& GetBoundingSphere() const;
+
+    const std::vector<Vector3>& GetPositions();
+    const std::vector<Vector3>& GetNormals();
+    const std::vector<glm::vec2>& GetUvs();
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

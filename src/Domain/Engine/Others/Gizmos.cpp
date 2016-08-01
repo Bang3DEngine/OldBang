@@ -61,7 +61,12 @@ void Gizmos::SetStatesBeforeDrawing()
 
     Gizmos::m_singleLineRenderer->SetReceivesLighting(m_receivesLighting);
     Gizmos::m_meshRenderer->SetReceivesLighting(m_receivesLighting);
+}
 
+void Gizmos::OnNewFrame()
+{
+    Gizmos::m_singleLineRenderer->SetEnabled(false);
+    Gizmos::m_meshRenderer->SetEnabled(false);
 }
 
 void Gizmos::SetColor(const Vector3 &color)
@@ -84,6 +89,7 @@ void Gizmos::DrawBox(const Box &b, bool wireframe)
     Gizmos::Init();
     Gizmos::SetStatesBeforeDrawing();
 
+    Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_boxMesh);
 
     Gizmos::m_meshRenderer->SetDrawWireframe(wireframe);
@@ -98,6 +104,7 @@ void Gizmos::DrawLine(const Vector3 &origin, const Vector3 &destiny)
     Gizmos::Init();
     Gizmos::SetStatesBeforeDrawing();
 
+    Gizmos::m_singleLineRenderer->SetEnabled(true);
     Gizmos::m_singleLineRenderer->SetOrigin(origin);
     Gizmos::m_singleLineRenderer->SetDestiny(destiny);
 

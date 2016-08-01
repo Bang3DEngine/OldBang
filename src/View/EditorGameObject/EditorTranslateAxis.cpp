@@ -35,7 +35,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
         m_axisCap->transform->SetLocalEuler(Vector3(-90.0f, 0.0f, 0.0f));
     }
     m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
-    m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.15f);
+    m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.25f);
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(m_material);
     m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
 }

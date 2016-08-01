@@ -8,6 +8,7 @@
 #include "AttrWidgetFloat.h"
 #include "AttrWidgetString.h"
 #include "AttrWidgetVectorFloat.h"
+#include "AttrWidgetBool.h"
 #include "AttrWidgetButton.h"
 
 #include "WindowMain.h"
@@ -119,6 +120,11 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
                 AttrWidgetString *aws = static_cast<AttrWidgetString*>(aw);
                 attribute.SetString(aws->GetValue(), attribute.GetProperties());
             }
+            else if (attrType == XMLAttribute::Type::Bool)
+            {
+                AttrWidgetBool *wb = static_cast<AttrWidgetBool*>(aw);
+                attribute.SetBool(wb->GetValue(), attribute.GetProperties());
+            }
             else if (attrType == XMLAttribute::Type::Enum)
             {
                 AttrWidgetEnum *awe = static_cast<AttrWidgetEnum*>(aw);
@@ -187,10 +193,17 @@ void InspectorWidget::RefreshWidgetValues()
                 wss->SetValue( xmlInfo.GetString(attrName) );
                 ws = wss;
             }
+            else if (attrType == XMLAttribute::Type::Bool)
+            {
+                AttrWidgetBool *wb = static_cast<AttrWidgetBool*>(ws);
+                wb->SetValue( xmlInfo.GetBool(attrName) );
+                ws = wb;
+            }
             else if (attrType == XMLAttribute::Type::Enum)
             {
                 AttrWidgetEnum *we = static_cast<AttrWidgetEnum*>(ws);
                 we->SetValue(attribute.GetEnumSelectedIndex());
+                ws = we;
             }
 
             ws->show();
@@ -228,6 +241,10 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
                 bool inlined = attribute.HasProperty(XMLProperty::Inline);
                 ws = new AttrWidgetString(attrName, this, readonly, inlined);
             }
+            else if (attrType == XMLAttribute::Type::Bool)
+            {
+                ws = new AttrWidgetBool(attrName, this);
+            }
             else if (attrType == XMLAttribute::Type::Enum)
             {
                 ws = new AttrWidgetEnum(attrName,
@@ -254,11 +271,14 @@ void InspectorWidget::_OnSlotValueChanged()
     }
 }
 
+void InspectorWidget::_OnSlotValueChanged(int _)
+{
+    _OnSlotValueChanged();
+}
 void InspectorWidget::_OnSlotValueChanged(double _)
 {
     _OnSlotValueChanged();
 }
-
 void InspectorWidget::_OnSlotValueChanged(QString _)
 {
     _OnSlotValueChanged();

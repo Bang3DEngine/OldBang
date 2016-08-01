@@ -80,6 +80,7 @@ private slots:
      */
     void RefreshWidgetValues();
 
+    void _OnSlotValueChanged(int _);
     void _OnSlotValueChanged(double _);
     void _OnSlotValueChanged(QString _);
 

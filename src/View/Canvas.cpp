@@ -71,6 +71,7 @@ void Canvas::paintGL()
     }
 
     Input::GetInstance()->OnNewFrame();
+    Gizmos::OnNewFrame();
 }
 
 void Canvas::updateGL()

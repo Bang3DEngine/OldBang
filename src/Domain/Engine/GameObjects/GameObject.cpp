@@ -181,14 +181,12 @@ Box GameObject::GetObjectBoundingBox() const
         {
             b = m->GetBoundingBox();
         }
+    }
 
-        /*
-        for (GameObject *child : m_children)
-        {
-            Box bc = child->GetBoundingBox();
-            b = Box::Union(b, bc);
-        }
-        */
+    for (GameObject *child : m_children)
+    {
+        Box bc = child->GetLocalBoundingBox();
+        b = Box::Union(b, bc);
     }
 
     return b;
@@ -500,6 +498,13 @@ bool GameObject::IsEnabled()
 
 void GameObject::OnDrawGizmos()
 {
+    if (name == "Scenario")
+    {
+        Box box = GetBoundingBox();
+        //Logger_Log(box);
+        Gizmos::SetColor(Vector3(1,0,0));
+        Gizmos::DrawBox(box);
+    }
 }
 
 const std::string GameObject::ToString() const

@@ -204,7 +204,8 @@ HEADERS += \
     src/Persistence/XMLNode.h \
     src/Persistence/XMLAttribute.h \
     src/Persistence/XMLProperty.h \
-    src/Domain/Engine/Others/NamedEnum.h
+    src/Domain/Engine/Others/NamedEnum.h \
+    src/View/Inspector/AttrWidgetBool.h
 
 EDITOR {
 HEADERS += \
@@ -329,7 +330,8 @@ SOURCES += \
     src/Persistence/XMLParser.cpp \
     src/Persistence/XMLNode.cpp \
     src/Persistence/XMLAttribute.cpp \
-    src/Persistence/XMLProperty.cpp
+    src/Persistence/XMLProperty.cpp \
+    src/View/Inspector/AttrWidgetBool.cpp
 
 EDITOR {
     SOURCES += \

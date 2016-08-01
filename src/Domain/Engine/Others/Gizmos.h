@@ -10,10 +10,11 @@ class Material;
 class MeshRenderer;
 class SingleLineRenderer;
 class EditorGameObject;
+
 class Gizmos
 {
+friend class Canvas;
 friend class EditorScene;
-
 private:
     Gizmos() {}
 
@@ -34,6 +35,8 @@ private:
     static bool m_receivesLighting;
 
     static void SetStatesBeforeDrawing();
+
+    static void OnNewFrame();
 
 public:
 

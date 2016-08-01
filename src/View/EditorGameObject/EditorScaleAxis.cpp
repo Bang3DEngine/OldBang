@@ -23,7 +23,7 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap = MeshFactory::GetCubeEditorGameObject();
     m_axisCap->SetParent(this);
     m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
-    m_axisCap->transform->SetLocalScale(Vector3(0.1f));
+    m_axisCap->transform->SetLocalScale(Vector3(0.2f));
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(m_material);
     m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
 }
