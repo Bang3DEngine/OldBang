@@ -112,6 +112,7 @@ public:
      */
     void HandleLookAtFocus();
 
+    void OnStart() override;
     void OnUpdate() override;
 
     /**

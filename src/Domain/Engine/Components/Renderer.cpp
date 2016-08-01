@@ -320,6 +320,7 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
 
     SetLineWidth(xmlInfo->GetFloat("LineWidth"));
     SetDrawWireframe(xmlInfo->GetBool("DrawWireframe"));
+    SetReceivesLighting(xmlInfo->GetBool("ReceivesLighting"));
 }
 
 void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
@@ -347,4 +348,5 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
 
     xmlInfo->SetFloat("LineWidth", GetLineWidth());
     xmlInfo->SetBool("DrawWireframe", GetDrawWireframe());
+    xmlInfo->SetBool("ReceivesLighting", GetReceivesLighting());
 }

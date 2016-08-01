@@ -11,10 +11,6 @@ EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
     m_cam->SetAutoUpdateAspectRatio(true);
     m_cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
-    transform->SetPosition(Vector3(10.0f, 10.0f, 10.0f));
-    transform->LookAt(Vector3(0));
-    UpdateRotationVariables();
-
     m_camt = m_yawNode->transform;
     m_cam->SetZFar(999.9f);
 }
@@ -62,7 +58,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
         float mouseWheel = Input::GetMouseWheel();
         if (mouseWheel != 0.0f)
         {
-            *moveStep += m_mouseZoomPerDeltaWheel * mouseWheel * m_camt->GetForward();
+            *moveStep -= m_mouseZoomPerDeltaWheel * mouseWheel * m_camt->GetForward();
             *hasMoved  = true;
         }
     }
@@ -113,11 +109,11 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
     Vector3 m(0);
     if (Input::GetKey(Input::Key::W))
     {
-        m += m_keysMoveSpeed * Time::GetDeltaTime() * m_camt->GetForward();
+        m -= m_keysMoveSpeed * Time::GetDeltaTime() * m_camt->GetForward();
     }
     else if (Input::GetKey(Input::Key::S))
     {
-        m -= m_keysMoveSpeed * Time::GetDeltaTime() * m_camt->GetForward();
+        m += m_keysMoveSpeed * Time::GetDeltaTime() * m_camt->GetForward();
     }
 
     if (Input::GetKey(Input::Key::A))
@@ -174,8 +170,20 @@ void EditorCamera::HandleLookAtFocus()
     }
 }
 
+void EditorCamera::OnStart()
+{
+    EditorGameObject::OnStart();
+
+    Sphere sceneSphere = Scene::GetCurrentScene()->GetBoundingSphere();
+    transform->SetPosition(Vector3(1.0f) * sceneSphere.GetRadius());
+    transform->LookAt(sceneSphere.GetCenter());
+    UpdateRotationVariables();
+}
+
 void EditorCamera::OnUpdate()
 {
+    EditorGameObject::OnUpdate();
+
     AdjustSpeeds();
 
     Vector3 moveStep(0.0f);

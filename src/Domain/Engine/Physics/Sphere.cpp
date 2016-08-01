@@ -34,7 +34,7 @@ float Sphere::GetVolume() const
 
 void Sphere::FillFromBox(const Box &box)
 {
-    m_radius = box.GetDiagonal().Length();
+    m_radius = box.GetDiagonal().Length() / 2.0f;
     m_center = box.GetCenter();
 }
 

@@ -32,7 +32,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     }
     else if (dir == EditorAxis::EditorAxisDirection::Z)
     {
-        m_axisCap->transform->SetLocalEuler(Vector3(-90.0f, 0.0f, 0.0f));
+        m_axisCap->transform->SetLocalEuler(Vector3(90.0f, 0.0f, 0.0f));
     }
     m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
     m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.25f);
