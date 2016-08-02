@@ -20,7 +20,7 @@ Canvas *Canvas::m_mainBinaryCanvas = nullptr;
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
-    m_clearColor = glm::vec4(1.0f) * 0.8f;
+    m_clearColor = Vector4(1.0f) * 0.8f;
 
     connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(update()));
     m_drawTimer.setInterval(Canvas::c_redrawDelay);

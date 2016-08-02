@@ -105,7 +105,7 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
                 else if (attrType == XMLAttribute::Type::Vector4 ||
                          attrType == XMLAttribute::Type::Quaternion)
                 {
-                    attribute.SetVector4(glm::vec4(v[0], v[1], v[2], v[3]), attribute.GetProperties());
+                    attribute.SetVector4(Vector4(v[0], v[1], v[2], v[3]), attribute.GetProperties());
                 }
             }
             else if (attrType == XMLAttribute::Type::File)
@@ -176,7 +176,7 @@ void InspectorWidget::RefreshWidgetValues()
                 else if (attrType == XMLAttribute::Type::Vector4 ||
                          attrType == XMLAttribute::Type::Quaternion)
                 {
-                    glm::vec4 v = xmlInfo.GetVector4(attrName);
+                    Vector4 v = xmlInfo.GetVector4(attrName);
                     wv->SetValue({v.x, v.y, v.z, v.w});
                 }
                 ws = wv;

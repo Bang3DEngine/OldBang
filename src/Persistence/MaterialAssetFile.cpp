@@ -41,7 +41,7 @@ const std::vector<std::string> &MaterialAssetFile::GetTextureFilepaths() const
     return m_textureFilepaths;
 }
 
-const glm::vec4 &MaterialAssetFile::GetDiffuseColor() const
+const Vector4 &MaterialAssetFile::GetDiffuseColor() const
 {
     return m_diffuseColor;
 }

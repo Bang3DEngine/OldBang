@@ -164,7 +164,7 @@ void XMLAttribute::SetVector3(const Vector3 &value,
     Set(m_name, oss.str(), XMLAttribute::Type::Vector3, properties);
 }
 
-void XMLAttribute::SetVector4(const glm::vec4 &value,
+void XMLAttribute::SetVector4(const Vector4 &value,
                               const std::vector<XMLProperty> &properties)
 {
     std::ostringstream oss;
@@ -360,7 +360,7 @@ Vector3 XMLAttribute::GetVector3() const
     return Vector3(x,y,z);
 }
 
-glm::vec4 XMLAttribute::GetVector4() const
+Vector4 XMLAttribute::GetVector4() const
 {
     float x = 0, y = 0, z = 0, w = 0;
     std::string insidePars = StringUtils::Split(m_value, '(')[1];
@@ -370,18 +370,18 @@ glm::vec4 XMLAttribute::GetVector4() const
     y = StringUtils::ToFloat(numbers[1]);
     z = StringUtils::ToFloat(numbers[2]);
     w = StringUtils::ToFloat(numbers[3]);
-    return glm::vec4(x,y,z,w);
+    return Vector4(x,y,z,w);
 }
 
 Quaternion XMLAttribute::GetQuaternion() const
 {
-    glm::vec4 v = GetVector4();
+    Vector4 v = GetVector4();
     return Quaternion(v.w, v.x, v.y, v.z);
 }
 
 Rect XMLAttribute::GetRect() const
 {
-    glm::vec4 v = GetVector4();
+    Vector4 v = GetVector4();
     return Rect(v.x, v.y, v.z, v.w);
 }
 

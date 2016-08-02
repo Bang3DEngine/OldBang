@@ -102,7 +102,7 @@ void XMLNode::SetVector3(const std::string &attributeName, const Vector3 &value,
     SetAttribute(attr);
 }
 
-void XMLNode::SetVector4(const std::string &attributeName, const glm::vec4 &value,
+void XMLNode::SetVector4(const std::string &attributeName, const Vector4 &value,
                          const std::vector<XMLProperty>& properties)
 {
     XMLAttribute attr; attr.SetVector4(value, properties);
@@ -235,10 +235,10 @@ Vector3 XMLNode::GetVector3(const std::string &attributeName) const
     return attr ? attr->GetVector3() : Vector3::zero;
 }
 
-glm::vec4 XMLNode::GetVector4(const std::string &attributeName) const
+Vector4 XMLNode::GetVector4(const std::string &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector4() : glm::vec4(0);
+    return attr ? attr->GetVector4() : Vector4(0);
 }
 
 Quaternion XMLNode::GetQuaternion(const std::string &attributeName) const

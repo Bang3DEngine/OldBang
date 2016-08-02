@@ -106,10 +106,8 @@ float Vector3::Dot(const Vector3 &v1, const Vector3 &v2)
 
 float Vector3::Distance(const Vector3 &v1, const Vector3 &v2)
 {
-    return glm::distance(glm::vec3(v1), glm::vec3(v2));
+    return (v1 - v2).Length();
 }
-
-
 
 
 

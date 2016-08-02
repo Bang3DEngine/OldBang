@@ -50,7 +50,7 @@ float CircleRenderer::GetDistanceInScreenSpace(const glm::vec2 &sOrigin,
                                               const Matrix4 &modelViewProjMatrix) const
 {
     Vector3 objP = m_points[pointIndex];
-    glm::vec4 sP_4 = modelViewProjMatrix * glm::vec4(objP, 1.0f);
+    Vector4 sP_4 = modelViewProjMatrix * Vector4(objP, 1.0f);
     glm::vec2 sP = sP_4.xy() / sP_4.w;
     sP = sP * 0.5f + 0.5f;
 
@@ -79,7 +79,7 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
     {
         // TODO: not working
         Vector3 objP = m_points[i];
-        glm::vec4 sP_4 = modelViewProjMatrix * glm::vec4(objP, 1.0f);
+        Vector4 sP_4 = modelViewProjMatrix * Vector4(objP, 1.0f);
         glm::vec2 sP = Canvas::GetCurrentScene()->GetCamera()->WorldToScreenNDCPoint(Vector3(sP_4.xyz()));
 
         float d = glm::distance(sP, sOrigin);

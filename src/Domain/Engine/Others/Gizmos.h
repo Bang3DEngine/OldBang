@@ -6,12 +6,12 @@
 class Box;
 class Mesh;
 class Vector3;
+class Vector4;
 class Material;
 class Texture2D;
 class MeshRenderer;
 class SingleLineRenderer;
 class EditorGameObject;
-
 class Gizmos
 {
 friend class Canvas;
@@ -32,7 +32,7 @@ private:
     static Mesh *m_planeMesh;
 
     static Material *m_material;
-    static glm::vec4 m_color;
+    static Vector4 m_color;
     static float m_lineWidth;
     static bool m_wireframe;
     static bool m_receivesLighting;
@@ -44,7 +44,7 @@ private:
 public:
 
     static void SetColor(const Vector3 &color);
-    static void SetColor(const glm::vec4 &color);
+    static void SetColor(const Vector4 &color);
     static void SetLineWidth(float lineWidth);
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);

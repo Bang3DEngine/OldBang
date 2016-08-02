@@ -9,6 +9,7 @@
 
 #include "Rect.h"
 #include "Vector3.h"
+#include "Vector4.h"
 #include "IToString.h"
 #include "Quaternion.h"
 #include "StringUtils.h"
@@ -69,7 +70,7 @@ public:
     void SetFloat(float value, const std::vector<XMLProperty>& properties = {});
     void SetVector2(const glm::vec2 &value, const std::vector<XMLProperty>& properties = {});
     void SetVector3(const Vector3 &value, const std::vector<XMLProperty>& properties = {});
-    void SetVector4(const glm::vec4 &value, const std::vector<XMLProperty>& properties = {});
+    void SetVector4(const Vector4 &value, const std::vector<XMLProperty>& properties = {});
     void SetQuaternion(const Quaternion &value, const std::vector<XMLProperty>& properties = {});
     void SetRect(const Rect &value, const std::vector<XMLProperty>& properties = {});
     void SetFilepath(const std::string &filepath, const std::string &fileExtension = "",
@@ -106,7 +107,7 @@ public:
     std::string GetString() const;
     glm::vec2 GetVector2() const;
     Vector3 GetVector3() const;
-    glm::vec4 GetVector4() const;
+    Vector4 GetVector4() const;
     Quaternion GetQuaternion() const;
     Rect GetRect() const;
     std::string GetEnumSelectedName() const;

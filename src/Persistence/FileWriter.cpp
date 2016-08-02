@@ -94,7 +94,7 @@ void FileWriter::WriteVector3(const Vector3 &v, std::ostream &f)
     f << v.x << " " << v.y << " " << v.z << std::endl;
 }
 
-void FileWriter::WriteVector4(const glm::vec4 &v, std::ostream &f)
+void FileWriter::WriteVector4(const Vector4 &v, std::ostream &f)
 {
     f << v.x << " " << v.y << " " << v.z << " " << v.w << std::endl;
 }

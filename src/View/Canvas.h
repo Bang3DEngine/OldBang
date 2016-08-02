@@ -54,7 +54,7 @@ private:
 
 public:
 
-    glm::vec4 m_clearColor;
+    Vector4 m_clearColor;
 
     explicit Canvas(QWidget *parent = 0);
     static void InitFromMainBinary();

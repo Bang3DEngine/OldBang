@@ -64,7 +64,7 @@ void Scene::_OnRender()
     m_gbuffer->Bind();
 
     // D2G
-        m_gbuffer->ClearBuffersAndBackground(glm::vec4(0.9f, 0.9f, 0.9f, 1));
+        m_gbuffer->ClearBuffersAndBackground(Vector4(0.9f, 0.9f, 0.9f, 1));
         m_gbuffer->SetAllDrawBuffers();
 
         glClear(GL_DEPTH_BUFFER_BIT);

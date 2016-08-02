@@ -64,9 +64,9 @@ Vector3 AttrWidgetVectorFloat::GetVector3() const
                    m_floatSlots[2]->GetValue());
 }
 
-glm::vec4 AttrWidgetVectorFloat::GetVector4() const
+Vector4 AttrWidgetVectorFloat::GetVector4() const
 {
-    return glm::vec4(m_floatSlots[0]->GetValue(),
+    return Vector4(m_floatSlots[0]->GetValue(),
                      m_floatSlots[1]->GetValue(),
                      m_floatSlots[2]->GetValue(),
                      m_floatSlots[3]->GetValue());

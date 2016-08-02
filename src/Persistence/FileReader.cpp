@@ -350,12 +350,12 @@ Vector3 FileReader::ReadVec3(std::istream &f)
     return Vector3(x, y, z);
 }
 
-glm::vec4 FileReader::ReadVec4(std::istream &f)
+Vector4 FileReader::ReadVec4(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
     float x,y,z,w;
     iss >> x >> y >> z >> w;
-    return glm::vec4(x, y, z, w);
+    return Vector4(x, y, z, w);
 }
 
 Quaternion FileReader::ReadQuat(std::istream &f)

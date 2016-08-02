@@ -114,10 +114,10 @@ Box operator*(const Matrix4 &m, const Box &b)
 {
     Vector3 minv = b.GetMin();
     Vector3 maxv = b.GetMax();
-    glm::vec4 bMinCoords = glm::vec4(minv.x, minv.y, minv.z, 1.0f);
-    glm::vec4 bMaxCoords = glm::vec4(maxv.x, maxv.y, maxv.z, 1.0f);
-    glm::vec4 v1 = m * bMinCoords;
-    glm::vec4 v2 = m * bMaxCoords;
+    Vector4 bMinCoords = Vector4(minv.x, minv.y, minv.z, 1.0f);
+    Vector4 bMaxCoords = Vector4(maxv.x, maxv.y, maxv.z, 1.0f);
+    Vector4 v1 = m * bMinCoords;
+    Vector4 v2 = m * bMaxCoords;
 
     Box br(std::min(v1.x, v2.x), std::max(v1.x, v2.x),
            std::min(v1.y, v2.y), std::max(v1.y, v2.y),

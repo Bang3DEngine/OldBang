@@ -20,7 +20,7 @@ class AttrWidgetVectorFloat : public AttributeWidget //Slot for a vector of size
         float GetFloat() const;
         glm::vec2 GetVector2() const;
         Vector3 GetVector3() const;
-        glm::vec4 GetVector4() const;
+        Vector4 GetVector4() const;
 };
 
 #endif // INSPECTORVECTORFLOATCOMPONENTSLOTWIDGET_H

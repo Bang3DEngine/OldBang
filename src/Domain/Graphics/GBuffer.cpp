@@ -99,7 +99,7 @@ void GBuffer::RenderToScreen() const
     m_renderGBufferToScreenMaterial->UnBind();
 }
 
-void GBuffer::ClearBuffersAndBackground(const glm::vec4 &backgroundColor, const glm::vec4 &clearValue)
+void GBuffer::ClearBuffersAndBackground(const Vector4 &backgroundColor, const Vector4 &clearValue)
 {
     Bind();
 

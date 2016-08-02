@@ -58,7 +58,7 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
         SetTexture(texture);
     }
 
-    glm::vec4 diffColor = xmlInfo->GetVector4("DiffuseColor");
+    Vector4 diffColor = xmlInfo->GetVector4("DiffuseColor");
     SetDiffuseColor(diffColor);
 }
 
@@ -102,7 +102,7 @@ void Material::SetTexture(const Texture2D *texture)
     }
 }
 
-void Material::SetDiffuseColor(const glm::vec4 &diffuseColor)
+void Material::SetDiffuseColor(const Vector4 &diffuseColor)
 {
     this->m_diffuseColor = diffuseColor;
 }
@@ -117,7 +117,7 @@ const Texture *Material::GetTexture() const
     return m_texture;
 }
 
-glm::vec4 Material::GetDiffuseColor() const
+Vector4 Material::GetDiffuseColor() const
 {
     return m_diffuseColor;
 }

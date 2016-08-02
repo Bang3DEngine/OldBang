@@ -16,7 +16,7 @@ private:
     std::string m_fshaderFilepath = "";
     int m_textureCount = 0;
     std::vector< std::string > m_textureFilepaths;
-    glm::vec4 m_diffuseColor = glm::vec4(0.0f);
+    Vector4 m_diffuseColor = Vector4(0.0f);
 
 public:
     MaterialAssetFile(const QFileSystemModel *model, const QModelIndex *index);
@@ -25,7 +25,7 @@ public:
     const std::string& GetFragmentShaderFilepath() const;
     int GetTextureCount() const;
     const std::vector<std::string>& GetTextureFilepaths() const;
-    const glm::vec4& GetDiffuseColor() const;
+    const Vector4& GetDiffuseColor() const;
 };
 
 #endif // MATERIALASSETFILE_H

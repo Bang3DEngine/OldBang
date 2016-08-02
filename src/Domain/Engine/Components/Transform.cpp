@@ -139,28 +139,28 @@ Vector3 Transform::TransformPoint(const Vector3 &point) const
     if (!gameObject->parent) return point;
     Matrix4 m;
     gameObject->parent->transform->GetModelMatrix(&m);
-    return Vector3((m * glm::vec4(point, 1)).xyz());
+    return Vector3((m * Vector4(point, 1)).xyz());
 }
 Vector3 Transform::InverseTransformPoint(const Vector3 &point) const
 {
     if (!gameObject->parent) return point;
     Matrix4 m;
     gameObject->parent->transform->GetModelMatrix(&m);
-    return Vector3((m.Inversed() * glm::vec4(point, 1)).xyz());
+    return Vector3((m.Inversed() * Vector4(point, 1)).xyz());
 }
 Vector3 Transform::TransformDirection(const Vector3 &dir) const
 {
     if (!gameObject->parent) return dir;
     Matrix4 m;
     gameObject->parent->transform->GetModelMatrix(&m);
-    return Vector3((m * glm::vec4(dir, 0)).xyz());
+    return Vector3((m * Vector4(dir, 0)).xyz());
 }
 Vector3 Transform::InverseTransformDirection(const Vector3 &dir) const
 {
     if (!gameObject->parent) return dir;
     Matrix4 m;
     gameObject->parent->transform->GetModelMatrix(&m);
-    return Vector3((m.Inversed() * glm::vec4(dir, 0)).xyz());
+    return Vector3((m.Inversed() * Vector4(dir, 0)).xyz());
 }
 
 
@@ -188,25 +188,25 @@ Vector3 Transform::LocalToObjectPoint(const Vector3 &point) const
 {
     Matrix4 m;
     GetObjectModelMatrix(&m);
-    return Vector3((m.Inversed() * glm::vec4(point, 1)).xyz());
+    return Vector3((m.Inversed() * Vector4(point, 1)).xyz());
 }
 Vector3 Transform::LocalToObjectDirection(const Vector3 &dir) const
 {
     Matrix4 m;
     GetObjectModelMatrix(&m);
-    return Vector3((m.Inversed() * glm::vec4(dir, 0)).xyz());
+    return Vector3((m.Inversed() * Vector4(dir, 0)).xyz());
 }
 Vector3 Transform::ObjectToLocalPoint(const Vector3 &point) const
 {
     Matrix4 m;
     GetObjectModelMatrix(&m);
-    return Vector3((m * glm::vec4(point, 1)).xyz());
+    return Vector3((m * Vector4(point, 1)).xyz());
 }
 Vector3 Transform::ObjectToLocalDirection(const Vector3 &dir) const
 {
     Matrix4 m;
     GetObjectModelMatrix(&m);
-    return Vector3((m * glm::vec4(dir, 0)).xyz());
+    return Vector3((m * Vector4(dir, 0)).xyz());
 }
 
 

@@ -208,7 +208,8 @@ HEADERS += \
     src/Persistence/XMLAttribute.h \
     src/Persistence/XMLProperty.h \
     src/Domain/Engine/Others/NamedEnum.h \
-    src/View/Inspector/AttrWidgetBool.h
+    src/View/Inspector/AttrWidgetBool.h \
+    src/Domain/Engine/Physics/Vector4.h
 
 EDITOR {
 HEADERS += \
@@ -334,7 +335,8 @@ SOURCES += \
     src/Persistence/XMLNode.cpp \
     src/Persistence/XMLAttribute.cpp \
     src/Persistence/XMLProperty.cpp \
-    src/View/Inspector/AttrWidgetBool.cpp
+    src/View/Inspector/AttrWidgetBool.cpp \
+    src/Domain/Engine/Physics/Vector4.cpp
 
 EDITOR {
     SOURCES += \

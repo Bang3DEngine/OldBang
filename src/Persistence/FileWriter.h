@@ -31,7 +31,7 @@ public:
     static void WritePointer(void *v, std::ostream &f);
     static void WriteVector2(const glm::vec2 &v, std::ostream &f);
     static void WriteVector3(const Vector3 &v, std::ostream &f);
-    static void WriteVector4(const glm::vec4 &v, std::ostream &f);
+    static void WriteVector4(const Vector4 &v, std::ostream &f);
     static void WriteQuaternion(const Quaternion &q, std::ostream &f);
     static void WriteRect(const Rect &r, std::ostream &f);
     static void WriteString(const std::string &str, std::ostream &f);

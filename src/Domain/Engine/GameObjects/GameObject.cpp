@@ -366,12 +366,10 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
         else // It's a Component
         {
             Component *c = nullptr;
-            bool isTransform = false;
             if (tagName == "Transform")
             {
                 transform->ReadXMLInfo(xmlChild);
                 c = transform;
-                isTransform = true;
             }
             else if (tagName == "MeshRenderer")
             {

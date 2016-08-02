@@ -18,7 +18,7 @@ std::ostream& operator<<(std::ostream &log, const Vector3 &v)
     return log;
 }
 
-std::ostream& operator<<(std::ostream &log, const glm::vec4 &v)
+std::ostream& operator<<(std::ostream &log, const Vector4 &v)
 {
     log << "(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
     return log;

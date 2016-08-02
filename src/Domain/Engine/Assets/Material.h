@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Asset.h"
+#include "Vector4.h"
 #include "Texture.h"
 #include "Texture2D.h"
 #include "ShaderContract.h"
@@ -26,7 +27,7 @@ public:
     }
 
 private:
-    glm::vec4 m_diffuseColor = glm::vec4(1.0f);
+    Vector4 m_diffuseColor = Vector4(1.0f);
 
     ShaderProgram *m_shaderProgram = nullptr;
     const Texture2D *m_texture = nullptr; // Currently supporting just one texture
@@ -39,12 +40,12 @@ public:
     void SetShaderProgram(ShaderProgram *program);
     void SetTexture(const Texture2D *m_texture);
 
-    void SetDiffuseColor(const glm::vec4 &m_diffuseColor);
+    void SetDiffuseColor(const Vector4 &m_diffuseColor);
 
     ShaderProgram* GetShaderProgram() const;
     const Texture* GetTexture() const;
 
-    glm::vec4 GetDiffuseColor() const;
+    Vector4 GetDiffuseColor() const;
 
     void Bind() const override;
     void UnBind() const override;

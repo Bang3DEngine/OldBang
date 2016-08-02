@@ -2,6 +2,7 @@
 
 #include "Box.h"
 #include "Vector3.h"
+#include "Vector4.h"
 #include "Material.h"
 #include "Texture2D.h"
 #include "MeshRenderer.h"
@@ -19,7 +20,7 @@ bool Gizmos::m_wireframe = false;
 
 Material *Gizmos::m_material = nullptr;
 
-glm::vec4 Gizmos::m_color = glm::vec4(1);
+Vector4 Gizmos::m_color = Vector4(1);
 float Gizmos::m_lineWidth = 1.0f;
 bool Gizmos::m_receivesLighting = false;
 
@@ -56,7 +57,7 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
 
 void Gizmos::SetStatesBeforeDrawing()
 {
-    glm::vec4 diffColor = m_color;
+    Vector4 diffColor = m_color;
     Gizmos::m_singleLineRenderer->GetMaterial()->SetDiffuseColor(diffColor);
     Gizmos::m_meshRenderer->GetMaterial()->SetDiffuseColor(diffColor);
 
@@ -80,10 +81,10 @@ void Gizmos::OnNewFrame()
 
 void Gizmos::SetColor(const Vector3 &color)
 {
-    Gizmos::m_color = glm::vec4(color.r, color.g, color.b, 1.0f);
+    Gizmos::m_color = Vector4(color.r, color.g, color.b, 1.0f);
 }
 
-void Gizmos::SetColor(const glm::vec4 &color)
+void Gizmos::SetColor(const Vector4 &color)
 {
     Gizmos::m_color = color;
 }

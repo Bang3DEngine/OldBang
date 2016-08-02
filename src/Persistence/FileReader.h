@@ -73,7 +73,7 @@ public:
     static float ReadFloat(std::istream &f);
     static glm::vec2 ReadVec2(std::istream &f);
     static Vector3 ReadVec3(std::istream &f);
-    static glm::vec4 ReadVec4(std::istream &f);
+    static Vector4 ReadVec4(std::istream &f);
     static Quaternion ReadQuat(std::istream &f);
     static Rect ReadRect(std::istream &f);
     static std::string ReadString(std::istream &f);
