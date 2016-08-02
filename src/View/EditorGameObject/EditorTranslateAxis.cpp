@@ -57,8 +57,8 @@ void EditorTranslateAxis::OnUpdate()
 
     if (m_grabbed)
     {
-        glm::vec2 sMouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f);
-        if (glm::length(sMouseDelta) > 0.0f)
+        Vector2 sMouseDelta = Input::GetMouseDelta() * Vector2(1.0f, -1.0f);
+        if (sMouseDelta.Length() > 0.0f)
         {
             Vector3 wAxisDir, parentAxisDir;
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
@@ -76,15 +76,15 @@ void EditorTranslateAxis::OnUpdate()
 
             // Alignment
             Vector3 wAxisCenter = transform->GetPosition();
-            glm::vec2 screenAxisDir = cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
+            Vector2 screenAxisDir = cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
                                       cam->WorldToScreenNDCPoint(wAxisCenter);
-            screenAxisDir = glm::normalize(screenAxisDir);
-            float alignment = glm::dot(screenAxisDir, glm::normalize(sMouseDelta));
+            screenAxisDir.Normalize();
+            float alignment = Vector2::Dot(screenAxisDir, sMouseDelta.Normalized());
             //
 
             Vector3 worldMove = alignment *
                                 parentAxisDir *
-                                glm::length(sMouseDelta) *
+                                sMouseDelta.Length() *
                                 Vector3::Distance(wCamPos, ago->transform->GetPosition()) * 0.002f;
             ago->transform->TranslateLocal(worldMove);
         }

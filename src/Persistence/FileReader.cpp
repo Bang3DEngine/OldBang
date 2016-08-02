@@ -118,11 +118,11 @@ int FileReader::GetOBJNumFaces(const std::string &filepath)
 bool FileReader::ReadOBJ(const std::string& filepath,
                          std::vector<Vector3> *vertexPos,
                          std::vector<Vector3> *vertexNormals,
-                         std::vector<glm::vec2> *vertexUvs,
+                         std::vector<Vector2> *vertexUvs,
                          bool *isTriangles)
 {
     std::vector<Vector3> disorderedVertexPos, disorderedVertexNormals;
-    std::vector<glm::vec2> disorderedVertexUvs;
+    std::vector<Vector2> disorderedVertexUvs;
     std::vector<unsigned int> vertexPosIndexes,
                               vertexUvsIndexes,
                               vertexNormIndexes;
@@ -148,7 +148,7 @@ bool FileReader::ReadOBJ(const std::string& filepath,
         }
         else if (hasUvs && lineHeader == "vt") //Cargamos uvs
         {
-            glm::vec2 uv;
+            Vector2 uv;
             ss >> uv.x >> uv.y;
             disorderedVertexUvs.push_back(uv);
         }
@@ -334,12 +334,12 @@ float FileReader::ReadFloat(std::istream &f)
     float v; iss >> v; return v;
 }
 
-glm::vec2 FileReader::ReadVec2(std::istream &f)
+Vector2 FileReader::ReadVec2(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
     float x,y;
     iss >> x >> y;
-    return glm::vec2(x, y);
+    return Vector2(x, y);
 }
 
 Vector3 FileReader::ReadVec3(std::istream &f)

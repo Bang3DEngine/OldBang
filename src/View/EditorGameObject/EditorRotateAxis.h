@@ -25,7 +25,7 @@ private:
      * releases its mouse button)
      * In Screen Space.
      */
-    glm::vec2 m_sAnchorPoint0, m_sAnchorPoint1;
+    Vector2 m_sAnchorPoint0, m_sAnchorPoint1;
 
 protected:
     Renderer *GetAxisRenderer() const override;

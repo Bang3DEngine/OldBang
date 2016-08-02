@@ -45,7 +45,7 @@ private:
      * @brief How many units in world space do we have to move,
      * for every panned pixel?
      */
-    glm::vec2 m_mousePanPerPixel = glm::vec2(100.0f); //Movement with middle button
+    Vector2 m_mousePanPerPixel = Vector2(100.0f); //Movement with middle button
 
     /**
      * @brief startingRotation changes after every lookAt.
@@ -53,8 +53,8 @@ private:
      * of mouse right click.
      */
     Quaternion m_startingRotation;                         //starting offset
-    glm::vec2 m_mouseRotDegreesAccum = glm::vec2(0.0f);    //User input
-    glm::vec2 m_mouseRotDegreesPerPixel = glm::vec2(0.0f); //Parameter
+    Vector2 m_mouseRotDegreesAccum = Vector2(0.0f);    //User input
+    Vector2 m_mouseRotDegreesPerPixel = Vector2(0.0f); //Parameter
 
     /**
      * @brief How many units in world space do we have to move

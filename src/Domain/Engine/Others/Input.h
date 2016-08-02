@@ -8,6 +8,7 @@
 #include "Bang.h"
 
 #include "glm/glm.hpp"
+#include "Vector2.h"
 
 class Input
 {
@@ -157,7 +158,7 @@ private:
     /**
      * @brief Mouse coordinates in Canvas space.
      */
-    glm::vec2 m_mouseCoords, m_lastMouseCoords;
+    Vector2 m_mouseCoords, m_lastMouseCoords;
 
 
     /**
@@ -208,7 +209,7 @@ public:
      * @return Mouse movement in y divided by canvas height [0.0f, 1.0f]
      */
     static float GetMouseAxisY();
-    static glm::vec2 GetMouseAxis();
+    static Vector2 GetMouseAxis();
 
     /**
      * @brief GetMouseDeltaX
@@ -221,12 +222,12 @@ public:
      * @return Mouse movement in y in pixels [0.0f, canvasHeight]
      */
     static float GetMouseDeltaY();
-    static glm::vec2 GetMouseDelta();
+    static Vector2 GetMouseDelta();
 
     static void LockMouseMovement(bool lock);
     static bool IsLockMouseMovement();
 
-    static glm::vec2 GetMouseCoords();
+    static Vector2 GetMouseCoords();
 };
 
 #endif // INPUT_H

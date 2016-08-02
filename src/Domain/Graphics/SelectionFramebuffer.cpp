@@ -75,8 +75,8 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 void SelectionFramebuffer::ProcessSelection()
 {
     // Get mouse coordinates and read pixel color
-    glm::vec2 coords = Input::GetMouseCoords();
-    coords = glm::vec2(coords.x, Canvas::GetHeight()-coords.y);
+    Vector2 coords = Input::GetMouseCoords();
+    coords = Vector2(coords.x, Canvas::GetHeight()-coords.y);
     Vector3 mouseOverColor = ReadPixel(coords.x, coords.y, 0);
 
     GameObject *mouseOverGO = nullptr;

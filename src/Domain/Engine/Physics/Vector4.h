@@ -4,6 +4,7 @@
 #include "glm/glm.hpp"
 
 class Matrix4;
+class Vector2;
 class Vector3;
 class Quaternion;
 class Vector4 : public glm::vec4
@@ -14,6 +15,7 @@ public:
     Vector4(float a);
     Vector4(float x, float y, float z, float w);
     Vector4(const Vector3 &v, float w);
+    Vector4(const Vector2 &v, float z, float w);
 
     /**
      * @brief Returns the length/magnitude of this Vector
@@ -43,7 +45,7 @@ public:
      */
     Vector4 ToRadians() const;
 
-    glm::vec4 ToGlmvec4() const;
+    glm::vec4 ToGlmVec4() const;
 
     float Distance(const Vector4 &p) const;
 
@@ -74,12 +76,19 @@ public:
     const static Vector4 back;
     const static Vector4 zero;
     const static Vector4 one;
+
+    // SWIZZLING
+    Vector2  xy() const;
+    Vector3  xyz() const;
+    //
 };
 
 Vector4 operator+(float a, const Vector4& v);
 Vector4 operator+(const Vector4& v, float a);
 Vector4 operator+(const Vector4& v1, const Vector4& v2);
 
+Vector4 operator-(float a, const Vector4& v);
+Vector4 operator-(const Vector4& v, float a);
 Vector4 operator-(const Vector4& v1, const Vector4& v2);
 Vector4 operator-(const Vector4& v);
 
@@ -97,5 +106,9 @@ Vector4& operator+=(Vector4& lhs, const Vector4& rhs);
 Vector4& operator-=(Vector4& lhs, const Vector4& rhs);
 Vector4& operator*=(Vector4& lhs, const Vector4& rhs);
 Vector4& operator/=(Vector4& lhs, const Vector4& rhs);
+Vector4& operator+=(Vector4& lhs, float a);
+Vector4& operator-=(Vector4& lhs, float a);
+Vector4& operator*=(Vector4& lhs, float a);
+Vector4& operator/=(Vector4& lhs, float a);
 
 #endif // VECTOR4_H

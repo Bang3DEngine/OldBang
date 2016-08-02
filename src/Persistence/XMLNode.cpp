@@ -84,7 +84,7 @@ void XMLNode::SetFloat(const std::string &attributeName, float value,
     SetAttribute(attr);
 }
 
-void XMLNode::SetVector2(const std::string &attributeName, const glm::vec2 &value,
+void XMLNode::SetVector2(const std::string &attributeName, const Vector2 &value,
                          const std::vector<XMLProperty>& properties)
 {
     XMLAttribute attr;
@@ -223,10 +223,10 @@ float XMLNode::GetFloat(const std::string &attributeName) const
     return attr ? attr->GetFloat() : 0.0f;
 }
 
-glm::vec2 XMLNode::GetVector2(const std::string &attributeName) const
+Vector2 XMLNode::GetVector2(const std::string &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector2() : glm::vec2(0);
+    return attr ? attr->GetVector2() : Vector2(0);
 }
 
 Vector3 XMLNode::GetVector3(const std::string &attributeName) const

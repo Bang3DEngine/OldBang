@@ -96,7 +96,7 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
                 }
                 else if (attrType == XMLAttribute::Type::Vector2)
                 {
-                    attribute.SetVector2(glm::vec2(v[0], v[1]), attribute.GetProperties());
+                    attribute.SetVector2(Vector2(v[0], v[1]), attribute.GetProperties());
                 }
                 else if (attrType == XMLAttribute::Type::Vector3)
                 {
@@ -165,7 +165,7 @@ void InspectorWidget::RefreshWidgetValues()
                 }
                 else if (attrType == XMLAttribute::Type::Vector2)
                 {
-                    glm::vec2 v = xmlInfo.GetVector2(attrName);
+                    Vector2 v = xmlInfo.GetVector2(attrName);
                     wv->SetValue({v.x, v.y});
                 }
                 else if (attrType == XMLAttribute::Type::Vector3)

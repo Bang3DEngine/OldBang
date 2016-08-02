@@ -84,7 +84,7 @@ void FileWriter::WritePointer(void *v, std::ostream &f)
     f << v << std::endl;
 }
 
-void FileWriter::WriteVector2(const glm::vec2 &v, std::ostream &f)
+void FileWriter::WriteVector2(const Vector2 &v, std::ostream &f)
 {
     f << v.x << " " << v.y << std::endl;
 }

@@ -68,7 +68,7 @@ void Mesh::LoadNormals(const std::vector<Vector3> &normals)
     m_vertexNormalsVBO->Fill((void*)(&m_normals[0]), m_normals.size() * sizeof(float) * 3);
 }
 
-void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
+void Mesh::LoadUvs(const std::vector<Vector2> &uvs)
 {
     if (m_vertexUvsVBO) delete m_vertexUvsVBO;
 
@@ -79,7 +79,7 @@ void Mesh::LoadUvs(const std::vector<glm::vec2> &uvs)
 
 void Mesh::LoadAll(const std::vector<Vector3> &positions,
                    const std::vector<Vector3> &normals,
-                   const std::vector<glm::vec2> &uvs)
+                   const std::vector<Vector2> &uvs)
 {
     LoadPositions(positions);
     LoadNormals(normals);
@@ -155,7 +155,7 @@ const std::vector<Vector3> &Mesh::GetNormals()
     return m_normals;
 }
 
-const std::vector<glm::vec2> &Mesh::GetUvs()
+const std::vector<Vector2> &Mesh::GetUvs()
 {
     return m_uvs;
 }

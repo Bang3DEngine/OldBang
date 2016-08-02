@@ -63,8 +63,8 @@ void EditorRotateAxis::OnUpdate()
         if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
         {
             // This will be done once every grab
-            glm::vec2 sMousePos= Input::GetMouseCoords();
-            sMousePos /= glm::vec2(Canvas::GetWidth(), Canvas::GetHeight());
+            Vector2 sMousePos= Input::GetMouseCoords();
+            sMousePos /= Vector2(Canvas::GetWidth(), Canvas::GetHeight());
             sMousePos.y = 1.0f - sMousePos.y;
             sMousePos = sMousePos * 2.0f - 1.0f;
 
@@ -83,12 +83,12 @@ void EditorRotateAxis::OnUpdate()
             }
         }
 
-        glm::vec2 sMouseDelta = Input::GetMouseDelta() * glm::vec2(1.0f, -1.0f);
-        if (glm::length(sMouseDelta) > 0.0f)
+        Vector2 sMouseDelta = Input::GetMouseDelta() * Vector2(1.0f, -1.0f);
+        if (sMouseDelta.Length() > 0.0f)
         {
             // Get how aligned is the user movement with the anchor points
-            glm::vec2 anchorPointsDir = glm::normalize(m_sAnchorPoint1 - m_sAnchorPoint0);
-            float alignment = glm::dot(anchorPointsDir, glm::normalize(sMouseDelta));
+            Vector2 anchorPointsDir = Vector2(m_sAnchorPoint1 - m_sAnchorPoint0).Normalized();
+            float alignment = Vector2::Dot(anchorPointsDir, Vector2(sMouseDelta).Normalized());
 
             float rotAngle = alignment * c_rotationBoost;
 

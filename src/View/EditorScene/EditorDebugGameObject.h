@@ -36,8 +36,8 @@ public:
                   bool depthTest = true);
 
     void DrawLineScreen(
-                  const glm::vec2 &origin,
-                  const glm::vec2 &destiny,
+                  const Vector2 &origin,
+                  const Vector2 &destiny,
                   const Vector3 &color = Vector3::zero,
                   float lineWidth = 1.0f,
                   float livingTimeSecs = -1.0f,

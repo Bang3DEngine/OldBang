@@ -34,7 +34,7 @@ private:
 
     std::vector<Vector3> m_positions;
     std::vector<Vector3> m_normals;
-    std::vector<glm::vec2> m_uvs;
+    std::vector<Vector2> m_uvs;
 
     VAO *m_vao = nullptr;
     VBO *m_vertexPositionsVBO = nullptr;
@@ -52,10 +52,10 @@ public:
     void LoadFromFile(const std::string &m_filepath);
     void LoadPositions(const std::vector<Vector3>& positions);
     void LoadNormals(const std::vector<Vector3>& normals);
-    void LoadUvs(const std::vector<glm::vec2>& uvs);
+    void LoadUvs(const std::vector<Vector2>& uvs);
     void LoadAll(const std::vector<Vector3>& positions,
                  const std::vector<Vector3>& normals,
-                 const std::vector<glm::vec2>& uvs);
+                 const std::vector<Vector2>& uvs);
 
     void BindPositionsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
     void BindNormalsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
@@ -71,7 +71,7 @@ public:
 
     const std::vector<Vector3>& GetPositions();
     const std::vector<Vector3>& GetNormals();
-    const std::vector<glm::vec2>& GetUvs();
+    const std::vector<Vector2>& GetUvs();
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

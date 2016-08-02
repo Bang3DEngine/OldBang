@@ -51,9 +51,9 @@ float AttrWidgetVectorFloat::GetFloat() const
     return m_floatSlots[0]->GetValue();
 }
 
-glm::vec2 AttrWidgetVectorFloat::GetVector2() const
+Vector2 AttrWidgetVectorFloat::GetVector2() const
 {
-    return glm::vec2(m_floatSlots[0]->GetValue(),
+    return Vector2(m_floatSlots[0]->GetValue(),
                      m_floatSlots[1]->GetValue());
 }
 

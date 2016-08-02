@@ -18,7 +18,7 @@ class AttrWidgetVectorFloat : public AttributeWidget //Slot for a vector of size
         virtual void SetValue(const std::vector<float> &v);
         virtual std::vector<float> GetValue();
         float GetFloat() const;
-        glm::vec2 GetVector2() const;
+        Vector2 GetVector2() const;
         Vector3 GetVector3() const;
         Vector4 GetVector4() const;
 };

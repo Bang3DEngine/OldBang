@@ -14,6 +14,7 @@
 #include <list>
 #include <map>
 
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
@@ -29,7 +30,7 @@
 
 //OSTREAM OPERATORS //////////////////////////////////
 std::ostream& operator<<(std::ostream &log, const std::string &str);
-std::ostream& operator<<(std::ostream &log, const glm::vec2 &v);
+std::ostream& operator<<(std::ostream &log, const Vector2 &v);
 std::ostream& operator<<(std::ostream &log, const Vector3 &v);
 std::ostream& operator<<(std::ostream &log, const Vector4 &v);
 std::ostream& operator<<(std::ostream &log, const Quaternion &q);

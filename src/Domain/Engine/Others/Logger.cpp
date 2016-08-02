@@ -6,7 +6,7 @@ std::ostream& operator<<(std::ostream &log, const std::string &str)
     return log;
 }
 
-std::ostream& operator<<(std::ostream &log, const glm::vec2 &v)
+std::ostream& operator<<(std::ostream &log, const Vector2 &v)
 {
     log << "(" << v.x << ", " << v.y << ")";
     return log;

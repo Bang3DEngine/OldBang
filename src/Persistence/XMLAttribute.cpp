@@ -145,7 +145,7 @@ void XMLAttribute::SetFloat(float value,
     Set(m_name, oss.str(), XMLAttribute::Type::Float, properties);
 }
 
-void XMLAttribute::SetVector2(const glm::vec2 &value,
+void XMLAttribute::SetVector2(const Vector2 &value,
                               const std::vector<XMLProperty> &properties)
 {
     std::ostringstream oss;
@@ -337,7 +337,7 @@ std::string XMLAttribute::GetString() const
     return m_value;
 }
 
-glm::vec2 XMLAttribute::GetVector2() const
+Vector2 XMLAttribute::GetVector2() const
 {
     float x = 0, y = 0;
     std::string insidePars = StringUtils::Split(m_value, '(')[1];
@@ -345,7 +345,7 @@ glm::vec2 XMLAttribute::GetVector2() const
     std::vector<std::string> numbers = StringUtils::Split(insidePars, ',');
     x = StringUtils::ToFloat(numbers[0]);
     y = StringUtils::ToFloat(numbers[1]);
-    return glm::vec2(x,y);
+    return Vector2(x,y);
 }
 
 Vector3 XMLAttribute::GetVector3() const

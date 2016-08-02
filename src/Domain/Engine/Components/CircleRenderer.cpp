@@ -45,23 +45,23 @@ void CircleRenderer::GeneratePoints()
     }
 }
 
-float CircleRenderer::GetDistanceInScreenSpace(const glm::vec2 &sOrigin,
-                                              int pointIndex,
-                                              const Matrix4 &modelViewProjMatrix) const
+float CircleRenderer::GetDistanceInScreenSpace(const Vector2 &sOrigin,
+                                               int pointIndex,
+                                               const Matrix4 &modelViewProjMatrix) const
 {
     Vector3 objP = m_points[pointIndex];
-    Vector4 sP_4 = modelViewProjMatrix * Vector4(objP, 1.0f);
-    glm::vec2 sP = sP_4.xy() / sP_4.w;
+    Vector4 sP4 = modelViewProjMatrix * Vector4(objP, 1.0f);
+    Vector2 sP = Vector2(sP4.xy()) / sP4.w;
     sP = sP * 0.5f + 0.5f;
 
-    return glm::distance(sOrigin, sP);
+    return Vector2::Distance(sOrigin, sP);
 }
 
 void CircleRenderer::GetTwoClosestPointsInScreenSpace(
-        const glm::vec2 &sOrigin,
+        const Vector2 &sOrigin,
         const Matrix4 &modelViewProjMatrix,
-        glm::vec2 *p0, int *i0,
-        glm::vec2 *p1, int *i1) const
+        Vector2 *p0, int *i0,
+        Vector2 *p1, int *i1) const
 {
     /**
      * @brief We calculate this step in order to avoid sampling
@@ -79,10 +79,10 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
     {
         // TODO: not working
         Vector3 objP = m_points[i];
-        Vector4 sP_4 = modelViewProjMatrix * Vector4(objP, 1.0f);
-        glm::vec2 sP = Canvas::GetCurrentScene()->GetCamera()->WorldToScreenNDCPoint(Vector3(sP_4.xyz()));
+        Vector4 sP4 = modelViewProjMatrix * Vector4(objP, 1.0f);
+        Vector2 sP = Canvas::GetCurrentScene()->GetCamera()->WorldToScreenNDCPoint(Vector3(sP4.xyz()));
 
-        float d = glm::distance(sP, sOrigin);
+        float d = Vector2::Distance(sP, sOrigin);
         if (d < d0)
         {
             *p1 = *p0;

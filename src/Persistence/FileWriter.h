@@ -29,7 +29,7 @@ public:
     static void WriteInt(int v, std::ostream &f);
     static void WriteFloat(float v, std::ostream &f);
     static void WritePointer(void *v, std::ostream &f);
-    static void WriteVector2(const glm::vec2 &v, std::ostream &f);
+    static void WriteVector2(const Vector2 &v, std::ostream &f);
     static void WriteVector3(const Vector3 &v, std::ostream &f);
     static void WriteVector4(const Vector4 &v, std::ostream &f);
     static void WriteQuaternion(const Quaternion &q, std::ostream &f);

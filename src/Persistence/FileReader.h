@@ -48,7 +48,7 @@ public:
     static bool ReadOBJ(const std::string& filepath,
                         std::vector<Vector3> *vertexPos,
                         std::vector<Vector3> *vertexNormals,
-                        std::vector<glm::vec2> *vertexUvs,
+                        std::vector<Vector2> *vertexUvs,
                         bool *isTriangles);
     //
 
@@ -71,7 +71,7 @@ public:
     static bool ReadBool(std::istream &f);
     static int ReadInt(std::istream &f);
     static float ReadFloat(std::istream &f);
-    static glm::vec2 ReadVec2(std::istream &f);
+    static Vector2 ReadVec2(std::istream &f);
     static Vector3 ReadVec3(std::istream &f);
     static Vector4 ReadVec4(std::istream &f);
     static Quaternion ReadQuat(std::istream &f);

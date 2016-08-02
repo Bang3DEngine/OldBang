@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "Rect.h"
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "IToString.h"
@@ -68,7 +69,7 @@ public:
     void SetInt(int value, const std::vector<XMLProperty>& properties = {});
     void SetString(const std::string &value, const std::vector<XMLProperty>& properties = {});
     void SetFloat(float value, const std::vector<XMLProperty>& properties = {});
-    void SetVector2(const glm::vec2 &value, const std::vector<XMLProperty>& properties = {});
+    void SetVector2(const Vector2 &value, const std::vector<XMLProperty>& properties = {});
     void SetVector3(const Vector3 &value, const std::vector<XMLProperty>& properties = {});
     void SetVector4(const Vector4 &value, const std::vector<XMLProperty>& properties = {});
     void SetQuaternion(const Quaternion &value, const std::vector<XMLProperty>& properties = {});
@@ -105,7 +106,7 @@ public:
     float GetFloat() const;
     std::string GetFilepath() const;
     std::string GetString() const;
-    glm::vec2 GetVector2() const;
+    Vector2 GetVector2() const;
     Vector3 GetVector3() const;
     Vector4 GetVector4() const;
     Quaternion GetQuaternion() const;

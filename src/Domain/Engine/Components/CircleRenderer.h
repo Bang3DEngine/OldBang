@@ -32,16 +32,16 @@ private:
 
     // Used by EditorRotateAxis mainly
     float GetDistanceInScreenSpace(
-            const glm::vec2 &sOrigin,
+            const Vector2 &sOrigin,
             int pointIndex,
             const Matrix4 &modelViewProjMatrix) const;
 
     // Used by EditorRotateAxis mainly
     void GetTwoClosestPointsInScreenSpace(
-            const glm::vec2 &sOrigin,
+            const Vector2 &sOrigin,
             const Matrix4 &modelViewProjMatrix,
-            glm::vec2 *p0, int *i0,
-            glm::vec2 *p1, int *i1 ) const;
+            Vector2 *p0, int *i0,
+            Vector2 *p1, int *i1 ) const;
 
 public:
     CircleRenderer();

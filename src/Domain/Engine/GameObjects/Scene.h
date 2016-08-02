@@ -59,8 +59,8 @@ public:
                                 bool depthTest = true) {}
 
     virtual void DebugDrawScreenLine (
-                                const glm::vec2 &origin,
-                                const glm::vec2 &destiny,
+                                const Vector2 &origin,
+                                const Vector2 &destiny,
                                 float lineWidth = 1.0f,
                                 float secsTime = 1.0f,
                                 bool depthTest = true) {}

@@ -108,7 +108,7 @@ bool Camera::GetAutoUpdateAspectRatio() const
     return m_autoUpdateAspectRatio;
 }
 
-glm::vec2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
+Vector2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
 {
     Matrix4 p, v;
     GetProjectionMatrix(&p);
@@ -116,7 +116,7 @@ glm::vec2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
     Vector4 v4 = p * v * Vector4(position, 1);
     v4 /= v4.w;
 
-    return v4.xy();
+    return Vector2(v4.xy());
 }
 
 const std::string Camera::ToString() const

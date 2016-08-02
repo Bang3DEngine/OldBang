@@ -109,7 +109,7 @@ void Input::HandleMouseWrapping()
         if (wrapped)
         {
             QPoint newCoords = canvas->mapFromGlobal(cursor.pos());
-            m_mouseCoords = glm::vec2(newCoords.x(), newCoords.y());
+            m_mouseCoords = Vector2(newCoords.x(), newCoords.y());
             m_lastMouseCoords = m_mouseCoords;
         }
     }
@@ -132,7 +132,7 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
         return;
     }
 
-    m_mouseCoords = glm::vec2(event->x(), event->y());
+    m_mouseCoords = Vector2(event->x(), event->y());
 
     if (m_lockMouseMovement)
     {
@@ -283,9 +283,9 @@ float Input::GetMouseAxisY()
     return Input::GetMouseDeltaY() / Canvas::GetHeight();
 }
 
-glm::vec2 Input::GetMouseAxis()
+Vector2 Input::GetMouseAxis()
 {
-    return glm::vec2(Input::GetMouseAxisX(), Input::GetMouseAxisY());
+    return Vector2(Input::GetMouseAxisX(), Input::GetMouseAxisY());
 }
 
 float Input::GetMouseDeltaX()
@@ -300,9 +300,9 @@ float Input::GetMouseDeltaY()
     return inp->m_mouseCoords.y - inp->m_lastMouseCoords.y;
 }
 
-glm::vec2 Input::GetMouseDelta()
+Vector2 Input::GetMouseDelta()
 {
-    return glm::vec2(Input::GetMouseDeltaX(), Input::GetMouseDeltaY());
+    return Vector2(Input::GetMouseDeltaX(), Input::GetMouseDeltaY());
 }
 
 void Input::LockMouseMovement(bool lock)
@@ -317,7 +317,7 @@ bool Input::IsLockMouseMovement()
     return inp->m_lockMouseMovement;
 }
 
-glm::vec2 Input::GetMouseCoords()
+Vector2 Input::GetMouseCoords()
 {
     Input *inp = Input::GetInstance();
     return inp->m_mouseCoords;

@@ -1,14 +1,17 @@
 #include "Vector3.h"
+
+#include "Vector2.h"
 #include "Quaternion.h"
 
 const Vector3 Vector3::up      = Vector3( 0, 1,  0);
 const Vector3 Vector3::down    = Vector3( 0,-1,  0);
 const Vector3 Vector3::right   = Vector3( 1, 0,  0);
 const Vector3 Vector3::left    = Vector3(-1, 0,  0);
-const Vector3 Vector3::forward = Vector3( 0, 0,  -1);
+const Vector3 Vector3::forward = Vector3( 0, 0, -1);
 const Vector3 Vector3::back    = Vector3( 0, 0,  1);
 const Vector3 Vector3::zero    = Vector3( 0, 0,  0);
 const Vector3 Vector3::one     = Vector3( 1, 1,  1);
+//*/
 
 Vector3::Vector3() : glm::vec3(0.0f)
 {
@@ -20,12 +23,14 @@ Vector3::Vector3(const glm::vec3 &v) : glm::vec3(v)
 
 Vector3::Vector3(float a) : glm::vec3(a)
 {
-
 }
 
 Vector3::Vector3(float x, float y, float z) : glm::vec3(x,y,z)
 {
+}
 
+Vector3::Vector3(const Vector2 &v, float z) : Vector3(v.x, v.y, z)
+{
 }
 
 float Vector3::Length() const
@@ -107,6 +112,11 @@ float Vector3::Dot(const Vector3 &v1, const Vector3 &v2)
 float Vector3::Distance(const Vector3 &v1, const Vector3 &v2)
 {
     return (v1 - v2).Length();
+}
+
+Vector2 Vector3::xy() const
+{
+    return Vector2(x, y);
 }
 
 
@@ -221,3 +231,52 @@ Vector3 operator-(const Vector3 &v1, const Vector3 &v2)
 {
     return Vector3(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
 }
+
+
+Vector3 operator-(const Vector3 &v, float a)
+{
+    return Vector3(v.x - a, v.y - a, v.z - a);
+}
+
+
+Vector3 operator-(float a, const Vector3 &v)
+{
+    return Vector3(a - v.x, a - v.y, a - v.z);
+}
+
+
+Vector3 &operator+=(Vector3 &lhs, float a)
+{
+    lhs.x += a;
+    lhs.y += a;
+    lhs.z += a;
+    return lhs;
+}
+
+
+Vector3 &operator-=(Vector3 &lhs, float a)
+{
+    lhs.x -= a;
+    lhs.y -= a;
+    lhs.z -= a;
+    return lhs;
+}
+
+
+Vector3 &operator*=(Vector3 &lhs, float a)
+{
+    lhs.x *= a;
+    lhs.y *= a;
+    lhs.z *= a;
+    return lhs;
+}
+
+
+Vector3 &operator/=(Vector3 &lhs, float a)
+{
+    lhs.x /= a;
+    lhs.y /= a;
+    lhs.z /= a;
+    return lhs;
+}
+

@@ -24,7 +24,7 @@ void EditorDebugGameObject::DrawLine(const Vector3 &origin,
     m_debugLines.push_back(DebugLine(slr, livingTimeSecs));
 }
 
-void EditorDebugGameObject::DrawLineScreen(const glm::vec2 &origin, const glm::vec2 &destiny,
+void EditorDebugGameObject::DrawLineScreen(const Vector2 &origin, const Vector2 &destiny,
                                            const Vector3 &color, float lineWidth,
                                            float livingTimeSecs, bool depthTest)
 {

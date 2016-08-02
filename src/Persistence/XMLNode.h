@@ -48,7 +48,7 @@ public:
                   const std::vector<XMLProperty>& properties = {});
     void SetString(const std::string &attributeName, const std::string &value,
                    const std::vector<XMLProperty>& properties = {});
-    void SetVector2(const std::string &attributeName, const glm::vec2 &value,
+    void SetVector2(const std::string &attributeName, const Vector2 &value,
                     const std::vector<XMLProperty>& properties = {});
     void SetVector3(const std::string &attributeName, const Vector3 &value,
                     const std::vector<XMLProperty>& properties = {});
@@ -75,7 +75,7 @@ public:
     float GetFloat(const std::string& attributeName) const;
     std::string GetFilepath(const std::string& attributeName) const;
     std::string GetString(const std::string& attributeName) const;
-    glm::vec2 GetVector2(const std::string& attributeName) const;
+    Vector2 GetVector2(const std::string& attributeName) const;
     Vector3 GetVector3(const std::string& attributeName) const;
     Vector4 GetVector4(const std::string& attributeName) const;
     Quaternion GetQuaternion(const std::string& attributeName) const;

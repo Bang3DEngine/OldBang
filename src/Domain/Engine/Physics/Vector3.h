@@ -3,6 +3,7 @@
 
 #include "glm/glm.hpp"
 
+class Vector2;
 class Quaternion;
 class Vector3 : public glm::vec3
 {
@@ -11,6 +12,7 @@ public:
     explicit Vector3(const glm::vec3 &v);
     Vector3(float a);
     Vector3(float x, float y, float z);
+    Vector3(const Vector2 &v, float z);
 
     /**
      * @brief Returns the length/magnitude of this Vector
@@ -79,12 +81,18 @@ public:
     const static Vector3 back;
     const static Vector3 zero;
     const static Vector3 one;
+
+    // SWIZZLING
+    Vector2 xy() const;
+    //
 };
 
 Vector3 operator+(float a, const Vector3& v);
 Vector3 operator+(const Vector3& v, float a);
 Vector3 operator+(const Vector3& v1, const Vector3& v2);
 
+Vector3 operator-(const Vector3& v, float a);
+Vector3 operator-(float a, const Vector3& v);
 Vector3 operator-(const Vector3& v1, const Vector3& v2);
 Vector3 operator-(const Vector3& v);
 
@@ -101,5 +109,9 @@ Vector3& operator+=(Vector3& lhs, const Vector3& rhs);
 Vector3& operator-=(Vector3& lhs, const Vector3& rhs);
 Vector3& operator*=(Vector3& lhs, const Vector3& rhs);
 Vector3& operator/=(Vector3& lhs, const Vector3& rhs);
+Vector3& operator+=(Vector3& lhs, float a);
+Vector3& operator-=(Vector3& lhs, float a);
+Vector3& operator*=(Vector3& lhs, float a);
+Vector3& operator/=(Vector3& lhs, float a);
 
 #endif // VECTOR3_H

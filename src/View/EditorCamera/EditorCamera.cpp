@@ -28,7 +28,7 @@ void EditorCamera::AdjustSpeeds()
     m_mouseRotDegreesPerPixel.x = 180.0f / cw;
     m_mouseRotDegreesPerPixel.y = 180.0f / ch;
 
-    m_mousePanPerPixel = glm::vec2(0.1f, 0.1f);
+    m_mousePanPerPixel = Vector2(0.1f, 0.1f);
     if (m_currentFocus)
     {
         Transform *ft = m_currentFocus->transform;
@@ -47,7 +47,7 @@ void EditorCamera::AdjustSpeeds()
 
 void EditorCamera::UpdateRotationVariables()
 {
-    m_mouseRotDegreesAccum = glm::vec2(0.0f);
+    m_mouseRotDegreesAccum = Vector2(0.0f);
     m_startingRotation =transform->GetLocalRotation();
 }
 
@@ -68,7 +68,7 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 {
     if (Input::GetMouseButton(Input::MouseButton::MRight))
     {
-        glm::vec2 delta = -Input::GetMouseDelta() * m_mouseRotDegreesPerPixel;
+        Vector2 delta = -Input::GetMouseDelta() * m_mouseRotDegreesPerPixel;
         m_mouseRotDegreesAccum += delta;
 
         transform->SetLocalRotation(m_startingRotation);
@@ -92,7 +92,7 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
 {
     if (Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        glm::vec2 delta = -Input::GetMouseDelta() * m_mousePanPerPixel;
+        Vector2 delta = -Input::GetMouseDelta() * m_mousePanPerPixel;
         delta.y *= -1.0f;
 
         transform->Translate(m_camt->GetRight() * delta.x + m_camt->GetUp() * delta.y);

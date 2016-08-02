@@ -92,7 +92,7 @@ bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn)
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec2 (const std::string &name, const glm::vec2& v, bool warn) const
+bool ShaderProgram::SetUniformVec2 (const std::string &name, const Vector2& v, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)

@@ -8,6 +8,7 @@
 #include "glm/gtx/transform.hpp"
 
 #include "Rect.h"
+#include "Vector2.h"
 #include "Component.h"
 #include "Transform.h"
 
@@ -65,7 +66,7 @@ public:
      * @brief Converts a point from world coods to Screen NDC.
      *        NDC: Normalized Device Coordinates [(-1,-1) -> (1,1)]
     **/
-    glm::vec2 WorldToScreenNDCPoint(const Vector3 &position);
+    Vector2 WorldToScreenNDCPoint(const Vector3 &position);
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override { return "Camera"; }

@@ -1,18 +1,18 @@
 #include "Vector4.h"
 
-#include "Vector4.h"
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Matrix4.h"
 #include "Quaternion.h"
 
-const Vector4 Vector4::up      = Vector4( Vector3::up,      0);
-const Vector4 Vector4::down    = Vector4( Vector3::down,    0);
-const Vector4 Vector4::right   = Vector4( Vector3::right,   0);
-const Vector4 Vector4::left    = Vector4( Vector3::left,    0);
-const Vector4 Vector4::forward = Vector4( Vector3::forward, 0);
-const Vector4 Vector4::back    = Vector4( Vector3::back,    1);
-const Vector4 Vector4::zero    = Vector4( Vector3::zero,    0);
-const Vector4 Vector4::one     = Vector4( Vector3::one,     1);
+const Vector4 Vector4::up      = Vector4( 0,  1,  0, 0);
+const Vector4 Vector4::down    = Vector4( 0, -1,  0, 0);
+const Vector4 Vector4::right   = Vector4( 1,  0,  0, 0);
+const Vector4 Vector4::left    = Vector4(-1,  0,  0, 0);
+const Vector4 Vector4::forward = Vector4( 0,  0, -1, 0);
+const Vector4 Vector4::back    = Vector4( 0,  0,  1, 0);
+const Vector4 Vector4::zero    = Vector4( 0,  0,  0, 0);
+const Vector4 Vector4::one     = Vector4( 1,  1,  1, 1);
 
 Vector4::Vector4() : glm::vec4(0.0f)
 {
@@ -31,6 +31,10 @@ Vector4::Vector4(float x, float y, float z, float w) : glm::vec4(x,y,z,w)
 }
 
 Vector4::Vector4(const Vector3 &v, float w) : Vector4(v.x, v.y, v.z, w)
+{
+}
+
+Vector4::Vector4(const Vector2 &v, float z, float w) : Vector4(v.x, v.y, z, w)
 {
 }
 
@@ -65,7 +69,7 @@ Vector4 Vector4::ToRadians() const
     return Vector4(glm::radians(glm::vec4(*this)));
 }
 
-glm::vec4 Vector4::ToGlmvec4() const
+glm::vec4 Vector4::ToGlmVec4() const
 {
     return glm::vec4(x,y,z,w);
 }
@@ -100,6 +104,16 @@ float Vector4::Dot(const Vector4 &v1, const Vector4 &v2)
 float Vector4::Distance(const Vector4 &v1, const Vector4 &v2)
 {
     return (v1 - v2).Length();
+}
+
+Vector2 Vector4::xy() const
+{
+    return Vector2(x, y);
+}
+
+Vector3 Vector4::xyz() const
+{
+    return Vector3(x, y, z);
 }
 
 
@@ -225,4 +239,55 @@ Vector4 operator-(const Vector4 &v1, const Vector4 &v2)
 Vector4 operator*(const Matrix4 &m, const Vector4 &v)
 {
     return Vector4(glm::mat4(m) * glm::vec4(v));
+}
+
+
+Vector4 operator-(float a, const Vector4 &v)
+{
+    return Vector4(a - v.x, a - v.y, a - v.z, a - v.w);
+}
+
+
+Vector4 operator-(const Vector4 &v, float a)
+{
+    return Vector4(v.x - a, v.y - a, v.z - a, v.w - a);
+}
+
+Vector4 &operator+=(Vector4 &lhs, float a)
+{
+    lhs.x += a;
+    lhs.y += a;
+    lhs.z += a;
+    lhs.w += a;
+    return lhs;
+}
+
+
+Vector4 &operator-=(Vector4 &lhs, float a)
+{
+    lhs.x -= a;
+    lhs.y -= a;
+    lhs.z -= a;
+    lhs.w -= a;
+    return lhs;
+}
+
+
+Vector4 &operator*=(Vector4 &lhs, float a)
+{
+    lhs.x *= a;
+    lhs.y *= a;
+    lhs.z *= a;
+    lhs.w *= a;
+    return lhs;
+}
+
+
+Vector4 &operator/=(Vector4 &lhs, float a)
+{
+    lhs.x /= a;
+    lhs.y /= a;
+    lhs.z /= a;
+    lhs.w /= a;
+    return lhs;
 }

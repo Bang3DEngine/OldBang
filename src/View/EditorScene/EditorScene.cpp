@@ -71,7 +71,7 @@ void EditorScene::DebugDrawLine(const Vector3 &origin,
     m_debugGameObject->DrawLine(origin, destiny, lineWidth, secsTime, depthTest);
 }
 
-void EditorScene::DebugDrawScreenLine(const glm::vec2 &origin, const glm::vec2 &destiny,
+void EditorScene::DebugDrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
                                       float lineWidth, float secsTime, bool depthTest)
 {
     m_debugGameObject->DrawLineScreen(origin, destiny, lineWidth, secsTime, depthTest);
