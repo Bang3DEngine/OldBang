@@ -40,12 +40,11 @@ private:
 
 protected:
     GLint m_internalType = GL_UNSIGNED_BYTE;
-    GLint m_internalFormat = GL_RGB;
-    GLint m_format = GL_RGB;
+    GLint m_internalFormat = GL_RGBA;
+    GLint m_format = GL_RGBA;
 
     int m_width = 0;
     int m_height = 0;
-    int m_numComponents = 0;
 
     FilterMode m_filterMode = FilterMode::Nearest;
     WrapMode m_wrapMode = WrapMode::Repeat;
@@ -72,7 +71,6 @@ public:
 
     int GetWidth() const;
     int GetHeight() const;
-    int GetNumComponents() const;
     GLint GetGLInternalType() const;
     GLint GetGLInternalFormat() const;
     GLint GetGLFormat() const;

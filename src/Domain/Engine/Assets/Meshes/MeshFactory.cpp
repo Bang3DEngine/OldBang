@@ -12,29 +12,29 @@
 
 Mesh* MeshFactory::GetPlane()
 {
-    return AssetsManager::GetAsset<Mesh>("Assets/Engine/Meshes/Plane.bmesh");
+    return AssetsManager::LoadAsset<Mesh>("Assets/Engine/Meshes/Plane.bmesh");
 }
 
 Mesh* MeshFactory::GetCube()
 {
-    return AssetsManager::GetAsset<Mesh>("Assets/Engine/Meshes/Cube.bmesh");
+    return AssetsManager::LoadAsset<Mesh>("Assets/Engine/Meshes/Cube.bmesh");
 }
 
 Mesh *MeshFactory::GetSphere()
 {
-    return AssetsManager::GetAsset<Mesh>("Assets/Engine/Meshes/Sphere.bmesh");
+    return AssetsManager::LoadAsset<Mesh>("Assets/Engine/Meshes/Sphere.bmesh");
 }
 
 Mesh *MeshFactory::GetCone()
 {
-    return AssetsManager::GetAsset<Mesh>("Assets/Engine/Meshes/Cone.bmesh");
+    return AssetsManager::LoadAsset<Mesh>("Assets/Engine/Meshes/Cone.bmesh");
 }
 
 GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const std::string &name)
 {
     GameObject *go = new GameObject(name);
 
-    Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/D2G_Default.bmat");
+    Material *mat = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/D2G_Default.bmat");
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
     r->SetRenderMode(MeshRenderer::RenderMode::Triangles);
@@ -50,7 +50,7 @@ EditorGameObject* MeshFactory::CreatePrimitiveEditorGameObject(Mesh *m, const st
 {
     EditorGameObject *go = new EditorGameObject(name);
 
-    Material *mat = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/D2G_Default.bmat");
+    Material *mat = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/D2G_Default.bmat");
 
     MeshRenderer *r = go->AddComponent<MeshRenderer>();
     r->SetRenderMode(MeshRenderer::RenderMode::Triangles);

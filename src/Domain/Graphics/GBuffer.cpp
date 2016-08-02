@@ -14,7 +14,7 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateColorAttachment(Attachment::Color,         GL_RGBA,    GL_RGBA, texInternalType);
     CreateDepthBufferAttachment();
 
-    m_renderGBufferToScreenMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/RenderGBufferToScreen.bmat");
+    m_renderGBufferToScreenMaterial = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/RenderGBufferToScreen.bmat");
     m_planeMeshToRenderEntireScreen = MeshFactory::GetPlane();
 }
 

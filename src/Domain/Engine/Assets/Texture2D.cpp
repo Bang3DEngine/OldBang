@@ -5,9 +5,9 @@ Texture2D::Texture2D() : Texture(TextureType::Texture2D)
 {
 }
 
-Texture2D::Texture2D(const std::string &filepath) : Texture2D()
+Texture2D::Texture2D(const std::string &imageFilepath) : Texture2D()
 {
-    LoadFromFile(filepath);
+    LoadFromFile(imageFilepath);
 }
 
 Texture2D::~Texture2D()
@@ -19,25 +19,23 @@ void Texture2D::LoadFromFile(const std::string &imageFilepath)
     Bind();
     this->m_filepath = imageFilepath;
     unsigned char *loadedData = FileReader::ReadImage(imageFilepath,
-                                                      &m_width, &m_height,
-                                                      &m_numComponents);
-    Fill(loadedData, m_width, m_height, m_numComponents);
+                                                      &m_width, &m_height);
+    Fill(loadedData, m_width, m_height);
     UnBind();
 }
 
 void Texture2D::CreateEmpty(int width, int height)
 {
-    Fill(nullptr, width, height, m_numComponents);
+    Fill(nullptr, width, height);
 }
 
 void Texture2D::Resize(int width, int height)
 {
-    Fill(m_data, width, height, m_numComponents);
+    Fill(m_data, width, height);
 }
 
 void Texture2D::Fill(unsigned char *newData,
-                     int width, int height,
-                     int numComponents)
+                     int width, int height)
 {
     if (this->m_data  && this->m_data != newData)
         delete this->m_data;
@@ -45,7 +43,6 @@ void Texture2D::Fill(unsigned char *newData,
     this->m_data = newData;
     this->m_width = width;
     this->m_height = height;
-    this->m_numComponents = numComponents;
 
     Bind();
     glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0, m_format, m_internalType, m_data);
@@ -56,6 +53,16 @@ void Texture2D::Fill(unsigned char *newData,
 std::string Texture2D::GetImageRelativeFilepath() const
 {
     return m_filepath;
+}
+
+void Texture2D::SetAlphaCuttoff(float alphaCuttoff)
+{
+    m_alphaCuttoff = alphaCuttoff;
+}
+
+float Texture2D::GetAlphaCuttoff() const
+{
+    return m_alphaCuttoff;
 }
 
 void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)

@@ -32,7 +32,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     // Assign id's
     int id = 0;
     m_gameObjectToId.clear(); m_idToGameObject.clear();
-    std::list<GameObject*> gameObjects = scene->GetChildrenRecursivelyIncludingEditorGameObjects();
+    std::list<GameObject*> gameObjects = scene->GetChildrenRecursivelyEditor();
     for (GameObject *go : gameObjects)
     {
         m_gameObjectToId[go] = id;
@@ -40,10 +40,12 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         ++id;
     }
 
+    ShaderProgram *sp = m_material->GetShaderProgram();
     for (GameObject *go : gameObjects)
     {
         if (go->IsEnabled())
         {
+            sp->SetUniformVec3("selectionColor", GetSelectionColor(go));
             go->_OnRender();
         }
     }
@@ -52,6 +54,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     {
         if (go->IsEnabled())
         {
+            sp->SetUniformVec3("selectionColor", GetSelectionColor(go));
             go->_OnDrawGizmos();
         }
     }
@@ -61,6 +64,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     {
         if (go->IsEnabled())
         {
+            sp->SetUniformVec3("selectionColor", GetSelectionColor(go));
             go->_OnDrawGizmosNoDepth();
         }
     }
@@ -81,6 +85,7 @@ void SelectionFramebuffer::ProcessSelection()
     {
         mouseOverGO = m_idToGameObject[id];
     }
+    //Logger_Log(mouseOverGO);
 
     if (m_lastMouseOverGO  && m_lastMouseOverGO != mouseOverGO)
     {
@@ -120,17 +125,17 @@ void SelectionFramebuffer::ProcessSelection()
     }
 }
 
-Vector3 SelectionFramebuffer::GetSelectionColor(GameObject *go)
+Vector3 SelectionFramebuffer::GetSelectionColor(GameObject *go) const
 {
     return MapIdToColor(m_gameObjectToId[go]);
 }
 
-Material *SelectionFramebuffer::GetSelectionMaterial()
+Material *SelectionFramebuffer::GetSelectionMaterial() const
 {
     return m_material;
 }
 
-bool SelectionFramebuffer::IsPassing()
+bool SelectionFramebuffer::IsPassing() const
 {
     return m_isPassing;
 }

@@ -164,7 +164,7 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const Matrix4& m, b
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformTexture(const std::string &name, Texture *texture, bool warn) const
+bool ShaderProgram::SetUniformTexture(const std::string &name, const Texture *texture, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -219,7 +219,7 @@ void ShaderProgram::Bind() const
     for (auto it = m_namesToTextures.begin(); it != m_namesToTextures.end(); ++it)
     {
         std::string texName = it->first;
-        Texture *tex = it->second;
+        const Texture *tex = it->second;
         if (tex)
         {
             int location = GetUniformLocation(texName);

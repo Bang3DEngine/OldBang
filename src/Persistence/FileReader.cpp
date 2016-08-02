@@ -21,16 +21,15 @@ void *FileReader::lastIstreamDir = nullptr;
 
 
 unsigned char* FileReader::ReadImage(const std::string& filepath,
-                                     int *width, int *height, int *components)
+                                     int *width, int *height)
 {
+    int comps;
     unsigned char* data = stbi_load(filepath.c_str(),
-                                    width, height,
-                                    components, 0);
+                                    width, height, &comps, 4);
     if (!data)
     {
         Logger_Error("Error loading the texture '" << filepath <<
                      "', couldn't open/read the file.");
-        return data;
     }
     return data;
 }

@@ -34,11 +34,13 @@ private:
      */
     GameObject *m_lastMouseOverGO = nullptr;
 
-    std::map<GameObject*, long> m_gameObjectToId;
-    std::map<long, GameObject*> m_idToGameObject;
+    mutable std::map<GameObject*, long> m_gameObjectToId;
+    mutable std::map<long, GameObject*> m_idToGameObject;
 
     static Vector3 MapIdToColor(long id);
     static long MapColorToId(const Vector3 &charColor);
+
+    Vector3 GetSelectionColor(GameObject *go) const;
 
 public:
     SelectionFramebuffer(int width, int height);
@@ -47,10 +49,8 @@ public:
     void RenderSelectionBuffer(const Scene *scene);
     void ProcessSelection();
 
-    Vector3 GetSelectionColor(GameObject *go);
-
-    Material* GetSelectionMaterial();
-    bool IsPassing();
+    Material* GetSelectionMaterial() const;
+    bool IsPassing() const;
 };
 
 #endif // SELECTIONFRAMEBUFFER_H

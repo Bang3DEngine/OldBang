@@ -33,13 +33,6 @@ void main()
 
     // ONLY FOR EDITOR
     B_materialBools_fout_gin.w = B_gameObject_isSelected;
-    /*
-    if(B_gameObject_isSelected > 0.5f)
-    {
-        B_materialBools_fout_gin.w = B_gameObject_isSelected;
-        B_vout.diffuseColor  = vec3(1,1,0);
-    }
-    */
     //
 
     B_DRAW_TO_GBUFFER_FS_END_MAIN();

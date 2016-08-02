@@ -20,7 +20,7 @@ Texture2DAssetFileInspectable::Texture2DAssetFileInspectable
 void Texture2DAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     // Update live instances currently being used
-    Texture2D *currentTex = AssetsManager::GetCachedAsset<Texture2D>(m_fileTex.GetPath());
+    Texture2D *currentTex = AssetsManager::LoadAsset<Texture2D>(m_fileTex.GetPath());
     if (currentTex) // Now we update the asset file.
     {
         currentTex->OnInspectorXMLChanged(xmlInfo);

@@ -1,8 +1,11 @@
 #include "DirectionalLight.h"
 
+#include "Transform.h"
+#include "GameObject.h"
+
 DirectionalLight::DirectionalLight() : Light()
 {
-    m_lightMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/PR_DirectionalLight.bmat");
+    m_lightMaterial = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_DirectionalLight.bmat");
 
     #ifdef BANG_EDITOR
     // m_inspectorComponentInfo.AddSlotInfos();
@@ -41,6 +44,15 @@ void DirectionalLight::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 void DirectionalLight::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);
+}
+
+void DirectionalLight::OnDrawGizmos()
+{
+    Light::OnDrawGizmos();
+
+    Gizmos::SetColor(glm::vec4(0));
+    Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("Assets/Engine/Textures/DirectionalLightIcon.btex2d");
+    Gizmos::DrawIcon(tex, gameObject->transform->GetPosition(), Vector3::one * 15.0f);
 }
 #endif
 

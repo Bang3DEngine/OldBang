@@ -77,11 +77,6 @@ int Texture::GetHeight() const
     return m_height;
 }
 
-int Texture::GetNumComponents() const
-{
-    return m_numComponents;
-}
-
 GLint Texture::GetGLInternalType() const
 {
     return m_internalType;

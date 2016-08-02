@@ -15,7 +15,7 @@ MaterialAssetFileInspectable::MaterialAssetFileInspectable
 void MaterialAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     // Update live instances currently being used
-    Material *currentMat = AssetsManager::GetCachedAsset<Material>(m_materialAssetFile.GetPath());
+    Material *currentMat = AssetsManager::LoadAsset<Material>(m_materialAssetFile.GetPath());
     if (currentMat) // Now we update the asset file.
     {
         currentMat->OnInspectorXMLChanged(xmlInfo);

@@ -107,7 +107,7 @@ void MeshRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void MeshRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Renderer::ReadXMLInfo(xmlInfo);
-    SetMesh( AssetsManager::GetAsset<Mesh>( xmlInfo->GetFilepath("MeshAssetFilepath") ) );
+    SetMesh( AssetsManager::LoadAsset<Mesh>( xmlInfo->GetFilepath("MeshAssetFilepath") ) );
 }
 
 void MeshRenderer::FillXMLInfo(XMLNode *xmlInfo) const

@@ -3,6 +3,7 @@
 
 #include "GBuffer.h"
 #include "Component.h"
+#include "Gizmos.h"
 
 #ifdef BANG_EDITOR
 #include "InspectorWidget.h"

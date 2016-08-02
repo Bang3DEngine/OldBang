@@ -111,7 +111,7 @@ public:
     std::list<GameObject*> GetChildrenRecursively() const;
 
     #ifdef BANG_EDITOR
-    std::list<GameObject*> GetChildrenRecursivelyIncludingEditorGameObjects() const;
+    std::list<GameObject*> GetChildrenRecursivelyEditor() const;
     #endif
 
 

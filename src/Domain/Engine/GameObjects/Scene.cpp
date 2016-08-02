@@ -7,7 +7,7 @@
 Scene::Scene() : GameObject("Scene")
 {
     m_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
-    m_materialAfterLighting = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/PR_AfterLighting.bmat");
+    m_materialAfterLighting = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_AfterLighting.bmat");
 }
 
 void Scene::_OnStart()

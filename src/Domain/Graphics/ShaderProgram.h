@@ -22,7 +22,7 @@ private:
     Shader *m_vshader;
     Shader *m_fshader;
 
-    mutable std::map<std::string, Texture*> m_namesToTextures;
+    mutable std::map<std::string, const Texture*> m_namesToTextures;
 
 public:
     ShaderProgram();
@@ -43,7 +43,7 @@ public:
     bool SetUniformVec3    (const std::string &name, const Vector3& v,       bool warn = true) const;
     bool SetUniformVec4    (const std::string &name, const glm::vec4& v,     bool warn = true) const;
     bool SetUniformMat4    (const std::string &name, const Matrix4& m,       bool warn = true) const;
-    bool SetUniformTexture (const std::string &name, Texture *texture,       bool warn = true) const;
+    bool SetUniformTexture (const std::string &name, const Texture *texture,       bool warn = true) const;
 
     Shader* GetVertexShader() const;
     Shader* GetFragmentShader() const;

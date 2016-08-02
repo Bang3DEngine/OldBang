@@ -18,11 +18,11 @@
 class AssetsManager;
 class Asset : public IToString
              ,public IFileable
-              #ifdef BANG_EDITOR
+             #ifdef BANG_EDITOR
              ,public IInspectable
-              #endif
+             #endif
 {
-    friend class AssetsManager;
+friend class AssetsManager;
 
 public:
     const static std::string GetFileExtensionStatic() { return "basset"; }

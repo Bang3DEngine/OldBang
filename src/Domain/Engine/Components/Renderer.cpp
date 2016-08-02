@@ -273,13 +273,12 @@ void Renderer::RenderSelectionFramebuffer(SelectionFramebuffer *sfb) const
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
-    sp->SetUniformVec3("selectionColor", sfb->GetSelectionColor(gameObject));
-
-    //Logger_Log("RenderSelectionFramebuffer "  << sfb->GetSelectionColor(gameObject));
 
     ActivateGLStatesBeforeRendering();
     if (ActivateGLStatesBeforeRenderingForSelection)
+    {
         ActivateGLStatesBeforeRenderingForSelection();
+    }
 
     selMaterial->Bind();
 
@@ -311,7 +310,7 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
     std::string materialFilepath = xmlInfo->GetFilepath("Material");
     if (materialFilepath != "")
     {
-        SetMaterial( AssetsManager::GetAsset<Material>(materialFilepath) );
+        SetMaterial( AssetsManager::LoadAsset<Material>(materialFilepath) );
     }
     else
     {

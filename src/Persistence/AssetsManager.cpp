@@ -2,20 +2,22 @@
 
 std::map<std::string, Asset*> AssetsManager::m_idToAssetPointer;
 
-bool AssetsManager::ExistsAssetInCache(const std::string &id)
+std::string AssetsManager::FormatFilepath(const std::string &filepath)
 {
-    std::string f = Persistence::ProjectRootAbsoluteToRelative(id);
+    return Persistence::ProjectRootAbsoluteToRelative(filepath);;
+}
+
+bool AssetsManager::IsAssetLoaded(const std::string &filepath)
+{
+    std::string f = AssetsManager::FormatFilepath(filepath);
     return (m_idToAssetPointer.find(f) != m_idToAssetPointer.end());
 }
 
-void AssetsManager::SaveRuntimeAsset(const std::string &uniqueId,
-                                     Asset *pointerToAsset)
+void AssetsManager::SaveAsset(const std::string &filepath, Asset *pointerToAsset)
 {
-    SaveAsset(uniqueId, pointerToAsset);
-}
-
-void AssetsManager::SaveAsset(const std::string &filepath,
-                              Asset *pointerToAsset) {
-    std::string f = Persistence::ProjectRootAbsoluteToRelative(filepath);
-    m_idToAssetPointer[filepath] = pointerToAsset;
+    if (filepath != "")
+    {
+        std::string f = AssetsManager::FormatFilepath(filepath);
+        m_idToAssetPointer[f] = pointerToAsset;
+    }
 }

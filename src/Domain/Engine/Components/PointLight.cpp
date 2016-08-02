@@ -2,7 +2,7 @@
 
 PointLight::PointLight() : Light()
 {
-    m_lightMaterial = AssetsManager::GetAsset<Material>("Assets/Engine/Materials/PR_PointLight.bmat");
+    m_lightMaterial = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_PointLight.bmat");
 }
 
 

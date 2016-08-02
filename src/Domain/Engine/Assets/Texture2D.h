@@ -18,9 +18,10 @@ class Texture2D : public Texture, public Asset
 {
 
 private:
-    //NON COPYABLE:
-    Texture2D(const Texture2D &t) : Texture2D() {}
 
+    float m_alphaCuttoff = 0.1f;
+
+    Texture2D(const Texture2D &t) : Texture2D() {}
 
 public:
     const static std::string GetFileExtensionStatic() { return "btex2d"; }
@@ -32,15 +33,18 @@ public:
 
 public:
     Texture2D();
-    Texture2D(const std::string &m_filepath);
+    Texture2D(const std::string &imageFilepath);
     virtual ~Texture2D();
 
-    void LoadFromFile(const std::string &m_filepath);
-    void CreateEmpty(int m_width, int m_height) override;
-    void Resize(int m_width, int m_height) override;
-    void Fill(unsigned char *newData, int m_width, int m_height, int m_numComponents);
+    void LoadFromFile(const std::string &imageFilepath);
+    void CreateEmpty(int width, int height) override;
+    void Resize(int width, int height) override;
+    void Fill(unsigned char *newData, int width, int height);
 
     std::string GetImageRelativeFilepath() const;
+
+    void SetAlphaCuttoff(float alphaCuttoff);
+    float GetAlphaCuttoff() const;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

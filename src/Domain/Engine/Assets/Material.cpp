@@ -45,7 +45,7 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
     if(numTextures == 1)
     {
         std::string texAssetFilepath = xmlInfo->GetString("Texture1");
-        Texture2D *texture = AssetsManager::GetAsset<Texture2D>(texAssetFilepath);
+        Texture2D *texture = AssetsManager::LoadAsset<Texture2D>(texAssetFilepath);
         m_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
     }
 
@@ -84,10 +84,10 @@ void Material::SetShaderProgram(ShaderProgram *program)
     m_shaderProgram = program;
 }
 
-void Material::SetTexture(Texture2D *texture)
+void Material::SetTexture(const Texture2D *texture)
 {
     m_texture = texture;
-    if(m_texture)
+    if (m_texture)
     {
         m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
     }

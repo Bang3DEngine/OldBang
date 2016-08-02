@@ -20,6 +20,8 @@ public:
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
 
+    virtual void OnDrawGizmos() override;
+
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 };

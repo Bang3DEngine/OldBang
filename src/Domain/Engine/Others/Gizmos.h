@@ -7,6 +7,7 @@ class Box;
 class Mesh;
 class Vector3;
 class Material;
+class Texture2D;
 class MeshRenderer;
 class SingleLineRenderer;
 class EditorGameObject;
@@ -28,10 +29,12 @@ private:
     static SingleLineRenderer *m_singleLineRenderer;
     static MeshRenderer *m_meshRenderer;
     static Mesh *m_boxMesh;
+    static Mesh *m_planeMesh;
 
     static Material *m_material;
-    static Vector3 m_color;
+    static glm::vec4 m_color;
     static float m_lineWidth;
+    static bool m_wireframe;
     static bool m_receivesLighting;
 
     static void SetStatesBeforeDrawing();
@@ -41,9 +44,13 @@ private:
 public:
 
     static void SetColor(const Vector3 &color);
+    static void SetColor(const glm::vec4 &color);
     static void SetLineWidth(float lineWidth);
+    static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
-    static void DrawBox(const Box &b, bool wireframe = true);
+    static void DrawBox(const Box &b);
+    static void DrawIcon(const Texture2D *texture,
+                         const Vector3 &position, const Vector3 &scale);
     static void DrawLine(const Vector3 &origin, const Vector3 &destiny);
 };
 

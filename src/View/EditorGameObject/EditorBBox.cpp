@@ -1,5 +1,7 @@
 #include "EditorBBox.h"
 
+Material *EditorBBox::s_boxMaterial = nullptr;
+
 EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("EditorBBox")
 {
     this->m_attachedGameObject = attachedGameObject;
@@ -8,33 +10,19 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
 
     // Copy the lines material to the box material, and save it in cache
     // only the first time. The rest of the times, load it from cache
-    Material *linesMaterial =
-            AssetsManager::GetAsset<Material>("Assets/Engine/Materials/D2G_Line.bmat");
-    Material *boxMaterial = nullptr;
-    if (!AssetsManager::ExistsAssetInCache("EditorBBox_Mat"))
+    Material *linesMaterial = AssetsManager::LoadAsset<Material>("./Assets/Engine/Materials/D2G_Line.bmat");
+
+    if (!s_boxMaterial)
     {
-        boxMaterial = new Material(*linesMaterial);
-        boxMaterial->SetDiffuseColor(glm::vec4(0,1,0,1));
+        s_boxMaterial = new Material(*linesMaterial);
     }
-    else
-    {
-        boxMaterial =
-                AssetsManager::GetRuntimeAsset<Material>("EditorBBox_Mat");
-    }
-    mr->SetMaterial(boxMaterial);
+
+    s_boxMaterial->SetDiffuseColor(glm::vec4(0,1,0,1));
+    mr->SetMaterial(s_boxMaterial);
 
     //Create the box mesh, and save it to cache
     // only the first time. The rest of the times, load it from cache.
-    Mesh *mesh = nullptr;
-    if (!AssetsManager::ExistsAssetInCache("EditorBBox_Mesh"))
-    {
-        mesh = new Mesh();
-        mesh->LoadPositions(s_boxVertices);
-    }
-    else
-    {
-        mesh = AssetsManager::GetRuntimeAsset<Mesh>("EditorBBox_Mesh");
-    }
+    Mesh *mesh = AssetsManager::LoadAsset<Mesh>("./Assets/Engine/Meshes/Cube.bmesh");
 
     mr->SetMesh(mesh);
     mr->SetDrawWireframe(true);

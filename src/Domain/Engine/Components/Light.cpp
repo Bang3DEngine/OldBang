@@ -78,7 +78,7 @@ void Light::ReadXMLInfo(const XMLNode *xmlInfo)
     Component::ReadXMLInfo(xmlInfo);
     SetIntensity(xmlInfo->GetFloat("intensity"));
     SetColor(xmlInfo->GetVector3("color"));
-    m_lightMaterial = AssetsManager::GetAsset<Material>(xmlInfo->GetFilepath("lightMaterial"));
+    m_lightMaterial = AssetsManager::LoadAsset<Material>(xmlInfo->GetFilepath("lightMaterial"));
 }
 
 void Light::FillXMLInfo(XMLNode *xmlInfo) const

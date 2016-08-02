@@ -29,7 +29,7 @@ private:
     glm::vec4 m_diffuseColor;
 
     ShaderProgram *m_shaderProgram = nullptr;
-    Texture2D *m_texture = nullptr; // Currently supporting just one texture
+    const Texture2D *m_texture = nullptr; // Currently supporting just one texture
 
 public:
     Material();
@@ -37,7 +37,7 @@ public:
     virtual ~Material();
 
     void SetShaderProgram(ShaderProgram *program);
-    void SetTexture(Texture2D *m_texture);
+    void SetTexture(const Texture2D *m_texture);
 
     void SetDiffuseColor(const glm::vec4 &m_diffuseColor);
 

@@ -35,8 +35,7 @@ public:
     static void GetImageFormat(const std::string& filepath, int *width,
                                int *height, int *numComponents);
     static unsigned char* ReadImage(const std::string& filepath,
-                                    int *width, int *height,
-                                    int *components);
+                                    int *width, int *height);
     //
 
 

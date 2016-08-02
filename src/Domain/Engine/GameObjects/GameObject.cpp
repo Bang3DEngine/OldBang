@@ -11,6 +11,7 @@
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
+#include "EditorScene.h"
 #include "WindowEventManager.h"
 #include "EditorSelectionGameObject.h"
 #endif
@@ -158,12 +159,12 @@ std::list<GameObject*> GameObject::GetChildrenRecursively() const
 }
 
 #ifdef BANG_EDITOR
-std::list<GameObject*> GameObject::GetChildrenRecursivelyIncludingEditorGameObjects() const
+std::list<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
 {
     std::list<GameObject*> cc;
     for (auto c = m_children.begin(); c != m_children.end(); ++c)
     {
-        cc.splice(cc.end(), (*c)->GetChildrenRecursivelyIncludingEditorGameObjects());
+        cc.splice(cc.end(), (*c)->GetChildrenRecursivelyEditor());
         cc.push_back(*c);
     }
     return cc;
@@ -502,6 +503,7 @@ void GameObject::OnDrawGizmos()
     {
         Box box = GetBoundingBox();
         //Logger_Log(box);
+        Gizmos::SetDrawWireframe(true);
         Gizmos::SetColor(Vector3(1,0,0));
         Gizmos::DrawBox(box);
     }
@@ -576,7 +578,13 @@ void GameObject::_OnPreRender ()
 
 void GameObject::_OnRender ()
 {
-    PROPAGATE_EVENT(_OnRender, m_children);
+    #ifdef BANG_EDITOR
+    EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
+    if (!scene->GetSelectionFramebuffer()->IsPassing())
+    #endif
+    {
+        PROPAGATE_EVENT(_OnRender, m_children);
+    }
     PROPAGATE_EVENT(_OnRender, m_components);
     OnRender();
 }
@@ -591,14 +599,26 @@ void GameObject::_OnDestroy()
 
 void GameObject::_OnDrawGizmos()
 {
-    PROPAGATE_EVENT(_OnDrawGizmos, m_children);
+    #ifdef BANG_EDITOR
+    EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
+    if (!scene->GetSelectionFramebuffer()->IsPassing())
+    #endif
+    {
+        PROPAGATE_EVENT(_OnDrawGizmos, m_children);
+    }
     PROPAGATE_EVENT(_OnDrawGizmos, m_components);
     OnDrawGizmos();
 }
 
 void GameObject::_OnDrawGizmosNoDepth()
 {
-    PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
+    #ifdef BANG_EDITOR
+    EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
+    if (!scene->GetSelectionFramebuffer()->IsPassing())
+    #endif
+    {
+        PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
+    }
     PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_components);
     OnDrawGizmosNoDepth();
 }
