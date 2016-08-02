@@ -32,7 +32,7 @@ protected:
      * @brief Line color will be multiplied by this when axis being hovered, but not grabbed.
      */
     const Vector3 c_lineColorFadingNotGrabbed = Vector3(0.9f);
-    Vector3 m_lineColor;
+    Color m_lineColor = Color::black;
 
     /**
      * @brief Axis direction in obj space.

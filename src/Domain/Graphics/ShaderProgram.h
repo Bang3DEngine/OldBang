@@ -39,11 +39,12 @@ public:
     void UnBind() const override;
 
     bool SetUniformFloat   (const std::string &name, float v,                bool warn = true) const;
-    bool SetUniformVec2    (const std::string &name, const Vector2& v,     bool warn = true) const;
+    bool SetUniformVec2    (const std::string &name, const Vector2& v,       bool warn = true) const;
     bool SetUniformVec3    (const std::string &name, const Vector3& v,       bool warn = true) const;
-    bool SetUniformVec4    (const std::string &name, const Vector4& v,     bool warn = true) const;
+    bool SetUniformVec4    (const std::string &name, const Vector4& v,       bool warn = true) const;
+    bool SetUniformColor   (const std::string &name, const Color& c,         bool warn = true) const;
     bool SetUniformMat4    (const std::string &name, const Matrix4& m,       bool warn = true) const;
-    bool SetUniformTexture (const std::string &name, const Texture *texture,       bool warn = true) const;
+    bool SetUniformTexture (const std::string &name, const Texture *texture, bool warn = true) const;
 
     Shader* GetVertexShader() const;
     Shader* GetFragmentShader() const;

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Asset.h"
+#include "Color.h"
 #include "Vector4.h"
 #include "Texture.h"
 #include "Texture2D.h"
@@ -27,7 +28,7 @@ public:
     }
 
 private:
-    Vector4 m_diffuseColor = Vector4(1.0f);
+    Color m_diffuseColor = Color::white;
 
     ShaderProgram *m_shaderProgram = nullptr;
     const Texture2D *m_texture = nullptr; // Currently supporting just one texture
@@ -38,14 +39,14 @@ public:
     virtual ~Material();
 
     void SetShaderProgram(ShaderProgram *program);
-    void SetTexture(const Texture2D *m_texture);
+    void SetTexture(const Texture2D *mtexture);
 
-    void SetDiffuseColor(const Vector4 &m_diffuseColor);
+    void SetDiffuseColor(const Color &diffuseColor);
 
     ShaderProgram* GetShaderProgram() const;
     const Texture* GetTexture() const;
 
-    Vector4 GetDiffuseColor() const;
+    const Color& GetDiffuseColor() const;
 
     void Bind() const override;
     void UnBind() const override;

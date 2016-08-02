@@ -15,7 +15,7 @@ friend class Scene;
 
 protected:
     float m_intensity = 1.0f;
-    Vector3 m_color = Vector3::one;
+    Color m_color = Color::white;
     Material *m_lightMaterial = nullptr;
 
     virtual void SetUniformsBeforeApplyingLight() const;
@@ -35,10 +35,10 @@ public:
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
 
-    void SetColor(const Vector3 &color);
+    void SetColor(const Color &color);
     void SetIntensity(float intensity);
 
-    Vector3 GetColor() const;
+    Color GetColor() const;
     float GetIntensity() const;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;

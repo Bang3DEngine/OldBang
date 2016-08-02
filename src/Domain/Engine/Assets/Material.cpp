@@ -20,8 +20,8 @@ void Material::Bind() const
     if (m_shaderProgram)
     {
         m_shaderProgram->Bind();
-        m_shaderProgram->SetUniformVec4(ShaderContract::Uniform_Material_Diffuse_Color,
-                                        m_diffuseColor, false);
+        m_shaderProgram->SetUniformColor(ShaderContract::Uniform_Material_Diffuse_Color,
+                                         m_diffuseColor, false);
         if (m_texture)
         {
             m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
@@ -58,8 +58,7 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
         SetTexture(texture);
     }
 
-    Vector4 diffColor = xmlInfo->GetVector4("DiffuseColor");
-    SetDiffuseColor(diffColor);
+    SetDiffuseColor(xmlInfo->GetColor("DiffuseColor"));
 }
 
 void Material::FillXMLInfo(XMLNode *xmlInfo) const
@@ -85,7 +84,7 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFilepath("FragmentShader", fsFile);
     xmlInfo->SetInt("TextureCount", 1);
     xmlInfo->SetFilepath("Texture1", m_texture->GetFilepath());
-    xmlInfo->SetVector4("DiffuseColor", m_diffuseColor);
+    xmlInfo->SetColor("DiffuseColor", GetDiffuseColor());
 }
 
 void Material::SetShaderProgram(ShaderProgram *program)
@@ -102,9 +101,9 @@ void Material::SetTexture(const Texture2D *texture)
     }
 }
 
-void Material::SetDiffuseColor(const Vector4 &diffuseColor)
+void Material::SetDiffuseColor(const Color &diffuseColor)
 {
-    this->m_diffuseColor = diffuseColor;
+    m_diffuseColor = diffuseColor;
 }
 
 ShaderProgram *Material::GetShaderProgram() const
@@ -117,7 +116,7 @@ const Texture *Material::GetTexture() const
     return m_texture;
 }
 
-Vector4 Material::GetDiffuseColor() const
+const Color& Material::GetDiffuseColor() const
 {
     return m_diffuseColor;
 }

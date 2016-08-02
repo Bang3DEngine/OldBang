@@ -8,7 +8,7 @@ EditorFloor::EditorFloor()
     {
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
         m_lineRenderers[i]->SetReceivesLighting(false);
-        m_lineRenderers[i]->GetMaterial()->SetDiffuseColor(Vector4(Vector3(0.4f), 1));
+        m_lineRenderers[i]->GetMaterial()->SetDiffuseColor(Color::gray);
     }
 }
 

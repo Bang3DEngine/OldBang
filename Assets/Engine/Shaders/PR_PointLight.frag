@@ -2,7 +2,7 @@ B_POST_RENDER_FS_DECLARE();
 
 uniform float B_light_intensity;
 uniform float B_light_range;
-uniform vec3  B_light_color;
+uniform vec4  B_light_color;
 uniform vec3  B_light_position_world;
 
 struct B_VertexIn  // GBuffer stored properties
@@ -36,7 +36,7 @@ void main()
         float lightDot = max(0.0f, dot(B_vin.normal_world, dir));
         float lightAttenuation = B_light_range / (distance(B_light_position_world, B_vin.position_world));
         B_vout.color = vec4(B_vin.color.rgb +
-                            B_vin.diffuseColor.rgb * lightDot * lightAttenuation * B_light_intensity * B_light_color, 1);
+                            B_vin.diffuseColor.rgb * lightDot * lightAttenuation * B_light_intensity * B_light_color.rgb, 1);
     }
 
     B_POST_RENDER_FS_END_MAIN();

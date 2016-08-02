@@ -54,6 +54,8 @@ public:
                     const std::vector<XMLProperty>& properties = {});
     void SetVector4(const std::string &attributeName, const Vector4 &value,
                     const std::vector<XMLProperty>& properties = {});
+    void SetColor(const std::string &attributeName, const Color &value,
+                  const std::vector<XMLProperty>& properties = {});
     void SetQuaternion(const std::string &attributeName, const Quaternion &value,
                        const std::vector<XMLProperty>& properties = {});
     void SetRect(const std::string &attributeName, const Rect &value,
@@ -78,6 +80,7 @@ public:
     Vector2 GetVector2(const std::string& attributeName) const;
     Vector3 GetVector3(const std::string& attributeName) const;
     Vector4 GetVector4(const std::string& attributeName) const;
+    Color GetColor(const std::string& attributeName) const;
     Quaternion GetQuaternion(const std::string& attributeName) const;
     Rect GetRect(const std::string& attributeName) const;
     int GetEnumSelectedIndex(const std::string& attributeName) const;

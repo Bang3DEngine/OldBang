@@ -175,6 +175,17 @@ void XMLAttribute::SetVector4(const Vector4 &value,
     Set(m_name, oss.str(), XMLAttribute::Type::Vector4, properties);
 }
 
+void XMLAttribute::SetColor(const Color &value,
+                            const std::vector<XMLProperty> &properties)
+{
+    std::ostringstream oss;
+    oss << "(" << value.r << ", " <<
+                  value.g << ", " <<
+                  value.b << ", " <<
+                  value.a << ")";
+    Set(m_name, oss.str(), XMLAttribute::Type::Color, properties);
+}
+
 void XMLAttribute::SetQuaternion(const Quaternion &value,
                                  const std::vector<XMLProperty> &properties)
 {
@@ -258,6 +269,7 @@ int XMLAttribute::GetNumberOfFieldsOfType() const
     else if (m_type == XMLAttribute::Type::Vector2)    return 2;
     else if (m_type == XMLAttribute::Type::Vector3)    return 3;
     else if (m_type == XMLAttribute::Type::Vector4)    return 4;
+    else if (m_type == XMLAttribute::Type::Color)      return 4;
     else if (m_type == XMLAttribute::Type::Quaternion) return 4;
     else if (m_type == XMLAttribute::Type::Rect)       return 4;
     else if (m_type == XMLAttribute::Type::File)       return 1;
@@ -371,6 +383,12 @@ Vector4 XMLAttribute::GetVector4() const
     z = StringUtils::ToFloat(numbers[2]);
     w = StringUtils::ToFloat(numbers[3]);
     return Vector4(x,y,z,w);
+}
+
+Color XMLAttribute::GetColor() const
+{
+    Color v = Color(GetVector4());
+    return Color(v);
 }
 
 Quaternion XMLAttribute::GetQuaternion() const

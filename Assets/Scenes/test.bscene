@@ -169,7 +169,7 @@
                        id:String="0x9aa1070"{Hidden,Readonly}
                       >
             </Transform>
-            <DirectionalLight color:Vector3="(1, 0.8, 0.8)"{}
+            <DirectionalLight color:Color="(1, 0.8, 0.8, 1)"{}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9aa12a8"{Hidden,Readonly}
                               intensity:Float="0.9"{}
@@ -188,7 +188,7 @@
                        id:String="0x9ae4e30"{Hidden,Readonly}
                       >
             </Transform>
-            <PointLight color:Vector3="(0.1, 0.1, 1)"{}
+            <PointLight color:Color="(0.1, 0.1, 1, 1)"{}
                         enabled:Bool="true"{Hidden,Readonly}
                         id:String="0x9adbe88"{Hidden,Readonly}
                         intensity:Float="2"{}
@@ -208,7 +208,7 @@
                        id:String="0x9b1a7b8"{Hidden,Readonly}
                       >
             </Transform>
-            <PointLight color:Vector3="(0.1, 1, 0.1)"{}
+            <PointLight color:Color="(0.1, 1, 0.1, 1)"{}
                         enabled:Bool="true"{Hidden,Readonly}
                         id:String="0x9b1bfc0"{Hidden,Readonly}
                         intensity:Float="1"{}

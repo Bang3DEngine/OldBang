@@ -146,6 +146,11 @@ bool ShaderProgram::SetUniformVec4 (const std::string &name, const Vector4& v, b
     return (location >= 0);
 }
 
+bool ShaderProgram::SetUniformColor(const std::string &name, const Color &c, bool warn) const
+{
+    SetUniformVec4(name, Vector4(c), warn);
+}
+
 bool ShaderProgram::SetUniformMat4 (const std::string &name, const Matrix4& m, bool warn) const
 {
     int location = GetUniformLocation(name);

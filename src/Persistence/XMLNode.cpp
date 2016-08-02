@@ -105,7 +105,18 @@ void XMLNode::SetVector3(const std::string &attributeName, const Vector3 &value,
 void XMLNode::SetVector4(const std::string &attributeName, const Vector4 &value,
                          const std::vector<XMLProperty>& properties)
 {
-    XMLAttribute attr; attr.SetVector4(value, properties);
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetVector4(value, properties);
+    SetAttribute(attr);
+}
+
+void XMLNode::SetColor(const std::string &attributeName, const Color &value,
+                       const std::vector<XMLProperty> &properties)
+{
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetColor(value, properties);
     SetAttribute(attr);
 }
 
@@ -226,7 +237,7 @@ float XMLNode::GetFloat(const std::string &attributeName) const
 Vector2 XMLNode::GetVector2(const std::string &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector2() : Vector2(0);
+    return attr ? attr->GetVector2() : Vector2::zero;
 }
 
 Vector3 XMLNode::GetVector3(const std::string &attributeName) const
@@ -238,7 +249,13 @@ Vector3 XMLNode::GetVector3(const std::string &attributeName) const
 Vector4 XMLNode::GetVector4(const std::string &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector4() : Vector4(0);
+    return attr ? attr->GetVector4() : Vector4::zero;
+}
+
+Color XMLNode::GetColor(const std::string &attributeName) const
+{
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetColor() : Color(0);
 }
 
 Quaternion XMLNode::GetQuaternion(const std::string &attributeName) const

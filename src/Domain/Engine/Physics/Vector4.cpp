@@ -2,6 +2,7 @@
 
 #include "Vector2.h"
 #include "Vector3.h"
+#include "Color.h"
 #include "Matrix4.h"
 #include "Quaternion.h"
 
@@ -14,19 +15,23 @@ const Vector4 Vector4::back    = Vector4( 0,  0,  1, 0);
 const Vector4 Vector4::zero    = Vector4( 0,  0,  0, 0);
 const Vector4 Vector4::one     = Vector4( 1,  1,  1, 1);
 
-Vector4::Vector4() : glm::vec4(0.0f)
+Vector4::Vector4() : Vector4(0.0f)
 {
 }
 
-Vector4::Vector4(const glm::vec4 &v) : glm::vec4(v)
+Vector4::Vector4(const glm::vec4 &v) : Vector4(v.x, v.y, v.z, v.w)
 {
 }
 
-Vector4::Vector4(float a) : glm::vec4(a)
+Vector4::Vector4(float a) : Vector4(a, a, a, a)
 {
 }
 
 Vector4::Vector4(float x, float y, float z, float w) : glm::vec4(x,y,z,w)
+{
+}
+
+Vector4::Vector4(const Color &c) : Vector4(c.r, c.g, c.b, c.a)
 {
 }
 

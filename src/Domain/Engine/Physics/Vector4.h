@@ -6,6 +6,7 @@
 class Matrix4;
 class Vector2;
 class Vector3;
+class Color;
 class Quaternion;
 class Vector4 : public glm::vec4
 {
@@ -14,6 +15,7 @@ public:
     explicit Vector4(const glm::vec4 &v);
     Vector4(float a);
     Vector4(float x, float y, float z, float w);
+    Vector4(const Color &c);
     Vector4(const Vector3 &v, float w);
     Vector4(const Vector2 &v, float z, float w);
 

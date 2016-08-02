@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "Rect.h"
+#include "Color.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -29,6 +30,7 @@ public:
         Vector2,
         Vector3,
         Vector4,
+        Color,
         Quaternion,
         Rect,
         File,
@@ -72,6 +74,7 @@ public:
     void SetVector2(const Vector2 &value, const std::vector<XMLProperty>& properties = {});
     void SetVector3(const Vector3 &value, const std::vector<XMLProperty>& properties = {});
     void SetVector4(const Vector4 &value, const std::vector<XMLProperty>& properties = {});
+    void SetColor(const Color &value, const std::vector<XMLProperty>& properties = {});
     void SetQuaternion(const Quaternion &value, const std::vector<XMLProperty>& properties = {});
     void SetRect(const Rect &value, const std::vector<XMLProperty>& properties = {});
     void SetFilepath(const std::string &filepath, const std::string &fileExtension = "",
@@ -109,6 +112,7 @@ public:
     Vector2 GetVector2() const;
     Vector3 GetVector3() const;
     Vector4 GetVector4() const;
+    Color GetColor() const;
     Quaternion GetQuaternion() const;
     Rect GetRect() const;
     std::string GetEnumSelectedName() const;

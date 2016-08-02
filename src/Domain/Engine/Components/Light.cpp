@@ -11,7 +11,7 @@ void Light::SetUniformsBeforeApplyingLight() const
 {
     ShaderProgram *sp = m_lightMaterial->GetShaderProgram();
     sp->SetUniformFloat("B_light_intensity",      m_intensity,                          false);
-    sp->SetUniformVec3 ("B_light_color",          m_color,                              false);
+    sp->SetUniformColor("B_light_color",          m_color,                              false);
     sp->SetUniformVec3 ("B_light_forward_world",  gameObject->transform->GetForward(),  false);
     sp->SetUniformVec3 ("B_light_position_world", gameObject->transform->GetPosition(), false);
 }
@@ -41,7 +41,7 @@ ICloneable *Light::Clone() const
     return l;
 }
 
-void Light::SetColor(const Vector3 &color)
+void Light::SetColor(const Color &color)
 {
     m_color = color;
 }
@@ -51,7 +51,7 @@ void Light::SetIntensity(float intensity)
     m_intensity = intensity;
 }
 
-Vector3 Light::GetColor() const
+Color Light::GetColor() const
 {
     return m_color;
 }
@@ -77,7 +77,7 @@ void Light::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
     SetIntensity(xmlInfo->GetFloat("intensity"));
-    SetColor(xmlInfo->GetVector3("color"));
+    SetColor(xmlInfo->GetColor("color"));
     m_lightMaterial = AssetsManager::LoadAsset<Material>(xmlInfo->GetFilepath("lightMaterial"));
 }
 
@@ -87,6 +87,6 @@ void Light::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Light");
 
     xmlInfo->SetFloat("intensity", GetIntensity());
-    xmlInfo->SetVector3("color", GetColor());
+    xmlInfo->SetColor("color", GetColor());
     xmlInfo->SetFilepath("lightMaterial", m_lightMaterial->GetFilepath());
 }

@@ -14,6 +14,7 @@
 #include <list>
 #include <map>
 
+#include "Color.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -33,6 +34,7 @@ std::ostream& operator<<(std::ostream &log, const std::string &str);
 std::ostream& operator<<(std::ostream &log, const Vector2 &v);
 std::ostream& operator<<(std::ostream &log, const Vector3 &v);
 std::ostream& operator<<(std::ostream &log, const Vector4 &v);
+std::ostream& operator<<(std::ostream &log, const Color &c);
 std::ostream& operator<<(std::ostream &log, const Quaternion &q);
 std::ostream& operator<<(std::ostream &log, const Matrix4 &v);
 std::ostream &operator<<(std::ostream &log, const IToString *s);

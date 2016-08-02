@@ -1,4 +1,4 @@
-<Material DiffuseColor:Vector4="(1, 1, 1, 1)"{}
+<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
           FragmentShader:File="./Assets/Engine/Shaders/D2G_Default.frag"{FileExtension="*.frag"}
           Texture1:File="./Assets/Textures/carpetTexture.btex2d"{FileExtension="*.btex2d"}
           TextureCount:Int="1"{}

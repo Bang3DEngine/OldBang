@@ -10,14 +10,15 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
 
     // Copy the lines material to the box material, and save it in cache
     // only the first time. The rest of the times, load it from cache
-    Material *linesMaterial = AssetsManager::LoadAsset<Material>("./Assets/Engine/Materials/D2G_Line.bmat");
+    Material *linesMaterial =
+            AssetsManager::LoadAsset<Material>("./Assets/Engine/Materials/D2G_Line.bmat");
 
     if (!s_boxMaterial)
     {
         s_boxMaterial = new Material(*linesMaterial);
     }
 
-    s_boxMaterial->SetDiffuseColor(Vector4(0,1,0,1));
+    s_boxMaterial->SetDiffuseColor(Color::green);
     mr->SetMaterial(s_boxMaterial);
 
     //Create the box mesh, and save it to cache

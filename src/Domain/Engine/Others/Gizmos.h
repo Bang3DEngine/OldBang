@@ -5,6 +5,7 @@
 
 class Box;
 class Mesh;
+class Color;
 class Vector3;
 class Vector4;
 class Material;
@@ -32,7 +33,7 @@ private:
     static Mesh *m_planeMesh;
 
     static Material *m_material;
-    static Vector4 m_color;
+    static Color m_color;
     static float m_lineWidth;
     static bool m_wireframe;
     static bool m_receivesLighting;
@@ -43,8 +44,7 @@ private:
 
 public:
 
-    static void SetColor(const Vector3 &color);
-    static void SetColor(const Vector4 &color);
+    static void SetColor(const Color &color);
     static void SetLineWidth(float lineWidth);
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);

@@ -13,7 +13,7 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
     m_material = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/D2G_Line.bmat");
     m_material = new Material(*m_material);
 
-    m_lineColor = m_oAxisDirection.Abs();
+    m_lineColor = Color(m_oAxisDirection.Abs(), 1);
 }
 
 EditorAxis::~EditorAxis()
@@ -66,23 +66,23 @@ void EditorAxis::OnUpdate()
 
         if (m_grabbed)
         {
-            m_material->SetDiffuseColor(Vector4(m_lineColor, 1));
+            m_material->SetDiffuseColor(Color(m_lineColor, 1));
         }
         else
         {
-            m_material->SetDiffuseColor(Vector4(m_lineColor * c_lineColorFadingNotGrabbed, 1));
+            m_material->SetDiffuseColor(Color(m_lineColor * c_lineColorFadingNotGrabbed, 1));
         }
     }
     else
     {
         if (m_grabbed)
         {
-            m_material->SetDiffuseColor(Vector4(m_lineColor, 1));
+            m_material->SetDiffuseColor(Color(m_lineColor, 1));
         }
         else
         {
             GetAxisRenderer()->SetLineWidth(m_axisLineWidth);
-            m_material->SetDiffuseColor(Vector4(m_lineColor * c_lineColorFadingNotHover, 1));
+            m_material->SetDiffuseColor(Color(m_lineColor * c_lineColorFadingNotHover, 1));
         }
     }
 }
