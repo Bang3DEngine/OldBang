@@ -106,6 +106,7 @@ protected:
 public:
 
     Renderer();
+
     virtual void CloneInto(ICloneable *clone) const override;
 
     virtual void SetMaterial(Material *m) = 0;

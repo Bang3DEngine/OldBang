@@ -50,7 +50,8 @@ public:
     static void SetReceivesLighting(bool receivesLighting);
     static void DrawBox(const Box &b);
     static void DrawIcon(const Texture2D *texture,
-                         const Vector3 &position, const Vector3 &scale);
+                         const Vector3 &position, const Vector3 &scale,
+                         bool billboard = true);
     static void DrawLine(const Vector3 &origin, const Vector3 &destiny);
 };
 

@@ -26,7 +26,7 @@ public:
     }
 
 private:
-    glm::vec4 m_diffuseColor;
+    glm::vec4 m_diffuseColor = glm::vec4(1.0f);
 
     ShaderProgram *m_shaderProgram = nullptr;
     const Texture2D *m_texture = nullptr; // Currently supporting just one texture

@@ -1,4 +1,5 @@
-<Texture2D FilterMode:Enum="1"{EnumName0="Nearest",EnumName1="Linear"}
+<Texture2D AlphaCuttoff:Float="0.5"{}
+           FilterMode:Enum="1"{EnumName0="Nearest",EnumName1="Linear"}
            TextureFilepath:File="./Assets/Engine/Textures/PointLightIcon.png"{FileExtension="*.jpg *.png *.bmp"}
           >
 </Texture2D>

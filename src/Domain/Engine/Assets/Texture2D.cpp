@@ -73,6 +73,7 @@ void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
     LoadFromFile(m_filepath);
 
     SetFilterMode(FilterMode_FromString(xmlInfo->GetEnumSelectedName("FilterMode")));
+    SetAlphaCuttoff(xmlInfo->GetFloat("AlphaCuttoff"));
 }
 
 void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
@@ -82,4 +83,5 @@ void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
 
     int selectedIndex = FilterMode_GetIndexFromValue(GetFilterMode());
     xmlInfo->SetEnum("FilterMode", FilterMode_GetNamesVector(), selectedIndex, {});
+    xmlInfo->SetFloat("AlphaCuttoff", GetAlphaCuttoff());
 }

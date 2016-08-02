@@ -1,5 +1,8 @@
 #include "PointLight.h"
 
+#include "Transform.h"
+#include "GameObject.h"
+
 PointLight::PointLight() : Light()
 {
     m_lightMaterial = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_PointLight.bmat");
@@ -48,6 +51,18 @@ void PointLight::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 void PointLight::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);
+}
+
+void PointLight::OnDrawGizmos()
+{
+    Light::OnDrawGizmos();
+
+    Gizmos::SetColor(glm::vec4(0));
+    Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("./Assets/Engine/Textures/PointLightIcon.btex2d");
+    Vector3 c = GetColor();
+    Gizmos::SetColor(glm::vec4(c.r, c.g, c.b, 0.5f));
+    Gizmos::DrawIcon(tex, gameObject->transform->GetPosition(), Vector3::one * 10.0f);
+
 }
 #endif
 

@@ -22,6 +22,7 @@ public:
     #ifdef BANG_EDITOR
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
+    virtual void OnDrawGizmos() override;
     #endif
 
     void SetRange(float range);

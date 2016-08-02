@@ -131,7 +131,10 @@ OTHER_FILES += \
     Assets/Textures/woodTexture.btex2d \
     Assets/Textures/luigiTexture.btex2d \
     Assets/Textures/carpetTexture.btex2d \
-    Assets/Scenes/test.bscene
+    Assets/Scenes/test.bscene \
+    Assets/Engine/Textures/DirectionalLightIcon.btex2d \
+    Assets/Engine/Textures/PointLightIcon .btex2d \
+    Assets/Engine/Textures/PointLightIcon .btex2d
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

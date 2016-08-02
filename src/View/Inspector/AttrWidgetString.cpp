@@ -24,7 +24,7 @@ AttrWidgetString::AttrWidgetString(const std::string &labelString,
     m_strField->setContentsMargins(0,0,0,0);
     m_strField->show();
 
-    connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
+    //connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
 
     layout->addWidget(GetLabelWidget(labelString));
     layout->addWidget(m_strField);
@@ -39,10 +39,10 @@ void AttrWidgetString::SetValue(const std::string &value)
 {
     if (!m_editing)
     {
-        disconnect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
+        //disconnect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
         m_strField->setText( QString::fromStdString(value) );
         m_strField->show();
-        connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
+        //connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
     }
 }
 

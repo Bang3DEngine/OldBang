@@ -2,14 +2,8 @@
 #include "FileReader.h"
 #include "GameObject.h"
 
-Transform::Transform() : m_localPosition(Vector3(0.0f))
-                        ,m_localRotation(Quaternion())
-                        ,m_localScale(Vector3(1.0f))
-                        #ifdef BANG_EDITOR
-                        ,m_localEuler(Vector3(0.0f))
-                        #endif
+Transform::Transform()
 {
-
 }
 
 void Transform::CloneInto(ICloneable *clone) const

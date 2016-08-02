@@ -168,6 +168,9 @@ uniform vec4  B_material_diffuse_color; \n\
 uniform float B_renderer_receivesLighting; \n\
 uniform float B_gameObject_isSelected; \n\
 \n\
+uniform sampler2D B_texture_0; \n\
+uniform float B_alphaCuttoff = -1.0f; \n\
+\n\
 in vec4 B_position_world_vout_fin; \n\
 in vec4 B_normal_world_vout_fin; \n\
 in vec2 B_uv_vout_fin; \n\

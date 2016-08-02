@@ -41,12 +41,12 @@ private:
  * These variables must be copied from BehaviourHolder
  */
 protected:
-    GameObject* m_parent = nullptr;
     GameObject* m_gameObject = nullptr;
-    Transform*  m_transform  = nullptr;
+    GameObject* m_parent = nullptr;
+    Transform* m_transform = nullptr;
 
-protected:
     GameObject* const& gameObject = m_gameObject;
+    GameObject* const& parent = m_parent;
     Transform*  const& transform  = m_transform;
 /**
 */

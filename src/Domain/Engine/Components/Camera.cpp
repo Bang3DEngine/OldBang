@@ -2,7 +2,7 @@
 #include "Canvas.h"
 #include "FileReader.h"
 
-Camera::Camera() : m_orthoRect(Rect(-1.0f, 1.0f, -1.0f, 1.0f))
+Camera::Camera()
 {
 }
 

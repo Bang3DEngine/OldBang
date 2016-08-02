@@ -68,6 +68,8 @@ void Gizmos::SetStatesBeforeDrawing()
 
     Gizmos::m_singleLineRenderer->SetDrawWireframe(m_wireframe);
     Gizmos::m_meshRenderer->SetDrawWireframe(m_wireframe);
+
+    Gizmos::m_meshRenderer->GetMaterial()->SetTexture(nullptr);
 }
 
 void Gizmos::OnNewFrame()
@@ -116,7 +118,8 @@ void Gizmos::DrawBox(const Box &b)
 }
 
 void Gizmos::DrawIcon(const Texture2D *texture,
-                      const Vector3 &position, const Vector3 &scale)
+                      const Vector3 &position, const Vector3 &scale,
+                      bool billboard)
 {
     Gizmos::Init();
     Gizmos::SetReceivesLighting(false);
@@ -128,6 +131,15 @@ void Gizmos::DrawIcon(const Texture2D *texture,
 
     Gizmos::m_gizmosGameObject->transform->SetPosition(position);
     Gizmos::m_gizmosGameObject->transform->SetScale(scale);
+    if (billboard)
+    {
+        Scene *scene = Scene::GetCurrentScene();
+        Transform *camTransform = scene->GetCamera()->transform;
+        Gizmos::m_gizmosGameObject->
+                transform->LookInDirection(camTransform->GetForward(),
+                                           camTransform->GetUp());
+    }
+
     Gizmos::m_meshRenderer->GetMaterial()->SetTexture(texture);
 
     Gizmos::m_meshRenderer->Render();

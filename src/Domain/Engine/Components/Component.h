@@ -18,8 +18,8 @@
 
 #define CAN_USE_COMPONENT(comp)  ( comp  && comp->IsEnabled() )
 
+class Transform;
 class GameObject;
-
 class Component :
               public ISceneEventListener
              ,public IToString
@@ -40,7 +40,9 @@ protected:
 public:
 
     GameObject *m_gameObject = nullptr;
+    Transform *m_gameObjectTransform = nullptr;
     GameObject* const& gameObject = m_gameObject;
+    Transform* const& transform = m_gameObjectTransform; // shortcut
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override = 0;
@@ -48,6 +50,8 @@ public:
     virtual const std::string ToString() const override;
 
     virtual std::string GetName() const;
+
+    void SetGameObject(GameObject *gameObject);
 
     void SetEnabled(bool enabled);
     bool IsEnabled() const;

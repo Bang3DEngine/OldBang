@@ -22,7 +22,7 @@ public:
 
 private:
 
-    Rect m_orthoRect;
+    Rect m_orthoRect = Rect(-1.0f, 1.0f, -1.0f, 1.0f);
 
     float m_fovDegrees = 60.0f;
     float m_zNear = 0.1f;

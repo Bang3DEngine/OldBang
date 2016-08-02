@@ -21,16 +21,17 @@ class Transform : public Component
 
 private:
 
-    Vector3 m_localPosition;
-    Quaternion m_localRotation;
-    Vector3 m_localScale;
+    Vector3 m_localPosition = Vector3(0.0f);
+    Quaternion m_localRotation = Quaternion();
+    Vector3 m_localScale = Vector3(1.0f);
 
     // Used in inspector too
-    Vector3 m_localEuler;
+    Vector3 m_localEuler = Vector3(0.0f);
 
 public:
 
     Transform();
+
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
     virtual ~Transform();

@@ -1,5 +1,6 @@
 #include "Component.h"
 #include "GameObject.h"
+#include "Transform.h"
 
 Component::Component()
 {
@@ -25,6 +26,12 @@ const std::string Component::ToString() const
 std::string Component::GetName() const
 {
     return "Component";
+}
+
+void Component::SetGameObject(GameObject *gameObject)
+{
+    m_gameObject = gameObject;
+    m_gameObjectTransform = m_gameObject->transform;
 }
 
 void Component::SetEnabled(bool enabled)

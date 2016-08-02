@@ -239,15 +239,14 @@ void GameObject::AddComponent(Component *c)
     {
         if (HasComponent<Transform>())
         {
-            Logger_Error("A gameObject can only contain one unique Transform.");
+            Logger_Error("A gameObject must contain one and only one Transform.");
             delete c;
             return;
         }
-
         m_transform = t;
     }
 
-    c->m_gameObject = this;
+    c->SetGameObject(this);
     m_components.push_back(c);
     c->_OnStart();
 }
@@ -275,6 +274,12 @@ Transform *GameObject::GetTransform() const
 
 void GameObject::RemoveComponent(Component *c)
 {
+    Transform *t = dynamic_cast<Transform*>(c);
+    if (t)
+    {
+        return;
+    }
+
     for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
     {
         if (c == *comp)
@@ -282,12 +287,6 @@ void GameObject::RemoveComponent(Component *c)
             m_components.erase(comp);
             break;
         }
-    }
-
-    Transform *t = dynamic_cast<Transform*>(c);
-    if (t)
-    {
-        m_transform = nullptr;
     }
 }
 
@@ -376,38 +375,33 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
             }
             else if (tagName == "MeshRenderer")
             {
-                MeshRenderer *mr = new MeshRenderer();
+                MeshRenderer *mr = AddComponent<MeshRenderer>();
                 mr->ReadXMLInfo(xmlChild);
                 c = mr;
             }
             else if (tagName == "Camera")
             {
-                Camera *cam = new Camera();
+                Camera *cam = AddComponent<Camera>();
                 cam->ReadXMLInfo(xmlChild);
                 c = cam;
             }
             else if (tagName == "BehaviourHolder")
             {
-                BehaviourHolder *bh = new BehaviourHolder();
+                BehaviourHolder *bh = AddComponent<BehaviourHolder>();
                 bh->ReadXMLInfo(xmlChild);
                 c = bh;
             }
             else if (tagName == "DirectionalLight")
             {
-                DirectionalLight *dl = new DirectionalLight();
+                DirectionalLight *dl = AddComponent<DirectionalLight>();
                 dl->ReadXMLInfo(xmlChild);
                 c = dl;
             }
             else if (tagName == "PointLight")
             {
-                PointLight *pl = new PointLight();
+                PointLight *pl = AddComponent<PointLight>();
                 pl->ReadXMLInfo(xmlChild);
                 c = pl;
-            }
-
-            if (c && !isTransform)
-            {
-                AddComponent(c);
             }
         }
     }
@@ -499,14 +493,6 @@ bool GameObject::IsEnabled()
 
 void GameObject::OnDrawGizmos()
 {
-    if (name == "Scenario")
-    {
-        Box box = GetBoundingBox();
-        //Logger_Log(box);
-        Gizmos::SetDrawWireframe(true);
-        Gizmos::SetColor(Vector3(1,0,0));
-        Gizmos::DrawBox(box);
-    }
 }
 
 const std::string GameObject::ToString() const

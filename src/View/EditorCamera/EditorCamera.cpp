@@ -58,7 +58,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
         float mouseWheel = Input::GetMouseWheel();
         if (mouseWheel != 0.0f)
         {
-            *moveStep -= m_mouseZoomPerDeltaWheel * mouseWheel * m_camt->GetForward();
+            *moveStep += m_mouseZoomPerDeltaWheel * mouseWheel * m_camt->GetForward();
             *hasMoved  = true;
         }
     }
@@ -109,11 +109,11 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
     Vector3 m(0);
     if (Input::GetKey(Input::Key::W))
     {
-        m -= m_keysMoveSpeed * Time::GetDeltaTime() * m_camt->GetForward();
+        m += m_keysMoveSpeed * Time::GetDeltaTime() * m_camt->GetForward();
     }
     else if (Input::GetKey(Input::Key::S))
     {
-        m += m_keysMoveSpeed * Time::GetDeltaTime() * m_camt->GetForward();
+        m -= m_keysMoveSpeed * Time::GetDeltaTime() * m_camt->GetForward();
     }
 
     if (Input::GetKey(Input::Key::A))

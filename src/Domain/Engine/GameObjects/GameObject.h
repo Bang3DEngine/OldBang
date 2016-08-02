@@ -157,21 +157,23 @@ public:
      */
     Sphere GetBoundingSphere() const;
 
-    /**
-     * Adds the Component c to this.
-     */
-    void AddComponent(Component *c);
-
+    #ifdef BANG_EDITOR
     /**
      * Moves the Component c upwards(-N), or downwards(N).
      * Used only for Inspector showing order purposes
      */
     void MoveComponent(Component *c, int distance);
+    #endif
 
     /**
      * Removes the Component c
      */
     void RemoveComponent(Component *c);
+
+    /**
+     * Adds the Component c to this.
+     */
+    void AddComponent(Component *c);
 
     /**
      * Creates a Component of type T, adds it to this,
@@ -180,9 +182,9 @@ public:
     template <class T>
     T* AddComponent()
     {
-        T *comp = new T();
-        AddComponent(comp);
-        return comp;
+        T *c = new T();
+        AddComponent(c);
+        return c;
     }
 
     /**

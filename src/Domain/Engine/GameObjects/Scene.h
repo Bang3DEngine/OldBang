@@ -46,7 +46,8 @@ public:
     void SetCamera (const Camera *cam);
 
     static Scene *GetCurrentScene();
-    Camera* GetCamera () const;
+    static Camera* GetCamera ();
+    Camera* GetCurrentCamera () const;
     const Canvas* GetCanvas () const;
 
     bool IsScene() const override;

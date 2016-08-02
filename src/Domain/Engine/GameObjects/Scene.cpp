@@ -115,13 +115,18 @@ Scene *Scene::GetCurrentScene()
     return Canvas::GetInstance()->GetCurrentScene();
 }
 
-Camera *Scene::GetCamera() const
+Camera *Scene::GetCamera()
+{
+    Scene *scene = Scene::GetCurrentScene();
+    return scene->GetCurrentCamera();
+}
+
+Camera *Scene::GetCurrentCamera() const
 {
     if (!m_cameraGameObject)
     {
         return nullptr;
     }
-
     return m_cameraGameObject->GetComponent<Camera>();
 }
 

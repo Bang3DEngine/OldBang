@@ -17,11 +17,20 @@ Material::~Material()
 
 void Material::Bind() const
 {
-    if (m_shaderProgram )
+    if (m_shaderProgram)
     {
         m_shaderProgram->Bind();
         m_shaderProgram->SetUniformVec4(ShaderContract::Uniform_Material_Diffuse_Color,
                                         m_diffuseColor, false);
+        if (m_texture)
+        {
+            m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
+            m_shaderProgram->SetUniformFloat("B_alphaCuttoff", m_texture->GetAlphaCuttoff(), false);
+        }
+        else
+        {
+            m_shaderProgram->SetUniformFloat("B_alphaCuttoff", -1.0f, false);
+        }
     }
 }
 
@@ -46,7 +55,7 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
     {
         std::string texAssetFilepath = xmlInfo->GetString("Texture1");
         Texture2D *texture = AssetsManager::LoadAsset<Texture2D>(texAssetFilepath);
-        m_shaderProgram->SetUniformTexture("B_texture_0", texture, false);
+        SetTexture(texture);
     }
 
     glm::vec4 diffColor = xmlInfo->GetVector4("DiffuseColor");

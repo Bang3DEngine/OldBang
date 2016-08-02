@@ -52,7 +52,9 @@ void DirectionalLight::OnDrawGizmos()
 
     Gizmos::SetColor(glm::vec4(0));
     Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("Assets/Engine/Textures/DirectionalLightIcon.btex2d");
-    Gizmos::DrawIcon(tex, gameObject->transform->GetPosition(), Vector3::one * 15.0f);
+    Vector3 c = GetColor();
+    Gizmos::SetColor(glm::vec4(c.r, c.g, c.b, 0.5f));
+    Gizmos::DrawIcon(tex, gameObject->transform->GetPosition(), Vector3::one * 5.0f);
 }
 #endif
 
