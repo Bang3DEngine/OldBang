@@ -1,5 +1,7 @@
 #include "Color.h"
 
+#include <sstream>
+
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -59,6 +61,52 @@ Color Color::Lerp(const Color &c1,
     return Color(Vector4(
                  glm::mix(glm::vec4(c1.r, c1.g, c1.b, c1.a),
                           glm::vec4(c2.r, c2.g, c2.b, c2.a), progression)));
+}
+
+std::string Color::ToStringRgb() const
+{
+    std::ostringstream oss;
+    oss << "(" << r << ", " << g << ", " << b << ")";
+    return oss.str();
+}
+
+std::string Color::ToStringRgb255() const
+{
+    std::ostringstream oss;
+    oss << "(" << int(r * 255) << ", " <<
+                  int(g * 255) << ", " <<
+                  int(b * 255) << ")";
+    return oss.str();
+}
+
+std::string Color::ToStringRgba() const
+{
+    std::ostringstream oss;
+    oss << "(" << r << ", " << g << ", " << b << ", " << a << ")";
+    return oss.str();
+}
+
+std::string Color::ToStringRgba255() const
+{
+    std::ostringstream oss;
+    oss << "(" << int(r * 255) << ", " <<
+                  int(g * 255) << ", " <<
+                  int(b * 255) << ", " <<
+                  int(a * 255) << ")";
+    return oss.str();
+}
+
+Color Color::FromQColor(const QColor &c)
+{
+    return Color(c.red()   / 255.0f,
+                 c.green() / 255.0f,
+                 c.blue()  / 255.0f,
+                 c.alpha() / 255.0f);
+}
+
+QColor Color::ToQColor() const
+{
+    return QColor(r * 255, g * 255, b * 255, a * 255);
 }
 
 Color operator+(const Color & c1, const Color &c2)

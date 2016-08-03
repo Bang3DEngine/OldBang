@@ -1,6 +1,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
+#include <QColor>
+
 #include "glm/glm.hpp"
 
 class Vector2;
@@ -32,6 +34,14 @@ public:
     static Color Lerp(const Color &v1,
                         const Color &v2,
                         float progression);
+
+    std::string ToStringRgb() const;
+    std::string ToStringRgb255() const;
+    std::string ToStringRgba() const;
+    std::string ToStringRgba255() const;
+
+    static Color FromQColor(const QColor &c);
+    QColor ToQColor() const;
 
     const static Color red;
     const static Color orange;

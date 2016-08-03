@@ -76,9 +76,9 @@ void Light::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void Light::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
-    SetIntensity(xmlInfo->GetFloat("intensity"));
-    SetColor(xmlInfo->GetColor("color"));
-    m_lightMaterial = AssetsManager::LoadAsset<Material>(xmlInfo->GetFilepath("lightMaterial"));
+    SetIntensity(xmlInfo->GetFloat("Intensity"));
+    SetColor(xmlInfo->GetColor("Color"));
+    m_lightMaterial = AssetsManager::LoadAsset<Material>(xmlInfo->GetFilepath("Material"));
 }
 
 void Light::FillXMLInfo(XMLNode *xmlInfo) const
@@ -86,7 +86,8 @@ void Light::FillXMLInfo(XMLNode *xmlInfo) const
     Component::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Light");
 
-    xmlInfo->SetFloat("intensity", GetIntensity());
-    xmlInfo->SetColor("color", GetColor());
-    xmlInfo->SetFilepath("lightMaterial", m_lightMaterial->GetFilepath());
+    xmlInfo->SetFloat("Intensity", GetIntensity());
+    xmlInfo->SetColor("Color", GetColor());
+    xmlInfo->SetFilepath("Material", m_lightMaterial->GetFilepath(), "*.bmat",
+                        {XMLProperty::Hidden});
 }

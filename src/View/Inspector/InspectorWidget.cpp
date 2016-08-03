@@ -9,6 +9,7 @@
 #include "AttrWidgetString.h"
 #include "AttrWidgetVectorFloat.h"
 #include "AttrWidgetBool.h"
+#include "AttrWidgetColor.h"
 #include "AttrWidgetButton.h"
 
 #include "WindowMain.h"
@@ -131,6 +132,11 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
                 attribute.SetEnum(attribute.GetEnumNames(), awe->GetValue(), // selected index
                                   attribute.GetProperties());
             }
+            else if (attrType == XMLAttribute::Type::Color)
+            {
+                AttrWidgetColor *awc = static_cast<AttrWidgetColor*>(aw);
+                attribute.SetColor(awc->GetValue(), attribute.GetProperties());
+            }
         }
         xmlInfo.SetAttribute(attribute);
     }
@@ -205,6 +211,12 @@ void InspectorWidget::RefreshWidgetValues()
                 we->SetValue(attribute.GetEnumSelectedIndex());
                 ws = we;
             }
+            else if (attrType == XMLAttribute::Type::Color)
+            {
+                AttrWidgetColor *wc = static_cast<AttrWidgetColor*>(ws);
+                wc->SetValue(attribute.GetColor());
+                ws = wc;
+            }
 
             ws->show();
         }
@@ -250,6 +262,11 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
                 ws = new AttrWidgetEnum(attrName,
                                         xmlInfo.GetEnumNames(attrName), this);
             }
+            else if (attrType == XMLAttribute::Type::Color)
+            {
+                ws = new AttrWidgetColor(attrName, this);
+            }
+
 
             if (ws)
             {

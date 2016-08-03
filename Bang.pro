@@ -211,7 +211,8 @@ HEADERS += \
     src/View/Inspector/AttrWidgetBool.h \
     src/Domain/Engine/Physics/Vector4.h \
     src/Domain/Engine/Physics/Vector2.h \
-    src/Domain/Engine/Physics/Color.h
+    src/Domain/Engine/Physics/Color.h \
+    src/View/Inspector/AttrWidgetColor.h
 
 EDITOR {
 HEADERS += \
@@ -340,7 +341,8 @@ SOURCES += \
     src/View/Inspector/AttrWidgetBool.cpp \
     src/Domain/Engine/Physics/Vector4.cpp \
     src/Domain/Engine/Physics/Vector2.cpp \
-    src/Domain/Engine/Physics/Color.cpp
+    src/Domain/Engine/Physics/Color.cpp \
+    src/View/Inspector/AttrWidgetColor.cpp
 
 EDITOR {
     SOURCES += \
