@@ -257,7 +257,8 @@ std::string Explorer::GetCurrentDir() const
 
 void Explorer::StartRenaming(const std::string &filepath)
 {
-
+    SelectFile(filepath);
+    edit(currentIndex());
 }
 
 void Explorer::updateGeometries()

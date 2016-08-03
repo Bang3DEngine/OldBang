@@ -288,6 +288,10 @@ void MenuBar::OnAlignViewWithGameObject() const
 void MenuBar::OnCreatePrefab() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreatePrefab);
+    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    filepath += "/New_Prefab." + Prefab::GetFileExtensionStatic();
+    AssetsManager::CreateAsset<Prefab>(filepath);
+    Explorer::GetInstance()->StartRenaming(filepath);
 }
 void MenuBar::OnCreateMaterial() const
 {
@@ -295,18 +299,33 @@ void MenuBar::OnCreateMaterial() const
     std::string filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Material." + Material::GetFileExtensionStatic();
     AssetsManager::CreateAsset<Material>(filepath);
+    Explorer::GetInstance()->StartRenaming(filepath);
 }
 void MenuBar::OnCreateMesh() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateMesh);
+    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    filepath += "/New_Mesh." + Mesh::GetFileExtensionStatic();
+    AssetsManager::CreateAsset<Mesh>(filepath);
+    Explorer::GetInstance()->StartRenaming(filepath);
 }
 void MenuBar::OnCreateShaderProgram() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateShaderProgram);
+    /*
+    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    filepath += "/New_ShaderProgram." + ShaderProgram::GetFileExtensionStatic();
+    AssetsManager::CreateAsset<ShaderProgram>(filepath);
+    Explorer::GetInstance()->StartRenaming(filepath);
+    */
 }
 void MenuBar::OnCreateTexture2D() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateTexture2D);
+    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    filepath += "/New_Texture2D." + Texture2D::GetFileExtensionStatic();
+    AssetsManager::CreateAsset<Texture2D>(filepath);
+    Explorer::GetInstance()->StartRenaming(filepath);
 }
 
 
