@@ -163,7 +163,7 @@ const std::vector<Vector2> &Mesh::GetUvs()
 void Mesh::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
-    m_filepath = xmlInfo->GetString("MeshFilepath");
+    m_filepath = xmlInfo->GetFilepath("MeshFilepath");
     LoadFromFile(m_filepath);
 }
 
@@ -171,4 +171,6 @@ void Mesh::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("MeshFilepath");
+
+    xmlInfo->SetFilepath("MeshFilepath", m_filepath, "*.obj");
 }

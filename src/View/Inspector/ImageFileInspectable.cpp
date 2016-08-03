@@ -11,9 +11,11 @@ void ImageFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 
 void ImageFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
+    xmlInfo->SetTagName("ImageFileInspectable");
+
     xmlInfo->SetString("FileName", m_fileImage.GetName() + "." + m_fileImage.GetExtension(),
                        {XMLProperty::Readonly});
-    xmlInfo->SetString("Path", m_fileImage.GetPath(),
+    xmlInfo->SetString("Path", m_fileImage.GetRelativePath(),
                        {XMLProperty::Readonly});
     xmlInfo->SetString("Dimensions", std::to_string(m_fileImage.GetWidth()) + "x" +
                                      std::to_string(m_fileImage.GetHeight()),

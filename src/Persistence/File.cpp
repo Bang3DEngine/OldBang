@@ -12,7 +12,7 @@ File::File(const QFileSystemModel *model, const QModelIndex *index)
     m_path = Persistence::ProjectRootAbsoluteToRelative(model->filePath(*index).toStdString());
     m_name = model->fileName(*index).toStdString();
 
-    std::string::size_type p = m_name.find('.');
+    std::string::size_type p = m_name.find('.', 2);
     if (p != std::string::npos)
     {
         m_extension = m_name.substr(p+1, m_name.length() - p - 1);
@@ -69,7 +69,7 @@ const std::string &File::GetName() const
     return m_name;
 }
 
-const std::string &File::GetPath() const
+const std::string &File::GetRelativePath() const
 {
     return m_path;
 }
@@ -79,7 +79,10 @@ const std::string &File::GetExtension() const
     return m_extension;
 }
 
-const std::string &File::GetNameAndExtension() const
+std::string File::GetNameAndExtension() const
 {
-    return GetName() + "." + GetExtension();
+    std::string str = GetName();
+    str += ".";
+    str += GetExtension();
+    return  str;
 }

@@ -264,7 +264,7 @@ void MenuBar::OnCreateDirectionalLight() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateDirectionalLight);
     GameObject *go = new GameObject("DirectionalLight");
     go->SetParent(Scene::GetCurrentScene());
-    DirectionalLight *dl = go->AddComponent<DirectionalLight>();
+    go->AddComponent<DirectionalLight>();
 }
 
 void MenuBar::OnCreatePointLight() const
@@ -272,7 +272,7 @@ void MenuBar::OnCreatePointLight() const
     m_wem->NotifyMenuBarActionClicked(Action::CreatePointLight);
     GameObject *go = new GameObject("PointLight");
     go->SetParent(Scene::GetCurrentScene());
-    PointLight *pl = go->AddComponent<PointLight>();
+    go->AddComponent<PointLight>();
 }
 
 void MenuBar::OnAlignGameObjectWithView() const

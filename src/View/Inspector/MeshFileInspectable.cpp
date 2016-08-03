@@ -12,9 +12,10 @@ void MeshFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 
 void MeshFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    xmlInfo->SetString("MeshFilepath", m_fileMesh.GetName() + "." + m_fileMesh.GetExtension(),
-                      {XMLProperty::Readonly});
-    xmlInfo->SetString("Path", m_fileMesh.GetPath(), {XMLProperty::Readonly});
+    xmlInfo->SetTagName("MeshFileInspectable");
+
+    xmlInfo->SetFilepath("MeshFilepath", m_fileMesh.GetNameAndExtension(), "*.obj",
+                         {XMLProperty::Readonly});
     xmlInfo->SetString("Mode", m_fileMesh.IsTriangles() ? "Triangles" : "Quads",
                       {XMLProperty::Readonly});
     xmlInfo->SetString("Faces",  std::to_string(m_fileMesh.GetNumFaces()),

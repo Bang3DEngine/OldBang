@@ -2,6 +2,7 @@
 
 AttrWidgetFile::AttrWidgetFile(const std::string &labelString,
                                const std::string &fileExtension,
+                               bool readonly,
                                InspectorWidget *parent) :
     AttributeWidget(labelString, parent)
 {
@@ -19,9 +20,13 @@ AttrWidgetFile::AttrWidgetFile(const std::string &labelString,
     m_filepathLineEdit->setReadOnly(true);
     hLayout->addWidget(m_filepathLineEdit);
 
-    QPushButton *browseButton = new QPushButton(QString("Browse"));
-    connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
-    hLayout->addWidget(browseButton);
+    if (!readonly)
+    {
+        QPushButton *browseButton = new QPushButton(QString("Browse"));
+        browseButton->setContentsMargins(10, 0, 0, 0);
+        connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
+        hLayout->addWidget(browseButton);
+    }
 
     connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
             this, SLOT(OnDoubleClick()));

@@ -233,6 +233,9 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         m_attributes.push_back(attribute);
         if (!attribute.HasProperty(XMLProperty::Hidden))
         {
+            bool readonly = attribute.HasProperty(XMLProperty::Readonly);
+            bool inlined = attribute.HasProperty(XMLProperty::Inline);
+
             std::string attrName  = attribute.GetName();
             XMLAttribute::Type attrType = attribute.GetType();
             AttributeWidget *ws = nullptr;
@@ -245,12 +248,10 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
             {
                 std::string fileExtension =
                         attribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
-                ws = new AttrWidgetFile(attrName, fileExtension, this);
+                ws = new AttrWidgetFile(attrName, fileExtension, readonly, this);
             }
             else if (attrType == XMLAttribute::Type::String)
             {
-                bool readonly = attribute.HasProperty(XMLProperty::Readonly);
-                bool inlined = attribute.HasProperty(XMLProperty::Inline);
                 ws = new AttrWidgetString(attrName, this, readonly, inlined);
             }
             else if (attrType == XMLAttribute::Type::Bool)

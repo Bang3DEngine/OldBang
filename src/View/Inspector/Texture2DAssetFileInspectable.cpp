@@ -9,7 +9,7 @@ Texture2DAssetFileInspectable::Texture2DAssetFileInspectable
     m_fileTex(fileTex)
 {
     // Load once and save the xmlInfo
-    XMLNode *xmlTexInfo = XMLParser::FromFile(m_fileTex.GetPath());
+    XMLNode *xmlTexInfo = XMLParser::FromFile(m_fileTex.GetRelativePath());
     if (xmlTexInfo)
     {
         m_xmlInfo = *xmlTexInfo; // We can do this safely, xmlTexInfo wont have children.
@@ -20,16 +20,17 @@ Texture2DAssetFileInspectable::Texture2DAssetFileInspectable
 void Texture2DAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     // Update live instances currently being used
-    Texture2D *currentTex = AssetsManager::LoadAsset<Texture2D>(m_fileTex.GetPath());
+    Texture2D *currentTex = AssetsManager::LoadAsset<Texture2D>(m_fileTex.GetRelativePath());
     if (currentTex) // Now we update the asset file.
     {
         currentTex->OnInspectorXMLChanged(xmlInfo);
     }
-    FileWriter::WriteToFile(m_fileTex.GetPath(), xmlInfo->ToString()); //Save
+    FileWriter::WriteToFile(m_fileTex.GetRelativePath(), xmlInfo->ToString()); //Save
     m_xmlInfo = *xmlInfo;
 }
 
 void Texture2DAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
+    xmlInfo->SetTagName("Texture2DAssetFileInspectable");
     *xmlInfo = m_xmlInfo;
 }

@@ -114,13 +114,14 @@ void Explorer::RefreshInspector()
     QModelIndex clickedIndex = selectedIndexes().at(0);
     File f(m_fileSystemModel, &clickedIndex);
 
+    Inspector *inspector = WindowMain::GetInstance()->widgetInspector;
     if (lastIInspectableInInspector)
     {
+        inspector->Clear();
         delete lastIInspectableInInspector;
         lastIInspectableInInspector = nullptr;
     }
 
-    Inspector *inspector = WindowMain::GetInstance()->widgetInspector;
     IInspectable *newInspectable = nullptr;
     if (f.IsImageFile()) // jpg, png, etc.
     {
@@ -154,7 +155,7 @@ void Explorer::RefreshInspector()
 
     if (newInspectable)
     {
-        inspector->SetInspectable(newInspectable);
+        inspector->SetInspectable(newInspectable, f.GetNameAndExtension());
         lastIInspectableInInspector = newInspectable;
     }
 }
@@ -165,8 +166,16 @@ void Explorer::SelectFile(const std::string &path)
     SetDir(Persistence::GetDir(absPath));
 
     QModelIndex ind = GetModelIndexFromFilepath(absPath);
-    setCurrentIndex(ind);
-    selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::ClearAndSelect);
+    if (ind.isValid())
+    {
+        setCurrentIndex(ind);
+        selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::ClearAndSelect);
+    }
+    else
+    {
+    }
+
+    Refresh();
 }
 
 Explorer *Explorer::GetInstance()
@@ -180,9 +189,9 @@ void Explorer::Refresh()
     {
        QModelIndex index = selectedIndexes().at(0);
        File f(m_fileSystemModel, &index);
-       if (f.GetPath() != m_lastSelectedPath)
+       if (f.GetRelativePath() != m_lastSelectedPath)
        {
-           m_lastSelectedPath = f.GetPath();
+           m_lastSelectedPath = f.GetRelativePath();
            RefreshInspector();
        }
     }

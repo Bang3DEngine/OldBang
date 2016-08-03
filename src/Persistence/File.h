@@ -29,10 +29,10 @@ public:
     bool IsDir() const;
     bool IsFile() const;
 
-    const std::string& GetPath() const;
+    const std::string& GetRelativePath() const;
     const std::string& GetName() const;
     const std::string& GetExtension() const;
-    const std::string& GetNameAndExtension() const;
+    std::string GetNameAndExtension() const;
 };
 
 #endif // FILE_H

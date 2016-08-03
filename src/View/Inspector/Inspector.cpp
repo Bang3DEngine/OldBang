@@ -32,31 +32,36 @@ void Inspector::Clear()
     m_currentGameObject = nullptr;
     m_titleLabel->setText(QString::fromStdString(""));
 
+    if (m_currentInspectorWidget)
+    {
+        delete m_currentInspectorWidget;
+        m_currentInspectorWidget = nullptr;
+    }
+
     setStyleSheet("/* */"); //without this line we get resize problems :)
     show();
 }
 
 void Inspector::Refresh()
 {
-    GameObject *e = m_currentGameObject;
-    Clear();
-    ShowGameObjectInfo(e);
+    if (m_currentGameObject)
+    {
+        Clear();
+        ShowGameObjectInfo(m_currentGameObject);
+    }
 }
 
 void Inspector::SetInspectable(IInspectable *inspectable, const std::string &title)
 {
-    InspectorWidget *iw = new InspectorWidget(title, inspectable);
-
     Clear();
-    AddWidget(iw);
+    m_currentInspectorWidget = new InspectorWidget(title, inspectable);
+    AddWidget(m_currentInspectorWidget);
 }
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
     Clear();
-    m_currentGameObject = gameObject;
-
-    NONULL(m_currentGameObject);
+    m_currentGameObject = gameObject; NONULL(m_currentGameObject);
 
     for (Component *p : m_currentGameObject->GetComponents())
     {
@@ -70,12 +75,16 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 
 void Inspector::AddWidget(InspectorWidget *widget)
 {
+    NONULL(widget);
+
     QListWidgetItem *item = new QListWidgetItem();
     m_widgetToItem[widget] = item;
     addItem(item);
 
     setItemWidget(item, widget);
-    item->setSizeHint(widget->size());
+    item->setSizeHint(widget->size()); // error aqui
+    widget->adjustSize();
+    widget->show();
 
     adjustSize();
     setStyleSheet("/* */"); //without this line we get resize problems :)
