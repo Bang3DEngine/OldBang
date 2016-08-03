@@ -2,6 +2,10 @@
 
 Material::Material() : Asset()
 {
+    // TODO: Create shaderProgram asset and use AssetManager to load this
+    SetShaderProgram(new ShaderProgram(
+                         ShaderContract::Filepath_Shader_D2G_Default_VS,
+                         ShaderContract::Filepath_Shader_D2G_Default_FS));
 }
 
 Material::Material(const Material &m)
@@ -12,7 +16,10 @@ Material::Material(const Material &m)
 
 Material::~Material()
 {
-
+    if (m_shaderProgram)
+    {
+        delete m_shaderProgram;
+    }
 }
 
 void Material::Bind() const
@@ -48,7 +55,14 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
 
     std::string vshaderFilepath = xmlInfo->GetFilepath("VertexShader");
     std::string fshaderFilepath = xmlInfo->GetFilepath("FragmentShader");
-    SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
+    if (!m_shaderProgram ||
+        !m_shaderProgram->GetVertexShader() || !m_shaderProgram->GetFragmentShader() ||
+        vshaderFilepath != m_shaderProgram->GetVertexShader()->GetFilepath()   ||
+        fshaderFilepath != m_shaderProgram->GetFragmentShader()->GetFilepath()
+        )
+    {
+        SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
+    }
 
     int numTextures = xmlInfo->GetInt("TextureCount");
     if(numTextures == 1)
@@ -67,23 +81,28 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Material");
 
     std::string vsFile =  "", fsFile = "";
-    if (this->m_shaderProgram)
+    if (m_shaderProgram)
     {
-        if (this->m_shaderProgram->GetVertexShader())
+        if (m_shaderProgram->GetVertexShader())
         {
-            vsFile = this->m_shaderProgram->GetVertexShader()->GetFilepath();
+            vsFile = m_shaderProgram->GetVertexShader()->GetFilepath();
         }
 
-        if (this->m_shaderProgram->GetFragmentShader())
+        if (m_shaderProgram->GetFragmentShader())
         {
-            fsFile = this->m_shaderProgram->GetFragmentShader()->GetFilepath();
+            fsFile = m_shaderProgram->GetFragmentShader()->GetFilepath();
         }
     }
 
     xmlInfo->SetFilepath("VertexShader", vsFile);
     xmlInfo->SetFilepath("FragmentShader", fsFile);
-    xmlInfo->SetInt("TextureCount", 1);
-    xmlInfo->SetFilepath("Texture1", m_texture->GetFilepath());
+
+    if (m_texture)
+    {
+        xmlInfo->SetInt("TextureCount", 1);
+        xmlInfo->SetFilepath("Texture1", m_texture->GetFilepath());
+    }
+
     xmlInfo->SetColor("DiffuseColor", GetDiffuseColor());
 }
 

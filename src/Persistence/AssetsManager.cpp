@@ -13,11 +13,23 @@ bool AssetsManager::IsAssetLoaded(const std::string &filepath)
     return (m_idToAssetPointer.find(f) != m_idToAssetPointer.end());
 }
 
-void AssetsManager::SaveAsset(const std::string &filepath, Asset *pointerToAsset)
+void AssetsManager::SaveAssetToMap(const std::string &filepath, Asset *pointerToAsset)
 {
-    if (filepath != "")
+    if (filepath != "" && pointerToAsset)
     {
         std::string f = AssetsManager::FormatFilepath(filepath);
         m_idToAssetPointer[f] = pointerToAsset;
     }
+}
+
+void AssetsManager::SaveAssetToFile(const std::string &filepath, Asset *pointerToAsset)
+{
+    if (filepath != "" && pointerToAsset)
+    {
+        XMLNode *xmlInfo = new XMLNode();
+        pointerToAsset->FillXMLInfo(xmlInfo);
+        FileWriter::WriteToFile(filepath, xmlInfo->ToString());
+        delete xmlInfo;
+    }
+
 }

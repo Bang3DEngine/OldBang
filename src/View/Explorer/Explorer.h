@@ -39,11 +39,15 @@ private:
     QToolButton *m_buttonChangeViewMode = nullptr;
     IInspectable *lastIInspectableInInspector = nullptr;
 
-    std::string m_lastSelectedFileName = "";
+    std::string m_lastSelectedPath = "";
     QTimer *m_updateTimer = nullptr;
 
+    std::string GetFilepathFromModelIndex(const QModelIndex &qmi);
+    std::string GetRelativeFilepathFromModelIndex(const QModelIndex &qmi);
+    std::string GetDirFromModelIndex(const QModelIndex &qmi);
+    std::string GetRelativeDirFromModelIndex(const QModelIndex &qmi);
+    QModelIndex GetModelIndexFromFilepath(const std::string &filepath);
     void SetDir(const std::string &path);
-    std::string GetCurrentDir() const;
 
 protected:
     //To set the scroll step to a smaller one
@@ -53,12 +57,20 @@ public:
     Explorer(QWidget *parent);
     virtual ~Explorer();
 
+    std::string GetCurrentDir() const;
+
+    void StartRenaming(const std::string &filepath);
+
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
     void dropEvent(QDropEvent *e) override;
 
     //Updates the Inspector with the selected file info
     void RefreshInspector();
+
+    void SelectFile(const std::string &path);
+
+    static Explorer* GetInstance();
 
 public slots:
     void Refresh();

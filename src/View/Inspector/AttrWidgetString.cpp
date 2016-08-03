@@ -16,8 +16,7 @@ AttrWidgetString::AttrWidgetString(const std::string &labelString,
     }
     setLayout(layout);
 
-    m_strField = new LabelStringSW(); //Right side
-    m_strField->setReadOnly(readonly);
+    m_strField = new LineEdit(readonly); //Right side
     m_strField->setAlignment(Qt::AlignRight);
     m_strField->setMinimumWidth(50);
     m_strField->setMinimumHeight(25);
@@ -66,6 +65,53 @@ void AttrWidgetString::OnFocusOut()
 QSize AttrWidgetString::sizeHint() const
 {
     return QSize(100, 30);
+}
+
+////////////////////////////////////////////////////////////
+
+LineEdit::LineEdit(bool readonly) : QLineEdit()
+{
+    setReadOnly(readonly);
+    if (readonly)
+    {
+        connect (this, SIGNAL(selectionChanged()),
+                 this, SLOT(Deselect()));
+    }
+}
+
+void LineEdit::focusInEvent(QFocusEvent *event)
+{
+    QLineEdit::focusInEvent(event);
+    QTimer::singleShot(50, this, SLOT(SelectAll()));
+    static_cast<AttrWidgetString*>(parent())->OnFocusIn();
+}
+
+void LineEdit::focusOutEvent(QFocusEvent *event)
+{
+    QLineEdit::focusOutEvent(event);
+    static_cast<AttrWidgetString*>(parent())->OnFocusOut();
+}
+
+void LineEdit::keyPressEvent(QKeyEvent *event)
+{
+    QLineEdit::keyPressEvent(event);
+    if (event->key() == QKeyEvent::Enter)
+    {
+        static_cast<AttrWidgetString*>(parent())->OnFocusOut();
+    }
+}
+
+void LineEdit::Deselect()
+{
+    deselect();
+}
+
+void LineEdit::SelectAll()
+{
+    if (!this->isReadOnly())
+    {
+        this->selectAll();
+    }
 }
 
 

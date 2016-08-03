@@ -1,5 +1,6 @@
-<Material VertexShader:File="./Assets/Engine/Shaders/PR_DrawScreenPlane.vert"{FileExtension="*.vert"}
+<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
           FragmentShader:File="./Assets/Engine/Shaders/PR_PointLight.frag"{FileExtension="*.frag"}
           TextureCount:Int="0"{}
-          DiffuseColor:Color="(1,1,1,1)"{}>
+          VertexShader:File="./Assets/Engine/Shaders/PR_DrawScreenPlane.vert"{FileExtension="*.vert"}
+         >
 </Material>

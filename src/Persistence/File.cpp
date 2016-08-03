@@ -78,3 +78,8 @@ const std::string &File::GetExtension() const
 {
     return m_extension;
 }
+
+const std::string &File::GetNameAndExtension() const
+{
+    return GetName() + "." + GetExtension();
+}

@@ -85,6 +85,10 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
                     m_fileSystemModel->fileName(clickedIndex).toStdString();
             SetDir(GetCurrentDir() + "/" + clickedDirName);
         }
+        else
+        {
+
+        }
     }
 }
 
@@ -105,9 +109,9 @@ void Explorer::dropEvent(QDropEvent *e)
 
 void Explorer::RefreshInspector()
 {
-    if (this->selectedIndexes().size() <= 0) return;
+    if (selectedIndexes().size() <= 0) return;
 
-    QModelIndex clickedIndex = this->selectedIndexes().at(0);
+    QModelIndex clickedIndex = selectedIndexes().at(0);
     File f(m_fileSystemModel, &clickedIndex);
 
     if (lastIInspectableInInspector)
@@ -155,23 +159,70 @@ void Explorer::RefreshInspector()
     }
 }
 
+void Explorer::SelectFile(const std::string &path)
+{
+    std::string absPath = Persistence::ProjectRootRelativeToAbsolute(path);
+    SetDir(Persistence::GetDir(absPath));
+
+    QModelIndex ind = GetModelIndexFromFilepath(absPath);
+    setCurrentIndex(ind);
+    selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::ClearAndSelect);
+}
+
+Explorer *Explorer::GetInstance()
+{
+    return WindowMain::GetInstance()->widgetListExplorer;
+}
+
 void Explorer::Refresh()
 {
-    if (selectedIndexes().length() > 0)
+    if (selectedIndexes().size() > 0)
     {
        QModelIndex index = selectedIndexes().at(0);
        File f(m_fileSystemModel, &index);
-       if (f.GetName() != m_lastSelectedFileName)
+       if (f.GetPath() != m_lastSelectedPath)
        {
-           m_lastSelectedFileName = f.GetName();
+           m_lastSelectedPath = f.GetPath();
            RefreshInspector();
        }
     }
 }
 
+std::string Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi)
+{
+    std::string f = m_fileSystemModel->fileInfo(qmi).absoluteFilePath().toStdString();
+    return f;
+}
+
+std::string Explorer::GetRelativeFilepathFromModelIndex(const QModelIndex &qmi)
+{
+    std::string f = GetFilepathFromModelIndex(qmi);
+    return Persistence::ProjectRootAbsoluteToRelative(f);
+}
+
+std::string Explorer::GetDirFromModelIndex(const QModelIndex &qmi)
+{
+    std::string f = m_fileSystemModel->fileInfo(qmi).absoluteDir()
+                    .absolutePath().toStdString();
+    return f;
+}
+
+std::string Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi)
+{
+    std::string f = GetDirFromModelIndex(qmi);
+    return Persistence::ProjectRootAbsoluteToRelative(f);
+}
+
+QModelIndex Explorer::GetModelIndexFromFilepath(const std::string &filepath)
+{
+    std::string absFilepath = Persistence::ProjectRootRelativeToAbsolute(filepath);
+    return m_fileSystemModel->index(QString::fromStdString(absFilepath));
+}
+
 void Explorer::SetDir(const std::string &path)
 {
-    setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(path)));
+    std::string absDir = Persistence::ProjectRootRelativeToAbsolute(path);
+    setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(absDir)));
 }
 
 void Explorer::OnDirLoaded(QString dir)
@@ -193,6 +244,11 @@ void Explorer::OnDirLoaded(QString dir)
 std::string Explorer::GetCurrentDir() const
 {
     return m_fileSystemModel->rootPath().toStdString();
+}
+
+void Explorer::StartRenaming(const std::string &filepath)
+{
+
 }
 
 void Explorer::updateGeometries()

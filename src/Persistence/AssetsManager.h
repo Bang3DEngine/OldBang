@@ -50,7 +50,8 @@ private:
         return a;
     }
 
-    static void SaveAsset(const std::string &filepath, Asset* pointerToAsset);
+    static void SaveAssetToMap(const std::string &filepath, Asset* pointerToAsset);
+    static void SaveAssetToFile(const std::string &filepath, Asset* pointerToAsset);
 
     AssetsManager() {}
 
@@ -62,19 +63,31 @@ public:
       * If there's no such Asset, it is loaded, added to the cache, and returned
       * If the file can't be read, nullptr is returned  **/
     template <class T>
+    static T* CreateAsset(const std::string &filepath)
+    {
+        T *a = new T();
+        //a->m_filepath = filepath;
+        SaveAssetToFile(filepath, a);
+        return a;
+    }
+
+    /** Tries to retrieve an Asset from the AssetsManager cache
+      * If there's no such Asset, it is loaded, added to the cache, and returned
+      * If the file can't be read, nullptr is returned  **/
+    template <class T>
     static T* LoadAsset(const std::string &filepath)
     {
-        Asset *a = nullptr;
+        T *a = nullptr;
         if (!IsAssetLoaded(filepath))
         {
             a = ReadAssetFile<T>(filepath);
-            SaveAsset(filepath, a);
+            SaveAssetToMap(filepath, a);
         }
         else
         {
             a = GetAsset<T>(filepath);
         }
-        return a ? static_cast<T*>(a) : nullptr;
+        return a;
     }
 };
 

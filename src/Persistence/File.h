@@ -32,6 +32,7 @@ public:
     const std::string& GetPath() const;
     const std::string& GetName() const;
     const std::string& GetExtension() const;
+    const std::string& GetNameAndExtension() const;
 };
 
 #endif // FILE_H

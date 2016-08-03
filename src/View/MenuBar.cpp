@@ -292,6 +292,9 @@ void MenuBar::OnCreatePrefab() const
 void MenuBar::OnCreateMaterial() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateMaterial);
+    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    filepath += "/New_Material." + Material::GetFileExtensionStatic();
+    AssetsManager::CreateAsset<Material>(filepath);
 }
 void MenuBar::OnCreateMesh() const
 {

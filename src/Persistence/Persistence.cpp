@@ -20,7 +20,7 @@ std::string Persistence::GetAssetsRelativePathFromProjectRoot()
 std::string Persistence::GetAssetsPathAbsolute()
 {
     return GetProjectRootPathAbsolute() +
-            GetAssetsRelativePathFromProjectRoot();
+           GetAssetsRelativePathFromProjectRoot();
 }
 
 std::string Persistence::GetDir(const std::string &filepath)
@@ -48,6 +48,7 @@ std::string Persistence::GetFileNameWithExtension(const std::string &filepath)
 
 std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPath)
 {
+    if (relPath == "") return "";
     if (IsAbsolute(relPath)) return relPath;
 
     if (relPath[0] == '.')
@@ -71,6 +72,8 @@ std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPat
 std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPath)
 {
     // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
+    if (absPath == "") return "";
+
     if (!IsAbsolute(absPath))
     {
         if (absPath[0] != '.')

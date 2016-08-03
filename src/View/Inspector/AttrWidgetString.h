@@ -8,13 +8,13 @@
 
 #include "AttributeWidget.h"
 
-class LabelStringSW;
+class LineEdit;
 class AttrWidgetString : public AttributeWidget
 {
     Q_OBJECT
 
 private:
-    LabelStringSW *m_strField = nullptr;
+    LineEdit *m_strField = nullptr;
     bool m_editing = false;
 
 public:
@@ -32,46 +32,21 @@ public:
 };
 
 
-class LabelStringSW : public QLineEdit //Slot for a float (label + float)
+class LineEdit : public QLineEdit //Slot for a float (label + float)
 {
     Q_OBJECT
 
 public:
-    LabelStringSW() : QLineEdit()
-    {
-    }
+    LineEdit(bool readonly);
 
-    virtual void focusInEvent(QFocusEvent * event) override
-    {
-        QLineEdit::focusInEvent(event);
-        QTimer::singleShot(50, this, SLOT(SelectAll()));
-        static_cast<AttrWidgetString*>(parent())->OnFocusIn();
-    }
-
-    virtual void focusOutEvent(QFocusEvent * event) override
-    {
-        QLineEdit::focusOutEvent(event);
-        static_cast<AttrWidgetString*>(parent())->OnFocusOut();
-    }
-
-    virtual void  keyPressEvent(QKeyEvent *event) override
-    {
-        QLineEdit::keyPressEvent(event);
-        if (event->key() == QKeyEvent::Enter)
-        {
-            static_cast<AttrWidgetString*>(parent())->OnFocusOut();
-        }
-    }
+    virtual void focusInEvent(QFocusEvent * event) override;
+    virtual void focusOutEvent(QFocusEvent * event) override;
+    virtual void  keyPressEvent(QKeyEvent *event) override;
 
 public slots:
 
-    void SelectAll()
-    {
-        if (!this->isReadOnly())
-        {
-            this->selectAll();
-        }
-    }
+    void Deselect();
+    void SelectAll();
 };
 
 #endif // INSPECTORSTRINGSW_H
