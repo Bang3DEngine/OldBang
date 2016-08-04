@@ -27,6 +27,16 @@ Box::Box(const Box &b)
     m_maxv = b.m_maxv;
 }
 
+void Box::SetMin(const Vector3 &bMin)
+{
+    m_minv = bMin;
+}
+
+void Box::SetMax(const Vector3 &bMax)
+{
+    m_maxv = bMax;
+}
+
 Vector3 Box::GetMin() const
 {
     return m_minv;

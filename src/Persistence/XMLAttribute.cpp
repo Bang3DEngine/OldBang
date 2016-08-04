@@ -257,6 +257,7 @@ bool XMLAttribute::HasVectoredType() const
            m_type == XMLAttribute::Type::Vector2 ||
            m_type == XMLAttribute::Type::Vector3 ||
            m_type == XMLAttribute::Type::Vector4 ||
+           m_type == XMLAttribute::Type::Rect    ||
            m_type == XMLAttribute::Type::Quaternion;
 }
 

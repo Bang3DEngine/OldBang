@@ -115,6 +115,32 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
     Gizmos::m_receivesLighting = receivesLighting;
 }
 
+
+void Gizmos::DrawSimpleBox(const Box &b)
+{
+    Gizmos::Init();
+    Gizmos::SetStatesBeforeDrawing();
+
+    Vector3 bMin = b.GetMin();
+    Vector3 bMax = b.GetMax();
+    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMin.z), Vector3(bMax.x, bMin.y, bMin.z));
+    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMin.z), Vector3(bMin.x, bMax.y, bMin.z));
+    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMin.z), Vector3(bMin.x, bMin.y, bMax.z));
+
+    Gizmos::DrawLine(Vector3(bMax.x, bMin.y, bMin.z), Vector3(bMax.x, bMax.y, bMin.z));
+    Gizmos::DrawLine(Vector3(bMax.x, bMin.y, bMin.z), Vector3(bMax.x, bMin.y, bMax.z));
+
+    Gizmos::DrawLine(Vector3(bMin.x, bMax.y, bMin.z), Vector3(bMax.x, bMax.y, bMin.z));
+    Gizmos::DrawLine(Vector3(bMin.x, bMax.y, bMin.z), Vector3(bMin.x, bMax.y, bMax.z));
+
+    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMax.z), Vector3(bMax.x, bMin.y, bMax.z));
+    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMax.z), Vector3(bMin.x, bMax.y, bMax.z));
+
+    Gizmos::DrawLine(Vector3(bMin.x, bMax.y, bMax.z), Vector3(bMax.x, bMax.y, bMax.z));
+    Gizmos::DrawLine(Vector3(bMax.x, bMin.y, bMax.z), Vector3(bMax.x, bMax.y, bMax.z));
+    Gizmos::DrawLine(Vector3(bMax.x, bMax.y, bMin.z), Vector3(bMax.x, bMax.y, bMax.z));
+}
+
 void Gizmos::DrawBox(const Box &b)
 {
     Gizmos::Init();
@@ -172,6 +198,11 @@ void Gizmos::DrawLine(const Vector3 &origin, const Vector3 &destiny)
     Gizmos::m_singleLineRenderer->Render();
 }
 
+void Gizmos::DrawRay(const Vector3 &origin, const Vector3 &rayDir)
+{
+    Gizmos::DrawLine(origin, origin + rayDir);
+}
+
 void Gizmos::DrawSphere(const Vector3 &origin, float radius)
 {
     Gizmos::Init();
@@ -184,6 +215,52 @@ void Gizmos::DrawSphere(const Vector3 &origin, float radius)
     Gizmos::m_gizmosGameObject->transform->SetScale(radius);
 
     Gizmos::m_meshRenderer->Render();
+}
+
+void Gizmos::DrawFrustum(const Vector3 &forward, const Vector3 &up,
+                         const Vector3 &origin,
+                         float zNear, float zFar,
+                         float fov, float aspectRatio)
+{
+    Gizmos::Init();
+    Gizmos::SetStatesBeforeDrawing();
+
+    const Vector3 &c = origin;
+    const Vector3 right = Vector3::Cross(up, forward);
+
+    const float fov2 = fov * (3.141592f / 180.0f) * 0.5f;
+    const Vector3 dirUp    = (forward + up    * glm::sin(       fov2       )).Normalized();
+    const Vector3 dirDown  = (forward - up    * glm::sin(       fov2       )).Normalized();
+    const Vector3 dirRight = (forward + right * glm::cos(fov2 * aspectRatio)).Normalized();
+    const Vector3 dirLeft  = (forward - right * glm::cos(fov2 * aspectRatio)).Normalized();
+
+    Vector3 nearUpLeft    = c + (dirUp   + dirLeft ).Normalized() * zNear;
+    Vector3 nearUpRight   = c + (dirUp   + dirRight).Normalized() * zNear;
+    Vector3 nearDownRight = c + (dirDown + dirRight).Normalized() * zNear;
+    Vector3 nearDownLeft  = c + (dirDown + dirLeft ).Normalized() * zNear;
+
+    Vector3 farUpLeft     = c + (dirUp   + dirLeft ).Normalized() * (zNear + zFar);
+    Vector3 farUpRight    = c + (dirUp   + dirRight).Normalized() * (zNear + zFar);
+    Vector3 farDownRight  = c + (dirDown + dirRight).Normalized() * (zNear + zFar);
+    Vector3 farDownLeft   = c + (dirDown + dirLeft ).Normalized() * (zNear + zFar);
+
+    // Near plane
+    Gizmos::DrawLine(nearUpLeft   , nearUpRight);
+    Gizmos::DrawLine(nearUpRight  , nearDownRight);
+    Gizmos::DrawLine(nearDownRight, nearDownLeft);
+    Gizmos::DrawLine(nearDownLeft , nearUpLeft);
+
+    // Far plane
+    Gizmos::DrawLine(farUpLeft   , farUpRight);
+    Gizmos::DrawLine(farUpRight  , farDownRight);
+    Gizmos::DrawLine(farDownRight, farDownLeft);
+    Gizmos::DrawLine(farDownLeft , farUpLeft);
+
+    // Projection lines
+    Gizmos::DrawLine(nearUpLeft   , farUpLeft);
+    Gizmos::DrawLine(nearUpRight  , farUpRight);
+    Gizmos::DrawLine(nearDownRight, farDownRight);
+    Gizmos::DrawLine(nearDownLeft , farDownLeft);
 }
 
 void Gizmos::DrawSimpleSphere(const Vector3 &origin, float radius)

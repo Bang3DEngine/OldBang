@@ -66,14 +66,12 @@ void DirectionalLight::OnDrawGizmos()
 
         Gizmos::SetColor(GetColor());
         Gizmos::SetReceivesLighting(false);
-        Gizmos::DrawLine(c + right     , c + right + forward);
-        Gizmos::DrawLine(c - right     , c - right + forward);
-        Gizmos::DrawLine(c + up        , c + up    + forward);
-        Gizmos::DrawLine(c - up        , c - up    + forward);
-        Gizmos::DrawLine(c + right + up, c + right + up + forward);
-        Gizmos::DrawLine(c + right - up, c + right - up + forward);
-        Gizmos::DrawLine(c - right + up, c - right + up + forward);
-        Gizmos::DrawLine(c - right - up, c - right - up + forward);
+        for (float angle = 0.0f; angle <= 2 * glm::pi<float>(); angle += glm::pi<float>() / 4.0f)
+        {
+            Vector3 offx = right * glm::cos(angle);
+            Vector3 offy = up * glm::sin(angle);
+            Gizmos::DrawLine(c + offx + offy, c + offx + offy + forward);
+        }
     }
 }
 #endif

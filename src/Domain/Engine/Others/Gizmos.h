@@ -52,11 +52,17 @@ public:
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
     static void DrawBox(const Box &b);
+    static void DrawSimpleBox(const Box &b);
     static void DrawIcon(const Texture2D *texture,
                          const Vector3 &position, const Vector3 &scale,
                          bool billboard = true);
     static void DrawLine(const Vector3 &origin, const Vector3 &destiny);
+    static void DrawRay(const Vector3 &origin, const Vector3 &rayDir);
     static void DrawSphere(const Vector3 &origin, float radius);
+    static void DrawFrustum(const Vector3 &forward, const Vector3 &up,
+                            const Vector3 &origin,
+                            float zNear, float zFar,
+                            float fov, float aspectRatio);
     static void DrawSimpleSphere(const Vector3 &origin, float radius);
 };
 

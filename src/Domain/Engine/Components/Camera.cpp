@@ -157,7 +157,30 @@ void Camera::OnDrawGizmos()
     Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("./Assets/Engine/Textures/CameraIcon.btex2d");
     Gizmos::SetColor(Color::gray);
     Gizmos::DrawIcon(tex, gameObject->transform->GetPosition(), Vector3::one * 10.0f);
+
+    if (gameObject->IsSelectedInHierarchy())
+    {
+        Gizmos::SetColor(Color::red);
+        Gizmos::SetReceivesLighting(false);
+
+        if (GetProjectionMode() == ProjectionMode::Perspective)
+        {
+            Gizmos::DrawFrustum(transform->GetForward(), transform->GetUp(),
+                                transform->GetPosition(),
+                                GetZNear(), GetZFar(),
+                                GetFovDegrees(), GetAspectRatio());
+        }
+        else
+        {
+            Box orthoBox;
+            orthoBox.SetMin(Vector3(m_orthoRect.m_minx, m_orthoRect.m_miny, GetZNear()));
+            orthoBox.SetMax(Vector3(m_orthoRect.m_maxx, m_orthoRect.m_maxy, GetZFar()));
+            Gizmos::DrawSimpleBox(orthoBox);
+        }
+    }
 }
+
+
 
 
 #ifdef BANG_EDITOR

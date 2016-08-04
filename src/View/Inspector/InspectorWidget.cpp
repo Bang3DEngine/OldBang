@@ -104,7 +104,8 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
                     attribute.SetVector3(Vector3(v[0], v[1], v[2]), attribute.GetProperties());
                 }
                 else if (attrType == XMLAttribute::Type::Vector4 ||
-                         attrType == XMLAttribute::Type::Quaternion)
+                         attrType == XMLAttribute::Type::Quaternion ||
+                         attrType == XMLAttribute::Type::Rect)
                 {
                     attribute.SetVector4(Vector4(v[0], v[1], v[2], v[3]), attribute.GetProperties());
                 }
@@ -180,7 +181,8 @@ void InspectorWidget::RefreshWidgetValues()
                     wv->SetValue({v.x, v.y, v.z});
                 }
                 else if (attrType == XMLAttribute::Type::Vector4 ||
-                         attrType == XMLAttribute::Type::Quaternion)
+                         attrType == XMLAttribute::Type::Quaternion ||
+                         attrType == XMLAttribute::Type::Rect)
                 {
                     Vector4 v = xmlInfo.GetVector4(attrName);
                     wv->SetValue({v.x, v.y, v.z, v.w});

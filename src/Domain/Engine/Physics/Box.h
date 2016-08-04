@@ -25,6 +25,9 @@ public:
     Box(const Vector3 &min, const Vector3 &max);
     Box(const Box& b);
 
+    void SetMin(const Vector3& bMin);
+    void SetMax(const Vector3& bMax);
+
     Vector3 GetMin() const;
     Vector3 GetMax() const;
     Vector3 GetDiagonal() const;
