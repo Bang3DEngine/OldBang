@@ -10,6 +10,16 @@ Component::~Component()
 {
 }
 
+void Component::_OnDrawGizmos()
+{
+    Gizmos::Reset();
+}
+
+void Component::_OnDrawGizmosNoDepth()
+{
+    Gizmos::Reset();
+}
+
 void Component::CloneInto(ICloneable *clone) const
 {
     Component *c = static_cast<Component*>(clone);

@@ -1,5 +1,6 @@
 #include "Gizmos.h"
 
+#include "Renderer.h"
 #include "Material.h"
 #include "Texture2D.h"
 #include "MeshRenderer.h"
@@ -9,6 +10,7 @@
 #include "SingleLineRenderer.h"
 
 EditorGameObject *Gizmos::m_gizmosGameObject = nullptr;
+std::vector<Renderer*> Gizmos::renderers;
 
 SingleLineRenderer *Gizmos::m_singleLineRenderer = nullptr;
 CircleRenderer *Gizmos::m_circleRenderer = nullptr;
@@ -16,13 +18,16 @@ MeshRenderer *Gizmos::m_meshRenderer = nullptr;
 Mesh *Gizmos::m_boxMesh = nullptr;
 Mesh *Gizmos::m_sphereMesh = nullptr;
 Mesh *Gizmos::m_planeMesh = nullptr;
-bool Gizmos::m_wireframe = false;
+bool  Gizmos::m_wireframe = false;
 
 Material *Gizmos::m_material = nullptr;
 
 Color Gizmos::m_color = Color::white;
 float Gizmos::m_lineWidth = 1.0f;
-bool Gizmos::m_receivesLighting = false;
+bool  Gizmos::m_ignoreModel      = false;
+bool  Gizmos::m_ignoreView       = false;
+bool  Gizmos::m_ignoreProjection = false;
+bool  Gizmos::m_receivesLighting = false;
 
 bool Gizmos::m_inited = false;
 
@@ -34,6 +39,7 @@ void Gizmos::Init()
         Gizmos::m_sphereMesh = MeshFactory::GetSphere();
         Gizmos::m_planeMesh = MeshFactory::GetPlane();
         Gizmos::m_material = AssetsManager::LoadAsset<Material>("./Assets/Engine/Materials/D2G_Default.bmat");
+        Gizmos::m_material = new Material(*Gizmos::m_material);
 
         Gizmos::m_inited = true;
     }
@@ -41,7 +47,7 @@ void Gizmos::Init()
 
 void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
 {
-    Init();
+    Gizmos::Init();
 
     if (m_gizmosGameObject)
     {
@@ -50,46 +56,35 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
     m_gizmosGameObject = ego;
 
     Gizmos::m_singleLineRenderer = m_gizmosGameObject->AddComponent<SingleLineRenderer>();
-    Gizmos::m_singleLineRenderer->SetMaterial(Gizmos::m_material);
-
     Gizmos::m_circleRenderer = m_gizmosGameObject->AddComponent<CircleRenderer>();
-    Gizmos::m_circleRenderer->SetMaterial(Gizmos::m_material);
-
     Gizmos::m_meshRenderer = m_gizmosGameObject->AddComponent<MeshRenderer>();
-    Gizmos::m_meshRenderer->SetMaterial(Gizmos::m_material);
 
+    renderers.push_back(Gizmos::m_singleLineRenderer);
+    renderers.push_back(Gizmos::m_circleRenderer);
+    renderers.push_back(Gizmos::m_meshRenderer);
+
+    for (Renderer *rend : Gizmos::renderers)
+    {
+        rend->SetMaterial(Gizmos::m_material);
+    }
 }
 
 void Gizmos::SetStatesBeforeDrawing()
 {
-    Gizmos::m_singleLineRenderer->GetMaterial()->SetDiffuseColor(m_color);
-    Gizmos::m_circleRenderer->GetMaterial()->SetDiffuseColor(m_color);
-    Gizmos::m_meshRenderer->GetMaterial()->SetDiffuseColor(m_color);
-
-    Gizmos::m_singleLineRenderer->SetLineWidth(m_lineWidth);
-    Gizmos::m_circleRenderer->SetLineWidth(m_lineWidth);
-    Gizmos::m_meshRenderer->SetLineWidth(m_lineWidth);
-
-    Gizmos::m_singleLineRenderer->SetReceivesLighting(m_receivesLighting);
-    Gizmos::m_circleRenderer->SetReceivesLighting(m_receivesLighting);
-    Gizmos::m_meshRenderer->SetReceivesLighting(m_receivesLighting);
-
-    Gizmos::m_singleLineRenderer->SetDrawWireframe(m_wireframe);
-    Gizmos::m_circleRenderer->SetDrawWireframe(m_wireframe);
-    Gizmos::m_meshRenderer->SetDrawWireframe(m_wireframe);
-
+    for (Renderer *rend : Gizmos::renderers)
+    {
+        rend->GetMaterial()->SetDiffuseColor(m_color);
+        rend->SetLineWidth(m_lineWidth);
+        rend->SetReceivesLighting(m_receivesLighting);
+        rend->SetDrawWireframe(m_wireframe);
+        rend->SetIgnoreModelMatrix(m_ignoreModel);
+        rend->SetIgnoreViewMatrix(m_ignoreView);
+        rend->SetIgnoreProjectionMatrix(m_ignoreProjection);
+        rend->transform->SetPosition(Vector3::zero);
+        rend->transform->SetRotation(Quaternion::identity);
+        rend->transform->SetScale(Vector3::one);
+    }
     Gizmos::m_meshRenderer->GetMaterial()->SetTexture(nullptr);
-
-    Gizmos::m_gizmosGameObject->transform->SetPosition(Vector3::zero);
-    Gizmos::m_gizmosGameObject->transform->SetRotation(Quaternion::identity);
-    Gizmos::m_gizmosGameObject->transform->SetScale(Vector3::one);
-}
-
-void Gizmos::OnNewFrame()
-{
-    Gizmos::m_singleLineRenderer->SetEnabled(false);
-    Gizmos::m_circleRenderer->SetEnabled(false);
-    Gizmos::m_meshRenderer->SetEnabled(false);
 }
 
 void Gizmos::SetColor(const Color &color)
@@ -110,6 +105,14 @@ void Gizmos::SetDrawWireframe(bool wireframe)
 void Gizmos::SetReceivesLighting(bool receivesLighting)
 {
     Gizmos::m_receivesLighting = receivesLighting;
+}
+
+void Gizmos::SetIgnoreMatrices(bool ignoreModel, bool ignoreView,
+                               bool ignoreProjection)
+{
+    m_ignoreModel = ignoreModel;
+    m_ignoreView = ignoreView;
+    m_ignoreProjection = ignoreProjection;
 }
 
 
@@ -285,4 +288,23 @@ void Gizmos::DrawSimpleSphere(const Vector3 &origin, float radius)
     Gizmos::m_circleRenderer->Render();
     Gizmos::m_gizmosGameObject->transform->SetLocalEuler(90, 0, 0);
     Gizmos::m_circleRenderer->Render();
+}
+
+void Gizmos::Reset()
+{
+    Gizmos::Init();
+
+    for (Renderer *rend : Gizmos::renderers)
+    {
+        rend->GetMaterial()->SetDiffuseColor(Color::green);
+        rend->SetLineWidth(1.0f);
+        rend->SetReceivesLighting(false);
+        rend->SetDrawWireframe(true);
+        rend->SetIgnoreModelMatrix(false);
+        rend->SetIgnoreViewMatrix(false);
+        rend->SetIgnoreProjectionMatrix(false);
+        rend->transform->SetPosition(Vector3::zero);
+        rend->transform->SetRotation(Quaternion::identity);
+        rend->transform->SetScale(Vector3::one);
+    }
 }

@@ -53,8 +53,10 @@ public:
 
     bool IsScene() const override;
 
+    #ifdef BANG_EDITOR
     virtual void DebugDrawLine (const Vector3 &origin,
                                 const Vector3 &destiny,
+                                const Color &color,
                                 float lineWidth = 1.0f,
                                 float secsTime = 1.0f,
                                 bool depthTest = true) {}
@@ -62,9 +64,10 @@ public:
     virtual void DebugDrawScreenLine (
                                 const Vector2 &origin,
                                 const Vector2 &destiny,
+                                const Color &color,
                                 float lineWidth = 1.0f,
-                                float secsTime = 1.0f,
-                                bool depthTest = true) {}
+                                float secsTime = 1.0f) {}
+    #endif
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

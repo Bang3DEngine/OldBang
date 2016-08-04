@@ -583,6 +583,7 @@ void GameObject::_OnDestroy()
 #ifdef BANG_EDITOR
 void GameObject::_OnDrawGizmos()
 {
+    Gizmos::Reset();
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
     {
@@ -594,6 +595,7 @@ void GameObject::_OnDrawGizmos()
 
 void GameObject::_OnDrawGizmosNoDepth()
 {
+    Gizmos::Reset();
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
     {

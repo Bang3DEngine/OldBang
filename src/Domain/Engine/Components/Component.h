@@ -37,6 +37,9 @@ protected:
     Component();
     virtual ~Component();
 
+    virtual void _OnDrawGizmos() override;
+    virtual void _OnDrawGizmosNoDepth() override;
+
 public:
 
     GameObject *m_gameObject = nullptr;

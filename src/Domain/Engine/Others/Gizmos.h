@@ -11,6 +11,7 @@
 
 class Mesh;
 class Material;
+class Renderer;
 class Texture2D;
 class MeshRenderer;
 class CircleRenderer;
@@ -22,6 +23,8 @@ friend class Canvas;
 friend class EditorScene;
 private:
     Gizmos() {}
+
+    static std::vector<Renderer*> renderers;
 
     static void Init();
 
@@ -41,11 +44,10 @@ private:
     static Color m_color;
     static float m_lineWidth;
     static bool m_wireframe;
+    static bool m_ignoreModel, m_ignoreView, m_ignoreProjection;
     static bool m_receivesLighting;
 
     static void SetStatesBeforeDrawing();
-
-    static void OnNewFrame();
 
 public:
 
@@ -53,6 +55,8 @@ public:
     static void SetLineWidth(float lineWidth);
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
+    static void SetIgnoreMatrices(bool ignoreModel, bool ignoreView,
+                                  bool ignoreProjection);
     static void DrawBox(const Box &b, const Quaternion& rotation = Quaternion::identity);
     static void DrawSimpleBox(const Box &b, const Quaternion& rotation = Quaternion::identity);
     static void DrawIcon(const Texture2D *texture,
@@ -66,6 +70,8 @@ public:
                             float zNear, float zFar,
                             float fovDegrees, float aspectRatio);
     static void DrawSimpleSphere(const Vector3 &origin, float radius);
+
+    static void Reset();
 };
 
 #endif // GIZMOS_H

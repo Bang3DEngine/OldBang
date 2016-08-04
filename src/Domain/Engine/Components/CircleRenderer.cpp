@@ -79,8 +79,9 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
     {
         // TODO: not working
         Vector3 objP = m_points[i];
-        Vector4 sP4 = modelViewProjMatrix * Vector4(objP, 1.0f);
-        Vector2 sP = Canvas::GetCurrentScene()->GetCamera()->WorldToScreenNDCPoint(Vector3(sP4.xyz()));
+        Matrix4 m; transform->GetModelMatrix(&m);
+        Vector3 worldP = (m * Vector4(objP,1)).xyz();
+        Vector2 sP = Scene::GetCurrentScene()->GetCamera()->WorldToScreenNDCPoint(worldP);
 
         float d = Vector2::Distance(sP, sOrigin);
         if (d < d0)

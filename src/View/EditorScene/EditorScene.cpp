@@ -31,6 +31,7 @@ void EditorScene::_OnStart()
 
     EditorGameObject *gizmosGo = new EditorGameObject("BANG_GizmosGameObject");
     gizmosGo->SetParent(this);
+
     Gizmos::SetGizmosGameObject(gizmosGo);
 }
 
@@ -62,19 +63,16 @@ SelectionFramebuffer* EditorScene::GetSelectionFramebuffer() const
     return m_selectionFramebuffer;
 }
 
-void EditorScene::DebugDrawLine(const Vector3 &origin,
-                                const Vector3 &destiny,
-                                float lineWidth,
-                                float secsTime,
-                                bool depthTest)
+void EditorScene::DebugDrawLine(const Vector3 &origin, const Vector3 &destiny, const Color &color,
+                                float lineWidth, float secsTime, bool depthTest)
 {
-    m_debugGameObject->DrawLine(origin, destiny, lineWidth, secsTime, depthTest);
+    m_debugGameObject->DrawLine(origin, destiny, color, lineWidth, secsTime, depthTest);
 }
 
-void EditorScene::DebugDrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
-                                      float lineWidth, float secsTime, bool depthTest)
+void EditorScene::DebugDrawScreenLine(const Vector2 &origin, const Vector2 &destiny, const Color &color,
+                                      float lineWidth, float secsTime)
 {
-    m_debugGameObject->DrawLineScreen(origin, destiny, lineWidth, secsTime, depthTest);
+    m_debugGameObject->DrawLineScreen(origin, destiny, color, lineWidth, secsTime);
 }
 
 bool EditorScene::IsEditorGameObject() const

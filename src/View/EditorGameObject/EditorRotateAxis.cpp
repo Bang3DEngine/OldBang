@@ -36,8 +36,6 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     {
         transform->SetLocalEuler(Vector3::up * 180.0f);
     }
-
-    m_oAxisDirection.z *= -1;
 }
 
 EditorRotateAxis::~EditorRotateAxis()
@@ -89,6 +87,7 @@ void EditorRotateAxis::OnUpdate()
             // Get how aligned is the user movement with the anchor points
             Vector2 anchorPointsDir = Vector2(m_sAnchorPoint1 - m_sAnchorPoint0).Normalized();
             float alignment = Vector2::Dot(anchorPointsDir, Vector2(sMouseDelta).Normalized());
+            //Logger_Log(alignment);
 
             float rotAngle = alignment * c_rotationBoost;
 
@@ -102,6 +101,7 @@ void EditorRotateAxis::OnUpdate()
             {
                 parentAxisDir = m_oAxisDirection;
             }
+            parentAxisDir.Normalize();
 
             Quaternion q = Quaternion::AngleAxis(rotAngle, parentAxisDir);
             ago->transform->RotateLocal(q);

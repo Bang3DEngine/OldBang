@@ -9,47 +9,68 @@ EditorDebugGameObject::~EditorDebugGameObject()
 {
 }
 
-void EditorDebugGameObject::DrawLine(const Vector3 &origin,
-                                     const Vector3 &destiny,
-                                     const Vector3 &color,
-                                     float lineWidth,
-                                     float livingTimeSecs,
-                                     bool depthTest)
+void EditorDebugGameObject::DrawLines(bool depthPass)
 {
-    SingleLineRenderer *slr = AddComponent<SingleLineRenderer>();
-    slr->SetOrigin(origin);
-    slr->SetDestiny(destiny);
-    slr->SetLineWidth(lineWidth);
+    for (const DebugLine &dl : m_debugLines)
+    {
+        if (depthPass && !dl.m_depthTest) continue;
 
-    m_debugLines.push_back(DebugLine(slr, livingTimeSecs));
+        if (dl.m_screen)
+        {
+            Gizmos::SetIgnoreMatrices(true, true, true);
+        }
+        else
+        {
+            Gizmos::SetIgnoreMatrices(false, false, false);
+        }
+
+        Gizmos::SetColor(dl.m_color);
+        Gizmos::SetLineWidth(dl.m_lineWidth);
+        Gizmos::SetReceivesLighting(false);
+
+        Gizmos::DrawLine(dl.m_origin, dl.m_destiny);
+    }
+}
+
+void EditorDebugGameObject::DrawLine(const Vector3 &origin, const Vector3 &destiny,
+                                     const Color &color, float lineWidth,
+                                     float livingTimeSecs, bool depthTest)
+{
+    m_debugLines.push_back(DebugLine(origin, destiny, color, lineWidth,
+                                     livingTimeSecs, depthTest, false));
 }
 
 void EditorDebugGameObject::DrawLineScreen(const Vector2 &origin, const Vector2 &destiny,
-                                           const Vector3 &color, float lineWidth,
-                                           float livingTimeSecs, bool depthTest)
+                                           const Color &color, float lineWidth,
+                                           float livingTimeSecs)
 {
-    SingleLineRenderer *slr = AddComponent<SingleLineRenderer>();
-    slr->SetIgnoreModelMatrix(true);
-    slr->SetIgnoreViewMatrix(true);
-    slr->SetIgnoreProjectionMatrix(true);
-    slr->SetOrigin(Vector3(origin.x, origin.y, 0.0f));
-    slr->SetDestiny(Vector3(destiny.x, destiny.y, 0.0f));
-    slr->SetLineWidth(lineWidth);
-
-    m_debugLines.push_back(DebugLine(slr, livingTimeSecs));
+    m_debugLines.push_back(DebugLine(Vector3(origin, 0), Vector3(destiny, 0),
+                                     color, lineWidth,
+                                     livingTimeSecs, false, true));
 }
 
 void EditorDebugGameObject::OnUpdate()
 {
-    float dTime = Time::GetDeltaTime();
+    // Remove the ones that have exhausted its time
+    float dTime = Time::deltaTime;
     for (auto it = m_debugLines.begin(); it != m_debugLines.end(); ++it)
     {
         DebugLine &dl = *it;
-        dl.elapsedTimeSecs += dTime;
-        if (dl.elapsedTimeSecs >= dl.livingTimeSecs)
+        dl.m_elapsedTimeSecs += dTime;
+        if (dl.m_elapsedTimeSecs >= dl.m_livingTimeSecs)
         {
-            RemoveComponent(dl.slr);
             it = m_debugLines.erase(it);
         }
     }
 }
+
+void EditorDebugGameObject::OnDrawGizmos()
+{
+    DrawLines(true);
+}
+
+void EditorDebugGameObject::OnDrawGizmosNoDepth()
+{
+    DrawLines(false);
+}
+

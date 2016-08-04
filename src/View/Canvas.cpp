@@ -70,10 +70,6 @@ void Canvas::paintGL()
     }
 
     Input::GetInstance()->OnNewFrame();
-
-    #ifdef BANG_EDITOR
-    Gizmos::OnNewFrame();
-    #endif
 }
 
 void Canvas::updateGL()

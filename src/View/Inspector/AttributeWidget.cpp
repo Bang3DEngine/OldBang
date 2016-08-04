@@ -32,7 +32,6 @@ AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttrib
 {
     AttributeWidget *w = nullptr;
 
-    bool hidden   = xmlAttribute.HasProperty(XMLProperty::Hidden);
     bool readonly = xmlAttribute.HasProperty(XMLProperty::Readonly);
     bool inlined  = xmlAttribute.HasProperty(XMLProperty::Inline);
 

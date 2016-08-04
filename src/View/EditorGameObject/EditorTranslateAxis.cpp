@@ -77,7 +77,7 @@ void EditorTranslateAxis::OnUpdate()
             // Alignment
             Vector3 wAxisCenter = transform->GetPosition();
             Vector2 screenAxisDir = cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
-                                      cam->WorldToScreenNDCPoint(wAxisCenter);
+                                    cam->WorldToScreenNDCPoint(wAxisCenter);
             screenAxisDir.Normalize();
             float alignment = Vector2::Dot(screenAxisDir, sMouseDelta.Normalized());
             //
@@ -86,6 +86,7 @@ void EditorTranslateAxis::OnUpdate()
                                 parentAxisDir *
                                 sMouseDelta.Length() *
                                 Vector3::Distance(wCamPos, ago->transform->GetPosition()) * 0.002f;
+            worldMove *= 1.0f / ago->parent->transform->GetScale();
             ago->transform->TranslateLocal(worldMove);
         }
     }

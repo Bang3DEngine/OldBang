@@ -10,7 +10,7 @@ class EditorRotateAxis : public EditorAxis
 {
 private:
 
-    const float c_rotationBoost = 0.02f;
+    const float c_rotationBoost = 0.1f;
 
     CircleRenderer *m_circle = nullptr;
 
