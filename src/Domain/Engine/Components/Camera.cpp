@@ -42,9 +42,9 @@ void Camera::GetProjectionMatrix(Matrix4 *proj) const
     }
 }
 
-void Camera::SetOrthoWidth(float orthoWidth)
+void Camera::SetOrthoHeight(float orthoHeight)
 {
-    m_orthoWidth = orthoWidth;
+    m_orthoHeight = orthoHeight;
 }
 
 void Camera::SetClearColor(const Color &color)
@@ -89,12 +89,12 @@ const Color &Camera::GetClearColor() const
 
 float Camera::GetOrthoWidth() const
 {
-    return m_orthoWidth;
+    return GetOrthoHeight() * GetAspectRatio();
 }
 
 float Camera::GetOrthoHeight() const
 {
-    return GetOrthoWidth() * GetAspectRatio();
+    return m_orthoHeight;
 }
 
 
@@ -183,9 +183,9 @@ void Camera::OnDrawGizmos()
         else
         {
             Box orthoBox;
-            orthoBox.SetMin(Vector3(-GetOrthoWidth(), -GetOrthoHeight(), GetZNear()));
-            orthoBox.SetMax(Vector3( GetOrthoWidth(),  GetOrthoHeight(), GetZFar()));
-            Gizmos::DrawSimpleBox(orthoBox);
+            orthoBox.SetMin(transform->GetPosition() + Vector3(-GetOrthoWidth(), -GetOrthoHeight(), -GetZNear()));
+            orthoBox.SetMax(transform->GetPosition() + Vector3( GetOrthoWidth(),  GetOrthoHeight(), -GetZFar()));
+            Gizmos::DrawSimpleBox(orthoBox, transform->GetRotation());
         }
     }
 }
@@ -216,7 +216,7 @@ void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
     ProjectionMode pm = ProjectionMode_FromString(xmlInfo->GetEnumSelectedName("ProjectionMode"));
     SetProjectionMode(pm);
     SetAspectRatio( xmlInfo->GetFloat("AspectRatio") );
-    SetOrthoWidth( xmlInfo->GetFloat("OrthoWidth") );
+    SetOrthoHeight( xmlInfo->GetFloat("OrthoHeight") );
 }
 
 void Camera::FillXMLInfo(XMLNode *xmlInfo) const
@@ -235,12 +235,12 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
 
     if (GetProjectionMode() == ProjectionMode::Orthographic)
     {
-        xmlInfo->SetFloat("OrthoWidth", GetOrthoWidth());
+        xmlInfo->SetFloat("OrthoHeight", GetOrthoHeight());
         xmlInfo->SetFloat("FOVDegrees", GetFovDegrees(), {XMLProperty::Hidden});
     }
     else
     {
-        xmlInfo->SetFloat("OrthoWidth", GetOrthoWidth(), {XMLProperty::Hidden});
+        xmlInfo->SetFloat("OrthoHeight", GetOrthoHeight(), {XMLProperty::Hidden});
         xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
     }
 }

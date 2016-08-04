@@ -1,9 +1,5 @@
 #include "Gizmos.h"
 
-#include "Box.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Color.h"
 #include "Material.h"
 #include "Texture2D.h"
 #include "MeshRenderer.h"
@@ -61,6 +57,7 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
 
     Gizmos::m_meshRenderer = m_gizmosGameObject->AddComponent<MeshRenderer>();
     Gizmos::m_meshRenderer->SetMaterial(Gizmos::m_material);
+
 }
 
 void Gizmos::SetStatesBeforeDrawing()
@@ -116,32 +113,33 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
 }
 
 
-void Gizmos::DrawSimpleBox(const Box &b)
+void Gizmos::DrawSimpleBox(const Box &b, const Quaternion& rotation)
 {
     Gizmos::Init();
     Gizmos::SetStatesBeforeDrawing();
 
+    Quaternion r = rotation;
     Vector3 bMin = b.GetMin();
     Vector3 bMax = b.GetMax();
-    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMin.z), Vector3(bMax.x, bMin.y, bMin.z));
-    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMin.z), Vector3(bMin.x, bMax.y, bMin.z));
-    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMin.z), Vector3(bMin.x, bMin.y, bMax.z));
+    Gizmos::DrawLine(r * Vector3(bMin.x, bMin.y, bMin.z), r * Vector3(bMax.x, bMin.y, bMin.z));
+    Gizmos::DrawLine(r * Vector3(bMin.x, bMin.y, bMin.z), r * Vector3(bMin.x, bMax.y, bMin.z));
+    Gizmos::DrawLine(r * Vector3(bMin.x, bMin.y, bMin.z), r * Vector3(bMin.x, bMin.y, bMax.z));
 
-    Gizmos::DrawLine(Vector3(bMax.x, bMin.y, bMin.z), Vector3(bMax.x, bMax.y, bMin.z));
-    Gizmos::DrawLine(Vector3(bMax.x, bMin.y, bMin.z), Vector3(bMax.x, bMin.y, bMax.z));
+    Gizmos::DrawLine(r * Vector3(bMax.x, bMin.y, bMin.z), r * Vector3(bMax.x, bMax.y, bMin.z));
+    Gizmos::DrawLine(r * Vector3(bMax.x, bMin.y, bMin.z), r * Vector3(bMax.x, bMin.y, bMax.z));
 
-    Gizmos::DrawLine(Vector3(bMin.x, bMax.y, bMin.z), Vector3(bMax.x, bMax.y, bMin.z));
-    Gizmos::DrawLine(Vector3(bMin.x, bMax.y, bMin.z), Vector3(bMin.x, bMax.y, bMax.z));
+    Gizmos::DrawLine(r * Vector3(bMin.x, bMax.y, bMin.z), r * Vector3(bMax.x, bMax.y, bMin.z));
+    Gizmos::DrawLine(r * Vector3(bMin.x, bMax.y, bMin.z), r * Vector3(bMin.x, bMax.y, bMax.z));
 
-    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMax.z), Vector3(bMax.x, bMin.y, bMax.z));
-    Gizmos::DrawLine(Vector3(bMin.x, bMin.y, bMax.z), Vector3(bMin.x, bMax.y, bMax.z));
+    Gizmos::DrawLine(r * Vector3(bMin.x, bMin.y, bMax.z), r * Vector3(bMax.x, bMin.y, bMax.z));
+    Gizmos::DrawLine(r * Vector3(bMin.x, bMin.y, bMax.z), r * Vector3(bMin.x, bMax.y, bMax.z));
 
-    Gizmos::DrawLine(Vector3(bMin.x, bMax.y, bMax.z), Vector3(bMax.x, bMax.y, bMax.z));
-    Gizmos::DrawLine(Vector3(bMax.x, bMin.y, bMax.z), Vector3(bMax.x, bMax.y, bMax.z));
-    Gizmos::DrawLine(Vector3(bMax.x, bMax.y, bMin.z), Vector3(bMax.x, bMax.y, bMax.z));
+    Gizmos::DrawLine(r * Vector3(bMin.x, bMax.y, bMax.z), r * Vector3(bMax.x, bMax.y, bMax.z));
+    Gizmos::DrawLine(r * Vector3(bMax.x, bMin.y, bMax.z), r * Vector3(bMax.x, bMax.y, bMax.z));
+    Gizmos::DrawLine(r * Vector3(bMax.x, bMax.y, bMin.z), r * Vector3(bMax.x, bMax.y, bMax.z));
 }
 
-void Gizmos::DrawBox(const Box &b)
+void Gizmos::DrawBox(const Box &b, const Quaternion& rotation)
 {
     Gizmos::Init();
     Gizmos::SetStatesBeforeDrawing();
@@ -150,6 +148,7 @@ void Gizmos::DrawBox(const Box &b)
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_boxMesh);
 
     Gizmos::m_gizmosGameObject->transform->SetPosition(b.GetCenter());
+    Gizmos::m_gizmosGameObject->transform->SetRotation(rotation);
     Gizmos::m_gizmosGameObject->transform->SetScale(b.GetDimensions());
 
     Gizmos::m_meshRenderer->Render();
@@ -220,19 +219,21 @@ void Gizmos::DrawSphere(const Vector3 &origin, float radius)
 void Gizmos::DrawFrustum(const Vector3 &forward, const Vector3 &up,
                          const Vector3 &origin,
                          float zNear, float zFar,
-                         float fov, float aspectRatio)
+                         float fovDegrees, float aspectRatio)
 {
     Gizmos::Init();
     Gizmos::SetStatesBeforeDrawing();
 
     const Vector3 &c = origin;
-    const Vector3 right = Vector3::Cross(up, forward);
+    const Vector3 right = Vector3::Cross(forward, up).Normalized();
 
-    const float fov2 = fov * (3.141592f / 180.0f) * 0.5f;
-    const Vector3 dirUp    = (forward + up    * glm::sin(       fov2       )).Normalized();
-    const Vector3 dirDown  = (forward - up    * glm::sin(       fov2       )).Normalized();
-    const Vector3 dirRight = (forward + right * glm::cos(fov2 * aspectRatio)).Normalized();
-    const Vector3 dirLeft  = (forward - right * glm::cos(fov2 * aspectRatio)).Normalized();
+    const float fovH = fovDegrees * (3.141592f / 180.0f) / 2.0f;
+    const float sH = glm::sin(fovH), cH = glm::cos(fovH);
+    const float sW = sH * aspectRatio, cW = cH * aspectRatio;
+    const Vector3 dirUp    = (cH * forward + sH * up   );
+    const Vector3 dirDown  = (cH * forward - sH * up   );
+    const Vector3 dirRight = (cW * forward + sW * right);
+    const Vector3 dirLeft  = (cW * forward - sW * right);
 
     Vector3 nearUpLeft    = c + (dirUp   + dirLeft ).Normalized() * zNear;
     Vector3 nearUpRight   = c + (dirUp   + dirRight).Normalized() * zNear;

@@ -3,11 +3,13 @@
 
 #include "Bang.h"
 
-class Box;
+#include "Box.h"
+#include "Color.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Quaternion.h"
+
 class Mesh;
-class Color;
-class Vector3;
-class Vector4;
 class Material;
 class Texture2D;
 class MeshRenderer;
@@ -51,8 +53,8 @@ public:
     static void SetLineWidth(float lineWidth);
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
-    static void DrawBox(const Box &b);
-    static void DrawSimpleBox(const Box &b);
+    static void DrawBox(const Box &b, const Quaternion& rotation = Quaternion::identity);
+    static void DrawSimpleBox(const Box &b, const Quaternion& rotation = Quaternion::identity);
     static void DrawIcon(const Texture2D *texture,
                          const Vector3 &position, const Vector3 &scale,
                          bool billboard = true);
@@ -62,7 +64,7 @@ public:
     static void DrawFrustum(const Vector3 &forward, const Vector3 &up,
                             const Vector3 &origin,
                             float zNear, float zFar,
-                            float fov, float aspectRatio);
+                            float fovDegrees, float aspectRatio);
     static void DrawSimpleSphere(const Vector3 &origin, float radius);
 };
 

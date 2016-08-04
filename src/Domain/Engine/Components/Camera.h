@@ -23,7 +23,7 @@ public:
 
 private:
 
-    float m_orthoWidth  = 0.5f;
+    float m_orthoHeight  = 0.5f;
 
     Color m_clearColor = Color(0.9f);
     float m_fovDegrees = 60.0f;
@@ -42,7 +42,7 @@ public:
     void GetViewMatrix(Matrix4 *view) const;
     void GetProjectionMatrix(Matrix4 *proj) const;
 
-    void SetOrthoWidth(float orthoWidth);
+    void SetOrthoHeight(float orthoHeight);
 
     void SetClearColor(const Color& color);
     void SetFovDegrees(float fovDegrees);
