@@ -48,7 +48,7 @@ void EditorCamera::AdjustSpeeds()
 void EditorCamera::UpdateRotationVariables()
 {
     m_mouseRotDegreesAccum = Vector2(0.0f);
-    m_startingRotation =transform->GetLocalRotation();
+    m_startingRotation = transform->GetLocalRotation();
 }
 
 void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
@@ -159,13 +159,18 @@ void EditorCamera::HandleLookAtFocus()
             if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
             {
                 float fov = glm::radians(cam->GetFovDegrees() / 2.0f);
-                minDist = radius / std::tan(fov);
+                minDist = radius / std::tan(fov) * 1.5f;
             }
 
-            minDist = std::max(minDist, 0.5f); //In case boundingBox is empty
+            minDist = std::max(minDist, 1.0f); //In case boundingBox is empty
             Vector3 dest = focusPos - (focusDir * minDist);
             float t = Time::GetDeltaTime() * m_lookAtMoveSpeed;
             transform->SetPosition( Vector3::Lerp(thisPos, dest, t) );
+
+            if ( Vector3::Distance(dest, thisPos) < 2.0f)
+            {
+                m_doingLookAt = false;
+            }
         }
     }
 }
@@ -190,38 +195,43 @@ void EditorCamera::OnUpdate()
     bool hasMoved = false;
     bool unwrapMouse = true;
 
-    HandleKeyMovement(&moveStep, &hasMoved); //WASD
-
-    if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
+    if (!m_doingLookAt)
     {
-        HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
+        HandleKeyMovement(&moveStep, &hasMoved); //WASD
+
+        if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
+        {
+            HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
+        }
+
+        HandleWheelZoom(&moveStep, &hasMoved);
+
+        m_keysMoveSpeed += m_keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
+        m_keysMoveSpeed = glm::clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
+        if (!hasMoved)
+        {
+            m_keysMoveSpeed = 0.0f; //reset speed
+        }
+
+        transform->Translate(moveStep);
     }
+    else
+    {
+        HandleLookAtFocus(); // Modifies m_doingLookAt
+        if (!m_doingLookAt)  // If it has just stopped
+        {
 
-    HandleWheelZoom(&moveStep, &hasMoved);
+        }
 
-    HandleLookAtFocus();
-    if (m_doingLookAt)
-    {   //Update all needed variables in case we are doing a lookAt.
+        //Update all needed variables in case we are doing a lookAt.
         UpdateRotationVariables();
     }
 
-    m_keysMoveSpeed += m_keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
-    m_keysMoveSpeed = glm::clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
 
     if (unwrapMouse)
     {
         Canvas::SetCursor( Qt::ArrowCursor ); //cursor visible
         Input::SetMouseWrapping(false);
-    }
-
-    if (!hasMoved )
-    {
-        m_keysMoveSpeed = 0.0f; //reset speed
-    }
-    else
-    {
-        m_doingLookAt = false; //No more lookAt
-        transform->Translate(moveStep);
     }
 }
 
