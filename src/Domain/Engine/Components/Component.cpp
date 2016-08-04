@@ -36,7 +36,7 @@ void Component::SetGameObject(GameObject *gameObject)
 
 void Component::SetEnabled(bool enabled)
 {
-    this->m_enabled = enabled;
+    m_enabled = enabled;
 }
 
 bool Component::IsEnabled() const

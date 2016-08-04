@@ -227,23 +227,25 @@ void Gizmos::DrawFrustum(const Vector3 &forward, const Vector3 &up,
     const Vector3 &c = origin;
     const Vector3 right = Vector3::Cross(forward, up).Normalized();
 
-    const float fovH = fovDegrees * (3.141592f / 180.0f) / 2.0f;
-    const float sH = glm::sin(fovH), cH = glm::cos(fovH);
-    const float sW = sH * aspectRatio, cW = cH * aspectRatio;
-    const Vector3 dirUp    = (cH * forward + sH * up   );
-    const Vector3 dirDown  = (cH * forward - sH * up   );
-    const Vector3 dirRight = (cW * forward + sW * right);
-    const Vector3 dirLeft  = (cW * forward - sW * right);
+    const float fovH = glm::radians(fovDegrees) / 2.0f;
 
-    Vector3 nearUpLeft    = c + (dirUp   + dirLeft ).Normalized() * zNear;
-    Vector3 nearUpRight   = c + (dirUp   + dirRight).Normalized() * zNear;
-    Vector3 nearDownRight = c + (dirDown + dirRight).Normalized() * zNear;
-    Vector3 nearDownLeft  = c + (dirDown + dirLeft ).Normalized() * zNear;
+    Vector3 nearPlaneCenter = c + forward * zNear;
+    Vector3 farPlaneCenter  = c + forward * zFar;
 
-    Vector3 farUpLeft     = c + (dirUp   + dirLeft ).Normalized() * (zNear + zFar);
-    Vector3 farUpRight    = c + (dirUp   + dirRight).Normalized() * (zNear + zFar);
-    Vector3 farDownRight  = c + (dirDown + dirRight).Normalized() * (zNear + zFar);
-    Vector3 farDownLeft   = c + (dirDown + dirLeft ).Normalized() * (zNear + zFar);
+    float nearHeight2 = zNear * glm::tan(fovH);
+    float nearWidth2 = nearHeight2 * aspectRatio;
+    float farHeight2  = zFar  * glm::tan(fovH);
+    float farWidth2  = farHeight2 * aspectRatio;
+
+    Vector3 nearUpLeft    = nearPlaneCenter - right * nearWidth2 + up * nearHeight2;
+    Vector3 nearUpRight   = nearPlaneCenter + right * nearWidth2 + up * nearHeight2;
+    Vector3 nearDownRight = nearPlaneCenter + right * nearWidth2 - up * nearHeight2;
+    Vector3 nearDownLeft  = nearPlaneCenter - right * nearWidth2 - up * nearHeight2;
+
+    Vector3 farUpLeft     = farPlaneCenter - right * farWidth2 + up * farHeight2;
+    Vector3 farUpRight    = farPlaneCenter + right * farWidth2 + up * farHeight2;
+    Vector3 farDownRight  = farPlaneCenter + right * farWidth2 - up * farHeight2;
+    Vector3 farDownLeft   = farPlaneCenter - right * farWidth2 - up * farHeight2;
 
     // Near plane
     Gizmos::DrawLine(nearUpLeft   , nearUpRight);

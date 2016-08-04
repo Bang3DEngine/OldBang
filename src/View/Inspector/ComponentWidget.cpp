@@ -9,11 +9,14 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
 {
     m_relatedComponent = relatedComponent;
 
-    m_IsEnabledCheckbox = new QCheckBox();
-    m_IsEnabledCheckbox->setChecked(m_relatedComponent->IsEnabled());
-    connect(m_IsEnabledCheckbox, SIGNAL(clicked(bool)),
-            this, SLOT(OnEnabledCheckboxPressed(bool)));
-    m_titleLayout->addWidget(m_IsEnabledCheckbox, 1);
+    if (!dynamic_cast<Transform*>(relatedComponent))
+    {
+        m_IsEnabledCheckbox = new QCheckBox();
+        m_IsEnabledCheckbox->setChecked(m_relatedComponent->IsEnabled());
+        connect(m_IsEnabledCheckbox, SIGNAL(clicked(bool)),
+                this, SLOT(OnEnabledCheckboxPressed(bool)));
+        m_titleLayout->addWidget(m_IsEnabledCheckbox, 1);
+    }
 }
 
 ComponentWidget::~ComponentWidget()
@@ -27,18 +30,22 @@ void ComponentWidget::OnCustomContextMenuRequested(QPoint point)
 
     QAction actionMoveComponentUp("Move up", this);
     QAction actionMoveComponentDown("Move down", this);
-    QAction actionRemoveComponent("Remove Component", this);
 
     connect(&actionMoveComponentUp, SIGNAL(triggered()),
             this, SLOT(OnContextMenuMoveUpSelected()));
     connect(&actionMoveComponentDown, SIGNAL(triggered()),
             this, SLOT(OnContextMenuMoveDownSelected()));
-    connect(&actionRemoveComponent, SIGNAL(triggered()),
-            this, SLOT(OnContextMenuRemoveComponentSelected()));
 
     contextMenu.addAction(&actionMoveComponentUp);
     contextMenu.addAction(&actionMoveComponentDown);
-    contextMenu.addAction(&actionRemoveComponent);
+
+    if (!dynamic_cast<Transform*>(m_relatedComponent))
+    {
+        QAction actionRemoveComponent("Remove Component", this);
+        connect(&actionRemoveComponent, SIGNAL(triggered()),
+                this, SLOT(OnContextMenuRemoveComponentSelected()));
+        contextMenu.addAction(&actionRemoveComponent);
+    }
 
     contextMenu.exec(mapToGlobal(point));
 }

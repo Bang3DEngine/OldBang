@@ -160,13 +160,14 @@ ICloneable *Camera::Clone() const
     return cam;
 }
 
+#ifdef BANG_EDITOR
 void Camera::OnDrawGizmos()
 {
     Component::OnDrawGizmos();
 
     Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("./Assets/Engine/Textures/CameraIcon.btex2d");
     Gizmos::SetColor(Color::gray);
-    Gizmos::DrawIcon(tex, gameObject->transform->GetPosition(), Vector3::one * 10.0f);
+    Gizmos::DrawIcon(tex, transform->GetPosition(), Vector3::one * 10.0f);
 
     if (gameObject->IsSelectedInHierarchy())
     {
@@ -190,10 +191,6 @@ void Camera::OnDrawGizmos()
     }
 }
 
-
-
-
-#ifdef BANG_EDITOR
 void Camera::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     FillXMLInfo(xmlInfo);
