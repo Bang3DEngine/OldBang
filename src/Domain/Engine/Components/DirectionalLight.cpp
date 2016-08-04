@@ -53,6 +53,28 @@ void DirectionalLight::OnDrawGizmos()
     Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("Assets/Engine/Textures/DirectionalLightIcon.btex2d");
     Gizmos::SetColor(Color(GetColor(), 0.5f));
     Gizmos::DrawIcon(tex, gameObject->transform->GetPosition(), Vector3::one * 5.0f);
+
+    if (gameObject->IsSelectedInHierarchy())
+    {
+        // Draw lines to show light's direction
+        const float wide = 1.0f;
+        const float length = 8.0f;
+        const Vector3 up = transform->GetUp() * wide;
+        const Vector3 right = transform->GetRight() * wide;
+        const Vector3 forward = transform->GetForward() * length;
+        const Vector3 c = transform->GetPosition();
+
+        Gizmos::SetColor(GetColor());
+        Gizmos::SetReceivesLighting(false);
+        Gizmos::DrawLine(c + right     , c + right + forward);
+        Gizmos::DrawLine(c - right     , c - right + forward);
+        Gizmos::DrawLine(c + up        , c + up    + forward);
+        Gizmos::DrawLine(c - up        , c - up    + forward);
+        Gizmos::DrawLine(c + right + up, c + right + up + forward);
+        Gizmos::DrawLine(c + right - up, c + right - up + forward);
+        Gizmos::DrawLine(c - right + up, c - right + up + forward);
+        Gizmos::DrawLine(c - right - up, c - right - up + forward);
+    }
 }
 #endif
 

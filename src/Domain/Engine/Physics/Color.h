@@ -32,8 +32,8 @@ public:
      * @return
      */
     static Color Lerp(const Color &v1,
-                        const Color &v2,
-                        float progression);
+                      const Color &v2,
+                      float progression);
 
     std::string ToStringRgb() const;
     std::string ToStringRgb255() const;
@@ -54,6 +54,8 @@ public:
     const static Color black;
     const static Color gray;
     const static Color white;
+    const static Color zero;
+    const static Color one;
 };
 
 Color operator+(float m, const Color& v);

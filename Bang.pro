@@ -209,11 +209,9 @@ HEADERS += \
     src/Persistence/XMLAttribute.h \
     src/Persistence/XMLProperty.h \
     src/Domain/Engine/Others/NamedEnum.h \
-    src/View/Inspector/AttrWidgetBool.h \
     src/Domain/Engine/Physics/Vector4.h \
     src/Domain/Engine/Physics/Vector2.h \
-    src/Domain/Engine/Physics/Color.h \
-    src/View/Inspector/AttrWidgetColor.h
+    src/Domain/Engine/Physics/Color.h
 
 EDITOR {
 HEADERS += \
@@ -264,7 +262,9 @@ HEADERS += \
     src/View/EditorGameObject/EditorScaleAxisGroup.h \
     src/View/EditorGameObject/EditorScaleAxis.h \
     src/View/EditorScene/EditorFloor.h \
-    src/Domain/Engine/Others/Gizmos.h
+    src/Domain/Engine/Others/Gizmos.h \
+    src/View/Inspector/AttrWidgetBool.h \
+    src/View/Inspector/AttrWidgetColor.h
 }
 
 GAME {
@@ -339,11 +339,9 @@ SOURCES += \
     src/Persistence/XMLNode.cpp \
     src/Persistence/XMLAttribute.cpp \
     src/Persistence/XMLProperty.cpp \
-    src/View/Inspector/AttrWidgetBool.cpp \
     src/Domain/Engine/Physics/Vector4.cpp \
     src/Domain/Engine/Physics/Vector2.cpp \
-    src/Domain/Engine/Physics/Color.cpp \
-    src/View/Inspector/AttrWidgetColor.cpp
+    src/Domain/Engine/Physics/Color.cpp
 
 EDITOR {
     SOURCES += \
@@ -395,7 +393,9 @@ EDITOR {
         src/View/EditorGameObject/EditorTranslateAxis.cpp \
         src/View/Toolbar.cpp \
         src/View/Inspector/AttrWidgetButton.cpp \
-        src/Domain/Engine/Others/Gizmos.cpp
+        src/Domain/Engine/Others/Gizmos.cpp \
+        src/View/Inspector/AttrWidgetBool.cpp \
+        src/View/Inspector/AttrWidgetColor.cpp
 }
 
 GAME {

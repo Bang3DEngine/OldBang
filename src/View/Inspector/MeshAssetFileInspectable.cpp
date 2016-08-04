@@ -14,6 +14,6 @@ void MeshAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("MeshAssetFileInspectable");
 
-    xmlInfo->SetString("MeshFilepath", m_meshFile.GetMeshFilepath(),
-                       {XMLProperty::Readonly});
+    xmlInfo->SetFilepath("MeshFilepath", m_meshFile.GetMeshFilepath(), "",
+                         {XMLProperty::Readonly});
 }

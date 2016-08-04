@@ -1,3 +1,4 @@
+
 #include "Scene.h"
 #include "GameObject.h"
 #include "Canvas.h"
@@ -64,7 +65,8 @@ void Scene::_OnRender()
     m_gbuffer->Bind();
 
     // D2G
-        m_gbuffer->ClearBuffersAndBackground(Vector4(0.9f, 0.9f, 0.9f, 1));
+        Color bgColor = GetCamera()->GetClearColor();
+        m_gbuffer->ClearBuffersAndBackground(bgColor);
         m_gbuffer->SetAllDrawBuffers();
 
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -72,10 +74,12 @@ void Scene::_OnRender()
         PROPAGATE_EVENT(_OnRender, m_children);
 
         // Draw Gizmos!
+        #ifdef BANG_EDITOR
         PROPAGATE_EVENT(_OnDrawGizmos, m_children);
 
         glClear(GL_DEPTH_BUFFER_BIT);
         PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
+        #endif
     //
 
     // PR

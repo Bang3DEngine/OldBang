@@ -31,11 +31,13 @@ void Material::Bind() const
                                          m_diffuseColor, false);
         if (m_texture)
         {
+            m_shaderProgram->SetUniformFloat("B_hasTexture", 1, false);
             m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
             m_shaderProgram->SetUniformFloat("B_alphaCuttoff", m_texture->GetAlphaCuttoff(), false);
         }
         else
         {
+            m_shaderProgram->SetUniformFloat("B_hasTexture", 0, false);
             m_shaderProgram->SetUniformFloat("B_alphaCuttoff", -1.0f, false);
         }
     }

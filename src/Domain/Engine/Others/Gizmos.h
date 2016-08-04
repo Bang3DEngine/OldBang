@@ -11,6 +11,7 @@ class Vector4;
 class Material;
 class Texture2D;
 class MeshRenderer;
+class CircleRenderer;
 class SingleLineRenderer;
 class EditorGameObject;
 class Gizmos
@@ -28,8 +29,10 @@ private:
 
     static EditorGameObject *m_gizmosGameObject;
     static SingleLineRenderer *m_singleLineRenderer;
+    static CircleRenderer *m_circleRenderer;
     static MeshRenderer *m_meshRenderer;
     static Mesh *m_boxMesh;
+    static Mesh *m_sphereMesh;
     static Mesh *m_planeMesh;
 
     static Material *m_material;
@@ -53,6 +56,8 @@ public:
                          const Vector3 &position, const Vector3 &scale,
                          bool billboard = true);
     static void DrawLine(const Vector3 &origin, const Vector3 &destiny);
+    static void DrawSphere(const Vector3 &origin, float radius);
+    static void DrawSimpleSphere(const Vector3 &origin, float radius);
 };
 
 #endif // GIZMOS_H

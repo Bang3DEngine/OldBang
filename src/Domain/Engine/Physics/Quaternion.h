@@ -28,6 +28,8 @@ public:
     static Quaternion LookDirection(const Vector3 &_forward,
                                     const Vector3 &_up = Vector3::up);
     static Quaternion AngleAxis(float angleDeg, const Vector3 &axis);
+
+    static Quaternion identity;
 };
 
 Quaternion operator*(const Quaternion &q1, const Quaternion& q2);

@@ -58,9 +58,15 @@ void PointLight::OnDrawGizmos()
     Light::OnDrawGizmos();
 
     Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("./Assets/Engine/Textures/PointLightIcon.btex2d");
-    Gizmos::SetColor(Color(GetColor(), 0.5f));
+    Gizmos::SetColor(Color(GetColor(), 1));
     Gizmos::DrawIcon(tex, gameObject->transform->GetPosition(), Vector3::one * 10.0f);
 
+    if (gameObject->IsSelectedInHierarchy())
+    {
+        Gizmos::SetDrawWireframe(true);
+        Gizmos::SetReceivesLighting(false);
+        Gizmos::DrawSimpleSphere(transform->GetPosition(), GetRange());
+    }
 }
 #endif
 

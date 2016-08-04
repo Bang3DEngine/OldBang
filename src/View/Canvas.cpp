@@ -20,7 +20,6 @@ Canvas *Canvas::m_mainBinaryCanvas = nullptr;
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
-    m_clearColor = Vector4(1.0f) * 0.8f;
 
     connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(update()));
     m_drawTimer.setInterval(Canvas::c_redrawDelay);
@@ -55,7 +54,7 @@ void Canvas::initializeGL()
 
 void Canvas::paintGL()
 {
-    glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, m_clearColor.a);
+    glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
 
     float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
     Time::GetInstance()->m_deltaTime = deltaTime;
@@ -71,7 +70,10 @@ void Canvas::paintGL()
     }
 
     Input::GetInstance()->OnNewFrame();
+
+    #ifdef BANG_EDITOR
     Gizmos::OnNewFrame();
+    #endif
 }
 
 void Canvas::updateGL()

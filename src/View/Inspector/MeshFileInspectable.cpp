@@ -14,7 +14,9 @@ void MeshFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("MeshFileInspectable");
 
-    xmlInfo->SetFilepath("MeshFilepath", m_fileMesh.GetNameAndExtension(), "*.obj",
+    xmlInfo->SetString("FileName", m_fileMesh.GetName() + "." + m_fileMesh.GetExtension(),
+                       {XMLProperty::Readonly});
+    xmlInfo->SetFilepath("MeshFilePath", m_fileMesh.GetRelativePath(), "",
                          {XMLProperty::Readonly});
     xmlInfo->SetString("Mode", m_fileMesh.IsTriangles() ? "Triangles" : "Quads",
                       {XMLProperty::Readonly});

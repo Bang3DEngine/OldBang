@@ -6,6 +6,7 @@
 #include <list>
 #include <string>
 
+#include "Color.h"
 #include "Logger.h"
 #include "Camera.h"
 #include "Canvas.h"

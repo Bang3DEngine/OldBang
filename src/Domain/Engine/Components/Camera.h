@@ -25,6 +25,7 @@ private:
 
     Rect m_orthoRect = Rect(-1.0f, 1.0f, -1.0f, 1.0f);
 
+    Color m_clearColor = Color(0.9f);
     float m_fovDegrees = 60.0f;
     float m_zNear = 0.1f;
     float m_zFar = 100.0f;
@@ -44,17 +45,18 @@ public:
 
     void SetOrthoRect(const Rect& rect);
 
-    void SetFovDegrees(float m_fovDegrees);
-    void SetZNear(float m_zNear);
-    void SetZFar(float m_zFar);
+    void SetClearColor(const Color& color);
+    void SetFovDegrees(float fovDegrees);
+    void SetZNear(float zNear);
+    void SetZFar(float zFar);
 
-    void SetProjectionMode(ProjectionMode m_projMode);
+    void SetProjectionMode(ProjectionMode projMode);
 
-    void SetAspectRatio(float m_aspectRatio);
+    void SetAspectRatio(float aspectRatio);
 
-    void SetAutoUpdateAspectRatio(bool m_autoUpdateAspectRatio);
+    void SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio);
 
-
+    const Color& GetClearColor() const;
     float GetFovDegrees() const;
     float GetAspectRatio() const;
     float GetZNear() const;
@@ -75,6 +77,7 @@ public:
     virtual ICloneable *Clone() const override;
 
     #ifdef BANG_EDITOR
+    void OnDrawGizmos() override;
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif

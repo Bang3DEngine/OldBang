@@ -1,4 +1,5 @@
 #include "GameObject.h"
+
 #include "Component.h"
 #include "FileReader.h"
 #include "SingletonManager.h"
@@ -251,6 +252,7 @@ void GameObject::AddComponent(Component *c)
     c->_OnStart();
 }
 
+#ifdef BANG_EDITOR
 void GameObject::MoveComponent(Component *c, int distance)
 {
     for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
@@ -266,6 +268,7 @@ void GameObject::MoveComponent(Component *c, int distance)
         }
     }
 }
+#endif
 
 Transform *GameObject::GetTransform() const
 {
@@ -489,10 +492,6 @@ bool GameObject::IsEnabled()
     return m_enabled && (!m_parent ? true : m_parent->IsEnabled());
 }
 
-void GameObject::OnDrawGizmos()
-{
-}
-
 const std::string GameObject::ToString() const
 {
     std::ostringstream oss;
@@ -581,12 +580,11 @@ void GameObject::_OnDestroy()
     OnDestroy();
 }
 
+#ifdef BANG_EDITOR
 void GameObject::_OnDrawGizmos()
 {
-    #ifdef BANG_EDITOR
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
-    #endif
     {
         PROPAGATE_EVENT(_OnDrawGizmos, m_children);
     }
@@ -596,13 +594,12 @@ void GameObject::_OnDrawGizmos()
 
 void GameObject::_OnDrawGizmosNoDepth()
 {
-    #ifdef BANG_EDITOR
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
-    #endif
     {
         PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
     }
     PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_components);
     OnDrawGizmosNoDepth();
 }
+#endif

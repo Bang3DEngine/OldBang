@@ -12,7 +12,7 @@ TestBehaviour::TestBehaviour()
 {
     time = 0.0f;
 
-    int r = rand()%3;
+    int r = rand() % 3;
     if (r == 0) randomAxis = Vector3(1.0, 0.0, 0.0);
     if (r == 1) randomAxis = Vector3(0.0, 1.0, 0.0);
     if (r == 2) randomAxis = Vector3(0.0, 0.0, 1.0);

@@ -54,7 +54,7 @@ private:
 
 public:
 
-    Vector4 m_clearColor;
+    Color m_clearColor = Color::blue * 0.6f;
 
     explicit Canvas(QWidget *parent = 0);
     static void InitFromMainBinary();

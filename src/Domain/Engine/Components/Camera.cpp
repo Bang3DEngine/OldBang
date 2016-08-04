@@ -47,6 +47,11 @@ void Camera::SetOrthoRect(const Rect &rect)
     m_orthoRect = rect;
 }
 
+void Camera::SetClearColor(const Color &color)
+{
+    m_clearColor = color;
+}
+
 void Camera::SetFovDegrees(float fovDegrees)
 {
     this->m_fovDegrees = fovDegrees;
@@ -75,6 +80,11 @@ void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
 void Camera::SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio)
 {
     this->m_autoUpdateAspectRatio = autoUpdateAspectRatio;
+}
+
+const Color &Camera::GetClearColor() const
+{
+    return m_clearColor;
 }
 
 
@@ -140,6 +150,15 @@ ICloneable *Camera::Clone() const
     return cam;
 }
 
+void Camera::OnDrawGizmos()
+{
+    Component::OnDrawGizmos();
+
+    Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("./Assets/Engine/Textures/CameraIcon.btex2d");
+    Gizmos::SetColor(Color::gray);
+    Gizmos::DrawIcon(tex, gameObject->transform->GetPosition(), Vector3::one * 10.0f);
+}
+
 
 #ifdef BANG_EDITOR
 void Camera::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
@@ -157,6 +176,7 @@ void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
 
+    SetClearColor(xmlInfo->GetColor("ClearColor"));
     SetFovDegrees(xmlInfo->GetFloat("FOVDegrees"));
     SetZNear(xmlInfo->GetFloat("ZNear"));
     SetZFar(xmlInfo->GetFloat("ZFar"));
@@ -170,6 +190,7 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
     Component::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Camera");
 
+    xmlInfo->SetColor("ClearColor", GetClearColor());
     xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
     xmlInfo->SetFloat("ZNear", GetZNear());
     xmlInfo->SetFloat("ZFar", GetZFar());

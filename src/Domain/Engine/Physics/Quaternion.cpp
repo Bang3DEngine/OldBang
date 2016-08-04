@@ -2,6 +2,8 @@
 
 #include "Vector3.h"
 
+Quaternion Quaternion::identity = Quaternion();
+
 Quaternion::Quaternion() : glm::quat()
 {
 }

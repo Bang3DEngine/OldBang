@@ -17,6 +17,8 @@ const Color Color::pink        = Color(1,     0,   1,  1);
 const Color Color::black       = Color(0,     0,   0,  1);
 const Color Color::gray        = Color(0.5, 0.5, 0.5,  1);
 const Color Color::white       = Color(1,     1,   1,  1);
+const Color Color::zero        = Color(0,     0,   0,  0);
+const Color Color::one         = Color(1,     1,   1,  1);
 
 Color::Color() : Color(0)
 {

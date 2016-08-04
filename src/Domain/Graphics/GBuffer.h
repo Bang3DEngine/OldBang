@@ -8,6 +8,8 @@
 #include "MeshFactory.h"
 #include "Framebuffer.h"
 
+#include "Color.h"
+
 class GBuffer : public Framebuffer
 {
 public:
@@ -24,8 +26,8 @@ public:
 
 private:
 
-    Material *m_renderGBufferToScreenMaterial;
-    Mesh *m_planeMeshToRenderEntireScreen;
+    Material *m_renderGBufferToScreenMaterial = nullptr;
+    Mesh *m_planeMeshToRenderEntireScreen = nullptr;
 
     void RenderScreenPlane() const;
 
@@ -37,7 +39,7 @@ public:
     void RenderPassWithMaterial(Material *mat) const;
     void RenderToScreen() const;
 
-    void ClearBuffersAndBackground(const Vector4 &backgroundColor, const Vector4 &clearValue = Vector4(0.0f));
+    void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::zero);
 };
 
 #endif // GBUFFER_H

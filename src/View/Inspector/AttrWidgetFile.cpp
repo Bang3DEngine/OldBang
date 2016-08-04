@@ -80,6 +80,8 @@ FileLineEdit::FileLineEdit(QWidget *parent) : QLineEdit(parent)
 {
     connect (this, SIGNAL(selectionChanged()),
              this, SLOT(Deselect()));
+
+    setAlignment(Qt::AlignmentFlag::AlignRight);
 }
 
 void FileLineEdit::mouseDoubleClickEvent(QMouseEvent *e)

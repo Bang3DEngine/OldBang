@@ -1,6 +1,7 @@
 #include "GBuffer.h"
 
 #include "Canvas.h"
+#include "Color.h"
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
@@ -99,16 +100,16 @@ void GBuffer::RenderToScreen() const
     m_renderGBufferToScreenMaterial->UnBind();
 }
 
-void GBuffer::ClearBuffersAndBackground(const Vector4 &backgroundColor, const Vector4 &clearValue)
+void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::Color &clearValue)
 {
     Bind();
 
     SetAllDrawBuffers();
-    glClearColor(clearValue.x, clearValue.y, clearValue.z, clearValue.w);
+    glClearColor(clearValue.r, clearValue.g, clearValue.b, clearValue.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     SetDrawBuffers({GBuffer::Attachment::Color});
-    glClearColor(backgroundColor.x, backgroundColor.y, backgroundColor.z, backgroundColor.w);
+    glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     UnBind();

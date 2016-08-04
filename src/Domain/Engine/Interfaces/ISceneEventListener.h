@@ -47,6 +47,7 @@ protected:
         OnDestroy();
     }
 
+    #ifdef BANG_EDITOR
     virtual void _OnDrawGizmos()
     {
         OnDrawGizmos();
@@ -56,15 +57,17 @@ protected:
     {
         OnDrawGizmosNoDepth();
     }
-
+    #endif
 
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
     virtual void OnPreRender() {}
     virtual void OnRender() {}
     virtual void OnDestroy() {}
+    #ifdef BANG_EDITOR
     virtual void OnDrawGizmos() {}
     virtual void OnDrawGizmosNoDepth() {}
+    #endif
 };
 
 #endif // SCENEEVENTLISTENER_H
