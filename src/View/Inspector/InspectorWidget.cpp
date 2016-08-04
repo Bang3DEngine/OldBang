@@ -220,7 +220,10 @@ void InspectorWidget::RefreshWidgetValues()
                 ws = wc;
             }
 
+            bool hidden = attribute.HasProperty(XMLProperty::Hidden);
             ws->show();
+            ws->setVisible(!hidden);
+            ws->setHidden(hidden);
         }
     }
 }
@@ -233,50 +236,12 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
     {
         XMLAttribute attribute = itAttr.second;
         m_attributes.push_back(attribute);
-        if (!attribute.HasProperty(XMLProperty::Hidden))
+        AttributeWidget *w = AttributeWidget::FromXMLAttribute(attribute, this);
+        if (w)
         {
-            bool readonly = attribute.HasProperty(XMLProperty::Readonly);
-            bool inlined = attribute.HasProperty(XMLProperty::Inline);
-
-            std::string attrName  = attribute.GetName();
-            XMLAttribute::Type attrType = attribute.GetType();
-            AttributeWidget *ws = nullptr;
-            if (attribute.HasVectoredType())
-            {
-                int numFields = attribute.GetNumberOfFieldsOfType();
-                ws = new AttrWidgetVectorFloat(attrName, numFields, this);
-            }
-            else if (attrType == XMLAttribute::Type::File)
-            {
-                std::string fileExtension =
-                        attribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
-                ws = new AttrWidgetFile(attrName, fileExtension, readonly, this);
-            }
-            else if (attrType == XMLAttribute::Type::String)
-            {
-                ws = new AttrWidgetString(attrName, this, readonly, inlined);
-            }
-            else if (attrType == XMLAttribute::Type::Bool)
-            {
-                ws = new AttrWidgetBool(attrName, this);
-            }
-            else if (attrType == XMLAttribute::Type::Enum)
-            {
-                ws = new AttrWidgetEnum(attrName,
-                                        xmlInfo.GetEnumNames(attrName), this);
-            }
-            else if (attrType == XMLAttribute::Type::Color)
-            {
-                ws = new AttrWidgetColor(attrName, this);
-            }
-
-
-            if (ws)
-            {
-                m_attrNameToAttrWidget[attrName] = ws;
-                layout()->addWidget(ws);
-                ws->show();
-            }
+            m_attrNameToAttrWidget[attribute.GetName()] = w;
+            layout()->addWidget(w);
+            w->show();
         }
     }
 }

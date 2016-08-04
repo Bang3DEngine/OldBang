@@ -24,6 +24,10 @@ protected:
      * to the layout, where you expect the attributewidget label to be.
      */
     QLabel* GetLabelWidget(const std::string &label);
+
+public:
+    static AttributeWidget* FromXMLAttribute(const XMLAttribute &xmlAttribute,
+                                             InspectorWidget *inspectorWidget);
 };
 
 #endif // INSPECTORSW_H

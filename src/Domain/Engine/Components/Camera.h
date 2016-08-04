@@ -23,7 +23,7 @@ public:
 
 private:
 
-    Rect m_orthoRect = Rect(-1.0f, 1.0f, -1.0f, 1.0f);
+    float m_orthoWidth  = 0.5f;
 
     Color m_clearColor = Color(0.9f);
     float m_fovDegrees = 60.0f;
@@ -42,8 +42,7 @@ public:
     void GetViewMatrix(Matrix4 *view) const;
     void GetProjectionMatrix(Matrix4 *proj) const;
 
-
-    void SetOrthoRect(const Rect& rect);
+    void SetOrthoWidth(float orthoWidth);
 
     void SetClearColor(const Color& color);
     void SetFovDegrees(float fovDegrees);
@@ -57,6 +56,8 @@ public:
     void SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio);
 
     const Color& GetClearColor() const;
+    float GetOrthoWidth() const;
+    float GetOrthoHeight() const;
     float GetFovDegrees() const;
     float GetAspectRatio() const;
     float GetZNear() const;

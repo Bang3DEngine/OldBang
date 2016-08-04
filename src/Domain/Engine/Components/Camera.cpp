@@ -36,15 +36,15 @@ void Camera::GetProjectionMatrix(Matrix4 *proj) const
     }
     else //Ortho
     {
-        *proj = Matrix4::Ortho(m_orthoRect.m_minx, m_orthoRect.m_maxx,
-                               m_orthoRect.m_miny, m_orthoRect.m_maxy,
-                               m_zNear, m_zFar);
+        *proj = Matrix4::Ortho(-GetOrthoWidth(),  GetOrthoWidth(),
+                               -GetOrthoHeight(), GetOrthoHeight(),
+                                GetZNear(),       GetZFar());
     }
 }
 
-void Camera::SetOrthoRect(const Rect &rect)
+void Camera::SetOrthoWidth(float orthoWidth)
 {
-    m_orthoRect = rect;
+    m_orthoWidth = orthoWidth;
 }
 
 void Camera::SetClearColor(const Color &color)
@@ -85,6 +85,16 @@ void Camera::SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio)
 const Color &Camera::GetClearColor() const
 {
     return m_clearColor;
+}
+
+float Camera::GetOrthoWidth() const
+{
+    return m_orthoWidth;
+}
+
+float Camera::GetOrthoHeight() const
+{
+    return GetOrthoWidth() * GetAspectRatio();
 }
 
 
@@ -173,8 +183,8 @@ void Camera::OnDrawGizmos()
         else
         {
             Box orthoBox;
-            orthoBox.SetMin(Vector3(m_orthoRect.m_minx, m_orthoRect.m_miny, GetZNear()));
-            orthoBox.SetMax(Vector3(m_orthoRect.m_maxx, m_orthoRect.m_maxy, GetZFar()));
+            orthoBox.SetMin(Vector3(-GetOrthoWidth(), -GetOrthoHeight(), GetZNear()));
+            orthoBox.SetMax(Vector3( GetOrthoWidth(),  GetOrthoHeight(), GetZFar()));
             Gizmos::DrawSimpleBox(orthoBox);
         }
     }
@@ -205,7 +215,8 @@ void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
     SetZFar(xmlInfo->GetFloat("ZFar"));
     ProjectionMode pm = ProjectionMode_FromString(xmlInfo->GetEnumSelectedName("ProjectionMode"));
     SetProjectionMode(pm);
-    SetOrthoRect( xmlInfo->GetRect("OrthoRectangle") );
+    SetAspectRatio( xmlInfo->GetFloat("AspectRatio") );
+    SetOrthoWidth( xmlInfo->GetFloat("OrthoWidth") );
 }
 
 void Camera::FillXMLInfo(XMLNode *xmlInfo) const
@@ -214,12 +225,22 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("Camera");
 
     xmlInfo->SetColor("ClearColor", GetClearColor());
-    xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
     xmlInfo->SetFloat("ZNear", GetZNear());
     xmlInfo->SetFloat("ZFar", GetZFar());
     xmlInfo->SetEnum("ProjectionMode",
                      ProjectionMode_GetNamesVector(),
                      ProjectionMode_GetIndexFromValue(m_projMode),
                      {XMLProperty::Readonly});
-    xmlInfo->SetRect("OrthoRectangle", m_orthoRect);
+    xmlInfo->SetFloat("AspectRatio", GetAspectRatio());
+
+    if (GetProjectionMode() == ProjectionMode::Orthographic)
+    {
+        xmlInfo->SetFloat("OrthoWidth", GetOrthoWidth());
+        xmlInfo->SetFloat("FOVDegrees", GetFovDegrees(), {XMLProperty::Hidden});
+    }
+    else
+    {
+        xmlInfo->SetFloat("OrthoWidth", GetOrthoWidth(), {XMLProperty::Hidden});
+        xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
+    }
 }
