@@ -10,6 +10,16 @@
 #include "Behaviour.h"
 #include "SystemUtils.h"
 
+class CompileBehaviourThread : public QThread
+{
+protected:
+    BehaviourHolder *m_behaviourHolder = nullptr;
+    void run() override;
+
+public:
+    void SetBehaviourHolder(BehaviourHolder *bh);
+};
+
 /**
  * @brief The BehaviourHolder class is the responsible of holding
  * a UNIQUE dynamically loaded Behaviour, loading them, and passing its events to them,
@@ -23,6 +33,9 @@ class BehaviourHolder : public Component,
                         public IAttrWidgetButtonListener
 {
 private:
+
+    CompileBehaviourThread m_compileThread;
+
     /**
      * @brief The dynamically loaded Behaviour
      */
@@ -51,6 +64,8 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
 
+    const std::string &GetSourceFilepath() const;
+
     #ifdef BANG_EDITOR
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
@@ -67,6 +82,8 @@ public:
     virtual void _OnPreRender () override;
     virtual void _OnRender () override;
     virtual void _OnDestroy () override;
+
+    void OnBehaviourFinishedCompiling(std::string soFilepath);
 
     // TODO: Add windowEventListener events pass to Behaviour too
 };

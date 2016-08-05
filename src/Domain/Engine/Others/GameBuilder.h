@@ -11,7 +11,7 @@ class BuildGameThread : public QThread
 {
     Q_OBJECT
     public:
-        bool runGame = false;
+        bool runGameAfterBuild = false;
 
     protected:
         void run() override;

@@ -220,8 +220,9 @@ void InspectorWidget::RefreshWidgetValues()
                 ws = wc;
             }
 
-            bool hidden = attribute.HasProperty(XMLProperty::Hidden);
-            ws->show();
+            bool hidden  =  attribute.HasProperty(XMLProperty::Hidden);
+            bool enabled = !attribute.HasProperty(XMLProperty::Disabled);
+            ws->setEnabled(enabled);
             ws->setVisible(!hidden);
             ws->setHidden(hidden);
         }

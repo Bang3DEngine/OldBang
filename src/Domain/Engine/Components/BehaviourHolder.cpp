@@ -4,6 +4,8 @@ BehaviourHolder::BehaviourHolder()
 {
     //    new AttrWidgetButtonInfo( "Refresh",
     //                std::bind(&BehaviourHolder::Refresh, this) )
+
+    m_compileThread.SetBehaviourHolder(this);
 }
 
 BehaviourHolder::~BehaviourHolder()
@@ -55,13 +57,25 @@ ICloneable *BehaviourHolder::Clone() const
     return bh;
 }
 
+const std::string &BehaviourHolder::GetSourceFilepath() const
+{
+    return m_sourceFilepath;
+}
+
 void BehaviourHolder::Refresh()
 {
     if (m_sourceFilepath == "") return;
 
-    // Compile
-    std::string soFilepath =
-            SystemUtils::CompileToSharedObject(m_sourceFilepath);
+    if (!m_compileThread.isRunning())
+    {
+        Logger_Log("Refreshing Behaviour...");
+        m_compileThread.start();
+    }
+}
+
+
+void BehaviourHolder::OnBehaviourFinishedCompiling(std::string soFilepath)
+{
     if (soFilepath == "")
     {
         ChangeBehaviour(nullptr);
@@ -94,6 +108,7 @@ void BehaviourHolder::Refresh()
         {
             m_behaviour->Init(this);
             m_behaviour->_OnStart();
+            Logger_Log("Behaviour successfully refreshed!");
         }
     }
     else
@@ -111,8 +126,12 @@ void BehaviourHolder::OnButtonClicked()
 void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
+    std::string lastFilepath = m_sourceFilepath;
     m_sourceFilepath = xmlInfo->GetString("BehaviourScript");
-    Refresh();
+    if (lastFilepath != m_sourceFilepath)
+    {
+        Refresh();
+    }
 }
 
 void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
@@ -123,7 +142,14 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "*.cpp");
 
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
-    xmlInfo->SetButton("Refresh", noConstThis, {});
+    if (m_compileThread.isRunning())
+    {
+        xmlInfo->SetButton("Refresh", noConstThis, {XMLProperty::Disabled});
+    }
+    else
+    {
+        xmlInfo->SetButton("Refresh", noConstThis, {});
+    }
 }
 
 
@@ -180,4 +206,18 @@ void BehaviourHolder::_OnDestroy()
     {
         m_behaviour->_OnDestroy();
     }
+}
+
+
+void CompileBehaviourThread::run()
+{
+    std::string sourceFilepath = m_behaviourHolder->GetSourceFilepath();
+    std::string soFilepath = SystemUtils::CompileToSharedObject(sourceFilepath);
+    // Here it's compiling the behaviour...
+    m_behaviourHolder->OnBehaviourFinishedCompiling(soFilepath); // Notify
+}
+
+void CompileBehaviourThread::SetBehaviourHolder(BehaviourHolder *bh)
+{
+    m_behaviourHolder = bh;
 }
