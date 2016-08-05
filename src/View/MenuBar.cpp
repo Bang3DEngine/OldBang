@@ -278,11 +278,29 @@ void MenuBar::OnCreatePointLight() const
 void MenuBar::OnAlignGameObjectWithView() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AlignGameObjectWithView);
+
+    GameObject *selected = Hierarchy::GetInstance()->GetFirstSelectedGameObject();
+    if (selected)
+    {
+        EditorCamera *editorCamera =
+                static_cast<EditorCamera*>(Scene::GetCamera()->gameObject->parent);
+        selected->transform->SetPosition(editorCamera->transform->GetPosition());
+        selected->transform->SetRotation(editorCamera->transform->GetRotation());
+    }
 }
 
 void MenuBar::OnAlignViewWithGameObject() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AlignViewWithGameObject);
+
+    GameObject *selected = Hierarchy::GetInstance()->GetFirstSelectedGameObject();
+    if (selected)
+    {
+        EditorCamera *editorCamera =
+                static_cast<EditorCamera*>(Scene::GetCamera()->gameObject->parent);
+        editorCamera->AlignViewWithGameObject(selected);
+    }
+
 }
 
 void MenuBar::OnCreatePrefab() const

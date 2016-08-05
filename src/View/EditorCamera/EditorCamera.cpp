@@ -43,6 +43,9 @@ void EditorCamera::AdjustSpeeds()
             m_mousePanPerPixel.x = m_mousePanPerPixel.y * ch * ar / cw;
         }
     }
+
+    m_mousePanPerPixel.x = glm::max(m_mousePanPerPixel.x, 0.05f);
+    m_mousePanPerPixel.y = glm::max(m_mousePanPerPixel.y, 0.05f);
 }
 
 void EditorCamera::UpdateRotationVariables()
@@ -242,6 +245,17 @@ void EditorCamera::NotifyGameObjectDestroyed(GameObject *go)
         m_currentFocus = nullptr;
         m_doingLookAt = false;
     }
+}
+
+void EditorCamera::AlignViewWithGameObject(GameObject *selected)
+{
+    m_currentFocus = nullptr;
+    m_doingLookAt = false;
+    m_camt->SetLocalRotation(Quaternion::identity);
+    transform->SetPosition(selected->transform->GetPosition());
+    Vector3 up = Vector3::up;
+    transform->LookInDirection(selected->transform->GetForward(), up);
+    UpdateRotationVariables();
 }
 
 Camera *EditorCamera::GetCamera()

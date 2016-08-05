@@ -63,9 +63,6 @@ private:
     float m_mouseZoomPerDeltaWheel = 5.0f;
 
 protected:
-    EditorCamera();
-    virtual ~EditorCamera();
-
     /**
      * @brief Adjust different camera parameters based
      * on the current camera position, focus, etc. For example,
@@ -112,17 +109,21 @@ protected:
      */
     void HandleLookAtFocus();
 
-    /**
-     * Gets the Camera Component inside the "Yaw-Node".
-     **/
-    Camera *GetCamera();
-
     void OnStart() override;
     void OnUpdate() override;
 
 public:
 
+    EditorCamera();
+    virtual ~EditorCamera();
+
     void NotifyGameObjectDestroyed(GameObject *go);
+    void AlignViewWithGameObject(GameObject *selected);
+
+    /**
+     * Gets the Camera Component inside the "Yaw-Node".
+     **/
+    Camera *GetCamera();
 
 #ifdef BANG_EDITOR
     void OnTreeHierarchyGameObjectsSelected
