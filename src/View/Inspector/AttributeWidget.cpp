@@ -66,6 +66,11 @@ AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttrib
     {
         w = new AttrWidgetColor(attrName, inspectorWidget);
     }
+    else if (attrType == XMLAttribute::Type::Button)
+    {
+        w = new AttrWidgetButton(attrName, xmlAttribute.GetButtonListener(),
+                                 inspectorWidget);
+    }
 
     return w;
 }

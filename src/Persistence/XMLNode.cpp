@@ -173,6 +173,16 @@ void XMLNode::SetEnum(const std::string &attributeName, const std::vector<std::s
     SetAttribute(attr);
 }
 
+void XMLNode::SetButton(const std::string &attributeName,
+                        IAttrWidgetButtonListener* listener,
+                        const std::vector<XMLProperty> &properties)
+{
+    XMLAttribute attr;
+    attr.SetName(attributeName);
+    attr.SetButton(attributeName, listener, properties);
+    SetAttribute(attr);
+}
+
 XMLAttribute* XMLNode::GetAttribute(const std::string &attributeName) const
 {
     XMLAttribute *attr = nullptr;
@@ -286,6 +296,12 @@ std::vector<std::string> XMLNode::GetEnumNames(const std::string &attributeName)
 {
     XMLAttribute *attr = GetAttribute(attributeName);
     return attr ? attr->GetEnumNames() : std::vector<std::string>();
+}
+
+IAttrWidgetButtonListener *XMLNode::GetButtonListener(const std::string &attributeName) const
+{
+    XMLAttribute *attr = GetAttribute(attributeName);
+    return attr ? attr->GetButtonListener() : nullptr;
 }
 
 const XMLNode *XMLNode::GetChild(const std::string &name) const

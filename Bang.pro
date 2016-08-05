@@ -211,7 +211,8 @@ HEADERS += \
     src/Domain/Engine/Others/NamedEnum.h \
     src/Domain/Engine/Physics/Vector4.h \
     src/Domain/Engine/Physics/Vector2.h \
-    src/Domain/Engine/Physics/Color.h
+    src/Domain/Engine/Physics/Color.h \
+    src/View/Inspector/IAttrWidgetButtonListener.h
 
 EDITOR {
 HEADERS += \
@@ -341,7 +342,8 @@ SOURCES += \
     src/Persistence/XMLProperty.cpp \
     src/Domain/Engine/Physics/Vector4.cpp \
     src/Domain/Engine/Physics/Vector2.cpp \
-    src/Domain/Engine/Physics/Color.cpp
+    src/Domain/Engine/Physics/Color.cpp \
+    src/View/Inspector/IAttrWidgetButtonListener.cpp
 
 EDITOR {
     SOURCES += \

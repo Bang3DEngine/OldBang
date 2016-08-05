@@ -1,8 +1,11 @@
 #ifndef BEHAVIOURHOLDER_H
 #define BEHAVIOURHOLDER_H
 
+#include <functional>
+
 #include "Bang.h"
 #include "Component.h"
+#include "IAttrWidgetButtonListener.h"
 
 #include "Behaviour.h"
 #include "SystemUtils.h"
@@ -16,7 +19,8 @@
  * In case the BehaviourHolder has a Behaviour correctly loaded, it will
  * pass the events to the behaviour. Otherwise, it will just do nothing.
  */
-class BehaviourHolder : public Component
+class BehaviourHolder : public Component,
+                        public IAttrWidgetButtonListener
 {
 private:
     /**
@@ -53,6 +57,7 @@ public:
     #endif
 
     void Refresh();
+    void OnButtonClicked() override;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

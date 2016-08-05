@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <functional>
 
 #include "Rect.h"
 #include "Color.h"
@@ -17,6 +18,8 @@
 #include "StringUtils.h"
 #include "Persistence.h"
 #include "XMLProperty.h"
+
+#include "IAttrWidgetButtonListener.h"
 
 class XMLAttribute : public IToString
 {
@@ -34,7 +37,8 @@ public:
         Quaternion,
         Rect,
         File,
-        Enum
+        Enum,
+        Button
     );
 
 private:
@@ -84,6 +88,9 @@ public:
                  const std::vector<XMLProperty>& properties = {});
     void SetEnum(const std::vector<std::string>& enumNames,
                  int selectedEnumIndex, const std::vector<XMLProperty>& properties = {});
+    void SetButton(const std::string buttonText,
+                   IAttrWidgetButtonListener *listener,
+                   const std::vector<XMLProperty>& properties = {});
 
 
     /**
@@ -115,6 +122,7 @@ public:
     Color GetColor() const;
     Quaternion GetQuaternion() const;
     Rect GetRect() const;
+    IAttrWidgetButtonListener* GetButtonListener() const;
     std::string GetEnumSelectedName() const;
     int GetEnumSelectedIndex() const;
     std::vector<std::string> GetEnumNames() const;

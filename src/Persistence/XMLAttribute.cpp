@@ -251,6 +251,16 @@ void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
     }
 }
 
+void XMLAttribute::SetButton(const std::string buttonText,
+                             IAttrWidgetButtonListener *listener,
+                             const std::vector<XMLProperty> &properties)
+{
+    Set(m_name, buttonText, XMLAttribute::Type::Button, properties);
+    std::ostringstream oss; oss << ( (void*) listener );
+    XMLProperty prop("Listener", oss.str());
+    SetProperty(prop);
+}
+
 bool XMLAttribute::HasVectoredType() const
 {
     return m_type == XMLAttribute::Type::Float   ||
@@ -275,6 +285,7 @@ int XMLAttribute::GetNumberOfFieldsOfType() const
     else if (m_type == XMLAttribute::Type::Rect)       return 4;
     else if (m_type == XMLAttribute::Type::File)       return 1;
     else if (m_type == XMLAttribute::Type::Enum)       return 1;
+    else if (m_type == XMLAttribute::Type::Button)     return 1;
     return -1;
 }
 
@@ -402,6 +413,20 @@ Rect XMLAttribute::GetRect() const
 {
     Vector4 v = GetVector4();
     return Rect(v.x, v.y, v.z, v.w);
+}
+
+IAttrWidgetButtonListener *XMLAttribute::GetButtonListener() const
+{
+    std::istringstream iss(GetPropertyValue("Listener"));
+    void *lp = nullptr;
+    iss >> lp;
+    if (lp)
+    {
+        IAttrWidgetButtonListener *listener =
+           static_cast<IAttrWidgetButtonListener*>(lp);
+        return listener;
+    }
+    return nullptr;
 }
 
 std::string XMLAttribute::GetEnumSelectedName() const

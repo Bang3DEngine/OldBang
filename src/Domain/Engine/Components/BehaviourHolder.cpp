@@ -103,6 +103,11 @@ void BehaviourHolder::Refresh()
     }
 }
 
+void BehaviourHolder::OnButtonClicked()
+{
+    Refresh();
+}
+
 void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
@@ -116,6 +121,9 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("BehaviourHolder");
 
     xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "*.cpp");
+
+    BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
+    xmlInfo->SetButton("Refresh", noConstThis, {});
 }
 
 

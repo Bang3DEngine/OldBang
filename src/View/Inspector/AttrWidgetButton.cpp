@@ -1,14 +1,14 @@
 #include "AttrWidgetButton.h"
 
 AttrWidgetButton::AttrWidgetButton(const std::string &label,
-                                   std::function<void()> onClickFunction,
+                                   IAttrWidgetButtonListener *listener,
                                    InspectorWidget *parent) :
     AttributeWidget("", parent)
 {
     QLayout *layout = new QVBoxLayout();
     setLayout(layout);
 
-    this->m_onClickFunction = onClickFunction;
+    m_listener = listener;
 
     m_button = new QPushButton(QString::fromStdString(label));
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(OnButtonClicked(bool)));
@@ -21,9 +21,22 @@ AttrWidgetButton::AttrWidgetButton(const std::string &label,
     setFocusPolicy(Qt::FocusPolicy::ClickFocus);
 }
 
+void AttrWidgetButton::SetValue(const std::string &buttonText)
+{
+    m_button->setText(QString::fromStdString(buttonText));
+}
+
+std::string AttrWidgetButton::GetValue() const
+{
+    return m_button->text().toStdString();
+}
+
 void AttrWidgetButton::OnButtonClicked(bool _)
 {
-    m_onClickFunction();
+    if (m_listener)
+    {
+        m_listener->OnButtonClicked();
+    }
 }
 
 QSize AttrWidgetButton::sizeHint() const

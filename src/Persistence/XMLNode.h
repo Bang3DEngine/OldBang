@@ -15,6 +15,7 @@
 #include "IToString.h"
 
 #include "XMLAttribute.h"
+#include "IAttrWidgetButtonListener.h"
 
 class XMLNode : public IToString
 {
@@ -68,6 +69,9 @@ public:
                  const std::vector<std::string>& enumNames,
                  int selectedEnumIndex,
                  const std::vector<XMLProperty>& properties = {});
+    void SetButton(const std::string &attributeName,
+                   IAttrWidgetButtonListener* listener,
+                   const std::vector<XMLProperty>& properties = {});
     void RemoveAttribute(const std::string& attributeName);
     XMLAttribute* GetAttribute(const std::string& attributeName) const;
     std::string GetAttributeValue(const std::string& attributeName) const;
@@ -86,6 +90,7 @@ public:
     int GetEnumSelectedIndex(const std::string& attributeName) const;
     std::string GetEnumSelectedName(const std::string& attributeName) const;
     std::vector<std::string> GetEnumNames(const std::string& attributeName) const;
+    IAttrWidgetButtonListener *GetButtonListener(const std::string &attributeName) const;
 
     const XMLNode *GetChild(const std::string &name) const;
     void SetTagName(const std::string tagName);
