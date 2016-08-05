@@ -373,27 +373,20 @@ void Hierarchy::OnContextMenuDeleteClicked()
 
 void Hierarchy::OnContextMenuCreatePrefab()
 {
-    GameObject *e = GetFirstSelectedGameObject();
-    Prefab *prefab = new Prefab(e);
+    GameObject *go = GetFirstSelectedGameObject();
 
-    std::string ext = Prefab::GetFileExtensionStatic();
     FileDialog fd("Create Prefab...", Prefab::GetFileExtensionStatic());
-    std::string filename = fd.GetSaveFilename(e->name);
+    std::string filename = fd.GetSaveFilename(go->name);
     if (filename != "")
     {
-        std::fstream f;
-        f.open(filename, std::fstream::out);
-        if (f.is_open())
-        {
-            XMLNode *node = new XMLNode();
-            prefab->FillXMLInfo(node);
-            f << node->ToString();
-            delete node;
-            f.close();
-        }
-    }
+        Prefab *prefab = new Prefab(go);
+        XMLNode *node = new XMLNode();
+        prefab->FillXMLInfo(node);
+        delete prefab;
 
-    delete prefab;
+        FileWriter::WriteToFile(filename, node->ToString());
+        delete node;
+    }
 }
 
 void Hierarchy::OnCustomContextMenuRequested(QPoint point)

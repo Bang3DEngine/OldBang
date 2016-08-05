@@ -7,7 +7,7 @@ Prefab::Prefab()
 
 Prefab::Prefab(const Prefab &p)
 {
-    this->m_assetDescription = p.m_assetDescription;
+    m_gameObjectXMLInfoContent = p.m_gameObjectXMLInfoContent;
 }
 
 Prefab::Prefab(GameObject *go)
@@ -16,13 +16,14 @@ Prefab::Prefab(GameObject *go)
     {
         XMLNode *xmlInfo = new XMLNode();
         go->FillXMLInfo(xmlInfo);
-        m_assetDescription = xmlInfo->ToString();
+        m_gameObjectXMLInfoContent = xmlInfo->ToString();
+        delete xmlInfo;
     }
 }
 
-Prefab::Prefab(const std::string &assetDescription)
+Prefab::Prefab(const std::string &gameObjectXMLInfoContent)
 {
-    this->m_assetDescription = assetDescription;
+    m_gameObjectXMLInfoContent = gameObjectXMLInfoContent;
 }
 
 GameObject *Prefab::Instantiate() const
@@ -37,10 +38,11 @@ GameObject *Prefab::Instantiate() const
 
 GameObject *Prefab::InstantiateWithoutStarting() const
 {
-    if (m_assetDescription != "")
+    if (m_gameObjectXMLInfoContent != "")
     {
         GameObject *go = new GameObject();
-        XMLNode *xmlInfo = XMLParser::FromString(m_assetDescription); go->FillXMLInfo(xmlInfo);
+        XMLNode *xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
+        go->ReadXMLInfo(xmlInfo);
         return go;
     }
     return nullptr;
@@ -49,19 +51,14 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 void Prefab::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
-
-    m_assetDescription = xmlInfo->ToString();
+    m_gameObjectXMLInfoContent = xmlInfo->ToString();
 }
 
 void Prefab::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Asset::FillXMLInfo(xmlInfo);
-    xmlInfo->SetTagName("Prefab");
 
-    GameObject *go = InstantiateWithoutStarting();
-    if (go)
-    {
-        go->FillXMLInfo(xmlInfo);
-        delete go;
-    }
+    XMLNode *goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
+    goInfo->CloneInto(xmlInfo);
+    xmlInfo->SetTagName("Prefab");
 }

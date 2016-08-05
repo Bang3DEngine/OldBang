@@ -1,0 +1,48 @@
+<Prefab enabled:Bool="true"{Hidden,Readonly}
+        id:String="0x9ae2510"{Hidden,Readonly}
+        name:String="Character"{Hidden,Readonly}
+       >
+    <Transform Position:Vector3="(12.3223, 2.7, 1.73757)"{}
+               Rotation:Vector3="(0, -2.7, 0)"{}
+               Scale:Vector3="(0.1, 0.1, 0.1)"{}
+               enabled:Bool="true"{Hidden,Readonly}
+               id:String="0x9ae2560"{Hidden,Readonly}
+              >
+    </Transform>
+    <MeshRenderer DrawWireframe:Bool="false"{}
+                  LineWidth:Float="1"{Hidden}
+                  Material:File="./Assets/Materials/luigiMaterial.bmat"{FileExtension="*.bmat"}
+                  MeshAssetFilepath:File="./Assets/Meshes/luigiMesh.bmesh"{FileExtension="*.bmesh"}
+                  ReceivesLighting:Bool="true"{}
+                  enabled:Bool="true"{Hidden,Readonly}
+                  id:String="0x9ae2648"{Hidden,Readonly}
+                 >
+    </MeshRenderer>
+    <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/TestBehaviour.cpp"{FileExtension="*.cpp"}
+                     Refresh:Button="Refresh"{Listener="0x90763b4"}
+                     enabled:Bool="true"{Hidden,Readonly}
+                     id:String="0x9076388"{Hidden,Readonly}
+                    >
+    </BehaviourHolder>
+    <GameObject enabled:Bool="true"{Hidden,Readonly}
+                id:String="0x9acad80"{Hidden,Readonly}
+                name:String="Sword"{Hidden,Readonly}
+               >
+        <Transform Position:Vector3="(-21.7028, 43.7334, 3.07981)"{}
+                   Rotation:Vector3="(0, 0, 0)"{}
+                   Scale:Vector3="(2.79391, 2.45606, 97.5492)"{}
+                   enabled:Bool="true"{Hidden,Readonly}
+                   id:String="0x8e68678"{Hidden,Readonly}
+                  >
+        </Transform>
+        <MeshRenderer DrawWireframe:Bool="false"{}
+                      LineWidth:Float="1"{Hidden}
+                      Material:File="./Assets/Engine/Materials/D2G_Default.bmat"{FileExtension="*.bmat"}
+                      MeshAssetFilepath:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="*.bmesh"}
+                      ReceivesLighting:Bool="true"{}
+                      enabled:Bool="true"{Hidden,Readonly}
+                      id:String="0x9ab1a70"{Hidden,Readonly}
+                     >
+        </MeshRenderer>
+    </GameObject>
+</Prefab>

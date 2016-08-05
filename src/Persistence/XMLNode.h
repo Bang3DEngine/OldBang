@@ -28,6 +28,8 @@ public:
     XMLNode(const std::string &tagName = "");
     virtual ~XMLNode();
 
+    void CloneInto(XMLNode *xmlNode) const;
+
     void AddChild(XMLNode *node);
 
     void UpdateAttributeValue(const std::string &attributeName,
@@ -100,6 +102,8 @@ public:
     const std::string& GetTagName() const;
     const std::map<std::string, XMLAttribute>& GetAttributes() const;
     const std::list<XMLNode*>& GetChildren() const;
+
+    static XMLNode* FromString(const std::string &xml);
 };
 
 #endif // XMLNODE_H

@@ -26,15 +26,13 @@ public:
 
 
 private:
-    //This variable contains the description inside the
-    //corresponding *.bprefab file (including the opening/closing tags)
-    std::string m_assetDescription = "";
+    std::string m_gameObjectXMLInfoContent = "";
 
 public:
     Prefab();
     Prefab(const Prefab &p);
-    Prefab(GameObject *o);
-    Prefab(const std::string &m_assetDescription);
+    Prefab(GameObject *go);
+    Prefab(const std::string &gameObjectXMLInfoContent);
 
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;

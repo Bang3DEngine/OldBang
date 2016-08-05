@@ -18,6 +18,20 @@ XMLNode::~XMLNode()
     }
 }
 
+void XMLNode::CloneInto(XMLNode *xmlNode) const
+{
+    xmlNode->m_children.clear();
+
+    xmlNode->SetTagName(GetTagName());
+    xmlNode->m_attributes = GetAttributes();
+    for (XMLNode *child : m_children)
+    {
+        XMLNode *childClone = new XMLNode();
+        child->CloneInto(childClone);
+        xmlNode->AddChild(childClone);
+    }
+}
+
 void XMLNode::AddChild(XMLNode *node)
 {
     m_children.push_back(node);
@@ -365,4 +379,9 @@ const std::map<std::string, XMLAttribute> &XMLNode::GetAttributes() const
 const std::list<XMLNode*>& XMLNode::GetChildren() const
 {
     return m_children;
+}
+
+XMLNode *XMLNode::FromString(const std::string &xml)
+{
+    return XMLParser::FromString(xml);
 }
