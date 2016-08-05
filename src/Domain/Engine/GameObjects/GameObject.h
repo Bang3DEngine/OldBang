@@ -43,7 +43,7 @@ friend class Canvas;
 friend class Prefab;
 friend class Scene;
 
-private:
+protected:
 
     #ifdef BANG_EDITOR
     bool m_isSelectedInHierarchy = false;
@@ -57,6 +57,8 @@ private:
     virtual void _OnDestroy () override;
 
     #ifdef BANG_EDITOR
+    virtual void OnDrawGizmos() override;
+    virtual void OnDrawGizmosNoDepth() override;
     virtual void _OnDrawGizmos () override;
     virtual void _OnDrawGizmosNoDepth () override;
     #endif

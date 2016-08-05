@@ -22,7 +22,7 @@ private:
 public:
     static void WriteScene(const std::string &filepath, Scene *scene);
     static void WriteAsset(const std::string &filepath, Asset *a);
-    static void WriteToFile(const std::string &filepath, const std::string &content);
+    static bool WriteToFile(const std::string &filepath, const std::string &content);
 
     static void WriteXMLNode(XMLNode *xmlInfo, std::ostream &f);
     static void WriteBool(bool v, std::ostream &f);

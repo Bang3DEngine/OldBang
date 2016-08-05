@@ -37,8 +37,8 @@ protected:
     Component();
     virtual ~Component();
 
-    virtual void _OnDrawGizmos() override;
-    virtual void _OnDrawGizmosNoDepth() override;
+    virtual void OnDrawGizmos() override;
+    virtual void OnDrawGizmosNoDepth() override;
 
 public:
 

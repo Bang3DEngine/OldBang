@@ -2,9 +2,9 @@
 
 #include "Canvas.h"
 
-EditorCamera::EditorCamera() : EditorGameObject("EditorCamera")
+EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
 {
-    m_yawNode = new EditorGameObject("EditorYawNode");
+    m_yawNode = new EditorGameObject("BANG_EditorYawNode");
     m_yawNode->SetParent(this);
 
     m_cam = m_yawNode->AddComponent<Camera>();
@@ -232,6 +232,15 @@ void EditorCamera::OnUpdate()
     {
         Canvas::SetCursor( Qt::ArrowCursor ); //cursor visible
         Input::SetMouseWrapping(false);
+    }
+}
+
+void EditorCamera::NotifyGameObjectDestroyed(GameObject *go)
+{
+    if (m_currentFocus == go)
+    {
+        m_currentFocus = nullptr;
+        m_doingLookAt = false;
     }
 }
 

@@ -65,14 +65,29 @@ ICloneable* GameObject::Clone() const
 
 GameObject::~GameObject()
 {
-    this->_OnDestroy();
+    _OnDestroy();
 
-    while (m_children.size() > 0)
+    #ifdef BANG_EDITOR
+    EditorCamera *ecam = static_cast<EditorCamera*>(
+                            Scene::GetCurrentScene()->GetChild("BANG_EditorCamera"));
+    ecam->NotifyGameObjectDestroyed(this);
+    #endif
+
+    for (auto it = m_children.begin(); it != m_children.end(); ++it)
     {
-        GameObject *child = *(m_children.begin());
-        child->SetParent(nullptr);
+        GameObject *child = *it;
+        it = m_children.erase(it);
         delete child;
     }
+
+    for (auto it = m_components.begin(); it != m_components.end(); ++it)
+    {
+        Component *comp = *it;
+        it = m_components.erase(it);
+        delete comp;
+    }
+
+    SetParent(nullptr);
 }
 
 void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
@@ -580,10 +595,19 @@ void GameObject::_OnDestroy()
     OnDestroy();
 }
 
+void GameObject::OnDrawGizmos()
+{
+    Gizmos::Reset();
+}
+
+void GameObject::OnDrawGizmosNoDepth()
+{
+    Gizmos::Reset();
+}
+
 #ifdef BANG_EDITOR
 void GameObject::_OnDrawGizmos()
 {
-    Gizmos::Reset();
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
     {

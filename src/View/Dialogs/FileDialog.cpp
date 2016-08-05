@@ -13,9 +13,10 @@ FileDialog::FileDialog(const std::string &title,
 
 std::string FileDialog::GetExtensionFilterString(const std::string &extension)
 {
-    return extension + "(" + extension + ")" ;
+    std::string ext = extension;
+    StringUtils::AddInFrontOfWords("*.", &ext);
+    return ext + "(" + ext + ")" ;
 }
-
 
 std::string FileDialog::GetOpenFilename()
 {
@@ -36,7 +37,7 @@ std::string FileDialog::GetSaveFilename(const std::string &suggestedFilename)
             (suggestedFilename == "" ? "" : ("/" + suggestedFilename));
 
     std::string filepath =
-            this->getSaveFileName(
+            getSaveFileName(
                 WindowMain::GetInstance()->GetMainWindow(),
                 QString::fromStdString(m_title),
                 QString::fromStdString(dirpath),
@@ -45,6 +46,5 @@ std::string FileDialog::GetSaveFilename(const std::string &suggestedFilename)
 
     //This function auto detects if it was in the filepath already.
     filepath = Persistence::AppendExtension(filepath, m_extension);
-
     return filepath;
 }

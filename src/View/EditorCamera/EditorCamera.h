@@ -62,7 +62,7 @@ private:
      */
     float m_mouseZoomPerDeltaWheel = 5.0f;
 
-public:
+protected:
     EditorCamera();
     virtual ~EditorCamera();
 
@@ -112,13 +112,17 @@ public:
      */
     void HandleLookAtFocus();
 
-    void OnStart() override;
-    void OnUpdate() override;
-
     /**
      * Gets the Camera Component inside the "Yaw-Node".
      **/
     Camera *GetCamera();
+
+    void OnStart() override;
+    void OnUpdate() override;
+
+public:
+
+    void NotifyGameObjectDestroyed(GameObject *go);
 
 #ifdef BANG_EDITOR
     void OnTreeHierarchyGameObjectsSelected

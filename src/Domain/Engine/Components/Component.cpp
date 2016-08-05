@@ -10,12 +10,12 @@ Component::~Component()
 {
 }
 
-void Component::_OnDrawGizmos()
+void Component::OnDrawGizmos()
 {
     Gizmos::Reset();
 }
 
-void Component::_OnDrawGizmosNoDepth()
+void Component::OnDrawGizmosNoDepth()
 {
     Gizmos::Reset();
 }

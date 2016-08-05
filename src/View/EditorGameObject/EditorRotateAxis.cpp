@@ -50,12 +50,6 @@ void EditorRotateAxis::OnUpdate()
     Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     GameObject *ago = m_attachedGameObject;
 
-    Matrix4 p, v, m;
-    cam->GetProjectionMatrix(&p);
-    cam->GetViewMatrix(&v);
-    transform->GetModelMatrix(&m);
-    Matrix4 pvm =  p * v * m;
-
     if (m_grabbed)
     {
         if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
@@ -70,8 +64,9 @@ void EditorRotateAxis::OnUpdate()
             // Get the two circle's closer points to the selected point
             // by the user in screen space.
             int anchorIndex0, anchorIndex1;
-            m_circle->GetTwoClosestPointsInScreenSpace(sMousePos , pvm,
-                        &m_sAnchorPoint0, &anchorIndex0, &m_sAnchorPoint1, &anchorIndex1);
+            m_circle->GetTwoClosestPointsInScreenSpace(sMousePos,
+                                                       &m_sAnchorPoint0, &anchorIndex0,
+                                                       &m_sAnchorPoint1, &anchorIndex1);
 
             // This is needed to properly compute the rotation
             if (anchorIndex1 < anchorIndex0)
@@ -87,7 +82,6 @@ void EditorRotateAxis::OnUpdate()
             // Get how aligned is the user movement with the anchor points
             Vector2 anchorPointsDir = Vector2(m_sAnchorPoint1 - m_sAnchorPoint0).Normalized();
             float alignment = Vector2::Dot(anchorPointsDir, Vector2(sMouseDelta).Normalized());
-            //Logger_Log(alignment);
 
             float rotAngle = alignment * c_rotationBoost;
 
@@ -117,6 +111,8 @@ void EditorRotateAxis::OnUpdate()
 
 void EditorRotateAxis::OnDrawGizmosNoDepth()
 {
+    EditorAxis::OnDrawGizmosNoDepth();
+
     m_circle->Render();
 }
 

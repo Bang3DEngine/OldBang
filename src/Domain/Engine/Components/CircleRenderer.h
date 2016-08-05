@@ -31,15 +31,8 @@ private:
     void GeneratePoints();
 
     // Used by EditorRotateAxis mainly
-    float GetDistanceInScreenSpace(
-            const Vector2 &sOrigin,
-            int pointIndex,
-            const Matrix4 &modelViewProjMatrix) const;
-
-    // Used by EditorRotateAxis mainly
     void GetTwoClosestPointsInScreenSpace(
             const Vector2 &sOrigin,
-            const Matrix4 &modelViewProjMatrix,
             Vector2 *p0, int *i0,
             Vector2 *p1, int *i1 ) const;
 

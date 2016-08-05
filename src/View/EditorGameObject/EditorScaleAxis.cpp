@@ -84,6 +84,8 @@ void EditorScaleAxis::OnUpdate()
 
 void EditorScaleAxis::OnDrawGizmosNoDepth()
 {
+    EditorAxis::OnDrawGizmosNoDepth();
+
     m_line->Render();
     m_axisCap->GetComponent<Renderer>()->Render();
 }

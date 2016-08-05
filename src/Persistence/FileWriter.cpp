@@ -8,42 +8,23 @@ FileWriter::FileWriter()
 
 void FileWriter::WriteScene(const std::string &filepath, Scene *scene)
 {
-    std::ofstream ofs;
     std::string fpath = Persistence::AppendExtension(filepath, Scene::GetFileExtension());
-    ofs.open(fpath);
-    if (ofs.is_open())
-    {
-        XMLNode *xmlInfo = new XMLNode();
-        scene->FillXMLInfo(xmlInfo);
-        ofs << xmlInfo->ToString();
-    }
-    else
-    {
-        Logger_Error("There was an error when saving file '" << fpath << "'");
-    }
-    ofs.close();
+    XMLNode *xmlInfo = new XMLNode();
+    scene->FillXMLInfo(xmlInfo);
+    FileWriter::WriteToFile(fpath, xmlInfo->ToString());
 }
 
 void FileWriter::WriteAsset(const std::string &filepath, Asset *a)
 {
-    std::ofstream ofs;
     std::string fpath = Persistence::AppendExtension(filepath, a->GetFileExtension());
-    ofs.open(fpath);
-    if (ofs.is_open())
-    {
-        XMLNode *xmlInfo = new XMLNode();
-        a->FillXMLInfo(xmlInfo);
-        ofs << xmlInfo->ToString();
-    }
-    else
-    {
-        Logger_Error("There was an error when saving file '" << filepath << "'");
-    }
-    ofs.close();
+    XMLNode *xmlInfo = new XMLNode();
+    a->FillXMLInfo(xmlInfo);
+    FileWriter::WriteToFile(fpath, xmlInfo->ToString());
 }
 
-void FileWriter::WriteToFile(const std::string &filepath, const std::string &content)
+bool FileWriter::WriteToFile(const std::string &filepath, const std::string &content)
 {
+    bool ok = true;
     std::ofstream ofs;
     ofs.open(filepath);
     if (ofs.is_open())
@@ -53,8 +34,10 @@ void FileWriter::WriteToFile(const std::string &filepath, const std::string &con
     else
     {
         Logger_Error("There was an error when saving file '" << filepath << "'");
+        ok = false;
     }
     ofs.close();
+    return ok;
 }
 
 void FileWriter::WriteXMLNode(XMLNode *xmlInfo, std::ostream &f)

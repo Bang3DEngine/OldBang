@@ -49,16 +49,13 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
 {
     Gizmos::Init();
 
-    if (m_gizmosGameObject)
-    {
-        delete m_gizmosGameObject;
-    }
-    m_gizmosGameObject = ego;
+    m_gizmosGameObject = ego; // Do not delete last gizmosGameObject, scene delete will do so
 
     Gizmos::m_singleLineRenderer = m_gizmosGameObject->AddComponent<SingleLineRenderer>();
     Gizmos::m_circleRenderer = m_gizmosGameObject->AddComponent<CircleRenderer>();
     Gizmos::m_meshRenderer = m_gizmosGameObject->AddComponent<MeshRenderer>();
 
+    renderers.clear();
     renderers.push_back(Gizmos::m_singleLineRenderer);
     renderers.push_back(Gizmos::m_circleRenderer);
     renderers.push_back(Gizmos::m_meshRenderer);
@@ -306,5 +303,8 @@ void Gizmos::Reset()
         rend->transform->SetPosition(Vector3::zero);
         rend->transform->SetRotation(Quaternion::identity);
         rend->transform->SetScale(Vector3::one);
+        rend->SetEnabled(false);
     }
+
+    Gizmos::m_meshRenderer->GetMaterial()->SetTexture(nullptr);
 }

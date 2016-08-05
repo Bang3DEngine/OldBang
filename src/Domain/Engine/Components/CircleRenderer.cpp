@@ -45,39 +45,14 @@ void CircleRenderer::GeneratePoints()
     }
 }
 
-float CircleRenderer::GetDistanceInScreenSpace(const Vector2 &sOrigin,
-                                               int pointIndex,
-                                               const Matrix4 &modelViewProjMatrix) const
-{
-    Vector3 objP = m_points[pointIndex];
-    Vector4 sP4 = modelViewProjMatrix * Vector4(objP, 1.0f);
-    Vector2 sP = Vector2(sP4.xy()) / sP4.w;
-    sP = sP * 0.5f + 0.5f;
-
-    return Vector2::Distance(sOrigin, sP);
-}
-
 void CircleRenderer::GetTwoClosestPointsInScreenSpace(
         const Vector2 &sOrigin,
-        const Matrix4 &modelViewProjMatrix,
         Vector2 *p0, int *i0,
         Vector2 *p1, int *i1) const
 {
-    /**
-     * @brief We calculate this step in order to avoid sampling
-     * points that are too close to each other, since this will
-     * make the rotation axis losing precision in screen terms...
-     */
-
-    //const int pointsToSample = 16;
-    //int step = points.size() / pointsToSample; // Sample pointsToSample circle points evenly spaced
-    //step = glm::max(step, 1); // In case segments < pointsToSample
-    int step = 1;
-
     float d0, d1; d0 = d1 = 99999.9f;
-    for (int i = 0; i < m_points.size() - 1; i += step) // -1 because the last point is repeated
+    for (int i = 0; i < m_points.size() - 1; ++i)
     {
-        // TODO: not working
         Vector3 objP = m_points[i];
         Matrix4 m; transform->GetModelMatrix(&m);
         Vector3 worldP = (m * Vector4(objP,1)).xyz();
