@@ -380,12 +380,8 @@ void Hierarchy::OnContextMenuCreatePrefab()
     if (filename != "")
     {
         Prefab *prefab = new Prefab(go);
-        XMLNode *node = new XMLNode();
-        prefab->FillXMLInfo(node);
+        FileWriter::WriteToFile(filename, prefab);
         delete prefab;
-
-        FileWriter::WriteToFile(filename, node->ToString());
-        delete node;
     }
 }
 

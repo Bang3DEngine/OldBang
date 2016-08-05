@@ -15,13 +15,15 @@
 #include "Persistence.h"
 
 #include "File.h"
+#include "TextFile.h"
 #include "MeshFile.h"
 #include "ImageFile.h"
 #include "MeshAssetFile.h"
-#include "MeshAssetFileInspectable.h"
 #include "MaterialAssetFile.h"
-#include "MaterialAssetFileInspectable.h"
 #include "Texture2DAssetFile.h"
+#include "TextFileInspectable.h"
+#include "MeshAssetFileInspectable.h"
+#include "MaterialAssetFileInspectable.h"
 
 #include "MeshFileInspectable.h"
 #include "ImageFileInspectable.h"

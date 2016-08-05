@@ -63,29 +63,6 @@ int main(int argc, char *argv[])
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
 
-    /*
-    GameObject *go = new GameObject("test1");
-    go->AddComponent<SingleLineRenderer>();
-    GameObject *go2 = new GameObject("test2");
-    go2->SetParent(go);
-    go2->AddComponent<MeshRenderer>();
-    GameObject *go3 = new GameObject("test3");
-    go3->SetParent(go2);
-    GameObject *go4 = new GameObject("test4");
-    go4->SetParent(go3);
-    GameObject *go5 = new GameObject("test5");
-    go5->SetParent(go2);
-    XMLNode *xmlInfo = new XMLNode();
-    go->FillXMLInfo(xmlInfo);
-    std::cerr << xmlInfo << std::endl;
-    std::cerr << "---------------------------------------" << std::endl;
-    XMLNode *xml2 = XMLParser::FromXML(xmlInfo->ToString());
-    std::cerr << xml2 << std::endl;
-    bool b = (xml2->ToString() == xmlInfo->ToString());
-    std::cerr << (b ? "PASS" : "NOPASS") << std::endl;
-    exit(0);
-    */
-
     #ifdef BANG_EDITOR
 
     // Load dark Window theme

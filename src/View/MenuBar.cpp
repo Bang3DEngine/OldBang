@@ -193,6 +193,7 @@ void MenuBar::OnCreateFromPrefab() const
 
     FileDialog fd("Create from prefab...", Prefab::GetFileExtensionStatic());
     std::string filename = fd.GetOpenFilename();
+    if (filename == "") { return; }
 
     WindowMain *w = WindowMain::GetInstance();
 

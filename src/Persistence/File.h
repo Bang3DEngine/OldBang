@@ -24,6 +24,8 @@ public:
 
     bool IsMaterialAsset() const;
 
+    bool IsTextFile() const;
+
     bool IsPrefabAsset() const;
 
     bool IsDir() const;

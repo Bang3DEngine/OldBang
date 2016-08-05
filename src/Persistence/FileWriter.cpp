@@ -9,17 +9,18 @@ FileWriter::FileWriter()
 void FileWriter::WriteScene(const std::string &filepath, Scene *scene)
 {
     std::string fpath = Persistence::AppendExtension(filepath, Scene::GetFileExtension());
-    XMLNode *xmlInfo = new XMLNode();
-    scene->FillXMLInfo(xmlInfo);
-    FileWriter::WriteToFile(fpath, xmlInfo->ToString());
+    FileWriter::WriteToFile(fpath, scene->GetXMLInfoString());
 }
 
 void FileWriter::WriteAsset(const std::string &filepath, Asset *a)
 {
     std::string fpath = Persistence::AppendExtension(filepath, a->GetFileExtension());
-    XMLNode *xmlInfo = new XMLNode();
-    a->FillXMLInfo(xmlInfo);
-    FileWriter::WriteToFile(fpath, xmlInfo->ToString());
+    FileWriter::WriteToFile(fpath, a->GetXMLInfoString());
+}
+
+bool FileWriter::WriteToFile(const std::string &filepath, const IFileable *fileable)
+{
+    FileWriter::WriteToFile(filepath, fileable->GetXMLInfoString());
 }
 
 bool FileWriter::WriteToFile(const std::string &filepath, const std::string &content)

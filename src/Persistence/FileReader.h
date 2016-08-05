@@ -31,6 +31,8 @@ private:
 
 public:
 
+    static std::string GetContents(const std::string &filepath);
+
     //IMAGE STUFF
     static void GetImageFormat(const std::string& filepath, int *width,
                                int *height, int *numComponents);

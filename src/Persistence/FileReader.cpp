@@ -281,6 +281,21 @@ std::string FileReader::PeekNextLine(std::istream &f)
     return line;
 }
 
+std::string FileReader::GetContents(const std::string &filepath)
+{
+    if (filepath == "") return nullptr;
+
+    std::fstream f;
+    f.open(filepath);
+    if (f.is_open())
+    {
+        std::string contents((std::istreambuf_iterator<char>(f)),
+                              std::istreambuf_iterator<char>());
+        return contents;
+    }
+    return "";
+}
+
 void FileReader::GetImageFormat(const std::string &filepath, int *width,
                                 int *height, int *numComponents)
 {

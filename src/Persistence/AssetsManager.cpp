@@ -26,10 +26,7 @@ void AssetsManager::SaveAssetToFile(const std::string &filepath, Asset *pointerT
 {
     if (filepath != "" && pointerToAsset)
     {
-        XMLNode *xmlInfo = new XMLNode();
-        pointerToAsset->FillXMLInfo(xmlInfo);
-        FileWriter::WriteToFile(filepath, xmlInfo->ToString());
-        delete xmlInfo;
+        FileWriter::WriteToFile(filepath, pointerToAsset);
     }
 
 }

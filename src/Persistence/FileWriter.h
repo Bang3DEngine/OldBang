@@ -11,6 +11,7 @@
 #include "Persistence.h"
 #include "XMLParser.h"
 #include "XMLNode.h"
+#include "IFileable.h"
 
 class Scene;
 class Asset;
@@ -22,6 +23,7 @@ private:
 public:
     static void WriteScene(const std::string &filepath, Scene *scene);
     static void WriteAsset(const std::string &filepath, Asset *a);
+    static bool WriteToFile(const std::string &filepath, const IFileable *fileable);
     static bool WriteToFile(const std::string &filepath, const std::string &content);
 
     static void WriteXMLNode(XMLNode *xmlInfo, std::ostream &f);

@@ -51,7 +51,8 @@ AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttrib
     }
     else if (attrType == XMLAttribute::Type::String)
     {
-        w = new AttrWidgetString(attrName, inspectorWidget, readonly, inlined);
+        bool bigText = xmlAttribute.HasProperty(XMLProperty::BigText);
+        w = new AttrWidgetString(attrName, inspectorWidget, readonly, inlined, bigText);
     }
     else if (attrType == XMLAttribute::Type::Bool)
     {

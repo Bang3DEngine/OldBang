@@ -212,7 +212,9 @@ HEADERS += \
     src/Domain/Engine/Physics/Vector4.h \
     src/Domain/Engine/Physics/Vector2.h \
     src/Domain/Engine/Physics/Color.h \
-    src/View/Inspector/IAttrWidgetButtonListener.h
+    src/View/Inspector/IAttrWidgetButtonListener.h \
+    src/View/Inspector/TextFileInspectable.h \
+    src/View/Inspector/TextFile.h
 
 EDITOR {
 HEADERS += \
@@ -343,7 +345,9 @@ SOURCES += \
     src/Domain/Engine/Physics/Vector4.cpp \
     src/Domain/Engine/Physics/Vector2.cpp \
     src/Domain/Engine/Physics/Color.cpp \
-    src/View/Inspector/IAttrWidgetButtonListener.cpp
+    src/View/Inspector/IAttrWidgetButtonListener.cpp \
+    src/View/Inspector/TextFileInspectable.cpp \
+    src/View/Inspector/TextFile.cpp
 
 EDITOR {
     SOURCES += \

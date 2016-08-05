@@ -27,10 +27,11 @@ bool File::IsTexture2DAsset() const
 
 bool File::IsImageFile() const
 {
-    return  m_isFile &&
-            (
-             m_extension == "jpg" || m_extension == "jpeg" ||
-             m_extension == "png" || m_extension == "bmp"
+    return  m_isFile && (
+             m_extension == "jpg"  ||
+             m_extension == "jpeg" ||
+             m_extension == "png"  ||
+             m_extension == "bmp"
             );
 }
 
@@ -47,6 +48,15 @@ bool File::IsMeshFile() const
 bool File::IsMaterialAsset() const
 {
     return m_isFile && m_extension == Material::GetFileExtensionStatic();
+}
+
+bool File::IsTextFile() const
+{
+    return m_isFile && (
+           m_extension == "txt"  ||
+           m_extension == "frag" ||
+           m_extension == "vert"
+          );
 }
 
 bool File::IsPrefabAsset() const

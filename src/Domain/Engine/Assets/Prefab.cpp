@@ -14,10 +14,7 @@ Prefab::Prefab(GameObject *go)
 {
     if (go)
     {
-        XMLNode *xmlInfo = new XMLNode();
-        go->FillXMLInfo(xmlInfo);
-        m_gameObjectXMLInfoContent = xmlInfo->ToString();
-        delete xmlInfo;
+        m_gameObjectXMLInfoContent = go->GetXMLInfoString();
     }
 }
 

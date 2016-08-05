@@ -2,7 +2,8 @@
 
 AttrWidgetString::AttrWidgetString(const std::string &labelString,
                                    InspectorWidget *parent,
-                                   bool readonly, bool inlined) :
+                                   bool readonly, bool inlined,
+                                   bool bigText) :
     AttributeWidget(labelString, parent)
 {
     QLayout *layout = nullptr;
@@ -16,17 +17,29 @@ AttrWidgetString::AttrWidgetString(const std::string &labelString,
     }
     setLayout(layout);
 
-    m_strField = new LineEdit(readonly); //Right side
-    m_strField->setAlignment(Qt::AlignRight);
-    m_strField->setMinimumWidth(50);
-    m_strField->setMinimumHeight(25);
-    m_strField->setContentsMargins(0,0,0,0);
-    m_strField->show();
+    QWidget *textWidget = nullptr;
+    if (!bigText)
+    {
+        m_lineEdit = new LineEdit(readonly); //Right side
+        m_lineEdit->setAlignment(Qt::AlignRight);
+        m_lineEdit->setMinimumWidth(50);
+        m_lineEdit->setMinimumHeight(25);
+        textWidget = m_lineEdit;
+    }
+    else
+    {
+        m_textEdit = new TextEdit(readonly);
+        m_textEdit->setAlignment(Qt::AlignLeft);
+        textWidget = m_textEdit;
+    }
+
+    textWidget->setContentsMargins(0,0,0,0);
+    textWidget->show();
 
     //connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
 
     layout->addWidget(GetLabelWidget(labelString));
-    layout->addWidget(m_strField);
+    layout->addWidget(textWidget);
 
     setContentsMargins(0,0,0,0);
     show();
@@ -38,17 +51,33 @@ void AttrWidgetString::SetValue(const std::string &value)
 {
     if (!m_editing)
     {
-        //disconnect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
-        m_strField->setText( QString::fromStdString(value) );
-        m_strField->show();
-        //connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
+        if (m_lineEdit)
+        {
+            //disconnect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
+            m_lineEdit->setText( QString::fromStdString(value) );
+            m_lineEdit->show();
+            //connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
+        }
+        else if (m_textEdit)
+        {
+            m_textEdit->setText( QString::fromStdString(value) );
+            m_textEdit->show();
+        }
     }
 }
 
 const std::string AttrWidgetString::GetValue() const
 {
-    std::string str = m_strField->text().toStdString();
-    return str;
+    if (m_lineEdit)
+    {
+        return m_lineEdit->text().toStdString();
+    }
+    else if (m_textEdit)
+    {
+        return m_textEdit->toPlainText().toStdString();
+    }
+
+    return "";
 }
 
 void AttrWidgetString::OnFocusIn()
@@ -64,7 +93,11 @@ void AttrWidgetString::OnFocusOut()
 
 QSize AttrWidgetString::sizeHint() const
 {
-    return QSize(100, 30);
+    if (m_lineEdit)
+    {
+        return QSize(100, 30);
+    }
+    return AttributeWidget::sizeHint();
 }
 
 ////////////////////////////////////////////////////////////
@@ -114,4 +147,22 @@ void LineEdit::SelectAll()
     }
 }
 
+////////////////////////////////////////////////////////////
 
+TextEdit::TextEdit(bool readonly)
+{
+    // setReadOnly(readonly);
+    setReadOnly(true);
+}
+
+void TextEdit::focusInEvent(QFocusEvent *event)
+{
+    QTextEdit::focusInEvent(event);
+    static_cast<AttrWidgetString*>(parent())->OnFocusIn();
+}
+
+void TextEdit::focusOutEvent(QFocusEvent *event)
+{
+    QTextEdit::focusOutEvent(event);
+    static_cast<AttrWidgetString*>(parent())->OnFocusOut();
+}

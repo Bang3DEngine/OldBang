@@ -14,6 +14,7 @@ private:
 public:
     const static XMLProperty Hidden;
     const static XMLProperty Inline;
+    const static XMLProperty BigText;
     const static XMLProperty Readonly;
     const static XMLProperty Disabled;
     const static XMLProperty FileExtension;

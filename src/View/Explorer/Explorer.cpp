@@ -47,7 +47,6 @@ void Explorer::OnButtonDirUpClicked()
             break;
         }
     }
-
     SetDir(parentDirPath);
 }
 
@@ -147,6 +146,11 @@ void Explorer::RefreshInspector()
     {
         MaterialAssetFile fm(m_fileSystemModel, &clickedIndex);
         newInspectable = new MaterialAssetFileInspectable(fm);
+    }
+    else if (f.IsTextFile()) // txt, frag, vert, etc.
+    {
+        TextFile f(m_fileSystemModel, &clickedIndex);
+        newInspectable = new TextFileInspectable(f);
     }
     else
     {

@@ -18,6 +18,8 @@ protected:
     IFileable() {}
 
 public:
+    std::string GetXMLInfoString() const;
+
     virtual void ReadXMLInfo(const XMLNode *xmlInfo);
     virtual void FillXMLInfo(XMLNode *xmlInfo) const;
 
