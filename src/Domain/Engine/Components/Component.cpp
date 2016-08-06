@@ -57,12 +57,14 @@ bool Component::IsEnabled() const
 void Component::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     IFileable::ReadXMLInfo(xmlInfo);
+
     SetEnabled(xmlInfo->GetBool("enabled"));
 }
 
 void Component::FillXMLInfo(XMLNode *xmlInfo) const
 {
     IFileable::FillXMLInfo(xmlInfo);
+
     xmlInfo->SetTagName("Component");
     xmlInfo->SetPointer("id", this,
                         {XMLProperty::Hidden,

@@ -128,8 +128,10 @@ void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
     Component::ReadXMLInfo(xmlInfo);
     std::string lastFilepath = m_sourceFilepath;
     m_sourceFilepath = xmlInfo->GetString("BehaviourScript");
-    if (lastFilepath != m_sourceFilepath)
+    if (lastFilepath != m_sourceFilepath &&
+        gameObject->IsInsideScene())
     {
+
         Refresh();
     }
 }
@@ -139,7 +141,7 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     Component::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("BehaviourHolder");
 
-    xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "*.cpp");
+    xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "cpp");
 
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
     if (m_compileThread.isRunning())
@@ -213,6 +215,7 @@ void CompileBehaviourThread::run()
 {
     std::string sourceFilepath = m_behaviourHolder->GetSourceFilepath();
     std::string soFilepath = SystemUtils::CompileToSharedObject(sourceFilepath);
+
     // Here it's compiling the behaviour...
     m_behaviourHolder->OnBehaviourFinishedCompiling(soFilepath); // Notify
 }

@@ -172,5 +172,5 @@ void Mesh::FillXMLInfo(XMLNode *xmlInfo) const
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("MeshFilepath");
 
-    xmlInfo->SetFilepath("MeshFilepath", m_filepath, "*.obj");
+    xmlInfo->SetFilepath("MeshFilepath", m_filepath, "obj");
 }

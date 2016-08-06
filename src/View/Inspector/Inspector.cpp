@@ -32,11 +32,11 @@ void Inspector::Clear()
     m_currentGameObject = nullptr;
     m_titleLabel->setText(QString::fromStdString(""));
 
-    if (m_currentInspectorWidget)
+    for (InspectorWidget *iw : m_currentInspectorWidgets)
     {
-        delete m_currentInspectorWidget;
-        m_currentInspectorWidget = nullptr;
+        delete iw;
     }
+    m_currentInspectorWidgets.clear();
 
     setStyleSheet("/* */"); //without this line we get resize problems :)
     show();
@@ -54,24 +54,26 @@ void Inspector::Refresh()
 void Inspector::SetInspectable(IInspectable *inspectable, const std::string &title)
 {
     Clear();
-    m_currentInspectorWidget = new InspectorWidget(title, inspectable);
-    AddWidget(m_currentInspectorWidget);
+    m_currentInspectorWidgets.push_back(new InspectorWidget(title, inspectable));
+    AddWidget(m_currentInspectorWidgets[0]);
 }
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
     Clear();
-    m_currentGameObject = gameObject; NONULL(m_currentGameObject);
 
-    for (Component *p : m_currentGameObject->GetComponents())
+    NONULL(gameObject);
+    m_currentGameObject = gameObject;
+
+    for (Component *c : gameObject->GetComponents())
     {
-        ComponentWidget *w = new ComponentWidget(p);
+        ComponentWidget *w = new ComponentWidget(c);
+        m_currentInspectorWidgets.push_back(w);
         AddWidget(w);
     }
 
-    m_titleLabel->setText(QString(m_currentGameObject->name.c_str()));
+    m_titleLabel->setText(QString(gameObject->name.c_str()));
 }
-
 
 void Inspector::AddWidget(InspectorWidget *widget)
 {
@@ -125,59 +127,38 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 
     if (clickedAction == MenuBar::Action::AddComponentBehaviour)
     {
-        if (this->m_currentGameObject )
-        {
-            BehaviourHolder *bh = new BehaviourHolder();
-            m_currentGameObject->AddComponent(bh);
-        }
+        BehaviourHolder *bh = new BehaviourHolder();
+        m_currentGameObject->AddComponent(bh);
     }
     else if (clickedAction == MenuBar::Action::AddComponentCamera)
     {
-        if (this->m_currentGameObject )
-        {
-            Camera *c = new Camera();
-            m_currentGameObject->AddComponent(c);
-        }
+        Camera *c = new Camera();
+        m_currentGameObject->AddComponent(c);
     }
     else if (clickedAction == MenuBar::Action::AddComponentMeshRenderer)
     {
-        if (this->m_currentGameObject )
-        {
-            MeshRenderer *m = new MeshRenderer();
-            m_currentGameObject->AddComponent(m);
-        }
+        MeshRenderer *m = new MeshRenderer();
+        m_currentGameObject->AddComponent(m);
     }
     else if (clickedAction == MenuBar::Action::AddComponenSingleLineRenderer)
     {
-        if (this->m_currentGameObject )
-        {
-            SingleLineRenderer *slr = new SingleLineRenderer();
-            m_currentGameObject->AddComponent(slr);
-        }
+        SingleLineRenderer *slr = new SingleLineRenderer();
+        m_currentGameObject->AddComponent(slr);
     }
     else if (clickedAction == MenuBar::Action::AddComponentCircleRenderer)
     {
-        if (this->m_currentGameObject )
-        {
-            CircleRenderer *cr = new CircleRenderer();
-            m_currentGameObject->AddComponent(cr);
-        }
+        CircleRenderer *cr = new CircleRenderer();
+        m_currentGameObject->AddComponent(cr);
     }
     else if (clickedAction == MenuBar::Action::AddComponentDirectionalLight)
     {
-        if (this->m_currentGameObject )
-        {
-            DirectionalLight *dl = new DirectionalLight();
-            m_currentGameObject->AddComponent(dl);
-        }
+        DirectionalLight *dl = new DirectionalLight();
+        m_currentGameObject->AddComponent(dl);
     }
     else if (clickedAction == MenuBar::Action::AddComponentPointLight)
     {
-        if (this->m_currentGameObject )
-        {
-            PointLight *pl = new PointLight();
-            m_currentGameObject->AddComponent(pl);
-        }
+        PointLight *pl = new PointLight();
+        m_currentGameObject->AddComponent(pl);
     }
 
     Refresh();

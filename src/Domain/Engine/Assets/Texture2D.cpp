@@ -81,7 +81,7 @@ void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Texture2D");
 
-    xmlInfo->SetFilepath("ImageFilepath", m_filepath, "*.jpg *.png *.bmp");
+    xmlInfo->SetFilepath("ImageFilepath", m_filepath, "jpg png bmp");
 
     int selectedIndex = FilterMode_GetIndexFromValue(GetFilterMode());
     xmlInfo->SetEnum("FilterMode", FilterMode_GetNamesVector(), selectedIndex, {});

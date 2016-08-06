@@ -72,9 +72,9 @@ void WindowEventManager::NotifyButtonScaleModeSelected()
     PROPAGATE_EVENT_PAR(OnButtonScaleModeSelected(), s_wem->m_listeners);
 }
 
-void WindowEventManager::NotifyInspectorSlotChanged(Component *updatedComponent, InspectorWidget *inspectorItem)
+void WindowEventManager::NotifyInspectorSlotChanged(InspectorWidget *inspectorItem)
 {
-    updatedComponent->OnInspectorSlotChanged(inspectorItem);
+    PROPAGATE_EVENT_PAR(OnInspectorSlotChanged(inspectorItem), s_wem->m_listeners);
 }
 
 void WindowEventManager::NotifyHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects)

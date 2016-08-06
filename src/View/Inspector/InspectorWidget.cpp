@@ -64,6 +64,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
 InspectorWidget::~InspectorWidget()
 {
+    m_updateTimer->stop();
     delete m_updateTimer;
 }
 
@@ -143,6 +144,11 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
     }
 
     return xmlInfo;
+}
+
+void InspectorWidget::SetTitle(const std::string &title)
+{
+    m_titleLabel->setText(QString::fromStdString(title));
 }
 
 void InspectorWidget::OnCustomContextMenuRequested(QPoint point)
@@ -255,6 +261,7 @@ void InspectorWidget::_OnSlotValueChanged()
         XMLNode xmlInfo = GetWidgetXMLInfo();
         m_relatedInspectable->OnInspectorXMLChanged(&xmlInfo);
     }
+    WindowEventManager::GetInstance()->NotifyInspectorSlotChanged(this);
 }
 
 void InspectorWidget::_OnSlotValueChanged(int _)

@@ -18,7 +18,7 @@ class Inspector : public QListWidget, public IWindowEventManagerListener
 private:
     QLabel *m_titleLabel = nullptr;
     GameObject *m_currentGameObject = nullptr;
-    InspectorWidget *m_currentInspectorWidget = nullptr;
+    std::vector<InspectorWidget*> m_currentInspectorWidgets;
 
     std::map<InspectorWidget*, QListWidgetItem*> m_widgetToItem;
 

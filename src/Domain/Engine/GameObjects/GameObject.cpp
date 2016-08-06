@@ -140,6 +140,13 @@ Scene *GameObject::GetScene()
     return nullptr;
 }
 
+bool GameObject::IsInsideScene() const
+{
+    if (IsScene()) { return true; }
+    if (parent) return parent->IsInsideScene();
+    return nullptr;
+}
+
 GameObject *GameObject::GetParent() const
 {
     return m_parent;
@@ -378,8 +385,12 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
         if (tagName == "GameObject") // It's a child
         {
             GameObject *child = new GameObject();
-            child->ReadXMLInfo(xmlChild);
+            // Important: this line must be before the ReadXMLInfo, because
+            // it will avoid Behaviour to be compiled if it's not in the scene,
+            // and it only can really know if its in scene when executing the Read if
+            // we set it before the Read, not after. Wtf I don't know how to write this xd
             child->SetParent(this);
+            child->ReadXMLInfo(xmlChild);
         }
         else // It's a Component
         {
@@ -426,6 +437,7 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
 {
     IFileable::FillXMLInfo(xmlInfo);
+
     xmlInfo->SetTagName("GameObject");
     xmlInfo->SetPointer("id", this,
                         {XMLProperty::Hidden,

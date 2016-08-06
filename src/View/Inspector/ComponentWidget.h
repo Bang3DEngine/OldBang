@@ -3,6 +3,7 @@
 
 #include "Bang.h"
 
+#include "GameObject.h"
 #include "InspectorWidget.h"
 
 class Component;
@@ -11,8 +12,8 @@ class ComponentWidget : public InspectorWidget
     Q_OBJECT
 
 private:
-    Component *m_relatedComponent;
-    QCheckBox *m_IsEnabledCheckbox;
+    Component *m_relatedComponent = nullptr;
+    QCheckBox *m_enabledCheckbox = nullptr;
 
 public:
     explicit ComponentWidget(Component *relatedComponent);

@@ -88,6 +88,6 @@ void Light::FillXMLInfo(XMLNode *xmlInfo) const
 
     xmlInfo->SetFloat("Intensity", GetIntensity());
     xmlInfo->SetColor("Color", GetColor());
-    xmlInfo->SetFilepath("Material", m_lightMaterial->GetFilepath(), "*.bmat",
+    xmlInfo->SetFilepath("Material", m_lightMaterial->GetFilepath(), "bmat",
                         {XMLProperty::Hidden});
 }

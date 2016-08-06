@@ -151,9 +151,24 @@ void Explorer::RefreshInspector()
         inspector->Clear();
     }
 
+    if (f.IsPrefabAsset()) // bprefab
+    {
+        File f(m_fileSystemModel, &clickedIndex);
+        PrefabAssetFileInspectable *prefabInspectable =
+                new PrefabAssetFileInspectable(f);
+        newInspectable = prefabInspectable;
+        prefabInspectable->ShowInInspector();
+    }
+    else
+    {
+        if (newInspectable)
+        {
+            inspector->SetInspectable(newInspectable, f.GetNameAndExtension());
+        }
+    }
+
     if (newInspectable)
     {
-        inspector->SetInspectable(newInspectable, f.GetNameAndExtension());
         lastIInspectableInInspector = newInspectable;
     }
 }

@@ -214,7 +214,8 @@ HEADERS += \
     src/Domain/Engine/Physics/Color.h \
     src/View/Inspector/IAttrWidgetButtonListener.h \
     src/View/Inspector/TextFileInspectable.h \
-    src/View/Inspector/TextFile.h
+    src/View/Inspector/TextFile.h \
+    src/View/Inspector/PrefabAssetFileInspectable.h
 
 EDITOR {
 HEADERS += \
@@ -347,7 +348,8 @@ SOURCES += \
     src/Domain/Engine/Physics/Color.cpp \
     src/View/Inspector/IAttrWidgetButtonListener.cpp \
     src/View/Inspector/TextFileInspectable.cpp \
-    src/View/Inspector/TextFile.cpp
+    src/View/Inspector/TextFile.cpp \
+    src/View/Inspector/PrefabAssetFileInspectable.cpp
 
 EDITOR {
     SOURCES += \

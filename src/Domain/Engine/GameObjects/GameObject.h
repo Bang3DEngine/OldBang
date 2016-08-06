@@ -97,6 +97,7 @@ public:
     const std::string ToString() const;
 
     Scene* GetScene();
+    bool IsInsideScene() const;
     GameObject* GetParent() const;
     const std::string GetName() const;
     const std::list<Component*>& GetComponents() const;

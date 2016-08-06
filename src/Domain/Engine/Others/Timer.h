@@ -14,6 +14,7 @@ private:
     float m_secDelay;
     int m_repeatCount;
     bool m_waitOneDelayTime;
+    bool m_killed = false;
 
     mutable bool m_stop = true;
 
@@ -21,11 +22,14 @@ private:
 
     void TimerLoop() const;
 
+    virtual ~Timer() {}   // Use Kill instead
+
 public:
-    Timer(std::function<void()> func, float secDelay, int repeatCount = -1, bool waitOneDelayTime = false);
+    Timer(std::function<void ()> func, float secDelay, int repeatCount = -1, bool waitOneDelayTime = true);
 
     void Start() const;
     void Stop() const;
+    void Kill();
 };
 
 #endif // TIMER_H

@@ -23,6 +23,7 @@
 #include "Texture2DAssetFile.h"
 #include "TextFileInspectable.h"
 #include "MeshAssetFileInspectable.h"
+#include "PrefabAssetFileInspectable.h"
 #include "MaterialAssetFileInspectable.h"
 
 #include "MeshFileInspectable.h"

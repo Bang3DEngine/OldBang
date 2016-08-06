@@ -14,14 +14,17 @@ void Timer::TimerLoop() const
     int count = 0;
     while (m_stop);
 
-    if (!m_waitOneDelayTime) { ++count; m_func(); }
+    if (!m_waitOneDelayTime && !m_killed) { ++count; m_func(); }
 
-    while ( !m_stop && (m_repeatCount == -1 || count < m_repeatCount) )
+    while ( !m_killed && !m_stop && (m_repeatCount == -1 || count < m_repeatCount) )
     {
         std::this_thread::sleep_for (std::chrono::milliseconds(int(m_secDelay * 1000)));
+        if (m_killed) { break; }
         m_func();
         ++count;
     }
+
+    delete this;
 }
 
 void Timer::Start() const
@@ -32,4 +35,9 @@ void Timer::Start() const
 void Timer::Stop() const
 {
     m_stop = true;
+}
+
+void Timer::Kill()
+{
+    m_killed = true;
 }

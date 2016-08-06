@@ -73,6 +73,8 @@ public:
      */
     XMLNode GetWidgetXMLInfo() const;
 
+    void SetTitle(const std::string &title);
+
 private slots:
 
     /**
