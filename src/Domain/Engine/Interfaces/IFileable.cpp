@@ -12,6 +12,16 @@ std::string IFileable::GetXMLInfoString() const
     return result;
 }
 
+void IFileable::ReadXMLInfoFromString(const std::string &xmlInfoString)
+{
+    XMLNode *xmlInfo = XMLNode::FromString(xmlInfoString);
+    if (xmlInfo)
+    {
+        ReadXMLInfo(xmlInfo);
+        delete xmlInfo;
+    }
+}
+
 void IFileable::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     XMLParser::RegisterId(xmlInfo, this);

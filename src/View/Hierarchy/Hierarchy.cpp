@@ -14,6 +14,14 @@ Hierarchy::Hierarchy(QWidget *parent)
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this ,SLOT(_NotifyHierarchyGameObjectDoubleClicked(
                            QTreeWidgetItem*,int)));
+
+    setAcceptDrops(true);
+    setDragEnabled(true);
+    setDropIndicatorShown(true);
+    viewport()->setAcceptDrops(true);
+    setDefaultDropAction(Qt::DropAction::MoveAction);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 }
 
 Hierarchy::~Hierarchy()
@@ -194,47 +202,92 @@ void Hierarchy::OnChildRemoved(GameObject *child)
     m_gameObjectToTreeItem.erase(child);
 }
 
-void Hierarchy::dropEvent(QDropEvent *event)
+void Hierarchy::dragEnterEvent(QDragEnterEvent *e)
 {
-    std::list<QTreeWidgetItem*> sourceItems = selectedItems().toStdList();
-    LeaveOnlyOuterMostItems(&sourceItems);
+    QTreeWidget::dragEnterEvent(e);
+    e->accept();
+}
 
-    QTreeWidgetItem *targetItem = itemAt(event->pos());
-    if (!sourceItems.empty())
+void Hierarchy::dragMoveEvent(QDragMoveEvent *e)
+{
+    QTreeWidget::dragMoveEvent(e);
+    e->accept();
+}
+
+void Hierarchy::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    QTreeWidget::dragLeaveEvent(e);
+    e->accept();
+}
+
+void Hierarchy::dropEvent(QDropEvent *e)
+{
+    QTreeWidget::dropEvent(e);
+
+    // Determine target gameObject
+    QTreeWidgetItem *targetItem = itemAt(e->pos());
+    GameObject *targetGameObject = nullptr;
+    if (targetItem)
     {
-        GameObject *target = nullptr;
-        if (targetItem)
+        targetGameObject = GetGameObjectFromItem(targetItem);
+        DropIndicatorPosition dropPos = dropIndicatorPosition();
+        if (dropPos == BelowItem || dropPos == AboveItem)
         {
-            target = GetGameObjectFromItem(targetItem);
-            DropIndicatorPosition dropPos = dropIndicatorPosition();
-            if (dropPos == BelowItem || dropPos == AboveItem)
-            {
-                //Not putting inside, but below or above. Thus take its parent.
-                targetItem = targetItem->parent();
-                if (targetItem) target = GetGameObjectFromItem(targetItem);
-                else target = Scene::GetCurrentScene();
-            }
+            //Not putting inside, but below or above. Thus take its parent.
+            targetItem = targetItem->parent();
+            if (targetItem) targetGameObject = GetGameObjectFromItem(targetItem);
+            else targetGameObject = Scene::GetCurrentScene();
         }
-        else
-        {
-            target = Scene::GetCurrentScene();
-        }
+    }
+    else
+    {
+        targetGameObject = Scene::GetCurrentScene();
+    }
+    //
 
-        for (QTreeWidgetItem *sourceItem : sourceItems)
+    Explorer *explorer = Explorer::GetInstance();
+    if (e->source() == this) // From Hierarchy To Hierarchy
+    {
+        std::list<QTreeWidgetItem*> sourceItems = selectedItems().toStdList();
+        LeaveOnlyOuterMostItems(&sourceItems);
+        if (!sourceItems.empty())
         {
-            if (sourceItem != targetItem)
+            for (QTreeWidgetItem *sourceItem : sourceItems)
             {
-                GameObject *source = GetGameObjectFromItem(sourceItem);
-                if (source && target && source->parent)
+                if (sourceItem != targetItem)
                 {
-                    source->SetParent(target, true);
+                    GameObject *sourceGameObject = GetGameObjectFromItem(sourceItem);
+                    if (sourceGameObject && targetGameObject  && sourceGameObject->parent)
+                    {
+                        sourceGameObject->SetParent(targetGameObject, true);
+                    }
                 }
             }
         }
     }
+    else if (e->source() == explorer) // From Explorer to Hierarchy
+    {
+        if (explorer->IsSelectedAFile())
+        {
+            OnExplorerFileDropped(explorer->GetSelectedFile(), targetGameObject);
+        }
+    }
 
-    QTreeWidget::dropEvent(event);
-    event->acceptProposedAction();
+    e->accept();
+}
+
+void Hierarchy::OnExplorerFileDropped(const File &f, GameObject *targetGameObject)
+{
+    NONULL(targetGameObject);
+    if (f.GetRelativePath().length() == 0) return;
+
+    if (f.IsPrefabAsset())
+    {
+        Prefab *prefab = new Prefab();
+        prefab->ReadXMLInfoFromString(f.GetContents());
+        GameObject *go = prefab->Instantiate();
+        go->SetParent(targetGameObject);
+    }
 }
 
 void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)

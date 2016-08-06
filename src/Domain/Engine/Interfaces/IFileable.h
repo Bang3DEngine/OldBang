@@ -19,6 +19,7 @@ protected:
 
 public:
     std::string GetXMLInfoString() const;
+    void ReadXMLInfoFromString(const std::string &xmlInfoString);
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo);
     virtual void FillXMLInfo(XMLNode *xmlInfo) const;

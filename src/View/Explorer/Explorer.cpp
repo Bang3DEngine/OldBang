@@ -6,7 +6,15 @@
 
 Explorer::Explorer(QWidget *parent) : QListView(parent)
 {
-    m_fileSystemModel = new QFileSystemModel();
+    setAcceptDrops(true);
+    setDragEnabled(true);
+    setDropIndicatorShown(true);
+    viewport()->setAcceptDrops(true);
+    setDefaultDropAction(Qt::DropAction::MoveAction);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
+
+    m_fileSystemModel = new FileSystemModel();
 
     m_buttonDirUp = WindowMain::GetInstance()->buttonExplorerDirUp;
     m_buttonChangeViewMode =
@@ -17,12 +25,11 @@ Explorer::Explorer(QWidget *parent) : QListView(parent)
             this, SLOT(OnButtonChangeViewModeClicked()));
 
     setModel(m_fileSystemModel);
-    m_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDot);
-    m_fileSystemModel->setReadOnly(false);
 
     connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
             this, SLOT(OnDirLoaded(QString)));
     SetDir(Persistence::GetAssetsPathAbsolute());
+
 
     m_updateTimer = new QTimer(this); //Every X secs, update all the slots values
     connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
@@ -64,6 +71,7 @@ void Explorer::OnButtonChangeViewModeClicked()
 
 void Explorer::mouseReleaseEvent(QMouseEvent *e)
 {
+    QListView::mouseReleaseEvent(e);
     if (e->button() == Qt::LeftButton)
     {
         RefreshInspector();
@@ -72,6 +80,7 @@ void Explorer::mouseReleaseEvent(QMouseEvent *e)
 
 void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 {
+    QListView::mouseDoubleClickEvent(e);
     if (e->button() == Qt::LeftButton)
     {
         if (this->selectedIndexes().length() <= 0) return;
@@ -89,21 +98,6 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 
         }
     }
-}
-
-void Explorer::dropEvent(QDropEvent *e)
-{
-    if (e->source() != this)
-    {
-        e->accept();
-    }
-    else
-    {
-        //e->ignore();
-        e->accept();
-    }
-
-    Logger_Log("Drop event in explorer " << e->source());
 }
 
 void Explorer::RefreshInspector()
@@ -259,14 +253,90 @@ std::string Explorer::GetCurrentDir() const
     return m_fileSystemModel->rootPath().toStdString();
 }
 
+std::string Explorer::GetSelectedFileOrDirPath() const
+{
+    if (!currentIndex().isValid()) return "";
+    return Persistence::ProjectRootAbsoluteToRelative(
+                m_fileSystemModel->filePath(currentIndex()).toStdString());
+}
+
+File Explorer::GetSelectedFile() const
+{
+    File f;
+    if (!currentIndex().isValid()) return f;
+    QModelIndex qmi = currentIndex();
+    return File(m_fileSystemModel, &qmi);
+}
+
+bool Explorer::IsSelectedAFile() const
+{
+    if (!currentIndex().isValid()) return false;
+    return !m_fileSystemModel->isDir(currentIndex());
+}
+
+bool Explorer::IsSelectedADir() const
+{
+    if (!currentIndex().isValid()) return false;
+    return m_fileSystemModel->isDir(currentIndex());
+}
+
 void Explorer::StartRenaming(const std::string &filepath)
 {
     SelectFile(filepath);
     edit(currentIndex());
 }
 
+void Explorer::dragEnterEvent(QDragEnterEvent *e)
+{
+    e->accept();
+}
+
+void Explorer::dragMoveEvent(QDragMoveEvent *e)
+{
+    e->accept();
+}
+
+void Explorer::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    e->accept();
+}
+
+void Explorer::dropEvent(QDropEvent *e)
+{
+    QListView::dropEvent(e);
+
+    Hierarchy *hierarchy = Hierarchy::GetInstance();
+    if (e->source() == hierarchy)
+    {
+        GameObject *selected = hierarchy->GetFirstSelectedGameObject();
+        if (selected)
+        {
+            std::string path = GetCurrentDir() + "/";
+            std::string gameObjectName = selected->name;
+            path += gameObjectName;
+            path = Persistence::AppendExtension(path, Prefab::GetFileExtensionStatic());
+            FileWriter::WriteToFile(path, selected);
+        }
+    }
+
+    e->ignore(); // If we dont ignore, objects in the source list get removed
+}
+
 void Explorer::updateGeometries()
 {
     QListView::updateGeometries();
     verticalScrollBar()->setSingleStep(3);
+}
+
+///////////////////////////////////////////////////////////////////////
+
+FileSystemModel::FileSystemModel()
+{
+    setFilter(QDir::AllEntries | QDir::NoDot);
+    setReadOnly(false);
+}
+
+Qt::DropActions FileSystemModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
 }

@@ -56,7 +56,11 @@ public:
     void OnChildChangedParent(GameObject *child, GameObject *previousParent) override;
     void OnChildRemoved(GameObject *child) override;
 
-    void dropEvent(QDropEvent *event);
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragMoveEvent(QDragMoveEvent *e)   override;
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
+    void dropEvent(QDropEvent *e)           override;
+    void OnExplorerFileDropped(const File &f, GameObject *targetGameObject);
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
 

@@ -5,11 +5,16 @@
 #include "Material.h"
 #include "Texture2D.h"
 
+File::File()
+{
+}
+
 File::File(const QFileSystemModel *model, const QModelIndex *index)
 {
     m_isFile = !model->isDir(*index);
 
-    m_path = Persistence::ProjectRootAbsoluteToRelative(model->filePath(*index).toStdString());
+    m_absPath = model->filePath(*index).toStdString();
+    m_path = Persistence::ProjectRootAbsoluteToRelative(m_absPath);
     m_name = model->fileName(*index).toStdString();
 
     std::string::size_type p = m_name.find('.', 2);
@@ -55,7 +60,9 @@ bool File::IsTextFile() const
     return m_isFile && (
            m_extension == "txt"  ||
            m_extension == "frag" ||
-           m_extension == "vert"
+           m_extension == "vert" ||
+           m_extension == "cpp"  ||
+           m_extension == "h"
           );
 }
 
@@ -72,6 +79,16 @@ bool File::IsDir() const
 bool File::IsFile() const
 {
     return m_isFile;
+}
+
+std::string File::GetContents() const
+{
+    return FileReader::GetContents(m_absPath);
+}
+
+const std::string &File::GetAbsolutePath() const
+{
+    return m_absPath;
 }
 
 const std::string &File::GetName() const

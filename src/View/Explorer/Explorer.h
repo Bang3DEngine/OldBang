@@ -29,14 +29,17 @@
 #include "ImageFileInspectable.h"
 #include "Texture2DAssetFileInspectable.h"
 
+class FileSystemModel;
 class Explorer : public QListView
 {
     Q_OBJECT
 
+    friend class FileSystemModel;
     friend class ExplorerDirTree;
 
 private:
-    QFileSystemModel *m_fileSystemModel = nullptr;
+
+    FileSystemModel *m_fileSystemModel = nullptr;
     QToolButton *m_buttonDirUp = nullptr;
     QToolButton *m_buttonChangeViewMode = nullptr;
     IInspectable *lastIInspectableInInspector = nullptr;
@@ -60,12 +63,20 @@ public:
     virtual ~Explorer();
 
     std::string GetCurrentDir() const;
+    std::string GetSelectedFileOrDirPath() const;
+    File GetSelectedFile() const;
+    bool IsSelectedAFile() const;
+    bool IsSelectedADir() const;
 
     void StartRenaming(const std::string &filepath);
 
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
+
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
-    void dropEvent(QDropEvent *e) override;
 
     //Updates the Inspector with the selected file info
     void RefreshInspector();
@@ -82,4 +93,26 @@ public slots:
     void OnButtonChangeViewModeClicked();
 };
 
+class FileSystemModel : public QFileSystemModel
+{
+public:
+    FileSystemModel();
+
+protected:
+    Qt::DropActions supportedDropActions() const override;
+};
+
 #endif // EXPLORER_H
+
+
+
+
+
+
+
+
+
+
+
+
+

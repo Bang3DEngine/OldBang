@@ -19,6 +19,16 @@ Canvas *Canvas::m_mainBinaryCanvas = nullptr;
 
 Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
 {
+    /*
+    setAcceptDrops(true);
+    setDragEnabled(true);
+    setDropIndicatorShown(true);
+    viewport()->setAcceptDrops(true);
+    setDefaultDropAction(Qt::DropAction::MoveAction);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
+    */
+
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
 
     connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(update()));
@@ -189,6 +199,33 @@ int Canvas::GetHeight()
 void Canvas::SetCursor(Qt::CursorShape cs)
 {
     Canvas::s_m_window->GetApplication()->setOverrideCursor( cs );
+}
+
+void Canvas::dragEnterEvent(QDragEnterEvent *e)
+{
+    e->accept();
+}
+
+void Canvas::dragMoveEvent(QDragMoveEvent *e)
+{
+    e->accept();
+}
+
+void Canvas::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    e->accept();
+}
+
+void Canvas::dropEvent(QDropEvent *e)
+{
+    Explorer *explorer = Explorer::GetInstance();
+    Logger_Log("Drop!!!");
+    if (e->source() == explorer)
+    {
+        Logger_Log("Drop from explorer!");
+    }
+
+    e->ignore();
 }
 
 void Canvas::wheelEvent(QWheelEvent *event)

@@ -138,10 +138,13 @@ std::string StringUtils::FormatInspectorLabel(const std::string &labelString)
     std::string labelFormatted = labelString;
     StringUtils::Replace(&labelFormatted, "_", " ");
 
-    //Add space before any cap that does not have a space to its left
+    // Add space after every cap (except for consecutive caps).
     for (auto it = labelFormatted.begin(); it != labelFormatted.end(); ++it)
     {
-        if (IsCap(*it) && it != labelFormatted.begin())
+        ++it;
+        bool nextOneIsCap = (it != labelFormatted.end()) && IsCap(*it);
+        --it;
+        if (!nextOneIsCap && IsCap(*it) && it != labelFormatted.begin())
         {
             it = labelFormatted.insert(it, ' ');
             ++it;

@@ -457,6 +457,7 @@ public:
         widgetListExplorer->setAutoScroll(false);
         widgetListExplorer->setProperty("showDropIndicator", QVariant(true));
         widgetListExplorer->setDragEnabled(true);
+        widgetListExplorer->setDragDropOverwriteMode(true);
         widgetListExplorer->setDragDropMode(QAbstractItemView::DragDrop);
         widgetListExplorer->setDefaultDropAction(Qt::MoveAction);
         widgetListExplorer->setMovement(QListView::Snap);
@@ -498,7 +499,6 @@ public:
         listLogger->setObjectName(QString::fromUtf8("listLogger"));
         listLogger->setEditTriggers(QAbstractItemView::NoEditTriggers);
         listLogger->setProperty("showDropIndicator", QVariant(false));
-        listLogger->setSelectionBehavior(QAbstractItemView::SelectRows);
         listLogger->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
         listLogger->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
