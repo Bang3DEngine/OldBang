@@ -16,18 +16,23 @@ PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
 
 PrefabAssetFileInspectable::~PrefabAssetFileInspectable()
 {
-    WindowMain::GetInstance()->widgetInspector->Clear();
+    Inspector::GetInstance()->Clear();
     delete m_prefabTempGameObject;
 }
 
-void PrefabAssetFileInspectable::ShowInInspector() const
+void PrefabAssetFileInspectable::ShowInInspector()
 {
-    WindowMain::GetInstance()->widgetInspector->ShowGameObjectInfo(m_prefabTempGameObject);
+    Inspector::GetInstance()->ShowPrefabInspectableInfo(this);
 }
 
 void PrefabAssetFileInspectable::OnInspectorSlotChanged(InspectorWidget *inspectorItem)
 {
     SaveToFile();
+}
+
+GameObject *PrefabAssetFileInspectable::GetPrefabTempGameObject() const
+{
+    return m_prefabTempGameObject;
 }
 
 void PrefabAssetFileInspectable::SaveToFile()

@@ -186,7 +186,7 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     //
 
     std::string filepath =
-            Persistence::ProjectRootRelativeToAbsolute(filepathFromProjectRoot);
+            Persistence::ToAbsolute(filepathFromProjectRoot);
     std::string scriptDir = Persistence::GetDir(filepath);
     std::string scriptName = Persistence::GetFileNameWithExtension(filepath);
 

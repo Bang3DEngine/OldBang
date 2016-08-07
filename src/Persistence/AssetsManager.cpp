@@ -4,7 +4,7 @@ std::map<std::string, Asset*> AssetsManager::m_idToAssetPointer;
 
 std::string AssetsManager::FormatFilepath(const std::string &filepath)
 {
-    return Persistence::ProjectRootAbsoluteToRelative(filepath);;
+    return Persistence::ToRelative(filepath);;
 }
 
 bool AssetsManager::IsAssetLoaded(const std::string &filepath)

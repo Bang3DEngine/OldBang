@@ -212,7 +212,7 @@ void XMLAttribute::SetFilepath(const std::string &filepath,
                                const std::string &fileExtension,
                                const std::vector<XMLProperty> &properties)
 {
-    std::string newFilepath = Persistence::ProjectRootAbsoluteToRelative(filepath);
+    std::string newFilepath = Persistence::ToRelative(filepath);
     Set(m_name, newFilepath, XMLAttribute::Type::File, properties);
 
     if (!fileExtension.empty())

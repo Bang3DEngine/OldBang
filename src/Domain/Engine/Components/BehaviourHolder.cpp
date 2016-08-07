@@ -68,7 +68,8 @@ void BehaviourHolder::Refresh()
 
     if (!m_compileThread.isRunning())
     {
-        Logger_Log("Refreshing Behaviour...");
+        std::string filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
+        Logger_Log("Refreshing Behaviour '" << filename << "'...");
         m_compileThread.start();
     }
 }
@@ -108,7 +109,8 @@ void BehaviourHolder::OnBehaviourFinishedCompiling(std::string soFilepath)
         {
             m_behaviour->Init(this);
             m_behaviour->_OnStart();
-            Logger_Log("Behaviour successfully refreshed!");
+            std::string filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
+            Logger_Log("Behaviour '" << filename << "' successfully refreshed!");
         }
     }
     else

@@ -16,13 +16,15 @@ public:
     static const std::string TOKEN_SPACE;
 
     static bool Contains(const std::string &str, const std::string &whatToFind);
-    static float ToFloat(const std::string &str);
+    static float ToFloat(const std::string &str, bool *ok = nullptr);
+    static int ToInt(const std::string &str, bool *ok = nullptr);
 
     static void TrimLeft(std::string *str);
     static void TrimRight(std::string *str);
     static void Trim(std::string *str);
     static std::string Trim(const std::string &str);
 
+    static std::string Concat(const std::vector<std::string> &particles, std::string joiner = "");
     static std::vector<std::string> Split(const std::string &content, char splitter);
     static std::vector<std::string> SplitTrim(const std::string &content, char splitter);
 

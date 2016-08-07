@@ -13,24 +13,22 @@ Explorer::Explorer(QWidget *parent) : IDroppableQListView()
 
     m_fileSystemModel = new FileSystemModel();
     setModel(m_fileSystemModel);
+    SetDir(Persistence::GetAssetsPathAbsolute());
 
     m_buttonDirUp = WindowMain::GetInstance()->buttonExplorerDirUp;
-    m_buttonChangeViewMode =
-            WindowMain::GetInstance()->buttonExplorerChangeViewMode;
+    m_buttonChangeViewMode = WindowMain::GetInstance()->buttonExplorerChangeViewMode;
+
+    m_updateTimer = new QTimer(this); //Every X secs, update all the slots values
+    m_updateTimer->start(100);
+
+    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
 
     connect(m_buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
     connect(m_buttonChangeViewMode, SIGNAL(clicked()),
             this, SLOT(OnButtonChangeViewModeClicked()));
 
-
     connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
             this, SLOT(OnDirLoaded(QString)));
-    SetDir(Persistence::GetAssetsPathAbsolute());
-
-
-    m_updateTimer = new QTimer(this); //Every X secs, update all the slots values
-    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
-    m_updateTimer->start(100);
 }
 
 Explorer::~Explorer()
@@ -66,6 +64,16 @@ void Explorer::OnButtonChangeViewModeClicked()
     }
 }
 
+void Explorer::mousePressEvent(QMouseEvent *e)
+{
+    QListView::mousePressEvent(e);
+
+    if (e->button() == Qt::RightButton)
+    {
+        OnCustomContextMenuRequested(e->pos());
+    }
+}
+
 void Explorer::mouseReleaseEvent(QMouseEvent *e)
 {
     QListView::mouseReleaseEvent(e);
@@ -85,6 +93,7 @@ void Explorer::mouseReleaseEvent(QMouseEvent *e)
 void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 {
     QListView::mouseDoubleClickEvent(e);
+
     if (e->button() == Qt::LeftButton)
     {
         if (this->selectedIndexes().length() <= 0) return;
@@ -104,6 +113,54 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
     }
 }
 
+void Explorer::OnCustomContextMenuRequested(QPoint point)
+{
+    QMenu contextMenu(tr("Explorer context menu"), this);
+
+    QAction actionDuplicate("Duplicate", this);
+    QAction actionDelete("Delete", this);
+
+    connect(&actionDuplicate, SIGNAL(triggered()), this, SLOT(OnContextMenuDuplicateClicked()));
+    connect(&actionDelete, SIGNAL(triggered()), this, SLOT(OnContextMenuDeleteClicked()));
+
+    if (IsSelectedAFile())
+    {
+        contextMenu.addAction(&actionDuplicate);
+        contextMenu.addAction(&actionDelete);
+    }
+    else if (IsSelectedADir())
+    {
+        // contextMenu.addAction(&actionDuplicate);
+        contextMenu.addAction(&actionDelete);
+    }
+
+    contextMenu.exec(mapToGlobal(point));
+}
+
+void Explorer::OnContextMenuDuplicateClicked()
+{
+    File source = GetSelectedFile();
+    std::string filepath = source.GetRelativePath();
+    while (Exists(filepath))
+    {
+        filepath = Persistence::GetNextDuplicateName(filepath);
+    }
+
+    FileWriter::WriteToFile(filepath, source.GetContents());
+}
+
+void Explorer::OnContextMenuDeleteClicked()
+{
+    Inspector *inspector = Inspector::GetInstance();
+    if (inspector->IsShowingInspectable(m_lastIInspectableInInspector))
+    {
+        inspector->Clear();
+        delete m_lastIInspectableInInspector;
+        m_lastIInspectableInInspector = nullptr;
+    }
+    m_fileSystemModel->remove(currentIndex());
+}
+
 void Explorer::RefreshInspector()
 {
     if (selectedIndexes().size() <= 0) return;
@@ -112,12 +169,12 @@ void Explorer::RefreshInspector()
     File f(m_fileSystemModel, &clickedIndex);
     m_lastSelectedPath = f.GetRelativePath();
 
-    Inspector *inspector = WindowMain::GetInstance()->widgetInspector;
-    if (lastIInspectableInInspector)
+    Inspector *inspector = Inspector::GetInstance();
+    if (m_lastIInspectableInInspector)
     {
         inspector->Clear();
-        delete lastIInspectableInInspector;
-        lastIInspectableInInspector = nullptr;
+        delete m_lastIInspectableInInspector;
+        m_lastIInspectableInInspector = nullptr;
     }
 
     IInspectable *newInspectable = nullptr;
@@ -179,13 +236,13 @@ void Explorer::RefreshInspector()
 
     if (newInspectable)
     {
-        lastIInspectableInInspector = newInspectable;
+        m_lastIInspectableInInspector = newInspectable;
     }
 }
 
 void Explorer::SelectFile(const std::string &path)
 {
-    std::string absPath = Persistence::ProjectRootRelativeToAbsolute(path);
+    std::string absPath = Persistence::ToAbsolute(path);
     SetDir(Persistence::GetDir(absPath));
 
     QModelIndex ind = GetModelIndexFromFilepath(absPath);
@@ -211,40 +268,40 @@ void Explorer::Refresh()
     // If needed in a future
 }
 
-std::string Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi)
+std::string Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const
 {
     std::string f = m_fileSystemModel->fileInfo(qmi).absoluteFilePath().toStdString();
     return f;
 }
 
-std::string Explorer::GetRelativeFilepathFromModelIndex(const QModelIndex &qmi)
+std::string Explorer::GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const
 {
     std::string f = GetFilepathFromModelIndex(qmi);
-    return Persistence::ProjectRootAbsoluteToRelative(f);
+    return Persistence::ToRelative(f);
 }
 
-std::string Explorer::GetDirFromModelIndex(const QModelIndex &qmi)
+std::string Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
 {
     std::string f = m_fileSystemModel->fileInfo(qmi).absoluteDir()
                     .absolutePath().toStdString();
     return f;
 }
 
-std::string Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi)
+std::string Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi) const
 {
     std::string f = GetDirFromModelIndex(qmi);
-    return Persistence::ProjectRootAbsoluteToRelative(f);
+    return Persistence::ToRelative(f);
 }
 
-QModelIndex Explorer::GetModelIndexFromFilepath(const std::string &filepath)
+QModelIndex Explorer::GetModelIndexFromFilepath(const std::string &filepath) const
 {
-    std::string absFilepath = Persistence::ProjectRootRelativeToAbsolute(filepath);
+    std::string absFilepath = Persistence::ToAbsolute(filepath);
     return m_fileSystemModel->index(QString::fromStdString(absFilepath));
 }
 
 void Explorer::SetDir(const std::string &path)
 {
-    std::string absDir = Persistence::ProjectRootRelativeToAbsolute(path);
+    std::string absDir = Persistence::ToAbsolute(path);
     setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(absDir)));
 }
 
@@ -272,7 +329,7 @@ std::string Explorer::GetCurrentDir() const
 std::string Explorer::GetSelectedFileOrDirPath() const
 {
     if (!currentIndex().isValid()) return "";
-    return Persistence::ProjectRootAbsoluteToRelative(
+    return Persistence::ToRelative(
                 m_fileSystemModel->filePath(currentIndex()).toStdString());
 }
 
@@ -282,6 +339,11 @@ File Explorer::GetSelectedFile() const
     if (!currentIndex().isValid()) return f;
     QModelIndex qmi = currentIndex();
     return File(m_fileSystemModel, &qmi);
+}
+
+bool Explorer::Exists(const std::string &filepath) const
+{
+    return GetModelIndexFromFilepath(filepath).isValid();
 }
 
 bool Explorer::IsSelectedAFile() const

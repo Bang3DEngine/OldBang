@@ -835,30 +835,14 @@
  <resources/>
  <connections>
   <connection>
-   <sender>widgetHierarchy</sender>
-   <signal>customContextMenuRequested(QPoint)</signal>
-   <receiver>widgetHierarchy</receiver>
-   <slot>OnCustomContextMenuRequested(QPoint)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>75</x>
-     <y>123</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>87</x>
-     <y>127</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>buttonLoggerClear</sender>
    <signal>clicked()</signal>
    <receiver>listLogger</receiver>
    <slot>clear()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>922</x>
-     <y>553</y>
+     <x>989</x>
+     <y>365</y>
     </hint>
     <hint type="destinationlabel">
      <x>922</x>

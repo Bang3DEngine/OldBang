@@ -22,10 +22,11 @@ public:
     PrefabAssetFileInspectable(const File &f);
     virtual ~PrefabAssetFileInspectable();
 
-    void ShowInInspector() const;
+    void ShowInInspector();
 
     void OnInspectorSlotChanged(InspectorWidget *inspectorItem) override;
 
+    GameObject *GetPrefabTempGameObject() const;
     void SaveToFile();
 };
 

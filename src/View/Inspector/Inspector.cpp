@@ -2,17 +2,18 @@
 
 #include <QScrollBar>
 
-#include "GameObject.h"
-#include "Component.h"
-#include "BehaviourHolder.h"
-#include "Camera.h"
-#include "Transform.h"
-#include "MeshRenderer.h"
-#include "SingleLineRenderer.h"
-#include "CircleRenderer.h"
-#include "DirectionalLight.h"
-#include "PointLight.h"
 #include "Logger.h"
+#include "Camera.h"
+#include "Component.h"
+#include "Transform.h"
+#include "PointLight.h"
+#include "WindowMain.h"
+#include "GameObject.h"
+#include "MeshRenderer.h"
+#include "CircleRenderer.h"
+#include "BehaviourHolder.h"
+#include "DirectionalLight.h"
+#include "SingleLineRenderer.h"
 
 Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 {
@@ -45,6 +46,7 @@ void Inspector::Clear()
         delete iw;
     }
     m_currentInspectorWidgets.clear();
+    m_currentInspectables.clear();
 
     setStyleSheet("/* */"); //without this line we get resize problems :)
     show();
@@ -63,6 +65,7 @@ void Inspector::SetInspectable(IInspectable *inspectable, const std::string &tit
 {
     Clear();
     m_currentInspectorWidgets.push_back(new InspectorWidget(title, inspectable));
+    m_currentInspectables.push_back(inspectable);
     AddWidget(m_currentInspectorWidgets[0]);
 }
 
@@ -77,10 +80,19 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     {
         ComponentWidget *w = new ComponentWidget(c);
         m_currentInspectorWidgets.push_back(w);
+        m_currentInspectables.push_back(c);
         AddWidget(w);
     }
 
     m_titleLabel->setText(QString(gameObject->name.c_str()));
+}
+
+void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable)
+{
+    ShowGameObjectInfo(prefabInspectable->GetPrefabTempGameObject());
+    // We need this line to make IsShowingInspectable work with
+    // this prefab fileInspectable
+    m_currentInspectables.push_back(prefabInspectable);
 }
 
 void Inspector::AddWidget(InspectorWidget *widget)
@@ -127,6 +139,28 @@ void Inspector::OnTreeHierarchyGameObjectsSelected
     }
 
     ShowGameObjectInfo(e);
+}
+
+std::vector<IInspectable *> Inspector::GetCurrentInspectables() const
+{
+    return m_currentInspectables;
+}
+
+bool Inspector::IsShowingInspectable(IInspectable *inspectable) const
+{
+    for (IInspectable *insp : m_currentInspectables)
+    {
+        if (inspectable == insp)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+Inspector *Inspector::GetInstance()
+{
+    return WindowMain::GetInstance()->widgetInspector;
 }
 
 void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)

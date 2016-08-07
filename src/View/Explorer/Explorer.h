@@ -45,16 +45,16 @@ private:
     FileSystemModel *m_fileSystemModel = nullptr;
     QToolButton *m_buttonDirUp = nullptr;
     QToolButton *m_buttonChangeViewMode = nullptr;
-    IInspectable *lastIInspectableInInspector = nullptr;
+    IInspectable *m_lastIInspectableInInspector = nullptr;
 
     std::string m_lastSelectedPath = "";
     QTimer *m_updateTimer = nullptr;
 
-    std::string GetFilepathFromModelIndex(const QModelIndex &qmi);
-    std::string GetRelativeFilepathFromModelIndex(const QModelIndex &qmi);
-    std::string GetDirFromModelIndex(const QModelIndex &qmi);
-    std::string GetRelativeDirFromModelIndex(const QModelIndex &qmi);
-    QModelIndex GetModelIndexFromFilepath(const std::string &filepath);
+    std::string GetFilepathFromModelIndex(const QModelIndex &qmi) const;
+    std::string GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const;
+    std::string GetDirFromModelIndex(const QModelIndex &qmi) const;
+    std::string GetRelativeDirFromModelIndex(const QModelIndex &qmi) const;
+    QModelIndex GetModelIndexFromFilepath(const std::string &filepath) const;
     void SetDir(const std::string &path);
 
 protected:
@@ -68,6 +68,7 @@ public:
     std::string GetCurrentDir() const;
     std::string GetSelectedFileOrDirPath() const;
     File GetSelectedFile() const;
+    bool Exists(const std::string &filepath) const;
     bool IsSelectedAFile() const;
     bool IsSelectedADir() const;
 
@@ -77,9 +78,16 @@ public:
 
     void OnDropFromHierarchy(GameObject *go,  QDropEvent *e) override;
 
+    void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
 
+    void OnCustomContextMenuRequested(QPoint point);
+public slots:
+    void OnContextMenuDuplicateClicked();
+    void OnContextMenuDeleteClicked();
+
+public:
     //Updates the Inspector with the selected file info
     void RefreshInspector();
 

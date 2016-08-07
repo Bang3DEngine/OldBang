@@ -1,4 +1,5 @@
 #include "Persistence.h"
+#include "StringUtils.h"
 
 std::string Persistence::s_currentSceneFilepath = "";
 
@@ -46,7 +47,7 @@ std::string Persistence::GetFileNameWithExtension(const std::string &filepath)
 }
 
 
-std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPath)
+std::string Persistence::ToAbsolute(const std::string &relPath)
 {
     if (relPath == "") return "";
     if (IsAbsolute(relPath)) return relPath;
@@ -69,7 +70,7 @@ std::string Persistence::ProjectRootRelativeToAbsolute(const std::string &relPat
     }
 }
 
-std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPath)
+std::string Persistence::ToRelative(const std::string &absPath)
 {
     // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
     if (absPath == "") return "";
@@ -90,6 +91,49 @@ std::string Persistence::ProjectRootAbsoluteToRelative(const std::string &absPat
                 pos,
                 absPath.length() -
                 GetAssetsRelativePathFromProjectRoot().length());
+}
+
+#include "Logger.h"
+std::string Persistence::GetNextDuplicateName(const std::string &path)
+{
+    std::string filePath = Persistence::ToRelative(path);
+    std::string fileDir  = Persistence::GetDir(filePath);
+    std::string fileName = Persistence::GetFileNameWithExtension(filePath);
+
+    std::vector<std::string> splitted = StringUtils::Split(fileName, '.');
+    fileName = splitted[0];
+    std::string fileExtension = splitted.size() <= 1 ? "" : splitted[1];
+    splitted = StringUtils::Split(fileName, '_');
+    int number = 1;
+    if (splitted.size() > 1)
+    {
+        std::string numberString = splitted[splitted.size() - 1];
+        bool ok = false;
+        int readNumber = StringUtils::ToInt(numberString, &ok);
+        if (ok)
+        {
+            number = readNumber + 1;
+            splitted.pop_back();
+
+            int lastUnderscorePos = fileName.rfind('_');
+            if (lastUnderscorePos != -1) // Strip _[number] from fileName
+            {
+                fileName = fileName.substr(0, lastUnderscorePos);
+            }
+        }
+    }
+
+    std::string result = "";
+    if (fileDir != "")
+    {
+        result += fileDir + "/";
+    }
+    result += fileName + "_" + std::to_string(number);
+    if (fileExtension != "")
+    {
+        result += "." + fileExtension;
+    }
+    return result;
 }
 
 void Persistence::SetCurrentSceneFilepath(const std::string &scenePath)

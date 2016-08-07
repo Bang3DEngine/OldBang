@@ -108,5 +108,5 @@ void FileWriter::WriteString(const std::string &str, std::ostream &f)
 
 void FileWriter::WriteFilepath(const std::string &path, std::ostream &f)
 {
-    FileWriter::WriteString(Persistence::ProjectRootAbsoluteToRelative(path), f);
+    FileWriter::WriteString(Persistence::ToRelative(path), f);
 }

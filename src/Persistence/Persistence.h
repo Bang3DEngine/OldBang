@@ -23,11 +23,19 @@ public:
     static std::string GetFileNameWithExtension(const std::string &filepath);
 
     // ./Assets/lolol/a.bmesh => /home/wololo/MyProject/Assets/lolol/a.bmesh
-    static std::string ProjectRootRelativeToAbsolute(const std::string &relPath);
+    static std::string ToAbsolute(const std::string &relPath);
 
     // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
-    static std::string ProjectRootAbsoluteToRelative(const std::string &absPath);
+    static std::string ToRelative(const std::string &absPath);
 
+    /**
+     * @brief wololo/omg/myFile.jpg => wololo/omg/myFile_1.jpg
+     *        wololo/omg/myFile_2.jpg => wololo/omg/myFile_3.jpg
+     *        etc.
+     * @param path
+     * @return
+     */
+    static std::string GetNextDuplicateName(const std::string &path);
 
     static void SetCurrentSceneFilepath(const std::string &scenePath);
     static std::string GetCurrentSceneFilepath();

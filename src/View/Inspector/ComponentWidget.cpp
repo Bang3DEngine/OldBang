@@ -60,13 +60,13 @@ void ComponentWidget::OnEnabledCheckboxPressed(bool checked)
 void ComponentWidget::OnContextMenuRemoveComponentSelected()
 {
     m_relatedComponent->gameObject->RemoveComponent(m_relatedComponent);
-    WindowMain::GetInstance()->widgetInspector->Refresh();
+    Inspector::GetInstance()->Refresh();
 }
 
 void ComponentWidget::OnContextMenuMoveUpSelected()
 {
     m_relatedComponent->gameObject->MoveComponent(m_relatedComponent, -1);
-    WindowMain::GetInstance()->widgetInspector->Refresh();
+    Inspector::GetInstance()->Refresh();
 }
 
 void ComponentWidget::OnContextMenuMoveDownSelected()

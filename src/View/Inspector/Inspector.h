@@ -9,6 +9,7 @@
 #include <QListWidget>
 
 #include "ComponentWidget.h"
+#include "PrefabAssetFileInspectable.h"
 #include "IWindowEventManagerListener.h"
 
 class Inspector : public QListWidget,
@@ -20,6 +21,7 @@ private:
     QLabel *m_titleLabel = nullptr;
     GameObject *m_currentGameObject = nullptr;
     std::vector<InspectorWidget*> m_currentInspectorWidgets;
+    std::vector<IInspectable*> m_currentInspectables;
 
     std::map<InspectorWidget*, QListWidgetItem*> m_widgetToItem;
 
@@ -37,12 +39,17 @@ public:
 
     void SetInspectable(IInspectable *inspectable, const std::string &title = "");
     void ShowGameObjectInfo(GameObject *gameObject);
+    void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
 
     void MoveUp(InspectorWidget *w);
     void MoveDown(InspectorWidget *w);
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
     void OnTreeHierarchyGameObjectsSelected(std::list<GameObject*> &selectedEntities);
+
+    std::vector<IInspectable*> GetCurrentInspectables() const;
+    bool IsShowingInspectable(IInspectable *inspectable) const;
+    static Inspector* GetInstance();
 };
 
 #endif // LISTINSPECTOR_H

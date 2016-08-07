@@ -6,18 +6,22 @@
 
 Hierarchy::Hierarchy(QWidget *parent) : IDroppableQTreeWidget()
 {
+    setDropIndicatorShown(true);
+    setDefaultDropAction(Qt::DropAction::MoveAction);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+
     connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
             this, SLOT(OnItemNameChanged(QTreeWidgetItem*,int)));
 
-    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(OnSelectionChanged()));
+    connect(this, SIGNAL(itemSelectionChanged()),
+            this, SLOT(OnSelectionChanged()));
 
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this ,SLOT(_NotifyHierarchyGameObjectDoubleClicked(
                            QTreeWidgetItem*,int)));
 
-    setDropIndicatorShown(true);
-    setDefaultDropAction(Qt::DropAction::MoveAction);
-    setSelectionMode(QAbstractItemView::SingleSelection);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(OnCustomContextMenuRequested(QPoint)));
 }
 
 Hierarchy::~Hierarchy()

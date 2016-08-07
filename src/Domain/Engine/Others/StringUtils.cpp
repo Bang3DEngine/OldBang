@@ -32,13 +32,26 @@ bool StringUtils::Contains(const std::string &str, const std::string &whatToFind
     return (j == whatToFind.length());
 }
 
-float StringUtils::ToFloat(const std::string &str)
+float StringUtils::ToFloat(const std::string &str, bool *ok)
 {
     std::string number = str;
     StringUtils::Trim(&number);
     std::istringstream iss(number);
     float v;
     iss >> v;
+    if (ok) *ok = !iss.fail();
+    return v;
+}
+
+int StringUtils::ToInt(const std::string &str, bool *ok)
+{
+    std::string number = str;
+    StringUtils::Trim(&number);
+    std::istringstream iss(number);
+    int
+            v;
+    iss >> v;
+    if (ok) *ok = !iss.fail();
     return v;
 }
 
@@ -83,6 +96,17 @@ std::string StringUtils::Trim(const std::string &str)
     std::string strCpy = str;
     Trim(&strCpy);
     return str;
+}
+
+std::string StringUtils::Concat(const std::vector<std::string> &particles, std::string joiner)
+{
+    std::string result = "";
+    for (int i = 0; i < particles.size(); ++i)
+    {
+        if (i != 0) { result += joiner; }
+        result += particles[i];
+    }
+    return result;
 }
 
 
