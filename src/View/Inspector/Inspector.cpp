@@ -16,6 +16,14 @@
 
 Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 {
+    setAcceptDrops(true);
+    setDragEnabled(true);
+    setDropIndicatorShown(true);
+    viewport()->setAcceptDrops(true);
+    setDefaultDropAction(Qt::DropAction::MoveAction);
+    setSelectionMode(QAbstractItemView::SingleSelection);
+    setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
+
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
 }
 

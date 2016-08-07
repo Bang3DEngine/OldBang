@@ -15,7 +15,9 @@
 #include "WindowMain.h"
 #include "GameObject.h"
 
-InspectorWidget::InspectorWidget() : QWidget() {}
+InspectorWidget::InspectorWidget() : IDroppableQWidget()
+{
+}
 
 InspectorWidget::InspectorWidget(const std::string &title,
                                  IInspectable *relatedInspectable) : InspectorWidget()
@@ -24,6 +26,8 @@ InspectorWidget::InspectorWidget(const std::string &title,
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
     ConstructFromWidgetXMLInfo(title, xmlInfo);
+
+    setAcceptDrops(true);
 }
 
 void InspectorWidget::ConstructFromWidgetXMLInfo(
@@ -64,8 +68,17 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
 InspectorWidget::~InspectorWidget()
 {
-    m_updateTimer->stop();
+    //m_updateTimer->stop();
     delete m_updateTimer;
+}
+
+void InspectorWidget::OnDropFromExplorer(const File &f, QDropEvent *e)
+{
+    Logger_Log(f.GetRelativePath());
+}
+
+void InspectorWidget::OnDropFromHierarchy(GameObject *go, QDropEvent *e)
+{
 }
 
 XMLNode InspectorWidget::GetInspectableXMLInfo() const

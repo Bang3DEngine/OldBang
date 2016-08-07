@@ -215,7 +215,8 @@ HEADERS += \
     src/View/Inspector/IAttrWidgetButtonListener.h \
     src/View/Inspector/TextFileInspectable.h \
     src/View/Inspector/TextFile.h \
-    src/View/Inspector/PrefabAssetFileInspectable.h
+    src/View/Inspector/PrefabAssetFileInspectable.h \
+    src/View/Interfaces/IDroppableWidget.h
 
 EDITOR {
 HEADERS += \
@@ -349,7 +350,8 @@ SOURCES += \
     src/View/Inspector/IAttrWidgetButtonListener.cpp \
     src/View/Inspector/TextFileInspectable.cpp \
     src/View/Inspector/TextFile.cpp \
-    src/View/Inspector/PrefabAssetFileInspectable.cpp
+    src/View/Inspector/PrefabAssetFileInspectable.cpp \
+    src/View/Interfaces/IDroppableWidget.cpp
 
 EDITOR {
     SOURCES += \

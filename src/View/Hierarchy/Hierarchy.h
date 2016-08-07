@@ -22,10 +22,12 @@
 #include "Scene.h"
 #include "FileDialog.h"
 #include "GameObject.h"
+#include "IDroppableWidget.h"
 #include "ClipboardGameObject.h"
 #include "IWindowEventManagerListener.h"
 
-class Hierarchy : public QTreeWidget, public IWindowEventManagerListener
+class Hierarchy : public IDroppableQTreeWidget,
+                  public IWindowEventManagerListener
 {
     Q_OBJECT
 
@@ -44,6 +46,8 @@ private:
     GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
     QTreeWidgetItem *GetItemFromGameObject(GameObject *go) const;
 
+    GameObject* GetDropTargetGameObject(QDropEvent *e) const;
+
 public:
     explicit Hierarchy(QWidget *parent = 0);
     virtual ~Hierarchy();
@@ -56,11 +60,8 @@ public:
     void OnChildChangedParent(GameObject *child, GameObject *previousParent) override;
     void OnChildRemoved(GameObject *child) override;
 
-    void dragEnterEvent(QDragEnterEvent *e) override;
-    void dragMoveEvent(QDragMoveEvent *e)   override;
-    void dragLeaveEvent(QDragLeaveEvent *e) override;
-    void dropEvent(QDropEvent *e)           override;
-    void OnExplorerFileDropped(const File &f, GameObject *targetGameObject);
+    void dropEvent(QDropEvent *e) override;
+    void OnDropFromExplorer(const File &f, QDropEvent *e) override;
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
 

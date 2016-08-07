@@ -27,48 +27,37 @@ File::File(const QFileSystemModel *model, const QModelIndex *index)
 
 bool File::IsTexture2DAsset() const
 {
-    return  m_isFile && m_extension == Texture2D::GetFileExtensionStatic();
+    return  m_isFile && IsOfExtension(Texture2D::GetFileExtensionStatic());
 }
 
 bool File::IsImageFile() const
 {
-    return  m_isFile && (
-             m_extension == "jpg"  ||
-             m_extension == "jpeg" ||
-             m_extension == "png"  ||
-             m_extension == "bmp"
-            );
+    return  m_isFile && IsOfExtension("jpg jpeg png bmp");
 }
 
 bool File::IsMeshAsset() const
 {
-    return  m_isFile && m_extension == Mesh::GetFileExtensionStatic();
+    return  m_isFile && IsOfExtension(Mesh::GetFileExtensionStatic());
 }
 
 bool File::IsMeshFile() const
 {
-    return  m_isFile && (m_extension == "obj");
+    return  m_isFile && IsOfExtension("obj");
 }
 
 bool File::IsMaterialAsset() const
 {
-    return m_isFile && m_extension == Material::GetFileExtensionStatic();
+    return m_isFile && IsOfExtension(Material::GetFileExtensionStatic());
 }
 
 bool File::IsTextFile() const
 {
-    return m_isFile && (
-           m_extension == "txt"  ||
-           m_extension == "frag" ||
-           m_extension == "vert" ||
-           m_extension == "cpp"  ||
-           m_extension == "h"
-          );
+    return m_isFile && IsOfExtension("txt frag vert cpp h");
 }
 
 bool File::IsPrefabAsset() const
 {
-    return m_isFile && m_extension == Prefab::GetFileExtensionStatic();
+    return m_isFile && IsOfExtension(Prefab::GetFileExtensionStatic());
 }
 
 bool File::IsDir() const
@@ -79,6 +68,20 @@ bool File::IsDir() const
 bool File::IsFile() const
 {
     return m_isFile;
+}
+
+bool File::IsOfExtension(const std::string &extensions) const
+{
+    // We receive something like "jpg png bmp obj"
+    std::vector<std::string> extensionsList = StringUtils::SplitTrim(extensions, ' ');
+    for (std::string ext : extensionsList)
+    {
+        if (ext == GetExtension())
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 std::string File::GetContents() const

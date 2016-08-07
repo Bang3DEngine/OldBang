@@ -4,8 +4,9 @@
 #include <QWidget>
 
 #include "ComponentWidget.h"
+#include "IDroppableWidget.h"
 
-class AttributeWidget : public QWidget
+class AttributeWidget : public IDroppableQWidget
 {
     Q_OBJECT
 

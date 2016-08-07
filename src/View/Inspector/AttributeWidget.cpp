@@ -12,7 +12,7 @@
 #include "AttrWidgetVectorFloat.h"
 
 AttributeWidget::AttributeWidget(const std::string &label,
-                                 InspectorWidget *parent) : QWidget(nullptr),
+                                 InspectorWidget *parent) : IDroppableQWidget(),
     m_label(label), m_parent(parent)
 {
 }

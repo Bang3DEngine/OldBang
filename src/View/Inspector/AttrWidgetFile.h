@@ -30,8 +30,11 @@ public:
                    bool readonly,
                    InspectorWidget *m_parent);
 
-    virtual void SetValue(const std::string &filepath);
+    virtual void SetValue(const std::string &filepath, bool draggedFile = false);
     virtual std::string GetValue();
+
+    virtual void OnDropFromExplorer(const File &f,  QDropEvent *e) override;
+    virtual void OnDropFromHierarchy(GameObject *go,  QDropEvent *e) override;
 
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
 

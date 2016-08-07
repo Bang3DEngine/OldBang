@@ -47,18 +47,35 @@ void AttrWidgetFile::Browse()
     }
 }
 
-void AttrWidgetFile::SetValue(const std::string &filepath)
+void AttrWidgetFile::SetValue(const std::string &filepath, bool draggedFile)
 {
     if (m_filepath != filepath)
     {
         m_filepath = filepath;
         m_filepathLineEdit->setText(QString::fromStdString(filepath));
     }
+
+    if (draggedFile)
+    {
+        m_parent->_OnSlotValueChanged();
+    }
 }
 
 std::string  AttrWidgetFile::GetValue()
 {
     return m_filepath;
+}
+
+void AttrWidgetFile::OnDropFromExplorer(const File &f, QDropEvent *e)
+{
+    if (f.IsOfExtension(m_fileExtension))
+    {
+        SetValue(f.GetRelativePath(), true);
+    }
+}
+
+void AttrWidgetFile::OnDropFromHierarchy(GameObject *go, QDropEvent *e)
+{
 }
 
 void AttrWidgetFile::mouseDoubleClickEvent(QMouseEvent *e)

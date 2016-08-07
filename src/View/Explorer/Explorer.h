@@ -30,8 +30,10 @@
 #include "ImageFileInspectable.h"
 #include "Texture2DAssetFileInspectable.h"
 
+#include "IDroppableWidget.h"
+
 class FileSystemModel;
-class Explorer : public QListView
+class Explorer : public IDroppableQListView
 {
     Q_OBJECT
 
@@ -71,10 +73,9 @@ public:
 
     void StartRenaming(const std::string &filepath);
 
-    void dragEnterEvent(QDragEnterEvent *e) override;
-    void dragMoveEvent(QDragMoveEvent *e) override;
-    void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
+
+    void OnDropFromHierarchy(GameObject *go,  QDropEvent *e) override;
 
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;

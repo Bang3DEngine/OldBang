@@ -18,18 +18,22 @@
 #include <QListWidget>
 #include <QDoubleSpinBox>
 
+#include "File.h"
 #include "Logger.h"
 #include "XMLNode.h"
 #include "IInspectable.h"
+#include "IDroppableWidget.h"
 
 class Component;
+class GameObject;
 class WindowEventManager;
 class AttributeWidget;
+
 /**
  * @brief Represents a widget that can be put in the Inspector.
  * It tracks the attributes and attributeWidget it contains.
  */
-class InspectorWidget : public QWidget
+class InspectorWidget : public IDroppableQWidget
 {
     Q_OBJECT
 
@@ -45,7 +49,8 @@ private:
 
 
     void CreateWidgetSlots(XMLNode &xmlInfo);
-    void ConstructFromWidgetXMLInfo(const std::string &title, XMLNode &info, bool autoUpdate = true);
+    void ConstructFromWidgetXMLInfo(const std::string &title,
+                                    XMLNode &info, bool autoUpdate = true);
 
 protected:
     IInspectable *m_relatedInspectable = nullptr;
@@ -59,6 +64,9 @@ public:
                              IInspectable *relatedInspectable);
 
     virtual ~InspectorWidget();
+
+    virtual void OnDropFromExplorer(const File &f, QDropEvent *e) override;
+    virtual void OnDropFromHierarchy(GameObject *go, QDropEvent *e) override;
 
     /**
      * @brief GetUpdatedWidgetXMLInfo

@@ -4,7 +4,7 @@
 #include "WindowMain.h"
 #include "WindowEventManager.h"
 
-Hierarchy::Hierarchy(QWidget *parent)
+Hierarchy::Hierarchy(QWidget *parent) : IDroppableQTreeWidget()
 {
     connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
             this, SLOT(OnItemNameChanged(QTreeWidgetItem*,int)));
@@ -15,13 +15,9 @@ Hierarchy::Hierarchy(QWidget *parent)
             this ,SLOT(_NotifyHierarchyGameObjectDoubleClicked(
                            QTreeWidgetItem*,int)));
 
-    setAcceptDrops(true);
-    setDragEnabled(true);
     setDropIndicatorShown(true);
-    viewport()->setAcceptDrops(true);
     setDefaultDropAction(Qt::DropAction::MoveAction);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 }
 
 Hierarchy::~Hierarchy()
@@ -105,6 +101,30 @@ QTreeWidgetItem *Hierarchy::GetItemFromGameObject(GameObject *go) const
         return m_gameObjectToTreeItem[go];
     }
     return nullptr;
+}
+
+GameObject *Hierarchy::GetDropTargetGameObject(QDropEvent *e) const
+{
+    QTreeWidgetItem *targetItem = itemAt(e->pos());
+    GameObject *targetGameObject = nullptr;
+    if (targetItem)
+    {
+        targetGameObject = GetGameObjectFromItem(targetItem);
+        DropIndicatorPosition dropPos = dropIndicatorPosition();
+        if (dropPos == BelowItem || dropPos == AboveItem)
+        {
+            //Not putting inside, but below or above. Thus take its parent.
+            targetItem = targetItem->parent();
+            if (targetItem) targetGameObject = GetGameObjectFromItem(targetItem);
+            else targetGameObject = Scene::GetCurrentScene();
+        }
+    }
+    else
+    {
+        targetGameObject = Scene::GetCurrentScene();
+    }
+
+    return targetGameObject;
 }
 
 void Hierarchy::UnselectAll()
@@ -202,50 +222,13 @@ void Hierarchy::OnChildRemoved(GameObject *child)
     m_gameObjectToTreeItem.erase(child);
 }
 
-void Hierarchy::dragEnterEvent(QDragEnterEvent *e)
-{
-    QTreeWidget::dragEnterEvent(e);
-    e->accept();
-}
-
-void Hierarchy::dragMoveEvent(QDragMoveEvent *e)
-{
-    QTreeWidget::dragMoveEvent(e);
-    e->accept();
-}
-
-void Hierarchy::dragLeaveEvent(QDragLeaveEvent *e)
-{
-    QTreeWidget::dragLeaveEvent(e);
-    e->accept();
-}
-
 void Hierarchy::dropEvent(QDropEvent *e)
 {
-    QTreeWidget::dropEvent(e);
+    IDroppableQTreeWidget::dropEvent(e);
 
-    // Determine target gameObject
-    QTreeWidgetItem *targetItem = itemAt(e->pos());
-    GameObject *targetGameObject = nullptr;
-    if (targetItem)
-    {
-        targetGameObject = GetGameObjectFromItem(targetItem);
-        DropIndicatorPosition dropPos = dropIndicatorPosition();
-        if (dropPos == BelowItem || dropPos == AboveItem)
-        {
-            //Not putting inside, but below or above. Thus take its parent.
-            targetItem = targetItem->parent();
-            if (targetItem) targetGameObject = GetGameObjectFromItem(targetItem);
-            else targetGameObject = Scene::GetCurrentScene();
-        }
-    }
-    else
-    {
-        targetGameObject = Scene::GetCurrentScene();
-    }
-    //
+    QTreeWidgetItem *targetItem = itemAt(e->pos()); NONULL(targetItem);
+    GameObject *targetGameObject = GetDropTargetGameObject(e);
 
-    Explorer *explorer = Explorer::GetInstance();
     if (e->source() == this) // From Hierarchy To Hierarchy
     {
         std::list<QTreeWidgetItem*> sourceItems = selectedItems().toStdList();
@@ -265,22 +248,14 @@ void Hierarchy::dropEvent(QDropEvent *e)
             }
         }
     }
-    else if (e->source() == explorer) // From Explorer to Hierarchy
-    {
-        if (explorer->IsSelectedAFile())
-        {
-            OnExplorerFileDropped(explorer->GetSelectedFile(), targetGameObject);
-        }
-    }
-
     e->accept();
 }
 
-void Hierarchy::OnExplorerFileDropped(const File &f, GameObject *targetGameObject)
+void Hierarchy::OnDropFromExplorer(const File &f, QDropEvent *e)
 {
-    NONULL(targetGameObject);
     if (f.GetRelativePath().length() == 0) return;
 
+    GameObject *targetGameObject = GetDropTargetGameObject(e); NONULL(targetGameObject);
     if (f.IsPrefabAsset())
     {
         Prefab *prefab = new Prefab();

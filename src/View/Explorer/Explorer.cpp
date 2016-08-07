@@ -3,18 +3,16 @@
 #include <QScrollBar>
 
 #include "WindowMain.h"
+#include "IDroppableWidget.h"
 
-Explorer::Explorer(QWidget *parent) : QListView(parent)
+Explorer::Explorer(QWidget *parent) : IDroppableQListView()
 {
-    setAcceptDrops(true);
-    setDragEnabled(true);
     setDropIndicatorShown(true);
-    viewport()->setAcceptDrops(true);
     setDefaultDropAction(Qt::DropAction::MoveAction);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 
     m_fileSystemModel = new FileSystemModel();
+    setModel(m_fileSystemModel);
 
     m_buttonDirUp = WindowMain::GetInstance()->buttonExplorerDirUp;
     m_buttonChangeViewMode =
@@ -24,7 +22,6 @@ Explorer::Explorer(QWidget *parent) : QListView(parent)
     connect(m_buttonChangeViewMode, SIGNAL(clicked()),
             this, SLOT(OnButtonChangeViewModeClicked()));
 
-    setModel(m_fileSystemModel);
 
     connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
             this, SLOT(OnDirLoaded(QString)));
@@ -72,9 +69,16 @@ void Explorer::OnButtonChangeViewModeClicked()
 void Explorer::mouseReleaseEvent(QMouseEvent *e)
 {
     QListView::mouseReleaseEvent(e);
+
     if (e->button() == Qt::LeftButton)
     {
-        RefreshInspector();
+        if (indexAt(e->pos()) == currentIndex())
+        {
+            if (IsSelectedAFile())
+            {
+                RefreshInspector();
+            }
+        }
     }
 }
 
@@ -106,6 +110,7 @@ void Explorer::RefreshInspector()
 
     QModelIndex clickedIndex = selectedIndexes().at(0);
     File f(m_fileSystemModel, &clickedIndex);
+    m_lastSelectedPath = f.GetRelativePath();
 
     Inspector *inspector = WindowMain::GetInstance()->widgetInspector;
     if (lastIInspectableInInspector)
@@ -145,6 +150,11 @@ void Explorer::RefreshInspector()
     {
         TextFile f(m_fileSystemModel, &clickedIndex);
         newInspectable = new TextFileInspectable(f);
+    }
+    else if (f.IsDir())
+    {
+        // Dont clear, to make it easier to navigate without losing current
+        // inspectable in inspector
     }
     else
     {
@@ -188,7 +198,7 @@ void Explorer::SelectFile(const std::string &path)
     {
     }
 
-    Refresh();
+    RefreshInspector();
 }
 
 Explorer *Explorer::GetInstance()
@@ -198,16 +208,7 @@ Explorer *Explorer::GetInstance()
 
 void Explorer::Refresh()
 {
-    if (selectedIndexes().size() > 0)
-    {
-       QModelIndex index = selectedIndexes().at(0);
-       File f(m_fileSystemModel, &index);
-       if (f.GetRelativePath() != m_lastSelectedPath)
-       {
-           m_lastSelectedPath = f.GetRelativePath();
-           RefreshInspector();
-       }
-    }
+    // If needed in a future
 }
 
 std::string Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi)
@@ -301,40 +302,22 @@ void Explorer::StartRenaming(const std::string &filepath)
     edit(currentIndex());
 }
 
-void Explorer::dragEnterEvent(QDragEnterEvent *e)
-{
-    e->accept();
-}
-
-void Explorer::dragMoveEvent(QDragMoveEvent *e)
-{
-    e->accept();
-}
-
-void Explorer::dragLeaveEvent(QDragLeaveEvent *e)
-{
-    e->accept();
-}
-
 void Explorer::dropEvent(QDropEvent *e)
 {
-    QListView::dropEvent(e);
-
-    Hierarchy *hierarchy = Hierarchy::GetInstance();
-    if (e->source() == hierarchy)
-    {
-        GameObject *selected = hierarchy->GetFirstSelectedGameObject();
-        if (selected)
-        {
-            std::string path = GetCurrentDir() + "/";
-            std::string gameObjectName = selected->name;
-            path += gameObjectName;
-            path = Persistence::AppendExtension(path, Prefab::GetFileExtensionStatic());
-            FileWriter::WriteToFile(path, selected);
-        }
-    }
-
+    IDroppableQListView::dropEvent(e);
     e->ignore(); // If we dont ignore, objects in the source list get removed
+}
+
+void Explorer::OnDropFromHierarchy(GameObject *selected, QDropEvent *e)
+{
+    // Create a prefab of selected on the current directory
+    NONULL(selected);
+
+    std::string path = GetCurrentDir() + "/";
+    std::string gameObjectName = selected->name;
+    path += gameObjectName;
+    path = Persistence::AppendExtension(path, Prefab::GetFileExtensionStatic());
+    FileWriter::WriteToFile(path, selected);
 }
 
 void Explorer::updateGeometries()

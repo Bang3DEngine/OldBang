@@ -33,6 +33,13 @@ public:
     bool IsDir() const;
     bool IsFile() const;
 
+    /**
+     * @brief The input must be something like "jpg png bmp obj"
+     * @param extensions
+     * @return
+     */
+    bool IsOfExtension(const std::string &extensions) const;
+
     std::string GetContents() const;
 
     const std::string& GetAbsolutePath() const;

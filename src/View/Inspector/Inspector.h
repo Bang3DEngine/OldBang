@@ -11,7 +11,8 @@
 #include "ComponentWidget.h"
 #include "IWindowEventManagerListener.h"
 
-class Inspector : public QListWidget, public IWindowEventManagerListener
+class Inspector : public QListWidget,
+                  public IWindowEventManagerListener
 {
     Q_OBJECT
 
