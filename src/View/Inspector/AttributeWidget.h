@@ -10,23 +10,31 @@ class AttributeWidget : public IDroppableQWidget
 {
     Q_OBJECT
 
+private:
+    void AddLabelWidget(const XMLAttribute &xmlAttribute,
+                        QBoxLayout *layout);
+
 protected:
-    std::string m_label = "";
-    InspectorWidget *m_parent = nullptr;
+    QBoxLayout *m_layout = nullptr;
+
+    bool m_readonly = false;
+    bool m_enabled  = false;
+    bool m_inlined  = false;
+    bool m_hidden   = false;
+
+    InspectorWidget *m_inspectorWidget = nullptr;
     XMLNode *m_relatedXMLInfo = nullptr;
 
-    AttributeWidget(const std::string &label,
-                    InspectorWidget *parent);
+    AttributeWidget(const XMLAttribute &xmlAttribute,
+                    InspectorWidget *inspectorWidget,
+                    bool createLabel = true);
 
-    /**
-     * @brief GetLabelWidget
-     * @param label
-     * @return A label that is properly formatted. Add this
-     * to the layout, where you expect the attributewidget label to be.
-     */
-    QLabel* GetLabelWidget(const std::string &label);
+    void AfterConstructor();
 
 public:
+
+    virtual void Refresh(const XMLAttribute &attribute);
+
     static AttributeWidget* FromXMLAttribute(const XMLAttribute &xmlAttribute,
                                              InspectorWidget *inspectorWidget);
 };

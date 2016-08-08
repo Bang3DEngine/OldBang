@@ -21,12 +21,14 @@ private:
 
 public:
 
-    AttrWidgetColor(const std::string &labelString,
-                    InspectorWidget *parent);
+    AttrWidgetColor(const XMLAttribute &xmlAttribute,
+                    InspectorWidget *inspectorWidget);
     virtual ~AttrWidgetColor();
 
     void SetValue(const Color &c);
     const Color& GetValue() const;
+
+    virtual void Refresh(const XMLAttribute &attribute) override;
 
 private slots:
 

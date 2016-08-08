@@ -1,30 +1,21 @@
 #include "AttrWidgetVectorFloat.h"
 
-AttrWidgetVectorFloat::AttrWidgetVectorFloat(const std::string &labelString,
-                                             int numberOfFields,
-                                             InspectorWidget *parent) :
-    AttributeWidget(labelString, parent)
+AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
+                                             InspectorWidget *inspectorWidget) :
+    AttributeWidget(xmlAttribute, inspectorWidget)
 {
-    QVBoxLayout *vLayout = new QVBoxLayout();
-    vLayout->setSpacing(0);
-    setLayout(vLayout);
-
-    vLayout->addWidget(GetLabelWidget(labelString));
-
     QHBoxLayout *hLayout = new QHBoxLayout();
-    hLayout->setSpacing(0); hLayout->setContentsMargins(0,0,0,0);
-    vLayout->addLayout(hLayout);
+    m_layout->addLayout(hLayout, 1);
 
+    int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
     for (unsigned int i = 0; i < numberOfFields; ++i)
     {
-        AttrWidgetFloat *s = new AttrWidgetFloat("", parent);
+        AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget);
         m_floatSlots.push_back(s);
-        hLayout->addWidget(s);
+        hLayout->addWidget(s, 1, Qt::AlignCenter | Qt::AlignVCenter);
     }
 
-    setContentsMargins(0,0,0,0);
-    adjustSize();
-    show();
+    AfterConstructor();
 }
 
 void AttrWidgetVectorFloat::SetValue(const std::vector<float> &v)
@@ -70,4 +61,37 @@ Vector4 AttrWidgetVectorFloat::GetVector4() const
                      m_floatSlots[1]->GetValue(),
                      m_floatSlots[2]->GetValue(),
                      m_floatSlots[3]->GetValue());
+}
+
+void AttrWidgetVectorFloat::Refresh(const XMLAttribute &attribute)
+{
+    AttributeWidget::Refresh(attribute);
+
+    XMLAttribute::Type attrType = attribute.GetType();
+
+    std::vector<float> vf;
+    if (attrType == XMLAttribute::Type::Float)
+    {
+        float v = attribute.GetFloat();
+        vf = {v};
+    }
+    else if (attrType == XMLAttribute::Type::Vector2)
+    {
+        Vector2 v = attribute.GetVector2();
+        vf = {v.x, v.y};
+    }
+    else if (attrType == XMLAttribute::Type::Vector3)
+    {
+        Vector3 v = attribute.GetVector3();
+        vf = {v.x, v.y, v.z};
+    }
+    else if (attrType == XMLAttribute::Type::Vector4 ||
+             attrType == XMLAttribute::Type::Quaternion ||
+             attrType == XMLAttribute::Type::Rect)
+    {
+        Vector4 v = attribute.GetVector4();
+        vf = {v.x, v.y, v.z, v.w};
+    }
+
+    SetValue(vf);
 }

@@ -20,13 +20,13 @@ private:
     bool m_editing = false;
 
 public:
-    AttrWidgetString(const std::string &labelString,
-                     InspectorWidget *m_parent,
-                     bool readonly, bool inlined,
-                     bool bigText);
+    AttrWidgetString(const XMLAttribute &xmlAttribute,
+                     InspectorWidget *m_inspectorWidget);
 
     virtual void SetValue(const std::string &value);
     virtual const std::string GetValue() const;
+
+    virtual void Refresh(const XMLAttribute &attribute) override;
 
     virtual void OnFocusIn();
     virtual void OnFocusOut();

@@ -1,26 +1,19 @@
 #include "AttrWidgetBool.h"
 
-AttrWidgetBool::AttrWidgetBool(const std::string &labelString,
-                               InspectorWidget *parent) :
-    AttributeWidget(labelString, parent)
+AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute,
+                               InspectorWidget *inspectorWidget) :
+    AttributeWidget(xmlAttribute, inspectorWidget)
 {
-    QLayout *layout = new QHBoxLayout();
-    setLayout(layout);
+    QBoxLayout *layout = new QHBoxLayout();
+    m_layout->addLayout(layout, 1);
 
     m_checkbox = new CheckboxWidget();
-    m_checkbox->setContentsMargins(0,0,0,0);
-    m_checkbox->show();
-
-    layout->addWidget(GetLabelWidget(labelString));
-    layout->addWidget(m_checkbox);
+    layout->addWidget(m_checkbox, 1, Qt::AlignRight);
 
     connect(m_checkbox, SIGNAL(stateChanged(int)),
-            parent, SLOT(_OnSlotValueChanged(int)));
+            inspectorWidget, SLOT(_OnSlotValueChanged(int)));
 
-    setContentsMargins(0,0,0,0);
-    show();
-
-    setFocusPolicy(Qt::FocusPolicy::ClickFocus);
+    AfterConstructor();
 }
 
 void AttrWidgetBool::SetValue(bool value)
@@ -31,4 +24,11 @@ void AttrWidgetBool::SetValue(bool value)
 bool AttrWidgetBool::GetValue() const
 {
     return m_checkbox->isChecked();
+}
+
+void AttrWidgetBool::Refresh(const XMLAttribute &attribute)
+{
+    AttributeWidget::Refresh(attribute);
+    if (attribute.GetType() != XMLAttribute::Type::Bool) return;
+    SetValue( attribute.GetBool() );
 }

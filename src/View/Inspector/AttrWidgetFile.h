@@ -25,10 +25,8 @@ public:
     FileLineEdit *m_filepathLineEdit = nullptr;
 
 public:
-    AttrWidgetFile(const std::string &labelString,
-                   const std::string &fileExtension,
-                   bool readonly,
-                   InspectorWidget *m_parent);
+    AttrWidgetFile(const XMLAttribute &xmlAttribute,
+                   InspectorWidget *m_inspectorWidget);
 
     virtual void SetValue(const std::string &filepath, bool draggedFile = false);
     virtual std::string GetValue();
@@ -37,6 +35,8 @@ public:
     virtual void OnDropFromHierarchy(GameObject *go,  QDropEvent *e) override;
 
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
+
+    virtual void Refresh(const XMLAttribute &attribute) override;
 
 public slots:
     void OnDoubleClick();

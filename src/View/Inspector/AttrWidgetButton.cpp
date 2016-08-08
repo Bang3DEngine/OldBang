@@ -1,24 +1,20 @@
 #include "AttrWidgetButton.h"
 
-AttrWidgetButton::AttrWidgetButton(const std::string &label,
-                                   IAttrWidgetButtonListener *listener,
-                                   InspectorWidget *parent) :
-    AttributeWidget("", parent)
+AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
+                                   InspectorWidget *inspectorWidget) :
+    AttributeWidget(xmlAttribute, inspectorWidget, false)
 {
     QLayout *layout = new QVBoxLayout();
-    setLayout(layout);
+    m_layout->addLayout(layout, 1);
 
-    m_listener = listener;
+    m_listener = xmlAttribute.GetButtonListener();
 
-    m_button = new QPushButton(QString::fromStdString(label));
+    m_button = new QPushButton(QString::fromStdString(xmlAttribute.GetName()));
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(OnButtonClicked(bool)));
-    m_button->show();
-
     layout->addWidget(m_button);
 
-    show();
-
-    setFocusPolicy(Qt::FocusPolicy::ClickFocus);
+    AfterConstructor();
+    m_layout->setAlignment(Qt::AlignRight);
 }
 
 void AttrWidgetButton::SetValue(const std::string &buttonText)
@@ -29,6 +25,12 @@ void AttrWidgetButton::SetValue(const std::string &buttonText)
 std::string AttrWidgetButton::GetValue() const
 {
     return m_button->text().toStdString();
+}
+
+void AttrWidgetButton::Refresh(const XMLAttribute &attribute)
+{
+    AttributeWidget::Refresh(attribute);
+    if (attribute.GetType() != XMLAttribute::Type::Button) return;
 }
 
 void AttrWidgetButton::OnButtonClicked(bool _)

@@ -1,25 +1,25 @@
 #include "AttrWidgetEnum.h"
 
-AttrWidgetEnum::AttrWidgetEnum(const std::string &labelString,
-                               const std::vector<std::string> &enumNames,
-                               InspectorWidget *parent) :
-    AttributeWidget(labelString, parent)
+AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
+                               InspectorWidget *inspectorWidget) :
+    AttributeWidget(xmlAttribute, inspectorWidget)
 {
-    QHBoxLayout *layout = new QHBoxLayout();
-    setLayout(layout);
+
+    QLayout *layout = new QHBoxLayout();
+    m_layout->addLayout(layout, 1);
 
     m_comboBox = new QComboBox();
+    layout->addWidget(m_comboBox);
+    std::vector<std::string> enumNames = xmlAttribute.GetEnumNames();
     for (std::string enumString : enumNames)
     {
         m_comboBox->addItem( QString::fromStdString(enumString) );
     }
-    m_comboBox->show();
-    connect(m_comboBox, SIGNAL(currentIndexChanged(QString)), parent, SLOT(_OnSlotValueChanged(QString)));
+    connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
+            inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
 
-    layout->addWidget(GetLabelWidget(labelString));
-    layout->addWidget(m_comboBox);
 
-    show();
+    AfterConstructor();
 }
 
 void AttrWidgetEnum::SetValue(int index)
@@ -30,5 +30,12 @@ void AttrWidgetEnum::SetValue(int index)
 int AttrWidgetEnum::GetValue()
 {
     return m_comboBox->currentIndex();
+}
+
+void AttrWidgetEnum::Refresh(const XMLAttribute &attribute)
+{
+    AttributeWidget::Refresh(attribute);
+    if (attribute.GetType() != XMLAttribute::Type::Enum) return;
+    SetValue( attribute.GetEnumSelectedIndex() );
 }
 

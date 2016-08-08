@@ -18,11 +18,13 @@ private:
     CheckboxWidget *m_checkbox = nullptr;
 
 public:
-    AttrWidgetBool(const std::string &labelString,
-                   InspectorWidget *parent);
+    AttrWidgetBool(const XMLAttribute &xmlAttribute,
+                   InspectorWidget *inspectorWidget);
 
     virtual void SetValue(bool value);
     virtual bool GetValue() const;
+
+    virtual void Refresh(const XMLAttribute &attribute) override;
 };
 
 class CheckboxWidget : public QCheckBox

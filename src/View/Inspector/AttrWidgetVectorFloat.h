@@ -8,19 +8,20 @@
 
 class AttrWidgetVectorFloat : public AttributeWidget //Slot for a vector of size N
 {
-    public:
-        std::vector<AttrWidgetFloat*> m_floatSlots;
+public:
+    std::vector<AttrWidgetFloat*> m_floatSlots;
 
-        AttrWidgetVectorFloat(const std::string &labelString,
-                              int numberOfFields,
-                              InspectorWidget *m_parent);
+    AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
+                          InspectorWidget *m_inspectorWidget);
 
-        virtual void SetValue(const std::vector<float> &v);
-        virtual std::vector<float> GetValue();
-        float GetFloat() const;
-        Vector2 GetVector2() const;
-        Vector3 GetVector3() const;
-        Vector4 GetVector4() const;
+    virtual void SetValue(const std::vector<float> &v);
+    virtual std::vector<float> GetValue();
+    float GetFloat() const;
+    Vector2 GetVector2() const;
+    Vector3 GetVector3() const;
+    Vector4 GetVector4() const;
+
+    virtual void Refresh(const XMLAttribute &attribute) override;
 };
 
 #endif // INSPECTORVECTORFLOATCOMPONENTSLOTWIDGET_H

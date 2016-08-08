@@ -18,11 +18,13 @@ private:
     bool _editing = false;
 
 public:
-    AttrWidgetFloat(const std::string &labelString,
-                    InspectorWidget *m_parent);
+    AttrWidgetFloat(const XMLAttribute &xmlAttribute,
+                    InspectorWidget *m_inspectorWidget);
 
     virtual void SetValue(float f);
     virtual float GetValue();
+
+    virtual void Refresh(const XMLAttribute &attribute) override;
 
     virtual void OnSpinBoxFocusIn();
     virtual void OnSpinBoxFocusOut();

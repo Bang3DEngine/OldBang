@@ -1,39 +1,31 @@
 #include "AttrWidgetFile.h"
 
-AttrWidgetFile::AttrWidgetFile(const std::string &labelString,
-                               const std::string &fileExtension,
-                               bool readonly,
-                               InspectorWidget *parent) :
-    AttributeWidget(labelString, parent)
+AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
+                               InspectorWidget *inspectorWidget) :
+    AttributeWidget(xmlAttribute, inspectorWidget)
 {
-    QVBoxLayout *vLayout = new QVBoxLayout();
-    vLayout->setSpacing(0);
-    setLayout(vLayout);
-
-    vLayout->addWidget(GetLabelWidget(labelString));
+    m_fileExtension = xmlAttribute.GetPropertyValue(
+                        XMLProperty::FileExtension.GetName());
 
     QHBoxLayout *hLayout = new QHBoxLayout();
-    hLayout->setSpacing(0); hLayout->setContentsMargins(0,0,0,0);
-    vLayout->addLayout(hLayout);
+    m_layout->addLayout(hLayout, 1);
 
     m_filepathLineEdit = new FileLineEdit();
-    m_filepathLineEdit->setReadOnly(true);
-    hLayout->addWidget(m_filepathLineEdit);
+    m_filepathLineEdit->setReadOnly(m_readonly);
+    hLayout->addWidget(m_filepathLineEdit, 100);
 
-    if (!readonly)
+    if (!m_readonly)
     {
+        hLayout->addStretch(1); // add little spacer
         QPushButton *browseButton = new QPushButton(QString("Browse"));
-        browseButton->setContentsMargins(10, 0, 0, 0);
         connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
-        hLayout->addWidget(browseButton);
+        hLayout->addWidget(browseButton, 20, Qt::AlignRight);
     }
 
     connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
             this, SLOT(OnDoubleClick()));
 
-    m_fileExtension = fileExtension;
-    setContentsMargins(0,0,0,0);
-    show();
+    AfterConstructor();
 }
 
 void AttrWidgetFile::Browse()
@@ -43,7 +35,7 @@ void AttrWidgetFile::Browse()
     if (selectedFile != "")
     {
         SetValue(selectedFile);
-        m_parent->_OnSlotValueChanged();
+        m_inspectorWidget->_OnSlotValueChanged();
     }
 }
 
@@ -57,7 +49,7 @@ void AttrWidgetFile::SetValue(const std::string &filepath, bool draggedFile)
 
     if (draggedFile)
     {
-        m_parent->_OnSlotValueChanged();
+        m_inspectorWidget->_OnSlotValueChanged();
     }
 }
 
@@ -68,7 +60,7 @@ std::string  AttrWidgetFile::GetValue()
 
 void AttrWidgetFile::OnDropFromExplorer(const File &f, QDropEvent *e)
 {
-    if (f.IsOfExtension(m_fileExtension))
+    if (f.IsOfExtension(m_fileExtension) && !m_readonly)
     {
         SetValue(f.GetRelativePath(), true);
     }
@@ -84,6 +76,13 @@ void AttrWidgetFile::mouseDoubleClickEvent(QMouseEvent *e)
     {
         OnDoubleClick();
     }
+}
+
+void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
+{
+    AttributeWidget::Refresh(attribute);
+    if (attribute.GetType() != XMLAttribute::Type::File) return;
+    SetValue( attribute.GetFilepath() );
 }
 
 void AttrWidgetFile::OnDoubleClick()

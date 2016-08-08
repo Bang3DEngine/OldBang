@@ -1,26 +1,17 @@
 #include "AttrWidgetString.h"
 
-AttrWidgetString::AttrWidgetString(const std::string &labelString,
-                                   InspectorWidget *parent,
-                                   bool readonly, bool inlined,
-                                   bool bigText) :
-    AttributeWidget(labelString, parent)
+AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
+                                   InspectorWidget *inspectorWidget) :
+    AttributeWidget(xmlAttribute, inspectorWidget)
 {
-    QLayout *layout = nullptr;
-    if (inlined)
-    {
-        layout = new QHBoxLayout();
-    }
-    else
-    {
-        layout = new QVBoxLayout();
-    }
-    setLayout(layout);
+    QLayout *layout = new QVBoxLayout();
+    m_layout->addLayout(layout, 1);
 
+    bool bigText = xmlAttribute.HasProperty(XMLProperty::BigText);
     QWidget *textWidget = nullptr;
     if (!bigText)
     {
-        m_lineEdit = new LineEdit(readonly); //Right side
+        m_lineEdit = new LineEdit(m_readonly); //Right side
         m_lineEdit->setAlignment(Qt::AlignRight);
         m_lineEdit->setMinimumWidth(50);
         m_lineEdit->setMinimumHeight(25);
@@ -28,23 +19,18 @@ AttrWidgetString::AttrWidgetString(const std::string &labelString,
     }
     else
     {
-        m_textEdit = new TextEdit(readonly);
+        m_textEdit = new TextEdit(m_readonly);
         m_textEdit->setAlignment(Qt::AlignLeft);
         textWidget = m_textEdit;
     }
-
-    textWidget->setContentsMargins(0,0,0,0);
     textWidget->show();
 
-    //connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
+    //connect(m_strField, SIGNAL(textChanged()),
+    //        m_parent, SLOT(_OnSlotValueChanged()));
 
-    layout->addWidget(GetLabelWidget(labelString));
-    layout->addWidget(textWidget);
+    m_layout->addWidget(textWidget);
 
-    setContentsMargins(0,0,0,0);
-    show();
-
-    setFocusPolicy(Qt::FocusPolicy::ClickFocus);
+    AfterConstructor();
 }
 
 void AttrWidgetString::SetValue(const std::string &value)
@@ -78,6 +64,13 @@ const std::string AttrWidgetString::GetValue() const
     }
 
     return "";
+}
+
+void AttrWidgetString::Refresh(const XMLAttribute &attribute)
+{
+    AttributeWidget::Refresh(attribute);
+    if (attribute.GetType() != XMLAttribute::Type::String) return;
+    SetValue( attribute.GetString() );
 }
 
 void AttrWidgetString::OnFocusIn()
@@ -141,9 +134,9 @@ void LineEdit::Deselect()
 
 void LineEdit::SelectAll()
 {
-    if (!this->isReadOnly())
+    if (!isReadOnly())
     {
-        this->selectAll();
+        selectAll();
     }
 }
 

@@ -15,12 +15,13 @@ private:
     QComboBox *m_comboBox = nullptr;
 
 public:
-    AttrWidgetEnum(const std::string &labelString,
-                   const std::vector<std::string> &enumNames,
-                   InspectorWidget *m_parent);
+    AttrWidgetEnum(const XMLAttribute &xmlAttribute,
+                   InspectorWidget *m_inspectorWidget);
 
     virtual void SetValue(int index);
     virtual int GetValue();
+
+    virtual void Refresh(const XMLAttribute &attribute) override;
 };
 
 #endif // INSPECTORCOMPONENTENUMSLOTWIDGET_H

@@ -16,12 +16,13 @@ private:
     IAttrWidgetButtonListener *m_listener = nullptr;
 
 public:
-    AttrWidgetButton(const std::string &label,
-                     IAttrWidgetButtonListener *listener,
-                     InspectorWidget *parent);
+    AttrWidgetButton(const XMLAttribute &xmlAttribute,
+                     InspectorWidget *inspectorWidget);
 
     void SetValue(const std::string &buttonText);
     std::string GetValue() const;
+
+    virtual void Refresh(const XMLAttribute &attribute) override;
 
     QSize sizeHint() const;
 

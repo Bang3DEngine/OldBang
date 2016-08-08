@@ -33,24 +33,30 @@ InspectorWidget::InspectorWidget(const std::string &title,
 void InspectorWidget::ConstructFromWidgetXMLInfo(
         const std::string &title, XMLNode &xmlInfo, bool autoUpdate)
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    setLayout(mainLayout);
+    m_mainVerticalLayout = new QVBoxLayout();
+    m_mainVerticalLayout->setSpacing(0);
+    m_mainVerticalLayout->setMargin(0);
+    setLayout(m_mainVerticalLayout);
 
     m_titleLayout = new QHBoxLayout();
+    m_titleLayout->setMargin(8);
+    m_mainVerticalLayout->addLayout(m_titleLayout, 0);
 
     std::string fTitle = StringUtils::FormatInspectorLabel(title);
     m_titleLabel = new QLabel( QString(fTitle.c_str()) );
     QFont font = m_titleLabel->font();
     font.setBold(true);
     m_titleLabel->setFont(font);
+    m_titleLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
-    m_titleLayout->addWidget(m_titleLabel, 10);
+    m_titleLayout->addWidget(m_titleLabel, 100);
 
-    mainLayout->addLayout(m_titleLayout);
     CreateWidgetSlots(xmlInfo);
+
     RefreshWidgetValues(); // Initial catch of values
-    m_created = true;
     show();
+
+    m_created = true;
 
     //
 
@@ -74,7 +80,6 @@ InspectorWidget::~InspectorWidget()
 
 void InspectorWidget::OnDropFromExplorer(const File &f, QDropEvent *e)
 {
-    Logger_Log(f.GetRelativePath());
 }
 
 void InspectorWidget::OnDropFromHierarchy(GameObject *go, QDropEvent *e)
@@ -176,74 +181,10 @@ void InspectorWidget::RefreshWidgetValues()
     {
         XMLAttribute attribute = itAttr.second;
         std::string attrName  = attribute.GetName();
-        XMLAttribute::Type attrType = attribute.GetType();
-
         if( m_attrNameToAttrWidget.find(attrName) != m_attrNameToAttrWidget.end())
         {
             AttributeWidget *ws = m_attrNameToAttrWidget[attrName];
-            if (attribute.HasVectoredType())
-            {
-                AttrWidgetVectorFloat *wv = static_cast<AttrWidgetVectorFloat*>(ws);
-                if (attrType == XMLAttribute::Type::Float)
-                {
-                    float v = xmlInfo.GetFloat(attrName);
-                    wv->SetValue({v});
-                }
-                else if (attrType == XMLAttribute::Type::Vector2)
-                {
-                    Vector2 v = xmlInfo.GetVector2(attrName);
-                    wv->SetValue({v.x, v.y});
-                }
-                else if (attrType == XMLAttribute::Type::Vector3)
-                {
-                    Vector3 v = xmlInfo.GetVector3(attrName);
-                    wv->SetValue({v.x, v.y, v.z});
-                }
-                else if (attrType == XMLAttribute::Type::Vector4 ||
-                         attrType == XMLAttribute::Type::Quaternion ||
-                         attrType == XMLAttribute::Type::Rect)
-                {
-                    Vector4 v = xmlInfo.GetVector4(attrName);
-                    wv->SetValue({v.x, v.y, v.z, v.w});
-                }
-                ws = wv;
-            }
-            else if (attrType == XMLAttribute::Type::File)
-            {
-                AttrWidgetFile *wf = static_cast<AttrWidgetFile*>(ws);
-                wf->SetValue( xmlInfo.GetFilepath(attrName) );
-                ws = wf;
-            }
-            else if (attrType == XMLAttribute::Type::String)
-            {
-                AttrWidgetString *wss = static_cast<AttrWidgetString*>(ws);
-                wss->SetValue( xmlInfo.GetString(attrName) );
-                ws = wss;
-            }
-            else if (attrType == XMLAttribute::Type::Bool)
-            {
-                AttrWidgetBool *wb = static_cast<AttrWidgetBool*>(ws);
-                wb->SetValue( xmlInfo.GetBool(attrName) );
-                ws = wb;
-            }
-            else if (attrType == XMLAttribute::Type::Enum)
-            {
-                AttrWidgetEnum *we = static_cast<AttrWidgetEnum*>(ws);
-                we->SetValue(attribute.GetEnumSelectedIndex());
-                ws = we;
-            }
-            else if (attrType == XMLAttribute::Type::Color)
-            {
-                AttrWidgetColor *wc = static_cast<AttrWidgetColor*>(ws);
-                wc->SetValue(attribute.GetColor());
-                ws = wc;
-            }
-
-            bool hidden  =  attribute.HasProperty(XMLProperty::Hidden);
-            bool enabled = !attribute.HasProperty(XMLProperty::Disabled);
-            ws->setEnabled(enabled);
-            ws->setVisible(!hidden);
-            ws->setHidden(hidden);
+            ws->Refresh(attribute);
         }
     }
 }
@@ -260,7 +201,7 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         if (w)
         {
             m_attrNameToAttrWidget[attribute.GetName()] = w;
-            layout()->addWidget(w);
+            m_mainVerticalLayout->addWidget(w, 1);
             w->show();
         }
     }

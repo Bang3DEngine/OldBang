@@ -1,28 +1,22 @@
 #include "AttrWidgetColor.h"
 
-
-AttrWidgetColor::AttrWidgetColor(const std::string &labelString,
-                                 InspectorWidget *parent) :
-  AttributeWidget(labelString, parent)
+AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
+                                 InspectorWidget *inspectorWidget) :
+  AttributeWidget(xmlAttribute, inspectorWidget)
 {
-  QLayout *layout = new QHBoxLayout();
-  setLayout(layout);
+    QLayout *layout = new QHBoxLayout();
+    m_layout->addLayout(layout, 1);
 
-  m_colorDialog = new ColorDialog();
-  m_colorLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
-  RefreshLabelColor();
+    m_colorDialog = new ColorDialog();
+    m_colorLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
+    RefreshLabelColor();
 
-  layout->addWidget(GetLabelWidget(labelString));
-  layout->addWidget(m_colorLabel);
+    layout->addWidget(m_colorLabel);
 
-
-  setContentsMargins(0,0,0,0);
-  show();
-
-  connect(m_colorDialog, SIGNAL(currentColorChanged(const QColor&)),
+    connect(m_colorDialog, SIGNAL(currentColorChanged(const QColor&)),
           this, SLOT(OnColorChanged(const QColor&)));
 
-  setFocusPolicy(Qt::FocusPolicy::ClickFocus);
+    AfterConstructor();
 }
 
 AttrWidgetColor::~AttrWidgetColor()
@@ -34,7 +28,7 @@ AttrWidgetColor::~AttrWidgetColor()
 void AttrWidgetColor::RefreshLabelColor()
 {
     m_colorLabel->SetColor(m_selectedColor);
-    m_parent->_OnSlotValueChanged();
+    m_inspectorWidget->_OnSlotValueChanged();
 }
 
 void AttrWidgetColor::SetValue(const Color &c)
@@ -46,6 +40,13 @@ void AttrWidgetColor::SetValue(const Color &c)
 const Color& AttrWidgetColor::GetValue() const
 {
     return m_selectedColor;
+}
+
+void AttrWidgetColor::Refresh(const XMLAttribute &attribute)
+{
+    AttributeWidget::Refresh(attribute);
+    if (attribute.GetType() != XMLAttribute::Type::Color) return;
+    SetValue( attribute.GetColor() );
 }
 
 void AttrWidgetColor::OnColorChanged(const QColor &c)

@@ -55,6 +55,7 @@ private:
 protected:
     IInspectable *m_relatedInspectable = nullptr;
 
+    QVBoxLayout *m_mainVerticalLayout = nullptr;
     QHBoxLayout *m_titleLayout = nullptr;
     QLabel *m_titleLabel = nullptr;
 

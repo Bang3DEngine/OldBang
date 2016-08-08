@@ -1,5 +1,6 @@
 #include "AttributeWidget.h"
 
+
 #include "XMLNode.h"
 #include "XMLAttribute.h"
 #include "AttrWidgetBool.h"
@@ -11,66 +12,101 @@
 #include "AttrWidgetButton.h"
 #include "AttrWidgetVectorFloat.h"
 
-AttributeWidget::AttributeWidget(const std::string &label,
-                                 InspectorWidget *parent) : IDroppableQWidget(),
-    m_label(label), m_parent(parent)
+AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
+                                 InspectorWidget *inspectorWidget,
+                                 bool createLabel) :
+    IDroppableQWidget(),
+    m_inspectorWidget(inspectorWidget)
 {
+    m_readonly =  xmlAttribute.HasProperty(XMLProperty::Readonly);
+    m_enabled  = !xmlAttribute.HasProperty(XMLProperty::Disabled);
+    m_inlined  =  xmlAttribute.HasProperty(XMLProperty::Inline);
+    m_hidden   =  xmlAttribute.HasProperty(XMLProperty::Hidden);
+
+    if (m_inlined) { m_layout = new QHBoxLayout(); }
+    else { m_layout = new QVBoxLayout(); }
+    setLayout(m_layout);
+    m_layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+    if (createLabel)
+    {
+        AddLabelWidget(xmlAttribute, m_layout);
+    }
+
+    setEnabled(m_enabled);
+    setVisible(!m_hidden);
+    setHidden(m_hidden);
 }
 
-QLabel *AttributeWidget::GetLabelWidget(const std::string &label)
+void AttributeWidget::AfterConstructor()
 {
+    updateGeometry();
+    setFocusPolicy(Qt::FocusPolicy::ClickFocus);
+    adjustSize();
+    show();
+
+    m_inspectorWidget->adjustSize();
+    m_inspectorWidget->show();
+}
+
+void AttributeWidget::AddLabelWidget(const XMLAttribute &xmlAttribute,
+                                     QBoxLayout *layout)
+{
+    std::string label = xmlAttribute.GetName();
     std::string fLabel = StringUtils::FormatInspectorLabel(label);
     QLabel *labelField = new QLabel(QString(fLabel.c_str()));
-    labelField->setAlignment(Qt::AlignLeft);
-    labelField->setContentsMargins(0,0,0,0);
+    labelField->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    labelField->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     labelField->show();
-    return labelField;
+
+    layout->addWidget(labelField, 100);
+}
+
+void AttributeWidget::Refresh(const XMLAttribute &attribute)
+{
+    m_readonly =  attribute.HasProperty(XMLProperty::Readonly);
+    m_enabled  = !attribute.HasProperty(XMLProperty::Disabled);
+    m_inlined  =  attribute.HasProperty(XMLProperty::Inline);
+    m_hidden   =  attribute.HasProperty(XMLProperty::Hidden);
+
+    setEnabled(m_enabled);
+    setVisible(!m_hidden);
+    setHidden(m_hidden);
 }
 
 AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttribute,
                                                    InspectorWidget *inspectorWidget)
 {
     AttributeWidget *w = nullptr;
-
-    bool readonly = xmlAttribute.HasProperty(XMLProperty::Readonly);
-    bool inlined  = xmlAttribute.HasProperty(XMLProperty::Inline);
-
-    std::string attrName  = xmlAttribute.GetName();
     XMLAttribute::Type attrType = xmlAttribute.GetType();
 
     if (xmlAttribute.HasVectoredType())
     {
-        int numFields = xmlAttribute.GetNumberOfFieldsOfType();
-        w = new AttrWidgetVectorFloat(attrName, numFields, inspectorWidget);
+        w = new AttrWidgetVectorFloat(xmlAttribute, inspectorWidget);
     }
     else if (attrType == XMLAttribute::Type::File)
     {
-        std::string fileExtension =
-                xmlAttribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
-        w = new AttrWidgetFile(attrName, fileExtension, readonly, inspectorWidget);
+        w = new AttrWidgetFile(xmlAttribute, inspectorWidget);
     }
     else if (attrType == XMLAttribute::Type::String)
     {
-        bool bigText = xmlAttribute.HasProperty(XMLProperty::BigText);
-        w = new AttrWidgetString(attrName, inspectorWidget, readonly, inlined, bigText);
+        w = new AttrWidgetString(xmlAttribute, inspectorWidget);
     }
     else if (attrType == XMLAttribute::Type::Bool)
     {
-        w = new AttrWidgetBool(attrName, inspectorWidget);
+        w = new AttrWidgetBool(xmlAttribute, inspectorWidget);
     }
     else if (attrType == XMLAttribute::Type::Enum)
     {
-        w = new AttrWidgetEnum(attrName,
-                               xmlAttribute.GetEnumNames(), inspectorWidget);
+        w = new AttrWidgetEnum(xmlAttribute, inspectorWidget);
     }
     else if (attrType == XMLAttribute::Type::Color)
     {
-        w = new AttrWidgetColor(attrName, inspectorWidget);
+        w = new AttrWidgetColor(xmlAttribute, inspectorWidget);
     }
     else if (attrType == XMLAttribute::Type::Button)
     {
-        w = new AttrWidgetButton(attrName, xmlAttribute.GetButtonListener(),
-                                 inspectorWidget);
+        w = new AttrWidgetButton(xmlAttribute, inspectorWidget);
     }
 
     return w;
