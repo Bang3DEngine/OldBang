@@ -35,6 +35,18 @@ std::string Persistence::GetDir(const std::string &filepath)
     return directory;
 }
 
+std::string Persistence::GetFileName(const std::string &filepath)
+{
+    std::string filename = "";
+    const size_t lastSlash = filepath.rfind('/');
+    if (lastSlash != std::string::npos)
+    {
+        filename = filepath.substr(lastSlash + 1);
+        filename = StringUtils::Split(filename, '.')[0];
+    }
+    return filename;
+}
+
 std::string Persistence::GetFileNameWithExtension(const std::string &filepath)
 {
     std::string filename = "";

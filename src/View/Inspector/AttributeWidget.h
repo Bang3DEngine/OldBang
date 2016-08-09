@@ -10,10 +10,6 @@ class AttributeWidget : public IDroppableQWidget
 {
     Q_OBJECT
 
-private:
-    void AddLabelWidget(const XMLAttribute &xmlAttribute,
-                        QBoxLayout *layout);
-
 protected:
     QBoxLayout *m_layout = nullptr;
 
@@ -27,7 +23,9 @@ protected:
 
     AttributeWidget(const XMLAttribute &xmlAttribute,
                     InspectorWidget *inspectorWidget,
-                    bool createLabel = true);
+                    bool isSubWidget = false,
+                    bool createLabel = true,
+                    bool needsLabelOnTop = false);
 
     void AfterConstructor();
 

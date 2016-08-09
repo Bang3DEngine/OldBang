@@ -14,7 +14,9 @@
 
 AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
                                  InspectorWidget *inspectorWidget,
-                                 bool createLabel) :
+                                 bool isSubWidget,
+                                 bool createLabel,
+                                 bool needsLabelOnTop) :
     IDroppableQWidget(),
     m_inspectorWidget(inspectorWidget)
 {
@@ -23,15 +25,30 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     m_inlined  =  xmlAttribute.HasProperty(XMLProperty::Inline);
     m_hidden   =  xmlAttribute.HasProperty(XMLProperty::Hidden);
 
-    if (m_inlined) { m_layout = new QHBoxLayout(); }
-    else { m_layout = new QVBoxLayout(); }
-    setLayout(m_layout);
+    m_layout = new QHBoxLayout();
     m_layout->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     m_layout->setMargin(0);
+    setLayout(m_layout);
 
-    if (createLabel)
+    if (!m_hidden && !isSubWidget)
     {
-        AddLabelWidget(xmlAttribute, m_layout);
+        QString label = "";
+        if (createLabel)
+        {
+            label = QString::fromStdString(xmlAttribute.GetName());
+        }
+
+        QFormLayout *fmLayout = m_inspectorWidget->GetFormLayout();
+        if (needsLabelOnTop)
+        {
+            QLabel *ql = new QLabel(label);
+            fmLayout->addRow(ql);
+            fmLayout->addRow(this);
+        }
+        else
+        {
+            fmLayout->addRow(label, this);
+        }
     }
 
     setEnabled(m_enabled);
@@ -45,21 +62,6 @@ void AttributeWidget::AfterConstructor()
     setFocusPolicy(Qt::FocusPolicy::ClickFocus);
     adjustSize();
     show();
-}
-
-void AttributeWidget::AddLabelWidget(const XMLAttribute &xmlAttribute,
-                                     QBoxLayout *layout)
-{
-    std::string label = xmlAttribute.GetName();
-    std::string fLabel = StringUtils::FormatInspectorLabel(label);
-    QLabel *labelField = new QLabel(QString(fLabel.c_str()));
-    labelField->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    labelField->show();
-
-    layout->addWidget(labelField, 100);
-
-    labelField->setMaximumHeight(15);
-    labelField->setMargin(0);
 }
 
 void AttributeWidget::Refresh(const XMLAttribute &attribute)
@@ -82,7 +84,15 @@ AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttrib
 
     if (xmlAttribute.HasVectoredType())
     {
-        w = new AttrWidgetVectorFloat(xmlAttribute, inspectorWidget);
+        int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
+        if (numberOfFields == 1)
+        {
+            w = new AttrWidgetFloat(xmlAttribute, inspectorWidget, false);
+        }
+        else
+        {
+            w = new AttrWidgetVectorFloat(xmlAttribute, inspectorWidget);
+        }
     }
     else if (attrType == XMLAttribute::Type::File)
     {

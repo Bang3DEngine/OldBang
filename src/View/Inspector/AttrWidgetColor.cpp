@@ -9,9 +9,9 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
 
     m_colorDialog = new ColorDialog();
     m_colorLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
-    RefreshLabelColor();
 
     layout->addWidget(m_colorLabel);
+    m_colorLabel->SetColor(m_selectedColor);
 
     connect(m_colorDialog, SIGNAL(currentColorChanged(const QColor&)),
           this, SLOT(OnColorChanged(const QColor&)));
@@ -25,16 +25,10 @@ AttrWidgetColor::~AttrWidgetColor()
     delete m_colorLabel;
 }
 
-void AttrWidgetColor::RefreshLabelColor()
-{
-    m_colorLabel->SetColor(m_selectedColor);
-    m_inspectorWidget->_OnSlotValueChanged();
-}
-
 void AttrWidgetColor::SetValue(const Color &c)
 {
     m_selectedColor = c;
-    RefreshLabelColor();
+    m_colorLabel->SetColor(m_selectedColor);
 }
 
 const Color& AttrWidgetColor::GetValue() const
@@ -52,6 +46,7 @@ void AttrWidgetColor::Refresh(const XMLAttribute &attribute)
 void AttrWidgetColor::OnColorChanged(const QColor &c)
 {
     SetValue(Color::FromQColor(c));
+    m_inspectorWidget->_OnSlotValueChanged();
 }
 
 
@@ -78,6 +73,8 @@ ColorLabel::ColorLabel(QWidget *parent,
 {
     m_colorDialog = colorDialog;
     m_selectedColor = selectedColor;
+    setMinimumHeight(10);
+    setMaximumHeight(10);
 }
 
 void ColorLabel::SetColor(const Color &c)

@@ -65,10 +65,10 @@ QWidget:item:selected
 
 QCheckBox
 {
-    spacing: 5px;
+    spacing: 2px;
     outline: none;
     color: #bbb;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
     background:transparent;
     background-color:transparent;
 }
@@ -80,8 +80,8 @@ QCheckBox:disabled
 QCheckBox::indicator,
 QGroupBox::indicator
 {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
 }
 QGroupBox::indicator
 {

@@ -50,6 +50,11 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     m_titleLayout->addWidget(m_titleLabel, 100);
     m_titleLayout->setContentsMargins(0, 0, 0, 5);
 
+    m_formLayout = new QFormLayout();
+    m_formLayout->setLabelAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    m_formLayout->setSpacing(0);
+    m_mainVerticalLayout->addLayout(m_formLayout, 100);
+
     CreateWidgetSlots(xmlInfo);
     RefreshWidgetValues(); // Initial catch of values
     adjustSize();
@@ -107,25 +112,30 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
             AttributeWidget *aw = m_attrNameToAttrWidget[attrName];
             if (attribute.HasVectoredType())
             {
-                AttrWidgetVectorFloat *awv = static_cast<AttrWidgetVectorFloat*>(aw);
-                std::vector<float> v = awv->GetValue();
                 if (attrType == XMLAttribute::Type::Float)
                 {
-                    attribute.SetFloat(v[0], attribute.GetProperties());
+                    AttrWidgetFloat *wf = static_cast<AttrWidgetFloat*>(aw);
+                    float v = wf->GetValue();
+                    attribute.SetFloat(v, attribute.GetProperties());
                 }
-                else if (attrType == XMLAttribute::Type::Vector2)
+                else
                 {
-                    attribute.SetVector2(Vector2(v[0], v[1]), attribute.GetProperties());
-                }
-                else if (attrType == XMLAttribute::Type::Vector3)
-                {
-                    attribute.SetVector3(Vector3(v[0], v[1], v[2]), attribute.GetProperties());
-                }
-                else if (attrType == XMLAttribute::Type::Vector4 ||
-                         attrType == XMLAttribute::Type::Quaternion ||
-                         attrType == XMLAttribute::Type::Rect)
-                {
-                    attribute.SetVector4(Vector4(v[0], v[1], v[2], v[3]), attribute.GetProperties());
+                    AttrWidgetVectorFloat *awv = static_cast<AttrWidgetVectorFloat*>(aw);
+                    std::vector<float> v = awv->GetValue();
+                    if (attrType == XMLAttribute::Type::Vector2)
+                    {
+                        attribute.SetVector2(Vector2(v[0], v[1]), attribute.GetProperties());
+                    }
+                    else if (attrType == XMLAttribute::Type::Vector3)
+                    {
+                        attribute.SetVector3(Vector3(v[0], v[1], v[2]), attribute.GetProperties());
+                    }
+                    else if (attrType == XMLAttribute::Type::Vector4 ||
+                             attrType == XMLAttribute::Type::Quaternion ||
+                             attrType == XMLAttribute::Type::Rect)
+                    {
+                        attribute.SetVector4(Vector4(v[0], v[1], v[2], v[3]), attribute.GetProperties());
+                    }
                 }
             }
             else if (attrType == XMLAttribute::Type::File)
@@ -161,6 +171,11 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
     }
 
     return xmlInfo;
+}
+
+QFormLayout *InspectorWidget::GetFormLayout() const
+{
+    return m_formLayout;
 }
 
 void InspectorWidget::SetTitle(const std::string &title)
@@ -200,7 +215,6 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         if (w)
         {
             m_attrNameToAttrWidget[attribute.GetName()] = w;
-            m_mainVerticalLayout->addWidget(w, 1);
             w->adjustSize();
             w->show();
         }

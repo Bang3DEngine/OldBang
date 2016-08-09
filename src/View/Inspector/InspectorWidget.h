@@ -14,6 +14,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QTextEdit>
+#include <QFormLayout>
 #include <QPushButton>
 #include <QListWidget>
 #include <QDoubleSpinBox>
@@ -55,6 +56,7 @@ private:
 protected:
     IInspectable *m_relatedInspectable = nullptr;
 
+    QFormLayout *m_formLayout = nullptr;
     QVBoxLayout *m_mainVerticalLayout = nullptr;
     QHBoxLayout *m_titleLayout = nullptr;
     QLabel *m_titleLabel = nullptr;
@@ -81,6 +83,8 @@ public:
      * @return An XMLNode with the updated information
      */
     XMLNode GetWidgetXMLInfo() const;
+
+    QFormLayout *GetFormLayout() const;
 
     void SetTitle(const std::string &title);
 

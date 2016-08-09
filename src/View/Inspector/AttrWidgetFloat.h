@@ -18,8 +18,12 @@ private:
     bool _editing = false;
 
 public:
+
+    // isSubWidget indicates if it belongs to another parent attributeWidget,
+    // such as AttrWidgetFloat's inside AttrWidgetVectorFloat
     AttrWidgetFloat(const XMLAttribute &xmlAttribute,
-                    InspectorWidget *m_inspectorWidget);
+                    InspectorWidget *m_inspectorWidget,
+                    bool isSubWidget = false);
 
     virtual void SetValue(float f);
     virtual float GetValue();
@@ -39,6 +43,7 @@ public:
     {
         //connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
         //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        setMinimumWidth(0);
         AdjustStep(value());
         installEventFilter(this);
         updateGeometry();

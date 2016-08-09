@@ -2,7 +2,7 @@
 
 AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
                                              InspectorWidget *inspectorWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget)
+    AttributeWidget(xmlAttribute, inspectorWidget, false, true, true)
 {
     QHBoxLayout *hLayout = new QHBoxLayout();
     m_layout->addLayout(hLayout, 1);
@@ -12,7 +12,7 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
     int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
     for (unsigned int i = 0; i < numberOfFields; ++i)
     {
-        AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget);
+        AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget, true);
         m_floatSlots.push_back(s);
         hLayout->addWidget(s, 1, Qt::AlignLeft | Qt::AlignTop);
     }

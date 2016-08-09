@@ -2,7 +2,7 @@
 
 AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
                                    InspectorWidget *inspectorWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget, false)
+    AttributeWidget(xmlAttribute, inspectorWidget, false, false)
 {
     QLayout *layout = new QVBoxLayout();
     m_layout->addLayout(layout, 1);

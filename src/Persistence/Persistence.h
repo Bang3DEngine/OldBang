@@ -20,6 +20,7 @@ public:
     static std::string GetAssetsPathAbsolute();
 
     static std::string GetDir(const std::string &filepath);
+    static std::string GetFileName(const std::string &filepath);
     static std::string GetFileNameWithExtension(const std::string &filepath);
 
     // ./Assets/lolol/a.bmesh => /home/wololo/MyProject/Assets/lolol/a.bmesh

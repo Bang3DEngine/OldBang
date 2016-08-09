@@ -46,7 +46,9 @@ void AttrWidgetFile::SetValue(const std::string &filepath, bool draggedFile)
     if (m_filepath != filepath)
     {
         m_filepath = filepath;
-        m_filepathLineEdit->setText(QString::fromStdString(filepath));
+
+        std::string value = Persistence::GetFileName(m_filepath);
+        m_filepathLineEdit->setText(QString::fromStdString(value));
     }
 
     if (draggedFile)
