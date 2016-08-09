@@ -348,7 +348,7 @@ QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus
 QLineEdit
 {
     background-color: #201F1F;
-    padding: 2px;
+    padding: px;
     border-style: solid;
     border: 1px solid #3A3939;
     border-radius: 2px;
@@ -390,7 +390,7 @@ QScrollBar:horizontal
 QScrollBar::handle:horizontal
 {
     background-color: #605F5F;
-    min-width: 5px;
+    min-width: 3px;
     border-radius: 4px;
 }
 

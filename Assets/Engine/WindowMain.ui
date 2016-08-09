@@ -349,12 +349,6 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <property name="minimumSize">
-    <size>
-     <width>300</width>
-     <height>178</height>
-    </size>
-   </property>
    <property name="floating">
     <bool>false</bool>
    </property>
@@ -388,8 +382,14 @@
       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1">
        <item>
         <widget class="QLabel" name="labelInspectorGameObjectName">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
-          <string>GameObject Name</string>
+          <string/>
          </property>
         </widget>
        </item>

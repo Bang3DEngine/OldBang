@@ -14,7 +14,7 @@ class AttrWidgetFloat : public AttributeWidget //Slot for a float (label + float
     Q_OBJECT
 
 private:
-    FloatComponentSlotSpinBox *m_spinbox = nullptr;
+    FloatComponentSlotSpinBox *m_lineEdit = nullptr;
     bool _editing = false;
 
 public:
@@ -30,44 +30,53 @@ public:
 
     virtual void Refresh(const XMLAttribute &attribute) override;
 
-    virtual void OnSpinBoxFocusIn();
-    virtual void OnSpinBoxFocusOut();
+    virtual void OnLineEditFocusIn();
+    virtual void OnLineEditFocusOut();
 };
 
-class FloatComponentSlotSpinBox : public QDoubleSpinBox //Slot for a float (label + float)
+class FloatComponentSlotSpinBox : public QLineEdit //Slot for a float (label + float)
 {
     Q_OBJECT
 
 public:
-    FloatComponentSlotSpinBox() : QDoubleSpinBox()
+    FloatComponentSlotSpinBox() : QLineEdit()
     {
         //connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
-        //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        setMinimumWidth(0);
-        AdjustStep(value());
+        setMinimumWidth(15);
+        setFixedHeight(18);
+        //AdjustStep();
         installEventFilter(this);
-        updateGeometry();
-        show();
     }
 
     virtual void focusInEvent(QFocusEvent * event) override
     {
-        QDoubleSpinBox::focusInEvent(event);
-        AdjustStep(value());
+        QLineEdit::focusInEvent(event);
+        //AdjustStep();
         QTimer::singleShot(50, this, SLOT(SelectAll()));
-        static_cast<AttrWidgetFloat*>(parent())->OnSpinBoxFocusIn();
+        static_cast<AttrWidgetFloat*>(parent())->OnLineEditFocusIn();
     }
 
     virtual void focusOutEvent(QFocusEvent * event) override
     {
-        QDoubleSpinBox::focusOutEvent(event);
-        AdjustStep(value());
-        static_cast<AttrWidgetFloat*>(parent())->OnSpinBoxFocusOut();
+        QLineEdit::focusOutEvent(event);
+        //AdjustStep();
+        static_cast<AttrWidgetFloat*>(parent())->OnLineEditFocusOut();
     }
 
     virtual void  keyPressEvent(QKeyEvent *event) override
     {
-        QDoubleSpinBox::keyPressEvent(event);
+        QLineEdit::keyPressEvent(event);
+
+        if (event->key() == Qt::Key::Key_Enter)
+        {
+            clearFocus();
+        }
+        else if (event->key() == Qt::Key::Key_Up)
+        {
+        }
+        else if (event->key() == Qt::Key::Key_Down)
+        {
+        }
     }
 
     bool eventFilter(QObject *obj, QEvent *event)
@@ -80,11 +89,24 @@ public:
         return false;
     }
 
-public slots:
-    void AdjustStep(double v)
+    void SetFloat(float f)
     {
-        if (std::abs(v) <= 1.0f) setSingleStep(0.1f);
-        else setSingleStep( pow(10.0, int(log10(v == 0.0f ? 0.1f : std::abs(v)))-1) );
+        std::string str = StringUtils::FromFloat(f, 2);
+        setText(QString::fromStdString(str));
+    }
+
+    float GetFloat() const
+    {
+        std::string str = text().toStdString();
+        StringUtils::Replace(&str, ",", ".");
+        return StringUtils::ToFloat(str);
+    }
+
+public slots:
+    void AdjustStep()
+    {
+        //if (std::abs(v) <= 1.0f) setSingleStep(0.1f);
+        //else setSingleStep( pow(10.0, int(log10(v == 0.0f ? 0.1f : std::abs(v)))-1) );
     }
 
     void SelectAll()

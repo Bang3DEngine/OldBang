@@ -12,21 +12,21 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
 
     m_filepathLineEdit = new FileLineEdit();
     m_filepathLineEdit->setReadOnly(m_readonly);
+    m_filepathLineEdit->setAlignment(Qt::AlignLeft);
     hLayout->addWidget(m_filepathLineEdit, 100);
 
     if (!m_readonly)
     {
         hLayout->addStretch(1); // add little spacer
         QPushButton *browseButton = new QPushButton(QString("Browse"));
+        browseButton->setFixedHeight(24);
         connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
-        hLayout->addWidget(browseButton, 20, Qt::AlignRight);
+        hLayout->addWidget(browseButton, 20, Qt::AlignRight | Qt::AlignVCenter);
     }
 
     connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
             this, SLOT(OnDoubleClick()));
 
-    setMinimumHeight(50);
-    setMaximumHeight(50);
     AfterConstructor();
 }
 
@@ -101,7 +101,8 @@ FileLineEdit::FileLineEdit(QWidget *parent) : QLineEdit(parent)
     connect (this, SIGNAL(selectionChanged()),
              this, SLOT(Deselect()));
 
-    setAlignment(Qt::AlignmentFlag::AlignRight);
+    setFixedHeight(24);
+    setAlignment(Qt::AlignmentFlag::AlignLeft);
 }
 
 void FileLineEdit::mouseDoubleClickEvent(QMouseEvent *e)

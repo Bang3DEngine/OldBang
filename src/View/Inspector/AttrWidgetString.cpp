@@ -41,13 +41,11 @@ void AttrWidgetString::SetValue(const std::string &value)
         {
             //disconnect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
             m_lineEdit->setText( QString::fromStdString(value) );
-            m_lineEdit->show();
             //connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
         }
         else if (m_textEdit)
         {
             m_textEdit->setText( QString::fromStdString(value) );
-            m_textEdit->show();
         }
     }
 }

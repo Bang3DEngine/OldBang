@@ -19,14 +19,14 @@ InspectorWidget::InspectorWidget() : IDroppableQWidget()
 {
 }
 
-InspectorWidget::InspectorWidget(const std::string &title,
-                                 IInspectable *relatedInspectable) : InspectorWidget()
+void InspectorWidget::Init(const std::string &title, IInspectable *relatedInspectable)
 {
     m_relatedInspectable = relatedInspectable;
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
     ConstructFromWidgetXMLInfo(title, xmlInfo);
 
+    setMinimumWidth(40);
     setAcceptDrops(true);
 }
 
@@ -57,8 +57,6 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
     CreateWidgetSlots(xmlInfo);
     RefreshWidgetValues(); // Initial catch of values
-    adjustSize();
-    show();
 
     m_created = true;
 
@@ -78,7 +76,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
 InspectorWidget::~InspectorWidget()
 {
-    //m_updateTimer->stop();
+    m_updateTimer->stop();
     delete m_updateTimer;
 }
 
@@ -216,7 +214,6 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         {
             m_attrNameToAttrWidget[attribute.GetName()] = w;
             w->adjustSize();
-            w->show();
         }
     }
 }

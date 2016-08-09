@@ -9,21 +9,16 @@ AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
     m_layout->addLayout(layout, 1);
     m_layout->setMargin(1);
 
-    m_spinbox = new FloatComponentSlotSpinBox();
-    m_spinbox->setAlignment(Qt::AlignLeft);
-    m_spinbox->setMaximum( 9999999999999999.9f);
-    m_spinbox->setMinimum(-9999999999999999.9f);
-    m_spinbox->setAccelerated(true);
-    m_spinbox->adjustSize();
-    m_spinbox->show();
+    m_lineEdit = new FloatComponentSlotSpinBox();
+    m_lineEdit->setAlignment(Qt::AlignLeft);
+    // m_spinbox->setMaximum( 9999999999999999.9f);
+    // m_spinbox->setMinimum(-9999999999999999.9f);
 
-    layout->addWidget(m_spinbox);
+    layout->addWidget(m_lineEdit);
 
-    setMinimumWidth(25);
-    setMinimumHeight(25);
-    setMaximumHeight(25);
+    setMinimumWidth(15);
     setContentsMargins(0, 0, 0, 0);
-    m_spinbox->updateGeometry();
+    m_lineEdit->updateGeometry();
 
     AfterConstructor();
 }
@@ -32,18 +27,17 @@ void AttrWidgetFloat::SetValue(float f)
 {
     if (!_editing)
     {
-        disconnect(m_spinbox, SIGNAL(valueChanged(double)),
-                   m_inspectorWidget, SLOT(_OnSlotValueChanged(double)));
-        m_spinbox->setValue(f);
-        m_spinbox->show();
-        connect(m_spinbox, SIGNAL(valueChanged(double)),
-                m_inspectorWidget, SLOT(_OnSlotValueChanged(double)));
+        disconnect(m_lineEdit, SIGNAL(textChanged(QString)),
+                   m_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+        m_lineEdit->SetFloat(f);
+        connect(m_lineEdit, SIGNAL(textChanged(QString)),
+                m_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
     }
 }
 
 float AttrWidgetFloat::GetValue()
 {
-    return m_spinbox->value();
+    return m_lineEdit->GetFloat();
 }
 
 void AttrWidgetFloat::Refresh(const XMLAttribute &attribute)
@@ -54,19 +48,14 @@ void AttrWidgetFloat::Refresh(const XMLAttribute &attribute)
     SetValue( attribute.GetFloat() );
 }
 
-void AttrWidgetFloat::OnSpinBoxFocusIn()
+void AttrWidgetFloat::OnLineEditFocusIn()
 {
     _editing = true;
 }
 
-void AttrWidgetFloat::OnSpinBoxFocusOut()
+void AttrWidgetFloat::OnLineEditFocusOut()
 {
     _editing = false;
-    connect(m_spinbox, SIGNAL(valueChanged(double)),
-            m_inspectorWidget, SLOT(_OnSlotValueChanged(double)));
-    m_spinbox->setValue(m_spinbox->value());
-    disconnect(m_spinbox, SIGNAL(valueChanged(double)),
-               m_inspectorWidget, SLOT(_OnSlotValueChanged(double)));
 }
 
 

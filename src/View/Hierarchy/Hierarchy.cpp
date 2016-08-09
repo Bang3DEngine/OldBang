@@ -481,6 +481,7 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
     }*/
 
     WindowEventManager::NotifyHierarchyGameObjectsSelected(selectedGameObjects);
+    Inspector::GetInstance()->ShowGameObjectInfo(GetFirstSelectedGameObject());
 }
 
 void Hierarchy::_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column)

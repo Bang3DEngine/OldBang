@@ -26,6 +26,7 @@ Inspector::Inspector(QWidget *parent) : QListWidget(parent)
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
+    setMinimumWidth(300);
 }
 
 void Inspector::updateGeometries()
@@ -47,9 +48,6 @@ void Inspector::Clear()
     }
     m_currentInspectorWidgets.clear();
     m_currentInspectables.clear();
-
-    setStyleSheet("/* */"); //without this line we get resize problems :)
-    show();
 }
 
 void Inspector::Refresh()
@@ -64,7 +62,9 @@ void Inspector::Refresh()
 void Inspector::SetInspectable(IInspectable *inspectable, const std::string &title)
 {
     Clear();
-    m_currentInspectorWidgets.push_back(new InspectorWidget(title, inspectable));
+    InspectorWidget *iw = new InspectorWidget();
+    iw->Init(title, inspectable);
+    m_currentInspectorWidgets.push_back(iw);
     m_currentInspectables.push_back(inspectable);
     AddWidget(m_currentInspectorWidgets[0]);
 }
@@ -90,8 +90,6 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable)
 {
     ShowGameObjectInfo(prefabInspectable->GetPrefabTempGameObject());
-    // We need this line to make IsShowingInspectable work with
-    // this prefab fileInspectable
     m_currentInspectables.push_back(prefabInspectable);
 }
 
@@ -105,12 +103,6 @@ void Inspector::AddWidget(InspectorWidget *widget)
 
     setItemWidget(item, widget);
     item->setSizeHint(widget->size()); // error aqui
-    widget->adjustSize();
-    widget->show();
-
-    adjustSize();
-    setStyleSheet("/* */"); //without this line we get resize problems :)
-    show();
 }
 
 void Inspector::MoveUp(InspectorWidget *w)
@@ -127,18 +119,6 @@ void Inspector::MoveDown(InspectorWidget *w)
     if (lastRow == this->count()) return;
     QListWidgetItem *item = takeItem(lastRow);
     insertItem(lastRow+1, item);
-}
-
-void Inspector::OnTreeHierarchyGameObjectsSelected
-    (std::list<GameObject*> &selectedEntities)
-{
-    GameObject *e = nullptr;
-    if (!selectedEntities.empty())
-    {
-        e = selectedEntities.front();
-    }
-
-    ShowGameObjectInfo(e);
 }
 
 std::vector<IInspectable *> Inspector::GetCurrentInspectables() const

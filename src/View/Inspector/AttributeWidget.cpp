@@ -27,15 +27,22 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
 
     m_layout = new QHBoxLayout();
     m_layout->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    m_layout->setMargin(0);
+    m_layout->setContentsMargins(4, 4, 4, 4);
     setLayout(m_layout);
+    setMinimumWidth(40);
+    if (!needsLabelOnTop)
+    {
+        m_layout->addSpacing(10);
+    }
 
     if (!m_hidden && !isSubWidget)
     {
         QString label = "";
         if (createLabel)
         {
-            label = QString::fromStdString(xmlAttribute.GetName());
+            std::string name = xmlAttribute.GetName();
+            name = StringUtils::FormatInspectorLabel(name);
+            label = QString::fromStdString(name);
         }
 
         QFormLayout *fmLayout = m_inspectorWidget->GetFormLayout();
@@ -58,10 +65,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
 
 void AttributeWidget::AfterConstructor()
 {
-    updateGeometry();
     setFocusPolicy(Qt::FocusPolicy::ClickFocus);
-    adjustSize();
-    show();
 }
 
 void AttributeWidget::Refresh(const XMLAttribute &attribute)

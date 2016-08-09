@@ -55,6 +55,13 @@ int StringUtils::ToInt(const std::string &str, bool *ok)
     return v;
 }
 
+std::string StringUtils::FromFloat(float f, int precision)
+{
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(precision) << f;
+    return oss.str();
+}
+
 void StringUtils::TrimLeft(std::string *str)
 {
     if(str->length() == 0)

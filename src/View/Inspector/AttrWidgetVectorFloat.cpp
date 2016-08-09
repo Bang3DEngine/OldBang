@@ -9,15 +9,24 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
 
+    std::string labels[] = {"X", "Y", "Z", "W"};
     int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
     for (unsigned int i = 0; i < numberOfFields; ++i)
     {
         AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget, true);
         m_floatSlots.push_back(s);
-        hLayout->addWidget(s, 1, Qt::AlignLeft | Qt::AlignTop);
+
+        QLabel *label = new QLabel(QString::fromStdString(labels[i]));
+        if (i != 0)
+        {
+            hLayout->addSpacing(5);
+        }
+        hLayout->addWidget(label, 0, Qt::AlignRight | Qt::AlignVCenter);
+        hLayout->addWidget(s, 0, Qt::AlignLeft | Qt::AlignVCenter);
     }
 
-    setMinimumHeight(40);
+    setMinimumWidth(40);
+    setFixedHeight(20);
     AfterConstructor();
 }
 
@@ -48,7 +57,7 @@ float AttrWidgetVectorFloat::GetFloat() const
 Vector2 AttrWidgetVectorFloat::GetVector2() const
 {
     return Vector2(m_floatSlots[0]->GetValue(),
-                     m_floatSlots[1]->GetValue());
+                   m_floatSlots[1]->GetValue());
 }
 
 Vector3 AttrWidgetVectorFloat::GetVector3() const

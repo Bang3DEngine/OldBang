@@ -4,17 +4,13 @@ AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :
     AttributeWidget(xmlAttribute, inspectorWidget)
 {
-    QBoxLayout *layout = new QHBoxLayout();
-    m_layout->addLayout(layout, 1);
-
     m_checkbox = new CheckboxWidget();
-    layout->addWidget(m_checkbox, 1, Qt::AlignRight);
+    m_layout->addWidget(m_checkbox, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
     connect(m_checkbox, SIGNAL(stateChanged(int)),
             inspectorWidget, SLOT(_OnSlotValueChanged(int)));
 
-    setMinimumHeight(40);
-    setMaximumHeight(40);
+    setFixedHeight(25);
     AfterConstructor();
 }
 

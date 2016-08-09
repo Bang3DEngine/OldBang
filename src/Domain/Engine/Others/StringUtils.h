@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <iomanip>
 #include <algorithm>
 
 class StringUtils
@@ -18,6 +19,7 @@ public:
     static bool Contains(const std::string &str, const std::string &whatToFind);
     static float ToFloat(const std::string &str, bool *ok = nullptr);
     static int ToInt(const std::string &str, bool *ok = nullptr);
+    static std::string FromFloat(float f, int precision = 6);
 
     static void TrimLeft(std::string *str);
     static void TrimRight(std::string *str);

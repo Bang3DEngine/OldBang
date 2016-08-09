@@ -5,9 +5,10 @@
 #include "WindowMain.h"
 
 ComponentWidget::ComponentWidget(Component *relatedComponent) :
-    InspectorWidget(relatedComponent->GetName(),
-                    relatedComponent)
+    InspectorWidget()
 {
+    Init(relatedComponent->GetName(), relatedComponent);
+
     m_relatedComponent = relatedComponent;
 
     if (relatedComponent->GetName() != "Transform")
@@ -45,7 +46,6 @@ void ComponentWidget::OnCustomContextMenuRequested(QPoint point)
         connect(&actionRemoveComponent, SIGNAL(triggered()),
                 this, SLOT(OnContextMenuRemoveComponentSelected()));
         contextMenu.addAction(&actionRemoveComponent);
-        Logger_Log("hola");
     }
     contextMenu.exec(mapToGlobal(point));
 }

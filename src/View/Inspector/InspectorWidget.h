@@ -63,8 +63,8 @@ protected:
 
 public:
     InspectorWidget();
-    explicit InspectorWidget(const std::string &title,
-                             IInspectable *relatedInspectable);
+    void Init(const std::string &title,
+              IInspectable *relatedInspectable);
 
     virtual ~InspectorWidget();
 

@@ -45,7 +45,6 @@ public:
     void MoveDown(InspectorWidget *w);
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
-    void OnTreeHierarchyGameObjectsSelected(std::list<GameObject*> &selectedEntities);
 
     std::vector<IInspectable*> GetCurrentInspectables() const;
     bool IsShowingInspectable(IInspectable *inspectable) const;
