@@ -13,6 +13,8 @@ AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute,
     connect(m_checkbox, SIGNAL(stateChanged(int)),
             inspectorWidget, SLOT(_OnSlotValueChanged(int)));
 
+    setMinimumHeight(40);
+    setMaximumHeight(40);
     AfterConstructor();
 }
 

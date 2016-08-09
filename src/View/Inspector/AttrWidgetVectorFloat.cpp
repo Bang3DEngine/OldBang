@@ -6,15 +6,18 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
 {
     QHBoxLayout *hLayout = new QHBoxLayout();
     m_layout->addLayout(hLayout, 1);
+    m_layout->setSpacing(0);
+    m_layout->setMargin(0);
 
     int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
     for (unsigned int i = 0; i < numberOfFields; ++i)
     {
         AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget);
         m_floatSlots.push_back(s);
-        hLayout->addWidget(s, 1, Qt::AlignCenter | Qt::AlignVCenter);
+        hLayout->addWidget(s, 1, Qt::AlignLeft | Qt::AlignTop);
     }
 
+    setMinimumHeight(40);
     AfterConstructor();
 }
 
@@ -58,9 +61,9 @@ Vector3 AttrWidgetVectorFloat::GetVector3() const
 Vector4 AttrWidgetVectorFloat::GetVector4() const
 {
     return Vector4(m_floatSlots[0]->GetValue(),
-                     m_floatSlots[1]->GetValue(),
-                     m_floatSlots[2]->GetValue(),
-                     m_floatSlots[3]->GetValue());
+                   m_floatSlots[1]->GetValue(),
+                   m_floatSlots[2]->GetValue(),
+                   m_floatSlots[3]->GetValue());
 }
 
 void AttrWidgetVectorFloat::Refresh(const XMLAttribute &attribute)

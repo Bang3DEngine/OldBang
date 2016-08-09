@@ -30,6 +30,7 @@ void ComponentWidget::OnCustomContextMenuRequested(QPoint point)
 
     QAction actionMoveComponentUp("Move up", this);
     QAction actionMoveComponentDown("Move down", this);
+    QAction actionRemoveComponent("Remove Component", this);
 
     connect(&actionMoveComponentUp, SIGNAL(triggered()),
             this, SLOT(OnContextMenuMoveUpSelected()));
@@ -41,10 +42,10 @@ void ComponentWidget::OnCustomContextMenuRequested(QPoint point)
 
     if (m_relatedComponent->GetName() != "Transform")
     {
-        QAction actionRemoveComponent("Remove Component", this);
         connect(&actionRemoveComponent, SIGNAL(triggered()),
                 this, SLOT(OnContextMenuRemoveComponentSelected()));
         contextMenu.addAction(&actionRemoveComponent);
+        Logger_Log("hola");
     }
     contextMenu.exec(mapToGlobal(point));
 }

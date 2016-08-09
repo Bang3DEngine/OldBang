@@ -25,6 +25,8 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
             this, SLOT(OnDoubleClick()));
 
+    setMinimumHeight(50);
+    setMaximumHeight(50);
     AfterConstructor();
 }
 

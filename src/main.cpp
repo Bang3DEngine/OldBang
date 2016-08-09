@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 
     QFont font;
     font.setFamily(font.defaultFamily());
-    font.setPixelSize(11);
+    font.setPixelSize(10);
     app.setFont(font);
 
     WindowMain::InitFromMainBinary(window, &app);

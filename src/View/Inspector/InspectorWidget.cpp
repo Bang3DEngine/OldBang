@@ -34,13 +34,11 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
         const std::string &title, XMLNode &xmlInfo, bool autoUpdate)
 {
     m_mainVerticalLayout = new QVBoxLayout();
-    m_mainVerticalLayout->setSpacing(0);
-    m_mainVerticalLayout->setMargin(0);
+    m_mainVerticalLayout->setMargin(10);
     setLayout(m_mainVerticalLayout);
 
     m_titleLayout = new QHBoxLayout();
-    m_titleLayout->setMargin(8);
-    m_mainVerticalLayout->addLayout(m_titleLayout, 0);
+    m_mainVerticalLayout->addLayout(m_titleLayout, 1);
 
     std::string fTitle = StringUtils::FormatInspectorLabel(title);
     m_titleLabel = new QLabel( QString(fTitle.c_str()) );
@@ -50,10 +48,11 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     m_titleLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     m_titleLayout->addWidget(m_titleLabel, 100);
+    m_titleLayout->setContentsMargins(0, 0, 0, 5);
 
     CreateWidgetSlots(xmlInfo);
-
     RefreshWidgetValues(); // Initial catch of values
+    adjustSize();
     show();
 
     m_created = true;
@@ -202,6 +201,7 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         {
             m_attrNameToAttrWidget[attribute.GetName()] = w;
             m_mainVerticalLayout->addWidget(w, 1);
+            w->adjustSize();
             w->show();
         }
     }

@@ -6,10 +6,10 @@ AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
 {
     QVBoxLayout *layout = new QVBoxLayout();
     m_layout->addLayout(layout, 1);
-    layout->setMargin(0);
+    m_layout->setMargin(1);
 
     m_spinbox = new FloatComponentSlotSpinBox();
-    m_spinbox->setAlignment(Qt::AlignHCenter);
+    m_spinbox->setAlignment(Qt::AlignLeft);
     m_spinbox->setMaximum( 9999999999999999.9f);
     m_spinbox->setMinimum(-9999999999999999.9f);
     m_spinbox->setAccelerated(true);
@@ -18,6 +18,10 @@ AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
 
     layout->addWidget(m_spinbox);
 
+    setMinimumHeight(25);
+    setMaximumHeight(25);
+    setContentsMargins(0, 0, 0, 0);
+    m_spinbox->updateGeometry();
     AfterConstructor();
 }
 
@@ -26,9 +30,9 @@ void AttrWidgetFloat::SetValue(float f)
     if (!_editing)
     {
         disconnect(m_spinbox, SIGNAL(valueChanged(double)), m_inspectorWidget, SLOT(_OnSlotValueChanged(double)));
+        connect(m_spinbox, SIGNAL(valueChanged(double)), m_inspectorWidget, SLOT(_OnSlotValueChanged(double)));
         m_spinbox->setValue(f);
         m_spinbox->show();
-        connect(m_spinbox, SIGNAL(valueChanged(double)), m_inspectorWidget, SLOT(_OnSlotValueChanged(double)));
     }
 }
 
@@ -57,4 +61,4 @@ void AttrWidgetFloat::OnSpinBoxFocusOut()
     disconnect(m_spinbox, SIGNAL(valueChanged(double)), m_inspectorWidget, SLOT(_OnSlotValueChanged(double)));
 }
 
-QSize AttrWidgetFloat::sizeHint() const { return QSize(10, 20); }
+

@@ -28,7 +28,6 @@ public:
 
     virtual void OnSpinBoxFocusIn();
     virtual void OnSpinBoxFocusOut();
-    QSize sizeHint() const override;
 };
 
 class FloatComponentSlotSpinBox : public QDoubleSpinBox //Slot for a float (label + float)
@@ -39,8 +38,11 @@ public:
     FloatComponentSlotSpinBox() : QDoubleSpinBox()
     {
         //connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
+        //setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         AdjustStep(value());
-        this->installEventFilter(this);
+        installEventFilter(this);
+        updateGeometry();
+        show();
     }
 
     virtual void focusInEvent(QFocusEvent * event) override
@@ -80,7 +82,10 @@ public slots:
         else setSingleStep( pow(10.0, int(log10(v == 0.0f ? 0.1f : std::abs(v)))-1) );
     }
 
-    void SelectAll() { selectAll(); }
+    void SelectAll()
+    {
+        selectAll();
+    }
 };
 
 #endif // INSPECTORFLOATSLOTWIDGET_H
