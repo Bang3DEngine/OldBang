@@ -1,5 +1,7 @@
 #include "MaterialAssetFile.h"
 
+#include "MaterialAssetFileInspectable.h"
+
 MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModelIndex *index) :
     File(model, index)
 {
@@ -19,6 +21,18 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModel
         m_diffuseColor = xmlInfo->GetVector4("DiffuseColor");
         delete xmlInfo;
     }
+}
+
+QPixmap MaterialAssetFile::GetIcon() const
+{
+    std::string fp = Persistence::ToAbsolute("./Assets/Engine/Icons/MaterialAssetIcon.png");
+    QPixmap pm(QString::fromStdString(fp));
+    return pm;
+}
+
+IInspectable *MaterialAssetFile::GetInspectable() const
+{
+    return new MaterialAssetFileInspectable(*this);
 }
 
 const std::string &MaterialAssetFile::GetVertexShaderFilepath() const

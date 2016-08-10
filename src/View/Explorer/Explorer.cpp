@@ -178,47 +178,14 @@ void Explorer::RefreshInspector()
     }
 
     IInspectable *newInspectable = nullptr;
-    if (f.IsImageFile()) // jpg, png, etc.
-    {
-        ImageFile fi(m_fileSystemModel, &clickedIndex);
-        newInspectable = new ImageFileInspectable(fi);
-    }
-    else if (f.IsTexture2DAsset()) // btex2d
-    {
-        Texture2DAssetFile ft(m_fileSystemModel, &clickedIndex);
-        newInspectable = new Texture2DAssetFileInspectable(ft);
-    }
-    else if (f.IsMeshFile()) // obj, etc.
-    {
-        MeshFile fm(m_fileSystemModel, &clickedIndex);
-        newInspectable = new MeshFileInspectable(fm);
-    }
-    else if (f.IsMeshAsset()) // bmesh
-    {
-        MeshAssetFile fm(m_fileSystemModel, &clickedIndex);
-        newInspectable = new MeshAssetFileInspectable(fm);
-    }
-    else if (f.IsMaterialAsset()) // bmat
-    {
-        MaterialAssetFile fm(m_fileSystemModel, &clickedIndex);
-        newInspectable = new MaterialAssetFileInspectable(fm);
-    }
-    else if (f.IsTextFile()) // txt, frag, vert, etc.
-    {
-        TextFile f(m_fileSystemModel, &clickedIndex);
-        newInspectable = new TextFileInspectable(f);
-    }
-    else if (f.IsDir())
-    {
-        // Dont clear, to make it easier to navigate without losing current
-        // inspectable in inspector
-    }
-    else
+    File *specificFile = File::GetSpecificFile(f);
+    newInspectable = specificFile->GetInspectable();
+    if (!newInspectable && !f.IsDir())
     {
         inspector->Clear();
     }
 
-    if (f.IsPrefabAsset()) // bprefab
+    if (f.IsPrefabAsset()) // bprefab special case
     {
         File f(m_fileSystemModel, &clickedIndex);
         PrefabAssetFileInspectable *prefabInspectable =
@@ -405,26 +372,12 @@ QVariant FileSystemModel::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::DecorationRole)
     {
-        File f(this, &index);
-        QPixmap *pm = nullptr;
-        if (f.IsMeshAsset())
+        File file(this, &index);
+        File *f = File::GetSpecificFile(file);
+        if (f)
         {
-            std::string fp = Persistence::ToAbsolute("./Assets/Engine/Icons/IconMesh.png");
-            pm = new QPixmap(QString::fromStdString(fp));
-        }
-        else if (f.IsMaterialAsset())
-        {
-            std::string fp = Persistence::ToAbsolute("./Assets/Engine/Icons/IconMaterial.png");
-            pm = new QPixmap(QString::fromStdString(fp));
-        }
-        else if (f.IsImageFile())
-        {
-            pm = new QPixmap(QString::fromStdString(f.GetAbsolutePath()));
-        }
-
-        if (pm)
-        {
-            return pm->scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
+            QPixmap pm = f->GetIcon();
+            return pm.scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
         }
     }
     return QFileSystemModel::data(index, role);

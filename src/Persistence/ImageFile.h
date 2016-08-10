@@ -15,6 +15,9 @@ protected:
 public:
     ImageFile(const QFileSystemModel *model, const QModelIndex *index);
 
+    virtual QPixmap GetIcon() const override;
+    virtual IInspectable *GetInspectable() const override;
+
     int GetWidth() const;
     int GetHeight() const;
     int GetNumComponents() const;

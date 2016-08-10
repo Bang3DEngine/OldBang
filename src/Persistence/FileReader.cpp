@@ -283,7 +283,7 @@ std::string FileReader::PeekNextLine(std::istream &f)
 
 std::string FileReader::GetContents(const std::string &filepath)
 {
-    if (filepath == "") return nullptr;
+    if (filepath == "") return "";
 
     std::fstream f;
     f.open(filepath);

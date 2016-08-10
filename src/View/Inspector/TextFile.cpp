@@ -1,5 +1,7 @@
 #include "TextFile.h"
 
+#include "TextFileInspectable.h"
+
 TextFile::TextFile(const QFileSystemModel *model, const QModelIndex *index)
     : File(model, index)
 {
@@ -9,4 +11,9 @@ TextFile::TextFile(const QFileSystemModel *model, const QModelIndex *index)
 std::string TextFile::GetContents() const
 {
     return m_contents;
+}
+
+IInspectable *TextFile::GetInspectable() const
+{
+    return new TextFileInspectable(*this);
 }

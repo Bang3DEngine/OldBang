@@ -13,6 +13,9 @@ private:
 
 public:
     MeshAssetFile(const QFileSystemModel *model, const QModelIndex *index);
+    virtual QPixmap GetIcon() const override;
+    virtual IInspectable *GetInspectable() const override;
+
     const std::string& GetMeshFilepath() const;
 };
 

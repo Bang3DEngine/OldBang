@@ -16,6 +16,9 @@ class MeshFile : public File
 public:
     MeshFile(const QFileSystemModel *model, const QModelIndex *index);
 
+    virtual QPixmap GetIcon() const override;
+    virtual IInspectable *GetInspectable() const override;
+
     bool IsTriangles() const;
     bool HasUvs() const;
     bool HasNormals() const;
