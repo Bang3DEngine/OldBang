@@ -607,6 +607,7 @@ void GameObject::_OnDestroy()
     OnDestroy();
 }
 
+#ifdef BANG_EDITOR
 void GameObject::OnDrawGizmos()
 {
     Gizmos::Reset();
@@ -617,7 +618,6 @@ void GameObject::OnDrawGizmosNoDepth()
     Gizmos::Reset();
 }
 
-#ifdef BANG_EDITOR
 void GameObject::_OnDrawGizmos()
 {
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());

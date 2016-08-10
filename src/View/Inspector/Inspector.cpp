@@ -20,6 +20,7 @@ Inspector::Inspector(QWidget *parent) : QListWidget(parent)
     setAcceptDrops(true);
     setDragEnabled(true);
     setDropIndicatorShown(true);
+    setAlternatingRowColors(true);
     viewport()->setAcceptDrops(true);
     setDefaultDropAction(Qt::DropAction::MoveAction);
     setSelectionMode(QAbstractItemView::SingleSelection);

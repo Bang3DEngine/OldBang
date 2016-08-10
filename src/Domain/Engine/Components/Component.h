@@ -37,8 +37,10 @@ protected:
     Component();
     virtual ~Component();
 
+    #ifdef BANG_EDITOR
     virtual void OnDrawGizmos() override;
     virtual void OnDrawGizmosNoDepth() override;
+    #endif
 
 public:
 

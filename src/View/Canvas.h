@@ -79,10 +79,12 @@ public:
     static void SetCursor(Qt::CursorShape cs);
 
 
+    #ifdef BANG_EDITOR
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
+    #endif
 
     void wheelEvent(QWheelEvent* event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

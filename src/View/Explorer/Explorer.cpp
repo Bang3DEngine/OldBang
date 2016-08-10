@@ -400,3 +400,32 @@ Qt::DropActions FileSystemModel::supportedDropActions() const
 {
     return Qt::MoveAction;
 }
+
+QVariant FileSystemModel::data(const QModelIndex &index, int role) const
+{
+    if (role == Qt::DecorationRole)
+    {
+        File f(this, &index);
+        QPixmap *pm = nullptr;
+        if (f.IsMeshAsset())
+        {
+            std::string fp = Persistence::ToAbsolute("./Assets/Engine/Icons/IconMesh.png");
+            pm = new QPixmap(QString::fromStdString(fp));
+        }
+        else if (f.IsMaterialAsset())
+        {
+            std::string fp = Persistence::ToAbsolute("./Assets/Engine/Icons/IconMaterial.png");
+            pm = new QPixmap(QString::fromStdString(fp));
+        }
+        else if (f.IsImageFile())
+        {
+            pm = new QPixmap(QString::fromStdString(f.GetAbsolutePath()));
+        }
+
+        if (pm)
+        {
+            return pm->scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
+        }
+    }
+    return QFileSystemModel::data(index, role);
+}

@@ -14,11 +14,11 @@ message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
 # CONFIG += EDITOR
 # CONFIG += GAME
+CONFIG += qt
 
 include(deployment.pri)
 qtcAddDeployment()
 
-CONFIG += qt
 
 QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC -O2
 
@@ -56,14 +56,14 @@ INCLUDEPATH += \
     $$PWD/src/Persistence/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/src/View/ \
-    $$PWD/BangPreprocessor/GeneratedFiles/
+    $$PWD/BangPreprocessor/GeneratedFiles/ \
+    $$PWD/src/View/Inspector/ \
 
 EDITOR {
     INCLUDEPATH += \
         $$PWD/src/View/ \
         $$PWD/src/View/Interfaces/ \
         $$PWD/src/View/Dialogs/ \
-        $$PWD/src/View/Inspector/ \
         $$PWD/src/View/Hierarchy/ \
         $$PWD/src/View/Explorer/ \
         $$PWD/src/View/Logger/ \
@@ -212,11 +212,7 @@ HEADERS += \
     src/Domain/Engine/Physics/Vector4.h \
     src/Domain/Engine/Physics/Vector2.h \
     src/Domain/Engine/Physics/Color.h \
-    src/View/Inspector/IAttrWidgetButtonListener.h \
-    src/View/Inspector/TextFileInspectable.h \
-    src/View/Inspector/TextFile.h \
-    src/View/Inspector/PrefabAssetFileInspectable.h \
-    src/View/Interfaces/IDroppableWidget.h
+    src/View/Inspector/IAttrWidgetButtonListener.h
 
 EDITOR {
 HEADERS += \
@@ -269,7 +265,11 @@ HEADERS += \
     src/View/EditorScene/EditorFloor.h \
     src/Domain/Engine/Others/Gizmos.h \
     src/View/Inspector/AttrWidgetBool.h \
-    src/View/Inspector/AttrWidgetColor.h
+    src/View/Inspector/AttrWidgetColor.h \
+    src/View/Inspector/TextFileInspectable.h \
+    src/View/Inspector/TextFile.h \
+    src/View/Inspector/PrefabAssetFileInspectable.h \
+    src/View/Interfaces/IDroppableWidget.h
 }
 
 GAME {
@@ -347,11 +347,7 @@ SOURCES += \
     src/Domain/Engine/Physics/Vector4.cpp \
     src/Domain/Engine/Physics/Vector2.cpp \
     src/Domain/Engine/Physics/Color.cpp \
-    src/View/Inspector/IAttrWidgetButtonListener.cpp \
-    src/View/Inspector/TextFileInspectable.cpp \
-    src/View/Inspector/TextFile.cpp \
-    src/View/Inspector/PrefabAssetFileInspectable.cpp \
-    src/View/Interfaces/IDroppableWidget.cpp
+    src/View/Inspector/IAttrWidgetButtonListener.cpp
 
 EDITOR {
     SOURCES += \
@@ -405,7 +401,11 @@ EDITOR {
         src/View/Inspector/AttrWidgetButton.cpp \
         src/Domain/Engine/Others/Gizmos.cpp \
         src/View/Inspector/AttrWidgetBool.cpp \
-        src/View/Inspector/AttrWidgetColor.cpp
+        src/View/Inspector/AttrWidgetColor.cpp \
+        src/View/Inspector/TextFileInspectable.cpp \
+        src/View/Inspector/TextFile.cpp \
+        src/View/Inspector/PrefabAssetFileInspectable.cpp \
+        src/View/Interfaces/IDroppableWidget.cpp
 }
 
 GAME {

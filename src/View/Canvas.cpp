@@ -201,6 +201,7 @@ void Canvas::SetCursor(Qt::CursorShape cs)
     Canvas::s_m_window->GetApplication()->setOverrideCursor( cs );
 }
 
+#ifdef BANG_EDITOR
 void Canvas::dragEnterEvent(QDragEnterEvent *e)
 {
     e->accept();
@@ -227,6 +228,7 @@ void Canvas::dropEvent(QDropEvent *e)
 
     e->ignore();
 }
+#endif
 
 void Canvas::wheelEvent(QWheelEvent *event)
 {

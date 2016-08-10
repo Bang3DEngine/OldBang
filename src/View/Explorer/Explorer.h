@@ -110,6 +110,8 @@ public:
 
 protected:
     Qt::DropActions supportedDropActions() const override;
+
+    QVariant data(const QModelIndex& index, int role) const;
 };
 
 #endif // EXPLORER_H

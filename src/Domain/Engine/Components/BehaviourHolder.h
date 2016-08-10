@@ -1,6 +1,7 @@
 #ifndef BEHAVIOURHOLDER_H
 #define BEHAVIOURHOLDER_H
 
+#include <QThread>
 #include <functional>
 
 #include "Bang.h"
