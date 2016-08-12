@@ -2,7 +2,8 @@
 
 AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
                                    InspectorWidget *inspectorWidget) :
-    AttributeWidget(xmlAttribute, inspectorWidget)
+    AttributeWidget(xmlAttribute, inspectorWidget, false, true,
+                    xmlAttribute.HasProperty(XMLProperty::BigText))
 {
     QLayout *layout = new QVBoxLayout();
     m_layout->addLayout(layout, 1);

@@ -20,7 +20,7 @@ void FileWriter::WriteAsset(const std::string &filepath, Asset *a)
 
 bool FileWriter::WriteToFile(const std::string &filepath, const IFileable *fileable)
 {
-    FileWriter::WriteToFile(filepath, fileable->GetXMLInfoString());
+    return FileWriter::WriteToFile(filepath, fileable->GetXMLInfoString());
 }
 
 bool FileWriter::WriteToFile(const std::string &filepath, const std::string &content)

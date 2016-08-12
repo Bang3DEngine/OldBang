@@ -1,12 +1,18 @@
 #ifndef FILE_H
 #define FILE_H
 
+#include <QPainter>
 #include <QModelIndex>
 #include <QFileSystemModel>
+
+#include "IInspectable.h"
 
 class File
 {
 protected:
+
+    const QFileSystemModel *m_fileSystemModel = nullptr;
+    QModelIndex m_modelIndex;
 
     bool m_isFile = true;
     std::string m_path = "";
@@ -14,9 +20,15 @@ protected:
     std::string m_absPath = "";
     std::string m_extension = "";
 
+    // Adds on top of the passed QPixmap the little icon that
+    // distinguishes between assets and noAsset files.
+    static QPixmap AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm);
+
 public:
     File();
-    File(const QFileSystemModel *model, const QModelIndex *index);
+    File(const std::string &filepath);
+    File(const QFileSystemModel *model, const QModelIndex &index);
+    virtual ~File();
 
     bool IsTexture2DAsset() const;
     bool IsImageFile() const;
@@ -25,6 +37,7 @@ public:
     bool IsMeshFile() const;
 
     bool IsMaterialAsset() const;
+    bool IsBehaviour() const;
 
     bool IsTextFile() const;
 
@@ -39,6 +52,10 @@ public:
      * @return
      */
     bool IsOfExtension(const std::string &extensions) const;
+
+    static File *GetSpecificFile(const File &f);
+    virtual QPixmap GetIcon() const;
+    virtual IInspectable *GetInspectable() const;
 
     std::string GetContents() const;
 

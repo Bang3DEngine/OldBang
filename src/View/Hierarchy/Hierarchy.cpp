@@ -246,10 +246,9 @@ void Hierarchy::OnChildRemoved(GameObject *child)
 
 void Hierarchy::dropEvent(QDropEvent *e)
 {
-    IDroppableQTreeWidget::dropEvent(e);
-
     QTreeWidgetItem *targetItem = itemAt(e->pos()); NONULL(targetItem);
     GameObject *targetGameObject = GetDropTargetGameObject(e);
+    bool successfulParenting = false;
 
     if (e->source() == this) // From Hierarchy To Hierarchy
     {
@@ -262,15 +261,22 @@ void Hierarchy::dropEvent(QDropEvent *e)
                 if (sourceItem != targetItem)
                 {
                     GameObject *sourceGameObject = GetGameObjectFromItem(sourceItem);
-                    if (sourceGameObject && targetGameObject  && sourceGameObject->parent)
+                    if (sourceGameObject && targetGameObject  && sourceGameObject->parent &&
+                        !targetGameObject->IsChildOf(sourceGameObject))
                     {
+                        successfulParenting = true;
                         sourceGameObject->SetParent(targetGameObject, true);
                     }
                 }
             }
         }
     }
-    e->accept();
+
+    if (successfulParenting)
+    {
+        IDroppableQTreeWidget::dropEvent(e);
+        e->accept();
+    }
 }
 
 void Hierarchy::OnDropFromExplorer(const File &f, QDropEvent *e)

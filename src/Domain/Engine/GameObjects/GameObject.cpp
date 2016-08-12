@@ -550,6 +550,15 @@ void GameObject::OnMouseExit(bool fromChildren)
     }
 }
 
+bool GameObject::IsChildOf(const GameObject *goParent) const
+{
+    if (!m_parent)
+    {
+        return false;
+    }
+    return (m_parent == goParent || m_parent->IsChildOf(goParent));
+}
+
 void GameObject::_OnStart()
 {
     PROPAGATE_EVENT(_OnStart, m_children);

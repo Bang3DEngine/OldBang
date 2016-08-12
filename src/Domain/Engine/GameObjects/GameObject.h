@@ -319,6 +319,7 @@ public:
     virtual void OnMouseOver(bool fromChildren);
     virtual void OnMouseExit(bool fromChildren);
 
+    bool IsChildOf(const GameObject *parent) const;
     virtual bool IsEditorGameObject() const;
     virtual bool IsScene() const;
 

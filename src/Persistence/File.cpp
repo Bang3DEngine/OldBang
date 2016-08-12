@@ -1,21 +1,61 @@
 #include "File.h"
 
+#include "Explorer.h"
+
 #include "Mesh.h"
 #include "Prefab.h"
 #include "Material.h"
 #include "Texture2D.h"
 
+#include "TextFile.h"
+#include "MeshFile.h"
+#include "ImageFile.h"
+#include "MeshAssetFile.h"
+#include "MaterialAssetFile.h"
+#include "Texture2DAssetFile.h"
+#include "TextFileInspectable.h"
+#include "MeshAssetFileInspectable.h"
+#include "PrefabAssetFileInspectable.h"
+#include "MaterialAssetFileInspectable.h"
+
+#include "MeshFileInspectable.h"
+#include "ImageFileInspectable.h"
+#include "Texture2DAssetFileInspectable.h"
+
+QPixmap File::AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm)
+{
+    /*
+    std::string fp = Persistence::ToAbsolute("./Assets/Engine/Icons/NoAssetIcon.png");
+    QPixmap noAssetPixmap(QString::fromStdString(fp));
+
+    QPixmap result(pm.scaled(128, 128, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation));
+    QPainter painter;
+    painter.begin(&result);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawPixmap(0, 0, 128, 128, noAssetPixmap);
+    painter.end();
+    */
+    return pm; //result;
+}
+
 File::File()
 {
 }
 
-File::File(const QFileSystemModel *model, const QModelIndex *index)
+File::File(const std::string &filepath)
+    : File(Explorer::GetInstance()->GetFileSystemModel(),
+           Explorer::GetInstance()->GetModelIndexFromFilepath(filepath))
 {
-    m_isFile = !model->isDir(*index);
+}
 
-    m_absPath = model->filePath(*index).toStdString();
+File::File(const QFileSystemModel *model, const QModelIndex &index) :
+    m_fileSystemModel(model), m_modelIndex(index)
+{
+    m_isFile = !model->isDir(index);
+
+    m_absPath = model->filePath(index).toStdString();
     m_path = Persistence::ToRelative(m_absPath);
-    m_name = model->fileName(*index).toStdString();
+    m_name = model->fileName(index).toStdString();
 
     std::string::size_type p = m_name.find('.', 2);
     if (p != std::string::npos)
@@ -23,6 +63,10 @@ File::File(const QFileSystemModel *model, const QModelIndex *index)
         m_extension = m_name.substr(p+1, m_name.length() - p - 1);
         m_name = m_name.substr(0, p);
     }
+}
+
+File::~File()
+{
 }
 
 bool File::IsTexture2DAsset() const
@@ -48,6 +92,11 @@ bool File::IsMeshFile() const
 bool File::IsMaterialAsset() const
 {
     return m_isFile && IsOfExtension(Material::GetFileExtensionStatic());
+}
+
+bool File::IsBehaviour() const
+{
+    return m_isFile && IsOfExtension("cpp hpp c h");
 }
 
 bool File::IsTextFile() const
@@ -84,9 +133,70 @@ bool File::IsOfExtension(const std::string &extensions) const
     return false;
 }
 
+File *File::GetSpecificFile(const File &f)
+{
+    if (!f.IsFile()) return nullptr;
+
+    if (f.IsTexture2DAsset())
+    {
+        return new Texture2DAssetFile(f.m_fileSystemModel, f.m_modelIndex);
+    }
+    else if (f.IsImageFile())
+    {
+        return new ImageFile(f.m_fileSystemModel, f.m_modelIndex);
+    }
+    else if (f.IsMaterialAsset())
+    {
+        return new MaterialAssetFile(f.m_fileSystemModel, f.m_modelIndex);
+    }
+    else if (f.IsMeshAsset())
+    {
+        return new MeshAssetFile(f.m_fileSystemModel, f.m_modelIndex);
+    }
+    else if (f.IsMeshFile())
+    {
+        return new MeshFile(f.m_fileSystemModel, f.m_modelIndex);
+    }
+    else if (f.IsPrefabAsset())
+    {
+        return new File(f.m_fileSystemModel, f.m_modelIndex);
+    }
+    else if (f.IsTextFile())
+    {
+        return new TextFile(f.m_fileSystemModel, f.m_modelIndex);
+    }
+
+    return new File(f.m_fileSystemModel, f.m_modelIndex);
+}
+
 std::string File::GetContents() const
 {
     return FileReader::GetContents(m_absPath);
+}
+
+QPixmap File::GetIcon() const
+{
+    std::string fp = "";
+    if (IsPrefabAsset())
+    {
+        fp = Persistence::ToAbsolute("./Assets/Engine/Icons/PrefabAssetIcon.png");
+    }
+    else if (IsBehaviour())
+    {
+        fp = Persistence::ToAbsolute("./Assets/Engine/Icons/BehaviourIcon.png");
+    }
+    else
+    {
+        fp = Persistence::ToAbsolute("./Assets/Engine/Icons/OtherFileIcon.png");
+    }
+
+    QPixmap pm(QString::fromStdString(fp));
+    return pm;
+}
+
+IInspectable *File::GetInspectable() const
+{
+    return nullptr;
 }
 
 const std::string &File::GetAbsolutePath() const
