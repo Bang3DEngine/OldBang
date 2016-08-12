@@ -19,6 +19,7 @@
 #include <QApplication>
 #include <QDropEvent>
 
+#include "File.h"
 #include "Scene.h"
 #include "FileDialog.h"
 #include "GameObject.h"
@@ -70,6 +71,9 @@ public:
     std::list<GameObject*> GetSelectedGameObjects(bool excludeInternal = false);
     void SelectGameObject(GameObject *go);
     void UnselectAll();
+
+    void OnDragStarted(QWidget *origin) override;
+    void OnDragStopped() override;
 
     void OnGameObjectNameChanged(GameObject *go);
 

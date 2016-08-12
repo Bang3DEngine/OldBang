@@ -20,6 +20,8 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     IDroppableQWidget(),
     m_inspectorWidget(inspectorWidget)
 {
+    m_xmlAttribute = xmlAttribute;
+
     m_readonly =  xmlAttribute.HasProperty(XMLProperty::Readonly);
     m_enabled  = !xmlAttribute.HasProperty(XMLProperty::Disabled);
     m_inlined  =  xmlAttribute.HasProperty(XMLProperty::Inline);

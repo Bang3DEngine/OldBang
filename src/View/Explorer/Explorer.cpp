@@ -3,6 +3,7 @@
 #include <QScrollBar>
 
 #include "WindowMain.h"
+#include "Hierarchy.h"
 #include "IDroppableWidget.h"
 
 Explorer::Explorer(QWidget *parent) : IDroppableQListView()
@@ -370,6 +371,20 @@ void Explorer::dropEvent(QDropEvent *e)
     e->ignore(); // If we dont ignore, objects in the source list get removed
 }
 
+void Explorer::OnDragStarted(QWidget *origin)
+{
+    Hierarchy *hierarchy = Hierarchy::GetInstance();
+    if (origin == hierarchy)
+    {
+        setStyleSheet(IDroppable::acceptDragStyle);
+    }
+}
+
+void Explorer::OnDragStopped()
+{
+    setStyleSheet("/* */");
+}
+
 void Explorer::OnDropFromHierarchy(GameObject *selected, QDropEvent *e)
 {
     // Create a prefab of selected on the current directory
@@ -421,10 +436,17 @@ QVariant FileSystemModel::data(const QModelIndex &index, int role) const
         {
             pm = new QPixmap(QString::fromStdString(f.GetAbsolutePath()));
         }
+        else if (f.IsPrefabAsset())
+        {
+            std::string fp = Persistence::ToAbsolute("./Assets/Engine/Icons/IconPrefab.png");
+            pm = new QPixmap(QString::fromStdString(fp));
+        }
 
         if (pm)
         {
-            return pm->scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
+            QPixmap result = pm->scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
+            delete pm;
+            return result;
         }
     }
     return QFileSystemModel::data(index, role);

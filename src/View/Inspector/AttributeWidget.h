@@ -13,6 +13,8 @@ class AttributeWidget : public IDroppableQWidget
 protected:
     QBoxLayout *m_layout = nullptr;
 
+    XMLAttribute m_xmlAttribute;
+
     bool m_readonly = false;
     bool m_enabled  = false;
     bool m_inlined  = false;

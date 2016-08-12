@@ -89,6 +89,24 @@ void Hierarchy::LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items)
     *items = result;
 }
 
+void Hierarchy::OnDragStarted(QWidget *origin)
+{
+    Explorer *explorer = Explorer::GetInstance();
+    if (origin == explorer)
+    {
+        File f = explorer->GetSelectedFile();
+        if (f.IsPrefabAsset())
+        {
+            setStyleSheet(IDroppable::acceptDragStyle);
+        }
+    }
+}
+
+void Hierarchy::OnDragStopped()
+{
+    setStyleSheet("/* */");
+}
+
 GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *item) const
 {
     if (m_treeItemToGameObject.find(item) != m_treeItemToGameObject.end())

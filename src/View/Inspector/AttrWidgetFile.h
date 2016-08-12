@@ -14,7 +14,8 @@
 #include "WindowEventManager.h"
 
 class FileLineEdit;
-class AttrWidgetFile : public AttributeWidget
+class AttrWidgetFile : public AttributeWidget,
+                       public IWindowEventManagerListener
 {
     Q_OBJECT
 
@@ -37,6 +38,9 @@ public:
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
 
     virtual void Refresh(const XMLAttribute &attribute) override;
+
+    void OnDragStarted(QWidget *origin) override;
+    void OnDragStopped() override;
 
 public slots:
     void OnDoubleClick();

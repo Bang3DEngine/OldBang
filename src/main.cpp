@@ -2,7 +2,6 @@
 #include <string>
 #include <iostream>
 
-#include <QApplication>
 #include <QTextStream>
 
 #include "glm/glm.hpp"
@@ -12,6 +11,7 @@
 #include "SingletonManager.h"
 #include "ShaderProgram.h"
 #include "MeshRenderer.h"
+#include "Application.h"
 #include "Framebuffer.h"
 #include "GameObject.h"
 #include "FileReader.h"
@@ -39,7 +39,7 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    Application app(argc, argv);
     SingletonManager::InitSingletonMangerFromMainBinary();
 
     QMainWindow *window = new QMainWindow();

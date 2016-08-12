@@ -2,6 +2,8 @@
 
 #include "GameObject.h"
 #include "WindowMain.h"
+#include "InspectorWidget.h"
+#include "IWindowEventManagerListener.h"
 
 WindowEventManager *WindowEventManager::s_wem = nullptr;
 
@@ -70,6 +72,15 @@ void WindowEventManager::NotifyButtonRotateModeSelected()
 void WindowEventManager::NotifyButtonScaleModeSelected()
 {
     PROPAGATE_EVENT_PAR(OnButtonScaleModeSelected(), s_wem->m_listeners);
+}
+
+void WindowEventManager::NotifyDragStarted(QWidget *origin)
+{
+    PROPAGATE_EVENT_PAR(OnDragStarted(origin), s_wem->m_listeners);
+}
+void WindowEventManager::NotifyDragStopped()
+{
+    PROPAGATE_EVENT_PAR(OnDragStopped(), s_wem->m_listeners);
 }
 
 void WindowEventManager::NotifyInspectorSlotChanged(InspectorWidget *inspectorItem)

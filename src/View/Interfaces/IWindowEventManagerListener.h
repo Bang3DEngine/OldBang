@@ -5,6 +5,7 @@
 
 #include "Bang.h"
 
+#include "File.h"
 #include "MenuBar.h"
 
 class GameObject;
@@ -24,6 +25,9 @@ public:
     virtual void OnButtonTranslateModeSelected() {}
     virtual void OnButtonRotateModeSelected() {}
     virtual void OnButtonScaleModeSelected() {}
+
+    virtual void OnDragStarted(QWidget *origin) {}
+    virtual void OnDragStopped() {}
 
     virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem)  { }
     virtual void OnTreeHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects) { }

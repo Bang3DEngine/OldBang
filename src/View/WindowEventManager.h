@@ -15,8 +15,6 @@
 
 #include "MenuBar.h"
 #include "XMLNode.h"
-#include "InspectorWidget.h"
-#include "IWindowEventManagerListener.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
     for (auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
@@ -28,6 +26,8 @@
 
 class Component;
 class GameObject;
+class InspectorWidget;
+class IWindowEventManagerListener;
 class WindowEventManager : public QGLWidget
 {
     Q_OBJECT
@@ -55,6 +55,9 @@ public slots:
     static void NotifyButtonTranslateModeSelected();
     static void NotifyButtonRotateModeSelected();
     static void NotifyButtonScaleModeSelected();
+
+    static void NotifyDragStarted(QWidget *origin);
+    static void NotifyDragStopped();
 
     static void NotifyInspectorSlotChanged(InspectorWidget *inspectorItem);
     static void NotifyHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects);

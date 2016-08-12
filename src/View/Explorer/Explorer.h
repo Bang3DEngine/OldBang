@@ -33,7 +33,8 @@
 #include "IDroppableWidget.h"
 
 class FileSystemModel;
-class Explorer : public IDroppableQListView
+class Explorer : public IDroppableQListView,
+                 public IWindowEventManagerListener
 {
     Q_OBJECT
 
@@ -94,6 +95,9 @@ public:
     void SelectFile(const std::string &path);
 
     static Explorer* GetInstance();
+
+    void OnDragStarted(QWidget *origin);
+    void OnDragStopped();
 
 public slots:
     void Refresh();

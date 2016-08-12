@@ -89,6 +89,33 @@ void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
     SetValue( attribute.GetFilepath() );
 }
 
+void AttrWidgetFile::OnDragStarted(QWidget *origin)
+{
+    if (!m_readonly)
+    {
+        Explorer *explorer = Explorer::GetInstance();
+        if (origin == explorer)
+        {
+            File f = explorer->GetSelectedFile();
+            std::string extensions =
+                    m_xmlAttribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
+            if (f.IsOfExtension(extensions))
+            {
+                m_filepathLineEdit->setStyleSheet(IDroppable::acceptDragStyle);
+            }
+            else
+            {
+                m_filepathLineEdit->setStyleSheet(IDroppable::rejectDragStyle);
+            }
+        }
+    }
+}
+
+void AttrWidgetFile::OnDragStopped()
+{
+    m_filepathLineEdit->setStyleSheet("/* */");
+}
+
 void AttrWidgetFile::OnDoubleClick()
 {
     Explorer::GetInstance()->SelectFile(m_filepath);
