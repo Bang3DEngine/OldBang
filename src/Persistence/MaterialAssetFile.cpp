@@ -2,7 +2,7 @@
 
 #include "MaterialAssetFileInspectable.h"
 
-MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModelIndex *index) :
+MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModelIndex &index) :
     File(model, index)
 {
     XMLNode *xmlInfo;

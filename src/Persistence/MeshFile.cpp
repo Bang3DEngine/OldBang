@@ -3,7 +3,7 @@
 #include "Persistence.h"
 #include "MeshFileInspectable.h"
 
-MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex *index)
+MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
     FileReader::GetOBJFormat(m_path, &m_hasUvs, &m_hasNormals, &m_isTris);

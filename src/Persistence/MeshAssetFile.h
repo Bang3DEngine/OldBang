@@ -12,7 +12,7 @@ private:
     std::string m_meshFilepath = "";
 
 public:
-    MeshAssetFile(const QFileSystemModel *model, const QModelIndex *index);
+    MeshAssetFile(const QFileSystemModel *model, const QModelIndex &index);
     virtual QPixmap GetIcon() const override;
     virtual IInspectable *GetInspectable() const override;
 

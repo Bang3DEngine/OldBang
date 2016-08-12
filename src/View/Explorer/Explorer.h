@@ -37,6 +37,7 @@ class Explorer : public IDroppableQListView
 {
     Q_OBJECT
 
+    friend class File;
     friend class FileSystemModel;
     friend class ExplorerDirTree;
 
@@ -71,6 +72,7 @@ public:
     bool Exists(const std::string &filepath) const;
     bool IsSelectedAFile() const;
     bool IsSelectedADir() const;
+    const QFileSystemModel* GetFileSystemModel() const;
 
     void StartRenaming(const std::string &filepath);
 

@@ -166,7 +166,7 @@ void Explorer::RefreshInspector()
     if (selectedIndexes().size() <= 0) return;
 
     QModelIndex clickedIndex = selectedIndexes().at(0);
-    File f(m_fileSystemModel, &clickedIndex);
+    File f(m_fileSystemModel, clickedIndex);
     m_lastSelectedPath = f.GetRelativePath();
 
     Inspector *inspector = Inspector::GetInstance();
@@ -187,7 +187,7 @@ void Explorer::RefreshInspector()
 
     if (f.IsPrefabAsset()) // bprefab special case
     {
-        File f(m_fileSystemModel, &clickedIndex);
+        File f(m_fileSystemModel, clickedIndex);
         PrefabAssetFileInspectable *prefabInspectable =
                 new PrefabAssetFileInspectable(f);
         newInspectable = prefabInspectable;
@@ -305,7 +305,7 @@ File Explorer::GetSelectedFile() const
     File f;
     if (!currentIndex().isValid()) return f;
     QModelIndex qmi = currentIndex();
-    return File(m_fileSystemModel, &qmi);
+    return File(m_fileSystemModel, qmi);
 }
 
 bool Explorer::Exists(const std::string &filepath) const
@@ -323,6 +323,11 @@ bool Explorer::IsSelectedADir() const
 {
     if (!currentIndex().isValid()) return false;
     return m_fileSystemModel->isDir(currentIndex());
+}
+
+const QFileSystemModel *Explorer::GetFileSystemModel() const
+{
+    return m_fileSystemModel;
 }
 
 void Explorer::StartRenaming(const std::string &filepath)
@@ -372,7 +377,7 @@ QVariant FileSystemModel::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::DecorationRole)
     {
-        File file(this, &index);
+        File file(this, index);
         File *f = File::GetSpecificFile(file);
         if (f)
         {

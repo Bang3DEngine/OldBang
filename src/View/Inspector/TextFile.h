@@ -12,7 +12,7 @@ protected:
     std::string m_contents = "";
 
 public:
-    TextFile(const QFileSystemModel *model, const QModelIndex *index);
+    TextFile(const QFileSystemModel *model, const QModelIndex &index);
 
     std::string GetContents() const;
     virtual IInspectable *GetInspectable() const override;

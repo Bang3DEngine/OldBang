@@ -70,7 +70,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     {
         m_updateTimer = new QTimer(this); //Every X seconds, update all the slots values
         connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(RefreshWidgetValues()));
-        m_updateTimer->start(100);
+        m_updateTimer->start(150);
     }
 }
 

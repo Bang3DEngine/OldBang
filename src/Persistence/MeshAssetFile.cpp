@@ -4,8 +4,7 @@
 #include "AssetsManager.h"
 #include "MeshAssetFileInspectable.h"
 
-MeshAssetFile::MeshAssetFile(const QFileSystemModel *model, const QModelIndex *index)
-    : File(model, index)
+MeshAssetFile::MeshAssetFile(const QFileSystemModel *model, const QModelIndex &index) : File(model, index)
 {
     XMLNode *xmlInfo;
     xmlInfo = XMLParser::FromFile(m_path);

@@ -26,7 +26,9 @@ protected:
 
 public:
     File();
-    File(const QFileSystemModel *model, const QModelIndex *index);
+    File(const std::string &filepath);
+    File(const QFileSystemModel *model, const QModelIndex &index);
+    virtual ~File();
 
     bool IsTexture2DAsset() const;
     bool IsImageFile() const;

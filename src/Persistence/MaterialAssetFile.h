@@ -19,7 +19,7 @@ private:
     Vector4 m_diffuseColor = Vector4(0.0f);
 
 public:
-    MaterialAssetFile(const QFileSystemModel *model, const QModelIndex *index);
+    MaterialAssetFile(const QFileSystemModel *model, const QModelIndex &index);
 
     virtual QPixmap GetIcon() const override;
     virtual IInspectable *GetInspectable() const override;

@@ -228,8 +228,6 @@ void Hierarchy::OnChildRemoved(GameObject *child)
 
 void Hierarchy::dropEvent(QDropEvent *e)
 {
-    IDroppableQTreeWidget::dropEvent(e);
-
     QTreeWidgetItem *targetItem = itemAt(e->pos()); NONULL(targetItem);
     GameObject *targetGameObject = GetDropTargetGameObject(e);
 
@@ -252,6 +250,8 @@ void Hierarchy::dropEvent(QDropEvent *e)
             }
         }
     }
+
+    IDroppableQTreeWidget::dropEvent(e);
     e->accept();
 }
 

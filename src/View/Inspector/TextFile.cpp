@@ -2,7 +2,7 @@
 
 #include "TextFileInspectable.h"
 
-TextFile::TextFile(const QFileSystemModel *model, const QModelIndex *index)
+TextFile::TextFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
     m_contents = FileReader::GetContents(m_path);

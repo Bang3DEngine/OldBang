@@ -1,5 +1,7 @@
 #include "File.h"
 
+#include "Explorer.h"
+
 #include "Mesh.h"
 #include "Prefab.h"
 #include "Material.h"
@@ -40,14 +42,20 @@ File::File()
 {
 }
 
-File::File(const QFileSystemModel *model, const QModelIndex *index) :
-    m_fileSystemModel(model), m_modelIndex(*index)
+File::File(const std::string &filepath)
+    : File(Explorer::GetInstance()->GetFileSystemModel(),
+           Explorer::GetInstance()->GetModelIndexFromFilepath(filepath))
 {
-    m_isFile = !model->isDir(*index);
+}
 
-    m_absPath = model->filePath(*index).toStdString();
+File::File(const QFileSystemModel *model, const QModelIndex &index) :
+    m_fileSystemModel(model), m_modelIndex(index)
+{
+    m_isFile = !model->isDir(index);
+
+    m_absPath = model->filePath(index).toStdString();
     m_path = Persistence::ToRelative(m_absPath);
-    m_name = model->fileName(*index).toStdString();
+    m_name = model->fileName(index).toStdString();
 
     std::string::size_type p = m_name.find('.', 2);
     if (p != std::string::npos)
@@ -55,6 +63,10 @@ File::File(const QFileSystemModel *model, const QModelIndex *index) :
         m_extension = m_name.substr(p+1, m_name.length() - p - 1);
         m_name = m_name.substr(0, p);
     }
+}
+
+File::~File()
+{
 }
 
 bool File::IsTexture2DAsset() const
@@ -127,34 +139,34 @@ File *File::GetSpecificFile(const File &f)
 
     if (f.IsTexture2DAsset())
     {
-        return new Texture2DAssetFile(f.m_fileSystemModel, &f.m_modelIndex);
+        return new Texture2DAssetFile(f.m_fileSystemModel, f.m_modelIndex);
     }
     else if (f.IsImageFile())
     {
-        return new ImageFile(f.m_fileSystemModel, &f.m_modelIndex);
+        return new ImageFile(f.m_fileSystemModel, f.m_modelIndex);
     }
     else if (f.IsMaterialAsset())
     {
-        return new MaterialAssetFile(f.m_fileSystemModel, &f.m_modelIndex);
+        return new MaterialAssetFile(f.m_fileSystemModel, f.m_modelIndex);
     }
     else if (f.IsMeshAsset())
     {
-        return new MeshAssetFile(f.m_fileSystemModel, &f.m_modelIndex);
+        return new MeshAssetFile(f.m_fileSystemModel, f.m_modelIndex);
     }
     else if (f.IsMeshFile())
     {
-        return new MeshFile(f.m_fileSystemModel, &f.m_modelIndex);
+        return new MeshFile(f.m_fileSystemModel, f.m_modelIndex);
     }
     else if (f.IsPrefabAsset())
     {
-        return new File(f.m_fileSystemModel, &f.m_modelIndex);
+        return new File(f.m_fileSystemModel, f.m_modelIndex);
     }
     else if (f.IsTextFile())
     {
-        return new TextFile(f.m_fileSystemModel, &f.m_modelIndex);
+        return new TextFile(f.m_fileSystemModel, f.m_modelIndex);
     }
 
-    return new File(f.m_fileSystemModel, &f.m_modelIndex);
+    return new File(f.m_fileSystemModel, f.m_modelIndex);
 }
 
 std::string File::GetContents() const

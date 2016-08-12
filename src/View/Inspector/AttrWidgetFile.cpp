@@ -1,5 +1,7 @@
 #include "AttrWidgetFile.h"
 
+#include "File.h"
+
 AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :
     AttributeWidget(xmlAttribute, inspectorWidget)
@@ -10,11 +12,28 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     QHBoxLayout *hLayout = new QHBoxLayout();
     m_layout->addLayout(hLayout, 1);
 
+    // Icon
+    File file(xmlAttribute.GetValue());
+    File *f = File::GetSpecificFile(file);
+    if (f)
+    {
+        QPixmap pm = f->GetIcon();
+        pm = pm.scaled(16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QLabel *icon = new QLabel();
+        icon->setPixmap(pm);
+        hLayout->addWidget(icon, 0, Qt::AlignRight);
+        delete f;
+    }
+    //
+
+    // File Line Edit
     m_filepathLineEdit = new FileLineEdit();
     m_filepathLineEdit->setReadOnly(true);
     m_filepathLineEdit->setAlignment(Qt::AlignLeft);
     hLayout->addWidget(m_filepathLineEdit, 100);
+    //
 
+    // Browse button
     if (!m_readonly)
     {
         hLayout->addStretch(1); // add little spacer
@@ -23,6 +42,7 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
         connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
         hLayout->addWidget(browseButton, 20, Qt::AlignRight | Qt::AlignVCenter);
     }
+    //
 
     connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
             this, SLOT(OnDoubleClick()));

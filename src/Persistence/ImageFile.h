@@ -13,7 +13,7 @@ protected:
     int m_numComponents = 3;
 
 public:
-    ImageFile(const QFileSystemModel *model, const QModelIndex *index);
+    ImageFile(const QFileSystemModel *model, const QModelIndex &index);
 
     virtual QPixmap GetIcon() const override;
     virtual IInspectable *GetInspectable() const override;
