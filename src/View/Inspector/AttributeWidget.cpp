@@ -21,23 +21,20 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     m_inspectorWidget(inspectorWidget)
 {
     m_xmlAttribute = xmlAttribute;
-
-    m_readonly =  xmlAttribute.HasProperty(XMLProperty::Readonly);
-    m_enabled  = !xmlAttribute.HasProperty(XMLProperty::Disabled);
-    m_inlined  =  xmlAttribute.HasProperty(XMLProperty::Inline);
-    m_hidden   =  xmlAttribute.HasProperty(XMLProperty::Hidden);
+    Refresh(xmlAttribute);
 
     m_layout = new QHBoxLayout();
     m_layout->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
     m_layout->setContentsMargins(4, 4, 4, 4);
     setLayout(m_layout);
     setMinimumWidth(40);
+
     if (!needsLabelOnTop)
     {
         m_layout->addSpacing(10);
     }
 
-    if (!m_hidden && !isSubWidget)
+    if (!isSubWidget)
     {
         QString label = "";
         if (createLabel)
@@ -47,22 +44,26 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
             label = QString::fromStdString(name);
         }
 
-        QFormLayout *fmLayout = m_inspectorWidget->GetFormLayout();
+        QGridLayout *gridLayout = m_inspectorWidget->GetGridLayout();
+        m_rowIndexInGridLayout = m_inspectorWidget->GetNextRowIndex();
+        m_label = new QLabel(label);
         if (needsLabelOnTop)
         {
-            QLabel *ql = new QLabel(label);
-            fmLayout->addRow(ql);
-            fmLayout->addRow(this);
+            gridLayout->addWidget(m_label, m_rowIndexInGridLayout, 0, 1, 2,
+                                  Qt::AlignLeft | Qt::AlignVCenter);
+            gridLayout->addWidget(this, m_rowIndexInGridLayout + 1, 0, 1, 2,
+                                  Qt::AlignVCenter);
         }
         else
         {
-            fmLayout->addRow(label, this);
+            gridLayout->addWidget(m_label, m_rowIndexInGridLayout, 0, 1, 1,
+                                  Qt::AlignLeft | Qt::AlignVCenter);
+            gridLayout->addWidget(this, m_rowIndexInGridLayout, 1, 1, 1,
+                                  Qt::AlignVCenter);
         }
     }
 
-    setEnabled(m_enabled);
-    setVisible(!m_hidden);
-    setHidden(m_hidden);
+    Refresh(xmlAttribute);
 }
 
 void AttributeWidget::AfterConstructor()
@@ -80,6 +81,11 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
     setEnabled(m_enabled);
     setVisible(!m_hidden);
     setHidden(m_hidden);
+    if (m_label)
+    {
+        m_label->setVisible(!m_hidden);
+        m_label->setHidden(m_hidden);
+    }
 }
 
 AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttribute,

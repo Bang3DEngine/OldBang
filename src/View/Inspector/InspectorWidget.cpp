@@ -33,12 +33,10 @@ void InspectorWidget::Init(const std::string &title, IInspectable *relatedInspec
 void InspectorWidget::ConstructFromWidgetXMLInfo(
         const std::string &title, XMLNode &xmlInfo, bool autoUpdate)
 {
-    m_mainVerticalLayout = new QVBoxLayout();
-    m_mainVerticalLayout->setMargin(10);
-    setLayout(m_mainVerticalLayout);
+    m_gridLayout = new QGridLayout();
+    m_gridLayout->setSpacing(0);
 
-    m_titleLayout = new QHBoxLayout();
-    m_mainVerticalLayout->addLayout(m_titleLayout, 1);
+    setLayout(m_gridLayout);
 
     std::string fTitle = StringUtils::FormatInspectorLabel(title);
     m_titleLabel = new QLabel( QString(fTitle.c_str()) );
@@ -46,14 +44,8 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     font.setBold(true);
     m_titleLabel->setFont(font);
     m_titleLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-
-    m_titleLayout->addWidget(m_titleLabel, 100);
-    m_titleLayout->setContentsMargins(0, 0, 0, 5);
-
-    m_formLayout = new QFormLayout();
-    m_formLayout->setLabelAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    m_formLayout->setSpacing(0);
-    m_mainVerticalLayout->addLayout(m_formLayout, 100);
+    m_gridLayout->addWidget(m_titleLabel, 0, 0, 2, 1,
+                            Qt::AlignLeft | Qt::AlignVCenter);
 
     CreateWidgetSlots(xmlInfo);
     RefreshWidgetValues(); // Initial catch of values
@@ -171,9 +163,14 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
     return xmlInfo;
 }
 
-QFormLayout *InspectorWidget::GetFormLayout() const
+QGridLayout *InspectorWidget::GetGridLayout() const
 {
-    return m_formLayout;
+    return m_gridLayout;
+}
+
+int InspectorWidget::GetNextRowIndex() const
+{
+    return m_gridLayout->rowCount();
 }
 
 void InspectorWidget::SetTitle(const std::string &title)

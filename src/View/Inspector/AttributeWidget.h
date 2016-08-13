@@ -12,6 +12,8 @@ class AttributeWidget : public IDroppableQWidget
 
 protected:
     QBoxLayout *m_layout = nullptr;
+    QLabel *m_label = nullptr;
+    int m_rowIndexInGridLayout = 0;
 
     XMLAttribute m_xmlAttribute;
 

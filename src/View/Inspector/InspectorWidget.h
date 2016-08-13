@@ -56,9 +56,7 @@ private:
 protected:
     IInspectable *m_relatedInspectable = nullptr;
 
-    QFormLayout *m_formLayout = nullptr;
-    QVBoxLayout *m_mainVerticalLayout = nullptr;
-    QHBoxLayout *m_titleLayout = nullptr;
+    QGridLayout *m_gridLayout = nullptr;
     QLabel *m_titleLabel = nullptr;
 
 public:
@@ -84,7 +82,8 @@ public:
      */
     XMLNode GetWidgetXMLInfo() const;
 
-    QFormLayout *GetFormLayout() const;
+    QGridLayout *GetGridLayout() const;
+    int GetNextRowIndex() const;
 
     void SetTitle(const std::string &title);
 

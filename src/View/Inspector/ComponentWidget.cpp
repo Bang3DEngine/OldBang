@@ -17,7 +17,8 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
         m_enabledCheckbox->setChecked(m_relatedComponent->IsEnabled());
         connect(m_enabledCheckbox, SIGNAL(clicked(bool)),
                 this, SLOT(OnEnabledCheckboxPressed(bool)));
-        m_titleLayout->addWidget(m_enabledCheckbox, 1);
+        m_gridLayout->addWidget(m_enabledCheckbox, 0, 1, 1, 1,
+                                Qt::AlignRight | Qt::AlignVCenter);
     }
 }
 
