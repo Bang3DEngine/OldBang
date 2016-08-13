@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-CONFIG += EDITOR
+# CONFIG += EDITOR
 # CONFIG += GAME
 CONFIG += qt
 
@@ -203,7 +203,6 @@ HEADERS += \
     src/View/ClipboardGameObject.h \
     src/Domain/Engine/Components/PointLight.h \
     src/Domain/Engine/Others/Property.h \
-    src/Persistence/File.h \
     src/Persistence/XMLParser.h \
     src/Persistence/XMLNode.h \
     src/Persistence/XMLAttribute.h \
@@ -268,6 +267,7 @@ HEADERS += \
     src/View/Inspector/AttrWidgetBool.h \
     src/View/Inspector/AttrWidgetColor.h \
     src/View/Inspector/TextFileInspectable.h \
+    src/Persistence/File.h \
     src/View/Inspector/TextFile.h \
     src/View/Inspector/PrefabAssetFileInspectable.h \
     src/View/Interfaces/IDroppableWidget.h
@@ -340,7 +340,6 @@ SOURCES += \
     src/Domain/Engine/Interfaces/IFileable.cpp \
     src/Domain/Engine/Components/PointLight.cpp \
     src/Domain/Engine/Others/Property.cpp \
-    src/Persistence/File.cpp \
     src/Persistence/XMLParser.cpp \
     src/Persistence/XMLNode.cpp \
     src/Persistence/XMLAttribute.cpp \
@@ -406,6 +405,7 @@ EDITOR {
         src/View/Inspector/AttrWidgetColor.cpp \
         src/View/Inspector/TextFileInspectable.cpp \
         src/View/Inspector/TextFile.cpp \
+        src/Persistence/File.cpp \
         src/View/Inspector/PrefabAssetFileInspectable.cpp \
         src/View/Interfaces/IDroppableWidget.cpp
 }

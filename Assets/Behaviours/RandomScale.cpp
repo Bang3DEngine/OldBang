@@ -13,6 +13,7 @@ void RandomScale::OnUpdate()
     Behaviour::OnUpdate();
 
     time += Time::GetDeltaTime();
-    gameObject->transform->SetLocalScale(originalScale + (sin(time) * 0.5f + 0.51f) * scaleAmplitude);
+    transform->SetLocalEuler(0.0f, time * 30.0f, 0.0f);
+    //gameObject->transform->SetLocalScale(originalScale + (sin(time) * 0.5f + 0.51f) * scaleAmplitude);
 }
 

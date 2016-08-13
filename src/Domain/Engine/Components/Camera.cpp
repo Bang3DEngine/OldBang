@@ -8,19 +8,8 @@ Camera::Camera()
 
 void Camera::GetViewMatrix(Matrix4 *view) const
 {
-    Transform *t = gameObject->transform;
-    if (CAN_USE_COMPONENT(t))
-    {
-        t->GetModelMatrix(view);
-        *view = view->Inversed();
-    }
-    else
-    {
-        Logger_Verbose(gameObject << " has a Camera but does not have a transform. " <<
-                       "View matrix will be the idgameObject matrix.");
-
-        *view = Matrix4(1.0f);
-    }
+    transform->GetModelMatrix(view);
+    *view = view->Inversed();
 }
 
 void Camera::GetProjectionMatrix(Matrix4 *proj) const
