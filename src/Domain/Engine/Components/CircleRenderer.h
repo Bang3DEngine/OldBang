@@ -20,7 +20,7 @@
 
 class CircleRenderer : public LineRenderer
 {
-
+friend class GameObject;
 friend class EditorRotateAxis;
 
 private:
@@ -36,8 +36,10 @@ private:
             Vector2 *p0, int *i0,
             Vector2 *p1, int *i1 ) const;
 
-public:
+protected:
     CircleRenderer();
+
+public:
     virtual ~CircleRenderer();
 
     virtual const std::string ToString() const override;

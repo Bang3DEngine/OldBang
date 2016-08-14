@@ -12,9 +12,13 @@
 #include "Component.h"
 #include "Transform.h"
 
+
 class Canvas;
+class MeshRenderer;
 class Camera : public Component
 {
+friend class GameObject;
+
 public:
     NamedEnum (ProjectionMode,
         Orthographic,
@@ -22,6 +26,9 @@ public:
     );
 
 private:
+    static bool s_inited;
+    static Mesh* s_camMesh;
+    static void InitStatics();
 
     float m_orthoHeight  = 0.5f;
 
@@ -36,8 +43,10 @@ private:
 
     bool m_autoUpdateAspectRatio = true;
 
-public:
+protected:
     Camera();
+
+public:
 
     void GetViewMatrix(Matrix4 *view) const;
     void GetProjectionMatrix(Matrix4 *proj) const;

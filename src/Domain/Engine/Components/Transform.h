@@ -18,6 +18,7 @@
 
 class Transform : public Component
 {
+friend class GameObject;
 
 private:
 
@@ -28,9 +29,10 @@ private:
     // Used in inspector too
     Vector3 m_localEuler = Vector3(0.0f);
 
-public:
-
+protected:
     Transform();
+
+public:
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;

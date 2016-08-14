@@ -1,9 +1,24 @@
 #include "Camera.h"
 #include "Canvas.h"
 #include "FileReader.h"
+#include "MeshRenderer.h"
+
+bool Camera::s_inited = false;
+Mesh* Camera::s_camMesh = nullptr;
+
+void Camera::InitStatics()
+{
+    if (s_inited) return;
+
+    s_camMesh = AssetsManager::LoadAsset<Mesh>(
+                "Assets/Engine/Meshes/Camera.bmesh");
+
+    s_inited = true;
+}
 
 Camera::Camera()
 {
+    InitStatics();
 }
 
 void Camera::GetViewMatrix(Matrix4 *view) const
@@ -152,11 +167,16 @@ ICloneable *Camera::Clone() const
 #ifdef BANG_EDITOR
 void Camera::OnDrawGizmos()
 {
+    if (gameObject->IsEditorGameObject()) return;
+
     Component::OnDrawGizmos();
 
-    Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("./Assets/Engine/Textures/CameraIcon.btex2d");
-    Gizmos::SetColor(Color::gray);
-    Gizmos::DrawIcon(tex, transform->GetPosition(), Vector3::one * 10.0f);
+    Gizmos::SetReceivesLighting(true);
+    Gizmos::SetPosition(transform->GetPosition());
+    Gizmos::SetRotation(transform->GetRotation());
+    Gizmos::SetScale(Vector3::one * 0.015f);
+    Gizmos::SetColor(GetClearColor());
+    Gizmos::RenderCustomMesh(Camera::s_camMesh);
 
     if (gameObject->IsSelectedInHierarchy())
     {
@@ -165,20 +185,22 @@ void Camera::OnDrawGizmos()
 
         if (GetProjectionMode() == ProjectionMode::Perspective)
         {
-            Gizmos::DrawFrustum(transform->GetForward(), transform->GetUp(),
-                                transform->GetPosition(),
-                                GetZNear(), GetZFar(),
-                                GetFovDegrees(), GetAspectRatio());
+            Gizmos::RenderFrustum(transform->GetForward(), transform->GetUp(),
+                                  transform->GetPosition(),
+                                  GetZNear(), GetZFar(),
+                                  GetFovDegrees(), GetAspectRatio());
         }
         else
         {
             Box orthoBox;
             orthoBox.SetMin(transform->GetPosition() + Vector3(-GetOrthoWidth(), -GetOrthoHeight(), -GetZNear()));
             orthoBox.SetMax(transform->GetPosition() + Vector3( GetOrthoWidth(),  GetOrthoHeight(), -GetZFar()));
-            Gizmos::DrawSimpleBox(orthoBox, transform->GetRotation());
+            Gizmos::SetRotation(transform->GetRotation());
+            Gizmos::RenderSimpleBox(orthoBox);
         }
     }
 }
+
 
 void Camera::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {

@@ -37,12 +37,12 @@ void Box::SetMax(const Vector3 &bMax)
     m_maxv = bMax;
 }
 
-Vector3 Box::GetMin() const
+const Vector3& Box::GetMin() const
 {
     return m_minv;
 }
 
-Vector3 Box::GetMax() const
+const Vector3& Box::GetMax() const
 {
     return m_maxv;
 }

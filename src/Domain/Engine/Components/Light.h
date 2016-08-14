@@ -12,6 +12,7 @@
 class Light : public Component
 {
 friend class Scene;
+friend class GameObject;
 
 protected:
     float m_intensity = 1.0f;
@@ -21,8 +22,9 @@ protected:
     virtual void SetUniformsBeforeApplyingLight() const;
     virtual void ApplyLight(GBuffer *gbuffer) const;
 
-public:
     Light();
+
+public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override { return "Directional Light"; }

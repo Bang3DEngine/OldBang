@@ -5,13 +5,17 @@
 
 class PointLight : public Light
 {
+friend class GameObject;
+
 protected:
     float m_range = 1.0f;
 
     virtual void SetUniformsBeforeApplyingLight() const override;
 
-public:
+protected:
     PointLight();
+
+public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override;

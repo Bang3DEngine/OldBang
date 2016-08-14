@@ -20,6 +20,8 @@
 
 class LineRenderer : public Renderer
 {
+friend class GameObject;
+
 protected:
     std::vector<Vector3> m_points;
 
@@ -31,8 +33,10 @@ protected:
     virtual void BindPointsToVAO() const;
     virtual void RenderWithoutBindingMaterial() const override;
 
-public:
+protected:
     LineRenderer();
+
+public:
     virtual ~LineRenderer();
 
     virtual const std::string ToString() const override;

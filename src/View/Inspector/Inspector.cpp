@@ -178,38 +178,31 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 
     if (clickedAction == MenuBar::Action::AddComponentBehaviour)
     {
-        BehaviourHolder *bh = new BehaviourHolder();
-        m_currentGameObject->AddComponent(bh);
+        BehaviourHolder *bh = m_currentGameObject->AddComponent<BehaviourHolder>();
     }
     else if (clickedAction == MenuBar::Action::AddComponentCamera)
     {
-        Camera *c = new Camera();
-        m_currentGameObject->AddComponent(c);
+        Camera *c = m_currentGameObject->AddComponent<Camera>();
     }
     else if (clickedAction == MenuBar::Action::AddComponentMeshRenderer)
     {
-        MeshRenderer *m = new MeshRenderer();
-        m_currentGameObject->AddComponent(m);
+        MeshRenderer *m = m_currentGameObject->AddComponent<MeshRenderer>();
     }
     else if (clickedAction == MenuBar::Action::AddComponenSingleLineRenderer)
     {
-        SingleLineRenderer *slr = new SingleLineRenderer();
-        m_currentGameObject->AddComponent(slr);
+        SingleLineRenderer *slr = m_currentGameObject->AddComponent<SingleLineRenderer>();
     }
     else if (clickedAction == MenuBar::Action::AddComponentCircleRenderer)
     {
-        CircleRenderer *cr = new CircleRenderer();
-        m_currentGameObject->AddComponent(cr);
+        CircleRenderer *cr = m_currentGameObject->AddComponent<CircleRenderer>();
     }
     else if (clickedAction == MenuBar::Action::AddComponentDirectionalLight)
     {
-        DirectionalLight *dl = new DirectionalLight();
-        m_currentGameObject->AddComponent(dl);
+        DirectionalLight *dl = m_currentGameObject->AddComponent<DirectionalLight>();
     }
     else if (clickedAction == MenuBar::Action::AddComponentPointLight)
     {
-        PointLight *pl = new PointLight();
-        m_currentGameObject->AddComponent(pl);
+        PointLight *pl = m_currentGameObject->AddComponent<PointLight>();
     }
 
     Refresh();

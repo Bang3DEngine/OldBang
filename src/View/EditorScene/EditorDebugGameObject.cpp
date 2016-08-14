@@ -28,7 +28,7 @@ void EditorDebugGameObject::DrawLines(bool depthPass)
         Gizmos::SetLineWidth(dl.m_lineWidth);
         Gizmos::SetReceivesLighting(false);
 
-        Gizmos::DrawLine(dl.m_origin, dl.m_destiny);
+        Gizmos::RenderLine(dl.m_origin, dl.m_destiny);
     }
 }
 

@@ -12,6 +12,7 @@ class SelectionFramebuffer;
 class Renderer : public Component
 {
 friend class SelectionFramebuffer;
+friend class GameObject;
 
 public:
     NamedEnum (RenderMode,
@@ -104,9 +105,10 @@ protected:
             const Matrix4 &projection,
             const Matrix4 &pvm) const;
 
-public:
-
+protected:
     Renderer();
+
+public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 

@@ -629,6 +629,7 @@ void GameObject::OnDrawGizmosNoDepth()
 
 void GameObject::_OnDrawGizmos()
 {
+    Gizmos::Reset();
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
     {

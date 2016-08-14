@@ -42,34 +42,42 @@ private:
 
     static Material *m_material;
     static Color m_color;
+    static Vector3 m_position;
+    static Quaternion m_rotation;
+    static Vector3 m_scale;
     static float m_lineWidth;
     static bool m_wireframe;
     static bool m_ignoreModel, m_ignoreView, m_ignoreProjection;
     static bool m_receivesLighting;
 
-    static void SetStatesBeforeDrawing();
+    static void SetStatesBeforeRendering();
 
 public:
 
     static void SetColor(const Color &color);
+
+    static void SetPosition(const Vector3 &position);
+    static void SetRotation(const Quaternion &rotation);
+    static void SetScale(const Vector3 &scale);
+
     static void SetLineWidth(float lineWidth);
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
     static void SetIgnoreMatrices(bool ignoreModel, bool ignoreView,
                                   bool ignoreProjection);
-    static void DrawBox(const Box &b, const Quaternion& rotation = Quaternion::identity);
-    static void DrawSimpleBox(const Box &b, const Quaternion& rotation = Quaternion::identity);
-    static void DrawIcon(const Texture2D *texture,
-                         const Vector3 &position, const Vector3 &scale,
-                         bool billboard = true);
-    static void DrawLine(const Vector3 &origin, const Vector3 &destiny);
-    static void DrawRay(const Vector3 &origin, const Vector3 &rayDir);
-    static void DrawSphere(const Vector3 &origin, float radius);
-    static void DrawFrustum(const Vector3 &forward, const Vector3 &up,
-                            const Vector3 &origin,
-                            float zNear, float zFar,
-                            float fovDegrees, float aspectRatio);
-    static void DrawSimpleSphere(const Vector3 &origin, float radius);
+    static void RenderCustomMesh(Mesh *m);
+    static void RenderBox(const Box &b);
+    static void RenderSimpleBox(const Box &b);
+    static void RenderIcon(const Texture2D *texture,
+                           bool billboard = true);
+    static void RenderLine(const Vector3 &origin, const Vector3 &destiny);
+    static void RenderRay(const Vector3 &origin, const Vector3 &rayDir);
+    static void RenderSphere(const Vector3 &origin, float radius);
+    static void RenderFrustum(const Vector3 &forward, const Vector3 &up,
+                              const Vector3 &origin,
+                              float zNear, float zFar,
+                              float fovDegrees, float aspectRatio);
+    static void RenderSimpleSphere(const Vector3 &origin, float radius);
 
     static void Reset();
 };

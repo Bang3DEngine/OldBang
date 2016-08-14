@@ -33,8 +33,9 @@ public:
 class BehaviourHolder : public Component,
                         public IAttrWidgetButtonListener
 {
-private:
+friend class GameObject;
 
+private:
     CompileBehaviourThread m_compileThread;
 
     /**
@@ -55,8 +56,10 @@ private:
 
     void ChangeBehaviour(Behaviour *newBehaviour);
 
-public:
+protected:
     BehaviourHolder();
+
+public:
     virtual ~BehaviourHolder();
 
     virtual const std::string ToString() const override;

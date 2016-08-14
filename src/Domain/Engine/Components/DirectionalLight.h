@@ -5,9 +5,11 @@
 
 class DirectionalLight : public Light
 {
+friend class GameObject;
 
-public:
+protected:
     DirectionalLight();
+public:
 
     virtual const std::string ToString() const override;
     virtual std::string GetName() const override;

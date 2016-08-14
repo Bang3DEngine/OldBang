@@ -20,9 +20,12 @@
 
 class SingleLineRenderer : public LineRenderer
 {
+friend class GameObject;
+
+protected:
+    SingleLineRenderer();
 
 public:
-    SingleLineRenderer();
     virtual ~SingleLineRenderer();
 
     virtual const std::string ToString() const override;

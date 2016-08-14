@@ -28,8 +28,8 @@ public:
     void SetMin(const Vector3& bMin);
     void SetMax(const Vector3& bMax);
 
-    Vector3 GetMin() const;
-    Vector3 GetMax() const;
+    const Vector3& GetMin() const;
+    const Vector3& GetMax() const;
     Vector3 GetDiagonal() const;
     float GetWidth() const;
     float GetHeight() const;
