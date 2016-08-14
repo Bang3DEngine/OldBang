@@ -38,7 +38,10 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
+    if (m_widgetToItem.size() == 0) return; // Avoid double clearings
+
     clear();
+
     m_widgetToItem.clear();
     m_currentGameObject = nullptr;
     m_titleLabel->setText(QString::fromStdString(""));
@@ -48,6 +51,7 @@ void Inspector::Clear()
         delete iw;
     }
     m_currentInspectorWidgets.clear();
+    m_widgetToInspectables.clear();
     m_currentInspectables.clear();
 }
 
@@ -55,8 +59,9 @@ void Inspector::Refresh()
 {
     if (m_currentGameObject)
     {
-        Clear();
         ShowGameObjectInfo(m_currentGameObject);
+        updateGeometry();
+        adjustSize();
     }
 }
 
@@ -65,9 +70,9 @@ void Inspector::SetInspectable(IInspectable *inspectable, const std::string &tit
     Clear();
     InspectorWidget *iw = new InspectorWidget();
     iw->Init(title, inspectable);
-    m_currentInspectorWidgets.push_back(iw);
+    m_widgetToInspectables[iw] = inspectable;
     m_currentInspectables.push_back(inspectable);
-    AddWidget(m_currentInspectorWidgets[0]);
+    AddWidget(iw);
 }
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
@@ -80,8 +85,8 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     for (Component *c : gameObject->GetComponents())
     {
         ComponentWidget *w = new ComponentWidget(c);
-        m_currentInspectorWidgets.push_back(w);
         m_currentInspectables.push_back(c);
+        m_widgetToInspectables[w] = c;
         AddWidget(w);
     }
 
@@ -94,32 +99,55 @@ void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInsp
     m_currentInspectables.push_back(prefabInspectable);
 }
 
-void Inspector::AddWidget(InspectorWidget *widget)
+void Inspector::RefreshHard()
+{
+    if (m_currentGameObject)
+    {
+        GameObject *go = m_currentGameObject;
+        ShowGameObjectInfo(go);
+    }
+    else
+    {
+        if(m_currentInspectables.size() == 1)
+        {
+            IInspectable *insp = m_currentInspectables[0];
+            SetInspectable(insp);
+        }
+    }
+}
+
+void Inspector::AddWidget(InspectorWidget *widget, int row)
 {
     NONULL(widget);
 
+    int newRow = (row == -1 ? count() : row);
+
     QListWidgetItem *item = new QListWidgetItem();
+    insertItem(newRow, item);
+
     m_widgetToItem[widget] = item;
-    addItem(item);
+    m_currentInspectorWidgets.push_back(widget);
 
     setItemWidget(item, widget);
-    item->setSizeHint(widget->size()); // error aqui
+    item->setSizeHint(widget->size());
 }
+
+
 
 void Inspector::MoveUp(InspectorWidget *w)
 {
     int lastRow = row(m_widgetToItem[w]);
     if (lastRow == 0) return;
     QListWidgetItem *item = takeItem(lastRow);
-    insertItem(lastRow-1, item);
+    insertItem(lastRow - 1, item);
 }
 
 void Inspector::MoveDown(InspectorWidget *w)
 {
     int lastRow = row(m_widgetToItem[w]);
-    if (lastRow == this->count()) return;
+    if (lastRow == count()) return;
     QListWidgetItem *item = takeItem(lastRow);
-    insertItem(lastRow+1, item);
+    insertItem(lastRow + 1, item);
 }
 
 std::vector<IInspectable *> Inspector::GetCurrentInspectables() const

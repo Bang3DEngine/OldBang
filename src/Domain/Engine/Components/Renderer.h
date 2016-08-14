@@ -35,6 +35,7 @@ private:
      * or if rendering with wireframe.
      */
     float m_lineWidth = 1.0f;
+    Color m_lineColor = Color::green;
 
     /**
      * @brief ignoreModelMatrix
@@ -125,6 +126,9 @@ public:
 
     void SetLineWidth(float w);
     float GetLineWidth() const;
+
+    void SetLineColor(Color c);
+    Color GetLineColor() const;
 
     void SetIgnoreMaterial(bool ignore);
     bool GetIgnoreMaterial() const;

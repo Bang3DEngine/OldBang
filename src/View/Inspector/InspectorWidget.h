@@ -27,7 +27,6 @@
 
 class Component;
 class GameObject;
-class WindowEventManager;
 class AttributeWidget;
 
 /**

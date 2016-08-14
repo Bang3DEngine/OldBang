@@ -26,6 +26,10 @@ IDroppable::IDroppable()
 {
 }
 
+IDroppable::~IDroppable()
+{
+}
+
 void IDroppable::Init(QWidget *qw)
 {
     if (!m_inited)
@@ -100,6 +104,8 @@ IDroppableQListView::IDroppableQListView() : IDroppable()
     viewport()->setAcceptDrops(true);
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 }
+
+
 IDroppableQTreeWidget::IDroppableQTreeWidget() : IDroppable()
 {
     setAcceptDrops(true);
@@ -107,6 +113,16 @@ IDroppableQTreeWidget::IDroppableQTreeWidget() : IDroppable()
     viewport()->setAcceptDrops(true);
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 
+}
+
+IDroppableQWidget::~IDroppableQWidget()
+{
+}
+IDroppableQListView::~IDroppableQListView()
+{
+}
+IDroppableQTreeWidget::~IDroppableQTreeWidget()
+{
 }
 //
 

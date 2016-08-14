@@ -59,21 +59,34 @@ void ComponentWidget::OnEnabledCheckboxPressed(bool checked)
     }
 }
 
+// We do this with timers to avoid a bug
 void ComponentWidget::OnContextMenuRemoveComponentSelected()
 {
+    QTimer::singleShot(50, this, SLOT(RemoveComponentSelected()));
+}
+void ComponentWidget::RemoveComponentSelected()
+{
     m_relatedComponent->gameObject->RemoveComponent(m_relatedComponent);
-    Inspector::GetInstance()->Refresh();
+    Inspector::GetInstance()->RefreshHard();
 }
 
 void ComponentWidget::OnContextMenuMoveUpSelected()
 {
+    QTimer::singleShot(50, this, SLOT(MenuMoveUpSelected()));
+}
+void ComponentWidget::MenuMoveUpSelected()
+{
     m_relatedComponent->gameObject->MoveComponent(m_relatedComponent, -1);
-    Inspector::GetInstance()->Refresh();
+    Inspector::GetInstance()->RefreshHard();
 }
 
 void ComponentWidget::OnContextMenuMoveDownSelected()
 {
+    QTimer::singleShot(50, this, SLOT(MenuMoveDownSelected()));
+}
+void ComponentWidget::MenuMoveDownSelected()
+{
     m_relatedComponent->gameObject->MoveComponent(m_relatedComponent, 1);
-    WindowMain::GetInstance()->widgetInspector->Refresh();
+    Inspector::GetInstance()->RefreshHard();
 }
 

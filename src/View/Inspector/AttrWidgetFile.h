@@ -28,6 +28,7 @@ public:
 public:
     AttrWidgetFile(const XMLAttribute &xmlAttribute,
                    InspectorWidget *m_inspectorWidget);
+    virtual ~AttrWidgetFile();
 
     virtual void SetValue(const std::string &filepath, bool draggedFile = false);
     virtual std::string GetValue();

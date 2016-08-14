@@ -24,8 +24,7 @@ private:
     std::vector<IInspectable*> m_currentInspectables;
 
     std::map<InspectorWidget*, QListWidgetItem*> m_widgetToItem;
-
-    void AddWidget(InspectorWidget *widget);
+    std::map<InspectorWidget*, IInspectable*> m_widgetToInspectables;
 
 protected:
     //To set the scroll step to a smaller one
@@ -45,6 +44,16 @@ public:
     void MoveDown(InspectorWidget *w);
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
+
+    /**
+     * @brief RefreshHard must be used when some hidden or non-hidden
+     * attrWidgets are shown/hidden. Because of resizing reasons, we have
+     * to reconstruct the layout in order for it to be propperly
+     * renderered by Qt.
+     * @param widget
+     */
+    void RefreshHard();
+    void AddWidget(InspectorWidget *widget, int row = -1);
 
     std::vector<IInspectable*> GetCurrentInspectables() const;
     bool IsShowingInspectable(IInspectable *inspectable) const;

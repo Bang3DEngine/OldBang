@@ -68,8 +68,11 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
 InspectorWidget::~InspectorWidget()
 {
-    m_updateTimer->stop();
-    delete m_updateTimer;
+    if (m_updateTimer)
+    {
+        m_updateTimer->stop();
+        delete m_updateTimer;
+    }
 }
 
 void InspectorWidget::OnDropFromExplorer(const File &f, QDropEvent *e)
@@ -186,6 +189,7 @@ void InspectorWidget::RefreshWidgetValues()
 {
     XMLNode xmlInfo = GetInspectableXMLInfo();
     xmlInfo.SetTagName(m_tagName);
+    bool hasToRefreshHard = false;
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         XMLAttribute attribute = itAttr.second;
@@ -193,8 +197,15 @@ void InspectorWidget::RefreshWidgetValues()
         if( m_attrNameToAttrWidget.find(attrName) != m_attrNameToAttrWidget.end())
         {
             AttributeWidget *ws = m_attrNameToAttrWidget[attrName];
+            hasToRefreshHard = hasToRefreshHard ||
+                    (ws->isHidden() ^ attribute.HasProperty(XMLProperty::Hidden));
             ws->Refresh(attribute);
         }
+    }
+
+    if (hasToRefreshHard)
+    {
+        Inspector::GetInstance()->RefreshHard();
     }
 }
 

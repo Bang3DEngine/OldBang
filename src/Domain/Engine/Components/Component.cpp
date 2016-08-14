@@ -1,6 +1,8 @@
 #include "Component.h"
-#include "GameObject.h"
+
 #include "Transform.h"
+#include "GameObject.h"
+#include "WindowEventManager.h"
 
 Component::Component()
 {
@@ -8,6 +10,7 @@ Component::Component()
 
 Component::~Component()
 {
+    WindowEventManager::GetInstance()->RemoveListener(this);
 }
 
 #ifdef BANG_EDITOR

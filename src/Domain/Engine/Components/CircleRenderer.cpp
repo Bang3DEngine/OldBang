@@ -117,8 +117,8 @@ void CircleRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void CircleRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     LineRenderer::ReadXMLInfo(xmlInfo);
-    SetRadius(xmlInfo->GetFloat("radius"));
-    SetSegments(xmlInfo->GetFloat("segments"));
+    SetRadius(xmlInfo->GetFloat("Radius"));
+    SetSegments(xmlInfo->GetFloat("Segments"));
 }
 
 void CircleRenderer::FillXMLInfo(XMLNode *xmlInfo) const
@@ -126,7 +126,6 @@ void CircleRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     LineRenderer::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("CircleRenderer");
 
-    xmlInfo->SetFilepath("materialFilepath", m_material->GetFilepath());
-    xmlInfo->SetFloat("radius", GetRadius());
-    xmlInfo->SetInt("segments", GetSegments());
+    xmlInfo->SetFloat("Radius", GetRadius());
+    xmlInfo->SetInt("Segments", GetSegments());
 }

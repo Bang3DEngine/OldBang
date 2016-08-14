@@ -25,8 +25,11 @@ public slots:
     void OnEnabledCheckboxPressed(bool checked);
 
     void OnContextMenuRemoveComponentSelected();
+    void RemoveComponentSelected();
     void OnContextMenuMoveUpSelected();
+    void MenuMoveUpSelected();
     void OnContextMenuMoveDownSelected();
+    void MenuMoveDownSelected();
 
 };
 

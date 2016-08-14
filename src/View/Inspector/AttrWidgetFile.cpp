@@ -50,6 +50,10 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     AfterConstructor();
 }
 
+AttrWidgetFile::~AttrWidgetFile()
+{
+}
+
 void AttrWidgetFile::Browse()
 {
     FileDialog fd(Persistence::GetAssetsPathAbsolute(), m_fileExtension);

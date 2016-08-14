@@ -25,6 +25,8 @@ protected:
     bool m_dragThatStartedHereIsGoingOn = false;
 
     IDroppable();
+    virtual ~IDroppable();
+
     void Init(QWidget *qw);
 
     void OnDragEnterEvent(QWidget *qw, QDragEnterEvent *e);
@@ -45,6 +47,7 @@ class IDroppableQWidget : public IDroppable,
 {
 public:
     IDroppableQWidget();
+    virtual ~IDroppableQWidget();
     virtual void dragEnterEvent(QDragEnterEvent *e) override;
     virtual void dragMoveEvent(QDragMoveEvent *e) override;
     virtual void dragLeaveEvent(QDragLeaveEvent *e) override;
@@ -55,6 +58,7 @@ class IDroppableQListView : public IDroppable,
 {
 public:
     IDroppableQListView();
+    virtual ~IDroppableQListView();
     virtual void dragEnterEvent(QDragEnterEvent *e) override;
     virtual void dragMoveEvent(QDragMoveEvent *e) override;
     virtual void dragLeaveEvent(QDragLeaveEvent *e) override;
@@ -65,6 +69,7 @@ class IDroppableQTreeWidget : public IDroppable,
 {
 public:
     IDroppableQTreeWidget();
+    virtual ~IDroppableQTreeWidget();
     virtual void dragEnterEvent(QDragEnterEvent *e) override;
     virtual void dragMoveEvent(QDragMoveEvent *e) override;
     virtual void dragLeaveEvent(QDragLeaveEvent *e) override;
