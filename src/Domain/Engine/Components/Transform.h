@@ -22,6 +22,8 @@ friend class GameObject;
 
 private:
 
+    mutable bool m_hasChanged = false;
+    mutable Matrix4 m_localToWorldMatrix;
     Vector3 m_localPosition = Vector3(0.0f);
     Quaternion m_localRotation = Quaternion();
     Vector3 m_localScale = Vector3(1.0f);
@@ -62,45 +64,51 @@ public:
     void Rotate(const Quaternion &r);
     void RotateEuler(const Vector3 &degreesEuler);
 
-#ifdef BANG_EDITOR
-    void SetLocalRotationFromInspector(const Quaternion &q);
-#endif
-
     void SetScale(float s);
     void SetScale(const Vector3 &v);
     void SetLocalScale(float s);
     void SetLocalScale(const Vector3 &s);
 
     /**
-     * @brief Transforms the passed direction from local(parent) space to world space.
+     * @brief Transforms the point from local space to world space.
      * @return
      */
     Vector3 TransformPoint(const Vector3 &point) const;
+
+    /**
+     * @brief Transforms the point from world space to local space.
+     * @return
+     */
     Vector3 InverseTransformPoint(const Vector3 &point) const;
+
+    /**
+     * @brief Transforms the direction from local space to world space.
+     * @return
+     */
     Vector3 TransformDirection(const Vector3 &dir) const;
+
+    /**
+     * @brief Transforms the direction from world space to local space.
+     * @return
+     */
     Vector3 InverseTransformDirection(const Vector3 &dir) const;
 
-    // These are aliases of the above
+    Vector3 ParentToLocalPoint(const Vector3 &point) const;
+    Vector3 ParentToLocalDirection(const Vector3 &dir) const;
+    Vector3 LocalToParentPoint(const Vector3 &point) const;
+    Vector3 LocalToParentDirection(const Vector3 &dir) const;
+
     Vector3 LocalToWorldPoint(const Vector3 &point) const;
-    Vector3 WorldToLocalPoint(const Vector3 &point) const;
     Vector3 LocalToWorldDirection(const Vector3 &dir) const;
+    Vector3 WorldToLocalPoint(const Vector3 &point) const;
     Vector3 WorldToLocalDirection(const Vector3 &dir) const;
 
-    Vector3 LocalToObjectPoint(const Vector3 &point) const;
-    Vector3 LocalToObjectDirection(const Vector3 &dir) const;
-    Vector3 ObjectToLocalPoint(const Vector3 &point) const;
-    Vector3 ObjectToLocalDirection(const Vector3 &dir) const;
 
-    Vector3 ObjectToWorldPoint(const Vector3 &point) const;
-    Vector3 ObjectToWorldDirection(const Vector3 &dir) const;
-    Vector3 WorldToObjectPoint(const Vector3 &point) const;
-    Vector3 WorldToObjectDirection(const Vector3 &dir) const;
+    const Matrix4& GetLocalToParentMatrix() const;
+    void GetLocalToParentMatrix(Matrix4 *m) const;
+    void GetLocalToWorldMatrix(Matrix4 *m) const;
 
-
-    void GetObjectModelMatrix(Matrix4 *m) const;
-    void GetModelMatrix(Matrix4 *m) const;
-
-    void GetNormalMatrix(Matrix4 *m) const;
+    void GetLocalToWorldNormalMatrix(Matrix4 *m) const;
 
     Vector3 GetForward() const;
     Vector3 GetBack() const;

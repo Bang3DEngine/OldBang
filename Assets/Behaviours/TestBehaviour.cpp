@@ -42,7 +42,12 @@ void TestBehaviour::OnUpdate()
         transform->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime);
     }
 
-    float speed = 50.0f;
+    float speed = 5.0f;
+    if (Input::GetKey(Input::Key::X))
+    {
+        // transform->SetPosition(Vector3::zero);
+    }
+
     if (Input::GetKey(Input::Key::W))
     {
         transform->Translate(transform->GetForward() * -speed * Time::deltaTime);

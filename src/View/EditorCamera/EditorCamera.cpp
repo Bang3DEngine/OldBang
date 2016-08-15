@@ -223,7 +223,6 @@ void EditorCamera::OnUpdate()
         HandleLookAtFocus(); // Modifies m_doingLookAt
         if (!m_doingLookAt)  // If it has just stopped
         {
-
         }
 
         //Update all needed variables in case we are doing a lookAt.

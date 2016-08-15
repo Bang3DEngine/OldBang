@@ -12,7 +12,7 @@
 #include "Component.h"
 #include "Transform.h"
 
-
+class Mesh;
 class Canvas;
 class MeshRenderer;
 class Camera : public Component

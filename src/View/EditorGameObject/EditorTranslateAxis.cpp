@@ -64,12 +64,15 @@ void EditorTranslateAxis::OnUpdate()
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 wAxisDir = m_oAxisDirection;
-                parentAxisDir = ago->transform->WorldToLocalDirection(m_oAxisDirection);
+                if (ago->parent)
+                {
+                    parentAxisDir = ago->parent->transform->WorldToLocalDirection(m_oAxisDirection);
+                }
             }
             else
             {
-                wAxisDir = ago->transform->ObjectToWorldDirection(m_oAxisDirection);
-                parentAxisDir = ago->transform->ObjectToLocalDirection(m_oAxisDirection);
+                wAxisDir = ago->transform->LocalToWorldDirection(m_oAxisDirection);
+                parentAxisDir = ago->transform->LocalToParentDirection(m_oAxisDirection);
             }
             wAxisDir.Normalize();
             parentAxisDir.Normalize();

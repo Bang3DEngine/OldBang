@@ -20,7 +20,6 @@ void Renderer::CloneInto(ICloneable *clone) const
     Renderer *r = static_cast<Renderer*>(clone);
     Component::CloneInto(r);
     r->SetMaterial(GetMaterial());
-    r->SetLineColor(GetLineColor());
     r->SetDrawWireframe(GetDrawWireframe());
     r->SetCullMode(GetCullMode());
     r->SetRenderMode(GetRenderMode());
@@ -123,8 +122,8 @@ void Renderer::GetMatrices(Matrix4 *model,
 
     if (!m_ignoreModelMatrix)
     {
-        gameObject->transform->GetModelMatrix(model);
-        gameObject->transform->GetNormalMatrix(normal);
+        gameObject->transform->GetLocalToWorldMatrix(model);
+        gameObject->transform->GetLocalToWorldNormalMatrix(normal);
     }
     else
     {
@@ -208,16 +207,6 @@ void Renderer::SetLineWidth(float w)
 float Renderer::GetLineWidth() const
 {
     return m_lineWidth;
-}
-
-void Renderer::SetLineColor(Color c)
-{
-    m_lineColor = c;
-}
-
-Color Renderer::GetLineColor() const
-{
-    return m_lineColor;
 }
 
 void Renderer::SetIgnoreMaterial(bool ignore)
@@ -329,7 +318,6 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
     }
 
     SetLineWidth(xmlInfo->GetFloat("LineWidth"));
-    SetLineColor(xmlInfo->GetColor("LineColor"));
     SetDrawWireframe(xmlInfo->GetBool("DrawWireframe"));
     SetReceivesLighting(xmlInfo->GetBool("ReceivesLighting"));
 }
@@ -358,7 +346,6 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
     }
 
     xmlInfo->SetFloat("LineWidth", GetLineWidth());
-    xmlInfo->SetColor("LineColor", GetLineColor());
     xmlInfo->SetBool("DrawWireframe", GetDrawWireframe(), {XMLProperty::Inline});
     xmlInfo->SetBool("ReceivesLighting", GetReceivesLighting(), {XMLProperty::Inline});
 }

@@ -1,4 +1,6 @@
 #include "Camera.h"
+
+#include "Mesh.h"
 #include "Canvas.h"
 #include "FileReader.h"
 #include "MeshRenderer.h"
@@ -23,7 +25,7 @@ Camera::Camera()
 
 void Camera::GetViewMatrix(Matrix4 *view) const
 {
-    transform->GetModelMatrix(view);
+    transform->GetLocalToWorldMatrix(view);
     *view = view->Inversed();
 }
 
@@ -171,10 +173,14 @@ void Camera::OnDrawGizmos()
 
     Component::OnDrawGizmos();
 
+    Camera *sceneCam = Scene::GetCamera();
+    float distScale = Vector3::Distance(sceneCam->transform->GetPosition(),
+                                        transform->GetPosition());
+
     Gizmos::SetReceivesLighting(true);
     Gizmos::SetPosition(transform->GetPosition());
     Gizmos::SetRotation(transform->GetRotation());
-    Gizmos::SetScale(Vector3::one * 0.015f);
+    Gizmos::SetScale(Vector3::one * 0.02f * distScale);
     Gizmos::SetColor(GetClearColor());
     Gizmos::RenderCustomMesh(Camera::s_camMesh);
 

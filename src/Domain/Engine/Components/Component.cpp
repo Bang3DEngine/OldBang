@@ -10,7 +10,6 @@ Component::Component()
 
 Component::~Component()
 {
-    WindowEventManager::GetInstance()->RemoveListener(this);
 }
 
 #ifdef BANG_EDITOR

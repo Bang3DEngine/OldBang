@@ -105,7 +105,7 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
 
         if(keepWorldTransform)
         {
-            m_transform->SetLocalPosition(m_transform->LocalToWorldPoint(m_transform->GetLocalPosition()));
+            m_transform->SetLocalPosition(m_parent->m_transform->LocalToWorldPoint(m_transform->GetLocalPosition()));
             // TODO
             // SetRotation
             // SetScale
@@ -119,7 +119,7 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
 
             if(keepWorldTransform)
             {
-                m_transform->SetLocalPosition(m_transform->WorldToLocalPoint(m_transform->GetLocalPosition()));
+                m_transform->SetLocalPosition(m_parent->m_transform->WorldToLocalPoint(m_transform->GetLocalPosition()));
                 // TODO
                 // SetRotation
                 // SetScale
@@ -222,7 +222,7 @@ Box GameObject::GetLocalBoundingBox() const
     if (CAN_USE_COMPONENT(m_transform))
     {
         Matrix4 mat;
-        m_transform->GetObjectModelMatrix(&mat);
+        m_transform->GetLocalToParentMatrix(&mat);
         b = mat * b; //Apply transform to Box
     }
     return b;
@@ -234,7 +234,7 @@ Box GameObject::GetBoundingBox() const
     if (CAN_USE_COMPONENT(m_transform))
     {
         Matrix4 mat;
-        m_transform->GetModelMatrix(&mat);
+        m_transform->GetLocalToWorldMatrix(&mat);
         b = mat * b;
     }
     return b;

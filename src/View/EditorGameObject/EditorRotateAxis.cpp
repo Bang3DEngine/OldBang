@@ -89,16 +89,23 @@ void EditorRotateAxis::OnUpdate()
             Vector3 parentAxisDir;
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
-                parentAxisDir = ago->transform->WorldToObjectDirection(m_oAxisDirection);
+                parentAxisDir = ago->parent->transform->WorldToLocalDirection(m_oAxisDirection);
             }
             else
             {
                 parentAxisDir = m_oAxisDirection;
             }
-            parentAxisDir.Normalize();
 
+            parentAxisDir.Normalize();
             Quaternion q = Quaternion::AngleAxis(rotAngle, parentAxisDir);
-            ago->transform->RotateLocal(q);
+            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
+            {
+                ago->transform->SetLocalRotation(q.Normalized() * ago->transform->GetLocalRotation());
+            }
+            else
+            {
+                ago->transform->RotateLocal(q);
+            }
         }
     }
 

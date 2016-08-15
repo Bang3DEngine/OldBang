@@ -118,7 +118,6 @@ void MeshRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     if (!GetDrawWireframe())
     {
         xmlInfo->GetAttribute("LineWidth")->SetProperty(XMLProperty::Hidden);
-        xmlInfo->GetAttribute("LineColor")->SetProperty(XMLProperty::Hidden);
     }
     xmlInfo->SetFilepath("Mesh", m_mesh ? m_mesh->GetFilepath() : "", "bmesh");
 }

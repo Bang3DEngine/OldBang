@@ -36,7 +36,7 @@ Matrix4::Matrix4(const Vector4 &col0,
     c3 = col3;
 }
 
-
+#include <iostream>
 Matrix4 Matrix4::Inversed() const
 {
     Matrix4 inv;
@@ -157,6 +157,12 @@ Matrix4 Matrix4::Inversed() const
 
     float det = m[0].x * inv[0].x + m[0].y * inv[1].x + m[0].z * inv[2].x + m[0].w * inv[3].x;
     if (det == 0) return *this;
+
+    inv.c0 *= 1.0f / det;
+    inv.c1 *= 1.0f / det;
+    inv.c2 *= 1.0f / det;
+    inv.c3 *= 1.0f / det;
+
     return inv;
 }
 

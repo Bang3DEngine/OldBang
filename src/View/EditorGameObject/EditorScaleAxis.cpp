@@ -52,11 +52,11 @@ void EditorScaleAxis::OnUpdate()
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {
                 wAxisDir = m_oAxisDirection;
-                parentAxisDir = ago->transform->WorldToObjectDirection(m_oAxisDirection);
+                parentAxisDir = ago->transform->WorldToLocalDirection(m_oAxisDirection);
             }
             else
             {
-                wAxisDir = ago->transform->ObjectToWorldDirection(m_oAxisDirection);
+                wAxisDir = ago->transform->LocalToWorldDirection(m_oAxisDirection);
                 parentAxisDir = m_oAxisDirection;
             }
             wAxisDir.Normalize();

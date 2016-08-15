@@ -205,11 +205,19 @@ void Gizmos::RenderIcon(const Texture2D *texture,
 
     if (billboard)
     {
-        Scene *scene = Scene::GetCurrentScene();
-        Transform *camTransform = scene->GetCamera()->transform;
+        Camera *cam = Scene::GetCamera();
+        Vector3 camPos = cam->transform->GetPosition();
+
+        float distScale = 1.0f;
+        if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
+        {
+           distScale = Vector3::Distance(camPos, Gizmos::m_position);
+        }
+
+        Gizmos::m_gizmosGameObject-> transform->SetScale(m_scale * distScale);
         Gizmos::m_gizmosGameObject->
-                transform->LookInDirection(camTransform->GetForward(),
-                                           camTransform->GetUp());
+                transform->LookInDirection(cam->transform->GetForward(),
+                                           cam->transform->GetUp());
     }
 
     Gizmos::m_meshRenderer->GetMaterial()->SetTexture(texture);
