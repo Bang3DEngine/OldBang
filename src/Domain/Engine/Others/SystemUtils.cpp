@@ -22,7 +22,7 @@ std::string SystemUtils::GetAllProjectObjects()
 
     bool ok = false;
     std::string objs = "";
-    SystemUtils::System(cmdGetAllObjects, objs, ok);
+    SystemUtils::System(cmdGetAllObjects, &objs, &ok);
     if (!ok)
     {
         Logger_Error("Error trying to find object files to compile");
@@ -41,7 +41,7 @@ std::string SystemUtils::GetAllProjectSubDirs()
 
     bool ok = false;
     std::string allSubDirs = "";
-    SystemUtils::System(cmdGetAllSubDirs, allSubDirs, ok);
+    SystemUtils::System(cmdGetAllSubDirs, &allSubDirs, &ok);
     if (!ok)
     {
         Logger_Error("Error trying to find include directories to compile.");
@@ -58,7 +58,7 @@ std::string SystemUtils::GetQtIncludes()
     cmdGetQtIncludeDirs += " | grep -E \"qt|QT|Qt\"";
 
     bool ok = false;
-    SystemUtils::System(cmdGetQtIncludeDirs, qtIncludeDirs, ok);
+    SystemUtils::System(cmdGetQtIncludeDirs, &qtIncludeDirs, &ok);
     if (!ok)
     {
         Logger_Error("Error trying to find Qt include directories to compile.");
@@ -74,7 +74,7 @@ std::string SystemUtils::GetQtLibrariesDirs()
     //                              "grep -E \"qt|QT|Qt\"";
     std::string cmdGetQtLibDirs = "qmake -query QT_INSTALL_LIBS";
     bool ok = false;
-    SystemUtils::System(cmdGetQtLibDirs, qtLibDirs, ok);
+    SystemUtils::System(cmdGetQtLibDirs, &qtLibDirs, &ok);
     if (!ok)
     {
         Logger_Error("Error trying to find Qt library directories to compile.");
@@ -83,15 +83,23 @@ std::string SystemUtils::GetQtLibrariesDirs()
     return qtLibDirs;
 }
 
-void SystemUtils::System(const std::string &command, std::string &output, bool &success)
+void SystemUtils::System(const std::string &command, std::string *output, bool *success)
 {
     int fd[2];
     int old_fd[3] = {dup(STDIN_FILENO), dup(STDOUT_FILENO), dup(STDERR_FILENO)};
     int pipeResult = pipe(fd);
     if (pipeResult != 0)
     {
-        output = "There was an error when creating a pipe to compile the Behaviour.";
-        success = false;
+        if (output)
+        {
+            *output = "There has been an error when creating a pipe to execute a System instruction.";
+        }
+
+        if (success)
+        {
+            *success = false;
+        }
+
         return;
     }
 
@@ -116,7 +124,7 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
     }
     else if (pid == -1)
     {
-        Logger_Error("There was an error doing a fork to compile the Behaviour.");
+        Logger_Error("There was an error doing a fork to execute a System instruction.");
         quick_exit(1);
     }
 
@@ -124,14 +132,22 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
     dup2(fd[0], STDIN_FILENO);
 
     // Get system's output
-    output = "";
+    if (output)
+    {
+        *output = "";
+    }
+
     const int bufferSize = 1024;
     char buff[bufferSize + 1];
     memset((char*) &buff, 0, bufferSize + 1);
 
     while ( read(fd[0], buff, bufferSize) )
     {
-        output.append(buff);
+        if (output)
+        {
+            output->append(buff);
+        }
+
         memset(buff, 0, bufferSize);
     }
 
@@ -147,7 +163,16 @@ void SystemUtils::System(const std::string &command, std::string &output, bool &
     dup2(STDERR_FILENO, old_fd[2]);
 
     // Set output parameters
-    success = (result == 0);
+    if (success)
+    {
+        *success = (result == 0);
+    }
+}
+
+void SystemUtils::SystemBackground(const std::string &command)
+{
+    std::string cmd = command + " &";
+    system(cmd.c_str());
 }
 
 std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromProjectRoot)
@@ -203,7 +228,7 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
 
     std::string output = "";
     bool ok = false;
-    SystemUtils::System(cmd, output, ok);
+    SystemUtils::System(cmd, &output, &ok);
 
     if (ok)
     {

@@ -3,11 +3,16 @@
 
 #include "Bang.h"
 
+#include "Time.h"
+#include "Scene.h"
 #include "Logger.h"
+#include "Material.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "ShaderContract.h"
 #include "SingletonManager.h"
 #include "ISceneEventListener.h"
+
 
 #ifdef BANG_EDITOR
 #include "WindowMain.h"
@@ -48,12 +53,17 @@ protected:
     GameObject* const& gameObject = m_gameObject;
     GameObject* const& parent = m_parent;
     Transform*  const& transform  = m_transform;
+
 /**
 */
 
 public:
     Behaviour();
     virtual ~Behaviour();
+
+    // Substitute CLASS_NAME
+    static std::string s_behaviourHeaderTemplate;
+    static std::string s_behaviourSourceTemplate;
 
 protected:
     virtual void OnUpdate() override;

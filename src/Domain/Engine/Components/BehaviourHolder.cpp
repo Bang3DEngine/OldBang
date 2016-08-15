@@ -2,9 +2,6 @@
 
 BehaviourHolder::BehaviourHolder()
 {
-    //    new AttrWidgetButtonInfo( "Refresh",
-    //                std::bind(&BehaviourHolder::Refresh, this) )
-
     m_compileThread.SetBehaviourHolder(this);
 }
 
@@ -120,9 +117,49 @@ void BehaviourHolder::OnBehaviourFinishedCompiling(std::string soFilepath)
     }
 }
 
-void BehaviourHolder::OnButtonClicked()
+void BehaviourHolder::OnButtonClicked(const std::string &attrName)
 {
-    Refresh();
+    if (StringUtils::Contains(attrName, "Create"))
+    {
+        bool ok;
+        // Get Behaviour Class Name using a Dialog
+        QString text = QInputDialog::getText(WindowMain::GetInstance()->GetMainWindow(),
+                                             QString("Behaviour class name"),
+                                             QString("Behaviour name:"),
+                                             QLineEdit::Normal,
+                                             QString("MyBehaviourName"),
+                                             &ok
+                                             );
+        if (ok)
+        {
+            std::string currentDir = Explorer::GetInstance()->GetCurrentDir();
+            std::string className = text.toStdString();
+
+            // Create header file
+            std::string headerCode = Behaviour::s_behaviourHeaderTemplate;
+            StringUtils::Replace(&headerCode, "CLASS_NAME", className);
+            std::string headerFilepath = currentDir + "/" + className + ".h";
+            FileWriter::WriteToFile(headerFilepath, headerCode);
+
+            // Create source file
+            std::string sourceCode = Behaviour::s_behaviourSourceTemplate;
+            StringUtils::Replace(&sourceCode, "CLASS_NAME", className);
+            std::string sourceFilepath = currentDir + "/" + className + ".cpp";
+            FileWriter::WriteToFile(sourceFilepath, sourceCode);
+
+            // Update Behaviour file
+            m_sourceFilepath = sourceFilepath;
+            Refresh();
+
+            // Open with system editor
+            SystemUtils::SystemBackground("xdg-open " + headerFilepath);
+            SystemUtils::SystemBackground("xdg-open " + sourceFilepath);
+        }
+    }
+    else if (attrName == "Refresh")
+    {
+        Refresh();
+    }
 }
 
 void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
@@ -133,7 +170,6 @@ void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
     if (lastFilepath != m_sourceFilepath &&
         gameObject->IsInsideScene())
     {
-
         Refresh();
     }
 }
@@ -146,14 +182,17 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "cpp");
 
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
+
+    xmlInfo->SetButton("CreateNew...", noConstThis);
     if (m_compileThread.isRunning())
     {
         xmlInfo->SetButton("Refresh", noConstThis, {XMLProperty::Disabled});
     }
     else
     {
-        xmlInfo->SetButton("Refresh", noConstThis, {});
+        xmlInfo->SetButton("Refresh", noConstThis);
     }
+
 }
 
 

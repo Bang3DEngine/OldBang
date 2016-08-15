@@ -35,7 +35,11 @@ public:
      * @param The output of the command.
      * @param Whether it's been successful or not
      */
-    static void System(const std::string &command, std::string &output, bool &success);
+    static void System(const std::string &command,
+                       std::string *output = nullptr,
+                       bool *success = nullptr);
+
+    static void SystemBackground(const std::string &command);
 
     /**
      * @brief Compiles the passed script into a shared library, whom path is

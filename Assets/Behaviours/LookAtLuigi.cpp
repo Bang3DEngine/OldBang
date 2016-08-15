@@ -32,11 +32,11 @@ void LookAtLuigi::OnUpdate()
 {
     Behaviour::OnUpdate();
 
-    GameObject *luigi = GameObject::Find("LuigiHolder");
+    GameObject *luigi = GameObject::Find("Character");
     if (luigi)
     {
-        Vector3 myPos = gameObject->transform->GetPosition() * Vector3(1,0,1);
-        Vector3 luigiPos = luigi->transform->GetPosition() * Vector3(1,0,1);
+        Vector3 myPos = gameObject->transform->GetPosition();
+        Vector3 luigiPos = luigi->transform->GetPosition();
         gameObject->transform->LookInDirection(luigiPos - myPos);
     }
 

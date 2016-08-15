@@ -49,8 +49,8 @@ void EditorAxisGroup::OnUpdate()
         if (at)
         {
             transform->SetPosition(at->GetPosition()); // Pivot
-            Box bbox = m_attachedGameObject->GetBoundingBox();
-            transform->SetPosition( bbox.GetCenter() ); // Center
+            //Box bbox = m_attachedGameObject->GetBoundingBox();
+            //transform->SetPosition( bbox.GetCenter() ); // Center
 
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {

@@ -1,8 +1,10 @@
 #ifndef BEHAVIOURHOLDER_H
 #define BEHAVIOURHOLDER_H
 
-#include <QThread>
 #include <functional>
+
+#include <QThread>
+#include <QInputDialog>
 
 #include "Bang.h"
 #include "Component.h"
@@ -76,7 +78,7 @@ public:
     #endif
 
     void Refresh();
-    void OnButtonClicked() override;
+    void OnButtonClicked(const std::string &attrName) override;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
