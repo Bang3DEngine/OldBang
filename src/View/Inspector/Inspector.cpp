@@ -28,6 +28,10 @@ Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
     setMinimumWidth(300);
+
+    setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(OnCustomContextMenuRequested(QPoint)));
 }
 
 void Inspector::updateGeometries()
@@ -130,6 +134,26 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
 
     setItemWidget(item, widget);
     item->setSizeHint(widget->size());
+}
+
+void Inspector::OnCustomContextMenuRequested(QPoint point)
+{
+    // TODO: Not working
+
+    Logger_Log("Custom context menu requested!");
+    QMenu contextMenu(tr("Inspector context menu"), this);
+
+    QAction actionPasteComponent("Paste Component", this);
+    connect(&actionPasteComponent, SIGNAL(triggered()),
+            this, SLOT(OnContextMenuPasteComponentSelected()));
+    contextMenu.addAction(&actionPasteComponent);
+
+    if (ComponentClipboard::IsEmpty())
+    {
+        actionPasteComponent.setEnabled(false);
+    }
+
+    contextMenu.exec(mapToGlobal(point));
 }
 
 

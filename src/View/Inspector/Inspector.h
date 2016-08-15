@@ -55,6 +55,8 @@ public:
     void RefreshHard();
     void AddWidget(InspectorWidget *widget, int row = -1);
 
+    virtual void OnCustomContextMenuRequested(QPoint point);
+
     std::vector<IInspectable*> GetCurrentInspectables() const;
     bool IsShowingInspectable(IInspectable *inspectable) const;
     static Inspector* GetInstance();

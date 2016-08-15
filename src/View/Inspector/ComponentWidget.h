@@ -5,6 +5,7 @@
 
 #include "GameObject.h"
 #include "InspectorWidget.h"
+#include "ComponentClipboard.h"
 
 class Component;
 class ComponentWidget : public InspectorWidget
@@ -24,13 +25,20 @@ public:
 public slots:
     void OnEnabledCheckboxPressed(bool checked);
 
-    void OnContextMenuRemoveComponentSelected();
-    void RemoveComponentSelected();
     void OnContextMenuMoveUpSelected();
     void MenuMoveUpSelected();
     void OnContextMenuMoveDownSelected();
     void MenuMoveDownSelected();
 
+    void OnContextMenuCopyComponentSelected();
+    void CopyComponentSelected();
+    void OnContextMenuPasteComponentSelected();
+    void PasteComponentSelected();
+    void OnContextMenuPasteComponentValuesSelected();
+    void PasteComponentValuesSelected();
+
+    void OnContextMenuRemoveComponentSelected();
+    void RemoveComponentSelected();
 };
 
 #endif // LISTINSPECTORITEM_H

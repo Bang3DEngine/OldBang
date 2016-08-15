@@ -31,6 +31,7 @@ class Component :
             #endif
 {
 friend class GameObject;
+friend class ComponentClipboard;
 protected:
     bool m_enabled = true;
 

@@ -212,7 +212,8 @@ HEADERS += \
     src/Domain/Engine/Physics/Vector2.h \
     src/Domain/Engine/Physics/Color.h \
     src/View/Inspector/IAttrWidgetButtonListener.h \
-    src/View/Application.h
+    src/View/Application.h \
+    src/View/Inspector/ComponentClipboard.h
 
 EDITOR {
 HEADERS += \
@@ -348,7 +349,8 @@ SOURCES += \
     src/Domain/Engine/Physics/Vector2.cpp \
     src/Domain/Engine/Physics/Color.cpp \
     src/View/Inspector/IAttrWidgetButtonListener.cpp \
-    src/View/Application.cpp
+    src/View/Application.cpp \
+    src/View/Inspector/ComponentClipboard.cpp
 
 EDITOR {
     SOURCES += \
