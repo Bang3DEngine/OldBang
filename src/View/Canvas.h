@@ -52,6 +52,9 @@ private:
     Scene *m_currentScene = nullptr;
     QTimer m_drawTimer;
 
+    GameObject *m_lastGameObjectOvered = nullptr;
+    GameObject *m_gameObjectBeingDragged = nullptr;
+
 public:
 
     Color m_clearColor = Color::blue * 0.6f;
@@ -77,7 +80,6 @@ public:
     static int GetWidth();
 
     static void SetCursor(Qt::CursorShape cs);
-
 
     #ifdef BANG_EDITOR
     void dragEnterEvent(QDragEnterEvent *e) override;

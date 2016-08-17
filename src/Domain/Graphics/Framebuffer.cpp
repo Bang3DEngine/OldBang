@@ -21,7 +21,8 @@ Framebuffer::~Framebuffer()
 }
 
 void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum,
-                                        GLint glInternalFormat, GLint glFormat, GLint glInternalType)
+                                        GLint glInternalFormat, GLint glFormat, GLint glInternalType,
+                                        bool depthAttachment)
 {
     while (int(m_textureAttachments.size()) <= framebufferAttachmentNum)
         m_textureAttachments.push_back(nullptr);
@@ -52,6 +53,7 @@ void Framebuffer::CreateColorAttachment(int framebufferAttachmentNum,
 
     //Attach it to framebuffer itself
     GLuint attachment = GL_COLOR_ATTACHMENT0 + framebufferAttachmentNum;
+    if (depthAttachment) attachment = GL_DEPTH_ATTACHMENT;
     glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, tex->GetGLId(), 0);
     m_boundAttachments.push_back(attachment);
     //
@@ -113,16 +115,40 @@ void Framebuffer::SetReadBuffer(GLuint attachmentId) const
     UnBind();
 }
 
-//TODO: Fix Bind and UnBind, if you call it repeatedly it does not work
-Vector3 Framebuffer::ReadPixel(int x, int y, int attachmentId) const
+Color Framebuffer::ReadColor255(int x, int y, int attachmentId) const
 {
-    unsigned char color[3];
+    unsigned char color[4];
     SetReadBuffer(attachmentId);
     Bind();
-    glReadPixels(x, y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, &color[0]);
+    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &color[0]);
     UnBind();
 
-    return Vector3(color[0], color[1], color[2]);
+    return Color(color[0], color[1], color[2], color[4]);
+}
+
+//TODO: Fix Bind and UnBind, if you call it repeatedly it does not work
+Color Framebuffer::ReadColor(int x, int y, int attachmentId) const
+{
+    return ReadColor255(x, y, attachmentId) / 255.0f;
+}
+
+float Framebuffer::ReadFloat(int x, int y, int attachmentId, int glFormat, int glType) const
+{
+    float f = 0.0f;
+    Bind();
+    SetReadBuffer(attachmentId);
+    glReadPixels(x, y, 1, 1, glFormat, glType, &f);
+    UnBind();
+    return f;
+}
+
+float Framebuffer::ReadDepth(int x, int y) const
+{
+    float d = 0.0f;
+    Bind();
+    glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &d);
+    UnBind();
+    return d;
 }
 
 void Framebuffer::Resize(int width, int height)

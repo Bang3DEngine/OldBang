@@ -7,6 +7,9 @@ BehaviourHolder::BehaviourHolder()
 
 BehaviourHolder::~BehaviourHolder()
 {
+    m_compileThread.quit();
+    m_compileThread.terminate();
+
     if (m_behaviour)
     {
         delete m_behaviour;
@@ -44,7 +47,7 @@ void BehaviourHolder::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     BehaviourHolder *bh = static_cast<BehaviourHolder*>(clone);
     bh->m_sourceFilepath = m_sourceFilepath;
-    bh->Refresh();
+    // bh->Refresh();
 }
 
 ICloneable *BehaviourHolder::Clone() const
@@ -61,6 +64,9 @@ const std::string &BehaviourHolder::GetSourceFilepath() const
 
 void BehaviourHolder::Refresh()
 {
+    if (!gameObject) return;
+    // No refresh on temporary gameObjects
+    if (gameObject->IsDraggedGameObject()) return;
     if (m_sourceFilepath == "") return;
 
     if (!m_compileThread.isRunning())
@@ -212,6 +218,7 @@ void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void BehaviourHolder::_OnStart()
 {
     Component::_OnStart();
+    Logger_Log("_OnStart !!!");
     Refresh();
 }
 

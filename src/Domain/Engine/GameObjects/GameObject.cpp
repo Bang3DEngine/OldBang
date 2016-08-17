@@ -65,6 +65,7 @@ ICloneable* GameObject::Clone() const
 
 GameObject::~GameObject()
 {
+    //Logger_Log("Before destr.");
     _OnDestroy();
 
     #ifdef BANG_EDITOR
@@ -88,6 +89,7 @@ GameObject::~GameObject()
     }
 
     SetParent(nullptr);
+    // Logger_Log("After destr.");
 }
 
 void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
@@ -209,6 +211,9 @@ Box GameObject::GetObjectBoundingBox() const
 
     for (GameObject *child : m_children)
     {
+        if (child->IsEditorGameObject() ||
+            child->IsDraggedGameObject()) continue;
+
         Box bc = child->GetLocalBoundingBox();
         b = Box::Union(b, bc);
     }
@@ -219,24 +224,16 @@ Box GameObject::GetObjectBoundingBox() const
 Box GameObject::GetLocalBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
-    if (CAN_USE_COMPONENT(m_transform))
-    {
-        Matrix4 mat;
-        m_transform->GetLocalToParentMatrix(&mat);
-        b = mat * b; //Apply transform to Box
-    }
+    Matrix4 mat = transform->GetLocalToParentMatrix();
+    b = mat * b; //Apply transform to Box
     return b;
 }
 
 Box GameObject::GetBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
-    if (CAN_USE_COMPONENT(m_transform))
-    {
-        Matrix4 mat;
-        m_transform->GetLocalToWorldMatrix(&mat);
-        b = mat * b;
-    }
+    Matrix4 mat = transform->GetLocalToParentMatrix();
+    b = mat * b;
     return b;
 }
 
@@ -271,7 +268,6 @@ void GameObject::AddComponent(Component *c)
 
     c->SetGameObject(this);
     m_components.push_back(c);
-    c->_OnStart();
 }
 
 #ifdef BANG_EDITOR
@@ -514,9 +510,14 @@ void GameObject::SetEnabled(bool enabled)
     m_enabled = enabled;
 }
 
-bool GameObject::IsEnabled()
+bool GameObject::IsEnabled() const
 {
     return m_enabled && (!m_parent ? true : m_parent->IsEnabled());
+}
+
+bool GameObject::IsDraggedGameObject() const
+{
+    return m_isDragged || (parent && parent->IsDraggedGameObject());
 }
 
 const std::string GameObject::ToString() const
@@ -561,6 +562,8 @@ bool GameObject::IsChildOf(const GameObject *goParent) const
 
 void GameObject::_OnStart()
 {
+    ISceneEventListener::_OnStart();
+
     PROPAGATE_EVENT(_OnStart, m_children);
     OnStart();
 }
@@ -568,6 +571,7 @@ void GameObject::_OnStart()
 
 void GameObject::_OnUpdate()
 {
+    ISceneEventListener::_OnUpdate();
 
     #ifdef BANG_EDITOR
     bool canUpdate = Toolbar::GetInstance()->IsPlaying() || IsEditorGameObject();
@@ -590,6 +594,8 @@ void GameObject::_OnUpdate()
 
 void GameObject::_OnPreRender ()
 {
+    ISceneEventListener::_OnPreRender();
+
     PROPAGATE_EVENT(_OnPreRender, m_children);
     PROPAGATE_EVENT(_OnPreRender, m_components);
     OnPreRender();
@@ -597,6 +603,8 @@ void GameObject::_OnPreRender ()
 
 void GameObject::_OnRender ()
 {
+    ISceneEventListener::_OnRender();
+
     #ifdef BANG_EDITOR
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
@@ -610,6 +618,8 @@ void GameObject::_OnRender ()
 
 void GameObject::_OnDestroy()
 {
+    ISceneEventListener::_OnDestroy();
+
     PROPAGATE_EVENT(_OnDestroy, m_components);
     //No need to propagate _OnDestroy to children,
     //since the "delete child" itself propagates it (look at the destructor)
@@ -617,6 +627,39 @@ void GameObject::_OnDestroy()
 }
 
 #ifdef BANG_EDITOR
+
+void GameObject::OnDragEnterMaterial(Material *m)
+{
+    m_materialsBeforeDrag.clear();
+
+    std::list<Renderer*> rends = GetComponents<Renderer>();
+    for (Renderer *r : rends)
+    {
+        m_materialsBeforeDrag.push_back(r->GetMaterial());
+        r->SetMaterial(m);
+    }
+}
+
+void GameObject::OnDragLeaveMaterial(Material *m)
+{
+    int i = 0;
+    std::list<Renderer*> rends = GetComponents<Renderer>();
+    for (Renderer *r : rends)
+    {
+        r->SetMaterial(m_materialsBeforeDrag[i]);
+        ++i;
+    }
+}
+
+void GameObject::OnDropMaterial(Material *m)
+{
+    std::list<Renderer*> rends = GetComponents<Renderer>();
+    for (Renderer *r : rends)
+    {
+        r->SetMaterial(m);
+    }
+}
+
 void GameObject::OnDrawGizmos()
 {
     Gizmos::Reset();
@@ -629,6 +672,8 @@ void GameObject::OnDrawGizmosNoDepth()
 
 void GameObject::_OnDrawGizmos()
 {
+    ISceneEventListener::_OnDrawGizmos();
+
     Gizmos::Reset();
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
@@ -641,6 +686,8 @@ void GameObject::_OnDrawGizmos()
 
 void GameObject::_OnDrawGizmosNoDepth()
 {
+    ISceneEventListener::_OnDrawGizmosNoDepth();
+
     Gizmos::Reset();
     EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())

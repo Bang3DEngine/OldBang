@@ -42,6 +42,7 @@ public:
 
     static Color FromQColor(const QColor &c);
     QColor ToQColor() const;
+    Vector3 ToVector3() const;
 
     const static Color red;
     const static Color orange;

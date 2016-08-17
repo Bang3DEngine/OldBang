@@ -40,9 +40,6 @@ public:
     void ShowGameObjectInfo(GameObject *gameObject);
     void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
 
-    void MoveUp(InspectorWidget *w);
-    void MoveDown(InspectorWidget *w);
-
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
 
     /**
@@ -55,11 +52,12 @@ public:
     void RefreshHard();
     void AddWidget(InspectorWidget *widget, int row = -1);
 
-    virtual void OnCustomContextMenuRequested(QPoint point);
-
     std::vector<IInspectable*> GetCurrentInspectables() const;
     bool IsShowingInspectable(IInspectable *inspectable) const;
     static Inspector* GetInstance();
+
+public slots:
+    virtual void OnCustomContextMenuRequested(QPoint point);
 };
 
 #endif // LISTINSPECTOR_H

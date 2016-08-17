@@ -145,6 +145,21 @@ Vector2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
     return Vector2(v4.xy());
 }
 
+Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCamera)
+{
+    Matrix4 p, v;
+    GetProjectionMatrix(&p);
+    GetViewMatrix(&v);
+    Vector2 sp = screenNDCPos;
+
+    // Pass coordinates to clip space, to invert them using projInversed
+    Vector4 clipCoords = Vector4(sp, 1.0, 1.0) * zFromCamera;
+    Vector4 res4 = p.Inversed() * clipCoords;
+    Vector3 res = res4.xyz();
+    res = (v.Inversed() * Vector4(res, 1.0f)).xyz();
+    return res;
+}
+
 const std::string Camera::ToString() const
 {
     return "Camera";

@@ -32,6 +32,6 @@ void TextureRender::Fill(unsigned char *newData, int width, int height)
     this->m_height = height;
 
     Bind();
-    glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0, m_format, GL_UNSIGNED_BYTE, m_data);
+    glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0, m_format, m_internalType, m_data);
     UnBind();
 }

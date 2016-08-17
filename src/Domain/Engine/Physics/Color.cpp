@@ -111,6 +111,11 @@ QColor Color::ToQColor() const
     return QColor(r * 255, g * 255, b * 255, a * 255);
 }
 
+Vector3 Color::ToVector3() const
+{
+    return Vector3(r, g, b);
+}
+
 Color operator+(const Color & c1, const Color &c2)
 {
     return Color(c1.r + c2.r, c1.g + c2.g, c1.b + c2.b, c1.a * c2.a);

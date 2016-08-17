@@ -5,6 +5,7 @@
 
 #include <vector>
 
+#include "Color.h"
 #include "Logger.h"
 #include "IGLIdable.h"
 #include "IGLBindable.h"
@@ -14,12 +15,6 @@
 class Framebuffer : public IGLBindable
                    ,public IGLIdable
 {
-private:
-    enum AttachmentType
-    {
-        Color = GL_COLOR_ATTACHMENT0, //For position, normal, uv, diffuse, etc.
-        Depth = GL_DEPTH_ATTACHMENT   //For Depth
-    };
 
 private:
 
@@ -38,7 +33,8 @@ public:
     virtual ~Framebuffer();
 
     void CreateColorAttachment(int framebufferAttachmentNum,
-                               GLint glInternalFormat = -1, GLint glFormat = -1,  GLint glInternalType = -1);
+                               GLint glInternalFormat = -1, GLint glFormat = -1,  GLint glInternalType = -1,
+                               bool depthAttachment = false);
 
     void CreateDepthBufferAttachment();
 
@@ -48,7 +44,11 @@ public:
     void SetDrawBuffers(const std::vector<int> &attachmentIds) const;
     void SetReadBuffer(GLuint attachmentId) const;
 
-    Vector3 ReadPixel(int x, int y, int attachmentId) const;
+    Color ReadColor255(int x, int y, int attachmentId) const;
+    Color ReadColor(int x, int y, int attachmentId) const;
+    float ReadFloat(int x, int y, int attachmentId,
+                    int glFormat = GL_DEPTH_COMPONENT, int glType = GL_FLOAT) const;
+    float ReadDepth(int x, int y) const; // TODO: not working read from renderbuffer
     void Resize(int width, int height);
 
     void Clear() const;

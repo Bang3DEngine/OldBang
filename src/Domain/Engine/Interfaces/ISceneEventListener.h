@@ -20,11 +20,14 @@ class ISceneEventListener
 {
 protected:
 
+    bool m_isStarted = false;
+
     ISceneEventListener () {}
 
     virtual void _OnStart ()
     {
         OnStart();
+        m_isStarted = true;
     }
 
     virtual void _OnUpdate ()
@@ -68,6 +71,8 @@ protected:
     virtual void OnDrawGizmos() {}
     virtual void OnDrawGizmosNoDepth() {}
     #endif
+
+    bool IsStarted() const { return m_isStarted; }
 };
 
 #endif // SCENEEVENTLISTENER_H

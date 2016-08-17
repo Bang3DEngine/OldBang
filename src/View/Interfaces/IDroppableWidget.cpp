@@ -12,11 +12,14 @@
 #include "WindowEventManager.h"
 
 // IDROPPABLE
+QString IDroppable::acceptDragStyleOnlyBorder =
+        "border: 1px solid #0F0";
+
 QString IDroppable::acceptDragStyle =
-        "background-color: #151; border: 1px solid #0F0";
+        "background-color: #151; " + IDroppable::acceptDragStyleOnlyBorder;
 
 QString IDroppable::overDragStyle   =
-        "background-color: #1B1; border: 1px solid #0F0";
+        "background-color: #1B1; " + IDroppable::acceptDragStyleOnlyBorder;
 
 QString IDroppable::rejectDragStyle =
         "background-color: #511; border: 1px solid #F00";

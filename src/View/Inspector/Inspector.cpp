@@ -64,8 +64,14 @@ void Inspector::Refresh()
     if (m_currentGameObject)
     {
         ShowGameObjectInfo(m_currentGameObject);
-        updateGeometry();
-        adjustSize();
+    }
+    else
+    {
+        if(m_currentInspectables.size() == 1)
+        {
+            IInspectable *insp = m_currentInspectables[0];
+            SetInspectable(insp);
+        }
     }
 }
 
@@ -107,8 +113,7 @@ void Inspector::RefreshHard()
 {
     if (m_currentGameObject)
     {
-        GameObject *go = m_currentGameObject;
-        ShowGameObjectInfo(go);
+        ShowGameObjectInfo(m_currentGameObject);
     }
     else
     {
@@ -138,40 +143,22 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
 
 void Inspector::OnCustomContextMenuRequested(QPoint point)
 {
-    // TODO: Not working
-
-    Logger_Log("Custom context menu requested!");
-    QMenu contextMenu(tr("Inspector context menu"), this);
-
-    QAction actionPasteComponent("Paste Component", this);
-    connect(&actionPasteComponent, SIGNAL(triggered()),
-            this, SLOT(OnContextMenuPasteComponentSelected()));
-    contextMenu.addAction(&actionPasteComponent);
-
-    if (ComponentClipboard::IsEmpty())
+    if (m_currentGameObject && m_currentInspectorWidgets.size() > 0)
     {
-        actionPasteComponent.setEnabled(false);
+        QMenu contextMenu(tr("Inspector context menu"), this);
+
+        QAction actionPasteComponent("Paste Component", this);
+        connect(&actionPasteComponent, SIGNAL(triggered()),
+                m_currentInspectorWidgets[0], SLOT(OnContextMenuPasteComponentSelected()));
+        contextMenu.addAction(&actionPasteComponent);
+
+        if (ComponentClipboard::IsEmpty())
+        {
+            actionPasteComponent.setEnabled(false);
+        }
+
+        contextMenu.exec(mapToGlobal(point));
     }
-
-    contextMenu.exec(mapToGlobal(point));
-}
-
-
-
-void Inspector::MoveUp(InspectorWidget *w)
-{
-    int lastRow = row(m_widgetToItem[w]);
-    if (lastRow == 0) return;
-    QListWidgetItem *item = takeItem(lastRow);
-    insertItem(lastRow - 1, item);
-}
-
-void Inspector::MoveDown(InspectorWidget *w)
-{
-    int lastRow = row(m_widgetToItem[w]);
-    if (lastRow == count()) return;
-    QListWidgetItem *item = takeItem(lastRow);
-    insertItem(lastRow + 1, item);
 }
 
 std::vector<IInspectable *> Inspector::GetCurrentInspectables() const

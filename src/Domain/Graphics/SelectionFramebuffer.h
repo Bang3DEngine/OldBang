@@ -37,10 +37,10 @@ private:
     mutable std::map<GameObject*, long> m_gameObjectToId;
     mutable std::map<long, GameObject*> m_idToGameObject;
 
-    static Vector3 MapIdToColor(long id);
-    static long MapColorToId(const Vector3 &charColor);
+    static Color MapIdToColor(long id);
+    static long MapColorToId(const Color &charColor);
 
-    Vector3 GetSelectionColor(GameObject *go) const;
+    Color GetSelectionColor(GameObject *go) const;
 
 public:
     SelectionFramebuffer(int width, int height);
@@ -49,7 +49,9 @@ public:
     void RenderSelectionBuffer(const Scene *scene);
     void ProcessSelection();
 
+    GameObject *GetGameObjectInPosition(int x, int y);
     Material* GetSelectionMaterial() const;
+    float GetDepthAt(int x, int y);
     bool IsPassing() const;
 };
 

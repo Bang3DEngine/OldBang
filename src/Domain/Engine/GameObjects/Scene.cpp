@@ -41,6 +41,20 @@ void Scene::_OnStart()
     }
 }
 
+void Scene::_OnUpdate()
+{
+    GameObject::_OnUpdate();
+
+    // Start non-started GameObjects
+    for (GameObject *child : m_children)
+    {
+        if (!child->IsStarted())
+        {
+            child->_OnStart();
+        }
+    }
+}
+
 void Scene::_OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
@@ -64,7 +78,8 @@ void Scene::_OnRender()
 
     m_gbuffer->Bind();
 
-    // D2G
+    // D2G (DrawToGBuffer, filling in GBuffer with positions, normals, etc.)
+
         Color bgColor = GetCamera()->GetClearColor();
         m_gbuffer->ClearBuffersAndBackground(bgColor);
         m_gbuffer->SetAllDrawBuffers();
@@ -74,15 +89,18 @@ void Scene::_OnRender()
         PROPAGATE_EVENT(_OnRender, m_children);
 
         // Draw Gizmos!
-        #ifdef BANG_EDITOR
-        PROPAGATE_EVENT(_OnDrawGizmos, m_children);
+            #ifdef BANG_EDITOR
+            PROPAGATE_EVENT(_OnDrawGizmos, m_children);
 
-        glClear(GL_DEPTH_BUFFER_BIT);
-        PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
-        #endif
+            glDisable(GL_DEPTH_TEST);
+            PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
+            glEnable(GL_DEPTH_TEST);
+            #endif
+        //
     //
 
-    // PR
+    // PR (Post-Render, modifying on top of GBuffer)
+        /*
         // Apply lights to gbuffer
         std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
         for (Light *light : childrenLights)
@@ -95,6 +113,7 @@ void Scene::_OnRender()
 
         // Selection effects and other stuff
         m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
+        */
     //
 
     m_gbuffer->UnBind();

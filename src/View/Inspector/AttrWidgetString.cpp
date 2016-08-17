@@ -24,7 +24,6 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
         m_textEdit->setAlignment(Qt::AlignLeft);
         textWidget = m_textEdit;
     }
-    textWidget->show();
 
     //connect(m_strField, SIGNAL(textChanged()),
     //        m_parent, SLOT(_OnSlotValueChanged()));

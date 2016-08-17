@@ -34,6 +34,7 @@ protected:
     GameObject *m_cameraGameObject = nullptr;
 
     virtual void _OnStart () override;
+    virtual void _OnUpdate () override;
     virtual void _OnResize (int newWidth, int newHeight);
 
 public:

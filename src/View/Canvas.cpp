@@ -1,7 +1,10 @@
 #include "Canvas.h"
 
 #ifdef BANG_EDITOR
+#include "Explorer.h"
+#include "Hierarchy.h"
 #include "WindowMain.h"
+#include "EditorScene.h"
 #include "SelectionFramebuffer.h"
 #else
 #include "GameWindow.h"
@@ -210,21 +213,117 @@ void Canvas::dragEnterEvent(QDragEnterEvent *e)
 void Canvas::dragMoveEvent(QDragMoveEvent *e)
 {
     e->accept();
+
+    NONULL(m_currentScene);
+
+    EditorScene *scene = static_cast<EditorScene*>(m_currentScene);
+    SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
+    int x = e->pos().x(), y = e->pos().y();
+    GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
+
+    Explorer *explorer = Explorer::GetInstance();
+    Hierarchy *hierarchy = Hierarchy::GetInstance();
+    if (e->source() == explorer)
+    {
+        File f = explorer->GetSelectedFile();
+        if (f.IsMaterialAsset())
+        {
+            Material *mat = AssetsManager::LoadAsset<Material>(f.GetRelativePath());
+            if (mat)
+            {
+                if (m_lastGameObjectOvered != overedGo)
+                {
+                    if (overedGo)
+                    {
+                        overedGo->OnDragEnterMaterial(mat);
+                    }
+
+                    if (m_lastGameObjectOvered)
+                    {
+                        m_lastGameObjectOvered->OnDragLeaveMaterial(mat);
+                    }
+                }
+            }
+        }
+    }
+    else if (e->source() == hierarchy)
+    {
+        if (!m_gameObjectBeingDragged)
+        {
+            GameObject *selectedGo = hierarchy->GetFirstSelectedGameObject();
+            if (selectedGo)
+            {
+                m_gameObjectBeingDragged = static_cast<GameObject*>(selectedGo->Clone());
+                m_gameObjectBeingDragged->m_isDragged = true;
+                m_gameObjectBeingDragged->SetParent(m_currentScene);
+            }
+        }
+        else
+        {
+            Camera *cam = scene->GetCamera();
+            /*/
+            float zCam = 0.0f;
+            if (overedGo)
+            {
+                zCam = Vector3::Distance(cam->transform->GetPosition(),
+                                          overedGo->transform->GetPosition());
+            }
+            else
+            {
+                zCam = Vector3::Distance(cam->transform->GetPosition(),
+                                          scene->GetBoundingBox().GetCenter());
+            }
+            */
+
+            Vector2 ndcMousePos = Vector2(x,y) / Vector2(Canvas::GetWidth(),
+                                                         Canvas::GetHeight());
+            ndcMousePos = ndcMousePos * 2.0f - 1.0f;
+            ndcMousePos.y *= -1.0f;
+
+            float zCam = sfb->GetDepthAt(x, Canvas::GetHeight() - y);
+            Logger_Log(zCam);
+            zCam *= (cam->GetZFar() - cam->GetZNear());
+            zCam += cam->GetZNear();
+
+            Vector3 pos = cam->ScreenNDCPointToWorld(ndcMousePos, zCam);
+            //Logger_Log(pos);
+
+            Matrix4 p, v;
+            cam->GetProjectionMatrix(&p);
+            cam->GetViewMatrix(&v);
+
+            m_gameObjectBeingDragged->transform->SetPosition(pos);
+        }
+    }
+
+    m_lastGameObjectOvered = overedGo;
 }
 
 void Canvas::dragLeaveEvent(QDragLeaveEvent *e)
 {
+    if (m_gameObjectBeingDragged)
+    {
+        m_lastGameObjectOvered = nullptr;
+
+        delete m_gameObjectBeingDragged;
+        m_gameObjectBeingDragged = nullptr;
+    }
+
     e->accept();
 }
 
 void Canvas::dropEvent(QDropEvent *e)
 {
-    Explorer *explorer = Explorer::GetInstance();
-    Logger_Log("Drop!!!");
-    if (e->source() == explorer)
+    NONULL(m_currentScene);
+
+    if (m_gameObjectBeingDragged)
     {
-        Logger_Log("Drop from explorer!");
+        m_gameObjectBeingDragged->m_isDragged = false;
+        m_gameObjectBeingDragged->SetParent(m_currentScene);
     }
+
+    m_lastGameObjectOvered = nullptr;
+    m_gameObjectBeingDragged = nullptr;
 
     e->ignore();
 }

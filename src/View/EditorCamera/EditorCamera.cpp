@@ -1,6 +1,7 @@
 #include "EditorCamera.h"
 
 #include "Canvas.h"
+#include "Scene.h"
 
 EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
 {
@@ -12,7 +13,6 @@ EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
     m_cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
     m_camt = m_yawNode->transform;
-    m_cam->SetZFar(999.9f);
 }
 
 EditorCamera::~EditorCamera()
@@ -191,6 +191,17 @@ void EditorCamera::OnStart()
 void EditorCamera::OnUpdate()
 {
     EditorGameObject::OnUpdate();
+
+    // Dynamically adjust zNear zFar
+    Sphere sceneSphere = Canvas::GetCurrentScene()->GetBoundingSphere();
+    float dToCenter = Vector3::Distance(sceneSphere.GetCenter(),
+                                        m_cam->transform->GetPosition());
+    float zNear = glm::max(dToCenter - sceneSphere.GetRadius() * 0.9f, m_minZNear);
+    float zFar = dToCenter + sceneSphere.GetRadius() * 1.1f;
+    zNear = m_minZNear;
+    m_cam->SetZNear(zNear);
+    m_cam->SetZFar(zFar);
+    //
 
     AdjustSpeeds();
 

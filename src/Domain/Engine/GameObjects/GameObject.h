@@ -46,6 +46,9 @@ friend class Scene;
 protected:
 
     #ifdef BANG_EDITOR
+    // Dont load Behaviours. Used on drags from hierarchy for example
+    bool m_isDragged = false;
+
     bool m_isSelectedInHierarchy = false;
     EditorSelectionGameObject *m_selectionGameObject = nullptr;
     #endif
@@ -55,6 +58,13 @@ protected:
     virtual void _OnPreRender () override;
     virtual void _OnRender () override;
     virtual void _OnDestroy () override;
+
+    #ifdef BANG_EDITOR
+    std::vector<Material*> m_materialsBeforeDrag;
+    void OnDragEnterMaterial(Material *m);
+    void OnDragLeaveMaterial(Material *m);
+    void OnDropMaterial(Material *m);
+    #endif
 
     #ifdef BANG_EDITOR
     virtual void OnDrawGizmos() override;
@@ -232,7 +242,7 @@ public:
         {
             if ((*c)->IsEditorGameObject()) continue;
 
-            Component *comp = (*c)->GetComponent<T>();
+            T *comp = (*c)->GetComponent<T>();
             if (comp) return comp;
             comp = (*c)->GetComponentInChildren<T>();
             if (comp) return comp;
@@ -252,18 +262,6 @@ public:
             comps_l.splice(comps_l.end(), (*c)->GetComponents<T>()); //concat
             comps_l.splice(comps_l.end(), (*c)->GetComponentsInChildren<T>()); //concat
         }
-        return comps_l;
-    }
-
-    /**
-     * Returns all the Components<T> of this,
-     * and all the Components<T> of its children
-     */
-    template <class T>
-    std::list<T*> GetComponentsInThisAndChildren() const
-    {
-        std::list<T*> comps_l = GetComponents<T>();
-        comps_l.splice(comps_l.end(), GetComponentsInChildren<T>()); //concat
         return comps_l;
     }
 
@@ -330,7 +328,10 @@ public:
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
     void SetEnabled(bool m_enabled);
-    bool IsEnabled();
+    bool IsEnabled() const;
+
+    // Is it being dragged from hierarchy into screen?
+    bool IsDraggedGameObject() const;
 
     #ifdef BANG_EDITOR
     bool IsSelectedInHierarchy() const;

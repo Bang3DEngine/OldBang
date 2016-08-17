@@ -38,7 +38,8 @@ protected:
     virtual void OnDropFromHierarchy(GameObject *go,  QDropEvent *e) {}
 
 public:
-    static QString acceptDragStyle, overDragStyle, rejectDragStyle;
+    static QString acceptDragStyle, acceptDragStyleOnlyBorder,
+                   overDragStyle, rejectDragStyle;
 
 };
 
