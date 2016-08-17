@@ -11,6 +11,7 @@
 #include "WindowMain.h"
 #include "WindowEventManager.h"
 
+
 // IDROPPABLE
 QString IDroppable::acceptDragStyleOnlyBorder =
         "border: 1px solid #0F0";
@@ -40,6 +41,8 @@ void IDroppable::Init(QWidget *qw)
         if (WindowMain::GetInstance() &&
             WindowMain::GetInstance()->GetMainWindow())
         {
+            // Install the event filter for the Application to be able
+            // to send the Notify stopped message
             QMainWindow *mw = WindowMain::GetInstance()->GetMainWindow();
             QList<QWidget*> widgets = qFindChildren<QWidget*>(mw);
             foreach(QWidget *w, widgets)
@@ -57,8 +60,6 @@ void IDroppable::OnDragEnterEvent(QWidget *qw, QDragEnterEvent *e)
     Init(qw);
     if (e->source() == qw)
     {
-        m_dragOriginWidget = qw;
-        m_dragThatStartedHereIsGoingOn = true;
         WindowEventManager::NotifyDragStarted(qw);
     }
     e->accept();

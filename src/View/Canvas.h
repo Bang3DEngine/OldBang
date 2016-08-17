@@ -41,6 +41,7 @@ private:
     #endif
 
     const int c_redrawDelay = 15;
+    QWidget *m_dragOrigin = nullptr;
 
     int m_width = 0;
     int m_height = 0;

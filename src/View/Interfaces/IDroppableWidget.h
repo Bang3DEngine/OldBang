@@ -21,8 +21,6 @@ private:
     bool m_inited = false;
 
 protected:
-    QWidget *m_dragOriginWidget = nullptr;
-    bool m_dragThatStartedHereIsGoingOn = false;
 
     IDroppable();
     virtual ~IDroppable();
@@ -76,6 +74,5 @@ public:
     virtual void dragLeaveEvent(QDragLeaveEvent *e) override;
     virtual void dropEvent(QDropEvent *e) override;
 };
-
 
 #endif // IDROPPABLE_H

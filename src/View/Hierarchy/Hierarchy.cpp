@@ -97,7 +97,7 @@ void Hierarchy::OnDragStarted(QWidget *origin)
         File f = explorer->GetSelectedFile();
         if (f.IsPrefabAsset())
         {
-            setStyleSheet(IDroppable::acceptDragStyle);
+            //setStyleSheet(IDroppable::acceptDragStyle);
         }
     }
 }
@@ -143,6 +143,7 @@ GameObject *Hierarchy::GetDropTargetGameObject(QDropEvent *e) const
     }
     else
     {
+        Logger_Log("Scene now");
         targetGameObject = Scene::GetCurrentScene();
     }
 
@@ -246,7 +247,7 @@ void Hierarchy::OnChildRemoved(GameObject *child)
 
 void Hierarchy::dropEvent(QDropEvent *e)
 {
-    QTreeWidgetItem *targetItem = itemAt(e->pos()); NONULL(targetItem);
+    QTreeWidgetItem *targetItem = itemAt(e->pos());
     GameObject *targetGameObject = GetDropTargetGameObject(e);
     bool successfulParenting = false;
 
@@ -283,7 +284,8 @@ void Hierarchy::OnDropFromExplorer(const File &f, QDropEvent *e)
 {
     if (f.GetRelativePath().length() == 0) return;
 
-    GameObject *targetGameObject = GetDropTargetGameObject(e); NONULL(targetGameObject);
+    GameObject *targetGameObject = GetDropTargetGameObject(e);
+    NONULL(targetGameObject);
     if (f.IsPrefabAsset())
     {
         Prefab *prefab = new Prefab();

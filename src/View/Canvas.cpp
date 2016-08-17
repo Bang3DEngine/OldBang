@@ -221,6 +221,7 @@ void Canvas::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
     SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
     int x = e->pos().x(), y = e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
+    m_dragOrigin = origin;
 
     if (!m_gameObjectBeingDragged)
     {
@@ -325,12 +326,15 @@ void Canvas::dragMoveEvent(QDragMoveEvent *e)
 
 void Canvas::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    if (m_gameObjectBeingDragged)
+    if (m_dragOrigin != Explorer::GetInstance())
     {
-        m_lastGameObjectOvered = nullptr;
+        if (m_gameObjectBeingDragged)
+        {
+            m_lastGameObjectOvered = nullptr;
 
-        delete m_gameObjectBeingDragged;
-        m_gameObjectBeingDragged = nullptr;
+            delete m_gameObjectBeingDragged;
+            m_gameObjectBeingDragged = nullptr;
+        }
     }
 
     e->accept();
