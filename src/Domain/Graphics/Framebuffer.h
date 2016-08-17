@@ -44,8 +44,10 @@ public:
     void SetDrawBuffers(const std::vector<int> &attachmentIds) const;
     void SetReadBuffer(GLuint attachmentId) const;
 
-    Color ReadColor255(int x, int y, int attachmentId) const;
-    Color ReadColor(int x, int y, int attachmentId) const;
+    Color ReadColor255(int x, int y, int attachmentId,
+                       int glFormat = GL_RGBA, int glType = GL_UNSIGNED_BYTE) const;
+    Color ReadColor(int x, int y, int attachmentId,
+                    int glFormat = GL_RGBA, int glType = GL_UNSIGNED_BYTE) const;
     float ReadFloat(int x, int y, int attachmentId,
                     int glFormat = GL_DEPTH_COMPONENT, int glType = GL_FLOAT) const;
     float ReadDepth(int x, int y) const; // TODO: not working read from renderbuffer

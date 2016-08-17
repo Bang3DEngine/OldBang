@@ -16,9 +16,8 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     m_material = new Material();
     m_material->SetShaderProgram(m_program);
 
-    CreateColorAttachment(0, GL_RGB, GL_RGB);
-    // CreateColorAttachment(1, GL_DEPTH_COMPONENT32F, GL_DEPTH_COMPONENT, GL_FLOAT, true);
-    CreateColorAttachment(1, GL_RGBA, GL_RGBA, GL_FLOAT);
+    CreateColorAttachment(Attachment::ColorAttachment, GL_RGB, GL_RGB);
+    CreateColorAttachment(Attachment::WorldPosition, GL_RGBA32F, GL_RGBA, GL_FLOAT);
     CreateDepthBufferAttachment();
 }
 
@@ -29,6 +28,8 @@ SelectionFramebuffer::~SelectionFramebuffer()
 
 void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 {
+    SetAllDrawBuffers();
+
     m_isPassing = true;
 
     // Assign id's
@@ -45,18 +46,19 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     ShaderProgram *sp = m_material->GetShaderProgram();
     for (GameObject *go : gameObjects)
     {
-        if (go->IsEnabled() && !go->IsDraggedGameObject())
+        if (CanRenderGameObject(go))
         {
             sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
             go->_OnRender();
         }
     }
 
-    /*
+    // Dont write to Attachment::WorldPosition
+    SetDrawBuffers({Attachment::ColorAttachment});
     glDepthMask(GL_FALSE); // Dont write to DepthBuffer
     for (GameObject *go : gameObjects)
     {
-        if (go->IsEnabled() && !go->IsDraggedGameObject())
+        if (CanRenderGameObject(go))
         {
             sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
             go->_OnDrawGizmos();
@@ -66,7 +68,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     glDisable(GL_DEPTH_TEST);
     for (GameObject *go : gameObjects)
     {
-        if (go->IsEnabled() && !go->IsDraggedGameObject())
+        if (CanRenderGameObject(go))
         {
             sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
             go->_OnDrawGizmosNoDepth();
@@ -74,7 +76,6 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     }
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE); // Back to writing DepthBuffer
-    */
 
     m_isPassing = false;
 }
@@ -126,7 +127,8 @@ void SelectionFramebuffer::ProcessSelection()
 GameObject *SelectionFramebuffer::GetGameObjectInPosition(int x, int y)
 {
     Vector2 coords = Vector2(x, Canvas::GetHeight() - y);
-    Color mouseOverColor255  = ReadColor255(coords.x, coords.y, 0);
+    Color mouseOverColor255  = ReadColor255(coords.x, coords.y,
+                                            Attachment::ColorAttachment);
 
     int id = MapColorToId(mouseOverColor255);
     if (m_idToGameObject.find(id) != m_idToGameObject.end())
@@ -146,12 +148,10 @@ Material *SelectionFramebuffer::GetSelectionMaterial() const
     return m_material;
 }
 
-float SelectionFramebuffer::GetDepthAt(int x, int y)
+Vector3 SelectionFramebuffer::GetWorldPositionAt(int x, int y)
 {
-    // 1 is depthAttachment in this case
-    // float d = ReadFloat(x, y, 1, GL_DEPTH_COMPONENT, GL_FLOAT);
-    float d = ReadColor(x, y, 1).r;
-    return d;
+    return ReadColor(x, y, Attachment::WorldPosition,
+                     GL_RGBA, GL_FLOAT).ToVector3();
 }
 
 bool SelectionFramebuffer::IsPassing() const
@@ -178,5 +178,16 @@ long SelectionFramebuffer::MapColorToId(const Color &charColor)
     Color color = charColor / 256.0d;
     return long(color.r * C) +
            long(color.g * C * C) +
-           long(color.b * C * C * C); // This +1 is because of the TextureRender GL_RGBA32F format. If its GL_RGB, then we dont need it :/
+           long(color.b * C * C * C);
+}
+
+bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
+{
+    if (go->IsEditorGameObject())
+    {
+       const EditorGameObject *ego = static_cast<const EditorGameObject*>(go);
+       return ego->IsEnabled() && !ego->IsDraggedGameObject() &&
+              ego->IsRenderInSelectionFramebuffer();
+    }
+    return go->IsEnabled() && !go->IsDraggedGameObject();
 }

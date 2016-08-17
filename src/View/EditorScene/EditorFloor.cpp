@@ -10,6 +10,8 @@ EditorFloor::EditorFloor()
         m_lineRenderers[i]->SetReceivesLighting(false);
         m_lineRenderers[i]->GetMaterial()->SetDiffuseColor(Color::gray);
     }
+
+    m_renderInSelectionFramebuffer = false;
 }
 
 EditorFloor::~EditorFloor()

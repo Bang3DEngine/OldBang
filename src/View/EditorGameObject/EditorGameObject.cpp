@@ -28,6 +28,11 @@ bool EditorGameObject::IsEditorGameObject() const
     return true;
 }
 
+bool EditorGameObject::IsRenderInSelectionFramebuffer() const
+{
+    return m_renderInSelectionFramebuffer;
+}
+
 void EditorGameObject::FillXMLInfo(XMLNode *xmlInfo) const
 {
     xmlInfo = nullptr;

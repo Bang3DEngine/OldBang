@@ -56,7 +56,7 @@ void EditorRotateAxis::OnUpdate()
         {
             // This will be done once every grab
             Vector2 sMousePos= Input::GetMouseCoords();
-            sMousePos /= Vector2(Canvas::GetWidth(), Canvas::GetHeight());
+            sMousePos /= Canvas::GetSize();
             sMousePos.y = 1.0f - sMousePos.y;
             sMousePos = sMousePos * 2.0f - 1.0f;
 

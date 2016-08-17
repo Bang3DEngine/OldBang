@@ -4,9 +4,9 @@
 #include <map>
 
 #include "Scene.h"
-#include "Framebuffer.h"
 #include "Vector3.h"
 #include "GameObject.h"
+#include "Framebuffer.h"
 
 /**
  * @brief This is the buffer where each GameObject is drawn into with a unique colour.
@@ -17,6 +17,12 @@ class SelectionFramebuffer : public Framebuffer
                             #endif
 {
 private:
+
+    enum Attachment
+    {
+        ColorAttachment = 0,
+        WorldPosition = 1
+    };
 
     /**
      * @brief m_isPassing is true only when SelectionFrambuffer is rendering.
@@ -40,6 +46,8 @@ private:
     static Color MapIdToColor(long id);
     static long MapColorToId(const Color &charColor);
 
+    bool CanRenderGameObject(const GameObject *go);
+
     Color GetSelectionColor(GameObject *go) const;
 
 public:
@@ -51,7 +59,7 @@ public:
 
     GameObject *GetGameObjectInPosition(int x, int y);
     Material* GetSelectionMaterial() const;
-    float GetDepthAt(int x, int y);
+    Vector3 GetWorldPositionAt(int x, int y);
     bool IsPassing() const;
 };
 

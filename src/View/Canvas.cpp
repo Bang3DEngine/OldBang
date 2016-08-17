@@ -194,6 +194,11 @@ int Canvas::GetWidth()
     return Canvas::m_mainBinaryCanvas->m_width;
 }
 
+Vector2 Canvas::GetSize()
+{
+    return Vector2(Canvas::GetWidth(), Canvas::GetHeight());
+}
+
 int Canvas::GetHeight()
 {
     return Canvas::m_mainBinaryCanvas->m_height;
@@ -208,6 +213,66 @@ void Canvas::SetCursor(Qt::CursorShape cs)
 void Canvas::dragEnterEvent(QDragEnterEvent *e)
 {
     e->accept();
+}
+
+void Canvas::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
+{
+    EditorScene *scene = static_cast<EditorScene*>(m_currentScene);
+    SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
+    int x = e->pos().x(), y = e->pos().y();
+    GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
+
+    if (!m_gameObjectBeingDragged)
+    {
+        Explorer *explorer = Explorer::GetInstance();
+        Hierarchy *hierarchy = Hierarchy::GetInstance();
+        if (origin == hierarchy)
+        {
+            GameObject *selectedGo = hierarchy->GetFirstSelectedGameObject();
+            if (selectedGo)
+            {
+                m_gameObjectBeingDragged = static_cast<GameObject*>(selectedGo->Clone());
+            }
+        }
+        else if (origin == explorer)
+        {
+            File f = explorer->GetSelectedFile();
+            if (f.IsPrefabAsset())
+            {
+                Prefab *prefab = new Prefab();
+                prefab->ReadXMLInfoFromString(f.GetContents());
+                m_gameObjectBeingDragged = prefab->InstantiateWithoutStarting();
+                delete prefab;
+            }
+        }
+
+        if (m_gameObjectBeingDragged)
+        {
+            m_gameObjectBeingDragged->m_isDragged = true;
+            m_gameObjectBeingDragged->SetParent(scene);
+        }
+    }
+    else
+    {
+        Vector3 worldPos;
+        if (overedGo)
+        {
+            worldPos = sfb->GetWorldPositionAt(x, Canvas::GetHeight() - y);
+        }
+        else
+        {
+            Camera *cam = scene->GetCamera();
+            Vector2 ndcPos = Vector2(x, y);
+            ndcPos /= Canvas::GetSize();
+            ndcPos = ndcPos * 2.0f - 1.0f;
+            ndcPos.y *= -1.0f;
+            float z = Vector3::Distance(cam->transform->GetPosition(),
+                                        scene->GetBoundingBox().GetCenter());
+            worldPos = cam->ScreenNDCPointToWorld(ndcPos, z);
+        }
+
+        m_gameObjectBeingDragged->transform->SetPosition(worldPos);
+    }
 }
 
 void Canvas::dragMoveEvent(QDragMoveEvent *e)
@@ -245,55 +310,14 @@ void Canvas::dragMoveEvent(QDragMoveEvent *e)
                 }
             }
         }
+        else if (f.IsPrefabAsset())
+        {
+            HandleGameObjectDragging(e, explorer);
+        }
     }
     else if (e->source() == hierarchy)
     {
-        if (!m_gameObjectBeingDragged)
-        {
-            GameObject *selectedGo = hierarchy->GetFirstSelectedGameObject();
-            if (selectedGo)
-            {
-                m_gameObjectBeingDragged = static_cast<GameObject*>(selectedGo->Clone());
-                m_gameObjectBeingDragged->m_isDragged = true;
-                m_gameObjectBeingDragged->SetParent(m_currentScene);
-            }
-        }
-        else
-        {
-            Camera *cam = scene->GetCamera();
-            /*/
-            float zCam = 0.0f;
-            if (overedGo)
-            {
-                zCam = Vector3::Distance(cam->transform->GetPosition(),
-                                          overedGo->transform->GetPosition());
-            }
-            else
-            {
-                zCam = Vector3::Distance(cam->transform->GetPosition(),
-                                          scene->GetBoundingBox().GetCenter());
-            }
-            */
-
-            Vector2 ndcMousePos = Vector2(x,y) / Vector2(Canvas::GetWidth(),
-                                                         Canvas::GetHeight());
-            ndcMousePos = ndcMousePos * 2.0f - 1.0f;
-            ndcMousePos.y *= -1.0f;
-
-            float zCam = sfb->GetDepthAt(x, Canvas::GetHeight() - y);
-            Logger_Log(zCam);
-            zCam *= (cam->GetZFar() - cam->GetZNear());
-            zCam += cam->GetZNear();
-
-            Vector3 pos = cam->ScreenNDCPointToWorld(ndcMousePos, zCam);
-            //Logger_Log(pos);
-
-            Matrix4 p, v;
-            cam->GetProjectionMatrix(&p);
-            cam->GetViewMatrix(&v);
-
-            m_gameObjectBeingDragged->transform->SetPosition(pos);
-        }
+        HandleGameObjectDragging(e, hierarchy);
     }
 
     m_lastGameObjectOvered = overedGo;

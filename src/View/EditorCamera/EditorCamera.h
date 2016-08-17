@@ -26,7 +26,6 @@ private:
     Camera *m_cam = nullptr;
     Transform *m_camt = nullptr; //YawNode transform
     EditorGameObject *m_yawNode = nullptr;
-    const float m_minZNear = 0.05f;
 
     GameObject *m_currentFocus = nullptr;
     bool m_doingLookAt = false;

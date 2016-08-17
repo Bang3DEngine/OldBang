@@ -115,21 +115,27 @@ void Framebuffer::SetReadBuffer(GLuint attachmentId) const
     UnBind();
 }
 
-Color Framebuffer::ReadColor255(int x, int y, int attachmentId) const
+//TODO: Fix Bind and UnBind, if you call it repeatedly it does not work
+Color Framebuffer::ReadColor255(int x, int y, int attachmentId, int glFormat, int glType) const
 {
     unsigned char color[4];
     SetReadBuffer(attachmentId);
     Bind();
-    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, &color[0]);
+    glReadPixels(x, y, 1, 1, glFormat, glType, &color[0]);
     UnBind();
 
-    return Color(color[0], color[1], color[2], color[4]);
+    return Color(color[0], color[1], color[2], color[3]);
 }
 
-//TODO: Fix Bind and UnBind, if you call it repeatedly it does not work
-Color Framebuffer::ReadColor(int x, int y, int attachmentId) const
+Color Framebuffer::ReadColor(int x, int y, int attachmentId, int glFormat, int glType) const
 {
-    return ReadColor255(x, y, attachmentId) / 255.0f;
+    float color[4];
+    SetReadBuffer(attachmentId);
+    Bind();
+    glReadPixels(x, y, 1, 1, glFormat, glType, &color[0]);
+    UnBind();
+
+    return Color(color[0], color[1], color[2], color[3]);
 }
 
 float Framebuffer::ReadFloat(int x, int y, int attachmentId, int glFormat, int glType) const

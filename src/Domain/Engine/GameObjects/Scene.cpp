@@ -100,7 +100,6 @@ void Scene::_OnRender()
     //
 
     // PR (Post-Render, modifying on top of GBuffer)
-        /*
         // Apply lights to gbuffer
         std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
         for (Light *light : childrenLights)
@@ -113,7 +112,6 @@ void Scene::_OnRender()
 
         // Selection effects and other stuff
         m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
-        */
     //
 
     m_gbuffer->UnBind();

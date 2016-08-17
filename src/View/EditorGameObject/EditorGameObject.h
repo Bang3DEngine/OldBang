@@ -5,6 +5,9 @@
 
 class EditorGameObject : public GameObject
 {
+protected:
+    bool m_renderInSelectionFramebuffer = true;
+
 public:
     EditorGameObject();
     EditorGameObject(const std::string &name);
@@ -13,6 +16,8 @@ public:
     virtual ICloneable* Clone() const;
 
     virtual bool IsEditorGameObject() const override;
+
+    bool IsRenderInSelectionFramebuffer() const;
 
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 };

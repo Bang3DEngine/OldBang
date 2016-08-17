@@ -55,6 +55,8 @@ private:
     GameObject *m_lastGameObjectOvered = nullptr;
     GameObject *m_gameObjectBeingDragged = nullptr;
 
+    void HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin);
+
 public:
 
     Color m_clearColor = Color::blue * 0.6f;
@@ -78,6 +80,7 @@ public:
     static float GetAspectRatio();
     static int GetHeight();
     static int GetWidth();
+    static Vector2 GetSize();
 
     static void SetCursor(Qt::CursorShape cs);
 
