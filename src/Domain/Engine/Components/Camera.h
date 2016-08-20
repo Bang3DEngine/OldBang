@@ -13,7 +13,7 @@
 #include "Transform.h"
 
 class Mesh;
-class Canvas;
+class Screen;
 class MeshRenderer;
 class Camera : public Component
 {

@@ -194,7 +194,7 @@ HEADERS += \
     src/Domain/Engine/Assets/Meshes/MeshFactory.h \
     src/Domain/Engine/Interfaces/ICloneable.h \
     src/Domain/Engine/Others/GameBuilder.h \
-    src/View/Canvas.h \
+    src/View/Screen.h \
     src/Domain/Engine/Others/StringUtils.h \
     src/View/IWindow.h \
     src/Domain/Engine/Components/DirectionalLight.h \
@@ -213,7 +213,10 @@ HEADERS += \
     src/Domain/Engine/Physics/Color.h \
     src/View/Inspector/IAttrWidgetButtonListener.h \
     src/View/Application.h \
-    src/View/Inspector/ComponentClipboard.h
+    src/View/Inspector/ComponentClipboard.h \
+    src/View/DragDropManager.h \
+    src/View/Hierarchy/HierarchyDragDropManager.h \
+    src/View/Interfaces/IDragDropListener.h
 
 EDITOR {
 HEADERS += \
@@ -271,7 +274,7 @@ HEADERS += \
     src/Persistence/File.h \
     src/View/Inspector/TextFile.h \
     src/View/Inspector/PrefabAssetFileInspectable.h \
-    src/View/Interfaces/IDroppableWidget.h
+    src/View/Interfaces/DragDropAgent.h
 }
 
 GAME {
@@ -331,7 +334,7 @@ SOURCES += \
     src/Domain/Engine/Assets/Meshes/MeshFactory.cpp \
     src/Domain/Engine/Interfaces/ICloneable.cpp \
     src/Domain/Engine/Others/GameBuilder.cpp \
-    src/View/Canvas.cpp \
+    src/View/Screen.cpp \
     src/Domain/Engine/Others/StringUtils.cpp \
     src/View/IWindow.cpp \
     src/Domain/Engine/Components/DirectionalLight.cpp \
@@ -350,7 +353,10 @@ SOURCES += \
     src/Domain/Engine/Physics/Color.cpp \
     src/View/Inspector/IAttrWidgetButtonListener.cpp \
     src/View/Application.cpp \
-    src/View/Inspector/ComponentClipboard.cpp
+    src/View/Inspector/ComponentClipboard.cpp \
+    src/View/DragDropManager.cpp \
+    src/View/Hierarchy/HierarchyDragDropManager.cpp \
+    src/View/Interfaces/IDragDropListener.cpp
 
 EDITOR {
     SOURCES += \
@@ -409,7 +415,7 @@ EDITOR {
         src/View/Inspector/TextFile.cpp \
         src/Persistence/File.cpp \
         src/View/Inspector/PrefabAssetFileInspectable.cpp \
-        src/View/Interfaces/IDroppableWidget.cpp
+        src/View/Interfaces/DragDropAgent.cpp
 }
 
 GAME {

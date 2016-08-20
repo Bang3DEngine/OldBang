@@ -20,7 +20,7 @@
 #include "XMLParser.h"
 #include "XMLNode.h"
 #include "Camera.h"
-#include "Canvas.h"
+#include "Screen.h"
 #include "Shader.h"
 #include "Timer.h"
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 
     #endif
 
-    Canvas::InitFromMainBinary();
+    Screen::InitFromMainBinary();
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
 
@@ -84,8 +84,8 @@ int main(int argc, char *argv[])
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
-        Canvas::GetInstance()->AddScene(scene);
-        Canvas::GetInstance()->SetCurrentScene(scene);
+        Screen::GetInstance()->AddScene(scene);
+        Screen::GetInstance()->SetCurrentScene(scene);
         Persistence::SetCurrentSceneFilepath(filename);
     }
 
@@ -96,8 +96,8 @@ int main(int argc, char *argv[])
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
-        Canvas::GetInstance()->AddScene(scene);
-        Canvas::GetInstance()->SetCurrentScene(scene);
+        Screen::GetInstance()->AddScene(scene);
+        Screen::GetInstance()->SetCurrentScene(scene);
         Persistence::SetCurrentSceneFilepath(filename);
     }
     #endif

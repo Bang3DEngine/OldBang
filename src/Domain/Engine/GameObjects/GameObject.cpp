@@ -65,7 +65,6 @@ ICloneable* GameObject::Clone() const
 
 GameObject::~GameObject()
 {
-    //Logger_Log("Before destr.");
     _OnDestroy();
 
     #ifdef BANG_EDITOR
@@ -89,7 +88,6 @@ GameObject::~GameObject()
     }
 
     SetParent(nullptr);
-    // Logger_Log("After destr.");
 }
 
 void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
@@ -99,10 +97,6 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
         if (m_parent)
         {
             m_parent->m_children.remove(this);
-
-            #ifdef BANG_EDITOR
-            WindowEventManager::NotifyChildRemoved(this);
-            #endif
         }
 
         if(keepWorldTransform)
@@ -126,11 +120,14 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
                 // SetRotation
                 // SetScale
             }
-
-            #ifdef BANG_EDITOR
-            WindowEventManager::NotifyChildAdded(this);
-            #endif
         }
+
+        #ifdef BANG_EDITOR
+        if (!IsEditorGameObject())
+        {
+            Hierarchy::GetInstance()->Refresh();
+        }
+        #endif
     }
 }
 
@@ -344,7 +341,7 @@ bool GameObject::IsScene() const
 
 GameObject *GameObject::Find(const std::string &name)
 {
-    Scene *scene = Canvas::GetCurrentScene();
+    Scene *scene = Screen::GetCurrentScene();
     return scene->FindInChildren(name);
 }
 
@@ -384,7 +381,7 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
             // Important: this line must be before the ReadXMLInfo, because
             // it will avoid Behaviour to be compiled if it's not in the scene,
             // and it only can really know if its in scene when executing the Read if
-            // we set it before the Read, not after. Wtf I don't know how to write this xd
+            // we set it before the Read, not after. Wtf I don't know how to write this xds
             child->SetParent(this);
             child->ReadXMLInfo(xmlChild);
         }
@@ -490,7 +487,7 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
         if (!m_isSelectedInHierarchy)
         {
             m_selectionGameObject = new EditorSelectionGameObject(this);
-            m_selectionGameObject->SetParent(Canvas::GetCurrentScene());
+            m_selectionGameObject->SetParent(Screen::GetCurrentScene());
         }
     }
     else

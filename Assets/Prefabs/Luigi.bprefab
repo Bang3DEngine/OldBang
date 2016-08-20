@@ -1,12 +1,12 @@
 <GameObject enabled:Bool="true"{Hidden,Readonly}
-            id:String="0x348ced0"{Hidden,Readonly}
+            id:String="0x9d02120"{Hidden,Readonly}
             name:String="Character"{Hidden,Readonly}
            >
     <Transform Position:Vector3="(2.66023, 2.7, 3.76086)"{}
                Rotation:Vector3="(0, 21.75, 0)"{}
                Scale:Vector3="(0.1, 0.1, 0.1)"{}
                enabled:Bool="true"{Hidden,Readonly}
-               id:String="0x34773f0"{Hidden,Readonly}
+               id:String="0x9c46308"{Hidden,Readonly}
               >
     </Transform>
     <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -15,24 +15,25 @@
                   Mesh:File="./Assets/Meshes/luigiMesh.bmesh"{FileExtension="bmesh"}
                   ReceivesLighting:Bool="true"{Inline}
                   enabled:Bool="true"{Hidden,Readonly}
-                  id:String="0x339c750"{Hidden,Readonly}
+                  id:String="0x9c7f948"{Hidden,Readonly}
                  >
     </MeshRenderer>
     <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/TestBehaviour.cpp"{FileExtension="cpp"}
-                     Refresh:Button="Refresh"{Listener="0x34ba918"}
+                     CreateNew...:Button="CreateNew..."{Listener="0x9c86540"}
+                     Refresh:Button="Refresh"{Listener="0x9c86540"}
                      enabled:Bool="true"{Hidden,Readonly}
-                     id:String="0x34ba8c0"{Hidden,Readonly}
+                     id:String="0x9c86510"{Hidden,Readonly}
                     >
     </BehaviourHolder>
     <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x3431830"{Hidden,Readonly}
+                id:String="0x9d08eb8"{Hidden,Readonly}
                 name:String="Sword"{Hidden,Readonly}
                >
         <Transform Position:Vector3="(-21.7028, 43.7334, 3.07981)"{}
                    Rotation:Vector3="(0, 0, 0)"{}
                    Scale:Vector3="(2.79391, 2.45606, 97.5492)"{}
                    enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0x34aeed0"{Hidden,Readonly}
+                   id:String="0x9cdcc18"{Hidden,Readonly}
                   >
         </Transform>
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -41,7 +42,7 @@
                       Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
-                      id:String="0x348fc60"{Hidden,Readonly}
+                      id:String="0x9b7b6b8"{Hidden,Readonly}
                      >
         </MeshRenderer>
     </GameObject>

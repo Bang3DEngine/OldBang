@@ -1,17 +1,20 @@
 #include "TextureRender.h"
 #include "Logger.h"
 
-TextureRender::TextureRender() : Texture(TextureType::Texture2D)
+TextureRender::TextureRender() : Texture2D()
 {
     SetFilterMode(Texture::FilterMode::Nearest);
     SetWrapMode(Texture::WrapMode::Clamp);
+    SetGLInternalFormat(GL_RGBA32F);
+    SetGLFormat(GL_RGBA);
+    SetGLType(GL_FLOAT);
 }
 
 TextureRender::~TextureRender()
 {
 
 }
-
+/*
 void TextureRender::CreateEmpty(int width, int height)
 {
     Fill(nullptr, width, height);
@@ -32,6 +35,7 @@ void TextureRender::Fill(unsigned char *newData, int width, int height)
     this->m_height = height;
 
     Bind();
-    glTexImage2D(GL_TEXTURE_2D, 0, m_internalFormat, width, height, 0, m_format, m_internalType, m_data);
+    glTexImage2D(GL_TEXTURE_2D, 0, m_glInternalFormat, width, height, 0, m_glFormat, m_glType, m_data);
     UnBind();
 }
+*/

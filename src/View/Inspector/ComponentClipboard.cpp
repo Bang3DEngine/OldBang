@@ -23,7 +23,6 @@ void ComponentClipboard::CopyComponent(Component *componentToCopy)
     }
 
     s_copiedComponent = static_cast<Component*>(componentToCopy->Clone());
-    Logger_Log(s_copiedComponent);
 }
 
 void ComponentClipboard::PasteComponentInto(GameObject *go)

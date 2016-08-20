@@ -1,6 +1,6 @@
 #include "EditorCamera.h"
 
-#include "Canvas.h"
+#include "Screen.h"
 #include "Scene.h"
 
 EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
@@ -23,7 +23,7 @@ EditorCamera::~EditorCamera()
 
 void EditorCamera::AdjustSpeeds()
 {
-    Canvas *c = Canvas::GetInstance();
+    Screen *c = Screen::GetInstance();
     int cw = c->GetWidth();
     int ch = c->GetHeight();
 
@@ -102,7 +102,7 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
 
         transform->Translate(m_camt->GetRight() * delta.x + m_camt->GetUp() * delta.y);
 
-        Canvas::SetCursor(Qt::SizeAllCursor);
+        Screen::SetCursor(Qt::SizeAllCursor);
         Input::SetMouseWrapping(true);
         *hasMoved  = true;
         *unwrapMouse = false;
@@ -234,7 +234,7 @@ void EditorCamera::OnUpdate()
 
     if (unwrapMouse)
     {
-        Canvas::SetCursor( Qt::ArrowCursor ); //cursor visible
+        Screen::SetCursor( Qt::ArrowCursor ); //cursor visible
         Input::SetMouseWrapping(false);
     }
 }

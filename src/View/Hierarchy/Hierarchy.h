@@ -23,46 +23,43 @@
 #include "Scene.h"
 #include "FileDialog.h"
 #include "GameObject.h"
-#include "IDroppableWidget.h"
+#include "DragDropAgent.h"
 #include "ClipboardGameObject.h"
+#include "HierarchyDragDropManager.h"
 #include "IWindowEventManagerListener.h"
 
-class Hierarchy : public IDroppableQTreeWidget,
+class Hierarchy : public DragDropQTreeWidget,
                   public IWindowEventManagerListener
 {
     Q_OBJECT
+
+friend class HierarchyDragDropManager;
 
 private:
     //For every gameObject, we have the associated treeItem,
     //in order to update :)
     mutable std::map<GameObject*, QTreeWidgetItem*> m_gameObjectToTreeItem;
     mutable std::map<QTreeWidgetItem*,GameObject*> m_treeItemToGameObject;
+    HierarchyDragDropManager m_hDragDropManager;
 
-    void ExpandRecursiveUpwards(QTreeWidgetItem *item);
-    QTreeWidgetItem* FillDownwards(GameObject *e);
+    void Expand(QTreeWidgetItem *item);
+    QTreeWidgetItem* PopulateItemGameObject(GameObject *e);
 
     //Useful for example, for Removing a Child
     //(we just need to remove the parent/s of all the selected entities)
     void LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items);
+
     GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
     QTreeWidgetItem *GetItemFromGameObject(GameObject *go) const;
-
-    GameObject* GetDropTargetGameObject(QDropEvent *e) const;
 
 public:
     explicit Hierarchy(QWidget *parent = 0);
     virtual ~Hierarchy();
 
     void Refresh();
+    void Expand(GameObject *go);
 
     GameObject* GetFirstSelectedGameObject() const;
-
-    void OnChildAdded(GameObject *child) override;
-    void OnChildChangedParent(GameObject *child, GameObject *previousParent) override;
-    void OnChildRemoved(GameObject *child) override;
-
-    void dropEvent(QDropEvent *e) override;
-    void OnDropFromExplorer(const File &f, QDropEvent *e) override;
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
 
@@ -72,8 +69,7 @@ public:
     void SelectGameObject(GameObject *go);
     void UnselectAll();
 
-    void OnDragStarted(QWidget *origin) override;
-    void OnDragStopped() override;
+    virtual void dropEvent(QDropEvent *e) override;
 
     void OnGameObjectNameChanged(GameObject *go);
 

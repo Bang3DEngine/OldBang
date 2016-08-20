@@ -58,7 +58,7 @@ void Renderer::ActivateGLStatesBeforeRendering() const
         glDisable(GL_CULL_FACE);
     }
 
-    Scene *scene = Canvas::GetCurrentScene();
+    Scene *scene = Screen::GetCurrentScene();
     Camera *camera = scene->GetCamera();
     if (camera && m_material  && m_material->m_shaderProgram )
     {

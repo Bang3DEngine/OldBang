@@ -25,6 +25,11 @@ public:
         TextureCubeMap = GL_TEXTURE_CUBE_MAP,
     };
 
+    NamedEnum (TextureInternalFormat,
+        Nearest = GL_NEAREST,
+        Linear = GL_LINEAR
+    );
+
     NamedEnum (FilterMode,
         Nearest = GL_NEAREST,
         Linear = GL_LINEAR
@@ -39,9 +44,9 @@ private:
     GLint m_glTextureGetIntegerType = 0;
 
 protected:
-    GLint m_internalType = GL_UNSIGNED_BYTE;
-    GLint m_internalFormat = GL_RGBA;
-    GLint m_format = GL_RGBA;
+    GLint m_glType = GL_UNSIGNED_BYTE;
+    GLint m_glInternalFormat = GL_RGBA;
+    GLint m_glFormat = GL_RGBA;
 
     int m_width = 0;
     int m_height = 0;
@@ -62,7 +67,7 @@ public:
     virtual void CreateEmpty(int width, int height) = 0;
     virtual void Resize(int width, int height) = 0;
 
-    void SetGLInternalType(GLint glInternalType);
+    void SetGLType(GLint glType);
     void SetGLInternalFormat(GLint glInternalFormat);
     void SetGLFormat(GLint glFormat);
     void SetFilterMode(FilterMode filterMode);
@@ -71,7 +76,7 @@ public:
 
     int GetWidth() const;
     int GetHeight() const;
-    GLint GetGLInternalType() const;
+    GLint GetGLType() const;
     GLint GetGLInternalFormat() const;
     GLint GetGLFormat() const;
     FilterMode GetFilterMode() const;

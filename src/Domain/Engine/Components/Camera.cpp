@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 #include "Mesh.h"
-#include "Canvas.h"
+#include "Screen.h"
 #include "FileReader.h"
 #include "MeshRenderer.h"
 
@@ -35,7 +35,7 @@ void Camera::GetProjectionMatrix(Matrix4 *proj) const
     {
         if (m_autoUpdateAspectRatio)
         {
-            m_aspectRatio = Canvas::GetAspectRatio();
+            m_aspectRatio = Screen::GetAspectRatio();
         }
 
         *proj = Matrix4::Perspective(glm::radians(m_fovDegrees), m_aspectRatio, m_zNear, m_zFar);

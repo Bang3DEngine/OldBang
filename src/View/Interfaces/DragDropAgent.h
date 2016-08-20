@@ -10,65 +10,65 @@
 #include <QDragLeaveEvent>
 
 #include "Color.h"
+#include "Vector2.h"
+#include "DragDropManager.h"
 
 class File;
 class GameObject;
 class WindowMain;
 class WindowEventManager;
-class IDroppable
-{
-private:
-    bool m_inited = false;
 
+/**
+ * @brief These objects/widgets will be the ones who can emit drag/drop events.
+ */
+class DragDropAgent
+{
 protected:
+    DragDropAgent() {}
+    virtual ~DragDropAgent() {}
 
-    IDroppable();
-    virtual ~IDroppable();
-
-    void Init(QWidget *qw);
-
-    void OnDragEnterEvent(QWidget *qw, QDragEnterEvent *e);
-    void OnDragMoveEvent(QWidget *qw, QDragMoveEvent *e);
-    void OnDragLeaveEvent(QWidget *qw, QDragLeaveEvent *e);
-    void OnDropEvent(QWidget *qw, QDropEvent *e);
-
-    virtual void OnDropFromExplorer(const File &f, QDropEvent *e) {}
-    virtual void OnDropFromHierarchy(GameObject *go,  QDropEvent *e) {}
-
-public:
-    static QString acceptDragStyle, acceptDragStyleOnlyBorder,
-                   overDragStyle, rejectDragStyle;
-
+    void HandleDragEnterEvent(QDragEnterEvent *e);
+    void HandleDragMoveEvent(QDragMoveEvent *e);
+    void HandleDragLeaveEvent(QDragLeaveEvent *e);
+    void HandleDropEvent(QDropEvent *e);
 };
 
-class IDroppableQWidget : public IDroppable,
-                          public QWidget
+//
+
+class DragDropQWidget : public DragDropAgent,
+                        public QWidget
 {
 public:
-    IDroppableQWidget();
-    virtual ~IDroppableQWidget();
+    DragDropQWidget();
+    virtual ~DragDropQWidget();
     virtual void dragEnterEvent(QDragEnterEvent *e) override;
     virtual void dragMoveEvent(QDragMoveEvent *e) override;
     virtual void dragLeaveEvent(QDragLeaveEvent *e) override;
     virtual void dropEvent(QDropEvent *e) override;
 };
-class IDroppableQListView : public IDroppable,
-                            public QListView
+
+//
+
+class DragDropQListView : public DragDropAgent,
+                          public QListView
 {
 public:
-    IDroppableQListView();
-    virtual ~IDroppableQListView();
+    DragDropQListView();
+    virtual ~DragDropQListView();
     virtual void dragEnterEvent(QDragEnterEvent *e) override;
     virtual void dragMoveEvent(QDragMoveEvent *e) override;
     virtual void dragLeaveEvent(QDragLeaveEvent *e) override;
     virtual void dropEvent(QDropEvent *e) override;
 };
-class IDroppableQTreeWidget : public IDroppable,
-                              public QTreeWidget
+
+//
+
+class DragDropQTreeWidget : public DragDropAgent,
+                            public QTreeWidget
 {
 public:
-    IDroppableQTreeWidget();
-    virtual ~IDroppableQTreeWidget();
+    DragDropQTreeWidget();
+    virtual ~DragDropQTreeWidget();
     virtual void dragEnterEvent(QDragEnterEvent *e) override;
     virtual void dragMoveEvent(QDragMoveEvent *e) override;
     virtual void dragLeaveEvent(QDragLeaveEvent *e) override;

@@ -4,6 +4,8 @@
 #include "WindowEventManager.h"
 #endif
 
+#include "DragDropManager.h"
+
 Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {
 }
@@ -11,10 +13,13 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 bool Application::notify(QObject *receiver, QEvent *e)
 {
     #ifdef BANG_EDITOR
-    if (e->type() == QEvent::Drop ||
-        e->type() == QEvent::MouseButtonRelease)
+    if (e->type() == QEvent::MouseButtonPress)
     {
-        WindowEventManager::NotifyDragStopped();
+        DragDropManager::HandleGlobalMousePress(receiver, e);
+    }
+    else if (e->type() == QEvent::MouseButtonRelease)
+    {
+        DragDropManager::HandleGlobalMouseRelease(receiver, e);
     }
     #endif
 

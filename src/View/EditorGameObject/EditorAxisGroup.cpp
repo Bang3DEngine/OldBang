@@ -61,7 +61,7 @@ void EditorAxisGroup::OnUpdate()
                 transform->SetLocalRotation( at->GetRotation() );
             }
 
-            Camera *cam = Canvas::GetCurrentScene()->GetCamera();
+            Camera *cam = Screen::GetCurrentScene()->GetCamera();
             Vector3 camPos = cam->gameObject->transform->GetPosition();
             Vector3 attPos = at->GetPosition();
             float distanceToCamera = Vector3::Distance(camPos, attPos);

@@ -23,7 +23,7 @@
 #include "Logger.h"
 #include "XMLNode.h"
 #include "IInspectable.h"
-#include "IDroppableWidget.h"
+#include "DragDropAgent.h"
 
 class Component;
 class GameObject;
@@ -33,7 +33,7 @@ class AttributeWidget;
  * @brief Represents a widget that can be put in the Inspector.
  * It tracks the attributes and attributeWidget it contains.
  */
-class InspectorWidget : public IDroppableQWidget
+class InspectorWidget : public DragDropQWidget
 {
     Q_OBJECT
 
@@ -65,8 +65,8 @@ public:
 
     virtual ~InspectorWidget();
 
-    virtual void OnDropFromExplorer(const File &f, QDropEvent *e) override;
-    virtual void OnDropFromHierarchy(GameObject *go, QDropEvent *e) override;
+    // virtual void OnDropFromExplorer(const File &f, QDropEvent *e) override;
+    // virtual void OnDropFromHierarchy(GameObject *go, QDropEvent *e) override;
 
     /**
      * @brief GetUpdatedWidgetXMLInfo

@@ -19,7 +19,7 @@ class SingleLineRenderer;
 class EditorGameObject;
 class Gizmos
 {
-friend class Canvas;
+friend class Screen;
 friend class EditorScene;
 private:
     Gizmos() {}

@@ -15,7 +15,7 @@
 #include "WindowMain.h"
 #include "GameObject.h"
 
-InspectorWidget::InspectorWidget() : IDroppableQWidget()
+InspectorWidget::InspectorWidget()
 {
 }
 
@@ -75,6 +75,7 @@ InspectorWidget::~InspectorWidget()
     }
 }
 
+/*
 void InspectorWidget::OnDropFromExplorer(const File &f, QDropEvent *e)
 {
 }
@@ -82,6 +83,7 @@ void InspectorWidget::OnDropFromExplorer(const File &f, QDropEvent *e)
 void InspectorWidget::OnDropFromHierarchy(GameObject *go, QDropEvent *e)
 {
 }
+*/
 
 XMLNode InspectorWidget::GetInspectableXMLInfo() const
 {

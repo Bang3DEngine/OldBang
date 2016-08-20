@@ -9,17 +9,17 @@
 #include "Color.h"
 #include "Logger.h"
 #include "Camera.h"
-#include "Canvas.h"
+#include "Screen.h"
 #include "GBuffer.h"
 #include "Material.h"
 #include "GameObject.h"
 
-class Canvas;
+class Screen;
 class SelectionFramebuffer;
 class Scene : public GameObject
 {
 
-friend class Canvas;
+friend class Screen;
 friend class GameObject;
 friend class SelectionFramebuffer;
 
@@ -30,7 +30,7 @@ protected:
 
     //Framebuffer for positions, normals, uvs and diffuse
     GBuffer *m_gbuffer = nullptr;
-    const Canvas *m_canvas = nullptr; //set by canvas when added to it
+    const Screen *m_screen = nullptr; //set by screen when added to it
     GameObject *m_cameraGameObject = nullptr;
 
     virtual void _OnStart () override;
@@ -50,7 +50,7 @@ public:
     static Scene *GetCurrentScene();
     static Camera* GetCamera ();
     Camera* GetCurrentCamera () const;
-    const Canvas* GetCanvas () const;
+    const Screen* GetScreen () const;
 
     bool IsScene() const override;
 

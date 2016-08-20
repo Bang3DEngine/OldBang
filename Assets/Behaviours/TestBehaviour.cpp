@@ -4,7 +4,7 @@
 #include "Transform.h"
 #include "Material.h"
 #include "Logger.h"
-#include "Canvas.h"
+#include "Screen.h"
 #include "Scene.h"
 #include "Time.h"
 

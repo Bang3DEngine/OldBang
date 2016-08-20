@@ -144,7 +144,7 @@
        </widget>
       </item>
       <item>
-       <widget class="Canvas" name="canvas" native="true">
+       <widget class="Screen" name="screen" native="true">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -296,18 +296,6 @@
          </property>
          <property name="dragEnabled">
           <bool>true</bool>
-         </property>
-         <property name="dragDropMode">
-          <enum>QAbstractItemView::DragDrop</enum>
-         </property>
-         <property name="defaultDropAction">
-          <enum>Qt::MoveAction</enum>
-         </property>
-         <property name="alternatingRowColors">
-          <bool>false</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::ExtendedSelection</enum>
          </property>
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
@@ -751,16 +739,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Canvas</class>
-   <extends>QWidget</extends>
-   <header>Canvas.h</header>
-   <container>1</container>
-   <slots>
-    <slot>OnTopKekPressed()</slot>
-    <slot>OnPauseResumeButtonPressed()</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
    <class>WindowEventManager</class>
    <extends>QWidget</extends>
    <header>WindowEventManager.h</header>
@@ -814,6 +792,12 @@
    <class>Toolbar</class>
    <extends>QWidget</extends>
    <header>Toolbar.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Screen</class>
+   <extends>QWidget</extends>
+   <header>Screen.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

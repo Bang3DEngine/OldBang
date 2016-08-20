@@ -33,15 +33,12 @@ public:
     virtual void SetValue(const std::string &filepath, bool draggedFile = false);
     virtual std::string GetValue();
 
-    virtual void OnDropFromExplorer(const File &f,  QDropEvent *e) override;
-    virtual void OnDropFromHierarchy(GameObject *go,  QDropEvent *e) override;
+    virtual void OnDragStart(const DragDropInfo &ddi) override;
+    virtual void OnDropHere(const DragDropInfo &ddi) override;
+    virtual void OnDrop(const DragDropInfo &ddi) override;
 
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
-
     virtual void Refresh(const XMLAttribute &attribute) override;
-
-    void OnDragStarted(QWidget *origin) override;
-    void OnDragStopped() override;
 
 public slots:
     void OnDoubleClick();

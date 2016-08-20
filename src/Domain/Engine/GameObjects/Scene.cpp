@@ -1,13 +1,13 @@
 
 #include "Scene.h"
 #include "GameObject.h"
-#include "Canvas.h"
+#include "Screen.h"
 
 #include "DirectionalLight.h"
 
 Scene::Scene() : GameObject("Scene")
 {
-    m_gbuffer = new GBuffer(Canvas::GetWidth(), Canvas::GetHeight());
+    m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
     m_materialAfterLighting = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_AfterLighting.bmat");
 }
 
@@ -73,7 +73,7 @@ void Scene::_OnRender()
     Camera *cam = m_cameraGameObject->GetComponent<Camera>();
     if (cam  && cam->GetAutoUpdateAspectRatio())
     {
-        cam->SetAspectRatio( m_canvas->GetAspectRatio() );
+        cam->SetAspectRatio( m_screen->GetAspectRatio() );
     }
 
     m_gbuffer->Bind();
@@ -133,7 +133,7 @@ void Scene::SetCamera(const Camera *cam)
 
 Scene *Scene::GetCurrentScene()
 {
-    return Canvas::GetInstance()->GetCurrentScene();
+    return Screen::GetInstance()->GetCurrentScene();
 }
 
 Camera *Scene::GetCamera()
@@ -151,9 +151,9 @@ Camera *Scene::GetCurrentCamera() const
     return m_cameraGameObject->GetComponent<Camera>();
 }
 
-const Canvas *Scene::GetCanvas() const
+const Screen *Scene::GetScreen() const
 {
-    return m_canvas;
+    return m_screen;
 }
 
 bool Scene::IsScene() const

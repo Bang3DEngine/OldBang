@@ -24,6 +24,14 @@ public:
         Color
     };
 
+    TextureRender *m_positionTexture = nullptr;
+    TextureRender *m_normalTexture   = nullptr;
+    TextureRender *m_uvTexture       = nullptr;
+    TextureRender *m_diffuseTexture  = nullptr;
+    TextureRender *m_matBoolsTexture = nullptr;
+    TextureRender *m_depthTexture    = nullptr;
+    TextureRender *m_colorTexture    = nullptr;
+
 private:
 
     Material *m_renderGBufferToScreenMaterial = nullptr;

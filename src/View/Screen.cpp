@@ -1,4 +1,4 @@
-#include "Canvas.h"
+#include "Screen.h"
 
 #ifdef BANG_EDITOR
 #include "Explorer.h"
@@ -13,14 +13,14 @@
 #include "SingletonManager.h"
 
 #ifdef BANG_EDITOR
-WindowMain *Canvas::s_m_window = nullptr;
+WindowMain *Screen::s_m_window = nullptr;
 #else
-GameWindow *Canvas::s_m_window = nullptr;
+GameWindow *Screen::s_m_window = nullptr;
 #endif
 
-Canvas *Canvas::m_mainBinaryCanvas = nullptr;
+Screen *Screen::m_mainBinaryScreen = nullptr;
 
-Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
+Screen::Screen(QWidget* parent) : QGLWidget(parent)
 {
     /*
     setAcceptDrops(true);
@@ -35,26 +35,26 @@ Canvas::Canvas(QWidget* parent) : QGLWidget(parent)
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
 
     connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(update()));
-    m_drawTimer.setInterval(Canvas::c_redrawDelay);
+    m_drawTimer.setInterval(Screen::c_redrawDelay);
     m_drawTimer.start();
 
     #ifdef BANG_EDITOR
-    Canvas::s_m_window = WindowMain::GetInstance();
+    Screen::s_m_window = WindowMain::GetInstance();
     #else
-    Canvas::s_m_window = GameWindow::GetInstance();
+    Screen::s_m_window = GameWindow::GetInstance();
     #endif
 }
 
-void Canvas::InitFromMainBinary()
+void Screen::InitFromMainBinary()
 {
     #ifdef BANG_EDITOR
-    Canvas::m_mainBinaryCanvas = static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton())->canvas;
+    Screen::m_mainBinaryScreen = static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #else
-    Canvas::m_mainBinaryCanvas = static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->canvas;
+    Screen::m_mainBinaryScreen = static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #endif
 }
 
-void Canvas::initializeGL()
+void Screen::initializeGL()
 {
     glewExperimental = GL_TRUE;
     glewInit();
@@ -65,7 +65,7 @@ void Canvas::initializeGL()
     m_lastRenderTime = Time::GetNow();
 }
 
-void Canvas::paintGL()
+void Screen::paintGL()
 {
     glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
 
@@ -85,11 +85,11 @@ void Canvas::paintGL()
     Input::GetInstance()->OnNewFrame();
 }
 
-void Canvas::updateGL()
+void Screen::updateGL()
 {
 }
 
-void Canvas::resizeGL(int w, int h)
+void Screen::resizeGL(int w, int h)
 {
     glViewport(0, 0, (GLint)w, (GLint)h);
     m_width = w;
@@ -102,7 +102,7 @@ void Canvas::resizeGL(int w, int h)
     }
 }
 
-Scene *Canvas::AddScene(const std::string &name)
+Scene *Screen::AddScene(const std::string &name)
 {
     Scene *st = new Scene();
     st->m_name = name;
@@ -110,12 +110,12 @@ Scene *Canvas::AddScene(const std::string &name)
     return st;
 }
 
-void Canvas::AddScene(Scene *scene)
+void Screen::AddScene(Scene *scene)
 {
     m_scenes.push_back(scene);
 }
 
-void Canvas::SetCurrentScene(Scene *scene)
+void Screen::SetCurrentScene(Scene *scene)
 {
     if (m_currentScene)
     {
@@ -127,12 +127,12 @@ void Canvas::SetCurrentScene(Scene *scene)
     {
         m_currentScene->_OnStart();
         #ifdef BANG_EDITOR
-        Canvas::s_m_window->widgetHierarchy->Refresh();
+        Screen::s_m_window->widgetHierarchy->Refresh();
         #endif
     }
 }
 
-void Canvas::SetCurrentScene(const std::string &name)
+void Screen::SetCurrentScene(const std::string &name)
 {
     if (m_currentScene )
     {
@@ -149,16 +149,16 @@ void Canvas::SetCurrentScene(const std::string &name)
     }
 
     Logger_Warn("Could not change Scene to '" << name << "', "<<
-                   "because no scene with this name is added to the Canvas.");
+                   "because no scene with this name is added to the Screen.");
 }
 
-Scene *Canvas::GetCurrentScene()
+Scene *Screen::GetCurrentScene()
 {
-    Canvas *c = Canvas::GetInstance();
+    Screen *c = Screen::GetInstance();
     return c ? c->m_currentScene : nullptr;
 }
 
-Scene *Canvas::GetScene(const std::string &name) const
+Scene *Screen::GetScene(const std::string &name) const
 {
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
@@ -167,7 +167,7 @@ Scene *Canvas::GetScene(const std::string &name) const
     return nullptr;
 }
 
-void Canvas::RemoveScene(const std::string &name)
+void Screen::RemoveScene(const std::string &name)
 {
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
@@ -175,51 +175,52 @@ void Canvas::RemoveScene(const std::string &name)
     }
 }
 
-Canvas *Canvas::GetInstance()
+Screen *Screen::GetInstance()
 {
     #ifdef BANG_EDITOR
-    return static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton())->canvas;
+    return static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #else
-    return static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->canvas;
+    return static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #endif
 }
 
-float Canvas::GetAspectRatio()
+float Screen::GetAspectRatio()
 {
-    return Canvas::m_mainBinaryCanvas->m_aspectRatio;
+    return Screen::m_mainBinaryScreen->m_aspectRatio;
 }
 
-int Canvas::GetWidth()
+int Screen::GetWidth()
 {
-    return Canvas::m_mainBinaryCanvas->m_width;
+    return Screen::m_mainBinaryScreen->m_width;
 }
 
-Vector2 Canvas::GetSize()
+Vector2 Screen::GetSize()
 {
-    return Vector2(Canvas::GetWidth(), Canvas::GetHeight());
+    return Vector2(Screen::GetWidth(), Screen::GetHeight());
 }
 
-int Canvas::GetHeight()
+int Screen::GetHeight()
 {
-    return Canvas::m_mainBinaryCanvas->m_height;
+    return Screen::m_mainBinaryScreen->m_height;
 }
 
-void Canvas::SetCursor(Qt::CursorShape cs)
+void Screen::SetCursor(Qt::CursorShape cs)
 {
-    Canvas::s_m_window->GetApplication()->setOverrideCursor( cs );
+    Screen::s_m_window->GetApplication()->setOverrideCursor( cs );
 }
 
 #ifdef BANG_EDITOR
-void Canvas::dragEnterEvent(QDragEnterEvent *e)
+void Screen::dragEnterEvent(QDragEnterEvent *e)
 {
     e->accept();
 }
 
-void Canvas::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
+void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
 {
     EditorScene *scene = static_cast<EditorScene*>(m_currentScene);
     SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
-    int x = e->pos().x(), y = e->pos().y();
+    int x = e->pos().x();
+    int y = Screen::GetHeight() - e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
     m_dragOrigin = origin;
 
@@ -246,25 +247,19 @@ void Canvas::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
                 delete prefab;
             }
         }
-
-        if (m_gameObjectBeingDragged)
-        {
-            m_gameObjectBeingDragged->m_isDragged = true;
-            m_gameObjectBeingDragged->SetParent(scene);
-        }
     }
     else
     {
         Vector3 worldPos;
         if (overedGo)
         {
-            worldPos = sfb->GetWorldPositionAt(x, Canvas::GetHeight() - y);
+            worldPos = sfb->GetWorldPositionAt(x, y);
         }
         else
         {
             Camera *cam = scene->GetCamera();
-            Vector2 ndcPos = Vector2(x, y);
-            ndcPos /= Canvas::GetSize();
+            Vector2 ndcPos = Vector2(x, Screen::GetHeight() - y);
+            ndcPos /= Screen::GetSize();
             ndcPos = ndcPos * 2.0f - 1.0f;
             ndcPos.y *= -1.0f;
             float z = Vector3::Distance(cam->transform->GetPosition(),
@@ -274,9 +269,21 @@ void Canvas::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
 
         m_gameObjectBeingDragged->transform->SetPosition(worldPos);
     }
+
+    if (m_gameObjectBeingDragged)
+    {
+        m_gameObjectBeingDragged->m_isDragged = true;
+        if (m_gameObjectBeingDragged->parent != scene)
+        {
+            m_gameObjectBeingDragged->SetParent(scene);
+            #ifdef BANG_EDITOR
+            Hierarchy::GetInstance()->Refresh();
+            #endif
+        }
+    }
 }
 
-void Canvas::dragMoveEvent(QDragMoveEvent *e)
+void Screen::dragMoveEvent(QDragMoveEvent *e)
 {
     e->accept();
 
@@ -284,7 +291,7 @@ void Canvas::dragMoveEvent(QDragMoveEvent *e)
 
     EditorScene *scene = static_cast<EditorScene*>(m_currentScene);
     SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
-    int x = e->pos().x(), y = e->pos().y();
+    int x = e->pos().x(), y = Screen::GetHeight() - e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
 
     Explorer *explorer = Explorer::GetInstance();
@@ -324,70 +331,79 @@ void Canvas::dragMoveEvent(QDragMoveEvent *e)
     m_lastGameObjectOvered = overedGo;
 }
 
-void Canvas::dragLeaveEvent(QDragLeaveEvent *e)
+void Screen::dragLeaveEvent(QDragLeaveEvent *e)
 {
-    if (m_dragOrigin != Explorer::GetInstance())
+    if (m_gameObjectBeingDragged)
     {
-        if (m_gameObjectBeingDragged)
-        {
-            m_lastGameObjectOvered = nullptr;
-
-            delete m_gameObjectBeingDragged;
-            m_gameObjectBeingDragged = nullptr;
-        }
+        m_lastGameObjectOvered = nullptr;
+        m_gameObjectBeingDragged->SetParent(nullptr);
+        // delete m_gameObjectBeingDragged;
+        // m_gameObjectBeingDragged = nullptr;
     }
 
     e->accept();
 }
 
-void Canvas::dropEvent(QDropEvent *e)
+void Screen::dropEvent(QDropEvent *e)
 {
     NONULL(m_currentScene);
+    e->ignore();
+}
 
-    if (m_gameObjectBeingDragged)
+void Screen::OnDrop(const DragDropInfo &ddi)
+{
+    if ( MouseOverMe() )
     {
-        m_gameObjectBeingDragged->m_isDragged = false;
-        m_gameObjectBeingDragged->SetParent(m_currentScene);
+        if (m_gameObjectBeingDragged)
+        {
+            m_gameObjectBeingDragged->m_isDragged = false;
+            m_gameObjectBeingDragged->SetParent(m_currentScene);
+        }
+    }
+    else
+    {
+        if (m_gameObjectBeingDragged)
+        {
+            delete m_gameObjectBeingDragged;
+        }
     }
 
     m_lastGameObjectOvered = nullptr;
     m_gameObjectBeingDragged = nullptr;
-
-    e->ignore();
 }
 #endif
 
-void Canvas::wheelEvent(QWheelEvent *event)
+void Screen::wheelEvent(QWheelEvent *event)
 {
     Input::GetInstance()->HandleInputMouseWheel(event);
     QGLWidget::wheelEvent(event);
 }
 
-void Canvas::mouseMoveEvent(QMouseEvent *event)
+void Screen::mouseMoveEvent(QMouseEvent *event)
 {
     Input::GetInstance()->HandleInputMouseMove(event);
     QGLWidget::mouseMoveEvent(event);
 }
 
-void Canvas::mousePressEvent(QMouseEvent *event)
+void Screen::mousePressEvent(QMouseEvent *event)
 {
     Input::GetInstance()->HandleInputMousePress(event);
     QGLWidget::mousePressEvent(event);
 }
 
-void Canvas::mouseReleaseEvent(QMouseEvent *event)
+void Screen::mouseReleaseEvent(QMouseEvent *event)
 {
     Input::GetInstance()->HandleInputMouseRelease(event);
     QGLWidget::mouseReleaseEvent(event);
 }
 
-void Canvas::keyPressEvent(QKeyEvent *event)
+void Screen::keyPressEvent(QKeyEvent *event)
 {
     Input::GetInstance()->HandleInputKeyPress(event);
     QGLWidget::keyPressEvent(event);
 }
 
-void Canvas::keyReleaseEvent(QKeyEvent *event)
+void Screen::keyReleaseEvent(QKeyEvent *event)
 {
     Input::GetInstance()->HandleInputKeyReleased(event);
     QGLWidget::keyReleaseEvent(event);
