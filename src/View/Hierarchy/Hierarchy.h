@@ -24,7 +24,8 @@
 #include "FileDialog.h"
 #include "GameObject.h"
 #include "DragDropAgent.h"
-#include "ClipboardGameObject.h"
+#include "GameObjectClipboard.h"
+#include "HierarchyContextMenu.h"
 #include "HierarchyDragDropManager.h"
 #include "IWindowEventManagerListener.h"
 
@@ -33,6 +34,7 @@ class Hierarchy : public DragDropQTreeWidget,
 {
     Q_OBJECT
 
+friend class HierarchyContextMenu;
 friend class HierarchyDragDropManager;
 
 private:
@@ -40,6 +42,8 @@ private:
     //in order to update :)
     mutable std::map<GameObject*, QTreeWidgetItem*> m_gameObjectToTreeItem;
     mutable std::map<QTreeWidgetItem*,GameObject*> m_treeItemToGameObject;
+
+    HierarchyContextMenu m_hContextMenu;
     HierarchyDragDropManager m_hDragDropManager;
 
     void Expand(QTreeWidgetItem *item);
@@ -80,14 +84,6 @@ public:
 public slots:
 
     void OnItemNameChanged(QTreeWidgetItem *item, int column);
-
-    void OnCustomContextMenuRequested(QPoint point);
-    void OnContextMenuCreateEmptyClicked();
-    void OnContextMenuCopyClicked();
-    void OnContextMenuPasteClicked();
-    void OnContextMenuDuplicateClicked();
-    void OnContextMenuCreatePrefab();
-    void OnContextMenuDeleteClicked();
 
     void OnSelectionChanged();
     void _NotifyHierarchyGameObjectSelectionChanged();

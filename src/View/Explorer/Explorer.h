@@ -25,6 +25,7 @@
 #include "Texture2DAssetFile.h"
 #include "MeshFileInspectable.h"
 #include "TextFileInspectable.h"
+#include "ExplorerContextMenu.h"
 #include "ImageFileInspectable.h"
 #include "MeshAssetFileInspectable.h"
 #include "PrefabAssetFileInspectable.h"
@@ -42,8 +43,11 @@ class Explorer : public DragDropQListView,
 friend class File;
 friend class FileSystemModel;
 friend class ExplorerDirTree;
+friend class ExplorerContextMenu;
 
 private:
+
+    ExplorerContextMenu m_eContextMenu;
 
     FileSystemModel *m_fileSystemModel = nullptr;
     QToolButton *m_buttonDirUp = nullptr;
@@ -86,11 +90,6 @@ public:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
-
-    void OnCustomContextMenuRequested(QPoint point);
-public slots:
-    void OnContextMenuDuplicateClicked();
-    void OnContextMenuDeleteClicked();
 
 public:
     //Updates the Inspector with the selected file info

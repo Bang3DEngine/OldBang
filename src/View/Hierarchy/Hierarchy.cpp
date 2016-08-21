@@ -4,7 +4,8 @@
 #include "WindowMain.h"
 #include "WindowEventManager.h"
 
-Hierarchy::Hierarchy(QWidget *parent) : m_hDragDropManager(this)
+Hierarchy::Hierarchy(QWidget *parent) :
+    m_hContextMenu(this), m_hDragDropManager(this)
 {
     connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
             this, SLOT(OnItemNameChanged(QTreeWidgetItem*,int)));
@@ -15,9 +16,6 @@ Hierarchy::Hierarchy(QWidget *parent) : m_hDragDropManager(this)
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             this ,SLOT(_NotifyHierarchyGameObjectDoubleClicked(
                            QTreeWidgetItem*,int)));
-
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(OnCustomContextMenuRequested(QPoint)));
 }
 
 Hierarchy::~Hierarchy()
@@ -233,7 +231,7 @@ void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 {
     if (clickedAction == MenuBar::Action::CreateEmptyGameObject)
     {
-        OnContextMenuCreateEmptyClicked();
+        m_hContextMenu.OnCreateEmptyClicked();
     }
 }
 
@@ -241,7 +239,7 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Delete) // Delete item
     {
-        OnContextMenuDeleteClicked();
+        m_hContextMenu.OnDeleteClicked();
     }
     else if (e->key() == Qt::Key_Enter ||
              e->key() == Qt::Key_Space)
@@ -314,117 +312,6 @@ void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
     {
         go->SetName(item->text(column).toStdString());
     }
-}
-
-void Hierarchy::OnContextMenuCreateEmptyClicked()
-{
-    GameObject *empty = new GameObject("Empty");
-
-    foreach(QTreeWidgetItem *item, selectedItems())
-    {
-        GameObject *selected = GetGameObjectFromItem(item);
-        empty->SetParent(selected);
-    }
-
-    if (selectedItems().size() == 0)
-    {
-        empty->SetParent(Scene::GetCurrentScene());
-    }
-
-    Expand(empty->parent);
-}
-
-void Hierarchy::OnContextMenuCopyClicked()
-{
-    std::list<GameObject*> whatToCopy = GetSelectedGameObjects(true);
-    ClipboardGameObject::CopyGameObjects(whatToCopy);
-}
-
-void Hierarchy::OnContextMenuPasteClicked()
-{
-    std::list<GameObject*> selected = GetSelectedGameObjects(false);
-    if (selected.size() > 0)
-    {
-        for (GameObject *sel : selected)
-        {
-            ClipboardGameObject::PasteCopiedGameObjectsInto(sel);
-        }
-    }
-    else
-    {
-        ClipboardGameObject::PasteCopiedGameObjectsInto(Scene::GetCurrentScene());
-    }
-}
-
-void Hierarchy::OnContextMenuDuplicateClicked()
-{
-    std::list<GameObject*> selected = GetSelectedGameObjects(true);
-    ClipboardGameObject::CopyGameObjects(selected);
-    ClipboardGameObject::DuplicateCopiedGameObjects();
-}
-
-void Hierarchy::OnContextMenuDeleteClicked()
-{
-    std::list<QTreeWidgetItem*> items = selectedItems().toStdList();
-    LeaveOnlyOuterMostItems(&items);
-    foreach(QTreeWidgetItem *item, items)
-    {
-        GameObject *selected = GetGameObjectFromItem(item);
-        UnselectAll(); // Needed to avoid bug when trying to restore selection
-        delete selected;
-    }
-}
-
-void Hierarchy::OnContextMenuCreatePrefab()
-{
-    GameObject *go = GetFirstSelectedGameObject();
-
-    FileDialog fd("Create Prefab...", Prefab::GetFileExtensionStatic());
-    std::string filename = fd.GetSaveFilename(go->name);
-    if (filename != "")
-    {
-        Prefab *prefab = new Prefab(go);
-        FileWriter::WriteToFile(filename, prefab);
-        delete prefab;
-    }
-}
-
-void Hierarchy::OnCustomContextMenuRequested(QPoint point)
-{
-    QTreeWidgetItem *item = itemAt(point);
-    QMenu contextMenu(tr("GameObject hierarchy context menu"), this);
-
-    QAction actionCreateEmpty("Create empty", this);
-    QAction actionCopy("Copy", this);
-    QAction actionPaste("Paste", this);
-    actionPaste.setEnabled(ClipboardGameObject::HasSomethingCopied());
-    QAction actionDuplicate("Duplicate", this);
-    QAction actionCreatePrefab("Create Prefab...", this);
-    QAction actionDelete("Delete", this);
-
-    connect(&actionCreateEmpty, SIGNAL(triggered()), this, SLOT(OnContextMenuCreateEmptyClicked()));
-    connect(&actionCopy, SIGNAL(triggered()), this, SLOT(OnContextMenuCopyClicked()));
-    connect(&actionPaste, SIGNAL(triggered()), this, SLOT(OnContextMenuPasteClicked()));
-    connect(&actionDuplicate, SIGNAL(triggered()), this, SLOT(OnContextMenuDuplicateClicked()));
-    connect(&actionCreatePrefab, SIGNAL(triggered()), this, SLOT(OnContextMenuCreatePrefab()));
-    connect(&actionDelete, SIGNAL(triggered()), this, SLOT(OnContextMenuDeleteClicked()));
-
-    if (item)
-    {
-        contextMenu.addAction(&actionCreateEmpty);
-        contextMenu.addAction(&actionCopy);
-        contextMenu.addAction(&actionPaste);
-        contextMenu.addAction(&actionDuplicate);
-        contextMenu.addAction(&actionCreatePrefab);
-        contextMenu.addAction(&actionDelete);
-    }
-    else
-    {
-        contextMenu.addAction(&actionCreateEmpty);
-        contextMenu.addAction(&actionPaste);
-    }
-
-    contextMenu.exec(mapToGlobal(point));
 }
 
 void Hierarchy::OnSelectionChanged()

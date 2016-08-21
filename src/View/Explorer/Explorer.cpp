@@ -6,7 +6,7 @@
 #include "Hierarchy.h"
 #include "DragDropAgent.h"
 
-Explorer::Explorer(QWidget *parent)
+Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -76,7 +76,7 @@ void Explorer::mousePressEvent(QMouseEvent *e)
 
     if (e->button() == Qt::RightButton)
     {
-        OnCustomContextMenuRequested(e->pos());
+        m_eContextMenu.OnCustomContextMenuRequested(e->pos());
     }
 }
 
@@ -117,54 +117,6 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 
         }
     }
-}
-
-void Explorer::OnCustomContextMenuRequested(QPoint point)
-{
-    QMenu contextMenu(tr("Explorer context menu"), this);
-
-    QAction actionDuplicate("Duplicate", this);
-    QAction actionDelete("Delete", this);
-
-    connect(&actionDuplicate, SIGNAL(triggered()), this, SLOT(OnContextMenuDuplicateClicked()));
-    connect(&actionDelete, SIGNAL(triggered()), this, SLOT(OnContextMenuDeleteClicked()));
-
-    if (IsSelectedAFile())
-    {
-        contextMenu.addAction(&actionDuplicate);
-        contextMenu.addAction(&actionDelete);
-    }
-    else if (IsSelectedADir())
-    {
-        // contextMenu.addAction(&actionDuplicate);
-        contextMenu.addAction(&actionDelete);
-    }
-
-    contextMenu.exec(mapToGlobal(point));
-}
-
-void Explorer::OnContextMenuDuplicateClicked()
-{
-    File source = GetSelectedFile();
-    std::string filepath = source.GetRelativePath();
-    while (Exists(filepath))
-    {
-        filepath = Persistence::GetNextDuplicateName(filepath);
-    }
-
-    FileWriter::WriteToFile(filepath, source.GetContents());
-}
-
-void Explorer::OnContextMenuDeleteClicked()
-{
-    Inspector *inspector = Inspector::GetInstance();
-    if (inspector->IsShowingInspectable(m_lastIInspectableInInspector))
-    {
-        inspector->Clear();
-        delete m_lastIInspectableInInspector;
-        m_lastIInspectableInInspector = nullptr;
-    }
-    m_fileSystemModel->remove(currentIndex());
 }
 
 void Explorer::RefreshInspector()

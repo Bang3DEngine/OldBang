@@ -15,7 +15,8 @@
 #include "DirectionalLight.h"
 #include "SingleLineRenderer.h"
 
-Inspector::Inspector(QWidget *parent) : QListWidget(parent)
+Inspector::Inspector(QWidget *parent)
+    : QListWidget(parent), m_iContextMenu(this)
 {
     setAcceptDrops(true);
     setDragEnabled(true);
@@ -28,10 +29,6 @@ Inspector::Inspector(QWidget *parent) : QListWidget(parent)
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
     setMinimumWidth(300);
-
-    setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(OnCustomContextMenuRequested(QPoint)));
 }
 
 void Inspector::updateGeometries()
@@ -139,26 +136,6 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
 
     setItemWidget(item, widget);
     item->setSizeHint(widget->size());
-}
-
-void Inspector::OnCustomContextMenuRequested(QPoint point)
-{
-    if (m_currentGameObject && m_currentInspectorWidgets.size() > 0)
-    {
-        QMenu contextMenu(tr("Inspector context menu"), this);
-
-        QAction actionPasteComponent("Paste Component", this);
-        connect(&actionPasteComponent, SIGNAL(triggered()),
-                m_currentInspectorWidgets[0], SLOT(OnContextMenuPasteComponentSelected()));
-        contextMenu.addAction(&actionPasteComponent);
-
-        if (ComponentClipboard::IsEmpty())
-        {
-            actionPasteComponent.setEnabled(false);
-        }
-
-        contextMenu.exec(mapToGlobal(point));
-    }
 }
 
 std::vector<IInspectable *> Inspector::GetCurrentInspectables() const

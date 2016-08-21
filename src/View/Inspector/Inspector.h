@@ -9,6 +9,7 @@
 #include <QListWidget>
 
 #include "ComponentWidget.h"
+#include "InspectorContextMenu.h"
 #include "PrefabAssetFileInspectable.h"
 #include "IWindowEventManagerListener.h"
 
@@ -17,7 +18,11 @@ class Inspector : public QListWidget,
 {
     Q_OBJECT
 
+friend class InspectorContextMenu;
+
 private:
+    InspectorContextMenu m_iContextMenu;
+
     QLabel *m_titleLabel = nullptr;
     GameObject *m_currentGameObject = nullptr;
     std::vector<InspectorWidget*> m_currentInspectorWidgets;
@@ -55,9 +60,6 @@ public:
     std::vector<IInspectable*> GetCurrentInspectables() const;
     bool IsShowingInspectable(IInspectable *inspectable) const;
     static Inspector* GetInstance();
-
-public slots:
-    virtual void OnCustomContextMenuRequested(QPoint point);
 };
 
 #endif // LISTINSPECTOR_H

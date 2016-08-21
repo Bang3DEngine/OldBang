@@ -200,7 +200,7 @@ HEADERS += \
     src/Domain/Engine/Components/DirectionalLight.h \
     src/Domain/Engine/Components/Light.h \
     src/Domain/Graphics/ShaderPreprocessor.h \
-    src/View/ClipboardGameObject.h \
+    src/View/GameObjectClipboard.h \
     src/Domain/Engine/Components/PointLight.h \
     src/Domain/Engine/Others/Property.h \
     src/Persistence/XMLParser.h \
@@ -216,7 +216,12 @@ HEADERS += \
     src/View/Inspector/ComponentClipboard.h \
     src/View/DragDropManager.h \
     src/View/Hierarchy/HierarchyDragDropManager.h \
-    src/View/Interfaces/IDragDropListener.h
+    src/View/Interfaces/IDragDropListener.h \
+    src/View/Hierarchy/HierarchyContextMenu.h \
+    src/View/Explorer/ExplorerContextMenu.h \
+    src/View/Inspector/ComponentWidgetContextMenu.h \
+    src/View/Inspector/InspectorContextMenu.h \
+    src/View/ContextMenu.h
 
 EDITOR {
 HEADERS += \
@@ -340,7 +345,7 @@ SOURCES += \
     src/Domain/Engine/Components/DirectionalLight.cpp \
     src/Domain/Engine/Components/Light.cpp \
     src/Domain/Graphics/ShaderPreprocessor.cpp \
-    src/View/ClipboardGameObject.cpp \
+    src/View/GameObjectClipboard.cpp \
     src/Domain/Engine/Interfaces/IFileable.cpp \
     src/Domain/Engine/Components/PointLight.cpp \
     src/Domain/Engine/Others/Property.cpp \
@@ -356,7 +361,12 @@ SOURCES += \
     src/View/Inspector/ComponentClipboard.cpp \
     src/View/DragDropManager.cpp \
     src/View/Hierarchy/HierarchyDragDropManager.cpp \
-    src/View/Interfaces/IDragDropListener.cpp
+    src/View/Interfaces/IDragDropListener.cpp \
+    src/View/Hierarchy/HierarchyContextMenu.cpp \
+    src/View/Explorer/ExplorerContextMenu.cpp \
+    src/View/Inspector/ComponentWidgetContextMenu.cpp \
+    src/View/Inspector/InspectorContextMenu.cpp \
+    src/View/ContextMenu.cpp
 
 EDITOR {
     SOURCES += \
