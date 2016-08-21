@@ -119,6 +119,15 @@ void Hierarchy::dropEvent(QDropEvent *e)
     e->ignore();
 }
 
+void Hierarchy::mousePressEvent(QMouseEvent *e)
+{
+    QTreeWidget::mousePressEvent(e);
+    if (itemAt(e->pos()) == nullptr)
+    {
+        UnselectAll();
+    }
+}
+
 void Hierarchy::OnGameObjectNameChanged(GameObject *go)
 {
     QTreeWidgetItem *item = GetItemFromGameObject(go);
@@ -180,7 +189,9 @@ void Hierarchy::Refresh()
     }
 
     // Restore selected gameObject
-    if (selectedGameObject)
+    if (selectedGameObject &&
+        m_gameObjectToTreeItem.find(selectedGameObject) !=
+            m_gameObjectToTreeItem.end())
     {
         m_gameObjectToTreeItem[selectedGameObject]->setSelected(true);
     }
@@ -192,6 +203,23 @@ void Hierarchy::Expand(GameObject *go)
         m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
     {
         Expand(m_gameObjectToTreeItem[go]);
+    }
+}
+
+void Hierarchy::ExpandTrigger(GameObject *go)
+{
+    if (go &&
+        m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
+    {
+        QTreeWidgetItem *item = m_gameObjectToTreeItem[go];
+        if (!item->isExpanded())
+        {
+            Expand(item);
+        }
+        else
+        {
+            item->setExpanded(false);
+        }
     }
 }
 
@@ -215,6 +243,12 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
     {
         OnContextMenuDeleteClicked();
     }
+    else if (e->key() == Qt::Key_Enter ||
+             e->key() == Qt::Key_Space)
+    {
+        GameObject *go = GetFirstSelectedGameObject();
+        ExpandTrigger(go);
+    }
     else if (e->key() == Qt::Key_F2) // Edit name
     {
         if (selectedItems().length() <= 0) return;
@@ -229,6 +263,10 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
             //Restore not editable by click
             selected->setFlags(oldFlags);
         }
+    }
+    else
+    {
+        QTreeWidget::keyPressEvent(e);
     }
 }
 
@@ -280,8 +318,7 @@ void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
 
 void Hierarchy::OnContextMenuCreateEmptyClicked()
 {
-    GameObject *empty = new GameObject();
-    empty->SetName("Empty");
+    GameObject *empty = new GameObject("Empty");
 
     foreach(QTreeWidgetItem *item, selectedItems())
     {
@@ -293,6 +330,8 @@ void Hierarchy::OnContextMenuCreateEmptyClicked()
     {
         empty->SetParent(Scene::GetCurrentScene());
     }
+
+    Expand(empty->parent);
 }
 
 void Hierarchy::OnContextMenuCopyClicked()
@@ -331,6 +370,7 @@ void Hierarchy::OnContextMenuDeleteClicked()
     foreach(QTreeWidgetItem *item, items)
     {
         GameObject *selected = GetGameObjectFromItem(item);
+        UnselectAll(); // Needed to avoid bug when trying to restore selection
         delete selected;
     }
 }

@@ -61,6 +61,9 @@ public:
 
     static void HandleGlobalMousePress(QObject *obj, QEvent *e);
     static void HandleGlobalMouseRelease(QObject *obj, QEvent *e);
+
+    static QObject* GetDragSource();
+    static bool IsDragGoingOn();
 };
 
 #endif // DRAGDROPMANAGER_H

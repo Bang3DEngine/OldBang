@@ -17,7 +17,10 @@ PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
 PrefabAssetFileInspectable::~PrefabAssetFileInspectable()
 {
     Inspector::GetInstance()->Clear();
-    delete m_prefabTempGameObject;
+    if (m_prefabTempGameObject)
+    {
+        delete m_prefabTempGameObject;
+    }
 }
 
 void PrefabAssetFileInspectable::ShowInInspector()
@@ -37,6 +40,8 @@ GameObject *PrefabAssetFileInspectable::GetPrefabTempGameObject() const
 
 void PrefabAssetFileInspectable::SaveToFile()
 {
+    NONULL(m_prefabTempGameObject);
+
     FileWriter::WriteToFile(m_file.GetAbsolutePath(),
                             m_prefabTempGameObject->GetXMLInfoString());
 }

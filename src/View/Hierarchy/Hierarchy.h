@@ -58,6 +58,7 @@ public:
 
     void Refresh();
     void Expand(GameObject *go);
+    void ExpandTrigger(GameObject *go);
 
     GameObject* GetFirstSelectedGameObject() const;
 
@@ -70,6 +71,7 @@ public:
     void UnselectAll();
 
     virtual void dropEvent(QDropEvent *e) override;
+    virtual void mousePressEvent(QMouseEvent *e) override;
 
     void OnGameObjectNameChanged(GameObject *go);
 

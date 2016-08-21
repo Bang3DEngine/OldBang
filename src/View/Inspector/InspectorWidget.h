@@ -65,9 +65,6 @@ public:
 
     virtual ~InspectorWidget();
 
-    // virtual void OnDropFromExplorer(const File &f, QDropEvent *e) override;
-    // virtual void OnDropFromHierarchy(GameObject *go, QDropEvent *e) override;
-
     /**
      * @brief GetUpdatedWidgetXMLInfo
      * @return An XMLNode with the information of the related IInspectable.

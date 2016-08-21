@@ -178,3 +178,15 @@ void DragDropManager::HandleGlobalMouseRelease(QObject *obj, QEvent *e)
     DragDropManager::HandleDropEvent(obj, e);
 }
 
+QObject *DragDropManager::GetDragSource()
+{
+    DragDropManager *m = DragDropManager::s_ddManager;
+    return m->m_ddInfo.sourceObject;
+}
+
+bool DragDropManager::IsDragGoingOn()
+{
+    DragDropManager *m = DragDropManager::s_ddManager;
+    return m->m_dragGoingOn;
+}
+

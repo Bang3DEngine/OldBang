@@ -13,6 +13,7 @@ private:
 public:
     static bool IsEmpty();
     static bool IsCopiedTransform();
+    static std::string GetCopiedComponentName();
     static void CopyComponent(Component *componentToCopy);
     static void PasteComponentInto(GameObject *go);
     static void PasteComponentValuesInto(Component *comp);

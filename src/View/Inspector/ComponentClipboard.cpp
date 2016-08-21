@@ -14,6 +14,15 @@ bool ComponentClipboard::IsCopiedTransform()
     return !IsEmpty() && s_copiedComponent->GetName() == "Transform";
 }
 
+std::string ComponentClipboard::GetCopiedComponentName()
+{
+    if (!IsEmpty())
+    {
+        return s_copiedComponent->GetName();
+    }
+    return "";
+}
+
 void ComponentClipboard::CopyComponent(Component *componentToCopy)
 {
     if (s_copiedComponent)

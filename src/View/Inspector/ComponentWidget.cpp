@@ -57,6 +57,12 @@ void ComponentWidget::OnCustomContextMenuRequested(QPoint point)
     contextMenu.addAction(&actionPasteComponentValues);
     contextMenu.addAction(&actionRemoveComponent);
 
+    if (ComponentClipboard::GetCopiedComponentName() !=
+            m_relatedComponent->GetName())
+    {
+        actionPasteComponentValues.setEnabled(false);
+    }
+
     if (ComponentClipboard::IsCopiedTransform())
     {
         actionPasteComponent.setEnabled(false);
