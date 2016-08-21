@@ -2,6 +2,7 @@
 
 #include "Logger.h"
 #include "WindowMain.h"
+#include "ShortcutManager.h"
 #include "WindowEventManager.h"
 
 Hierarchy::Hierarchy(QWidget *parent) :
@@ -81,6 +82,15 @@ void Hierarchy::LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items)
         }
     }
     *items = result;
+}
+
+QTreeWidgetItem *Hierarchy::GetFirstSelectedItem() const
+{
+    if (!selectedItems().empty())
+    {
+        return selectedItems()[0];
+    }
+    return nullptr;
 }
 
 GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *item) const
@@ -235,19 +245,43 @@ void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     }
 }
 
-void Hierarchy::keyPressEvent(QKeyEvent *e)
+void Hierarchy::OnShortcutsUpdate()
 {
-    if (e->key() == Qt::Key_Delete) // Delete item
+    if (ShortcutManager::IsPressed(Input::Key::Delete)) // Delete item
     {
         m_hContextMenu.OnDeleteClicked();
     }
-    else if (e->key() == Qt::Key_Enter ||
-             e->key() == Qt::Key_Space)
+    else if ( ShortcutManager::IsPressed(Input::Key::Enter) ||
+              ShortcutManager::IsPressed(Input::Key::Space))
     {
         GameObject *go = GetFirstSelectedGameObject();
         ExpandTrigger(go);
     }
-    else if (e->key() == Qt::Key_F2) // Edit name
+    else if ( ShortcutManager::IsPressed(Input::Key::Up))
+    {
+        SelectItemAboveOrBelowSelected(true);
+    }
+    else if ( ShortcutManager::IsPressed(Input::Key::Down))
+    {
+        SelectItemAboveOrBelowSelected(false);
+    }
+    else if ( ShortcutManager::IsPressed(Input::Key::Left))
+    {
+        QTreeWidgetItem *item = GetFirstSelectedItem();
+        if (item)
+        {
+            item->setExpanded(false);
+        }
+    }
+    else if ( ShortcutManager::IsPressed(Input::Key::Right))
+    {
+        QTreeWidgetItem *item = GetFirstSelectedItem();
+        if (item)
+        {
+            item->setExpanded(true);
+        }
+    }
+    else if ( ShortcutManager::IsPressed(Input::Key::F2) ) // Edit name
     {
         if (selectedItems().length() <= 0) return;
         QTreeWidgetItem *selected = this->selectedItems().at(0);
@@ -257,14 +291,7 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
             selected->setFlags(oldFlags | Qt::ItemFlag::ItemIsEditable);
 
             editItem(selected, 0); // Name can be edited now
-
-            //Restore not editable by click
-            selected->setFlags(oldFlags);
         }
-    }
-    else
-    {
-        QTreeWidget::keyPressEvent(e);
     }
 }
 
@@ -301,6 +328,20 @@ void Hierarchy::SelectGameObject(GameObject *go)
         UnselectAll();
         item->setSelected(true);
         _NotifyHierarchyGameObjectSelectionChanged();
+    }
+}
+
+void Hierarchy::SelectItemAboveOrBelowSelected(bool above)
+{
+    QTreeWidgetItem *item = GetFirstSelectedItem();
+    if (item)
+    {
+        QTreeWidgetItem *itemUp = above ? itemAbove(item) : itemBelow(item);
+        if (itemUp)
+        {
+            UnselectAll();
+            itemUp->setSelected(true);
+        }
     }
 }
 

@@ -41,6 +41,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     std::string fTitle = StringUtils::FormatInspectorLabel(title);
     m_titleLabel = new QLabel( QString(fTitle.c_str()) );
     QFont font = m_titleLabel->font();
+    font.setPixelSize(13);
     font.setBold(true);
     m_titleLabel->setFont(font);
     m_titleLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);

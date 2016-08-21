@@ -358,6 +358,7 @@ void Screen::OnDrop(const DragDropInfo &ddi)
         {
             m_gameObjectBeingDragged->m_isDragged = false;
             m_gameObjectBeingDragged->SetParent(m_currentScene);
+            Hierarchy::GetInstance()->SelectGameObject(m_gameObjectBeingDragged);
         }
     }
     else

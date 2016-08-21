@@ -1,6 +1,7 @@
 #include "Toolbar.h"
 
 #include "WindowMain.h"
+#include "ShortcutManager.h"
 
 Toolbar *Toolbar::s_tb = nullptr;
 
@@ -8,7 +9,6 @@ Toolbar::Toolbar(QWidget *parent) : QWidget(parent) { }
 
 Toolbar::~Toolbar()
 {
-    delete m_keyTimer;
 }
 
 void Toolbar::Init()
@@ -22,12 +22,6 @@ void Toolbar::Init()
     Toolbar::s_tb->m_buttonLocalCoords   = w->buttonLocalCoords;
     Toolbar::s_tb->m_buttonPlay          = w->buttonPlay;
     Toolbar::s_tb->m_buttonStop          = w->buttonStop;
-
-    Toolbar::s_tb->m_keyTimer = new QTimer();
-    Toolbar::s_tb->m_keyTimer->start(1);
-
-    connect(Toolbar::s_tb->m_keyTimer, SIGNAL(timeout()),
-            Toolbar::s_tb, SLOT(CheckKeyPressed()));
 
     connect(Toolbar::s_tb->m_buttonTranslateMode, SIGNAL(clicked()),
             Toolbar::s_tb, SLOT(OnTranslateClicked()));
@@ -125,6 +119,8 @@ void Toolbar::OnPlayClicked()
     m_buttonPlay->setChecked(true);
     m_buttonStop->setChecked(false);
     m_playing = true;
+
+    Screen::GetInstance()->setFocus();
 }
 
 void Toolbar::OnStopClicked()
@@ -134,30 +130,38 @@ void Toolbar::OnStopClicked()
     m_playing = false;
 }
 
-void Toolbar::CheckKeyPressed()
+void Toolbar::OnShortcutsUpdate()
 {
-    if (Input::GetKeyDown(Input::Key::W))
+    if (ShortcutManager::IsPressed(Input::Key::W))
     {
         m_buttonTranslateMode->click();
     }
-    else if (Input::GetKeyDown(Input::Key::E))
+    else if (ShortcutManager::IsPressed(Input::Key::E))
     {
         m_buttonRotateMode->click();
     }
-    else if (Input::GetKeyDown(Input::Key::R))
+    else if (ShortcutManager::IsPressed(Input::Key::R))
     {
         m_buttonScaleMode->click();
     }
-    else if (Input::GetKeyDown(Input::Key::P) && Input::GetKey(Input::Key::Control))
+    else if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::P}) &&
+             !m_playShortcutRecentlyUsed)
     {
         if (m_playing)
         {
-            m_buttonPlay->click();
+            m_buttonStop->click();
         }
         else
         {
-            m_buttonStop->click();
+            m_buttonPlay->click();
         }
+
+        m_playShortcutRecentlyUsed = true;
+    }
+
+    if (!ShortcutManager::IsPressed({Input::Key::Control, Input::Key::P}))
+    {
+        m_playShortcutRecentlyUsed = false;
     }
 }
 

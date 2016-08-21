@@ -361,7 +361,7 @@ QVariant FileSystemModel::data(const QModelIndex &index, int role) const
         if (f)
         {
             QPixmap pm = f->GetIcon();
-            return pm.scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
+            return pm.scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::FastTransformation);
         }
     }
     return QFileSystemModel::data(index, role);

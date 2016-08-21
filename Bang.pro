@@ -221,7 +221,9 @@ HEADERS += \
     src/View/Explorer/ExplorerContextMenu.h \
     src/View/Inspector/ComponentWidgetContextMenu.h \
     src/View/Inspector/InspectorContextMenu.h \
-    src/View/ContextMenu.h
+    src/View/ContextMenu.h \
+    src/View/ShortcutManager.h \
+    src/View/IShortcutListener.h
 
 EDITOR {
 HEADERS += \
@@ -366,7 +368,9 @@ SOURCES += \
     src/View/Explorer/ExplorerContextMenu.cpp \
     src/View/Inspector/ComponentWidgetContextMenu.cpp \
     src/View/Inspector/InspectorContextMenu.cpp \
-    src/View/ContextMenu.cpp
+    src/View/ContextMenu.cpp \
+    src/View/ShortcutManager.cpp \
+    src/View/IShortcutListener.cpp
 
 EDITOR {
     SOURCES += \

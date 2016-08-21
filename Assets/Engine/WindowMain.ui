@@ -376,8 +376,12 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="text">
-          <string/>
+         <property name="font">
+          <font>
+           <pointsize>15</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
          </property>
         </widget>
        </item>
@@ -451,6 +455,12 @@
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,5">
        <item>
         <widget class="ExplorerDirTree" name="widgetTreeExplorerDirTree">
+         <property name="maximumSize">
+          <size>
+           <width>150</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="autoScroll">
           <bool>false</bool>
          </property>
@@ -557,13 +567,6 @@
       <widget class="LoggerWidget" name="widgetLogger" native="true">
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
-         <widget class="QPushButton" name="buttonLoggerClear">
-          <property name="text">
-           <string>Clear</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="ListLogger" name="listLogger">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
@@ -579,6 +582,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="buttonLoggerClear">
+          <property name="text">
+           <string>Clear</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
@@ -589,10 +599,16 @@
    <property name="text">
     <string>Open Scene...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionSaveSceneAs">
    <property name="text">
     <string>Save Scene as...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="actionCreateMaterial">
@@ -654,10 +670,16 @@
    <property name="text">
     <string>New Scene</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionSaveScene">
    <property name="text">
     <string>Save Scene</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionAddComponentLineRenderer">
@@ -699,10 +721,16 @@
    <property name="text">
     <string>Build</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
   </action>
   <action name="actionBuildAndRun">
    <property name="text">
     <string>Build and Run</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+B</string>
    </property>
   </action>
   <action name="actionAddComponentDirectionalLight">

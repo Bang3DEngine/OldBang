@@ -24,13 +24,15 @@
 #include "FileDialog.h"
 #include "GameObject.h"
 #include "DragDropAgent.h"
+#include "IShortcutListener.h"
 #include "GameObjectClipboard.h"
 #include "HierarchyContextMenu.h"
 #include "HierarchyDragDropManager.h"
 #include "IWindowEventManagerListener.h"
 
 class Hierarchy : public DragDropQTreeWidget,
-                  public IWindowEventManagerListener
+                  public IWindowEventManagerListener,
+                  public IShortcutListener
 {
     Q_OBJECT
 
@@ -53,6 +55,7 @@ private:
     //(we just need to remove the parent/s of all the selected entities)
     void LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items);
 
+    QTreeWidgetItem* GetFirstSelectedItem() const;
     GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
     QTreeWidgetItem *GetItemFromGameObject(GameObject *go) const;
 
@@ -68,10 +71,11 @@ public:
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
 
-    void keyPressEvent(QKeyEvent *e);
+    void OnShortcutsUpdate() override;
 
     std::list<GameObject*> GetSelectedGameObjects(bool excludeInternal = false);
     void SelectGameObject(GameObject *go);
+    void SelectItemAboveOrBelowSelected(bool above);
     void UnselectAll();
 
     virtual void dropEvent(QDropEvent *e) override;

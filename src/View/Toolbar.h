@@ -6,10 +6,12 @@
 #include <QToolButton>
 
 #include "Input.h"
+#include "IShortcutListener.h"
 #include "IWindowEventManagerListener.h"
 
-class Toolbar : public QWidget
-                ,public IWindowEventManagerListener
+class Toolbar : public QWidget,
+                public IWindowEventManagerListener,
+                public IShortcutListener
 {
     Q_OBJECT
 
@@ -23,13 +25,9 @@ private:
     static Toolbar *s_tb;
     bool m_globalCoords = false;
 
-    #ifdef BANG_EDITOR
     bool m_playing = false;
-    #else
-    bool m_playing = true;
-    #endif
+    bool m_playShortcutRecentlyUsed = false;
 
-    QTimer *m_keyTimer = nullptr;
     QToolButton *m_buttonTranslateMode = nullptr;
     QToolButton *m_buttonRotateMode    = nullptr;
     QToolButton *m_buttonScaleMode     = nullptr;
@@ -63,7 +61,8 @@ public slots:
     void OnLocalCoordsClicked();
     void OnPlayClicked();
     void OnStopClicked();
-    void CheckKeyPressed();
+
+    void OnShortcutsUpdate() override;
 };
 
 #endif // TOOLBAR_H
