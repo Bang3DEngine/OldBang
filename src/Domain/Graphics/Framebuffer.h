@@ -9,8 +9,8 @@
 #include "Logger.h"
 #include "IGLIdable.h"
 #include "IGLBindable.h"
-#include "TextureRender.h"
 #include "TextureDepth.h"
+#include "TextureRender.h"
 
 class Framebuffer : public IGLBindable
                    ,public IGLIdable
@@ -19,10 +19,10 @@ class Framebuffer : public IGLBindable
 private:
 
     int m_width, m_height;
-    GLuint m_depthBufferAttachmentId;
+    GLuint m_depthAttachmentId;
 
-    std::vector<GLuint> m_boundAttachments;
-    std::vector<TextureRender*> m_textureAttachments;
+    std::map<int, GLuint> m_attachmentId_To_GLAttachment;
+    std::map<int, TextureRender*> m_attachmentId_To_Texture;
 
 protected:
 
@@ -32,26 +32,22 @@ public:
     Framebuffer(int width, int height);
     virtual ~Framebuffer();
 
-    void CreateColorAttachment(int framebufferAttachmentNum,
-                               GLint glInternalFormat = -1, GLint glFormat = -1,  GLint glInternalType = -1,
-                               bool depthAttachment = false);
+    void SetColorAttachment(int attachmentId, TextureRender *tex);
+    void CreateDepthRenderbufferAttachment();
 
-    void CreateDepthBufferAttachment();
-
-    TextureRender* GetTextureAttachment(int framebufferAttachmentNum) const;
+    TextureRender* GetColorAttachment(int attachmentId) const;
 
     void SetAllDrawBuffers() const;
     void SetDrawBuffers(const std::vector<int> &attachmentIds) const;
-    void SetReadBuffer(GLuint attachmentId) const;
+    void SetReadBuffer(int attachmentId) const;
 
-    Color ReadColor255(int x, int y, int attachmentId,
-                       int glFormat = GL_RGBA, int glType = GL_UNSIGNED_BYTE) const;
-    Color ReadColor(int x, int y, int attachmentId,
-                    int glFormat = GL_RGBA, int glType = GL_UNSIGNED_BYTE) const;
-    float ReadFloat(int x, int y, int attachmentId,
-                    int glFormat = GL_DEPTH_COMPONENT, int glType = GL_FLOAT) const;
+    Color ReadColor(int x, int y, int attachmentId) const;
     float ReadDepth(int x, int y) const; // TODO: not working read from renderbuffer
     void Resize(int width, int height);
+
+    int GetWidth() const;
+    int GetHeight() const;
+    Vector2 GetSize() const;
 
     void Clear() const;
     void ClearDepth() const;

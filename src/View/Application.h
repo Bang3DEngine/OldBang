@@ -1,8 +1,10 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <QApplication>
 #include <iostream>
+
+#include <QApplication>
+#include <QKeyEvent>
 
 class Application final : public QApplication
 {

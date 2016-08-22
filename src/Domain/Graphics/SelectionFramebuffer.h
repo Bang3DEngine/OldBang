@@ -24,6 +24,9 @@ private:
         WorldPosition = 1
     };
 
+    TextureRender *m_colorTexture    = nullptr;
+    TextureRender *m_worldPosTexture = nullptr;
+
     /**
      * @brief m_isPassing is true only when SelectionFrambuffer is rendering.
      * It is used by the Renderer's, to know if they have to activate its special states
@@ -44,7 +47,7 @@ private:
     mutable std::map<long, GameObject*> m_idToGameObject;
 
     static Color MapIdToColor(long id);
-    static long MapColorToId(const Color &charColor);
+    static long MapColorToId(const Color &color);
 
     bool CanRenderGameObject(const GameObject *go);
 

@@ -39,7 +39,7 @@ class GameObject :
 
 friend class SelectionFramebuffer;
 friend class Hierarchy;
-friend class Canvas;
+friend class Screen;
 friend class Prefab;
 friend class Scene;
 

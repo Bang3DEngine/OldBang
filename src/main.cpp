@@ -20,7 +20,7 @@
 #include "XMLParser.h"
 #include "XMLNode.h"
 #include "Camera.h"
-#include "Canvas.h"
+#include "Screen.h"
 #include "Shader.h"
 #include "Timer.h"
 
@@ -40,28 +40,6 @@
 
 int main(int argc, char *argv[])
 {
-    String str = "hola, esto, es una, lista, muy bonita, huehue";
-    //str = "";
-    str = "w,o,l,o,l,o,o,oooooo";
-    std::cerr << "str: " << str << std::endl;
-    std::cerr << str.Length() << std::endl;
-    std::cerr << str.SubString(0, 0) << std::endl;
-    std::cerr << str.SubString(0, 1) << std::endl;
-    std::cerr << str.SubString(0, 2) << std::endl;
-    std::cerr << str.SubString(0, 3) << std::endl;
-    std::cerr << str.Split(',', true) << std::endl;
-
-    if (str.Contains("oooooo"))
-    {
-        std::cerr << "YES" << std::endl;
-    }
-    else
-    {
-        std::cerr << "NO" << std::endl;
-    }
-    return 0;
-
-    /*
     Application app(argc, argv);
     SingletonManager::InitSingletonMangerFromMainBinary();
 
@@ -82,7 +60,7 @@ int main(int argc, char *argv[])
 
     #endif
 
-    Canvas::InitFromMainBinary();
+    Screen::InitFromMainBinary();
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
 
@@ -107,8 +85,8 @@ int main(int argc, char *argv[])
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
-        Canvas::GetInstance()->AddScene(scene);
-        Canvas::GetInstance()->SetCurrentScene(scene);
+        Screen::GetInstance()->AddScene(scene);
+        Screen::GetInstance()->SetCurrentScene(scene);
         Persistence::SetCurrentSceneFilepath(filename);
     }
 
@@ -119,12 +97,11 @@ int main(int argc, char *argv[])
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
-        Canvas::GetInstance()->AddScene(scene);
-        Canvas::GetInstance()->SetCurrentScene(scene);
+        Screen::GetInstance()->AddScene(scene);
+        Screen::GetInstance()->SetCurrentScene(scene);
         Persistence::SetCurrentSceneFilepath(filename);
     }
     #endif
 
     return app.exec();
-    */
 }

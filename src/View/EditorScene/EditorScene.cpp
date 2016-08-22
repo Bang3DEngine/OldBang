@@ -16,8 +16,8 @@ EditorScene::EditorScene() : Scene()
     m_floor->SetParent(this);
 
     m_selectionFramebuffer =
-            new SelectionFramebuffer(Canvas::GetWidth(),
-                                     Canvas::GetHeight());
+            new SelectionFramebuffer(Screen::GetWidth(),
+                                     Screen::GetHeight());
 }
 
 EditorScene::~EditorScene()

@@ -17,7 +17,6 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
                                  bool isSubWidget,
                                  bool createLabel,
                                  bool needsLabelOnTop) :
-    IDroppableQWidget(),
     m_inspectorWidget(inspectorWidget)
 {
     m_xmlAttribute = xmlAttribute;

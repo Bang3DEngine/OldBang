@@ -16,13 +16,25 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     m_material = new Material();
     m_material->SetShaderProgram(m_program);
 
+    m_colorTexture = new TextureRender();
+    /*
+    m_colorTexture->SetGLFormat(GL_RGB);
+    m_colorTexture->SetGLInternalFormat(GL_RGB);
+    */
+    m_worldPosTexture = new TextureRender();
+    SetColorAttachment(Attachment::ColorAttachment, m_colorTexture);
+    SetColorAttachment(Attachment::WorldPosition, m_worldPosTexture);
+    /*
     CreateColorAttachment(Attachment::ColorAttachment, GL_RGB, GL_RGB);
     CreateColorAttachment(Attachment::WorldPosition, GL_RGBA32F, GL_RGBA, GL_FLOAT);
-    CreateDepthBufferAttachment();
+    */
+    CreateDepthRenderbufferAttachment();
 }
 
 SelectionFramebuffer::~SelectionFramebuffer()
 {
+    delete m_colorTexture;
+    delete m_worldPosTexture;
     delete m_program;
 }
 
@@ -84,6 +96,7 @@ void SelectionFramebuffer::ProcessSelection()
 {
     // Get mouse coordinates and read pixel color
     Vector2 coords = Input::GetMouseCoords();
+    coords.y = Screen::GetHeight() - coords.y;
     GameObject *mouseOverGO = GetGameObjectInPosition(coords.x, coords.y);
 
     if (m_lastMouseOverGO  && m_lastMouseOverGO != mouseOverGO)
@@ -126,11 +139,8 @@ void SelectionFramebuffer::ProcessSelection()
 
 GameObject *SelectionFramebuffer::GetGameObjectInPosition(int x, int y)
 {
-    Vector2 coords = Vector2(x, Canvas::GetHeight() - y);
-    Color mouseOverColor255  = ReadColor255(coords.x, coords.y,
-                                            Attachment::ColorAttachment);
-
-    int id = MapColorToId(mouseOverColor255);
+    Color mouseOverColor = ReadColor(x, y, Attachment::ColorAttachment);
+    int id = MapColorToId(mouseOverColor);
     if (m_idToGameObject.find(id) != m_idToGameObject.end())
     {
         return m_idToGameObject[id];
@@ -150,8 +160,7 @@ Material *SelectionFramebuffer::GetSelectionMaterial() const
 
 Vector3 SelectionFramebuffer::GetWorldPositionAt(int x, int y)
 {
-    return ReadColor(x, y, Attachment::WorldPosition,
-                     GL_RGBA, GL_FLOAT).ToVector3();
+    return ReadColor(x, y, Attachment::WorldPosition).ToVector3();
 }
 
 bool SelectionFramebuffer::IsPassing() const
@@ -161,24 +170,21 @@ bool SelectionFramebuffer::IsPassing() const
 
 Color SelectionFramebuffer::MapIdToColor(long id)
 {
-    const int C = 256;
-    Color charColor =
+    Color color =
             Color(
-                    double(id % C),
-                    double((id / C) % C),
-                    double(((id / C) / C) % C)
+                    double(  id               % 256),
+                    double( (id / 256)        % 256),
+                    double(((id / 256) / 256) % 256)
                    );
 
-   return charColor / C;
+   return color / 256.0f;
 }
 
-long SelectionFramebuffer::MapColorToId(const Color &charColor)
+long SelectionFramebuffer::MapColorToId(const Color &color)
 {
-    const int C = 256;
-    Color color = charColor / 256.0d;
-    return long(color.r * C) +
-           long(color.g * C * C) +
-           long(color.b * C * C * C);
+    return long(color.r * 256) +
+           long(color.g * 256 * 256) +
+           long(color.b * 256 * 256 * 256);
 }
 
 bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)

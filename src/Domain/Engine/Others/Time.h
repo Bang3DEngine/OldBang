@@ -7,7 +7,7 @@
 
 class Time
 {
-friend class Canvas;
+friend class Screen;
 friend class Behaviour;
 friend class GameObject;
 

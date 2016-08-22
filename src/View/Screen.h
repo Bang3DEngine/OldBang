@@ -22,17 +22,19 @@
 #include "Shader.h"
 #include "MeshRenderer.h"
 #include "ShaderProgram.h"
+#include "IDragDropListener.h"
 
 class WindowMain;
 class GameWindow;
 class SelectionFramebuffer;
-class Canvas : public QGLWidget
+class Screen : public QGLWidget,
+               public IDragDropListener
 {
     Q_OBJECT
 
 private:
 
-    static Canvas *m_mainBinaryCanvas;
+    static Screen *m_mainBinaryScreen;
 
     #ifdef BANG_EDITOR
     static WindowMain *s_m_window;
@@ -62,7 +64,7 @@ public:
 
     Color m_clearColor = Color::blue * 0.6f;
 
-    explicit Canvas(QWidget *parent = 0);
+    explicit Screen(QWidget *parent = 0);
     static void InitFromMainBinary();
 
     void initializeGL() override;
@@ -77,7 +79,7 @@ public:
 
     static Scene* GetCurrentScene();
     Scene* GetScene(const std::string &name) const;
-    static Canvas *GetInstance();
+    static Screen *GetInstance();
     static float GetAspectRatio();
     static int GetHeight();
     static int GetWidth();
@@ -91,6 +93,8 @@ public:
     void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
     #endif
+
+    void OnDrop(const DragDropInfo &ddi) override;
 
     void wheelEvent(QWheelEvent* event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

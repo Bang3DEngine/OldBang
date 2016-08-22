@@ -194,13 +194,13 @@ HEADERS += \
     src/Domain/Engine/Assets/Meshes/MeshFactory.h \
     src/Domain/Engine/Interfaces/ICloneable.h \
     src/Domain/Engine/Others/GameBuilder.h \
-    src/View/Canvas.h \
+    src/View/Screen.h \
     src/Domain/Engine/Others/StringUtils.h \
     src/View/IWindow.h \
     src/Domain/Engine/Components/DirectionalLight.h \
     src/Domain/Engine/Components/Light.h \
     src/Domain/Graphics/ShaderPreprocessor.h \
-    src/View/ClipboardGameObject.h \
+    src/View/GameObjectClipboard.h \
     src/Domain/Engine/Components/PointLight.h \
     src/Domain/Engine/Others/Property.h \
     src/Persistence/XMLParser.h \
@@ -214,7 +214,17 @@ HEADERS += \
     src/View/Inspector/IAttrWidgetButtonListener.h \
     src/View/Application.h \
     src/View/Inspector/ComponentClipboard.h \
-    src/Domain/Engine/Others/String.h
+    src/Domain/Engine/Others/String.h \
+    src/View/DragDropManager.h \
+    src/View/Hierarchy/HierarchyDragDropManager.h \
+    src/View/Interfaces/IDragDropListener.h \
+    src/View/Hierarchy/HierarchyContextMenu.h \
+    src/View/Explorer/ExplorerContextMenu.h \
+    src/View/Inspector/ComponentWidgetContextMenu.h \
+    src/View/Inspector/InspectorContextMenu.h \
+    src/View/ContextMenu.h \
+    src/View/ShortcutManager.h \
+    src/View/IShortcutListener.h
 
 EDITOR {
 HEADERS += \
@@ -272,7 +282,7 @@ HEADERS += \
     src/Persistence/File.h \
     src/View/Inspector/TextFile.h \
     src/View/Inspector/PrefabAssetFileInspectable.h \
-    src/View/Interfaces/IDroppableWidget.h
+    src/View/Interfaces/DragDropAgent.h
 }
 
 GAME {
@@ -332,13 +342,13 @@ SOURCES += \
     src/Domain/Engine/Assets/Meshes/MeshFactory.cpp \
     src/Domain/Engine/Interfaces/ICloneable.cpp \
     src/Domain/Engine/Others/GameBuilder.cpp \
-    src/View/Canvas.cpp \
+    src/View/Screen.cpp \
     src/Domain/Engine/Others/StringUtils.cpp \
     src/View/IWindow.cpp \
     src/Domain/Engine/Components/DirectionalLight.cpp \
     src/Domain/Engine/Components/Light.cpp \
     src/Domain/Graphics/ShaderPreprocessor.cpp \
-    src/View/ClipboardGameObject.cpp \
+    src/View/GameObjectClipboard.cpp \
     src/Domain/Engine/Interfaces/IFileable.cpp \
     src/Domain/Engine/Components/PointLight.cpp \
     src/Domain/Engine/Others/Property.cpp \
@@ -352,7 +362,17 @@ SOURCES += \
     src/View/Inspector/IAttrWidgetButtonListener.cpp \
     src/View/Application.cpp \
     src/View/Inspector/ComponentClipboard.cpp \
-    src/Domain/Engine/Others/String.cpp
+    src/Domain/Engine/Others/String.cpp \
+    src/View/DragDropManager.cpp \
+    src/View/Hierarchy/HierarchyDragDropManager.cpp \
+    src/View/Interfaces/IDragDropListener.cpp \
+    src/View/Hierarchy/HierarchyContextMenu.cpp \
+    src/View/Explorer/ExplorerContextMenu.cpp \
+    src/View/Inspector/ComponentWidgetContextMenu.cpp \
+    src/View/Inspector/InspectorContextMenu.cpp \
+    src/View/ContextMenu.cpp \
+    src/View/ShortcutManager.cpp \
+    src/View/IShortcutListener.cpp
 
 EDITOR {
     SOURCES += \
@@ -411,7 +431,7 @@ EDITOR {
         src/View/Inspector/TextFile.cpp \
         src/Persistence/File.cpp \
         src/View/Inspector/PrefabAssetFileInspectable.cpp \
-        src/View/Interfaces/IDroppableWidget.cpp
+        src/View/Interfaces/DragDropAgent.cpp
 }
 
 GAME {

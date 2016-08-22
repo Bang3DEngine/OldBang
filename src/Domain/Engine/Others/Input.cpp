@@ -1,6 +1,6 @@
 #include "Input.h"
 
-#include "Canvas.h"
+#include "Screen.h"
 #include "SingletonManager.h"
 
 #ifdef BANG_EDITOR
@@ -13,7 +13,7 @@ Input::Input()
 {
 }
 
-void Input::InitFromMainBinary() // Called from Canvas
+void Input::InitFromMainBinary() // Called from Screen
 {
     SingletonManager::GetInstance()->SetInputSingleton(new Input());
 }
@@ -79,36 +79,36 @@ void Input::HandleMouseWrapping()
 
         QCursor cursor = w->GetMainWindow()->cursor();
 
-        Canvas *canvas = w->canvas;
-        int cw = canvas->GetWidth();
-        int ch = canvas->GetHeight();
+        Screen *screen = w->screen;
+        int cw = screen->GetWidth();
+        int ch = screen->GetHeight();
 
         bool wrapped = false;
         if (m_mouseCoords.x >= cw)
         {
-            cursor.setPos(canvas->mapToGlobal(QPoint(0, m_mouseCoords.y)));
+            cursor.setPos(screen->mapToGlobal(QPoint(0, m_mouseCoords.y)));
             wrapped = true;
         }
         else if (m_mouseCoords.x < 0)
         {
-            cursor.setPos(canvas->mapToGlobal(QPoint(cw, m_mouseCoords.y)));
+            cursor.setPos(screen->mapToGlobal(QPoint(cw, m_mouseCoords.y)));
             wrapped = true;
         }
 
         if (m_mouseCoords.y >= ch)
         {
-            cursor.setPos(canvas->mapToGlobal(QPoint(m_mouseCoords.x, 0)));
+            cursor.setPos(screen->mapToGlobal(QPoint(m_mouseCoords.x, 0)));
             wrapped = true;
         }
         else if (m_mouseCoords.y < 0)
         {
-            cursor.setPos(canvas->mapToGlobal(QPoint(m_mouseCoords.x, ch)));
+            cursor.setPos(screen->mapToGlobal(QPoint(m_mouseCoords.x, ch)));
             wrapped = true;
         }
 
         if (wrapped)
         {
-            QPoint newCoords = canvas->mapFromGlobal(cursor.pos());
+            QPoint newCoords = screen->mapFromGlobal(cursor.pos());
             m_mouseCoords = Vector2(newCoords.x(), newCoords.y());
             m_lastMouseCoords = m_mouseCoords;
         }
@@ -138,7 +138,7 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
     {
         QPoint glob = QPoint(m_lastMouseCoords.x,
                              m_lastMouseCoords.y);
-        glob = Canvas::GetInstance()->mapToGlobal(glob);
+        glob = Screen::GetInstance()->mapToGlobal(glob);
 
         fakeMoveEvent = true;
         QCursor::setPos(glob);
@@ -275,12 +275,12 @@ bool Input::GetMouseButtonDoubleClick(Input::MouseButton mb)
 
 float Input::GetMouseAxisX()
 {
-    return Input::GetMouseDeltaX() / Canvas::GetWidth();
+    return Input::GetMouseDeltaX() / Screen::GetWidth();
 }
 
 float Input::GetMouseAxisY()
 {
-    return Input::GetMouseDeltaY() / Canvas::GetHeight();
+    return Input::GetMouseDeltaY() / Screen::GetHeight();
 }
 
 Vector2 Input::GetMouseAxis()

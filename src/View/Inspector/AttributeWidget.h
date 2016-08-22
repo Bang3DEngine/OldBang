@@ -3,10 +3,12 @@
 
 #include <QWidget>
 
+#include "IDragDropListener.h"
 #include "ComponentWidget.h"
-#include "IDroppableWidget.h"
+#include "DragDropAgent.h"
 
-class AttributeWidget : public IDroppableQWidget
+class AttributeWidget : public DragDropQWidget,
+                        public IDragDropListener
 {
     Q_OBJECT
 

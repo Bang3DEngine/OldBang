@@ -116,6 +116,29 @@ Vector3 Color::ToVector3() const
     return Vector3(r, g, b);
 }
 
+Vector4 Color::ToVector4() const
+{
+    return Vector4(r, g, b, a);
+}
+
+void Color::Ceil()
+{
+    r = glm::ceil(r);
+    g = glm::ceil(g);
+    b = glm::ceil(b);
+    a = glm::ceil(a);
+}
+
+Color Color::FromVector3(const Vector3 &v)
+{
+    return Color(v.x, v.y, v.z, 1);
+}
+
+Color Color::FromVector4(const Vector4 &v)
+{
+    return Color(v.x, v.y, v.z, v.w);
+}
+
 Color operator+(const Color & c1, const Color &c2)
 {
     return Color(c1.r + c2.r, c1.g + c2.g, c1.b + c2.b, c1.a * c2.a);

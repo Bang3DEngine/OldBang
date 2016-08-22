@@ -5,10 +5,10 @@
 #include <list>
 #include "GameObject.h"
 
-class ClipboardGameObject
+class GameObjectClipboard
 {
 private:
-    ClipboardGameObject() {}
+    GameObjectClipboard() {}
 
 private:
 

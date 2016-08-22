@@ -1,6 +1,6 @@
 #include "MenuBar.h"
 
-#include "Canvas.h"
+#include "Screen.h"
 #include "WindowMain.h"
 #include "FileReader.h"
 #include "FileWriter.h"
@@ -83,7 +83,7 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 void MenuBar::CreateNewScene() const
 {
     Scene *scene = new EditorScene();
-    Canvas::GetInstance()->SetCurrentScene(scene);
+    Screen::GetInstance()->SetCurrentScene(scene);
     Persistence::SetCurrentSceneFilepath("");
 }
 
@@ -130,8 +130,8 @@ void MenuBar::OnOpenScene() const
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
-        Canvas::GetInstance()->AddScene(scene);
-        Canvas::GetInstance()->SetCurrentScene(scene);
+        Screen::GetInstance()->AddScene(scene);
+        Screen::GetInstance()->SetCurrentScene(scene);
         Persistence::SetCurrentSceneFilepath(filename);
     }
     else
@@ -152,7 +152,7 @@ void MenuBar::OnSaveScene() const
     }
     else //Save directly
     {
-        Scene *scene = Canvas::GetInstance()->GetCurrentScene(); NONULL(scene);
+        Scene *scene = Screen::GetInstance()->GetCurrentScene(); NONULL(scene);
         FileWriter::WriteScene(filename, scene);
     }
 }
@@ -161,7 +161,7 @@ void MenuBar::OnSaveSceneAs() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::SaveSceneAs);
 
-    Scene *scene = Canvas::GetInstance()->GetCurrentScene(); NONULL(scene);
+    Scene *scene = Screen::GetInstance()->GetCurrentScene(); NONULL(scene);
 
     FileDialog fd("Save scene as...", Scene::GetFileExtension());
     std::string filename = fd.GetSaveFilename(scene->name);
@@ -214,7 +214,7 @@ void MenuBar::OnCreateFromPrefab() const
         }
         else
         {
-            Scene *currentScene = Canvas::GetInstance()->GetCurrentScene();
+            Scene *currentScene = Screen::GetInstance()->GetCurrentScene();
             if (currentScene )
             {
                 e->SetParent(currentScene);
@@ -235,7 +235,7 @@ GameObject* MenuBar::CreatePrimitiveGameObject(Mesh *m, const std::string &name)
 {
     GameObject *go = MeshFactory::CreatePrimitiveGameObject(m, name);
 
-    go->SetParent(Canvas::GetInstance()->GetCurrentScene());
+    go->SetParent(Screen::GetInstance()->GetCurrentScene());
     Hierarchy::GetInstance()->SelectGameObject(go);
     return go;
 }

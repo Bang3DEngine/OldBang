@@ -47,7 +47,7 @@ void EditorRotateAxis::OnUpdate()
     EditorAxis::OnUpdate();
 
     // Obtain mousePos in screen space for next calculations
-    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
+    Camera *cam = Screen::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     GameObject *ago = m_attachedGameObject;
 
     if (m_grabbed)
@@ -56,7 +56,7 @@ void EditorRotateAxis::OnUpdate()
         {
             // This will be done once every grab
             Vector2 sMousePos= Input::GetMouseCoords();
-            sMousePos /= Canvas::GetSize();
+            sMousePos /= Screen::GetSize();
             sMousePos.y = 1.0f - sMousePos.y;
             sMousePos = sMousePos * 2.0f - 1.0f;
 

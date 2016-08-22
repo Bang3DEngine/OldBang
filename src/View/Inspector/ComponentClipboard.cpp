@@ -14,6 +14,15 @@ bool ComponentClipboard::IsCopiedTransform()
     return !IsEmpty() && s_copiedComponent->GetName() == "Transform";
 }
 
+std::string ComponentClipboard::GetCopiedComponentName()
+{
+    if (!IsEmpty())
+    {
+        return s_copiedComponent->GetName();
+    }
+    return "";
+}
+
 void ComponentClipboard::CopyComponent(Component *componentToCopy)
 {
     if (s_copiedComponent)
@@ -23,7 +32,6 @@ void ComponentClipboard::CopyComponent(Component *componentToCopy)
     }
 
     s_copiedComponent = static_cast<Component*>(componentToCopy->Clone());
-    Logger_Log(s_copiedComponent);
 }
 
 void ComponentClipboard::PasteComponentInto(GameObject *go)

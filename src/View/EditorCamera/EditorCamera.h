@@ -8,7 +8,7 @@
 #include "Vector3.h"
 
 #include "Input.h"
-#include "Canvas.h"
+#include "Screen.h"
 #include "Camera.h"
 #include "EditorGameObject.h"
 #include "IWindowEventManagerListener.h"

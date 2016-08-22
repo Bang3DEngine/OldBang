@@ -7,7 +7,7 @@
 #include "Bang.h"
 
 #include "IWindow.h"
-#include "Canvas.h"
+#include "Screen.h"
 
 class GameWindow : public IWindow
 {
@@ -16,7 +16,7 @@ private:
     void SetupUI();
 
 public:
-    Canvas *canvas = nullptr;
+    Screen *screen = nullptr;
 
     GameWindow(QMainWindow *window);
 

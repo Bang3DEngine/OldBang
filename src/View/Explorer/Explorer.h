@@ -19,30 +19,35 @@
 #include "MeshFile.h"
 #include "ImageFile.h"
 #include "MeshAssetFile.h"
+#include "DragDropAgent.h"
+#include "IDragDropListener.h"
 #include "MaterialAssetFile.h"
 #include "Texture2DAssetFile.h"
+#include "MeshFileInspectable.h"
 #include "TextFileInspectable.h"
+#include "ExplorerContextMenu.h"
+#include "ImageFileInspectable.h"
 #include "MeshAssetFileInspectable.h"
 #include "PrefabAssetFileInspectable.h"
 #include "MaterialAssetFileInspectable.h"
-
-#include "MeshFileInspectable.h"
-#include "ImageFileInspectable.h"
 #include "Texture2DAssetFileInspectable.h"
 
-#include "IDroppableWidget.h"
 
 class FileSystemModel;
-class Explorer : public IDroppableQListView,
+class Explorer : public DragDropQListView,
+                 public IDragDropListener,
                  public IWindowEventManagerListener
 {
     Q_OBJECT
 
-    friend class File;
-    friend class FileSystemModel;
-    friend class ExplorerDirTree;
+friend class File;
+friend class FileSystemModel;
+friend class ExplorerDirTree;
+friend class ExplorerContextMenu;
 
 private:
+
+    ExplorerContextMenu m_eContextMenu;
 
     FileSystemModel *m_fileSystemModel = nullptr;
     QToolButton *m_buttonDirUp = nullptr;
@@ -77,18 +82,14 @@ public:
 
     void StartRenaming(const std::string &filepath);
 
+    virtual void OnDragStart(const DragDropInfo &ddi) override;
+    virtual void OnDropHere(const DragDropInfo &ddi) override;
+    virtual void OnDrop(const DragDropInfo &ddi) override;
+
     void dropEvent(QDropEvent *e) override;
-
-    void OnDropFromHierarchy(GameObject *go,  QDropEvent *e) override;
-
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
-
-    void OnCustomContextMenuRequested(QPoint point);
-public slots:
-    void OnContextMenuDuplicateClicked();
-    void OnContextMenuDeleteClicked();
 
 public:
     //Updates the Inspector with the selected file info
@@ -97,9 +98,6 @@ public:
     void SelectFile(const std::string &path);
 
     static Explorer* GetInstance();
-
-    void OnDragStarted(QWidget *origin);
-    void OnDragStopped();
 
 public slots:
     void Refresh();

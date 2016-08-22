@@ -5,7 +5,7 @@
 
 #include "Bang.h"
 
-#include "Canvas.h"
+#include "Screen.h"
 #include "Logger.h"
 
 #include "IWindow.h"

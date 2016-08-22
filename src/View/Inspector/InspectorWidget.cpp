@@ -15,7 +15,7 @@
 #include "WindowMain.h"
 #include "GameObject.h"
 
-InspectorWidget::InspectorWidget() : IDroppableQWidget()
+InspectorWidget::InspectorWidget()
 {
 }
 
@@ -41,6 +41,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     std::string fTitle = StringUtils::FormatInspectorLabel(title);
     m_titleLabel = new QLabel( QString(fTitle.c_str()) );
     QFont font = m_titleLabel->font();
+    font.setPixelSize(13);
     font.setBold(true);
     m_titleLabel->setFont(font);
     m_titleLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
@@ -73,14 +74,6 @@ InspectorWidget::~InspectorWidget()
         m_updateTimer->stop();
         delete m_updateTimer;
     }
-}
-
-void InspectorWidget::OnDropFromExplorer(const File &f, QDropEvent *e)
-{
-}
-
-void InspectorWidget::OnDropFromHierarchy(GameObject *go, QDropEvent *e)
-{
 }
 
 XMLNode InspectorWidget::GetInspectableXMLInfo() const

@@ -19,11 +19,11 @@ GameWindow::GameWindow(QMainWindow *window)
 
 void GameWindow::SetupUI()
 {
-    canvas = new Canvas(GameWindow::GetInstance()->m_mainWindow);
-    canvas->setMouseTracking(true);
-    canvas->setFocusPolicy(Qt::StrongFocus);
+    screen = new Screen(GameWindow::GetInstance()->m_mainWindow);
+    screen->setMouseTracking(true);
+    screen->setFocusPolicy(Qt::StrongFocus);
 
-    GameWindow::GetInstance()->m_mainWindow->setCentralWidget(canvas);
+    GameWindow::GetInstance()->m_mainWindow->setCentralWidget(screen);
 }
 
 

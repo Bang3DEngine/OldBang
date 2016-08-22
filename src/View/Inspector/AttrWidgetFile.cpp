@@ -1,6 +1,8 @@
 #include "AttrWidgetFile.h"
 
 #include "File.h"
+#include "Explorer.h"
+#include "Hierarchy.h"
 
 AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :
@@ -86,17 +88,51 @@ std::string  AttrWidgetFile::GetValue()
     return m_filepath;
 }
 
-void AttrWidgetFile::OnDropFromExplorer(const File &f, QDropEvent *e)
+void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)
 {
-    if (f.IsOfExtension(m_fileExtension) && !m_readonly)
+    if (!m_readonly)
     {
-        SetValue(f.GetRelativePath(), true);
+        Explorer *explorer = Explorer::GetInstance();
+        if (ddi.sourceObject == explorer)
+        {
+            File f = explorer->GetSelectedFile();
+            std::string extensions =
+                    m_xmlAttribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
+            if (f.IsOfExtension(extensions))
+            {
+                m_filepathLineEdit->setStyleSheet(IDragDropListener::acceptDragStyle);
+            }
+            else
+            {
+                m_filepathLineEdit->setStyleSheet(IDragDropListener::rejectDragStyle);
+            }
+        }
     }
 }
 
-void AttrWidgetFile::OnDropFromHierarchy(GameObject *go, QDropEvent *e)
+void AttrWidgetFile::OnDropHere(const DragDropInfo &ddi)
 {
+    Explorer  *explorer  = Explorer::GetInstance();
+    Hierarchy *hierarchy = Hierarchy::GetInstance();
+    if (ddi.sourceObject == explorer)
+    {
+        File f = explorer->GetSelectedFile();
+        if (f.IsOfExtension(m_fileExtension) && !m_readonly)
+        {
+            SetValue(f.GetRelativePath(), true);
+        }
+    }
+    else if (ddi.sourceObject == hierarchy)
+    {
+        GameObject *go = hierarchy->GetFirstSelectedGameObject();
+    }
 }
+
+void AttrWidgetFile::OnDrop(const DragDropInfo &ddi)
+{
+    m_filepathLineEdit->setStyleSheet("/* */");
+}
+
 
 void AttrWidgetFile::mouseDoubleClickEvent(QMouseEvent *e)
 {
@@ -113,37 +149,11 @@ void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
     SetValue( attribute.GetFilepath() );
 }
 
-void AttrWidgetFile::OnDragStarted(QWidget *origin)
-{
-    if (!m_readonly)
-    {
-        Explorer *explorer = Explorer::GetInstance();
-        if (origin == explorer)
-        {
-            File f = explorer->GetSelectedFile();
-            std::string extensions =
-                    m_xmlAttribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
-            if (f.IsOfExtension(extensions))
-            {
-                m_filepathLineEdit->setStyleSheet(IDroppable::acceptDragStyle);
-            }
-            else
-            {
-                m_filepathLineEdit->setStyleSheet(IDroppable::rejectDragStyle);
-            }
-        }
-    }
-}
-
-void AttrWidgetFile::OnDragStopped()
-{
-    m_filepathLineEdit->setStyleSheet("/* */");
-}
-
 void AttrWidgetFile::OnDoubleClick()
 {
     Explorer::GetInstance()->SelectFile(m_filepath);
 }
+
 
 ////////////////////////////////////////////////////////
 

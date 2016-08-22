@@ -46,18 +46,11 @@ public:
 
 public slots:
 
-    static void NotifyChildAdded(GameObject *child);
-    static void NotifyChildChangedParent(GameObject *child, GameObject *previousParent);
-    static void NotifyChildRemoved(GameObject *child);
-
     static void NotifyMenuBarActionClicked(MenuBar::Action clickedAction);
 
     static void NotifyButtonTranslateModeSelected();
     static void NotifyButtonRotateModeSelected();
     static void NotifyButtonScaleModeSelected();
-
-    static void NotifyDragStarted(QWidget *origin);
-    static void NotifyDragStopped();
 
     static void NotifyInspectorSlotChanged(InspectorWidget *inspectorItem);
     static void NotifyHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects);

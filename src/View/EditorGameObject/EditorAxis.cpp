@@ -1,6 +1,6 @@
 #include "EditorAxis.h"
 
-#include "Canvas.h"
+#include "Screen.h"
 #include "Toolbar.h"
 
 EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,

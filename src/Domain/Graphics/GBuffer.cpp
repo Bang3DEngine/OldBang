@@ -1,10 +1,19 @@
 #include "GBuffer.h"
 
-#include "Canvas.h"
+#include "Screen.h"
 #include "Color.h"
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
+    m_positionTexture = new TextureRender();
+    m_normalTexture   = new TextureRender();
+    m_uvTexture       = new TextureRender();
+    m_diffuseTexture  = new TextureRender();
+    m_matBoolsTexture = new TextureRender();
+    m_depthTexture    = new TextureRender();
+    m_colorTexture    = new TextureRender();
+
+    /*
     const GLint texInternalType = GL_FLOAT;
     CreateColorAttachment(Attachment::Position,      GL_RGBA32F, GL_RGBA,  texInternalType);
     CreateColorAttachment(Attachment::Normal,        GL_RGBA32F, GL_RGBA,  texInternalType);
@@ -13,39 +22,47 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateColorAttachment(Attachment::MaterialBools, GL_RGBA,    GL_RGBA, texInternalType);
     CreateColorAttachment(Attachment::Depth,         GL_RGBA,    GL_RGBA, texInternalType);
     CreateColorAttachment(Attachment::Color,         GL_RGBA,    GL_RGBA, texInternalType);
-    CreateDepthBufferAttachment();
+    */
+    SetColorAttachment(Attachment::Position,      m_positionTexture);
+    SetColorAttachment(Attachment::Normal,        m_normalTexture);
+    SetColorAttachment(Attachment::Uv,            m_uvTexture);
+    SetColorAttachment(Attachment::Diffuse,       m_diffuseTexture);
+    SetColorAttachment(Attachment::MaterialBools, m_matBoolsTexture);
+    SetColorAttachment(Attachment::Depth,         m_depthTexture);
+    SetColorAttachment(Attachment::Color,         m_colorTexture);
+    CreateDepthRenderbufferAttachment();
 
-    m_renderGBufferToScreenMaterial = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/RenderGBufferToScreen.bmat");
+    std::string renderToScreenMatFilepath =
+            "Assets/Engine/Materials/RenderGBufferToScreen.bmat";
+    m_renderGBufferToScreenMaterial =
+            AssetsManager::LoadAsset<Material>(renderToScreenMatFilepath);
     m_planeMeshToRenderEntireScreen = MeshFactory::GetPlane();
 }
 
 GBuffer::~GBuffer()
 {
+    delete m_positionTexture;
+    delete m_normalTexture;
+    delete m_uvTexture;
+    delete m_diffuseTexture;
+    delete m_matBoolsTexture;
+    delete m_depthTexture;
+    delete m_colorTexture;
+
     if (m_renderGBufferToScreenMaterial) delete m_renderGBufferToScreenMaterial;
     if (m_planeMeshToRenderEntireScreen) delete m_planeMeshToRenderEntireScreen;
 }
 
 void GBuffer::BindGBufferInTexturesTo(Material *mat) const
 {
-    TextureRender *positionTex  = GetTextureAttachment(GBuffer::Attachment::Position);
-    TextureRender *normalTex    = GetTextureAttachment(GBuffer::Attachment::Normal);
-    TextureRender *uvTex        = GetTextureAttachment(GBuffer::Attachment::Uv);
-    TextureRender *diffuseTex   = GetTextureAttachment(GBuffer::Attachment::Diffuse);
-    TextureRender *matBoolsTex  = GetTextureAttachment(GBuffer::Attachment::MaterialBools);
-    TextureRender *depthTex     = GetTextureAttachment(GBuffer::Attachment::Depth);
-    TextureRender *colorTex     = GetTextureAttachment(GBuffer::Attachment::Color);
-
     ShaderProgram *sp =mat->GetShaderProgram(); NONULL(sp);
-
-    //Now attach to the material, with its corresponding index for the name (BANG_texture_0)
-    //which in this case are the same as each respective texture slot
-    sp->SetUniformTexture("B_position_gout_fin",      positionTex, false);
-    sp->SetUniformTexture("B_normal_gout_fin",        normalTex,   false);
-    sp->SetUniformTexture("B_uv_gout_fin",            uvTex,       false);
-    sp->SetUniformTexture("B_diffuse_gout_fin",       diffuseTex,  false);
-    sp->SetUniformTexture("B_materialBools_gout_fin", matBoolsTex, false);
-    sp->SetUniformTexture("B_depth_gout_fin",         depthTex,    false);
-    sp->SetUniformTexture("B_color_gout_fin",         colorTex,    false);
+    sp->SetUniformTexture("B_position_gout_fin",      m_positionTexture, false);
+    sp->SetUniformTexture("B_normal_gout_fin",        m_normalTexture,   false);
+    sp->SetUniformTexture("B_uv_gout_fin",            m_uvTexture,       false);
+    sp->SetUniformTexture("B_diffuse_gout_fin",       m_diffuseTexture,  false);
+    sp->SetUniformTexture("B_materialBools_gout_fin", m_matBoolsTexture, false);
+    sp->SetUniformTexture("B_depth_gout_fin",         m_depthTexture,    false);
+    sp->SetUniformTexture("B_color_gout_fin",         m_colorTexture,    false);
 }
 
 void GBuffer::RenderPassWithMaterial(Material *mat) const
@@ -63,7 +80,7 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
     SetDrawBuffers({GBuffer::Attachment::Color});
 
-    mat->GetShaderProgram()->SetUniformVec2("B_screen_size", Canvas::GetSize(), false);
+    mat->GetShaderProgram()->SetUniformVec2("B_screen_size", Screen::GetSize(), false);
 
     RenderScreenPlane();
 
@@ -91,7 +108,7 @@ void GBuffer::RenderToScreen() const
                 BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                              *(m_renderGBufferToScreenMaterial->GetShaderProgram()));
 
-    TextureRender *colorTex = GetTextureAttachment(GBuffer::Attachment::Color);
+    TextureRender *colorTex = GetColorAttachment(GBuffer::Attachment::Color);
     ShaderProgram *sp =m_renderGBufferToScreenMaterial->GetShaderProgram(); NONULL(sp);
     sp->SetUniformTexture("B_color_gout_fin", colorTex, false);
 

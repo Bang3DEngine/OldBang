@@ -6,13 +6,20 @@
 #include "GameObject.h"
 #include "InspectorWidget.h"
 #include "ComponentClipboard.h"
+#include "ComponentWidgetContextMenu.h"
 
 class Component;
 class ComponentWidget : public InspectorWidget
 {
+friend class InspectorContextMenu;
+friend class ComponentWidgetContextMenu;
+
     Q_OBJECT
 
 private:
+
+    ComponentWidgetContextMenu m_cwContextMenu;
+
     Component *m_relatedComponent = nullptr;
     QCheckBox *m_enabledCheckbox = nullptr;
 
@@ -20,25 +27,8 @@ public:
     explicit ComponentWidget(Component *relatedComponent);
     virtual ~ComponentWidget();
 
-    virtual void OnCustomContextMenuRequested(QPoint point) override;
-
 public slots:
     void OnEnabledCheckboxPressed(bool checked);
-
-    void OnContextMenuMoveUpSelected();
-    void MenuMoveUpSelected();
-    void OnContextMenuMoveDownSelected();
-    void MenuMoveDownSelected();
-
-    void OnContextMenuCopyComponentSelected();
-    void CopyComponentSelected();
-    void OnContextMenuPasteComponentSelected();
-    void PasteComponentSelected();
-    void OnContextMenuPasteComponentValuesSelected();
-    void PasteComponentValuesSelected();
-
-    void OnContextMenuRemoveComponentSelected();
-    void RemoveComponentSelected();
 };
 
 #endif // LISTINSPECTORITEM_H

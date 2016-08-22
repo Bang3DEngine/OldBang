@@ -50,7 +50,7 @@ void EditorTranslateAxis::OnUpdate()
 {
     EditorAxis::OnUpdate();
 
-    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
+    Camera *cam = Screen::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->gameObject->transform;
     GameObject *ago = m_attachedGameObject;
     Vector3 wCamPos = camTransform->GetPosition();

@@ -38,7 +38,7 @@ void EditorScaleAxis::OnUpdate()
 {
     EditorAxis::OnUpdate();
 
-    Camera *cam = Canvas::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
+    Camera *cam = Screen::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
     Transform *camTransform = cam->gameObject->transform; NONULL(camTransform);
     GameObject *ago = m_attachedGameObject; NONULL(ago->transform);
     Vector3 wCamPos = camTransform->GetPosition();

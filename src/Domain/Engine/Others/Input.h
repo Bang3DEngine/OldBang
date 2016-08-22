@@ -12,7 +12,7 @@
 
 class Input
 {
-friend class Canvas;
+friend class Screen;
 
 public:
     enum Key
@@ -127,7 +127,7 @@ private:
 
     /**
      * @brief If true, mouse will loop in x and y when
-     * going outside the Canvas.
+     * going outside the Screen.
      */
     bool m_mouseWrapping = false;
 
@@ -156,7 +156,7 @@ private:
     int m_framesMouseStopped = 0  ;
 
     /**
-     * @brief Mouse coordinates in Canvas space.
+     * @brief Mouse coordinates in Screen space.
      */
     Vector2 m_mouseCoords, m_lastMouseCoords;
 
@@ -200,26 +200,26 @@ public:
 
     /**
      * @brief GetMouseAxisX
-     * @return Mouse movement in x divided by canvas width [0.0f, 1.0f]
+     * @return Mouse movement in x divided by screen width [0.0f, 1.0f]
      */
     static float GetMouseAxisX();
 
     /**
      * @brief GetMouseDeltaY
-     * @return Mouse movement in y divided by canvas height [0.0f, 1.0f]
+     * @return Mouse movement in y divided by screen height [0.0f, 1.0f]
      */
     static float GetMouseAxisY();
     static Vector2 GetMouseAxis();
 
     /**
      * @brief GetMouseDeltaX
-     * @return Mouse movement in x in pixels [0.0f, canvasWidth]
+     * @return Mouse movement in x in pixels [0.0f, screenWidth]
      */
     static float GetMouseDeltaX();
 
     /**
      * @brief GetMouseDeltaY
-     * @return Mouse movement in y in pixels [0.0f, canvasHeight]
+     * @return Mouse movement in y in pixels [0.0f, screenHeight]
      */
     static float GetMouseDeltaY();
     static Vector2 GetMouseDelta();

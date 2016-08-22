@@ -31,6 +31,7 @@ void Light::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
     Light *l = static_cast<Light*>(clone);
+    l->SetIntensity(GetIntensity());
     l->SetColor(GetColor());
 }
 

@@ -4,10 +4,15 @@
 
 #include "WindowMain.h"
 #include "Hierarchy.h"
-#include "IDroppableWidget.h"
+#include "DragDropAgent.h"
 
-Explorer::Explorer(QWidget *parent) : IDroppableQListView()
+Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 {
+    setAcceptDrops(true);
+    viewport()->setAcceptDrops(true);
+    setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
+    setDragEnabled(true);
+
     setDropIndicatorShown(true);
     setDefaultDropAction(Qt::DropAction::MoveAction);
     setSelectionMode(QAbstractItemView::SingleSelection);
@@ -71,7 +76,7 @@ void Explorer::mousePressEvent(QMouseEvent *e)
 
     if (e->button() == Qt::RightButton)
     {
-        OnCustomContextMenuRequested(e->pos());
+        m_eContextMenu.OnCustomContextMenuRequested(e->pos());
     }
 }
 
@@ -112,54 +117,6 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 
         }
     }
-}
-
-void Explorer::OnCustomContextMenuRequested(QPoint point)
-{
-    QMenu contextMenu(tr("Explorer context menu"), this);
-
-    QAction actionDuplicate("Duplicate", this);
-    QAction actionDelete("Delete", this);
-
-    connect(&actionDuplicate, SIGNAL(triggered()), this, SLOT(OnContextMenuDuplicateClicked()));
-    connect(&actionDelete, SIGNAL(triggered()), this, SLOT(OnContextMenuDeleteClicked()));
-
-    if (IsSelectedAFile())
-    {
-        contextMenu.addAction(&actionDuplicate);
-        contextMenu.addAction(&actionDelete);
-    }
-    else if (IsSelectedADir())
-    {
-        // contextMenu.addAction(&actionDuplicate);
-        contextMenu.addAction(&actionDelete);
-    }
-
-    contextMenu.exec(mapToGlobal(point));
-}
-
-void Explorer::OnContextMenuDuplicateClicked()
-{
-    File source = GetSelectedFile();
-    std::string filepath = source.GetRelativePath();
-    while (Exists(filepath))
-    {
-        filepath = Persistence::GetNextDuplicateName(filepath);
-    }
-
-    FileWriter::WriteToFile(filepath, source.GetContents());
-}
-
-void Explorer::OnContextMenuDeleteClicked()
-{
-    Inspector *inspector = Inspector::GetInstance();
-    if (inspector->IsShowingInspectable(m_lastIInspectableInInspector))
-    {
-        inspector->Clear();
-        delete m_lastIInspectableInInspector;
-        m_lastIInspectableInInspector = nullptr;
-    }
-    m_fileSystemModel->remove(currentIndex());
 }
 
 void Explorer::RefreshInspector()
@@ -337,36 +294,43 @@ void Explorer::StartRenaming(const std::string &filepath)
     edit(currentIndex());
 }
 
-void Explorer::dropEvent(QDropEvent *e)
-{
-    IDroppableQListView::dropEvent(e);
-    e->ignore(); // If we dont ignore, objects in the source list get removed
-}
 
-void Explorer::OnDragStarted(QWidget *origin)
+void Explorer::OnDragStart(const DragDropInfo &ddi)
 {
     Hierarchy *hierarchy = Hierarchy::GetInstance();
-    if (origin == hierarchy)
+    if (ddi.sourceObject == hierarchy)
     {
-        setStyleSheet(IDroppable::acceptDragStyle);
+        setStyleSheet(IDragDropListener::acceptDragStyle);
     }
 }
 
-void Explorer::OnDragStopped()
+void Explorer::OnDropHere(const DragDropInfo &ddi)
+{
+    Hierarchy *hierarchy = Hierarchy::GetInstance();
+    if (ddi.sourceObject == hierarchy)
+    {
+        // Create a prefab of selected on the current directory
+        GameObject *selected = hierarchy->GetFirstSelectedGameObject();
+        NONULL(selected);
+
+        std::string path = GetCurrentDir() + "/";
+        std::string gameObjectName = selected->name;
+        path += gameObjectName;
+        path = Persistence::AppendExtension(path,
+                      Prefab::GetFileExtensionStatic());
+        FileWriter::WriteToFile(path, selected);
+    }
+}
+
+void Explorer::OnDrop(const DragDropInfo &ddi)
 {
     setStyleSheet("/* */");
 }
 
-void Explorer::OnDropFromHierarchy(GameObject *selected, QDropEvent *e)
+void Explorer::dropEvent(QDropEvent *e)
 {
-    // Create a prefab of selected on the current directory
-    NONULL(selected);
-
-    std::string path = GetCurrentDir() + "/";
-    std::string gameObjectName = selected->name;
-    path += gameObjectName;
-    path = Persistence::AppendExtension(path, Prefab::GetFileExtensionStatic());
-    FileWriter::WriteToFile(path, selected);
+    DragDropQListView::dropEvent(e);
+    e->ignore(); // If we dont ignore, objects in the source list get removed
 }
 
 void Explorer::updateGeometries()
@@ -397,7 +361,7 @@ QVariant FileSystemModel::data(const QModelIndex &index, int role) const
         if (f)
         {
             QPixmap pm = f->GetIcon();
-            return pm.scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation);
+            return pm.scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::FastTransformation);
         }
     }
     return QFileSystemModel::data(index, role);

@@ -23,14 +23,21 @@
 #include "Scene.h"
 #include "FileDialog.h"
 #include "GameObject.h"
-#include "IDroppableWidget.h"
-#include "ClipboardGameObject.h"
+#include "DragDropAgent.h"
+#include "IShortcutListener.h"
+#include "GameObjectClipboard.h"
+#include "HierarchyContextMenu.h"
+#include "HierarchyDragDropManager.h"
 #include "IWindowEventManagerListener.h"
 
-class Hierarchy : public IDroppableQTreeWidget,
-                  public IWindowEventManagerListener
+class Hierarchy : public DragDropQTreeWidget,
+                  public IWindowEventManagerListener,
+                  public IShortcutListener
 {
     Q_OBJECT
+
+friend class HierarchyContextMenu;
+friend class HierarchyDragDropManager;
 
 private:
     //For every gameObject, we have the associated treeItem,
@@ -38,42 +45,41 @@ private:
     mutable std::map<GameObject*, QTreeWidgetItem*> m_gameObjectToTreeItem;
     mutable std::map<QTreeWidgetItem*,GameObject*> m_treeItemToGameObject;
 
-    void ExpandRecursiveUpwards(QTreeWidgetItem *item);
-    QTreeWidgetItem* FillDownwards(GameObject *e);
+    HierarchyContextMenu m_hContextMenu;
+    HierarchyDragDropManager m_hDragDropManager;
+
+    void Expand(QTreeWidgetItem *item);
+    QTreeWidgetItem* PopulateItemGameObject(GameObject *e);
 
     //Useful for example, for Removing a Child
     //(we just need to remove the parent/s of all the selected entities)
     void LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items);
+
+    QTreeWidgetItem* GetFirstSelectedItem() const;
     GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
     QTreeWidgetItem *GetItemFromGameObject(GameObject *go) const;
-
-    GameObject* GetDropTargetGameObject(QDropEvent *e) const;
 
 public:
     explicit Hierarchy(QWidget *parent = 0);
     virtual ~Hierarchy();
 
     void Refresh();
+    void Expand(GameObject *go);
+    void ExpandTrigger(GameObject *go);
 
     GameObject* GetFirstSelectedGameObject() const;
 
-    void OnChildAdded(GameObject *child) override;
-    void OnChildChangedParent(GameObject *child, GameObject *previousParent) override;
-    void OnChildRemoved(GameObject *child) override;
-
-    void dropEvent(QDropEvent *e) override;
-    void OnDropFromExplorer(const File &f, QDropEvent *e) override;
-
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
 
-    void keyPressEvent(QKeyEvent *e);
+    void OnShortcutsUpdate() override;
 
     std::list<GameObject*> GetSelectedGameObjects(bool excludeInternal = false);
     void SelectGameObject(GameObject *go);
+    void SelectItemAboveOrBelowSelected(bool above);
     void UnselectAll();
 
-    void OnDragStarted(QWidget *origin) override;
-    void OnDragStopped() override;
+    virtual void dropEvent(QDropEvent *e) override;
+    virtual void mousePressEvent(QMouseEvent *e) override;
 
     void OnGameObjectNameChanged(GameObject *go);
 
@@ -82,14 +88,6 @@ public:
 public slots:
 
     void OnItemNameChanged(QTreeWidgetItem *item, int column);
-
-    void OnCustomContextMenuRequested(QPoint point);
-    void OnContextMenuCreateEmptyClicked();
-    void OnContextMenuCopyClicked();
-    void OnContextMenuPasteClicked();
-    void OnContextMenuDuplicateClicked();
-    void OnContextMenuCreatePrefab();
-    void OnContextMenuDeleteClicked();
 
     void OnSelectionChanged();
     void _NotifyHierarchyGameObjectSelectionChanged();
