@@ -16,15 +16,15 @@
 #include "Explorer.h"
 #endif
 
-const std::string FileReader::NoRegisterId = "-";
+const String FileReader::NoRegisterId = "-";
 void *FileReader::lastIstreamDir = nullptr;
 
 
-unsigned char* FileReader::ReadImage(const std::string& filepath,
+unsigned char* FileReader::ReadImage(const String& filepath,
                                      int *width, int *height)
 {
     int comps;
-    unsigned char* data = stbi_load(filepath.c_str(),
+    unsigned char* data = stbi_load(filepath.ToCString(),
                                     width, height, &comps, 4);
     if (!data)
     {
@@ -34,11 +34,11 @@ unsigned char* FileReader::ReadImage(const std::string& filepath,
     return data;
 }
 
-void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs,
+void FileReader::GetOBJFormat(const String& filepath, bool *hasUvs,
                               bool *hasNormals, bool *isTriangles)
 {
     std::FILE *f;
-    f = fopen(filepath.c_str(), "r");
+    f = fopen(filepath.ToCString(), "r");
     if (!f)
     {
         Logger_Error("Error trying to open '" << filepath << "'");
@@ -96,14 +96,14 @@ void FileReader::GetOBJFormat(const std::string& filepath, bool *hasUvs,
     *isTriangles = true;
 }
 
-int FileReader::GetOBJNumFaces(const std::string &filepath)
+int FileReader::GetOBJNumFaces(const String &filepath)
 {
     std::ifstream f(filepath, std::ios::in);
     if (!f.is_open())
         Logger_Error("Error opening the mesh file '" << filepath << "'");
 
     int numFaces = 0;
-    std::string line;
+    String line;
     while (std::getline(f, line))
     {
         if (line.length() > 0 && line.at(0) == 'f')
@@ -115,7 +115,7 @@ int FileReader::GetOBJNumFaces(const std::string &filepath)
     return numFaces;
 }
 
-bool FileReader::ReadOBJ(const std::string& filepath,
+bool FileReader::ReadOBJ(const String& filepath,
                          std::vector<Vector3> *vertexPos,
                          std::vector<Vector3> *vertexNormals,
                          std::vector<Vector2> *vertexUvs,
@@ -133,12 +133,12 @@ bool FileReader::ReadOBJ(const std::string& filepath,
     std::ifstream f(filepath, std::ios::in);
     if (!f.is_open())
         Logger_Error("Error opening the mesh file '" << filepath << "'");
-    std::string line;
+    String line;
 
     while (std::getline(f, line))
     {
         std::stringstream ss(line);
-        std::string lineHeader;
+        String lineHeader;
         if (!(ss >> lineHeader)) continue;
         if (lineHeader == "v")
         {
@@ -254,7 +254,7 @@ bool FileReader::ReadOBJ(const std::string& filepath,
     return true;
 }
 
-void FileReader::ReadScene(const std::string &filepath, Scene* scene)
+void FileReader::ReadScene(const String &filepath, Scene* scene)
 {
     XMLNode *xmlInfo = XMLParser::FromFile(filepath);
     if (xmlInfo)
@@ -264,10 +264,10 @@ void FileReader::ReadScene(const std::string &filepath, Scene* scene)
     scene->PostReadXMLInfo(xmlInfo);
 }
 
-std::string FileReader::PeekNextLine(std::istream &f)
+String FileReader::PeekNextLine(std::istream &f)
 {
     std::streampos beginningOfLine = f.tellg();
-    std::string line;
+    String line;
     do
     {
         beginningOfLine = f.tellg();
@@ -281,7 +281,7 @@ std::string FileReader::PeekNextLine(std::istream &f)
     return line;
 }
 
-std::string FileReader::GetContents(const std::string &filepath)
+String FileReader::GetContents(const String &filepath)
 {
     if (filepath == "") return "";
 
@@ -289,22 +289,22 @@ std::string FileReader::GetContents(const std::string &filepath)
     f.open(filepath);
     if (f.is_open())
     {
-        std::string contents((std::istreambuf_iterator<char>(f)),
+        String contents((std::istreambuf_iterator<char>(f)),
                               std::istreambuf_iterator<char>());
         return contents;
     }
     return "";
 }
 
-void FileReader::GetImageFormat(const std::string &filepath, int *width,
+void FileReader::GetImageFormat(const String &filepath, int *width,
                                 int *height, int *numComponents)
 {
-    stbi_info(filepath.c_str(), width, height, numComponents);
+    stbi_info(filepath.ToCString(), width, height, numComponents);
 }
 
-std::string FileReader::ReadNextLine(std::istream &f)
+String FileReader::ReadNextLine(std::istream &f)
 {
-    std::string line;
+    String line;
     do
     {
         std::getline(f, line);
@@ -316,7 +316,7 @@ std::string FileReader::ReadNextLine(std::istream &f)
     return line;
 }
 
-bool FileReader::ReadNextLine(std::istream &f, std::string *line)
+bool FileReader::ReadNextLine(std::istream &f, String *line)
 {
     if (f.peek() == EOF) return false;
 
@@ -334,7 +334,7 @@ bool FileReader::ReadNextLine(std::istream &f, std::string *line)
 bool FileReader::ReadBool(std::istream &f)
 {
     std::istringstream iss(ReadNextLine(f));
-    std::string b; iss >> b;  return (b == "true");
+    String b; iss >> b;  return (b == "true");
 }
 
 int FileReader::ReadInt(std::istream &f)
@@ -388,9 +388,9 @@ Rect FileReader::ReadRect(std::istream &f)
     return Rect(q.x, q.y, q.z, q.w);
 }
 
-std::string FileReader::ReadString(std::istream &f)
+String FileReader::ReadString(std::istream &f)
 {
-    std::string str;
+    String str;
     std::getline(f, str);
     StringUtils::TrimLeft(&str);
     return str;

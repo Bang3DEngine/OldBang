@@ -1,4 +1,5 @@
 #include "ListLogger.h"
+
 #include "WindowMain.h"
 
 QListWidget *ListLogger::s_listLogger = nullptr;
@@ -7,7 +8,7 @@ ListLogger::ListLogger(QWidget *parent) : QListWidget(parent)
 {
 }
 
-void ListLogger::AddLog(const std::string &str)
+void ListLogger::AddLog(const String &str)
 {
     s_listLogger = ListLogger::GetInstance();
 
@@ -15,7 +16,7 @@ void ListLogger::AddLog(const std::string &str)
     s_listLogger->scrollToBottom();
 }
 
-void ListLogger::AddWarn(const std::string &str)
+void ListLogger::AddWarn(const String &str)
 {
     s_listLogger = ListLogger::GetInstance();
 
@@ -23,7 +24,7 @@ void ListLogger::AddWarn(const std::string &str)
     DecorateLastItem(QColor::fromRgb(255, 255, 200, 255));
 }
 
-void ListLogger::AddError(const std::string &str)
+void ListLogger::AddError(const String &str)
 {
     s_listLogger = ListLogger::GetInstance();
 

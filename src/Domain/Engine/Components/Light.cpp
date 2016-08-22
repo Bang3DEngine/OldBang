@@ -22,7 +22,7 @@ void Light::ApplyLight(GBuffer *gbuffer) const
     gbuffer->RenderPassWithMaterial(m_lightMaterial);
 }
 
-const std::string Light::ToString() const
+const String Light::ToString() const
 {
     return "Light";
 }

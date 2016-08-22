@@ -1,5 +1,5 @@
 #include <vector>
-#include <string>
+
 #include <iostream>
 
 #include <QTextStream>
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
     //
 
     Scene *scene = new EditorScene();
-    std::string filename = "./Assets/Scenes/test.bscene";
+    String filename = "./Assets/Scenes/test.bscene";
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     #else
 
     Scene *scene = new Scene();
-    std::string filename = "./Assets/Scenes/test.bscene";
+    String filename = "./Assets/Scenes/test.bscene";
     FileReader::ReadScene(filename, scene);
     if (scene)
     {

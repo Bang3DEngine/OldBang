@@ -41,7 +41,7 @@ public:
     void Clear();
     void Refresh();
 
-    void SetInspectable(IInspectable *inspectable, const std::string &title = "");
+    void SetInspectable(IInspectable *inspectable, const String &title = "");
     void ShowGameObjectInfo(GameObject *gameObject);
     void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
 

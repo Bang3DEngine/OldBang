@@ -3,6 +3,8 @@
 
 #include <QListWidget>
 
+#include "Bang.h"
+
 class ListLogger : public QListWidget
 {
     Q_OBJECT
@@ -13,9 +15,9 @@ private:
 public:
     explicit ListLogger(QWidget *parent = nullptr);
 
-    static void AddLog(const std::string &str);
-    static void AddWarn(const std::string &str);
-    static void AddError(const std::string &str);
+    static void AddLog(const String &str);
+    static void AddWarn(const String &str);
+    static void AddError(const String &str);
 
     static ListLogger* GetInstance();
     static void DecorateLastItem(const QColor &color);

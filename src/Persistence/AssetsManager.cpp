@@ -1,28 +1,28 @@
 #include "AssetsManager.h"
 
-std::map<std::string, Asset*> AssetsManager::m_idToAssetPointer;
+std::map<String, Asset*> AssetsManager::m_idToAssetPointer;
 
-std::string AssetsManager::FormatFilepath(const std::string &filepath)
+String AssetsManager::FormatFilepath(const String &filepath)
 {
     return Persistence::ToRelative(filepath);;
 }
 
-bool AssetsManager::IsAssetLoaded(const std::string &filepath)
+bool AssetsManager::IsAssetLoaded(const String &filepath)
 {
-    std::string f = AssetsManager::FormatFilepath(filepath);
+    String f = AssetsManager::FormatFilepath(filepath);
     return (m_idToAssetPointer.find(f) != m_idToAssetPointer.end());
 }
 
-void AssetsManager::SaveAssetToMap(const std::string &filepath, Asset *pointerToAsset)
+void AssetsManager::SaveAssetToMap(const String &filepath, Asset *pointerToAsset)
 {
     if (filepath != "" && pointerToAsset)
     {
-        std::string f = AssetsManager::FormatFilepath(filepath);
+        String f = AssetsManager::FormatFilepath(filepath);
         m_idToAssetPointer[f] = pointerToAsset;
     }
 }
 
-void AssetsManager::SaveAssetToFile(const std::string &filepath, Asset *pointerToAsset)
+void AssetsManager::SaveAssetToFile(const String &filepath, Asset *pointerToAsset)
 {
     if (filepath != "" && pointerToAsset)
     {

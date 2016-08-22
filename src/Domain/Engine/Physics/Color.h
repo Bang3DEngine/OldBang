@@ -3,7 +3,7 @@
 
 #include <QColor>
 
-#include "glm/glm.hpp"
+#include "Bang.h"
 
 class Vector2;
 class Vector3;
@@ -35,10 +35,10 @@ public:
                       const Color &v2,
                       float progression);
 
-    std::string ToStringRgb() const;
-    std::string ToStringRgb255() const;
-    std::string ToStringRgba() const;
-    std::string ToStringRgba255() const;
+    String ToStringRgb() const;
+    String ToStringRgb255() const;
+    String ToStringRgba() const;
+    String ToStringRgba255() const;
 
     static Color FromQColor(const QColor &c);
     QColor ToQColor() const;

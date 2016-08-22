@@ -9,14 +9,14 @@
 class MeshAssetFile : public File
 {
 private:
-    std::string m_meshFilepath = "";
+    String m_meshFilepath = "";
 
 public:
     MeshAssetFile(const QFileSystemModel *model, const QModelIndex &index);
     virtual QPixmap GetIcon() const override;
     virtual IInspectable *GetInspectable() const override;
 
-    const std::string& GetMeshFilepath() const;
+    const String& GetMeshFilepath() const;
 };
 
 #endif // FILEMESHASSET_H

@@ -59,7 +59,7 @@ AttrWidgetFile::~AttrWidgetFile()
 void AttrWidgetFile::Browse()
 {
     FileDialog fd(Persistence::GetAssetsPathAbsolute(), m_fileExtension);
-    std::string selectedFile = fd.GetOpenFilename();
+    String selectedFile = fd.GetOpenFilename();
     if (selectedFile != "")
     {
         SetValue(selectedFile);
@@ -67,13 +67,13 @@ void AttrWidgetFile::Browse()
     }
 }
 
-void AttrWidgetFile::SetValue(const std::string &filepath, bool draggedFile)
+void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
 {
     if (m_filepath != filepath)
     {
         m_filepath = filepath;
 
-        std::string value = Persistence::GetFileName(m_filepath);
+        String value = Persistence::GetFileName(m_filepath);
         m_filepathLineEdit->setText(QString::fromStdString(value));
     }
 
@@ -83,7 +83,7 @@ void AttrWidgetFile::SetValue(const std::string &filepath, bool draggedFile)
     }
 }
 
-std::string  AttrWidgetFile::GetValue()
+String  AttrWidgetFile::GetValue()
 {
     return m_filepath;
 }
@@ -96,7 +96,7 @@ void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)
         if (ddi.sourceObject == explorer)
         {
             File f = explorer->GetSelectedFile();
-            std::string extensions =
+            String extensions =
                     m_xmlAttribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
             if (f.IsOfExtension(extensions))
             {

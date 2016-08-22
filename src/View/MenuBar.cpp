@@ -123,7 +123,7 @@ void MenuBar::OnOpenScene() const
     m_wem->NotifyMenuBarActionClicked(Action::OpenScene);
 
     FileDialog fd("Open scene...", Scene::GetFileExtension());
-    std::string filename = fd.GetOpenFilename();
+    String filename = fd.GetOpenFilename();
     if (filename == "") return;
 
     EditorScene *scene = new EditorScene();
@@ -145,7 +145,7 @@ void MenuBar::OnSaveScene() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::SaveScene);
 
-    std::string filename = Persistence::GetCurrentSceneFilepath();
+    String filename = Persistence::GetCurrentSceneFilepath();
     if ( filename == "" ) //Give the scene a name
     {
         OnSaveSceneAs();
@@ -164,7 +164,7 @@ void MenuBar::OnSaveSceneAs() const
     Scene *scene = Screen::GetInstance()->GetCurrentScene(); NONULL(scene);
 
     FileDialog fd("Save scene as...", Scene::GetFileExtension());
-    std::string filename = fd.GetSaveFilename(scene->name);
+    String filename = fd.GetSaveFilename(scene->name);
     if (filename == "") return;
 
     FileWriter::WriteScene(filename, scene);
@@ -192,7 +192,7 @@ void MenuBar::OnCreateFromPrefab() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
 
     FileDialog fd("Create from prefab...", Prefab::GetFileExtensionStatic());
-    std::string filename = fd.GetOpenFilename();
+    String filename = fd.GetOpenFilename();
     if (filename == "") { return; }
 
     WindowMain *w = WindowMain::GetInstance();
@@ -231,7 +231,7 @@ void MenuBar::OnCreateFromPrefab() const
 }
 
 
-GameObject* MenuBar::CreatePrimitiveGameObject(Mesh *m, const std::string &name) const
+GameObject* MenuBar::CreatePrimitiveGameObject(Mesh *m, const String &name) const
 {
     GameObject *go = MeshFactory::CreatePrimitiveGameObject(m, name);
 
@@ -307,7 +307,7 @@ void MenuBar::OnAlignViewWithGameObject() const
 void MenuBar::OnCreatePrefab() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreatePrefab);
-    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Prefab." + Prefab::GetFileExtensionStatic();
     AssetsManager::CreateAsset<Prefab>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
@@ -315,7 +315,7 @@ void MenuBar::OnCreatePrefab() const
 void MenuBar::OnCreateMaterial() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateMaterial);
-    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Material." + Material::GetFileExtensionStatic();
     AssetsManager::CreateAsset<Material>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
@@ -323,7 +323,7 @@ void MenuBar::OnCreateMaterial() const
 void MenuBar::OnCreateMesh() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateMesh);
-    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Mesh." + Mesh::GetFileExtensionStatic();
     AssetsManager::CreateAsset<Mesh>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
@@ -332,7 +332,7 @@ void MenuBar::OnCreateShaderProgram() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateShaderProgram);
     /*
-    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_ShaderProgram." + ShaderProgram::GetFileExtensionStatic();
     AssetsManager::CreateAsset<ShaderProgram>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
@@ -341,7 +341,7 @@ void MenuBar::OnCreateShaderProgram() const
 void MenuBar::OnCreateTexture2D() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateTexture2D);
-    std::string filepath = Explorer::GetInstance()->GetCurrentDir();
+    String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Texture2D." + Texture2D::GetFileExtensionStatic();
     AssetsManager::CreateAsset<Texture2D>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);

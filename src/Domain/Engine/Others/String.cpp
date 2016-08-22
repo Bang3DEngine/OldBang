@@ -9,10 +9,21 @@ String::String(const char *cstr) :
 {
 }
 
-String::String(const std::string &cstr) :
-    std::string(cstr)
+String::String(const std::string &stdstr) :
+    std::string(stdstr)
 {
+}
 
+String::String(const std::vector<char>::iterator begin,
+               const std::vector<char>::iterator end) :
+    std::string(begin, end)
+{
+}
+
+String::String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
+               std::istreambuf_iterator<char, std::char_traits<char> > end) :
+    std::string(begin, end)
+{
 }
 
 char String::At(int index) const
@@ -99,7 +110,7 @@ long String::IndexOf(const String &str, long startingPos) const
 
 String String::SubString(long startIndex, long endIndex) const
 {
-    if (endIndex == npos) return substr(startIndex);
+    if (endIndex == std::string::npos) return substr(startIndex);
     else return substr(startIndex, endIndex - startIndex + 1);
 }
 
@@ -120,7 +131,7 @@ bool String::Empty() const
 
 bool String::Contains(const String &str) const
 {
-    return find(str) != npos;
+    return find(str) != std::string::npos;
 }
 
 

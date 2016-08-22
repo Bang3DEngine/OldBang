@@ -1,33 +1,35 @@
 #ifndef PERSISTENCE_H
 #define PERSISTENCE_H
 
-#include <string>
+
+
+#include "Bang.h"
 
 class Persistence
 {
 
 private:
-   static std::string s_currentSceneFilepath;
+   static String s_currentSceneFilepath;
 
 public:
 
-    static bool IsAbsolute(const std::string &path);
+    static bool IsAbsolute(const String &path);
 
-    static std::string GetProjectRootPathAbsolute();
+    static String GetProjectRootPathAbsolute();
 
-    static std::string GetAssetsRelativePathFromProjectRoot();
+    static String GetAssetsRelativePathFromProjectRoot();
 
-    static std::string GetAssetsPathAbsolute();
+    static String GetAssetsPathAbsolute();
 
-    static std::string GetDir(const std::string &filepath);
-    static std::string GetFileName(const std::string &filepath);
-    static std::string GetFileNameWithExtension(const std::string &filepath);
+    static String GetDir(const String &filepath);
+    static String GetFileName(const String &filepath);
+    static String GetFileNameWithExtension(const String &filepath);
 
     // ./Assets/lolol/a.bmesh => /home/wololo/MyProject/Assets/lolol/a.bmesh
-    static std::string ToAbsolute(const std::string &relPath);
+    static String ToAbsolute(const String &relPath);
 
     // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
-    static std::string ToRelative(const std::string &absPath);
+    static String ToRelative(const String &absPath);
 
     /**
      * @brief wololo/omg/myFile.jpg => wololo/omg/myFile_1.jpg
@@ -36,13 +38,13 @@ public:
      * @param path
      * @return
      */
-    static std::string GetNextDuplicateName(const std::string &path);
+    static String GetNextDuplicateName(const String &path);
 
-    static void SetCurrentSceneFilepath(const std::string &scenePath);
-    static std::string GetCurrentSceneFilepath();
+    static void SetCurrentSceneFilepath(const String &scenePath);
+    static String GetCurrentSceneFilepath();
 
     //Appends an extension to a filepath only if that filename does not contain the extension
-    static std::string AppendExtension(const std::string &filepath, const std::string extNoDot);
+    static String AppendExtension(const String &filepath, const String extNoDot);
 };
 
 #endif // PERSISTENCE_H

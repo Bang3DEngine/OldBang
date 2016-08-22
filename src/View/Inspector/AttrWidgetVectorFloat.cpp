@@ -9,7 +9,7 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
 
-    std::string labels[] = {"X", "Y", "Z", "W"};
+    String labels[] = {"X", "Y", "Z", "W"};
     int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
     for (unsigned int i = 0; i < numberOfFields; ++i)
     {

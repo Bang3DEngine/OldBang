@@ -21,7 +21,7 @@ GameObject::GameObject() : GameObject("")
 {
 }
 
-GameObject::GameObject(const std::string &name) :
+GameObject::GameObject(const String &name) :
     m_name(name)
 {
     AddComponent<Transform>();
@@ -151,7 +151,7 @@ GameObject *GameObject::GetParent() const
     return m_parent;
 }
 
-const std::string GameObject::GetName() const
+const String GameObject::GetName() const
 {
     return m_name;
 }
@@ -308,7 +308,7 @@ void GameObject::RemoveComponent(Component *c)
     }
 }
 
-GameObject *GameObject::GetChild(const std::string &name) const
+GameObject *GameObject::GetChild(const String &name) const
 {
     for (auto it = m_children.begin(); it != m_children.end(); ++it)
     {
@@ -321,7 +321,7 @@ GameObject *GameObject::GetChild(const std::string &name) const
     return nullptr;
 }
 
-void GameObject::SetName(const std::string &name)
+void GameObject::SetName(const String &name)
 {
     this->m_name = name;
     #ifdef BANG_EDITOR
@@ -339,13 +339,13 @@ bool GameObject::IsScene() const
     return false;
 }
 
-GameObject *GameObject::Find(const std::string &name)
+GameObject *GameObject::Find(const String &name)
 {
     Scene *scene = Screen::GetCurrentScene();
     return scene->FindInChildren(name);
 }
 
-GameObject *GameObject::FindInChildren(const std::string &name)
+GameObject *GameObject::FindInChildren(const String &name)
 {
     for (GameObject *child : GetChildren())
     {
@@ -374,7 +374,7 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 
     for ( XMLNode *xmlChild : xmlInfo->GetChildren() )
     {
-        std::string tagName = xmlChild->GetTagName();
+        String tagName = xmlChild->GetTagName();
         if (tagName == "GameObject") // It's a child
         {
             GameObject *child = new GameObject();
@@ -517,7 +517,7 @@ bool GameObject::IsDraggedGameObject() const
     return m_isDragged || (parent && parent->IsDraggedGameObject());
 }
 
-const std::string GameObject::ToString() const
+const String GameObject::ToString() const
 {
     std::ostringstream oss;
     oss << "GameObject: " << m_name << "(" << ((void*)this) << ")";

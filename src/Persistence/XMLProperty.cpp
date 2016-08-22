@@ -11,42 +11,42 @@ XMLProperty::XMLProperty()
 {
 }
 
-XMLProperty::XMLProperty(const std::string &name, const std::string &value) :
+XMLProperty::XMLProperty(const String &name, const String &value) :
     m_name(name), m_value(value)
 {
 
 }
 
-void XMLProperty::SetName(const std::string &name)
+void XMLProperty::SetName(const String &name)
 {
     m_name = name;
 }
 
-void XMLProperty::SetValue(const std::string &value)
+void XMLProperty::SetValue(const String &value)
 {
     m_value = value;
 }
 
-const std::string &XMLProperty::GetName() const
+const String &XMLProperty::GetName() const
 {
     return m_name;
 }
 
-const std::string &XMLProperty::GetValue() const
+const String &XMLProperty::GetValue() const
 {
     return m_value;
 }
 
-XMLProperty XMLProperty::FromString(const std::string &string)
+XMLProperty XMLProperty::FromString(const String &string)
 {
-    std::string propString = string;
+    String propString = string;
 
     StringUtils::Trim(&propString);
-    std::vector<std::string> parts = StringUtils::Split(propString, '=');
+    std::vector<String> parts = StringUtils::Split(propString, '=');
 
-    std::string name = parts[0];
+    String name = parts[0];
 
-    std::string value = "";
+    String value = "";
     if (parts.size() > 1)
     {
         value = parts[1];

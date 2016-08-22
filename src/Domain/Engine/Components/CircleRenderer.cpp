@@ -10,12 +10,12 @@ CircleRenderer::~CircleRenderer()
 
 }
 
-const std::string CircleRenderer::ToString() const
+const String CircleRenderer::ToString() const
 {
     return "CircleRenderer";
 }
 
-std::string CircleRenderer::GetName() const { return "CircleRenderer"; }
+String CircleRenderer::GetName() const { return "CircleRenderer"; }
 
 void CircleRenderer::CloneInto(ICloneable *clone) const
 {

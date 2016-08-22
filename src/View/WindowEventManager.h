@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 
 #include <vector>
-#include <string>
+
 #include <chrono>
 #include <QTimer>
 #include <QGLWidget>

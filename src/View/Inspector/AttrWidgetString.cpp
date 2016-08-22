@@ -33,7 +33,7 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
     AfterConstructor();
 }
 
-void AttrWidgetString::SetValue(const std::string &value)
+void AttrWidgetString::SetValue(const String &value)
 {
     if (!m_editing)
     {
@@ -50,7 +50,7 @@ void AttrWidgetString::SetValue(const std::string &value)
     }
 }
 
-const std::string AttrWidgetString::GetValue() const
+const String AttrWidgetString::GetValue() const
 {
     if (m_lineEdit)
     {

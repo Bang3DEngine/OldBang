@@ -44,8 +44,8 @@ Explorer::~Explorer()
 
 void Explorer::OnButtonDirUpClicked()
 {
-    std::string rootPath = GetCurrentDir();
-    std::string parentDirPath = "";
+    String rootPath = GetCurrentDir();
+    String parentDirPath = "";
 
     for (int i = rootPath.length() - 1; i >= 0; --i)
     {
@@ -108,7 +108,7 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
         bool isDir = m_fileSystemModel->isDir(clickedIndex);
         if (isDir)
         {
-            std::string clickedDirName =
+            String clickedDirName =
                     m_fileSystemModel->fileName(clickedIndex).toStdString();
             SetDir(GetCurrentDir() + "/" + clickedDirName);
         }
@@ -165,9 +165,9 @@ void Explorer::RefreshInspector()
     }
 }
 
-void Explorer::SelectFile(const std::string &path)
+void Explorer::SelectFile(const String &path)
 {
-    std::string absPath = Persistence::ToAbsolute(path);
+    String absPath = Persistence::ToAbsolute(path);
     SetDir(Persistence::GetDir(absPath));
 
     QModelIndex ind = GetModelIndexFromFilepath(absPath);
@@ -193,40 +193,40 @@ void Explorer::Refresh()
     // If needed in a future
 }
 
-std::string Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const
+String Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const
 {
-    std::string f = m_fileSystemModel->fileInfo(qmi).absoluteFilePath().toStdString();
+    String f = m_fileSystemModel->fileInfo(qmi).absoluteFilePath().toStdString();
     return f;
 }
 
-std::string Explorer::GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const
+String Explorer::GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const
 {
-    std::string f = GetFilepathFromModelIndex(qmi);
+    String f = GetFilepathFromModelIndex(qmi);
     return Persistence::ToRelative(f);
 }
 
-std::string Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
+String Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
 {
-    std::string f = m_fileSystemModel->fileInfo(qmi).absoluteDir()
+    String f = m_fileSystemModel->fileInfo(qmi).absoluteDir()
                     .absolutePath().toStdString();
     return f;
 }
 
-std::string Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi) const
+String Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi) const
 {
-    std::string f = GetDirFromModelIndex(qmi);
+    String f = GetDirFromModelIndex(qmi);
     return Persistence::ToRelative(f);
 }
 
-QModelIndex Explorer::GetModelIndexFromFilepath(const std::string &filepath) const
+QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const
 {
-    std::string absFilepath = Persistence::ToAbsolute(filepath);
+    String absFilepath = Persistence::ToAbsolute(filepath);
     return m_fileSystemModel->index(QString::fromStdString(absFilepath));
 }
 
-void Explorer::SetDir(const std::string &path)
+void Explorer::SetDir(const String &path)
 {
-    std::string absDir = Persistence::ToAbsolute(path);
+    String absDir = Persistence::ToAbsolute(path);
     setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(absDir)));
 }
 
@@ -246,12 +246,12 @@ void Explorer::OnDirLoaded(QString dir)
     }
 }
 
-std::string Explorer::GetCurrentDir() const
+String Explorer::GetCurrentDir() const
 {
     return m_fileSystemModel->rootPath().toStdString();
 }
 
-std::string Explorer::GetSelectedFileOrDirPath() const
+String Explorer::GetSelectedFileOrDirPath() const
 {
     if (!currentIndex().isValid()) return "";
     return Persistence::ToRelative(
@@ -266,7 +266,7 @@ File Explorer::GetSelectedFile() const
     return File(m_fileSystemModel, qmi);
 }
 
-bool Explorer::Exists(const std::string &filepath) const
+bool Explorer::Exists(const String &filepath) const
 {
     return GetModelIndexFromFilepath(filepath).isValid();
 }
@@ -288,7 +288,7 @@ const QFileSystemModel *Explorer::GetFileSystemModel() const
     return m_fileSystemModel;
 }
 
-void Explorer::StartRenaming(const std::string &filepath)
+void Explorer::StartRenaming(const String &filepath)
 {
     SelectFile(filepath);
     edit(currentIndex());
@@ -313,8 +313,8 @@ void Explorer::OnDropHere(const DragDropInfo &ddi)
         GameObject *selected = hierarchy->GetFirstSelectedGameObject();
         NONULL(selected);
 
-        std::string path = GetCurrentDir() + "/";
-        std::string gameObjectName = selected->name;
+        String path = GetCurrentDir() + "/";
+        String gameObjectName = selected->name;
         path += gameObjectName;
         path = Persistence::AppendExtension(path,
                       Prefab::GetFileExtensionStatic());

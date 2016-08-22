@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 #include <cstring>
 
 class String : public std::string
@@ -10,7 +11,11 @@ class String : public std::string
 public:
     String();
     String(const char *cstr);
-    String(const std::string &cstr);
+    String(const std::string &stdstr);
+    String(const std::vector<char>::iterator begin,
+           const std::vector<char>::iterator end);
+    String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
+           std::istreambuf_iterator<char, std::char_traits<char> > end);
 
     char At(int index) const;
 
@@ -24,7 +29,8 @@ public:
     long IndexOf(const String &str, long startingPos = 0) const;
 
     // Both startIndex and endIndex are inclusive
-    String SubString(long startIndex, long endIndex = npos) const;
+    String SubString(long startIndex,
+                     long endIndex = std::string::npos) const;
 
     const char *ToCString() const;
 

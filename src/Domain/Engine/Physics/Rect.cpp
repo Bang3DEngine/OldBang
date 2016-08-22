@@ -26,7 +26,7 @@ float Rect::GetArea() const
     return (m_maxx-m_minx) * (m_maxy-m_miny);
 }
 
-const std::string Rect::ToString() const
+const String Rect::ToString() const
 {
     std::ostringstream oss;
     oss << "Rect: [" << std::endl <<
@@ -36,5 +36,5 @@ const std::string Rect::ToString() const
            "  maxy:" << m_maxy << std::endl <<
            "]" << std::endl;
 
-    return oss.str();
+    return String(oss.str());
 }

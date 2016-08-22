@@ -55,8 +55,8 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
 
-    std::string vshaderFilepath = xmlInfo->GetFilepath("VertexShader");
-    std::string fshaderFilepath = xmlInfo->GetFilepath("FragmentShader");
+    String vshaderFilepath = xmlInfo->GetFilepath("VertexShader");
+    String fshaderFilepath = xmlInfo->GetFilepath("FragmentShader");
     if (!m_shaderProgram ||
         !m_shaderProgram->GetVertexShader() || !m_shaderProgram->GetFragmentShader() ||
         vshaderFilepath != m_shaderProgram->GetVertexShader()->GetFilepath()   ||
@@ -69,7 +69,7 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
     int numTextures = xmlInfo->GetInt("TextureCount");
     if(numTextures == 1)
     {
-        std::string texAssetFilepath = xmlInfo->GetString("Texture1");
+        String texAssetFilepath = xmlInfo->GetString("Texture1");
         Texture2D *texture = AssetsManager::LoadAsset<Texture2D>(texAssetFilepath);
         SetTexture(texture);
     }
@@ -82,7 +82,7 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Material");
 
-    std::string vsFile =  "", fsFile = "";
+    String vsFile =  "", fsFile = "";
     if (m_shaderProgram)
     {
         if (m_shaderProgram->GetVertexShader())

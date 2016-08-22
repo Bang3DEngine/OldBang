@@ -5,12 +5,12 @@
 ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    stbi_info(m_path.c_str(), &m_width, &m_height, &m_numComponents);
+    stbi_info(m_path.ToCString(), &m_width, &m_height, &m_numComponents);
 }
 
 QPixmap ImageFile::GetIcon() const
 {
-    std::string fp = GetAbsolutePath();
+    String fp = GetAbsolutePath();
     QPixmap pm(QString::fromStdString(fp));
     return File::AddNoAssetFileQPixmapOnTopOf(pm);
 }

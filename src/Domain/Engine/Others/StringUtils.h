@@ -2,10 +2,12 @@
 #define STRINGUTILS_H
 
 #include <vector>
-#include <string>
+
 #include <sstream>
 #include <iomanip>
 #include <algorithm>
+
+#include "String.h"
 
 class StringUtils
 {
@@ -14,28 +16,28 @@ private:
 
 public:
 
-    static const std::string TOKEN_SPACE;
+    static const String TOKEN_SPACE;
 
-    static bool Contains(const std::string &str, const std::string &whatToFind);
-    static float ToFloat(const std::string &str, bool *ok = nullptr);
-    static int ToInt(const std::string &str, bool *ok = nullptr);
-    static std::string FromFloat(float f, int precision = 6);
+    static bool Contains(const String &str, const String &whatToFind);
+    static float ToFloat(const String &str, bool *ok = nullptr);
+    static int ToInt(const String &str, bool *ok = nullptr);
+    static String FromFloat(float f, int precision = 6);
 
-    static void TrimLeft(std::string *str);
-    static void TrimRight(std::string *str);
-    static void Trim(std::string *str);
-    static std::string Trim(const std::string &str);
+    static void TrimLeft(String *str);
+    static void TrimRight(String *str);
+    static void Trim(String *str);
+    static String Trim(const String &str);
 
-    static std::string Concat(const std::vector<std::string> &particles, std::string joiner = "");
-    static std::vector<std::string> Split(const std::string &content, char splitter);
-    static std::vector<std::string> SplitTrim(const std::string &content, char splitter);
+    static String Concat(const std::vector<String> &particles, String joiner = "");
+    static std::vector<String> Split(const String &content, char splitter);
+    static std::vector<String> SplitTrim(const String &content, char splitter);
 
     /**
      * @brief FormatInspectorLabel
      * @param labelString
      * @return Returns the label formatted. It replaces "_" with spaces.
      */
-    static std::string FormatInspectorLabel(const std::string &labelString);
+    static String FormatInspectorLabel(const String &labelString);
 
     static bool IsNumber(char c);
     static bool IsLetter(char c);
@@ -47,28 +49,28 @@ public:
      * For example: ("-I", "file1 dir/file2 dir/file3") is converted to
      * "-Ifile1 -Idir/file2 -Idir/file3"
      */
-    static void AddInFrontOfWords(std::string particle, std::string *str);
-    static void RemoveLineBreaks(std::string *str);
-    static void Replace(std::string *content, const std::string &toFind, const std::string &replaceWithThis);
+    static void AddInFrontOfWords(String particle, String *str);
+    static void RemoveLineBreaks(String *str);
+    static void Replace(String *content, const String &toFind, const String &replaceWithThis);
 
-    static std::vector<std::string> BangEnumVariadicStringToNamesArray(const std::string &_va_args_);
+    static std::vector<String> BangEnumVariadicStringToNamesArray(const String &_va_args_);
 
     template <class EnumName>
-    static std::vector<EnumName> BangEnumVariadicStringToValuesArray(const std::string &_va_args_)
+    static std::vector<EnumName> BangEnumVariadicStringToValuesArray(const String &_va_args_)
     {
         // We receive something like "Wololo, Apple = 49, Pear=29, Lololo=2193, Banana,Sandwich, Monkey=32"
         // We want this vector: [0, 49, 29, 2193, 2194, 2195, 32]
         std::vector<EnumName> result;
-        std::vector<std::string> splitted = SplitTrim(_va_args_, ',');
+        std::vector<String> splitted = SplitTrim(_va_args_, ',');
         int lastValue = -1;
-        for (std::string str : splitted)
+        for (String str : splitted)
         {
             Trim(&str);
-            std::vector<std::string> equalSplitted = SplitTrim(str, '=');
+            std::vector<String> equalSplitted = SplitTrim(str, '=');
             int val;
             if (equalSplitted.size() == 2) // Has value
             {
-                val = std::atoi(equalSplitted[1].c_str());
+                val = std::atoi(equalSplitted[1].ToCString());
             }
             else // Has no value, one more than the last one
             {

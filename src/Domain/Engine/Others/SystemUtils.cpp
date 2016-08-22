@@ -3,9 +3,9 @@
 #include "Behaviour.h"
 #include "SingletonManager.h"
 
-std::string SystemUtils::GetAllProjectObjects()
+String SystemUtils::GetAllProjectObjects()
 {
-    std::string cmdGetAllObjects = "";
+    String cmdGetAllObjects = "";
     cmdGetAllObjects = " find " +                                  // Find recursively
                        Persistence::GetProjectRootPathAbsolute() + // From project root
                        " -type f " +                               // Only files
@@ -21,7 +21,7 @@ std::string SystemUtils::GetAllProjectObjects()
                        " | xargs";                                 // Inline
 
     bool ok = false;
-    std::string objs = "";
+    String objs = "";
     SystemUtils::System(cmdGetAllObjects, &objs, &ok);
     if (!ok)
     {
@@ -30,9 +30,9 @@ std::string SystemUtils::GetAllProjectObjects()
     return objs;
 }
 
-std::string SystemUtils::GetAllProjectSubDirs()
+String SystemUtils::GetAllProjectSubDirs()
 {
-    std::string cmdGetAllSubDirs = "";
+    String cmdGetAllSubDirs = "";
     cmdGetAllSubDirs = " find " +                                  // Find recursively
                        Persistence::GetProjectRootPathAbsolute() + // From project root
                        " -type d " +                               // Only directories
@@ -40,7 +40,7 @@ std::string SystemUtils::GetAllProjectSubDirs()
                        " | xargs";                                 // Inline
 
     bool ok = false;
-    std::string allSubDirs = "";
+    String allSubDirs = "";
     SystemUtils::System(cmdGetAllSubDirs, &allSubDirs, &ok);
     if (!ok)
     {
@@ -50,10 +50,10 @@ std::string SystemUtils::GetAllProjectSubDirs()
     return allSubDirs;
 }
 
-std::string SystemUtils::GetQtIncludes()
+String SystemUtils::GetQtIncludes()
 {
-    std::string qtIncludeDirs = "";
-    std::string cmdGetQtIncludeDirs = "";
+    String qtIncludeDirs = "";
+    String cmdGetQtIncludeDirs = "";
     cmdGetQtIncludeDirs =  "find $(qmake -query QT_INSTALL_HEADERS) -type d";
     cmdGetQtIncludeDirs += " | grep -E \"qt|QT|Qt\"";
 
@@ -67,12 +67,12 @@ std::string SystemUtils::GetQtIncludes()
     return qtIncludeDirs;
 }
 
-std::string SystemUtils::GetQtLibrariesDirs()
+String SystemUtils::GetQtLibrariesDirs()
 {
-    std::string qtLibDirs = "";
-    //std::string cmdGetQtLibDirs = "find $(qmake -query QT_INSTALL_LIBS) -type d " +
+    String qtLibDirs = "";
+    //String cmdGetQtLibDirs = "find $(qmake -query QT_INSTALL_LIBS) -type d " +
     //                              "grep -E \"qt|QT|Qt\"";
-    std::string cmdGetQtLibDirs = "qmake -query QT_INSTALL_LIBS";
+    String cmdGetQtLibDirs = "qmake -query QT_INSTALL_LIBS";
     bool ok = false;
     SystemUtils::System(cmdGetQtLibDirs, &qtLibDirs, &ok);
     if (!ok)
@@ -83,7 +83,7 @@ std::string SystemUtils::GetQtLibrariesDirs()
     return qtLibDirs;
 }
 
-void SystemUtils::System(const std::string &command, std::string *output, bool *success)
+void SystemUtils::System(const String &command, String *output, bool *success)
 {
     int fd[2];
     int old_fd[3] = {dup(STDIN_FILENO), dup(STDOUT_FILENO), dup(STDERR_FILENO)};
@@ -112,7 +112,7 @@ void SystemUtils::System(const std::string &command, std::string *output, bool *
         dup2(fd[1], STDOUT_FILENO);
         dup2(fd[1], STDERR_FILENO);
 
-        int result = system(command.c_str());
+        int result = system(command.ToCString());
         close (fd[1]);
 
         // This is needed, because exit receives a uchar,
@@ -169,33 +169,33 @@ void SystemUtils::System(const std::string &command, std::string *output, bool *
     }
 }
 
-void SystemUtils::SystemBackground(const std::string &command)
+void SystemUtils::SystemBackground(const String &command)
 {
-    std::string cmd = command + " &";
-    system(cmd.c_str());
+    String cmd = command + " &";
+    system(cmd.ToCString());
 }
 
-std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromProjectRoot)
+String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
 {
     // GET INCLUDES
     // Get all subdirs recursively in a single line, and add -I in front of every path
 
-    std::string includes = "";
+    String includes = "";
     includes += SystemUtils::GetAllProjectSubDirs();
     includes += " . ";
     includes += SystemUtils::GetQtIncludes();
     StringUtils::RemoveLineBreaks(&includes);
     StringUtils::AddInFrontOfWords("-I", &includes);
 
-    std::string objs = SystemUtils::GetAllProjectObjects();
+    String objs = SystemUtils::GetAllProjectObjects();
     StringUtils::RemoveLineBreaks(&objs);
 
-    std::string qtLibDirs = SystemUtils::GetQtLibrariesDirs();
+    String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
     StringUtils::RemoveLineBreaks(&qtLibDirs);
     StringUtils::AddInFrontOfWords("-L", &qtLibDirs);
 
     // Gather options
-    std::string options = "";
+    String options = "";
     options += " " + objs  + " ";
     options += " -O2";
     options += " -g ";
@@ -210,23 +210,23 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     options += " -fPIC"; // Shared linking stuff
     //
 
-    std::string filepath =
+    String filepath =
             Persistence::ToAbsolute(filepathFromProjectRoot);
-    std::string scriptDir = Persistence::GetDir(filepath);
-    std::string scriptName = Persistence::GetFileNameWithExtension(filepath);
+    String scriptDir = Persistence::GetDir(filepath);
+    String scriptName = Persistence::GetFileNameWithExtension(filepath);
 
     // Compile
-    std::string sharedObjectFilepath = "";
+    String sharedObjectFilepath = "";
     sharedObjectFilepath += scriptDir + "/" + scriptName + "_" +
                             ".so." + std::to_string(Time::GetNow()) + ".1.1";
 
 
-    std::string cmd = "";
+    String cmd = "";
     cmd += "/usr/bin/g++ -shared ";
     cmd += filepath + " " + options + " -o " + sharedObjectFilepath;
     StringUtils::RemoveLineBreaks(&cmd);
 
-    std::string output = "";
+    String output = "";
     bool ok = false;
     SystemUtils::System(cmd, &output, &ok);
 
@@ -254,14 +254,14 @@ std::string SystemUtils::CompileToSharedObject(const std::string &filepathFromPr
     return sharedObjectFilepath;
 }
 
-void SystemUtils::CreateDynamicBehaviour(const  std::string &sharedObjectFilepath,
+void SystemUtils::CreateDynamicBehaviour(const  String &sharedObjectFilepath,
                                          Behaviour **createdBehaviour,
                                          void **openLibrary)
 {
     dlerror(); // Clear last error just in case
 
     // Open library
-    *openLibrary = dlopen(sharedObjectFilepath.c_str(), RTLD_NOW);
+    *openLibrary = dlopen(sharedObjectFilepath.ToCString(), RTLD_NOW);
     char *err = dlerror();
     if (err)
     {

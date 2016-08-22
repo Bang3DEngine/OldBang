@@ -1,7 +1,7 @@
 #ifndef SHADERPREPROCESSOR_H
 #define SHADERPREPROCESSOR_H
 
-#include <string>
+
 #include <algorithm>
 
 #include "Bang.h"
@@ -15,7 +15,7 @@ private:
     ShaderPreprocessor();
 
 public:
-    static void PreprocessShaderCode(std::string *shaderSourceCode);
+    static void PreprocessShaderCode(String *shaderSourceCode);
 };
 
 #endif // SHADERPREPROCESSOR_H

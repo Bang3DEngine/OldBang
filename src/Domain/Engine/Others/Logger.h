@@ -9,7 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include <string>
+
 #include <vector>
 #include <list>
 #include <map>
@@ -30,7 +30,7 @@
 #endif
 
 //OSTREAM OPERATORS //////////////////////////////////
-std::ostream& operator<<(std::ostream &log, const std::string &str);
+std::ostream& operator<<(std::ostream &log, const String &str);
 std::ostream& operator<<(std::ostream &log, const Vector2 &v);
 std::ostream& operator<<(std::ostream &log, const Vector3 &v);
 std::ostream& operator<<(std::ostream &log, const Vector4 &v);

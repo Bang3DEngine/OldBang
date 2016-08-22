@@ -1,7 +1,7 @@
 #ifndef INSPECTORTEXTURE2DWIDGET_H
 #define INSPECTORTEXTURE2DWIDGET_H
 
-#include <string>
+
 
 #include "ImageFile.h"
 #include "InspectorWidget.h"

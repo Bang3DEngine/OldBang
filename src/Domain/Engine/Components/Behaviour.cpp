@@ -30,7 +30,7 @@ void Behaviour::Init(BehaviourHolder *bh)
     m_transform = m_gameObject->transform;
 }
 
-std::string Behaviour::s_behaviourHeaderTemplate =
+String Behaviour::s_behaviourHeaderTemplate =
 "\
 #ifndef CLASS_NAME_H \n\
 #define CLASS_NAME_H \n\
@@ -51,7 +51,7 @@ BANG_BEHAVIOUR_CLASS(CLASS_NAME) \n\
 "
 ;
 
-std::string Behaviour::s_behaviourSourceTemplate =
+String Behaviour::s_behaviourSourceTemplate =
 "\
 #include \"CLASS_NAME.h\" \n\
 \n\

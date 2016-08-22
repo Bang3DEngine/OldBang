@@ -1,7 +1,7 @@
 #ifndef INSPECTORFLOATSLOTWIDGET_H
 #define INSPECTORFLOATSLOTWIDGET_H
 
-#include <string>
+
 #include <QTimer>
 #include <QFocusEvent>
 #include <QDoubleSpinBox>
@@ -91,13 +91,13 @@ public:
 
     void SetFloat(float f)
     {
-        std::string str = StringUtils::FromFloat(f, 2);
+        String str = StringUtils::FromFloat(f, 2);
         setText(QString::fromStdString(str));
     }
 
     float GetFloat() const
     {
-        std::string str = text().toStdString();
+        String str = text().toStdString();
         StringUtils::Replace(&str, ",", ".");
         return StringUtils::ToFloat(str);
     }

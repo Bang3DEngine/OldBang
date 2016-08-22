@@ -307,7 +307,7 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
 
-    std::string materialFilepath = xmlInfo->GetFilepath("Material");
+    String materialFilepath = xmlInfo->GetFilepath("Material");
     if (materialFilepath != "")
     {
         SetMaterial( AssetsManager::LoadAsset<Material>(materialFilepath) );
@@ -335,7 +335,7 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            std::string memAddress;
+            String memAddress;
             Logger_GetString(memAddress, (void*)m_material);
             xmlInfo->SetFilepath("Material", memAddress, "bmat");
         }

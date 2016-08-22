@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 
 #include <vector>
-#include <string>
+
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -26,21 +26,21 @@ public:
     );
 
 private:
-    std::string m_sourceCode;
-    std::string m_filepath;
+    String m_sourceCode;
+    String m_filepath;
     Type m_type;
 
 public:
 
     Shader(Shader::Type t);
-    Shader(Shader::Type t, const std::string &shaderPath);
+    Shader(Shader::Type t, const String &shaderPath);
 
-    bool LoadFromFile(const std::string &filepath);
+    bool LoadFromFile(const String &filepath);
 
-    const std::string& GetSourceCode() const;
-    const std::string& GetFilepath() const;
+    const String& GetSourceCode() const;
+    const String& GetFilepath() const;
     Type GetType() const;
-    const std::string ToString() const;
+    const String ToString() const;
 };
 
 #endif // SHADER_H

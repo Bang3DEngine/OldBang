@@ -32,12 +32,12 @@ void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
 }
 
 
-const std::string BehaviourHolder::ToString() const
+const String BehaviourHolder::ToString() const
 {
     return "BehaviourHolder ( " + m_sourceFilepath + ")";
 }
 
-std::string BehaviourHolder::GetName() const
+String BehaviourHolder::GetName() const
 {
     return "BehaviourHolder";
 }
@@ -57,7 +57,7 @@ ICloneable *BehaviourHolder::Clone() const
     return bh;
 }
 
-const std::string &BehaviourHolder::GetSourceFilepath() const
+const String &BehaviourHolder::GetSourceFilepath() const
 {
     return m_sourceFilepath;
 }
@@ -71,14 +71,14 @@ void BehaviourHolder::Refresh()
 
     if (!m_compileThread.isRunning())
     {
-        std::string filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
+        String filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
         Logger_Log("Refreshing Behaviour '" << filename << "'...");
         m_compileThread.start();
     }
 }
 
 
-void BehaviourHolder::OnBehaviourFinishedCompiling(std::string soFilepath)
+void BehaviourHolder::OnBehaviourFinishedCompiling(String soFilepath)
 {
     if (soFilepath == "")
     {
@@ -112,7 +112,7 @@ void BehaviourHolder::OnBehaviourFinishedCompiling(std::string soFilepath)
         {
             m_behaviour->Init(this);
             m_behaviour->_OnStart();
-            std::string filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
+            String filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
             Logger_Log("Behaviour '" << filename << "' successfully refreshed!");
         }
     }
@@ -123,7 +123,7 @@ void BehaviourHolder::OnBehaviourFinishedCompiling(std::string soFilepath)
     }
 }
 
-void BehaviourHolder::OnButtonClicked(const std::string &attrName)
+void BehaviourHolder::OnButtonClicked(const String &attrName)
 {
     if (StringUtils::Contains(attrName, "Create"))
     {
@@ -138,19 +138,19 @@ void BehaviourHolder::OnButtonClicked(const std::string &attrName)
                                              );
         if (ok)
         {
-            std::string currentDir = Explorer::GetInstance()->GetCurrentDir();
-            std::string className = text.toStdString();
+            String currentDir = Explorer::GetInstance()->GetCurrentDir();
+            String className = text.toStdString();
 
             // Create header file
-            std::string headerCode = Behaviour::s_behaviourHeaderTemplate;
+            String headerCode = Behaviour::s_behaviourHeaderTemplate;
             StringUtils::Replace(&headerCode, "CLASS_NAME", className);
-            std::string headerFilepath = currentDir + "/" + className + ".h";
+            String headerFilepath = currentDir + "/" + className + ".h";
             FileWriter::WriteToFile(headerFilepath, headerCode);
 
             // Create source file
-            std::string sourceCode = Behaviour::s_behaviourSourceTemplate;
+            String sourceCode = Behaviour::s_behaviourSourceTemplate;
             StringUtils::Replace(&sourceCode, "CLASS_NAME", className);
-            std::string sourceFilepath = currentDir + "/" + className + ".cpp";
+            String sourceFilepath = currentDir + "/" + className + ".cpp";
             FileWriter::WriteToFile(sourceFilepath, sourceCode);
 
             // Update Behaviour file
@@ -171,7 +171,7 @@ void BehaviourHolder::OnButtonClicked(const std::string &attrName)
 void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
-    std::string lastFilepath = m_sourceFilepath;
+    String lastFilepath = m_sourceFilepath;
     m_sourceFilepath = xmlInfo->GetString("BehaviourScript");
     if (lastFilepath != m_sourceFilepath &&
         gameObject->IsInsideScene())
@@ -261,8 +261,8 @@ void BehaviourHolder::_OnDestroy()
 
 void CompileBehaviourThread::run()
 {
-    std::string sourceFilepath = m_behaviourHolder->GetSourceFilepath();
-    std::string soFilepath = SystemUtils::CompileToSharedObject(sourceFilepath);
+    String sourceFilepath = m_behaviourHolder->GetSourceFilepath();
+    String soFilepath = SystemUtils::CompileToSharedObject(sourceFilepath);
 
     // Here it's compiling the behaviour...
     m_behaviourHolder->OnBehaviourFinishedCompiling(soFilepath); // Notify

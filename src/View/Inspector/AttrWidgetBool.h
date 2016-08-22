@@ -2,7 +2,7 @@
 #define ATTRWIDGETBOOL_H
 
 
-#include <string>
+
 #include <QTimer>
 #include <QFocusEvent>
 #include <QDoubleSpinBox>

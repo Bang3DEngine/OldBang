@@ -4,7 +4,7 @@
 #include "Bang.h"
 
 #include <map>
-#include <string>
+
 #include <sstream>
 
 #include "Asset.h"
@@ -17,17 +17,17 @@ private:
     /** For every id, it contains a pointer to the asset
       * created when the assets were loaded.
     **/
-    static std::map<std::string, Asset*> m_idToAssetPointer;
+    static std::map<String, Asset*> m_idToAssetPointer;
 
-    static std::string FormatFilepath(const std::string &filepath);
+    static String FormatFilepath(const String &filepath);
 
     template <class T>
-    static T* GetAsset(const std::string &filepath)
+    static T* GetAsset(const String &filepath)
     {
         if (!IsAssetLoaded(filepath)) return nullptr;
         else
         {
-            std::string f = AssetsManager::FormatFilepath(filepath);
+            String f = AssetsManager::FormatFilepath(filepath);
             return dynamic_cast<T*>(m_idToAssetPointer[f]);
         }
     }
@@ -36,7 +36,7 @@ private:
       * from a filepath.
     **/
     template <class T>
-    static T* ReadAssetFile(const std::string &filepath)
+    static T* ReadAssetFile(const String &filepath)
     {
         T *a = nullptr;
         XMLNode *xmlInfo = XMLParser::FromFile(filepath);
@@ -50,20 +50,20 @@ private:
         return a;
     }
 
-    static void SaveAssetToMap(const std::string &filepath, Asset* pointerToAsset);
-    static void SaveAssetToFile(const std::string &filepath, Asset* pointerToAsset);
+    static void SaveAssetToMap(const String &filepath, Asset* pointerToAsset);
+    static void SaveAssetToFile(const String &filepath, Asset* pointerToAsset);
 
     AssetsManager() {}
 
 public:
 
-    static bool IsAssetLoaded(const std::string &filepath);
+    static bool IsAssetLoaded(const String &filepath);
 
     /** Tries to retrieve an Asset from the AssetsManager cache
       * If there's no such Asset, it is loaded, added to the cache, and returned
       * If the file can't be read, nullptr is returned  **/
     template <class T>
-    static T* CreateAsset(const std::string &filepath)
+    static T* CreateAsset(const String &filepath)
     {
         T *a = new T();
         //a->m_filepath = filepath;
@@ -75,7 +75,7 @@ public:
       * If there's no such Asset, it is loaded, added to the cache, and returned
       * If the file can't be read, nullptr is returned  **/
     template <class T>
-    static T* LoadAsset(const std::string &filepath)
+    static T* LoadAsset(const String &filepath)
     {
         T *a = nullptr;
         if (!IsAssetLoaded(filepath))

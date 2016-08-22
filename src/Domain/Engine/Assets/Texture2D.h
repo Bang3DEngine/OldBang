@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <string>
+
 #include <vector>
 #include <stack>
 
@@ -24,8 +24,8 @@ private:
     Texture2D(const Texture2D &t) : Texture2D() {}
 
 public:
-    const static std::string GetFileExtensionStatic() { return "btex2d"; }
-    const virtual std::string GetFileExtension()
+    const static String GetFileExtensionStatic() { return "btex2d"; }
+    const virtual String GetFileExtension()
     {
         return Texture2D::GetFileExtensionStatic();
     }
@@ -33,15 +33,15 @@ public:
 
 public:
     Texture2D();
-    Texture2D(const std::string &imageFilepath);
+    Texture2D(const String &imageFilepath);
     virtual ~Texture2D();
 
-    void LoadFromFile(const std::string &imageFilepath);
+    void LoadFromFile(const String &imageFilepath);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
     void Fill(unsigned char *newData, int width, int height);
 
-    std::string GetImageRelativeFilepath() const;
+    String GetImageRelativeFilepath() const;
 
     void SetAlphaCuttoff(float alphaCuttoff);
     float GetAlphaCuttoff() const;

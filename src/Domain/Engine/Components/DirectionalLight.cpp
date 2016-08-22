@@ -15,12 +15,12 @@ DirectionalLight::DirectionalLight() : Light()
     #endif
 }
 
-const std::string DirectionalLight::ToString() const
+const String DirectionalLight::ToString() const
 {
     return "DirectionalLight";
 }
 
-std::string DirectionalLight::GetName() const
+String DirectionalLight::GetName() const
 {
     return "DirectionalLight";
 }

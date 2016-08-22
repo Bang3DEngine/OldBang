@@ -2,13 +2,13 @@
 
 BuildGameThread GameBuilder::buildThread;
 
-void GameBuilder::BuildGame(const std::string &absoluteDir)
+void GameBuilder::BuildGame(const String &absoluteDir)
 {
     GameBuilder::buildThread.runGameAfterBuild = false;
     GameBuilder::buildThread.start();
 }
 
-void GameBuilder::BuildAndRunGame(const std::string &absoluteDir)
+void GameBuilder::BuildAndRunGame(const String &absoluteDir)
 {
     GameBuilder::buildThread.runGameAfterBuild = true;
     GameBuilder::buildThread.start();
@@ -18,7 +18,7 @@ void GameBuilder::BuildAndRunGame(const std::string &absoluteDir)
 void BuildGameThread::run()
 {
     bool ok = false;
-    std::string output = "";
+    String output = "";
     SystemUtils::System("qmake \"BUILD_MODE=GAME\" && make -j8", &output, &ok);
 
     if (!ok)
@@ -33,7 +33,7 @@ void BuildGameThread::run()
     if (ok && runGameAfterBuild)
     {
         ok = false;
-        std::string output = "";
+        String output = "";
         Logger_Log("Running Game...");
         SystemUtils::System("./Game.exe &", &output, &ok);
 

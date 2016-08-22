@@ -137,7 +137,7 @@ Box operator*(const Matrix4 &m, const Box &b)
 
 
 
-const std::string Box::ToString() const
+const String Box::ToString() const
 {
     std::ostringstream oss;
     oss << "Box: [" << std::endl <<

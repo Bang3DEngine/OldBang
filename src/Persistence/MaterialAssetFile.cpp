@@ -25,7 +25,7 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModel
 
 QPixmap MaterialAssetFile::GetIcon() const
 {
-    std::string fp = Persistence::ToAbsolute("./Assets/Engine/Icons/MaterialAssetIcon.png");
+    String fp = Persistence::ToAbsolute("./Assets/Engine/Icons/MaterialAssetIcon.png");
     QPixmap pm(QString::fromStdString(fp));
     return pm;
 }
@@ -35,12 +35,12 @@ IInspectable *MaterialAssetFile::GetInspectable() const
     return new MaterialAssetFileInspectable(*this);
 }
 
-const std::string &MaterialAssetFile::GetVertexShaderFilepath() const
+const String &MaterialAssetFile::GetVertexShaderFilepath() const
 {
     return m_vshaderFilepath;
 }
 
-const std::string &MaterialAssetFile::GetFragmentShaderFilepath() const
+const String &MaterialAssetFile::GetFragmentShaderFilepath() const
 {
     return m_fshaderFilepath;
 }
@@ -50,7 +50,7 @@ int MaterialAssetFile::GetTextureCount() const
     return m_textureCount;
 }
 
-const std::vector<std::string> &MaterialAssetFile::GetTextureFilepaths() const
+const std::vector<String> &MaterialAssetFile::GetTextureFilepaths() const
 {
     return m_textureFilepaths;
 }

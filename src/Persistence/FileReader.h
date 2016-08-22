@@ -5,7 +5,7 @@
 
 #include <map>
 #include <vector>
-#include <string>
+
 #include <fstream>
 #include <sstream>
 #include <cstdlib>
@@ -26,28 +26,28 @@ class FileReader
 private:
     FileReader() {}
 
-    static const std::string NoRegisterId;
+    static const String NoRegisterId;
     static void *lastIstreamDir;
 
 public:
 
-    static std::string GetContents(const std::string &filepath);
+    static String GetContents(const String &filepath);
 
     //IMAGE STUFF
-    static void GetImageFormat(const std::string& filepath, int *width,
+    static void GetImageFormat(const String& filepath, int *width,
                                int *height, int *numComponents);
-    static unsigned char* ReadImage(const std::string& filepath,
+    static unsigned char* ReadImage(const String& filepath,
                                     int *width, int *height);
     //
 
 
     //3D STUFF
-    static void GetOBJFormat(const std::string& filepath, bool *hasUvs,
+    static void GetOBJFormat(const String& filepath, bool *hasUvs,
                              bool *hasNormals, bool *isTriangles);
 
-    static int GetOBJNumFaces(const std::string& filepath);
+    static int GetOBJNumFaces(const String& filepath);
 
-    static bool ReadOBJ(const std::string& filepath,
+    static bool ReadOBJ(const String& filepath,
                         std::vector<Vector3> *vertexPos,
                         std::vector<Vector3> *vertexNormals,
                         std::vector<Vector2> *vertexUvs,
@@ -62,13 +62,13 @@ public:
     // and they consume the closing tag.
 
     //Scene must be a created object before being passed to these functions (new Scene)
-    static void ReadScene(const std::string &filepath, Scene* scene);
+    static void ReadScene(const String &filepath, Scene* scene);
     //
 
     //READ PRIMITIVE VALUES
-    static std::string PeekNextLine(std::istream &f);
-    static std::string ReadNextLine(std::istream &f);
-    static bool ReadNextLine(std::istream &f, std::string *line);
+    static String PeekNextLine(std::istream &f);
+    static String ReadNextLine(std::istream &f);
+    static bool ReadNextLine(std::istream &f, String *line);
 
     static bool ReadBool(std::istream &f);
     static int ReadInt(std::istream &f);
@@ -78,7 +78,7 @@ public:
     static Vector4 ReadVec4(std::istream &f);
     static Quaternion ReadQuat(std::istream &f);
     static Rect ReadRect(std::istream &f);
-    static std::string ReadString(std::istream &f);
+    static String ReadString(std::istream &f);
 };
 
 #endif // FILEREADER_H

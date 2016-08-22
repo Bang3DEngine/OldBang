@@ -25,7 +25,7 @@
 QPixmap File::AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm)
 {
     /*
-    std::string fp = Persistence::ToAbsolute("./Assets/Engine/Icons/NoAssetIcon.png");
+    String fp = Persistence::ToAbsolute("./Assets/Engine/Icons/NoAssetIcon.png");
     QPixmap noAssetPixmap(QString::fromStdString(fp));
 
     QPixmap result(pm.scaled(128, 128, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation));
@@ -42,7 +42,7 @@ File::File()
 {
 }
 
-File::File(const std::string &filepath)
+File::File(const String &filepath)
     : File(Explorer::GetInstance()->GetFileSystemModel(),
            Explorer::GetInstance()->GetModelIndexFromFilepath(filepath))
 {
@@ -57,8 +57,8 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
     m_path = Persistence::ToRelative(m_absPath);
     m_name = model->fileName(index).toStdString();
 
-    std::string::size_type p = m_name.find('.', 2);
-    if (p != std::string::npos)
+    String::size_type p = m_name.find('.', 2);
+    if (p != String::npos)
     {
         m_extension = m_name.substr(p+1, m_name.length() - p - 1);
         m_name = m_name.substr(0, p);
@@ -119,11 +119,11 @@ bool File::IsFile() const
     return m_isFile;
 }
 
-bool File::IsOfExtension(const std::string &extensions) const
+bool File::IsOfExtension(const String &extensions) const
 {
     // We receive something like "jpg png bmp obj"
-    std::vector<std::string> extensionsList = StringUtils::SplitTrim(extensions, ' ');
-    for (std::string ext : extensionsList)
+    std::vector<String> extensionsList = StringUtils::SplitTrim(extensions, ' ');
+    for (String ext : extensionsList)
     {
         if (ext == GetExtension())
         {
@@ -169,14 +169,14 @@ File *File::GetSpecificFile(const File &f)
     return new File(f.m_fileSystemModel, f.m_modelIndex);
 }
 
-std::string File::GetContents() const
+String File::GetContents() const
 {
     return FileReader::GetContents(m_absPath);
 }
 
 QPixmap File::GetIcon() const
 {
-    std::string fp = "";
+    String fp = "";
     if (IsPrefabAsset())
     {
         fp = Persistence::ToAbsolute("./Assets/Engine/Icons/PrefabAssetIcon.png");
@@ -199,29 +199,29 @@ IInspectable *File::GetInspectable() const
     return nullptr;
 }
 
-const std::string &File::GetAbsolutePath() const
+const String &File::GetAbsolutePath() const
 {
     return m_absPath;
 }
 
-const std::string &File::GetName() const
+const String &File::GetName() const
 {
     return m_name;
 }
 
-const std::string &File::GetRelativePath() const
+const String &File::GetRelativePath() const
 {
     return m_path;
 }
 
-const std::string &File::GetExtension() const
+const String &File::GetExtension() const
 {
     return m_extension;
 }
 
-std::string File::GetNameAndExtension() const
+String File::GetNameAndExtension() const
 {
-    std::string str = GetName();
+    String str = GetName();
     str += ".";
     str += GetExtension();
     return  str;

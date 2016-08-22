@@ -4,7 +4,7 @@
 #include "Bang.h"
 
 #include <list>
-#include <string>
+
 #include <iostream>
 #include <functional>
 
@@ -74,7 +74,7 @@ protected:
     #endif
 
 protected:
-    std::string m_name = "";
+    String m_name = "";
     std::list<Component*> m_components;
     std::list<GameObject*> m_children;
     Transform *m_transform = nullptr;
@@ -85,13 +85,13 @@ protected:
 public:
 
     // PROPERTIES
-    std::string const& name   = m_name;
+    String const& name   = m_name;
     GameObject* const& parent = m_parent;
     Transform* const& transform = m_transform;
     //
 
     GameObject();
-    GameObject(const std::string &m_name);
+    GameObject(const String &m_name);
     GameObject(const GameObject &go);
 
     virtual void CloneInto(ICloneable *clone) const override;
@@ -100,16 +100,16 @@ public:
     virtual ~GameObject();
 
     void SetParent(GameObject *parent, bool keepWorldTransform = false);
-    GameObject* GetChild(const std::string &m_name) const;
+    GameObject* GetChild(const String &m_name) const;
 
-    void SetName(const std::string &m_name);
+    void SetName(const String &m_name);
 
-    const std::string ToString() const;
+    const String ToString() const;
 
     Scene* GetScene();
     bool IsInsideScene() const;
     GameObject* GetParent() const;
-    const std::string GetName() const;
+    const String GetName() const;
     const std::list<Component*>& GetComponents() const;
 
     /**
@@ -321,8 +321,8 @@ public:
     virtual bool IsEditorGameObject() const;
     virtual bool IsScene() const;
 
-    static GameObject *Find(const std::string &name);
-    GameObject *FindInChildren(const std::string &name);
+    static GameObject *Find(const String &name);
+    GameObject *FindInChildren(const String &name);
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

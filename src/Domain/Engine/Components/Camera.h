@@ -81,8 +81,8 @@ public:
     Vector2 WorldToScreenNDCPoint(const Vector3 &position);
     Vector3 ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCamera);
 
-    virtual const std::string ToString() const override;
-    virtual std::string GetName() const override { return "Camera"; }
+    virtual const String ToString() const override;
+    virtual String GetName() const override { return "Camera"; }
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;

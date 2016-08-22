@@ -27,7 +27,7 @@ Mesh::~Mesh()
     if (m_vertexNormalsVBO)   delete m_vertexUvsVBO;
 }
 
-void Mesh::LoadFromFile(const std::string &filepath)
+void Mesh::LoadFromFile(const String &filepath)
 {
     m_positions.clear();
     m_normals.clear();
@@ -86,7 +86,7 @@ void Mesh::LoadAll(const std::vector<Vector3> &positions,
     LoadUvs(uvs);
 }
 
-void Mesh::BindPositionsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
+void Mesh::BindPositionsToShaderProgram(const String &nameInShader, const ShaderProgram &sp)
 {
     if (m_vertexPositionsVBO )
     {
@@ -95,7 +95,7 @@ void Mesh::BindPositionsToShaderProgram(const std::string &nameInShader, const S
     }
 }
 
-void Mesh::BindNormalsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
+void Mesh::BindNormalsToShaderProgram(const String &nameInShader, const ShaderProgram &sp)
 {
     if (m_vertexNormalsVBO )
     {
@@ -104,7 +104,7 @@ void Mesh::BindNormalsToShaderProgram(const std::string &nameInShader, const Sha
     }
 }
 
-void Mesh::BindUvsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp)
+void Mesh::BindUvsToShaderProgram(const String &nameInShader, const ShaderProgram &sp)
 {
     if (m_vertexUvsVBO )
     {

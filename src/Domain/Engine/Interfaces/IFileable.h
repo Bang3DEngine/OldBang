@@ -7,7 +7,7 @@
 #include <ostream>
 #include <sstream>
 #include <fstream>
-#include <string>
+
 
 #include "XMLParser.h"
 
@@ -18,8 +18,8 @@ protected:
     IFileable() {}
 
 public:
-    std::string GetXMLInfoString() const;
-    void ReadXMLInfoFromString(const std::string &xmlInfoString);
+    String GetXMLInfoString() const;
+    void ReadXMLInfoFromString(const String &xmlInfoString);
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo);
     virtual void FillXMLInfo(XMLNode *xmlInfo) const;

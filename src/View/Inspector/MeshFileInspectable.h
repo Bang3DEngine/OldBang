@@ -1,7 +1,7 @@
 #ifndef INSPECTORMESHFILEWIDGET_H
 #define INSPECTORMESHFILEWIDGET_H
 
-#include <string>
+
 
 #include "MeshFile.h"
 #include "InspectorWidget.h"

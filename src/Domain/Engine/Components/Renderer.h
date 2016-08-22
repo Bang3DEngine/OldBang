@@ -153,8 +153,8 @@ public:
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
 
-    virtual const std::string ToString() const override { return "Renderer"; }
-    virtual std::string GetName() const override { return "Renderer"; }
+    virtual const String ToString() const override { return "Renderer"; }
+    virtual String GetName() const override { return "Renderer"; }
     virtual ICloneable *Clone() const override = 0;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;

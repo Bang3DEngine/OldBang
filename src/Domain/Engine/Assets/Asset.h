@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <string>
+
 
 #include "FileWriter.h"
 #include "FileReader.h"
@@ -25,8 +25,8 @@ class Asset : public IToString
 friend class AssetsManager;
 
 public:
-    const static std::string GetFileExtensionStatic() { return "basset"; }
-    const virtual std::string GetFileExtension()
+    const static String GetFileExtensionStatic() { return "basset"; }
+    const virtual String GetFileExtension()
     {
         return Asset::GetFileExtensionStatic();
     }
@@ -37,16 +37,16 @@ public:
 #endif
 
 protected:
-    std::string m_filepath = "";
+    String m_filepath = "";
 
     Asset();
     virtual ~Asset();
 
 public:
 
-    std::string GetFilepath() const;
+    String GetFilepath() const;
 
-    virtual const std::string ToString() const override;
+    virtual const String ToString() const override;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

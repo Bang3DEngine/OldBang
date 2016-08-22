@@ -16,12 +16,12 @@ LineRenderer::~LineRenderer()
 
 }
 
-const std::string LineRenderer::ToString() const
+const String LineRenderer::ToString() const
 {
     return "LineRenderer";
 }
 
-std::string LineRenderer::GetName() const { return "LineRenderer"; }
+String LineRenderer::GetName() const { return "LineRenderer"; }
 
 
 void LineRenderer::BindPointsToVAO() const

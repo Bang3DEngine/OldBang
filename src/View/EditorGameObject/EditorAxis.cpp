@@ -21,7 +21,7 @@ EditorAxis::~EditorAxis()
     delete m_material;
 }
 
-std::string EditorAxis::GetStringFromDir(EditorAxis::EditorAxisDirection dir)
+String EditorAxis::GetStringFromDir(EditorAxis::EditorAxisDirection dir)
 {
     if (dir == EditorAxisDirection::X) return "X";
     else if (dir == EditorAxisDirection::Y) return "Y";

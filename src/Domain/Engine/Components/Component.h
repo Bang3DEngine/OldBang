@@ -53,9 +53,9 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override = 0;
 
-    virtual const std::string ToString() const override;
+    virtual const String ToString() const override;
 
-    virtual std::string GetName() const;
+    virtual String GetName() const;
 
     void SetGameObject(GameObject *gameObject);
 

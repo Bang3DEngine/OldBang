@@ -21,8 +21,8 @@ class Material : public IGLBindable
 friend class Renderer;
 
 public:
-    const static std::string GetFileExtensionStatic() { return "bmat"; }
-    const virtual std::string GetFileExtension()
+    const static String GetFileExtensionStatic() { return "bmat"; }
+    const virtual String GetFileExtension()
     {
         return Material::GetFileExtensionStatic();
     }

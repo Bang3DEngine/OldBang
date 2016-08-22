@@ -11,7 +11,7 @@
 #include "Texture.h"
 #include "IGLBindable.h"
 
-#include <string>
+
 
 
 class ShaderProgram : public IGLIdable
@@ -22,12 +22,12 @@ private:
     Shader *m_vshader;
     Shader *m_fshader;
 
-    mutable std::map<std::string, const Texture*> m_namesToTextures;
+    mutable std::map<String, const Texture*> m_namesToTextures;
 
 public:
     ShaderProgram();
-    ShaderProgram(const std::string &vshaderPath,
-                  const std::string &fshaderPath);
+    ShaderProgram(const String &vshaderPath,
+                  const String &fshaderPath);
     virtual ~ShaderProgram();
 
     void BindVertexShader(Shader *vshader);
@@ -38,21 +38,21 @@ public:
     void Bind() const override;
     void UnBind() const override;
 
-    bool SetUniformFloat   (const std::string &name, float v,                bool warn = true) const;
-    bool SetUniformVec2    (const std::string &name, const Vector2& v,       bool warn = true) const;
-    bool SetUniformVec3    (const std::string &name, const Vector3& v,       bool warn = true) const;
-    bool SetUniformVec4    (const std::string &name, const Vector4& v,       bool warn = true) const;
-    bool SetUniformColor   (const std::string &name, const Color& c,         bool warn = true) const;
-    bool SetUniformMat4    (const std::string &name, const Matrix4& m,       bool warn = true) const;
-    bool SetUniformTexture (const std::string &name, const Texture *texture, bool warn = true) const;
+    bool SetUniformFloat   (const String &name, float v,                bool warn = true) const;
+    bool SetUniformVec2    (const String &name, const Vector2& v,       bool warn = true) const;
+    bool SetUniformVec3    (const String &name, const Vector3& v,       bool warn = true) const;
+    bool SetUniformVec4    (const String &name, const Vector4& v,       bool warn = true) const;
+    bool SetUniformColor   (const String &name, const Color& c,         bool warn = true) const;
+    bool SetUniformMat4    (const String &name, const Matrix4& m,       bool warn = true) const;
+    bool SetUniformTexture (const String &name, const Texture *texture, bool warn = true) const;
 
     Shader* GetVertexShader() const;
     Shader* GetFragmentShader() const;
 
-    GLint GetUniformLocation(const std::string &name) const;
-    GLint GetAttribLocation(const std::string &name) const;
+    GLint GetUniformLocation(const String &name) const;
+    GLint GetAttribLocation(const String &name) const;
 
-    const std::string ToString() const override;
+    const String ToString() const override;
 };
 
 #endif // SHADERPROGRAM_H

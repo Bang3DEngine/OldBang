@@ -1,45 +1,45 @@
 #include "Persistence.h"
 #include "StringUtils.h"
 
-std::string Persistence::s_currentSceneFilepath = "";
+String Persistence::s_currentSceneFilepath = "";
 
-bool Persistence::IsAbsolute(const std::string &path)
+bool Persistence::IsAbsolute(const String &path)
 {
     return path[0] == '/';
 }
 
-std::string Persistence::GetProjectRootPathAbsolute()
+String Persistence::GetProjectRootPathAbsolute()
 {
     return QT_PROJECT_PATH;
 }
 
-std::string Persistence::GetAssetsRelativePathFromProjectRoot()
+String Persistence::GetAssetsRelativePathFromProjectRoot()
 {
     return "/Assets";
 }
 
-std::string Persistence::GetAssetsPathAbsolute()
+String Persistence::GetAssetsPathAbsolute()
 {
     return GetProjectRootPathAbsolute() +
            GetAssetsRelativePathFromProjectRoot();
 }
 
-std::string Persistence::GetDir(const std::string &filepath)
+String Persistence::GetDir(const String &filepath)
 {
-    std::string directory = "";
+    String directory = "";
     const size_t lastSlash = filepath.rfind('/');
-    if (lastSlash != std::string::npos)
+    if (lastSlash != String::npos)
     {
         directory = filepath.substr(0, lastSlash);
     }
     return directory;
 }
 
-std::string Persistence::GetFileName(const std::string &filepath)
+String Persistence::GetFileName(const String &filepath)
 {
-    std::string filename = "";
+    String filename = "";
     const size_t lastSlash = filepath.rfind('/');
-    if (lastSlash != std::string::npos)
+    if (lastSlash != String::npos)
     {
         filename = filepath.substr(lastSlash + 1);
         filename = StringUtils::Split(filename, '.')[0];
@@ -47,11 +47,11 @@ std::string Persistence::GetFileName(const std::string &filepath)
     return filename;
 }
 
-std::string Persistence::GetFileNameWithExtension(const std::string &filepath)
+String Persistence::GetFileNameWithExtension(const String &filepath)
 {
-    std::string filename = "";
+    String filename = "";
     const size_t lastSlash = filepath.rfind('/');
-    if (lastSlash != std::string::npos)
+    if (lastSlash != String::npos)
     {
         filename = filepath.substr(lastSlash + 1);
     }
@@ -59,7 +59,7 @@ std::string Persistence::GetFileNameWithExtension(const std::string &filepath)
 }
 
 
-std::string Persistence::ToAbsolute(const std::string &relPath)
+String Persistence::ToAbsolute(const String &relPath)
 {
     if (relPath == "") return "";
     if (IsAbsolute(relPath)) return relPath;
@@ -82,7 +82,7 @@ std::string Persistence::ToAbsolute(const std::string &relPath)
     }
 }
 
-std::string Persistence::ToRelative(const std::string &absPath)
+String Persistence::ToRelative(const String &absPath)
 {
     // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
     if (absPath == "") return "";
@@ -97,7 +97,7 @@ std::string Persistence::ToRelative(const std::string &absPath)
     }
 
     std::size_t pos = absPath.find(GetAssetsRelativePathFromProjectRoot());
-    if (pos == std::string::npos) return absPath;
+    if (pos == String::npos) return absPath;
 
     return "." + absPath.substr(
                 pos,
@@ -106,20 +106,20 @@ std::string Persistence::ToRelative(const std::string &absPath)
 }
 
 #include "Logger.h"
-std::string Persistence::GetNextDuplicateName(const std::string &path)
+String Persistence::GetNextDuplicateName(const String &path)
 {
-    std::string filePath = Persistence::ToRelative(path);
-    std::string fileDir  = Persistence::GetDir(filePath);
-    std::string fileName = Persistence::GetFileNameWithExtension(filePath);
+    String filePath = Persistence::ToRelative(path);
+    String fileDir  = Persistence::GetDir(filePath);
+    String fileName = Persistence::GetFileNameWithExtension(filePath);
 
-    std::vector<std::string> splitted = StringUtils::Split(fileName, '.');
+    std::vector<String> splitted = StringUtils::Split(fileName, '.');
     fileName = splitted[0];
-    std::string fileExtension = splitted.size() <= 1 ? "" : splitted[1];
+    String fileExtension = splitted.size() <= 1 ? "" : splitted[1];
     splitted = StringUtils::Split(fileName, '_');
     int number = 1;
     if (splitted.size() > 1)
     {
-        std::string numberString = splitted[splitted.size() - 1];
+        String numberString = splitted[splitted.size() - 1];
         bool ok = false;
         int readNumber = StringUtils::ToInt(numberString, &ok);
         if (ok)
@@ -135,7 +135,7 @@ std::string Persistence::GetNextDuplicateName(const std::string &path)
         }
     }
 
-    std::string result = "";
+    String result = "";
     if (fileDir != "")
     {
         result += fileDir + "/";
@@ -148,19 +148,19 @@ std::string Persistence::GetNextDuplicateName(const std::string &path)
     return result;
 }
 
-void Persistence::SetCurrentSceneFilepath(const std::string &scenePath)
+void Persistence::SetCurrentSceneFilepath(const String &scenePath)
 {
     s_currentSceneFilepath = scenePath;
 }
 
-std::string Persistence::GetCurrentSceneFilepath()
+String Persistence::GetCurrentSceneFilepath()
 {
     return s_currentSceneFilepath;
 }
 
-std::string Persistence::AppendExtension(const std::string &filepath, const std::string extNoDot)
+String Persistence::AppendExtension(const String &filepath, const String extNoDot)
 {
-    if (filepath.find("." + extNoDot) != std::string::npos) return filepath;
+    if (filepath.find("." + extNoDot) != String::npos) return filepath;
     return filepath + "." + extNoDot;
 }
 

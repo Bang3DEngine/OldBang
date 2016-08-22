@@ -18,12 +18,12 @@ void PointLight::SetUniformsBeforeApplyingLight() const
 }
 
 
-const std::string PointLight::ToString() const
+const String PointLight::ToString() const
 {
     return "PointLight";
 }
 
-std::string PointLight::GetName() const
+String PointLight::GetName() const
 {
     return "PointLight";
 }

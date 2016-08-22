@@ -358,7 +358,7 @@ Vector3 Transform::GetDown() const
 }
 
 
-const std::string Transform::ToString() const
+const String Transform::ToString() const
 {
     using std::operator<<;
 

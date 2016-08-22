@@ -20,7 +20,7 @@ private:
     /**
      * @brief Shared code to create a Plane, Cube, Sphere, etc.
      */
-    GameObject* CreatePrimitiveGameObject(Mesh *m, const std::string &name) const;
+    GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name) const;
 
 public:
     Q_ENUMS(Action);

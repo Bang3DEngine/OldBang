@@ -21,7 +21,7 @@ public:
     float GetHeight() const;
     float GetArea() const;
 
-    const std::string ToString() const override;
+    const String ToString() const override;
 };
 
 #endif // RECT_H

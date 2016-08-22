@@ -15,10 +15,10 @@ protected:
     QModelIndex m_modelIndex;
 
     bool m_isFile = true;
-    std::string m_path = "";
-    std::string m_name = "";
-    std::string m_absPath = "";
-    std::string m_extension = "";
+    String m_path = "";
+    String m_name = "";
+    String m_absPath = "";
+    String m_extension = "";
 
     // Adds on top of the passed QPixmap the little icon that
     // distinguishes between assets and noAsset files.
@@ -26,7 +26,7 @@ protected:
 
 public:
     File();
-    File(const std::string &filepath);
+    File(const String &filepath);
     File(const QFileSystemModel *model, const QModelIndex &index);
     virtual ~File();
 
@@ -51,19 +51,19 @@ public:
      * @param extensions
      * @return
      */
-    bool IsOfExtension(const std::string &extensions) const;
+    bool IsOfExtension(const String &extensions) const;
 
     static File *GetSpecificFile(const File &f);
     virtual QPixmap GetIcon() const;
     virtual IInspectable *GetInspectable() const;
 
-    std::string GetContents() const;
+    String GetContents() const;
 
-    const std::string& GetAbsolutePath() const;
-    const std::string& GetRelativePath() const;
-    const std::string& GetName() const;
-    const std::string& GetExtension() const;
-    std::string GetNameAndExtension() const;
+    const String& GetAbsolutePath() const;
+    const String& GetRelativePath() const;
+    const String& GetName() const;
+    const String& GetExtension() const;
+    String GetNameAndExtension() const;
 };
 
 #endif // FILE_H

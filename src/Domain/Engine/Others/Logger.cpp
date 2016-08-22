@@ -1,8 +1,8 @@
 #include "Logger.h"
 
-std::ostream& operator<<(std::ostream &log, const std::string &str)
+std::ostream& operator<<(std::ostream &log, const String &str)
 {
-    log << str.c_str();
+    log << str.ToCString();
     return log;
 }
 

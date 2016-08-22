@@ -30,7 +30,7 @@ Mesh *MeshFactory::GetCone()
     return AssetsManager::LoadAsset<Mesh>("Assets/Engine/Meshes/Cone.bmesh");
 }
 
-GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const std::string &name)
+GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const String &name)
 {
     GameObject *go = new GameObject(name);
 
@@ -46,7 +46,7 @@ GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const std::string &n
 
 
 #ifdef BANG_EDITOR
-EditorGameObject* MeshFactory::CreatePrimitiveEditorGameObject(Mesh *m, const std::string &name)
+EditorGameObject* MeshFactory::CreatePrimitiveEditorGameObject(Mesh *m, const String &name)
 {
     EditorGameObject *go = new EditorGameObject(name);
 

@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <string>
+
 
 #include "GameObject.h"
 #include "Asset.h"
@@ -18,21 +18,21 @@ class Prefab : public Asset
 {
 
 public:
-    const static std::string GetFileExtensionStatic() { return "bprefab"; }
-    const virtual std::string GetFileExtension()
+    const static String GetFileExtensionStatic() { return "bprefab"; }
+    const virtual String GetFileExtension()
     {
         return Prefab::GetFileExtensionStatic();
     }
 
 
 private:
-    std::string m_gameObjectXMLInfoContent = "";
+    String m_gameObjectXMLInfoContent = "";
 
 public:
     Prefab();
     Prefab(const Prefab &p);
     Prefab(GameObject *go);
-    Prefab(const std::string &gameObjectXMLInfoContent);
+    Prefab(const String &gameObjectXMLInfoContent);
 
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;

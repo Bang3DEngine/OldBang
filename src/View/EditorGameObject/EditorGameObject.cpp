@@ -6,7 +6,7 @@ EditorGameObject::EditorGameObject() : GameObject()
 {
 }
 
-EditorGameObject::EditorGameObject(const std::string &name) : GameObject(name)
+EditorGameObject::EditorGameObject(const String &name) : GameObject(name)
 {
 }
 

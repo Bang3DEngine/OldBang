@@ -19,7 +19,7 @@ InspectorWidget::InspectorWidget()
 {
 }
 
-void InspectorWidget::Init(const std::string &title, IInspectable *relatedInspectable)
+void InspectorWidget::Init(const String &title, IInspectable *relatedInspectable)
 {
     m_relatedInspectable = relatedInspectable;
 
@@ -31,15 +31,15 @@ void InspectorWidget::Init(const std::string &title, IInspectable *relatedInspec
 }
 
 void InspectorWidget::ConstructFromWidgetXMLInfo(
-        const std::string &title, XMLNode &xmlInfo, bool autoUpdate)
+        const String &title, XMLNode &xmlInfo, bool autoUpdate)
 {
     m_gridLayout = new QGridLayout();
     m_gridLayout->setSpacing(0);
 
     setLayout(m_gridLayout);
 
-    std::string fTitle = StringUtils::FormatInspectorLabel(title);
-    m_titleLabel = new QLabel( QString(fTitle.c_str()) );
+    String fTitle = StringUtils::FormatInspectorLabel(title);
+    m_titleLabel = new QLabel( QString(fTitle.ToCString()) );
     QFont font = m_titleLabel->font();
     font.setPixelSize(13);
     font.setBold(true);
@@ -90,7 +90,7 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
     xmlInfo.SetTagName(m_tagName);
     for (XMLAttribute attribute : m_attributes)
     {
-        std::string attrName = attribute.GetName();
+        String attrName = attribute.GetName();
         XMLAttribute::Type attrType = attribute.GetType();
 
         if (m_attrNameToAttrWidget.find(attrName) != m_attrNameToAttrWidget.end())
@@ -169,7 +169,7 @@ int InspectorWidget::GetNextRowIndex() const
     return m_gridLayout->rowCount();
 }
 
-void InspectorWidget::SetTitle(const std::string &title)
+void InspectorWidget::SetTitle(const String &title)
 {
     m_titleLabel->setText(QString::fromStdString(title));
 }
@@ -186,7 +186,7 @@ void InspectorWidget::RefreshWidgetValues()
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         XMLAttribute attribute = itAttr.second;
-        std::string attrName  = attribute.GetName();
+        String attrName  = attribute.GetName();
         if( m_attrNameToAttrWidget.find(attrName) != m_attrNameToAttrWidget.end())
         {
             AttributeWidget *ws = m_attrNameToAttrWidget[attrName];

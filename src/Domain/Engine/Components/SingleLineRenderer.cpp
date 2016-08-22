@@ -14,12 +14,12 @@ SingleLineRenderer::~SingleLineRenderer()
 
 }
 
-const std::string SingleLineRenderer::ToString() const
+const String SingleLineRenderer::ToString() const
 {
     return "SingleLineRenderer";
 }
 
-std::string SingleLineRenderer::GetName() const { return "SingleLineRenderer"; }
+String SingleLineRenderer::GetName() const { return "SingleLineRenderer"; }
 
 void SingleLineRenderer::CloneInto(ICloneable *clone) const
 {

@@ -5,7 +5,7 @@
 
 #include <map>
 #include <list>
-#include <string>
+
 #include <sstream>
 
 #include "Rect.h"
@@ -20,90 +20,90 @@
 class XMLNode : public IToString
 {
 private:
-    std::string m_tagName = "";
-    mutable std::map<std::string, XMLAttribute> m_attributes;
+    String m_tagName = "";
+    mutable std::map<String, XMLAttribute> m_attributes;
     std::list<XMLNode*> m_children;
 
 public:
-    XMLNode(const std::string &tagName = "");
+    XMLNode(const String &tagName = "");
     virtual ~XMLNode();
 
     void CloneInto(XMLNode *xmlNode) const;
 
     void AddChild(XMLNode *node);
 
-    void UpdateAttributeValue(const std::string &attributeName,
-                              const std::string &newAttributeValue);
+    void UpdateAttributeValue(const String &attributeName,
+                              const String &newAttributeValue);
 
     void SetAttribute(const XMLAttribute &attribute);
-    void SetGenericAttribute(const std::string &attributeName,
-                             const std::string &attributeValue,
+    void SetGenericAttribute(const String &attributeName,
+                             const String &attributeValue,
                              XMLAttribute::Type type,
                              const std::vector<XMLProperty>& properties = {});
-    void SetPointer(const std::string &attributeName,
+    void SetPointer(const String &attributeName,
                     const void *value,
                     const std::vector<XMLProperty>& properties = {});
-    void SetBool(const std::string &attributeName, bool value,
+    void SetBool(const String &attributeName, bool value,
                  const std::vector<XMLProperty>& properties = {});
-    void SetInt(const std::string &attributeName, int value,
+    void SetInt(const String &attributeName, int value,
                 const std::vector<XMLProperty>& properties = {});
-    void SetFloat(const std::string &attributeName, float value,
+    void SetFloat(const String &attributeName, float value,
                   const std::vector<XMLProperty>& properties = {});
-    void SetString(const std::string &attributeName, const std::string &value,
+    void SetString(const String &attributeName, const String &value,
                    const std::vector<XMLProperty>& properties = {});
-    void SetVector2(const std::string &attributeName, const Vector2 &value,
+    void SetVector2(const String &attributeName, const Vector2 &value,
                     const std::vector<XMLProperty>& properties = {});
-    void SetVector3(const std::string &attributeName, const Vector3 &value,
+    void SetVector3(const String &attributeName, const Vector3 &value,
                     const std::vector<XMLProperty>& properties = {});
-    void SetVector4(const std::string &attributeName, const Vector4 &value,
+    void SetVector4(const String &attributeName, const Vector4 &value,
                     const std::vector<XMLProperty>& properties = {});
-    void SetColor(const std::string &attributeName, const Color &value,
+    void SetColor(const String &attributeName, const Color &value,
                   const std::vector<XMLProperty>& properties = {});
-    void SetQuaternion(const std::string &attributeName, const Quaternion &value,
+    void SetQuaternion(const String &attributeName, const Quaternion &value,
                        const std::vector<XMLProperty>& properties = {});
-    void SetRect(const std::string &attributeName, const Rect &value,
+    void SetRect(const String &attributeName, const Rect &value,
                  const std::vector<XMLProperty>& properties = {});
-    void SetFilepath(const std::string &attributeName,
-                     const std::string &filepath,
-                     const std::string &fileExtension = "",
+    void SetFilepath(const String &attributeName,
+                     const String &filepath,
+                     const String &fileExtension = "",
                      const std::vector<XMLProperty>& properties = {});
-    void SetEnum(const std::string &attributeName,
-                 const std::vector<std::string>& enumNames,
+    void SetEnum(const String &attributeName,
+                 const std::vector<String>& enumNames,
                  int selectedEnumIndex,
                  const std::vector<XMLProperty>& properties = {});
-    void SetButton(const std::string &attributeName,
+    void SetButton(const String &attributeName,
                    IAttrWidgetButtonListener* listener,
                    const std::vector<XMLProperty>& properties = {});
-    void RemoveAttribute(const std::string& attributeName);
-    XMLAttribute* GetAttribute(const std::string& attributeName) const;
-    std::string GetAttributeValue(const std::string& attributeName) const;
+    void RemoveAttribute(const String& attributeName);
+    XMLAttribute* GetAttribute(const String& attributeName) const;
+    String GetAttributeValue(const String& attributeName) const;
 
-    bool GetBool(const std::string& attributeName) const;
-    int GetInt(const std::string& attributeName) const;
-    float GetFloat(const std::string& attributeName) const;
-    std::string GetFilepath(const std::string& attributeName) const;
-    std::string GetString(const std::string& attributeName) const;
-    Vector2 GetVector2(const std::string& attributeName) const;
-    Vector3 GetVector3(const std::string& attributeName) const;
-    Vector4 GetVector4(const std::string& attributeName) const;
-    Color GetColor(const std::string& attributeName) const;
-    Quaternion GetQuaternion(const std::string& attributeName) const;
-    Rect GetRect(const std::string& attributeName) const;
-    int GetEnumSelectedIndex(const std::string& attributeName) const;
-    std::string GetEnumSelectedName(const std::string& attributeName) const;
-    std::vector<std::string> GetEnumNames(const std::string& attributeName) const;
-    IAttrWidgetButtonListener *GetButtonListener(const std::string &attributeName) const;
+    bool GetBool(const String& attributeName) const;
+    int GetInt(const String& attributeName) const;
+    float GetFloat(const String& attributeName) const;
+    String GetFilepath(const String& attributeName) const;
+    String GetString(const String& attributeName) const;
+    Vector2 GetVector2(const String& attributeName) const;
+    Vector3 GetVector3(const String& attributeName) const;
+    Vector4 GetVector4(const String& attributeName) const;
+    Color GetColor(const String& attributeName) const;
+    Quaternion GetQuaternion(const String& attributeName) const;
+    Rect GetRect(const String& attributeName) const;
+    int GetEnumSelectedIndex(const String& attributeName) const;
+    String GetEnumSelectedName(const String& attributeName) const;
+    std::vector<String> GetEnumNames(const String& attributeName) const;
+    IAttrWidgetButtonListener *GetButtonListener(const String &attributeName) const;
 
-    const XMLNode *GetChild(const std::string &name) const;
-    void SetTagName(const std::string tagName);
-    const std::string ToString() const override;
-    const std::string ToString(const std::string& indent) const;
+    const XMLNode *GetChild(const String &name) const;
+    void SetTagName(const String tagName);
+    const String ToString() const override;
+    const String ToString(const String& indent) const;
 
-    const std::string& GetTagName() const;
-    const std::map<std::string, XMLAttribute>& GetAttributes() const;
+    const String& GetTagName() const;
+    const std::map<String, XMLAttribute>& GetAttributes() const;
     const std::list<XMLNode*>& GetChildren() const;
 
-    static XMLNode* FromString(const std::string &xml);
+    static XMLNode* FromString(const String &xml);
 };
 
 #endif // XMLNODE_H

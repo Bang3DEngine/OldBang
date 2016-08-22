@@ -19,8 +19,8 @@ public:
     AttrWidgetButton(const XMLAttribute &xmlAttribute,
                      InspectorWidget *inspectorWidget);
 
-    void SetValue(const std::string &buttonText);
-    std::string GetValue() const;
+    void SetValue(const String &buttonText);
+    String GetValue() const;
 
     virtual void Refresh(const XMLAttribute &attribute) override;
 

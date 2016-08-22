@@ -102,7 +102,7 @@ void Screen::resizeGL(int w, int h)
     }
 }
 
-Scene *Screen::AddScene(const std::string &name)
+Scene *Screen::AddScene(const String &name)
 {
     Scene *st = new Scene();
     st->m_name = name;
@@ -132,7 +132,7 @@ void Screen::SetCurrentScene(Scene *scene)
     }
 }
 
-void Screen::SetCurrentScene(const std::string &name)
+void Screen::SetCurrentScene(const String &name)
 {
     if (m_currentScene )
     {
@@ -158,7 +158,7 @@ Scene *Screen::GetCurrentScene()
     return c ? c->m_currentScene : nullptr;
 }
 
-Scene *Screen::GetScene(const std::string &name) const
+Scene *Screen::GetScene(const String &name) const
 {
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {
@@ -167,7 +167,7 @@ Scene *Screen::GetScene(const std::string &name) const
     return nullptr;
 }
 
-void Screen::RemoveScene(const std::string &name)
+void Screen::RemoveScene(const String &name)
 {
     for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
     {

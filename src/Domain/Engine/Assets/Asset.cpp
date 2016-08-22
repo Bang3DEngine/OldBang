@@ -22,12 +22,12 @@ void Asset::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 }
 #endif
 
-std::string Asset::GetFilepath() const
+String Asset::GetFilepath() const
 {
     return m_filepath;
 }
 
-const std::string Asset::ToString() const
+const String Asset::ToString() const
 {
     return "Asset '" + m_filepath + "'.";
 }

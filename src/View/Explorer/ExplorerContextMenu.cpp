@@ -36,7 +36,7 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
 void ExplorerContextMenu::OnDuplicateClicked()
 {
     File source = m_explorer->GetSelectedFile();
-    std::string filepath = source.GetRelativePath();
+    String filepath = source.GetRelativePath();
     while (m_explorer->Exists(filepath))
     {
         filepath = Persistence::GetNextDuplicateName(filepath);

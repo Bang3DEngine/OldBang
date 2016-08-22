@@ -39,8 +39,8 @@ private:
 
 
     void Init(BehaviourHolder *bh);
-    void SetSourceFilepath(const std::string &m_sourceFilepath);
-    std::string GetSourceFilepath() const;
+    void SetSourceFilepath(const String &m_sourceFilepath);
+    String GetSourceFilepath() const;
 
 /**
  * These variables must be copied from BehaviourHolder
@@ -62,8 +62,8 @@ public:
     virtual ~Behaviour();
 
     // Substitute CLASS_NAME
-    static std::string s_behaviourHeaderTemplate;
-    static std::string s_behaviourSourceTemplate;
+    static String s_behaviourHeaderTemplate;
+    static String s_behaviourSourceTemplate;
 
 protected:
     virtual void OnUpdate() override;

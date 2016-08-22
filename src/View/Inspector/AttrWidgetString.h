@@ -1,7 +1,7 @@
 #ifndef INSPECTORSTRINGSW_H
 #define INSPECTORSTRINGSW_H
 
-#include <string>
+
 #include <QTimer>
 #include <QFocusEvent>
 #include <QDoubleSpinBox>
@@ -23,8 +23,8 @@ public:
     AttrWidgetString(const XMLAttribute &xmlAttribute,
                      InspectorWidget *m_inspectorWidget);
 
-    virtual void SetValue(const std::string &value);
-    virtual const std::string GetValue() const;
+    virtual void SetValue(const String &value);
+    virtual const String GetValue() const;
 
     virtual void Refresh(const XMLAttribute &attribute) override;
 

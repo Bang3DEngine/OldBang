@@ -25,8 +25,8 @@ private:
     GameBuilder() {}
 
 public:
-    static void BuildGame(const std::string &absoluteDir);
-    static void BuildAndRunGame(const std::string &absoluteDir);
+    static void BuildGame(const String &absoluteDir);
+    static void BuildAndRunGame(const String &absoluteDir);
 };
 
 #endif // GAMEBUILDER_H

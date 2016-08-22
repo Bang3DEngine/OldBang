@@ -43,7 +43,7 @@ protected:
 
     float m_axisLineWidth = 1.0f;
 
-    static std::string GetStringFromDir(EditorAxisDirection dir);
+    static String GetStringFromDir(EditorAxisDirection dir);
     static Vector3 GetVectorFromDir(EditorAxisDirection dir);
 
 

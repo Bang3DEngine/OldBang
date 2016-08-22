@@ -57,7 +57,7 @@ public:
      */
     void FillFromPositions(const std::vector<Vector3> &positions);
 
-    const std::string ToString() const override;
+    const String ToString() const override;
 };
 
 Box operator*(const Matrix4 &m, const Box &b);

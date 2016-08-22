@@ -1,15 +1,15 @@
 #ifndef XMLPROPERTY_H
 #define XMLPROPERTY_H
 
-#include <string>
+
 
 #include  "StringUtils.h"
 
 class XMLProperty
 {
 private:
-    std::string m_name = "";
-    std::string m_value = "";
+    String m_name = "";
+    String m_value = "";
 
 public:
     const static XMLProperty Hidden;
@@ -20,15 +20,15 @@ public:
     const static XMLProperty FileExtension;
 
     XMLProperty();
-    XMLProperty(const std::string &name, const std::string &value = "");
+    XMLProperty(const String &name, const String &value = "");
 
-    void SetName(const std::string &name);
-    void SetValue(const std::string &value);
+    void SetName(const String &name);
+    void SetValue(const String &value);
 
-    const std::string& GetName() const;
-    const std::string& GetValue() const;
+    const String& GetName() const;
+    const String& GetValue() const;
 
-    static XMLProperty FromString(const std::string &string);
+    static XMLProperty FromString(const String &string);
 };
 
 #endif // XMLPROPERTY_H

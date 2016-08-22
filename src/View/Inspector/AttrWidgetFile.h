@@ -2,7 +2,7 @@
 #define INSPECTORASSETSW_H
 
 #include <vector>
-#include <string>
+
 #include <QFileDialog>
 #include <QDir>
 
@@ -21,8 +21,8 @@ class AttrWidgetFile : public AttributeWidget,
 
 private:
 public:
-    std::string m_fileExtension = "";
-    std::string m_filepath = "";
+    String m_fileExtension = "";
+    String m_filepath = "";
     FileLineEdit *m_filepathLineEdit = nullptr;
 
 public:
@@ -30,8 +30,8 @@ public:
                    InspectorWidget *m_inspectorWidget);
     virtual ~AttrWidgetFile();
 
-    virtual void SetValue(const std::string &filepath, bool draggedFile = false);
-    virtual std::string GetValue();
+    virtual void SetValue(const String &filepath, bool draggedFile = false);
+    virtual String GetValue();
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
     virtual void OnDropHere(const DragDropInfo &ddi) override;

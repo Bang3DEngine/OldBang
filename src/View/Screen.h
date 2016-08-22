@@ -8,7 +8,7 @@
 #include <GL/glew.h>
 
 #include <vector>
-#include <string>
+
 #include <chrono>
 #include <QTimer>
 #include <QGLWidget>
@@ -71,14 +71,14 @@ public:
     void paintGL() override;
     void resizeGL(int w, int h) override;
 
-    Scene* AddScene(const std::string &name);
+    Scene* AddScene(const String &name);
     void AddScene(Scene* scene);
     void SetCurrentScene(Scene *scene);
-    void SetCurrentScene(const std::string &name);
-    void RemoveScene(const std::string &name);
+    void SetCurrentScene(const String &name);
+    void RemoveScene(const String &name);
 
     static Scene* GetCurrentScene();
-    Scene* GetScene(const std::string &name) const;
+    Scene* GetScene(const String &name) const;
     static Screen *GetInstance();
     static float GetAspectRatio();
     static int GetHeight();

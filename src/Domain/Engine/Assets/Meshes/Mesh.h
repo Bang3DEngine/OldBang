@@ -22,8 +22,8 @@ class Mesh : public Asset
 friend class MeshRenderer;
 
 public:
-    const static std::string GetFileExtensionStatic() { return "bmesh"; }
-    const virtual std::string GetFileExtension()
+    const static String GetFileExtensionStatic() { return "bmesh"; }
+    const virtual String GetFileExtension()
     {
         return Mesh::GetFileExtensionStatic();
     }
@@ -49,7 +49,7 @@ public:
     Mesh(const Mesh& m);
     virtual ~Mesh();
 
-    void LoadFromFile(const std::string &m_filepath);
+    void LoadFromFile(const String &m_filepath);
     void LoadPositions(const std::vector<Vector3>& positions);
     void LoadNormals(const std::vector<Vector3>& normals);
     void LoadUvs(const std::vector<Vector2>& uvs);
@@ -57,9 +57,9 @@ public:
                  const std::vector<Vector3>& normals,
                  const std::vector<Vector2>& uvs);
 
-    void BindPositionsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
-    void BindNormalsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
-    void BindUvsToShaderProgram(const std::string &nameInShader, const ShaderProgram &sp);
+    void BindPositionsToShaderProgram(const String &nameInShader, const ShaderProgram &sp);
+    void BindNormalsToShaderProgram(const String &nameInShader, const ShaderProgram &sp);
+    void BindUvsToShaderProgram(const String &nameInShader, const ShaderProgram &sp);
 
     void BindAllVBOsToShaderProgram(const ShaderProgram &sp);
 

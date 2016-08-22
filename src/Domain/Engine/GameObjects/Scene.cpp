@@ -181,7 +181,7 @@ void Scene::PostReadXMLInfo(const XMLNode *xmlInfo)
 
     if (!IsEditorGameObject()) // In EditorScene we'll use the EditorCamera
     {
-        std::string camId = xmlInfo->GetString("Camera");
+        String camId = xmlInfo->GetString("Camera");
         if (camId.length() > 0)
         {
             const Camera *cam = dynamic_cast<const Camera*>(XMLParser::GetPointerFromId(camId));

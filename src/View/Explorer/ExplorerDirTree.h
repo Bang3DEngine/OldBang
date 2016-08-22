@@ -1,7 +1,7 @@
 #ifndef EXPLORERDIRLIST_H
 #define EXPLORERDIRLIST_H
 
-#include <string>
+
 
 #include <QTreeView>
 #include <QMouseEvent>
@@ -21,8 +21,8 @@ private:
     QFileSystemModel *m_fileSystemModel = nullptr;
     Explorer *m_explorer;
 
-    std::string m_topPath;
-    void setDir(const std::string &path);
+    String m_topPath;
+    void setDir(const String &path);
 
     void *m_lastSelectedModelIndexPointer = nullptr;
 

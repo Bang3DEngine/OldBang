@@ -8,7 +8,7 @@ TextFileInspectable::TextFileInspectable(const TextFile &textFile) :
 
 void TextFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    std::string contents = xmlInfo->GetString("Contents");
+    String contents = xmlInfo->GetString("Contents");
     FileWriter::WriteToFile(m_textFile.GetRelativePath(), contents);
 }
 

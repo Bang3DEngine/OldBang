@@ -30,14 +30,14 @@ void Component::CloneInto(ICloneable *clone) const
     c->m_enabled = m_enabled;
 }
 
-const std::string Component::ToString() const
+const String Component::ToString() const
 {
     std::ostringstream msg;
     msg << "Component";
     return msg.str();
 }
 
-std::string Component::GetName() const
+String Component::GetName() const
 {
     return "Component";
 }

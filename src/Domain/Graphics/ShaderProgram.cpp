@@ -5,8 +5,8 @@ ShaderProgram::ShaderProgram() : m_vshader(nullptr), m_fshader(nullptr)
     m_idGL = glCreateProgram();
 }
 
-ShaderProgram::ShaderProgram(const std::string &vshaderPath,
-                             const std::string &fshaderPath) : ShaderProgram()
+ShaderProgram::ShaderProgram(const String &vshaderPath,
+                             const String &fshaderPath) : ShaderProgram()
 {
     Shader *vs = new Shader(Shader::Type::Vertex, vshaderPath);
     BindVertexShader(vs);
@@ -61,7 +61,7 @@ bool ShaderProgram::Link()
           char* errorLog = (char*) (malloc(sizeof(char) * errorLength));
           glGetProgramInfoLog(m_idGL, errorLength, NULL, errorLog);
 
-          std::string errorStr(errorLog);
+          String errorStr(errorLog);
           Logger_Error("Can't link " << std::endl << this << std::endl <<
                        "   Reason:  " << errorStr);
 
@@ -74,7 +74,7 @@ bool ShaderProgram::Link()
     return linked;
 }
 
-bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn) const
+bool ShaderProgram::SetUniformFloat(const String &name, float v, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -92,7 +92,7 @@ bool ShaderProgram::SetUniformFloat(const std::string &name, float v, bool warn)
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec2 (const std::string &name, const Vector2& v, bool warn) const
+bool ShaderProgram::SetUniformVec2 (const String &name, const Vector2& v, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -110,7 +110,7 @@ bool ShaderProgram::SetUniformVec2 (const std::string &name, const Vector2& v, b
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec3 (const std::string &name, const Vector3& v, bool warn) const
+bool ShaderProgram::SetUniformVec3 (const String &name, const Vector3& v, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -128,7 +128,7 @@ bool ShaderProgram::SetUniformVec3 (const std::string &name, const Vector3& v, b
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec4 (const std::string &name, const Vector4& v, bool warn) const
+bool ShaderProgram::SetUniformVec4 (const String &name, const Vector4& v, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -146,12 +146,12 @@ bool ShaderProgram::SetUniformVec4 (const std::string &name, const Vector4& v, b
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformColor(const std::string &name, const Color &c, bool warn) const
+bool ShaderProgram::SetUniformColor(const String &name, const Color &c, bool warn) const
 {
     return SetUniformVec4(name, Vector4(c), warn);
 }
 
-bool ShaderProgram::SetUniformMat4 (const std::string &name, const Matrix4& m, bool warn) const
+bool ShaderProgram::SetUniformMat4 (const String &name, const Matrix4& m, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -169,7 +169,7 @@ bool ShaderProgram::SetUniformMat4 (const std::string &name, const Matrix4& m, b
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformTexture(const std::string &name, const Texture *texture, bool warn) const
+bool ShaderProgram::SetUniformTexture(const String &name, const Texture *texture, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -195,17 +195,17 @@ Shader *ShaderProgram::GetFragmentShader() const
     return m_fshader;
 }
 
-GLint ShaderProgram::GetUniformLocation(const std::string &name) const
+GLint ShaderProgram::GetUniformLocation(const String &name) const
 {
-    return glGetUniformLocation(m_idGL, name.c_str());
+    return glGetUniformLocation(m_idGL, name.ToCString());
 }
 
-GLint ShaderProgram::GetAttribLocation(const std::string &name) const
+GLint ShaderProgram::GetAttribLocation(const String &name) const
 {
-    return glGetAttribLocation(m_idGL, name.c_str());
+    return glGetAttribLocation(m_idGL, name.ToCString());
 }
 
-const std::string ShaderProgram::ToString() const
+const String ShaderProgram::ToString() const
 {
     std::ostringstream oss;
     oss << "Shader program: " << std::endl <<
@@ -223,7 +223,7 @@ void ShaderProgram::Bind() const
     int textureUnit = 0;
     for (auto it = m_namesToTextures.begin(); it != m_namesToTextures.end(); ++it)
     {
-        std::string texName = it->first;
+        String texName = it->first;
         const Texture *tex = it->second;
         if (tex)
         {

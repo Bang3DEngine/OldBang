@@ -3,24 +3,24 @@
 #include "WindowMain.h"
 #include "Persistence.h"
 
-FileDialog::FileDialog(const std::string &title,
-                       const std::string &extension) :
+FileDialog::FileDialog(const String &title,
+                       const String &extension) :
     QFileDialog(WindowMain::GetInstance()->GetMainWindow())
 {
     this->m_title = title;
     this->m_extension = extension;
 }
 
-std::string FileDialog::GetExtensionFilterString(const std::string &extension)
+String FileDialog::GetExtensionFilterString(const String &extension)
 {
-    std::string ext = extension;
+    String ext = extension;
     StringUtils::AddInFrontOfWords("*.", &ext);
     return ext + "(" + ext + ")" ;
 }
 
-std::string FileDialog::GetOpenFilename()
+String FileDialog::GetOpenFilename()
 {
-    std::string filepath =
+    String filepath =
             this->getOpenFileName(
                 WindowMain::GetInstance()->GetMainWindow(),
                 QString::fromStdString(m_title),
@@ -31,12 +31,12 @@ std::string FileDialog::GetOpenFilename()
     return filepath;
 }
 
-std::string FileDialog::GetSaveFilename(const std::string &suggestedFilename)
+String FileDialog::GetSaveFilename(const String &suggestedFilename)
 {
-    std::string dirpath = Persistence::GetAssetsPathAbsolute() +
+    String dirpath = Persistence::GetAssetsPathAbsolute() +
             (suggestedFilename == "" ? "" : ("/" + suggestedFilename));
 
-    std::string filepath =
+    String filepath =
             getSaveFileName(
                 WindowMain::GetInstance()->GetMainWindow(),
                 QString::fromStdString(m_title),

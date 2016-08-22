@@ -64,7 +64,7 @@ const Mesh *MeshRenderer::GetMesh()
     return m_mesh;
 }
 
-const std::string MeshRenderer::ToString() const
+const String MeshRenderer::ToString() const
 {
     std::ostringstream oss;
     oss << "MeshRenderer: [" << std::endl <<
@@ -74,7 +74,7 @@ const std::string MeshRenderer::ToString() const
     return oss.str();
 }
 
-std::string MeshRenderer::GetName() const
+String MeshRenderer::GetName() const
 {
     return "MeshRenderer";
 }

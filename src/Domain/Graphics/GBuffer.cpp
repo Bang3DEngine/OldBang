@@ -32,7 +32,7 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     SetColorAttachment(Attachment::Color,         m_colorTexture);
     CreateDepthRenderbufferAttachment();
 
-    std::string renderToScreenMatFilepath =
+    String renderToScreenMatFilepath =
             "Assets/Engine/Materials/RenderGBufferToScreen.bmat";
     m_renderGBufferToScreenMaterial =
             AssetsManager::LoadAsset<Material>(renderToScreenMatFilepath);

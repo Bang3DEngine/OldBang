@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <string>
+
 #include <iomanip>
 #include <sstream>
 #include <functional>
@@ -43,13 +43,13 @@ private:
     bool m_created = false;
 
     QTimer *m_updateTimer = nullptr;
-    std::string m_tagName = "";
+    String m_tagName = "";
     std::vector<XMLAttribute> m_attributes;
-    mutable std::map<std::string, AttributeWidget*> m_attrNameToAttrWidget;
+    mutable std::map<String, AttributeWidget*> m_attrNameToAttrWidget;
 
 
     void CreateWidgetSlots(XMLNode &xmlInfo);
-    void ConstructFromWidgetXMLInfo(const std::string &title,
+    void ConstructFromWidgetXMLInfo(const String &title,
                                     XMLNode &info, bool autoUpdate = true);
 
 protected:
@@ -60,7 +60,7 @@ protected:
 
 public:
     InspectorWidget();
-    void Init(const std::string &title,
+    void Init(const String &title,
               IInspectable *relatedInspectable);
 
     virtual ~InspectorWidget();
@@ -81,7 +81,7 @@ public:
     QGridLayout *GetGridLayout() const;
     int GetNextRowIndex() const;
 
-    void SetTitle(const std::string &title);
+    void SetTitle(const String &title);
 
 private slots:
 

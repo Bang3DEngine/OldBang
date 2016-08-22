@@ -9,11 +9,11 @@ Texture2DAssetFile::Texture2DAssetFile
 {
 }
 
-std::string Texture2DAssetFile::GetImageFilepath() const
+String Texture2DAssetFile::GetImageFilepath() const
 {
-    std::string contents = FileReader::GetContents(GetAbsolutePath());
+    String contents = FileReader::GetContents(GetAbsolutePath());
     XMLNode *xmlInfo = XMLNode::FromString(contents);
-    std::string result = "";
+    String result = "";
     if (xmlInfo)
     {
         result = xmlInfo->GetString("ImageFilepath");
@@ -24,7 +24,7 @@ std::string Texture2DAssetFile::GetImageFilepath() const
 
 QPixmap Texture2DAssetFile::GetIcon() const
 {
-    std::string fp = GetImageFilepath();
+    String fp = GetImageFilepath();
     QPixmap pm(QString::fromStdString(fp));
     return pm;
 }

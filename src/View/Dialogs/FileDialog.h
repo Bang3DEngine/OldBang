@@ -1,24 +1,24 @@
 #ifndef FILEDIALOG_H
 #define FILEDIALOG_H
 
-#include <string>
 #include <QFileDialog>
 
+#include "Bang.h"
 
 class FileDialog : public QFileDialog
 {
 private:
-    std::string m_title = "";
-    std::string m_extension = "";
+    String m_title = "";
+    String m_extension = "";
 
-    std::string GetExtensionFilterString(const std::string &extension);
+    String GetExtensionFilterString(const String &extension);
 
 public:
-    FileDialog(const std::string &title,
-               const std::string &extension);
+    FileDialog(const String &title,
+               const String &extension);
 
-    std::string GetOpenFilename();
-    std::string GetSaveFilename(const std::string &suggestedFilename = "");
+    String GetOpenFilename();
+    String GetSaveFilename(const String &suggestedFilename = "");
 };
 
 #endif // FILEDIALOG_H

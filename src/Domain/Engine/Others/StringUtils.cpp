@@ -1,15 +1,15 @@
 #include "StringUtils.h"
 
-const std::string StringUtils::TOKEN_SPACE = " \t\n";
+const String StringUtils::TOKEN_SPACE = " \t\n";
 
-bool StringUtils::Contains(const std::string &str, const std::string &whatToFind)
+bool StringUtils::Contains(const String &str, const String &whatToFind)
 {
-    return str.find(whatToFind.c_str(), 0) != std::string::npos;
+    return str.find(whatToFind.ToCString(), 0) != String::npos;
 }
 
-float StringUtils::ToFloat(const std::string &str, bool *ok)
+float StringUtils::ToFloat(const String &str, bool *ok)
 {
-    std::string number = str;
+    String number = str;
     StringUtils::Trim(&number);
     std::istringstream iss(number);
     float v;
@@ -18,9 +18,9 @@ float StringUtils::ToFloat(const std::string &str, bool *ok)
     return v;
 }
 
-int StringUtils::ToInt(const std::string &str, bool *ok)
+int StringUtils::ToInt(const String &str, bool *ok)
 {
-    std::string number = str;
+    String number = str;
     StringUtils::Trim(&number);
     std::istringstream iss(number);
     int
@@ -30,14 +30,14 @@ int StringUtils::ToInt(const std::string &str, bool *ok)
     return v;
 }
 
-std::string StringUtils::FromFloat(float f, int precision)
+String StringUtils::FromFloat(float f, int precision)
 {
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(precision) << f;
     return oss.str();
 }
 
-void StringUtils::TrimLeft(std::string *str)
+void StringUtils::TrimLeft(String *str)
 {
     if(str->length() == 0)
     {
@@ -52,7 +52,7 @@ void StringUtils::TrimLeft(std::string *str)
     *str = i == str->length() ? "" : str->substr(i, str->length() - i);
 }
 
-void StringUtils::TrimRight(std::string *str)
+void StringUtils::TrimRight(String *str)
 {
     if(str->length() == 0)
     {
@@ -67,22 +67,22 @@ void StringUtils::TrimRight(std::string *str)
     *str = i < 0 ? "" : str->substr(0, i+1);
 }
 
-void StringUtils::Trim(std::string *str)
+void StringUtils::Trim(String *str)
 {
     StringUtils::TrimLeft(str);
     StringUtils::TrimRight(str);
 }
 
-std::string StringUtils::Trim(const std::string &str)
+String StringUtils::Trim(const String &str)
 {
-    std::string strCpy = str;
+    String strCpy = str;
     Trim(&strCpy);
     return str;
 }
 
-std::string StringUtils::Concat(const std::vector<std::string> &particles, std::string joiner)
+String StringUtils::Concat(const std::vector<String> &particles, String joiner)
 {
-    std::string result = "";
+    String result = "";
     for (int i = 0; i < particles.size(); ++i)
     {
         if (i != 0) { result += joiner; }
@@ -92,9 +92,9 @@ std::string StringUtils::Concat(const std::vector<std::string> &particles, std::
 }
 
 
-std::vector<std::string> StringUtils::Split(const std::string &content, char splitter)
+std::vector<String> StringUtils::Split(const String &content, char splitter)
 {
-    std::vector<std::string> result;
+    std::vector<String> result;
     if(content == "")
     {
         return result; // Empty
@@ -105,43 +105,43 @@ std::vector<std::string> StringUtils::Split(const std::string &content, char spl
     while (!lastParticle)
     {
         int indexFound = content.find_first_of(splitter, lastIndexFound);
-        if (indexFound == std::string::npos)
+        if (indexFound == String::npos)
         {
             lastParticle = true;
             indexFound = content.length();
         }
-        std::string particle = content.substr(lastIndexFound, indexFound - lastIndexFound);
+        String particle = content.substr(lastIndexFound, indexFound - lastIndexFound);
         result.push_back(particle);
         lastIndexFound = indexFound + 1;
     }
     return result;
 }
 
-std::vector<std::string> StringUtils::SplitTrim(const std::string &content, char splitter)
+std::vector<String> StringUtils::SplitTrim(const String &content, char splitter)
 {
-    std::vector<std::string> result = Split(content, splitter);
-    for (std::string &str : result)
+    std::vector<String> result = Split(content, splitter);
+    for (String &str : result)
     {
         Trim(&str);
     }
     return result;
 }
 
-std::vector<std::string> StringUtils::BangEnumVariadicStringToNamesArray(const std::string &_va_args_)
+std::vector<String> StringUtils::BangEnumVariadicStringToNamesArray(const String &_va_args_)
 {
     // We receive something like "Wololo, Apple = 49, Pear=29, Lololo=2193, Banana,Sandwich, Monkey=32"
     // We want this vector: ["Wololo", "Apple", "Pear", "Lololo", "Banana", "Sandwich", "Monkey"]
-    std::vector<std::string> result = SplitTrim(_va_args_, ',');
-    for (std::string &str : result)
+    std::vector<String> result = SplitTrim(_va_args_, ',');
+    for (String &str : result)
     {
         str = SplitTrim(str, '=')[0];
     }
     return result;
 }
 
-std::string StringUtils::FormatInspectorLabel(const std::string &labelString)
+String StringUtils::FormatInspectorLabel(const String &labelString)
 {
-    std::string labelFormatted = labelString;
+    String labelFormatted = labelString;
     StringUtils::Replace(&labelFormatted, "_", " ");
 
     // Add space after every cap (except for consecutive caps).
@@ -177,9 +177,9 @@ bool StringUtils::IsCap(char c)
     return c >= 65 && c <= 90;
 }
 
-void StringUtils::AddInFrontOfWords(std::string particle, std::string *str)
+void StringUtils::AddInFrontOfWords(String particle, String *str)
 {
-    std::string &phrase = *str;
+    String &phrase = *str;
     if (phrase.length() > 0 && phrase[0] != ' ')
     {
         phrase.insert(0, particle);
@@ -195,15 +195,15 @@ void StringUtils::AddInFrontOfWords(std::string particle, std::string *str)
     }
 }
 
-void StringUtils::RemoveLineBreaks(std::string *str)
+void StringUtils::RemoveLineBreaks(String *str)
 {
     std::replace(str->begin(), str->end(), '\n', ' ');
 }
 
-void StringUtils::Replace(std::string *content, const std::string &toFind, const std::string &replaceWithThis)
+void StringUtils::Replace(String *content, const String &toFind, const String &replaceWithThis)
 {
-    std::string::size_type i;
-    while ( (i = content->find(toFind)) != std::string::npos)
+    String::size_type i;
+    while ( (i = content->find(toFind)) != String::npos)
     {
         content->replace(i, toFind.length(), replaceWithThis);
     }

@@ -4,16 +4,16 @@ XMLAttribute::XMLAttribute()
 {
 }
 
-XMLAttribute::XMLAttribute(const std::string &name,
-                           const std::string &value,
+XMLAttribute::XMLAttribute(const String &name,
+                           const String &value,
                            XMLAttribute::Type type,
                            const std::vector<XMLProperty> &properties)
 {
     Set(name, value, type, properties);
 }
 
-void XMLAttribute::Set(const std::string &name,
-                       const std::string &value,
+void XMLAttribute::Set(const String &name,
+                       const String &value,
                        XMLAttribute::Type type,
                        const std::vector<XMLProperty> &properties)
 {
@@ -23,12 +23,12 @@ void XMLAttribute::Set(const std::string &name,
     SetProperties(properties);
 }
 
-void XMLAttribute::SetName(const std::string &name)
+void XMLAttribute::SetName(const String &name)
 {
     m_name = name;
 }
 
-void XMLAttribute::SetValue(const std::string &value)
+void XMLAttribute::SetValue(const String &value)
 {
     m_value = value;
 }
@@ -38,7 +38,7 @@ void XMLAttribute::SetProperty(const XMLProperty &property)
     SetProperty(property.GetName(), property.GetValue());
 }
 
-void XMLAttribute::SetProperty(const std::string &propertyName, const std::string &propertyValue)
+void XMLAttribute::SetProperty(const String &propertyName, const String &propertyValue)
 {
     for (const XMLProperty& prop : m_properties) //Dont add repeated
     {
@@ -60,7 +60,7 @@ void XMLAttribute::SetProperties(const std::vector<XMLProperty> &properties)
     }
 }
 
-const std::string XMLAttribute::GetPropertyValue(const std::string &propertyName) const
+const String XMLAttribute::GetPropertyValue(const String &propertyName) const
 {
     for (const XMLProperty& prop : m_properties)
     {
@@ -84,7 +84,7 @@ bool XMLAttribute::HasProperty(const XMLProperty &property) const
     return false;
 }
 
-bool XMLAttribute::HasProperty(const std::string &propertyName) const
+bool XMLAttribute::HasProperty(const String &propertyName) const
 {
     for (const XMLProperty &prop : m_properties)
     {
@@ -96,7 +96,7 @@ bool XMLAttribute::HasProperty(const std::string &propertyName) const
     return false;
 }
 
-void XMLAttribute::RemoveProperty(const std::string &propertyName)
+void XMLAttribute::RemoveProperty(const String &propertyName)
 {
     for (auto it = m_properties.begin(); it != m_properties.end(); ++it)
     {
@@ -131,7 +131,7 @@ void XMLAttribute::SetInt(int value,
     Set(m_name, oss.str(), XMLAttribute::Type::Int, properties);
 }
 
-void XMLAttribute::SetString(const std::string &value,
+void XMLAttribute::SetString(const String &value,
                              const std::vector<XMLProperty> &properties)
 {
     Set(m_name, value, XMLAttribute::Type::String, properties);
@@ -208,11 +208,11 @@ void XMLAttribute::SetRect(const Rect &value,
     Set(m_name, oss.str(), XMLAttribute::Type::Rect, properties);
 }
 
-void XMLAttribute::SetFilepath(const std::string &filepath,
-                               const std::string &fileExtension,
+void XMLAttribute::SetFilepath(const String &filepath,
+                               const String &fileExtension,
                                const std::vector<XMLProperty> &properties)
 {
-    std::string newFilepath = Persistence::ToRelative(filepath);
+    String newFilepath = Persistence::ToRelative(filepath);
     Set(m_name, newFilepath, XMLAttribute::Type::File, properties);
 
     if (!fileExtension.empty())
@@ -223,14 +223,14 @@ void XMLAttribute::SetFilepath(const std::string &filepath,
     }
 }
 
-void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
-                           const std::string &selectedEnumName,
+void XMLAttribute::SetEnum(const std::vector<String> &enumNames,
+                           const String &selectedEnumName,
                            const std::vector<XMLProperty> &properties)
 {
     int selectedEnumIndex = -1;
     for (int i = 0; i < enumNames.size(); ++i)
     {
-        const std::string& enumName = enumNames[i];
+        const String& enumName = enumNames[i];
         if (enumName == selectedEnumName)
         {
             selectedEnumIndex = i;
@@ -240,7 +240,7 @@ void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
     SetEnum(enumNames, selectedEnumIndex, properties);
 }
 
-void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
+void XMLAttribute::SetEnum(const std::vector<String> &enumNames,
                            int selectedEnumIndex, const std::vector<XMLProperty> &properties)
 {
     Set(m_name, std::to_string(selectedEnumIndex), XMLAttribute::Type::Enum, properties);
@@ -251,7 +251,7 @@ void XMLAttribute::SetEnum(const std::vector<std::string> &enumNames,
     }
 }
 
-void XMLAttribute::SetButton(const std::string buttonText,
+void XMLAttribute::SetButton(const String buttonText,
                              IAttrWidgetButtonListener *listener,
                              const std::vector<XMLProperty> &properties)
 {
@@ -295,9 +295,9 @@ void XMLAttribute::SetType(const XMLAttribute::Type &type)
     m_type = type;
 }
 
-const std::string XMLAttribute::ToString() const
+const String XMLAttribute::ToString() const
 {
-    std::string str = "";
+    String str = "";
     str += GetName();
     str += ":";
     str += GetTypeName();
@@ -324,12 +324,12 @@ const std::string XMLAttribute::ToString() const
     return str;
 }
 
-const std::string& XMLAttribute::GetName() const
+const String& XMLAttribute::GetName() const
 {
     return m_name;
 }
 
-const std::string& XMLAttribute::GetValue() const
+const String& XMLAttribute::GetValue() const
 {
     return m_value;
 }
@@ -351,12 +351,12 @@ float XMLAttribute::GetFloat() const
     return StringUtils::ToFloat(m_value);
 }
 
-std::string XMLAttribute::GetFilepath() const
+String XMLAttribute::GetFilepath() const
 {
     return GetString();
 }
 
-std::string XMLAttribute::GetString() const
+String XMLAttribute::GetString() const
 {
     return m_value;
 }
@@ -364,9 +364,9 @@ std::string XMLAttribute::GetString() const
 Vector2 XMLAttribute::GetVector2() const
 {
     float x = 0, y = 0;
-    std::string insidePars = StringUtils::Split(m_value, '(')[1];
+    String insidePars = StringUtils::Split(m_value, '(')[1];
     insidePars =  StringUtils::Split(insidePars, ')')[0];
-    std::vector<std::string> numbers = StringUtils::Split(insidePars, ',');
+    std::vector<String> numbers = StringUtils::Split(insidePars, ',');
     x = StringUtils::ToFloat(numbers[0]);
     y = StringUtils::ToFloat(numbers[1]);
     return Vector2(x,y);
@@ -375,9 +375,9 @@ Vector2 XMLAttribute::GetVector2() const
 Vector3 XMLAttribute::GetVector3() const
 {
     float x = 0, y = 0, z = 0;
-    std::string insidePars = StringUtils::Split(m_value, '(')[1];
+    String insidePars = StringUtils::Split(m_value, '(')[1];
     insidePars =  StringUtils::Split(insidePars, ')')[0];
-    std::vector<std::string> numbers = StringUtils::Split(insidePars, ',');
+    std::vector<String> numbers = StringUtils::Split(insidePars, ',');
     x = StringUtils::ToFloat(numbers[0]);
     y = StringUtils::ToFloat(numbers[1]);
     z = StringUtils::ToFloat(numbers[2]);
@@ -387,9 +387,9 @@ Vector3 XMLAttribute::GetVector3() const
 Vector4 XMLAttribute::GetVector4() const
 {
     float x = 0, y = 0, z = 0, w = 0;
-    std::string insidePars = StringUtils::Split(m_value, '(')[1];
+    String insidePars = StringUtils::Split(m_value, '(')[1];
     insidePars =  StringUtils::Split(insidePars, ')')[0];
-    std::vector<std::string> numbers = StringUtils::Split(insidePars, ',');
+    std::vector<String> numbers = StringUtils::Split(insidePars, ',');
     x = StringUtils::ToFloat(numbers[0]);
     y = StringUtils::ToFloat(numbers[1]);
     z = StringUtils::ToFloat(numbers[2]);
@@ -429,24 +429,24 @@ IAttrWidgetButtonListener *XMLAttribute::GetButtonListener() const
     return nullptr;
 }
 
-std::string XMLAttribute::GetEnumSelectedName() const
+String XMLAttribute::GetEnumSelectedName() const
 {
-    std::string propName = "EnumName" + std::to_string(GetEnumSelectedIndex());
+    String propName = "EnumName" + std::to_string(GetEnumSelectedIndex());
     return GetPropertyValue(propName);
 }
 
 int XMLAttribute::GetEnumSelectedIndex() const
 {
-    return std::atoi(GetValue().c_str());
+    return std::atoi(GetValue().ToCString());
 }
 
-std::vector<std::string> XMLAttribute::GetEnumNames() const
+std::vector<String> XMLAttribute::GetEnumNames() const
 {
-    std::vector<std::string> enumNames;
+    std::vector<String> enumNames;
     int i = 0;
     while (true)
     {
-        std::string propName = "EnumName" + std::to_string(i);
+        String propName = "EnumName" + std::to_string(i);
         if (HasProperty(propName))
         {
             enumNames.push_back( GetPropertyValue(propName) );
@@ -465,11 +465,11 @@ const std::vector<XMLProperty> &XMLAttribute::GetProperties() const
     return m_properties;
 }
 
-XMLAttribute XMLAttribute::FromString(const std::string &string)
+XMLAttribute XMLAttribute::FromString(const String &string)
 {
     XMLAttribute attribute;
 
-    std::string str = string;
+    String str = string;
     StringUtils::Trim(&str);
 
     int attrNameBegin = str.find_first_not_of(StringUtils::TOKEN_SPACE, 0);
@@ -496,17 +496,17 @@ XMLAttribute XMLAttribute::FromString(const std::string &string)
     int attrPropertiesEnd = str.find_first_of("}", attrPropertiesBegin);
     if (attrPropertiesEnd == -1) { return attribute; }
 
-    std::string name = str.substr(attrNameBegin, attrNameEnd - attrNameBegin);
-    std::string typeString = str.substr(attrTypeBegin, attrTypeEnd - attrTypeBegin);
-    std::string value = str.substr(attrValueBegin, attrValueEnd - attrValueBegin);
-    std::string propertiesString = str.substr(attrPropertiesBegin, attrPropertiesEnd - attrPropertiesBegin);
-    std::vector<std::string> properties = StringUtils::Split(propertiesString, ',');
+    String name = str.substr(attrNameBegin, attrNameEnd - attrNameBegin);
+    String typeString = str.substr(attrTypeBegin, attrTypeEnd - attrTypeBegin);
+    String value = str.substr(attrValueBegin, attrValueEnd - attrValueBegin);
+    String propertiesString = str.substr(attrPropertiesBegin, attrPropertiesEnd - attrPropertiesBegin);
+    std::vector<String> properties = StringUtils::Split(propertiesString, ',');
 
     attribute.SetName(name);
     attribute.SetType(XMLAttribute::Type_FromString(typeString));
     attribute.SetValue(value);
 
-    for (std::string propString : properties)
+    for (String propString : properties)
     {
         XMLProperty prop = XMLProperty::FromString(propString);
         attribute.SetProperty(prop);
@@ -521,7 +521,7 @@ const XMLAttribute::Type& XMLAttribute::GetType() const
 }
 
 
-std::string XMLAttribute::GetTypeName() const
+String XMLAttribute::GetTypeName() const
 {
     return Type_ToString(m_type);
 }

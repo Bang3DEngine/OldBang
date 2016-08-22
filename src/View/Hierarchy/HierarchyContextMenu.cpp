@@ -112,7 +112,7 @@ void HierarchyContextMenu::OnCreatePrefab()
     GameObject *go = m_hierarchy->GetFirstSelectedGameObject();
 
     FileDialog fd("Create Prefab...", Prefab::GetFileExtensionStatic());
-    std::string filename = fd.GetSaveFilename(go->name);
+    String filename = fd.GetSaveFilename(go->name);
     if (filename != "")
     {
         Prefab *prefab = new Prefab(go);

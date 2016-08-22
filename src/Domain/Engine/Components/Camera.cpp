@@ -160,7 +160,7 @@ Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCa
     return res;
 }
 
-const std::string Camera::ToString() const
+const String Camera::ToString() const
 {
     return "Camera";
 }

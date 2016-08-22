@@ -8,7 +8,7 @@ TextFile::TextFile(const QFileSystemModel *model, const QModelIndex &index)
     m_contents = FileReader::GetContents(m_path);
 }
 
-std::string TextFile::GetContents() const
+String TextFile::GetContents() const
 {
     return m_contents;
 }

@@ -1,7 +1,7 @@
 #ifndef EXPLORER_H
 #define EXPLORER_H
 
-#include <string>
+
 
 #include <QListView>
 #include <QMouseEvent>
@@ -54,15 +54,15 @@ private:
     QToolButton *m_buttonChangeViewMode = nullptr;
     IInspectable *m_lastIInspectableInInspector = nullptr;
 
-    std::string m_lastSelectedPath = "";
+    String m_lastSelectedPath = "";
     QTimer *m_updateTimer = nullptr;
 
-    std::string GetFilepathFromModelIndex(const QModelIndex &qmi) const;
-    std::string GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const;
-    std::string GetDirFromModelIndex(const QModelIndex &qmi) const;
-    std::string GetRelativeDirFromModelIndex(const QModelIndex &qmi) const;
-    QModelIndex GetModelIndexFromFilepath(const std::string &filepath) const;
-    void SetDir(const std::string &path);
+    String GetFilepathFromModelIndex(const QModelIndex &qmi) const;
+    String GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const;
+    String GetDirFromModelIndex(const QModelIndex &qmi) const;
+    String GetRelativeDirFromModelIndex(const QModelIndex &qmi) const;
+    QModelIndex GetModelIndexFromFilepath(const String &filepath) const;
+    void SetDir(const String &path);
 
 protected:
     //To set the scroll step to a smaller one
@@ -72,15 +72,15 @@ public:
     Explorer(QWidget *parent);
     virtual ~Explorer();
 
-    std::string GetCurrentDir() const;
-    std::string GetSelectedFileOrDirPath() const;
+    String GetCurrentDir() const;
+    String GetSelectedFileOrDirPath() const;
     File GetSelectedFile() const;
-    bool Exists(const std::string &filepath) const;
+    bool Exists(const String &filepath) const;
     bool IsSelectedAFile() const;
     bool IsSelectedADir() const;
     const QFileSystemModel* GetFileSystemModel() const;
 
-    void StartRenaming(const std::string &filepath);
+    void StartRenaming(const String &filepath);
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
     virtual void OnDropHere(const DragDropInfo &ddi) override;
@@ -95,7 +95,7 @@ public:
     //Updates the Inspector with the selected file info
     void RefreshInspector();
 
-    void SelectFile(const std::string &path);
+    void SelectFile(const String &path);
 
     static Explorer* GetInstance();
 

@@ -54,7 +54,7 @@ private:
      * @brief Path to the Behaviour source file.
      * It is indicated using the Inspector
      */
-    std::string m_sourceFilepath = "";
+    String m_sourceFilepath = "";
 
     void ChangeBehaviour(Behaviour *newBehaviour);
 
@@ -64,13 +64,13 @@ protected:
 public:
     virtual ~BehaviourHolder();
 
-    virtual const std::string ToString() const override;
-    virtual std::string GetName() const override;
+    virtual const String ToString() const override;
+    virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
 
-    const std::string &GetSourceFilepath() const;
+    const String &GetSourceFilepath() const;
 
     #ifdef BANG_EDITOR
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
@@ -78,7 +78,7 @@ public:
     #endif
 
     void Refresh();
-    void OnButtonClicked(const std::string &attrName) override;
+    void OnButtonClicked(const String &attrName) override;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
@@ -89,7 +89,7 @@ public:
     virtual void _OnRender () override;
     virtual void _OnDestroy () override;
 
-    void OnBehaviourFinishedCompiling(std::string soFilepath);
+    void OnBehaviourFinishedCompiling(String soFilepath);
 
     // TODO: Add windowEventListener events pass to Behaviour too
 };

@@ -6,6 +6,7 @@
 #include <glm/gtx/euler_angles.hpp>
 
 #include "NamedEnum.h"
+#include "String.h"
 
 // MACROS
 

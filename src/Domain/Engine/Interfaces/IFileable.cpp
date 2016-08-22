@@ -3,16 +3,16 @@
 #include "FileWriter.h"
 #include "FileReader.h"
 
-std::string IFileable::GetXMLInfoString() const
+String IFileable::GetXMLInfoString() const
 {
     XMLNode *xmlInfo = new XMLNode();
     FillXMLInfo(xmlInfo);
-    std::string result = xmlInfo->ToString();
+    String result = xmlInfo->ToString();
     delete xmlInfo;
     return result;
 }
 
-void IFileable::ReadXMLInfoFromString(const std::string &xmlInfoString)
+void IFileable::ReadXMLInfoFromString(const String &xmlInfoString)
 {
     XMLNode *xmlInfo = XMLNode::FromString(xmlInfoString);
     if (xmlInfo)

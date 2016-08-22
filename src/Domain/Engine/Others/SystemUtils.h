@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <string>
+
 #include <string.h>
 
 #include "StringUtils.h"
@@ -23,11 +23,11 @@ private:
 
 public:
 
-    static std::string GetAllProjectObjects();
-    static std::string GetAllProjectSubDirs();
+    static String GetAllProjectObjects();
+    static String GetAllProjectSubDirs();
 
-    static std::string GetQtIncludes();
-    static std::string GetQtLibrariesDirs();
+    static String GetQtIncludes();
+    static String GetQtLibrariesDirs();
 
     /**
      * @brief Executes a system command.
@@ -35,11 +35,11 @@ public:
      * @param The output of the command.
      * @param Whether it's been successful or not
      */
-    static void System(const std::string &command,
-                       std::string *output = nullptr,
+    static void System(const String &command,
+                       String *output = nullptr,
                        bool *success = nullptr);
 
-    static void SystemBackground(const std::string &command);
+    static void SystemBackground(const String &command);
 
     /**
      * @brief Compiles the passed script into a shared library, whom path is
@@ -47,7 +47,7 @@ public:
      * @param filepath of the script to compile. Relative to the project root.
      * @return The filepath of the created library
      */
-    static std::string CompileToSharedObject(const std::string &filepathFromProjectRoot);
+    static String CompileToSharedObject(const String &filepathFromProjectRoot);
 
     /**
      * @brief Creates a Behaviour from a sharedObject passed as parameter.
@@ -60,7 +60,7 @@ public:
      * later with CloseLibrary. If error, nullptr.
      * @return The created Behaviour.
      */
-    static void CreateDynamicBehaviour(const std::string &sharedObjectFilepath,
+    static void CreateDynamicBehaviour(const String &sharedObjectFilepath,
                                        Behaviour **createdBehaviour,
                                        void **openLibrary);
 

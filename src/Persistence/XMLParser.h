@@ -1,7 +1,7 @@
 #ifndef XMLPARSER_H
 #define XMLPARSER_H
 
-#include <string>
+
 #include <sstream>
 #include <fstream>
 
@@ -12,46 +12,46 @@ class XMLParser
 {
 private:
 public:
-    static std::map<std::string, const IFileable*> m_idToPointer;
+    static std::map<String, const IFileable*> m_idToPointer;
 
     static void ClearPointerIds();
 
-    static void GetNextOpenTag(const std::string &xml,
+    static void GetNextOpenTag(const String &xml,
                                int startPosition,
-                               std::string *tag,
+                               String *tag,
                                int *beginPosition,
                                int *endTagPosition);
 
-    static void GetNextTag(const std::string &xml,
+    static void GetNextTag(const String &xml,
                                int startPosition,
-                               std::string *tag,
+                               String *tag,
                                int *beginPosition,
                                int *endTagPosition);
 
-    static void GetCorrespondingCloseTag(const std::string &xml,
+    static void GetCorrespondingCloseTag(const String &xml,
                                          int startPositionAfterOpenTag,
-                                         std::string tagName,
+                                         String tagName,
                                          int *beginPosition,
                                          int *endPosition);
 
-    static void GetFirstAttribute(const std::string &tag,
+    static void GetFirstAttribute(const String &tag,
                                   int startPosition,
                                   XMLAttribute *attribute,
                                   int *attributeEnd);
 
-    static bool IsOpenTag(const std::string &tag);
+    static bool IsOpenTag(const String &tag);
 
 public:
     XMLParser();
 
     static void RegisterId(const XMLNode *xmlInfo, const IFileable *pointer);
-    static const IFileable* GetPointerFromId(const std::string &id);
+    static const IFileable* GetPointerFromId(const String &id);
 
-    static std::string GetTagName(const std::string &tag,
+    static String GetTagName(const String &tag,
                                   int *tagNameBegin = nullptr, int *tagNameEnd = nullptr);
 
-    static XMLNode* FromFile(const std::string &filepath);
-    static XMLNode* FromString(const std::string &xml);
+    static XMLNode* FromFile(const String &filepath);
+    static XMLNode* FromString(const String &xml);
 };
 
 #endif // XMLPARSER_H

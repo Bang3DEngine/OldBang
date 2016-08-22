@@ -17,8 +17,8 @@ protected:
 
 public:
 
-    virtual const std::string ToString() const override;
-    virtual std::string GetName() const override;
+    virtual const String ToString() const override;
+    virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;

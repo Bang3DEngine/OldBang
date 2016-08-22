@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <string>
+
 #include <sstream>
 #include <ostream>
 
@@ -126,8 +126,8 @@ public:
     Vector3 GetLocalScale() const;
     Vector3 GetScale() const;
 
-    const std::string ToString() const override;
-    virtual std::string GetName() const override { return "Transform"; }
+    const String ToString() const override;
+    virtual String GetName() const override { return "Transform"; }
 
     #ifdef BANG_EDITOR
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;

@@ -9,7 +9,7 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
 
     m_listener = xmlAttribute.GetButtonListener();
 
-    std::string buttonText = StringUtils::FormatInspectorLabel(xmlAttribute.GetName());
+    String buttonText = StringUtils::FormatInspectorLabel(xmlAttribute.GetName());
     m_button = new QPushButton(QString::fromStdString(buttonText));
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(OnButtonClicked(bool)));
     layout->addWidget(m_button);
@@ -18,12 +18,12 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
     m_layout->setAlignment(Qt::AlignRight);
 }
 
-void AttrWidgetButton::SetValue(const std::string &buttonText)
+void AttrWidgetButton::SetValue(const String &buttonText)
 {
     m_button->setText(QString::fromStdString(buttonText));
 }
 
-std::string AttrWidgetButton::GetValue() const
+String AttrWidgetButton::GetValue() const
 {
     return m_button->text().toStdString();
 }

@@ -72,7 +72,7 @@ void Inspector::Refresh()
     }
 }
 
-void Inspector::SetInspectable(IInspectable *inspectable, const std::string &title)
+void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
 {
     Clear();
     InspectorWidget *iw = new InspectorWidget();
@@ -97,7 +97,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
         AddWidget(w);
     }
 
-    m_titleLabel->setText(QString(gameObject->name.c_str()));
+    m_titleLabel->setText(QString(gameObject->name.ToCString()));
 }
 
 void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable)

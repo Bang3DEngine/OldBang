@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <string>
+
 
 #include "Vector3.h"
 #include "Rect.h"
@@ -21,10 +21,10 @@ private:
     FileWriter();
 
 public:
-    static void WriteScene(const std::string &filepath, Scene *scene);
-    static void WriteAsset(const std::string &filepath, Asset *a);
-    static bool WriteToFile(const std::string &filepath, const IFileable *fileable);
-    static bool WriteToFile(const std::string &filepath, const std::string &content);
+    static void WriteScene(const String &filepath, Scene *scene);
+    static void WriteAsset(const String &filepath, Asset *a);
+    static bool WriteToFile(const String &filepath, const IFileable *fileable);
+    static bool WriteToFile(const String &filepath, const String &content);
 
     static void WriteXMLNode(XMLNode *xmlInfo, std::ostream &f);
     static void WriteBool(bool v, std::ostream &f);
@@ -36,8 +36,8 @@ public:
     static void WriteVector4(const Vector4 &v, std::ostream &f);
     static void WriteQuaternion(const Quaternion &q, std::ostream &f);
     static void WriteRect(const Rect &r, std::ostream &f);
-    static void WriteString(const std::string &str, std::ostream &f);
-    static void WriteFilepath(const std::string &path, std::ostream &f);
+    static void WriteString(const String &str, std::ostream &f);
+    static void WriteFilepath(const String &path, std::ostream &f);
 };
 
 #endif // FILEWRITER_H

@@ -79,7 +79,7 @@ ColorLabel::ColorLabel(QWidget *parent,
 
 void ColorLabel::SetColor(const Color &c)
 {
-    std::string ss = "background-color: rgb";
+    String ss = "background-color: rgb";
     ss += c.ToStringRgb255();
     setStyleSheet(QString::fromStdString(ss));
 }

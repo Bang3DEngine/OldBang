@@ -2,7 +2,8 @@
 #define MESHFACTORY_H
 
 #include <vector>
-#include <string>
+
+#include "Bang.h"
 
 class Mesh;
 class Vector3;
@@ -18,10 +19,10 @@ friend class MenuBar;
 
 private:
     MeshFactory() {}
-    static GameObject* CreatePrimitiveGameObject(Mesh *m, const std::string &name);
+    static GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name);
 
     #ifdef BANG_EDITOR
-    static EditorGameObject* CreatePrimitiveEditorGameObject(Mesh *m, const std::string &name);
+    static EditorGameObject* CreatePrimitiveEditorGameObject(Mesh *m, const String &name);
     #endif
 
 public:

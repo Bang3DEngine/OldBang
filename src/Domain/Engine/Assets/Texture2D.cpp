@@ -5,7 +5,7 @@ Texture2D::Texture2D() : Texture(TextureType::Texture2D)
 {
 }
 
-Texture2D::Texture2D(const std::string &imageFilepath) : Texture2D()
+Texture2D::Texture2D(const String &imageFilepath) : Texture2D()
 {
     LoadFromFile(imageFilepath);
 }
@@ -14,7 +14,7 @@ Texture2D::~Texture2D()
 {
 }
 
-void Texture2D::LoadFromFile(const std::string &imageFilepath)
+void Texture2D::LoadFromFile(const String &imageFilepath)
 {
     Bind();
     m_filepath = imageFilepath;
@@ -49,7 +49,7 @@ void Texture2D::Fill(unsigned char *newData,
     UnBind();
 }
 
-std::string Texture2D::GetImageRelativeFilepath() const
+String Texture2D::GetImageRelativeFilepath() const
 {
     return m_filepath;
 }

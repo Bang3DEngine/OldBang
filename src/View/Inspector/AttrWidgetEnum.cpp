@@ -10,8 +10,8 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
 
     m_comboBox = new QComboBox();
     layout->addWidget(m_comboBox);
-    std::vector<std::string> enumNames = xmlAttribute.GetEnumNames();
-    for (std::string enumString : enumNames)
+    std::vector<String> enumNames = xmlAttribute.GetEnumNames();
+    for (String enumString : enumNames)
     {
         m_comboBox->addItem( QString::fromStdString(enumString) );
     }

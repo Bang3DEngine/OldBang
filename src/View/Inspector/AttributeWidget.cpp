@@ -38,7 +38,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
         QString label = "";
         if (createLabel)
         {
-            std::string name = xmlAttribute.GetName();
+            String name = xmlAttribute.GetName();
             name = StringUtils::FormatInspectorLabel(name);
             label = QString::fromStdString(name);
         }

@@ -65,14 +65,14 @@ Color Color::Lerp(const Color &c1,
                           glm::vec4(c2.r, c2.g, c2.b, c2.a), progression)));
 }
 
-std::string Color::ToStringRgb() const
+String Color::ToStringRgb() const
 {
     std::ostringstream oss;
     oss << "(" << r << ", " << g << ", " << b << ")";
     return oss.str();
 }
 
-std::string Color::ToStringRgb255() const
+String Color::ToStringRgb255() const
 {
     std::ostringstream oss;
     oss << "(" << int(r * 255) << ", " <<
@@ -81,14 +81,14 @@ std::string Color::ToStringRgb255() const
     return oss.str();
 }
 
-std::string Color::ToStringRgba() const
+String Color::ToStringRgba() const
 {
     std::ostringstream oss;
     oss << "(" << r << ", " << g << ", " << b << ", " << a << ")";
     return oss.str();
 }
 
-std::string Color::ToStringRgba255() const
+String Color::ToStringRgba255() const
 {
     std::ostringstream oss;
     oss << "(" << int(r * 255) << ", " <<

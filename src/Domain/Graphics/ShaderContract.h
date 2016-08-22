@@ -6,7 +6,7 @@
 //TODO: Add check of all variables beginning with ShaderNames_Prefix, to see
 //      if all of them have an existing name. Do this when loading shaders.
 
-#include <string>
+
 
 class ShaderContract
 {
@@ -14,7 +14,7 @@ private:
     ShaderContract() {}
 
 public:
-    const static std::string \
+    const static String \
     ShaderNames_Prefix,
 
     Attr_Vertex_In_Position_Raw,

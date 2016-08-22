@@ -39,7 +39,7 @@ void ExplorerDirTree::CheckSelection()
         if (m_lastSelectedModelIndexPointer != index.internalPointer())
         {
             m_lastSelectedModelIndexPointer = index.internalPointer();
-            std::string selectedDirPath =
+            String selectedDirPath =
                     m_fileSystemModel->filePath(index).toStdString();
             m_explorer->SetDir(selectedDirPath);
         }
@@ -51,7 +51,7 @@ void ExplorerDirTree::OnDirLoaded(QString dir)
     this->expandAll();
 }
 
-void ExplorerDirTree::setDir(const std::string &path)
+void ExplorerDirTree::setDir(const String &path)
 {
     setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(path)));
 }

@@ -4,7 +4,7 @@
 #include "Bang.h"
 
 #include <list>
-#include <string>
+
 
 #include "Color.h"
 #include "Logger.h"
@@ -38,7 +38,7 @@ protected:
     virtual void _OnResize (int newWidth, int newHeight);
 
 public:
-    const static std::string GetFileExtension () { return "bscene"; }
+    const static String GetFileExtension () { return "bscene"; }
 
     Scene();
     virtual ~Scene();

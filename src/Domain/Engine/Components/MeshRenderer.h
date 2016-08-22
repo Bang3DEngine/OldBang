@@ -46,8 +46,8 @@ public:
     virtual Box GetBoundingBox() const override;
 
     virtual const Mesh* GetMesh();
-    virtual const std::string ToString() const override;
-    virtual std::string GetName() const override;
+    virtual const String ToString() const override;
+    virtual String GetName() const override;
 
     #ifdef BANG_EDITOR
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;

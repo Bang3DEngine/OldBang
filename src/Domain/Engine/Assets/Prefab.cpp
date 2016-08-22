@@ -18,7 +18,7 @@ Prefab::Prefab(GameObject *go)
     }
 }
 
-Prefab::Prefab(const std::string &gameObjectXMLInfoContent)
+Prefab::Prefab(const String &gameObjectXMLInfoContent)
 {
     m_gameObjectXMLInfoContent = gameObjectXMLInfoContent;
 }

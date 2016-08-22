@@ -2,7 +2,7 @@
 #define INSPECTORCOMPONENTENUMSLOTWIDGET_H
 
 #include <vector>
-#include <string>
+
 #include <QTimer>
 #include <QFocusEvent>
 #include <QComboBox>

@@ -4,12 +4,12 @@ Shader::Shader(Shader::Type t) : m_sourceCode(""), m_filepath(""), m_type(t)
 {
 }
 
-Shader::Shader(Shader::Type t, const std::string &shaderPath) : Shader(t)
+Shader::Shader(Shader::Type t, const String &shaderPath) : Shader(t)
 {
     LoadFromFile(shaderPath);
 }
 
-bool Shader::LoadFromFile(const std::string& filepath)
+bool Shader::LoadFromFile(const String& filepath)
 {
     this->m_filepath = filepath;
 
@@ -29,7 +29,7 @@ bool Shader::LoadFromFile(const std::string& filepath)
 
     m_idGL = glCreateShader(GLint(m_type));
 
-    const GLchar *source = (const GLchar*)(m_sourceCode.c_str());
+    const GLchar *source = (const GLchar*)(m_sourceCode.ToCString());
     GLint size = m_sourceCode.length();
     glShaderSource(m_idGL, 1, &source, &size);
     glCompileShader(m_idGL);
@@ -44,7 +44,7 @@ bool Shader::LoadFromFile(const std::string& filepath)
         std::vector<GLchar> v(maxLength);
         glGetShaderInfoLog(m_idGL, maxLength, &maxLength, &v[0]);
 
-        std::string errorStr(v.begin(), v.end());
+        String errorStr(v.begin(), v.end());
         Logger_Error("Failed to compile shader: '" + filepath + "': " + errorStr);
         glDeleteShader(m_idGL);
         return false;
@@ -53,12 +53,12 @@ bool Shader::LoadFromFile(const std::string& filepath)
     return true;
 }
 
-const std::string& Shader::GetSourceCode() const
+const String& Shader::GetSourceCode() const
 {
     return m_sourceCode;
 }
 
-const std::string& Shader::GetFilepath() const
+const String& Shader::GetFilepath() const
 {
     return m_filepath;
 }
@@ -68,7 +68,7 @@ Shader::Type Shader::GetType() const
     return m_type;
 }
 
-const std::string Shader::ToString() const
+const String Shader::ToString() const
 {
     if (m_type == Type::Vertex) return "Vertex Shader: '" + m_filepath + "'";
     return "Fragment Shader: '" + m_filepath + "'";

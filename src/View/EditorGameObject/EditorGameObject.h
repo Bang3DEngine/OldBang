@@ -10,7 +10,7 @@ protected:
 
 public:
     EditorGameObject();
-    EditorGameObject(const std::string &name);
+    EditorGameObject(const String &name);
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable* Clone() const;

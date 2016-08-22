@@ -6,24 +6,24 @@ FileWriter::FileWriter()
 {
 }
 
-void FileWriter::WriteScene(const std::string &filepath, Scene *scene)
+void FileWriter::WriteScene(const String &filepath, Scene *scene)
 {
-    std::string fpath = Persistence::AppendExtension(filepath, Scene::GetFileExtension());
+    String fpath = Persistence::AppendExtension(filepath, Scene::GetFileExtension());
     FileWriter::WriteToFile(fpath, scene->GetXMLInfoString());
 }
 
-void FileWriter::WriteAsset(const std::string &filepath, Asset *a)
+void FileWriter::WriteAsset(const String &filepath, Asset *a)
 {
-    std::string fpath = Persistence::AppendExtension(filepath, a->GetFileExtension());
+    String fpath = Persistence::AppendExtension(filepath, a->GetFileExtension());
     FileWriter::WriteToFile(fpath, a->GetXMLInfoString());
 }
 
-bool FileWriter::WriteToFile(const std::string &filepath, const IFileable *fileable)
+bool FileWriter::WriteToFile(const String &filepath, const IFileable *fileable)
 {
     return FileWriter::WriteToFile(filepath, fileable->GetXMLInfoString());
 }
 
-bool FileWriter::WriteToFile(const std::string &filepath, const std::string &content)
+bool FileWriter::WriteToFile(const String &filepath, const String &content)
 {
     bool ok = true;
     std::ofstream ofs;
@@ -49,7 +49,7 @@ void FileWriter::WriteXMLNode(XMLNode *xmlInfo, std::ostream &f)
 
 void FileWriter::WriteBool(bool v, std::ostream &f)
 {
-    std::string s = v ? "true" : "false";
+    String s = v ? "true" : "false";
     f << s << std::endl;
 }
 
@@ -94,7 +94,7 @@ void FileWriter::WriteRect(const Rect &r, std::ostream &f)
     f << r.m_minx << " " << r.m_maxx << " " << r.m_miny << " " << r.m_maxy << std::endl;
 }
 
-void FileWriter::WriteString(const std::string &str, std::ostream &f)
+void FileWriter::WriteString(const String &str, std::ostream &f)
 {
     if (str != "")
     {
@@ -106,7 +106,7 @@ void FileWriter::WriteString(const std::string &str, std::ostream &f)
     }
 }
 
-void FileWriter::WriteFilepath(const std::string &path, std::ostream &f)
+void FileWriter::WriteFilepath(const String &path, std::ostream &f)
 {
     FileWriter::WriteString(Persistence::ToRelative(path), f);
 }

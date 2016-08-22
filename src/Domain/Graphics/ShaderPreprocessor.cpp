@@ -4,9 +4,9 @@ ShaderPreprocessor::ShaderPreprocessor()
 {
 }
 
-void ShaderPreprocessor::PreprocessShaderCode(std::string *shaderSourceCode)
+void ShaderPreprocessor::PreprocessShaderCode(String *shaderSourceCode)
 {
-    std::string &code = *shaderSourceCode;
+    String &code = *shaderSourceCode;
 
     StringUtils::Replace(&code,
                          ShaderContract::Macro_Draw_To_GBuffer_VS_Declare + ";",
