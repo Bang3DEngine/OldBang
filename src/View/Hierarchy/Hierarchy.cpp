@@ -245,7 +245,7 @@ void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     }
 }
 
-void Hierarchy::OnShortcutsUpdate()
+void Hierarchy::OnShortcutPressed()
 {
     if (ShortcutManager::IsPressed(Input::Key::Delete)) // Delete item
     {
@@ -294,6 +294,7 @@ void Hierarchy::OnShortcutsUpdate()
         }
     }
 }
+
 
 std::list<GameObject *> Hierarchy::GetSelectedGameObjects(bool excludeInternal)
 {

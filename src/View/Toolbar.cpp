@@ -130,22 +130,25 @@ void Toolbar::OnStopClicked()
     m_playing = false;
 }
 
-void Toolbar::OnShortcutsUpdate()
+void Toolbar::OnShortcutPressedKey(Input::Key key)
 {
-    if (ShortcutManager::IsPressed(Input::Key::W))
+    if (key == Input::Key::W)
     {
         m_buttonTranslateMode->click();
     }
-    else if (ShortcutManager::IsPressed(Input::Key::E))
+    else if (key == Input::Key::E)
     {
         m_buttonRotateMode->click();
     }
-    else if (ShortcutManager::IsPressed(Input::Key::R))
+    else if (key == Input::Key::R)
     {
         m_buttonScaleMode->click();
     }
-    else if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::P}) &&
-             !m_playShortcutRecentlyUsed)
+}
+
+void Toolbar::OnShortcutPressed()
+{
+    if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::P}))
     {
         if (m_playing)
         {
@@ -155,13 +158,6 @@ void Toolbar::OnShortcutsUpdate()
         {
             m_buttonPlay->click();
         }
-
-        m_playShortcutRecentlyUsed = true;
-    }
-
-    if (!ShortcutManager::IsPressed({Input::Key::Control, Input::Key::P}))
-    {
-        m_playShortcutRecentlyUsed = false;
     }
 }
 

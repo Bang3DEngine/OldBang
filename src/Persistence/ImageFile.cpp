@@ -11,8 +11,17 @@ ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
 QPixmap ImageFile::GetIcon() const
 {
     String fp = GetAbsolutePath();
-    QPixmap pm(QString::fromStdString(fp));
-    return File::AddNoAssetFileQPixmapOnTopOf(pm);
+
+    // Mini cache
+    static std::map<std::string, QPixmap> filepath_To_pixmap;
+    if (filepath_To_pixmap.find(fp) == filepath_To_pixmap.end())
+    {
+        QPixmap pm(QString::fromStdString(fp));
+        filepath_To_pixmap[fp] = pm;
+    }
+
+    return filepath_To_pixmap[fp];
+    // return File::AddNoAssetFileQPixmapOnTopOf(pm);
 }
 
 IInspectable *ImageFile::GetInspectable() const

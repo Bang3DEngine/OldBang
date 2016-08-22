@@ -25,7 +25,9 @@ String FileDialog::GetOpenFilename()
                 WindowMain::GetInstance()->GetMainWindow(),
                 QString::fromStdString(m_title),
                 QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
-                QString::fromStdString(GetExtensionFilterString(m_extension))
+                QString::fromStdString(GetExtensionFilterString(m_extension)),
+                nullptr,
+                QFileDialog::DontUseNativeDialog
             ).toStdString();
 
     return filepath;
@@ -41,7 +43,9 @@ String FileDialog::GetSaveFilename(const String &suggestedFilename)
                 WindowMain::GetInstance()->GetMainWindow(),
                 QString::fromStdString(m_title),
                 QString::fromStdString(dirpath),
-                QString::fromStdString(GetExtensionFilterString(m_extension))
+                QString::fromStdString(GetExtensionFilterString(m_extension)),
+                nullptr,
+                QFileDialog::DontUseNativeDialog
             ).toStdString();
 
     //This function auto detects if it was in the filepath already.

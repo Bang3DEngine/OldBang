@@ -26,7 +26,6 @@ private:
     bool m_globalCoords = false;
 
     bool m_playing = false;
-    bool m_playShortcutRecentlyUsed = false;
 
     QToolButton *m_buttonTranslateMode = nullptr;
     QToolButton *m_buttonRotateMode    = nullptr;
@@ -62,7 +61,8 @@ public slots:
     void OnPlayClicked();
     void OnStopClicked();
 
-    void OnShortcutsUpdate() override;
+    void OnShortcutPressedKey(Input::Key key) override;
+    void OnShortcutPressed() override;
 };
 
 #endif // TOOLBAR_H

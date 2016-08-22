@@ -211,20 +211,8 @@ HEADERS += \
     src/Domain/Engine/Physics/Vector4.h \
     src/Domain/Engine/Physics/Vector2.h \
     src/Domain/Engine/Physics/Color.h \
-    src/View/Inspector/IAttrWidgetButtonListener.h \
     src/View/Application.h \
-    src/View/Inspector/ComponentClipboard.h \
-    src/Domain/Engine/Others/String.h \
-    src/View/DragDropManager.h \
-    src/View/Hierarchy/HierarchyDragDropManager.h \
-    src/View/Interfaces/IDragDropListener.h \
-    src/View/Hierarchy/HierarchyContextMenu.h \
-    src/View/Explorer/ExplorerContextMenu.h \
-    src/View/Inspector/ComponentWidgetContextMenu.h \
-    src/View/Inspector/InspectorContextMenu.h \
-    src/View/ContextMenu.h \
-    src/View/ShortcutManager.h \
-    src/View/IShortcutListener.h
+    src/Domain/Engine/Others/String.h
 
 EDITOR {
 HEADERS += \
@@ -282,8 +270,19 @@ HEADERS += \
     src/Persistence/File.h \
     src/View/Inspector/TextFile.h \
     src/View/Inspector/PrefabAssetFileInspectable.h \
-    src/View/Interfaces/DragDropAgent.h
-}
+    src/View/Interfaces/DragDropAgent.h \
+    src/View/Inspector/IAttrWidgetButtonListener.h \
+    src/View/Inspector/ComponentClipboard.h \
+    src/View/DragDropManager.h \
+    src/View/Hierarchy/HierarchyDragDropManager.h \
+    src/View/Interfaces/IDragDropListener.h \
+    src/View/Hierarchy/HierarchyContextMenu.h \
+    src/View/Explorer/ExplorerContextMenu.h \
+    src/View/Inspector/ComponentWidgetContextMenu.h \
+    src/View/Inspector/InspectorContextMenu.h \
+    src/View/ContextMenu.h \
+    src/View/ShortcutManager.h \
+    src/View/IShortcutListener.h }
 
 GAME {
     HEADERS += \
@@ -359,20 +358,8 @@ SOURCES += \
     src/Domain/Engine/Physics/Vector4.cpp \
     src/Domain/Engine/Physics/Vector2.cpp \
     src/Domain/Engine/Physics/Color.cpp \
-    src/View/Inspector/IAttrWidgetButtonListener.cpp \
     src/View/Application.cpp \
-    src/View/Inspector/ComponentClipboard.cpp \
-    src/Domain/Engine/Others/String.cpp \
-    src/View/DragDropManager.cpp \
-    src/View/Hierarchy/HierarchyDragDropManager.cpp \
-    src/View/Interfaces/IDragDropListener.cpp \
-    src/View/Hierarchy/HierarchyContextMenu.cpp \
-    src/View/Explorer/ExplorerContextMenu.cpp \
-    src/View/Inspector/ComponentWidgetContextMenu.cpp \
-    src/View/Inspector/InspectorContextMenu.cpp \
-    src/View/ContextMenu.cpp \
-    src/View/ShortcutManager.cpp \
-    src/View/IShortcutListener.cpp
+    src/Domain/Engine/Others/String.cpp
 
 EDITOR {
     SOURCES += \
@@ -431,7 +418,19 @@ EDITOR {
         src/View/Inspector/TextFile.cpp \
         src/Persistence/File.cpp \
         src/View/Inspector/PrefabAssetFileInspectable.cpp \
-        src/View/Interfaces/DragDropAgent.cpp
+        src/View/Interfaces/DragDropAgent.cpp \
+        src/View/Inspector/IAttrWidgetButtonListener.cpp \
+        src/View/Inspector/ComponentClipboard.cpp \
+        src/View/DragDropManager.cpp \
+        src/View/Hierarchy/HierarchyDragDropManager.cpp \
+        src/View/Interfaces/IDragDropListener.cpp \
+        src/View/Hierarchy/HierarchyContextMenu.cpp \
+        src/View/Explorer/ExplorerContextMenu.cpp \
+        src/View/Inspector/ComponentWidgetContextMenu.cpp \
+        src/View/Inspector/InspectorContextMenu.cpp \
+        src/View/ContextMenu.cpp \
+        src/View/ShortcutManager.cpp \
+        src/View/IShortcutListener.cpp
 }
 
 GAME {

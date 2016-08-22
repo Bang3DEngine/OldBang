@@ -18,6 +18,7 @@
  * in the MAIN BINARY.
  */
 
+class ShortcutManager;
 class WindowMain;
 class IWindow;
 class Logger;
@@ -32,6 +33,7 @@ private:
     IWindow *m_mainBinaryWindowMain = nullptr;
     Time *m_mainBinaryTime = nullptr;
     Input *m_mainBinaryInput = nullptr;
+    ShortcutManager *m_mainBinaryShortcutManager = nullptr;
 
     SingletonManager() {}
 
@@ -46,6 +48,7 @@ public:
     void SetWindowMainSingleton(IWindow* mainBinaryWindowMain);
     void SetTimeSingleton(Time* mainBinaryTime);
     void SetInputSingleton(Input* mainBinaryInput);
+    void SetShortcutManagerSingleton(ShortcutManager* mainBinaryShortcutManager);
 
     /**
      * The GetXXXXSingleton methods should only be called by the method that
@@ -55,6 +58,7 @@ public:
     IWindow* GetWindowSingleton();
     Time* GetTimeSingleton();
     Input* GetInputSingleton();
+    ShortcutManager* GetShortcutManagerSingleton();
 
 
     /**
@@ -67,7 +71,7 @@ public:
     /**
      * @brief This method should be called ONLY by the main binary.
      */
-    static void InitSingletonMangerFromMainBinary();
+    static void InitSingletonManagerFromMainBinary();
 
     /**
      * @brief This method should be called ONLY by the main binary, and passed

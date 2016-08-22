@@ -1,7 +1,9 @@
 #include "ShortcutManager.h"
 
-std::list<IShortcutListener*> ShortcutManager::m_shortcutsListeners;
-std::set<Input::Key> ShortcutManager::m_pressedKeys;
+#include "Logger.h"
+#include "WindowMain.h"
+#include "Application.h"
+#include "SingletonManager.h"
 
 ShortcutManager::ShortcutManager()
 {
@@ -9,36 +11,41 @@ ShortcutManager::ShortcutManager()
 
 void ShortcutManager::OnKeyPressed(Input::Key key)
 {
-    ShortcutManager::m_pressedKeys.insert(key);
-    ShortcutManager::NotifyListeners();
+    m_pressedKeys.insert(key);
+    for (IShortcutListener *list : ShortcutManager::m_shortcutsListeners)
+    {
+        list->OnShortcutPressedKey(key);
+        list->OnShortcutPressed();
+    }
 }
 
 void ShortcutManager::OnKeyReleased(Input::Key key)
 {
-    auto it = ShortcutManager::m_pressedKeys.find(key);
-    if (it != ShortcutManager::m_pressedKeys.end())
+    auto it = m_pressedKeys.find(key);
+    if (it != m_pressedKeys.end())
     {
-        ShortcutManager::m_pressedKeys.erase(it);
+        m_pressedKeys.erase(it);
     }
-    ShortcutManager::NotifyListeners();
 }
 
 void ShortcutManager::RegisterListener(IShortcutListener *list)
 {
-    ShortcutManager::m_shortcutsListeners.push_back(list);
+    m_shortcutsListeners.push_back(list);
 }
 
 void ShortcutManager::UnregisterListener(IShortcutListener *list)
 {
-    ShortcutManager::m_shortcutsListeners.remove(list);
+    m_shortcutsListeners.remove(list);
 }
 
-void ShortcutManager::NotifyListeners()
+void ShortcutManager::InitFromMainBinary()
 {
-    for (IShortcutListener *list : ShortcutManager::m_shortcutsListeners)
-    {
-        list->OnShortcutsUpdate();
-    }
+    SingletonManager::GetInstance()->SetShortcutManagerSingleton(new ShortcutManager());
+}
+
+ShortcutManager *ShortcutManager::GetInstance()
+{
+    return SingletonManager::GetInstance()->GetShortcutManagerSingleton();
 }
 
 bool ShortcutManager::IsPressed(Input::Key key)
@@ -49,13 +56,21 @@ bool ShortcutManager::IsPressed(Input::Key key)
 
 bool ShortcutManager::IsPressed(const std::vector<Input::Key> keys)
 {
+    ShortcutManager *sm = ShortcutManager::GetInstance();
+    if (!sm) { return nullptr; }
+
     for (Input::Key key : keys)
     {
-        if (ShortcutManager::m_pressedKeys.find(key) ==
-               ShortcutManager::m_pressedKeys.end())
+        if (sm->m_pressedKeys.find(key) == sm->m_pressedKeys.end())
         {
             return false;
         }
     }
     return true;
 }
+
+void ShortcutManager::Clear()
+{
+    //m_pressedKeys.clear();
+}
+

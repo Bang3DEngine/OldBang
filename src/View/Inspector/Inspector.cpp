@@ -28,7 +28,7 @@ Inspector::Inspector(QWidget *parent)
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
-    setMinimumWidth(300);
+    setMinimumWidth(330);
 }
 
 void Inspector::updateGeometries()

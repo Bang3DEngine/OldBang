@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #ifdef BANG_EDITOR
+#include "WindowMain.h"
 #include "WindowEventManager.h"
 #endif
 
@@ -9,6 +10,12 @@
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {
+
+}
+
+Application *Application::GetInstance()
+{
+    return static_cast<Application*>(WindowMain::GetInstance()->GetApplication());
 }
 
 bool Application::notify(QObject *receiver, QEvent *e)
@@ -26,12 +33,23 @@ bool Application::notify(QObject *receiver, QEvent *e)
     if (e->type() == QEvent::KeyPress)
     {
         QKeyEvent *ev = static_cast<QKeyEvent*>(e);
-        ShortcutManager::OnKeyPressed( Input::Key(ev->key()) );
+        if (!ev->isAutoRepeat())
+        {
+            ShortcutManager::GetInstance()->OnKeyPressed( Input::Key(ev->key()) );
+        }
     }
     else if (e->type() == QEvent::KeyRelease)
     {
         QKeyEvent *ev = static_cast<QKeyEvent*>(e);
-        ShortcutManager::OnKeyReleased( Input::Key(ev->key()) );
+        if (!ev->isAutoRepeat())
+        {
+            ShortcutManager::GetInstance()->OnKeyReleased( Input::Key(ev->key()) );
+        }
+    }
+
+    if (e->type() == QEvent::Shortcut)
+    {
+        ShortcutManager::GetInstance()->Clear();
     }
     #endif
 

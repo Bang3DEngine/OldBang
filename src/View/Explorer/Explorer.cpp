@@ -352,7 +352,8 @@ Qt::DropActions FileSystemModel::supportedDropActions() const
     return Qt::MoveAction;
 }
 
-QVariant FileSystemModel::data(const QModelIndex &index, int role) const
+QVariant FileSystemModel::data(const QModelIndex &index,
+                               int role) const
 {
     if (role == Qt::DecorationRole)
     {
@@ -360,8 +361,15 @@ QVariant FileSystemModel::data(const QModelIndex &index, int role) const
         File *f = File::GetSpecificFile(file);
         if (f)
         {
-            QPixmap pm = f->GetIcon();
-            return pm.scaled(32, 32, Qt::IgnoreAspectRatio, Qt::TransformationMode::FastTransformation);
+            const QPixmap &pm = f->GetIcon();
+            Qt::TransformationMode transMode =
+                    Qt::TransformationMode::SmoothTransformation;
+            if (f->IsTexture2DAsset() || f->IsImageFile())
+            {
+                transMode = Qt::TransformationMode::FastTransformation;
+            }
+
+            return pm.scaled(32, 32, Qt::IgnoreAspectRatio, transMode);
         }
     }
     return QFileSystemModel::data(index, role);

@@ -13,23 +13,26 @@ friend class Application;
 friend class IShortcutListener;
 
 private:
-    static std::list<IShortcutListener*> m_shortcutsListeners;
-    static std::set<Input::Key> m_pressedKeys;
+    std::list<IShortcutListener*> m_shortcutsListeners;
+    std::set<Input::Key> m_pressedKeys;
 
     ShortcutManager();
 
-    static void OnKeyPressed(Input::Key key);
-    static void OnKeyReleased(Input::Key key);
+    void OnKeyPressed(Input::Key key);
+    void OnKeyReleased(Input::Key key);
 
-
-    static void RegisterListener(IShortcutListener *list);
-    static void UnregisterListener(IShortcutListener *list);
-    static void NotifyListeners();
+    void RegisterListener(IShortcutListener *list);
+    void UnregisterListener(IShortcutListener *list);
 
 public:
 
+    static void InitFromMainBinary();
+    static ShortcutManager *GetInstance();
+
     static bool IsPressed(Input::Key key);
     static bool IsPressed(const std::vector<Input::Key> keys);
+
+    void Clear();
 };
 
 #endif // SHORTCUTMANAGER_H

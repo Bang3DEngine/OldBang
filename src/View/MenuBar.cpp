@@ -31,6 +31,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
     connect(w->actionBuildAndRun,  SIGNAL(triggered()),
             this, SLOT(OnBuildAndRun()));
 
+    w->actionNewScene->setIconText("wololo");
+
 
     connect(w->actionCreateEmptyGameObject,  SIGNAL(triggered()),
             this, SLOT(OnCreateEmptyGameObject()));

@@ -32,7 +32,9 @@ WindowMain *WindowMain::GetInstance()
 {
     // This will always be initialized,
     // since main inits it using WindowMain::InitFromMainBinary()
-    return static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton());
+    return SingletonManager::GetInstance() ?
+                static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton()) :
+                nullptr;
 }
 
 QMainWindow *WindowMain::GetMainWindow() const

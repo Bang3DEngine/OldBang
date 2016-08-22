@@ -1,6 +1,7 @@
 #include "SingletonManager.h"
 
 #include "Logger.h"
+#include "ShortcutManager.h"
 
 SingletonManager *SingletonManager::s_mainBinarySM = nullptr;
 
@@ -17,6 +18,11 @@ void SingletonManager::SetTimeSingleton(Time *mainBinaryTime)
 void SingletonManager::SetInputSingleton(Input *mainBinaryInput)
 {
     this->m_mainBinaryInput = mainBinaryInput;
+}
+
+void SingletonManager::SetShortcutManagerSingleton(ShortcutManager *mainBinaryShortcutManager)
+{
+    this->m_mainBinaryShortcutManager = mainBinaryShortcutManager;
 }
 
 
@@ -38,13 +44,18 @@ Input *SingletonManager::GetInputSingleton()
     return m_mainBinaryInput;
 }
 
+ShortcutManager *SingletonManager::GetShortcutManagerSingleton()
+{
+    return m_mainBinaryShortcutManager;
+}
+
 void SingletonManager::SetSingletonManagerInstanceFromBehaviourLibrary(SingletonManager *mainBinarySM)
 {
     SingletonManager::s_mainBinarySM = mainBinarySM;
 }
 
 
-void SingletonManager::InitSingletonMangerFromMainBinary()
+void SingletonManager::InitSingletonManagerFromMainBinary()
 {
     SingletonManager::s_mainBinarySM = new SingletonManager();
 }

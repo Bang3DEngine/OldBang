@@ -71,7 +71,7 @@ public:
 
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
 
-    void OnShortcutsUpdate() override;
+    void OnShortcutPressed() override;
 
     std::list<GameObject*> GetSelectedGameObjects(bool excludeInternal = false);
     void SelectGameObject(GameObject *go);

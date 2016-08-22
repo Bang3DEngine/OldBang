@@ -25,8 +25,16 @@ String Texture2DAssetFile::GetImageFilepath() const
 QPixmap Texture2DAssetFile::GetIcon() const
 {
     String fp = GetImageFilepath();
-    QPixmap pm(QString::fromStdString(fp));
-    return pm;
+
+    // Mini cache
+    static std::map<std::string, QPixmap> filepath_To_pixmap;
+    if (filepath_To_pixmap.find(fp) == filepath_To_pixmap.end())
+    {
+        QPixmap pm(QString::fromStdString(fp));
+        filepath_To_pixmap[fp] = pm;
+    }
+
+    return filepath_To_pixmap[fp];
 }
 
 IInspectable *Texture2DAssetFile::GetInspectable() const

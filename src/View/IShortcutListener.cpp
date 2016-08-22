@@ -1,13 +1,18 @@
 #include "IShortcutListener.h"
 
+#include "Application.h"
 #include "ShortcutManager.h"
 
 IShortcutListener::IShortcutListener()
 {
-    ShortcutManager::RegisterListener(this);
+    ShortcutManager::GetInstance()->RegisterListener(this);
 }
 
 IShortcutListener::~IShortcutListener()
 {
-    ShortcutManager::UnregisterListener(this);
+    ShortcutManager::GetInstance()->UnregisterListener(this);
+}
+
+void IShortcutListener::OnShortcutPressedKey(Input::Key key)
+{
 }
