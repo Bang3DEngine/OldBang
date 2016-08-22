@@ -313,7 +313,7 @@ const String XMLAttribute::ToString() const
         }
 
         str += prop.GetName();
-        if (prop.GetValue().length() > 0)
+        if (!prop.GetValue().Empty())
         {
             str += "=\"" + prop.GetValue() + "\"";
         }

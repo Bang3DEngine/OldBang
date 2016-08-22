@@ -60,7 +60,7 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
     String::size_type p = m_name.find('.', 2);
     if (p != String::npos)
     {
-        m_extension = m_name.substr(p+1, m_name.length() - p - 1);
+        m_extension = m_name.substr(p+1, m_name.Length() - p - 1);
         m_name = m_name.substr(0, p);
     }
 }

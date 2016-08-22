@@ -67,7 +67,7 @@ String Persistence::ToAbsolute(const String &relPath)
     if (relPath[0] == '.')
     {
         return GetProjectRootPathAbsolute() +
-                relPath.substr(1, relPath.length() -1); //No starting "."
+                relPath.substr(1, relPath.Length() - 1); //No starting "."
     }
     else
     {
@@ -101,8 +101,8 @@ String Persistence::ToRelative(const String &absPath)
 
     return "." + absPath.substr(
                 pos,
-                absPath.length() -
-                GetAssetsRelativePathFromProjectRoot().length());
+                absPath.Length() -
+                GetAssetsRelativePathFromProjectRoot().Length());
 }
 
 #include "Logger.h"

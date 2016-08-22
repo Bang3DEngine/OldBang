@@ -108,6 +108,16 @@ long String::IndexOf(const String &str, long startingPos) const
     return find(str, startingPos);
 }
 
+long String::IndexOfOneOf(const String &str, long startingPos) const
+{
+    return find_first_of(str, startingPos);
+}
+
+long String::IndexOfOneNotOf(const String &str, long startingPos) const
+{
+    return find_first_not_of(str, startingPos);
+}
+
 String String::SubString(long startIndex, long endIndex) const
 {
     if (endIndex == std::string::npos) return substr(startIndex);

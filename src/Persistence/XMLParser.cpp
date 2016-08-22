@@ -1,6 +1,7 @@
 #include "XMLParser.h"
 
 #include "IFileable.h"
+#include "Logger.h"
 
 std::map<String, const IFileable*> XMLParser::m_idToPointer;
 
@@ -25,16 +26,16 @@ const IFileable *XMLParser::GetPointerFromId(const String &id)
 
 String XMLParser::GetTagName(const String &tag, int *tagNameBegin, int *tagNameEnd)
 {
-    int tagBegin = tag.find_first_of("<");
-    int tagBegin2 = tag.find_first_of("/", tagBegin);
-    tagBegin = (tagBegin2 == tagBegin+1) ? tagBegin2 : tagBegin;
-    int nameBegin = tag.find_first_not_of(StringUtils::TOKEN_SPACE, tagBegin + 1);
-    int nameEnd = tag.find_first_of(StringUtils::TOKEN_SPACE + ">", nameBegin + 1);
+    int tagBegin = tag.IndexOfOneOf("<");
+    int tagBegin2 = tag.IndexOfOneOf("/", tagBegin);
+    tagBegin = (tagBegin2 == tagBegin + 1) ? tagBegin2 : tagBegin;
+    int nameBegin = tag.IndexOfOneNotOf(StringUtils::TOKEN_SPACE, tagBegin + 1);
+    int nameEnd = tag.IndexOfOneOf(StringUtils::TOKEN_SPACE + ">", nameBegin + 1);
 
     if (tagNameBegin) *tagNameBegin = nameBegin;
     if (tagNameEnd) *tagNameEnd = nameEnd;
 
-    return tag.substr(nameBegin, nameEnd - nameBegin);
+    return tag.SubString(nameBegin, nameEnd - 1);
 }
 
 void XMLParser::GetFirstAttribute(const String &tag,
@@ -50,16 +51,16 @@ void XMLParser::GetFirstAttribute(const String &tag,
         attribute->SetValue("");
     }
 
-    int attrEnd = tag.find_first_of("}", startPosition) + 1;
+    int attrEnd = tag.IndexOf("}", startPosition);
     if (attrEnd == -1) { return; }
 
-    String attrString = tag.substr(startPosition, attrEnd - startPosition);
+    String attrString = tag.SubString(startPosition, attrEnd);
     XMLAttribute attr = XMLAttribute::FromString(attrString);
     if (attr.GetName() == "") { return; }
 
     if (attributeEnd)
     {
-        *attributeEnd = startPosition + attrString.length();
+        *attributeEnd = startPosition + attrString.Length();
     }
 
     if (attribute)
@@ -157,24 +158,24 @@ void XMLParser::GetNextOpenTag(const String &xml,
 }
 
 void XMLParser::GetNextTag(const String &xml,
-                               int startPosition,
-                               String *tag,
-                               int *beginPosition,
-                               int *endTagPosition)
+                           int startPosition,
+                           String *tag,
+                           int *beginPosition,
+                           int *endTagPosition)
 {
     *tag = "";
     *beginPosition  = -1;
     *endTagPosition = -1;
 
-    int tagBegin = xml.find_first_of('<', startPosition);
+    int tagBegin = xml.IndexOf('<', startPosition);
     if (tagBegin == -1) { return; }
 
-    int tagEnd = xml.find_first_of('>', tagBegin + 1);
+    int tagEnd = xml.IndexOf('>', tagBegin + 1);
     if (tagEnd == -1) { return; }
 
     if (tagBegin < tagEnd)
     {
-        *tag = xml.substr(tagBegin, tagEnd-tagBegin+1);
+        *tag = xml.SubString(tagBegin, tagEnd + 1);
         *beginPosition  = tagBegin;
         *endTagPosition = tagEnd;
     }
@@ -189,7 +190,7 @@ XMLNode *XMLParser::FromFile(const String &filepath)
     if (f.is_open())
     {
         String contents((std::istreambuf_iterator<char>(f)),
-                              std::istreambuf_iterator<char>());
+                         std::istreambuf_iterator<char>());
         XMLNode *xmlInfo = XMLParser::FromString(contents);
         return xmlInfo;
     }
@@ -224,11 +225,12 @@ XMLNode* XMLParser::FromString(const String &xml)
         XMLAttribute attr;
         XMLParser::GetFirstAttribute(tag, attrEnd + 1, &attr, &attrEnd);
         if(attrEnd == -1) { break; }
-        root->SetGenericAttribute(attr.GetName(), attr.GetValue(), attr.GetType(), attr.GetProperties());
+        root->SetGenericAttribute(attr.GetName(), attr.GetValue(),
+                                  attr.GetType(), attr.GetProperties());
     }
 
     //Read children
-    String innerXML = xml.substr(rootOpenTagEnd+1, rootCloseTagBegin-rootOpenTagEnd-1);
+    String innerXML = xml.SubString(rootOpenTagEnd + 1, rootCloseTagBegin - 1);
     int innerLastPos = 0;
     while (true)
     {
@@ -236,14 +238,14 @@ XMLNode* XMLParser::FromString(const String &xml)
         int childOpenTagBegin, childOpenTagEnd;
         XMLParser::GetNextOpenTag(innerXML, innerLastPos, &innerTag,
                                   &childOpenTagBegin, &childOpenTagEnd);
-        //std::cerr << "nextOpenTag child: " << innerTag << std::endl << std::endl;
+
         if (childOpenTagBegin == -1) { break; }
 
         String tagName = XMLParser::GetTagName(innerTag);
         int childCloseTagBegin, childCloseTagEnd;
         XMLParser::GetCorrespondingCloseTag(innerXML, childOpenTagEnd, tagName,
                                             &childCloseTagBegin, &childCloseTagEnd);
-        String childXML = innerXML.substr(childOpenTagBegin, childCloseTagEnd-childOpenTagBegin);
+        String childXML = innerXML.SubString(childOpenTagBegin, childCloseTagEnd);
 
         XMLNode *child = XMLParser::FromString(childXML);
         if (child)

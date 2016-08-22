@@ -30,7 +30,7 @@ bool Shader::LoadFromFile(const String& filepath)
     m_idGL = glCreateShader(GLint(m_type));
 
     const GLchar *source = (const GLchar*)(m_sourceCode.ToCString());
-    GLint size = m_sourceCode.length();
+    GLint size = m_sourceCode.Length();
     glShaderSource(m_idGL, 1, &source, &size);
     glCompileShader(m_idGL);
 

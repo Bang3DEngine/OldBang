@@ -39,27 +39,27 @@ String StringUtils::FromFloat(float f, int precision)
 
 void StringUtils::TrimLeft(String *str)
 {
-    if(str->length() == 0)
+    if(str->Empty())
     {
         return;
     }
 
     int i = 0;
-    for (; i < str->length(); ++i)
+    for (; i < str->Length(); ++i)
     {
         if (str->at(i) != ' ' && str->at(i) != '\t') break;
     }
-    *str = i == str->length() ? "" : str->substr(i, str->length() - i);
+    *str = i == str->Length() ? "" : str->substr(i, str->Length() - i);
 }
 
 void StringUtils::TrimRight(String *str)
 {
-    if(str->length() == 0)
+    if(str->Empty())
     {
         return;
     }
 
-    int i = str->length()-1;
+    int i = str->Length() - 1;
     for (; i >= 0; --i)
     {
         if (str->at(i) != ' ' && str->at(i) != '\t') break;
@@ -180,12 +180,12 @@ bool StringUtils::IsCap(char c)
 void StringUtils::AddInFrontOfWords(String particle, String *str)
 {
     String &phrase = *str;
-    if (phrase.length() > 0 && phrase[0] != ' ')
+    if (!phrase.Empty() && phrase[0] != ' ')
     {
         phrase.insert(0, particle);
     }
 
-    for (int i = 0; i < phrase.length() -1; ++i)
+    for (int i = 0; i < phrase.Length() - 1; ++i)
     {
         if (phrase[i] == ' ' && phrase[i+1] != ' ')
         {
@@ -205,6 +205,6 @@ void StringUtils::Replace(String *content, const String &toFind, const String &r
     String::size_type i;
     while ( (i = content->find(toFind)) != String::npos)
     {
-        content->replace(i, toFind.length(), replaceWithThis);
+        content->replace(i, toFind.Length(), replaceWithThis);
     }
 }

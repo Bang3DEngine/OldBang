@@ -23,10 +23,10 @@ public:
                                int *endTagPosition);
 
     static void GetNextTag(const String &xml,
-                               int startPosition,
-                               String *tag,
-                               int *beginPosition,
-                               int *endTagPosition);
+                           int startPosition,
+                           String *tag,
+                           int *beginPosition,
+                           int *endTagPosition);
 
     static void GetCorrespondingCloseTag(const String &xml,
                                          int startPositionAfterOpenTag,

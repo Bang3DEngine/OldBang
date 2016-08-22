@@ -47,7 +47,7 @@ void Explorer::OnButtonDirUpClicked()
     String rootPath = GetCurrentDir();
     String parentDirPath = "";
 
-    for (int i = rootPath.length() - 1; i >= 0; --i)
+    for (int i = rootPath.Length() - 1; i >= 0; --i)
     {
         if (rootPath[i] == '/')
         {
@@ -234,7 +234,7 @@ void Explorer::OnDirLoaded(QString dir)
 {
     NONULL(WindowMain::GetInstance());
 
-    if (GetCurrentDir().length() <= Persistence::GetAssetsPathAbsolute().length())
+    if (GetCurrentDir().Length() <= Persistence::GetAssetsPathAbsolute().Length())
     {
         m_buttonDirUp->setEnabled(false);
         m_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);

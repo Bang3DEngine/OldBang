@@ -50,7 +50,7 @@ XMLProperty XMLProperty::FromString(const String &string)
     if (parts.size() > 1)
     {
         value = parts[1];
-        value = value.substr(1, value.length()-2); // Strip the "
+        value = value.substr(1, value.Length() - 2); // Strip the "
     }
 
     return XMLProperty(name, value);

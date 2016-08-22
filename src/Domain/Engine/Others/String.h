@@ -27,6 +27,8 @@ public:
 
     long IndexOf(char c, long startingPos = 0) const;
     long IndexOf(const String &str, long startingPos = 0) const;
+    long IndexOfOneOf(const String &str, long startingPos = 0) const;
+    long IndexOfOneNotOf(const String &str, long startingPos = 0) const;
 
     // Both startIndex and endIndex are inclusive
     String SubString(long startIndex,

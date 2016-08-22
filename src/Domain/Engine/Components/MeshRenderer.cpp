@@ -40,7 +40,7 @@ void MeshRenderer::SetMesh(Mesh *m)
     NONULL(m_mesh); NONULL(m_material); NONULL(m_material->GetShaderProgram());
 
     m_mesh->BindAllVBOsToShaderProgram(*(m_material->GetShaderProgram()));
-    if (m_mesh->GetFilepath().length() > 0)
+    if (!m_mesh->GetFilepath().Empty())
     {
         SetRenderMode(m_mesh->IsATrianglesModel() ?
                       RenderMode::Triangles : RenderMode::Quads);

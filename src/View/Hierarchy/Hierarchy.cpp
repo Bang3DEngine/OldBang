@@ -284,7 +284,7 @@ void Hierarchy::OnShortcutsUpdate()
     else if ( ShortcutManager::IsPressed(Input::Key::F2) ) // Edit name
     {
         if (selectedItems().length() <= 0) return;
-        QTreeWidgetItem *selected = this->selectedItems().at(0);
+        QTreeWidgetItem *selected = selectedItems().at(0);
         if (selected)
         {
             Qt::ItemFlags oldFlags = selected->flags();
