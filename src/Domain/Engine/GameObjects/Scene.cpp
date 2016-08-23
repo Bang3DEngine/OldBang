@@ -1,8 +1,8 @@
-
 #include "Scene.h"
-#include "GameObject.h"
-#include "Screen.h"
 
+#include "Screen.h"
+#include "GameObject.h"
+#include "SceneManager.h"
 #include "DirectionalLight.h"
 
 Scene::Scene() : GameObject("Scene")
@@ -131,14 +131,14 @@ void Scene::SetCamera(const Camera *cam)
     }
 }
 
-Scene *Scene::GetCurrentScene()
+Scene *Scene::GetActiveScene()
 {
-    return Screen::GetInstance()->GetCurrentScene();
+    return SceneManager::GetActiveScene();
 }
 
 Camera *Scene::GetCamera()
 {
-    Scene *scene = Scene::GetCurrentScene();
+    Scene *scene = SceneManager::GetActiveScene();
     return scene->GetCurrentCamera();
 }
 

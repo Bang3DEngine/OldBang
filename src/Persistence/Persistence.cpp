@@ -148,12 +148,12 @@ String Persistence::GetNextDuplicateName(const String &path)
     return result;
 }
 
-void Persistence::SetCurrentSceneFilepath(const String &scenePath)
+void Persistence::SetActiveSceneFilepath(const String &scenePath)
 {
     s_currentSceneFilepath = scenePath;
 }
 
-String Persistence::GetCurrentSceneFilepath()
+String Persistence::SetActiveSceneFilepath()
 {
     return s_currentSceneFilepath;
 }

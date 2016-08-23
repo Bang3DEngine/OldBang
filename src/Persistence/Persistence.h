@@ -40,8 +40,8 @@ public:
      */
     static String GetNextDuplicateName(const String &path);
 
-    static void SetCurrentSceneFilepath(const String &scenePath);
-    static String GetCurrentSceneFilepath();
+    static void SetActiveSceneFilepath(const String &scenePath);
+    static String SetActiveSceneFilepath();
 
     //Appends an extension to a filepath only if that filename does not contain the extension
     static String AppendExtension(const String &filepath, const String extNoDot);

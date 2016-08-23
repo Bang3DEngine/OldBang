@@ -13,6 +13,7 @@
 class Input
 {
 friend class Screen;
+friend class Application;
 
 public:
     enum Key

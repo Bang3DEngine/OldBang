@@ -7,9 +7,10 @@
 
 class Time
 {
-friend class Screen;
 friend class Behaviour;
 friend class GameObject;
+friend class Application;
+friend class SceneManager;
 
 private:
     float m_deltaTime = 0.0f;

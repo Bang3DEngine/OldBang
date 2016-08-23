@@ -58,7 +58,7 @@ void Renderer::ActivateGLStatesBeforeRendering() const
         glDisable(GL_CULL_FACE);
     }
 
-    Scene *scene = Screen::GetCurrentScene();
+    Scene *scene = SceneManager::GetActiveScene();
     Camera *camera = scene->GetCamera();
     if (camera && m_material  && m_material->m_shaderProgram )
     {
@@ -83,7 +83,7 @@ void Renderer::OnRender()
 void Renderer::Render() const
 {
     #ifdef BANG_EDITOR
-    EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
+    EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
     SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
     if (sfb && sfb->IsPassing())
     {

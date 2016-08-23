@@ -60,7 +60,7 @@ void HierarchyContextMenu::OnCreateEmptyClicked()
 
     if (m_hierarchy->selectedItems().size() == 0)
     {
-        empty->SetParent(Scene::GetCurrentScene());
+        empty->SetParent(SceneManager::GetActiveScene());
     }
 
     m_hierarchy->Expand(empty->parent);
@@ -84,7 +84,7 @@ void HierarchyContextMenu::OnPasteClicked()
     }
     else
     {
-        GameObjectClipboard::PasteCopiedGameObjectsInto(Scene::GetCurrentScene());
+        GameObjectClipboard::PasteCopiedGameObjectsInto(SceneManager::GetActiveScene());
     }
 }
 

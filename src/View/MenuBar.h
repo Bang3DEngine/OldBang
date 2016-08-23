@@ -63,7 +63,7 @@ public:
     MenuBar(QWidget *parent = nullptr);
 
     void CreateNewScene () const;
-    QMessageBox::StandardButton AskForSavingCurrentScene () const;
+    QMessageBox::StandardButton AskForSavingActiveScene () const;
 
 
 public slots:

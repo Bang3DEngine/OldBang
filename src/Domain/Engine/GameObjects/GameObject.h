@@ -38,6 +38,7 @@ class GameObject :
 {
 
 friend class SelectionFramebuffer;
+friend class SceneManager;
 friend class Hierarchy;
 friend class Screen;
 friend class Prefab;

@@ -47,7 +47,7 @@ void EditorRotateAxis::OnUpdate()
     EditorAxis::OnUpdate();
 
     // Obtain mousePos in screen space for next calculations
-    Camera *cam = Screen::GetInstance()->GetCurrentScene()->GetCamera(); NONULL(cam);
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); NONULL(cam);
     GameObject *ago = m_attachedGameObject;
 
     if (m_grabbed)

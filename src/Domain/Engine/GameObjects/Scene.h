@@ -21,6 +21,8 @@ class Scene : public GameObject
 
 friend class Screen;
 friend class GameObject;
+friend class Application;
+friend class SceneManager;
 friend class SelectionFramebuffer;
 
 protected:
@@ -47,7 +49,7 @@ public:
 
     void SetCamera (const Camera *cam);
 
-    static Scene *GetCurrentScene();
+    static Scene *GetActiveScene();
     static Camera* GetCamera ();
     Camera* GetCurrentCamera () const;
     const Screen* GetScreen () const;

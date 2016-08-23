@@ -5,11 +5,12 @@
 #include "FileReader.h"
 #include "FileWriter.h"
 #include "FileDialog.h"
-#include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SystemUtils.h"
 #include "Persistence.h"
 #include "EditorScene.h"
+#include "SceneManager.h"
+#include "DirectionalLight.h"
 #include "WindowEventManager.h"
 
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
@@ -30,9 +31,6 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnBuild()));
     connect(w->actionBuildAndRun,  SIGNAL(triggered()),
             this, SLOT(OnBuildAndRun()));
-
-    w->actionNewScene->setIconText("wololo");
-
 
     connect(w->actionCreateEmptyGameObject,  SIGNAL(triggered()),
             this, SLOT(OnCreateEmptyGameObject()));
@@ -85,11 +83,11 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 void MenuBar::CreateNewScene() const
 {
     Scene *scene = new EditorScene();
-    Screen::GetInstance()->SetCurrentScene(scene);
-    Persistence::SetCurrentSceneFilepath("");
+    SceneManager::SetActiveScene(scene);
+    Persistence::SetActiveSceneFilepath("");
 }
 
-QMessageBox::StandardButton MenuBar::AskForSavingCurrentScene() const
+QMessageBox::StandardButton MenuBar::AskForSavingActiveScene() const
 {
     QMessageBox::StandardButton reply =
             QMessageBox::question(WindowMain::GetInstance()->GetMainWindow(),
@@ -114,13 +112,13 @@ void MenuBar::OnNewScene() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::NewScene);
 
-    if (AskForSavingCurrentScene() == QMessageBox::Cancel) return;
+    if (AskForSavingActiveScene() == QMessageBox::Cancel) return;
     CreateNewScene();
 }
 
 void MenuBar::OnOpenScene() const
 {
-    if (AskForSavingCurrentScene() == QMessageBox::Cancel) return;
+    if (AskForSavingActiveScene() == QMessageBox::Cancel) return;
 
     m_wem->NotifyMenuBarActionClicked(Action::OpenScene);
 
@@ -132,9 +130,9 @@ void MenuBar::OnOpenScene() const
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
-        Screen::GetInstance()->AddScene(scene);
-        Screen::GetInstance()->SetCurrentScene(scene);
-        Persistence::SetCurrentSceneFilepath(filename);
+        SceneManager::AddScene(scene);
+        SceneManager::SetActiveScene(scene);
+        Persistence::SetActiveSceneFilepath(filename);
     }
     else
     {
@@ -147,14 +145,14 @@ void MenuBar::OnSaveScene() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::SaveScene);
 
-    String filename = Persistence::GetCurrentSceneFilepath();
+    String filename = Persistence::SetActiveSceneFilepath();
     if ( filename == "" ) //Give the scene a name
     {
         OnSaveSceneAs();
     }
     else //Save directly
     {
-        Scene *scene = Screen::GetInstance()->GetCurrentScene(); NONULL(scene);
+        Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
         FileWriter::WriteScene(filename, scene);
     }
 }
@@ -163,7 +161,7 @@ void MenuBar::OnSaveSceneAs() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::SaveSceneAs);
 
-    Scene *scene = Screen::GetInstance()->GetCurrentScene(); NONULL(scene);
+    Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
 
     FileDialog fd("Save scene as...", Scene::GetFileExtension());
     String filename = fd.GetSaveFilename(scene->name);
@@ -216,10 +214,10 @@ void MenuBar::OnCreateFromPrefab() const
         }
         else
         {
-            Scene *currentScene = Screen::GetInstance()->GetCurrentScene();
-            if (currentScene )
+            Scene *activeScene = SceneManager::GetActiveScene();
+            if (activeScene)
             {
-                e->SetParent(currentScene);
+                e->SetParent(activeScene);
             }
         }
         delete p;
@@ -237,7 +235,7 @@ GameObject* MenuBar::CreatePrimitiveGameObject(Mesh *m, const String &name) cons
 {
     GameObject *go = MeshFactory::CreatePrimitiveGameObject(m, name);
 
-    go->SetParent(Screen::GetInstance()->GetCurrentScene());
+    go->SetParent(SceneManager::GetActiveScene());
     Hierarchy::GetInstance()->SelectGameObject(go);
     return go;
 }
@@ -266,7 +264,7 @@ void MenuBar::OnCreateDirectionalLight() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateDirectionalLight);
     GameObject *go = new GameObject("DirectionalLight");
-    go->SetParent(Scene::GetCurrentScene());
+    go->SetParent(SceneManager::GetActiveScene());
     go->AddComponent<DirectionalLight>();
 }
 
@@ -274,7 +272,7 @@ void MenuBar::OnCreatePointLight() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreatePointLight);
     GameObject *go = new GameObject("PointLight");
-    go->SetParent(Scene::GetCurrentScene());
+    go->SetParent(SceneManager::GetActiveScene());
     go->AddComponent<PointLight>();
 }
 

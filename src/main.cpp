@@ -8,21 +8,22 @@
 
 #include "Bang.h"
 
-#include "SingletonManager.h"
-#include "ShaderProgram.h"
-#include "MeshRenderer.h"
-#include "Application.h"
-#include "Framebuffer.h"
-#include "GameObject.h"
-#include "FileReader.h"
-#include "Behaviour.h"
-#include "Texture2D.h"
-#include "XMLParser.h"
-#include "XMLNode.h"
+#include "Timer.h"
 #include "Camera.h"
 #include "Screen.h"
 #include "Shader.h"
-#include "Timer.h"
+#include "XMLNode.h"
+#include "Behaviour.h"
+#include "Texture2D.h"
+#include "XMLParser.h"
+#include "GameObject.h"
+#include "FileReader.h"
+#include "Application.h"
+#include "Framebuffer.h"
+#include "SceneManager.h"
+#include "MeshRenderer.h"
+#include "ShaderProgram.h"
+#include "SingletonManager.h"
 
 #ifdef BANG_EDITOR
 
@@ -87,9 +88,9 @@ int main(int argc, char *argv[])
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
-        Screen::GetInstance()->AddScene(scene);
-        Screen::GetInstance()->SetCurrentScene(scene);
-        Persistence::SetCurrentSceneFilepath(filename);
+        SceneManager::AddScene(scene);
+        SceneManager::SetActiveScene(scene);
+        Persistence::SetActiveSceneFilepath(filename);
     }
 
     #else
@@ -99,9 +100,9 @@ int main(int argc, char *argv[])
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
-        Screen::GetInstance()->AddScene(scene);
-        Screen::GetInstance()->SetCurrentScene(scene);
-        Persistence::SetCurrentSceneFilepath(filename);
+        SceneManager::AddScene(scene);
+        SceneManager::SetActiveScene(scene);
+        Persistence::SetActiveSceneFilepath(filename);
     }
     #endif
 

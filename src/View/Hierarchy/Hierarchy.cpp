@@ -152,7 +152,7 @@ Hierarchy *Hierarchy::GetInstance()
 
 void Hierarchy::Refresh()
 {
-    NONULL(Scene::GetCurrentScene());
+    NONULL(SceneManager::GetActiveScene());
 
     // Save expanded and selected gameObject items
     GameObject *selectedGameObject = nullptr;
@@ -176,7 +176,7 @@ void Hierarchy::Refresh()
     clear();
 
     // Add top level items and populate them recursively
-    std::list<GameObject*> sceneChildren = Scene::GetCurrentScene()->GetChildren();
+    std::list<GameObject*> sceneChildren = SceneManager::GetActiveScene()->GetChildren();
     for (GameObject* go : sceneChildren)
     {
         if (!go->IsEditorGameObject())

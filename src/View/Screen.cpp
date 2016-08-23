@@ -10,6 +10,8 @@
 #include "GameWindow.h"
 #endif
 
+#include "Application.h"
+#include "SceneManager.h"
 #include "SingletonManager.h"
 
 #ifdef BANG_EDITOR
@@ -23,10 +25,6 @@ Screen *Screen::m_mainBinaryScreen = nullptr;
 Screen::Screen(QWidget* parent) : QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
-
-    connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(update()));
-    m_drawTimer.setInterval(Screen::c_redrawDelay);
-    m_drawTimer.start();
 
     #ifdef BANG_EDITOR
     Screen::s_m_window = WindowMain::GetInstance();
@@ -51,28 +49,15 @@ void Screen::initializeGL()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-
-    m_lastRenderTime = Time::GetNow();
 }
 
 void Screen::paintGL()
 {
-    glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
-
-    float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
-    Time::GetInstance()->m_deltaTime = deltaTime;
-    // Update mainBinary static deltaTime, for internal engine use
-    // (this is not Behaviours' static deltaTime, theirs is updated in Behaviour _OnUpdate)
-    Time::s_deltaTime = deltaTime;
-
-    if (m_currentScene)
+    Scene *activeScene = SceneManager::GetActiveScene();
+    if (activeScene)
     {
-        m_lastRenderTime = Time::GetNow();
-        m_currentScene->_OnUpdate();
-        m_currentScene->_OnRender(); //Note: _OnPreRender() is called from scene _OnRender
+        activeScene->_OnRender(); //Note: _OnPreRender() is called from scene _OnRender
     }
-
-    Input::GetInstance()->OnNewFrame();
 }
 
 void Screen::updateGL()
@@ -86,84 +71,13 @@ void Screen::resizeGL(int w, int h)
     m_height = h;
     m_aspectRatio = float(w) / h;
 
-    if (m_currentScene )
+    Scene *activeScene = SceneManager::GetActiveScene();
+    if (activeScene)
     {
-        m_currentScene->_OnResize(w,h);
+        activeScene->_OnResize(w,h);
     }
 }
 
-Scene *Screen::AddScene(const String &name)
-{
-    Scene *st = new Scene();
-    st->m_name = name;
-    m_scenes.push_back(st);
-    return st;
-}
-
-void Screen::AddScene(Scene *scene)
-{
-    m_scenes.push_back(scene);
-}
-
-void Screen::SetCurrentScene(Scene *scene)
-{
-    if (m_currentScene)
-    {
-        m_currentScene->_OnDestroy();
-    }
-
-    m_currentScene = scene;
-    if (m_currentScene)
-    {
-        m_currentScene->_OnStart();
-        #ifdef BANG_EDITOR
-        Screen::s_m_window->widgetHierarchy->Refresh();
-        #endif
-    }
-}
-
-void Screen::SetCurrentScene(const String &name)
-{
-    if (m_currentScene )
-    {
-        m_currentScene->_OnDestroy();
-    }
-
-    for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
-    {
-        if ((*it)->name == name)
-        {
-            SetCurrentScene((*it));
-            return;
-        }
-    }
-
-    Logger_Warn("Could not change Scene to '" << name << "', "<<
-                   "because no scene with this name is added to the Screen.");
-}
-
-Scene *Screen::GetCurrentScene()
-{
-    Screen *c = Screen::GetInstance();
-    return c ? c->m_currentScene : nullptr;
-}
-
-Scene *Screen::GetScene(const String &name) const
-{
-    for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
-    {
-        if ((*it)->name == name) return (*it);
-    }
-    return nullptr;
-}
-
-void Screen::RemoveScene(const String &name)
-{
-    for (auto it = m_scenes.begin(); it != m_scenes.end(); ++it)
-    {
-        if ((*it)->name == name) { m_scenes.erase(it); return; }
-    }
-}
 
 Screen *Screen::GetInstance()
 {
@@ -196,7 +110,7 @@ int Screen::GetHeight()
 
 void Screen::SetCursor(Qt::CursorShape cs)
 {
-    Screen::s_m_window->GetApplication()->setOverrideCursor( cs );
+    Application::GetInstance()->setOverrideCursor( cs );
 }
 
 #ifdef BANG_EDITOR
@@ -207,7 +121,8 @@ void Screen::dragEnterEvent(QDragEnterEvent *e)
 
 void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
 {
-    EditorScene *scene = static_cast<EditorScene*>(m_currentScene);
+    Scene *activeScene = SceneManager::GetActiveScene();
+    EditorScene *scene = static_cast<EditorScene*>(activeScene);
     SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
     int x = e->pos().x();
     int y = Screen::GetHeight() - e->pos().y();
@@ -277,9 +192,10 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
 {
     e->accept();
 
-    NONULL(m_currentScene);
+    Scene *activeScene = SceneManager::GetActiveScene();
+    NONULL(activeScene);
 
-    EditorScene *scene = static_cast<EditorScene*>(m_currentScene);
+    EditorScene *scene = static_cast<EditorScene*>(activeScene);
     SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
     int x = e->pos().x(), y = Screen::GetHeight() - e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
@@ -336,18 +252,20 @@ void Screen::dragLeaveEvent(QDragLeaveEvent *e)
 
 void Screen::dropEvent(QDropEvent *e)
 {
-    NONULL(m_currentScene);
+    // NONULL(m_activeScene);
     e->ignore();
 }
 
 void Screen::OnDrop(const DragDropInfo &ddi)
 {
+    Scene *activeScene = SceneManager::GetActiveScene();
+
     if ( MouseOverMe() )
     {
         if (m_gameObjectBeingDragged)
         {
             m_gameObjectBeingDragged->m_isDragged = false;
-            m_gameObjectBeingDragged->SetParent(m_currentScene);
+            m_gameObjectBeingDragged->SetParent(activeScene);
             Hierarchy::GetInstance()->SelectGameObject(m_gameObjectBeingDragged);
         }
     }

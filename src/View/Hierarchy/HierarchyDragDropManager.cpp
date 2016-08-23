@@ -42,13 +42,13 @@ GameObject *HierarchyDragDropManager::GetDropTargetGameObject() const
             }
             else
             {
-                targetGameObject = Scene::GetCurrentScene();
+                targetGameObject = SceneManager::GetActiveScene();
             }
         }
     }
     else
     {
-        targetGameObject = Scene::GetCurrentScene();
+        targetGameObject = SceneManager::GetActiveScene();
     }
 
     return targetGameObject;

@@ -42,18 +42,12 @@ private:
     static GameWindow *s_m_window;
     #endif
 
-    const int c_redrawDelay = 15;
+
     QWidget *m_dragOrigin = nullptr;
 
     int m_width = 0;
     int m_height = 0;
     float m_aspectRatio = 1.0f;
-    unsigned long long m_lastRenderTime = 0;
-
-    std::list<Scene*> m_scenes;
-
-    Scene *m_currentScene = nullptr;
-    QTimer m_drawTimer;
 
     GameObject *m_lastGameObjectOvered = nullptr;
     GameObject *m_gameObjectBeingDragged = nullptr;
@@ -62,8 +56,6 @@ private:
 
 public:
 
-    Color m_clearColor = Color::blue * 0.6f;
-
     explicit Screen(QWidget *parent = 0);
     static void InitFromMainBinary();
 
@@ -71,14 +63,6 @@ public:
     void paintGL() override;
     void resizeGL(int w, int h) override;
 
-    Scene* AddScene(const String &name);
-    void AddScene(Scene* scene);
-    void SetCurrentScene(Scene *scene);
-    void SetCurrentScene(const String &name);
-    void RemoveScene(const String &name);
-
-    static Scene* GetCurrentScene();
-    Scene* GetScene(const String &name) const;
     static Screen *GetInstance();
     static float GetAspectRatio();
     static int GetHeight();

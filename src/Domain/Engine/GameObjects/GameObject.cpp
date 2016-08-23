@@ -1,14 +1,15 @@
 #include "GameObject.h"
 
-#include "Component.h"
 #include "FileReader.h"
+#include "SceneManager.h"
 #include "SingletonManager.h"
-#include "Transform.h"
 
-#include "DirectionalLight.h"
-#include "BehaviourHolder.h"
-#include "MeshRenderer.h"
+#include "Component.h"
 #include "PointLight.h"
+#include "Transform.h"
+#include "MeshRenderer.h"
+#include "BehaviourHolder.h"
+#include "DirectionalLight.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
@@ -69,7 +70,7 @@ GameObject::~GameObject()
 
     #ifdef BANG_EDITOR
     EditorCamera *ecam = static_cast<EditorCamera*>(
-                            Scene::GetCurrentScene()->GetChild("BANG_EditorCamera"));
+                            SceneManager::GetActiveScene()->GetChild("BANG_EditorCamera"));
     ecam->NotifyGameObjectDestroyed(this);
     #endif
 
@@ -341,7 +342,7 @@ bool GameObject::IsScene() const
 
 GameObject *GameObject::Find(const String &name)
 {
-    Scene *scene = Screen::GetCurrentScene();
+    Scene *scene = SceneManager::GetActiveScene();
     return scene->FindInChildren(name);
 }
 
@@ -487,7 +488,7 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
         if (!m_isSelectedInHierarchy)
         {
             m_selectionGameObject = new EditorSelectionGameObject(this);
-            m_selectionGameObject->SetParent(Screen::GetCurrentScene());
+            m_selectionGameObject->SetParent(SceneManager::GetActiveScene());
         }
     }
     else
@@ -603,7 +604,7 @@ void GameObject::_OnRender ()
     ISceneEventListener::_OnRender();
 
     #ifdef BANG_EDITOR
-    EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
+    EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
     #endif
     {
@@ -672,7 +673,7 @@ void GameObject::_OnDrawGizmos()
     ISceneEventListener::_OnDrawGizmos();
 
     Gizmos::Reset();
-    EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
+    EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
     {
         PROPAGATE_EVENT(_OnDrawGizmos, m_children);
@@ -686,7 +687,7 @@ void GameObject::_OnDrawGizmosNoDepth()
     ISceneEventListener::_OnDrawGizmosNoDepth();
 
     Gizmos::Reset();
-    EditorScene *scene = static_cast<EditorScene*>(Scene::GetCurrentScene());
+    EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
     {
         PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);

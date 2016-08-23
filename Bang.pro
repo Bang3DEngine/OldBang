@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-# CONFIG += EDITOR
+CONFIG += EDITOR
 # CONFIG += GAME
 CONFIG += qt
 
@@ -212,7 +212,8 @@ HEADERS += \
     src/Domain/Engine/Physics/Vector2.h \
     src/Domain/Engine/Physics/Color.h \
     src/View/Application.h \
-    src/Domain/Engine/Others/String.h
+    src/Domain/Engine/Others/String.h \
+    src/Domain/Engine/Others/SceneManager.h
 
 EDITOR {
 HEADERS += \
@@ -359,7 +360,8 @@ SOURCES += \
     src/Domain/Engine/Physics/Vector2.cpp \
     src/Domain/Engine/Physics/Color.cpp \
     src/View/Application.cpp \
-    src/Domain/Engine/Others/String.cpp
+    src/Domain/Engine/Others/String.cpp \
+    src/Domain/Engine/Others/SceneManager.cpp
 
 EDITOR {
     SOURCES += \

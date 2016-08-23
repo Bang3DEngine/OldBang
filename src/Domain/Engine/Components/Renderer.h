@@ -7,6 +7,7 @@
 #include "Box.h"
 #include "Material.h"
 #include "Component.h"
+#include "SceneManager.h"
 
 class SelectionFramebuffer;
 class Renderer : public Component
