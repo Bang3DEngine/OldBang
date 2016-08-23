@@ -1,5 +1,6 @@
 #include "Vector2.h"
 
+#include "String.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Matrix4.h"
@@ -59,6 +60,12 @@ Vector2 Vector2::ToRadians() const
 glm::vec2 Vector2::ToGlmVec2() const
 {
     return glm::vec2(x,y);
+}
+
+String Vector2::ToString() const
+{
+    return "(" + String::ToString(x) + ", " +
+                 String::ToString(y) + ")";
 }
 
 float Vector2::Distance(const Vector2 &p) const

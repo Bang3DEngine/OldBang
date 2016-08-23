@@ -25,7 +25,7 @@ String SystemUtils::GetAllProjectObjects()
     SystemUtils::System(cmdGetAllObjects, &objs, &ok);
     if (!ok)
     {
-        Logger_Error("Error trying to find object files to compile");
+        Debug_Error("Error trying to find object files to compile");
     }
     return objs;
 }
@@ -44,7 +44,7 @@ String SystemUtils::GetAllProjectSubDirs()
     SystemUtils::System(cmdGetAllSubDirs, &allSubDirs, &ok);
     if (!ok)
     {
-        Logger_Error("Error trying to find include directories to compile.");
+        Debug_Error("Error trying to find include directories to compile.");
     }
 
     return allSubDirs;
@@ -61,7 +61,7 @@ String SystemUtils::GetQtIncludes()
     SystemUtils::System(cmdGetQtIncludeDirs, &qtIncludeDirs, &ok);
     if (!ok)
     {
-        Logger_Error("Error trying to find Qt include directories to compile.");
+        Debug_Error("Error trying to find Qt include directories to compile.");
     }
 
     return qtIncludeDirs;
@@ -77,7 +77,7 @@ String SystemUtils::GetQtLibrariesDirs()
     SystemUtils::System(cmdGetQtLibDirs, &qtLibDirs, &ok);
     if (!ok)
     {
-        Logger_Error("Error trying to find Qt library directories to compile.");
+        Debug_Error("Error trying to find Qt library directories to compile.");
     }
 
     return qtLibDirs;
@@ -124,7 +124,7 @@ void SystemUtils::System(const String &command, String *output, bool *success)
     }
     else if (pid == -1)
     {
-        Logger_Error("There was an error doing a fork to execute a System instruction.");
+        Debug_Error("There was an error doing a fork to execute a System instruction.");
         quick_exit(1);
     }
 
@@ -234,18 +234,18 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     {
         if (output != "")
         {
-            Logger_Warn(output);
+            Debug_Warn(output);
         }
     }
     else // There has been an error
     {
         if (output != "")
         {
-            Logger_Error(output);
+            Debug_Error(output);
         }
         else
         {
-            Logger_Error("There was an error compiling the Behaviour...");
+            Debug_Error("There was an error compiling the Behaviour...");
         }
 
         sharedObjectFilepath = "";
@@ -265,7 +265,7 @@ void SystemUtils::CreateDynamicBehaviour(const  String &sharedObjectFilepath,
     char *err = dlerror();
     if (err)
     {
-        Logger_Error(err);
+        Debug_Error(err);
         if (*openLibrary)
         {
             dlclose(*openLibrary);
@@ -279,7 +279,7 @@ void SystemUtils::CreateDynamicBehaviour(const  String &sharedObjectFilepath,
     err = dlerror();
     if (err )
     {
-        Logger_Error(err);
+        Debug_Error(err);
         dlclose(*openLibrary);
         *openLibrary = *createdBehaviour = nullptr;
         return;
@@ -294,7 +294,7 @@ void SystemUtils::CreateDynamicBehaviour(const  String &sharedObjectFilepath,
     err = dlerror();
     if (err )
     {
-        Logger_Error(err);
+        Debug_Error(err);
         dlclose(*openLibrary);
         *openLibrary = *createdBehaviour = nullptr;
         return;
@@ -318,7 +318,7 @@ bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, void *openLibrary)
     char *err = dlerror();
     if (err )
     {
-        Logger_Error(err);
+        Debug_Error(err);
         return false;
     }
 
@@ -331,7 +331,7 @@ bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, void *openLibrary)
     err = dlerror();
     if (err )
     {
-        Logger_Error(err);
+        Debug_Error(err);
         return false;
     }
 
@@ -351,7 +351,7 @@ void SystemUtils::CloseLibrary(void *library)
     char *err = dlerror();
     if (err )
     {
-        Logger_Error(err);
+        Debug_Error(err);
     }
 }
 

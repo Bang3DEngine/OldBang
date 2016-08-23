@@ -2,7 +2,7 @@
 #define FILETEXTURE2DASSET_H
 
 #include "stb_image.h"
-#include "Logger.h"
+#include "Debug.h"
 
 #include "File.h"
 

@@ -335,8 +335,7 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            String memAddress;
-            Logger_GetString(memAddress, (void*)m_material);
+            String memAddress = String::ToString((void*) m_material);
             xmlInfo->SetFilepath("Material", memAddress, "bmat");
         }
     }

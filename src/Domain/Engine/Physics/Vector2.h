@@ -1,12 +1,11 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 
-
 #include "glm/glm.hpp"
 
+class String;
 class Matrix4;
 class Vector3;
-
 class Vector2 : public glm::vec2
 {
 public:
@@ -44,6 +43,7 @@ public:
     Vector2 ToRadians() const;
 
     glm::vec2 ToGlmVec2() const;
+    String ToString() const;
 
     float Distance(const Vector2 &p) const;
 

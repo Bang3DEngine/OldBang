@@ -1,7 +1,7 @@
 #include "Mesh.h"
 #include "Scene.h"
 #include "Camera.h"
-#include "Logger.h"
+#include "Debug.h"
 #include "stb_image.h"
 #include "Behaviour.h"
 #include "Transform.h"
@@ -28,7 +28,7 @@ unsigned char* FileReader::ReadImage(const String& filepath,
                                     width, height, &comps, 4);
     if (!data)
     {
-        Logger_Error("Error loading the texture '" << filepath <<
+        Debug_Error("Error loading the texture '" << filepath <<
                      "', couldn't open/read the file.");
     }
     return data;
@@ -41,7 +41,7 @@ void FileReader::GetOBJFormat(const String& filepath, bool *hasUvs,
     f = fopen(filepath.ToCString(), "r");
     if (!f)
     {
-        Logger_Error("Error trying to open '" << filepath << "'");
+        Debug_Error("Error trying to open '" << filepath << "'");
         return;
     }
 
@@ -100,7 +100,7 @@ int FileReader::GetOBJNumFaces(const String &filepath)
 {
     std::ifstream f(filepath, std::ios::in);
     if (!f.is_open())
-        Logger_Error("Error opening the mesh file '" << filepath << "'");
+        Debug_Error("Error opening the mesh file '" << filepath << "'");
 
     int numFaces = 0;
     String line;
@@ -132,7 +132,7 @@ bool FileReader::ReadOBJ(const String& filepath,
 
     std::ifstream f(filepath, std::ios::in);
     if (!f.is_open())
-        Logger_Error("Error opening the mesh file '" << filepath << "'");
+        Debug_Error("Error opening the mesh file '" << filepath << "'");
     String line;
 
     while (std::getline(f, line))

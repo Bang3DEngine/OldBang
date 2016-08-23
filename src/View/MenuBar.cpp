@@ -136,7 +136,7 @@ void MenuBar::OnOpenScene() const
     }
     else
     {
-        Logger_Error("Scene from file '" << filename <<
+        Debug_Error("Scene from file '" << filename <<
                      "' could not be loaded.");
     }
 }
@@ -172,13 +172,13 @@ void MenuBar::OnSaveSceneAs() const
 
 void MenuBar::OnBuild() const
 {
-    Logger_Log("Building Game... (This could take a while)");
+    Debug_Log("Building Game... (This could take a while)");
     GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute());
 }
 
 void MenuBar::OnBuildAndRun() const
 {
-    Logger_Log("Building and running Game... (This could take a while)");
+    Debug_Log("Building and running Game... (This could take a while)");
     GameBuilder::BuildAndRunGame(Persistence::GetProjectRootPathAbsolute());
 }
 
@@ -226,7 +226,7 @@ void MenuBar::OnCreateFromPrefab() const
     }
     else
     {
-        Logger_Error("Prefab file '" << filename << "' can't be read.");
+        Debug_Error("Prefab file '" << filename << "' can't be read.");
     }
 }
 

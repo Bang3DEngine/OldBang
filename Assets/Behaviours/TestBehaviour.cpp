@@ -3,7 +3,6 @@
 #include "ShaderContract.h"
 #include "Transform.h"
 #include "Material.h"
-#include "Logger.h"
 #include "Screen.h"
 #include "Scene.h"
 #include "Time.h"
@@ -31,6 +30,7 @@ void TestBehaviour::OnUpdate()
     Behaviour::OnUpdate();
 
     time += Time::deltaTime;
+    Debug_Log("WOLOLO " << time);
 
     float rotSpeed = 150.0f;
     if (Input::GetKey(Input::Key::A))

@@ -9,6 +9,7 @@
 #include "Bang.h"
 
 #include "Timer.h"
+#include "Debug.h"
 #include "Camera.h"
 #include "Screen.h"
 #include "Shader.h"
@@ -42,6 +43,16 @@
 
 int main(int argc, char *argv[])
 {
+    String str = "vector: " + Vector2(1,2) + ", " + Vector3(1,2,3) + ", " + Vector4(1,2,3,4);
+    Debug_Log(str);
+    str = "quat: " + Quaternion(1,2,3,4);
+    Debug_Warn(str);
+    Matrix4 m;
+    str = "mat: " + m;
+    Debug_Error(str);
+    Color c = Color::blue;
+    Debug_Log("wololo: " << c << ", " << Vector2(0,1) << "kjashdas");
+
     SingletonManager::InitSingletonManagerFromMainBinary();
     ShortcutManager::InitFromMainBinary(); // It must go before Application init
 
@@ -73,7 +84,7 @@ int main(int argc, char *argv[])
     QFile f("Assets/Engine/qdarkstyle/style.qss");
     if (!f.exists())
     {
-        Logger_Error("Unable to set dark stylesheet, stylesheet not found.");
+        Debug_Error("Unable to set dark stylesheet, stylesheet not found.");
     }
     else
     {

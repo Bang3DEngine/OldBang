@@ -7,6 +7,7 @@
 
 #include "Vector3.h"
 
+class String;
 class Quaternion : public glm::quat
 {
 public:
@@ -19,6 +20,7 @@ public:
     Quaternion Inversed() const;
 
     Vector3 EulerAngles() const;
+    String ToString() const;
 
     static Vector3 EulerAngles(const Quaternion &q);
     static Quaternion Slerp(const Quaternion &from,

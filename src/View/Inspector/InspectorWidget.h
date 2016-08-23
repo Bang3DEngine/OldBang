@@ -20,7 +20,7 @@
 #include <QDoubleSpinBox>
 
 #include "File.h"
-#include "Logger.h"
+#include "Debug.h"
 #include "XMLNode.h"
 #include "IInspectable.h"
 #include "DragDropAgent.h"

@@ -72,7 +72,7 @@ void BehaviourHolder::Refresh()
     if (!m_compileThread.isRunning())
     {
         String filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
-        Logger_Log("Refreshing Behaviour '" << filename << "'...");
+        Debug_Log("Refreshing Behaviour '" << filename << "'...");
         m_compileThread.start();
     }
 }
@@ -83,7 +83,7 @@ void BehaviourHolder::OnBehaviourFinishedCompiling(String soFilepath)
     if (soFilepath == "")
     {
         ChangeBehaviour(nullptr);
-        Logger_Error("There was an error compiling the Behaviour "
+        Debug_Error("There was an error compiling the Behaviour "
                      << m_sourceFilepath);
         return;
     }
@@ -113,12 +113,12 @@ void BehaviourHolder::OnBehaviourFinishedCompiling(String soFilepath)
             m_behaviour->Init(this);
             m_behaviour->_OnStart();
             String filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
-            Logger_Log("Behaviour '" << filename << "' successfully refreshed!");
+            Debug_Log("Behaviour '" << filename << "' successfully refreshed!");
         }
     }
     else
     {
-        Logger_Error("Behaviour " << m_sourceFilepath <<
+        Debug_Error("Behaviour " << m_sourceFilepath <<
                      " could not be refreshed. See errors above");
     }
 }
@@ -218,7 +218,7 @@ void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void BehaviourHolder::_OnStart()
 {
     Component::_OnStart();
-    Logger_Log("_OnStart !!!");
+    Debug_Log("_OnStart !!!");
     Refresh();
 }
 

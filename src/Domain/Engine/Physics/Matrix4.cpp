@@ -1,5 +1,6 @@
 #include "Matrix4.h"
 
+#include "String.h"
 #include "Vector3.h"
 #include "Quaternion.h"
 
@@ -214,6 +215,16 @@ glm::mat4 Matrix4::ToGlmMat4() const
     m[2] = glm::vec4(c2.x, c2.y, c2.z, c2.w);
     m[3] = glm::vec4(c3.x, c3.y, c3.z, c3.w);
     return m;
+}
+
+String Matrix4::ToString() const
+{
+    std::ostringstream oss;
+    oss << "(" << c0[0] << ", " << c1[0] << ", " << c2[0] << ", " << c3[0] << "," << std::endl;
+    oss << " " << c0[1] << ", " << c1[1] << ", " << c2[1] << ", " << c3[1] << "," << std::endl;
+    oss << " " << c0[2] << ", " << c1[2] << ", " << c2[2] << ", " << c3[2] << "," << std::endl;
+    oss << " " << c0[3] << ", " << c1[3] << ", " << c2[3] << ", " << c3[3] << ")" << std::endl;
+    return String(oss.str());
 }
 
 Matrix4 Matrix4::Perspective(float fovY, float aspect, float zNear, float zFar)

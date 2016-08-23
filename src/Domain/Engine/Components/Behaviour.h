@@ -4,8 +4,8 @@
 #include "Bang.h"
 
 #include "Time.h"
+#include "Debug.h"
 #include "Scene.h"
-#include "Logger.h"
 #include "Material.h"
 #include "Transform.h"
 #include "GameObject.h"

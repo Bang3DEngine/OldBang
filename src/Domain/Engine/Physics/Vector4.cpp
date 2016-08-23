@@ -1,9 +1,10 @@
 #include "Vector4.h"
 
+#include "Color.h"
+#include "String.h"
+#include "Matrix4.h"
 #include "Vector2.h"
 #include "Vector3.h"
-#include "Color.h"
-#include "Matrix4.h"
 #include "Quaternion.h"
 
 const Vector4 Vector4::up      = Vector4( 0,  1,  0, 0);
@@ -77,6 +78,14 @@ Vector4 Vector4::ToRadians() const
 glm::vec4 Vector4::ToGlmVec4() const
 {
     return glm::vec4(x,y,z,w);
+}
+
+String Vector4::ToString() const
+{
+    return "(" + String::ToString(x) + ", " +
+                 String::ToString(y) + ", " +
+                 String::ToString(z) + ", " +
+                 String::ToString(w) + ")";
 }
 
 float Vector4::Distance(const Vector4 &p) const

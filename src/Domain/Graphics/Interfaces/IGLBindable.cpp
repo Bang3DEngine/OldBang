@@ -1,5 +1,5 @@
 #include "IGLBindable.h"
-#include "Logger.h"
+#include "Debug.h"
 
 IGLBindable::IGLBindable() {}
 
@@ -20,7 +20,7 @@ GLint IGLBindable::PreUnBind(GLenum bindTarget) const
     if (m_boundIds.find(bindTarget) == m_boundIds.end() ||
        m_boundIds[bindTarget].empty())
     {
-        Logger_Warn("Unbinding non-binded GL target.");
+        Debug_Warn("Unbinding non-binded GL target.");
         return 0;
     }
 

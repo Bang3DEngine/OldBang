@@ -1,5 +1,6 @@
 #include "Vector3.h"
 
+#include "String.h"
 #include "Vector2.h"
 #include "Quaternion.h"
 
@@ -66,6 +67,13 @@ Vector3 Vector3::ToRadians() const
 glm::vec3 Vector3::ToGlmVec3() const
 {
     return glm::vec3(x,y,z);
+}
+
+String Vector3::ToString() const
+{
+    return "(" + String::ToString(x) + ", " +
+                 String::ToString(y) + ", " +
+                 String::ToString(z) + ")";
 }
 
 float Vector3::Distance(const Vector3 &p) const

@@ -257,7 +257,7 @@ void GameObject::AddComponent(Component *c)
     {
         if (HasComponent<Transform>())
         {
-            Logger_Error("A gameObject must contain one and only one Transform.");
+            Debug_Error("A gameObject must contain one and only one Transform.");
             delete c;
             return;
         }

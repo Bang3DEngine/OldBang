@@ -1,7 +1,7 @@
 #include "XMLParser.h"
 
 #include "IFileable.h"
-#include "Logger.h"
+#include "Debug.h"
 
 std::map<String, const IFileable*> XMLParser::m_idToPointer;
 

@@ -1,5 +1,6 @@
 #include "Quaternion.h"
 
+#include "String.h"
 #include "Vector3.h"
 
 Quaternion Quaternion::identity = Quaternion();
@@ -34,6 +35,14 @@ Quaternion Quaternion::Inversed() const
 Vector3 Quaternion::EulerAngles() const
 {
     return Quaternion::EulerAngles(*this);
+}
+
+String Quaternion::ToString() const
+{
+    return "(" + String::ToString(x) + ", " +
+                 String::ToString(y) + ", " +
+                 String::ToString(z) + ", " +
+                 String::ToString(w) + ")";
 }
 
 Quaternion Quaternion::Slerp(const Quaternion &from, const Quaternion &to, float progression)

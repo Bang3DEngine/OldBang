@@ -1,10 +1,11 @@
 #ifndef EDITORDEBUGGAMEOBJECT_H
 #define EDITORDEBUGGAMEOBJECT_H
 
-#include "Bang.h"
-
 #include <list>
 
+#include "Bang.h"
+
+#include "Time.h"
 #include "Color.h"
 #include "Gizmos.h"
 #include "EditorGameObject.h"

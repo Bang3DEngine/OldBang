@@ -11,7 +11,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "Logger.h"
+#include "Debug.h"
 #include "IGLIdable.h"
 #include "IToString.h"
 #include "ShaderPreprocessor.h"

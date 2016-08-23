@@ -11,7 +11,7 @@
 
 #include "FileReader.h"
 #include "Texture.h"
-#include "Logger.h"
+#include "Debug.h"
 #include "Asset.h"
 
 class Texture2D : public Texture, public Asset

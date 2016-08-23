@@ -105,7 +105,7 @@ String Persistence::ToRelative(const String &absPath)
                 GetAssetsRelativePathFromProjectRoot().Length());
 }
 
-#include "Logger.h"
+#include "Debug.h"
 String Persistence::GetNextDuplicateName(const String &path)
 {
     String filePath = Persistence::ToRelative(path);

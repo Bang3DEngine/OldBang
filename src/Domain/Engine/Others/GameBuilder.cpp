@@ -23,27 +23,27 @@ void BuildGameThread::run()
 
     if (!ok)
     {
-        Logger_Error(output);
+        Debug_Error(output);
     }
     else
     {
-        Logger_Log("Game has been built!");
+        Debug_Log("Game has been built!");
     }
 
     if (ok && runGameAfterBuild)
     {
         ok = false;
         String output = "";
-        Logger_Log("Running Game...");
+        Debug_Log("Running Game...");
         SystemUtils::System("./Game.exe &", &output, &ok);
 
         if (!ok)
         {
-            Logger_Error(output);
+            Debug_Error(output);
         }
         else
         {
-            Logger_Log("Game is running!");
+            Debug_Log("Game is running!");
         }
     }
 }

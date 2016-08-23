@@ -7,7 +7,7 @@
 
 
 #include "Color.h"
-#include "Logger.h"
+#include "Debug.h"
 #include "Camera.h"
 #include "Screen.h"
 #include "GBuffer.h"

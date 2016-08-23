@@ -5,6 +5,7 @@
 
 #include "Bang.h"
 
+class String;
 class Vector2;
 class Vector3;
 class Vector4;
@@ -42,6 +43,7 @@ public:
 
     static Color FromQColor(const QColor &c);
     QColor ToQColor() const;
+    String ToString() const;
     Vector3 ToVector3() const;
     Vector4 ToVector4() const;
 

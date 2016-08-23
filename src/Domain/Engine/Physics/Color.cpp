@@ -2,6 +2,7 @@
 
 #include <sstream>
 
+#include "String.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -109,6 +110,14 @@ Color Color::FromQColor(const QColor &c)
 QColor Color::ToQColor() const
 {
     return QColor(r * 255, g * 255, b * 255, a * 255);
+}
+
+String Color::ToString() const
+{
+    return "(" + String(r) + ", " +
+                 String(g) + ", " +
+                 String(b) + ", " +
+                 String(a) + ")";
 }
 
 Vector3 Color::ToVector3() const

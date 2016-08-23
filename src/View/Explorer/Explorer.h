@@ -10,7 +10,7 @@
 
 #include "Bang.h"
 
-#include "Logger.h"
+#include "Debug.h"
 
 #include "Persistence.h"
 

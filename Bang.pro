@@ -142,7 +142,6 @@ HEADERS += \
     src/View/WindowMain.h \
     src/Domain/Interfaces/IToString.h \
     src/Domain/Engine/Interfaces/ISceneEventListener.h \
-    src/Domain/Engine/Others/Logger.h \
     src/Domain/Engine/Others/Timer.h \
     src/Domain/Engine/Others/Time.h \
     src/Domain/Engine/GameObjects/GameObject.h \
@@ -213,7 +212,8 @@ HEADERS += \
     src/Domain/Engine/Physics/Color.h \
     src/View/Application.h \
     src/Domain/Engine/Others/String.h \
-    src/Domain/Engine/Others/SceneManager.h
+    src/Domain/Engine/Others/SceneManager.h \
+    src/Domain/Engine/Others/Debug.h
 
 EDITOR {
 HEADERS += \
@@ -293,7 +293,6 @@ GAME {
 
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
-    src/Domain/Engine/Others/Logger.cpp \
     src/Domain/Engine/Others/Timer.cpp \
     src/Domain/Engine/Others/Time.cpp \
     src/Domain/Engine/GameObjects/GameObject.cpp \
@@ -361,7 +360,8 @@ SOURCES += \
     src/Domain/Engine/Physics/Color.cpp \
     src/View/Application.cpp \
     src/Domain/Engine/Others/String.cpp \
-    src/Domain/Engine/Others/SceneManager.cpp
+    src/Domain/Engine/Others/SceneManager.cpp \
+    src/Domain/Engine/Others/Debug.cpp
 
 EDITOR {
     SOURCES += \

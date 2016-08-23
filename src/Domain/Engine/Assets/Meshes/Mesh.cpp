@@ -42,7 +42,7 @@ void Mesh::LoadFromFile(const String &filepath)
     }
     else
     {
-        Logger_Error("There was an error when reading mesh file '" << filepath << "'.");
+        Debug_Error("There was an error when reading mesh file '" << filepath << "'.");
     }
 }
 

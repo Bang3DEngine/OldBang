@@ -1,6 +1,6 @@
 #include "Hierarchy.h"
 
-#include "Logger.h"
+#include "Debug.h"
 #include "WindowMain.h"
 #include "ShortcutManager.h"
 #include "WindowEventManager.h"

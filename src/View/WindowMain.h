@@ -6,7 +6,7 @@
 #include "Bang.h"
 
 #include "Screen.h"
-#include "Logger.h"
+#include "Debug.h"
 
 #include "IWindow.h"
 

@@ -2,7 +2,7 @@
 #define FILEMESHASSET_H
 
 #include "FileReader.h"
-#include "Logger.h"
+#include "Debug.h"
 
 #include "File.h"
 

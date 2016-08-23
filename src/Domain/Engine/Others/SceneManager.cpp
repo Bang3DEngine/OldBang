@@ -72,7 +72,7 @@ void SceneManager::SetActiveScene(const String &name)
         }
     }
 
-    Logger_Warn("Could not change Scene to '" << name << "', "<<
+    Debug_Warn("Could not change Scene to '" << name << "', "<<
                 "because no scene with this name is added to the SceneManager.");
 }
 

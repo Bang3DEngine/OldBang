@@ -3,6 +3,7 @@
 
 #include "glm/glm.hpp"
 
+class String;
 class Vector2;
 class Quaternion;
 class Vector3 : public glm::vec3
@@ -43,6 +44,7 @@ public:
     Vector3 ToRadians() const;
 
     glm::vec3 ToGlmVec3() const;
+    String ToString() const;
 
     float Distance(const Vector3 &p) const;
 

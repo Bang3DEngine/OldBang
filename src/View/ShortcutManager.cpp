@@ -1,6 +1,6 @@
 #include "ShortcutManager.h"
 
-#include "Logger.h"
+#include "Debug.h"
 #include "WindowMain.h"
 #include "Application.h"
 #include "SingletonManager.h"

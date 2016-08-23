@@ -17,7 +17,7 @@
 #include "glm/glm.hpp"
 
 #include "Rect.h"
-#include "Logger.h"
+#include "Debug.h"
 
 class Scene;
 class GameObject;

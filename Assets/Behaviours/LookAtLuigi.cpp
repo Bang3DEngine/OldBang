@@ -3,7 +3,7 @@
 #include "ShaderContract.h"
 #include "Transform.h"
 #include "Material.h"
-#include "Logger.h"
+#include "Debug.h"
 #include "Screen.h"
 #include "Scene.h"
 #include "Time.h"

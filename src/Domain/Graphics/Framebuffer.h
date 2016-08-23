@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "Color.h"
-#include "Logger.h"
+#include "Debug.h"
 #include "IGLIdable.h"
 #include "IGLBindable.h"
 #include "TextureDepth.h"

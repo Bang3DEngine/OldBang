@@ -1,6 +1,6 @@
 #include "Box.h"
 
-#include "Logger.h"
+#include "Debug.h"
 
 Box::Box()
 {

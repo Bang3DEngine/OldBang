@@ -1,7 +1,23 @@
 #include "String.h"
 
+#include <vector>
+#include <list>
+#include <map>
+
+#include "Color.h"
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Matrix4.h"
+#include "Quaternion.h"
+
 String::String()
 {
+}
+
+String::String(float v)
+{
+    *this = ToString(v);
 }
 
 String::String(const char *cstr) :
@@ -150,3 +166,70 @@ String& String::operator=(const char *cstr)
     std::string::operator=(cstr);
     return *this;
 }
+
+String String::ToString(int i)
+{
+    return String(std::to_string(i));
+}
+
+String String::ToString(float f)
+{
+    return String(std::to_string(f));
+}
+
+String String::ToString(void *v)
+{
+    std::ostringstream log;
+    log << v;
+    return String(log.str());
+}
+
+String String::ToString(const Color &v)
+{
+    return v.ToString();
+}
+String String::ToString(const Vector2 &v)
+{
+    return v.ToString();
+}
+String String::ToString(const Vector3 &v)
+{
+    return v.ToString();
+}
+String String::ToString(const Vector4 &v)
+{
+    return v.ToString();
+}
+String String::ToString(const Matrix4 &v)
+{
+    return v.ToString();
+}
+String String::ToString(const Quaternion &v)
+{
+    return v.ToString();
+}
+
+// OPERATORS
+
+// Operator+ using String::ToString(v)
+// (so String::ToString(const T &v) must be explicitely defined for T
+//  If not, this will give compile errors.)
+OPERATOR_PLUS_RIGHT_DEF(Color)
+ OPERATOR_PLUS_LEFT_DEF(Color)
+OPERATOR_PLUS_RIGHT_DEF(Vector2)
+ OPERATOR_PLUS_LEFT_DEF(Vector2)
+OPERATOR_PLUS_RIGHT_DEF(Vector3)
+ OPERATOR_PLUS_LEFT_DEF(Vector3)
+OPERATOR_PLUS_RIGHT_DEF(Vector4)
+ OPERATOR_PLUS_LEFT_DEF(Vector4)
+OPERATOR_PLUS_RIGHT_DEF(Matrix4)
+ OPERATOR_PLUS_LEFT_DEF(Matrix4)
+OPERATOR_PLUS_RIGHT_DEF(Quaternion)
+ OPERATOR_PLUS_LEFT_DEF(Quaternion)
+/*
+OPERATOR_PLUS_RIGHT_PRIMITIVE_DEF(int)
+ OPERATOR_PLUS_LEFT_PRIMITIVE_DEF(int)
+OPERATOR_PLUS_RIGHT_PRIMITIVE_DEF(float)
+ OPERATOR_PLUS_LEFT_PRIMITIVE_DEF(float)
+ */
+//

@@ -34,7 +34,7 @@ bool FileWriter::WriteToFile(const String &filepath, const String &content)
     }
     else
     {
-        Logger_Error("There was an error when saving file '" << filepath << "'");
+        Debug_Error("There was an error when saving file '" << filepath << "'");
         ok = false;
     }
     ofs.close();

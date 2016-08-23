@@ -3,7 +3,7 @@
 
 #include <QThread>
 
-#include "Logger.h"
+#include "Debug.h"
 #include "StringUtils.h"
 #include "SystemUtils.h"
 

@@ -9,7 +9,7 @@
 #include <QFileSystemModel>
 
 #include "Bang.h"
-#include "Logger.h"
+#include "Debug.h"
 #include "Explorer.h"
 
 //Directory list at the left of the Explorer itself

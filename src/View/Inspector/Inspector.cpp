@@ -2,7 +2,7 @@
 
 #include <QScrollBar>
 
-#include "Logger.h"
+#include "Debug.h"
 #include "Camera.h"
 #include "Component.h"
 #include "Transform.h"

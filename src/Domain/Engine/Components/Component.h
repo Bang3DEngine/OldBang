@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include "Logger.h"
+#include "Debug.h"
 #include "IFileable.h"
 #include "IToString.h"
 #include "ICloneable.h"

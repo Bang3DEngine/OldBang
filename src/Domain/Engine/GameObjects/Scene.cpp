@@ -18,16 +18,16 @@ void Scene::_OnStart()
     if (!IsEditorGameObject())
     {
         std::list<Camera*> cameras = GetComponentsInChildren<Camera>();
-        Logger_Log("Cameras: " << cameras);
+        Debug_Log("Cameras: " << cameras);
         if (!cameras.empty())
         {
             Camera *cam = cameras.front();
             SetCamera(cam);
-            Logger_Log("Found camera: " << cam);
+            Debug_Log("Found camera: " << cam);
         }
         else // Create default camera
         {
-            Logger_Log("Creating default camera");
+            Debug_Log("Creating default camera");
             GameObject *m_defaultCamera = new GameObject("DefaultCamera");
             m_defaultCamera->transform->SetPosition(Vector3(90));
             m_defaultCamera->transform->LookAt(Vector3::zero);

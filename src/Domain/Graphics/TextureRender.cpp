@@ -1,5 +1,5 @@
 #include "TextureRender.h"
-#include "Logger.h"
+#include "Debug.h"
 
 TextureRender::TextureRender() : Texture2D()
 {

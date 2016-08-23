@@ -34,13 +34,13 @@ bool ShaderProgram::Link()
 {
     if (!m_vshader)
     {
-        Logger_Error("Vertex shader not set. Can't link shader program.");
+        Debug_Error("Vertex shader not set. Can't link shader program.");
         return false;
     }
 
     if (!m_fshader)
     {
-        Logger_Error("Fragment shader not set. Can't link shader program.");
+        Debug_Error("Fragment shader not set. Can't link shader program.");
         return false;
     }
 
@@ -62,7 +62,7 @@ bool ShaderProgram::Link()
           glGetProgramInfoLog(m_idGL, errorLength, NULL, errorLog);
 
           String errorStr(errorLog);
-          Logger_Error("Can't link " << std::endl << this << std::endl <<
+          Debug_Error("Can't link " << std::endl << this << std::endl <<
                        "   Reason:  " << errorStr);
 
           free(errorLog);
@@ -85,7 +85,7 @@ bool ShaderProgram::SetUniformFloat(const String &name, float v, bool warn) cons
     }
     else
     {
-        if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
+        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
     }
 
@@ -98,12 +98,12 @@ bool ShaderProgram::SetUniformVec2 (const String &name, const Vector2& v, bool w
     if (location >= 0)
     {
         Bind();
-        glUniform2fv(location, 1, &v[0]);
+        glUniform2fv(location, 1, &v.x);
         UnBind();
     }
     else
     {
-        if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
+        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
     }
 
@@ -116,12 +116,12 @@ bool ShaderProgram::SetUniformVec3 (const String &name, const Vector3& v, bool w
     if (location >= 0)
     {
         Bind();
-        glUniform3fv(location, 1, &v[0]);
+        glUniform3fv(location, 1, &v.x);
         UnBind();
     }
     else
     {
-        if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
+        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
     }
 
@@ -134,12 +134,12 @@ bool ShaderProgram::SetUniformVec4 (const String &name, const Vector4& v, bool w
     if (location >= 0)
     {
         Bind();
-        glUniform4fv(location, 1, &v[0]);
+        glUniform4fv(location, 1, &v.x);
         UnBind();
     }
     else
     {
-        if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
+        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
     }
 
@@ -162,7 +162,7 @@ bool ShaderProgram::SetUniformMat4 (const String &name, const Matrix4& m, bool w
     }
     else
     {
-        if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
+        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
     }
 
@@ -178,7 +178,7 @@ bool ShaderProgram::SetUniformTexture(const String &name, const Texture *texture
     }
     else
     {
-        if (warn) Logger_Warn("Couldn't find uniform '" + name + "' in " <<
+        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
                                 std::endl << this << std::endl << " . Not setting it.");
     }
 
