@@ -53,7 +53,6 @@ void Screen::initializeGL()
 
 void Screen::paintGL()
 {
-    Debug_Log("PAINT GL MECAGOENLAPUTA");
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
@@ -283,37 +282,36 @@ void Screen::OnDrop(const DragDropInfo &ddi)
 
 void Screen::wheelEvent(QWheelEvent *event)
 {
-    Input::GetInstance()->HandleEvent(event);
+    Input::GetInstance()->EnqueueEvent(event);
     QGLWidget::wheelEvent(event);
 }
 
 void Screen::mouseMoveEvent(QMouseEvent *event)
 {
-    Input::GetInstance()->HandleEvent(event);
+    Input::GetInstance()->EnqueueEvent(event);
     QGLWidget::mouseMoveEvent(event);
 }
 
 void Screen::mousePressEvent(QMouseEvent *event)
 {
-    Debug_Log("MOUSE PRESS JODER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    Input::GetInstance()->HandleEvent(event);
+    Input::GetInstance()->EnqueueEvent(event);
     QGLWidget::mousePressEvent(event);
 }
 
 void Screen::mouseReleaseEvent(QMouseEvent *event)
 {
-    Input::GetInstance()->HandleEvent(event);
+    Input::GetInstance()->EnqueueEvent(event);
     QGLWidget::mouseReleaseEvent(event);
 }
 
 void Screen::keyPressEvent(QKeyEvent *event)
 {
-    Input::GetInstance()->HandleEvent(event);
+    Input::GetInstance()->EnqueueEvent(event);
     QGLWidget::keyPressEvent(event);
 }
 
 void Screen::keyReleaseEvent(QKeyEvent *event)
 {
-    Input::GetInstance()->HandleEvent(event);
+    Input::GetInstance()->EnqueueEvent(event);
     QGLWidget::keyReleaseEvent(event);
 }

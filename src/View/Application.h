@@ -23,13 +23,6 @@ friend class IShortcutListener;
 private:
     SceneManager *m_sceneManager = nullptr;
 
-    /**
-     * @brief Useful for Input processing, to delay the events not being handled before the
-     * update loop. This avoids handling events between the OnUpdate and Input->OnNewFrame()
-     * and losing them.
-     */
-    bool m_delayEventsForNextFrame = true;
-
     unsigned long long m_lastRenderTime = 0;
     const int c_redrawDelay = 25;
     QTimer m_drawTimer;
@@ -40,8 +33,6 @@ public:
 
     static Application *GetInstance();
     virtual bool notify(QObject *receiver, QEvent *e) override;
-
-    bool DelayEventsForNextFrame() const;
 
 public slots:
     void OnDrawTimerTick();

@@ -101,6 +101,44 @@ private:
 
     Input();
 
+    class EventInfo
+    {
+        public:
+            QEvent::Type m_eventType;
+            Input::Key m_key;
+            Input::MouseButton m_mouseButton;
+            int m_x, m_y;
+            int m_wheelDelta;
+
+            EventInfo(const QEvent *e)
+            {
+                m_eventType = e->type();
+                if (m_eventType == QEvent::KeyPress ||
+                    m_eventType == QEvent::KeyRelease)
+                {
+                    const QKeyEvent *ke = static_cast<const QKeyEvent*>(e);
+                    int k = ke->key();
+                    m_key = static_cast<Input::Key>(k);
+                }
+                else if (m_eventType == QEvent::MouseButtonPress ||
+                         m_eventType == QEvent::MouseButtonRelease ||
+                         m_eventType == QEvent::MouseMove)
+                {
+                    const QMouseEvent *me = static_cast<const QMouseEvent*>(e);
+                    Qt::MouseButton mb = me->button();
+                    m_mouseButton = static_cast<Input::MouseButton>(mb);
+                    m_x = me->pos().x();
+                    m_y = me->pos().y();
+                }
+                else if (m_eventType == QEvent::Wheel)
+                {
+                    const QWheelEvent *we = static_cast<const QWheelEvent*>(e);
+                    m_wheelDelta = we->delta();
+                }
+            }
+    };
+
+
     /**
      * @brief Struct to keep track of a Button state.
      * A button can either be a key or a mouse button,
@@ -182,21 +220,21 @@ private:
      * @brief This map will contain the delayed key and mouse events, which will be processed in
      * the next frame.
      */
-    std::vector<QEvent*> m_delayedEventsForNextFrame;
-
-
-    void OnNewFrame();
+    std::vector<EventInfo> m_eventInfoQueue;
 
     void HandleMouseWrapping();
-    void HandleEvent(QEvent *event);
-    void HandleInputMouseWheel(QWheelEvent *event);
-    void HandleInputMouseMove(QMouseEvent *event);
-    void HandleInputMousePress(QMouseEvent *event);
-    void HandleInputMouseRelease(QMouseEvent *event);
-    void HandleInputKeyPress(QKeyEvent *event);
-    void HandleInputKeyReleased(QKeyEvent *event);
+    void ProcessMouseWheelEventInfo(const EventInfo &ei);
+    void ProcessMouseMoveEventInfo(const EventInfo &ei);
+    void ProcessMousePressEventInfo(const EventInfo &ei);
+    void ProcessMouseReleaseEventInfo(const EventInfo &ei);
+    void ProcessKeyPressEventInfo(const EventInfo &ei);
+    void ProcessKeyReleasedEventInfo(const EventInfo &ei);
 
-    void ProcessDelayedEventsFromPreviousFrame();
+    void EnqueueEvent(QEvent *event);
+    void ProcessEventInfo(const EventInfo &ei);
+
+    void ProcessEnqueuedEvents();
+    void OnFrameFinished();
 
 
 public:

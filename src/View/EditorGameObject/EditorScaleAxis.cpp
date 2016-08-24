@@ -16,7 +16,7 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
 
     m_line->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
-            glLineWidth(25.0f);
+            glLineWidth(25.0f); // Easier grab
         }
     );
 

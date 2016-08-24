@@ -27,25 +27,21 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::OnDrawTimerTick()
 {
-    // PAINTGL CALLED HERE OR BELOW (Because Qt reasons)
-
-    m_delayEventsForNextFrame = false;
-
     // Update deltaTime
     float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
     Time::GetInstance()->m_deltaTime = deltaTime;
 
     // Update mainBinary static deltaTime, for internal engine use
-    // (this is not Behaviours' static deltaTime, theirs is updated in Behaviour _OnUpdate)
+    // (this is not Behaviours' static deltaTime, theirs is
+    //  updated in Behaviour _OnUpdate)
     Time::s_deltaTime = deltaTime;
     //
 
-    // Process mouse and key events, so the Input is available in OnUpdate.
-    // If we don't do this, events can happen between OnUpdate and Input->OnNewFrame()
-    // And they would get lost.
-    Debug_Log("Before process events");
+    // Process mouse and key events, so the Input is available in OnUpdate
+    // as accurate as possible.
+    // Lost events in between Update and Render will be delayed by Input.
     processEvents();
-    Debug_Log("After process events");
+    Input::GetInstance()->ProcessEnqueuedEvents();
 
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
@@ -56,13 +52,9 @@ void Application::OnDrawTimerTick()
 
 
     // Render screen  (_OnRender mainly)
-    // Screen::GetInstance()->update(); // update() calls Screen's paintGL method
+    Screen::GetInstance()->update(); // update() calls Screen's paintGL method
 
-    Input::GetInstance()->OnNewFrame(); // Notify newFrame has passed
-    m_delayEventsForNextFrame = true;
-
-    // PAINTGL CALLED HERE OR ABOVE (Because Qt reasons)
-    Debug_Log("_________________________");
+    Input::GetInstance()->OnFrameFinished(); // Notify to Input that a new frame has passed
 }
 
 
@@ -111,9 +103,4 @@ bool Application::notify(QObject *receiver, QEvent *e)
     #endif
 
     return QApplication::notify(receiver, e);
-}
-
-bool Application::DelayEventsForNextFrame() const
-{
-    return m_delayEventsForNextFrame;
 }

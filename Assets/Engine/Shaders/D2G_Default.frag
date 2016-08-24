@@ -24,7 +24,7 @@ void main()
 {
     B_DRAW_TO_GBUFFER_FS_INIT_MAIN();
 
-    vec3  diffColor = B_material_diffuse_color.rgb;
+    vec3 diffColor = B_material_diffuse_color.rgb;
     if (B_hasTexture > 0.5)
     {
         // ALPHA CUTTOFF

@@ -16,6 +16,7 @@ public:
     EditorRotateAxisGroup(GameObject *attachedGameObject);
 
     void OnUpdate() override;
+    void OnDrawGizmosNoDepth() override;
 };
 
 #endif // EDITORROTATEAXISGROUP_H

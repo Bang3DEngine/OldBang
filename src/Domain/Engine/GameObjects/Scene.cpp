@@ -92,9 +92,8 @@ void Scene::_OnRender()
             #ifdef BANG_EDITOR
             PROPAGATE_EVENT(_OnDrawGizmos, m_children);
 
-            glDisable(GL_DEPTH_TEST);
+            glClear(GL_DEPTH_BUFFER_BIT);
             PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
-            glEnable(GL_DEPTH_TEST);
             #endif
         //
     //

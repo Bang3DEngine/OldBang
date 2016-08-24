@@ -19,47 +19,48 @@ void Input::InitFromMainBinary() // Called from Screen
     SingletonManager::GetInstance()->SetInputSingleton(new Input());
 }
 
-void Input::OnNewFrame()
+void Input::OnFrameFinished()
 {
+    Debug_Log("Input::OnFrameFinished");
+    // KEYS
+    // Debug_Log("BEFORE: " << m_keyInfos);
     for (auto it = m_keyInfos.begin(); it != m_keyInfos.end(); ++it)
     {
         ButtonInfo &kInfo = it->second;
+        if (kInfo.down)
+        {
+            kInfo.down = false; //Not down anymore, just pressed.
+        }
+
         if (kInfo.up) //After a frame where it was Up
         {
             m_keyInfos.erase(it);
         }
-        else if (kInfo.down)
-        {
-            kInfo.down = false; //Not down anymore, just pressed.
-        }
     }
+    // Debug_Log("AFTER: " << m_keyInfos);
+    //
 
-    if (!m_mouseInfo.empty()) Debug_Log("BEFORE: " << m_mouseInfo);
+    // MOUSE
+    Debug_Log("BEFORE: " << m_mouseInfo);
     for (auto it = m_mouseInfo.begin(); it != m_mouseInfo.end(); ++it)
     {
         ButtonInfo &mbInfo = it->second;
-
-        // Special case of up & down in the same frame
-        if (mbInfo.up && mbInfo.down)
+        if (mbInfo.down)
         {
-            mbInfo.down = false;
+            mbInfo.down = false; // Not down anymore, just pressed.
         }
-        else
+
+        if (mbInfo.up)
         {
-            if (mbInfo.up)
-            {
-                m_mouseInfo.erase(it);
-            }
-            else if (mbInfo.down)
-            {
-                mbInfo.down = false; // Not down anymore, just pressed.
-            }
+            m_mouseInfo.erase(it);
         }
 
         m_isADoubleClick = false; // Reset double click
     }
-    if (!m_mouseInfo.empty()) Debug_Log("AFTER: " << m_mouseInfo);
+    Debug_Log("AFTER: " << m_mouseInfo);
+    //
 
+    // MOUSE LOCK
     m_lastMouseWheelDelta = 0.0f;
     if (!m_lockMouseMovement)
     {
@@ -73,12 +74,11 @@ void Input::OnNewFrame()
         m_lastMouseCoords = m_mouseCoords;
     }
     ++m_framesMouseStopped;
+    //
 
     m_secsSinceLastMouseDown += Time::GetDeltaTime();
 
     HandleMouseWrapping();
-
-    ProcessDelayedEventsFromPreviousFrame();
 }
 
 void Input::HandleMouseWrapping()
@@ -129,49 +129,42 @@ void Input::HandleMouseWrapping()
     }
 }
 
-void Input::HandleEvent(QEvent *e)
+void Input::ProcessEventInfo(const EventInfo &ei)
 {
-    if (Application::GetInstance()->DelayEventsForNextFrame())
+    if (ei.m_eventType == QEvent::Wheel)
     {
-        Debug_Log("Had to delay it");
-        m_delayedEventsForNextFrame.push_back(e);
+        ProcessMouseWheelEventInfo(ei);
     }
-    else
+    else if (ei.m_eventType == QEvent::MouseMove)
     {
-        Debug_Log("Actually processing it");
-        if (e->type() == QEvent::Wheel)
-        {
-            HandleInputMouseWheel(static_cast<QWheelEvent*>(e));
-        }
-        else if (e->type() == QEvent::MouseMove)
-        {
-            HandleInputMouseMove(static_cast<QMouseEvent*>(e));
-        }
-        else if (e->type() == QEvent::MouseButtonPress)
-        {
-            HandleInputMousePress(static_cast<QMouseEvent*>(e));
-        }
-        else if (e->type() == QEvent::MouseButtonRelease)
-        {
-            HandleInputMouseRelease(static_cast<QMouseEvent*>(e));
-        }
-        else if (e->type() == QEvent::KeyPress)
-        {
-            HandleInputKeyPress(static_cast<QKeyEvent*>(e));
-        }
-        else if (e->type() == QEvent::KeyRelease)
-        {
-            HandleInputKeyReleased(static_cast<QKeyEvent*>(e));
-        }
+        ProcessMouseMoveEventInfo(ei);
+    }
+    else if (ei.m_eventType == QEvent::MouseButtonPress)
+    {
+        ProcessMousePressEventInfo(ei);
+    }
+    else if (ei.m_eventType == QEvent::MouseButtonRelease)
+    {
+        ProcessMouseReleaseEventInfo(ei);
+    }
+    else if (ei.m_eventType == QEvent::KeyPress)
+    {
+        Debug_Log("Processing keyPress");
+        ProcessKeyPressEventInfo(ei);
+    }
+    else if (ei.m_eventType == QEvent::KeyRelease)
+    {
+        Debug_Log("Processing keyRelease");
+        ProcessKeyReleasedEventInfo(ei);
     }
 }
 
-void Input::HandleInputMouseWheel(QWheelEvent *event)
+void Input::ProcessMouseWheelEventInfo(const EventInfo &ei)
 {
-    m_lastMouseWheelDelta = float(event->delta()) / (360.0f);
+    m_lastMouseWheelDelta = float(ei.m_wheelDelta) / (360.0f);
 }
 
-void Input::HandleInputMouseMove(QMouseEvent *event)
+void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
 {
     m_framesMouseStopped = 0;
 
@@ -183,7 +176,7 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
         return;
     }
 
-    m_mouseCoords = Vector2(event->x(), event->y());
+    m_mouseCoords = Vector2(ei.m_x, ei.m_y);
 
     if (m_lockMouseMovement)
     {
@@ -196,27 +189,32 @@ void Input::HandleInputMouseMove(QMouseEvent *event)
     }
 }
 
-void Input::HandleInputMousePress(QMouseEvent *event)
+void Input::ProcessMousePressEventInfo(const EventInfo &ei)
 {
-    MouseButton mb = static_cast<MouseButton>(event->button());
-    if (m_mouseInfo.find(mb) == m_mouseInfo.end())
+    Debug_Log("ProcessMousePressEventInfo");
+    MouseButton mb = ei.m_mouseButton;
+    bool up = false;
+    if (m_mouseInfo.find(mb) != m_mouseInfo.end())
     {
-        //Only if it was not down/pressed before
-        m_mouseInfo[mb] = ButtonInfo(false, true, true);
-
-        if (m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds)
-        {
-            m_isADoubleClick = true;
-        }
-        m_secsSinceLastMouseDown = 0; // Restart time since last click counter
+        up = m_mouseInfo[mb].up;
     }
+
+    m_mouseInfo[mb] = ButtonInfo(up, true, true);
+    if (m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds &&
+        m_secsSinceLastMouseDown != 0)
+        // Reject clicks in the same frame as double-clicking (secs... != 0)
+        // To avoid a delayed MouseEvent bug
+    {
+        m_isADoubleClick = true;
+    }
+    m_secsSinceLastMouseDown = 0; // Restart time since last click counter
 }
 
-void Input::HandleInputMouseRelease(QMouseEvent *event)
+void Input::ProcessMouseReleaseEventInfo(const EventInfo &ei)
 {
-    MouseButton mb = static_cast<MouseButton>(event->button());
-    if (m_mouseInfo.find(mb) != m_mouseInfo.end() &&
-        m_mouseInfo[mb].pressed)
+    Debug_Log("ProcessMouseReleaseEventInfo");
+    MouseButton mb = ei.m_mouseButton;
+    if (m_mouseInfo.find(mb) != m_mouseInfo.end())
     {
         // Only if it was pressed before
         // We must respect the down and pressed, just in case they happen
@@ -226,38 +224,46 @@ void Input::HandleInputMouseRelease(QMouseEvent *event)
 }
 
 
-void Input::HandleInputKeyPress(QKeyEvent *event)
+void Input::ProcessKeyPressEventInfo(const EventInfo &ei)
 {
-    //Only capture first press, not repeated ones
-    if (event->isAutoRepeat()) return;
-
-    Key k = static_cast<Key>(event->key());
+    Debug_Log("ProcessKeyPressEventInfo");
+    Key k = ei.m_key;
     if (m_keyInfos.find(k) == m_keyInfos.end())
-    {   //Only if it was not down/pressed before
-        m_keyInfos[k] = ButtonInfo(false, true, true);
-    }
-}
-
-void Input::HandleInputKeyReleased(QKeyEvent *event)
-{
-    //Only capture actual release, not repeated ones
-    if (event->isAutoRepeat()) return;
-
-    Key k = static_cast<Key>(event->key());
-    if (m_keyInfos.find(k) != m_keyInfos.end() &&
-       m_keyInfos[k].pressed)
-    {   //Only if it was pressed before
-        m_keyInfos[k] = ButtonInfo(true, m_keyInfos[k].down, m_keyInfos[k].pressed);
-    }
-}
-
-void Input::ProcessDelayedEventsFromPreviousFrame()
-{
-    for (QEvent *e : m_delayedEventsForNextFrame)
     {
-        HandleEvent(e);
+        m_keyInfos[k] = ButtonInfo();
     }
-    m_delayedEventsForNextFrame.clear();
+    m_keyInfos[k].down    = true;
+    m_keyInfos[k].pressed = true;
+
+}
+
+void Input::ProcessKeyReleasedEventInfo(const EventInfo &ei)
+{
+    Debug_Log("ProcessKeyReleasedEventInfo");
+    Key k = ei.m_key;
+    if (m_keyInfos.find(k) == m_keyInfos.end())
+    {
+        m_keyInfos[k] = ButtonInfo();
+    }
+    m_keyInfos[k].up = true;
+}
+
+void Input::EnqueueEvent(QEvent *event)
+{
+    EventInfo ei(event);
+    m_eventInfoQueue.push_back(ei);
+}
+
+void Input::ProcessEnqueuedEvents()
+{
+    Debug_Log("ProcessEnqueuedEvents before");
+    Debug_Log("Enqueued events: " << m_eventInfoQueue.size());
+    for (const EventInfo &ei : m_eventInfoQueue)
+    {
+        ProcessEventInfo(ei);
+    }
+    m_eventInfoQueue.clear();
+    Debug_Log("ProcessEnqueuedEvents after");
 }
 
 Input *Input::GetInstance()

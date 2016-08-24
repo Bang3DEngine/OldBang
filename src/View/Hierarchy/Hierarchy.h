@@ -1,4 +1,4 @@
-#ifndef HIERARCHY_H
+﻿#ifndef HIERARCHY_H
 #define HIERARCHY_H
 
 #include "Bang.h"
@@ -79,6 +79,7 @@ public:
     void UnselectAll();
 
     virtual void dropEvent(QDropEvent *e) override;
+    virtual void keyPressEvent(QKeyEvent *e) override;
     virtual void mousePressEvent(QMouseEvent *e) override;
 
     void OnGameObjectNameChanged(GameObject *go);

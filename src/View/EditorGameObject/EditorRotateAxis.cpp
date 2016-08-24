@@ -8,9 +8,6 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 {
     SetName("EditorRotateAxisGroup" + EditorAxis::GetStringFromDir(dir));
 
-    m_material = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/D2G_LineRotationAxis.bmat");
-    m_material = new Material(*m_material);
-
     m_circle = AddComponent<CircleRenderer>();
     m_circle->SetRadius(0.5f);
     m_circle->SetSegments(64);
@@ -20,7 +17,7 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 
     m_circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
-            glLineWidth(25.0f);
+            glLineWidth(10.0f); // Easier grab
         }
     );
 
@@ -108,12 +105,6 @@ void EditorRotateAxis::OnUpdate()
             }
         }
     }
-
-    // Pass some uniforms to the shader that renders the rotation circles
-    Sphere bSphere = m_attachedGameObject->GetBoundingSphere();
-    float radius = bSphere.GetRadius() / 2.0f;
-    m_material->GetShaderProgram()->SetUniformVec3("B_world_circleCenter", bSphere.GetCenter(), false);
-    m_material->GetShaderProgram()->SetUniformVec3("B_boundingSphereRadius", radius, false);
 }
 
 void EditorRotateAxis::OnDrawGizmosNoDepth()

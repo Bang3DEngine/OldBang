@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-# CONFIG += EDITOR
+CONFIG += EDITOR
 # CONFIG += GAME
 CONFIG += qt
 
@@ -99,8 +99,6 @@ OTHER_FILES += \
     Assets/Engine/Shaders/PR_DirectionalLight.frag \
     Assets/Engine/Shaders/D2G_Line.frag \
     Assets/Engine/Shaders/D2G_Line.vert \
-    Assets/Engine/Shaders/D2G_LineRotationAxis.frag \
-    Assets/Engine/Shaders/D2G_LineRotationAxis.vert \
     Assets/Engine/Shaders/D2G_Default.frag \
     Assets/Engine/Shaders/D2G_Default.vert \
     Assets/Engine/Shaders/PR_DrawScreenPlane.vert \
@@ -115,7 +113,6 @@ OTHER_FILES += \
     Assets/Scenes/test2.bscene \
     Assets/Engine/Materials/D2G_Default.bmat \
     Assets/Engine/Materials/D2G_Line.bmat \
-    Assets/Engine/Materials/D2G_LineRotationAxis.bmat \
     Assets/Engine/Materials/PR_AfterLighting.bmat \
     Assets/Engine/Materials/PR_DirectionalLight.bmat \
     Assets/Engine/Materials/PR_PointLight.bmat \

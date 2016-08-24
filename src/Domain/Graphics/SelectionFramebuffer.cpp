@@ -67,7 +67,6 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 
     // Dont write to Attachment::WorldPosition
     SetDrawBuffers({Attachment::ColorAttachment});
-    glDepthMask(GL_FALSE); // Dont write to DepthBuffer
     for (GameObject *go : gameObjects)
     {
         if (CanRenderGameObject(go))
@@ -77,7 +76,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         }
     }
 
-    glDisable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
     for (GameObject *go : gameObjects)
     {
         if (CanRenderGameObject(go))
@@ -86,14 +85,13 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
             go->_OnDrawGizmosNoDepth();
         }
     }
-    glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE); // Back to writing DepthBuffer
 
     m_isPassing = false;
 }
 
 void SelectionFramebuffer::ProcessSelection()
 {
+    Debug_Log("SelectionFramebuffer::ProcessSelection");
     // Get mouse coordinates and read pixel color
     Vector2 coords = Input::GetMouseCoords();
     coords.y = Screen::GetHeight() - coords.y;
@@ -117,10 +115,9 @@ void SelectionFramebuffer::ProcessSelection()
     m_lastMouseOverGO = mouseOverGO;
 
     // Selection (clicking over) Here we just handle non-EditorGameObjects
-    Debug_Log("ProcessSelection");
     if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
-        Debug_Log("GetMouseButtonDown YES");
+        Debug_Log("DOWN ********************************");
         if (mouseOverGO)
         {
             if (!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
@@ -172,14 +169,15 @@ bool SelectionFramebuffer::IsPassing() const
 
 Color SelectionFramebuffer::MapIdToColor(long id)
 {
+    const int C = 256;
     Color color =
             Color(
-                    double(  id               % 256),
-                    double( (id / 256)        % 256),
-                    double(((id / 256) / 256) % 256)
+                    double(  id               % C),
+                    double( (id / C)        % C),
+                    double(((id / C) / C) % C)
                    );
 
-   return color / 256.0f;
+   return color / float(C);
 }
 
 long SelectionFramebuffer::MapColorToId(const Color &color)

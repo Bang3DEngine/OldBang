@@ -127,6 +127,10 @@ void Hierarchy::dropEvent(QDropEvent *e)
     e->ignore();
 }
 
+void Hierarchy::keyPressEvent(QKeyEvent *e)
+{
+}
+
 void Hierarchy::mousePressEvent(QMouseEvent *e)
 {
     QTreeWidget::mousePressEvent(e);

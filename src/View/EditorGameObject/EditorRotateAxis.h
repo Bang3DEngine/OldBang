@@ -8,6 +8,8 @@
 
 class EditorRotateAxis : public EditorAxis
 {
+friend class EditorRotateAxisGroup;
+
 private:
 
     const float c_rotationBoost = 0.1f;

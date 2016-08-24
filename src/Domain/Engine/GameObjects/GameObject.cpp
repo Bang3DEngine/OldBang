@@ -232,7 +232,7 @@ Box GameObject::GetLocalBoundingBox() const
 Box GameObject::GetBoundingBox() const
 {
     Box b = GetObjectBoundingBox();
-    Matrix4 mat = transform->GetLocalToParentMatrix();
+    Matrix4 mat; transform->GetLocalToWorldMatrix(&mat);
     b = mat * b;
     return b;
 }
