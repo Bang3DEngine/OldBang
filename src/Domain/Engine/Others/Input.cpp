@@ -21,9 +21,7 @@ void Input::InitFromMainBinary() // Called from Screen
 
 void Input::OnFrameFinished()
 {
-    Debug_Log("Input::OnFrameFinished");
     // KEYS
-    // Debug_Log("BEFORE: " << m_keyInfos);
     for (auto it = m_keyInfos.begin(); it != m_keyInfos.end(); ++it)
     {
         ButtonInfo &kInfo = it->second;
@@ -37,11 +35,9 @@ void Input::OnFrameFinished()
             m_keyInfos.erase(it);
         }
     }
-    // Debug_Log("AFTER: " << m_keyInfos);
     //
 
     // MOUSE
-    Debug_Log("BEFORE: " << m_mouseInfo);
     for (auto it = m_mouseInfo.begin(); it != m_mouseInfo.end(); ++it)
     {
         ButtonInfo &mbInfo = it->second;
@@ -57,7 +53,6 @@ void Input::OnFrameFinished()
 
         m_isADoubleClick = false; // Reset double click
     }
-    Debug_Log("AFTER: " << m_mouseInfo);
     //
 
     // MOUSE LOCK
@@ -149,12 +144,10 @@ void Input::ProcessEventInfo(const EventInfo &ei)
     }
     else if (ei.m_eventType == QEvent::KeyPress)
     {
-        Debug_Log("Processing keyPress");
         ProcessKeyPressEventInfo(ei);
     }
     else if (ei.m_eventType == QEvent::KeyRelease)
     {
-        Debug_Log("Processing keyRelease");
         ProcessKeyReleasedEventInfo(ei);
     }
 }
@@ -191,7 +184,6 @@ void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
 
 void Input::ProcessMousePressEventInfo(const EventInfo &ei)
 {
-    Debug_Log("ProcessMousePressEventInfo");
     MouseButton mb = ei.m_mouseButton;
     bool up = false;
     if (m_mouseInfo.find(mb) != m_mouseInfo.end())
@@ -212,7 +204,6 @@ void Input::ProcessMousePressEventInfo(const EventInfo &ei)
 
 void Input::ProcessMouseReleaseEventInfo(const EventInfo &ei)
 {
-    Debug_Log("ProcessMouseReleaseEventInfo");
     MouseButton mb = ei.m_mouseButton;
     if (m_mouseInfo.find(mb) != m_mouseInfo.end())
     {
@@ -226,7 +217,8 @@ void Input::ProcessMouseReleaseEventInfo(const EventInfo &ei)
 
 void Input::ProcessKeyPressEventInfo(const EventInfo &ei)
 {
-    Debug_Log("ProcessKeyPressEventInfo");
+    if (ei.m_autoRepeat) return;
+
     Key k = ei.m_key;
     if (m_keyInfos.find(k) == m_keyInfos.end())
     {
@@ -239,7 +231,8 @@ void Input::ProcessKeyPressEventInfo(const EventInfo &ei)
 
 void Input::ProcessKeyReleasedEventInfo(const EventInfo &ei)
 {
-    Debug_Log("ProcessKeyReleasedEventInfo");
+    if (ei.m_autoRepeat) return;
+
     Key k = ei.m_key;
     if (m_keyInfos.find(k) == m_keyInfos.end())
     {
@@ -256,14 +249,11 @@ void Input::EnqueueEvent(QEvent *event)
 
 void Input::ProcessEnqueuedEvents()
 {
-    Debug_Log("ProcessEnqueuedEvents before");
-    Debug_Log("Enqueued events: " << m_eventInfoQueue.size());
     for (const EventInfo &ei : m_eventInfoQueue)
     {
         ProcessEventInfo(ei);
     }
     m_eventInfoQueue.clear();
-    Debug_Log("ProcessEnqueuedEvents after");
 }
 
 Input *Input::GetInstance()

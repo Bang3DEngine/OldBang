@@ -91,7 +91,6 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 
 void SelectionFramebuffer::ProcessSelection()
 {
-    Debug_Log("SelectionFramebuffer::ProcessSelection");
     // Get mouse coordinates and read pixel color
     Vector2 coords = Input::GetMouseCoords();
     coords.y = Screen::GetHeight() - coords.y;
@@ -117,7 +116,6 @@ void SelectionFramebuffer::ProcessSelection()
     // Selection (clicking over) Here we just handle non-EditorGameObjects
     if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
-        Debug_Log("DOWN ********************************");
         if (mouseOverGO)
         {
             if (!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject

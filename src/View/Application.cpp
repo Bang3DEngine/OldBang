@@ -53,6 +53,7 @@ void Application::OnDrawTimerTick()
 
     // Render screen  (_OnRender mainly)
     Screen::GetInstance()->update(); // update() calls Screen's paintGL method
+    processEvents(); // This processEvents forces the paintGL() call right now, after the update()
 
     Input::GetInstance()->OnFrameFinished(); // Notify to Input that a new frame has passed
 }

@@ -107,6 +107,7 @@ private:
             QEvent::Type m_eventType;
             Input::Key m_key;
             Input::MouseButton m_mouseButton;
+            bool m_autoRepeat;
             int m_x, m_y;
             int m_wheelDelta;
 
@@ -118,6 +119,7 @@ private:
                 {
                     const QKeyEvent *ke = static_cast<const QKeyEvent*>(e);
                     int k = ke->key();
+                    m_autoRepeat = ke->isAutoRepeat();
                     m_key = static_cast<Input::Key>(k);
                 }
                 else if (m_eventType == QEvent::MouseButtonPress ||
