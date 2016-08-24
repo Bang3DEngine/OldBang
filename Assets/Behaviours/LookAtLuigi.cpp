@@ -9,7 +9,7 @@
 #include "Time.h"
 
 #ifdef BANG_EDITOR
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #else
 #include "GameWindow.h"
 #endif

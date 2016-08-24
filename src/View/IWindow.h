@@ -16,7 +16,6 @@ public:
 
     static void InitFromMainBinary(QMainWindow *window, QApplication *application);
 
-    static IWindow *GetInstance();
     virtual QMainWindow *GetMainWindow() const = 0;
     virtual QApplication *GetApplication() const = 0;
 };

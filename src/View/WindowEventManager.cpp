@@ -1,7 +1,7 @@
 #include "WindowEventManager.h"
 
 #include "GameObject.h"
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "InspectorWidget.h"
 #include "IWindowEventManagerListener.h"
 
@@ -33,7 +33,7 @@ WindowEventManager *WindowEventManager::GetInstance()
 {
     if (!s_wem)
     {
-        s_wem = WindowMain::GetInstance()->windowEventManager;
+        s_wem = EditorWindow::GetInstance()->windowEventManager;
     }
 
     return s_wem;

@@ -1,6 +1,6 @@
 #include "ExplorerDirTree.h"
 
-#include "WindowMain.h"
+#include "EditorWindow.h"
 
 ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
 {
@@ -32,7 +32,7 @@ ExplorerDirTree::~ExplorerDirTree()
 
 void ExplorerDirTree::CheckSelection()
 {
-    m_explorer = WindowMain::GetInstance()->widgetListExplorer;
+    m_explorer = EditorWindow::GetInstance()->widgetListExplorer;
     if (selectedIndexes().size() > 0 && selectedIndexes().at(0).isValid())
     {
         QModelIndex index = selectedIndexes().at(0);

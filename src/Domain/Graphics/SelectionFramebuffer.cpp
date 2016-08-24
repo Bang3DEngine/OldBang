@@ -1,6 +1,6 @@
 #include "SelectionFramebuffer.h"
 
-#include "WindowMain.h"
+#include "EditorWindow.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
@@ -117,13 +117,15 @@ void SelectionFramebuffer::ProcessSelection()
     m_lastMouseOverGO = mouseOverGO;
 
     // Selection (clicking over) Here we just handle non-EditorGameObjects
+    Debug_Log("ProcessSelection");
     if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
+        Debug_Log("GetMouseButtonDown YES");
         if (mouseOverGO)
         {
             if (!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
             {
-                WindowMain::GetInstance()->widgetHierarchy->SelectGameObject(mouseOverGO);
+                EditorWindow::GetInstance()->widgetHierarchy->SelectGameObject(mouseOverGO);
                 if (Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft)) // Double clicking
                 {
                     WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(mouseOverGO);
@@ -132,7 +134,7 @@ void SelectionFramebuffer::ProcessSelection()
         }
         else // Background has been pressed
         {
-            WindowMain::GetInstance()->widgetHierarchy->UnselectAll();
+            EditorWindow::GetInstance()->widgetHierarchy->UnselectAll();
         }
     }
 }

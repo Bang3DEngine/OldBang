@@ -11,7 +11,10 @@
 
 #include "Color.h"
 #include "Vector2.h"
+
+#ifdef BANG_EDITOR
 #include "DragDropManager.h"
+#endif
 
 /**
  * @brief Listen to drag/drop events

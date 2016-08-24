@@ -6,8 +6,8 @@
 
 #include "Bang.h"
 
-#include "IWindow.h"
 #include "Screen.h"
+#include "IWindow.h"
 
 class GameWindow : public IWindow
 {

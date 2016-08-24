@@ -15,7 +15,7 @@
 
 class File;
 class GameObject;
-class WindowMain;
+class EditorWindow;
 class WindowEventManager;
 
 /**

@@ -3,7 +3,7 @@
 #ifdef BANG_EDITOR
 #include "Explorer.h"
 #include "Hierarchy.h"
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "EditorScene.h"
 #include "SelectionFramebuffer.h"
 #else
@@ -15,7 +15,7 @@
 #include "SingletonManager.h"
 
 #ifdef BANG_EDITOR
-WindowMain *Screen::s_m_window = nullptr;
+EditorWindow *Screen::s_m_window = nullptr;
 #else
 GameWindow *Screen::s_m_window = nullptr;
 #endif
@@ -27,7 +27,7 @@ Screen::Screen(QWidget* parent) : QGLWidget(parent)
     setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
 
     #ifdef BANG_EDITOR
-    Screen::s_m_window = WindowMain::GetInstance();
+    Screen::s_m_window = EditorWindow::GetInstance();
     #else
     Screen::s_m_window = GameWindow::GetInstance();
     #endif
@@ -36,7 +36,7 @@ Screen::Screen(QWidget* parent) : QGLWidget(parent)
 void Screen::InitFromMainBinary()
 {
     #ifdef BANG_EDITOR
-    Screen::m_mainBinaryScreen = static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
+    Screen::m_mainBinaryScreen = static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #else
     Screen::m_mainBinaryScreen = static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #endif
@@ -53,6 +53,7 @@ void Screen::initializeGL()
 
 void Screen::paintGL()
 {
+    Debug_Log("PAINT GL MECAGOENLAPUTA");
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
@@ -82,7 +83,7 @@ void Screen::resizeGL(int w, int h)
 Screen *Screen::GetInstance()
 {
     #ifdef BANG_EDITOR
-    return static_cast<WindowMain*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
+    return static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #else
     return static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #endif
@@ -181,9 +182,7 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
         if (m_gameObjectBeingDragged->parent != scene)
         {
             m_gameObjectBeingDragged->SetParent(scene);
-            #ifdef BANG_EDITOR
             Hierarchy::GetInstance()->Refresh();
-            #endif
         }
     }
 }
@@ -284,36 +283,37 @@ void Screen::OnDrop(const DragDropInfo &ddi)
 
 void Screen::wheelEvent(QWheelEvent *event)
 {
-    Input::GetInstance()->HandleInputMouseWheel(event);
+    Input::GetInstance()->HandleEvent(event);
     QGLWidget::wheelEvent(event);
 }
 
 void Screen::mouseMoveEvent(QMouseEvent *event)
 {
-    Input::GetInstance()->HandleInputMouseMove(event);
+    Input::GetInstance()->HandleEvent(event);
     QGLWidget::mouseMoveEvent(event);
 }
 
 void Screen::mousePressEvent(QMouseEvent *event)
 {
-    Input::GetInstance()->HandleInputMousePress(event);
+    Debug_Log("MOUSE PRESS JODER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    Input::GetInstance()->HandleEvent(event);
     QGLWidget::mousePressEvent(event);
 }
 
 void Screen::mouseReleaseEvent(QMouseEvent *event)
 {
-    Input::GetInstance()->HandleInputMouseRelease(event);
+    Input::GetInstance()->HandleEvent(event);
     QGLWidget::mouseReleaseEvent(event);
 }
 
 void Screen::keyPressEvent(QKeyEvent *event)
 {
-    Input::GetInstance()->HandleInputKeyPress(event);
+    Input::GetInstance()->HandleEvent(event);
     QGLWidget::keyPressEvent(event);
 }
 
 void Screen::keyReleaseEvent(QKeyEvent *event)
 {
-    Input::GetInstance()->HandleInputKeyReleased(event);
+    Input::GetInstance()->HandleEvent(event);
     QGLWidget::keyReleaseEvent(event);
 }

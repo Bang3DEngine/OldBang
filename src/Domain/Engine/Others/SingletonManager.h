@@ -7,7 +7,7 @@
  *
  * When adding a custom user Behaviour, it must use the global
  * Singleton's that were in use by the main program (the Logger,
- * the WindowMain, etc.)
+ * the EditorWindow, etc.)
  *
  * So, every time a user Behaviour is linked to the main binary,
  * the SingletonManager must initialize its references to the ones being
@@ -19,7 +19,7 @@
  */
 
 class ShortcutManager;
-class WindowMain;
+class EditorWindow;
 class IWindow;
 class Logger;
 class Input;
@@ -30,10 +30,13 @@ private:
 
     static SingletonManager *s_mainBinarySM;
 
-    IWindow *m_mainBinaryWindowMain = nullptr;
+    IWindow *m_mainBinaryEditorWindow = nullptr;
     Time *m_mainBinaryTime = nullptr;
     Input *m_mainBinaryInput = nullptr;
+
+    #ifdef BANG_EDITOR
     ShortcutManager *m_mainBinaryShortcutManager = nullptr;
+    #endif
 
     SingletonManager() {}
 
@@ -45,10 +48,13 @@ public:
      * So, they should be called in the main() function.
      */
 
-    void SetWindowMainSingleton(IWindow* mainBinaryWindowMain);
+    void SetEditorWindowSingleton(IWindow* mainBinaryEditorWindow);
     void SetTimeSingleton(Time* mainBinaryTime);
     void SetInputSingleton(Input* mainBinaryInput);
+
+    #ifdef BANG_EDITOR
     void SetShortcutManagerSingleton(ShortcutManager* mainBinaryShortcutManager);
+    #endif
 
     /**
      * The GetXXXXSingleton methods should only be called by the method that
@@ -58,7 +64,10 @@ public:
     IWindow* GetWindowSingleton();
     Time* GetTimeSingleton();
     Input* GetInputSingleton();
+
+    #ifdef BANG_EDITOR
     ShortcutManager* GetShortcutManagerSingleton();
+    #endif
 
 
     /**

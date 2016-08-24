@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WindowMain</class>
- <widget class="QMainWindow" name="WindowMain">
+ <class>EditorWindow</class>
+ <widget class="QMainWindow" name="EditorWindow">
   <property name="windowModality">
    <enum>Qt::NonModal</enum>
   </property>
@@ -20,7 +20,7 @@
    <enum>Qt::StrongFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Bang Editor</string>
+   <string>Bang</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">

@@ -35,7 +35,5 @@ void main()
 
     if (dToV > maxDist) discard;
 
-    B_vout.diffuseColor = B_material_diffuse_color.rgb;
-
     B_DRAW_TO_GBUFFER_FS_END_MAIN();
 }

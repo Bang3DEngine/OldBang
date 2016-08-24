@@ -209,8 +209,10 @@ Box GameObject::GetObjectBoundingBox() const
 
     for (GameObject *child : m_children)
     {
+        #ifdef BANG_EDITOR
         if (child->IsEditorGameObject() ||
             child->IsDraggedGameObject()) continue;
+        #endif
 
         Box bc = child->GetLocalBoundingBox();
         b = Box::Union(b, bc);
@@ -513,10 +515,12 @@ bool GameObject::IsEnabled() const
     return m_enabled && (!m_parent ? true : m_parent->IsEnabled());
 }
 
+#ifdef BANG_EDITOR
 bool GameObject::IsDraggedGameObject() const
 {
     return m_isDragged || (parent && parent->IsDraggedGameObject());
 }
+#endif
 
 const String GameObject::ToString() const
 {

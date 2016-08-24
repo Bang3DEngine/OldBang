@@ -1,10 +1,11 @@
 #include "Input.h"
 
 #include "Screen.h"
+#include "Application.h"
 #include "SingletonManager.h"
 
 #ifdef BANG_EDITOR
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #else
 #include "GameWindow.h"
 #endif
@@ -33,20 +34,31 @@ void Input::OnNewFrame()
         }
     }
 
+    if (!m_mouseInfo.empty()) Debug_Log("BEFORE: " << m_mouseInfo);
     for (auto it = m_mouseInfo.begin(); it != m_mouseInfo.end(); ++it)
     {
         ButtonInfo &mbInfo = it->second;
-        if (mbInfo.up) //After a frame where it was Up
+
+        // Special case of up & down in the same frame
+        if (mbInfo.up && mbInfo.down)
         {
-            m_mouseInfo.erase(it);
+            mbInfo.down = false;
         }
-        else if (mbInfo.down)
+        else
         {
-            mbInfo.down = false; // Not down anymore, just pressed.
+            if (mbInfo.up)
+            {
+                m_mouseInfo.erase(it);
+            }
+            else if (mbInfo.down)
+            {
+                mbInfo.down = false; // Not down anymore, just pressed.
+            }
         }
 
         m_isADoubleClick = false; // Reset double click
     }
+    if (!m_mouseInfo.empty()) Debug_Log("AFTER: " << m_mouseInfo);
 
     m_lastMouseWheelDelta = 0.0f;
     if (!m_lockMouseMovement)
@@ -65,6 +77,8 @@ void Input::OnNewFrame()
     m_secsSinceLastMouseDown += Time::GetDeltaTime();
 
     HandleMouseWrapping();
+
+    ProcessDelayedEventsFromPreviousFrame();
 }
 
 void Input::HandleMouseWrapping()
@@ -72,7 +86,7 @@ void Input::HandleMouseWrapping()
     if (m_mouseWrapping)
     {
         #ifdef BANG_EDITOR
-        WindowMain *w = WindowMain::GetInstance();
+        EditorWindow *w = EditorWindow::GetInstance();
         #else
         GameWindow *w = GameWindow::GetInstance();
         #endif
@@ -111,6 +125,43 @@ void Input::HandleMouseWrapping()
             QPoint newCoords = screen->mapFromGlobal(cursor.pos());
             m_mouseCoords = Vector2(newCoords.x(), newCoords.y());
             m_lastMouseCoords = m_mouseCoords;
+        }
+    }
+}
+
+void Input::HandleEvent(QEvent *e)
+{
+    if (Application::GetInstance()->DelayEventsForNextFrame())
+    {
+        Debug_Log("Had to delay it");
+        m_delayedEventsForNextFrame.push_back(e);
+    }
+    else
+    {
+        Debug_Log("Actually processing it");
+        if (e->type() == QEvent::Wheel)
+        {
+            HandleInputMouseWheel(static_cast<QWheelEvent*>(e));
+        }
+        else if (e->type() == QEvent::MouseMove)
+        {
+            HandleInputMouseMove(static_cast<QMouseEvent*>(e));
+        }
+        else if (e->type() == QEvent::MouseButtonPress)
+        {
+            HandleInputMousePress(static_cast<QMouseEvent*>(e));
+        }
+        else if (e->type() == QEvent::MouseButtonRelease)
+        {
+            HandleInputMouseRelease(static_cast<QMouseEvent*>(e));
+        }
+        else if (e->type() == QEvent::KeyPress)
+        {
+            HandleInputKeyPress(static_cast<QKeyEvent*>(e));
+        }
+        else if (e->type() == QEvent::KeyRelease)
+        {
+            HandleInputKeyReleased(static_cast<QKeyEvent*>(e));
         }
     }
 }
@@ -198,6 +249,15 @@ void Input::HandleInputKeyReleased(QKeyEvent *event)
     {   //Only if it was pressed before
         m_keyInfos[k] = ButtonInfo(true, m_keyInfos[k].down, m_keyInfos[k].pressed);
     }
+}
+
+void Input::ProcessDelayedEventsFromPreviousFrame()
+{
+    for (QEvent *e : m_delayedEventsForNextFrame)
+    {
+        HandleEvent(e);
+    }
+    m_delayedEventsForNextFrame.clear();
 }
 
 Input *Input::GetInstance()
@@ -322,3 +382,4 @@ Vector2 Input::GetMouseCoords()
     Input *inp = Input::GetInstance();
     return inp->m_mouseCoords;
 }
+

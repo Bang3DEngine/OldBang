@@ -1,7 +1,7 @@
 #include "ShortcutManager.h"
 
 #include "Debug.h"
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "Application.h"
 #include "SingletonManager.h"
 

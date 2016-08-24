@@ -99,6 +99,7 @@ void Scene::_OnRender()
         //
     //
 
+
     // PR (Post-Render, modifying on top of GBuffer)
         // Apply lights to gbuffer
         std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
@@ -110,8 +111,10 @@ void Scene::_OnRender()
             }
         }
 
+        #ifdef BANG_EDITOR
         // Selection effects and other stuff
         m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
+        #endif
     //
 
     m_gbuffer->UnBind();

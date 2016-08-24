@@ -2,7 +2,7 @@
 
 #include "Component.h"
 #include "GameObject.h"
-#include "WindowMain.h"
+#include "EditorWindow.h"
 
 ComponentWidget::ComponentWidget(Component *relatedComponent) :
     InspectorWidget(), m_cwContextMenu(this)

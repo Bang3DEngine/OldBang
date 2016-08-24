@@ -25,8 +25,7 @@ private:
     GameBuilder() {}
 
 public:
-    static void BuildGame(const String &absoluteDir);
-    static void BuildAndRunGame(const String &absoluteDir);
+    static void BuildGame(const String &absoluteDir, bool runGame = false);
 };
 
 #endif // GAMEBUILDER_H

@@ -1,11 +1,11 @@
 #include "FileDialog.h"
 
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "Persistence.h"
 
 FileDialog::FileDialog(const String &title,
                        const String &extension) :
-    QFileDialog(WindowMain::GetInstance()->GetMainWindow())
+    QFileDialog(EditorWindow::GetInstance()->GetMainWindow())
 {
     this->m_title = title;
     this->m_extension = extension;
@@ -22,7 +22,7 @@ String FileDialog::GetOpenFilename()
 {
     String filepath =
             this->getOpenFileName(
-                WindowMain::GetInstance()->GetMainWindow(),
+                EditorWindow::GetInstance()->GetMainWindow(),
                 QString::fromStdString(m_title),
                 QString::fromStdString(Persistence::GetAssetsPathAbsolute()),
                 QString::fromStdString(GetExtensionFilterString(m_extension)),
@@ -40,7 +40,7 @@ String FileDialog::GetSaveFilename(const String &suggestedFilename)
 
     String filepath =
             getSaveFileName(
-                WindowMain::GetInstance()->GetMainWindow(),
+                EditorWindow::GetInstance()->GetMainWindow(),
                 QString::fromStdString(m_title),
                 QString::fromStdString(dirpath),
                 QString::fromStdString(GetExtensionFilterString(m_extension)),

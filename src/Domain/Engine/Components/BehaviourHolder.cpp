@@ -66,7 +66,10 @@ void BehaviourHolder::Refresh()
 {
     if (!gameObject) return;
     // No refresh on temporary gameObjects
+    #ifdef BANG_EDITOR
     if (gameObject->IsDraggedGameObject()) return;
+    #endif
+
     if (m_sourceFilepath == "") return;
 
     if (!m_compileThread.isRunning())
@@ -123,51 +126,6 @@ void BehaviourHolder::OnBehaviourFinishedCompiling(String soFilepath)
     }
 }
 
-void BehaviourHolder::OnButtonClicked(const String &attrName)
-{
-    if (StringUtils::Contains(attrName, "Create"))
-    {
-        bool ok;
-        // Get Behaviour Class Name using a Dialog
-        QString text = QInputDialog::getText(WindowMain::GetInstance()->GetMainWindow(),
-                                             QString("Behaviour class name"),
-                                             QString("Behaviour name:"),
-                                             QLineEdit::Normal,
-                                             QString("MyBehaviourName"),
-                                             &ok
-                                             );
-        if (ok)
-        {
-            String currentDir = Explorer::GetInstance()->GetCurrentDir();
-            String className = text.toStdString();
-
-            // Create header file
-            String headerCode = Behaviour::s_behaviourHeaderTemplate;
-            StringUtils::Replace(&headerCode, "CLASS_NAME", className);
-            String headerFilepath = currentDir + "/" + className + ".h";
-            FileWriter::WriteToFile(headerFilepath, headerCode);
-
-            // Create source file
-            String sourceCode = Behaviour::s_behaviourSourceTemplate;
-            StringUtils::Replace(&sourceCode, "CLASS_NAME", className);
-            String sourceFilepath = currentDir + "/" + className + ".cpp";
-            FileWriter::WriteToFile(sourceFilepath, sourceCode);
-
-            // Update Behaviour file
-            m_sourceFilepath = sourceFilepath;
-            Refresh();
-
-            // Open with system editor
-            SystemUtils::SystemBackground("xdg-open " + headerFilepath);
-            SystemUtils::SystemBackground("xdg-open " + sourceFilepath);
-        }
-    }
-    else if (attrName == "Refresh")
-    {
-        Refresh();
-    }
-}
-
 void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);
@@ -214,6 +172,53 @@ void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)
     Refresh();
 }
 #endif
+
+void BehaviourHolder::OnButtonClicked(const String &attrName)
+{
+    #ifdef BANG_EDITOR
+    if (StringUtils::Contains(attrName, "Create"))
+    {
+        bool ok;
+        // Get Behaviour Class Name using a Dialog
+        QString text = QInputDialog::getText(EditorWindow::GetInstance()->GetMainWindow(),
+                                             QString("Behaviour class name"),
+                                             QString("Behaviour name:"),
+                                             QLineEdit::Normal,
+                                             QString("MyBehaviourName"),
+                                             &ok
+                                             );
+        if (ok)
+        {
+            String currentDir = Explorer::GetInstance()->GetCurrentDir();
+            String className = text.toStdString();
+
+            // Create header file
+            String headerCode = Behaviour::s_behaviourHeaderTemplate;
+            StringUtils::Replace(&headerCode, "CLASS_NAME", className);
+            String headerFilepath = currentDir + "/" + className + ".h";
+            FileWriter::WriteToFile(headerFilepath, headerCode);
+
+            // Create source file
+            String sourceCode = Behaviour::s_behaviourSourceTemplate;
+            StringUtils::Replace(&sourceCode, "CLASS_NAME", className);
+            String sourceFilepath = currentDir + "/" + className + ".cpp";
+            FileWriter::WriteToFile(sourceFilepath, sourceCode);
+
+            // Update Behaviour file
+            m_sourceFilepath = sourceFilepath;
+            Refresh();
+
+            // Open with system editor
+            SystemUtils::SystemBackground("xdg-open " + headerFilepath);
+            SystemUtils::SystemBackground("xdg-open " + sourceFilepath);
+        }
+    }
+    else if (attrName == "Refresh")
+    {
+        Refresh();
+    }
+    #endif
+}
 
 void BehaviourHolder::_OnStart()
 {

@@ -1,6 +1,6 @@
 #include "ListLogger.h"
 
-#include "WindowMain.h"
+#include "EditorWindow.h"
 
 QListWidget *ListLogger::s_listLogger = nullptr;
 
@@ -34,8 +34,8 @@ void ListLogger::AddError(const String &str)
 
 ListLogger *ListLogger::GetInstance()
 {
-    return WindowMain::GetInstance() ?
-                WindowMain::GetInstance()->listLogger : nullptr;
+    return EditorWindow::GetInstance() ?
+           EditorWindow::GetInstance()->listLogger : nullptr;
 }
 
 void ListLogger::DecorateLastItem(const QColor &color)

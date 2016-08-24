@@ -2,10 +2,10 @@
 #define DRAGDROPMANAGER_H
 
 #include <QObject>
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDragLeaveEvent>
 #include <QDropEvent>
+#include <QDragMoveEvent>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
 
 #include "Vector2.h"
 

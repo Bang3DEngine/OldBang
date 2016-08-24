@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-CONFIG += EDITOR
+# CONFIG += EDITOR
 # CONFIG += GAME
 CONFIG += qt
 
@@ -133,13 +133,11 @@ OTHER_FILES += \
     Assets/Textures/carpetTexture.btex2d \
     Assets/Scenes/test.bscene \
     Assets/Engine/Textures/DirectionalLightIcon.btex2d \
-    Assets/Engine/Textures/PointLightIcon .btex2d \
-    Assets/Engine/Textures/PointLightIcon .btex2d \
     Assets/Engine/Textures/PointLightIcon.btex2d
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
-    src/View/WindowMain.h \
+    src/View/EditorWindow.h \
     src/Domain/Interfaces/IToString.h \
     src/Domain/Engine/Interfaces/ISceneEventListener.h \
     src/Domain/Engine/Others/Timer.h \
@@ -359,6 +357,7 @@ SOURCES += \
     src/Domain/Engine/Physics/Vector2.cpp \
     src/Domain/Engine/Physics/Color.cpp \
     src/View/Application.cpp \
+    src/View/Inspector/IAttrWidgetButtonListener.cpp \
     src/Domain/Engine/Others/String.cpp \
     src/Domain/Engine/Others/SceneManager.cpp \
     src/Domain/Engine/Others/Debug.cpp
@@ -372,7 +371,7 @@ EDITOR {
         src/View/EditorGameObject/EditorScaleAxisGroup.cpp \
         src/View/EditorGameObject/EditorScaleAxis.cpp \
         src/View/EditorScene/EditorFloor.cpp \
-        src/View/WindowMain.cpp \
+        src/View/EditorWindow.cpp \
         src/View/WindowEventManager.cpp \
         src/View/Interfaces/IWindowEventManagerListener.cpp \
         src/View/Inspector/Inspector.cpp \
@@ -421,7 +420,6 @@ EDITOR {
         src/Persistence/File.cpp \
         src/View/Inspector/PrefabAssetFileInspectable.cpp \
         src/View/Interfaces/DragDropAgent.cpp \
-        src/View/Inspector/IAttrWidgetButtonListener.cpp \
         src/View/Inspector/ComponentClipboard.cpp \
         src/View/DragDropManager.cpp \
         src/View/Hierarchy/HierarchyDragDropManager.cpp \

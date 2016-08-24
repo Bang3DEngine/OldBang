@@ -1,6 +1,6 @@
 #include "EditorTranslateAxisGroup.h"
 
-#include "WindowMain.h"
+#include "EditorWindow.h"
 
 EditorTranslateAxisGroup::EditorTranslateAxisGroup(GameObject *attachedGameObject)
     : EditorGameObject("EditorTranslateAxisGroup")

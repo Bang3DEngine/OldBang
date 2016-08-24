@@ -7,8 +7,10 @@
 
 #include "Bang.h"
 
-#include "glm/glm.hpp"
+#include "String.h"
 #include "Vector2.h"
+#include "IToString.h"
+#include "glm/glm.hpp"
 
 class Input
 {
@@ -104,19 +106,27 @@ private:
      * A button can either be a key or a mouse button,
      * and it contains the states up, down and pressed.
      */
-    struct ButtonInfo
+    class ButtonInfo : public IToString
     {
-        bool up;   //just one frame
-        bool down; //just one frame
-        bool pressed; //long duration
+        public:
+            bool up;   //just one frame
+            bool down; //just one frame
+            bool pressed; //long duration
 
-        ButtonInfo() { up = down = pressed = false; }
-        ButtonInfo(bool up, bool down, bool pressed)
-        {
-            this->up = up;
-            this->down = down;
-            this->pressed = pressed;
-        }
+            ButtonInfo() { up = down = pressed = false; }
+            ButtonInfo(bool up, bool down, bool pressed)
+            {
+                this->up = up;
+                this->down = down;
+                this->pressed = pressed;
+            }
+
+            const String ToString() const override
+            {
+                std::ostringstream oss;
+                oss << "(Up: " << up << ", Down: " << down << ", Pressed: " << pressed << ")";
+                return String(oss.str());
+            }
     };
 
     /**
@@ -168,13 +178,17 @@ private:
      */
     std::map<MouseButton, ButtonInfo> m_mouseInfo;
 
-public:
-    static void InitFromMainBinary();
+    /**
+     * @brief This map will contain the delayed key and mouse events, which will be processed in
+     * the next frame.
+     */
+    std::vector<QEvent*> m_delayedEventsForNextFrame;
 
-private:
+
     void OnNewFrame();
 
     void HandleMouseWrapping();
+    void HandleEvent(QEvent *event);
     void HandleInputMouseWheel(QWheelEvent *event);
     void HandleInputMouseMove(QMouseEvent *event);
     void HandleInputMousePress(QMouseEvent *event);
@@ -182,8 +196,12 @@ private:
     void HandleInputKeyPress(QKeyEvent *event);
     void HandleInputKeyReleased(QKeyEvent *event);
 
+    void ProcessDelayedEventsFromPreviousFrame();
+
+
 public:
     static Input* GetInstance();
+    static void InitFromMainBinary();
 
     static bool GetMouseWrapping();
     static void SetMouseWrapping(bool m_mouseWrapping);

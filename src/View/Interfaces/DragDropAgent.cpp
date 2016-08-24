@@ -1,6 +1,6 @@
 #include "DragDropAgent.h"
 
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "WindowEventManager.h"
 
 #include "File.h"

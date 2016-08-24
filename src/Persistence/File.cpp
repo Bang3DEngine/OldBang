@@ -1,6 +1,8 @@
 #include "File.h"
 
+#ifdef BANG_EDITOR
 #include "Explorer.h"
+#endif
 
 #include "Mesh.h"
 #include "Prefab.h"

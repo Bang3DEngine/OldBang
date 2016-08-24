@@ -1,10 +1,12 @@
 #include "Application.h"
 
 #ifdef BANG_EDITOR
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "DragDropManager.h"
 #include "ShortcutManager.h"
 #include "WindowEventManager.h"
+#else
+#include "GameWindow.h"
 #endif
 
 #include "Scene.h"
@@ -15,8 +17,7 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {
     m_sceneManager = new SceneManager();
 
-    connect(&m_drawTimer, SIGNAL(timeout()),
-            this, SLOT(OnDrawTimerTick()));
+    connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(OnDrawTimerTick()));
 
     m_drawTimer.setInterval(c_redrawDelay);
     m_drawTimer.start();
@@ -26,6 +27,10 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::OnDrawTimerTick()
 {
+    // PAINTGL CALLED HERE OR BELOW (Because Qt reasons)
+
+    m_delayEventsForNextFrame = false;
+
     // Update deltaTime
     float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
     Time::GetInstance()->m_deltaTime = deltaTime;
@@ -35,6 +40,13 @@ void Application::OnDrawTimerTick()
     Time::s_deltaTime = deltaTime;
     //
 
+    // Process mouse and key events, so the Input is available in OnUpdate.
+    // If we don't do this, events can happen between OnUpdate and Input->OnNewFrame()
+    // And they would get lost.
+    Debug_Log("Before process events");
+    processEvents();
+    Debug_Log("After process events");
+
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
@@ -42,16 +54,25 @@ void Application::OnDrawTimerTick()
         activeScene->_OnUpdate();
     }
 
+
     // Render screen  (_OnRender mainly)
-    Screen::GetInstance()->update(); // update() calls Screen's paintGL method
+    // Screen::GetInstance()->update(); // update() calls Screen's paintGL method
 
     Input::GetInstance()->OnNewFrame(); // Notify newFrame has passed
+    m_delayEventsForNextFrame = true;
+
+    // PAINTGL CALLED HERE OR ABOVE (Because Qt reasons)
+    Debug_Log("_________________________");
 }
 
 
 Application *Application::GetInstance()
 {
-    return static_cast<Application*>(WindowMain::GetInstance()->GetApplication());
+    #ifdef BANG_EDITOR
+    return static_cast<Application*>(EditorWindow::GetInstance()->GetApplication());
+    #else
+    return static_cast<Application*>(GameWindow::GetInstance()->GetApplication());
+    #endif
 }
 
 bool Application::notify(QObject *receiver, QEvent *e)
@@ -90,4 +111,9 @@ bool Application::notify(QObject *receiver, QEvent *e)
     #endif
 
     return QApplication::notify(receiver, e);
+}
+
+bool Application::DelayEventsForNextFrame() const
+{
+    return m_delayEventsForNextFrame;
 }

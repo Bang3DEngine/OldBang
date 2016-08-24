@@ -1,8 +1,11 @@
 #include "SceneManager.h"
 
 #include "Scene.h"
-#include "Hierarchy.h"
 #include "Application.h"
+
+#ifdef BANG_EDITOR
+#include "Hierarchy.h"
+#endif
 
 SceneManager::SceneManager()
 {

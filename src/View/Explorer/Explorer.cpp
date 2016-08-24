@@ -2,7 +2,7 @@
 
 #include <QScrollBar>
 
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "Hierarchy.h"
 #include "DragDropAgent.h"
 
@@ -21,8 +21,8 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
     setModel(m_fileSystemModel);
     SetDir(Persistence::GetAssetsPathAbsolute());
 
-    m_buttonDirUp = WindowMain::GetInstance()->buttonExplorerDirUp;
-    m_buttonChangeViewMode = WindowMain::GetInstance()->buttonExplorerChangeViewMode;
+    m_buttonDirUp = EditorWindow::GetInstance()->buttonExplorerDirUp;
+    m_buttonChangeViewMode = EditorWindow::GetInstance()->buttonExplorerChangeViewMode;
 
     m_updateTimer = new QTimer(this); //Every X secs, update all the slots values
     m_updateTimer->start(100);
@@ -185,7 +185,7 @@ void Explorer::SelectFile(const String &path)
 
 Explorer *Explorer::GetInstance()
 {
-    return WindowMain::GetInstance()->widgetListExplorer;
+    return EditorWindow::GetInstance()->widgetListExplorer;
 }
 
 void Explorer::Refresh()
@@ -232,7 +232,7 @@ void Explorer::SetDir(const String &path)
 
 void Explorer::OnDirLoaded(QString dir)
 {
-    NONULL(WindowMain::GetInstance());
+    NONULL(EditorWindow::GetInstance());
 
     if (GetCurrentDir().Length() <= Persistence::GetAssetsPathAbsolute().Length())
     {

@@ -1,7 +1,7 @@
 #include "DragDropManager.h"
 
 #include "Debug.h"
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "DragDropAgent.h"
 #include "IDragDropListener.h"
 
@@ -18,7 +18,7 @@ void DragDropManager::InstallEventFilters()
     // Do this every certain time, just in case new Widgets appear hehe
     QTimer::singleShot(500, this, SLOT(InstallEventFilters()));
 
-    WindowMain *wm = WindowMain::GetInstance();
+    EditorWindow *wm = EditorWindow::GetInstance();
     if (wm && wm->GetMainWindow())
     {
         QMainWindow *mw = wm->GetMainWindow();

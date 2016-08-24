@@ -12,7 +12,7 @@
 #include "AttrWidgetColor.h"
 #include "AttrWidgetButton.h"
 
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "GameObject.h"
 
 InspectorWidget::InspectorWidget()

@@ -1,7 +1,7 @@
 #include "MenuBar.h"
 
 #include "Screen.h"
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "FileReader.h"
 #include "FileWriter.h"
 #include "FileDialog.h"
@@ -17,7 +17,7 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 {
     m_wem = WindowEventManager::GetInstance();
 
-    WindowMain *w = WindowMain::GetInstance();
+    EditorWindow *w = EditorWindow::GetInstance();
 
     connect(w->actionNewScene,  SIGNAL(triggered()),
             this, SLOT(OnNewScene()));
@@ -90,7 +90,7 @@ void MenuBar::CreateNewScene() const
 QMessageBox::StandardButton MenuBar::AskForSavingActiveScene() const
 {
     QMessageBox::StandardButton reply =
-            QMessageBox::question(WindowMain::GetInstance()->GetMainWindow(),
+            QMessageBox::question(EditorWindow::GetInstance()->GetMainWindow(),
                                   "Save Scene",
                                   "Do you want to save your current Scene?",
                                   (QMessageBox::Yes |  QMessageBox::No |
@@ -173,13 +173,13 @@ void MenuBar::OnSaveSceneAs() const
 void MenuBar::OnBuild() const
 {
     Debug_Log("Building Game... (This could take a while)");
-    GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute());
+    GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute(), false);
 }
 
 void MenuBar::OnBuildAndRun() const
 {
     Debug_Log("Building and running Game... (This could take a while)");
-    GameBuilder::BuildAndRunGame(Persistence::GetProjectRootPathAbsolute());
+    GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute(), true);
 }
 
 
@@ -195,7 +195,7 @@ void MenuBar::OnCreateFromPrefab() const
     String filename = fd.GetOpenFilename();
     if (filename == "") { return; }
 
-    WindowMain *w = WindowMain::GetInstance();
+    EditorWindow *w = EditorWindow::GetInstance();
 
     Prefab *p = new Prefab();
 

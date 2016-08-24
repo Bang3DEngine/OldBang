@@ -15,7 +15,7 @@
 
 
 #ifdef BANG_EDITOR
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "IWindowEventManagerListener.h"
 #endif
 

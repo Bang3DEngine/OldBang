@@ -1,7 +1,7 @@
 #include "Hierarchy.h"
 
 #include "Debug.h"
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "ShortcutManager.h"
 #include "WindowEventManager.h"
 
@@ -147,7 +147,7 @@ void Hierarchy::OnGameObjectNameChanged(GameObject *go)
 
 Hierarchy *Hierarchy::GetInstance()
 {
-    return WindowMain::GetInstance()->widgetHierarchy;
+    return EditorWindow::GetInstance()->widgetHierarchy;
 }
 
 void Hierarchy::Refresh()

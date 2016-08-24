@@ -1,16 +1,16 @@
 #include "GameWindow.h"
 
-#include "SingletonManager.h"
-
 #include <QLabel>
 #include <QLayout>
+
+#include "SingletonManager.h"
 
 GameWindow *GameWindow::s_m_win = nullptr;
 
 GameWindow::GameWindow(QMainWindow *window)
 {
     if (window->objectName().isEmpty())
-        window->setObjectName(QString::fromUtf8("WindowMain"));
+        window->setObjectName(QString::fromUtf8("EditorWindow"));
     window->setWindowModality(Qt::NonModal);
     window->resize(1008, 594);
     window->setMouseTracking(true);
@@ -32,7 +32,7 @@ void GameWindow::InitFromMainBinary(QMainWindow *window, QApplication *applicati
     IWindow::InitFromMainBinary(window, application);
 
     GameWindow::s_m_win = new GameWindow(window);
-    SingletonManager::GetInstance()->SetWindowMainSingleton(GameWindow::s_m_win);
+    SingletonManager::GetInstance()->SetEditorWindowSingleton(GameWindow::s_m_win);
 
     GameWindow::s_m_win->m_mainWindow = window;
     GameWindow::s_m_win->SetupUI();

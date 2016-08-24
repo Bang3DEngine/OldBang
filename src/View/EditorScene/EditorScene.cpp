@@ -53,9 +53,9 @@ void EditorScene::_OnRender()
     m_selectionFramebuffer->ProcessSelection();
 
     // Discomment to see selectionFramebuffer rendering
-    //glDisable(GL_DEPTH_TEST);
-    //m_selectionFramebuffer->RenderSelectionBuffer(this);
-    //glEnable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
+    m_selectionFramebuffer->RenderSelectionBuffer(this);
+    glEnable(GL_DEPTH_TEST);
 }
 
 SelectionFramebuffer* EditorScene::GetSelectionFramebuffer() const

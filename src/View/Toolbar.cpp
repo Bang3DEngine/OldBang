@@ -1,6 +1,6 @@
 #include "Toolbar.h"
 
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "ShortcutManager.h"
 
 Toolbar *Toolbar::s_tb = nullptr;
@@ -13,7 +13,7 @@ Toolbar::~Toolbar()
 
 void Toolbar::Init()
 {
-    WindowMain *w = WindowMain::GetInstance();
+    EditorWindow *w = EditorWindow::GetInstance();
     Toolbar::s_tb = w->widgetToolbar;
     Toolbar::s_tb->m_buttonTranslateMode = w->buttonTranslateMode;
     Toolbar::s_tb->m_buttonRotateMode    = w->buttonRotateMode;

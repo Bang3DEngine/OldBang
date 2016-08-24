@@ -7,7 +7,7 @@
 #include "Component.h"
 #include "Transform.h"
 #include "PointLight.h"
-#include "WindowMain.h"
+#include "EditorWindow.h"
 #include "GameObject.h"
 #include "MeshRenderer.h"
 #include "CircleRenderer.h"
@@ -157,7 +157,7 @@ bool Inspector::IsShowingInspectable(IInspectable *inspectable) const
 
 Inspector *Inspector::GetInstance()
 {
-    return WindowMain::GetInstance()->widgetInspector;
+    return EditorWindow::GetInstance()->widgetInspector;
 }
 
 void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)

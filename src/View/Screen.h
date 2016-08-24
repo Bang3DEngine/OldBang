@@ -1,18 +1,17 @@
 ﻿#ifndef CANVAS_H
 #define CANVAS_H
 
-#include <QThread>
-
-#include "Bang.h"
-
 #include <GL/glew.h>
 
-#include <vector>
+#include <QThread>
 
+#include <vector>
 #include <chrono>
 #include <QTimer>
 #include <QGLWidget>
 #include <QApplication>
+
+#include "Bang.h"
 
 #include "VAO.h"
 #include "Time.h"
@@ -22,13 +21,18 @@
 #include "Shader.h"
 #include "MeshRenderer.h"
 #include "ShaderProgram.h"
-#include "IDragDropListener.h"
 
-class WindowMain;
+#ifdef BANG_EDITOR
+#include "IDragDropListener.h"
+#else
+class IDragDropListener { }; // To solve a Qt moc bug
+#endif
+
+class EditorWindow;
 class GameWindow;
 class SelectionFramebuffer;
 class Screen : public QGLWidget,
-               public IDragDropListener
+               public IDragDropListener // Must be in non-editor compile too. Weird QT moc bug
 {
     Q_OBJECT
 
@@ -37,7 +41,7 @@ private:
     static Screen *m_mainBinaryScreen;
 
     #ifdef BANG_EDITOR
-    static WindowMain *s_m_window;
+    static EditorWindow *s_m_window;
     #else
     static GameWindow *s_m_window;
     #endif
@@ -76,9 +80,8 @@ public:
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
-    #endif
-
     void OnDrop(const DragDropInfo &ddi) override;
+    #endif
 
     void wheelEvent(QWheelEvent* event) override;
     void mouseMoveEvent(QMouseEvent *event) override;

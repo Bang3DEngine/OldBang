@@ -331,10 +331,10 @@ public:
     void SetEnabled(bool m_enabled);
     bool IsEnabled() const;
 
+    #ifdef BANG_EDITOR
     // Is it being dragged from hierarchy into screen?
     bool IsDraggedGameObject() const;
 
-    #ifdef BANG_EDITOR
     bool IsSelectedInHierarchy() const;
     void OnTreeHierarchyGameObjectsSelected(
             std::list<GameObject*> &selectedEntities) override;

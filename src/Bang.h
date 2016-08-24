@@ -1,12 +1,14 @@
 #ifndef BANG_H
 #define BANG_H
 
+#include <GL/glew.h>
+
 //.xyz, .yxz, .zy, etc.
 #define GLM_SWIZZLE
 #include <glm/gtx/euler_angles.hpp>
 
-#include "NamedEnum.h"
 #include "String.h"
+#include "NamedEnum.h"
 
 // MACROS
 

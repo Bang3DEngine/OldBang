@@ -32,8 +32,8 @@ public:
  * In case the BehaviourHolder has a Behaviour correctly loaded, it will
  * pass the events to the behaviour. Otherwise, it will just do nothing.
  */
-class BehaviourHolder : public Component,
-                        public IAttrWidgetButtonListener
+class BehaviourHolder : public Component
+                        ,public IAttrWidgetButtonListener
 {
 friend class GameObject;
 
@@ -77,8 +77,9 @@ public:
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
 
-    void Refresh();
     void OnButtonClicked(const String &attrName) override;
+
+    void Refresh();
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
