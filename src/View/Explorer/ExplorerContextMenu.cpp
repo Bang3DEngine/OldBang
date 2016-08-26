@@ -15,9 +15,12 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
     QAction          actionDelete("Delete",        m_explorer);
     QAction    actionCreateFolder("Create folder", m_explorer);
 
-    connect(&actionDuplicate, SIGNAL(triggered()), this, SLOT(OnDuplicateClicked()));
-    connect(&actionDelete,    SIGNAL(triggered()), this, SLOT(OnDeleteClicked()));
-    connect(&actionCreateFolder,    SIGNAL(triggered()), this, SLOT(OnDeleteClicked()));
+    connect(&actionDuplicate,SIGNAL(triggered()),
+            this, SLOT(OnDuplicateClicked()));
+    connect(&actionDelete, SIGNAL(triggered()),
+            this, SLOT(OnDeleteClicked()));
+    connect(&actionCreateFolder, SIGNAL(triggered()),
+            this, SLOT(OnCreateFolderClicked()));
 
     if (m_explorer->indexAt(point).isValid())
     {
@@ -44,11 +47,7 @@ void ExplorerContextMenu::OnDuplicateClicked()
 {
     File source = m_explorer->GetSelectedFile();
     String filepath = source.GetAbsolutePath();
-    while (m_explorer->Exists(filepath))
-    {
-        filepath = Persistence::GetNextDuplicateName(filepath);
-    }
-
+    filepath = Persistence::GetDuplicateName(filepath, m_explorer);
     QFile::copy(source.GetAbsolutePath().ToQString(), filepath.ToQString());
     m_explorer->SelectFile(filepath);
 }
@@ -69,13 +68,12 @@ void ExplorerContextMenu::OnDeleteClicked()
 void ExplorerContextMenu::OnCreateFolderClicked()
 {
     String currentDir = m_explorer->GetCurrentDir();
-    String folderDir = currentDir + "/NewFolder";
-    while (m_explorer->Exists(folderDir))
-    {
-        folderDir = Persistence::GetNextDuplicateName(folderDir);
-    }
+    String dirPath = currentDir + "/New_Folder";
+    dirPath = Persistence::GetDuplicateName(dirPath, m_explorer);
+    dirPath = Persistence::ToAbsolute(dirPath);
 
     QDir dir = QDir::root();
-    dir.mkpath(folderDir.ToQString());
-    m_explorer->StartRenaming(folderDir);
+    dir.mkpath(dirPath.ToQString());
+
+    m_explorer->StartRenaming(dirPath);
 }

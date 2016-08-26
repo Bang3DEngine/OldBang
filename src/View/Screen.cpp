@@ -52,6 +52,11 @@ void Screen::initializeGL()
     glEnable(GL_CULL_FACE);
 }
 
+void Screen::paintGL()
+{
+    Render();
+}
+
 void Screen::Render()
 {
     Scene *activeScene = SceneManager::GetActiveScene();

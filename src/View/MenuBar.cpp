@@ -205,24 +205,24 @@ void MenuBar::OnCreateFromPrefab() const
         p->ReadXMLInfo(xmlInfo);
         delete xmlInfo;
 
-        GameObject *e = p->InstantiateWithoutStarting();
+        GameObject *go = p->InstantiateWithoutStarting();
         GameObject *selectedGameObject = w->widgetHierarchy->GetFirstSelectedGameObject();
 
         if (selectedGameObject )
         {
-            e->SetParent(selectedGameObject);
+            go->SetParent(selectedGameObject);
         }
         else
         {
             Scene *activeScene = SceneManager::GetActiveScene();
             if (activeScene)
             {
-                e->SetParent(activeScene);
+                go->SetParent(activeScene);
             }
         }
         delete p;
 
-        Hierarchy::GetInstance()->SelectGameObject(e);
+        Hierarchy::GetInstance()->SelectGameObject(go);
     }
     else
     {
@@ -266,6 +266,7 @@ void MenuBar::OnCreateDirectionalLight() const
     GameObject *go = new GameObject("DirectionalLight");
     go->SetParent(SceneManager::GetActiveScene());
     go->AddComponent<DirectionalLight>();
+    Hierarchy::GetInstance()->SelectGameObject(go);
 }
 
 void MenuBar::OnCreatePointLight() const
@@ -274,6 +275,7 @@ void MenuBar::OnCreatePointLight() const
     GameObject *go = new GameObject("PointLight");
     go->SetParent(SceneManager::GetActiveScene());
     go->AddComponent<PointLight>();
+    Hierarchy::GetInstance()->SelectGameObject(go);
 }
 
 void MenuBar::OnAlignGameObjectWithView() const
@@ -309,6 +311,7 @@ void MenuBar::OnCreatePrefab() const
     m_wem->NotifyMenuBarActionClicked(Action::CreatePrefab);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Prefab." + Prefab::GetFileExtensionStatic();
+    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
     AssetsManager::CreateAsset<Prefab>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -317,6 +320,7 @@ void MenuBar::OnCreateMaterial() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateMaterial);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Material." + Material::GetFileExtensionStatic();
+    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
     AssetsManager::CreateAsset<Material>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -325,6 +329,7 @@ void MenuBar::OnCreateMesh() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateMesh);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Mesh." + Mesh::GetFileExtensionStatic();
+    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
     AssetsManager::CreateAsset<Mesh>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -334,6 +339,7 @@ void MenuBar::OnCreateShaderProgram() const
     /*
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_ShaderProgram." + ShaderProgram::GetFileExtensionStatic();
+    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
     AssetsManager::CreateAsset<ShaderProgram>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
     */
@@ -343,6 +349,7 @@ void MenuBar::OnCreateTexture2D() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateTexture2D);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Texture2D." + Texture2D::GetFileExtensionStatic();
+    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
     AssetsManager::CreateAsset<Texture2D>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }

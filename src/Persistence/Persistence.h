@@ -1,10 +1,9 @@
 #ifndef PERSISTENCE_H
 #define PERSISTENCE_H
 
-
-
 #include "Bang.h"
 
+class Explorer;
 class Persistence
 {
 
@@ -39,6 +38,7 @@ public:
      * @return
      */
     static String GetNextDuplicateName(const String &path);
+    static String GetDuplicateName(const String &path, Explorer *exp);
 
     static void SetActiveSceneFilepath(const String &scenePath);
     static String SetActiveSceneFilepath();

@@ -1,4 +1,6 @@
 #include "Persistence.h"
+
+#include "Explorer.h"
 #include "StringUtils.h"
 
 String Persistence::s_currentSceneFilepath = "";
@@ -105,7 +107,6 @@ String Persistence::ToRelative(const String &absPath)
                 GetAssetsRelativePathFromProjectRoot().Length());
 }
 
-#include "Debug.h"
 String Persistence::GetNextDuplicateName(const String &path)
 {
     String filePath = Persistence::ToRelative(path);
@@ -144,6 +145,16 @@ String Persistence::GetNextDuplicateName(const String &path)
     if (fileExtension != "")
     {
         result += "." + fileExtension;
+    }
+    return result;
+}
+
+String Persistence::GetDuplicateName(const String &path, Explorer *exp)
+{
+    String result = path;
+    while (exp->Exists(result))
+    {
+        result = Persistence::GetNextDuplicateName(result);
     }
     return result;
 }

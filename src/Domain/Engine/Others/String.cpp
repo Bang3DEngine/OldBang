@@ -11,11 +11,13 @@
 #include "Matrix4.h"
 #include "Quaternion.h"
 
-String::String()
+String::String() :
+    std::string("")
 {
 }
 
-String::String(float v)
+String::String(float v)  :
+    std::string("")
 {
     *this = ToString(v);
 }

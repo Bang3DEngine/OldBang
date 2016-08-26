@@ -121,59 +121,65 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 
 void Explorer::OnShortcutPressed()
 {
-    if (ShortcutManager::IsPressed(Input::Key::Delete))
+    if (hasFocus())
     {
-        m_eContextMenu.OnDeleteClicked();
-    }
-    else if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}))
-    {
-        m_eContextMenu.OnDuplicateClicked();
+        if (ShortcutManager::IsPressed(Input::Key::Delete))
+        {
+            m_eContextMenu.OnDeleteClicked();
+        }
+        else if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}))
+        {
+            m_eContextMenu.OnDuplicateClicked();
+        }
     }
 }
 
 void Explorer::RefreshInspector()
 {
-    if (selectedIndexes().size() <= 0) return;
+    if (selectedIndexes().empty()) return;
 
-    QModelIndex clickedIndex = selectedIndexes().at(0);
-    File f(m_fileSystemModel, clickedIndex);
-    m_lastSelectedPath = f.GetRelativePath();
+    QModelIndex selectedIndex = selectedIndexes().front();
+    File f(m_fileSystemModel, selectedIndex);
+    if (f.IsFile())
+    {
+        m_lastSelectedPath = f.GetRelativePath();
 
-    Inspector *inspector = Inspector::GetInstance();
-    if (m_lastIInspectableInInspector)
-    {
-        inspector->Clear();
-        delete m_lastIInspectableInInspector;
-        m_lastIInspectableInInspector = nullptr;
-    }
+        Inspector *inspector = Inspector::GetInstance();
+        if (m_lastIInspectableInInspector)
+        {
+            inspector->Clear();
+            delete m_lastIInspectableInInspector;
+            m_lastIInspectableInInspector = nullptr;
+        }
 
-    IInspectable *newInspectable = nullptr;
-    File *specificFile = File::GetSpecificFile(f);
-    newInspectable = specificFile->GetInspectable();
-    if (!newInspectable && !f.IsDir())
-    {
-        inspector->Clear();
-    }
+        IInspectable *newInspectable = nullptr;
+        File *specificFile = File::GetSpecificFile(f);
+        newInspectable = specificFile->GetInspectable();
+        if (!newInspectable && !f.IsDir())
+        {
+            inspector->Clear();
+        }
 
-    if (f.IsPrefabAsset()) // bprefab special case
-    {
-        File f(m_fileSystemModel, clickedIndex);
-        PrefabAssetFileInspectable *prefabInspectable =
-                new PrefabAssetFileInspectable(f);
-        newInspectable = prefabInspectable;
-        prefabInspectable->ShowInInspector();
-    }
-    else
-    {
+        if (f.IsPrefabAsset()) // bprefab special case
+        {
+            File f(m_fileSystemModel, selectedIndex);
+            PrefabAssetFileInspectable *prefabInspectable =
+                    new PrefabAssetFileInspectable(f);
+            newInspectable = prefabInspectable;
+            prefabInspectable->ShowInInspector();
+        }
+        else
+        {
+            if (newInspectable)
+            {
+                inspector->SetInspectable(newInspectable, f.GetNameAndExtension());
+            }
+        }
+
         if (newInspectable)
         {
-            inspector->SetInspectable(newInspectable, f.GetNameAndExtension());
+            m_lastIInspectableInInspector = newInspectable;
         }
-    }
-
-    if (newInspectable)
-    {
-        m_lastIInspectableInInspector = newInspectable;
     }
 }
 
@@ -187,12 +193,11 @@ void Explorer::SelectFile(const String &path)
     {
         setCurrentIndex(ind);
         selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::ClearAndSelect);
+        RefreshInspector();
     }
     else
     {
     }
-
-    RefreshInspector();
 }
 
 Explorer *Explorer::GetInstance()
@@ -309,7 +314,10 @@ const QFileSystemModel *Explorer::GetFileSystemModel() const
 void Explorer::StartRenaming(const String &filepath)
 {
     SelectFile(filepath);
-    edit(selectedIndexes().front());
+    if (!selectedIndexes().empty())
+    {
+        edit(selectedIndexes().front());
+    }
 }
 
 
@@ -380,14 +388,16 @@ QVariant FileSystemModel::data(const QModelIndex &index,
         if (f)
         {
             const QPixmap &pm = f->GetIcon();
-            Qt::TransformationMode transMode =
-                    Qt::TransformationMode::SmoothTransformation;
-            if (f->IsTexture2DAsset() || f->IsImageFile())
+            if (!pm.isNull())
             {
-                transMode = Qt::TransformationMode::FastTransformation;
+                Qt::TransformationMode transMode =
+                        Qt::TransformationMode::SmoothTransformation;
+                if (f->IsTexture2DAsset() || f->IsImageFile())
+                {
+                    transMode = Qt::TransformationMode::FastTransformation;
+                }
+                return pm.scaled(32, 32, Qt::IgnoreAspectRatio, transMode);
             }
-
-            return pm.scaled(32, 32, Qt::IgnoreAspectRatio, transMode);
         }
     }
     return QFileSystemModel::data(index, role);

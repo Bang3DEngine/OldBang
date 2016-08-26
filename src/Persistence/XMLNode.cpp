@@ -22,7 +22,9 @@ void XMLNode::CloneInto(XMLNode *xmlNode) const
 {
     xmlNode->m_children.clear();
 
-    xmlNode->SetTagName(GetTagName());
+    std::cerr << xmlNode << std::endl;
+    String name = xmlNode->GetTagName();
+    xmlNode->SetTagName(name);
     xmlNode->m_attributes = GetAttributes();
     for (XMLNode *child : m_children)
     {

@@ -68,6 +68,7 @@ public:
     static void InitFromMainBinary();
 
     void initializeGL() override;
+    void paintGL() override;
     void Render();
     void resizeGL(int w, int h) override;
 

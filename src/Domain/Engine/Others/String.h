@@ -13,7 +13,8 @@ class Vector3;
 class Vector4;
 class Matrix4;
 class Quaternion;
-class String : public std::string
+class String :
+        public std::string
 {
 public:
     String();

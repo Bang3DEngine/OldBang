@@ -56,6 +56,10 @@ void Prefab::FillXMLInfo(XMLNode *xmlInfo) const
     Asset::FillXMLInfo(xmlInfo);
 
     XMLNode *goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
-    goInfo->CloneInto(xmlInfo);
-    xmlInfo->SetTagName("Prefab");
+    if (goInfo)
+    {
+        goInfo->CloneInto(xmlInfo);
+        xmlInfo->SetTagName("Prefab");
+        delete goInfo;
+    }
 }
