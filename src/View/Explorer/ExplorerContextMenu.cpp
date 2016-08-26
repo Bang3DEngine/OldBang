@@ -11,21 +11,30 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
 {
     QMenu contextMenu(tr("Explorer context menu"), m_explorer);
 
-    QAction actionDuplicate("Duplicate", m_explorer);
-    QAction    actionDelete("Delete",    m_explorer);
+    QAction       actionDuplicate("Duplicate",     m_explorer);
+    QAction          actionDelete("Delete",        m_explorer);
+    QAction    actionCreateFolder("Create folder", m_explorer);
 
     connect(&actionDuplicate, SIGNAL(triggered()), this, SLOT(OnDuplicateClicked()));
     connect(&actionDelete,    SIGNAL(triggered()), this, SLOT(OnDeleteClicked()));
+    connect(&actionCreateFolder,    SIGNAL(triggered()), this, SLOT(OnDeleteClicked()));
 
-    if (m_explorer->IsSelectedAFile())
+    if (m_explorer->indexAt(point).isValid())
     {
-        contextMenu.addAction(&actionDuplicate);
-        contextMenu.addAction(&actionDelete);
+        if (m_explorer->IsSelectedAFile())
+        {
+            contextMenu.addAction(&actionDuplicate);
+            contextMenu.addAction(&actionDelete);
+        }
+        else if (m_explorer->IsSelectedADir())
+        {
+            // contextMenu.addAction(&actionDuplicate);
+            contextMenu.addAction(&actionDelete);
+        }
     }
-    else if (m_explorer->IsSelectedADir())
+    else
     {
-        // contextMenu.addAction(&actionDuplicate);
-        contextMenu.addAction(&actionDelete);
+        contextMenu.addAction(&actionCreateFolder);
     }
 
     contextMenu.exec(m_explorer->mapToGlobal(point));
@@ -34,13 +43,14 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
 void ExplorerContextMenu::OnDuplicateClicked()
 {
     File source = m_explorer->GetSelectedFile();
-    String filepath = source.GetRelativePath();
+    String filepath = source.GetAbsolutePath();
     while (m_explorer->Exists(filepath))
     {
         filepath = Persistence::GetNextDuplicateName(filepath);
     }
 
-    FileWriter::WriteToFile(filepath, source.GetContents());
+    QFile::copy(source.GetAbsolutePath().ToQString(), filepath.ToQString());
+    m_explorer->SelectFile(filepath);
 }
 
 void ExplorerContextMenu::OnDeleteClicked()
@@ -54,4 +64,18 @@ void ExplorerContextMenu::OnDeleteClicked()
         m_explorer->m_lastIInspectableInInspector = nullptr;
     }
     m_explorer->m_fileSystemModel->remove(m_explorer->currentIndex());
+}
+
+void ExplorerContextMenu::OnCreateFolderClicked()
+{
+    String currentDir = m_explorer->GetCurrentDir();
+    String folderDir = currentDir + "/NewFolder";
+    while (m_explorer->Exists(folderDir))
+    {
+        folderDir = Persistence::GetNextDuplicateName(folderDir);
+    }
+
+    QDir dir = QDir::root();
+    dir.mkpath(folderDir.ToQString());
+    m_explorer->StartRenaming(folderDir);
 }

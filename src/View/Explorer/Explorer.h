@@ -22,6 +22,7 @@
 #include "DragDropAgent.h"
 #include "IDragDropListener.h"
 #include "MaterialAssetFile.h"
+#include "IShortcutListener.h"
 #include "Texture2DAssetFile.h"
 #include "MeshFileInspectable.h"
 #include "TextFileInspectable.h"
@@ -36,6 +37,7 @@
 class FileSystemModel;
 class Explorer : public DragDropQListView,
                  public IDragDropListener,
+                 public IShortcutListener,
                  public IWindowEventManagerListener
 {
     Q_OBJECT
@@ -90,6 +92,8 @@ public:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
+
+    void OnShortcutPressed() override;
 
 public:
     //Updates the Inspector with the selected file info

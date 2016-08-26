@@ -1,9 +1,10 @@
 #include "ShortcutManager.h"
 
 #include "Debug.h"
-#include "EditorWindow.h"
 #include "Application.h"
+#include "EditorWindow.h"
 #include "SingletonManager.h"
+#include "IShortcutListener.h"
 
 ShortcutManager::ShortcutManager()
 {

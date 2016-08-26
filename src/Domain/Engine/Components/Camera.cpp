@@ -197,6 +197,7 @@ void Camera::OnDrawGizmos()
     float distScale = Vector3::Distance(sceneCam->transform->GetPosition(),
                                         transform->GetPosition());
 
+    Gizmos::SetDrawWireframe(false);
     Gizmos::SetReceivesLighting(true);
     Gizmos::SetPosition(transform->GetPosition());
     Gizmos::SetRotation(transform->GetRotation());

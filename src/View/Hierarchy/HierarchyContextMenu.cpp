@@ -114,9 +114,7 @@ void HierarchyContextMenu::OnDeleteClicked()
     for (QTreeWidgetItem *item : items)
     {
         GameObject *selected = m_hierarchy->GetGameObjectFromItem(item);
-        Debug_Log("Deleting " << selected);
         delete selected;
-        Debug_Log("DELETED!");
     }
 }
 

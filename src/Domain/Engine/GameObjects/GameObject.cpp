@@ -66,7 +66,6 @@ ICloneable* GameObject::Clone() const
 
 GameObject::~GameObject()
 {
-    Debug_Log("START ~GameObject() " << this);
     _OnDestroy();
 
     while (!m_children.empty())
@@ -82,12 +81,14 @@ GameObject::~GameObject()
         delete comp;
     }
 
-    m_parent->m_children.remove(this);
+    if (parent)
+    {
+        parent->m_children.remove(this); // Remove me from parent
+    }
 
     #ifdef BANG_EDITOR
     WindowEventManager::NotifyGameObjectDestroyed(this);
     #endif
-    Debug_Log("FINISH ~GameObject() " << this);
 }
 
 void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
@@ -96,7 +97,6 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
     {
         if (m_parent)
         {
-            Debug_Log("Removing from " << m_parent << " child " << this);
             m_parent->m_children.remove(this);
         }
 
@@ -494,7 +494,6 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
     }
     else if (wasSelected && !selected && m_selectionGameObject)
     {
-        Debug_Log("Deleting m_selectionGameObject " << m_selectionGameObject);
         delete m_selectionGameObject;
         m_selectionGameObject = nullptr;
     }

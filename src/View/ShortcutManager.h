@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "Input.h"
-#include "IShortcutListener.h"
 
+class IShortcutListener;
 class ShortcutManager
 {
 friend class Application;

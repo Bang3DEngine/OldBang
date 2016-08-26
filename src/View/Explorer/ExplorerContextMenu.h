@@ -25,6 +25,7 @@ public slots:
 
     void OnDuplicateClicked();
     void OnDeleteClicked();
+    void OnCreateFolderClicked();
 };
 
 #endif // EXPLORERCONTEXTMENU_H

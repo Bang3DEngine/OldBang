@@ -119,6 +119,18 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
     }
 }
 
+void Explorer::OnShortcutPressed()
+{
+    if (ShortcutManager::IsPressed(Input::Key::Delete))
+    {
+        m_eContextMenu.OnDeleteClicked();
+    }
+    else if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}))
+    {
+        m_eContextMenu.OnDuplicateClicked();
+    }
+}
+
 void Explorer::RefreshInspector()
 {
     if (selectedIndexes().size() <= 0) return;
@@ -253,17 +265,23 @@ String Explorer::GetCurrentDir() const
 
 String Explorer::GetSelectedFileOrDirPath() const
 {
-    if (!currentIndex().isValid()) return "";
-    return Persistence::ToRelative(
-                m_fileSystemModel->filePath(currentIndex()).toStdString());
+    if (!selectedIndexes().empty())
+    {
+        return Persistence::ToRelative(
+                    m_fileSystemModel->filePath(selectedIndexes().front()).toStdString());
+    }
+    return "";
 }
 
 File Explorer::GetSelectedFile() const
 {
     File f;
-    if (!currentIndex().isValid()) return f;
-    QModelIndex qmi = currentIndex();
-    return File(m_fileSystemModel, qmi);
+    if (!selectedIndexes().empty())
+    {
+        QModelIndex qmi = selectedIndexes().front();
+        return File(m_fileSystemModel, qmi);
+    }
+    return f;
 }
 
 bool Explorer::Exists(const String &filepath) const
@@ -273,14 +291,14 @@ bool Explorer::Exists(const String &filepath) const
 
 bool Explorer::IsSelectedAFile() const
 {
-    if (!currentIndex().isValid()) return false;
-    return !m_fileSystemModel->isDir(currentIndex());
+    return !selectedIndexes().empty() &&
+           !m_fileSystemModel->isDir(selectedIndexes().front());
 }
 
 bool Explorer::IsSelectedADir() const
 {
-    if (!currentIndex().isValid()) return false;
-    return m_fileSystemModel->isDir(currentIndex());
+    return !selectedIndexes().empty() &&
+            m_fileSystemModel->isDir(selectedIndexes().front());
 }
 
 const QFileSystemModel *Explorer::GetFileSystemModel() const
@@ -291,7 +309,7 @@ const QFileSystemModel *Explorer::GetFileSystemModel() const
 void Explorer::StartRenaming(const String &filepath)
 {
     SelectFile(filepath);
-    edit(currentIndex());
+    edit(selectedIndexes().front());
 }
 
 

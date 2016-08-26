@@ -7,6 +7,8 @@ BehaviourHolder::BehaviourHolder()
 
 BehaviourHolder::~BehaviourHolder()
 {
+    //connect(m_compileThread, SIGNAL(finished()),
+            //m_compileThread, SLOT(deleteLater()));
     m_compileThread.quit();
     m_compileThread.terminate();
 

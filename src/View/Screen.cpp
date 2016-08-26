@@ -52,17 +52,13 @@ void Screen::initializeGL()
     glEnable(GL_CULL_FACE);
 }
 
-void Screen::paintGL()
+void Screen::Render()
 {
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
         activeScene->_OnRender(); //Note: _OnPreRender() is called from scene _OnRender
     }
-}
-
-void Screen::updateGL()
-{
 }
 
 void Screen::resizeGL(int w, int h)
@@ -132,7 +128,6 @@ void Screen::OnShortcutPressed()
         }
         else if (ShortcutManager::IsPressed(Input::Key::Delete))
         { // Delete
-            Debug_Log("DELETE PRESSED FROM SCREEEEEEN");
             Hierarchy::GetInstance()->m_hContextMenu.OnDeleteClicked();
         }
     }
@@ -319,6 +314,7 @@ void Screen::mousePressEvent(QMouseEvent *event)
 {
     Input::GetInstance()->EnqueueEvent(event);
     QGLWidget::mousePressEvent(event);
+    setFocus();
 }
 
 void Screen::mouseReleaseEvent(QMouseEvent *event)

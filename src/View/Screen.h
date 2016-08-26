@@ -68,7 +68,7 @@ public:
     static void InitFromMainBinary();
 
     void initializeGL() override;
-    void paintGL() override;
+    void Render();
     void resizeGL(int w, int h) override;
 
     static Screen *GetInstance();
@@ -95,9 +95,6 @@ public:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
-
-public slots:
-    void updateGL() override;
 };
 
 #endif // CANVAS_H

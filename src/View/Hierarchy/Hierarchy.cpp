@@ -42,7 +42,6 @@ QTreeWidgetItem* Hierarchy::PopulateItemGameObject(GameObject *go)
 
     for (GameObject* cgo : children)
     {
-        // Debug_Log("Populating " << go <<  " with " << cgo);
         QTreeWidgetItem *c = PopulateItemGameObject(cgo);
         if (c)
         {
@@ -116,7 +115,10 @@ void Hierarchy::UnselectAll()
 {
     foreach(QTreeWidgetItem *item, selectedItems())
     {
-        item->setSelected(false);
+        if (item->isSelected())
+        {
+            item->setSelected(false);
+        }
     }
 
     _NotifyHierarchyGameObjectSelectionChanged();
@@ -157,10 +159,8 @@ Hierarchy *Hierarchy::GetInstance()
 
 void Hierarchy::Refresh()
 {
-    // Debug_Log("Refreshing hierarchy...");
     NONULL(SceneManager::GetActiveScene());
 
-    /*
     // Save expanded and selected gameObject items
     GameObject *selectedGameObject = nullptr;
     std::list<GameObject*> expandedGameObjects;
@@ -177,7 +177,6 @@ void Hierarchy::Refresh()
             selectedGameObject = it.first;
         }
     }
-    */
 
     m_gameObjectToTreeItem.clear();
     m_treeItemToGameObject.clear();
@@ -194,7 +193,6 @@ void Hierarchy::Refresh()
     }
 
     // Restore expanded gameObject items
-    /*
     for (GameObject *expandedGameObject : expandedGameObjects)
     {
         if (m_gameObjectToTreeItem.find(expandedGameObject) !=
@@ -212,7 +210,6 @@ void Hierarchy::Refresh()
     {
         m_gameObjectToTreeItem[selectedGameObject]->setSelected(true);
     }
-    */
 }
 
 void Hierarchy::Expand(GameObject *go)
@@ -315,7 +312,6 @@ void Hierarchy::OnShortcutPressed()
         }
         else if (ShortcutManager::IsPressed(Input::Key::Delete)) // Delete item
         { // Delete
-            Debug_Log("DELETE PRESSED FROM HIERARCHYYYYYYY");
             m_hContextMenu.OnDeleteClicked();
         }
     }
@@ -384,7 +380,14 @@ void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
 
 void Hierarchy::OnGameObjectDestroyed(GameObject *destroyed)
 {
-    Refresh();
+    NONULL(destroyed);
+    if (m_gameObjectToTreeItem.find(destroyed) != m_gameObjectToTreeItem.end())
+    {
+        QTreeWidgetItem *item = m_gameObjectToTreeItem[destroyed];
+        m_gameObjectToTreeItem.erase(m_gameObjectToTreeItem.find(destroyed));
+        m_treeItemToGameObject.erase(m_treeItemToGameObject.find(item));
+        delete item;
+    }
 }
 
 void Hierarchy::OnSelectionChanged()
