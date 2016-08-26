@@ -5,8 +5,6 @@
 ExplorerContextMenu::ExplorerContextMenu(Explorer *explorer) :
     ContextMenu(explorer), m_explorer(explorer)
 {
-    connect(m_explorer, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(OnCustomContextMenuRequested(QPoint)));
 }
 
 void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)

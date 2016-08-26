@@ -169,9 +169,14 @@ void Camera::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
     Camera *cam = static_cast<Camera*>(clone);
+    cam->SetZFar(GetZFar());
+    cam->SetZNear(GetZNear());
+    cam->SetClearColor(GetClearColor());
+    cam->SetFovDegrees(GetFovDegrees());
+    cam->SetOrthoHeight(GetOrthoHeight());
     cam->SetAspectRatio(GetAspectRatio());
+    cam->SetProjectionMode(GetProjectionMode());
     cam->SetAutoUpdateAspectRatio(GetAutoUpdateAspectRatio());
-
 }
 
 ICloneable *Camera::Clone() const

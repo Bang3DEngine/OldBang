@@ -239,9 +239,10 @@ void EditorCamera::OnUpdate()
     }
 }
 
-void EditorCamera::NotifyGameObjectDestroyed(GameObject *go)
+
+void EditorCamera::OnGameObjectDestroyed(GameObject *destroyed)
 {
-    if (m_currentFocus == go)
+    if (m_currentFocus == destroyed)
     {
         m_currentFocus = nullptr;
         m_doingLookAt = false;

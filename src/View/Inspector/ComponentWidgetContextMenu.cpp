@@ -8,8 +8,6 @@ ComponentWidgetContextMenu::
 
     ContextMenu(componentWidget), m_cWidget(componentWidget)
 {
-    connect(m_cWidget, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(OnCustomContextMenuRequested(QPoint)));
 }
 
 void ComponentWidgetContextMenu::OnCustomContextMenuRequested(QPoint point)

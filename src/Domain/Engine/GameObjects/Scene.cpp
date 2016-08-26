@@ -98,7 +98,6 @@ void Scene::_OnRender()
         //
     //
 
-
     // PR (Post-Render, modifying on top of GBuffer)
         // Apply lights to gbuffer
         std::list<Light*> childrenLights = GetComponentsInChildren<Light>();

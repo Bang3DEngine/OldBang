@@ -52,6 +52,8 @@ public slots:
     static void NotifyButtonRotateModeSelected();
     static void NotifyButtonScaleModeSelected();
 
+    static void NotifyGameObjectDestroyed(GameObject *destroyed);
+
     static void NotifyInspectorSlotChanged(InspectorWidget *inspectorItem);
     static void NotifyHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects);
     static void NotifyHierarchyGameObjectDoubleClicked(GameObject *selected);

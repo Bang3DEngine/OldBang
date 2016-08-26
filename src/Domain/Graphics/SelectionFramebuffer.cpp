@@ -33,8 +33,6 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
 
 SelectionFramebuffer::~SelectionFramebuffer()
 {
-    delete m_colorTexture;
-    delete m_worldPosTexture;
     delete m_program;
 }
 
@@ -163,6 +161,14 @@ Vector3 SelectionFramebuffer::GetWorldPositionAt(int x, int y)
 bool SelectionFramebuffer::IsPassing() const
 {
     return m_isPassing;
+}
+
+void SelectionFramebuffer::OnGameObjectDestroyed(GameObject *destroyed)
+{
+    if (destroyed == m_lastMouseOverGO)
+    {
+        m_lastMouseOverGO = nullptr;
+    }
 }
 
 Color SelectionFramebuffer::MapIdToColor(long id)

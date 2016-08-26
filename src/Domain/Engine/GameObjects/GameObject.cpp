@@ -66,18 +66,12 @@ ICloneable* GameObject::Clone() const
 
 GameObject::~GameObject()
 {
+    Debug_Log("START ~GameObject() " << this);
     _OnDestroy();
 
-    #ifdef BANG_EDITOR
-    EditorCamera *ecam = static_cast<EditorCamera*>(
-                            SceneManager::GetActiveScene()->GetChild("BANG_EditorCamera"));
-    ecam->NotifyGameObjectDestroyed(this);
-    #endif
-
-    for (auto it = m_children.begin(); it != m_children.end(); ++it)
+    while (!m_children.empty())
     {
-        GameObject *child = *it;
-        it = m_children.erase(it);
+        GameObject *child = m_children.front();
         delete child;
     }
 
@@ -88,7 +82,12 @@ GameObject::~GameObject()
         delete comp;
     }
 
-    SetParent(nullptr);
+    m_parent->m_children.remove(this);
+
+    #ifdef BANG_EDITOR
+    WindowEventManager::NotifyGameObjectDestroyed(this);
+    #endif
+    Debug_Log("FINISH ~GameObject() " << this);
 }
 
 void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
@@ -97,6 +96,7 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
     {
         if (m_parent)
         {
+            Debug_Log("Removing from " << m_parent << " child " << this);
             m_parent->m_children.remove(this);
         }
 
@@ -485,23 +485,19 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
         }
     }
 
-    if (selected)
-    {
-        if (!m_isSelectedInHierarchy)
-        {
-            m_selectionGameObject = new EditorSelectionGameObject(this);
-            m_selectionGameObject->SetParent(SceneManager::GetActiveScene());
-        }
-    }
-    else
-    {
-        if (m_isSelectedInHierarchy)
-        {
-            m_selectionGameObject->SetParent(nullptr);
-        }
-    }
-
+    bool wasSelected = IsSelectedInHierarchy();
     m_isSelectedInHierarchy = selected;
+    if (!wasSelected && selected)
+    {
+        m_selectionGameObject = new EditorSelectionGameObject(this);
+        m_selectionGameObject->SetParent(SceneManager::GetActiveScene());
+    }
+    else if (wasSelected && !selected && m_selectionGameObject)
+    {
+        Debug_Log("Deleting m_selectionGameObject " << m_selectionGameObject);
+        delete m_selectionGameObject;
+        m_selectionGameObject = nullptr;
+    }
 }
 #endif
 

@@ -7,6 +7,7 @@
 #include <cstring>
 
 class Color;
+class QString;
 class Vector2;
 class Vector3;
 class Vector4;
@@ -42,6 +43,7 @@ public:
                      long endIndex = std::string::npos) const;
 
     const char *ToCString() const;
+    QString ToQString() const;
 
     long Length() const;
     bool Empty() const;

@@ -12,3 +12,8 @@ EditorSelectionGameObject::EditorSelectionGameObject(GameObject *attachedGameObj
     //bbox->GetComponent<MeshRenderer>()->GetMaterial()->SetDiffuseColor(Vector4(1,0,0,1));
     //bbox->SetParent(this);
 }
+
+EditorSelectionGameObject::~EditorSelectionGameObject()
+{
+
+}

@@ -24,6 +24,7 @@
 
 #ifdef BANG_EDITOR
 #include "IDragDropListener.h"
+#include "IShortcutListener.h"
 #else
 class IDragDropListener { }; // To solve a Qt moc bug
 #endif
@@ -33,6 +34,9 @@ class GameWindow;
 class SelectionFramebuffer;
 class Screen : public QGLWidget,
                public IDragDropListener // Must be in non-editor compile too. Weird QT moc bug
+                #ifdef BANG_EDITOR
+               , public IShortcutListener
+               #endif
 {
     Q_OBJECT
 
@@ -75,7 +79,9 @@ public:
 
     static void SetCursor(Qt::CursorShape cs);
 
+
     #ifdef BANG_EDITOR
+    void OnShortcutPressed() override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragLeaveEvent(QDragLeaveEvent *e) override;

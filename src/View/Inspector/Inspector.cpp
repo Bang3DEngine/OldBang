@@ -97,7 +97,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
         AddWidget(w);
     }
 
-    m_titleLabel->setText(QString(gameObject->name.ToCString()));
+    m_titleLabel->setText(gameObject->name.ToQString());
 }
 
 void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable)

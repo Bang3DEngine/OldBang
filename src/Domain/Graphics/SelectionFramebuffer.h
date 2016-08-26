@@ -64,6 +64,8 @@ public:
     Material* GetSelectionMaterial() const;
     Vector3 GetWorldPositionAt(int x, int y);
     bool IsPassing() const;
+
+    void OnGameObjectDestroyed(GameObject *destroyed) override;
 };
 
 #endif // SELECTIONFRAMEBUFFER_H

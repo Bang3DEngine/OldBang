@@ -19,8 +19,8 @@ public:
 
     static bool HasSomethingCopied();
     static void CopyGameObjects(const std::list<GameObject*> &whatToCopy);
-    static void PasteCopiedGameObjectsInto(GameObject *parent);
-    static void DuplicateCopiedGameObjects();
+    static std::list<GameObject*> PasteCopiedGameObjectsInto(GameObject *parent);
+    static std::list<GameObject*> DuplicateCopiedGameObjects();
 };
 
 #endif // COPYPASTEGAMEOBJECTMANAGER_H

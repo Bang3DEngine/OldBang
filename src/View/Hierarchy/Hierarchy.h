@@ -36,6 +36,7 @@ class Hierarchy : public DragDropQTreeWidget,
 {
     Q_OBJECT
 
+friend class Screen;
 friend class HierarchyContextMenu;
 friend class HierarchyDragDropManager;
 
@@ -89,6 +90,7 @@ public:
 public slots:
 
     void OnItemNameChanged(QTreeWidgetItem *item, int column);
+    void OnGameObjectDestroyed(GameObject *destroyed) override;
 
     void OnSelectionChanged();
     void _NotifyHierarchyGameObjectSelectionChanged();

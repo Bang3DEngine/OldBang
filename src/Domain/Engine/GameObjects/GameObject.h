@@ -228,7 +228,7 @@ public:
         for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if (tp ) comps_l.push_back(tp);
+            if (tp) comps_l.push_back(tp);
         }
         return comps_l;
     }

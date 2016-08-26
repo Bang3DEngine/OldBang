@@ -12,6 +12,7 @@
 
 #include "Application.h"
 #include "SceneManager.h"
+#include "ShortcutManager.h"
 #include "SingletonManager.h"
 
 #ifdef BANG_EDITOR
@@ -111,6 +112,30 @@ int Screen::GetHeight()
 void Screen::SetCursor(Qt::CursorShape cs)
 {
     Application::GetInstance()->setOverrideCursor( cs );
+}
+
+void Screen::OnShortcutPressed()
+{
+    if (hasFocus())
+    {
+        if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::C}) )
+        { // Copy
+            Hierarchy::GetInstance()->m_hContextMenu.OnCopyClicked();
+        }
+        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::V}) )
+        { // Paste
+            Hierarchy::GetInstance()->m_hContextMenu.OnPasteClicked();
+        }
+        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}) )
+        { // Duplicate
+            Hierarchy::GetInstance()->m_hContextMenu.OnDuplicateClicked();
+        }
+        else if (ShortcutManager::IsPressed(Input::Key::Delete))
+        { // Delete
+            Debug_Log("DELETE PRESSED FROM SCREEEEEEN");
+            Hierarchy::GetInstance()->m_hContextMenu.OnDeleteClicked();
+        }
+    }
 }
 
 #ifdef BANG_EDITOR
@@ -241,8 +266,6 @@ void Screen::dragLeaveEvent(QDragLeaveEvent *e)
     {
         m_lastGameObjectOvered = nullptr;
         m_gameObjectBeingDragged->SetParent(nullptr);
-        // delete m_gameObjectBeingDragged;
-        // m_gameObjectBeingDragged = nullptr;
     }
 
     e->accept();

@@ -10,6 +10,10 @@ EditorGameObject::EditorGameObject(const String &name) : GameObject(name)
 {
 }
 
+EditorGameObject::~EditorGameObject()
+{
+}
+
 void EditorGameObject::CloneInto(ICloneable *clone) const
 {
     GameObject::CloneInto(clone);

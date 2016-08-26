@@ -5,8 +5,6 @@
 HierarchyContextMenu::HierarchyContextMenu(Hierarchy *hierarchy)
     : ContextMenu(hierarchy), m_hierarchy(hierarchy)
 {
-    connect(m_hierarchy, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(OnCustomContextMenuRequested(QPoint)));
 }
 
 void HierarchyContextMenu::OnCustomContextMenuRequested(QPoint point)
@@ -63,7 +61,7 @@ void HierarchyContextMenu::OnCreateEmptyClicked()
         empty->SetParent(SceneManager::GetActiveScene());
     }
 
-    m_hierarchy->Expand(empty->parent);
+    m_hierarchy->SelectGameObject(empty);
 }
 
 void HierarchyContextMenu::OnCopyClicked()
@@ -75,35 +73,50 @@ void HierarchyContextMenu::OnCopyClicked()
 void HierarchyContextMenu::OnPasteClicked()
 {
     std::list<GameObject*> selected = m_hierarchy->GetSelectedGameObjects(false);
+    std::list<GameObject*> pasted;
     if (selected.size() > 0)
     {
         for (GameObject *sel : selected)
         {
-            GameObjectClipboard::PasteCopiedGameObjectsInto(sel);
+            pasted = GameObjectClipboard::PasteCopiedGameObjectsInto(sel);
         }
     }
     else
     {
-        GameObjectClipboard::PasteCopiedGameObjectsInto(SceneManager::GetActiveScene());
+        pasted = GameObjectClipboard::PasteCopiedGameObjectsInto(SceneManager::GetActiveScene());
     }
+
+    if (pasted.size() > 0)
+    {
+        m_hierarchy->SelectGameObject(pasted.front());
+    }
+
 }
 
 void HierarchyContextMenu::OnDuplicateClicked()
 {
     std::list<GameObject*> selected = m_hierarchy->GetSelectedGameObjects(true);
     GameObjectClipboard::CopyGameObjects(selected);
-    GameObjectClipboard::DuplicateCopiedGameObjects();
+    std::list<GameObject*> duplicated =
+            GameObjectClipboard::DuplicateCopiedGameObjects();
+
+    if (duplicated.size() > 0)
+    {
+        m_hierarchy->SelectGameObject(duplicated.front());
+    }
 }
 
 void HierarchyContextMenu::OnDeleteClicked()
 {
     std::list<QTreeWidgetItem*> items = m_hierarchy->selectedItems().toStdList();
     m_hierarchy->LeaveOnlyOuterMostItems(&items);
-    foreach(QTreeWidgetItem *item, items)
+    m_hierarchy->UnselectAll(); // Needed to avoid bug when trying to restore selection
+    for (QTreeWidgetItem *item : items)
     {
         GameObject *selected = m_hierarchy->GetGameObjectFromItem(item);
-        m_hierarchy->UnselectAll(); // Needed to avoid bug when trying to restore selection
+        Debug_Log("Deleting " << selected);
         delete selected;
+        Debug_Log("DELETED!");
     }
 }
 

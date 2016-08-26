@@ -19,6 +19,7 @@ private:
 
 public:
     EditorSelectionGameObject(GameObject *attachedGameObject);
+    virtual ~EditorSelectionGameObject();
 };
 
 #endif // EDITORSELECTIONGAMEOBJECT_H

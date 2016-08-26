@@ -145,6 +145,11 @@ const char *String::ToCString() const
     return c_str();
 }
 
+QString String::ToQString() const
+{
+    return QString::fromStdString(*this);
+}
+
 long String::Length() const
 {
     return length();

@@ -6,7 +6,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
                                          GameObject *attachedGameObject)
     : EditorAxis(dir, attachedGameObject)
 {
-    SetName("EditorTranslateAxisGroup" + EditorAxis::GetStringFromDir(dir));
+    SetName("EditorTranslateAxis" + EditorAxis::GetStringFromDir(dir));
 
     m_line = AddComponent<SingleLineRenderer>();
     m_line->SetDestiny(m_oAxisDirection);
@@ -42,7 +42,6 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
 
 EditorTranslateAxis::~EditorTranslateAxis()
 {
-
 }
 
 

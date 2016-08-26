@@ -26,8 +26,10 @@ void GameObjectClipboard::CopyGameObjects(const std::list<GameObject*> &whatToCo
     }
 }
 
-void GameObjectClipboard::PasteCopiedGameObjectsInto(GameObject *parent)
+std::list<GameObject*> GameObjectClipboard::PasteCopiedGameObjectsInto(GameObject *parent)
 {
+    std::list<GameObject*> pasted;
+
     // We first store all the copies of the copies into a local list,
     // to avoid modifying the original copy which can be pasted multiple times.
     std::list<GameObject*> localCopies;
@@ -41,14 +43,22 @@ void GameObjectClipboard::PasteCopiedGameObjectsInto(GameObject *parent)
     {
         GameObject *paste = static_cast<GameObject*>(localCopy);
         paste->SetParent(parent);
+        pasted.push_back(paste);
     }
+
+    return pasted;
 }
 
-void GameObjectClipboard::DuplicateCopiedGameObjects()
+std::list<GameObject*> GameObjectClipboard::DuplicateCopiedGameObjects()
 {
+    std::list<GameObject*> duplicated;
+
     for (GameObject *copy : s_copiedGameObjects)
     {
         GameObject *localCopy = static_cast<GameObject*>(copy->Clone());
         localCopy->SetParent(s_goCopyToItsParent[copy]);
+        duplicated.push_back(localCopy);
     }
+
+    return duplicated;
 }

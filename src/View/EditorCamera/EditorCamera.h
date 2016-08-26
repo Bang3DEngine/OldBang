@@ -117,7 +117,7 @@ public:
     EditorCamera();
     virtual ~EditorCamera();
 
-    void NotifyGameObjectDestroyed(GameObject *go);
+    void OnGameObjectDestroyed(GameObject *destroyed) override;
     void AlignViewWithGameObject(GameObject *selected);
 
     /**

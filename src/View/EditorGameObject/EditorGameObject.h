@@ -11,6 +11,7 @@ protected:
 public:
     EditorGameObject();
     EditorGameObject(const String &name);
+    virtual ~EditorGameObject();
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable* Clone() const;

@@ -27,6 +27,7 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::OnDrawTimerTick()
 {
+    Debug_Log("Frame starts!");
     // Update deltaTime
     float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
     Time::GetInstance()->m_deltaTime = deltaTime;
@@ -42,20 +43,25 @@ void Application::OnDrawTimerTick()
     // Lost events in between Update and Render will be delayed by Input.
     processEvents();
     Input::GetInstance()->ProcessEnqueuedEvents();
+    Debug_Log("Input processed enqueued events!");
 
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
         m_lastRenderTime = Time::GetNow();
         activeScene->_OnUpdate();
+        Debug_Log("OnUpdate done!");
     }
 
 
     // Render screen  (_OnRender mainly)
+    Debug_Log("Rendering screeeeennn...!");
     Screen::GetInstance()->update(); // update() calls Screen's paintGL method
     processEvents(); // This processEvents forces the paintGL() call right now, after the update()
+    Debug_Log("Screen rendered!");
 
     Input::GetInstance()->OnFrameFinished(); // Notify to Input that a new frame has passed
+    Debug_Log("Frame ends!");
 }
 
 

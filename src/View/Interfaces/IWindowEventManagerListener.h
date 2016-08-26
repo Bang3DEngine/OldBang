@@ -26,6 +26,8 @@ public:
     virtual void OnButtonRotateModeSelected() {}
     virtual void OnButtonScaleModeSelected() {}
 
+    virtual void OnGameObjectDestroyed(GameObject *destroyed)  { }
+
     virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem)  { }
     virtual void OnTreeHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects) { }
     virtual void OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected) { }

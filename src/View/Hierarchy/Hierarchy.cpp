@@ -31,26 +31,27 @@ void Hierarchy::Expand(QTreeWidgetItem *item)
     Expand(item->parent());
 }
 
-QTreeWidgetItem* Hierarchy::PopulateItemGameObject(GameObject *o)
+QTreeWidgetItem* Hierarchy::PopulateItemGameObject(GameObject *go)
 {
-    if (o->IsEditorGameObject()) return nullptr;
+    if (go->IsEditorGameObject()) return nullptr;
 
-    const std::list<GameObject*> children = o->GetChildren();
+    const std::list<GameObject*> children = go->GetChildren();
 
     QTreeWidgetItem *eRoot = new QTreeWidgetItem();
-    eRoot->setText(0, QString::fromStdString(o->name));
+    eRoot->setText(0, QString::fromStdString(go->name));
 
-    for (GameObject* go : children)
+    for (GameObject* cgo : children)
     {
-        QTreeWidgetItem *c = PopulateItemGameObject(go);
+        // Debug_Log("Populating " << go <<  " with " << cgo);
+        QTreeWidgetItem *c = PopulateItemGameObject(cgo);
         if (c)
         {
             eRoot->addChild(c);
         }
     }
 
-    m_gameObjectToTreeItem[o] = eRoot;
-    m_treeItemToGameObject[eRoot] = o;
+    m_gameObjectToTreeItem[go] = eRoot;
+    m_treeItemToGameObject[eRoot] = go;
 
     return eRoot;
 }
@@ -156,8 +157,10 @@ Hierarchy *Hierarchy::GetInstance()
 
 void Hierarchy::Refresh()
 {
+    // Debug_Log("Refreshing hierarchy...");
     NONULL(SceneManager::GetActiveScene());
 
+    /*
     // Save expanded and selected gameObject items
     GameObject *selectedGameObject = nullptr;
     std::list<GameObject*> expandedGameObjects;
@@ -174,6 +177,7 @@ void Hierarchy::Refresh()
             selectedGameObject = it.first;
         }
     }
+    */
 
     m_gameObjectToTreeItem.clear();
     m_treeItemToGameObject.clear();
@@ -190,6 +194,7 @@ void Hierarchy::Refresh()
     }
 
     // Restore expanded gameObject items
+    /*
     for (GameObject *expandedGameObject : expandedGameObjects)
     {
         if (m_gameObjectToTreeItem.find(expandedGameObject) !=
@@ -207,6 +212,7 @@ void Hierarchy::Refresh()
     {
         m_gameObjectToTreeItem[selectedGameObject]->setSelected(true);
     }
+    */
 }
 
 void Hierarchy::Expand(GameObject *go)
@@ -251,50 +257,66 @@ void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 
 void Hierarchy::OnShortcutPressed()
 {
-    if (ShortcutManager::IsPressed(Input::Key::Delete)) // Delete item
+    if (hasFocus())
     {
-        m_hContextMenu.OnDeleteClicked();
-    }
-    else if ( ShortcutManager::IsPressed(Input::Key::Enter) ||
-              ShortcutManager::IsPressed(Input::Key::Space))
-    {
-        GameObject *go = GetFirstSelectedGameObject();
-        ExpandTrigger(go);
-    }
-    else if ( ShortcutManager::IsPressed(Input::Key::Up))
-    {
-        SelectItemAboveOrBelowSelected(true);
-    }
-    else if ( ShortcutManager::IsPressed(Input::Key::Down))
-    {
-        SelectItemAboveOrBelowSelected(false);
-    }
-    else if ( ShortcutManager::IsPressed(Input::Key::Left))
-    {
-        QTreeWidgetItem *item = GetFirstSelectedItem();
-        if (item)
+        if ( ShortcutManager::IsPressed(Input::Key::Enter) ||
+             ShortcutManager::IsPressed(Input::Key::Space))
         {
-            item->setExpanded(false);
+            GameObject *go = GetFirstSelectedGameObject();
+            ExpandTrigger(go);
         }
-    }
-    else if ( ShortcutManager::IsPressed(Input::Key::Right))
-    {
-        QTreeWidgetItem *item = GetFirstSelectedItem();
-        if (item)
+        else if ( ShortcutManager::IsPressed(Input::Key::Up))
         {
-            item->setExpanded(true);
+            SelectItemAboveOrBelowSelected(true);
         }
-    }
-    else if ( ShortcutManager::IsPressed(Input::Key::F2) ) // Edit name
-    {
-        if (selectedItems().length() <= 0) return;
-        QTreeWidgetItem *selected = selectedItems().at(0);
-        if (selected)
+        else if ( ShortcutManager::IsPressed(Input::Key::Down))
         {
-            Qt::ItemFlags oldFlags = selected->flags();
-            selected->setFlags(oldFlags | Qt::ItemFlag::ItemIsEditable);
+            SelectItemAboveOrBelowSelected(false);
+        }
+        else if ( ShortcutManager::IsPressed(Input::Key::Left))
+        {
+            QTreeWidgetItem *item = GetFirstSelectedItem();
+            if (item)
+            {
+                item->setExpanded(false);
+            }
+        }
+        else if ( ShortcutManager::IsPressed(Input::Key::Right))
+        {
+            QTreeWidgetItem *item = GetFirstSelectedItem();
+            if (item)
+            {
+                item->setExpanded(true);
+            }
+        }
+        else if ( ShortcutManager::IsPressed(Input::Key::F2) )
+        { // Edit name
+            if (selectedItems().length() <= 0) return;
+            QTreeWidgetItem *selected = selectedItems().at(0);
+            if (selected)
+            {
+                Qt::ItemFlags oldFlags = selected->flags();
+                selected->setFlags(oldFlags | Qt::ItemFlag::ItemIsEditable);
 
-            editItem(selected, 0); // Name can be edited now
+                editItem(selected, 0); // Name can be edited now
+            }
+        }
+        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::C}) )
+        { // Copy
+            m_hContextMenu.OnCopyClicked();
+        }
+        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::V}) )
+        { // Paste
+            m_hContextMenu.OnPasteClicked();
+        }
+        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}) )
+        { // Duplicate
+            m_hContextMenu.OnDuplicateClicked();
+        }
+        else if (ShortcutManager::IsPressed(Input::Key::Delete)) // Delete item
+        { // Delete
+            Debug_Log("DELETE PRESSED FROM HIERARCHYYYYYYY");
+            m_hContextMenu.OnDeleteClicked();
         }
     }
 }
@@ -358,6 +380,11 @@ void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
     {
         go->SetName(item->text(column).toStdString());
     }
+}
+
+void Hierarchy::OnGameObjectDestroyed(GameObject *destroyed)
+{
+    Refresh();
 }
 
 void Hierarchy::OnSelectionChanged()
