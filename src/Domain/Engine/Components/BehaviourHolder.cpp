@@ -2,15 +2,23 @@
 
 BehaviourHolder::BehaviourHolder()
 {
-    m_compileThread.SetBehaviourHolder(this);
+    m_compileThread = new CompileBehaviourThread();
+    m_compileThread->SetBehaviourHolder(this);
 }
 
 BehaviourHolder::~BehaviourHolder()
 {
-    //connect(m_compileThread, SIGNAL(finished()),
-            //m_compileThread, SLOT(deleteLater()));
-    m_compileThread.quit();
-    m_compileThread.terminate();
+    if (m_compileThread)
+    {
+        if (m_compileThread->isRunning())
+        {
+            m_compileThread->SetBehaviourHolder(nullptr);
+        }
+        else
+        {
+            delete m_compileThread;
+        }
+    }
 
     if (m_behaviour)
     {
@@ -19,7 +27,8 @@ BehaviourHolder::~BehaviourHolder()
 
     if (m_currentOpenLibrary)
     {
-        SystemUtils::CloseLibrary(m_currentOpenLibrary);
+        delete m_currentOpenLibrary;
+        // SystemUtils::CloseLibrary(m_currentOpenLibrary);
     }
 }
 
@@ -29,7 +38,6 @@ void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
     {
         delete m_behaviour;
     }
-
     m_behaviour = newBehaviour;
 }
 
@@ -66,7 +74,8 @@ const String &BehaviourHolder::GetSourceFilepath() const
 
 void BehaviourHolder::Refresh()
 {
-    if (!gameObject) return;
+    NONULL(gameObject);
+
     // No refresh on temporary gameObjects
     #ifdef BANG_EDITOR
     if (gameObject->IsDraggedGameObject()) return;
@@ -74,17 +83,20 @@ void BehaviourHolder::Refresh()
 
     if (m_sourceFilepath == "") return;
 
-    if (!m_compileThread.isRunning())
+    if (!m_compileThread->isRunning())
     {
         String filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
         Debug_Log("Refreshing Behaviour '" << filename << "'...");
-        m_compileThread.start();
+        m_compileThread->start();
     }
 }
 
 
 void BehaviourHolder::OnBehaviourFinishedCompiling(String soFilepath)
 {
+    // Prepare thread for next compilation
+    m_compileThread = new CompileBehaviourThread();
+
     if (soFilepath == "")
     {
         ChangeBehaviour(nullptr);
@@ -94,10 +106,10 @@ void BehaviourHolder::OnBehaviourFinishedCompiling(String soFilepath)
     }
 
     // Create new Behaviour
-    void *openLibrary = nullptr;
+    // void *openLibrary = nullptr;
+    QLibrary *openLibrary = nullptr;
     Behaviour *createdBehaviour = nullptr;
-    SystemUtils::CreateDynamicBehaviour(soFilepath,
-                                        &createdBehaviour,
+    SystemUtils::CreateDynamicBehaviour(soFilepath, &createdBehaviour,
                                         &openLibrary);
 
     ChangeBehaviour(createdBehaviour); // To newly created or nullptr, depending on success
@@ -106,7 +118,8 @@ void BehaviourHolder::OnBehaviourFinishedCompiling(String soFilepath)
     {
         if (m_currentOpenLibrary)
         {
-            SystemUtils::CloseLibrary(m_currentOpenLibrary);
+            delete m_currentOpenLibrary;
+            // SystemUtils::CloseLibrary(m_currentOpenLibrary);
         }
         m_currentOpenLibrary = openLibrary;
     }
@@ -150,7 +163,7 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
 
     xmlInfo->SetButton("CreateNew...", noConstThis);
-    if (m_compileThread.isRunning())
+    if (m_compileThread->isRunning())
     {
         xmlInfo->SetButton("Refresh", noConstThis, {XMLProperty::Disabled});
     }
@@ -219,13 +232,12 @@ void BehaviourHolder::OnButtonClicked(const String &attrName)
     {
         Refresh();
     }
-    #endif
+#endif
 }
 
 void BehaviourHolder::_OnStart()
 {
     Component::_OnStart();
-    Debug_Log("_OnStart !!!");
     Refresh();
 }
 
@@ -256,6 +268,24 @@ void BehaviourHolder::_OnRender()
     }
 }
 
+void BehaviourHolder::_OnDrawGizmos()
+{
+    Component::_OnDrawGizmos();
+    if (m_behaviour)
+    {
+        m_behaviour->_OnDrawGizmos();
+    }
+}
+
+void BehaviourHolder::_OnDrawGizmosNoDepth()
+{
+    Component::_OnDrawGizmosNoDepth();
+    if (m_behaviour)
+    {
+        m_behaviour->_OnDrawGizmosNoDepth();
+    }
+}
+
 void BehaviourHolder::_OnDestroy()
 {
     Component::_OnDestroy();
@@ -265,14 +295,28 @@ void BehaviourHolder::_OnDestroy()
     }
 }
 
+//////////////////////////////////////////////////////////////////////////
+
+CompileBehaviourThread::CompileBehaviourThread()
+{
+}
 
 void CompileBehaviourThread::run()
 {
+    NONULL(m_behaviourHolder);
+
     String sourceFilepath = m_behaviourHolder->GetSourceFilepath();
+
+    // Compile
     String soFilepath = SystemUtils::CompileToSharedObject(sourceFilepath);
 
-    // Here it's compiling the behaviour...
-    m_behaviourHolder->OnBehaviourFinishedCompiling(soFilepath); // Notify
+    // Check, just in case the BehaviourHolder has been deleted while compiling
+    if (m_behaviourHolder)
+    {
+        m_behaviourHolder->OnBehaviourFinishedCompiling(soFilepath); // Notify
+    }
+
+    deleteLater(); // Automatic delete
 }
 
 void CompileBehaviourThread::SetBehaviourHolder(BehaviourHolder *bh)

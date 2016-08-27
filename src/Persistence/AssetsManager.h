@@ -17,18 +17,19 @@ private:
     /** For every id, it contains a pointer to the asset
       * created when the assets were loaded.
     **/
-    static std::map<String, Asset*> m_idToAssetPointer;
+    std::map<String, Asset*> m_idToAssetPointer;
 
     static String FormatFilepath(const String &filepath);
 
     template <class T>
     static T* GetAsset(const String &filepath)
     {
-        if (!IsAssetLoaded(filepath)) return nullptr;
+        AssetsManager *am = AssetsManager::GetCurrent();
+        if (!AssetsManager::IsAssetLoaded(filepath)) return nullptr;
         else
         {
             String f = AssetsManager::FormatFilepath(filepath);
-            return dynamic_cast<T*>(m_idToAssetPointer[f]);
+            return dynamic_cast<T*>(am->m_idToAssetPointer[f]);
         }
     }
 
@@ -53,9 +54,11 @@ private:
     static void SaveAssetToMap(const String &filepath, Asset* pointerToAsset);
     static void SaveAssetToFile(const String &filepath, Asset* pointerToAsset);
 
-    AssetsManager() {}
-
 public:
+
+    AssetsManager();
+    virtual ~AssetsManager();
+    static AssetsManager* GetCurrent();
 
     static bool IsAssetLoaded(const String &filepath);
 
@@ -67,7 +70,7 @@ public:
     {
         T *a = new T();
         //a->m_filepath = filepath;
-        SaveAssetToFile(filepath, a);
+        AssetsManager::SaveAssetToFile(filepath, a);
         return a;
     }
 
@@ -78,17 +81,19 @@ public:
     static T* LoadAsset(const String &filepath)
     {
         T *a = nullptr;
-        if (!IsAssetLoaded(filepath))
+        if (!AssetsManager::IsAssetLoaded(filepath))
         {
-            a = ReadAssetFile<T>(filepath);
-            SaveAssetToMap(filepath, a);
+            a = AssetsManager::ReadAssetFile<T>(filepath);
+            AssetsManager::SaveAssetToMap(filepath, a);
         }
         else
         {
-            a = GetAsset<T>(filepath);
+            a = AssetsManager::GetAsset<T>(filepath);
         }
         return a;
     }
+
+    static void UnloadAsset(const Asset *asset);
 };
 
 #endif // ASSETSMANAGER_H

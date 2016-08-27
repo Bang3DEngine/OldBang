@@ -4,6 +4,7 @@
 #include <functional>
 
 #include <QThread>
+#include <QLibrary>
 #include <QInputDialog>
 
 #include "Bang.h"
@@ -20,6 +21,8 @@ protected:
     void run() override;
 
 public:
+    CompileBehaviourThread();
+
     void SetBehaviourHolder(BehaviourHolder *bh);
 };
 
@@ -33,22 +36,19 @@ public:
  * pass the events to the behaviour. Otherwise, it will just do nothing.
  */
 class BehaviourHolder : public Component
-                        ,public IAttrWidgetButtonListener
+                       ,public IAttrWidgetButtonListener
 {
 friend class GameObject;
 
 private:
-    CompileBehaviourThread m_compileThread;
+
+    QLibrary *m_currentOpenLibrary = nullptr;
+    CompileBehaviourThread *m_compileThread = nullptr;
 
     /**
      * @brief The dynamically loaded Behaviour
      */
     Behaviour *m_behaviour = nullptr;
-
-    /**
-     * @brief The currently open library to load the Behaviour, if any.
-     */
-    void *m_currentOpenLibrary = nullptr;
 
     /**
      * @brief Path to the Behaviour source file.
@@ -88,6 +88,8 @@ public:
     virtual void _OnUpdate () override;
     virtual void _OnPreRender () override;
     virtual void _OnRender () override;
+    virtual void _OnDrawGizmos () override;
+    virtual void _OnDrawGizmosNoDepth () override;
     virtual void _OnDestroy () override;
 
     void OnBehaviourFinishedCompiling(String soFilepath);

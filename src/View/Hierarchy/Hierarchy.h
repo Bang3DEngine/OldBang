@@ -64,6 +64,7 @@ public:
     explicit Hierarchy(QWidget *parent = 0);
     virtual ~Hierarchy();
 
+    void Clear();
     void Refresh();
     void Expand(GameObject *go);
     void ExpandTrigger(GameObject *go);

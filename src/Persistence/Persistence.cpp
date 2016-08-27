@@ -60,6 +60,11 @@ String Persistence::GetFileNameWithExtension(const String &filepath)
     return filename;
 }
 
+String Persistence::GetPathWithoutExtension(const String &filepath)
+{
+    return filepath.Split('.')[0];
+}
+
 
 String Persistence::ToAbsolute(const String &relPath)
 {

@@ -7,6 +7,8 @@
 #include <sstream>
 #include <iostream>
 
+#include <QString>
+
 class Color;
 class String;
 class Vector2;
@@ -72,6 +74,7 @@ OPERATOR_OSTREAM_DECL(Matrix4)
 OPERATOR_OSTREAM_DECL(IToString)
 OPERATOR_OSTREAM_DECL(Quaternion)
 std::ostream& operator<<(std::ostream &log, const String &str);
+std::ostream& operator<<(std::ostream &log, const QString &str);
 std::ostream& operator<<(std::ostream &log, const IToString *s);
 //
 

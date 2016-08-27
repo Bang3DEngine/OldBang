@@ -1,5 +1,7 @@
 #include "Asset.h"
 
+#include "AssetsManager.h"
+
 Asset::Asset()
 {
 
@@ -7,7 +9,7 @@ Asset::Asset()
 
 Asset::~Asset()
 {
-
+    AssetsManager::UnloadAsset(this);
 }
 
 #ifdef BANG_EDITOR

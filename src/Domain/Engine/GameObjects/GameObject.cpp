@@ -74,10 +74,10 @@ GameObject::~GameObject()
         delete child;
     }
 
-    for (auto it = m_components.begin(); it != m_components.end(); ++it)
+    while (!m_components.empty())
     {
-        Component *comp = *it;
-        it = m_components.erase(it);
+        Component *comp = m_components.front();
+        m_components.pop_front();
         delete comp;
     }
 

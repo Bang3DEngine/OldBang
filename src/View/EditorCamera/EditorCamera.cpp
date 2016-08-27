@@ -185,8 +185,17 @@ void EditorCamera::OnStart()
     EditorGameObject::OnStart();
 
     Sphere sceneSphere = SceneManager::GetActiveScene()->GetBoundingSphere();
-    transform->SetPosition(Vector3(1.0f) * sceneSphere.GetRadius());
-    transform->LookAt(sceneSphere.GetCenter());
+    if (sceneSphere.GetRadius() > 0)
+    {
+        transform->SetPosition(Vector3(1.0f) * sceneSphere.GetRadius());
+        transform->LookAt(sceneSphere.GetCenter());
+    }
+    else
+    {
+        transform->SetPosition(Vector3::one * 30.0f);
+        transform->LookAt(Vector3::zero);
+    }
+
     UpdateRotationVariables();
 }
 

@@ -23,6 +23,7 @@ public:
     static String GetDir(const String &filepath);
     static String GetFileName(const String &filepath);
     static String GetFileNameWithExtension(const String &filepath);
+    static String GetPathWithoutExtension(const String &filepath);
 
     // ./Assets/lolol/a.bmesh => /home/wololo/MyProject/Assets/lolol/a.bmesh
     static String ToAbsolute(const String &relPath);

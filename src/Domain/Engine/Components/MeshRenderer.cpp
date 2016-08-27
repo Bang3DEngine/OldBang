@@ -68,8 +68,9 @@ const String MeshRenderer::ToString() const
 {
     std::ostringstream oss;
     oss << "MeshRenderer: [" << std::endl <<
-           "   " << m_mesh << std::endl <<
-           "   " << m_material << std::endl <<
+           "   " << (m_mesh ? m_mesh->ToString() : "") << std::endl <<
+           //"   " << (m_material ? m_material->ToString() : "") << std::endl <<
+           "   " << "material" << std::endl <<
            "]";
     return oss.str();
 }

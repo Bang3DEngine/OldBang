@@ -14,7 +14,8 @@
 #include "Debug.h"
 #include "Asset.h"
 
-class Texture2D : public Texture, public Asset
+class Texture2D : public Texture,
+                  public Asset
 {
 
 private:

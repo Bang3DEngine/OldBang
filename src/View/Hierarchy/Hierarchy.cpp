@@ -21,7 +21,7 @@ Hierarchy::Hierarchy(QWidget *parent) :
 
 Hierarchy::~Hierarchy()
 {
-    this->clear();
+    clear();
 }
 
 void Hierarchy::Expand(QTreeWidgetItem *item)
@@ -157,6 +157,13 @@ Hierarchy *Hierarchy::GetInstance()
     return EditorWindow::GetInstance()->widgetHierarchy;
 }
 
+void Hierarchy::Clear()
+{
+    m_gameObjectToTreeItem.clear();
+    m_treeItemToGameObject.clear();
+    clear();
+}
+
 void Hierarchy::Refresh()
 {
     NONULL(SceneManager::GetActiveScene());
@@ -178,9 +185,7 @@ void Hierarchy::Refresh()
         }
     }
 
-    m_gameObjectToTreeItem.clear();
-    m_treeItemToGameObject.clear();
-    clear();
+    Clear();
 
     // Add top level items and populate them recursively
     std::list<GameObject*> sceneChildren = SceneManager::GetActiveScene()->GetChildren();

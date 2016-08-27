@@ -16,7 +16,9 @@ Framebuffer::~Framebuffer()
     }
 
     if (m_depthAttachmentId != 0)
+    {
         glDeleteRenderbuffers(1, &m_depthAttachmentId);
+    }
 
     glDeleteFramebuffers(1, &m_idGL);
 }

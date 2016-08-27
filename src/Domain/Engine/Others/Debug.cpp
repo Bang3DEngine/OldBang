@@ -75,3 +75,9 @@ std::ostream &operator<<(std::ostream &log, const IToString *s)
     return log;
 }
 //
+
+
+std::ostream &operator<<(std::ostream &log, const QString &str)
+{
+    log << str.toStdString(); return log;
+}

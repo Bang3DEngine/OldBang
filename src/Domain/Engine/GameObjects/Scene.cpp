@@ -8,6 +8,7 @@
 Scene::Scene() : GameObject("Scene")
 {
     m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
+    m_assetsManager = new AssetsManager();
     m_materialAfterLighting = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_AfterLighting.bmat");
 }
 
@@ -62,10 +63,15 @@ void Scene::_OnResize(int newWidth, int newHeight)
 
 Scene::~Scene()
 {
-    this->_OnDestroy();
+    _OnDestroy();
     delete m_materialAfterLighting;
     delete m_defaultCamera;
     delete m_gbuffer;
+
+    // AssetsManager must be deleted the last one
+    // to clean all the Assets that haven't been deleted
+    // for whatever reason
+    delete m_assetsManager;
 }
 
 void Scene::_OnRender()
@@ -155,6 +161,11 @@ Camera *Scene::GetCurrentCamera() const
 const Screen *Scene::GetScreen() const
 {
     return m_screen;
+}
+
+AssetsManager *Scene::GetAssetsManager() const
+{
+    return m_assetsManager;
 }
 
 bool Scene::IsScene() const

@@ -217,9 +217,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
 
     // Compile
     String sharedObjectFilepath = "";
-    sharedObjectFilepath += scriptDir + "/" + scriptName + "_" +
-                            ".so." + std::to_string(Time::GetNow()) + ".1.1";
-
+    sharedObjectFilepath += scriptDir + "/" + scriptName + ".so." + std::to_string(Time::GetNow()) + ".1.1";
 
     String cmd = "";
     cmd += "/usr/bin/g++ -shared ";
@@ -254,104 +252,82 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     return sharedObjectFilepath;
 }
 
-void SystemUtils::CreateDynamicBehaviour(const  String &sharedObjectFilepath,
+void SystemUtils::CreateDynamicBehaviour(const String &sharedObjectFilepath,
                                          Behaviour **createdBehaviour,
-                                         void **openLibrary)
+                                         QLibrary **openLibrary)
 {
-    dlerror(); // Clear last error just in case
+    *openLibrary = nullptr;
+    *createdBehaviour = nullptr;
 
     // Open library
-    *openLibrary = dlopen(sharedObjectFilepath.ToCString(), RTLD_NOW);
-    char *err = dlerror();
-    if (err)
+    *openLibrary = new QLibrary(sharedObjectFilepath.ToCString());
+
+    QLibrary *lib = *openLibrary;
+    lib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
+    if (lib->load())
     {
-        Debug_Error(err);
-        if (*openLibrary)
+        // Get the pointer to the CreateDynamically function
+        Behaviour* (*createFunction)(SingletonManager*) =
+                (Behaviour* (*)(SingletonManager*)) (lib->resolve("CreateDynamically"));
+
+        if (createFunction)
         {
-            dlclose(*openLibrary);
-            *openLibrary = *createdBehaviour = nullptr;
+            // Call it and get the pointer to the created Behaviour
+            if (createFunction)
+            {
+                // Create the Behaviour, passing to it the SingletonManager
+                // of this main binary, so it can link it.
+                *createdBehaviour = createFunction(SingletonManager::GetInstance());
+            }
         }
-        return;
+        else
+        {
+            lib->unload();
+            Debug_Error(lib->errorString());
+            delete lib;
+            *openLibrary = nullptr;
+        }
     }
-    NONULL(*openLibrary);
-
-    // Error Check
-    err = dlerror();
-    if (err )
+    else
     {
-        Debug_Error(err);
-        dlclose(*openLibrary);
-        *openLibrary = *createdBehaviour = nullptr;
-        return;
-    }
-
-
-    // Get the pointer to the CreateDynamically function
-    Behaviour* (*createFunction)(SingletonManager*) =
-            (Behaviour* (*)(SingletonManager*)) (dlsym(*openLibrary, "CreateDynamically"));
-
-    // Error Check
-    err = dlerror();
-    if (err )
-    {
-        Debug_Error(err);
-        dlclose(*openLibrary);
-        *openLibrary = *createdBehaviour = nullptr;
-        return;
-    }
-
-    // Call it and get the pointer to the created Behaviour
-    *createdBehaviour = nullptr;
-    if (createFunction )
-    {
-        // Create the Behaviour, passing to it the SingletonManager
-        // of this main binary, so it can link it.
-        *createdBehaviour = createFunction(SingletonManager::GetInstance());
+        if (lib)
+        {
+            lib->unload();
+            Debug_Error(lib->errorString());
+            delete lib;
+        }
+        *openLibrary = nullptr;
     }
 }
 
-bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, void *openLibrary)
+bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, QLibrary *openLibrary)
 {
-    dlerror(); // Clear last error just in case
-
-    // Error Check
-    char *err = dlerror();
-    if (err )
+    if (!openLibrary)
     {
-        Debug_Error(err);
         return false;
     }
-
 
     // Get the pointer to the CreateDynamically function
     void (*deleteFunction)(Behaviour*) =
-            (void (*)(Behaviour*)) (dlsym(openLibrary, "DeleteDynamically"));
+            (void (*)(Behaviour*)) (openLibrary->resolve("DeletedDinamically"));
 
-    // Error Check
-    err = dlerror();
-    if (err )
-    {
-        Debug_Error(err);
-        return false;
-    }
-
-    if (deleteFunction )
+    if (deleteFunction)
     {
         deleteFunction(b);
+        return true;
     }
-    else return false;
-
-    return true;
+    else
+    {
+        Debug_Error(openLibrary->errorString().toStdString());
+        return false;
+    }
 }
 
-void SystemUtils::CloseLibrary(void *library)
+void SystemUtils::CloseLibrary(QLibrary *library)
 {
-    dlerror();
-    dlclose(library);
-    char *err = dlerror();
-    if (err )
+    if (!library->unload())
     {
-        Debug_Error(err);
+        Debug_Error(library->errorString().toStdString());
     }
 }
 

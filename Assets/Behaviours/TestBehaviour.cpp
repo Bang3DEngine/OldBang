@@ -34,11 +34,11 @@ void TestBehaviour::OnUpdate()
     float rotSpeed = 150.0f;
     if (Input::GetKey(Input::Key::A))
     {
-        transform->RotateLocalEuler(Vector3::up * -rotSpeed * Time::deltaTime);
+        transform->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime);
     }
     else if (Input::GetKey(Input::Key::D))
     {
-        transform->RotateLocalEuler(Vector3::up * rotSpeed * Time::deltaTime);
+        transform->RotateLocalEuler(Vector3::up * -rotSpeed * Time::deltaTime);
     }
 
     float speed = 5.0f;

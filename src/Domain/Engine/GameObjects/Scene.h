@@ -27,6 +27,8 @@ friend class SelectionFramebuffer;
 
 protected:
 
+    AssetsManager *m_assetsManager = nullptr;
+
     GameObject *m_defaultCamera = nullptr;
     Material *m_materialAfterLighting = nullptr;
 
@@ -53,6 +55,7 @@ public:
     static Camera* GetCamera ();
     Camera* GetCurrentCamera () const;
     const Screen* GetScreen () const;
+    AssetsManager *GetAssetsManager() const;
 
     bool IsScene() const override;
 

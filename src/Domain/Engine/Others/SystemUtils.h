@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <string.h>
+#include <QLibrary>
 
 #include "StringUtils.h"
 
@@ -62,7 +62,7 @@ public:
      */
     static void CreateDynamicBehaviour(const String &sharedObjectFilepath,
                                        Behaviour **createdBehaviour,
-                                       void **openLibrary);
+                                       QLibrary **openLibrary);
 
     /**
      * @brief Delete dynamic Behaviour from a sharedObject passed as parameter.
@@ -71,10 +71,10 @@ public:
      * @return Success or not.
      */
     static bool DeleteDynamicBehaviour(Behaviour *b,    // NOT USED FTM
-                                       void *openLibrary);
+                                       QLibrary *openLibrary);
 
 
-    static void CloseLibrary(void *library);
+    static void CloseLibrary(QLibrary *library);
 };
 
 #endif // SYSTEMUTILS_H

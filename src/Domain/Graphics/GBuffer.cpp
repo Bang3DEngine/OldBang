@@ -13,16 +13,6 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     m_depthTexture    = new TextureRender();
     m_colorTexture    = new TextureRender();
 
-    /*
-    const GLint texInternalType = GL_FLOAT;
-    CreateColorAttachment(Attachment::Position,      GL_RGBA32F, GL_RGBA,  texInternalType);
-    CreateColorAttachment(Attachment::Normal,        GL_RGBA32F, GL_RGBA,  texInternalType);
-    CreateColorAttachment(Attachment::Uv,            GL_RGBA32F, GL_RGBA,  texInternalType);
-    CreateColorAttachment(Attachment::Diffuse,       GL_RGBA,    GL_RGBA, texInternalType);
-    CreateColorAttachment(Attachment::MaterialBools, GL_RGBA,    GL_RGBA, texInternalType);
-    CreateColorAttachment(Attachment::Depth,         GL_RGBA,    GL_RGBA, texInternalType);
-    CreateColorAttachment(Attachment::Color,         GL_RGBA,    GL_RGBA, texInternalType);
-    */
     SetColorAttachment(Attachment::Position,      m_positionTexture);
     SetColorAttachment(Attachment::Normal,        m_normalTexture);
     SetColorAttachment(Attachment::Uv,            m_uvTexture);
@@ -41,14 +31,6 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 
 GBuffer::~GBuffer()
 {
-    delete m_positionTexture;
-    delete m_normalTexture;
-    delete m_uvTexture;
-    delete m_diffuseTexture;
-    delete m_matBoolsTexture;
-    delete m_depthTexture;
-    delete m_colorTexture;
-
     if (m_renderGBufferToScreenMaterial) delete m_renderGBufferToScreenMaterial;
     if (m_planeMeshToRenderEntireScreen) delete m_planeMeshToRenderEntireScreen;
 }

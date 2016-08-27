@@ -69,9 +69,6 @@ Application *Application::GetInstance()
 
 bool Application::notify(QObject *receiver, QEvent *e)
 {
-    //if (e->type() != 1 && e->type() != 12)
-      //  std::cerr << "Notify " << e->type() << " to " << receiver << std::endl;
-
     #ifdef BANG_EDITOR
     if (e->type() == QEvent::MouseButtonPress)
     {

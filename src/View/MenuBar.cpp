@@ -1,7 +1,6 @@
 #include "MenuBar.h"
 
 #include "Screen.h"
-#include "EditorWindow.h"
 #include "FileReader.h"
 #include "FileWriter.h"
 #include "FileDialog.h"
@@ -9,7 +8,9 @@
 #include "SystemUtils.h"
 #include "Persistence.h"
 #include "EditorScene.h"
+#include "Application.h"
 #include "SceneManager.h"
+#include "EditorWindow.h"
 #include "DirectionalLight.h"
 #include "WindowEventManager.h"
 
@@ -82,6 +83,7 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 
 void MenuBar::CreateNewScene() const
 {
+    SceneManager::SetActiveScene(nullptr);
     Scene *scene = new EditorScene();
     SceneManager::SetActiveScene(scene);
     Persistence::SetActiveSceneFilepath("");
@@ -111,7 +113,6 @@ QMessageBox::StandardButton MenuBar::AskForSavingActiveScene() const
 void MenuBar::OnNewScene() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::NewScene);
-
     if (AskForSavingActiveScene() == QMessageBox::Cancel) return;
     CreateNewScene();
 }
@@ -126,6 +127,7 @@ void MenuBar::OnOpenScene() const
     String filename = fd.GetOpenFilename();
     if (filename == "") return;
 
+    SceneManager::SetActiveScene(nullptr);
     EditorScene *scene = new EditorScene();
     FileReader::ReadScene(filename, scene);
     if (scene)

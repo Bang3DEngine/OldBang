@@ -64,6 +64,11 @@ void Screen::Render()
     {
         activeScene->_OnRender(); //Note: _OnPreRender() is called from scene _OnRender
     }
+    else
+    {
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 }
 
 void Screen::resizeGL(int w, int h)
