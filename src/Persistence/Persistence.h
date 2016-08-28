@@ -31,6 +31,7 @@ public:
     // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
     static String ToRelative(const String &absPath);
 
+    #ifdef BANG_EDITOR
     /**
      * @brief wololo/omg/myFile.jpg => wololo/omg/myFile_1.jpg
      *        wololo/omg/myFile_2.jpg => wololo/omg/myFile_3.jpg
@@ -40,6 +41,7 @@ public:
      */
     static String GetNextDuplicateName(const String &path);
     static String GetDuplicateName(const String &path, Explorer *exp);
+    #endif
 
     static void SetActiveSceneFilepath(const String &scenePath);
     static String SetActiveSceneFilepath();

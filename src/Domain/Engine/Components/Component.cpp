@@ -12,17 +12,13 @@ Component::~Component()
 {
 }
 
-#ifdef BANG_EDITOR
 void Component::OnDrawGizmos()
 {
-    Gizmos::Reset();
 }
 
 void Component::OnDrawGizmosNoDepth()
 {
-    Gizmos::Reset();
 }
-#endif
 
 void Component::CloneInto(ICloneable *clone) const
 {
@@ -46,6 +42,7 @@ void Component::SetGameObject(GameObject *gameObject)
 {
     m_gameObject = gameObject;
     m_gameObjectTransform = m_gameObject->transform;
+    OnAddedToGameObject();
 }
 
 void Component::SetEnabled(bool enabled)

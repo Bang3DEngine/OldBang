@@ -27,16 +27,15 @@
 #include "IShortcutListener.h"
 #else
 class IDragDropListener { }; // To solve a Qt moc bug
+class IShortcutListener { }; // To solve a Qt moc bug
 #endif
 
 class EditorWindow;
 class GameWindow;
 class SelectionFramebuffer;
 class Screen : public QGLWidget,
-               public IDragDropListener // Must be in non-editor compile too. Weird QT moc bug
-                #ifdef BANG_EDITOR
-               , public IShortcutListener
-               #endif
+               public IDragDropListener, // Must be in non-editor compile too. Weird QT moc bug
+               public IShortcutListener
 {
     Q_OBJECT
 

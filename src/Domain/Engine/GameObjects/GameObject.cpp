@@ -657,35 +657,29 @@ void GameObject::OnDropMaterial(Material *m)
     }
 }
 
-void GameObject::OnDrawGizmos()
-{
-    Gizmos::Reset();
-}
-
-void GameObject::OnDrawGizmosNoDepth()
-{
-    Gizmos::Reset();
-}
+#endif
 
 void GameObject::_OnDrawGizmos()
 {
+    #ifdef BANG_EDITOR
     ISceneEventListener::_OnDrawGizmos();
 
-    Gizmos::Reset();
     EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
     {
         PROPAGATE_EVENT(_OnDrawGizmos, m_children);
     }
     PROPAGATE_EVENT(_OnDrawGizmos, m_components);
+
     OnDrawGizmos();
+    #endif
 }
 
 void GameObject::_OnDrawGizmosNoDepth()
 {
+    #ifdef BANG_EDITOR
     ISceneEventListener::_OnDrawGizmosNoDepth();
 
-    Gizmos::Reset();
     EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
     if (!scene->GetSelectionFramebuffer()->IsPassing())
     {
@@ -693,5 +687,14 @@ void GameObject::_OnDrawGizmosNoDepth()
     }
     PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_components);
     OnDrawGizmosNoDepth();
+    #endif
 }
-#endif
+
+void GameObject::OnDrawGizmos()
+{
+}
+
+void GameObject::OnDrawGizmosNoDepth()
+{
+}
+

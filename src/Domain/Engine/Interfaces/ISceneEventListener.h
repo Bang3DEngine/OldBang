@@ -50,27 +50,27 @@ protected:
         OnDestroy();
     }
 
-    #ifdef BANG_EDITOR
     virtual void _OnDrawGizmos()
     {
+        #ifdef BANG_EDITOR
         OnDrawGizmos();
+        #endif
     }
 
     virtual void _OnDrawGizmosNoDepth()
     {
+        #ifdef BANG_EDITOR
         OnDrawGizmosNoDepth();
+        #endif
     }
-    #endif
 
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
     virtual void OnPreRender() {}
     virtual void OnRender() {}
     virtual void OnDestroy() {}
-    #ifdef BANG_EDITOR
     virtual void OnDrawGizmos() {}
     virtual void OnDrawGizmosNoDepth() {}
-    #endif
 
     bool IsStarted() const { return m_isStarted; }
 };

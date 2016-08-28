@@ -54,7 +54,12 @@ private:
     static void OnBehaviourFinishedCompiling(const String &behaviourRelPath,
                                              const String &soFilepath);
 
+    static bool IsCached(const String &behaviourRelPath);
+    static QLibrary* GetCachedLibrary(const String &behaviourRelPath);
+
 public:
+    static bool IsBeingCompiled(const String &behaviourPath);
+
     // This must be called when you want to retrieve the QLibrary from a
     // behaviour source filepath
     static void Load(BehaviourHolder *behaviourHolder,

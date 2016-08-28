@@ -24,7 +24,6 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourRelPa
 {
     BehaviourManager *bm = BehaviourManager::GetInstance(); NONULL(bm);
 
-    Debug_Log("Finished compiling " << behaviourRelPath);
     const String &bfp = behaviourRelPath;
 
     if (bm->m_behPathsBeingCompiled.find(bfp) !=
@@ -60,29 +59,54 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourRelPa
     }
 }
 
+bool BehaviourManager::IsCached(const String &behaviourPath)
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    if (!bm) { return false; }
+
+    String bfp = Persistence::ToRelative(behaviourPath);
+    return bm->m_behaviourPath_To_library.find(bfp) !=
+           bm->m_behaviourPath_To_library.end();
+}
+
+QLibrary *BehaviourManager::GetCachedLibrary(const String &behaviourRelPath)
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    if (!bm) { return nullptr; }
+
+    return bm->m_behaviourPath_To_library[behaviourRelPath];
+}
+
+bool BehaviourManager::IsBeingCompiled(const String &behaviourRelPath)
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    if (!bm) { return false; }
+
+    return bm->m_behPathsBeingCompiled.find(behaviourRelPath) !=
+           bm->m_behPathsBeingCompiled.end();
+}
+
 void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
                             const String &behaviourFilepath)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance(); NONULL(bm);
 
-    Debug_Log("Loading " << behaviourFilepath);
-
     String bfp = Persistence::ToRelative(behaviourFilepath);
-    if (bm->m_behPathsBeingCompiled.find(bfp) !=
-        bm->m_behPathsBeingCompiled.end())
-    {
-        return; // The BehaviourManager will notify it when available
-    }
-
-    if (bm->m_behaviourPath_To_library.find(bfp) !=
-        bm->m_behaviourPath_To_library.end())
+    if (BehaviourManager::IsCached(bfp))
     {
         // It's cached from a previous load...
-        QLibrary *lib = bm->m_behaviourPath_To_library[bfp];
+        QLibrary *lib = BehaviourManager::GetCachedLibrary(bfp);
         behaviourHolder->OnBehaviourLibraryAvailable(lib);
     }
     else
     {
+        if (BehaviourManager::IsBeingCompiled(bfp))
+        {
+            return; // The BehaviourManager will notify it when available
+        }
+
+        bm->m_behPathsBeingCompiled.insert(bfp);
+
         // Have to compile and load it
         // First compile
         BehaviourManagerCompileThread *compileThread =

@@ -120,6 +120,7 @@ void Screen::SetCursor(Qt::CursorShape cs)
     Application::GetInstance()->setOverrideCursor( cs );
 }
 
+#ifdef BANG_EDITOR
 void Screen::OnShortcutPressed()
 {
     if (hasFocus())
@@ -143,7 +144,6 @@ void Screen::OnShortcutPressed()
     }
 }
 
-#ifdef BANG_EDITOR
 void Screen::dragEnterEvent(QDragEnterEvent *e)
 {
     e->accept();

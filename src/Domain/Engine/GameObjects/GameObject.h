@@ -67,12 +67,10 @@ protected:
     void OnDropMaterial(Material *m);
     #endif
 
-    #ifdef BANG_EDITOR
-    virtual void OnDrawGizmos() override;
-    virtual void OnDrawGizmosNoDepth() override;
     virtual void _OnDrawGizmos () override;
     virtual void _OnDrawGizmosNoDepth () override;
-    #endif
+    virtual void OnDrawGizmos() override;
+    virtual void OnDrawGizmosNoDepth() override;
 
 protected:
     String m_name = "";

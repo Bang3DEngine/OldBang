@@ -1,6 +1,9 @@
 #include "Persistence.h"
 
+#ifdef BANG_EDITOR
 #include "Explorer.h"
+#endif
+
 #include "StringUtils.h"
 
 String Persistence::s_currentSceneFilepath = "";
@@ -112,6 +115,7 @@ String Persistence::ToRelative(const String &absPath)
                 GetAssetsRelativePathFromProjectRoot().Length());
 }
 
+#ifdef BANG_EDITOR
 String Persistence::GetNextDuplicateName(const String &path)
 {
     String filePath = Persistence::ToRelative(path);
@@ -163,6 +167,7 @@ String Persistence::GetDuplicateName(const String &path, Explorer *exp)
     }
     return result;
 }
+#endif
 
 void Persistence::SetActiveSceneFilepath(const String &scenePath)
 {

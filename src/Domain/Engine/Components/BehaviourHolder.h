@@ -64,6 +64,7 @@ public:
 
     void OnButtonClicked(const String &attrName) override;
 
+    virtual void OnAddedToGameObject() override;
     void Refresh();
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
@@ -73,9 +74,11 @@ public:
     virtual void _OnUpdate () override;
     virtual void _OnPreRender () override;
     virtual void _OnRender () override;
-    virtual void _OnDrawGizmos () override;
-    virtual void _OnDrawGizmosNoDepth () override;
     virtual void _OnDestroy () override;
+
+    // They will only override if they are in BANG_EDITOR
+    virtual void _OnDrawGizmos ();
+    virtual void _OnDrawGizmosNoDepth ();
 
     void OnBehaviourLibraryAvailable(QLibrary *lib);
 

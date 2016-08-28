@@ -70,6 +70,8 @@ void BehaviourHolder::Refresh()
 
 void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
 {
+    NONULL(gameObject);
+
     // Create new Behaviour
     Behaviour *createdBehaviour = SystemUtils::CreateDynamicBehaviour(lib);
 
@@ -115,7 +117,7 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
 
     xmlInfo->SetButton("CreateNew...", noConstThis);
-    if (false) //(m_compileThread->isRunning())
+    if (BehaviourManager::IsBeingCompiled(m_sourceFilepath))
     {
         xmlInfo->SetButton("Refresh", noConstThis, {XMLProperty::Disabled});
     }
@@ -187,6 +189,12 @@ void BehaviourHolder::OnButtonClicked(const String &attrName)
 #endif
 }
 
+void BehaviourHolder::OnAddedToGameObject()
+{
+    Component::OnAddedToGameObject();
+    Refresh();
+}
+
 void BehaviourHolder::_OnStart()
 {
     Component::_OnStart();
@@ -222,7 +230,10 @@ void BehaviourHolder::_OnRender()
 
 void BehaviourHolder::_OnDrawGizmos()
 {
+    #ifdef BANG_EDITOR
     Component::_OnDrawGizmos();
+    #endif
+
     if (m_behaviour)
     {
         m_behaviour->_OnDrawGizmos();
@@ -231,7 +242,10 @@ void BehaviourHolder::_OnDrawGizmos()
 
 void BehaviourHolder::_OnDrawGizmosNoDepth()
 {
+    #ifdef BANG_EDITOR
     Component::_OnDrawGizmosNoDepth();
+    #endif
+
     if (m_behaviour)
     {
         m_behaviour->_OnDrawGizmosNoDepth();

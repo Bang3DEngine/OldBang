@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-CONFIG += EDITOR
+# CONFIG += EDITOR
 # CONFIG += GAME
 CONFIG += qt
 
