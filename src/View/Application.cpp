@@ -12,10 +12,12 @@
 #include "Scene.h"
 #include "Screen.h"
 #include "SceneManager.h"
+#include "BehaviourManager.h"
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {
     m_sceneManager = new SceneManager();
+    m_behaviourManager = new BehaviourManager();
 
     connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(OnDrawTimerTick()));
 

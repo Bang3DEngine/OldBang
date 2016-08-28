@@ -9,6 +9,7 @@
 
 #include "Asset.h"
 #include "Persistence.h"
+#include "BehaviourManager.h"
 
 class AssetsManager
 {
@@ -51,14 +52,15 @@ private:
         return a;
     }
 
-    static void SaveAssetToMap(const String &filepath, Asset* pointerToAsset);
-    static void SaveAssetToFile(const String &filepath, Asset* pointerToAsset);
+    static void SaveAssetToMap(const String &filepath, Asset* asset);
+    static void SaveAssetToFile(const String &filepath, Asset* asset);
+
+    static AssetsManager* GetCurrent();
 
 public:
 
     AssetsManager();
     virtual ~AssetsManager();
-    static AssetsManager* GetCurrent();
 
     static bool IsAssetLoaded(const String &filepath);
 

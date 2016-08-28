@@ -14,18 +14,6 @@
 #include "Behaviour.h"
 #include "SystemUtils.h"
 
-class CompileBehaviourThread : public QThread
-{
-protected:
-    BehaviourHolder *m_behaviourHolder = nullptr;
-    void run() override;
-
-public:
-    CompileBehaviourThread();
-
-    void SetBehaviourHolder(BehaviourHolder *bh);
-};
-
 /**
  * @brief The BehaviourHolder class is the responsible of holding
  * a UNIQUE dynamically loaded Behaviour, loading them, and passing its events to them,
@@ -41,9 +29,6 @@ class BehaviourHolder : public Component
 friend class GameObject;
 
 private:
-
-    QLibrary *m_currentOpenLibrary = nullptr;
-    CompileBehaviourThread *m_compileThread = nullptr;
 
     /**
      * @brief The dynamically loaded Behaviour
@@ -92,7 +77,7 @@ public:
     virtual void _OnDrawGizmosNoDepth () override;
     virtual void _OnDestroy () override;
 
-    void OnBehaviourFinishedCompiling(String soFilepath);
+    void OnBehaviourLibraryAvailable(QLibrary *lib);
 
     // TODO: Add windowEventListener events pass to Behaviour too
 };

@@ -1,34 +1,16 @@
 #include "BehaviourHolder.h"
 
+#include "BehaviourManager.h"
+
 BehaviourHolder::BehaviourHolder()
 {
-    m_compileThread = new CompileBehaviourThread();
-    m_compileThread->SetBehaviourHolder(this);
 }
 
 BehaviourHolder::~BehaviourHolder()
 {
-    if (m_compileThread)
-    {
-        if (m_compileThread->isRunning())
-        {
-            m_compileThread->SetBehaviourHolder(nullptr);
-        }
-        else
-        {
-            delete m_compileThread;
-        }
-    }
-
     if (m_behaviour)
     {
         delete m_behaviour;
-    }
-
-    if (m_currentOpenLibrary)
-    {
-        delete m_currentOpenLibrary;
-        // SystemUtils::CloseLibrary(m_currentOpenLibrary);
     }
 }
 
@@ -57,7 +39,6 @@ void BehaviourHolder::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     BehaviourHolder *bh = static_cast<BehaviourHolder*>(clone);
     bh->m_sourceFilepath = m_sourceFilepath;
-    // bh->Refresh();
 }
 
 ICloneable *BehaviourHolder::Clone() const
@@ -83,46 +64,17 @@ void BehaviourHolder::Refresh()
 
     if (m_sourceFilepath == "") return;
 
-    if (!m_compileThread->isRunning())
-    {
-        String filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
-        Debug_Log("Refreshing Behaviour '" << filename << "'...");
-        m_compileThread->start();
-    }
+    BehaviourManager::Load(this, m_sourceFilepath);
 }
 
 
-void BehaviourHolder::OnBehaviourFinishedCompiling(String soFilepath)
+void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
 {
-    // Prepare thread for next compilation
-    m_compileThread = new CompileBehaviourThread();
-
-    if (soFilepath == "")
-    {
-        ChangeBehaviour(nullptr);
-        Debug_Error("There was an error compiling the Behaviour "
-                     << m_sourceFilepath);
-        return;
-    }
-
     // Create new Behaviour
-    // void *openLibrary = nullptr;
-    QLibrary *openLibrary = nullptr;
-    Behaviour *createdBehaviour = nullptr;
-    SystemUtils::CreateDynamicBehaviour(soFilepath, &createdBehaviour,
-                                        &openLibrary);
+    Behaviour *createdBehaviour = SystemUtils::CreateDynamicBehaviour(lib);
 
-    ChangeBehaviour(createdBehaviour); // To newly created or nullptr, depending on success
-
-    if (createdBehaviour)
-    {
-        if (m_currentOpenLibrary)
-        {
-            delete m_currentOpenLibrary;
-            // SystemUtils::CloseLibrary(m_currentOpenLibrary);
-        }
-        m_currentOpenLibrary = openLibrary;
-    }
+    // Change to newly created or nullptr, depending on success
+    ChangeBehaviour(createdBehaviour);
 
     if (createdBehaviour)
     {
@@ -163,7 +115,7 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
 
     xmlInfo->SetButton("CreateNew...", noConstThis);
-    if (m_compileThread->isRunning())
+    if (false) //(m_compileThread->isRunning())
     {
         xmlInfo->SetButton("Refresh", noConstThis, {XMLProperty::Disabled});
     }
@@ -293,33 +245,4 @@ void BehaviourHolder::_OnDestroy()
     {
         m_behaviour->_OnDestroy();
     }
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CompileBehaviourThread::CompileBehaviourThread()
-{
-}
-
-void CompileBehaviourThread::run()
-{
-    NONULL(m_behaviourHolder);
-
-    String sourceFilepath = m_behaviourHolder->GetSourceFilepath();
-
-    // Compile
-    String soFilepath = SystemUtils::CompileToSharedObject(sourceFilepath);
-
-    // Check, just in case the BehaviourHolder has been deleted while compiling
-    if (m_behaviourHolder)
-    {
-        m_behaviourHolder->OnBehaviourFinishedCompiling(soFilepath); // Notify
-    }
-
-    deleteLater(); // Automatic delete
-}
-
-void CompileBehaviourThread::SetBehaviourHolder(BehaviourHolder *bh)
-{
-    m_behaviourHolder = bh;
 }

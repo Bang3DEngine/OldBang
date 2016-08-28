@@ -12,16 +12,19 @@
 class Scene;
 class SceneManager;
 class ShortcutManager;
+class BehaviourManager;
 class Application : public QApplication
 {
     Q_OBJECT
 
 friend class SceneManager;
 friend class ShortcutManager;
+friend class BehaviourManager;
 friend class IShortcutListener;
 
 private:
     SceneManager *m_sceneManager = nullptr;
+    BehaviourManager *m_behaviourManager = nullptr;
 
     unsigned long long m_lastRenderTime = 0;
     const int c_redrawDelay = 25;

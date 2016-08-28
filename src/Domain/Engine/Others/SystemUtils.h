@@ -50,19 +50,14 @@ public:
     static String CompileToSharedObject(const String &filepathFromProjectRoot);
 
     /**
-     * @brief Creates a Behaviour from a sharedObject passed as parameter.
+     * @brief Creates a Behaviour from its QLibrary passed as parameter.
      * This will try to call the function CreateDynamically, loading the library
      * passed as parameter. This method CreateDynamically should be defined
      * in the XXXBehaviour.cpp file, as extern "C".
-     * @param The filepath to the sharedObject
-     * @param The created Behaviour. If error, nullptr.
-     * @param The library that has been opened. You must keep this to close the library
-     * later with CloseLibrary. If error, nullptr.
+     * @param The dynamic library of the Behaviour that you must have opened before.
      * @return The created Behaviour.
      */
-    static void CreateDynamicBehaviour(const String &sharedObjectFilepath,
-                                       Behaviour **createdBehaviour,
-                                       QLibrary **openLibrary);
+    static Behaviour* CreateDynamicBehaviour(QLibrary *openLibrary);
 
     /**
      * @brief Delete dynamic Behaviour from a sharedObject passed as parameter.

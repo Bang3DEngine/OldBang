@@ -252,19 +252,15 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     return sharedObjectFilepath;
 }
 
-void SystemUtils::CreateDynamicBehaviour(const String &sharedObjectFilepath,
-                                         Behaviour **createdBehaviour,
-                                         QLibrary **openLibrary)
+Behaviour* SystemUtils::CreateDynamicBehaviour(QLibrary *openLibrary)
 {
-    *openLibrary = nullptr;
-    *createdBehaviour = nullptr;
+    QLibrary *lib = openLibrary;
+    if (!lib)
+    {
+        return nullptr;
+    }
 
-    // Open library
-    *openLibrary = new QLibrary(sharedObjectFilepath.ToCString());
-
-    QLibrary *lib = *openLibrary;
-    lib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
-    if (lib->load())
+    if (lib->isLoaded())
     {
         // Get the pointer to the CreateDynamically function
         Behaviour* (*createFunction)(SingletonManager*) =
@@ -277,27 +273,15 @@ void SystemUtils::CreateDynamicBehaviour(const String &sharedObjectFilepath,
             {
                 // Create the Behaviour, passing to it the SingletonManager
                 // of this main binary, so it can link it.
-                *createdBehaviour = createFunction(SingletonManager::GetInstance());
+                return createFunction(SingletonManager::GetInstance());
             }
         }
         else
         {
-            lib->unload();
             Debug_Error(lib->errorString());
-            delete lib;
-            *openLibrary = nullptr;
         }
     }
-    else
-    {
-        if (lib)
-        {
-            lib->unload();
-            Debug_Error(lib->errorString());
-            delete lib;
-        }
-        *openLibrary = nullptr;
-    }
+    return nullptr;
 }
 
 bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, QLibrary *openLibrary)

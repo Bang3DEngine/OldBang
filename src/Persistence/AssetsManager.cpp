@@ -3,6 +3,25 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
+AssetsManager::AssetsManager()
+{
+}
+
+AssetsManager::~AssetsManager()
+{
+    while (m_idToAssetPointer.empty())
+    {
+        auto it = m_idToAssetPointer.begin();
+        delete it->second;
+    }
+}
+
+AssetsManager *AssetsManager::GetCurrent()
+{
+    Scene *scene = SceneManager::GetActiveScene();
+    return  scene ? scene->GetAssetsManager() : nullptr;
+}
+
 String AssetsManager::FormatFilepath(const String &filepath)
 {
     return Persistence::ToRelative(filepath);;
@@ -34,39 +53,20 @@ void AssetsManager::UnloadAsset(const Asset *asset)
     }
 }
 
-void AssetsManager::SaveAssetToMap(const String &filepath, Asset *pointerToAsset)
+void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); NONULL(am);
-    if (filepath != "" && pointerToAsset)
+    if (filepath != "" && asset)
     {
         String f = FormatFilepath(filepath);
-        am->m_idToAssetPointer[f] = pointerToAsset;
+        am->m_idToAssetPointer[f] = asset;
     }
 }
 
-void AssetsManager::SaveAssetToFile(const String &filepath, Asset *pointerToAsset)
+void AssetsManager::SaveAssetToFile(const String &filepath, Asset *asset)
 {
-    if (filepath != "" && pointerToAsset)
+    if (filepath != "" && asset)
     {
-        FileWriter::WriteToFile(filepath, pointerToAsset);
+        FileWriter::WriteToFile(filepath, asset);
     }
-}
-
-AssetsManager::AssetsManager()
-{
-}
-
-AssetsManager::~AssetsManager()
-{
-    while (m_idToAssetPointer.empty())
-    {
-        auto it = m_idToAssetPointer.begin();
-        delete it->second;
-    }
-}
-
-AssetsManager *AssetsManager::GetCurrent()
-{
-    Scene *scene = SceneManager::GetActiveScene();
-    return  scene ? scene->GetAssetsManager() : nullptr;
 }

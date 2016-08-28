@@ -208,7 +208,9 @@ HEADERS += \
     src/View/Application.h \
     src/Domain/Engine/Others/String.h \
     src/Domain/Engine/Others/SceneManager.h \
-    src/Domain/Engine/Others/Debug.h
+    src/Domain/Engine/Others/Debug.h \
+    src/Persistence/BehaviourManager.h \
+    src/Persistence/BehaviourManagerCompileThread.h
 
 EDITOR {
 HEADERS += \
@@ -357,7 +359,9 @@ SOURCES += \
     src/View/Inspector/IAttrWidgetButtonListener.cpp \
     src/Domain/Engine/Others/String.cpp \
     src/Domain/Engine/Others/SceneManager.cpp \
-    src/Domain/Engine/Others/Debug.cpp
+    src/Domain/Engine/Others/Debug.cpp \
+    src/Persistence/BehaviourManager.cpp \
+    src/Persistence/BehaviourManagerCompileThread.cpp
 
 EDITOR {
     SOURCES += \
