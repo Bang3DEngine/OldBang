@@ -76,6 +76,8 @@ Scene::~Scene()
 
 void Scene::_OnRender()
 {
+    Chrono c("Scene");
+    c.MarkEvent("Init");
     Camera *cam = m_cameraGameObject->GetComponent<Camera>();
     if (cam  && cam->GetAutoUpdateAspectRatio())
     {
@@ -84,6 +86,7 @@ void Scene::_OnRender()
 
     m_gbuffer->Bind();
 
+    c.MarkEvent("D2G");
     // D2G (DrawToGBuffer, filling in GBuffer with positions, normals, etc.)
 
         Color bgColor = GetCamera()->GetClearColor();
@@ -104,6 +107,7 @@ void Scene::_OnRender()
         //
     //
 
+    c.MarkEvent("PR");
     // PR (Post-Render, modifying on top of GBuffer)
         // Apply lights to gbuffer
         std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
@@ -116,13 +120,17 @@ void Scene::_OnRender()
         }
 
         #ifdef BANG_EDITOR
-        // Selection effects and other stuff
+        // Selection visual effects and other stuff
         m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
         #endif
     //
 
     m_gbuffer->UnBind();
+
+    c.MarkEvent("RenderToScreen");
     m_gbuffer->RenderToScreen();
+
+    c.Log();
 }
 
 void Scene::SetCamera(const Camera *cam)

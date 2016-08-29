@@ -46,7 +46,7 @@ void ListLogger::DecorateLastItem(const QColor &color)
                    255 - color.blue());
 
     QListWidgetItem *item = s_listLogger->item(s_listLogger->count()-1);
-    if (item )
+    if (item)
     {
         item->setBackgroundColor(color);
         item->setTextColor(inverse);

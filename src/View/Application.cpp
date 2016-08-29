@@ -29,6 +29,9 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::OnDrawTimerTick()
 {
+    std::cerr << "NEW FRAMEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE " << std::endl;
+    Chrono c("Application::OnDrawTimerTick()");
+    c.MarkEvent("NewFrame");
     // Update deltaTime
     float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
     Time::GetInstance()->m_deltaTime = deltaTime;
@@ -45,6 +48,7 @@ void Application::OnDrawTimerTick()
     processEvents();
     Input::GetInstance()->ProcessEnqueuedEvents();
 
+    c.MarkEvent("Update");
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
@@ -52,9 +56,13 @@ void Application::OnDrawTimerTick()
         activeScene->_OnUpdate();
     }
 
+    c.MarkEvent("Scene Render");
     // Render screen  (_OnRender mainly)
     Screen::GetInstance()->Render();
+    c.MarkEvent("Swap buffers");
     Screen::GetInstance()->swapBuffers();
+
+    c.Log();
 
     Input::GetInstance()->OnFrameFinished(); // Notify to Input that a new frame has passed
 }

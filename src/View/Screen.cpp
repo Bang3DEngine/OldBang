@@ -54,11 +54,13 @@ void Screen::initializeGL()
 
 void Screen::paintGL()
 {
+    std::cerr << "paintGL" << std::endl;
     Render();
 }
 
 void Screen::Render()
 {
+    std::cerr << "Render" << std::endl;
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {

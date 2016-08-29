@@ -7,6 +7,7 @@
 #define GLM_SWIZZLE
 #include <glm/gtx/euler_angles.hpp>
 
+#include "Chrono.h"
 #include "String.h"
 #include "NamedEnum.h"
 

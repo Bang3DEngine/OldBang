@@ -27,7 +27,7 @@ private:
     BehaviourManager *m_behaviourManager = nullptr;
 
     unsigned long long m_lastRenderTime = 0;
-    const int c_redrawDelay = 25;
+    const int c_redrawDelay = 30;
     QTimer m_drawTimer;
 
 

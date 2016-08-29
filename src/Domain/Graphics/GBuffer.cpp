@@ -83,6 +83,8 @@ void GBuffer::RenderScreenPlane() const
 
 void GBuffer::RenderToScreen() const
 {
+    Chrono c("GBuffer::RenderToScreen()");
+    c.MarkEvent("Init()");
     // Assumes gbuffer is not bound, hence directly writing to screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -95,8 +97,10 @@ void GBuffer::RenderToScreen() const
     sp->SetUniformTexture("B_color_gout_fin", colorTex, false);
 
     m_renderGBufferToScreenMaterial->Bind();
+    c.MarkEvent("RenderScreenPlane()");
     RenderScreenPlane();
     m_renderGBufferToScreenMaterial->UnBind();
+    c.Log();
 }
 
 void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::Color &clearValue)
