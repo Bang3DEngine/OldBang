@@ -22,7 +22,7 @@ void DragDropManager::InstallEventFilters()
     if (wm && wm->GetMainWindow())
     {
         QMainWindow *mw = wm->GetMainWindow();
-        QList<QWidget*> widgets = qFindChildren<QWidget*>(mw);
+        QList<QWidget*> widgets = mw->findChildren<QWidget*>();
         foreach(QWidget *w, widgets)
         {
             w->setAcceptDrops(true);

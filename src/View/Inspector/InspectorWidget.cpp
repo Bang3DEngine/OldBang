@@ -1,19 +1,19 @@
 #include "InspectorWidget.h"
-#include "WindowEventManager.h"
-#include "Component.h"
 
-#include "AttributeWidget.h"
+#include "Component.h"
+#include "GameObject.h"
+#include "EditorWindow.h"
 #include "AttrWidgetEnum.h"
 #include "AttrWidgetFile.h"
-#include "AttrWidgetFloat.h"
-#include "AttrWidgetString.h"
-#include "AttrWidgetVectorFloat.h"
 #include "AttrWidgetBool.h"
+#include "AttrWidgetFloat.h"
 #include "AttrWidgetColor.h"
+#include "AttributeWidget.h"
 #include "AttrWidgetButton.h"
+#include "AttrWidgetString.h"
+#include "WindowEventManager.h"
+#include "AttrWidgetVectorFloat.h"
 
-#include "EditorWindow.h"
-#include "GameObject.h"
 
 InspectorWidget::InspectorWidget()
 {

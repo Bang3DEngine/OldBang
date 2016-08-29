@@ -7,6 +7,7 @@
 ComponentWidget::ComponentWidget(Component *relatedComponent) :
     InspectorWidget(), m_cwContextMenu(this)
 {
+    Debug_Log("Going to init with component " << relatedComponent);
     Init(relatedComponent->GetName(), relatedComponent);
 
     m_relatedComponent = relatedComponent;
@@ -17,8 +18,8 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
         m_enabledCheckbox->setChecked(m_relatedComponent->IsEnabled());
         connect(m_enabledCheckbox, SIGNAL(clicked(bool)),
                 this, SLOT(OnEnabledCheckboxPressed(bool)));
-        m_gridLayout->addWidget(m_enabledCheckbox, 0, 1, 1, 1,
-                                Qt::AlignRight | Qt::AlignVCenter);
+        //m_gridLayout->addWidget(m_enabledCheckbox, 0, 1, 1, 1,
+        //                        Qt::AlignRight | Qt::AlignVCenter);
     }
 }
 

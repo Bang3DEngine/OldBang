@@ -52,7 +52,6 @@ void SceneManager::SetActiveScene(Scene *scene)
 
         #ifdef BANG_EDITOR
         Hierarchy::GetInstance()->Clear();
-        Hierarchy::GetInstance()->Refresh();
         #endif
     }
 }

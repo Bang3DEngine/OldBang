@@ -46,6 +46,7 @@ private:
     mutable std::map<GameObject*, QTreeWidgetItem*> m_gameObjectToTreeItem;
     mutable std::map<QTreeWidgetItem*,GameObject*> m_treeItemToGameObject;
 
+    QTimer m_refreshTimer;
     HierarchyContextMenu m_hContextMenu;
     HierarchyDragDropManager m_hDragDropManager;
 
@@ -65,9 +66,10 @@ public:
     virtual ~Hierarchy();
 
     void Clear();
-    void Refresh();
     void Expand(GameObject *go);
-    void ExpandTrigger(GameObject *go);
+    bool IsSelected(GameObject *go);
+    bool IsSelected(QTreeWidgetItem *item);
+    void ExpandToggle(GameObject *go);
 
     GameObject* GetFirstSelectedGameObject() const;
 
@@ -88,10 +90,16 @@ public:
 
     static Hierarchy *GetInstance();
 
-public slots:
+    bool Contains(GameObject *go);
+    void DeleteGameObjectItem(GameObject *go);
 
-    void OnItemNameChanged(QTreeWidgetItem *item, int column);
+private slots:
+    void RefreshFromScene();
+    QTreeWidgetItem* Refresh(GameObject *go);
+
+public slots:
     void OnGameObjectDestroyed(GameObject *destroyed) override;
+    void OnItemNameChanged(QTreeWidgetItem *item, int column);
 
     void OnSelectionChanged();
     void _NotifyHierarchyGameObjectSelectionChanged();

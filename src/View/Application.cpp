@@ -80,35 +80,45 @@ Application *Application::GetInstance()
 bool Application::notify(QObject *receiver, QEvent *e)
 {
     #ifdef BANG_EDITOR
-    if (e->type() == QEvent::MouseButtonPress)
+    bool isWindow = (receiver->parent() == nullptr);
+    if (isWindow)
     {
-        DragDropManager::HandleGlobalMousePress(receiver, e);
-    }
-    else if (e->type() == QEvent::MouseButtonRelease)
-    {
-        DragDropManager::HandleGlobalMouseRelease(receiver, e);
-    }
-
-    if (e->type() == QEvent::KeyPress)
-    {
-        QKeyEvent *ev = static_cast<QKeyEvent*>(e);
-        if (!ev->isAutoRepeat())
+        // Only call these functions if the receiver is
+        // the window (which is the first to receive always any event).
+        // This way we ensure they are called once per event, because
+        // if we don't do this, Qt will try to notify all its children hierarchy
+        // in some cases, resulting in several calls to these functions.
+        if (e->type() == QEvent::MouseButtonPress)
         {
-            ShortcutManager::GetInstance()->OnKeyPressed( Input::Key(ev->key()) );
+            DragDropManager::HandleGlobalMousePress(receiver, e);
         }
-    }
-    else if (e->type() == QEvent::KeyRelease)
-    {
-        QKeyEvent *ev = static_cast<QKeyEvent*>(e);
-        if (!ev->isAutoRepeat())
+        else if (e->type() == QEvent::MouseButtonRelease)
         {
-            ShortcutManager::GetInstance()->OnKeyReleased( Input::Key(ev->key()) );
+            DragDropManager::HandleGlobalMouseRelease(receiver, e);
         }
-    }
 
-    if (e->type() == QEvent::Shortcut)
-    {
-        ShortcutManager::GetInstance()->Clear();
+        if (e->type() == QEvent::KeyPress)
+        {
+            QKeyEvent *ev = static_cast<QKeyEvent*>(e);
+            if (!ev->isAutoRepeat())
+            {
+                Debug_Log("Application notify KeyPress");
+                ShortcutManager::GetInstance()->OnKeyPressed( Input::Key(ev->key()) );
+            }
+        }
+        else if (e->type() == QEvent::KeyRelease)
+        {
+            QKeyEvent *ev = static_cast<QKeyEvent*>(e);
+            if (!ev->isAutoRepeat())
+            {
+                ShortcutManager::GetInstance()->OnKeyReleased( Input::Key(ev->key()) );
+            }
+        }
+
+        if (e->type() == QEvent::Shortcut)
+        {
+            ShortcutManager::GetInstance()->Clear();
+        }
     }
     #endif
 

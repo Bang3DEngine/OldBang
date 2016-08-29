@@ -1,5 +1,5 @@
 TEMPLATE = app
-QT_VERSION = 4
+QT_VERSION = 5
 QT += core gui opengl
 
 # Call this qmake using either:

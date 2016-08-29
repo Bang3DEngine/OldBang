@@ -124,7 +124,7 @@ void HierarchyDragDropManager::OnDropHereFromHierarchy(GameObject *selected,
             }
         }
     }
-    m_hierarchy->Refresh();
+    m_hierarchy->RefreshFromScene();
 }
 
 void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,

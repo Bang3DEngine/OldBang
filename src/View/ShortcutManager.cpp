@@ -12,6 +12,7 @@ ShortcutManager::ShortcutManager()
 
 void ShortcutManager::OnKeyPressed(Input::Key key)
 {
+    Debug_Log("OnKeyPressed " << key);
     m_pressedKeys.insert(key);
     for (IShortcutListener *list : ShortcutManager::m_shortcutsListeners)
     {

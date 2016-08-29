@@ -78,12 +78,16 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
     m_hidden   =  attribute.HasProperty(XMLProperty::Hidden);
 
     setEnabled(m_enabled);
-    setVisible(!m_hidden);
-    setHidden(m_hidden);
-    if (m_label)
+
+    if (m_hidden) // Only hide, to avoid window flickering
     {
-        m_label->setVisible(!m_hidden);
-        m_label->setHidden(m_hidden);
+        setVisible(false);
+        setHidden(true);
+        if (m_label)
+        {
+            m_label->setVisible(false);
+            m_label->setHidden(true);
+        }
     }
 }
 

@@ -217,6 +217,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
 
     // Compile
     String sharedObjectFilepath = "";
+    // TODO: Solve using same so name instead of adding time...
     sharedObjectFilepath += scriptDir + "/" + scriptName + ".so." + std::to_string(Time::GetNow()) + ".1.1";
 
     String cmd = "";

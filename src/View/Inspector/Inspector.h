@@ -45,7 +45,9 @@ public:
     void ShowGameObjectInfo(GameObject *gameObject);
     void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
 
+    // IWindowEventManagerListener
     void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
+    void OnGameObjectDestroyed(GameObject *destroyed);
 
     /**
      * @brief RefreshHard must be used when some hidden or non-hidden

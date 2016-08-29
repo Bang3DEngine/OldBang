@@ -213,7 +213,6 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
         if (m_gameObjectBeingDragged->parent != scene)
         {
             m_gameObjectBeingDragged->SetParent(scene);
-            Hierarchy::GetInstance()->Refresh();
         }
     }
 }

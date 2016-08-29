@@ -122,13 +122,6 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
                 // SetScale
             }
         }
-
-        #ifdef BANG_EDITOR
-        if (!IsEditorGameObject())
-        {
-            Hierarchy::GetInstance()->Refresh();
-        }
-        #endif
     }
 }
 
@@ -158,7 +151,10 @@ const String GameObject::GetName() const
 }
 
 
-const std::list<Component *> &GameObject::GetComponents() const { return m_components; }
+const std::list<Component *> &GameObject::GetComponents() const
+{
+    return m_components;
+}
 
 const std::list<GameObject *> GameObject::GetChildren() const
 {

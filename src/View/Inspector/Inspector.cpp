@@ -7,8 +7,9 @@
 #include "Component.h"
 #include "Transform.h"
 #include "PointLight.h"
-#include "EditorWindow.h"
 #include "GameObject.h"
+#include "Application.h"
+#include "EditorWindow.h"
 #include "MeshRenderer.h"
 #include "CircleRenderer.h"
 #include "BehaviourHolder.h"
@@ -84,10 +85,20 @@ void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
+    Debug_Log("ShowGameObjectInfo");
+    Debug_Log("ShowGameObjectInfo" << gameObject);
     Clear();
 
     NONULL(gameObject);
+    if (!Hierarchy::GetInstance()->Contains(gameObject))
+    {   // To avoid a bug of Inspector trying to show a deleted gameObject.
+        return;
+    }
+
     m_currentGameObject = gameObject;
+
+    Debug_Log(gameObject << " components:");
+    Debug_Log(gameObject->GetComponents());
 
     for (Component *c : gameObject->GetComponents())
     {
@@ -136,6 +147,8 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
 
     setItemWidget(item, widget);
     item->setSizeHint(widget->size());
+
+    Application::GetInstance()->processEvents();
 }
 
 std::vector<IInspectable *> Inspector::GetCurrentInspectables() const
@@ -194,6 +207,14 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     }
 
     Refresh();
+}
+
+void Inspector::OnGameObjectDestroyed(GameObject *destroyed)
+{
+    if (m_currentGameObject == destroyed)
+    {
+        Clear();
+    }
 }
 
 
