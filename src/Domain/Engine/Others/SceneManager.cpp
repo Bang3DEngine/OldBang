@@ -42,7 +42,6 @@ void SceneManager::SetActiveScene(Scene *scene)
     if (sm->m_activeScene)
     {
         delete sm->m_activeScene;
-        //sm->m_activeScene->_OnDestroy();
     }
 
     sm->m_activeScene = scene;

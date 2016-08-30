@@ -1,5 +1,7 @@
 #include "EditorScene.h"
 
+#include "Hierarchy.h"
+
 EditorScene::EditorScene() : Scene()
 {
     m_debugGameObject = new EditorDebugGameObject();
@@ -22,6 +24,7 @@ EditorScene::EditorScene() : Scene()
 
 EditorScene::~EditorScene()
 {
+    Hierarchy::GetInstance()->Clear(); // To avoid potential bugs (seriously xd)
     delete m_selectionFramebuffer;
 }
 

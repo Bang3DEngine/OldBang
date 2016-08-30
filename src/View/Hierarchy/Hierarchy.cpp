@@ -149,30 +149,9 @@ void Hierarchy::Clear()
 
 void Hierarchy::RefreshFromScene()
 {
-    Debug_Log("RefreshFromSceneeeeeeeeeeeeeeeeeeeeeeeeeee");
     Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
 
-    // First pass: delete the children that don't exist anymore, or
-    // have changed its parent
-    /*
-    for (int i = 0; i < topLevelItemCount(); ++i)
-    {
-        QTreeWidgetItem *citem = topLevelItem(i);
-        GameObject *cgo = GetGameObjectFromItem(citem);
-        if (cgo)
-        {
-            if (!cgo->IsChildOf(scene))
-            {
-                // cgo parent has changed. It's not go child anymore. Delete the item.
-                Debug_Log("Delete " << cgo << " ioputa.");
-                DeleteGameObjectItem(cgo);
-            }
-        }
-    }
-    Debug_Log("Finished deleting");
-    */
-
-    // Second pass: refresh go's children. If we find a new child, add it to topLevel.
+    // refresh go's children. If we find a new child, add it to topLevel.
     const std::list<GameObject*> sceneChildren = scene->GetChildren();
     for (GameObject* child : sceneChildren)
     {
@@ -180,7 +159,6 @@ void Hierarchy::RefreshFromScene()
         if (!childItem)
         {   // New child item !!!
             childItem = Refresh(child);
-            Debug_Log("addTopLevelItem ioputa");
             addTopLevelItem(childItem);
             m_gameObjectToTreeItem[child] = childItem;
             m_treeItemToGameObject[childItem] = child;
@@ -213,25 +191,7 @@ QTreeWidgetItem* Hierarchy::Refresh(GameObject *go)
         m_treeItemToGameObject[goItem] = go;
     }
 
-    // First pass: delete the children that don't exist anymore, or
-    // have changed its parent
-    /*
-    for (int i = 0; i < goItem->childCount(); ++i)
-    {
-        QTreeWidgetItem *citem = goItem->child(i);
-        GameObject *cgo = GetGameObjectFromItem(citem);
-        if (cgo)
-        {
-            if (!cgo->IsChildOf(go))
-            {
-                // cgo parent has changed. It's not go anymore. Delete the item.
-                DeleteGameObjectItem(cgo);
-            }
-        }
-    }
-    */
-
-    // Second pass: refresh go's children. If we find a new child, add it to goItem.
+    // refresh go's children. If we find a new child, add it to goItem.
     const std::list<GameObject*> children = go->GetChildren();
     for (GameObject* cgo : children)
     {
@@ -357,7 +317,6 @@ void Hierarchy::OnShortcutPressed()
         }
         else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}) )
         { // Duplicate
-            Debug_Log("SHORTCUT PRESSED Ctrl+D");
             m_hContextMenu.OnDuplicateClicked();
         }
         else if (ShortcutManager::IsPressed(Input::Key::Delete)) // Delete item
@@ -393,8 +352,6 @@ void Hierarchy::SelectGameObject(GameObject *go)
     RefreshFromScene();
     UnselectAll();
 
-    Debug_Log("Going to select: " << go);
-
     QTreeWidgetItem *item = GetItemFromGameObject(go);
     if (item)
     {
@@ -418,23 +375,6 @@ void Hierarchy::SelectItemAboveOrBelowSelected(bool above)
     if (item)
     {
         QTreeWidgetItem *itemNear = above ? itemAbove(item) : itemBelow(item);
-
-        // TODO: Dont think this code below is necessary....
-        // Doesn't have siblings above or below
-        /*
-        if (!itemNear) // above, try to select parent. below, try to select first child
-        {
-            if (above && item->parent())
-            {
-                itemNear = item->parent();
-            }
-            else if (!above && item->isExpanded() && item->childCount() >= 1)
-            {
-                itemNear = item->child(0);
-            }
-        }
-        */
-
         if (itemNear)
         {
             SelectGameObject( GetGameObjectFromItem(itemNear) );
@@ -462,12 +402,6 @@ void Hierarchy::DeleteGameObjectItem(GameObject *go)
         m_gameObjectToTreeItem.erase(m_gameObjectToTreeItem.find(go));
         m_treeItemToGameObject.erase(m_treeItemToGameObject.find(item));
 
-        Debug_Log("DELETE " << go);
-        if (selectedItems().size() == 1 && IsSelected(item))
-        {
-            //SelectItemAboveOrBelowSelected(true);
-        }
-
         // Try to delete children's items too
         for (int i = 0; i < item->childCount(); ++i)
         {
@@ -494,16 +428,13 @@ void Hierarchy::OnSelectionChanged()
 
 void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
 {
-    Debug_Log("_NotifyHierarchyGameObjectSelectionChanged");
     std::list<GameObject*> selectedGameObjects = GetSelectedGameObjects(false);
 
     WindowEventManager::NotifyHierarchyGameObjectsSelected(selectedGameObjects);
 
     GameObject *selectedGameObject = GetFirstSelectedGameObject();
-    Debug_Log("Show gameObject info of " << selectedGameObject);
     if (selectedGameObject && GetItemFromGameObject(selectedGameObject))
     {
-        Debug_Log(m_gameObjectToTreeItem);
         Inspector::GetInstance()->ShowGameObjectInfo(selectedGameObject);
     }
 }

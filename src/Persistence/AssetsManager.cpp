@@ -56,10 +56,13 @@ void AssetsManager::UnloadAsset(const Asset *asset)
 void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); NONULL(am);
-    if (filepath != "" && asset)
+    if (!filepath.Empty() && asset)
     {
         String f = FormatFilepath(filepath);
-        am->m_idToAssetPointer[f] = asset;
+        if (!f.Empty())
+        {
+            am->m_idToAssetPointer[f] = asset;
+        }
     }
 }
 

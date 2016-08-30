@@ -197,7 +197,8 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     // Gather options
     String options = "";
     options += " " + objs  + " ";
-    options += " -O2";
+    //options += " -O2";
+    options += " -O0";
     options += " -g ";
     #ifdef BANG_EDITOR
     options += " -D BANG_EDITOR ";

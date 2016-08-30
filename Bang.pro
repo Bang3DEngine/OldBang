@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-# CONFIG += EDITOR
+CONFIG += EDITOR
 # CONFIG += GAME
 CONFIG += qt
 
@@ -20,7 +20,8 @@ include(deployment.pri)
 qtcAddDeployment()
 
 
-QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC -O2
+QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
+QMAKE_CXXFLAGS += -O0
 
 LIBS += -lGLEW -ldl
 

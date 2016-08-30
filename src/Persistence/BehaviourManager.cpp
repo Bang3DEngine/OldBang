@@ -100,29 +100,30 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
     }
     else
     {
-        if (BehaviourManager::IsBeingCompiled(bfp))
-        {
-            return; // The BehaviourManager will notify it when available
-        }
-
-        bm->m_behPathsBeingCompiled.insert(bfp);
-
-        // Have to compile and load it
-        // First compile
-        BehaviourManagerCompileThread *compileThread =
-                new BehaviourManagerCompileThread(bfp);
-        compileThread->start(); // This auto-deletes itself when finished
-
+        // Add behaviour to the list of demanders
         if (bm->m_behPath_To_behHolderDemanders.find(bfp) ==
             bm->m_behPath_To_behHolderDemanders.end())
         {
             bm->m_behPath_To_behHolderDemanders[bfp] =
-                    std::list<BehaviourHolder*>();
+                    std::list<BehaviourHolder*>(); // Init list
         }
         bm->m_behPath_To_behHolderDemanders[bfp].push_back(behaviourHolder);
 
-        // And when the compileThread finishes, we will be notified,
-        // load it, and then notify the behaviourHolder
+        if (!BehaviourManager::IsBeingCompiled(bfp))
+        {
+            // Compile once
+
+            bm->m_behPathsBeingCompiled.insert(bfp);
+
+            // Have to compile and load it
+            // First compile
+            BehaviourManagerCompileThread *compileThread =
+                    new BehaviourManagerCompileThread(bfp);
+            compileThread->start(); // This auto-deletes itself when finished
+
+            // And when the compileThread finishes, we will be notified,
+            // load the library, and then notify the behaviourHolders waiting for it
+        }
     }
 }
 

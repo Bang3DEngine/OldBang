@@ -42,13 +42,13 @@ public:
     void Bind() const override;
     void UnBind() const override;
 
-    bool SetUniformFloat   (const String &name, float v,                bool warn = true) const;
-    bool SetUniformVec2    (const String &name, const Vector2& v,       bool warn = true) const;
-    bool SetUniformVec3    (const String &name, const Vector3& v,       bool warn = true) const;
-    bool SetUniformVec4    (const String &name, const Vector4& v,       bool warn = true) const;
-    bool SetUniformColor   (const String &name, const Color& c,         bool warn = true) const;
-    bool SetUniformMat4    (const String &name, const Matrix4& m,       bool warn = true) const;
-    bool SetUniformTexture (const String &name, const Texture *texture, bool warn = true) const;
+    bool SetUniformFloat   (const String &name, float v,                bool warn = false) const;
+    bool SetUniformVec2    (const String &name, const Vector2& v,       bool warn = false) const;
+    bool SetUniformVec3    (const String &name, const Vector3& v,       bool warn = false) const;
+    bool SetUniformVec4    (const String &name, const Vector4& v,       bool warn = false) const;
+    bool SetUniformColor   (const String &name, const Color& c,         bool warn = false) const;
+    bool SetUniformMat4    (const String &name, const Matrix4& m,       bool warn = false) const;
+    bool SetUniformTexture (const String &name, const Texture *texture, bool warn = false) const;
 
     Shader* GetVertexShader() const;
     Shader* GetFragmentShader() const;

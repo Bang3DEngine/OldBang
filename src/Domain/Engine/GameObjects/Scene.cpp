@@ -70,7 +70,8 @@ Scene::~Scene()
 
     // AssetsManager must be deleted the last one
     // to clean all the Assets that haven't been deleted
-    // for whatever reason
+    // for whatever reason. Otherwise, we could double delete
+    // some stuff
     delete m_assetsManager;
 }
 

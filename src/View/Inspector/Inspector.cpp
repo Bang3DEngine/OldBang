@@ -29,7 +29,7 @@ Inspector::Inspector(QWidget *parent)
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
-    setMinimumWidth(330);
+    setMinimumWidth(360);
 }
 
 void Inspector::updateGeometries()
@@ -85,20 +85,10 @@ void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
-    Debug_Log("ShowGameObjectInfo");
-    Debug_Log("ShowGameObjectInfo" << gameObject);
     Clear();
 
     NONULL(gameObject);
-    if (!Hierarchy::GetInstance()->Contains(gameObject))
-    {   // To avoid a bug of Inspector trying to show a deleted gameObject.
-        return;
-    }
-
     m_currentGameObject = gameObject;
-
-    Debug_Log(gameObject << " components:");
-    Debug_Log(gameObject->GetComponents());
 
     for (Component *c : gameObject->GetComponents())
     {
@@ -147,8 +137,6 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
 
     setItemWidget(item, widget);
     item->setSizeHint(widget->size());
-
-    Application::GetInstance()->processEvents();
 }
 
 std::vector<IInspectable *> Inspector::GetCurrentInspectables() const

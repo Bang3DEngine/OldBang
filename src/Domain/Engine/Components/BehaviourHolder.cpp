@@ -178,6 +178,7 @@ void BehaviourHolder::OnButtonClicked(const String &attrName)
             Refresh();
 
             // Open with system editor
+            // TODO: Make cross-platform
             SystemUtils::SystemBackground("xdg-open " + headerFilepath);
             SystemUtils::SystemBackground("xdg-open " + sourceFilepath);
         }

@@ -110,9 +110,9 @@ String Persistence::ToRelative(const String &absPath)
     if (pos == String::npos) return absPath;
 
     return "." + absPath.substr(
-                pos,
-                absPath.Length() -
-                GetAssetsRelativePathFromProjectRoot().Length());
+                 pos,
+                 absPath.Length() -
+                 GetAssetsRelativePathFromProjectRoot().Length());
 }
 
 #ifdef BANG_EDITOR

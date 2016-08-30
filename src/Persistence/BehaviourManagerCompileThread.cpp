@@ -10,8 +10,7 @@ BehaviourManagerCompileThread::
     m_behaviourRelativeFilepath = behaviourRelativeFilepath;
 }
 
-//void BehaviourManagerCompileThread::run()
-void BehaviourManagerCompileThread::start()
+void BehaviourManagerCompileThread::run()
 {
     // Compile....
     Debug_Log("Compiling " << m_behaviourRelativeFilepath);
@@ -22,5 +21,5 @@ void BehaviourManagerCompileThread::start()
     BehaviourManager::OnBehaviourFinishedCompiling(m_behaviourRelativeFilepath,
                                                    soFilepath);
 
-   // deleteLater(); // Automatic thread delete
+    deleteLater(); // Automatic thread delete
 }

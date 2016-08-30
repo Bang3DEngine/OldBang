@@ -12,12 +12,14 @@ ShortcutManager::ShortcutManager()
 
 void ShortcutManager::OnKeyPressed(Input::Key key)
 {
-    Debug_Log("OnKeyPressed " << key);
-    m_pressedKeys.insert(key);
-    for (IShortcutListener *list : ShortcutManager::m_shortcutsListeners)
+    if (m_pressedKeys.find(key) == m_pressedKeys.end()) // If it wasn't pressed
     {
-        list->OnShortcutPressedKey(key);
-        list->OnShortcutPressed();
+        m_pressedKeys.insert(key);
+        for (IShortcutListener *list : ShortcutManager::m_shortcutsListeners)
+        {
+            list->OnShortcutPressedKey(key);
+            list->OnShortcutPressed();
+        }
     }
 }
 

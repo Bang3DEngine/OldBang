@@ -25,6 +25,9 @@ friend class BehaviourManagerCompileThread;
 
 private:
 
+    // TODO: Take care of concurrent access to these maps and sets, from
+    // the callback of the compilingThread/s
+
     /**
      * @brief The cache of libraries. For the source filepath
      * wololo.cpp, contains its loaded library (if cached).
