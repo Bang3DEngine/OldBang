@@ -19,7 +19,7 @@ public:
         Normal,
         Uv,
         Diffuse,
-        MaterialBools, // (receivesLighting, -, -, -)
+        MaterialProperties, // (receivesLighting, -, -, -)
         Depth,
         Color
     };
@@ -28,7 +28,7 @@ public:
     TextureRender *m_normalTexture   = nullptr;
     TextureRender *m_uvTexture       = nullptr;
     TextureRender *m_diffuseTexture  = nullptr;
-    TextureRender *m_matBoolsTexture = nullptr;
+    TextureRender *m_matPropsTexture = nullptr;
     TextureRender *m_depthTexture    = nullptr;
     TextureRender *m_colorTexture    = nullptr;
 

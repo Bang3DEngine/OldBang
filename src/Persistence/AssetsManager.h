@@ -18,7 +18,7 @@ private:
     /** For every id, it contains a pointer to the asset
       * created when the assets were loaded.
     **/
-    std::map<String, Asset*> m_idToAssetPointer;
+    std::map<String, Asset*> m_id_To_AssetPointer;
 
     static String FormatFilepath(const String &filepath);
 
@@ -30,7 +30,7 @@ private:
         else
         {
             String f = AssetsManager::FormatFilepath(filepath);
-            return dynamic_cast<T*>(am->m_idToAssetPointer[f]);
+            return dynamic_cast<T*>(am->m_id_To_AssetPointer[f]);
         }
     }
 

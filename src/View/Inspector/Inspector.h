@@ -25,8 +25,8 @@ private:
 
     QLabel *m_titleLabel = nullptr;
     GameObject *m_currentGameObject = nullptr;
-    std::vector<InspectorWidget*> m_currentInspectorWidgets;
-    std::vector<IInspectable*> m_currentInspectables;
+    List<InspectorWidget*> m_currentInspectorWidgets;
+    List<IInspectable*> m_currentInspectables;
 
     std::map<InspectorWidget*, QListWidgetItem*> m_widgetToItem;
     std::map<InspectorWidget*, IInspectable*> m_widgetToInspectables;
@@ -59,7 +59,7 @@ public:
     void RefreshHard();
     void AddWidget(InspectorWidget *widget, int row = -1);
 
-    std::vector<IInspectable*> GetCurrentInspectables() const;
+    List<IInspectable*> GetCurrentInspectables() const;
     bool IsShowingInspectable(IInspectable *inspectable) const;
     static Inspector* GetInstance();
 };

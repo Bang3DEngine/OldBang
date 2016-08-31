@@ -1,6 +1,7 @@
 #include "AssetsManager.h"
 
 #include "Scene.h"
+#include "Application.h"
 #include "SceneManager.h"
 
 AssetsManager::AssetsManager()
@@ -9,22 +10,22 @@ AssetsManager::AssetsManager()
 
 AssetsManager::~AssetsManager()
 {
-    while (m_idToAssetPointer.empty())
+    while (m_id_To_AssetPointer.empty())
     {
-        auto it = m_idToAssetPointer.begin();
+        auto it = m_id_To_AssetPointer.begin();
         delete it->second;
     }
 }
 
 AssetsManager *AssetsManager::GetCurrent()
 {
-    Scene *scene = SceneManager::GetActiveScene();
-    return  scene ? scene->GetAssetsManager() : nullptr;
+    Application *app = Application::GetInstance();
+    return  app ? app->GetAssetsManager() : nullptr;
 }
 
 String AssetsManager::FormatFilepath(const String &filepath)
 {
-    return Persistence::ToRelative(filepath);;
+    return Persistence::ToRelative(filepath);
 }
 
 bool AssetsManager::IsAssetLoaded(const String &filepath)
@@ -36,18 +37,18 @@ bool AssetsManager::IsAssetLoaded(const String &filepath)
     }
 
     String f = AssetsManager::FormatFilepath(filepath);
-    return (am->m_idToAssetPointer.find(f) != am->m_idToAssetPointer.end());
+    return (am->m_id_To_AssetPointer.find(f) != am->m_id_To_AssetPointer.end());
 }
 
 void AssetsManager::UnloadAsset(const Asset *asset)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); NONULL(am);
-    for (auto it = am->m_idToAssetPointer.begin();
-         it != am->m_idToAssetPointer.end(); ++it)
+    for (auto it = am->m_id_To_AssetPointer.begin();
+         it != am->m_id_To_AssetPointer.end(); ++it)
     {
         if (((void*)(it->second)) == ((void*)(asset)))
         {
-            am->m_idToAssetPointer.erase(it);
+            am->m_id_To_AssetPointer.erase(it);
             break;
         }
     }
@@ -61,14 +62,14 @@ void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset)
         String f = FormatFilepath(filepath);
         if (!f.Empty())
         {
-            am->m_idToAssetPointer[f] = asset;
+            am->m_id_To_AssetPointer[f] = asset;
         }
     }
 }
 
 void AssetsManager::SaveAssetToFile(const String &filepath, Asset *asset)
 {
-    if (filepath != "" && asset)
+    if (!filepath.Empty() && asset)
     {
         FileWriter::WriteToFile(filepath, asset);
     }

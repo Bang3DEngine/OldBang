@@ -3,20 +3,19 @@
 
 #include "Bang.h"
 
-#include <list>
-
 #include <iostream>
 #include <functional>
 
+#include "List.h"
 #include "IFileable.h"
 #include "IToString.h"
 #include "ICloneable.h"
 #include "ISceneEventListener.h"
 
+#include "Box.h"
+#include "Sphere.h"
 #include "Property.h"
 #include "Material.h"
-#include "Sphere.h"
-#include "Box.h"
 
 #ifdef BANG_EDITOR
 #include "Gizmos.h"
@@ -74,8 +73,8 @@ protected:
 
 protected:
     String m_name = "";
-    std::list<Component*> m_components;
-    std::list<GameObject*> m_children;
+    List<Component*> m_components;
+    List<GameObject*> m_children;
     Transform *m_transform = nullptr;
     GameObject *m_parent = nullptr;
 
@@ -109,7 +108,7 @@ public:
     bool IsInsideScene() const;
     GameObject* GetParent() const;
     const String GetName() const;
-    const std::list<Component*>& GetComponents() const;
+    const List<Component*>& GetComponents() const;
 
     /**
      * TODO: Change so this method returns a reference, putting
@@ -117,16 +116,16 @@ public:
      * @brief GetChildren
      * @return
      */
-    const std::list<GameObject*> GetChildren() const;
+    const List<GameObject*> GetChildren() const;
 
     /**
      * @brief GetChildrenRecursively
      * @return
      */
-    std::list<GameObject*> GetChildrenRecursively() const;
+    List<GameObject*> GetChildrenRecursively() const;
 
     #ifdef BANG_EDITOR
-    std::list<GameObject*> GetChildrenRecursivelyEditor() const;
+    List<GameObject*> GetChildrenRecursivelyEditor() const;
     #endif
 
 
@@ -220,9 +219,9 @@ public:
      * Returns all the Components<T> in this
      */
     template <class T>
-    std::list<T*> GetComponents() const
+    List<T*> GetComponents() const
     {
-        std::list<T*> comps_l;
+        List<T*> comps_l;
         for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
@@ -253,9 +252,9 @@ public:
      * Returns all the Components<T> of its children
      */
     template <class T>
-    std::list<T*> GetComponentsInChildren() const
+    List<T*> GetComponentsInChildren() const
     {
-        std::list<T*> comps_l;
+        List<T*> comps_l;
         for (auto c = m_children.begin(); c != m_children.end(); ++c)
         {
             comps_l.splice(comps_l.end(), (*c)->GetComponents<T>()); //concat
@@ -335,7 +334,7 @@ public:
 
     bool IsSelectedInHierarchy() const;
     void OnTreeHierarchyGameObjectsSelected(
-            std::list<GameObject*> &selectedEntities) override;
+            List<GameObject*> &selectedEntities) override;
     #endif
 
 };

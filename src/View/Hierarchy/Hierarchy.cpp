@@ -36,30 +36,17 @@ void Hierarchy::Expand(QTreeWidgetItem *item)
     Expand(item->parent());
 }
 
-void Hierarchy::LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items)
+void Hierarchy::LeaveOnlyOuterMostItems(List<QTreeWidgetItem*> *items)
 {
     //For each item, it will be a top level item,
     //if none of the selected items is its parent
-    std::list<QTreeWidgetItem*> result;
+    List<QTreeWidgetItem*> result;
     for (QTreeWidgetItem *item : *items)
     {
-        bool hasItsParentInTheList = false;
         QTreeWidgetItem *parent = item->parent();
-        if (parent)
+        if (!items->Contains(parent))
         {
-            for (QTreeWidgetItem *item2 : *items)
-            {
-                if (parent == item2)
-                {
-                    hasItsParentInTheList = true;
-                    break;
-                }
-            }
-        }
-
-        if (!hasItsParentInTheList)
-        {
-            result.push_back(item);
+            result.PushBack(item);
         }
     }
     *items = result;
@@ -152,7 +139,7 @@ void Hierarchy::RefreshFromScene()
     Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
 
     // refresh go's children. If we find a new child, add it to topLevel.
-    const std::list<GameObject*> sceneChildren = scene->GetChildren();
+    const List<GameObject*> sceneChildren = scene->GetChildren();
     for (GameObject* child : sceneChildren)
     {
         QTreeWidgetItem *childItem = GetItemFromGameObject(child);
@@ -192,7 +179,7 @@ QTreeWidgetItem* Hierarchy::Refresh(GameObject *go)
     }
 
     // refresh go's children. If we find a new child, add it to goItem.
-    const std::list<GameObject*> children = go->GetChildren();
+    const List<GameObject*> children = go->GetChildren();
     for (GameObject* cgo : children)
     {
         QTreeWidgetItem *citem = GetItemFromGameObject(cgo);
@@ -327,15 +314,15 @@ void Hierarchy::OnShortcutPressed()
 }
 
 
-std::list<GameObject *> Hierarchy::GetSelectedGameObjects(bool excludeInternal)
+List<GameObject *> Hierarchy::GetSelectedGameObjects(bool excludeInternal)
 {
-    std::list<QTreeWidgetItem*> selected = selectedItems().toStdList();
+    List<QTreeWidgetItem*> selected = selectedItems().toStdList();
     if (excludeInternal)
     {
         LeaveOnlyOuterMostItems(&selected);
     }
 
-    std::list<GameObject*> selectedGos;
+    List<GameObject*> selectedGos;
     for (QTreeWidgetItem *selItem : selected)
     {
         GameObject *go = GetGameObjectFromItem(selItem);
@@ -428,7 +415,7 @@ void Hierarchy::OnSelectionChanged()
 
 void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
 {
-    std::list<GameObject*> selectedGameObjects = GetSelectedGameObjects(false);
+    List<GameObject*> selectedGameObjects = GetSelectedGameObjects(false);
 
     WindowEventManager::NotifyHierarchyGameObjectsSelected(selectedGameObjects);
 

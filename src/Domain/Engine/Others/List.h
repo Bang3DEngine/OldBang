@@ -20,21 +20,25 @@ public:
     {
     }
 
+    List(const std::list<T> &l) : std::list<T>(l)
+    {
+    }
+
     bool Contains(const T& x) const
     {
         return std::find(Begin(), End(), x) != End();
     }
 
-    void Splice(Const_Iterator insertBefore, List &from)
+    void Splice(Iterator insertBefore, List &from)
     {
         this->splice(insertBefore, from);
     }
-    void Splice(Const_Iterator insertBefore, List &from, Const_Iterator element)
+    void Splice(Iterator insertBefore, List &from, Iterator element)
     {
         this->splice(insertBefore, from, element);
     }
-    void Splice(Const_Iterator insertBefore, List &from,
-                Const_Iterator fromRangeBegin, Const_Iterator fromRangeEnd)
+    void Splice(Iterator insertBefore, List &from,
+                Iterator fromRangeBegin, Iterator fromRangeEnd)
     {
         this->splice(insertBefore, from, fromRangeBegin, fromRangeEnd);
     }

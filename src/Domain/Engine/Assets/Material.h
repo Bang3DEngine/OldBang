@@ -29,6 +29,7 @@ public:
 
 private:
     Color m_diffuseColor = Color::white;
+    float m_shininess = 60.0f;
 
     ShaderProgram *m_shaderProgram = nullptr;
     const Texture2D *m_texture = nullptr; // Currently supporting just one texture
@@ -41,11 +42,13 @@ public:
     void SetShaderProgram(ShaderProgram *program);
     void SetTexture(const Texture2D *mtexture);
 
+    void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
     ShaderProgram* GetShaderProgram() const;
     const Texture* GetTexture() const;
 
+    float GetShininess() const;
     const Color& GetDiffuseColor() const;
 
     void Bind() const override;

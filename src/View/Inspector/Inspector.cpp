@@ -29,7 +29,7 @@ Inspector::Inspector(QWidget *parent)
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
-    setMinimumWidth(360);
+    setMinimumWidth(300);
 }
 
 void Inspector::updateGeometries()
@@ -52,7 +52,7 @@ void Inspector::Clear()
     {
         delete iw;
     }
-    m_currentInspectorWidgets.clear();
+    m_currentInspectorWidgets.Clear();
     m_widgetToInspectables.clear();
     m_currentInspectables.clear();
 }
@@ -65,9 +65,9 @@ void Inspector::Refresh()
     }
     else
     {
-        if(m_currentInspectables.size() == 1)
+        if(m_currentInspectables.Size() == 1)
         {
-            IInspectable *insp = m_currentInspectables[0];
+            IInspectable *insp = m_currentInspectables.Front();
             SetInspectable(insp);
         }
     }
@@ -79,7 +79,7 @@ void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
     InspectorWidget *iw = new InspectorWidget();
     iw->Init(title, inspectable);
     m_widgetToInspectables[iw] = inspectable;
-    m_currentInspectables.push_back(inspectable);
+    m_currentInspectables.PushBack(inspectable);
     AddWidget(iw);
 }
 
@@ -93,7 +93,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     for (Component *c : gameObject->GetComponents())
     {
         ComponentWidget *w = new ComponentWidget(c);
-        m_currentInspectables.push_back(c);
+        m_currentInspectables.PushBack(c);
         m_widgetToInspectables[w] = c;
         AddWidget(w);
     }
@@ -104,7 +104,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable)
 {
     ShowGameObjectInfo(prefabInspectable->GetPrefabTempGameObject());
-    m_currentInspectables.push_back(prefabInspectable);
+    m_currentInspectables.PushBack(prefabInspectable);
 }
 
 void Inspector::RefreshHard()
@@ -115,9 +115,9 @@ void Inspector::RefreshHard()
     }
     else
     {
-        if(m_currentInspectables.size() == 1)
+        if(m_currentInspectables.Size() == 1)
         {
-            IInspectable *insp = m_currentInspectables[0];
+            IInspectable *insp = m_currentInspectables.Front();
             SetInspectable(insp);
         }
     }
@@ -133,27 +133,20 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
     insertItem(newRow, item);
 
     m_widgetToItem[widget] = item;
-    m_currentInspectorWidgets.push_back(widget);
+    m_currentInspectorWidgets.PushBack(widget);
 
     setItemWidget(item, widget);
     item->setSizeHint(widget->size());
 }
 
-std::vector<IInspectable *> Inspector::GetCurrentInspectables() const
+List<IInspectable *> Inspector::GetCurrentInspectables() const
 {
     return m_currentInspectables;
 }
 
 bool Inspector::IsShowingInspectable(IInspectable *inspectable) const
 {
-    for (IInspectable *insp : m_currentInspectables)
-    {
-        if (inspectable == insp)
-        {
-            return true;
-        }
-    }
-    return false;
+    return m_currentInspectables.Contains(inspectable);
 }
 
 Inspector *Inspector::GetInstance()

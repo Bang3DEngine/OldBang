@@ -116,6 +116,7 @@ uniform mat4  B_matrix_projection; \n\
 uniform mat4  B_matrix_projection_inv; \n\
 uniform mat4  B_matrix_pvm; \n\
 uniform mat4  B_matrix_pvm_inv; \n\
+uniform vec3  B_position_camera; \n\
 in vec3 B_position_raw_vin; \n\
 in vec3 B_normal_raw_vin; \n\
 in vec2 B_uv_raw_vin; \n\
@@ -165,6 +166,7 @@ uniform mat4  B_matrix_pvm; \n\
 \n\
 uniform vec3  B_position_camera; \n\
 uniform vec4  B_material_diffuse_color; \n\
+uniform float B_material_shininess; \n\
 uniform float B_renderer_receivesLighting; \n\
 uniform float B_gameObject_isSelected; \n\
 \n\
@@ -180,7 +182,7 @@ out vec4 B_position_fout_gin; \n\
 out vec4 B_normal_fout_gin; \n\
 out vec4 B_uv_fout_gin; \n\
 out vec4 B_diffuse_fout_gin; \n\
-out vec4 B_materialBools_fout_gin; \n\
+out vec4 B_materialProps_fout_gin; \n\
 out vec4 B_depth_fout_gin; \n\
 out vec4 B_color_fout_gin; \n\
 ";
@@ -193,27 +195,29 @@ B_vin.normal_world   = B_normal_world_vout_fin; \n\
 B_vin.uv             = B_uv_vout_fin; \n\
  \n\
 /* Some default values */ \n\
-B_vout.position_world   = B_vin.position_world.xyz; \n\
-B_vout.normal_world     = B_vin.normal_world.xyz; \n\
-B_vout.uv               = B_vin.uv; \n\
-B_vout.receivesLighting = B_renderer_receivesLighting; \n\
-B_vout.diffuseColor     = B_material_diffuse_color.rgb; \n\
-B_vout.depth            = gl_FragCoord.z;  \n\
-B_materialBools_fout_gin.w = 0.0f; \n\
+B_vout.position_world      = B_vin.position_world.xyz; \n\
+B_vout.normal_world        = B_vin.normal_world.xyz; \n\
+B_vout.uv                  = B_vin.uv; \n\
+B_vout.receivesLighting    = B_renderer_receivesLighting > 0.5; \n\
+B_vout.shininess           = B_material_shininess; \n\
+B_vout.diffuseColor        = B_material_diffuse_color.rgba; \n\
+B_vout.depth               = gl_FragCoord.z;  \n\
 \n\
 ";
 
 const String ShaderContract::Macro_Draw_To_GBuffer_FS_End_Main_Content =
 "\n\
-B_position_fout_gin       = vec4(B_vout.position_world, 1); \n\
-B_normal_fout_gin         = vec4(B_vout.normal_world, 0); \n\
-B_uv_fout_gin             = vec4(B_vout.uv, 0, 0); \n\
-B_diffuse_fout_gin        = vec4(B_vout.diffuseColor.rgb, 1); \n\
-B_materialBools_fout_gin  = vec4(B_vout.receivesLighting, 0, 0, B_materialBools_fout_gin.w); \n\
-B_depth_fout_gin          = vec4(B_vout.depth); \n\
+B_position_fout_gin              = vec4(B_vout.position_world, 1); \n\
+B_normal_fout_gin                = vec4(B_vout.normal_world, 0); \n\
+B_uv_fout_gin                    = vec4(B_vout.uv, 0, 0); \n\
+B_diffuse_fout_gin               = B_vout.diffuseColor; \n\
+B_materialProps_fout_gin.x       = B_vout.receivesLighting ? 1.0f : 0.0f; \n\
+B_materialProps_fout_gin.y       = B_vout.shininess; \n\
+B_materialProps_fout_gin.z       = B_vout.shininess; \n\
+B_materialProps_fout_gin.w       = B_gameObject_isSelected; /*isSelected for Editor*/ \n\
+B_depth_fout_gin                 = vec4(B_vout.depth); \n\
 \n\
-float ambientLight = (B_vout.receivesLighting > 0.5f) ? 0.5f : 1.0f; \n\
-B_color_fout_gin   = vec4(B_vout.diffuseColor.rgb * ambientLight, 1);  \n\
+B_color_fout_gin = vec4(0);  \n\
 ";
 
 
@@ -231,6 +235,7 @@ uniform mat4  B_matrix_projection; \n\
 uniform mat4  B_matrix_projection_inv; \n\
 uniform mat4  B_matrix_pvm; \n\
 \n\
+uniform vec3  B_position_camera; \n\
 ";
 
 const String ShaderContract::Macro_Post_Render_VS_Init_Main_Content =
@@ -252,6 +257,10 @@ uniform mat4 B_matrix_projection; \n\
 uniform mat4 B_matrix_projection_inv; \n\
 uniform mat4 B_matrix_pvm; \n\
 \n\
+uniform float B_material_shininess; \n\
+\n\
+uniform vec3  B_position_camera; \n\
+\n\
 uniform vec2 B_screen_size; \n\
 vec2 B_screen_coord = gl_FragCoord.xy; \n\
 vec2 B_screen_coord_norm = B_screen_coord / B_screen_size; \n\
@@ -261,7 +270,7 @@ uniform sampler2D B_position_gout_fin; \n\
 uniform sampler2D B_normal_gout_fin; \n\
 uniform sampler2D B_uv_gout_fin; \n\
 uniform sampler2D B_diffuse_gout_fin;\n\
-uniform sampler2D B_materialBools_gout_fin; \n\
+uniform sampler2D B_materialProps_gout_fin; \n\
 uniform sampler2D B_depth_gout_fin; \n\
 uniform sampler2D B_color_gout_fin; \n\
 \n\
@@ -275,21 +284,25 @@ out vec4 B_color_gout_gin; /*Accumulated color*/ \n\
 const String ShaderContract::Macro_Post_Render_FS_Init_Main_Content =
 "\
 B_vin.uv_screen           = B_uv_raw_vout_fin; \n\
-B_vin.position_world      = texture2D(B_position_gout_fin,       B_vin.uv_screen).xyz;  \n\
-B_vin.normal_world        = texture2D(B_normal_gout_fin,         B_vin.uv_screen).xyz;  \n\
-B_vin.uv                  = texture2D(B_uv_gout_fin,             B_vin.uv_screen).xy;   \n\
-B_vin.diffuseColor        = texture2D(B_diffuse_gout_fin,        B_vin.uv_screen).rgb;  \n\
-B_vin.receivesLighting    = texture2D(B_materialBools_gout_fin,  B_vin.uv_screen).x;    \n\
-B_vin.depth               = texture2D(B_depth_gout_fin,          B_vin.uv_screen).x;    \n\
-B_vin.color               = texture2D(B_color_gout_fin,          B_vin.uv_screen).rgba; \n\
+B_vin.position_world      = texture2D(B_position_gout_fin,       B_vin.uv_screen).xyz;        \n\
+B_vin.normal_world        = texture2D(B_normal_gout_fin,         B_vin.uv_screen).xyz;        \n\
+B_vin.uv                  = texture2D(B_uv_gout_fin,             B_vin.uv_screen).xy;         \n\
+B_vin.diffuseColor        = texture2D(B_diffuse_gout_fin,        B_vin.uv_screen).rgba;       \n\
+B_vin.receivesLighting    = texture2D(B_materialProps_gout_fin,  B_vin.uv_screen).x  > 0.5f;  \n\
+B_vin.shininess           = texture2D(B_materialProps_gout_fin,  B_vin.uv_screen).y;          \n\
+B_vin.depth               = texture2D(B_depth_gout_fin,          B_vin.uv_screen).x;          \n\
+B_vin.color               = texture2D(B_color_gout_fin,          B_vin.uv_screen).rgba;       \n\
 B_vin.normal_world        = normalize(B_vin.normal_world); \n\
 \n\
 /*Default value*/\n\
-B_vout.color              = vec4(B_vin.color.rgb, 1); \n\
+B_vout.color              = B_vin.color; \n\
 ";
 
 const String ShaderContract::Macro_Post_Render_FS_End_Main_Content =
 "\
+/*Alpha blending*/ \n\
+B_vout.color = vec4(B_vout.color.rgb * B_vout.color.a +             \n\
+                    B_vin.color.rgb  * (1.0 - B_vout.color.a), 1);  \n\
 B_color_gout_gin = B_vout.color; \n\
 ";
 

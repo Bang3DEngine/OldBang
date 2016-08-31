@@ -12,8 +12,9 @@ struct B_VertexOut_GBufferIn   // GBuffer
     vec3 position_world;
     vec3 normal_world;
     vec2 uv;
-    vec3 diffuseColor;
-    float receivesLighting;
+    vec4 diffuseColor;
+    bool receivesLighting;
+    float shininess;
     float depth;
 };
 

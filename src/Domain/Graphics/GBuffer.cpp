@@ -9,17 +9,17 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     m_normalTexture   = new TextureRender();
     m_uvTexture       = new TextureRender();
     m_diffuseTexture  = new TextureRender();
-    m_matBoolsTexture = new TextureRender();
+    m_matPropsTexture = new TextureRender();
     m_depthTexture    = new TextureRender();
     m_colorTexture    = new TextureRender();
 
-    SetColorAttachment(Attachment::Position,      m_positionTexture);
-    SetColorAttachment(Attachment::Normal,        m_normalTexture);
-    SetColorAttachment(Attachment::Uv,            m_uvTexture);
-    SetColorAttachment(Attachment::Diffuse,       m_diffuseTexture);
-    SetColorAttachment(Attachment::MaterialBools, m_matBoolsTexture);
-    SetColorAttachment(Attachment::Depth,         m_depthTexture);
-    SetColorAttachment(Attachment::Color,         m_colorTexture);
+    SetColorAttachment(Attachment::Position,           m_positionTexture);
+    SetColorAttachment(Attachment::Normal,             m_normalTexture);
+    SetColorAttachment(Attachment::Uv,                 m_uvTexture);
+    SetColorAttachment(Attachment::Diffuse,            m_diffuseTexture);
+    SetColorAttachment(Attachment::MaterialProperties, m_matPropsTexture);
+    SetColorAttachment(Attachment::Depth,              m_depthTexture);
+    SetColorAttachment(Attachment::Color,              m_colorTexture);
     CreateDepthRenderbufferAttachment();
 
     String renderToScreenMatFilepath =
@@ -31,20 +31,18 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 
 GBuffer::~GBuffer()
 {
-    if (m_renderGBufferToScreenMaterial) delete m_renderGBufferToScreenMaterial;
-    if (m_planeMeshToRenderEntireScreen) delete m_planeMeshToRenderEntireScreen;
 }
 
 void GBuffer::BindGBufferInTexturesTo(Material *mat) const
 {
     ShaderProgram *sp =mat->GetShaderProgram(); NONULL(sp);
-    sp->SetUniformTexture("B_position_gout_fin",      m_positionTexture, false);
-    sp->SetUniformTexture("B_normal_gout_fin",        m_normalTexture,   false);
-    sp->SetUniformTexture("B_uv_gout_fin",            m_uvTexture,       false);
-    sp->SetUniformTexture("B_diffuse_gout_fin",       m_diffuseTexture,  false);
-    sp->SetUniformTexture("B_materialBools_gout_fin", m_matBoolsTexture, false);
-    sp->SetUniformTexture("B_depth_gout_fin",         m_depthTexture,    false);
-    sp->SetUniformTexture("B_color_gout_fin",         m_colorTexture,    false);
+    sp->SetUniformTexture("B_position_gout_fin",           m_positionTexture, false);
+    sp->SetUniformTexture("B_normal_gout_fin",             m_normalTexture,   false);
+    sp->SetUniformTexture("B_uv_gout_fin",                 m_uvTexture,       false);
+    sp->SetUniformTexture("B_diffuse_gout_fin",            m_diffuseTexture,  false);
+    sp->SetUniformTexture("B_materialProps_gout_fin", m_matPropsTexture, false);
+    sp->SetUniformTexture("B_depth_gout_fin",              m_depthTexture,    false);
+    sp->SetUniformTexture("B_color_gout_fin",              m_colorTexture,    false);
 }
 
 void GBuffer::RenderPassWithMaterial(Material *mat) const
@@ -62,6 +60,12 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
     SetDrawBuffers({GBuffer::Attachment::Color});
 
+    Camera *camera = Scene::GetActiveScene()->GetCamera();
+    if (camera)
+    {
+        mat->GetShaderProgram()->SetUniformVec3(
+                    ShaderContract::Uniform_Position_Camera, camera->transform->GetPosition(), false);
+    }
     mat->GetShaderProgram()->SetUniformVec2("B_screen_size", Screen::GetSize(), false);
 
     RenderScreenPlane();
@@ -109,10 +113,15 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::
 
     SetAllDrawBuffers();
     glClearColor(clearValue.r, clearValue.g, clearValue.b, clearValue.a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     SetDrawBuffers({GBuffer::Attachment::Color});
     glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    SetDrawBuffers({GBuffer::Attachment::Depth});
+    glClearDepth(1.0);
+    glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     UnBind();

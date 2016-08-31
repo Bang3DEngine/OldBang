@@ -277,7 +277,7 @@ Camera *EditorCamera::GetCamera()
 #ifdef BANG_EDITOR
 
 void EditorCamera::OnTreeHierarchyGameObjectsSelected
-    (std::list<GameObject *> &selectedGameObjects)
+    (List<GameObject *> &selectedGameObjects)
 {
     if (selectedGameObjects.size() != 1) return;
 

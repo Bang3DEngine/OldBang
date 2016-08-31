@@ -2,7 +2,7 @@
 #define MAP_H
 
 #include <map>
-#include <list>
+#include "List.h"
 #include <sstream>
 
 #include "List.h"
@@ -21,7 +21,7 @@ public:
     {
     }
 
-    void Add(const Key &key, const Value &value)
+    void Set(const Key &key, const Value &value)
     {
         (*this)[key] = value;
     }
@@ -59,7 +59,7 @@ public:
 
     bool ContainsValue(const Value &value) const
     {
-        for (auto it = this->begin(); it != this->end(); ++it)
+        for (auto it = this->Begin(); it != this->End(); ++it)
         {
             if (it->second == value) return true;
         }
@@ -69,9 +69,9 @@ public:
     List<Key> GetKeys() const
     {
         List<Key> result;
-        for (auto it = this->begin(); it != this->end(); ++it)
+        for (auto it = this->Begin(); it != this->End(); ++it)
         {
-            result.push_back(it->first);
+            result.PushBack(it->first);
         }
         return result;
     }
@@ -79,9 +79,9 @@ public:
     List<Value> GetValues() const
     {
         List<Value> result;
-        for (auto it = this->begin(); it != this->end(); ++it)
+        for (auto it = this->Begin(); it != this->End(); ++it)
         {
-            result.push_back(it->second);
+            result.PushBack(it->second);
         }
         return result;
     }
@@ -123,9 +123,9 @@ public:
     {
         std::ostringstream oss;
         oss << "{";
-        for (auto it = this->begin(); it != this->end(); ++it)
+        for (auto it = this->Begin(); it != this->End(); ++it)
         {
-            if (it != this->begin()) oss << ", ";
+            if (it != this->Begin()) oss << ", ";
             oss << (it->first) << ": " << (it->second);
         }
         oss << "}";

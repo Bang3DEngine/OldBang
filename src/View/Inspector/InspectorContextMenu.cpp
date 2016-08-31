@@ -19,7 +19,7 @@ void InspectorContextMenu::OnCustomContextMenuRequested(QPoint point)
 
         ComponentWidget *cw =
                 static_cast<ComponentWidget*>(m_inspector->
-                                              m_currentInspectorWidgets[0]);
+                                              m_currentInspectorWidgets.Front());
 
         connect(&actionPasteComponent, SIGNAL(triggered()),
                 &(cw->m_cwContextMenu), SLOT(OnPasteComponentSelected()));

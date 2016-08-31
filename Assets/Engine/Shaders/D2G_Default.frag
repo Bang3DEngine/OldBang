@@ -12,8 +12,9 @@ struct B_VertexOut_GBufferIn   // GBuffer
     vec3 position_world;
     vec3 normal_world;
     vec2 uv;
-    vec3 diffuseColor;
-    float receivesLighting;
+    vec4 diffuseColor;
+    bool receivesLighting;
+    float shininess;
     float depth;
 };
 
@@ -24,28 +25,22 @@ void main()
 {
     B_DRAW_TO_GBUFFER_FS_INIT_MAIN();
 
-    vec3 diffColor = B_material_diffuse_color.rgb;
+    vec4 diffColor = B_material_diffuse_color;
     if (B_hasTexture > 0.5)
     {
         // ALPHA CUTTOFF
-        vec4 texColor = texture2D(B_texture_0, B_vin.uv).rgba;
+        vec4 texColor = texture2D(B_texture_0, B_vin.uv);
         if (texColor.a <= B_alphaCuttoff) discard;
         //
+
         // MIX DIFFUSE_COLOR AND TEXTURE_COLOR
-        float texApport = (1.0 - B_material_diffuse_color.a);
-        vec3  diffTex   = texColor.rgb;
+        B_vout.diffuseColor = texColor * diffColor;
         //
-        B_vout.diffuseColor = diffTex * diffColor;
     }
     else
     {
         B_vout.diffuseColor = diffColor;
     }
-
-    // ONLY FOR EDITOR SELECTION
-    B_materialBools_fout_gin.w = B_gameObject_isSelected;
-    //
-
 
     B_DRAW_TO_GBUFFER_FS_END_MAIN();
 }

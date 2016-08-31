@@ -1,7 +1,7 @@
 #ifndef EDITORDEBUGGAMEOBJECT_H
 #define EDITORDEBUGGAMEOBJECT_H
 
-#include <list>
+#include "List.h"
 
 #include "Bang.h"
 
@@ -33,7 +33,7 @@ private:
         }
     };
 
-    std::list<DebugLine> m_debugLines;
+    List<DebugLine> m_debugLines;
 
     void DrawLines(bool depthPass);
 

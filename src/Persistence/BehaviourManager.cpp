@@ -40,17 +40,16 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourRelPa
         bm->m_behaviourPath_To_library[behaviourRelPath] = lib;
 
         // Notify the BehaviourHolder
-        std::list<BehaviourHolder*> behDemanders =
+        List<BehaviourHolder*> behDemanders =
                 bm->m_behPath_To_behHolderDemanders[bfp];
-
-        bm->m_behPath_To_behHolderDemanders.erase(
-                    bm->m_behPath_To_behHolderDemanders.find(bfp));
 
         for (BehaviourHolder* bh : behDemanders)
         {
             bh->OnBehaviourLibraryAvailable(lib);
         }
-        bm->m_behPath_To_behHolderDemanders[bfp].clear();
+
+        bm->m_behPath_To_behHolderDemanders.erase(
+                    bm->m_behPath_To_behHolderDemanders.find(bfp));
     }
     else
     {
@@ -105,7 +104,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             bm->m_behPath_To_behHolderDemanders.end())
         {
             bm->m_behPath_To_behHolderDemanders[bfp] =
-                    std::list<BehaviourHolder*>(); // Init list
+                    List<BehaviourHolder*>(); // Init list
         }
         bm->m_behPath_To_behHolderDemanders[bfp].push_back(behaviourHolder);
 
@@ -131,13 +130,12 @@ void BehaviourManager::
     OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder)
 {
     // Erase the behaviourHolder from all the demand lists it is in
-
     BehaviourManager *bm = BehaviourManager::GetInstance(); NONULL(bm);
 
     for (auto it = bm->m_behPath_To_behHolderDemanders.begin();
          it != bm->m_behPath_To_behHolderDemanders.end(); ++it)
     {
-        std::list<BehaviourHolder*> &bhList = it->second;
+        List<BehaviourHolder*> &bhList = it->second;
         bhList.remove(behaviourHolder);
     }
 }

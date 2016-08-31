@@ -13,7 +13,6 @@ BehaviourManagerCompileThread::
 void BehaviourManagerCompileThread::run()
 {
     // Compile....
-    Debug_Log("Compiling " << m_behaviourRelativeFilepath);
     String soFilepath =
             SystemUtils::CompileToSharedObject(m_behaviourRelativeFilepath);
 

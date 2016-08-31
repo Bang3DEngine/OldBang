@@ -51,26 +51,29 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
 {
     Gizmos::Init();
 
-    m_gizmosGameObject = ego; // Do not delete last gizmosGameObject, scene delete will do so
-
-    Gizmos::m_singleLineRenderer = m_gizmosGameObject->AddComponent<SingleLineRenderer>();
-    Gizmos::m_circleRenderer = m_gizmosGameObject->AddComponent<CircleRenderer>();
-    Gizmos::m_meshRenderer = m_gizmosGameObject->AddComponent<MeshRenderer>();
-
-    renderers.clear();
-    renderers.push_back(Gizmos::m_singleLineRenderer);
-    renderers.push_back(Gizmos::m_circleRenderer);
-    renderers.push_back(Gizmos::m_meshRenderer);
-
-    for (Renderer *rend : Gizmos::renderers)
+    if (m_gizmosGameObject != ego && ego)
     {
-        rend->SetMaterial(Gizmos::m_material);
+        m_gizmosGameObject = ego; // Do not delete last gizmosGameObject, scene delete will do so
+
+        Gizmos::m_singleLineRenderer = m_gizmosGameObject->AddComponent<SingleLineRenderer>();
+        Gizmos::m_circleRenderer = m_gizmosGameObject->AddComponent<CircleRenderer>();
+        Gizmos::m_meshRenderer = m_gizmosGameObject->AddComponent<MeshRenderer>();
+
+        renderers.clear();
+        renderers.push_back(Gizmos::m_singleLineRenderer);
+        renderers.push_back(Gizmos::m_circleRenderer);
+        renderers.push_back(Gizmos::m_meshRenderer);
+
+        for (Renderer *rend : Gizmos::renderers)
+        {
+            rend->SetMaterial(Gizmos::m_material);
+        }
     }
 }
 
 void Gizmos::SetStatesBeforeRendering()
 {
-    Gizmos::Init();
+    Gizmos::Init(); NONULL(m_gizmosGameObject);
 
     Gizmos::m_gizmosGameObject->transform->SetLocalPosition(Gizmos::m_position);
     Gizmos::m_gizmosGameObject->transform->SetLocalRotation(Gizmos::m_rotation);
@@ -141,7 +144,7 @@ void Gizmos::RenderCustomMesh(Mesh *m)
 {
     NONULL(m)
 
-    Gizmos::SetStatesBeforeRendering();
+    Gizmos::SetStatesBeforeRendering(); NONULL(m_gizmosGameObject);
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(m);
@@ -153,7 +156,7 @@ void Gizmos::RenderCustomMesh(Mesh *m)
 
 void Gizmos::RenderSimpleBox(const Box &b)
 {
-    Gizmos::SetStatesBeforeRendering();
+    Gizmos::SetStatesBeforeRendering(); NONULL(m_gizmosGameObject);
 
     const Quaternion &r = Gizmos::m_rotation;
     const Vector3 &bMin = b.GetMin();
@@ -180,7 +183,7 @@ void Gizmos::RenderSimpleBox(const Box &b)
 
 void Gizmos::RenderBox(const Box &b)
 {
-    Gizmos::SetStatesBeforeRendering();
+    Gizmos::SetStatesBeforeRendering(); NONULL(m_gizmosGameObject);
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_boxMesh);
@@ -196,9 +199,9 @@ void Gizmos::RenderBox(const Box &b)
 void Gizmos::RenderIcon(const Texture2D *texture,
                         bool billboard)
 {
-    Gizmos::SetReceivesLighting(false);
     Gizmos::SetDrawWireframe(false);
-    Gizmos::SetStatesBeforeRendering();
+    Gizmos::SetReceivesLighting(false);
+    Gizmos::SetStatesBeforeRendering(); NONULL(m_gizmosGameObject);
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_planeMesh);
@@ -229,7 +232,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
 
 void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 {
-    Gizmos::SetStatesBeforeRendering();
+    Gizmos::SetStatesBeforeRendering(); NONULL(m_gizmosGameObject);
 
     Gizmos::m_singleLineRenderer->SetEnabled(true);
     Gizmos::m_singleLineRenderer->SetOrigin(origin);
@@ -246,13 +249,11 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
 {
     Gizmos::RenderLine(origin, origin + rayDir);
-
-    Gizmos::Reset();
 }
 
 void Gizmos::RenderSphere(const Vector3 &origin, float radius)
 {
-    Gizmos::SetStatesBeforeRendering();
+    Gizmos::SetStatesBeforeRendering(); NONULL(m_gizmosGameObject);
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_sphereMesh);
@@ -270,7 +271,7 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
                            float zNear, float zFar,
                            float fovDegrees, float aspectRatio)
 {
-    Gizmos::SetStatesBeforeRendering();
+    Gizmos::SetStatesBeforeRendering(); NONULL(m_gizmosGameObject);
 
     const Vector3 &c = origin;
     const Vector3 right = Vector3::Cross(forward, up).Normalized();
@@ -318,7 +319,7 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
 
 void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
 {
-    Gizmos::SetStatesBeforeRendering();
+    Gizmos::SetStatesBeforeRendering(); NONULL(m_gizmosGameObject);
 
     Gizmos::m_circleRenderer->SetEnabled(true);
     Gizmos::m_circleRenderer->SetRadius(radius);

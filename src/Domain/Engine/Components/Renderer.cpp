@@ -60,10 +60,10 @@ void Renderer::ActivateGLStatesBeforeRendering() const
 
     Scene *scene = SceneManager::GetActiveScene();
     Camera *camera = scene->GetCamera();
-    if (camera && m_material  && m_material->m_shaderProgram )
+    if (camera && m_material  && m_material->GetShaderProgram())
     {
         Transform *t = camera->gameObject->transform;
-        ShaderProgram *sp = m_material->m_shaderProgram;
+        ShaderProgram *sp = m_material->GetShaderProgram();
         sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera, t->GetPosition(), false);
         sp->SetUniformFloat("B_renderer_receivesLighting", m_receivesLighting ? 1.0f : 0.0f, false);
 
@@ -308,7 +308,7 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
     Component::ReadXMLInfo(xmlInfo);
 
     String materialFilepath = xmlInfo->GetFilepath("Material");
-    if (materialFilepath != "")
+    if (!materialFilepath.Empty())
     {
         SetMaterial( AssetsManager::LoadAsset<Material>(materialFilepath) );
     }

@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <list>
+#include "List.h"
 
 
 #include "Color.h"
@@ -20,6 +20,7 @@ class Scene : public GameObject
 {
 
 friend class Screen;
+friend class Toolbar;
 friend class GameObject;
 friend class Application;
 friend class SceneManager;
@@ -27,10 +28,9 @@ friend class SelectionFramebuffer;
 
 protected:
 
-    AssetsManager *m_assetsManager = nullptr;
-
     GameObject *m_defaultCamera = nullptr;
-    Material *m_materialAfterLighting = nullptr;
+    Material *m_materialBeforeLighting = nullptr;
+    Material *m_materialAfterLighting   = nullptr;
 
     //Framebuffer for positions, normals, uvs and diffuse
     GBuffer *m_gbuffer = nullptr;
@@ -55,7 +55,6 @@ public:
     static Camera* GetCamera ();
     Camera* GetCurrentCamera () const;
     const Screen* GetScreen () const;
-    AssetsManager *GetAssetsManager() const;
 
     bool IsScene() const override;
 

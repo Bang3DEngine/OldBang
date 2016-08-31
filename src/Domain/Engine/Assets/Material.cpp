@@ -30,6 +30,8 @@ void Material::Bind() const
         m_shaderProgram->Bind();
         m_shaderProgram->SetUniformColor(ShaderContract::Uniform_Material_Diffuse_Color,
                                          m_diffuseColor, false);
+        m_shaderProgram->SetUniformFloat("B_material_shininess", m_shininess, false);
+
         if (m_texture)
         {
             m_shaderProgram->SetUniformFloat("B_hasTexture", 1, false);
@@ -76,6 +78,7 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
     }
 
     SetDiffuseColor(xmlInfo->GetColor("DiffuseColor"));
+    SetShininess(xmlInfo->GetFloat("Shininess"));
 }
 
 void Material::FillXMLInfo(XMLNode *xmlInfo) const
@@ -107,6 +110,7 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
     }
 
     xmlInfo->SetColor("DiffuseColor", GetDiffuseColor());
+    xmlInfo->SetFloat("Shininess", GetShininess());
 }
 
 void Material::SetShaderProgram(ShaderProgram *program)
@@ -123,6 +127,11 @@ void Material::SetTexture(const Texture2D *texture)
     }
 }
 
+void Material::SetShininess(float shininess)
+{
+    m_shininess = shininess;
+}
+
 void Material::SetDiffuseColor(const Color &diffuseColor)
 {
     m_diffuseColor = diffuseColor;
@@ -136,6 +145,11 @@ ShaderProgram *Material::GetShaderProgram() const
 const Texture *Material::GetTexture() const
 {
     return m_texture;
+}
+
+float Material::GetShininess() const
+{
+    return m_shininess;
 }
 
 const Color& Material::GetDiffuseColor() const

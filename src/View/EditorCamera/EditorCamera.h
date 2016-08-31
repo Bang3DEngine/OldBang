@@ -127,7 +127,7 @@ public:
 
 #ifdef BANG_EDITOR
     void OnTreeHierarchyGameObjectsSelected
-                (std::list<GameObject*> &selectedGameObjects) override;
+                (List<GameObject*> &selectedGameObjects) override;
     void OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected) override;
 #endif
 };

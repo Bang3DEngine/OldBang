@@ -4,7 +4,7 @@
 #include "Bang.h"
 
 #include <map>
-#include <list>
+#include "List.h"
 
 #include <sstream>
 
@@ -22,7 +22,7 @@ class XMLNode : public IToString
 private:
     String m_tagName = "";
     mutable std::map<String, XMLAttribute> m_attributes;
-    std::list<XMLNode*> m_children;
+    List<XMLNode*> m_children;
 
 public:
     XMLNode(const String &tagName = "");
@@ -101,7 +101,7 @@ public:
 
     const String& GetTagName() const;
     const std::map<String, XMLAttribute>& GetAttributes() const;
-    const std::list<XMLNode*>& GetChildren() const;
+    const List<XMLNode*>& GetChildren() const;
 
     static XMLNode* FromString(const String &xml);
 };

@@ -11,6 +11,7 @@
 
 class Scene;
 class SceneManager;
+class AssetsManager;
 class ShortcutManager;
 class BehaviourManager;
 class Application : public QApplication
@@ -23,7 +24,9 @@ friend class BehaviourManager;
 friend class IShortcutListener;
 
 private:
+
     SceneManager *m_sceneManager = nullptr;
+    AssetsManager *m_assetsManager = nullptr;
     BehaviourManager *m_behaviourManager = nullptr;
 
     unsigned long long m_lastRenderTime = 0;
@@ -34,6 +37,7 @@ private:
 public:
     Application(int& argc, char** argv);
 
+    AssetsManager *GetAssetsManager() const;
     static Application *GetInstance();
     virtual bool notify(QObject *receiver, QEvent *e) override;
 

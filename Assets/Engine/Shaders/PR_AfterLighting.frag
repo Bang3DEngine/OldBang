@@ -5,8 +5,9 @@ struct B_VertexIn  // GBuffer stored properties
     vec3 position_world;
     vec3 normal_world;
     vec2 uv;
-    vec3 diffuseColor;
-    float receivesLighting;
+    vec4 diffuseColor;
+    bool receivesLighting;
+    float shininess;
     float depth;
     vec4 color;
 
@@ -28,10 +29,10 @@ void main()
     // ONLY FOR EDITOR
 
     // SELECTION OUTLINE EFFECT
-    float isSelected = texture2D(B_materialBools_gout_fin, B_vin.uv_screen).w;
-    if (isSelected > 0.5f)
+    bool isSelected = texture2D(B_materialProps_gout_fin, B_vin.uv_screen).w > 0.5;
+    if (isSelected)
     {
-        B_vout.color += vec4(0, 0.1, 0.3, 0);
+        B_vout.color = B_vin.color + vec4(0, 0.1, 0.3, 0);
     }
     //
 

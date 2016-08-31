@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 
 #include <map>
-#include <list>
+#include "List.h"
 #include <vector>
 
 #include <chrono>
@@ -55,7 +55,7 @@ private:
 
     //Useful for example, for Removing a Child
     //(we just need to remove the parent/s of all the selected entities)
-    void LeaveOnlyOuterMostItems(std::list<QTreeWidgetItem*> *items);
+    void LeaveOnlyOuterMostItems(List<QTreeWidgetItem*> *items);
 
     QTreeWidgetItem* GetFirstSelectedItem() const;
     GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
@@ -77,7 +77,7 @@ public:
 
     void OnShortcutPressed() override;
 
-    std::list<GameObject*> GetSelectedGameObjects(bool excludeInternal = false);
+    List<GameObject*> GetSelectedGameObjects(bool excludeInternal = false);
     void SelectGameObject(GameObject *go);
     void SelectItemAboveOrBelowSelected(bool above);
     void UnselectAll();

@@ -88,7 +88,7 @@ void Mesh::LoadAll(const std::vector<Vector3> &positions,
 
 void Mesh::BindPositionsToShaderProgram(const String &nameInShader, const ShaderProgram &sp)
 {
-    if (m_vertexPositionsVBO )
+    if (m_vertexPositionsVBO)
     {
         GLint location = sp.GetAttribLocation(nameInShader);
         m_vao->BindVBO(m_vertexPositionsVBO, location, 3);
@@ -97,7 +97,7 @@ void Mesh::BindPositionsToShaderProgram(const String &nameInShader, const Shader
 
 void Mesh::BindNormalsToShaderProgram(const String &nameInShader, const ShaderProgram &sp)
 {
-    if (m_vertexNormalsVBO )
+    if (m_vertexNormalsVBO)
     {
         GLint location = sp.GetAttribLocation(nameInShader);
         m_vao->BindVBO(m_vertexNormalsVBO, location, 3);
@@ -106,7 +106,7 @@ void Mesh::BindNormalsToShaderProgram(const String &nameInShader, const ShaderPr
 
 void Mesh::BindUvsToShaderProgram(const String &nameInShader, const ShaderProgram &sp)
 {
-    if (m_vertexUvsVBO )
+    if (m_vertexUvsVBO)
     {
         GLint location = sp.GetAttribLocation(nameInShader);
         m_vao->BindVBO(m_vertexUvsVBO, location, 2);

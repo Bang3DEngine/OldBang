@@ -2,7 +2,7 @@
 #define DEBUG_H
 
 #include <map>
-#include <list>
+#include "List.h"
 #include <vector>
 #include <sstream>
 #include <iostream>
@@ -82,10 +82,10 @@ std::ostream& operator<<(std::ostream &log, const IToString *s);
 // Templated ostream operators
 // List
 template <class T>
-std::ostream &operator<<(std::ostream &log, const std::list<T> *l)
+std::ostream &operator<<(std::ostream &log, const List<T> *l)
 {
     log << "("; bool first = true;
-    for (auto it = l->begin(); it != l->end(); ++it)
+    for (auto it = l->Begin(); it != l->End(); ++it)
     {
         if (!first) log << ", ";
         log << (*it);
@@ -95,7 +95,7 @@ std::ostream &operator<<(std::ostream &log, const std::list<T> *l)
     return log;
 }
 template <class T>
-std::ostream &operator<<(std::ostream &log, const std::list<T> &l)
+std::ostream &operator<<(std::ostream &log, const List<T> &l)
 {
     return log << (&l);
 }
@@ -124,7 +124,7 @@ template <class T, class S>
 std::ostream &operator<<(std::ostream &log, const std::map<T,S> *m)
 {
     log << "{";
-    for (auto it = m->begin(); it != m->end(); ++it)
+    for (auto it = m->Begin(); it != m->End(); ++it)
     {
         if (it != m->begin()) log << ", ";
         log << (it->first) << ": " << (it->second);

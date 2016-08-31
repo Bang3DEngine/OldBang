@@ -2,7 +2,7 @@
 #define COPYPASTEGAMEOBJECTMANAGER_H
 
 #include <map>
-#include <list>
+#include "List.h"
 #include "GameObject.h"
 
 class GameObjectClipboard
@@ -12,15 +12,15 @@ private:
 
 private:
 
-    static std::list<GameObject*> s_copiedGameObjects;
+    static List<GameObject*> s_copiedGameObjects;
     static std::map<GameObject*, GameObject*> s_goCopyToItsParent;
 
 public:
 
     static bool HasSomethingCopied();
-    static void CopyGameObjects(const std::list<GameObject*> &whatToCopy);
-    static std::list<GameObject*> PasteCopiedGameObjectsInto(GameObject *parent);
-    static std::list<GameObject*> DuplicateCopiedGameObjects();
+    static void CopyGameObjects(const List<GameObject*> &whatToCopy);
+    static List<GameObject*> PasteCopiedGameObjectsInto(GameObject *parent);
+    static List<GameObject*> DuplicateCopiedGameObjects();
 };
 
 #endif // COPYPASTEGAMEOBJECTMANAGER_H

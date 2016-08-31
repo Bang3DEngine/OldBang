@@ -17,7 +17,7 @@
 #include "XMLNode.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
-    for (auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
+    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
     {\
         if ((*it) ) (*it)->FUNCTION;\
     }\
@@ -33,7 +33,7 @@ class WindowEventManager : public QGLWidget
     Q_OBJECT
 private:
     static WindowEventManager *s_wem;
-    std::list<IWindowEventManagerListener*> m_listeners;
+    List<IWindowEventManagerListener*> m_listeners;
 
 public:
     explicit WindowEventManager(QWidget *parent = 0);
@@ -55,7 +55,7 @@ public slots:
     static void NotifyGameObjectDestroyed(GameObject *destroyed);
 
     static void NotifyInspectorSlotChanged(InspectorWidget *inspectorItem);
-    static void NotifyHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects);
+    static void NotifyHierarchyGameObjectsSelected(List<GameObject*> &selectedGameObjects);
     static void NotifyHierarchyGameObjectDoubleClicked(GameObject *selected);
 };
 

@@ -1,5 +1,9 @@
 #include "MaterialAssetFileInspectable.h"
 
+#include "Scene.h"
+#include "Renderer.h"
+#include "SceneManager.h"
+
 MaterialAssetFileInspectable::MaterialAssetFileInspectable
     (const MaterialAssetFile &materialAssetFile) :
         m_materialAssetFile(materialAssetFile)

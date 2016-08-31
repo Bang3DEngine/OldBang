@@ -7,6 +7,7 @@
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 
+#include "List.h"
 #include "Vector2.h"
 
 class DragDropInfo
@@ -40,7 +41,7 @@ private:
 
     DragDropInfo m_ddInfo;
     bool m_dragGoingOn = false;
-    std::list<IDragDropListener*> m_dragDropListeners;
+    List<IDragDropListener*> m_dragDropListeners;
 
     DragDropManager();
 

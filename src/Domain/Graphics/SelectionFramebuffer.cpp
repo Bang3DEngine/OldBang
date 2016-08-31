@@ -48,7 +48,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     c.MarkEvent("Assign Ids");
     int id = 0;
     m_gameObjectToId.clear(); m_idToGameObject.clear();
-    std::list<GameObject*> gameObjects = scene->GetChildrenRecursivelyEditor();
+    List<GameObject*> gameObjects = scene->GetChildrenRecursivelyEditor();
     for (GameObject *go : gameObjects)
     {
         m_gameObjectToId[go] = id;

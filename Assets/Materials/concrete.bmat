@@ -1,5 +1,6 @@
 <Material DiffuseColor:Color="(1, 1, 1, 1)"{}
           FragmentShader:File="./Assets/Engine/Shaders/D2G_Default.frag"{FileExtension="frag"}
+          Shininess:Float="5"{}
           Texture1:File="./Assets/Textures/victor.btex2d"{FileExtension="btex2d"}
           TextureCount:Int="1"{}
           VertexShader:File="./Assets/Engine/Shaders/D2G_Default.vert"{FileExtension="vert"}

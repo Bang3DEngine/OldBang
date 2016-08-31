@@ -14,19 +14,12 @@ WindowEventManager::WindowEventManager(QWidget *parent) : QGLWidget(parent)
 
 void WindowEventManager::AddListener(IWindowEventManagerListener *listener)
 {
-    m_listeners.push_back(listener);
+    m_listeners.PushBack(listener);
 }
 
 void WindowEventManager::RemoveListener(IWindowEventManagerListener *listener)
 {
-    for (auto it = m_listeners.begin(); it != m_listeners.end(); ++it)
-    {
-        if ((*it) == listener)
-        {
-            m_listeners.erase(it);
-            break;
-        }
-    }
+    m_listeners.Remove(listener);
 }
 
 WindowEventManager *WindowEventManager::GetInstance()
@@ -69,7 +62,7 @@ void WindowEventManager::NotifyInspectorSlotChanged(InspectorWidget *inspectorIt
     PROPAGATE_EVENT_PAR(OnInspectorSlotChanged(inspectorItem), s_wem->m_listeners);
 }
 
-void WindowEventManager::NotifyHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects)
+void WindowEventManager::NotifyHierarchyGameObjectsSelected(List<GameObject*> &selectedGameObjects)
 {
     PROPAGATE_EVENT_PAR(OnTreeHierarchyGameObjectsSelected(selectedGameObjects), s_wem->m_listeners);
 }

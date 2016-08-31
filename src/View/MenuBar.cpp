@@ -127,13 +127,19 @@ void MenuBar::OnOpenScene() const
     String filename = fd.GetOpenFilename();
     if (filename == "") return;
 
+    Debug_Log("SetActiveScene(nullptr)");
     SceneManager::SetActiveScene(nullptr);
+    Debug_Log("new EditorScene()");
     EditorScene *scene = new EditorScene();
+    Debug_Log("ReadScene()");
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
+        Debug_Log("AddScene(nullptr)");
         SceneManager::AddScene(scene);
+        Debug_Log("SetActiveScene(scene)");
         SceneManager::SetActiveScene(scene);
+        Debug_Log("SetActiveSceneFilepath()");
         Persistence::SetActiveSceneFilepath(filename);
     }
     else

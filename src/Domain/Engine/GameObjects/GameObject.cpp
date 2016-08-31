@@ -151,40 +151,42 @@ const String GameObject::GetName() const
 }
 
 
-const std::list<Component *> &GameObject::GetComponents() const
+const List<Component *> &GameObject::GetComponents() const
 {
     return m_components;
 }
 
-const std::list<GameObject *> GameObject::GetChildren() const
+const List<GameObject *> GameObject::GetChildren() const
 {
-    std::list<GameObject *> cc;
-    for (auto c = m_children.begin(); c != m_children.end(); ++c)
+    List<GameObject *> cc;
+    for (GameObject *c : m_children)
     {
-        if (!(*c)->IsEditorGameObject()) cc.push_back(*c);
+        if (!c->IsEditorGameObject()) cc.PushBack(c);
     }
     return cc;
 }
 
-std::list<GameObject*> GameObject::GetChildrenRecursively() const
+List<GameObject*> GameObject::GetChildrenRecursively() const
 {
-    std::list<GameObject*> cc;
-    for (auto c = m_children.begin(); c != m_children.end(); ++c)
+    List<GameObject*> cc;
+    for (GameObject *c : m_children)
     {
-        cc.splice(cc.end(), (*c)->GetChildrenRecursively()); //concat
-        if (!(*c)->IsEditorGameObject()) cc.push_back(*c);
+        List<GameObject*> childChildren = c->GetChildrenRecursively();
+        cc.Splice(cc.End(), childChildren); //concat
+        if (!c->IsEditorGameObject()) cc.PushBack(c);
     }
     return cc;
 }
 
 #ifdef BANG_EDITOR
-std::list<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
+List<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
 {
-    std::list<GameObject*> cc;
-    for (auto c = m_children.begin(); c != m_children.end(); ++c)
+    List<GameObject*> cc;
+    for (GameObject *c : m_children)
     {
-        cc.splice(cc.end(), (*c)->GetChildrenRecursivelyEditor());
-        cc.push_back(*c);
+        List<GameObject*> childChildren = c->GetChildrenRecursively();
+        cc.Splice(cc.End(), childChildren);
+        cc.PushBack(c);
     }
     return cc;
 }
@@ -269,7 +271,7 @@ void GameObject::AddComponent(Component *c)
 #ifdef BANG_EDITOR
 void GameObject::MoveComponent(Component *c, int distance)
 {
-    for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
+    for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
     {
         if (c == *comp)
         {
@@ -296,20 +298,12 @@ void GameObject::RemoveComponent(Component *c)
     {
         return;
     }
-
-    for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
-    {
-        if (c == *comp)
-        {
-            m_components.erase(comp);
-            break;
-        }
-    }
+    m_components.Remove(c);
 }
 
 GameObject *GameObject::GetChild(const String &name) const
 {
-    for (auto it = m_children.begin(); it != m_children.end(); ++it)
+    for (auto it = m_children.Begin(); it != m_children.End(); ++it)
     {
         GameObject *child = (*it);
         if (child->m_name == name)
@@ -467,20 +461,11 @@ bool GameObject::IsSelectedInHierarchy() const
 }
 
 void GameObject::OnTreeHierarchyGameObjectsSelected(
-        std::list<GameObject*> &selectedEntities )
+        List<GameObject*> &selectedEntities )
 {
     if (IsEditorGameObject() || IsScene()) return;
 
-    bool selected = false;
-    for (auto it : selectedEntities)
-    {
-        if ( it == this )
-        {
-            selected = true;
-            break;
-        }
-    }
-
+    bool selected = selectedEntities.Contains(this);
     bool wasSelected = IsSelectedInHierarchy();
     m_isSelectedInHierarchy = selected;
     if (!wasSelected && selected)
@@ -625,7 +610,7 @@ void GameObject::OnDragEnterMaterial(Material *m)
 {
     m_materialsBeforeDrag.clear();
 
-    std::list<Renderer*> rends = GetComponents<Renderer>();
+    List<Renderer*> rends = GetComponents<Renderer>();
     for (Renderer *r : rends)
     {
         m_materialsBeforeDrag.push_back(r->GetMaterial());
@@ -636,7 +621,7 @@ void GameObject::OnDragEnterMaterial(Material *m)
 void GameObject::OnDragLeaveMaterial(Material *m)
 {
     int i = 0;
-    std::list<Renderer*> rends = GetComponents<Renderer>();
+    List<Renderer*> rends = GetComponents<Renderer>();
     for (Renderer *r : rends)
     {
         r->SetMaterial(m_materialsBeforeDrag[i]);
@@ -646,7 +631,7 @@ void GameObject::OnDragLeaveMaterial(Material *m)
 
 void GameObject::OnDropMaterial(Material *m)
 {
-    std::list<Renderer*> rends = GetComponents<Renderer>();
+    List<Renderer*> rends = GetComponents<Renderer>();
     for (Renderer *r : rends)
     {
         r->SetMaterial(m);

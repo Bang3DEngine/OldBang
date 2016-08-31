@@ -66,14 +66,14 @@ void HierarchyContextMenu::OnCreateEmptyClicked()
 
 void HierarchyContextMenu::OnCopyClicked()
 {
-    std::list<GameObject*> whatToCopy = m_hierarchy->GetSelectedGameObjects(true);
+    List<GameObject*> whatToCopy = m_hierarchy->GetSelectedGameObjects(true);
     GameObjectClipboard::CopyGameObjects(whatToCopy);
 }
 
 void HierarchyContextMenu::OnPasteClicked()
 {
-    std::list<GameObject*> selected = m_hierarchy->GetSelectedGameObjects(false);
-    std::list<GameObject*> pasted;
+    List<GameObject*> selected = m_hierarchy->GetSelectedGameObjects(false);
+    List<GameObject*> pasted;
     if (selected.size() > 0)
     {
         for (GameObject *sel : selected)
@@ -95,9 +95,9 @@ void HierarchyContextMenu::OnPasteClicked()
 
 void HierarchyContextMenu::OnDuplicateClicked()
 {
-    std::list<GameObject*> selected = m_hierarchy->GetSelectedGameObjects(true);
+    List<GameObject*> selected = m_hierarchy->GetSelectedGameObjects(true);
     GameObjectClipboard::CopyGameObjects(selected);
-    std::list<GameObject*> duplicated =
+    List<GameObject*> duplicated =
             GameObjectClipboard::DuplicateCopiedGameObjects();
 
     if (duplicated.size() > 0)
@@ -108,7 +108,7 @@ void HierarchyContextMenu::OnDuplicateClicked()
 
 void HierarchyContextMenu::OnDeleteClicked()
 {
-    std::list<QTreeWidgetItem*> items = m_hierarchy->selectedItems().toStdList();
+    List<QTreeWidgetItem*> items = m_hierarchy->selectedItems().toStdList();
     m_hierarchy->LeaveOnlyOuterMostItems(&items);
     m_hierarchy->UnselectAll(); // Needed to avoid bug when trying to restore selection
     for (QTreeWidgetItem *item : items)

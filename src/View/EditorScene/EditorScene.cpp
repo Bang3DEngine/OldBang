@@ -4,6 +4,10 @@
 
 EditorScene::EditorScene() : Scene()
 {
+    EditorGameObject *gizmosGo = new EditorGameObject("BANG_GizmosGameObject");
+    gizmosGo->SetParent(this);
+    Gizmos::SetGizmosGameObject(gizmosGo);
+
     m_debugGameObject = new EditorDebugGameObject();
     m_debugGameObject->SetParent(this);
 
@@ -24,6 +28,7 @@ EditorScene::EditorScene() : Scene()
 
 EditorScene::~EditorScene()
 {
+    Gizmos::SetGizmosGameObject(nullptr);
     Hierarchy::GetInstance()->Clear(); // To avoid potential bugs (seriously xd)
     delete m_selectionFramebuffer;
 }
@@ -31,11 +36,6 @@ EditorScene::~EditorScene()
 void EditorScene::_OnStart()
 {
     Scene::_OnStart();
-
-    EditorGameObject *gizmosGo = new EditorGameObject("BANG_GizmosGameObject");
-    gizmosGo->SetParent(this);
-
-    Gizmos::SetGizmosGameObject(gizmosGo);
 }
 
 void EditorScene::_OnResize(int newWidth, int newHeight)

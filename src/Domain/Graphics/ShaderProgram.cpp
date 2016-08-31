@@ -174,7 +174,7 @@ bool ShaderProgram::SetUniformTexture(const String &name, const Texture *texture
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
-        m_namesToTextures[name] = texture;
+        m_names_To_Textures[name] = texture;
     }
     else
     {
@@ -221,7 +221,7 @@ void ShaderProgram::Bind() const
 
     // Bind textures at the moment we bind the shader program
     int textureUnit = 0;
-    for (auto it = m_namesToTextures.begin(); it != m_namesToTextures.end(); ++it)
+    for (auto it = m_names_To_Textures.begin(); it != m_names_To_Textures.end(); ++it)
     {
         String texName = it->first;
         const Texture *tex = it->second;

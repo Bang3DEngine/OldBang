@@ -118,7 +118,16 @@ void Toolbar::OnPlayClicked()
 {
     m_buttonPlay->setChecked(true);
     m_buttonStop->setChecked(false);
-    m_playing = true;
+
+    if (m_playing == false)
+    {
+        m_playing = true;
+        Scene *scene = SceneManager::GetActiveScene();
+        if (scene)
+        {
+            scene->_OnStart();
+        }
+    }
 
     Screen::GetInstance()->setFocus();
 }

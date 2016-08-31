@@ -8,6 +8,7 @@
 #include <functional>
 
 #include "Bang.h"
+#include "List.h"
 #include "String.h"
 
 class BehaviourHolder;
@@ -39,7 +40,7 @@ private:
      * library for wololo.cpp. They will be notified when we
      * get the library
      */
-    std::map<String, std::list<BehaviourHolder*> >
+    std::map<String, List<BehaviourHolder*> >
         m_behPath_To_behHolderDemanders;
 
     /**

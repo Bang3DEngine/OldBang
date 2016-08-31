@@ -1,7 +1,7 @@
 #ifndef IWINDOWEVENTMANAGERLISTENER_H
 #define IWINDOWEVENTMANAGERLISTENER_H
 
-#include <list>
+#include "List.h"
 
 #include "Bang.h"
 
@@ -29,7 +29,7 @@ public:
     virtual void OnGameObjectDestroyed(GameObject *destroyed)  { }
 
     virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem)  { }
-    virtual void OnTreeHierarchyGameObjectsSelected(std::list<GameObject*> &selectedGameObjects) { }
+    virtual void OnTreeHierarchyGameObjectsSelected(List<GameObject*> &selectedGameObjects) { }
     virtual void OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected) { }
 };
 

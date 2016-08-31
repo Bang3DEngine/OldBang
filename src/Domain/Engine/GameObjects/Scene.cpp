@@ -8,8 +8,8 @@
 Scene::Scene() : GameObject("Scene")
 {
     m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
-    m_assetsManager = new AssetsManager();
-    m_materialAfterLighting = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_AfterLighting.bmat");
+    m_materialBeforeLighting = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_BeforeLighting.bmat");
+    m_materialAfterLighting  = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_AfterLighting.bmat");
 }
 
 void Scene::_OnStart()
@@ -18,7 +18,7 @@ void Scene::_OnStart()
 
     if (!IsEditorGameObject())
     {
-        std::list<Camera*> cameras = GetComponentsInChildren<Camera>();
+        List<Camera*> cameras = GetComponentsInChildren<Camera>();
         Debug_Log("Cameras: " << cameras);
         if (!cameras.empty())
         {
@@ -67,18 +67,10 @@ Scene::~Scene()
     delete m_materialAfterLighting;
     delete m_defaultCamera;
     delete m_gbuffer;
-
-    // AssetsManager must be deleted the last one
-    // to clean all the Assets that haven't been deleted
-    // for whatever reason. Otherwise, we could double delete
-    // some stuff
-    delete m_assetsManager;
 }
 
 void Scene::_OnRender()
 {
-    Chrono c("Scene");
-    c.MarkEvent("Init");
     Camera *cam = m_cameraGameObject->GetComponent<Camera>();
     if (cam  && cam->GetAutoUpdateAspectRatio())
     {
@@ -87,7 +79,6 @@ void Scene::_OnRender()
 
     m_gbuffer->Bind();
 
-    c.MarkEvent("D2G");
     // D2G (DrawToGBuffer, filling in GBuffer with positions, normals, etc.)
 
         Color bgColor = GetCamera()->GetClearColor();
@@ -108,10 +99,12 @@ void Scene::_OnRender()
         //
     //
 
-    c.MarkEvent("PR");
     // PR (Post-Render, modifying on top of GBuffer)
+
+        m_gbuffer->RenderPassWithMaterial(m_materialBeforeLighting);
+
         // Apply lights to gbuffer
-        std::list<Light*> childrenLights = GetComponentsInChildren<Light>();
+        List<Light*> childrenLights = GetComponentsInChildren<Light>();
         for (Light *light : childrenLights)
         {
             if (CAN_USE_COMPONENT(light))
@@ -127,11 +120,7 @@ void Scene::_OnRender()
     //
 
     m_gbuffer->UnBind();
-
-    c.MarkEvent("RenderToScreen");
     m_gbuffer->RenderToScreen();
-
-    c.Log();
 }
 
 void Scene::SetCamera(const Camera *cam)
@@ -170,11 +159,6 @@ Camera *Scene::GetCurrentCamera() const
 const Screen *Scene::GetScreen() const
 {
     return m_screen;
-}
-
-AssetsManager *Scene::GetAssetsManager() const
-{
-    return m_assetsManager;
 }
 
 bool Scene::IsScene() const

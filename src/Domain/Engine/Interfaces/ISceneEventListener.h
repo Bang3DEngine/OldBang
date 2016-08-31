@@ -3,12 +3,12 @@
 
 #include "Bang.h"
 
-#include <list>
+#include "List.h"
 #include <algorithm>
 #include <functional>
 
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
-    for (auto it = (ITERABLE).begin(); it != (ITERABLE).end(); ++it ) \
+    for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
     {\
         if ((*it)->IsEnabled()) { \
             (*it)->FUNCTION();   \

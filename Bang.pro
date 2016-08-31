@@ -131,7 +131,8 @@ OTHER_FILES += \
     Assets/Textures/carpetTexture.btex2d \
     Assets/Scenes/test.bscene \
     Assets/Engine/Textures/DirectionalLightIcon.btex2d \
-    Assets/Engine/Textures/PointLightIcon.btex2d
+    Assets/Engine/Textures/PointLightIcon.btex2d \
+    Assets/Engine/Shaders/PR_BeforeLighting.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

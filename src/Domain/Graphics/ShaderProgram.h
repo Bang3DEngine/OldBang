@@ -26,7 +26,7 @@ private:
     Shader *m_vshader;
     Shader *m_fshader;
 
-    mutable std::map<String, const Texture*> m_namesToTextures;
+    mutable std::map<String, const Texture*> m_names_To_Textures;
 
 public:
     ShaderProgram();

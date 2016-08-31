@@ -12,6 +12,7 @@ BehaviourHolder::~BehaviourHolder()
     {
         delete m_behaviour;
     }
+    BehaviourManager::OnBehaviourHolderDeleted(this);
 }
 
 void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
@@ -84,8 +85,6 @@ void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
         {
             m_behaviour->Init(this);
             m_behaviour->_OnStart();
-            String filename = Persistence::GetFileNameWithExtension(m_sourceFilepath);
-            Debug_Log("Behaviour '" << filename << "' successfully refreshed!");
         }
     }
     else

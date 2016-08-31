@@ -12,11 +12,13 @@
 #include "Scene.h"
 #include "Screen.h"
 #include "SceneManager.h"
+#include "AssetsManager.h"
 #include "BehaviourManager.h"
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {
     m_sceneManager = new SceneManager();
+    m_assetsManager = new AssetsManager();
     m_behaviourManager = new BehaviourManager();
 
     connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(OnDrawTimerTick()));
@@ -29,8 +31,6 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::OnDrawTimerTick()
 {
-    Chrono c("Application::OnDrawTimerTick()");
-    c.MarkEvent("NewFrame");
     // Update deltaTime
     float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
     Time::GetInstance()->m_deltaTime = deltaTime;
@@ -47,7 +47,6 @@ void Application::OnDrawTimerTick()
     processEvents();
     Input::GetInstance()->ProcessEnqueuedEvents();
 
-    c.MarkEvent("Update");
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
@@ -55,17 +54,17 @@ void Application::OnDrawTimerTick()
         activeScene->_OnUpdate();
     }
 
-    c.MarkEvent("Scene Render");
     // Render screen  (_OnRender mainly)
     Screen::GetInstance()->Render();
-    c.MarkEvent("Swap buffers");
     Screen::GetInstance()->swapBuffers();
-
-    c.Log();
 
     Input::GetInstance()->OnFrameFinished(); // Notify to Input that a new frame has passed
 }
 
+AssetsManager *Application::GetAssetsManager() const
+{
+    return m_assetsManager;
+}
 
 Application *Application::GetInstance()
 {

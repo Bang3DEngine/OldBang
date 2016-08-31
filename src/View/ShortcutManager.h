@@ -4,6 +4,7 @@
 #include <set>
 #include <vector>
 
+#include "List.h"
 #include "Input.h"
 
 class IShortcutListener;
@@ -13,7 +14,7 @@ friend class Application;
 friend class IShortcutListener;
 
 private:
-    std::list<IShortcutListener*> m_shortcutsListeners;
+    List<IShortcutListener*> m_shortcutsListeners;
     std::set<Input::Key> m_pressedKeys;
 
     ShortcutManager();

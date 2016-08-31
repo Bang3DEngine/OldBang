@@ -102,7 +102,7 @@ void HierarchyDragDropManager::OnDropHereFromHierarchy(GameObject *selected,
     QEvent *e = ddi.currentEvent;
 
     GameObject *targetGameObject = GetDropTargetGameObject();
-    std::list<QTreeWidgetItem*> sourceItems =
+    List<QTreeWidgetItem*> sourceItems =
             m_hierarchy->selectedItems().toStdList();
     m_hierarchy->LeaveOnlyOuterMostItems(&sourceItems);
     if (!sourceItems.empty())

@@ -32,22 +32,28 @@ void SceneManager::AddScene(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetInstance(); NONULL(sm);
 
-    sm->m_scenes.push_back(scene);
+    if (sm->m_scenes.Contains(scene))
+    {
+        sm->m_scenes.PushBack(scene);
+    }
 }
 
 void SceneManager::SetActiveScene(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetInstance(); NONULL(sm);
+    if (sm->m_activeScene == scene) return;
 
     if (sm->m_activeScene)
     {
+        sm->m_scenes.remove(sm->m_activeScene);
         delete sm->m_activeScene;
+        sm->m_activeScene = nullptr;
     }
 
     sm->m_activeScene = scene;
     if (sm->m_activeScene)
     {
-        sm->m_activeScene->_OnStart();
+        AddScene(scene); // (it does not add repeated ones)
 
         #ifdef BANG_EDITOR
         Hierarchy::GetInstance()->Clear();
@@ -58,13 +64,6 @@ void SceneManager::SetActiveScene(Scene *scene)
 void SceneManager::SetActiveScene(const String &name)
 {
     SceneManager *sm = SceneManager::GetInstance(); NONULL(sm);
-
-    if (sm->m_activeScene)
-    {
-        delete sm->m_activeScene;
-        //sm->m_activeScene->_OnDestroy();
-    }
-
     for (Scene *scene : sm->m_scenes)
     {
         if (scene->name == name)
@@ -73,7 +72,6 @@ void SceneManager::SetActiveScene(const String &name)
             return;
         }
     }
-
     Debug_Warn("Could not change Scene to '" << name << "', "<<
                 "because no scene with this name is added to the SceneManager.");
 }
@@ -103,13 +101,13 @@ void SceneManager::RemoveScene(const String &name)
 {
     SceneManager *sm = SceneManager::GetInstance(); NONULL(sm);
 
-    for (auto it = sm->m_scenes.begin();
-         it != sm->m_scenes.end(); ++it)
+    for (auto it = sm->m_scenes.Begin();
+         it != sm->m_scenes.End(); ++it)
     {
         Scene *scene = (*it);
         if (scene->name == name)
         {
-            sm->m_scenes.erase(it);
+            sm->m_scenes.Remove(it);
             return;
         }
     }

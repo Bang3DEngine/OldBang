@@ -377,7 +377,7 @@ const std::map<String, XMLAttribute> &XMLNode::GetAttributes() const
     return m_attributes;
 }
 
-const std::list<XMLNode*>& XMLNode::GetChildren() const
+const List<XMLNode*>& XMLNode::GetChildren() const
 {
     return m_children;
 }

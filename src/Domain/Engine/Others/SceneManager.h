@@ -1,7 +1,7 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
-#include <list>
+#include "List.h"
 
 #include "String.h"
 
@@ -13,7 +13,7 @@ friend class Application;
 private:
     SceneManager();
 
-    std::list<Scene*> m_scenes;
+    List<Scene*> m_scenes;
     Scene *m_activeScene = nullptr;
 
 public:
