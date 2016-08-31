@@ -8,7 +8,6 @@
 
 #include "Bang.h"
 
-#include "Map.h"
 #include "Timer.h"
 #include "Debug.h"
 #include "Camera.h"

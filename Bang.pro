@@ -213,7 +213,8 @@ HEADERS += \
     src/Persistence/BehaviourManager.h \
     src/Persistence/BehaviourManagerCompileThread.h \
     src/Domain/Engine/Others/Chrono.h \
-    src/Domain/Engine/Others/Map.h
+    src/Domain/Engine/Others/Map.h \
+    src/Domain/Engine/Others/List.h
 
 EDITOR {
 HEADERS += \
@@ -366,7 +367,8 @@ SOURCES += \
     src/Persistence/BehaviourManager.cpp \
     src/Persistence/BehaviourManagerCompileThread.cpp \
     src/Domain/Engine/Others/Chrono.cpp \
-    src/Domain/Engine/Others/Map.cpp
+    src/Domain/Engine/Others/Map.cpp \
+    src/Domain/Engine/Others/List.cpp
 
 EDITOR {
     SOURCES += \

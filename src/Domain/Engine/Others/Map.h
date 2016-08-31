@@ -5,14 +5,17 @@
 #include <list>
 #include <sstream>
 
+#include "List.h"
 #include "String.h"
 
 template <class Key, class Value>
-class Map : private std::map<Key, Value>
+class Map : public std::map<Key, Value>
 {
 public:
     typedef typename std::map<Key, Value>::iterator Iterator;
     typedef typename std::map<Key, Value>::const_iterator Const_Iterator;
+    typedef typename std::map<Key, Value>::reverse_iterator Reverse_Iterator;
+    typedef typename std::map<Key, Value>::const_reverse_iterator Const_Reverse_Iterator;
 
     Map()
     {
@@ -63,9 +66,9 @@ public:
         return false;
     }
 
-    std::list<Key> GetKeys() const
+    List<Key> GetKeys() const
     {
-        std::list<Key> result;
+        List<Key> result;
         for (auto it = this->begin(); it != this->end(); ++it)
         {
             result.push_back(it->first);
@@ -73,9 +76,9 @@ public:
         return result;
     }
 
-    std::list<Value> GetValues() const
+    List<Value> GetValues() const
     {
-        std::list<Value> result;
+        List<Value> result;
         for (auto it = this->begin(); it != this->end(); ++it)
         {
             result.push_back(it->second);
@@ -83,13 +86,37 @@ public:
         return result;
     }
 
-    typename std::map<Key, Value>::const_iterator Begin()
+    Iterator Begin()
     {
         return this->begin();
     }
-    typename std::map<Key, Value>::const_iterator End()
+    Iterator End()
     {
         return this->end();
+    }
+    Const_Iterator Begin() const
+    {
+        return this->begin();
+    }
+    Const_Iterator End() const
+    {
+        return this->end();
+    }
+    Reverse_Iterator RBegin()
+    {
+        return this->rbegin();
+    }
+    Reverse_Iterator REnd()
+    {
+        return this->rend();
+    }
+    Const_Reverse_Iterator RBegin() const
+    {
+        return this->rbegin();
+    }
+    Const_Reverse_Iterator REnd() const
+    {
+        return this->rend();
     }
 
     String ToString()

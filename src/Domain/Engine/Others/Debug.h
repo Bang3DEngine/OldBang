@@ -73,6 +73,7 @@ OPERATOR_OSTREAM_DECL(Vector4)
 OPERATOR_OSTREAM_DECL(Matrix4)
 OPERATOR_OSTREAM_DECL(IToString)
 OPERATOR_OSTREAM_DECL(Quaternion)
+// TODO: Do the same with Vector, List and Map
 std::ostream& operator<<(std::ostream &log, const String &str);
 std::ostream& operator<<(std::ostream &log, const QString &str);
 std::ostream& operator<<(std::ostream &log, const IToString *s);
