@@ -18,7 +18,6 @@ AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
 
     setMinimumWidth(15);
     setContentsMargins(0, 0, 0, 0);
-    m_lineEdit->updateGeometry();
 
     AfterConstructor();
 }

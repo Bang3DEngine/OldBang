@@ -31,7 +31,7 @@ protected:
                     InspectorWidget *inspectorWidget,
                     bool isSubWidget = false,
                     bool createLabel = true,
-                    bool needsLabelOnTop = false);
+                    bool labelAbove  = false);
 
     void AfterConstructor();
 

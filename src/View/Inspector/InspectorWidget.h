@@ -96,8 +96,6 @@ private slots:
 
 public slots:
 
-    virtual void OnCustomContextMenuRequested(QPoint point);
-
     virtual void _OnSlotValueChanged();
 };
 

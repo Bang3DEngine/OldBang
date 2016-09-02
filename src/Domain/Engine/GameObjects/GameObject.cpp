@@ -184,7 +184,7 @@ List<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
     List<GameObject*> cc;
     for (GameObject *c : m_children)
     {
-        List<GameObject*> childChildren = c->GetChildrenRecursively();
+        List<GameObject*> childChildren = c->GetChildrenRecursivelyEditor();
         cc.Splice(cc.End(), childChildren);
         cc.PushBack(c);
     }

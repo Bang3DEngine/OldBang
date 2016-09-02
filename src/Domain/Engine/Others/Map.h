@@ -21,6 +21,10 @@ public:
     {
     }
 
+    Map(const std::map<Key, Value> &m) : std::map<Key, Value>(m)
+    {
+    }
+
     void Set(const Key &key, const Value &value)
     {
         (*this)[key] = value;

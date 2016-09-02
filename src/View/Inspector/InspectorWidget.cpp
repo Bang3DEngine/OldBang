@@ -40,11 +40,12 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
     String fTitle = StringUtils::FormatInspectorLabel(title);
     m_titleLabel = new QLabel( QString(fTitle.ToCString()) );
+
     QFont font = m_titleLabel->font();
     font.setPixelSize(13);
     font.setBold(true);
     m_titleLabel->setFont(font);
-    m_titleLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
+
     m_gridLayout->addWidget(m_titleLabel, 0, 0, 2, 1,
                             Qt::AlignLeft | Qt::AlignVCenter);
 
@@ -52,12 +53,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     RefreshWidgetValues(); // Initial catch of values
 
     m_created = true;
-
     //
-
-    setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)),
-            this, SLOT(OnCustomContextMenuRequested(QPoint)));
 
     if (autoUpdate)
     {
@@ -172,10 +168,6 @@ int InspectorWidget::GetNextRowIndex() const
 void InspectorWidget::SetTitle(const String &title)
 {
     m_titleLabel->setText(QString::fromStdString(title));
-}
-
-void InspectorWidget::OnCustomContextMenuRequested(QPoint point)
-{
 }
 
 void InspectorWidget::RefreshWidgetValues()

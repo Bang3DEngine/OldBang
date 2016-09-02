@@ -29,7 +29,7 @@ Inspector::Inspector(QWidget *parent)
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
-    setMinimumWidth(300);
+    setMinimumWidth(360);
 }
 
 void Inspector::updateGeometries()
@@ -99,6 +99,10 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     }
 
     m_titleLabel->setText(gameObject->name.ToQString());
+    updateGeometry();
+    adjustSize();
+    update();
+    show();
 }
 
 void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable)

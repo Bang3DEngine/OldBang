@@ -6,7 +6,7 @@
 EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
                        GameObject *attachedGameObject)
 {
-    this->m_attachedGameObject = attachedGameObject;
+    m_attachedGameObject = attachedGameObject;
 
     m_oAxisDirection = EditorAxis::GetVectorFromDir(dir);
 

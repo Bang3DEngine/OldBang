@@ -32,6 +32,7 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     m_filepathLineEdit = new FileLineEdit();
     m_filepathLineEdit->setReadOnly(true);
     m_filepathLineEdit->setAlignment(Qt::AlignLeft);
+    m_filepathLineEdit->setMinimumWidth(50);
     hLayout->addWidget(m_filepathLineEdit, 100);
     //
 

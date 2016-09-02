@@ -16,7 +16,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
                                  InspectorWidget *inspectorWidget,
                                  bool isSubWidget,
                                  bool createLabel,
-                                 bool needsLabelOnTop) :
+                                 bool labelAbove ) :
     m_inspectorWidget(inspectorWidget)
 {
     m_xmlAttribute = xmlAttribute;
@@ -28,9 +28,9 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     setLayout(m_layout);
     setMinimumWidth(40);
 
-    if (!needsLabelOnTop)
+    if (!labelAbove)
     {
-        m_layout->addSpacing(10);
+        m_layout->setSpacing(10); // Margin to the right of the label
     }
 
     if (!isSubWidget)
@@ -45,21 +45,13 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
 
         QGridLayout *gridLayout = m_inspectorWidget->GetGridLayout();
         m_rowIndexInGridLayout = m_inspectorWidget->GetNextRowIndex();
+
+        int widgetRow = m_rowIndexInGridLayout + (labelAbove ? 1 : 0);
+        int widgetCol = (labelAbove ? 0 : 1);
+        int colSpan   = (labelAbove ? 2 : 1);
         m_label = new QLabel(label);
-        if (needsLabelOnTop)
-        {
-            gridLayout->addWidget(m_label, m_rowIndexInGridLayout, 0, 1, 2,
-                                  Qt::AlignLeft | Qt::AlignVCenter);
-            gridLayout->addWidget(this, m_rowIndexInGridLayout + 1, 0, 1, 2,
-                                  Qt::AlignVCenter);
-        }
-        else
-        {
-            gridLayout->addWidget(m_label, m_rowIndexInGridLayout, 0, 1, 1,
-                                  Qt::AlignLeft | Qt::AlignVCenter);
-            gridLayout->addWidget(this, m_rowIndexInGridLayout, 1, 1, 1,
-                                  Qt::AlignVCenter);
-        }
+        gridLayout->addWidget(m_label, m_rowIndexInGridLayout,         0, 1, colSpan, Qt::AlignLeft | Qt::AlignVCenter);
+        gridLayout->addWidget(this,    widgetRow,              widgetCol, 1, colSpan, Qt::AlignVCenter);
     }
 
     Refresh(xmlAttribute);

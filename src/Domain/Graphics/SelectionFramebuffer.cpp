@@ -17,17 +17,9 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     m_material->SetShaderProgram(m_program);
 
     m_colorTexture = new TextureRender();
-    /*
-    m_colorTexture->SetGLFormat(GL_RGB);
-    m_colorTexture->SetGLInternalFormat(GL_RGB);
-    */
     m_worldPosTexture = new TextureRender();
     SetColorAttachment(Attachment::ColorAttachment, m_colorTexture);
     SetColorAttachment(Attachment::WorldPosition, m_worldPosTexture);
-    /*
-    CreateColorAttachment(Attachment::ColorAttachment, GL_RGB, GL_RGB);
-    CreateColorAttachment(Attachment::WorldPosition, GL_RGBA32F, GL_RGBA, GL_FLOAT);
-    */
     CreateDepthRenderbufferAttachment();
 }
 
@@ -38,14 +30,11 @@ SelectionFramebuffer::~SelectionFramebuffer()
 
 void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 {
-    Chrono c("SelectionFramebuffer");
-    c.MarkEvent("Init");
     SetAllDrawBuffers();
 
     m_isPassing = true;
 
     // Assign id's
-    c.MarkEvent("Assign Ids");
     int id = 0;
     m_gameObjectToId.clear(); m_idToGameObject.clear();
     List<GameObject*> gameObjects = scene->GetChildrenRecursivelyEditor();
@@ -56,7 +45,6 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         ++id;
     }
 
-    c.MarkEvent("Normal pass");
     ShaderProgram *sp = m_material->GetShaderProgram();
     for (GameObject *go : gameObjects)
     {
@@ -68,7 +56,6 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
     }
 
     // Dont write to Attachment::WorldPosition
-    c.MarkEvent("Gizmos pass");
     SetDrawBuffers({Attachment::ColorAttachment});
     for (GameObject *go : gameObjects)
     {
@@ -79,7 +66,6 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         }
     }
 
-    c.MarkEvent("GizmosND pass");
     glClear(GL_DEPTH_BUFFER_BIT);
     for (GameObject *go : gameObjects)
     {
@@ -89,8 +75,6 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
             go->_OnDrawGizmosNoDepth();
         }
     }
-
-    c.Log();
 
     m_isPassing = false;
 }

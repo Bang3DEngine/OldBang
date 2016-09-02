@@ -78,35 +78,42 @@ Application *Application::GetInstance()
 bool Application::notify(QObject *receiver, QEvent *e)
 {
     #ifdef BANG_EDITOR
-    if (e->type() == QEvent::MouseButtonPress)
+    if (receiver == focusWidget())
     {
-        DragDropManager::HandleGlobalMousePress(receiver, e);
-    }
-    else if (e->type() == QEvent::MouseButtonRelease)
-    {
-        DragDropManager::HandleGlobalMouseRelease(receiver, e);
-    }
-
-    if (e->type() == QEvent::KeyPress)
-    {
-        QKeyEvent *ev = static_cast<QKeyEvent*>(e);
-        if (!ev->isAutoRepeat())
+        if (e->type() == QEvent::MouseButtonPress)
         {
-            ShortcutManager::GetInstance()->OnKeyPressed( Input::Key(ev->key()) );
+            DragDropManager::HandleGlobalMousePress(receiver, e);
         }
-    }
-    else if (e->type() == QEvent::KeyRelease)
-    {
-        QKeyEvent *ev = static_cast<QKeyEvent*>(e);
-        if (!ev->isAutoRepeat())
+        else if (e->type() == QEvent::MouseButtonRelease)
         {
-            ShortcutManager::GetInstance()->OnKeyReleased( Input::Key(ev->key()) );
+            DragDropManager::HandleGlobalMouseRelease(receiver, e);
         }
-    }
 
-    if (e->type() == QEvent::Shortcut)
-    {
-        ShortcutManager::GetInstance()->Clear();
+        if (e->type() == QEvent::KeyPress)
+        {
+            QKeyEvent *ev = static_cast<QKeyEvent*>(e);
+            if (!ev->isAutoRepeat())
+            {
+                std::cerr << "KeyPress event on: " << ev->text() << ", " << (receiver ? receiver->objectName().toStdString() : "") << std::endl;
+                ShortcutManager::GetInstance()->OnKeyPressed( Input::Key(ev->key()) );
+                e->accept();
+            }
+        }
+        else if (e->type() == QEvent::KeyRelease)
+        {
+            QKeyEvent *ev = static_cast<QKeyEvent*>(e);
+            if (!ev->isAutoRepeat())
+            {
+                std::cerr << "KeyRelease event on: " << ev->text() << ", " <<  (receiver ? receiver->objectName().toStdString() : "") << std::endl;
+                ShortcutManager::GetInstance()->OnKeyReleased( Input::Key(ev->key()) );
+                e->accept();
+            }
+        }
+
+        if (e->type() == QEvent::Shortcut)
+        {
+            ShortcutManager::GetInstance()->Clear();
+        }
     }
     #endif
 

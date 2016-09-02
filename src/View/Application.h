@@ -14,6 +14,7 @@ class SceneManager;
 class AssetsManager;
 class ShortcutManager;
 class BehaviourManager;
+
 class Application : public QApplication
 {
     Q_OBJECT

@@ -19,10 +19,10 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
         QLabel *label = new QLabel(QString::fromStdString(labels[i]));
         if (i != 0)
         {
-            hLayout->addSpacing(5);
+            hLayout->setSpacing(3);
         }
         hLayout->addWidget(label, 0, Qt::AlignRight | Qt::AlignVCenter);
-        hLayout->addWidget(s, 0, Qt::AlignLeft | Qt::AlignVCenter);
+        hLayout->addWidget(s,     0, Qt::AlignLeft | Qt::AlignVCenter);
     }
 
     setMinimumWidth(40);
