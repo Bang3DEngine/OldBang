@@ -97,7 +97,6 @@ void EditorTranslateAxis::OnUpdate()
 void EditorTranslateAxis::OnDrawGizmosNoDepth()
 {
     EditorAxis::OnDrawGizmosNoDepth();
-    Gizmos::Begin();
     m_line->Render();
     m_axisCap->GetComponent<Renderer>()->Render();
 }

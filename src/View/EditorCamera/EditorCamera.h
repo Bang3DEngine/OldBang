@@ -29,8 +29,8 @@ private:
 
     GameObject *m_currentFocus = nullptr;
     bool m_doingLookAt = false;
-    float m_lookAtRotSpeed = 5.0f;
-    float m_lookAtMoveSpeed = 4.0f;
+    float m_lookAtRotSpeed = 2.0f;
+    float m_lookAtMoveSpeed = 3.0f;
 
     /**
      * These 4 variables are related to the speed when moving

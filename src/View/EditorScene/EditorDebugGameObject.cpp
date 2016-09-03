@@ -69,13 +69,11 @@ void EditorDebugGameObject::OnUpdate()
 
 void EditorDebugGameObject::OnDrawGizmos()
 {
-    Gizmos::Begin();
     DrawLines(true);
 }
 
 void EditorDebugGameObject::OnDrawGizmosNoDepth()
 {
-    Gizmos::Begin();
     DrawLines(false);
 }
 

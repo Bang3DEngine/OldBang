@@ -159,20 +159,20 @@ void EditorCamera::HandleLookAtFocus()
             }
 
             //LookAt Move
-            float minDist = 0.0f;
+            float stopDist = 0.0f;
             float radius = focusBSphere.GetRadius();
             if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
             {
                 float fov = glm::radians(cam->GetFovDegrees() / 2.0f);
-                minDist = radius / std::tan(fov) * 1.5f;
+                stopDist = radius / std::tan(fov) * 1.5f;
             }
 
-            minDist = std::max(minDist, 1.0f); //In case boundingBox is empty
-            Vector3 dest = focusPos - (focusDir * minDist);
+            stopDist = std::max(stopDist, 1.0f); //In case boundingBox is empty
+            Vector3 dest = focusPos - (focusDir * stopDist);
             float t = Time::GetDeltaTime() * m_lookAtMoveSpeed;
             transform->SetPosition( Vector3::Lerp(thisPos, dest, t) );
 
-            if ( Vector3::Distance(dest, thisPos) < 2.0f)
+            if ( Vector3::Distance(dest, thisPos) < 0.05f)
             {
                 m_doingLookAt = false;
             }
@@ -232,9 +232,6 @@ void EditorCamera::OnUpdate()
     else
     {
         HandleLookAtFocus(); // Modifies m_doingLookAt
-        if (!m_doingLookAt)  // If it has just stopped
-        {
-        }
 
         //Update all needed variables in case we are doing a lookAt.
         UpdateRotationVariables();

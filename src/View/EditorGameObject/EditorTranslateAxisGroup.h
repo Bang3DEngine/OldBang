@@ -6,6 +6,7 @@
 #include "EditorAxis.h"
 #include "MeshRenderer.h"
 #include "LineRenderer.h"
+#include "EditorAxisPlane.h"
 #include "EditorGameObject.h"
 #include "EditorTranslateAxis.h"
 
@@ -18,9 +19,12 @@
 class EditorTranslateAxisGroup : public EditorGameObject
 {
 private:
-    EditorTranslateAxis *m_axisX;
-    EditorTranslateAxis *m_axisY;
-    EditorTranslateAxis *m_axisZ;
+    EditorTranslateAxis *m_axisX = nullptr;
+    EditorTranslateAxis *m_axisY = nullptr;
+    EditorTranslateAxis *m_axisZ = nullptr;
+    EditorAxisPlane *m_planeXY = nullptr;
+    EditorAxisPlane *m_planeXZ = nullptr;
+    EditorAxisPlane *m_planeYZ = nullptr;
 
 public:
     EditorTranslateAxisGroup(GameObject *attachedGameObject);

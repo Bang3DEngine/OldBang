@@ -32,25 +32,25 @@ private:
 
     static bool m_inited;
 
-    static EditorGameObject *m_gizmosGameObject;
+    static EditorGameObject   *m_gizmosGameObject;
     static SingleLineRenderer *m_singleLineRenderer;
-    static CircleRenderer *m_circleRenderer;
-    static MeshRenderer *m_meshRenderer;
+    static CircleRenderer     *m_circleRenderer;
+    static MeshRenderer       *m_meshRenderer;
     static Mesh *m_boxMesh;
     static Mesh *m_sphereMesh;
     static Mesh *m_planeMesh;
-
     static Material *m_material;
-    static Color m_color;
-    static Vector3 m_position;
-    static Quaternion m_rotation;
-    static Vector3 m_scale;
-    static float m_lineWidth;
-    static bool m_wireframe;
-    static bool m_ignoreModel, m_ignoreView, m_ignoreProjection;
-    static bool m_receivesLighting;
 
-    static void SetStatesBeforeRendering();
+
+    static bool m_resetAllowed;
+
+    /**
+     * @brief Useful if we want to call for example inside RenderFrustum a lot
+     * of RenderLines. We avoid Reset() inside RenderLines being called, because
+     * we don't want this
+     */
+    static void SetResetAllowed(bool allowed);
+    static void Reset();
 
 public:
 
@@ -79,7 +79,6 @@ public:
                               float fovDegrees, float aspectRatio);
     static void RenderSimpleSphere(const Vector3 &origin, float radius);
 
-    static void Begin();
 };
 
 #endif // GIZMOS_H

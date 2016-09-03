@@ -46,8 +46,6 @@ void EditorScene::_OnResize(int newWidth, int newHeight)
 
 void EditorScene::_OnRender()
 {
-    Gizmos::Begin();
-
     Scene::_OnRender();
 
     m_selectionFramebuffer->Bind();

@@ -53,8 +53,6 @@ void DirectionalLight::OnDrawGizmos()
 {
     Light::OnDrawGizmos();
 
-    Gizmos::Begin();
-
     Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("Assets/Engine/Textures/DirectionalLightIcon.btex2d");
     Gizmos::SetColor(Color(GetColor(), 0.5f));
     Gizmos::SetPosition(transform->GetPosition());
@@ -81,6 +79,7 @@ void DirectionalLight::OnDrawGizmos()
         {
             Vector3 offx = right * glm::cos(angle);
             Vector3 offy = up * glm::sin(angle);
+            Gizmos::SetColor(GetColor());
             Gizmos::RenderLine(c + offx + offy, c + offx + offy + forward);
         }
     }
