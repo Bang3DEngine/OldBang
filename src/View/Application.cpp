@@ -72,7 +72,7 @@ Application *Application::GetInstance()
     return static_cast<Application*>(EditorWindow::GetInstance()->GetApplication());
     #else
     return static_cast<Application*>(GameWindow::GetInstance()->GetApplication());
-    #endif
+#endif
 }
 
 bool Application::notify(QObject *receiver, QEvent *e)
@@ -91,22 +91,20 @@ bool Application::notify(QObject *receiver, QEvent *e)
 
         if (e->type() == QEvent::KeyPress)
         {
-            QKeyEvent *ev = static_cast<QKeyEvent*>(e);
+            QKeyEvent *ev = dynamic_cast<QKeyEvent*>(e);
+            m_lastKeyPressEvInfo.time = Time::GetNow();
+            m_lastKeyPressEvInfo.key = ev->key();
             if (!ev->isAutoRepeat())
             {
-                std::cerr << "KeyPress event on: " << ev->text() << ", " << (receiver ? receiver->objectName().toStdString() : "") << std::endl;
                 ShortcutManager::GetInstance()->OnKeyPressed( Input::Key(ev->key()) );
-                e->accept();
             }
         }
         else if (e->type() == QEvent::KeyRelease)
         {
-            QKeyEvent *ev = static_cast<QKeyEvent*>(e);
+            QKeyEvent *ev = dynamic_cast<QKeyEvent*>(e);
             if (!ev->isAutoRepeat())
             {
-                std::cerr << "KeyRelease event on: " << ev->text() << ", " <<  (receiver ? receiver->objectName().toStdString() : "") << std::endl;
                 ShortcutManager::GetInstance()->OnKeyReleased( Input::Key(ev->key()) );
-                e->accept();
             }
         }
 
@@ -118,4 +116,10 @@ bool Application::notify(QObject *receiver, QEvent *e)
     #endif
 
     return QApplication::notify(receiver, e);
+}
+
+bool Application::CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent)
+{
+    return m_lastKeyPressEvInfo.key == keyReleaseEvent->key() &&
+           Time::GetNow() == m_lastKeyPressEvInfo.time;
 }

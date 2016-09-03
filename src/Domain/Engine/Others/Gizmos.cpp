@@ -10,7 +10,7 @@
 #include "SingleLineRenderer.h"
 
 EditorGameObject *Gizmos::m_gizmosGameObject = nullptr;
-std::vector<Renderer*> Gizmos::renderers;
+std::vector<Renderer*> Gizmos::m_renderers;
 
 SingleLineRenderer *Gizmos::m_singleLineRenderer = nullptr;
 CircleRenderer *Gizmos::m_circleRenderer = nullptr;
@@ -59,12 +59,12 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
         Gizmos::m_circleRenderer = m_gizmosGameObject->AddComponent<CircleRenderer>();
         Gizmos::m_meshRenderer = m_gizmosGameObject->AddComponent<MeshRenderer>();
 
-        renderers.clear();
-        renderers.push_back(Gizmos::m_singleLineRenderer);
-        renderers.push_back(Gizmos::m_circleRenderer);
-        renderers.push_back(Gizmos::m_meshRenderer);
+        m_renderers.clear();
+        m_renderers.push_back(Gizmos::m_singleLineRenderer);
+        m_renderers.push_back(Gizmos::m_circleRenderer);
+        m_renderers.push_back(Gizmos::m_meshRenderer);
 
-        for (Renderer *rend : Gizmos::renderers)
+        for (Renderer *rend : Gizmos::m_renderers)
         {
             rend->SetMaterial(Gizmos::m_material);
         }
@@ -79,7 +79,7 @@ void Gizmos::SetStatesBeforeRendering()
     Gizmos::m_gizmosGameObject->transform->SetLocalRotation(Gizmos::m_rotation);
     Gizmos::m_gizmosGameObject->transform->SetLocalScale(Gizmos::m_scale);
 
-    for (Renderer *rend : Gizmos::renderers)
+    for (Renderer *rend : Gizmos::m_renderers)
     {
         rend->GetMaterial()->SetDiffuseColor(m_color);
         rend->SetLineWidth(m_lineWidth);
@@ -88,11 +88,6 @@ void Gizmos::SetStatesBeforeRendering()
         rend->SetIgnoreModelMatrix(m_ignoreModel);
         rend->SetIgnoreViewMatrix(m_ignoreView);
         rend->SetIgnoreProjectionMatrix(m_ignoreProjection);
-        /*
-        rend->transform->SetPosition(Vector3::zero);
-        rend->transform->SetRotation(Quaternion::identity);
-        rend->transform->SetScale(Vector3::one);
-        */
     }
     Gizmos::m_meshRenderer->GetMaterial()->SetTexture(nullptr);
 }
@@ -142,15 +137,12 @@ void Gizmos::SetIgnoreMatrices(bool ignoreModel, bool ignoreView,
 
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
-    NONULL(m)
-
+    NONULL(m);
     Gizmos::SetStatesBeforeRendering(); NONULL(m_gizmosGameObject);
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(m);
     Gizmos::m_meshRenderer->Render();
-
-    Gizmos::Reset();
 }
 
 
@@ -177,8 +169,6 @@ void Gizmos::RenderSimpleBox(const Box &b)
     Gizmos::RenderLine(r * Vector3(bMin.x, bMax.y, bMax.z), r * Vector3(bMax.x, bMax.y, bMax.z));
     Gizmos::RenderLine(r * Vector3(bMax.x, bMin.y, bMax.z), r * Vector3(bMax.x, bMax.y, bMax.z));
     Gizmos::RenderLine(r * Vector3(bMax.x, bMax.y, bMin.z), r * Vector3(bMax.x, bMax.y, bMax.z));
-
-    Gizmos::Reset();
 }
 
 void Gizmos::RenderBox(const Box &b)
@@ -192,8 +182,6 @@ void Gizmos::RenderBox(const Box &b)
     Gizmos::m_gizmosGameObject->transform->SetScale(b.GetDimensions());
 
     Gizmos::m_meshRenderer->Render();
-
-    Gizmos::Reset();
 }
 
 void Gizmos::RenderIcon(const Texture2D *texture,
@@ -217,7 +205,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
            distScale = Vector3::Distance(camPos, Gizmos::m_position);
         }
 
-        Gizmos::m_gizmosGameObject-> transform->SetScale(m_scale * distScale);
+        Gizmos::m_gizmosGameObject->transform->SetScale(m_scale * distScale);
         Gizmos::m_gizmosGameObject->
                 transform->LookInDirection(cam->transform->GetForward(),
                                            cam->transform->GetUp());
@@ -226,8 +214,6 @@ void Gizmos::RenderIcon(const Texture2D *texture,
     Gizmos::m_meshRenderer->GetMaterial()->SetTexture(texture);
 
     Gizmos::m_meshRenderer->Render();
-
-    Gizmos::Reset();
 }
 
 void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
@@ -242,8 +228,6 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
     Gizmos::m_gizmosGameObject->transform->SetScale(Vector3::one);
 
     Gizmos::m_singleLineRenderer->Render();
-
-    Gizmos::Reset();
 }
 
 void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
@@ -262,8 +246,6 @@ void Gizmos::RenderSphere(const Vector3 &origin, float radius)
     Gizmos::m_gizmosGameObject->transform->SetScale(radius);
 
     Gizmos::m_meshRenderer->Render();
-
-    Gizmos::Reset();
 }
 
 void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
@@ -313,8 +295,6 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
     Gizmos::RenderLine(nearUpRight  , farUpRight);
     Gizmos::RenderLine(nearDownRight, farDownRight);
     Gizmos::RenderLine(nearDownLeft , farDownLeft);
-
-    Gizmos::Reset();
 }
 
 void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
@@ -335,31 +315,23 @@ void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
     Gizmos::m_circleRenderer->Render();
     Gizmos::m_gizmosGameObject->transform->SetLocalEuler(90, 0, 0);
     Gizmos::m_circleRenderer->Render();
-
-    Gizmos::Reset();
 }
 
-void Gizmos::Reset()
+void Gizmos::Begin()
 {
     Gizmos::Init();
 
-    Gizmos::m_position = Vector3::zero;
-    Gizmos::m_rotation = Quaternion::identity;
-    Gizmos::m_scale = Vector3::one;
-    for (Renderer *rend : Gizmos::renderers)
+    Gizmos::SetPosition(Vector3::zero);
+    Gizmos::SetRotation(Quaternion::identity);
+    Gizmos::SetScale(Vector3::one);
+    Gizmos::SetColor(Color::green);
+    Gizmos::SetLineWidth(1.0f);
+    Gizmos::SetReceivesLighting(false);
+    Gizmos::SetDrawWireframe(true);
+    Gizmos::SetIgnoreMatrices(false, false, false);
+
+    for (Renderer *rend : m_renderers)
     {
-        rend->GetMaterial()->SetDiffuseColor(Color::green);
-        rend->SetLineWidth(1.0f);
-        rend->SetReceivesLighting(false);
-        rend->SetDrawWireframe(true);
-        rend->SetIgnoreModelMatrix(false);
-        rend->SetIgnoreViewMatrix(false);
-        rend->SetIgnoreProjectionMatrix(false);
-        /*
-        rend->transform->SetPosition(Vector3::zero);
-        rend->transform->SetRotation(Quaternion::identity);
-        rend->transform->SetScale(Vector3::one);
-        */
         rend->SetEnabled(false);
     }
 

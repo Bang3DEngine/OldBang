@@ -46,6 +46,8 @@ void EditorScene::_OnResize(int newWidth, int newHeight)
 
 void EditorScene::_OnRender()
 {
+    Gizmos::Begin();
+
     Scene::_OnRender();
 
     m_selectionFramebuffer->Bind();
@@ -63,18 +65,6 @@ void EditorScene::_OnRender()
 SelectionFramebuffer* EditorScene::GetSelectionFramebuffer() const
 {
     return m_selectionFramebuffer;
-}
-
-void EditorScene::DebugDrawLine(const Vector3 &origin, const Vector3 &destiny, const Color &color,
-                                float lineWidth, float secsTime, bool depthTest)
-{
-    m_debugGameObject->DrawLine(origin, destiny, color, lineWidth, secsTime, depthTest);
-}
-
-void EditorScene::DebugDrawScreenLine(const Vector2 &origin, const Vector2 &destiny, const Color &color,
-                                      float lineWidth, float secsTime)
-{
-    m_debugGameObject->DrawLineScreen(origin, destiny, color, lineWidth, secsTime);
 }
 
 bool EditorScene::IsEditorGameObject() const

@@ -14,14 +14,14 @@ GameWindow::GameWindow(QMainWindow *window)
     window->setWindowModality(Qt::NonModal);
     window->resize(1008, 594);
     window->setMouseTracking(true);
-    window->setFocusPolicy(Qt::StrongFocus);
+    window->setFocusPolicy(Qt::NoFocus);
 }
 
 void GameWindow::SetupUI()
 {
     screen = new Screen(GameWindow::GetInstance()->m_mainWindow);
     screen->setMouseTracking(true);
-    screen->setFocusPolicy(Qt::StrongFocus);
+    screen->setFocusPolicy(Qt::NoFocus);
 
     GameWindow::GetInstance()->m_mainWindow->setCentralWidget(screen);
 }

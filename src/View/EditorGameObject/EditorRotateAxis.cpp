@@ -110,7 +110,7 @@ void EditorRotateAxis::OnUpdate()
 void EditorRotateAxis::OnDrawGizmosNoDepth()
 {
     EditorAxis::OnDrawGizmosNoDepth();
-
+    Gizmos::Begin();
     m_circle->Render();
 }
 

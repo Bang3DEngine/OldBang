@@ -22,6 +22,8 @@ void EditorRotateAxisGroup::OnDrawGizmosNoDepth()
 {
     EditorGameObject::OnDrawGizmosNoDepth();
 
+    Gizmos::Begin();
+
     Vector3 center = m_axisX->m_attachedGameObject->transform->GetPosition();
     // Billboard-scaling taken into account too
     float radius = 0.95f * m_axisX->m_circle->GetRadius() * transform->GetScale().x;

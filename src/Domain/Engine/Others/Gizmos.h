@@ -24,7 +24,7 @@ friend class EditorScene;
 private:
     Gizmos() {}
 
-    static std::vector<Renderer*> renderers;
+    static std::vector<Renderer*> m_renderers;
 
     static void Init();
 
@@ -79,7 +79,7 @@ public:
                               float fovDegrees, float aspectRatio);
     static void RenderSimpleSphere(const Vector3 &origin, float radius);
 
-    static void Reset();
+    static void Begin();
 };
 
 #endif // GIZMOS_H

@@ -53,6 +53,8 @@ void DirectionalLight::OnDrawGizmos()
 {
     Light::OnDrawGizmos();
 
+    Gizmos::Begin();
+
     Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("Assets/Engine/Textures/DirectionalLightIcon.btex2d");
     Gizmos::SetColor(Color(GetColor(), 0.5f));
     Gizmos::SetPosition(transform->GetPosition());

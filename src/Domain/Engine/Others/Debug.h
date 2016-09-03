@@ -27,6 +27,20 @@ private:
     static const String c_errorPrefix;
 
 public:
+
+    static void DrawLine(const Vector3 &origin,
+                         const Vector3 &destiny,
+                         const Color &color,
+                         float lineWidth = 1.0f,
+                         float secsTime = 1.0f,
+                         bool depthTest = true);
+
+    static void DrawScreenLine(const Vector2 &origin,
+                               const Vector2 &destiny,
+                               const Color &color,
+                               float lineWidth = 1.0f,
+                               float secsTime = 1.0f);
+
     static void _Log(const String &str);
 
     static void _Warn(const String &str);

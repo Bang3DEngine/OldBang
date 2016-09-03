@@ -14,7 +14,6 @@ class SceneManager;
 class AssetsManager;
 class ShortcutManager;
 class BehaviourManager;
-
 class Application : public QApplication
 {
     Q_OBJECT
@@ -34,13 +33,24 @@ private:
     const int c_redrawDelay = 30;
     QTimer m_drawTimer;
 
+    // To detect when it's autorepeat (very fast Release after a Press)
+    struct LastKeyEventInfo
+    {
+        unsigned long long time;
+        int key;
+    };
+    LastKeyEventInfo m_lastKeyPressEvInfo;
 
 public:
     Application(int& argc, char** argv);
 
     AssetsManager *GetAssetsManager() const;
     static Application *GetInstance();
-    virtual bool notify(QObject *receiver, QEvent *e) override;
+
+    bool notify(QObject *receiver, QEvent *e) override;
+
+private slots:
+    bool CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent);
 
 public slots:
     void OnDrawTimerTick();

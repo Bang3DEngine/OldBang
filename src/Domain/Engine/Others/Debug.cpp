@@ -1,5 +1,6 @@
 #include "Debug.h"
 
+#include "Scene.h"
 #include "Color.h"
 #include "String.h"
 #include "Vector2.h"
@@ -8,9 +9,12 @@
 #include "Matrix4.h"
 #include "IToString.h"
 #include "Quaternion.h"
+#include "SceneManager.h"
 
 #ifdef BANG_EDITOR
 #include "ListLogger.h"
+#include "EditorScene.h"
+#include "EditorDebugGameObject.h"
 #endif
 
 const String Debug::c_logPrefix   = "[   LOG   ]: ";
@@ -19,6 +23,22 @@ const String Debug::c_errorPrefix = "[  ERROR  ]: ";
 
 Debug::Debug()
 {
+}
+
+void Debug::DrawLine(const Vector3 &origin, const Vector3 &destiny, const Color &color, float lineWidth, float secsTime, bool depthTest)
+{
+    Scene *s = SceneManager::GetActiveScene(); NONULL(s);
+    EditorScene *es = dynamic_cast<EditorScene*>(s); NONULL(es);
+    EditorDebugGameObject *edgo = es->m_debugGameObject; NONULL(edgo);
+    edgo->DrawLine(origin, destiny, color, lineWidth, secsTime, depthTest);
+}
+
+void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny, const Color &color, float lineWidth, float secsTime)
+{
+    Scene *s = SceneManager::GetActiveScene(); NONULL(s);
+    EditorScene *es = dynamic_cast<EditorScene*>(s); NONULL(es);
+    EditorDebugGameObject *edgo = es->m_debugGameObject; NONULL(edgo);
+    edgo->DrawScreenLine(origin, destiny, color, lineWidth, secsTime);
 }
 
 void Debug::_Log(const String &str)

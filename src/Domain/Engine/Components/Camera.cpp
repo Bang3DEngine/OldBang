@@ -193,6 +193,8 @@ void Camera::OnDrawGizmos()
 
     Component::OnDrawGizmos();
 
+    Gizmos::Begin();
+
     Camera *sceneCam = Scene::GetCamera();
     float distScale = Vector3::Distance(sceneCam->transform->GetPosition(),
                                         transform->GetPosition());

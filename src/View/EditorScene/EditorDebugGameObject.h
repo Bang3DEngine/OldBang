@@ -35,7 +35,7 @@ private:
 
     List<DebugLine> m_debugLines;
 
-    void DrawLines(bool depthPass);
+    void DrawLines(bool depthEnabled);
 
 public:
 
@@ -47,7 +47,7 @@ public:
                   float lineWidth = 1.0f, float livingTimeSecs = -1.0f,
                   bool depthTest = true);
 
-    void DrawLineScreen(const Vector2 &origin, const Vector2 &destiny,
+    void DrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
                         const Color &color = Color::green,
                         float lineWidth = 1.0f, float livingTimeSecs = -1.0f);
 

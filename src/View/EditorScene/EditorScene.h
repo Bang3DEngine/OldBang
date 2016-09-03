@@ -10,6 +10,8 @@
 
 class EditorScene : public Scene
 {
+friend class Debug;
+
 private:
     EditorDebugGameObject *m_debugGameObject = nullptr;
     EditorCamera *m_cameraGameObject = nullptr;
@@ -27,20 +29,6 @@ public:
     virtual void _OnRender () override;
 
     SelectionFramebuffer* GetSelectionFramebuffer() const;
-
-    void DebugDrawLine(const Vector3 &origin,
-                       const Vector3 &destiny,
-                       const Color &color = Color::green,
-                       float lineWidth = 1.0f,
-                       float secsTime = 1.0f,
-                       bool depthTest = true) override;
-
-    virtual void DebugDrawScreenLine (
-                                const Vector2 &origin,
-                                const Vector2 &destiny,
-                                const Color &color = Color::green,
-                                float lineWidth = 1.0f,
-                                float secsTime = 1.0f) override;
 
     bool IsEditorGameObject() const override;
 };

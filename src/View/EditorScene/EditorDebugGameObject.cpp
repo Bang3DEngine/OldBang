@@ -9,26 +9,29 @@ EditorDebugGameObject::~EditorDebugGameObject()
 {
 }
 
-void EditorDebugGameObject::DrawLines(bool depthPass)
+void EditorDebugGameObject::DrawLines(bool depthEnabled)
 {
-    for (const DebugLine &dl : m_debugLines)
+    for (auto it = m_debugLines.Begin(); it != m_debugLines.End(); ++it)
     {
-        if (depthPass && !dl.m_depthTest) continue;
-
-        if (dl.m_screen)
+        const DebugLine &dl = *it;
+        bool draw = !(depthEnabled ^ dl.m_depthTest);
+        if (draw)
         {
-            Gizmos::SetIgnoreMatrices(true, true, true);
-        }
-        else
-        {
-            Gizmos::SetIgnoreMatrices(false, false, false);
-        }
+            if (dl.m_screen)
+            {
+                Gizmos::SetIgnoreMatrices(true, true, true);
+            }
+            else
+            {
+                Gizmos::SetIgnoreMatrices(false, false, false);
+            }
 
-        Gizmos::SetColor(dl.m_color);
-        Gizmos::SetLineWidth(dl.m_lineWidth);
-        Gizmos::SetReceivesLighting(false);
+            Gizmos::SetColor(dl.m_color);
+            Gizmos::SetLineWidth(dl.m_lineWidth);
+            Gizmos::SetReceivesLighting(false);
 
-        Gizmos::RenderLine(dl.m_origin, dl.m_destiny);
+            Gizmos::RenderLine(dl.m_origin, dl.m_destiny);
+        }
     }
 }
 
@@ -40,7 +43,7 @@ void EditorDebugGameObject::DrawLine(const Vector3 &origin, const Vector3 &desti
                                      livingTimeSecs, depthTest, false));
 }
 
-void EditorDebugGameObject::DrawLineScreen(const Vector2 &origin, const Vector2 &destiny,
+void EditorDebugGameObject::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
                                            const Color &color, float lineWidth,
                                            float livingTimeSecs)
 {
@@ -53,24 +56,26 @@ void EditorDebugGameObject::OnUpdate()
 {
     // Remove the ones that have exhausted its time
     float dTime = Time::deltaTime;
-    for (auto it = m_debugLines.begin(); it != m_debugLines.end(); ++it)
+    for (auto it = m_debugLines.Begin(); it != m_debugLines.End(); ++it)
     {
         DebugLine &dl = *it;
         dl.m_elapsedTimeSecs += dTime;
         if (dl.m_elapsedTimeSecs >= dl.m_livingTimeSecs)
         {
-            it = m_debugLines.erase(it);
+            it = m_debugLines.Remove(it);
         }
     }
 }
 
 void EditorDebugGameObject::OnDrawGizmos()
 {
+    Gizmos::Begin();
     DrawLines(true);
 }
 
 void EditorDebugGameObject::OnDrawGizmosNoDepth()
 {
+    Gizmos::Begin();
     DrawLines(false);
 }
 
