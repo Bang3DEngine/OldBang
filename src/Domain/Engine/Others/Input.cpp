@@ -186,7 +186,7 @@ void Input::ProcessMousePressEventInfo(const EventInfo &ei)
 {
     MouseButton mb = ei.m_mouseButton;
     bool up = false;
-    if (m_mouseInfo.find(mb) != m_mouseInfo.end())
+    if (m_mouseInfo.ContainsKey(mb))
     {
         up = m_mouseInfo[mb].up;
     }
@@ -205,7 +205,7 @@ void Input::ProcessMousePressEventInfo(const EventInfo &ei)
 void Input::ProcessMouseReleaseEventInfo(const EventInfo &ei)
 {
     MouseButton mb = ei.m_mouseButton;
-    if (m_mouseInfo.find(mb) != m_mouseInfo.end())
+    if (m_mouseInfo.ContainsKey(mb))
     {
         // Only if it was pressed before
         // We must respect the down and pressed, just in case they happen
@@ -220,7 +220,7 @@ void Input::ProcessKeyPressEventInfo(const EventInfo &ei)
     if (ei.m_autoRepeat) return;
 
     Key k = ei.m_key;
-    if (m_keyInfos.find(k) == m_keyInfos.end())
+    if (m_keyInfos.ContainsKey(k))
     {
         m_keyInfos[k] = ButtonInfo();
     }
@@ -234,7 +234,7 @@ void Input::ProcessKeyReleasedEventInfo(const EventInfo &ei)
     if (ei.m_autoRepeat) return;
 
     Key k = ei.m_key;
-    if (m_keyInfos.find(k) == m_keyInfos.end())
+    if (m_keyInfos.ContainsKey(k))
     {
         m_keyInfos[k] = ButtonInfo();
     }
@@ -277,22 +277,19 @@ void Input::SetMouseWrapping(bool mouseWrapping)
 bool Input::GetKey(Input::Key k)
 {
     Input *inp = Input::GetInstance();
-    return inp->m_keyInfos.find(k) != inp->m_keyInfos.end() &&
-           inp->m_keyInfos[k].pressed;
+    return inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].pressed;
 }
 
 bool Input::GetKeyUp(Input::Key k)
 {
     Input *inp = Input::GetInstance();
-    return inp->m_keyInfos.find(k) != inp->m_keyInfos.end() &&
-           inp-> m_keyInfos[k].up;
+    return inp->m_keyInfos.ContainsKey(k) && inp-> m_keyInfos[k].up;
 }
 
 bool Input::GetKeyDown(Input::Key k)
 {
     Input *inp = Input::GetInstance();
-    return inp->m_keyInfos.find(k) != inp->m_keyInfos.end() &&
-           inp->m_keyInfos[k].down;
+    return inp->m_keyInfos.ContainsKey(k) && inp->m_keyInfos[k].down;
 }
 
 float Input::GetMouseWheel()
@@ -305,22 +302,19 @@ float Input::GetMouseWheel()
 bool Input::GetMouseButton(Input::MouseButton mb)
 {
     Input *inp = Input::GetInstance();
-    return inp->m_mouseInfo.find(mb) != inp->m_mouseInfo.end() &&
-           inp->m_mouseInfo[mb].pressed;
+    return inp->m_mouseInfo.ContainsKey(mb) && inp->m_mouseInfo[mb].pressed;
 }
 
 bool Input::GetMouseButtonUp(Input::MouseButton mb)
 {
     Input *inp = Input::GetInstance();
-    return inp->m_mouseInfo.find(mb) != inp->m_mouseInfo.end() &&
-           inp->m_mouseInfo[mb].up;
+    return inp->m_mouseInfo.ContainsKey(mb) && inp->m_mouseInfo[mb].up;
 }
 
 bool Input::GetMouseButtonDown(Input::MouseButton mb)
 {
     Input *inp = Input::GetInstance();
-    return inp->m_mouseInfo.find(mb) != inp->m_mouseInfo.end() &&
-           inp->m_mouseInfo[mb].down;
+    return inp->m_mouseInfo.ContainsKey(mb) && inp->m_mouseInfo[mb].down;
 }
 
 bool Input::GetMouseButtonDoubleClick(Input::MouseButton mb)

@@ -45,7 +45,7 @@ private:
     QTimer *m_updateTimer = nullptr;
     String m_tagName = "";
     std::vector<XMLAttribute> m_attributes;
-    mutable std::map<String, AttributeWidget*> m_attrNameToAttrWidget;
+    mutable Map<String, AttributeWidget*> m_attrName_To_AttrWidget;
 
 
     void CreateWidgetSlots(XMLNode &xmlInfo);

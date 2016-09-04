@@ -13,15 +13,14 @@ QPixmap ImageFile::GetIcon() const
     String fp = GetAbsolutePath();
 
     // Mini cache
-    static std::map<std::string, QPixmap> filepath_To_pixmap;
-    if (filepath_To_pixmap.find(fp) == filepath_To_pixmap.end())
+    static Map<std::string, QPixmap> filepath_To_Pixmap;
+    if (!filepath_To_Pixmap.ContainsKey(fp))
     {
         QPixmap pm(QString::fromStdString(fp));
-        filepath_To_pixmap[fp] = pm;
+        filepath_To_Pixmap[fp] = pm;
     }
 
-    return filepath_To_pixmap[fp];
-    // return File::AddNoAssetFileQPixmapOnTopOf(pm);
+    return filepath_To_Pixmap[fp];
 }
 
 IInspectable *ImageFile::GetInspectable() const

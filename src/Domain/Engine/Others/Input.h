@@ -7,6 +7,7 @@
 
 #include "Bang.h"
 
+#include "Map.h"
 #include "String.h"
 #include "Vector2.h"
 #include "IToString.h"
@@ -173,7 +174,7 @@ private:
      * @brief For every Key, we have a ButtonInfo
      * assigned to it
      */
-    std::map<Key, ButtonInfo> m_keyInfos;
+    Map<Key, ButtonInfo> m_keyInfos;
 
 
     /**
@@ -216,7 +217,7 @@ private:
      * @brief For every MouseButton, we have a ButtonInfo
      * assigned to it
      */
-    std::map<MouseButton, ButtonInfo> m_mouseInfo;
+    Map<MouseButton, ButtonInfo> m_mouseInfo;
 
     /**
      * @brief This map will contain the delayed key and mouse events, which will be processed in

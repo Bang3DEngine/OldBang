@@ -135,6 +135,14 @@ public:
         oss << "}";
         return oss.str();
     }
-};
 
+    Value& operator[](const Key &k)
+    {
+        return std::map<Key,Value>::operator[](k);
+    }
+    const Value& operator[](const Key &k) const
+    {
+        return std::map<Key,Value>::operator[](k);
+    }
+};
 #endif // MAP_H

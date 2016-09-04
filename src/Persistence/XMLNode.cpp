@@ -201,7 +201,7 @@ void XMLNode::SetButton(const String &attributeName,
 XMLAttribute* XMLNode::GetAttribute(const String &attributeName) const
 {
     XMLAttribute *attr = nullptr;
-    if (m_attributes.find(attributeName) != m_attributes.end())
+    if (m_attributes.ContainsKey(attributeName))
     {
         attr = &(m_attributes[attributeName]);
     }
@@ -222,7 +222,7 @@ void XMLNode::RemoveAttribute(const String &attributeName)
 
 String XMLNode::GetAttributeValue(const String &attributeName) const
 {
-    if (m_attributes.find(attributeName) != m_attributes.end())
+    if (m_attributes.ContainsKey(attributeName))
     {
         return m_attributes[attributeName].GetValue();
     }
@@ -372,7 +372,7 @@ const String &XMLNode::GetTagName() const
     return m_tagName;
 }
 
-const std::map<String, XMLAttribute> &XMLNode::GetAttributes() const
+const Map<String, XMLAttribute> &XMLNode::GetAttributes() const
 {
     return m_attributes;
 }

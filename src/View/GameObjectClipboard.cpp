@@ -1,7 +1,7 @@
 #include "GameObjectClipboard.h"
 
 List<GameObject*> GameObjectClipboard::s_copiedGameObjects;
-std::map<GameObject*, GameObject*> GameObjectClipboard::s_goCopyToItsParent;
+Map<GameObject*, GameObject*> GameObjectClipboard::s_goCopyToItsParent;
 
 bool GameObjectClipboard::HasSomethingCopied()
 {
@@ -45,7 +45,6 @@ List<GameObject*> GameObjectClipboard::PasteCopiedGameObjectsInto(GameObject *pa
         paste->SetParent(parent);
         pasted.push_back(paste);
     }
-
     return pasted;
 }
 
@@ -59,6 +58,5 @@ List<GameObject*> GameObjectClipboard::DuplicateCopiedGameObjects()
         localCopy->SetParent(s_goCopyToItsParent[copy]);
         duplicated.push_back(localCopy);
     }
-
     return duplicated;
 }

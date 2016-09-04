@@ -12,7 +12,7 @@ class XMLParser
 {
 private:
 public:
-    static std::map<String, const IFileable*> m_idToPointer;
+    static Map<String, const IFileable*> m_id_To_Pointer;
 
     static void ClearPointerIds();
 

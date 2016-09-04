@@ -54,18 +54,17 @@ void Framebuffer::CreateDepthRenderbufferAttachment()
 
 TextureRender *Framebuffer::GetColorAttachment(int attachmentId) const
 {
-    if (m_attachmentId_To_Texture.find(attachmentId) ==
-            m_attachmentId_To_Texture.end())
+    if (!m_attachmentId_To_Texture.ContainsKey(attachmentId))
     {
         return nullptr;
     }
-    return m_attachmentId_To_Texture.at(attachmentId);
+    return m_attachmentId_To_Texture.Get(attachmentId);
 }
 
 void Framebuffer::SetAllDrawBuffers() const
 {
     std::vector<int> attachmentIds;
-    for (int i = 0; i < m_attachmentId_To_GLAttachment.size(); ++i)
+    for (int i = 0; i < m_attachmentId_To_GLAttachment.Size(); ++i)
     {
         attachmentIds.push_back(i);
     }
@@ -78,7 +77,7 @@ void Framebuffer::SetDrawBuffers(const std::vector<int> &attachmentIds) const
     std::vector<GLuint> drawBuffers;
     for (GLint att : attachmentIds)
     {
-        drawBuffers.push_back(m_attachmentId_To_GLAttachment.at(att));
+        drawBuffers.push_back(m_attachmentId_To_GLAttachment.Get(att));
     }
 
     glDrawBuffers(drawBuffers.size(), &drawBuffers[0]);
@@ -89,7 +88,7 @@ void Framebuffer::SetDrawBuffers(const std::vector<int> &attachmentIds) const
 void Framebuffer::SetReadBuffer(int attachmentId) const
 {
     Bind();
-    glReadBuffer(m_attachmentId_To_GLAttachment.at(attachmentId));
+    glReadBuffer(m_attachmentId_To_GLAttachment.Get(attachmentId));
     CheckFramebufferError();
     UnBind();
 }

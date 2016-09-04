@@ -1,7 +1,7 @@
 #ifndef COPYPASTEGAMEOBJECTMANAGER_H
 #define COPYPASTEGAMEOBJECTMANAGER_H
 
-#include <map>
+#include "Map.h"
 #include "List.h"
 #include "GameObject.h"
 
@@ -13,7 +13,7 @@ private:
 private:
 
     static List<GameObject*> s_copiedGameObjects;
-    static std::map<GameObject*, GameObject*> s_goCopyToItsParent;
+    static Map<GameObject*, GameObject*> s_goCopyToItsParent;
 
 public:
 

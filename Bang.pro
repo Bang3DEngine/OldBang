@@ -12,7 +12,7 @@ QT += core gui opengl
 
 message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-CONFIG += EDITOR
+# CONFIG += EDITOR
 # CONFIG += GAME
 CONFIG += qt
 
@@ -215,8 +215,7 @@ HEADERS += \
     src/Persistence/BehaviourManagerCompileThread.h \
     src/Domain/Engine/Others/Chrono.h \
     src/Domain/Engine/Others/Map.h \
-    src/Domain/Engine/Others/List.h \
-    src/View/EditorGameObject/EditorAxisPlane.h
+    src/Domain/Engine/Others/List.h
 
 EDITOR {
 HEADERS += \
@@ -286,7 +285,9 @@ HEADERS += \
     src/View/Inspector/InspectorContextMenu.h \
     src/View/ContextMenu.h \
     src/View/ShortcutManager.h \
-    src/View/IShortcutListener.h }
+    src/View/EditorGameObject/EditorAxisPlane.h \
+    src/View/IShortcutListener.h
+}
 
 GAME {
     HEADERS += \
@@ -370,8 +371,7 @@ SOURCES += \
     src/Persistence/BehaviourManagerCompileThread.cpp \
     src/Domain/Engine/Others/Chrono.cpp \
     src/Domain/Engine/Others/Map.cpp \
-    src/Domain/Engine/Others/List.cpp \
-    src/View/EditorGameObject/EditorAxisPlane.cpp
+    src/Domain/Engine/Others/List.cpp
 
 EDITOR {
     SOURCES += \
@@ -441,7 +441,8 @@ EDITOR {
         src/View/Inspector/InspectorContextMenu.cpp \
         src/View/ContextMenu.cpp \
         src/View/ShortcutManager.cpp \
-        src/View/IShortcutListener.cpp
+        src/View/IShortcutListener.cpp \
+        src/View/EditorGameObject/EditorAxisPlane.cpp
 }
 
 GAME {

@@ -1,13 +1,13 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include <map>
-#include "List.h"
 #include <vector>
 #include <sstream>
 #include <iostream>
-
 #include <QString>
+
+#include "Map.h"
+#include "List.h"
 
 class Color;
 class String;
@@ -135,7 +135,7 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
 
 // Map
 template <class T, class S>
-std::ostream &operator<<(std::ostream &log, const std::map<T,S> *m)
+std::ostream &operator<<(std::ostream &log, const Map<T,S> *m)
 {
     log << "{";
     for (auto it = m->Begin(); it != m->End(); ++it)
@@ -147,7 +147,7 @@ std::ostream &operator<<(std::ostream &log, const std::map<T,S> *m)
     return log;
 }
 template <class T, class S>
-std::ostream &operator<<(std::ostream &log, const std::map<T,S> &m)
+std::ostream &operator<<(std::ostream &log, const Map<T,S> &m)
 {
     return log << (&m);
 }

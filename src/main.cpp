@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
 
     #ifdef BANG_EDITOR
 
+    // EDITOR /////////////////////////////////////
     // Load dark Window theme
     QFile f("Assets/Engine/qdarkstyle/style.qss");
     if (!f.exists())
@@ -98,6 +99,7 @@ int main(int argc, char *argv[])
 
     #else
 
+    // GAME /////////////////////////////////////
     Scene *scene = new Scene();
     String filename = "./Assets/Scenes/test.bscene";
     FileReader::ReadScene(filename, scene);

@@ -36,12 +36,13 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
 
     // Assign id's
     int id = 0;
-    m_gameObjectToId.clear(); m_idToGameObject.clear();
+    m_gameObject_To_Id.Clear();
+    m_id_To_GameObject.Clear();
     List<GameObject*> gameObjects = scene->GetChildrenRecursivelyEditor();
     for (GameObject *go : gameObjects)
     {
-        m_gameObjectToId[go] = id;
-        m_idToGameObject[id] = go;
+        m_gameObject_To_Id[go] = id;
+        m_id_To_GameObject[id] = go;
         ++id;
     }
 
@@ -128,16 +129,16 @@ GameObject *SelectionFramebuffer::GetGameObjectInPosition(int x, int y)
 {
     Color mouseOverColor = ReadColor(x, y, Attachment::ColorAttachment);
     int id = MapColorToId(mouseOverColor);
-    if (m_idToGameObject.find(id) != m_idToGameObject.end())
+    if (m_id_To_GameObject.ContainsKey(id))
     {
-        return m_idToGameObject[id];
+        return m_id_To_GameObject[id];
     }
     return nullptr;
 }
 
 Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
 {
-    return MapIdToColor(m_gameObjectToId[go]);
+    return MapIdToColor(m_gameObject_To_Id[go]);
 }
 
 Material *SelectionFramebuffer::GetSelectionMaterial() const

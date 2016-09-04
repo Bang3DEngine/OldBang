@@ -1,8 +1,7 @@
 #ifndef SELECTIONFRAMEBUFFER_H
 #define SELECTIONFRAMEBUFFER_H
 
-#include <map>
-
+#include "Map.h"
 #include "Scene.h"
 #include "Vector3.h"
 #include "GameObject.h"
@@ -43,8 +42,8 @@ private:
      */
     GameObject *m_lastMouseOverGO = nullptr;
 
-    mutable std::map<GameObject*, long> m_gameObjectToId;
-    mutable std::map<long, GameObject*> m_idToGameObject;
+    mutable Map<GameObject*, long> m_gameObject_To_Id;
+    mutable Map<long, GameObject*> m_id_To_GameObject;
 
     static Color MapIdToColor(long id);
     static long MapColorToId(const Color &color);

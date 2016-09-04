@@ -1,13 +1,14 @@
 #ifndef BEHAVIOURMANAGER_H
 #define BEHAVIOURMANAGER_H
 
-#include <map>
 #include <set>
 #include <QMutex>
 #include <QLibrary>
 #include <functional>
 
 #include "Bang.h"
+
+#include "Map.h"
 #include "List.h"
 #include "String.h"
 
@@ -31,17 +32,16 @@ private:
 
     /**
      * @brief The cache of libraries. For the source filepath
-     * wololo.cpp, contains its loaded library (if cached).
+       *.cpp, contains its loaded library (if cached).
      */
-    std::map<String, QLibrary*> m_behaviourPath_To_library;
+    Map<String, QLibrary*> m_behaviourPath_To_library;
 
     /**
      * @brief For wololo.cpp, contains all the demanders of the
      * library for wololo.cpp. They will be notified when we
-     * get the library
+    Maphe library
      */
-    std::map<String, List<BehaviourHolder*> >
-        m_behPath_To_behHolderDemanders;
+    Map<String, List<BehaviourHolder*> > m_behPath_To_behHolderDemanders;
 
     /**
      * @brief Set of behaviours paths that are being compiled right now.

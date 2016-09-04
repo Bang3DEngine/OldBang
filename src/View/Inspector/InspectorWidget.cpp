@@ -89,9 +89,9 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
         String attrName = attribute.GetName();
         XMLAttribute::Type attrType = attribute.GetType();
 
-        if (m_attrNameToAttrWidget.find(attrName) != m_attrNameToAttrWidget.end())
+        if (m_attrName_To_AttrWidget.ContainsKey(attrName))
         {
-            AttributeWidget *aw = m_attrNameToAttrWidget[attrName];
+            AttributeWidget *aw = m_attrName_To_AttrWidget[attrName];
             if (attribute.HasVectoredType())
             {
                 if (attrType == XMLAttribute::Type::Float)
@@ -179,9 +179,9 @@ void InspectorWidget::RefreshWidgetValues()
     {
         XMLAttribute attribute = itAttr.second;
         String attrName  = attribute.GetName();
-        if( m_attrNameToAttrWidget.find(attrName) != m_attrNameToAttrWidget.end())
+        if( m_attrName_To_AttrWidget.ContainsKey(attrName))
         {
-            AttributeWidget *ws = m_attrNameToAttrWidget[attrName];
+            AttributeWidget *ws = m_attrName_To_AttrWidget[attrName];
             hasToRefreshHard = hasToRefreshHard ||
                     (ws->isHidden() ^ attribute.HasProperty(XMLProperty::Hidden));
             ws->Refresh(attribute);
@@ -205,7 +205,7 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         AttributeWidget *w = AttributeWidget::FromXMLAttribute(attribute, this);
         if (w)
         {
-            m_attrNameToAttrWidget[attribute.GetName()] = w;
+            m_attrName_To_AttrWidget[attribute.GetName()] = w;
             w->adjustSize();
         }
     }

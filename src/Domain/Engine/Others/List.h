@@ -106,7 +106,11 @@ public:
 
     void Remove(const T& x)
     {
-        this->erase(std::find(this->Begin(), this->End(), x));
+        Iterator it = Find(x);
+        if (it != End())
+        {
+            this->erase(it);
+        }
     }
 
     Iterator Remove(Iterator it)

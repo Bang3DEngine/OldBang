@@ -3,10 +3,10 @@
 
 #include "Bang.h"
 
-#include <map>
 
 #include <sstream>
 
+#include "Map.h"
 #include "Asset.h"
 #include "Persistence.h"
 #include "BehaviourManager.h"
@@ -18,7 +18,7 @@ private:
     /** For every id, it contains a pointer to the asset
       * created when the assets were loaded.
     **/
-    std::map<String, Asset*> m_id_To_AssetPointer;
+    Map<String, Asset*> m_id_To_AssetPointer;
 
     static String FormatFilepath(const String &filepath);
 

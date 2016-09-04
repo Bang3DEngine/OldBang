@@ -64,9 +64,9 @@ QTreeWidgetItem *Hierarchy::GetFirstSelectedItem() const
 GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *item) const
 {
     if (!item) return nullptr;
-    if (m_treeItemToGameObject.find(item) != m_treeItemToGameObject.end())
+    if (m_treeItem_To_GameObject.ContainsKey(item))
     {
-        return m_treeItemToGameObject[item];
+        return m_treeItem_To_GameObject[item];
     }
     return nullptr;
 }
@@ -74,9 +74,9 @@ GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *item) const
 QTreeWidgetItem *Hierarchy::GetItemFromGameObject(GameObject *go) const
 {
     if (!go) return nullptr;
-    if (m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
+    if (m_gameObject_To_TreeItem.ContainsKey(go))
     {
-        QTreeWidgetItem *item = m_gameObjectToTreeItem[go];
+        QTreeWidgetItem *item = m_gameObject_To_TreeItem[go];
         return item;
     }
     return nullptr;
@@ -129,8 +129,8 @@ bool Hierarchy::Contains(GameObject *go)
 
 void Hierarchy::Clear()
 {
-    m_gameObjectToTreeItem.clear();
-    m_treeItemToGameObject.clear();
+    m_gameObject_To_TreeItem.clear();
+    m_treeItem_To_GameObject.clear();
     clear();
 }
 
@@ -147,8 +147,8 @@ void Hierarchy::RefreshFromScene()
         {   // New child item !!!
             childItem = Refresh(child);
             addTopLevelItem(childItem);
-            m_gameObjectToTreeItem[child] = childItem;
-            m_treeItemToGameObject[childItem] = child;
+            m_gameObject_To_TreeItem[child] = childItem;
+            m_treeItem_To_GameObject[childItem] = child;
         }
         else
         {
@@ -174,8 +174,8 @@ QTreeWidgetItem* Hierarchy::Refresh(GameObject *go)
         goItem = new QTreeWidgetItem();
         goItem->setText(0, QString::fromStdString(go->name));
 
-        m_gameObjectToTreeItem[go] = goItem;
-        m_treeItemToGameObject[goItem] = go;
+        m_gameObject_To_TreeItem[go] = goItem;
+        m_treeItem_To_GameObject[goItem] = go;
     }
 
     // refresh go's children. If we find a new child, add it to goItem.
@@ -201,9 +201,9 @@ QTreeWidgetItem* Hierarchy::Refresh(GameObject *go)
 void Hierarchy::Expand(GameObject *go)
 {
     if (go &&
-        m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
+        m_gameObject_To_TreeItem.ContainsKey(go))
     {
-        Expand(m_gameObjectToTreeItem[go]);
+        Expand(m_gameObject_To_TreeItem[go]);
     }
 }
 
@@ -220,9 +220,9 @@ bool Hierarchy::IsSelected(QTreeWidgetItem *item)
 void Hierarchy::ExpandToggle(GameObject *go)
 {
     if (go &&
-        m_gameObjectToTreeItem.find(go) != m_gameObjectToTreeItem.end())
+        m_gameObject_To_TreeItem.ContainsKey(go))
     {
-        QTreeWidgetItem *item = m_gameObjectToTreeItem[go];
+        QTreeWidgetItem *item = m_gameObject_To_TreeItem[go];
         if (!item->isExpanded())
         {
             Expand(item);
@@ -386,10 +386,11 @@ void Hierarchy::DeleteGameObjectItem(GameObject *go)
     QTreeWidgetItem *item = GetItemFromGameObject(go);
     if (item)
     {
-        m_gameObjectToTreeItem.erase(m_gameObjectToTreeItem.find(go));
-        m_treeItemToGameObject.erase(m_treeItemToGameObject.find(item));
+        m_gameObject_To_TreeItem.Remove(go);
+        m_treeItem_To_GameObject.Remove(item);
 
         // Try to delete children's items too
+        /*
         for (int i = 0; i < item->childCount(); ++i)
         {
             QTreeWidgetItem *childItem = item->child(i);
@@ -399,6 +400,7 @@ void Hierarchy::DeleteGameObjectItem(GameObject *go)
                 DeleteGameObjectItem(childGo);
             }
         }
+        */
         delete item;
     }
 }

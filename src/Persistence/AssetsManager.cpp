@@ -31,13 +31,10 @@ String AssetsManager::FormatFilepath(const String &filepath)
 bool AssetsManager::IsAssetLoaded(const String &filepath)
 {
     AssetsManager *am = AssetsManager::GetCurrent();
-    if (!am)
-    {
-        return false;
-    }
+    if (!am) { return false; }
 
     String f = AssetsManager::FormatFilepath(filepath);
-    return (am->m_id_To_AssetPointer.find(f) != am->m_id_To_AssetPointer.end());
+    return (am->m_id_To_AssetPointer.ContainsKey(f));
 }
 
 void AssetsManager::UnloadAsset(const Asset *asset)

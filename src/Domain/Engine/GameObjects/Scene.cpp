@@ -71,6 +71,7 @@ Scene::~Scene()
 
 void Scene::_OnRender()
 {
+    NONULL(m_cameraGameObject);
     Camera *cam = m_cameraGameObject->GetComponent<Camera>();
     if (cam  && cam->GetAutoUpdateAspectRatio())
     {

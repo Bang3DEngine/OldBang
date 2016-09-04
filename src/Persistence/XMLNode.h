@@ -1,19 +1,17 @@
 #ifndef XMLNODE_H
 #define XMLNODE_H
 
-#include "Bang.h"
-
-#include <map>
-#include "List.h"
-
 #include <sstream>
 
+#include "Bang.h"
+
+#include "Map.h"
+#include "List.h"
 #include "Rect.h"
 #include "Vector3.h"
+#include "IToString.h"
 #include "Quaternion.h"
 #include "StringUtils.h"
-#include "IToString.h"
-
 #include "XMLAttribute.h"
 #include "IAttrWidgetButtonListener.h"
 
@@ -21,7 +19,7 @@ class XMLNode : public IToString
 {
 private:
     String m_tagName = "";
-    mutable std::map<String, XMLAttribute> m_attributes;
+    mutable Map<String, XMLAttribute> m_attributes;
     List<XMLNode*> m_children;
 
 public:
@@ -100,7 +98,7 @@ public:
     const String ToString(const String& indent) const;
 
     const String& GetTagName() const;
-    const std::map<String, XMLAttribute>& GetAttributes() const;
+    const Map<String, XMLAttribute>& GetAttributes() const;
     const List<XMLNode*>& GetChildren() const;
 
     static XMLNode* FromString(const String &xml);

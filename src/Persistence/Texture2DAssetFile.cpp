@@ -27,14 +27,14 @@ QPixmap Texture2DAssetFile::GetIcon() const
     String fp = GetImageFilepath();
 
     // Mini cache
-    static std::map<std::string, QPixmap> filepath_To_pixmap;
-    if (filepath_To_pixmap.find(fp) == filepath_To_pixmap.end())
+    static Map<std::string, QPixmap> filepath_To_Pixmap;
+    if (!filepath_To_Pixmap.ContainsKey(fp))
     {
         QPixmap pm(QString::fromStdString(fp));
-        filepath_To_pixmap[fp] = pm;
+        filepath_To_Pixmap[fp] = pm;
     }
 
-    return filepath_To_pixmap[fp];
+    return filepath_To_Pixmap[fp];
 }
 
 IInspectable *Texture2DAssetFile::GetInspectable() const

@@ -27,18 +27,22 @@ Debug::Debug()
 
 void Debug::DrawLine(const Vector3 &origin, const Vector3 &destiny, const Color &color, float lineWidth, float secsTime, bool depthTest)
 {
+    #ifdef BANG_EDITOR
     Scene *s = SceneManager::GetActiveScene(); NONULL(s);
     EditorScene *es = dynamic_cast<EditorScene*>(s); NONULL(es);
     EditorDebugGameObject *edgo = es->m_debugGameObject; NONULL(edgo);
     edgo->DrawLine(origin, destiny, color, lineWidth, secsTime, depthTest);
+    #endif
 }
 
 void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny, const Color &color, float lineWidth, float secsTime)
 {
+    #ifdef BANG_EDITOR
     Scene *s = SceneManager::GetActiveScene(); NONULL(s);
     EditorScene *es = dynamic_cast<EditorScene*>(s); NONULL(es);
     EditorDebugGameObject *edgo = es->m_debugGameObject; NONULL(edgo);
     edgo->DrawScreenLine(origin, destiny, color, lineWidth, secsTime);
+    #endif
 }
 
 void Debug::_Log(const String &str)

@@ -3,20 +3,18 @@
 
 #include "Bang.h"
 
-#include "Matrix4.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Map.h"
+#include "Color.h"
 #include "Shader.h"
-#include "Texture.h"
-#include "IGLBindable.h"
-
-
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
-#include "Color.h"
+#include "Texture.h"
+#include "IGLBindable.h"
 
 class ShaderProgram : public IGLIdable
                      ,public IGLBindable
@@ -26,7 +24,7 @@ private:
     Shader *m_vshader;
     Shader *m_fshader;
 
-    mutable std::map<String, const Texture*> m_names_To_Textures;
+    mutable Map<String, const Texture*> m_names_To_Textures;
 
 public:
     ShaderProgram();

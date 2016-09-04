@@ -3,7 +3,7 @@
 #include "IFileable.h"
 #include "Debug.h"
 
-std::map<String, const IFileable*> XMLParser::m_idToPointer;
+Map<String, const IFileable*> XMLParser::m_id_To_Pointer;
 
 XMLParser::XMLParser()
 {
@@ -12,14 +12,14 @@ XMLParser::XMLParser()
 void XMLParser::RegisterId(const XMLNode *xmlInfo, const IFileable *pointer)
 {
     String id = xmlInfo->GetString("id");
-    m_idToPointer[id] = pointer;
+    m_id_To_Pointer[id] = pointer;
 }
 
 const IFileable *XMLParser::GetPointerFromId(const String &id)
 {
-    if (m_idToPointer.find(id) != m_idToPointer.end())
+    if (m_id_To_Pointer.ContainsKey(id))
     {
-        return m_idToPointer[id];
+        return m_id_To_Pointer[id];
     }
     return nullptr;
 }
@@ -124,7 +124,7 @@ void XMLParser::GetCorrespondingCloseTag(const String &xml,
 
 void XMLParser::ClearPointerIds()
 {
-    m_idToPointer.clear();
+    m_id_To_Pointer.clear();
 }
 
 void XMLParser::GetNextOpenTag(const String &xml,

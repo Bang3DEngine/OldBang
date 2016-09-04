@@ -207,10 +207,10 @@ public:
     template <class T>
     T* GetComponent() const
     {
-        for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
+        for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if (tp ) return tp;
+            if (tp) return tp;
         }
         return nullptr;
     }
@@ -222,10 +222,10 @@ public:
     List<T*> GetComponents() const
     {
         List<T*> comps_l;
-        for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
+        for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
         {
             T *tp = dynamic_cast<T*>(*comp);
-            if (tp) comps_l.push_back(tp);
+            if (tp) comps_l.PushBack(tp);
         }
         return comps_l;
     }
@@ -236,7 +236,7 @@ public:
     template <class T>
     T* GetComponentInChildren() const
     {
-        for (auto c = m_children.begin(); c != m_children.end(); ++c)
+        for (auto c = m_children.Begin(); c != m_children.End(); ++c)
         {
             if ((*c)->IsEditorGameObject()) continue;
 
@@ -255,10 +255,10 @@ public:
     List<T*> GetComponentsInChildren() const
     {
         List<T*> comps_l;
-        for (auto c = m_children.begin(); c != m_children.end(); ++c)
+        for (auto c = m_children.Begin(); c != m_children.End(); ++c)
         {
-            comps_l.splice(comps_l.end(), (*c)->GetComponents<T>()); //concat
-            comps_l.splice(comps_l.end(), (*c)->GetComponentsInChildren<T>()); //concat
+            comps_l.splice(comps_l.End(), (*c)->GetComponents<T>()); //concat
+            comps_l.splice(comps_l.End(), (*c)->GetComponentsInChildren<T>()); //concat
         }
         return comps_l;
     }
@@ -280,9 +280,9 @@ public:
     int CountComponents() const
     {
         int count = 0;
-        for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
+        for (auto it = m_components.Begin(); it != m_components.End(); ++it)
         {
-            T *tp = dynamic_cast<T*>(*comp);
+            T *tp = dynamic_cast<T*>(*it);
             if (tp)
             {
                 ++count;
@@ -297,12 +297,12 @@ public:
     template <class T>
     void RemoveComponent()
     {
-        for (auto comp = m_components.begin(); comp != m_components.end(); ++comp)
+        for (auto it = m_components.Begin(); it != m_components.End(); ++it)
         {
-            T *tp = dynamic_cast<T*>(*comp);
+            T *tp = dynamic_cast<T*>(*it);
             if (tp)
             {
-                  m_components.erase(comp);
+                it = m_components.Remove(it); --it;
                 delete tp;
                 break;
             }

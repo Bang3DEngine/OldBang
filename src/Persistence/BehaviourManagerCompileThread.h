@@ -1,12 +1,13 @@
 #ifndef BEHAVIOURMANAGERCOMPILETHREAD_H
 #define BEHAVIOURMANAGERCOMPILETHREAD_H
 
-#include <map>
 #include <QThread>
 #include <QLibrary>
 #include <functional>
 
 #include "Bang.h"
+
+#include "Map.h"
 #include "String.h"
 
 class BehaviourManager;

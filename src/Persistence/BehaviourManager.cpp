@@ -48,8 +48,7 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourRelPa
             bh->OnBehaviourLibraryAvailable(lib);
         }
 
-        bm->m_behPath_To_behHolderDemanders.erase(
-                    bm->m_behPath_To_behHolderDemanders.find(bfp));
+        bm->m_behPath_To_behHolderDemanders.Remove(bfp);
     }
     else
     {
@@ -64,8 +63,7 @@ bool BehaviourManager::IsCached(const String &behaviourPath)
     if (!bm) { return false; }
 
     String bfp = Persistence::ToRelative(behaviourPath);
-    return bm->m_behaviourPath_To_library.find(bfp) !=
-           bm->m_behaviourPath_To_library.end();
+    return bm->m_behaviourPath_To_library.ContainsKey(bfp);
 }
 
 QLibrary *BehaviourManager::GetCachedLibrary(const String &behaviourRelPath)
@@ -100,11 +98,10 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
     else
     {
         // Add behaviour to the list of demanders
-        if (bm->m_behPath_To_behHolderDemanders.find(bfp) ==
-            bm->m_behPath_To_behHolderDemanders.end())
+        if (!bm->m_behPath_To_behHolderDemanders.ContainsKey(bfp))
         {
-            bm->m_behPath_To_behHolderDemanders[bfp] =
-                    List<BehaviourHolder*>(); // Init list
+            // Init list
+            bm->m_behPath_To_behHolderDemanders[bfp] = List<BehaviourHolder*>();
         }
         bm->m_behPath_To_behHolderDemanders[bfp].push_back(behaviourHolder);
 
@@ -132,10 +129,10 @@ void BehaviourManager::
     // Erase the behaviourHolder from all the demand lists it is in
     BehaviourManager *bm = BehaviourManager::GetInstance(); NONULL(bm);
 
-    for (auto it = bm->m_behPath_To_behHolderDemanders.begin();
-         it != bm->m_behPath_To_behHolderDemanders.end(); ++it)
+    for (auto it = bm->m_behPath_To_behHolderDemanders.Begin();
+         it != bm->m_behPath_To_behHolderDemanders.End(); ++it)
     {
         List<BehaviourHolder*> &bhList = it->second;
-        bhList.remove(behaviourHolder);
+        bhList.Remove(behaviourHolder);
     }
 }

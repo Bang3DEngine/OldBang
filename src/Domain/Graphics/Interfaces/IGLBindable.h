@@ -6,7 +6,8 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <stack>
-#include <map>
+
+#include "Map.h"
 
 class IGLBindable
 {
@@ -17,7 +18,7 @@ private:
      * There can be several targets for the same bindable, and they must
      * be separated in this map.
      */
-    mutable std::map< GLenum, std::stack<GLint> > m_boundIds;
+    mutable Map< GLenum, std::stack<GLint> > m_target_To_BoundIdsStack;
 
 protected:
     IGLBindable();

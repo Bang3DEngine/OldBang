@@ -5,8 +5,6 @@
 
 #include <GL/glew.h>
 
-#include <map>
-#include "List.h"
 #include <vector>
 
 #include <chrono>
@@ -19,6 +17,8 @@
 #include <QApplication>
 #include <QDropEvent>
 
+#include "Map.h"
+#include "List.h"
 #include "File.h"
 #include "Scene.h"
 #include "FileDialog.h"
@@ -43,8 +43,8 @@ friend class HierarchyDragDropManager;
 private:
     //For every gameObject, we have the associated treeItem,
     //in order to update :)
-    mutable std::map<GameObject*, QTreeWidgetItem*> m_gameObjectToTreeItem;
-    mutable std::map<QTreeWidgetItem*,GameObject*> m_treeItemToGameObject;
+    mutable Map<GameObject*, QTreeWidgetItem*> m_gameObject_To_TreeItem;
+    mutable Map<QTreeWidgetItem*,GameObject*> m_treeItem_To_GameObject;
 
     QTimer m_refreshTimer;
     HierarchyContextMenu m_hContextMenu;

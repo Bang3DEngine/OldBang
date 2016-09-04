@@ -3,7 +3,6 @@
 
 #include "Bang.h"
 
-#include <map>
 #include <vector>
 
 #include <fstream>
@@ -16,6 +15,7 @@
 #include "stb_image.h"
 #include "glm/glm.hpp"
 
+#include "Map.h"
 #include "Rect.h"
 #include "Debug.h"
 

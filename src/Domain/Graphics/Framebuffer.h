@@ -5,6 +5,7 @@
 
 #include <vector>
 
+#include "Map.h"
 #include "Color.h"
 #include "Debug.h"
 #include "IGLIdable.h"
@@ -20,9 +21,8 @@ private:
 
     int m_width, m_height;
     GLuint m_depthAttachmentId;
-
-    std::map<int, GLuint> m_attachmentId_To_GLAttachment;
-    std::map<int, TextureRender*> m_attachmentId_To_Texture;
+    Map<int, GLuint> m_attachmentId_To_GLAttachment;
+    Map<int, TextureRender*> m_attachmentId_To_Texture;
 
 protected:
 

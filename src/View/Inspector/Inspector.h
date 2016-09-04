@@ -1,13 +1,12 @@
 #ifndef LISTINSPECTOR_H
 #define LISTINSPECTOR_H
 
-#include <map>
-
 #include "Bang.h"
 
 #include <QLabel>
 #include <QListWidget>
 
+#include "Map.h"
 #include "ComponentWidget.h"
 #include "InspectorContextMenu.h"
 #include "PrefabAssetFileInspectable.h"
@@ -28,8 +27,8 @@ private:
     List<InspectorWidget*> m_currentInspectorWidgets;
     List<IInspectable*> m_currentInspectables;
 
-    std::map<InspectorWidget*, QListWidgetItem*> m_widgetToItem;
-    std::map<InspectorWidget*, IInspectable*> m_widgetToInspectables;
+    Map<InspectorWidget*, QListWidgetItem*> m_widgetToItem;
+    Map<InspectorWidget*, IInspectable*> m_widgetToInspectables;
 
 protected:
     //To set the scroll step to a smaller one

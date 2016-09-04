@@ -3,11 +3,12 @@
 
 #include <iostream>
 #include <vector>
-#include <map>
 
 #include <QTimer>
 #include <QKeyEvent>
 #include <QApplication>
+
+#include "Map.h"
 
 class Scene;
 class SceneManager;

@@ -1,10 +1,9 @@
 #ifndef NAMEDENUM_H
 #define NAMEDENUM_H
 
-#include <map>
 #include <vector>
 
-
+#include "Map.h"
 #include "StringUtils.h"
 
 #define NamedEnum(EnumName, ...) \
@@ -30,9 +29,9 @@ static const std::vector<EnumName>& EnumName##_GetValuesVector() { \
 } \
 \
 /* For every enum value, it maps to the index inside the Enum. */ \
-static std::map<EnumName,int>& EnumName##_GetEnumValueToIndexMap() { \
+static Map<EnumName,int>& EnumName##_GetEnumValueToIndexMap() { \
     static bool mapInit = false; \
-    static std::map<EnumName,int> enumValueToIndex; \
+    static Map<EnumName,int> enumValueToIndex; \
     if (!mapInit) \
     { \
         const std::vector<String>& names = EnumName##_GetNamesVector(); \
@@ -63,7 +62,7 @@ static String EnumName##_GetNameByIndex(int index) { \
 \
 /* Given a value, return its index in the enum. */ \
 static int EnumName##_GetIndexFromValue(EnumName value) { \
-    std::map<EnumName,int>& enumValueToIndex = EnumName##_GetEnumValueToIndexMap(); \
+    Map<EnumName, int>& enumValueToIndex = EnumName##_GetEnumValueToIndexMap(); \
     return enumValueToIndex[value]; \
 } \
 \

@@ -4,10 +4,10 @@
 #include "Bang.h"
 
 #include <GL/glew.h>
-#include <map>
 
-#include "ShaderProgram.h"
 #include "VBO.h"
+#include "Map.h"
+#include "ShaderProgram.h"
 
 class VAO : public IGLIdable, IGLBindable
 {
