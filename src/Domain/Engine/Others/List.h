@@ -8,7 +8,7 @@
 #include "String.h"
 
 template <class T>
-class List : public std::list<T>
+class List : private std::list<T>
 {
 public:
     typedef typename std::list<T>::iterator Iterator;
@@ -42,6 +42,7 @@ public:
     {
         this->splice(insertBefore, from, fromRangeBegin, fromRangeEnd);
     }
+
 
     void Clear()
     {
@@ -93,6 +94,10 @@ public:
     {
         this->InsertBefore(it, x);
     }
+    void Insert(Iterator first, int count, const T& x)
+    {
+        this->insert(first, count, x);
+    }
     void InsertBefore(Iterator it, const T& x)
     {
         this->insert(it, x);
@@ -117,6 +122,10 @@ public:
     {
         return this->erase(it);
     }
+    Iterator Remove(Iterator first, Iterator last)
+    {
+        return this->erase(first, last);
+    }
 
     const T& PopBack()
     {
@@ -139,38 +148,20 @@ public:
         this->push_back(x);
     }
 
-    Iterator Begin()
-    {
-        return this->begin();
-    }
-    Iterator End()
-    {
-        return this->end();
-    }
-    Const_Iterator Begin() const
-    {
-        return this->begin();
-    }
-    Const_Iterator End() const
-    {
-        return this->end();
-    }
-    Reverse_Iterator RBegin()
-    {
-        return this->rbegin();
-    }
-    Reverse_Iterator REnd()
-    {
-        return this->rend();
-    }
-    Const_Reverse_Iterator RBegin() const
-    {
-        return this->rbegin();
-    }
-    Const_Reverse_Iterator REnd() const
-    {
-        return this->rend();
-    }
+    Iterator Begin() { return this->begin(); }
+    Iterator End() { return this->end(); }
+    Const_Iterator Begin() const { return this->begin(); }
+    Const_Iterator End() const { return this->end(); }
+    Reverse_Iterator RBegin() { return this->rbegin(); }
+    Reverse_Iterator REnd() { return this->rend(); }
+    Const_Reverse_Iterator RBegin() const { return this->rbegin(); }
+    Const_Reverse_Iterator REnd() const { return this->rend(); }
+
+    // To allow range-based for loops
+    Iterator begin() { return this->std::list<T>::begin(); }
+    Iterator end() { return this->std::list<T>::end(); }
+    Const_Iterator begin() const { return this->std::list<T>::begin(); }
+    Const_Iterator end() const { return this->std::list<T>::end(); }
 
 
     String ToString()

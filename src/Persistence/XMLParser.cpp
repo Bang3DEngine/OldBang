@@ -124,7 +124,7 @@ void XMLParser::GetCorrespondingCloseTag(const String &xml,
 
 void XMLParser::ClearPointerIds()
 {
-    m_id_To_Pointer.clear();
+    m_id_To_Pointer.Clear();
 }
 
 void XMLParser::GetNextOpenTag(const String &xml,

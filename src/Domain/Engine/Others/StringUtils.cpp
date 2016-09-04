@@ -145,12 +145,12 @@ String StringUtils::FormatInspectorLabel(const String &labelString)
     StringUtils::Replace(&labelFormatted, "_", " ");
 
     // Add space after every cap (except for consecutive caps).
-    for (auto it = labelFormatted.begin(); it != labelFormatted.end(); ++it)
+    for (auto it = labelFormatted.Begin(); it != labelFormatted.End(); ++it)
     {
         ++it;
-        bool nextOneIsCap = (it != labelFormatted.end()) && IsCap(*it);
+        bool nextOneIsCap = (it != labelFormatted.End()) && IsCap(*it);
         --it;
-        if (!nextOneIsCap && IsCap(*it) && it != labelFormatted.begin())
+        if (!nextOneIsCap && IsCap(*it) && it != labelFormatted.Begin())
         {
             it = labelFormatted.insert(it, ' ');
             ++it;

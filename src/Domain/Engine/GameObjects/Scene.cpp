@@ -20,9 +20,9 @@ void Scene::_OnStart()
     {
         List<Camera*> cameras = GetComponentsInChildren<Camera>();
         Debug_Log("Cameras: " << cameras);
-        if (!cameras.empty())
+        if (!cameras.Empty())
         {
-            Camera *cam = cameras.front();
+            Camera *cam = cameras.Front();
             SetCamera(cam);
             Debug_Log("Found camera: " << cam);
         }

@@ -103,7 +103,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             // Init list
             bm->m_behPath_To_behHolderDemanders[bfp] = List<BehaviourHolder*>();
         }
-        bm->m_behPath_To_behHolderDemanders[bfp].push_back(behaviourHolder);
+        bm->m_behPath_To_behHolderDemanders[bfp].PushBack(behaviourHolder);
 
         if (!BehaviourManager::IsBeingCompiled(bfp))
         {

@@ -20,7 +20,7 @@ XMLNode::~XMLNode()
 
 void XMLNode::CloneInto(XMLNode *xmlNode) const
 {
-    xmlNode->m_children.clear();
+    xmlNode->m_children.Clear();
 
     String name = xmlNode->GetTagName();
     xmlNode->SetTagName(name);
@@ -35,7 +35,7 @@ void XMLNode::CloneInto(XMLNode *xmlNode) const
 
 void XMLNode::AddChild(XMLNode *node)
 {
-    m_children.push_back(node);
+    m_children.PushBack(node);
 }
 
 void XMLNode::UpdateAttributeValue(const String &attributeName,
@@ -210,12 +210,13 @@ XMLAttribute* XMLNode::GetAttribute(const String &attributeName) const
 
 void XMLNode::RemoveAttribute(const String &attributeName)
 {
-    for (auto it = m_attributes.begin(); it != m_attributes.end(); ++it)
+    for (auto it = m_attributes.Begin(); it != m_attributes.End(); ++it)
     {
         XMLAttribute &attr = it->second;
         if (attr.GetName() == attributeName)
         {
-            it = m_attributes.erase(it);
+            it = m_attributes.Remove(it);
+            --it;
         }
     }
 }

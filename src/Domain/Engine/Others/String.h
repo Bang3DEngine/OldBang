@@ -13,10 +13,14 @@ class Vector3;
 class Vector4;
 class Matrix4;
 class Quaternion;
-class String :
-        public std::string
+class String : public std::string
 {
 public:
+    typedef typename std::string::iterator Iterator;
+    typedef typename std::string::const_iterator Const_Iterator;
+    typedef typename std::string::reverse_iterator Reverse_Iterator;
+    typedef typename std::string::const_reverse_iterator Const_Reverse_Iterator;
+
     String();
     String(float v);
     String(const char *cstr);
@@ -33,6 +37,23 @@ public:
     String Trimmed();
 
     std::vector<String> Split(char splitter, bool trimResults = false) const;
+
+    void Insert(Iterator it, char c);
+
+    Iterator Begin() { return this->begin(); }
+    Iterator End() { return this->end(); }
+    Const_Iterator Begin() const { return this->begin(); }
+    Const_Iterator End() const { return this->end(); }
+    Reverse_Iterator RBegin() { return this->rbegin(); }
+    Reverse_Iterator REnd() { return this->rend(); }
+    Const_Reverse_Iterator RBegin() const { return this->rbegin(); }
+    Const_Reverse_Iterator REnd() const { return this->rend(); }
+
+    // To allow range-based for loops
+    Iterator begin() { return this->std::string::begin(); }
+    Iterator end() { return this->std::string::end(); }
+    Const_Iterator begin() const { return this->std::string::begin(); }
+    Const_Iterator end() const { return this->std::string::end(); }
 
     long IndexOf(char c, long startingPos = 0) const;
     long IndexOf(const String &str, long startingPos = 0) const;

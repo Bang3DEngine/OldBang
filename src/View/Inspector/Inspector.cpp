@@ -40,11 +40,11 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
-    if (m_widgetToItem.size() == 0) return; // Avoid double clearings
+    if (m_widget_To_Item.Empty()) return; // Avoid double clearings
 
     clear();
 
-    m_widgetToItem.clear();
+    m_widget_To_Item.Clear();
     m_currentGameObject = nullptr;
     m_titleLabel->setText(QString::fromStdString(""));
 
@@ -53,8 +53,8 @@ void Inspector::Clear()
         delete iw;
     }
     m_currentInspectorWidgets.Clear();
-    m_widgetToInspectables.clear();
-    m_currentInspectables.clear();
+    m_widget_To_Inspectables.Clear();
+    m_currentInspectables.Clear();
 }
 
 void Inspector::Refresh()
@@ -78,7 +78,7 @@ void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
     Clear();
     InspectorWidget *iw = new InspectorWidget();
     iw->Init(title, inspectable);
-    m_widgetToInspectables[iw] = inspectable;
+    m_widget_To_Inspectables[iw] = inspectable;
     m_currentInspectables.PushBack(inspectable);
     AddWidget(iw);
 }
@@ -94,7 +94,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     {
         ComponentWidget *w = new ComponentWidget(c);
         m_currentInspectables.PushBack(c);
-        m_widgetToInspectables[w] = c;
+        m_widget_To_Inspectables[w] = c;
         AddWidget(w);
     }
 
@@ -136,7 +136,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
     QListWidgetItem *item = new QListWidgetItem();
     insertItem(newRow, item);
 
-    m_widgetToItem[widget] = item;
+    m_widget_To_Item[widget] = item;
     m_currentInspectorWidgets.PushBack(widget);
 
     setItemWidget(item, widget);

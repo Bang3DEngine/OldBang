@@ -56,7 +56,7 @@ void HierarchyContextMenu::OnCreateEmptyClicked()
         empty->SetParent(selected);
     }
 
-    if (m_hierarchy->selectedItems().size() == 0)
+    if (m_hierarchy->selectedItems().empty())
     {
         empty->SetParent(SceneManager::GetActiveScene());
     }
@@ -74,7 +74,7 @@ void HierarchyContextMenu::OnPasteClicked()
 {
     List<GameObject*> selected = m_hierarchy->GetSelectedGameObjects(false);
     List<GameObject*> pasted;
-    if (selected.size() > 0)
+    if (!selected.Empty())
     {
         for (GameObject *sel : selected)
         {
@@ -86,9 +86,9 @@ void HierarchyContextMenu::OnPasteClicked()
         pasted = GameObjectClipboard::PasteCopiedGameObjectsInto(SceneManager::GetActiveScene());
     }
 
-    if (pasted.size() > 0)
+    if (!pasted.Empty())
     {
-        m_hierarchy->SelectGameObject(pasted.front());
+        m_hierarchy->SelectGameObject(pasted.Front());
     }
 
 }
@@ -100,9 +100,9 @@ void HierarchyContextMenu::OnDuplicateClicked()
     List<GameObject*> duplicated =
             GameObjectClipboard::DuplicateCopiedGameObjects();
 
-    if (duplicated.size() > 0)
+    if (!duplicated.Empty())
     {
-        m_hierarchy->SelectGameObject(duplicated.front());
+        m_hierarchy->SelectGameObject(duplicated.Front());
     }
 }
 

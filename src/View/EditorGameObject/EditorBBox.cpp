@@ -38,7 +38,7 @@ void EditorBBox::OnUpdate()
     // Adjust transform to wrap all the vertices of the parent and children
     Box bbox;
     List<Renderer*> rends = m_attachedGameObject->GetComponents<Renderer>();
-    for (auto it_r = rends.begin(); it_r != rends.end(); ++it_r)
+    for (auto it_r = rends.Begin(); it_r != rends.End(); ++it_r)
     {
         Renderer *r = *it_r;
         if (CAN_USE_COMPONENT(r))

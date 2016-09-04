@@ -2,14 +2,13 @@
 #define MAP_H
 
 #include <map>
-#include "List.h"
 #include <sstream>
 
 #include "List.h"
 #include "String.h"
 
 template <class Key, class Value>
-class Map : public std::map<Key, Value>
+class Map : private std::map<Key, Value>
 {
 public:
     typedef typename std::map<Key, Value>::iterator Iterator;
@@ -33,6 +32,23 @@ public:
     void Remove(const Key &key)
     {
         this->erase(key);
+    }
+
+    Iterator Remove(Iterator it)
+    {
+        return this->erase(it);
+    }
+
+    void RemoveValues(const Value &value)
+    {
+        for (auto it = this->Begin(); it != this->End(); ++it)
+        {
+            if (it->second == value)
+            {
+                it = Remove(it);
+                --it;
+            }
+        }
     }
 
     const Value& Get(const Key &key) const
@@ -90,38 +106,20 @@ public:
         return result;
     }
 
-    Iterator Begin()
-    {
-        return this->begin();
-    }
-    Iterator End()
-    {
-        return this->end();
-    }
-    Const_Iterator Begin() const
-    {
-        return this->begin();
-    }
-    Const_Iterator End() const
-    {
-        return this->end();
-    }
-    Reverse_Iterator RBegin()
-    {
-        return this->rbegin();
-    }
-    Reverse_Iterator REnd()
-    {
-        return this->rend();
-    }
-    Const_Reverse_Iterator RBegin() const
-    {
-        return this->rbegin();
-    }
-    Const_Reverse_Iterator REnd() const
-    {
-        return this->rend();
-    }
+    Iterator Begin() { return this->begin(); }
+    Iterator End() { return this->end(); }
+    Const_Iterator Begin() const { return this->begin(); }
+    Const_Iterator End() const { return this->end(); }
+    Reverse_Iterator RBegin() { return this->rbegin(); }
+    Reverse_Iterator REnd() { return this->rend(); }
+    Const_Reverse_Iterator RBegin() const { return this->rbegin(); }
+    Const_Reverse_Iterator REnd() const { return this->rend(); }
+
+    // To allow range-based for loops
+    Iterator begin() { return this->std::map<Key,Value>::begin(); }
+    Iterator end() { return this->std::map<Key,Value>::end(); }
+    Const_Iterator begin() const { return this->std::map<Key,Value>::begin(); }
+    Const_Iterator end() const { return this->std::map<Key,Value>::end(); }
 
     String ToString()
     {

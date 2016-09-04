@@ -95,7 +95,7 @@ public:
         return a;
     }
 
-    static void UnloadAsset(const Asset *asset);
+    static void UnloadAsset(Asset *asset);
 };
 
 #endif // ASSETSMANAGER_H

@@ -45,7 +45,7 @@ public:
 
     /**
      * @brief AddInFrontOfWords
-     * Adds the passed particle in front of every word.
+     * Adds the passed particle in Front of every word.
      * For example: ("-I", "file1 dir/file2 dir/file3") is converted to
      * "-Ifile1 -Idir/file2 -Idir/file3"
      */

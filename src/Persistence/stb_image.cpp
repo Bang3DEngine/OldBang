@@ -1615,7 +1615,7 @@ static int stbi_jpeg_info(stbi *s, int *x, int *y, int *comp)
 
 // public domain zlib decode    v0.2  Sean Barrett 2006-11-18
 //    simple implementation
-//      - all input must be provided in an upfront buffer
+//      - all input must be provided in an upFront buffer
 //      - all output is written to a single output buffer (can malloc/realloc)
 //    performance
 //      - fast huffman

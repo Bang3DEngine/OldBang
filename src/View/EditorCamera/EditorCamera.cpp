@@ -276,9 +276,9 @@ Camera *EditorCamera::GetCamera()
 void EditorCamera::OnTreeHierarchyGameObjectsSelected
     (List<GameObject *> &selectedGameObjects)
 {
-    if (selectedGameObjects.size() != 1) return;
+    if (selectedGameObjects.Size() != 1) return;
 
-    GameObject *selected = selectedGameObjects.front();
+    GameObject *selected = selectedGameObjects.Front();
     m_currentFocus = selected;
     m_doingLookAt = false;
 }

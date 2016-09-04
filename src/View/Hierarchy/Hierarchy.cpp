@@ -129,8 +129,8 @@ bool Hierarchy::Contains(GameObject *go)
 
 void Hierarchy::Clear()
 {
-    m_gameObject_To_TreeItem.clear();
-    m_treeItem_To_GameObject.clear();
+    m_gameObject_To_TreeItem.Clear();
+    m_treeItem_To_GameObject.Clear();
     clear();
 }
 
@@ -328,7 +328,7 @@ List<GameObject *> Hierarchy::GetSelectedGameObjects(bool excludeInternal)
         GameObject *go = GetGameObjectFromItem(selItem);
         if (go)
         {
-            selectedGos.push_back(go);
+            selectedGos.PushBack(go);
         }
     }
     return selectedGos;

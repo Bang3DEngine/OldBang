@@ -32,10 +32,10 @@ QPixmap File::AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm)
 
     QPixmap result(pm.scaled(128, 128, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation));
     QPainter painter;
-    painter.begin(&result);
+    painter.Begin(&result);
     painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     painter.drawPixmap(0, 0, 128, 128, noAssetPixmap);
-    painter.end();
+    painter.End();
     */
     return pm; //result;
 }

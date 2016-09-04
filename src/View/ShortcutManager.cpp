@@ -34,12 +34,12 @@ void ShortcutManager::OnKeyReleased(Input::Key key)
 
 void ShortcutManager::RegisterListener(IShortcutListener *list)
 {
-    m_shortcutsListeners.push_back(list);
+    m_shortcutsListeners.PushBack(list);
 }
 
 void ShortcutManager::UnregisterListener(IShortcutListener *list)
 {
-    m_shortcutsListeners.remove(list);
+    m_shortcutsListeners.Remove(list);
 }
 
 void ShortcutManager::InitFromMainBinary()

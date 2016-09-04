@@ -274,7 +274,7 @@ String FileReader::PeekNextLine(std::istream &f)
         std::getline(f, line);
         StringUtils::TrimLeft(&line);
     }
-    while ( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') &&
+    while ( (line.Empty() || line.at(0) == '#' || line.at(0) == '\n') &&
            f.peek() != EOF); //Skip all empty/comment lines
 
     f.seekg(beginningOfLine);
@@ -310,7 +310,7 @@ String FileReader::ReadNextLine(std::istream &f)
         std::getline(f, line);
         StringUtils::TrimLeft(&line);
     }
-    while ( (line.empty() || line.at(0) == '#' || line.at(0) == '\n') &&
+    while ( (line.Empty() || line.at(0) == '#' || line.at(0) == '\n') &&
            f.peek() != EOF); //Skip all empty/comment lines
 
     return line;

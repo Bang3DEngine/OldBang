@@ -116,6 +116,11 @@ std::vector<String> String::Split(char splitter, bool trimResults) const
     return result;
 }
 
+void String::Insert(Iterator it, char c)
+{
+    insert(it, c);
+}
+
 long String::IndexOf(char c, long startingPos) const
 {
     return find(c, startingPos);

@@ -27,8 +27,8 @@ private:
     List<InspectorWidget*> m_currentInspectorWidgets;
     List<IInspectable*> m_currentInspectables;
 
-    Map<InspectorWidget*, QListWidgetItem*> m_widgetToItem;
-    Map<InspectorWidget*, IInspectable*> m_widgetToInspectables;
+    Map<InspectorWidget*, QListWidgetItem*> m_widget_To_Item;
+    Map<InspectorWidget*, IInspectable*> m_widget_To_Inspectables;
 
 protected:
     //To set the scroll step to a smaller one

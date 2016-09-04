@@ -26,7 +26,7 @@ Framebuffer::~Framebuffer()
 void Framebuffer::SetColorAttachment(int attachmentId, TextureRender *tex)
 {
     tex->CreateEmpty(GetWidth(), GetHeight());
-    GLuint glAttachment = GL_COLOR_ATTACHMENT0 + m_attachmentId_To_Texture.size();
+    GLuint glAttachment = GL_COLOR_ATTACHMENT0 + m_attachmentId_To_Texture.Size();
     m_attachmentId_To_Texture[attachmentId] = tex;
     m_attachmentId_To_GLAttachment[attachmentId] = glAttachment;
 

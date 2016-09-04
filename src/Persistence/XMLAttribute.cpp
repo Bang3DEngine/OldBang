@@ -215,7 +215,7 @@ void XMLAttribute::SetFilepath(const String &filepath,
     String newFilepath = Persistence::ToRelative(filepath);
     Set(m_name, newFilepath, XMLAttribute::Type::File, properties);
 
-    if (!fileExtension.empty())
+    if (!fileExtension.Empty())
     {
         XMLProperty extensionProp = XMLProperty::FileExtension;
         extensionProp.SetValue(fileExtension);

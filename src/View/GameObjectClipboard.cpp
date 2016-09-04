@@ -5,19 +5,19 @@ Map<GameObject*, GameObject*> GameObjectClipboard::s_goCopyToItsParent;
 
 bool GameObjectClipboard::HasSomethingCopied()
 {
-    return s_copiedGameObjects.size() > 0;
+    return !s_copiedGameObjects.Empty();
 }
 
 void GameObjectClipboard::CopyGameObjects(const List<GameObject*> &whatToCopy)
 {
-    s_copiedGameObjects.clear();
-    s_goCopyToItsParent.clear();
+    s_copiedGameObjects.Clear();
+    s_goCopyToItsParent.Clear();
 
     for (GameObject *go : whatToCopy)
     {
         GameObject *copy = static_cast<GameObject*>(go->Clone());
         s_goCopyToItsParent[copy] = go->parent;
-        s_copiedGameObjects.push_back(copy);
+        s_copiedGameObjects.PushBack(copy);
     }
 
     for (GameObject *copy : s_copiedGameObjects)
@@ -36,14 +36,14 @@ List<GameObject*> GameObjectClipboard::PasteCopiedGameObjectsInto(GameObject *pa
     for (GameObject *copy : s_copiedGameObjects)
     {
         GameObject *localCopy = static_cast<GameObject*>(copy->Clone());
-        localCopies.push_back(localCopy);
+        localCopies.PushBack(localCopy);
     }
 
     for (GameObject *localCopy : localCopies)
     {
         GameObject *paste = static_cast<GameObject*>(localCopy);
         paste->SetParent(parent);
-        pasted.push_back(paste);
+        pasted.PushBack(paste);
     }
     return pasted;
 }
@@ -56,7 +56,7 @@ List<GameObject*> GameObjectClipboard::DuplicateCopiedGameObjects()
     {
         GameObject *localCopy = static_cast<GameObject*>(copy->Clone());
         localCopy->SetParent(s_goCopyToItsParent[copy]);
-        duplicated.push_back(localCopy);
+        duplicated.PushBack(localCopy);
     }
     return duplicated;
 }

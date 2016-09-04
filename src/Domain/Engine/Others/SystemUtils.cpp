@@ -178,7 +178,7 @@ void SystemUtils::SystemBackground(const String &command)
 String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
 {
     // GET INCLUDES
-    // Get all subdirs recursively in a single line, and add -I in front of every path
+    // Get all subdirs recursively in a single line, and add -I in Front of every path
 
     String includes = "";
     includes += SystemUtils::GetAllProjectSubDirs();

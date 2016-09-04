@@ -31,7 +31,7 @@ void Chrono::Log()
 {
     if (m_events.empty()) return;
 
-    //std::cerr << "Chrono " <<  m_chronoName << " -------------------" << std::endl;
+    std::cerr << "Chrono " <<  m_chronoName << " -------------------" << std::endl;
     long now = Time::GetNow();
     for (int i = 0; i < m_events.size(); ++i)
     {
@@ -46,9 +46,9 @@ void Chrono::Log()
             intervalSecs = (now - ce.time) / 1000.0f;
         }
 
-        //std::cerr << ce.eventName << "(" <<  intervalSecs << ")[" << ce.time << "]" << std::endl;
+        std::cerr << ce.eventName << "(" <<  intervalSecs << ")[" << ce.time << "]" << std::endl;
     }
     long firstTime = m_events.front().time;
-    //std::cerr << "Total: " << (now - firstTime) / 1000.0f << " ----------------" << std::endl;
-    //std::cerr << std::endl;
+    std::cerr << "Total: " << (now - firstTime) / 1000.0f << " ----------------" << std::endl;
+    std::cerr << std::endl;
 }

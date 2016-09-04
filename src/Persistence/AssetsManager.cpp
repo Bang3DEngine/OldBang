@@ -10,9 +10,9 @@ AssetsManager::AssetsManager()
 
 AssetsManager::~AssetsManager()
 {
-    while (m_id_To_AssetPointer.empty())
+    while (m_id_To_AssetPointer.Empty())
     {
-        auto it = m_id_To_AssetPointer.begin();
+        auto it = m_id_To_AssetPointer.Begin();
         delete it->second;
     }
 }
@@ -37,18 +37,10 @@ bool AssetsManager::IsAssetLoaded(const String &filepath)
     return (am->m_id_To_AssetPointer.ContainsKey(f));
 }
 
-void AssetsManager::UnloadAsset(const Asset *asset)
+void AssetsManager::UnloadAsset(Asset *asset)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); NONULL(am);
-    for (auto it = am->m_id_To_AssetPointer.begin();
-         it != am->m_id_To_AssetPointer.end(); ++it)
-    {
-        if (((void*)(it->second)) == ((void*)(asset)))
-        {
-            am->m_id_To_AssetPointer.erase(it);
-            break;
-        }
-    }
+    am->m_id_To_AssetPointer.RemoveValues(asset);
 }
 
 void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset)

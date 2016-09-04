@@ -24,7 +24,7 @@ Scene *SceneManager::AddScene(const String &name)
 
     Scene *scene = new Scene();
     scene->m_name = name;
-    sm->m_scenes.push_back(scene);
+    sm->m_scenes.PushBack(scene);
     return scene;
 }
 
@@ -45,7 +45,7 @@ void SceneManager::SetActiveScene(Scene *scene)
 
     if (sm->m_activeScene)
     {
-        sm->m_scenes.remove(sm->m_activeScene);
+        sm->m_scenes.Remove(sm->m_activeScene);
         delete sm->m_activeScene;
         sm->m_activeScene = nullptr;
     }

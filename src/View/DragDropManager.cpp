@@ -54,12 +54,12 @@ void DragDropManager::RegisterDragDropAgent(IDragDropListener *dragDropListener)
     {
         DragDropManager::s_ddManager = new DragDropManager();
     }
-    DragDropManager::s_ddManager->m_dragDropListeners.push_back(dragDropListener);
+    DragDropManager::s_ddManager->m_dragDropListeners.PushBack(dragDropListener);
 }
 
 void DragDropManager::UnregisterDragDropAgent(IDragDropListener *dragDropListener)
 {
-    DragDropManager::s_ddManager->m_dragDropListeners.remove(dragDropListener);
+    DragDropManager::s_ddManager->m_dragDropListeners.Remove(dragDropListener);
 }
 
 void DragDropManager::HandleDragEnterEvent(QObject *obj, QDragEnterEvent *e)

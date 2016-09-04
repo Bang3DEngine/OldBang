@@ -68,22 +68,22 @@ GameObject::~GameObject()
 {
     _OnDestroy();
 
-    while (!m_children.empty())
+    while (!m_children.Empty())
     {
-        GameObject *child = m_children.front();
+        GameObject *child = m_children.Front();
         delete child;
     }
 
-    while (!m_components.empty())
+    while (!m_components.Empty())
     {
-        Component *comp = m_components.front();
-        m_components.pop_front();
+        Component *comp = m_components.Front();
+        m_components.PopFront();
         delete comp;
     }
 
     if (parent)
     {
-        parent->m_children.remove(this); // Remove me from parent
+        parent->m_children.Remove(this); // Remove me from parent
     }
 
     #ifdef BANG_EDITOR
@@ -97,7 +97,7 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
     {
         if (m_parent)
         {
-            m_parent->m_children.remove(this);
+            m_parent->m_children.Remove(this);
         }
 
         if(keepWorldTransform)
@@ -112,7 +112,7 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
 
         if (m_parent)
         {
-            m_parent->m_children.push_back(this);
+            m_parent->m_children.PushBack(this);
 
             if(keepWorldTransform)
             {
@@ -265,7 +265,7 @@ void GameObject::AddComponent(Component *c)
     }
 
     c->SetGameObject(this);
-    m_components.push_back(c);
+    m_components.PushBack(c);
 }
 
 #ifdef BANG_EDITOR
@@ -277,9 +277,9 @@ void GameObject::MoveComponent(Component *c, int distance)
         {
             auto comp1 = comp;
             std::advance(comp1, 1);
-            m_components.erase(comp, comp1);
+            m_components.Remove(comp, comp1);
             std::advance(comp1, distance);
-            m_components.insert(comp1, 1, c);
+            m_components.Insert(comp1, 1, c);
             break;
         }
     }

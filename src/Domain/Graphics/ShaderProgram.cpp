@@ -221,7 +221,7 @@ void ShaderProgram::Bind() const
 
     // Bind textures at the moment we bind the shader program
     int textureUnit = 0;
-    for (auto it = m_names_To_Textures.begin(); it != m_names_To_Textures.end(); ++it)
+    for (auto it = m_names_To_Textures.Begin(); it != m_names_To_Textures.End(); ++it)
     {
         String texName = it->first;
         const Texture *tex = it->second;
