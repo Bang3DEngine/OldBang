@@ -171,6 +171,40 @@ File *File::GetSpecificFile(const File &f)
     return new File(f.m_fileSystemModel, f.m_modelIndex);
 }
 
+bool File::Exists(const String &filepath)
+{
+    String absFilepath = Persistence::ToAbsolute(filepath);
+    QFileInfo f(absFilepath.ToQString());
+    return f.exists();
+}
+
+void File::Write(const String &filepath, const String &contents)
+{
+    std::ofstream out(filepath);
+    if (out.is_open())
+    {
+        out << contents;
+        out.close();
+    }
+}
+
+void File::Write(const String &filepath, const Array<String> &lines)
+{
+    String all = String::Join(lines, "\n");
+    File::Write(filepath, all);
+}
+
+void File::Write(const String &filepath, const List<String> &lines)
+{
+    String all = String::Join(lines, "\n");
+    File::Write(filepath, all);
+}
+
+String File::GetContents(const String &filepath)
+{
+    return FileReader::GetContents(filepath);
+}
+
 String File::GetContents() const
 {
     return FileReader::GetContents(m_absPath);

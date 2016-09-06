@@ -1,6 +1,8 @@
 #ifndef FILE_H
 #define FILE_H
 
+#include <fstream>
+
 #include <QPainter>
 #include <QModelIndex>
 #include <QFileSystemModel>
@@ -54,6 +56,12 @@ public:
     bool IsOfExtension(const String &extensions) const;
 
     static File *GetSpecificFile(const File &f);
+    static bool Exists(const String &filepath);
+    static void Write(const String &filepath, const String &contents);
+    static void Write(const String &filepath, const Array<String> &lines);
+    static void Write(const String &filepath, const List<String> &lines);
+    static String GetContents(const String &filepath);
+
     virtual QPixmap GetIcon() const;
     virtual IInspectable *GetInspectable() const;
 

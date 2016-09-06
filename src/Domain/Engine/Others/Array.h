@@ -5,6 +5,7 @@
 #include <algorithm>
 
 class String;
+template <class T> class List;
 template <class T>
 class Array : private std::vector<T>
 {
@@ -68,7 +69,7 @@ public:
     }
     T& PopBack()
     {
-        const T& x = Back();
+        T& x = Back();
         this->pop_back();
         return x;
     }
@@ -88,6 +89,16 @@ public:
     T& Back()
     {
         return this->back();
+    }
+
+    List<T> ToList() const
+    {
+        List<T> list;
+        for (const T &x : *this)
+        {
+            list.PushBack(x);
+        }
+        return list;
     }
 
     Iterator Begin() { return this->begin(); }

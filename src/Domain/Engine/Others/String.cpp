@@ -2,6 +2,7 @@
 
 #include "Map.h"
 #include "List.h"
+#include "Array.h"
 #include "Color.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -114,6 +115,38 @@ Array<String> String::Split(char splitter, bool trimResults) const
     return result;
 }
 
+String String::Join(const Array<String> &parts, String joiner)
+{
+    String all = "";
+    for (int i = 0; i < parts.Size(); ++i)
+    {
+        const String &part = parts[i];
+        all += part;
+        if (i < parts.Size() - 1)
+        {
+            all += joiner;
+        }
+    }
+    return all;
+}
+
+String String::Join(const List<String> &parts, String joiner)
+{
+    int i = 0;
+    String all = "";
+    for (auto it = parts.Begin(); it != parts.End(); ++it)
+    {
+        const String &part = *it;
+        all += part;
+        if (i < parts.Size() - 1)
+        {
+            all += joiner;
+        }
+        ++i;
+    }
+    return all;
+}
+
 void String::Insert(Iterator it, char c)
 {
     insert(it, c);
@@ -168,6 +201,16 @@ bool String::Empty() const
 bool String::Contains(const String &str) const
 {
     return find(str) != std::string::npos;
+}
+
+bool String::BeginsWith(const String &str) const
+{
+    return this->IndexOf(str) == 0;
+}
+
+bool String::EndsWith(const String &str) const
+{
+    return this->IndexOf(str) == Length() - str.Length();
 }
 
 

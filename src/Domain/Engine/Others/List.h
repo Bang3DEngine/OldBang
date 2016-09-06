@@ -5,8 +5,7 @@
 #include <sstream>
 #include <algorithm>
 
-#include "String.h"
-
+class String;
 template <class T>
 class List : private std::list<T>
 {
@@ -168,20 +167,7 @@ public:
     Const_Iterator begin() const { return this->std::list<T>::begin(); }
     Const_Iterator end() const { return this->std::list<T>::end(); }
 
-
-    String ToString()
-    {
-        std::ostringstream oss;
-        oss << "("; bool first = true;
-        for (auto it = Begin(); it != End(); ++it)
-        {
-            if (!first) oss << ", ";
-            oss << (*it);
-            first = false;
-        }
-        oss <<")";
-        return String(oss.str());
-    }
+    String ToString();
 };
 
 #endif // LIST_H

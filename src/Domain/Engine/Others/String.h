@@ -14,6 +14,7 @@ class Vector3;
 class Vector4;
 class Matrix4;
 class Quaternion;
+template <class T> class List;
 class String : public std::string
 {
 public:
@@ -26,8 +27,7 @@ public:
     String(float v);
     String(const char *cstr);
     String(const std::string &stdstr);
-    String(const Array<char>::Iterator begin,
-           const Array<char>::Iterator end);
+    String(const Array<char>::Iterator begin, const Array<char>::Iterator end);
     String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
            std::istreambuf_iterator<char, std::char_traits<char> > end);
 
@@ -38,6 +38,8 @@ public:
     String Trimmed();
 
     Array<String> Split(char splitter, bool trimResults = false) const;
+    static String Join(const Array<String> &parts, String joiner = "");
+    static String Join(const List<String>  &parts, String joiner = "");
 
     void Insert(Iterator it, char c);
 
@@ -71,6 +73,8 @@ public:
     long Length() const;
     bool Empty() const;
     bool Contains(const String& str) const;
+    bool BeginsWith(const String& str) const;
+    bool EndsWith(const String& str) const;
 
     String& operator=(const char *cstr);
 
