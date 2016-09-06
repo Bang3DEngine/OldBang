@@ -29,9 +29,9 @@ Mesh::~Mesh()
 
 void Mesh::LoadFromFile(const String &filepath)
 {
-    m_positions.clear();
-    m_normals.clear();
-    m_uvs.clear();
+    m_positions.Clear();
+    m_normals.Clear();
+    m_uvs.Clear();
     if ( FileReader::ReadOBJ(filepath,
                              &m_positions, &m_normals, &m_uvs,
                              &m_trisModel))
@@ -46,40 +46,40 @@ void Mesh::LoadFromFile(const String &filepath)
     }
 }
 
-void Mesh::LoadPositions(const std::vector<Vector3>& positions)
+void Mesh::LoadPositions(const Array<Vector3>& positions)
 {
     if (m_vertexPositionsVBO) delete m_vertexPositionsVBO;
 
     m_positions = positions;
     m_vertexPositionsVBO = new VBO();
-    m_vertexPositionsVBO->Fill((void*)(&m_positions[0]), m_positions.size() * sizeof(float) * 3);
-    m_vertexCount = m_positions.size();
+    m_vertexPositionsVBO->Fill((void*)(&m_positions[0]), m_positions.Size() * sizeof(float) * 3);
+    m_vertexCount = m_positions.Size();
 
     m_bBox.FillFromPositions(m_positions);
     m_bSphere.FillFromBox(m_bBox);
 }
 
-void Mesh::LoadNormals(const std::vector<Vector3> &normals)
+void Mesh::LoadNormals(const Array<Vector3> &normals)
 {
     if (m_vertexNormalsVBO) delete m_vertexNormalsVBO;
 
     m_normals = normals;
     m_vertexNormalsVBO = new VBO();
-    m_vertexNormalsVBO->Fill((void*)(&m_normals[0]), m_normals.size() * sizeof(float) * 3);
+    m_vertexNormalsVBO->Fill((void*)(&m_normals[0]), m_normals.Size() * sizeof(float) * 3);
 }
 
-void Mesh::LoadUvs(const std::vector<Vector2> &uvs)
+void Mesh::LoadUvs(const Array<Vector2> &uvs)
 {
     if (m_vertexUvsVBO) delete m_vertexUvsVBO;
 
     m_uvs = uvs;
     m_vertexUvsVBO = new VBO();
-    m_vertexUvsVBO->Fill((void*)(&m_uvs[0]), m_uvs.size() * sizeof(float) * 2);
+    m_vertexUvsVBO->Fill((void*)(&m_uvs[0]), m_uvs.Size() * sizeof(float) * 2);
 }
 
-void Mesh::LoadAll(const std::vector<Vector3> &positions,
-                   const std::vector<Vector3> &normals,
-                   const std::vector<Vector2> &uvs)
+void Mesh::LoadAll(const Array<Vector3> &positions,
+                   const Array<Vector3> &normals,
+                   const Array<Vector2> &uvs)
 {
     LoadPositions(positions);
     LoadNormals(normals);
@@ -145,17 +145,17 @@ const Sphere &Mesh::GetBoundingSphere() const
     return m_bSphere;
 }
 
-const std::vector<Vector3> &Mesh::GetPositions()
+const Array<Vector3> &Mesh::GetPositions()
 {
     return m_positions;
 }
 
-const std::vector<Vector3> &Mesh::GetNormals()
+const Array<Vector3> &Mesh::GetNormals()
 {
     return m_normals;
 }
 
-const std::vector<Vector2> &Mesh::GetUvs()
+const Array<Vector2> &Mesh::GetUvs()
 {
     return m_uvs;
 }

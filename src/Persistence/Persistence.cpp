@@ -122,20 +122,20 @@ String Persistence::GetNextDuplicateName(const String &path)
     String fileDir  = Persistence::GetDir(filePath);
     String fileName = Persistence::GetFileNameWithExtension(filePath);
 
-    std::vector<String> splitted = StringUtils::Split(fileName, '.');
+    Array<String> splitted = StringUtils::Split(fileName, '.');
     fileName = splitted[0];
-    String fileExtension = splitted.size() <= 1 ? "" : splitted[1];
+    String fileExtension = splitted.Size() <= 1 ? "" : splitted[1];
     splitted = StringUtils::Split(fileName, '_');
     int number = 1;
-    if (splitted.size() > 1)
+    if (splitted.Size() > 1)
     {
-        String numberString = splitted[splitted.size() - 1];
+        String numberString = splitted[splitted.Size() - 1];
         bool ok = false;
         int readNumber = StringUtils::ToInt(numberString, &ok);
         if (ok)
         {
             number = readNumber + 1;
-            splitted.pop_back();
+            splitted.PopBack();
 
             int lastUnderscorePos = fileName.rfind('_');
             if (lastUnderscorePos != -1) // Strip _[number] from fileName

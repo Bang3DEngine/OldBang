@@ -63,24 +63,24 @@ TextureRender *Framebuffer::GetColorAttachment(int attachmentId) const
 
 void Framebuffer::SetAllDrawBuffers() const
 {
-    std::vector<int> attachmentIds;
+    Array<int> attachmentIds;
     for (int i = 0; i < m_attachmentId_To_GLAttachment.Size(); ++i)
     {
-        attachmentIds.push_back(i);
+        attachmentIds.PushBack(i);
     }
     SetDrawBuffers(attachmentIds);
 }
 
-void Framebuffer::SetDrawBuffers(const std::vector<int> &attachmentIds) const
+void Framebuffer::SetDrawBuffers(const Array<int> &attachmentIds) const
 {
     Bind();
-    std::vector<GLuint> drawBuffers;
+    Array<GLuint> drawBuffers;
     for (GLint att : attachmentIds)
     {
-        drawBuffers.push_back(m_attachmentId_To_GLAttachment.Get(att));
+        drawBuffers.PushBack(m_attachmentId_To_GLAttachment.Get(att));
     }
 
-    glDrawBuffers(drawBuffers.size(), &drawBuffers[0]);
+    glDrawBuffers(drawBuffers.Size(), &drawBuffers[0]);
     CheckFramebufferError();
     UnBind();
 }

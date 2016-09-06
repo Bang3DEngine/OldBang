@@ -42,12 +42,12 @@ XMLProperty XMLProperty::FromString(const String &string)
     String propString = string;
 
     StringUtils::Trim(&propString);
-    std::vector<String> parts = StringUtils::Split(propString, '=');
+    Array<String> parts = StringUtils::Split(propString, '=');
 
     String name = parts[0];
 
     String value = "";
-    if (parts.size() > 1)
+    if (parts.Size() > 1)
     {
         value = parts[1];
         value = value.substr(1, value.Length() - 2); // Strip the "

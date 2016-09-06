@@ -26,10 +26,10 @@ String LineRenderer::GetName() const { return "LineRenderer"; }
 
 void LineRenderer::BindPointsToVAO() const
 {
-    if (m_points.size() >= 2 &&
+    if (m_points.Size() >= 2 &&
        m_material  && m_material->GetShaderProgram() )
     {
-        m_vbo->Fill(m_points.data(), m_points.size() * sizeof(Vector3));
+        m_vbo->Fill(m_points.Data(), m_points.Size() * sizeof(Vector3));
         GLint verticesShaderLocation = m_material->GetShaderProgram()->
                 GetAttribLocation(ShaderContract::Attr_Vertex_In_Position_Raw);
         m_vao->UnBindVBO(verticesShaderLocation);
@@ -44,7 +44,7 @@ void LineRenderer::RenderWithoutBindingMaterial() const
     SetMatricesUniforms(model, normal, view, projection, pvm);
 
     m_vao->Bind();
-    glDrawArrays(GLint(m_drawLinesMode), 0, m_points.size());
+    glDrawArrays(GLint(m_drawLinesMode), 0, m_points.Size());
     m_vao->UnBind();
 }
 
@@ -58,7 +58,7 @@ Box LineRenderer::GetBoundingBox() const
 {
     Vector3 minp(999999.9f);
     Vector3 maxp(-999999.9f);
-    for (int i = 0; i < m_points.size(); ++i)
+    for (int i = 0; i < m_points.Size(); ++i)
     {
         Vector3 p = m_points[i];
         if (p.x < minp.x) minp.x = p.x;
@@ -72,7 +72,7 @@ Box LineRenderer::GetBoundingBox() const
     return Box(minp, maxp);
 }
 
-const std::vector<Vector3> &LineRenderer::GetPoints() const
+const Array<Vector3> &LineRenderer::GetPoints() const
 {
     return m_points;
 }

@@ -1,7 +1,7 @@
 #ifndef SINGLELINERENDERER_H
 #define SINGLELINERENDERER_H
 
-#include <vector>
+#include "Array.h"
 
 #include "VBO.h"
 #include "VAO.h"

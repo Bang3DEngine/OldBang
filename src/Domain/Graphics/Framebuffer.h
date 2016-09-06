@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <vector>
+#include "Array.h"
 
 #include "Map.h"
 #include "Color.h"
@@ -38,7 +38,7 @@ public:
     TextureRender* GetColorAttachment(int attachmentId) const;
 
     void SetAllDrawBuffers() const;
-    void SetDrawBuffers(const std::vector<int> &attachmentIds) const;
+    void SetDrawBuffers(const Array<int> &attachmentIds) const;
     void SetReadBuffer(int attachmentId) const;
 
     Color ReadColor(int x, int y, int attachmentId) const;

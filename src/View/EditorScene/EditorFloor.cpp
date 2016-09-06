@@ -3,7 +3,7 @@
 EditorFloor::EditorFloor()
 {
     const int GridSize2 = 2 * (c_gridSize + 1);
-    m_lineRenderers.resize(GridSize2);
+    m_lineRenderers.Resize(GridSize2);
     for (int i = 0; i < GridSize2; ++i)
     {
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();

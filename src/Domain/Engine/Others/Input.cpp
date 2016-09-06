@@ -244,7 +244,7 @@ void Input::ProcessKeyReleasedEventInfo(const EventInfo &ei)
 void Input::EnqueueEvent(QEvent *event)
 {
     EventInfo ei(event);
-    m_eventInfoQueue.push_back(ei);
+    m_eventInfoQueue.PushBack(ei);
 }
 
 void Input::ProcessEnqueuedEvents()
@@ -253,7 +253,7 @@ void Input::ProcessEnqueuedEvents()
     {
         ProcessEventInfo(ei);
     }
-    m_eventInfoQueue.clear();
+    m_eventInfoQueue.Clear();
 }
 
 Input *Input::GetInstance()

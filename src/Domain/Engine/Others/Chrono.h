@@ -1,7 +1,7 @@
 #ifndef CHRONO_H
 #define CHRONO_H
 
-#include <vector>
+#include "Array.h"
 #include <iostream>
 
 #include "String.h"
@@ -17,7 +17,7 @@ private:
     };
 
     String m_chronoName;
-    std::vector<ChronoEvent> m_events;
+    Array<ChronoEvent> m_events;
 
 public:
     Chrono(String chronoName = "");

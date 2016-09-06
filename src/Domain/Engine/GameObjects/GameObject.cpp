@@ -608,12 +608,12 @@ void GameObject::_OnDestroy()
 
 void GameObject::OnDragEnterMaterial(Material *m)
 {
-    m_materialsBeforeDrag.clear();
+    m_materialsBeforeDrag.Clear();
 
     List<Renderer*> rends = GetComponents<Renderer>();
     for (Renderer *r : rends)
     {
-        m_materialsBeforeDrag.push_back(r->GetMaterial());
+        m_materialsBeforeDrag.PushBack(r->GetMaterial());
         r->SetMaterial(m);
     }
 }

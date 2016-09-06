@@ -1,7 +1,7 @@
 ﻿#ifndef INPUT_H
 #define INPUT_H
 
-#include <vector>
+#include "Array.h"
 
 #include <QKeyEvent>
 
@@ -223,7 +223,7 @@ private:
      * @brief This map will contain the delayed key and mouse events, which will be processed in
      * the next frame.
      */
-    std::vector<EventInfo> m_eventInfoQueue;
+    Array<EventInfo> m_eventInfoQueue;
 
     void HandleMouseWrapping();
     void ProcessMouseWheelEventInfo(const EventInfo &ei);

@@ -1,7 +1,7 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include <vector>
+#include "Array.h"
 #include <sstream>
 #include <iostream>
 #include <QString>
@@ -116,7 +116,7 @@ std::ostream &operator<<(std::ostream &log, const List<T> &l)
 
 // Vector
 template <class T>
-std::ostream &operator<<(std::ostream &log, const std::vector<T> *v)
+std::ostream &operator<<(std::ostream &log, const Array<T> *v)
 {
     log << "[";
     for (int i = 0; i < v->size(); ++i)
@@ -128,7 +128,7 @@ std::ostream &operator<<(std::ostream &log, const std::vector<T> *v)
     return log;
 }
 template <class T>
-std::ostream &operator<<(std::ostream &log, const std::vector<T> &v)
+std::ostream &operator<<(std::ostream &log, const Array<T> &v)
 {
     return log << (&v);
 }

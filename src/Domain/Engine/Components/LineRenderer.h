@@ -1,7 +1,7 @@
 #ifndef LINERENDERER_H
 #define LINERENDERER_H
 
-#include <vector>
+#include "Array.h"
 
 #include "VBO.h"
 #include "VAO.h"
@@ -23,7 +23,7 @@ class LineRenderer : public Renderer
 friend class GameObject;
 
 protected:
-    std::vector<Vector3> m_points;
+    Array<Vector3> m_points;
 
     VBO *m_vbo = nullptr;
     VAO *m_vao = nullptr;
@@ -46,7 +46,7 @@ public:
     virtual void SetMaterial(Material *m) override;
 
     virtual Box GetBoundingBox() const override;
-    const std::vector<Vector3>& GetPoints() const;
+    const Array<Vector3>& GetPoints() const;
 
     #ifdef BANG_EDITOR
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;

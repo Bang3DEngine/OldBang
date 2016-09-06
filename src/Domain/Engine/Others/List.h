@@ -24,6 +24,11 @@ public:
     {
     }
 
+    // Allow "l = {1,2,3...}" initialization
+    List(std::initializer_list<T> l) : std::list<T>(l)
+    {
+    }
+
     bool Contains(const T& x) const
     {
         return std::find(Begin(), End(), x) != End();

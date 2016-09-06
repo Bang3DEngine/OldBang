@@ -24,7 +24,7 @@ friend class EditorScene;
 private:
     Gizmos() {}
 
-    static std::vector<Renderer*> m_renderers;
+    static Array<Renderer*> m_renderers;
 
     static void Init();
 

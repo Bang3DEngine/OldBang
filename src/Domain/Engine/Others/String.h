@@ -2,9 +2,10 @@
 #define STRING_H
 
 #include <string>
-#include <vector>
 #include <sstream>
 #include <cstring>
+
+#include "Array.h"
 
 class Color;
 class QString;
@@ -25,8 +26,8 @@ public:
     String(float v);
     String(const char *cstr);
     String(const std::string &stdstr);
-    String(const std::vector<char>::iterator begin,
-           const std::vector<char>::iterator end);
+    String(const Array<char>::Iterator begin,
+           const Array<char>::Iterator end);
     String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
            std::istreambuf_iterator<char, std::char_traits<char> > end);
 
@@ -36,7 +37,7 @@ public:
     String TrimmedRight();
     String Trimmed();
 
-    std::vector<String> Split(char splitter, bool trimResults = false) const;
+    Array<String> Split(char splitter, bool trimResults = false) const;
 
     void Insert(Iterator it, char c);
 
@@ -100,20 +101,7 @@ String operator+(const CLASS &v, const String &str);
 #define OPERATOR_PLUS_LEFT_DEF(CLASS) \
 String operator+(const CLASS &v, const String &str) { \
     String res = str; res += String::ToString(v); return res; }
-/*
-// With const char*
-#define OPERATOR_PLUS_RIGHT_CONST_CHAR_DECL(CLASS) \
-String operator+(const char *str, const CLASS &v);
-#define OPERATOR_PLUS_RIGHT_CONST_CHAR_DEF(CLASS) \
-String operator+(const char *str, const CLASS &v) { \
-    String res = String(str); res += String::ToString(v); return res; }
 
-#define OPERATOR_PLUS_LEFT_CONST_CHAR_DECL(CLASS) \
-String operator+(const CLASS &v, const char *str);
-#define OPERATOR_PLUS_LEFT_CONST_CHAR_DEF(CLASS) \
-String operator+(const CLASS &v, const char *str) { \
-    String res = String(str); res += String::ToString(v); return res; }
-*/
 
 OPERATOR_PLUS_RIGHT_DECL(Color)
  OPERATOR_PLUS_LEFT_DECL(Color)

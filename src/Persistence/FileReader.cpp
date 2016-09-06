@@ -116,14 +116,14 @@ int FileReader::GetOBJNumFaces(const String &filepath)
 }
 
 bool FileReader::ReadOBJ(const String& filepath,
-                         std::vector<Vector3> *vertexPos,
-                         std::vector<Vector3> *vertexNormals,
-                         std::vector<Vector2> *vertexUvs,
+                         Array<Vector3> *vertexPos,
+                         Array<Vector3> *vertexNormals,
+                         Array<Vector2> *vertexUvs,
                          bool *isTriangles)
 {
-    std::vector<Vector3> disorderedVertexPos, disorderedVertexNormals;
-    std::vector<Vector2> disorderedVertexUvs;
-    std::vector<unsigned int> vertexPosIndexes,
+    Array<Vector3> disorderedVertexPos, disorderedVertexNormals;
+    Array<Vector2> disorderedVertexUvs;
+    Array<unsigned int> vertexPosIndexes,
                               vertexUvsIndexes,
                               vertexNormIndexes;
     bool hasUvs, hasNormals;
@@ -144,19 +144,19 @@ bool FileReader::ReadOBJ(const String& filepath,
         {
             Vector3 pos;
             ss >> pos.x >> pos.y >> pos.z;
-            disorderedVertexPos.push_back(pos);
+            disorderedVertexPos.PushBack(pos);
         }
         else if (hasUvs && lineHeader == "vt") //Cargamos uvs
         {
             Vector2 uv;
             ss >> uv.x >> uv.y;
-            disorderedVertexUvs.push_back(uv);
+            disorderedVertexUvs.PushBack(uv);
         }
         else if (hasNormals && lineHeader == "vn") //Cargamos normals
         {
             Vector3 normal;
             ss >> normal.x >> normal.y >> normal.z;
-            disorderedVertexNormals.push_back(normal);
+            disorderedVertexNormals.PushBack(normal);
         }
         else if (lineHeader == "f")
         {
@@ -183,9 +183,9 @@ bool FileReader::ReadOBJ(const String& filepath,
             //Vertices 0,1 same for tris and quads in CCW
             for (int j = 0; j <= 1; ++j)
             {
-                vertexPosIndexes.push_back(posIndices[j]);
-                vertexUvsIndexes.push_back(uvIndices[j]);
-                vertexNormIndexes.push_back(normalIndices[j]);
+                vertexPosIndexes.PushBack(posIndices[j]);
+                vertexUvsIndexes.PushBack(uvIndices[j]);
+                vertexNormIndexes.PushBack(normalIndices[j]);
             }
 
             bool theresAFaceLeft = false;
@@ -208,46 +208,46 @@ bool FileReader::ReadOBJ(const String& filepath,
                     while (ss.peek() == '/') ss.ignore();
                     ss >> normalIndices[3];
                 }
-                vertexPosIndexes.push_back(posIndices[3]);
-                vertexUvsIndexes.push_back(uvIndices[3]);
-                vertexNormIndexes.push_back(normalIndices[3]);
+                vertexPosIndexes.PushBack(posIndices[3]);
+                vertexUvsIndexes.PushBack(uvIndices[3]);
+                vertexNormIndexes.PushBack(normalIndices[3]);
 
                 //Make second triangle in CCW
                 for (int j = 1; j <= 3; ++j) //3,2,1
                 {
-                    vertexPosIndexes.push_back(posIndices[j]);
-                    vertexUvsIndexes.push_back(uvIndices[j]);
-                    vertexNormIndexes.push_back(normalIndices[j]);
+                    vertexPosIndexes.PushBack(posIndices[j]);
+                    vertexUvsIndexes.PushBack(uvIndices[j]);
+                    vertexNormIndexes.PushBack(normalIndices[j]);
                 }
             }
             else //Triangles, finish with index 2
             {
-                vertexPosIndexes.push_back(posIndices[2]);
-                vertexUvsIndexes.push_back(uvIndices[2]);
-                vertexNormIndexes.push_back(normalIndices[2]);
+                vertexPosIndexes.PushBack(posIndices[2]);
+                vertexUvsIndexes.PushBack(uvIndices[2]);
+                vertexNormIndexes.PushBack(normalIndices[2]);
             }
         }
     }
 
-    for (unsigned int i = 0; i < vertexPosIndexes.size(); ++i)
+    for (unsigned int i = 0; i < vertexPosIndexes.Size(); ++i)
     {
-        vertexPos->push_back(disorderedVertexPos[vertexPosIndexes[i]-1]);
+        vertexPos->PushBack(disorderedVertexPos[vertexPosIndexes[i]-1]);
     }
 
     if (hasNormals)
     {
-        for (unsigned int i = 0; i < vertexNormIndexes.size(); ++i)
+        for (unsigned int i = 0; i < vertexNormIndexes.Size(); ++i)
         {
-            vertexNormals->push_back(
+            vertexNormals->PushBack(
                         disorderedVertexNormals[vertexNormIndexes[i]-1]);
         }
     }
 
     if (hasUvs)
     {
-        for (unsigned int i = 0; i < vertexUvsIndexes.size(); ++i)
+        for (unsigned int i = 0; i < vertexUvsIndexes.Size(); ++i)
         {
-            vertexUvs->push_back(disorderedVertexUvs[vertexUvsIndexes[i]-1]);
+            vertexUvs->PushBack(disorderedVertexUvs[vertexUvsIndexes[i]-1]);
         }
     }
 

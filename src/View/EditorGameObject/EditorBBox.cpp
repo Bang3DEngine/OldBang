@@ -60,7 +60,7 @@ void EditorBBox::OnUpdate()
 }
 
 
-std::vector<Vector3> EditorBBox::s_boxVertices =
+Array<Vector3> EditorBBox::s_boxVertices =
 {
     Vector3( 0.5f, 0.5f, 0.5f),
     Vector3( 0.5f,-0.5f,-0.5f),

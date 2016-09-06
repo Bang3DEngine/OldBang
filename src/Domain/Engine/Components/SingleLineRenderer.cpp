@@ -2,7 +2,7 @@
 
 SingleLineRenderer::SingleLineRenderer()
 {
-    m_points.resize(2);
+    m_points.Resize(2);
     m_points[0] = Vector3(0.0f);
     m_points[1] = Vector3(1.0f);
 

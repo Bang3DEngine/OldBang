@@ -7,7 +7,7 @@
 #include "XMLParser.h"
 
 
-#include <vector>
+#include "Array.h"
 
 class MaterialAssetFile : public File
 {
@@ -15,7 +15,7 @@ private:
     String m_vshaderFilepath = "";
     String m_fshaderFilepath = "";
     int m_textureCount = 0;
-    std::vector< String > m_textureFilepaths;
+    Array< String > m_textureFilepaths;
     Vector4 m_diffuseColor = Vector4(0.0f);
 
 public:
@@ -27,7 +27,7 @@ public:
     const String& GetVertexShaderFilepath() const;
     const String& GetFragmentShaderFilepath() const;
     int GetTextureCount() const;
-    const std::vector<String>& GetTextureFilepaths() const;
+    const Array<String>& GetTextureFilepaths() const;
     const Vector4& GetDiffuseColor() const;
 };
 

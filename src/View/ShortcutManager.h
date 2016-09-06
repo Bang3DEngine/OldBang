@@ -2,7 +2,7 @@
 #define SHORTCUTMANAGER_H
 
 #include <set>
-#include <vector>
+#include "Array.h"
 
 #include "List.h"
 #include "Input.h"
@@ -31,7 +31,7 @@ public:
     static ShortcutManager *GetInstance();
 
     static bool IsPressed(Input::Key key);
-    static bool IsPressed(const std::vector<Input::Key> keys);
+    static bool IsPressed(const Array<Input::Key> keys);
 
     void Clear();
 };

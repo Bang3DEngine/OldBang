@@ -35,8 +35,8 @@ ICloneable *CircleRenderer::Clone() const
 
 void CircleRenderer::GeneratePoints()
 {
-    m_points.clear();
-    m_points.resize(m_segments + 1);
+    m_points.Clear();
+    m_points.Resize(m_segments + 1);
 
     float step = (2.0f * 3.141592f) / (m_segments);
     for (int i = 0;  i < m_segments + 1; ++i)
@@ -51,7 +51,7 @@ void CircleRenderer::GetTwoClosestPointsInScreenSpace(
         Vector2 *p1, int *i1) const
 {
     float d0, d1; d0 = d1 = 99999.9f;
-    for (int i = 0; i < m_points.size() - 1; ++i)
+    for (int i = 0; i < m_points.Size() - 1; ++i)
     {
         Vector3 objP = m_points[i];
         Matrix4 m; transform->GetLocalToWorldMatrix(&m);

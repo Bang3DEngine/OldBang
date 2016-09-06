@@ -11,7 +11,7 @@
 class EditorBBox : public EditorGameObject
 {
 private:
-    static std::vector<Vector3> s_boxVertices;
+    static Array<Vector3> s_boxVertices;
     static Material *s_boxMaterial;
 
     GameObject *m_attachedGameObject = nullptr;

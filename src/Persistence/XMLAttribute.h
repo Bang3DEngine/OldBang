@@ -4,7 +4,7 @@
 #include "Bang.h"
 
 
-#include <vector>
+#include "Array.h"
 #include <iostream>
 #include <functional>
 
@@ -45,52 +45,52 @@ private:
     String m_name = "";
     XMLAttribute::Type m_type = XMLAttribute::Type::Bool;
     String m_value = "";
-    std::vector<XMLProperty> m_properties;
+    Array<XMLProperty> m_properties;
 
 public:
     XMLAttribute();
     XMLAttribute(const String &name,
                  const String &value,
                  XMLAttribute::Type type,
-                 const std::vector<XMLProperty> &properties = {});
+                 const Array<XMLProperty> &properties = {});
 
     void Set(const String &name,
              const String &value,
              XMLAttribute::Type type,
-             const std::vector<XMLProperty> &properties = {});
+             const Array<XMLProperty> &properties = {});
     void SetName(const String &name);
     void SetType(const XMLAttribute::Type &type);
     void SetValue(const String &value);
     void SetProperty(const XMLProperty &property);
     void SetProperty(const String &propertyName, const String &propertyValue = "");
-    void SetProperties(const std::vector<XMLProperty>& properties);
+    void SetProperties(const Array<XMLProperty>& properties);
     const String GetPropertyValue(const String &propertyName) const;
     bool HasProperty(const XMLProperty &property) const;
     bool HasProperty(const String &propertyName) const;
     void RemoveProperty(const String &propertyName);
 
 
-    void SetPointer(const void *value, const std::vector<XMLProperty>& properties = {});
-    void SetBool(bool value, const std::vector<XMLProperty>& properties = {});
-    void SetInt(int value, const std::vector<XMLProperty>& properties = {});
-    void SetString(const String &value, const std::vector<XMLProperty>& properties = {});
-    void SetFloat(float value, const std::vector<XMLProperty>& properties = {});
-    void SetVector2(const Vector2 &value, const std::vector<XMLProperty>& properties = {});
-    void SetVector3(const Vector3 &value, const std::vector<XMLProperty>& properties = {});
-    void SetVector4(const Vector4 &value, const std::vector<XMLProperty>& properties = {});
-    void SetColor(const Color &value, const std::vector<XMLProperty>& properties = {});
-    void SetQuaternion(const Quaternion &value, const std::vector<XMLProperty>& properties = {});
-    void SetRect(const Rect &value, const std::vector<XMLProperty>& properties = {});
+    void SetPointer(const void *value, const Array<XMLProperty>& properties = {});
+    void SetBool(bool value, const Array<XMLProperty>& properties = {});
+    void SetInt(int value, const Array<XMLProperty>& properties = {});
+    void SetString(const String &value, const Array<XMLProperty>& properties = {});
+    void SetFloat(float value, const Array<XMLProperty>& properties = {});
+    void SetVector2(const Vector2 &value, const Array<XMLProperty>& properties = {});
+    void SetVector3(const Vector3 &value, const Array<XMLProperty>& properties = {});
+    void SetVector4(const Vector4 &value, const Array<XMLProperty>& properties = {});
+    void SetColor(const Color &value, const Array<XMLProperty>& properties = {});
+    void SetQuaternion(const Quaternion &value, const Array<XMLProperty>& properties = {});
+    void SetRect(const Rect &value, const Array<XMLProperty>& properties = {});
     void SetFilepath(const String &filepath, const String &fileExtension = "",
-                     const std::vector<XMLProperty>& properties = {});
-    void SetEnum(const std::vector<String>& enumNames,
+                     const Array<XMLProperty>& properties = {});
+    void SetEnum(const Array<String>& enumNames,
                  const String& selectedEnumName,
-                 const std::vector<XMLProperty>& properties = {});
-    void SetEnum(const std::vector<String>& enumNames,
-                 int selectedEnumIndex, const std::vector<XMLProperty>& properties = {});
+                 const Array<XMLProperty>& properties = {});
+    void SetEnum(const Array<String>& enumNames,
+                 int selectedEnumIndex, const Array<XMLProperty>& properties = {});
     void SetButton(const String buttonText,
                    IAttrWidgetButtonListener *listener,
-                   const std::vector<XMLProperty>& properties = {});
+                   const Array<XMLProperty>& properties = {});
 
 
     /**
@@ -125,10 +125,10 @@ public:
     IAttrWidgetButtonListener* GetButtonListener() const;
     String GetEnumSelectedName() const;
     int GetEnumSelectedIndex() const;
-    std::vector<String> GetEnumNames() const;
+    Array<String> GetEnumNames() const;
 
     String GetTypeName() const;
-    const std::vector<XMLProperty>& GetProperties() const;
+    const Array<XMLProperty>& GetProperties() const;
 
     static XMLAttribute FromString(const String &string);
 };

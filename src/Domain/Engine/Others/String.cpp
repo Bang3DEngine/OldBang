@@ -1,9 +1,7 @@
 #include "String.h"
 
-#include <vector>
-#include "List.h"
-
 #include "Map.h"
+#include "List.h"
 #include "Color.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -32,8 +30,8 @@ String::String(const std::string &stdstr) :
 {
 }
 
-String::String(const std::vector<char>::iterator begin,
-               const std::vector<char>::iterator end) :
+String::String(const Array<char>::Iterator begin,
+               const Array<char>::Iterator end) :
     std::string(begin, end)
 {
 }
@@ -88,9 +86,9 @@ String String::Trimmed()
     return (*this).TrimmedLeft().TrimmedRight();
 }
 
-std::vector<String> String::Split(char splitter, bool trimResults) const
+Array<String> String::Split(char splitter, bool trimResults) const
 {
-    std::vector<String> result;
+    Array<String> result;
     if (Empty()) { return result; }
 
     bool lastParticle = false;
@@ -109,7 +107,7 @@ std::vector<String> String::Split(char splitter, bool trimResults) const
         {
             particle = particle.Trimmed();
         }
-        result.push_back(particle);
+        result.PushBack(particle);
 
         lastIndexFound = indexFound + 1;
     }

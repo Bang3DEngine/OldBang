@@ -1,7 +1,7 @@
 #ifndef CIRCLERENDERER_H
 #define CIRCLERENDERER_H
 
-#include <vector>
+#include "Array.h"
 
 #include "VBO.h"
 #include "VAO.h"

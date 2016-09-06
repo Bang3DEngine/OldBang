@@ -1,7 +1,7 @@
 #ifndef MESHFACTORY_H
 #define MESHFACTORY_H
 
-#include <vector>
+#include "Array.h"
 
 #include "Bang.h"
 

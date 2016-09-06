@@ -57,14 +57,14 @@ void XMLNode::SetAttribute(const XMLAttribute &attribute)
 void XMLNode::SetGenericAttribute(const String &attributeName,
                                   const String &attributeValue,
                                   XMLAttribute::Type type,
-                                  const std::vector<XMLProperty>& properties)
+                                  const Array<XMLProperty>& properties)
 {
     XMLAttribute attr(attributeName, attributeValue, type, properties);
     SetAttribute(attr);
 }
 
 void XMLNode::SetPointer(const String &attributeName, const void *value,
-                         const std::vector<XMLProperty>& properties)
+                         const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -73,7 +73,7 @@ void XMLNode::SetPointer(const String &attributeName, const void *value,
 }
 
 void XMLNode::SetBool(const String &attributeName, bool value,
-                      const std::vector<XMLProperty>& properties)
+                      const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -82,7 +82,7 @@ void XMLNode::SetBool(const String &attributeName, bool value,
 }
 
 void XMLNode::SetInt(const String &attributeName, int value,
-                     const std::vector<XMLProperty>& properties)
+                     const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -91,7 +91,7 @@ void XMLNode::SetInt(const String &attributeName, int value,
 }
 
 void XMLNode::SetFloat(const String &attributeName, float value,
-                       const std::vector<XMLProperty>& properties)
+                       const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -100,7 +100,7 @@ void XMLNode::SetFloat(const String &attributeName, float value,
 }
 
 void XMLNode::SetVector2(const String &attributeName, const Vector2 &value,
-                         const std::vector<XMLProperty>& properties)
+                         const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -109,7 +109,7 @@ void XMLNode::SetVector2(const String &attributeName, const Vector2 &value,
 }
 
 void XMLNode::SetVector3(const String &attributeName, const Vector3 &value,
-                         const std::vector<XMLProperty>& properties)
+                         const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -118,7 +118,7 @@ void XMLNode::SetVector3(const String &attributeName, const Vector3 &value,
 }
 
 void XMLNode::SetVector4(const String &attributeName, const Vector4 &value,
-                         const std::vector<XMLProperty>& properties)
+                         const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -127,7 +127,7 @@ void XMLNode::SetVector4(const String &attributeName, const Vector4 &value,
 }
 
 void XMLNode::SetColor(const String &attributeName, const Color &value,
-                       const std::vector<XMLProperty> &properties)
+                       const Array<XMLProperty> &properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -136,7 +136,7 @@ void XMLNode::SetColor(const String &attributeName, const Color &value,
 }
 
 void XMLNode::SetQuaternion(const String &attributeName, const Quaternion &value,
-                            const std::vector<XMLProperty>& properties)
+                            const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -145,7 +145,7 @@ void XMLNode::SetQuaternion(const String &attributeName, const Quaternion &value
 }
 
 void XMLNode::SetRect(const String &attributeName, const Rect &value,
-                      const std::vector<XMLProperty>& properties)
+                      const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -154,7 +154,7 @@ void XMLNode::SetRect(const String &attributeName, const Rect &value,
 }
 
 void XMLNode::SetString(const String &attributeName, const String &value,
-                        const std::vector<XMLProperty>& properties)
+                        const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -164,7 +164,7 @@ void XMLNode::SetString(const String &attributeName, const String &value,
 
 void XMLNode::SetFilepath(const String &attributeName, const String &filepath,
                           const String &fileExtension,
-                          const std::vector<XMLProperty>& properties)
+                          const Array<XMLProperty>& properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -172,13 +172,13 @@ void XMLNode::SetFilepath(const String &attributeName, const String &filepath,
     SetAttribute(attr);
 }
 
-void XMLNode::SetEnum(const String &attributeName, const std::vector<String>& enumNames,
-                      int selectedEnumIndex, const std::vector<XMLProperty> &properties)
+void XMLNode::SetEnum(const String &attributeName, const Array<String>& enumNames,
+                      int selectedEnumIndex, const Array<XMLProperty> &properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
     attr.SetEnum(enumNames, selectedEnumIndex, properties);
-    for (int i = 0; i < enumNames.size(); ++i)
+    for (int i = 0; i < enumNames.Size(); ++i)
     {
         const String &enumName = enumNames[i];
         XMLProperty prop("EnumName" + std::to_string(i), enumName);
@@ -190,7 +190,7 @@ void XMLNode::SetEnum(const String &attributeName, const std::vector<String>& en
 
 void XMLNode::SetButton(const String &attributeName,
                         IAttrWidgetButtonListener* listener,
-                        const std::vector<XMLProperty> &properties)
+                        const Array<XMLProperty> &properties)
 {
     XMLAttribute attr;
     attr.SetName(attributeName);
@@ -308,10 +308,10 @@ String XMLNode::GetEnumSelectedName(const String &attributeName) const
     return attr ? attr->GetEnumSelectedName() : "";
 }
 
-std::vector<String> XMLNode::GetEnumNames(const String &attributeName) const
+Array<String> XMLNode::GetEnumNames(const String &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetEnumNames() : std::vector<String>();
+    return attr ? attr->GetEnumNames() : Array<String>();
 }
 
 IAttrWidgetButtonListener *XMLNode::GetButtonListener(const String &attributeName) const

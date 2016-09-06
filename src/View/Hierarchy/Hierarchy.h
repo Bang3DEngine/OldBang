@@ -5,7 +5,7 @@
 
 #include <GL/glew.h>
 
-#include <vector>
+#include "Array.h"
 
 #include <chrono>
 #include <algorithm>

@@ -1,7 +1,7 @@
 ﻿#ifndef INSPECTORASSETSW_H
 #define INSPECTORASSETSW_H
 
-#include <vector>
+#include "Array.h"
 
 #include <QFileDialog>
 #include <QDir>

@@ -4,7 +4,7 @@
 #include "Bang.h"
 
 #include <GL/glew.h>
-#include <vector>
+#include "Array.h"
 
 #include "glm/glm.hpp"
 
@@ -32,9 +32,9 @@ private:
     Box m_bBox;
     Sphere m_bSphere;
 
-    std::vector<Vector3> m_positions;
-    std::vector<Vector3> m_normals;
-    std::vector<Vector2> m_uvs;
+    Array<Vector3> m_positions;
+    Array<Vector3> m_normals;
+    Array<Vector2> m_uvs;
 
     VAO *m_vao = nullptr;
     VBO *m_vertexPositionsVBO = nullptr;
@@ -50,12 +50,12 @@ public:
     virtual ~Mesh();
 
     void LoadFromFile(const String &m_filepath);
-    void LoadPositions(const std::vector<Vector3>& positions);
-    void LoadNormals(const std::vector<Vector3>& normals);
-    void LoadUvs(const std::vector<Vector2>& uvs);
-    void LoadAll(const std::vector<Vector3>& positions,
-                 const std::vector<Vector3>& normals,
-                 const std::vector<Vector2>& uvs);
+    void LoadPositions(const Array<Vector3>& positions);
+    void LoadNormals(const Array<Vector3>& normals);
+    void LoadUvs(const Array<Vector2>& uvs);
+    void LoadAll(const Array<Vector3>& positions,
+                 const Array<Vector3>& normals,
+                 const Array<Vector2>& uvs);
 
     void BindPositionsToShaderProgram(const String &nameInShader, const ShaderProgram &sp);
     void BindNormalsToShaderProgram(const String &nameInShader, const ShaderProgram &sp);
@@ -69,9 +69,9 @@ public:
     const Box& GetBoundingBox() const;
     const Sphere& GetBoundingSphere() const;
 
-    const std::vector<Vector3>& GetPositions();
-    const std::vector<Vector3>& GetNormals();
-    const std::vector<Vector2>& GetUvs();
+    const Array<Vector3>& GetPositions();
+    const Array<Vector3>& GetNormals();
+    const Array<Vector2>& GetUvs();
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

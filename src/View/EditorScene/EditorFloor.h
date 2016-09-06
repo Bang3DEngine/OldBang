@@ -4,7 +4,7 @@
 #include "Bang.h"
 
 #include "List.h"
-#include <vector>
+#include "Array.h"
 
 #include "SingleLineRenderer.h"
 #include "EditorGameObject.h"
@@ -16,7 +16,7 @@ public:
     const float c_tileSize = 15.0f;
     const int c_gridSize = 30;     // Number of lines
 
-    std::vector<SingleLineRenderer*> m_lineRenderers;
+    Array<SingleLineRenderer*> m_lineRenderers;
 
     EditorFloor();
     virtual ~EditorFloor();

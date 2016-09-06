@@ -60,7 +60,7 @@ protected:
     virtual void _OnDestroy () override;
 
     #ifdef BANG_EDITOR
-    std::vector<Material*> m_materialsBeforeDrag;
+    Array<Material*> m_materialsBeforeDrag;
     void OnDragEnterMaterial(Material *m);
     void OnDragLeaveMaterial(Material *m);
     void OnDropMaterial(Material *m);

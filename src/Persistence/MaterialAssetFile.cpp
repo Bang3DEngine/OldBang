@@ -15,7 +15,7 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModel
         m_textureCount = xmlInfo->GetInt("TextureCount");
         for (int i = 1; i <= m_textureCount; ++i)
         {
-            m_textureFilepaths.push_back(xmlInfo->GetFilepath("Texture" + std::to_string(i)));
+            m_textureFilepaths.PushBack(xmlInfo->GetFilepath("Texture" + std::to_string(i)));
         }
 
         m_diffuseColor = xmlInfo->GetVector4("DiffuseColor");
@@ -50,7 +50,7 @@ int MaterialAssetFile::GetTextureCount() const
     return m_textureCount;
 }
 
-const std::vector<String> &MaterialAssetFile::GetTextureFilepaths() const
+const Array<String> &MaterialAssetFile::GetTextureFilepaths() const
 {
     return m_textureFilepaths;
 }

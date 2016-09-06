@@ -103,7 +103,7 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
                 else
                 {
                     AttrWidgetVectorFloat *awv = static_cast<AttrWidgetVectorFloat*>(aw);
-                    std::vector<float> v = awv->GetValue();
+                    Array<float> v = awv->GetValue();
                     if (attrType == XMLAttribute::Type::Vector2)
                     {
                         attribute.SetVector2(Vector2(v[0], v[1]), attribute.GetProperties());
@@ -201,7 +201,7 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         XMLAttribute attribute = itAttr.second;
-        m_attributes.push_back(attribute);
+        m_attributes.PushBack(attribute);
         AttributeWidget *w = AttributeWidget::FromXMLAttribute(attribute, this);
         if (w)
         {

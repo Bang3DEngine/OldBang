@@ -2,7 +2,7 @@
 #define APPLICATION_H
 
 #include <iostream>
-#include <vector>
+#include "Array.h"
 
 #include <QTimer>
 #include <QKeyEvent>

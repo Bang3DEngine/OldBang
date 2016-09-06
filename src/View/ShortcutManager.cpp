@@ -54,11 +54,11 @@ ShortcutManager *ShortcutManager::GetInstance()
 
 bool ShortcutManager::IsPressed(Input::Key key)
 {
-    const std::vector<Input::Key> keys = {key};
+    const Array<Input::Key> keys = {key};
     return ShortcutManager::IsPressed(keys);
 }
 
-bool ShortcutManager::IsPressed(const std::vector<Input::Key> keys)
+bool ShortcutManager::IsPressed(const Array<Input::Key> keys)
 {
     ShortcutManager *sm = ShortcutManager::GetInstance();
     if (!sm) { return nullptr; }

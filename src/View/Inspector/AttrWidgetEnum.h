@@ -1,7 +1,7 @@
 #ifndef INSPECTORCOMPONENTENUMSLOTWIDGET_H
 #define INSPECTORCOMPONENTENUMSLOTWIDGET_H
 
-#include <vector>
+#include "Array.h"
 
 #include <QTimer>
 #include <QFocusEvent>

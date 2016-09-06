@@ -14,7 +14,7 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
     for (unsigned int i = 0; i < numberOfFields; ++i)
     {
         AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget, true);
-        m_floatSlots.push_back(s);
+        m_floatSlots.PushBack(s);
 
         QLabel *label = new QLabel(QString::fromStdString(labels[i]));
         if (i != 0)
@@ -30,21 +30,21 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
     AfterConstructor();
 }
 
-void AttrWidgetVectorFloat::SetValue(const std::vector<float> &v)
+void AttrWidgetVectorFloat::SetValue(const Array<float> &v)
 {
-    for (unsigned int i = 0; i < m_floatSlots.size(); ++i)
+    for (unsigned int i = 0; i < m_floatSlots.Size(); ++i)
     {
         m_floatSlots[i]->SetValue(v[i]);
     }
 }
 
-std::vector<float>  AttrWidgetVectorFloat::GetValue()
+Array<float>  AttrWidgetVectorFloat::GetValue()
 {
-    std::vector<float> result;
-    for (unsigned int i = 0; i < m_floatSlots.size(); ++i)
+    Array<float> result;
+    for (unsigned int i = 0; i < m_floatSlots.Size(); ++i)
     {
         float f = m_floatSlots[i]->GetValue();
-        result.push_back(f);
+        result.PushBack(f);
     }
     return result;
 }
@@ -81,7 +81,7 @@ void AttrWidgetVectorFloat::Refresh(const XMLAttribute &attribute)
 
     XMLAttribute::Type attrType = attribute.GetType();
 
-    std::vector<float> vf;
+    Array<float> vf;
     if (attrType == XMLAttribute::Type::Float)
     {
         float v = attribute.GetFloat();

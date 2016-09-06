@@ -37,41 +37,41 @@ public:
     void SetGenericAttribute(const String &attributeName,
                              const String &attributeValue,
                              XMLAttribute::Type type,
-                             const std::vector<XMLProperty>& properties = {});
+                             const Array<XMLProperty>& properties = {});
     void SetPointer(const String &attributeName,
                     const void *value,
-                    const std::vector<XMLProperty>& properties = {});
+                    const Array<XMLProperty>& properties = {});
     void SetBool(const String &attributeName, bool value,
-                 const std::vector<XMLProperty>& properties = {});
+                 const Array<XMLProperty>& properties = {});
     void SetInt(const String &attributeName, int value,
-                const std::vector<XMLProperty>& properties = {});
+                const Array<XMLProperty>& properties = {});
     void SetFloat(const String &attributeName, float value,
-                  const std::vector<XMLProperty>& properties = {});
+                  const Array<XMLProperty>& properties = {});
     void SetString(const String &attributeName, const String &value,
-                   const std::vector<XMLProperty>& properties = {});
+                   const Array<XMLProperty>& properties = {});
     void SetVector2(const String &attributeName, const Vector2 &value,
-                    const std::vector<XMLProperty>& properties = {});
+                    const Array<XMLProperty>& properties = {});
     void SetVector3(const String &attributeName, const Vector3 &value,
-                    const std::vector<XMLProperty>& properties = {});
+                    const Array<XMLProperty>& properties = {});
     void SetVector4(const String &attributeName, const Vector4 &value,
-                    const std::vector<XMLProperty>& properties = {});
+                    const Array<XMLProperty>& properties = {});
     void SetColor(const String &attributeName, const Color &value,
-                  const std::vector<XMLProperty>& properties = {});
+                  const Array<XMLProperty>& properties = {});
     void SetQuaternion(const String &attributeName, const Quaternion &value,
-                       const std::vector<XMLProperty>& properties = {});
+                       const Array<XMLProperty>& properties = {});
     void SetRect(const String &attributeName, const Rect &value,
-                 const std::vector<XMLProperty>& properties = {});
+                 const Array<XMLProperty>& properties = {});
     void SetFilepath(const String &attributeName,
                      const String &filepath,
                      const String &fileExtension = "",
-                     const std::vector<XMLProperty>& properties = {});
+                     const Array<XMLProperty>& properties = {});
     void SetEnum(const String &attributeName,
-                 const std::vector<String>& enumNames,
+                 const Array<String>& enumNames,
                  int selectedEnumIndex,
-                 const std::vector<XMLProperty>& properties = {});
+                 const Array<XMLProperty>& properties = {});
     void SetButton(const String &attributeName,
                    IAttrWidgetButtonListener* listener,
-                   const std::vector<XMLProperty>& properties = {});
+                   const Array<XMLProperty>& properties = {});
     void RemoveAttribute(const String& attributeName);
     XMLAttribute* GetAttribute(const String& attributeName) const;
     String GetAttributeValue(const String& attributeName) const;
@@ -89,7 +89,7 @@ public:
     Rect GetRect(const String& attributeName) const;
     int GetEnumSelectedIndex(const String& attributeName) const;
     String GetEnumSelectedName(const String& attributeName) const;
-    std::vector<String> GetEnumNames(const String& attributeName) const;
+    Array<String> GetEnumNames(const String& attributeName) const;
     IAttrWidgetButtonListener *GetButtonListener(const String &attributeName) const;
 
     const XMLNode *GetChild(const String &name) const;

@@ -10,7 +10,7 @@
 #include "SingleLineRenderer.h"
 
 EditorGameObject *Gizmos::m_gizmosGameObject = nullptr;
-std::vector<Renderer*> Gizmos::m_renderers;
+Array<Renderer*> Gizmos::m_renderers;
 
 SingleLineRenderer *Gizmos::m_singleLineRenderer = nullptr;
 CircleRenderer *Gizmos::m_circleRenderer = nullptr;
@@ -48,10 +48,10 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
         Gizmos::m_circleRenderer = m_gizmosGameObject->AddComponent<CircleRenderer>();
         Gizmos::m_meshRenderer = m_gizmosGameObject->AddComponent<MeshRenderer>();
 
-        m_renderers.clear();
-        m_renderers.push_back(Gizmos::m_singleLineRenderer);
-        m_renderers.push_back(Gizmos::m_circleRenderer);
-        m_renderers.push_back(Gizmos::m_meshRenderer);
+        m_renderers.Clear();
+        m_renderers.PushBack(Gizmos::m_singleLineRenderer);
+        m_renderers.PushBack(Gizmos::m_circleRenderer);
+        m_renderers.PushBack(Gizmos::m_meshRenderer);
 
         for (Renderer *rend : Gizmos::m_renderers)
         {

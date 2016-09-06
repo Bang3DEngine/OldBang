@@ -124,7 +124,7 @@ bool File::IsFile() const
 bool File::IsOfExtension(const String &extensions) const
 {
     // We receive something like "jpg png bmp obj"
-    std::vector<String> extensionsList = StringUtils::SplitTrim(extensions, ' ');
+    Array<String> extensionsList = StringUtils::SplitTrim(extensions, ' ');
     for (String ext : extensionsList)
     {
         if (ext == GetExtension())

@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <vector>
+#include "Array.h"
 
 #include "Asset.h"
 #include "Color.h"

@@ -5,7 +5,7 @@
 
 #include <QThread>
 
-#include <vector>
+#include "Array.h"
 #include <chrono>
 #include <QTimer>
 #include <QGLWidget>

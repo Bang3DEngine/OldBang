@@ -3,7 +3,7 @@
 
 #include "Bang.h"
 
-#include <vector>
+#include "Array.h"
 
 #include <fstream>
 #include <sstream>
@@ -48,9 +48,9 @@ public:
     static int GetOBJNumFaces(const String& filepath);
 
     static bool ReadOBJ(const String& filepath,
-                        std::vector<Vector3> *vertexPos,
-                        std::vector<Vector3> *vertexNormals,
-                        std::vector<Vector2> *vertexUvs,
+                        Array<Vector3> *vertexPos,
+                        Array<Vector3> *vertexNormals,
+                        Array<Vector2> *vertexUvs,
                         bool *isTriangles);
     //
 

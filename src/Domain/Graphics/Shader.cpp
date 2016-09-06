@@ -41,7 +41,7 @@ bool Shader::LoadFromFile(const String& filepath)
         GLint maxLength = 0;
         glGetShaderiv(m_idGL, GL_INFO_LOG_LENGTH, &maxLength);
 
-        std::vector<GLchar> v(maxLength);
+        Array<GLchar> v(maxLength);
         glGetShaderInfoLog(m_idGL, maxLength, &maxLength, &v[0]);
 
         String errorStr(v.begin(), v.end());

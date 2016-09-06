@@ -80,10 +80,10 @@ String StringUtils::Trim(const String &str)
     return str;
 }
 
-String StringUtils::Concat(const std::vector<String> &particles, String joiner)
+String StringUtils::Concat(const Array<String> &particles, String joiner)
 {
     String result = "";
-    for (int i = 0; i < particles.size(); ++i)
+    for (int i = 0; i < particles.Size(); ++i)
     {
         if (i != 0) { result += joiner; }
         result += particles[i];
@@ -92,9 +92,9 @@ String StringUtils::Concat(const std::vector<String> &particles, String joiner)
 }
 
 
-std::vector<String> StringUtils::Split(const String &content, char splitter)
+Array<String> StringUtils::Split(const String &content, char splitter)
 {
-    std::vector<String> result;
+    Array<String> result;
     if(content == "")
     {
         return result; // Empty
@@ -111,15 +111,15 @@ std::vector<String> StringUtils::Split(const String &content, char splitter)
             indexFound = content.length();
         }
         String particle = content.substr(lastIndexFound, indexFound - lastIndexFound);
-        result.push_back(particle);
+        result.PushBack(particle);
         lastIndexFound = indexFound + 1;
     }
     return result;
 }
 
-std::vector<String> StringUtils::SplitTrim(const String &content, char splitter)
+Array<String> StringUtils::SplitTrim(const String &content, char splitter)
 {
-    std::vector<String> result = Split(content, splitter);
+    Array<String> result = Split(content, splitter);
     for (String &str : result)
     {
         Trim(&str);
@@ -127,11 +127,11 @@ std::vector<String> StringUtils::SplitTrim(const String &content, char splitter)
     return result;
 }
 
-std::vector<String> StringUtils::BangEnumVariadicStringToNamesArray(const String &_va_args_)
+Array<String> StringUtils::BangEnumVariadicStringToNamesArray(const String &_va_args_)
 {
     // We receive something like "Wololo, Apple = 49, Pear=29, Lololo=2193, Banana,Sandwich, Monkey=32"
     // We want this vector: ["Wololo", "Apple", "Pear", "Lololo", "Banana", "Sandwich", "Monkey"]
-    std::vector<String> result = SplitTrim(_va_args_, ',');
+    Array<String> result = SplitTrim(_va_args_, ',');
     for (String &str : result)
     {
         str = SplitTrim(str, '=')[0];

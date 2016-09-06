@@ -7,7 +7,7 @@ XMLAttribute::XMLAttribute()
 XMLAttribute::XMLAttribute(const String &name,
                            const String &value,
                            XMLAttribute::Type type,
-                           const std::vector<XMLProperty> &properties)
+                           const Array<XMLProperty> &properties)
 {
     Set(name, value, type, properties);
 }
@@ -15,7 +15,7 @@ XMLAttribute::XMLAttribute(const String &name,
 void XMLAttribute::Set(const String &name,
                        const String &value,
                        XMLAttribute::Type type,
-                       const std::vector<XMLProperty> &properties)
+                       const Array<XMLProperty> &properties)
 {
     SetName(name);
     SetValue(value);
@@ -49,10 +49,10 @@ void XMLAttribute::SetProperty(const String &propertyName, const String &propert
     }
 
     XMLProperty prop(propertyName, propertyValue);
-    m_properties.push_back(prop);
+    m_properties.PushBack(prop);
 }
 
-void XMLAttribute::SetProperties(const std::vector<XMLProperty> &properties)
+void XMLAttribute::SetProperties(const Array<XMLProperty> &properties)
 {
     for (const XMLProperty &prop : properties)
     {
@@ -98,19 +98,20 @@ bool XMLAttribute::HasProperty(const String &propertyName) const
 
 void XMLAttribute::RemoveProperty(const String &propertyName)
 {
-    for (auto it = m_properties.begin(); it != m_properties.end(); ++it)
+    for (auto it = m_properties.Begin(); it != m_properties.End(); ++it)
     {
         const XMLProperty &prop = *it;
         if (prop.GetName() == propertyName)
         {
-            m_properties.erase(it);
+            it = m_properties.Remove(it);
+            --it;
             return;
         }
     }
 }
 
 void XMLAttribute::SetPointer(const void *value,
-                              const std::vector<XMLProperty> &properties)
+                              const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
     oss << value;
@@ -118,13 +119,13 @@ void XMLAttribute::SetPointer(const void *value,
 }
 
 void XMLAttribute::SetBool(bool value,
-                           const std::vector<XMLProperty> &properties)
+                           const Array<XMLProperty> &properties)
 {
     Set(m_name, value ? "true" : "false", XMLAttribute::Type::Bool, properties);
 }
 
 void XMLAttribute::SetInt(int value,
-                          const std::vector<XMLProperty> &properties)
+                          const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
     oss << value;
@@ -132,13 +133,13 @@ void XMLAttribute::SetInt(int value,
 }
 
 void XMLAttribute::SetString(const String &value,
-                             const std::vector<XMLProperty> &properties)
+                             const Array<XMLProperty> &properties)
 {
     Set(m_name, value, XMLAttribute::Type::String, properties);
 }
 
 void XMLAttribute::SetFloat(float value,
-                            const std::vector<XMLProperty> &properties)
+                            const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
     oss << value;
@@ -146,7 +147,7 @@ void XMLAttribute::SetFloat(float value,
 }
 
 void XMLAttribute::SetVector2(const Vector2 &value,
-                              const std::vector<XMLProperty> &properties)
+                              const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
     oss << "(" << value.x << ", " <<
@@ -155,7 +156,7 @@ void XMLAttribute::SetVector2(const Vector2 &value,
 }
 
 void XMLAttribute::SetVector3(const Vector3 &value,
-                              const std::vector<XMLProperty> &properties)
+                              const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
     oss << "(" << value.x << ", " <<
@@ -165,7 +166,7 @@ void XMLAttribute::SetVector3(const Vector3 &value,
 }
 
 void XMLAttribute::SetVector4(const Vector4 &value,
-                              const std::vector<XMLProperty> &properties)
+                              const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
     oss << "(" << value.x << ", " <<
@@ -176,7 +177,7 @@ void XMLAttribute::SetVector4(const Vector4 &value,
 }
 
 void XMLAttribute::SetColor(const Color &value,
-                            const std::vector<XMLProperty> &properties)
+                            const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
     oss << "(" << value.r << ", " <<
@@ -187,7 +188,7 @@ void XMLAttribute::SetColor(const Color &value,
 }
 
 void XMLAttribute::SetQuaternion(const Quaternion &value,
-                                 const std::vector<XMLProperty> &properties)
+                                 const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
     oss << "(" << value.w << ", " <<
@@ -198,7 +199,7 @@ void XMLAttribute::SetQuaternion(const Quaternion &value,
 }
 
 void XMLAttribute::SetRect(const Rect &value,
-                           const std::vector<XMLProperty> &properties)
+                           const Array<XMLProperty> &properties)
 {
     std::ostringstream oss;
     oss << "(" << value.m_minx << ", " <<
@@ -210,7 +211,7 @@ void XMLAttribute::SetRect(const Rect &value,
 
 void XMLAttribute::SetFilepath(const String &filepath,
                                const String &fileExtension,
-                               const std::vector<XMLProperty> &properties)
+                               const Array<XMLProperty> &properties)
 {
     String newFilepath = Persistence::ToRelative(filepath);
     Set(m_name, newFilepath, XMLAttribute::Type::File, properties);
@@ -223,12 +224,12 @@ void XMLAttribute::SetFilepath(const String &filepath,
     }
 }
 
-void XMLAttribute::SetEnum(const std::vector<String> &enumNames,
+void XMLAttribute::SetEnum(const Array<String> &enumNames,
                            const String &selectedEnumName,
-                           const std::vector<XMLProperty> &properties)
+                           const Array<XMLProperty> &properties)
 {
     int selectedEnumIndex = -1;
-    for (int i = 0; i < enumNames.size(); ++i)
+    for (int i = 0; i < enumNames.Size(); ++i)
     {
         const String& enumName = enumNames[i];
         if (enumName == selectedEnumName)
@@ -240,11 +241,11 @@ void XMLAttribute::SetEnum(const std::vector<String> &enumNames,
     SetEnum(enumNames, selectedEnumIndex, properties);
 }
 
-void XMLAttribute::SetEnum(const std::vector<String> &enumNames,
-                           int selectedEnumIndex, const std::vector<XMLProperty> &properties)
+void XMLAttribute::SetEnum(const Array<String> &enumNames,
+                           int selectedEnumIndex, const Array<XMLProperty> &properties)
 {
     Set(m_name, std::to_string(selectedEnumIndex), XMLAttribute::Type::Enum, properties);
-    for (int i = 0; i < enumNames.size(); ++i)
+    for (int i = 0; i < enumNames.Size(); ++i)
     {
         XMLProperty prop("EnumName" + std::to_string(i), enumNames[i]);
         SetProperty(prop);
@@ -253,7 +254,7 @@ void XMLAttribute::SetEnum(const std::vector<String> &enumNames,
 
 void XMLAttribute::SetButton(const String buttonText,
                              IAttrWidgetButtonListener *listener,
-                             const std::vector<XMLProperty> &properties)
+                             const Array<XMLProperty> &properties)
 {
     Set(m_name, buttonText, XMLAttribute::Type::Button, properties);
     std::ostringstream oss; oss << ( (void*) listener );
@@ -366,7 +367,7 @@ Vector2 XMLAttribute::GetVector2() const
     float x = 0, y = 0;
     String insidePars = StringUtils::Split(m_value, '(')[1];
     insidePars =  StringUtils::Split(insidePars, ')')[0];
-    std::vector<String> numbers = StringUtils::Split(insidePars, ',');
+    Array<String> numbers = StringUtils::Split(insidePars, ',');
     x = StringUtils::ToFloat(numbers[0]);
     y = StringUtils::ToFloat(numbers[1]);
     return Vector2(x,y);
@@ -377,7 +378,7 @@ Vector3 XMLAttribute::GetVector3() const
     float x = 0, y = 0, z = 0;
     String insidePars = StringUtils::Split(m_value, '(')[1];
     insidePars =  StringUtils::Split(insidePars, ')')[0];
-    std::vector<String> numbers = StringUtils::Split(insidePars, ',');
+    Array<String> numbers = StringUtils::Split(insidePars, ',');
     x = StringUtils::ToFloat(numbers[0]);
     y = StringUtils::ToFloat(numbers[1]);
     z = StringUtils::ToFloat(numbers[2]);
@@ -389,7 +390,7 @@ Vector4 XMLAttribute::GetVector4() const
     float x = 0, y = 0, z = 0, w = 0;
     String insidePars = StringUtils::Split(m_value, '(')[1];
     insidePars =  StringUtils::Split(insidePars, ')')[0];
-    std::vector<String> numbers = StringUtils::Split(insidePars, ',');
+    Array<String> numbers = StringUtils::Split(insidePars, ',');
     x = StringUtils::ToFloat(numbers[0]);
     y = StringUtils::ToFloat(numbers[1]);
     z = StringUtils::ToFloat(numbers[2]);
@@ -440,16 +441,16 @@ int XMLAttribute::GetEnumSelectedIndex() const
     return std::atoi(GetValue().ToCString());
 }
 
-std::vector<String> XMLAttribute::GetEnumNames() const
+Array<String> XMLAttribute::GetEnumNames() const
 {
-    std::vector<String> enumNames;
+    Array<String> enumNames;
     int i = 0;
     while (true)
     {
         String propName = "EnumName" + std::to_string(i);
         if (HasProperty(propName))
         {
-            enumNames.push_back( GetPropertyValue(propName) );
+            enumNames.PushBack( GetPropertyValue(propName) );
         }
         else
         {
@@ -460,7 +461,7 @@ std::vector<String> XMLAttribute::GetEnumNames() const
     return enumNames;
 }
 
-const std::vector<XMLProperty> &XMLAttribute::GetProperties() const
+const Array<XMLProperty> &XMLAttribute::GetProperties() const
 {
     return m_properties;
 }
@@ -500,7 +501,7 @@ XMLAttribute XMLAttribute::FromString(const String &string)
     String typeString = str.substr(attrTypeBegin, attrTypeEnd - attrTypeBegin);
     String value = str.substr(attrValueBegin, attrValueEnd - attrValueBegin);
     String propertiesString = str.substr(attrPropertiesBegin, attrPropertiesEnd - attrPropertiesBegin);
-    std::vector<String> properties = StringUtils::Split(propertiesString, ',');
+    Array<String> properties = StringUtils::Split(propertiesString, ',');
 
     attribute.SetName(name);
     attribute.SetType(XMLAttribute::Type_FromString(typeString));

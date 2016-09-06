@@ -4,7 +4,7 @@
 #include "Bang.h"
 
 #include <cmath>
-#include <vector>
+#include "Array.h"
 
 #include "Vector3.h"
 #include "Matrix4.h"
@@ -55,7 +55,7 @@ public:
      * Bounding Box of the positions vector.
      * @param positions
      */
-    void FillFromPositions(const std::vector<Vector3> &positions);
+    void FillFromPositions(const Array<Vector3> &positions);
 
     const String ToString() const override;
 };
