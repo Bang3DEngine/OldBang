@@ -1,8 +1,10 @@
 #include "ShaderPreprocessor.h"
 
+#include "Debug.h"
+
 const Array<String> ShaderPreprocessor::c_includePaths =
 {
-    "Assets/Engine/Shaders/Includes"
+    "Assets/Engine/Shaders/Include"
 };
 
 ShaderPreprocessor::ShaderPreprocessor()
@@ -34,108 +36,59 @@ String ShaderPreprocessor::
     if (!completeFilepath.Empty())
     {
         String includeContents = File::GetContents(completeFilepath);
-        includeContents += "\n";
 
         // Using #line, error lines info will be reported as in the original file,
         // for a more user-friendly debugging
-        includeContents += "#line " + includeDirectiveLine;
+        includeContents += "\n";
+        includeContents += "#line " + String::ToString(includeDirectiveLine);
+        includeContents += "\n";
 
         return includeContents;
+    }
+    else
+    {
+        Debug_Error("Include file '" << includeFile << "' could not found.");
     }
 
     return "";
 }
 
+// TODO: Do recursively. Solve #line problem
 void ShaderPreprocessor::PreprocessShaderCode(String *shaderSourceCode)
 {
     String &code = *shaderSourceCode;
 
     Array<String> linesArray = code.Split('\n');
     List<String> lines = linesArray.ToList();
-    int i = 0;
+
+    // Keep track of the user's source line number, to use #line directive
+    int originalLineNum = 0;
+
+    // It supports recursive #include's.
     for (auto it = lines.Begin(); it != lines.End(); ++it)
     {
         String line = (*it).Trimmed();
         if (line.BeginsWith("#include"))
         {
-            String content = GetIncludeReplacementString(line, i + 1);
-            lines.InsertAfter(it, content);
+            it = lines.Remove(it);
+
+            --it;
+            List<String>::Iterator beforeInsertingContent = it;
+            ++it;
+
+            String content = GetIncludeReplacementString(line, originalLineNum + 1);
+
+            // Get the include content lines, and add it to the overall lines.
+            // This way we can process it recursively, since the included lines
+            // are processed too
+            List<String> contentLines = content.Split('\n').ToList();
+            lines.Splice(it, contentLines, contentLines.Begin(), contentLines.End());
+
+            originalLineNum -= contentLines.Size();
+            it = beforeInsertingContent;
         }
-        ++i;
+        ++originalLineNum;
     }
 
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_Declare + ";",
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_Declare_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_Init_Main + ";",
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_Init_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_End_Main + ";",
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_End_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_Declare + ";",
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_Declare_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_Init_Main + ";",
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_Init_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_End_Main + ";",
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_End_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_VS_Declare + ";",
-                         ShaderContract::Macro_Post_Render_VS_Declare_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_VS_Init_Main + ";",
-                         ShaderContract::Macro_Post_Render_VS_Init_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_VS_End_Main + ";",
-                         ShaderContract::Macro_Post_Render_VS_End_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_FS_Declare + ";",
-                         ShaderContract::Macro_Post_Render_FS_Declare_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_FS_Init_Main + ";",
-                         ShaderContract::Macro_Post_Render_FS_Init_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_FS_End_Main + ";",
-                         ShaderContract::Macro_Post_Render_FS_End_Main_Content);
-
-    // Same but without semicolon:
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_Declare,
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_Declare_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_Init_Main,
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_Init_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_End_Main,
-                         ShaderContract::Macro_Draw_To_GBuffer_VS_End_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_Declare,
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_Declare_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_Init_Main,
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_Init_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_End_Main,
-                         ShaderContract::Macro_Draw_To_GBuffer_FS_End_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_VS_Declare,
-                         ShaderContract::Macro_Post_Render_VS_Declare_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_VS_Init_Main,
-                         ShaderContract::Macro_Post_Render_VS_Init_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_VS_End_Main,
-                         ShaderContract::Macro_Post_Render_VS_End_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_FS_Declare,
-                         ShaderContract::Macro_Post_Render_FS_Declare_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_FS_Init_Main,
-                         ShaderContract::Macro_Post_Render_FS_Init_Main_Content);
-    StringUtils::Replace(&code,
-                         ShaderContract::Macro_Post_Render_FS_End_Main,
-                         ShaderContract::Macro_Post_Render_FS_End_Main_Content);
+    code = String::Join(lines, "\n"); // Update the code String adding all the lines
 }

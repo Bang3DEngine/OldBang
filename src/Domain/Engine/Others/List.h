@@ -41,10 +41,10 @@ public:
     {
         this->splice(insertBefore, from, element);
     }
-    void Splice(Iterator insertBefore, List &from,
-                Iterator fromRangeBegin, Iterator fromRangeEnd)
+    void Splice(Iterator insertBefore, List &src,
+                Iterator srcRangeBegin, Iterator srcRangeEnd)
     {
-        this->splice(insertBefore, from, fromRangeBegin, fromRangeEnd);
+        this->splice(insertBefore, src, srcRangeBegin, srcRangeEnd);
     }
 
 
@@ -94,32 +94,33 @@ public:
         return End();
     }
 
-    void Insert(Iterator it, const T& x)
+    Iterator Insert(Iterator it, const T& x)
     {
-        this->InsertBefore(it, x);
+        return this->InsertBefore(it, x);
     }
-    void Insert(Iterator first, int count, const T& x)
+    Iterator Insert(Iterator first, int count, const T& x)
     {
-        this->insert(first, count, x);
+        return this->insert(first, count, x);
     }
-    void InsertBefore(Iterator it, const T& x)
+    Iterator InsertBefore(Iterator it, const T& x)
     {
-        this->insert(it, x);
+        return this->insert(it, x);
     }
-    void InsertAfter(Iterator it, const T& x)
+    Iterator InsertAfter(Iterator it, const T& x)
     {
         Iterator itAfter = it;
         std::advance(itAfter, 1);
-        this->insert(itAfter, x);
+        return this->insert(itAfter, x);
     }
 
-    void Remove(const T& x)
+    Iterator Remove(const T& x)
     {
         Iterator it = Find(x);
         if (it != End())
         {
-            this->erase(it);
+            return this->erase(it);
         }
+        return this->End();
     }
 
     Iterator Remove(Iterator it)

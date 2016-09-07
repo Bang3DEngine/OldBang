@@ -1,30 +1,8 @@
-B_POST_RENDER_FS_DECLARE();
-
-struct B_VertexIn  // GBuffer stored properties
-{
-    vec3 position_world;
-    vec3 normal_world;
-    vec2 uv;
-    vec4 diffuseColor;
-    bool receivesLighting;
-    float shininess;
-    float depth;
-    vec4 color;
-
-    vec2 uv_screen;
-};
-
-struct B_VertexOut
-{
-    vec4 color;
-};
-
-B_VertexIn B_vin;
-B_VertexOut B_vout;
+#include "PR.frag"
 
 void main()
 {
-    B_POST_RENDER_FS_INIT_MAIN();
+    InitMain();
 
     // ONLY FOR EDITOR
 
@@ -38,5 +16,5 @@ void main()
 
     //
 
-    B_POST_RENDER_FS_END_MAIN();
+    EndMain();
 }

@@ -1,4 +1,4 @@
-#version 130
+#include "Version.glsl"
 
 uniform sampler2D B_color_gout_fin;
 

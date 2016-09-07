@@ -132,7 +132,18 @@ OTHER_FILES += \
     Assets/Scenes/test.bscene \
     Assets/Engine/Textures/DirectionalLightIcon.btex2d \
     Assets/Engine/Textures/PointLightIcon.btex2d \
-    Assets/Engine/Shaders/PR_BeforeLighting.frag
+    Assets/Engine/Shaders/PR_BeforeLighting.frag \
+    Assets/Engine/Shaders/D2G.vert \
+    Assets/Engine/Shaders/PR.vert \
+    Assets/Engine/Shaders/PR.frag \
+    Assets/Engine/Shaders/Include/D2G.frag \
+    Assets/Engine/Shaders/Include/PR.frag \
+    Assets/Engine/Shaders/Include/D2G.vert \
+    Assets/Engine/Shaders/Include/PR.vert \
+    Assets/Engine/Shaders/Include/Uniforms.glsl \
+    Assets/Engine/Shaders/Include/Version.glsl \
+    Assets/Engine/Shaders/Include/PointLight.glsl \
+    Assets/Engine/Shaders/Include/DirectionalLight.glsl
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

@@ -1,4 +1,4 @@
-#version 130
+#include "Version.glsl"
 
 uniform vec3 selectionColor;
 

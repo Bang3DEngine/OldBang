@@ -29,6 +29,12 @@ private:
                                               int includeDirectiveLine);
 
 public:
+
+    /**
+     * @brief Preprocess the passed shader source code.
+     * For the moment, doing the needed recursive includes.
+     * @param shaderSourceCode
+     */
     static void PreprocessShaderCode(String *shaderSourceCode);
 };
 
