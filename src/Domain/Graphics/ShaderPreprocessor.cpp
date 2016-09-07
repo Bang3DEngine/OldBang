@@ -39,9 +39,12 @@ String ShaderPreprocessor::
 
         // Using #line, error lines info will be reported as in the original file,
         // for a more user-friendly debugging
-        includeContents += "\n";
-        includeContents += "#line " + String::ToString(includeDirectiveLine);
-        includeContents += "\n";
+        if (includeDirectiveLine > 0)
+        {
+            includeContents += "\n";
+            includeContents += "#line " + String::ToString(includeDirectiveLine - 1);
+            includeContents += "\n";
+        }
 
         return includeContents;
     }
@@ -62,7 +65,7 @@ void ShaderPreprocessor::PreprocessShaderCode(String *shaderSourceCode)
     List<String> lines = linesArray.ToList();
 
     // Keep track of the user's source line number, to use #line directive
-    int originalLineNum = 0;
+    int originalLineNum = 1;
 
     // It supports recursive #include's.
     for (auto it = lines.Begin(); it != lines.End(); ++it)
@@ -76,15 +79,16 @@ void ShaderPreprocessor::PreprocessShaderCode(String *shaderSourceCode)
             List<String>::Iterator beforeInsertingContent = it;
             ++it;
 
-            String content = GetIncludeReplacementString(line, originalLineNum + 1);
+            String content = GetIncludeReplacementString(line, originalLineNum);
 
             // Get the include content lines, and add it to the overall lines.
             // This way we can process it recursively, since the included lines
             // are processed too
             List<String> contentLines = content.Split('\n').ToList();
+            originalLineNum -= contentLines.Size(); // Do this before the splice
+
             lines.Splice(it, contentLines, contentLines.Begin(), contentLines.End());
 
-            originalLineNum -= contentLines.Size();
             it = beforeInsertingContent;
         }
         ++originalLineNum;

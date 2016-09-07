@@ -17,7 +17,6 @@ void main()
                                     B_light_color.rgb,
                                     B_position_camera.xyz);
 
-        xxxx;
         B_vout.color = vec4(B_vin.color.rgb + dirLightApport,
                             B_vin.diffuseColor.a);
     }
