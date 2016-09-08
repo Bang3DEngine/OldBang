@@ -231,7 +231,8 @@ HEADERS += \
     src/Domain/Engine/Others/Chrono.h \
     src/Domain/Engine/Others/Map.h \
     src/Domain/Engine/Others/List.h \
-    src/Domain/Engine/Others/Array.h
+    src/Domain/Engine/Others/Array.h \
+    src/Domain/Engine/Others/GraphicPipeline.h
 
 EDITOR {
 HEADERS += \
@@ -388,7 +389,8 @@ SOURCES += \
     src/Domain/Engine/Others/Chrono.cpp \
     src/Domain/Engine/Others/Map.cpp \
     src/Domain/Engine/Others/List.cpp \
-    src/Domain/Engine/Others/Array.cpp
+    src/Domain/Engine/Others/Array.cpp \
+    src/Domain/Engine/Others/GraphicPipeline.cpp
 
 EDITOR {
     SOURCES += \

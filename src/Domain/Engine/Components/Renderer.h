@@ -12,9 +12,6 @@
 class SelectionFramebuffer;
 class Renderer : public Component
 {
-friend class SelectionFramebuffer;
-friend class GameObject;
-
 public:
     NamedEnum (RenderMode,
         Points = GL_POINTS,
@@ -165,6 +162,9 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    friend class SelectionFramebuffer;
+    friend class GameObject;
 };
 
 #endif // RENDERER_H

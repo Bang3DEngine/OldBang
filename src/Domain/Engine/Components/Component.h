@@ -30,8 +30,6 @@ class Component :
              ,public IInspectable
             #endif
 {
-friend class GameObject;
-friend class ComponentClipboard;
 protected:
     bool m_enabled = true;
 
@@ -64,6 +62,10 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+
+    friend class GameObject;
+    friend class ComponentClipboard;
 };
 
 #endif // COMPONENT_H

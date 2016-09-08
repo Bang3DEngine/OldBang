@@ -11,9 +11,6 @@
 
 class Light : public Component
 {
-friend class Scene;
-friend class GameObject;
-
 protected:
     float m_intensity = 1.0f;
     Color m_color = Color::white;
@@ -45,6 +42,9 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    friend class GameObject;
+    friend class GraphicPipeline;
 };
 
 #endif // LIGHT_H

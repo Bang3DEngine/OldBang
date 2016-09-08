@@ -18,8 +18,6 @@
 class Material : public IGLBindable
                 ,public Asset
 {
-friend class Renderer;
-
 public:
     const static String GetFileExtensionStatic() { return "bmat"; }
     const virtual String GetFileExtension()
@@ -56,6 +54,8 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    friend class Renderer;
 };
 
 #endif // MATERIAL_H

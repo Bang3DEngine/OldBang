@@ -26,8 +26,6 @@
 class BehaviourHolder : public Component
                        ,public IAttrWidgetButtonListener
 {
-friend class GameObject;
-
 private:
 
     /**
@@ -83,6 +81,8 @@ public:
     void OnBehaviourLibraryAvailable(QLibrary *lib);
 
     // TODO: Add windowEventListener events pass to Behaviour too
+
+    friend class GameObject;
 };
 
 #endif

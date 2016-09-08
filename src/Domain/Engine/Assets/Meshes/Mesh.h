@@ -19,8 +19,6 @@
 
 class Mesh : public Asset
 {
-friend class MeshRenderer;
-
 public:
     const static String GetFileExtensionStatic() { return "bmesh"; }
     const virtual String GetFileExtension()
@@ -75,6 +73,9 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+
+    friend class MeshRenderer;
 };
 
 #endif // MESH_H

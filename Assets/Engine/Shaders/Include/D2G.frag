@@ -47,7 +47,7 @@ void InitMain()
     B_vout.uv                  = B_vin.uv;
     B_vout.receivesLighting    = B_renderer_receivesLighting > 0.5;
     B_vout.shininess           = B_material_shininess;
-    B_vout.diffuseColor        = B_material_diffuse_color.rgba;
+    B_vout.diffuseColor        = B_material_diffuse_color;
     B_vout.depth               = gl_FragCoord.z;
 }
 
@@ -62,6 +62,5 @@ void EndMain()
     B_materialProps_fout_gin.z       = B_vout.shininess;
     B_materialProps_fout_gin.w       = B_gameObject_isSelected; // Editor
     B_depth_fout_gin                 = vec4(B_vout.depth);
-
-    B_color_fout_gin = vec4(0);
+    B_color_fout_gin                 = vec4(0);
 }

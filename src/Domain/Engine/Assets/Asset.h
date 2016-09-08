@@ -22,8 +22,6 @@ class Asset : public IToString
              ,public IInspectable
              #endif
 {
-friend class AssetsManager;
-
 public:
     const static String GetFileExtensionStatic() { return "basset"; }
     const virtual String GetFileExtension()
@@ -50,6 +48,9 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+
+    friend class AssetsManager;
 };
 
 #endif // ASSET_H

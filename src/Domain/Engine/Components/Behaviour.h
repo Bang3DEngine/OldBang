@@ -27,8 +27,6 @@ class BehaviourHolder;
  */
 class Behaviour : public ISceneEventListener
 {
-friend class BehaviourHolder;
-
 private:
 
     /**
@@ -70,6 +68,9 @@ protected:
 
 private:
     virtual void _OnUpdate() override;
+
+
+    friend class BehaviourHolder;
 };
 
 #endif

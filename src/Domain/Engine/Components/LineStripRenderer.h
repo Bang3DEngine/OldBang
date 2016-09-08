@@ -3,12 +3,12 @@
 
 class LineStripRenderer
 {
-friend class GameObject;
-
 protected:
     LineStripRenderer();
 
 public:
+
+    friend class GameObject;
 };
 
 #endif // LINESTRIPRENDERER_H

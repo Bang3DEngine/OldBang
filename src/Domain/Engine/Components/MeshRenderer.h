@@ -23,8 +23,6 @@
 
 class MeshRenderer : public Renderer
 {
-friend class GameObject;
-
 private:
     Mesh *m_mesh = nullptr;
 
@@ -56,6 +54,8 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    friend class GameObject;
 };
 
 #endif // MESHRENDERER_H

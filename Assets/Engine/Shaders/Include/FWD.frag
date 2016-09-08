@@ -3,9 +3,13 @@
 
 struct B_VertexIn
 {
-    vec3 position_world; // Passed from vert
-    vec3 normal_world;   // Passed from vert
-    vec2 uv;             // Passed from vert
+    vec3 position_world;    // Passed from vert
+    vec3 normal_world;      // Passed from vert
+    vec2 uv;                // Passed from vert
+    vec4 diffuseColor;      // Passed from GBuffer
+    bool receivesLighting;  // Passed from GBuffer
+    float shininess;        // Passed from GBuffer
+    float depth;            // Passed from GBuffer
 };
 
 struct B_VertexOut
@@ -20,6 +24,12 @@ in vec3 B_position_world_vout_fin;
 in vec3 B_normal_world_vout_fin;
 in vec2 B_uv_vout_fin;
 
+out vec4 B_position_fout_gin;
+out vec4 B_normal_fout_gin;
+out vec4 B_uv_fout_gin;
+out vec4 B_diffuse_fout_gin;
+out vec4 B_materialProps_fout_gin;
+out vec4 B_depth_fout_gin;
 out vec4 B_color_gout_gin; // Accumulated color
 
 void InitMain()

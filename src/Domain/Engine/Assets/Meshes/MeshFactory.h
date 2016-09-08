@@ -15,8 +15,6 @@ class EditorGameObject;
 
 class MeshFactory
 {
-friend class MenuBar;
-
 private:
     MeshFactory() {}
     static GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name);
@@ -43,6 +41,8 @@ public:
     static EditorGameObject* GetSphereEditorGameObject();
     static EditorGameObject* GetConeEditorGameObject();
     #endif
+
+    friend class MenuBar;
 };
 
 #endif // MESHFACTORY_H

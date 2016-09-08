@@ -5,8 +5,6 @@
 
 class PointLight : public Light
 {
-friend class GameObject;
-
 protected:
     float m_range = 1.0f;
 
@@ -34,6 +32,8 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    friend class GameObject;
 };
 
 #endif // POINTLIGHT_H

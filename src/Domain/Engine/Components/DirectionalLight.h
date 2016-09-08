@@ -5,8 +5,6 @@
 
 class DirectionalLight : public Light
 {
-friend class GameObject;
-
 protected:
     DirectionalLight();
 public:
@@ -25,6 +23,9 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    friend class GameObject;
+
 };
 
 #endif // DIRECTIONALLIGHT_H

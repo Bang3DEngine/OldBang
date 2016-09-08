@@ -17,8 +17,6 @@ class Screen;
 class MeshRenderer;
 class Camera : public Component
 {
-friend class GameObject;
-
 public:
     NamedEnum (ProjectionMode,
         Orthographic,
@@ -95,6 +93,8 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    friend class GameObject;
 };
 
 #endif // CAMERA_H

@@ -20,9 +20,6 @@
 
 class CircleRenderer : public LineRenderer
 {
-friend class GameObject;
-friend class EditorRotateAxis;
-
 private:
 
     float m_radius = 1.0f;
@@ -61,6 +58,9 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    friend class GameObject;
+    friend class EditorRotateAxis;
 };
 
 #endif // CIRCLERENDERER_H

@@ -1,9 +1,10 @@
 #include "Renderer.h"
 
-#include "Camera.h"
 #include "Scene.h"
+#include "Camera.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
 #include "EditorScene.h"
@@ -93,7 +94,7 @@ void Renderer::Render() const
     #endif
     {
         // NORMAL RENDERING
-        bool opaquePass = scene->IsInOpaquePass();
+        bool opaquePass = GraphicPipeline::GetActive()->IsInOpaquePass();
         bool canRenderNow = (IsTransparent() == !opaquePass); // It's its turn
         if (canRenderNow)
         {

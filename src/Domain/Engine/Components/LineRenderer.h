@@ -20,8 +20,6 @@
 
 class LineRenderer : public Renderer
 {
-friend class GameObject;
-
 protected:
     Array<Vector3> m_points;
 
@@ -55,6 +53,8 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    friend class GameObject;
 };
 
 #endif // LINERENDERER_H

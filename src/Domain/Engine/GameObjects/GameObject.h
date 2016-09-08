@@ -36,13 +36,6 @@ class GameObject :
                #endif
 {
 
-friend class SelectionFramebuffer;
-friend class SceneManager;
-friend class Hierarchy;
-friend class Screen;
-friend class Prefab;
-friend class Scene;
-
 protected:
 
     #ifdef BANG_EDITOR
@@ -339,6 +332,14 @@ public:
             List<GameObject*> &selectedEntities) override;
     #endif
 
+
+    friend class Scene;
+    friend class Screen;
+    friend class Prefab;
+    friend class Hierarchy;
+    friend class SceneManager;
+    friend class GraphicPipeline;
+    friend class SelectionFramebuffer;
 };
 
 #endif // GAMEOBJECT_H
