@@ -65,6 +65,8 @@ private:
      */
     bool m_ignoreProjectionMatrix = false;
 
+    bool m_isTransparent = false;
+
     #ifdef BANG_EDITOR
     /**
      * @brief Called by SelectionFramebuffer.
@@ -145,6 +147,9 @@ public:
     bool GetReceivesLighting() const;
 
     void Render() const;
+
+    void SetTransparent(bool transparent);
+    bool IsTransparent() const;
 
     #ifdef BANG_EDITOR
     void RenderSelectionFramebuffer(SelectionFramebuffer *sfb) const;

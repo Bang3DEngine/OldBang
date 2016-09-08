@@ -88,7 +88,7 @@ void GBuffer::RenderScreenPlane() const
 void GBuffer::RenderToScreen() const
 {
     // Assumes gbuffer is not bound, hence directly writing to screen
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
 
     m_planeMeshToRenderEntireScreen->
                 BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
@@ -111,14 +111,19 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::
     glClearColor(clearValue.r, clearValue.g, clearValue.b, clearValue.a);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // Clear stored color to backgroundColor
     SetDrawBuffers({GBuffer::Attachment::Color});
     glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // Clear stored depth
     SetDrawBuffers({GBuffer::Attachment::Depth});
-    glClearDepth(1.0);
     glClearColor(1, 1, 1, 1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // Clear real depth (renderBuffer)
+    glClearDepth(1.0);
+    glClear(GL_DEPTH_BUFFER_BIT);
 
     UnBind();
 }

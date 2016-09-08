@@ -56,8 +56,6 @@ void InitMain()
 
 void EndMain()
 {
-    // Alpha blending
-    B_vout.color = vec4(B_vout.color.rgb * B_vout.color.a +
-                        B_vin.color.rgb  * (1.0 - B_vout.color.a), 1);
+    B_vout.color = vec4(B_vout.color.rgb, 1);
     B_color_gout_gin = B_vout.color;
 }

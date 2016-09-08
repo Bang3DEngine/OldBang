@@ -143,7 +143,11 @@ OTHER_FILES += \
     Assets/Engine/Shaders/Include/Uniforms.glsl \
     Assets/Engine/Shaders/Include/Version.glsl \
     Assets/Engine/Shaders/Include/PointLight.glsl \
-    Assets/Engine/Shaders/Include/DirectionalLight.glsl
+    Assets/Engine/Shaders/Include/DirectionalLight.glsl \
+    Assets/Engine/Shaders/FWD_Default.vert \
+    Assets/Engine/Shaders/Include/FWD.vert \
+    Assets/Engine/Shaders/Include/FWD.frag \
+    Assets/Engine/Shaders/FWD_Default.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

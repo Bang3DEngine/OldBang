@@ -61,6 +61,69 @@ void Scene::_OnResize(int newWidth, int newHeight)
     m_gbuffer->Resize(newWidth, newHeight);
 }
 
+void Scene::RenderOpaque()
+{
+    m_opaquePass = true;
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    // First, we fill in the GBuffer with the positions, normals, etc.
+    // D2G (DrawToGBuffer)
+    PROPAGATE_EVENT(_OnPreRender, m_children);
+    PROPAGATE_EVENT(_OnRender, m_children);
+
+    // Draw Gizmos!
+    #ifdef BANG_EDITOR
+    PROPAGATE_EVENT(_OnDrawGizmos, m_children);
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+    PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
+    #endif
+    //
+
+    // Then we apply post render effects.
+    // PR (Post-Render, modifying on top of GBuffer)
+    // Add ambient light
+    m_gbuffer->RenderPassWithMaterial(m_materialBeforeLighting);
+
+    // Apply all lights
+    List<Light*> childrenLights = GetComponentsInChildren<Light>();
+    for (Light *light : childrenLights)
+    {
+        if (CAN_USE_COMPONENT(light))
+        {
+            light->ApplyLight(m_gbuffer);
+        }
+    }
+
+    #ifdef BANG_EDITOR
+    // Selection visual effects and other stuff
+    m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
+    #endif
+    //
+}
+
+void Scene::RenderTransparent()
+{
+    m_opaquePass = false;
+
+  //  glEnable(GL_BLEND);
+//    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    PROPAGATE_EVENT(_OnPreRender, m_children);
+    PROPAGATE_EVENT(_OnRender, m_children);
+
+    // Draw Gizmos!
+    #ifdef BANG_EDITOR
+    PROPAGATE_EVENT(_OnDrawGizmos, m_children);
+
+    glClear(GL_DEPTH_BUFFER_BIT);
+    PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
+    #endif
+
+    glDisable(GL_BLEND);
+}
+
 Scene::~Scene()
 {
     _OnDestroy();
@@ -80,45 +143,14 @@ void Scene::_OnRender()
 
     m_gbuffer->Bind();
 
-    // D2G (DrawToGBuffer, filling in GBuffer with positions, normals, etc.)
+    Color bgColor = GetCamera()->GetClearColor();
+    m_gbuffer->ClearBuffersAndBackground(bgColor);
 
-        Color bgColor = GetCamera()->GetClearColor();
-        m_gbuffer->ClearBuffersAndBackground(bgColor);
-        m_gbuffer->SetAllDrawBuffers();
+    m_gbuffer->SetAllDrawBuffers();
+    RenderOpaque();      // Deferred
 
-        glClear(GL_DEPTH_BUFFER_BIT);
-        PROPAGATE_EVENT(_OnPreRender, m_children);
-        PROPAGATE_EVENT(_OnRender, m_children);
-
-        // Draw Gizmos!
-            #ifdef BANG_EDITOR
-            PROPAGATE_EVENT(_OnDrawGizmos, m_children);
-
-            glClear(GL_DEPTH_BUFFER_BIT);
-            PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
-            #endif
-        //
-    //
-
-    // PR (Post-Render, modifying on top of GBuffer)
-
-        m_gbuffer->RenderPassWithMaterial(m_materialBeforeLighting);
-
-        // Apply lights to gbuffer
-        List<Light*> childrenLights = GetComponentsInChildren<Light>();
-        for (Light *light : childrenLights)
-        {
-            if (CAN_USE_COMPONENT(light))
-            {
-                light->ApplyLight(m_gbuffer);
-            }
-        }
-
-        #ifdef BANG_EDITOR
-        // Selection visual effects and other stuff
-        m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
-        #endif
-    //
+    m_gbuffer->SetDrawBuffers({GBuffer::Attachment::Color});
+    RenderTransparent(); // Forward on top of the deferred stuff
 
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen();
@@ -197,6 +229,11 @@ void Scene::PostReadXMLInfo(const XMLNode *xmlInfo)
             }
         }
     }
+}
+
+bool Scene::IsInOpaquePass() const
+{
+    return m_opaquePass;
 }
 
 

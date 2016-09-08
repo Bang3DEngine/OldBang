@@ -87,27 +87,46 @@ void Renderer::Render() const
     SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
     if (sfb && sfb->IsPassing())
     {
-        RenderSelectionFramebuffer(sfb);
+        RenderSelectionFramebuffer(sfb); // RENDER FRAMEBUFFER
     }
     else
     #endif
     {
-        ActivateGLStatesBeforeRendering();
-
-        if (!GetIgnoreMaterial())
+        // NORMAL RENDERING
+        bool opaquePass = scene->IsInOpaquePass();
+        bool canRenderNow = (IsTransparent() == !opaquePass); // It's its turn
+        if (canRenderNow)
         {
-            NONULL(m_material);
-            NONULL(m_material->GetShaderProgram());
-            m_material->Bind();
-        }
+            ActivateGLStatesBeforeRendering();
 
-        RenderWithoutBindingMaterial();
+            if (!GetIgnoreMaterial())
+            {
+                NONULL(m_material);
+                NONULL(m_material->GetShaderProgram());
+                m_material->Bind();
+            }
 
-        if (!GetIgnoreMaterial())
-        {
-            m_material->UnBind();
+            RenderWithoutBindingMaterial();
+
+            if (!GetIgnoreMaterial())
+            {
+                m_material->UnBind();
+            }
         }
     }
+}
+
+void Renderer::SetTransparent(bool transparent)
+{
+    // TODO: useless function
+    m_isTransparent = transparent;
+}
+bool Renderer::IsTransparent() const
+{
+    // TODO: Let the user specify whether is a transparent renderer or not
+    //return m_isTransparent;
+    ShaderProgram *sp = m_material ? m_material->GetShaderProgram() : nullptr;
+    return  sp && sp->GetType() == ShaderProgram::Type::Forward;
 }
 
 void Renderer::GetMatrices(Matrix4 *model,

@@ -37,9 +37,24 @@ protected:
     const Screen *m_screen = nullptr; //set by screen when added to it
     GameObject *m_cameraGameObject = nullptr;
 
+    // Indicates whether we are currently rendering opaque or transparent Renderers
+    // Renderer's will use it to determine if they can render themselves or not
+    bool m_opaquePass = false;
+
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
     virtual void _OnResize (int newWidth, int newHeight);
+
+    /**
+     * @brief Renders the opaque Renderers, using Deferred rendering.
+     */
+    void RenderOpaque();
+
+    /**
+     * @brief Renders the transparent Renderers, using Forward rendering.
+     * It renders them from furthest to closest.
+     */
+    void RenderTransparent();
 
 public:
     const static String GetFileExtension () { return "bscene"; }
@@ -61,6 +76,8 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
     virtual void PostReadXMLInfo(const XMLNode *xmlInfo) override;
+
+    bool IsInOpaquePass() const;
 };
 
 #endif // SCENE_H

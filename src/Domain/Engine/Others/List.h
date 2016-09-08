@@ -94,23 +94,23 @@ public:
         return End();
     }
 
-    Iterator Insert(Iterator it, const T& x)
+    void Insert(Iterator it, const T& x)
     {
-        return this->InsertBefore(it, x);
+        this->InsertBefore(it, x);
     }
-    Iterator Insert(Iterator first, int count, const T& x)
+    void Insert(Iterator first, int count, const T& x)
     {
-        return this->insert(first, count, x);
+        this->insert(first, count, x);
     }
-    Iterator InsertBefore(Iterator it, const T& x)
+    void InsertBefore(Iterator it, const T& x)
     {
-        return this->insert(it, x);
+        this->insert(it, x);
     }
-    Iterator InsertAfter(Iterator it, const T& x)
+    void InsertAfter(Iterator it, const T& x)
     {
         Iterator itAfter = it;
         std::advance(itAfter, 1);
-        return this->insert(itAfter, x);
+        this->insert(itAfter, x);
     }
 
     Iterator Remove(const T& x)

@@ -1,5 +1,4 @@
 #include "Version.glsl"
-#define BANG_FRAGMENT
 #include "Uniforms.glsl"
 
 struct B_VertexIn
