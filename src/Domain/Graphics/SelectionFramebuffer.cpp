@@ -52,7 +52,7 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         if (CanRenderGameObject(go))
         {
             sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
-            go->_OnRender();
+            // go->Render();
         }
     }
 

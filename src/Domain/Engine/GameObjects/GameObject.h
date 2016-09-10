@@ -48,8 +48,6 @@ protected:
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
-    virtual void _OnPreRender () override;
-    virtual void _OnRender () override;
     virtual void _OnDestroy () override;
 
     #ifdef BANG_EDITOR

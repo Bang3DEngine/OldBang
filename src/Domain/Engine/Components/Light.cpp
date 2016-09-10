@@ -1,5 +1,6 @@
 #include "Light.h"
 
+#include "Renderer.h"
 #include "Transform.h"
 #include "GameObject.h"
 
@@ -20,6 +21,13 @@ void Light::ApplyLight(GBuffer *gbuffer) const
 {
     SetUniformsBeforeApplyingLight();
     gbuffer->RenderPassWithMaterial(m_lightMaterial);
+}
+
+void Light::ApplyLight(Renderer *rend) const
+{
+    // GBuffer must be bound
+    SetUniformsBeforeApplyingLight();
+    rend->RenderWithMaterial(m_lightMaterial);
 }
 
 const String Light::ToString() const

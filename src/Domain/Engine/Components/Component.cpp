@@ -52,7 +52,7 @@ void Component::SetEnabled(bool enabled)
 
 bool Component::IsEnabled() const
 {
-    return m_enabled;
+    return gameObject && gameObject->IsEnabled() && m_enabled;
 }
 
 void Component::ReadXMLInfo(const XMLNode *xmlInfo)

@@ -41,14 +41,6 @@ private:
     bool m_ignoreModelMatrix = false;
 
     /**
-     * @brief Bind or not to bind material before drawing. So, if it's true, it will
-     * just render the mesh (without binding its material),
-     * and this way you can externally bind and unbind the Material you want.
-     */
-    bool m_ignoreMaterial = false;
-
-
-    /**
      * @brief If ignoreViewMatrix == true, when drawing the Renderer
      * will ignore view matrix.
      * So it won't take into account camera's translation, rotation or scale.
@@ -86,10 +78,8 @@ protected:
     CullMode m_cullMode = CullMode::Back;
     RenderMode m_renderMode = RenderMode::Triangles;
 
-
-    virtual void ActivateGLStatesBeforeRendering() const;
+    virtual void ActivateGLStatesBeforeRendering(Material *mat) const;
     virtual void RenderWithoutBindingMaterial() const = 0;
-    void OnRender() override;
 
     void GetMatrices(Matrix4 *model,
                      Matrix4 *normal,
@@ -98,6 +88,7 @@ protected:
                      Matrix4 *pvm) const;
 
     void SetMatricesUniforms(
+            Material *mat,
             const Matrix4 &model,
             const Matrix4 &normal,
             const Matrix4 &view,
@@ -128,9 +119,6 @@ public:
     void SetLineWidth(float w);
     float GetLineWidth() const;
 
-    void SetIgnoreMaterial(bool ignore);
-    bool GetIgnoreMaterial() const;
-
     void SetIgnoreModelMatrix(bool ignore);
     bool GetIgnoreModelMatrix() const;
 
@@ -144,6 +132,7 @@ public:
     bool GetReceivesLighting() const;
 
     void Render() const;
+    void RenderWithMaterial(Material *mat) const;
 
     void SetTransparent(bool transparent);
     bool IsTransparent() const;
@@ -163,8 +152,9 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-    friend class SelectionFramebuffer;
     friend class GameObject;
+    friend class GraphicPipeline;
+    friend class SelectionFramebuffer;
 };
 
 #endif // RENDERER_H

@@ -85,10 +85,10 @@ public:
 
 protected:
     void Bind() const override;
-    void UnBind() const override;
 
 public:
     void BindToTextureUnit(int textureUnit) const;
+    void UnBind() const override;
 };
 
 #endif // TEXTURE_H

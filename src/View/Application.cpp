@@ -54,7 +54,7 @@ void Application::OnDrawTimerTick()
         activeScene->_OnUpdate();
     }
 
-    // Render screen  (_OnRender mainly)
+    // Render screen
     Screen::GetInstance()->Render();
     Screen::GetInstance()->swapBuffers();
 

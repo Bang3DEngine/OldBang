@@ -43,6 +43,8 @@ void EditorScaleAxis::OnUpdate()
     GameObject *ago = m_attachedGameObject; NONULL(ago->transform);
     Vector3 wCamPos = camTransform->GetPosition();
 
+    SetEnabled(Toolbar::GetInstance()->GetSelectedTransformMode() ==
+               Toolbar::TransformMode::Scale);
     if (m_grabbed)
     {
         Vector2 sMouseDelta = Input::GetMouseDelta() * Vector2(1.0f, -1.0f);

@@ -37,8 +37,6 @@ public:
     Scene();
     virtual ~Scene();
 
-    virtual void _OnRender () override;
-
     void SetCamera (const Camera *cam);
 
     static Scene *GetActiveScene();

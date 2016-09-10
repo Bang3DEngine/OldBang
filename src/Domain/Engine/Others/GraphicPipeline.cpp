@@ -4,20 +4,37 @@
 #include "Screen.h"
 #include "GBuffer.h"
 #include "Material.h"
+#include "GameObject.h"
 #include "AssetsManager.h"
 
 GraphicPipeline::GraphicPipeline()
 {
     m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
-    m_materialBeforeLighting = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_BeforeLighting.bmat");
-    m_materialAfterLighting  = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_AfterLighting.bmat");
+
+    String drawScreenPlaneVert = "Assets/Engine/Shaders/PR_DrawScreenPlane.vert";
+    String beforeLightingFrag  = "Assets/Engine/Shaders/PR_BeforeLighting.frag";
+    String afterLightingFrag  = "Assets/Engine/Shaders/PR_AfterLighting.frag";
+    String meshVert = "Assets/Engine/Shaders/PR_Mesh.vert";
+
+    m_matBeforeLightingScreen = new Material();
+    m_matBeforeLightingScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, beforeLightingFrag));
+
+    m_matAfterLightingScreen  = new Material();
+    m_matAfterLightingScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, afterLightingFrag));
+
+    m_matBeforeLightingMesh   = new Material();
+    m_matBeforeLightingMesh->SetShaderProgram(new ShaderProgram(meshVert, beforeLightingFrag));
+
+    m_matAfterLightingMesh    = new Material();
+    m_matAfterLightingMesh->SetShaderProgram(new ShaderProgram(meshVert, afterLightingFrag));
+
 }
 
 GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
-    delete m_materialAfterLighting;
-    delete m_materialBeforeLighting;
+    delete m_matAfterLightingScreen;
+    delete m_matBeforeLightingScreen;
 }
 
 GraphicPipeline* GraphicPipeline::GetActive()
@@ -29,104 +46,77 @@ GraphicPipeline* GraphicPipeline::GetActive()
 void GraphicPipeline::RenderScene(Scene *scene)
 {
     m_gbuffer->Bind();
+    m_gbuffer->SetAllDrawBuffers(); // Prepare the buffers to be written
 
     // CLEAR. First, clear everything in gbuffer (depth and all its buffers)
     Color bgColor = scene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
 
-    m_gbuffer->SetAllDrawBuffers(); // Prepare the buffers to be written
+    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
+    Gizmos::Reset(); // Disable Gizmos renderers
 
-    // PART 1. Opaque with Deferred
-    RenderOpaque(scene);
+    // PART 1. Opaque objects
+    for (Renderer *rend : renderers)
+    {
+        if (CAN_USE_COMPONENT(rend) && !rend->IsTransparent())
+        {
+            rend->Render();
+        }
+    }
 
-    // PART 2. Transparent with Forward
-    // RenderTransparent(scene);
+    #ifdef BANG_EDITOR // Draw Gizmos
+    PROPAGATE_EVENT(_OnDrawGizmos, scene->m_children);
+    #endif
+    m_gbuffer->RenderPassWithMaterial(m_matBeforeLightingScreen); // Put ambient light
+    // ApplyDeferredLightsToAllGBuffer(scene);
+
+
+    //PART 2. Transparent objects
+    for (Renderer *rend : renderers)
+    {
+        if (CAN_USE_COMPONENT(rend) && rend->IsTransparent())
+        {
+            m_gbuffer->SetAllDrawBuffers();
+            rend->Render();
+
+            // glEnable(GL_BLEND);
+            // glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            // Only apply PR effects to the rendered zone of rend, not to all the screen
+            m_gbuffer->SetDrawBuffers({GBuffer::Attachment::Color});
+            rend->RenderWithMaterial(m_matBeforeLightingMesh);
+            //ApplyDeferredLightsToRenderer(scene, rend);
+        }
+    }
+    m_gbuffer->SetAllDrawBuffers();
 
     // BREAK. Clear the depth
     m_gbuffer->ClearDepth();
-
+/*
     // PART 4. Opaque Gizmos with Deferred
     RenderOpaqueNoDepthGizmos(scene);
 
     // PART 5. Opaque Gizmos with Deferred
     // RenderTransparentNoDepthGizmos(scene);
+*/
 
     // PART 3. PostRenderEffects
-    RenderPostRenderEffects(scene);
+    // RenderPostRenderEffects(scene);
 
     m_gbuffer->UnBind();
 
     // FINAL. Render the gbuffer to the screen
-    m_gbuffer->RenderToScreen();
-}
-
-void GraphicPipeline::RenderOpaque(Scene *scene)
-{
-    m_opaquePass = true;
-
-    // First, we fill in the GBuffer with the positions, normals, etc.
-    // D2G (DrawToGBuffer)
-    PROPAGATE_EVENT(_OnPreRender, scene->m_children);
-    PROPAGATE_EVENT(_OnRender, scene->m_children);
-
-    // Draw Gizmos!
-    #ifdef BANG_EDITOR
-    PROPAGATE_EVENT(_OnDrawGizmos, scene->m_children);
-    #endif
-    //
-
-    // Add ambient light
-    m_gbuffer->RenderPassWithMaterial(m_materialBeforeLighting);
-    ApplyDeferredLights(scene);
-}
-
-void GraphicPipeline::RenderTransparent(Scene *scene)
-{
-    // Here we use Forward rendering.
-    // So lights are applied in the same shader
-    m_opaquePass = false;
-
-    // Enable Blend to allow transparency
-    glEnable(GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    for (GameObject *child : scene->m_children)
-    {
-        child->_OnPreRender();
-        child->_OnRender();
-        child->_OnDrawGizmos();
-    }
-
-    glDisable(GL_BLEND);
+    m_gbuffer->RenderToScreen(); // WORKING GOOD
+    //Debug_Log("Ends render");
 }
 
 void GraphicPipeline::RenderPostRenderEffects(Scene *scene)
 {
     #ifdef BANG_EDITOR
-    m_gbuffer->RenderPassWithMaterial(m_materialAfterLighting);
+    m_gbuffer->RenderPassWithMaterial(m_matAfterLightingScreen);
     #endif
 }
 
-void GraphicPipeline::RenderOpaqueNoDepthGizmos(Scene *scene)
-{
-    m_opaquePass = true;
-    PROPAGATE_EVENT(_OnDrawGizmosNoDepth, scene->m_children);
-
-    // Add ambient light
-    m_gbuffer->RenderPassWithMaterial(m_materialBeforeLighting);
-    ApplyDeferredLights(scene);
-}
-
-void GraphicPipeline::RenderTransparentNoDepthGizmos(Scene *scene)
-{
-    m_opaquePass = false;
-    glEnable(GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    PROPAGATE_EVENT(_OnDrawGizmosNoDepth, scene->m_children);
-    glDisable(GL_BLEND);
-}
-
-void GraphicPipeline::ApplyDeferredLights(Scene *scene)
+void GraphicPipeline::ApplyDeferredLightsToAllGBuffer(Scene *scene)
 {
     List<Light*> childrenLights = scene->GetComponentsInChildren<Light>();
     for (Light *light : childrenLights)
@@ -138,12 +128,19 @@ void GraphicPipeline::ApplyDeferredLights(Scene *scene)
     }
 }
 
+void GraphicPipeline::ApplyDeferredLightsToRenderer(Scene *scene, Renderer *rend)
+{
+    List<Light*> childrenLights = scene->GetComponentsInChildren<Light>();
+    for (Light *light : childrenLights)
+    {
+        if (CAN_USE_COMPONENT(light))
+        {
+            light->ApplyLight(rend);
+        }
+    }
+}
+
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
-}
-
-bool GraphicPipeline::IsInOpaquePass() const
-{
-    return m_opaquePass;
 }

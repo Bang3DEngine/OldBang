@@ -43,8 +43,9 @@ public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    void BindGBufferInTexturesTo(Material *mat) const;
+    void BindInputTexturesTo(Material *mat) const;
     void RenderPassWithMaterial(Material *mat) const;
+    void RenderToScreen(Attachment attachmentId) const;
     void RenderToScreen() const;
 
     void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::zero);

@@ -570,30 +570,6 @@ void GameObject::_OnUpdate()
     }
 }
 
-void GameObject::_OnPreRender ()
-{
-    ISceneEventListener::_OnPreRender();
-
-    PROPAGATE_EVENT(_OnPreRender, m_children);
-    PROPAGATE_EVENT(_OnPreRender, m_components);
-    OnPreRender();
-}
-
-void GameObject::_OnRender ()
-{
-    ISceneEventListener::_OnRender();
-
-    #ifdef BANG_EDITOR
-    EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
-    if (!scene->GetSelectionFramebuffer()->IsPassing())
-    #endif
-    {
-        PROPAGATE_EVENT(_OnRender, m_children);
-    }
-    PROPAGATE_EVENT(_OnRender, m_components);
-    OnRender();
-}
-
 void GameObject::_OnDestroy()
 {
     ISceneEventListener::_OnDestroy();

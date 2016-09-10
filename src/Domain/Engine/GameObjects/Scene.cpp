@@ -45,6 +45,12 @@ void Scene::_OnUpdate()
 {
     GameObject::_OnUpdate();
 
+    Camera *cam = m_cameraGameObject->GetComponent<Camera>();
+    if (cam  && cam->GetAutoUpdateAspectRatio())
+    {
+        cam->SetAspectRatio( m_screen->GetAspectRatio() );
+    }
+
     // Start non-started GameObjects
     for (GameObject *child : m_children)
     {
@@ -65,18 +71,6 @@ Scene::~Scene()
     _OnDestroy();
     delete m_gPipeline;
     delete m_defaultCamera;
-}
-
-void Scene::_OnRender()
-{
-    NONULL(m_cameraGameObject);
-    Camera *cam = m_cameraGameObject->GetComponent<Camera>();
-    if (cam  && cam->GetAutoUpdateAspectRatio())
-    {
-        cam->SetAspectRatio( m_screen->GetAspectRatio() );
-    }
-
-    m_gPipeline->RenderScene(this);
 }
 
 void Scene::SetCamera(const Camera *cam)

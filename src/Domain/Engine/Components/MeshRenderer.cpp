@@ -82,12 +82,6 @@ String MeshRenderer::GetName() const
 
 void MeshRenderer::RenderWithoutBindingMaterial() const
 {
-    NONULL(m_mesh);
-
-    Matrix4 model, normal, view, projection, pvm;
-    GetMatrices(&model, &normal, &view, &projection, &pvm);
-    SetMatricesUniforms(model, normal, view, projection, pvm);
-
     m_mesh->GetVAO()->Bind();
     glDrawArrays(GLint(m_renderMode), 0, m_mesh->GetVertexCount());
     m_mesh->GetVAO()->UnBind();

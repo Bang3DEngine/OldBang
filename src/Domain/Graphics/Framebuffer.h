@@ -23,6 +23,7 @@ private:
     GLuint m_depthAttachmentId;
     Map<int, GLuint> m_attachmentId_To_GLAttachment;
     Map<int, TextureRender*> m_attachmentId_To_Texture;
+    mutable Array<int> m_currentDrawAttachmentIds;
 
 protected:
 
@@ -40,6 +41,8 @@ public:
     void SetAllDrawBuffers() const;
     void SetDrawBuffers(const Array<int> &attachmentIds) const;
     void SetReadBuffer(int attachmentId) const;
+
+    const Array<int>& GetCurrentDrawAttachmentIds() const;
 
     Color ReadColor(int x, int y, int attachmentId) const;
     float ReadDepth(int x, int y) const; // TODO: not working read from renderbuffer

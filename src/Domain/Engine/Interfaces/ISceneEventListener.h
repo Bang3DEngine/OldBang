@@ -35,16 +35,6 @@ protected:
         OnUpdate();
     }
 
-    virtual void _OnPreRender ()
-    {
-        OnPreRender();
-    }
-
-    virtual void _OnRender ()
-    {
-        OnRender();
-    }
-
     virtual void _OnDestroy()
     {
         OnDestroy();
@@ -66,8 +56,6 @@ protected:
 
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
-    virtual void OnPreRender() {}
-    virtual void OnRender() {}
     virtual void OnDestroy() {}
     virtual void OnDrawGizmos() {}
     virtual void OnDrawGizmosNoDepth() {}

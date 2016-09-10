@@ -210,24 +210,6 @@ void BehaviourHolder::_OnUpdate()
     }
 }
 
-void BehaviourHolder::_OnPreRender()
-{
-    Component::_OnPreRender();
-    if (m_behaviour)
-    {
-        m_behaviour->_OnPreRender();
-    }
-}
-
-void BehaviourHolder::_OnRender()
-{
-    Component::_OnRender();
-    if (m_behaviour)
-    {
-        m_behaviour->_OnRender();
-    }
-}
-
 void BehaviourHolder::_OnDrawGizmos()
 {
     #ifdef BANG_EDITOR

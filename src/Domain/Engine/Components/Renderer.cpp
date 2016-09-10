@@ -25,7 +25,6 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetCullMode(GetCullMode());
     r->SetRenderMode(GetRenderMode());
     r->SetLineWidth(GetLineWidth());
-    r->SetIgnoreMaterial(GetIgnoreMaterial());
     r->SetIgnoreModelMatrix(GetIgnoreModelMatrix());
     r->SetIgnoreViewMatrix(GetIgnoreViewMatrix());
     r->SetIgnoreProjectionMatrix(GetIgnoreProjectionMatrix());
@@ -36,7 +35,7 @@ Material *Renderer::GetMaterial() const
     return m_material;
 }
 
-void Renderer::ActivateGLStatesBeforeRendering() const
+void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
 {
     //Set polygon mode
     if (m_drawWireframe)
@@ -61,10 +60,10 @@ void Renderer::ActivateGLStatesBeforeRendering() const
 
     Scene *scene = SceneManager::GetActiveScene();
     Camera *camera = scene->GetCamera();
-    if (camera && m_material  && m_material->GetShaderProgram())
+    if (camera && mat && mat->GetShaderProgram())
     {
         Transform *t = camera->gameObject->transform;
-        ShaderProgram *sp = m_material->GetShaderProgram();
+        ShaderProgram *sp = mat->GetShaderProgram();
         sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera, t->GetPosition(), false);
         sp->SetUniformFloat("B_renderer_receivesLighting", m_receivesLighting ? 1.0f : 0.0f, false);
 
@@ -76,11 +75,6 @@ void Renderer::ActivateGLStatesBeforeRendering() const
     glLineWidth(m_lineWidth);
 }
 
-void Renderer::OnRender()
-{
-    Render();
-}
-
 void Renderer::Render() const
 {
     #ifdef BANG_EDITOR
@@ -88,46 +82,44 @@ void Renderer::Render() const
     SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
     if (sfb && sfb->IsPassing())
     {
-        RenderSelectionFramebuffer(sfb); // RENDER FRAMEBUFFER
+        RenderSelectionFramebuffer(sfb); // RENDER FOR FRAMEBUFFER
     }
     else
     #endif
     {
-        // NORMAL RENDERING
-        bool opaquePass = GraphicPipeline::GetActive()->IsInOpaquePass();
-        bool canRenderNow = (IsTransparent() == !opaquePass); // It's its turn
-        if (canRenderNow)
-        {
-            ActivateGLStatesBeforeRendering();
+        RenderWithMaterial(m_material);
+    }
+}
 
-            if (!GetIgnoreMaterial())
-            {
-                NONULL(m_material);
-                NONULL(m_material->GetShaderProgram());
-                m_material->Bind();
-            }
+void Renderer::RenderWithMaterial(Material *mat) const
+{
+    ActivateGLStatesBeforeRendering(mat);
 
-            RenderWithoutBindingMaterial();
+    Matrix4 model, normal, view, projection, pvm;
+    GetMatrices(&model, &normal, &view, &projection, &pvm);
+    SetMatricesUniforms(mat, model, normal, view, projection, pvm);
 
-            if (!GetIgnoreMaterial())
-            {
-                m_material->UnBind();
-            }
-        }
+    bool goodMaterial = mat && mat->GetShaderProgram();
+    if (goodMaterial)
+    {
+        mat->Bind();
+    }
+
+    RenderWithoutBindingMaterial();
+
+    if (goodMaterial)
+    {
+        mat->UnBind();
     }
 }
 
 void Renderer::SetTransparent(bool transparent)
 {
-    // TODO: useless function
     m_isTransparent = transparent;
 }
 bool Renderer::IsTransparent() const
 {
-    // TODO: Let the user specify whether is a transparent renderer or not
-    //return m_isTransparent;
-    ShaderProgram *sp = m_material ? m_material->GetShaderProgram() : nullptr;
-    return  sp && sp->GetType() == ShaderProgram::Type::Forward;
+    return m_isTransparent;
 }
 
 void Renderer::GetMatrices(Matrix4 *model,
@@ -172,13 +164,14 @@ void Renderer::GetMatrices(Matrix4 *model,
     *pvm = (*projection) * (*view) * (*model);
 }
 
-void Renderer::SetMatricesUniforms(const Matrix4 &model,
+void Renderer::SetMatricesUniforms(Material *mat,
+                                   const Matrix4 &model,
                                    const Matrix4 &normal,
                                    const Matrix4 &view,
                                    const Matrix4 &projection,
                                    const Matrix4 &pvm) const
 {
-    ShaderProgram *sp = m_material->m_shaderProgram;
+    ShaderProgram *sp = mat->m_shaderProgram;
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal, normal, false);
@@ -227,16 +220,6 @@ void Renderer::SetLineWidth(float w)
 float Renderer::GetLineWidth() const
 {
     return m_lineWidth;
-}
-
-void Renderer::SetIgnoreMaterial(bool ignore)
-{
-    m_ignoreMaterial = ignore;
-}
-
-bool Renderer::GetIgnoreMaterial() const
-{
-    return m_ignoreMaterial;
 }
 
 void Renderer::SetIgnoreModelMatrix(bool ignore)
@@ -294,7 +277,7 @@ void Renderer::RenderSelectionFramebuffer(SelectionFramebuffer *sfb) const
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
 
-    ActivateGLStatesBeforeRendering();
+    ActivateGLStatesBeforeRendering(m_material);
     if (ActivateGLStatesBeforeRenderingForSelection)
     {
         ActivateGLStatesBeforeRenderingForSelection();
@@ -337,6 +320,7 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
         SetMaterial (nullptr);
     }
 
+    SetTransparent(xmlInfo->GetBool("IsTransparent"));
     SetLineWidth(xmlInfo->GetFloat("LineWidth"));
     SetDrawWireframe(xmlInfo->GetBool("DrawWireframe"));
     SetReceivesLighting(xmlInfo->GetBool("ReceivesLighting"));
@@ -365,6 +349,7 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
     }
 
     xmlInfo->SetFloat("LineWidth", GetLineWidth());
+    xmlInfo->SetBool("IsTransparent", IsTransparent(), {XMLProperty::Inline});
     xmlInfo->SetBool("DrawWireframe", GetDrawWireframe(), {XMLProperty::Inline});
     xmlInfo->SetBool("ReceivesLighting", GetReceivesLighting(), {XMLProperty::Inline});
 }

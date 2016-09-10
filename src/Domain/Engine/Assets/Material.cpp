@@ -62,8 +62,8 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
     String fshaderFilepath = xmlInfo->GetFilepath("FragmentShader");
     if (!m_shaderProgram ||
         !m_shaderProgram->GetVertexShader() || !m_shaderProgram->GetFragmentShader() ||
-        vshaderFilepath != m_shaderProgram->GetVertexShader()->GetFilepath()   ||
-        fshaderFilepath != m_shaderProgram->GetFragmentShader()->GetFilepath()
+         vshaderFilepath != m_shaderProgram->GetVertexShader()->GetFilepath()   ||
+         fshaderFilepath != m_shaderProgram->GetFragmentShader()->GetFilepath()
         )
     {
         SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));

@@ -79,6 +79,7 @@ public:
                               float fovDegrees, float aspectRatio);
     static void RenderSimpleSphere(const Vector3 &origin, float radius);
 
+    friend class GraphicPipeline;
 };
 
 #endif // GIZMOS_H

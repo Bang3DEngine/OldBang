@@ -74,10 +74,12 @@ void Framebuffer::SetAllDrawBuffers() const
 void Framebuffer::SetDrawBuffers(const Array<int> &attachmentIds) const
 {
     Bind();
-    Array<GLuint> drawBuffers;
-    for (GLint att : attachmentIds)
+    m_currentDrawAttachmentIds = attachmentIds;
+
+    Array<GLenum> drawBuffers;
+    for (int attId : attachmentIds)
     {
-        drawBuffers.PushBack(m_attachmentId_To_GLAttachment.Get(att));
+        drawBuffers.PushBack(m_attachmentId_To_GLAttachment.Get(attId));
     }
 
     glDrawBuffers(drawBuffers.Size(), &drawBuffers[0]);
@@ -91,6 +93,11 @@ void Framebuffer::SetReadBuffer(int attachmentId) const
     glReadBuffer(m_attachmentId_To_GLAttachment.Get(attachmentId));
     CheckFramebufferError();
     UnBind();
+}
+
+const Array<int> &Framebuffer::GetCurrentDrawAttachmentIds() const
+{
+    return m_currentDrawAttachmentIds;
 }
 
 Color Framebuffer::ReadColor(int x, int y, int attachmentId) const
@@ -191,7 +198,7 @@ void Framebuffer::Bind() const
 
 void Framebuffer::UnBind() const
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, PreUnBind(GL_FRAMEBUFFER_BINDING) );
+    glBindFramebuffer(GL_FRAMEBUFFER, PreUnBind(GL_FRAMEBUFFER_BINDING));
 }
 
 

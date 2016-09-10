@@ -33,7 +33,7 @@ private:
     Shader *m_vshader;
     Shader *m_fshader;
 
-    mutable Map<String, const Texture*> m_names_To_Textures;
+    mutable Map<String, const Texture*> m_names_To_Texture;
 
 public:
     ShaderProgram();

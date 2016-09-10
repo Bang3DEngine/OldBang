@@ -31,7 +31,7 @@ private:
      * It is used by the Renderer's, to know if they have to activate its special states
      * before rendering.
      */
-    bool m_isPassing;
+    bool m_isPassing = false;
 
     ShaderProgram *m_program = nullptr;
     Material *m_material = nullptr;

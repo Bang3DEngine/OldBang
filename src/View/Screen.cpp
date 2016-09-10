@@ -12,6 +12,7 @@
 
 #include "Application.h"
 #include "SceneManager.h"
+#include "GraphicPipeline.h"
 #include "ShortcutManager.h"
 #include "SingletonManager.h"
 
@@ -62,7 +63,7 @@ void Screen::Render()
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
-        activeScene->_OnRender(); // Note: _OnPreRender() is called from scene _OnRender
+        GraphicPipeline::GetActive()->RenderScene(activeScene);
     }
     else
     {

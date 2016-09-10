@@ -26,7 +26,7 @@ public:
 
     virtual void _OnStart () override;
     virtual void _OnResize (int newWidth, int newHeight) override;
-    virtual void _OnRender () override;
+    virtual void _OnRender ();
 
     SelectionFramebuffer* GetSelectionFramebuffer() const;
 

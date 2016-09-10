@@ -47,6 +47,8 @@ void EditorRotateAxis::OnUpdate()
     Camera *cam = SceneManager::GetActiveScene()->GetCamera(); NONULL(cam);
     GameObject *ago = m_attachedGameObject;
 
+    SetEnabled(Toolbar::GetInstance()->GetSelectedTransformMode() ==
+               Toolbar::TransformMode::Rotate);
     if (m_grabbed)
     {
         if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))

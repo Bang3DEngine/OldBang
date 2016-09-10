@@ -4,6 +4,8 @@
 class Scene;
 class GBuffer;
 class Material;
+class Renderer;
+class GameObject;
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
  * These are the followed steps:
@@ -41,44 +43,29 @@ private:
 
     GBuffer *m_gbuffer = nullptr;
 
-    Material *m_materialBeforeLighting = nullptr;
-    Material *m_materialAfterLighting   = nullptr;
+    // For opaque
+    Material *m_matBeforeLightingScreen = nullptr;
+    Material *m_matAfterLightingScreen  = nullptr;
 
-    // Indicates whether we are currently rendering opaque or transparent Renderers
-    // Renderer's will use it to determine if they can render themselves or not
-    bool m_opaquePass = false;
-
-    /**
-     * @brief PART 1. Renders the opaque Renderers, using Deferred rendering.
-     */
-    void RenderOpaque(Scene *scene);
-
-    /**
-     * @brief PART 2. Renders the transparent Renderers, using Forward rendering.
-     * It renders them from furthest to closest.
-     */
-    void RenderTransparent(Scene *scene);
+    // For transparent, (local lighting, not screen)
+    Material *m_matBeforeLightingMesh   = nullptr;
+    Material *m_matAfterLightingMesh    = nullptr;
 
     /**
      * @brief PART 3. Some after effects, such as the selection one.
      */
     void RenderPostRenderEffects(Scene *scene);
 
+    /**
+     * @brief Apply all the scene lights over the current gbuffer.
+     */
+    void ApplyDeferredLightsToAllGBuffer(Scene *scene);
 
     /**
-     * @brief PART 4. Render no-depth opaque Gizmos. Using Deferred.
+     * @brief Apply all the scene lights over the specified renderer.
+     * @param scene
      */
-    void RenderOpaqueNoDepthGizmos(Scene *scene);
-
-    /**
-     * @brief PART 5. Render no-depth transparent Gizmos. Using Forward.
-     */
-    void RenderTransparentNoDepthGizmos(Scene *scene);
-
-    /**
-     * @brief Apply al the scene lights over the current gbuffer.
-     */
-    void ApplyDeferredLights(Scene *scene);
+    void ApplyDeferredLightsToRenderer(Scene *scene, Renderer *rend);
 
 public:
     GraphicPipeline();
@@ -89,8 +76,6 @@ public:
     void RenderScene(Scene *scene);
 
     void OnResize(int newWidth, int newHeight);
-
-    bool IsInOpaquePass() const;
 };
 
 #endif // GRAPHICPIPELINE_H

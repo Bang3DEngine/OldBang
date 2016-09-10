@@ -110,7 +110,7 @@ int Texture::GetTextureUnit() const
 void Texture::BindToTextureUnit(int textureUnit) const
 {
     glActiveTexture(GL_TEXTURE0 + textureUnit);
-    glBindTexture(GL_TEXTURE_2D, m_idGL);
+    Bind();
 }
 
 

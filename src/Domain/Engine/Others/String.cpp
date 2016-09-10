@@ -31,8 +31,8 @@ String::String(const std::string &stdstr) :
 {
 }
 
-String::String(const Array<char>::Iterator begin,
-               const Array<char>::Iterator end) :
+String::String(const std::vector<char>::iterator begin,
+               const std::vector<char>::iterator end) :
     std::string(begin, end)
 {
 }

@@ -2,10 +2,9 @@
 #define STRING_H
 
 #include <string>
+#include <vector>
 #include <sstream>
 #include <cstring>
-
-#include "Array.h"
 
 class Color;
 class QString;
@@ -15,6 +14,7 @@ class Vector4;
 class Matrix4;
 class Quaternion;
 template <class T> class List;
+template <class T> class Array;
 class String : public std::string
 {
 public:
@@ -27,7 +27,7 @@ public:
     String(float v);
     String(const char *cstr);
     String(const std::string &stdstr);
-    String(const Array<char>::Iterator begin, const Array<char>::Iterator end);
+    String(const std::vector<char>::iterator begin, const std::vector<char>::iterator end);
     String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
            std::istreambuf_iterator<char, std::char_traits<char> > end);
 

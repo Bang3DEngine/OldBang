@@ -46,8 +46,6 @@ void EditorScene::_OnResize(int newWidth, int newHeight)
 
 void EditorScene::_OnRender()
 {
-    Scene::_OnRender();
-
     m_selectionFramebuffer->Bind();
     m_selectionFramebuffer->Clear();
     m_selectionFramebuffer->RenderSelectionBuffer(this);

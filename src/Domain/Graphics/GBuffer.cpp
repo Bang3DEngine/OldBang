@@ -1,7 +1,8 @@
 #include "GBuffer.h"
 
-#include "Screen.h"
 #include "Color.h"
+#include "Array.h"
+#include "Screen.h"
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
@@ -33,14 +34,14 @@ GBuffer::~GBuffer()
 {
 }
 
-void GBuffer::BindGBufferInTexturesTo(Material *mat) const
+void GBuffer::BindInputTexturesTo(Material *mat) const
 {
     ShaderProgram *sp =mat->GetShaderProgram(); NONULL(sp);
     sp->SetUniformTexture("B_position_gout_fin",           m_positionTexture, false);
     sp->SetUniformTexture("B_normal_gout_fin",             m_normalTexture,   false);
     sp->SetUniformTexture("B_uv_gout_fin",                 m_uvTexture,       false);
     sp->SetUniformTexture("B_diffuse_gout_fin",            m_diffuseTexture,  false);
-    sp->SetUniformTexture("B_materialProps_gout_fin", m_matPropsTexture, false);
+    sp->SetUniformTexture("B_materialProps_gout_fin",      m_matPropsTexture, false);
     sp->SetUniformTexture("B_depth_gout_fin",              m_depthTexture,    false);
     sp->SetUniformTexture("B_color_gout_fin",              m_colorTexture,    false);
 }
@@ -53,11 +54,14 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
             BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                          *(mat->GetShaderProgram()));
 
-    BindGBufferInTexturesTo(mat);
-
+    BindInputTexturesTo(mat);
     mat->Bind();
 
+    // Dont mess up the depth (don't overlap the plane's depth in top of everything)
+    glDepthMask(false);
+
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
+    Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
     SetDrawBuffers({GBuffer::Attachment::Color});
 
     Camera *camera = Scene::GetActiveScene()->GetCamera();
@@ -71,6 +75,27 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
     RenderScreenPlane();
 
     mat->UnBind();
+
+    glDepthMask(true); // Back to writing depth buffer as usual
+    SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
+}
+
+void GBuffer::RenderToScreen(GBuffer::Attachment attachmentId) const
+{
+    // Assumes gbuffer is not bound, hence directly writing to screen
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    m_planeMeshToRenderEntireScreen->
+                BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
+                                             *(m_renderGBufferToScreenMaterial->GetShaderProgram()));
+
+    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram(); NONULL(sp);
+    Texture *tex = GetColorAttachment(attachmentId); NONULL(tex);
+    sp->SetUniformTexture("B_color_gout_fin", tex, false);
+
+    m_renderGBufferToScreenMaterial->Bind();
+    RenderScreenPlane();
+    m_renderGBufferToScreenMaterial->UnBind();
 }
 
 void GBuffer::RenderScreenPlane() const
@@ -87,25 +112,13 @@ void GBuffer::RenderScreenPlane() const
 
 void GBuffer::RenderToScreen() const
 {
-    // Assumes gbuffer is not bound, hence directly writing to screen
-    glClear(GL_DEPTH_BUFFER_BIT);
-
-    m_planeMeshToRenderEntireScreen->
-                BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
-                                             *(m_renderGBufferToScreenMaterial->GetShaderProgram()));
-
-    TextureRender *colorTex = GetColorAttachment(GBuffer::Attachment::Color);
-    ShaderProgram *sp =m_renderGBufferToScreenMaterial->GetShaderProgram(); NONULL(sp);
-    sp->SetUniformTexture("B_color_gout_fin", colorTex, false);
-
-    m_renderGBufferToScreenMaterial->Bind();
-    RenderScreenPlane();
-    m_renderGBufferToScreenMaterial->UnBind();
+    RenderToScreen(Attachment::Color);
 }
 
 void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::Color &clearValue)
 {
     Bind();
+    Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
 
     SetAllDrawBuffers();
     glClearColor(clearValue.r, clearValue.g, clearValue.b, clearValue.a);
@@ -125,5 +138,6 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::
     glClearDepth(1.0);
     glClear(GL_DEPTH_BUFFER_BIT);
 
+    SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
     UnBind();
 }

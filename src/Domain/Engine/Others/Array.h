@@ -4,7 +4,8 @@
 #include <vector>
 #include <algorithm>
 
-class String;
+#include "String.h"
+
 template <class T> class List;
 template <class T>
 class Array : private std::vector<T>
@@ -152,7 +153,20 @@ public:
         return std::vector<T>::operator [](i);
     }
 
-    String ToString();
+    String ToString() const
+    {
+        std::ostringstream oss;
+        oss << "["; bool first = true;
+        for (auto it = this->Begin(); it != this->End(); ++it)
+        {
+            if (!first) oss << ", ";
+            oss << (*it);
+            first = false;
+        }
+        oss <<"]";
+        return String(oss.str());
+    }
+
 };
 
 #endif // ARRAY_H

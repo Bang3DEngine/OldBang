@@ -1,9 +1,9 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
+#include "Gizmos.h"
 #include "GBuffer.h"
 #include "Component.h"
-#include "Gizmos.h"
 
 #ifdef BANG_EDITOR
 #include "InspectorWidget.h"
@@ -18,6 +18,7 @@ protected:
 
     virtual void SetUniformsBeforeApplyingLight() const;
     virtual void ApplyLight(GBuffer *gbuffer) const;
+    virtual void ApplyLight(Renderer *rend) const;
 
     Light();
 
