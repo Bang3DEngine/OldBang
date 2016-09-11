@@ -6,6 +6,7 @@
 #include "MeshRenderer.h"
 #include "AssetsManager.h"
 #include "CircleRenderer.h"
+#include "GraphicPipeline.h"
 #include "EditorGameObject.h"
 #include "SingleLineRenderer.h"
 
@@ -126,7 +127,7 @@ void Gizmos::RenderCustomMesh(Mesh *m)
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(m);
-    Gizmos::m_meshRenderer->Render();
+    Gizmos::Render(Gizmos::m_meshRenderer);
 
     Gizmos::Reset();
 }
@@ -170,7 +171,7 @@ void Gizmos::RenderBox(const Box &b)
 
     Gizmos::m_gizmosGameObject->transform->SetPosition(b.GetCenter());
     Gizmos::m_gizmosGameObject->transform->SetScale(b.GetDimensions());
-    Gizmos::m_meshRenderer->Render();
+    Gizmos::Render(Gizmos::m_meshRenderer);
 
     Gizmos::Reset();
 }
@@ -204,7 +205,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
                                            cam->transform->GetUp());
     }
     Gizmos::m_meshRenderer->GetMaterial()->SetTexture(texture);
-    Gizmos::m_meshRenderer->Render();
+    Gizmos::Render(Gizmos::m_meshRenderer);
 
     Gizmos::Reset();
 }
@@ -220,7 +221,7 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
     Gizmos::m_gizmosGameObject->transform->SetPosition(Vector3::zero);
     Gizmos::m_gizmosGameObject->transform->SetScale(Vector3::one);
 
-    Gizmos::m_singleLineRenderer->Render();
+    Gizmos::Render(Gizmos::m_singleLineRenderer);
 
     Gizmos::Reset();
 }
@@ -241,7 +242,7 @@ void Gizmos::RenderSphere(const Vector3 &origin, float radius)
     Gizmos::m_gizmosGameObject->transform->SetPosition(origin);
     Gizmos::m_gizmosGameObject->transform->SetScale(radius);
 
-    Gizmos::m_meshRenderer->Render();
+    Gizmos::Render(Gizmos::m_meshRenderer);
 
     Gizmos::Reset();
 }
@@ -311,14 +312,14 @@ void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
     Gizmos::m_gizmosGameObject->transform->SetPosition(origin);
 
     Gizmos::m_gizmosGameObject->transform->SetLocalEuler(0, 0, 0);
-    Gizmos::m_circleRenderer->Render();
+    Gizmos::Render(Gizmos::m_circleRenderer);
     Gizmos::m_gizmosGameObject->transform->SetLocalEuler(0, 90, 0);
-    Gizmos::m_circleRenderer->Render();
+    Gizmos::Render(Gizmos::m_circleRenderer);
 
     Gizmos::m_gizmosGameObject->transform->SetLocalEuler(0, 0, 0);
-    Gizmos::m_circleRenderer->Render();
+    Gizmos::Render(Gizmos::m_circleRenderer);
     Gizmos::m_gizmosGameObject->transform->SetLocalEuler(90, 0, 0);
-    Gizmos::m_circleRenderer->Render();
+    Gizmos::Render(Gizmos::m_circleRenderer);
 
     Gizmos::Reset();
 }
@@ -344,4 +345,16 @@ void Gizmos::Reset()
     }
 
     Gizmos::m_meshRenderer->GetMaterial()->SetTexture(nullptr);
+}
+
+void Gizmos::Render(Renderer *rend)
+{
+    rend->Render();
+
+    // If using custom transparent renderer
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    if (gp->IsTransparentPass() && rend->IsTransparent())
+    {
+        gp->ApplyPREffectsToRenderer(rend);
+    }
 }

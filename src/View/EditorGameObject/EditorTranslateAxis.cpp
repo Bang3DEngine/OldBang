@@ -38,6 +38,9 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.25f);
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(m_material);
     m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
+
+    m_line->SetEnabled(false);
+    m_axisCap->GetComponent<Renderer>()->SetEnabled(false);
 }
 
 EditorTranslateAxis::~EditorTranslateAxis()
@@ -99,8 +102,17 @@ void EditorTranslateAxis::OnUpdate()
 void EditorTranslateAxis::OnDrawGizmosNoDepth()
 {
     EditorAxis::OnDrawGizmosNoDepth();
-    m_line->Render();
-    m_axisCap->GetComponent<Renderer>()->Render();
+
+    m_line->SetEnabled(true);
+    m_axisCap->GetComponent<Renderer>()->SetEnabled(true);
+
+    Gizmos::Render(m_line);
+    Gizmos::Render(m_axisCap->GetComponent<Renderer>());
+
+    // Disable renderers, to avoid them from being rendered
+    // in the normal pass
+    m_line->SetEnabled(false);
+    m_axisCap->GetComponent<Renderer>()->SetEnabled(false);
 }
 
 Renderer *EditorTranslateAxis::GetAxisRenderer() const

@@ -5,15 +5,16 @@
 
 PointLight::PointLight() : Light()
 {
-    m_lightMaterial = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_PointLight.bmat");
+    m_lightMaterialScreen = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_PointLight_Screen.bmat");
+    m_lightMaterialMesh   = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_PointLight_Mesh.bmat");
 }
 
 
-void PointLight::SetUniformsBeforeApplyingLight() const
+void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
 {
-    Light::SetUniformsBeforeApplyingLight();
+    Light::SetUniformsBeforeApplyingLight(mat);
 
-    ShaderProgram *sp = m_lightMaterial->GetShaderProgram();
+    ShaderProgram *sp = mat->GetShaderProgram();
     sp->SetUniformFloat("B_light_range", m_range, false);
 }
 

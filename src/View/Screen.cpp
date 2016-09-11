@@ -154,7 +154,7 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
 {
     Scene *activeScene = SceneManager::GetActiveScene();
     EditorScene *scene = static_cast<EditorScene*>(activeScene);
-    SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
+    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     int x = e->pos().x();
     int y = Screen::GetHeight() - e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
@@ -224,7 +224,7 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
     NONULL(activeScene);
 
     EditorScene *scene = static_cast<EditorScene*>(activeScene);
-    SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
+    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     int x = e->pos().x(), y = Screen::GetHeight() - e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
 

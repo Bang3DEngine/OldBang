@@ -29,7 +29,6 @@ out vec4 B_uv_fout_gin;
 out vec4 B_diffuse_fout_gin;
 out vec4 B_materialProps_fout_gin;
 out vec4 B_depth_fout_gin;
-out vec4 B_color_fout_gin;
 
 B_VertexIn B_vin;
 B_VertexOut_GBufferIn B_vout;
@@ -62,5 +61,4 @@ void EndMain()
     B_materialProps_fout_gin.z       = B_vout.shininess;
     B_materialProps_fout_gin.w       = B_gameObject_isSelected; // Editor
     B_depth_fout_gin                 = vec4(B_vout.depth);
-    B_color_fout_gin                 = vec4(0);
 }

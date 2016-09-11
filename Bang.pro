@@ -149,7 +149,11 @@ OTHER_FILES += \
     Assets/Engine/Shaders/Include/FWD.frag \
     Assets/Engine/Shaders/FWD_Default.frag \
     Assets/Engine/Materials/PR_BeforeLighting.bmat \
-    Assets/Engine/Shaders/PR_Mesh.vert
+    Assets/Engine/Shaders/PR_Mesh.vert \
+    Assets/Engine/Materials/PR_DirectionalLight_Mesh.bmat \
+    Assets/Engine/Materials/PR_DirectionalLight_Screen.bmat \
+    Assets/Engine/Materials/PR_PointLight_Mesh.bmat \
+    Assets/Engine/Materials/PR_PointLight_Screen.bmat
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

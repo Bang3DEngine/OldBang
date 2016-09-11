@@ -8,11 +8,8 @@
 
 DirectionalLight::DirectionalLight() : Light()
 {
-    m_lightMaterial = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_DirectionalLight.bmat");
-
-    #ifdef BANG_EDITOR
-    // m_inspectorComponentInfo.AddSlotInfos();
-    #endif
+    m_lightMaterialScreen = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_DirectionalLight_Screen.bmat");
+    m_lightMaterialMesh   = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/PR_DirectionalLight_Mesh.bmat");
 }
 
 const String DirectionalLight::ToString() const

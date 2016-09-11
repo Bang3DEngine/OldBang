@@ -8,9 +8,9 @@ Light::Light()
 {
 }
 
-void Light::SetUniformsBeforeApplyingLight() const
+void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 {
-    ShaderProgram *sp = m_lightMaterial->GetShaderProgram();
+    ShaderProgram *sp = mat->GetShaderProgram();
     sp->SetUniformFloat("B_light_intensity",      m_intensity,                          false);
     sp->SetUniformColor("B_light_color",          m_color,                              false);
     sp->SetUniformVec3 ("B_light_forward_world",  gameObject->transform->GetForward(),  false);
@@ -19,15 +19,25 @@ void Light::SetUniformsBeforeApplyingLight() const
 
 void Light::ApplyLight(GBuffer *gbuffer) const
 {
-    SetUniformsBeforeApplyingLight();
-    gbuffer->RenderPassWithMaterial(m_lightMaterial);
+    gbuffer->Bind();
+    gbuffer->SetDrawBuffers({GBuffer::Attachment::Color});
+
+    SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
+    gbuffer->RenderPassWithMaterial(m_lightMaterialScreen);
+
+    gbuffer->UnBind();
 }
 
-void Light::ApplyLight(Renderer *rend) const
+void Light::ApplyLight(GBuffer *gbuffer, Renderer *rend) const
 {
-    // GBuffer must be bound
-    SetUniformsBeforeApplyingLight();
-    rend->RenderWithMaterial(m_lightMaterial);
+    gbuffer->Bind();
+    gbuffer->SetDrawBuffers({GBuffer::Attachment::Color});
+
+    SetUniformsBeforeApplyingLight(m_lightMaterialMesh);
+    gbuffer->BindInputTexturesTo(m_lightMaterialMesh);
+    rend->RenderWithMaterial(m_lightMaterialMesh);
+
+    gbuffer->UnBind();
 }
 
 const String Light::ToString() const
@@ -87,7 +97,6 @@ void Light::ReadXMLInfo(const XMLNode *xmlInfo)
     Component::ReadXMLInfo(xmlInfo);
     SetIntensity(xmlInfo->GetFloat("Intensity"));
     SetColor(xmlInfo->GetColor("Color"));
-    m_lightMaterial = AssetsManager::LoadAsset<Material>(xmlInfo->GetFilepath("Material"));
 }
 
 void Light::FillXMLInfo(XMLNode *xmlInfo) const
@@ -97,6 +106,4 @@ void Light::FillXMLInfo(XMLNode *xmlInfo) const
 
     xmlInfo->SetFloat("Intensity", GetIntensity());
     xmlInfo->SetColor("Color", GetColor());
-    xmlInfo->SetFilepath("Material", m_lightMaterial->GetFilepath(), "bmat",
-                        {XMLProperty::Hidden});
 }

@@ -14,8 +14,9 @@ void main()
 
     if (B_vin.depth != 1.0)
     {
-        vec3 ambientLight = vec3(B_vin.receivesLighting ? 0.5 : 1.0);
-        B_vout.color = vec4(B_vin.diffuseColor.rgb * ambientLight, 1);
+        vec3 ambientLight = vec3(B_vin.receivesLighting ? 0.3 : 1.0);
+        B_vout.color = vec4(B_vin.diffuseColor.rgb * ambientLight,
+                            B_vin.diffuseColor.a);
     }
     else
     {   // Background

@@ -14,18 +14,19 @@ class Light : public Component
 protected:
     float m_intensity = 1.0f;
     Color m_color = Color::white;
-    Material *m_lightMaterial = nullptr;
+    Material *m_lightMaterialScreen = nullptr;
+    Material *m_lightMaterialMesh   = nullptr;
 
-    virtual void SetUniformsBeforeApplyingLight() const;
+    virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
     virtual void ApplyLight(GBuffer *gbuffer) const;
-    virtual void ApplyLight(Renderer *rend) const;
+    virtual void ApplyLight(GBuffer *gbuffer, Renderer *rend) const;
 
     Light();
 
 public:
 
     virtual const String ToString() const override;
-    virtual String GetName() const override { return "Directional Light"; }
+    virtual String GetName() const override { return "Light"; }
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;

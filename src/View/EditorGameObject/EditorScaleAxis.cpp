@@ -26,6 +26,9 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->transform->SetLocalScale(Vector3(0.2f));
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(m_material);
     m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
+
+    m_line->SetEnabled(false);
+    m_axisCap->GetComponent<Renderer>()->SetEnabled(false);
 }
 
 EditorScaleAxis::~EditorScaleAxis()
@@ -87,8 +90,15 @@ void EditorScaleAxis::OnUpdate()
 void EditorScaleAxis::OnDrawGizmosNoDepth()
 {
     EditorAxis::OnDrawGizmosNoDepth();
-    m_line->Render();
-    m_axisCap->GetComponent<Renderer>()->Render();
+
+    m_line->SetEnabled(true);
+    m_axisCap->GetComponent<Renderer>()->SetEnabled(true);
+
+    Gizmos::Render(m_line);
+    Gizmos::Render(m_axisCap->GetComponent<Renderer>());
+
+    m_line->SetEnabled(false);
+    m_axisCap->GetComponent<Renderer>()->SetEnabled(false);
 }
 
 Renderer *EditorScaleAxis::GetAxisRenderer() const

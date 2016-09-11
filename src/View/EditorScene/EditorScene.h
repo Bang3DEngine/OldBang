@@ -18,17 +18,11 @@ private:
     EditorTranslateAxisGroup *m_axises = nullptr;
     EditorFloor *m_floor = nullptr;
 
-    SelectionFramebuffer *m_selectionFramebuffer = nullptr;
-
 public:
     EditorScene();
     virtual ~EditorScene();
 
     virtual void _OnStart () override;
-    virtual void _OnResize (int newWidth, int newHeight) override;
-    virtual void _OnRender ();
-
-    SelectionFramebuffer* GetSelectionFramebuffer() const;
 
     bool IsEditorGameObject() const override;
 };

@@ -138,7 +138,6 @@ public:
     bool IsTransparent() const;
 
     #ifdef BANG_EDITOR
-    void RenderSelectionFramebuffer(SelectionFramebuffer *sfb) const;
     void SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f);
 
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;

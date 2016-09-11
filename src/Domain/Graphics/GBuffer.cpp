@@ -115,6 +115,21 @@ void GBuffer::RenderToScreen() const
     RenderToScreen(Attachment::Color);
 }
 
+void GBuffer::SetAllDrawBuffersExceptColor()
+{
+    SetDrawBuffers({GBuffer::Attachment::Position,
+                    GBuffer::Attachment::Normal,
+                    GBuffer::Attachment::Uv,
+                    GBuffer::Attachment::Diffuse,
+                    GBuffer::Attachment::MaterialProperties,
+                    GBuffer::Attachment::Depth});
+}
+
+void GBuffer::SetColorDrawBuffer()
+{
+    SetDrawBuffers({GBuffer::Attachment::Color});
+}
+
 void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::Color &clearValue)
 {
     Bind();

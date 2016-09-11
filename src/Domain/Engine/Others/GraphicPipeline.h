@@ -6,42 +6,18 @@ class GBuffer;
 class Material;
 class Renderer;
 class GameObject;
+class SelectionFramebuffer;
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
- * These are the followed steps:
- * PART 1: OPAQUE. Everything rendered in this first part will be opaque.
- *                 We use deferred shading in this part.
- *      STEP 1: Render all opaque renderers in GameObjects.
- *      STEP 2: Render opaque Gizmos with depth.
- *
- * PART 2: TRANSPARENT. Render transparent stuff, using forward pipeline
- *                      in this case.
- *      STEP 1: Render all transparent renderers in GameObjects.
- *      STEP 2: Render transparent Gizmos with depth.
- *
- * PART 3: Some POST-RENDER EFFECTS.
- *      Apply PostRender effects, such as selection outline in editor.
- *
- * BREAK: This is a point in which we will clear the depth buffer.
- * We do this because we need to draw no-depth Gizmos now. If you think
- * it can be done without clearing the depth buffer, and merge below steps
- * with above steps, think that No-Depth Gizmos must respect the depth
- * between them when being drawn. I didn't find a better way to do this.
- *
- * PART 3: OPAQUE No-Depth Gizmos.
- *      STEP 1: Render opaque Gizmos using deferred shading.
- *
- * PART 4: TRANSPARENT No-Depth Gizmos.
- *      STEP 1: Render transparent Gizmos using forward shading.
- *
- *
- * FINAL: Write the GBuffer to the screen
  */
 class GraphicPipeline
 {
 private:
 
     GBuffer *m_gbuffer = nullptr;
+    #ifdef BANG_EDITOR
+    SelectionFramebuffer *m_selectionFB = nullptr;
+    #endif
 
     // For opaque
     Material *m_matBeforeLightingScreen = nullptr;
@@ -51,9 +27,11 @@ private:
     Material *m_matBeforeLightingMesh   = nullptr;
     Material *m_matAfterLightingMesh    = nullptr;
 
-    /**
-     * @brief PART 3. Some after effects, such as the selection one.
-     */
+    bool m_transparentPass = false;
+
+    void RenderOpaque(Scene *scene);
+    void RenderTransparent(Scene *scene);
+    void RenderNoDepth(Scene *scene);
     void RenderPostRenderEffects(Scene *scene);
 
     /**
@@ -67,6 +45,12 @@ private:
      */
     void ApplyDeferredLightsToRenderer(Scene *scene, Renderer *rend);
 
+    void ApplyPREffectsToScreen(Scene *scene);
+
+    #ifdef BANG_EDITOR
+    void RenderSelectionFramebuffer(Scene *scene);
+    #endif
+
 public:
     GraphicPipeline();
     virtual ~GraphicPipeline();
@@ -76,6 +60,19 @@ public:
     void RenderScene(Scene *scene);
 
     void OnResize(int newWidth, int newHeight);
+
+    /**
+     * @brief Applies all the PR effects to a Renderer. This is called by
+     * the transparent Gizmos, since the PR effects must be applied after
+     * the rendering of each transparent renderer.
+     */
+    void ApplyPREffectsToRenderer(Renderer *renderer);
+
+    #ifdef BANG_EDITOR
+    SelectionFramebuffer* GetSelectionFramebuffer() const;
+    #endif
+
+    bool IsTransparentPass() const;
 };
 
 #endif // GRAPHICPIPELINE_H

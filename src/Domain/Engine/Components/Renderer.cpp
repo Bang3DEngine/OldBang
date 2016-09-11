@@ -13,6 +13,7 @@
 
 Renderer::Renderer()
 {
+    ActivateGLStatesBeforeRenderingForSelection = [](){};
 }
 
 void Renderer::CloneInto(ICloneable *clone) const
@@ -78,11 +79,10 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
 void Renderer::Render() const
 {
     #ifdef BANG_EDITOR
-    EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
-    SelectionFramebuffer *sfb = scene->GetSelectionFramebuffer();
+    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     if (sfb && sfb->IsPassing())
-    {
-        RenderSelectionFramebuffer(sfb); // RENDER FOR FRAMEBUFFER
+    {   // For SelectionFramebuffer OnDrawGizmos(NoDepth)
+        RenderWithMaterial( sfb->GetSelectionMaterial() ); // RENDER FOR FRAMEBUFFER
     }
     else
     #endif
@@ -94,6 +94,11 @@ void Renderer::Render() const
 void Renderer::RenderWithMaterial(Material *mat) const
 {
     ActivateGLStatesBeforeRendering(mat);
+    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+    if (sfb && sfb->IsPassing())
+    {
+        ActivateGLStatesBeforeRenderingForSelection();
+    }
 
     Matrix4 model, normal, view, projection, pvm;
     GetMatrices(&model, &normal, &view, &projection, &pvm);
@@ -263,32 +268,6 @@ bool Renderer::GetReceivesLighting() const
 }
 
 #ifdef BANG_EDITOR
-
-void Renderer::RenderSelectionFramebuffer(SelectionFramebuffer *sfb) const
-{
-    Material *selMaterial = sfb->GetSelectionMaterial(); NONULL(selMaterial);
-    ShaderProgram *sp = selMaterial->GetShaderProgram();
-
-    Matrix4 model, normal, view, projection, pvm;
-    GetMatrices(&model, &normal, &view, &projection, &pvm);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal, normal, false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
-
-    ActivateGLStatesBeforeRendering(m_material);
-    if (ActivateGLStatesBeforeRenderingForSelection)
-    {
-        ActivateGLStatesBeforeRenderingForSelection();
-    }
-
-    selMaterial->Bind();
-
-    RenderWithoutBindingMaterial();
-
-    selMaterial->UnBind();
-}
 
 void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f)
 {

@@ -8,7 +8,7 @@ class PointLight : public Light
 protected:
     float m_range = 1.0f;
 
-    virtual void SetUniformsBeforeApplyingLight() const override;
+    virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
 
 protected:
     PointLight();

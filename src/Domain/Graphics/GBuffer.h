@@ -48,6 +48,13 @@ public:
     void RenderToScreen(Attachment attachmentId) const;
     void RenderToScreen() const;
 
+    /**
+     * @brief Sets all GBuffer's draw buffers, except for the color one.
+     * This is useful for D2G render pass.
+     */
+    void SetAllDrawBuffersExceptColor();
+    void SetColorDrawBuffer();
+
     void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::zero);
 };
 

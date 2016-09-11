@@ -79,6 +79,8 @@ public:
                               float fovDegrees, float aspectRatio);
     static void RenderSimpleSphere(const Vector3 &origin, float radius);
 
+    static void Render(Renderer *rend);
+
     friend class GraphicPipeline;
 };
 

@@ -33,6 +33,8 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     {
         transform->SetLocalEuler(Vector3::up * 180.0f);
     }
+
+    m_circle->SetEnabled(false);
 }
 
 EditorRotateAxis::~EditorRotateAxis()
@@ -113,7 +115,12 @@ void EditorRotateAxis::OnDrawGizmosNoDepth()
 {
     EditorAxis::OnDrawGizmosNoDepth();
     Gizmos::SetDrawWireframe(false);
-    m_circle->Render();
+
+    m_circle->SetEnabled(true);
+
+    Gizmos::Render(m_circle);
+
+    m_circle->SetEnabled(false);
 }
 
 Renderer *EditorRotateAxis::GetAxisRenderer() const

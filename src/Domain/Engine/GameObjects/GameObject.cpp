@@ -5,9 +5,10 @@
 #include "SingletonManager.h"
 
 #include "Component.h"
-#include "PointLight.h"
 #include "Transform.h"
+#include "PointLight.h"
 #include "MeshRenderer.h"
+#include "GraphicPipeline.h"
 #include "BehaviourHolder.h"
 #include "DirectionalLight.h"
 
@@ -621,13 +622,11 @@ void GameObject::_OnDrawGizmos()
     #ifdef BANG_EDITOR
     ISceneEventListener::_OnDrawGizmos();
 
-    EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
-    if (!scene->GetSelectionFramebuffer()->IsPassing())
+    if (!GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
     {
         PROPAGATE_EVENT(_OnDrawGizmos, m_children);
     }
     PROPAGATE_EVENT(_OnDrawGizmos, m_components);
-
     OnDrawGizmos();
     #endif
 }
@@ -637,8 +636,7 @@ void GameObject::_OnDrawGizmosNoDepth()
     #ifdef BANG_EDITOR
     ISceneEventListener::_OnDrawGizmosNoDepth();
 
-    EditorScene *scene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
-    if (!scene->GetSelectionFramebuffer()->IsPassing())
+    if (!GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
     {
         PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
     }

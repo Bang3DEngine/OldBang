@@ -45,34 +45,69 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         m_id_To_GameObject[id] = go;
         ++id;
     }
+    //
 
+    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
     ShaderProgram *sp = m_material->GetShaderProgram();
-    for (GameObject *go : gameObjects)
+    for (Renderer *rend : renderers)
     {
-        if (CanRenderGameObject(go))
+        if (CanRenderGameObject(rend->gameObject))
         {
-            sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
-            // go->Render();
+            sp->SetUniformColor("selectionColor", GetSelectionColor(rend->gameObject));
+            rend->RenderWithMaterial(m_material);
         }
+
+        /*
+        ShaderProgram *sp = m_material->GetShaderProgram();
+        for (GameObject *go : gameObjects)
+        {
+            if (CanRenderGameObject(go))
+            {
+                // go->Render();
+            }
+        }
+
+        // Dont write to Attachment::WorldPosition
+        SetDrawBuffers({Attachment::ColorAttachment});
+        for (GameObject *go : gameObjects)
+        {
+            if (CanRenderGameObject(go))
+            {
+                sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
+                go->_OnDrawGizmos();
+            }
+        }
+
+        glClear(GL_DEPTH_BUFFER_BIT);
+        for (GameObject *go : gameObjects)
+        {
+            if (CanRenderGameObject(go))
+            {
+                sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
+                go->_OnDrawGizmosNoDepth();
+            }
+        }
+        */
     }
 
-    // Dont write to Attachment::WorldPosition
+    // Selection for OnDrawGizmos
     SetDrawBuffers({Attachment::ColorAttachment});
     for (GameObject *go : gameObjects)
     {
         if (CanRenderGameObject(go))
         {
-            sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
+            sp->SetUniformColor("selectionColor", GetSelectionColor(go));
             go->_OnDrawGizmos();
         }
     }
 
+    // Selection for OnDrawGizmosNoDepth
     glClear(GL_DEPTH_BUFFER_BIT);
     for (GameObject *go : gameObjects)
     {
         if (CanRenderGameObject(go))
         {
-            sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
+            sp->SetUniformColor("selectionColor", GetSelectionColor(go));
             go->_OnDrawGizmosNoDepth();
         }
     }
@@ -169,8 +204,8 @@ Color SelectionFramebuffer::MapIdToColor(long id)
     const int C = 256;
     Color color =
             Color(
-                    double(  id               % C),
-                    double( (id / C)        % C),
+                    double(  id           % C),
+                    double( (id / C)      % C),
                     double(((id / C) / C) % C)
                    );
 

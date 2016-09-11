@@ -25,7 +25,7 @@ void EditorRotateAxisGroup::OnDrawGizmosNoDepth()
     Vector3 center = m_axisX->m_attachedGameObject->transform->GetPosition();
     // Billboard-scaling taken into account too
     float radius = 0.95f * m_axisX->m_circle->GetRadius() * transform->GetScale().x;
-    Gizmos::SetColor(Color::white * Color(1, 1, 1, 0.4f));
+    Gizmos::SetColor(Color::white * Color(1, 1, 1, 0.2f));
     Gizmos::SetReceivesLighting(false);
     Gizmos::RenderSphere(center, radius);
 }
