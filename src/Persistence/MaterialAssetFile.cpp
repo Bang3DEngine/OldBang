@@ -1,6 +1,8 @@
 #include "MaterialAssetFile.h"
 
+#ifdef BANG_EDITOR
 #include "MaterialAssetFileInspectable.h"
+#endif
 
 MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModelIndex &index) :
     File(model, index)
@@ -30,10 +32,12 @@ QPixmap MaterialAssetFile::GetIcon() const
     return pm;
 }
 
+#ifdef BANG_EDITOR
 IInspectable *MaterialAssetFile::GetInspectable() const
 {
     return new MaterialAssetFileInspectable(*this);
 }
+#endif
 
 const String &MaterialAssetFile::GetVertexShaderFilepath() const
 {

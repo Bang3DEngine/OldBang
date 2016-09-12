@@ -2,7 +2,10 @@
 
 #include "Mesh.h"
 #include "AssetsManager.h"
+
+#ifdef BANG_EDITOR
 #include "MeshAssetFileInspectable.h"
+#endif
 
 MeshAssetFile::MeshAssetFile(const QFileSystemModel *model, const QModelIndex &index) : File(model, index)
 {
@@ -19,10 +22,12 @@ QPixmap MeshAssetFile::GetIcon() const
     return pm;
 }
 
+#ifdef BANG_EDITOR
 IInspectable *MeshAssetFile::GetInspectable() const
 {
     return new MeshAssetFileInspectable(*this);
 }
+#endif
 
 const String& MeshAssetFile::GetMeshFilepath() const
 {

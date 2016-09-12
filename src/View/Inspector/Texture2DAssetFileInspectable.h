@@ -1,8 +1,6 @@
 #ifndef INSPECTORTEXTURE2DASSETWIDGET_H
 #define INSPECTORTEXTURE2DASSETWIDGET_H
 
-
-
 #include "IInspectable.h"
 #include "FileWriter.h"
 #include "Texture2DAssetFile.h"

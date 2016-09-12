@@ -7,11 +7,16 @@
 #include <QModelIndex>
 #include <QFileSystemModel>
 
+#include "String.h"
+
+#ifdef BANG_EDITOR
 #include "IInspectable.h"
+#endif
 
 class File
 {
 protected:
+
 
     const QFileSystemModel *m_fileSystemModel = nullptr;
     QModelIndex m_modelIndex;
@@ -27,9 +32,11 @@ protected:
     static QPixmap AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm);
 
 public:
+
     File();
     File(const String &filepath);
     File(const QFileSystemModel *model, const QModelIndex &index);
+
     virtual ~File();
 
     bool IsTexture2DAsset() const;
@@ -63,7 +70,10 @@ public:
     static String GetContents(const String &filepath);
 
     virtual QPixmap GetIcon() const;
+
+    #ifdef BANG_EDITOR
     virtual IInspectable *GetInspectable() const;
+    #endif
 
     String GetContents() const;
 

@@ -13,7 +13,10 @@ public:
 
     String GetImageFilepath() const;
     virtual QPixmap GetIcon() const override;
+
+    #ifdef BANG_EDITOR
     virtual IInspectable *GetInspectable() const override;
+    #endif
 };
 
 #endif // FILETEXTURE2DASSET_H

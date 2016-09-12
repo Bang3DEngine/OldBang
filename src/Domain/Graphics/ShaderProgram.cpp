@@ -74,28 +74,6 @@ bool ShaderProgram::Link()
     return linked;
 }
 
-ShaderProgram::Type ShaderProgram::GetType() const
-{
-    if (m_fshader)
-    {
-        String name = Persistence::GetFileName(m_fshader->GetFilepath());
-        if (name.BeginsWith("FWD_"))
-        {
-            return Type::Forward;
-        }
-        else if (name.BeginsWith("D2G_"))
-        {
-            return Type::DrawToGBuffer;
-        }
-        else if (name.BeginsWith("PR_"))
-        {
-            return Type::PostRender;
-        }
-    }
-
-    return Type::Other;
-}
-
 bool ShaderProgram::SetUniformFloat(const String &name, float v, bool warn) const
 {
     int location = GetUniformLocation(name);

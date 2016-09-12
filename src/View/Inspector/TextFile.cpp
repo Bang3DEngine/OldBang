@@ -13,7 +13,9 @@ String TextFile::GetContents() const
     return m_contents;
 }
 
+#ifdef BANG_EDITOR
 IInspectable *TextFile::GetInspectable() const
 {
     return new TextFileInspectable(*this);
 }
+#endif

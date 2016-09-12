@@ -15,14 +15,18 @@
 #include "MeshAssetFile.h"
 #include "MaterialAssetFile.h"
 #include "Texture2DAssetFile.h"
+
+/*
+#ifdef BANG_EDITOR
 #include "TextFileInspectable.h"
 #include "MeshAssetFileInspectable.h"
 #include "PrefabAssetFileInspectable.h"
 #include "MaterialAssetFileInspectable.h"
-
 #include "MeshFileInspectable.h"
 #include "ImageFileInspectable.h"
 #include "Texture2DAssetFileInspectable.h"
+#endif
+*/
 
 QPixmap File::AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm)
 {
@@ -44,9 +48,12 @@ File::File()
 {
 }
 
+
 File::File(const String &filepath)
+#ifdef BANG_EDITOR
     : File(Explorer::GetInstance()->GetFileSystemModel(),
            Explorer::GetInstance()->GetModelIndexFromFilepath(filepath))
+#endif
 {
 }
 
@@ -230,10 +237,12 @@ QPixmap File::GetIcon() const
     return pm;
 }
 
+#ifdef BANG_EDITOR
 IInspectable *File::GetInspectable() const
 {
     return nullptr;
 }
+#endif
 
 const String &File::GetAbsolutePath() const
 {

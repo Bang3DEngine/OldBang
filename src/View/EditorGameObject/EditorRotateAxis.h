@@ -13,6 +13,7 @@ friend class EditorRotateAxisGroup;
 private:
 
     const float c_rotationBoost = 0.1f;
+    const float c_rotationStep  = 15.0f; // When pressing Control key
 
     CircleRenderer *m_circle = nullptr;
 

@@ -98,6 +98,7 @@ void EditorRotateAxis::OnUpdate()
             }
 
             parentAxisDir.Normalize();
+
             Quaternion q = Quaternion::AngleAxis(rotAngle, parentAxisDir);
             if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
             {

@@ -57,7 +57,9 @@ void GraphicPipeline::RenderScene(Scene *scene)
 {
     m_gbuffer->Bind();
 
+    #ifdef BANG_EDITOR
     Gizmos::Reset(); // Disable Gizmos renderers
+    #endif
 
     // CLEAR. First, clear everything in gbuffer (depth and all its buffers)
     Color bgColor = scene->GetCamera()->GetClearColor();
@@ -76,7 +78,6 @@ void GraphicPipeline::RenderScene(Scene *scene)
     m_gbuffer->UnBind();
 
     m_gbuffer->RenderToScreen();
-    m_gbuffer->RenderToScreen(GBuffer::Attachment::Uv);
 
     // RENDER SELECTION FRAMEBUFFER
     #ifdef BANG_EDITOR
@@ -184,12 +185,16 @@ void GraphicPipeline::ApplyPREffectsToScreen(Scene *scene)
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
+    #ifdef BANG_EDITOR
     m_selectionFB->Resize(newWidth, newHeight);
+    #endif
 }
 
 void GraphicPipeline::ApplyPREffectsToRenderer(Renderer *renderer)
 {
+    #ifdef BANG_EDITOR
     if (m_selectionFB->IsPassing()) { return; } // If SFB passing, dont apply PR
+    #endif
 
     Scene *scene = SceneManager::GetActiveScene();
 

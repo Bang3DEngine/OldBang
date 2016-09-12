@@ -20,15 +20,6 @@ class ShaderProgram : public IGLIdable
                      ,public IGLBindable
                      ,public IToString
 {
-public:
-    enum Type
-    {
-        Forward,        // FWD
-        DrawToGBuffer,  // D2G
-        PostRender,     // PR
-        Other           // Internal Stuff, SelectionFB or things like that
-    };
-
 private:
     Shader *m_vshader;
     Shader *m_fshader;
@@ -45,8 +36,6 @@ public:
     void BindFragmentShader(Shader *fshader);
 
     bool Link();
-
-    Type GetType() const;
 
     void Bind() const override;
     void UnBind() const override;

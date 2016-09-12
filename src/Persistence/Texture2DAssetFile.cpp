@@ -2,7 +2,10 @@
 
 #include "XMLNode.h"
 #include "FileReader.h"
+
+#ifdef BANG_EDITOR
 #include "Texture2DAssetFileInspectable.h"
+#endif
 
 Texture2DAssetFile::Texture2DAssetFile
     (const QFileSystemModel *model, const QModelIndex &index) : File(model, index)
@@ -37,7 +40,9 @@ QPixmap Texture2DAssetFile::GetIcon() const
     return filepath_To_Pixmap[fp];
 }
 
+#ifdef BANG_EDITOR
 IInspectable *Texture2DAssetFile::GetInspectable() const
 {
     return new Texture2DAssetFileInspectable(*this);
 }
+#endif

@@ -1,7 +1,10 @@
 #include "MeshFile.h"
 
 #include "Persistence.h"
+
+#ifdef BANG_EDITOR
 #include "MeshFileInspectable.h"
+#endif
 
 MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
@@ -17,10 +20,12 @@ QPixmap MeshFile::GetIcon() const
     return pm;
 }
 
+#ifdef BANG_EDITOR
 IInspectable *MeshFile::GetInspectable() const
 {
     return new MeshFileInspectable(*this);
 }
+#endif
 
 bool MeshFile::IsTriangles() const
 {

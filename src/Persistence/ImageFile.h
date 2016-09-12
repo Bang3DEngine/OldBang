@@ -16,7 +16,10 @@ public:
     ImageFile(const QFileSystemModel *model, const QModelIndex &index);
 
     virtual QPixmap GetIcon() const override;
+
+    #ifdef BANG_EDITOR
     virtual IInspectable *GetInspectable() const override;
+    #endif
 
     int GetWidth() const;
     int GetHeight() const;

@@ -235,6 +235,12 @@ HEADERS += \
     src/Persistence/BehaviourManager.h \
     src/Persistence/BehaviourManagerCompileThread.h \
     src/Domain/Engine/Others/Chrono.h \
+    src/Persistence/ImageFile.h \
+    src/Persistence/MeshFile.h \
+    src/Persistence/Texture2DAssetFile.h \
+    src/Persistence/MeshAssetFile.h \
+    src/Persistence/MaterialAssetFile.h \
+    src/Persistence/File.h \
     src/Domain/Engine/Others/Map.h \
     src/Domain/Engine/Others/List.h \
     src/Domain/Engine/Others/Array.h \
@@ -249,6 +255,7 @@ HEADERS += \
     src/View/Inspector/AttrWidgetButton.h \
     src/View/Toolbar.h \
     src/View/WindowEventManager.h \
+    src/View/Inspector/AttrWidgetFile.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/View/Inspector/Inspector.h \
     src/View/Hierarchy/Hierarchy.h \
@@ -260,27 +267,24 @@ HEADERS += \
     src/View/Logger/LoggerWidget.h \
     src/View/Inspector/AttrWidgetEnum.h \
     src/View/Explorer/Explorer.h \
-    src/View/Inspector/AttrWidgetFile.h \
     src/View/Inspector/IInspectable.h \
     src/View/MenuBar.h \
-    src/Persistence/ImageFile.h \
-    src/Persistence/MeshFile.h \
-    src/Persistence/Texture2DAssetFile.h \
-    src/Persistence/MeshAssetFile.h \
-    src/View/Inspector/MeshAssetFileInspectable.h \
-    src/Persistence/MaterialAssetFile.h \
-    src/View/Inspector/MaterialAssetFileInspectable.h \
     src/View/Explorer/ExplorerDirTree.h \
     src/View/Inspector/InspectorWidget.h \
+    src/View/Inspector/TextFile.h \
     src/View/Inspector/ImageFileInspectable.h \
-    src/View/Inspector/AttrWidgetString.h \
     src/View/Inspector/MeshFileInspectable.h \
+    src/View/Inspector/MeshAssetFileInspectable.h \
+    src/View/Inspector/MaterialAssetFileInspectable.h \
+    src/View/Inspector/AttrWidgetString.h \
+    src/View/Inspector/Texture2DAssetFileInspectable.h \
+    src/View/Inspector/PrefabAssetFileInspectable.h \
+    src/View/Dialogs/FileDialog.h \
+    src/View/Inspector/TextFileInspectable.h \
     src/View/EditorCamera/EditorCamera.h \
     src/View/EditorGameObject/EditorGameObject.h \
     src/View/EditorScene/EditorScene.h \
     src/Domain/Graphics/SelectionFramebuffer.h \
-    src/View/Inspector/Texture2DAssetFileInspectable.h \
-    src/View/Dialogs/FileDialog.h \
     src/View/EditorGameObject/EditorBBox.h \
     src/View/EditorGameObject/EditorRotateAxisGroup.h \
     src/View/EditorGameObject/EditorRotateAxis.h \
@@ -292,10 +296,6 @@ HEADERS += \
     src/Domain/Engine/Others/Gizmos.h \
     src/View/Inspector/AttrWidgetBool.h \
     src/View/Inspector/AttrWidgetColor.h \
-    src/View/Inspector/TextFileInspectable.h \
-    src/Persistence/File.h \
-    src/View/Inspector/TextFile.h \
-    src/View/Inspector/PrefabAssetFileInspectable.h \
     src/View/Interfaces/DragDropAgent.h \
     src/View/Inspector/IAttrWidgetButtonListener.h \
     src/View/Inspector/ComponentClipboard.h \
@@ -352,6 +352,13 @@ SOURCES += \
     src/Domain/Engine/Others/Input.cpp \
     src/Persistence/FileWriter.cpp \
     src/Persistence/Persistence.cpp \
+    src/Persistence/ImageFile.cpp \
+    src/Persistence/MeshFile.cpp \
+    src/Persistence/Texture2DAssetFile.cpp \
+    src/Persistence/MeshAssetFile.cpp \
+    src/Persistence/MaterialAssetFile.cpp \
+    src/View/Inspector/TextFile.cpp \
+    src/Persistence/File.cpp \
     src/Domain/Engine/Components/LineRenderer.cpp \
     src/Domain/Engine/Components/Renderer.cpp \
     src/Domain/Engine/Physics/Box.cpp \
@@ -421,25 +428,20 @@ EDITOR {
         src/View/Logger/LoggerWidget.cpp \
         src/View/Inspector/AttrWidgetEnum.cpp \
         src/View/Explorer/Explorer.cpp \
-        src/View/Inspector/AttrWidgetFile.cpp \
         src/View/Inspector/IInspectable.cpp \
         src/View/MenuBar.cpp \
+        src/View/Inspector/AttrWidgetFile.cpp \
         src/View/Explorer/ExplorerDirTree.cpp \
         src/View/Inspector/InspectorWidget.cpp \
-        src/View/Inspector/ImageFileInspectable.cpp \
         src/View/Inspector/AttrWidgetString.cpp \
-        src/View/Inspector/MeshFileInspectable.cpp \
         src/View/EditorCamera/EditorCamera.cpp \
         src/View/EditorGameObject/EditorGameObject.cpp \
         src/View/EditorScene/EditorScene.cpp \
+        src/View/Inspector/MeshAssetFileInspectable.cpp \
         src/View/Inspector/Texture2DAssetFileInspectable.cpp \
         src/View/Dialogs/FileDialog.cpp \
-        src/Persistence/ImageFile.cpp \
-        src/Persistence/MeshFile.cpp \
-        src/Persistence/Texture2DAssetFile.cpp \
-        src/Persistence/MeshAssetFile.cpp \
-        src/View/Inspector/MeshAssetFileInspectable.cpp \
-        src/Persistence/MaterialAssetFile.cpp \
+        src/View/Inspector/ImageFileInspectable.cpp \
+        src/View/Inspector/MeshFileInspectable.cpp \
         src/View/Inspector/MaterialAssetFileInspectable.cpp \
         src/View/EditorGameObject/EditorBBox.cpp \
         src/View/EditorGameObject/EditorSelectionGameObject.cpp \
@@ -452,8 +454,6 @@ EDITOR {
         src/View/Inspector/AttrWidgetBool.cpp \
         src/View/Inspector/AttrWidgetColor.cpp \
         src/View/Inspector/TextFileInspectable.cpp \
-        src/View/Inspector/TextFile.cpp \
-        src/Persistence/File.cpp \
         src/View/Inspector/PrefabAssetFileInspectable.cpp \
         src/View/Interfaces/DragDropAgent.cpp \
         src/View/Inspector/ComponentClipboard.cpp \

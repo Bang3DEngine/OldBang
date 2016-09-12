@@ -1,6 +1,8 @@
 #include "ImageFile.h"
 
+#ifdef BANG_EDITOR
 #include "ImageFileInspectable.h"
+#endif
 
 ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
@@ -23,10 +25,12 @@ QPixmap ImageFile::GetIcon() const
     return filepath_To_Pixmap[fp];
 }
 
+#ifdef BANG_EDITOR
 IInspectable *ImageFile::GetInspectable() const
 {
     return new ImageFileInspectable(*this);
 }
+#endif
 
 int ImageFile::GetWidth() const
 {

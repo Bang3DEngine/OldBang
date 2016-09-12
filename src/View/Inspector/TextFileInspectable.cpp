@@ -6,6 +6,7 @@ TextFileInspectable::TextFileInspectable(const TextFile &textFile) :
 
 }
 
+#ifdef BANG_EDITOR
 void TextFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     String contents = xmlInfo->GetString("Contents");
@@ -18,3 +19,4 @@ void TextFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 
     xmlInfo->SetString("Contents", m_textFile.GetContents(), {XMLProperty::BigText});
 }
+#endif

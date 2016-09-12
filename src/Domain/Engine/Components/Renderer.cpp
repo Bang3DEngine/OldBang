@@ -13,7 +13,9 @@
 
 Renderer::Renderer()
 {
+    #ifdef BANG_EDITOR
     ActivateGLStatesBeforeRenderingForSelection = [](){};
+    #endif
 }
 
 void Renderer::CloneInto(ICloneable *clone) const
@@ -94,11 +96,13 @@ void Renderer::Render() const
 void Renderer::RenderWithMaterial(Material *mat) const
 {
     ActivateGLStatesBeforeRendering(mat);
+    #ifdef BANG_EDITOR
     SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     if (sfb && sfb->IsPassing())
     {
         ActivateGLStatesBeforeRenderingForSelection();
     }
+    #endif
 
     Matrix4 model, normal, view, projection, pvm;
     GetMatrices(&model, &normal, &view, &projection, &pvm);
