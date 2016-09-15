@@ -32,13 +32,11 @@ struct B_VertexOut
 B_VertexIn B_vin;
 B_VertexOut B_vout;
 
-in vec2 B_screen_uv_vout_fin;
-
 out vec4 B_color_gout_gin; // Accumulated color
 
 void InitMain()
 {
-    B_vin.uv_screen           = B_screen_uv_vout_fin;
+    B_vin.uv_screen           = gl_FragCoord.xy / B_screen_size.xy;
     B_vin.position_world      = texture2D(B_position_gout_fin,       B_vin.uv_screen).xyz;
     B_vin.normal_world        = texture2D(B_normal_gout_fin,         B_vin.uv_screen).xyz;
     B_vin.uv                  = texture2D(B_uv_gout_fin,             B_vin.uv_screen).xy;

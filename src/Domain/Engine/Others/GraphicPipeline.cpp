@@ -79,9 +79,22 @@ void GraphicPipeline::RenderScene(Scene *scene)
 
     m_gbuffer->RenderToScreen();
 
+    /*
+    static int x = 0, N = 40; ++x;
+    if      (x < N * 1) m_gbuffer->RenderToScreen(GBuffer::Attachment::Position);
+    else if (x < N * 2) m_gbuffer->RenderToScreen(GBuffer::Attachment::Normal);
+    else if (x < N * 3) m_gbuffer->RenderToScreen(GBuffer::Attachment::Uv);
+    else if (x < N * 4) m_gbuffer->RenderToScreen(GBuffer::Attachment::Diffuse);
+    else if (x < N * 5) m_gbuffer->RenderToScreen(GBuffer::Attachment::MaterialProperties);
+    else if (x < N * 6) m_gbuffer->RenderToScreen(GBuffer::Attachment::Depth);
+    else if (x < N * 7) m_gbuffer->RenderToScreen(GBuffer::Attachment::Color);
+    else x = 0;
+    */
+
     // RENDER SELECTION FRAMEBUFFER
     #ifdef BANG_EDITOR
     RenderSelectionFramebuffer(scene);
+    // Uncomment if u want to see selectionFramebuffer
     // glClear(GL_DEPTH_BUFFER_BIT);
     // m_selectionFB->RenderSelectionBuffer(scene);
     #endif

@@ -13,6 +13,9 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     m_matPropsTexture = new TextureRender();
     m_depthTexture    = new TextureRender();
     m_colorTexture    = new TextureRender();
+    m_colorTexture->SetGLFormat(GL_RGBA);
+    m_colorTexture->SetGLInternalFormat(GL_RGBA);
+    m_colorTexture->SetGLType(GL_FLOAT);
 
     SetColorAttachment(Attachment::Position,           m_positionTexture);
     SetColorAttachment(Attachment::Normal,             m_normalTexture);
@@ -70,7 +73,6 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
         mat->GetShaderProgram()->SetUniformVec3(
                     ShaderContract::Uniform_Position_Camera, camera->transform->GetPosition(), false);
     }
-    mat->GetShaderProgram()->SetUniformVec2("B_screen_size", Screen::GetSize(), false);
 
     RenderScreenPlane();
 

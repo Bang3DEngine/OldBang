@@ -1,5 +1,7 @@
 #include "Material.h"
 
+#include "Screen.h"
+
 Material::Material() : Asset()
 {
     // TODO: Create shaderProgram asset and use AssetManager to load this
@@ -30,6 +32,7 @@ void Material::Bind() const
         m_shaderProgram->Bind();
         m_shaderProgram->SetUniformColor(ShaderContract::Uniform_Material_Diffuse_Color,
                                          m_diffuseColor, false);
+        m_shaderProgram->SetUniformVec2("B_screen_size", Screen::GetSize(), false);
         m_shaderProgram->SetUniformFloat("B_material_shininess", m_shininess, false);
 
         if (m_texture)

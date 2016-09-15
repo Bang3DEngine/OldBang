@@ -144,10 +144,6 @@ OTHER_FILES += \
     Assets/Engine/Shaders/Include/Version.glsl \
     Assets/Engine/Shaders/Include/PointLight.glsl \
     Assets/Engine/Shaders/Include/DirectionalLight.glsl \
-    Assets/Engine/Shaders/FWD_Default.vert \
-    Assets/Engine/Shaders/Include/FWD.vert \
-    Assets/Engine/Shaders/Include/FWD.frag \
-    Assets/Engine/Shaders/FWD_Default.frag \
     Assets/Engine/Materials/PR_BeforeLighting.bmat \
     Assets/Engine/Shaders/PR_Mesh.vert \
     Assets/Engine/Materials/PR_DirectionalLight_Mesh.bmat \
