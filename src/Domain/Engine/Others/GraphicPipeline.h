@@ -6,6 +6,7 @@ class GBuffer;
 class Material;
 class Renderer;
 class GameObject;
+class NVGcontext;
 class SelectionFramebuffer;
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
@@ -13,6 +14,8 @@ class SelectionFramebuffer;
 class GraphicPipeline
 {
 private:
+
+    NVGcontext *nvgContext = nullptr;
 
     GBuffer *m_gbuffer = nullptr;
     #ifdef BANG_EDITOR

@@ -10,12 +10,6 @@ then
 	exit 1
 fi
 
-# Make and run BangPreprocessor
-cd BangPreprocessor
-qmake
-(make -j4 && ./BangPreprocessor) || exit -1
-cd ..
-
 # Make and run Bang
 qmake "BUILD_MODE=$1"
 make -j4

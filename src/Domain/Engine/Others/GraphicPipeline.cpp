@@ -7,6 +7,14 @@
 #include "GameObject.h"
 #include "AssetsManager.h"
 
+#ifdef NANOVG_GLEW
+#       include <GL/glew.h>
+#endif
+#define NANOVG_GL3_IMPLEMENTATION
+#include "nanovg.h"
+#include "nanovg_gl.h"
+#include "nanovg_gl_utils.h"
+
 #ifdef BANG_EDITOR
 #include "SelectionFramebuffer.h"
 #endif
@@ -14,6 +22,8 @@
 GraphicPipeline::GraphicPipeline()
 {
     m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
+
+    nvgContext = nvgCreateGL3(NVG_STENCIL_STROKES | NVG_DEBUG);
 
     String drawScreenPlaneVert = "Assets/Engine/Shaders/PR_DrawScreenPlane.vert";
     String beforeLightingFrag  = "Assets/Engine/Shaders/PR_BeforeLighting.frag";
@@ -57,6 +67,10 @@ void GraphicPipeline::RenderScene(Scene *scene)
 {
     m_gbuffer->Bind();
 
+    // nvgBeginFrame(nvgContext, Screen::GetWidth(), Screen::GetHeight(), 1.0f);
+    // nvgRect(nvgContext, 10.0f, 10.0f, 50.0f, 50.0f);
+    // nvgEndFrame(nvgContext);
+
     #ifdef BANG_EDITOR
     Gizmos::Reset(); // Disable Gizmos renderers
     #endif
@@ -67,19 +81,21 @@ void GraphicPipeline::RenderScene(Scene *scene)
 
     RenderOpaque(scene);
     RenderTransparent(scene);
-
-    #ifdef BANG_EDITOR
-    m_gbuffer->ClearDepth();
-    RenderNoDepth(scene);
-    #endif
-
     RenderPostRenderEffects(scene); // PostRenderEffects (selection outline for example)
 
     m_gbuffer->UnBind();
-
     m_gbuffer->RenderToScreen();
 
-    /*
+
+    #ifdef BANG_EDITOR // NoDepth Pass
+    m_gbuffer->Bind();
+    m_gbuffer->ClearDepth();
+    RenderNoDepth(scene);
+    m_gbuffer->UnBind();
+    m_gbuffer->RenderToScreen();
+    #endif
+
+    /* Uncomment to loop through all GBuffer buffers
     static int x = 0, N = 40; ++x;
     if      (x < N * 1) m_gbuffer->RenderToScreen(GBuffer::Attachment::Position);
     else if (x < N * 2) m_gbuffer->RenderToScreen(GBuffer::Attachment::Normal);
