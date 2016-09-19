@@ -1,14 +1,11 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "Gizmos.h"
-#include "GBuffer.h"
 #include "Component.h"
 
-#ifdef BANG_EDITOR
-#include "InspectorWidget.h"
-#endif
-
+class GBuffer;
+class Material;
+class Renderer;
 class Light : public Component
 {
 protected:
@@ -18,8 +15,8 @@ protected:
     Material *m_lightMaterialMesh   = nullptr;
 
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
-    virtual void ApplyLight(GBuffer *gbuffer) const;
-    virtual void ApplyLight(GBuffer *gbuffer, Renderer *rend) const;
+    void ApplyLight(GBuffer *gbuffer) const;
+    void ApplyLight(GBuffer *gbuffer, const Renderer *rend) const;
 
     Light();
 

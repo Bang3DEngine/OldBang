@@ -1,7 +1,14 @@
 #include "PointLight.h"
 
+#include "Gizmos.h"
+#include "GBuffer.h"
 #include "Transform.h"
 #include "GameObject.h"
+
+#ifdef BANG_EDITOR
+#include "InspectorWidget.h"
+#endif
+
 
 PointLight::PointLight() : Light()
 {

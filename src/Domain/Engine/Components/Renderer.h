@@ -131,8 +131,10 @@ public:
     void SetReceivesLighting(bool receivesLighting);
     bool GetReceivesLighting() const;
 
-    void Render() const;
+    virtual void Render() const;
     void RenderWithMaterial(Material *mat) const;
+
+    virtual bool IsACanvasRenderer() const;
 
     void SetTransparent(bool transparent);
     bool IsTransparent() const;

@@ -53,7 +53,7 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourRelPa
     else
     {
         Debug_Error("There was an error when loading the library '" <<
-                    libraryFilepath << "'");
+                    libraryFilepath << "': " << lib->errorString().toStdString());
     }
 }
 

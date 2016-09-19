@@ -1,14 +1,16 @@
 #ifndef GBUFFER_H
 #define GBUFFER_H
 
+#include <stack>
+
 #include "Bang.h"
 
 #include "Mesh.h"
+#include "Color.h"
 #include "Material.h"
 #include "MeshFactory.h"
 #include "Framebuffer.h"
 
-#include "Color.h"
 
 class GBuffer : public Framebuffer
 {
@@ -52,8 +54,8 @@ public:
      * @brief Sets all GBuffer's draw buffers, except for the color one.
      * This is useful for D2G render pass.
      */
-    void SetAllDrawBuffersExceptColor();
-    void SetColorDrawBuffer();
+    void SetAllDrawBuffersExceptColor() const;
+    void SetColorDrawBuffer() const;
 
     void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::zero);
 };

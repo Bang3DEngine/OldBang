@@ -77,6 +77,10 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnAddComponentDirectionalLight()));
     connect(w->actionAddComponentPointLight,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentPointLight()));
+    connect(w->actionAddComponentCanvas,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentCanvas()));
+    connect(w->actionAddComponentUIImage,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentUIImage()));
 }
 
 
@@ -377,13 +381,19 @@ void MenuBar::OnAddComponentCircleRenderer() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AddComponentCircleRenderer);
 }
-
 void MenuBar::OnAddComponentDirectionalLight() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AddComponentDirectionalLight);
 }
-
 void MenuBar::OnAddComponentPointLight() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AddComponentPointLight);
+}
+void MenuBar::OnAddComponentCanvas() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentCanvas);
+}
+void MenuBar::OnAddComponentUIImage() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentUIImage);
 }

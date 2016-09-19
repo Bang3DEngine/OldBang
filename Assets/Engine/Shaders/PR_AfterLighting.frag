@@ -10,7 +10,7 @@ void main()
     bool isSelected = texture2D(B_materialProps_gout_fin, B_vin.uv_screen).w > 0.5;
     if (isSelected)
     {
-        B_vout.color = B_vin.color + vec4(0, 0.1, 0.3, 0);
+        B_vout.color = vec4(B_vin.color.rgb * 2.0, 1);
     }
     //
 

@@ -1,5 +1,5 @@
-﻿#ifndef CANVAS_H
-#define CANVAS_H
+﻿#ifndef SCREEN_H
+#define SCREEN_H
 
 #include <GL/glew.h>
 
@@ -97,4 +97,4 @@ public:
     void keyReleaseEvent(QKeyEvent *event) override;
 };
 
-#endif // CANVAS_H
+#endif // SCREEN_H

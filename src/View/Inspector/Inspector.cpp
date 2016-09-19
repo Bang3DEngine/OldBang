@@ -3,7 +3,9 @@
 #include <QScrollBar>
 
 #include "Debug.h"
+#include "Canvas.h"
 #include "Camera.h"
+#include "UIImage.h"
 #include "Component.h"
 #include "Transform.h"
 #include "PointLight.h"
@@ -189,6 +191,14 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     else if (clickedAction == MenuBar::Action::AddComponentPointLight)
     {
         PointLight *pl = m_currentGameObject->AddComponent<PointLight>();
+    }
+    else if (clickedAction == MenuBar::Action::AddComponentCanvas)
+    {
+        Canvas *c = m_currentGameObject->AddComponent<Canvas>();
+    }
+    else if (clickedAction == MenuBar::Action::AddComponentUIImage)
+    {
+        UIImage *img = m_currentGameObject->AddComponent<UIImage>();
     }
 
     Refresh();

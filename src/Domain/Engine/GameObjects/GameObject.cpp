@@ -4,6 +4,8 @@
 #include "SceneManager.h"
 #include "SingletonManager.h"
 
+#include "Canvas.h"
+#include "UIImage.h"
 #include "Component.h"
 #include "Transform.h"
 #include "PointLight.h"
@@ -416,6 +418,18 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
                 PointLight *pl = AddComponent<PointLight>();
                 pl->ReadXMLInfo(xmlChild);
                 c = pl;
+            }
+            else if (tagName == "Canvas")
+            {
+                Canvas *cv = AddComponent<Canvas>();
+                cv->ReadXMLInfo(xmlChild);
+                c = cv;
+            }
+            else if (tagName == "UIImage")
+            {
+                UIImage *img = AddComponent<UIImage>();
+                img->ReadXMLInfo(xmlChild);
+                c = img;
             }
         }
     }

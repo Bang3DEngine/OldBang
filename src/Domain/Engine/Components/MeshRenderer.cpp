@@ -49,7 +49,7 @@ void MeshRenderer::SetMesh(Mesh *m)
 
 Box MeshRenderer::GetBoundingBox() const
 {
-    if (m_mesh )
+    if (m_mesh)
     {
         return m_mesh->GetBoundingBox();
     }
@@ -82,6 +82,8 @@ String MeshRenderer::GetName() const
 
 void MeshRenderer::RenderWithoutBindingMaterial() const
 {
+    NONULL(m_mesh);
+
     m_mesh->GetVAO()->Bind();
     glDrawArrays(GLint(m_renderMode), 0, m_mesh->GetVertexCount());
     m_mesh->GetVAO()->UnBind();

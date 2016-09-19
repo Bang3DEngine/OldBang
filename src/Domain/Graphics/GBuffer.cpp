@@ -65,7 +65,7 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
 
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
     Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
-    SetDrawBuffers({GBuffer::Attachment::Color});
+    SetColorDrawBuffer();
 
     Camera *camera = Scene::GetActiveScene()->GetCamera();
     if (camera)
@@ -117,7 +117,7 @@ void GBuffer::RenderToScreen() const
     RenderToScreen(Attachment::Color);
 }
 
-void GBuffer::SetAllDrawBuffersExceptColor()
+void GBuffer::SetAllDrawBuffersExceptColor() const
 {
     SetDrawBuffers({GBuffer::Attachment::Position,
                     GBuffer::Attachment::Normal,
@@ -127,7 +127,7 @@ void GBuffer::SetAllDrawBuffersExceptColor()
                     GBuffer::Attachment::Depth});
 }
 
-void GBuffer::SetColorDrawBuffer()
+void GBuffer::SetColorDrawBuffer() const
 {
     SetDrawBuffers({GBuffer::Attachment::Color});
 }

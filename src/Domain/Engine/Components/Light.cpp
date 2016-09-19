@@ -1,8 +1,14 @@
 #include "Light.h"
 
+#include "Gizmos.h"
+#include "GBuffer.h"
 #include "Renderer.h"
 #include "Transform.h"
 #include "GameObject.h"
+
+#ifdef BANG_EDITOR
+#include "InspectorWidget.h"
+#endif
 
 Light::Light()
 {
@@ -28,7 +34,7 @@ void Light::ApplyLight(GBuffer *gbuffer) const
     gbuffer->UnBind();
 }
 
-void Light::ApplyLight(GBuffer *gbuffer, Renderer *rend) const
+void Light::ApplyLight(GBuffer *gbuffer, const Renderer *rend) const
 {
     gbuffer->Bind();
     gbuffer->SetDrawBuffers({GBuffer::Attachment::Color});

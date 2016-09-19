@@ -145,7 +145,7 @@ ShaderProgram *Material::GetShaderProgram() const
     return m_shaderProgram;
 }
 
-const Texture *Material::GetTexture() const
+const Texture2D *Material::GetTexture() const
 {
     return m_texture;
 }

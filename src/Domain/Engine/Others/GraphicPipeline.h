@@ -6,7 +6,6 @@ class GBuffer;
 class Material;
 class Renderer;
 class GameObject;
-class NVGcontext;
 class SelectionFramebuffer;
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
@@ -14,8 +13,6 @@ class SelectionFramebuffer;
 class GraphicPipeline
 {
 private:
-
-    NVGcontext *nvgContext = nullptr;
 
     GBuffer *m_gbuffer = nullptr;
     #ifdef BANG_EDITOR
@@ -34,19 +31,21 @@ private:
 
     void RenderOpaque(Scene *scene);
     void RenderTransparent(Scene *scene);
+    void RenderCanvasOpaque(Scene *scene);
+    void RenderCanvasTransparent(Scene *scene);
     void RenderNoDepth(Scene *scene);
     void RenderPostRenderEffects(Scene *scene);
 
     /**
      * @brief Apply all the scene lights over the current gbuffer.
      */
-    void ApplyDeferredLightsToAllGBuffer(Scene *scene);
+    void ApplyDeferredLightsToScreen(Scene *scene);
 
     /**
      * @brief Apply all the scene lights over the specified renderer.
      * @param scene
      */
-    void ApplyDeferredLightsToRenderer(Scene *scene, Renderer *rend);
+    void ApplyDeferredLightsToRenderer(Scene *scene, const Renderer *rend);
 
     void ApplyPREffectsToScreen(Scene *scene);
 
@@ -69,7 +68,10 @@ public:
      * the transparent Gizmos, since the PR effects must be applied after
      * the rendering of each transparent renderer.
      */
-    void ApplyPREffectsToRenderer(Renderer *renderer);
+    void ApplyPREffectsToRenderer(const Renderer *renderer);
+    void ApplyPREffectsToRenderer(const Renderer *renderer, Material *mat);
+
+    GBuffer *GetGBuffer() const;
 
     #ifdef BANG_EDITOR
     SelectionFramebuffer* GetSelectionFramebuffer() const;

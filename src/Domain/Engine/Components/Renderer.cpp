@@ -104,14 +104,17 @@ void Renderer::RenderWithMaterial(Material *mat) const
     }
     #endif
 
-    Matrix4 model, normal, view, projection, pvm;
-    GetMatrices(&model, &normal, &view, &projection, &pvm);
-    SetMatricesUniforms(mat, model, normal, view, projection, pvm);
-
     bool goodMaterial = mat && mat->GetShaderProgram();
     if (goodMaterial)
     {
+        Matrix4 model, normal, view, projection, pvm;
+        GetMatrices(&model, &normal, &view, &projection, &pvm);
+        SetMatricesUniforms(mat, model, normal, view, projection, pvm);
         mat->Bind();
+    }
+    else
+    {
+        Debug_Log("Not a good material " << mat);
     }
 
     RenderWithoutBindingMaterial();
@@ -120,6 +123,11 @@ void Renderer::RenderWithMaterial(Material *mat) const
     {
         mat->UnBind();
     }
+}
+
+bool Renderer::IsACanvasRenderer() const
+{
+    return false;
 }
 
 void Renderer::SetTransparent(bool transparent)
@@ -180,6 +188,8 @@ void Renderer::SetMatricesUniforms(Material *mat,
                                    const Matrix4 &projection,
                                    const Matrix4 &pvm) const
 {
+    NONULL(mat); NONULL(mat->m_shaderProgram);
+
     ShaderProgram *sp = mat->m_shaderProgram;
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);

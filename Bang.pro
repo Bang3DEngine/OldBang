@@ -10,7 +10,7 @@ QT += core gui opengl
 #    EDITOR
 #    GAME
 
-message(Building $$BUILD_MODE ...)
+# message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
 # CONFIG += EDITOR
 # CONFIG += GAME
@@ -58,7 +58,7 @@ INCLUDEPATH += \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/src/View/ \
     $$PWD/BangPreprocessor/GeneratedFiles/ \
-    $$PWD/src/View/Inspector/ \
+    $$PWD/src/View/Inspector/
 
 EDITOR {
     INCLUDEPATH += \
@@ -149,7 +149,10 @@ OTHER_FILES += \
     Assets/Engine/Materials/PR_DirectionalLight_Mesh.bmat \
     Assets/Engine/Materials/PR_DirectionalLight_Screen.bmat \
     Assets/Engine/Materials/PR_PointLight_Mesh.bmat \
-    Assets/Engine/Materials/PR_PointLight_Screen.bmat
+    Assets/Engine/Materials/PR_PointLight_Screen.bmat \
+    Assets/Engine/Shaders/UI/PR_UIImage.frag \
+    Assets/Engine/Materials/UI/UIImage.bmat \
+    Assets/Engine/Materials/UI/PR_UIImage.bmat
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -240,7 +243,9 @@ HEADERS += \
     src/Domain/Engine/Others/Map.h \
     src/Domain/Engine/Others/List.h \
     src/Domain/Engine/Others/Array.h \
-    src/Domain/Engine/Others/GraphicPipeline.h
+    src/Domain/Engine/Others/GraphicPipeline.h \
+    src/Domain/Engine/Components/Canvas.h \
+    src/Domain/Engine/Components/UIImage.h
 
 EDITOR {
 HEADERS += \
@@ -399,7 +404,9 @@ SOURCES += \
     src/Domain/Engine/Others/Map.cpp \
     src/Domain/Engine/Others/List.cpp \
     src/Domain/Engine/Others/Array.cpp \
-    src/Domain/Engine/Others/GraphicPipeline.cpp
+    src/Domain/Engine/Others/GraphicPipeline.cpp \
+    src/Domain/Engine/Components/Canvas.cpp \
+    src/Domain/Engine/Components/UIImage.cpp
 
 EDITOR {
     SOURCES += \

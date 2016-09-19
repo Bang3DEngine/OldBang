@@ -251,6 +251,9 @@
      <addaction name="separator"/>
      <addaction name="actionAddComponentDirectionalLight"/>
      <addaction name="actionAddComponentPointLight"/>
+     <addaction name="separator"/>
+     <addaction name="actionAddComponentCanvas"/>
+     <addaction name="actionAddComponentUIImage"/>
     </widget>
     <addaction name="menuAddComponent"/>
    </widget>
@@ -761,6 +764,16 @@
   <action name="actionAlignGameObjectWithView">
    <property name="text">
     <string>Align GameObject with View</string>
+   </property>
+  </action>
+  <action name="actionAddComponentCanvas">
+   <property name="text">
+    <string>Canvas</string>
+   </property>
+  </action>
+  <action name="actionAddComponentUIImage">
+   <property name="text">
+    <string>Image</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

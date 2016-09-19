@@ -43,8 +43,8 @@ public:
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
-    ShaderProgram* GetShaderProgram() const;
-    const Texture* GetTexture() const;
+    ShaderProgram*   GetShaderProgram() const;
+    const Texture2D* GetTexture() const;
 
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
