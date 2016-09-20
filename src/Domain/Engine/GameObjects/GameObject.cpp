@@ -169,6 +169,17 @@ const List<GameObject *> GameObject::GetChildren() const
     return cc;
 }
 
+const List<GameObject *> GameObject::GetChildrenEditor() const
+{
+    List<GameObject *> cc;
+    for (GameObject *c : m_children)
+    {
+        cc.PushBack(c);
+    }
+    return cc;
+}
+
+
 List<GameObject*> GameObject::GetChildrenRecursively() const
 {
     List<GameObject*> cc;

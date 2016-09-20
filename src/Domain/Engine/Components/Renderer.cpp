@@ -139,6 +139,26 @@ bool Renderer::IsTransparent() const
     return m_isTransparent;
 }
 
+void Renderer::SetIsGizmo(bool isGizmo)
+{
+    m_isGizmo = isGizmo;
+}
+
+bool Renderer::IsGizmo() const
+{
+    return m_isGizmo;
+}
+
+void Renderer::SetDepthLayer(Renderer::DepthLayer dl)
+{
+    m_depthLayer = dl;
+}
+
+Renderer::DepthLayer Renderer::GetDepthLayer() const
+{
+    return m_depthLayer;
+}
+
 void Renderer::GetMatrices(Matrix4 *model,
                            Matrix4 *normal,
                            Matrix4 *view,

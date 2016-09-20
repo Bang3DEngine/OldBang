@@ -170,6 +170,8 @@ public:
     void MoveComponent(Component *c, int distance);
     #endif
 
+    const List<GameObject *> GetChildrenEditor() const;
+
     /**
      * Removes the Component c
      */

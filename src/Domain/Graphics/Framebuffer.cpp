@@ -2,7 +2,7 @@
 
 Framebuffer::Framebuffer(int width, int height) : m_width(width),
                                                   m_height(height),
-                                                  m_depthAttachmentId(0)
+                                                  m_depthStencilAttachmentId(0)
 {
     glGenFramebuffers(1, &m_idGL);
 }
@@ -15,9 +15,9 @@ Framebuffer::~Framebuffer()
         delete t;
     }
 
-    if (m_depthAttachmentId != 0)
+    if (m_depthStencilAttachmentId != 0)
     {
-        glDeleteRenderbuffers(1, &m_depthAttachmentId);
+        glDeleteRenderbuffers(1, &m_depthStencilAttachmentId);
     }
 
     glDeleteFramebuffers(1, &m_idGL);
@@ -39,14 +39,14 @@ void Framebuffer::SetColorAttachment(int attachmentId, TextureRender *tex)
     //
 }
 
-void Framebuffer::CreateDepthRenderbufferAttachment()
+void Framebuffer::CreateDepthStencilRenderbufferAttachment()
 {
     Bind();
-    glGenRenderbuffers(1, &m_depthAttachmentId);
+    glGenRenderbuffers(1, &m_depthStencilAttachmentId);
     //TODO:  respect former bindings of renderbuffers
-    glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttachmentId);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_width, m_height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthAttachmentId);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilAttachmentId);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_width, m_height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencilAttachmentId);
 
     CheckFramebufferError();
     UnBind();
@@ -111,15 +111,6 @@ Color Framebuffer::ReadColor(int x, int y, int attachmentId) const
     return c;
 }
 
-float Framebuffer::ReadDepth(int x, int y) const
-{
-    // NOT WORKING I THINK
-    float d = 0.0f;
-    Bind();
-    glReadPixels(x, y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &d);
-    UnBind();
-    return d;
-}
 
 void Framebuffer::Resize(int width, int height)
 {
@@ -134,11 +125,11 @@ void Framebuffer::Resize(int width, int height)
         }
     }
 
-    if (m_depthAttachmentId != 0)
+    if (m_depthStencilAttachmentId != 0)
     {
         //TODO:  respect former bindings of renderbuffers
-        glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttachmentId);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+        glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilAttachmentId);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
     }
 }
 
@@ -161,7 +152,9 @@ void Framebuffer::Clear() const
 {
     Bind();
     SetAllDrawBuffers();
-    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glClear(GL_STENCIL_BUFFER_BIT |
+            GL_DEPTH_BUFFER_BIT   |
+            GL_COLOR_BUFFER_BIT);
     UnBind();
 }
 
@@ -172,6 +165,15 @@ void Framebuffer::ClearDepth() const
     glClear(GL_DEPTH_BUFFER_BIT);
     UnBind();
 }
+
+void Framebuffer::ClearStencil() const
+{
+    Bind();
+    SetAllDrawBuffers();
+    glClear(GL_STENCIL_BUFFER_BIT);
+    UnBind();
+}
+
 
 void Framebuffer::ClearColor() const
 {

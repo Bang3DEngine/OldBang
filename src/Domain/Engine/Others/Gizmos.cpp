@@ -56,6 +56,7 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
 
         for (Renderer *rend : Gizmos::m_renderers)
         {
+            rend->SetIsGizmo(true);
             rend->SetMaterial(Gizmos::m_material);
         }
     }
@@ -84,6 +85,17 @@ void Gizmos::SetRotation(const Quaternion &rotation)
 void Gizmos::SetScale(const Vector3 &scale)
 {
     Gizmos::m_gizmosGameObject->transform->SetLocalScale(scale);
+}
+
+void Gizmos::SetOverlay(bool overlay)
+{
+    Renderer::DepthLayer dl =
+            overlay ? Renderer::DepthLayer::DepthLayerGizmosOverlay :
+                      Renderer::DepthLayer::DepthLayerScene;
+    for (Renderer *rend : Gizmos::m_renderers)
+    {
+        rend->SetDepthLayer(dl);
+    }
 }
 
 void Gizmos::SetLineWidth(float lineWidth)
@@ -338,6 +350,7 @@ void Gizmos::Reset()
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetDrawWireframe(true);
     Gizmos::SetIgnoreMatrices(false, false, false);
+    Gizmos::SetOverlay(false);
 
     for (Renderer *rend : m_renderers)
     {
@@ -349,12 +362,6 @@ void Gizmos::Reset()
 
 void Gizmos::Render(Renderer *rend)
 {
-    rend->Render();
-
-    // If using custom transparent renderer
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
-    if (gp->IsTransparentPass() && rend->IsTransparent())
-    {
-        gp->ApplyPREffectsToRenderer(rend);
-    }
+    GraphicPipeline *gp = GraphicPipeline::GetActive(); NONULL(gp);
+    gp->RenderRenderer(rend);
 }

@@ -60,6 +60,7 @@ public:
     static void SetRotation(const Quaternion &rotation);
     static void SetScale(const Vector3 &scale);
 
+    static void SetOverlay(bool overlay);
     static void SetLineWidth(float lineWidth);
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);

@@ -20,7 +20,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     m_worldPosTexture = new TextureRender();
     SetColorAttachment(Attachment::ColorAttachment, m_colorTexture);
     SetColorAttachment(Attachment::WorldPosition, m_worldPosTexture);
-    CreateDepthRenderbufferAttachment();
+    CreateDepthStencilRenderbufferAttachment();
 }
 
 SelectionFramebuffer::~SelectionFramebuffer()
@@ -28,12 +28,8 @@ SelectionFramebuffer::~SelectionFramebuffer()
     delete m_program;
 }
 
-void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
+void SelectionFramebuffer::PrepareForRender(const Scene *scene)
 {
-    SetAllDrawBuffers();
-
-    m_isPassing = true;
-
     // Assign id's
     int id = 0;
     m_gameObject_To_Id.Clear();
@@ -46,70 +42,19 @@ void SelectionFramebuffer::RenderSelectionBuffer(const Scene *scene)
         ++id;
     }
     //
+}
 
-    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
+void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
+{
+    SetAllDrawBuffers();
+
+    m_isPassing = true;
+
     ShaderProgram *sp = m_material->GetShaderProgram();
-    for (Renderer *rend : renderers)
+    if (CanRenderGameObject(rend->gameObject))
     {
-        if (CanRenderGameObject(rend->gameObject))
-        {
-            sp->SetUniformColor("selectionColor", GetSelectionColor(rend->gameObject));
-            rend->RenderWithMaterial(m_material);
-        }
-
-        /*
-        ShaderProgram *sp = m_material->GetShaderProgram();
-        for (GameObject *go : gameObjects)
-        {
-            if (CanRenderGameObject(go))
-            {
-                // go->Render();
-            }
-        }
-
-        // Dont write to Attachment::WorldPosition
-        SetDrawBuffers({Attachment::ColorAttachment});
-        for (GameObject *go : gameObjects)
-        {
-            if (CanRenderGameObject(go))
-            {
-                sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
-                go->_OnDrawGizmos();
-            }
-        }
-
-        glClear(GL_DEPTH_BUFFER_BIT);
-        for (GameObject *go : gameObjects)
-        {
-            if (CanRenderGameObject(go))
-            {
-                sp->SetUniformVec3("selectionColor", GetSelectionColor(go).ToVector3());
-                go->_OnDrawGizmosNoDepth();
-            }
-        }
-        */
-    }
-
-    // Selection for OnDrawGizmos
-    SetDrawBuffers({Attachment::ColorAttachment});
-    for (GameObject *go : gameObjects)
-    {
-        if (CanRenderGameObject(go))
-        {
-            sp->SetUniformColor("selectionColor", GetSelectionColor(go));
-            go->_OnDrawGizmos();
-        }
-    }
-
-    // Selection for OnDrawGizmosNoDepth
-    glClear(GL_DEPTH_BUFFER_BIT);
-    for (GameObject *go : gameObjects)
-    {
-        if (CanRenderGameObject(go))
-        {
-            sp->SetUniformColor("selectionColor", GetSelectionColor(go));
-            go->_OnDrawGizmosNoDepth();
-        }
+        sp->SetUniformColor("selectionColor", GetSelectionColor(rend->gameObject));
+        rend->RenderWithMaterial(m_material);
     }
 
     m_isPassing = false;

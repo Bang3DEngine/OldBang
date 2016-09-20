@@ -14,7 +14,8 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     m_circle->SetLineWidth(2.0f);
     m_circle->SetMaterial(m_material);
     m_circle->SetReceivesLighting(false);
-
+    m_circle->SetIsGizmo(true);
+    m_circle->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmosOverlay);
     m_circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
             glLineWidth(10.0f); // Easier grab
@@ -33,8 +34,6 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     {
         transform->SetLocalEuler(Vector3::up * 180.0f);
     }
-
-    m_circle->SetEnabled(false);
 }
 
 EditorRotateAxis::~EditorRotateAxis()
@@ -115,13 +114,8 @@ void EditorRotateAxis::OnUpdate()
 void EditorRotateAxis::OnDrawGizmosNoDepth()
 {
     EditorAxis::OnDrawGizmosNoDepth();
-    Gizmos::SetDrawWireframe(false);
-
-    m_circle->SetEnabled(true);
 
     Gizmos::Render(m_circle);
-
-    m_circle->SetEnabled(false);
 }
 
 Renderer *EditorRotateAxis::GetAxisRenderer() const

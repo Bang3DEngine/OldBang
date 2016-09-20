@@ -1,10 +1,11 @@
 #ifndef EDITORROTATEAXISGROUP_H
 #define EDITORROTATEAXISGROUP_H
 
-#include "Toolbar.h"
 #include "EditorGameObject.h"
 #include "EditorRotateAxis.h"
 
+class Toolbar;
+class MeshRenderer;
 class EditorRotateAxisGroup : public EditorGameObject
 {
 private:
@@ -14,6 +15,7 @@ private:
 
 public:
     EditorRotateAxisGroup(GameObject *attachedGameObject);
+    virtual ~EditorRotateAxisGroup();
 
     void OnUpdate() override;
     void OnDrawGizmosNoDepth() override;

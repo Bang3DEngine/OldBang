@@ -51,6 +51,11 @@ void InitMain()
     B_vout.color              = B_vin.color;
 }
 
+bool IsEmpty()
+{
+    return B_vin.depth == 1.0f;
+}
+
 void EndMain()
 {
     B_vout.color     = vec4( mix(B_vin.color.rgb, B_vout.color.rgb, B_vout.color.a), 1);

@@ -26,7 +26,7 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 void Light::ApplyLight(GBuffer *gbuffer) const
 {
     gbuffer->Bind();
-    gbuffer->SetDrawBuffers({GBuffer::Attachment::Color});
+    gbuffer->SetColorDrawBuffer();
 
     SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
     gbuffer->RenderPassWithMaterial(m_lightMaterialScreen);
@@ -37,7 +37,7 @@ void Light::ApplyLight(GBuffer *gbuffer) const
 void Light::ApplyLight(GBuffer *gbuffer, const Renderer *rend) const
 {
     gbuffer->Bind();
-    gbuffer->SetDrawBuffers({GBuffer::Attachment::Color});
+    gbuffer->SetColorDrawBuffer();
 
     SetUniformsBeforeApplyingLight(m_lightMaterialMesh);
     gbuffer->BindInputTexturesTo(m_lightMaterialMesh);

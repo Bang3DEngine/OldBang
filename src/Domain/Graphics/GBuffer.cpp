@@ -24,7 +24,7 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     SetColorAttachment(Attachment::MaterialProperties, m_matPropsTexture);
     SetColorAttachment(Attachment::Depth,              m_depthTexture);
     SetColorAttachment(Attachment::Color,              m_colorTexture);
-    CreateDepthRenderbufferAttachment();
+    CreateDepthStencilRenderbufferAttachment();
 
     String renderToScreenMatFilepath =
             "Assets/Engine/Materials/RenderGBufferToScreen.bmat";
@@ -130,6 +130,14 @@ void GBuffer::SetAllDrawBuffersExceptColor() const
 void GBuffer::SetColorDrawBuffer() const
 {
     SetDrawBuffers({GBuffer::Attachment::Color});
+}
+
+void GBuffer::ClearAllBuffersExceptColor()
+{
+    Bind();
+    SetAllDrawBuffersExceptColor();
+    glClear(GL_COLOR_BUFFER_BIT);
+    UnBind();
 }
 
 void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::Color &clearValue)

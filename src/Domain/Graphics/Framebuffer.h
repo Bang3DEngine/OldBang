@@ -19,8 +19,9 @@ class Framebuffer : public IGLBindable
 
 private:
 
-    int m_width, m_height;
-    GLuint m_depthAttachmentId;
+    int m_width;
+    int m_height;
+    GLuint m_depthStencilAttachmentId = 0;
     Map<int, GLuint> m_attachmentId_To_GLAttachment;
     Map<int, TextureRender*> m_attachmentId_To_Texture;
     mutable Array<int> m_currentDrawAttachmentIds;
@@ -34,7 +35,7 @@ public:
     virtual ~Framebuffer();
 
     void SetColorAttachment(int attachmentId, TextureRender *tex);
-    void CreateDepthRenderbufferAttachment();
+    void CreateDepthStencilRenderbufferAttachment();
 
     TextureRender* GetColorAttachment(int attachmentId) const;
 
@@ -45,7 +46,6 @@ public:
     const Array<int>& GetCurrentDrawAttachmentIds() const;
 
     Color ReadColor(int x, int y, int attachmentId) const;
-    float ReadDepth(int x, int y) const; // TODO: not working read from renderbuffer
     void Resize(int width, int height);
 
     int GetWidth() const;
@@ -54,6 +54,7 @@ public:
 
     void Clear() const;
     void ClearDepth() const;
+    void ClearStencil() const;
     void ClearColor() const;
 
     virtual void Bind() const override;

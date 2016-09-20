@@ -5,7 +5,7 @@ void main()
 {
     InitMain();
 
-    if (B_vin.receivesLighting)
+    if (!IsEmpty() && B_vin.receivesLighting)
     {
         vec3 dirLightApport = GetDirectionalLightColorApportation(
                                     B_vin.position_world,

@@ -1,10 +1,11 @@
 #ifndef GRAPHICPIPELINE_H
 #define GRAPHICPIPELINE_H
 
+#include "Renderer.h"
+
 class Scene;
 class GBuffer;
 class Material;
-class Renderer;
 class GameObject;
 class SelectionFramebuffer;
 /**
@@ -12,7 +13,17 @@ class SelectionFramebuffer;
  */
 class GraphicPipeline
 {
+public:
+
 private:
+
+    Scene *m_currentScene = nullptr;
+    Renderer::DepthLayer m_currentDepthLayer =
+            Renderer::DepthLayer::DepthLayerScene;
+    const Renderer::DepthLayer
+        DepthLayerOrder[3] = {Renderer::DepthLayer::DepthLayerScene,
+                              Renderer::DepthLayer::DepthLayerCanvas,
+                              Renderer::DepthLayer::DepthLayerGizmosOverlay};
 
     GBuffer *m_gbuffer = nullptr;
     #ifdef BANG_EDITOR
@@ -20,37 +31,28 @@ private:
     #endif
 
     // For opaque
-    Material *m_matBeforeLightingScreen = nullptr;
-    Material *m_matAfterLightingScreen  = nullptr;
+    Material *m_matAmbientLightScreen  = nullptr;
+    Material *m_matEditorEffectsScreen = nullptr;
 
     // For transparent, (local lighting, not screen)
-    Material *m_matBeforeLightingMesh   = nullptr;
-    Material *m_matAfterLightingMesh    = nullptr;
+    Material *m_matAmbientLightMesh   = nullptr;
+    Material *m_matEditorEffectsMesh  = nullptr;
 
-    bool m_transparentPass = false;
-
-    void RenderOpaque(Scene *scene);
-    void RenderTransparent(Scene *scene);
-    void RenderCanvasOpaque(Scene *scene);
-    void RenderCanvasTransparent(Scene *scene);
-    void RenderNoDepth(Scene *scene);
-    void RenderPostRenderEffects(Scene *scene);
+    void ApplyEditorEffects();
 
     /**
      * @brief Apply all the scene lights over the current gbuffer.
      */
-    void ApplyDeferredLightsToScreen(Scene *scene);
+    void ApplyDeferredLightsToScreen();
 
     /**
      * @brief Apply all the scene lights over the specified renderer.
      * @param scene
      */
-    void ApplyDeferredLightsToRenderer(Scene *scene, const Renderer *rend);
-
-    void ApplyPREffectsToScreen(Scene *scene);
+    void ApplyDeferredLightsToRenderer(const Renderer *rend);
 
     #ifdef BANG_EDITOR
-    void RenderSelectionFramebuffer(Scene *scene);
+    void RenderSelectionFramebuffer(const List<Renderer*> &renderers);
     #endif
 
 public:
@@ -60,24 +62,17 @@ public:
     static GraphicPipeline* GetActive();
 
     void RenderScene(Scene *scene);
+    void RenderRenderer(Renderer *rend);
 
     void OnResize(int newWidth, int newHeight);
 
-    /**
-     * @brief Applies all the PR effects to a Renderer. This is called by
-     * the transparent Gizmos, since the PR effects must be applied after
-     * the rendering of each transparent renderer.
-     */
-    void ApplyPREffectsToRenderer(const Renderer *renderer);
-    void ApplyPREffectsToRenderer(const Renderer *renderer, Material *mat);
+    void ApplyPREffectToRenderer(const Renderer *renderer, Material *mat);
 
     GBuffer *GetGBuffer() const;
 
     #ifdef BANG_EDITOR
     SelectionFramebuffer* GetSelectionFramebuffer() const;
     #endif
-
-    bool IsTransparentPass() const;
 };
 
 #endif // GRAPHICPIPELINE_H

@@ -114,10 +114,10 @@ OTHER_FILES += \
     Assets/Scenes/test2.bscene \
     Assets/Engine/Materials/D2G_Default.bmat \
     Assets/Engine/Materials/D2G_Line.bmat \
-    Assets/Engine/Materials/PR_AfterLighting.bmat \
+    Assets/Engine/Materials/PR_EditorEffects.bmat \
     Assets/Engine/Materials/PR_DirectionalLight.bmat \
     Assets/Engine/Materials/PR_PointLight.bmat \
-    Assets/Engine/Shaders/PR_AfterLighting.frag \
+    Assets/Engine/Shaders/PR_EditorEffects.frag \
     Assets/Behaviours/RandomScale.h \
     Assets/Behaviours/RandomScale.cpp \
     Assets/Engine/Shaders/PR_DrawScreenPlane.vert \
@@ -132,7 +132,7 @@ OTHER_FILES += \
     Assets/Scenes/test.bscene \
     Assets/Engine/Textures/DirectionalLightIcon.btex2d \
     Assets/Engine/Textures/PointLightIcon.btex2d \
-    Assets/Engine/Shaders/PR_BeforeLighting.frag \
+    Assets/Engine/Shaders/PR_AmbientLight.frag \
     Assets/Engine/Shaders/D2G.vert \
     Assets/Engine/Shaders/PR.vert \
     Assets/Engine/Shaders/PR.frag \
@@ -144,7 +144,7 @@ OTHER_FILES += \
     Assets/Engine/Shaders/Include/Version.glsl \
     Assets/Engine/Shaders/Include/PointLight.glsl \
     Assets/Engine/Shaders/Include/DirectionalLight.glsl \
-    Assets/Engine/Materials/PR_BeforeLighting.bmat \
+    Assets/Engine/Materials/PR_AmbientLight.bmat \
     Assets/Engine/Shaders/PR_Mesh.vert \
     Assets/Engine/Materials/PR_DirectionalLight_Mesh.bmat \
     Assets/Engine/Materials/PR_DirectionalLight_Screen.bmat \

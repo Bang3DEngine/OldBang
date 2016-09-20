@@ -16,6 +16,7 @@ UIImage::UIImage()
     SetIgnoreProjectionMatrix(true);
     SetReceivesLighting(false);
     SetTransparent(false);
+    SetDepthLayer(Renderer::DepthLayer::DepthLayerCanvas);
 
     m_material->SetDiffuseColor(Color::white);
 }
@@ -116,3 +117,4 @@ void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->GetAttribute("DrawWireframe")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("ReceivesLighting")->SetProperty({XMLProperty::Hidden});
 }
+

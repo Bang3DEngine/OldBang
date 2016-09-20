@@ -1,4 +1,4 @@
-<Material DiffuseColor:Color="(1, 1, 1, 0.784314)"{}
+<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
           FragmentShader:File="./Assets/Engine/Shaders/D2G_Default.frag"{FileExtension="frag"}
           Shininess:Float="1"{}
           Texture1:File="./Assets/Textures/woodTexture.btex2d"{FileExtension="btex2d"}

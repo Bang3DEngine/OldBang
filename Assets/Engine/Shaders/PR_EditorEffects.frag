@@ -8,9 +8,9 @@ void main()
 
     // SELECTION OUTLINE EFFECT
     bool isSelected = texture2D(B_materialProps_gout_fin, B_vin.uv_screen).w > 0.5;
-    if (isSelected)
+    if (!IsEmpty() && isSelected)
     {
-        B_vout.color = vec4(B_vin.color.rgb * 2.0, 1);
+        B_vout.color = vec4(B_vin.color.rgb + vec3(0, 0, 0.5), 1);
     }
     //
 

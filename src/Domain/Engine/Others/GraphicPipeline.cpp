@@ -16,21 +16,21 @@ GraphicPipeline::GraphicPipeline()
     m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
 
     String drawScreenPlaneVert = "Assets/Engine/Shaders/PR_DrawScreenPlane.vert";
-    String beforeLightingFrag  = "Assets/Engine/Shaders/PR_BeforeLighting.frag";
-    String afterLightingFrag  = "Assets/Engine/Shaders/PR_AfterLighting.frag";
+    String ambientLightFrag  = "Assets/Engine/Shaders/PR_AmbientLight.frag";
+    String afterLightingFrag  = "Assets/Engine/Shaders/PR_EditorEffects.frag";
     String meshVert = "Assets/Engine/Shaders/PR_Mesh.vert";
 
-    m_matBeforeLightingScreen = new Material();
-    m_matBeforeLightingScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, beforeLightingFrag));
+    m_matAmbientLightScreen = new Material();
+    m_matAmbientLightScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, ambientLightFrag));
 
-    m_matAfterLightingScreen  = new Material();
-    m_matAfterLightingScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, afterLightingFrag));
+    m_matEditorEffectsScreen  = new Material();
+    m_matEditorEffectsScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, afterLightingFrag));
 
-    m_matBeforeLightingMesh   = new Material();
-    m_matBeforeLightingMesh->SetShaderProgram(new ShaderProgram(meshVert, beforeLightingFrag));
+    m_matAmbientLightMesh   = new Material();
+    m_matAmbientLightMesh->SetShaderProgram(new ShaderProgram(meshVert, ambientLightFrag));
 
-    m_matAfterLightingMesh    = new Material();
-    m_matAfterLightingMesh->SetShaderProgram(new ShaderProgram(meshVert, afterLightingFrag));
+    m_matEditorEffectsMesh    = new Material();
+    m_matEditorEffectsMesh->SetShaderProgram(new ShaderProgram(meshVert, afterLightingFrag));
 
     #ifdef BANG_EDITOR
     m_selectionFB = new SelectionFramebuffer(Screen::GetWidth(), Screen::GetHeight());
@@ -40,8 +40,8 @@ GraphicPipeline::GraphicPipeline()
 GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
-    delete m_matAfterLightingScreen;
-    delete m_matBeforeLightingScreen;
+    delete m_matEditorEffectsScreen;
+    delete m_matAmbientLightScreen;
     #ifdef BANG_EDITOR
     delete m_selectionFB;
     #endif
@@ -55,35 +55,88 @@ GraphicPipeline* GraphicPipeline::GetActive()
 
 void GraphicPipeline::RenderScene(Scene *scene)
 {
-    #ifdef BANG_EDITOR
-    Gizmos::Reset(); // Disable Gizmos renderers
-    #endif
+    Gizmos::Reset();
+    m_currentScene = scene;
 
-
-    m_gbuffer->Bind();
+    glDisable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     // CLEAR. First, clear everything in gbuffer (depth and all its buffers)
-    Color bgColor = scene->GetCamera()->GetClearColor();
+    Color bgColor = m_currentScene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
 
-    // Normal pass (meshes, lines, etc.)
-    RenderOpaque(scene);
-    RenderTransparent(scene);
-    //
+    m_gbuffer->Bind();
+    List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
+    List<Renderer*> renderers = m_currentScene->GetComponentsInChildren<Renderer>();
+    for (Renderer::DepthLayer depthLayer : DepthLayerOrder)
+    {
+        m_currentDepthLayer = depthLayer;
 
-    // Canvas Pass
-    m_gbuffer->ClearDepth();
-    RenderCanvasOpaque(scene);
-    RenderCanvasTransparent(scene);
-    //
-    RenderPostRenderEffects(scene); // PostRenderEffects (selection outline for example)
+        // After each pass, only the color remains
+        m_gbuffer->ClearDepth();
+        m_gbuffer->ClearAllBuffersExceptColor();
 
-    // NoDepth Pass
-    #ifdef BANG_EDITOR
-    m_gbuffer->ClearDepth();
-    RenderNoDepth(scene);
-    #endif
-    //
+        if (m_currentDepthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
+        {
+            // Opaque
+            for (Renderer *rend : renderers)
+            {
+                if (!rend->IsTransparent() && !rend->IsGizmo())
+                {
+                    RenderRenderer(rend);
+                }
+            }
+            ApplyDeferredLightsToScreen();
+
+            /*
+            for (Renderer *rend : renderers)
+            {
+                if (CAN_USE_COMPONENT(rend) &&
+                     rend->GetDepthLayer() == depthLayer &&
+                    !rend->IsTransparent())
+                {
+                    /*
+                    for (PRExtraPass prPass : rend->GetPRExtraPasses)
+                    {
+                        m_gbuffer->SetColorDrawBuffer();
+                        prPass.Apply(m_gbuffer);
+                    }
+                    */
+                //}
+            //}
+            //
+
+            // Transparent
+            for (Renderer *rend : renderers)
+            {
+                if (rend->IsTransparent() && !rend->IsGizmo())
+                {
+                    RenderRenderer(rend);
+
+                   // for (PRExtraPass prPass : rend->GetPRExtraPasses)
+                   // {
+                   //     m_gbuffer->SetColorDrawBuffer();
+                   //     prPass.Apply(m_gbuffer);
+                   // }
+                }
+            }
+            //
+
+            for (GameObject *go : sceneGameObjects)
+            {
+                go->_OnDrawGizmos();
+            }
+        }
+        else
+        {
+            for (GameObject *go : sceneGameObjects)
+            {
+                go->_OnDrawGizmosNoDepth();
+            }
+        }
+
+        ApplyEditorEffects(); // e.g. selection outline
+    }
 
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen();
@@ -100,118 +153,42 @@ void GraphicPipeline::RenderScene(Scene *scene)
     else x = 0;
     */
 
-
-    // RENDER SELECTION FRAMEBUFFER
+    // Render SelectionFramebuffer
     #ifdef BANG_EDITOR
-    RenderSelectionFramebuffer(scene);
-    // Uncomment if u want to see selectionFramebuffer
-    // glClear(GL_DEPTH_BUFFER_BIT);
-    // m_selectionFB->RenderSelectionBuffer(scene);
+    RenderSelectionFramebuffer(renderers);
     #endif
 }
 
-void GraphicPipeline::RenderOpaque(Scene *scene)
+void GraphicPipeline::RenderRenderer(Renderer *rend)
 {
-    m_transparentPass = false;
-    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
-    for (Renderer *rend : renderers)
-    {
-        if (CAN_USE_COMPONENT(rend) &&
-            !rend->IsTransparent()  && !rend->IsACanvasRenderer())
-        {
-            m_gbuffer->SetAllDrawBuffersExceptColor();
-            rend->Render();
-        }
-    }
+    if (!CAN_USE_COMPONENT(rend)) { return; }
+    if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
 
-
-    #ifdef BANG_EDITOR
-    for (GameObject *go : scene->m_children)
-    {
-        go->_OnDrawGizmos();
-    }
-    #endif
-
-    ApplyPREffectsToScreen(scene);
-}
-
-void GraphicPipeline::RenderTransparent(Scene *scene)
-{
-    m_transparentPass = true;
-    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
-    for (Renderer *rend : renderers)
-    {
-        if (CAN_USE_COMPONENT(rend) &&
-            rend->IsTransparent() && !rend->IsACanvasRenderer())
-        {
-            m_gbuffer->SetAllDrawBuffersExceptColor();
-            rend->Render();
-            ApplyPREffectsToRenderer(rend);
-        }
-    }
-
-    #ifdef BANG_EDITOR
+    glEnable(GL_STENCIL_TEST);
+    m_gbuffer->ClearStencil();
     m_gbuffer->SetAllDrawBuffersExceptColor();
-    for (GameObject *go : scene->m_children)
-    {
-        go->_OnDrawGizmos();
-        // Themselves apply the PR (from Gizmos::Render func)
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
+    rend->Render();
+    glStencilFunc(GL_EQUAL, 1, 0xFF);
+    if (rend->IsTransparent() || rend->IsGizmo())
+    {   // Immediate PostRender
+        ApplyDeferredLightsToRenderer(rend);
     }
-    #endif
+    glDisable(GL_STENCIL_TEST);
 }
 
-void GraphicPipeline::RenderCanvasOpaque(Scene *scene)
-{
-    m_transparentPass = false;
-    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
-    for (Renderer *rend : renderers)
-    {
-        if (CAN_USE_COMPONENT(rend) &&
-            !rend->IsTransparent() && rend->IsACanvasRenderer())
-        {
-            m_gbuffer->SetAllDrawBuffersExceptColor();
-            rend->Render();
-        }
-    }
-}
-
-void GraphicPipeline::RenderCanvasTransparent(Scene *scene)
-{
-    m_transparentPass = true;
-    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
-    for (Renderer *rend : renderers)
-    {
-        if (CAN_USE_COMPONENT(rend) &&
-            rend->IsTransparent() && rend->IsACanvasRenderer())
-        {
-            m_gbuffer->SetAllDrawBuffersExceptColor();
-            rend->Render();
-        }
-    }
-}
-
-void GraphicPipeline::RenderNoDepth(Scene *scene)
-{
-    m_transparentPass = false;
-    m_gbuffer->SetAllDrawBuffersExceptColor();
-    for (GameObject *go : scene->m_children)
-    {
-        go->_OnDrawGizmosNoDepth();
-    }
-    ApplyPREffectsToScreen(scene);
-}
-
-void GraphicPipeline::RenderPostRenderEffects(Scene *scene)
+void GraphicPipeline::ApplyEditorEffects()
 {
     #ifdef BANG_EDITOR
-    m_gbuffer->RenderPassWithMaterial(m_matAfterLightingScreen);
+    m_gbuffer->RenderPassWithMaterial(m_matEditorEffectsScreen);
     #endif
 }
 
-void GraphicPipeline::ApplyDeferredLightsToScreen(Scene *scene)
+void GraphicPipeline::ApplyDeferredLightsToScreen()
 {
-    List<Light*> childrenLights = scene->GetComponentsInChildren<Light>();
-    for (Light *light : childrenLights)
+    m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen);
+    List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
+    for (Light *light : lights)
     {
         if (CAN_USE_COMPONENT(light))
         {
@@ -220,22 +197,19 @@ void GraphicPipeline::ApplyDeferredLightsToScreen(Scene *scene)
     }
 }
 
-void GraphicPipeline::ApplyDeferredLightsToRenderer(Scene *scene, const Renderer *rend)
+void GraphicPipeline::ApplyDeferredLightsToRenderer(const Renderer *rend)
 {
-    List<Light*> childrenLights = scene->GetComponentsInChildren<Light>();
-    for (Light *light : childrenLights)
+    ApplyPREffectToRenderer(rend, m_matAmbientLightMesh);
+    if (rend->IsGizmo() && !rend->GetReceivesLighting()) return;
+
+    List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
+    for (Light *light : lights)
     {
         if (CAN_USE_COMPONENT(light))
         {
             light->ApplyLight(m_gbuffer, rend);
         }
     }
-}
-
-void GraphicPipeline::ApplyPREffectsToScreen(Scene *scene)
-{
-    m_gbuffer->RenderPassWithMaterial(m_matBeforeLightingScreen);
-    ApplyDeferredLightsToScreen(scene);
 }
 
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
@@ -246,24 +220,16 @@ void GraphicPipeline::OnResize(int newWidth, int newHeight)
     #endif
 }
 
-void GraphicPipeline::ApplyPREffectsToRenderer(const Renderer *renderer)
-{
-    ApplyPREffectsToRenderer(renderer, m_matBeforeLightingMesh);
-}
-
-void GraphicPipeline::ApplyPREffectsToRenderer(const Renderer *renderer, Material *mat)
+void GraphicPipeline::ApplyPREffectToRenderer(const Renderer *renderer, Material *mat)
 {
     #ifdef BANG_EDITOR
     if (m_selectionFB->IsPassing()) { return; } // If SFB passing, dont apply PR
     #endif
 
-    Scene *scene = SceneManager::GetActiveScene();
-
     // Only apply PR effects to the rendered zone of rend, not to all the screen
     m_gbuffer->SetColorDrawBuffer();
     m_gbuffer->BindInputTexturesTo(mat);
     renderer->RenderWithMaterial(mat);
-    ApplyDeferredLightsToRenderer(scene, renderer);
 }
 
 GBuffer *GraphicPipeline::GetGBuffer() const
@@ -272,11 +238,24 @@ GBuffer *GraphicPipeline::GetGBuffer() const
 }
 
 #ifdef BANG_EDITOR
-void GraphicPipeline::RenderSelectionFramebuffer(Scene *scene)
+void GraphicPipeline::RenderSelectionFramebuffer(const List<Renderer*> &renderers)
 {
+    m_selectionFB->PrepareForRender(m_currentScene);
+
     m_selectionFB->Bind();
     m_selectionFB->Clear();
-    m_selectionFB->RenderSelectionBuffer(scene);
+    for (Renderer::DepthLayer depthLayer : DepthLayerOrder)
+    {
+        m_selectionFB->ClearDepth();
+        for (Renderer *rend : renderers)
+        {
+            if (CAN_USE_COMPONENT(rend) &&
+                rend->GetDepthLayer() == depthLayer)
+            {
+                m_selectionFB->RenderForSelectionBuffer(rend);
+            }
+        }
+    }
     m_selectionFB->UnBind();
 
     m_selectionFB->ProcessSelection();
@@ -287,8 +266,3 @@ SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
     return m_selectionFB;
 }
 #endif
-
-bool GraphicPipeline::IsTransparentPass() const
-{
-    return m_transparentPass;
-}

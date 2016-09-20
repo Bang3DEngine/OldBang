@@ -57,6 +57,7 @@ public:
     void SetAllDrawBuffersExceptColor() const;
     void SetColorDrawBuffer() const;
 
+    void ClearAllBuffersExceptColor();
     void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::zero);
 };
 

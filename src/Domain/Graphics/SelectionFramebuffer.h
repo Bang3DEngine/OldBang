@@ -56,7 +56,8 @@ public:
     SelectionFramebuffer(int width, int height);
     virtual ~SelectionFramebuffer();
 
-    void RenderSelectionBuffer(const Scene *scene);
+    void PrepareForRender(const Scene *scene);
+    void RenderForSelectionBuffer(Renderer *renderer);
     void ProcessSelection();
 
     GameObject *GetGameObjectInPosition(int x, int y);

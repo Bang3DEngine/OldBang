@@ -1,5 +1,8 @@
 #include "EditorRotateAxisGroup.h"
 
+#include "Toolbar.h"
+#include "MeshRenderer.h"
+
 EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     : EditorGameObject("EditorRotateAxisGroup")
 {
@@ -12,10 +15,13 @@ EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     m_axisZ->SetParent(this);
 }
 
+EditorRotateAxisGroup::~EditorRotateAxisGroup()
+{
+}
+
 void EditorRotateAxisGroup::OnUpdate()
 {
     EditorGameObject::OnUpdate();
-
 }
 
 void EditorRotateAxisGroup::OnDrawGizmosNoDepth()
@@ -23,9 +29,12 @@ void EditorRotateAxisGroup::OnDrawGizmosNoDepth()
     EditorGameObject::OnDrawGizmosNoDepth();
 
     Vector3 center = m_axisX->m_attachedGameObject->transform->GetPosition();
-    // Billboard-scaling taken into account too
     float radius = 0.95f * m_axisX->m_circle->GetRadius() * transform->GetScale().x;
-    Gizmos::SetColor(Color::white * Color(1, 1, 1, 0.1f));
+
+    // Billboard-scaling taken into account too
+    Gizmos::SetOverlay(true);
+    Gizmos::SetColor(Color::white * Color(1, 1, 1, 0.4f));
     Gizmos::SetReceivesLighting(false);
+    Gizmos::SetDrawWireframe(false);
     Gizmos::RenderSphere(center, radius);
 }

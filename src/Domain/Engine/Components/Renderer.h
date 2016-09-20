@@ -28,7 +28,19 @@ public:
         None = GL_NONE
     );
 
+    enum DepthLayer
+    {
+        DepthLayerScene,
+        DepthLayerCanvas,
+        DepthLayerGizmosOverlay
+    };
+
 private:
+
+    DepthLayer m_depthLayer = DepthLayerScene;
+    bool m_isGizmo = false;
+    bool m_isTransparent = false;
+
     /**
      * @brief Width of the lines if rendering with Lines RenderMode
      * or if rendering with wireframe.
@@ -54,7 +66,6 @@ private:
      */
     bool m_ignoreProjectionMatrix = false;
 
-    bool m_isTransparent = false;
 
     #ifdef BANG_EDITOR
     /**
@@ -136,9 +147,6 @@ public:
 
     virtual bool IsACanvasRenderer() const;
 
-    void SetTransparent(bool transparent);
-    bool IsTransparent() const;
-
     #ifdef BANG_EDITOR
     void SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f);
 
@@ -152,6 +160,15 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    void SetTransparent(bool transparent);
+    bool IsTransparent() const;
+
+    void SetIsGizmo(bool isGizmo);
+    bool IsGizmo() const;
+
+    void SetDepthLayer(DepthLayer dl);
+    DepthLayer GetDepthLayer() const;
 
     friend class GameObject;
     friend class GraphicPipeline;
