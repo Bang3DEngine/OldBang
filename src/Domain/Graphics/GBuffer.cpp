@@ -13,9 +13,9 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     m_matPropsTexture = new TextureRender();
     m_depthTexture    = new TextureRender();
     m_colorTexture    = new TextureRender();
-    m_colorTexture->SetGLFormat(GL_RGBA);
-    m_colorTexture->SetGLInternalFormat(GL_RGBA);
-    m_colorTexture->SetGLType(GL_FLOAT);
+    //m_colorTexture->SetGLFormat(GL_RGBA);
+    //m_colorTexture->SetGLInternalFormat(GL_RGBA);
+    //m_colorTexture->SetGLType(GL_FLOAT);
 
     SetColorAttachment(Attachment::Position,           m_positionTexture);
     SetColorAttachment(Attachment::Normal,             m_normalTexture);
@@ -60,9 +60,6 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
     BindInputTexturesTo(mat);
     mat->Bind();
 
-    // Dont mess up the depth (don't overlap the plane's depth in top of everything)
-    glDepthMask(false);
-
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
     Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
     SetColorDrawBuffer();
@@ -78,7 +75,6 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
 
     mat->UnBind();
 
-    glDepthMask(true); // Back to writing depth buffer as usual
     SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
 }
 
@@ -107,14 +103,20 @@ void GBuffer::RenderScreenPlane() const
     glDepthFunc(GL_LEQUAL); //Overwrite last screen plane!
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDisable(GL_CULL_FACE);
+    // FAILING HERE
+    //glDepthMask(GL_FALSE);
+    glDisable(GL_DEPTH_TEST);
     glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());
+    glEnable(GL_DEPTH_TEST);
+    //glDepthMask(GL_TRUE);
+    glEnable(GL_CULL_FACE);
 
     m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
 }
 
 void GBuffer::RenderToScreen() const
 {
-    RenderToScreen(Attachment::Color);
+    RenderToScreen(GBuffer::Attachment::Color);
 }
 
 void GBuffer::SetAllDrawBuffersExceptColor() const

@@ -26,22 +26,9 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 void Light::ApplyLight(GBuffer *gbuffer) const
 {
     gbuffer->Bind();
-    gbuffer->SetColorDrawBuffer();
 
     SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
     gbuffer->RenderPassWithMaterial(m_lightMaterialScreen);
-
-    gbuffer->UnBind();
-}
-
-void Light::ApplyLight(GBuffer *gbuffer, const Renderer *rend) const
-{
-    gbuffer->Bind();
-    gbuffer->SetColorDrawBuffer();
-
-    SetUniformsBeforeApplyingLight(m_lightMaterialMesh);
-    gbuffer->BindInputTexturesTo(m_lightMaterialMesh);
-    rend->RenderWithMaterial(m_lightMaterialMesh);
 
     gbuffer->UnBind();
 }

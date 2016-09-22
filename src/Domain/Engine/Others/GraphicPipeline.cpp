@@ -16,21 +16,14 @@ GraphicPipeline::GraphicPipeline()
     m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
 
     String drawScreenPlaneVert = "Assets/Engine/Shaders/PR_DrawScreenPlane.vert";
-    String ambientLightFrag  = "Assets/Engine/Shaders/PR_AmbientLight.frag";
-    String afterLightingFrag  = "Assets/Engine/Shaders/PR_EditorEffects.frag";
-    String meshVert = "Assets/Engine/Shaders/PR_Mesh.vert";
+    String ambientLightFrag    = "Assets/Engine/Shaders/PR_AmbientLight.frag";
+    String afterLightingFrag   = "Assets/Engine/Shaders/PR_EditorEffects.frag";
 
     m_matAmbientLightScreen = new Material();
     m_matAmbientLightScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, ambientLightFrag));
 
     m_matEditorEffectsScreen  = new Material();
     m_matEditorEffectsScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, afterLightingFrag));
-
-    m_matAmbientLightMesh   = new Material();
-    m_matAmbientLightMesh->SetShaderProgram(new ShaderProgram(meshVert, ambientLightFrag));
-
-    m_matEditorEffectsMesh    = new Material();
-    m_matEditorEffectsMesh->SetShaderProgram(new ShaderProgram(meshVert, afterLightingFrag));
 
     #ifdef BANG_EDITOR
     m_selectionFB = new SelectionFramebuffer(Screen::GetWidth(), Screen::GetHeight());
@@ -57,9 +50,6 @@ void GraphicPipeline::RenderScene(Scene *scene)
 {
     Gizmos::Reset();
     m_currentScene = scene;
-
-    glDisable(GL_STENCIL_TEST);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     // CLEAR. First, clear everything in gbuffer (depth and all its buffers)
     Color bgColor = m_currentScene->GetCamera()->GetClearColor();
@@ -88,39 +78,14 @@ void GraphicPipeline::RenderScene(Scene *scene)
             }
             ApplyDeferredLightsToScreen();
 
-            /*
-            for (Renderer *rend : renderers)
-            {
-                if (CAN_USE_COMPONENT(rend) &&
-                     rend->GetDepthLayer() == depthLayer &&
-                    !rend->IsTransparent())
-                {
-                    /*
-                    for (PRExtraPass prPass : rend->GetPRExtraPasses)
-                    {
-                        m_gbuffer->SetColorDrawBuffer();
-                        prPass.Apply(m_gbuffer);
-                    }
-                    */
-                //}
-            //}
-            //
-
             // Transparent
             for (Renderer *rend : renderers)
             {
                 if (rend->IsTransparent() && !rend->IsGizmo())
                 {
                     RenderRenderer(rend);
-
-                   // for (PRExtraPass prPass : rend->GetPRExtraPasses)
-                   // {
-                   //     m_gbuffer->SetColorDrawBuffer();
-                   //     prPass.Apply(m_gbuffer);
-                   // }
                 }
             }
-            //
 
             for (GameObject *go : sceneGameObjects)
             {
@@ -135,23 +100,28 @@ void GraphicPipeline::RenderScene(Scene *scene)
             }
         }
 
-        ApplyEditorEffects(); // e.g. selection outline
+        ApplyEditorEffects();
+
+        /* uncomment to see all gbuffer attachments over time
+        if (depthLayer == Renderer::DepthLayer::DepthLayerScene)
+        {
+            m_gbuffer->UnBind();
+            static int x = 0, N = 40; ++x;
+            if      (x < N * 1) m_gbuffer->RenderToScreen(GBuffer::Attachment::Position);
+            else if (x < N * 2) m_gbuffer->RenderToScreen(GBuffer::Attachment::Normal);
+            else if (x < N * 3) m_gbuffer->RenderToScreen(GBuffer::Attachment::Uv);
+            else if (x < N * 4) m_gbuffer->RenderToScreen(GBuffer::Attachment::Diffuse);
+            else if (x < N * 5) m_gbuffer->RenderToScreen(GBuffer::Attachment::MaterialProperties);
+            else if (x < N * 6) m_gbuffer->RenderToScreen(GBuffer::Attachment::Depth);
+            else if (x < N * 7) m_gbuffer->RenderToScreen(GBuffer::Attachment::Color);
+            else x = 0;
+            m_gbuffer->Bind();
+        }
+        */
     }
 
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen();
-
-    /* Uncomment to loop through all GBuffer buffers
-    static int x = 0, N = 40; ++x;
-    if      (x < N * 1) m_gbuffer->RenderToScreen(GBuffer::Attachment::Position);
-    else if (x < N * 2) m_gbuffer->RenderToScreen(GBuffer::Attachment::Normal);
-    else if (x < N * 3) m_gbuffer->RenderToScreen(GBuffer::Attachment::Uv);
-    else if (x < N * 4) m_gbuffer->RenderToScreen(GBuffer::Attachment::Diffuse);
-    else if (x < N * 5) m_gbuffer->RenderToScreen(GBuffer::Attachment::MaterialProperties);
-    else if (x < N * 6) m_gbuffer->RenderToScreen(GBuffer::Attachment::Depth);
-    else if (x < N * 7) m_gbuffer->RenderToScreen(GBuffer::Attachment::Color);
-    else x = 0;
-    */
 
     // Render SelectionFramebuffer
     #ifdef BANG_EDITOR
@@ -164,17 +134,24 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
     if (!CAN_USE_COMPONENT(rend)) { return; }
     if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
 
-    glEnable(GL_STENCIL_TEST);
-    m_gbuffer->ClearStencil();
-    m_gbuffer->SetAllDrawBuffersExceptColor();
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    rend->Render();
-    glStencilFunc(GL_EQUAL, 1, 0xFF);
-    if (rend->IsTransparent() || rend->IsGizmo())
-    {   // Immediate PostRender
-        ApplyDeferredLightsToRenderer(rend);
+    bool immediatePostRender = (rend->IsTransparent() || rend->IsGizmo());
+    if (immediatePostRender)
+    {
+        glEnable(GL_STENCIL_TEST);
+        m_gbuffer->ClearStencil();
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     }
-    glDisable(GL_STENCIL_TEST);
+
+    m_gbuffer->SetAllDrawBuffersExceptColor();
+    rend->Render();
+
+    if (immediatePostRender)
+    {
+        glStencilFunc(GL_EQUAL, 1, 0xFF);
+        ApplyDeferredLightsToScreen();
+        glDisable(GL_STENCIL_TEST);
+    }
 }
 
 void GraphicPipeline::ApplyEditorEffects()
@@ -193,21 +170,6 @@ void GraphicPipeline::ApplyDeferredLightsToScreen()
         if (CAN_USE_COMPONENT(light))
         {
             light->ApplyLight(m_gbuffer);
-        }
-    }
-}
-
-void GraphicPipeline::ApplyDeferredLightsToRenderer(const Renderer *rend)
-{
-    ApplyPREffectToRenderer(rend, m_matAmbientLightMesh);
-    if (rend->IsGizmo() && !rend->GetReceivesLighting()) return;
-
-    List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
-    for (Light *light : lights)
-    {
-        if (CAN_USE_COMPONENT(light))
-        {
-            light->ApplyLight(m_gbuffer, rend);
         }
     }
 }

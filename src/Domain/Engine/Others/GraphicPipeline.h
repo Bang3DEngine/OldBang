@@ -34,10 +34,6 @@ private:
     Material *m_matAmbientLightScreen  = nullptr;
     Material *m_matEditorEffectsScreen = nullptr;
 
-    // For transparent, (local lighting, not screen)
-    Material *m_matAmbientLightMesh   = nullptr;
-    Material *m_matEditorEffectsMesh  = nullptr;
-
     void ApplyEditorEffects();
 
     /**

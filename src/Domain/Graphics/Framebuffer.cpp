@@ -45,7 +45,7 @@ void Framebuffer::CreateDepthStencilRenderbufferAttachment()
     glGenRenderbuffers(1, &m_depthStencilAttachmentId);
     //TODO:  respect former bindings of renderbuffers
     glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilAttachmentId);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_width, m_height);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH32F_STENCIL8, m_width, m_height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencilAttachmentId);
 
     CheckFramebufferError();
@@ -161,7 +161,6 @@ void Framebuffer::Clear() const
 void Framebuffer::ClearDepth() const
 {
     Bind();
-    SetAllDrawBuffers();
     glClear(GL_DEPTH_BUFFER_BIT);
     UnBind();
 }
@@ -169,7 +168,6 @@ void Framebuffer::ClearDepth() const
 void Framebuffer::ClearStencil() const
 {
     Bind();
-    SetAllDrawBuffers();
     glClear(GL_STENCIL_BUFFER_BIT);
     UnBind();
 }

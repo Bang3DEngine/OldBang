@@ -21,7 +21,7 @@ public:
         Normal,
         Uv,
         Diffuse,
-        MaterialProperties, // (receivesLighting, -, -, -)
+        MaterialProperties, // (receivesLighting, shininess, -, -)
         Depth,
         Color
     };

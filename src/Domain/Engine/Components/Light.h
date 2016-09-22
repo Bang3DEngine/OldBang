@@ -16,7 +16,6 @@ protected:
 
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
     void ApplyLight(GBuffer *gbuffer) const;
-    void ApplyLight(GBuffer *gbuffer, const Renderer *rend) const;
 
     Light();
 

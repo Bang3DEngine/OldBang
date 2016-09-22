@@ -40,11 +40,11 @@ void InitMain()
     B_vin.position_world      = texture2D(B_position_gout_fin,       B_vin.uv_screen).xyz;
     B_vin.normal_world        = texture2D(B_normal_gout_fin,         B_vin.uv_screen).xyz;
     B_vin.uv                  = texture2D(B_uv_gout_fin,             B_vin.uv_screen).xy;
-    B_vin.diffuseColor        = texture2D(B_diffuse_gout_fin,        B_vin.uv_screen).rgba;
+    B_vin.diffuseColor        = texture2D(B_diffuse_gout_fin,        B_vin.uv_screen);
     B_vin.receivesLighting    = texture2D(B_materialProps_gout_fin,  B_vin.uv_screen).x  > 0.5f;
     B_vin.shininess           = texture2D(B_materialProps_gout_fin,  B_vin.uv_screen).y;
     B_vin.depth               = texture2D(B_depth_gout_fin,          B_vin.uv_screen).x;
-    B_vin.color               = texture2D(B_color_gout_fin,          B_vin.uv_screen).rgba;
+    B_vin.color               = texture2D(B_color_gout_fin,          B_vin.uv_screen);
     B_vin.normal_world        = normalize(B_vin.normal_world);
 
     // Default value
@@ -58,6 +58,6 @@ bool IsEmpty()
 
 void EndMain()
 {
-    B_vout.color     = vec4( mix(B_vin.color.rgb, B_vout.color.rgb, B_vout.color.a), 1);
+    B_vout.color = vec4( mix(B_vin.color.rgb, B_vout.color.rgb, B_vout.color.a), 1);
     B_color_gout_gin = B_vout.color;
 }

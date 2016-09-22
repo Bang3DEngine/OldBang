@@ -152,7 +152,8 @@ OTHER_FILES += \
     Assets/Engine/Materials/PR_PointLight_Screen.bmat \
     Assets/Engine/Shaders/UI/PR_UIImage.frag \
     Assets/Engine/Materials/UI/UIImage.bmat \
-    Assets/Engine/Materials/UI/PR_UIImage.bmat
+    Assets/Engine/Materials/UI/PR_UIImage.bmat \
+    Assets/Engine/Shaders/PR_RenderBackground.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
