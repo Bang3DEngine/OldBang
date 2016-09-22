@@ -20,7 +20,7 @@ GLint IGLBindable::PreUnBind(GLenum bindTarget) const
     if (!m_target_To_BoundIdsStack.ContainsKey(bindTarget) ||
          m_target_To_BoundIdsStack[bindTarget].empty())
     {
-        Debug_Warn("Unbinding non-binded GL target.");
+        Debug_Warn("Unbinding non-binded GL target " << bindTarget);
         return 0;
     }
 

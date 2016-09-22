@@ -21,9 +21,9 @@ private:
     Renderer::DepthLayer m_currentDepthLayer =
             Renderer::DepthLayer::DepthLayerScene;
     const Renderer::DepthLayer
-        DepthLayerOrder[3] = {Renderer::DepthLayer::DepthLayerScene,
+        DepthLayerOrder [1] = {Renderer::DepthLayer::DepthLayerScene};/*,
                               Renderer::DepthLayer::DepthLayerCanvas,
-                              Renderer::DepthLayer::DepthLayerGizmosOverlay};
+                              Renderer::DepthLayer::DepthLayerGizmosOverlay};*/
 
     GBuffer *m_gbuffer = nullptr;
     #ifdef BANG_EDITOR
@@ -40,12 +40,6 @@ private:
      * @brief Apply all the scene lights over the current gbuffer.
      */
     void ApplyDeferredLightsToScreen();
-
-    /**
-     * @brief Apply all the scene lights over the specified renderer.
-     * @param scene
-     */
-    void ApplyDeferredLightsToRenderer(const Renderer *rend);
 
     #ifdef BANG_EDITOR
     void RenderSelectionFramebuffer(const List<Renderer*> &renderers);

@@ -14,7 +14,7 @@ EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
 
     m_camt = m_yawNode->transform;
     m_cam->SetZNear(0.05f);
-    m_cam->SetZFar(9999.9f);
+    m_cam->SetZFar(99.9f);
 }
 
 EditorCamera::~EditorCamera()

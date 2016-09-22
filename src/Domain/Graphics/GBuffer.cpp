@@ -13,9 +13,9 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     m_matPropsTexture = new TextureRender();
     m_depthTexture    = new TextureRender();
     m_colorTexture    = new TextureRender();
-    //m_colorTexture->SetGLFormat(GL_RGBA);
-    //m_colorTexture->SetGLInternalFormat(GL_RGBA);
-    //m_colorTexture->SetGLType(GL_FLOAT);
+    m_colorTexture->SetGLFormat(GL_RGBA);
+    m_colorTexture->SetGLInternalFormat(GL_RGBA);
+    m_colorTexture->SetGLType(GL_FLOAT);
 
     SetColorAttachment(Attachment::Position,           m_positionTexture);
     SetColorAttachment(Attachment::Normal,             m_normalTexture);
@@ -52,16 +52,16 @@ void GBuffer::BindInputTexturesTo(Material *mat) const
 void GBuffer::RenderPassWithMaterial(Material *mat) const
 {
     NONULL(mat);
-
     m_planeMeshToRenderEntireScreen->
             BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                          *(mat->GetShaderProgram()));
 
     BindInputTexturesTo(mat);
+    //mat->GetShaderProgram()->SetUniformTexture("B_color_gout_fin", m_colorTexture, false);
     mat->Bind();
 
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
-    Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
+    //Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
     SetColorDrawBuffer();
 
     Camera *camera = Scene::GetActiveScene()->GetCamera();
@@ -71,11 +71,16 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
                     ShaderContract::Uniform_Position_Camera, camera->transform->GetPosition(), false);
     }
 
+    // FAILING HERE
+    //glDepthMask(GL_FALSE);
+    glDisable(GL_DEPTH_TEST);
     RenderScreenPlane();
+    glEnable(GL_DEPTH_TEST);
+    //glDepthMask(GL_TRUE);
 
     mat->UnBind();
 
-    SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
+    //SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
 }
 
 void GBuffer::RenderToScreen(GBuffer::Attachment attachmentId) const
@@ -100,16 +105,7 @@ void GBuffer::RenderScreenPlane() const
 {
     m_planeMeshToRenderEntireScreen->GetVAO()->Bind();
 
-    glDepthFunc(GL_LEQUAL); //Overwrite last screen plane!
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glDisable(GL_CULL_FACE);
-    // FAILING HERE
-    //glDepthMask(GL_FALSE);
-    glDisable(GL_DEPTH_TEST);
     glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());
-    glEnable(GL_DEPTH_TEST);
-    //glDepthMask(GL_TRUE);
-    glEnable(GL_CULL_FACE);
 
     m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
 }
@@ -145,10 +141,16 @@ void GBuffer::ClearAllBuffersExceptColor()
 void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::Color &clearValue)
 {
     Bind();
+
+    SetAllDrawBuffers();
+    glClear(GL_STENCIL_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
+
     Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
 
     SetAllDrawBuffers();
-    glClearColor(clearValue.r, clearValue.g, clearValue.b, clearValue.a);
+    glClearColor(clearValue.r, clearValue.g, clearValue.b, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Clear stored color to backgroundColor
@@ -161,9 +163,8 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::
     glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    // Clear real depth (renderBuffer)
-    glClearDepth(1.0);
-    glClear(GL_DEPTH_BUFFER_BIT);
+    ClearDepth();
+    ClearStencil();
 
     SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
     UnBind();

@@ -45,8 +45,9 @@ void Framebuffer::CreateDepthStencilRenderbufferAttachment()
     glGenRenderbuffers(1, &m_depthStencilAttachmentId);
     //TODO:  respect former bindings of renderbuffers
     glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilAttachmentId);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH32F_STENCIL8, m_width, m_height);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_width, m_height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencilAttachmentId);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     CheckFramebufferError();
     UnBind();
@@ -130,6 +131,7 @@ void Framebuffer::Resize(int width, int height)
         //TODO:  respect former bindings of renderbuffers
         glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilAttachmentId);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
     }
 }
 
@@ -161,6 +163,7 @@ void Framebuffer::Clear() const
 void Framebuffer::ClearDepth() const
 {
     Bind();
+    glClearDepth(1.0f);
     glClear(GL_DEPTH_BUFFER_BIT);
     UnBind();
 }
@@ -168,6 +171,7 @@ void Framebuffer::ClearDepth() const
 void Framebuffer::ClearStencil() const
 {
     Bind();
+    glClearStencil(0);
     glClear(GL_STENCIL_BUFFER_BIT);
     UnBind();
 }

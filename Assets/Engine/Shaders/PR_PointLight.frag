@@ -5,7 +5,7 @@ void main()
 {
     InitMain();
 
-    if (!IsEmpty() && B_vin.receivesLighting)
+    if (B_vin.receivesLighting)
     {
         vec3 pointLightApport = GetPointLightColorApportation(
                                       B_vin.position_world,

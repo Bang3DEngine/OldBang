@@ -15,8 +15,7 @@
 
 #include "AssetsManager.h"
 
-class Material : public IGLBindable
-                ,public Asset
+class Material : public Asset
 {
 public:
     const static String GetFileExtensionStatic() { return "bmat"; }
@@ -49,8 +48,8 @@ public:
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
 
-    void Bind() const override;
-    void UnBind() const override;
+    void Bind() const;
+    void UnBind() const;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
