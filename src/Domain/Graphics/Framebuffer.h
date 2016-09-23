@@ -21,7 +21,7 @@ private:
 
     int m_width;
     int m_height;
-    GLuint m_depthStencilAttachmentId = 0;
+    GLuint m_depthAttachmentId = 0;
     Map<int, GLuint> m_attachmentId_To_GLAttachment;
     Map<int, TextureRender*> m_attachmentId_To_Texture;
     mutable Array<int> m_currentDrawAttachmentIds;
@@ -35,7 +35,7 @@ public:
     virtual ~Framebuffer();
 
     void SetColorAttachment(int attachmentId, TextureRender *tex);
-    void CreateDepthStencilRenderbufferAttachment();
+    void CreateDepthRenderbufferAttachment();
 
     TextureRender* GetColorAttachment(int attachmentId) const;
 

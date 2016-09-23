@@ -23,6 +23,7 @@ public:
         Diffuse,
         MaterialProperties, // (receivesLighting, shininess, -, -)
         Depth,
+        Stencil,
         Color
     };
 
@@ -32,6 +33,7 @@ public:
     TextureRender *m_diffuseTexture  = nullptr;
     TextureRender *m_matPropsTexture = nullptr;
     TextureRender *m_depthTexture    = nullptr;
+    TextureRender *m_stencilTexture  = nullptr;
     TextureRender *m_colorTexture    = nullptr;
 
 private:
@@ -40,6 +42,11 @@ private:
     Mesh *m_planeMeshToRenderEntireScreen = nullptr;
 
     void RenderScreenPlane() const;
+
+    // To preserve state
+    mutable Array<int> m_previousDrawAttachmentsIds;
+    void SaveCurrentDrawBuffers() const;
+    void LoadSavedDrawBuffers() const;
 
 public:
     GBuffer(int width, int height);
@@ -55,8 +62,10 @@ public:
      * This is useful for D2G render pass.
      */
     void SetAllDrawBuffersExceptColor() const;
+    void SetStencilDrawBuffer() const;
     void SetColorDrawBuffer() const;
 
+    void ClearStencil() const;
     void ClearAllBuffersExceptColor();
     void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::zero);
 };

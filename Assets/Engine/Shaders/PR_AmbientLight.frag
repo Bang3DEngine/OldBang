@@ -13,7 +13,5 @@ void main()
     B_vout.color = vec4(B_vin.diffuseColor.rgb * ambientLight,
                         B_vin.diffuseColor.a);
 
-    B_vout.color = vec4(B_vin.diffuseColor.rgb * ambientLight,
-                        B_vin.diffuseColor.a);
     EndMain();
 }

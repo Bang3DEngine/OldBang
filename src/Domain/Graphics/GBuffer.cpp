@@ -12,10 +12,8 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     m_diffuseTexture  = new TextureRender();
     m_matPropsTexture = new TextureRender();
     m_depthTexture    = new TextureRender();
+    m_stencilTexture  = new TextureRender();
     m_colorTexture    = new TextureRender();
-    m_colorTexture->SetGLFormat(GL_RGBA);
-    m_colorTexture->SetGLInternalFormat(GL_RGBA);
-    m_colorTexture->SetGLType(GL_FLOAT);
 
     SetColorAttachment(Attachment::Position,           m_positionTexture);
     SetColorAttachment(Attachment::Normal,             m_normalTexture);
@@ -23,8 +21,9 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     SetColorAttachment(Attachment::Diffuse,            m_diffuseTexture);
     SetColorAttachment(Attachment::MaterialProperties, m_matPropsTexture);
     SetColorAttachment(Attachment::Depth,              m_depthTexture);
+    SetColorAttachment(Attachment::Stencil,            m_stencilTexture);
     SetColorAttachment(Attachment::Color,              m_colorTexture);
-    CreateDepthStencilRenderbufferAttachment();
+    CreateDepthRenderbufferAttachment();
 
     String renderToScreenMatFilepath =
             "Assets/Engine/Materials/RenderGBufferToScreen.bmat";
@@ -46,6 +45,7 @@ void GBuffer::BindInputTexturesTo(Material *mat) const
     sp->SetUniformTexture("B_diffuse_gout_fin",            m_diffuseTexture,  false);
     sp->SetUniformTexture("B_materialProps_gout_fin",      m_matPropsTexture, false);
     sp->SetUniformTexture("B_depth_gout_fin",              m_depthTexture,    false);
+    sp->SetUniformTexture("B_stencil_gout_fin",            m_stencilTexture,  false);
     sp->SetUniformTexture("B_color_gout_fin",              m_colorTexture,    false);
 }
 
@@ -57,11 +57,10 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
                                          *(mat->GetShaderProgram()));
 
     BindInputTexturesTo(mat);
-    //mat->GetShaderProgram()->SetUniformTexture("B_color_gout_fin", m_colorTexture, false);
     mat->Bind();
 
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
-    //Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
+    Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
     SetColorDrawBuffer();
 
     Camera *camera = Scene::GetActiveScene()->GetCamera();
@@ -72,15 +71,13 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
     }
 
     // FAILING HERE
-    //glDepthMask(GL_FALSE);
-    glDisable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
     RenderScreenPlane();
-    glEnable(GL_DEPTH_TEST);
-    //glDepthMask(GL_TRUE);
+    glDepthMask(GL_TRUE);
 
     mat->UnBind();
 
-    //SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
+    SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
 }
 
 void GBuffer::RenderToScreen(GBuffer::Attachment attachmentId) const
@@ -105,9 +102,21 @@ void GBuffer::RenderScreenPlane() const
 {
     m_planeMeshToRenderEntireScreen->GetVAO()->Bind();
 
+    glDepthFunc(GL_LEQUAL);
     glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());
+    glDepthFunc(GL_LESS);
 
     m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
+}
+
+void GBuffer::SaveCurrentDrawBuffers() const
+{
+    m_previousDrawAttachmentsIds = GetCurrentDrawAttachmentIds();
+}
+
+void GBuffer::LoadSavedDrawBuffers() const
+{
+    SetDrawBuffers(m_previousDrawAttachmentsIds);
 }
 
 void GBuffer::RenderToScreen() const
@@ -122,7 +131,13 @@ void GBuffer::SetAllDrawBuffersExceptColor() const
                     GBuffer::Attachment::Uv,
                     GBuffer::Attachment::Diffuse,
                     GBuffer::Attachment::MaterialProperties,
+                    GBuffer::Attachment::Stencil,
                     GBuffer::Attachment::Depth});
+}
+
+void GBuffer::SetStencilDrawBuffer() const
+{
+    SetDrawBuffers({GBuffer::Attachment::Stencil});
 }
 
 void GBuffer::SetColorDrawBuffer() const
@@ -130,12 +145,29 @@ void GBuffer::SetColorDrawBuffer() const
     SetDrawBuffers({GBuffer::Attachment::Color});
 }
 
+void GBuffer::ClearStencil() const
+{
+    SaveCurrentDrawBuffers();
+
+    Bind();
+    SetStencilDrawBuffer();
+    glClearColor(0,0,0,0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    UnBind();
+
+    LoadSavedDrawBuffers();
+}
+
 void GBuffer::ClearAllBuffersExceptColor()
 {
+    SaveCurrentDrawBuffers();
+
     Bind();
     SetAllDrawBuffersExceptColor();
     glClear(GL_COLOR_BUFFER_BIT);
     UnBind();
+
+    LoadSavedDrawBuffers();
 }
 
 void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::Color &clearValue)
@@ -143,11 +175,10 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::
     Bind();
 
     SetAllDrawBuffers();
-    glClear(GL_STENCIL_BUFFER_BIT);
     glClear(GL_DEPTH_BUFFER_BIT);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
+    SaveCurrentDrawBuffers();
 
     SetAllDrawBuffers();
     glClearColor(clearValue.r, clearValue.g, clearValue.b, 1);
@@ -166,6 +197,6 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::
     ClearDepth();
     ClearStencil();
 
-    SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
+    LoadSavedDrawBuffers();
     UnBind();
 }

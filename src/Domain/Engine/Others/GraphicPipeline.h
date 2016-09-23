@@ -21,9 +21,9 @@ private:
     Renderer::DepthLayer m_currentDepthLayer =
             Renderer::DepthLayer::DepthLayerScene;
     const Renderer::DepthLayer
-        DepthLayerOrder [1] = {Renderer::DepthLayer::DepthLayerScene};/*,
-                              Renderer::DepthLayer::DepthLayerCanvas,
-                              Renderer::DepthLayer::DepthLayerGizmosOverlay};*/
+        DepthLayerOrder [3] = {Renderer::DepthLayer::DepthLayerScene,
+                               Renderer::DepthLayer::DepthLayerCanvas,
+                               Renderer::DepthLayer::DepthLayerGizmosOverlay};
 
     GBuffer *m_gbuffer = nullptr;
     #ifdef BANG_EDITOR

@@ -20,7 +20,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     m_worldPosTexture = new TextureRender();
     SetColorAttachment(Attachment::ColorAttachment, m_colorTexture);
     SetColorAttachment(Attachment::WorldPosition, m_worldPosTexture);
-    CreateDepthStencilRenderbufferAttachment();
+    CreateDepthRenderbufferAttachment();
 }
 
 SelectionFramebuffer::~SelectionFramebuffer()

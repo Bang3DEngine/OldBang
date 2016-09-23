@@ -58,6 +58,6 @@ bool IsEmpty()
 
 void EndMain()
 {
-    B_vout.color = vec4( mix(B_vin.color.rgb, B_vout.color.rgb, B_vout.color.a), 1);
+    B_vout.color = vec4( mix(B_vin.color.rgb, B_vout.color.rgb, B_vout.color.a), 1 );
     B_color_gout_gin = B_vout.color;
 }

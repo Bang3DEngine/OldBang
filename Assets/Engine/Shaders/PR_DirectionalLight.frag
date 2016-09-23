@@ -5,7 +5,6 @@ void main()
 {
     InitMain();
 
-    B_vout.color = B_vin.color;
     if (B_vin.receivesLighting)
     {
         vec3 dirLightApport = GetDirectionalLightColorApportation(

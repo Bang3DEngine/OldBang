@@ -78,16 +78,15 @@ void GraphicPipeline::RenderScene(Scene *scene)
 
         // After each pass, only the color remains
         m_gbuffer->ClearDepth();
-        m_gbuffer->ClearStencil();
         m_gbuffer->ClearAllBuffersExceptColor();
 
         if (m_currentDepthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
         {
-            /*
-            glEnable(GL_STENCIL_TEST);
+            /*glEnable(GL_STENCIL_TEST);
             m_gbuffer->ClearStencil();
             glStencilFunc(GL_ALWAYS, 1, 0xFF);
             glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+            */
             // Opaque
             for (Renderer *rend : renderers)
             {
@@ -96,11 +95,12 @@ void GraphicPipeline::RenderScene(Scene *scene)
                     RenderRenderer(rend);
                 }
             }
-            glStencilFunc(GL_EQUAL, 1, 0xFF);
-            glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
             ApplyDeferredLightsToScreen();
+           /* glStencilFunc(GL_EQUAL, 1, 0xFF);
+            glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
             glDisable(GL_STENCIL_TEST);
             */
+
             // Transparent
             for (Renderer *rend : renderers)
             {
@@ -109,6 +109,7 @@ void GraphicPipeline::RenderScene(Scene *scene)
                     RenderRenderer(rend);
                 }
             }
+
             /*
             m_gbuffer->UnBind();
             if (m_currentDepthLayer == Renderer::DepthLayer::DepthLayerScene)
@@ -130,18 +131,18 @@ void GraphicPipeline::RenderScene(Scene *scene)
 
             for (GameObject *go : sceneGameObjects)
             {
-            //    go->_OnDrawGizmos();
+                go->_OnDrawGizmos();
             }
         }
         else
         {
             for (GameObject *go : sceneGameObjects)
             {
-            //    go->_OnDrawGizmosNoDepth();
+                go->_OnDrawGizmosNoDepth();
             }
         }
 
-        //ApplyEditorEffects();
+        ApplyEditorEffects();
 
         // uncomment to see all gbuffer attachments over time
         /*
@@ -179,10 +180,11 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
     bool immediatePostRender = (rend->IsTransparent() || rend->IsGizmo());
     if (immediatePostRender)
     {
-        m_gbuffer->ClearStencil();
-        glEnable(GL_STENCIL_TEST);
+        /*m_gbuffer->ClearStencil();
+        //glEnable(GL_STENCIL_TEST);
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+        */
     }
 
     m_gbuffer->SetAllDrawBuffersExceptColor();
@@ -190,10 +192,10 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
 
     if (immediatePostRender)
     {
-        glStencilFunc(GL_EQUAL, 1, 0xFF);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-        ApplyDeferredLightsToScreen();
-        glDisable(GL_STENCIL_TEST);
+       //glStencilFunc(GL_EQUAL, 1, 0xFF);
+       // glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+       ApplyDeferredLightsToScreen();
+       // glDisable(GL_STENCIL_TEST);
     }
 }
 
