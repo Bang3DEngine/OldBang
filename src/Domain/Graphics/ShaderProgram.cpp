@@ -64,8 +64,6 @@ bool ShaderProgram::Link()
           String errorStr(errorLog);
           Debug_Error("Can't link " << std::endl << this << std::endl <<
                        "   Reason:  " << errorStr);
-
-          free(errorLog);
         }
 
         glDeleteProgram(m_idGL);

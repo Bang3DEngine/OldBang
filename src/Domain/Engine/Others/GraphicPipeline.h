@@ -32,9 +32,9 @@ private:
 
     // For opaque
     Material *m_matAmbientLightScreen  = nullptr;
-    Material *m_matEditorEffectsScreen = nullptr;
+    Material *m_matSelectionEffectScreen = nullptr;
 
-    void ApplyEditorEffects();
+    void ApplySelectionEffect();
 
     /**
      * @brief Apply all the scene lights over the current gbuffer.

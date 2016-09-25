@@ -1,4 +1,3 @@
-#include "Version.glsl"
 #define BANG_FRAGMENT
 #include "Uniforms.glsl"
 
@@ -29,7 +28,11 @@ out vec4 B_color_gout_gin; // Accumulated color
 
 bool PassStencil()
 {
+    #ifndef BANG_NO_STENCIL_TEST
     return !B_stencilTestEnabled || B_vin.stencil == 1;
+    #else
+    return true;
+    #endif
 }
 
 void InitMain()

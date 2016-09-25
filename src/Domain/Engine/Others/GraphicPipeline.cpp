@@ -8,6 +8,7 @@
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
+#include "Hierarchy.h"
 #include "SelectionFramebuffer.h"
 #endif
 
@@ -17,13 +18,13 @@ GraphicPipeline::GraphicPipeline()
 
     String drawScreenPlaneVert = "Assets/Engine/Shaders/PR_DrawScreenPlane.vert";
     String ambientLightFrag    = "Assets/Engine/Shaders/PR_AmbientLight.frag";
-    String afterLightingFrag   = "Assets/Engine/Shaders/PR_EditorEffects.frag";
+    String afterLightingFrag   = "Assets/Engine/Shaders/PR_SelectionEffect.frag";
 
     m_matAmbientLightScreen = new Material();
     m_matAmbientLightScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, ambientLightFrag));
 
-    m_matEditorEffectsScreen  = new Material();
-    m_matEditorEffectsScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, afterLightingFrag));
+    m_matSelectionEffectScreen  = new Material();
+    m_matSelectionEffectScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, afterLightingFrag));
 
     #ifdef BANG_EDITOR
     m_selectionFB = new SelectionFramebuffer(Screen::GetWidth(), Screen::GetHeight());
@@ -33,7 +34,7 @@ GraphicPipeline::GraphicPipeline()
 GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
-    delete m_matEditorEffectsScreen;
+    delete m_matSelectionEffectScreen;
     delete m_matAmbientLightScreen;
     #ifdef BANG_EDITOR
     delete m_selectionFB;
@@ -56,6 +57,7 @@ void GraphicPipeline::RenderScene(Scene *scene)
     m_gbuffer->ClearBuffersAndBackground(bgColor);
 
     m_gbuffer->Bind();
+    m_gbuffer->SetStencilWrite(true);
     List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
     List<Renderer*> renderers = m_currentScene->GetComponentsInChildren<Renderer>();
     for (Renderer::DepthLayer depthLayer : DepthLayerOrder)
@@ -95,13 +97,12 @@ void GraphicPipeline::RenderScene(Scene *scene)
         }
         else
         {
+            ApplySelectionEffect(); // Before rendering Overlay Gizmos
             for (GameObject *go : sceneGameObjects)
             {
                 go->_OnDrawGizmosNoDepth();
             }
         }
-
-        ApplyEditorEffects();
     }
 
     m_gbuffer->UnBind();
@@ -144,10 +145,43 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
     }
 }
 
-void GraphicPipeline::ApplyEditorEffects()
+void GraphicPipeline::ApplySelectionEffect()
 {
     #ifdef BANG_EDITOR
-    m_gbuffer->RenderPassWithMaterial(m_matEditorEffectsScreen);
+
+    if (!Hierarchy::GetInstance()->GetFirstSelectedGameObject()) { return; }
+
+    List<GameObject*> sceneGameObjects =
+            m_currentScene->GetChildrenRecursivelyEditor();
+
+    // Create stencil mask that the selection pass will use
+    m_gbuffer->ClearDepth();
+    m_gbuffer->ClearStencil();
+    m_gbuffer->SetAllDrawBuffersExceptColor();
+    m_gbuffer->SetStencilWrite(true);
+    m_gbuffer->SetStencilTest(false);
+    for (GameObject *go : sceneGameObjects)
+    {
+        if (go->IsSelectedInHierarchy())
+        {
+            List<Renderer*> rends = go->GetComponentsInThisAndChildren<Renderer>();
+            for (Renderer *rend : rends)
+            {
+                if (CAN_USE_COMPONENT(rend))
+                {
+                    rend->Render();
+                }
+            }
+        }
+    }
+    m_gbuffer->SetStencilWrite(false);
+
+    // Apply selection outline
+    m_gbuffer->RenderPassWithMaterial(m_matSelectionEffectScreen);
+
+    m_gbuffer->ClearDepth();
+    m_gbuffer->ClearStencil();
+
     #endif
 }
 
@@ -189,11 +223,14 @@ void GraphicPipeline::
     m_selectionFB->PrepareForRender(m_currentScene);
 
     m_selectionFB->Bind();
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT);
     m_selectionFB->Clear();
     List<GameObject*> sceneGameObjects =
             m_currentScene->GetChildrenRecursivelyEditor();
     for (Renderer::DepthLayer depthLayer : DepthLayerOrder)
     {
+        glClear(GL_DEPTH_BUFFER_BIT);
         m_currentDepthLayer = depthLayer;
         m_selectionFB->ClearDepth();
 

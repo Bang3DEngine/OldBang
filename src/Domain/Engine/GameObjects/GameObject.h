@@ -251,11 +251,23 @@ public:
         for (auto c = m_children.Begin(); c != m_children.End(); ++c)
         {
             List<T*> childComps = (*c)->GetComponents<T>();
-            comps_l.Splice(comps_l.End(), childComps); //concat
+            comps_l.Splice(comps_l.Begin(), childComps); //concat
             List<T*> childChildrenComps = (*c)->GetComponentsInChildren<T>();
-            comps_l.Splice(comps_l.End(), childChildrenComps); //concat
+            comps_l.Splice(comps_l.Begin(), childChildrenComps); //concat
         }
         return comps_l;
+    }
+
+    /**
+     * Returns all the Components<T> of it and its children
+     */
+    template <class T>
+    List<T*> GetComponentsInThisAndChildren() const
+    {
+        List<T*> comps = GetComponentsInChildren<T>();
+        List<T*> thisComps = GetComponents<T>();
+        comps.Splice(comps.Begin(), thisComps);
+        return comps;
     }
 
     /**

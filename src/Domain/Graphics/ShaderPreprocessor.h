@@ -16,6 +16,8 @@ class ShaderPreprocessor
 private:
     ShaderPreprocessor();
 
+    static const String c_version;
+
     static const Array<String> c_includePaths;
 
     /**

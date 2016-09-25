@@ -1,4 +1,3 @@
-#include "Version.glsl"
 #define BANG_VERTEX
 #include "Uniforms.glsl"
 

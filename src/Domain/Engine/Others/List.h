@@ -33,18 +33,18 @@ public:
         return std::find(Begin(), End(), x) != End();
     }
 
-    void Splice(Iterator insertBefore, List &from)
+    void Splice(Iterator insertAfter, List &from)
     {
-        this->splice(insertBefore, from);
+        this->splice(insertAfter, from);
     }
-    void Splice(Iterator insertBefore, List &from, Iterator element)
+    void Splice(Iterator insertAfter, List &from, Iterator element)
     {
-        this->splice(insertBefore, from, element);
+        this->splice(insertAfter, from, element);
     }
-    void Splice(Iterator insertBefore, List &src,
+    void Splice(Iterator insertAfter, List &src,
                 Iterator srcRangeBegin, Iterator srcRangeEnd)
     {
-        this->splice(insertBefore, src, srcRangeBegin, srcRangeEnd);
+        this->splice(insertAfter, src, srcRangeBegin, srcRangeEnd);
     }
 
 

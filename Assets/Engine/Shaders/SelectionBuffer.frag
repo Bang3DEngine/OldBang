@@ -1,5 +1,3 @@
-#include "Version.glsl"
-
 uniform vec4 selectionColor;
 
 in vec4 B_position_raw_vout_fin;

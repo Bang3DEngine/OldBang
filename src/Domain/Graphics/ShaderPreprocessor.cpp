@@ -2,6 +2,8 @@
 
 #include "Debug.h"
 
+const String ShaderPreprocessor::c_version = "#version 130";
+
 const Array<String> ShaderPreprocessor::c_includePaths =
 {
     "Assets/Engine/Shaders/Include"
@@ -56,7 +58,7 @@ String ShaderPreprocessor::
     return "";
 }
 
-// TODO: Do recursively. Solve #line problem
+// TODO: Do recursively.
 void ShaderPreprocessor::PreprocessShaderCode(String *shaderSourceCode)
 {
     String &code = *shaderSourceCode;
@@ -95,4 +97,7 @@ void ShaderPreprocessor::PreprocessShaderCode(String *shaderSourceCode)
     }
 
     code = String::Join(lines, "\n"); // Update the code String adding all the lines
+
+    // Finally, add the version. It must be the very first line
+    code.Prepend(ShaderPreprocessor::c_version + "\n");
 }

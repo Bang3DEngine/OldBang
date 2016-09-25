@@ -114,7 +114,6 @@ OTHER_FILES += \
     Assets/Engine/Materials/PR_EditorEffects.bmat \
     Assets/Engine/Materials/PR_DirectionalLight.bmat \
     Assets/Engine/Materials/PR_PointLight.bmat \
-    Assets/Engine/Shaders/PR_EditorEffects.frag \
     Assets/Behaviours/RandomScale.h \
     Assets/Behaviours/RandomScale.cpp \
     Assets/Engine/Shaders/PR_DrawScreenPlane.vert \
@@ -138,7 +137,6 @@ OTHER_FILES += \
     Assets/Engine/Shaders/Include/D2G.vert \
     Assets/Engine/Shaders/Include/PR.vert \
     Assets/Engine/Shaders/Include/Uniforms.glsl \
-    Assets/Engine/Shaders/Include/Version.glsl \
     Assets/Engine/Shaders/Include/PointLight.glsl \
     Assets/Engine/Shaders/Include/DirectionalLight.glsl \
     Assets/Engine/Materials/PR_AmbientLight.bmat \
@@ -151,7 +149,9 @@ OTHER_FILES += \
     Assets/Engine/Materials/UI/UIImage.bmat \
     Assets/Engine/Materials/UI/PR_UIImage.bmat \
     Assets/Engine/Shaders/PR_RenderBackground.frag \
-    Assets/Engine/Shaders/Include/Main.glsl
+    Assets/Engine/Shaders/Include/Main.glsl \
+    Assets/Engine/Shaders/SelectionBuffer.vert \
+    Assets/Engine/Shaders/PR_SelectionEffect.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

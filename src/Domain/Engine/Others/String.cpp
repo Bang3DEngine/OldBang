@@ -147,6 +147,16 @@ String String::Join(const List<String> &parts, String joiner)
     return all;
 }
 
+void String::Append(const String &str)
+{
+    *this = *this + str;
+}
+
+void String::Prepend(const String &str)
+{
+    *this = str + *this;
+}
+
 void String::Insert(Iterator it, char c)
 {
     insert(it, c);

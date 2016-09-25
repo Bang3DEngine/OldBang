@@ -41,6 +41,9 @@ public:
     static String Join(const Array<String> &parts, String joiner = "");
     static String Join(const List<String>  &parts, String joiner = "");
 
+    void Append(const String &str);
+    void Prepend(const String &str);
+
     void Insert(Iterator it, char c);
 
     Iterator Begin() { return this->begin(); }

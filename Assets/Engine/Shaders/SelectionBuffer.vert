@@ -1,5 +1,3 @@
-#version 130
-
 uniform mat4 B_matrix_model;
 uniform mat4 B_matrix_view;
 uniform mat4 B_matrix_projection;
