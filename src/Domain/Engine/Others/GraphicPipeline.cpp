@@ -11,9 +11,6 @@
 #include "SelectionFramebuffer.h"
 #endif
 
-static int pass = 0;
-static int passLimit = 1    ;
-
 GraphicPipeline::GraphicPipeline()
 {
     m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
@@ -51,17 +48,6 @@ GraphicPipeline* GraphicPipeline::GetActive()
 
 void GraphicPipeline::RenderScene(Scene *scene)
 {
-    pass = 0;
-
-    if (Input::GetKeyDown(Input::Key::Up))
-    {
-        ++passLimit;
-    }
-    else if (Input::GetKeyDown(Input::Key::Down))
-    {
-        --passLimit;
-    }
-
     Gizmos::Reset();
     m_currentScene = scene;
 
@@ -83,7 +69,6 @@ void GraphicPipeline::RenderScene(Scene *scene)
 
         if (m_currentDepthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
         {
-            m_gbuffer->ClearStencil();
             // Opaque
             for (Renderer *rend : renderers)
             {
@@ -107,26 +92,6 @@ void GraphicPipeline::RenderScene(Scene *scene)
             {
                 go->_OnDrawGizmos();
             }
-
-            /*
-            m_gbuffer->UnBind();
-            if (m_currentDepthLayer == Renderer::DepthLayer::DepthLayerScene)
-            {
-                static int N = 8, x = 0;
-                if (Input::GetKeyDown(Input::Key::Right))     x = (x + 1 + N) % N;
-                else if (Input::GetKeyDown(Input::Key::Left)) x = (x - 1 + N) % N;
-
-                if (x == 0) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Position); }
-                else if (x == 1) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Normal); }
-                else if (x == 2) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Uv); }
-                else if (x == 3) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Diffuse); }
-                else if (x == 4) { m_gbuffer->RenderToScreen(GBuffer::Attachment::MaterialProperties); }
-                else if (x == 5) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Depth); }
-                else if (x == 6) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Stencil); }
-                else if (x == 7) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Color); }
-            }
-            m_gbuffer->Bind();
-            */
         }
         else
         {
@@ -137,30 +102,11 @@ void GraphicPipeline::RenderScene(Scene *scene)
         }
 
         ApplyEditorEffects();
-
-        // uncomment to see all gbuffer attachments over time
-        /*
-        if (depthLayer == Renderer::DepthLayer::DepthLayerScene)
-        {
-            m_gbuffer->UnBind();
-            static int x = 0, N = 40; ++x;
-            if      (x < N * 1) m_gbuffer->RenderToScreen(GBuffer::Attachment::Position);
-            else if (x < N * 2) m_gbuffer->RenderToScreen(GBuffer::Attachment::Normal);
-            else if (x < N * 3) m_gbuffer->RenderToScreen(GBuffer::Attachment::Uv);
-            else if (x < N * 4) m_gbuffer->RenderToScreen(GBuffer::Attachment::Diffuse);
-            else if (x < N * 5) m_gbuffer->RenderToScreen(GBuffer::Attachment::MaterialProperties);
-            else if (x < N * 6) m_gbuffer->RenderToScreen(GBuffer::Attachment::Depth);
-            else if (x < N * 7) m_gbuffer->RenderToScreen(GBuffer::Attachment::Color);
-            else x = 0;
-            m_gbuffer->Bind();
-        }
-        */
     }
 
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen();
 
-    // Render SelectionFramebuffer
     #ifdef BANG_EDITOR
     RenderSelectionFramebuffer(renderers);
     #endif
@@ -171,23 +117,30 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
     if (!CAN_USE_COMPONENT(rend)) { return; }
     if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
 
-    bool immediatePostRender = (rend->IsTransparent() || rend->IsGizmo());
-    if (immediatePostRender)
+    if (!m_selectionFB->IsPassing())
     {
-        m_gbuffer->ClearStencil();
-        m_gbuffer->SetStencilWrite(true);
-        m_gbuffer->SetStencilTest(false);
+        bool immediatePostRender = (rend->IsTransparent() || rend->IsGizmo());
+        if (immediatePostRender)
+        {
+            m_gbuffer->ClearStencil();
+            m_gbuffer->SetStencilWrite(true);
+            m_gbuffer->SetStencilTest(false);
+        }
+
+        m_gbuffer->SetAllDrawBuffersExceptColor();
+        rend->Render();
+
+        if (immediatePostRender)
+        {
+           m_gbuffer->SetStencilWrite(false);
+           m_gbuffer->SetStencilTest(true);
+           ApplyDeferredLightsToScreen();
+           m_gbuffer->SetStencilTest(false);
+        }
     }
-
-    m_gbuffer->SetAllDrawBuffersExceptColor();
-    rend->Render();
-
-    if (immediatePostRender)
+    else
     {
-       m_gbuffer->SetStencilWrite(false);
-       m_gbuffer->SetStencilTest(true);
-       ApplyDeferredLightsToScreen();
-       m_gbuffer->SetStencilTest(false);
+        m_selectionFB->RenderForSelectionBuffer(rend);
     }
 }
 
@@ -229,27 +182,50 @@ GBuffer *GraphicPipeline::GetGBuffer() const
 }
 
 #ifdef BANG_EDITOR
-void GraphicPipeline::RenderSelectionFramebuffer(const List<Renderer*> &renderers)
+void GraphicPipeline::
+   RenderSelectionFramebuffer(const List<Renderer*> &renderers)
 {
+    m_selectionFB->m_isPassing = true;
     m_selectionFB->PrepareForRender(m_currentScene);
 
     m_selectionFB->Bind();
     m_selectionFB->Clear();
+    List<GameObject*> sceneGameObjects =
+            m_currentScene->GetChildrenRecursivelyEditor();
     for (Renderer::DepthLayer depthLayer : DepthLayerOrder)
     {
+        m_currentDepthLayer = depthLayer;
         m_selectionFB->ClearDepth();
-        for (Renderer *rend : renderers)
+
+        if (depthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
         {
-            if (CAN_USE_COMPONENT(rend) &&
-                rend->GetDepthLayer() == depthLayer)
+            for (Renderer *rend : renderers)
             {
-                m_selectionFB->RenderForSelectionBuffer(rend);
+                if (!rend->IsGizmo())
+                {
+                    RenderRenderer(rend);
+                }
+            }
+
+            for (GameObject *go : sceneGameObjects)
+            {
+                m_selectionFB->PrepareNextGameObject(go);
+                go->_OnDrawGizmos();
+            }
+        }
+        else
+        {
+            for (GameObject *go : sceneGameObjects)
+            {
+                m_selectionFB->PrepareNextGameObject(go);
+                go->_OnDrawGizmosNoDepth();
             }
         }
     }
     m_selectionFB->UnBind();
 
     m_selectionFB->ProcessSelection();
+    m_selectionFB->m_isPassing = false;
 }
 
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const

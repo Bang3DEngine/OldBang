@@ -98,8 +98,6 @@ OTHER_FILES += \
     Assets/Engine/Meshes/Sphere.bmesh \
     Assets/Engine/Meshes/Pyramid.bmesh \
     Assets/Engine/Shaders/PR_DirectionalLight.frag \
-    Assets/Engine/Shaders/D2G_Line.frag \
-    Assets/Engine/Shaders/D2G_Line.vert \
     Assets/Engine/Shaders/D2G_Default.frag \
     Assets/Engine/Shaders/D2G_Default.vert \
     Assets/Engine/Shaders/PR_DrawScreenPlane.vert \
@@ -113,7 +111,6 @@ OTHER_FILES += \
     Assets/Scenes/tmp.bscene \
     Assets/Scenes/test2.bscene \
     Assets/Engine/Materials/D2G_Default.bmat \
-    Assets/Engine/Materials/D2G_Line.bmat \
     Assets/Engine/Materials/PR_EditorEffects.bmat \
     Assets/Engine/Materials/PR_DirectionalLight.bmat \
     Assets/Engine/Materials/PR_PointLight.bmat \

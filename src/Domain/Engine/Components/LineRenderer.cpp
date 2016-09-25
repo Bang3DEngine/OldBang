@@ -4,11 +4,6 @@ LineRenderer::LineRenderer()
 {
     m_vbo = new VBO();
     m_vao = new VAO();
-
-    Material *m = AssetsManager::LoadAsset<Material>(
-                "./Assets/Engine/Materials/D2G_Line.bmat" );
-    SetMaterial(m);
-    SetLineWidth(1.0f);
 }
 
 LineRenderer::~LineRenderer()

@@ -28,10 +28,11 @@ private:
 
     /**
      * @brief m_isPassing is true only when SelectionFrambuffer is rendering.
-     * It is used by the Renderer's, to know if they have to activate its special states
-     * before rendering.
+     * It is used by the Renderer's, to know if they have to activate its
+     * special states before rendering.
      */
     bool m_isPassing = false;
+    GameObject *m_nextGameObjectToBeRendered = nullptr;
 
     ShaderProgram *m_program = nullptr;
     Material *m_material = nullptr;
@@ -57,6 +58,7 @@ public:
     virtual ~SelectionFramebuffer();
 
     void PrepareForRender(const Scene *scene);
+    void PrepareNextGameObject(GameObject *go);
     void RenderForSelectionBuffer(Renderer *renderer);
     void ProcessSelection();
 
@@ -66,6 +68,8 @@ public:
     bool IsPassing() const;
 
     void OnGameObjectDestroyed(GameObject *destroyed) override;
+
+    friend class GraphicPipeline;
 };
 
 #endif // SELECTIONFRAMEBUFFER_H

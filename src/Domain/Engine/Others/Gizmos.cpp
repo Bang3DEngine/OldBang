@@ -348,7 +348,7 @@ void Gizmos::Reset()
     Gizmos::SetColor(Color::green);
     Gizmos::SetLineWidth(1.0f);
     Gizmos::SetReceivesLighting(false);
-    Gizmos::SetDrawWireframe(true);
+    Gizmos::SetDrawWireframe(false);
     Gizmos::SetIgnoreMatrices(false, false, false);
     Gizmos::SetOverlay(false);
 

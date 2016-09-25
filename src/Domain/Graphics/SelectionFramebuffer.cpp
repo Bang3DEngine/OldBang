@@ -19,7 +19,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     m_colorTexture = new TextureRender();
     m_worldPosTexture = new TextureRender();
     SetColorAttachment(Attachment::ColorAttachment, m_colorTexture);
-    SetColorAttachment(Attachment::WorldPosition, m_worldPosTexture);
+    SetColorAttachment(Attachment::WorldPosition,   m_worldPosTexture);
     CreateDepthRenderbufferAttachment();
 }
 
@@ -44,20 +44,23 @@ void SelectionFramebuffer::PrepareForRender(const Scene *scene)
     //
 }
 
+void SelectionFramebuffer::PrepareNextGameObject(GameObject *go)
+{
+    m_nextGameObjectToBeRendered = go;
+}
+
 void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     SetAllDrawBuffers();
 
-    m_isPassing = true;
-
     ShaderProgram *sp = m_material->GetShaderProgram();
-    if (CanRenderGameObject(rend->gameObject))
+    GameObject *go = !rend->IsGizmo() ? rend->gameObject :
+                                        m_nextGameObjectToBeRendered;
+    if (CanRenderGameObject(go))
     {
-        sp->SetUniformColor("selectionColor", GetSelectionColor(rend->gameObject));
+        sp->SetUniformColor("selectionColor", GetSelectionColor(go));
         rend->RenderWithMaterial(m_material);
     }
-
-    m_isPassing = false;
 }
 
 void SelectionFramebuffer::ProcessSelection()
@@ -169,8 +172,8 @@ bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
     if (go->IsEditorGameObject())
     {
        const EditorGameObject *ego = static_cast<const EditorGameObject*>(go);
-       return ego->IsEnabled() && !ego->IsDraggedGameObject() &&
+       return ego && ego->IsEnabled() && !ego->IsDraggedGameObject() &&
               ego->IsRenderInSelectionFramebuffer();
     }
-    return go->IsEnabled() && !go->IsDraggedGameObject();
+    return go && go->IsEnabled() && !go->IsDraggedGameObject();
 }

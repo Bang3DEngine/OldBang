@@ -16,6 +16,9 @@ Renderer::Renderer()
     #ifdef BANG_EDITOR
     ActivateGLStatesBeforeRenderingForSelection = [](){};
     #endif
+
+    m_material = AssetsManager::LoadAsset<Material>(
+                    "./Assets/Engine/Materials/D2G_Default.bmat" );
 }
 
 void Renderer::CloneInto(ICloneable *clone) const
@@ -80,17 +83,7 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
 
 void Renderer::Render() const
 {
-    #ifdef BANG_EDITOR
-    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
-    if (sfb && sfb->IsPassing())
-    {   // For SelectionFramebuffer OnDrawGizmos(NoDepth)
-        RenderWithMaterial( sfb->GetSelectionMaterial() ); // RENDER FOR FRAMEBUFFER
-    }
-    else
-    #endif
-    {
-        RenderWithMaterial(m_material);
-    }
+    RenderWithMaterial(m_material);
 }
 
 void Renderer::RenderWithMaterial(Material *mat) const

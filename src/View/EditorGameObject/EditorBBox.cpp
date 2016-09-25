@@ -11,7 +11,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
     // Copy the lines material to the box material, and save it in cache
     // only the first time. The rest of the times, load it from cache
     Material *linesMaterial =
-            AssetsManager::LoadAsset<Material>("./Assets/Engine/Materials/D2G_Line.bmat");
+            AssetsManager::LoadAsset<Material>("./Assets/Engine/Materials/D2G_Default.bmat");
 
     if (!s_boxMaterial)
     {

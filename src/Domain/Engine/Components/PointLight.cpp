@@ -73,7 +73,6 @@ void PointLight::OnDrawGizmos()
 
     if (gameObject->IsSelectedInHierarchy())
     {
-        Gizmos::SetDrawWireframe(true);
         Gizmos::SetReceivesLighting(false);
         Gizmos::SetColor(Color(GetColor(), 1));
         Gizmos::RenderSimpleSphere(transform->GetPosition(), GetRange());
