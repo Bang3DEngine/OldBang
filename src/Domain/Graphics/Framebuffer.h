@@ -54,7 +54,6 @@ public:
 
     void Clear() const;
     void ClearDepth() const;
-    void ClearStencil() const;
     void ClearColor() const;
 
     virtual void Bind() const override;

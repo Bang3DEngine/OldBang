@@ -36,7 +36,7 @@ void UIImage::Render() const
     {
         GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
         gbuffer->SetColorDrawBuffer();
-        gbuffer->BindInputTexturesTo(m_materialPR);
+        gbuffer->SetUniformsBeforeRendering(m_materialPR);
         m_materialPR->GetShaderProgram()->SetUniformColor("B_tint", m_tint);
         m_materialPR->GetShaderProgram()->SetUniformColor("B_strokeColor", m_strokeColor);
         m_materialPR->GetShaderProgram()->SetUniformFloat("B_stroke", m_stroke);

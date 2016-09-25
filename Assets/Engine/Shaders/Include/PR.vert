@@ -9,3 +9,5 @@ void InitMain()
 void EndMain()
 {
 }
+
+#include "Main.glsl"

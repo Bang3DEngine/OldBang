@@ -1,4 +1,4 @@
-<Material DiffuseColor:Color="(1, 0.784314, 0, 0.196078)"{}
+<Material DiffuseColor:Color="(1, 0.784314, 0, 0.470588)"{}
           FragmentShader:File="./Assets/Engine/Shaders/D2G_Default.frag"{}
           Shininess:Float="60"{}
           VertexShader:File="./Assets/Engine/Shaders/D2G_Default.vert"{}

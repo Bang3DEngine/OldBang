@@ -1,7 +1,5 @@
 #include "D2G.vert"
 
-void main()
+void Main()
 {
-    InitMain();
-    EndMain();
 }

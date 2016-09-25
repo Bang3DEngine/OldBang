@@ -1,10 +1,8 @@
 #include "PR.frag"
 #include "PointLight.glsl"
 
-void main()
+void Main()
 {
-    InitMain();
-
     if (B_vin.receivesLighting)
     {
         vec3 pointLightApport = GetPointLightColorApportation(
@@ -21,6 +19,4 @@ void main()
         B_vout.color = vec4(B_vin.color.rgb + pointLightApport,
                             B_vin.diffuseColor.a);
     }
-
-    EndMain();
 }

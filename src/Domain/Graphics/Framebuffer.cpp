@@ -74,15 +74,14 @@ void Framebuffer::SetAllDrawBuffers() const
 
 void Framebuffer::SetDrawBuffers(const Array<int> &attachmentIds) const
 {
-    Bind();
     m_currentDrawAttachmentIds = attachmentIds;
-
     Array<GLenum> drawBuffers;
     for (int attId : attachmentIds)
     {
         drawBuffers.PushBack(m_attachmentId_To_GLAttachment.Get(attId));
     }
 
+    Bind();
     glDrawBuffers(drawBuffers.Size(), &drawBuffers[0]);
     CheckFramebufferError();
     UnBind();
@@ -167,15 +166,6 @@ void Framebuffer::ClearDepth() const
     glClear(GL_DEPTH_BUFFER_BIT);
     UnBind();
 }
-
-void Framebuffer::ClearStencil() const
-{
-    Bind();
-   // glClearStencil(0);
-    //glClear(GL_STENCIL_BUFFER_BIT);
-    UnBind();
-}
-
 
 void Framebuffer::ClearColor() const
 {

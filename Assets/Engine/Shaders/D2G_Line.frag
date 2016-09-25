@@ -1,7 +1,5 @@
 #include "D2G.frag"
 
-void main()
+void Main()
 {
-    InitMain();
-    EndMain();
 }

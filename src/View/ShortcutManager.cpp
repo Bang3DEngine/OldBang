@@ -61,7 +61,7 @@ bool ShortcutManager::IsPressed(Input::Key key)
 bool ShortcutManager::IsPressed(const Array<Input::Key> keys)
 {
     ShortcutManager *sm = ShortcutManager::GetInstance();
-    if (!sm) { return nullptr; }
+    if (!sm) { return false; }
 
     for (Input::Key key : keys)
     {

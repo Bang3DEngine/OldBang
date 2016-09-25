@@ -1,9 +1,7 @@
 #include "PR.frag"
 
-void main()
+void Main()
 {
-    InitMain();
-
     // ONLY FOR EDITOR
 
     // SELECTION OUTLINE EFFECT
@@ -15,6 +13,4 @@ void main()
     //
 
     //
-
-    EndMain();
 }

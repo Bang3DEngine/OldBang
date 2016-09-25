@@ -96,6 +96,7 @@ void Renderer::Render() const
 void Renderer::RenderWithMaterial(Material *mat) const
 {
     ActivateGLStatesBeforeRendering(mat);
+
     #ifdef BANG_EDITOR
     SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     if (sfb && sfb->IsPassing())
@@ -110,6 +111,9 @@ void Renderer::RenderWithMaterial(Material *mat) const
         Matrix4 model, normal, view, projection, pvm;
         GetMatrices(&model, &normal, &view, &projection, &pvm);
         SetMatricesUniforms(mat, model, normal, view, projection, pvm);
+        GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
+        gb->SetUniformsBeforeRendering(mat);
+
         mat->Bind();
     }
     else

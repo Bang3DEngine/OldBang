@@ -40,6 +40,8 @@ private:
 
     Material *m_renderGBufferToScreenMaterial = nullptr;
     Mesh *m_planeMeshToRenderEntireScreen = nullptr;
+    bool m_stencilWriteEnabled = false;
+    bool m_stencilTestEnabled  = false;
 
     void RenderScreenPlane() const;
 
@@ -52,7 +54,7 @@ public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    void BindInputTexturesTo(Material *mat) const;
+    void SetUniformsBeforeRendering(Material *mat) const;
     void RenderPassWithMaterial(Material *mat) const;
     void RenderToScreen(Attachment attachmentId) const;
     void RenderToScreen() const;
@@ -65,7 +67,10 @@ public:
     void SetStencilDrawBuffer() const;
     void SetColorDrawBuffer() const;
 
+    void SetStencilWrite(bool writeEnabled);
+    void SetStencilTest(bool testEnabled);
     void ClearStencil() const;
+
     void ClearAllBuffersExceptColor();
     void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::zero);
 };

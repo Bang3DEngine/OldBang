@@ -1,10 +1,8 @@
 #include "D2G.frag"
 
-void main()
+void Main()
 {
-    InitMain();
-
-    if (B_hasTexture > 0.5)
+    if (B_hasTexture)
     {
         // ALPHA CUTTOFF
         vec4 texColor = texture2D(B_texture_0, B_vin.uv);
@@ -17,6 +15,4 @@ void main()
         B_vout.diffuseColor = texColor * diffColor;
         //
     }
-
-    EndMain();
 }

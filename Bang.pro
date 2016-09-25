@@ -153,7 +153,8 @@ OTHER_FILES += \
     Assets/Engine/Shaders/UI/PR_UIImage.frag \
     Assets/Engine/Materials/UI/UIImage.bmat \
     Assets/Engine/Materials/UI/PR_UIImage.bmat \
-    Assets/Engine/Shaders/PR_RenderBackground.frag
+    Assets/Engine/Shaders/PR_RenderBackground.frag \
+    Assets/Engine/Shaders/Include/Main.glsl
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

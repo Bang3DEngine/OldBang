@@ -140,7 +140,7 @@ bool GameObject::IsInsideScene() const
 {
     if (IsScene()) { return true; }
     if (parent) return parent->IsInsideScene();
-    return nullptr;
+    return false;
 }
 
 GameObject *GameObject::GetParent() const

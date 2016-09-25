@@ -17,6 +17,7 @@ struct B_VertexOut_GBufferIn   // GBuffer
     bool receivesLighting;
     float shininess;
     float depth;
+    float stencil;
 };
 
 in vec4 B_position_world_vout_fin;
@@ -29,6 +30,7 @@ out vec4 B_uv_fout_gin;
 out vec4 B_diffuse_fout_gin;
 out vec4 B_materialProps_fout_gin;
 out vec4 B_depth_fout_gin;
+out vec4 B_stencil_fout_gin;
 
 B_VertexIn B_vin;
 B_VertexOut_GBufferIn B_vout;
@@ -44,10 +46,11 @@ void InitMain()
     B_vout.position_world      = B_vin.position_world.xyz;
     B_vout.normal_world        = B_vin.normal_world.xyz;
     B_vout.uv                  = B_vin.uv;
-    B_vout.receivesLighting    = B_renderer_receivesLighting > 0.5;
+    B_vout.receivesLighting    = B_renderer_receivesLighting;
     B_vout.shininess           = B_material_shininess;
     B_vout.diffuseColor        = B_material_diffuse_color;
     B_vout.depth               = gl_FragCoord.z;
+    B_vout.stencil             = 1;
 }
 
 void EndMain()
@@ -59,6 +62,13 @@ void EndMain()
     B_materialProps_fout_gin.x       = B_vout.receivesLighting ? 1.0f : 0.0f;
     B_materialProps_fout_gin.y       = B_vout.shininess;
     B_materialProps_fout_gin.z       = B_vout.shininess;
-    B_materialProps_fout_gin.w       = B_gameObject_isSelected; // Editor
+    B_materialProps_fout_gin.w       = B_gameObject_isSelected ? 1.0f : 0.0f; // Editor
     B_depth_fout_gin                 = vec4(B_vout.depth);
+
+    if (B_stencilWriteEnabled)
+    {
+        B_stencil_fout_gin = vec4(B_vout.stencil);
+    }
 }
+
+#include "Main.glsl"

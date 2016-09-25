@@ -51,3 +51,5 @@ void EndMain()
     B_uv_vout_fin             = B_vout.uv;
     gl_Position               = B_vout.position_pvm;
 }
+
+#include "Main.glsl"

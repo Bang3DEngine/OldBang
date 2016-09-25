@@ -78,15 +78,12 @@ void GraphicPipeline::RenderScene(Scene *scene)
 
         // After each pass, only the color remains
         m_gbuffer->ClearDepth();
+        m_gbuffer->ClearStencil();
         m_gbuffer->ClearAllBuffersExceptColor();
 
         if (m_currentDepthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
         {
-            /*glEnable(GL_STENCIL_TEST);
             m_gbuffer->ClearStencil();
-            glStencilFunc(GL_ALWAYS, 1, 0xFF);
-            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-            */
             // Opaque
             for (Renderer *rend : renderers)
             {
@@ -96,10 +93,6 @@ void GraphicPipeline::RenderScene(Scene *scene)
                 }
             }
             ApplyDeferredLightsToScreen();
-           /* glStencilFunc(GL_EQUAL, 1, 0xFF);
-            glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-            glDisable(GL_STENCIL_TEST);
-            */
 
             // Transparent
             for (Renderer *rend : renderers)
@@ -110,11 +103,16 @@ void GraphicPipeline::RenderScene(Scene *scene)
                 }
             }
 
+            for (GameObject *go : sceneGameObjects)
+            {
+                go->_OnDrawGizmos();
+            }
+
             /*
             m_gbuffer->UnBind();
             if (m_currentDepthLayer == Renderer::DepthLayer::DepthLayerScene)
             {
-                static int N = 7, x = 0;
+                static int N = 8, x = 0;
                 if (Input::GetKeyDown(Input::Key::Right))     x = (x + 1 + N) % N;
                 else if (Input::GetKeyDown(Input::Key::Left)) x = (x - 1 + N) % N;
 
@@ -124,15 +122,11 @@ void GraphicPipeline::RenderScene(Scene *scene)
                 else if (x == 3) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Diffuse); }
                 else if (x == 4) { m_gbuffer->RenderToScreen(GBuffer::Attachment::MaterialProperties); }
                 else if (x == 5) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Depth); }
-                else if (x == 6) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Color); }
+                else if (x == 6) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Stencil); }
+                else if (x == 7) { m_gbuffer->RenderToScreen(GBuffer::Attachment::Color); }
             }
             m_gbuffer->Bind();
             */
-
-            for (GameObject *go : sceneGameObjects)
-            {
-                go->_OnDrawGizmos();
-            }
         }
         else
         {
@@ -180,11 +174,9 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
     bool immediatePostRender = (rend->IsTransparent() || rend->IsGizmo());
     if (immediatePostRender)
     {
-        /*m_gbuffer->ClearStencil();
-        //glEnable(GL_STENCIL_TEST);
-        glStencilFunc(GL_ALWAYS, 1, 0xFF);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-        */
+        m_gbuffer->ClearStencil();
+        m_gbuffer->SetStencilWrite(true);
+        m_gbuffer->SetStencilTest(false);
     }
 
     m_gbuffer->SetAllDrawBuffersExceptColor();
@@ -192,10 +184,10 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
 
     if (immediatePostRender)
     {
-       //glStencilFunc(GL_EQUAL, 1, 0xFF);
-       // glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+       m_gbuffer->SetStencilWrite(false);
+       m_gbuffer->SetStencilTest(true);
        ApplyDeferredLightsToScreen();
-       // glDisable(GL_STENCIL_TEST);
+       m_gbuffer->SetStencilTest(false);
     }
 }
 
@@ -208,6 +200,8 @@ void GraphicPipeline::ApplyEditorEffects()
 
 void GraphicPipeline::ApplyDeferredLightsToScreen()
 {
+    m_gbuffer->SetStencilTest(true);
+    m_gbuffer->SetStencilWrite(false);
     m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen);
     List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
     for (Light *light : lights)
@@ -217,6 +211,8 @@ void GraphicPipeline::ApplyDeferredLightsToScreen()
             light->ApplyLight(m_gbuffer);
         }
     }
+    m_gbuffer->SetStencilTest(false);
+    m_gbuffer->SetStencilWrite(true);
 }
 
 void GraphicPipeline::OnResize(int newWidth, int newHeight)

@@ -36,9 +36,12 @@ GBuffer::~GBuffer()
 {
 }
 
-void GBuffer::BindInputTexturesTo(Material *mat) const
+void GBuffer::SetUniformsBeforeRendering(Material *mat) const
 {
-    ShaderProgram *sp =mat->GetShaderProgram(); NONULL(sp);
+    NONULL(mat);
+    ShaderProgram *sp = mat->GetShaderProgram(); NONULL(sp);
+
+    // Color Attachments bindings as Shader Inputs
     sp->SetUniformTexture("B_position_gout_fin",           m_positionTexture, false);
     sp->SetUniformTexture("B_normal_gout_fin",             m_normalTexture,   false);
     sp->SetUniformTexture("B_uv_gout_fin",                 m_uvTexture,       false);
@@ -47,7 +50,19 @@ void GBuffer::BindInputTexturesTo(Material *mat) const
     sp->SetUniformTexture("B_depth_gout_fin",              m_depthTexture,    false);
     sp->SetUniformTexture("B_stencil_gout_fin",            m_stencilTexture,  false);
     sp->SetUniformTexture("B_color_gout_fin",              m_colorTexture,    false);
+
+    Camera *camera = Scene::GetActiveScene()->GetCamera();
+    if (camera)
+    {
+        sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
+                           camera->transform->GetPosition(), false);
+    }
+
+    // Stencil uniforms
+    sp->SetUniformFloat("B_stencilWriteEnabled", m_stencilWriteEnabled ? 1.0f : 0.0f);
+    sp->SetUniformFloat("B_stencilTestEnabled",  m_stencilTestEnabled  ? 1.0f : 0.0f);
 }
+
 
 void GBuffer::RenderPassWithMaterial(Material *mat) const
 {
@@ -56,19 +71,12 @@ void GBuffer::RenderPassWithMaterial(Material *mat) const
             BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                          *(mat->GetShaderProgram()));
 
-    BindInputTexturesTo(mat);
+    SetUniformsBeforeRendering(mat);
     mat->Bind();
 
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
     Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
     SetColorDrawBuffer();
-
-    Camera *camera = Scene::GetActiveScene()->GetCamera();
-    if (camera)
-    {
-        mat->GetShaderProgram()->SetUniformVec3(
-                    ShaderContract::Uniform_Position_Camera, camera->transform->GetPosition(), false);
-    }
 
     // FAILING HERE
     glDepthMask(GL_FALSE);
@@ -131,8 +139,8 @@ void GBuffer::SetAllDrawBuffersExceptColor() const
                     GBuffer::Attachment::Uv,
                     GBuffer::Attachment::Diffuse,
                     GBuffer::Attachment::MaterialProperties,
-                    GBuffer::Attachment::Stencil,
-                    GBuffer::Attachment::Depth});
+                    GBuffer::Attachment::Depth,
+                    GBuffer::Attachment::Stencil});
 }
 
 void GBuffer::SetStencilDrawBuffer() const
@@ -143,6 +151,16 @@ void GBuffer::SetStencilDrawBuffer() const
 void GBuffer::SetColorDrawBuffer() const
 {
     SetDrawBuffers({GBuffer::Attachment::Color});
+}
+
+void GBuffer::SetStencilWrite(bool writeEnabled)
+{
+    m_stencilWriteEnabled = writeEnabled;
+}
+
+void GBuffer::SetStencilTest(bool testEnabled)
+{
+    m_stencilTestEnabled = testEnabled;
 }
 
 void GBuffer::ClearStencil() const
