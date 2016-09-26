@@ -64,14 +64,13 @@ void GraphicPipeline::RenderScene(Scene *scene)
     {
         m_currentDepthLayer = depthLayer;
 
-        // After each pass, only the color remains
+        // After each pass, clear the depth
         m_gbuffer->ClearDepth();
-        m_gbuffer->ClearStencil();
-        m_gbuffer->ClearAllBuffersExceptColor();
 
         if (m_currentDepthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
         {
             // Opaque
+            m_gbuffer->SetAllDrawBuffersExceptColor();
             for (Renderer *rend : renderers)
             {
                 if (!rend->IsTransparent() && !rend->IsGizmo())
@@ -104,7 +103,6 @@ void GraphicPipeline::RenderScene(Scene *scene)
             }
         }
     }
-
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen();
 
@@ -128,7 +126,6 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
             m_gbuffer->SetStencilTest(false);
         }
 
-        m_gbuffer->SetAllDrawBuffersExceptColor();
         rend->Render();
 
         if (immediatePostRender)

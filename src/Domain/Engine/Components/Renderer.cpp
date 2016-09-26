@@ -31,6 +31,7 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetCullMode(GetCullMode());
     r->SetRenderMode(GetRenderMode());
     r->SetLineWidth(GetLineWidth());
+    r->SetReceivesLighting(GetReceivesLighting());
     r->SetIgnoreModelMatrix(GetIgnoreModelMatrix());
     r->SetIgnoreViewMatrix(GetIgnoreViewMatrix());
     r->SetIgnoreProjectionMatrix(GetIgnoreProjectionMatrix());

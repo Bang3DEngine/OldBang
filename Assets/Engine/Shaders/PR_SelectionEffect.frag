@@ -12,7 +12,7 @@ bool IsOutline(vec2 offset)
 void Main()
 {
     const vec4  outlineColor = vec4(1, 0.5, 0, 1);
-    const float fillOpacity = 0.0f;
+    const float fillOpacity = 0.2f;
     const int   stroke = 1;
 
     bool isSelected = texture2D(B_stencil_gout_fin, B_vin.uv_screen).x == 1;

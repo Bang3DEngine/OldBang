@@ -181,8 +181,14 @@ void GBuffer::ClearAllBuffersExceptColor()
     SaveCurrentDrawBuffers();
 
     Bind();
-    SetAllDrawBuffersExceptColor();
+    SetDrawBuffers({GBuffer::Attachment::Position,
+                    GBuffer::Attachment::Normal,
+                    GBuffer::Attachment::Uv,
+                    GBuffer::Attachment::Diffuse,
+                    GBuffer::Attachment::MaterialProperties});
     glClear(GL_COLOR_BUFFER_BIT);
+    ClearDepth();
+    ClearStencil();
     UnBind();
 
     LoadSavedDrawBuffers();
@@ -192,18 +198,19 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::
 {
     Bind();
 
-    SetAllDrawBuffers();
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glClear(GL_COLOR_BUFFER_BIT);
-
     SaveCurrentDrawBuffers();
 
-    SetAllDrawBuffers();
+    SetDrawBuffers({GBuffer::Attachment::Position,
+                    GBuffer::Attachment::Normal,
+                    GBuffer::Attachment::Uv,
+                    GBuffer::Attachment::Diffuse,
+                    GBuffer::Attachment::MaterialProperties});
+
     glClearColor(clearValue.r, clearValue.g, clearValue.b, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
     // Clear stored color to backgroundColor
-    SetDrawBuffers({GBuffer::Attachment::Color});
+    SetColorDrawBuffer();
     glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
     glClear(GL_COLOR_BUFFER_BIT);
 
