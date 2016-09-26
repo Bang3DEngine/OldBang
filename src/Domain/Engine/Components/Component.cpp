@@ -16,7 +16,7 @@ void Component::OnDrawGizmos()
 {
 }
 
-void Component::OnDrawGizmosNoDepth()
+void Component::OnDrawGizmosOverlay()
 {
 }
 

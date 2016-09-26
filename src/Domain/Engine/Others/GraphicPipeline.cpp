@@ -49,65 +49,18 @@ GraphicPipeline* GraphicPipeline::GetActive()
 
 void GraphicPipeline::RenderScene(Scene *scene)
 {
-    Gizmos::Reset();
     m_currentScene = scene;
 
-    // CLEAR. First, clear everything in gbuffer (depth and all its buffers)
     Color bgColor = m_currentScene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
-
+    m_gbuffer->SetAllDrawBuffersExceptColor();
     m_gbuffer->Bind();
-    m_gbuffer->SetStencilWrite(true);
-    List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
-    List<Renderer*> renderers = m_currentScene->GetComponentsInChildren<Renderer>();
-    for (Renderer::DepthLayer depthLayer : DepthLayerOrder)
-    {
-        m_currentDepthLayer = depthLayer;
-
-        // After each pass, clear the depth
-        m_gbuffer->ClearDepth();
-
-        if (m_currentDepthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
-        {
-            // Opaque
-            m_gbuffer->SetAllDrawBuffersExceptColor();
-            for (Renderer *rend : renderers)
-            {
-                if (!rend->IsTransparent() && !rend->IsGizmo())
-                {
-                    RenderRenderer(rend);
-                }
-            }
-            ApplyDeferredLightsToScreen();
-
-            // Transparent
-            for (Renderer *rend : renderers)
-            {
-                if (rend->IsTransparent() && !rend->IsGizmo())
-                {
-                    RenderRenderer(rend);
-                }
-            }
-
-            for (GameObject *go : sceneGameObjects)
-            {
-                go->_OnDrawGizmos();
-            }
-        }
-        else
-        {
-            ApplySelectionEffect(); // Before rendering Overlay Gizmos
-            for (GameObject *go : sceneGameObjects)
-            {
-                go->_OnDrawGizmosNoDepth();
-            }
-        }
-    }
+    RenderDepthLayers(m_gbuffer);
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen();
 
     #ifdef BANG_EDITOR
-    RenderSelectionFramebuffer(renderers);
+    RenderSelectionFramebuffer();
     #endif
 }
 
@@ -199,6 +152,77 @@ void GraphicPipeline::ApplyDeferredLightsToScreen()
     m_gbuffer->SetStencilWrite(true);
 }
 
+#ifdef BANG_EDITOR
+void GraphicPipeline::RenderSelectionFramebuffer()
+{
+    m_selectionFB->m_isPassing = true;
+    m_selectionFB->PrepareForRender(m_currentScene);
+
+    m_selectionFB->Bind();
+    m_selectionFB->Clear();
+    RenderDepthLayers(m_selectionFB);
+    m_selectionFB->UnBind();
+
+    m_selectionFB->ProcessSelection();
+    m_selectionFB->m_isPassing = false;
+}
+
+void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
+                                               Framebuffer *fb)
+{
+    m_currentDepthLayer = depthLayer;
+    fb->ClearDepth(); // After each pass, clear the depth
+
+    List<Renderer*> renderers = m_currentScene->GetComponentsInChildren<Renderer>();
+    for (Renderer *rend : renderers) // Opaque
+    {
+        if (!rend->IsTransparent() && !rend->IsGizmo())
+        {
+            RenderRenderer(rend);
+        }
+    }
+    if (fb == m_gbuffer) ApplyDeferredLightsToScreen();
+
+    for (Renderer *rend : renderers) // Transparent
+    {
+        if (rend->IsTransparent() && !rend->IsGizmo())
+        {
+            RenderRenderer(rend);
+        }
+    }
+
+    List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
+    for (GameObject *go : sceneGameObjects)
+    {
+        go->_OnDrawGizmos();
+    }
+}
+
+void GraphicPipeline::RenderGizmosOverlayPass(Framebuffer *fb)
+{
+    m_currentDepthLayer = Renderer::DepthLayer::DepthLayerGizmosOverlay;
+    fb->ClearDepth(); // After each pass, clear the depth
+
+    List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
+    for (GameObject *go : sceneGameObjects)
+    {
+        go->_OnDrawGizmosOverlay();
+    }
+}
+
+void GraphicPipeline::RenderDepthLayers(Framebuffer *fb)
+{
+    for (Renderer::DepthLayer depthLayer : DepthLayerOrder)
+    {
+        if (depthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
+        {
+            RenderPassWithDepthLayer(depthLayer, fb);
+        }
+    }
+    if (fb == m_gbuffer) ApplySelectionEffect();
+    RenderGizmosOverlayPass(fb);
+}
+
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
@@ -210,56 +234,6 @@ void GraphicPipeline::OnResize(int newWidth, int newHeight)
 GBuffer *GraphicPipeline::GetGBuffer() const
 {
     return m_gbuffer;
-}
-
-#ifdef BANG_EDITOR
-void GraphicPipeline::
-   RenderSelectionFramebuffer(const List<Renderer*> &renderers)
-{
-    m_selectionFB->m_isPassing = true;
-    m_selectionFB->PrepareForRender(m_currentScene);
-
-    m_selectionFB->Bind();
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClear(GL_DEPTH_BUFFER_BIT);
-    m_selectionFB->Clear();
-    List<GameObject*> sceneGameObjects =
-            m_currentScene->GetChildrenRecursivelyEditor();
-    for (Renderer::DepthLayer depthLayer : DepthLayerOrder)
-    {
-        glClear(GL_DEPTH_BUFFER_BIT);
-        m_currentDepthLayer = depthLayer;
-        m_selectionFB->ClearDepth();
-
-        if (depthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
-        {
-            for (Renderer *rend : renderers)
-            {
-                if (!rend->IsGizmo())
-                {
-                    RenderRenderer(rend);
-                }
-            }
-
-            for (GameObject *go : sceneGameObjects)
-            {
-                m_selectionFB->PrepareNextGameObject(go);
-                go->_OnDrawGizmos();
-            }
-        }
-        else
-        {
-            for (GameObject *go : sceneGameObjects)
-            {
-                m_selectionFB->PrepareNextGameObject(go);
-                go->_OnDrawGizmosNoDepth();
-            }
-        }
-    }
-    m_selectionFB->UnBind();
-
-    m_selectionFB->ProcessSelection();
-    m_selectionFB->m_isPassing = false;
 }
 
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const

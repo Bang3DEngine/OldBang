@@ -25,7 +25,7 @@ public:
     virtual ~EditorScaleAxis();
 
     void OnUpdate() override;
-    void OnDrawGizmosNoDepth() override;
+    void OnDrawGizmosOverlay() override;
 };
 
 

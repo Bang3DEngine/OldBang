@@ -18,7 +18,7 @@ public:
     virtual ~EditorRotateAxisGroup();
 
     void OnUpdate() override;
-    void OnDrawGizmosNoDepth() override;
+    void OnDrawGizmosOverlay() override;
 };
 
 #endif // EDITORROTATEAXISGROUP_H

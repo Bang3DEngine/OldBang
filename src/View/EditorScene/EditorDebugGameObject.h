@@ -53,7 +53,7 @@ public:
 
     void OnUpdate() override;
     void OnDrawGizmos() override;
-    void OnDrawGizmosNoDepth() override;
+    void OnDrawGizmosOverlay() override;
 };
 
 #endif // EDITORDEBUGGAMEOBJECT_H

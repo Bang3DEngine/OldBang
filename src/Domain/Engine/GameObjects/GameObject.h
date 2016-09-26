@@ -58,9 +58,9 @@ protected:
     #endif
 
     virtual void _OnDrawGizmos () override;
-    virtual void _OnDrawGizmosNoDepth () override;
+    virtual void _OnDrawGizmosOverlay () override;
     virtual void OnDrawGizmos() override;
-    virtual void OnDrawGizmosNoDepth() override;
+    virtual void OnDrawGizmosOverlay() override;
 
 protected:
     String m_name = "";

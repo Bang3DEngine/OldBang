@@ -47,10 +47,10 @@ protected:
         #endif
     }
 
-    virtual void _OnDrawGizmosNoDepth()
+    virtual void _OnDrawGizmosOverlay()
     {
         #ifdef BANG_EDITOR
-        OnDrawGizmosNoDepth();
+        OnDrawGizmosOverlay();
         #endif
     }
 
@@ -58,7 +58,7 @@ protected:
     virtual void OnUpdate()  {}
     virtual void OnDestroy() {}
     virtual void OnDrawGizmos() {}
-    virtual void OnDrawGizmosNoDepth() {}
+    virtual void OnDrawGizmosOverlay() {}
 
     bool IsStarted() const { return m_isStarted; }
 };

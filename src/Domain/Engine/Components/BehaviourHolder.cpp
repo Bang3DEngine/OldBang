@@ -222,15 +222,15 @@ void BehaviourHolder::_OnDrawGizmos()
     }
 }
 
-void BehaviourHolder::_OnDrawGizmosNoDepth()
+void BehaviourHolder::_OnDrawGizmosOverlay()
 {
     #ifdef BANG_EDITOR
-    Component::_OnDrawGizmosNoDepth();
+    Component::_OnDrawGizmosOverlay();
     #endif
 
     if (m_behaviour)
     {
-        m_behaviour->_OnDrawGizmosNoDepth();
+        m_behaviour->_OnDrawGizmosOverlay();
     }
 }
 

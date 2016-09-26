@@ -39,7 +39,7 @@ protected:
     virtual void OnAddedToGameObject() {}
 
     virtual void OnDrawGizmos() override;
-    virtual void OnDrawGizmosNoDepth() override;
+    virtual void OnDrawGizmosOverlay() override;
 
 public:
 

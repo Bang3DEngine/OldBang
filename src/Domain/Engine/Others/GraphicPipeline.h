@@ -7,6 +7,7 @@ class Scene;
 class GBuffer;
 class Material;
 class GameObject;
+class Framebuffer;
 class SelectionFramebuffer;
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
@@ -42,8 +43,13 @@ private:
     void ApplyDeferredLightsToScreen();
 
     #ifdef BANG_EDITOR
-    void RenderSelectionFramebuffer(const List<Renderer*> &renderers);
+    void RenderSelectionFramebuffer();
     #endif
+
+    void RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
+                                  Framebuffer *fb);
+    void RenderGizmosOverlayPass(Framebuffer *fb);
+    void RenderDepthLayers(Framebuffer *fb);
 
 public:
     GraphicPipeline();

@@ -25,7 +25,7 @@ public:
     virtual ~EditorTranslateAxis();
 
     void OnUpdate() override;
-    void OnDrawGizmosNoDepth() override;
+    void OnDrawGizmosOverlay() override;
 };
 
 #endif // EDITORTRANSLATEAXIS_H

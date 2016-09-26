@@ -74,7 +74,7 @@ public:
 
     // They will only override if they are in BANG_EDITOR
     virtual void _OnDrawGizmos ();
-    virtual void _OnDrawGizmosNoDepth ();
+    virtual void _OnDrawGizmosOverlay ();
 
     void OnBehaviourLibraryAvailable(QLibrary *lib);
 

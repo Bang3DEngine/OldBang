@@ -73,7 +73,7 @@ void EditorDebugGameObject::OnDrawGizmos()
     DrawLines(true);
 }
 
-void EditorDebugGameObject::OnDrawGizmosNoDepth()
+void EditorDebugGameObject::OnDrawGizmosOverlay()
 {
     DrawLines(false);
 }

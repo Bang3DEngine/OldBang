@@ -88,9 +88,9 @@ void EditorScaleAxis::OnUpdate()
     }
 }
 
-void EditorScaleAxis::OnDrawGizmosNoDepth()
+void EditorScaleAxis::OnDrawGizmosOverlay()
 {
-    EditorAxis::OnDrawGizmosNoDepth();
+    EditorAxis::OnDrawGizmosOverlay();
 
     Gizmos::Render(m_line);
     Gizmos::Render(m_axisCap->GetComponent<Renderer>());

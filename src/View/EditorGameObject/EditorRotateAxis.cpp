@@ -111,9 +111,9 @@ void EditorRotateAxis::OnUpdate()
     }
 }
 
-void EditorRotateAxis::OnDrawGizmosNoDepth()
+void EditorRotateAxis::OnDrawGizmosOverlay()
 {
-    EditorAxis::OnDrawGizmosNoDepth();
+    EditorAxis::OnDrawGizmosOverlay();
 
     Gizmos::Render(m_circle);
 }

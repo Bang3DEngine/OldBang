@@ -38,7 +38,7 @@ public:
     virtual ~EditorRotateAxis();
 
     void OnUpdate() override;
-    void OnDrawGizmosNoDepth() override;
+    void OnDrawGizmosOverlay() override;
 };
 
 #endif // EDITORROTATEAXIS_H

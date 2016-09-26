@@ -647,26 +647,34 @@ void GameObject::_OnDrawGizmos()
     #ifdef BANG_EDITOR
     ISceneEventListener::_OnDrawGizmos();
 
-    if (!GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
-    {
-        PROPAGATE_EVENT(_OnDrawGizmos, m_children);
-    }
+    PROPAGATE_EVENT(_OnDrawGizmos, m_children);
     PROPAGATE_EVENT(_OnDrawGizmos, m_components);
+
+    SelectionFramebuffer *sfb =
+            GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+    if (sfb->IsPassing())
+    {
+        sfb->PrepareNextGameObject(this);
+    }
     OnDrawGizmos();
     #endif
 }
 
-void GameObject::_OnDrawGizmosNoDepth()
+void GameObject::_OnDrawGizmosOverlay()
 {
     #ifdef BANG_EDITOR
-    ISceneEventListener::_OnDrawGizmosNoDepth();
+    ISceneEventListener::_OnDrawGizmosOverlay();
 
-    if (!GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
+    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_children);
+    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_components);
+
+    SelectionFramebuffer *sfb =
+            GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+    if (sfb->IsPassing())
     {
-        PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_children);
+        sfb->PrepareNextGameObject(this);
     }
-    PROPAGATE_EVENT(_OnDrawGizmosNoDepth, m_components);
-    OnDrawGizmosNoDepth();
+    OnDrawGizmosOverlay();
     #endif
 }
 
@@ -674,7 +682,7 @@ void GameObject::OnDrawGizmos()
 {
 }
 
-void GameObject::OnDrawGizmosNoDepth()
+void GameObject::OnDrawGizmosOverlay()
 {
 }
 

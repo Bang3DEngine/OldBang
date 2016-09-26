@@ -24,9 +24,9 @@ void EditorRotateAxisGroup::OnUpdate()
     EditorGameObject::OnUpdate();
 }
 
-void EditorRotateAxisGroup::OnDrawGizmosNoDepth()
+void EditorRotateAxisGroup::OnDrawGizmosOverlay()
 {
-    EditorGameObject::OnDrawGizmosNoDepth();
+    EditorGameObject::OnDrawGizmosOverlay();
 
     Vector3 center = m_axisX->m_attachedGameObject->transform->GetPosition();
     float radius = 0.95f * m_axisX->m_circle->GetRadius() * transform->GetScale().x;

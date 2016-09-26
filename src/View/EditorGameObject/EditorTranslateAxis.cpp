@@ -100,9 +100,9 @@ void EditorTranslateAxis::OnUpdate()
     }
 }
 
-void EditorTranslateAxis::OnDrawGizmosNoDepth()
+void EditorTranslateAxis::OnDrawGizmosOverlay()
 {
-    EditorAxis::OnDrawGizmosNoDepth();
+    EditorAxis::OnDrawGizmosOverlay();
 
     Gizmos::Render(m_line);
     Gizmos::Render(m_axisCap->GetComponent<Renderer>());
