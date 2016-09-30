@@ -52,9 +52,9 @@ public:
     int GetHeight() const;
     Vector2 GetSize() const;
 
-    void Clear() const;
-    void ClearDepth() const;
-    void ClearColor() const;
+    void Clear();
+    virtual void ClearDepth();
+    void ClearColor();
 
     virtual void Bind() const override;
     virtual void UnBind() const override;

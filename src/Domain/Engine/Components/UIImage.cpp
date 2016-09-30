@@ -7,8 +7,10 @@
 
 UIImage::UIImage()
 {
+    m_hasCustomPRPass = true;
+
     SetMesh(MeshFactory::GetPlane());
-    SetMaterial(AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/UI/UIImage.bmat") );
+    SetMaterial( AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/D2G_Default.bmat") );
     m_materialPR = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/UI/PR_UIImage.bmat");
 
     SetIgnoreModelMatrix(false);
@@ -25,23 +27,22 @@ UIImage::~UIImage()
 {
 }
 
-void UIImage::Render() const
+void UIImage::RenderCustomPR() const
 {
-    MeshRenderer::Render();
+    MeshRenderer::RenderCustomPR();
 
-    #ifdef BANG_EDITOR
-    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
-    if (!sfb || !sfb->IsPassing())
-    #endif
-    {
-        GBuffer *gbuffer = GraphicPipeline::GetActive()->GetGBuffer();
-        gbuffer->SetColorDrawBuffer();
-        gbuffer->SetUniformsBeforeRendering(m_materialPR);
-        m_materialPR->GetShaderProgram()->SetUniformColor("B_tint", m_tint);
-        m_materialPR->GetShaderProgram()->SetUniformColor("B_strokeColor", m_strokeColor);
-        m_materialPR->GetShaderProgram()->SetUniformFloat("B_stroke", m_stroke);
-        RenderWithMaterial(m_materialPR);
-    }
+    ShaderProgram *sp = m_materialPR->GetShaderProgram();
+    Box screenBox = gameObject->GetBoundingBox();
+    sp->SetUniformFloat("B_image_left",  screenBox.GetMin().x);
+    sp->SetUniformFloat("B_image_up",    screenBox.GetMax().y);
+    sp->SetUniformFloat("B_image_right", screenBox.GetMax().x);
+    sp->SetUniformFloat("B_image_bot",   screenBox.GetMin().y);
+    sp->SetUniformColor("B_tint",        m_tint);
+    sp->SetUniformColor("B_strokeColor", m_strokeColor);
+    sp->SetUniformFloat("B_stroke",      m_stroke);
+    sp->SetUniformTexture("B_texture_0", m_material->GetTexture());
+    GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
+    gb->RenderPassWithMaterial(m_materialPR);
 }
 
 bool UIImage::IsACanvasRenderer() const
@@ -90,7 +91,10 @@ void UIImage::ReadXMLInfo(const XMLNode *xmlInfo)
 
     String texFilepath = xmlInfo->GetFilepath("Image");
     Texture2D *tex = AssetsManager::LoadAsset<Texture2D>(texFilepath);
-    m_material->SetTexture(tex);
+    if (m_material)
+    {
+        m_material->SetTexture(tex);
+    }
 
     m_tint = xmlInfo->GetColor("Tint");
     m_strokeColor = xmlInfo->GetColor("StrokeColor");
@@ -102,10 +106,15 @@ void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
     MeshRenderer::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName(GetName());
 
-    const Texture2D *tex = m_material->GetTexture();
-    String texFilepath = tex ? tex->GetFilepath() : "";
-    xmlInfo->SetFilepath("Image", texFilepath,
-                         Texture2D::GetFileExtensionStatic(), {});
+    String texFilepath = "";
+    if (m_material)
+    {
+        const Texture2D *tex = m_material->GetTexture();
+        texFilepath = tex ? tex->GetFilepath() : "";
+        xmlInfo->SetFilepath("Image", texFilepath,
+                             Texture2D::GetFileExtensionStatic(), {});
+    }
+
     xmlInfo->SetColor("Tint", m_tint);
     xmlInfo->SetColor("StrokeColor", m_strokeColor);
     xmlInfo->SetFloat("Stroke", m_stroke);

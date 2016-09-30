@@ -87,6 +87,11 @@ void Renderer::Render() const
     RenderWithMaterial(m_material);
 }
 
+void Renderer::RenderCustomPR() const
+{
+    // To override by child classes if they want to implement some PR pass
+}
+
 void Renderer::RenderWithMaterial(Material *mat) const
 {
     ActivateGLStatesBeforeRendering(mat);
@@ -105,6 +110,7 @@ void Renderer::RenderWithMaterial(Material *mat) const
         Matrix4 model, normal, view, projection, pvm;
         GetMatrices(&model, &normal, &view, &projection, &pvm);
         SetMatricesUniforms(mat, model, normal, view, projection, pvm);
+
         GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
         gb->SetUniformsBeforeRendering(mat);
 
@@ -112,7 +118,7 @@ void Renderer::RenderWithMaterial(Material *mat) const
     }
     else
     {
-        Debug_Log("Not a good material " << mat);
+        Debug_Log("Not a good material");
     }
 
     RenderWithoutBindingMaterial();
@@ -145,6 +151,11 @@ void Renderer::SetIsGizmo(bool isGizmo)
 bool Renderer::IsGizmo() const
 {
     return m_isGizmo;
+}
+
+bool Renderer::HasCustomPRPass() const
+{
+    return m_hasCustomPRPass;
 }
 
 void Renderer::SetDepthLayer(Renderer::DepthLayer dl)

@@ -36,7 +36,7 @@ GBuffer::~GBuffer()
 {
 }
 
-void GBuffer::SetUniformsBeforeRendering(Material *mat) const
+void GBuffer::SetUniformsBeforeRendering(Material *mat)
 {
     NONULL(mat);
     ShaderProgram *sp = mat->GetShaderProgram(); NONULL(sp);
@@ -64,35 +64,35 @@ void GBuffer::SetUniformsBeforeRendering(Material *mat) const
 }
 
 
-void GBuffer::RenderPassWithMaterial(Material *mat) const
+void GBuffer::RenderPassWithMaterial(Material *mat)
 {
     NONULL(mat);
     m_planeMeshToRenderEntireScreen->
             BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                          *(mat->GetShaderProgram()));
 
+    bool prevStencilWrite = m_stencilWriteEnabled;
+    SetStencilWrite(false);
+
     SetUniformsBeforeRendering(mat);
     mat->Bind();
 
-    // Set as only draw output: "B_color_gout_gin". To accumulate color in there
-    Array<int> previousDrawAttIds = GetCurrentDrawAttachmentIds();
-    SetColorDrawBuffer();
+    SaveCurrentDrawBuffers();
 
-    // FAILING HERE
-    glDepthMask(GL_FALSE);
+    // Set as only draw output: "B_color_gout_gin". To accumulate color in there
+    SetColorDrawBuffer();
     RenderScreenPlane();
-    glDepthMask(GL_TRUE);
 
     mat->UnBind();
 
-    SetDrawBuffers(previousDrawAttIds); // Restore previous draw buffers
+    SetStencilWrite(prevStencilWrite);
+
+    LoadSavedDrawBuffers();
 }
 
-void GBuffer::RenderToScreen(GBuffer::Attachment attachmentId) const
+void GBuffer::RenderToScreen(GBuffer::Attachment attachmentId)
 {
     // Assumes gbuffer is not bound, hence directly writing to screen
-    glClear(GL_DEPTH_BUFFER_BIT);
-
     m_planeMeshToRenderEntireScreen->
                 BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                              *(m_renderGBufferToScreenMaterial->GetShaderProgram()));
@@ -106,33 +106,35 @@ void GBuffer::RenderToScreen(GBuffer::Attachment attachmentId) const
     m_renderGBufferToScreenMaterial->UnBind();
 }
 
-void GBuffer::RenderScreenPlane() const
+void GBuffer::RenderScreenPlane()
 {
     m_planeMeshToRenderEntireScreen->GetVAO()->Bind();
 
-    glDepthFunc(GL_LEQUAL);
+    glDepthFunc(GL_ALWAYS);
+    glDepthMask(GL_FALSE);
     glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());
+    glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
 
     m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
 }
 
-void GBuffer::SaveCurrentDrawBuffers() const
+void GBuffer::SaveCurrentDrawBuffers()
 {
     m_previousDrawAttachmentsIds = GetCurrentDrawAttachmentIds();
 }
 
-void GBuffer::LoadSavedDrawBuffers() const
+void GBuffer::LoadSavedDrawBuffers()
 {
     SetDrawBuffers(m_previousDrawAttachmentsIds);
 }
 
-void GBuffer::RenderToScreen() const
+void GBuffer::RenderToScreen()
 {
     RenderToScreen(GBuffer::Attachment::Color);
 }
 
-void GBuffer::SetAllDrawBuffersExceptColor() const
+void GBuffer::SetAllDrawBuffersExceptColor()
 {
     SetDrawBuffers({GBuffer::Attachment::Position,
                     GBuffer::Attachment::Normal,
@@ -143,12 +145,12 @@ void GBuffer::SetAllDrawBuffersExceptColor() const
                     GBuffer::Attachment::Stencil});
 }
 
-void GBuffer::SetStencilDrawBuffer() const
+void GBuffer::SetStencilDrawBuffer()
 {
     SetDrawBuffers({GBuffer::Attachment::Stencil});
 }
 
-void GBuffer::SetColorDrawBuffer() const
+void GBuffer::SetColorDrawBuffer()
 {
     SetDrawBuffers({GBuffer::Attachment::Color});
 }
@@ -163,7 +165,7 @@ void GBuffer::SetStencilTest(bool testEnabled)
     m_stencilTestEnabled = testEnabled;
 }
 
-void GBuffer::ClearStencil() const
+void GBuffer::ClearStencil()
 {
     SaveCurrentDrawBuffers();
 
@@ -173,6 +175,17 @@ void GBuffer::ClearStencil() const
     glClear(GL_COLOR_BUFFER_BIT);
     UnBind();
 
+    LoadSavedDrawBuffers();
+}
+
+void GBuffer::ClearDepth()
+{
+    Framebuffer::ClearDepth();
+
+    SaveCurrentDrawBuffers();
+    SetDrawBuffers({GBuffer::Attachment::Depth});
+    glClearColor(1, 1, 1, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
     LoadSavedDrawBuffers();
 }
 

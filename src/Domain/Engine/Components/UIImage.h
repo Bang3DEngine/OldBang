@@ -18,7 +18,7 @@ protected:
 
 public:
 
-    virtual void Render() const override;
+    virtual void RenderCustomPR() const override;
     bool IsACanvasRenderer() const override;
 
     virtual const String ToString() const override;

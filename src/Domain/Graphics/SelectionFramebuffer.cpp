@@ -112,7 +112,8 @@ GameObject *SelectionFramebuffer::GetGameObjectInPosition(int x, int y)
 {
     Color mouseOverColor = ReadColor(x, y, Attachment::ColorAttachment);
     int id = MapColorToId(mouseOverColor);
-    if (m_id_To_GameObject.ContainsKey(id))
+    if (mouseOverColor != Color::zero &&
+        m_id_To_GameObject.ContainsKey(id))
     {
         return m_id_To_GameObject[id];
     }

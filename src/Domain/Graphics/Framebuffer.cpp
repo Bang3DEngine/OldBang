@@ -149,7 +149,7 @@ Vector2 Framebuffer::GetSize() const
     return Vector2(GetWidth(), GetHeight());
 }
 
-void Framebuffer::Clear() const
+void Framebuffer::Clear()
 {
     Bind();
     SetAllDrawBuffers();
@@ -159,7 +159,7 @@ void Framebuffer::Clear() const
     UnBind();
 }
 
-void Framebuffer::ClearDepth() const
+void Framebuffer::ClearDepth()
 {
     Bind();
     glClearDepth(1.0f);
@@ -167,7 +167,7 @@ void Framebuffer::ClearDepth() const
     UnBind();
 }
 
-void Framebuffer::ClearColor() const
+void Framebuffer::ClearColor()
 {
     Bind();
     SetAllDrawBuffers();

@@ -57,6 +57,7 @@ void GraphicPipeline::RenderScene(Scene *scene)
     m_gbuffer->Bind();
     RenderDepthLayers(m_gbuffer);
     m_gbuffer->UnBind();
+
     m_gbuffer->RenderToScreen();
 
     #ifdef BANG_EDITOR
@@ -69,24 +70,34 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
     if (!CAN_USE_COMPONENT(rend)) { return; }
     if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
 
+    m_gbuffer->SetStencilTest(false);
+    m_gbuffer->SetStencilWrite(true);
     if (!m_selectionFB->IsPassing())
     {
-        bool immediatePostRender = (rend->IsTransparent() || rend->IsGizmo());
+        bool immediatePostRender = (rend->IsTransparent()   ||
+                                    rend->HasCustomPRPass() ||
+                                    rend->IsGizmo());
         if (immediatePostRender)
         {
             m_gbuffer->ClearStencil();
-            m_gbuffer->SetStencilWrite(true);
-            m_gbuffer->SetStencilTest(false);
         }
 
+        m_gbuffer->SetStencilTest(false);
+        m_gbuffer->SetStencilWrite(true);
+        m_gbuffer->SetAllDrawBuffersExceptColor();
         rend->Render();
 
         if (immediatePostRender)
         {
-           m_gbuffer->SetStencilWrite(false);
-           m_gbuffer->SetStencilTest(true);
-           ApplyDeferredLightsToScreen();
-           m_gbuffer->SetStencilTest(false);
+            // These PR's are stenciled from the Render before
+            ApplyDeferredLightsToScreen();
+            if (rend->HasCustomPRPass())
+            {
+                m_gbuffer->SetStencilWrite(true);
+                m_gbuffer->SetAllDrawBuffersExceptColor();
+                RenderCustomPR(rend);
+                m_gbuffer->SetStencilWrite(false);
+            }
         }
     }
     else
@@ -106,10 +117,11 @@ void GraphicPipeline::ApplySelectionEffect()
 
     // Create stencil mask that the selection pass will use
     m_gbuffer->ClearDepth();
-    m_gbuffer->ClearStencil();
     m_gbuffer->SetAllDrawBuffersExceptColor();
-    m_gbuffer->SetStencilWrite(true);
+
+    m_gbuffer->ClearStencil();
     m_gbuffer->SetStencilTest(false);
+    m_gbuffer->SetStencilWrite(true);
     for (GameObject *go : sceneGameObjects)
     {
         if (go->IsSelectedInHierarchy())
@@ -124,14 +136,9 @@ void GraphicPipeline::ApplySelectionEffect()
             }
         }
     }
-    m_gbuffer->SetStencilWrite(false);
 
     // Apply selection outline
     m_gbuffer->RenderPassWithMaterial(m_matSelectionEffectScreen);
-
-    m_gbuffer->ClearDepth();
-    m_gbuffer->ClearStencil();
-
     #endif
 }
 
@@ -148,23 +155,6 @@ void GraphicPipeline::ApplyDeferredLightsToScreen()
             light->ApplyLight(m_gbuffer);
         }
     }
-    m_gbuffer->SetStencilTest(false);
-    m_gbuffer->SetStencilWrite(true);
-}
-
-#ifdef BANG_EDITOR
-void GraphicPipeline::RenderSelectionFramebuffer()
-{
-    m_selectionFB->m_isPassing = true;
-    m_selectionFB->PrepareForRender(m_currentScene);
-
-    m_selectionFB->Bind();
-    m_selectionFB->Clear();
-    RenderDepthLayers(m_selectionFB);
-    m_selectionFB->UnBind();
-
-    m_selectionFB->ProcessSelection();
-    m_selectionFB->m_isPassing = false;
 }
 
 void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
@@ -176,16 +166,23 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     List<Renderer*> renderers = m_currentScene->GetComponentsInChildren<Renderer>();
     for (Renderer *rend : renderers) // Opaque
     {
-        if (!rend->IsTransparent() && !rend->IsGizmo())
+        if (!rend->IsTransparent() && !rend->HasCustomPRPass() &&
+            !rend->IsGizmo())
         {
             RenderRenderer(rend);
         }
     }
-    if (fb == m_gbuffer) ApplyDeferredLightsToScreen();
 
-    for (Renderer *rend : renderers) // Transparent
+    if (fb == m_gbuffer)
     {
-        if (rend->IsTransparent() && !rend->IsGizmo())
+        ApplyDeferredLightsToScreen();
+        m_gbuffer->ClearStencil();
+    }
+
+    for (Renderer *rend : renderers) // Immediate PR
+    {
+        if ((rend->IsTransparent() || rend->HasCustomPRPass()) &&
+            !rend->IsGizmo())
         {
             RenderRenderer(rend);
         }
@@ -196,6 +193,16 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     {
         go->_OnDrawGizmos();
     }
+}
+
+void GraphicPipeline::RenderCustomPR(Renderer *rend)
+{
+    if (!CAN_USE_COMPONENT(rend)) { return; }
+    if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
+
+    m_gbuffer->SetStencilWrite(false);
+    m_gbuffer->SetStencilTest(true);
+    rend->RenderCustomPR();
 }
 
 void GraphicPipeline::RenderGizmosOverlayPass(Framebuffer *fb)
@@ -219,7 +226,11 @@ void GraphicPipeline::RenderDepthLayers(Framebuffer *fb)
             RenderPassWithDepthLayer(depthLayer, fb);
         }
     }
-    if (fb == m_gbuffer) ApplySelectionEffect();
+    if (fb == m_gbuffer)
+    {
+        ApplySelectionEffect();
+    }
+
     RenderGizmosOverlayPass(fb);
 }
 
@@ -236,6 +247,20 @@ GBuffer *GraphicPipeline::GetGBuffer() const
     return m_gbuffer;
 }
 
+#ifdef BANG_EDITOR
+void GraphicPipeline::RenderSelectionFramebuffer()
+{
+    m_selectionFB->m_isPassing = true;
+    m_selectionFB->PrepareForRender(m_currentScene);
+
+    m_selectionFB->Bind();
+    m_selectionFB->Clear();
+    RenderDepthLayers(m_selectionFB);
+    m_selectionFB->UnBind();
+
+    m_selectionFB->ProcessSelection();
+    m_selectionFB->m_isPassing = false;
+}
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
 {
     return m_selectionFB;

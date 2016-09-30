@@ -59,6 +59,7 @@ public:
 
     void RenderScene(Scene *scene);
     void RenderRenderer(Renderer *rend);
+    void RenderCustomPR(Renderer *rend);
 
     void OnResize(int newWidth, int newHeight);
 

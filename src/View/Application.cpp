@@ -54,12 +54,12 @@ void Application::OnDrawTimerTick()
         activeScene->_OnUpdate();
     }
 
-    Chrono c("FPS");
+    //Chrono c("FPS");
     // Render screen
-    c.MarkEvent("Render");
+    //c.MarkEvent("Render");
     Screen::GetInstance()->Render();
     Screen::GetInstance()->swapBuffers();
-    c.Log();
+    //c.Log();
 
     Input::GetInstance()->OnFrameFinished(); // Notify to Input that a new frame has passed
 }

@@ -86,6 +86,7 @@ protected:
 
     bool m_drawWireframe = false;
     bool m_receivesLighting = true;
+    bool m_hasCustomPRPass = false;
     CullMode m_cullMode = CullMode::Back;
     RenderMode m_renderMode = RenderMode::Triangles;
 
@@ -143,6 +144,7 @@ public:
     bool GetReceivesLighting() const;
 
     virtual void Render() const;
+    virtual void RenderCustomPR() const;
     void RenderWithMaterial(Material *mat) const;
 
     virtual bool IsACanvasRenderer() const;
@@ -166,6 +168,8 @@ public:
 
     void SetIsGizmo(bool isGizmo);
     bool IsGizmo() const;
+
+    bool HasCustomPRPass() const;
 
     void SetDepthLayer(DepthLayer dl);
     DepthLayer GetDepthLayer() const;

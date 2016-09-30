@@ -31,9 +31,10 @@ uniform sampler2D B_texture_0;
 // Screen related
 uniform vec2 B_screen_size;
 #ifdef BANG_FRAGMENT
-vec2 B_screen_coord = gl_FragCoord.xy;
-vec2 B_screen_coord_norm = B_screen_coord / B_screen_size;
-vec2 B_pixel_step = 1.0f / B_screen_size;
+float B_screen_aspect_ratio = B_screen_size.x / B_screen_size.y;
+vec2  B_screen_coord = gl_FragCoord.xy;
+vec2  B_screen_coord_norm = B_screen_coord / B_screen_size;
+vec2  B_pixel_step = 1.0f / B_screen_size;
 #endif
 
 // GBuffer textures

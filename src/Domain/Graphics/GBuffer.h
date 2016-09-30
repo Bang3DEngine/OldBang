@@ -43,33 +43,34 @@ private:
     bool m_stencilWriteEnabled = false;
     bool m_stencilTestEnabled  = false;
 
-    void RenderScreenPlane() const;
+    void RenderScreenPlane();
 
     // To preserve state
     mutable Array<int> m_previousDrawAttachmentsIds;
-    void SaveCurrentDrawBuffers() const;
-    void LoadSavedDrawBuffers() const;
+    void SaveCurrentDrawBuffers();
+    void LoadSavedDrawBuffers();
 
 public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    void SetUniformsBeforeRendering(Material *mat) const;
-    void RenderPassWithMaterial(Material *mat) const;
-    void RenderToScreen(Attachment attachmentId) const;
-    void RenderToScreen() const;
+    void SetUniformsBeforeRendering(Material *mat);
+    void RenderPassWithMaterial(Material *mat);
+    void RenderToScreen(Attachment attachmentId);
+    void RenderToScreen();
 
     /**
      * @brief Sets all GBuffer's draw buffers, except for the color one.
      * This is useful for D2G render pass.
      */
-    void SetAllDrawBuffersExceptColor() const;
-    void SetStencilDrawBuffer() const;
-    void SetColorDrawBuffer() const;
+    void SetAllDrawBuffersExceptColor();
+    void SetStencilDrawBuffer();
+    void SetColorDrawBuffer();
 
     void SetStencilWrite(bool writeEnabled);
     void SetStencilTest(bool testEnabled);
-    void ClearStencil() const;
+    void ClearStencil();
+    void ClearDepth() override;
 
     void ClearAllBuffersExceptColor();
     void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::zero);

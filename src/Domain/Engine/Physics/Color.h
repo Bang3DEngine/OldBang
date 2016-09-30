@@ -84,6 +84,8 @@ Color operator/(float m, const Color& v);
 Color operator/(const Color& v, float m);
 Color operator/(const Color& v1, const Color& v2);
 
+bool operator==(const Color& lhs, const Color& rhs);
+bool operator!=(const Color& lhs, const Color& rhs);
 Color& operator+=(Color& lhs, const Color& rhs);
 Color& operator-=(Color& lhs, const Color& rhs);
 Color& operator*=(Color& lhs, const Color& rhs);
