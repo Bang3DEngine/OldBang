@@ -119,7 +119,7 @@ template <class T>
 std::ostream &operator<<(std::ostream &log, const Array<T> *v)
 {
     log << "[";
-    for (int i = 0; i < v->size(); ++i)
+    for (int i = 0; i < v->Size(); ++i)
     {
         if (i != 0) log << ", ";
         log << (*v)[i];

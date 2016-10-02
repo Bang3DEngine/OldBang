@@ -124,8 +124,8 @@ bool FileReader::ReadOBJ(const String& filepath,
     Array<Vector3> disorderedVertexPos, disorderedVertexNormals;
     Array<Vector2> disorderedVertexUvs;
     Array<unsigned int> vertexPosIndexes,
-                              vertexUvsIndexes,
-                              vertexNormIndexes;
+                        vertexUvsIndexes,
+                        vertexNormIndexes;
     bool hasUvs, hasNormals;
 
     GetOBJFormat(filepath, &hasUvs, &hasNormals, isTriangles);
