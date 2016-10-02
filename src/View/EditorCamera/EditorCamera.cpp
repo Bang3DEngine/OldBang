@@ -202,7 +202,6 @@ void EditorCamera::OnStart()
 void EditorCamera::OnUpdate()
 {
     EditorGameObject::OnUpdate();
-
     AdjustSpeeds();
 
     Vector3 moveStep(0.0f);
@@ -236,7 +235,6 @@ void EditorCamera::OnUpdate()
         //Update all needed variables in case we are doing a lookAt.
         UpdateRotationVariables();
     }
-
 
     if (unwrapMouse)
     {

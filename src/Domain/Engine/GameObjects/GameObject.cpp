@@ -566,17 +566,14 @@ bool GameObject::IsChildOf(const GameObject *goParent) const
 
 void GameObject::_OnStart()
 {
-    ISceneEventListener::_OnStart();
-
-    PROPAGATE_EVENT(_OnStart, m_children);
     OnStart();
+    m_isStarted = true;
+    PROPAGATE_EVENT(_OnStart, m_children);
 }
 
 
 void GameObject::_OnUpdate()
 {
-    ISceneEventListener::_OnUpdate();
-
     #ifdef BANG_EDITOR
     bool canUpdate = Toolbar::GetInstance()->IsPlaying() || IsEditorGameObject();
     #else
@@ -585,24 +582,23 @@ void GameObject::_OnUpdate()
 
     if (canUpdate)
     {
+        OnUpdate();
+    }
+
+    if (canUpdate)
+    {
         PROPAGATE_EVENT(_OnUpdate, m_components);
     }
 
     PROPAGATE_EVENT(_OnUpdate, m_children);
-
-    if (canUpdate)
-    {
-        OnUpdate();
-    }
 }
 
 void GameObject::_OnDestroy()
 {
-    ISceneEventListener::_OnDestroy();
-
-    PROPAGATE_EVENT(_OnDestroy, m_components);
-    //No need to propagate _OnDestroy to children,
+    //No need to propagate _OnDestroy to children, just on components,
     //since the "delete child" itself propagates it (look at the destructor)
+    PROPAGATE_EVENT(_OnDestroy, m_components);
+
     OnDestroy();
 }
 
@@ -645,7 +641,6 @@ void GameObject::OnDropMaterial(Material *m)
 void GameObject::_OnDrawGizmos()
 {
     #ifdef BANG_EDITOR
-    ISceneEventListener::_OnDrawGizmos();
 
     PROPAGATE_EVENT(_OnDrawGizmos, m_children);
     PROPAGATE_EVENT(_OnDrawGizmos, m_components);
@@ -663,7 +658,6 @@ void GameObject::_OnDrawGizmos()
 void GameObject::_OnDrawGizmosOverlay()
 {
     #ifdef BANG_EDITOR
-    ISceneEventListener::_OnDrawGizmosOverlay();
 
     PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_children);
     PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_components);

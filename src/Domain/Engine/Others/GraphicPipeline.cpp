@@ -41,12 +41,6 @@ GraphicPipeline::~GraphicPipeline()
     #endif
 }
 
-GraphicPipeline* GraphicPipeline::GetActive()
-{
-    Scene *scene = SceneManager::GetActiveScene();
-    return scene ? scene->GetGraphicPipeline() : nullptr;
-}
-
 void GraphicPipeline::RenderScene(Scene *scene)
 {
     m_currentScene = scene;
@@ -70,8 +64,6 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
     if (!CAN_USE_COMPONENT(rend)) { return; }
     if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
 
-    m_gbuffer->SetStencilTest(false);
-    m_gbuffer->SetStencilWrite(true);
     if (!m_selectionFB->IsPassing())
     {
         bool immediatePostRender = (rend->IsTransparent()   ||
@@ -93,10 +85,7 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
             ApplyDeferredLightsToScreen();
             if (rend->HasCustomPRPass())
             {
-                m_gbuffer->SetStencilWrite(true);
-                m_gbuffer->SetAllDrawBuffersExceptColor();
                 RenderCustomPR(rend);
-                m_gbuffer->SetStencilWrite(false);
             }
         }
     }
@@ -195,26 +184,29 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     }
 }
 
-void GraphicPipeline::RenderCustomPR(Renderer *rend)
-{
-    if (!CAN_USE_COMPONENT(rend)) { return; }
-    if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
-
-    m_gbuffer->SetStencilWrite(false);
-    m_gbuffer->SetStencilTest(true);
-    rend->RenderCustomPR();
-}
-
 void GraphicPipeline::RenderGizmosOverlayPass(Framebuffer *fb)
 {
     m_currentDepthLayer = Renderer::DepthLayer::DepthLayerGizmosOverlay;
-    fb->ClearDepth(); // After each pass, clear the depth
+    fb->ClearDepth(); // After each pass, clear the dept
 
     List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
     for (GameObject *go : sceneGameObjects)
     {
         go->_OnDrawGizmosOverlay();
     }
+}
+
+void GraphicPipeline::RenderCustomPR(Renderer *rend)
+{
+    if (!CAN_USE_COMPONENT(rend)) { return; }
+    if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
+
+    if (!m_selectionFB->IsPassing())
+    {
+        m_gbuffer->SetStencilWrite(false);
+        m_gbuffer->SetStencilTest(true);
+    }
+    rend->RenderCustomPR();
 }
 
 void GraphicPipeline::RenderDepthLayers(Framebuffer *fb)
@@ -226,25 +218,13 @@ void GraphicPipeline::RenderDepthLayers(Framebuffer *fb)
             RenderPassWithDepthLayer(depthLayer, fb);
         }
     }
+
     if (fb == m_gbuffer)
     {
         ApplySelectionEffect();
     }
 
     RenderGizmosOverlayPass(fb);
-}
-
-void GraphicPipeline::OnResize(int newWidth, int newHeight)
-{
-    m_gbuffer->Resize(newWidth, newHeight);
-    #ifdef BANG_EDITOR
-    m_selectionFB->Resize(newWidth, newHeight);
-    #endif
-}
-
-GBuffer *GraphicPipeline::GetGBuffer() const
-{
-    return m_gbuffer;
 }
 
 #ifdef BANG_EDITOR
@@ -261,8 +241,29 @@ void GraphicPipeline::RenderSelectionFramebuffer()
     m_selectionFB->ProcessSelection();
     m_selectionFB->m_isPassing = false;
 }
+
+GraphicPipeline* GraphicPipeline::GetActive()
+{
+    Scene *scene = SceneManager::GetActiveScene();
+    return scene ? scene->GetGraphicPipeline() : nullptr;
+}
+
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
 {
     return m_selectionFB;
 }
+
+void GraphicPipeline::OnResize(int newWidth, int newHeight)
+{
+    m_gbuffer->Resize(newWidth, newHeight);
+    #ifdef BANG_EDITOR
+    m_selectionFB->Resize(newWidth, newHeight);
+    #endif
+}
+
+GBuffer *GraphicPipeline::GetGBuffer() const
+{
+    return m_gbuffer;
+}
+
 #endif

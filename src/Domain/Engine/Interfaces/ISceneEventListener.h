@@ -26,7 +26,10 @@ protected:
 
     virtual void _OnStart ()
     {
-        OnStart();
+        if (!m_isStarted)
+        {
+            OnStart();
+        }
         m_isStarted = true;
     }
 

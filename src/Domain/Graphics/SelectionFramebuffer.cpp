@@ -157,7 +157,6 @@ Color SelectionFramebuffer::MapIdToColor(long id)
                     double( (id / C)      % C),
                     double(((id / C) / C) % C)
                    );
-
    return color / float(C);
 }
 
