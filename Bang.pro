@@ -150,7 +150,9 @@ OTHER_FILES += \
     Assets/Engine/Shaders/PR_RenderBackground.frag \
     Assets/Engine/Shaders/Include/Main.glsl \
     Assets/Engine/Shaders/SelectionBuffer.vert \
-    Assets/Engine/Shaders/PR_SelectionEffect.frag
+    Assets/Engine/Shaders/PR_SelectionEffect.frag \
+    Assets/Engine/Shaders/D2G_RotationAxisLine.frag \
+    Assets/Engine/Materials/D2G_RotationAxisLine.bmat
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

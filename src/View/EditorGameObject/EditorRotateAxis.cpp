@@ -12,7 +12,13 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     m_circle->SetRadius(0.5f);
     m_circle->SetSegments(64);
     m_circle->SetLineWidth(2.0f);
+
+    delete m_material; // Delete default EditorAxis material
+    Material *mat = AssetsManager::LoadAsset<Material>(
+                "Assets/Engine/Materials/D2G_RotationAxisLine.bmat");
+    m_material = new Material(*mat);
     m_circle->SetMaterial(m_material);
+
     m_circle->SetReceivesLighting(false);
     m_circle->SetIsGizmo(true);
     m_circle->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmosOverlay);
@@ -109,6 +115,12 @@ void EditorRotateAxis::OnUpdate()
             }
         }
     }
+
+    // Pass some uniforms to the shader that renders the rotation circles
+    Sphere bSphere = m_attachedGameObject->GetBoundingSphere();
+    float radius = bSphere.GetRadius() / 2.0f;
+    m_material->GetShaderProgram()->SetUniformVec3("B_world_circleCenter", bSphere.GetCenter());
+    m_material->GetShaderProgram()->SetUniformVec3("B_boundingSphereRadius", radius);
 }
 
 void EditorRotateAxis::OnDrawGizmosOverlay()
