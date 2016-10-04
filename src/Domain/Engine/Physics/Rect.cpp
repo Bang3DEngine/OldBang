@@ -17,7 +17,7 @@ Rect::Rect(float minx, float maxx,
 {
 }
 
-Rect::Rect(Vector2 p1, Vector2 p2)
+Rect::Rect(const Vector2 &p1, const Vector2 &p2)
 {
     m_minx = glm::min(p1.x, p2.x);
     m_maxx = glm::max(p1.x, p2.x);

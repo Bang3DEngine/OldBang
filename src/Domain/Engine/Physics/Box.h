@@ -24,6 +24,7 @@ private:
     Vector3 m_minv, m_maxv;
 
 public:
+    static Box Zero;
 
     Box();
     Box(float minx, float maxx,
@@ -83,5 +84,6 @@ public:
 };
 
 Box operator*(const Matrix4 &m, const Box &b);
+bool operator==(const Box &b1, const Box &b2);
 
 #endif // BOX_H

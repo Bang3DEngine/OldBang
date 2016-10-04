@@ -218,14 +218,16 @@ Rect GameObject::GetBoundingScreenRect(Camera *cam,
 
 Box GameObject::GetObjectBoundingBox(bool includeChildren) const
 {
-    Box b;
-    MeshRenderer *mr = GetComponent<MeshRenderer>();
-    if (CAN_USE_COMPONENT(mr))
+    List<Renderer*> rends = GetComponents<Renderer>();
+    Box b = Box::Zero;
+    if (!rends.Empty())
     {
-        const Mesh *m = mr->GetMesh();
-        if (m)
+        for (Renderer *rend : rends)
         {
-            b = m->GetBoundingBox();
+            if (CAN_USE_COMPONENT(rend))
+            {
+                b = Box::Union(b, rend->GetBoundingBox());
+            }
         }
     }
 
@@ -516,7 +518,6 @@ void GameObject::OnHierarchyGameObjectsSelected(
         if (rend)
         {
             Rect br = rend->GetBoundingRect();
-            Debug_Log(br);
             Debug::DrawScreenLine(br.GetMin(), br.GetMax(), Color::Green);
         }
     }
@@ -663,16 +664,18 @@ void GameObject::_OnDrawGizmos()
 {
     #ifdef BANG_EDITOR
 
-    PROPAGATE_EVENT(_OnDrawGizmos, m_children);
-    PROPAGATE_EVENT(_OnDrawGizmos, m_components);
+    PROPAGATE_EVENT(_OnDrawGizmos, m_children);  // The order matters
 
-    SelectionFramebuffer *sfb =
-            GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (sfb->IsPassing())
     {
         sfb->PrepareNextGameObject(this);
     }
+
+    PROPAGATE_EVENT(_OnDrawGizmos, m_components);  // The order matters
     OnDrawGizmos();
+
     #endif
 }
 
@@ -680,16 +683,18 @@ void GameObject::_OnDrawGizmosOverlay()
 {
     #ifdef BANG_EDITOR
 
-    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_children);
-    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_components);
+    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_children); // The order matters
 
-    SelectionFramebuffer *sfb =
-            GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (sfb->IsPassing())
     {
         sfb->PrepareNextGameObject(this);
     }
+
+    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_components);  // The order matters
     OnDrawGizmosOverlay();
+
     #endif
 }
 

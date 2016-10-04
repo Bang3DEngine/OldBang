@@ -6,6 +6,8 @@
 #include "Camera.h"
 #include "Sphere.h"
 
+Box Box::Zero = Box(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+
 Box::Box()
 {
 }
@@ -100,10 +102,12 @@ float Box::GetVolume() const
 
 Box Box::Union(const Box &b1, const Box &b2)
 {
+    if (b1 == Box::Zero) { return b2; }
+    if (b2 == Box::Zero) { return b1; }
     return
-    Box(std::min(b1.m_minv.x, b2.m_minv.x), std::max(b1.m_maxv.x, b2.m_maxv.x),
-        std::min(b1.m_minv.y, b2.m_minv.y), std::max(b1.m_maxv.y, b2.m_maxv.y),
-        std::min(b1.m_minv.z, b2.m_minv.z), std::max(b1.m_maxv.z, b2.m_maxv.z));
+    Box(glm::min(b1.m_minv.x, b2.m_minv.x), glm::max(b1.m_maxv.x, b2.m_maxv.x),
+        glm::min(b1.m_minv.y, b2.m_minv.y), glm::max(b1.m_maxv.y, b2.m_maxv.y),
+        glm::min(b1.m_minv.z, b2.m_minv.z), glm::max(b1.m_maxv.z, b2.m_maxv.z));
 }
 
 void Box::FillFromPositions(const Array<Vector3> &positions)
@@ -201,4 +205,11 @@ const String Box::ToString() const
            "]" << std::endl;
 
     return oss.str();
+}
+
+
+bool operator==(const Box &b1, const Box &b2)
+{
+    return b1.GetMin() == b2.GetMin() &&
+           b1.GetMax() == b2.GetMax();
 }

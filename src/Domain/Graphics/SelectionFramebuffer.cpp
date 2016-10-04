@@ -53,11 +53,12 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     SetAllDrawBuffers();
 
-    ShaderProgram *sp = m_material->GetShaderProgram();
     GameObject *go = !rend->IsGizmo() ? rend->gameObject :
                                         m_nextGameObjectToBeRendered;
+
     if (CanRenderGameObject(go))
     {
+        ShaderProgram *sp = m_material->GetShaderProgram();
         sp->SetUniformColor("selectionColor", GetSelectionColor(go));
         rend->RenderWithMaterial(m_material);
     }
@@ -162,9 +163,10 @@ Color SelectionFramebuffer::MapIdToColor(long id)
 
 long SelectionFramebuffer::MapColorToId(const Color &color)
 {
-    return long(color.r * 256) +
-           long(color.g * 256 * 256) +
-           long(color.b * 256 * 256 * 256);
+    const int C = 256;
+    return long(color.r * C) +
+           long(color.g * C * C) +
+           long(color.b * C * C * C);
 }
 
 bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)

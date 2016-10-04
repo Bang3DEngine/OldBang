@@ -22,7 +22,7 @@ public:
     Rect();
     Rect(float minx, float maxx,
          float miny, float maxy);
-    Rect(Vector2 p1, Vector2 p2);
+    Rect(const Vector2 &p1, const Vector2 &p2);
 
     Vector2 GetMin() const;
     Vector2 GetMax() const;

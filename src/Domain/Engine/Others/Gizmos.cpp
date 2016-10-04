@@ -180,7 +180,7 @@ void Gizmos::RenderBox(const Box &b)
     Gizmos::Reset();
 }
 
-void Gizmos::RenderScreenRect(const Rect &r)
+void Gizmos::RenderRect(const Rect &r)
 {
     NONULL(m_gizmosGameObject);
     Gizmos::SetIgnoreMatrices(true, true, true);

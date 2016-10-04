@@ -60,6 +60,12 @@ Box LineRenderer::GetBoundingBox() const
         maxp.y = glm::max(maxp.y, p.y);
         maxp.z = glm::max(maxp.z, p.z);
     }
+
+    // Add a bit in every dimensions, to avoid flattened Rects
+    const float strokeAdd = 0.01f;
+    minp.x -= strokeAdd; maxp.x += strokeAdd;
+    minp.y -= strokeAdd; maxp.y += strokeAdd;
+    minp.z -= strokeAdd; maxp.z += strokeAdd;
     return Box(minp, maxp);
 }
 

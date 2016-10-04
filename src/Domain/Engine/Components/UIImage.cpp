@@ -1,5 +1,6 @@
 ﻿#include "UIImage.h"
 
+#include "Rect.h"
 #include "Material.h"
 #include "MeshFactory.h"
 #include "GraphicPipeline.h"
@@ -32,17 +33,20 @@ void UIImage::RenderCustomPR() const
     MeshRenderer::RenderCustomPR();
 
     ShaderProgram *sp = m_materialPR->GetShaderProgram();
+    sp->SetUniformColor("B_tint",        m_tint);
+    sp->SetUniformColor("B_strokeColor", m_strokeColor);
+    sp->SetUniformFloat("B_stroke",      m_stroke);
+    sp->SetUniformTexture("B_texture_0", m_material->GetTexture());
+
     Box screenBox = gameObject->GetBoundingBox();
     sp->SetUniformFloat("B_image_left",  screenBox.GetMin().x);
     sp->SetUniformFloat("B_image_up",    screenBox.GetMax().y);
     sp->SetUniformFloat("B_image_right", screenBox.GetMax().x);
     sp->SetUniformFloat("B_image_bot",   screenBox.GetMin().y);
-    sp->SetUniformColor("B_tint",        m_tint);
-    sp->SetUniformColor("B_strokeColor", m_strokeColor);
-    sp->SetUniformFloat("B_stroke",      m_stroke);
-    sp->SetUniformTexture("B_texture_0", m_material->GetTexture());
+
+    Rect renderRect(screenBox.GetMin().xy(), screenBox.GetMax().xy());
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
-    gb->RenderPassWithMaterial(m_materialPR);
+    gb->RenderPassWithMaterial(m_materialPR, renderRect);
 }
 
 bool UIImage::IsACanvasRenderer() const
