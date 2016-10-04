@@ -13,6 +13,8 @@ protected:
 protected:
     PointLight();
 
+    Rect GetRenderRect(Camera *cam) const override;
+
 public:
 
     virtual const String ToString() const override;

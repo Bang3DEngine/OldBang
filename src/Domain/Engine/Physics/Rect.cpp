@@ -66,7 +66,17 @@ Rect Rect::Union(const Rect &r1, const Rect &r2)
 
 Rect Rect::Intersection(const Rect &r1, const Rect &r2)
 {
+    float minx = glm::max(r1.m_minx, r2.m_minx);
+    float miny = glm::max(r1.m_miny, r2.m_miny);
+    float maxx = glm::min(r1.m_maxx, r2.m_maxx);
+    float maxy = glm::min(r1.m_maxy, r2.m_maxy);
 
+    if (minx > maxx || miny > maxy)
+    {
+        return Rect::Empty;
+    }
+
+    return Rect(minx, maxx, miny, maxy);
 }
 
 Rect Rect::GetBoundingRectFromPositions(const List<Vector2> &positions)

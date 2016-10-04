@@ -15,6 +15,7 @@
 #include "IToString.h"
 
 class Rect;
+class Sphere;
 class Camera;
 class Quaternion;
 class Box : public IToString
@@ -63,6 +64,8 @@ public:
      */
     void FillFromPositions(const Array<Vector3> &positions);
 
+    static Box FromSphere(const Sphere &sphere);
+
     List<Vector3> GetPoints() const;
 
     /**
@@ -71,10 +74,10 @@ public:
      * @param cam
      * @return
      */
-    Rect ToScreenRect(Camera *cam,
-                      const Vector3 &translation = Vector3::Zero,
-                      const Quaternion& rotation = Quaternion::Identity,
-                      const Vector3 &scale = Vector3::One);
+    Rect GetBoundingScreenRect(Camera *cam,
+                               const Vector3 &translation = Vector3::Zero,
+                               const Quaternion& rotation = Quaternion::Identity,
+                               const Vector3 &scale = Vector3::One);
 
     const String ToString() const override;
 };

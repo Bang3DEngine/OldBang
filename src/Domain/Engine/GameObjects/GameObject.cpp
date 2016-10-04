@@ -210,7 +210,7 @@ Rect GameObject::GetBoundingScreenRect(Camera *cam,
                                        bool includeChildren) const
 {
     Box bbox = GetObjectBoundingBox(includeChildren);
-    return bbox.ToScreenRect(cam,
+    return bbox.GetBoundingScreenRect(cam,
                              transform->GetPosition(),
                              transform->GetRotation(),
                              transform->GetScale());

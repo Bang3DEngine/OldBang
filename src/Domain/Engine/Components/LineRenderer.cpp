@@ -47,19 +47,19 @@ void LineRenderer::SetMaterial(Material *m)
 
 Box LineRenderer::GetBoundingBox() const
 {
-    Vector3 minp(999999.9f);
-    Vector3 maxp(-999999.9f);
-    for (int i = 0; i < m_points.Size(); ++i)
-    {
-        Vector3 p = m_points[i];
-        if (p.x < minp.x) minp.x = p.x;
-        if (p.y < minp.y) minp.y = p.y;
-        if (p.z < minp.z) minp.z = p.z;
-        if (p.x > minp.x) maxp.x = p.x;
-        if (p.y > minp.y) maxp.y = p.y;
-        if (p.z > minp.z) maxp.z = p.z;
-    }
+    if (m_points.Empty()) { return Box(Vector3::Zero, Vector3::Zero); }
 
+    Vector3 minp = m_points.Front();
+    Vector3 maxp = m_points.Front();
+    for (const Vector3 &p : m_points)
+    {
+        minp.x = glm::min(minp.x, p.x);
+        minp.y = glm::min(minp.y, p.y);
+        minp.z = glm::min(minp.z, p.z);
+        maxp.x = glm::max(maxp.x, p.x);
+        maxp.y = glm::max(maxp.y, p.y);
+        maxp.z = glm::max(maxp.z, p.z);
+    }
     return Box(minp, maxp);
 }
 

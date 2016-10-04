@@ -16,6 +16,13 @@ PointLight::PointLight() : Light()
                 "Assets/Engine/Materials/PR_PointLight_Screen.bmat");
 }
 
+Rect PointLight::GetRenderRect(Camera *cam) const
+{
+    Sphere sphere(gameObject->transform->GetPosition(), m_range);
+    Box bbox = Box::FromSphere(sphere);
+    return bbox.GetBoundingScreenRect(cam);
+}
+
 
 void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
 {

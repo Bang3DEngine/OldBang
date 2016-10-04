@@ -60,7 +60,7 @@ void Mesh::LoadPositions(const Array<Vector3>& positions)
     m_vertexCount = m_positions.Size();
 
     m_bBox.FillFromPositions(m_positions);
-    m_bSphere.FillFromBox(m_bBox);
+    m_bSphere.FromBox(m_bBox);
 }
 
 void Mesh::LoadNormals(const Array<Vector3> &normals)

@@ -1,10 +1,12 @@
 #include "Light.h"
 
+#include "Scene.h"
 #include "Gizmos.h"
 #include "GBuffer.h"
 #include "Renderer.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "SceneManager.h"
 
 #ifdef BANG_EDITOR
 #include "InspectorWidget.h"
@@ -26,9 +28,20 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
 {
     gbuffer->Bind();
+
     SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
-    gbuffer->RenderPassWithMaterial(m_lightMaterialScreen, renderRect);
+
+    // Intersect with light rect to draw exactly what we need
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera();
+    Rect improvedRenderRect = Rect::Intersection(GetRenderRect(cam), renderRect);
+    gbuffer->RenderPassWithMaterial(m_lightMaterialScreen, improvedRenderRect);
+
     gbuffer->UnBind();
+}
+
+Rect Light::GetRenderRect(Camera *cam) const
+{
+    return Rect::ScreenRect; // By default, no rect rendering constraint
 }
 
 const String Light::ToString() const

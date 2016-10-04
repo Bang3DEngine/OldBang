@@ -4,6 +4,7 @@
 
 #include "Rect.h"
 #include "Camera.h"
+#include "Sphere.h"
 
 Box::Box()
 {
@@ -121,6 +122,14 @@ void Box::FillFromPositions(const Array<Vector3> &positions)
     }
 }
 
+Box Box::FromSphere(const Sphere &sphere)
+{
+    Box b;
+    b.SetMin(sphere.GetCenter() - Vector3(sphere.GetRadius()));
+    b.SetMax(sphere.GetCenter() + Vector3(sphere.GetRadius()));
+    return b;
+}
+
 List<Vector3> Box::GetPoints() const
 {
     return {Vector3(m_minv.x, m_minv.y, m_minv.z),
@@ -133,10 +142,10 @@ List<Vector3> Box::GetPoints() const
             Vector3(m_maxv.x, m_maxv.y, m_maxv.z)};
 }
 
-Rect Box::ToScreenRect(Camera *cam,
-                       const Vector3 &translation,
-                       const Quaternion &rotation,
-                       const Vector3 &scale)
+Rect Box::GetBoundingScreenRect(Camera *cam,
+                                const Vector3 &translation,
+                                const Quaternion &rotation,
+                                const Vector3 &scale)
 {
     Matrix4 transformMatrix =
             Matrix4::TranslateMatrix(translation) *
