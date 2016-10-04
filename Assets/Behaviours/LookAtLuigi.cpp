@@ -38,7 +38,7 @@ void LookAtLuigi::OnUpdate()
         Vector3 myPos = gameObject->transform->GetPosition();
         Vector3 luigiPos = luigi->transform->GetPosition();
         gameObject->transform->LookInDirection(luigiPos - myPos);
-        Debug::DrawLine(myPos, luigiPos, Color::green, 3.0f, 0.05f, true);
+        Debug::DrawLine(myPos, luigiPos, Color::Green, 3.0f, 0.05f, true);
     }
 
 }

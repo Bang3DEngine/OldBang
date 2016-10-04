@@ -119,13 +119,20 @@ public:
     List<GameObject*> GetChildrenRecursivelyEditor() const;
     #endif
 
+    /**
+     * @brief Returns the bounding screen rect of the gameObject rendered
+     * from the passed camera in NDC.
+     * @return
+     */
+    Rect GetBoundingScreenRect(Camera *cam,
+                               bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding box in Object space, without
      * applying any Transform (equivalent to Mesh->GetBoundingBox())
      * @return
      */
-    Box GetObjectBoundingBox() const;
+    Box GetObjectBoundingBox(bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding box, applying only the
@@ -133,20 +140,20 @@ public:
      * (not parents' transforms included here).
      * @return
      */
-    Box GetLocalBoundingBox() const;
+    Box GetLocalBoundingBox(bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding box in world space
      * @return
      */
-    Box GetBoundingBox() const;
+    Box GetBoundingBox(bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding sphere in Object space, without
      * applying any Transform (equivalent to Mesh->GetBoundingBox())
      * @return
      */
-    Sphere GetObjectBoundingSphere() const;
+    Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding sphere, applying only the
@@ -154,13 +161,13 @@ public:
      * (not parents' transforms included here).
      * @return
      */
-    Sphere GetLocalBoundingSphere() const;
+    Sphere GetLocalBoundingSphere(bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding sphere in world space
      * @return
      */
-    Sphere GetBoundingSphere() const;
+    Sphere GetBoundingSphere(bool includeChildren = true) const;
 
     #ifdef BANG_EDITOR
     /**
@@ -340,7 +347,7 @@ public:
     bool IsDraggedGameObject() const;
 
     bool IsSelectedInHierarchy() const;
-    void OnTreeHierarchyGameObjectsSelected(
+    void OnHierarchyGameObjectsSelected(
             List<GameObject*> &selectedEntities) override;
     #endif
 

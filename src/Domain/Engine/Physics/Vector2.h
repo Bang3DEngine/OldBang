@@ -66,12 +66,12 @@ public:
     static float Dot(const Vector2 &v1, const Vector2 &v2);
     static float Distance(const Vector2 &v1, const Vector2 &v2);
 
-    const static Vector2 up;
-    const static Vector2 down;
-    const static Vector2 right;
-    const static Vector2 left;
-    const static Vector2 zero;
-    const static Vector2 one;
+    const static Vector2 Up;
+    const static Vector2 Down;
+    const static Vector2 Right;
+    const static Vector2 Left;
+    const static Vector2 Zero;
+    const static Vector2 One;
 };
 
 Vector2 operator+(float a, const Vector2& v);

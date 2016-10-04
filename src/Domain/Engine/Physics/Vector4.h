@@ -72,14 +72,14 @@ public:
     static float Dot(const Vector4 &v1, const Vector4 &v2);
     static float Distance(const Vector4 &v1, const Vector4 &v2);
 
-    const static Vector4 up;
-    const static Vector4 down;
-    const static Vector4 right;
-    const static Vector4 left;
-    const static Vector4 forward;
-    const static Vector4 back;
-    const static Vector4 zero;
-    const static Vector4 one;
+    const static Vector4 Up;
+    const static Vector4 Down;
+    const static Vector4 Right;
+    const static Vector4 Left;
+    const static Vector4 Forward;
+    const static Vector4 Back;
+    const static Vector4 Zero;
+    const static Vector4 One;
 
     // SWIZZLING
     Vector2  xy() const;

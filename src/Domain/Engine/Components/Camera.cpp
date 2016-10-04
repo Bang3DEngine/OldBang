@@ -201,13 +201,13 @@ void Camera::OnDrawGizmos()
     Gizmos::SetReceivesLighting(true);
     Gizmos::SetPosition(transform->GetPosition());
     Gizmos::SetRotation(transform->GetRotation());
-    Gizmos::SetScale(Vector3::one * 0.02f * distScale);
+    Gizmos::SetScale(Vector3::One * 0.02f * distScale);
     Gizmos::SetColor(GetClearColor());
     Gizmos::RenderCustomMesh(Camera::s_camMesh);
 
     if (gameObject->IsSelectedInHierarchy())
     {
-        Gizmos::SetColor(Color::red);
+        Gizmos::SetColor(Color::Red);
         Gizmos::SetReceivesLighting(false);
 
         if (GetProjectionMode() == ProjectionMode::Perspective)

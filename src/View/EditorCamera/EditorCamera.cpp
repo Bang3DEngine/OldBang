@@ -1,7 +1,11 @@
 #include "EditorCamera.h"
 
-#include "Screen.h"
+#include "Input.h"
 #include "Scene.h"
+#include "Screen.h"
+#include "Camera.h"
+#include "Screen.h"
+#include "SceneManager.h"
 
 EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
 {
@@ -14,7 +18,7 @@ EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
 
     m_camt = m_yawNode->transform;
     m_cam->SetZNear(0.05f);
-    m_cam->SetZFar(99.9f);
+    m_cam->SetZFar(9999.9f);
 }
 
 EditorCamera::~EditorCamera()
@@ -78,7 +82,7 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 
         transform->SetLocalRotation(m_startingRotation);
         Quaternion rotX = Quaternion::AngleAxis(glm::radians(m_mouseRotDegreesAccum.x),
-                                                Vector3::up);
+                                                Vector3::Up);
         transform->Rotate(rotX);
 
         Quaternion rotY = Quaternion::AngleAxis(glm::radians(m_mouseRotDegreesAccum.y),
@@ -151,7 +155,7 @@ void EditorCamera::HandleLookAtFocus()
             if (thisPos != focusPos)
             {
                 Quaternion origin = transform->GetRotation();
-                Quaternion dest = Quaternion::LookDirection(focusDir, Vector3::up);
+                Quaternion dest = Quaternion::LookDirection(focusDir, Vector3::Up);
                 Quaternion final = Quaternion::Slerp( origin, dest,
                             Time::GetDeltaTime() * m_lookAtRotSpeed);
 
@@ -192,8 +196,8 @@ void EditorCamera::OnStart()
     }
     else
     {
-        transform->SetPosition(Vector3::one * 30.0f);
-        transform->LookAt(Vector3::zero);
+        transform->SetPosition(Vector3::One * 30.0f);
+        transform->LookAt(Vector3::Zero);
     }
 
     UpdateRotationVariables();
@@ -257,9 +261,9 @@ void EditorCamera::AlignViewWithGameObject(GameObject *selected)
 {
     m_currentFocus = nullptr;
     m_doingLookAt = false;
-    m_camt->SetLocalRotation(Quaternion::identity);
+    m_camt->SetLocalRotation(Quaternion::Identity);
     transform->SetPosition(selected->transform->GetPosition());
-    Vector3 up = Vector3::up;
+    Vector3 up = Vector3::Up;
     transform->LookInDirection(selected->transform->GetForward(), up);
     UpdateRotationVariables();
 }
@@ -271,7 +275,7 @@ Camera *EditorCamera::GetCamera()
 
 #ifdef BANG_EDITOR
 
-void EditorCamera::OnTreeHierarchyGameObjectsSelected
+void EditorCamera::OnHierarchyGameObjectsSelected
     (List<GameObject *> &selectedGameObjects)
 {
     if (selectedGameObjects.Size() != 1) return;
@@ -282,7 +286,7 @@ void EditorCamera::OnTreeHierarchyGameObjectsSelected
 }
 
 
-void EditorCamera::OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected)
+void EditorCamera::OnHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
     NONULL(selected);
     m_currentFocus = selected;

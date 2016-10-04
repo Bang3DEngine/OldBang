@@ -10,6 +10,7 @@
 #include "Quaternion.h"
 
 class Mesh;
+class Rect;
 class Material;
 class Renderer;
 class Texture2D;
@@ -60,7 +61,6 @@ public:
     static void SetRotation(const Quaternion &rotation);
     static void SetScale(const Vector3 &scale);
 
-    static void SetOverlay(bool overlay);
     static void SetLineWidth(float lineWidth);
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
@@ -69,6 +69,7 @@ public:
     static void RenderCustomMesh(Mesh *m);
     static void RenderBox(const Box &b);
     static void RenderSimpleBox(const Box &b);
+    static void RenderScreenRect(const Rect &r);
     static void RenderIcon(const Texture2D *texture,
                            bool billboard = true);
     static void RenderLine(const Vector3 &origin, const Vector3 &destiny);

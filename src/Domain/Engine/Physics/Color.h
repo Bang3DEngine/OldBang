@@ -52,19 +52,19 @@ public:
     static Color FromVector3(const Vector3 &v);
     static Color FromVector4(const Vector4 &v);
 
-    const static Color red;
-    const static Color orange;
-    const static Color yellow;
-    const static Color green;
-    const static Color turquoise;
-    const static Color blue;
-    const static Color purple;
-    const static Color pink;
-    const static Color black;
-    const static Color gray;
-    const static Color white;
-    const static Color zero;
-    const static Color one;
+    const static Color Red;
+    const static Color Orange;
+    const static Color Yellow;
+    const static Color Green;
+    const static Color Turquoise;
+    const static Color Blue;
+    const static Color Purple;
+    const static Color Pink;
+    const static Color Black;
+    const static Color Gray;
+    const static Color White;
+    const static Color Zero;
+    const static Color One;
 };
 
 Color operator+(float m, const Color& v);

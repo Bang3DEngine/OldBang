@@ -64,12 +64,12 @@ void WindowEventManager::NotifyInspectorSlotChanged(InspectorWidget *inspectorIt
 
 void WindowEventManager::NotifyHierarchyGameObjectsSelected(List<GameObject*> &selectedGameObjects)
 {
-    PROPAGATE_EVENT_PAR(OnTreeHierarchyGameObjectsSelected(selectedGameObjects), s_wem->m_listeners);
+    PROPAGATE_EVENT_PAR(OnHierarchyGameObjectsSelected(selectedGameObjects), s_wem->m_listeners);
 }
 
 void WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
-    PROPAGATE_EVENT_PAR(OnTreeHierarchyGameObjectDoubleClicked(selected), s_wem->m_listeners);
+    PROPAGATE_EVENT_PAR(OnHierarchyGameObjectDoubleClicked(selected), s_wem->m_listeners);
 }
 
 

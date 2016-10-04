@@ -1,16 +1,22 @@
 #ifndef BOX_H
 #define BOX_H
 
+#include <cmath>
+
 #include "Bang.h"
 
-#include <cmath>
 #include "Array.h"
+#include "List.h"
 
 #include "Vector3.h"
 #include "Matrix4.h"
+#include "Quaternion.h"
 
 #include "IToString.h"
 
+class Rect;
+class Camera;
+class Quaternion;
 class Box : public IToString
 {
 private:
@@ -56,6 +62,19 @@ public:
      * @param positions
      */
     void FillFromPositions(const Array<Vector3> &positions);
+
+    List<Vector3> GetPoints() const;
+
+    /**
+     * @brief Returns the minimum 2D rect in screen NDC space that contains
+     * this box rendered from the passed camera.
+     * @param cam
+     * @return
+     */
+    Rect ToScreenRect(Camera *cam,
+                      const Vector3 &translation = Vector3::Zero,
+                      const Quaternion& rotation = Quaternion::Identity,
+                      const Vector3 &scale = Vector3::One);
 
     const String ToString() const override;
 };

@@ -25,7 +25,7 @@ public:
     }
 
 private:
-    Color m_diffuseColor = Color::white;
+    Color m_diffuseColor = Color::White;
     float m_shininess = 60.0f;
 
     ShaderProgram *m_shaderProgram = nullptr;

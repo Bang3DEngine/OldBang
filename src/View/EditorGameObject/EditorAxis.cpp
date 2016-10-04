@@ -30,9 +30,9 @@ String EditorAxis::GetStringFromDir(EditorAxis::EditorAxisDirection dir)
 
 Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir)
 {
-    if (dir == EditorAxisDirection::X) return Vector3::right;
-    else if (dir == EditorAxisDirection::Y) return Vector3::up;
-    else return Vector3::forward;
+    if (dir == EditorAxisDirection::X) return Vector3::Right;
+    else if (dir == EditorAxisDirection::Y) return Vector3::Up;
+    else return Vector3::Forward;
 }
 
 void EditorAxis::OnUpdate()

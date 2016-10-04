@@ -2,6 +2,9 @@
 
 #include "Debug.h"
 
+#include "Rect.h"
+#include "Camera.h"
+
 Box::Box()
 {
 }
@@ -9,7 +12,6 @@ Box::Box()
 Box::Box(float minx, float maxx,
          float miny, float maxy,
          float minz, float maxz) :
-
     Box(Vector3(minx, miny, minz),
         Vector3(maxx, maxy, maxz))
 {
@@ -105,7 +107,7 @@ Box Box::Union(const Box &b1, const Box &b2)
 
 void Box::FillFromPositions(const Array<Vector3> &positions)
 {
-    m_minv = m_maxv = Vector3::zero;
+    m_minv = m_maxv = Vector3::Zero;
     for (const Vector3 &v : positions)
     {
         m_minv.x = std::min(m_minv.x, v.x);
@@ -117,6 +119,50 @@ void Box::FillFromPositions(const Array<Vector3> &positions)
         m_minv.z = std::min(m_minv.z, v.z);
         m_maxv.z = std::max(m_maxv.z, v.z);
     }
+}
+
+List<Vector3> Box::GetPoints() const
+{
+    return {Vector3(m_minv.x, m_minv.y, m_minv.z),
+            Vector3(m_minv.x, m_minv.y, m_maxv.z),
+            Vector3(m_minv.x, m_maxv.y, m_minv.z),
+            Vector3(m_minv.x, m_maxv.y, m_maxv.z),
+            Vector3(m_maxv.x, m_minv.y, m_minv.z),
+            Vector3(m_maxv.x, m_minv.y, m_maxv.z),
+            Vector3(m_maxv.x, m_maxv.y, m_minv.z),
+            Vector3(m_maxv.x, m_maxv.y, m_maxv.z)};
+}
+
+Rect Box::ToScreenRect(Camera *cam,
+                       const Vector3 &translation,
+                       const Quaternion &rotation,
+                       const Vector3 &scale)
+{
+    Matrix4 transformMatrix =
+            Matrix4::TranslateMatrix(translation) *
+            Matrix4::RotateMatrix(rotation) *
+            Matrix4::ScaleMatrix(scale);
+
+    List<Vector3> boxPoints = (*this).GetPoints();
+    List<Vector2> screenPoints;
+    for (const Vector3 &p : boxPoints)
+    {
+        Vector3 transP = (transformMatrix * Vector4(p,1)).xyz();
+        Vector2 screenP = cam->WorldToScreenNDCPoint(transP);
+        if ( !Rect::ScreenRect.Contains(screenP) )
+        {
+            // The point outside the viewport, return the entire
+            // screen rect to avoid problems...
+            // TODO: Properly handle points outside the view of
+            // the camera
+            return Rect::ScreenRect;
+        }
+
+        screenPoints.PushBack(screenP);
+    }
+
+    Rect screenRect = Rect::GetBoundingRectFromPositions(screenPoints);
+    return screenRect;
 }
 
 

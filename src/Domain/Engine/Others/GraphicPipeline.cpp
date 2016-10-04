@@ -5,6 +5,7 @@
 #include "GBuffer.h"
 #include "Material.h"
 #include "GameObject.h"
+#include "SceneManager.h"
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
@@ -14,18 +15,12 @@
 
 GraphicPipeline::GraphicPipeline()
 {
+    m_matAmbientLightScreen    = AssetsManager::LoadAsset<Material>(
+                "Assets/Engine/Materials/PR_AmbientLight_Screen.bmat");
+    m_matSelectionEffectScreen = AssetsManager::LoadAsset<Material>(
+                "Assets/Engine/Materials/PR_SelectionEffect.bmat");
+
     m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
-
-    String drawScreenPlaneVert = "Assets/Engine/Shaders/PR_DrawScreenPlane.vert";
-    String ambientLightFrag    = "Assets/Engine/Shaders/PR_AmbientLight.frag";
-    String afterLightingFrag   = "Assets/Engine/Shaders/PR_SelectionEffect.frag";
-
-    m_matAmbientLightScreen = new Material();
-    m_matAmbientLightScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, ambientLightFrag));
-
-    m_matSelectionEffectScreen  = new Material();
-    m_matSelectionEffectScreen->SetShaderProgram(new ShaderProgram(drawScreenPlaneVert, afterLightingFrag));
-
     #ifdef BANG_EDITOR
     m_selectionFB = new SelectionFramebuffer(Screen::GetWidth(), Screen::GetHeight());
     #endif
@@ -82,7 +77,7 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
         if (immediatePostRender)
         {
             // These PR's are stenciled from the Render before
-            ApplyDeferredLightsToScreen();
+            ApplyDeferredLights(rend);
             if (rend->HasCustomPRPass())
             {
                 RenderCustomPR(rend);
@@ -131,17 +126,24 @@ void GraphicPipeline::ApplySelectionEffect()
     #endif
 }
 
-void GraphicPipeline::ApplyDeferredLightsToScreen()
+void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 {
+    // Limit to the rend visible rect, to save bandwidth
+    Rect renderRect = Rect::ScreenRect;
+    if (rend)
+    {
+        renderRect = rend->gameObject->GetBoundingScreenRect(
+                            m_currentScene->GetCamera(), false);
+    }
+
     m_gbuffer->SetStencilTest(true);
-    m_gbuffer->SetStencilWrite(false);
-    m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen);
+    m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen, renderRect);
     List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
     for (Light *light : lights)
     {
         if (CAN_USE_COMPONENT(light))
         {
-            light->ApplyLight(m_gbuffer);
+            light->ApplyLight(m_gbuffer, renderRect);
         }
     }
 }
@@ -164,7 +166,7 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
 
     if (fb == m_gbuffer)
     {
-        ApplyDeferredLightsToScreen();
+        ApplyDeferredLights();
         m_gbuffer->ClearStencil();
     }
 
@@ -187,7 +189,7 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
 void GraphicPipeline::RenderGizmosOverlayPass(Framebuffer *fb)
 {
     m_currentDepthLayer = Renderer::DepthLayer::DepthLayerGizmosOverlay;
-    fb->ClearDepth(); // After each pass, clear the dept
+    fb->ClearDepth(); // After each pass, clear the depth
 
     List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
     for (GameObject *go : sceneGameObjects)
@@ -256,14 +258,17 @@ SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
-    #ifdef BANG_EDITOR
     m_selectionFB->Resize(newWidth, newHeight);
-    #endif
 }
 
 GBuffer *GraphicPipeline::GetGBuffer() const
 {
     return m_gbuffer;
+}
+
+Renderer::DepthLayer GraphicPipeline::GetCurrentDepthLayer() const
+{
+    return m_currentDepthLayer;
 }
 
 #endif

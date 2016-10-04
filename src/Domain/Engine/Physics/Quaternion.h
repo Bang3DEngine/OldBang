@@ -28,10 +28,10 @@ public:
                             float progression);
     static Quaternion FromTo(const Vector3 &from, const Vector3 &to);
     static Quaternion LookDirection(const Vector3 &_forward,
-                                    const Vector3 &_up = Vector3::up);
+                                    const Vector3 &_up = Vector3::Up);
     static Quaternion AngleAxis(float angleDeg, const Vector3 &axis);
 
-    static Quaternion identity;
+    static Quaternion Identity;
 };
 
 Quaternion operator*(const Quaternion &q1, const Quaternion& q2);

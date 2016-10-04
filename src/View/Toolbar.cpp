@@ -1,6 +1,7 @@
 #include "Toolbar.h"
 
 #include "EditorWindow.h"
+#include "SceneManager.h"
 #include "ShortcutManager.h"
 
 Toolbar *Toolbar::s_tb = nullptr;

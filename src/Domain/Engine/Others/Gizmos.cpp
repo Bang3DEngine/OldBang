@@ -1,5 +1,6 @@
 #include "Gizmos.h"
 
+#include "Rect.h"
 #include "Renderer.h"
 #include "Material.h"
 #include "Texture2D.h"
@@ -87,17 +88,6 @@ void Gizmos::SetScale(const Vector3 &scale)
     Gizmos::m_gizmosGameObject->transform->SetLocalScale(scale);
 }
 
-void Gizmos::SetOverlay(bool overlay)
-{
-    Renderer::DepthLayer dl =
-            overlay ? Renderer::DepthLayer::DepthLayerGizmosOverlay :
-                      Renderer::DepthLayer::DepthLayerScene;
-    for (Renderer *rend : Gizmos::m_renderers)
-    {
-        rend->SetDepthLayer(dl);
-    }
-}
-
 void Gizmos::SetLineWidth(float lineWidth)
 {
     for (Renderer *rend : Gizmos::m_renderers)
@@ -150,7 +140,7 @@ void Gizmos::RenderSimpleBox(const Box &b)
     NONULL(m_gizmosGameObject);
 
     const Quaternion &r = Gizmos::m_gizmosGameObject->transform->GetLocalRotation();
-    const Vector3 &bMin = b.GetMin();
+    const Vector3& bMin = b.GetMin();
     const Vector3& bMax = b.GetMax();
 
     Gizmos::SetResetAllowed(false);
@@ -182,9 +172,24 @@ void Gizmos::RenderBox(const Box &b)
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_boxMesh);
 
     Gizmos::m_gizmosGameObject->transform->SetPosition(b.GetCenter());
-    Gizmos::m_gizmosGameObject->transform->SetScale(b.GetDimensions());
+    Gizmos::m_gizmosGameObject->transform->SetScale(
+                Gizmos::m_gizmosGameObject->transform->GetScale() * b.GetDimensions());
+
     Gizmos::Render(Gizmos::m_meshRenderer);
 
+    Gizmos::Reset();
+}
+
+void Gizmos::RenderScreenRect(const Rect &r)
+{
+    NONULL(m_gizmosGameObject);
+    Gizmos::SetIgnoreMatrices(true, true, true);
+    Gizmos::SetResetAllowed(false);
+    Gizmos::RenderLine( Vector3(r.m_minx, r.m_miny, 0), Vector3(r.m_maxx, r.m_miny, 0) );
+    Gizmos::RenderLine( Vector3(r.m_maxx, r.m_miny, 0), Vector3(r.m_maxx, r.m_maxy, 0) );
+    Gizmos::RenderLine( Vector3(r.m_maxx, r.m_maxy, 0), Vector3(r.m_minx, r.m_maxy, 0) );
+    Gizmos::RenderLine( Vector3(r.m_minx, r.m_maxy, 0), Vector3(r.m_minx, r.m_miny, 0) );
+    Gizmos::SetResetAllowed(true);
     Gizmos::Reset();
 }
 
@@ -230,8 +235,8 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
     Gizmos::m_singleLineRenderer->SetOrigin(origin);
     Gizmos::m_singleLineRenderer->SetDestiny(destiny);
 
-    Gizmos::m_gizmosGameObject->transform->SetPosition(Vector3::zero);
-    Gizmos::m_gizmosGameObject->transform->SetScale(Vector3::one);
+    Gizmos::m_gizmosGameObject->transform->SetPosition(Vector3::Zero);
+    Gizmos::m_gizmosGameObject->transform->SetScale(Vector3::One);
 
     Gizmos::Render(Gizmos::m_singleLineRenderer);
 
@@ -342,15 +347,14 @@ void Gizmos::Reset()
 
     if (!m_resetAllowed) { return; }
 
-    Gizmos::SetPosition(Vector3::zero);
-    Gizmos::SetRotation(Quaternion::identity);
-    Gizmos::SetScale(Vector3::one);
-    Gizmos::SetColor(Color::green);
+    Gizmos::SetPosition(Vector3::Zero);
+    Gizmos::SetRotation(Quaternion::Identity);
+    Gizmos::SetScale(Vector3::One);
+    Gizmos::SetColor(Color::Green);
     Gizmos::SetLineWidth(1.0f);
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetDrawWireframe(false);
     Gizmos::SetIgnoreMatrices(false, false, false);
-    Gizmos::SetOverlay(false);
 
     for (Renderer *rend : m_renderers)
     {
@@ -363,5 +367,6 @@ void Gizmos::Reset()
 void Gizmos::Render(Renderer *rend)
 {
     GraphicPipeline *gp = GraphicPipeline::GetActive(); NONULL(gp);
+    rend->SetDepthLayer(gp->GetCurrentDepthLayer());
     gp->RenderRenderer(rend);
 }

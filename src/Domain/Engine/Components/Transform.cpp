@@ -67,9 +67,9 @@ void Transform::SetLocalEuler(const Vector3 &degreesEuler)
     m_localEuler = eulers;
 
     Vector3 rads = m_localEuler.ToRadians();
-    Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::right);
-    Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3::up);
-    Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3::forward);
+    Quaternion qx = Quaternion::AngleAxis(rads.x, Vector3::Right);
+    Quaternion qy = Quaternion::AngleAxis(rads.y, Vector3::Up);
+    Quaternion qz = Quaternion::AngleAxis(rads.z, Vector3::Forward);
     m_localRotation = (qz * qy * qx).Normalized();
     m_hasChanged = true;
 }
@@ -329,7 +329,7 @@ Vector3 Transform::GetScale() const
 
 Vector3 Transform::GetForward() const
 {
-    return LocalToWorldDirection(Vector3::forward).Normalized();
+    return LocalToWorldDirection(Vector3::Forward).Normalized();
 }
 
 Vector3 Transform::GetBack() const
@@ -339,7 +339,7 @@ Vector3 Transform::GetBack() const
 
 Vector3 Transform::GetRight() const
 {
-    return  LocalToWorldDirection(Vector3::right).Normalized();
+    return  LocalToWorldDirection(Vector3::Right).Normalized();
 }
 
 Vector3 Transform::GetLeft() const
@@ -349,7 +349,7 @@ Vector3 Transform::GetLeft() const
 
 Vector3 Transform::GetUp() const
 {
-    return LocalToWorldDirection(Vector3::up).Normalized();
+    return LocalToWorldDirection(Vector3::Up).Normalized();
 }
 
 Vector3 Transform::GetDown() const

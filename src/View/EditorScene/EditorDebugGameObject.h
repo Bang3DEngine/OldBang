@@ -16,7 +16,7 @@ private:
     struct DebugLine
     {
         Vector3 m_origin, m_destiny;
-        Color m_color = Color::green;
+        Color m_color = Color::Green;
         bool m_depthTest = false;
         float m_lineWidth = 0.0f;
         float m_elapsedTimeSecs = 0;
@@ -43,12 +43,12 @@ public:
     virtual ~EditorDebugGameObject();
 
     void DrawLine(const Vector3 &origin, const Vector3 &destiny,
-                  const Color &color = Color::green,
+                  const Color &color = Color::Green,
                   float lineWidth = 1.0f, float livingTimeSecs = -1.0f,
                   bool depthTest = true);
 
     void DrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
-                        const Color &color = Color::green,
+                        const Color &color = Color::Green,
                         float lineWidth = 1.0f, float livingTimeSecs = -1.0f);
 
     void OnUpdate() override;

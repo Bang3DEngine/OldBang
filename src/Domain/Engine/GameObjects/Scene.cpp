@@ -30,7 +30,7 @@ void Scene::_OnStart()
             Debug_Log("Creating default camera");
             GameObject *m_defaultCamera = new GameObject("DefaultCamera");
             m_defaultCamera->transform->SetPosition(Vector3(90));
-            m_defaultCamera->transform->LookAt(Vector3::zero);
+            m_defaultCamera->transform->LookAt(Vector3::Zero);
             m_defaultCamera->SetParent(this);
 
             Camera *cam = m_defaultCamera->AddComponent<Camera>();

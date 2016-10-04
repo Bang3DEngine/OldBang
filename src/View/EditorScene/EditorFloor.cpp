@@ -1,5 +1,7 @@
 #include "EditorFloor.h"
 
+#include "SceneManager.h"
+
 EditorFloor::EditorFloor()
 {
     const int GridSize2 = 2 * (c_gridSize + 1);
@@ -8,7 +10,7 @@ EditorFloor::EditorFloor()
     {
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
         m_lineRenderers[i]->SetReceivesLighting(false);
-        m_lineRenderers[i]->GetMaterial()->SetDiffuseColor(Color::gray);
+        m_lineRenderers[i]->GetMaterial()->SetDiffuseColor(Color::Gray);
     }
 
     m_renderInSelectionFramebuffer = false;

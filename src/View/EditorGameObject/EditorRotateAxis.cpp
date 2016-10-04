@@ -1,6 +1,7 @@
 #include "EditorRotateAxis.h"
 
 #include "Toolbar.h"
+#include "SceneManager.h"
 
 EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
                                    GameObject *attachedGameObject)
@@ -30,15 +31,15 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 
     if (dir == EditorAxisDirection::X)
     {
-        transform->SetLocalEuler(Vector3::up * 90.0f);
+        transform->SetLocalEuler(Vector3::Up * 90.0f);
     }
     else if (dir == EditorAxisDirection::Y)
     {
-        transform->SetLocalEuler(Vector3::right * -90.0f);
+        transform->SetLocalEuler(Vector3::Right * -90.0f);
     }
     else
     {
-        transform->SetLocalEuler(Vector3::up * 180.0f);
+        transform->SetLocalEuler(Vector3::Up * 180.0f);
     }
 }
 

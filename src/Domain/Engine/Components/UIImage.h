@@ -8,8 +8,8 @@ class UIImage : public MeshRenderer
 protected:
 
     Material *m_materialPR = new Material();
-    Color m_tint = Color::zero;
-    Color m_strokeColor = Color::white;
+    Color m_tint = Color::Zero;
+    Color m_strokeColor = Color::White;
     float m_stroke = 0.0f;
 
 

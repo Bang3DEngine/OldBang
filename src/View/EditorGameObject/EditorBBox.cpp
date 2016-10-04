@@ -18,7 +18,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
         s_boxMaterial = new Material(*linesMaterial);
     }
 
-    s_boxMaterial->SetDiffuseColor(Color::green);
+    s_boxMaterial->SetDiffuseColor(Color::Green);
     mr->SetMaterial(s_boxMaterial);
 
     //Create the box mesh, and save it to cache

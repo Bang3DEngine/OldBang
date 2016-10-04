@@ -1,5 +1,7 @@
 #include "CircleRenderer.h"
 
+#include "SceneManager.h"
+
 CircleRenderer::CircleRenderer()
 {
     this->m_drawLinesMode = RenderMode::LineStrip;
@@ -12,10 +14,12 @@ CircleRenderer::~CircleRenderer()
 
 const String CircleRenderer::ToString() const
 {
+    return GetName();
+}
+String CircleRenderer::GetName() const
+{
     return "CircleRenderer";
 }
-
-String CircleRenderer::GetName() const { return "CircleRenderer"; }
 
 void CircleRenderer::CloneInto(ICloneable *clone) const
 {

@@ -15,7 +15,7 @@ private:
 
     ColorDialog *m_colorDialog = nullptr;
     ColorLabel *m_colorLabel = nullptr;
-    Color m_selectedColor = Color::white;
+    Color m_selectedColor = Color::White;
 
     void RefreshLabelColor();
 

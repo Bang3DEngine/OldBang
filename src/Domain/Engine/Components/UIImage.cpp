@@ -20,7 +20,7 @@ UIImage::UIImage()
     SetTransparent(false);
     SetDepthLayer(Renderer::DepthLayer::DepthLayerCanvas);
 
-    m_material->SetDiffuseColor(Color::white);
+    m_material->SetDiffuseColor(Color::White);
 }
 
 UIImage::~UIImage()

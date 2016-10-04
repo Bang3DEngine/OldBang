@@ -4,7 +4,7 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 
-Matrix4 Matrix4::identity = Matrix4();
+Matrix4 Matrix4::Identity = Matrix4();
 
 Matrix4::Matrix4() : Matrix4(1.0f)
 {

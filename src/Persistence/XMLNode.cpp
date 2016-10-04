@@ -263,19 +263,19 @@ float XMLNode::GetFloat(const String &attributeName) const
 Vector2 XMLNode::GetVector2(const String &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector2() : Vector2::zero;
+    return attr ? attr->GetVector2() : Vector2::Zero;
 }
 
 Vector3 XMLNode::GetVector3(const String &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector3() : Vector3::zero;
+    return attr ? attr->GetVector3() : Vector3::Zero;
 }
 
 Vector4 XMLNode::GetVector4(const String &attributeName) const
 {
     XMLAttribute *attr = GetAttribute(attributeName);
-    return attr ? attr->GetVector4() : Vector4::zero;
+    return attr ? attr->GetVector4() : Vector4::Zero;
 }
 
 Color XMLNode::GetColor(const String &attributeName) const

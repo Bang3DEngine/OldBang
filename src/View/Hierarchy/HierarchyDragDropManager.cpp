@@ -1,6 +1,7 @@
 #include "HierarchyDragDropManager.h"
 
 #include "Hierarchy.h"
+#include "SceneManager.h"
 
 HierarchyDragDropManager::HierarchyDragDropManager(Hierarchy *hierarchy) :
     m_hierarchy(hierarchy)

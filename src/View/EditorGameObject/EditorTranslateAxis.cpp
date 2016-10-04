@@ -1,6 +1,7 @@
 #include "EditorTranslateAxis.h"
 
 #include "Toolbar.h"
+#include "SceneManager.h"
 
 EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
                                          GameObject *attachedGameObject)

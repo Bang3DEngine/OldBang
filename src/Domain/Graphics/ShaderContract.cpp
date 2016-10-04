@@ -76,7 +76,7 @@ const String ShaderContract::Filepath_Shader_SelectionBuffer_FS = "Assets/Engine
 
 const String ShaderContract::Filepath_Shader_Render_GBuffer_To_Screen_FS = "Assets/Engine/Shaders/RenderGBufferToScreen.frag";
 
-const String ShaderContract::Filepath_Shader_PR_DrawScreenPlane_VS = "Assets/Engine/Shaders/PR_DrawScreenPlane.vert";
+const String ShaderContract::Filepath_Shader_PR_ScreenPass_VS = "Assets/Engine/Shaders/PR_ScreenPass.vert";
 const String ShaderContract::Filepath_Shader_PR_Default_FS = "Assets/Engine/Shaders/PR_Default.frag";
 
 

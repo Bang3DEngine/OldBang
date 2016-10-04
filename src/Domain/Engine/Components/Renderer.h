@@ -4,11 +4,12 @@
 #include "Array.h"
 #include <functional>
 
-#include "Box.h"
-#include "Material.h"
 #include "Component.h"
-#include "SceneManager.h"
 
+class Box;
+class Camera;
+class Material;
+class SceneManager;
 class SelectionFramebuffer;
 class Renderer : public Component
 {
@@ -121,6 +122,15 @@ public:
     bool GetDrawWireframe() const;
 
     virtual Box GetBoundingBox() const = 0;
+
+    /**
+     * @brief GetBoundingRect
+     * @param camera The camera whose screen space you want the bounding rect
+     * to be relative to. By default, it will take the active scene's camera.
+     * @return Returns the bounding rect of the renderer relative to the
+     * passed camera's screen space
+     */
+    virtual Rect GetBoundingRect(Camera *camera = nullptr) const;
 
     void SetCullMode(CullMode m_cullMode);
     CullMode GetCullMode() const;

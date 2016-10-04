@@ -29,8 +29,8 @@ public:
     virtual void OnGameObjectDestroyed(GameObject *destroyed)  { }
 
     virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem)  { }
-    virtual void OnTreeHierarchyGameObjectsSelected(List<GameObject*> &selectedGameObjects) { }
-    virtual void OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected) { }
+    virtual void OnHierarchyGameObjectsSelected(List<GameObject*> &selectedGameObjects) { }
+    virtual void OnHierarchyGameObjectDoubleClicked(GameObject* gameObject) { }
 };
 
 #endif // IWINDOWEVENTMANAGERLISTENER_H

@@ -1,6 +1,7 @@
 #include "EditorScaleAxis.h"
 
 #include "Toolbar.h"
+#include "SceneManager.h"
 
 EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
                                  GameObject *attachedGameObject)

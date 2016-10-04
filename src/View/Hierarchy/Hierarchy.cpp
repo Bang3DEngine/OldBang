@@ -2,6 +2,7 @@
 
 #include "Debug.h"
 #include "EditorWindow.h"
+#include "SceneManager.h"
 #include "ShortcutManager.h"
 #include "WindowEventManager.h"
 

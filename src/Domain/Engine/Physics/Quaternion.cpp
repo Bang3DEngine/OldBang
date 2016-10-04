@@ -3,7 +3,7 @@
 #include "String.h"
 #include "Vector3.h"
 
-Quaternion Quaternion::identity = Quaternion();
+Quaternion Quaternion::Identity = Quaternion();
 
 Quaternion::Quaternion() : glm::quat()
 {

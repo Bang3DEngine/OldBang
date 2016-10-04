@@ -32,8 +32,7 @@ void EditorRotateAxisGroup::OnDrawGizmosOverlay()
     float radius = 0.95f * m_axisX->m_circle->GetRadius() * transform->GetScale().x;
 
     // Billboard-scaling taken into account too
-    Gizmos::SetOverlay(true);
-    Gizmos::SetColor(Color::white * Color(1, 1, 1, 0.4f));
+    Gizmos::SetColor(Color::White * Color(1, 1, 1, 0.4f));
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetDrawWireframe(false);
     Gizmos::RenderSphere(center, radius);

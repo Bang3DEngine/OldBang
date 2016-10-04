@@ -27,6 +27,7 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 
     String renderToScreenMatFilepath =
             "Assets/Engine/Materials/RenderGBufferToScreen.bmat";
+
     m_renderGBufferToScreenMaterial =
             AssetsManager::LoadAsset<Material>(renderToScreenMatFilepath);
     m_planeMeshToRenderEntireScreen = MeshFactory::GetPlane();
@@ -64,12 +65,15 @@ void GBuffer::SetUniformsBeforeRendering(Material *mat)
 }
 
 
-void GBuffer::RenderPassWithMaterial(Material *mat)
+void GBuffer::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
 {
     NONULL(mat);
     m_planeMeshToRenderEntireScreen->
             BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                          *(mat->GetShaderProgram()));
+
+    mat->GetShaderProgram()->SetUniformVec2("B_rectMinCoord", renderRect.GetMin());
+    mat->GetShaderProgram()->SetUniformVec2("B_rectMaxCoord", renderRect.GetMax());
 
     bool prevStencilWrite = m_stencilWriteEnabled;
     SetStencilWrite(false);
@@ -110,6 +114,7 @@ void GBuffer::RenderScreenPlane()
 {
     m_planeMeshToRenderEntireScreen->GetVAO()->Bind();
 
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDepthFunc(GL_ALWAYS);
     glDepthMask(GL_FALSE);
     glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());

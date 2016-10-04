@@ -6,13 +6,12 @@
 #include "Bang.h"
 
 #include "Vector3.h"
-
-#include "Input.h"
-#include "Screen.h"
-#include "Camera.h"
 #include "EditorGameObject.h"
 #include "IWindowEventManagerListener.h"
 
+class Input;
+class Camera;
+class Screen;
 
 /**
  * Pre-built GameObject, with a Camera that you can control in the editor
@@ -126,9 +125,9 @@ public:
     Camera *GetCamera();
 
 #ifdef BANG_EDITOR
-    void OnTreeHierarchyGameObjectsSelected
+    void OnHierarchyGameObjectsSelected
                 (List<GameObject*> &selectedGameObjects) override;
-    void OnTreeHierarchyGameObjectDoubleClicked(GameObject *selected) override;
+    void OnHierarchyGameObjectDoubleClicked(GameObject *selected) override;
 #endif
 };
 

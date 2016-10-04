@@ -32,7 +32,7 @@ private:
     #endif
 
     // For opaque
-    Material *m_matAmbientLightScreen  = nullptr;
+    Material *m_matAmbientLightScreen    = nullptr;
     Material *m_matSelectionEffectScreen = nullptr;
 
     void ApplySelectionEffect();
@@ -40,7 +40,8 @@ private:
     /**
      * @brief Apply all the scene lights over the current gbuffer.
      */
-    void ApplyDeferredLightsToScreen();
+    void ApplyDeferredLights(Renderer *rend = nullptr);
+    void ApplyDeferredLightsToRenderer();
 
     #ifdef BANG_EDITOR
     void RenderSelectionFramebuffer();
@@ -66,6 +67,7 @@ public:
     void ApplyPREffectToRenderer(const Renderer *renderer, Material *mat);
 
     GBuffer *GetGBuffer() const;
+    Renderer::DepthLayer GetCurrentDepthLayer() const;
 
     #ifdef BANG_EDITOR
     SelectionFramebuffer* GetSelectionFramebuffer() const;

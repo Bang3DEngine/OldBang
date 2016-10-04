@@ -1,6 +1,7 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
+#include "Rect.h"
 #include "Component.h"
 
 class GBuffer;
@@ -10,12 +11,12 @@ class Light : public Component
 {
 protected:
     float m_intensity = 1.0f;
-    Color m_color = Color::white;
+    Color m_color = Color::White;
     Material *m_lightMaterialScreen = nullptr;
-    Material *m_lightMaterialMesh   = nullptr;
 
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
-    void ApplyLight(GBuffer *gbuffer) const;
+    void ApplyLight(GBuffer *gbuffer,
+                    const Rect &renderRect = Rect::ScreenRect) const;
 
     Light();
 

@@ -55,7 +55,8 @@ public:
     virtual ~GBuffer();
 
     void SetUniformsBeforeRendering(Material *mat);
-    void RenderPassWithMaterial(Material *mat);
+    void RenderPassWithMaterial(Material *mat,
+                                const Rect &renderRect = Rect(-1, 1, -1, 1));
     void RenderToScreen(Attachment attachmentId);
     void RenderToScreen();
 
@@ -73,7 +74,7 @@ public:
     void ClearDepth() override;
 
     void ClearAllBuffersExceptColor();
-    void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::zero);
+    void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::Zero);
 };
 
 #endif // GBUFFER_H

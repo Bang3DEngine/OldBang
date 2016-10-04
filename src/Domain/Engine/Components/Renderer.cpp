@@ -1,9 +1,12 @@
 #include "Renderer.h"
 
+#include "Box.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "Material.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "SceneManager.h"
 #include "GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
@@ -238,6 +241,16 @@ void Renderer::SetDrawWireframe(bool drawWireframe)
 bool Renderer::GetDrawWireframe() const
 {
     return m_drawWireframe;
+}
+
+Rect Renderer::GetBoundingRect(Camera *camera) const
+{
+    Camera *cam = camera ? camera : SceneManager::GetActiveScene()->GetCamera();
+
+    Box bb = GetBoundingBox();
+    Vector2 p1 = cam->WorldToScreenNDCPoint(bb.GetMin());
+    Vector2 p2 = cam->WorldToScreenNDCPoint(bb.GetMax());
+    return Rect(p1, p2);
 }
 
 

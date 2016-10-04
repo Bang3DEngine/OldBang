@@ -7,14 +7,14 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 
-const Vector4 Vector4::up      = Vector4( 0,  1,  0, 0);
-const Vector4 Vector4::down    = Vector4( 0, -1,  0, 0);
-const Vector4 Vector4::right   = Vector4( 1,  0,  0, 0);
-const Vector4 Vector4::left    = Vector4(-1,  0,  0, 0);
-const Vector4 Vector4::forward = Vector4( 0,  0, -1, 0);
-const Vector4 Vector4::back    = Vector4( 0,  0,  1, 0);
-const Vector4 Vector4::zero    = Vector4( 0,  0,  0, 0);
-const Vector4 Vector4::one     = Vector4( 1,  1,  1, 1);
+const Vector4 Vector4::Up      = Vector4( 0,  1,  0, 0);
+const Vector4 Vector4::Down    = Vector4( 0, -1,  0, 0);
+const Vector4 Vector4::Right   = Vector4( 1,  0,  0, 0);
+const Vector4 Vector4::Left    = Vector4(-1,  0,  0, 0);
+const Vector4 Vector4::Forward = Vector4( 0,  0, -1, 0);
+const Vector4 Vector4::Back    = Vector4( 0,  0,  1, 0);
+const Vector4 Vector4::Zero    = Vector4( 0,  0,  0, 0);
+const Vector4 Vector4::One     = Vector4( 1,  1,  1, 1);
 
 Vector4::Vector4() : Vector4(0.0f)
 {

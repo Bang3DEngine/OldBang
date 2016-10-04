@@ -17,19 +17,17 @@ Light::Light()
 void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 {
     ShaderProgram *sp = mat->GetShaderProgram();
-    sp->SetUniformFloat("B_light_intensity",      m_intensity,                          false);
-    sp->SetUniformColor("B_light_color",          m_color,                              false);
-    sp->SetUniformVec3 ("B_light_forward_world",  gameObject->transform->GetForward(),  false);
-    sp->SetUniformVec3 ("B_light_position_world", gameObject->transform->GetPosition(), false);
+    sp->SetUniformFloat("B_light_intensity",      m_intensity                         );
+    sp->SetUniformColor("B_light_color",          m_color                             );
+    sp->SetUniformVec3 ("B_light_forward_world",  gameObject->transform->GetForward() );
+    sp->SetUniformVec3 ("B_light_position_world", gameObject->transform->GetPosition());
 }
 
-void Light::ApplyLight(GBuffer *gbuffer) const
+void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
 {
     gbuffer->Bind();
-
     SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
-    gbuffer->RenderPassWithMaterial(m_lightMaterialScreen);
-
+    gbuffer->RenderPassWithMaterial(m_lightMaterialScreen, renderRect);
     gbuffer->UnBind();
 }
 

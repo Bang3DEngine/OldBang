@@ -7,19 +7,19 @@
 #include "Vector3.h"
 #include "Vector4.h"
 
-const Color Color::red         = Color(1,     0,   0,  1);
-const Color Color::orange      = Color(1,   0.5,   0,  1);
-const Color Color::yellow      = Color(1,     1,   0,  1);
-const Color Color::green       = Color(0,     1,   0,  1);
-const Color Color::turquoise   = Color(1,     1,   0,  1);
-const Color Color::blue        = Color(0,     0,   1,  1);
-const Color Color::purple      = Color(0.5,   0,   1,  1);
-const Color Color::pink        = Color(1,     0,   1,  1);
-const Color Color::black       = Color(0,     0,   0,  1);
-const Color Color::gray        = Color(0.5, 0.5, 0.5,  1);
-const Color Color::white       = Color(1,     1,   1,  1);
-const Color Color::zero        = Color(0,     0,   0,  0);
-const Color Color::one         = Color(1,     1,   1,  1);
+const Color Color::Red         = Color(1,     0,   0,  1);
+const Color Color::Orange      = Color(1,   0.5,   0,  1);
+const Color Color::Yellow      = Color(1,     1,   0,  1);
+const Color Color::Green       = Color(0,     1,   0,  1);
+const Color Color::Turquoise   = Color(1,     1,   0,  1);
+const Color Color::Blue        = Color(0,     0,   1,  1);
+const Color Color::Purple      = Color(0.5,   0,   1,  1);
+const Color Color::Pink        = Color(1,     0,   1,  1);
+const Color Color::Black       = Color(0,     0,   0,  1);
+const Color Color::Gray        = Color(0.5, 0.5, 0.5,  1);
+const Color Color::White       = Color(1,     1,   1,  1);
+const Color Color::Zero        = Color(0,     0,   0,  0);
+const Color Color::One         = Color(1,     1,   1,  1);
 
 Color::Color() : Color(0)
 {

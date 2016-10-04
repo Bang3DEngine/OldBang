@@ -1,5 +1,7 @@
 #include "EditorAxisGroup.h"
 
+#include "SceneManager.h"
+
 EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObject("EditorAxisGroup")
 {
     this->m_attachedGameObject = attachedGameObject;

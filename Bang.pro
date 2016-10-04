@@ -100,12 +100,10 @@ OTHER_FILES += \
     Assets/Engine/Shaders/PR_DirectionalLight.frag \
     Assets/Engine/Shaders/D2G_Default.frag \
     Assets/Engine/Shaders/D2G_Default.vert \
-    Assets/Engine/Shaders/PR_DrawScreenPlane.vert \
     Assets/Materials/luigiMaterial.bmat \
     Assets/Materials/testMaterial.bmat \
     Assets/Materials/testMaterial2.bmat \
     Assets/Engine/Shaders/SelectionBuffer.frag \
-    Assets/Engine/Materials/RenderGBufferToScreen.bmat \
     Assets/Engine/Shaders/RenderGBufferToScreen.frag \
     Assets/Engine/Shaders/PR_PointLight.frag \
     Assets/Scenes/tmp.bscene \
@@ -116,7 +114,6 @@ OTHER_FILES += \
     Assets/Engine/Materials/PR_PointLight.bmat \
     Assets/Behaviours/RandomScale.h \
     Assets/Behaviours/RandomScale.cpp \
-    Assets/Engine/Shaders/PR_DrawScreenPlane.vert \
     Assets/Materials/victor.bmat \
     Assets/Engine/Meshes/Plane.bmesh \
     Assets/Meshes/luigiMesh.bmesh \
@@ -140,10 +137,8 @@ OTHER_FILES += \
     Assets/Engine/Shaders/Include/PointLight.glsl \
     Assets/Engine/Shaders/Include/DirectionalLight.glsl \
     Assets/Engine/Materials/PR_AmbientLight.bmat \
-    Assets/Engine/Shaders/PR_Mesh.vert \
-    Assets/Engine/Materials/PR_DirectionalLight_Mesh.bmat \
+    Assets/Engine/Shaders/PR_MeshPass.vert \
     Assets/Engine/Materials/PR_DirectionalLight_Screen.bmat \
-    Assets/Engine/Materials/PR_PointLight_Mesh.bmat \
     Assets/Engine/Materials/PR_PointLight_Screen.bmat \
     Assets/Engine/Shaders/UI/PR_UIImage.frag \
     Assets/Engine/Materials/UI/PR_UIImage.bmat \
@@ -152,7 +147,13 @@ OTHER_FILES += \
     Assets/Engine/Shaders/SelectionBuffer.vert \
     Assets/Engine/Shaders/PR_SelectionEffect.frag \
     Assets/Engine/Shaders/D2G_RotationAxisLine.frag \
-    Assets/Engine/Materials/D2G_RotationAxisLine.bmat
+    Assets/Engine/Materials/D2G_RotationAxisLine.bmat \
+    Assets/Engine/Materials/PR_MeshPass.bmat \
+    Assets/Engine/Materials/RenderGBufferToScreen.bmat \
+    Assets/Engine/Shaders/PR_ScreenPass.vert \
+    Assets/Engine/Shaders/PR_MeshPass.vert \
+    Assets/Engine/Materials/PR_AmbientLight_Screen.bmat \
+    Assets/Engine/Materials/PR_SelectionEffect.bmat
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

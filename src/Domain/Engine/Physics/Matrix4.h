@@ -46,7 +46,7 @@ public:
 
     Vector4& operator[](int i) const;
 
-    static Matrix4 identity;
+    static Matrix4 Identity;
 };
 
 Matrix4 operator*(const Matrix4 &m1, const Matrix4& m2);

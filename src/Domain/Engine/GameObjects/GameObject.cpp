@@ -206,7 +206,17 @@ List<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
 }
 #endif
 
-Box GameObject::GetObjectBoundingBox() const
+Rect GameObject::GetBoundingScreenRect(Camera *cam,
+                                       bool includeChildren) const
+{
+    Box bbox = GetObjectBoundingBox(includeChildren);
+    return bbox.ToScreenRect(cam,
+                             transform->GetPosition(),
+                             transform->GetRotation(),
+                             transform->GetScale());
+}
+
+Box GameObject::GetObjectBoundingBox(bool includeChildren) const
 {
     Box b;
     MeshRenderer *mr = GetComponent<MeshRenderer>();
@@ -219,49 +229,52 @@ Box GameObject::GetObjectBoundingBox() const
         }
     }
 
-    for (GameObject *child : m_children)
+    if (includeChildren)
     {
-        #ifdef BANG_EDITOR
-        if (child->IsEditorGameObject() ||
-            child->IsDraggedGameObject()) continue;
-        #endif
+        for (GameObject *child : m_children)
+        {
+            #ifdef BANG_EDITOR
+            if (child->IsEditorGameObject() ||
+                child->IsDraggedGameObject()) continue;
+            #endif
 
-        Box bc = child->GetLocalBoundingBox();
-        b = Box::Union(b, bc);
+            Box bc = child->GetLocalBoundingBox(true);
+            b = Box::Union(b, bc);
+        }
     }
 
     return b;
 }
 
-Box GameObject::GetLocalBoundingBox() const
+Box GameObject::GetLocalBoundingBox(bool includeChildren) const
 {
-    Box b = GetObjectBoundingBox();
+    Box b = GetObjectBoundingBox(includeChildren);
     Matrix4 mat = transform->GetLocalToParentMatrix();
     b = mat * b; //Apply transform to Box
     return b;
 }
 
-Box GameObject::GetBoundingBox() const
+Box GameObject::GetBoundingBox(bool includeChildren) const
 {
-    Box b = GetObjectBoundingBox();
+    Box b = GetObjectBoundingBox(includeChildren);
     Matrix4 mat; transform->GetLocalToWorldMatrix(&mat);
     b = mat * b;
     return b;
 }
 
-Sphere GameObject::GetObjectBoundingSphere() const
+Sphere GameObject::GetObjectBoundingSphere(bool includeChildren) const
 {
-    return Sphere::FromBox(GetObjectBoundingBox());
+    return Sphere::FromBox(GetObjectBoundingBox(includeChildren));
 }
 
-Sphere GameObject::GetLocalBoundingSphere() const
+Sphere GameObject::GetLocalBoundingSphere(bool includeChildren) const
 {
-    return Sphere::FromBox(GetLocalBoundingBox());
+    return Sphere::FromBox(GetLocalBoundingBox(includeChildren));
 }
 
-Sphere GameObject::GetBoundingSphere() const
+Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 {
-    return Sphere::FromBox(GetBoundingBox());
+    return Sphere::FromBox(GetBoundingBox(includeChildren));
 }
 
 void GameObject::AddComponent(Component *c)
@@ -486,7 +499,7 @@ bool GameObject::IsSelectedInHierarchy() const
     return m_isSelectedInHierarchy;
 }
 
-void GameObject::OnTreeHierarchyGameObjectsSelected(
+void GameObject::OnHierarchyGameObjectsSelected(
         List<GameObject*> &selectedEntities )
 {
     if (IsEditorGameObject() || IsScene()) return;
@@ -498,6 +511,14 @@ void GameObject::OnTreeHierarchyGameObjectsSelected(
     {
         m_selectionGameObject = new EditorSelectionGameObject(this);
         m_selectionGameObject->SetParent(SceneManager::GetActiveScene());
+
+        Renderer *rend = GetComponent<Renderer>();
+        if (rend)
+        {
+            Rect br = rend->GetBoundingRect();
+            Debug_Log(br);
+            Debug::DrawScreenLine(br.GetMin(), br.GetMax(), Color::Green);
+        }
     }
     else if (wasSelected && !selected && m_selectionGameObject)
     {
