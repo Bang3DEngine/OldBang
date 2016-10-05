@@ -24,7 +24,7 @@ private:
     Vector3 m_minv, m_maxv;
 
 public:
-    static Box Zero;
+    static Box Empty;
 
     Box();
     Box(float minx, float maxx,

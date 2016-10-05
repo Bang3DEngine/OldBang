@@ -5,21 +5,18 @@
 
 class UIImage : public MeshRenderer
 {
-protected:
-
-    Material *m_materialPR = new Material();
-    Color m_tint = Color::Zero;
-    Color m_strokeColor = Color::White;
-    float m_stroke = 0.0f;
-
-
-    UIImage();
-    virtual ~UIImage();
-
 public:
 
     virtual void RenderCustomPR() const override;
     bool IsACanvasRenderer() const override;
+
+    virtual void SetMatricesUniforms(
+            Material *mat,
+            const Matrix4 &model,
+            const Matrix4 &normal,
+            const Matrix4 &view,
+            const Matrix4 &projection,
+            const Matrix4 &pvm) const override;
 
     virtual const String ToString() const override;
     virtual String GetName() const override;
@@ -34,6 +31,17 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+protected:
+
+    Material *m_materialPR = new Material();
+    Color m_tint = Color::Zero;
+    Color m_strokeColor = Color::White;
+    float m_stroke = 0.0f;
+
+
+    UIImage();
+    virtual ~UIImage();
 
     friend class GameObject;
 };

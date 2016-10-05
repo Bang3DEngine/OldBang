@@ -219,15 +219,12 @@ Rect GameObject::GetBoundingScreenRect(Camera *cam,
 Box GameObject::GetObjectBoundingBox(bool includeChildren) const
 {
     List<Renderer*> rends = GetComponents<Renderer>();
-    Box b = Box::Zero;
-    if (!rends.Empty())
+    Box b = Box::Empty;
+    for (Renderer *rend : rends)
     {
-        for (Renderer *rend : rends)
+        if (CAN_USE_COMPONENT(rend))
         {
-            if (CAN_USE_COMPONENT(rend))
-            {
-                b = Box::Union(b, rend->GetBoundingBox());
-            }
+            b = Box::Union(b, rend->GetBoundingBox());
         }
     }
 
@@ -672,7 +669,6 @@ void GameObject::_OnDrawGizmos()
     {
         sfb->PrepareNextGameObject(this);
     }
-
     PROPAGATE_EVENT(_OnDrawGizmos, m_components);  // The order matters
     OnDrawGizmos();
 
@@ -691,7 +687,6 @@ void GameObject::_OnDrawGizmosOverlay()
     {
         sfb->PrepareNextGameObject(this);
     }
-
     PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_components);  // The order matters
     OnDrawGizmosOverlay();
 

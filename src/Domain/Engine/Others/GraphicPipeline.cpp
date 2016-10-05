@@ -72,10 +72,17 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
         m_gbuffer->SetStencilTest(false);
         m_gbuffer->SetStencilWrite(true);
         m_gbuffer->SetAllDrawBuffersExceptColor();
+        if (immediatePostRender)
+        {   // Transparent objects must not write to depth buffer
+            glDepthMask(GL_FALSE);
+        }
+
         rend->Render();
 
         if (immediatePostRender)
         {
+            glDepthMask(GL_TRUE);
+
             // These PR's are stenciled from the Render before
             ApplyDeferredLights(rend);
             if (rend->HasCustomPRPass())
@@ -126,6 +133,7 @@ void GraphicPipeline::ApplySelectionEffect()
     #endif
 }
 
+#include "SingleLineRenderer.h"
 void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 {
     // Limit to the rend visible rect, to save bandwidth
@@ -138,12 +146,15 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 
     m_gbuffer->SetStencilTest(true);
     m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen, renderRect);
-    List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
-    for (Light *light : lights)
+    if (!rend || rend->GetReceivesLighting())
     {
-        if (CAN_USE_COMPONENT(light))
+        List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
+        for (Light *light : lights)
         {
-            light->ApplyLight(m_gbuffer, renderRect);
+            if (CAN_USE_COMPONENT(light))
+            {
+                light->ApplyLight(m_gbuffer, renderRect);
+            }
         }
     }
 }

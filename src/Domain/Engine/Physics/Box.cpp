@@ -6,7 +6,7 @@
 #include "Camera.h"
 #include "Sphere.h"
 
-Box Box::Zero = Box(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+Box Box::Empty = Box(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 
 Box::Box()
 {
@@ -102,8 +102,8 @@ float Box::GetVolume() const
 
 Box Box::Union(const Box &b1, const Box &b2)
 {
-    if (b1 == Box::Zero) { return b2; }
-    if (b2 == Box::Zero) { return b1; }
+    if (b1 == Box::Empty) { return b2; }
+    if (b2 == Box::Empty) { return b1; }
     return
     Box(glm::min(b1.m_minv.x, b2.m_minv.x), glm::max(b1.m_maxv.x, b2.m_maxv.x),
         glm::min(b1.m_minv.y, b2.m_minv.y), glm::max(b1.m_maxv.y, b2.m_maxv.y),
@@ -158,24 +158,23 @@ Rect Box::GetBoundingScreenRect(Camera *cam,
 
     List<Vector3> boxPoints = (*this).GetPoints();
     List<Vector2> screenPoints;
+
+    // TODO: Treat properly points outside the screen
+    // (now we just return the full screen rect if 1 or more points are outside)
     for (const Vector3 &p : boxPoints)
     {
         Vector3 transP = (transformMatrix * Vector4(p,1)).xyz();
         Vector2 screenP = cam->WorldToScreenNDCPoint(transP);
         if ( !Rect::ScreenRect.Contains(screenP) )
         {
-            // The point outside the viewport, return the entire
-            // screen rect to avoid problems...
-            // TODO: Properly handle points outside the view of
-            // the camera
             return Rect::ScreenRect;
         }
 
         screenPoints.PushBack(screenP);
     }
 
-    Rect screenRect = Rect::GetBoundingRectFromPositions(screenPoints);
-    return screenRect;
+    Rect boundingRect = Rect::GetBoundingRectFromPositions(screenPoints);
+    return boundingRect;
 }
 
 

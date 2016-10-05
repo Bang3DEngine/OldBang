@@ -64,14 +64,13 @@ public:
     static void SetLineWidth(float lineWidth);
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
-    static void SetIgnoreMatrices(bool ignoreModel, bool ignoreView,
-                                  bool ignoreProjection);
     static void RenderCustomMesh(Mesh *m);
     static void RenderBox(const Box &b);
     static void RenderSimpleBox(const Box &b);
     static void RenderRect(const Rect &r);
     static void RenderIcon(const Texture2D *texture,
                            bool billboard = true);
+    static void RenderScreenLine(const Vector2 &origin, const Vector2 &destiny);
     static void RenderLine(const Vector3 &origin, const Vector3 &destiny);
     static void RenderRay(const Vector3 &origin, const Vector3 &rayDir);
     static void RenderSphere(const Vector3 &origin, float radius);

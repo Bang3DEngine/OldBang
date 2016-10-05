@@ -47,7 +47,7 @@ void LineRenderer::SetMaterial(Material *m)
 
 Box LineRenderer::GetBoundingBox() const
 {
-    if (m_points.Empty()) { return Box(Vector3::Zero, Vector3::Zero); }
+    if (m_points.Empty()) { return Box::Empty; }
 
     Vector3 minp = m_points.Front();
     Vector3 maxp = m_points.Front();

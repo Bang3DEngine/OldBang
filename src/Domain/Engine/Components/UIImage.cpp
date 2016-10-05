@@ -14,9 +14,6 @@ UIImage::UIImage()
     SetMaterial( AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/D2G_Default.bmat") );
     m_materialPR = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/UI/PR_UIImage.bmat");
 
-    SetIgnoreModelMatrix(false);
-    SetIgnoreViewMatrix(true);
-    SetIgnoreProjectionMatrix(true);
     SetReceivesLighting(false);
     SetTransparent(false);
     SetDepthLayer(Renderer::DepthLayer::DepthLayerCanvas);
@@ -26,6 +23,30 @@ UIImage::UIImage()
 
 UIImage::~UIImage()
 {
+}
+
+void UIImage::SetMatricesUniforms(Material *mat,
+                                  const Matrix4 &model,
+                                  const Matrix4 &normal,
+                                  const Matrix4 &view,
+                                  const Matrix4 &projection,
+                                  const Matrix4 &pvm) const
+{
+    NONULL(mat); NONULL(mat->GetShaderProgram());
+
+    MeshRenderer::SetMatricesUniforms(mat, model, normal, view,
+                                      projection, pvm);
+
+    ShaderProgram *sp = mat->GetShaderProgram();
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection,
+                       Matrix4::Identity);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection_Inverse,
+                       Matrix4::Identity);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_View,
+                       Matrix4::Identity);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_View_Inverse,
+                       Matrix4::Identity);
+    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, model);
 }
 
 void UIImage::RenderCustomPR() const

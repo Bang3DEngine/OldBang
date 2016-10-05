@@ -17,20 +17,18 @@ void EditorDebugGameObject::DrawLines(bool depthEnabled)
         bool draw = !(depthEnabled ^ dl.m_depthTest);
         if (draw)
         {
-            if (dl.m_screen)
-            {
-                Gizmos::SetIgnoreMatrices(true, true, true);
-            }
-            else
-            {
-                Gizmos::SetIgnoreMatrices(false, false, false);
-            }
-
             Gizmos::SetColor(dl.m_color);
             Gizmos::SetLineWidth(dl.m_lineWidth);
             Gizmos::SetReceivesLighting(false);
 
-            Gizmos::RenderLine(dl.m_origin, dl.m_destiny);
+            if (dl.m_screen)
+            {
+                Gizmos::RenderScreenLine(dl.m_origin.xy(), dl.m_destiny.xy());
+            }
+            else
+            {
+                Gizmos::RenderLine(dl.m_origin, dl.m_destiny);
+            }
         }
     }
 }

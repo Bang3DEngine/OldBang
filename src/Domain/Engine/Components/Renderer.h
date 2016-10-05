@@ -48,26 +48,6 @@ private:
      */
     float m_lineWidth = 1.0f;
 
-    /**
-     * @brief ignoreModelMatrix
-     */
-    bool m_ignoreModelMatrix = false;
-
-    /**
-     * @brief If ignoreViewMatrix == true, when drawing the Renderer
-     * will ignore view matrix.
-     * So it won't take into account camera's translation, rotation or scale.
-     */
-    bool m_ignoreViewMatrix = false;
-
-    /**
-     * @brief If ignoreViewMatrix == true, when drawing the Renderer
-     * will ignore view matrix.
-     * So it won't take into account camera's translation, rotation or scale.
-     */
-    bool m_ignoreProjectionMatrix = false;
-
-
     #ifdef BANG_EDITOR
     /**
      * @brief Called by SelectionFramebuffer.
@@ -100,7 +80,7 @@ protected:
                      Matrix4 *projection,
                      Matrix4 *pvm) const;
 
-    void SetMatricesUniforms(
+    virtual void SetMatricesUniforms(
             Material *mat,
             const Matrix4 &model,
             const Matrix4 &normal,
@@ -140,15 +120,6 @@ public:
 
     void SetLineWidth(float w);
     float GetLineWidth() const;
-
-    void SetIgnoreModelMatrix(bool ignore);
-    bool GetIgnoreModelMatrix() const;
-
-    void SetIgnoreViewMatrix(bool ignore);
-    bool GetIgnoreViewMatrix() const;
-
-    void SetIgnoreProjectionMatrix(bool ignore);
-    bool GetIgnoreProjectionMatrix() const;
 
     void SetReceivesLighting(bool receivesLighting);
     bool GetReceivesLighting() const;

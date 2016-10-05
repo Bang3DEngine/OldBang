@@ -35,9 +35,6 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetRenderMode(GetRenderMode());
     r->SetLineWidth(GetLineWidth());
     r->SetReceivesLighting(GetReceivesLighting());
-    r->SetIgnoreModelMatrix(GetIgnoreModelMatrix());
-    r->SetIgnoreViewMatrix(GetIgnoreViewMatrix());
-    r->SetIgnoreProjectionMatrix(GetIgnoreProjectionMatrix());
 }
 
 Material *Renderer::GetMaterial() const
@@ -68,21 +65,33 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
         glDisable(GL_CULL_FACE);
     }
 
+    glLineWidth(m_lineWidth);
+
+    // Set uniforms
     Scene *scene = SceneManager::GetActiveScene();
     Camera *camera = scene->GetCamera();
-    if (camera && mat && mat->GetShaderProgram())
+    bool goodMaterial = mat && mat->GetShaderProgram();
+    if (goodMaterial)
     {
-        Transform *t = camera->gameObject->transform;
-        ShaderProgram *sp = mat->GetShaderProgram();
-        sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera, t->GetPosition(), false);
-        sp->SetUniformFloat("B_renderer_receivesLighting", m_receivesLighting ? 1.0f : 0.0f, false);
+        if (camera)
+        {
+            Transform *t = camera->gameObject->transform;
+            ShaderProgram *sp = mat->GetShaderProgram();
+            sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera, t->GetPosition(), false);
+            sp->SetUniformFloat("B_renderer_receivesLighting", m_receivesLighting ? 1.0f : 0.0f, false);
 
-        #ifdef BANG_EDITOR
-        sp->SetUniformFloat("B_gameObject_isSelected", gameObject->IsSelectedInHierarchy() ? 1.0f : 0.0f, false);
-        #endif
+            #ifdef BANG_EDITOR
+            sp->SetUniformFloat("B_gameObject_isSelected", gameObject->IsSelectedInHierarchy() ? 1.0f : 0.0f, false);
+            #endif
+        }
+
+        Matrix4 model, normal, view, projection, pvm;
+        GetMatrices(&model, &normal, &view, &projection, &pvm);
+        SetMatricesUniforms(mat, model, normal, view, projection, pvm);
+
+        GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
+        gb->SetUniformsBeforeRendering(mat);
     }
-
-    glLineWidth(m_lineWidth);
 }
 
 void Renderer::Render() const
@@ -110,18 +119,7 @@ void Renderer::RenderWithMaterial(Material *mat) const
     bool goodMaterial = mat && mat->GetShaderProgram();
     if (goodMaterial)
     {
-        Matrix4 model, normal, view, projection, pvm;
-        GetMatrices(&model, &normal, &view, &projection, &pvm);
-        SetMatricesUniforms(mat, model, normal, view, projection, pvm);
-
-        GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
-        gb->SetUniformsBeforeRendering(mat);
-
         mat->Bind();
-    }
-    else
-    {
-        Debug_Log("Not a good material");
     }
 
     RenderWithoutBindingMaterial();
@@ -178,38 +176,11 @@ void Renderer::GetMatrices(Matrix4 *model,
                            Matrix4 *pvm) const
 {
     //We assume cam, scene and transform do exist.
-
     Camera *cam = gameObject->GetScene()->GetCamera();
-
-    if (!m_ignoreModelMatrix)
-    {
-        gameObject->transform->GetLocalToWorldMatrix(model);
-        gameObject->transform->GetLocalToWorldNormalMatrix(normal);
-    }
-    else
-    {
-        *model = Matrix4(1.0f);
-        *normal = Matrix4(1.0f);
-    }
-
-    if (!m_ignoreViewMatrix)
-    {
-        cam->GetViewMatrix(view);
-    }
-    else
-    {
-        *view = Matrix4(1.0f);
-    }
-
-    if (!m_ignoreProjectionMatrix)
-    {
-        cam->GetProjectionMatrix(projection);
-    }
-    else
-    {
-        *projection = Matrix4(1.0f);
-    }
-
+    gameObject->transform->GetLocalToWorldMatrix(model);
+    gameObject->transform->GetLocalToWorldNormalMatrix(normal);
+    cam->GetViewMatrix(view);
+    cam->GetProjectionMatrix(projection);
     *pvm = (*projection) * (*view) * (*model);
 }
 
@@ -248,9 +219,7 @@ Rect Renderer::GetBoundingRect(Camera *camera) const
     Camera *cam = camera ? camera : SceneManager::GetActiveScene()->GetCamera();
 
     Box bb = GetBoundingBox();
-    Vector2 p1 = cam->WorldToScreenNDCPoint(bb.GetMin());
-    Vector2 p2 = cam->WorldToScreenNDCPoint(bb.GetMax());
-    return Rect(p1, p2);
+    return bb.GetBoundingScreenRect(cam);
 }
 
 
@@ -281,36 +250,6 @@ void Renderer::SetLineWidth(float w)
 float Renderer::GetLineWidth() const
 {
     return m_lineWidth;
-}
-
-void Renderer::SetIgnoreModelMatrix(bool ignore)
-{
-    m_ignoreModelMatrix = ignore;
-}
-
-bool Renderer::GetIgnoreModelMatrix() const
-{
-    return m_ignoreModelMatrix;
-}
-
-void Renderer::SetIgnoreViewMatrix(bool ignore)
-{
-    m_ignoreViewMatrix = ignore;
-}
-
-bool Renderer::GetIgnoreViewMatrix() const
-{
-    return m_ignoreViewMatrix;
-}
-
-void Renderer::SetIgnoreProjectionMatrix(bool ignore)
-{
-    m_ignoreProjectionMatrix = ignore;
-}
-
-bool Renderer::GetIgnoreProjectionMatrix() const
-{
-    return m_ignoreProjectionMatrix;
 }
 
 void Renderer::SetReceivesLighting(bool receivesLighting)

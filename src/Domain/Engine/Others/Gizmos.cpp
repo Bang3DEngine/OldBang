@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "Texture2D.h"
 #include "MeshRenderer.h"
+#include "SceneManager.h"
 #include "AssetsManager.h"
 #include "CircleRenderer.h"
 #include "GraphicPipeline.h"
@@ -112,17 +113,6 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
     }
 }
 
-void Gizmos::SetIgnoreMatrices(bool ignoreModel, bool ignoreView,
-                               bool ignoreProjection)
-{
-    for (Renderer *rend : Gizmos::m_renderers)
-    {
-        rend->SetIgnoreModelMatrix(ignoreModel);
-        rend->SetIgnoreViewMatrix(ignoreView);
-        rend->SetIgnoreProjectionMatrix(ignoreProjection);
-    }
-}
-
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
     NONULL(m); NONULL(m_gizmosGameObject);
@@ -183,12 +173,11 @@ void Gizmos::RenderBox(const Box &b)
 void Gizmos::RenderRect(const Rect &r)
 {
     NONULL(m_gizmosGameObject);
-    Gizmos::SetIgnoreMatrices(true, true, true);
     Gizmos::SetResetAllowed(false);
-    Gizmos::RenderLine( Vector3(r.m_minx, r.m_miny, 0), Vector3(r.m_maxx, r.m_miny, 0) );
-    Gizmos::RenderLine( Vector3(r.m_maxx, r.m_miny, 0), Vector3(r.m_maxx, r.m_maxy, 0) );
-    Gizmos::RenderLine( Vector3(r.m_maxx, r.m_maxy, 0), Vector3(r.m_minx, r.m_maxy, 0) );
-    Gizmos::RenderLine( Vector3(r.m_minx, r.m_maxy, 0), Vector3(r.m_minx, r.m_miny, 0) );
+    Gizmos::RenderScreenLine( Vector2(r.m_minx, r.m_miny), Vector2(r.m_maxx, r.m_miny) );
+    Gizmos::RenderScreenLine( Vector2(r.m_maxx, r.m_miny), Vector2(r.m_maxx, r.m_maxy) );
+    Gizmos::RenderScreenLine( Vector2(r.m_maxx, r.m_maxy), Vector2(r.m_minx, r.m_maxy) );
+    Gizmos::RenderScreenLine( Vector2(r.m_minx, r.m_maxy), Vector2(r.m_minx, r.m_miny) );
     Gizmos::SetResetAllowed(true);
     Gizmos::Reset();
 }
@@ -231,7 +220,6 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 {
     NONULL(m_gizmosGameObject);
 
-    Gizmos::m_singleLineRenderer->SetEnabled(true);
     Gizmos::m_singleLineRenderer->SetOrigin(origin);
     Gizmos::m_singleLineRenderer->SetDestiny(destiny);
 
@@ -240,6 +228,20 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 
     Gizmos::Render(Gizmos::m_singleLineRenderer);
 
+    Gizmos::Reset();
+}
+
+void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
+{
+    NONULL(m_gizmosGameObject);
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); NONULL(cam);
+    const float z = cam->GetZNear() + 0.01f;
+    Vector3 worldPosOrigin  = cam->ScreenNDCPointToWorld(origin,  z);
+    Vector3 worldPosDestiny = cam->ScreenNDCPointToWorld(destiny, z);
+    bool resetAllowedBefore = m_resetAllowed;
+    Gizmos::SetResetAllowed(false);
+    Gizmos::RenderLine(worldPosOrigin, worldPosDestiny);
+    Gizmos::SetResetAllowed(resetAllowedBefore);
     Gizmos::Reset();
 }
 
@@ -354,7 +356,6 @@ void Gizmos::Reset()
     Gizmos::SetLineWidth(1.0f);
     Gizmos::SetReceivesLighting(false);
     Gizmos::SetDrawWireframe(false);
-    Gizmos::SetIgnoreMatrices(false, false, false);
 
     for (Renderer *rend : m_renderers)
     {
@@ -366,6 +367,11 @@ void Gizmos::Reset()
 
 void Gizmos::Render(Renderer *rend)
 {
+    for (Renderer *r : m_renderers)
+    {
+        r->SetEnabled(r == rend); // Enable only rend
+    }
+
     GraphicPipeline *gp = GraphicPipeline::GetActive(); NONULL(gp);
     rend->SetDepthLayer(gp->GetCurrentDepthLayer());
     gp->RenderRenderer(rend);
