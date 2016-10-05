@@ -204,7 +204,7 @@ void Camera::OnDrawGizmos()
     Gizmos::SetColor(GetClearColor());
     Gizmos::RenderCustomMesh(Camera::s_camMesh);
 
-    if (gameObject->IsSelectedInHierarchy())
+    if (gameObject->IsSelected())
     {
         Gizmos::SetColor(Color::Red);
         Gizmos::SetReceivesLighting(false);

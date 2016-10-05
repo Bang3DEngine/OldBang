@@ -72,17 +72,11 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
         m_gbuffer->SetStencilTest(false);
         m_gbuffer->SetStencilWrite(true);
         m_gbuffer->SetAllDrawBuffersExceptColor();
-        if (immediatePostRender)
-        {   // Transparent objects must not write to depth buffer
-            glDepthMask(GL_FALSE);
-        }
 
         rend->Render();
 
         if (immediatePostRender)
         {
-            glDepthMask(GL_TRUE);
-
             // These PR's are stenciled from the Render before
             ApplyDeferredLights(rend);
             if (rend->HasCustomPRPass())
@@ -115,7 +109,7 @@ void GraphicPipeline::ApplySelectionEffect()
     m_gbuffer->SetStencilWrite(true);
     for (GameObject *go : sceneGameObjects)
     {
-        if (go->IsSelectedInHierarchy())
+        if (go->IsSelected())
         {
             List<Renderer*> rends = go->GetComponentsInThisAndChildren<Renderer>();
             for (Renderer *rend : rends)

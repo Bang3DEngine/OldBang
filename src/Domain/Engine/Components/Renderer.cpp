@@ -81,7 +81,7 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
             sp->SetUniformFloat("B_renderer_receivesLighting", m_receivesLighting ? 1.0f : 0.0f, false);
 
             #ifdef BANG_EDITOR
-            sp->SetUniformFloat("B_gameObject_isSelected", gameObject->IsSelectedInHierarchy() ? 1.0f : 0.0f, false);
+            sp->SetUniformFloat("B_gameObject_isSelected", gameObject->IsSelected() ? 1.0f : 0.0f, false);
             #endif
         }
 
@@ -96,7 +96,12 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
 
 void Renderer::Render() const
 {
+    // Transparent renderers must not write to the depth buffer
+    if (IsTransparent()) { glDepthMask(GL_FALSE); }
+
     RenderWithMaterial(m_material);
+
+    if (IsTransparent()) { glDepthMask(GL_TRUE); }
 }
 
 void Renderer::RenderCustomPR() const

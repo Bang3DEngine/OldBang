@@ -78,7 +78,7 @@ void PointLight::OnDrawGizmos()
     Gizmos::SetScale(Vector3::One * 0.1f);
     Gizmos::RenderIcon(tex);
 
-    if (gameObject->IsSelectedInHierarchy())
+    if (gameObject->IsSelected())
     {
         Gizmos::SetReceivesLighting(false);
         Gizmos::SetColor(Color(GetColor(), 1));

@@ -346,7 +346,7 @@ public:
     // Is it being dragged from hierarchy into screen?
     bool IsDraggedGameObject() const;
 
-    bool IsSelectedInHierarchy() const;
+    bool IsSelected() const;
     void OnHierarchyGameObjectsSelected(
             List<GameObject*> &selectedEntities) override;
     #endif

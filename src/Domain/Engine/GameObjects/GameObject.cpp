@@ -509,7 +509,7 @@ void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
 
 
 #ifdef BANG_EDITOR
-bool GameObject::IsSelectedInHierarchy() const
+bool GameObject::IsSelected() const
 {
     return m_isSelectedInHierarchy;
 }
@@ -520,7 +520,7 @@ void GameObject::OnHierarchyGameObjectsSelected(
     if (IsEditorGameObject() || IsScene()) return;
 
     bool selected = selectedEntities.Contains(this);
-    bool wasSelected = IsSelectedInHierarchy();
+    bool wasSelected = IsSelected();
     m_isSelectedInHierarchy = selected;
     if (!wasSelected && selected)
     {

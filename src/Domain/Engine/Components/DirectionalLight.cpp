@@ -64,7 +64,7 @@ void DirectionalLight::OnDrawGizmos()
     Gizmos::SetScale(Vector3::One * 0.1f);
     Gizmos::RenderIcon(tex);
 
-    if (gameObject->IsSelectedInHierarchy())
+    if (gameObject->IsSelected())
     {
         // Draw lines to show light's direction
         Camera *cam = Scene::GetCamera();
