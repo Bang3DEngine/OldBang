@@ -49,6 +49,14 @@ void UIImage::SetMatricesUniforms(Material *mat,
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, model);
 }
 
+Rect UIImage::GetBoundingRect(Camera *camera) const
+{
+    // Dont take into account View nor Projection, coords already
+    // are in NDC
+    Box screenBox = gameObject->GetBoundingBox();
+    return Rect(screenBox.GetMin().xy(), screenBox.GetMax().xy());
+}
+
 void UIImage::RenderCustomPR() const
 {
     MeshRenderer::RenderCustomPR();

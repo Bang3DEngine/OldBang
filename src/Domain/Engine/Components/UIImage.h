@@ -18,6 +18,8 @@ public:
             const Matrix4 &projection,
             const Matrix4 &pvm) const override;
 
+    virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
+
     virtual const String ToString() const override;
     virtual String GetName() const override;
 

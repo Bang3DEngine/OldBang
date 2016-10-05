@@ -49,14 +49,8 @@ void MeshRenderer::SetMesh(Mesh *m)
 
 Box MeshRenderer::GetBoundingBox() const
 {
-    if (m_mesh)
-    {
-        return m_mesh->GetBoundingBox();
-    }
-    else
-    {
-        return Box();
-    }
+    return m_mesh ? m_mesh->GetBoundingBox() :
+                    Box::Empty;
 }
 
 const Mesh *MeshRenderer::GetMesh()

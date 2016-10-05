@@ -58,6 +58,8 @@ bool Rect::Contains(const Vector2 &p) const
 
 Rect Rect::Union(const Rect &r1, const Rect &r2)
 {
+    if (r1 == Rect::Empty) { return r2; }
+    if (r2 == Rect::Empty) { return r1; }
     return Rect(glm::min(r1.m_minx, r2.m_minx),
                 glm::min(r1.m_maxx, r2.m_maxx),
                 glm::max(r1.m_miny, r2.m_miny),
@@ -106,4 +108,11 @@ const String Rect::ToString() const
            "]" << std::endl;
 
     return String(oss.str());
+}
+
+
+bool operator==(const Rect &r1, const Rect &r2)
+{
+    return r1.GetMin() == r2.GetMin() &&
+           r1.GetMax() == r2.GetMax();
 }

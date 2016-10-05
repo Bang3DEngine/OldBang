@@ -56,4 +56,6 @@ public:
     const String ToString() const override;
 };
 
+bool operator==(const Rect &r1, const Rect &r2);
+
 #endif // RECT_H

@@ -69,6 +69,7 @@ public:
 
     void OnGameObjectDestroyed(GameObject *destroyed) override;
 
+    friend class Gizmos;
     friend class GraphicPipeline;
 };
 

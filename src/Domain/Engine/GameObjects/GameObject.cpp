@@ -209,11 +209,27 @@ List<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
 Rect GameObject::GetBoundingScreenRect(Camera *cam,
                                        bool includeChildren) const
 {
-    Box bbox = GetObjectBoundingBox(includeChildren);
-    return bbox.GetBoundingScreenRect(cam,
-                             transform->GetPosition(),
-                             transform->GetRotation(),
-                             transform->GetScale());
+    Rect renderRect = Rect::Empty;
+    List<Renderer*> renderers = GetComponents<Renderer>();
+    for (Renderer *rend : renderers)
+    {
+        if (CAN_USE_COMPONENT(rend))
+        {
+            Rect rr = rend->GetBoundingRect(cam);
+            renderRect = Rect::Union(renderRect, rr);
+        }
+    }
+
+    if (includeChildren)
+    {
+        for (GameObject* child : m_children)
+        {
+            Rect rr = child->GetBoundingScreenRect(cam, true);
+            renderRect = Rect::Union(renderRect, rr);
+        }
+    }
+
+    return renderRect;
 }
 
 Box GameObject::GetObjectBoundingBox(bool includeChildren) const
@@ -510,13 +526,6 @@ void GameObject::OnHierarchyGameObjectsSelected(
     {
         m_selectionGameObject = new EditorSelectionGameObject(this);
         m_selectionGameObject->SetParent(SceneManager::GetActiveScene());
-
-        Renderer *rend = GetComponent<Renderer>();
-        if (rend)
-        {
-            Rect br = rend->GetBoundingRect();
-            Debug::DrawScreenLine(br.GetMin(), br.GetMax(), Color::Green);
-        }
     }
     else if (wasSelected && !selected && m_selectionGameObject)
     {

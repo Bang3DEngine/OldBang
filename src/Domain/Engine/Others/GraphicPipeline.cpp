@@ -133,7 +133,6 @@ void GraphicPipeline::ApplySelectionEffect()
     #endif
 }
 
-#include "SingleLineRenderer.h"
 void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 {
     // Limit to the rend visible rect, to save bandwidth

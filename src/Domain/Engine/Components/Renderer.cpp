@@ -217,9 +217,12 @@ bool Renderer::GetDrawWireframe() const
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
     Camera *cam = camera ? camera : SceneManager::GetActiveScene()->GetCamera();
-
     Box bb = GetBoundingBox();
-    return bb.GetBoundingScreenRect(cam);
+    return bb.GetBoundingScreenRect(cam,
+                                    gameObject->transform->GetPosition(),
+                                    gameObject->transform->GetRotation(),
+                                    gameObject->transform->GetScale()
+                                    );
 }
 
 
