@@ -143,16 +143,20 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
                             m_currentScene->GetCamera(), false);
     }
 
-    m_gbuffer->SetStencilTest(true);
-    m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen, renderRect);
-    if (!rend || rend->GetReceivesLighting())
+    // If the rect is empty, dont waste time rendering nothing (which wastes time)
+    if (renderRect != Rect::Empty)
     {
-        List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
-        for (Light *light : lights)
+        m_gbuffer->SetStencilTest(true);
+        m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen, renderRect);
+        if (!rend || rend->GetReceivesLighting())
         {
-            if (CAN_USE_COMPONENT(light))
+            List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
+            for (Light *light : lights)
             {
-                light->ApplyLight(m_gbuffer, renderRect);
+                if (CAN_USE_COMPONENT(light))
+                {
+                    light->ApplyLight(m_gbuffer, renderRect);
+                }
             }
         }
     }

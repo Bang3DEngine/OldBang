@@ -217,7 +217,26 @@ bool Renderer::GetDrawWireframe() const
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
     Camera *cam = camera ? camera : SceneManager::GetActiveScene()->GetCamera();
+    Vector3 camForward = cam->transform->GetForward();
+
     Box bb = GetBoundingBox();
+
+    List<Vector3> points = bb.GetPoints();
+    bool allPointsOutside = true;
+    for (const Vector3 &p : points)
+    {
+        if (Vector3::Dot(p, camForward) > 0)
+        {
+            allPointsOutside = false;
+            break;
+        }
+    }
+
+    if (allPointsOutside)
+    {
+        return Rect::Empty;
+    }
+
     return bb.GetBoundingScreenRect(cam,
                                     gameObject->transform->GetPosition(),
                                     gameObject->transform->GetRotation(),

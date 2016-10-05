@@ -116,3 +116,9 @@ bool operator==(const Rect &r1, const Rect &r2)
     return r1.GetMin() == r2.GetMin() &&
            r1.GetMax() == r2.GetMax();
 }
+
+
+bool operator!=(const Rect &r1, const Rect &r2)
+{
+    return !(r1 == r2);
+}
