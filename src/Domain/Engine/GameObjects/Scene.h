@@ -20,7 +20,6 @@ class SelectionFramebuffer;
 class Scene : public GameObject
 {
 protected:
-    GraphicPipeline *m_gPipeline = nullptr;
     GameObject *m_defaultCamera = nullptr;
 
     //Framebuffer for positions, normals, uvs and diffuse
@@ -49,8 +48,6 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
     virtual void PostReadXMLInfo(const XMLNode *xmlInfo) override;
-
-    GraphicPipeline* GetGraphicPipeline() const;
 
     friend class Screen;
     friend class Toolbar;

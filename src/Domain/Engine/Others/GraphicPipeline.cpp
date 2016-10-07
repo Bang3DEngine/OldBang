@@ -13,16 +13,16 @@
 #include "SelectionFramebuffer.h"
 #endif
 
-GraphicPipeline::GraphicPipeline()
+GraphicPipeline::GraphicPipeline(Screen *screen)
 {
     m_matAmbientLightScreen    = AssetsManager::LoadAsset<Material>(
                 "Assets/Engine/Materials/PR_AmbientLight_Screen.bmat");
     m_matSelectionEffectScreen = AssetsManager::LoadAsset<Material>(
                 "Assets/Engine/Materials/PR_SelectionEffect.bmat");
 
-    m_gbuffer = new GBuffer(Screen::GetWidth(), Screen::GetHeight());
+    m_gbuffer = new GBuffer(screen->m_width, screen->m_height);
     #ifdef BANG_EDITOR
-    m_selectionFB = new SelectionFramebuffer(Screen::GetWidth(), Screen::GetHeight());
+    m_selectionFB = new SelectionFramebuffer(screen->m_width, screen->m_height);
     #endif
 }
 
@@ -254,8 +254,8 @@ void GraphicPipeline::RenderSelectionFramebuffer()
 
 GraphicPipeline* GraphicPipeline::GetActive()
 {
-    Scene *scene = SceneManager::GetActiveScene();
-    return scene ? scene->GetGraphicPipeline() : nullptr;
+    Screen *screen = Screen::GetInstance();;
+    return screen ? screen->GetGraphicPipeline() : nullptr;
 }
 
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const

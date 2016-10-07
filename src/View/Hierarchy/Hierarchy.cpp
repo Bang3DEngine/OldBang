@@ -39,8 +39,8 @@ void Hierarchy::Expand(QTreeWidgetItem *item)
 
 void Hierarchy::LeaveOnlyOuterMostItems(List<QTreeWidgetItem*> *items)
 {
-    //For each item, it will be a top level item,
-    //if none of the selected items is its parent
+    // For each item, it will be a top level item,
+    // if none of the selected items is its parent
     List<QTreeWidgetItem*> result;
     for (QTreeWidgetItem *item : *items)
     {
@@ -139,7 +139,7 @@ void Hierarchy::RefreshFromScene()
 {
     Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
 
-    // refresh go's children. If we find a new child, add it to topLevel.
+    // Refresh go's children. If we find a new child, add it to topLevel.
     const List<GameObject*> sceneChildren = scene->GetChildren();
     for (GameObject* child : sceneChildren)
     {
@@ -158,15 +158,46 @@ void Hierarchy::RefreshFromScene()
     }
 }
 
+void Hierarchy::UpdateSceneFromHierarchy()
+{
+    // First case, direct children of scene (top level items)
+    Scene *scene = SceneManager::GetActiveScene();
+    for (int i = 0; i < topLevelItemCount(); ++i)
+    {
+        QTreeWidgetItem *childItem = topLevelItem(i);
+        UpdateGameObjectFromHierarchy(childItem); // Recursive call
+
+        GameObject *childItemGo = GetGameObjectFromItem(childItem);
+        if (!childItemGo->IsChildOf(scene, false))
+        {   // Fix scene to match hierarchy
+            childItemGo->SetParent(scene, true);
+        }
+    }
+}
+
+void Hierarchy::UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem)
+{
+    // Iterate all items, and check its children are the same as in the scene.
+    // If a child in hierarchy is not updated in scene, the modify the scene
+    // so that it matches the hierarchy
+    GameObject *go = GetGameObjectFromItem(goItem);
+    for (int i = 0; i < goItem->childCount(); ++i)
+    {
+        QTreeWidgetItem *childItem = goItem->child(i);
+        UpdateGameObjectFromHierarchy(childItem); // Recursive call
+
+        GameObject *childItemGo = GetGameObjectFromItem(childItem);
+        if (!childItemGo->IsChildOf(go, false))
+        {   // Fix scene to match hierarchy
+            childItemGo->SetParent(go, true);
+        }
+    }
+}
+
 QTreeWidgetItem* Hierarchy::Refresh(GameObject *go)
 {
-    if (!SceneManager::GetActiveScene())
-    {
-        return nullptr;
-    }
-
-    if (go->IsEditorGameObject()) return nullptr;
-
+    if (!SceneManager::GetActiveScene()) { return nullptr; }
+    if (go->IsEditorGameObject()) { return nullptr; }
 
     QTreeWidgetItem *goItem = GetItemFromGameObject(go);
     if (!goItem)
@@ -179,7 +210,7 @@ QTreeWidgetItem* Hierarchy::Refresh(GameObject *go)
         m_treeItem_To_GameObject[goItem] = go;
     }
 
-    // refresh go's children. If we find a new child, add it to goItem.
+    // Refresh go's children. If we find a new child, add it to goItem.
     const List<GameObject*> children = go->GetChildren();
     for (GameObject* cgo : children)
     {

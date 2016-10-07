@@ -30,8 +30,9 @@ class IDragDropListener { }; // To solve a Qt moc bug
 class IShortcutListener { }; // To solve a Qt moc bug
 #endif
 
-class EditorWindow;
 class GameWindow;
+class EditorWindow;
+class GraphicPipeline;
 class SelectionFramebuffer;
 class Screen : public QGLWidget,
                public IDragDropListener, // Must be in non-editor compile too. Weird QT moc bug
@@ -49,11 +50,11 @@ private:
     static GameWindow *s_m_window;
     #endif
 
-
     QWidget *m_dragOrigin = nullptr;
+    GraphicPipeline *m_gPipeline = nullptr;
 
-    int m_width = 0;
-    int m_height = 0;
+    int m_width = 1;
+    int m_height = 1;
     float m_aspectRatio = 1.0f;
 
     GameObject *m_lastGameObjectOvered = nullptr;
@@ -64,6 +65,8 @@ private:
 public:
 
     explicit Screen(QWidget *parent = 0);
+    virtual ~Screen();
+
     static void InitFromMainBinary();
 
     void initializeGL() override;
@@ -79,6 +82,7 @@ public:
 
     static void SetCursor(Qt::CursorShape cs);
 
+    GraphicPipeline *GetGraphicPipeline() const;
 
     #ifdef BANG_EDITOR
     void OnShortcutPressed() override;
@@ -95,6 +99,8 @@ public:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+
+    friend class GraphicPipeline;
 };
 
 #endif // SCREEN_H

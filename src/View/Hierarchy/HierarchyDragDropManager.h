@@ -1,6 +1,9 @@
 #ifndef HIERARCHYDRAGDROPMANAGER_H
 #define HIERARCHYDRAGDROPMANAGER_H
 
+#include <QTreeWidgetItem>
+
+#include "List.h"
 #include "GameObject.h"
 #include "IDragDropListener.h"
 
@@ -17,7 +20,7 @@ private:
     virtual void OnDragMove(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
-    void OnDropHereFromHierarchy(GameObject *selected, const DragDropInfo &ddi);
+    void OnDropHereFromHierarchy(const DragDropInfo &ddi);
     void OnDropHereFromExplorer(const File &f, const DragDropInfo &ddi);
 
 public:

@@ -8,6 +8,7 @@
 #include "Vector3.h"
 
 class String;
+class Matrix4;
 class Quaternion : public glm::quat
 {
 public:
@@ -30,6 +31,7 @@ public:
     static Quaternion LookDirection(const Vector3 &_forward,
                                     const Vector3 &_up = Vector3::Up);
     static Quaternion AngleAxis(float angleDeg, const Vector3 &axis);
+    static Quaternion FromRotationMatrix(const Matrix4 &rotMatrix);
 
     static Quaternion Identity;
 };

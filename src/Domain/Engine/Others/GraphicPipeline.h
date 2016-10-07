@@ -4,6 +4,7 @@
 #include "Renderer.h"
 
 class Scene;
+class Screen;
 class GBuffer;
 class Material;
 class GameObject;
@@ -53,7 +54,7 @@ private:
     void RenderDepthLayers(Framebuffer *fb);
 
 public:
-    GraphicPipeline();
+    GraphicPipeline(Screen *screen);
     virtual ~GraphicPipeline();
 
     static GraphicPipeline* GetActive();

@@ -96,6 +96,9 @@ GameObject::~GameObject()
 
 void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
 {
+    if (keepWorldTransform)
+        Debug_Log("Set parent of " << this << " to " << newParent);
+
     if (m_parent != newParent)
     {
         if (m_parent)
@@ -103,12 +106,33 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
             m_parent->m_children.Remove(this);
         }
 
-        if(keepWorldTransform)
+        if (keepWorldTransform)
         {
-            m_transform->SetLocalPosition(m_parent->m_transform->LocalToWorldPoint(m_transform->GetLocalPosition()));
-            // TODO
-            // SetRotation
-            // SetScale
+            // TODO: Not working yet (sometimes scaling breaks)
+
+            Matrix4 oldParentToWorld;
+            parent->transform->GetLocalToWorldMatrix(&oldParentToWorld);
+            //Debug_Log("LOCAL TO WORLD: " << Transform::FromTransformMatrix(oldParentToWorld));
+
+            Matrix4 worldToNewParent;
+            if (newParent)
+            {
+                newParent->transform->GetLocalToWorldMatrix(&worldToNewParent);
+                worldToNewParent = worldToNewParent.Inversed();
+                //Debug_Log("WORLD TO NEW PARENT: " << Transform::FromTransformMatrix(worldToNewParent));
+            }
+
+            Matrix4 keepWorldTransformMatrix =
+                    worldToNewParent * oldParentToWorld * transform->GetLocalToParentMatrix();
+            //Debug_Log("LOCALTOPARENT: " <<
+            //          Quaternion::EulerAngles(
+            //              Transform::GetRotationFromMatrix4(transform->GetLocalToParentMatrix())));
+            //Debug_Log("KEEPWORLDMATRIX: " << Transform::FromTransformMatrix(keepWorldTransformMatrix));
+
+            Transform t = Transform::FromTransformMatrix(keepWorldTransformMatrix);
+            transform->SetLocalPosition(t.GetLocalPosition());
+            transform->SetLocalRotation(t.GetLocalRotation());
+            transform->SetLocalScale   (t.GetLocalScale());
         }
 
         m_parent = newParent;
@@ -116,14 +140,6 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
         if (m_parent)
         {
             m_parent->m_children.PushBack(this);
-
-            if(keepWorldTransform)
-            {
-                m_transform->SetLocalPosition(m_parent->m_transform->WorldToLocalPoint(m_transform->GetLocalPosition()));
-                // TODO
-                // SetRotation
-                // SetScale
-            }
         }
     }
 }
@@ -583,13 +599,15 @@ void GameObject::OnMouseExit(bool fromChildren)
     }
 }
 
-bool GameObject::IsChildOf(const GameObject *goParent) const
+bool GameObject::IsChildOf(const GameObject *goParent, bool recursive) const
 {
-    if (!m_parent)
+    if (!parent) { return false; }
+
+    if (recursive)
     {
-        return false;
+        return parent == goParent || parent->IsChildOf(goParent);
     }
-    return (m_parent == goParent || m_parent->IsChildOf(goParent));
+    return parent == goParent;
 }
 
 void GameObject::_OnStart()

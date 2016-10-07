@@ -35,6 +35,11 @@ Screen::Screen(QWidget* parent) : QGLWidget(parent)
     #endif
 }
 
+Screen::~Screen()
+{
+    delete m_gPipeline;
+}
+
 void Screen::InitFromMainBinary()
 {
     #ifdef BANG_EDITOR
@@ -51,6 +56,8 @@ void Screen::initializeGL()
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+
+    m_gPipeline = new GraphicPipeline(this);
 }
 
 void Screen::paintGL()
@@ -63,7 +70,7 @@ void Screen::Render()
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
-        GraphicPipeline::GetActive()->RenderScene(activeScene);
+        m_gPipeline->RenderScene(activeScene);
     }
     else
     {
@@ -78,6 +85,8 @@ void Screen::resizeGL(int w, int h)
     m_width = w;
     m_height = h;
     m_aspectRatio = float(w) / h;
+
+    m_gPipeline->OnResize(w, h);
 
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
@@ -119,6 +128,11 @@ int Screen::GetHeight()
 void Screen::SetCursor(Qt::CursorShape cs)
 {
     Application::GetInstance()->setOverrideCursor( cs );
+}
+
+GraphicPipeline *Screen::GetGraphicPipeline() const
+{
+    return m_gPipeline;
 }
 
 #ifdef BANG_EDITOR

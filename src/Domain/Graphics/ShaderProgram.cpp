@@ -224,13 +224,16 @@ void ShaderProgram::Bind() const
         String texName = it->first;
         const Texture *tex = it->second;
 
-        int location = GetUniformLocation(texName);
-        // Set the uniform with the corresponding texture unit
-        glUniform1i(location, textureUnit);
+        if (tex)
+        {
+            int location = GetUniformLocation(texName);
+            // Set the uniform with the corresponding texture unit
+            glUniform1i(location, textureUnit);
 
-        // Bind To texture unit
-        tex->BindToTextureUnit(textureUnit); //Leave it bound
-        textureUnit++;
+            // Bind To texture unit
+            tex->BindToTextureUnit(textureUnit); //Leave it bound
+            textureUnit++;
+        }
     }
 }
 
@@ -239,7 +242,10 @@ void ShaderProgram::UnBind() const
     for (auto it = m_names_To_Texture.Begin(); it != m_names_To_Texture.End(); ++it)
     {
         const Texture *tex = it->second;
-        tex->UnBind();
+        if (tex)
+        {
+            tex->UnBind();
+        }
     }
     glUseProgram(PreUnBind(GL_CURRENT_PROGRAM));
 }

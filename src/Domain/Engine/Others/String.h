@@ -26,6 +26,7 @@ public:
     String();
     String(float v);
     String(const char *cstr);
+    String(const QString &qstr);
     String(const std::string &stdstr);
     String(const std::vector<char>::iterator begin, const std::vector<char>::iterator end);
     String(std::istreambuf_iterator<char, std::char_traits<char> > begin,

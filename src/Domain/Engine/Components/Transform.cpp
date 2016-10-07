@@ -327,6 +327,38 @@ Vector3 Transform::GetScale() const
     }
 }
 
+Vector3 Transform::GetPositionFromMatrix4(const Matrix4 &tm)
+{
+    return tm.c3.xyz();
+}
+
+Quaternion Transform::GetRotationFromMatrix4(const Matrix4 &tm)
+{
+    Vector3 scale = Transform::GetScaleFromMatrix4(tm);
+
+    Matrix4 rotMatrix;
+    rotMatrix.c0 = Vector4(tm.c0.xyz() / scale.x, 0);
+    rotMatrix.c1 = Vector4(tm.c1.xyz() / scale.y, 0);
+    rotMatrix.c2 = Vector4(tm.c2.xyz() / scale.z, 0);
+    rotMatrix.c3 = Vector4(0, 0, 0, 1);
+
+    return Quaternion::FromRotationMatrix(rotMatrix);
+}
+
+Vector3 Transform::GetScaleFromMatrix4(const Matrix4 &tm)
+{
+    return Vector3(tm.c0.Length(), tm.c1.Length(), tm.c2.Length());
+}
+
+Transform Transform::FromTransformMatrix(const Matrix4 &transformMatrix)
+{
+    Transform t;
+    t.SetLocalPosition(Transform::GetPositionFromMatrix4(transformMatrix));
+    t.SetLocalRotation(Transform::GetRotationFromMatrix4(transformMatrix));
+    t.SetLocalScale   (Transform::GetScaleFromMatrix4(transformMatrix));
+    return t;
+}
+
 Vector3 Transform::GetForward() const
 {
     return LocalToWorldDirection(Vector3::Forward).Normalized();

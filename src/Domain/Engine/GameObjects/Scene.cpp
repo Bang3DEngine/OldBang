@@ -8,7 +8,6 @@
 
 Scene::Scene() : GameObject("Scene")
 {
-    m_gPipeline = new GraphicPipeline();
 }
 
 void Scene::_OnStart()
@@ -63,13 +62,11 @@ void Scene::_OnUpdate()
 
 void Scene::_OnResize(int newWidth, int newHeight)
 {
-    m_gPipeline->OnResize(newWidth, newHeight);
 }
 
 Scene::~Scene()
 {
     _OnDestroy();
-    delete m_gPipeline;
     delete m_defaultCamera;
 }
 
@@ -147,10 +144,4 @@ void Scene::PostReadXMLInfo(const XMLNode *xmlInfo)
         }
     }
 }
-
-GraphicPipeline *Scene::GetGraphicPipeline() const
-{
-    return m_gPipeline;
-}
-
 

@@ -329,7 +329,7 @@ public:
     virtual void OnMouseOver(bool fromChildren);
     virtual void OnMouseExit(bool fromChildren);
 
-    bool IsChildOf(const GameObject *parent) const;
+    bool IsChildOf(const GameObject *parent, bool recursive = true) const;
     virtual bool IsEditorGameObject() const;
     virtual bool IsScene() const;
 

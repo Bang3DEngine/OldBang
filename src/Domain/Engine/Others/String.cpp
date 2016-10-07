@@ -1,5 +1,7 @@
 #include "String.h"
 
+#include <QString>
+
 #include "Map.h"
 #include "List.h"
 #include "Array.h"
@@ -24,6 +26,11 @@ String::String(float v)  :
 String::String(const char *cstr) :
     std::string(cstr)
 {
+}
+
+String::String(const QString &qstr)
+{
+    *this = qstr.toStdString();
 }
 
 String::String(const std::string &stdstr) :

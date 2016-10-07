@@ -37,7 +37,6 @@ Matrix4::Matrix4(const Vector4 &col0,
     c3 = col3;
 }
 
-#include <iostream>
 Matrix4 Matrix4::Inversed() const
 {
     Matrix4 inv;

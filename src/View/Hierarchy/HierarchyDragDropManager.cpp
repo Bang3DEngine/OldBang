@@ -89,43 +89,15 @@ void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
         }
         else if (ddi.sourceObject == m_hierarchy)
         {
-            OnDropHereFromHierarchy(m_hierarchy->GetFirstSelectedGameObject(),
-                                    ddi);
+            OnDropHereFromHierarchy(ddi);
         }
     }
 
-    // setStyleSheet("/* */");
 }
 
-void HierarchyDragDropManager::OnDropHereFromHierarchy(GameObject *selected,
-                                                       const DragDropInfo &ddi)
+void HierarchyDragDropManager::OnDropHereFromHierarchy(const DragDropInfo &ddi)
 {
-    QEvent *e = ddi.currentEvent;
-
-    GameObject *targetGameObject = GetDropTargetGameObject();
-    List<QTreeWidgetItem*> sourceItems =
-            m_hierarchy->selectedItems().toStdList();
-    m_hierarchy->LeaveOnlyOuterMostItems(&sourceItems);
-    if (!sourceItems.Empty())
-    {
-        QTreeWidgetItem *targetItem = GetDropTargetItem();
-        for (QTreeWidgetItem *sourceItem : sourceItems)
-        {
-            if (sourceItem != targetItem)
-            {
-                GameObject *sourceGameObject =
-                        m_hierarchy->GetGameObjectFromItem(sourceItem);
-                if (sourceGameObject != targetGameObject &&
-                    sourceGameObject && sourceGameObject->parent &&
-                    !targetGameObject->IsChildOf(sourceGameObject))
-                {
-                    sourceGameObject->SetParent(targetGameObject, true);
-                    e->accept();
-                }
-            }
-        }
-    }
-    m_hierarchy->RefreshFromScene();
+    m_hierarchy->UpdateSceneFromHierarchy();
 }
 
 void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,

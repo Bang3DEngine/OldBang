@@ -95,6 +95,8 @@ public:
 
 private slots:
     void RefreshFromScene();
+    void UpdateSceneFromHierarchy();
+    void UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem);
     QTreeWidgetItem* Refresh(GameObject *go);
 
 public slots:
