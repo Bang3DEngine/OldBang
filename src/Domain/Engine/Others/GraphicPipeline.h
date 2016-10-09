@@ -15,10 +15,7 @@ class SelectionFramebuffer;
  */
 class GraphicPipeline
 {
-public:
-
 private:
-
     Scene *m_currentScene = nullptr;
     Renderer::DepthLayer m_currentDepthLayer =
             Renderer::DepthLayer::DepthLayerScene;

@@ -12,7 +12,7 @@ QT += core gui opengl
 
 # message(Building $$BUILD_MODE ...)
 CONFIG += $$BUILD_MODE
-# CONFIG += EDITOR
+CONFIG += EDITOR
 # CONFIG += GAME
 CONFIG += qt
 
@@ -246,7 +246,8 @@ HEADERS += \
     src/Domain/Engine/Others/Array.h \
     src/Domain/Engine/Others/GraphicPipeline.h \
     src/Domain/Engine/Components/Canvas.h \
-    src/Domain/Engine/Components/UIImage.h
+    src/Domain/Engine/Components/UIImage.h \
+    src/Domain/Engine/Components/UIRenderer.h
 
 EDITOR {
 HEADERS += \
@@ -407,7 +408,8 @@ SOURCES += \
     src/Domain/Engine/Others/Array.cpp \
     src/Domain/Engine/Others/GraphicPipeline.cpp \
     src/Domain/Engine/Components/Canvas.cpp \
-    src/Domain/Engine/Components/UIImage.cpp
+    src/Domain/Engine/Components/UIImage.cpp \
+    src/Domain/Engine/Components/UIRenderer.cpp
 
 EDITOR {
     SOURCES += \

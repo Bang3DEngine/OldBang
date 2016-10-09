@@ -11,7 +11,6 @@
 #include "MeshFactory.h"
 #include "Framebuffer.h"
 
-
 class GBuffer : public Framebuffer
 {
 public:
@@ -65,7 +64,6 @@ public:
      * This is useful for D2G render pass.
      */
     void SetAllDrawBuffersExceptColor();
-    void SetStencilDrawBuffer();
     void SetColorDrawBuffer();
 
     void SetStencilWrite(bool writeEnabled);

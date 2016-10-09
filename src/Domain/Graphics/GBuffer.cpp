@@ -150,11 +150,6 @@ void GBuffer::SetAllDrawBuffersExceptColor()
                     GBuffer::Attachment::Stencil});
 }
 
-void GBuffer::SetStencilDrawBuffer()
-{
-    SetDrawBuffers({GBuffer::Attachment::Stencil});
-}
-
 void GBuffer::SetColorDrawBuffer()
 {
     SetDrawBuffers({GBuffer::Attachment::Color});
@@ -175,7 +170,7 @@ void GBuffer::ClearStencil()
     SaveCurrentDrawBuffers();
 
     Bind();
-    SetStencilDrawBuffer();
+    SetDrawBuffers({GBuffer::Attachment::Stencil});
     glClearColor(0,0,0,0);
     glClear(GL_COLOR_BUFFER_BIT);
     UnBind();
