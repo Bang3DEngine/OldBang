@@ -3,25 +3,41 @@
 
 #include "Bang.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include <GL/glew.h>
-#include "Array.h"
 
 #include "glm/glm.hpp"
 
-#include "Texture2D.h"
+#include "Array.h"
 #include "Asset.h"
+#include "Texture2D.h"
 
 class Texture2D;
 class Font : public Asset
 {
 public:
-    static int CharLoadSize;
+    /**
+     * @brief Structure to hold metrics for a character glyph.
+     * They are all relative to the baseline.
+     */
+    struct CharGlyphMetrics
+    {
+        int width, height; // Width and height of character (of the actual char pixels)
+        int bearingY; // Offset upwards from the baseline where the char pixels begin
+        int bearingX; // Offset to right from the pen position where the char pixels begin
+        int advance;  // Distance to be moved in X to right when drawing the next character
+    };
 
     const static String GetFileExtensionStatic() { return "bfont"; }
     const virtual String GetFileExtension()
     {
         return Font::GetFileExtensionStatic();
     }
+
+    static int CharLoadSize;
+
 
     Font();
     virtual ~Font();
@@ -31,10 +47,33 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
+    const Font::CharGlyphMetrics &GetCharacterMetrics(unsigned char c);
     Texture2D *GetCharacterTexture(unsigned char c) const;
 
+    /**
+     * @brief Returns the distance that the pen position must be moved between
+     * leftChar and rightChar (kerning)
+     */
+    int GetKerningX(char leftChar, char rightChar);
+
 private:
+
+    FT_Face m_freetypeFace;
+
+    /**
+     * @brief Each position i contains the character
+     * glyph metrics for the character i. This is,
+     * the bearingX, bearingY, height, width, etc.
+     */
+    Array<CharGlyphMetrics> m_charMetrics;
+
+    /**
+     * @brief Each position i contains the texture
+     * corresponding for the character i.
+     */
     Array<Texture2D*> m_charTextures;
+
+    void Free();
 };
 
 #endif // FONT_H

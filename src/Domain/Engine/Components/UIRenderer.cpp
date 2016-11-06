@@ -23,7 +23,6 @@ UIRenderer::UIRenderer()
 
 UIRenderer::~UIRenderer()
 {
-    if (m_materialPR) delete m_materialPR;
 }
 
 void UIRenderer::CloneInto(ICloneable *clone) const

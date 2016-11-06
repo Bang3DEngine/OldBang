@@ -4,44 +4,57 @@
 
 UIText::UIText() : UIRenderer()
 {
-    m_material = nullptr;
-    m_material = m_letterQuadMaterial = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/UI/D2G_UIText.bmat");
+    m_material = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/UI/D2G_UIText.bmat");
     m_font = AssetsManager::LoadAsset<Font>("Assets/Engine/Fonts/GreatFont.bfont");
 }
 
 UIText::~UIText()
 {
-    delete m_material;
 }
 
 void UIText::Render() const
 {
-    if (m_font)
+    NONULL(m_font); NONULL(m_material); NONULL(m_material->GetShaderProgram());
+
+    m_material->SetDiffuseColor(m_textColor);
+
+    Vector3 initialScale = transform->GetScale();
+    Vector3 initialPosition = transform->GetPosition();
+
+    float scaleFactor =  ( m_textSize * (1.0f / 8000.0f) );
+    Vector3 charScaleFactor = transform->GetScale() * scaleFactor;
+    for (int i = 0; i < m_content.Length(); ++i)
     {
-        Vector3 initialScale = transform->GetScale();
-        Vector3 initialPosition = transform->GetPosition();
+        char c = m_content[i];
+        const Font::CharGlyphMetrics &charMetrics = m_font->GetCharacterMetrics(c);
+        Texture2D *charTexture = m_font->GetCharacterTexture(c);
 
-        float characterStep = m_textSize * 1.0f / 100.0f;
-        Vector3 scale = Vector3(characterStep, characterStep, 1.0f) * transform->GetScale();
-        transform->SetScale(scale);
-        for (int i = 0; i < m_content.Length(); ++i)
-        {
-            char c = m_content[i];
-            if (c != ' ')
-            {
-                Texture2D *charTexture = m_font->GetCharacterTexture(c);
+        Vector3 quadScale = charScaleFactor * Vector3(charMetrics.width, charMetrics.height, 1.0f);
+        transform->SetScale(quadScale);          // The quad must have the dimensions of the char
+        transform->Translate(-quadScale / 2.0f); // Move from center to topleft
 
-                // Set corresponding char texture to material and render
-                m_material->SetTexture(charTexture);
-                UIRenderer::Render();
-            }
+        // Apply Bearings(X/Y)
+        transform->Translate( Vector3(charMetrics.bearingX, charMetrics.bearingY, 0) * charScaleFactor);
 
-            // Move to the right a char space
-            transform->Translate(Vector3::Right * characterStep);
-        }
-        transform->SetPosition(initialPosition);
-        transform->SetScale(initialScale);
+        m_material->SetTexture(charTexture); // Set corresponding char texture to material
+        UIRenderer::Render(); // RENDER THE CHAR !!!
+
+        // Unapply Bearings(X/Y)
+        transform->Translate(-Vector3(charMetrics.bearingX, charMetrics.bearingY, 0) * charScaleFactor);
+        transform->Translate(quadScale / 2.0f); // Move from topleft to center again
+
+        // Move to the right the advance distance
+        float advance = charMetrics.advance;
+        //if (i > 0)
+        //{
+        //    float advx = m_font->GetKerningX(m_content[i-1], m_content[i]);
+        //    if (advx > 0) { advance = advx; } // Try to get the kerningX instead of advance
+        //}
+        advance *= charScaleFactor.x;
+        transform->Translate(Vector3::Right * advance);
     }
+    transform->SetPosition(initialPosition);
+    transform->SetScale(initialScale);
 }
 
 const String UIText::ToString() const
@@ -106,6 +119,7 @@ void UIText::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetString("Content", m_content, {XMLProperty::Inline});
     xmlInfo->SetFloat("TextSize", m_textSize);
 
+    xmlInfo->GetAttribute("Tint")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("Material")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("LineWidth")->SetProperty({XMLProperty::Hidden});
@@ -117,22 +131,11 @@ void UIText::FillXMLInfo(XMLNode *xmlInfo) const
 void UIText::RenderCustomPR() const
 {
     UIRenderer::RenderCustomPR();
-    // Nothing
 }
 
 void UIText::SetContent(const String &content)
 {
     m_content = content;
-
-    /*
-    for (int i = 0; i < m_content.Length(); ++i)
-    {
-        char c = m_content[i];
-        MeshRenderer *letterQuad = new MeshRenderer();
-        letterQuad->SetMaterial(m_letterQuadMaterial);
-        m_letterQuads.Add(letterQuad);
-    }
-    */
 }
 
 const String &UIText::GetContent() const
@@ -153,16 +156,4 @@ int UIText::GetTextSize() const
 Rect UIText::GetBoundingRect(Camera *camera) const
 {
     return Rect::ScreenRect;
-}
-
-void UIText::DeleteCurrentLetterQuads()
-{
-    /*
-    for (MeshRenderer *meshRend : m_letterQuads)
-    {
-        gameObject->RemoveComponent(meshRend);
-        delete meshRend;
-    }
-    m_letterQuads.Clear();
-    */
 }

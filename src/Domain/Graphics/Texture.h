@@ -37,7 +37,8 @@ public:
 
     NamedEnum (WrapMode,
         Repeat = GL_REPEAT,
-        Clamp = GL_CLAMP
+        Clamp = GL_CLAMP,
+        ClampToEdge = GL_CLAMP_TO_EDGE
     );
 
 private:

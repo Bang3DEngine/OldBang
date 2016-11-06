@@ -37,14 +37,10 @@ public:
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 private:
-    Material *m_letterQuadMaterial = nullptr;
-
     Font *m_font = nullptr;
     Color m_textColor = Color::Black;
     int m_textSize = 32; // Set in the constructor
     String m_content = "";
-
-    void DeleteCurrentLetterQuads();
 
     friend class GameObject;
 };

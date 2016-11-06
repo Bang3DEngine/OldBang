@@ -1,45 +1,45 @@
 <Scene enabled:Bool="true"{Hidden,Readonly}
-       id:String="0x95a3e08"{Hidden}
+       id:String="0x8ce01b0"{Hidden}
        name:String="Scene"{Hidden,Readonly}
       >
     <Transform Position:Vector3="(0, 0, 0)"{}
                Rotation:Vector3="(0, 0, 0)"{}
                Scale:Vector3="(1, 1, 1)"{}
                enabled:Bool="true"{Hidden,Readonly}
-               id:String="0x8c1b298"{Hidden,Readonly}
+               id:String="0x8c1b640"{Hidden,Readonly}
               >
     </Transform>
     <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x9607740"{Hidden,Readonly}
+                id:String="0x94c8848"{Hidden,Readonly}
                 name:String="Scenario"{Hidden,Readonly}
                >
         <Transform Position:Vector3="(0, 0, 0)"{}
                    Rotation:Vector3="(0, 0, 0)"{}
                    Scale:Vector3="(0.1, 0.1, 0.1)"{}
                    enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0x95fc868"{Hidden,Readonly}
+                   id:String="0x9600618"{Hidden,Readonly}
                   >
         </Transform>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x94c3c60"{Hidden,Readonly}
+                    id:String="0x95a2b18"{Hidden,Readonly}
                     name:String="Room"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(0, 1.1376, 0)"{}
                        Rotation:Vector3="(0, 0, 0)"{}
                        Scale:Vector3="(1, 1, 1)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x95e9768"{Hidden,Readonly}
+                       id:String="0x95ffd40"{Hidden,Readonly}
                       >
             </Transform>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x9606058"{Hidden,Readonly}
+                        id:String="0x9600298"{Hidden,Readonly}
                         name:String="WallLeft"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(-49.9311, 37.5314, 1.8)"{}
                            Rotation:Vector3="(90, 90, 0)"{}
                            Scale:Vector3="(104.912, 3, 72.9992)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x96060b8"{Hidden,Readonly}
+                           id:String="0x94c86b0"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -49,19 +49,19 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x9578578"{Hidden,Readonly}
+                              id:String="0x96030a0"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x965ad50"{Hidden,Readonly}
+                        id:String="0x9657540"{Hidden,Readonly}
                         name:String="Cube"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(54.5806, 35.0641, -22.2451)"{}
                            Rotation:Vector3="(90, -0, 0)"{}
                            Scale:Vector3="(8.60305, 5.59867, 72.6347)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x962e340"{Hidden,Readonly}
+                           id:String="0x96576c8"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -71,19 +71,19 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x966e8c8"{Hidden,Readonly}
+                              id:String="0x966e670"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x96c86a0"{Hidden,Readonly}
+                        id:String="0x96d5560"{Hidden,Readonly}
                         name:String="WallBack"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(12.4088, 36.3957, -48.9366)"{}
                            Rotation:Vector3="(90, -0, 0)"{}
                            Scale:Vector3="(129.103, 2.90004, 75.3087)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x967c0a8"{Hidden,Readonly}
+                           id:String="0x968f240"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -93,19 +93,19 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x962fa20"{Hidden,Readonly}
+                              id:String="0x96adb00"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x967c178"{Hidden,Readonly}
+                        id:String="0x96adba8"{Hidden,Readonly}
                         name:String="FloorWood"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(12.7272, -0.153702, 2.05281)"{}
                            Rotation:Vector3="(0, -0, 0)"{}
                            Scale:Vector3="(128.084, 2.9, 101.5)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x96a3d70"{Hidden,Readonly}
+                           id:String="0x96c4500"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -115,19 +115,19 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="false"{Hidden,Readonly}
-                              id:String="0x965c2a8"{Hidden,Readonly}
+                              id:String="0x96c4600"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x974b8e0"{Hidden,Readonly}
+                        id:String="0x9730bd8"{Hidden,Readonly}
                         name:String="Cube"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(-25.3593, 34.1351, -22.2451)"{}
                            Rotation:Vector3="(90, -0, 0)"{}
                            Scale:Vector3="(8.60305, 5.59867, 72.6347)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x96b9470"{Hidden,Readonly}
+                           id:String="0x9718e40"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -137,44 +137,44 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x972e988"{Hidden,Readonly}
+                              id:String="0x9730a78"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
         </GameObject>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x97468a8"{Hidden,Readonly}
+                    id:String="0x9747648"{Hidden,Readonly}
                     name:String="DirectionalLight"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(10.94, 17.57, 19.67)"{}
                        Rotation:Vector3="(-10, 30, 0)"{}
                        Scale:Vector3="(1, 1, 1)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x96b9210"{Hidden,Readonly}
+                       id:String="0x97476a8"{Hidden,Readonly}
                       >
             </Transform>
             <DirectionalLight Color:Color="(1, 1, 1, 1)"{}
                               Intensity:Float="0.5"{}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x96b92c0"{Hidden,Readonly}
+                              id:String="0x9743b30"{Hidden,Readonly}
                              >
             </DirectionalLight>
             <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/RandomScale.cpp"{FileExtension="cpp"}
-                             CreateNew...:Button="CreateNew..."{Listener="0x9735fe8"}
-                             Refresh:Button="Refresh"{Listener="0x9735fe8"}
+                             CreateNew...:Button="CreateNew..."{Listener="0x97a1da0"}
+                             Refresh:Button="Refresh"{Listener="0x97a1da0"}
                              enabled:Bool="true"{Hidden,Readonly}
-                             id:String="0x9735fb8"{Hidden,Readonly}
+                             id:String="0x97a1d70"{Hidden,Readonly}
                             >
             </BehaviourHolder>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x97b1438"{Hidden,Readonly}
+                        id:String="0x97b99e0"{Hidden,Readonly}
                         name:String="Cube"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(0, 0, -4.74131)"{}
                            Rotation:Vector3="(0, 0, 0)"{}
                            Scale:Vector3="(1, 1, 7.39705)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x97c6c68"{Hidden,Readonly}
+                           id:String="0x97b9a40"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -184,39 +184,39 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x97c6d18"{Hidden,Readonly}
+                              id:String="0x9793460"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
         </GameObject>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x97c6d80"{Hidden,Readonly}
+                    id:String="0x97934c8"{Hidden,Readonly}
                     name:String="PointLight"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(-15.7416, 17.0794, 10)"{}
                        Rotation:Vector3="(0, -0, 0)"{}
                        Scale:Vector3="(1, 1, 1)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x97c6de0"{Hidden,Readonly}
+                       id:String="0x97ba010"{Hidden,Readonly}
                       >
             </Transform>
             <PointLight Color:Color="(0, 0.533333, 1, 1)"{}
                         Intensity:Float="3"{}
                         Range:Float="4"{}
                         enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x97c6e90"{Hidden,Readonly}
+                        id:String="0x97b9af0"{Hidden,Readonly}
                        >
             </PointLight>
         </GameObject>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x9839010"{Hidden,Readonly}
+                    id:String="0x980e868"{Hidden,Readonly}
                     name:String="Floor"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(7.44, -1.73436, 0.41)"{}
                        Rotation:Vector3="(0, 0, 0)"{}
                        Scale:Vector3="(432.669, 2.9, 353.399)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x97d4ea0"{Hidden,Readonly}
+                       id:String="0x9811550"{Hidden,Readonly}
                       >
             </Transform>
             <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -226,19 +226,19 @@
                           Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                           ReceivesLighting:Bool="true"{Inline}
                           enabled:Bool="true"{Hidden,Readonly}
-                          id:String="0x97d4f50"{Hidden,Readonly}
+                          id:String="0x98111f0"{Hidden,Readonly}
                          >
             </MeshRenderer>
         </GameObject>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x98ccaa8"{Hidden,Readonly}
+                    id:String="0x98b20e8"{Hidden,Readonly}
                     name:String="Character"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(3.88165, 2.02, -24.8586)"{}
                        Rotation:Vector3="(5.00896e-06, 59.08, -5.00896e-06)"{}
                        Scale:Vector3="(0.2, 0.2, 0.2)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x9855098"{Hidden,Readonly}
+                       id:String="0x98b2148"{Hidden,Readonly}
                       >
             </Transform>
             <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -248,25 +248,25 @@
                           Mesh:File="./Assets/Meshes/luigiMesh.bmesh"{FileExtension="bmesh"}
                           ReceivesLighting:Bool="true"{Inline}
                           enabled:Bool="true"{Hidden,Readonly}
-                          id:String="0x98c9b10"{Hidden,Readonly}
+                          id:String="0x98b2208"{Hidden,Readonly}
                          >
             </MeshRenderer>
             <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/TestBehaviour.cpp"{FileExtension="cpp"}
-                             CreateNew...:Button="CreateNew..."{Listener="0x990d2d8"}
-                             Refresh:Button="Refresh"{Listener="0x990d2d8"}
+                             CreateNew...:Button="CreateNew..."{Listener="0x991d780"}
+                             Refresh:Button="Refresh"{Listener="0x991d780"}
                              enabled:Bool="true"{Hidden,Readonly}
-                             id:String="0x990d2a8"{Hidden,Readonly}
+                             id:String="0x991d750"{Hidden,Readonly}
                             >
             </BehaviourHolder>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x9922e28"{Hidden,Readonly}
+                        id:String="0x99199a0"{Hidden,Readonly}
                         name:String="Sword"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(-21.7028, 43.7334, 3.07981)"{}
                            Rotation:Vector3="(0, -0, 0)"{}
                            Scale:Vector3="(2.79391, 2.45606, 97.5492)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x9922e88"{Hidden,Readonly}
+                           id:String="0x9933a00"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -276,19 +276,19 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x9922f58"{Hidden,Readonly}
+                              id:String="0x989e400"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x9934bc0"{Hidden,Readonly}
+                        id:String="0x9922b50"{Hidden,Readonly}
                         name:String="Camera"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(-2.04, 80, -160.32)"{}
                            Rotation:Vector3="(180, -5.00896e-06, 180)"{}
                            Scale:Vector3="(1, 1, 1)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x9934c30"{Hidden,Readonly}
+                           id:String="0x989e4b8"{Hidden,Readonly}
                           >
                 </Transform>
                 <Camera AspectRatio:Float="1"{}
@@ -299,44 +299,44 @@
                         ZFar:Float="99999"{}
                         ZNear:Float="0.5"{}
                         enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x990bd98"{Hidden,Readonly}
+                        id:String="0x989e5b8"{Hidden,Readonly}
                        >
                 </Camera>
             </GameObject>
         </GameObject>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x990be38"{Hidden,Readonly}
+                    id:String="0x98d4c28"{Hidden,Readonly}
                     name:String="DirectionalLight"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(10.94, 17.57, 19.67)"{}
                        Rotation:Vector3="(0, 90, 0)"{}
                        Scale:Vector3="(1, 1, 1)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x990be98"{Hidden,Readonly}
+                       id:String="0x98d4c88"{Hidden,Readonly}
                       >
             </Transform>
             <DirectionalLight Color:Color="(1, 1, 1, 1)"{}
                               Intensity:Float="0.5"{}
                               enabled:Bool="false"{Hidden,Readonly}
-                              id:String="0x983cd30"{Hidden,Readonly}
+                              id:String="0x98d4d78"{Hidden,Readonly}
                              >
             </DirectionalLight>
             <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/RandomScale.cpp"{FileExtension="cpp"}
-                             CreateNew...:Button="CreateNew..."{Listener="0x990f7b0"}
-                             Refresh:Button="Refresh"{Listener="0x990f7b0"}
+                             CreateNew...:Button="CreateNew..."{Listener="0x989e498"}
+                             Refresh:Button="Refresh"{Listener="0x989e498"}
                              enabled:Bool="true"{Hidden,Readonly}
-                             id:String="0x990f780"{Hidden,Readonly}
+                             id:String="0x989e468"{Hidden,Readonly}
                             >
             </BehaviourHolder>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x983cd90"{Hidden,Readonly}
+                        id:String="0x98d4dc8"{Hidden,Readonly}
                         name:String="Cube"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(0, 0, -4.74131)"{}
                            Rotation:Vector3="(0, -0, 0)"{}
                            Scale:Vector3="(1, 1, 7.39705)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x983cdf0"{Hidden,Readonly}
+                           id:String="0x98d4e38"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -346,21 +346,21 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x9926088"{Hidden,Readonly}
+                              id:String="0x98d64a0"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
         </GameObject>
     </GameObject>
     <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x9926100"{Hidden,Readonly}
+                id:String="0x98d6558"{Hidden,Readonly}
                 name:String="Enemy"{Hidden,Readonly}
                >
         <Transform Position:Vector3="(-2.99, 5.17866, 0)"{}
                    Rotation:Vector3="(0, 0, 0)"{}
                    Scale:Vector3="(1, 1, 1)"{}
                    enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0x9926170"{Hidden,Readonly}
+                   id:String="0x98d65c8"{Hidden,Readonly}
                   >
         </Transform>
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -370,36 +370,36 @@
                       Mesh:File="./Assets/Engine/Meshes/Sphere.bmesh"{FileExtension="bmesh"}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
-                      id:String="0x9926270"{Hidden,Readonly}
+                      id:String="0x98d66c8"{Hidden,Readonly}
                      >
         </MeshRenderer>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x99262e8"{Hidden,Readonly}
+                    id:String="0x9908488"{Hidden,Readonly}
                     name:String="BarrelRot"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(0.187785, 0, 0)"{}
                        Rotation:Vector3="(-50.8994, -52.0752, 1.80676e-06)"{}
                        Scale:Vector3="(1, 1, 1)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x990e6d8"{Hidden,Readonly}
+                       id:String="0x98d1b30"{Hidden,Readonly}
                       >
             </Transform>
             <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/LookAtLuigi.cpp"{FileExtension="cpp"}
-                             CreateNew...:Button="CreateNew..."{Listener="0x983cf20"}
-                             Refresh:Button="Refresh"{Listener="0x983cf20"}
+                             CreateNew...:Button="CreateNew..."{Listener="0x98d6538"}
+                             Refresh:Button="Refresh"{Listener="0x98d6538"}
                              enabled:Bool="true"{Hidden,Readonly}
-                             id:String="0x983cef0"{Hidden,Readonly}
+                             id:String="0x98d6508"{Hidden,Readonly}
                             >
             </BehaviourHolder>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x9935c98"{Hidden,Readonly}
+                        id:String="0x99084f8"{Hidden,Readonly}
                         name:String="Barrel"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(0, 0, -1.25)"{}
                            Rotation:Vector3="(0, 0, 0)"{}
                            Scale:Vector3="(0.23, 0.29, 1)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x98554a8"{Hidden,Readonly}
+                           id:String="0x9839040"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -409,21 +409,21 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x98555a8"{Hidden,Readonly}
+                              id:String="0x9839140"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
         </GameObject>
     </GameObject>
     <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x99a4ec8"{Hidden,Readonly}
+                id:String="0x998ec70"{Hidden,Readonly}
                 name:String="Enemy"{Hidden,Readonly}
                >
         <Transform Position:Vector3="(-3.58258, 5.17866, 3.87496)"{}
                    Rotation:Vector3="(0, -0, 0)"{}
                    Scale:Vector3="(1, 1, 1)"{}
                    enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0x9993050"{Hidden,Readonly}
+                   id:String="0x9909a40"{Hidden,Readonly}
                   >
         </Transform>
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -433,36 +433,36 @@
                       Mesh:File="./Assets/Engine/Meshes/Sphere.bmesh"{FileExtension="bmesh"}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
-                      id:String="0x99a4f28"{Hidden,Readonly}
+                      id:String="0x9923a80"{Hidden,Readonly}
                      >
         </MeshRenderer>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x9961570"{Hidden,Readonly}
+                    id:String="0x9990800"{Hidden,Readonly}
                     name:String="BarrelRot"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(0.187785, 0, 0)"{}
                        Rotation:Vector3="(-34.0053, -30.4262, -1.36376e-06)"{}
                        Scale:Vector3="(1, 1, 1)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x9949338"{Hidden,Readonly}
+                       id:String="0x9929da8"{Hidden,Readonly}
                       >
             </Transform>
             <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/LookAtLuigi.cpp"{FileExtension="cpp"}
-                             CreateNew...:Button="CreateNew..."{Listener="0x990dd90"}
-                             Refresh:Button="Refresh"{Listener="0x990dd90"}
+                             CreateNew...:Button="CreateNew..."{Listener="0x9909b50"}
+                             Refresh:Button="Refresh"{Listener="0x9909b50"}
                              enabled:Bool="true"{Hidden,Readonly}
-                             id:String="0x990dd60"{Hidden,Readonly}
+                             id:String="0x9909b20"{Hidden,Readonly}
                             >
             </BehaviourHolder>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x99493e8"{Hidden,Readonly}
+                        id:String="0x9990860"{Hidden,Readonly}
                         name:String="Barrel"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(0, 0, -1.25)"{}
                            Rotation:Vector3="(0, -0, 0)"{}
                            Scale:Vector3="(0.23, 0.29, 1)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x997d0a8"{Hidden,Readonly}
+                           id:String="0x998fc70"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -472,21 +472,21 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x997d158"{Hidden,Readonly}
+                              id:String="0x998fd20"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
         </GameObject>
     </GameObject>
     <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x997d1d0"{Hidden,Readonly}
+                id:String="0x992a008"{Hidden,Readonly}
                 name:String="Enemy"{Hidden,Readonly}
                >
         <Transform Position:Vector3="(6.54172, 5.17866, 0)"{}
                    Rotation:Vector3="(0, -0, 0)"{}
                    Scale:Vector3="(1, 1, 1)"{}
                    enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0x99903b0"{Hidden,Readonly}
+                   id:String="0x992a068"{Hidden,Readonly}
                   >
         </Transform>
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -496,36 +496,36 @@
                       Mesh:File="./Assets/Engine/Meshes/Sphere.bmesh"{FileExtension="bmesh"}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
-                      id:String="0x99904b0"{Hidden,Readonly}
+                      id:String="0x9923198"{Hidden,Readonly}
                      >
         </MeshRenderer>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x9990528"{Hidden,Readonly}
+                    id:String="0x9923210"{Hidden,Readonly}
                     name:String="BarrelRot"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(0.187785, 0, 0)"{}
                        Rotation:Vector3="(-36.1541, 68.5944, 5.67407e-07)"{}
                        Scale:Vector3="(1, 1, 1)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x9991440"{Hidden,Readonly}
+                       id:String="0x9943198"{Hidden,Readonly}
                       >
             </Transform>
             <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/LookAtLuigi.cpp"{FileExtension="cpp"}
-                             CreateNew...:Button="CreateNew..."{Listener="0x99145e0"}
-                             Refresh:Button="Refresh"{Listener="0x99145e0"}
+                             CreateNew...:Button="CreateNew..."{Listener="0x99a7250"}
+                             Refresh:Button="Refresh"{Listener="0x99a7250"}
                              enabled:Bool="true"{Hidden,Readonly}
-                             id:String="0x99145b0"{Hidden,Readonly}
+                             id:String="0x99a7220"{Hidden,Readonly}
                             >
             </BehaviourHolder>
             <GameObject enabled:Bool="true"{Hidden,Readonly}
-                        id:String="0x9991550"{Hidden,Readonly}
+                        id:String="0x99432a8"{Hidden,Readonly}
                         name:String="Barrel"{Hidden,Readonly}
                        >
                 <Transform Position:Vector3="(0, 0, -1.25)"{}
                            Rotation:Vector3="(0, -0, 0)"{}
                            Scale:Vector3="(0.23, 0.29, 1)"{}
                            enabled:Bool="true"{Hidden,Readonly}
-                           id:String="0x994e548"{Hidden,Readonly}
+                           id:String="0x98eada0"{Hidden,Readonly}
                           >
                 </Transform>
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -535,21 +535,21 @@
                               Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
-                              id:String="0x994e648"{Hidden,Readonly}
+                              id:String="0x98eaea0"{Hidden,Readonly}
                              >
                 </MeshRenderer>
             </GameObject>
         </GameObject>
     </GameObject>
     <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x994e6c0"{Hidden,Readonly}
+                id:String="0x9923280"{Hidden,Readonly}
                 name:String="Ceiling"{Hidden,Readonly}
                >
         <Transform Position:Vector3="(1.31657, 7, 0.102839)"{}
                    Rotation:Vector3="(90, -0, 0)"{}
                    Scale:Vector3="(13, 10.0727, 0.259996)"{}
                    enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0x99a7220"{Hidden,Readonly}
+                   id:String="0x998f7e0"{Hidden,Readonly}
                   >
         </Transform>
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -559,19 +559,19 @@
                       Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
-                      id:String="0x99a7320"{Hidden,Readonly}
+                      id:String="0x998f8e0"{Hidden,Readonly}
                      >
         </MeshRenderer>
     </GameObject>
     <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x99a7398"{Hidden,Readonly}
+                id:String="0x99a63c8"{Hidden,Readonly}
                 name:String="Panel"{Hidden,Readonly}
                >
-        <Transform Position:Vector3="(-0.0084881, -0.80949, 0)"{}
+        <Transform Position:Vector3="(-0.01, -0.73, 0)"{}
                    Rotation:Vector3="(0, 0, 0)"{}
                    Scale:Vector3="(1.9, 0.3, 1)"{}
                    enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0x9985190"{Hidden,Readonly}
+                   id:String="0x99a6438"{Hidden,Readonly}
                   >
         </Transform>
         <UIImage DrawWireframe:Bool="false"{Inline,Hidden}
@@ -585,19 +585,48 @@
                  StrokeColor:Color="(0, 0, 0, 1)"{}
                  Tint:Color="(1, 0, 0.0156863, 0.501961)"{}
                  enabled:Bool="true"{Hidden,Readonly}
-                 id:String="0x99915c0"{Hidden,Readonly}
+                 id:String="0x99a6538"{Hidden,Readonly}
                 >
         </UIImage>
+        <GameObject enabled:Bool="true"{Hidden,Readonly}
+                    id:String="0x9a4e480"{Hidden,Readonly}
+                    name:String="TestText"{Hidden,Readonly}
+                   >
+            <Transform Position:Vector3="(-0.45, -0.114795, 0)"{}
+                       Rotation:Vector3="(0, -0, 0)"{}
+                       Scale:Vector3="(0.53, 3.33, 1)"{}
+                       enabled:Bool="true"{Hidden,Readonly}
+                       id:String="0x9a3c3f8"{Hidden,Readonly}
+                      >
+            </Transform>
+            <UIText Color:Color="(1, 1, 1, 1)"{}
+                    Content:String="The quick brown fox jumps over the lazy dog"{Inline}
+                    DrawWireframe:Bool="false"{Inline,Hidden}
+                    Font:File="./Assets/Engine/Fonts/PrettyFont.bfont"{FileExtension="bfont"}
+                    IsTransparent:Bool="false"{Inline,Hidden}
+                    LineWidth:Float="1"{Hidden}
+                    Material:File="./Assets/Engine/Materials/UI/D2G_UIText.bmat"{FileExtension="bmat",Hidden}
+                    Mesh:File="./Assets/Engine/Meshes/Plane.bmesh"{FileExtension="bmesh",Hidden}
+                    ReceivesLighting:Bool="false"{Inline,Hidden}
+                    Stroke:Float="0"{}
+                    StrokeColor:Color="(1, 1, 1, 1)"{}
+                    TextSize:Float="40"{}
+                    Tint:Color="(0, 0, 0, 0)"{Hidden}
+                    enabled:Bool="true"{Hidden,Readonly}
+                    id:String="0x9991c88"{Hidden,Readonly}
+                   >
+            </UIText>
+        </GameObject>
     </GameObject>
     <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x9a36ab8"{Hidden,Readonly}
+                id:String="0xa21d088"{Hidden,Readonly}
                 name:String="Sphere"{Hidden,Readonly}
                >
         <Transform Position:Vector3="(6.5, 2.5, 5.33)"{}
                    Rotation:Vector3="(-5.41336e-07, 45, -90)"{}
                    Scale:Vector3="(2, 2, 2)"{}
                    enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0x9a49e78"{Hidden,Readonly}
+                   id:String="0xa21d0e8"{Hidden,Readonly}
                   >
         </Transform>
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -607,18 +636,18 @@
                       Mesh:File="./Assets/Engine/Meshes/Sphere.bmesh"{FileExtension="bmesh"}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
-                      id:String="0x9a444f0"{Hidden,Readonly}
+                      id:String="0xa21d2a8"{Hidden,Readonly}
                      >
         </MeshRenderer>
         <GameObject enabled:Bool="true"{Hidden,Readonly}
-                    id:String="0x99b28b0"{Hidden,Readonly}
+                    id:String="0xa21d320"{Hidden,Readonly}
                     name:String="Cube"{Hidden,Readonly}
                    >
             <Transform Position:Vector3="(0, -0.770532, 0)"{}
                        Rotation:Vector3="(0, 0, 0)"{}
                        Scale:Vector3="(1.76, 0.48, 0.29)"{}
                        enabled:Bool="true"{Hidden,Readonly}
-                       id:String="0x9a4a2f0"{Hidden,Readonly}
+                       id:String="0xa21d390"{Hidden,Readonly}
                       >
             </Transform>
             <MeshRenderer DrawWireframe:Bool="false"{Inline}
@@ -628,154 +657,9 @@
                           Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
                           ReceivesLighting:Bool="true"{Inline}
                           enabled:Bool="true"{Hidden,Readonly}
-                          id:String="0x9a12360"{Hidden,Readonly}
+                          id:String="0xa21d510"{Hidden,Readonly}
                          >
             </MeshRenderer>
         </GameObject>
-    </GameObject>
-    <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x9a123c8"{Hidden,Readonly}
-                name:String="Text1"{Hidden,Readonly}
-               >
-        <Transform Position:Vector3="(-0.9, 0.888847, 0)"{}
-                   Rotation:Vector3="(0, 0, 0)"{}
-                   Scale:Vector3="(1, 1, 1)"{}
-                   enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0x9a23090"{Hidden,Readonly}
-                  >
-        </Transform>
-        <UIText Color:Color="(0, 0, 0, 1)"{}
-                Content:String="ABCDEFGHIJKLMNOPQR"{Inline}
-                DrawWireframe:Bool="false"{Inline,Hidden}
-                Font:File="./Assets/Engine/Fonts/UbuntuFont.bfont"{FileExtension="bfont"}
-                IsTransparent:Bool="false"{Inline,Hidden}
-                LineWidth:Float="1"{Hidden}
-                Material:File="./Assets/Engine/Materials/UI/D2G_UIText.bmat"{FileExtension="bmat",Hidden}
-                Mesh:File="./Assets/Engine/Meshes/Plane.bmesh"{FileExtension="bmesh",Hidden}
-                ReceivesLighting:Bool="false"{Inline,Hidden}
-                Stroke:Float="0"{}
-                StrokeColor:Color="(1, 1, 1, 1)"{}
-                TextSize:Float="10"{}
-                Tint:Color="(0, 0, 0, 0)"{}
-                enabled:Bool="true"{Hidden,Readonly}
-                id:String="0x9a1d820"{Hidden,Readonly}
-               >
-        </UIText>
-    </GameObject>
-    <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0xa20bd50"{Hidden,Readonly}
-                name:String="Text1"{Hidden,Readonly}
-               >
-        <Transform Position:Vector3="(-0.9, 0.742322, 0)"{}
-                   Rotation:Vector3="(0, -0, 0)"{}
-                   Scale:Vector3="(1, 1, 1)"{}
-                   enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0xa20bdb0"{Hidden,Readonly}
-                  >
-        </Transform>
-        <UIText Color:Color="(0, 0, 0, 1)"{}
-                Content:String="STUVWXYZ0123456789"{Inline}
-                DrawWireframe:Bool="false"{Inline,Hidden}
-                Font:File="./Assets/Engine/Fonts/UbuntuFont.bfont"{FileExtension="bfont"}
-                IsTransparent:Bool="false"{Inline,Hidden}
-                LineWidth:Float="1"{Hidden}
-                Material:File="./Assets/Engine/Materials/UI/D2G_UIText.bmat"{FileExtension="bmat",Hidden}
-                Mesh:File="./Assets/Engine/Meshes/Plane.bmesh"{FileExtension="bmesh",Hidden}
-                ReceivesLighting:Bool="false"{Inline,Hidden}
-                Stroke:Float="0"{}
-                StrokeColor:Color="(1, 1, 1, 1)"{}
-                TextSize:Float="10"{}
-                Tint:Color="(0, 0, 0, 0)"{}
-                enabled:Bool="true"{Hidden,Readonly}
-                id:String="0xa20bf60"{Hidden,Readonly}
-               >
-        </UIText>
-    </GameObject>
-    <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0xa20c4a8"{Hidden,Readonly}
-                name:String="Text1"{Hidden,Readonly}
-               >
-        <Transform Position:Vector3="(-0.9, 0.612978, 0)"{}
-                   Rotation:Vector3="(0, -0, 0)"{}
-                   Scale:Vector3="(1, 1, 1)"{}
-                   enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0xa2463c0"{Hidden,Readonly}
-                  >
-        </Transform>
-        <UIText Color:Color="(0, 0, 0, 1)"{}
-                Content:String="abcdefghijklmnopqr"{Inline}
-                DrawWireframe:Bool="false"{Inline,Hidden}
-                Font:File="./Assets/Engine/Fonts/UbuntuFont.bfont"{FileExtension="bfont"}
-                IsTransparent:Bool="false"{Inline,Hidden}
-                LineWidth:Float="1"{Hidden}
-                Material:File="./Assets/Engine/Materials/UI/D2G_UIText.bmat"{FileExtension="bmat",Hidden}
-                Mesh:File="./Assets/Engine/Meshes/Plane.bmesh"{FileExtension="bmesh",Hidden}
-                ReceivesLighting:Bool="false"{Inline,Hidden}
-                Stroke:Float="0"{}
-                StrokeColor:Color="(1, 1, 1, 1)"{}
-                TextSize:Float="10"{}
-                Tint:Color="(0, 0, 0, 0)"{}
-                enabled:Bool="true"{Hidden,Readonly}
-                id:String="0xa25d5e0"{Hidden,Readonly}
-               >
-        </UIText>
-    </GameObject>
-    <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0xa27d130"{Hidden,Readonly}
-                name:String="Text1"{Hidden,Readonly}
-               >
-        <Transform Position:Vector3="(-0.9, 0.464504, 0)"{}
-                   Rotation:Vector3="(0, -0, 0)"{}
-                   Scale:Vector3="(1, 1, 1)"{}
-                   enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0xa265d38"{Hidden,Readonly}
-                  >
-        </Transform>
-        <UIText Color:Color="(0, 0, 0, 1)"{}
-                Content:String="stuvwxyz_.,?!*/\-&%"{Inline}
-                DrawWireframe:Bool="false"{Inline,Hidden}
-                Font:File="./Assets/Engine/Fonts/UbuntuFont.bfont"{FileExtension="bfont"}
-                IsTransparent:Bool="false"{Inline,Hidden}
-                LineWidth:Float="1"{Hidden}
-                Material:File="./Assets/Engine/Materials/UI/D2G_UIText.bmat"{FileExtension="bmat",Hidden}
-                Mesh:File="./Assets/Engine/Meshes/Plane.bmesh"{FileExtension="bmesh",Hidden}
-                ReceivesLighting:Bool="false"{Inline,Hidden}
-                Stroke:Float="0"{}
-                StrokeColor:Color="(1, 1, 1, 1)"{}
-                TextSize:Float="10"{}
-                Tint:Color="(0, 0, 0, 0)"{}
-                enabled:Bool="true"{Hidden,Readonly}
-                id:String="0xa290ab0"{Hidden,Readonly}
-               >
-        </UIText>
-    </GameObject>
-    <GameObject enabled:Bool="true"{Hidden,Readonly}
-                id:String="0xa2304e8"{Hidden,Readonly}
-                name:String="Text1"{Hidden,Readonly}
-               >
-        <Transform Position:Vector3="(-0.9, 0.313507, 0)"{}
-                   Rotation:Vector3="(0, -0, 0)"{}
-                   Scale:Vector3="(1, 1, 1)"{}
-                   enabled:Bool="true"{Hidden,Readonly}
-                   id:String="0xa2b2b30"{Hidden,Readonly}
-                  >
-        </Transform>
-        <UIText Color:Color="(0, 0, 0, 1)"{}
-                Content:String=""{Inline}
-                DrawWireframe:Bool="false"{Inline,Hidden}
-                Font:File="./Assets/Engine/Fonts/UbuntuFont.bfont"{FileExtension="bfont"}
-                IsTransparent:Bool="false"{Inline,Hidden}
-                LineWidth:Float="0"{Hidden}
-                Material:File=""{FileExtension="bmat",Hidden}
-                Mesh:File=""{FileExtension="bmesh",Hidden}
-                ReceivesLighting:Bool="false"{Inline,Hidden}
-                Stroke:Float="0"{}
-                StrokeColor:Color="(0, 0, 0, 0)"{}
-                TextSize:Float="0"{}
-                Tint:Color="(0, 0, 0, 0)"{}
-                enabled:Bool="false"{Hidden,Readonly}
-                id:String="0xa2cb328"{Hidden,Readonly}
-               >
-        </UIText>
     </GameObject>
 </Scene>

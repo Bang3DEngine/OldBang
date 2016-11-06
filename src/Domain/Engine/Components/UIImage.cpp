@@ -77,8 +77,8 @@ void UIImage::RenderCustomPR() const
 
     ShaderProgram *sp = m_materialPR->GetShaderProgram();
     sp->SetUniformColor("B_tint",        m_tint);
-    sp->SetUniformColor("B_strokeColor", m_strokeColor);
     sp->SetUniformFloat("B_stroke",      m_stroke);
+    sp->SetUniformColor("B_strokeColor", m_strokeColor);
     sp->SetUniformTexture("B_texture_0", m_material->GetTexture());
 
     Box screenBox = gameObject->GetBoundingBox();

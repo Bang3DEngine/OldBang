@@ -6,6 +6,7 @@
 
 #include "Bang.h"
 
+#include "Font.h"
 #include "String.h"
 
 /**
@@ -13,6 +14,7 @@
  * library to create fontsheets. A Fontsheet is an image
  * which contains the set of glyphs of the font.
  */
+class Font;
 class Texture2D;
 class FontSheetCreator
 {
@@ -26,8 +28,12 @@ private:
     static FontSheetCreator *m_singleton;
 
 public:
-    static Texture2D* CreateCharTexture(const String &fontFilepath,
-                                        int glyphSizePx, char character);
+    static int GetGlyphIndex(FT_Face face, char c);
+    static bool LoadCharTexture(const String &fontFilepath,
+                                int glyphSizePx, char character,
+                                Texture2D **resultTexture,
+                                Font::CharGlyphMetrics *resultMetrics,
+                                FT_Face *fontFace);
 };
 
 #endif // FONTSHEETCREATOR_H

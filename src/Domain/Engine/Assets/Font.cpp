@@ -10,20 +10,22 @@ Font::Font()
 
 Font::~Font()
 {
-    for (Texture2D* charTexture : m_charTextures)
-    {
-        delete charTexture;
-    }
+    Free();
 }
 
 void Font::LoadFromFile(const String &m_filepath)
 {
+    Free();
     for (int c = 0; c <= 255; ++c)
     {
-        Texture2D *charTexture = FontSheetCreator::CreateCharTexture(m_filepath,
-                                                                     Font::CharLoadSize,
-                                                                     char(c));
-        m_charTextures.Add(charTexture);
+        Texture2D *charTexture = nullptr;
+        CharGlyphMetrics charMetrics;
+        if (FontSheetCreator::LoadCharTexture(m_filepath, Font::CharLoadSize, char(c),
+                                              &charTexture, &charMetrics, &m_freetypeFace))
+        {
+            m_charMetrics.Add(charMetrics);
+            m_charTextures.Add(charTexture);
+        }
     }
 }
 
@@ -41,7 +43,40 @@ void Font::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFilepath("FontFilepath", m_filepath, Font::GetFileExtensionStatic());
 }
 
+const Font::CharGlyphMetrics &Font::GetCharacterMetrics(unsigned char c)
+{
+    return m_charMetrics[c];
+}
+
 Texture2D *Font::GetCharacterTexture(unsigned char c) const
 {
     return m_charTextures[c];
+}
+
+int Font::GetKerningX(char leftChar, char rightChar)
+{
+    if (!FT_HAS_KERNING(m_freetypeFace)) { return -1; }
+
+    FT_Vector kerning;
+    int leftGlyphIndex  = FontSheetCreator::GetGlyphIndex(m_freetypeFace,  leftChar);
+    int rightGlyphIndex = FontSheetCreator::GetGlyphIndex(m_freetypeFace, rightChar);
+    int error = FT_Get_Kerning(m_freetypeFace,
+                               leftGlyphIndex, rightGlyphIndex,
+                               FT_KERNING_DEFAULT, &kerning);
+    if (!error)
+    {
+        return kerning.x / 64;
+    }
+    return -1;
+}
+
+void Font::Free()
+{
+    m_charMetrics.Clear();
+
+    for (Texture2D* charTexture : m_charTextures)
+    {
+        delete charTexture;
+    }
+    m_charTextures.Clear();
 }
