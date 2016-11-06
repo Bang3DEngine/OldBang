@@ -14,6 +14,10 @@
 #include "BehaviourHolder.h"
 #include "DirectionalLight.h"
 
+#include "UIText.h"
+#include "Canvas.h"
+#include "UIImage.h"
+
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
 #include "EditorScene.h"
@@ -441,38 +445,27 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
             Component *c = nullptr;
             if (tagName == "Transform")
             {
-                transform->ReadXMLInfo(xmlChild);
                 c = transform;
             }
             else if (tagName == "MeshRenderer")
             {
-                MeshRenderer *mr = AddComponent<MeshRenderer>();
-                mr->ReadXMLInfo(xmlChild);
-                c = mr;
+                c = AddComponent<MeshRenderer>();
             }
             else if (tagName == "Camera")
             {
-                Camera *cam = AddComponent<Camera>();
-                cam->ReadXMLInfo(xmlChild);
-                c = cam;
+                c = AddComponent<Camera>();
             }
             else if (tagName == "BehaviourHolder")
             {
-                BehaviourHolder *bh = AddComponent<BehaviourHolder>();
-                bh->ReadXMLInfo(xmlChild);
-                c = bh;
+                c = AddComponent<BehaviourHolder>();
             }
             else if (tagName == "DirectionalLight")
             {
-                DirectionalLight *dl = AddComponent<DirectionalLight>();
-                dl->ReadXMLInfo(xmlChild);
-                c = dl;
+                c = AddComponent<DirectionalLight>();
             }
             else if (tagName == "PointLight")
             {
-                PointLight *pl = AddComponent<PointLight>();
-                pl->ReadXMLInfo(xmlChild);
-                c = pl;
+                c = AddComponent<PointLight>();
             }
             else if (tagName == "Canvas")
             {
@@ -482,9 +475,16 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
             }
             else if (tagName == "UIImage")
             {
-                UIImage *img = AddComponent<UIImage>();
-                img->ReadXMLInfo(xmlChild);
-                c = img;
+                c = AddComponent<UIImage>();
+            }
+            else if (tagName == "UIText")
+            {
+                c = AddComponent<UIText>();
+            }
+
+            if (c)
+            {
+                c->ReadXMLInfo(xmlChild);
             }
         }
     }

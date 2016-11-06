@@ -1,5 +1,6 @@
 #include "MenuBar.h"
 
+#include "Font.h"
 #include "Screen.h"
 #include "FileReader.h"
 #include "FileWriter.h"
@@ -62,6 +63,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnCreateShaderProgram()));
     connect(w->actionCreateTexture2D,  SIGNAL(triggered()),
             this, SLOT(OnCreateTexture2D()));
+    connect(w->actionCreateFont,  SIGNAL(triggered()),
+            this, SLOT(OnCreateFont()));
 
     connect(w->actionAddComponentBehaviour,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentBehaviour()));
@@ -81,6 +84,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnAddComponentCanvas()));
     connect(w->actionAddComponentUIImage,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentUIImage()));
+    connect(w->actionAddComponentUIText,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentUIText()));
 }
 
 
@@ -360,6 +365,16 @@ void MenuBar::OnCreateTexture2D() const
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 
+void MenuBar::OnCreateFont() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::CreateFont);
+    String filepath = Explorer::GetInstance()->GetCurrentDir();
+    filepath += "/New_Font." + Font::GetFileExtensionStatic();
+    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
+    AssetsManager::CreateAsset<Font>(filepath);
+    Explorer::GetInstance()->StartRenaming(filepath);
+}
+
 
 void MenuBar::OnAddComponentBehaviour() const
 {
@@ -396,4 +411,9 @@ void MenuBar::OnAddComponentCanvas() const
 void MenuBar::OnAddComponentUIImage() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AddComponentUIImage);
+}
+
+void MenuBar::OnAddComponentUIText() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentUIText);
 }

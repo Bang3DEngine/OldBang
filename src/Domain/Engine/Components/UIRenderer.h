@@ -9,6 +9,8 @@ public:
     virtual void RenderCustomPR() const override;
     bool IsACanvasRenderer() const override;
 
+    virtual void Render() const override;
+
     virtual void SetMatricesUniforms(
             Material *mat,
             const Matrix4 &model,
@@ -27,8 +29,8 @@ public:
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override = 0;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override = 0;
+    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
+    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
 protected:
     Material *m_materialPR = new Material();
@@ -38,6 +40,9 @@ protected:
 
     UIRenderer();
     virtual ~UIRenderer();
+
+    virtual void CloneInto(ICloneable *clone) const override;
+    virtual ICloneable *Clone() const override;
 
     friend class GameObject;
 };

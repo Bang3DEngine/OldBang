@@ -40,7 +40,7 @@ public:
     void LoadFromFile(const String &imageFilepath);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
-    void Fill(unsigned char *newData, int width, int height);
+    void Fill(unsigned char *newData, int width, int height, bool genMipMaps = true);
 
     String GetImageRelativeFilepath() const;
 

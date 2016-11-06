@@ -50,6 +50,7 @@ public:
         CreateMesh,
         CreateShaderProgram,
         CreateTexture2D,
+        CreateFont,
 
         AddComponentBehaviour,
         AddComponentCamera,
@@ -59,7 +60,8 @@ public:
         AddComponentDirectionalLight,
         AddComponentPointLight,
         AddComponentCanvas,
-        AddComponentUIImage
+        AddComponentUIImage,
+        AddComponentUIText
     };
 
     MenuBar(QWidget *parent = nullptr);
@@ -93,6 +95,7 @@ public slots:
     void OnCreateMesh() const;
     void OnCreateShaderProgram() const;
     void OnCreateTexture2D() const;
+    void OnCreateFont() const;
 
     void OnAddComponentBehaviour() const;
     void OnAddComponentCamera() const;
@@ -103,6 +106,7 @@ public slots:
     void OnAddComponentPointLight() const;
     void OnAddComponentCanvas() const;
     void OnAddComponentUIImage() const;
+    void OnAddComponentUIText() const;
 };
 
 #endif // MENUBAR_H

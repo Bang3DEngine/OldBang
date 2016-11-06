@@ -14,6 +14,7 @@
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "BehaviourManager.h"
+#include "FontSheetCreator.h"
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {

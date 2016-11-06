@@ -74,7 +74,6 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-
     friend class MeshRenderer;
 };
 

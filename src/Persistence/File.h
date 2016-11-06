@@ -15,22 +15,6 @@
 
 class File
 {
-protected:
-
-
-    const QFileSystemModel *m_fileSystemModel = nullptr;
-    QModelIndex m_modelIndex;
-
-    bool m_isFile = true;
-    String m_path = "";
-    String m_name = "";
-    String m_absPath = "";
-    String m_extension = "";
-
-    // Adds on top of the passed QPixmap the little icon that
-    // distinguishes between assets and noAsset files.
-    static QPixmap AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm);
-
 public:
 
     File();
@@ -49,6 +33,7 @@ public:
     bool IsBehaviour() const;
 
     bool IsTextFile() const;
+    bool IsFontAssetFile() const;
 
     bool IsPrefabAsset() const;
 
@@ -82,6 +67,21 @@ public:
     const String& GetName() const;
     const String& GetExtension() const;
     String GetNameAndExtension() const;
+
+protected:
+    const QFileSystemModel *m_fileSystemModel = nullptr;
+    QModelIndex m_modelIndex;
+
+    bool m_isFile = true;
+    String m_path = "";
+    String m_name = "";
+    String m_absPath = "";
+    String m_extension = "";
+
+    // Adds on top of the passed QPixmap the little icon that
+    // distinguishes between assets and noAsset files.
+    static QPixmap AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm);
+
 };
 
 #endif // FILE_H

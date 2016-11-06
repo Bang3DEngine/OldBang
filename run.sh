@@ -1,2 +1,2 @@
 #!/bin/bash
-./compile.sh EDITOR && ./BangEditor.exe
+./compile.sh EDITOR && gdb -ex run ./BangEditor.exe

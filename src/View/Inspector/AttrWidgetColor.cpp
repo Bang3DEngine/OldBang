@@ -21,8 +21,8 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
 
 AttrWidgetColor::~AttrWidgetColor()
 {
-    delete m_colorDialog;
-    delete m_colorLabel;
+    if (m_colorDialog) { delete m_colorDialog; }
+    if (m_colorLabel) { delete m_colorLabel; }
 }
 
 void AttrWidgetColor::SetValue(const Color &c)

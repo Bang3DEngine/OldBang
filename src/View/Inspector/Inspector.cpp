@@ -3,6 +3,7 @@
 #include <QScrollBar>
 
 #include "Debug.h"
+#include "UIText.h"
 #include "Canvas.h"
 #include "Camera.h"
 #include "UIImage.h"
@@ -199,6 +200,10 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     else if (clickedAction == MenuBar::Action::AddComponentUIImage)
     {
         UIImage *img = m_currentGameObject->AddComponent<UIImage>();
+    }
+    else if (clickedAction == MenuBar::Action::AddComponentUIText)
+    {
+        UIText *text = m_currentGameObject->AddComponent<UIText>();
     }
 
     Refresh();

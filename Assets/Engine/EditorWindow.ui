@@ -193,6 +193,7 @@
      <addaction name="actionCreateMesh"/>
      <addaction name="actionCreateShaderProgram"/>
      <addaction name="actionCreateTexture2D"/>
+     <addaction name="actionCreateFont"/>
     </widget>
     <addaction name="menuCreate"/>
    </widget>
@@ -254,6 +255,7 @@
      <addaction name="separator"/>
      <addaction name="actionAddComponentCanvas"/>
      <addaction name="actionAddComponentUIImage"/>
+     <addaction name="actionAddComponentUIText"/>
     </widget>
     <addaction name="menuAddComponent"/>
    </widget>
@@ -774,6 +776,16 @@
   <action name="actionAddComponentUIImage">
    <property name="text">
     <string>Image</string>
+   </property>
+  </action>
+  <action name="actionCreateFont">
+   <property name="text">
+    <string>Font</string>
+   </property>
+  </action>
+  <action name="actionAddComponentUIText">
+   <property name="text">
+    <string>Text</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

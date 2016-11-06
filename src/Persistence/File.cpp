@@ -4,6 +4,7 @@
 #include "Explorer.h"
 #endif
 
+#include "Font.h"
 #include "Mesh.h"
 #include "Prefab.h"
 #include "Material.h"
@@ -15,18 +16,6 @@
 #include "MeshAssetFile.h"
 #include "MaterialAssetFile.h"
 #include "Texture2DAssetFile.h"
-
-/*
-#ifdef BANG_EDITOR
-#include "TextFileInspectable.h"
-#include "MeshAssetFileInspectable.h"
-#include "PrefabAssetFileInspectable.h"
-#include "MaterialAssetFileInspectable.h"
-#include "MeshFileInspectable.h"
-#include "ImageFileInspectable.h"
-#include "Texture2DAssetFileInspectable.h"
-#endif
-*/
 
 QPixmap File::AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm)
 {
@@ -111,6 +100,11 @@ bool File::IsBehaviour() const
 bool File::IsTextFile() const
 {
     return m_isFile && IsOfExtension("txt frag vert cpp h");
+}
+
+bool File::IsFontAssetFile() const
+{
+    return m_isFile && IsOfExtension(Font::GetFileExtensionStatic());
 }
 
 bool File::IsPrefabAsset() const

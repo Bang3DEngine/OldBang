@@ -26,7 +26,13 @@ void Texture2D::LoadFromFile(const String &imageFilepath)
 
 void Texture2D::CreateEmpty(int width, int height)
 {
-    Fill(nullptr, width, height);
+    int size = width * height;
+    unsigned char *data = new unsigned char[size];
+    for (int i = 0; i < size; ++i)
+    {
+        data[i] = 0;
+    }
+    Fill(data, width, height, false);
 }
 
 void Texture2D::Resize(int width, int height)
@@ -35,9 +41,9 @@ void Texture2D::Resize(int width, int height)
 }
 
 void Texture2D::Fill(unsigned char *newData,
-                     int width, int height)
+                     int width, int height, bool genMipMaps)
 {
-    if (m_data  && m_data != newData) delete m_data;
+    if (m_data && m_data != newData) delete m_data;
 
     m_data = newData; // TODO: Copy (?)
     m_width = width;
@@ -45,7 +51,10 @@ void Texture2D::Fill(unsigned char *newData,
 
     Bind();
     glTexImage2D(GL_TEXTURE_2D, 0, m_glInternalFormat, width, height, 0, m_glFormat, m_glType, m_data);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    if (genMipMaps)
+    {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
     UnBind();
 }
 

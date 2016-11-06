@@ -137,7 +137,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
                             m_currentScene->GetCamera(), false);
     }
 
-    //renderRect = Rect::ScreenRect;
+    renderRect = Rect::ScreenRect; // TODO: Erase this and correct rect creation, it doesnt work sometimes
     // If the rect is empty, dont waste time rendering nothing (which wastes time)
     if (renderRect != Rect::Empty)
     {

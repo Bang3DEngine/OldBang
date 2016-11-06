@@ -19,23 +19,34 @@ CONFIG += qt
 include(deployment.pri)
 qtcAddDeployment()
 
+DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
 
 QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
-QMAKE_CXXFLAGS += -O0
+QMAKE_CXXFLAGS += -O3
 
-LIBS += -lGLEW -ldl
+#FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType && ./configure && make
+FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType && ./configure && make
+QMAKE_EXTRA_TARGETS += FreeTypeTarget
+PRE_TARGETDEPS = FreeTypeTarget
 
-DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
+LIBS += src/Domain/Graphics/FreeType/objs/*.o
+#LIBS += FreeTypeLib
+
+LIBS += \
+    -lGLEW  \ # GLEW, just GLEW
+    -ldl    \ # To load libraries and stuff
+    -lpng   \ # To read & write pngs, used by FreeType
+    -lz -lbz2 # Used by FreeType too
 
 EDITOR {
     DEFINES += BANG_EDITOR
     RESOURCES = Assets/Engine/qdarkstyle/style.qrc
-    OBJECTS_DIR = objEditor/
+    OBJECTS_DIR += objEditor/
     TARGET = BangEditor.exe
 }
 
 GAME {
-    OBJECTS_DIR = objGame/
+    OBJECTS_DIR += objGame/
     TARGET = Game.exe
 }
 
@@ -44,6 +55,7 @@ INCLUDEPATH += \
     $$PWD/src/ \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
+    $$PWD/src/Domain/Graphics/FreeType/include \
     $$PWD/src/Domain/Graphics/Interfaces/ \
     $$PWD/src/Domain/Engine/Interfaces/ \
     $$PWD/src/Domain/Engine/GameObjects/ \
@@ -153,7 +165,8 @@ OTHER_FILES += \
     Assets/Engine/Shaders/PR_ScreenPass.vert \
     Assets/Engine/Shaders/PR_MeshPass.vert \
     Assets/Engine/Materials/PR_AmbientLight_Screen.bmat \
-    Assets/Engine/Materials/PR_SelectionEffect.bmat
+    Assets/Engine/Materials/PR_SelectionEffect.bmat \
+    Assets/Engine/Shaders/UI/D2G_UIText.frag
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
@@ -247,7 +260,11 @@ HEADERS += \
     src/Domain/Engine/Others/GraphicPipeline.h \
     src/Domain/Engine/Components/Canvas.h \
     src/Domain/Engine/Components/UIImage.h \
-    src/Domain/Engine/Components/UIRenderer.h
+    src/Domain/Engine/Components/UIRenderer.h \
+    src/Domain/Graphics/FontSheetCreator.h \
+    src/Domain/Engine/Assets/Font.h \
+    src/Persistence/FontAssetFile.h \
+    src/Domain/Engine/Components/UIText.h
 
 EDITOR {
 HEADERS += \
@@ -409,7 +426,11 @@ SOURCES += \
     src/Domain/Engine/Others/GraphicPipeline.cpp \
     src/Domain/Engine/Components/Canvas.cpp \
     src/Domain/Engine/Components/UIImage.cpp \
-    src/Domain/Engine/Components/UIRenderer.cpp
+    src/Domain/Engine/Components/UIRenderer.cpp \
+    src/Domain/Graphics/FontSheetCreator.cpp \
+    src/Domain/Engine/Assets/Font.cpp \
+    src/Persistence/FontAssetFile.cpp \
+    src/Domain/Engine/Components/UIText.cpp
 
 EDITOR {
     SOURCES += \

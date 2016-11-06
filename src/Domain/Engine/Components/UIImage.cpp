@@ -26,7 +26,7 @@ String UIImage::GetName() const
 
 void UIImage::CloneInto(ICloneable *clone) const
 {
-    MeshRenderer::CloneInto(clone);
+    UIRenderer::CloneInto(clone);
     UIImage *img = static_cast<UIImage*>(clone);
 }
 
@@ -39,7 +39,7 @@ ICloneable *UIImage::Clone() const
 
 void UIImage::ReadXMLInfo(const XMLNode *xmlInfo)
 {
-    MeshRenderer::ReadXMLInfo(xmlInfo);
+    UIRenderer::ReadXMLInfo(xmlInfo);
 
     String texFilepath = xmlInfo->GetFilepath("Image");
     Texture2D *tex = AssetsManager::LoadAsset<Texture2D>(texFilepath);
@@ -47,15 +47,11 @@ void UIImage::ReadXMLInfo(const XMLNode *xmlInfo)
     {
         m_material->SetTexture(tex);
     }
-
-    m_tint = xmlInfo->GetColor("Tint");
-    m_strokeColor = xmlInfo->GetColor("StrokeColor");
-    m_stroke = xmlInfo->GetFloat("Stroke");
 }
 
 void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    MeshRenderer::FillXMLInfo(xmlInfo);
+    UIRenderer::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName(GetName());
 
     String texFilepath = "";
@@ -67,15 +63,32 @@ void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
                              Texture2D::GetFileExtensionStatic(), {});
     }
 
-    xmlInfo->SetColor("Tint", m_tint);
-    xmlInfo->SetColor("StrokeColor", m_strokeColor);
-    xmlInfo->SetFloat("Stroke", m_stroke);
-
     xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("Material")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("LineWidth")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("IsTransparent")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("DrawWireframe")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("ReceivesLighting")->SetProperty({XMLProperty::Hidden});
+}
+
+void UIImage::RenderCustomPR() const
+{
+    UIRenderer::RenderCustomPR();
+
+    ShaderProgram *sp = m_materialPR->GetShaderProgram();
+    sp->SetUniformColor("B_tint",        m_tint);
+    sp->SetUniformColor("B_strokeColor", m_strokeColor);
+    sp->SetUniformFloat("B_stroke",      m_stroke);
+    sp->SetUniformTexture("B_texture_0", m_material->GetTexture());
+
+    Box screenBox = gameObject->GetBoundingBox();
+    sp->SetUniformFloat("B_image_left",  screenBox.GetMin().x);
+    sp->SetUniformFloat("B_image_up",    screenBox.GetMax().y);
+    sp->SetUniformFloat("B_image_right", screenBox.GetMax().x);
+    sp->SetUniformFloat("B_image_bot",   screenBox.GetMin().y);
+
+    Rect renderRect(screenBox.GetMin().xy(), screenBox.GetMax().xy());
+    GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
+    gb->RenderPassWithMaterial(m_materialPR, renderRect);
 }
 
