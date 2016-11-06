@@ -356,11 +356,10 @@ Transform *GameObject::GetTransform() const
 void GameObject::RemoveComponent(Component *c)
 {
     Transform *t = dynamic_cast<Transform*>(c);
-    if (t)
+    if (!t)
     {
-        return;
+        m_components.Remove(c);
     }
-    m_components.Remove(c);
 }
 
 GameObject *GameObject::GetChild(const String &name) const

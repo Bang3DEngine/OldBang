@@ -18,22 +18,6 @@
 
 class Transform : public Component
 {
-friend class GameObject;
-
-private:
-
-    mutable bool m_hasChanged = false;
-    mutable Matrix4 m_localToWorldMatrix;
-    Vector3 m_localPosition = Vector3(0.0f);
-    Quaternion m_localRotation = Quaternion();
-    Vector3 m_localScale = Vector3(1.0f);
-
-    // Used in inspector too
-    Vector3 m_localEuler = Vector3(0.0f);
-
-protected:
-    Transform();
-
 public:
 
     virtual void CloneInto(ICloneable *clone) const override;
@@ -141,6 +125,22 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+protected:
+    Transform();
+
+private:
+
+    mutable bool m_hasChanged = false;
+    mutable Matrix4 m_localToWorldMatrix;
+    Vector3 m_localPosition = Vector3(0.0f);
+    Quaternion m_localRotation = Quaternion();
+    Vector3 m_localScale = Vector3(1.0f);
+
+    // Used in inspector too
+    Vector3 m_localEuler = Vector3(0.0f);
+
+    friend class GameObject;
 };
 
 #endif // TRANSFORM_H

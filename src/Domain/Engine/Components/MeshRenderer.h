@@ -23,16 +23,9 @@
 
 class MeshRenderer : public Renderer
 {
-private:
-    Mesh *m_mesh = nullptr;
-
-protected:
-
-    virtual void RenderWithoutBindingMaterial() const override;
+public:
 
     MeshRenderer();
-
-public:
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
@@ -54,6 +47,14 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+private:
+    Mesh *m_mesh = nullptr;
+
+protected:
+
+    virtual void RenderWithoutBindingMaterial() const override;
+
 
     friend class GameObject;
 };

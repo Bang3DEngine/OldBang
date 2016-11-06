@@ -81,7 +81,10 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
             sp->SetUniformFloat("B_renderer_receivesLighting", m_receivesLighting ? 1.0f : 0.0f, false);
 
             #ifdef BANG_EDITOR
-            sp->SetUniformFloat("B_gameObject_isSelected", gameObject->IsSelected() ? 1.0f : 0.0f, false);
+            if (gameObject)
+            {
+                sp->SetUniformFloat("B_gameObject_isSelected", gameObject->IsSelected() ? 1.0f : 0.0f, false);
+            }
             #endif
         }
 
@@ -96,7 +99,7 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
 
 void Renderer::Render() const
 {
-    // Transparent renderers must not write to the depth buffer
+    // TODO: Transparent renderers must not write to the depth buffer (?)
     if (IsTransparent()) { glDepthMask(GL_FALSE); }
 
     RenderWithMaterial(m_material);
@@ -181,9 +184,17 @@ void Renderer::GetMatrices(Matrix4 *model,
                            Matrix4 *pvm) const
 {
     //We assume cam, scene and transform do exist.
-    Camera *cam = gameObject->GetScene()->GetCamera();
-    gameObject->transform->GetLocalToWorldMatrix(model);
-    gameObject->transform->GetLocalToWorldNormalMatrix(normal);
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera();
+    if (gameObject)
+    {
+        gameObject->transform->GetLocalToWorldMatrix(model);
+        gameObject->transform->GetLocalToWorldNormalMatrix(normal);
+    }
+    else
+    {
+        *model = *normal = Matrix4::Identity;
+    }
+
     cam->GetViewMatrix(view);
     cam->GetProjectionMatrix(projection);
     *pvm = (*projection) * (*view) * (*model);
@@ -242,11 +253,18 @@ Rect Renderer::GetBoundingRect(Camera *camera) const
         return Rect::Empty;
     }
 
-    return bb.GetBoundingScreenRect(cam,
-                                    gameObject->transform->GetPosition(),
-                                    gameObject->transform->GetRotation(),
-                                    gameObject->transform->GetScale()
-                                    );
+    if (gameObject)
+    {
+        return bb.GetBoundingScreenRect(cam,
+                                        gameObject->transform->GetPosition(),
+                                        gameObject->transform->GetRotation(),
+                                        gameObject->transform->GetScale()
+                                        );
+    }
+    else
+    {
+        return bb.GetBoundingScreenRect(cam);
+    }
 }
 
 

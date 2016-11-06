@@ -14,7 +14,7 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
     m_colorLabel->SetColor(m_selectedColor);
 
     connect(m_colorDialog, SIGNAL(currentColorChanged(const QColor&)),
-          this, SLOT(OnColorChanged(const QColor&)));
+            this, SLOT(OnColorChanged(const QColor&)));
 
     AfterConstructor();
 }

@@ -13,11 +13,11 @@ public:
 
     virtual void SetMatricesUniforms(
             Material *mat,
-            const Matrix4 &model,
-            const Matrix4 &normal,
-            const Matrix4 &view,
-            const Matrix4 &projection,
-            const Matrix4 &pvm) const override;
+            const Matrix4 &model      = Matrix4::Identity,
+            const Matrix4 &normal     = Matrix4::Identity,
+            const Matrix4 &view       = Matrix4::Identity,
+            const Matrix4 &projection = Matrix4::Identity,
+            const Matrix4 &pvm        = Matrix4::Identity) const override;
 
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 

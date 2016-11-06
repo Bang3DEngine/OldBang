@@ -26,8 +26,8 @@ private:
     static FontSheetCreator *m_singleton;
 
 public:
-    static Texture2D* CreateFontSheet(const String &fontFilepath,
-                                      int glyphSizePx);
+    static Texture2D* CreateCharTexture(const String &fontFilepath,
+                                        int glyphSizePx, char character);
 };
 
 #endif // FONTSHEETCREATOR_H

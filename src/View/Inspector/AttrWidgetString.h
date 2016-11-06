@@ -30,6 +30,7 @@ public:
 
     virtual void OnFocusIn();
     virtual void OnFocusOut();
+    virtual void OnKeyPressed();
     QSize sizeHint() const override;
 };
 
@@ -60,6 +61,7 @@ public:
 
     virtual void focusInEvent(QFocusEvent * event) override;
     virtual void focusOutEvent(QFocusEvent * event) override;
+    virtual void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // INSPECTORSTRINGSW_H

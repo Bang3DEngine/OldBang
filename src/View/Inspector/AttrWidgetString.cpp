@@ -79,7 +79,12 @@ void AttrWidgetString::OnFocusIn()
 void AttrWidgetString::OnFocusOut()
 {
     m_editing = false;
-    //m_parent->_OnSlotValueChanged();
+    m_inspectorWidget->_OnSlotValueChanged();
+}
+
+void AttrWidgetString::OnKeyPressed()
+{
+    m_inspectorWidget->_OnSlotValueChanged();
 }
 
 QSize AttrWidgetString::sizeHint() const
@@ -119,10 +124,7 @@ void LineEdit::focusOutEvent(QFocusEvent *event)
 void LineEdit::keyPressEvent(QKeyEvent *event)
 {
     QLineEdit::keyPressEvent(event);
-    if (event->key() == QKeyEvent::Enter)
-    {
-        static_cast<AttrWidgetString*>(parent())->OnFocusOut();
-    }
+    static_cast<AttrWidgetString*>(parent())->OnKeyPressed();
 }
 
 void LineEdit::Deselect()
@@ -156,4 +158,10 @@ void TextEdit::focusOutEvent(QFocusEvent *event)
 {
     QTextEdit::focusOutEvent(event);
     static_cast<AttrWidgetString*>(parent())->OnFocusOut();
+}
+
+void TextEdit::keyPressEvent(QKeyEvent *event)
+{
+    QTextEdit::keyPressEvent(event);
+    static_cast<AttrWidgetString*>(parent())->OnKeyPressed();
 }

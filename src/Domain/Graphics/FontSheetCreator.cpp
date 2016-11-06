@@ -28,8 +28,8 @@ bool FontSheetCreator::Init()
     return true;
 }
 
-Texture2D* FontSheetCreator::CreateFontSheet(const String &fontFilepath,
-                                             int glyphSizePx)
+Texture2D* FontSheetCreator::CreateCharTexture(const String &fontFilepath,
+                                               int glyphSizePx, char character)
 {
     if (!FontSheetCreator::Init()) { return nullptr; }
 
@@ -68,69 +68,79 @@ Texture2D* FontSheetCreator::CreateFontSheet(const String &fontFilepath,
     }
 
 
-    // Get one glyph
-    int glyph_index = FT_Get_Char_Index(face, 'g');
+    // Get character's glyph index
+    int glyph_index = FT_Get_Char_Index(face, character);
     error = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
     if (error)
     {
-        Debug_Error("Failed to load glyph '" << 'A' << "' for font '" << fontFilepath << "': Error(" << error << ")");
+        Debug_Error("Failed to load glyph '" << character << "' for font '" << fontFilepath << "': Error(" << error << ")");
         return nullptr;
     }
 
 
-    // Move The Face's Glyph Into A Glyph Object.
+    // Move the face's glyph into a glyph object.
     FT_Glyph glyph;
     error = FT_Get_Glyph( face->glyph, &glyph );
     if (error)
     {
-        Debug_Error("Failed to get glyph '" << 'A' << "' for font '" << fontFilepath << "': Error(" << error << ")");
+        Debug_Error("Failed to get glyph '" << character << "' for font '" << fontFilepath << "': Error(" << error << ")");
         return nullptr;
     }
 
-    // Render glyph
-    /*
-    error = FT_Render_Glyph(face->glyph, FT_RENDER_MODE_NORMAL);
-    if (error)
-    {
-        Debug_Error("Failed when rendering glyph '" << 'A' << "' for font '" << fontFilepath << "': Error(" << error << ")");
-        return nullptr;
-    }
-    */
 
-    // Convert The Glyph To A Bitmap.
-    FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, true);
+    // Convert the glyph to a bitmap.
+    FT_Vector  origin; origin.x = origin.y = 0;
+    FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, &origin, true);
     FT_BitmapGlyph bitmap_glyph = FT_BitmapGlyph(glyph);
     FT_Bitmap &bitmap = bitmap_glyph->bitmap;
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    int width  = bitmap.width;
-    int height = bitmap.rows;
-    unsigned char* colorMap = new unsigned char[width * height * 4];
-    for(int j = 0; j < height; j++)
+    // Get some metrics (they are given in 1/64 pixels...)
+    // These are measurements relative to the full texture quad (size x size)
+    FT_BBox bbox;
+    FT_Glyph_Get_CBox(glyph, FT_LOAD_NO_SCALE, &bbox);
+
+    const int size   = glyphSizePx; // Total texture quad size (letter and its margins)
+    const int baseline = (face->ascender) * (size / float(face->ascender - face->descender));
+
+    const int left  = (face->glyph->metrics.horiBearingX) / 64;
+    const int right = left + face->glyph->metrics.width / 64;
+
+    const int top   = baseline - (face->glyph->metrics.horiBearingY) / 64;
+    const int bot   = top + face->glyph->metrics.height / 64;
+
+    // Create a RGBA bitmap from the pixmap provided by FreeType
+    std::cout << character << ": " << left << ", " << right << ", " << top << ", " << bot << ", " << face->glyph->metrics.horiBearingY / 64 << std::endl;
+    std::cout << character << ": " << baseline << ", " << face->ascender << ", " << face->descender << std::endl;
+    unsigned char* colorMap = new unsigned char[size * size * 4];
+    for(int y = 0; y < size; y++)
     {
-        for(int i = 0; i < width; i++)
+        for(int x = 0; x < size; x++)
         {
-            int k = j * width + i;
-            colorMap[k * 4 + 0] = 255;
-            colorMap[k * 4 + 1] = 0;
-            colorMap[k * 4 + 2] = 0;
-            colorMap[k * 4 + 3] = bitmap.buffer[k] < 128 ? 0 : 255; // Alpha
+            int k = y * size + x;
+            colorMap[k * 4 + 0] = colorMap[k * 4 + 1] = colorMap[k * 4 + 2] = 255;
+
+            int alpha = 0;
+            if (x >= left && x < right && y >= top && y < bot)
+            {
+                int glyphK = (y-top) * bitmap.width + (x-left);
+                alpha = bitmap.buffer[glyphK] < 128 ? 0 : 255;
+            }
+            colorMap[k * 4 + 3] = alpha;
         }
     }
 
+    // Create texture
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     Texture2D *fontTexture = new Texture2D();
     fontTexture->SetFilterMode(Texture::FilterMode::Linear);
     fontTexture->SetGLFormat(GL_RGBA);
     fontTexture->SetGLInternalFormat(GL_RGBA);
-    fontTexture->Fill(colorMap, bitmap.width, bitmap.rows);
+    fontTexture->Fill(colorMap, size, size);
 
+    // Free stuff
     delete bitmap.buffer;
     delete colorMap;
-
-    Debug_Log(bitmap.rows);
-    Debug_Log(bitmap.width);
-    Debug_Log(face->num_glyphs);
 
     return fontTexture;
 }
