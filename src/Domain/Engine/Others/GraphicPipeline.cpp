@@ -38,9 +38,7 @@ GraphicPipeline::~GraphicPipeline()
 
 void GraphicPipeline::RenderScene(Scene *scene)
 {
-    //Debug_Log("-------------");
     m_currentScene = scene;
-    //Debug_Log(m_currentScene->GetChildren());
 
     Color bgColor = m_currentScene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);

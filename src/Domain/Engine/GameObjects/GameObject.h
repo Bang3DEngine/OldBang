@@ -262,9 +262,9 @@ public:
         for (auto c = m_children.Begin(); c != m_children.End(); ++c)
         {
             List<T*> childComps = (*c)->GetComponents<T>();
-            comps_l.Splice(comps_l.Begin(), childComps); //concat
+            comps_l.Splice(comps_l.End(), childComps); //concat
             List<T*> childChildrenComps = (*c)->GetComponentsInChildren<T>();
-            comps_l.Splice(comps_l.Begin(), childChildrenComps); //concat
+            comps_l.Splice(comps_l.End(), childChildrenComps); //concat
         }
         return comps_l;
     }
@@ -277,7 +277,7 @@ public:
     {
         List<T*> comps = GetComponentsInChildren<T>();
         List<T*> thisComps = GetComponents<T>();
-        comps.Splice(comps.Begin(), thisComps);
+        thisComps.Splice(thisComps.End(), comps);
         return comps;
     }
 

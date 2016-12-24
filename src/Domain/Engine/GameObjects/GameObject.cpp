@@ -138,22 +138,17 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform, GameO
 
     if (m_parent)
     {
-        //Debug_Log("Set parent of " << this << " to " << m_parent << " above " << aboveThisChild);
         if (!aboveThisChild)
         {
-            //Debug_Log("Adding " << this << " to the end of " << m_parent);
             m_parent->m_children.PushBack(this); // Add it to the end
         }
         else
         {
-            //Debug_Log("Adding " << this << " to " << m_parent << " above " << aboveThisChild);
-            //Debug_Log("AHI ESTAMOSSS");
             bool itemToBeAboveOfFound = false;
             for (auto it = m_parent->m_children.Begin(); it != m_parent->m_children.End(); ++it)
             {
                 if (aboveThisChild == *it)
                 {
-                    //Debug_Log("FOUND IT");
                     m_parent->m_children.InsertBefore(it, this);
                     itemToBeAboveOfFound = true;
                     break;
@@ -166,10 +161,6 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform, GameO
             }
         }
     }
-
-    //Debug_Log(name << " children: *****************");
-    //Debug_Log(m_children);
-    //Debug_Log("************************************");
 }
 
 
@@ -229,9 +220,9 @@ List<GameObject*> GameObject::GetChildrenRecursively() const
     List<GameObject*> cc;
     for (GameObject *c : m_children)
     {
+        if (!c->IsEditorGameObject()) cc.PushBack(c);
         List<GameObject*> childChildren = c->GetChildrenRecursively();
         cc.Splice(cc.Begin(), childChildren); //concat
-        if (!c->IsEditorGameObject()) cc.PushBack(c);
     }
     return cc;
 }
@@ -242,9 +233,9 @@ List<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
     List<GameObject*> cc;
     for (GameObject *c : m_children)
     {
+        cc.PushBack(c);
         List<GameObject*> childChildren = c->GetChildrenRecursivelyEditor();
         cc.Splice(cc.Begin(), childChildren);
-        cc.PushBack(c);
     }
     return cc;
 }
