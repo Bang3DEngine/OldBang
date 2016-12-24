@@ -98,54 +98,78 @@ GameObject::~GameObject()
     #endif
 }
 
-void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform)
+void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform, GameObject *aboveThisChild)
 {
-    if (keepWorldTransform)
-        Debug_Log("Set parent of " << this << " to " << newParent);
-
-    if (m_parent != newParent)
+    if (m_parent)
     {
-        if (m_parent)
+        m_parent->m_children.Remove(this);
+    }
+
+    if (keepWorldTransform)
+    {
+        // TODO: Not working yet (sometimes scaling breaks)
+
+        Matrix4 oldParentToWorld;
+        parent->transform->GetLocalToWorldMatrix(&oldParentToWorld);
+        //Debug_Log("LOCAL TO WORLD: " << Transform::FromTransformMatrix(oldParentToWorld));
+
+        Matrix4 worldToNewParent;
+        if (newParent)
         {
-            m_parent->m_children.Remove(this);
+            newParent->transform->GetLocalToWorldMatrix(&worldToNewParent);
+            worldToNewParent = worldToNewParent.Inversed();
+            //Debug_Log("WORLD TO NEW PARENT: " << Transform::FromTransformMatrix(worldToNewParent));
         }
 
-        if (keepWorldTransform)
+        Matrix4 keepWorldTransformMatrix =
+                worldToNewParent * oldParentToWorld * transform->GetLocalToParentMatrix();
+        //Debug_Log("LOCALTOPARENT: " <<
+        //          Quaternion::EulerAngles(
+        //              Transform::GetRotationFromMatrix4(transform->GetLocalToParentMatrix())));
+        //Debug_Log("KEEPWORLDMATRIX: " << Transform::FromTransformMatrix(keepWorldTransformMatrix));
+
+        Transform t = Transform::FromTransformMatrix(keepWorldTransformMatrix);
+        transform->SetLocalPosition(t.GetLocalPosition());
+        transform->SetLocalRotation(t.GetLocalRotation());
+        transform->SetLocalScale   (t.GetLocalScale());
+    }
+
+    m_parent = newParent;
+
+    if (m_parent)
+    {
+        //Debug_Log("Set parent of " << this << " to " << m_parent << " above " << aboveThisChild);
+        if (!aboveThisChild)
         {
-            // TODO: Not working yet (sometimes scaling breaks)
-
-            Matrix4 oldParentToWorld;
-            parent->transform->GetLocalToWorldMatrix(&oldParentToWorld);
-            //Debug_Log("LOCAL TO WORLD: " << Transform::FromTransformMatrix(oldParentToWorld));
-
-            Matrix4 worldToNewParent;
-            if (newParent)
+            //Debug_Log("Adding " << this << " to the end of " << m_parent);
+            m_parent->m_children.PushBack(this); // Add it to the end
+        }
+        else
+        {
+            //Debug_Log("Adding " << this << " to " << m_parent << " above " << aboveThisChild);
+            //Debug_Log("AHI ESTAMOSSS");
+            bool itemToBeAboveOfFound = false;
+            for (auto it = m_parent->m_children.Begin(); it != m_parent->m_children.End(); ++it)
             {
-                newParent->transform->GetLocalToWorldMatrix(&worldToNewParent);
-                worldToNewParent = worldToNewParent.Inversed();
-                //Debug_Log("WORLD TO NEW PARENT: " << Transform::FromTransformMatrix(worldToNewParent));
+                if (aboveThisChild == *it)
+                {
+                    //Debug_Log("FOUND IT");
+                    m_parent->m_children.InsertBefore(it, this);
+                    itemToBeAboveOfFound = true;
+                    break;
+                }
             }
 
-            Matrix4 keepWorldTransformMatrix =
-                    worldToNewParent * oldParentToWorld * transform->GetLocalToParentMatrix();
-            //Debug_Log("LOCALTOPARENT: " <<
-            //          Quaternion::EulerAngles(
-            //              Transform::GetRotationFromMatrix4(transform->GetLocalToParentMatrix())));
-            //Debug_Log("KEEPWORLDMATRIX: " << Transform::FromTransformMatrix(keepWorldTransformMatrix));
-
-            Transform t = Transform::FromTransformMatrix(keepWorldTransformMatrix);
-            transform->SetLocalPosition(t.GetLocalPosition());
-            transform->SetLocalRotation(t.GetLocalRotation());
-            transform->SetLocalScale   (t.GetLocalScale());
-        }
-
-        m_parent = newParent;
-
-        if (m_parent)
-        {
-            m_parent->m_children.PushBack(this);
+            if (!itemToBeAboveOfFound)
+            {
+                m_parent->m_children.PushBack(this); // Just in case, add to the end
+            }
         }
     }
+
+    //Debug_Log(name << " children: *****************");
+    //Debug_Log(m_children);
+    //Debug_Log("************************************");
 }
 
 
@@ -380,7 +404,17 @@ void GameObject::SetName(const String &name)
     this->m_name = name;
     #ifdef BANG_EDITOR
     Hierarchy::GetInstance()->OnGameObjectNameChanged(this);
-    #endif
+#endif
+}
+
+void GameObject::Print(const String &indent) const
+{
+    Debug_Log(indent << name);
+    String indent2 = indent; indent2 += "   ";
+    for (GameObject *child : m_children)
+    {
+        child->Print(indent2);
+    }
 }
 
 bool GameObject::IsEditorGameObject() const
@@ -529,8 +563,7 @@ bool GameObject::IsSelected() const
     return m_isSelectedInHierarchy;
 }
 
-void GameObject::OnHierarchyGameObjectsSelected(
-        List<GameObject*> &selectedEntities )
+void GameObject::OnHierarchyGameObjectsSelected(List<GameObject*> &selectedEntities)
 {
     if (IsEditorGameObject() || IsScene()) return;
 

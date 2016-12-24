@@ -36,31 +36,6 @@ class Hierarchy : public DragDropQTreeWidget,
 {
     Q_OBJECT
 
-friend class Screen;
-friend class HierarchyContextMenu;
-friend class HierarchyDragDropManager;
-
-private:
-    //For every gameObject, we have the associated treeItem,
-    //in order to update :)
-    mutable Map<GameObject*, QTreeWidgetItem*> m_gameObject_To_TreeItem;
-    mutable Map<QTreeWidgetItem*,GameObject*> m_treeItem_To_GameObject;
-
-    QTimer m_refreshTimer;
-    HierarchyContextMenu m_hContextMenu;
-    HierarchyDragDropManager m_hDragDropManager;
-
-    void Expand(QTreeWidgetItem *item);
-    QTreeWidgetItem* PopulateItemGameObject(GameObject *e);
-
-    //Useful for example, for Removing a Child
-    //(we just need to remove the parent/s of all the selected entities)
-    void LeaveOnlyOuterMostItems(List<QTreeWidgetItem*> *items);
-
-    QTreeWidgetItem* GetFirstSelectedItem() const;
-    GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
-    QTreeWidgetItem *GetItemFromGameObject(GameObject *go) const;
-
 public:
     explicit Hierarchy(QWidget *parent = 0);
     virtual ~Hierarchy();
@@ -92,12 +67,7 @@ public:
 
     bool Contains(GameObject *go);
     void DeleteGameObjectItem(GameObject *go);
-
-private slots:
-    void RefreshFromScene();
-    void UpdateSceneFromHierarchy();
-    void UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem);
-    QTreeWidgetItem* Refresh(GameObject *go);
+    void Print(QTreeWidgetItem *item = nullptr, const String &indent = "");
 
 public slots:
     void OnGameObjectDestroyed(GameObject *destroyed) override;
@@ -106,6 +76,42 @@ public slots:
     void OnSelectionChanged();
     void _NotifyHierarchyGameObjectSelectionChanged();
     void _NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column);
+
+private slots:
+    void UpdateHierarchyFromScene();
+    void UpdateSceneFromHierarchy();
+    void UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem);
+    void LocateGameObject(GameObject *gameObjectToLocate,
+                          GameObject **gameObjectParent,
+                          GameObject **gameObjectAbove,
+                          GameObject **gameObjectBelow);
+    QTreeWidgetItem* Update(GameObject *go);
+
+private:
+    //For every gameObject, we have the associated treeItem,
+    //in order to update :)
+    mutable Map<GameObject*, QTreeWidgetItem*> m_gameObject_To_TreeItem;
+    mutable Map<QTreeWidgetItem*,GameObject*> m_treeItem_To_GameObject;
+
+    QTimer m_refreshTimer;
+    HierarchyContextMenu m_hContextMenu;
+    HierarchyDragDropManager m_hDragDropManager;
+
+    void Expand(QTreeWidgetItem *item);
+    QTreeWidgetItem* PopulateItemGameObject(GameObject *e);
+
+    //Useful for example, for Removing a Child
+    //(we just need to remove the parent/s of all the selected entities)
+    void LeaveOnlyOuterMostItems(List<QTreeWidgetItem*> *items);
+
+    QTreeWidgetItem* GetFirstSelectedItem() const;
+    GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
+    QTreeWidgetItem *GetItemFromGameObject(GameObject *go) const;
+
+
+    friend class Screen;
+    friend class HierarchyContextMenu;
+    friend class HierarchyDragDropManager;
 };
 
 #endif // TREEHIERARCHY_H

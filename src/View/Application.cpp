@@ -42,6 +42,8 @@ void Application::OnDrawTimerTick()
     Time::s_deltaTime = deltaTime;
     //
 
+    DragDropManager::Update();
+
     // Process mouse and key events, so the Input is available in OnUpdate
     // as accurate as possible.
     // Lost events in between Update and Render will be delayed by Input.
@@ -76,23 +78,24 @@ Application *Application::GetInstance()
     return static_cast<Application*>(EditorWindow::GetInstance()->GetApplication());
     #else
     return static_cast<Application*>(GameWindow::GetInstance()->GetApplication());
-#endif
+    #endif
 }
 
 bool Application::notify(QObject *receiver, QEvent *e)
 {
     #ifdef BANG_EDITOR
+
+    if (e->type() == QEvent::MouseButtonPress)
+    {
+        DragDropManager::HandleGlobalMousePress(receiver, e);
+    }
+    else if (e->type() == QEvent::MouseButtonRelease)
+    {
+        DragDropManager::HandleGlobalMouseRelease(receiver, e);
+    }
+
     if (receiver == focusWidget())
     {
-        if (e->type() == QEvent::MouseButtonPress)
-        {
-            DragDropManager::HandleGlobalMousePress(receiver, e);
-        }
-        else if (e->type() == QEvent::MouseButtonRelease)
-        {
-            DragDropManager::HandleGlobalMouseRelease(receiver, e);
-        }
-
         if (e->type() == QEvent::KeyPress)
         {
             QKeyEvent *ev = dynamic_cast<QKeyEvent*>(e);

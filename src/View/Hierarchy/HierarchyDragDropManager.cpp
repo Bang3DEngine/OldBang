@@ -22,41 +22,21 @@ QTreeWidgetItem *HierarchyDragDropManager::GetDropTargetItem() const
     return m_hierarchy->itemAt(pos);
 }
 
-GameObject *HierarchyDragDropManager::GetDropTargetGameObject() const
+void HierarchyDragDropManager::GetDropTargetGameObject(GameObject **dropTargetGameObject,
+                                                       bool *above, bool *below) const
 {
     QTreeWidgetItem *targetItem = GetDropTargetItem();
-    GameObject *targetGameObject = nullptr;
-    if (targetItem)
-    {
-        targetGameObject = m_hierarchy->GetGameObjectFromItem(targetItem);
-        QTreeWidget::DropIndicatorPosition dropPos =
-                m_hierarchy->dropIndicatorPosition();
-        if (dropPos == QTreeWidget::BelowItem ||
-            dropPos == QTreeWidget::AboveItem)
-        {
-            //Not putting inside, but below or above. Thus take its parent.
-            targetItem = targetItem->parent();
-            if (targetItem)
-            {
-                targetGameObject =
-                    m_hierarchy->GetGameObjectFromItem(targetItem);
-            }
-            else
-            {
-                targetGameObject = SceneManager::GetActiveScene();
-            }
-        }
-    }
-    else
-    {
-        targetGameObject = SceneManager::GetActiveScene();
-    }
 
-    return targetGameObject;
+    QTreeWidget::DropIndicatorPosition dropPos = m_hierarchy->dropIndicatorPosition();
+    *dropTargetGameObject = m_hierarchy->GetGameObjectFromItem(targetItem);
+    *below = (dropPos == QTreeWidget::BelowItem);
+    *above = (dropPos == QTreeWidget::AboveItem);
 }
 
 void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
 {
+    m_draggingStartGameObject = m_hierarchy->GetFirstSelectedGameObject();
+
     Explorer *explorer = Explorer::GetInstance();
     if (ddi.sourceObject == explorer)
     {
@@ -71,16 +51,11 @@ void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
 void HierarchyDragDropManager::OnDragMove(const DragDropInfo &ddi)
 {
     QTreeWidgetItem *item = GetDropTargetItem();
-
-    if (item)
-    {
-        item->setExpanded(true);
-    }
 }
 
 void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
 {
-    if ( IDragDropListener::MouseOver(m_hierarchy) )
+    if ( ddi.sourceObject == m_hierarchy )
     {
         Explorer *explorer = Explorer::GetInstance();
         if (ddi.sourceObject == explorer)
@@ -92,12 +67,12 @@ void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
             OnDropHereFromHierarchy(ddi);
         }
     }
-
 }
 
 void HierarchyDragDropManager::OnDropHereFromHierarchy(const DragDropInfo &ddi)
 {
     m_hierarchy->UpdateSceneFromHierarchy();
+    m_hierarchy->UpdateHierarchyFromScene();
 }
 
 void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
@@ -108,11 +83,14 @@ void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
 
     if (f.IsPrefabAsset())
     {
-        GameObject *targetGameObject = GetDropTargetGameObject();
+        GameObject *dropTargetGameObject;
+        bool above, below;
+        GetDropTargetGameObject(&dropTargetGameObject, &above, &below);
+
         Prefab *prefab = new Prefab();
         prefab->ReadXMLInfoFromString(f.GetContents());
         GameObject *go = prefab->Instantiate();
-        go->SetParent(targetGameObject);
+        go->SetParent(dropTargetGameObject->parent, false, dropTargetGameObject);
         e->accept();
         return;
     }

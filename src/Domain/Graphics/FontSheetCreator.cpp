@@ -120,7 +120,7 @@ bool FontSheetCreator::LoadCharTexture(const String &fontFilepath,
             {
                 int k = y * metrics.width + x;
                 colorMap[k * 4 + 0] = colorMap[k * 4 + 1] = colorMap[k * 4 + 2] = 255;
-                colorMap[k * 4 + 3] = bitmap.buffer[k] < 128 ? 0 : 255;
+                colorMap[k * 4 + 3] = bitmap.buffer[k]; // Alpha is the gray
             }
         }
 

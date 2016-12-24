@@ -21,7 +21,7 @@ Hierarchy::Hierarchy(QWidget *parent) :
 
     m_refreshTimer.setInterval(1000);
     connect(&m_refreshTimer, SIGNAL(timeout()),
-            this, SLOT(RefreshFromScene()));
+            this, SLOT(UpdateHierarchyFromScene()));
     m_refreshTimer.start();
 }
 
@@ -65,6 +65,7 @@ QTreeWidgetItem *Hierarchy::GetFirstSelectedItem() const
 GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *item) const
 {
     if (!item) return nullptr;
+
     if (m_treeItem_To_GameObject.ContainsKey(item))
     {
         return m_treeItem_To_GameObject[item];
@@ -135,7 +136,7 @@ void Hierarchy::Clear()
     clear();
 }
 
-void Hierarchy::RefreshFromScene()
+void Hierarchy::UpdateHierarchyFromScene()
 {
     Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
 
@@ -145,15 +146,16 @@ void Hierarchy::RefreshFromScene()
     {
         QTreeWidgetItem *childItem = GetItemFromGameObject(child);
         if (!childItem)
-        {   // New child item !!!
-            childItem = Refresh(child);
+        {
+            // New child item !!!
+            childItem = Update(child);
             addTopLevelItem(childItem);
             m_gameObject_To_TreeItem[child] = childItem;
             m_treeItem_To_GameObject[childItem] = child;
         }
         else
         {
-            Refresh(child); // Just refresh
+            Update(child); // Just refresh
         }
     }
 }
@@ -168,18 +170,13 @@ void Hierarchy::UpdateSceneFromHierarchy()
         UpdateGameObjectFromHierarchy(childItem); // Recursive call
 
         GameObject *childItemGo = GetGameObjectFromItem(childItem);
-        if (!childItemGo->IsChildOf(scene, false))
-        {   // Fix scene to match hierarchy
-            childItemGo->SetParent(scene, true);
-        }
+        childItemGo->SetParent(scene, true, nullptr);
     }
 }
 
 void Hierarchy::UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem)
 {
-    // Iterate all items, and check its children are the same as in the scene.
-    // If a child in hierarchy is not updated in scene, the modify the scene
-    // so that it matches the hierarchy
+    // Iterate all items, and update
     GameObject *go = GetGameObjectFromItem(goItem);
     for (int i = 0; i < goItem->childCount(); ++i)
     {
@@ -187,14 +184,36 @@ void Hierarchy::UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem)
         UpdateGameObjectFromHierarchy(childItem); // Recursive call
 
         GameObject *childItemGo = GetGameObjectFromItem(childItem);
-        if (!childItemGo->IsChildOf(go, false))
-        {   // Fix scene to match hierarchy
-            childItemGo->SetParent(go, true);
-        }
+        childItemGo->SetParent(go, true, nullptr);
     }
 }
 
-QTreeWidgetItem* Hierarchy::Refresh(GameObject *go)
+void Hierarchy::LocateGameObject(GameObject *gameObjectToLocate,
+                                 GameObject **gameObjectParent,
+                                 GameObject **gameObjectAbove,
+                                 GameObject **gameObjectBelow)
+{
+    QTreeWidgetItem *item = GetItemFromGameObject(gameObjectToLocate);
+
+    if (gameObjectParent)
+    {
+        QTreeWidgetItem *parentItem = item->parent();
+        *gameObjectParent = parentItem ? GetGameObjectFromItem(parentItem) :
+                                         SceneManager::GetActiveScene();
+    }
+    if (gameObjectAbove)
+    {
+        QTreeWidgetItem *aboveItem = itemAbove(item);
+        *gameObjectAbove = GetGameObjectFromItem(aboveItem);
+    }
+    if (gameObjectBelow)
+    {
+        QTreeWidgetItem *belowItem = itemBelow(item);
+        *gameObjectBelow = GetGameObjectFromItem(belowItem);
+    }
+}
+
+QTreeWidgetItem* Hierarchy::Update(GameObject *go)
 {
     if (!SceneManager::GetActiveScene()) { return nullptr; }
     if (go->IsEditorGameObject()) { return nullptr; }
@@ -217,12 +236,28 @@ QTreeWidgetItem* Hierarchy::Refresh(GameObject *go)
         QTreeWidgetItem *citem = GetItemFromGameObject(cgo);
         if (citem)
         {
-            Refresh(cgo); // Look for possibly new gameObjects inside it
+            Update(cgo); // Look for possibly new gameObjects inside it
         }
         else // New gameObject found! Add it!
         {
-            citem = Refresh(cgo);    // Refresh child and keep it into citem
+            citem = Update(cgo);    // Refresh child and keep it into citem
             goItem->addChild(citem); // Add child to hierarchy as go child.
+        }
+    }
+
+    // Remove items that are not children of go
+    List<QTreeWidgetItem*> childrenItem;
+    for (int i = 0; i < goItem->childCount(); ++i)
+    {
+        childrenItem.PushBack(goItem->child(i));
+    }
+
+    for (QTreeWidgetItem *childItem : childrenItem)
+    {
+        GameObject *childItemGo = GetGameObjectFromItem(childItem);
+        if (!childItemGo->IsChildOf(go))
+        {
+            DeleteGameObjectItem(childItemGo);
         }
     }
 
@@ -368,7 +403,7 @@ List<GameObject *> Hierarchy::GetSelectedGameObjects(bool excludeInternal)
 
 void Hierarchy::SelectGameObject(GameObject *go)
 {
-    RefreshFromScene();
+    UpdateHierarchyFromScene();
     UnselectAll();
 
     QTreeWidgetItem *item = GetItemFromGameObject(go);
@@ -388,7 +423,7 @@ void Hierarchy::SelectGameObject(GameObject *go)
 
 void Hierarchy::SelectItemAboveOrBelowSelected(bool above)
 {
-    RefreshFromScene();
+    UpdateHierarchyFromScene();
 
     QTreeWidgetItem *item = GetFirstSelectedItem();
     if (item)
@@ -434,6 +469,32 @@ void Hierarchy::DeleteGameObjectItem(GameObject *go)
         }
         */
         delete item;
+    }
+}
+
+void Hierarchy::Print(QTreeWidgetItem *item, const String &indent)
+{
+    List<QTreeWidgetItem*> itemChildren;
+    if (!item)
+    {
+        for (int i = 0; i < topLevelItemCount(); ++i)
+        {
+            itemChildren.PushBack(topLevelItem(i));
+        }
+    }
+    else
+    {
+        for (int i = 0; i < item->childCount(); ++i)
+        {
+            itemChildren.PushBack(item->child(i));
+        }
+    }
+
+    for (QTreeWidgetItem *it : itemChildren)
+    {
+        Debug_Log(indent << it->text(0));
+        String indent2 = indent; indent2 += "   ";
+        Print(it, indent2);
     }
 }
 

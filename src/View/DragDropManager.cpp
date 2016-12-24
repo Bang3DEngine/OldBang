@@ -35,17 +35,26 @@ void DragDropManager::InstallEventFilters()
 
 bool DragDropManager::eventFilter(QObject *obj, QEvent *e)
 {
-    /*
-    // Here we receive all the events for all the IDroppable's
-    // (since each of them has installed an event filter on us)
-
-    if (e->type() == QEvent::MouseButtonRelease)
-    {
-        HandleDropEvent(nullptr, e);
-    }
-    */
-
     return QObject::eventFilter(obj, e);
+}
+
+DragDropAgent* DragDropManager::GetDragDropAgentBelowMouse()
+{
+    // Go up in the hierarchy (parent->parent->...->nullptr), until
+    // we find a widget that can be cast to DragDropAgent* (if any)
+    QObject *objBelowMouse = IWindow::GetWidgetBelowMouse();
+    while (objBelowMouse != nullptr)
+    {
+        DragDropAgent *dda = dynamic_cast<DragDropAgent*>(objBelowMouse);
+        if (dda) return dda;
+        objBelowMouse = objBelowMouse->parent();
+    }
+    return nullptr;
+}
+
+DragDropInfo* DragDropManager::GetDragDropInfo()
+{
+    return &(DragDropManager::s_ddManager->m_ddInfo);
 }
 
 void DragDropManager::RegisterDragDropAgent(IDragDropListener *dragDropListener)
@@ -62,120 +71,16 @@ void DragDropManager::UnregisterDragDropAgent(IDragDropListener *dragDropListene
     DragDropManager::s_ddManager->m_dragDropListeners.Remove(dragDropListener);
 }
 
-void DragDropManager::HandleDragEnterEvent(QObject *obj, QDragEnterEvent *e)
-{
-    DragDropManager *m = DragDropManager::s_ddManager;
-    m->m_ddInfo.currentEvent = e;
-
-    if (obj == e->source())
-    {   // DRAG START
-        m->m_ddInfo.currentObject  = obj;
-        m->m_ddInfo.previousObject = obj;
-        m->m_ddInfo.sourceObject   = obj;
-
-        for (IDragDropListener *d : m->m_dragDropListeners)
-        {
-            d->OnDragStart(m->m_ddInfo);
-            if ( d->MouseOverMe() )
-            {
-                d->OnDragStartHere(m->m_ddInfo);
-            }
-        }
-
-        m->m_dragGoingOn = true;
-    }
-    else
-    {   // DRAG ENTER
-        m->m_ddInfo.currentObject   = obj;
-        m->m_ddInfo.previousObject  = obj;
-
-        for (IDragDropListener *d : m->m_dragDropListeners)
-        {
-            d->OnDragEnter(m->m_ddInfo);
-            if ( d->MouseOverMe() )
-            {
-                d->OnDragEnterHere(m->m_ddInfo);
-            }
-        }
-
-    }
-
-    m->m_ddInfo.previousObject = m->m_ddInfo.currentObject;
-}
-
-void DragDropManager::HandleDragMoveEvent(QObject *obj, QDragMoveEvent *e)
-{
-    DragDropManager *m = DragDropManager::s_ddManager;
-    m->m_ddInfo.currentObject   = obj;
-    m->m_ddInfo.currentEvent = e;
-
-    for (IDragDropListener *d : m->m_dragDropListeners)
-    {
-        d->OnDragMove(m->m_ddInfo);
-        if ( d->MouseOverMe() )
-        {
-            d->OnDragMoveHere(m->m_ddInfo);
-        }
-    }
-
-    m->m_ddInfo.previousObject = m->m_ddInfo.currentObject;
-}
-
-void DragDropManager::HandleDragLeaveEvent(QObject *obj, QDragLeaveEvent *e)
-{
-    DragDropManager *m = DragDropManager::s_ddManager;
-    m->m_ddInfo.currentObject = obj;
-    m->m_ddInfo.currentEvent = e;
-
-    for (IDragDropListener *d : m->m_dragDropListeners)
-    {
-        d->OnDragLeave(m->m_ddInfo);
-        if ( d->MouseOverMe() )
-        {
-            d->OnDragLeaveHere(m->m_ddInfo);
-        }
-    }
-
-    m->m_ddInfo.previousObject = m->m_ddInfo.currentObject;
-}
-
-void DragDropManager::HandleDropEvent(QObject *obj, QEvent *e)
-{
-    DragDropManager *m = DragDropManager::s_ddManager;
-
-    if (m->m_dragGoingOn)
-    {
-        m->m_ddInfo.currentEvent = e;
-        m->m_ddInfo.currentObject = obj;
-
-        for (IDragDropListener *d : m->m_dragDropListeners)
-        {
-            d->OnDrop(m->m_ddInfo);
-            if ( d->MouseOverMe() )
-            {
-                d->OnDropHere(m->m_ddInfo);
-            }
-        }
-
-        m->m_ddInfo.currentEvent  = nullptr;
-        m->m_ddInfo.currentObject = nullptr;
-        m->m_ddInfo.sourceObject  = nullptr;
-        m->m_dragGoingOn = false;
-    }
-    e->accept();
-}
-
 void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
 {
     DragDropManager *m = DragDropManager::s_ddManager;
-    m->m_ddInfo.currentObject = obj;
-    m->m_ddInfo.sourceObject  = obj;
-    m->m_dragGoingOn = true;
+    m->m_mouseDown = true;
 }
 
 void DragDropManager::HandleGlobalMouseRelease(QObject *obj, QEvent *e)
 {
-    DragDropManager::HandleDropEvent(obj, e);
+    DragDropManager *m = DragDropManager::s_ddManager;
+    m->m_mouseDown = false;
 }
 
 QObject *DragDropManager::GetDragSource()
@@ -187,6 +92,78 @@ QObject *DragDropManager::GetDragSource()
 bool DragDropManager::IsDragGoingOn()
 {
     DragDropManager *m = DragDropManager::s_ddManager;
-    return m->m_dragGoingOn;
+    return m->m_mouseDown;
+}
+
+void DragDropManager::Update()
+{
+    DragDropManager *m = DragDropManager::s_ddManager;
+    if (!m) return;
+
+    DragDropAgent *currentDDAgentBelowMouse = DragDropManager::GetDragDropAgentBelowMouse();
+    if (m->m_mouseDown)
+    {
+        m->m_ddInfo.previousObject = m->m_ddInfo.currentObject;
+        m->m_ddInfo.currentObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
+
+        bool changingOfDragDropAgent = currentDDAgentBelowMouse != m->m_latestDDAgentBelowMouse;
+
+        // Drag Starts in currentDDAgentBelowMouse
+        bool isDragStart = !m->m_latestUpdateMouseDown;
+        if (isDragStart)
+        {
+            m->m_ddInfo.sourceObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
+            for (IDragDropListener *d : m->m_dragDropListeners)
+            {
+                d->OnDragStart(m->m_ddInfo);
+            }
+        }
+
+        // Drag Enters into currentDDAgentBelowMouse
+        bool isDragEnter = currentDDAgentBelowMouse  && changingOfDragDropAgent;
+        if (isDragEnter)
+        {
+            for (IDragDropListener *d : m->m_dragDropListeners)
+            {
+                d->OnDragEnter(m->m_ddInfo);
+            }
+        }
+
+        // Drag Moves in currentDDAgentBelowMouse
+        bool isDragMove = currentDDAgentBelowMouse && !changingOfDragDropAgent;
+        if (isDragMove)
+        {
+            for (IDragDropListener *d : m->m_dragDropListeners)
+            {
+                d->OnDragMove(m->m_ddInfo);
+            }
+        }
+
+        // Drag Leaves m_latestDDAgentBelowMouse
+        bool isDragLeave = m->m_latestDDAgentBelowMouse && changingOfDragDropAgent;
+        if (isDragLeave)
+        {
+            for (IDragDropListener *d : m->m_dragDropListeners)
+            {
+                d->OnDragLeave(m->m_ddInfo);
+            }
+        }
+
+        m->m_latestDDAgentBelowMouse = currentDDAgentBelowMouse;
+    }
+    else
+    {
+        bool isDrop = m->m_latestUpdateMouseDown;
+        if (isDrop)
+        {
+            for (IDragDropListener *d : m->m_dragDropListeners)
+            {
+                d->OnDrop(m->m_ddInfo);
+            }
+        }
+        m->m_latestDDAgentBelowMouse = nullptr;
+    }
+
+    m->m_latestUpdateMouseDown = m->m_mouseDown;
 }
 

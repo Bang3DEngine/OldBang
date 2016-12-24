@@ -12,9 +12,19 @@ class HierarchyDragDropManager : public IDragDropListener
 {
 private:
     Hierarchy *m_hierarchy;
+    GameObject *m_draggingStartGameObject = nullptr;
 
     QTreeWidgetItem *GetDropTargetItem() const;
-    GameObject* GetDropTargetGameObject() const;
+
+    /**
+     * @brief GetDropTargetGameObject
+     * @param parentTargetGameObject = The gameObject where user wants to put the dropping gameObject as child of.
+     * @param dropTargetGameObject = The gameObject where the user is dropping the widget over/below/above. This will
+     * be the same as parentTargetGameObject only in the case where the user is dropping the dragged gameObject over
+     * the gameObject. In case it's being dropped below or above, then they won't be the same.
+     */
+    void GetDropTargetGameObject(GameObject **dropTargetGameObject,
+                                 bool *above, bool *below) const;
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
     virtual void OnDragMove(const DragDropInfo &ddi) override;
@@ -25,6 +35,7 @@ private:
 
 public:
     HierarchyDragDropManager(Hierarchy *hierarchy);
+
 };
 
 #endif // HIERARCHYDRAGDROPMANAGER_H

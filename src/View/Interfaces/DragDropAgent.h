@@ -26,11 +26,6 @@ class DragDropAgent
 protected:
     DragDropAgent() {}
     virtual ~DragDropAgent() {}
-
-    void HandleDragEnterEvent(QDragEnterEvent *e);
-    void HandleDragMoveEvent(QDragMoveEvent *e);
-    void HandleDragLeaveEvent(QDragLeaveEvent *e);
-    void HandleDropEvent(QDropEvent *e);
 };
 
 //
@@ -41,10 +36,6 @@ class DragDropQWidget : public DragDropAgent,
 public:
     DragDropQWidget();
     virtual ~DragDropQWidget();
-    virtual void dragEnterEvent(QDragEnterEvent *e) override;
-    virtual void dragMoveEvent(QDragMoveEvent *e) override;
-    virtual void dragLeaveEvent(QDragLeaveEvent *e) override;
-    virtual void dropEvent(QDropEvent *e) override;
 };
 
 //
@@ -55,10 +46,6 @@ class DragDropQListView : public DragDropAgent,
 public:
     DragDropQListView();
     virtual ~DragDropQListView();
-    virtual void dragEnterEvent(QDragEnterEvent *e) override;
-    virtual void dragMoveEvent(QDragMoveEvent *e) override;
-    virtual void dragLeaveEvent(QDragLeaveEvent *e) override;
-    virtual void dropEvent(QDropEvent *e) override;
 };
 
 //
@@ -69,10 +56,6 @@ class DragDropQTreeWidget : public DragDropAgent,
 public:
     DragDropQTreeWidget();
     virtual ~DragDropQTreeWidget();
-    virtual void dragEnterEvent(QDragEnterEvent *e) override;
-    virtual void dragMoveEvent(QDragMoveEvent *e) override;
-    virtual void dragLeaveEvent(QDragLeaveEvent *e) override;
-    virtual void dropEvent(QDropEvent *e) override;
 };
 
 #endif // IDROPPABLE_H

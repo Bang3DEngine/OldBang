@@ -88,10 +88,14 @@ public:
 
     virtual ~GameObject();
 
-    void SetParent(GameObject *parent, bool keepWorldTransform = false);
+    void SetParent(GameObject *parent, bool keepWorldTransform = false,
+                   GameObject *aboveThisChild = nullptr);
+
     GameObject* GetChild(const String &m_name) const;
 
     void SetName(const String &m_name);
+
+    void Print(const String& indent = "") const;
 
     const String ToString() const;
 

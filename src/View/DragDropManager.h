@@ -13,7 +13,6 @@
 class DragDropInfo
 {
 public:
-
     // The source of the drag (where it started)
     QObject *sourceObject = nullptr;
 
@@ -23,6 +22,9 @@ public:
 
     // The widget that the mouse is overing
     QObject *currentObject = nullptr;
+
+    // Custom content you want to put here (data being dragged).
+    void *content = nullptr;
 
     // The latest event
     QEvent *currentEvent;
@@ -36,14 +38,18 @@ class DragDropManager : public QObject
 {
     Q_OBJECT
 
-private:
-    static DragDropManager *s_ddManager;
+public:
+    static void RegisterDragDropAgent(IDragDropListener *dragDropListener);
+    static void UnregisterDragDropAgent(IDragDropListener *dragDropListener);
 
-    DragDropInfo m_ddInfo;
-    bool m_dragGoingOn = false;
-    List<IDragDropListener*> m_dragDropListeners;
+    static void HandleGlobalMousePress(QObject *obj, QEvent *e);
+    static void HandleGlobalMouseRelease(QObject *obj, QEvent *e);
 
-    DragDropManager();
+    static QObject* GetDragSource();
+    static bool IsDragGoingOn();
+
+    static DragDropAgent* GetDragDropAgentBelowMouse();
+    static DragDropInfo* GetDragDropInfo();
 
 protected slots:
     void InstallEventFilters();
@@ -51,20 +57,19 @@ protected slots:
 protected:
     bool eventFilter(QObject *obj, QEvent *event);
 
-public:
-    static void RegisterDragDropAgent(IDragDropListener *dragDropListener);
-    static void UnregisterDragDropAgent(IDragDropListener *dragDropListener);
+private:
+    static DragDropManager *s_ddManager;
 
-    static void HandleDragEnterEvent(QObject *obj, QDragEnterEvent *e);
-    static void HandleDragMoveEvent(QObject *obj, QDragMoveEvent *e);
-    static void HandleDragLeaveEvent(QObject *obj, QDragLeaveEvent *e);
-    static void HandleDropEvent(QObject *obj, QEvent *e);
+    DragDropInfo m_ddInfo;
+    bool m_latestUpdateMouseDown = false, m_mouseDown = false;
+    DragDropAgent *m_latestDDAgentBelowMouse = nullptr;
+    List<IDragDropListener*> m_dragDropListeners;
 
-    static void HandleGlobalMousePress(QObject *obj, QEvent *e);
-    static void HandleGlobalMouseRelease(QObject *obj, QEvent *e);
+    DragDropManager();
 
-    static QObject* GetDragSource();
-    static bool IsDragGoingOn();
+    static void Update();
+
+    friend class Application;
 };
 
 #endif // DRAGDROPMANAGER_H

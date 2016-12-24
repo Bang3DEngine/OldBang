@@ -38,7 +38,9 @@ GraphicPipeline::~GraphicPipeline()
 
 void GraphicPipeline::RenderScene(Scene *scene)
 {
+    //Debug_Log("-------------");
     m_currentScene = scene;
+    //Debug_Log(m_currentScene->GetChildren());
 
     Color bgColor = m_currentScene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
@@ -61,28 +63,45 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
 
     if (!m_selectionFB->IsPassing())
     {
+        // Rendering to GBuffer
+
+        // immediatePostRender means we have to apply the light and possibly
+        // other postRender effects immediately. For example, in transparent
+        // objects we need to apply deferred light locally before we render another
+        // stuff, because if we render another transparent object above it, we would
+        // be blending wrong colors
         bool immediatePostRender = (rend->IsTransparent()   ||
                                     rend->HasCustomPRPass() ||
                                     rend->IsGizmo());
         if (immediatePostRender)
         {
+            // If there's a renderer with a postRender effect,
+            // then do not accumulate the stenciling. The stencil
+            // accumulation is basically used to apply the deferred lighting
+            glDepthMask(GL_FALSE);
             m_gbuffer->ClearStencil();
         }
 
-        m_gbuffer->SetStencilTest(false);
-        m_gbuffer->SetStencilWrite(true);
-        m_gbuffer->SetAllDrawBuffersExceptColor();
+        m_gbuffer->SetStencilTest(false); // Don't want to be filtered by the stencil
+        m_gbuffer->SetStencilWrite(true); // We are going to mark into the stencil
+        m_gbuffer->SetAllDrawBuffersExceptColor(); // But we DO write to diffuseColor (color != diffuseColor !!!)
 
-        rend->Render();
+        rend->Render(); // Render without writing to the final color buffer
 
-        if (immediatePostRender)
+        if (rend->IsACanvasRenderer())
+        {
+           // Debug_Log("Rendering " << rend);
+        }
+
+        if (immediatePostRender) // In case we need to apply immediately some PR
         {
             // These PR's are stenciled from the Render before
-            ApplyDeferredLights(rend);
+            ApplyDeferredLights(rend); // Only apply lights to the needed zone
             if (rend->HasCustomPRPass())
             {
-                RenderCustomPR(rend);
+                RenderCustomPR(rend); //
             }
+            glDepthMask(GL_TRUE);
         }
     }
     else
@@ -129,19 +148,17 @@ void GraphicPipeline::ApplySelectionEffect()
 
 void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 {
-    // Limit to the rend visible rect, to save bandwidth
-    Rect renderRect = Rect::ScreenRect;
+    // Limit rendering to the rend visible rect
+    Rect renderRect = Rect::ScreenRect; // TODO: Correct rect creation, it doesnt work sometimes, and uncomment below
     if (rend)
     {
-        renderRect = rend->gameObject->GetBoundingScreenRect(
-                            m_currentScene->GetCamera(), false);
+    //    renderRect = rend->gameObject->GetBoundingScreenRect(m_currentScene->GetCamera(), false);
     }
 
-    renderRect = Rect::ScreenRect; // TODO: Erase this and correct rect creation, it doesnt work sometimes
-    // If the rect is empty, dont waste time rendering nothing (which wastes time)
+    // If the rect is empty, dont waste time rendering nothing
     if (renderRect != Rect::Empty)
     {
-        m_gbuffer->SetStencilTest(true);
+        m_gbuffer->SetStencilTest(true); // We have marked from before the zone where we want to draw
         m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen, renderRect);
         if (!rend || rend->GetReceivesLighting())
         {
@@ -166,23 +183,24 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     List<Renderer*> renderers = m_currentScene->GetComponentsInChildren<Renderer>();
     for (Renderer *rend : renderers) // Opaque
     {
-        if (!rend->IsTransparent() && !rend->HasCustomPRPass() &&
-            !rend->IsGizmo())
+        if (!rend->IsTransparent() && !rend->HasCustomPRPass() && !rend->IsGizmo())
         {
             RenderRenderer(rend);
         }
     }
 
+    // Apply deferred lights to opaque objects
     if (fb == m_gbuffer)
     {
         ApplyDeferredLights();
         m_gbuffer->ClearStencil();
     }
 
-    for (Renderer *rend : renderers) // Immediate PR
+    // Post-render passes (screen passes).
+    // Either is transparent or has a custom PR Pass (gizmos are left for the end...)
+    for (Renderer *rend : renderers)
     {
-        if ((rend->IsTransparent() || rend->HasCustomPRPass()) &&
-            !rend->IsGizmo())
+        if ((rend->IsTransparent() || rend->HasCustomPRPass()) && !rend->IsGizmo())
         {
             RenderRenderer(rend);
         }
