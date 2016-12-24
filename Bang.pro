@@ -24,12 +24,20 @@ DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
 QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
 QMAKE_CXXFLAGS += -O3
 
-#FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType && ./configure && make
-FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType && ./configure && make
+FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType
+!exists (src/Domain/Graphics/FreeType/build) {
+    message("Compiling FreeType")
+    CONFIG += COMPILE_FREETYPE
+    FreeTypeTarget.commands += && sh autogen.sh \
+                               && mkdir build ; cd build \
+                               && cmake .. && ../configure
+}
+
+FreeTypeTarget.commands += && cd build ; make
 QMAKE_EXTRA_TARGETS += FreeTypeTarget
 PRE_TARGETDEPS = FreeTypeTarget
 
-LIBS += src/Domain/Graphics/FreeType/objs/*.o
+LIBS += src/Domain/Graphics/FreeType/build/*.o
 #LIBS += FreeTypeLib
 
 LIBS += \

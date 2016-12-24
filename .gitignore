@@ -18,6 +18,12 @@ nohup.out
 BangPreprocessor
 BangPreprocessor/*
 
+# CMake
+*CMakeCache.txt
+*CMakeFiles/*
+objs*/*
+build/*
+
 # Qt-es
 
 /.qmake.cache
@@ -32,6 +38,8 @@ qrc_*.cpp
 ui_*.h
 Makefile*
 *build-*
+*build*
+*cache*
 
 # QtCreator
 
