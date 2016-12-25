@@ -174,7 +174,8 @@ OTHER_FILES += \
     Assets/Engine/Shaders/PR_MeshPass.vert \
     Assets/Engine/Materials/PR_AmbientLight_Screen.bmat \
     Assets/Engine/Materials/PR_SelectionEffect.bmat \
-    Assets/Engine/Shaders/UI/D2G_UIText.frag
+    Assets/Engine/Shaders/UI/D2G_UIText.frag \
+    Assets/Engine/Materials/UI/D2G_UIText.bmat
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

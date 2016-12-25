@@ -6,6 +6,10 @@ struct B_VertexIn
     vec4 position_world;
     vec4 normal_world;
     vec2 uv;
+    vec4 diffuseColor; // Diffuse component
+    float depth;
+    float stencil;
+    vec4 color;        // Color (with PR applied)
 };
 
 struct B_VertexOut_GBufferIn   // GBuffer
@@ -41,6 +45,10 @@ void InitMain()
     B_vin.position_world = B_position_world_vout_fin;
     B_vin.normal_world   = B_normal_world_vout_fin;
     B_vin.uv             = B_uv_vout_fin;
+    B_vin.diffuseColor   = texture2D(B_diffuse_gout_fin, B_screen_coord_norm);
+    B_vin.depth          = texture2D(B_depth_gout_fin,   B_screen_coord_norm).x;
+    B_vin.stencil        = texture2D(B_stencil_gout_fin, B_screen_coord_norm).x;
+    B_vin.color          = texture2D(B_color_gout_fin,   B_screen_coord_norm);
 
     // Some default values
     B_vout.position_world      = B_vin.position_world.xyz;
@@ -59,11 +67,12 @@ void EndMain()
     B_normal_fout_gin                = vec4(B_vout.normal_world, 0);
     B_uv_fout_gin                    = vec4(B_vout.uv, 0, 0);
     B_diffuse_fout_gin               = B_vout.diffuseColor;
-    /*B_diffuse_fout_gin               = vec4( mix(B_diffuse_fout_gin.rgb,
-                                                 B_vout.diffuseColor.rgb,
-                                                 B_vout.diffuseColor.a * B_diffuse_fout_gin.a),
-                                                 B_vout.diffuseColor.a);
-                                                 */
+    B_diffuse_fout_gin               = B_diffuse_fout_gin;
+    //vec4( mix(B_diffuse_fout_gin.rgb,
+      //                                           B_vout.diffuseColor.rgb,
+        //                                         B_vout.diffuseColor.a * B_diffuse_fout_gin.a),
+          //                                       B_vout.diffuseColor.a);
+
     B_materialProps_fout_gin.x       = B_vout.receivesLighting ? 1.0f : 0.0f;
     B_materialProps_fout_gin.y       = B_vout.shininess;
     B_materialProps_fout_gin.z       = B_vout.shininess;
