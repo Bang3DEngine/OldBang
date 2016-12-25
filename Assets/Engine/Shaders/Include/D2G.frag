@@ -67,7 +67,6 @@ void EndMain()
     B_normal_fout_gin                = vec4(B_vout.normal_world, 0);
     B_uv_fout_gin                    = vec4(B_vout.uv, 0, 0);
     B_diffuse_fout_gin               = B_vout.diffuseColor;
-    B_diffuse_fout_gin               = B_diffuse_fout_gin;
     //vec4( mix(B_diffuse_fout_gin.rgb,
       //                                           B_vout.diffuseColor.rgb,
         //                                         B_vout.diffuseColor.a * B_diffuse_fout_gin.a),

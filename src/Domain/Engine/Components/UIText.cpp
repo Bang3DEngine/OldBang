@@ -5,7 +5,7 @@
 UIText::UIText() : UIRenderer()
 {
     m_material = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/UI/D2G_UIText.bmat");
-    m_font = AssetsManager::LoadAsset<Font>("Assets/Engine/Fonts/GreatFont.bfont");
+    m_font = AssetsManager::LoadAsset<Font>("Assets/Engine/Fonts/UbuntuFont.bfont");
 }
 
 UIText::~UIText()
@@ -29,9 +29,9 @@ void UIText::Render() const
         const Font::CharGlyphMetrics &charMetrics = m_font->GetCharacterMetrics(c);
         Texture2D *charTexture = m_font->GetCharacterTexture(c);
 
-        Vector3 quadScale = charScaleFactor * Vector3(charMetrics.width, charMetrics.height, 1.0f) * 1.5f;
+        Vector3 quadScale = charScaleFactor * Vector3(charMetrics.width, charMetrics.height, 1.0f);
         transform->SetScale(quadScale);          // The quad must have the dimensions of the char
-        transform->Translate(-quadScale / 2.0f); // Move from center to topleft
+        transform->Translate(-quadScale / 2.0f * Vector3::Up); // Move from center to topleft
 
         // Apply Bearings(X/Y)
         Vector3 bearing = Vector3(charMetrics.bearingX, charMetrics.bearingY, 0) * charScaleFactor;
@@ -42,14 +42,14 @@ void UIText::Render() const
 
         // Unapply Bearings(X/Y)
         transform->Translate(-bearing);
-        transform->Translate(quadScale / 2.0f); // Move from topleft to center again
+        transform->Translate(quadScale / 2.0f * Vector3::Up); // Move from topleft to center again
 
         // Move to the right the advance distance
         float advance = charMetrics.advance;
         if (i > 0)
         {
-            float advx = m_font->GetKerningX(m_content[i-1], m_content[i]);
-            if (advx > 0) { advance = advx; } // Try to get the kerningX instead of advance
+            //float advx = m_font->GetKerningX(m_content[i-1], m_content[i]);
+            //if (advx > 0) { advance = advx; } // Try to get the kerningX instead of advance
         }
         advance *= charScaleFactor.x;
         transform->Translate(Vector3::Right * advance);
