@@ -278,7 +278,7 @@ public:
         List<T*> comps = GetComponentsInChildren<T>();
         List<T*> thisComps = GetComponents<T>();
         thisComps.Splice(thisComps.End(), comps);
-        return comps;
+        return thisComps;
     }
 
     /**
