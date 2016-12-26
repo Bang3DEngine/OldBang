@@ -3,9 +3,7 @@
 
 #include <QThread>
 
-#include "Debug.h"
-#include "StringUtils.h"
-#include "SystemUtils.h"
+#include "String.h"
 
 class BuildGameThread : public QThread
 {

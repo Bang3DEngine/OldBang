@@ -1,5 +1,11 @@
 #include "LineRenderer.h"
 
+#include "VBO.h"
+#include "VAO.h"
+#include "Material.h"
+#include "Transform.h"
+#include "AssetsManager.h"
+
 LineRenderer::LineRenderer()
 {
     m_vbo = new VBO();
@@ -16,7 +22,10 @@ const String LineRenderer::ToString() const
     return "LineRenderer";
 }
 
-String LineRenderer::GetName() const { return "LineRenderer"; }
+String LineRenderer::GetName() const
+{
+    return "LineRenderer";
+}
 
 
 void LineRenderer::BindPointsToVAO() const

@@ -2,8 +2,6 @@
 #define CHRONO_H
 
 #include "Array.h"
-#include <iostream>
-
 #include "String.h"
 
 class Chrono

@@ -2,7 +2,9 @@
 
 #include "Scene.h"
 #include "Renderer.h"
+#include "FileWriter.h"
 #include "SceneManager.h"
+#include "AssetsManager.h"
 
 MaterialAssetFileInspectable::MaterialAssetFileInspectable
     (const MaterialAssetFile &materialAssetFile) :

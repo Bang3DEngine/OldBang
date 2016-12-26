@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 
 #include "Scene.h"
+#include "Debug.h"
 #include "Application.h"
 
 #ifdef BANG_EDITOR

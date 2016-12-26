@@ -1,12 +1,16 @@
 #ifndef UITEXT_H
 #define UITEXT_H
 
+#include "Rect.h"
+#include "Color.h"
+#include "String.h"
 #include "UIRenderer.h"
 
 class Font;
+class XMLNode;
+class ICloneable;
 class UIText : public UIRenderer
 {
-
 public:
     UIText();
     virtual ~UIText();

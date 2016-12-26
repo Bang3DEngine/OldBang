@@ -2,6 +2,12 @@
 #include "GameObject.h"
 #include "FileReader.h"
 
+#include "VAO.h"
+#include "Mesh.h"
+#include "Material.h"
+#include "Transform.h"
+#include "AssetsManager.h"
+
 MeshRenderer::MeshRenderer()
 {
 }

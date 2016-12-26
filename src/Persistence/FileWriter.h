@@ -4,17 +4,15 @@
 #include <iostream>
 #include <fstream>
 
-
-
-#include "Vector3.h"
-#include "Rect.h"
-#include "Persistence.h"
-#include "XMLParser.h"
 #include "XMLNode.h"
+#include "XMLParser.h"
 #include "IFileable.h"
 
+class Rect;
 class Scene;
 class Asset;
+class String;
+class XMLNode;
 class FileWriter
 {
 private:

@@ -2,6 +2,8 @@
 
 #include "Screen.h"
 #include "Toolbar.h"
+#include "Material.h"
+#include "AssetsManager.h"
 
 EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
                        GameObject *attachedGameObject)

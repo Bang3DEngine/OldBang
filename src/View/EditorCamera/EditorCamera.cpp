@@ -5,6 +5,7 @@
 #include "Screen.h"
 #include "Camera.h"
 #include "Screen.h"
+#include "Transform.h"
 #include "SceneManager.h"
 
 EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")

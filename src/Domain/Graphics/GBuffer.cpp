@@ -1,8 +1,16 @@
 #include "GBuffer.h"
 
+#include "VAO.h"
+#include "Mesh.h"
+#include "Scene.h"
 #include "Color.h"
 #include "Array.h"
-#include "Screen.h"
+#include "Camera.h"
+#include "Material.h"
+#include "Transform.h"
+#include "MeshFactory.h"
+#include "ShaderProgram.h"
+#include "AssetsManager.h"
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {

@@ -1,7 +1,9 @@
 #ifndef EDITORAXIS_H
 #define EDITORAXIS_H
 
-#include "Bang.h"
+#include "Color.h"
+#include "String.h"
+#include "Vector3.h"
 
 #include "Input.h"
 #include "Camera.h"
@@ -9,6 +11,9 @@
 #include "Transform.h"
 #include "EditorGameObject.h"
 
+class Renderer;
+class Material;
+class GameObject;
 class EditorAxis : public EditorGameObject
 {
 public:

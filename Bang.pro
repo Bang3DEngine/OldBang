@@ -229,7 +229,6 @@ HEADERS += \
     src/Domain/Engine/Others/SingletonManager.h \
     src/Domain/Engine/Components/CircleRenderer.h \
     src/Domain/Engine/Components/SingleLineRenderer.h \
-    src/Domain/Engine/Components/LineStripRenderer.h \
     src/Domain/Engine/Assets/Meshes/MeshFactory.h \
     src/Domain/Engine/Interfaces/ICloneable.h \
     src/Domain/Engine/Others/GameBuilder.h \
@@ -400,7 +399,6 @@ SOURCES += \
     src/Domain/Engine/Others/SingletonManager.cpp \
     src/Domain/Engine/Components/CircleRenderer.cpp \
     src/Domain/Engine/Components/SingleLineRenderer.cpp \
-    src/Domain/Engine/Components/LineStripRenderer.cpp \
     src/Domain/Engine/Assets/Meshes/MeshFactory.cpp \
     src/Domain/Engine/Interfaces/ICloneable.cpp \
     src/Domain/Engine/Others/GameBuilder.cpp \

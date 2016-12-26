@@ -1,7 +1,10 @@
 #include "EditorAxisPlane.h"
 
+#include "Material.h"
 #include "EditorAxis.h"
+#include "MeshFactory.h"
 #include "MeshRenderer.h"
+#include "AssetsManager.h"
 
 EditorAxisPlane::EditorAxisPlane(EditorAxis *axis1, EditorAxis *axis2)
     : m_axis1(axis1), m_axis2(axis2)

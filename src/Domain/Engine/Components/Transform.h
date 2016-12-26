@@ -1,21 +1,15 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include "Bang.h"
 
-
-#include <sstream>
-#include <ostream>
-
+#include "String.h"
 #include "Vector3.h"
 #include "Matrix4.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include "Component.h"
 #include "Quaternion.h"
 
-#include "FileReader.h"
-#include "Component.h"
-
+class XMLNode;
+class ICloneable;
 class Transform : public Component
 {
 public:

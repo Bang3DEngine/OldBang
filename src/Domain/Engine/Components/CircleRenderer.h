@@ -1,41 +1,14 @@
 #ifndef CIRCLERENDERER_H
 #define CIRCLERENDERER_H
 
-#include "Array.h"
-
-#include "VBO.h"
-#include "VAO.h"
-#include "Mesh.h"
-#include "Component.h"
-#include "Scene.h"
-#include "Material.h"
-#include "Transform.h"
-#include "ShaderProgram.h"
-#include "ShaderContract.h"
-#include "AssetsManager.h"
-#include "FileReader.h"
-#include "ShaderContract.h"
-
+#include "String.h"
+#include "Vector2.h"
 #include "LineRenderer.h"
 
+class XMLNode;
+class ICloneable;
 class CircleRenderer : public LineRenderer
 {
-private:
-
-    float m_radius = 1.0f;
-    int m_segments = 32;
-
-    void GeneratePoints();
-
-    // Used by EditorRotateAxis mainly
-    void GetTwoClosestPointsInScreenSpace(
-            const Vector2 &sOrigin,
-            Vector2 *p0, int *i0,
-            Vector2 *p1, int *i1 ) const;
-
-protected:
-    CircleRenderer();
-
 public:
     virtual ~CircleRenderer();
 
@@ -58,6 +31,21 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+protected:
+    CircleRenderer();
+
+private:
+    float m_radius = 1.0f;
+    int m_segments = 32;
+
+    void GeneratePoints();
+
+    // Used by EditorRotateAxis mainly
+    void GetTwoClosestPointsInScreenSpace(
+            const Vector2 &sOrigin,
+            Vector2 *p0, int *i0,
+            Vector2 *p1, int *i1 ) const;
 
     friend class GameObject;
     friend class EditorRotateAxis;

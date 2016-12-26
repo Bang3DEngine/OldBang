@@ -1,23 +1,20 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
-#include "Bang.h"
-
-#include "Debug.h"
 #include "IFileable.h"
 #include "IToString.h"
 #include "ICloneable.h"
-#include "FileWriter.h"
 #include "ISceneEventListener.h"
-
 #ifdef BANG_EDITOR
 #include "IInspectable.h"
-#include "InspectorWidget.h"
 #include "IWindowEventManagerListener.h"
 #endif
 
+#include "String.h"
+
 #define CAN_USE_COMPONENT(comp)  ( comp  && comp->IsEnabled() )
 
+class XMLNode;
 class Transform;
 class GameObject;
 class Component :
@@ -62,7 +59,6 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
-
 
     friend class GameObject;
     friend class ComponentClipboard;

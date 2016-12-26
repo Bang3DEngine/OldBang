@@ -1,48 +1,27 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "Bang.h"
-
-#include <GL/glew.h>
-#include "Array.h"
-
-#include "glm/glm.hpp"
-
-#include "ShaderContract.h"
-#include "IFileable.h"
-#include "FileReader.h"
-#include "Sphere.h"
-#include "Asset.h"
-#include "VAO.h"
-#include "VBO.h"
 #include "Box.h"
+#include "Array.h"
+#include "Asset.h"
+#include "Sphere.h"
 
+class VAO;
+class VBO;
+class Box;
+class Sphere;
+class Vector2;
+class Vector3;
+class XMLNode;
+class IFileable;
+class FileReader;
+class ShaderProgram;
 class Mesh : public Asset
 {
 public:
-    const static String GetFileExtensionStatic() { return "bmesh"; }
-    const virtual String GetFileExtension()
-    {
-        return Mesh::GetFileExtensionStatic();
-    }
+    const static String GetFileExtensionStatic();
+    const virtual String GetFileExtension();
 
-private:
-    Box m_bBox;
-    Sphere m_bSphere;
-
-    Array<Vector3> m_positions;
-    Array<Vector3> m_normals;
-    Array<Vector2> m_uvs;
-
-    VAO *m_vao = nullptr;
-    VBO *m_vertexPositionsVBO = nullptr;
-    VBO *m_vertexNormalsVBO = nullptr;
-    VBO *m_vertexUvsVBO = nullptr;
-    int m_vertexCount = 0;
-
-    bool m_trisModel = false;
-
-public:
     Mesh();
     Mesh(const Mesh& m);
     virtual ~Mesh();
@@ -73,6 +52,22 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+private:
+    Box m_bBox;
+    Sphere m_bSphere;
+
+    Array<Vector3> m_positions;
+    Array<Vector3> m_normals;
+    Array<Vector2> m_uvs;
+
+    VAO *m_vao = nullptr;
+    VBO *m_vertexPositionsVBO = nullptr;
+    VBO *m_vertexNormalsVBO = nullptr;
+    VBO *m_vertexUvsVBO = nullptr;
+    int m_vertexCount = 0;
+
+    bool m_trisModel = false;
 
     friend class MeshRenderer;
 };

@@ -1,5 +1,8 @@
 #include "Prefab.h"
 
+#include "GameObject.h"
+#include "XMLParser.h"
+
 Prefab::Prefab()
 {
 
@@ -21,6 +24,16 @@ Prefab::Prefab(GameObject *go)
 Prefab::Prefab(const String &gameObjectXMLInfoContent)
 {
     m_gameObjectXMLInfoContent = gameObjectXMLInfoContent;
+}
+
+const String Prefab::GetFileExtensionStatic()
+{
+    return "bprefab";
+}
+
+const String Prefab::GetFileExtension()
+{
+    return Prefab::GetFileExtensionStatic();
 }
 
 GameObject *Prefab::Instantiate() const

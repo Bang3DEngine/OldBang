@@ -2,7 +2,10 @@
 #define DIRECTIONALLIGHT_H
 
 #include "Light.h"
+#include "String.h"
 
+class XMLNode;
+class ICloneable;
 class DirectionalLight : public Light
 {
 protected:

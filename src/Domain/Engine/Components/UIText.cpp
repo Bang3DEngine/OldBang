@@ -1,6 +1,9 @@
 #include "UIText.h"
 
 #include "Font.h"
+#include "Material.h"
+#include "Transform.h"
+#include "AssetsManager.h"
 
 UIText::UIText() : UIRenderer()
 {

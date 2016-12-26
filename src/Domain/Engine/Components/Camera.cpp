@@ -2,8 +2,10 @@
 
 #include "Mesh.h"
 #include "Screen.h"
+#include "Transform.h"
 #include "FileReader.h"
 #include "MeshRenderer.h"
+#include "AssetsManager.h"
 
 bool Camera::s_inited = false;
 Mesh* Camera::s_camMesh = nullptr;

@@ -1,14 +1,12 @@
 #ifndef EDITORFLOOR_H
 #define EDITORFLOOR_H
 
-#include "Bang.h"
-
 #include "List.h"
 #include "Array.h"
 
-#include "SingleLineRenderer.h"
 #include "EditorGameObject.h"
 
+class SingleLineRenderer;
 class EditorFloor : public EditorGameObject
 {
 public:

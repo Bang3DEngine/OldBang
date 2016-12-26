@@ -1,19 +1,17 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "Bang.h"
-
-#include "glm/glm.hpp"
-#include "glm/gtx/quaternion.hpp"
-#include "glm/gtx/transform.hpp"
-
-#include "Rect.h"
+#include "Color.h"
+#include "String.h"
 #include "Vector2.h"
+#include "Vector3.h"
 #include "Component.h"
-#include "Transform.h"
 
 class Mesh;
 class Screen;
+class Matrix4;
+class XMLNode;
+class ICloneable;
 class MeshRenderer;
 class Camera : public Component
 {
@@ -22,29 +20,6 @@ public:
         Orthographic,
         Perspective
     );
-
-private:
-    static bool s_inited;
-    static Mesh* s_camMesh;
-    static void InitStatics();
-
-    float m_orthoHeight  = 0.5f;
-
-    Color m_clearColor = Color(Color(0.9f), 1);
-    float m_fovDegrees = 60.0f;
-    float m_zNear = 0.1f;
-    float m_zFar = 100.0f;
-
-    mutable float m_aspectRatio = 1.0f;
-
-    ProjectionMode m_projMode = ProjectionMode::Perspective;
-
-    bool m_autoUpdateAspectRatio = true;
-
-protected:
-    Camera();
-
-public:
 
     void GetViewMatrix(Matrix4 *view) const;
     void GetProjectionMatrix(Matrix4 *proj) const;
@@ -93,6 +68,27 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+protected:
+    Camera();
+
+private:
+    static bool s_inited;
+    static Mesh* s_camMesh;
+    static void InitStatics();
+
+    float m_orthoHeight  = 0.5f;
+
+    Color m_clearColor = Color(Color(0.9f), 1);
+    float m_fovDegrees = 60.0f;
+    float m_zNear = 0.1f;
+    float m_zFar = 100.0f;
+
+    mutable float m_aspectRatio = 1.0f;
+
+    ProjectionMode m_projMode = ProjectionMode::Perspective;
+
+    bool m_autoUpdateAspectRatio = true;
 
     friend class GameObject;
 };

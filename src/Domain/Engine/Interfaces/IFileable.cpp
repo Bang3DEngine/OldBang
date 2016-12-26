@@ -1,5 +1,11 @@
 #include "IFileable.h"
 
+#include <istream>
+#include <ostream>
+#include <sstream>
+#include <fstream>
+
+#include "XMLParser.h"
 #include "FileWriter.h"
 #include "FileReader.h"
 
@@ -30,4 +36,11 @@ void IFileable::ReadXMLInfo(const XMLNode *xmlInfo)
 void IFileable::FillXMLInfo(XMLNode *xmlInfo) const
 {
     XMLParser::RegisterId(xmlInfo, this);
+}
+
+void IFileable::PostReadXMLInfo(const XMLNode *xmlInfo) {}
+void IFileable::PostFillXMLInfo(XMLNode *xmlInfo) const {}
+
+IFileable::IFileable()
+{
 }

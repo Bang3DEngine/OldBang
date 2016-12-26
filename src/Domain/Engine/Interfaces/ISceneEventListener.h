@@ -1,11 +1,7 @@
 #ifndef ISCENEEVENTLISTENER_H
 #define ISCENEEVENTLISTENER_H
 
-#include "Bang.h"
-
 #include "List.h"
-#include <algorithm>
-#include <functional>
 
 #define PROPAGATE_EVENT(FUNCTION, ITERABLE) do {\
     for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \

@@ -1,18 +1,8 @@
 #ifndef BEHAVIOURHOLDER_H
 #define BEHAVIOURHOLDER_H
 
-#include <functional>
-
-#include <QThread>
-#include <QLibrary>
-#include <QInputDialog>
-
-#include "Bang.h"
 #include "Component.h"
 #include "IAttrWidgetButtonListener.h"
-
-#include "Behaviour.h"
-#include "SystemUtils.h"
 
 /**
  * @brief The BehaviourHolder class is the responsible of holding
@@ -23,26 +13,11 @@
  * In case the BehaviourHolder has a Behaviour correctly loaded, it will
  * pass the events to the behaviour. Otherwise, it will just do nothing.
  */
+class QLibrary;
+class Behaviour;
 class BehaviourHolder : public Component
                        ,public IAttrWidgetButtonListener
 {
-private:
-
-    /**
-     * @brief The dynamically loaded Behaviour
-     */
-    Behaviour *m_behaviour = nullptr;
-
-    /**
-     * @brief Path to the Behaviour source file.
-     * It is indicated using the Inspector
-     */
-    String m_sourceFilepath = "";
-
-    void ChangeBehaviour(Behaviour *newBehaviour);
-
-protected:
-    BehaviourHolder();
 
 public:
     virtual ~BehaviourHolder();
@@ -79,6 +54,24 @@ public:
     void OnBehaviourLibraryAvailable(QLibrary *lib);
 
     // TODO: Add windowEventListener events pass to Behaviour too
+
+protected:
+    BehaviourHolder();
+
+private:
+
+    /**
+     * @brief The dynamically loaded Behaviour
+     */
+    Behaviour *m_behaviour = nullptr;
+
+    /**
+     * @brief Path to the Behaviour source file.
+     * It is indicated using the Inspector
+     */
+    String m_sourceFilepath = "";
+
+    void ChangeBehaviour(Behaviour *newBehaviour);
 
     friend class GameObject;
 };

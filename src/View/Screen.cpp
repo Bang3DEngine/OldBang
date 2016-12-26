@@ -12,6 +12,7 @@
 
 #include "Application.h"
 #include "SceneManager.h"
+#include "AssetsManager.h"
 #include "GraphicPipeline.h"
 #include "ShortcutManager.h"
 #include "SingletonManager.h"

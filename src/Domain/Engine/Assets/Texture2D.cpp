@@ -1,5 +1,7 @@
 #include "Texture2D.h"
-#include "Persistence.h"
+
+#include "Debug.h"
+#include "FileReader.h"
 
 Texture2D::Texture2D() : Texture(TextureType::Texture2D)
 {
@@ -13,6 +15,17 @@ Texture2D::Texture2D(const String &imageFilepath) : Texture2D()
 Texture2D::~Texture2D()
 {
 }
+
+const String Texture2D::GetFileExtensionStatic()
+{
+    return "btex2d";
+}
+
+const String Texture2D::GetFileExtension()
+{
+    return Texture2D::GetFileExtensionStatic();
+}
+
 
 void Texture2D::LoadFromFile(const String &imageFilepath)
 {
@@ -95,3 +108,5 @@ void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetEnum("FilterMode", FilterMode_GetNamesVector(), selectedIndex, {});
     xmlInfo->SetFloat("AlphaCuttoff", GetAlphaCuttoff());
 }
+
+Texture2D::Texture2D(const Texture2D &t) : Texture2D() {}

@@ -2,7 +2,6 @@
 
 #include "Transform.h"
 #include "GameObject.h"
-#include "WindowEventManager.h"
 
 Component::Component()
 {

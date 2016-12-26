@@ -2,6 +2,7 @@
 
 #include "Light.h"
 #include "Screen.h"
+#include "Camera.h"
 #include "GBuffer.h"
 #include "Material.h"
 #include "GameObject.h"

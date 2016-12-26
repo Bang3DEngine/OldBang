@@ -1,7 +1,6 @@
 #ifndef PROPERTY_H
 #define PROPERTY_H
 
-#include <functional>
 /*
 template<class PROPERTY_CLASS, class HOLDER_CLASS>
 class Property
@@ -34,6 +33,7 @@ public:
     }
 };
 */
+
 template<typename T>
 class Property
 {

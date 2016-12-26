@@ -1,6 +1,11 @@
 #include "EditorFloor.h"
 
+#include "Scene.h"
+#include "Camera.h"
+#include "Material.h"
+#include "Transform.h"
 #include "SceneManager.h"
+#include "SingleLineRenderer.h"
 
 EditorFloor::EditorFloor()
 {

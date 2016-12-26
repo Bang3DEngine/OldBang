@@ -1,11 +1,12 @@
 #include "GameObject.h"
 
-#include "FileReader.h"
+#include <iostream>
+
 #include "SceneManager.h"
 #include "SingletonManager.h"
 
 #include "Canvas.h"
-#include "UIImage.h"
+#include "Material.h"
 #include "Component.h"
 #include "Transform.h"
 #include "PointLight.h"
@@ -15,7 +16,6 @@
 #include "DirectionalLight.h"
 
 #include "UIText.h"
-#include "Canvas.h"
 #include "UIImage.h"
 
 #ifdef BANG_EDITOR

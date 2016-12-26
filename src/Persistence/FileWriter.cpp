@@ -1,6 +1,16 @@
 #include "FileWriter.h"
+
+#include "Rect.h"
+#include "String.h"
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Vector4.h"
+#include "Matrix4.h"
+
 #include "Scene.h"
 #include "Asset.h"
+#include "Debug.h"
+#include "Persistence.h"
 
 FileWriter::FileWriter()
 {

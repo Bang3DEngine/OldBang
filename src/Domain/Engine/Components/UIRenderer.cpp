@@ -3,7 +3,7 @@
 #include "Rect.h"
 #include "Material.h"
 #include "MeshFactory.h"
-#include "GraphicPipeline.h"
+#include "AssetsManager.h"
 #include "SelectionFramebuffer.h"
 
 UIRenderer::UIRenderer()
@@ -18,6 +18,7 @@ UIRenderer::UIRenderer()
     SetTransparent(false);
     SetDepthLayer(Renderer::DepthLayer::DepthLayerCanvas);
 
+    m_materialPR = new Material();
     m_material->SetDiffuseColor(Color::White);
 }
 

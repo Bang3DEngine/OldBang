@@ -1,9 +1,12 @@
 #include "PointLight.h"
 
 #include "Gizmos.h"
-#include "GBuffer.h"
+#include "Material.h"
+#include "Texture2D.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "AssetsManager.h"
+#include "ShaderProgram.h"
 
 #ifdef BANG_EDITOR
 #include "InspectorWidget.h"

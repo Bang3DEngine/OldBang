@@ -1,6 +1,9 @@
 #include "EditorTranslateAxis.h"
 
+#include "Scene.h"
 #include "Toolbar.h"
+#include "MeshFactory.h"
+#include "MeshRenderer.h"
 #include "SceneManager.h"
 
 EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,

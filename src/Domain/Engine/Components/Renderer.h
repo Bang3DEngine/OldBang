@@ -2,8 +2,8 @@
 #define RENDERER_H
 
 #include "Array.h"
-#include <functional>
 
+#include "NamedEnum.h"
 #include "Component.h"
 
 class Box;

@@ -1,6 +1,8 @@
 #include "AssetsManager.h"
 
 #include "Scene.h"
+#include "FileReader.h"
+#include "FileWriter.h"
 #include "Application.h"
 #include "SceneManager.h"
 

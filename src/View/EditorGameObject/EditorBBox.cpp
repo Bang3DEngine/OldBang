@@ -1,5 +1,7 @@
 #include "EditorBBox.h"
 
+#include "Material.h"
+
 Material *EditorBBox::s_boxMaterial = nullptr;
 
 EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("EditorBBox")

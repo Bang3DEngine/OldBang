@@ -6,9 +6,10 @@
 #include <QMenuBar>
 #include <QMessageBox>
 
-#include "GameBuilder.h"
 #include "Mesh.h"
+#include "GameBuilder.h"
 
+class GameObject;
 class WindowEventManager;
 class MenuBar : public QMenuBar
 {

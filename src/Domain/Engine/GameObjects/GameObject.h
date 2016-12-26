@@ -1,21 +1,14 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include "Bang.h"
-
-#include <iostream>
-#include <functional>
-
-#include "List.h"
 #include "IFileable.h"
 #include "IToString.h"
 #include "ICloneable.h"
 #include "ISceneEventListener.h"
 
 #include "Box.h"
+#include "List.h"
 #include "Sphere.h"
-#include "Property.h"
-#include "Material.h"
 
 #ifdef BANG_EDITOR
 #include "Gizmos.h"
@@ -23,6 +16,7 @@
 #endif
 
 class Scene;
+class Material;
 class Component;
 class Transform;
 class EditorSelectionGameObject;

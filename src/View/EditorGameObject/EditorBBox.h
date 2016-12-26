@@ -1,13 +1,16 @@
 #ifndef EDITORBBOX_H
 #define EDITORBBOX_H
 
-#include "Bang.h"
+#include "Array.h"
+#include "Vector3.h"
 
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "AssetsManager.h"
 #include "EditorGameObject.h"
 
+class Material;
+class GameObject;
 class EditorBBox : public EditorGameObject
 {
 private:

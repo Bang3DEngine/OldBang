@@ -3,16 +3,15 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "Gizmos.h"
-#include "GBuffer.h"
+#include "Material.h"
+#include "Texture2D.h"
 #include "Transform.h"
 #include "GameObject.h"
-
+#include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
 #include "InspectorWidget.h"
 #endif
-
-
 
 DirectionalLight::DirectionalLight() : Light()
 {

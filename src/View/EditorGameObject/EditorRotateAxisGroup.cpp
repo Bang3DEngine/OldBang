@@ -2,6 +2,7 @@
 
 #include "Toolbar.h"
 #include "MeshRenderer.h"
+#include "CircleRenderer.h"
 
 EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     : EditorGameObject("EditorRotateAxisGroup")

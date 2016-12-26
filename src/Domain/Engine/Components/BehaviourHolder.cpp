@@ -1,5 +1,10 @@
 #include "BehaviourHolder.h"
 
+#include <QLibrary>
+#include <QInputDialog>
+
+#include "Behaviour.h"
+#include "SystemUtils.h"
 #include "BehaviourManager.h"
 
 BehaviourHolder::BehaviourHolder()

@@ -1,5 +1,10 @@
 #include "GameBuilder.h"
 
+
+#include "Debug.h"
+#include "StringUtils.h"
+#include "SystemUtils.h"
+
 BuildGameThread GameBuilder::buildThread;
 
 void GameBuilder::BuildGame(const String &absoluteDir, bool runGame)

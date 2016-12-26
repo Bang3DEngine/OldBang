@@ -1,6 +1,9 @@
 #include "Chrono.h"
 
+#include <iostream>
+
 #include "Time.h"
+
 
 Chrono::Chrono(String chronoName)
 {

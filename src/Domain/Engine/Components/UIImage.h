@@ -1,8 +1,11 @@
 #ifndef UIIMAGE_H
 #define UIIMAGE_H
 
+#include "String.h"
 #include "UIRenderer.h"
 
+class XMLNode;
+class ICloneable;
 class UIImage : public UIRenderer
 {
 public:

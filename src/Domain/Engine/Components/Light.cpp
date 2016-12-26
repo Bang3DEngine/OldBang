@@ -4,9 +4,11 @@
 #include "Gizmos.h"
 #include "GBuffer.h"
 #include "Renderer.h"
+#include "Material.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "SceneManager.h"
+#include "ShaderProgram.h"
 
 #ifdef BANG_EDITOR
 #include "InspectorWidget.h"

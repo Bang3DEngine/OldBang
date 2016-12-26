@@ -1,39 +1,19 @@
 #ifndef LINERENDERER_H
 #define LINERENDERER_H
 
+#include "Box.h"
 #include "Array.h"
-
-#include "VBO.h"
-#include "VAO.h"
-#include "Mesh.h"
-#include "Component.h"
-#include "Scene.h"
-#include "Material.h"
-#include "Transform.h"
-#include "ShaderProgram.h"
-#include "ShaderContract.h"
-#include "AssetsManager.h"
-#include "FileReader.h"
-#include "ShaderContract.h"
-
+#include "String.h"
+#include "Vector3.h"
 #include "Renderer.h"
 
+class VBO;
+class VAO;
+class XMLNode;
+class Material;
+class ICloneable;
 class LineRenderer : public Renderer
 {
-protected:
-    Array<Vector3> m_points;
-
-    VBO *m_vbo = nullptr;
-    VAO *m_vao = nullptr;
-
-    RenderMode m_drawLinesMode = RenderMode::Lines;
-
-    virtual void BindPointsToVAO() const;
-    virtual void RenderWithoutBindingMaterial() const override;
-
-protected:
-    LineRenderer();
-
 public:
     virtual ~LineRenderer();
 
@@ -53,6 +33,19 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+protected:
+    Array<Vector3> m_points;
+
+    VBO *m_vbo = nullptr;
+    VAO *m_vao = nullptr;
+
+    RenderMode m_drawLinesMode = RenderMode::Lines;
+
+    virtual void BindPointsToVAO() const;
+    virtual void RenderWithoutBindingMaterial() const override;
+
+    LineRenderer();
 
     friend class GameObject;
 };

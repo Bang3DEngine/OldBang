@@ -1,5 +1,6 @@
 #include "HierarchyDragDropManager.h"
 
+#include "Explorer.h"
 #include "Hierarchy.h"
 #include "SceneManager.h"
 

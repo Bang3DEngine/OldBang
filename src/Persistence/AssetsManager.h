@@ -1,15 +1,14 @@
 #ifndef ASSETSMANAGER_H
 #define ASSETSMANAGER_H
 
-#include "Bang.h"
-
-
 #include <sstream>
 
 #include "Map.h"
 #include "Asset.h"
 #include "Persistence.h"
 #include "BehaviourManager.h"
+
+#include "XMLParser.h"
 
 class AssetsManager
 {

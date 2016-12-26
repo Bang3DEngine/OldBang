@@ -1,5 +1,8 @@
 #include "Font.h"
 
+#include <GL/glew.h>
+
+#include "Texture2D.h"
 #include "FontSheetCreator.h"
 
 int Font::CharLoadSize = 64;

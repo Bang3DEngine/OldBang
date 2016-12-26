@@ -1,21 +1,11 @@
 #ifndef IFILEABLE_H
 #define IFILEABLE_H
 
-#include "Bang.h"
-
-#include <istream>
-#include <ostream>
-#include <sstream>
-#include <fstream>
-
-
-#include "XMLParser.h"
-
 //Describes something than can be written and read to/from a file
+class String;
+class XMLNode;
 class IFileable
 {
-protected:
-    IFileable() {}
 
 public:
     String GetXMLInfoString() const;
@@ -30,8 +20,11 @@ public:
       For example, a Scene might need to access to its main Camera. If the
       Camera hasnt been read yet, then Scene wont be able to set it.
      */
-    virtual void PostReadXMLInfo(const XMLNode *xmlInfo) {}
-    virtual void PostFillXMLInfo(XMLNode *xmlInfo) const {}
+    virtual void PostReadXMLInfo(const XMLNode *xmlInfo);
+    virtual void PostFillXMLInfo(XMLNode *xmlInfo) const;
+
+protected:
+    IFileable();
 };
 
 #endif // IFILEABLE_H

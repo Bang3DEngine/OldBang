@@ -1,13 +1,13 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
-#include "Array.h"
 #include <sstream>
 #include <iostream>
 #include <QString>
 
 #include "Map.h"
 #include "List.h"
+#include "Array.h"
 
 class Color;
 class String;

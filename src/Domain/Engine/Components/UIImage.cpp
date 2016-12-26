@@ -1,8 +1,12 @@
 ﻿#include "UIImage.h"
 
 #include "Rect.h"
+#include "GBuffer.h"
 #include "Material.h"
+#include "Texture2D.h"
 #include "MeshFactory.h"
+#include "ShaderProgram.h"
+#include "AssetsManager.h"
 #include "GraphicPipeline.h"
 #include "SelectionFramebuffer.h"
 

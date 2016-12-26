@@ -1,6 +1,9 @@
 #include "EditorScaleAxis.h"
 
+#include "Scene.h"
 #include "Toolbar.h"
+#include "MeshFactory.h"
+#include "MeshRenderer.h"
 #include "SceneManager.h"
 
 EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,

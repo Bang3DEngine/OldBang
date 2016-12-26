@@ -1,7 +1,14 @@
 #include "EditorRotateAxis.h"
 
+#include "Scene.h"
+#include "Screen.h"
 #include "Toolbar.h"
+#include "Material.h"
+#include "Transform.h"
 #include "SceneManager.h"
+#include "ShaderProgram.h"
+#include "AssetsManager.h"
+#include "CircleRenderer.h"
 
 EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
                                    GameObject *attachedGameObject)

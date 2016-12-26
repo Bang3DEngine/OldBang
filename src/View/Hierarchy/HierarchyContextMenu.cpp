@@ -1,6 +1,7 @@
 #include "HierarchyContextMenu.h"
 
 #include "Hierarchy.h"
+#include "FileWriter.h"
 #include "SceneManager.h"
 
 HierarchyContextMenu::HierarchyContextMenu(Hierarchy *hierarchy)

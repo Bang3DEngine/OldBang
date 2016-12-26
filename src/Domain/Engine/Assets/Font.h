@@ -1,18 +1,11 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "Bang.h"
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include <GL/glew.h>
-
-#include "glm/glm.hpp"
-
 #include "Array.h"
 #include "Asset.h"
-#include "Texture2D.h"
 
 class Texture2D;
 class Font : public Asset

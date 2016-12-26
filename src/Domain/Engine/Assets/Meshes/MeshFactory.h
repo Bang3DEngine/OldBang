@@ -3,8 +3,6 @@
 
 #include "Array.h"
 
-#include "Bang.h"
-
 class Mesh;
 class Vector3;
 class Material;
@@ -15,14 +13,6 @@ class EditorGameObject;
 
 class MeshFactory
 {
-private:
-    MeshFactory() {}
-    static GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name);
-
-    #ifdef BANG_EDITOR
-    static EditorGameObject* CreatePrimitiveEditorGameObject(Mesh *m, const String &name);
-    #endif
-
 public:
 
     static Mesh* GetPlane();
@@ -40,6 +30,14 @@ public:
     static EditorGameObject* GetCubeEditorGameObject();
     static EditorGameObject* GetSphereEditorGameObject();
     static EditorGameObject* GetConeEditorGameObject();
+    #endif
+
+private:
+    MeshFactory();
+    static GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name);
+
+    #ifdef BANG_EDITOR
+    static EditorGameObject* CreatePrimitiveEditorGameObject(Mesh *m, const String &name);
     #endif
 
     friend class MenuBar;

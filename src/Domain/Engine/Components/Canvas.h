@@ -1,14 +1,13 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
+#include "String.h"
 #include "Component.h"
 
+class XMLNode;
+class ICloneable;
 class Canvas : public Component
 {
-protected:
-    Canvas();
-    virtual ~Canvas();
-
 public:
 
     virtual const String ToString() const override;
@@ -24,6 +23,10 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+protected:
+    Canvas();
+    virtual ~Canvas();
 
     friend class GameObject;
 };

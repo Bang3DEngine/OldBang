@@ -3,19 +3,6 @@
 
 #include "Array.h"
 
-#include "VBO.h"
-#include "VAO.h"
-#include "Mesh.h"
-#include "Component.h"
-#include "Scene.h"
-#include "Material.h"
-#include "Transform.h"
-#include "ShaderProgram.h"
-#include "ShaderContract.h"
-#include "AssetsManager.h"
-#include "FileReader.h"
-#include "ShaderContract.h"
-
 #include "LineRenderer.h"
 
 class SingleLineRenderer : public LineRenderer

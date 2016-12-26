@@ -3,20 +3,13 @@
 
 #include "Light.h"
 
+class Camera;
+class XMLNode;
+class Material;
+class ICloneable;
 class PointLight : public Light
 {
-protected:
-    float m_range = 1.0f;
-
-    virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
-
-protected:
-    PointLight();
-
-    Rect GetRenderRect(Camera *cam) const override;
-
 public:
-
     virtual const String ToString() const override;
     virtual String GetName() const override;
 
@@ -34,6 +27,14 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+protected:
+    float m_range = 1.0f;
+
+    PointLight();
+
+    Rect GetRenderRect(Camera *cam) const override;
+    virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
 
     friend class GameObject;
 };

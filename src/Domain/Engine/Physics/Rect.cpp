@@ -1,6 +1,7 @@
 #include "Rect.h"
 
 #include "List.h"
+#include "Camera.h"
 #include "Vector2.h"
 
 Rect Rect::ScreenRect = Rect(Vector2(-1), Vector2(1));

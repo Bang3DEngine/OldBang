@@ -1,5 +1,13 @@
 #include "Mesh.h"
 
+#include <GL/glew.h>
+
+#include "VAO.h"
+#include "VBO.h"
+#include "IFileable.h"
+#include "FileReader.h"
+#include "ShaderContract.h"
+
 Mesh::Mesh()
 {
     m_vao = new VAO();
@@ -25,6 +33,13 @@ Mesh::~Mesh()
     if (m_vertexPositionsVBO) delete m_vertexPositionsVBO;
     if (m_vertexNormalsVBO)   delete m_vertexNormalsVBO;
     if (m_vertexNormalsVBO)   delete m_vertexUvsVBO;
+}
+
+const String Mesh::GetFileExtensionStatic() { return "bmesh"; }
+
+const String Mesh::GetFileExtension()
+{
+    return Mesh::GetFileExtensionStatic();
 }
 
 void Mesh::LoadFromFile(const String &filepath)

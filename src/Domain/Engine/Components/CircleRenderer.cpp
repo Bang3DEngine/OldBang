@@ -1,5 +1,8 @@
 #include "CircleRenderer.h"
 
+#include "Scene.h"
+#include "Camera.h"
+#include "Transform.h"
 #include "SceneManager.h"
 
 CircleRenderer::CircleRenderer()

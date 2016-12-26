@@ -27,18 +27,14 @@ class BehaviourHolder;
  */
 class Behaviour : public ISceneEventListener
 {
-private:
 
-    /**
-     * @brief Set directly by BehaviourHolder (its a friend class), when
-     * adding this Behaviour to itself.
-     */
-    BehaviourHolder *m_behaviourHolder = nullptr;
+public:
+    Behaviour();
+    virtual ~Behaviour();
 
-
-    void Init(BehaviourHolder *bh);
-    void SetSourceFilepath(const String &m_sourceFilepath);
-    String GetSourceFilepath() const;
+    // Substitute CLASS_NAME
+    static String s_behaviourHeaderTemplate;
+    static String s_behaviourSourceTemplate;
 
 /**
  * These variables must be copied from BehaviourHolder
@@ -52,23 +48,20 @@ protected:
     GameObject* const& parent = m_parent;
     Transform*  const& transform  = m_transform;
 
-/**
-*/
-
-public:
-    Behaviour();
-    virtual ~Behaviour();
-
-    // Substitute CLASS_NAME
-    static String s_behaviourHeaderTemplate;
-    static String s_behaviourSourceTemplate;
-
-protected:
     virtual void OnUpdate() override;
 
+/**
+ * @brief Set directly by BehaviourHolder (its a friend class), when
+ * adding this Behaviour to itself.
+ */
 private:
-    virtual void _OnUpdate() override;
+    BehaviourHolder *m_behaviourHolder = nullptr;
 
+    void Init(BehaviourHolder *bh);
+    void SetSourceFilepath(const String &m_sourceFilepath);
+    String GetSourceFilepath() const;
+
+    virtual void _OnUpdate() override;
 
     friend class BehaviourHolder;
 };

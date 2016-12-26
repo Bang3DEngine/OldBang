@@ -1,10 +1,16 @@
 #include "Scene.h"
 
 #include "Screen.h"
+#include "Camera.h"
+#include "Material.h"
+#include "XMLParser.h"
+#include "Transform.h"
 #include "GameObject.h"
 #include "SceneManager.h"
 #include "GraphicPipeline.h"
 #include "DirectionalLight.h"
+
+#include "Debug.h"
 
 Scene::Scene() : GameObject("Scene")
 {

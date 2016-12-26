@@ -1,7 +1,6 @@
 #ifndef RECT_H
 #define RECT_H
 
-#include "Bang.h"
 #include "List.h"
 #include "IToString.h"
 

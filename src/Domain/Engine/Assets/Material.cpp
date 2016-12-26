@@ -1,6 +1,13 @@
 #include "Material.h"
 
 #include "Screen.h"
+#include "Vector4.h"
+#include "Texture.h"
+#include "Texture2D.h"
+#include "ShaderContract.h"
+#include "ShaderProgram.h"
+
+#include "AssetsManager.h"
 
 Material::Material() : Asset()
 {
@@ -23,6 +30,16 @@ Material::~Material()
     {
         delete m_shaderProgram;
     }
+}
+
+const String Material::GetFileExtensionStatic()
+{
+    return "bmat";
+}
+
+const String Material::GetFileExtension()
+{
+    return Material::GetFileExtensionStatic();
 }
 
 void Material::Bind() const

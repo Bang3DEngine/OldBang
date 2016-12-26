@@ -1,5 +1,7 @@
 #include "Asset.h"
 
+#include "FileWriter.h"
+#include "FileReader.h"
 #include "AssetsManager.h"
 
 Asset::Asset()
@@ -13,6 +15,17 @@ Asset::~Asset()
 }
 
 #ifdef BANG_EDITOR
+
+const String Asset::GetFileExtensionStatic()
+{
+    return "basset";
+}
+
+const String Asset::GetFileExtension()
+{
+    return Asset::GetFileExtensionStatic();
+}
+
 void Asset::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);

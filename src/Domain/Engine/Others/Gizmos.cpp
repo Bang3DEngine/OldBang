@@ -1,9 +1,13 @@
 #include "Gizmos.h"
 
 #include "Rect.h"
+#include "Scene.h"
+#include "Camera.h"
 #include "Renderer.h"
 #include "Material.h"
+#include "Transform.h"
 #include "Texture2D.h"
+#include "MeshFactory.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"

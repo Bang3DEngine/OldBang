@@ -1,12 +1,18 @@
 #include "Renderer.h"
 
+#include <functional>
+
 #include "Box.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "GBuffer.h"
 #include "Material.h"
 #include "Transform.h"
 #include "GameObject.h"
 #include "SceneManager.h"
+#include "AssetsManager.h"
+#include "ShaderProgram.h"
+#include "ShaderContract.h"
 #include "GraphicPipeline.h"
 
 #ifdef BANG_EDITOR

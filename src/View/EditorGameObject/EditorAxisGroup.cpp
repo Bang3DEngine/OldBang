@@ -1,5 +1,6 @@
 #include "EditorAxisGroup.h"
 
+#include "Scene.h"
 #include "SceneManager.h"
 
 EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObject("EditorAxisGroup")

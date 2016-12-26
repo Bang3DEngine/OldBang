@@ -30,6 +30,8 @@ Mesh *MeshFactory::GetCone()
     return AssetsManager::LoadAsset<Mesh>("Assets/Engine/Meshes/Cone.bmesh");
 }
 
+MeshFactory::MeshFactory() {}
+
 GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const String &name)
 {
     GameObject *go = new GameObject(name);

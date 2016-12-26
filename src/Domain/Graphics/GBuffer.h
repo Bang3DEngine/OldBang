@@ -1,16 +1,12 @@
 #ifndef GBUFFER_H
 #define GBUFFER_H
 
-#include <stack>
-
-#include "Bang.h"
-
-#include "Mesh.h"
 #include "Color.h"
-#include "Material.h"
-#include "MeshFactory.h"
+#include "String.h"
 #include "Framebuffer.h"
 
+class Mesh;
+class Material;
 class GBuffer : public Framebuffer
 {
 public:

@@ -1,10 +1,7 @@
 #ifndef EDITORROTATEAXIS_H
 #define EDITORROTATEAXIS_H
 
-#include "Transform.h"
 #include "EditorAxis.h"
-#include "CircleRenderer.h"
-#include "EditorGameObject.h"
 
 class EditorRotateAxis : public EditorAxis
 {

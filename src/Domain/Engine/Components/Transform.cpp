@@ -1,5 +1,9 @@
 #include "Transform.h"
-#include "FileReader.h"
+
+#include <sstream>
+#include <ostream>
+
+#include "Debug.h"
 #include "GameObject.h"
 
 Transform::Transform()

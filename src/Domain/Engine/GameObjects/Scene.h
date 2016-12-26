@@ -1,20 +1,13 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Bang.h"
-
 #include "List.h"
 
-
 #include "Color.h"
-#include "Debug.h"
-#include "Camera.h"
-#include "Screen.h"
-#include "GBuffer.h"
-#include "Material.h"
 #include "GameObject.h"
 
 class Screen;
+class Camera;
 class GraphicPipeline;
 class SelectionFramebuffer;
 class Scene : public GameObject

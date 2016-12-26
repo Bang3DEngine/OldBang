@@ -1,9 +1,9 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "Rect.h"
 #include "Component.h"
 
+class Rect;
 class Camera;
 class GBuffer;
 class Material;

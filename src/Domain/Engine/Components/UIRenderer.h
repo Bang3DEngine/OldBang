@@ -1,8 +1,14 @@
 #ifndef UIRENDERER_H
 #define UIRENDERER_H
 
+#include "Color.h"
+#include "String.h"
+#include "Matrix4.h"
 #include "MeshRenderer.h"
 
+class XMLNode;
+class Material;
+class ICloneable;
 class UIRenderer : public MeshRenderer
 {
 public:
@@ -33,7 +39,7 @@ public:
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
 protected:
-    Material *m_materialPR = new Material();
+    Material *m_materialPR = nullptr;
     Color m_tint = Color::Zero;
     Color m_strokeColor = Color::White;
     float m_stroke = 0.0f;
