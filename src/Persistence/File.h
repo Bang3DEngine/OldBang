@@ -1,18 +1,12 @@
 #ifndef FILE_H
 #define FILE_H
 
-#include <fstream>
-
-#include <QPainter>
 #include <QModelIndex>
 #include <QFileSystemModel>
 
 #include "String.h"
 
-#ifdef BANG_EDITOR
-#include "IInspectable.h"
-#endif
-
+class IInspectable;
 class File
 {
 public:

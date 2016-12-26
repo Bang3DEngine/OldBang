@@ -1,5 +1,7 @@
 #include "Timer.h"
 
+#include <chrono>
+
 Timer::Timer(std::function<void ()> func, float secDelay, int repeatCount, bool waitOneDelayTime) :
     m_func(func),
     m_secDelay(secDelay),

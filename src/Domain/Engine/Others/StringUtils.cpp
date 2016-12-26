@@ -1,5 +1,9 @@
 #include "StringUtils.h"
 
+#include <sstream>
+#include <iomanip>
+#include <algorithm>
+
 const String StringUtils::TOKEN_SPACE = " \t\n";
 
 bool StringUtils::Contains(const String &str, const String &whatToFind)

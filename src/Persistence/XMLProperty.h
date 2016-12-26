@@ -1,9 +1,7 @@
 #ifndef XMLPROPERTY_H
 #define XMLPROPERTY_H
 
-
-
-#include  "StringUtils.h"
+#include "String.h"
 
 class XMLProperty
 {

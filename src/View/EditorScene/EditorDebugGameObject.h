@@ -3,11 +3,7 @@
 
 #include "List.h"
 
-#include "Bang.h"
-
-#include "Time.h"
 #include "Color.h"
-#include "Gizmos.h"
 #include "EditorGameObject.h"
 
 class EditorDebugGameObject : public EditorGameObject
@@ -25,12 +21,7 @@ private:
 
         DebugLine(const Vector3& origin, const Vector3 &destiny,
                   const Color &color, float lineWidth, float livingTimeSecs,
-                  bool depthTest, bool screen) :
-                    m_origin(origin), m_destiny(destiny), m_color(color),
-                    m_depthTest(depthTest), m_lineWidth(lineWidth),
-                    m_livingTimeSecs(livingTimeSecs), m_screen(screen)
-        {
-        }
+                  bool depthTest, bool screen);
     };
 
     List<DebugLine> m_debugLines;

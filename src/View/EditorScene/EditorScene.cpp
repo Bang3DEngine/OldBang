@@ -1,6 +1,11 @@
 #include "EditorScene.h"
 
 #include "Hierarchy.h"
+#include "EditorFloor.h"
+#include "EditorCamera.h"
+#include "SelectionFramebuffer.h"
+#include "EditorDebugGameObject.h"
+#include "EditorTranslateAxisGroup.h"
 
 EditorScene::EditorScene() : Scene()
 {

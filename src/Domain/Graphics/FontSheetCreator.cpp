@@ -1,7 +1,7 @@
 #include "FontSheetCreator.h"
 
-#include "Texture2D.h"
 #include "Debug.h"
+#include "Texture2D.h"
 
 #include "freetype2/ftglyph.h"
 

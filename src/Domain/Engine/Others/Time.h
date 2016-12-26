@@ -1,10 +1,6 @@
 #ifndef TIME_H
 #define TIME_H
 
-#include "Bang.h"
-
-#include <chrono>
-
 class Time
 {
 friend class Behaviour;

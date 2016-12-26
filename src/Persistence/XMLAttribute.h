@@ -1,12 +1,9 @@
 #ifndef XMLATTRIBUTE_H
 #define XMLATTRIBUTE_H
 
-#include "Bang.h"
-
-
 #include "Array.h"
-#include <iostream>
-#include <functional>
+
+#include "NamedEnum.h"
 
 #include "Rect.h"
 #include "Color.h"
@@ -15,12 +12,9 @@
 #include "Vector4.h"
 #include "IToString.h"
 #include "Quaternion.h"
-#include "StringUtils.h"
-#include "Persistence.h"
 #include "XMLProperty.h"
 
-#include "IAttrWidgetButtonListener.h"
-
+class IAttrWidgetButtonListener;
 class XMLAttribute : public IToString
 {
 public:

@@ -1,9 +1,11 @@
 #include "MeshAssetFile.h"
 
 #include "Mesh.h"
+#include "Persistence.h"
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
+#include "IInspectable.h"
 #include "MeshAssetFileInspectable.h"
 #endif
 

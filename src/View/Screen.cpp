@@ -10,6 +10,9 @@
 #include "GameWindow.h"
 #endif
 
+#include "Camera.h"
+#include "Material.h"
+#include "Transform.h"
 #include "Application.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"

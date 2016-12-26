@@ -18,12 +18,12 @@
  * in the MAIN BINARY.
  */
 
-class ShortcutManager;
-class EditorWindow;
-class IWindow;
-class Logger;
-class Input;
 class Time;
+class Input;
+class Logger;
+class IWindow;
+class EditorWindow;
+class ShortcutManager;
 class SingletonManager
 {
 private:

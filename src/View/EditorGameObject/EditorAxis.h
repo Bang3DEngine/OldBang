@@ -5,14 +5,13 @@
 #include "String.h"
 #include "Vector3.h"
 
-#include "Input.h"
-#include "Camera.h"
-#include "Renderer.h"
-#include "Transform.h"
 #include "EditorGameObject.h"
 
+class Input;
+class Camera;
 class Renderer;
 class Material;
+class Transform;
 class GameObject;
 class EditorAxis : public EditorGameObject
 {

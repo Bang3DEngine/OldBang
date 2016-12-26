@@ -1,5 +1,7 @@
 #include "Time.h"
 
+#include <chrono>
+
 #include "SingletonManager.h"
 
 float Time::s_deltaTime = 0.0f;

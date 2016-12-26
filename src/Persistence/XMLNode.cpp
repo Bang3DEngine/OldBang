@@ -4,6 +4,8 @@
 
 #include "FileReader.h"
 #include "FileWriter.h"
+#include "StringUtils.h"
+#include "IAttrWidgetButtonListener.h"
 
 XMLNode::XMLNode(const String &tagName) :
     m_tagName(tagName)

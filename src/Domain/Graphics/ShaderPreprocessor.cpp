@@ -1,6 +1,11 @@
 #include "ShaderPreprocessor.h"
 
+#include <algorithm>
+
+#include "File.h"
 #include "Debug.h"
+#include "StringUtils.h"
+#include "ShaderContract.h"
 
 const String ShaderPreprocessor::c_version = "#version 130";
 

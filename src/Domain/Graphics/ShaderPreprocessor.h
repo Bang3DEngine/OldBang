@@ -1,15 +1,8 @@
 #ifndef SHADERPREPROCESSOR_H
 #define SHADERPREPROCESSOR_H
 
-
-#include <algorithm>
-
-#include "Bang.h"
-
-#include "File.h"
 #include "Array.h"
-#include "StringUtils.h"
-#include "ShaderContract.h"
+#include "String.h"
 
 class ShaderPreprocessor
 {

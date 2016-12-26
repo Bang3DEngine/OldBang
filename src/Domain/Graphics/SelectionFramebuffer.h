@@ -2,10 +2,17 @@
 #define SELECTIONFRAMEBUFFER_H
 
 #include "Map.h"
-#include "Scene.h"
 #include "Vector3.h"
-#include "GameObject.h"
 #include "Framebuffer.h"
+
+#ifdef BANG_EDITOR
+#include "IWindowEventManagerListener.h"
+#endif
+
+class Scene;
+class Material;
+class Renderer;
+class GameObject;
 
 /**
  * @brief This is the buffer where each GameObject is drawn into with a unique colour.

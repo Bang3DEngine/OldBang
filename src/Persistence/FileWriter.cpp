@@ -7,6 +7,10 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 
+#include "XMLNode.h"
+#include "XMLParser.h"
+#include "IFileable.h"
+
 #include "Scene.h"
 #include "Asset.h"
 #include "Debug.h"

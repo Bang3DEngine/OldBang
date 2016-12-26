@@ -4,8 +4,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "Bang.h"
-
 #include "Font.h"
 #include "String.h"
 

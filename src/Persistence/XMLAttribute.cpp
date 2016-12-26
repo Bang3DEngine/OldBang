@@ -1,5 +1,12 @@
 #include "XMLAttribute.h"
 
+#include <iostream>
+#include <functional>
+
+#include "StringUtils.h"
+#include "Persistence.h"
+#include "IAttrWidgetButtonListener.h"
+
 XMLAttribute::XMLAttribute()
 {
 }

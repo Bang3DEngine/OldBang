@@ -1,5 +1,7 @@
 #include "XMLProperty.h"
 
+#include "StringUtils.h"
+
 const XMLProperty XMLProperty::Hidden("Hidden");
 const XMLProperty XMLProperty::Inline("Inline");
 const XMLProperty XMLProperty::BigText("BigText");

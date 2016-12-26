@@ -1,5 +1,7 @@
 #include "Matrix4.h"
 
+#include <sstream>
+
 #include "String.h"
 #include "Vector3.h"
 #include "Quaternion.h"

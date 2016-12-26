@@ -3,8 +3,6 @@
 
 #include <QColor>
 
-#include "Bang.h"
-
 class String;
 class Vector2;
 class Vector3;

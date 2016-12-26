@@ -1,5 +1,9 @@
 #include "ImageFile.h"
 
+#include "stb_image.h"
+
+#include "Debug.h"
+
 #ifdef BANG_EDITOR
 #include "ImageFileInspectable.h"
 #endif

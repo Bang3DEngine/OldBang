@@ -1,8 +1,12 @@
 #include "MeshFile.h"
 
+#include "Debug.h"
+
+#include "FileReader.h"
 #include "Persistence.h"
 
 #ifdef BANG_EDITOR
+#include "IInspectable.h"
 #include "MeshFileInspectable.h"
 #endif
 

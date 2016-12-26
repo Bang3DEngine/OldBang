@@ -3,8 +3,6 @@
 
 #include <cmath>
 
-#include "Bang.h"
-
 #include "Array.h"
 #include "List.h"
 

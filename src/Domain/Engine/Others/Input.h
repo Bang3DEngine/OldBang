@@ -1,17 +1,13 @@
 ﻿#ifndef INPUT_H
 #define INPUT_H
 
-#include "Array.h"
-
 #include <QKeyEvent>
 
-#include "Bang.h"
-
 #include "Map.h"
+#include "Array.h"
 #include "String.h"
 #include "Vector2.h"
 #include "IToString.h"
-#include "glm/glm.hpp"
 
 class Input
 {

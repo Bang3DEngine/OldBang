@@ -1,6 +1,7 @@
 #ifndef GBUFFER_H
 #define GBUFFER_H
 
+#include "Rect.h"
 #include "Color.h"
 #include "String.h"
 #include "Framebuffer.h"

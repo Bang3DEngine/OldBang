@@ -3,7 +3,7 @@
 
 #include <QFileDialog>
 
-#include "Bang.h"
+#include "String.h"
 
 class FileDialog : public QFileDialog
 {

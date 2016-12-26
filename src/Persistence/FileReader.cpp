@@ -1,20 +1,11 @@
-#include "Mesh.h"
-#include "Scene.h"
-#include "Camera.h"
-#include "Debug.h"
-#include "stb_image.h"
-#include "Behaviour.h"
-#include "Transform.h"
-#include "Texture2D.h"
 #include "FileReader.h"
-#include "GameObject.h"
-#include "PointLight.h"
-#include "BehaviourHolder.h"
-#include "DirectionalLight.h"
 
-#ifdef BANG_EDITOR
-#include "Explorer.h"
-#endif
+#include "stb_image.h"
+
+#include "Scene.h"
+#include "Debug.h"
+#include "XMLParser.h"
+#include "GameObject.h"
 
 const String FileReader::NoRegisterId = "-";
 void *FileReader::lastIstreamDir = nullptr;

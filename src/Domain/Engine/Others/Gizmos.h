@@ -1,8 +1,6 @@
 #ifndef GIZMOS_H
 #define GIZMOS_H
 
-#include "Bang.h"
-
 #include "Box.h"
 #include "Color.h"
 #include "Vector3.h"

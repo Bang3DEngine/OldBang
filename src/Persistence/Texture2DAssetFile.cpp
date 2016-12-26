@@ -1,9 +1,13 @@
 #include "Texture2DAssetFile.h"
 
+#include "stb_image.h"
+
+#include "Debug.h"
 #include "XMLNode.h"
 #include "FileReader.h"
 
 #ifdef BANG_EDITOR
+#include "IInspectable.h"
 #include "Texture2DAssetFileInspectable.h"
 #endif
 

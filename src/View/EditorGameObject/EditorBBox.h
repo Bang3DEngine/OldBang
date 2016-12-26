@@ -4,9 +4,6 @@
 #include "Array.h"
 #include "Vector3.h"
 
-#include "Transform.h"
-#include "MeshRenderer.h"
-#include "AssetsManager.h"
 #include "EditorGameObject.h"
 
 class Material;

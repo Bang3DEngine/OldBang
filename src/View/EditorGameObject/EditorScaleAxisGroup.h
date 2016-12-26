@@ -1,14 +1,9 @@
 #ifndef EDITORSCALEAXISGROUP_H
 #define EDITORSCALEAXISGROUP_H
 
-#include "Toolbar.h"
-#include "Transform.h"
-#include "EditorAxis.h"
-#include "MeshRenderer.h"
-#include "LineRenderer.h"
 #include "EditorGameObject.h"
-#include "EditorScaleAxis.h"
 
+class EditorScaleAxis;
 /**
  * @brief The EditorScaleAxisGroup class represents a group of EditorScaleAxises.
  * There will be X,Y,Z EditorScaleAxis, which will be children of this EditorGameObject.

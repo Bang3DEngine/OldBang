@@ -1,38 +1,18 @@
 #ifndef EXPLORER_H
 #define EXPLORER_H
 
-
-
 #include <QListView>
 #include <QMouseEvent>
 #include <QToolButton>
 #include <QFileSystemModel>
 
-#include "Bang.h"
-
-#include "Debug.h"
-
-#include "Persistence.h"
-
 #include "File.h"
-#include "TextFile.h"
-#include "MeshFile.h"
-#include "ImageFile.h"
-#include "MeshAssetFile.h"
+#include "String.h"
 #include "DragDropAgent.h"
 #include "IDragDropListener.h"
-#include "MaterialAssetFile.h"
 #include "IShortcutListener.h"
-#include "Texture2DAssetFile.h"
-#include "MeshFileInspectable.h"
-#include "TextFileInspectable.h"
 #include "ExplorerContextMenu.h"
-#include "ImageFileInspectable.h"
-#include "MeshAssetFileInspectable.h"
-#include "PrefabAssetFileInspectable.h"
-#include "MaterialAssetFileInspectable.h"
-#include "Texture2DAssetFileInspectable.h"
-
+#include "IWindowEventManagerListener.h"
 
 class FileSystemModel;
 class Explorer : public DragDropQListView,

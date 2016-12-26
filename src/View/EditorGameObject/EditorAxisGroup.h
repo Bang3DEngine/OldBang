@@ -1,11 +1,12 @@
 #ifndef EDITORAXISGROUP_H
 #define EDITORAXISGROUP_H
 
-#include "Toolbar.h"
-#include "EditorScaleAxisGroup.h"
-#include "EditorRotateAxisGroup.h"
-#include "EditorTranslateAxisGroup.h"
+#include "EditorGameObject.h"
 
+class GameObject;
+class EditorScaleAxisGroup;
+class EditorRotateAxisGroup;
+class EditorTranslateAxisGroup;
 /**
  * @brief The EditorAxisGroup class contains the Translate, Rotate
  * and Scale Axis Groups.

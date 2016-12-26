@@ -4,6 +4,7 @@
 #include <QInputDialog>
 
 #include "Behaviour.h"
+#include "FileWriter.h"
 #include "SystemUtils.h"
 #include "BehaviourManager.h"
 

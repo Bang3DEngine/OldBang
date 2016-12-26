@@ -19,6 +19,7 @@
 #include "XMLParser.h"
 #include "GameObject.h"
 #include "FileReader.h"
+#include "Persistence.h"
 #include "Application.h"
 #include "Framebuffer.h"
 #include "SceneManager.h"

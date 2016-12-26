@@ -1,18 +1,21 @@
 #include "File.h"
 
+#include <fstream>
+
 #ifdef BANG_EDITOR
 #include "Explorer.h"
+#include "IInspectable.h"
 #endif
 
 #include "Font.h"
 #include "Mesh.h"
 #include "Prefab.h"
 #include "Material.h"
-#include "Texture2D.h"
-
 #include "TextFile.h"
 #include "MeshFile.h"
 #include "ImageFile.h"
+#include "Texture2D.h"
+#include "Persistence.h"
 #include "MeshAssetFile.h"
 #include "MaterialAssetFile.h"
 #include "Texture2DAssetFile.h"

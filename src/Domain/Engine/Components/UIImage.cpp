@@ -4,6 +4,7 @@
 #include "GBuffer.h"
 #include "Material.h"
 #include "Texture2D.h"
+#include "GameObject.h"
 #include "MeshFactory.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"

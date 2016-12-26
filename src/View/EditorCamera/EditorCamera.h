@@ -3,11 +3,8 @@
 
 #include <cmath>
 
-#include "Bang.h"
-
 #include "Vector3.h"
 #include "EditorGameObject.h"
-#include "IWindowEventManagerListener.h"
 
 class Input;
 class Camera;

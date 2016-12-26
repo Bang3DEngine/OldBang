@@ -1,10 +1,17 @@
 #include "EditorScaleAxis.h"
 
 #include "Scene.h"
+#include "Camera.h"
 #include "Toolbar.h"
+#include "Matrix4.h"
+#include "Material.h"
+#include "Renderer.h"
+#include "Transform.h"
 #include "MeshFactory.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
+#include "EditorGameObject.h"
+#include "SingleLineRenderer.h"
 
 EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
                                  GameObject *attachedGameObject)

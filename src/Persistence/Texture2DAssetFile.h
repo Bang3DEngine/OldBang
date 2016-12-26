@@ -1,11 +1,13 @@
 #ifndef FILETEXTURE2DASSET_H
 #define FILETEXTURE2DASSET_H
 
-#include "stb_image.h"
-#include "Debug.h"
+#include <QPixmap>
+#include <QModelIndex>
+#include <QFileSystemModel>
 
 #include "File.h"
 
+class IInspectable;
 class Texture2DAssetFile : public File
 {
 public:

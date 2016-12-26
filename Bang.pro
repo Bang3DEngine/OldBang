@@ -195,7 +195,6 @@ HEADERS += \
     src/Domain/Graphics/GBuffer.h \
     src/Domain/Graphics/TextureRender.h \
     src/Domain/Graphics/VBO.h \
-    src/Domain/Graphics/TextureDepth.h \
     src/Domain/Graphics/Interfaces/IGLBindable.h \
     src/Domain/Graphics/Interfaces/IToString.h \
     src/Domain/Graphics/Interfaces/IGLIdable.h \
@@ -360,7 +359,6 @@ SOURCES += \
     src/Domain/Graphics/VAO.cpp \
     src/Domain/Graphics/Shader.cpp \
     src/Domain/Graphics/TextureRender.cpp \
-    src/Domain/Graphics/TextureDepth.cpp \
     src/Domain/Graphics/VBO.cpp \
     src/Domain/Graphics/Interfaces/IGLBindable.cpp \
     src/Domain/Engine/Components/Transform.cpp \

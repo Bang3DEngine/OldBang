@@ -1,15 +1,13 @@
 #ifndef EDITORSCALEAXIS_H
 #define EDITORSCALEAXIS_H
 
-#include "Bang.h"
 
-#include "Matrix4.h"
-#include "Material.h"
-#include "Transform.h"
 #include "EditorAxis.h"
-#include "EditorGameObject.h"
-#include "SingleLineRenderer.h"
 
+class Renderer;
+class GameObject;
+class EditorGameObject;
+class SingleLineRenderer;
 class EditorScaleAxis : public EditorAxis
 {
 private:

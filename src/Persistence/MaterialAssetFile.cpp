@@ -1,5 +1,8 @@
 #include "MaterialAssetFile.h"
 
+#include "XMLParser.h"
+#include "Persistence.h"
+
 #ifdef BANG_EDITOR
 #include "MaterialAssetFileInspectable.h"
 #endif

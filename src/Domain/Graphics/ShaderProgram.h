@@ -1,21 +1,19 @@
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
 
-#include "Bang.h"
-
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #include "Map.h"
 #include "Color.h"
-#include "Shader.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
-#include "Texture.h"
+
+#include "IGLIdable.h"
+#include "IToString.h"
 #include "IGLBindable.h"
 
+class Shader;
+class Texture;
 class ShaderProgram : public IGLIdable
                      ,public IGLBindable
                      ,public IToString

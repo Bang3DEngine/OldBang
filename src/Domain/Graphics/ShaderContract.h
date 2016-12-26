@@ -1,12 +1,10 @@
 #ifndef SHADERCONTRACT_H
 #define SHADERCONTRACT_H
 
-#include "Bang.h"
-
 //TODO: Add check of all variables beginning with ShaderNames_Prefix, to see
 //      if all of them have an existing name. Do this when loading shaders.
 
-
+#include "String.h"
 
 class ShaderContract
 {

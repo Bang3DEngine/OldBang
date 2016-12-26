@@ -1,11 +1,15 @@
 #ifndef FILEMESHASSET_H
 #define FILEMESHASSET_H
 
-#include "FileReader.h"
-#include "Debug.h"
+#include <QPixmap>
+#include <QModelIndex>
+#include <QFileSystemModel>
 
 #include "File.h"
+#include "String.h"
+#include "FileReader.h"
 
+class IInspectable;
 class MeshAssetFile : public File
 {
 private:

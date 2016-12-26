@@ -1,14 +1,13 @@
 #ifndef VBO_H
 #define VBO_H
 
-#include "Bang.h"
-
 #include <GL/glew.h>
 
 #include "IGLIdable.h"
 #include "IGLBindable.h"
 
-class VBO : public IGLIdable, public IGLBindable
+class VBO : public IGLIdable,
+            public IGLBindable
 {
 public:
     VBO();

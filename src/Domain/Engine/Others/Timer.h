@@ -1,11 +1,8 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "Bang.h"
-
-#include <functional>
 #include <thread>
-#include <chrono>
+#include <functional>
 
 class Timer
 {

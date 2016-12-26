@@ -1,15 +1,16 @@
 #ifndef VAO_H
 #define VAO_H
 
-#include "Bang.h"
-
 #include <GL/glew.h>
 
-#include "VBO.h"
-#include "Map.h"
-#include "ShaderProgram.h"
+#include "Array.h"
 
-class VAO : public IGLIdable, IGLBindable
+#include "IGLIdable.h"
+#include "IGLBindable.h"
+
+class VBO;
+class VAO : public IGLIdable,
+            public IGLBindable
 {
 private:
 

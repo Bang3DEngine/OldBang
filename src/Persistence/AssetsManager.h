@@ -5,10 +5,8 @@
 
 #include "Map.h"
 #include "Asset.h"
-#include "Persistence.h"
-#include "BehaviourManager.h"
-
 #include "XMLParser.h"
+#include "BehaviourManager.h"
 
 class AssetsManager
 {

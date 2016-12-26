@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "Camera.h"
+#include "Vector3.h"
 #include "Material.h"
 #include "Transform.h"
 #include "SceneManager.h"

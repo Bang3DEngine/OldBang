@@ -1,7 +1,12 @@
 #include "SystemUtils.h"
 
+#include <QLibrary>
+
 #include "Behaviour.h"
+#include "Persistence.h"
+#include "StringUtils.h"
 #include "SingletonManager.h"
+
 
 String SystemUtils::GetAllProjectObjects()
 {

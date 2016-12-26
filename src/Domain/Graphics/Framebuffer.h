@@ -1,18 +1,14 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
-#include "Bang.h"
-
 #include "Array.h"
 
 #include "Map.h"
 #include "Color.h"
-#include "Debug.h"
 #include "IGLIdable.h"
 #include "IGLBindable.h"
-#include "TextureDepth.h"
-#include "TextureRender.h"
 
+class TextureRender;
 class Framebuffer : public IGLBindable
                    ,public IGLIdable
 {

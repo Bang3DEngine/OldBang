@@ -2,9 +2,25 @@
 
 #include <QScrollBar>
 
-#include "EditorWindow.h"
+#include "Debug.h"
+
+#include "TextFile.h"
+#include "MeshFile.h"
+#include "ImageFile.h"
 #include "Hierarchy.h"
-#include "DragDropAgent.h"
+#include "Persistence.h"
+#include "EditorWindow.h"
+#include "MeshAssetFile.h"
+#include "MaterialAssetFile.h"
+#include "Texture2DAssetFile.h"
+#include "MeshFileInspectable.h"
+#include "TextFileInspectable.h"
+#include "ExplorerContextMenu.h"
+#include "ImageFileInspectable.h"
+#include "MeshAssetFileInspectable.h"
+#include "PrefabAssetFileInspectable.h"
+#include "MaterialAssetFileInspectable.h"
+#include "Texture2DAssetFileInspectable.h"
 
 Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 {

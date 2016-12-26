@@ -1,6 +1,12 @@
 #include "SelectionFramebuffer.h"
 
+#include "Scene.h"
+#include "Material.h"
+#include "Renderer.h"
+#include "GameObject.h"
 #include "EditorWindow.h"
+#include "TextureRender.h"
+#include "ShaderContract.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"

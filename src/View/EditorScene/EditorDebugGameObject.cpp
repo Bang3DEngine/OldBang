@@ -1,5 +1,8 @@
 #include "EditorDebugGameObject.h"
 
+#include "Time.h"
+#include "Gizmos.h"
+
 EditorDebugGameObject::EditorDebugGameObject() :
     EditorGameObject("EditorDebugGameObject")
 {
@@ -76,3 +79,11 @@ void EditorDebugGameObject::OnDrawGizmosOverlay()
     DrawLines(false);
 }
 
+
+
+EditorDebugGameObject::DebugLine::DebugLine(const Vector3 &origin, const Vector3 &destiny, const Color &color, float lineWidth, float livingTimeSecs, bool depthTest, bool screen) :
+    m_origin(origin), m_destiny(destiny), m_color(color),
+    m_depthTest(depthTest), m_lineWidth(lineWidth),
+    m_livingTimeSecs(livingTimeSecs), m_screen(screen)
+{
+}

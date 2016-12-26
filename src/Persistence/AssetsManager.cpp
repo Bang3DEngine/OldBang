@@ -4,6 +4,7 @@
 #include "FileReader.h"
 #include "FileWriter.h"
 #include "Application.h"
+#include "Persistence.h"
 #include "SceneManager.h"
 
 AssetsManager::AssetsManager()

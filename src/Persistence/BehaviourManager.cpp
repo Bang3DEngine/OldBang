@@ -1,5 +1,7 @@
 #include "BehaviourManager.h"
 
+#include <QLibrary>
+
 #include "Debug.h"
 #include "Persistence.h"
 #include "Application.h"

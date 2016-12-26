@@ -1,22 +1,16 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include "Bang.h"
-
 #include <GL/glew.h>
 
 #include "Array.h"
 
-#include <sstream>
-#include <fstream>
-#include <iostream>
-
-#include "Debug.h"
+#include "NamedEnum.h"
 #include "IGLIdable.h"
 #include "IToString.h"
-#include "ShaderPreprocessor.h"
 
-class Shader : public IToString, public IGLIdable
+class Shader : public IToString,
+               public IGLIdable
 {
 public:
 

@@ -2,10 +2,10 @@
 #define EDITORROTATEAXISGROUP_H
 
 #include "EditorGameObject.h"
-#include "EditorRotateAxis.h"
 
 class Toolbar;
 class MeshRenderer;
+class EditorRotateAxis;
 class EditorRotateAxisGroup : public EditorGameObject
 {
 private:

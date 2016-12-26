@@ -1,10 +1,7 @@
 #ifndef FONTASSETFILE_H
 #define FONTASSETFILE_H
 
-#include "Debug.h"
-
 #include "File.h"
-
 
 class FontAssetFile : public File
 {

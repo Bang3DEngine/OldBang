@@ -2,12 +2,7 @@
 #define BEHAVIOURMANAGERCOMPILETHREAD_H
 
 #include <QThread>
-#include <QLibrary>
-#include <functional>
 
-#include "Bang.h"
-
-#include "Map.h"
 #include "String.h"
 
 class BehaviourManager;

@@ -1,11 +1,13 @@
 #ifndef FILEMESH_H
 #define FILEMESH_H
 
-#include "FileReader.h"
-#include "Debug.h"
+#include <QPixmap>
+#include <QModelIndex>
+#include <QFileSystemModel>
 
 #include "File.h"
 
+class IInspectable;
 class MeshFile : public File
 {
     bool m_isTris = true;

@@ -1,6 +1,7 @@
 #include "EditorAxisPlane.h"
 
 #include "Material.h"
+#include "Transform.h"
 #include "EditorAxis.h"
 #include "MeshFactory.h"
 #include "MeshRenderer.h"

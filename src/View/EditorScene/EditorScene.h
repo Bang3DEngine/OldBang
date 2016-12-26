@@ -2,12 +2,11 @@
 #define EDITORSCENE_H
 
 #include "Scene.h"
-#include "EditorFloor.h"
-#include "EditorCamera.h"
-#include "SelectionFramebuffer.h"
-#include "EditorDebugGameObject.h"
-#include "EditorTranslateAxisGroup.h"
 
+class EditorFloor;
+class EditorCamera;
+class EditorDebugGameObject;
+class EditorTranslateAxisGroup;
 class EditorScene : public Scene
 {
 friend class Debug;

@@ -1,13 +1,12 @@
 #ifndef MATERIALASSETFILE_H
 #define MATERIALASSETFILE_H
 
-#include "Bang.h"
+#include <QPixmap>
 
 #include "File.h"
-#include "XMLParser.h"
-
-
 #include "Array.h"
+#include "String.h"
+#include "Vector4.h"
 
 class MaterialAssetFile : public File
 {

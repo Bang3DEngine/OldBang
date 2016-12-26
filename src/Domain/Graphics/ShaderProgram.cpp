@@ -1,5 +1,12 @@
 #include "ShaderProgram.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#include "Debug.h"
+#include "Shader.h"
+#include "Texture.h"
+
 ShaderProgram::ShaderProgram() : m_vshader(nullptr), m_fshader(nullptr)
 {
     m_idGL = glCreateProgram();

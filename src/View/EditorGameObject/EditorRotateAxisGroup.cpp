@@ -1,8 +1,12 @@
 #include "EditorRotateAxisGroup.h"
 
+#include "Gizmos.h"
+#include "Camera.h"
 #include "Toolbar.h"
+#include "Transform.h"
 #include "MeshRenderer.h"
 #include "CircleRenderer.h"
+#include "EditorRotateAxis.h"
 
 EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     : EditorGameObject("EditorRotateAxisGroup")

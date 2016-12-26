@@ -1,8 +1,12 @@
 #include "EditorAxis.h"
 
+#include "Input.h"
+#include "Camera.h"
 #include "Screen.h"
 #include "Toolbar.h"
 #include "Material.h"
+#include "Renderer.h"
+#include "Transform.h"
 #include "AssetsManager.h"
 
 EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,

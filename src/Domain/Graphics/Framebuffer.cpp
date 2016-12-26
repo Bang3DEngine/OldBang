@@ -1,5 +1,8 @@
 #include "Framebuffer.h"
 
+#include "Debug.h"
+#include "TextureRender.h"
+
 Framebuffer::Framebuffer(int width, int height) : m_width(width),
                                                   m_height(height),
                                                   m_depthAttachmentId(0)

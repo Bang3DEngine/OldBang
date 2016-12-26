@@ -4,15 +4,14 @@
 #include <iostream>
 #include <fstream>
 
-#include "XMLNode.h"
-#include "XMLParser.h"
-#include "IFileable.h"
+#include "String.h"
 
 class Rect;
 class Scene;
 class Asset;
 class String;
 class XMLNode;
+class IFileable;
 class FileWriter
 {
 private:

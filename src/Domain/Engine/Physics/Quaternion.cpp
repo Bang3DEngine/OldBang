@@ -4,6 +4,10 @@
 #include "Vector3.h"
 #include "Matrix4.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtx/transform.hpp"
+#include "glm/gtc/quaternion.hpp"
+
 Quaternion Quaternion::Identity = Quaternion();
 
 Quaternion::Quaternion() : glm::quat()

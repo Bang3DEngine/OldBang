@@ -1,10 +1,9 @@
 #ifndef EDITORSELECTIONGAMEOBJECT_H
 #define EDITORSELECTIONGAMEOBJECT_H
 
-#include "EditorBBox.h"
-#include "EditorAxisGroup.h"
 #include "EditorGameObject.h"
 
+class EditorAxisGroup;
 /**
  * @brief Contains all the GameObjects that are added
  * to the selected GameObject when selecting it.

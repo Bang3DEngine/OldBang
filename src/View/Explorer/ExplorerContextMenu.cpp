@@ -1,6 +1,7 @@
 #include "ExplorerContextMenu.h"
 
 #include "Explorer.h"
+#include "Persistence.h"
 
 ExplorerContextMenu::ExplorerContextMenu(Explorer *explorer) :
     ContextMenu(explorer), m_explorer(explorer)

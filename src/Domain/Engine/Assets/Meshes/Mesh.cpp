@@ -6,6 +6,7 @@
 #include "VBO.h"
 #include "IFileable.h"
 #include "FileReader.h"
+#include "ShaderProgram.h"
 #include "ShaderContract.h"
 
 Mesh::Mesh()

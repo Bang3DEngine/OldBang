@@ -2,6 +2,7 @@
 
 #include "Rect.h"
 #include "Material.h"
+#include "GameObject.h"
 #include "MeshFactory.h"
 #include "AssetsManager.h"
 #include "SelectionFramebuffer.h"

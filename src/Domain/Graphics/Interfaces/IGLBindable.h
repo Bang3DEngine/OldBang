@@ -1,11 +1,8 @@
 #ifndef IGLBINDABLE_H
 #define IGLBINDABLE_H
 
-#include "Bang.h"
-
-#include <GL/glew.h>
-#include <iostream>
 #include <stack>
+#include <GL/glew.h>
 
 #include "Map.h"
 

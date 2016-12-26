@@ -1,6 +1,9 @@
 #include "EditorBBox.h"
 
 #include "Material.h"
+#include "Transform.h"
+#include "MeshRenderer.h"
+#include "AssetsManager.h"
 
 Material *EditorBBox::s_boxMaterial = nullptr;
 

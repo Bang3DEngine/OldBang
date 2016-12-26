@@ -3,7 +3,9 @@
 
 #include "GameObject.h"
 
+class Material;
 class EditorAxis;
+class MeshRenderer;
 class EditorAxisPlane : public GameObject
 {
 private:

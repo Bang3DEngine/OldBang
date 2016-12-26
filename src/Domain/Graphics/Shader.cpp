@@ -1,5 +1,12 @@
 #include "Shader.h"
 
+#include <sstream>
+#include <fstream>
+#include <iostream>
+
+#include "Debug.h"
+#include "ShaderPreprocessor.h"
+
 Shader::Shader(Shader::Type t) : m_sourceCode(""), m_filepath(""), m_type(t)
 {
 }

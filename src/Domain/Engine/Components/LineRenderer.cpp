@@ -4,7 +4,9 @@
 #include "VAO.h"
 #include "Material.h"
 #include "Transform.h"
+#include "ShaderProgram.h"
 #include "AssetsManager.h"
+#include "ShaderContract.h"
 
 LineRenderer::LineRenderer()
 {

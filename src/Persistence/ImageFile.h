@@ -1,9 +1,6 @@
 #ifndef FILEIMAGE_H
 #define FILEIMAGE_H
 
-#include "stb_image.h"
-#include "Debug.h"
-
 #include "File.h"
 
 class ImageFile : public File

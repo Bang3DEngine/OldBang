@@ -1,10 +1,6 @@
 #ifndef STRINGUTILS_H
 #define STRINGUTILS_H
 
-#include <sstream>
-#include <iomanip>
-#include <algorithm>
-
 #include "Array.h"
 #include "String.h"
 

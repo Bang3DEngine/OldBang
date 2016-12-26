@@ -3,6 +3,7 @@
 #include "File.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
+#include "Persistence.h"
 
 AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :

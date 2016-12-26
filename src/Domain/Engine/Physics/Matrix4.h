@@ -1,9 +1,8 @@
 #ifndef MATRIX4_H
 #define MATRIX4_H
 
-#include <sstream>
-
 #include "Vector4.h"
+
 #include "glm/glm.hpp"
 #include "glm/gtx/transform.hpp"
 

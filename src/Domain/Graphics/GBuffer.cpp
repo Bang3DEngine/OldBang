@@ -2,6 +2,7 @@
 
 #include "VAO.h"
 #include "Mesh.h"
+#include "Rect.h"
 #include "Scene.h"
 #include "Color.h"
 #include "Array.h"
@@ -11,6 +12,8 @@
 #include "MeshFactory.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
+#include "TextureRender.h"
+#include "ShaderContract.h"
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {

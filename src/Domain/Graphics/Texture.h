@@ -1,15 +1,14 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "Bang.h"
-
 #include <GL/glew.h>
 
-#include "IGLBindable.h"
+#include "NamedEnum.h"
 #include "IGLIdable.h"
+#include "IGLBindable.h"
 
-class Texture : public IGLIdable
-               ,protected IGLBindable // Only for internal use
+class Texture : public IGLIdable,
+                protected IGLBindable // Only for internal use
 {
 
 private:

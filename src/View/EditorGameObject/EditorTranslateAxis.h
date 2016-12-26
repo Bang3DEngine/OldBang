@@ -1,15 +1,10 @@
 #ifndef EDITORTRANSLATEAXIS_H
 #define EDITORTRANSLATEAXIS_H
 
-#include "Bang.h"
-
-#include "Matrix4.h"
-#include "Material.h"
-#include "Transform.h"
 #include "EditorAxis.h"
-#include "EditorGameObject.h"
-#include "SingleLineRenderer.h"
 
+class EditorGameObject;
+class SingleLineRenderer;
 class EditorTranslateAxis : public EditorAxis
 {
 private:

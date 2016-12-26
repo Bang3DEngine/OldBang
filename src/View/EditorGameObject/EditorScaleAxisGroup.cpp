@@ -1,6 +1,7 @@
 #include "EditorScaleAxisGroup.h"
 
-#include "EditorWindow.h"
+#include "EditorAxis.h"
+#include "EditorScaleAxis.h"
 
 EditorScaleAxisGroup::EditorScaleAxisGroup(GameObject *attachedGameObject) :
     EditorGameObject("EditorScaleAxisGroup")

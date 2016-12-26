@@ -2,16 +2,12 @@
 #define BEHAVIOURMANAGER_H
 
 #include <set>
-#include <QMutex>
-#include <QLibrary>
-#include <functional>
-
-#include "Bang.h"
 
 #include "Map.h"
 #include "List.h"
 #include "String.h"
 
+class QLibrary;
 class BehaviourHolder;
 class BehaviourManagerCompileThread;
 

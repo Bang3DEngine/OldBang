@@ -1,8 +1,6 @@
 #ifndef FILEREADER_H
 #define FILEREADER_H
 
-#include "Bang.h"
-
 #include "Array.h"
 
 #include <fstream>
@@ -11,9 +9,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <string.h>
-
-#include "stb_image.h"
-#include "glm/glm.hpp"
 
 #include "Map.h"
 #include "Rect.h"

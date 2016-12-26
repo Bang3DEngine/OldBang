@@ -1,6 +1,7 @@
 #include "EditorSelectionGameObject.h"
 
-#include "EditorWindow.h"
+#include "EditorBBox.h"
+#include "EditorAxisGroup.h"
 
 EditorSelectionGameObject::EditorSelectionGameObject(GameObject *attachedGameObject) :
     EditorGameObject("EditorSelectionGameObject")
