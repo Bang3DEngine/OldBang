@@ -39,6 +39,10 @@
              <property name="text">
               <string>T</string>
              </property>
+             <property name="icon">
+              <iconset resource="qdarkstyle/style.qrc">
+               <normaloff>:/qss_icons/Icons/translate.png</normaloff>:/qss_icons/Icons/translate.png</iconset>
+             </property>
              <property name="checkable">
               <bool>true</bool>
              </property>
@@ -61,6 +65,10 @@
              <property name="text">
               <string>R</string>
              </property>
+             <property name="icon">
+              <iconset resource="qdarkstyle/style.qrc">
+               <normaloff>:/qss_icons/Icons/rotate.png</normaloff>:/qss_icons/Icons/rotate.png</iconset>
+             </property>
              <property name="checkable">
               <bool>true</bool>
              </property>
@@ -70,6 +78,10 @@
             <widget class="QToolButton" name="buttonScaleMode">
              <property name="text">
               <string>S</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qdarkstyle/style.qrc">
+               <normaloff>:/qss_icons/Icons/scale.png</normaloff>:/qss_icons/Icons/scale.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -120,6 +132,10 @@
              <property name="text">
               <string>Play</string>
              </property>
+             <property name="icon">
+              <iconset resource="qdarkstyle/style.qrc">
+               <normaloff>:/qss_icons/Icons/play.png</normaloff>:/qss_icons/Icons/play.png</iconset>
+             </property>
              <property name="checkable">
               <bool>true</bool>
              </property>
@@ -129,6 +145,10 @@
             <widget class="QToolButton" name="buttonStop">
              <property name="text">
               <string>Stop</string>
+             </property>
+             <property name="icon">
+              <iconset resource="qdarkstyle/style.qrc">
+               <normaloff>:/qss_icons/Icons/stop.png</normaloff>:/qss_icons/Icons/stop.png</iconset>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -489,6 +509,10 @@
              <property name="text">
               <string>Up</string>
              </property>
+             <property name="icon">
+              <iconset resource="qdarkstyle/style.qrc">
+               <normaloff>:/qss_icons/Icons/dirUpIcon.png</normaloff>:/qss_icons/Icons/dirUpIcon.png</iconset>
+             </property>
             </widget>
            </item>
            <item>
@@ -496,7 +520,24 @@
              <property name="text">
               <string>Change view mode</string>
              </property>
+             <property name="icon">
+              <iconset resource="qdarkstyle/style.qrc">
+               <normaloff>:/qss_icons/Icons/eye.png</normaloff>:/qss_icons/Icons/eye.png</iconset>
+             </property>
             </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>
@@ -591,6 +632,10 @@
          <widget class="QPushButton" name="buttonLoggerClear">
           <property name="text">
            <string>Clear</string>
+          </property>
+          <property name="icon">
+           <iconset resource="qdarkstyle/style.qrc">
+            <normaloff>:/qss_icons/Icons/clear.png</normaloff>:/qss_icons/Icons/clear.png</iconset>
           </property>
          </widget>
         </item>
@@ -854,7 +899,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="qdarkstyle/style.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonLoggerClear</sender>

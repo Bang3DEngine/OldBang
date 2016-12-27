@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
     QFont font;
     font.setFamily(font.defaultFamily());
-    font.setPointSize(7);
+    font.setPointSize(8);
     app.setFont(font);
 
     EditorWindow::InitFromMainBinary(window, &app);

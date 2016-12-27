@@ -1,0 +1,25 @@
+<RCC>
+  <qresource prefix="Bang">
+    <file>Icons/translate.png</file>
+    <file>Icons/scale.png</file>
+    <file>Icons/rotate.png</file>
+    <file>Icons/clear.png</file>
+    <file>Icons/stop.png</file>
+    <file>Icons/play.png</file>
+    <file>Icons/BehaviourIcon.png</file>
+    <file>Icons/brackets.png</file>
+    <file>Icons/capsule.png</file>
+    <file>Icons/dirUpIcon.png</file>
+    <file>Icons/eye.png</file>
+    <file>Icons/filePaper.png</file>
+    <file>Icons/MaterialAssetIcon.png</file>
+    <file>Icons/MaterialAssetIcon.psd</file>
+    <file>Icons/mesh.png</file>
+    <file>Icons/MeshAssetIcon.png</file>
+    <file>Icons/NoAssetIcon.png</file>
+    <file>Icons/OtherFileIcon.png</file>
+    <file>Icons/PrefabAssetIcon.png</file>
+    <file>Icons/sphere.png</file>
+    <file>Icons/textFile.png</file>
+  </qresource>
+</RCC>

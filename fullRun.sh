@@ -1,9 +1,17 @@
 #!/bin/bash
 
 BUILD_MODE="$1"
+./fullCompile.sh $1
+
+BUILD_MODE="$1"
+if [ -z "$BUILD_MODE" ]
+then
+	BUILD_MODE="EDITOR"
+fi
+
 if [ "${BUILD_MODE}" = "EDITOR" ]
 then
-	./fullCompile.sh EDITOR && ./BangEditor.exe
+	./BangEditor.exe
 else
-	./fullCompile.sh GAME && ./Game.exe
+	./Game.exe
 fi
