@@ -50,12 +50,12 @@ LIBS += \
 EDITOR {
     DEFINES += BANG_EDITOR
     RESOURCES = Assets/Engine/qdarkstyle/style.qrc
-    OBJECTS_DIR += objEditor/
+    OBJECTS_DIR = objEditor/
     TARGET = BangEditor.exe
 }
 
 GAME {
-    OBJECTS_DIR += objGame/
+    OBJECTS_DIR = objGame/
     TARGET = Game.exe
 }
 
