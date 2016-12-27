@@ -1,11 +1,10 @@
 #ifndef INSPECTORMESHFILEWIDGET_H
 #define INSPECTORMESHFILEWIDGET_H
 
-
-
 #include "MeshFile.h"
-#include "InspectorWidget.h"
+#include "IInspectable.h"
 
+class XMLNode;
 class MeshFileInspectable: public IInspectable
 {
 private:

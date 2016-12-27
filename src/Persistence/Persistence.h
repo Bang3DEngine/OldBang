@@ -1,7 +1,7 @@
 #ifndef PERSISTENCE_H
 #define PERSISTENCE_H
 
-#include "Bang.h"
+#include "String.h"
 
 class Explorer;
 class Persistence

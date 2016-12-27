@@ -3,7 +3,9 @@
 
 #include <cmath>
 
+#include "Vector2.h"
 #include "Vector3.h"
+#include "Quaternion.h"
 #include "EditorGameObject.h"
 
 class Input;

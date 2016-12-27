@@ -1,10 +1,10 @@
 #ifndef MESHASSETFILEINSPECTABLE_H
 #define MESHASSETFILEINSPECTABLE_H
 
-#include "XMLNode.h"
 #include "IInspectable.h"
 #include "MeshAssetFile.h"
 
+class XMLNode;
 class MeshAssetFileInspectable : public IInspectable
 {
 private:

@@ -1,6 +1,7 @@
 #include "Material.h"
 
 #include "Screen.h"
+#include "Shader.h"
 #include "Vector4.h"
 #include "Texture.h"
 #include "Texture2D.h"

@@ -1,5 +1,6 @@
 #include "Component.h"
 
+#include "XMLNode.h"
 #include "Transform.h"
 #include "GameObject.h"
 

@@ -1,6 +1,12 @@
 #include "Hierarchy.h"
 
+#include <chrono>
+#include <algorithm>
+
+#include "Bang.h"
 #include "Debug.h"
+#include "Scene.h"
+#include "GameObject.h"
 #include "EditorWindow.h"
 #include "SceneManager.h"
 #include "ShortcutManager.h"

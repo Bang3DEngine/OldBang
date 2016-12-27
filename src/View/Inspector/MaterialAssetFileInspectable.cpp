@@ -1,6 +1,7 @@
 #include "MaterialAssetFileInspectable.h"
 
 #include "Scene.h"
+#include "Material.h"
 #include "Renderer.h"
 #include "FileWriter.h"
 #include "SceneManager.h"

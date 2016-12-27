@@ -2,6 +2,7 @@
 
 #include <QScrollBar>
 
+#include "Bang.h"
 #include "Debug.h"
 #include "UIText.h"
 #include "Canvas.h"
@@ -15,6 +16,7 @@
 #include "EditorWindow.h"
 #include "MeshRenderer.h"
 #include "CircleRenderer.h"
+#include "ComponentWidget.h"
 #include "BehaviourHolder.h"
 #include "DirectionalLight.h"
 #include "SingleLineRenderer.h"

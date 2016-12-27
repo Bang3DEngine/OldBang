@@ -3,24 +3,13 @@
 
 #include <GL/glew.h>
 
-#include <QThread>
-
-#include "Array.h"
 #include <chrono>
 #include <QTimer>
+#include <QThread>
 #include <QGLWidget>
 #include <QApplication>
 
-#include "Bang.h"
-
-#include "VAO.h"
-#include "Time.h"
-#include "Input.h"
-#include "Scene.h"
-#include "Prefab.h"
-#include "Shader.h"
-#include "MeshRenderer.h"
-#include "ShaderProgram.h"
+#include "Array.h"
 
 #ifdef BANG_EDITOR
 #include "IDragDropListener.h"
@@ -30,6 +19,7 @@ class IDragDropListener { }; // To solve a Qt moc bug
 class IShortcutListener { }; // To solve a Qt moc bug
 #endif
 
+class GameObject;
 class GameWindow;
 class EditorWindow;
 class GraphicPipeline;

@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "Camera.h"
+#include "XMLNode.h"
 #include "Transform.h"
 #include "SceneManager.h"
 

@@ -4,13 +4,18 @@
 
 #include "Debug.h"
 
+#include "Bang.h"
+#include "Prefab.h"
 #include "TextFile.h"
 #include "MeshFile.h"
 #include "ImageFile.h"
 #include "Hierarchy.h"
+#include "GameObject.h"
+#include "FileWriter.h"
 #include "Persistence.h"
 #include "EditorWindow.h"
 #include "MeshAssetFile.h"
+#include "ShortcutManager.h"
 #include "MaterialAssetFile.h"
 #include "Texture2DAssetFile.h"
 #include "MeshFileInspectable.h"

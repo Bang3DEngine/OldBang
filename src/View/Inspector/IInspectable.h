@@ -1,8 +1,7 @@
 #ifndef IINSPECTABLE_H
 #define IINSPECTABLE_H
 
-#include "XMLNode.h"
-
+class XMLNode;
 class InspectorWidget;
 class IInspectable
 {

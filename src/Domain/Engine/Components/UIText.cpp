@@ -1,5 +1,7 @@
 #include "UIText.h"
 
+#include "Bang.h"
+
 #include "Font.h"
 #include "Material.h"
 #include "Transform.h"

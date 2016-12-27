@@ -10,9 +10,12 @@
 #include "GameWindow.h"
 #endif
 
+#include "Bang.h"
+#include "Prefab.h"
 #include "Camera.h"
 #include "Material.h"
 #include "Transform.h"
+#include "GameObject.h"
 #include "Application.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"

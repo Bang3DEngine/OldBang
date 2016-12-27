@@ -2,9 +2,9 @@
 #define TEXTFILEINSPECTABLE_H
 
 #include "TextFile.h"
-#include "FileWriter.h"
 #include "IInspectable.h"
 
+class XMLNode;
 class TextFileInspectable : public IInspectable
 {
 private:

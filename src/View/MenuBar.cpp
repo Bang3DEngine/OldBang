@@ -1,6 +1,8 @@
 #include "MenuBar.h"
 
+#include "Bang.h"
 #include "Font.h"
+#include "Mesh.h"
 #include "Screen.h"
 #include "Prefab.h"
 #include "Camera.h"
@@ -17,6 +19,7 @@
 #include "Persistence.h"
 #include "EditorScene.h"
 #include "Application.h"
+#include "GameBuilder.h"
 #include "EditorCamera.h"
 #include "SceneManager.h"
 #include "EditorWindow.h"

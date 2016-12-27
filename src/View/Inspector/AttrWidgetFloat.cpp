@@ -1,5 +1,11 @@
 #include "AttrWidgetFloat.h"
 
+#include <QVBoxLayout>
+
+#include "StringUtils.h"
+#include "XMLAttribute.h"
+#include "InspectorWidget.h"
+
 AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
                                  InspectorWidget *inspectorWidget,
                                  bool isSubWidget) :
@@ -58,3 +64,78 @@ void AttrWidgetFloat::OnLineEditFocusOut()
 }
 
 
+
+
+FloatComponentSlotSpinBox::FloatComponentSlotSpinBox() : QLineEdit()
+{
+    //connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
+    setMinimumWidth(15);
+    setFixedHeight(18);
+    //AdjustStep();
+    installEventFilter(this);
+}
+
+void FloatComponentSlotSpinBox::focusInEvent(QFocusEvent *event)
+{
+    QLineEdit::focusInEvent(event);
+    //AdjustStep();
+    QTimer::singleShot(50, this, SLOT(SelectAll()));
+    static_cast<AttrWidgetFloat*>(parent())->OnLineEditFocusIn();
+}
+
+void FloatComponentSlotSpinBox::focusOutEvent(QFocusEvent *event)
+{
+    QLineEdit::focusOutEvent(event);
+    //AdjustStep();
+    static_cast<AttrWidgetFloat*>(parent())->OnLineEditFocusOut();
+}
+
+void FloatComponentSlotSpinBox::keyPressEvent(QKeyEvent *event)
+{
+    QLineEdit::keyPressEvent(event);
+
+    if (event->key() == Qt::Key::Key_Enter)
+    {
+        clearFocus();
+    }
+    else if (event->key() == Qt::Key::Key_Up)
+    {
+    }
+    else if (event->key() == Qt::Key::Key_Down)
+    {
+    }
+}
+
+bool FloatComponentSlotSpinBox::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::Wheel && obj == this)
+    {
+        return true; // Block wheel event :D
+    }
+
+    return false;
+}
+
+void FloatComponentSlotSpinBox::SetFloat(float f)
+{
+    String str = StringUtils::FromFloat(f, 2);
+    setText(QString::fromStdString(str));
+}
+
+float FloatComponentSlotSpinBox::GetFloat() const
+{
+    String str = text().toStdString();
+    StringUtils::Replace(&str, ",", ".");
+    return StringUtils::ToFloat(str);
+}
+
+void FloatComponentSlotSpinBox::AdjustStep()
+{
+    //if (std::abs(v) <= 1.0f) setSingleStep(0.1f);
+    //else setSingleStep( pow(10.0, int(log10(v == 0.0f ? 0.1f : std::abs(v)))-1) );
+}
+
+void FloatComponentSlotSpinBox::SelectAll()
+{
+    selectAll();
+}

@@ -3,6 +3,7 @@
 #include <functional>
 
 #include "Box.h"
+#include "Bang.h"
 #include "Scene.h"
 #include "Camera.h"
 #include "GBuffer.h"

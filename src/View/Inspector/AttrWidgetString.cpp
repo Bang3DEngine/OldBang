@@ -1,5 +1,10 @@
 #include "AttrWidgetString.h"
 
+#include <QVBoxLayout>
+
+#include "InspectorWidget.h"
+
+
 AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
                                    InspectorWidget *inspectorWidget) :
     AttributeWidget(xmlAttribute, inspectorWidget, false, true,

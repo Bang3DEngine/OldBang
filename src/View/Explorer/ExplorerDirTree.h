@@ -1,17 +1,13 @@
 #ifndef EXPLORERDIRLIST_H
 #define EXPLORERDIRLIST_H
 
-
-
 #include <QTreeView>
-#include <QMouseEvent>
-#include <QToolButton>
-#include <QFileSystemModel>
 
-#include "Bang.h"
-#include "Debug.h"
-#include "Explorer.h"
+#include "String.h"
 
+class QTimer;
+class Explorer;
+class QFileSystemModel;
 //Directory list at the left of the Explorer itself
 class ExplorerDirTree : public QTreeView
 {

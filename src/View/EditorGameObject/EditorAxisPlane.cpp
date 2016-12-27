@@ -1,5 +1,6 @@
 #include "EditorAxisPlane.h"
 
+#include "Bang.h"
 #include "Material.h"
 #include "Transform.h"
 #include "EditorAxis.h"

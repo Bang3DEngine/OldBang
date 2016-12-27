@@ -1,8 +1,10 @@
 #ifndef COMPONENTCLIPBOARD_H
 #define COMPONENTCLIPBOARD_H
 
-#include "Component.h"
+#include "String.h"
 
+class Component;
+class GameObject;
 class ComponentClipboard
 {
 private:

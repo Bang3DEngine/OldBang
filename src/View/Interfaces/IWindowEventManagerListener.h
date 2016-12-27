@@ -3,9 +3,6 @@
 
 #include "List.h"
 
-#include "Bang.h"
-
-#include "File.h"
 #include "MenuBar.h"
 
 class GameObject;

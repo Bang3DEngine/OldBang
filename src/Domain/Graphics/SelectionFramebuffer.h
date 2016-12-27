@@ -13,6 +13,7 @@ class Scene;
 class Material;
 class Renderer;
 class GameObject;
+class ShaderProgram;
 
 /**
  * @brief This is the buffer where each GameObject is drawn into with a unique colour.

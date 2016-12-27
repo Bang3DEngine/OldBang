@@ -1,5 +1,7 @@
 #include "EditorBBox.h"
 
+#include "Bang.h"
+#include "Mesh.h"
 #include "Material.h"
 #include "Transform.h"
 #include "MeshRenderer.h"

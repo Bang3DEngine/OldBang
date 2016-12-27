@@ -1,5 +1,7 @@
 #include "AttrWidgetButton.h"
 
+#include <QVBoxLayout>
+
 AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
                                    InspectorWidget *inspectorWidget) :
     AttributeWidget(xmlAttribute, inspectorWidget, false, false)

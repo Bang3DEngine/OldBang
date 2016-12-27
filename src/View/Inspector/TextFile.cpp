@@ -1,5 +1,6 @@
 #include "TextFile.h"
 
+#include "FileReader.h"
 #include "TextFileInspectable.h"
 
 TextFile::TextFile(const QFileSystemModel *model, const QModelIndex &index)

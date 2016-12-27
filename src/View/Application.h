@@ -1,14 +1,14 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <iostream>
-#include "Array.h"
 
 #include <QTimer>
+#include <iostream>
 #include <QKeyEvent>
 #include <QApplication>
 
 #include "Map.h"
+#include "Array.h"
 
 class Scene;
 class SceneManager;

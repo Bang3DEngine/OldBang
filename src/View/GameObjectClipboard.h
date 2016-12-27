@@ -3,8 +3,8 @@
 
 #include "Map.h"
 #include "List.h"
-#include "GameObject.h"
 
+class GameObject;
 class GameObjectClipboard
 {
 private:

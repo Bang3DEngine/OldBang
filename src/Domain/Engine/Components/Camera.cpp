@@ -1,8 +1,10 @@
 #include "Camera.h"
 
 #include "Mesh.h"
+#include "Scene.h"
 #include "Screen.h"
 #include "Transform.h"
+#include "GameObject.h"
 #include "FileReader.h"
 #include "MeshRenderer.h"
 #include "AssetsManager.h"

@@ -1,12 +1,12 @@
 #ifndef ATTRWIDGETBOOL_H
 #define ATTRWIDGETBOOL_H
 
-
-
 #include <QTimer>
+#include <QCheckBox>
 #include <QFocusEvent>
-#include <QDoubleSpinBox>
 
+#include "XMLAttribute.h"
+#include "InspectorWidget.h"
 #include "AttributeWidget.h"
 
 class CheckboxWidget;

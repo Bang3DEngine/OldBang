@@ -1,7 +1,10 @@
 #include "ComponentWidgetContextMenu.h"
 
 #include "Inspector.h"
+#include "Component.h"
+#include "GameObject.h"
 #include "ComponentWidget.h"
+#include "ComponentClipboard.h"
 
 ComponentWidgetContextMenu::
     ComponentWidgetContextMenu(ComponentWidget *componentWidget) :

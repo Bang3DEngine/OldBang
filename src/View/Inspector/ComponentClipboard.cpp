@@ -1,5 +1,6 @@
 #include "ComponentClipboard.h"
 
+#include "Component.h"
 #include "GameObject.h"
 
 Component* ComponentClipboard::s_copiedComponent = nullptr;

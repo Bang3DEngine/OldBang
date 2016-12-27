@@ -1,5 +1,6 @@
 #include "Input.h"
 
+#include "Time.h"
 #include "Screen.h"
 #include "Application.h"
 #include "SingletonManager.h"

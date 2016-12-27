@@ -1,17 +1,12 @@
 ﻿#ifndef INSPECTORASSETSW_H
 #define INSPECTORASSETSW_H
 
-#include "Array.h"
-
-#include <QFileDialog>
 #include <QDir>
+#include <QLineEdit>
 
-#include "Asset.h"
-#include "Mesh.h"
-#include "Explorer.h"
-#include "FileDialog.h"
+#include "String.h"
 #include "AttributeWidget.h"
-#include "WindowEventManager.h"
+#include "IWindowEventManagerListener.h"
 
 class FileLineEdit;
 class AttrWidgetFile : public AttributeWidget,

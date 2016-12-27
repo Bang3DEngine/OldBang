@@ -1,5 +1,8 @@
 #include "ImageFileInspectable.h"
 
+#include "XMLNode.h"
+#include "InspectorWidget.h"
+
 ImageFileInspectable::ImageFileInspectable(const ImageFile &fileImage) :
     m_fileImage(fileImage)
 {

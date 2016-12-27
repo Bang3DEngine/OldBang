@@ -3,6 +3,8 @@
 ./updateUI.sh
 echo 
 
+NUM_THREADS=16
+
 command_exists () {
     type "$1" &> /dev/null ;
 }
@@ -18,7 +20,7 @@ fi
 qmake "BUILD_MODE=$1"
 if command_exists colormake
 then
-	colormake -j8
+	colormake -j${NUM_THREADS}
 else
-	make -j8
+	make -j${NUM_THREADS}
 fi

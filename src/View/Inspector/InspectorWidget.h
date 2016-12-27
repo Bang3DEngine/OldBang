@@ -1,12 +1,8 @@
 #ifndef INSPECTORWIDGET_H
 #define INSPECTORWIDGET_H
 
-#include "Bang.h"
-
-
 #include <iomanip>
 #include <sstream>
-#include <functional>
 
 #include <QLabel>
 #include <QLayout>

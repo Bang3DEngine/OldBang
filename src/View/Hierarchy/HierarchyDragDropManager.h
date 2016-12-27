@@ -1,13 +1,11 @@
 #ifndef HIERARCHYDRAGDROPMANAGER_H
 #define HIERARCHYDRAGDROPMANAGER_H
 
-#include <QTreeWidgetItem>
-
-#include "List.h"
-#include "GameObject.h"
 #include "IDragDropListener.h"
 
+class File;
 class Hierarchy;
+class GameObject;
 class HierarchyDragDropManager : public IDragDropListener
 {
 private:

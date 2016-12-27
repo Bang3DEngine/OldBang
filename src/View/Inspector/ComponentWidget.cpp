@@ -1,7 +1,6 @@
 #include "ComponentWidget.h"
 
 #include "Component.h"
-#include "GameObject.h"
 #include "EditorWindow.h"
 
 ComponentWidget::ComponentWidget(Component *relatedComponent) :

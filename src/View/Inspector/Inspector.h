@@ -1,13 +1,10 @@
 #ifndef LISTINSPECTOR_H
 #define LISTINSPECTOR_H
 
-#include "Bang.h"
-
 #include <QLabel>
 #include <QListWidget>
 
 #include "Map.h"
-#include "ComponentWidget.h"
 #include "InspectorContextMenu.h"
 #include "PrefabAssetFileInspectable.h"
 #include "IWindowEventManagerListener.h"

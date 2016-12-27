@@ -1,5 +1,7 @@
 #include "SingleLineRenderer.h"
 
+#include "XMLNode.h"
+
 SingleLineRenderer::SingleLineRenderer()
 {
     m_points.Resize(2);
@@ -19,7 +21,10 @@ const String SingleLineRenderer::ToString() const
     return "SingleLineRenderer";
 }
 
-String SingleLineRenderer::GetName() const { return "SingleLineRenderer"; }
+String SingleLineRenderer::GetName() const
+{
+    return "SingleLineRenderer";
+}
 
 void SingleLineRenderer::CloneInto(ICloneable *clone) const
 {

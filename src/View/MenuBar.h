@@ -1,14 +1,12 @@
 #ifndef MENUBAR_H
 #define MENUBAR_H
 
-#include "Bang.h"
-
 #include <QMenuBar>
 #include <QMessageBox>
 
-#include "Mesh.h"
-#include "GameBuilder.h"
+#include "String.h"
 
+class Mesh;
 class GameObject;
 class WindowEventManager;
 class MenuBar : public QMenuBar

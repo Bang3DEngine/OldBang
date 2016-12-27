@@ -3,7 +3,7 @@
 
 #include <QPushButton>
 
-#include "XMLNode.h"
+#include "XMLAttribute.h"
 #include "AttributeWidget.h"
 #include "IAttrWidgetButtonListener.h"
 

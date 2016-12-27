@@ -1,9 +1,15 @@
 #include "AttrWidgetFile.h"
 
+#include <QLabel>
+#include <QPushButton>
+#include <QHBoxLayout>
+
 #include "File.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
+#include "FileDialog.h"
 #include "Persistence.h"
+#include "InspectorWidget.h"
 
 AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :

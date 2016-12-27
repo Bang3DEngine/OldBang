@@ -4,6 +4,7 @@
 
 #include "VAO.h"
 #include "VBO.h"
+#include "XMLNode.h"
 #include "IFileable.h"
 #include "FileReader.h"
 #include "ShaderProgram.h"

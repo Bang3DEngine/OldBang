@@ -1,11 +1,7 @@
 #ifndef LISTINSPECTORITEMWIDGET_H
 #define LISTINSPECTORITEMWIDGET_H
 
-#include "Bang.h"
-
-#include "GameObject.h"
 #include "InspectorWidget.h"
-#include "ComponentClipboard.h"
 #include "ComponentWidgetContextMenu.h"
 
 class Component;

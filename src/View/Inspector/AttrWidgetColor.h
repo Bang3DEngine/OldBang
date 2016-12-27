@@ -3,10 +3,13 @@
 
 #include <QColorDialog>
 
+#include "Color.h"
+#include "XMLAttribute.h"
+#include "InspectorWidget.h"
 #include "AttributeWidget.h"
 
-class ColorDialog;
 class ColorLabel;
+class ColorDialog;
 class AttrWidgetColor : public AttributeWidget
 {
     Q_OBJECT

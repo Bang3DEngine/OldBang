@@ -1,6 +1,7 @@
 #ifndef CONTEXTMENU_H
 #define CONTEXTMENU_H
 
+#include <QPoint>
 #include <QWidget>
 
 class ContextMenu : public QObject

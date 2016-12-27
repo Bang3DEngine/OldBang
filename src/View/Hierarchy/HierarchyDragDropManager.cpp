@@ -1,7 +1,12 @@
 #include "HierarchyDragDropManager.h"
 
+#include <QTreeWidgetItem>
+
+#include "File.h"
+#include "Prefab.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
+#include "GameObject.h"
 #include "SceneManager.h"
 
 HierarchyDragDropManager::HierarchyDragDropManager(Hierarchy *hierarchy) :

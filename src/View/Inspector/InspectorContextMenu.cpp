@@ -1,7 +1,12 @@
 #include "InspectorContextMenu.h"
 
+#include <QMenu>
+#include <QAction>
+
 #include "Inspector.h"
 #include "InspectorWidget.h"
+#include "ComponentWidget.h"
+#include "ComponentClipboard.h"
 
 InspectorContextMenu::InspectorContextMenu(Inspector *inspector)
     : ContextMenu(inspector), m_inspector(inspector)

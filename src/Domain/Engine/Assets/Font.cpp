@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 
+#include "XMLNode.h"
 #include "Texture2D.h"
 #include "FontSheetCreator.h"
 

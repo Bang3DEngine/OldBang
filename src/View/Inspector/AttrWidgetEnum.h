@@ -1,12 +1,11 @@
 #ifndef INSPECTORCOMPONENTENUMSLOTWIDGET_H
 #define INSPECTORCOMPONENTENUMSLOTWIDGET_H
 
-#include "Array.h"
-
 #include <QTimer>
-#include <QFocusEvent>
 #include <QComboBox>
 
+#include "XMLAttribute.h"
+#include "InspectorWidget.h"
 #include "AttributeWidget.h"
 
 class AttrWidgetEnum  : public AttributeWidget

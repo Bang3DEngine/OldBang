@@ -5,8 +5,10 @@
 #include "Renderer.h"
 #include "GameObject.h"
 #include "EditorWindow.h"
+#include "ShaderProgram.h"
 #include "TextureRender.h"
 #include "ShaderContract.h"
+#include "EditorGameObject.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"

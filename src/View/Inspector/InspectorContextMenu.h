@@ -1,6 +1,8 @@
 #ifndef INSPECTORCONTEXTMENU_H
 #define INSPECTORCONTEXTMENU_H
 
+#include <QPoint>
+
 #include "ContextMenu.h"
 
 class Inspector;

@@ -1,5 +1,6 @@
 #include "EditorWindow.h"
 
+#include "Debug.h"
 #include "Toolbar.h"
 #include "SingletonManager.h"
 #include "WindowEventManager.h"

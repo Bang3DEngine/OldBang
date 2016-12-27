@@ -1,8 +1,10 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "Array.h"
+#include <GL/glew.h>
 
+#include "Rect.h"
+#include "Array.h"
 #include "NamedEnum.h"
 #include "Component.h"
 

@@ -1,5 +1,8 @@
 #include "TextFileInspectable.h"
 
+#include "XMLNode.h"
+#include "FileWriter.h"
+
 TextFileInspectable::TextFileInspectable(const TextFile &textFile) :
     m_textFile(textFile)
 {

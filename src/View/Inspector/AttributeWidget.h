@@ -1,12 +1,15 @@
 #ifndef INSPECTORSW_H
 #define INSPECTORSW_H
 
-#include <QWidget>
 
-#include "IDragDropListener.h"
-#include "ComponentWidget.h"
+#include "XMLAttribute.h"
 #include "DragDropAgent.h"
+#include "IDragDropListener.h"
 
+class QLabel;
+class XMLNode;
+class QBoxLayout;
+class InspectorWidget;
 class AttributeWidget : public DragDropQWidget,
                         public IDragDropListener
 {

@@ -1,6 +1,7 @@
 #ifndef EDITORROTATEAXIS_H
 #define EDITORROTATEAXIS_H
 
+#include "Vector2.h"
 #include "EditorAxis.h"
 
 class EditorRotateAxis : public EditorAxis

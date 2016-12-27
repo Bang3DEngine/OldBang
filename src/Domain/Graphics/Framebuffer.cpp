@@ -1,6 +1,7 @@
 #include "Framebuffer.h"
 
 #include "Debug.h"
+#include "Vector2.h"
 #include "TextureRender.h"
 
 Framebuffer::Framebuffer(int width, int height) : m_width(width),

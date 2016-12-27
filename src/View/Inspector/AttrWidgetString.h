@@ -1,8 +1,9 @@
 #ifndef INSPECTORSTRINGSW_H
 #define INSPECTORSTRINGSW_H
 
-
 #include <QTimer>
+#include <QLineEdit>
+#include <QTextEdit>
 #include <QFocusEvent>
 #include <QDoubleSpinBox>
 

@@ -1,5 +1,6 @@
 #include "AssetsManager.h"
 
+#include "Bang.h"
 #include "Scene.h"
 #include "FileReader.h"
 #include "FileWriter.h"

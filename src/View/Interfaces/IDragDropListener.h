@@ -21,9 +21,9 @@
  */
 class IDragDropListener
 {
-friend class DragDropManager;
-friend class DragDropAgent;
 public:
+    static QString acceptDragStyle, acceptDragStyleOnlyBorder,
+                   overDragStyle, rejectDragStyle;
 
     IDragDropListener();
     virtual ~IDragDropListener();
@@ -45,10 +45,8 @@ protected:
     bool MouseOverMe() const;
     static bool MouseOver(QWidget *w);
 
-public:
-    static QString acceptDragStyle, acceptDragStyleOnlyBorder,
-                   overDragStyle, rejectDragStyle;
-
+    friend class DragDropManager;
+    friend class DragDropAgent;
 };
 
 #endif // IDRAGDROPLISTENER_H

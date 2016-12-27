@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 
+#include "Bang.h"
 #include "Scene.h"
 #include "Debug.h"
 #include "Application.h"

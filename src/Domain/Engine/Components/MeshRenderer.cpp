@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "FileReader.h"
 
+#include "Bang.h"
+
 #include "VAO.h"
 #include "Mesh.h"
 #include "Material.h"

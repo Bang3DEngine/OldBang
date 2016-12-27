@@ -1,5 +1,6 @@
 #include "Debug.h"
 
+#include "Bang.h"
 #include "Scene.h"
 #include "Color.h"
 #include "String.h"

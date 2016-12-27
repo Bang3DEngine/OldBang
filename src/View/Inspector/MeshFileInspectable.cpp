@@ -1,5 +1,7 @@
 #include "MeshFileInspectable.h"
 
+#include "XMLNode.h"
+
 MeshFileInspectable::MeshFileInspectable(const MeshFile &fileMesh) :
     m_fileMesh(fileMesh)
 {

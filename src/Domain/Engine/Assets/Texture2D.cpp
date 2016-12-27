@@ -1,6 +1,7 @@
 #include "Texture2D.h"
 
 #include "Debug.h"
+#include "XMLNode.h"
 #include "FileReader.h"
 
 Texture2D::Texture2D() : Texture(TextureType::Texture2D)

@@ -1,8 +1,8 @@
 #ifndef MATERIALASSETFILEINSPECTABLE_H
 #define MATERIALASSETFILEINSPECTABLE_H
 
+#include "XMLNode.h"
 #include "IInspectable.h"
-#include "Material.h"
 #include "MaterialAssetFile.h"
 
 class MaterialAssetFileInspectable : public IInspectable

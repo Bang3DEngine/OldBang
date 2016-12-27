@@ -1,9 +1,10 @@
 #ifndef LISTLOGGER_H
 #define LISTLOGGER_H
 
+#include <QColor>
 #include <QListWidget>
 
-#include "Bang.h"
+#include "String.h"
 
 class ListLogger : public QListWidget
 {

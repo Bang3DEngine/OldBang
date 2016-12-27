@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QLayout>
 
+#include "Screen.h"
 #include "SingletonManager.h"
 
 GameWindow *GameWindow::s_m_win = nullptr;

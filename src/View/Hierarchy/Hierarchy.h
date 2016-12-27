@@ -1,35 +1,24 @@
 ﻿#ifndef HIERARCHY_H
 #define HIERARCHY_H
 
-#include "Bang.h"
-
 #include <GL/glew.h>
 
 #include "Array.h"
 
-#include <chrono>
-#include <algorithm>
-
 #include <QTimer>
-#include <QAction>
-#include <QMenu>
-#include <QTreeWidget>
-#include <QApplication>
 #include <QDropEvent>
+#include <QTreeWidget>
 
 #include "Map.h"
 #include "List.h"
-#include "File.h"
-#include "Scene.h"
-#include "FileDialog.h"
-#include "GameObject.h"
+
 #include "DragDropAgent.h"
 #include "IShortcutListener.h"
-#include "GameObjectClipboard.h"
 #include "HierarchyContextMenu.h"
 #include "HierarchyDragDropManager.h"
 #include "IWindowEventManagerListener.h"
 
+class GameObject;
 class Hierarchy : public DragDropQTreeWidget,
                   public IWindowEventManagerListener,
                   public IShortcutListener

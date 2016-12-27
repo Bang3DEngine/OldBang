@@ -2,7 +2,6 @@
 #define TEXTFILE_H
 
 #include "File.h"
-#include "FileReader.h"
 
 class TextFile : public File
 {

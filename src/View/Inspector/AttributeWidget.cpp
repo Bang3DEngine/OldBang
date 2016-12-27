@@ -1,5 +1,7 @@
 #include "AttributeWidget.h"
 
+#include <QLabel>
+#include <QBoxLayout>
 
 #include "XMLNode.h"
 #include "XMLAttribute.h"
@@ -8,6 +10,7 @@
 #include "AttrWidgetFile.h"
 #include "AttrWidgetColor.h"
 #include "AttrWidgetFloat.h"
+#include "InspectorWidget.h"
 #include "AttrWidgetString.h"
 #include "AttrWidgetButton.h"
 #include "AttrWidgetVectorFloat.h"

@@ -4,6 +4,8 @@
 #include "List.h"
 
 #include "Color.h"
+#include "Vector2.h"
+#include "Vector3.h"
 #include "EditorGameObject.h"
 
 class EditorDebugGameObject : public EditorGameObject

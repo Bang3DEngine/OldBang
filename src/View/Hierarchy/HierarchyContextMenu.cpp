@@ -1,8 +1,15 @@
 #include "HierarchyContextMenu.h"
 
+#include <QTreeWidgetItem>
+
+#include "Scene.h"
+#include "Prefab.h"
 #include "Hierarchy.h"
+#include "GameObject.h"
 #include "FileWriter.h"
+#include "FileDialog.h"
 #include "SceneManager.h"
+#include "GameObjectClipboard.h"
 
 HierarchyContextMenu::HierarchyContextMenu(Hierarchy *hierarchy)
     : ContextMenu(hierarchy), m_hierarchy(hierarchy)

@@ -1,5 +1,7 @@
 #include "AttrWidgetEnum.h"
 
+#include "Array.h"
+
 AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :
     AttributeWidget(xmlAttribute, inspectorWidget)

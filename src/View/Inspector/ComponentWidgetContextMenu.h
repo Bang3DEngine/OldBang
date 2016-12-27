@@ -5,7 +5,6 @@
 #include <QTreeWidgetItem>
 
 #include "ContextMenu.h"
-#include "ComponentClipboard.h"
 
 class ComponentWidget;
 class ComponentWidgetContextMenu : public ContextMenu

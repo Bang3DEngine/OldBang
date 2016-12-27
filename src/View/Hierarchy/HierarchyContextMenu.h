@@ -1,12 +1,7 @@
 #ifndef HIERARCHYCONTEXTMENU_H
 #define HIERARCHYCONTEXTMENU_H
 
-#include <QTreeWidgetItem>
-
-#include "Prefab.h"
-#include "FileDialog.h"
 #include "ContextMenu.h"
-#include "GameObjectClipboard.h"
 
 class Hierarchy;
 class HierarchyContextMenu : public ContextMenu

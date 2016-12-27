@@ -1,5 +1,6 @@
 #include "Toolbar.h"
 
+#include "Scene.h"
 #include "EditorWindow.h"
 #include "SceneManager.h"
 #include "ShortcutManager.h"

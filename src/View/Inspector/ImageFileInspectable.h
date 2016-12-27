@@ -1,10 +1,8 @@
 #ifndef INSPECTORTEXTURE2DWIDGET_H
 #define INSPECTORTEXTURE2DWIDGET_H
 
-
-
 #include "ImageFile.h"
-#include "InspectorWidget.h"
+#include "IInspectable.h"
 
 class ImageFileInspectable : public IInspectable
 {

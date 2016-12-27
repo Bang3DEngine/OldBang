@@ -9,8 +9,10 @@
 #include "GameWindow.h"
 #endif
 
+#include "Time.h"
 #include "Scene.h"
 #include "Screen.h"
+#include "Chrono.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "BehaviourManager.h"

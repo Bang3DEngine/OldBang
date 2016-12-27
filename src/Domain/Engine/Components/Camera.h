@@ -5,7 +5,9 @@
 #include "String.h"
 #include "Vector2.h"
 #include "Vector3.h"
+#include "NamedEnum.h"
 #include "Component.h"
+
 
 class Mesh;
 class Screen;

@@ -4,11 +4,11 @@
 #include <QTimer>
 
 #include "File.h"
-#include "Timer.h"
 #include "IInspectable.h"
-#include "EditorGameObject.h"
 #include "IWindowEventManagerListener.h"
 
+class GameObject;
+class InspectorWidget;
 class GameObjectPrefabInspectable;
 class PrefabAssetFileInspectable : public IInspectable,
                                    public IWindowEventManagerListener

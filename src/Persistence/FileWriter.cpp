@@ -1,19 +1,18 @@
 #include "FileWriter.h"
 
+#include "Bang.h"
 #include "Rect.h"
+#include "Scene.h"
+#include "Asset.h"
+#include "Debug.h"
 #include "String.h"
+#include "XMLNode.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4.h"
-
-#include "XMLNode.h"
-#include "XMLParser.h"
 #include "IFileable.h"
-
-#include "Scene.h"
-#include "Asset.h"
-#include "Debug.h"
+#include "XMLParser.h"
 #include "Persistence.h"
 
 FileWriter::FileWriter()

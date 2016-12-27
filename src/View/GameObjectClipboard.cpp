@@ -1,5 +1,7 @@
 #include "GameObjectClipboard.h"
 
+#include "GameObject.h"
+
 List<GameObject*> GameObjectClipboard::s_copiedGameObjects;
 Map<GameObject*, GameObject*> GameObjectClipboard::s_goCopyToItsParent;
 

@@ -4,11 +4,9 @@
 #include <QMainWindow>
 #include <QApplication>
 
-#include "Bang.h"
-
-#include "Screen.h"
 #include "IWindow.h"
 
+class Screen;
 class GameWindow : public IWindow
 {
 private:

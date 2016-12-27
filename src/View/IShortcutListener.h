@@ -2,7 +2,6 @@
 #define ISHORTCUTLISTENER_H
 
 #include "Input.h"
-#include "ShortcutManager.h"
 
 class IShortcutListener
 {

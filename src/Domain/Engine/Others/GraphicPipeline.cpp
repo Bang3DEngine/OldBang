@@ -1,5 +1,6 @@
 #include "GraphicPipeline.h"
 
+#include "Scene.h"
 #include "Light.h"
 #include "Screen.h"
 #include "Camera.h"
