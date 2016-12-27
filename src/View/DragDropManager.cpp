@@ -1,5 +1,6 @@
 #include "DragDropManager.h"
 
+#include "Time.h"
 #include "Debug.h"
 #include "EditorWindow.h"
 #include "DragDropAgent.h"
@@ -100,25 +101,30 @@ void DragDropManager::Update()
     DragDropManager *m = DragDropManager::s_ddManager;
     if (!m) return;
 
+    m->m_dragging = ( m->m_mouseDown &&
+                     (m->m_timeSinceLastMouseDown >= m->c_TimeToStartDrag)
+                    );
+
     DragDropAgent *currentDDAgentBelowMouse = DragDropManager::GetDragDropAgentBelowMouse();
-    if (m->m_mouseDown)
+
+    m->m_ddInfo.previousObject = m->m_ddInfo.currentObject;
+    m->m_ddInfo.currentObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
+
+    bool changingOfDragDropAgent = currentDDAgentBelowMouse != m->m_latestDDAgentBelowMouse;
+
+    // Drag Starts in currentDDAgentBelowMouse
+    bool isDragStart = !m->m_latestUpdateDragging && m->m_dragging;
+    if (isDragStart)
     {
-        m->m_ddInfo.previousObject = m->m_ddInfo.currentObject;
-        m->m_ddInfo.currentObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
-
-        bool changingOfDragDropAgent = currentDDAgentBelowMouse != m->m_latestDDAgentBelowMouse;
-
-        // Drag Starts in currentDDAgentBelowMouse
-        bool isDragStart = !m->m_latestUpdateMouseDown;
-        if (isDragStart)
+        m->m_ddInfo.sourceObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
+        for (IDragDropListener *d : m->m_dragDropListeners)
         {
-            m->m_ddInfo.sourceObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
-            for (IDragDropListener *d : m->m_dragDropListeners)
-            {
-                d->OnDragStart(m->m_ddInfo);
-            }
+            d->OnDragStart(m->m_ddInfo);
         }
+    }
 
+    if (m->m_dragging)
+    {
         // Drag Enters into currentDDAgentBelowMouse
         bool isDragEnter = currentDDAgentBelowMouse  && changingOfDragDropAgent;
         if (isDragEnter)
@@ -148,12 +154,13 @@ void DragDropManager::Update()
                 d->OnDragLeave(m->m_ddInfo);
             }
         }
-
-        m->m_latestDDAgentBelowMouse = currentDDAgentBelowMouse;
     }
-    else
+
+    m->m_latestDDAgentBelowMouse = currentDDAgentBelowMouse;
+
+    if (!m->m_dragging)
     {
-        bool isDrop = m->m_latestUpdateMouseDown;
+        bool isDrop = m->m_latestUpdateDragging && !m->m_dragging;
         if (isDrop)
         {
             for (IDragDropListener *d : m->m_dragDropListeners)
@@ -165,5 +172,15 @@ void DragDropManager::Update()
     }
 
     m->m_latestUpdateMouseDown = m->m_mouseDown;
+    m->m_latestUpdateDragging  = m->m_dragging;
+
+    if (m->m_mouseDown)
+    {
+        m->m_timeSinceLastMouseDown += Time::deltaTime;
+    }
+    else
+    {
+        m->m_timeSinceLastMouseDown = 0.0f;
+    }
 }
 

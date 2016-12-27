@@ -61,7 +61,12 @@ private:
     static DragDropManager *s_ddManager;
 
     DragDropInfo m_ddInfo;
-    bool m_latestUpdateMouseDown = false, m_mouseDown = false;
+
+    float m_timeSinceLastMouseDown = 0.0f;
+    const float c_TimeToStartDrag = 0.15f;
+    bool m_mouseDown = false, m_latestUpdateMouseDown = false;
+    bool m_dragging  = false, m_latestUpdateDragging  = false;
+
     DragDropAgent *m_latestDDAgentBelowMouse = nullptr;
     List<IDragDropListener*> m_dragDropListeners;
 
