@@ -15,6 +15,7 @@ CONFIG += $$BUILD_MODE
 # CONFIG += EDITOR
 # CONFIG += GAME
 CONFIG += qt
+MOC_DIR = src/
 
 include(deployment.pri)
 qtcAddDeployment()
