@@ -3,6 +3,7 @@
 #include <QLibrary>
 #include <QInputDialog>
 
+#include "XMLNode.h"
 #include "Behaviour.h"
 #include "FileWriter.h"
 #include "SystemUtils.h"

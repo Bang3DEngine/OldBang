@@ -3,8 +3,10 @@
 #include "Bang.h"
 
 #include "Font.h"
+#include "XMLNode.h"
 #include "Material.h"
 #include "Transform.h"
+#include "IInspectable.h"
 #include "AssetsManager.h"
 
 UIText::UIText() : UIRenderer()
@@ -90,6 +92,7 @@ ICloneable *UIText::Clone() const
     return text;
 }
 
+#ifdef BANG_EDITOR
 void UIText::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     FillXMLInfo(xmlInfo);
@@ -99,6 +102,7 @@ void UIText::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);
 }
+#endif
 
 void UIText::ReadXMLInfo(const XMLNode *xmlInfo)
 {

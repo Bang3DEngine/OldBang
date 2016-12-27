@@ -14,7 +14,6 @@ Asset::~Asset()
     AssetsManager::UnloadAsset(this);
 }
 
-#ifdef BANG_EDITOR
 
 const String Asset::GetFileExtensionStatic()
 {
@@ -26,6 +25,7 @@ const String Asset::GetFileExtension()
     return Asset::GetFileExtensionStatic();
 }
 
+#ifdef BANG_EDITOR
 void Asset::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);

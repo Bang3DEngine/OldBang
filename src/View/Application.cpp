@@ -10,6 +10,7 @@
 #endif
 
 #include "Time.h"
+#include "Input.h"
 #include "Scene.h"
 #include "Screen.h"
 #include "Chrono.h"
@@ -44,7 +45,9 @@ void Application::OnDrawTimerTick()
     Time::s_deltaTime = deltaTime;
     //
 
+    #ifdef BANG_EDITOR
     DragDropManager::Update();
+    #endif
 
     // Process mouse and key events, so the Input is available in OnUpdate
     // as accurate as possible.

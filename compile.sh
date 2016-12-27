@@ -9,15 +9,17 @@ command_exists () {
     type "$1" &> /dev/null ;
 }
 
-if [ -z $1 ] 
+BUILD_MODE=$1
+if [ -z BUILD_MODE ] 
 then
-	echo "[ ERROR ]: Please specify as first argument: EDITOR or GAME"
+	echo "Compile mode not specified. Picking EDITOR mode (default). If you want to change it, specify as first argument: EDITOR or GAME"
 	echo 
+	BUILD_MODE="EDITOR"
 	exit 1
 fi
 
 # Make and run Bang
-qmake "BUILD_MODE=$1"
+qmake "BUILD_MODE=${BUILD_MODE}"
 if command_exists colormake
 then
 	colormake -j${NUM_THREADS}

@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "Gizmos.h"
+#include "XMLNode.h"
 #include "GBuffer.h"
 #include "Renderer.h"
 #include "Material.h"

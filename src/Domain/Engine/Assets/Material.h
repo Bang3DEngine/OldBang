@@ -2,7 +2,6 @@
 #define MATERIAL_H
 
 #include "Array.h"
-
 #include "Asset.h"
 #include "Color.h"
 

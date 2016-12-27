@@ -3,10 +3,11 @@
 #include <iostream>
 
 #include "Debug.h"
+#include "Scene.h"
 #include "Canvas.h"
 #include "UIText.h"
 #include "Camera.h"
-#include "Toolbar.h"
+#include "XMLNode.h"
 #include "UIImage.h"
 #include "Material.h"
 #include "Component.h"
@@ -20,6 +21,7 @@
 #include "DirectionalLight.h"
 
 #ifdef BANG_EDITOR
+#include "Toolbar.h"
 #include "Hierarchy.h"
 #include "EditorScene.h"
 #include "WindowEventManager.h"

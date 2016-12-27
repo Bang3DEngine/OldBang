@@ -6,6 +6,10 @@
 #include "Persistence.h"
 #include "AssetsManager.h"
 
+#ifdef BANG_EDITOR
+#include "IInspectable.h"
+#endif
+
 FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &index)
 {
     XMLNode *xmlInfo;
@@ -21,10 +25,12 @@ QPixmap FontAssetFile::GetIcon() const
     return pm;
 }
 
+#ifdef BANG_EDITOR
 IInspectable *FontAssetFile::GetInspectable() const
 {
     return nullptr;
 }
+#endif
 
 const String &FontAssetFile::GetFontFilepath() const
 {

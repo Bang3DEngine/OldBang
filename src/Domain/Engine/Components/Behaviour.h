@@ -4,6 +4,7 @@
 #include "Bang.h"
 
 #include "Time.h"
+#include "Input.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "Material.h"

@@ -1,5 +1,6 @@
 #include "GraphicPipeline.h"
 
+#include "Debug.h"
 #include "Scene.h"
 #include "Light.h"
 #include "Screen.h"
@@ -61,7 +62,9 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
     if (!CAN_USE_COMPONENT(rend)) { return; }
     if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
 
+    #ifdef BANG_EDITOR
     if (!m_selectionFB->IsPassing())
+    #endif
     {
         // Rendering to GBuffer
 
@@ -104,10 +107,12 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
             glDepthMask(GL_TRUE);
         }
     }
+    #ifdef BANG_EDITOR
     else
     {
         m_selectionFB->RenderForSelectionBuffer(rend);
     }
+    #endif
 }
 
 void GraphicPipeline::ApplySelectionEffect()
@@ -230,7 +235,9 @@ void GraphicPipeline::RenderCustomPR(Renderer *rend)
     if (!CAN_USE_COMPONENT(rend)) { return; }
     if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
 
+    #ifdef BANG_EDITOR
     if (!m_selectionFB->IsPassing())
+    #endif
     {
         m_gbuffer->SetStencilWrite(false);
         m_gbuffer->SetStencilTest(true);
@@ -270,6 +277,11 @@ void GraphicPipeline::RenderSelectionFramebuffer()
     m_selectionFB->ProcessSelection();
     m_selectionFB->m_isPassing = false;
 }
+SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
+{
+    return m_selectionFB;
+}
+#endif
 
 GraphicPipeline* GraphicPipeline::GetActive()
 {
@@ -277,15 +289,13 @@ GraphicPipeline* GraphicPipeline::GetActive()
     return screen ? screen->GetGraphicPipeline() : nullptr;
 }
 
-SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
-{
-    return m_selectionFB;
-}
-
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
     m_gbuffer->Resize(newWidth, newHeight);
+
+    #ifdef BANG_EDITOR
     m_selectionFB->Resize(newWidth, newHeight);
+    #endif
 }
 
 GBuffer *GraphicPipeline::GetGBuffer() const
@@ -297,5 +307,3 @@ Renderer::DepthLayer GraphicPipeline::GetCurrentDepthLayer() const
 {
     return m_currentDepthLayer;
 }
-
-#endif

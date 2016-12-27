@@ -3,6 +3,7 @@
 #include "Mesh.h"
 #include "Vector3.h"
 #include "Material.h"
+#include "GameObject.h"
 #include "MeshRenderer.h"
 #include "AssetsManager.h"
 

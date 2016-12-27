@@ -1,8 +1,14 @@
 #ifndef FONTASSETFILE_H
 #define FONTASSETFILE_H
 
-#include "File.h"
+#include <QPixmap>
+#include <QModelIndex>
+#include <QFileSystemModel>
 
+#include "File.h"
+#include "String.h"
+
+class IInspectable;
 class FontAssetFile : public File
 {
 private:

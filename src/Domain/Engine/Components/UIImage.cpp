@@ -9,10 +9,10 @@
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
 #include "GraphicPipeline.h"
-#include "SelectionFramebuffer.h"
 
 UIImage::UIImage()
 {
+    m_materialPR = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/UI/PR_UIImage.bmat");
 }
 
 UIImage::~UIImage()
@@ -82,16 +82,9 @@ void UIImage::RenderCustomPR() const
 
     ShaderProgram *sp = m_materialPR->GetShaderProgram();
     sp->SetUniformColor("B_tint",        m_tint);
-    sp->SetUniformFloat("B_stroke",      m_stroke);
-    sp->SetUniformColor("B_strokeColor", m_strokeColor);
     sp->SetUniformTexture("B_texture_0", m_material->GetTexture());
 
     Box screenBox = gameObject->GetBoundingBox();
-    sp->SetUniformFloat("B_image_left",  screenBox.GetMin().x);
-    sp->SetUniformFloat("B_image_up",    screenBox.GetMax().y);
-    sp->SetUniformFloat("B_image_right", screenBox.GetMax().x);
-    sp->SetUniformFloat("B_image_bot",   screenBox.GetMin().y);
-
     Rect renderRect(screenBox.GetMin().xy(), screenBox.GetMax().xy());
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
     gb->RenderPassWithMaterial(m_materialPR, renderRect);

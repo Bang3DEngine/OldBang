@@ -15,6 +15,27 @@ class SelectionFramebuffer;
  */
 class GraphicPipeline
 {
+public:
+    GraphicPipeline(Screen *screen);
+    virtual ~GraphicPipeline();
+
+    static GraphicPipeline* GetActive();
+
+    void RenderScene(Scene *scene);
+    void RenderRenderer(Renderer *rend);
+    void RenderCustomPR(Renderer *rend);
+
+    void OnResize(int newWidth, int newHeight);
+
+    void ApplyPREffectToRenderer(const Renderer *renderer, Material *mat);
+
+    GBuffer *GetGBuffer() const;
+    Renderer::DepthLayer GetCurrentDepthLayer() const;
+
+    #ifdef BANG_EDITOR
+    SelectionFramebuffer* GetSelectionFramebuffer() const;
+    #endif
+
 private:
     Scene *m_currentScene = nullptr;
     Renderer::DepthLayer m_currentDepthLayer =
@@ -49,27 +70,6 @@ private:
                                   Framebuffer *fb);
     void RenderGizmosOverlayPass(Framebuffer *fb);
     void RenderDepthLayers(Framebuffer *fb);
-
-public:
-    GraphicPipeline(Screen *screen);
-    virtual ~GraphicPipeline();
-
-    static GraphicPipeline* GetActive();
-
-    void RenderScene(Scene *scene);
-    void RenderRenderer(Renderer *rend);
-    void RenderCustomPR(Renderer *rend);
-
-    void OnResize(int newWidth, int newHeight);
-
-    void ApplyPREffectToRenderer(const Renderer *renderer, Material *mat);
-
-    GBuffer *GetGBuffer() const;
-    Renderer::DepthLayer GetCurrentDepthLayer() const;
-
-    #ifdef BANG_EDITOR
-    SelectionFramebuffer* GetSelectionFramebuffer() const;
-    #endif
 };
 
 #endif // GRAPHICPIPELINE_H

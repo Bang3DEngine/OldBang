@@ -5,7 +5,6 @@
 #include "GameObject.h"
 #include "MeshFactory.h"
 #include "AssetsManager.h"
-#include "SelectionFramebuffer.h"
 
 UIRenderer::UIRenderer()
 {
@@ -95,6 +94,7 @@ void UIRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);
 }
+#endif
 
 void UIRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
@@ -113,4 +113,3 @@ void UIRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetColor("StrokeColor", m_strokeColor);
     xmlInfo->SetFloat("Stroke", m_stroke);
 }
-#endif

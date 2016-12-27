@@ -41,7 +41,8 @@ void Texture2D::LoadFromFile(const String &imageFilepath)
 void Texture2D::CreateEmpty(int width, int height)
 {
     int size = width * height;
-    unsigned char *data = new unsigned char[size];
+    const int numChannels = 4, typeSize = 4;
+    unsigned char *data = new unsigned char[size * numChannels * typeSize];
     for (int i = 0; i < size; ++i)
     {
         data[i] = 0;
@@ -51,7 +52,9 @@ void Texture2D::CreateEmpty(int width, int height)
 
 void Texture2D::Resize(int width, int height)
 {
-    Fill(m_data, width, height);
+    const int numChannels = 4, typeSize = 4;
+    unsigned char *newData = new unsigned char[width * height * numChannels * typeSize]; //
+    Fill(newData, width, height);
 }
 
 void Texture2D::Fill(unsigned char *newData,

@@ -19,10 +19,10 @@ public:
     const static String GetFileExtensionStatic();
     const virtual String GetFileExtension();
 
-#ifdef BANG_EDITOR
+    #ifdef BANG_EDITOR
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
-#endif
+    #endif
 
     String GetFilepath() const;
 

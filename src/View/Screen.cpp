@@ -11,6 +11,8 @@
 #endif
 
 #include "Bang.h"
+#include "Debug.h"
+#include "Scene.h"
 #include "Prefab.h"
 #include "Camera.h"
 #include "Material.h"
