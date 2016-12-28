@@ -46,6 +46,12 @@
 
 int main(int argc, char *argv[])
 {
+    // Init some paths:
+    Persistence::c_ProjectRootAbsolute = "/home/sephirot47/Bang";
+    Persistence::c_ProjectAssetsRootAbsolute = Persistence::c_ProjectRootAbsolute + "/Assets";
+    Persistence::c_EngineAssetsRootAbsolute = "/home/sephirot47/Bang/Assets/Engine";
+    //
+
     SingletonManager::InitSingletonManagerFromMainBinary();
     #ifdef BANG_EDITOR
     ShortcutManager::InitFromMainBinary(); // It must go before Application init
@@ -77,7 +83,8 @@ int main(int argc, char *argv[])
 
     // EDITOR /////////////////////////////////////
     // Load dark Window theme
-    QFile f("Assets/Engine/qdarkstyle/style.qss");
+    QFile f((Persistence::c_EngineAssetsRootAbsolute + "/qdarkstyle/style.qss").ToQString()
+            );
     if (!f.exists())
     {
         Debug_Error("Unable to set dark stylesheet, stylesheet not found.");
@@ -91,7 +98,9 @@ int main(int argc, char *argv[])
     //
 
     Scene *scene = new EditorScene();
-    String filename = "./Assets/Scenes/test.bscene";
+    String filename = "./Scenes/test.bscene";
+    filename = Persistence::ToAbsolute(filename,
+                                       Persistence::c_ProjectAssetsRootAbsolute);
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
@@ -104,7 +113,9 @@ int main(int argc, char *argv[])
 
     // GAME /////////////////////////////////////
     Scene *scene = new Scene();
-    String filename = "./Assets/Scenes/test.bscene";
+    String filename = "./Scenes/test.bscene";
+    filename = Persistence::ToAbsolute(filename,
+                                       Persistence::c_ProjectAssetsRootAbsolute);
     FileReader::ReadScene(filename, scene);
     if (scene)
     {

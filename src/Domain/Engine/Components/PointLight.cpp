@@ -15,8 +15,8 @@
 
 PointLight::PointLight() : Light()
 {
-    m_lightMaterialScreen = AssetsManager::LoadAsset<Material>(
-                "Assets/Engine/Materials/PR_PointLight_Screen.bmat");
+    m_lightMaterialScreen = AssetsManager::Load<Material>(
+                "Materials/PR_PointLight_Screen.bmat", true);
 }
 
 Rect PointLight::GetRenderRect(Camera *cam) const
@@ -75,7 +75,7 @@ void PointLight::OnDrawGizmos()
 {
     Light::OnDrawGizmos();
 
-    Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("./Assets/Engine/Textures/PointLightIcon.btex2d");
+    Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/PointLightIcon.btex2d", true);
     Gizmos::SetColor(Color(GetColor(), 1));
     Gizmos::SetPosition(transform->GetPosition());
     Gizmos::SetScale(Vector3::One * 0.1f);

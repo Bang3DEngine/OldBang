@@ -5,13 +5,14 @@
 #include "File.h"
 #include "Debug.h"
 #include "StringUtils.h"
+#include "Persistence.h"
 #include "ShaderContract.h"
 
 const String ShaderPreprocessor::c_version = "#version 130";
 
 const Array<String> ShaderPreprocessor::c_includePaths =
 {
-    "Assets/Engine/Shaders/Include"
+    "Shaders/Include"
 };
 
 ShaderPreprocessor::ShaderPreprocessor()
@@ -32,6 +33,7 @@ String ShaderPreprocessor::
     String completeFilepath = "";
     for (String includePathDir : c_includePaths)
     {
+        includePathDir = Persistence::ToAbsolute(includePathDir, true);
         String filepath = includePathDir + "/" + includeFile;
         if (File::Exists(filepath))
         {

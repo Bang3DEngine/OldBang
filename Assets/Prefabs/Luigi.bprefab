@@ -11,14 +11,14 @@
     </Transform>
     <MeshRenderer DrawWireframe:Bool="false"{Inline}
                   LineWidth:Float="1"{Hidden}
-                  Material:File="./Assets/Materials/luigiMaterial.bmat"{FileExtension="bmat"}
-                  Mesh:File="./Assets/Meshes/luigiMesh.bmesh"{FileExtension="bmesh"}
+                  Material:File="./Materials/luigiMaterial.bmat"{FileExtension="bmat"}
+                  Mesh:File="./Meshes/luigiMesh.bmesh"{FileExtension="bmesh"}
                   ReceivesLighting:Bool="true"{Inline}
                   enabled:Bool="true"{Hidden,Readonly}
                   id:String="0x9c7f948"{Hidden,Readonly}
                  >
     </MeshRenderer>
-    <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/TestBehaviour.cpp"{FileExtension="cpp"}
+    <BehaviourHolder BehaviourScript:File="./Behaviours/TestBehaviour.cpp"{FileExtension="cpp"}
                      CreateNew...:Button="CreateNew..."{Listener="0x9c86540"}
                      Refresh:Button="Refresh"{Listener="0x9c86540"}
                      enabled:Bool="true"{Hidden,Readonly}
@@ -38,8 +38,8 @@
         </Transform>
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
                       LineWidth:Float="1"{Hidden}
-                      Material:File="./Assets/Engine/Materials/D2G_Default.bmat"{FileExtension="bmat"}
-                      Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                      Material:File="./Materials/D2G_Default.bmat"{FileExtension="bmat",IsEngineFile}
+                      Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
                       id:String="0x9b7b6b8"{Hidden,Readonly}

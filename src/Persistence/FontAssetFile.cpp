@@ -20,7 +20,8 @@ FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &i
 
 QPixmap FontAssetFile::GetIcon() const
 {
-    String fp = Persistence::ToAbsolute("./Assets/Engine/Icons/NoAssetIcon.png");
+    String fp = Persistence::ToAbsolute("./Icons/NoAssetIcon.png",
+                                        Persistence::c_EngineAssetsRootAbsolute);
     QPixmap pm(QString::fromStdString(fp));
     return pm;
 }

@@ -23,7 +23,7 @@
 QPixmap File::AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm)
 {
     /*
-    String fp = Persistence::ToAbsolute("./Assets/Engine/Icons/NoAssetIcon.png");
+    String fp = Persistence::ToAbsolute("./Icons/NoAssetIcon.png");
     QPixmap noAssetPixmap(QString::fromStdString(fp));
 
     QPixmap result(pm.scaled(128, 128, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation));
@@ -55,7 +55,7 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
     m_isFile = !model->isDir(index);
 
     m_absPath = model->filePath(index).toStdString();
-    m_path = Persistence::ToRelative(m_absPath);
+    m_path = Persistence::ToRelative(m_absPath, false);
     m_name = model->fileName(index).toStdString();
 
     String::size_type p = m_name.find('.', 2);
@@ -177,7 +177,7 @@ File *File::GetSpecificFile(const File &f)
 
 bool File::Exists(const String &filepath)
 {
-    String absFilepath = Persistence::ToAbsolute(filepath);
+    String absFilepath = Persistence::ToAbsolute(filepath, false);
     QFileInfo f(absFilepath.ToQString());
     return f.exists();
 }
@@ -219,15 +219,18 @@ QPixmap File::GetIcon() const
     String fp = "";
     if (IsPrefabAsset())
     {
-        fp = Persistence::ToAbsolute("./Assets/Engine/Icons/PrefabAssetIcon.png");
+        fp = Persistence::ToAbsolute("./Icons/PrefabAssetIcon.png",
+                                     Persistence::c_EngineAssetsRootAbsolute);
     }
     else if (IsBehaviour())
     {
-        fp = Persistence::ToAbsolute("./Assets/Engine/Icons/BehaviourIcon.png");
+        fp = Persistence::ToAbsolute("./Icons/BehaviourIcon.png",
+                                     Persistence::c_EngineAssetsRootAbsolute);
     }
     else
     {
-        fp = Persistence::ToAbsolute("./Assets/Engine/Icons/OtherFileIcon.png");
+        fp = Persistence::ToAbsolute("./Icons/OtherFileIcon.png",
+                                     Persistence::c_EngineAssetsRootAbsolute);
     }
 
     QPixmap pm(QString::fromStdString(fp));

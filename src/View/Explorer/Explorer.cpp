@@ -206,7 +206,7 @@ void Explorer::RefreshInspector()
 
 void Explorer::SelectFile(const String &path)
 {
-    String absPath = Persistence::ToAbsolute(path);
+    String absPath = Persistence::ToAbsolute(path, false);
     SetDir(Persistence::GetDir(absPath));
 
     QModelIndex ind = GetModelIndexFromFilepath(absPath);
@@ -240,7 +240,7 @@ String Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const
 String Explorer::GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const
 {
     String f = GetFilepathFromModelIndex(qmi);
-    return Persistence::ToRelative(f);
+    return Persistence::ToRelative(f, false);
 }
 
 String Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
@@ -253,18 +253,18 @@ String Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
 String Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi) const
 {
     String f = GetDirFromModelIndex(qmi);
-    return Persistence::ToRelative(f);
+    return Persistence::ToRelative(f, false);
 }
 
 QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const
 {
-    String absFilepath = Persistence::ToAbsolute(filepath);
+    String absFilepath = Persistence::ToAbsolute(filepath, false);
     return m_fileSystemModel->index(QString::fromStdString(absFilepath));
 }
 
 void Explorer::SetDir(const String &path)
 {
-    String absDir = Persistence::ToAbsolute(path);
+    String absDir = Persistence::ToAbsolute(path, false);
     setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(absDir)));
 }
 
@@ -294,7 +294,8 @@ String Explorer::GetSelectedFileOrDirPath() const
     if (!selectedIndexes().empty())
     {
         return Persistence::ToRelative(
-                    m_fileSystemModel->filePath(selectedIndexes().front()).toStdString());
+                    m_fileSystemModel->filePath(selectedIndexes().front()).toStdString(),
+                    false);
     }
     return "";
 }

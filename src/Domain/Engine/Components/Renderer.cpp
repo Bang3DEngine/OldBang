@@ -27,8 +27,7 @@ Renderer::Renderer()
     ActivateGLStatesBeforeRenderingForSelection = [](){};
     #endif
 
-    m_material = AssetsManager::LoadAsset<Material>(
-                    "./Assets/Engine/Materials/D2G_Default.bmat" );
+    m_material = AssetsManager::Load<Material>("Materials/D2G_Default.bmat", true);
 }
 
 void Renderer::CloneInto(ICloneable *clone) const
@@ -339,7 +338,7 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
     String materialFilepath = xmlInfo->GetFilepath("Material");
     if (!materialFilepath.Empty())
     {
-        SetMaterial( AssetsManager::LoadAsset<Material>(materialFilepath) );
+        SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
     }
     else
     {

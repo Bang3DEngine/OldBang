@@ -12,7 +12,7 @@
 
 UIImage::UIImage()
 {
-    m_materialPR = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/UI/PR_UIImage.bmat");
+    m_materialPR = AssetsManager::Load<Material>("Materials/UI/PR_UIImage.bmat", true);
 }
 
 UIImage::~UIImage()
@@ -47,7 +47,7 @@ void UIImage::ReadXMLInfo(const XMLNode *xmlInfo)
     UIRenderer::ReadXMLInfo(xmlInfo);
 
     String texFilepath = xmlInfo->GetFilepath("Image");
-    Texture2D *tex = AssetsManager::LoadAsset<Texture2D>(texFilepath);
+    Texture2D *tex = AssetsManager::Load<Texture2D>(texFilepath);
     if (m_material)
     {
         m_material->SetTexture(tex);

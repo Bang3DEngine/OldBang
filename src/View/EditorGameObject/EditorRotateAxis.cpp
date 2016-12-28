@@ -23,8 +23,8 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     m_circle->SetLineWidth(2.0f);
 
     delete m_material; // Delete default EditorAxis material
-    Material *mat = AssetsManager::LoadAsset<Material>(
-                "Assets/Engine/Materials/D2G_RotationAxisLine.bmat");
+    Material *mat = AssetsManager::Load<Material>(
+                "Materials/D2G_RotationAxisLine.bmat", true);
     m_material = new Material(*mat);
     m_circle->SetMaterial(m_material);
 

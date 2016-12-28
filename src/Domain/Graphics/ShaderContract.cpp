@@ -1,5 +1,7 @@
 #include "ShaderContract.h"
 
+#include "Persistence.h"
+
 const String ShaderContract::ShaderNames_Prefix = "B_";
 
 
@@ -70,16 +72,3 @@ const String ShaderContract::Uniform_Texture_Final_Color =
 
 const String ShaderContract::Uniform_Material_Diffuse_Color =
         ShaderContract::ShaderNames_Prefix + "material_diffuse_color";
-
-const String ShaderContract::Filepath_Shader_SelectionBuffer_VS = "Assets/Engine/Shaders/SelectionBuffer.vert";
-const String ShaderContract::Filepath_Shader_SelectionBuffer_FS = "Assets/Engine/Shaders/SelectionBuffer.frag";
-
-const String ShaderContract::Filepath_Shader_Render_GBuffer_To_Screen_FS = "Assets/Engine/Shaders/RenderGBufferToScreen.frag";
-
-const String ShaderContract::Filepath_Shader_PR_ScreenPass_VS = "Assets/Engine/Shaders/PR_ScreenPass.vert";
-const String ShaderContract::Filepath_Shader_PR_Default_FS = "Assets/Engine/Shaders/PR_Default.frag";
-
-
-const String ShaderContract::Filepath_Shader_D2G_Default_VS = "Assets/Engine/Shaders/D2G_Default.vert";
-const String ShaderContract::Filepath_Shader_D2G_Default_FS  = "Assets/Engine/Shaders/D2G_Default.frag";
-

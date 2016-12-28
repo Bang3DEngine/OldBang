@@ -18,10 +18,10 @@
 
 GraphicPipeline::GraphicPipeline(Screen *screen)
 {
-    m_matAmbientLightScreen    = AssetsManager::LoadAsset<Material>(
-                "Assets/Engine/Materials/PR_AmbientLight_Screen.bmat");
-    m_matSelectionEffectScreen = AssetsManager::LoadAsset<Material>(
-                "Assets/Engine/Materials/PR_SelectionEffect.bmat");
+    m_matAmbientLightScreen    = AssetsManager::Load<Material>(
+                "Materials/PR_AmbientLight_Screen.bmat", true);
+    m_matSelectionEffectScreen = AssetsManager::Load<Material>(
+                "Materials/PR_SelectionEffect.bmat", true);
 
     m_gbuffer = new GBuffer(screen->m_width, screen->m_height);
     #ifdef BANG_EDITOR

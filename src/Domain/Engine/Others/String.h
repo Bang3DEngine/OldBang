@@ -86,6 +86,7 @@ public:
     static String ToString(float f);
     static String ToString(void *v);
     static String ToString(const Color &v);
+    static String ToString(const String &v);
     static String ToString(const Vector2 &v);
     static String ToString(const Vector3 &v);
     static String ToString(const Vector4 &v);
@@ -138,12 +139,13 @@ OPERATOR_PLUS_RIGHT_PRIMITIVE_DECL(float)
 template <class T>
 String operator+(const char *str, const T &v)
 {
-    return String(str) + v;
+    //return String(str) + String::ToString(v);
+    return String(std::string(str) + std::string(String::ToString(v)));
 }
 template <class T>
 String operator+(const T &v, const char *str)
 {
-    return v + String(str);
+    return String(std::string(String::ToString(v)) + std::string(str));
 }
 
 #endif // STRING_H

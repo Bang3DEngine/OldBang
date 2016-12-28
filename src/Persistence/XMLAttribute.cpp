@@ -3,6 +3,7 @@
 #include <iostream>
 #include <functional>
 
+#include "Debug.h"
 #include "StringUtils.h"
 #include "Persistence.h"
 #include "IAttrWidgetButtonListener.h"
@@ -220,7 +221,7 @@ void XMLAttribute::SetFilepath(const String &filepath,
                                const String &fileExtension,
                                const Array<XMLProperty> &properties)
 {
-    String newFilepath = Persistence::ToRelative(filepath);
+    String newFilepath = Persistence::ToRelative(filepath, false);
     Set(m_name, newFilepath, XMLAttribute::Type::File, properties);
 
     if (!fileExtension.Empty())
@@ -361,7 +362,12 @@ float XMLAttribute::GetFloat() const
 
 String XMLAttribute::GetFilepath() const
 {
-    return GetString();
+    String filepath = GetString();
+    Debug_Log("GetFilepath on " << filepath);
+    bool isEngineFile = HasProperty(XMLProperty::IsEngineFile);
+    Debug_Log("Returning: " << Persistence::ToAbsolute(filepath, isEngineFile));
+    Debug_Log("------------");
+    return Persistence::ToAbsolute(filepath, isEngineFile);
 }
 
 String XMLAttribute::GetString() const

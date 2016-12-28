@@ -38,10 +38,10 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateDepthRenderbufferAttachment();
 
     String renderToScreenMatFilepath =
-            "Assets/Engine/Materials/RenderGBufferToScreen.bmat";
+            "Materials/RenderGBufferToScreen.bmat";
 
     m_renderGBufferToScreenMaterial =
-            AssetsManager::LoadAsset<Material>(renderToScreenMatFilepath);
+            AssetsManager::Load<Material>(renderToScreenMatFilepath, true);
     m_planeMeshToRenderEntireScreen = MeshFactory::GetPlane();
 }
 

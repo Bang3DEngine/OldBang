@@ -12,8 +12,8 @@
 
 UIText::UIText() : UIRenderer()
 {
-    m_material = AssetsManager::LoadAsset<Material>("Assets/Engine/Materials/UI/D2G_UIText.bmat");
-    m_font = AssetsManager::LoadAsset<Font>("Assets/Engine/Fonts/UbuntuFont.bfont");
+    m_material = AssetsManager::Load<Material>("Materials/UI/D2G_UIText.bmat", true);
+    m_font = AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true);
 }
 
 UIText::~UIText()
@@ -112,7 +112,7 @@ void UIText::ReadXMLInfo(const XMLNode *xmlInfo)
     String fontFilepath = xmlInfo->GetFilepath("Font");
     if (!fontFilepath.Empty())
     {
-        m_font = AssetsManager::LoadAsset<Font>(fontFilepath);
+        m_font = AssetsManager::Load<Font>(fontFilepath);
     }
 
     m_textColor = xmlInfo->GetColor("Color");

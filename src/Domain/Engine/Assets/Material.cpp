@@ -5,6 +5,7 @@
 #include "Vector4.h"
 #include "Texture.h"
 #include "Texture2D.h"
+#include "Persistence.h"
 #include "ShaderContract.h"
 #include "ShaderProgram.h"
 
@@ -14,8 +15,10 @@ Material::Material() : Asset()
 {
     // TODO: Create shaderProgram asset and use AssetManager to load this
     SetShaderProgram(new ShaderProgram(
-                         ShaderContract::Filepath_Shader_D2G_Default_VS,
-                         ShaderContract::Filepath_Shader_D2G_Default_FS));
+                         Persistence::ToAbsolute("Shaders/D2G_Default.vert", true),
+                         Persistence::ToAbsolute("Shaders/D2G_Default.frag", true)
+                         )
+                    );
 }
 
 Material::Material(const Material &m)
@@ -94,7 +97,7 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
     if(numTextures == 1)
     {
         String texAssetFilepath = xmlInfo->GetString("Texture1");
-        Texture2D *texture = AssetsManager::LoadAsset<Texture2D>(texAssetFilepath);
+        Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
         SetTexture(texture);
     }
 

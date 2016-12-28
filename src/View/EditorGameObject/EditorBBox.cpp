@@ -18,7 +18,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
     // Copy the lines material to the box material, and save it in cache
     // only the first time. The rest of the times, load it from cache
     Material *linesMaterial =
-            AssetsManager::LoadAsset<Material>("./Assets/Engine/Materials/D2G_Default.bmat");
+            AssetsManager::Load<Material>("./Materials/D2G_Default.bmat", true);
 
     if (!s_boxMaterial)
     {
@@ -30,7 +30,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
 
     //Create the box mesh, and save it to cache
     // only the first time. The rest of the times, load it from cache.
-    Mesh *mesh = AssetsManager::LoadAsset<Mesh>("./Assets/Engine/Meshes/Cube.bmesh");
+    Mesh *mesh = AssetsManager::Load<Mesh>("./Meshes/Cube.bmesh", true);
 
     mr->SetMesh(mesh);
     mr->SetDrawWireframe(true);

@@ -45,8 +45,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Materials/concrete.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/concrete.bmat"{FileExtension="bmat"}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9733510"{Hidden,Readonly}
@@ -67,8 +67,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Materials/wood.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/wood.bmat"{FileExtension="bmat"}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9768bb0"{Hidden,Readonly}
@@ -89,8 +89,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Materials/concrete.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/concrete.bmat"{FileExtension="bmat"}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9813190"{Hidden,Readonly}
@@ -111,8 +111,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="true"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Materials/Transparent.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/Transparent.bmat"{FileExtension="bmat"}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="false"{Hidden,Readonly}
                               id:String="0x980f8a0"{Hidden,Readonly}
@@ -133,8 +133,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Materials/wood.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/wood.bmat"{FileExtension="bmat"}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9712478"{Hidden,Readonly}
@@ -159,7 +159,7 @@
                               id:String="0x98674b8"{Hidden,Readonly}
                              >
             </DirectionalLight>
-            <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/RandomScale.cpp"{FileExtension="cpp"}
+            <BehaviourHolder BehaviourScript:File="./Behaviours/RandomScale.cpp"{FileExtension="cpp"}
                              CreateNew...:Button="CreateNew..."{Listener="0x98fc4e0"}
                              Refresh:Button="Refresh"{Listener="0x98fc4e0"}
                              enabled:Bool="true"{Hidden,Readonly}
@@ -180,8 +180,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Engine/Materials/D2G_Default.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/D2G_Default.bmat"{FileExtension="bmat",IsEngineFile}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x981aed0"{Hidden,Readonly}
@@ -222,8 +222,8 @@
             <MeshRenderer DrawWireframe:Bool="false"{Inline}
                           IsTransparent:Bool="false"{Inline}
                           LineWidth:Float="1"{Hidden}
-                          Material:File="./Assets/Materials/grass.bmat"{FileExtension="bmat"}
-                          Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                          Material:File="./Materials/grass.bmat"{FileExtension="bmat"}
+                          Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                           ReceivesLighting:Bool="true"{Inline}
                           enabled:Bool="true"{Hidden,Readonly}
                           id:String="0x9988210"{Hidden,Readonly}
@@ -244,14 +244,14 @@
             <MeshRenderer DrawWireframe:Bool="false"{Inline}
                           IsTransparent:Bool="false"{Inline}
                           LineWidth:Float="1"{Hidden}
-                          Material:File="./Assets/Materials/luigiMaterial.bmat"{FileExtension="bmat"}
-                          Mesh:File="./Assets/Meshes/luigiMesh.bmesh"{FileExtension="bmesh"}
+                          Material:File="./Materials/luigiMaterial.bmat"{FileExtension="bmat"}
+                          Mesh:File="./Meshes/luigiMesh.bmesh"{FileExtension="bmesh"}
                           ReceivesLighting:Bool="true"{Inline}
                           enabled:Bool="true"{Hidden,Readonly}
                           id:String="0x99f6fc8"{Hidden,Readonly}
                          >
             </MeshRenderer>
-            <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/TestBehaviour.cpp"{FileExtension="cpp"}
+            <BehaviourHolder BehaviourScript:File="./Behaviours/TestBehaviour.cpp"{FileExtension="cpp"}
                              CreateNew...:Button="CreateNew..."{Listener="0x9a34460"}
                              Refresh:Button="Refresh"{Listener="0x9a34460"}
                              enabled:Bool="true"{Hidden,Readonly}
@@ -272,8 +272,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Engine/Materials/D2G_Default.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/D2G_Default.bmat"{FileExtension="bmat",IsEngineFile}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9a7ff40"{Hidden,Readonly}
@@ -321,7 +321,7 @@
                               id:String="0x9a688e8"{Hidden,Readonly}
                              >
             </DirectionalLight>
-            <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/RandomScale.cpp"{FileExtension="cpp"}
+            <BehaviourHolder BehaviourScript:File="./Behaviours/RandomScale.cpp"{FileExtension="cpp"}
                              CreateNew...:Button="CreateNew..."{Listener="0x99f87a8"}
                              Refresh:Button="Refresh"{Listener="0x99f87a8"}
                              enabled:Bool="true"{Hidden,Readonly}
@@ -342,8 +342,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Engine/Materials/D2G_Default.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/D2G_Default.bmat"{FileExtension="bmat",IsEngineFile}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9a65020"{Hidden,Readonly}
@@ -366,8 +366,8 @@
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
                       IsTransparent:Bool="false"{Inline}
                       LineWidth:Float="1"{Hidden}
-                      Material:File="./Assets/Materials/wood.bmat"{FileExtension="bmat"}
-                      Mesh:File="./Assets/Engine/Meshes/Sphere.bmesh"{FileExtension="bmesh"}
+                      Material:File="./Materials/wood.bmat"{FileExtension="bmat"}
+                      Mesh:File="./Meshes/Sphere.bmesh"{FileExtension="bmesh",IsEngineFile}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
                       id:String="0x9a48728"{Hidden,Readonly}
@@ -384,7 +384,7 @@
                        id:String="0x9a4a770"{Hidden,Readonly}
                       >
             </Transform>
-            <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/LookAtLuigi.cpp"{FileExtension="cpp"}
+            <BehaviourHolder BehaviourScript:File="./Behaviours/LookAtLuigi.cpp"{FileExtension="cpp"}
                              CreateNew...:Button="CreateNew..."{Listener="0x9a4a960"}
                              Refresh:Button="Refresh"{Listener="0x9a4a960"}
                              enabled:Bool="true"{Hidden,Readonly}
@@ -405,8 +405,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Materials/red.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/red.bmat"{FileExtension="bmat"}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9a7bb70"{Hidden,Readonly}
@@ -429,8 +429,8 @@
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
                       IsTransparent:Bool="false"{Inline}
                       LineWidth:Float="1"{Hidden}
-                      Material:File="./Assets/Materials/wood.bmat"{FileExtension="bmat"}
-                      Mesh:File="./Assets/Engine/Meshes/Sphere.bmesh"{FileExtension="bmesh"}
+                      Material:File="./Materials/wood.bmat"{FileExtension="bmat"}
+                      Mesh:File="./Meshes/Sphere.bmesh"{FileExtension="bmesh",IsEngineFile}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
                       id:String="0x9ab5d28"{Hidden,Readonly}
@@ -447,7 +447,7 @@
                        id:String="0x9adc210"{Hidden,Readonly}
                       >
             </Transform>
-            <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/LookAtLuigi.cpp"{FileExtension="cpp"}
+            <BehaviourHolder BehaviourScript:File="./Behaviours/LookAtLuigi.cpp"{FileExtension="cpp"}
                              CreateNew...:Button="CreateNew..."{Listener="0x9aefa88"}
                              Refresh:Button="Refresh"{Listener="0x9aefa88"}
                              enabled:Bool="true"{Hidden,Readonly}
@@ -468,8 +468,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Materials/red.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/red.bmat"{FileExtension="bmat"}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9a8cfe0"{Hidden,Readonly}
@@ -492,8 +492,8 @@
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
                       IsTransparent:Bool="false"{Inline}
                       LineWidth:Float="1"{Hidden}
-                      Material:File="./Assets/Materials/wood.bmat"{FileExtension="bmat"}
-                      Mesh:File="./Assets/Engine/Meshes/Sphere.bmesh"{FileExtension="bmesh"}
+                      Material:File="./Materials/wood.bmat"{FileExtension="bmat"}
+                      Mesh:File="./Meshes/Sphere.bmesh"{FileExtension="bmesh",IsEngineFile}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
                       id:String="0x9adcb80"{Hidden,Readonly}
@@ -510,7 +510,7 @@
                        id:String="0x9adbdf8"{Hidden,Readonly}
                       >
             </Transform>
-            <BehaviourHolder BehaviourScript:File="./Assets/Behaviours/LookAtLuigi.cpp"{FileExtension="cpp"}
+            <BehaviourHolder BehaviourScript:File="./Behaviours/LookAtLuigi.cpp"{FileExtension="cpp"}
                              CreateNew...:Button="CreateNew..."{Listener="0x9add468"}
                              Refresh:Button="Refresh"{Listener="0x9add468"}
                              enabled:Bool="true"{Hidden,Readonly}
@@ -531,8 +531,8 @@
                 <MeshRenderer DrawWireframe:Bool="false"{Inline}
                               IsTransparent:Bool="false"{Inline}
                               LineWidth:Float="1"{Hidden}
-                              Material:File="./Assets/Materials/red.bmat"{FileExtension="bmat"}
-                              Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                              Material:File="./Materials/red.bmat"{FileExtension="bmat"}
+                              Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                               ReceivesLighting:Bool="true"{Inline}
                               enabled:Bool="true"{Hidden,Readonly}
                               id:String="0x9af3b00"{Hidden,Readonly}
@@ -555,8 +555,8 @@
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
                       IsTransparent:Bool="true"{Inline}
                       LineWidth:Float="1"{Hidden}
-                      Material:File="./Assets/Materials/Transparent.bmat"{FileExtension="bmat"}
-                      Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                      Material:File="./Materials/Transparent.bmat"{FileExtension="bmat"}
+                      Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
                       id:String="0x9aecd10"{Hidden,Readonly}
@@ -575,11 +575,11 @@
                   >
         </Transform>
         <UIImage DrawWireframe:Bool="false"{Inline,Hidden}
-                 Image:File="./Assets/Textures/woodTexture.btex2d"{FileExtension="btex2d"}
+                 Image:File="./Textures/woodTexture.btex2d"{FileExtension="btex2d"}
                  IsTransparent:Bool="false"{Inline,Hidden}
                  LineWidth:Float="1"{Hidden}
-                 Material:File="./Assets/Materials/wood.bmat"{FileExtension="bmat",Hidden}
-                 Mesh:File="./Assets/Engine/Meshes/Plane.bmesh"{FileExtension="bmesh",Hidden}
+                 Material:File="./Materials/wood.bmat"{FileExtension="bmat",Hidden}
+                 Mesh:File="./Meshes/Plane.bmesh"{FileExtension="bmesh",Hidden,IsEngineFile}
                  ReceivesLighting:Bool="false"{Inline,Hidden}
                  Stroke:Float="0.01"{}
                  StrokeColor:Color="(0, 0, 0, 1)"{}
@@ -602,11 +602,11 @@
             <UIText Color:Color="(1, 1, 1, 1)"{}
                     Content:String="This is a testing text wololo ! :D"{Inline}
                     DrawWireframe:Bool="false"{Inline,Hidden}
-                    Font:File="./Assets/Engine/Fonts/UbuntuFont.bfont"{FileExtension="bfont"}
+                    Font:File="./Fonts/UbuntuFont.bfont"{FileExtension="bfont",IsEngineFile}
                     IsTransparent:Bool="false"{Inline,Hidden}
                     LineWidth:Float="1"{Hidden}
-                    Material:File="./Assets/Engine/Materials/UI/D2G_UIText.bmat"{FileExtension="bmat",Hidden}
-                    Mesh:File="./Assets/Engine/Meshes/Plane.bmesh"{FileExtension="bmesh",Hidden}
+                    Material:File="./Materials/UI/D2G_UIText.bmat"{FileExtension="bmat",Hidden,IsEngineFile}
+                    Mesh:File="./Meshes/Plane.bmesh"{FileExtension="bmesh",Hidden,IsEngineFile}
                     ReceivesLighting:Bool="false"{Inline,Hidden}
                     Stroke:Float="0"{}
                     StrokeColor:Color="(1, 1, 1, 1)"{}
@@ -632,8 +632,8 @@
         <MeshRenderer DrawWireframe:Bool="false"{Inline}
                       IsTransparent:Bool="false"{Inline}
                       LineWidth:Float="1"{Hidden}
-                      Material:File="./Assets/Materials/wood.bmat"{FileExtension="bmat"}
-                      Mesh:File="./Assets/Engine/Meshes/Sphere.bmesh"{FileExtension="bmesh"}
+                      Material:File="./Materials/wood.bmat"{FileExtension="bmat"}
+                      Mesh:File="./Meshes/Sphere.bmesh"{FileExtension="bmesh",IsEngineFile}
                       ReceivesLighting:Bool="true"{Inline}
                       enabled:Bool="true"{Hidden,Readonly}
                       id:String="0xa1135a8"{Hidden,Readonly}
@@ -653,8 +653,8 @@
             <MeshRenderer DrawWireframe:Bool="false"{Inline}
                           IsTransparent:Bool="false"{Inline}
                           LineWidth:Float="1"{Hidden}
-                          Material:File="./Assets/Engine/Materials/D2G_Default.bmat"{FileExtension="bmat"}
-                          Mesh:File="./Assets/Engine/Meshes/Cube.bmesh"{FileExtension="bmesh"}
+                          Material:File="./Materials/D2G_Default.bmat"{FileExtension="bmat",IsEngineFile}
+                          Mesh:File="./Meshes/Cube.bmesh"{FileExtension="bmesh",IsEngineFile}
                           ReceivesLighting:Bool="true"{Inline}
                           enabled:Bool="true"{Hidden,Readonly}
                           id:String="0xa113f90"{Hidden,Readonly}

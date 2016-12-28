@@ -217,7 +217,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     //
 
     String filepath =
-            Persistence::ToAbsolute(filepathFromProjectRoot);
+            Persistence::ToAbsolute(filepathFromProjectRoot, false);
     String scriptDir = Persistence::GetDir(filepath);
     String scriptName = Persistence::GetFileNameWithExtension(filepath);
 

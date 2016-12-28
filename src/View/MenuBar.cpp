@@ -335,7 +335,7 @@ void MenuBar::OnCreatePrefab() const
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Prefab." + Prefab::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
-    AssetsManager::CreateAsset<Prefab>(filepath);
+    AssetsManager::Create<Prefab>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 void MenuBar::OnCreateMaterial() const
@@ -344,7 +344,7 @@ void MenuBar::OnCreateMaterial() const
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Material." + Material::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
-    AssetsManager::CreateAsset<Material>(filepath);
+    AssetsManager::Create<Material>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 void MenuBar::OnCreateMesh() const
@@ -353,7 +353,7 @@ void MenuBar::OnCreateMesh() const
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Mesh." + Mesh::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
-    AssetsManager::CreateAsset<Mesh>(filepath);
+    AssetsManager::Create<Mesh>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 void MenuBar::OnCreateShaderProgram() const
@@ -373,7 +373,7 @@ void MenuBar::OnCreateTexture2D() const
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Texture2D." + Texture2D::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
-    AssetsManager::CreateAsset<Texture2D>(filepath);
+    AssetsManager::Create<Texture2D>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 
@@ -383,7 +383,7 @@ void MenuBar::OnCreateFont() const
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Font." + Font::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
-    AssetsManager::CreateAsset<Font>(filepath);
+    AssetsManager::Create<Font>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 

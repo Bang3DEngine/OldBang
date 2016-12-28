@@ -15,8 +15,8 @@
 
 DirectionalLight::DirectionalLight() : Light()
 {
-    m_lightMaterialScreen = AssetsManager::LoadAsset<Material>(
-                "Assets/Engine/Materials/PR_DirectionalLight_Screen.bmat");
+    m_lightMaterialScreen = AssetsManager::Load<Material>(
+                "Materials/PR_DirectionalLight_Screen.bmat", true);
 }
 
 const String DirectionalLight::ToString() const
@@ -57,7 +57,7 @@ void DirectionalLight::OnDrawGizmos()
 {
     Light::OnDrawGizmos();
 
-    Texture2D *tex = AssetsManager::LoadAsset<Texture2D>("Assets/Engine/Textures/DirectionalLightIcon.btex2d");
+    Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/DirectionalLightIcon.btex2d", true);
     Gizmos::SetColor(Color(GetColor(), 1.0f));
     Gizmos::SetPosition(transform->GetPosition());
     Gizmos::SetScale(Vector3::One * 0.1f);

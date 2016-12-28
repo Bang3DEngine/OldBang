@@ -38,7 +38,7 @@ void Gizmos::Init()
         Gizmos::m_boxMesh = MeshFactory::GetCube();
         Gizmos::m_sphereMesh = MeshFactory::GetSphere();
         Gizmos::m_planeMesh = MeshFactory::GetPlane();
-        Gizmos::m_material = AssetsManager::LoadAsset<Material>("./Assets/Engine/Materials/D2G_Default.bmat");
+        Gizmos::m_material = AssetsManager::Load<Material>("Materials/D2G_Default.bmat", true);
         Gizmos::m_material = new Material(*Gizmos::m_material);
         Gizmos::m_inited = true;
     }

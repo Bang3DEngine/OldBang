@@ -7,6 +7,7 @@ const XMLProperty XMLProperty::Inline("Inline");
 const XMLProperty XMLProperty::BigText("BigText");
 const XMLProperty XMLProperty::Readonly("Readonly");
 const XMLProperty XMLProperty::Disabled("Disabled");
+const XMLProperty XMLProperty::IsEngineFile("IsEngineFile");
 const XMLProperty XMLProperty::FileExtension("FileExtension");
 
 XMLProperty::XMLProperty()

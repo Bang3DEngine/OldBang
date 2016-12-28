@@ -11,7 +11,7 @@ Asset::Asset()
 
 Asset::~Asset()
 {
-    AssetsManager::UnloadAsset(this);
+    AssetsManager::Unload(this);
 }
 
 

@@ -30,7 +30,8 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModel
 
 QPixmap MaterialAssetFile::GetIcon() const
 {
-    String fp = Persistence::ToAbsolute("./Assets/Engine/Icons/MaterialAssetIcon.png");
+    String fp = Persistence::ToAbsolute("./Icons/MaterialAssetIcon.png",
+                                        Persistence::c_EngineAssetsRootAbsolute);
     QPixmap pm(QString::fromStdString(fp));
     return pm;
 }

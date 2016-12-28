@@ -45,18 +45,7 @@ public:
     // When rendering to screen after Deferred Rendering passes.
     // This texture will hold the definitive color values of the rendered scene
     Uniform_Texture_Final_Color,
-    Uniform_Material_Diffuse_Color,
-
-    Filepath_Shader_SelectionBuffer_VS,
-    Filepath_Shader_SelectionBuffer_FS,
-
-    Filepath_Shader_PR_ScreenPass_VS,
-    Filepath_Shader_PR_Default_FS,
-
-    Filepath_Shader_Render_GBuffer_To_Screen_FS,
-
-    Filepath_Shader_D2G_Default_VS,
-    Filepath_Shader_D2G_Default_FS
+    Uniform_Material_Diffuse_Color
     ;
 };
 

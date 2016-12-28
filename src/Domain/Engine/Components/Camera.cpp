@@ -16,9 +16,7 @@ void Camera::InitStatics()
 {
     if (s_inited) return;
 
-    s_camMesh = AssetsManager::LoadAsset<Mesh>(
-                "Assets/Engine/Meshes/Camera.bmesh");
-
+    s_camMesh = AssetsManager::Load<Mesh>("Meshes/Camera.bmesh", true);
     s_inited = true;
 }
 

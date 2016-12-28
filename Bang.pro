@@ -10,12 +10,15 @@ QT += core gui opengl
 #    EDITOR
 #    GAME
 
-# message(Building $$BUILD_MODE ...)
+BUILD_MODE = $$BUILD_MODE # EDITOR or GAME
+isEmpty($$BUILD_MODE) {   # Default build mode variable
+  BUILD_MODE = EDITOR
+}
+#message(BUILD_MODE: $$BUILD_MODE)
+
 CONFIG += $$BUILD_MODE
-# CONFIG += EDITOR
-# CONFIG += GAME
 CONFIG += qt
-MOC_DIR = src/
+MOC_DIR = src/Qt_MOCs/
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -50,13 +53,13 @@ LIBS += \
 EDITOR {
     DEFINES += BANG_EDITOR
     RESOURCES = Assets/Engine/qdarkstyle/style.qrc
-    OBJECTS_DIR = objEditor/
-    TARGET = BangEditor.exe
+    OBJECTS_DIR = bin/objEditor/
+    TARGET = bin/BangEditor.exe
 }
 
 GAME {
-    OBJECTS_DIR = objGame/
-    TARGET = Game.exe
+    OBJECTS_DIR = bin/objGame/
+    TARGET = bin/Game.exe
 }
 
 

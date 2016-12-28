@@ -258,7 +258,7 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
         File f = explorer->GetSelectedFile();
         if (f.IsMaterialAsset())
         {
-            Material *mat = AssetsManager::LoadAsset<Material>(f.GetRelativePath());
+            Material *mat = AssetsManager::Load<Material>(f.GetRelativePath());
             if (mat)
             {
                 if (m_lastGameObjectOvered != overedGo)

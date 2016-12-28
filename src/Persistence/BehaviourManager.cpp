@@ -65,7 +65,7 @@ bool BehaviourManager::IsCached(const String &behaviourPath)
     BehaviourManager *bm = BehaviourManager::GetInstance();
     if (!bm) { return false; }
 
-    String bfp = Persistence::ToRelative(behaviourPath);
+    String bfp = Persistence::ToRelative(behaviourPath, false);
     return bm->m_behaviourPath_To_library.ContainsKey(bfp);
 }
 
@@ -91,7 +91,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
 {
     BehaviourManager *bm = BehaviourManager::GetInstance(); NONULL(bm);
 
-    String bfp = Persistence::ToRelative(behaviourFilepath);
+    String bfp = Persistence::ToRelative(behaviourFilepath, false);
     if (BehaviourManager::IsCached(bfp))
     {
         // It's cached from a previous load...

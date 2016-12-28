@@ -258,6 +258,11 @@ String String::ToString(const Color &v)
 {
     return v.ToString();
 }
+
+String String::ToString(const String &v)
+{
+    return v;
+}
 String String::ToString(const Vector2 &v)
 {
     return v.ToString();

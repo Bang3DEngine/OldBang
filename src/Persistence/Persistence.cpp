@@ -4,9 +4,15 @@
 #include "Explorer.h"
 #endif
 
+#include "Debug.h"
 #include "StringUtils.h"
 
 String Persistence::s_currentSceneFilepath = "";
+
+// Set by main.cpp
+String Persistence::c_ProjectRootAbsolute = "";
+String Persistence::c_ProjectAssetsRootAbsolute = "";
+String Persistence::c_EngineAssetsRootAbsolute = "";
 
 bool Persistence::IsAbsolute(const String &path)
 {
@@ -20,12 +26,12 @@ String Persistence::GetProjectRootPathAbsolute()
 
 String Persistence::GetAssetsRelativePathFromProjectRoot()
 {
-    return "/Assets";
+    return "Assets";
 }
 
 String Persistence::GetAssetsPathAbsolute()
 {
-    return GetProjectRootPathAbsolute() +
+    return GetProjectRootPathAbsolute() + "/" +
            GetAssetsRelativePathFromProjectRoot();
 }
 
@@ -65,36 +71,49 @@ String Persistence::GetFileNameWithExtension(const String &filepath)
 
 String Persistence::GetPathWithoutExtension(const String &filepath)
 {
-    return filepath.Split('.')[0];
+    String path = GetDir(filepath);
+    path += GetFileName(filepath);
+    return path;
 }
 
 
-String Persistence::ToAbsolute(const String &relPath)
+String Persistence::ToAbsolute(const String &relPath,
+                               const String &prependDirectory)
 {
     if (relPath == "") return "";
     if (IsAbsolute(relPath)) return relPath;
 
-    if (relPath[0] == '.')
+    String rPath = relPath;
+    if (rPath[0] == '.' && rPath[1] == '/') // Something like "./Images/wololo"
     {
-        return GetProjectRootPathAbsolute() +
-                relPath.substr(1, relPath.Length() - 1); //No starting "."
+        return  prependDirectory +
+                relPath.substr(1, relPath.Length() - 2);
     }
-    else
+
+    String pDir = prependDirectory;
+    if (pDir[pDir.Length()-1] == '/')
     {
-        if (relPath[0] == '/')
-        {
-            return GetProjectRootPathAbsolute() + relPath;
-        }
-        else
-        {
-            return GetProjectRootPathAbsolute() + "/" + relPath;
-        }
+        pDir = pDir.SubString(0, pDir.Length()-1);
     }
+
+    return pDir + "/" + relPath;
 }
 
-String Persistence::ToRelative(const String &absPath)
+String Persistence::ToAbsolute(const String &relPath, bool isEngineFile)
 {
-    // /home/wololo/MyProject/Assets/lolol/a.bmesh => ./Assets/lolol/a.bmesh
+    Debug_Log("ToAbsolute of " << relPath << ": " <<
+              Persistence::ToAbsolute(relPath,
+                 isEngineFile ? Persistence::c_EngineAssetsRootAbsolute :
+                                Persistence::c_ProjectAssetsRootAbsolute)
+              );
+    return Persistence::ToAbsolute(relPath,
+              isEngineFile ? Persistence::c_EngineAssetsRootAbsolute :
+                             Persistence::c_ProjectAssetsRootAbsolute);
+}
+
+String Persistence::ToRelative(const String &absPath,
+                               const String &prependDirectory)
+{
     if (absPath == "") return "";
 
     if (!IsAbsolute(absPath))
@@ -106,19 +125,24 @@ String Persistence::ToRelative(const String &absPath)
         return absPath;
     }
 
-    std::size_t pos = absPath.find(GetAssetsRelativePathFromProjectRoot());
+    std::size_t pos = absPath.find(prependDirectory);
     if (pos == String::npos) return absPath;
 
-    return "." + absPath.substr(
-                 pos,
-                 absPath.Length() -
-                 GetAssetsRelativePathFromProjectRoot().Length());
+    return "." + absPath.substr(pos,
+                                absPath.Length() - prependDirectory.Length());
+}
+
+String Persistence::ToRelative(const String &relPath, bool isEngineFile)
+{
+    return Persistence::ToRelative(relPath,
+              isEngineFile ? Persistence::c_EngineAssetsRootAbsolute :
+                             Persistence::c_ProjectAssetsRootAbsolute);
 }
 
 #ifdef BANG_EDITOR
 String Persistence::GetNextDuplicateName(const String &path)
 {
-    String filePath = Persistence::ToRelative(path);
+    String filePath = Persistence::ToRelative(path, false);
     String fileDir  = Persistence::GetDir(filePath);
     String fileName = Persistence::GetFileNameWithExtension(filePath);
 

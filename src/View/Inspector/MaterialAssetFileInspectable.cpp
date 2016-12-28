@@ -22,7 +22,7 @@ MaterialAssetFileInspectable::MaterialAssetFileInspectable
 void MaterialAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     // Update live instances currently being used
-    Material *currentMat = AssetsManager::LoadAsset<Material>(m_materialAssetFile.GetRelativePath());
+    Material *currentMat = AssetsManager::Load<Material>(m_materialAssetFile.GetRelativePath());
     if (currentMat) // Now we update the asset file.
     {
         currentMat->OnInspectorXMLChanged(xmlInfo);

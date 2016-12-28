@@ -27,32 +27,57 @@ AssetsManager *AssetsManager::GetCurrent()
     return  app ? app->GetAssetsManager() : nullptr;
 }
 
-String AssetsManager::FormatFilepath(const String &filepath)
+String AssetsManager::FormatFilepathForSearchingFile(const String &filepath,
+                                                     bool isEngineAsset)
 {
-    return Persistence::ToRelative(filepath);
+    if (Persistence::IsAbsolute(filepath))
+    {   // Do nothing, maybe the user is looking for something outside of Assets
+        return filepath;
+    }
+/*
+    String prependDirectory = isEngineAsset ?
+                Persistence::c_EngineAssetsRootAbsolute :
+                Persistence::c_ProjectAssetsRootAbsolute;
+*/
+    return Persistence::ToAbsolute(filepath, isEngineAsset);
 }
 
-bool AssetsManager::IsAssetLoaded(const String &filepath)
+String AssetsManager::FormatFilepathForCacheMap(const String &filepath,
+                                                bool isEngineAsset)
+{
+    String prependDirectory = isEngineAsset ?
+                Persistence::c_EngineAssetsRootAbsolute :
+                Persistence::c_ProjectAssetsRootAbsolute;
+
+    // Temporal solution to avoid collisions of Engine assets with user assets
+    //if (isEngineAsset)
+    //    prependDirectory += "ENGINE";
+
+    return Persistence::ToRelative(filepath, isEngineAsset);
+}
+
+bool AssetsManager::IsLoaded(const String &filepath,
+                             bool isEngineAsset)
 {
     AssetsManager *am = AssetsManager::GetCurrent();
     if (!am) { return false; }
 
-    String f = AssetsManager::FormatFilepath(filepath);
+    String f = AssetsManager::FormatFilepathForCacheMap(filepath, isEngineAsset);
     return (am->m_id_To_AssetPointer.ContainsKey(f));
 }
 
-void AssetsManager::UnloadAsset(Asset *asset)
+void AssetsManager::Unload(Asset *asset, bool isEngineAsset)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); NONULL(am);
     am->m_id_To_AssetPointer.RemoveValues(asset);
 }
 
-void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset)
+void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset, bool isEngineAsset)
 {
     AssetsManager *am = AssetsManager::GetCurrent(); NONULL(am);
     if (!filepath.Empty() && asset)
     {
-        String f = FormatFilepath(filepath);
+        String f = FormatFilepathForCacheMap(filepath, isEngineAsset);
         if (!f.Empty())
         {
             am->m_id_To_AssetPointer[f] = asset;
@@ -60,10 +85,11 @@ void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset)
     }
 }
 
-void AssetsManager::SaveAssetToFile(const String &filepath, Asset *asset)
+void AssetsManager::SaveAssetToFile(const String &filepath, Asset *asset, bool isEngineAsset)
 {
     if (!filepath.Empty() && asset)
     {
-        FileWriter::WriteToFile(filepath, asset);
+        String f = FormatFilepathForSearchingFile(filepath, isEngineAsset);
+        FileWriter::WriteToFile(f, asset);
     }
 }

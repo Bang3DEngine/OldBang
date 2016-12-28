@@ -78,7 +78,7 @@ void ExplorerContextMenu::OnCreateFolderClicked()
     String currentDir = m_explorer->GetCurrentDir();
     String dirPath = currentDir + "/New_Folder";
     dirPath = Persistence::GetDuplicateName(dirPath, m_explorer);
-    dirPath = Persistence::ToAbsolute(dirPath);
+    dirPath = Persistence::ToAbsolute(dirPath, false);
 
     QDir dir = QDir::root();
     dir.mkpath(dirPath.ToQString());

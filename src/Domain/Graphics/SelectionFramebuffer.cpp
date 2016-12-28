@@ -4,6 +4,7 @@
 #include "Material.h"
 #include "Renderer.h"
 #include "GameObject.h"
+#include "Persistence.h"
 #include "EditorWindow.h"
 #include "ShaderProgram.h"
 #include "TextureRender.h"
@@ -18,8 +19,8 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
     m_program = new ShaderProgram(
-                ShaderContract::Filepath_Shader_SelectionBuffer_VS,
-                ShaderContract::Filepath_Shader_SelectionBuffer_FS);
+                Persistence::ToAbsolute("Shaders/D2G_Default.vert", true),
+                Persistence::ToAbsolute("Shaders/D2G_Default.frag", true));
 
     m_material = new Material();
     m_material->SetShaderProgram(m_program);

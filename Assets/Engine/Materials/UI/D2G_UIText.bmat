@@ -1,6 +1,6 @@
 <Material DiffuseColor:Color="(1, 1, 1, 1)"{}
-          FragmentShader:File="./Assets/Engine/Shaders/UI/D2G_UIText.frag"{FileExtension="frag"}
+          FragmentShader:File="./Shaders/UI/D2G_UIText.frag"{FileExtension="frag",IsEngineFile}
           TextureCount:Int="0"{}
-          VertexShader:File="./Assets/Engine/Shaders/D2G_Default.vert"{FileExtension="vert"}
+          VertexShader:File="./Shaders/D2G_Default.vert"{FileExtension="vert",IsEngineFile}
          >
 </Material>
