@@ -3,6 +3,7 @@
 #include "Bang.h"
 
 #include "Font.h"
+#include "Debug.h"
 #include "XMLNode.h"
 #include "Material.h"
 #include "Transform.h"

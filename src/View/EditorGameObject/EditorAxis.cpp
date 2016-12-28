@@ -31,14 +31,16 @@ String EditorAxis::GetStringFromDir(EditorAxis::EditorAxisDirection dir)
 {
     if (dir == EditorAxisDirection::X) return "X";
     else if (dir == EditorAxisDirection::Y) return "Y";
-    else return "Z";
+    else if (dir == EditorAxisDirection::Z) return "Z";
+    else return "Central";
 }
 
 Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir)
 {
     if (dir == EditorAxisDirection::X) return Vector3::Right;
     else if (dir == EditorAxisDirection::Y) return Vector3::Up;
-    else return Vector3::Forward;
+    else if (dir == EditorAxisDirection::Z) return Vector3::Forward;
+    else return Vector3::One; // Central
 }
 
 void EditorAxis::OnUpdate()

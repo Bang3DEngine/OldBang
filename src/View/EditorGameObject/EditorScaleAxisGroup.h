@@ -3,6 +3,7 @@
 
 #include "EditorGameObject.h"
 
+class Material;
 class EditorScaleAxis;
 /**
  * @brief The EditorScaleAxisGroup class represents a group of EditorScaleAxises.
@@ -13,9 +14,10 @@ class EditorScaleAxis;
 class EditorScaleAxisGroup : public EditorGameObject
 {
 private:
-    EditorScaleAxis *m_axisX;
-    EditorScaleAxis *m_axisY;
-    EditorScaleAxis *m_axisZ;
+    EditorScaleAxis *m_axisX = nullptr;
+    EditorScaleAxis *m_axisY = nullptr;
+    EditorScaleAxis *m_axisZ = nullptr;
+    EditorScaleAxis *m_axisCentral = nullptr; // Uniform scaling
 
 public:
     EditorScaleAxisGroup(GameObject *attachedGameObject);

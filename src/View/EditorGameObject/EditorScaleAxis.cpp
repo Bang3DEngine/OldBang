@@ -20,6 +20,7 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
 {
     SetName("EditorScaleAxisGroup" + EditorAxis::GetStringFromDir(dir));
 
+    // Line Renderer configuration
     m_line = AddComponent<SingleLineRenderer>();
     m_line->SetDestiny(m_oAxisDirection);
     m_line->SetMaterial(m_material);
@@ -33,6 +34,7 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
         }
     );
 
+    // Scale axis cap configuration (the cube at the end)
     m_axisCap = MeshFactory::GetCubeEditorGameObject();
     m_axisCap->SetParent(this);
     m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
@@ -42,6 +44,11 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->GetComponent<MeshRenderer>()->SetIsGizmo(true);
     m_axisCap->GetComponent<MeshRenderer>()->
             SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmosOverlay);
+
+    if (dir == EditorAxis::EditorAxisDirection::Central)
+    {
+        ConfigureCentralAxis();
+    }
 }
 
 EditorScaleAxis::~EditorScaleAxis()
@@ -111,5 +118,11 @@ void EditorScaleAxis::OnDrawGizmosOverlay()
 Renderer *EditorScaleAxis::GetAxisRenderer() const
 {
     return m_line;
+}
+
+void EditorScaleAxis::ConfigureCentralAxis()
+{
+    m_line->SetDestiny(Vector3::Zero); // i.e. no line
+    m_axisCap->transform->SetLocalPosition(Vector3::Zero); // Center
 }
 

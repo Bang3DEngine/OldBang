@@ -16,7 +16,7 @@ class GameObject;
 class EditorAxis : public EditorGameObject
 {
 public:
-    enum EditorAxisDirection { X, Y, Z };
+    enum EditorAxisDirection { X, Y, Z, Central };
 
 protected:
 

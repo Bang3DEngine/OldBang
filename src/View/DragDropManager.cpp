@@ -76,6 +76,9 @@ void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
 {
     DragDropManager *m = DragDropManager::s_ddManager;
     m->m_mouseDown = true;
+
+    DragDropAgent *currentDDAgentBelowMouse = DragDropManager::GetDragDropAgentBelowMouse();
+    m->m_ddInfo.sourceObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
 }
 
 void DragDropManager::HandleGlobalMouseRelease(QObject *obj, QEvent *e)
@@ -116,7 +119,6 @@ void DragDropManager::Update()
     bool isDragStart = !m->m_latestUpdateDragging && m->m_dragging;
     if (isDragStart)
     {
-        m->m_ddInfo.sourceObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
         for (IDragDropListener *d : m->m_dragDropListeners)
         {
             d->OnDragStart(m->m_ddInfo);
