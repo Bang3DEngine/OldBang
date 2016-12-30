@@ -13,14 +13,12 @@ private:
 public:
    static String c_ProjectRootAbsolute;
    static String c_ProjectAssetsRootAbsolute;
+   static String c_EngineRootAbsolute;
    static String c_EngineAssetsRootAbsolute;
 
    static bool IsAbsolute(const String &path);
 
    static String GetProjectRootPathAbsolute();
-
-   static String GetAssetsRelativePathFromProjectRoot();
-
    static String GetAssetsPathAbsolute();
 
    static String GetDir(const String &filepath);
@@ -47,6 +45,8 @@ public:
    static String ToRelative(const String &absPath);
 
    static bool IsEngineFile(const String &filepath);
+
+   static String GetDirUp(const String &filepath);
 
    #ifdef BANG_EDITOR
    /**

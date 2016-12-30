@@ -1,5 +1,0 @@
-<Texture2D ImageFilepath:File="./Textures/testTexture.png"{FileExtension="jpg png bmp"}
-           FilterMode:Enum="1"{EnumName0="Nearest",EnumName1="Linear"}
-           AlphaCuttoff:Float="0"{}>
-</Texture2D>
-

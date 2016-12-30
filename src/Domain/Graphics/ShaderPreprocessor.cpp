@@ -24,7 +24,7 @@ String ShaderPreprocessor::
                                    int includeDirectiveLine)
 {
     Array<String> includeParts = includeDirective.Split('"', true);
-    if (includeParts.Size() < 3) { return ""; }
+    if (includeParts.Size() < 2) { return ""; }
 
     String includeFile = includeParts[1];
 

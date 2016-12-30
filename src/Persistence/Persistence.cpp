@@ -12,6 +12,7 @@ String Persistence::s_currentSceneFilepath = "";
 // Set by main.cpp
 String Persistence::c_ProjectRootAbsolute = "";
 String Persistence::c_ProjectAssetsRootAbsolute = "";
+String Persistence::c_EngineRootAbsolute = "";
 String Persistence::c_EngineAssetsRootAbsolute = "";
 
 bool Persistence::IsAbsolute(const String &path)
@@ -21,18 +22,12 @@ bool Persistence::IsAbsolute(const String &path)
 
 String Persistence::GetProjectRootPathAbsolute()
 {
-    return QT_PROJECT_PATH;
-}
-
-String Persistence::GetAssetsRelativePathFromProjectRoot()
-{
-    return "Assets";
+    return Persistence::c_ProjectRootAbsolute;
 }
 
 String Persistence::GetAssetsPathAbsolute()
 {
-    return GetProjectRootPathAbsolute() + "/" +
-           GetAssetsRelativePathFromProjectRoot();
+    return Persistence::c_ProjectAssetsRootAbsolute;
 }
 
 String Persistence::GetDir(const String &filepath)
@@ -143,6 +138,14 @@ String Persistence::ToRelative(const String &absPath)
 bool Persistence::IsEngineFile(const String &filepath)
 {
     return filepath.BeginsWith(Persistence::c_EngineAssetsRootAbsolute);
+}
+
+String Persistence::GetDirUp(const String &filepath)
+{
+    Array<String> splits = filepath.Split('/');
+    splits.PopBack();
+    return (Persistence::IsAbsolute(filepath) ? "/" : "") +
+            String::Join(splits, "/");
 }
 
 #ifdef BANG_EDITOR

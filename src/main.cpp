@@ -47,9 +47,13 @@
 int main(int argc, char *argv[])
 {
     // Init some paths:
-    Persistence::c_ProjectRootAbsolute = "/home/sephirot47/Bang";
+    String engineDir = argv[0];
+    String binDir = Persistence::GetDir(engineDir);
+    String engineRootDirAbs = Persistence::GetDirUp(binDir);
+    Persistence::c_ProjectRootAbsolute = "/home/sephirot47/BangTestProject"; // Not correct
     Persistence::c_ProjectAssetsRootAbsolute = Persistence::c_ProjectRootAbsolute + "/Assets";
-    Persistence::c_EngineAssetsRootAbsolute = "/home/sephirot47/Bang/EngineAssets";
+    Persistence::c_EngineRootAbsolute = engineRootDirAbs;
+    Persistence::c_EngineAssetsRootAbsolute = Persistence::c_EngineRootAbsolute + "/EngineAssets";
     //
 
     SingletonManager::InitSingletonManagerFromMainBinary();

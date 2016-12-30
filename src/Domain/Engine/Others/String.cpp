@@ -110,13 +110,15 @@ Array<String> String::Split(char splitter, bool trimResults) const
             indexFound = Length();
         }
 
-        String particle = SubString(lastIndexFound, indexFound - 1);
-        if (trimResults)
+        if (indexFound != lastIndexFound)
         {
-            particle = particle.Trimmed();
+            String particle = SubString(lastIndexFound, indexFound - 1);
+            if (trimResults)
+            {
+                particle = particle.Trimmed();
+            }
+            result.PushBack(particle);
         }
-        result.PushBack(particle);
-
         lastIndexFound = indexFound + 1;
     }
     return result;

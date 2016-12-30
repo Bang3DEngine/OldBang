@@ -10,9 +10,19 @@
 
 String SystemUtils::GetAllProjectObjects()
 {
+    return SystemUtils::GetAllObjects(Persistence::c_ProjectRootAbsolute);
+}
+
+String SystemUtils::GetAllEngineObjects()
+{
+    return SystemUtils::GetAllObjects(Persistence::c_EngineRootAbsolute);
+}
+
+String SystemUtils::GetAllObjects(const String &rootFilepath)
+{
     String cmdGetAllObjects = "";
     cmdGetAllObjects = " find " +                                  // Find recursively
-                       Persistence::GetProjectRootPathAbsolute() + // From project root
+                       rootFilepath +                              // From project root
                        " -type f " +                               // Only files
                        " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
                        " | grep -E -v \"BangPreprocessor\" " +     // Temporal fix with colliding .o's TODO
@@ -37,9 +47,19 @@ String SystemUtils::GetAllProjectObjects()
 
 String SystemUtils::GetAllProjectSubDirs()
 {
+    return GetAllSubDirs(Persistence::c_ProjectRootAbsolute);
+}
+
+String SystemUtils::GetAllEngineSubDirs()
+{
+    return GetAllSubDirs(Persistence::c_EngineRootAbsolute);
+}
+
+String SystemUtils::GetAllSubDirs(const String &rootFilepath)
+{
     String cmdGetAllSubDirs = "";
     cmdGetAllSubDirs = " find " +                                  // Find recursively
-                       Persistence::GetProjectRootPathAbsolute() + // From project root
+                       rootFilepath +                              // From root
                        " -type d " +                               // Only directories
                        " | grep -E -v \"\\.\" " +                  // Not including hidden dirs
                        " | xargs";                                 // Inline
@@ -49,7 +69,7 @@ String SystemUtils::GetAllProjectSubDirs()
     SystemUtils::System(cmdGetAllSubDirs, &allSubDirs, &ok);
     if (!ok)
     {
-        Debug_Error("Error trying to find include directories to compile.");
+        Debug_Error("Error trying to find subdirs for dir '" << rootFilepath << "'");
     }
 
     return allSubDirs;
@@ -186,13 +206,16 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     // Get all subdirs recursively in a single line, and add -I in Front of every path
 
     String includes = "";
-    includes += SystemUtils::GetAllProjectSubDirs();
     includes += " . ";
+    includes += SystemUtils::GetAllProjectSubDirs();
+    includes += SystemUtils::GetAllEngineSubDirs();
     includes += SystemUtils::GetQtIncludes();
     StringUtils::RemoveLineBreaks(&includes);
     StringUtils::AddInFrontOfWords("-I", &includes);
 
-    String objs = SystemUtils::GetAllProjectObjects();
+    String objs = "";
+    objs += SystemUtils::GetAllProjectObjects();
+    objs += SystemUtils::GetAllEngineObjects();
     StringUtils::RemoveLineBreaks(&objs);
 
     String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
