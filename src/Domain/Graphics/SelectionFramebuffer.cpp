@@ -1,6 +1,7 @@
 #include "SelectionFramebuffer.h"
 
 #include "Scene.h"
+#include "Debug.h"
 #include "Material.h"
 #include "Renderer.h"
 #include "GameObject.h"
@@ -19,8 +20,8 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
     m_program = new ShaderProgram(
-                Persistence::ToAbsolute("Shaders/D2G_Default.vert", true),
-                Persistence::ToAbsolute("Shaders/D2G_Default.frag", true));
+                Persistence::ToAbsolute("Shaders/SelectionBuffer.vert", true),
+                Persistence::ToAbsolute("Shaders/SelectionBuffer.frag", true));
 
     m_material = new Material();
     m_material->SetShaderProgram(m_program);
@@ -187,4 +188,15 @@ bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
               ego->IsRenderInSelectionFramebuffer();
     }
     return go && go->IsEnabled() && !go->IsDraggedGameObject();
+}
+
+
+TextureRender *SelectionFramebuffer::GetColorTexture() const
+{
+    return m_colorTexture;
+}
+
+TextureRender *SelectionFramebuffer::GetWorldPosTexture() const
+{
+    return m_worldPosTexture;
 }

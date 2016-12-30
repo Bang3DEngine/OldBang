@@ -70,6 +70,9 @@ public:
     void RenderForSelectionBuffer(Renderer *renderer);
     void ProcessSelection();
 
+    TextureRender *GetColorTexture() const;
+    TextureRender *GetWorldPosTexture() const;
+
     GameObject *GetGameObjectInPosition(int x, int y);
     Material* GetSelectionMaterial() const;
     Vector3 GetWorldPositionAt(int x, int y);
@@ -80,5 +83,7 @@ public:
     friend class Gizmos;
     friend class GraphicPipeline;
 };
+
+
 
 #endif // SELECTIONFRAMEBUFFER_H

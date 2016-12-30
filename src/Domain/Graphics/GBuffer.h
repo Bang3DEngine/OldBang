@@ -34,8 +34,6 @@ public:
 
 private:
 
-    Material *m_renderGBufferToScreenMaterial = nullptr;
-    Mesh *m_planeMeshToRenderEntireScreen = nullptr;
     bool m_stencilWriteEnabled = false;
     bool m_stencilTestEnabled  = false;
 

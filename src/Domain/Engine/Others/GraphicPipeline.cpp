@@ -1,15 +1,24 @@
 #include "GraphicPipeline.h"
 
+#include "VAO.h"
+#include "VBO.h"
+#include "Mesh.h"
+#include "Bang.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "Light.h"
 #include "Screen.h"
 #include "Camera.h"
 #include "GBuffer.h"
+#include "Texture.h"
 #include "Material.h"
 #include "GameObject.h"
+#include "MeshFactory.h"
 #include "SceneManager.h"
+#include "TextureRender.h"
+#include "ShaderProgram.h"
 #include "AssetsManager.h"
+#include "ShaderContract.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
@@ -27,6 +36,10 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     #ifdef BANG_EDITOR
     m_selectionFB = new SelectionFramebuffer(screen->m_width, screen->m_height);
     #endif
+
+    m_renderGBufferToScreenMaterial =
+            AssetsManager::Load<Material>("Materials/RenderGBufferToScreen.bmat", true);
+    m_planeMeshToRenderEntireScreen = MeshFactory::GetPlane();
 }
 
 GraphicPipeline::~GraphicPipeline()
@@ -243,6 +256,48 @@ void GraphicPipeline::RenderCustomPR(Renderer *rend)
         m_gbuffer->SetStencilTest(true);
     }
     rend->RenderCustomPR();
+}
+
+void GraphicPipeline::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
+{
+    NONULL(mat);
+
+    m_planeMeshToRenderEntireScreen->
+            BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
+                                         *(mat->GetShaderProgram()));
+
+    mat->GetShaderProgram()->SetUniformVec2("B_rectMinCoord", renderRect.GetMin());
+    mat->GetShaderProgram()->SetUniformVec2("B_rectMaxCoord", renderRect.GetMax());
+
+    mat->Bind();
+    RenderScreenPlane();
+    mat->UnBind();
+}
+
+void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
+{
+    m_planeMeshToRenderEntireScreen->
+                BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
+                                             *(m_renderGBufferToScreenMaterial->GetShaderProgram()));
+
+    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram(); NONULL(sp);
+    sp->SetUniformTexture("B_color_gout_fin", fullScreenTexture, false);
+
+    m_renderGBufferToScreenMaterial->Bind();
+    GraphicPipeline::RenderScreenPlane();
+    m_renderGBufferToScreenMaterial->UnBind();
+}
+
+void GraphicPipeline::RenderScreenPlane()
+{
+    m_planeMeshToRenderEntireScreen->GetVAO()->Bind();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glDepthFunc(GL_ALWAYS);
+    glDepthMask(GL_FALSE);
+    glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS);
+    m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
 }
 
 void GraphicPipeline::RenderDepthLayers(Framebuffer *fb)

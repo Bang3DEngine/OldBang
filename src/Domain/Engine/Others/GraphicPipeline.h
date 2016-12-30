@@ -6,6 +6,7 @@
 class Scene;
 class Screen;
 class GBuffer;
+class Texture;
 class Material;
 class GameObject;
 class Framebuffer;
@@ -24,6 +25,10 @@ public:
     void RenderScene(Scene *scene);
     void RenderRenderer(Renderer *rend);
     void RenderCustomPR(Renderer *rend);
+    void RenderToScreen(Texture *fullScreenTexture);
+    void RenderPassWithMaterial(Material *mat,
+                                const Rect &renderRect = Rect(-1, 1, -1, 1));
+    void RenderScreenPlane();
 
     void OnResize(int newWidth, int newHeight);
 
@@ -37,6 +42,9 @@ public:
     #endif
 
 private:
+    Material *m_renderGBufferToScreenMaterial = nullptr;
+    Mesh *m_planeMeshToRenderEntireScreen = nullptr;
+
     Scene *m_currentScene = nullptr;
     Renderer::DepthLayer m_currentDepthLayer =
             Renderer::DepthLayer::DepthLayerScene;

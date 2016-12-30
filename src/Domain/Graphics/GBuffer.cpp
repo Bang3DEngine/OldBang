@@ -15,6 +15,7 @@
 #include "AssetsManager.h"
 #include "TextureRender.h"
 #include "ShaderContract.h"
+#include "GraphicPipeline.h"
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
@@ -36,13 +37,6 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     SetColorAttachment(Attachment::Stencil,            m_stencilTexture);
     SetColorAttachment(Attachment::Color,              m_colorTexture);
     CreateDepthRenderbufferAttachment();
-
-    String renderToScreenMatFilepath =
-            "Materials/RenderGBufferToScreen.bmat";
-
-    m_renderGBufferToScreenMaterial =
-            AssetsManager::Load<Material>(renderToScreenMatFilepath, true);
-    m_planeMeshToRenderEntireScreen = MeshFactory::GetPlane();
 }
 
 GBuffer::~GBuffer()
@@ -80,60 +74,26 @@ void GBuffer::SetUniformsBeforeRendering(Material *mat)
 void GBuffer::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
 {
     NONULL(mat);
-    m_planeMeshToRenderEntireScreen->
-            BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
-                                         *(mat->GetShaderProgram()));
-
-    mat->GetShaderProgram()->SetUniformVec2("B_rectMinCoord", renderRect.GetMin());
-    mat->GetShaderProgram()->SetUniformVec2("B_rectMaxCoord", renderRect.GetMax());
 
     bool prevStencilWrite = m_stencilWriteEnabled;
     SetStencilWrite(false);
 
     SetUniformsBeforeRendering(mat);
-    mat->Bind();
-
     SaveCurrentDrawBuffers();
 
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there
     SetColorDrawBuffer();
-    RenderScreenPlane();
-
-    mat->UnBind();
+    GraphicPipeline::GetActive()->RenderPassWithMaterial(mat, renderRect);
 
     SetStencilWrite(prevStencilWrite);
-
     LoadSavedDrawBuffers();
 }
 
 void GBuffer::RenderToScreen(GBuffer::Attachment attachmentId)
 {
     // Assumes gbuffer is not bound, hence directly writing to screen
-    m_planeMeshToRenderEntireScreen->
-                BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
-                                             *(m_renderGBufferToScreenMaterial->GetShaderProgram()));
-
-    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram(); NONULL(sp);
     Texture *tex = GetColorAttachment(attachmentId); NONULL(tex);
-    sp->SetUniformTexture("B_color_gout_fin", tex, false);
-
-    m_renderGBufferToScreenMaterial->Bind();
-    RenderScreenPlane();
-    m_renderGBufferToScreenMaterial->UnBind();
-}
-
-void GBuffer::RenderScreenPlane()
-{
-    m_planeMeshToRenderEntireScreen->GetVAO()->Bind();
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glDepthFunc(GL_ALWAYS);
-    glDepthMask(GL_FALSE);
-    glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());
-    glDepthMask(GL_TRUE);
-    glDepthFunc(GL_LESS);
-
-    m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
+    GraphicPipeline::GetActive()->RenderToScreen(tex);
 }
 
 void GBuffer::SaveCurrentDrawBuffers()
