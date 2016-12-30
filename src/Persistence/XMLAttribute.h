@@ -104,7 +104,7 @@ public:
     const String& GetName() const;
     const XMLAttribute::Type& GetType() const;
 
-    const String& GetValue() const;
+    String GetValue() const;
     bool GetBool() const;
     int GetInt() const;
     float GetFloat() const;

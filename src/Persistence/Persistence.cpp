@@ -83,17 +83,17 @@ String Persistence::ToAbsolute(const String &relPath,
     if (relPath == "") return "";
     if (IsAbsolute(relPath)) return relPath;
 
-    String rPath = relPath;
-    if (rPath[0] == '.' && rPath[1] == '/') // Something like "./Images/wololo"
-    {
-        return  prependDirectory +
-                relPath.substr(1, relPath.Length() - 2);
-    }
-
     String pDir = prependDirectory;
     if (pDir[pDir.Length()-1] == '/')
     {
-        pDir = pDir.SubString(0, pDir.Length()-1);
+        pDir = pDir.SubString(1, pDir.Length()-1);
+    }
+
+    String rPath = relPath;
+    if (rPath[0] == '.' && rPath[1] == '/') // Something like "./Images/wololo"
+    {
+        return  prependDirectory + "/" +
+                relPath.substr(2, relPath.Length() - 1);
     }
 
     return pDir + "/" + relPath;
@@ -101,11 +101,6 @@ String Persistence::ToAbsolute(const String &relPath,
 
 String Persistence::ToAbsolute(const String &relPath, bool isEngineFile)
 {
-    Debug_Log("ToAbsolute of " << relPath << ": " <<
-              Persistence::ToAbsolute(relPath,
-                 isEngineFile ? Persistence::c_EngineAssetsRootAbsolute :
-                                Persistence::c_ProjectAssetsRootAbsolute)
-              );
     return Persistence::ToAbsolute(relPath,
               isEngineFile ? Persistence::c_EngineAssetsRootAbsolute :
                              Persistence::c_ProjectAssetsRootAbsolute);
@@ -114,7 +109,7 @@ String Persistence::ToAbsolute(const String &relPath, bool isEngineFile)
 String Persistence::ToRelative(const String &absPath,
                                const String &prependDirectory)
 {
-    if (absPath == "") return "";
+    if (absPath.Empty()) return "";
 
     if (!IsAbsolute(absPath))
     {
@@ -128,8 +123,9 @@ String Persistence::ToRelative(const String &absPath,
     std::size_t pos = absPath.find(prependDirectory);
     if (pos == String::npos) return absPath;
 
-    return "." + absPath.substr(pos,
-                                absPath.Length() - prependDirectory.Length());
+    String relPath = "." + absPath.substr( pos + prependDirectory.Length(),
+                                          (absPath.Length() - prependDirectory.Length()));
+    return relPath;
 }
 
 String Persistence::ToRelative(const String &relPath, bool isEngineFile)
@@ -139,10 +135,20 @@ String Persistence::ToRelative(const String &relPath, bool isEngineFile)
                              Persistence::c_ProjectAssetsRootAbsolute);
 }
 
+String Persistence::ToRelative(const String &absPath)
+{
+    return Persistence::ToRelative(absPath, Persistence::IsEngineFile(absPath));
+}
+
+bool Persistence::IsEngineFile(const String &filepath)
+{
+    return filepath.BeginsWith(Persistence::c_EngineAssetsRootAbsolute);
+}
+
 #ifdef BANG_EDITOR
 String Persistence::GetNextDuplicateName(const String &path)
 {
-    String filePath = Persistence::ToRelative(path, false);
+    String filePath = Persistence::ToRelative(path);
     String fileDir  = Persistence::GetDir(filePath);
     String fileName = Persistence::GetFileNameWithExtension(filePath);
 

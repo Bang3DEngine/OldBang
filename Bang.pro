@@ -26,7 +26,8 @@ qtcAddDeployment()
 DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
 
 QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
-QMAKE_CXXFLAGS += -O3
+QMAKE_CXXFLAGS += -O0
+#QMAKE_CXXFLAGS += -O3
 
 FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType
 !exists (src/Domain/Graphics/FreeType/build) {
@@ -52,7 +53,7 @@ LIBS += \
 
 EDITOR {
     DEFINES += BANG_EDITOR
-    RESOURCES = Assets/Engine/qdarkstyle/style.qrc
+    RESOURCES = EngineAssets/qdarkstyle/style.qrc
     OBJECTS_DIR = bin/objEditor/
     TARGET = bin/BangEditor.exe
 }

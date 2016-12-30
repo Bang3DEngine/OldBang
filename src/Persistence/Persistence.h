@@ -44,6 +44,9 @@ public:
                             const String &prependDirectory);
    static String ToRelative(const String &relPath,
                             bool isEngineFile);
+   static String ToRelative(const String &absPath);
+
+   static bool IsEngineFile(const String &filepath);
 
    #ifdef BANG_EDITOR
    /**

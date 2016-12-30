@@ -206,10 +206,9 @@ void Explorer::RefreshInspector()
 
 void Explorer::SelectFile(const String &path)
 {
-    String absPath = Persistence::ToAbsolute(path, false);
-    SetDir(Persistence::GetDir(absPath));
+    SetDir(Persistence::GetDir(path));
 
-    QModelIndex ind = GetModelIndexFromFilepath(absPath);
+    QModelIndex ind = GetModelIndexFromFilepath(path);
     if (ind.isValid())
     {
         setCurrentIndex(ind);
@@ -240,7 +239,7 @@ String Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const
 String Explorer::GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const
 {
     String f = GetFilepathFromModelIndex(qmi);
-    return Persistence::ToRelative(f, false);
+    return Persistence::ToRelative(f);
 }
 
 String Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
@@ -253,7 +252,7 @@ String Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
 String Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi) const
 {
     String f = GetDirFromModelIndex(qmi);
-    return Persistence::ToRelative(f, false);
+    return Persistence::ToRelative(f);
 }
 
 QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const

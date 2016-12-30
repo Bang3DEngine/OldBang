@@ -53,7 +53,7 @@ String AssetsManager::FormatFilepathForCacheMap(const String &filepath,
     //if (isEngineAsset)
     //    prependDirectory += "ENGINE";
 
-    return Persistence::ToRelative(filepath, isEngineAsset);
+    return Persistence::ToRelative(filepath);
 }
 
 bool AssetsManager::IsLoaded(const String &filepath,

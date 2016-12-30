@@ -55,6 +55,7 @@ void XMLParser::GetFirstAttribute(const String &tag,
     if (attrEnd == -1) { return; }
 
     String attrString = tag.SubString(startPosition, attrEnd);
+
     XMLAttribute attr = XMLAttribute::FromString(attrString);
     if (attr.GetName() == "") { return; }
 

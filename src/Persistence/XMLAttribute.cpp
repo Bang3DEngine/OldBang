@@ -221,14 +221,19 @@ void XMLAttribute::SetFilepath(const String &filepath,
                                const String &fileExtension,
                                const Array<XMLProperty> &properties)
 {
-    String newFilepath = Persistence::ToRelative(filepath, false);
-    Set(m_name, newFilepath, XMLAttribute::Type::File, properties);
+    String relFilepath = Persistence::ToRelative(filepath);
+    Set(m_name, relFilepath, XMLAttribute::Type::File, properties);
 
     if (!fileExtension.Empty())
     {
         XMLProperty extensionProp = XMLProperty::FileExtension;
         extensionProp.SetValue(fileExtension);
         SetProperty(extensionProp);
+    }
+
+    if (Persistence::IsEngineFile(filepath))
+    {
+        SetProperty(XMLProperty::IsEngineFile);
     }
 }
 
@@ -338,7 +343,7 @@ const String& XMLAttribute::GetName() const
     return m_name;
 }
 
-const String& XMLAttribute::GetValue() const
+String XMLAttribute::GetValue() const
 {
     return m_value;
 }
@@ -362,12 +367,7 @@ float XMLAttribute::GetFloat() const
 
 String XMLAttribute::GetFilepath() const
 {
-    String filepath = GetString();
-    Debug_Log("GetFilepath on " << filepath);
-    bool isEngineFile = HasProperty(XMLProperty::IsEngineFile);
-    Debug_Log("Returning: " << Persistence::ToAbsolute(filepath, isEngineFile));
-    Debug_Log("------------");
-    return Persistence::ToAbsolute(filepath, isEngineFile);
+    return Persistence::ToAbsolute(GetValue(), HasProperty(XMLProperty::IsEngineFile));
 }
 
 String XMLAttribute::GetString() const

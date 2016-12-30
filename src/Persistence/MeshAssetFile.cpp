@@ -19,8 +19,7 @@ MeshAssetFile::MeshAssetFile(const QFileSystemModel *model, const QModelIndex &i
 
 QPixmap MeshAssetFile::GetIcon() const
 {
-    String fp = Persistence::ToAbsolute("./Icons/MeshAssetIcon.png",
-                                        Persistence::c_EngineAssetsRootAbsolute);
+    String fp = Persistence::ToAbsolute("./Icons/MeshAssetIcon.png", true);
     QPixmap pm(QString::fromStdString(fp));
     return pm;
 }

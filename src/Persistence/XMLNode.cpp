@@ -4,6 +4,7 @@
 
 #include "FileReader.h"
 #include "FileWriter.h"
+#include "Persistence.h"
 #include "StringUtils.h"
 #include "IAttrWidgetButtonListener.h"
 

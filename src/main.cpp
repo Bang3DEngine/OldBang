@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     // Init some paths:
     Persistence::c_ProjectRootAbsolute = "/home/sephirot47/Bang";
     Persistence::c_ProjectAssetsRootAbsolute = Persistence::c_ProjectRootAbsolute + "/Assets";
-    Persistence::c_EngineAssetsRootAbsolute = "/home/sephirot47/Bang/Assets/Engine";
+    Persistence::c_EngineAssetsRootAbsolute = "/home/sephirot47/Bang/EngineAssets";
     //
 
     SingletonManager::InitSingletonManagerFromMainBinary();
@@ -99,8 +99,7 @@ int main(int argc, char *argv[])
 
     Scene *scene = new EditorScene();
     String filename = "./Scenes/test.bscene";
-    filename = Persistence::ToAbsolute(filename,
-                                       Persistence::c_ProjectAssetsRootAbsolute);
+    filename = Persistence::ToAbsolute(filename, false);
     FileReader::ReadScene(filename, scene);
     if (scene)
     {
@@ -114,8 +113,7 @@ int main(int argc, char *argv[])
     // GAME /////////////////////////////////////
     Scene *scene = new Scene();
     String filename = "./Scenes/test.bscene";
-    filename = Persistence::ToAbsolute(filename,
-                                       Persistence::c_ProjectAssetsRootAbsolute);
+    filename = Persistence::ToAbsolute(filename, false);
     FileReader::ReadScene(filename, scene);
     if (scene)
     {

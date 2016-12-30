@@ -28,6 +28,8 @@ public:
     const String& GetValue() const;
 
     static XMLProperty FromString(const String &string);
+
+    bool operator==(const XMLProperty &rhs) const;
 };
 
 #endif // XMLPROPERTY_H

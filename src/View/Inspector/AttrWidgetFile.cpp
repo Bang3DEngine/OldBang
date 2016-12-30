@@ -22,7 +22,9 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     m_layout->addLayout(hLayout, 1);
 
     // Icon
-    File file(xmlAttribute.GetValue());
+    String filepath = xmlAttribute.GetValue();
+    filepath = Persistence::ToAbsolute(filepath, xmlAttribute.HasProperty(XMLProperty::IsEngineFile));
+    File file(filepath);
     File *f = File::GetSpecificFile(file);
     if (f)
     {

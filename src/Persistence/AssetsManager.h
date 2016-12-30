@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "Map.h"
+#include "Debug.h"
 #include "Asset.h"
 #include "XMLParser.h"
 #include "BehaviourManager.h"
@@ -53,14 +54,14 @@ private:
     static T* ReadAssetFile(const String &filepath, bool isEngineAsset)
     {
         T *a = nullptr;
-        String f = AssetsManager::FormatFilepathForSearchingFile(filepath,
-                                                                 isEngineAsset);
-        XMLNode *xmlInfo = XMLParser::FromFile(f);
+        String absPath = AssetsManager::FormatFilepathForSearchingFile(filepath,
+                                                                       isEngineAsset);
+        XMLNode *xmlInfo = XMLParser::FromFile(absPath);
         if (xmlInfo)
         {
             a = new T();
             a->ReadXMLInfo(xmlInfo);
-            a->m_filepath = f;
+            a->m_filepath = absPath;
             delete xmlInfo;
         }
         return a;
@@ -99,7 +100,7 @@ public:
                    bool isEngineAsset = false)
     {
         T *a = nullptr;
-        if (!AssetsManager::IsLoaded(filepath))
+        if (!AssetsManager::IsLoaded(filepath, isEngineAsset))
         {
             a = AssetsManager::ReadAssetFile<T>(filepath, isEngineAsset);
             AssetsManager::SaveAssetToMap(filepath, a, isEngineAsset); // Register it

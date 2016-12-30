@@ -54,8 +54,7 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
 {
     m_isFile = !model->isDir(index);
 
-    m_absPath = model->filePath(index).toStdString();
-    m_path = Persistence::ToRelative(m_absPath, false);
+    m_path = model->filePath(index).toStdString();
     m_name = model->fileName(index).toStdString();
 
     String::size_type p = m_name.find('.', 2);
@@ -211,7 +210,7 @@ String File::GetContents(const String &filepath)
 
 String File::GetContents() const
 {
-    return FileReader::GetContents(m_absPath);
+    return FileReader::GetContents(m_path);
 }
 
 QPixmap File::GetIcon() const
@@ -219,18 +218,15 @@ QPixmap File::GetIcon() const
     String fp = "";
     if (IsPrefabAsset())
     {
-        fp = Persistence::ToAbsolute("./Icons/PrefabAssetIcon.png",
-                                     Persistence::c_EngineAssetsRootAbsolute);
+        fp = Persistence::ToAbsolute("./Icons/PrefabAssetIcon.png", true);
     }
     else if (IsBehaviour())
     {
-        fp = Persistence::ToAbsolute("./Icons/BehaviourIcon.png",
-                                     Persistence::c_EngineAssetsRootAbsolute);
+        fp = Persistence::ToAbsolute("./Icons/BehaviourIcon.png", true);
     }
     else
     {
-        fp = Persistence::ToAbsolute("./Icons/OtherFileIcon.png",
-                                     Persistence::c_EngineAssetsRootAbsolute);
+        fp = Persistence::ToAbsolute("./Icons/OtherFileIcon.png", true);
     }
 
     QPixmap pm(QString::fromStdString(fp));
@@ -246,7 +242,7 @@ IInspectable *File::GetInspectable() const
 
 const String &File::GetAbsolutePath() const
 {
-    return m_absPath;
+    return m_path;
 }
 
 const String &File::GetName() const

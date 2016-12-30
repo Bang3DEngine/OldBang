@@ -121,5 +121,5 @@ void FileWriter::WriteString(const String &str, std::ostream &f)
 
 void FileWriter::WriteFilepath(const String &path, std::ostream &f)
 {
-    FileWriter::WriteString(Persistence::ToRelative(path, false), f);
+    FileWriter::WriteString(Persistence::ToRelative(path), f);
 }

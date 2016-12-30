@@ -2,6 +2,7 @@
 
 #include "FileWriter.h"
 #include "FileReader.h"
+#include "Persistence.h"
 #include "AssetsManager.h"
 
 Asset::Asset()

@@ -399,12 +399,11 @@ void GameObject::SetName(const String &name)
     this->m_name = name;
     #ifdef BANG_EDITOR
     Hierarchy::GetInstance()->OnGameObjectNameChanged(this);
-#endif
+    #endif
 }
 
 void GameObject::Print(const String &indent) const
 {
-    Debug_Log(indent << name);
     String indent2 = indent; indent2 += "   ";
     for (GameObject *child : m_children)
     {

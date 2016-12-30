@@ -58,3 +58,8 @@ XMLProperty XMLProperty::FromString(const String &string)
 
     return XMLProperty(name, value);
 }
+
+bool XMLProperty::operator==(const XMLProperty &rhs) const
+{
+    return m_name == rhs.m_name && m_value == rhs.m_value;
+}

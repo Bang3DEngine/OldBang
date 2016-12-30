@@ -1,0 +1,33 @@
+#!/bin/bash
+cd "$(dirname "$0")"
+
+function usage
+{
+echo -e "\
+
+Usage:
+  ./ref-cpp-class-name  'old_class_name'  'new_class_name' 
+
+"
+
+}
+
+if [ -z "$1" ] || [ -z "$2" ]
+then
+	usage
+	exit 2
+fi
+
+
+OLD_CLASSNAME=$1
+NEW_CLASSNAME=$2
+
+for f in $(find . | grep -E "${OLD_CLASSNAME}\.(h|cpp|c|hpp)")
+do
+	f=$(realpath $f)
+	ext=$(echo $f | cut -d. -f2)
+	echo -e "Changing file name: ${OLD_CLASSNAME}.${ext} \t to \t ${NEW_CLASSNAME}.${ext}"
+	mv $f "$(dirname $f)/${NEW_CLASSNAME}.${ext}"
+done
+
+sed -i "s|${OLD_CLASSNAME}|${NEW_CLASSNAME}|g" $( find -type f | grep -E ".*[\.](h|cpp|c|hpp|pro|txt)" )

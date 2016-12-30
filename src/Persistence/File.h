@@ -69,7 +69,6 @@ protected:
     bool m_isFile = true;
     String m_path = "";
     String m_name = "";
-    String m_absPath = "";
     String m_extension = "";
 
     // Adds on top of the passed QPixmap the little icon that
