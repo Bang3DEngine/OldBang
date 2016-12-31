@@ -20,6 +20,8 @@ public:
     bool IsTexture2DAsset() const;
     bool IsImageFile() const;
 
+    bool IsScene() const;
+
     bool IsMeshAsset() const;
     bool IsMeshFile() const;
 

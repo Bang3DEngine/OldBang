@@ -91,7 +91,7 @@ void ProjectManager::SaveProject(const Project *project)
                                       project->GetXMLInfoString());
     if (ok)
     {
-        Debug_Status("Project '" << project->GetProjectName() << "' successfully saved.");
+        Debug_Status("Project '" << project->GetProjectName() << "' successfully saved.", 5.0f);
     }
     else
     {

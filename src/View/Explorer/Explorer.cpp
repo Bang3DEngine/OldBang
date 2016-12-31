@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include "FileWriter.h"
 #include "Persistence.h"
+#include "SceneManager.h"
 #include "EditorWindow.h"
 #include "MeshAssetFile.h"
 #include "ShortcutManager.h"
@@ -135,7 +136,12 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
         }
         else
         {
-
+            File *f = new File(m_fileSystemModel, clickedIndex);
+            if (f->IsScene())
+            {
+                SceneManager::LoadScene(f->GetAbsolutePath());
+            }
+            delete f;
         }
     }
 }

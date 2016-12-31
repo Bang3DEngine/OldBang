@@ -23,16 +23,16 @@ void Scene::_OnStart()
     if (!IsEditorGameObject())
     {
         List<Camera*> cameras = GetComponentsInChildren<Camera>();
-        Debug_Status("Cameras: " << cameras);
+        Debug_Status("Cameras: " << cameras, 5.0f);
         if (!cameras.Empty())
         {
             Camera *cam = cameras.Front();
             SetCamera(cam);
-            Debug_Status("Found camera: " << cam);
+            Debug_Status("Found camera: " << cam, 5.0f);
         }
         else // Create default camera
         {
-            Debug_Status("Creating default camera");
+            Debug_Status("Creating default camera", 5.0f);
             GameObject *m_defaultCamera = new GameObject("DefaultCamera");
             m_defaultCamera->transform->SetPosition(Vector3(90));
             m_defaultCamera->transform->LookAt(Vector3::Zero);
@@ -68,6 +68,11 @@ void Scene::_OnUpdate()
 
 void Scene::_OnResize(int newWidth, int newHeight)
 {
+}
+
+const String Scene::GetFileExtensionStatic()
+{
+    return "bscene";
 }
 
 Scene::~Scene()

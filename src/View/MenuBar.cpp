@@ -169,7 +169,7 @@ void MenuBar::OnOpenScene() const
     m_wem->NotifyMenuBarActionClicked(Action::OpenScene);
 
     String filename = Dialog::GetOpenFilename("Open scene...",
-                                              Scene::GetFileExtension());
+                                              Scene::GetFileExtensionStatic());
     if (filename.Empty())
     {
         return;
@@ -201,7 +201,7 @@ void MenuBar::OnSaveSceneAs() const
     Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
 
     String filename = Dialog::GetSaveFilename("Save scene as...",
-                                                  Scene::GetFileExtension(),
+                                                  Scene::GetFileExtensionStatic(),
                                                   scene->name);
     if (filename == "") return;
 
@@ -210,13 +210,13 @@ void MenuBar::OnSaveSceneAs() const
 
 void MenuBar::OnBuild() const
 {
-    Debug_Status("Building Game... (This could take a while)");
+    Debug_Status("Building Game... (This could take a while)", 0.0f);
     GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute(), false);
 }
 
 void MenuBar::OnBuildAndRun() const
 {
-    Debug_Status("Building and running Game... (This could take a while)");
+    Debug_Status("Building and running Game... (This could take a while)", 0.0f);
     GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute(), true);
 }
 

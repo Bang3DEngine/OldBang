@@ -21,7 +21,7 @@ FileWriter::FileWriter()
 
 void FileWriter::WriteScene(const String &filepath, Scene *scene)
 {
-    String fpath = Persistence::AppendExtension(filepath, Scene::GetFileExtension());
+    String fpath = Persistence::AppendExtension(filepath, Scene::GetFileExtensionStatic());
     FileWriter::WriteToFile(fpath, scene->GetXMLInfoString());
 }
 

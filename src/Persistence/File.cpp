@@ -9,6 +9,7 @@
 
 #include "Font.h"
 #include "Mesh.h"
+#include "Scene.h"
 #include "Prefab.h"
 #include "Material.h"
 #include "TextFile.h"
@@ -77,6 +78,11 @@ bool File::IsTexture2DAsset() const
 bool File::IsImageFile() const
 {
     return  m_isFile && IsOfExtension("jpg jpeg png bmp");
+}
+
+bool File::IsScene() const
+{
+    return m_isFile && IsOfExtension(Scene::GetFileExtensionStatic());
 }
 
 bool File::IsMeshAsset() const
@@ -223,6 +229,10 @@ QPixmap File::GetIcon() const
     else if (IsBehaviour())
     {
         fp = Persistence::ToAbsolute("./Icons/BehaviourIcon.png", true);
+    }
+    else if (IsScene())
+    {
+        fp = Persistence::ToAbsolute("./Icons/SceneIcon.png", true);
     }
     else
     {

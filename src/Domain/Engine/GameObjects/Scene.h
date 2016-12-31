@@ -24,7 +24,7 @@ protected:
     virtual void _OnResize (int newWidth, int newHeight);
 
 public:
-    const static String GetFileExtension () { return "bscene"; }
+    const static String GetFileExtensionStatic ();
 
     Scene();
     virtual ~Scene();

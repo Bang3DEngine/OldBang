@@ -45,7 +45,7 @@ public:
     static void _Log(const String &str);
     static void _Warn(const String &str);
     static void _Error(const String &str);
-    static void _Status(const String &str);
+    static void _Status(const String &str, float timeInSeconds);
 };
 
 // NONULL
@@ -82,11 +82,11 @@ public:
     Debug::_Error(log.str()); \
 } while (0)
 
-#define Debug_Status(msg) do{\
+#define Debug_Status(msg, timeInSeconds) do{\
     std::ostringstream log;\
     log << msg;\
     log.flush();\
-    Debug::_Status(log.str()); \
+    Debug::_Status(log.str(), timeInSeconds); \
 } while (0)
 
 #define _Debug_Suffix \

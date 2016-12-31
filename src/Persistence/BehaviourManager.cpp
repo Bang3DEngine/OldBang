@@ -119,6 +119,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             BehaviourManagerCompileThread *compileThread =
                     new BehaviourManagerCompileThread(bfp);
             compileThread->start(); // This auto-deletes itself when finished
+            Debug_Status("Compiling script" << Persistence::GetFileName(behaviourFilepath) << "...", 5.0f);
 
             // And when the compileThread finishes, we will be notified,
             // load the library, and then notify the behaviourHolders waiting for it

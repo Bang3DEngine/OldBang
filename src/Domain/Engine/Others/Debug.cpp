@@ -48,13 +48,13 @@ void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny, const 
 #endif
 }
 
-void Debug::_Status(const String &str)
+void Debug::_Status(const String &str, float timeInSeconds)
 {
     std::cerr << c_statusPrefix << str << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
     EditorWindow *win = EditorWindow::GetInstance();
-    win->statusbar->showMessage( str.ToQString(), 5000);
+    win->statusbar->showMessage( str.ToQString(), timeInSeconds * 1000 );
     #endif
 }
 
