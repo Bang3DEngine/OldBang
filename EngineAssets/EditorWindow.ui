@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1008</width>
-    <height>594</height>
+    <height>569</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -478,7 +478,7 @@
     <number>8</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_5">
-    <layout class="QVBoxLayout" name="verticalLayout_10" stretch="1,0">
+    <layout class="QVBoxLayout" name="verticalLayout_10" stretch="1">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,5">
        <item>
@@ -596,13 +596,6 @@
         </layout>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelStatus">
-       <property name="text">
-        <string>Status text...</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </widget>

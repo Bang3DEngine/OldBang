@@ -141,39 +141,12 @@ QMessageBox::StandardButton MenuBar::AskForSavingActiveScene() const
 
 void MenuBar::OnNewProject() const
 {
-    String dirPath = Dialog::GetOpenDirname("Select the project containing directory");
-    if (!dirPath.Empty())
-    {
-        bool ok;
-        String projectName = Dialog::GetInputString("Please specify your new project's name",
-                                                    "Project name:",
-                                                    "MyBangProject",
-                                                    &ok);
-
-        if (ok)
-        {
-            String projectPath = dirPath + "/" + projectName;
-
-            Project *project = ProjectManager::NewProject(dirPath, projectName);
-            Persistence::c_ProjectRootAbsolute = projectPath;
-            Persistence::c_ProjectAssetsRootAbsolute =
-                    Persistence::c_ProjectRootAbsolute + "/Assets";
-
-            ProjectManager::OpenProject(project->GetProjectFileFilepath());
-        }
-    }
+    ProjectManager::CreateNewProjectAndDialogs();
 }
 
 void MenuBar::OnOpenProject() const
 {
-    String projectFilepath =
-            Dialog::GetOpenFilename("Select the project file to be opened",
-                                    Project::GetFileExtensionStatic(),
-                                    String(QDir::homePath()) );
-    if (!projectFilepath.Empty())
-    {
-        ProjectManager::OpenProject(projectFilepath);
-    }
+    ProjectManager::OpenProjectAndDialogs();
 }
 
 void MenuBar::OnSaveProject() const
@@ -196,23 +169,13 @@ void MenuBar::OnOpenScene() const
     m_wem->NotifyMenuBarActionClicked(Action::OpenScene);
 
     String filename = Dialog::GetOpenFilename("Open scene...",
-                                                  Scene::GetFileExtension());
-    if (filename == "") return;
+                                              Scene::GetFileExtension());
+    if (filename.Empty())
+    {
+        return;
+    }
 
-    SceneManager::SetActiveScene(nullptr);
-    EditorScene *scene = new EditorScene();
-    FileReader::ReadScene(filename, scene);
-    if (scene)
-    {
-        SceneManager::AddScene(scene);
-        SceneManager::SetActiveScene(scene);
-        Persistence::SetActiveSceneFilepath(filename);
-    }
-    else
-    {
-        Debug_Error("Scene from file '" << filename <<
-                     "' could not be loaded.");
-    }
+    SceneManager::LoadScene(filename);
 }
 
 void MenuBar::OnSaveScene() const

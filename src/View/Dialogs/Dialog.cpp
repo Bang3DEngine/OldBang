@@ -3,6 +3,7 @@
 #include <QInputDialog>
 
 #include "EditorWindow.h"
+#include "SelectProjectWindow.h"
 
 Dialog::Dialog()
 {
@@ -15,18 +16,35 @@ String Dialog::GetExtensionFilterString(const String &extension)
     return ext + "(" + ext + ")" ;
 }
 
+QWidget *Dialog::GetCurrentWindow()
+{
+    if (EditorWindow::GetInstance())
+    {
+        QWidget *w = EditorWindow::GetInstance()->GetMainWindow();
+        if (w) { return w; }
+    }
+
+    if (SelectProjectWindow::GetInstance())
+    {
+        QWidget *w = SelectProjectWindow::GetInstance()->GetMainWindow();
+        if (w) { return w; }
+    }
+
+    return nullptr;
+}
+
 String Dialog::GetOpenDirname(const String &caption,
                                   const String &initDirectory)
 {
     String dir =
             String(
                 QFileDialog::getExistingDirectory(
-                    EditorWindow::GetInstance()->GetMainWindow(),
+                    Dialog::GetCurrentWindow(),
                     caption.ToQString(),
                     initDirectory.ToQString(),
                     QFileDialog::ShowDirsOnly |
-                    QFileDialog::DontResolveSymlinks |
-                    QFileDialog::DontUseNativeDialog
+                    QFileDialog::DontResolveSymlinks //|
+                    //QFileDialog::DontUseNativeDialog
                 )
             );
 
@@ -40,12 +58,12 @@ String Dialog::GetOpenFilename(const String &caption,
     String filepath =
             String(
                 QFileDialog::getOpenFileName(
-                    EditorWindow::GetInstance()->GetMainWindow(),
+                    Dialog::GetCurrentWindow(),
                     caption.ToQString(),
                     initDir.ToQString(),
                     Dialog::GetExtensionFilterString(extension).ToQString(),
                     nullptr,
-                    QFileDialog::DontUseNativeDialog
+                    0 // QFileDialog::DontUseNativeDialog
                 )
             );
 
@@ -60,12 +78,12 @@ String Dialog::GetSaveFilename(const String &caption,
     String filepath =
             String(
                 QFileDialog::getSaveFileName(
-                    EditorWindow::GetInstance()->GetMainWindow(),
+                    Dialog::GetCurrentWindow(),
                     caption.ToQString(),
                     String(initPath + "/" + suggestedFilename).ToQString(),
                     Dialog::GetExtensionFilterString(extension).ToQString(),
                     nullptr,
-                    QFileDialog::DontUseNativeDialog
+                    0 // QFileDialog::DontUseNativeDialog
                 )
             );
 
@@ -84,7 +102,7 @@ String Dialog::GetInputString(const String &caption,
     String str =
             String(
                 QInputDialog::getText(
-                    EditorWindow::GetInstance()->GetMainWindow(),
+                    Dialog::GetCurrentWindow(),
                     caption.ToQString(),
                     labelText.ToQString(),
                     QLineEdit::Normal,

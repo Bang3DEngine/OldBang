@@ -1,6 +1,7 @@
 #include "ProjectManager.h"
 
 #include "Debug.h"
+#include "Dialog.h"
 #include "Project.h"
 #include "XMLNode.h"
 #include "MenuBar.h"
@@ -8,8 +9,9 @@
 #include "XMLParser.h"
 #include "FileWriter.h"
 #include "Persistence.h"
+#include "EditorWindow.h"
 
-Project *ProjectManager::currentProject = nullptr;
+Project *ProjectManager::s_currentProject = nullptr;
 
 ProjectManager::ProjectManager()
 {
@@ -35,17 +37,17 @@ Project* ProjectManager::NewProject(const String &projectContainingDir,
 
     ProjectManager::CloseCurrentProject();
 
-    ProjectManager::currentProject = new Project();
-    ProjectManager::currentProject->SetProjectRootFilepath(projectDir);
+    ProjectManager::s_currentProject = new Project();
+    ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 
     String projectFileFilepath = projectDir + "/" +
             projectName + "." + Project::GetFileExtensionStatic();
     FileWriter::WriteToFile(projectFileFilepath,
-                            ProjectManager::currentProject->GetXMLInfoString());
+                            ProjectManager::s_currentProject->GetXMLInfoString());
 
     Persistence::CreateDirectory(projectDir + "/Assets");
 
-    return ProjectManager::currentProject;
+    return ProjectManager::s_currentProject;
 }
 
 Project* ProjectManager::OpenProject(const String &projectFilepath)
@@ -58,19 +60,28 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
 
     ProjectManager::CloseCurrentProject();
 
-    ProjectManager::currentProject = new Project();
-    ProjectManager::currentProject->ReadXMLInfo(xmlInfo);
-    ProjectManager::currentProject->
+    ProjectManager::s_currentProject = new Project();
+    ProjectManager::s_currentProject->ReadXMLInfo(xmlInfo);
+    ProjectManager::s_currentProject->
             SetProjectRootFilepath( Persistence::GetDir(projectFilepath) );
 
     // Create new scene
-    MenuBar::GetInstance()->OnNewScene();
+    MenuBar::GetInstance()->CreateNewScene();
 
     // Set directory of the explorer to the Assets' root of the new project
     Explorer::GetInstance()->SetDir(
-                ProjectManager::currentProject->GetProjectAssetsRootFilepath());
+                ProjectManager::s_currentProject->GetProjectAssetsRootFilepath());
 
-    return ProjectManager::currentProject;
+    // Set window title
+    String title = "Bang - " + ProjectManager::s_currentProject->GetProjectName();
+    EditorWindow::GetInstance()->GetMainWindow()->setWindowTitle(title.ToQString());
+
+    // Set persistence variables
+    Persistence::c_ProjectRootAbsolute = ProjectManager::s_currentProject->GetProjectRootFilepath();
+    Persistence::c_ProjectAssetsRootAbsolute =
+            Persistence::c_ProjectRootAbsolute + "/Assets";
+
+    return ProjectManager::s_currentProject;
 }
 
 void ProjectManager::SaveProject(const Project *project)
@@ -96,15 +107,48 @@ void ProjectManager::SaveCurrentProject()
 void ProjectManager::CloseCurrentProject()
 {
     // TODO: Ask for saving current open project and stuff
-    if (ProjectManager::currentProject)
+    if (ProjectManager::s_currentProject)
     {
-        delete currentProject;
-        ProjectManager::currentProject = nullptr;
+        delete s_currentProject;
+        ProjectManager::s_currentProject = nullptr;
     }
 
 }
 
+String ProjectManager::CreateNewProjectAndDialogs()
+{
+    String dirPath = Dialog::GetOpenDirname("Select the project containing directory");
+    if (!dirPath.Empty())
+    {
+        bool ok;
+        String projectName = Dialog::GetInputString("Please specify your new project's name",
+                                                    "Project name:",
+                                                    "MyBangProject",
+                                                    &ok);
+
+        if (ok)
+        {
+            String projectPath = dirPath + "/" + projectName;
+
+            Project *project = ProjectManager::NewProject(dirPath, projectName);
+
+            ProjectManager::OpenProject(project->GetProjectFileFilepath());
+            return ProjectManager::GetCurrentProject()->GetProjectFileFilepath();
+        }
+    }
+    return "";
+}
+
+String ProjectManager::OpenProjectAndDialogs()
+{
+    String projectFilepath =
+            Dialog::GetOpenFilename("Select the project file to be opened",
+                                    Project::GetFileExtensionStatic(),
+                                    String(QDir::homePath()) );
+    return projectFilepath;
+}
+
 Project *ProjectManager::GetCurrentProject()
 {
-    return ProjectManager::currentProject;
+    return ProjectManager::s_currentProject;
 }

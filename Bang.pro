@@ -53,7 +53,8 @@ LIBS += \
 
 EDITOR {
     DEFINES += BANG_EDITOR
-    RESOURCES = EngineAssets/qdarkstyle/style.qrc
+    RESOURCES += EngineAssets/qdarkstyle/style.qrc
+    RESOURCES += EngineAssets/QtResources.qrc
     OBJECTS_DIR = bin/objEditor/
     TARGET = bin/BangEditor.exe
 }
@@ -279,7 +280,8 @@ HEADERS += \
     src/Domain/Engine/Components/UIText.h \
     src/Persistence/ProjectManager.h \
     src/Persistence/Project.h \
-    src/View/Dialogs/Dialog.h
+    src/View/Dialogs/Dialog.h \
+    src/View/SelectProjectWindow.h
 
 EDITOR {
 HEADERS += \
@@ -445,7 +447,8 @@ SOURCES += \
     src/Domain/Engine/Components/UIText.cpp \
     src/Persistence/ProjectManager.cpp \
     src/Persistence/Project.cpp \
-    src/View/Dialogs/Dialog.cpp
+    src/View/Dialogs/Dialog.cpp \
+    src/View/SelectProjectWindow.cpp
 
 EDITOR {
     SOURCES += \

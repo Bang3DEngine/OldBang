@@ -7,7 +7,7 @@ class Project;
 class ProjectManager
 {
 private:
-    static Project *currentProject;
+    static Project *s_currentProject;
 
 public:
     ProjectManager();
@@ -18,6 +18,9 @@ public:
     static void SaveProject(const Project *project);
     static void SaveCurrentProject();
     static void CloseCurrentProject();
+
+    static String CreateNewProjectAndDialogs();
+    static String OpenProjectAndDialogs();
 
     static Project* GetCurrentProject();
 };

@@ -13,6 +13,7 @@ private:
 
     Dialog();
     static String GetExtensionFilterString(const String &extension);
+    static QWidget *GetCurrentWindow();
 
 public:
 

@@ -3,10 +3,13 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Debug.h"
+#include "FileReader.h"
+#include "Persistence.h"
 #include "Application.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
+#include "EditorScene.h"
 #endif
 
 SceneManager::SceneManager()
@@ -116,5 +119,28 @@ void SceneManager::RemoveScene(const String &name)
             sm->m_scenes.Remove(it);
             return;
         }
+    }
+}
+
+void SceneManager::LoadScene(const String &sceneFilepath)
+{
+    SceneManager::SetActiveScene(nullptr);
+
+    #ifdef BANG_EDITOR
+    EditorScene *scene = new EditorScene();
+    #else
+    Scene *scene = new Scene();
+    #endif
+
+    FileReader::ReadScene(sceneFilepath, scene);
+    if (scene)
+    {
+        SceneManager::AddScene(scene);
+        SceneManager::SetActiveScene(scene);
+        Persistence::SetActiveSceneFilepath(sceneFilepath);
+    }
+    else
+    {
+        Debug_Error("Scene from file '" << sceneFilepath << "' could not be loaded.");
     }
 }

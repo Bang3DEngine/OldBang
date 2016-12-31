@@ -25,7 +25,6 @@ friend class BehaviourManager;
 friend class IShortcutListener;
 
 private:
-
     SceneManager *m_sceneManager = nullptr;
     AssetsManager *m_assetsManager = nullptr;
     BehaviourManager *m_behaviourManager = nullptr;

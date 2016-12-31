@@ -24,6 +24,7 @@ public:
     static void SetActiveScene(const String &name);
     static void RemoveScene(const String &name);
 
+    static void LoadScene(const String &sceneFilepath);
     static Scene* GetActiveScene();
     static Scene* GetScene(const String &name);
 

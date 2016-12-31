@@ -54,7 +54,7 @@ void Debug::_Status(const String &str)
     std::cerr.flush();
     #ifdef BANG_EDITOR
     EditorWindow *win = EditorWindow::GetInstance();
-    win->labelStatus->setText( str.ToQString() );
+    win->statusbar->showMessage( str.ToQString(), 5000);
     #endif
 }
 

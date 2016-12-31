@@ -264,7 +264,6 @@ QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const
 void Explorer::SetDir(const String &path)
 {
     String absDir = Persistence::ToAbsolute(path, false);
-    Debug_Log("Setting dir " << absDir);
     setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(absDir)));
 }
 

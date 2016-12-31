@@ -80,6 +80,8 @@ void UIImage::RenderCustomPR() const
 {
     UIRenderer::RenderCustomPR();
 
+    NONULL(m_material); NONULL(m_materialPR);
+
     ShaderProgram *sp = m_materialPR->GetShaderProgram();
     sp->SetUniformColor("B_tint",        m_tint);
     sp->SetUniformTexture("B_texture_0", m_material->GetTexture());
