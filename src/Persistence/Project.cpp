@@ -1,5 +1,6 @@
 #include "Project.h"
 
+#include "XMLNode.h"
 #include "Persistence.h"
 
 Project::Project()
@@ -27,7 +28,7 @@ void Project::ReadXMLInfo(const XMLNode *xmlInfo)
 
 void Project::FillXMLInfo(XMLNode *xmlInfo) const
 {
-
+    xmlInfo->SetTagName("Project");
 }
 
 const String&  Project::GetProjectRootFilepath() const
@@ -38,6 +39,12 @@ const String&  Project::GetProjectRootFilepath() const
 String Project::GetProjectAssetsRootFilepath() const
 {
     return m_projectRootFilepath + "/Assets";
+}
+
+String Project::GetProjectFileFilepath() const
+{
+    return m_projectRootFilepath + "/" +
+            GetProjectName() + "." + GetFileExtensionStatic();
 }
 
 String Project::GetProjectName() const

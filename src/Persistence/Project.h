@@ -18,6 +18,7 @@ public:
 
     const String& GetProjectRootFilepath() const;
     String GetProjectAssetsRootFilepath() const;
+    String GetProjectFileFilepath() const;
     String GetProjectName() const;
 
     void SetProjectRootFilepath(const String &projectDir);

@@ -29,8 +29,11 @@
 #include "DirectionalLight.h"
 #include "WindowEventManager.h"
 
+MenuBar *MenuBar::s_instance = nullptr;
+
 MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 {
+    MenuBar::s_instance = this;
     m_wem = WindowEventManager::GetInstance();
 
     EditorWindow *w = EditorWindow::GetInstance();
@@ -39,6 +42,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnNewProject()));
     connect(w->actionOpenProject,  SIGNAL(triggered()),
             this, SLOT(OnOpenProject()));
+    connect(w->actionSaveProject,  SIGNAL(triggered()),
+            this, SLOT(OnSaveProject()));
     connect(w->actionNewScene,  SIGNAL(triggered()),
             this, SLOT(OnNewScene()));
     connect(w->actionOpenScene,  SIGNAL(triggered()),
@@ -136,15 +141,44 @@ QMessageBox::StandardButton MenuBar::AskForSavingActiveScene() const
 
 void MenuBar::OnNewProject() const
 {
-    String dirName = Dialog::GetOpenDirname("Select the project containing directory");
-    Debug_Log(dirName);
+    String dirPath = Dialog::GetOpenDirname("Select the project containing directory");
+    if (!dirPath.Empty())
+    {
+        bool ok;
+        String projectName = Dialog::GetInputString("Please specify your new project's name",
+                                                    "Project name:",
+                                                    "MyBangProject",
+                                                    &ok);
+
+        if (ok)
+        {
+            String projectPath = dirPath + "/" + projectName;
+
+            Project *project = ProjectManager::NewProject(dirPath, projectName);
+            Persistence::c_ProjectRootAbsolute = projectPath;
+            Persistence::c_ProjectAssetsRootAbsolute =
+                    Persistence::c_ProjectRootAbsolute + "/Assets";
+
+            ProjectManager::OpenProject(project->GetProjectFileFilepath());
+        }
+    }
 }
 
 void MenuBar::OnOpenProject() const
 {
-    String dirName = Dialog::GetOpenDirname("Select the project file to be opened",
-                                                Project::GetFileExtensionStatic());
-    Debug_Log(dirName);
+    String projectFilepath =
+            Dialog::GetOpenFilename("Select the project file to be opened",
+                                    Project::GetFileExtensionStatic(),
+                                    String(QDir::homePath()) );
+    if (!projectFilepath.Empty())
+    {
+        ProjectManager::OpenProject(projectFilepath);
+    }
+}
+
+void MenuBar::OnSaveProject() const
+{
+    ProjectManager::SaveProject( ProjectManager::GetCurrentProject() );
 }
 
 
@@ -446,4 +480,9 @@ void MenuBar::OnAddComponentUIImage() const
 void MenuBar::OnAddComponentUIText() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AddComponentUIText);
+}
+
+MenuBar *MenuBar::GetInstance()
+{
+    return MenuBar::s_instance;
 }

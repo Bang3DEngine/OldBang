@@ -3,8 +3,13 @@
 #include "Debug.h"
 #include "Project.h"
 #include "XMLNode.h"
+#include "MenuBar.h"
+#include "Explorer.h"
 #include "XMLParser.h"
+#include "FileWriter.h"
 #include "Persistence.h"
+
+Project *ProjectManager::currentProject = nullptr;
 
 ProjectManager::ProjectManager()
 {
@@ -13,25 +18,34 @@ ProjectManager::ProjectManager()
 Project* ProjectManager::NewProject(const String &projectContainingDir,
                                     const String &projectName)
 {
-    String projectDir = projectContainingDir + projectName;
-    if (Persistence::ExistsDirectory(projectDir))
+    String projectDir = projectContainingDir + "/" + projectName;
+    if (!Persistence::ExistsDirectory(projectDir))
     {
-        Debug_Error ("Can not create project, directory '" << projectDir << "' already exists.");
-        return nullptr;
+        if (!Persistence::CreateDirectory(projectDir))
+        {
+            Debug_Error ("Could not create project in directory '" << projectDir << "'.");
+            return nullptr;
+        }
+    }
+    else
+    {
+        // TODO: Add overwrite window warning
+        Debug_Warn("Directory '" << projectDir << "' already existed, using it.");
     }
 
-    if (!Persistence::CreateDirectory(projectDir))
-    {
-        Debug_Error ("Could not create project in directory '" << projectDir << "'.");
-        return nullptr;
-    }
+    ProjectManager::CloseCurrentProject();
 
-    Project *project = new Project();
-    project->SetProjectRootFilepath(projectDir);
+    ProjectManager::currentProject = new Project();
+    ProjectManager::currentProject->SetProjectRootFilepath(projectDir);
+
+    String projectFileFilepath = projectDir + "/" +
+            projectName + "." + Project::GetFileExtensionStatic();
+    FileWriter::WriteToFile(projectFileFilepath,
+                            ProjectManager::currentProject->GetXMLInfoString());
 
     Persistence::CreateDirectory(projectDir + "/Assets");
 
-    return project;
+    return ProjectManager::currentProject;
 }
 
 Project* ProjectManager::OpenProject(const String &projectFilepath)
@@ -42,13 +56,55 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
         Debug_Error("Could not open project '" << projectFilepath << "'");
     }
 
-    Project *project = new Project();
-    project->ReadXMLInfo(xmlInfo);
+    ProjectManager::CloseCurrentProject();
 
-    return project;
+    ProjectManager::currentProject = new Project();
+    ProjectManager::currentProject->ReadXMLInfo(xmlInfo);
+    ProjectManager::currentProject->
+            SetProjectRootFilepath( Persistence::GetDir(projectFilepath) );
+
+    // Create new scene
+    MenuBar::GetInstance()->OnNewScene();
+
+    // Set directory of the explorer to the Assets' root of the new project
+    Explorer::GetInstance()->SetDir(
+                ProjectManager::currentProject->GetProjectAssetsRootFilepath());
+
+    return ProjectManager::currentProject;
 }
 
-void ProjectManager::SaveProject(const Project &project, const String &projectFilepath)
+void ProjectManager::SaveProject(const Project *project)
 {
+    NONULL(project);
+    bool ok = FileWriter::WriteToFile(project->GetProjectFileFilepath(),
+                                      project->GetXMLInfoString());
+    if (ok)
+    {
+        Debug_Status("Project '" << project->GetProjectName() << "' successfully saved.");
+    }
+    else
+    {
+        Debug_Error("Could not save the project...");
+    }
+}
 
+void ProjectManager::SaveCurrentProject()
+{
+    ProjectManager::SaveProject( ProjectManager::GetCurrentProject() );
+}
+
+void ProjectManager::CloseCurrentProject()
+{
+    // TODO: Ask for saving current open project and stuff
+    if (ProjectManager::currentProject)
+    {
+        delete currentProject;
+        ProjectManager::currentProject = nullptr;
+    }
+
+}
+
+Project *ProjectManager::GetCurrentProject()
+{
+    return ProjectManager::currentProject;
 }

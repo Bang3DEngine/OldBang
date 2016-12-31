@@ -13,14 +13,6 @@ class MenuBar : public QMenuBar
 {
     Q_OBJECT
 
-private:
-    WindowEventManager *m_wem = nullptr;
-
-    /**
-     * @brief Shared code to create a Plane, Cube, Sphere, etc.
-     */
-    GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name) const;
-
 public:
     Q_ENUMS(Action);
 
@@ -68,11 +60,13 @@ public:
     void CreateNewScene() const;
     QMessageBox::StandardButton AskForSavingActiveScene() const;
 
+    static MenuBar *GetInstance();
 
 public slots:
 
     void OnNewProject() const;
     void OnOpenProject() const;
+    void OnSaveProject() const;
     void OnNewScene() const;
     void OnOpenScene() const;
     void OnSaveScene() const;
@@ -108,6 +102,16 @@ public slots:
     void OnAddComponentCanvas() const;
     void OnAddComponentUIImage() const;
     void OnAddComponentUIText() const;
+
+private:
+    static MenuBar *s_instance;
+    WindowEventManager *m_wem = nullptr;
+
+    /**
+     * @brief Shared code to create a Plane, Cube, Sphere, etc.
+     */
+    GameObject* CreatePrimitiveGameObject(Mesh *m, const String &name) const;
+
 };
 
 #endif // MENUBAR_H

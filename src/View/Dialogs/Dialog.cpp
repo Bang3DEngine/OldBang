@@ -1,5 +1,7 @@
 #include "Dialog.h"
 
+#include <QInputDialog>
+
 #include "EditorWindow.h"
 
 Dialog::Dialog()
@@ -70,4 +72,26 @@ String Dialog::GetSaveFilename(const String &caption,
     //This function auto detects if it was in the filepath already.
     filepath = Persistence::AppendExtension(filepath, extension);
     return filepath;
+}
+
+
+String Dialog::GetInputString(const String &caption,
+                              const String &labelText,
+                              const String &defaultText,
+                              bool *ok)
+{
+    bool everythingOk = false;
+    String str =
+            String(
+                QInputDialog::getText(
+                    EditorWindow::GetInstance()->GetMainWindow(),
+                    caption.ToQString(),
+                    labelText.ToQString(),
+                    QLineEdit::Normal,
+                    defaultText.ToQString(),
+                    &everythingOk)
+            );
+
+    if (ok) { *ok = everythingOk; }
+    return str;
 }

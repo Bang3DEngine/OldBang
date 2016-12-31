@@ -25,6 +25,11 @@ public:
                                   const String &extension = "*",
                                   const String &initPath = Persistence::GetAssetsPathAbsolute(),
                                   const String &suggestedFilename = "");
+
+    static String GetInputString(const String &caption = "Input string",
+                                 const String &labelText = "Your string:",
+                                 const String &defaultText = "DefaultString",
+                                 bool *ok = nullptr);
 };
 
 #endif // FILEDIALOG_H

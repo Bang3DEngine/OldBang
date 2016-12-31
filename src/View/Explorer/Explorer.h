@@ -27,29 +27,6 @@ friend class FileSystemModel;
 friend class ExplorerDirTree;
 friend class ExplorerContextMenu;
 
-private:
-
-    ExplorerContextMenu m_eContextMenu;
-
-    FileSystemModel *m_fileSystemModel = nullptr;
-    QToolButton *m_buttonDirUp = nullptr;
-    QToolButton *m_buttonChangeViewMode = nullptr;
-    IInspectable *m_lastIInspectableInInspector = nullptr;
-
-    String m_lastSelectedPath = "";
-    QTimer *m_updateTimer = nullptr;
-
-    String GetFilepathFromModelIndex(const QModelIndex &qmi) const;
-    String GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const;
-    String GetDirFromModelIndex(const QModelIndex &qmi) const;
-    String GetRelativeDirFromModelIndex(const QModelIndex &qmi) const;
-    QModelIndex GetModelIndexFromFilepath(const String &filepath) const;
-    void SetDir(const String &path);
-
-protected:
-    //To set the scroll step to a smaller one
-    virtual void updateGeometries() override;
-
 public:
     Explorer(QWidget *parent);
     virtual ~Explorer();
@@ -75,13 +52,13 @@ public:
 
     void OnShortcutPressed() override;
 
-public:
     //Updates the Inspector with the selected file info
     void RefreshInspector();
 
     void SelectFile(const String &path);
 
     static Explorer* GetInstance();
+    void SetDir(const String &path);
 
 public slots:
     void Refresh();
@@ -89,6 +66,27 @@ public slots:
     void OnDirLoaded(QString dir);
     void OnButtonDirUpClicked();
     void OnButtonChangeViewModeClicked();
+
+protected:
+    //To set the scroll step to a smaller one
+    virtual void updateGeometries() override;
+
+private:
+    ExplorerContextMenu m_eContextMenu;
+
+    FileSystemModel *m_fileSystemModel = nullptr;
+    QToolButton *m_buttonDirUp = nullptr;
+    QToolButton *m_buttonChangeViewMode = nullptr;
+    IInspectable *m_lastIInspectableInInspector = nullptr;
+
+    String m_lastSelectedPath = "";
+    QTimer *m_updateTimer = nullptr;
+
+    String GetFilepathFromModelIndex(const QModelIndex &qmi) const;
+    String GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const;
+    String GetDirFromModelIndex(const QModelIndex &qmi) const;
+    String GetRelativeDirFromModelIndex(const QModelIndex &qmi) const;
+    QModelIndex GetModelIndexFromFilepath(const String &filepath) const;
 };
 
 class FileSystemModel : public QFileSystemModel
