@@ -75,6 +75,7 @@ protected:
 
     virtual void ActivateGLStatesBeforeRendering(Material *mat) const;
     virtual void RenderWithoutBindingMaterial() const = 0;
+    virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const;
 
     void GetMatrices(Matrix4 *model,
                      Matrix4 *normal,
@@ -128,7 +129,7 @@ public:
 
     virtual void Render() const;
     virtual void RenderCustomPR() const;
-    void RenderWithMaterial(Material *mat) const;
+    virtual void RenderWithMaterial(Material *mat) const;
 
     virtual bool IsACanvasRenderer() const;
 

@@ -16,6 +16,7 @@ public:
     virtual ~UIText();
 
     virtual void Render() const override;
+    virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const override;
 
     virtual const String ToString() const override;
     virtual String GetName() const override;
@@ -46,6 +47,7 @@ private:
     int m_textSize = 32; // Set in the constructor
     String m_content = "";
 
+    void RenderText(bool forSelectionFramebuffer) const;
     friend class GameObject;
 };
 

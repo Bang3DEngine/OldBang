@@ -103,6 +103,11 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
     }
 }
 
+void Renderer::RenderForSelectionFramebufferWithoutBindingMaterial() const
+{
+    RenderWithoutBindingMaterial();
+}
+
 void Renderer::Render() const
 {
     // TODO: Transparent renderers must not write to the depth buffer (?)
@@ -136,7 +141,16 @@ void Renderer::RenderWithMaterial(Material *mat) const
         mat->Bind();
     }
 
-    RenderWithoutBindingMaterial();
+    #ifdef BANG_EDITOR
+    if (sfb && sfb->IsPassing())
+    {
+        RenderForSelectionFramebufferWithoutBindingMaterial();
+    }
+    else
+    #endif
+    {
+        RenderWithoutBindingMaterial();
+    }
 
     if (goodMaterial)
     {

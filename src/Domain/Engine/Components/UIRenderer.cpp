@@ -71,7 +71,9 @@ bool UIRenderer::IsACanvasRenderer() const
 
 void UIRenderer::Render() const
 {
+    glDisable(GL_DEPTH_TEST);
     MeshRenderer::Render();
+    glEnable(GL_DEPTH_TEST);
 }
 
 const String UIRenderer::ToString() const

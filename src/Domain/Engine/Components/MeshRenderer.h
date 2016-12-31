@@ -40,7 +40,6 @@ protected:
 
     virtual void RenderWithoutBindingMaterial() const override;
 
-
     friend class GameObject;
 };
 

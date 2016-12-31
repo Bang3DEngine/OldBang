@@ -67,6 +67,7 @@ void GraphicPipeline::RenderScene(Scene *scene)
 
     #ifdef BANG_EDITOR
     RenderSelectionFramebuffer();
+    // RenderToScreen(m_selectionFB->GetColorTexture()); // Uncomment to see the framebuffer
     #endif
 }
 
@@ -332,6 +333,7 @@ void GraphicPipeline::RenderSelectionFramebuffer()
     m_selectionFB->ProcessSelection();
     m_selectionFB->m_isPassing = false;
 }
+
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
 {
     return m_selectionFB;
