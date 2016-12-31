@@ -2,7 +2,7 @@
 
 #include <QLibrary>
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Debug.h"
 #include "Persistence.h"
 #include "Application.h"

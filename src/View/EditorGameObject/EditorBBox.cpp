@@ -1,6 +1,6 @@
 #include "EditorBBox.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Mesh.h"
 #include "Material.h"
 #include "Transform.h"

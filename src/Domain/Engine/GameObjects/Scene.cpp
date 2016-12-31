@@ -23,16 +23,16 @@ void Scene::_OnStart()
     if (!IsEditorGameObject())
     {
         List<Camera*> cameras = GetComponentsInChildren<Camera>();
-        Debug_Log("Cameras: " << cameras);
+        Debug_Status("Cameras: " << cameras);
         if (!cameras.Empty())
         {
             Camera *cam = cameras.Front();
             SetCamera(cam);
-            Debug_Log("Found camera: " << cam);
+            Debug_Status("Found camera: " << cam);
         }
         else // Create default camera
         {
-            Debug_Log("Creating default camera");
+            Debug_Status("Creating default camera");
             GameObject *m_defaultCamera = new GameObject("DefaultCamera");
             m_defaultCamera->transform->SetPosition(Vector3(90));
             m_defaultCamera->transform->LookAt(Vector3::Zero);

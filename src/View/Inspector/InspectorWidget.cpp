@@ -1,6 +1,6 @@
 #include "InspectorWidget.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Component.h"
 #include "GameObject.h"
 #include "EditorWindow.h"

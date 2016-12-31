@@ -1,6 +1,6 @@
 #include "FileWriter.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Rect.h"
 #include "Scene.h"
 #include "Asset.h"

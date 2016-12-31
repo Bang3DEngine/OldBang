@@ -1,6 +1,6 @@
 #include "MenuBar.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Font.h"
 #include "Mesh.h"
 #include "Screen.h"
@@ -195,13 +195,13 @@ void MenuBar::OnSaveSceneAs() const
 
 void MenuBar::OnBuild() const
 {
-    Debug_Log("Building Game... (This could take a while)");
+    Debug_Status("Building Game... (This could take a while)");
     GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute(), false);
 }
 
 void MenuBar::OnBuildAndRun() const
 {
-    Debug_Log("Building and running Game... (This could take a while)");
+    Debug_Status("Building and running Game... (This could take a while)");
     GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute(), true);
 }
 

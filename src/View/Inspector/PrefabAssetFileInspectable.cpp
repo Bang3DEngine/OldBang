@@ -1,6 +1,6 @@
 #include "PrefabAssetFileInspectable.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Prefab.h"
 #include "Inspector.h"
 #include "GameObject.h"

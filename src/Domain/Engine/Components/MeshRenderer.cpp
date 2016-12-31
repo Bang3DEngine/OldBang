@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "FileReader.h"
 
-#include "Bang.h"
+#include "Debug.h"
 
 #include "VAO.h"
 #include "Mesh.h"

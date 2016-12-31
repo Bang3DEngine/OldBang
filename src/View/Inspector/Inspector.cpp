@@ -2,7 +2,7 @@
 
 #include <QScrollBar>
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Debug.h"
 #include "UIText.h"
 #include "Canvas.h"

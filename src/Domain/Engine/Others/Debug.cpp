@@ -1,6 +1,6 @@
 #include "Debug.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Scene.h"
 #include "Color.h"
 #include "String.h"
@@ -10,6 +10,7 @@
 #include "Matrix4.h"
 #include "IToString.h"
 #include "Quaternion.h"
+#include "EditorWindow.h"
 #include "SceneManager.h"
 
 #ifdef BANG_EDITOR
@@ -18,9 +19,10 @@
 #include "EditorDebugGameObject.h"
 #endif
 
-const String Debug::c_logPrefix   = "[   LOG   ]: ";
-const String Debug::c_warnPrefix  = "[ WARNING ]: ";
-const String Debug::c_errorPrefix = "[  ERROR  ]: ";
+const String Debug::c_logPrefix    = "[   LOG   ]: ";
+const String Debug::c_warnPrefix   = "[ WARNING ]: ";
+const String Debug::c_errorPrefix  = "[  ERROR  ]: ";
+const String Debug::c_statusPrefix = "[  STATUS ]: ";
 
 Debug::Debug()
 {
@@ -43,6 +45,16 @@ void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny, const 
     EditorScene *es = dynamic_cast<EditorScene*>(s); NONULL(es);
     EditorDebugGameObject *edgo = es->m_debugGameObject; NONULL(edgo);
     edgo->DrawScreenLine(origin, destiny, color, lineWidth, secsTime);
+#endif
+}
+
+void Debug::_Status(const String &str)
+{
+    std::cerr << c_statusPrefix << str << std::endl;
+    std::cerr.flush();
+    #ifdef BANG_EDITOR
+    EditorWindow *win = EditorWindow::GetInstance();
+    win->labelStatus->setText( str.ToQString() );
     #endif
 }
 

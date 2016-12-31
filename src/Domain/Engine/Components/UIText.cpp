@@ -1,6 +1,6 @@
 #include "UIText.h"
 
-#include "Bang.h"
+#include "Debug.h"
 
 #include "Font.h"
 #include "Debug.h"

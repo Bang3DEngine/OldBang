@@ -1,7 +1,7 @@
 #include "GBuffer.h"
 
 #include "VAO.h"
-#include "Bang.h"
+#include "Debug.h"
 #include "Mesh.h"
 #include "Rect.h"
 #include "Scene.h"

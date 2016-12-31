@@ -10,7 +10,7 @@
 #include "GameWindow.h"
 #endif
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "Prefab.h"

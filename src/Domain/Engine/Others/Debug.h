@@ -25,6 +25,7 @@ private:
     static const String c_logPrefix;
     static const String c_warnPrefix;
     static const String c_errorPrefix;
+    static const String c_statusPrefix;
 
 public:
 
@@ -42,11 +43,23 @@ public:
                                float secsTime = 1.0f);
 
     static void _Log(const String &str);
-
     static void _Warn(const String &str);
-
     static void _Error(const String &str);
+    static void _Status(const String &str);
 };
+
+// NONULL
+    #define NONULL(x) do { if (x == nullptr) { return; } } while (0);
+//
+
+// ASSERT
+    #define Assert(mustBeTrue, message, returnAction) do{\
+        if (!(mustBeTrue)) {\
+            Debug_Error("Assertion failed: " << message);\
+            returnAction;\
+        }\
+    } while (0)
+//
 
 #define Debug_Log(msg) do{\
     std::ostringstream log;\
@@ -67,6 +80,13 @@ public:
     log << msg;\
     log.flush();\
     Debug::_Error(log.str()); \
+} while (0)
+
+#define Debug_Status(msg) do{\
+    std::ostringstream log;\
+    log << msg;\
+    log.flush();\
+    Debug::_Status(log.str()); \
 } while (0)
 
 #define _Debug_Suffix \

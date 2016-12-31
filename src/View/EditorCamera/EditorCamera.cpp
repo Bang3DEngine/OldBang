@@ -1,6 +1,6 @@
 #include "EditorCamera.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Time.h"
 #include "Input.h"
 #include "Scene.h"

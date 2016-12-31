@@ -3,7 +3,7 @@
 #include <chrono>
 #include <algorithm>
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "GameObject.h"

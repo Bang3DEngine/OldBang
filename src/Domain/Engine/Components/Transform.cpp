@@ -3,7 +3,7 @@
 #include <sstream>
 #include <ostream>
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Debug.h"
 #include "XMLNode.h"
 #include "GameObject.h"

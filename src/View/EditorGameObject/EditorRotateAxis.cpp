@@ -1,6 +1,6 @@
 #include "EditorRotateAxis.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Scene.h"
 #include "Screen.h"
 #include "Toolbar.h"

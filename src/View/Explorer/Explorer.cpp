@@ -4,7 +4,7 @@
 
 #include "Debug.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "Prefab.h"
 #include "TextFile.h"
 #include "MeshFile.h"

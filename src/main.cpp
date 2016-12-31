@@ -6,7 +6,7 @@
 
 #include "glm/glm.hpp"
 
-#include "Bang.h"
+#include "Debug.h"
 
 #include "Input.h"
 #include "Timer.h"

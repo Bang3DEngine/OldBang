@@ -1,6 +1,6 @@
 #include "ListLogger.h"
 
-#include "Bang.h"
+#include "Debug.h"
 #include "EditorWindow.h"
 
 QListWidget *ListLogger::s_listLogger = nullptr;

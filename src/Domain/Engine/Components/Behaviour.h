@@ -1,7 +1,7 @@
 #ifndef BEHAVIOUR_H
 #define BEHAVIOUR_H
 
-#include "Bang.h"
+#include "Debug.h"
 
 #include "Time.h"
 #include "Input.h"

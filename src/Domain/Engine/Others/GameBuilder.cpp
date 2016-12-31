@@ -11,7 +11,7 @@ void GameBuilder::BuildGame(const String &absoluteDir, bool runGame)
 {
     if (GameBuilder::buildThread.isRunning())
     {
-        Debug_Log("Game is already being built");
+        Debug_Status("Game is already being built");
     }
     else
     {
@@ -34,14 +34,14 @@ void BuildGameThread::run()
     }
     else
     {
-        Debug_Log("Game has been built!");
+        Debug_Status("Game has been built!");
     }
 
     if (ok && runGameAfterBuild)
     {
         String output = "";
-        Debug_Log("Running Game...");
+        Debug_Status("Running Game...");
         SystemUtils::SystemBackground("./Game.exe");
-        Debug_Log("Game is running!");
+        Debug_Status("Game is running!");
     }
 }

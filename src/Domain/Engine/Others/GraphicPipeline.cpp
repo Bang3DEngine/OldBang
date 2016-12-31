@@ -3,7 +3,7 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "Mesh.h"
-#include "Bang.h"
+#include "Debug.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "Light.h"
