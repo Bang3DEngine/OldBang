@@ -4,6 +4,8 @@
 #include "Explorer.h"
 #endif
 
+#include <QDir>
+
 #include "Debug.h"
 #include "StringUtils.h"
 
@@ -201,6 +203,16 @@ String Persistence::GetDuplicateName(const String &path, Explorer *exp)
     return result;
 }
 #endif
+
+bool Persistence::ExistsDirectory(const String &dirPath)
+{
+    return QDir(dirPath.ToQString()).exists();
+}
+
+bool Persistence::CreateDirectory(const String &dirPath)
+{
+    return QDir().mkdir(dirPath.ToQString());
+}
 
 void Persistence::SetActiveSceneFilepath(const String &scenePath)
 {

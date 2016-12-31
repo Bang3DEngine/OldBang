@@ -2,10 +2,10 @@
 
 #include <QTreeWidgetItem>
 
+#include "Dialog.h"
 #include "Prefab.h"
 #include "Explorer.h"
 #include "Inspector.h"
-#include "FileDialog.h"
 #include "GameObjectClipboard.h"
 
 #include "Persistence.h"

@@ -3,16 +3,17 @@
 #include "Debug.h"
 #include "Font.h"
 #include "Mesh.h"
+#include "Dialog.h"
 #include "Screen.h"
 #include "Prefab.h"
 #include "Camera.h"
+#include "Project.h"
 #include "Material.h"
 #include "Transform.h"
 #include "Texture2D.h"
 #include "GameObject.h"
 #include "FileReader.h"
 #include "FileWriter.h"
-#include "FileDialog.h"
 #include "PointLight.h"
 #include "MeshFactory.h"
 #include "SystemUtils.h"
@@ -24,6 +25,7 @@
 #include "SceneManager.h"
 #include "EditorWindow.h"
 #include "AssetsManager.h"
+#include "ProjectManager.h"
 #include "DirectionalLight.h"
 #include "WindowEventManager.h"
 
@@ -33,6 +35,10 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 
     EditorWindow *w = EditorWindow::GetInstance();
 
+    connect(w->actionNewProject,  SIGNAL(triggered()),
+            this, SLOT(OnNewProject()));
+    connect(w->actionOpenProject,  SIGNAL(triggered()),
+            this, SLOT(OnOpenProject()));
     connect(w->actionNewScene,  SIGNAL(triggered()),
             this, SLOT(OnNewScene()));
     connect(w->actionOpenScene,  SIGNAL(triggered()),
@@ -128,7 +134,18 @@ QMessageBox::StandardButton MenuBar::AskForSavingActiveScene() const
     return reply;
 }
 
+void MenuBar::OnNewProject() const
+{
+    String dirName = Dialog::GetOpenDirname("Select the project containing directory");
+    Debug_Log(dirName);
+}
 
+void MenuBar::OnOpenProject() const
+{
+    String dirName = Dialog::GetOpenDirname("Select the project file to be opened",
+                                                Project::GetFileExtensionStatic());
+    Debug_Log(dirName);
+}
 
 
 void MenuBar::OnNewScene() const
@@ -144,8 +161,8 @@ void MenuBar::OnOpenScene() const
 
     m_wem->NotifyMenuBarActionClicked(Action::OpenScene);
 
-    FileDialog fd("Open scene...", Scene::GetFileExtension());
-    String filename = fd.GetOpenFilename();
+    String filename = Dialog::GetOpenFilename("Open scene...",
+                                                  Scene::GetFileExtension());
     if (filename == "") return;
 
     SceneManager::SetActiveScene(nullptr);
@@ -186,8 +203,9 @@ void MenuBar::OnSaveSceneAs() const
 
     Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
 
-    FileDialog fd("Save scene as...", Scene::GetFileExtension());
-    String filename = fd.GetSaveFilename(scene->name);
+    String filename = Dialog::GetSaveFilename("Save scene as...",
+                                                  Scene::GetFileExtension(),
+                                                  scene->name);
     if (filename == "") return;
 
     FileWriter::WriteScene(filename, scene);
@@ -214,8 +232,8 @@ void MenuBar::OnCreateFromPrefab() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
 
-    FileDialog fd("Create from prefab...", Prefab::GetFileExtensionStatic());
-    String filename = fd.GetOpenFilename();
+    String filename = Dialog::GetOpenFilename("Create from prefab...",
+                                                  Prefab::GetFileExtensionStatic());
     if (filename == "") { return; }
 
     EditorWindow *w = EditorWindow::GetInstance();

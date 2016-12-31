@@ -244,6 +244,10 @@
     <property name="title">
      <string>Project</string>
     </property>
+    <addaction name="actionNewProject"/>
+    <addaction name="actionOpenProject"/>
+    <addaction name="actionProjectSettings"/>
+    <addaction name="separator"/>
     <addaction name="actionNewScene"/>
     <addaction name="actionOpenScene"/>
     <addaction name="actionSaveScene"/>
@@ -251,8 +255,6 @@
     <addaction name="separator"/>
     <addaction name="actionBuild"/>
     <addaction name="actionBuildAndRun"/>
-    <addaction name="separator"/>
-    <addaction name="actionProjectSettings"/>
    </widget>
    <widget class="QMenu" name="menuComponents">
     <property name="title">
@@ -838,6 +840,16 @@
   <action name="actionAddComponentUIText">
    <property name="text">
     <string>Text</string>
+   </property>
+  </action>
+  <action name="actionNewProject">
+   <property name="text">
+    <string>New Project</string>
+   </property>
+  </action>
+  <action name="actionOpenProject">
+   <property name="text">
+    <string>Open Project...</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

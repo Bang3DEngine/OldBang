@@ -60,6 +60,8 @@ public:
    static String GetDuplicateName(const String &path, Explorer *exp);
    #endif
 
+   static bool ExistsDirectory(const String &dirPath);
+   static bool CreateDirectory(const String &dirPath);
    static void SetActiveSceneFilepath(const String &scenePath);
    static String SetActiveSceneFilepath();
 

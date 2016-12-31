@@ -50,10 +50,10 @@ int main(int argc, char *argv[])
     String engineDir = argv[0];
     String binDir = Persistence::GetDir(engineDir);
     String engineRootDirAbs = Persistence::GetDirUp(binDir);
-    Persistence::c_ProjectRootAbsolute = "/home/sephirot47/BangTestProject"; // Not correct
-    Persistence::c_ProjectAssetsRootAbsolute = Persistence::c_ProjectRootAbsolute + "/Assets";
     Persistence::c_EngineRootAbsolute = engineRootDirAbs;
     Persistence::c_EngineAssetsRootAbsolute = Persistence::c_EngineRootAbsolute + "/EngineAssets";
+    Persistence::c_ProjectRootAbsolute = "/home/sephirot47/BangTestProject"; // Not correct
+    Persistence::c_ProjectAssetsRootAbsolute = Persistence::c_ProjectRootAbsolute + "/Assets";
     //
 
     SingletonManager::InitSingletonManagerFromMainBinary();

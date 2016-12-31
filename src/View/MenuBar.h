@@ -65,27 +65,29 @@ public:
 
     MenuBar(QWidget *parent = nullptr);
 
-    void CreateNewScene () const;
-    QMessageBox::StandardButton AskForSavingActiveScene () const;
+    void CreateNewScene() const;
+    QMessageBox::StandardButton AskForSavingActiveScene() const;
 
 
 public slots:
 
-    void OnNewScene () const;
-    void OnOpenScene () const;
-    void OnSaveScene () const;
-    void OnSaveSceneAs () const;
-    void OnBuild () const;
-    void OnBuildAndRun () const;
+    void OnNewProject() const;
+    void OnOpenProject() const;
+    void OnNewScene() const;
+    void OnOpenScene() const;
+    void OnSaveScene() const;
+    void OnSaveSceneAs() const;
+    void OnBuild() const;
+    void OnBuildAndRun() const;
 
-    void OnCreateEmptyGameObject () const;
-    void OnCreateFromPrefab () const;
-    void OnCreatePlane () const;
-    void OnCreateCube () const;
-    void OnCreateSphere () const;
-    void OnCreateCone () const;
-    void OnCreateDirectionalLight () const;
-    void OnCreatePointLight () const;
+    void OnCreateEmptyGameObject() const;
+    void OnCreateFromPrefab() const;
+    void OnCreatePlane() const;
+    void OnCreateCube() const;
+    void OnCreateSphere() const;
+    void OnCreateCone() const;
+    void OnCreateDirectionalLight() const;
+    void OnCreatePointLight() const;
     void OnAlignGameObjectWithView() const;
     void OnAlignViewWithGameObject() const;
 

@@ -276,7 +276,10 @@ HEADERS += \
     src/Domain/Graphics/FontSheetCreator.h \
     src/Domain/Engine/Assets/Font.h \
     src/Persistence/FontAssetFile.h \
-    src/Domain/Engine/Components/UIText.h
+    src/Domain/Engine/Components/UIText.h \
+    src/Persistence/ProjectManager.h \
+    src/Persistence/Project.h \
+    src/View/Dialogs/Dialog.h
 
 EDITOR {
 HEADERS += \
@@ -311,7 +314,6 @@ HEADERS += \
     src/View/Inspector/AttrWidgetString.h \
     src/View/Inspector/Texture2DAssetFileInspectable.h \
     src/View/Inspector/PrefabAssetFileInspectable.h \
-    src/View/Dialogs/FileDialog.h \
     src/View/Inspector/TextFileInspectable.h \
     src/View/EditorCamera/EditorCamera.h \
     src/View/EditorGameObject/EditorGameObject.h \
@@ -440,7 +442,10 @@ SOURCES += \
     src/Domain/Graphics/FontSheetCreator.cpp \
     src/Domain/Engine/Assets/Font.cpp \
     src/Persistence/FontAssetFile.cpp \
-    src/Domain/Engine/Components/UIText.cpp
+    src/Domain/Engine/Components/UIText.cpp \
+    src/Persistence/ProjectManager.cpp \
+    src/Persistence/Project.cpp \
+    src/View/Dialogs/Dialog.cpp
 
 EDITOR {
     SOURCES += \
@@ -476,7 +481,6 @@ EDITOR {
         src/View/EditorScene/EditorScene.cpp \
         src/View/Inspector/MeshAssetFileInspectable.cpp \
         src/View/Inspector/Texture2DAssetFileInspectable.cpp \
-        src/View/Dialogs/FileDialog.cpp \
         src/View/Inspector/ImageFileInspectable.cpp \
         src/View/Inspector/MeshFileInspectable.cpp \
         src/View/Inspector/MaterialAssetFileInspectable.cpp \

@@ -5,9 +5,9 @@
 #include <QHBoxLayout>
 
 #include "File.h"
+#include "Dialog.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
-#include "FileDialog.h"
 #include "Persistence.h"
 #include "InspectorWidget.h"
 
@@ -68,8 +68,9 @@ AttrWidgetFile::~AttrWidgetFile()
 
 void AttrWidgetFile::Browse()
 {
-    FileDialog fd(Persistence::GetAssetsPathAbsolute(), m_fileExtension);
-    String selectedFile = fd.GetOpenFilename();
+    String selectedFile =
+            Dialog::GetOpenFilename(Persistence::GetAssetsPathAbsolute(),
+                                        m_fileExtension);
     if (selectedFile != "")
     {
         SetValue(selectedFile);

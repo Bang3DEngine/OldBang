@@ -3,11 +3,11 @@
 #include <QTreeWidgetItem>
 
 #include "Scene.h"
+#include "Dialog.h"
 #include "Prefab.h"
 #include "Hierarchy.h"
 #include "GameObject.h"
 #include "FileWriter.h"
-#include "FileDialog.h"
 #include "SceneManager.h"
 #include "GameObjectClipboard.h"
 
@@ -131,8 +131,9 @@ void HierarchyContextMenu::OnCreatePrefab()
 {
     GameObject *go = m_hierarchy->GetFirstSelectedGameObject();
 
-    FileDialog fd("Create Prefab...", Prefab::GetFileExtensionStatic());
-    String filename = fd.GetSaveFilename(go->name);
+    String filename = Dialog::GetSaveFilename("Create Prefab...",
+                                                  Prefab::GetFileExtensionStatic(),
+                                                  go->name);
     if (filename != "")
     {
         Prefab *prefab = new Prefab(go);
