@@ -32,6 +32,8 @@ String SelectProjectWindow::ExecAndGetProjectFilepath(QMainWindow *window, QAppl
     connect(inst->buttonLoadRecentProject, SIGNAL(clicked()),
             inst, SLOT(OnLoadRecentProject()));
 
+    inst->buttonLoadRecentProject->setFocus();
+
     // Create recent project list and select first item
     inst->FillRecentProjectsList();
     inst->listRecentProjects->setCurrentItem(inst->listRecentProjects->item(0,0));
