@@ -141,12 +141,14 @@ QMessageBox::StandardButton MenuBar::AskForSavingActiveScene() const
 
 void MenuBar::OnNewProject() const
 {
-    ProjectManager::CreateNewProjectAndDialogs();
+    String projectFilepath = ProjectManager::DialogCreateNewProject();
+    ProjectManager::OpenProject(projectFilepath);
 }
 
 void MenuBar::OnOpenProject() const
 {
-    ProjectManager::OpenProjectAndDialogs();
+    String projectFilepath = ProjectManager::DialogOpenProject();
+    ProjectManager::OpenProject(projectFilepath);
 }
 
 void MenuBar::OnSaveProject() const

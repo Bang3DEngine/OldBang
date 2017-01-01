@@ -12,15 +12,15 @@ private:
 public:
     ProjectManager();
 
-    static Project* NewProject(const String &projectContainingDir,
+    static Project* CreateNewProject(const String &projectContainingDir,
                                const String &projectName);
     static Project* OpenProject(const String &projectFilepath);
     static void SaveProject(const Project *project);
     static void SaveCurrentProject();
     static void CloseCurrentProject();
 
-    static String CreateNewProjectAndDialogs();
-    static String OpenProjectAndDialogs();
+    static String DialogCreateNewProject();
+    static String DialogOpenProject();
 
     static Project* GetCurrentProject();
 };

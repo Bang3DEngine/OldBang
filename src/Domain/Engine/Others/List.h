@@ -1,6 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 
+#include <set>
 #include <list>
 #include <sstream>
 #include <algorithm>
@@ -92,6 +93,16 @@ public:
             }
         }
         return End();
+    }
+
+    int CountOccurrences(const T& x)
+    {
+        int c = 0;
+        for (auto it = Begin(); it != End(); ++it)
+        {
+            if (x == *it) { ++c; }
+        }
+        return c;
     }
 
     void Insert(Iterator it, const T& x)

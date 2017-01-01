@@ -5,6 +5,7 @@
 #endif
 
 #include <QDir>
+#include <QFile>
 
 #include "Debug.h"
 #include "StringUtils.h"
@@ -201,6 +202,11 @@ String Persistence::GetDuplicateName(const String &path, Explorer *exp)
         result = Persistence::GetNextDuplicateName(result);
     }
     return result;
+}
+
+bool Persistence::ExistsFile(const String &filepath)
+{
+    return QFile(filepath.ToQString()).exists();
 }
 #endif
 

@@ -17,8 +17,8 @@ ProjectManager::ProjectManager()
 {
 }
 
-Project* ProjectManager::NewProject(const String &projectContainingDir,
-                                    const String &projectName)
+Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
+                                          const String &projectName)
 {
     String projectDir = projectContainingDir + "/" + projectName;
     if (!Persistence::ExistsDirectory(projectDir))
@@ -56,6 +56,7 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     if (!xmlInfo)
     {
         Debug_Error("Could not open project '" << projectFilepath << "'");
+        return nullptr;
     }
 
     ProjectManager::CloseCurrentProject();
@@ -115,7 +116,7 @@ void ProjectManager::CloseCurrentProject()
 
 }
 
-String ProjectManager::CreateNewProjectAndDialogs()
+String ProjectManager::DialogCreateNewProject()
 {
     String dirPath = Dialog::GetOpenDirname("Select the project containing directory");
     if (!dirPath.Empty())
@@ -125,21 +126,16 @@ String ProjectManager::CreateNewProjectAndDialogs()
                                                     "Project name:",
                                                     "MyBangProject",
                                                     &ok);
-
         if (ok)
         {
-            String projectPath = dirPath + "/" + projectName;
-
-            Project *project = ProjectManager::NewProject(dirPath, projectName);
-
-            ProjectManager::OpenProject(project->GetProjectFileFilepath());
+            ProjectManager::CreateNewProject(dirPath, projectName);
             return ProjectManager::GetCurrentProject()->GetProjectFileFilepath();
         }
     }
     return "";
 }
 
-String ProjectManager::OpenProjectAndDialogs()
+String ProjectManager::DialogOpenProject()
 {
     String projectFilepath =
             Dialog::GetOpenFilename("Select the project file to be opened",

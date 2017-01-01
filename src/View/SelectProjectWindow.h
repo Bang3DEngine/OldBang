@@ -18,17 +18,22 @@ public:
     static String ExecAndGetProjectFilepath(QMainWindow *window, QApplication *app);
     static SelectProjectWindow *GetInstance();
     QMainWindow* GetMainWindow() const;
+    void FillRecentProjectsList();
 
 public slots:
+    void OnRecentProjectListSelectionChanged(int row, int column);
+
+    void OnLoadRecentProject();
     void OnCreateNewProject();
-    void OnLoadProject();
-    void OnClosed();
+    void OnBrowseProject();
 
 private:
     static SelectProjectWindow *s_instance;
     String m_loadedProjectFile = "";
     QMainWindow *m_window = nullptr;
     bool m_directlyClosedByUser = false;
+
+    String m_selectedRecentProjectFilepath = "";
 };
 
 #endif // SELECTPROJECTWINDOW_H
