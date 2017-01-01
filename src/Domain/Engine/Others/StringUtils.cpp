@@ -84,18 +84,6 @@ String StringUtils::Trim(const String &str)
     return str;
 }
 
-String StringUtils::Concat(const Array<String> &particles, String joiner)
-{
-    String result = "";
-    for (int i = 0; i < particles.Size(); ++i)
-    {
-        if (i != 0) { result += joiner; }
-        result += particles[i];
-    }
-    return result;
-}
-
-
 Array<String> StringUtils::Split(const String &content, char splitter)
 {
     Array<String> result;

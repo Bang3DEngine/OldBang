@@ -190,7 +190,8 @@ void Gizmos::RenderRect(const Rect &r)
 void Gizmos::RenderIcon(const Texture2D *texture,
                         bool billboard)
 {
-    NONULL(m_gizmosGameObject);
+    NONULL(m_gizmosGameObject); NONULL(Gizmos::m_meshRenderer);
+    NONULL(Gizmos::m_planeMesh);
 
     Gizmos::SetDrawWireframe(false);
     Gizmos::SetReceivesLighting(false);

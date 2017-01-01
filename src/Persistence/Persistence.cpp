@@ -18,9 +18,19 @@ String Persistence::c_ProjectAssetsRootAbsolute = "";
 String Persistence::c_EngineRootAbsolute = "";
 String Persistence::c_EngineAssetsRootAbsolute = "";
 
+bool Persistence::IsDir(const String &path)
+{
+    return QFileInfo(path.ToQString()).isDir();
+}
+
+bool Persistence::IsFile(const String &path)
+{
+    return QFileInfo(path.ToQString()).isFile();
+}
+
 bool Persistence::IsAbsolute(const String &path)
 {
-    return path[0] == '/';
+    return QFileInfo(path.ToQString()).isAbsolute();
 }
 
 String Persistence::GetProjectRootPathAbsolute()
@@ -202,6 +212,64 @@ String Persistence::GetDuplicateName(const String &path, Explorer *exp)
         result = Persistence::GetNextDuplicateName(result);
     }
     return result;
+}
+
+List<String> Persistence::GetSubDirectories(const String &dirPath,
+                                            bool recursive)
+{
+    List<String> subdirsList;
+    if (!Persistence::ExistsDirectory(dirPath)) { return subdirsList; }
+
+    QStringList subdirs =  QDir(dirPath.ToQString()).entryList();
+    for (QString qSubdir : subdirs)
+    {
+        if (qSubdir == "." || qSubdir == "..") continue;
+
+        String subdirName = String(qSubdir);
+        String subdirPath = dirPath + "/" + subdirName;
+        if (Persistence::IsDir(subdirPath))
+        {
+            subdirsList.Add(subdirPath);
+            if (recursive)
+            {
+                List<String> subdirsListRecursive =
+                        GetSubDirectories(subdirPath, recursive);
+                subdirsList.Splice(subdirsList.End(), subdirsListRecursive);
+            }
+        }
+    }
+    return subdirsList;
+}
+
+List<String> Persistence::GetFiles(const String &dirPath,
+                                   bool recursive,
+                                   List<String> extensions)
+{
+    List<String> filesList;
+    QStringList extensionList;
+    for (String ext : extensions)
+    {
+        extensionList.append(ext.ToQString());
+    }
+
+    List<String> subdirs = GetSubDirectories(dirPath, recursive);
+    subdirs.PushFront(dirPath);
+    for (String subdir : subdirs)
+    {
+        QStringList filepathList = QDir(subdir.ToQString())
+                .entryList(extensionList);
+
+        for (QString qFilepath : filepathList)
+        {
+            String filepath(qFilepath);
+            filepath = subdir + "/" + filepath;
+            if (filepath == "." || filepath == ".." ||
+                !Persistence::IsFile(filepath)) { continue; }
+
+            filesList.Add(filepath);
+        }
+    }
+    return filesList;
 }
 
 bool Persistence::ExistsFile(const String &filepath)

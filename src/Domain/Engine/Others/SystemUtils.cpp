@@ -10,69 +10,39 @@
 
 String SystemUtils::GetAllProjectObjects()
 {
-    return SystemUtils::GetAllObjects(Persistence::c_ProjectRootAbsolute);
+    List<String> files =
+            Persistence::GetFiles(Persistence::c_ProjectRootAbsolute, true, {"*.o"});
+    return String::Join(files, " ");
 }
 
 String SystemUtils::GetAllEngineObjects()
 {
-    return SystemUtils::GetAllObjects(Persistence::c_EngineRootAbsolute);
-}
+    #ifdef BANG_EDITOR
+    String subdir = "/bin/objEditor";
+    #else
+    String subdir = "/bin/objGame";
+    #endif
 
-String SystemUtils::GetAllObjects(const String &rootFilepath)
-{
-    String cmdGetAllObjects = "";
-    cmdGetAllObjects = " find " +                                  // Find recursively
-                       rootFilepath +                              // From project root
-                       " -type f " +                               // Only files
-                       " | grep -E -v \"\\..*/.*\" " +             // Not including hidden dirs
-                       " | grep -E -v \"BangPreprocessor\" " +     // Temporal fix with colliding .o's TODO
-                       " | grep -E -v \"main\\.o\" " +             // Temporal fix with colliding .o's TODO
-                       #ifdef BANG_EDITOR
-                       " | grep -E \"objEditor\"" +
-                       #else
-                       " | grep -E \"objGame\"" +
-                       #endif
-                       " | grep -E \"\\.o$\"" +                    // Only .o files
-                       " | xargs";                                 // Inline
-
-    bool ok = false;
-    String objs = "";
-    SystemUtils::System(cmdGetAllObjects, &objs, &ok);
-    if (!ok)
-    {
-        Debug_Error("Error trying to find object files to compile");
-    }
-    return objs;
+    List<String> files =
+            Persistence::GetFiles(Persistence::c_EngineRootAbsolute + subdir,
+                                  true, {"*.o"});
+    return String::Join(files, " ");
 }
 
 String SystemUtils::GetAllProjectSubDirs()
 {
-    return GetAllSubDirs(Persistence::c_ProjectRootAbsolute);
+    List<String> subdirs =
+            Persistence::GetSubDirectories(Persistence::c_ProjectRootAbsolute, true);
+    subdirs.PushFront(Persistence::c_ProjectRootAbsolute);
+    return String::Join(subdirs, " ");
 }
 
 String SystemUtils::GetAllEngineSubDirs()
 {
-    return GetAllSubDirs(Persistence::c_EngineRootAbsolute);
-}
-
-String SystemUtils::GetAllSubDirs(const String &rootFilepath)
-{
-    String cmdGetAllSubDirs = "";
-    cmdGetAllSubDirs = " find " +                                  // Find recursively
-                       rootFilepath +                              // From root
-                       " -type d " +                               // Only directories
-                       " | grep -E -v \"\\.\" " +                  // Not including hidden dirs
-                       " | xargs";                                 // Inline
-
-    bool ok = false;
-    String allSubDirs = "";
-    SystemUtils::System(cmdGetAllSubDirs, &allSubDirs, &ok);
-    if (!ok)
-    {
-        Debug_Error("Error trying to find subdirs for dir '" << rootFilepath << "'");
-    }
-
-    return allSubDirs;
+    List<String> subdirs =
+            Persistence::GetSubDirectories(Persistence::c_EngineRootAbsolute, true);
+    subdirs.PushFront(Persistence::c_EngineRootAbsolute);
+    return String::Join(subdirs, " ");
 }
 
 String SystemUtils::GetQtIncludes()
@@ -207,16 +177,15 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
 
     String includes = "";
     includes += " . ";
-    includes += SystemUtils::GetAllProjectSubDirs();
-    includes += SystemUtils::GetAllEngineSubDirs();
-    includes += SystemUtils::GetQtIncludes();
+    includes += SystemUtils::GetAllProjectSubDirs() + " ";
+    includes += SystemUtils::GetAllEngineSubDirs() + " ";
+    includes += SystemUtils::GetQtIncludes() + " ";
     StringUtils::RemoveLineBreaks(&includes);
     StringUtils::AddInFrontOfWords("-I", &includes);
 
     String objs = "";
-    objs += SystemUtils::GetAllProjectObjects();
-    objs += SystemUtils::GetAllEngineObjects();
-    StringUtils::RemoveLineBreaks(&objs);
+    objs += SystemUtils::GetAllProjectObjects() + " ";
+    objs += SystemUtils::GetAllEngineObjects() + " ";
 
     String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
     StringUtils::RemoveLineBreaks(&qtLibDirs);

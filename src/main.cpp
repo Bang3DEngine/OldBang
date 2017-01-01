@@ -99,6 +99,9 @@ int main(int argc, char *argv[])
     //
 
 
+    //Debug_Log( String::Join( Persistence::GetSubDirectories("/home/sephirot47/Bang", true), " ") );
+    //Debug_Log( Persistence::GetFiles("/home/sephirot47/BangTestProject", true, {"*.cpp", "*.h"}) );
+
     #ifdef BANG_EDITOR
     // Select project
     QApplication selectProjectApp(argc, argv);

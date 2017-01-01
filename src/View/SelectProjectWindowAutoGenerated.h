@@ -56,7 +56,7 @@ public:
             SelectProjectWindow->setObjectName(QString::fromUtf8("SelectProjectWindow"));
         SelectProjectWindow->resize(421, 452);
         QIcon icon;
-        icon.addFile(QString::fromUtf8(":/Bang/BangIcon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/Bang/BangLogo.png"), QSize(), QIcon::Normal, QIcon::Off);
         SelectProjectWindow->setWindowIcon(icon);
         SelectProjectWindow->setWindowOpacity(1);
         centralwidget = new QWidget(SelectProjectWindow);

@@ -25,11 +25,9 @@ public:
 
     static String GetAllProjectObjects();
     static String GetAllEngineObjects();
-    static String GetAllObjects(const String &rootFilepath);
 
     static String GetAllProjectSubDirs();
     static String GetAllEngineSubDirs();
-    static String GetAllSubDirs(const String &rootFilepath);
 
     static String GetQtIncludes();
     static String GetQtLibrariesDirs();

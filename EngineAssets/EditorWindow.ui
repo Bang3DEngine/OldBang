@@ -22,6 +22,10 @@
   <property name="windowTitle">
    <string>Bang</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="QtResources.qrc">
+    <normaloff>:/Bang/BangLogo.png</normaloff>:/Bang/BangLogo.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -919,6 +923,7 @@
  </customwidgets>
  <resources>
   <include location="qdarkstyle/style.qrc"/>
+  <include location="QtResources.qrc"/>
  </resources>
  <connections>
   <connection>

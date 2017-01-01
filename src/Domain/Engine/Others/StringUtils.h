@@ -23,7 +23,6 @@ public:
     static void Trim(String *str);
     static String Trim(const String &str);
 
-    static String Concat(const Array<String> &particles, String joiner = "");
     static Array<String> Split(const String &content, char splitter);
     static Array<String> SplitTrim(const String &content, char splitter);
 

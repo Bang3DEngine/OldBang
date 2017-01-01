@@ -1,6 +1,7 @@
 #ifndef PERSISTENCE_H
 #define PERSISTENCE_H
 
+#include "List.h"
 #include "String.h"
 
 class Explorer;
@@ -16,6 +17,8 @@ public:
    static String c_EngineRootAbsolute;
    static String c_EngineAssetsRootAbsolute;
 
+   static bool IsDir(const String &path);
+   static bool IsFile(const String &path);
    static bool IsAbsolute(const String &path);
 
    static String GetProjectRootPathAbsolute();
@@ -60,8 +63,13 @@ public:
    static String GetDuplicateName(const String &path, Explorer *exp);
    #endif
 
-   static bool ExistsFile(const String &filepath);
+   static List<String> GetSubDirectories(const String& dirPath,
+                                         bool recursive = false);
+   static List<String> GetFiles(const String& dirPath,
+                                bool recursive = false,
+                                List<String> extensions = {});
 
+   static bool ExistsFile(const String &filepath);
    static bool ExistsDirectory(const String &dirPath);
    static bool CreateDirectory(const String &dirPath);
    static void SetActiveSceneFilepath(const String &scenePath);

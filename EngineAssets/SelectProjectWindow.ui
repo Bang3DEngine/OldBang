@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="QtResources.qrc">
-    <normaloff>:/Bang/BangIcon.png</normaloff>:/Bang/BangIcon.png</iconset>
+    <normaloff>:/Bang/BangLogo.png</normaloff>:/Bang/BangLogo.png</iconset>
   </property>
   <property name="windowOpacity">
    <double>1.000000000000000</double>
