@@ -1,6 +1,8 @@
 #include "ProjectManager.h"
 
+#include "List.h"
 #include "Debug.h"
+#include "Scene.h"
 #include "Dialog.h"
 #include "Project.h"
 #include "XMLNode.h"
@@ -10,6 +12,7 @@
 #include "FileWriter.h"
 #include "Persistence.h"
 #include "EditorWindow.h"
+#include "SceneManager.h"
 
 Project *ProjectManager::s_currentProject = nullptr;
 
@@ -63,11 +66,8 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
 
     ProjectManager::s_currentProject = new Project();
     ProjectManager::s_currentProject->ReadXMLInfo(xmlInfo);
-    ProjectManager::s_currentProject->
-            SetProjectRootFilepath( Persistence::GetDir(projectFilepath) );
-
-    // Create new scene
-    MenuBar::GetInstance()->CreateNewScene();
+    String projectDir = Persistence::GetDir(projectFilepath);
+    ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 
     // Set directory of the explorer to the Assets' root of the new project
     Explorer::GetInstance()->SetDir(
@@ -81,6 +81,21 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     Persistence::c_ProjectRootAbsolute = ProjectManager::s_currentProject->GetProjectRootFilepath();
     Persistence::c_ProjectAssetsRootAbsolute =
             Persistence::c_ProjectRootAbsolute + "/Assets";
+
+
+    // Open the first found scene
+    List<String> sceneFilepaths = Persistence::GetFiles(projectDir, true,
+                                                        {Scene::GetFileExtensionStatic()});
+    if (!sceneFilepaths.Empty())
+    {
+        SceneManager::LoadScene(sceneFilepaths.Front());
+    }
+    else
+    {
+        // Create new empty scene
+        MenuBar::GetInstance()->CreateNewScene();
+    }
+    //
 
     return ProjectManager::s_currentProject;
 }

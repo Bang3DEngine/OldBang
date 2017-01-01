@@ -243,12 +243,13 @@ List<String> Persistence::GetSubDirectories(const String &dirPath,
 
 List<String> Persistence::GetFiles(const String &dirPath,
                                    bool recursive,
-                                   List<String> extensions)
+                                   const List<String> &extensions)
 {
     List<String> filesList;
     QStringList extensionList;
     for (String ext : extensions)
     {
+        if (!ext.BeginsWith("*.")) { ext = "*." + ext; }
         extensionList.append(ext.ToQString());
     }
 

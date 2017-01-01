@@ -67,7 +67,7 @@ public:
                                          bool recursive = false);
    static List<String> GetFiles(const String& dirPath,
                                 bool recursive = false,
-                                List<String> extensions = {});
+                                const List<String> &extensions = {});
 
    static bool ExistsFile(const String &filepath);
    static bool ExistsDirectory(const String &dirPath);
