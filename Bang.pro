@@ -20,9 +20,6 @@ CONFIG += $$BUILD_MODE
 CONFIG += qt
 MOC_DIR = src/Qt_MOCs/
 
-include(deployment.pri)
-qtcAddDeployment()
-
 DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
 
 QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC

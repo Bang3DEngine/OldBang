@@ -11,7 +11,8 @@
 String SystemUtils::GetAllProjectObjects()
 {
     List<String> files =
-            Persistence::GetFiles(Persistence::c_ProjectRootAbsolute, true, {"*.o"});
+            Persistence::GetFiles(Persistence::c_ProjectRootAbsolute,
+                                  true, {"*.o"});
     return String::Join(files, " ");
 }
 
