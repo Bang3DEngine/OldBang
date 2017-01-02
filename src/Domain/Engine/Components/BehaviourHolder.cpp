@@ -122,15 +122,6 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
 
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
     xmlInfo->SetButton("CreateNew...", noConstThis);
-    if (BehaviourManager::IsBeingCompiled(m_sourceFilepath))
-    {
-        xmlInfo->SetButton("Refresh", noConstThis, {XMLProperty::Disabled});
-    }
-    else
-    {
-        xmlInfo->SetButton("Refresh", noConstThis);
-    }
-
 }
 
 
@@ -187,10 +178,6 @@ void BehaviourHolder::OnButtonClicked(const String &attrName)
             SystemUtils::SystemBackground("xdg-open " + headerFilepath);
             SystemUtils::SystemBackground("xdg-open " + sourceFilepath);
         }
-    }
-    else if (attrName == "Refresh")
-    {
-        Refresh();
     }
     #endif
 }
