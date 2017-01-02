@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 
+class UIText;
 class EditorFloor;
 class EditorCamera;
 class EditorDebugGameObject;
@@ -17,11 +18,15 @@ private:
     EditorTranslateAxisGroup *m_axises = nullptr;
     EditorFloor *m_floor = nullptr;
 
+    EditorGameObject *m_fpsCounter = nullptr;
+    UIText *m_fpsCounterText = nullptr;
+
 public:
     EditorScene();
     virtual ~EditorScene();
 
     virtual void _OnStart () override;
+    virtual void OnUpdate() override;
 
     bool IsEditorGameObject() const override;
 };

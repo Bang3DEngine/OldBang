@@ -1,6 +1,9 @@
 #include "EditorScene.h"
 
+#include "Time.h"
+#include "UIText.h"
 #include "Hierarchy.h"
+#include "Transform.h"
 #include "EditorFloor.h"
 #include "EditorCamera.h"
 #include "SelectionFramebuffer.h"
@@ -25,17 +28,32 @@ EditorScene::EditorScene() : Scene()
 
     m_floor = new EditorFloor();
     m_floor->SetParent(this);
+
+    m_fpsCounter = new EditorGameObject();
+    m_fpsCounter->SetParent(this);
+    m_fpsCounterText = m_fpsCounter->AddComponent<UIText>();
+    m_fpsCounterText->SetTextSize(10);
+    m_fpsCounter->transform->SetLocalPosition(Vector3(0.7f, 0.92f, 1.0f));
 }
 
 EditorScene::~EditorScene()
 {
     Gizmos::SetGizmosGameObject(nullptr);
     Hierarchy::GetInstance()->Clear(); // To avoid potential bugs (seriously xd)
+    delete m_fpsCounter;
+    delete m_fpsCounterText;
 }
 
 void EditorScene::_OnStart()
 {
     Scene::_OnStart();
+}
+
+void EditorScene::OnUpdate()
+{
+    Scene::OnUpdate();
+    int fps = 1.0f / (Time::s_deltaTime + 0.0001f);
+    m_fpsCounterText->SetContent("FPS: " + String(fps));
 }
 
 bool EditorScene::IsEditorGameObject() const

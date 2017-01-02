@@ -279,7 +279,7 @@ HEADERS += \
     src/View/Dialogs/Dialog.h \
     src/View/SelectProjectWindow.h \
     src/Persistence/EngineConfig.h \
-    src/Persistence/BehaviourRefresherThread.h
+    src/Persistence/BehaviourRefresherTimer.h
 
 EDITOR {
 HEADERS += \
@@ -448,7 +448,7 @@ SOURCES += \
     src/View/Dialogs/Dialog.cpp \
     src/View/SelectProjectWindow.cpp \
     src/Persistence/EngineConfig.cpp \
-    src/Persistence/BehaviourRefresherThread.cpp
+    src/Persistence/BehaviourRefresherTimer.cpp
 
 EDITOR {
     SOURCES += \

@@ -28,6 +28,7 @@ void Font::LoadFromFile(const String &m_filepath)
         if (FontSheetCreator::LoadCharTexture(m_filepath, Font::CharLoadSize, char(c),
                                               &charTexture, &charMetrics, &m_freetypeFace))
         {
+            charTexture->SetFilterMode(Texture2D::FilterMode::Linear);
             m_charMetrics.Add(charMetrics);
             m_charTextures.Add(charTexture);
         }

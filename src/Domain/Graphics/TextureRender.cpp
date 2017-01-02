@@ -3,7 +3,7 @@
 
 TextureRender::TextureRender() : Texture2D()
 {
-    SetFilterMode(Texture::FilterMode::Nearest);
+    SetFilterMode(Texture::FilterMode::Linear);
     SetWrapMode(Texture::WrapMode::Clamp);
     SetGLInternalFormat(GL_RGBA32F);
     SetGLFormat(GL_RGBA);

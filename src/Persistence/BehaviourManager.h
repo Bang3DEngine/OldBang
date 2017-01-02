@@ -6,7 +6,7 @@
 #include "Map.h"
 #include "List.h"
 #include "String.h"
-#include "BehaviourRefresherThread.h"
+#include "BehaviourRefresherTimer.h"
 
 class QLibrary;
 class BehaviourHolder;
@@ -34,7 +34,7 @@ public:
 
 private:
 
-    BehaviourRefresherThread m_behaviourRefresherThread;
+    BehaviourRefresherTimer m_behaviourRefresherTimer;
 
     /**
      * @brief The cache of libraries. For the hash of the behaviour script

@@ -24,6 +24,7 @@ public:
     typedef typename std::string::const_reverse_iterator Const_Reverse_Iterator;
 
     String();
+    String(int v);
     String(float v);
     String(const char *cstr);
     String(const QString &qstr);

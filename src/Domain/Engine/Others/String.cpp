@@ -17,6 +17,12 @@ String::String() :
 {
 }
 
+String::String(int v) :
+    std::string("")
+{
+    *this = ToString(v);
+}
+
 String::String(float v)  :
     std::string("")
 {

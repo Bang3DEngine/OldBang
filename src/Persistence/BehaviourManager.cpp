@@ -13,7 +13,6 @@
 
 BehaviourManager::BehaviourManager()
 {
-    m_behaviourRefresherThread.start();
 }
 
 BehaviourManager *BehaviourManager::GetInstance()

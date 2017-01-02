@@ -1,7 +1,8 @@
 #include "XMLParser.h"
 
-#include "IFileable.h"
 #include "Debug.h"
+#include "IFileable.h"
+#include "Persistence.h"
 
 Map<String, const IFileable*> XMLParser::m_id_To_Pointer;
 
@@ -184,15 +185,25 @@ void XMLParser::GetNextTag(const String &xml,
 
 XMLNode *XMLParser::FromFile(const String &filepath)
 {
-    if (filepath == "") return nullptr;
+    ASSERT(!filepath.Empty(), "", return nullptr);
+    ASSERT(Persistence::ExistsFile(filepath), "", return nullptr);
 
-    std::fstream f;
-    f.open(filepath);
+    std::ifstream f;
+    try
+    {
+        f.open(filepath);
+    }
+    catch (std::ifstream::failure)
+    {
+        return nullptr;
+    }
+
     if (f.is_open())
     {
         String contents((std::istreambuf_iterator<char>(f)),
                          std::istreambuf_iterator<char>());
         XMLNode *xmlInfo = XMLParser::FromString(contents);
+        f.close();
         return xmlInfo;
     }
     return nullptr;

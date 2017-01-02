@@ -21,16 +21,19 @@ String Persistence::c_EngineAssetsRootAbsolute = "";
 
 bool Persistence::IsDir(const String &path)
 {
+    ASSERT(!path.Empty(), "", return false);
     return QFileInfo(path.ToQString()).isDir();
 }
 
 bool Persistence::IsFile(const String &path)
 {
+    ASSERT(!path.Empty(), "", return false);
     return QFileInfo(path.ToQString()).isFile();
 }
 
 bool Persistence::IsAbsolute(const String &path)
 {
+    ASSERT(!path.Empty(), "", return false);
     return QFileInfo(path.ToQString()).isAbsolute();
 }
 
@@ -46,6 +49,7 @@ String Persistence::GetAssetsPathAbsolute()
 
 String Persistence::GetDir(const String &filepath)
 {
+    ASSERT(!filepath.Empty(), "", return "");
     String directory = "";
     const size_t lastSlash = filepath.rfind('/');
     if (lastSlash != String::npos)
@@ -57,6 +61,7 @@ String Persistence::GetDir(const String &filepath)
 
 String Persistence::GetFileName(const String &filepath)
 {
+    ASSERT(!filepath.Empty(), "", return "");
     String filename = "";
     const size_t lastSlash = filepath.rfind('/');
     if (lastSlash != String::npos)
@@ -69,6 +74,7 @@ String Persistence::GetFileName(const String &filepath)
 
 String Persistence::GetFileNameWithExtension(const String &filepath)
 {
+    ASSERT(!filepath.Empty(), "", return "");
     String filename = "";
     const size_t lastSlash = filepath.rfind('/');
     if (lastSlash != String::npos)
@@ -80,6 +86,7 @@ String Persistence::GetFileNameWithExtension(const String &filepath)
 
 String Persistence::GetPathWithoutExtension(const String &filepath)
 {
+    ASSERT(!filepath.Empty(), "", return "");
     String path = GetDir(filepath);
     path += GetFileName(filepath);
     return path;
@@ -89,19 +96,22 @@ String Persistence::GetPathWithoutExtension(const String &filepath)
 String Persistence::ToAbsolute(const String &relPath,
                                const String &prependDirectory)
 {
-    if (relPath == "") return "";
-    if (Persistence::IsAbsolute(relPath)) return relPath;
+    ASSERT(!relPath.Empty(), "", return "");
+    ASSERT(!Persistence::IsAbsolute(relPath), "", return relPath);
 
     String pDir = prependDirectory;
-    if (pDir[pDir.Length()-1] == '/')
+    if (!pDir.Empty())
     {
-        pDir = pDir.SubString(1, pDir.Length()-1);
+        if (pDir[pDir.Length()-1] == '/')
+        {
+            pDir = pDir.SubString(1, pDir.Length()-1);
+        }
     }
 
     String rPath = relPath;
     if (rPath[0] == '.' && rPath[1] == '/') // Something like "./Images/wololo"
     {
-        return  prependDirectory + "/" +
+        return  pDir + "/" +
                 relPath.substr(2, relPath.Length() - 1);
     }
 
@@ -110,6 +120,7 @@ String Persistence::ToAbsolute(const String &relPath,
 
 String Persistence::ToAbsolute(const String &relPath, bool isEngineFile)
 {
+    ASSERT(!relPath.Empty(), "", return "");
     return Persistence::ToAbsolute(relPath,
               isEngineFile ? Persistence::c_EngineAssetsRootAbsolute :
                              Persistence::c_ProjectAssetsRootAbsolute);
@@ -118,7 +129,7 @@ String Persistence::ToAbsolute(const String &relPath, bool isEngineFile)
 String Persistence::ToRelative(const String &absPath,
                                const String &prependDirectory)
 {
-    if (absPath.Empty()) return "";
+    ASSERT(!absPath.Empty(), "", return "");
 
     if (!IsAbsolute(absPath))
     {
@@ -139,6 +150,7 @@ String Persistence::ToRelative(const String &absPath,
 
 String Persistence::ToRelative(const String &relPath, bool isEngineFile)
 {
+    ASSERT(!relPath.Empty(), "", return "");
     return Persistence::ToRelative(relPath,
               isEngineFile ? Persistence::c_EngineAssetsRootAbsolute :
                              Persistence::c_ProjectAssetsRootAbsolute);
@@ -146,16 +158,19 @@ String Persistence::ToRelative(const String &relPath, bool isEngineFile)
 
 String Persistence::ToRelative(const String &absPath)
 {
+    ASSERT(!absPath.Empty(), "", return "");
     return Persistence::ToRelative(absPath, Persistence::IsEngineFile(absPath));
 }
 
 bool Persistence::IsEngineFile(const String &filepath)
 {
+    ASSERT(!filepath.Empty(), "", return "");
     return filepath.BeginsWith(Persistence::c_EngineAssetsRootAbsolute);
 }
 
 String Persistence::GetDirUp(const String &filepath)
 {
+    ASSERT(!filepath.Empty(), "", return "");
     Array<String> splits = filepath.Split('/');
     splits.PopBack();
     return (Persistence::IsAbsolute(filepath) ? "/" : "") +
@@ -165,6 +180,7 @@ String Persistence::GetDirUp(const String &filepath)
 #ifdef BANG_EDITOR
 String Persistence::GetNextDuplicateName(const String &path)
 {
+    ASSERT(!path.Empty(), "", return "");
     String filePath = Persistence::ToRelative(path);
     String fileDir  = Persistence::GetDir(filePath);
     String fileName = Persistence::GetFileNameWithExtension(filePath);
@@ -207,6 +223,7 @@ String Persistence::GetNextDuplicateName(const String &path)
 
 String Persistence::GetDuplicateName(const String &path, Explorer *exp)
 {
+    ASSERT(!path.Empty(), "", return "");
     String result = path;
     while (exp->Exists(result))
     {
@@ -218,6 +235,7 @@ String Persistence::GetDuplicateName(const String &path, Explorer *exp)
 List<String> Persistence::GetSubDirectories(const String &dirPath,
                                             bool recursive)
 {
+    ASSERT(!dirPath.Empty(), "", return {});
     List<String> subdirsList;
     if (!Persistence::ExistsDirectory(dirPath)) { return subdirsList; }
 
@@ -246,6 +264,7 @@ List<String> Persistence::GetFiles(const String &dirPath,
                                    bool recursive,
                                    const List<String> &extensions)
 {
+    ASSERT(!dirPath.Empty(), "", return {});
     List<String> filesList;
     QStringList extensionList;
     for (String ext : extensions)
@@ -327,6 +346,7 @@ String Persistence::GetHash(const String &filepath)
 
 String Persistence::AppendExtension(const String &filepath, const String extNoDot)
 {
+    ASSERT(!filepath.Empty(), "", return "");
     if (filepath.find("." + extNoDot) != String::npos) return filepath;
     return filepath + "." + extNoDot;
 }
