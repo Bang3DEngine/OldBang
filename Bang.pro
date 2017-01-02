@@ -278,7 +278,8 @@ HEADERS += \
     src/Persistence/Project.h \
     src/View/Dialogs/Dialog.h \
     src/View/SelectProjectWindow.h \
-    src/Persistence/EngineConfig.h
+    src/Persistence/EngineConfig.h \
+    src/Persistence/BehaviourRefresherThread.h
 
 EDITOR {
 HEADERS += \
@@ -446,7 +447,8 @@ SOURCES += \
     src/Persistence/Project.cpp \
     src/View/Dialogs/Dialog.cpp \
     src/View/SelectProjectWindow.cpp \
-    src/Persistence/EngineConfig.cpp
+    src/Persistence/EngineConfig.cpp \
+    src/Persistence/BehaviourRefresherThread.cpp
 
 EDITOR {
     SOURCES += \

@@ -19,10 +19,16 @@ class Application : public QApplication
 {
     Q_OBJECT
 
-friend class SceneManager;
-friend class ShortcutManager;
-friend class BehaviourManager;
-friend class IShortcutListener;
+public:
+    Application(int& argc, char** argv);
+
+    AssetsManager *GetAssetsManager() const;
+    static Application *GetInstance();
+
+    bool notify(QObject *receiver, QEvent *e) override;
+
+public slots:
+    void OnDrawTimerTick();
 
 private:
     SceneManager *m_sceneManager = nullptr;
@@ -41,19 +47,14 @@ private:
     };
     LastKeyEventInfo m_lastKeyPressEvInfo;
 
-public:
-    Application(int& argc, char** argv);
-
-    AssetsManager *GetAssetsManager() const;
-    static Application *GetInstance();
-
-    bool notify(QObject *receiver, QEvent *e) override;
-
 private slots:
     bool CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent);
 
-public slots:
-    void OnDrawTimerTick();
+
+    friend class SceneManager;
+    friend class ShortcutManager;
+    friend class BehaviourManager;
+    friend class IShortcutListener;
 };
 
 #endif // APPLICATION_H

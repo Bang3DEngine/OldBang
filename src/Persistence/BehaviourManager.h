@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "List.h"
 #include "String.h"
+#include "BehaviourRefresherThread.h"
 
 class QLibrary;
 class BehaviourHolder;
@@ -28,10 +29,12 @@ public:
                      const String &behaviourFilepath);
     static void OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder);
 
+    static BehaviourManager* GetInstance();
+    static bool IsCached(const String &behaviourPath);
+
 private:
 
-    // TODO: Take care of concurrent access to these maps and sets, from
-    // the callback of the compilingThread/s
+    BehaviourRefresherThread m_behaviourRefresherThread;
 
     /**
      * @brief The cache of libraries. For the hash of the behaviour script
@@ -55,7 +58,6 @@ private:
 
     BehaviourManager();
 
-    static BehaviourManager* GetInstance();
 
     // Called by the BehaviourManagerCompileThread when has finished
     static void OnBehaviourFinishedCompiling(const String &behaviourPath,
@@ -63,7 +65,6 @@ private:
 
     static void RemoveOutdatedLibraryFiles(
             const String &mostRecentLibraryFilepath);
-    static bool IsCached(const String &behaviourPath);
     static QLibrary* GetCachedLibrary(const String &behaviourPath);
 
     friend class Application;

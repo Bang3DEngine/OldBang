@@ -64,6 +64,7 @@ private:
      * @brief The dynamically loaded Behaviour
      */
     Behaviour *m_behaviour = nullptr;
+    QLibrary *m_currentLoadedLibrary = nullptr;
 
     /**
      * @brief Path to the Behaviour source file.

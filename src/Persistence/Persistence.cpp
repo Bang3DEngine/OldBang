@@ -90,7 +90,7 @@ String Persistence::ToAbsolute(const String &relPath,
                                const String &prependDirectory)
 {
     if (relPath == "") return "";
-    if (IsAbsolute(relPath)) return relPath;
+    if (Persistence::IsAbsolute(relPath)) return relPath;
 
     String pDir = prependDirectory;
     if (pDir[pDir.Length()-1] == '/')
@@ -283,17 +283,20 @@ bool Persistence::RemoveFile(const String &filepath)
 
 bool Persistence::ExistsFile(const String &filepath)
 {
+    ASSERT(!filepath.Empty(), "", return false);
     return QFile(filepath.ToQString()).exists();
 }
 #endif
 
 bool Persistence::ExistsDirectory(const String &dirPath)
 {
+    ASSERT(!dirPath.Empty(), "", return false);
     return QDir(dirPath.ToQString()).exists();
 }
 
 bool Persistence::CreateDirectory(const String &dirPath)
 {
+    ASSERT(!dirPath.Empty(), "", return false);
     return QDir().mkdir(dirPath.ToQString());
 }
 

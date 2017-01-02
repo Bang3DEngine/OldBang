@@ -35,6 +35,8 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::OnDrawTimerTick()
 {
+    ASSERT(Screen::GetInstance());
+
     // Update deltaTime
     float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
     Time::GetInstance()->m_deltaTime = deltaTime;
@@ -80,8 +82,10 @@ AssetsManager *Application::GetAssetsManager() const
 Application *Application::GetInstance()
 {
     #ifdef BANG_EDITOR
+    ASSERT(EditorWindow::GetInstance(), "", return nullptr);
     return static_cast<Application*>(EditorWindow::GetInstance()->GetApplication());
     #else
+    ASSERT(GameWindow::GetInstance(), "", return nullptr);
     return static_cast<Application*>(GameWindow::GetInstance()->GetApplication());
     #endif
 }

@@ -640,6 +640,7 @@ void GameObject::_OnStart()
 {
     OnStart();
     m_isStarted = true;
+    PROPAGATE_EVENT(_OnStart, m_components);
     PROPAGATE_EVENT(_OnStart, m_children);
 }
 

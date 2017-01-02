@@ -28,7 +28,8 @@ Debug::Debug()
 {
 }
 
-void Debug::DrawLine(const Vector3 &origin, const Vector3 &destiny, const Color &color, float lineWidth, float secsTime, bool depthTest)
+void Debug::DrawLine(const Vector3 &origin, const Vector3 &destiny, const Color &color,
+                     float lineWidth, float secsTime, bool depthTest)
 {
     #ifdef BANG_EDITOR
     Scene *s = SceneManager::GetActiveScene(); ASSERT(s);
@@ -38,7 +39,8 @@ void Debug::DrawLine(const Vector3 &origin, const Vector3 &destiny, const Color 
     #endif
 }
 
-void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny, const Color &color, float lineWidth, float secsTime)
+void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
+                           const Color &color, float lineWidth, float secsTime)
 {
     #ifdef BANG_EDITOR
     Scene *s = SceneManager::GetActiveScene(); ASSERT(s);

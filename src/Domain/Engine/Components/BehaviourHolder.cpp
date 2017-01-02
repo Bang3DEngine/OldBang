@@ -6,6 +6,7 @@
 #include "XMLNode.h"
 #include "Behaviour.h"
 #include "FileWriter.h"
+#include "Persistence.h"
 #include "SystemUtils.h"
 #include "BehaviourManager.h"
 
@@ -67,18 +68,21 @@ void BehaviourHolder::Refresh()
     #ifdef BANG_EDITOR // No refresh on temporary gameObjects
     ASSERT(!gameObject->IsDraggedGameObject());
     #endif
-    ASSERT(!m_sourceFilepath.Empty());
 
-    BehaviourManager::Load(this, m_sourceFilepath);
+    String absPath = Persistence::ToAbsolute(m_sourceFilepath, false);
+    ASSERT(Persistence::ExistsFile(absPath));
+    BehaviourManager::Load(this, absPath);
 }
 
 
 void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
 {
     ASSERT(gameObject);
+    ASSERT(m_currentLoadedLibrary != lib); // Its the same lib, no need to do anything
 
     // Create new Behaviour
     Behaviour *createdBehaviour = SystemUtils::CreateDynamicBehaviour(lib);
+    m_currentLoadedLibrary = lib;
 
     // Change to newly created or nullptr, depending on success
     ChangeBehaviour(createdBehaviour);
@@ -88,7 +92,6 @@ void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
         if (m_behaviour)
         {
             m_behaviour->Init(this);
-            m_behaviour->_OnStart();
         }
     }
     else
@@ -201,7 +204,12 @@ void BehaviourHolder::OnAddedToGameObject()
 void BehaviourHolder::_OnStart()
 {
     Component::_OnStart();
-    Refresh();
+    if (m_behaviour)
+    {
+        m_behaviour->m_isStarted = false;
+        m_behaviour->_OnStart();
+    }
+    m_isStarted = true;
 }
 
 void BehaviourHolder::_OnUpdate()
