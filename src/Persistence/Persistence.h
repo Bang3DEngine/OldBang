@@ -69,6 +69,7 @@ public:
                                 bool recursive = false,
                                 const List<String> &extensions = {});
 
+   static bool RemoveFile(const String &filepath);
    static bool ExistsFile(const String &filepath);
    static bool ExistsDirectory(const String &dirPath);
    static bool CreateDirectory(const String &dirPath);

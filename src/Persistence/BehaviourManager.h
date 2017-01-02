@@ -18,8 +18,15 @@ class BehaviourManagerCompileThread;
  */
 class BehaviourManager
 {
-friend class Application;
-friend class BehaviourManagerCompileThread;
+
+public:
+    static bool IsBeingCompiled(const String &behaviourPath);
+
+    // This must be called when you want to retrieve the QLibrary from a
+    // behaviour source filepath
+    static void Load(BehaviourHolder *behaviourHolder,
+                     const String &behaviourFilepath);
+    static void OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder);
 
 private:
 
@@ -54,18 +61,13 @@ private:
     static void OnBehaviourFinishedCompiling(const String &behaviourRelPath,
                                              const String &soFilepath);
 
+    static void RemoveOutdatedLibraryFiles(
+            const String &mostRecentLibraryFilepath);
     static bool IsCached(const String &behaviourRelPath);
     static QLibrary* GetCachedLibrary(const String &behaviourRelPath);
 
-public:
-    static bool IsBeingCompiled(const String &behaviourPath);
-
-    // This must be called when you want to retrieve the QLibrary from a
-    // behaviour source filepath
-    static void Load(BehaviourHolder *behaviourHolder,
-                     const String &behaviourFilepath);
-    static void OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder);
-
+    friend class Application;
+    friend class BehaviourManagerCompileThread;
 };
 
 #endif // BEHAVIOURMANAGER_H

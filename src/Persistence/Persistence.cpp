@@ -273,6 +273,13 @@ List<String> Persistence::GetFiles(const String &dirPath,
     return filesList;
 }
 
+bool Persistence::RemoveFile(const String &filepath)
+{
+    ASSERT(Persistence::ExistsFile(filepath), "", return false);
+    QFile f(filepath.ToQString());
+    return f.remove();
+}
+
 bool Persistence::ExistsFile(const String &filepath)
 {
     return QFile(filepath.ToQString()).exists();

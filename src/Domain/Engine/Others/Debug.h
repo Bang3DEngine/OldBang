@@ -53,12 +53,29 @@ public:
 //
 
 // ASSERT
-    #define ASSERT(mustBeTrue, message, returnAction) do{\
+    #define ASSERT1(mustBeTrue) do{\
         if (!(mustBeTrue)) {\
-            Debug_Error("Assertion failed: " << message);\
+            return;\
+        }\
+    } while (0)
+
+    #define ASSERT2(mustBeTrue, message) do{\
+        if (!(mustBeTrue)) {\
+            if (message != "") { Debug_Error("Assertion failed: " << message); }\
+            return;\
+        }\
+    } while (0)
+
+    #define ASSERT3(mustBeTrue, message, returnAction) do{\
+        if (!(mustBeTrue)) {\
+            if (message != "") { Debug_Error("Assertion failed: " << message); }\
             returnAction;\
         }\
     } while (0)
+
+    #define NUMARGS(...)  (sizeof((int[]){__VA_ARGS__})/sizeof(int))
+    #define GET_MACRO(_1, _2, _3, NAME, ...) NAME // Enable macro overloading
+    #define ASSERT(...) GET_MACRO(__VA_ARGS__, ASSERT3, ASSERT2, ASSERT1)(__VA_ARGS__)
 //
 
 #define Debug_Log(msg) do{\

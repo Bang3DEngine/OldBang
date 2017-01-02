@@ -52,11 +52,34 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourRelPa
         }
 
         bm->m_behPath_To_behHolderDemanders.Remove(bfp);
+
+        // Remove the outdated libraries files
+        RemoveOutdatedLibraryFiles(libraryFilepath);
     }
     else
     {
         Debug_Error("There was an error when loading the library '" <<
                     libraryFilepath << "': " << lib->errorString().toStdString());
+    }
+}
+
+void BehaviourManager::RemoveOutdatedLibraryFiles(const String &mostRecentLibraryFilepath)
+{
+    String libraryNameAndExtension =
+            Persistence::GetFileNameWithExtension(mostRecentLibraryFilepath);
+    String libraryName = Persistence::GetFileName(mostRecentLibraryFilepath);
+
+    List<String> libs = Persistence::GetFiles(Persistence::c_ProjectAssetsRootAbsolute,
+                                              true, {"*.so.*"});
+    for (auto it = libs.Begin(); it != libs.End(); ++it)
+    {
+        const String &libFilepath = *it;
+        bool isOfTheSameBehaviour = (Persistence::GetFileName(libFilepath) == libraryName);
+        bool isTheMostRecentOne = libFilepath.EndsWith(libraryNameAndExtension);
+        if (isOfTheSameBehaviour && !isTheMostRecentOne)
+        {
+            Persistence::RemoveFile(libFilepath); // Remove outdated library
+        }
     }
 }
 
