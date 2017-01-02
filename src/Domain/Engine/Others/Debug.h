@@ -1,9 +1,10 @@
 #ifndef DEBUG_H
 #define DEBUG_H
 
+#include <string>
+#include <QString>
 #include <sstream>
 #include <iostream>
-#include <QString>
 
 #include "Map.h"
 #include "List.h"
@@ -61,14 +62,14 @@ public:
 
     #define ASSERT2(mustBeTrue, message) do{\
         if (!(mustBeTrue)) {\
-            if (message != "") { Debug_Error("Assertion failed: " << message); }\
+            if (strcmp(message, "") != 0) { Debug_Error("Assertion failed: " << message); }\
             return;\
         }\
     } while (0)
 
     #define ASSERT3(mustBeTrue, message, returnAction) do{\
         if (!(mustBeTrue)) {\
-            if (message != "") { Debug_Error("Assertion failed: " << message); }\
+            if (strcmp(message, "") != 0) { Debug_Error("Assertion failed: " << message); }\
             returnAction;\
         }\
     } while (0)

@@ -64,13 +64,10 @@ const String &BehaviourHolder::GetSourceFilepath() const
 void BehaviourHolder::Refresh()
 {
     EXISTS(gameObject);
-
-    // No refresh on temporary gameObjects
-    #ifdef BANG_EDITOR
-    if (gameObject->IsDraggedGameObject()) return;
+    #ifdef BANG_EDITOR // No refresh on temporary gameObjects
+    ASSERT(!gameObject->IsDraggedGameObject());
     #endif
-
-    if (m_sourceFilepath == "") return;
+    ASSERT(!m_sourceFilepath.Empty());
 
     BehaviourManager::Load(this, m_sourceFilepath);
 }
@@ -121,7 +118,6 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "cpp");
 
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
-
     xmlInfo->SetButton("CreateNew...", noConstThis);
     if (BehaviourManager::IsBeingCompiled(m_sourceFilepath))
     {
@@ -193,7 +189,7 @@ void BehaviourHolder::OnButtonClicked(const String &attrName)
     {
         Refresh();
     }
-#endif
+    #endif
 }
 
 void BehaviourHolder::OnAddedToGameObject()

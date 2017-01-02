@@ -76,6 +76,8 @@ public:
    static void SetActiveSceneFilepath(const String &scenePath);
    static String SetActiveSceneFilepath();
 
+   static String GetHash(const String &filepath);
+
    //Appends an extension to a filepath only if that filename does not contain the extension
    static String AppendExtension(const String &filepath, const String extNoDot);
 };

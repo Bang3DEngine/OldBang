@@ -34,20 +34,20 @@ private:
     // the callback of the compilingThread/s
 
     /**
-     * @brief The cache of libraries. For the source filepath
+     * @brief The cache of libraries. For the hash of the behaviour script
        *.cpp, contains its loaded library (if cached).
      */
-    Map<String, QLibrary*> m_behaviourPath_To_library;
+    Map<String, QLibrary*> m_behaviourHash_To_library;
 
     /**
      * @brief For wololo.cpp, contains all the demanders of the
      * library for wololo.cpp. They will be notified when we
     Maphe library
      */
-    Map<String, List<BehaviourHolder*> > m_behPath_To_behHolderDemanders;
+    Map<String, List<BehaviourHolder*> > m_behHash_To_behHolderDemanders;
 
     /**
-     * @brief Set of behaviours paths that are being compiled right now.
+     * @brief Set of behaviours abs paths that are being compiled right now.
      * This is useful in the case when a behaviour is demanded while it's
      * being compiled.
      */
@@ -58,13 +58,13 @@ private:
     static BehaviourManager* GetInstance();
 
     // Called by the BehaviourManagerCompileThread when has finished
-    static void OnBehaviourFinishedCompiling(const String &behaviourRelPath,
+    static void OnBehaviourFinishedCompiling(const String &behaviourPath,
                                              const String &soFilepath);
 
     static void RemoveOutdatedLibraryFiles(
             const String &mostRecentLibraryFilepath);
-    static bool IsCached(const String &behaviourRelPath);
-    static QLibrary* GetCachedLibrary(const String &behaviourRelPath);
+    static bool IsCached(const String &behaviourPath);
+    static QLibrary* GetCachedLibrary(const String &behaviourPath);
 
     friend class Application;
     friend class BehaviourManagerCompileThread;

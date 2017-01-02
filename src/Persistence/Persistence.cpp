@@ -6,6 +6,7 @@
 
 #include <QDir>
 #include <QFile>
+#include <QCryptographicHash>
 
 #include "Debug.h"
 #include "StringUtils.h"
@@ -304,6 +305,21 @@ void Persistence::SetActiveSceneFilepath(const String &scenePath)
 String Persistence::SetActiveSceneFilepath()
 {
     return s_currentSceneFilepath;
+}
+
+String Persistence::GetHash(const String &filepath)
+{
+    ASSERT(Persistence::ExistsFile(filepath), "", return "");
+
+    QFile file(filepath.ToQString());
+    if(file.open(QIODevice::ReadOnly))
+    {
+        QCryptographicHash hash(QCryptographicHash::Md5);
+        QByteArray result = hash.hash(file.readAll(), QCryptographicHash::Md5);
+        file.close();
+        return String( QString(result.toHex()) );
+    }
+    return "";
 }
 
 String Persistence::AppendExtension(const String &filepath, const String extNoDot)
