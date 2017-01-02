@@ -5,6 +5,7 @@
 #include "Debug.h"
 #include "XMLNode.h"
 #include "FileReader.h"
+#include "Persistence.h"
 
 #ifdef BANG_EDITOR
 #include "IInspectable.h"
@@ -32,15 +33,14 @@ String Texture2DAssetFile::GetImageFilepath() const
 QPixmap Texture2DAssetFile::GetIcon() const
 {
     String fp = GetImageFilepath();
+    fp = Persistence::ToAbsolute(fp, false);
 
-    // Mini cache
     static Map<std::string, QPixmap> filepath_To_Pixmap;
     if (!filepath_To_Pixmap.ContainsKey(fp))
     {
-        QPixmap pm(QString::fromStdString(fp));
+        QPixmap pm(fp.ToQString());
         filepath_To_Pixmap[fp] = pm;
     }
-
     return filepath_To_Pixmap[fp];
 }
 

@@ -239,7 +239,8 @@ QPixmap File::GetIcon() const
         fp = Persistence::ToAbsolute("./Icons/OtherFileIcon.png", true);
     }
 
-    QPixmap pm(QString::fromStdString(fp));
+    // Its a texture, the icon is the image itself
+    QPixmap pm(fp.ToQString());
     return pm;
 }
 

@@ -34,6 +34,5 @@ void MaterialAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void MaterialAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("MaterialAssetFileInspectable");
-
     *xmlInfo = m_xmlInfo;
 }
