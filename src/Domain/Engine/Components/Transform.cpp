@@ -255,7 +255,7 @@ void Transform::GetLocalToWorldNormalMatrix(Matrix4 *m) const
 
 void Transform::LookAt(const Vector3 &target, const Vector3 &_up)
 {
-    Assert(target != m_localPosition, "LookAt target is the same as position.", return);
+    ASSERT(target != m_localPosition, "LookAt target is the same as position.", return);
     Vector3 up = _up.Normalized();
     SetRotation(Quaternion::LookDirection(target - GetPosition(), up) );
 }

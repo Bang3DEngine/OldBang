@@ -25,7 +25,7 @@ BehaviourManager *BehaviourManager::GetInstance()
 void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourRelPath,
                                                     const String &libraryFilepath)
 {
-    BehaviourManager *bm = BehaviourManager::GetInstance(); NONULL(bm);
+    BehaviourManager *bm = BehaviourManager::GetInstance(); EXISTS(bm);
 
     const String &bfp = behaviourRelPath;
 
@@ -89,7 +89,7 @@ bool BehaviourManager::IsBeingCompiled(const String &behaviourRelPath)
 void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
                             const String &behaviourFilepath)
 {
-    BehaviourManager *bm = BehaviourManager::GetInstance(); NONULL(bm);
+    BehaviourManager *bm = BehaviourManager::GetInstance(); EXISTS(bm);
 
     String bfp = Persistence::ToRelative(behaviourFilepath);
     if (BehaviourManager::IsCached(bfp))
@@ -119,7 +119,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             BehaviourManagerCompileThread *compileThread =
                     new BehaviourManagerCompileThread(bfp);
             compileThread->start(); // This auto-deletes itself when finished
-            Debug_Status("Compiling script" << Persistence::GetFileName(behaviourFilepath) << "...", 5.0f);
+            Debug_Status("Compiling script " << Persistence::GetFileName(behaviourFilepath) << "...", 5.0f);
 
             // And when the compileThread finishes, we will be notified,
             // load the library, and then notify the behaviourHolders waiting for it
@@ -131,7 +131,7 @@ void BehaviourManager::
     OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder)
 {
     // Erase the behaviourHolder from all the demand lists it is in
-    BehaviourManager *bm = BehaviourManager::GetInstance(); NONULL(bm);
+    BehaviourManager *bm = BehaviourManager::GetInstance(); EXISTS(bm);
 
     for (auto it = bm->m_behPath_To_behHolderDemanders.Begin();
          it != bm->m_behPath_To_behHolderDemanders.End(); ++it)

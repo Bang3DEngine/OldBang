@@ -45,7 +45,7 @@ void MeshRenderer::SetMaterial(Material *m)
 void MeshRenderer::SetMesh(Mesh *m)
 {
     m_mesh = m;
-    NONULL(m_mesh); NONULL(m_material); NONULL(m_material->GetShaderProgram());
+    EXISTS(m_mesh); EXISTS(m_material); EXISTS(m_material->GetShaderProgram());
 
     m_mesh->BindAllVBOsToShaderProgram(*(m_material->GetShaderProgram()));
     if (!m_mesh->GetFilepath().Empty())
@@ -84,7 +84,7 @@ String MeshRenderer::GetName() const
 
 void MeshRenderer::RenderWithoutBindingMaterial() const
 {
-    NONULL(m_mesh);
+    EXISTS(m_mesh);
 
     m_mesh->GetVAO()->Bind();
     glDrawArrays(GLint(m_renderMode), 0, m_mesh->GetVertexCount());

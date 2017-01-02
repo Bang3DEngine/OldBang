@@ -26,6 +26,7 @@ QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wun
 QMAKE_CXXFLAGS += -O0
 #QMAKE_CXXFLAGS += -O3
 
+# FREE TYPE ###########################
 FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType
 !exists (src/Domain/Graphics/FreeType/build) {
     message("Compiling FreeType")
@@ -34,13 +35,11 @@ FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType
                                && mkdir build ; cd build \
                                && cmake .. && ../configure
 }
-
 FreeTypeTarget.commands += && cd build ; make
 QMAKE_EXTRA_TARGETS += FreeTypeTarget
 PRE_TARGETDEPS = FreeTypeTarget
-
 LIBS += src/Domain/Graphics/FreeType/build/*.o
-#LIBS += FreeTypeLib
+##########################################
 
 LIBS += \
     -lGLEW  \ # GLEW, just GLEW

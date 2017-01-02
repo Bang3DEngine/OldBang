@@ -92,7 +92,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
     Clear();
 
-    NONULL(gameObject);
+    EXISTS(gameObject);
     m_currentGameObject = gameObject;
 
     for (Component *c : gameObject->GetComponents())
@@ -134,7 +134,7 @@ void Inspector::RefreshHard()
 
 void Inspector::AddWidget(InspectorWidget *widget, int row)
 {
-    NONULL(widget);
+    EXISTS(widget);
 
     int newRow = (row == -1 ? count() : row);
 
@@ -165,7 +165,7 @@ Inspector *Inspector::GetInstance()
 
 void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 {
-    NONULL(m_currentGameObject);
+    EXISTS(m_currentGameObject);
 
     if (clickedAction == MenuBar::Action::AddComponentBehaviour)
     {

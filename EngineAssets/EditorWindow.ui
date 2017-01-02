@@ -207,19 +207,12 @@
     <property name="title">
      <string>Assets</string>
     </property>
-    <widget class="QMenu" name="menuCreate">
-     <property name="title">
-      <string>Create</string>
-     </property>
-     <addaction name="actionCreatePrefab"/>
-     <addaction name="separator"/>
-     <addaction name="actionCreateMaterial"/>
-     <addaction name="actionCreateMesh"/>
-     <addaction name="actionCreateShaderProgram"/>
-     <addaction name="actionCreateTexture2D"/>
-     <addaction name="actionCreateFont"/>
-    </widget>
-    <addaction name="menuCreate"/>
+    <addaction name="actionCreatePrefab"/>
+    <addaction name="actionCreateMaterial"/>
+    <addaction name="actionCreateMesh"/>
+    <addaction name="actionCreateShaderProgram"/>
+    <addaction name="actionCreateTexture2D"/>
+    <addaction name="actionCreateFont"/>
    </widget>
    <widget class="QMenu" name="menuGameObject">
     <property name="title">

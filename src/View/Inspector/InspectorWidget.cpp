@@ -214,7 +214,7 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
 
 void InspectorWidget::_OnSlotValueChanged()
 {
-    NONULL(m_relatedInspectable);
+    EXISTS(m_relatedInspectable);
     if (m_created)
     {
         XMLNode xmlInfo = GetWidgetXMLInfo();

@@ -102,7 +102,7 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
 
 void ProjectManager::SaveProject(const Project *project)
 {
-    NONULL(project);
+    EXISTS(project);
     bool ok = FileWriter::WriteToFile(project->GetProjectFileFilepath(),
                                       project->GetXMLInfoString());
     if (ok)

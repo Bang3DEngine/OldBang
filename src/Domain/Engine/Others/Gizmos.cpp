@@ -48,23 +48,31 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
 {
     Gizmos::Init();
 
-    if (m_gizmosGameObject != ego && ego)
+    if (m_gizmosGameObject != ego)
     {
-        m_gizmosGameObject = ego; // Do not delete last gizmosGameObject, scene delete will do so
-
-        Gizmos::m_singleLineRenderer = m_gizmosGameObject->AddComponent<SingleLineRenderer>();
-        Gizmos::m_circleRenderer = m_gizmosGameObject->AddComponent<CircleRenderer>();
-        Gizmos::m_meshRenderer = m_gizmosGameObject->AddComponent<MeshRenderer>();
-
-        m_renderers.Clear();
-        m_renderers.PushBack(Gizmos::m_singleLineRenderer);
-        m_renderers.PushBack(Gizmos::m_circleRenderer);
-        m_renderers.PushBack(Gizmos::m_meshRenderer);
-
-        for (Renderer *rend : Gizmos::m_renderers)
+        if (ego)
         {
-            rend->SetIsGizmo(true);
-            rend->SetMaterial(Gizmos::m_material);
+            m_gizmosGameObject = ego; // Do not delete last gizmosGameObject, scene delete will do so
+
+            Gizmos::m_singleLineRenderer = m_gizmosGameObject->AddComponent<SingleLineRenderer>();
+            Gizmos::m_circleRenderer = m_gizmosGameObject->AddComponent<CircleRenderer>();
+            Gizmos::m_meshRenderer = m_gizmosGameObject->AddComponent<MeshRenderer>();
+
+            m_renderers.Clear();
+            m_renderers.PushBack(Gizmos::m_singleLineRenderer);
+            m_renderers.PushBack(Gizmos::m_circleRenderer);
+            m_renderers.PushBack(Gizmos::m_meshRenderer);
+
+            for (Renderer *rend : Gizmos::m_renderers)
+            {
+                rend->SetIsGizmo(true);
+                rend->SetMaterial(Gizmos::m_material);
+            }
+        }
+        else
+        {
+            //Debug_Log("Set gizmosGameObject to NULL");
+            m_gizmosGameObject = nullptr;
         }
     }
 }
@@ -120,7 +128,7 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
 
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
-    NONULL(m); NONULL(m_gizmosGameObject);
+    EXISTS(m); EXISTS(m_gizmosGameObject);
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(m);
@@ -132,7 +140,7 @@ void Gizmos::RenderCustomMesh(Mesh *m)
 
 void Gizmos::RenderSimpleBox(const Box &b)
 {
-    NONULL(m_gizmosGameObject);
+    EXISTS(m_gizmosGameObject);
 
     const Quaternion &r = Gizmos::m_gizmosGameObject->transform->GetLocalRotation();
     const Vector3& bMin = b.GetMin();
@@ -162,7 +170,7 @@ void Gizmos::RenderSimpleBox(const Box &b)
 
 void Gizmos::RenderBox(const Box &b)
 {
-    NONULL(m_gizmosGameObject);
+    EXISTS(m_gizmosGameObject);
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_boxMesh);
 
@@ -177,7 +185,7 @@ void Gizmos::RenderBox(const Box &b)
 
 void Gizmos::RenderRect(const Rect &r)
 {
-    NONULL(m_gizmosGameObject);
+    EXISTS(m_gizmosGameObject);
     Gizmos::SetResetAllowed(false);
     Gizmos::RenderScreenLine( Vector2(r.m_minx, r.m_miny), Vector2(r.m_maxx, r.m_miny) );
     Gizmos::RenderScreenLine( Vector2(r.m_maxx, r.m_miny), Vector2(r.m_maxx, r.m_maxy) );
@@ -190,8 +198,8 @@ void Gizmos::RenderRect(const Rect &r)
 void Gizmos::RenderIcon(const Texture2D *texture,
                         bool billboard)
 {
-    NONULL(m_gizmosGameObject); NONULL(Gizmos::m_meshRenderer);
-    NONULL(Gizmos::m_planeMesh);
+    EXISTS(m_gizmosGameObject); EXISTS(Gizmos::m_meshRenderer);
+    EXISTS(Gizmos::m_planeMesh);
 
     Gizmos::SetDrawWireframe(false);
     Gizmos::SetReceivesLighting(false);
@@ -223,7 +231,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
 
 void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 {
-    NONULL(m_gizmosGameObject);
+    EXISTS(m_gizmosGameObject);
 
     Gizmos::m_singleLineRenderer->SetOrigin(origin);
     Gizmos::m_singleLineRenderer->SetDestiny(destiny);
@@ -238,8 +246,8 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 
 void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
 {
-    NONULL(m_gizmosGameObject);
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); NONULL(cam);
+    EXISTS(m_gizmosGameObject);
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); EXISTS(cam);
     const float z = cam->GetZNear() + 0.01f;
     Vector3 worldPosOrigin  = cam->ScreenNDCPointToWorld(origin,  z);
     Vector3 worldPosDestiny = cam->ScreenNDCPointToWorld(destiny, z);
@@ -258,7 +266,7 @@ void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
 
 void Gizmos::RenderSphere(const Vector3 &origin, float radius)
 {
-    NONULL(m_gizmosGameObject);
+    EXISTS(m_gizmosGameObject);
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_sphereMesh);
@@ -276,7 +284,7 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
                            float zNear, float zFar,
                            float fovDegrees, float aspectRatio)
 {
-    NONULL(m_gizmosGameObject);
+    EXISTS(m_gizmosGameObject);
 
     const Vector3 &c = origin;
     const Vector3 right = Vector3::Cross(forward, up).Normalized();
@@ -328,7 +336,7 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
 
 void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
 {
-    NONULL(m_gizmosGameObject);
+    EXISTS(m_gizmosGameObject);
 
     Gizmos::m_circleRenderer->SetEnabled(true);
     Gizmos::m_circleRenderer->SetRadius(radius);
@@ -377,7 +385,7 @@ void Gizmos::Render(Renderer *rend)
         r->SetEnabled(r == rend); // Enable only rend
     }
 
-    GraphicPipeline *gp = GraphicPipeline::GetActive(); NONULL(gp);
+    GraphicPipeline *gp = GraphicPipeline::GetActive(); EXISTS(gp);
     rend->SetDepthLayer(gp->GetCurrentDepthLayer());
     gp->RenderRenderer(rend);
 }

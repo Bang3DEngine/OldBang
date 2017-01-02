@@ -191,7 +191,7 @@ void MenuBar::OnSaveScene() const
     }
     else //Save directly
     {
-        Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
+        Scene *scene = SceneManager::GetActiveScene(); EXISTS(scene);
         FileWriter::WriteScene(filename, scene);
     }
 }
@@ -200,7 +200,7 @@ void MenuBar::OnSaveSceneAs() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::SaveSceneAs);
 
-    Scene *scene = SceneManager::GetActiveScene(); NONULL(scene);
+    Scene *scene = SceneManager::GetActiveScene(); EXISTS(scene);
 
     String filename = Dialog::GetSaveFilename("Save scene as...",
                                                   Scene::GetFileExtensionStatic(),

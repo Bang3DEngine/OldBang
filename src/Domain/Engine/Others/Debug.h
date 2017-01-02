@@ -48,12 +48,12 @@ public:
     static void _Status(const String &str, float timeInSeconds);
 };
 
-// NONULL
-    #define NONULL(x) do { if (x == nullptr) { return; } } while (0);
+// EXISTS
+    #define EXISTS(x) do { if (x == nullptr) { return; } } while (0);
 //
 
 // ASSERT
-    #define Assert(mustBeTrue, message, returnAction) do{\
+    #define ASSERT(mustBeTrue, message, returnAction) do{\
         if (!(mustBeTrue)) {\
             Debug_Error("Assertion failed: " << message);\
             returnAction;\

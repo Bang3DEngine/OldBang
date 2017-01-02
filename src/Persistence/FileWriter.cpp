@@ -56,7 +56,7 @@ bool FileWriter::WriteToFile(const String &filepath, const String &content)
 
 void FileWriter::WriteXMLNode(XMLNode *xmlInfo, std::ostream &f)
 {
-    NONULL(xmlInfo);
+    EXISTS(xmlInfo);
     f << xmlInfo->ToString();
 }
 

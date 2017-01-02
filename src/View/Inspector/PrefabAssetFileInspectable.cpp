@@ -44,7 +44,7 @@ GameObject *PrefabAssetFileInspectable::GetPrefabTempGameObject() const
 
 void PrefabAssetFileInspectable::SaveToFile()
 {
-    NONULL(m_prefabTempGameObject);
+    EXISTS(m_prefabTempGameObject);
 
     FileWriter::WriteToFile(m_file.GetAbsolutePath(),
                             m_prefabTempGameObject->GetXMLInfoString());
