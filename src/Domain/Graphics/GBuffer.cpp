@@ -45,8 +45,8 @@ GBuffer::~GBuffer()
 
 void GBuffer::SetUniformsBeforeRendering(Material *mat)
 {
-    EXISTS(mat);
-    ShaderProgram *sp = mat->GetShaderProgram(); EXISTS(sp);
+    ASSERT(mat);
+    ShaderProgram *sp = mat->GetShaderProgram(); ASSERT(sp);
 
     // Color Attachments bindings as Shader Inputs
     sp->SetUniformTexture("B_position_gout_fin",           m_positionTexture, false);
@@ -73,7 +73,7 @@ void GBuffer::SetUniformsBeforeRendering(Material *mat)
 
 void GBuffer::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
 {
-    EXISTS(mat);
+    ASSERT(mat);
 
     bool prevStencilWrite = m_stencilWriteEnabled;
     SetStencilWrite(false);
@@ -92,7 +92,7 @@ void GBuffer::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
 void GBuffer::RenderToScreen(GBuffer::Attachment attachmentId)
 {
     // Assumes gbuffer is not bound, hence directly writing to screen
-    Texture *tex = GetColorAttachment(attachmentId); EXISTS(tex);
+    Texture *tex = GetColorAttachment(attachmentId); ASSERT(tex);
     GraphicPipeline::GetActive()->RenderToScreen(tex);
 }
 

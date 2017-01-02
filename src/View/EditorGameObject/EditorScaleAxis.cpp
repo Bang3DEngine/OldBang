@@ -61,9 +61,9 @@ void EditorScaleAxis::OnUpdate()
 {
     EditorAxis::OnUpdate();
 
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); EXISTS(cam);
-    Transform *camTransform = cam->gameObject->transform; EXISTS(camTransform);
-    GameObject *ago = m_attachedGameObject; EXISTS(ago->transform);
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ASSERT(cam);
+    Transform *camTransform = cam->gameObject->transform; ASSERT(camTransform);
+    GameObject *ago = m_attachedGameObject; ASSERT(ago->transform);
     Vector3 wCamPos = camTransform->GetPosition();
 
     SetEnabled(Toolbar::GetInstance()->GetSelectedTransformMode() ==

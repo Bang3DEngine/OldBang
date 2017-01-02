@@ -38,7 +38,7 @@ Hierarchy::~Hierarchy()
 
 void Hierarchy::Expand(QTreeWidgetItem *item)
 {
-    EXISTS(item);
+    ASSERT(item);
     item->setExpanded(true);
     Expand(item->parent());
 }
@@ -144,7 +144,7 @@ void Hierarchy::Clear()
 
 void Hierarchy::UpdateHierarchyFromScene()
 {
-    Scene *scene = SceneManager::GetActiveScene(); EXISTS(scene);
+    Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
 
     // Refresh go's children. If we find a new child, add it to topLevel.
     const List<GameObject*> sceneChildren = scene->GetChildren();
@@ -454,7 +454,7 @@ void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
 
 void Hierarchy::DeleteGameObjectItem(GameObject *go)
 {
-    EXISTS(go);
+    ASSERT(go);
 
     QTreeWidgetItem *item = GetItemFromGameObject(go);
     if (item)

@@ -291,7 +291,7 @@ void EditorCamera::OnHierarchyGameObjectsSelected
 
 void EditorCamera::OnHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
-    EXISTS(selected);
+    ASSERT(selected);
     m_currentFocus = selected;
     m_doingLookAt = true;
 }

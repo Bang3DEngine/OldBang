@@ -275,7 +275,7 @@ void Explorer::SetDir(const String &path)
 
 void Explorer::OnDirLoaded(QString dir)
 {
-    EXISTS(EditorWindow::GetInstance());
+    ASSERT(EditorWindow::GetInstance());
 
     if (GetCurrentDir().Length() <= Persistence::GetAssetsPathAbsolute().Length())
     {
@@ -364,7 +364,7 @@ void Explorer::OnDropHere(const DragDropInfo &ddi)
     {
         // Create a prefab of selected on the current directory
         GameObject *selected = hierarchy->GetFirstSelectedGameObject();
-        EXISTS(selected);
+        ASSERT(selected);
 
         String path = GetCurrentDir() + "/";
         String gameObjectName = selected->name;

@@ -261,7 +261,7 @@ void GraphicPipeline::RenderCustomPR(Renderer *rend)
 
 void GraphicPipeline::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
 {
-    EXISTS(mat);
+    ASSERT(mat);
 
     m_planeMeshToRenderEntireScreen->
             BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
@@ -281,7 +281,7 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
                 BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
                                              *(m_renderGBufferToScreenMaterial->GetShaderProgram()));
 
-    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram(); EXISTS(sp);
+    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram(); ASSERT(sp);
     sp->SetUniformTexture("B_color_gout_fin", fullScreenTexture, false);
 
     m_renderGBufferToScreenMaterial->Bind();

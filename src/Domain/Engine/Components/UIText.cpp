@@ -141,8 +141,8 @@ Rect UIText::GetBoundingRect(Camera *camera) const
 
 void UIText::RenderText(bool forSelectionFramebuffer) const
 {
-    EXISTS(m_font);
-    if (!forSelectionFramebuffer) { EXISTS(m_material); EXISTS(m_material->GetShaderProgram()); }
+    ASSERT(m_font);
+    if (!forSelectionFramebuffer) { ASSERT(m_material); ASSERT(m_material->GetShaderProgram()); }
 
     if (!forSelectionFramebuffer) { m_material->SetDiffuseColor(m_textColor); }
 

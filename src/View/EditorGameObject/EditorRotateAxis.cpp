@@ -60,7 +60,7 @@ void EditorRotateAxis::OnUpdate()
     EditorAxis::OnUpdate();
 
     // Obtain mousePos in screen space for next calculations
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); EXISTS(cam);
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ASSERT(cam);
     GameObject *ago = m_attachedGameObject;
 
     SetEnabled(Toolbar::GetInstance()->GetSelectedTransformMode() ==

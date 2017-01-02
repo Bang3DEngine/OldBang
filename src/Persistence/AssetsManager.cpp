@@ -68,13 +68,13 @@ bool AssetsManager::IsLoaded(const String &filepath,
 
 void AssetsManager::Unload(Asset *asset, bool isEngineAsset)
 {
-    AssetsManager *am = AssetsManager::GetCurrent(); EXISTS(am);
+    AssetsManager *am = AssetsManager::GetCurrent(); ASSERT(am);
     am->m_id_To_AssetPointer.RemoveValues(asset);
 }
 
 void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset, bool isEngineAsset)
 {
-    AssetsManager *am = AssetsManager::GetCurrent(); EXISTS(am);
+    AssetsManager *am = AssetsManager::GetCurrent(); ASSERT(am);
     if (!filepath.Empty() && asset)
     {
         String f = FormatFilepathForCacheMap(filepath, isEngineAsset);

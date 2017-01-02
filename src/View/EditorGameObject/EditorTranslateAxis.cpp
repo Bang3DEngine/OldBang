@@ -65,7 +65,7 @@ void EditorTranslateAxis::OnUpdate()
 {
     EditorAxis::OnUpdate();
 
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); EXISTS(cam);
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ASSERT(cam);
     Transform *camTransform = cam->gameObject->transform;
     GameObject *ago = m_attachedGameObject;
     Vector3 wCamPos = camTransform->GetPosition();

@@ -49,10 +49,6 @@ public:
     static void _Status(const String &str, float timeInSeconds);
 };
 
-// EXISTS
-    #define EXISTS(x) do { if (x == nullptr) { return; } } while (0);
-//
-
 // ASSERT
     #define ASSERT1(mustBeTrue) do{\
         if (!(mustBeTrue)) {\

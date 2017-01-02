@@ -121,14 +121,12 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
 
     if (BehaviourManager::IsCached(absPath))
     {
-        Debug_Log("Is cached");
         // It's cached from a previous load...
         QLibrary *lib = BehaviourManager::GetCachedLibrary(absPath);
         behaviourHolder->OnBehaviourLibraryAvailable(lib);
     }
     else
     {
-        Debug_Log("Is NOT cached :)");
         // Add behaviour to the list of demanders
         if (!bm->m_behHash_To_behHolderDemanders.ContainsKey(hash))
         {   // Init list

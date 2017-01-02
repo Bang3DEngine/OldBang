@@ -63,7 +63,7 @@ const String &BehaviourHolder::GetSourceFilepath() const
 
 void BehaviourHolder::Refresh()
 {
-    EXISTS(gameObject);
+    ASSERT(gameObject);
     #ifdef BANG_EDITOR // No refresh on temporary gameObjects
     ASSERT(!gameObject->IsDraggedGameObject());
     #endif
@@ -75,7 +75,7 @@ void BehaviourHolder::Refresh()
 
 void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
 {
-    EXISTS(gameObject);
+    ASSERT(gameObject);
 
     // Create new Behaviour
     Behaviour *createdBehaviour = SystemUtils::CreateDynamicBehaviour(lib);

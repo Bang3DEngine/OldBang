@@ -35,7 +35,7 @@ Scene *SceneManager::AddScene(const String &name)
 
 void SceneManager::AddScene(Scene *scene)
 {
-    SceneManager *sm = SceneManager::GetInstance(); EXISTS(sm);
+    SceneManager *sm = SceneManager::GetInstance(); ASSERT(sm);
 
     if (sm->m_scenes.Contains(scene))
     {
@@ -45,7 +45,7 @@ void SceneManager::AddScene(Scene *scene)
 
 void SceneManager::SetActiveScene(Scene *scene)
 {
-    SceneManager *sm = SceneManager::GetInstance(); EXISTS(sm);
+    SceneManager *sm = SceneManager::GetInstance(); ASSERT(sm);
     if (sm->m_activeScene == scene) return;
 
     if (sm->m_activeScene)
@@ -72,7 +72,7 @@ void SceneManager::SetActiveScene(Scene *scene)
 
 void SceneManager::SetActiveScene(const String &name)
 {
-    SceneManager *sm = SceneManager::GetInstance(); EXISTS(sm);
+    SceneManager *sm = SceneManager::GetInstance(); ASSERT(sm);
     for (Scene *scene : sm->m_scenes)
     {
         if (scene->name == name)
@@ -108,7 +108,7 @@ Scene *SceneManager::GetScene(const String &name)
 
 void SceneManager::RemoveScene(const String &name)
 {
-    SceneManager *sm = SceneManager::GetInstance(); EXISTS(sm);
+    SceneManager *sm = SceneManager::GetInstance(); ASSERT(sm);
 
     for (auto it = sm->m_scenes.Begin();
          it != sm->m_scenes.End(); ++it)

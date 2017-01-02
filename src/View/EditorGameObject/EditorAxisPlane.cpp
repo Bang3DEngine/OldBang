@@ -32,7 +32,7 @@ void EditorAxisPlane::OnUpdate()
 
 void EditorAxisPlane::SetTransformAccordingToAxis()
 {
-    EXISTS(m_axis1); EXISTS(m_axis2);
+    ASSERT(m_axis1); ASSERT(m_axis2);
     Vector3 pos = Vector3::Zero;
     Vector3 scale = Vector3::One;
 

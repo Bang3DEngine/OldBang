@@ -128,7 +128,7 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
 
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
-    EXISTS(m); EXISTS(m_gizmosGameObject);
+    ASSERT(m); ASSERT(m_gizmosGameObject);
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(m);
@@ -140,7 +140,7 @@ void Gizmos::RenderCustomMesh(Mesh *m)
 
 void Gizmos::RenderSimpleBox(const Box &b)
 {
-    EXISTS(m_gizmosGameObject);
+    ASSERT(m_gizmosGameObject);
 
     const Quaternion &r = Gizmos::m_gizmosGameObject->transform->GetLocalRotation();
     const Vector3& bMin = b.GetMin();
@@ -170,7 +170,7 @@ void Gizmos::RenderSimpleBox(const Box &b)
 
 void Gizmos::RenderBox(const Box &b)
 {
-    EXISTS(m_gizmosGameObject);
+    ASSERT(m_gizmosGameObject);
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_boxMesh);
 
@@ -185,7 +185,7 @@ void Gizmos::RenderBox(const Box &b)
 
 void Gizmos::RenderRect(const Rect &r)
 {
-    EXISTS(m_gizmosGameObject);
+    ASSERT(m_gizmosGameObject);
     Gizmos::SetResetAllowed(false);
     Gizmos::RenderScreenLine( Vector2(r.m_minx, r.m_miny), Vector2(r.m_maxx, r.m_miny) );
     Gizmos::RenderScreenLine( Vector2(r.m_maxx, r.m_miny), Vector2(r.m_maxx, r.m_maxy) );
@@ -198,8 +198,8 @@ void Gizmos::RenderRect(const Rect &r)
 void Gizmos::RenderIcon(const Texture2D *texture,
                         bool billboard)
 {
-    EXISTS(m_gizmosGameObject); EXISTS(Gizmos::m_meshRenderer);
-    EXISTS(Gizmos::m_planeMesh);
+    ASSERT(m_gizmosGameObject); ASSERT(Gizmos::m_meshRenderer);
+    ASSERT(Gizmos::m_planeMesh);
 
     Gizmos::SetDrawWireframe(false);
     Gizmos::SetReceivesLighting(false);
@@ -231,7 +231,7 @@ void Gizmos::RenderIcon(const Texture2D *texture,
 
 void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 {
-    EXISTS(m_gizmosGameObject);
+    ASSERT(m_gizmosGameObject);
 
     Gizmos::m_singleLineRenderer->SetOrigin(origin);
     Gizmos::m_singleLineRenderer->SetDestiny(destiny);
@@ -246,8 +246,8 @@ void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)
 
 void Gizmos::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
 {
-    EXISTS(m_gizmosGameObject);
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); EXISTS(cam);
+    ASSERT(m_gizmosGameObject);
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ASSERT(cam);
     const float z = cam->GetZNear() + 0.01f;
     Vector3 worldPosOrigin  = cam->ScreenNDCPointToWorld(origin,  z);
     Vector3 worldPosDestiny = cam->ScreenNDCPointToWorld(destiny, z);
@@ -266,7 +266,7 @@ void Gizmos::RenderRay(const Vector3 &origin, const Vector3 &rayDir)
 
 void Gizmos::RenderSphere(const Vector3 &origin, float radius)
 {
-    EXISTS(m_gizmosGameObject);
+    ASSERT(m_gizmosGameObject);
 
     Gizmos::m_meshRenderer->SetEnabled(true);
     Gizmos::m_meshRenderer->SetMesh(Gizmos::m_sphereMesh);
@@ -284,7 +284,7 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
                            float zNear, float zFar,
                            float fovDegrees, float aspectRatio)
 {
-    EXISTS(m_gizmosGameObject);
+    ASSERT(m_gizmosGameObject);
 
     const Vector3 &c = origin;
     const Vector3 right = Vector3::Cross(forward, up).Normalized();
@@ -336,7 +336,7 @@ void Gizmos::RenderFrustum(const Vector3 &forward, const Vector3 &up,
 
 void Gizmos::RenderSimpleSphere(const Vector3 &origin, float radius)
 {
-    EXISTS(m_gizmosGameObject);
+    ASSERT(m_gizmosGameObject);
 
     Gizmos::m_circleRenderer->SetEnabled(true);
     Gizmos::m_circleRenderer->SetRadius(radius);
@@ -385,7 +385,7 @@ void Gizmos::Render(Renderer *rend)
         r->SetEnabled(r == rend); // Enable only rend
     }
 
-    GraphicPipeline *gp = GraphicPipeline::GetActive(); EXISTS(gp);
+    GraphicPipeline *gp = GraphicPipeline::GetActive(); ASSERT(gp);
     rend->SetDepthLayer(gp->GetCurrentDepthLayer());
     gp->RenderRenderer(rend);
 }
