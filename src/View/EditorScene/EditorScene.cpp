@@ -40,8 +40,6 @@ EditorScene::~EditorScene()
 {
     Gizmos::SetGizmosGameObject(nullptr);
     Hierarchy::GetInstance()->Clear(); // To avoid potential bugs (seriously xd)
-    delete m_fpsCounter;
-    delete m_fpsCounterText;
 }
 
 void EditorScene::_OnStart()

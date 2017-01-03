@@ -46,7 +46,7 @@ void SceneManager::AddScene(Scene *scene)
 void SceneManager::SetActiveScene(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetInstance(); ASSERT(sm);
-    if (sm->m_activeScene == scene) return;
+    ASSERT(sm->m_activeScene != scene);
 
     if (sm->m_activeScene)
     {

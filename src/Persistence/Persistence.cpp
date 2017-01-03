@@ -336,8 +336,8 @@ String Persistence::GetHash(const String &filepath)
     QFile file(filepath.ToQString());
     if(file.open(QIODevice::ReadOnly))
     {
-        QCryptographicHash hash(QCryptographicHash::Md5);
-        QByteArray result = hash.hash(file.readAll(), QCryptographicHash::Md5);
+        QCryptographicHash hash(QCryptographicHash::Sha1);
+        QByteArray result = hash.hash(file.readAll(), QCryptographicHash::Sha1);
         file.close();
         return String( QString(result.toHex()) );
     }

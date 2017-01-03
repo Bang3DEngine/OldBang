@@ -100,12 +100,12 @@ int main(int argc, char *argv[])
 
     #ifdef BANG_EDITOR
     // Select project
-    QApplication selectProjectApp(argc, argv);
+    QApplication *selectProjectApp = new QApplication(argc, argv);
     QMainWindow *selectProjectWindow = new QMainWindow();
-    LoadStylesheet(&selectProjectApp);
+    LoadStylesheet(selectProjectApp);
     String loadedProjectFilepath =
             SelectProjectWindow::ExecAndGetProjectFilepath(selectProjectWindow,
-                                                           &selectProjectApp);
+                                                           selectProjectApp);
     //
 
     if (loadedProjectFilepath.Empty())
