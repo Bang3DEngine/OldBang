@@ -1,9 +1,8 @@
 #include "MenuBar.h"
 
-#include "Debug.h"
 #include "Font.h"
 #include "Mesh.h"
-#include "Dialog.h"
+#include "Debug.h"
 #include "Screen.h"
 #include "Prefab.h"
 #include "Camera.h"
@@ -121,21 +120,16 @@ void MenuBar::CreateNewScene() const
     Persistence::SetActiveSceneFilepath("");
 }
 
-QMessageBox::StandardButton MenuBar::AskForSavingActiveScene() const
+Dialog::Reply MenuBar::AskForSavingActiveScene() const
 {
-    QMessageBox::StandardButton reply =
-            QMessageBox::question(EditorWindow::GetInstance()->GetMainWindow(),
-                                  "Save Scene",
-                                  "Do you want to save your current Scene?",
-                                  (QMessageBox::Yes |  QMessageBox::No |
-                                   QMessageBox::Cancel )
-                                  );
+    Dialog::Reply reply = Dialog::GetYesNoCancel(
+                "Save Scene",
+                "Do you want to save the current Scene?");
 
-    if (reply == QMessageBox::Yes)
+    if (reply == Dialog::Reply::Yes)
     {
         OnSaveScene();
     }
-
     return reply;
 }
 
@@ -160,13 +154,13 @@ void MenuBar::OnSaveProject() const
 void MenuBar::OnNewScene() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::NewScene);
-    if (AskForSavingActiveScene() == QMessageBox::Cancel) return;
+    if (AskForSavingActiveScene() == Dialog::Reply::Cancel) return;
     CreateNewScene();
 }
 
 void MenuBar::OnOpenScene() const
 {
-    if (AskForSavingActiveScene() == QMessageBox::Cancel) return;
+    if (AskForSavingActiveScene() == Dialog::Reply::Cancel) return;
 
     m_wem->NotifyMenuBarActionClicked(Action::OpenScene);
 

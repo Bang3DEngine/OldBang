@@ -79,7 +79,7 @@ void BehaviourManager::RemoveOutdatedLibraryFiles(const String &mostRecentLibrar
         bool isTheMostRecentOne = libFilepath.EndsWith(libraryNameAndExtension);
         if (isOfTheSameBehaviour && !isTheMostRecentOne)
         {
-            Persistence::RemoveFile(libFilepath); // Remove outdated library
+            Persistence::Remove(libFilepath); // Remove outdated library
         }
     }
 }

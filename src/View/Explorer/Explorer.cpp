@@ -304,9 +304,7 @@ String Explorer::GetSelectedFileOrDirPath() const
 {
     if (!selectedIndexes().empty())
     {
-        return Persistence::ToRelative(
-                    m_fileSystemModel->filePath(selectedIndexes().front()).toStdString(),
-                    false);
+        return String(m_fileSystemModel->filePath(selectedIndexes().front()));
     }
     return "";
 }

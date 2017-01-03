@@ -113,3 +113,30 @@ String Dialog::GetInputString(const String &caption,
     if (ok) { *ok = everythingOk; }
     return str;
 }
+
+Dialog::Reply Dialog::GetYesNo(const String &caption,
+                               const String &labelText)
+{
+
+    QMessageBox::StandardButton reply =
+            QMessageBox::question(EditorWindow::GetInstance()->GetMainWindow(),
+                                  caption.ToQString(),
+                                  labelText.ToQString(),
+                                  (QMessageBox::Yes |  QMessageBox::No)
+                                  );
+    return static_cast<Dialog::Reply>(reply);
+}
+
+Dialog::Reply Dialog::GetYesNoCancel(const String &caption,
+                                     const String &labelText)
+{
+
+    QMessageBox::StandardButton reply =
+            QMessageBox::question(EditorWindow::GetInstance()->GetMainWindow(),
+                                  caption.ToQString(),
+                                  labelText.ToQString(),
+                                  (QMessageBox::Yes |  QMessageBox::No |
+                                   QMessageBox::Cancel)
+                                  );
+    return static_cast<Dialog::Reply>(reply);
+}

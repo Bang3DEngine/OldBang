@@ -177,11 +177,19 @@ String Persistence::GetDirUp(const String &filepath)
             String::Join(splits, "/");
 }
 
+bool Persistence::CopyFile(const String &fromFilepath,
+                           const String &toFilepath)
+{
+    ASSERT(Persistence::ExistsFile(fromFilepath), "", return false);
+    return QFile::copy(fromFilepath.ToQString(), toFilepath.ToQString());
+}
+
 #ifdef BANG_EDITOR
 String Persistence::GetNextDuplicateName(const String &path)
 {
     ASSERT(!path.Empty(), "", return "");
-    String filePath = Persistence::ToRelative(path);
+
+    String filePath = path;
     String fileDir  = Persistence::GetDir(filePath);
     String fileName = Persistence::GetFileNameWithExtension(filePath);
 
@@ -231,6 +239,7 @@ String Persistence::GetDuplicateName(const String &path, Explorer *exp)
     }
     return result;
 }
+#endif
 
 List<String> Persistence::GetSubDirectories(const String &dirPath,
                                             bool recursive)
@@ -293,11 +302,23 @@ List<String> Persistence::GetFiles(const String &dirPath,
     return filesList;
 }
 
-bool Persistence::RemoveFile(const String &filepath)
+bool Persistence::Remove(const String &path)
 {
-    ASSERT(Persistence::ExistsFile(filepath), "", return false);
-    QFile f(filepath.ToQString());
-    return f.remove();
+    ASSERT(Persistence::ExistsFile(path), "", return false);
+    if (Persistence::IsFile(path))
+    {
+        QFile f(path.ToQString());
+        return f.remove();
+    }
+    else
+    {
+        List<String> subDirs  = GetSubDirectories(path, false);
+        for (String subDir : subDirs) { Persistence::Remove(subDir); }
+        List<String> subFiles = GetFiles(path, false);
+        for (String subFile : subFiles) { Persistence::Remove(subFile); }
+        QDir().rmdir(path.ToQString());
+    }
+    return false;
 }
 
 bool Persistence::ExistsFile(const String &filepath)
@@ -305,7 +326,6 @@ bool Persistence::ExistsFile(const String &filepath)
     ASSERT(!filepath.Empty(), "", return false);
     return QFile(filepath.ToQString()).exists();
 }
-#endif
 
 bool Persistence::ExistsDirectory(const String &dirPath)
 {

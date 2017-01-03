@@ -4,6 +4,7 @@
 #include <QMenuBar>
 #include <QMessageBox>
 
+#include "Dialog.h"
 #include "String.h"
 
 class Mesh;
@@ -58,7 +59,7 @@ public:
     MenuBar(QWidget *parent = nullptr);
 
     void CreateNewScene() const;
-    QMessageBox::StandardButton AskForSavingActiveScene() const;
+    Dialog::Reply AskForSavingActiveScene() const;
 
     static MenuBar *GetInstance();
 

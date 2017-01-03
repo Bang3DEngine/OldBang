@@ -3,19 +3,20 @@
 
 #include <QDialog>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include "String.h"
 #include "Persistence.h"
 
 class Dialog
 {
-private:
-
-    Dialog();
-    static String GetExtensionFilterString(const String &extension);
-    static QWidget *GetCurrentWindow();
-
 public:
+    enum Reply
+    {
+        Yes    = QMessageBox::Yes,
+        No     = QMessageBox::No,
+        Cancel = QMessageBox::Cancel
+    };
 
     static String GetOpenDirname(const String &caption = "Choose a directory",
                                  const String &initDirectory = String(QDir::homePath()) );
@@ -31,6 +32,17 @@ public:
                                  const String &labelText = "Your string:",
                                  const String &defaultText = "DefaultString",
                                  bool *ok = nullptr);
+
+
+    static Dialog::Reply GetYesNo(const String &caption = "Confirm",
+                                  const String &labelText = "Are you sure?");
+    static Dialog::Reply GetYesNoCancel(const String &caption = "Confirm",
+                                        const String &labelText = "Are you sure?");
+
+private:
+    Dialog();
+    static String GetExtensionFilterString(const String &extension);
+    static QWidget *GetCurrentWindow();
 };
 
 #endif // FILEDIALOG_H

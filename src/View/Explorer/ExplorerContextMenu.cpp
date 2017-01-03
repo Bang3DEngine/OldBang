@@ -2,6 +2,7 @@
 
 #include <QTreeWidgetItem>
 
+#include "Debug.h"
 #include "Dialog.h"
 #include "Prefab.h"
 #include "Explorer.h"
@@ -53,24 +54,35 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
 
 void ExplorerContextMenu::OnDuplicateClicked()
 {
-    File source = m_explorer->GetSelectedFile();
-    String filepath = source.GetAbsolutePath();
-    filepath = Persistence::GetDuplicateName(filepath, m_explorer);
-    QFile::copy(source.GetAbsolutePath().ToQString(), filepath.ToQString());
-    m_explorer->SelectFile(filepath);
+    ASSERT(!m_explorer->GetSelectedFileOrDirPath().Empty());
+
+    String fromPath = m_explorer->GetSelectedFileOrDirPath();
+    String toPath = Persistence::GetDuplicateName(fromPath, m_explorer);
+    Persistence::CopyFile(fromPath, toPath);
+    m_explorer->SelectFile(toPath);
 }
 
 void ExplorerContextMenu::OnDeleteClicked()
 {
-    Inspector *inspector = Inspector::GetInstance();
-    IInspectable *lastInspectable = m_explorer->m_lastIInspectableInInspector;
-    if (inspector->IsShowingInspectable(lastInspectable))
+    String path = m_explorer->GetSelectedFile().GetAbsolutePath();
+    String name = Persistence::GetFileNameWithExtension(path);
+    Dialog::Reply reply = Dialog::GetYesNo(
+                "Delete file or directory",
+                "Are you sure you want to remove '" + name + "' ? \n" +
+                "This can NOT be undone.");
+
+    if (reply == Dialog::Reply::Yes)
     {
-        inspector->Clear();
-        delete lastInspectable;
-        m_explorer->m_lastIInspectableInInspector = nullptr;
+        Inspector *inspector = Inspector::GetInstance();
+        IInspectable *lastInspectable = m_explorer->m_lastIInspectableInInspector;
+        if (inspector->IsShowingInspectable(lastInspectable))
+        {
+            inspector->Clear();
+            delete lastInspectable;
+            m_explorer->m_lastIInspectableInInspector = nullptr;
+        }
+        Persistence::Remove(path);
     }
-    m_explorer->m_fileSystemModel->remove(m_explorer->currentIndex());
 }
 
 void ExplorerContextMenu::OnCreateFolderClicked()

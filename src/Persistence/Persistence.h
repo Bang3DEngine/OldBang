@@ -51,7 +51,10 @@ public:
 
    static String GetDirUp(const String &filepath);
 
-   #ifdef BANG_EDITOR
+   static bool CopyFile(const String &fromFilepath,
+                        const String &toFilepath);
+
+    #ifdef BANG_EDITOR
    /**
     * @brief wololo/omg/myFile.jpg => wololo/omg/myFile_1.jpg
     *        wololo/omg/myFile_2.jpg => wololo/omg/myFile_3.jpg
@@ -61,7 +64,7 @@ public:
     */
    static String GetNextDuplicateName(const String &path);
    static String GetDuplicateName(const String &path, Explorer *exp);
-   #endif
+    #endif
 
    static List<String> GetSubDirectories(const String& dirPath,
                                          bool recursive = false);
@@ -69,7 +72,7 @@ public:
                                 bool recursive = false,
                                 const List<String> &extensions = {});
 
-   static bool RemoveFile(const String &filepath);
+   static bool Remove(const String &path);
    static bool ExistsFile(const String &filepath);
    static bool ExistsDirectory(const String &dirPath);
    static bool CreateDirectory(const String &dirPath);
