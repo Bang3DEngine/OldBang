@@ -427,8 +427,11 @@
          <property name="autoScroll">
           <bool>false</bool>
          </property>
+         <property name="showDropIndicator" stdset="0">
+          <bool>false</bool>
+         </property>
          <property name="dragDropMode">
-          <enum>QAbstractItemView::DragOnly</enum>
+          <enum>QAbstractItemView::NoDragDrop</enum>
          </property>
          <property name="defaultDropAction">
           <enum>Qt::IgnoreAction</enum>
@@ -610,7 +613,7 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
-      <widget class="LoggerWidget" name="widgetLogger" native="true">
+      <widget class="QWidget" name="widgetLogger" native="true">
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
          <widget class="ListLogger" name="listLogger">
@@ -874,12 +877,6 @@
    <class>Inspector</class>
    <extends>QListWidget</extends>
    <header>Inspector.h</header>
-  </customwidget>
-  <customwidget>
-   <class>LoggerWidget</class>
-   <extends>QWidget</extends>
-   <header>LoggerWidget.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>ListLogger</class>

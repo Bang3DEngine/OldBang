@@ -3,6 +3,7 @@
 #include <QTreeWidgetItem>
 
 #include "File.h"
+#include "Debug.h"
 #include "Prefab.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
@@ -41,6 +42,7 @@ void HierarchyDragDropManager::GetDropTargetGameObject(GameObject **dropTargetGa
 
 void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
 {
+    Debug_Log("Drag start");
     m_draggingStartGameObject = m_hierarchy->GetFirstSelectedGameObject();
 
     Explorer *explorer = Explorer::GetInstance();
@@ -61,9 +63,18 @@ void HierarchyDragDropManager::OnDragMove(const DragDropInfo &ddi)
 
 void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
 {
-    if ( ddi.sourceObject == m_hierarchy )
+    Explorer *explorer = Explorer::GetInstance();
+
+    if (ddi.sourceObject == m_hierarchy)
     {
-        Explorer *explorer = Explorer::GetInstance();
+        if (ddi.currentObject != m_hierarchy ||
+            ddi.currentObject != explorer)
+        {
+            Debug_Log("Ignoring");
+            return;
+        }
+
+        Debug_Log("Drop in " << ddi.currentObject->objectName());
         if (ddi.sourceObject == explorer)
         {
             OnDropHereFromExplorer(explorer->GetSelectedFile(), ddi);
@@ -79,13 +90,15 @@ void HierarchyDragDropManager::OnDropHereFromHierarchy(const DragDropInfo &ddi)
 {
     m_hierarchy->UpdateSceneFromHierarchy();
     m_hierarchy->UpdateHierarchyFromScene();
+    Debug_Log("***********************************");
+    Debug_Log("***********************************");
+    Debug_Log("***********************************");
 }
 
 void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
                                                       const DragDropInfo &ddi)
 {
-    QDropEvent *e = static_cast<QDropEvent*>(ddi.currentEvent);
-    if (f.GetRelativePath().length() == 0) { e->ignore(); return; }
+    ASSERT(!f.GetRelativePath().Empty() > 0, "", return);
 
     if (f.IsPrefabAsset())
     {
@@ -97,9 +110,5 @@ void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
         prefab->ReadXMLInfoFromString(f.GetContents());
         GameObject *go = prefab->Instantiate();
         go->SetParent(dropTargetGameObject->parent, false, dropTargetGameObject);
-        e->accept();
-        return;
     }
-
-    e->ignore();
 }

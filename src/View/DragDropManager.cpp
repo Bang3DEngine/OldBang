@@ -10,6 +10,10 @@ DragDropManager *DragDropManager::s_ddManager = nullptr;
 
 DragDropManager::DragDropManager()
 {
+    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(Update()));
+    m_updateTimer.setInterval(c_UpdateTime * 1000);
+    m_updateTimer.start();
+
     InstallEventFilters();
 }
 
@@ -17,7 +21,7 @@ void DragDropManager::InstallEventFilters()
 {
     // InstallEventFilter of all the widgets of the window :)
     // Do this every certain time, just in case new Widgets appear hehe
-    QTimer::singleShot(500, this, SLOT(InstallEventFilters()));
+    QTimer::singleShot(1000, this, SLOT(InstallEventFilters()));
 
     EditorWindow *wm = EditorWindow::GetInstance();
     if (wm && wm->GetMainWindow())
@@ -74,8 +78,10 @@ void DragDropManager::UnregisterDragDropAgent(IDragDropListener *dragDropListene
 
 void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
 {
-    DragDropManager *m = DragDropManager::s_ddManager;
+    DragDropManager *m = DragDropManager::s_ddManager; ASSERT(m);
     m->m_mouseDown = true;
+    m->m_latestUpdateDragging = m->m_dragging = false;
+    m->m_timeSinceLastMouseDown = 0.0f;
 
     DragDropAgent *currentDDAgentBelowMouse = DragDropManager::GetDragDropAgentBelowMouse();
     m->m_ddInfo.sourceObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
@@ -83,7 +89,7 @@ void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
 
 void DragDropManager::HandleGlobalMouseRelease(QObject *obj, QEvent *e)
 {
-    DragDropManager *m = DragDropManager::s_ddManager;
+    DragDropManager *m = DragDropManager::s_ddManager; ASSERT(m);
     m->m_mouseDown = false;
 }
 
@@ -101,39 +107,37 @@ bool DragDropManager::IsDragGoingOn()
 
 void DragDropManager::Update()
 {
-    DragDropManager *m = DragDropManager::s_ddManager;
-    if (!m) return;
-
-    m->m_dragging = ( m->m_mouseDown &&
-                     (m->m_timeSinceLastMouseDown >= m->c_TimeToStartDrag)
+    //Debug_Log(m_timeSinceLastMouseDown);
+    m_dragging = ( m_mouseDown &&
+                     (m_timeSinceLastMouseDown >= c_TimeToStartDrag)
                     );
 
     DragDropAgent *currentDDAgentBelowMouse = DragDropManager::GetDragDropAgentBelowMouse();
 
-    m->m_ddInfo.previousObject = m->m_ddInfo.currentObject;
-    m->m_ddInfo.currentObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
+    m_ddInfo.previousObject = m_ddInfo.currentObject;
+    m_ddInfo.currentObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
 
-    bool changingOfDragDropAgent = currentDDAgentBelowMouse != m->m_latestDDAgentBelowMouse;
+    bool changingOfDragDropAgent = currentDDAgentBelowMouse != m_latestDDAgentBelowMouse;
 
     // Drag Starts in currentDDAgentBelowMouse
-    bool isDragStart = !m->m_latestUpdateDragging && m->m_dragging;
+    bool isDragStart = !m_latestUpdateDragging && m_dragging;
     if (isDragStart)
     {
-        for (IDragDropListener *d : m->m_dragDropListeners)
+        for (IDragDropListener *d : m_dragDropListeners)
         {
-            d->OnDragStart(m->m_ddInfo);
+            d->OnDragStart(m_ddInfo);
         }
     }
 
-    if (m->m_dragging)
+    if (m_dragging)
     {
         // Drag Enters into currentDDAgentBelowMouse
         bool isDragEnter = currentDDAgentBelowMouse  && changingOfDragDropAgent;
         if (isDragEnter)
         {
-            for (IDragDropListener *d : m->m_dragDropListeners)
+            for (IDragDropListener *d : m_dragDropListeners)
             {
-                d->OnDragEnter(m->m_ddInfo);
+                d->OnDragEnter(m_ddInfo);
             }
         }
 
@@ -141,48 +145,47 @@ void DragDropManager::Update()
         bool isDragMove = currentDDAgentBelowMouse && !changingOfDragDropAgent;
         if (isDragMove)
         {
-            for (IDragDropListener *d : m->m_dragDropListeners)
+            for (IDragDropListener *d : m_dragDropListeners)
             {
-                d->OnDragMove(m->m_ddInfo);
+                d->OnDragMove(m_ddInfo);
             }
         }
 
         // Drag Leaves m_latestDDAgentBelowMouse
-        bool isDragLeave = m->m_latestDDAgentBelowMouse && changingOfDragDropAgent;
+        bool isDragLeave = m_latestDDAgentBelowMouse && changingOfDragDropAgent;
         if (isDragLeave)
         {
-            for (IDragDropListener *d : m->m_dragDropListeners)
+            for (IDragDropListener *d : m_dragDropListeners)
             {
-                d->OnDragLeave(m->m_ddInfo);
+                d->OnDragLeave(m_ddInfo);
             }
         }
     }
 
-    m->m_latestDDAgentBelowMouse = currentDDAgentBelowMouse;
+    m_latestDDAgentBelowMouse = currentDDAgentBelowMouse;
 
-    if (!m->m_dragging)
+    if (!m_dragging)
     {
-        bool isDrop = m->m_latestUpdateDragging && !m->m_dragging;
+        bool isDrop = m_latestUpdateDragging && !m_dragging;
         if (isDrop)
         {
-            for (IDragDropListener *d : m->m_dragDropListeners)
+            Debug_Log("DROPPPPPP");
+            for (IDragDropListener *d : m_dragDropListeners)
             {
-                d->OnDrop(m->m_ddInfo);
+                d->OnDrop(m_ddInfo);
             }
         }
-        m->m_latestDDAgentBelowMouse = nullptr;
+        m_latestDDAgentBelowMouse = nullptr;
     }
+    m_latestUpdateDragging  = m_dragging;
 
-    m->m_latestUpdateMouseDown = m->m_mouseDown;
-    m->m_latestUpdateDragging  = m->m_dragging;
-
-    if (m->m_mouseDown)
+    if (m_mouseDown)
     {
-        m->m_timeSinceLastMouseDown += Time::deltaTime;
+        m_timeSinceLastMouseDown += c_UpdateTime;
     }
     else
     {
-        m->m_timeSinceLastMouseDown = 0.0f;
+        m_timeSinceLastMouseDown = 0.0f;
     }
 }
 

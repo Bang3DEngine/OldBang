@@ -36,8 +36,11 @@ private:
     BehaviourManager *m_behaviourManager = nullptr;
 
     unsigned long long m_lastRenderTime = 0;
-    const int c_redrawDelay = 16; // 60 FPS cap
     QTimer m_drawTimer;
+
+    // If this is too low, Qt stops it when dragging
+    // something around the window :(
+    const int c_redrawDelay = 16; // 60 FPS cap
 
     // To detect when it's autorepeat (very fast Release after a Press)
     struct LastKeyEventInfo

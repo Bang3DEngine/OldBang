@@ -2,11 +2,12 @@
 #define LISTLOGGER_H
 
 #include <QColor>
-#include <QListWidget>
+#include <QDropEvent>
 
 #include "String.h"
+#include "DragDropAgent.h"
 
-class ListLogger : public QListWidget
+class ListLogger : public DragDropQListWidget
 {
     Q_OBJECT
 
@@ -22,6 +23,8 @@ public:
 
     static ListLogger* GetInstance();
     static void DecorateLastItem(const QColor &color);
+
+    void dropEvent(QDropEvent *e) override;
 };
 
 #endif // LISTLOGGER_H

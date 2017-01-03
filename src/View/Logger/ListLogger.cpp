@@ -5,7 +5,7 @@
 
 QListWidget *ListLogger::s_listLogger = nullptr;
 
-ListLogger::ListLogger(QWidget *parent) : QListWidget(parent)
+ListLogger::ListLogger(QWidget *parent) : DragDropQListWidget()
 {
 }
 
@@ -54,4 +54,9 @@ void ListLogger::DecorateLastItem(const QColor &color)
     }
 
     s_listLogger->scrollToBottom();
+}
+
+void ListLogger::dropEvent(QDropEvent *e)
+{
+    e->ignore();
 }

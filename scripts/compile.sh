@@ -1,10 +1,6 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 
-echo "Updating Qt UI file..."
-./updateUI.sh
-echo 
-
 cd .. # Go to root directory
 
 NUM_THREADS=16

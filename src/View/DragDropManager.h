@@ -7,6 +7,8 @@
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 
+#include <QTimer>
+
 #include "List.h"
 #include "Vector2.h"
 
@@ -25,9 +27,6 @@ public:
 
     // Custom content you want to put here (data being dragged).
     void *content = nullptr;
-
-    // The latest event
-    QEvent *currentEvent;
 };
 
 // Receives drag/drop events and manages them.
@@ -61,10 +60,12 @@ private:
     static DragDropManager *s_ddManager;
 
     DragDropInfo m_ddInfo;
+    const float c_UpdateTime = 0.05f;
+    QTimer m_updateTimer;
 
     float m_timeSinceLastMouseDown = 0.0f;
-    const float c_TimeToStartDrag = 0.15f;
-    bool m_mouseDown = false, m_latestUpdateMouseDown = false;
+    const float c_TimeToStartDrag = 0.1f;
+    bool m_mouseDown = false;
     bool m_dragging  = false, m_latestUpdateDragging  = false;
 
     DragDropAgent *m_latestDDAgentBelowMouse = nullptr;
@@ -72,9 +73,8 @@ private:
 
     DragDropManager();
 
-    static void Update();
-
-    friend class Application;
+private slots:
+    void Update();
 };
 
 #endif // DRAGDROPMANAGER_H

@@ -2,14 +2,15 @@
 #define LISTINSPECTOR_H
 
 #include <QLabel>
-#include <QListWidget>
+#include <QDropEvent>
 
 #include "Map.h"
+#include "DragDropAgent.h"
 #include "InspectorContextMenu.h"
 #include "PrefabAssetFileInspectable.h"
 #include "IWindowEventManagerListener.h"
 
-class Inspector : public QListWidget,
+class Inspector : public DragDropQListWidget,
                   public IWindowEventManagerListener
 {
     Q_OBJECT
@@ -32,7 +33,7 @@ protected:
     virtual void updateGeometries() override;
 
 public:
-    explicit Inspector(QWidget *parent = 0);
+    explicit Inspector(QWidget *parent = nullptr);
 
     void Clear();
     void Refresh();
@@ -58,6 +59,8 @@ public:
     List<IInspectable*> GetCurrentInspectables() const;
     bool IsShowingInspectable(IInspectable *inspectable) const;
     static Inspector* GetInstance();
+
+    void dropEvent(QDropEvent *e) override;
 };
 
 #endif // LISTINSPECTOR_H

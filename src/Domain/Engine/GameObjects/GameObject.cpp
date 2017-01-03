@@ -405,6 +405,7 @@ void GameObject::SetName(const String &name)
 void GameObject::Print(const String &indent) const
 {
     String indent2 = indent; indent2 += "   ";
+    Debug_Log(indent << this);
     for (GameObject *child : m_children)
     {
         child->Print(indent2);

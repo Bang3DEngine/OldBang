@@ -22,16 +22,10 @@
 #include "SingleLineRenderer.h"
 
 Inspector::Inspector(QWidget *parent)
-    : QListWidget(parent), m_iContextMenu(this)
+    : DragDropQListWidget(), m_iContextMenu(this)
 {
-    setAcceptDrops(true);
-    setDragEnabled(true);
-    setDropIndicatorShown(true);
     setAlternatingRowColors(true);
-    viewport()->setAcceptDrops(true);
-    setDefaultDropAction(Qt::DropAction::MoveAction);
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
     setMinimumWidth(360);
@@ -161,6 +155,11 @@ bool Inspector::IsShowingInspectable(IInspectable *inspectable) const
 Inspector *Inspector::GetInstance()
 {
     return EditorWindow::GetInstance()->widgetInspector;
+}
+
+void Inspector::dropEvent(QDropEvent *e)
+{
+    e->ignore();
 }
 
 void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)

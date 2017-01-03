@@ -25,10 +25,10 @@ Hierarchy::Hierarchy(QWidget *parent) :
             this, SLOT(_NotifyHierarchyGameObjectDoubleClicked(
                            QTreeWidgetItem*,int)));
 
-    m_refreshTimer.setInterval(1000);
-    connect(&m_refreshTimer, SIGNAL(timeout()),
+    m_refreshFromSceneTimer.setInterval(1000);
+    connect(&m_refreshFromSceneTimer, SIGNAL(timeout()),
             this, SLOT(UpdateHierarchyFromScene()));
-    m_refreshTimer.start();
+    m_refreshFromSceneTimer.start();
 }
 
 Hierarchy::~Hierarchy()
@@ -94,12 +94,6 @@ void Hierarchy::UnselectAll()
 {
     clearSelection();
     _NotifyHierarchyGameObjectSelectionChanged();
-}
-
-void Hierarchy::dropEvent(QDropEvent *e)
-{
-    DragDropQTreeWidget::dropEvent(e);
-    e->ignore();
 }
 
 void Hierarchy::keyPressEvent(QKeyEvent *e)
@@ -178,6 +172,8 @@ void Hierarchy::UpdateSceneFromHierarchy()
         GameObject *childItemGo = GetGameObjectFromItem(childItem);
         childItemGo->SetParent(scene, true, nullptr);
     }
+    //Debug_Log("SCENE ***********************");
+    //scene->Print();
 }
 
 void Hierarchy::UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem)
@@ -192,6 +188,8 @@ void Hierarchy::UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem)
         GameObject *childItemGo = GetGameObjectFromItem(childItem);
         childItemGo->SetParent(go, true, nullptr);
     }
+    //Debug_Log("HIERARCHY ***********************");
+    //this->Print();
 }
 
 void Hierarchy::LocateGameObject(GameObject *gameObjectToLocate,

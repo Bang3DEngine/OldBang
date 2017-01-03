@@ -19,8 +19,10 @@ isEmpty($$BUILD_MODE) {   # Default build mode variable
 CONFIG += $$BUILD_MODE
 CONFIG += qt
 MOC_DIR = src/Qt_MOCs/
-
+FORMS   += EngineAssets/EditorWindow.ui
+FORMS   += EngineAssets/SelectProjectWindow.ui
 DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
+
 
 QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
 QMAKE_CXXFLAGS += -O0
@@ -299,7 +301,6 @@ HEADERS += \
     src/View/Inspector/AttrWidgetFloat.h \
     src/View/Inspector/AttrWidgetVectorFloat.h \
     src/View/Logger/ListLogger.h \
-    src/View/Logger/LoggerWidget.h \
     src/View/Inspector/AttrWidgetEnum.h \
     src/View/Explorer/Explorer.h \
     src/View/Inspector/IInspectable.h \
@@ -470,7 +471,6 @@ EDITOR {
         src/View/Inspector/AttrWidgetFloat.cpp \
         src/View/Inspector/AttrWidgetVectorFloat.cpp \
         src/View/Logger/ListLogger.cpp \
-        src/View/Logger/LoggerWidget.cpp \
         src/View/Inspector/AttrWidgetEnum.cpp \
         src/View/Explorer/Explorer.cpp \
         src/View/Inspector/IInspectable.cpp \

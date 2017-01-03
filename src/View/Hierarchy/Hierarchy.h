@@ -6,7 +6,6 @@
 #include "Array.h"
 
 #include <QTimer>
-#include <QDropEvent>
 #include <QTreeWidget>
 
 #include "Map.h"
@@ -46,7 +45,6 @@ public:
     void SelectItemAboveOrBelowSelected(bool above);
     void UnselectAll();
 
-    virtual void dropEvent(QDropEvent *e) override;
     virtual void keyPressEvent(QKeyEvent *e) override;
     virtual void mousePressEvent(QMouseEvent *e) override;
 
@@ -82,7 +80,7 @@ private:
     mutable Map<GameObject*, QTreeWidgetItem*> m_gameObject_To_TreeItem;
     mutable Map<QTreeWidgetItem*,GameObject*> m_treeItem_To_GameObject;
 
-    QTimer m_refreshTimer;
+    QTimer m_refreshFromSceneTimer;
     HierarchyContextMenu m_hContextMenu;
     HierarchyDragDropManager m_hDragDropManager;
 

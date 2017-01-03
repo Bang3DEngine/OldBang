@@ -47,10 +47,6 @@ void Application::OnDrawTimerTick()
     Time::s_deltaTime = deltaTime;
     //
 
-    #ifdef BANG_EDITOR
-    DragDropManager::Update();
-    #endif
-
     // Process mouse and key events, so the Input is available in OnUpdate
     // as accurate as possible.
     // Lost events in between Update and Render will be delayed by Input.
