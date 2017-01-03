@@ -235,6 +235,10 @@ void XMLAttribute::SetFilepath(const String &filepath,
     {
         SetProperty(XMLProperty::IsEngineFile);
     }
+    else
+    {
+        RemoveProperty(XMLProperty::IsEngineFile.GetName());
+    }
 }
 
 void XMLAttribute::SetEnum(const Array<String> &enumNames,

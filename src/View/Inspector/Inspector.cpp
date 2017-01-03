@@ -31,6 +31,12 @@ Inspector::Inspector(QWidget *parent)
     setMinimumWidth(360);
 }
 
+void Inspector::OnWindowShown()
+{
+    this->SetDragDropEventPossibleSources({
+          Explorer::GetInstance(), Hierarchy::GetInstance()});
+}
+
 void Inspector::updateGeometries()
 {
     QListWidget::updateGeometries();

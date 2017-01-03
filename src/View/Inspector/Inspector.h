@@ -35,6 +35,8 @@ protected:
 public:
     explicit Inspector(QWidget *parent = nullptr);
 
+    void OnWindowShown();
+
     void Clear();
     void Refresh();
 

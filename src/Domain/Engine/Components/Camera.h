@@ -81,7 +81,7 @@ private:
 
     float m_orthoHeight  = 0.5f;
 
-    Color m_clearColor = Color(Color(0.9f), 1);
+    Color m_clearColor = Color(Color(0.4f), 1);
     float m_fovDegrees = 60.0f;
     float m_zNear = 0.1f;
     float m_zFar = 100.0f;

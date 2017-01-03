@@ -6,17 +6,21 @@
 #include "Material.h"
 #include "Transform.h"
 #include "SceneManager.h"
+#include "AssetsManager.h"
 #include "SingleLineRenderer.h"
 
 EditorFloor::EditorFloor()
 {
+    m_material = new Material(*AssetsManager::Load<Material>("Materials/D2G_Default.bmat", true));
+    m_material->SetDiffuseColor(Color::White * 0.7f);
+
     const int GridSize2 = 2 * (c_gridSize + 1);
     m_lineRenderers.Resize(GridSize2);
     for (int i = 0; i < GridSize2; ++i)
     {
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
         m_lineRenderers[i]->SetReceivesLighting(false);
-        m_lineRenderers[i]->GetMaterial()->SetDiffuseColor(Color::Gray);
+        m_lineRenderers[i]->SetMaterial(m_material);
     }
 
     m_renderInSelectionFramebuffer = false;
@@ -24,6 +28,7 @@ EditorFloor::EditorFloor()
 
 EditorFloor::~EditorFloor()
 {
+    delete m_material;
 }
 
 void EditorFloor::OnUpdate()

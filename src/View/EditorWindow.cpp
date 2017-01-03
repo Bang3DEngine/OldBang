@@ -33,6 +33,7 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
 
     Hierarchy::GetInstance()->OnWindowShown();
     Explorer::GetInstance()->OnWindowShown();
+    Inspector::GetInstance()->OnWindowShown();
 }
 
 EditorWindow *EditorWindow::GetInstance()

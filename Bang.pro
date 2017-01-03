@@ -179,7 +179,31 @@ OTHER_FILES += \
     Assets/Engine/Materials/PR_AmbientLight_Screen.bmat \
     Assets/Engine/Materials/PR_SelectionEffect.bmat \
     Assets/Engine/Shaders/UI/D2G_UIText.frag \
-    Assets/Engine/Materials/UI/D2G_UIText.bmat
+    Assets/Engine/Materials/UI/D2G_UIText.bmat \
+    EngineAssets/Shaders/SelectionBuffer.frag \
+    EngineAssets/Shaders/RenderGBufferToScreen.frag \
+    EngineAssets/Shaders/PR_Template.frag \
+    EngineAssets/Shaders/PR_SelectionEffect.frag \
+    EngineAssets/Shaders/PR_PointLight.frag \
+    EngineAssets/Shaders/PR_DirectionalLight.frag \
+    EngineAssets/Shaders/PR_AmbientLight.frag \
+    EngineAssets/Shaders/D2G_Template.frag \
+    EngineAssets/Shaders/D2G_RotationAxisLine.frag \
+    EngineAssets/Shaders/D2G_Default.frag \
+    EngineAssets/Shaders/SelectionBuffer.vert \
+    EngineAssets/Shaders/PR_ScreenPass.vert \
+    EngineAssets/Shaders/D2G_Template.vert \
+    EngineAssets/Shaders/D2G_Default.vert \
+    EngineAssets/Shaders/UI/PR_UIImage.frag \
+    EngineAssets/Shaders/UI/D2G_UIText.frag \
+    EngineAssets/Shaders/Include/Uniforms.glsl \
+    EngineAssets/Shaders/Include/PointLight.glsl \
+    EngineAssets/Shaders/Include/Main.glsl \
+    EngineAssets/Shaders/Include/DirectionalLight.glsl \
+    EngineAssets/Shaders/Include/PR.frag \
+    EngineAssets/Shaders/Include/D2G.frag \
+    EngineAssets/Shaders/Include/PR.vert \
+    EngineAssets/Shaders/Include/D2G.vert
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \

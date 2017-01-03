@@ -19,6 +19,9 @@ public:
     virtual ~EditorFloor();
 
     void OnUpdate() override;
+
+private:
+    Material *m_material = nullptr;
 };
 
 #endif // EDITORFLOOR_H

@@ -80,13 +80,18 @@ void AttrWidgetFile::Browse()
 
 void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
 {
-    if (m_filepath != filepath)
-    {
-        m_filepath = filepath;
+    ASSERT(m_filepath != filepath);
 
-        String value = Persistence::GetFileName(m_filepath);
-        m_filepathLineEdit->setText(QString::fromStdString(value));
-    }
+    m_filepath = filepath;
+
+    // Change the filepath in the xmlAttribute too
+    m_xmlAttribute.SetFilepath(m_filepath,
+                               m_xmlAttribute.GetPropertyValue(
+                                   XMLProperty::FileExtension.GetName()),
+                               m_xmlAttribute.GetProperties());
+
+    String fileName = Persistence::GetFileName(m_filepath);
+    m_filepathLineEdit->setText(fileName.ToQString());
 
     if (draggedFile)
     {
@@ -121,27 +126,27 @@ void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)
     }
 }
 
-void AttrWidgetFile::OnDropHere(const DragDropInfo &ddi)
-{
-    Explorer  *explorer  = Explorer::GetInstance();
-    Hierarchy *hierarchy = Hierarchy::GetInstance();
-    if (ddi.sourceObject == explorer)
-    {
-        File f = explorer->GetSelectedFile();
-        if (f.IsOfExtension(m_fileExtension) && !m_readonly)
-        {
-            SetValue(f.GetRelativePath(), true);
-        }
-    }
-    else if (ddi.sourceObject == hierarchy)
-    {
-        GameObject *go = hierarchy->GetFirstSelectedGameObject();
-    }
-}
-
 void AttrWidgetFile::OnDrop(const DragDropInfo &ddi)
 {
     m_filepathLineEdit->setStyleSheet("/* */");
+
+    Explorer  *explorer  = Explorer::GetInstance();
+    Hierarchy *hierarchy = Hierarchy::GetInstance();
+    if (ddi.currentObject == this)
+    {
+        if (ddi.sourceObject == explorer)
+        {
+            File f = explorer->GetSelectedFile();
+            if (f.IsOfExtension(m_fileExtension) && !m_readonly)
+            {
+                SetValue(f.GetAbsolutePath(), true);
+            }
+        }
+        else if (ddi.sourceObject == hierarchy)
+        {
+            GameObject *go = hierarchy->GetFirstSelectedGameObject();
+        }
+    }
 }
 
 
@@ -162,6 +167,8 @@ void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
 
 void AttrWidgetFile::OnDoubleClick()
 {
+    ASSERT(Persistence::ExistsFile(m_filepath));
+    ASSERT(!Persistence::IsEngineFile(m_filepath));
     Explorer::GetInstance()->SelectFile(m_filepath);
 }
 

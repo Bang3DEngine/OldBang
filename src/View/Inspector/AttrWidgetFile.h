@@ -16,8 +16,8 @@ class AttrWidgetFile : public AttributeWidget,
 
 private:
 public:
-    String m_fileExtension = "";
     String m_filepath = "";
+    String m_fileExtension = "";
     FileLineEdit *m_filepathLineEdit = nullptr;
 
 public:
@@ -29,7 +29,6 @@ public:
     virtual String GetValue();
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
-    virtual void OnDropHere(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;

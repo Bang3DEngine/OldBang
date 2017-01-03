@@ -51,8 +51,7 @@ void Material::Bind() const
     if (m_shaderProgram)
     {
         m_shaderProgram->Bind();
-        m_shaderProgram->SetUniformColor(ShaderContract::Uniform_Material_Diffuse_Color,
-                                         m_diffuseColor, false);
+        m_shaderProgram->SetUniformColor("B_material_diffuse_color", m_diffuseColor, false);
         m_shaderProgram->SetUniformVec2("B_screen_size", Screen::GetSize(), false);
         m_shaderProgram->SetUniformFloat("B_material_shininess", m_shininess, false);
 

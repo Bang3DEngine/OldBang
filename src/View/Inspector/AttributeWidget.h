@@ -28,7 +28,6 @@ protected:
     bool m_hidden   = false;
 
     InspectorWidget *m_inspectorWidget = nullptr;
-    XMLNode *m_relatedXMLInfo = nullptr;
 
     AttributeWidget(const XMLAttribute &xmlAttribute,
                     InspectorWidget *inspectorWidget,

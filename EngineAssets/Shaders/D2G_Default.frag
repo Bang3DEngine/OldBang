@@ -2,6 +2,7 @@
 
 void Main()
 {
+    vec4 diffColor = B_material_diffuse_color;
     if (B_hasTexture)
     {
         // ALPHA CUTTOFF
@@ -9,10 +10,12 @@ void Main()
         if (texColor.a <= B_alphaCuttoff) discard;
         //
 
-        vec4 diffColor = B_material_diffuse_color;
-
         // MIX DIFFUSE_COLOR AND TEXTURE_COLOR
         B_vout.diffuseColor = texColor * diffColor;
         //
+    }
+    else
+    {
+        B_vout.diffuseColor = diffColor;
     }
 }
