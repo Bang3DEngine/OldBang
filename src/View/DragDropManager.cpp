@@ -107,7 +107,6 @@ bool DragDropManager::IsDragGoingOn()
 
 void DragDropManager::Update()
 {
-    //Debug_Log(m_timeSinceLastMouseDown);
     m_dragging = ( m_mouseDown &&
                      (m_timeSinceLastMouseDown >= c_TimeToStartDrag)
                     );
@@ -169,7 +168,6 @@ void DragDropManager::Update()
         bool isDrop = m_latestUpdateDragging && !m_dragging;
         if (isDrop)
         {
-            Debug_Log("DROPPPPPP");
             for (IDragDropListener *d : m_dragDropListeners)
             {
                 d->OnDrop(m_ddInfo);

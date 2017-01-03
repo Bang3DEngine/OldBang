@@ -3,6 +3,7 @@
 #include <QTreeWidgetItem>
 
 #include "File.h"
+#include "Scene.h"
 #include "Debug.h"
 #include "Prefab.h"
 #include "Explorer.h"
@@ -42,7 +43,6 @@ void HierarchyDragDropManager::GetDropTargetGameObject(GameObject **dropTargetGa
 
 void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
 {
-    Debug_Log("Drag start");
     m_draggingStartGameObject = m_hierarchy->GetFirstSelectedGameObject();
 
     Explorer *explorer = Explorer::GetInstance();
@@ -56,25 +56,12 @@ void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
     }
 }
 
-void HierarchyDragDropManager::OnDragMove(const DragDropInfo &ddi)
-{
-    QTreeWidgetItem *item = GetDropTargetItem();
-}
-
 void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
 {
     Explorer *explorer = Explorer::GetInstance();
 
-    if (ddi.sourceObject == m_hierarchy)
+    if (ddi.currentObject == m_hierarchy)
     {
-        if (ddi.currentObject != m_hierarchy ||
-            ddi.currentObject != explorer)
-        {
-            Debug_Log("Ignoring");
-            return;
-        }
-
-        Debug_Log("Drop in " << ddi.currentObject->objectName());
         if (ddi.sourceObject == explorer)
         {
             OnDropHereFromExplorer(explorer->GetSelectedFile(), ddi);
@@ -90,9 +77,6 @@ void HierarchyDragDropManager::OnDropHereFromHierarchy(const DragDropInfo &ddi)
 {
     m_hierarchy->UpdateSceneFromHierarchy();
     m_hierarchy->UpdateHierarchyFromScene();
-    Debug_Log("***********************************");
-    Debug_Log("***********************************");
-    Debug_Log("***********************************");
 }
 
 void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
@@ -105,10 +89,14 @@ void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
         GameObject *dropTargetGameObject;
         bool above, below;
         GetDropTargetGameObject(&dropTargetGameObject, &above, &below);
+        GameObject *aboveGameObject = dropTargetGameObject;
+        dropTargetGameObject = dropTargetGameObject ? dropTargetGameObject->parent :
+                                                      SceneManager::GetActiveScene();
+        ASSERT(dropTargetGameObject);
 
         Prefab *prefab = new Prefab();
         prefab->ReadXMLInfoFromString(f.GetContents());
-        GameObject *go = prefab->Instantiate();
-        go->SetParent(dropTargetGameObject->parent, false, dropTargetGameObject);
+        GameObject *go = prefab->Instantiate(); ASSERT(go);
+        go->SetParent(dropTargetGameObject, false, aboveGameObject);
     }
 }

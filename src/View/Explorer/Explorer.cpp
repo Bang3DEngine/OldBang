@@ -61,7 +61,13 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 
 Explorer::~Explorer()
 {
-   delete m_fileSystemModel;
+    delete m_fileSystemModel;
+}
+
+void Explorer::OnWindowShown()
+{
+    this->SetDragDropEventPossibleSources({
+          Hierarchy::GetInstance(), this });
 }
 
 void Explorer::OnButtonDirUpClicked()
@@ -357,27 +363,25 @@ void Explorer::OnDragStart(const DragDropInfo &ddi)
     }
 }
 
-void Explorer::OnDropHere(const DragDropInfo &ddi)
-{
-    Hierarchy *hierarchy = Hierarchy::GetInstance();
-    if (ddi.sourceObject == hierarchy)
-    {
-        // Create a prefab of selected on the current directory
-        GameObject *selected = hierarchy->GetFirstSelectedGameObject();
-        ASSERT(selected);
-
-        String path = GetCurrentDir() + "/";
-        String gameObjectName = selected->name;
-        path += gameObjectName;
-        path = Persistence::AppendExtension(path,
-                      Prefab::GetFileExtensionStatic());
-        FileWriter::WriteToFile(path, selected);
-    }
-}
-
 void Explorer::OnDrop(const DragDropInfo &ddi)
 {
     setStyleSheet("/* */");
+    if (ddi.currentObject == this)
+    {
+        Hierarchy *hierarchy = Hierarchy::GetInstance();
+        if (ddi.sourceObject == hierarchy)
+        {
+            // Create a prefab of selected on the current directory
+            GameObject *selected = hierarchy->GetFirstSelectedGameObject(); ASSERT(selected);
+
+            String path = GetCurrentDir() + "/";
+            String gameObjectName = selected->name;
+            path += gameObjectName;
+            path = Persistence::AppendExtension(path,
+                          Prefab::GetFileExtensionStatic());
+            FileWriter::WriteToFile(path, selected);
+        }
+    }
 }
 
 void Explorer::dropEvent(QDropEvent *e)

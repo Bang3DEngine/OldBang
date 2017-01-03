@@ -25,7 +25,6 @@ private:
                                  bool *above, bool *below) const;
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
-    virtual void OnDragMove(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
     void OnDropHereFromHierarchy(const DragDropInfo &ddi);

@@ -4,12 +4,14 @@
 #include "WindowEventManager.h"
 
 #include "File.h"
+#include "Debug.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
 #include "GameObject.h"
 
 
 // DragDropAgent
+
 void DragDropAgent::SetDragDropEventPossibleSources(
         const List<QObject *> &possibleDragDropEventSources)
 {
@@ -55,6 +57,7 @@ DragDropQListView::DragDropQListView() : DragDropAgent()
 {
     setAcceptDrops(true);
     setDragEnabled(true);
+    setDropIndicatorShown(true);
     viewport()->setAcceptDrops(true);
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 }
@@ -85,6 +88,7 @@ DragDropQTreeWidget::DragDropQTreeWidget() : DragDropAgent()
 {
     setAcceptDrops(true);
     setDragEnabled(true);
+    setDropIndicatorShown(true);
     viewport()->setAcceptDrops(true);
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 }
@@ -116,6 +120,7 @@ DragDropQListWidget::DragDropQListWidget()
 {
     setAcceptDrops(true);
     setDragEnabled(true);
+    setDropIndicatorShown(true);
     viewport()->setAcceptDrops(true);
     setDragDropMode(QAbstractItemView::DragDropMode::DragDrop);
 }

@@ -36,6 +36,12 @@ Hierarchy::~Hierarchy()
     clear();
 }
 
+void Hierarchy::OnWindowShown()
+{
+    this->SetDragDropEventPossibleSources({
+          Explorer::GetInstance(), this });
+}
+
 void Hierarchy::Expand(QTreeWidgetItem *item)
 {
     ASSERT(item);

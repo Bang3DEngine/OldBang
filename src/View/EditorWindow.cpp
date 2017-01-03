@@ -2,6 +2,9 @@
 
 #include "Debug.h"
 #include "Toolbar.h"
+#include "Explorer.h"
+#include "Hierarchy.h"
+#include "Inspector.h"
 #include "SingletonManager.h"
 #include "WindowEventManager.h"
 
@@ -27,6 +30,9 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     EditorWindow::s_m_win->m_app = application;
 
     Toolbar::Init();
+
+    Hierarchy::GetInstance()->OnWindowShown();
+    Explorer::GetInstance()->OnWindowShown();
 }
 
 EditorWindow *EditorWindow::GetInstance()

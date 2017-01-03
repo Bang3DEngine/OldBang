@@ -28,6 +28,8 @@ public:
     explicit Hierarchy(QWidget *parent = 0);
     virtual ~Hierarchy();
 
+    void OnWindowShown();
+
     void Clear();
     void Expand(GameObject *go);
     bool IsSelected(GameObject *go);

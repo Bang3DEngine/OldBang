@@ -31,6 +31,8 @@ public:
     Explorer(QWidget *parent);
     virtual ~Explorer();
 
+    void OnWindowShown();
+
     String GetCurrentDir() const;
     String GetSelectedFileOrDirPath() const;
     File GetSelectedFile() const;
@@ -42,7 +44,6 @@ public:
     void StartRenaming(const String &filepath);
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
-    virtual void OnDropHere(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
     void dropEvent(QDropEvent *e) override;
