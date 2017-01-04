@@ -189,7 +189,6 @@
      </layout>
     </item>
    </layout>
-   <zorder></zorder>
   </widget>
   <widget class="MenuBar" name="menubar">
    <property name="geometry">
