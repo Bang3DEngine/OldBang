@@ -218,22 +218,17 @@
     <property name="title">
      <string>GameObjects</string>
     </property>
-    <widget class="QMenu" name="menuCreate_2">
-     <property name="title">
-      <string>Create</string>
-     </property>
-     <addaction name="actionCreateEmptyGameObject"/>
-     <addaction name="separator"/>
-     <addaction name="actionCreateFromPrefab"/>
-     <addaction name="separator"/>
-     <addaction name="actionCreatePlane"/>
-     <addaction name="actionCreateCube"/>
-     <addaction name="actionCreateSphere"/>
-     <addaction name="separator"/>
-     <addaction name="actionCreateDirectionalLight"/>
-     <addaction name="actionCreatePointLight"/>
-    </widget>
-    <addaction name="menuCreate_2"/>
+    <addaction name="actionCreateEmptyGameObject"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreateFromPrefab"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreatePlane"/>
+    <addaction name="actionCreateCube"/>
+    <addaction name="actionCreateSphere"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreateDirectionalLight"/>
+    <addaction name="actionCreatePointLight"/>
+    <addaction name="separator"/>
     <addaction name="actionAlignViewWithGameObject"/>
     <addaction name="actionAlignGameObjectWithView"/>
    </widget>
@@ -431,7 +426,7 @@
           <bool>false</bool>
          </property>
          <property name="dragDropMode">
-          <enum>QAbstractItemView::NoDragDrop</enum>
+          <enum>QAbstractItemView::DragOnly</enum>
          </property>
          <property name="defaultDropAction">
           <enum>Qt::IgnoreAction</enum>
@@ -464,7 +459,7 @@
   <widget class="QDockWidget" name="dockExplorer">
    <property name="minimumSize">
     <size>
-     <width>493</width>
+     <width>519</width>
      <height>210</height>
     </size>
    </property>
@@ -541,6 +536,16 @@
               </size>
              </property>
             </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelCurrentPath">
+             <property name="text">
+              <string>/home/sephiro47/MyProject/Assets/wololo/wololo2</string>
+             </property>
+             <property name="textInteractionFlags">
+              <set>Qt::TextSelectableByMouse</set>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>

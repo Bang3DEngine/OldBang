@@ -10,10 +10,9 @@
 
 BehaviourRefresherTimer::BehaviourRefresherTimer()
 {
-    m_timer.setInterval(3000);
     connect(&m_timer, SIGNAL(timeout()),
             this, SLOT(RefreshBehavioursInScene()));
-    m_timer.start();
+    m_timer.start(3000);
 }
 
 void BehaviourRefresherTimer::RefreshBehavioursInScene() const

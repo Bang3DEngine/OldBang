@@ -97,25 +97,41 @@ String Persistence::ToAbsolute(const String &relPath,
                                const String &prependDirectory)
 {
     ASSERT(!relPath.Empty(), "", return "");
-    ASSERT(!Persistence::IsAbsolute(relPath), "", return relPath);
 
-    String pDir = prependDirectory;
-    if (!pDir.Empty())
+    String result = "";
+    if (Persistence::IsAbsolute(relPath))
     {
-        if (pDir[pDir.Length()-1] == '/')
+        result = relPath;
+    }
+    else
+    {
+        String pDir = prependDirectory;
+        if (!pDir.Empty())
         {
-            pDir = pDir.SubString(1, pDir.Length()-1);
+            if (pDir[pDir.Length()-1] == '/')
+            {
+                pDir = pDir.SubString(1, pDir.Length()-1);
+            }
         }
+
+        String rPath = relPath;
+        if (rPath[0] == '.' && rPath[1] == '/') // Something like "./Images/wololo"
+        {
+            return  pDir + "/" +
+                    relPath.substr(2, relPath.Length() - 1);
+        }
+
+        result = pDir + "/" + relPath;
     }
 
-    String rPath = relPath;
-    if (rPath[0] == '.' && rPath[1] == '/') // Something like "./Images/wololo"
+    // If we try to get canonical for non-existing filepath,
+    // then it returns empty string, we must handle this
+    if (Persistence::Exists(result))
     {
-        return  pDir + "/" +
-                relPath.substr(2, relPath.Length() - 1);
+        result = QFileInfo(result.ToQString()).canonicalFilePath();
     }
 
-    return pDir + "/" + relPath;
+    return result;
 }
 
 String Persistence::ToAbsolute(const String &relPath, bool isEngineFile)
@@ -177,11 +193,41 @@ String Persistence::GetDirUp(const String &filepath)
             String::Join(splits, "/");
 }
 
-bool Persistence::CopyFile(const String &fromFilepath,
-                           const String &toFilepath)
+String Persistence::GetRightmostDir(const String &dir)
+{
+    Array<String> parts = StringUtils::Split(dir, '/');
+    ASSERT(!parts.Empty(), "", return "");
+    return parts.Back();
+}
+
+bool Persistence::DuplicateFile(const String &fromFilepath,
+                                const String &toFilepath)
 {
     ASSERT(Persistence::ExistsFile(fromFilepath), "", return false);
     return QFile::copy(fromFilepath.ToQString(), toFilepath.ToQString());
+}
+
+bool Persistence::DuplicateDir(const String &fromDirpath,
+                               const String &toDirpath)
+{
+    ASSERT(Persistence::ExistsDirectory(fromDirpath), "", return false);
+
+    Persistence::CreateDirectory(toDirpath);
+    List<String> filepaths = Persistence::GetFiles(fromDirpath, false);
+    for(String filepath : filepaths)
+    {
+        String fileName = Persistence::GetFileNameWithExtension(filepath);
+        Persistence::DuplicateFile(fromDirpath + "/" + fileName,
+                                   toDirpath   + "/" + fileName);
+    }
+
+    List<String> subdirs = Persistence::GetSubDirectories(fromDirpath, false);
+    for (String subdir : subdirs)
+    {
+        Persistence::DuplicateDir(
+                    subdir,
+                    toDirpath + "/" + Persistence::GetRightmostDir(subdir));
+    }
 }
 
 #ifdef BANG_EDITOR
@@ -229,11 +275,11 @@ String Persistence::GetNextDuplicateName(const String &path)
     return result;
 }
 
-String Persistence::GetDuplicateName(const String &path, Explorer *exp)
+String Persistence::GetDuplicateName(const String &path)
 {
     ASSERT(!path.Empty(), "", return "");
     String result = path;
-    while (exp->Exists(result))
+    while (Persistence::Exists(result))
     {
         result = Persistence::GetNextDuplicateName(result);
     }
@@ -331,6 +377,16 @@ bool Persistence::ExistsDirectory(const String &dirPath)
 {
     ASSERT(!dirPath.Empty(), "", return false);
     return QDir(dirPath.ToQString()).exists();
+}
+
+bool Persistence::Exists(const String &filepath)
+{
+    ASSERT(!filepath.Empty(), "", return false);
+    if (Persistence::IsDir(filepath))
+    {
+        return Persistence::ExistsDirectory(filepath);
+    }
+    return Persistence::ExistsFile(filepath);
 }
 
 bool Persistence::CreateDirectory(const String &dirPath)

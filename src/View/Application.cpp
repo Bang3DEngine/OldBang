@@ -27,8 +27,7 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
     connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(OnDrawTimerTick()));
 
-    m_drawTimer.setInterval(c_redrawDelay);
-    m_drawTimer.start();
+    m_drawTimer.start(c_redrawDelay);
 
     m_lastRenderTime = Time::GetNow();
 }

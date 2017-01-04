@@ -2,8 +2,7 @@
 
 #include <QScrollBar>
 
-#include "Debug.h"
-
+#include "Input.h"
 #include "Debug.h"
 #include "Prefab.h"
 #include "TextFile.h"
@@ -41,13 +40,16 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 
     m_fileSystemModel = new FileSystemModel();
     setModel(m_fileSystemModel);
-    SetDir(Persistence::GetAssetsPathAbsolute());
 
     m_buttonDirUp = EditorWindow::GetInstance()->buttonExplorerDirUp;
     m_buttonChangeViewMode = EditorWindow::GetInstance()->buttonExplorerChangeViewMode;
 
     m_updateTimer = new QTimer(this); //Every X secs, update all the slots values
     m_updateTimer->start(100);
+
+    m_labelCurrentPath = EditorWindow::GetInstance()->labelCurrentPath;
+
+    SetDir(Persistence::c_ProjectAssetsRootAbsolute);
 
     connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
 
@@ -102,6 +104,11 @@ void Explorer::mousePressEvent(QMouseEvent *e)
 {
     QListView::mousePressEvent(e);
 
+    if (!indexAt(e->pos()).isValid()) // Deselect
+    {
+        clearSelection();
+    }
+
     if (e->button() == Qt::RightButton)
     {
         m_eContextMenu.OnCustomContextMenuRequested(e->pos());
@@ -130,24 +137,18 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 
     if (e->button() == Qt::LeftButton)
     {
-        if (this->selectedIndexes().length() <= 0) return;
-
-        QModelIndex clickedIndex = this->selectedIndexes().at(0);
-        bool isDir = m_fileSystemModel->isDir(clickedIndex);
-        if (isDir)
+        ASSERT(selectedIndexes().length() > 0);
+        String selectedPath = GetSelectedFileOrDirPath();
+        if (Persistence::Exists(selectedPath))
         {
-            String clickedDirName =
-                    m_fileSystemModel->fileName(clickedIndex).toStdString();
-            SetDir(GetCurrentDir() + "/" + clickedDirName);
-        }
-        else
-        {
-            File *f = new File(m_fileSystemModel, clickedIndex);
-            if (f->IsScene())
+            if (Persistence::IsDir(selectedPath))
             {
-                SceneManager::LoadScene(f->GetAbsolutePath());
+                OnDirDoubleClicked(selectedPath);
             }
-            delete f;
+            else // File
+            {
+                OnFileDoubleClicked(selectedPath);
+            }
         }
     }
 }
@@ -164,6 +165,20 @@ void Explorer::OnShortcutPressed()
         {
             m_eContextMenu.OnDuplicateClicked();
         }
+    }
+}
+
+void Explorer::OnDirDoubleClicked(const String &dirpath)
+{
+    SetDir(dirpath);
+}
+
+void Explorer::OnFileDoubleClicked(const String &filepath)
+{
+    File f(filepath);
+    if (f.IsScene())
+    {
+        SceneManager::LoadScene(f.GetAbsolutePath());
     }
 }
 
@@ -227,9 +242,6 @@ void Explorer::SelectFile(const String &path)
         selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::ClearAndSelect);
         RefreshInspector();
     }
-    else
-    {
-    }
 }
 
 Explorer *Explorer::GetInstance()
@@ -276,6 +288,7 @@ QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const
 void Explorer::SetDir(const String &path)
 {
     String absDir = Persistence::ToAbsolute(path, false);
+    m_labelCurrentPath->setText(absDir.ToQString());
     setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(absDir)));
 }
 
@@ -318,11 +331,6 @@ File Explorer::GetSelectedFile() const
         return File(m_fileSystemModel, qmi);
     }
     return f;
-}
-
-bool Explorer::Exists(const String &filepath) const
-{
-    return GetModelIndexFromFilepath(filepath).isValid();
 }
 
 bool Explorer::IsSelectedAFile() const
@@ -386,6 +394,27 @@ void Explorer::dropEvent(QDropEvent *e)
 {
     DragDropQListView::dropEvent(e);
     e->ignore(); // If we dont ignore, objects in the source list get removed
+}
+
+void Explorer::keyPressEvent(QKeyEvent *e)
+{
+    DragDropQListView::keyPressEvent(e);
+    if (e->key() == Input::Key::Space ||
+        e->key() == Input::Key::Return)
+    {
+        String selectedPath = GetSelectedFileOrDirPath();
+        if (Persistence::Exists(selectedPath))
+        {
+            if (Persistence::IsDir(selectedPath))
+            {
+                OnDirDoubleClicked(selectedPath);
+            }
+            else // File
+            {
+                OnFileDoubleClicked(selectedPath);
+            }
+        }
+    }
 }
 
 void Explorer::updateGeometries()

@@ -19,7 +19,7 @@ public slots:
 
     void OnDuplicateClicked();
     void OnDeleteClicked();
-    void OnCreateFolderClicked();
+    void OnCreateDirClicked();
 };
 
 #endif // EXPLORERCONTEXTMENU_H

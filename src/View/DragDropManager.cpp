@@ -11,8 +11,7 @@ DragDropManager *DragDropManager::s_ddManager = nullptr;
 DragDropManager::DragDropManager()
 {
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(Update()));
-    m_updateTimer.setInterval(c_UpdateTime * 1000);
-    m_updateTimer.start();
+    m_updateTimer.start(c_UpdateTime * 1000);
 
     InstallEventFilters();
 }

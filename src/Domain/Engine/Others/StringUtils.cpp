@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <algorithm>
 
+#include "Debug.h"
+
 const String StringUtils::TOKEN_SPACE = " \t\n";
 
 bool StringUtils::Contains(const String &str, const String &whatToFind)
@@ -87,10 +89,7 @@ String StringUtils::Trim(const String &str)
 Array<String> StringUtils::Split(const String &content, char splitter)
 {
     Array<String> result;
-    if(content == "")
-    {
-        return result; // Empty
-    }
+    ASSERT(!content.Empty(), "", return result);
 
     bool lastParticle = false;
     int lastIndexFound = 0;

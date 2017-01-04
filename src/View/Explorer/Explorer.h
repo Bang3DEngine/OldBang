@@ -2,6 +2,7 @@
 #define EXPLORER_H
 
 #include <QListView>
+#include <QKeyEvent>
 #include <QMouseEvent>
 #include <QToolButton>
 #include <QFileSystemModel>
@@ -36,7 +37,6 @@ public:
     String GetCurrentDir() const;
     String GetSelectedFileOrDirPath() const;
     File GetSelectedFile() const;
-    bool Exists(const String &filepath) const;
     bool IsSelectedAFile() const;
     bool IsSelectedADir() const;
     const QFileSystemModel* GetFileSystemModel() const;
@@ -47,11 +47,14 @@ public:
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
     void dropEvent(QDropEvent *e) override;
+    void keyPressEvent(QKeyEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
 
     void OnShortcutPressed() override;
+    void OnDirDoubleClicked(const String &dirpath);
+    void OnFileDoubleClicked(const String &filepath);
 
     //Updates the Inspector with the selected file info
     void RefreshInspector();
@@ -82,6 +85,7 @@ private:
 
     String m_lastSelectedPath = "";
     QTimer *m_updateTimer = nullptr;
+    QLabel *m_labelCurrentPath = nullptr;
 
     String GetFilepathFromModelIndex(const QModelIndex &qmi) const;
     String GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const;

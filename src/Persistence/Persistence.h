@@ -50,9 +50,12 @@ public:
    static bool IsEngineFile(const String &filepath);
 
    static String GetDirUp(const String &filepath);
+   static String GetRightmostDir(const String &dir);
 
-   static bool CopyFile(const String &fromFilepath,
-                        const String &toFilepath);
+   static bool DuplicateFile(const String &fromFilepath,
+                             const String &toFilepath);
+   static bool DuplicateDir(const String &fromDirpath,
+                            const String &toDirpath);
 
     #ifdef BANG_EDITOR
    /**
@@ -63,7 +66,7 @@ public:
     * @return
     */
    static String GetNextDuplicateName(const String &path);
-   static String GetDuplicateName(const String &path, Explorer *exp);
+   static String GetDuplicateName(const String &path);
     #endif
 
    static List<String> GetSubDirectories(const String& dirPath,
@@ -75,6 +78,7 @@ public:
    static bool Remove(const String &path);
    static bool ExistsFile(const String &filepath);
    static bool ExistsDirectory(const String &dirPath);
+   static bool Exists(const String &filepath);
    static bool CreateDirectory(const String &dirPath);
    static void SetActiveSceneFilepath(const String &scenePath);
    static String SetActiveSceneFilepath();

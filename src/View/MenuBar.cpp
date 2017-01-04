@@ -345,7 +345,7 @@ void MenuBar::OnCreatePrefab() const
     m_wem->NotifyMenuBarActionClicked(Action::CreatePrefab);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Prefab." + Prefab::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
+    filepath = Persistence::GetDuplicateName(filepath);
     AssetsManager::Create<Prefab>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -354,7 +354,7 @@ void MenuBar::OnCreateMaterial() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateMaterial);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Material." + Material::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
+    filepath = Persistence::GetDuplicateName(filepath);
     AssetsManager::Create<Material>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -363,7 +363,7 @@ void MenuBar::OnCreateMesh() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateMesh);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Mesh." + Mesh::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
+    filepath = Persistence::GetDuplicateName(filepath);
     AssetsManager::Create<Mesh>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -373,7 +373,7 @@ void MenuBar::OnCreateShaderProgram() const
     /*
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_ShaderProgram." + ShaderProgram::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
+    filepath = Persistence::GetDuplicateName(filepath);
     AssetsManager::CreateAsset<ShaderProgram>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
     */
@@ -383,7 +383,7 @@ void MenuBar::OnCreateTexture2D() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateTexture2D);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Texture2D." + Texture2D::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
+    filepath = Persistence::GetDuplicateName(filepath);
     AssetsManager::Create<Texture2D>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -393,7 +393,7 @@ void MenuBar::OnCreateFont() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateFont);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Font." + Font::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath, Explorer::GetInstance());
+    filepath = Persistence::GetDuplicateName(filepath);
     AssetsManager::Create<Font>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }

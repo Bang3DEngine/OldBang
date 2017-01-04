@@ -25,10 +25,9 @@ Hierarchy::Hierarchy(QWidget *parent) :
             this, SLOT(_NotifyHierarchyGameObjectDoubleClicked(
                            QTreeWidgetItem*,int)));
 
-    m_refreshFromSceneTimer.setInterval(1000);
     connect(&m_refreshFromSceneTimer, SIGNAL(timeout()),
             this, SLOT(UpdateHierarchyFromScene()));
-    m_refreshFromSceneTimer.start();
+    m_refreshFromSceneTimer.start(1000);
 }
 
 Hierarchy::~Hierarchy()

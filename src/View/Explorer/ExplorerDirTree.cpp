@@ -13,11 +13,10 @@ ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
 {
     m_fileSystemModel = new QFileSystemModel();
 
-    m_topPath = QT_PROJECT_PATH;
-    m_topPath += "/Assets";
+    m_topPath = Persistence::c_ProjectAssetsRootAbsolute;
 
     setModel(m_fileSystemModel);
-    setDir(m_topPath);
+    SetDir(m_topPath);
 
     m_fileSystemModel->setFilter(QDir::AllDirs | QDir::NoDotAndDotDot);
 
@@ -27,9 +26,10 @@ ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
 
     connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)), this, SLOT(OnDirLoaded(QString)));
 
-    m_checkSelectionTimer = new QTimer(this); //Every X seconds, update all the slots values
-    connect(m_checkSelectionTimer, SIGNAL(timeout()), this, SLOT(CheckSelection()));
-    m_checkSelectionTimer->start(100);
+    //Every X seconds, update all the slots values
+    connect(&m_checkSelectionTimer, SIGNAL(timeout()),
+            this, SLOT(CheckSelection()));
+    m_checkSelectionTimer.start(100);
 }
 
 ExplorerDirTree::~ExplorerDirTree()
@@ -39,6 +39,8 @@ ExplorerDirTree::~ExplorerDirTree()
 
 void ExplorerDirTree::CheckSelection()
 {
+    SetDir(Persistence::c_ProjectAssetsRootAbsolute);
+
     m_explorer = EditorWindow::GetInstance()->widgetListExplorer;
     if (selectedIndexes().size() > 0 && selectedIndexes().at(0).isValid())
     {
@@ -58,7 +60,7 @@ void ExplorerDirTree::OnDirLoaded(QString dir)
     this->expandAll();
 }
 
-void ExplorerDirTree::setDir(const String &path)
+void ExplorerDirTree::SetDir(const String &path)
 {
-    setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(path)));
+    setRootIndex(m_fileSystemModel->setRootPath(path.ToQString()));
 }
