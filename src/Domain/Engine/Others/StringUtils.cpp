@@ -186,11 +186,6 @@ void StringUtils::AddInFrontOfWords(String particle, String *str)
     }
 }
 
-void StringUtils::RemoveLineBreaks(String *str)
-{
-    std::replace(str->begin(), str->end(), '\n', ' ');
-}
-
 void StringUtils::Replace(String *content, const String &toFind, const String &replaceWithThis)
 {
     String::size_type i;

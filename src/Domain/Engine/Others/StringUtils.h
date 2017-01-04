@@ -44,7 +44,6 @@ public:
      * "-Ifile1 -Idir/file2 -Idir/file3"
      */
     static void AddInFrontOfWords(String particle, String *str);
-    static void RemoveLineBreaks(String *str);
     static void Replace(String *content, const String &toFind, const String &replaceWithThis);
 
     static Array<String> BangEnumVariadicStringToNamesArray(const String &_va_args_);

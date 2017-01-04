@@ -181,7 +181,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     includes += SystemUtils::GetAllProjectSubDirs() + " ";
     includes += SystemUtils::GetAllEngineSubDirs() + " ";
     includes += SystemUtils::GetQtIncludes() + " ";
-    StringUtils::RemoveLineBreaks(&includes);
+    includes.Replace("\n", " ");
     StringUtils::AddInFrontOfWords("-I", &includes);
 
     String objs = "";
@@ -189,7 +189,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     objs += SystemUtils::GetAllEngineObjects() + " ";
 
     String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
-    StringUtils::RemoveLineBreaks(&qtLibDirs);
+    qtLibDirs.Replace("\n", " ");
     StringUtils::AddInFrontOfWords("-L", &qtLibDirs);
 
     // Gather options
@@ -222,7 +222,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     String cmd = "";
     cmd += "/usr/bin/g++ -shared ";
     cmd += filepath + " " + options + " -o " + sharedObjectFilepath;
-    StringUtils::RemoveLineBreaks(&cmd);
+    cmd.Replace("\n", " ");
 
     String output = "";
     bool ok = false;

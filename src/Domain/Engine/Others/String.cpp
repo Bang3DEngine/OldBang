@@ -6,6 +6,7 @@
 #include "List.h"
 #include "Array.h"
 #include "Color.h"
+#include "Debug.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -177,6 +178,34 @@ void String::Insert(Iterator it, char c)
     insert(it, c);
 }
 
+void String::Insert(int position, char c)
+{
+    Iterator pos = begin();
+    std::advance(pos, position);
+    insert(pos, c);
+}
+
+void String::Insert(int position, const String &str)
+{
+    insert(position, str.ToCString());
+}
+
+void String::Erase(String::Iterator it, int numberOfChars)
+{
+    Iterator end = it;
+    std::advance(end, numberOfChars);
+    erase(it, end);
+}
+
+void String::Erase(int beginIndex, int endIndexInclusive)
+{
+    Iterator begin = Begin();
+    std::advance(begin, beginIndex);
+    Iterator end = begin;
+    std::advance(end, endIndexInclusive - beginIndex);
+    erase(begin, end);
+}
+
 long String::IndexOf(char c, long startingPos) const
 {
     return find(c, startingPos);
@@ -187,14 +216,14 @@ long String::IndexOf(const String &str, long startingPos) const
     return find(str, startingPos);
 }
 
-long String::IndexOfOneOf(const String &str, long startingPos) const
+long String::IndexOfOneOf(const String &charSet, long startingPos) const
 {
-    return find_first_of(str, startingPos);
+    return find_first_of(charSet, startingPos);
 }
 
-long String::IndexOfOneNotOf(const String &str, long startingPos) const
+long String::IndexOfOneNotOf(const String &charSet, long startingPos) const
 {
-    return find_first_not_of(str, startingPos);
+    return find_first_not_of(charSet, startingPos);
 }
 
 String String::SubString(long startIndex, long endIndex) const
@@ -211,6 +240,34 @@ const char *String::ToCString() const
 QString String::ToQString() const
 {
     return QString::fromStdString(*this);
+}
+
+int String::Replace(const String &from,
+                    const String &to,
+                    int maxNumberOfReplacements)
+{
+    ASSERT(!from.Empty(), "", return 0);
+
+    int lastIndex = 0;
+    int numReplacements = 0;
+    while (lastIndex != -1 &&
+           lastIndex + from.Length() < Length() - 1)
+    {
+        lastIndex = IndexOf(from, lastIndex);
+        if (lastIndex >= 0)
+        {
+            Erase(lastIndex, lastIndex + from.Length());
+            Insert(lastIndex, to);
+            lastIndex += to.Length();
+            ++numReplacements;
+            if (maxNumberOfReplacements != -1 &&
+                numReplacements >= maxNumberOfReplacements)
+            {
+                break;
+            }
+        }
+    }
+    return numReplacements;
 }
 
 long String::Length() const

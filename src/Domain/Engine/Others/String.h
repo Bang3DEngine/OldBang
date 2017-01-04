@@ -47,6 +47,11 @@ public:
     void Prepend(const String &str);
 
     void Insert(Iterator it, char c);
+    void Insert(int position, char c);
+    void Insert(int position, const String &str);
+    void Erase(Iterator it, int numberOfChars);
+    void Erase(int beginIndex, int endIndexInclusive);
+
 
     Iterator Begin() { return this->begin(); }
     Iterator End() { return this->end(); }
@@ -65,8 +70,8 @@ public:
 
     long IndexOf(char c, long startingPos = 0) const;
     long IndexOf(const String &str, long startingPos = 0) const;
-    long IndexOfOneOf(const String &str, long startingPos = 0) const;
-    long IndexOfOneNotOf(const String &str, long startingPos = 0) const;
+    long IndexOfOneOf(const String &charSet, long startingPos = 0) const;
+    long IndexOfOneNotOf(const String &charSet, long startingPos = 0) const;
 
     // Both startIndex and endIndex are inclusive
     String SubString(long startIndex,
@@ -74,6 +79,10 @@ public:
 
     const char *ToCString() const;
     QString ToQString() const;
+
+    int Replace(const String &from,
+                const String &to,
+                int maxNumberOfReplacements = -1);
 
     long Length() const;
     bool Empty() const;
