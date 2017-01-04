@@ -405,6 +405,24 @@ String Persistence::SetActiveSceneFilepath()
     return s_currentSceneFilepath;
 }
 
+bool Persistence::Rename(const String &oldPath, const String &newPath)
+{
+    ASSERT(Persistence::Exists(oldPath), "", return false);
+    if (Persistence::IsDir(oldPath))
+    {
+        return QDir().rename(oldPath.ToQString(), newPath.ToQString());
+    }
+    else
+    {
+        return QFile().rename(oldPath.ToQString(), newPath.ToQString());
+    }
+}
+
+bool Persistence::Move(const String &oldPath, const String &newPath)
+{
+    return Persistence::Rename(oldPath, newPath);
+}
+
 String Persistence::GetHash(const String &filepath)
 {
     ASSERT(Persistence::ExistsFile(filepath), "", return "");

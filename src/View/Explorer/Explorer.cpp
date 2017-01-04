@@ -56,7 +56,6 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
     connect(m_buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
     connect(m_buttonChangeViewMode, SIGNAL(clicked()),
             this, SLOT(OnButtonChangeViewModeClicked()));
-
     connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
             this, SLOT(OnDirLoaded(QString)));
 }

@@ -23,7 +23,7 @@ private:
     GameBuilder() {}
 
 public:
-    static void BuildGame(const String &absoluteDir, bool runGame = false);
+    static void BuildGame(bool runGame = false);
 };
 
 #endif // GAMEBUILDER_H

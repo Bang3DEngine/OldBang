@@ -1,13 +1,16 @@
 #include "GameBuilder.h"
 
-
 #include "Debug.h"
+#include "Dialog.h"
+#include "Project.h"
+#include "Persistence.h"
 #include "StringUtils.h"
 #include "SystemUtils.h"
+#include "ProjectManager.h"
 
 BuildGameThread GameBuilder::buildThread;
 
-void GameBuilder::BuildGame(const String &absoluteDir, bool runGame)
+void GameBuilder::BuildGame(bool runGame)
 {
     if (GameBuilder::buildThread.isRunning())
     {
@@ -22,12 +25,30 @@ void GameBuilder::BuildGame(const String &absoluteDir, bool runGame)
 
 void BuildGameThread::run()
 {
-    bool ok = false;
     String output = "";
-    String cmd = "./compile.sh GAME";
+    String cmd = Persistence::c_EngineRootAbsolute + "/scripts/compile.sh GAME";
 
+
+    // Compile!
+    const String defaultOutputDirectory = Persistence::c_ProjectRootAbsolute;
+    const String projectName = ProjectManager::GetCurrentProject()->GetProjectName();
+    String outputFilepath =
+        Dialog::GetSaveFilename("Choose the file where you want to create your game",
+                                "*",
+                                defaultOutputDirectory,
+                                defaultOutputDirectory + "/" + projectName + ".exe");
+
+    ASSERT(!outputFilepath.Empty());
+
+    Debug_Log(outputFilepath);
+
+    outputFilepath = Persistence::AppendExtension(outputFilepath, "exe");
+    const String initialOutputDir = Persistence::c_EngineRootAbsolute + "/bin/Game.exe";
+    Persistence::Remove(initialOutputDir);
+
+    bool ok = false;
     SystemUtils::System(cmd.ToCString(), &output, &ok);
-
+    ok = ok && Persistence::ExistsFile(initialOutputDir);
     if (!ok)
     {
         Debug_Error(output);

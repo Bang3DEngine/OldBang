@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1008</width>
-    <height>569</height>
+    <height>585</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -26,6 +26,15 @@
    <iconset resource="QtResources.qrc">
     <normaloff>:/Bang/BangLogo.png</normaloff>:/Bang/BangLogo.png</iconset>
   </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"> </string>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>true</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -35,7 +44,7 @@
       </item>
       <item>
        <widget class="Toolbar" name="widgetToolbar" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
@@ -119,7 +128,7 @@
             </widget>
            </item>
            <item>
-            <spacer name="horizontalSpacer">
+            <spacer name="horizontalSpacer_5">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -472,9 +481,9 @@
     <number>8</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_5">
-    <layout class="QVBoxLayout" name="verticalLayout_10" stretch="1">
+    <layout class="QVBoxLayout" name="verticalLayout_10" stretch="0">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,5">
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,10">
        <item>
         <widget class="ExplorerDirTree" name="widgetTreeExplorerDirTree">
          <property name="maximumSize">
@@ -489,12 +498,33 @@
          <property name="showDropIndicator" stdset="0">
           <bool>true</bool>
          </property>
+         <property name="textElideMode">
+          <enum>Qt::ElideLeft</enum>
+         </property>
+         <property name="indentation">
+          <number>5</number>
+         </property>
+         <property name="uniformRowHeights">
+          <bool>false</bool>
+         </property>
          <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="animated">
           <bool>true</bool>
          </property>
          <property name="allColumnsShowFocus">
           <bool>true</bool>
          </property>
+         <property name="headerHidden">
+          <bool>false</bool>
+         </property>
+         <attribute name="headerDefaultSectionSize">
+          <number>20</number>
+         </attribute>
+         <attribute name="headerMinimumSectionSize">
+          <number>20</number>
+         </attribute>
         </widget>
        </item>
        <item>
@@ -584,7 +614,7 @@
             <enum>QListView::Adjust</enum>
            </property>
            <property name="layoutMode">
-            <enum>QListView::Batched</enum>
+            <enum>QListView::SinglePass</enum>
            </property>
            <property name="viewMode">
             <enum>QListView::IconMode</enum>
@@ -856,6 +886,8 @@
    </property>
   </action>
   <zorder>dockExplorer</zorder>
+  <zorder>dockScene</zorder>
+  <zorder>dockHierarchy</zorder>
  </widget>
  <customwidgets>
   <customwidget>

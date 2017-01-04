@@ -34,6 +34,18 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     Hierarchy::GetInstance()->OnWindowShown();
     Explorer::GetInstance()->OnWindowShown();
     Inspector::GetInstance()->OnWindowShown();
+
+    QDockWidget *hierarchyDock = EditorWindow::s_m_win->dockHierarchy;
+    QDockWidget *inspectorDock = EditorWindow::s_m_win->dockInspector;
+    QDockWidget *explorerDock = EditorWindow::s_m_win->dockExplorer;
+    QDockWidget *loggerDock = EditorWindow::s_m_win->dockLogger;
+    window->tabifyDockWidget(explorerDock, loggerDock);
+    explorerDock->raise();
+
+    window->setCorner(Qt::TopLeftCorner,     Qt::LeftDockWidgetArea);
+    window->setCorner(Qt::BottomLeftCorner,  Qt::LeftDockWidgetArea);
+    window->setCorner(Qt::TopRightCorner,    Qt::RightDockWidgetArea);
+    window->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 }
 
 EditorWindow *EditorWindow::GetInstance()

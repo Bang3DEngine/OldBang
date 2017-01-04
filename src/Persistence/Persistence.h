@@ -82,6 +82,8 @@ public:
    static bool CreateDirectory(const String &dirPath);
    static void SetActiveSceneFilepath(const String &scenePath);
    static String SetActiveSceneFilepath();
+   static bool Rename(const String &oldPath, const String &newPath);
+   static bool Move(const String &oldPath, const String &newPath);
 
    static String GetHash(const String &filepath);
 

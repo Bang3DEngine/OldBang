@@ -206,14 +206,12 @@ void MenuBar::OnSaveSceneAs() const
 
 void MenuBar::OnBuild() const
 {
-    Debug_Status("Building Game... (This could take a while)", 0.0f);
-    GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute(), false);
+    GameBuilder::BuildGame(false);
 }
 
 void MenuBar::OnBuildAndRun() const
 {
-    Debug_Status("Building and running Game... (This could take a while)", 0.0f);
-    GameBuilder::BuildGame(Persistence::GetProjectRootPathAbsolute(), true);
+    GameBuilder::BuildGame(true);
 }
 
 

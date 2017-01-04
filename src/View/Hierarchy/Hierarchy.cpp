@@ -28,6 +28,8 @@ Hierarchy::Hierarchy(QWidget *parent) :
     connect(&m_refreshFromSceneTimer, SIGNAL(timeout()),
             this, SLOT(UpdateHierarchyFromScene()));
     m_refreshFromSceneTimer.start(1000);
+
+    setMinimumWidth(200);
 }
 
 Hierarchy::~Hierarchy()
@@ -177,8 +179,6 @@ void Hierarchy::UpdateSceneFromHierarchy()
         GameObject *childItemGo = GetGameObjectFromItem(childItem);
         childItemGo->SetParent(scene, true, nullptr);
     }
-    //Debug_Log("SCENE ***********************");
-    //scene->Print();
 }
 
 void Hierarchy::UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem)
@@ -193,8 +193,6 @@ void Hierarchy::UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem)
         GameObject *childItemGo = GetGameObjectFromItem(childItem);
         childItemGo->SetParent(go, true, nullptr);
     }
-    //Debug_Log("HIERARCHY ***********************");
-    //this->Print();
 }
 
 void Hierarchy::LocateGameObject(GameObject *gameObjectToLocate,
