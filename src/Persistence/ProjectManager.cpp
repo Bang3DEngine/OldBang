@@ -143,8 +143,18 @@ String ProjectManager::DialogCreateNewProject()
                                                     &ok);
         if (ok)
         {
-            ProjectManager::CreateNewProject(dirPath, projectName);
-            return ProjectManager::GetCurrentProject()->GetProjectFileFilepath();
+            String projectPath = dirPath + "/" + projectName;
+            if (!Persistence::ExistsDirectory(projectPath))
+            {
+                ProjectManager::CreateNewProject(dirPath, projectName);
+                return ProjectManager::GetCurrentProject()->GetProjectFileFilepath();
+            }
+            else
+            {
+                Dialog::Error("Error creating the project",
+                              "The directory '" + projectPath + "' existed before.\n" +
+                              "Please select another name for your project.");
+            }
         }
     }
     return "";

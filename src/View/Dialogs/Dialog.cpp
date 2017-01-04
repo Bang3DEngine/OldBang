@@ -119,7 +119,7 @@ Dialog::Reply Dialog::GetYesNo(const String &caption,
 {
 
     QMessageBox::StandardButton reply =
-            QMessageBox::question(EditorWindow::GetInstance()->GetMainWindow(),
+            QMessageBox::question(Dialog::GetCurrentWindow(),
                                   caption.ToQString(),
                                   labelText.ToQString(),
                                   (QMessageBox::Yes |  QMessageBox::No)
@@ -132,11 +132,19 @@ Dialog::Reply Dialog::GetYesNoCancel(const String &caption,
 {
 
     QMessageBox::StandardButton reply =
-            QMessageBox::question(EditorWindow::GetInstance()->GetMainWindow(),
+            QMessageBox::question(Dialog::GetCurrentWindow(),
                                   caption.ToQString(),
                                   labelText.ToQString(),
                                   (QMessageBox::Yes |  QMessageBox::No |
                                    QMessageBox::Cancel)
                                   );
     return static_cast<Dialog::Reply>(reply);
+}
+
+void Dialog::Error(const String &caption,
+                   const String &labelText)
+{
+    QMessageBox::critical(Dialog::GetCurrentWindow(),
+                          caption.ToQString(),
+                          labelText.ToQString());
 }

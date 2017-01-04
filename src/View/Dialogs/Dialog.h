@@ -39,6 +39,9 @@ public:
     static Dialog::Reply GetYesNoCancel(const String &caption = "Confirm",
                                         const String &labelText = "Are you sure?");
 
+    static void Error(const String &caption = "Error",
+                      const String &labelText = "There has been an error.");
+
 private:
     Dialog();
     static String GetExtensionFilterString(const String &extension);
