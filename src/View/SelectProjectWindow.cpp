@@ -23,6 +23,9 @@ String SelectProjectWindow::ExecAndGetProjectFilepath(QMainWindow *window, QAppl
     connect(inst->listRecentProjects, SIGNAL(cellClicked(int,int)),
             inst, SLOT(OnRecentProjectListSelectionChanged(int,int)) );
 
+    connect(inst->listRecentProjects, SIGNAL(cellDoubleClicked(int,int)),
+            inst, SLOT(OnRecentProjectDoubleClicked(int,int)) );
+
     connect(inst->buttonCreateNewProject, SIGNAL(clicked()),
             inst, SLOT(OnCreateNewProject()));
 
@@ -99,6 +102,11 @@ void SelectProjectWindow::OnRecentProjectListSelectionChanged(int row, int colum
         "Load " + Persistence::GetFileName(m_selectedRecentProjectFilepath);
 
     buttonLoadRecentProject->setText(newButtonText.ToQString());
+}
+
+void SelectProjectWindow::OnRecentProjectDoubleClicked(int row, int column)
+{
+    OnLoadRecentProject();
 }
 
 void SelectProjectWindow::OnLoadRecentProject()

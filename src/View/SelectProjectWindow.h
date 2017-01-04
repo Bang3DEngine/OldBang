@@ -22,6 +22,7 @@ public:
 
 public slots:
     void OnRecentProjectListSelectionChanged(int row, int column);
+    void OnRecentProjectDoubleClicked(int row, int column);
 
     void OnLoadRecentProject();
     void OnCreateNewProject();
