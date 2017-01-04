@@ -7,8 +7,8 @@
 #include "Prefab.h"
 #include "Explorer.h"
 #include "Inspector.h"
+#include "EditorWindow.h"
 #include "GameObjectClipboard.h"
-
 #include "Persistence.h"
 
 ExplorerContextMenu::ExplorerContextMenu(Explorer *explorer) :
@@ -20,8 +20,8 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
 {
     QMenu contextMenu(tr("Explorer context menu"), m_explorer);
 
-    QAction       actionDuplicate("Duplicate",        m_explorer);
-    QAction          actionDelete("Delete",           m_explorer);
+    QAction       actionDuplicate("Duplicate",     m_explorer);
+    QAction          actionDelete("Delete",        m_explorer);
     QAction    actionCreateDir("Create directory", m_explorer);
 
     connect(&actionDuplicate,SIGNAL(triggered()),
@@ -46,6 +46,9 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
     }
     else
     {
+        QMenu *assetsMenu = EditorWindow::GetInstance()->menuAssets;
+        contextMenu.addActions(assetsMenu->actions());
+        contextMenu.addSeparator();
         contextMenu.addAction(&actionCreateDir);
     }
 
