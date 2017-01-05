@@ -4,6 +4,7 @@
 #include <QAction>
 
 #include "Inspector.h"
+#include "EditorWindow.h"
 #include "InspectorWidget.h"
 #include "ComponentWidget.h"
 #include "ComponentClipboard.h"
@@ -15,26 +16,27 @@ InspectorContextMenu::InspectorContextMenu(Inspector *inspector)
 
 void InspectorContextMenu::OnCustomContextMenuRequested(QPoint point)
 {
-    if ( m_inspector->m_currentGameObject &&
-        !m_inspector->m_currentInspectorWidgets.Empty())
+    ASSERT(m_inspector);
+    ASSERT(m_inspector->m_currentGameObject);
+    ASSERT(!m_inspector->m_currentInspectorWidgets.Empty());
+
+    QMenu contextMenu(tr("Inspector context menu"), m_inspector);
+    contextMenu.addActions(EditorWindow::GetInstance()->menuAddComponent->actions());
+    contextMenu.addSeparator();
+
+
+    ComponentWidget *cw = static_cast<ComponentWidget*>(
+                m_inspector->m_currentInspectorWidgets.Front());
+
+    QAction actionPasteComponent("Paste Component", m_inspector);
+    connect(&actionPasteComponent, SIGNAL(triggered()),
+            &(cw->m_cwContextMenu), SLOT(OnPasteComponentSelected()));
+    contextMenu.addAction(&actionPasteComponent);
+
+    if (ComponentClipboard::IsEmpty())
     {
-        QMenu contextMenu(tr("Inspector context menu"), m_inspector);
-
-        QAction actionPasteComponent("Paste Component", m_inspector);
-
-        ComponentWidget *cw =
-                static_cast<ComponentWidget*>(m_inspector->
-                                              m_currentInspectorWidgets.Front());
-
-        connect(&actionPasteComponent, SIGNAL(triggered()),
-                &(cw->m_cwContextMenu), SLOT(OnPasteComponentSelected()));
-        contextMenu.addAction(&actionPasteComponent);
-
-        if (ComponentClipboard::IsEmpty())
-        {
-            actionPasteComponent.setEnabled(false);
-        }
-
-        contextMenu.exec(m_inspector->mapToGlobal(point));
+        actionPasteComponent.setEnabled(false);
     }
+
+    contextMenu.exec(m_inspector->mapToGlobal(point));
 }

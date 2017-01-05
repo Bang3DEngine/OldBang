@@ -51,6 +51,7 @@ public:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 
     void OnShortcutPressed() override;
     void OnDirDoubleClicked(const String &dirpath);

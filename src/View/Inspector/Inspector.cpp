@@ -2,7 +2,7 @@
 
 #include <QScrollBar>
 
-#include "Debug.h"
+#include "Scene.h"
 #include "Debug.h"
 #include "UIText.h"
 #include "Canvas.h"
@@ -15,6 +15,7 @@
 #include "Application.h"
 #include "EditorWindow.h"
 #include "MeshRenderer.h"
+#include "SceneManager.h"
 #include "CircleRenderer.h"
 #include "ComponentWidget.h"
 #include "BehaviourHolder.h"
@@ -45,17 +46,17 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
-    if (m_widget_To_Item.Empty()) return; // Avoid double clearings
+    ASSERT(!m_widget_To_Item.Empty()); // Avoid double clearings
 
     clear();
 
     m_widget_To_Item.Clear();
     m_currentGameObject = nullptr;
-    m_titleLabel->setText(QString::fromStdString(""));
+    m_titleLabel->setText(tr(""));
 
     for (InspectorWidget *iw : m_currentInspectorWidgets)
     {
-        delete iw;
+        //delete iw;
     }
     m_currentInspectorWidgets.Clear();
     m_widget_To_Inspectables.Clear();
@@ -78,6 +79,30 @@ void Inspector::Refresh()
     }
 }
 
+void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement)
+{
+    QListWidgetItem *movingItem = m_widget_To_Item[inspectorWidget];
+    ASSERT(movingItem);
+
+    const int itemCount = count();
+    const int oldRow = row(movingItem);
+    ASSERT(oldRow >= 0 && oldRow < itemCount);
+
+    takeItem(oldRow);
+    const int newRow = (oldRow + movement + itemCount) % itemCount;
+    insertItem(newRow, movingItem);
+    movingItem->setHidden(true);
+    movingItem->setHidden(false);
+    movingItem->setSelected(true);
+    movingItem->setSelected(false);
+    Debug_Log(oldRow << ", " << newRow << ", " << itemCount);
+    dataChanged(QModelIndex(),QModelIndex());
+    update();
+    repaint();
+    hide();
+    show();
+}
+
 void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
 {
     Clear();
@@ -94,6 +119,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 
     ASSERT(gameObject);
     m_currentGameObject = gameObject;
+    Debug_Log("ShowGameObjectInfo: " << m_currentGameObject->name);
 
     for (Component *c : gameObject->GetComponents())
     {
@@ -118,9 +144,12 @@ void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInsp
 
 void Inspector::RefreshHard()
 {
+    GameObject *currentGameObject = m_currentGameObject;
+    ShowGameObjectInfo(SceneManager::GetActiveScene());
+    ShowGameObjectInfo(currentGameObject);
     if (m_currentGameObject)
     {
-        ShowGameObjectInfo(m_currentGameObject);
+        //ShowGameObjectInfo(m_currentGameObject);
     }
     else
     {

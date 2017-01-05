@@ -69,11 +69,9 @@ void ComponentWidgetContextMenu::OnCustomContextMenuRequested(QPoint point)
     contextMenu.exec(m_cWidget->mapToGlobal(point));
 }
 
-
-// We do this with timers to avoid a bug
 void ComponentWidgetContextMenu::OnMoveUpSelected()
 {
-    QTimer::singleShot(50, this, SLOT(MenuMoveUpSelected()));
+    MenuMoveUpSelected();
 }
 void ComponentWidgetContextMenu::MenuMoveUpSelected()
 {
@@ -84,7 +82,7 @@ void ComponentWidgetContextMenu::MenuMoveUpSelected()
 
 void ComponentWidgetContextMenu::OnMoveDownSelected()
 {
-    QTimer::singleShot(50, this, SLOT(MenuMoveDownSelected()));
+    MenuMoveDownSelected();
 }
 void ComponentWidgetContextMenu::MenuMoveDownSelected()
 {
@@ -95,7 +93,7 @@ void ComponentWidgetContextMenu::MenuMoveDownSelected()
 
 void ComponentWidgetContextMenu::OnCopyComponentSelected()
 {
-    QTimer::singleShot(50, this, SLOT(CopyComponentSelected()));
+    CopyComponentSelected();
 }
 void ComponentWidgetContextMenu::CopyComponentSelected()
 {
@@ -106,7 +104,7 @@ void ComponentWidgetContextMenu::CopyComponentSelected()
 
 void ComponentWidgetContextMenu::OnPasteComponentSelected()
 {
-    QTimer::singleShot(50, this, SLOT(PasteComponentSelected()));
+    PasteComponentSelected();
 }
 void ComponentWidgetContextMenu::PasteComponentSelected()
 {
@@ -117,7 +115,7 @@ void ComponentWidgetContextMenu::PasteComponentSelected()
 
 void ComponentWidgetContextMenu::OnPasteComponentValuesSelected()
 {
-    QTimer::singleShot(50, this, SLOT(PasteComponentValuesSelected()));
+    PasteComponentValuesSelected();
 }
 void ComponentWidgetContextMenu::PasteComponentValuesSelected()
 {
@@ -128,7 +126,7 @@ void ComponentWidgetContextMenu::PasteComponentValuesSelected()
 
 void ComponentWidgetContextMenu::OnRemoveComponentSelected()
 {
-    QTimer::singleShot(50, this, SLOT(RemoveComponentSelected()));
+    RemoveComponentSelected();
 }
 void ComponentWidgetContextMenu::RemoveComponentSelected()
 {

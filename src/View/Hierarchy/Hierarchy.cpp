@@ -77,8 +77,7 @@ QTreeWidgetItem *Hierarchy::GetFirstSelectedItem() const
 
 GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *item) const
 {
-    if (!item) return nullptr;
-
+    ASSERT(item, "", return nullptr);
     if (m_treeItem_To_GameObject.ContainsKey(item))
     {
         return m_treeItem_To_GameObject[item];
@@ -88,7 +87,7 @@ GameObject *Hierarchy::GetGameObjectFromItem(QTreeWidgetItem *item) const
 
 QTreeWidgetItem *Hierarchy::GetItemFromGameObject(GameObject *go) const
 {
-    if (!go) return nullptr;
+    ASSERT(go, "", return nullptr);
     if (m_gameObject_To_TreeItem.ContainsKey(go))
     {
         QTreeWidgetItem *item = m_gameObject_To_TreeItem[go];

@@ -166,10 +166,7 @@ void MenuBar::OnOpenScene() const
 
     String filename = Dialog::GetOpenFilename("Open scene...",
                                               Scene::GetFileExtensionStatic());
-    if (filename.Empty())
-    {
-        return;
-    }
+    ASSERT(!filename.Empty());
 
     SceneManager::LoadScene(filename);
 }

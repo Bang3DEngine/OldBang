@@ -152,6 +152,15 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
     }
 }
 
+void Explorer::currentChanged(const QModelIndex &current,
+                              const QModelIndex &previous)
+{
+    QListView::currentChanged(current, previous);
+
+    String selectedPath(m_fileSystemModel->filePath(current));
+    m_labelCurrentPath->setText(selectedPath.ToQString());
+}
+
 void Explorer::OnShortcutPressed()
 {
     if (hasFocus())
@@ -288,7 +297,7 @@ void Explorer::SetDir(const String &path)
 {
     String absDir = Persistence::ToAbsolute(path, false);
     m_labelCurrentPath->setText(absDir.ToQString());
-    setRootIndex(m_fileSystemModel->setRootPath(QString::fromStdString(absDir)));
+    setRootIndex(m_fileSystemModel->setRootPath(absDir.ToQString()));
 }
 
 void Explorer::OnDirLoaded(QString dir)

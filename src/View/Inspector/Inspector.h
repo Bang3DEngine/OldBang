@@ -40,6 +40,7 @@ public:
     void Clear();
     void Refresh();
 
+    void MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement);
     void SetInspectable(IInspectable *inspectable, const String &title = "");
     void ShowGameObjectInfo(GameObject *gameObject);
     void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
