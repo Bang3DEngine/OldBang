@@ -17,6 +17,7 @@ private:
 public:
     explicit ListLogger(QWidget *parent = nullptr);
 
+    static void Clear();
     static void AddLog(const String &str);
     static void AddWarn(const String &str);
     static void AddError(const String &str);

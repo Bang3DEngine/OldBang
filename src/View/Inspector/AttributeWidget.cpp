@@ -27,13 +27,13 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
 
     m_layout = new QHBoxLayout();
     m_layout->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    m_layout->setContentsMargins(4, 4, 4, 4);
+    m_layout->setContentsMargins(2, 2, 2, 2);
     setLayout(m_layout);
     setMinimumWidth(40);
 
     if (!labelAbove)
     {
-        m_layout->setSpacing(10); // Margin to the right of the label
+        m_layout->setSpacing(5); // Margin to the right of the label
     }
 
     if (!isSubWidget)

@@ -9,6 +9,12 @@ ListLogger::ListLogger(QWidget *parent) : DragDropQListWidget()
 {
 }
 
+void ListLogger::Clear()
+{
+    s_listLogger = ListLogger::GetInstance(); ASSERT(s_listLogger);
+    s_listLogger->clear();
+}
+
 void ListLogger::AddLog(const String &str)
 {
     s_listLogger = ListLogger::GetInstance(); ASSERT(s_listLogger);

@@ -10,6 +10,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QTextEdit>
+#include <QToolButton>
 #include <QFormLayout>
 #include <QPushButton>
 #include <QListWidget>
@@ -32,27 +33,6 @@ class AttributeWidget;
 class InspectorWidget : public DragDropQWidget
 {
     Q_OBJECT
-
-private:
-
-    /** @brief This variable is used to avoid premature OnSlotValueChanged, before creating the widget**/
-    bool m_created = false;
-
-    QTimer *m_updateTimer = nullptr;
-    String m_tagName = "";
-    Array<XMLAttribute> m_attributes;
-    mutable Map<String, AttributeWidget*> m_attrName_To_AttrWidget;
-
-
-    void CreateWidgetSlots(XMLNode &xmlInfo);
-    void ConstructFromWidgetXMLInfo(const String &title,
-                                    XMLNode &info, bool autoUpdate = true);
-
-protected:
-    IInspectable *m_relatedInspectable = nullptr;
-
-    QGridLayout *m_gridLayout = nullptr;
-    QLabel *m_titleLabel = nullptr;
 
 public:
     InspectorWidget();
@@ -79,6 +59,43 @@ public:
 
     void SetTitle(const String &title);
 
+public slots:
+
+    virtual void _OnSlotValueChanged();
+
+protected:
+    IInspectable *m_relatedInspectable = nullptr;
+
+    QVBoxLayout *m_vLayout = nullptr;
+        QHBoxLayout *m_header = nullptr;
+            QToolButton *m_closeOpenButton = nullptr;
+            QPixmap m_openButtonPixmapap, m_closeButtonPixmap;
+            QLabel *m_titleLabel = nullptr;
+    QGridLayout *m_gridLayout = nullptr;
+
+    bool m_closed = false;
+
+protected slots:
+    void OnCloseOpenButtonClicked();
+
+protected:
+    void UpdateCloseOpenButtonIcon();
+    virtual void SetClosed(bool closedWidget);
+
+private:
+    /** @brief This variable is used to avoid premature OnSlotValueChanged, before creating the widget**/
+    bool m_created = false;
+
+    String m_tagName = "";
+    QTimer m_updateTimer;
+    Array<XMLAttribute> m_attributes;
+    mutable Map<String, AttributeWidget*> m_attrName_To_AttrWidget;
+
+
+    void CreateWidgetSlots(XMLNode &xmlInfo);
+    void ConstructFromWidgetXMLInfo(const String &title,
+                                    XMLNode &info, bool autoUpdate = true);
+
 private slots:
 
     /**
@@ -89,10 +106,6 @@ private slots:
     void _OnSlotValueChanged(int _);
     void _OnSlotValueChanged(double _);
     void _OnSlotValueChanged(QString _);
-
-public slots:
-
-    virtual void _OnSlotValueChanged();
 };
 
 #endif // INSPECTORWIDGET_H

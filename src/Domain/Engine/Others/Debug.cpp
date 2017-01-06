@@ -50,6 +50,13 @@ void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
 #endif
 }
 
+void Debug::_Clear()
+{
+    #ifdef BANG_EDITOR
+    ListLogger::Clear();
+    #endif
+}
+
 void Debug::_Status(const String &str, float timeInSeconds)
 {
     std::cerr << c_statusPrefix << str << std::endl;

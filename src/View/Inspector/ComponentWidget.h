@@ -25,6 +25,9 @@ public:
 
 public slots:
     void OnEnabledCheckboxPressed(bool checked);
+
+protected:
+    void SetClosed(bool closed) override;
 };
 
 #endif // LISTINSPECTORITEM_H

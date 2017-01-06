@@ -15,23 +15,6 @@ class Inspector : public DragDropQListWidget,
 {
     Q_OBJECT
 
-friend class InspectorContextMenu;
-
-private:
-    InspectorContextMenu m_iContextMenu;
-
-    QLabel *m_titleLabel = nullptr;
-    GameObject *m_currentGameObject = nullptr;
-    List<InspectorWidget*> m_currentInspectorWidgets;
-    List<IInspectable*> m_currentInspectables;
-
-    Map<InspectorWidget*, QListWidgetItem*> m_widget_To_Item;
-    Map<InspectorWidget*, IInspectable*> m_widget_To_Inspectables;
-
-protected:
-    //To set the scroll step to a smaller one
-    virtual void updateGeometries() override;
-
 public:
     explicit Inspector(QWidget *parent = nullptr);
 
@@ -64,6 +47,24 @@ public:
     static Inspector* GetInstance();
 
     void dropEvent(QDropEvent *e) override;
+
+protected:
+    //To set the scroll step to a smaller one
+    virtual void updateGeometries() override;
+
+private:
+    InspectorContextMenu m_iContextMenu;
+
+    QLabel *m_titleLabel = nullptr;
+    GameObject *m_currentGameObject = nullptr;
+    List<InspectorWidget*> m_currentInspectorWidgets;
+    List<IInspectable*> m_currentInspectables;
+
+    Map<InspectorWidget*, QListWidgetItem*> m_widget_To_Item;
+    Map<InspectorWidget*, IInspectable*> m_widget_To_Inspectables;
+
+    friend class InspectorWidget;
+    friend class InspectorContextMenu;
 };
 
 #endif // LISTINSPECTOR_H

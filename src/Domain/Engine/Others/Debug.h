@@ -43,6 +43,7 @@ public:
                                float lineWidth = 1.0f,
                                float secsTime = 1.0f);
 
+    static void _Clear();
     static void _Log(const String &str);
     static void _Warn(const String &str);
     static void _Error(const String &str);
@@ -74,6 +75,10 @@ public:
     #define GET_MACRO(_1, _2, _3, NAME, ...) NAME // Enable macro overloading
     #define ASSERT(...) GET_MACRO(__VA_ARGS__, ASSERT3, ASSERT2, ASSERT1)(__VA_ARGS__)
 //
+
+#define Debug_Clear() do{\
+    Debug::_Clear(); \
+} while (0)
 
 #define Debug_Log(msg) do{\
     std::ostringstream log;\

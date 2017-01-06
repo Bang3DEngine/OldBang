@@ -54,10 +54,6 @@ void Inspector::Clear()
     m_currentGameObject = nullptr;
     m_titleLabel->setText(tr(""));
 
-    for (InspectorWidget *iw : m_currentInspectorWidgets)
-    {
-        //delete iw;
-    }
     m_currentInspectorWidgets.Clear();
     m_widget_To_Inspectables.Clear();
     m_currentInspectables.Clear();
@@ -91,16 +87,6 @@ void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget, int moveme
     takeItem(oldRow);
     const int newRow = (oldRow + movement + itemCount) % itemCount;
     insertItem(newRow, movingItem);
-    movingItem->setHidden(true);
-    movingItem->setHidden(false);
-    movingItem->setSelected(true);
-    movingItem->setSelected(false);
-    Debug_Log(oldRow << ", " << newRow << ", " << itemCount);
-    dataChanged(QModelIndex(),QModelIndex());
-    update();
-    repaint();
-    hide();
-    show();
 }
 
 void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
@@ -115,11 +101,12 @@ void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
+    Debug_Log("ShowGameObjectInfo " << gameObject->name);
+
     Clear();
 
     ASSERT(gameObject);
     m_currentGameObject = gameObject;
-    Debug_Log("ShowGameObjectInfo: " << m_currentGameObject->name);
 
     for (Component *c : gameObject->GetComponents())
     {
@@ -130,10 +117,6 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     }
 
     m_titleLabel->setText(gameObject->name.ToQString());
-    updateGeometry();
-    adjustSize();
-    update();
-    show();
 }
 
 void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable)
@@ -144,12 +127,11 @@ void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInsp
 
 void Inspector::RefreshHard()
 {
-    GameObject *currentGameObject = m_currentGameObject;
-    ShowGameObjectInfo(SceneManager::GetActiveScene());
-    ShowGameObjectInfo(currentGameObject);
+    Debug_Clear();
+    Debug_Log("RefreshHard " << std::rand());
     if (m_currentGameObject)
     {
-        //ShowGameObjectInfo(m_currentGameObject);
+        ShowGameObjectInfo(m_currentGameObject);
     }
     else
     {

@@ -1,5 +1,8 @@
 #include "InspectorWidget.h"
 
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+
 #include "Debug.h"
 #include "Component.h"
 #include "GameObject.h"
@@ -34,43 +37,54 @@ void InspectorWidget::Init(const String &title, IInspectable *relatedInspectable
 void InspectorWidget::ConstructFromWidgetXMLInfo(
         const String &title, XMLNode &xmlInfo, bool autoUpdate)
 {
-    m_gridLayout = new QGridLayout();
-    m_gridLayout->setSpacing(0);
+    Debug_Log("ConstructFromWidgetXMLInfo");
 
-    setLayout(m_gridLayout);
+    m_vLayout = new QVBoxLayout();
+        m_header = new QHBoxLayout();
+            m_closeOpenButton = new QToolButton();
+            m_titleLabel = new QLabel();
+        m_gridLayout = new QGridLayout();
+        m_gridLayout->setSpacing(0);
+        m_gridLayout->setHorizontalSpacing(0);
+
+    setLayout(m_vLayout);
+    m_vLayout->addLayout(m_header, 0);
+    m_vLayout->addLayout(m_gridLayout, 9999);
+
+    m_header->setSpacing(5);
+    m_header->setMargin(0);
+    m_header->addWidget(m_closeOpenButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    m_header->addWidget(m_titleLabel, 99, Qt::AlignLeft | Qt::AlignVCenter);
+
+    m_closeOpenButton->setStyleSheet("border: 0px; padding-left:-5px;  ");
+    m_closeButtonPixmap.load(":/qss_icons/rc/branch_closed.png");
+    m_openButtonPixmapap.load(":/qss_icons/rc/branch_open.png");
+    UpdateCloseOpenButtonIcon();
+    connect(m_closeOpenButton, SIGNAL(clicked()), this, SLOT(OnCloseOpenButtonClicked()));
 
     String fTitle = StringUtils::FormatInspectorLabel(title);
-    m_titleLabel = new QLabel( QString(fTitle.ToCString()) );
-
+    m_titleLabel->setText(fTitle.ToQString());
     QFont font = m_titleLabel->font();
     font.setPixelSize(13);
     font.setBold(true);
     m_titleLabel->setFont(font);
-
-    m_gridLayout->addWidget(m_titleLabel, 0, 0, 2, 1,
-                            Qt::AlignLeft | Qt::AlignVCenter);
+    m_titleLabel->setAlignment(Qt::AlignLeft);
 
     CreateWidgetSlots(xmlInfo);
     RefreshWidgetValues(); // Initial catch of values
 
     m_created = true;
-    //
 
     if (autoUpdate)
     {
-        m_updateTimer = new QTimer(this); //Every X seconds, update all the slots values
-        connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(RefreshWidgetValues()));
-        m_updateTimer->start(150);
+        //Every X seconds, update all the slots values
+        connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(RefreshWidgetValues()));
+        m_updateTimer.start(150);
     }
 }
 
 InspectorWidget::~InspectorWidget()
 {
-    if (m_updateTimer)
-    {
-        m_updateTimer->stop();
-        delete m_updateTimer;
-    }
 }
 
 XMLNode InspectorWidget::GetInspectableXMLInfo() const
@@ -184,14 +198,14 @@ void InspectorWidget::RefreshWidgetValues()
         {
             AttributeWidget *ws = m_attrName_To_AttrWidget[attrName];
             hasToRefreshHard = hasToRefreshHard ||
-                    (ws->isHidden() ^ attribute.HasProperty(XMLProperty::Hidden));
+                    (ws->isHidden() != attribute.HasProperty(XMLProperty::Hidden));
             ws->Refresh(attribute);
         }
     }
 
     if (hasToRefreshHard)
     {
-        Inspector::GetInstance()->RefreshHard();
+        //Inspector::GetInstance()->RefreshHard();
     }
 }
 
@@ -221,6 +235,38 @@ void InspectorWidget::_OnSlotValueChanged()
         m_relatedInspectable->OnInspectorXMLChanged(&xmlInfo);
     }
     WindowEventManager::GetInstance()->NotifyInspectorSlotChanged(this);
+}
+
+void InspectorWidget::OnCloseOpenButtonClicked()
+{
+    m_closed = !m_closed;
+    SetClosed(m_closed);
+    Inspector::GetInstance()->RefreshHard();
+}
+
+void InspectorWidget::SetClosed(bool closedWidget)
+{
+    for (int i = 0; i < m_gridLayout->count(); ++i)
+    {
+        QLayoutItem *item = m_gridLayout->itemAt(i);
+        if(item->widget())
+        {
+            item->widget()->setHidden(closedWidget);
+        }
+    }
+    UpdateCloseOpenButtonIcon();
+}
+
+void InspectorWidget::UpdateCloseOpenButtonIcon()
+{
+    if (m_closed)
+    {
+        m_closeOpenButton->setIcon(QIcon(m_closeButtonPixmap));
+    }
+    else
+    {
+        m_closeOpenButton->setIcon(QIcon(m_openButtonPixmapap));
+    }
 }
 
 void InspectorWidget::_OnSlotValueChanged(int _)

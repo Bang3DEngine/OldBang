@@ -30,7 +30,7 @@
    <bool>true</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true"> </string>
+   <string notr="true"/>
   </property>
   <property name="dockNestingEnabled">
    <bool>true</bool>
@@ -261,26 +261,20 @@
     <property name="title">
      <string>Components</string>
     </property>
-    <widget class="QMenu" name="menuAddComponent">
-     <property name="title">
-      <string>Add Component</string>
-     </property>
-     <addaction name="actionAddComponentBehaviour"/>
-     <addaction name="separator"/>
-     <addaction name="actionAddComponentCamera"/>
-     <addaction name="separator"/>
-     <addaction name="actionAddComponentMeshRenderer"/>
-     <addaction name="actionAddComponentLineRenderer"/>
-     <addaction name="actionAddComponentCircleRenderer"/>
-     <addaction name="separator"/>
-     <addaction name="actionAddComponentDirectionalLight"/>
-     <addaction name="actionAddComponentPointLight"/>
-     <addaction name="separator"/>
-     <addaction name="actionAddComponentCanvas"/>
-     <addaction name="actionAddComponentUIImage"/>
-     <addaction name="actionAddComponentUIText"/>
-    </widget>
-    <addaction name="menuAddComponent"/>
+    <addaction name="actionAddComponentBehaviour"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddComponentCamera"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddComponentMeshRenderer"/>
+    <addaction name="actionAddComponentLineRenderer"/>
+    <addaction name="actionAddComponentCircleRenderer"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddComponentDirectionalLight"/>
+    <addaction name="actionAddComponentPointLight"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddComponentCanvas"/>
+    <addaction name="actionAddComponentUIImage"/>
+    <addaction name="actionAddComponentUIText"/>
    </widget>
    <addaction name="menuProject"/>
    <addaction name="menuAssets"/>
@@ -614,7 +608,7 @@
             <enum>QListView::Adjust</enum>
            </property>
            <property name="layoutMode">
-            <enum>QListView::SinglePass</enum>
+            <enum>QListView::Batched</enum>
            </property>
            <property name="viewMode">
             <enum>QListView::IconMode</enum>
@@ -886,7 +880,6 @@
    </property>
   </action>
   <zorder>dockExplorer</zorder>
-  <zorder>dockScene</zorder>
   <zorder>dockHierarchy</zorder>
  </widget>
  <customwidgets>

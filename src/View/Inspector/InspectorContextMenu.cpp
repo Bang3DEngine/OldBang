@@ -21,9 +21,8 @@ void InspectorContextMenu::OnCustomContextMenuRequested(QPoint point)
     ASSERT(!m_inspector->m_currentInspectorWidgets.Empty());
 
     QMenu contextMenu(tr("Inspector context menu"), m_inspector);
-    contextMenu.addActions(EditorWindow::GetInstance()->menuAddComponent->actions());
+    contextMenu.addActions(EditorWindow::GetInstance()->menuComponents->actions());
     contextMenu.addSeparator();
-
 
     ComponentWidget *cw = static_cast<ComponentWidget*>(
                 m_inspector->m_currentInspectorWidgets.Front());

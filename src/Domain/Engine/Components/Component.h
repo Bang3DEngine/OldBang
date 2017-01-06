@@ -29,6 +29,7 @@ class Component :
 {
 protected:
     bool m_enabled = true;
+    bool m_closedInInspector = false;
 
     Component();
     virtual ~Component();
@@ -56,6 +57,9 @@ public:
 
     void SetEnabled(bool enabled);
     bool IsEnabled() const;
+
+    void SetClosedInInspector(bool closed);
+    bool IsClosedInInspector() const;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

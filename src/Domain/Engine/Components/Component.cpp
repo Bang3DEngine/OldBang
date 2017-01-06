@@ -55,11 +55,22 @@ bool Component::IsEnabled() const
     return gameObject && gameObject->IsEnabled() && m_enabled;
 }
 
+void Component::SetClosedInInspector(bool closed)
+{
+    m_closedInInspector = closed;
+}
+
+bool Component::IsClosedInInspector() const
+{
+    return m_closedInInspector;
+}
+
 void Component::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     IFileable::ReadXMLInfo(xmlInfo);
 
     SetEnabled(xmlInfo->GetBool("enabled"));
+    SetClosedInInspector(xmlInfo->GetBool("closedInInspector"));
 }
 
 void Component::FillXMLInfo(XMLNode *xmlInfo) const
@@ -71,6 +82,9 @@ void Component::FillXMLInfo(XMLNode *xmlInfo) const
                         {XMLProperty::Hidden,
                          XMLProperty::Readonly});
     xmlInfo->SetBool("enabled", IsEnabled(),
+                     {XMLProperty::Hidden,
+                      XMLProperty::Readonly});
+    xmlInfo->SetBool("closedInInspector", IsClosedInInspector(),
                      {XMLProperty::Hidden,
                       XMLProperty::Readonly});
 }
