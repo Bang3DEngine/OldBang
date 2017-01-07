@@ -1,5 +1,6 @@
 #include "InspectorWidget.h"
 
+#include <QScrollBar>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
@@ -69,7 +70,6 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     m_header->addWidget(m_closeOpenButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
     m_header->addWidget(m_titleLabel, 99, Qt::AlignLeft | Qt::AlignVCenter);
 
-    m_vLayout->setContentsMargins(10, 5, 20, 8);
     m_titleLabel->setStyleSheet("padding:0px");
     m_closeOpenButton->setStyleSheet("padding:0px");
     m_closeOpenButton->setStyleSheet("padding:0px; border: 0px; margin-left:-5px;  ");
@@ -229,6 +229,10 @@ void InspectorWidget::RefreshWidgetValues()
             ws->Refresh(attribute);
         }
     }
+
+    Debug_Log(Inspector::GetInstance()->verticalScrollBar()->isVisible());
+    const int c_marginRight = Inspector::GetInstance()->verticalScrollBar()->isVisible() ? 20 : 5;
+    m_vLayout->setContentsMargins(10, 5, c_marginRight, 5);
 }
 
 void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)

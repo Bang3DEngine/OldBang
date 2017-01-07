@@ -440,7 +440,7 @@
           <enum>QAbstractItemView::ScrollPerPixel</enum>
          </property>
          <property name="horizontalScrollMode">
-          <enum>QAbstractItemView::ScrollPerPixel</enum>
+          <enum>QAbstractItemView::ScrollPerItem</enum>
          </property>
          <property name="movement">
           <enum>QListView::Snap</enum>
@@ -953,11 +953,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>989</x>
-     <y>365</y>
+     <y>544</y>
     </hint>
     <hint type="destinationlabel">
-     <x>922</x>
-     <y>520</y>
+     <x>989</x>
+     <y>511</y>
     </hint>
    </hints>
   </connection>
