@@ -29,7 +29,8 @@ Inspector::Inspector(QWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
-    setMinimumWidth(360);
+    //setMinimumWidth(380);
+    setMinimumWidth(300);
 }
 
 void Inspector::OnWindowShown()

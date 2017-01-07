@@ -4,7 +4,7 @@
 #include <QVBoxLayout>
 
 #include "Debug.h"
-#include "Component.h"
+#include "Component.h"t
 #include "GameObject.h"
 #include "EditorWindow.h"
 #include "AttrWidgetEnum.h"
@@ -61,17 +61,20 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
         m_gridLayout->setHorizontalSpacing(0);
 
     setLayout(m_vLayout);
+    m_vLayout->setSpacing(0);
     m_vLayout->addLayout(m_header, 0);
     m_vLayout->addLayout(m_gridLayout, 9999);
 
     m_header->setSpacing(5);
-    m_header->setMargin(0);
     m_header->addWidget(m_closeOpenButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
     m_header->addWidget(m_titleLabel, 99, Qt::AlignLeft | Qt::AlignVCenter);
 
-    m_closeOpenButton->setStyleSheet("border: 0px; padding-left:-5px;  ");
+    m_vLayout->setContentsMargins(10, 5, 20, 8);
+    m_titleLabel->setStyleSheet("padding:0px");
+    m_closeOpenButton->setStyleSheet("padding:0px");
+    m_closeOpenButton->setStyleSheet("padding:0px; border: 0px; margin-left:-5px;  ");
     m_closeButtonPixmap.load(":/qss_icons/rc/branch_closed.png");
-    m_openButtonPixmapap.load(":/qss_icons/rc/branch_open.png");
+    m_openButtonPixmap.load(":/qss_icons/rc/branch_open.png");
     UpdateCloseOpenButtonIcon();
     connect(m_closeOpenButton, SIGNAL(clicked()), this, SLOT(OnCloseOpenButtonClicked()));
 
@@ -93,7 +96,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
         //Every X seconds, update all the slots values
         connect(&m_updateTimer, SIGNAL(timeout()),
                 this, SLOT(RefreshWidgetValues()));
-        m_updateTimer.start(2000);
+        m_updateTimer.start(100);
     }
 }
 
@@ -299,7 +302,7 @@ void InspectorWidget::UpdateCloseOpenButtonIcon()
     }
     else
     {
-        m_closeOpenButton->setIcon(QIcon(m_openButtonPixmapap));
+        m_closeOpenButton->setIcon(QIcon(m_openButtonPixmap));
     }
 }
 

@@ -26,13 +26,14 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     Refresh(xmlAttribute);
 
     m_layout = new QHBoxLayout();
-    m_layout->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    m_layout->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_layout->setContentsMargins(2, 2, 2, 2);
     setLayout(m_layout);
     setMinimumWidth(40);
 
     if (!labelAbove)
     {
+        m_layout->setContentsMargins(5,0,0,0);
         m_layout->setSpacing(10); // Margin to the right of the label
     }
 
@@ -43,16 +44,17 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
         {
             String name = xmlAttribute.GetName();
             name = StringUtils::FormatInspectorLabel(name);
-            label = QString::fromStdString(name);
+            label = name.ToQString();
         }
 
         QGridLayout *gridLayout = m_inspectorWidget->GetGridLayout();
         m_rowIndexInGridLayout = m_inspectorWidget->GetNextRowIndex();
 
-        int widgetRow = m_rowIndexInGridLayout + (labelAbove ? 1 : 0);
-        int widgetCol = (labelAbove ? 0 : 1);
-        int colSpan   = (labelAbove ? 2 : 1);
+        const int widgetRow = m_rowIndexInGridLayout + (labelAbove ? 1 : 0);
+        const int widgetCol = (labelAbove ? 0 : 1);
+        const int colSpan   = (labelAbove ? 2 : 1);
         m_label = new QLabel(label);
+        m_label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         gridLayout->addWidget(m_label, m_rowIndexInGridLayout,         0, 1, colSpan, Qt::AlignLeft | Qt::AlignVCenter);
         gridLayout->addWidget(this,    widgetRow,              widgetCol, 1, colSpan, Qt::AlignVCenter);
     }

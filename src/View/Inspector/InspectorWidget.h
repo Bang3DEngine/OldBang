@@ -76,7 +76,7 @@ protected:
     QVBoxLayout *m_vLayout = nullptr;
         QHBoxLayout *m_header = nullptr;
             QToolButton *m_closeOpenButton = nullptr;
-            QPixmap m_openButtonPixmapap, m_closeButtonPixmap;
+            QPixmap m_openButtonPixmap, m_closeButtonPixmap;
             QLabel *m_titleLabel = nullptr;
     QGridLayout *m_gridLayout = nullptr;
 
