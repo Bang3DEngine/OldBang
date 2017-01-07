@@ -124,6 +124,25 @@ bool Application::notify(QObject *receiver, QEvent *e)
             ShortcutManager::GetInstance()->Clear();
         }
     }
+
+    /*
+    if (e->type() == QEvent::MouseButtonDblClick)
+    {
+        QMouseEvent *e = dynamic_cast<QMouseEvent*>(e);
+        //if (e->button() == Qt::MouseButton::)
+        {
+            QWidget *w = dynamic_cast<QWidget*>(receiver);
+            if (w)
+            {
+                String L[] = {"A", "B", "C", "D", "E", "F"};
+                String color = "";
+                color += L[rand() % 6]; color += L[rand() % 6];
+                color += L[rand() % 6]; color += L[rand() % 6];
+                color += L[rand() % 6]; color += L[rand() % 6];
+                w->setStyleSheet( String(String("background-color:#") + color).ToQString() );
+            }
+        }
+    } */
     #endif
 
     //int eType = e->type();

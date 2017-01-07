@@ -14,6 +14,24 @@ ComponentWidget::~ComponentWidget()
 {
 }
 
+int ComponentWidget::GetHeightSizeHint()
+{
+    const int c_headerHeight = 40;
+    const int c_attributeHeight = 20;
+    if (IsClosed())
+    {
+        return c_headerHeight;
+    }
+    else
+    {
+        XMLNode xmlInfo;
+        m_relatedComponent->FillXMLInfo(&xmlInfo);
+        const int attrCount = xmlInfo.GetAttributes().Size();
+        return c_headerHeight +
+               attrCount * c_attributeHeight;
+    }
+}
+
 void ComponentWidget::Start()
 {
     Init(m_relatedComponent->GetName(), m_relatedComponent);

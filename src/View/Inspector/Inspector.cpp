@@ -97,6 +97,7 @@ void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
     m_widget_To_Inspectables[iw] = inspectable;
     m_currentInspectables.PushBack(inspectable);
     AddWidget(iw);
+    RefreshSizeHints();
 }
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
@@ -113,12 +114,23 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
         ComponentWidget *w = new ComponentWidget(c);
         m_currentInspectables.PushBack(c);
         m_widget_To_Inspectables[w] = c;
-        AddWidget(w);
         w->RefreshWidgetValues();
+        AddWidget(w);
     }
 
+    RefreshSizeHints();
     m_titleLabel->setText(gameObject->name.ToQString());
-    adjustSize();
+}
+
+void Inspector::RefreshSizeHints()
+{
+    for (InspectorWidget *iw : m_currentInspectorWidgets)
+    {
+        QListWidgetItem *item = m_widget_To_Item[iw];
+        int width = iw->size().width();
+        const int height = iw->GetHeightSizeHint();
+        item->setSizeHint( QSize(width, height) );
+    }
 }
 
 void Inspector::ShowCurrentGameObjectInfo()
@@ -139,6 +151,10 @@ void Inspector::RefreshHard()
     if (m_currentGameObject)
     {
         ShowGameObjectInfo(m_currentGameObject);
+        update();
+        updateGeometry();
+        repaint();
+        adjustSize();
     }
     else
     {
@@ -163,7 +179,6 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
     m_currentInspectorWidgets.PushBack(widget);
 
     setItemWidget(item, widget);
-    item->setSizeHint(widget->size());
 }
 
 List<IInspectable *> Inspector::GetCurrentInspectables() const

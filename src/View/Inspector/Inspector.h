@@ -26,14 +26,11 @@ public:
     void MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement);
     void SetInspectable(IInspectable *inspectable, const String &title = "");
     void ShowGameObjectInfo(GameObject *gameObject);
+
+    void RefreshSizeHints();
+
 public slots:
     void ShowCurrentGameObjectInfo();
-public:
-    void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
-
-    // IWindowEventManagerListener
-    void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
-    void OnGameObjectDestroyed(GameObject *destroyed);
 
     /**
      * @brief RefreshHard must be used when some hidden or non-hidden
@@ -43,6 +40,14 @@ public:
      * @param widget
      */
     void RefreshHard();
+
+public:
+    void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
+
+    // IWindowEventManagerListener
+    void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
+    void OnGameObjectDestroyed(GameObject *destroyed);
+
     void AddWidget(InspectorWidget *widget, int row = -1);
 
     List<IInspectable*> GetCurrentInspectables() const;

@@ -48,11 +48,15 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 {
     Debug_Log("ConstructFromWidgetXMLInfo");
 
+    setObjectName("InspectorWidget");
     m_vLayout = new QVBoxLayout();
+    m_vLayout->setObjectName("VLayout");
         m_header = new QHBoxLayout();
+        m_header->setObjectName("Header");
             m_closeOpenButton = new QToolButton();
             m_titleLabel = new QLabel();
         m_gridLayout = new QGridLayout();
+        m_gridLayout->setObjectName("GridLayout");
         m_gridLayout->setSpacing(0);
         m_gridLayout->setHorizontalSpacing(0);
 
@@ -89,7 +93,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
         //Every X seconds, update all the slots values
         connect(&m_updateTimer, SIGNAL(timeout()),
                 this, SLOT(RefreshWidgetValues()));
-        m_updateTimer.start(3000);
+        m_updateTimer.start(2000);
     }
 }
 
@@ -195,9 +199,18 @@ void InspectorWidget::SetTitle(const String &title)
     m_titleLabel->setText(QString::fromStdString(title));
 }
 
+bool InspectorWidget::IsClosed() const
+{
+    return m_closed;
+}
+
+int InspectorWidget::GetHeightSizeHint()
+{
+    return 500;
+}
+
 void InspectorWidget::RefreshWidgetValues()
 {
-    //Debug_Log("RefreshWidgetValues" << std::rand());
     XMLNode xmlInfo = GetInspectableXMLInfo();
     xmlInfo.SetTagName(m_tagName);
     bool hasToRefreshHard = false;
@@ -213,11 +226,6 @@ void InspectorWidget::RefreshWidgetValues()
             ws->Refresh(attribute);
         }
     }
-    /*
-    adjustSize();
-    adjustSize();
-    adjustSize();
-    */
 }
 
 void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
@@ -267,7 +275,7 @@ void InspectorWidget::OnCloseOpenButtonClicked()
     m_closed = !m_closed;
     SetClosed(m_closed);
     RefreshWidgetValues();
-    //Inspector::GetInstance()->RefreshHard();
+    Inspector::GetInstance()->RefreshSizeHints();
 }
 
 void InspectorWidget::SetClosed(bool closedWidget)

@@ -58,6 +58,9 @@ public:
     int GetNextRowIndex() const;
 
     void SetTitle(const String &title);
+    bool IsClosed() const;
+
+    virtual int GetHeightSizeHint();
 
 public slots:
 

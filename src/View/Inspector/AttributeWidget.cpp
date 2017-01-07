@@ -33,7 +33,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
 
     if (!labelAbove)
     {
-        m_layout->setSpacing(5); // Margin to the right of the label
+        m_layout->setSpacing(10); // Margin to the right of the label
     }
 
     if (!isSubWidget)
@@ -92,7 +92,7 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
         adjustSize();
         update();
     }
-    else if (!m_hidden && isHidden())
+    else if (!m_hidden && !m_inspectorWidget->IsClosed() && isHidden())
     {
         show();
         if (m_label)
