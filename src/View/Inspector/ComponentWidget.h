@@ -12,6 +12,17 @@ friend class ComponentWidgetContextMenu;
 
     Q_OBJECT
 
+public:
+    explicit ComponentWidget(Component *relatedComponent);
+    virtual ~ComponentWidget();
+
+public slots:
+    void Start();
+    void OnEnabledCheckboxPressed(bool checked);
+
+protected:
+    void SetClosed(bool closed) override;
+
 private:
 
     ComponentWidgetContextMenu m_cwContextMenu;
@@ -19,15 +30,6 @@ private:
     Component *m_relatedComponent = nullptr;
     QCheckBox *m_enabledCheckbox = nullptr;
 
-public:
-    explicit ComponentWidget(Component *relatedComponent);
-    virtual ~ComponentWidget();
-
-public slots:
-    void OnEnabledCheckboxPressed(bool checked);
-
-protected:
-    void SetClosed(bool closed) override;
 };
 
 #endif // LISTINSPECTORITEM_H

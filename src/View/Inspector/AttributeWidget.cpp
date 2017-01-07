@@ -71,18 +71,38 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
     m_enabled  = !attribute.HasProperty(XMLProperty::Disabled);
     m_inlined  =  attribute.HasProperty(XMLProperty::Inline);
     m_hidden   =  attribute.HasProperty(XMLProperty::Hidden);
+    //Debug_Log(attribute.GetName() << ": " << m_hidden);
 
     setEnabled(m_enabled);
 
-    if (m_hidden) // Only hide, to avoid window flickering
+    if (m_hidden && !isHidden()) // Only hide, to avoid window flickering
     {
         setVisible(false);
         setHidden(true);
+        hide();
         if (m_label)
         {
+            //m_label->setText("XXXXXXXXXXX");
+            m_label->hide();
             m_label->setVisible(false);
             m_label->setHidden(true);
         }
+        activateWindow();
+        updateGeometry();
+        adjustSize();
+        update();
+    }
+    else if (!m_hidden && isHidden())
+    {
+        show();
+        if (m_label)
+        {
+            m_label->show();
+        }
+        activateWindow();
+        updateGeometry();
+        adjustSize();
+        update();
     }
 }
 

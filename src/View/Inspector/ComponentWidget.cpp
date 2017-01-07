@@ -6,15 +6,22 @@
 ComponentWidget::ComponentWidget(Component *relatedComponent) :
     InspectorWidget(), m_cwContextMenu(this)
 {
-    Init(relatedComponent->GetName(), relatedComponent);
-
     m_relatedComponent = relatedComponent;
+    Start();
+}
+
+ComponentWidget::~ComponentWidget()
+{
+}
+
+void ComponentWidget::Start()
+{
+    Init(m_relatedComponent->GetName(), m_relatedComponent);
 
     m_closed = m_relatedComponent->IsClosedInInspector();
     SetClosed(m_closed);
     UpdateCloseOpenButtonIcon();
-    Debug_Log("Creating component " << m_relatedComponent->GetName() << ": " << m_closed);
-    if (relatedComponent->GetName() != "Transform")
+    if (m_relatedComponent->GetName() != "Transform")
     {
         m_enabledCheckbox = new QCheckBox();
         m_enabledCheckbox->setChecked(m_relatedComponent->IsEnabled());
@@ -22,10 +29,7 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
                 this, SLOT(OnEnabledCheckboxPressed(bool)));
         m_header->addWidget(m_enabledCheckbox, 0, Qt::AlignRight | Qt::AlignVCenter);
     }
-}
-
-ComponentWidget::~ComponentWidget()
-{
+    RefreshWidgetValues();
 }
 
 void ComponentWidget::OnEnabledCheckboxPressed(bool checked)

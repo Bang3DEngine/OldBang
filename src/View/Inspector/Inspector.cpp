@@ -114,9 +114,16 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
         m_currentInspectables.PushBack(c);
         m_widget_To_Inspectables[w] = c;
         AddWidget(w);
+        w->RefreshWidgetValues();
     }
 
     m_titleLabel->setText(gameObject->name.ToQString());
+    adjustSize();
+}
+
+void Inspector::ShowCurrentGameObjectInfo()
+{
+    ShowGameObjectInfo(m_currentGameObject);
 }
 
 void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable)

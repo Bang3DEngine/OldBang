@@ -68,7 +68,7 @@ void Texture2D::Fill(unsigned char *newData,
 
     Bind();
     glTexImage2D(GL_TEXTURE_2D, 0, m_glInternalFormat, width, height, 0, m_glFormat, m_glType, m_data);
-    if (genMipMaps)
+    if (genMipMaps && width > 0 && height > 0)
     {
         glGenerateMipmap(GL_TEXTURE_2D);
     }

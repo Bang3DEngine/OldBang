@@ -26,6 +26,9 @@ public:
     void MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement);
     void SetInspectable(IInspectable *inspectable, const String &title = "");
     void ShowGameObjectInfo(GameObject *gameObject);
+public slots:
+    void ShowCurrentGameObjectInfo();
+public:
     void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
 
     // IWindowEventManagerListener

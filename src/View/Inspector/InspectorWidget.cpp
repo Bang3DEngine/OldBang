@@ -29,9 +29,18 @@ void InspectorWidget::Init(const String &title, IInspectable *relatedInspectable
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
     ConstructFromWidgetXMLInfo(title, xmlInfo);
+    Debug_Log("InspectorWidget Init: " << xmlInfo);
 
     setMinimumWidth(40);
     setAcceptDrops(true);
+    RefreshWidgetValues();
+    RefreshWidgetValues();
+    RefreshWidgetValues();
+    RefreshWidgetValues();
+    EditorWindow::GetInstance()->GetMainWindow()->activateWindow();
+    EditorWindow::GetInstance()->GetMainWindow()->update();
+    EditorWindow::GetInstance()->GetMainWindow()->updateGeometry();
+    EditorWindow::GetInstance()->GetMainWindow()->show();
 }
 
 void InspectorWidget::ConstructFromWidgetXMLInfo(
@@ -78,8 +87,9 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     if (autoUpdate)
     {
         //Every X seconds, update all the slots values
-        connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(RefreshWidgetValues()));
-        m_updateTimer.start(150);
+        connect(&m_updateTimer, SIGNAL(timeout()),
+                this, SLOT(RefreshWidgetValues()));
+        m_updateTimer.start(3000);
     }
 }
 
@@ -187,6 +197,7 @@ void InspectorWidget::SetTitle(const String &title)
 
 void InspectorWidget::RefreshWidgetValues()
 {
+    //Debug_Log("RefreshWidgetValues" << std::rand());
     XMLNode xmlInfo = GetInspectableXMLInfo();
     xmlInfo.SetTagName(m_tagName);
     bool hasToRefreshHard = false;
@@ -202,11 +213,11 @@ void InspectorWidget::RefreshWidgetValues()
             ws->Refresh(attribute);
         }
     }
-
-    if (hasToRefreshHard)
-    {
-        //Inspector::GetInstance()->RefreshHard();
-    }
+    /*
+    adjustSize();
+    adjustSize();
+    adjustSize();
+    */
 }
 
 void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
@@ -221,7 +232,21 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         if (w)
         {
             m_attrName_To_AttrWidget[attribute.GetName()] = w;
+            if (attribute.HasProperty(XMLProperty::Hidden))
+            {
+                w->hide();
+                w->setHidden(true);
+            }
+            w->activateWindow();
             w->adjustSize();
+            w->updateGeometry();
+            w->update();
+            if (w->layout())
+            {
+                w->layout()->activate();
+                w->layout()->invalidate();
+                w->layout()->update();
+            }
         }
     }
 }
@@ -241,7 +266,8 @@ void InspectorWidget::OnCloseOpenButtonClicked()
 {
     m_closed = !m_closed;
     SetClosed(m_closed);
-    Inspector::GetInstance()->RefreshHard();
+    RefreshWidgetValues();
+    //Inspector::GetInstance()->RefreshHard();
 }
 
 void InspectorWidget::SetClosed(bool closedWidget)

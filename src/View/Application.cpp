@@ -126,6 +126,8 @@ bool Application::notify(QObject *receiver, QEvent *e)
     }
     #endif
 
+    //int eType = e->type();
+    //std::cout << "Notifying " << eType << " to " << receiver << std::endl;
     return QApplication::notify(receiver, e);
 }
 

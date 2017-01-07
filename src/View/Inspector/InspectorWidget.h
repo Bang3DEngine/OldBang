@@ -62,6 +62,10 @@ public:
 public slots:
 
     virtual void _OnSlotValueChanged();
+    /**
+     * @brief Refreshes all the widget values with the related IInspectable current values.
+     */
+    void RefreshWidgetValues();
 
 protected:
     IInspectable *m_relatedInspectable = nullptr;
@@ -97,12 +101,6 @@ private:
                                     XMLNode &info, bool autoUpdate = true);
 
 private slots:
-
-    /**
-     * @brief Refreshes all the widget values with the related IInspectable current values.
-     */
-    void RefreshWidgetValues();
-
     void _OnSlotValueChanged(int _);
     void _OnSlotValueChanged(double _);
     void _OnSlotValueChanged(QString _);
