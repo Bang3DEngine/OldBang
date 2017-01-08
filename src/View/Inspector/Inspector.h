@@ -21,7 +21,6 @@ public:
     void OnWindowShown();
 
     void Clear();
-    void Refresh();
 
     void MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement);
     void SetInspectable(IInspectable *inspectable, const String &title = "");
@@ -39,7 +38,7 @@ public slots:
      * renderered by Qt.
      * @param widget
      */
-    void RefreshHard();
+    void Refresh();
 
 public:
     void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);

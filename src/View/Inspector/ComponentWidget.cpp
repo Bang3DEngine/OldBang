@@ -17,7 +17,7 @@ ComponentWidget::~ComponentWidget()
 int ComponentWidget::GetHeightSizeHint()
 {
     const int c_headerHeight = 40;
-    const int c_attributeHeight = 20;
+    const int c_attributeHeight = 22;
     if (IsClosed())
     {
         return c_headerHeight;

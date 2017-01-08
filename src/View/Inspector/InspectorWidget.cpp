@@ -27,56 +27,34 @@ InspectorWidget::InspectorWidget()
 void InspectorWidget::Init(const String &title, IInspectable *relatedInspectable)
 {
     m_relatedInspectable = relatedInspectable;
-
     XMLNode xmlInfo = GetInspectableXMLInfo();
     ConstructFromWidgetXMLInfo(title, xmlInfo);
-    Debug_Log("InspectorWidget Init: " << xmlInfo);
-
-    setMinimumWidth(40);
     setAcceptDrops(true);
     RefreshWidgetValues();
-    RefreshWidgetValues();
-    RefreshWidgetValues();
-    RefreshWidgetValues();
-    EditorWindow::GetInstance()->GetMainWindow()->activateWindow();
-    EditorWindow::GetInstance()->GetMainWindow()->update();
-    EditorWindow::GetInstance()->GetMainWindow()->updateGeometry();
-    EditorWindow::GetInstance()->GetMainWindow()->show();
 }
 
 void InspectorWidget::ConstructFromWidgetXMLInfo(
         const String &title, XMLNode &xmlInfo, bool autoUpdate)
 {
-    Debug_Log("ConstructFromWidgetXMLInfo");
-
-    setObjectName("InspectorWidget");
     m_vLayout = new QVBoxLayout();
-    m_vLayout->setObjectName("VLayout");
         m_header = new QHBoxLayout();
-        m_header->setObjectName("Header");
             m_closeOpenButton = new QToolButton();
             m_titleLabel = new QLabel();
         m_gridLayout = new QGridLayout();
-        m_gridLayout->setObjectName("GridLayout");
-        m_gridLayout->setSpacing(0);
-        m_gridLayout->setHorizontalSpacing(0);
 
-    setLayout(m_vLayout);
-    m_vLayout->setSpacing(0);
     m_vLayout->addLayout(m_header, 0);
-    m_vLayout->addLayout(m_gridLayout, 9999);
+    m_vLayout->addLayout(m_gridLayout, 99);
+    setLayout(m_vLayout);
 
     m_header->setSpacing(5);
     m_header->addWidget(m_closeOpenButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    m_header->addWidget(m_titleLabel, 99, Qt::AlignLeft | Qt::AlignVCenter);
+    m_header->addWidget(m_titleLabel,     99, Qt::AlignLeft | Qt::AlignVCenter);
 
-    m_titleLabel->setStyleSheet("padding:0px");
-    m_closeOpenButton->setStyleSheet("padding:0px");
-    m_closeOpenButton->setStyleSheet("padding:0px; border: 0px; margin-left:-5px;  ");
+    m_closeOpenButton->setStyleSheet("padding:0px; border: 0px; margin-left:-5px;");
     m_closeButtonPixmap.load(":/qss_icons/rc/branch_closed.png");
     m_openButtonPixmap.load(":/qss_icons/rc/branch_open.png");
-    UpdateCloseOpenButtonIcon();
     connect(m_closeOpenButton, SIGNAL(clicked()), this, SLOT(OnCloseOpenButtonClicked()));
+    UpdateCloseOpenButtonIcon();
 
     String fTitle = StringUtils::FormatInspectorLabel(title);
     m_titleLabel->setText(fTitle.ToQString());
@@ -87,17 +65,17 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     m_titleLabel->setAlignment(Qt::AlignLeft);
 
     CreateWidgetSlots(xmlInfo);
-    RefreshWidgetValues(); // Initial catch of values
-
-    m_created = true;
+    RefreshWidgetValues();
 
     if (autoUpdate)
     {
-        //Every X seconds, update all the slots values
-        connect(&m_updateTimer, SIGNAL(timeout()),
+        // To refresh all the slots values
+        connect(&m_refreshTimer, SIGNAL(timeout()),
                 this, SLOT(RefreshWidgetValues()));
-        m_updateTimer.start(100);
+        m_refreshTimer.start(100);
     }
+
+    m_created = true;
 }
 
 InspectorWidget::~InspectorWidget()
@@ -216,29 +194,22 @@ void InspectorWidget::RefreshWidgetValues()
 {
     XMLNode xmlInfo = GetInspectableXMLInfo();
     xmlInfo.SetTagName(m_tagName);
-    bool hasToRefreshHard = false;
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         XMLAttribute attribute = itAttr.second;
-        String attrName  = attribute.GetName();
+        String attrName = attribute.GetName();
         if( m_attrName_To_AttrWidget.ContainsKey(attrName))
         {
             AttributeWidget *ws = m_attrName_To_AttrWidget[attrName];
-            hasToRefreshHard = hasToRefreshHard ||
-                    (ws->isHidden() != attribute.HasProperty(XMLProperty::Hidden));
             ws->Refresh(attribute);
         }
     }
-
-    Debug_Log(Inspector::GetInstance()->verticalScrollBar()->isVisible());
-    const int c_marginRight = Inspector::GetInstance()->verticalScrollBar()->isVisible() ? 20 : 5;
-    m_vLayout->setContentsMargins(10, 5, c_marginRight, 5);
+    UpdateContentMargins();
 }
 
 void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
 {
     m_tagName = xmlInfo.GetTagName();
-
     for (auto itAttr : xmlInfo.GetAttributes())
     {
         XMLAttribute attribute = itAttr.second;
@@ -247,21 +218,7 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
         if (w)
         {
             m_attrName_To_AttrWidget[attribute.GetName()] = w;
-            if (attribute.HasProperty(XMLProperty::Hidden))
-            {
-                w->hide();
-                w->setHidden(true);
-            }
-            w->activateWindow();
-            w->adjustSize();
-            w->updateGeometry();
-            w->update();
-            if (w->layout())
-            {
-                w->layout()->activate();
-                w->layout()->invalidate();
-                w->layout()->update();
-            }
+            if (attribute.HasProperty(XMLProperty::Hidden)) { w->hide(); }
         }
     }
 }
@@ -282,6 +239,7 @@ void InspectorWidget::OnCloseOpenButtonClicked()
     m_closed = !m_closed;
     SetClosed(m_closed);
     RefreshWidgetValues();
+    UpdateContentMargins();
     Inspector::GetInstance()->RefreshSizeHints();
 }
 
@@ -290,24 +248,29 @@ void InspectorWidget::SetClosed(bool closedWidget)
     for (int i = 0; i < m_gridLayout->count(); ++i)
     {
         QLayoutItem *item = m_gridLayout->itemAt(i);
-        if(item->widget())
-        {
-            item->widget()->setHidden(closedWidget);
-        }
+        if (!item->widget()) { continue; }
+        item->widget()->setHidden(closedWidget);
     }
     UpdateCloseOpenButtonIcon();
 }
 
+void InspectorWidget::UpdateContentMargins()
+{
+    Inspector *insp = Inspector::GetInstance();
+    bool scrollbarVisible = insp->verticalScrollBar()->isVisible();
+    const int c_marginLeft  = 10;
+    const int c_marginTop = IsClosed() ? 0 : 10;
+    const int c_marginRight = scrollbarVisible ? 20 : 5;
+    const int c_marginBot = IsClosed() ? 0 : 20;
+    m_vLayout->setContentsMargins(c_marginLeft,  c_marginTop,
+                                  c_marginRight, c_marginBot);
+}
+
 void InspectorWidget::UpdateCloseOpenButtonIcon()
 {
-    if (m_closed)
-    {
-        m_closeOpenButton->setIcon(QIcon(m_closeButtonPixmap));
-    }
-    else
-    {
-        m_closeOpenButton->setIcon(QIcon(m_openButtonPixmap));
-    }
+    const QPixmap &pixmap = m_closed ? m_closeButtonPixmap :
+                                       m_openButtonPixmap;
+    m_closeOpenButton->setIcon( QIcon(pixmap) );
 }
 
 void InspectorWidget::_OnSlotValueChanged(int _)

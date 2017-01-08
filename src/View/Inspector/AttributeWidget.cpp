@@ -27,15 +27,15 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
 
     m_layout = new QHBoxLayout();
     m_layout->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    m_layout->setContentsMargins(2, 2, 2, 2);
-    setLayout(m_layout);
-    setMinimumWidth(40);
-
     if (!labelAbove)
     {
         m_layout->setContentsMargins(5,0,0,0);
-        m_layout->setSpacing(10); // Margin to the right of the label
     }
+    else
+    {
+        m_layout->setContentsMargins(2, 2, 2, 2);
+    }
+    setLayout(m_layout);
 
     if (!isSubWidget)
     {
@@ -55,10 +55,11 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
         const int colSpan   = (labelAbove ? 2 : 1);
         m_label = new QLabel(label);
         m_label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-        gridLayout->addWidget(m_label, m_rowIndexInGridLayout,         0, 1, colSpan, Qt::AlignLeft | Qt::AlignVCenter);
-        gridLayout->addWidget(this,    widgetRow,              widgetCol, 1, colSpan, Qt::AlignVCenter);
+        gridLayout->addWidget(m_label, m_rowIndexInGridLayout, 0, 1,
+                              colSpan, Qt::AlignLeft | Qt::AlignVCenter);
+        gridLayout->addWidget(this, widgetRow, widgetCol, 1,
+                              colSpan, Qt::AlignVCenter);
     }
-
     Refresh(xmlAttribute);
 }
 
@@ -73,38 +74,18 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
     m_enabled  = !attribute.HasProperty(XMLProperty::Disabled);
     m_inlined  =  attribute.HasProperty(XMLProperty::Inline);
     m_hidden   =  attribute.HasProperty(XMLProperty::Hidden);
-    //Debug_Log(attribute.GetName() << ": " << m_hidden);
-
     setEnabled(m_enabled);
 
-    if (m_hidden && !isHidden()) // Only hide, to avoid window flickering
+    const bool hasToBeHidden = m_hidden || m_inspectorWidget->IsClosed();
+    if (hasToBeHidden && !isHidden()) // Only hide, to avoid window flickering
     {
-        setVisible(false);
-        setHidden(true);
         hide();
-        if (m_label)
-        {
-            //m_label->setText("XXXXXXXXXXX");
-            m_label->hide();
-            m_label->setVisible(false);
-            m_label->setHidden(true);
-        }
-        activateWindow();
-        updateGeometry();
-        adjustSize();
-        update();
+        if (m_label) { m_label->hide(); }
     }
-    else if (!m_hidden && !m_inspectorWidget->IsClosed() && isHidden())
+    else if (!hasToBeHidden && isHidden())
     {
         show();
-        if (m_label)
-        {
-            m_label->show();
-        }
-        activateWindow();
-        updateGeometry();
-        adjustSize();
-        update();
+        if (m_label) { m_label->show(); }
     }
 }
 

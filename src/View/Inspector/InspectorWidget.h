@@ -94,11 +94,12 @@ private:
     bool m_created = false;
 
     String m_tagName = "";
-    QTimer m_updateTimer;
+    QTimer m_refreshTimer;
     Array<XMLAttribute> m_attributes;
     mutable Map<String, AttributeWidget*> m_attrName_To_AttrWidget;
 
 
+    void UpdateContentMargins();
     void CreateWidgetSlots(XMLNode &xmlInfo);
     void ConstructFromWidgetXMLInfo(const String &title,
                                     XMLNode &info, bool autoUpdate = true);

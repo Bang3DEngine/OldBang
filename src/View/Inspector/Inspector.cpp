@@ -75,6 +75,7 @@ void Inspector::Refresh()
             SetInspectable(insp);
         }
     }
+    RefreshSizeHints();
 }
 
 void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement)
@@ -104,8 +105,6 @@ void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
-    Debug_Log("ShowGameObjectInfo " << gameObject->name);
-
     Clear();
 
     ASSERT(gameObject);
@@ -144,28 +143,6 @@ void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInsp
 {
     ShowGameObjectInfo(prefabInspectable->GetPrefabTempGameObject());
     m_currentInspectables.PushBack(prefabInspectable);
-}
-
-void Inspector::RefreshHard()
-{
-    Debug_Clear();
-    Debug_Log("RefreshHard " << std::rand());
-    if (m_currentGameObject)
-    {
-        ShowGameObjectInfo(m_currentGameObject);
-        update();
-        updateGeometry();
-        repaint();
-        adjustSize();
-    }
-    else
-    {
-        if(m_currentInspectables.Size() == 1)
-        {
-            IInspectable *insp = m_currentInspectables.Front();
-            SetInspectable(insp);
-        }
-    }
 }
 
 void Inspector::AddWidget(InspectorWidget *widget, int row)
