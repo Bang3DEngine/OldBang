@@ -15,10 +15,19 @@ class AttributeWidget : public DragDropQWidget,
 {
     Q_OBJECT
 
+public:
+
+    virtual void Refresh(const XMLAttribute &attribute);
+    virtual int GetHeightSizeHint();
+
+    static AttributeWidget* FromXMLAttribute(const XMLAttribute &xmlAttribute,
+                                             InspectorWidget *inspectorWidget);
+
 protected:
     QBoxLayout *m_layout = nullptr;
     QLabel *m_label = nullptr;
     int m_rowIndexInGridLayout = 0;
+    int m_heightSizeHint = -1;
 
     XMLAttribute m_xmlAttribute;
 
@@ -36,13 +45,6 @@ protected:
                     bool labelAbove  = false);
 
     void AfterConstructor();
-
-public:
-
-    virtual void Refresh(const XMLAttribute &attribute);
-
-    static AttributeWidget* FromXMLAttribute(const XMLAttribute &xmlAttribute,
-                                             InspectorWidget *inspectorWidget);
 };
 
 #endif // INSPECTORSW_H

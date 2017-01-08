@@ -59,6 +59,8 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
             this, SLOT(OnDoubleClick()));
 
+    m_heightSizeHint = 35;
+
     AfterConstructor();
 }
 

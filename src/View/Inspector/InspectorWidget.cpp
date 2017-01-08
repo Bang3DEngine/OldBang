@@ -50,6 +50,8 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     m_header->addWidget(m_closeOpenButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
     m_header->addWidget(m_titleLabel,     99, Qt::AlignLeft | Qt::AlignVCenter);
 
+    m_gridLayout->setSpacing(0);
+
     m_closeOpenButton->setStyleSheet("padding:0px; border: 0px; margin-left:-5px;");
     m_closeButtonPixmap.load(":/qss_icons/rc/branch_closed.png");
     m_openButtonPixmap.load(":/qss_icons/rc/branch_open.png");
@@ -187,7 +189,18 @@ bool InspectorWidget::IsClosed() const
 
 int InspectorWidget::GetHeightSizeHint()
 {
-    return 500;
+    int heightSizeHint = 0;
+    heightSizeHint += 60; // Header height
+
+    // Add up children widget's height size hints
+    typedef std::pair<String, AttributeWidget*> Pair;
+    for (Pair name_AttrWidget : m_attrName_To_AttrWidget)
+    {
+        AttributeWidget *attrWidget = name_AttrWidget.second;
+        heightSizeHint += attrWidget->GetHeightSizeHint();
+    }
+
+    return heightSizeHint;
 }
 
 void InspectorWidget::RefreshWidgetValues()

@@ -33,7 +33,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     }
     else
     {
-        m_layout->setContentsMargins(2, 2, 2, 2);
+        m_layout->setContentsMargins(0,0,0,0);
     }
     setLayout(m_layout);
 
@@ -61,6 +61,8 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
                               colSpan, Qt::AlignVCenter);
     }
     Refresh(xmlAttribute);
+
+    m_heightSizeHint = labelAbove ? 45 : 25;
 }
 
 void AttributeWidget::AfterConstructor()
@@ -87,6 +89,15 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
         show();
         if (m_label) { m_label->show(); }
     }
+}
+
+int AttributeWidget::GetHeightSizeHint()
+{
+    if (m_hidden || m_inspectorWidget->IsClosed())
+    {
+        return 0;
+    }
+    return m_heightSizeHint;
 }
 
 AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttribute,

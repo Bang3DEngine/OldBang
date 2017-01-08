@@ -16,6 +16,8 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(OnButtonClicked(bool)));
     layout->addWidget(m_button);
 
+    m_heightSizeHint = 50;
+
     AfterConstructor();
     m_layout->setAlignment(Qt::AlignRight);
 }

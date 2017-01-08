@@ -6,7 +6,6 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :
     AttributeWidget(xmlAttribute, inspectorWidget)
 {
-
     QLayout *layout = new QHBoxLayout();
     m_layout->addLayout(layout, 1);
 
@@ -20,6 +19,7 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
     connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
             inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
 
+    m_heightSizeHint = 45;
 
     AfterConstructor();
 }
