@@ -9,9 +9,9 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
 
     m_colorDialog = new ColorDialog();
     m_colorLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
-
-    layout->addWidget(m_colorLabel);
+    m_colorLabel->setMinimumHeight(20);
     m_colorLabel->SetColor(m_selectedColor);
+    layout->addWidget(m_colorLabel);
 
     connect(m_colorDialog, SIGNAL(currentColorChanged(const QColor&)),
             this, SLOT(OnColorChanged(const QColor&)));

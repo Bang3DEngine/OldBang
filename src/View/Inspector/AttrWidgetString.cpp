@@ -11,16 +11,15 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
                     xmlAttribute.HasProperty(XMLProperty::BigText))
 {
     QLayout *layout = new QVBoxLayout();
-    m_layout->addLayout(layout, 1);
+    m_layout->addLayout(layout, 0);
+    m_layout->setContentsMargins(0,0,0,0);
 
     bool bigText = xmlAttribute.HasProperty(XMLProperty::BigText);
     QWidget *textWidget = nullptr;
     if (!bigText)
     {
         m_lineEdit = new LineEdit(m_readonly); //Right side
-        m_lineEdit->setAlignment(Qt::AlignRight);
-        m_lineEdit->setMinimumWidth(50);
-        m_lineEdit->setMinimumHeight(25);
+        m_lineEdit->setAlignment(Qt::AlignLeft);
         textWidget = m_lineEdit;
     }
     else
@@ -45,12 +44,12 @@ void AttrWidgetString::SetValue(const String &value)
         if (m_lineEdit)
         {
             //disconnect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
-            m_lineEdit->setText( QString::fromStdString(value) );
+            m_lineEdit->setText( value.ToQString() );
             //connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
         }
         else if (m_textEdit)
         {
-            m_textEdit->setText( QString::fromStdString(value) );
+            m_textEdit->setText( value.ToQString() );
         }
     }
 }
@@ -65,14 +64,13 @@ const String AttrWidgetString::GetValue() const
     {
         return m_textEdit->toPlainText().toStdString();
     }
-
     return "";
 }
 
 void AttrWidgetString::Refresh(const XMLAttribute &attribute)
 {
     AttributeWidget::Refresh(attribute);
-    if (attribute.GetType() != XMLAttribute::Type::String) return;
+    ASSERT (attribute.GetType() == XMLAttribute::Type::String);
     SetValue( attribute.GetString() );
 }
 
@@ -94,10 +92,6 @@ void AttrWidgetString::OnKeyPressed()
 
 QSize AttrWidgetString::sizeHint() const
 {
-    if (m_lineEdit)
-    {
-        return QSize(100, 30);
-    }
     return AttributeWidget::sizeHint();
 }
 
