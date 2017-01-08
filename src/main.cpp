@@ -68,7 +68,7 @@ void LoadStylesheet(QApplication *app)
     app->setFont(font);
 }
 
-void InitEditor(QMainWindow *window, Application *app)
+void InitEditorOrGame(QMainWindow *window, Application *app)
 {
     SingletonManager::InitSingletonManagerFromMainBinary();
     #ifdef BANG_EDITOR
@@ -88,30 +88,39 @@ void InitEditor(QMainWindow *window, Application *app)
 
 int main(int argc, char *argv[])
 {
+    Debug_Log("HOLAAAA");
+
+    String executableFile = argv[0];
+    String executableDir = Persistence::GetDir(executableFile);
+    #ifdef BANG_EDITOR
     // Init engine paths, by looking at executable location:
-    String engineDir = argv[0];
-    String binDir = Persistence::GetDir(engineDir);
-    String engineRootDirAbs = Persistence::GetDirUp(binDir);
+    String engineRootDirAbs = Persistence::GetDirUp(executableDir);
     Persistence::c_EngineRootAbsolute = engineRootDirAbs;
     Persistence::c_EngineAssetsRootAbsolute =
             Persistence::c_EngineRootAbsolute + "/EngineAssets";
     //
+    #else
+    Persistence::c_EngineRootAbsolute = "./GameData";
+    Persistence::c_EngineAssetsRootAbsolute =
+            Persistence::c_EngineRootAbsolute + "/EngineAssets";
+    #endif
 
+    String loadedProjectFilepath = "";
     #ifdef BANG_EDITOR
     // Select project
     QApplication *selectProjectApp = new QApplication(argc, argv);
     QMainWindow *selectProjectWindow = new QMainWindow();
     LoadStylesheet(selectProjectApp);
-    String loadedProjectFilepath =
+    loadedProjectFilepath =
             SelectProjectWindow::ExecAndGetProjectFilepath(selectProjectWindow,
                                                            selectProjectApp);
+    #else
+    loadedProjectFilepath = executableDir + "/GameData/Game.bproject";
+    #endif
     //
 
-    if (loadedProjectFilepath.Empty())
-    {
-        return 0; // If the select project window is closed by the user
-    }
-    #endif
+    ASSERT (!loadedProjectFilepath.Empty(),
+            "The project filepath has not been specified.", return 0);
 
     // Editor / Game
     Application app(argc, argv);
@@ -119,7 +128,7 @@ int main(int argc, char *argv[])
     #ifdef BANG_EDITOR
     LoadStylesheet(&app);
     #endif
-    InitEditor(editorOrGameWindow, &app);
+    InitEditorOrGame(editorOrGameWindow, &app);
     ProjectManager::OpenProject(loadedProjectFilepath); // Load previously selected project
     return app.exec();
     //

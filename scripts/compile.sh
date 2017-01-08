@@ -10,7 +10,7 @@ command_exists () {
 }
 
 BUILD_MODE=$1
-if [ -z $BUILD_MODE ] 
+if [ -z ${BUILD_MODE} ] 
 then
 	BUILD_MODE="EDITOR"
 	echo "Compile mode not specified. Picking EDITOR mode (default)."
@@ -19,8 +19,9 @@ then
 fi
 
 # Make and run Bang
+#echo "BUILD_MODE on compile.sh: '${BUILD_MODE}'"
 qmake "BUILD_MODE=${BUILD_MODE}"
-if command_exists colormake
+if [ $(command_exists colormake) ] && [ "${BUILD_MODE}" != "GAME" ] 
 then
 	colormake -j${NUM_THREADS}
 else

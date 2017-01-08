@@ -10,12 +10,12 @@
 #include "Matrix4.h"
 #include "IToString.h"
 #include "Quaternion.h"
-#include "EditorWindow.h"
 #include "SceneManager.h"
 
 #ifdef BANG_EDITOR
 #include "ListLogger.h"
 #include "EditorScene.h"
+#include "EditorWindow.h"
 #include "EditorDebugGameObject.h"
 #endif
 

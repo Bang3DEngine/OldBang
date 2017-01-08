@@ -9,7 +9,8 @@ class BuildGameThread : public QThread
 {
     Q_OBJECT
     public:
-        bool runGameAfterBuild = false;
+        String m_outputFilepath = "";
+        bool m_runGameAfterBuild = false;
 
     protected:
         void run() override;
@@ -17,13 +18,14 @@ class BuildGameThread : public QThread
 
 class GameBuilder
 {
-private:
-    static BuildGameThread buildThread;
-
-    GameBuilder() {}
-
 public:
     static void BuildGame(bool runGame = false);
+
+private:
+    GameBuilder() {}
+
+    static BuildGameThread buildThread;
+    static bool CreateDataDirectory(const String &parentDir);
 };
 
 #endif // GAMEBUILDER_H

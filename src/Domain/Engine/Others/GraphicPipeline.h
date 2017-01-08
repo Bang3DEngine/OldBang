@@ -3,6 +3,7 @@
 
 #include "Renderer.h"
 
+class Mesh;
 class Scene;
 class Screen;
 class GBuffer;

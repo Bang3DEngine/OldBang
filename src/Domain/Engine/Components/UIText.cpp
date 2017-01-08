@@ -7,10 +7,13 @@
 #include "XMLNode.h"
 #include "Material.h"
 #include "Transform.h"
-#include "IInspectable.h"
 #include "AssetsManager.h"
 #include "GraphicPipeline.h"
+
+#ifdef BANG_EDITOR
+#include "IInspectable.h"
 #include "SelectionFramebuffer.h"
+#endif
 
 UIText::UIText() : UIRenderer()
 {
@@ -146,8 +149,10 @@ void UIText::RenderText(bool forSelectionFramebuffer) const
 
     if (!forSelectionFramebuffer) { m_material->SetDiffuseColor(m_textColor); }
 
+    #ifdef BANG_EDITOR
     Material *selFramebufferMaterial = GraphicPipeline::GetActive()->GetSelectionFramebuffer()->
                                                                      GetSelectionMaterial();
+    #endif
 
     Vector3 initialScale = transform->GetScale();
     Vector3 initialPosition = transform->GetPosition();
@@ -174,6 +179,7 @@ void UIText::RenderText(bool forSelectionFramebuffer) const
             m_material->SetTexture(charTexture); // Set corresponding char texture to material
         }
 
+        #ifdef BANG_EDITOR
         if (forSelectionFramebuffer)
         {
             Matrix4 model, normal, view, projection, pvm;
@@ -182,6 +188,7 @@ void UIText::RenderText(bool forSelectionFramebuffer) const
             UIRenderer::RenderWithoutBindingMaterial(); // RENDER THE CHAR !!!
         }
         else
+        #endif
         {
             UIRenderer::Render();
         }

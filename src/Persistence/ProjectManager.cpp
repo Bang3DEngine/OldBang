@@ -3,16 +3,19 @@
 #include "List.h"
 #include "Debug.h"
 #include "Scene.h"
-#include "Dialog.h"
 #include "Project.h"
 #include "XMLNode.h"
-#include "MenuBar.h"
-#include "Explorer.h"
 #include "XMLParser.h"
 #include "FileWriter.h"
 #include "Persistence.h"
-#include "EditorWindow.h"
 #include "SceneManager.h"
+
+#ifdef BANG_EDITOR
+#include "Dialog.h"
+#include "MenuBar.h"
+#include "Explorer.h"
+#include "EditorWindow.h"
+#endif
 
 Project *ProjectManager::s_currentProject = nullptr;
 
@@ -20,6 +23,61 @@ ProjectManager::ProjectManager()
 {
 }
 
+Project* ProjectManager::OpenProject(const String &projectFilepath)
+{
+    Debug_Log(projectFilepath);
+    XMLNode *xmlInfo = XMLParser::FromFile(projectFilepath);
+    if (!xmlInfo)
+    {
+        Debug_Error("Could not open project '" << projectFilepath << "'");
+        return nullptr;
+    }
+
+    #ifdef BANG_EDITOR
+    ProjectManager::CloseCurrentProject();
+    #endif
+
+    ProjectManager::s_currentProject = new Project();
+    ProjectManager::s_currentProject->ReadXMLInfo(xmlInfo);
+    String projectDir = Persistence::GetDir(projectFilepath);
+    ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
+
+    #ifdef BANG_EDITOR
+    // Set directory of the explorer to the Assets' root of the new project
+    Explorer::GetInstance()->SetDir(
+                ProjectManager::s_currentProject->GetProjectAssetsRootFilepath());
+
+    // Set window title
+    String title = "Bang - " + ProjectManager::s_currentProject->GetProjectName();
+    EditorWindow::GetInstance()->GetMainWindow()->setWindowTitle(title.ToQString());
+    #endif
+
+    // Set persistence variables
+    Persistence::c_ProjectRootAbsolute = ProjectManager::s_currentProject->GetProjectRootFilepath();
+    Persistence::c_ProjectAssetsRootAbsolute =
+            Persistence::c_ProjectRootAbsolute + "/Assets";
+
+
+    // Open the first found scene
+    List<String> sceneFilepaths = Persistence::GetFiles(projectDir, true,
+                                                        {"*." + Scene::GetFileExtensionStatic()});
+    if (!sceneFilepaths.Empty())
+    {
+        SceneManager::LoadScene(sceneFilepaths.Front());
+    }
+    else
+    {
+        #ifdef BANG_EDITOR
+        // Create new empty scene
+        MenuBar::GetInstance()->CreateNewScene();
+        #endif
+    }
+    //
+
+    return ProjectManager::s_currentProject;
+}
+
+#ifdef BANG_EDITOR
 Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
                                           const String &projectName)
 {
@@ -49,53 +107,6 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
                             ProjectManager::s_currentProject->GetXMLInfoString());
 
     Persistence::CreateDirectory(projectDir + "/Assets");
-
-    return ProjectManager::s_currentProject;
-}
-
-Project* ProjectManager::OpenProject(const String &projectFilepath)
-{
-    XMLNode *xmlInfo = XMLParser::FromFile(projectFilepath);
-    if (!xmlInfo)
-    {
-        Debug_Error("Could not open project '" << projectFilepath << "'");
-        return nullptr;
-    }
-
-    ProjectManager::CloseCurrentProject();
-
-    ProjectManager::s_currentProject = new Project();
-    ProjectManager::s_currentProject->ReadXMLInfo(xmlInfo);
-    String projectDir = Persistence::GetDir(projectFilepath);
-    ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
-
-    // Set directory of the explorer to the Assets' root of the new project
-    Explorer::GetInstance()->SetDir(
-                ProjectManager::s_currentProject->GetProjectAssetsRootFilepath());
-
-    // Set window title
-    String title = "Bang - " + ProjectManager::s_currentProject->GetProjectName();
-    EditorWindow::GetInstance()->GetMainWindow()->setWindowTitle(title.ToQString());
-
-    // Set persistence variables
-    Persistence::c_ProjectRootAbsolute = ProjectManager::s_currentProject->GetProjectRootFilepath();
-    Persistence::c_ProjectAssetsRootAbsolute =
-            Persistence::c_ProjectRootAbsolute + "/Assets";
-
-
-    // Open the first found scene
-    List<String> sceneFilepaths = Persistence::GetFiles(projectDir, true,
-                                                        {"*." + Scene::GetFileExtensionStatic()});
-    if (!sceneFilepaths.Empty())
-    {
-        SceneManager::LoadScene(sceneFilepaths.Front());
-    }
-    else
-    {
-        // Create new empty scene
-        MenuBar::GetInstance()->CreateNewScene();
-    }
-    //
 
     return ProjectManager::s_currentProject;
 }
@@ -168,6 +179,7 @@ String ProjectManager::DialogOpenProject()
                                     String(QDir::homePath()) );
     return projectFilepath;
 }
+#endif
 
 Project *ProjectManager::GetCurrentProject()
 {

@@ -11,7 +11,7 @@ QT += core gui opengl
 #    GAME
 
 BUILD_MODE = $$BUILD_MODE # EDITOR or GAME
-isEmpty($$BUILD_MODE) {   # Default build mode variable
+isEmpty(BUILD_MODE) {   # Default build mode variable
   BUILD_MODE = EDITOR
 }
 #message(BUILD_MODE: $$BUILD_MODE)
@@ -207,7 +207,6 @@ OTHER_FILES += \
 
 HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
-    src/View/EditorWindow.h \
     src/Domain/Interfaces/IToString.h \
     src/Domain/Engine/Interfaces/ISceneEventListener.h \
     src/Domain/Engine/Others/Timer.h \
@@ -258,7 +257,6 @@ HEADERS += \
     src/Domain/Engine/Components/SingleLineRenderer.h \
     src/Domain/Engine/Assets/Meshes/MeshFactory.h \
     src/Domain/Engine/Interfaces/ICloneable.h \
-    src/Domain/Engine/Others/GameBuilder.h \
     src/View/Screen.h \
     src/Domain/Engine/Others/StringUtils.h \
     src/View/IWindow.h \
@@ -302,13 +300,13 @@ HEADERS += \
     src/Domain/Engine/Components/UIText.h \
     src/Persistence/ProjectManager.h \
     src/Persistence/Project.h \
-    src/View/Dialogs/Dialog.h \
-    src/View/SelectProjectWindow.h \
     src/Persistence/EngineConfig.h \
     src/Persistence/BehaviourRefresherTimer.h
 
 EDITOR {
 HEADERS += \
+    src/View/SelectProjectWindow.h \
+    src/View/EditorWindow.h \
     src/View/EditorGameObject/EditorSelectionGameObject.h \
     src/View/EditorScene/EditorDebugGameObject.h \
     src/View/EditorGameObject/EditorTranslateAxis.h \
@@ -317,6 +315,7 @@ HEADERS += \
     src/View/Toolbar.h \
     src/View/WindowEventManager.h \
     src/View/Inspector/AttrWidgetFile.h \
+    src/View/Dialogs/Dialog.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/View/Inspector/Inspector.h \
     src/View/Hierarchy/Hierarchy.h \
@@ -366,6 +365,7 @@ HEADERS += \
     src/View/Inspector/ComponentWidgetContextMenu.h \
     src/View/Inspector/InspectorContextMenu.h \
     src/View/ContextMenu.h \
+    src/Domain/Engine/Others/GameBuilder.h \
     src/View/ShortcutManager.h \
     src/View/EditorGameObject/EditorAxisPlane.h \
     src/View/IShortcutListener.h
@@ -431,7 +431,6 @@ SOURCES += \
     src/Domain/Engine/Components/SingleLineRenderer.cpp \
     src/Domain/Engine/Assets/Meshes/MeshFactory.cpp \
     src/Domain/Engine/Interfaces/ICloneable.cpp \
-    src/Domain/Engine/Others/GameBuilder.cpp \
     src/View/Screen.cpp \
     src/Domain/Engine/Others/StringUtils.cpp \
     src/View/IWindow.cpp \
@@ -470,13 +469,12 @@ SOURCES += \
     src/Domain/Engine/Components/UIText.cpp \
     src/Persistence/ProjectManager.cpp \
     src/Persistence/Project.cpp \
-    src/View/Dialogs/Dialog.cpp \
-    src/View/SelectProjectWindow.cpp \
     src/Persistence/EngineConfig.cpp \
     src/Persistence/BehaviourRefresherTimer.cpp
 
 EDITOR {
     SOURCES += \
+        src/View/SelectProjectWindow.cpp \
         src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
         src/View/EditorGameObject/EditorRotateAxis.cpp \
         src/View/EditorGameObject/EditorAxisGroup.cpp \
@@ -499,6 +497,7 @@ EDITOR {
         src/View/Explorer/Explorer.cpp \
         src/View/Inspector/IInspectable.cpp \
         src/View/MenuBar.cpp \
+        src/View/Dialogs/Dialog.cpp \
         src/View/Inspector/AttrWidgetFile.cpp \
         src/View/Explorer/ExplorerDirTree.cpp \
         src/View/Inspector/InspectorWidget.cpp \
@@ -532,6 +531,7 @@ EDITOR {
         src/View/Explorer/ExplorerContextMenu.cpp \
         src/View/Inspector/ComponentWidgetContextMenu.cpp \
         src/View/Inspector/InspectorContextMenu.cpp \
+        src/Domain/Engine/Others/GameBuilder.cpp \
         src/View/ContextMenu.cpp \
         src/View/ShortcutManager.cpp \
         src/View/IShortcutListener.cpp \

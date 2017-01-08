@@ -53,9 +53,11 @@ public:
    static String GetRightmostDir(const String &dir);
 
    static bool DuplicateFile(const String &fromFilepath,
-                             const String &toFilepath);
+                             const String &toFilepath,
+                             bool overwrite = true);
    static bool DuplicateDir(const String &fromDirpath,
-                            const String &toDirpath);
+                            const String &toDirpath,
+                            bool overwrite = true);
 
     #ifdef BANG_EDITOR
    /**

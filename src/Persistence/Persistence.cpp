@@ -201,33 +201,42 @@ String Persistence::GetRightmostDir(const String &dir)
 }
 
 bool Persistence::DuplicateFile(const String &fromFilepath,
-                                const String &toFilepath)
+                                const String &toFilepath,
+                                bool overwrite)
 {
     ASSERT(Persistence::ExistsFile(fromFilepath), "", return false);
-    return QFile::copy(fromFilepath.ToQString(), toFilepath.ToQString());
+    if (overwrite) { Persistence::Remove(toFilepath); }
+    bool ok = QFile::copy(fromFilepath.ToQString(), toFilepath.ToQString());
+    return ok;
 }
 
 bool Persistence::DuplicateDir(const String &fromDirpath,
-                               const String &toDirpath)
+                               const String &toDirpath,
+                               bool overwrite)
 {
     ASSERT(Persistence::ExistsDirectory(fromDirpath), "", return false);
 
-    Persistence::CreateDirectory(toDirpath);
+    if (!Persistence::CreateDirectory(toDirpath)) { return false; }
     List<String> filepaths = Persistence::GetFiles(fromDirpath, false);
-    for(String filepath : filepaths)
+    for(const String & filepath : filepaths)
     {
         String fileName = Persistence::GetFileNameWithExtension(filepath);
-        Persistence::DuplicateFile(fromDirpath + "/" + fileName,
-                                   toDirpath   + "/" + fileName);
+        bool ok = Persistence::DuplicateFile(fromDirpath + "/" + fileName,
+                                             toDirpath   + "/" + fileName,
+                                             overwrite);
+        if (!ok) { return false; }
     }
 
     List<String> subdirs = Persistence::GetSubDirectories(fromDirpath, false);
-    for (String subdir : subdirs)
+    for (const String &subdir : subdirs)
     {
-        Persistence::DuplicateDir(
-                    subdir,
-                    toDirpath + "/" + Persistence::GetRightmostDir(subdir));
+        bool ok = Persistence::DuplicateDir(
+                            subdir,
+                            toDirpath + "/" + Persistence::GetRightmostDir(subdir),
+                            overwrite);
+        if (!ok) { return false; }
     }
+    return true;
 }
 
 #ifdef BANG_EDITOR
@@ -328,7 +337,12 @@ List<String> Persistence::GetFiles(const String &dirPath,
         extensionList.append(ext.ToQString());
     }
 
-    List<String> subdirs = GetSubDirectories(dirPath, recursive);
+    List<String> subdirs;
+    if (recursive)
+    {
+        List<String> subdirsRecursive = GetSubDirectories(dirPath, recursive);
+        subdirs.Splice(subdirs.Begin(), subdirsRecursive);
+    }
     subdirs.PushFront(dirPath);
     for (String subdir : subdirs)
     {
@@ -392,6 +406,7 @@ bool Persistence::Exists(const String &filepath)
 bool Persistence::CreateDirectory(const String &dirPath)
 {
     ASSERT(!dirPath.Empty(), "", return false);
+    if (Persistence::ExistsDirectory(dirPath)) { return true; }
     return QDir().mkdir(dirPath.ToQString());
 }
 
