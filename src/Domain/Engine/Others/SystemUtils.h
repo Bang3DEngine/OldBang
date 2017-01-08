@@ -48,9 +48,11 @@ public:
      * @brief Compiles the passed script into a shared library, whom path is
      * returned.
      * @param filepath of the script to compile. Relative to the project root.
+     * @param with the BANG_EDITOR define or without it
      * @return The filepath of the created library
      */
-    static String CompileToSharedObject(const String &filepathFromProjectRoot);
+    static String CompileToSharedObject(const String &filepathFromProjectRoot,
+                                        bool editorMode = true);
 
     /**
      * @brief Creates a Behaviour from its QLibrary passed as parameter.

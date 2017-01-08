@@ -3,12 +3,12 @@
 #include <QLibrary>
 
 #include "Debug.h"
-#include "Debug.h"
+#include "Project.h"
 #include "Persistence.h"
 #include "Application.h"
 #include "SystemUtils.h"
+#include "ProjectManager.h"
 #include "BehaviourHolder.h"
-
 #include "BehaviourManagerCompileThread.h"
 
 BehaviourManager::BehaviourManager()
@@ -139,6 +139,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             // Compile once
             bm->m_behPathsBeingCompiled.insert(absPath);
 
+            #ifdef BANG_EDITOR
             // Have to compile and load it. First compile
             BehaviourManagerCompileThread *compileThread =
                     new BehaviourManagerCompileThread(absPath);
@@ -146,9 +147,20 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
 
             Debug_Status("Compiling script " <<
                          Persistence::GetFileName(behaviourFilepath) << "...", 5.0f);
-
             // And when the compileThread finishes, we will be notified,
             // load the library, and then notify the behaviourHolders waiting for it
+
+            #else // GAME
+            // In Game, we have the behaviour object library in
+            // "BEHAVIOUR_DIR/BEHAVIOUR_NAME.so.RANDOM_PROJECT_ID"
+            // so we just have to load it directly. I.E., notify the instant load.
+            const String behaviourDir = Persistence::GetDir(behaviourFilepath);
+            const String behaviourFilename = Persistence::GetFileName(behaviourFilepath);
+            const String libraryFilepath = behaviourDir + "/" + behaviourFilename + ".so." +
+                    ProjectManager::GetCurrentProject()->GetProjectRandomId();
+            Debug_Log("Loading library " << libraryFilepath);
+            OnBehaviourFinishedCompiling(behaviourFilepath, libraryFilepath);
+            #endif
         }
     }
 }

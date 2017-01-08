@@ -20,10 +20,12 @@ public:
     String GetProjectAssetsRootFilepath() const;
     String GetProjectFileFilepath() const;
     String GetProjectName() const;
+    String GetProjectRandomId() const;
 
     void SetProjectRootFilepath(const String &projectDir);
 
 private:
+    String m_randomId = "123456789";
     String m_projectRootFilepath = "";
 
 };

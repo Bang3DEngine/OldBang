@@ -171,7 +171,8 @@ void SystemUtils::SystemBackground(const String &command)
     system(cmd.ToCString());
 }
 
-String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
+String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot,
+                                          bool editorMode)
 {
     // GET INCLUDES
     // Get all subdirs recursively in a single line, and add -I in Front of every path
@@ -199,7 +200,10 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
     options += " -O0";
     options += " -g ";
     #ifdef BANG_EDITOR
-    options += " -D BANG_EDITOR ";
+    if (editorMode)
+    {
+        options += " -D BANG_EDITOR ";
+    }
     #endif
     options += " -Wl,--export-dynamic ";
     options += " --std=c++11";
@@ -226,6 +230,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot)
 
     String output = "";
     bool ok = false;
+    Debug_Log(cmd);
     SystemUtils::System(cmd, &output, &ok);
 
     if (ok)

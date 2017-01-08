@@ -1,5 +1,8 @@
 #include "ProjectManager.h"
 
+#include <string>
+
+#include "Time.h"
 #include "List.h"
 #include "Debug.h"
 #include "Scene.h"
@@ -25,7 +28,6 @@ ProjectManager::ProjectManager()
 
 Project* ProjectManager::OpenProject(const String &projectFilepath)
 {
-    Debug_Log(projectFilepath);
     XMLNode *xmlInfo = XMLParser::FromFile(projectFilepath);
     if (!xmlInfo)
     {
@@ -98,17 +100,22 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
 
     ProjectManager::CloseCurrentProject();
 
-    ProjectManager::s_currentProject = new Project();
-    ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
-
     String projectFileFilepath = projectDir + "/" +
             projectName + "." + Project::GetFileExtensionStatic();
-    FileWriter::WriteToFile(projectFileFilepath,
-                            ProjectManager::s_currentProject->GetXMLInfoString());
+
+    ProjectManager::s_currentProject = CreateNewProjectFileOnly(projectFileFilepath);
+    ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 
     Persistence::CreateDirectory(projectDir + "/Assets");
 
     return ProjectManager::s_currentProject;
+}
+
+Project *ProjectManager::CreateNewProjectFileOnly(const String &projectFilepath)
+{
+    Project *proj = new Project();
+    FileWriter::WriteToFile(projectFilepath, proj->GetXMLInfoString());
+    return proj;
 }
 
 void ProjectManager::SaveProject(const Project *project)

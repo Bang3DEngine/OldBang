@@ -16,7 +16,8 @@ public:
 
     #ifdef BANG_EDITOR
     static Project* CreateNewProject(const String &projectContainingDir,
-                               const String &projectName);
+                                     const String &projectName);
+    static Project* CreateNewProjectFileOnly(const String &projectFilepath);
     static void SaveProject(const Project *project);
     static void SaveCurrentProject();
     static void CloseCurrentProject();

@@ -88,8 +88,6 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
 
 int main(int argc, char *argv[])
 {
-    Debug_Log("HOLAAAA");
-
     String executableFile = argv[0];
     String executableDir = Persistence::GetDir(executableFile);
     #ifdef BANG_EDITOR
