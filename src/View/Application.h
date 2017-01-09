@@ -40,7 +40,8 @@ private:
 
     // If this is too low, Qt stops it when dragging
     // something around the window :(
-    const int c_redrawDelay = 16; // 60 FPS cap
+    //const int c_redrawDelay = 16; // 60 FPS cap
+    const int c_redrawDelay = 35; // 30 FPS cap
 
     // To detect when it's autorepeat (very fast Release after a Press)
     struct LastKeyEventInfo

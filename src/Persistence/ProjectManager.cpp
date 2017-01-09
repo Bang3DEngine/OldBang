@@ -59,6 +59,10 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     Persistence::c_ProjectAssetsRootAbsolute =
             Persistence::c_ProjectRootAbsolute + "/Assets";
 
+    Debug_Log(Persistence::c_EngineRootAbsolute);
+    Debug_Log(Persistence::c_EngineAssetsRootAbsolute);
+    Debug_Log(Persistence::c_ProjectRootAbsolute);
+    Debug_Log(Persistence::c_ProjectAssetsRootAbsolute);
 
     // Open the first found scene
     List<String> sceneFilepaths = Persistence::GetFiles(projectDir, true,

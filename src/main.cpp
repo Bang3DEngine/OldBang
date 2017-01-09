@@ -88,8 +88,13 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
 
 int main(int argc, char *argv[])
 {
-    String executableFile = argv[0];
-    String executableDir = Persistence::GetDir(executableFile);
+    String executableDir = ""; // Get the executable dir
+    {
+        Application preApp(argc, argv);
+        executableDir = preApp.applicationDirPath();
+        preApp.exit(0);
+    }
+
     #ifdef BANG_EDITOR
     // Init engine paths, by looking at executable location:
     String engineRootDirAbs = Persistence::GetDirUp(executableDir);
@@ -98,7 +103,7 @@ int main(int argc, char *argv[])
             Persistence::c_EngineRootAbsolute + "/EngineAssets";
     //
     #else
-    Persistence::c_EngineRootAbsolute = "./GameData";
+    Persistence::c_EngineRootAbsolute = executableDir + "/GameData";
     Persistence::c_EngineAssetsRootAbsolute =
             Persistence::c_EngineRootAbsolute + "/EngineAssets";
     #endif
