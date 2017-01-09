@@ -1,9 +1,8 @@
 #ifndef BEHAVIOUR_H
 #define BEHAVIOUR_H
 
-#include "Debug.h"
-
 #include "Time.h"
+#include "Debug.h"
 #include "Input.h"
 #include "Debug.h"
 #include "Scene.h"

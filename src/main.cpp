@@ -88,6 +88,12 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
 
 int main(int argc, char *argv[])
 {
+    #ifndef BANG_EDITOR
+    std::cout << "GAMEEEEEEEEEEEEEEEEEEEEEEEEEEEE" << std::endl;
+    #else
+    std::cout << "EDITOOOOOOOOOOOOOOOOOOOOOOOORRRR" << std::endl;
+    #endif
+
     String executableDir = ""; // Get the executable dir
     {
         Application preApp(argc, argv);

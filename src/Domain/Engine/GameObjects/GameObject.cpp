@@ -201,8 +201,11 @@ const List<Component *> &GameObject::GetComponents() const
 const List<GameObject *> GameObject::GetChildren() const
 {
     List<GameObject *> cc;
+    //Debug_Log(m_children);
+    //Debug_Log(m_children.Size());
     for (GameObject *c : m_children)
     {
+        //Debug_Log("    " << c);
         if (!c->IsEditorGameObject()) cc.PushBack(c);
     }
     return cc;

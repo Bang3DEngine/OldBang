@@ -30,16 +30,19 @@ void GameBuilder::BuildGame(bool runGame)
 
         ASSERT(!outputFilepath.Empty());
 
+        // The Game.exe must be compiled before the behaviours *.so are compiled,
+        // because they need all the objects (*.o) of the engine in Game mode
+        Debug_Status("Building game...", 5.0f);
+        GameBuilder::buildThread.m_outputFilepath = outputFilepath;
+        GameBuilder::buildThread.m_runGameAfterBuild = runGame;
+        GameBuilder::buildThread.BuildGame();
+
         String outputDir = Persistence::GetDir(outputFilepath);
         bool createdDataDir = GameBuilder::CreateDataDirectory(outputDir);
         ASSERT(createdDataDir, "Could not create data directory");
 
         outputFilepath = Persistence::AppendExtension(outputFilepath, "exe");
-        GameBuilder::buildThread.m_outputFilepath = outputFilepath;
 
-        Debug_Status("Building game...", 5.0f);
-        GameBuilder::buildThread.m_runGameAfterBuild = runGame;
-        GameBuilder::buildThread.start();
     }
 }
 
@@ -67,14 +70,6 @@ bool GameBuilder::CreateDataDirectory(const String &parentDir)
             ProjectManager::CreateNewProjectFileOnly(dataDir + "/Game.bproject");
     if (!gameProject) { return false; }
 
-    /*
-    String projFilepath = proj->GetProjectFileFilepath();
-    if (!Persistence::DuplicateFile(projFilepath, dataDir + "/Game.bproject"))
-    {
-        return false;
-    }
-    */
-
     // Compile the behaviours and save them so the Game can load them instantly,
     // and doesn't need to compile them
     List<String> behaviourFilepaths =
@@ -100,7 +95,6 @@ bool GameBuilder::CreateDataDirectory(const String &parentDir)
         // Add the random project Id, to avoid library(*.so) caching from
         // the operative system (it happens, yes)
         String randomProjectId = gameProject->GetProjectRandomId();
-        Debug_Log(randomProjectId);
         String gameLibWithRandomProjectId =
                 gameLibFilepathWithoutTimestamp + "." + randomProjectId;
         Persistence::Rename(compiledLibFilepath, gameLibWithRandomProjectId);
@@ -108,6 +102,11 @@ bool GameBuilder::CreateDataDirectory(const String &parentDir)
 }
 
 void BuildGameThread::run()
+{
+    BuildGame();
+}
+
+void BuildGameThread::BuildGame()
 {
     String output = "";
     String cmd = Persistence::c_EngineRootAbsolute + "/scripts/compile.sh GAME";

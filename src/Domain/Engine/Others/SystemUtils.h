@@ -24,7 +24,7 @@ private:
 public:
 
     static String GetAllProjectObjects();
-    static String GetAllEngineObjects();
+    static String GetAllEngineObjects(bool editorMode);
 
     static String GetAllProjectSubDirs();
     static String GetAllEngineSubDirs();

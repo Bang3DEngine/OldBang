@@ -19,7 +19,7 @@ then
 fi
 
 # Make and run Bang
-#echo "BUILD_MODE on compile.sh: '${BUILD_MODE}'"
+echo "BUILD_MODE on compile.sh: '${BUILD_MODE}'"
 qmake "BUILD_MODE=${BUILD_MODE}"
 if [ $(command_exists colormake) ] && [ "${BUILD_MODE}" != "GAME" ] 
 then

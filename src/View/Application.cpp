@@ -53,7 +53,11 @@ void Application::OnDrawTimerTick()
     Input::GetInstance()->ProcessEnqueuedEvents();
 
     Scene *activeScene = SceneManager::GetActiveScene();
-    if (activeScene)
+    bool canUpdate = activeScene;
+    #ifndef BANG_EDITOR // GAME
+    canUpdate = (canUpdate || activeScene->IsStarted());
+    #endif
+    if (canUpdate)
     {
         m_lastRenderTime = Time::GetNow();
         activeScene->_OnUpdate();

@@ -14,7 +14,7 @@ BUILD_MODE = $$BUILD_MODE # EDITOR or GAME
 isEmpty(BUILD_MODE) {   # Default build mode variable
   BUILD_MODE = EDITOR
 }
-#message(BUILD_MODE: $$BUILD_MODE)
+message(BUILD_MODE: $$BUILD_MODE)
 
 CONFIG += $$BUILD_MODE
 CONFIG += qt

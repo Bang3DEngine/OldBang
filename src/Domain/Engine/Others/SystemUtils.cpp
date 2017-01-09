@@ -16,14 +16,9 @@ String SystemUtils::GetAllProjectObjects()
     return String::Join(files, " ");
 }
 
-String SystemUtils::GetAllEngineObjects()
+String SystemUtils::GetAllEngineObjects(bool editorMode)
 {
-    #ifdef BANG_EDITOR
-    String subdir = "/bin/objEditor";
-    #else
-    String subdir = "/bin/objGame";
-    #endif
-
+    String subdir = editorMode ? "/bin/objEditor" : "/bin/objGame";
     List<String> files =
             Persistence::GetFiles(Persistence::c_EngineRootAbsolute + subdir,
                                   true, {"*.o"});
@@ -187,7 +182,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot,
 
     String objs = "";
     objs += SystemUtils::GetAllProjectObjects() + " ";
-    objs += SystemUtils::GetAllEngineObjects() + " ";
+    objs += SystemUtils::GetAllEngineObjects(editorMode) + " ";
 
     String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
     qtLibDirs.Replace("\n", " ");

@@ -14,6 +14,9 @@ class BuildGameThread : public QThread
 
     protected:
         void run() override;
+        void BuildGame();
+
+    friend class GameBuilder;
 };
 
 class GameBuilder

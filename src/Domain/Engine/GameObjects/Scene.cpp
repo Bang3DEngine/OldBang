@@ -1,5 +1,6 @@
 #include "Scene.h"
 
+#include "Debug.h"
 #include "Screen.h"
 #include "Camera.h"
 #include "Material.h"
@@ -9,8 +10,6 @@
 #include "SceneManager.h"
 #include "GraphicPipeline.h"
 #include "DirectionalLight.h"
-
-#include "Debug.h"
 
 Scene::Scene() : GameObject("Scene")
 {
@@ -23,16 +22,14 @@ void Scene::_OnStart()
     if (!IsEditorGameObject())
     {
         List<Camera*> cameras = GetComponentsInChildren<Camera>();
-        Debug_Status("Cameras: " << cameras, 5.0f);
         if (!cameras.Empty())
         {
             Camera *cam = cameras.Front();
             SetCamera(cam);
-            Debug_Status("Found camera: " << cam, 5.0f);
         }
         else // Create default camera
         {
-            Debug_Status("Creating default camera", 5.0f);
+            Debug_Warn("No camera was found. Creating default camera...");
             GameObject *m_defaultCamera = new GameObject("DefaultCamera");
             m_defaultCamera->transform->SetPosition(Vector3(90));
             m_defaultCamera->transform->LookAt(Vector3::Zero);
