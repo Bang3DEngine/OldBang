@@ -2,33 +2,39 @@
 #define GAMEBUILDER_H
 
 #include <QThread>
+#include <QProgressDialog>
 
 #include "String.h"
+#include "GameBuilderThread.h"
 
-class BuildGameThread : public QThread
-{
-    Q_OBJECT
-    public:
-        String m_outputFilepath = "";
-        bool m_runGameAfterBuild = false;
-
-    protected:
-        void run() override;
-        void BuildGame();
-
-    friend class GameBuilder;
-};
-
+class Project;
+class GameBuildDialog;
 class GameBuilder
 {
 public:
-    static void BuildGame(bool runGame = false);
+    static GameBuilder* GetInstance();
+
+    void BuildGame(bool runGame = false);
 
 private:
-    GameBuilder() {}
+    GameBuilder();
+    virtual ~GameBuilder();
 
-    static BuildGameThread buildThread;
-    static bool CreateDataDirectory(const String &parentDir);
+    static GameBuilder *s_instance;
+
+    GameBuilderThread m_buildThread;
+    GameBuildDialog *m_gameBuildDialog = nullptr;
+
+    String AskForExecutableFilepath();
+    bool     CompileGameExecutable(const String &gameExecutableFilepath);
+    bool     CreateDataDirectory(const String &executableDir);
+    Project* CreateGameProject(const String &executableDir);
+    bool     CompileBehaviours(const String &executableDir,
+                               Project *GameProject);
+
+    GameBuildDialog *GetGameBuildDialog();
+
+    friend class GameBuilderThread;
 };
 
 #endif // GAMEBUILDER_H

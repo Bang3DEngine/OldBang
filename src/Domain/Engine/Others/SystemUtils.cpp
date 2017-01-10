@@ -197,7 +197,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot,
     #ifdef BANG_EDITOR
     if (editorMode)
     {
-        options += " -D BANG_EDITOR ";
+        options += " -DBANG_EDITOR ";
     }
     #endif
     options += " -Wl,--export-dynamic ";
@@ -225,7 +225,7 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot,
 
     String output = "";
     bool ok = false;
-    Debug_Log(cmd);
+    //Debug_Log(cmd);
     SystemUtils::System(cmd, &output, &ok);
 
     if (ok)

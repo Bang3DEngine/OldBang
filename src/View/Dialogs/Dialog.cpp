@@ -73,12 +73,13 @@ String Dialog::GetOpenFilename(const String &caption,
 String Dialog::GetSaveFilename(const String &caption,
                                    const String &extension,
                                    const String &initPath,
-                                   const String &suggestedFilename)
+                                   const String &suggestedFilename,
+                                   QWidget *parent)
 {
     String filepath =
             String(
                 QFileDialog::getSaveFileName(
-                    Dialog::GetCurrentWindow(),
+                    parent ? parent : Dialog::GetCurrentWindow(),
                     caption.ToQString(),
                     String(initPath + "/" + suggestedFilename).ToQString(),
                     Dialog::GetExtensionFilterString(extension).ToQString(),

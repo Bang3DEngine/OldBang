@@ -6,49 +6,113 @@
 #include "Persistence.h"
 #include "StringUtils.h"
 #include "SystemUtils.h"
+#include "EditorWindow.h"
 #include "ProjectManager.h"
+#include "GameBuildDialog.h"
 #include "BehaviourManager.h"
 
-BuildGameThread GameBuilder::buildThread;
+GameBuilder *GameBuilder::s_instance = nullptr;
+
+GameBuilder::GameBuilder()
+{
+}
+
+GameBuilder::~GameBuilder()
+{
+}
+
+GameBuilder *GameBuilder::GetInstance()
+{
+    if (!GameBuilder::s_instance)
+    {
+        GameBuilder::s_instance = new GameBuilder();
+    }
+    return GameBuilder::s_instance;
+}
+
+String GameBuilder::AskForExecutableFilepath()
+{
+    // Get the executable output filepath
+    const String defaultOutputDirectory = Persistence::c_ProjectRootAbsolute;
+    const String projectName = ProjectManager::GetCurrentProject()->GetProjectName();
+    Debug_Log("HIIIII");
+    String executableFilepath =
+        Dialog::GetSaveFilename("Choose the file where you want to create your game",
+                                "exe",
+                                defaultOutputDirectory,
+                                projectName + ".exe");
+
+    if (!executableFilepath.Empty())
+    {
+        executableFilepath =
+                Persistence::AppendExtension(executableFilepath, "exe");
+    }
+    return executableFilepath;
+}
 
 void GameBuilder::BuildGame(bool runGame)
 {
-    if (GameBuilder::buildThread.isRunning())
+    if (m_buildThread.isRunning())
     {
         Debug_Status("Game is already being built", 5.0f);
     }
     else
     {
-        // Compile!
-        const String defaultOutputDirectory = Persistence::c_ProjectRootAbsolute;
-        const String projectName = ProjectManager::GetCurrentProject()->GetProjectName();
-        String outputFilepath =
-            Dialog::GetSaveFilename("Choose the file where you want to create your game",
-                                    "exe",
-                                    defaultOutputDirectory,
-                                    projectName + ".exe");
+        // First ask for the executable output file (in the main thread)
+        String executableFilepath = AskForExecutableFilepath();
+        ASSERT(!executableFilepath.Empty());
 
-        ASSERT(!outputFilepath.Empty());
+        // Create the progress window
+        if (m_gameBuildDialog) { delete m_gameBuildDialog; }
+        m_gameBuildDialog = new GameBuildDialog();
 
-        // The Game.exe must be compiled before the behaviours *.so are compiled,
-        // because they need all the objects (*.o) of the engine in Game mode
-        Debug_Status("Building game...", 5.0f);
-        GameBuilder::buildThread.m_outputFilepath = outputFilepath;
-        GameBuilder::buildThread.m_runGameAfterBuild = runGame;
-        GameBuilder::buildThread.BuildGame();
-
-        String outputDir = Persistence::GetDir(outputFilepath);
-        bool createdDataDir = GameBuilder::CreateDataDirectory(outputDir);
-        ASSERT(createdDataDir, "Could not create data directory");
-
-        outputFilepath = Persistence::AppendExtension(outputFilepath, "exe");
-
+        // Create and start the building thread
+        QObject::connect(&m_buildThread, SIGNAL(NotifyPercent(float)),
+                          m_gameBuildDialog, SLOT(SetPercent(float)));
+        QObject::connect(&m_buildThread, SIGNAL(NotifyMessage(String)),
+                          m_gameBuildDialog, SLOT(SetMessage(String)));
+        m_buildThread.m_executableFilepath = executableFilepath;
+        m_buildThread.m_runGameAfterBuild  = runGame;
+        m_buildThread.start();
     }
 }
 
-bool GameBuilder::CreateDataDirectory(const String &parentDir)
+bool GameBuilder::CompileGameExecutable(const String &gameExecutableFilepath)
 {
-    String dataDir = parentDir + "/GameData";
+    String output = "";
+    String cmd = Persistence::c_EngineRootAbsolute + "/scripts/compile.sh GAME";
+
+    const String initialOutputDir = Persistence::c_EngineRootAbsolute + "/bin/Game.exe";
+    Persistence::Remove(initialOutputDir);
+
+    bool ok = false;
+    SystemUtils::System(cmd.ToCString(), &output, &ok);
+    ok = ok && Persistence::ExistsFile(initialOutputDir);
+    if (ok)
+    {
+        Persistence::Remove(gameExecutableFilepath);
+        Persistence::Move(initialOutputDir, gameExecutableFilepath);
+        //Debug_Status("Game has been built!", 5.0f);
+        /*
+        if (m_runGameAfterBuild)
+        {
+            //Debug_Status("Running Game...", 0.0f);
+            SystemUtils::SystemBackground(m_outputFilepath); // Execute game
+            //Debug_Status("Game is running!", 0.0f);
+        }
+        */
+        return true;
+    }
+    else
+    {
+        Debug_Error(output);
+        return false;
+    }
+}
+
+bool GameBuilder::CreateDataDirectory(const String &executableDir)
+{
+    String dataDir = executableDir + "/GameData";
     if (!Persistence::CreateDirectory(dataDir)) { return false; }
 
     // Copy the Engine Assets in the GameData directory
@@ -65,13 +129,24 @@ bool GameBuilder::CreateDataDirectory(const String &parentDir)
         return false;
     }
 
-    // Create the project of the Game
+    return true;
+}
+
+Project* GameBuilder::CreateGameProject(const String &executableDir)
+{
+    String dataDir = executableDir + "/GameData";
     Project *gameProject =
             ProjectManager::CreateNewProjectFileOnly(dataDir + "/Game.bproject");
-    if (!gameProject) { return false; }
+    return gameProject;
+}
 
-    // Compile the behaviours and save them so the Game can load them instantly,
-    // and doesn't need to compile them
+bool GameBuilder::CompileBehaviours(const String &executableDir,
+                                    Project *gameProject)
+{
+    String dataDir = executableDir + "/GameData";
+
+    // Compile the behaviours and save them so the Game can
+    // load them instantly and doesn't need to compile them
     List<String> behaviourFilepaths =
             Persistence::GetFiles(Persistence::c_ProjectAssetsRootAbsolute,
                                   true, { "*.cpp" });
@@ -92,45 +167,18 @@ bool GameBuilder::CreateDataDirectory(const String &parentDir)
                 Persistence::GetDir(gameLibFilepath) + "/" +
                 Persistence::GetFileName(gameLibFilepath) + ".so";
 
-        // Add the random project Id, to avoid library(*.so) caching from
-        // the operative system (it happens, yes)
+        // Add the random project Id to the name, to avoid library(*.so)
+        // caching from by operative system (it happens, yes)
         String randomProjectId = gameProject->GetProjectRandomId();
         String gameLibWithRandomProjectId =
                 gameLibFilepathWithoutTimestamp + "." + randomProjectId;
         Persistence::Rename(compiledLibFilepath, gameLibWithRandomProjectId);
     }
+
+    return true;
 }
 
-void BuildGameThread::run()
+GameBuildDialog *GameBuilder::GetGameBuildDialog()
 {
-    BuildGame();
-}
-
-void BuildGameThread::BuildGame()
-{
-    String output = "";
-    String cmd = Persistence::c_EngineRootAbsolute + "/scripts/compile.sh GAME";
-
-    const String initialOutputDir = Persistence::c_EngineRootAbsolute + "/bin/Game.exe";
-    Persistence::Remove(initialOutputDir);
-
-    bool ok = false;
-    SystemUtils::System(cmd.ToCString(), &output, &ok);
-    ok = ok && Persistence::ExistsFile(initialOutputDir);
-    if (ok)
-    {
-        //Debug_Status("Game has been built!", 5.0f);
-        Persistence::Remove(m_outputFilepath);
-        Persistence::Move(initialOutputDir, m_outputFilepath);
-        if (m_runGameAfterBuild)
-        {
-            //Debug_Status("Running Game...", 0.0f);
-            SystemUtils::SystemBackground(m_outputFilepath); // Execute game
-            //Debug_Status("Game is running!", 0.0f);
-        }
-    }
-    else
-    {
-        Debug_Error(output);
-    }
+    return m_gameBuildDialog;
 }

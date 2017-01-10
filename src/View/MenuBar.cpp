@@ -203,12 +203,12 @@ void MenuBar::OnSaveSceneAs() const
 
 void MenuBar::OnBuild() const
 {
-    GameBuilder::BuildGame(false);
+    GameBuilder::GetInstance()->BuildGame(false);
 }
 
 void MenuBar::OnBuildAndRun() const
 {
-    GameBuilder::BuildGame(true);
+    GameBuilder::GetInstance()->BuildGame(true);
 }
 
 

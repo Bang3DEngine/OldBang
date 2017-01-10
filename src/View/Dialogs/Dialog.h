@@ -26,7 +26,8 @@ public:
     static String GetSaveFilename(const String &caption = "Save file",
                                   const String &extension = "*",
                                   const String &initPath = Persistence::GetAssetsPathAbsolute(),
-                                  const String &suggestedFilename = "");
+                                  const String &suggestedFilename = "",
+                                  QWidget *parent = nullptr);
 
     static String GetInputString(const String &caption = "Input string",
                                  const String &labelText = "Your string:",

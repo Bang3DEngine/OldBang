@@ -14,7 +14,7 @@ BUILD_MODE = $$BUILD_MODE # EDITOR or GAME
 isEmpty(BUILD_MODE) {   # Default build mode variable
   BUILD_MODE = EDITOR
 }
-message(BUILD_MODE: $$BUILD_MODE)
+#message(BUILD_MODE: $$BUILD_MODE)
 
 CONFIG += $$BUILD_MODE
 CONFIG += qt
@@ -23,10 +23,13 @@ FORMS   += EngineAssets/EditorWindow.ui
 FORMS   += EngineAssets/SelectProjectWindow.ui
 DEFINES += QT_PROJECT_PATH=\\\"$$PWD\\\"
 
-
+QMAKE_CXXFLAGS -= -O1 -O2 -O3
+QMAKE_CXXFLAGS_RELEASE -= -O1 -O2 -O3
+QMAKE_LFLAGS_RELEASE -= -O1 -O2 -O3
 QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
 QMAKE_CXXFLAGS += -O0
-#QMAKE_CXXFLAGS += -O3
+QMAKE_LFLAGS_RELEASE += -g
+QMAKE_LFLAGS_RELEASE += -O0
 
 # FREE TYPE ###########################
 FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType
@@ -306,6 +309,7 @@ HEADERS += \
 EDITOR {
 HEADERS += \
     src/View/SelectProjectWindow.h \
+    src/View/GameBuilderThread.h \
     src/View/EditorWindow.h \
     src/View/EditorGameObject/EditorSelectionGameObject.h \
     src/View/EditorScene/EditorDebugGameObject.h \
@@ -314,6 +318,7 @@ HEADERS += \
     src/View/Inspector/AttrWidgetButton.h \
     src/View/Toolbar.h \
     src/View/WindowEventManager.h \
+    src/View/Dialogs/GameBuildDialog.h \
     src/View/Inspector/AttrWidgetFile.h \
     src/View/Dialogs/Dialog.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
@@ -474,6 +479,8 @@ SOURCES += \
 
 EDITOR {
     SOURCES += \
+        src/View/Dialogs/GameBuildDialog.cpp \
+        src/View/GameBuilderThread.cpp \
         src/View/SelectProjectWindow.cpp \
         src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
         src/View/EditorGameObject/EditorRotateAxis.cpp \
