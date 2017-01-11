@@ -5,16 +5,26 @@
 #include <QProgressDialog>
 
 #include "String.h"
-#include "GameBuilderThread.h"
+#include "GameBuilderJob.h"
 
 class Project;
 class GameBuildDialog;
-class GameBuilder
+class GameBuilder : public QObject
 {
+    Q_OBJECT
+
 public:
     static GameBuilder* GetInstance();
 
     void BuildGame(bool runGame = false);
+    void OnGameBuildingHasBeenCanceled();
+
+public slots:
+    void OnGameHasBeenBuilt();
+    void OnGameBuildingHasFailed();
+
+signals:
+    void NotifyGameBuildingCanceled();
 
 private:
     GameBuilder();
@@ -22,19 +32,24 @@ private:
 
     static GameBuilder *s_instance;
 
-    GameBuilderThread m_buildThread;
+    QThread *m_gameBuilderThread = nullptr;
+    GameBuilderJob *m_gameBuilderJob = nullptr;
     GameBuildDialog *m_gameBuildDialog = nullptr;
+    String m_latestGameExecutableFilepath = "";
 
     String AskForExecutableFilepath();
-    bool     CompileGameExecutable(const String &gameExecutableFilepath);
+    bool     CompileGameExecutable();
     bool     CreateDataDirectory(const String &executableDir);
     Project* CreateGameProject(const String &executableDir);
     bool     CompileBehaviours(const String &executableDir,
-                               Project *GameProject);
+                               Project *GameProject,
+                               bool *cancel);
+    void RemoveLatestGameBuild();
 
     GameBuildDialog *GetGameBuildDialog();
 
-    friend class GameBuilderThread;
+
+    friend class GameBuilderJob;
 };
 
 #endif // GAMEBUILDER_H

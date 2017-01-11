@@ -309,7 +309,6 @@ HEADERS += \
 EDITOR {
 HEADERS += \
     src/View/SelectProjectWindow.h \
-    src/View/GameBuilderThread.h \
     src/View/EditorWindow.h \
     src/View/EditorGameObject/EditorSelectionGameObject.h \
     src/View/EditorScene/EditorDebugGameObject.h \
@@ -319,6 +318,7 @@ HEADERS += \
     src/View/Toolbar.h \
     src/View/WindowEventManager.h \
     src/View/Dialogs/GameBuildDialog.h \
+    src/View/GameBuilderJob.h \
     src/View/Inspector/AttrWidgetFile.h \
     src/View/Dialogs/Dialog.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
@@ -479,8 +479,8 @@ SOURCES += \
 
 EDITOR {
     SOURCES += \
+        src/View/GameBuilderJob.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
-        src/View/GameBuilderThread.cpp \
         src/View/SelectProjectWindow.cpp \
         src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
         src/View/EditorGameObject/EditorRotateAxis.cpp \

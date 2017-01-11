@@ -35,7 +35,6 @@ String GameBuilder::AskForExecutableFilepath()
     // Get the executable output filepath
     const String defaultOutputDirectory = Persistence::c_ProjectRootAbsolute;
     const String projectName = ProjectManager::GetCurrentProject()->GetProjectName();
-    Debug_Log("HIIIII");
     String executableFilepath =
         Dialog::GetSaveFilename("Choose the file where you want to create your game",
                                 "exe",
@@ -52,32 +51,85 @@ String GameBuilder::AskForExecutableFilepath()
 
 void GameBuilder::BuildGame(bool runGame)
 {
-    if (m_buildThread.isRunning())
+    if (m_gameBuilderThread && m_gameBuilderThread->isRunning())
     {
         Debug_Status("Game is already being built", 5.0f);
     }
     else
     {
         // First ask for the executable output file (in the main thread)
-        String executableFilepath = AskForExecutableFilepath();
-        ASSERT(!executableFilepath.Empty());
+        m_latestGameExecutableFilepath = AskForExecutableFilepath();
+        ASSERT(!m_latestGameExecutableFilepath.Empty());
 
         // Create the progress window
-        if (m_gameBuildDialog) { delete m_gameBuildDialog; }
+        if (m_gameBuildDialog)
+        {
+            delete m_gameBuildDialog;
+        }
         m_gameBuildDialog = new GameBuildDialog();
+        //
+
+        // Create the game builder job and connect stuff
+        if (m_gameBuilderJob)
+        {
+            delete m_gameBuilderJob;
+        }
+        m_gameBuilderJob = new GameBuilderJob();
+        m_gameBuilderJob->m_executableFilepath = m_latestGameExecutableFilepath;
+        m_gameBuilderJob->m_runGameAfterBuild  = runGame;
+        //
 
         // Create and start the building thread
-        QObject::connect(&m_buildThread, SIGNAL(NotifyPercent(float)),
-                          m_gameBuildDialog, SLOT(SetPercent(float)));
-        QObject::connect(&m_buildThread, SIGNAL(NotifyMessage(String)),
-                          m_gameBuildDialog, SLOT(SetMessage(String)));
-        m_buildThread.m_executableFilepath = executableFilepath;
-        m_buildThread.m_runGameAfterBuild  = runGame;
-        m_buildThread.start();
+        if (m_gameBuilderThread)
+        {
+            m_gameBuilderThread->exit(0);
+            delete m_gameBuilderThread;
+        }
+        m_gameBuilderThread = new QThread();
+        //
+
+        // Connect stuff
+        QObject::connect(m_gameBuilderJob, SIGNAL(NotifyPercent(float)),
+                         m_gameBuildDialog, SLOT(SetPercent(float)));
+        QObject::connect(m_gameBuilderJob, SIGNAL(NotifyMessage(const QString&)),
+                         m_gameBuildDialog, SLOT(SetMessage(const QString&)));
+        QObject::connect(m_gameBuilderThread, SIGNAL(started()),
+                         m_gameBuilderJob, SLOT(BuildGame()) );
+        QObject::connect(m_gameBuilderJob, SIGNAL(NotifyGameHasBeenBuilt()),
+                         this, SLOT(OnGameHasBeenBuilt()) );
+        QObject::connect(m_gameBuilderJob, SIGNAL(NotifyGameBuildingHasFailed()),
+                         m_gameBuildDialog, SLOT(cancel()));
+        //
+
+        // Start the thread
+        m_gameBuilderJob->moveToThread(m_gameBuilderThread);
+        m_gameBuilderThread->start();
     }
 }
 
-bool GameBuilder::CompileGameExecutable(const String &gameExecutableFilepath)
+void GameBuilder::OnGameHasBeenBuilt()
+{
+    if (m_gameBuildDialog)
+    {
+        m_gameBuildDialog->close();
+    }
+
+    m_gameBuilderThread->exit(0);
+}
+
+void GameBuilder::OnGameBuildingHasFailed()
+{
+    Dialog::Error("Error building game",
+                  "The game could not be built.");
+}
+
+void GameBuilder::OnGameBuildingHasBeenCanceled()
+{
+    m_gameBuilderJob->OnGameBuildingCanceled();
+    // RemoveLatestGameBuild();
+}
+
+bool GameBuilder::CompileGameExecutable()
 {
     String output = "";
     String cmd = Persistence::c_EngineRootAbsolute + "/scripts/compile.sh GAME";
@@ -88,26 +140,12 @@ bool GameBuilder::CompileGameExecutable(const String &gameExecutableFilepath)
     bool ok = false;
     SystemUtils::System(cmd.ToCString(), &output, &ok);
     ok = ok && Persistence::ExistsFile(initialOutputDir);
-    if (ok)
-    {
-        Persistence::Remove(gameExecutableFilepath);
-        Persistence::Move(initialOutputDir, gameExecutableFilepath);
-        //Debug_Status("Game has been built!", 5.0f);
-        /*
-        if (m_runGameAfterBuild)
-        {
-            //Debug_Status("Running Game...", 0.0f);
-            SystemUtils::SystemBackground(m_outputFilepath); // Execute game
-            //Debug_Status("Game is running!", 0.0f);
-        }
-        */
-        return true;
-    }
-    else
+    if (!ok)
     {
         Debug_Error(output);
         return false;
     }
+    return true;
 }
 
 bool GameBuilder::CreateDataDirectory(const String &executableDir)
@@ -141,7 +179,8 @@ Project* GameBuilder::CreateGameProject(const String &executableDir)
 }
 
 bool GameBuilder::CompileBehaviours(const String &executableDir,
-                                    Project *gameProject)
+                                    Project *gameProject,
+                                    bool *cancel)
 {
     String dataDir = executableDir + "/GameData";
 
@@ -152,6 +191,8 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
                                   true, { "*.cpp" });
     for (const String &behaviourFilepath : behaviourFilepaths)
     {
+        if (*cancel) { return true; }
+
         String compiledLibFilepath =
                 SystemUtils::CompileToSharedObject(behaviourFilepath, false);
         if (compiledLibFilepath.Empty())
@@ -176,6 +217,15 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
     }
 
     return true;
+}
+
+void GameBuilder::RemoveLatestGameBuild()
+{
+    Persistence::Remove(m_latestGameExecutableFilepath);
+
+    String executableDir = Persistence::GetDir(m_latestGameExecutableFilepath);
+    String gameDataDir = executableDir + "/GameData";
+    Persistence::Remove(gameDataDir);
 }
 
 GameBuildDialog *GameBuilder::GetGameBuildDialog()

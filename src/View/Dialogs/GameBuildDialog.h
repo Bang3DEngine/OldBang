@@ -18,11 +18,8 @@ public slots:
      * @param percent In the range [0.0, 1.0]
      */
     void SetPercent(float percent);
-
-    void SetMessage(const String &message);
-
-private:
-    const int c_maxTotalProgress = 10000;
+    void SetMessage(const QString &message);
+    void OnCanceled();
 };
 
 #endif // GAMEBUILDDIALOG_H

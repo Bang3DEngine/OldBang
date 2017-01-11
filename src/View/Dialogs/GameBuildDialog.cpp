@@ -1,16 +1,19 @@
 #include "GameBuildDialog.h"
 
+#include "Debug.h"
+#include "GameBuilder.h"
 #include "EditorWindow.h"
 
 GameBuildDialog::GameBuildDialog() :
     QProgressDialog("Building game...",
-                    "Cancel",
-                    0,
-                    c_maxTotalProgress)
+                    "Cancel", 0, 100)
 {
     setModal(true);
-    setWindowTitle("Game Building");
+    setWindowTitle("Building game...");
     setWindowModality(Qt::WindowModality::ApplicationModal);
+
+    QObject::connect(this, SIGNAL(canceled()),
+                     this, SLOT(OnCanceled()));
 
     show();
     raise();
@@ -19,10 +22,15 @@ GameBuildDialog::GameBuildDialog() :
 
 void GameBuildDialog::SetPercent(float percent)
 {
-    setValue(percent * c_maxTotalProgress);
+    setValue(percent * 100);
 }
 
-void GameBuildDialog::SetMessage(const String &message)
+void GameBuildDialog::SetMessage(const QString &message)
 {
-    setLabelText(message.ToQString());
+    setLabelText(message);
+}
+
+void GameBuildDialog::OnCanceled()
+{
+    GameBuilder::GetInstance()->OnGameBuildingHasBeenCanceled();
 }

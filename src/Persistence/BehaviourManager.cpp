@@ -158,7 +158,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             const String behaviourFilename = Persistence::GetFileName(behaviourFilepath);
             const String libraryFilepath = behaviourDir + "/" + behaviourFilename + ".so." +
                     ProjectManager::GetCurrentProject()->GetProjectRandomId();
-            Debug_Log("Loading library " << libraryFilepath);
+            //Debug_Log("Loading library " << libraryFilepath);
             OnBehaviourFinishedCompiling(behaviourFilepath, libraryFilepath);
             #endif
         }
