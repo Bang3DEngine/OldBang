@@ -17,21 +17,23 @@ void Main()
 
     if (B_hasTexture)
     {
+        float inStencil = FRAG_IN_STENCIL();
         vec4 backgroundColorToBlendWith = vec4(0.0);
-        if (B_vin.stencil > 0.5)
+        if (inStencil > 0.5)
         {
             // We are on top of another char, just blend with diffuse
             // ( the previous char has a full quad blended with the color buffer,
             //   so everything will be okay)
-            backgroundColorToBlendWith = B_vin.diffuseColor;
+            backgroundColorToBlendWith = FRAG_IN_DIFFUSE_COLOR();
         }
         else
         {
             // We are not on top of another char, blend with color buffer
-            backgroundColorToBlendWith = B_vin.color;
+            backgroundColorToBlendWith = FRAG_IN_COLOR();
         }
 
-        vec4 charTexColor = texture2D(B_texture_0, B_vin.uv);
+        vec2 inUv = FRAG_IN_UV();
+        vec4 charTexColor = texture2D(B_texture_0, inUv);
         B_vout.diffuseColor = mix(backgroundColorToBlendWith,
                                   charTexColor * B_material_diffuse_color,
                                   charTexColor.a);

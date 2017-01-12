@@ -118,14 +118,15 @@ Color Framebuffer::ReadColor(int x, int y, int attachmentId) const
 
 void Framebuffer::Resize(int width, int height)
 {
-    m_width = width;
-    m_height = height;
+    m_width = std::max(width, 1);
+    m_height = std::max(height, 1);
+
     for (auto it : m_attachmentId_To_Texture)
     {
         TextureRender *t = it.second;
         if (t)
         {
-            t->Resize(width, height);
+            t->Resize(m_width, m_height);
         }
     }
 
@@ -133,7 +134,7 @@ void Framebuffer::Resize(int width, int height)
     {
         //TODO:  respect former bindings of renderbuffers
         glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttachmentId);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, m_width, m_height);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
     }
 }

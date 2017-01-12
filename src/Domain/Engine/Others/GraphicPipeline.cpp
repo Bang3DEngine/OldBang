@@ -214,6 +214,9 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     if (fb == m_gbuffer)
     {
         ApplyDeferredLights();
+        m_gbuffer->UnBind();
+        //RenderToScreen(m_gbuffer->GetColorAttachment(GBuffer::Attachment::Color));
+        m_gbuffer->Bind();
         m_gbuffer->ClearStencil();
     }
 

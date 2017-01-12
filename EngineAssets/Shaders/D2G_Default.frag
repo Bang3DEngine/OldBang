@@ -6,7 +6,8 @@ void Main()
     if (B_hasTexture)
     {
         // ALPHA CUTTOFF
-        vec4 texColor = texture2D(B_texture_0, B_vin.uv);
+        vec2 fragmentUv = FRAG_IN_UV();
+        vec4 texColor = texture2D(B_texture_0, fragmentUv);
         if (texColor.a <= B_alphaCuttoff) discard;
         //
 

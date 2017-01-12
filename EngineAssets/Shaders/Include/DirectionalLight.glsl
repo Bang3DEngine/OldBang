@@ -1,11 +1,11 @@
-vec3 GetDirectionalLightColorApportation(vec3  pixelPosWorld,
-                                         vec3  pixelNormalWorld,
-                                         vec3  pixelDiffColor,
-                                         float pixelShininess,
-                                         vec3  lightForwardWorld,
-                                         float lightIntensity,
-                                         vec3  lightColor,
-                                         vec3  camPosWorld)
+vec3 GetDirectionalLightColorApportation(const in vec3  pixelPosWorld,
+                                         const in vec3  pixelNormalWorld,
+                                         const in vec3  pixelDiffColor,
+                                         const in float pixelShininess,
+                                         const in vec3  lightForwardWorld,
+                                         const in float lightIntensity,
+                                         const in vec3  lightColor,
+                                         const in vec3  camPosWorld)
 {
     float lightDot     = max(0.0, dot(pixelNormalWorld, -lightForwardWorld));
 
@@ -15,8 +15,7 @@ vec3 GetDirectionalLightColorApportation(vec3  pixelPosWorld,
     // SPECULAR
     vec3 worldCamPos     = camPosWorld;
     vec3 pointToCamDir   = normalize(worldCamPos - pixelPosWorld);
-    vec3 lightToPointDir = -lightForwardWorld;
-    vec3 reflected       = -reflect(lightToPointDir, pixelNormalWorld);
+    vec3 reflected       = -reflect(-lightForwardWorld, pixelNormalWorld);
     float specDot        = max(0.0, dot(reflected, pointToCamDir));
     float specShin       = min(pow(specDot, pixelShininess), 1.0);
     vec3 lightSpecular   = specShin * lightDot * lightIntensity * lightColor;

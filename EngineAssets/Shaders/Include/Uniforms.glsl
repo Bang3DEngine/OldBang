@@ -47,6 +47,38 @@ uniform sampler2D B_depth_gout_fin;
 uniform sampler2D B_stencil_gout_fin;
 uniform sampler2D B_color_gout_fin;
 
+// Getters
+
+#ifdef BANG_PR
+    #define FRAG_IN_UV_SCREEN()                    B_screen_coord_norm
+    #define FRAG_IN_COLOR()                        (texture2D(B_color_gout_fin,         B_screen_coord_norm))
+    #define FRAG_IN_POSITION_WORLD()               (texture2D(B_position_gout_fin,      B_screen_coord_norm).xyz)
+    #define FRAG_IN_NORMAL_WORLD()      normalize(  texture2D(B_normal_gout_fin,        B_screen_coord_norm).xyz )
+    #define FRAG_IN_UV()                           (texture2D(B_uv_gout_fin,            B_screen_coord_norm).xy)
+    #define FRAG_IN_DIFFUSE_COLOR()                (texture2D(B_diffuse_gout_fin,       B_screen_coord_norm))
+    #define FRAG_IN_RECEIVES_LIGHTING()            (texture2D(B_materialProps_gout_fin, B_screen_coord_norm).x > 0.5f)
+    #define FRAG_IN_SHININESS()                    (texture2D(B_materialProps_gout_fin, B_screen_coord_norm).y)
+    #define FRAG_IN_DEPTH()                        (texture2D(B_depth_gout_fin,         B_screen_coord_norm).x)
+    #define FRAG_IN_STENCIL()                      (texture2D(B_stencil_gout_fin,       B_screen_coord_norm).x)
+#endif
+
+#ifdef BANG_D2G
+    #ifdef BANG_VERTEX
+        #define VERT_IN_POSITION_OBJECT() B_position_raw_vin
+        #define VERT_IN_NORMAL_OBJECT()   B_normal_raw_vin
+        #define VERT_IN_UV_OBJECT()       B_uv_raw_vin
+    #endif
+    #ifdef BANG_FRAGMENT
+        #define FRAG_IN_POSITION_WORLD()  B_position_world_vout_fin
+        #define FRAG_IN_NORMAL_WORLD()    B_normal_world_vout_fin
+        #define FRAG_IN_UV()              B_uv_vout_fin
+        #define FRAG_IN_DIFFUSE_COLOR()   (texture2D(B_diffuse_gout_fin, B_screen_coord_norm))
+        #define FRAG_IN_DEPTH()           (texture2D(B_depth_gout_fin,   B_screen_coord_norm).x)
+        #define FRAG_IN_STENCIL()         (texture2D(B_stencil_gout_fin, B_screen_coord_norm).x)
+        #define FRAG_IN_COLOR()           (texture2D(B_color_gout_fin,   B_screen_coord_norm))
+    #endif
+#endif
+
 // Light related
 uniform float B_light_range;
 uniform vec4  B_light_color;

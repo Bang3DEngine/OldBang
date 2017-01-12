@@ -5,7 +5,7 @@ bool IsOutline(vec2 offset)
 {
     bool pixelSelected = texture2D(
                 B_stencil_gout_fin,
-                B_vin.uv_screen + offset * B_pixel_step).w == 1.0f;
+                FRAG_IN_UV_SCREEN() + offset * B_pixel_step).w == 1.0f;
     return pixelSelected;
 }
 
@@ -15,7 +15,8 @@ void Main()
     const float fillOpacity = 0.2f;
     const int   stroke = 1;
 
-    bool isSelected = texture2D(B_stencil_gout_fin, B_vin.uv_screen).x == 1;
+    /*
+    bool isSelected = texture2D(B_stencil_gout_fin, FRAG_IN_UV_SCREEN()).x == 1;
     if (!isSelected)
     {
         bool isOutline = false;
@@ -36,4 +37,5 @@ void Main()
     {
         B_vout.color += outlineColor * fillOpacity;
     }
+    */
 }

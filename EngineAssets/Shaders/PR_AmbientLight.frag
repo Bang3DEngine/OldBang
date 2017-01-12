@@ -10,7 +10,7 @@ void Main()
       ambientColor into the color buffer.
     */
 
-    float ambientLight = (B_vin.receivesLighting ? 0.3 : 1.0);
-    B_vout.color = vec4(B_vin.diffuseColor.rgb * ambientLight,
-                        B_vin.diffuseColor.a);
+    float ambientLight = (FRAG_IN_RECEIVES_LIGHTING() ? 0.3 : 1.0);
+    vec4 diffColor = FRAG_IN_DIFFUSE_COLOR();
+    B_vout.color = vec4(diffColor.rgb * ambientLight, diffColor.a);
 }

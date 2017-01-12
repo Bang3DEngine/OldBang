@@ -1,16 +1,6 @@
 #define BANG_FRAGMENT
+#define BANG_D2G
 #include "Uniforms.glsl"
-
-struct B_VertexIn
-{
-    vec4 position_world;
-    vec4 normal_world;
-    vec2 uv;
-    vec4 diffuseColor; // Diffuse component
-    float depth;
-    float stencil;
-    vec4 color;        // Color (with PR applied)
-};
 
 struct B_VertexOut_GBufferIn   // GBuffer
 {
@@ -36,24 +26,14 @@ out vec4 B_materialProps_fout_gin;
 out vec4 B_depth_fout_gin;
 out vec4 B_stencil_fout_gin;
 
-B_VertexIn B_vin;
 B_VertexOut_GBufferIn B_vout;
 
 void InitMain()
 {
-    // Fill vin
-    B_vin.position_world = B_position_world_vout_fin;
-    B_vin.normal_world   = B_normal_world_vout_fin;
-    B_vin.uv             = B_uv_vout_fin;
-    B_vin.diffuseColor   = texture2D(B_diffuse_gout_fin, B_screen_coord_norm);
-    B_vin.depth          = texture2D(B_depth_gout_fin,   B_screen_coord_norm).x;
-    B_vin.stencil        = texture2D(B_stencil_gout_fin, B_screen_coord_norm).x;
-    B_vin.color          = texture2D(B_color_gout_fin,   B_screen_coord_norm);
-
     // Some default values
-    B_vout.position_world      = B_vin.position_world.xyz;
-    B_vout.normal_world        = B_vin.normal_world.xyz;
-    B_vout.uv                  = B_vin.uv;
+    B_vout.position_world      = FRAG_IN_POSITION_WORLD().xyz;
+    B_vout.normal_world        = FRAG_IN_NORMAL_WORLD().xyz;
+    B_vout.uv                  = FRAG_IN_UV();
     B_vout.receivesLighting    = B_renderer_receivesLighting;
     B_vout.shininess           = B_material_shininess;
     B_vout.diffuseColor        = B_material_diffuse_color;

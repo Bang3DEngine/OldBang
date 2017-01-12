@@ -1,6 +1,7 @@
 #include "EditorScene.h"
 
 #include "Time.h"
+#include "List.h"
 #include "UIText.h"
 #include "Hierarchy.h"
 #include "Transform.h"
@@ -50,8 +51,15 @@ void EditorScene::_OnStart()
 void EditorScene::OnUpdate()
 {
     Scene::OnUpdate();
+
+    static List<int> latestFPS = {0,0,0,0,0};
     int fps = 1.0f / (Time::s_deltaTime + 0.0001f);
-    m_fpsCounterText->SetContent("FPS: " + String(fps));
+    latestFPS.PushFront(fps);
+    latestFPS.PopBack();
+    int fpsSum = 0;
+    for (int f : latestFPS) { fpsSum += f; }
+    int fpsMean = fpsSum / latestFPS.Size();
+    m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
 }
 
 bool EditorScene::IsEditorGameObject() const
