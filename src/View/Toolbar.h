@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QAction>
+#include <QComboBox>
 #include <QToolButton>
 
 #include "Input.h"
@@ -35,6 +36,7 @@ private:
     QToolButton *m_buttonPlay          = nullptr;
     QToolButton *m_buttonStop          = nullptr;
     QToolButton *m_button3D            = nullptr;
+    QComboBox   *m_gbufferAttachmentComboBox = nullptr;
 
     TransformMode m_currentTransformMode = TransformMode::Translate;
 
@@ -62,6 +64,7 @@ public slots:
     void OnPlayClicked();
     void OnStopClicked();
     void OnOrthoPerspectiveClicked();
+    void OnGBufferAttachmentIndexChanged(int newIndex);
 
     void OnShortcutPressedKey(Input::Key key) override;
     void OnShortcutPressed() override;

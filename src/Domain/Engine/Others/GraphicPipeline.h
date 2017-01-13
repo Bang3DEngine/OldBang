@@ -1,12 +1,12 @@
 #ifndef GRAPHICPIPELINE_H
 #define GRAPHICPIPELINE_H
 
+#include "GBuffer.h"
 #include "Renderer.h"
 
 class Mesh;
 class Scene;
 class Screen;
-class GBuffer;
 class Texture;
 class Material;
 class GameObject;
@@ -35,6 +35,8 @@ public:
 
     void ApplyPREffectToRenderer(const Renderer *renderer, Material *mat);
 
+    void SetGBufferAttachmentToBeRendered(GBuffer::Attachment attachment);
+
     GBuffer *GetGBuffer() const;
     Renderer::DepthLayer GetCurrentDepthLayer() const;
 
@@ -43,6 +45,8 @@ public:
     #endif
 
 private:
+    GBuffer::Attachment m_gbufferAttachmentToBeShown = GBuffer::Attachment::Color;
+
     Material *m_renderGBufferToScreenMaterial = nullptr;
     Mesh *m_planeMeshToRenderEntireScreen = nullptr;
 

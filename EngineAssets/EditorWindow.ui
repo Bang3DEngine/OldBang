@@ -141,6 +141,57 @@
             </spacer>
            </item>
            <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>GBuffer Attachment</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBoxGBufferAttachment">
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+             </property>
+             <property name="minimumContentsLength">
+              <number>12</number>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>5</width>
+               <height>5</height>
+              </size>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <item>
+              <property name="text">
+               <string>Color</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Position</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Normal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Uv</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Diffuse Color</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
             <widget class="QToolButton" name="buttonOrthoPerspectiveMode">
              <property name="font">
               <font>

@@ -6,6 +6,7 @@
 #include "EditorCamera.h"
 #include "EditorWindow.h"
 #include "SceneManager.h"
+#include "GraphicPipeline.h"
 #include "ShortcutManager.h"
 
 Toolbar *Toolbar::s_tb = nullptr;
@@ -28,6 +29,7 @@ void Toolbar::Init()
     Toolbar::s_tb->m_buttonPlay          = w->buttonPlay;
     Toolbar::s_tb->m_buttonStop          = w->buttonStop;
     Toolbar::s_tb->m_button3D            = w->buttonOrthoPerspectiveMode;
+    Toolbar::s_tb->m_gbufferAttachmentComboBox = w->comboBoxGBufferAttachment;
 
     connect(Toolbar::s_tb->m_buttonTranslateMode, SIGNAL(clicked()),
             Toolbar::s_tb, SLOT(OnTranslateClicked()));
@@ -48,6 +50,9 @@ void Toolbar::Init()
 
     connect(Toolbar::s_tb->m_button3D, SIGNAL(clicked()),
             Toolbar::s_tb, SLOT(OnOrthoPerspectiveClicked()));
+
+    connect(Toolbar::s_tb->m_gbufferAttachmentComboBox, SIGNAL(currentIndexChanged(int)),
+            Toolbar::s_tb, SLOT(OnGBufferAttachmentIndexChanged(int)));
 
     Toolbar::s_tb->m_buttonTranslateMode->click();
     Toolbar::s_tb->m_buttonGlobalCoords->click();
@@ -159,6 +164,32 @@ void Toolbar::OnOrthoPerspectiveClicked()
 
     bool mode3D = m_button3D->isChecked();
     edCam->SwitchProjectionModeTo(mode3D);
+}
+
+void Toolbar::OnGBufferAttachmentIndexChanged(int newIndex)
+{
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+
+    if (newIndex == 0)
+    {
+        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Color);
+    }
+    else if (newIndex == 1)
+    {
+        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Position);
+    }
+    else if (newIndex == 2)
+    {
+        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Normal);
+    }
+    else if (newIndex == 3)
+    {
+        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Uv);
+    }
+    else if (newIndex == 4)
+    {
+        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Diffuse);
+    }
 }
 
 void Toolbar::OnShortcutPressedKey(Input::Key key)

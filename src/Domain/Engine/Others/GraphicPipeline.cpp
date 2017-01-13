@@ -59,7 +59,7 @@ void GraphicPipeline::RenderScene(Scene *scene)
     RenderSelectionFramebuffer();
     #endif
 
-    m_gbuffer->RenderToScreen();
+    m_gbuffer->RenderToScreen(m_gbufferAttachmentToBeShown);
     // RenderToScreen(m_selectionFB->GetColorTexture()); // Uncomment to see the framebuffer
 }
 
@@ -346,6 +346,11 @@ void GraphicPipeline::OnResize(int newWidth, int newHeight)
     #ifdef BANG_EDITOR
     m_selectionFB->Resize(newWidth, newHeight);
     #endif
+}
+
+void GraphicPipeline::SetGBufferAttachmentToBeRendered(GBuffer::Attachment attachment)
+{
+    m_gbufferAttachmentToBeShown = attachment;
 }
 
 GBuffer *GraphicPipeline::GetGBuffer() const
