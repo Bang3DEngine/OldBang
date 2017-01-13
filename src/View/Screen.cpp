@@ -52,7 +52,7 @@ Screen::~Screen()
 void Screen::InitFromMainBinary()
 {
     #ifdef BANG_EDITOR
-    Screen::m_mainBinaryScreen = static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
+    Screen::m_mainBinaryScreen = static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screenScene;
     #else
     Screen::m_mainBinaryScreen = static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #endif
@@ -105,10 +105,10 @@ void Screen::resizeGL(int w, int h)
 }
 
 
-Screen *Screen::GetInstance()
+Screen *Screen::GetActive()
 {
     #ifdef BANG_EDITOR
-    return static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
+    return static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screenScene;
     #else
     return static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #endif

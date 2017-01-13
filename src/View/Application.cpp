@@ -34,7 +34,7 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::OnDrawTimerTick()
 {
-    ASSERT(Screen::GetInstance());
+    ASSERT(Screen::GetActive());
 
     // Update deltaTime
     float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
@@ -66,8 +66,8 @@ void Application::OnDrawTimerTick()
     Chrono c("FPS");
     // Render screen
     c.MarkEvent("Render");
-    Screen::GetInstance()->Render();
-    Screen::GetInstance()->swapBuffers();
+    Screen::GetActive()->Render();
+    Screen::GetActive()->swapBuffers();
     c.Log();
 
     Input::GetInstance()->OnFrameFinished(); // Notify to Input that a new frame has passed

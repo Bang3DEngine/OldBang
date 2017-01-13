@@ -335,7 +335,7 @@ SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
 
 GraphicPipeline* GraphicPipeline::GetActive()
 {
-    Screen *screen = Screen::GetInstance();
+    Screen *screen = Screen::GetActive();
     return screen ? screen->GetGraphicPipeline() : nullptr;
 }
 

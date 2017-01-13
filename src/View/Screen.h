@@ -64,7 +64,7 @@ public:
     void Render();
     void resizeGL(int w, int h) override;
 
-    static Screen *GetInstance();
+    static Screen *GetActive();
     static float GetAspectRatio();
     static int GetHeight();
     static int GetWidth();

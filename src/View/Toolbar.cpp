@@ -143,7 +143,7 @@ void Toolbar::OnPlayClicked()
         }
     }
 
-    Screen::GetInstance()->setFocus();
+    Screen::GetActive()->setFocus();
 }
 
 void Toolbar::OnStopClicked()

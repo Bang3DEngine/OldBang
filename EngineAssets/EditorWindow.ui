@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1008</width>
-    <height>585</height>
+    <height>592</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -36,232 +36,285 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_12">
+    <property name="margin">
+     <number>2</number>
+    </property>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout_3">
-      <item>
-       <widget class="WindowEventManager" name="windowEventManager" native="true"/>
-      </item>
-      <item>
-       <widget class="Toolbar" name="widgetToolbar" native="true">
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QToolButton" name="buttonTranslateMode">
-             <property name="text">
-              <string>T</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qdarkstyle/style.qrc">
-               <normaloff>:/qss_icons/Icons/translate.png</normaloff>:/qss_icons/Icons/translate.png</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="popupMode">
-              <enum>QToolButton::DelayedPopup</enum>
-             </property>
-             <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonIconOnly</enum>
-             </property>
-             <property name="autoRaise">
-              <bool>false</bool>
-             </property>
-             <property name="arrowType">
-              <enum>Qt::NoArrow</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="buttonRotateMode">
-             <property name="text">
-              <string>R</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qdarkstyle/style.qrc">
-               <normaloff>:/qss_icons/Icons/rotate.png</normaloff>:/qss_icons/Icons/rotate.png</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="buttonScaleMode">
-             <property name="text">
-              <string>S</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qdarkstyle/style.qrc">
-               <normaloff>:/qss_icons/Icons/scale.png</normaloff>:/qss_icons/Icons/scale.png</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="buttonGlobalCoords">
-             <property name="text">
-              <string>Global</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-             <property name="autoExclusive">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="buttonLocalCoords">
-             <property name="text">
-              <string>Local</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>GBuffer Attachment</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="comboBoxGBufferAttachment">
-             <property name="sizeAdjustPolicy">
-              <enum>QComboBox::AdjustToMinimumContentsLength</enum>
-             </property>
-             <property name="minimumContentsLength">
-              <number>12</number>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>5</width>
-               <height>5</height>
-              </size>
-             </property>
-             <property name="frame">
-              <bool>true</bool>
-             </property>
-             <item>
-              <property name="text">
-               <string>Color</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Position</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Normal</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Uv</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Diffuse Color</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="buttonOrthoPerspectiveMode">
-             <property name="font">
-              <font>
-               <pointsize>9</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>3D</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="buttonPlay">
-             <property name="text">
-              <string>Play</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qdarkstyle/style.qrc">
-               <normaloff>:/qss_icons/Icons/play.png</normaloff>:/qss_icons/Icons/play.png</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="buttonStop">
-             <property name="text">
-              <string>Stop</string>
-             </property>
-             <property name="icon">
-              <iconset resource="qdarkstyle/style.qrc">
-               <normaloff>:/qss_icons/Icons/stop.png</normaloff>:/qss_icons/Icons/stop.png</iconset>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="1">
+       <widget class="WindowEventManager" name="windowEventManager" native="true">
+        <zorder>tabWidget</zorder>
+        <zorder>tabWidget</zorder>
        </widget>
       </item>
-      <item>
-       <widget class="Screen" name="screen" native="true">
-        <property name="enabled">
-         <bool>true</bool>
+      <item row="0" column="0">
+       <widget class="QTabWidget" name="tabWidget">
+        <property name="currentIndex">
+         <number>0</number>
         </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>1</horstretch>
-          <verstretch>1</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="mouseTracking">
-         <bool>true</bool>
-        </property>
-        <property name="focusPolicy">
-         <enum>Qt::StrongFocus</enum>
-        </property>
+        <widget class="QWidget" name="tabWidgetScene" native="true">
+         <attribute name="title">
+          <string>Scene</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout">
+          <property name="margin">
+           <number>2</number>
+          </property>
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item row="0" column="0">
+           <layout class="QVBoxLayout" name="tabWidgetScene_vlayout" stretch="0,9999">
+            <property name="spacing">
+             <number>2</number>
+            </property>
+            <item>
+             <widget class="Toolbar" name="widgetToolbar" native="true">
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <property name="margin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QToolButton" name="buttonTranslateMode">
+                   <property name="text">
+                    <string>T</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="qdarkstyle/style.qrc">
+                     <normaloff>:/qss_icons/Icons/translate.png</normaloff>:/qss_icons/Icons/translate.png</iconset>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <property name="popupMode">
+                    <enum>QToolButton::DelayedPopup</enum>
+                   </property>
+                   <property name="toolButtonStyle">
+                    <enum>Qt::ToolButtonIconOnly</enum>
+                   </property>
+                   <property name="autoRaise">
+                    <bool>false</bool>
+                   </property>
+                   <property name="arrowType">
+                    <enum>Qt::NoArrow</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="buttonRotateMode">
+                   <property name="text">
+                    <string>R</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="qdarkstyle/style.qrc">
+                     <normaloff>:/qss_icons/Icons/rotate.png</normaloff>:/qss_icons/Icons/rotate.png</iconset>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="buttonScaleMode">
+                   <property name="text">
+                    <string>S</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="qdarkstyle/style.qrc">
+                     <normaloff>:/qss_icons/Icons/scale.png</normaloff>:/qss_icons/Icons/scale.png</iconset>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="buttonGlobalCoords">
+                   <property name="text">
+                    <string>Global</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                   <property name="autoExclusive">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="buttonLocalCoords">
+                   <property name="text">
+                    <string>Local</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_5">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label">
+                   <property name="text">
+                    <string>GBuffer Attachment</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="comboBoxGBufferAttachment">
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+                   </property>
+                   <property name="minimumContentsLength">
+                    <number>12</number>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>5</width>
+                     <height>5</height>
+                    </size>
+                   </property>
+                   <property name="frame">
+                    <bool>true</bool>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>Color</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Position</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Normal</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Uv</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>Diffuse Color</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="buttonOrthoPerspectiveMode">
+                   <property name="font">
+                    <font>
+                     <pointsize>9</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>3D</string>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="buttonPlay">
+                   <property name="text">
+                    <string>Play</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="qdarkstyle/style.qrc">
+                     <normaloff>:/qss_icons/Icons/play.png</normaloff>:/qss_icons/Icons/play.png</iconset>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="buttonStop">
+                   <property name="text">
+                    <string>Stop</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="qdarkstyle/style.qrc">
+                     <normaloff>:/qss_icons/Icons/stop.png</normaloff>:/qss_icons/Icons/stop.png</iconset>
+                   </property>
+                   <property name="checkable">
+                    <bool>true</bool>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="Screen" name="screenScene" native="true"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tabWidgetGame" native="true">
+         <attribute name="title">
+          <string>Game</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <property name="margin">
+           <number>2</number>
+          </property>
+          <item row="1" column="0">
+           <layout class="QVBoxLayout" name="tabWidgetGame_vlayout">
+            <item>
+             <widget class="Screen" name="screenGame" native="true">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>1</horstretch>
+                <verstretch>1</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="mouseTracking">
+               <bool>true</bool>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::StrongFocus</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -366,6 +419,9 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_4">
     <layout class="QVBoxLayout" name="verticalLayout_8">
+     <property name="margin">
+      <number>2</number>
+     </property>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0">
        <item>
@@ -454,6 +510,9 @@
      <enum>Qt::DefaultContextMenu</enum>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_9">
+     <property name="margin">
+      <number>2</number>
+     </property>
      <item>
       <widget class="QWidget" name="widget" native="true"/>
      </item>
@@ -545,8 +604,14 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_5">
     <layout class="QVBoxLayout" name="verticalLayout_10" stretch="0">
+     <property name="margin">
+      <number>2</number>
+     </property>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,10">
+       <property name="spacing">
+        <number>2</number>
+       </property>
        <item>
         <widget class="ExplorerDirTree" name="widgetTreeExplorerDirTree">
          <property name="maximumSize">
@@ -592,6 +657,9 @@
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,9999">
+         <property name="spacing">
+          <number>2</number>
+         </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
@@ -709,9 +777,15 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout_5">
+     <property name="margin">
+      <number>2</number>
+     </property>
      <item>
       <widget class="QWidget" name="widgetLogger" native="true">
        <layout class="QVBoxLayout" name="verticalLayout_6">
+        <property name="margin">
+         <number>2</number>
+        </property>
         <item>
          <widget class="ListLogger" name="listLogger">
           <property name="editTriggers">
@@ -950,6 +1024,7 @@
   </action>
   <zorder>dockExplorer</zorder>
   <zorder>dockHierarchy</zorder>
+  <zorder>dockGame</zorder>
  </widget>
  <customwidgets>
   <customwidget>

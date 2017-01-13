@@ -90,7 +90,7 @@ void EditorFloor::OnDrawGizmos()
         if (pointLight)
         {
             rect = pointLight->GetRenderRect(scene->GetCamera());
-            Gizmos::RenderRect(rect);
+            //Gizmos::RenderRect(rect);
         }
     }
 
