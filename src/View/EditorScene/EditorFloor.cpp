@@ -69,3 +69,24 @@ void EditorFloor::OnUpdate()
         lr->SetDestiny( Vector3( LineSize2, 0, 0) + center );
     }
 }
+
+#include "Hierarchy.h"
+void EditorFloor::OnDrawGizmos()
+{
+    Scene *scene = SceneManager::GetActiveScene();
+
+    Rect rect;
+    GameObject *selected = Hierarchy::GetInstance()->GetFirstSelectedGameObject();
+    if (selected)
+    {
+        AABox box;
+        box = selected->GetAABBox(true);
+        Gizmos::SetColor(Color::Red);
+        //Gizmos::RenderSimpleBox(box);
+        rect = selected->GetBoundingScreenRect(scene->GetCamera(), true);
+        //Gizmos::RenderRect(rect);
+    }
+
+    //rect = scene->GetBoundingScreenRect(scene->GetCamera(), true);
+    //Gizmos::RenderRect(rect);
+}

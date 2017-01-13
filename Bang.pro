@@ -248,7 +248,6 @@ HEADERS += \
     src/Persistence/Persistence.h \
     src/Domain/Engine/Components/LineRenderer.h \
     src/Domain/Engine/Components/Renderer.h \
-    src/Domain/Engine/Physics/Box.h \
     src/Domain/Engine/Physics/Vector3.h \
     src/Domain/Engine/Physics/Quaternion.h \
     src/Domain/Engine/Physics/Matrix4.h \
@@ -304,7 +303,8 @@ HEADERS += \
     src/Persistence/ProjectManager.h \
     src/Persistence/Project.h \
     src/Persistence/EngineConfig.h \
-    src/Persistence/BehaviourRefresherTimer.h
+    src/Persistence/BehaviourRefresherTimer.h \
+    src/Domain/Engine/Physics/AABox.h
 
 EDITOR {
 HEADERS += \
@@ -424,7 +424,6 @@ SOURCES += \
     src/Persistence/File.cpp \
     src/Domain/Engine/Components/LineRenderer.cpp \
     src/Domain/Engine/Components/Renderer.cpp \
-    src/Domain/Engine/Physics/Box.cpp \
     src/Domain/Engine/Physics/Vector3.cpp \
     src/Domain/Engine/Physics/Quaternion.cpp \
     src/Domain/Engine/Physics/Matrix4.cpp \
@@ -475,7 +474,8 @@ SOURCES += \
     src/Persistence/ProjectManager.cpp \
     src/Persistence/Project.cpp \
     src/Persistence/EngineConfig.cpp \
-    src/Persistence/BehaviourRefresherTimer.cpp
+    src/Persistence/BehaviourRefresherTimer.cpp \
+    src/Domain/Engine/Physics/AABox.cpp
 
 EDITOR {
     SOURCES += \

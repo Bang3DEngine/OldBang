@@ -4,7 +4,7 @@
 #include "List.h"
 #include "IToString.h"
 
-class Box;
+class AABox;
 class Camera;
 class Vector2;
 class Rect : public IToString

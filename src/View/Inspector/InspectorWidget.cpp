@@ -5,7 +5,7 @@
 #include <QVBoxLayout>
 
 #include "Debug.h"
-#include "Component.h"t
+#include "Component.h"
 #include "GameObject.h"
 #include "EditorWindow.h"
 #include "AttrWidgetEnum.h"

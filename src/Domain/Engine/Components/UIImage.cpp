@@ -86,7 +86,7 @@ void UIImage::RenderCustomPR() const
     sp->SetUniformColor("B_tint",        m_tint);
     sp->SetUniformTexture("B_texture_0", m_material->GetTexture());
 
-    Box screenBox = gameObject->GetBoundingBox();
+    AABox screenBox = gameObject->GetAABBox();
     Rect renderRect(screenBox.GetMin().xy(), screenBox.GetMax().xy());
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
     gb->RenderPassWithMaterial(m_materialPR, renderRect);

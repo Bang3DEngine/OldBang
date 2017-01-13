@@ -2,6 +2,7 @@
 
 #include "Time.h"
 #include "List.h"
+#include "Debug.h"
 #include "UIText.h"
 #include "Hierarchy.h"
 #include "Transform.h"

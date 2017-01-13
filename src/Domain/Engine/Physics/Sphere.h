@@ -1,7 +1,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "Box.h"
+#include "AABox.h"
 #include "Vector3.h"
 
 class Sphere
@@ -26,9 +26,9 @@ public:
      * wrapping the box passed as parameter.
      * @param box
      */
-    void FillFromBox(const Box &box);
+    void FillFromBox(const AABox &box);
 
-    static Sphere FromBox(const Box &box);
+    static Sphere FromBox(const AABox &box);
 
     void SetCenter(const Vector3 &m_center);
     Vector3 GetCenter() const;

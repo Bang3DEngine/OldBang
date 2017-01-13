@@ -6,7 +6,7 @@
 #include "ICloneable.h"
 #include "ISceneEventListener.h"
 
-#include "Box.h"
+#include "AABox.h"
 #include "List.h"
 #include "Sphere.h"
 
@@ -130,21 +130,13 @@ public:
      * applying any Transform (equivalent to Mesh->GetBoundingBox())
      * @return
      */
-    Box GetObjectBoundingBox(bool includeChildren = true) const;
-
-    /**
-     * @brief Returns this GameObject's bounding box, applying only the
-     * transformations of this GameObject's Transform
-     * (not parents' transforms included here).
-     * @return
-     */
-    Box GetLocalBoundingBox(bool includeChildren = true) const;
+    AABox GetObjectAABBox(bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding box in world space
      * @return
      */
-    Box GetBoundingBox(bool includeChildren = true) const;
+    AABox GetAABBox(bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding sphere in Object space, without
@@ -152,14 +144,6 @@ public:
      * @return
      */
     Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
-
-    /**
-     * @brief Returns this GameObject's bounding sphere, applying only the
-     * transformations of this GameObject's Transform
-     * (not parents' transforms included here).
-     * @return
-     */
-    Sphere GetLocalBoundingSphere(bool includeChildren = true) const;
 
     /**
      * @brief Returns this GameObject's bounding sphere in world space

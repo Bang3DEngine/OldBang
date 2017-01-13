@@ -1,5 +1,6 @@
 #include "UIRenderer.h"
 
+#include "Mesh.h"
 #include "Rect.h"
 #include "Material.h"
 #include "GameObject.h"
@@ -53,10 +54,7 @@ void UIRenderer::SetMatricesUniforms(Material *mat,
 
 Rect UIRenderer::GetBoundingRect(Camera *camera) const
 {
-    // Dont take into account View nor Projection, coords already
-    // are in NDC
-    Box screenBox = gameObject->GetBoundingBox();
-    return Rect(screenBox.GetMin().xy(), screenBox.GetMax().xy());
+    return MeshRenderer::GetBoundingRect(camera);
 }
 
 void UIRenderer::RenderCustomPR() const

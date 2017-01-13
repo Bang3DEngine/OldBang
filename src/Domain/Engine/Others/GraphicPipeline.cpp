@@ -7,6 +7,7 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Light.h"
+#include "Chrono.h"
 #include "Screen.h"
 #include "Camera.h"
 #include "GBuffer.h"
@@ -56,21 +57,13 @@ void GraphicPipeline::RenderScene(Scene *scene)
 {
     m_currentScene = scene;
 
-    Color bgColor = m_currentScene->GetCamera()->GetClearColor();
-    m_gbuffer->ClearBuffersAndBackground(bgColor);
-    m_gbuffer->SetAllDrawBuffersExceptColor();
-    m_gbuffer->Bind();
-    RenderDepthLayers(m_gbuffer);
-    m_gbuffer->UnBind();
-
-    m_gbuffer->RenderToScreen();
-
-    //RenderToScreen(m_gbuffer->GetColorAttachment(GBuffer::Attachment::Uv));
-
+    RenderGBuffer();
     #ifdef BANG_EDITOR
     RenderSelectionFramebuffer();
-    // RenderToScreen(m_selectionFB->GetColorTexture()); // Uncomment to see the framebuffer
     #endif
+
+    m_gbuffer->RenderToScreen();
+    // RenderToScreen(m_selectionFB->GetColorTexture()); // Uncomment to see the framebuffer
 }
 
 void GraphicPipeline::RenderRenderer(Renderer *rend)
@@ -97,20 +90,19 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
             // If there's a renderer with a postRender effect,
             // then do not accumulate the stenciling. The stencil
             // accumulation is basically used to apply the deferred lighting
-            glDepthMask(GL_FALSE);
+            glDepthMask(GL_FALSE); // Do not write to depth
+
+            // We need a brand new stencil to later apply the custom effects
+            // Because if we dont, then we apply the ambient light to all the
+            // stuff that is stenciled, removing all the effects over it
             m_gbuffer->ClearStencil();
         }
 
         m_gbuffer->SetStencilTest(false); // Don't want to be filtered by the stencil
-        m_gbuffer->SetStencilWrite(true); // We are going to mark into the stencil
+        m_gbuffer->SetStencilWrite(true); // We are going to mark into the stencil (to later let the deferred lighting be applied here)
         m_gbuffer->SetAllDrawBuffersExceptColor(); // But we DO write to diffuseColor (color != diffuseColor !!!)
 
         rend->Render(); // Render without writing to the final color buffer
-
-        if (rend->IsACanvasRenderer())
-        {
-           // Debug_Log("Rendering " << rend);
-        }
 
         if (immediatePostRender) // In case we need to apply immediately some PR
         {
@@ -118,7 +110,7 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
             ApplyDeferredLights(rend); // Only apply lights to the needed zone
             if (rend->HasCustomPRPass())
             {
-                RenderCustomPR(rend); //
+                RenderCustomPR(rend);
             }
             glDepthMask(GL_TRUE);
         }
@@ -149,16 +141,13 @@ void GraphicPipeline::ApplySelectionEffect()
     m_gbuffer->SetStencilWrite(true);
     for (GameObject *go : sceneGameObjects)
     {
-        if (go->IsSelected())
+        if (!go->IsSelected()) { continue; }
+
+        List<Renderer*> rends = go->GetComponents<Renderer>();
+        for (Renderer *rend : rends)
         {
-            List<Renderer*> rends = go->GetComponentsInThisAndChildren<Renderer>();
-            for (Renderer *rend : rends)
-            {
-                if (CAN_USE_COMPONENT(rend))
-                {
-                    rend->Render();
-                }
-            }
+            if (!CAN_USE_COMPONENT(rend)) { continue; }
+            rend->Render();
         }
     }
 
@@ -169,28 +158,33 @@ void GraphicPipeline::ApplySelectionEffect()
 
 void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 {
-    // Limit rendering to the rend visible rect
-    Rect renderRect = Rect::ScreenRect; // TODO: Correct rect creation, it doesnt work sometimes, and uncomment below
+    //std::cerr << "ApplyDeferredLights" << std::endl;
+
+    // Limit rendering to the renderer visible rect
+    Rect renderRect = Rect::ScreenRect;
+    Camera *sceneCam = m_currentScene->GetCamera();
     if (rend)
     {
-    //    renderRect = rend->gameObject->GetBoundingScreenRect(m_currentScene->GetCamera(), false);
+        renderRect = rend->gameObject->GetBoundingScreenRect(sceneCam, false);
+    }
+    else
+    {
+        renderRect = m_currentScene->GetBoundingScreenRect(sceneCam, true);
     }
 
-    // If the rect is empty, dont waste time rendering nothing
-    if (renderRect != Rect::Empty)
+
+    ASSERT(renderRect != Rect::Empty); // If the rect is empty, dont waste time rendering nothing
+
+    m_gbuffer->SetStencilTest(true); // We have marked from before the zone where we want to apply the effect
+    m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen, renderRect); // Apply ambient lights
+
+    if (!rend || rend->ReceivesLighting())
     {
-        m_gbuffer->SetStencilTest(true); // We have marked from before the zone where we want to draw
-        m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen, renderRect);
-        if (!rend || rend->GetReceivesLighting())
+        List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
+        for (Light *light : lights)
         {
-            List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
-            for (Light *light : lights)
-            {
-                if (CAN_USE_COMPONENT(light))
-                {
-                    light->ApplyLight(m_gbuffer, renderRect);
-                }
-            }
+            if (!CAN_USE_COMPONENT(light)) { continue; }
+            light->ApplyLight(m_gbuffer, renderRect);
         }
     }
 }
@@ -214,9 +208,6 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     if (fb == m_gbuffer)
     {
         ApplyDeferredLights();
-        m_gbuffer->UnBind();
-        //RenderToScreen(m_gbuffer->GetColorAttachment(GBuffer::Attachment::Color));
-        m_gbuffer->Bind();
         m_gbuffer->ClearStencil();
     }
 
@@ -229,20 +220,21 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
             RenderRenderer(rend);
         }
     }
+}
+
+void GraphicPipeline::RenderGizmosPass(Framebuffer *fb)
+{
+    m_currentDepthLayer = Renderer::DepthLayer::DepthLayerGizmos;
+    fb->ClearDepth(); // After each pass, clear the depth
 
     List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
     for (GameObject *go : sceneGameObjects)
     {
         go->_OnDrawGizmos();
     }
-}
 
-void GraphicPipeline::RenderGizmosOverlayPass(Framebuffer *fb)
-{
-    m_currentDepthLayer = Renderer::DepthLayer::DepthLayerGizmosOverlay;
-    fb->ClearDepth(); // After each pass, clear the depth
+    fb->ClearDepth();
 
-    List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
     for (GameObject *go : sceneGameObjects)
     {
         go->_OnDrawGizmosOverlay();
@@ -306,22 +298,21 @@ void GraphicPipeline::RenderScreenPlane()
     m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
 }
 
-void GraphicPipeline::RenderDepthLayers(Framebuffer *fb)
+void GraphicPipeline::RenderGBuffer()
 {
-    for (Renderer::DepthLayer depthLayer : DepthLayerOrder)
-    {
-        if (depthLayer != Renderer::DepthLayer::DepthLayerGizmosOverlay)
-        {
-            RenderPassWithDepthLayer(depthLayer, fb);
-        }
-    }
+    Color bgColor = m_currentScene->GetCamera()->GetClearColor();
+    m_gbuffer->ClearBuffersAndBackground(bgColor);
 
-    if (fb == m_gbuffer)
-    {
-        ApplySelectionEffect();
-    }
+    m_gbuffer->Bind();
+    m_gbuffer->SetAllDrawBuffersExceptColor();
 
-    RenderGizmosOverlayPass(fb);
+    RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerScene, m_gbuffer);
+    RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerCanvas, m_gbuffer);
+    ApplySelectionEffect();
+    RenderGizmosPass(m_gbuffer);
+
+    m_gbuffer->UnBind();
+
 }
 
 #ifdef BANG_EDITOR
@@ -332,7 +323,11 @@ void GraphicPipeline::RenderSelectionFramebuffer()
 
     m_selectionFB->Bind();
     m_selectionFB->Clear();
-    RenderDepthLayers(m_selectionFB);
+
+    RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerScene, m_selectionFB);
+    RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerCanvas, m_selectionFB);
+    RenderGizmosPass(m_selectionFB);
+
     m_selectionFB->UnBind();
 
     m_selectionFB->ProcessSelection();

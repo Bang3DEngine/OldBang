@@ -8,7 +8,7 @@
 #include "NamedEnum.h"
 #include "Component.h"
 
-class Box;
+class AABox;
 class Camera;
 class Material;
 class SceneManager;
@@ -35,7 +35,7 @@ public:
     {
         DepthLayerScene,
         DepthLayerCanvas,
-        DepthLayerGizmosOverlay
+        DepthLayerGizmos
     };
 
 private:
@@ -104,7 +104,7 @@ public:
     void SetDrawWireframe(bool m_drawWireframe);
     bool GetDrawWireframe() const;
 
-    virtual Box GetBoundingBox() const = 0;
+    virtual AABox GetAABBox() const = 0;
 
     /**
      * @brief GetBoundingRect
@@ -125,7 +125,7 @@ public:
     float GetLineWidth() const;
 
     void SetReceivesLighting(bool receivesLighting);
-    bool GetReceivesLighting() const;
+    bool ReceivesLighting() const;
 
     virtual void Render() const;
     virtual void RenderCustomPR() const;

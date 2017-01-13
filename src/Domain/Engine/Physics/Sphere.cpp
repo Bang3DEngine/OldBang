@@ -32,13 +32,13 @@ float Sphere::GetVolume() const
     return glm::pi<float>() * m_radius * m_radius;
 }
 
-void Sphere::FillFromBox(const Box &box)
+void Sphere::FillFromBox(const AABox &box)
 {
     m_radius = box.GetDiagonal().Length() / 2.0f;
     m_center = box.GetCenter();
 }
 
-Sphere Sphere::FromBox(const Box &box)
+Sphere Sphere::FromBox(const AABox &box)
 {
     Sphere s;
     s.FillFromBox(box);

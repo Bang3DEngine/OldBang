@@ -164,7 +164,7 @@ bool Mesh::IsATrianglesModel() const
     return m_trisModel;
 }
 
-const Box &Mesh::GetBoundingBox() const
+const AABox &Mesh::GetAABBox() const
 {
     return m_bBox;
 }

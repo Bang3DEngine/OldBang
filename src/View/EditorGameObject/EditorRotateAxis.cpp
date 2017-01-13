@@ -30,7 +30,7 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 
     m_circle->SetReceivesLighting(false);
     m_circle->SetIsGizmo(true);
-    m_circle->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmosOverlay);
+    m_circle->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
     m_circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
             glLineWidth(10.0f); // Easier grab

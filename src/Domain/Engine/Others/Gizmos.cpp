@@ -67,6 +67,7 @@ void Gizmos::SetGizmosGameObject(EditorGameObject *ego)
             {
                 rend->SetIsGizmo(true);
                 rend->SetMaterial(Gizmos::m_material);
+                rend->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
             }
         }
         else
@@ -138,7 +139,7 @@ void Gizmos::RenderCustomMesh(Mesh *m)
 }
 
 
-void Gizmos::RenderSimpleBox(const Box &b)
+void Gizmos::RenderSimpleBox(const AABox &b)
 {
     ASSERT(m_gizmosGameObject);
 
@@ -168,7 +169,7 @@ void Gizmos::RenderSimpleBox(const Box &b)
     Gizmos::Reset();
 }
 
-void Gizmos::RenderBox(const Box &b)
+void Gizmos::RenderBox(const AABox &b)
 {
     ASSERT(m_gizmosGameObject);
     Gizmos::m_meshRenderer->SetEnabled(true);
@@ -386,6 +387,5 @@ void Gizmos::Render(Renderer *rend)
     }
 
     GraphicPipeline *gp = GraphicPipeline::GetActive(); ASSERT(gp);
-    rend->SetDepthLayer(gp->GetCurrentDepthLayer());
     gp->RenderRenderer(rend);
 }

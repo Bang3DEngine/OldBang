@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "Box.h"
+#include "AABox.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "Camera.h"
@@ -40,7 +40,7 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetCullMode(GetCullMode());
     r->SetRenderMode(GetRenderMode());
     r->SetLineWidth(GetLineWidth());
-    r->SetReceivesLighting(GetReceivesLighting());
+    r->SetReceivesLighting(ReceivesLighting());
 }
 
 Material *Renderer::GetMaterial() const
@@ -253,38 +253,33 @@ bool Renderer::GetDrawWireframe() const
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
     Camera *cam = camera ? camera : SceneManager::GetActiveScene()->GetCamera();
-    Vector3 camForward = cam->transform->GetForward();
 
-    Box bb = GetBoundingBox();
+    AABox bb = GetAABBox();
+    Matrix4 transformMatrix;
+    transform->GetLocalToWorldMatrix(&transformMatrix);
+    bb = transformMatrix * bb;
 
-    List<Vector3> points = bb.GetPoints();
+    // If there's a point outside the camera rect, return Empty
     bool allPointsOutside = true;
+    Rect screenRect = bb.GetAABoundingScreenRect(cam);
+    Vector2 rMin = screenRect.GetMin(), rMax = screenRect.GetMax();
+    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMin.x, rMin.y) );
+    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMin.x, rMax.y) );
+    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMax.x, rMin.y) );
+    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMax.x, rMax.y) );
+    if (allPointsOutside) { return Rect::Empty; }
+
+    // If there's one or more points behind the camera, return ScreenRect
+    // because we don't know how to handle it properly
+    Array<Vector3> points = bb.GetPoints();
+    Vector3 camForward = cam->transform->GetForward();
     for (const Vector3 &p : points)
     {
-        if (Vector3::Dot(p, camForward) > 0)
-        {
-            allPointsOutside = false;
-            break;
-        }
+        Vector3 dirToP = p - cam->transform->GetPosition();
+        if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::ScreenRect; }
     }
 
-    if (allPointsOutside)
-    {
-        return Rect::Empty;
-    }
-
-    if (gameObject)
-    {
-        return bb.GetBoundingScreenRect(cam,
-                                        gameObject->transform->GetPosition(),
-                                        gameObject->transform->GetRotation(),
-                                        gameObject->transform->GetScale()
-                                        );
-    }
-    else
-    {
-        return bb.GetBoundingScreenRect(cam);
-    }
+    return screenRect;
 }
 
 
@@ -322,7 +317,7 @@ void Renderer::SetReceivesLighting(bool receivesLighting)
     m_receivesLighting = receivesLighting;
 }
 
-bool Renderer::GetReceivesLighting() const
+bool Renderer::ReceivesLighting() const
 {
     return m_receivesLighting;
 }
@@ -390,5 +385,5 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("LineWidth", GetLineWidth());
     xmlInfo->SetBool("IsTransparent", IsTransparent(), {XMLProperty::Inline});
     xmlInfo->SetBool("DrawWireframe", GetDrawWireframe(), {XMLProperty::Inline});
-    xmlInfo->SetBool("ReceivesLighting", GetReceivesLighting(), {XMLProperty::Inline});
+    xmlInfo->SetBool("ReceivesLighting", ReceivesLighting(), {XMLProperty::Inline});
 }

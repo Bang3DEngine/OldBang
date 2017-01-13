@@ -1,7 +1,7 @@
 #ifndef GIZMOS_H
 #define GIZMOS_H
 
-#include "Box.h"
+#include "AABox.h"
 #include "Color.h"
 #include "Vector3.h"
 #include "Vector4.h"
@@ -63,8 +63,8 @@ public:
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
     static void RenderCustomMesh(Mesh *m);
-    static void RenderBox(const Box &b);
-    static void RenderSimpleBox(const Box &b);
+    static void RenderBox(const AABox &b);
+    static void RenderSimpleBox(const AABox &b);
     static void RenderRect(const Rect &r);
     static void RenderIcon(const Texture2D *texture,
                            bool billboard = true);

@@ -50,7 +50,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
     m_axisCap->transform->SetLocalScale(Vector3(1,2,1) * 0.25f);
     m_axisCap->GetComponent<MeshRenderer>()->SetMaterial(m_material);
-    m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(true);
+    m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(false);
     m_axisCap->GetComponent<MeshRenderer>()->SetIsGizmo(true);
     m_axisCap->GetComponent<MeshRenderer>()->
             SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmosOverlay);

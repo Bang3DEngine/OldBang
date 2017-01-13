@@ -222,7 +222,7 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
             ndcPos = ndcPos * 2.0f - 1.0f;
             ndcPos.y *= -1.0f;
             float z = Vector3::Distance(cam->transform->GetPosition(),
-                                        scene->GetBoundingBox().GetCenter());
+                                        scene->GetAABBox().GetCenter());
             worldPos = cam->ScreenNDCPointToWorld(ndcPos, z);
         }
 

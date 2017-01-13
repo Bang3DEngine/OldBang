@@ -19,7 +19,7 @@ public:
     void SetMaterial(Material *m) override;
     virtual void SetMesh(Mesh *m);
 
-    virtual Box GetBoundingBox() const override;
+    virtual AABox GetAABBox() const override;
 
     virtual const Mesh* GetMesh();
     virtual const String ToString() const override;
@@ -33,10 +33,8 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-private:
-    Mesh *m_mesh = nullptr;
-
 protected:
+    Mesh *m_mesh = nullptr;
 
     virtual void RenderWithoutBindingMaterial() const override;
 

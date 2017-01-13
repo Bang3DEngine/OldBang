@@ -115,22 +115,16 @@ void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform, GameO
 
         Matrix4 oldParentToWorld;
         parent->transform->GetLocalToWorldMatrix(&oldParentToWorld);
-        //Debug_Log("LOCAL TO WORLD: " << Transform::FromTransformMatrix(oldParentToWorld));
 
         Matrix4 worldToNewParent;
         if (newParent)
         {
             newParent->transform->GetLocalToWorldMatrix(&worldToNewParent);
             worldToNewParent = worldToNewParent.Inversed();
-            //Debug_Log("WORLD TO NEW PARENT: " << Transform::FromTransformMatrix(worldToNewParent));
         }
 
         Matrix4 keepWorldTransformMatrix =
                 worldToNewParent * oldParentToWorld * transform->GetLocalToParentMatrix();
-        //Debug_Log("LOCALTOPARENT: " <<
-        //          Quaternion::EulerAngles(
-        //              Transform::GetRotationFromMatrix4(transform->GetLocalToParentMatrix())));
-        //Debug_Log("KEEPWORLDMATRIX: " << Transform::FromTransformMatrix(keepWorldTransformMatrix));
 
         Transform t = Transform::FromTransformMatrix(keepWorldTransformMatrix);
         transform->SetLocalPosition(t.GetLocalPosition());
@@ -251,6 +245,7 @@ List<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
 Rect GameObject::GetBoundingScreenRect(Camera *cam,
                                        bool includeChildren) const
 {
+    bool firstIter = true;
     Rect renderRect = Rect::Empty;
     List<Renderer*> renderers = GetComponents<Renderer>();
     for (Renderer *rend : renderers)
@@ -258,8 +253,9 @@ Rect GameObject::GetBoundingScreenRect(Camera *cam,
         if (CAN_USE_COMPONENT(rend))
         {
             Rect rr = rend->GetBoundingRect(cam);
-            renderRect = Rect::Union(renderRect, rr);
+            renderRect = firstIter ? rr : Rect::Union(renderRect, rr);
         }
+        firstIter = false;
     }
 
     if (includeChildren)
@@ -274,15 +270,15 @@ Rect GameObject::GetBoundingScreenRect(Camera *cam,
     return renderRect;
 }
 
-Box GameObject::GetObjectBoundingBox(bool includeChildren) const
+AABox GameObject::GetObjectAABBox(bool includeChildren) const
 {
     List<Renderer*> rends = GetComponents<Renderer>();
-    Box b = Box::Empty;
+    AABox aabBox = AABox::Empty;
     for (Renderer *rend : rends)
     {
         if (CAN_USE_COMPONENT(rend))
         {
-            b = Box::Union(b, rend->GetBoundingBox());
+            aabBox = AABox::Union(aabBox, rend->GetAABBox());
         }
     }
 
@@ -295,43 +291,33 @@ Box GameObject::GetObjectBoundingBox(bool includeChildren) const
                 child->IsDraggedGameObject()) continue;
             #endif
 
-            Box bc = child->GetLocalBoundingBox(true);
-            b = Box::Union(b, bc);
+            AABox aabBoxChild = child->GetObjectAABBox(true);
+            Matrix4 mat = child->transform->GetLocalToParentMatrix();
+            aabBoxChild = mat * aabBoxChild;
+            aabBox = AABox::Union(aabBox, aabBoxChild);
         }
     }
 
-    return b;
+    return aabBox;
 }
 
-Box GameObject::GetLocalBoundingBox(bool includeChildren) const
+AABox GameObject::GetAABBox(bool includeChildren) const
 {
-    Box b = GetObjectBoundingBox(includeChildren);
-    Matrix4 mat = transform->GetLocalToParentMatrix();
-    b = mat * b; //Apply transform to Box
-    return b;
-}
-
-Box GameObject::GetBoundingBox(bool includeChildren) const
-{
-    Box b = GetObjectBoundingBox(includeChildren);
-    Matrix4 mat; transform->GetLocalToWorldMatrix(&mat);
+    AABox b = GetObjectAABBox(includeChildren);
+    Matrix4 mat;
+    transform->GetLocalToWorldMatrix(&mat);
     b = mat * b;
     return b;
 }
 
 Sphere GameObject::GetObjectBoundingSphere(bool includeChildren) const
 {
-    return Sphere::FromBox(GetObjectBoundingBox(includeChildren));
-}
-
-Sphere GameObject::GetLocalBoundingSphere(bool includeChildren) const
-{
-    return Sphere::FromBox(GetLocalBoundingBox(includeChildren));
+    return Sphere::FromBox(GetObjectAABBox(includeChildren));
 }
 
 Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 {
-    return Sphere::FromBox(GetBoundingBox(includeChildren));
+    return Sphere::FromBox(GetAABBox(includeChildren));
 }
 
 void GameObject::AddComponent(Component *c)
@@ -737,8 +723,6 @@ void GameObject::_OnDrawGizmosOverlay()
 {
     #ifdef BANG_EDITOR
 
-    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_children); // The order matters
-
     GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (sfb->IsPassing())
@@ -747,6 +731,8 @@ void GameObject::_OnDrawGizmosOverlay()
     }
     PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_components);  // The order matters
     OnDrawGizmosOverlay();
+
+    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_children); // The order matters
 
     #endif
 }

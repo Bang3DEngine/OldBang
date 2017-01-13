@@ -1,7 +1,7 @@
 #ifndef LINERENDERER_H
 #define LINERENDERER_H
 
-#include "Box.h"
+#include "AABox.h"
 #include "Array.h"
 #include "String.h"
 #include "Vector3.h"
@@ -23,7 +23,7 @@ public:
 
     virtual void SetMaterial(Material *m) override;
 
-    virtual Box GetBoundingBox() const override;
+    virtual AABox GetAABBox() const override;
     const Array<Vector3>& GetPoints() const;
 
     #ifdef BANG_EDITOR

@@ -220,7 +220,7 @@ void Camera::OnDrawGizmos()
         }
         else
         {
-            Box orthoBox;
+            AABox orthoBox;
             orthoBox.SetMin(transform->GetPosition() + Vector3(-GetOrthoWidth(), -GetOrthoHeight(), -GetZNear()));
             orthoBox.SetMax(transform->GetPosition() + Vector3( GetOrthoWidth(),  GetOrthoHeight(), -GetZFar()));
             Gizmos::SetRotation(transform->GetRotation());

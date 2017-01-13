@@ -62,8 +62,8 @@ Rect Rect::Union(const Rect &r1, const Rect &r2)
     if (r1 == Rect::Empty) { return r2; }
     if (r2 == Rect::Empty) { return r1; }
     return Rect(glm::min(r1.m_minx, r2.m_minx),
-                glm::min(r1.m_maxx, r2.m_maxx),
-                glm::max(r1.m_miny, r2.m_miny),
+                glm::max(r1.m_maxx, r2.m_maxx),
+                glm::min(r1.m_miny, r2.m_miny),
                 glm::max(r1.m_maxy, r2.m_maxy));
 }
 

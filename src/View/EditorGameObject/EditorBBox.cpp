@@ -43,15 +43,15 @@ void EditorBBox::OnUpdate()
     ASSERT(m_attachedGameObject);
 
     // Adjust transform to wrap all the vertices of the parent and children
-    Box bbox;
+    AABox bbox;
     List<Renderer*> rends = m_attachedGameObject->GetComponents<Renderer>();
     for (auto it_r = rends.Begin(); it_r != rends.End(); ++it_r)
     {
         Renderer *r = *it_r;
         if (CAN_USE_COMPONENT(r))
         {
-            Box mbox = r->GetBoundingBox();
-            bbox = Box::Union(bbox, mbox);
+            AABox mbox = r->GetAABBox();
+            bbox = AABox::Union(bbox, mbox);
         }
     }
 

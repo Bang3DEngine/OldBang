@@ -48,11 +48,7 @@ private:
 
     Scene *m_currentScene = nullptr;
     Renderer::DepthLayer m_currentDepthLayer =
-            Renderer::DepthLayer::DepthLayerScene;
-    const Renderer::DepthLayer
-        DepthLayerOrder [3] = {Renderer::DepthLayer::DepthLayerScene,
-                               Renderer::DepthLayer::DepthLayerCanvas,
-                               Renderer::DepthLayer::DepthLayerGizmosOverlay};
+                             Renderer::DepthLayer::DepthLayerScene;
 
     GBuffer *m_gbuffer = nullptr;
     #ifdef BANG_EDITOR
@@ -69,16 +65,15 @@ private:
      * @brief Apply all the scene lights over the current gbuffer.
      */
     void ApplyDeferredLights(Renderer *rend = nullptr);
-    void ApplyDeferredLightsToRenderer();
 
     #ifdef BANG_EDITOR
+    void RenderGBuffer();
     void RenderSelectionFramebuffer();
     #endif
 
     void RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
                                   Framebuffer *fb);
-    void RenderGizmosOverlayPass(Framebuffer *fb);
-    void RenderDepthLayers(Framebuffer *fb);
+    void RenderGizmosPass(Framebuffer *fb);
 };
 
 #endif // GRAPHICPIPELINE_H

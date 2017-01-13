@@ -3,33 +3,32 @@
 
 #include <cmath>
 
-#include "Array.h"
 #include "List.h"
-
+#include "Array.h"
 #include "Vector3.h"
 #include "Matrix4.h"
+#include "IToString.h"
 #include "Quaternion.h"
 
-#include "IToString.h"
 
 class Rect;
 class Sphere;
 class Camera;
 class Quaternion;
-class Box : public IToString
+class AABox : public IToString
 {
 private:
     Vector3 m_minv, m_maxv;
 
 public:
-    static Box Empty;
+    static AABox Empty;
 
-    Box();
-    Box(float minx, float maxx,
+    AABox();
+    AABox(float minx, float maxx,
         float miny, float maxy,
         float minz, float maxz);
-    Box(const Vector3 &min, const Vector3 &max);
-    Box(const Box& b);
+    AABox(const Vector3 &min, const Vector3 &max);
+    AABox(const AABox& b);
 
     void SetMin(const Vector3& bMin);
     void SetMax(const Vector3& bMax);
@@ -54,7 +53,7 @@ public:
      * @param b2
      * @return
      */
-    static Box Union(const Box &b1, const Box &b2);
+    static AABox Union(const AABox &b1, const AABox &b2);
 
     /**
      * @brief This Box fills its values with the
@@ -63,9 +62,9 @@ public:
      */
     void FillFromPositions(const Array<Vector3> &positions);
 
-    static Box FromSphere(const Sphere &sphere);
+    static AABox FromSphere(const Sphere &sphere);
 
-    List<Vector3> GetPoints() const;
+    Array<Vector3> GetPoints() const;
 
     /**
      * @brief Returns the minimum 2D rect in screen NDC space that contains
@@ -73,15 +72,12 @@ public:
      * @param cam
      * @return
      */
-    Rect GetBoundingScreenRect(Camera *cam,
-                               const Vector3 &translation = Vector3::Zero,
-                               const Quaternion& rotation = Quaternion::Identity,
-                               const Vector3 &scale = Vector3::One);
+    Rect GetAABoundingScreenRect(Camera *cam);
 
     const String ToString() const override;
 };
 
-Box operator*(const Matrix4 &m, const Box &b);
-bool operator==(const Box &b1, const Box &b2);
+AABox operator*(const Matrix4 &m, const AABox &b);
+bool operator==(const AABox &b1, const AABox &b2);
 
 #endif // BOX_H

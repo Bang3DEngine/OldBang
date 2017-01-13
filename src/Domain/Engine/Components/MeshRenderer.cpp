@@ -55,10 +55,9 @@ void MeshRenderer::SetMesh(Mesh *m)
     }
 }
 
-Box MeshRenderer::GetBoundingBox() const
+AABox MeshRenderer::GetAABBox() const
 {
-    return m_mesh ? m_mesh->GetBoundingBox() :
-                    Box::Empty;
+    return m_mesh ? m_mesh->GetAABBox() : AABox::Empty;
 }
 
 const Mesh *MeshRenderer::GetMesh()

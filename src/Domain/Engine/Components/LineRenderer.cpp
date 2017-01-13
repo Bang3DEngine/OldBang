@@ -56,9 +56,9 @@ void LineRenderer::SetMaterial(Material *m)
     BindPointsToVAO();
 }
 
-Box LineRenderer::GetBoundingBox() const
+AABox LineRenderer::GetAABBox() const
 {
-    if (m_points.Empty()) { return Box::Empty; }
+    if (m_points.Empty()) { return AABox::Empty; }
 
     Vector3 minp = m_points.Front();
     Vector3 maxp = m_points.Front();
@@ -77,7 +77,7 @@ Box LineRenderer::GetBoundingBox() const
     minp.x -= strokeAdd; maxp.x += strokeAdd;
     minp.y -= strokeAdd; maxp.y += strokeAdd;
     minp.z -= strokeAdd; maxp.z += strokeAdd;
-    return Box(minp, maxp);
+    return AABox(minp, maxp);
 }
 
 const Array<Vector3> &LineRenderer::GetPoints() const

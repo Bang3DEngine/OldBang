@@ -1,5 +1,6 @@
 #include "EditorRotateAxisGroup.h"
 
+#include "Debug.h"
 #include "Gizmos.h"
 #include "Camera.h"
 #include "Toolbar.h"

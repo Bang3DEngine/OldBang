@@ -1,14 +1,13 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "Box.h"
+#include "AABox.h"
 #include "Array.h"
 #include "Asset.h"
 #include "Sphere.h"
 
 class VAO;
 class VBO;
-class Box;
 class Sphere;
 class Vector2;
 class Vector3;
@@ -43,7 +42,7 @@ public:
     VAO *GetVAO() const;
     int GetVertexCount() const;
     bool IsATrianglesModel() const;
-    const Box& GetBoundingBox() const;
+    const AABox& GetAABBox() const;
     const Sphere& GetBoundingSphere() const;
 
     const Array<Vector3>& GetPositions();
@@ -54,9 +53,6 @@ public:
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
 private:
-    Box m_bBox;
-    Sphere m_bSphere;
-
     Array<Vector3> m_positions;
     Array<Vector3> m_normals;
     Array<Vector2> m_uvs;
@@ -66,6 +62,9 @@ private:
     VBO *m_vertexNormalsVBO = nullptr;
     VBO *m_vertexUvsVBO = nullptr;
     int m_vertexCount = 0;
+
+    AABox m_bBox;
+    Sphere m_bSphere;
 
     bool m_trisModel = false;
 
