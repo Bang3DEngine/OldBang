@@ -10,6 +10,10 @@
 #include "Transform.h"
 #include "SceneManager.h"
 
+float EditorCamera::s_initialFovDegrees = 60.0f;
+float EditorCamera::s_initialZNear      = 0.05f;
+float EditorCamera::s_initialZFar       = 9999.9f;
+
 EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
 {
     m_yawNode = new EditorGameObject("BANG_EditorYawNode");
@@ -20,8 +24,9 @@ EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
     m_cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
     m_camt = m_yawNode->transform;
-    m_cam->SetZNear(0.05f);
-    m_cam->SetZFar(9999.9f);
+    m_cam->SetZNear(s_initialZNear);
+    m_cam->SetZFar(s_initialZFar);
+    m_cam->SetFovDegrees(EditorCamera::s_initialFovDegrees);
 }
 
 EditorCamera::~EditorCamera()
@@ -70,8 +75,13 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
         float mouseWheel = Input::GetMouseWheel();
         if (mouseWheel != 0.0f)
         {
-            *moveStep += m_mouseZoomPerDeltaWheel * mouseWheel * m_camt->GetForward();
-            *hasMoved  = true;
+            if (m_cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
+            {
+                *moveStep += m_mouseZoomPerDeltaWheel * mouseWheel * m_camt->GetForward();
+                *hasMoved  = true;
+            }
+            m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
+            m_cam->SetOrthoHeight(m_orthoHeight);
         }
     }
 }
@@ -274,6 +284,24 @@ void EditorCamera::AlignViewWithGameObject(GameObject *selected)
 Camera *EditorCamera::GetCamera()
 {
     return m_yawNode->GetComponent<Camera>();
+}
+
+void EditorCamera::SwitchProjectionModeTo(bool mode3D)
+{
+    if (mode3D)
+    {
+        m_cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
+        m_cam->SetZNear(EditorCamera::s_initialZNear);
+        m_cam->SetZFar(EditorCamera::s_initialZFar);
+        m_cam->SetFovDegrees(EditorCamera::s_initialFovDegrees);
+    }
+    else
+    {
+        m_cam->SetProjectionMode(Camera::ProjectionMode::Orthographic);
+        m_cam->SetOrthoHeight(m_orthoHeight);
+        m_cam->SetZNear(-999999.9f);
+        m_cam->SetZFar(999999.9f);
+    }
 }
 
 #ifdef BANG_EDITOR

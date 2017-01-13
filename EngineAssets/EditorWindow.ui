@@ -141,6 +141,24 @@
             </spacer>
            </item>
            <item>
+            <widget class="QToolButton" name="buttonOrthoPerspectiveMode">
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>3D</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QToolButton" name="buttonPlay">
              <property name="text">
               <string>Play</string>

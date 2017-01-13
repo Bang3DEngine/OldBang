@@ -33,7 +33,8 @@ private:
     QToolButton *m_buttonGlobalCoords  = nullptr;
     QToolButton *m_buttonLocalCoords   = nullptr;
     QToolButton *m_buttonPlay          = nullptr;
-    QToolButton *m_buttonStop         = nullptr;
+    QToolButton *m_buttonStop          = nullptr;
+    QToolButton *m_button3D            = nullptr;
 
     TransformMode m_currentTransformMode = TransformMode::Translate;
 
@@ -60,6 +61,7 @@ public slots:
     void OnLocalCoordsClicked();
     void OnPlayClicked();
     void OnStopClicked();
+    void OnOrthoPerspectiveClicked();
 
     void OnShortcutPressedKey(Input::Key key) override;
     void OnShortcutPressed() override;

@@ -79,7 +79,7 @@ private:
     static Mesh* s_camMesh;
     static void InitStatics();
 
-    float m_orthoHeight  = 0.5f;
+    float m_orthoHeight  = 25.0f;
 
     Color m_clearColor = Color(Color(0.4f), 1);
     float m_fovDegrees = 60.0f;

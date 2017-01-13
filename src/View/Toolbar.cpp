@@ -1,6 +1,9 @@
 #include "Toolbar.h"
 
+#include "Debug.h"
 #include "Scene.h"
+#include "Camera.h"
+#include "EditorCamera.h"
 #include "EditorWindow.h"
 #include "SceneManager.h"
 #include "ShortcutManager.h"
@@ -24,6 +27,7 @@ void Toolbar::Init()
     Toolbar::s_tb->m_buttonLocalCoords   = w->buttonLocalCoords;
     Toolbar::s_tb->m_buttonPlay          = w->buttonPlay;
     Toolbar::s_tb->m_buttonStop          = w->buttonStop;
+    Toolbar::s_tb->m_button3D            = w->buttonOrthoPerspectiveMode;
 
     connect(Toolbar::s_tb->m_buttonTranslateMode, SIGNAL(clicked()),
             Toolbar::s_tb, SLOT(OnTranslateClicked()));
@@ -41,6 +45,9 @@ void Toolbar::Init()
             Toolbar::s_tb, SLOT(OnPlayClicked()));
     connect(Toolbar::s_tb->m_buttonStop, SIGNAL(clicked()),
             Toolbar::s_tb, SLOT(OnStopClicked()));
+
+    connect(Toolbar::s_tb->m_button3D, SIGNAL(clicked()),
+            Toolbar::s_tb, SLOT(OnOrthoPerspectiveClicked()));
 
     Toolbar::s_tb->m_buttonTranslateMode->click();
     Toolbar::s_tb->m_buttonGlobalCoords->click();
@@ -139,6 +146,19 @@ void Toolbar::OnStopClicked()
     m_buttonPlay->setChecked(false);
     m_buttonStop->setChecked(true);
     m_playing = false;
+}
+
+void Toolbar::OnOrthoPerspectiveClicked()
+{
+    Scene *currentScene = SceneManager::GetActiveScene();
+    ASSERT(currentScene);
+
+    Camera *cam = currentScene->GetCamera(); ASSERT(cam);
+    EditorCamera *edCam = dynamic_cast<EditorCamera*>( cam->gameObject->parent );
+    ASSERT(edCam);
+
+    bool mode3D = m_button3D->isChecked();
+    edCam->SwitchProjectionModeTo(mode3D);
 }
 
 void Toolbar::OnShortcutPressedKey(Input::Key key)

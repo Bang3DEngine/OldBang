@@ -20,45 +20,31 @@ class Screen;
 **/
 class EditorCamera : public EditorGameObject
 {
-private:
-    Camera *m_cam = nullptr;
-    Transform *m_camt = nullptr; //YawNode transform
-    EditorGameObject *m_yawNode = nullptr;
+public:
 
-    GameObject *m_currentFocus = nullptr;
-    bool m_doingLookAt = false;
-    float m_lookAtRotSpeed = 2.0f;
-    float m_lookAtMoveSpeed = 3.0f;
+    EditorCamera();
+    virtual ~EditorCamera();
 
-    /**
-     * These 4 variables are related to the speed when moving
-     * the camera with WASD
-     */
-    float m_maxMoveSpeed = 1.0f;
-    float m_minMoveSpeed = 0.1f;
-    float m_keysMoveAccel = 0.1f;
-    float m_keysMoveSpeed = 0.0f;
+    void OnGameObjectDestroyed(GameObject *destroyed) override;
+    void AlignViewWithGameObject(GameObject *selected);
 
-    /**
-     * @brief How many units in world space do we have to move,
-     * for every panned pixel?
-     */
-    Vector2 m_mousePanPerPixel = Vector2(100.0f); //Movement with middle button
+    static float s_initialFovDegrees;
+    static float s_initialZNear;
+    static float s_initialZFar;
+
+    void SwitchProjectionModeTo(bool mode3D);
+
+    #ifdef BANG_EDITOR
+    void OnHierarchyGameObjectsSelected
+                (List<GameObject*> &selectedGameObjects) override;
+    void OnHierarchyGameObjectDoubleClicked(GameObject *selected) override;
+    #endif
 
     /**
-     * @brief startingRotation changes after every lookAt.
-     * It indicates the initial offset to sum to the user's rotation
-     * of mouse right click.
-     */
-    Quaternion m_startingRotation;                         //starting offset
-    Vector2 m_mouseRotDegreesAccum = Vector2(0.0f);    //User input
-    Vector2 m_mouseRotDegreesPerPixel = Vector2(0.0f); //Parameter
+     * Gets the Camera Component inside the "Yaw-Node".
+     **/
+    Camera *GetCamera();
 
-    /**
-     * @brief How many units in world space do we have to move
-     * in camera's forward direction, for every user wheel delta?
-     */
-    float m_mouseZoomPerDeltaWheel = 5.0f;
 
 protected:
     /**
@@ -110,24 +96,47 @@ protected:
     void OnStart() override;
     void OnUpdate() override;
 
-public:
+private:
+    Camera *m_cam = nullptr;
+    Transform *m_camt = nullptr; //YawNode transform
+    EditorGameObject *m_yawNode = nullptr;
 
-    EditorCamera();
-    virtual ~EditorCamera();
-
-    void OnGameObjectDestroyed(GameObject *destroyed) override;
-    void AlignViewWithGameObject(GameObject *selected);
+    GameObject *m_currentFocus = nullptr;
+    bool m_doingLookAt = false;
+    float m_lookAtRotSpeed = 2.0f;
+    float m_lookAtMoveSpeed = 3.0f;
 
     /**
-     * Gets the Camera Component inside the "Yaw-Node".
-     **/
-    Camera *GetCamera();
+     * These 4 variables are related to the speed when moving
+     * the camera with WASD
+     */
+    float m_maxMoveSpeed = 1.0f;
+    float m_minMoveSpeed = 0.1f;
+    float m_keysMoveAccel = 0.1f;
+    float m_keysMoveSpeed = 0.0f;
 
-#ifdef BANG_EDITOR
-    void OnHierarchyGameObjectsSelected
-                (List<GameObject*> &selectedGameObjects) override;
-    void OnHierarchyGameObjectDoubleClicked(GameObject *selected) override;
-#endif
+    /**
+     * @brief How many units in world space do we have to move,
+     * for every panned pixel?
+     */
+    Vector2 m_mousePanPerPixel = Vector2(100.0f); //Movement with middle button
+
+    /**
+     * @brief startingRotation changes after every lookAt.
+     * It indicates the initial offset to sum to the user's rotation
+     * of mouse right click.
+     */
+    Quaternion m_startingRotation;                         //starting offset
+    Vector2 m_mouseRotDegreesAccum = Vector2(0.0f);    //User input
+    Vector2 m_mouseRotDegreesPerPixel = Vector2(0.0f); //Parameter
+
+    /**
+     * @brief How many units in world space do we have to move
+     * in camera's forward direction, for every user wheel delta?
+     */
+    float m_mouseZoomPerDeltaWheel = 5.0f;
+
+    float m_orthoHeight = 30.0f;
 };
 
 #endif // EDITORCAMERA_H
