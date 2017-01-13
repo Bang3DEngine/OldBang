@@ -56,7 +56,6 @@ private:
     #endif
 
     // For opaque
-    Material *m_matAmbientLightScreen    = nullptr;
     Material *m_matSelectionEffectScreen = nullptr;
 
     void ApplySelectionEffect();
@@ -65,9 +64,9 @@ private:
      * @brief Apply all the scene lights over the current gbuffer.
      */
     void ApplyDeferredLights(Renderer *rend = nullptr);
+    void RenderGBuffer();
 
     #ifdef BANG_EDITOR
-    void RenderGBuffer();
     void RenderSelectionFramebuffer();
     #endif
 

@@ -37,6 +37,7 @@ protected:
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
 
     friend class GameObject;
+    friend class EditorFloor;
 };
 
 #endif // POINTLIGHT_H

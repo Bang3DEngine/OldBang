@@ -28,8 +28,6 @@
 
 GraphicPipeline::GraphicPipeline(Screen *screen)
 {
-    m_matAmbientLightScreen    = AssetsManager::Load<Material>(
-                "Materials/PR_AmbientLight_Screen.bmat", true);
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
                 "Materials/PR_SelectionEffect.bmat", true);
 
@@ -47,7 +45,6 @@ GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
     delete m_matSelectionEffectScreen;
-    delete m_matAmbientLightScreen;
     #ifdef BANG_EDITOR
     delete m_selectionFB;
     #endif
@@ -93,14 +90,12 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
             glDepthMask(GL_FALSE); // Do not write to depth
 
             // We need a brand new stencil to later apply the custom effects
-            // Because if we dont, then we apply the ambient light to all the
-            // stuff that is stenciled, removing all the effects over it
             m_gbuffer->ClearStencil();
         }
 
         m_gbuffer->SetStencilTest(false); // Don't want to be filtered by the stencil
         m_gbuffer->SetStencilWrite(true); // We are going to mark into the stencil (to later let the deferred lighting be applied here)
-        m_gbuffer->SetAllDrawBuffersExceptColor(); // But we DO write to diffuseColor (color != diffuseColor !!!)
+        m_gbuffer->SetAllDrawBuffers(); // But we DO write to diffuseColor (color != diffuseColor !!!)
 
         rend->Render(); // Render without writing to the final color buffer
 
@@ -158,8 +153,6 @@ void GraphicPipeline::ApplySelectionEffect()
 
 void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 {
-    //std::cerr << "ApplyDeferredLights" << std::endl;
-
     // Limit rendering to the renderer visible rect
     Rect renderRect = Rect::ScreenRect;
     Camera *sceneCam = m_currentScene->GetCamera();
@@ -176,7 +169,6 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     ASSERT(renderRect != Rect::Empty); // If the rect is empty, dont waste time rendering nothing
 
     m_gbuffer->SetStencilTest(true); // We have marked from before the zone where we want to apply the effect
-    m_gbuffer->RenderPassWithMaterial(m_matAmbientLightScreen, renderRect); // Apply ambient lights
 
     if (!rend || rend->ReceivesLighting())
     {
@@ -215,7 +207,8 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     // Either is transparent or has a custom PR Pass (gizmos are left for the end...)
     for (Renderer *rend : renderers)
     {
-        if ((rend->IsTransparent() || rend->HasCustomPRPass()) && !rend->IsGizmo())
+        if ((rend->IsTransparent() || rend->HasCustomPRPass()) &&
+             !rend->IsGizmo())
         {
             RenderRenderer(rend);
         }
@@ -304,7 +297,7 @@ void GraphicPipeline::RenderGBuffer()
     m_gbuffer->ClearBuffersAndBackground(bgColor);
 
     m_gbuffer->Bind();
-    m_gbuffer->SetAllDrawBuffersExceptColor();
+    m_gbuffer->SetAllDrawBuffers();
 
     RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerScene, m_gbuffer);
     RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerCanvas, m_gbuffer);

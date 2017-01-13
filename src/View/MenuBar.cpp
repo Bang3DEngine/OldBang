@@ -194,8 +194,9 @@ void MenuBar::OnSaveSceneAs() const
     Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
 
     String filename = Dialog::GetSaveFilename("Save scene as...",
-                                                  Scene::GetFileExtensionStatic(),
-                                                  scene->name);
+                                              Scene::GetFileExtensionStatic(),
+                                              Persistence::c_ProjectAssetsRootAbsolute,
+                                              scene->name);
     if (filename == "") return;
 
     FileWriter::WriteScene(filename, scene);

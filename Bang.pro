@@ -152,7 +152,6 @@ OTHER_FILES += \
     Assets/Scenes/test.bscene \
     Assets/Engine/Textures/DirectionalLightIcon.btex2d \
     Assets/Engine/Textures/PointLightIcon.btex2d \
-    Assets/Engine/Shaders/PR_AmbientLight.frag \
     Assets/Engine/Shaders/D2G.vert \
     Assets/Engine/Shaders/PR.vert \
     Assets/Engine/Shaders/PR.frag \
@@ -163,7 +162,6 @@ OTHER_FILES += \
     Assets/Engine/Shaders/Include/Uniforms.glsl \
     Assets/Engine/Shaders/Include/PointLight.glsl \
     Assets/Engine/Shaders/Include/DirectionalLight.glsl \
-    Assets/Engine/Materials/PR_AmbientLight.bmat \
     Assets/Engine/Shaders/PR_MeshPass.vert \
     Assets/Engine/Materials/PR_DirectionalLight_Screen.bmat \
     Assets/Engine/Materials/PR_PointLight_Screen.bmat \
@@ -179,7 +177,6 @@ OTHER_FILES += \
     Assets/Engine/Materials/RenderGBufferToScreen.bmat \
     Assets/Engine/Shaders/PR_ScreenPass.vert \
     Assets/Engine/Shaders/PR_MeshPass.vert \
-    Assets/Engine/Materials/PR_AmbientLight_Screen.bmat \
     Assets/Engine/Materials/PR_SelectionEffect.bmat \
     Assets/Engine/Shaders/UI/D2G_UIText.frag \
     Assets/Engine/Materials/UI/D2G_UIText.bmat \
@@ -189,7 +186,6 @@ OTHER_FILES += \
     EngineAssets/Shaders/PR_SelectionEffect.frag \
     EngineAssets/Shaders/PR_PointLight.frag \
     EngineAssets/Shaders/PR_DirectionalLight.frag \
-    EngineAssets/Shaders/PR_AmbientLight.frag \
     EngineAssets/Shaders/D2G_Template.frag \
     EngineAssets/Shaders/D2G_RotationAxisLine.frag \
     EngineAssets/Shaders/D2G_Default.frag \

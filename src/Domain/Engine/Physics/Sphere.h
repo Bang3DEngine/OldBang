@@ -1,6 +1,7 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
+#include "Array.h"
 #include "AABox.h"
 #include "Vector3.h"
 
@@ -16,6 +17,8 @@ public:
     Sphere();
     Sphere(float m_radius);
     Sphere(Vector3 m_center, float m_radius);
+
+    Array<Vector3> GetPoints() const;
 
     float GetDiameter() const;
     float GetArea() const;

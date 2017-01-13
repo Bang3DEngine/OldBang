@@ -34,7 +34,7 @@ void Main()
         }
         else
         {
-            B_vout.color += outlineColor * fillOpacity;
+            B_vout.color = FRAG_IN_COLOR() + outlineColor * fillOpacity;
         }
     }
 }

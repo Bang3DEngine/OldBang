@@ -27,7 +27,7 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     m_line->SetLineWidth(2.0f);
     m_line->SetIsGizmo(true);
     m_line->SetReceivesLighting(false);
-    m_line->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmosOverlay);
+    m_line->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
     m_line->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
         {
             glLineWidth(25.0f); // Easier grab
@@ -43,7 +43,7 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->GetComponent<MeshRenderer>()->SetReceivesLighting(false);
     m_axisCap->GetComponent<MeshRenderer>()->SetIsGizmo(true);
     m_axisCap->GetComponent<MeshRenderer>()->
-            SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmosOverlay);
+            SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
 
     if (dir == EditorAxis::EditorAxisDirection::Central)
     {

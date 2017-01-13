@@ -5,6 +5,7 @@
 #include "Vector3.h"
 #include "Material.h"
 #include "Transform.h"
+#include "PointLight.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "SingleLineRenderer.h"
@@ -85,6 +86,12 @@ void EditorFloor::OnDrawGizmos()
         //Gizmos::RenderSimpleBox(box);
         rect = selected->GetBoundingScreenRect(scene->GetCamera(), true);
         //Gizmos::RenderRect(rect);
+        PointLight *pointLight = selected->GetComponent<PointLight>();
+        if (pointLight)
+        {
+            rect = pointLight->GetRenderRect(scene->GetCamera());
+            Gizmos::RenderRect(rect);
+        }
     }
 
     //rect = scene->GetBoundingScreenRect(scene->GetCamera(), true);

@@ -130,8 +130,7 @@ void AABox::FillFromPositions(const Array<Vector3> &positions)
 AABox AABox::FromSphere(const Sphere &sphere)
 {
     AABox b;
-    b.SetMin(sphere.GetCenter() - Vector3(sphere.GetRadius()));
-    b.SetMax(sphere.GetCenter() + Vector3(sphere.GetRadius()));
+    b.FillFromPositions(sphere.GetPoints());
     return b;
 }
 

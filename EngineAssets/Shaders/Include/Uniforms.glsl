@@ -21,11 +21,11 @@ uniform bool B_stencilWriteEnabled;
 uniform bool B_stencilTestEnabled;
 
 // Material related
-uniform bool B_renderer_receivesLighting;
+uniform bool  B_renderer_receivesLighting;
 uniform vec4  B_material_diffuse_color;
 uniform float B_alphaCuttoff = -1.0f;
 uniform float B_material_shininess;
-uniform bool B_hasTexture = false;
+uniform bool  B_hasTexture = false;
 uniform sampler2D B_texture_0;
 
 // Screen related
@@ -69,13 +69,13 @@ uniform sampler2D B_color_gout_fin;
         #define VERT_IN_UV_OBJECT()       B_uv_raw_vin
     #endif
     #ifdef BANG_FRAGMENT
-        #define FRAG_IN_POSITION_WORLD()  B_position_world_vout_fin
-        #define FRAG_IN_NORMAL_WORLD()    B_normal_world_vout_fin
-        #define FRAG_IN_UV()              B_uv_vout_fin
-        #define FRAG_IN_DIFFUSE_COLOR()   (texture2D(B_diffuse_gout_fin, B_screen_coord_norm))
-        #define FRAG_IN_DEPTH()           (texture2D(B_depth_gout_fin,   B_screen_coord_norm).x)
-        #define FRAG_IN_STENCIL()         (texture2D(B_stencil_gout_fin, B_screen_coord_norm).x)
-        #define FRAG_IN_COLOR()           (texture2D(B_color_gout_fin,   B_screen_coord_norm))
+        #define FRAG_IN_POSITION_WORLD()     B_position_world_vout_fin
+        #define FRAG_IN_NORMAL_WORLD()       B_normal_world_vout_fin
+        #define FRAG_IN_UV()                 B_uv_vout_fin
+        #define FRAG_IN_DIFFUSE_COLOR()      (texture2D(B_diffuse_gout_fin, B_screen_coord_norm))
+        #define FRAG_IN_DEPTH()              (texture2D(B_depth_gout_fin,   B_screen_coord_norm).x)
+        #define FRAG_IN_STENCIL()            (texture2D(B_stencil_gout_fin, B_screen_coord_norm).x)
+        #define FRAG_IN_COLOR()              (texture2D(B_color_gout_fin,   B_screen_coord_norm))
     #endif
 #endif
 

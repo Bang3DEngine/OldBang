@@ -189,7 +189,8 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor, const ::
                     GBuffer::Attachment::Normal,
                     GBuffer::Attachment::Uv,
                     GBuffer::Attachment::Diffuse,
-                    GBuffer::Attachment::MaterialProperties});
+                    GBuffer::Attachment::MaterialProperties,
+                    GBuffer::Attachment::Color});
 
     glClearColor(clearValue.r, clearValue.g, clearValue.b, 1);
     glClear(GL_COLOR_BUFFER_BIT);
