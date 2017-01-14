@@ -5,12 +5,15 @@
 #include "Explorer.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
+#include "EditorScene.h"
+#include "SceneManager.h"
 #include "SingletonManager.h"
 #include "WindowEventManager.h"
 
-EditorWindow *EditorWindow::s_m_win = nullptr;
+EditorWindow *EditorWindow::s_win = nullptr;
 
-EditorWindow::EditorWindow() : Ui_EditorWindow()
+EditorWindow::EditorWindow(QWidget *parent) :
+    QObject(parent), Ui_EditorWindow()
 {
 
 }
@@ -19,15 +22,15 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
 {
     IWindow::InitFromMainBinary(window, application);
 
-    EditorWindow::s_m_win = new EditorWindow();
-    SingletonManager::GetInstance()->SetEditorWindowSingleton(EditorWindow::s_m_win);
+    EditorWindow::s_win = new EditorWindow();
+    SingletonManager::GetInstance()->SetEditorWindowSingleton(EditorWindow::s_win);
 
-    EditorWindow::s_m_win->setupUi(window);
+    EditorWindow::s_win->setupUi(window);
 
-    EditorWindow::s_m_win->m_mainWindow = window;
-    EditorWindow::s_m_win->m_mainWindow->showMaximized();
+    EditorWindow::s_win->m_mainWindow = window;
+    EditorWindow::s_win->m_mainWindow->showMaximized();
 
-    EditorWindow::s_m_win->m_app = application;
+    EditorWindow::s_win->m_app = application;
 
     Toolbar::Init();
 
@@ -35,10 +38,10 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     Explorer::GetInstance()->OnWindowShown();
     Inspector::GetInstance()->OnWindowShown();
 
-    QDockWidget *hierarchyDock = EditorWindow::s_m_win->dockHierarchy;
-    QDockWidget *inspectorDock = EditorWindow::s_m_win->dockInspector;
-    QDockWidget *explorerDock = EditorWindow::s_m_win->dockExplorer;
-    QDockWidget *loggerDock = EditorWindow::s_m_win->dockLogger;
+    QDockWidget *hierarchyDock = EditorWindow::s_win->dockHierarchy;
+    QDockWidget *inspectorDock = EditorWindow::s_win->dockInspector;
+    QDockWidget *explorerDock = EditorWindow::s_win->dockExplorer;
+    QDockWidget *loggerDock = EditorWindow::s_win->dockLogger;
     window->tabifyDockWidget(explorerDock, loggerDock);
     explorerDock->raise();
 

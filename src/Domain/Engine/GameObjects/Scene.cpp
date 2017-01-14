@@ -19,27 +19,24 @@ void Scene::_OnStart()
 {
     GameObject::_OnStart();
 
-    if (!IsEditorGameObject())
+    List<Camera*> cameras = GetComponentsInChildren<Camera>();
+    if (!cameras.Empty())
     {
-        List<Camera*> cameras = GetComponentsInChildren<Camera>();
-        if (!cameras.Empty())
-        {
-            Camera *cam = cameras.Front();
-            SetCamera(cam);
-        }
-        else // Create default camera
-        {
-            Debug_Warn("No camera was found. Creating default camera...");
-            GameObject *m_defaultCamera = new GameObject("DefaultCamera");
-            m_defaultCamera->transform->SetPosition(Vector3(90));
-            m_defaultCamera->transform->LookAt(Vector3::Zero);
-            m_defaultCamera->SetParent(this);
+        Camera *cam = cameras.Front();
+        SetCamera(cam);
+    }
+    else // Create default camera
+    {
+        Debug_Warn("No camera was found. Creating default camera...");
+        GameObject *m_defaultCamera = new GameObject("DefaultCamera");
+        m_defaultCamera->transform->SetPosition(Vector3(90));
+        m_defaultCamera->transform->LookAt(Vector3::Zero);
+        m_defaultCamera->SetParent(this);
 
-            Camera *cam = m_defaultCamera->AddComponent<Camera>();
-            cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);
-            cam->SetZFar(99999.0f);
-            SetCamera(cam);
-        }
+        Camera *cam = m_defaultCamera->AddComponent<Camera>();
+        cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);
+        cam->SetZFar(99999.0f);
+        SetCamera(cam);
     }
 }
 
@@ -50,7 +47,7 @@ void Scene::_OnUpdate()
     Camera *cam = m_cameraGameObject->GetComponent<Camera>();
     if (cam  && cam->GetAutoUpdateAspectRatio())
     {
-        cam->SetAspectRatio( m_screen->GetAspectRatio() );
+        cam->SetAspectRatio( Screen::GetInstance()->GetAspectRatio() );
     }
 
     // Start non-started GameObjects
@@ -78,6 +75,18 @@ Scene::~Scene()
     delete m_defaultCamera;
 }
 
+void Scene::CloneInto(ICloneable *clone) const
+{
+    GameObject::CloneInto(clone);
+}
+
+ICloneable *Scene::Clone() const
+{
+    Scene *scene = new Scene();
+    CloneInto(scene);
+    return scene;
+}
+
 void Scene::SetCamera(const Camera *cam)
 {
     if (!cam)
@@ -99,7 +108,7 @@ Scene *Scene::GetActiveScene()
 Camera *Scene::GetCamera()
 {
     Scene *scene = SceneManager::GetActiveScene();
-    return scene->GetCurrentCamera();
+    return scene ? scene->GetCurrentCamera() : nullptr;
 }
 
 Camera *Scene::GetCurrentCamera() const
@@ -109,11 +118,6 @@ Camera *Scene::GetCurrentCamera() const
         return nullptr;
     }
     return m_cameraGameObject->GetComponent<Camera>();
-}
-
-const Screen *Scene::GetScreen() const
-{
-    return m_screen;
 }
 
 bool Scene::IsScene() const

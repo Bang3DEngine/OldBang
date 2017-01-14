@@ -89,7 +89,7 @@ void Input::HandleMouseWrapping()
 
         QCursor cursor = w->GetMainWindow()->cursor();
 
-        Screen *screen = Screen::GetActive();
+        Screen *screen = Screen::GetInstance();
         int cw = screen->GetWidth();
         int ch = screen->GetHeight();
 
@@ -176,7 +176,7 @@ void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)
     {
         QPoint glob = QPoint(m_lastMouseCoords.x,
                              m_lastMouseCoords.y);
-        glob = Screen::GetActive()->mapToGlobal(glob);
+        glob = Screen::GetInstance()->mapToGlobal(glob);
 
         fakeMoveEvent = true;
         QCursor::setPos(glob);

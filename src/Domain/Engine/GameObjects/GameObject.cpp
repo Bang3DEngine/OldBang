@@ -92,10 +92,7 @@ GameObject::~GameObject()
         delete comp;
     }
 
-    if (parent)
-    {
-        parent->m_children.Remove(this); // Remove me from parent
-    }
+    SetParent(nullptr);
 
     #ifdef BANG_EDITOR
     WindowEventManager::NotifyGameObjectDestroyed(this);
@@ -486,9 +483,7 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
             }
             else if (tagName == "Canvas")
             {
-                Canvas *cv = AddComponent<Canvas>();
-                cv->ReadXMLInfo(xmlChild);
-                c = cv;
+                c = AddComponent<Canvas>();
             }
             else if (tagName == "UIImage")
             {

@@ -18,38 +18,6 @@ class SingleLineRenderer;
 class EditorGameObject;
 class Gizmos
 {
-friend class Screen;
-friend class EditorScene;
-private:
-    Gizmos() {}
-
-    static Array<Renderer*> m_renderers;
-
-    static void Init();
-
-    static void SetGizmosGameObject(EditorGameObject *ego); // Called by scene
-
-    static bool m_inited;
-
-    static EditorGameObject   *m_gizmosGameObject;
-    static SingleLineRenderer *m_singleLineRenderer;
-    static CircleRenderer     *m_circleRenderer;
-    static MeshRenderer       *m_meshRenderer;
-    static Mesh *m_boxMesh;
-    static Mesh *m_sphereMesh;
-    static Mesh *m_planeMesh;
-    static Material *m_material;
-
-
-    static bool m_resetAllowed;
-
-    /**
-     * @brief Useful if we want to call for example inside RenderFrustum a lot
-     * of RenderLines. We avoid Reset() inside RenderLines being called, because
-     * we don't want this
-     */
-    static void SetResetAllowed(bool allowed);
-    static void Reset();
 
 public:
 
@@ -80,6 +48,37 @@ public:
 
     static void Render(Renderer *rend);
 
+private:
+    Gizmos() {}
+
+    static Array<Renderer*> m_renderers;
+
+    static void Init();
+
+    // Called by EditorScene
+    static void InitGizmosGameObject(EditorGameObject *gizmosGo);
+    static EditorGameObject* GetGizmosGameObject();
+
+    static bool m_inited;
+
+    static Mesh *m_boxMesh;
+    static Mesh *m_sphereMesh;
+    static Mesh *m_planeMesh;
+    static Material *m_material;
+
+
+    static bool m_resetAllowed;
+
+    /**
+     * @brief Useful if we want to call for example inside RenderFrustum a lot
+     * of RenderLines. We avoid Reset() inside RenderLines being called, because
+     * we don't want this
+     */
+    static void SetResetAllowed(bool allowed);
+    static void Reset();
+
+    friend class Screen;
+    friend class EditorScene;
     friend class GraphicPipeline;
 };
 

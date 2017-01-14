@@ -23,7 +23,7 @@ public:
 
     static GraphicPipeline* GetActive();
 
-    void RenderScene(Scene *scene);
+    void RenderScene(Scene *scene, bool inGame);
     void RenderRenderer(Renderer *rend);
     void RenderCustomPR(Renderer *rend);
     void RenderToScreen(Texture *fullScreenTexture);
@@ -46,6 +46,8 @@ public:
 
 private:
     GBuffer::Attachment m_gbufferAttachmentToBeShown = GBuffer::Attachment::Color;
+
+    bool m_renderingInGame = false; // Rendering for the Game Screen or the Scene screen
 
     Material *m_renderGBufferToScreenMaterial = nullptr;
     Mesh *m_planeMeshToRenderEntireScreen = nullptr;

@@ -14,6 +14,7 @@ public:
 
     virtual const String ToString() const override;
     virtual String GetName() const override;
+
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
 

@@ -34,7 +34,9 @@ void UIRenderer::CloneInto(ICloneable *clone) const
 
 ICloneable *UIRenderer::Clone() const
 {
-    return MeshRenderer::Clone();
+    UIRenderer *uiRend = new UIRenderer();
+    CloneInto(uiRend);
+    return uiRend;
 }
 
 void UIRenderer::SetMatricesUniforms(Material *mat,

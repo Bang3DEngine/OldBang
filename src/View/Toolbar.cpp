@@ -3,6 +3,8 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "Application.h"
+#include "EditorScene.h"
 #include "EditorCamera.h"
 #include "EditorWindow.h"
 #include "SceneManager.h"
@@ -20,7 +22,7 @@ Toolbar::~Toolbar()
 void Toolbar::Init()
 {
     EditorWindow *w = EditorWindow::GetInstance();
-    Toolbar::s_tb = w->widgetToolbar;
+    Toolbar::s_tb = w->screenToolbar;
     Toolbar::s_tb->m_buttonTranslateMode = w->buttonTranslateMode;
     Toolbar::s_tb->m_buttonRotateMode    = w->buttonRotateMode;
     Toolbar::s_tb->m_buttonScaleMode     = w->buttonScaleMode;
@@ -136,21 +138,21 @@ void Toolbar::OnPlayClicked()
     if (m_playing == false)
     {
         m_playing = true;
-        Scene *scene = SceneManager::GetActiveScene();
-        if (scene)
-        {
-            scene->_OnStart();
-        }
+        Application::GetInstance()->OnPlay();
     }
 
-    Screen::GetActive()->setFocus();
+    Screen::GetInstance()->setFocus();
 }
 
 void Toolbar::OnStopClicked()
 {
     m_buttonPlay->setChecked(false);
     m_buttonStop->setChecked(true);
-    m_playing = false;
+    if (m_playing)
+    {
+        m_playing = false;
+        Application::GetInstance()->OnStop();
+    }
 }
 
 void Toolbar::OnOrthoPerspectiveClicked()

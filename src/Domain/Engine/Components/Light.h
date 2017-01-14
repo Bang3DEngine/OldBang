@@ -11,27 +11,6 @@ class Material;
 class Renderer;
 class Light : public Component
 {
-protected:
-    float m_intensity = 1.0f;
-    Color m_color = Color::White;
-    Material *m_lightMaterialScreen = nullptr;
-
-    virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
-    void ApplyLight(GBuffer *gbuffer,
-                    const Rect &renderRect = Rect::ScreenRect) const;
-
-    /**
-     * @brief Returns the rect where the Light range can apply.
-     * This is for performance, the deferred light will only be applied
-     * to the intersection of this rect and the object/s we are applying
-     * the light to. For example, a point light must return a bounding rect
-     * of its spherical range.
-     * @return
-     */
-    virtual Rect GetRenderRect(Camera *cam) const;
-
-    Light();
-
 public:
 
     virtual const String ToString() const override;
@@ -53,6 +32,28 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+protected:
+    float m_intensity = 1.0f;
+    Color m_color = Color::White;
+    Material *m_lightMaterialScreen = nullptr;
+
+    virtual void SetUniformsBeforeApplyingLight(Material *mat) const;
+    void ApplyLight(GBuffer *gbuffer,
+                    const Rect &renderRect = Rect::ScreenRect) const;
+
+    /**
+     * @brief Returns the rect where the Light range can apply.
+     * This is for performance, the deferred light will only be applied
+     * to the intersection of this rect and the object/s we are applying
+     * the light to. For example, a point light must return a bounding rect
+     * of its spherical range.
+     * @return
+     */
+    virtual Rect GetRenderRect(Camera *cam) const;
+
+    Light();
+    virtual ~Light();
 
     friend class GameObject;
     friend class GraphicPipeline;

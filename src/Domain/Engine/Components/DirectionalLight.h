@@ -8,8 +8,6 @@ class XMLNode;
 class ICloneable;
 class DirectionalLight : public Light
 {
-protected:
-    DirectionalLight();
 public:
 
     virtual const String ToString() const override;
@@ -26,6 +24,10 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+protected:
+    DirectionalLight();
+    virtual ~DirectionalLight();
 
     friend class GameObject;
 

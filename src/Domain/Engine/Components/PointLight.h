@@ -32,6 +32,7 @@ protected:
     float m_range = 1.0f;
 
     PointLight();
+    virtual ~PointLight();
 
     Rect GetRenderRect(Camera *cam) const override;
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;

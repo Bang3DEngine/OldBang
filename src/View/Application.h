@@ -27,10 +27,14 @@ public:
 
     bool notify(QObject *receiver, QEvent *e) override;
 
+    void OnPlay();
+    void OnStop();
+
 public slots:
     void OnDrawTimerTick();
 
 private:
+    Scene *m_latestSceneBeforePlaying = nullptr;
     SceneManager *m_sceneManager = nullptr;
     AssetsManager *m_assetsManager = nullptr;
     BehaviourManager *m_behaviourManager = nullptr;

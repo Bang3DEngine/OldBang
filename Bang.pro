@@ -27,9 +27,9 @@ QMAKE_CXXFLAGS -= -O1 -O2 -O3
 QMAKE_CXXFLAGS_RELEASE -= -O1 -O2 -O3
 QMAKE_LFLAGS_RELEASE -= -O1 -O2 -O3
 QMAKE_CXXFLAGS += -g --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
-QMAKE_CXXFLAGS += -O0
+QMAKE_CXXFLAGS += -O0 -Wall
 QMAKE_LFLAGS_RELEASE += -g
-QMAKE_LFLAGS_RELEASE += -O0
+QMAKE_LFLAGS_RELEASE += -O0 -Wall
 
 # FREE TYPE ###########################
 FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType

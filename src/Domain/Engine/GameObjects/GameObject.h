@@ -30,41 +30,6 @@ class GameObject :
                #endif
 {
 
-protected:
-
-    #ifdef BANG_EDITOR
-    // Dont load Behaviours. Used on drags from hierarchy for example
-    bool m_isDragged = false;
-
-    bool m_isSelectedInHierarchy = false;
-    EditorSelectionGameObject *m_selectionGameObject = nullptr;
-    #endif
-
-    virtual void _OnStart () override;
-    virtual void _OnUpdate () override;
-    virtual void _OnDestroy () override;
-
-    #ifdef BANG_EDITOR
-    Array<Material*> m_materialsBeforeDrag;
-    void OnDragEnterMaterial(Material *m);
-    void OnDragLeaveMaterial(Material *m);
-    void OnDropMaterial(Material *m);
-    #endif
-
-    virtual void _OnDrawGizmos () override;
-    virtual void _OnDrawGizmosOverlay () override;
-    virtual void OnDrawGizmos() override;
-    virtual void OnDrawGizmosOverlay() override;
-
-protected:
-    String m_name = "";
-    List<Component*> m_components;
-    List<GameObject*> m_children;
-    Transform *m_transform = nullptr;
-    GameObject *m_parent = nullptr;
-
-    bool m_enabled = true;
-
 public:
 
     // PROPERTIES
@@ -333,6 +298,38 @@ public:
             List<GameObject*> &selectedEntities) override;
     #endif
 
+protected:
+    String m_name = "";
+    List<Component*> m_components;
+    List<GameObject*> m_children;
+    Transform *m_transform = nullptr;
+    GameObject *m_parent = nullptr;
+
+    bool m_enabled = true;
+
+    #ifdef BANG_EDITOR
+    // Dont load Behaviours. Used on drags from hierarchy for example
+    bool m_isDragged = false;
+
+    bool m_isSelectedInHierarchy = false;
+    EditorSelectionGameObject *m_selectionGameObject = nullptr;
+    #endif
+
+    virtual void _OnStart () override;
+    virtual void _OnUpdate () override;
+    virtual void _OnDestroy () override;
+
+    #ifdef BANG_EDITOR
+    Array<Material*> m_materialsBeforeDrag;
+    void OnDragEnterMaterial(Material *m);
+    void OnDragLeaveMaterial(Material *m);
+    void OnDropMaterial(Material *m);
+    #endif
+
+    virtual void _OnDrawGizmos () override;
+    virtual void _OnDrawGizmosOverlay () override;
+    virtual void OnDrawGizmos() override;
+    virtual void OnDrawGizmosOverlay() override;
 
     friend class Scene;
     friend class Screen;

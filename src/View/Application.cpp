@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "Screen.h"
 #include "Chrono.h"
+#include "EditorScene.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "BehaviourManager.h"
@@ -34,7 +35,7 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::OnDrawTimerTick()
 {
-    ASSERT(Screen::GetActive());
+    ASSERT(Screen::GetInstance());
 
     // Update deltaTime
     float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
@@ -53,22 +54,27 @@ void Application::OnDrawTimerTick()
     Input::GetInstance()->ProcessEnqueuedEvents();
 
     Scene *activeScene = SceneManager::GetActiveScene();
-    bool canUpdate = activeScene;
-    #ifndef BANG_EDITOR // GAME
-    canUpdate = (canUpdate || activeScene->IsStarted());
-    #endif
-    if (canUpdate)
+    if (activeScene)
     {
-        m_lastRenderTime = Time::GetNow();
-        activeScene->_OnUpdate();
+        Debug_Log("DrawTimerTick activeScene: " << activeScene);
+        #ifdef BANG_EDITOR
+        bool canUpdate = true;
+        #else
+        bool canUpdate = activeScene->IsStarted();
+        #endif
+        if (canUpdate)
+        {
+            m_lastRenderTime = Time::GetNow();
+            activeScene->_OnUpdate();
+        }
     }
 
     Chrono c("FPS");
     // Render screen
     c.MarkEvent("Render");
-    Screen::GetActive()->Render();
-    Screen::GetActive()->swapBuffers();
-    c.Log();
+    Screen::GetInstance()->Render();
+    Screen::GetInstance()->swapBuffers();
+    //c.Log();
 
     Input::GetInstance()->OnFrameFinished(); // Notify to Input that a new frame has passed
 }
@@ -152,6 +158,39 @@ bool Application::notify(QObject *receiver, QEvent *e)
     //int eType = e->type();
     //std::cout << "Notifying " << eType << " to " << receiver << std::endl;
     return QApplication::notify(receiver, e);
+}
+
+void Application::OnPlay()
+{
+    m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
+    Debug_Log("On play... saving latest scene: " << m_latestSceneBeforePlaying);
+
+    Scene *sceneCopy = static_cast<Scene*>( m_latestSceneBeforePlaying->Clone() );
+    if (sceneCopy)
+    {
+        sceneCopy->_OnStart();
+        SceneManager::SetActiveScene(sceneCopy);
+    }
+
+    EditorScene *edScene = static_cast<EditorScene*>(sceneCopy);
+    edScene->OnEditorPlay();
+
+}
+
+void Application::OnStop()
+{
+    Debug_Log("On stop... Stopping: " << SceneManager::GetActiveScene());
+    Scene *sceneCopy = SceneManager::GetActiveScene();
+    if (sceneCopy)
+    {
+        Hierarchy::GetInstance()->Clear();
+        SceneManager::SetActiveScene(nullptr);
+        delete sceneCopy;
+    }
+
+    SceneManager::SetActiveScene(m_latestSceneBeforePlaying);
+    EditorScene *edScene = static_cast<EditorScene*>(m_latestSceneBeforePlaying);
+    edScene->OnEditorStop();
 }
 
 bool Application::CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent)

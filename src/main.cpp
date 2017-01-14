@@ -12,7 +12,6 @@
 #include "Timer.h"
 #include "Debug.h"
 #include "Camera.h"
-#include "Screen.h"
 #include "Shader.h"
 #include "XMLNode.h"
 #include "Behaviour.h"
@@ -81,7 +80,6 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
     GameWindow::InitFromMainBinary(window, app);
     #endif
 
-    Screen::InitFromMainBinary();
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
 }

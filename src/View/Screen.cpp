@@ -15,6 +15,7 @@
 #include "Scene.h"
 #include "Prefab.h"
 #include "Camera.h"
+#include "Toolbar.h"
 #include "Material.h"
 #include "Transform.h"
 #include "GameObject.h"
@@ -30,8 +31,6 @@ EditorWindow *Screen::s_m_window = nullptr;
 #else
 GameWindow *Screen::s_m_window = nullptr;
 #endif
-
-Screen *Screen::m_mainBinaryScreen = nullptr;
 
 Screen::Screen(QWidget* parent) : QGLWidget(parent)
 {
@@ -49,15 +48,6 @@ Screen::~Screen()
     delete m_gPipeline;
 }
 
-void Screen::InitFromMainBinary()
-{
-    #ifdef BANG_EDITOR
-    Screen::m_mainBinaryScreen = static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screenScene;
-    #else
-    Screen::m_mainBinaryScreen = static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
-    #endif
-}
-
 void Screen::initializeGL()
 {
     glewExperimental = GL_TRUE;
@@ -71,7 +61,6 @@ void Screen::initializeGL()
 
 void Screen::paintGL()
 {
-    Render();
 }
 
 void Screen::Render()
@@ -79,7 +68,8 @@ void Screen::Render()
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
-        m_gPipeline->RenderScene(activeScene);
+        bool inGame = Toolbar::GetInstance()->IsPlaying();
+        m_gPipeline->RenderScene(activeScene, inGame);
     }
     else
     {
@@ -104,11 +94,10 @@ void Screen::resizeGL(int w, int h)
     }
 }
 
-
-Screen *Screen::GetActive()
+Screen *Screen::GetInstance()
 {
     #ifdef BANG_EDITOR
-    return static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screenScene;
+    return static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #else
     return static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #endif
@@ -116,12 +105,12 @@ Screen *Screen::GetActive()
 
 float Screen::GetAspectRatio()
 {
-    return Screen::m_mainBinaryScreen->m_aspectRatio;
+    return Screen::GetInstance()->m_aspectRatio;
 }
 
 int Screen::GetWidth()
 {
-    return Screen::m_mainBinaryScreen->m_width;
+    return Screen::GetInstance()->m_width;
 }
 
 Vector2 Screen::GetSize()
@@ -131,7 +120,7 @@ Vector2 Screen::GetSize()
 
 int Screen::GetHeight()
 {
-    return Screen::m_mainBinaryScreen->m_height;
+    return Screen::GetInstance()->m_height;
 }
 
 void Screen::SetCursor(Qt::CursorShape cs)

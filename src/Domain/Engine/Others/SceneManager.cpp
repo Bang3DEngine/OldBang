@@ -51,7 +51,6 @@ void SceneManager::SetActiveScene(Scene *scene)
     if (sm->m_activeScene)
     {
         sm->m_scenes.Remove(sm->m_activeScene);
-        delete sm->m_activeScene;
         sm->m_activeScene = nullptr;
     }
 
@@ -124,7 +123,10 @@ void SceneManager::RemoveScene(const String &name)
 
 void SceneManager::LoadScene(const String &sceneFilepath)
 {
+    Scene *oldScene = SceneManager::GetActiveScene();
+    if (oldScene) { delete oldScene; }
     SceneManager::SetActiveScene(nullptr);
+
     #ifdef BANG_EDITOR
     EditorScene *scene = new EditorScene();
     #else

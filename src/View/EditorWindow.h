@@ -12,16 +12,14 @@
  *  Cross-library shared singleton
  */
 class QApplication;
-class EditorWindow : public IWindow,
+class EditorWindow : public QObject,
+                     public IWindow,
                      public Ui_EditorWindow
 {
-
-private:
-    EditorWindow();
-
-    static EditorWindow *s_m_win;
+    Q_OBJECT
 
 public:
+    EditorWindow(QWidget *parent = nullptr);
 
     /**
      * @brief This must be called by main() in the mainBinary.
@@ -34,6 +32,9 @@ public:
     static EditorWindow *GetInstance();
     QMainWindow *GetMainWindow() const override;
     QApplication *GetApplication() const override;
+
+private:
+    static EditorWindow *s_win;
 
 };
 

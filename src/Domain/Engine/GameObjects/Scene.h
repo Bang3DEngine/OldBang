@@ -6,41 +6,41 @@
 #include "Color.h"
 #include "GameObject.h"
 
-class Screen;
 class Camera;
 class GraphicPipeline;
 class SelectionFramebuffer;
 class Scene : public GameObject
 {
-protected:
-    GameObject *m_defaultCamera = nullptr;
-
-    //Framebuffer for positions, normals, uvs and diffuse
-    const Screen *m_screen = nullptr; //set by screen when added to it
-    GameObject *m_cameraGameObject = nullptr;
-
-    virtual void _OnStart () override;
-    virtual void _OnUpdate () override;
-    virtual void _OnResize (int newWidth, int newHeight);
-
 public:
     const static String GetFileExtensionStatic ();
 
     Scene();
     virtual ~Scene();
 
+    virtual void CloneInto(ICloneable *clone) const override;
+    virtual ICloneable *Clone() const override;
+
     void SetCamera (const Camera *cam);
 
     static Scene *GetActiveScene();
     static Camera* GetCamera ();
     Camera* GetCurrentCamera () const;
-    const Screen* GetScreen () const;
 
     bool IsScene() const override;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
     virtual void PostReadXMLInfo(const XMLNode *xmlInfo) override;
+
+protected:
+    GameObject *m_defaultCamera = nullptr;
+
+    //Framebuffer for positions, normals, uvs and diffuse
+    GameObject *m_cameraGameObject = nullptr;
+
+    virtual void _OnStart () override;
+    virtual void _OnUpdate () override;
+    virtual void _OnResize (int newWidth, int newHeight);
 
     friend class Screen;
     friend class Toolbar;

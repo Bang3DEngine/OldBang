@@ -32,8 +32,6 @@ class Screen : public QGLWidget,
 
 private:
 
-    static Screen *m_mainBinaryScreen;
-
     #ifdef BANG_EDITOR
     static EditorWindow *s_m_window;
     #else
@@ -57,14 +55,12 @@ public:
     explicit Screen(QWidget *parent = 0);
     virtual ~Screen();
 
-    static void InitFromMainBinary();
-
     void initializeGL() override;
     void paintGL() override;
     void Render();
     void resizeGL(int w, int h) override;
 
-    static Screen *GetActive();
+    static Screen *GetInstance();
     static float GetAspectRatio();
     static int GetHeight();
     static int GetWidth();

@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="Bang">
+    <file>BangLogoDark.png</file>
     <file>BangIcon.png</file>
     <file>BangLogo.png</file>
     <file>Icons/translate.png</file>

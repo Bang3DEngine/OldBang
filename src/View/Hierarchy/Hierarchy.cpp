@@ -34,6 +34,7 @@ Hierarchy::Hierarchy(QWidget *parent) :
 
 Hierarchy::~Hierarchy()
 {
+    Debug_Log("Deleting hierarchy");
     clear();
 }
 

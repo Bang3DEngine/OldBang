@@ -35,7 +35,7 @@ EditorCamera::~EditorCamera()
 
 void EditorCamera::AdjustSpeeds()
 {
-    Screen *c = Screen::GetActive();
+    Screen *c = Screen::GetInstance();
     int cw = c->GetWidth();
     int ch = c->GetHeight();
 

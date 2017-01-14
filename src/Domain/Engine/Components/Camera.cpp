@@ -25,6 +25,11 @@ Camera::Camera()
     InitStatics();
 }
 
+Camera::~Camera()
+{
+
+}
+
 void Camera::GetViewMatrix(Matrix4 *view) const
 {
     transform->GetLocalToWorldMatrix(view);

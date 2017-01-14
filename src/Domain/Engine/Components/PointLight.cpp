@@ -19,6 +19,11 @@ PointLight::PointLight() : Light()
                 "Materials/PR_PointLight_Screen.bmat", true);
 }
 
+PointLight::~PointLight()
+{
+
+}
+
 Rect PointLight::GetRenderRect(Camera *cam) const
 {
     Sphere sphere(gameObject->transform->GetPosition(), m_range);
@@ -38,7 +43,7 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
 
 const String PointLight::ToString() const
 {
-    return "PointLight";
+    return "PointLight (" + String::ToString((void*)this) + ")";
 }
 
 String PointLight::GetName() const

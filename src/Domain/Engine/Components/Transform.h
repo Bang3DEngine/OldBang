@@ -16,6 +16,7 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
+
     virtual ~Transform();
 
     void LookAt(const Vector3 &target,

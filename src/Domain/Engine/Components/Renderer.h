@@ -38,64 +38,6 @@ public:
         DepthLayerGizmos
     };
 
-private:
-
-    DepthLayer m_depthLayer = DepthLayerScene;
-    bool m_isGizmo = false;
-    bool m_isTransparent = false;
-
-    /**
-     * @brief Width of the lines if rendering with Lines RenderMode
-     * or if rendering with wireframe.
-     */
-    float m_lineWidth = 1.0f;
-
-    #ifdef BANG_EDITOR
-    /**
-     * @brief Called by SelectionFramebuffer.
-     * Use this if you want to activate
-     * special states before rendering for the selection framebuffer. For example,
-     * you may want to draw a bigger object in order for the selection to be easier to do.
-     *
-     * This is used in the transform axes for example, in which we increase the lineWidth for
-     * an easier axis grabbing.
-     */
-    std::function<void()> ActivateGLStatesBeforeRenderingForSelection = nullptr;
-    #endif
-
-protected:
-
-    Material *m_material = nullptr;
-
-    bool m_drawWireframe = false;
-    bool m_receivesLighting = true;
-    bool m_hasCustomPRPass = false;
-    CullMode m_cullMode = CullMode::Back;
-    RenderMode m_renderMode = RenderMode::Triangles;
-
-    virtual void ActivateGLStatesBeforeRendering(Material *mat) const;
-    virtual void RenderWithoutBindingMaterial() const = 0;
-    virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const;
-
-    void GetMatrices(Matrix4 *model,
-                     Matrix4 *normal,
-                     Matrix4 *view,
-                     Matrix4 *projection,
-                     Matrix4 *pvm) const;
-
-    virtual void SetMatricesUniforms(
-            Material *mat,
-            const Matrix4 &model,
-            const Matrix4 &normal,
-            const Matrix4 &view,
-            const Matrix4 &projection,
-            const Matrix4 &pvm) const;
-
-protected:
-    Renderer();
-
-public:
-
     virtual void CloneInto(ICloneable *clone) const override;
 
     virtual void SetMaterial(Material *m) = 0;
@@ -157,6 +99,63 @@ public:
 
     void SetDepthLayer(DepthLayer dl);
     DepthLayer GetDepthLayer() const;
+
+protected:
+
+    Material *m_material = nullptr;
+
+    bool m_drawWireframe = false;
+    bool m_receivesLighting = true;
+    bool m_hasCustomPRPass = false;
+    CullMode m_cullMode = CullMode::Back;
+    RenderMode m_renderMode = RenderMode::Triangles;
+
+    virtual void ActivateGLStatesBeforeRendering(Material *mat) const;
+    virtual void RenderWithoutBindingMaterial() const = 0;
+    virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const;
+
+    void GetMatrices(Matrix4 *model,
+                     Matrix4 *normal,
+                     Matrix4 *view,
+                     Matrix4 *projection,
+                     Matrix4 *pvm) const;
+
+    virtual void SetMatricesUniforms(
+            Material *mat,
+            const Matrix4 &model,
+            const Matrix4 &normal,
+            const Matrix4 &view,
+            const Matrix4 &projection,
+            const Matrix4 &pvm) const;
+
+protected:
+    Renderer();
+    virtual ~Renderer();
+
+private:
+
+    DepthLayer m_depthLayer = DepthLayerScene;
+    bool m_isGizmo = false;
+    bool m_isTransparent = false;
+
+    /**
+     * @brief Width of the lines if rendering with Lines RenderMode
+     * or if rendering with wireframe.
+     */
+    float m_lineWidth = 1.0f;
+
+    #ifdef BANG_EDITOR
+    /**
+     * @brief Called by SelectionFramebuffer.
+     * Use this if you want to activate
+     * special states before rendering for the selection framebuffer. For example,
+     * you may want to draw a bigger object in order for the selection to be easier to do.
+     *
+     * This is used in the transform axes for example, in which we increase the lineWidth for
+     * an easier axis grabbing.
+     */
+    std::function<void()> ActivateGLStatesBeforeRenderingForSelection = nullptr;
+    #endif
 
     friend class GameObject;
     friend class GraphicPipeline;

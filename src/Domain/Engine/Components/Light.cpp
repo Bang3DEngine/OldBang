@@ -19,6 +19,11 @@ Light::Light()
 {
 }
 
+Light::~Light()
+{
+
+}
+
 void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 {
     ShaderProgram *sp = mat->GetShaderProgram();

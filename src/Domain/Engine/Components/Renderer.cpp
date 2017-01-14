@@ -30,6 +30,11 @@ Renderer::Renderer()
     m_material = AssetsManager::Load<Material>("Materials/D2G_Default.bmat", true);
 }
 
+Renderer::~Renderer()
+{
+
+}
+
 void Renderer::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);

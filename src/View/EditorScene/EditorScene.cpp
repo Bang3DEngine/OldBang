@@ -14,19 +14,16 @@
 
 EditorScene::EditorScene() : Scene()
 {
-    EditorGameObject *gizmosGo = new EditorGameObject("BANG_GizmosGameObject");
-    gizmosGo->SetParent(this);
-    Gizmos::SetGizmosGameObject(gizmosGo);
+    m_gizmosGameObject = new EditorGameObject("BANG_GizmosGameObject");
+    m_gizmosGameObject->SetParent(this);
+    Gizmos::InitGizmosGameObject(m_gizmosGameObject);
 
     m_debugGameObject = new EditorDebugGameObject();
     m_debugGameObject->SetParent(this);
 
-    m_cameraGameObject = new EditorCamera();
-    m_cameraGameObject->SetParent(this);
-    SetCamera(m_cameraGameObject->GetCamera());
-
-    //axises = new EditorTranslateAxisGroup();
-    //axises->SetParent(this);
+    m_edCameraGameObject = new EditorCamera();
+    m_edCameraGameObject->SetParent(this);
+    SetCamera(m_edCameraGameObject->GetCamera());
 
     m_floor = new EditorFloor();
     m_floor->SetParent(this);
@@ -40,8 +37,20 @@ EditorScene::EditorScene() : Scene()
 
 EditorScene::~EditorScene()
 {
-    Gizmos::SetGizmosGameObject(nullptr);
+    Gizmos::InitGizmosGameObject(nullptr);
     Hierarchy::GetInstance()->Clear(); // To avoid potential bugs (seriously xd)
+}
+
+void EditorScene::CloneInto(ICloneable *clone) const
+{
+    Scene::CloneInto(clone);
+}
+
+ICloneable *EditorScene::Clone() const
+{
+    EditorScene *edScene = new EditorScene();
+    CloneInto(edScene);
+    return edScene;
 }
 
 void EditorScene::_OnStart()
@@ -63,7 +72,22 @@ void EditorScene::OnUpdate()
     m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
 }
 
+void EditorScene::OnEditorStop()
+{
+    SetCamera( m_edCameraGameObject->GetCamera() );
+}
+
+void EditorScene::OnEditorPlay()
+{
+    // The camera is automatically set by _OnStart method
+}
+
 bool EditorScene::IsEditorGameObject() const
 {
     return true;
+}
+
+EditorGameObject *EditorScene::GetGizmosGameObject() const
+{
+    return m_gizmosGameObject;
 }

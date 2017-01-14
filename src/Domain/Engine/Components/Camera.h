@@ -73,6 +73,7 @@ public:
 
 protected:
     Camera();
+    virtual ~Camera();
 
 private:
     static bool s_inited;

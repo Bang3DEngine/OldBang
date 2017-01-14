@@ -50,13 +50,18 @@ GraphicPipeline::~GraphicPipeline()
     #endif
 }
 
-void GraphicPipeline::RenderScene(Scene *scene)
+void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
-    m_currentScene = scene;
+    m_currentScene = scene; ASSERT(m_currentScene);
+    m_renderingInGame = inGame;
 
     RenderGBuffer();
+
     #ifdef BANG_EDITOR
-    RenderSelectionFramebuffer();
+    if (!inGame)
+    {
+        RenderSelectionFramebuffer();
+    }
     #endif
 
     m_gbuffer->RenderToScreen(m_gbufferAttachmentToBeShown);
@@ -190,6 +195,8 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     List<Renderer*> renderers = m_currentScene->GetComponentsInChildren<Renderer>();
     for (Renderer *rend : renderers) // Opaque
     {
+        if (m_renderingInGame && rend->gameObject->IsEditorGameObject()) { continue; }
+
         if (!rend->IsTransparent() && !rend->HasCustomPRPass() && !rend->IsGizmo())
         {
             RenderRenderer(rend);
@@ -207,6 +214,8 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     // Either is transparent or has a custom PR Pass (gizmos are left for the end...)
     for (Renderer *rend : renderers)
     {
+        if (m_renderingInGame && rend->gameObject->IsEditorGameObject()) { continue; }
+
         if ((rend->IsTransparent() || rend->HasCustomPRPass()) &&
              !rend->IsGizmo())
         {
@@ -301,8 +310,12 @@ void GraphicPipeline::RenderGBuffer()
 
     RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerScene, m_gbuffer);
     RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerCanvas, m_gbuffer);
-    ApplySelectionEffect();
-    RenderGizmosPass(m_gbuffer);
+    if (!m_renderingInGame)
+    {
+        ApplySelectionEffect();
+        Debug_Log("Rendering scene: " << SceneManager::GetActiveScene());
+        RenderGizmosPass(m_gbuffer);
+    }
 
     m_gbuffer->UnBind();
 
@@ -319,7 +332,10 @@ void GraphicPipeline::RenderSelectionFramebuffer()
 
     RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerScene, m_selectionFB);
     RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerCanvas, m_selectionFB);
-    RenderGizmosPass(m_selectionFB);
+    if (m_renderingInGame)
+    {
+        RenderGizmosPass(m_selectionFB);
+    }
 
     m_selectionFB->UnBind();
 
@@ -335,7 +351,7 @@ SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
 
 GraphicPipeline* GraphicPipeline::GetActive()
 {
-    Screen *screen = Screen::GetActive();
+    Screen *screen = Screen::GetInstance();
     return screen ? screen->GetGraphicPipeline() : nullptr;
 }
 

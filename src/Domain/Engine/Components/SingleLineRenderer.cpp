@@ -13,7 +13,6 @@ SingleLineRenderer::SingleLineRenderer()
 
 SingleLineRenderer::~SingleLineRenderer()
 {
-
 }
 
 const String SingleLineRenderer::ToString() const

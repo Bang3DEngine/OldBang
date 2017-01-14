@@ -19,6 +19,11 @@ DirectionalLight::DirectionalLight() : Light()
                 "Materials/PR_DirectionalLight_Screen.bmat", true);
 }
 
+DirectionalLight::~DirectionalLight()
+{
+
+}
+
 const String DirectionalLight::ToString() const
 {
     return "DirectionalLight";
