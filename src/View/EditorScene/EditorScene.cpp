@@ -3,6 +3,7 @@
 #include "Time.h"
 #include "List.h"
 #include "Debug.h"
+#include "Camera.h"
 #include "UIText.h"
 #include "Hierarchy.h"
 #include "Transform.h"
@@ -43,7 +44,8 @@ EditorScene::~EditorScene()
 
 void EditorScene::CloneInto(ICloneable *clone) const
 {
-    Scene::CloneInto(clone);
+    EditorScene *edScene = static_cast<EditorScene*>(clone);
+    Scene::CloneInto(edScene);
 }
 
 ICloneable *EditorScene::Clone() const
@@ -79,7 +81,6 @@ void EditorScene::OnEditorStop()
 
 void EditorScene::OnEditorPlay()
 {
-    // The camera is automatically set by _OnStart method
 }
 
 bool EditorScene::IsEditorGameObject() const

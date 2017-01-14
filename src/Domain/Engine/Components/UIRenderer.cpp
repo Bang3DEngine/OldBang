@@ -29,7 +29,11 @@ UIRenderer::~UIRenderer()
 
 void UIRenderer::CloneInto(ICloneable *clone) const
 {
-    MeshRenderer::CloneInto(clone);
+    UIRenderer *rend = static_cast<UIRenderer*>(clone);
+    MeshRenderer::CloneInto(rend);
+    rend->m_tint = m_tint;
+    rend->m_stroke = m_stroke;
+    rend->m_strokeColor = m_strokeColor;
 }
 
 ICloneable *UIRenderer::Clone() const

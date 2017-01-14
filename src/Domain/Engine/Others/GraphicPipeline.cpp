@@ -58,7 +58,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     RenderGBuffer();
 
     #ifdef BANG_EDITOR
-    if (!inGame)
+    if (!m_renderingInGame)
     {
         RenderSelectionFramebuffer();
     }
@@ -313,7 +313,6 @@ void GraphicPipeline::RenderGBuffer()
     if (!m_renderingInGame)
     {
         ApplySelectionEffect();
-        Debug_Log("Rendering scene: " << SceneManager::GetActiveScene());
         RenderGizmosPass(m_gbuffer);
     }
 
@@ -332,10 +331,7 @@ void GraphicPipeline::RenderSelectionFramebuffer()
 
     RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerScene, m_selectionFB);
     RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerCanvas, m_selectionFB);
-    if (m_renderingInGame)
-    {
-        RenderGizmosPass(m_selectionFB);
-    }
+    RenderGizmosPass(m_selectionFB);
 
     m_selectionFB->UnBind();
 

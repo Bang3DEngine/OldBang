@@ -19,13 +19,20 @@ void Scene::_OnStart()
 {
     GameObject::_OnStart();
 
+    // Find the first non-Editor Camera
     List<Camera*> cameras = GetComponentsInChildren<Camera>();
-    if (!cameras.Empty())
+    bool cameraFound = false;
+    for (Camera *cam : cameras)
     {
-        Camera *cam = cameras.Front();
-        SetCamera(cam);
+        if (!cam->gameObject->IsEditorGameObject())
+        {
+            SetCamera(cam);
+            cameraFound = true;
+            break;
+        }
     }
-    else // Create default camera
+
+    if (!cameraFound) // Create default camera
     {
         Debug_Warn("No camera was found. Creating default camera...");
         GameObject *m_defaultCamera = new GameObject("DefaultCamera");

@@ -39,13 +39,16 @@ void Renderer::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
     Renderer *r = static_cast<Renderer*>(clone);
-    Component::CloneInto(r);
     r->SetMaterial(GetMaterial());
     r->SetDrawWireframe(GetDrawWireframe());
     r->SetCullMode(GetCullMode());
     r->SetRenderMode(GetRenderMode());
     r->SetLineWidth(GetLineWidth());
     r->SetReceivesLighting(ReceivesLighting());
+    r->SetClosedInInspector(IsClosedInInspector());
+    r->SetTransparent(IsTransparent());
+    r->SetIsGizmo(IsGizmo());
+    r->m_hasCustomPRPass = HasCustomPRPass();
 }
 
 Material *Renderer::GetMaterial() const

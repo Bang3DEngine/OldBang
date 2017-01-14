@@ -56,7 +56,6 @@ void Application::OnDrawTimerTick()
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
-        Debug_Log("DrawTimerTick activeScene: " << activeScene);
         #ifdef BANG_EDITOR
         bool canUpdate = true;
         #else
@@ -163,7 +162,6 @@ bool Application::notify(QObject *receiver, QEvent *e)
 void Application::OnPlay()
 {
     m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
-    Debug_Log("On play... saving latest scene: " << m_latestSceneBeforePlaying);
 
     Scene *sceneCopy = static_cast<Scene*>( m_latestSceneBeforePlaying->Clone() );
     if (sceneCopy)
@@ -174,12 +172,10 @@ void Application::OnPlay()
 
     EditorScene *edScene = static_cast<EditorScene*>(sceneCopy);
     edScene->OnEditorPlay();
-
 }
 
 void Application::OnStop()
 {
-    Debug_Log("On stop... Stopping: " << SceneManager::GetActiveScene());
     Scene *sceneCopy = SceneManager::GetActiveScene();
     if (sceneCopy)
     {
