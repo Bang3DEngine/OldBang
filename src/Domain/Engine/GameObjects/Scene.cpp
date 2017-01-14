@@ -19,32 +19,7 @@ void Scene::_OnStart()
 {
     GameObject::_OnStart();
 
-    // Find the first non-Editor Camera
-    List<Camera*> cameras = GetComponentsInChildren<Camera>();
-    bool cameraFound = false;
-    for (Camera *cam : cameras)
-    {
-        if (!cam->gameObject->IsEditorGameObject())
-        {
-            SetCamera(cam);
-            cameraFound = true;
-            break;
-        }
-    }
-
-    if (!cameraFound) // Create default camera
-    {
-        Debug_Warn("No camera was found. Creating default camera...");
-        GameObject *m_defaultCamera = new GameObject("DefaultCamera");
-        m_defaultCamera->transform->SetPosition(Vector3(90));
-        m_defaultCamera->transform->LookAt(Vector3::Zero);
-        m_defaultCamera->SetParent(this);
-
-        Camera *cam = m_defaultCamera->AddComponent<Camera>();
-        cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);
-        cam->SetZFar(99999.0f);
-        SetCamera(cam);
-    }
+    SetFirstFoundCameraOrDefaultOne();
 }
 
 void Scene::_OnUpdate()
@@ -104,6 +79,35 @@ void Scene::SetCamera(const Camera *cam)
     else
     {
         this->m_cameraGameObject = cam->gameObject;
+    }
+}
+
+void Scene::SetFirstFoundCameraOrDefaultOne()
+{
+    List<Camera*> cameras = GetComponentsInChildren<Camera>();
+    bool cameraFound = false;
+    for (Camera *cam : cameras)
+    {
+        if (!cam->gameObject->IsEditorGameObject())
+        {
+            SetCamera(cam);
+            cameraFound = true;
+            break;
+        }
+    }
+
+    if (!cameraFound) // Create default camera
+    {
+        Debug_Warn("No camera was found. Creating default camera...");
+        GameObject *m_defaultCamera = new GameObject("DefaultCamera");
+        m_defaultCamera->transform->SetPosition(Vector3(90));
+        m_defaultCamera->transform->LookAt(Vector3::Zero);
+        m_defaultCamera->SetParent(this);
+
+        Camera *cam = m_defaultCamera->AddComponent<Camera>();
+        cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);
+        cam->SetZFar(99999.0f);
+        SetCamera(cam);
     }
 }
 

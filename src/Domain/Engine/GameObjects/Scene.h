@@ -21,6 +21,7 @@ public:
     virtual ICloneable *Clone() const override;
 
     void SetCamera (const Camera *cam);
+    void SetFirstFoundCameraOrDefaultOne();
 
     static Scene *GetActiveScene();
     static Camera* GetCamera ();

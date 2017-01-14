@@ -172,6 +172,9 @@ void Application::OnPlay()
 
     EditorScene *edScene = static_cast<EditorScene*>(sceneCopy);
     edScene->OnEditorPlay();
+
+    EditorWindow *win = EditorWindow::GetInstance();
+    win->tabContainerSceneGame->setCurrentWidget(win->tabGame);
 }
 
 void Application::OnStop()
@@ -187,6 +190,9 @@ void Application::OnStop()
     SceneManager::SetActiveScene(m_latestSceneBeforePlaying);
     EditorScene *edScene = static_cast<EditorScene*>(m_latestSceneBeforePlaying);
     edScene->OnEditorStop();
+
+    EditorWindow *win = EditorWindow::GetInstance();
+    win->tabContainerSceneGame->setCurrentWidget(win->tabScene);
 }
 
 bool Application::CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent)

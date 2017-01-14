@@ -38,6 +38,9 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     Explorer::GetInstance()->OnWindowShown();
     Inspector::GetInstance()->OnWindowShown();
 
+    QObject::connect(EditorWindow::s_win->tabContainerSceneGame, SIGNAL(currentChanged(int)),
+                     EditorWindow::s_win, SLOT(OnTabSceneGameChanged(int)));
+
     QDockWidget *hierarchyDock = EditorWindow::s_win->dockHierarchy;
     QDockWidget *inspectorDock = EditorWindow::s_win->dockInspector;
     QDockWidget *explorerDock = EditorWindow::s_win->dockExplorer;
@@ -68,4 +71,28 @@ QMainWindow *EditorWindow::GetMainWindow() const
 QApplication *EditorWindow::GetApplication() const
 {
     return EditorWindow::GetInstance()->m_app;
+}
+
+void EditorWindow::OnTabSceneGameChanged(int index)
+{
+    EditorScene *edScene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
+    bool scene = tabContainerSceneGame->widget(index) == tabScene;
+    if (scene)
+    {
+        tabGameVLayout->takeAt(0);
+        tabGameVLayout->takeAt(1);
+        tabSceneVLayout->addWidget(screenToolbar, 0);
+        tabSceneVLayout->addWidget(screen, 9999);
+
+        edScene->SetEditorCamera();
+    }
+    else // Game
+    {
+        tabSceneVLayout->takeAt(0);
+        tabSceneVLayout->takeAt(1);
+        tabGameVLayout->addWidget(screenToolbar, 0);
+        tabGameVLayout->addWidget(screen, 9999);
+
+        edScene->SetFirstFoundCameraOrDefaultOne();
+    }
 }

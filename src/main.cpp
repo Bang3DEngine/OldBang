@@ -81,6 +81,8 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
     #endif
 
     Time::InitFromMainBinary();
+    Screen::GetInstance()->makeCurrent();
+    Screen::GetInstance()->initializeGL();
     Input::InitFromMainBinary();
 }
 

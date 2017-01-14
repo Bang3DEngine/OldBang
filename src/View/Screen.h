@@ -30,28 +30,7 @@ class Screen : public QGLWidget,
 {
     Q_OBJECT
 
-private:
-
-    #ifdef BANG_EDITOR
-    static EditorWindow *s_m_window;
-    #else
-    static GameWindow *s_m_window;
-    #endif
-
-    QWidget *m_dragOrigin = nullptr;
-    GraphicPipeline *m_gPipeline = nullptr;
-
-    int m_width = 1;
-    int m_height = 1;
-    float m_aspectRatio = 1.0f;
-
-    GameObject *m_lastGameObjectOvered = nullptr;
-    GameObject *m_gameObjectBeingDragged = nullptr;
-
-    void HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin);
-
 public:
-
     explicit Screen(QWidget *parent = 0);
     virtual ~Screen();
 
@@ -59,6 +38,8 @@ public:
     void paintGL() override;
     void Render();
     void resizeGL(int w, int h) override;
+
+    bool IsRenderingInGame() const;
 
     static Screen *GetInstance();
     static float GetAspectRatio();
@@ -85,6 +66,19 @@ public:
     void mouseReleaseEvent(QMouseEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+
+private:
+    QWidget *m_dragOrigin = nullptr;
+    GraphicPipeline *m_gPipeline = nullptr;
+
+    int m_width = 1;
+    int m_height = 1;
+    float m_aspectRatio = 1.0f;
+
+    GameObject *m_lastGameObjectOvered = nullptr;
+    GameObject *m_gameObjectBeingDragged = nullptr;
+
+    void HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin);
 
     friend class GraphicPipeline;
 };

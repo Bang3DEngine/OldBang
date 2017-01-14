@@ -88,6 +88,11 @@ bool EditorScene::IsEditorGameObject() const
     return true;
 }
 
+void EditorScene::SetEditorCamera()
+{
+    SetCamera( m_edCameraGameObject->GetCamera() );
+}
+
 EditorGameObject *EditorScene::GetGizmosGameObject() const
 {
     return m_gizmosGameObject;

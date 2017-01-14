@@ -26,26 +26,15 @@
 #include "ShortcutManager.h"
 #include "SingletonManager.h"
 
-#ifdef BANG_EDITOR
-EditorWindow *Screen::s_m_window = nullptr;
-#else
-GameWindow *Screen::s_m_window = nullptr;
-#endif
-
 Screen::Screen(QWidget* parent) : QGLWidget(parent)
 {
-    setFormat(QGLFormat(QGL::DoubleBuffer | QGL::DepthBuffer));
-
-    #ifdef BANG_EDITOR
-    Screen::s_m_window = EditorWindow::GetInstance();
-    #else
-    Screen::s_m_window = GameWindow::GetInstance();
-    #endif
+    setFormat(QGLFormat(QGL::DoubleBuffer));
+    //setAutoBufferSwap(false);
 }
 
 Screen::~Screen()
 {
-    delete m_gPipeline;
+    if (m_gPipeline) { delete m_gPipeline; }
 }
 
 void Screen::initializeGL()
@@ -61,6 +50,7 @@ void Screen::initializeGL()
 
 void Screen::paintGL()
 {
+    Render();
 }
 
 void Screen::Render()
@@ -68,8 +58,7 @@ void Screen::Render()
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
-        bool inGame = Toolbar::GetInstance()->IsPlaying();
-        m_gPipeline->RenderScene(activeScene, inGame);
+        m_gPipeline->RenderScene(activeScene, IsRenderingInGame());
     }
     else
     {
@@ -94,10 +83,19 @@ void Screen::resizeGL(int w, int h)
     }
 }
 
+bool Screen::IsRenderingInGame() const
+{
+    EditorWindow *win = EditorWindow::GetInstance();
+    ASSERT(win, "", return false);
+
+    return win->tabContainerSceneGame->currentWidget() ==
+           win->tabGame;
+}
+
 Screen *Screen::GetInstance()
 {
     #ifdef BANG_EDITOR
-    return static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
+    return EditorWindow::GetInstance()->screen;
     #else
     return static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #endif

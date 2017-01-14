@@ -33,6 +33,9 @@ public:
     QMainWindow *GetMainWindow() const override;
     QApplication *GetApplication() const override;
 
+private slots:
+    void OnTabSceneGameChanged(int index);
+
 private:
     static EditorWindow *s_win;
 
