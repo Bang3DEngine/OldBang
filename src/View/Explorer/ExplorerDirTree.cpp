@@ -13,7 +13,7 @@ ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
 {
     m_fileSystemModel = new QFileSystemModel();
 
-    m_topPath = Persistence::c_ProjectAssetsRootAbsolute;
+    m_topPath = Persistence::GetEngineAssetsRootAbs();
 
     setModel(m_fileSystemModel);
     SetDir(m_topPath);
@@ -39,7 +39,7 @@ ExplorerDirTree::~ExplorerDirTree()
 
 void ExplorerDirTree::CheckSelection()
 {
-    SetDir(Persistence::c_ProjectAssetsRootAbsolute);
+    SetDir(Persistence::GetProjectAssetsRootAbs());
 
     m_explorer = EditorWindow::GetInstance()->widgetListExplorer;
     if (selectedIndexes().size() > 0 && selectedIndexes().at(0).isValid())

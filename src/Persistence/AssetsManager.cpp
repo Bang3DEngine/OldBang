@@ -36,8 +36,8 @@ String AssetsManager::FormatFilepathForSearchingFile(const String &filepath,
     }
 /*
     String prependDirectory = isEngineAsset ?
-                Persistence::c_EngineAssetsRootAbsolute :
-                Persistence::c_ProjectAssetsRootAbsolute;
+                Persistence::GetEngineAssetsRootAbs() :
+                Persistence::GetProjectAssetsRootAbs();
 */
     return Persistence::ToAbsolute(filepath, isEngineAsset);
 }
@@ -46,8 +46,8 @@ String AssetsManager::FormatFilepathForCacheMap(const String &filepath,
                                                 bool isEngineAsset)
 {
     String prependDirectory = isEngineAsset ?
-                Persistence::c_EngineAssetsRootAbsolute :
-                Persistence::c_ProjectAssetsRootAbsolute;
+                Persistence::GetEngineAssetsRootAbs() :
+                Persistence::GetProjectAssetsRootAbs();
 
     // Temporal solution to avoid collisions of Engine assets with user assets
     //if (isEngineAsset)

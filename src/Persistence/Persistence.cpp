@@ -10,14 +10,7 @@
 
 #include "Debug.h"
 #include "StringUtils.h"
-
-String Persistence::s_currentSceneFilepath = "";
-
-// Set by main.cpp
-String Persistence::c_ProjectRootAbsolute = "";
-String Persistence::c_ProjectAssetsRootAbsolute = "";
-String Persistence::c_EngineRootAbsolute = "";
-String Persistence::c_EngineAssetsRootAbsolute = "";
+#include "SingletonManager.h"
 
 bool Persistence::IsDir(const String &path)
 {
@@ -39,12 +32,12 @@ bool Persistence::IsAbsolute(const String &path)
 
 String Persistence::GetProjectRootPathAbsolute()
 {
-    return Persistence::c_ProjectRootAbsolute;
+    return Persistence::GetProjectRootAbs();
 }
 
 String Persistence::GetAssetsPathAbsolute()
 {
-    return Persistence::c_ProjectAssetsRootAbsolute;
+    return Persistence::GetProjectAssetsRootAbs();
 }
 
 String Persistence::GetDir(const String &filepath)
@@ -138,8 +131,8 @@ String Persistence::ToAbsolute(const String &relPath, bool isEngineFile)
 {
     ASSERT(!relPath.Empty(), "", return "");
     return Persistence::ToAbsolute(relPath,
-              isEngineFile ? Persistence::c_EngineAssetsRootAbsolute :
-                             Persistence::c_ProjectAssetsRootAbsolute);
+              isEngineFile ? Persistence::GetEngineAssetsRootAbs() :
+                             Persistence::GetProjectAssetsRootAbs());
 }
 
 String Persistence::ToRelative(const String &absPath,
@@ -168,8 +161,8 @@ String Persistence::ToRelative(const String &relPath, bool isEngineFile)
 {
     ASSERT(!relPath.Empty(), "", return "");
     return Persistence::ToRelative(relPath,
-              isEngineFile ? Persistence::c_EngineAssetsRootAbsolute :
-                             Persistence::c_ProjectAssetsRootAbsolute);
+              isEngineFile ? Persistence::GetEngineAssetsRootAbs() :
+                             Persistence::GetProjectAssetsRootAbs());
 }
 
 String Persistence::ToRelative(const String &absPath)
@@ -181,7 +174,7 @@ String Persistence::ToRelative(const String &absPath)
 bool Persistence::IsEngineFile(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");
-    return filepath.BeginsWith(Persistence::c_EngineAssetsRootAbsolute);
+    return filepath.BeginsWith(Persistence::GetEngineAssetsRootAbs());
 }
 
 String Persistence::GetDirUp(const String &filepath)
@@ -412,12 +405,7 @@ bool Persistence::CreateDirectory(const String &dirPath)
 
 void Persistence::SetActiveSceneFilepath(const String &scenePath)
 {
-    s_currentSceneFilepath = scenePath;
-}
-
-String Persistence::SetActiveSceneFilepath()
-{
-    return s_currentSceneFilepath;
+    Persistence::GetInstance()->c_currentSceneFilepath = scenePath;
 }
 
 bool Persistence::Rename(const String &oldPath, const String &newPath)
@@ -458,6 +446,37 @@ String Persistence::AppendExtension(const String &filepath, const String extNoDo
     ASSERT(!filepath.Empty(), "", return "");
     if (filepath.find("." + extNoDot) != String::npos) return filepath;
     return filepath + "." + extNoDot;
+}
+
+void Persistence::InitFromMainBinary()
+{
+    SingletonManager::GetInstance()->SetPersistenceSingleton(new Persistence());
+}
+
+Persistence *Persistence::GetInstance()
+{
+    return SingletonManager::GetInstance()->GetPersistenceSingleton();
+}
+
+const String &Persistence::GetCurrentSceneFilepath()
+{
+    return Persistence::GetInstance()->c_currentSceneFilepath;
+}
+const String &Persistence::GetProjectRootAbs()
+{
+    return Persistence::GetInstance()->c_ProjectRootAbsolute;
+}
+const String &Persistence::GetProjectAssetsRootAbs()
+{
+    return Persistence::GetInstance()->c_ProjectAssetsRootAbsolute;
+}
+const String &Persistence::GetEngineRootAbs()
+{
+    return Persistence::GetInstance()->c_EngineRootAbsolute;
+}
+const String &Persistence::GetEngineAssetsRootAbs()
+{
+    return Persistence::GetInstance()->c_EngineAssetsRootAbsolute;
 }
 
 

@@ -42,7 +42,7 @@ void EngineConfig::WriteListToFile(const String &filepath,
 
 String EngineConfig::GetRecentProjectsFilepath()
 {
-    return Persistence::c_EngineRootAbsolute + "/config/RecentProjects.cfg";
+    return Persistence::GetEngineRootAbs() + "/config/RecentProjects.cfg";
 }
 
 List<String> EngineConfig::GetRecentProjectsList()

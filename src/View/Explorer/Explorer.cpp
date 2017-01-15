@@ -49,7 +49,7 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 
     m_labelCurrentPath = EditorWindow::GetInstance()->labelCurrentPath;
 
-    SetDir(Persistence::c_ProjectAssetsRootAbsolute);
+    SetDir(Persistence::GetProjectAssetsRootAbs());
 
     connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
 

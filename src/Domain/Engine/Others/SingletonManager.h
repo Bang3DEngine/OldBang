@@ -22,6 +22,7 @@ class Time;
 class Input;
 class Logger;
 class IWindow;
+class Persistence;
 class EditorWindow;
 class ShortcutManager;
 class SingletonManager
@@ -30,9 +31,10 @@ private:
 
     static SingletonManager *s_mainBinarySM;
 
-    IWindow *m_mainBinaryEditorWindow = nullptr;
+    IWindow *m_mainBinaryWindow = nullptr;
     Time *m_mainBinaryTime = nullptr;
     Input *m_mainBinaryInput = nullptr;
+    Persistence *m_mainBinaryPersistence = nullptr;
 
     #ifdef BANG_EDITOR
     ShortcutManager *m_mainBinaryShortcutManager = nullptr;
@@ -48,9 +50,10 @@ public:
      * So, they should be called in the main() function.
      */
 
-    void SetEditorWindowSingleton(IWindow* mainBinaryEditorWindow);
+    void SetWindowSingleton(IWindow* mainBinaryEditorWindow);
     void SetTimeSingleton(Time* mainBinaryTime);
     void SetInputSingleton(Input* mainBinaryInput);
+    void SetPersistenceSingleton(Persistence* mainBinaryPersistence);
 
     #ifdef BANG_EDITOR
     void SetShortcutManagerSingleton(ShortcutManager* mainBinaryShortcutManager);
@@ -64,6 +67,7 @@ public:
     IWindow* GetWindowSingleton();
     Time* GetTimeSingleton();
     Input* GetInputSingleton();
+    Persistence* GetPersistenceSingleton();
 
     #ifdef BANG_EDITOR
     ShortcutManager* GetShortcutManagerSingleton();

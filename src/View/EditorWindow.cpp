@@ -23,7 +23,7 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     IWindow::InitFromMainBinary(window, application);
 
     EditorWindow::s_win = new EditorWindow();
-    SingletonManager::GetInstance()->SetEditorWindowSingleton(EditorWindow::s_win);
+    SingletonManager::GetInstance()->SetWindowSingleton(EditorWindow::s_win);
 
     EditorWindow::s_win->setupUi(window);
 

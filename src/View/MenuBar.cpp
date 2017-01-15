@@ -175,7 +175,7 @@ void MenuBar::OnSaveScene() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::SaveScene);
 
-    String filename = Persistence::SetActiveSceneFilepath();
+    String filename = Persistence::GetCurrentSceneFilepath();
     if ( filename == "" ) //Give the scene a name
     {
         OnSaveSceneAs();
@@ -195,7 +195,7 @@ void MenuBar::OnSaveSceneAs() const
 
     String filename = Dialog::GetSaveFilename("Save scene as...",
                                               Scene::GetFileExtensionStatic(),
-                                              Persistence::c_ProjectAssetsRootAbsolute,
+                                              Persistence::GetProjectAssetsRootAbs(),
                                               scene->name);
     if (filename == "") return;
 

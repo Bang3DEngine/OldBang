@@ -156,6 +156,6 @@ template <class T>
 String operator+(const T &v, const char *str)
 {
     return String(std::string(String::ToString(v)) + std::string(str));
-}
+}  
 
 #endif // STRING_H

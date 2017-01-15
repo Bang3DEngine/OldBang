@@ -11,7 +11,7 @@
 String SystemUtils::GetAllProjectObjects()
 {
     List<String> files =
-            Persistence::GetFiles(Persistence::c_ProjectRootAbsolute,
+            Persistence::GetFiles(Persistence::GetProjectRootAbs(),
                                   true, {"*.o"});
     return String::Join(files, " ");
 }
@@ -20,7 +20,7 @@ String SystemUtils::GetAllEngineObjects(bool editorMode)
 {
     String subdir = editorMode ? "/bin/objEditor" : "/bin/objGame";
     List<String> files =
-            Persistence::GetFiles(Persistence::c_EngineRootAbsolute + subdir,
+            Persistence::GetFiles(Persistence::GetEngineRootAbs() + subdir,
                                   true, {"*.o"});
     return String::Join(files, " ");
 }
@@ -28,16 +28,16 @@ String SystemUtils::GetAllEngineObjects(bool editorMode)
 String SystemUtils::GetAllProjectSubDirs()
 {
     List<String> subdirs =
-            Persistence::GetSubDirectories(Persistence::c_ProjectRootAbsolute, true);
-    subdirs.PushFront(Persistence::c_ProjectRootAbsolute);
+            Persistence::GetSubDirectories(Persistence::GetProjectRootAbs(), true);
+    subdirs.PushFront(Persistence::GetProjectRootAbs());
     return String::Join(subdirs, " ");
 }
 
 String SystemUtils::GetAllEngineSubDirs()
 {
     List<String> subdirs =
-            Persistence::GetSubDirectories(Persistence::c_EngineRootAbsolute, true);
-    subdirs.PushFront(Persistence::c_EngineRootAbsolute);
+            Persistence::GetSubDirectories(Persistence::GetEngineRootAbs(), true);
+    subdirs.PushFront(Persistence::GetEngineRootAbs());
     return String::Join(subdirs, " ");
 }
 

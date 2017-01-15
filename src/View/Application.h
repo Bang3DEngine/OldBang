@@ -1,7 +1,6 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-
 #include <QTimer>
 #include <iostream>
 #include <QKeyEvent>
@@ -27,8 +26,10 @@ public:
 
     bool notify(QObject *receiver, QEvent *e) override;
 
+    #ifdef BANG_EDITOR
     void OnPlay();
     void OnStop();
+    #endif
 
 public slots:
     void OnDrawTimerTick();

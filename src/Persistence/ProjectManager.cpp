@@ -55,9 +55,10 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     #endif
 
     // Set persistence variables
-    Persistence::c_ProjectRootAbsolute = ProjectManager::s_currentProject->GetProjectRootFilepath();
-    Persistence::c_ProjectAssetsRootAbsolute =
-            Persistence::c_ProjectRootAbsolute + "/Assets";
+    Persistence::GetInstance()->c_ProjectRootAbsolute =
+            ProjectManager::s_currentProject->GetProjectRootFilepath();
+    Persistence::GetInstance()->c_ProjectAssetsRootAbsolute =
+            Persistence::GetProjectRootAbs() + "/Assets";
 
     // Open the first found scene
     List<String> sceneFilepaths = Persistence::GetFiles(projectDir, true,

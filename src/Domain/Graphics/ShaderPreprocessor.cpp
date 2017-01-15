@@ -59,7 +59,7 @@ String ShaderPreprocessor::
     }
     else
     {
-        Debug_Error("Include file '" << includeFile << "' could not found.");
+        Debug_Error("Include file '" << includeFile << "' could not be found.");
     }
 
     return "";

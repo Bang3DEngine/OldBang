@@ -1,6 +1,7 @@
 #include "SingletonManager.h"
 
 #include "Debug.h"
+#include "Persistence.h"
 
 #ifdef BANG_EDITOR
 #include "ShortcutManager.h"
@@ -8,25 +9,30 @@
 
 SingletonManager *SingletonManager::s_mainBinarySM = nullptr;
 
-void SingletonManager::SetEditorWindowSingleton(IWindow *mainBinaryEditorWindow)
+void SingletonManager::SetWindowSingleton(IWindow *mainBinaryWindow)
 {
-    this->m_mainBinaryEditorWindow = mainBinaryEditorWindow;
+    m_mainBinaryWindow = mainBinaryWindow;
 }
 
 void SingletonManager::SetTimeSingleton(Time *mainBinaryTime)
 {
-    this->m_mainBinaryTime = mainBinaryTime;
+    m_mainBinaryTime = mainBinaryTime;
 }
 
 void SingletonManager::SetInputSingleton(Input *mainBinaryInput)
 {
-    this->m_mainBinaryInput = mainBinaryInput;
+    m_mainBinaryInput = mainBinaryInput;
+}
+
+void SingletonManager::SetPersistenceSingleton(Persistence *mainBinaryPersistence)
+{
+    m_mainBinaryPersistence = mainBinaryPersistence;
 }
 
 #ifdef BANG_EDITOR
 void SingletonManager::SetShortcutManagerSingleton(ShortcutManager *mainBinaryShortcutManager)
 {
-    this->m_mainBinaryShortcutManager = mainBinaryShortcutManager;
+    m_mainBinaryShortcutManager = mainBinaryShortcutManager;
 }
 #endif
 
@@ -35,7 +41,7 @@ void SingletonManager::SetShortcutManagerSingleton(ShortcutManager *mainBinarySh
 
 IWindow* SingletonManager::GetWindowSingleton()
 {
-    return m_mainBinaryEditorWindow;
+    return m_mainBinaryWindow;
 }
 
 Time* SingletonManager::GetTimeSingleton()
@@ -46,6 +52,11 @@ Time* SingletonManager::GetTimeSingleton()
 Input *SingletonManager::GetInputSingleton()
 {
     return m_mainBinaryInput;
+}
+
+Persistence *SingletonManager::GetPersistenceSingleton()
+{
+    return m_mainBinaryPersistence;
 }
 
 #ifdef BANG_EDITOR

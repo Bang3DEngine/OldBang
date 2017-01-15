@@ -67,7 +67,7 @@ void GameBuilderJob::BuildGame()
     CHECK_CANCEL;
 
     emit NotifyMessage("Moving the executable into the desired location...");
-    const String c_initialOutputDir = Persistence::c_EngineRootAbsolute + "/bin/Game.exe";
+    const String c_initialOutputDir = Persistence::GetEngineRootAbs() + "/bin/Game.exe";
     Persistence::Remove(m_executableFilepath);
     Persistence::Move(c_initialOutputDir, m_executableFilepath);
 

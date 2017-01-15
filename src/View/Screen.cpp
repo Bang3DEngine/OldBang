@@ -1,21 +1,22 @@
 #include "Screen.h"
 
 #ifdef BANG_EDITOR
+#include "Toolbar.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
-#include "EditorWindow.h"
 #include "EditorScene.h"
+#include "EditorWindow.h"
+#include "ShortcutManager.h"
 #include "SelectionFramebuffer.h"
 #else
 #include "GameWindow.h"
 #endif
 
-#include "Debug.h"
+#include "Input.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "Prefab.h"
 #include "Camera.h"
-#include "Toolbar.h"
 #include "Material.h"
 #include "Transform.h"
 #include "GameObject.h"
@@ -23,7 +24,6 @@
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "GraphicPipeline.h"
-#include "ShortcutManager.h"
 #include "SingletonManager.h"
 
 Screen::Screen(QWidget* parent) : QGLWidget(parent)
@@ -85,11 +85,15 @@ void Screen::resizeGL(int w, int h)
 
 bool Screen::IsRenderingInGame() const
 {
+    #ifdef BANG_EDITOR
     EditorWindow *win = EditorWindow::GetInstance();
     ASSERT(win, "", return false);
 
     return win->tabContainerSceneGame->currentWidget() ==
            win->tabGame;
+    #else
+    return true;
+    #endif
 }
 
 Screen *Screen::GetInstance()

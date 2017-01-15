@@ -33,7 +33,7 @@ void GameWindow::InitFromMainBinary(QMainWindow *window, QApplication *applicati
     IWindow::InitFromMainBinary(window, application);
 
     GameWindow::s_m_win = new GameWindow(window);
-    SingletonManager::GetInstance()->SetEditorWindowSingleton(GameWindow::s_m_win);
+    SingletonManager::GetInstance()->SetWindowSingleton(GameWindow::s_m_win);
 
     GameWindow::s_m_win->m_mainWindow = window;
     GameWindow::s_m_win->SetupUI();

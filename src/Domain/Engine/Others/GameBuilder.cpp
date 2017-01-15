@@ -33,7 +33,7 @@ GameBuilder *GameBuilder::GetInstance()
 String GameBuilder::AskForExecutableFilepath()
 {
     // Get the executable output filepath
-    const String defaultOutputDirectory = Persistence::c_ProjectRootAbsolute;
+    const String defaultOutputDirectory = Persistence::GetProjectRootAbs();
     const String projectName = ProjectManager::GetCurrentProject()->GetProjectName();
     String executableFilepath =
         Dialog::GetSaveFilename("Choose the file where you want to create your game",
@@ -132,9 +132,9 @@ void GameBuilder::OnGameBuildingHasBeenCanceled()
 bool GameBuilder::CompileGameExecutable()
 {
     String output = "";
-    String cmd = Persistence::c_EngineRootAbsolute + "/scripts/compile.sh GAME";
+    String cmd = Persistence::GetEngineRootAbs() + "/scripts/compile.sh GAME RELEASE_MODE";
 
-    const String initialOutputDir = Persistence::c_EngineRootAbsolute + "/bin/Game.exe";
+    const String initialOutputDir = Persistence::GetEngineRootAbs() + "/bin/Game.exe";
     Persistence::Remove(initialOutputDir);
 
     bool ok = false;
@@ -154,14 +154,14 @@ bool GameBuilder::CreateDataDirectory(const String &executableDir)
     if (!Persistence::CreateDirectory(dataDir)) { return false; }
 
     // Copy the Engine Assets in the GameData directory
-    if (!Persistence::DuplicateDir(Persistence::c_EngineAssetsRootAbsolute,
+    if (!Persistence::DuplicateDir(Persistence::GetEngineAssetsRootAbs(),
                                    dataDir + "/EngineAssets"))
     {
         return false;
     }
 
     // Copy the Project Assets in the GameData directory
-    if (!Persistence::DuplicateDir(Persistence::c_ProjectAssetsRootAbsolute,
+    if (!Persistence::DuplicateDir(Persistence::GetProjectAssetsRootAbs(),
                                    dataDir + "/Assets"))
     {
         return false;
@@ -187,7 +187,7 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
     // Compile the behaviours and save them so the Game can
     // load them instantly and doesn't need to compile them
     List<String> behaviourFilepaths =
-            Persistence::GetFiles(Persistence::c_ProjectAssetsRootAbsolute,
+            Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(),
                                   true, { "*.cpp" });
     for (const String &behaviourFilepath : behaviourFilepaths)
     {
@@ -202,7 +202,7 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
         }
 
         String gameLibFilepath = compiledLibFilepath;
-        gameLibFilepath.Replace(Persistence::c_ProjectAssetsRootAbsolute,
+        gameLibFilepath.Replace(Persistence::GetProjectAssetsRootAbs(),
                                dataDir + "/Assets");
         String gameLibFilepathWithoutTimestamp =
                 Persistence::GetDir(gameLibFilepath) + "/" +

@@ -1,6 +1,5 @@
 #include "Debug.h"
 
-#include "Debug.h"
 #include "Scene.h"
 #include "Color.h"
 #include "String.h"
@@ -10,6 +9,7 @@
 #include "Matrix4.h"
 #include "IToString.h"
 #include "Quaternion.h"
+#include "Persistence.h"
 #include "SceneManager.h"
 
 #ifdef BANG_EDITOR

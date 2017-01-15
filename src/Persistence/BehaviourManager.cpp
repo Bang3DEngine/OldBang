@@ -95,7 +95,7 @@ void BehaviourManager::RemoveOutdatedLibraryFiles(const String &mostRecentLibrar
             Persistence::GetFileNameWithExtension(mostRecentLibraryFilepath);
     String libraryName = Persistence::GetFileName(mostRecentLibraryFilepath);
 
-    List<String> libs = Persistence::GetFiles(Persistence::c_ProjectAssetsRootAbsolute,
+    List<String> libs = Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(),
                                               true, {"*.so.*"});
     for (auto it = libs.Begin(); it != libs.End(); ++it)
     {
@@ -207,7 +207,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             const String libraryFilepath = behaviourDir + "/" + behaviourFilename + ".so." +
                     ProjectManager::GetCurrentProject()->GetProjectRandomId();
             //Debug_Log("Loading library " << libraryFilepath);
-            OnBehaviourFinishedCompiling(behaviourFilepath, libraryFilepath);
+            bm->OnBehaviourFinishedCompiling(behaviourFilepath, libraryFilepath);
             #endif
         }
     }

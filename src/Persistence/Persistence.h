@@ -7,16 +7,7 @@
 class Explorer;
 class Persistence
 {
-
-private:
-   static String s_currentSceneFilepath;
-
 public:
-   static String c_ProjectRootAbsolute;
-   static String c_ProjectAssetsRootAbsolute;
-   static String c_EngineRootAbsolute;
-   static String c_EngineAssetsRootAbsolute;
-
    static bool IsDir(const String &path);
    static bool IsFile(const String &path);
    static bool IsAbsolute(const String &path);
@@ -83,7 +74,6 @@ public:
    static bool Exists(const String &filepath);
    static bool CreateDirectory(const String &dirPath);
    static void SetActiveSceneFilepath(const String &scenePath);
-   static String SetActiveSceneFilepath();
    static bool Rename(const String &oldPath, const String &newPath);
    static bool Move(const String &oldPath, const String &newPath);
 
@@ -91,6 +81,25 @@ public:
 
    //Appends an extension to a filepath only if that filename does not contain the extension
    static String AppendExtension(const String &filepath, const String extNoDot);
+
+   static void InitFromMainBinary();
+
+   static Persistence *GetInstance();
+   static const String& GetCurrentSceneFilepath();
+   static const String& GetProjectRootAbs();
+   static const String& GetProjectAssetsRootAbs();
+   static const String& GetEngineRootAbs();
+   static const String& GetEngineAssetsRootAbs();
+
+private:
+   String c_currentSceneFilepath      = "";
+   String c_ProjectRootAbsolute       = "";
+   String c_ProjectAssetsRootAbsolute = "";
+   String c_EngineRootAbsolute        = "";
+   String c_EngineAssetsRootAbsolute  = "";
+
+   friend class ProjectManager;
+   friend int main(int argc, char** argv);
 };
 
 #endif // PERSISTENCE_H

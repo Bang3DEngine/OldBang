@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #ifdef BANG_EDITOR
+#include "EditorScene.h"
 #include "EditorWindow.h"
 #include "DragDropManager.h"
 #include "ShortcutManager.h"
@@ -14,7 +15,6 @@
 #include "Scene.h"
 #include "Screen.h"
 #include "Chrono.h"
-#include "EditorScene.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "BehaviourManager.h"
@@ -159,6 +159,7 @@ bool Application::notify(QObject *receiver, QEvent *e)
     return QApplication::notify(receiver, e);
 }
 
+#ifdef BANG_EDITOR
 void Application::OnPlay()
 {
     m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
@@ -194,6 +195,7 @@ void Application::OnStop()
     EditorWindow *win = EditorWindow::GetInstance();
     win->tabContainerSceneGame->setCurrentWidget(win->tabScene);
 }
+#endif
 
 bool Application::CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent)
 {

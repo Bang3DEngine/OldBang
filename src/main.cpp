@@ -13,6 +13,7 @@
 #include "Debug.h"
 #include "Camera.h"
 #include "Shader.h"
+#include "Screen.h"
 #include "XMLNode.h"
 #include "Behaviour.h"
 #include "Texture2D.h"
@@ -47,7 +48,7 @@
 void LoadStylesheet(QApplication *app)
 {
     // Load dark Window theme
-    QFile f((Persistence::c_EngineAssetsRootAbsolute + "/qdarkstyle/style.qss").ToQString()
+    QFile f((Persistence::GetEngineAssetsRootAbs() + "/qdarkstyle/style.qss").ToQString()
             );
     if (!f.exists())
     {
@@ -67,26 +68,31 @@ void LoadStylesheet(QApplication *app)
     app->setFont(font);
 }
 
-void InitEditorOrGame(QMainWindow *window, Application *app)
+void InitSingletonManager()
 {
     SingletonManager::InitSingletonManagerFromMainBinary();
     #ifdef BANG_EDITOR
     ShortcutManager::InitFromMainBinary(); // It must go before Application init
     #endif
 
+    Time::InitFromMainBinary();
+    Input::InitFromMainBinary();
+    Persistence::InitFromMainBinary();
+}
+
+void InitEditorOrGame(QMainWindow *window, Application *app)
+{
     #ifdef BANG_EDITOR
     EditorWindow::InitFromMainBinary(window, app);
     #else
     GameWindow::InitFromMainBinary(window, app);
     #endif
 
-    Time::InitFromMainBinary();
     Screen::GetInstance()->makeCurrent();
     Screen::GetInstance()->initializeGL();
-    Input::InitFromMainBinary();
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
     String executableDir = ""; // Get the executable dir
     {
@@ -95,20 +101,23 @@ int main(int argc, char *argv[])
         preApp.exit(0);
     }
 
-    #ifdef BANG_EDITOR
+    InitSingletonManager();
+
     // Init engine paths, by looking at executable location:
+    #ifdef BANG_EDITOR
     String engineRootDirAbs = Persistence::GetDirUp(executableDir);
-    Persistence::c_EngineRootAbsolute = engineRootDirAbs;
-    Persistence::c_EngineAssetsRootAbsolute =
-            Persistence::c_EngineRootAbsolute + "/EngineAssets";
-    //
+    Persistence::GetInstance()->c_EngineRootAbsolute = engineRootDirAbs;
+    Persistence::GetInstance()->c_EngineAssetsRootAbsolute =
+            Persistence::GetEngineRootAbs() + "/EngineAssets";
     #else
-    Persistence::c_EngineRootAbsolute = executableDir + "/GameData";
-    Persistence::c_EngineAssetsRootAbsolute =
-            Persistence::c_EngineRootAbsolute + "/EngineAssets";
+    Persistence::GetInstance()->c_EngineRootAbsolute = executableDir + "/GameData";
+    Persistence::GetInstance()->c_EngineAssetsRootAbsolute =
+            Persistence::GetEngineRootAbs() + "/EngineAssets";
     #endif
 
+
     String loadedProjectFilepath = "";
+
     #ifdef BANG_EDITOR
     // Select project
     QApplication *selectProjectApp = new QApplication(argc, argv);
@@ -124,6 +133,7 @@ int main(int argc, char *argv[])
 
     ASSERT (!loadedProjectFilepath.Empty(),
             "The project filepath has not been specified.", return 0);
+
 
     // Editor / Game
     Application app(argc, argv);
