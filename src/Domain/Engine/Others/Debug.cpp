@@ -67,30 +67,37 @@ void Debug::_Status(const String &str, float timeInSeconds)
     #endif
 }
 
-void Debug::_Log(const String &str)
+void Debug::_Log(const String &str, int line, const String &filePath)
 {
-    std::cerr << c_logPrefix << str << std::endl;
+    String fileName = Persistence::GetFileNameWithExtension(filePath);
+    std::cerr << c_logPrefix << str << " | " <<
+                 fileName << "(" << line << ")" <<  std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    ListLogger::AddLog(str);
+    ListLogger::AddLog(str, line, fileName);
     #endif
 }
 
-void Debug::_Warn(const String &str)
+void Debug::_Warn(const String &str, int line, const String &filePath)
 {
-    std::cerr << c_warnPrefix << str << std::endl;
+    String fileName = Persistence::GetFileNameWithExtension(filePath);
+    std::cerr << c_warnPrefix << str << " | " <<
+                 fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    ListLogger::AddWarn(str);
+    ListLogger::AddWarn(str, line, fileName);
     #endif
 }
 
-void Debug::_Error(const String &str)
+void Debug::_Error(const String &str, int line, const String &filePath,
+                   bool uniqueMessage)
 {
-    std::cerr << c_errorPrefix << str << std::endl;
+    String fileName = Persistence::GetFileNameWithExtension(filePath);
+    std::cerr << c_errorPrefix << str << " | " <<
+                 fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    ListLogger::AddError(str);
+    ListLogger::AddError(str, line, fileName);
     #endif
 }
 

@@ -1,6 +1,9 @@
 <RCC>
   <qresource prefix="qss_icons">
     <file>../Icons/filePaper.png</file>
+    <file>../Icons/ErrorIcon.png</file>
+    <file>../Icons/WarnIcon.png</file>
+    <file>../Icons/LogIcon.png</file>
     <file>../Icons/rotate.png</file>
     <file>../Icons/textFile.png</file>
     <file>../Icons/stop.png</file>

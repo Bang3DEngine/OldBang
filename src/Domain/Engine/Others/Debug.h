@@ -44,9 +44,10 @@ public:
                                float secsTime = 1.0f);
 
     static void _Clear();
-    static void _Log(const String &str);
-    static void _Warn(const String &str);
-    static void _Error(const String &str);
+    static void _Log(const String &str, int line, const String &fileName);
+    static void _Warn(const String &str, int line, const String &fileName);
+    static void _Error(const String &str, int line, const String &fileName,
+                       bool uniqueMessage = false);
     static void _Status(const String &str, float timeInSeconds);
 };
 
@@ -84,21 +85,28 @@ public:
     std::ostringstream log;\
     log << msg;\
     log.flush();\
-    Debug::_Log(log.str()); \
+    Debug::_Log(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 #define Debug_Warn(msg) do{\
     std::ostringstream log;\
     log << msg;\
     log.flush();\
-    Debug::_Warn(log.str()); \
+    Debug::_Warn(log.str(), __LINE__, __FILE__); \
 } while (0)
 
 #define Debug_Error(msg) do{\
     std::ostringstream log;\
     log << msg;\
     log.flush();\
-    Debug::_Error(log.str()); \
+    Debug::_Error(log.str(), __LINE__, __FILE__); \
+} while (0)
+
+#define Debug_Error_Unique(msg) do{\
+    std::ostringstream log;\
+    log << msg;\
+    log.flush();\
+    Debug::_Error(log.str(), __LINE__, __FILE__, true); \
 } while (0)
 
 #define Debug_Status(msg, timeInSeconds) do{\

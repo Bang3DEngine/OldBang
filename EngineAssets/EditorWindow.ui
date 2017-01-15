@@ -24,7 +24,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="QtResources.qrc">
-    <normaloff>:/Bang/BangLogo.png</normaloff>:/Bang/BangLogo.png</iconset>
+    <normaloff>:/Bang/BangIcon.png</normaloff>:/Bang/BangIcon.png</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -263,9 +263,7 @@
            </widget>
           </item>
           <item>
-           <widget class="Screen" name="screen" native="true">
-            <zorder>screenToolbar</zorder>
-           </widget>
+           <widget class="Screen" name="screen" native="true"/>
           </item>
          </layout>
         </item>

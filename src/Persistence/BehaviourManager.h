@@ -40,6 +40,9 @@ public:
     void OnBehaviourFinishedCompiling(const String &behaviourPath,
                                       const String &soFilepath);
 
+    // Called by the BehaviourManagerCompileThread when has failed
+    void OnBehaviourFailedCompiling(const String &behaviourPath);
+
 public slots:
     void TreatCompiledBehaviours();
 
@@ -61,6 +64,12 @@ private:
     Maphe library
      */
     Map<String, List<BehaviourHolder*> > m_behHash_To_behHolderDemanders;
+
+    /**
+     * @brief Holds the compiled behaviour filepaths that have failed
+     * to compile and its hashes
+     */
+    Map<String, String> m_failed_behFilepath_To_behaviourHash;
 
     /**
      * @brief Holds the compiled behaviour filepaths and its

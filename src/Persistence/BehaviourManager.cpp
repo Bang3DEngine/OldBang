@@ -29,7 +29,18 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourPath,
                                                     const String &libraryFilepath)
 {
     QMutexLocker locker(&m_mutex);
+    String absPath = Persistence::ToAbsolute(behaviourPath, false);
+    m_behPathsBeingCompiled.erase(absPath);
     m_behFilepath_To_compiledLibrary.Set(behaviourPath, libraryFilepath);
+}
+
+void BehaviourManager::OnBehaviourFailedCompiling(const String &behaviourPath)
+{
+    QMutexLocker locker(&m_mutex);
+    String absPath = Persistence::ToAbsolute(behaviourPath, false);
+    m_behPathsBeingCompiled.erase(absPath);
+    m_failed_behFilepath_To_behaviourHash.Set(behaviourPath,
+                                              Persistence::GetHash(absPath));
 }
 
 void BehaviourManager::TreatCompiledBehaviours()
@@ -40,20 +51,13 @@ void BehaviourManager::TreatCompiledBehaviours()
          it != m_behFilepath_To_compiledLibrary.End(); ++it)
     {
         String behaviourPath = it->first;
-        String libraryFilepath = it->second;
+        String absPath = Persistence::ToAbsolute(behaviourPath, false);
+        String hash = Persistence::GetHash(absPath);
 
         BehaviourManager *bm = BehaviourManager::GetInstance();
 
-        String absPath = Persistence::ToAbsolute(behaviourPath, false);
-
-        if (bm->m_behPathsBeingCompiled.find(absPath) !=
-            bm->m_behPathsBeingCompiled.end())
-        {
-            bm->m_behPathsBeingCompiled.erase(bm->m_behPathsBeingCompiled.find(absPath));
-        }
-
         // Open the library
-        String hash = Persistence::GetHash(absPath);
+        String libraryFilepath = it->second;
         QLibrary *lib = new  QLibrary(libraryFilepath.ToCString());
         lib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
         if (lib->load())
@@ -144,6 +148,20 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
 
     String absPath = Persistence::ToAbsolute(behaviourFilepath, false);
     String hash = Persistence::GetHash(absPath);
+    if (bm->m_failed_behFilepath_To_behaviourHash.ContainsKey(behaviourFilepath))
+    {
+        String oldHash = bm->m_failed_behFilepath_To_behaviourHash[behaviourFilepath];
+        if (oldHash == hash)
+        {
+            // A previous compilation of behaviourFilepath has failed,
+            // and the file hasn't changed (same hash)
+            return;
+        }
+        else
+        {
+            bm->m_failed_behFilepath_To_behaviourHash.Remove(behaviourFilepath);
+        }
+    }
 
     if (BehaviourManager::IsCached(absPath))
     {
