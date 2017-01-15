@@ -9,12 +9,13 @@ class BehaviourManager;
 
 class BehaviourManagerCompileThread : public QThread
 {
-protected:
-    String m_behaviourRelativeFilepath = "";
-    void run() override;
 
 public:
     BehaviourManagerCompileThread(const String &behaviourRelativeFilepath);
+
+protected:
+    String m_behaviourRelativeFilepath = "";
+    void run() override;
 };
 
 #endif // BEHAVIOURMANAGERCOMPILETHREAD_H

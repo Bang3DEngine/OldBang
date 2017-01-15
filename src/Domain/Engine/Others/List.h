@@ -134,6 +134,18 @@ public:
         return this->End();
     }
 
+    void RemoveAll(const T& x)
+    {
+        for (Iterator it = Begin(); it != End(); ++it)
+        {
+            if (*it == x)
+            {
+                it = this->erase(it);
+                --it;
+            }
+        }
+    }
+
     Iterator Remove(Iterator it)
     {
         return this->erase(it);

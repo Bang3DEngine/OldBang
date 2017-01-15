@@ -8,6 +8,8 @@ BehaviourManagerCompileThread::
     BehaviourManagerCompileThread(const String &behaviourRelativeFilepath)
 {
     m_behaviourRelativeFilepath = behaviourRelativeFilepath;
+
+    BehaviourManager *bm = BehaviourManager::GetInstance();
 }
 
 void BehaviourManagerCompileThread::run()
@@ -17,11 +19,8 @@ void BehaviourManagerCompileThread::run()
             SystemUtils::CompileToSharedObject(m_behaviourRelativeFilepath);
 
     // Notify BehaviourManager
-    BehaviourManager::OnBehaviourFinishedCompiling(m_behaviourRelativeFilepath,
-                                                   soFilepath);
-
-    // Cant Debug_Status from another thread
-    //Debug_Log(m_behaviourRelativeFilepath << " compiled.");
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    bm->OnBehaviourFinishedCompiling(m_behaviourRelativeFilepath, soFilepath);
 
     deleteLater(); // Automatic thread delete
 }

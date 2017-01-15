@@ -16,11 +16,11 @@ BehaviourHolder::BehaviourHolder()
 
 BehaviourHolder::~BehaviourHolder()
 {
+    BehaviourManager::OnBehaviourHolderDeleted(this);
     if (m_behaviour)
     {
         delete m_behaviour;
     }
-    BehaviourManager::OnBehaviourHolderDeleted(this);
 }
 
 void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
@@ -35,7 +35,8 @@ void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
 
 const String BehaviourHolder::ToString() const
 {
-    return "BehaviourHolder ( " + m_sourceFilepath + ")";
+    return "BehaviourHolder ( " +
+            String::ToString((void*)this)  + ")";
 }
 
 String BehaviourHolder::GetName() const

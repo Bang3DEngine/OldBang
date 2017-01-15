@@ -2,6 +2,9 @@
 #define BEHAVIOURMANAGER_H
 
 #include <set>
+#include <QTimer>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include "Map.h"
 #include "List.h"
@@ -17,8 +20,9 @@ class BehaviourManagerCompileThread;
  * The compiling is asynchronous, so we must use the BehaviourHolder callback
  * to notify its QLibrary has been created.
  */
-class BehaviourManager
+class BehaviourManager : public QObject
 {
+    Q_OBJECT
 
 public:
     static bool IsBeingCompiled(const String &behaviourPath);
@@ -32,8 +36,17 @@ public:
     static BehaviourManager* GetInstance();
     static bool IsCached(const String &behaviourPath);
 
-private:
+    // Called by the BehaviourManagerCompileThread when has finished
+    void OnBehaviourFinishedCompiling(const String &behaviourPath,
+                                      const String &soFilepath);
 
+public slots:
+    void TreatCompiledBehaviours();
+
+private:
+    QMutex m_mutex;
+
+    QTimer m_checkCompiledBehavioursTimer;
     BehaviourRefresherTimer m_behaviourRefresherTimer;
 
     /**
@@ -50,6 +63,12 @@ private:
     Map<String, List<BehaviourHolder*> > m_behHash_To_behHolderDemanders;
 
     /**
+     * @brief Holds the compiled behaviour filepaths and its
+     * compiled libraries
+     */
+    Map<String, String> m_behFilepath_To_compiledLibrary;
+
+    /**
      * @brief Set of behaviours abs paths that are being compiled right now.
      * This is useful in the case when a behaviour is demanded while it's
      * being compiled.
@@ -57,11 +76,6 @@ private:
     std::set<String> m_behPathsBeingCompiled;
 
     BehaviourManager();
-
-
-    // Called by the BehaviourManagerCompileThread when has finished
-    static void OnBehaviourFinishedCompiling(const String &behaviourPath,
-                                             const String &soFilepath);
 
     static void RemoveOutdatedLibraryFiles(
             const String &mostRecentLibraryFilepath);
