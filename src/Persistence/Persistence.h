@@ -12,9 +12,6 @@ public:
    static bool IsFile(const String &path);
    static bool IsAbsolute(const String &path);
 
-   static String GetProjectRootPathAbsolute();
-   static String GetAssetsPathAbsolute();
-
    static String GetDir(const String &filepath);
    static String GetFileName(const String &filepath);
    static String GetFileNameWithExtension(const String &filepath);

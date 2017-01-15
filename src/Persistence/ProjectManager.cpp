@@ -61,8 +61,9 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
             Persistence::GetProjectRootAbs() + "/Assets";
 
     // Open the first found scene
-    List<String> sceneFilepaths = Persistence::GetFiles(projectDir, true,
-                                                        {"*." + Scene::GetFileExtensionStatic()});
+    List<String> sceneFilepaths =
+            Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true,
+                                  {"*." + Scene::GetFileExtensionStatic()});
     if (!sceneFilepaths.Empty())
     {
         SceneManager::LoadScene(sceneFilepaths.Front());

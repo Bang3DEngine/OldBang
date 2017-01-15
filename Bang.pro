@@ -74,7 +74,7 @@ EDITOR {
     RESOURCES += EngineAssets/qdarkstyle/style.qrc
     RESOURCES += EngineAssets/QtResources.qrc
     OBJECTS_DIR = bin/objEditor/
-    TARGET = bin/BangEditor.exe
+    TARGET = bin/Bang
 }
 GAME {
     OBJECTS_DIR = bin/objGame/

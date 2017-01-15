@@ -37,6 +37,10 @@ public:
 
     void OnButtonClicked(const String &attrName) override;
 
+    #ifdef BANG_EDITOR
+    void CreateNewBehaviour();
+    #endif
+
     virtual void OnAddedToGameObject() override;
     void Refresh();
 

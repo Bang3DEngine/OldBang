@@ -9,6 +9,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "Persistence.h"
 #include "ShaderContract.h"
 #include "SingletonManager.h"
 #include "ISceneEventListener.h"

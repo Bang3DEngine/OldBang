@@ -30,16 +30,6 @@ bool Persistence::IsAbsolute(const String &path)
     return QFileInfo(path.ToQString()).isAbsolute();
 }
 
-String Persistence::GetProjectRootPathAbsolute()
-{
-    return Persistence::GetProjectRootAbs();
-}
-
-String Persistence::GetAssetsPathAbsolute()
-{
-    return Persistence::GetProjectAssetsRootAbs();
-}
-
 String Persistence::GetDir(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");

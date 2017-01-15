@@ -2,6 +2,7 @@
 
 #include <QInputDialog>
 
+#include "Debug.h"
 #include "EditorWindow.h"
 #include "SelectProjectWindow.h"
 
@@ -47,13 +48,14 @@ String Dialog::GetOpenDirname(const String &caption,
                     //QFileDialog::DontUseNativeDialog
                 )
             );
+    ASSERT(Persistence::ExistsDirectory(dir), "", return "");
 
     return dir;
 }
 
 String Dialog::GetOpenFilename(const String &caption,
-                                   const String &extension,
-                                   const String &initDir)
+                               const String &extension,
+                               const String &initDir)
 {
     String filepath =
             String(
@@ -66,6 +68,7 @@ String Dialog::GetOpenFilename(const String &caption,
                     0 // QFileDialog::DontUseNativeDialog
                 )
             );
+    ASSERT(Persistence::ExistsFile(filepath), "", return "");
 
     return filepath;
 }

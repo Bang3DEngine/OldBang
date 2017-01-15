@@ -184,7 +184,12 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
 {
     ASSERT(m_currentGameObject);
 
-    if (clickedAction == MenuBar::Action::AddComponentBehaviour)
+    if (clickedAction == MenuBar::Action::AddComponentNewBehaviour)
+    {
+        BehaviourHolder *bh = m_currentGameObject->AddComponent<BehaviourHolder>();
+        bh->CreateNewBehaviour();
+    }
+    else if (clickedAction == MenuBar::Action::AddComponentBehaviour)
     {
         BehaviourHolder *bh = m_currentGameObject->AddComponent<BehaviourHolder>();
     }

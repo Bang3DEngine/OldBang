@@ -15,8 +15,7 @@ ui_*
 *.dll
 *.dylib
 nohup.out
-BangPreprocessor
-BangPreprocessor/*
+bin/*
 
 # CMake
 *CMakeCache.txt

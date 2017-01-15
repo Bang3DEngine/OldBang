@@ -22,9 +22,11 @@ public:
 public slots:
     void OnGameHasBeenBuilt();
     void OnGameBuildingHasFailed();
+    void OnDialogError(const QString &title, const QString &msg);
 
 signals:
     void NotifyGameBuildingCanceled();
+    void DialogError(const QString &title, const QString &msg);
 
 private:
     GameBuilder();
@@ -32,6 +34,7 @@ private:
 
     static GameBuilder *s_instance;
 
+    bool m_runGameAfterBuild = false;
     QThread *m_gameBuilderThread = nullptr;
     GameBuilderJob *m_gameBuilderJob = nullptr;
     GameBuildDialog *m_gameBuildDialog = nullptr;

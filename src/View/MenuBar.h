@@ -44,6 +44,7 @@ public:
         CreateTexture2D,
         CreateFont,
 
+        AddComponentNewBehaviour,
         AddComponentBehaviour,
         AddComponentCamera,
         AddComponentMeshRenderer,
@@ -93,6 +94,7 @@ public slots:
     void OnCreateTexture2D() const;
     void OnCreateFont() const;
 
+    void OnAddComponentNewBehaviour() const;
     void OnAddComponentBehaviour() const;
     void OnAddComponentCamera() const;
     void OnAddComponentMeshRenderer() const;

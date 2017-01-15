@@ -71,9 +71,9 @@ AttrWidgetFile::~AttrWidgetFile()
 void AttrWidgetFile::Browse()
 {
     String selectedFile =
-            Dialog::GetOpenFilename(Persistence::GetAssetsPathAbsolute(),
-                                        m_fileExtension);
-    if (selectedFile != "")
+            Dialog::GetOpenFilename(Persistence::GetProjectAssetsRootAbs(),
+                                    m_fileExtension);
+    if (!selectedFile.Empty())
     {
         SetValue(selectedFile);
         m_inspectorWidget->_OnSlotValueChanged();

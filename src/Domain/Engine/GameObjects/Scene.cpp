@@ -1,5 +1,9 @@
 #include "Scene.h"
 
+#ifdef BANG_EDITOR
+#include "EditorScene.h"
+#endif
+
 #include "Debug.h"
 #include "Screen.h"
 #include "Camera.h"
@@ -7,6 +11,7 @@
 #include "XMLParser.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "MeshFactory.h"
 #include "SceneManager.h"
 #include "GraphicPipeline.h"
 #include "DirectionalLight.h"
@@ -120,6 +125,34 @@ Camera *Scene::GetCamera()
 {
     Scene *scene = SceneManager::GetActiveScene();
     return scene ? scene->GetCurrentCamera() : nullptr;
+}
+
+Scene *Scene::GetDefaultScene()
+{
+    #ifdef BANG_EDITOR
+    Scene *scene = new EditorScene();
+    #else
+    Scene *scene = new Scene();
+    #endif
+
+    GameObject *cube = MeshFactory::GetCubeGameObject();
+    cube->SetParent(scene);
+
+    const float c_dist = 5.0f;
+    GameObject *dirLight = new GameObject("Directional Light");
+    dirLight->AddComponent<DirectionalLight>();
+    dirLight->transform->SetPosition(Vector3(-1, 1, -1) * c_dist);
+    dirLight->transform->LookAt(cube);
+    dirLight->SetParent(scene);
+
+    GameObject *camera = new GameObject("Camera");
+    Camera *camComp = camera->AddComponent<Camera>();
+    camera->transform->SetPosition(Vector3(1, 1, -1) * c_dist);
+    camera->transform->LookAt(cube);
+    camComp->SetClearColor(Color::LightBlue);
+    camera->SetParent(scene);
+
+    return scene;
 }
 
 Camera *Scene::GetCurrentCamera() const

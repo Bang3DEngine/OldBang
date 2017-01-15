@@ -355,6 +355,7 @@
     <property name="title">
      <string>Components</string>
     </property>
+    <addaction name="actionAddComponentNewBehaviour"/>
     <addaction name="actionAddComponentBehaviour"/>
     <addaction name="separator"/>
     <addaction name="actionAddComponentCamera"/>
@@ -992,6 +993,11 @@
   <action name="actionSaveProject">
    <property name="text">
     <string>Save Project</string>
+   </property>
+  </action>
+  <action name="actionAddComponentNewBehaviour">
+   <property name="text">
+    <string>New Behaviour</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

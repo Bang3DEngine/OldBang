@@ -144,44 +144,54 @@ void BehaviourHolder::OnButtonClicked(const String &attrName)
     #ifdef BANG_EDITOR
     if (StringUtils::Contains(attrName, "Create"))
     {
-        bool ok;
-        // Get Behaviour Class Name using a Dialog
-        QString text = QInputDialog::getText(EditorWindow::GetInstance()->GetMainWindow(),
-                                             QString("Behaviour class name"),
-                                             QString("Behaviour name:"),
-                                             QLineEdit::Normal,
-                                             QString("MyBehaviourName"),
-                                             &ok
-                                             );
-        if (ok)
-        {
-            String currentDir = Explorer::GetInstance()->GetCurrentDir();
-            String className = text.toStdString();
-
-            // Create header file
-            String headerCode = Behaviour::s_behaviourHeaderTemplate;
-            StringUtils::Replace(&headerCode, "CLASS_NAME", className);
-            String headerFilepath = currentDir + "/" + className + ".h";
-            FileWriter::WriteToFile(headerFilepath, headerCode);
-
-            // Create source file
-            String sourceCode = Behaviour::s_behaviourSourceTemplate;
-            StringUtils::Replace(&sourceCode, "CLASS_NAME", className);
-            String sourceFilepath = currentDir + "/" + className + ".cpp";
-            FileWriter::WriteToFile(sourceFilepath, sourceCode);
-
-            // Update Behaviour file
-            m_sourceFilepath = sourceFilepath;
-            Refresh();
-
-            // Open with system editor
-            // TODO: Make cross-platform
-            SystemUtils::SystemBackground("xdg-open " + headerFilepath);
-            SystemUtils::SystemBackground("xdg-open " + sourceFilepath);
-        }
+        CreateNewBehaviour();
     }
     #endif
 }
+
+#ifdef BANG_EDITOR
+void BehaviourHolder::CreateNewBehaviour()
+{
+    bool ok;
+    // Get Behaviour Class Name using a Dialog
+    String className = Dialog::GetInputString("Behaviour class name",
+                                              "Behaviour name:",
+                                              "MyBehaviourName",
+                                              &ok
+                                             );
+    if (ok && !className.Empty())
+    {
+        // TODO: Check that the class name is a valid name!
+
+        String currentDir = Explorer::GetInstance()->GetCurrentDir();
+
+        // Create header file
+        String headerCode = Behaviour::s_behaviourHeaderTemplate;
+        StringUtils::Replace(&headerCode, "CLASS_NAME", className);
+        String headerFilepath = currentDir + "/" + className;
+        headerFilepath = Persistence::AppendExtension(headerFilepath, "h");
+        ASSERT(!Persistence::ExistsFile(headerFilepath));
+        FileWriter::WriteToFile(headerFilepath, headerCode);
+
+        // Create source file
+        String sourceCode = Behaviour::s_behaviourSourceTemplate;
+        StringUtils::Replace(&sourceCode, "CLASS_NAME", className);
+        String sourceFilepath = currentDir + "/" + className;
+        sourceFilepath = Persistence::AppendExtension(sourceFilepath, "cpp");
+        ASSERT(!Persistence::ExistsFile(sourceFilepath));
+        FileWriter::WriteToFile(sourceFilepath, sourceCode);
+
+        // Update Behaviour file
+        m_sourceFilepath = sourceFilepath;
+        Refresh();
+
+        // Open with system editor
+        // TODO: Make cross-platform
+        SystemUtils::SystemBackground("xdg-open " + headerFilepath);
+        SystemUtils::SystemBackground("xdg-open " + sourceFilepath);
+    }
+}
+#endif
 
 void BehaviourHolder::OnAddedToGameObject()
 {

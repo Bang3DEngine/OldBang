@@ -55,16 +55,16 @@ String Behaviour::s_behaviourSourceTemplate =
 "\
 #include \"CLASS_NAME.h\" \n\
 \n\
+// This function will be executed once when created \n\
 void CLASS_NAME::OnStart() \n\
 { \n\
     Behaviour::OnStart(); \n\
-    // This function will be executed once when created \n\
 } \n\
 \n\
+// This function will be executed every frame \n\
 void CLASS_NAME::OnUpdate() \n\
 { \n\
     Behaviour::OnUpdate(); \n\
-    // This function will be executed every frame \n\
 } \n\
 \
 "

@@ -1,6 +1,7 @@
 #include "GameBuilder.h"
 
 #include "Debug.h"
+#include "Scene.h"
 #include "Dialog.h"
 #include "Project.h"
 #include "Persistence.h"
@@ -15,6 +16,8 @@ GameBuilder *GameBuilder::s_instance = nullptr;
 
 GameBuilder::GameBuilder()
 {
+    QObject::connect(this, SIGNAL(DialogError(const QString&, const QString&)),
+                     this, SLOT(OnDialogError(const QString&, const QString&)));
 }
 
 GameBuilder::~GameBuilder()
@@ -57,6 +60,8 @@ void GameBuilder::BuildGame(bool runGame)
     }
     else
     {
+        m_runGameAfterBuild = runGame;
+
         // First ask for the executable output file (in the main thread)
         m_latestGameExecutableFilepath = AskForExecutableFilepath();
         ASSERT(!m_latestGameExecutableFilepath.Empty());
@@ -109,28 +114,48 @@ void GameBuilder::BuildGame(bool runGame)
 
 void GameBuilder::OnGameHasBeenBuilt()
 {
-    if (m_gameBuildDialog)
-    {
-        m_gameBuildDialog->close();
-    }
-
+    if (m_gameBuildDialog) { m_gameBuildDialog->close(); }
     m_gameBuilderThread->exit(0);
+
+    if (m_runGameAfterBuild)
+    {
+        SystemUtils::SystemBackground(m_latestGameExecutableFilepath);
+    }
 }
 
 void GameBuilder::OnGameBuildingHasFailed()
 {
-    Dialog::Error("Error building game",
+    OnDialogError("Error building game",
                   "The game could not be built.");
+}
+
+void GameBuilder::OnDialogError(const QString &title, const QString &msg)
+{
+    Dialog::Error(title, msg);
+    if (m_gameBuildDialog) { m_gameBuildDialog->close(); }
+    m_gameBuilderThread->exit(0);
 }
 
 void GameBuilder::OnGameBuildingHasBeenCanceled()
 {
     m_gameBuilderJob->OnGameBuildingCanceled();
-    // RemoveLatestGameBuild();
+    m_gameBuilderThread->exit(0);
 }
 
 bool GameBuilder::CompileGameExecutable()
 {
+    List<String> sceneFiles =
+        Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true,
+                              {"*." + Scene::GetFileExtensionStatic()});
+    if (sceneFiles.Empty())
+    {
+        emit
+        DialogError("Error building game",
+                    "Please save at least one scene in the Assets directory to build the game");
+        emit m_gameBuilderJob->NotifyGameBuildingHasFailed();
+        return false;
+    }
+
     String output = "";
     String cmd = Persistence::GetEngineRootAbs() + "/scripts/compile.sh GAME RELEASE_MODE";
 
@@ -151,6 +176,7 @@ bool GameBuilder::CompileGameExecutable()
 bool GameBuilder::CreateDataDirectory(const String &executableDir)
 {
     String dataDir = executableDir + "/GameData";
+    Persistence::Remove(dataDir);
     if (!Persistence::CreateDirectory(dataDir)) { return false; }
 
     // Copy the Engine Assets in the GameData directory

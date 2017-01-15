@@ -304,7 +304,7 @@ void Explorer::OnDirLoaded(QString dir)
 {
     ASSERT(EditorWindow::GetInstance());
 
-    if (GetCurrentDir().Length() <= Persistence::GetAssetsPathAbsolute().Length())
+    if (GetCurrentDir().Length() <= Persistence::GetProjectAssetsRootAbs().Length())
     {
         m_buttonDirUp->setEnabled(false);
         m_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);

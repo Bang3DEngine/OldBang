@@ -88,6 +88,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
     connect(w->actionCreateFont,  SIGNAL(triggered()),
             this, SLOT(OnCreateFont()));
 
+    connect(w->actionAddComponentNewBehaviour,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentNewBehaviour()));
     connect(w->actionAddComponentBehaviour,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentBehaviour()));
     connect(w->actionAddComponentCamera,  SIGNAL(triggered()),
@@ -110,12 +112,10 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnAddComponentUIText()));
 }
 
-
-
 void MenuBar::CreateNewScene() const
 {
     SceneManager::SetActiveScene(nullptr);
-    Scene *scene = new EditorScene();
+    Scene *scene = Scene::GetDefaultScene();
     SceneManager::SetActiveScene(scene);
     Persistence::SetActiveSceneFilepath("");
 }
@@ -392,6 +392,11 @@ void MenuBar::OnCreateFont() const
     filepath = Persistence::GetDuplicateName(filepath);
     AssetsManager::Create<Font>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
+}
+
+void MenuBar::OnAddComponentNewBehaviour() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentNewBehaviour);
 }
 
 

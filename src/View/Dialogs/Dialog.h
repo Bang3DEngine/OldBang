@@ -22,10 +22,10 @@ public:
                                  const String &initDirectory = String(QDir::homePath()) );
     static String GetOpenFilename(const String &caption = "Open file",
                                   const String &extension = "*",
-                                  const String &initDir = Persistence::GetAssetsPathAbsolute());
+                                  const String &initDir = Persistence::GetProjectAssetsRootAbs());
     static String GetSaveFilename(const String &caption = "Save file",
                                   const String &extension = "*",
-                                  const String &initPath = Persistence::GetAssetsPathAbsolute(),
+                                  const String &initPath = Persistence::GetProjectAssetsRootAbs(),
                                   const String &suggestedFilename = "",
                                   QWidget *parent = nullptr);
 

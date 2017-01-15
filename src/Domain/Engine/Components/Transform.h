@@ -20,9 +20,13 @@ public:
     virtual ~Transform();
 
     void LookAt(const Vector3 &target,
-                const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
+                const Vector3 &up = Vector3::Up);
+    void LookAt(Transform *targetTransform,
+                const Vector3 &up = Vector3::Up);
+    void LookAt(GameObject *target,
+                const Vector3 &up = Vector3::Up);
     void LookInDirection(const Vector3 &dir,
-                const Vector3 &up = Vector3(0.0f, 1.0f, 0.0f));
+                         const Vector3 &up = Vector3::Up);
 
 
     void SetLocalPosition(const Vector3 &p);

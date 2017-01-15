@@ -208,7 +208,7 @@ void Camera::OnDrawGizmos()
     Gizmos::SetPosition(transform->GetPosition());
     Gizmos::SetRotation(transform->GetRotation());
     Gizmos::SetScale(Vector3::One * 0.02f * distScale);
-    Gizmos::SetColor(GetClearColor());
+    Gizmos::SetColor(Color::White);
     Gizmos::RenderCustomMesh(Camera::s_camMesh);
 
     if (gameObject->IsSelected())

@@ -92,8 +92,14 @@ void ListLogger::AddRow(const QIcon &icon, const String &msg,
         }
     }
 
-    int shortMessageEnd = std::min(100, int(msg.Length())-1);
-    String shortMessage = msg.SubString(0, shortMessageEnd) + "...";
+    // Shorten the message of the new row, it its too long
+    const int c_lengthLimit = 100;
+    int shortMessageEnd = std::min(c_lengthLimit, int(msg.Length())-1);
+    String shortMessage = msg.SubString(0, shortMessageEnd);
+    if (msg.Length() >= c_lengthLimit)
+    {
+        shortMessage += "...";
+    }
 
     QTreeWidgetItem *item = new QTreeWidgetItem();
     item->setIcon(c_iconColumn,     icon);
