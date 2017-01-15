@@ -12,4 +12,4 @@ cd Bang
 <img src="/EngineAssets/BangLogo.png" width="200">
 <br/>
 Bang 3D Game Engine and Editor. <br/>
-Made with C++, OpenGL, and QT for the Editor.
+Made with C++, OpenGL, and Qt for the Editor.
