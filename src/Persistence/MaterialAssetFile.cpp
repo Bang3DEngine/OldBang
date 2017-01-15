@@ -17,13 +17,9 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModel
         m_vshaderFilepath = xmlInfo->GetString("VertexShader");
         m_fshaderFilepath = xmlInfo->GetString("FragmentShader");
 
-        m_textureCount = xmlInfo->GetInt("TextureCount");
-        for (int i = 1; i <= m_textureCount; ++i)
-        {
-            m_textureFilepaths.PushBack(xmlInfo->GetFilepath("Texture" + std::to_string(i)));
-        }
+        m_textureFilepaths.PushBack( xmlInfo->GetFilepath("Texture") );
 
-        m_diffuseColor = xmlInfo->GetVector4("DiffuseColor");
+        m_diffuseColor = xmlInfo->GetColor("DiffuseColor");
         delete xmlInfo;
     }
 }
@@ -52,17 +48,12 @@ const String &MaterialAssetFile::GetFragmentShaderFilepath() const
     return m_fshaderFilepath;
 }
 
-int MaterialAssetFile::GetTextureCount() const
-{
-    return m_textureCount;
-}
-
 const Array<String> &MaterialAssetFile::GetTextureFilepaths() const
 {
     return m_textureFilepaths;
 }
 
-const Vector4 &MaterialAssetFile::GetDiffuseColor() const
+const Color &MaterialAssetFile::GetDiffuseColor() const
 {
     return m_diffuseColor;
 }

@@ -14,6 +14,7 @@ class XMLNode : public IToString
 {
 private:
     String m_tagName = "";
+    mutable List<String> m_attributeOrder;
     mutable Map<String, XMLAttribute> m_attributes;
     List<XMLNode*> m_children;
 
@@ -94,6 +95,8 @@ public:
 
     const String& GetTagName() const;
     const Map<String, XMLAttribute>& GetAttributes() const;
+    const List<String>& GetAttributesOrderList() const;
+    List< std::pair<String, XMLAttribute> > GetAttributesListInOrder() const;
     const List<XMLNode*>& GetChildren() const;
 
     static XMLNode* FromString(const String &xml);

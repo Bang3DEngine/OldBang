@@ -81,6 +81,26 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
 
+    SetDiffuseColor(xmlInfo->GetColor("DiffuseColor"));
+    SetShininess(xmlInfo->GetFloat("Shininess"));
+
+    String texAssetFilepath = xmlInfo->GetString("Texture");
+    bool textureChanged = false;
+    if (!m_texture)
+    {
+        textureChanged = !texAssetFilepath.Empty();
+    }
+    else
+    {
+        textureChanged = (m_texture->GetFilepath() != texAssetFilepath);
+    }
+
+    if (textureChanged)
+    {
+        Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
+        SetTexture(texture);
+    }
+
     String vshaderFilepath = xmlInfo->GetFilepath("VertexShader");
     String fshaderFilepath = xmlInfo->GetFilepath("FragmentShader");
     if (!m_shaderProgram ||
@@ -92,22 +112,18 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
         SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
     }
 
-    int numTextures = xmlInfo->GetInt("TextureCount");
-    if(numTextures == 1)
-    {
-        String texAssetFilepath = xmlInfo->GetString("Texture1");
-        Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
-        SetTexture(texture);
-    }
-
-    SetDiffuseColor(xmlInfo->GetColor("DiffuseColor"));
-    SetShininess(xmlInfo->GetFloat("Shininess"));
 }
 
 void Material::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Material");
+
+    xmlInfo->SetColor("DiffuseColor", GetDiffuseColor());
+    xmlInfo->SetFloat("Shininess", GetShininess());
+
+    String textureFilepath = m_texture ? m_texture->GetFilepath() : "";
+    xmlInfo->SetFilepath("Texture", textureFilepath, Texture2D::GetFileExtensionStatic());
 
     String vsFile =  "", fsFile = "";
     if (m_shaderProgram)
@@ -122,18 +138,8 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
             fsFile = m_shaderProgram->GetFragmentShader()->GetFilepath();
         }
     }
-
-    xmlInfo->SetFilepath("VertexShader", vsFile);
-    xmlInfo->SetFilepath("FragmentShader", fsFile);
-
-    if (m_texture)
-    {
-        xmlInfo->SetInt("TextureCount", 1);
-        xmlInfo->SetFilepath("Texture1", m_texture->GetFilepath());
-    }
-
-    xmlInfo->SetColor("DiffuseColor", GetDiffuseColor());
-    xmlInfo->SetFloat("Shininess", GetShininess());
+    xmlInfo->SetFilepath("VertexShader", vsFile, "vert");
+    xmlInfo->SetFilepath("FragmentShader", fsFile, "frag");
 }
 
 void Material::SetShaderProgram(ShaderProgram *program)

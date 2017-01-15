@@ -5,6 +5,7 @@
 
 #include "File.h"
 #include "Array.h"
+#include "Color.h"
 #include "String.h"
 #include "Vector4.h"
 
@@ -13,9 +14,8 @@ class MaterialAssetFile : public File
 private:
     String m_vshaderFilepath = "";
     String m_fshaderFilepath = "";
-    int m_textureCount = 0;
     Array< String > m_textureFilepaths;
-    Vector4 m_diffuseColor = Vector4(0.0f);
+    Color m_diffuseColor = Color(0.0f);
 
 public:
     MaterialAssetFile(const QFileSystemModel *model, const QModelIndex &index);
@@ -30,7 +30,7 @@ public:
     const String& GetFragmentShaderFilepath() const;
     int GetTextureCount() const;
     const Array<String>& GetTextureFilepaths() const;
-    const Vector4& GetDiffuseColor() const;
+    const Color& GetDiffuseColor() const;
 };
 
 #endif // MATERIALASSETFILE_H

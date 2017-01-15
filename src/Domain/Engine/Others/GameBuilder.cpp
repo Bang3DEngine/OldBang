@@ -102,6 +102,8 @@ void GameBuilder::BuildGame(bool runGame)
                          m_gameBuilderJob, SLOT(BuildGame()) );
         QObject::connect(m_gameBuilderJob, SIGNAL(NotifyGameHasBeenBuilt()),
                          this, SLOT(OnGameHasBeenBuilt()) );
+        QObject::connect(m_gameBuildDialog, SIGNAL(destroyed()),
+                         this, SLOT(OnGameHasBeenBuilt()));
         QObject::connect(m_gameBuilderJob, SIGNAL(NotifyGameBuildingHasFailed()),
                          m_gameBuildDialog, SLOT(cancel()));
         //
@@ -116,6 +118,8 @@ void GameBuilder::OnGameHasBeenBuilt()
 {
     if (m_gameBuildDialog) { m_gameBuildDialog->close(); }
     m_gameBuilderThread->exit(0);
+
+    m_gameBuilderJob->OnGameBuildingCanceled(); // Needed, if the dialog is closed by the user
 
     if (m_runGameAfterBuild)
     {

@@ -28,6 +28,7 @@ void XMLNode::CloneInto(XMLNode *xmlNode) const
     String name = xmlNode->GetTagName();
     xmlNode->SetTagName(name);
     xmlNode->m_attributes = GetAttributes();
+    xmlNode->m_attributeOrder = GetAttributesOrderList();
     for (XMLNode *child : m_children)
     {
         XMLNode *childClone = new XMLNode();
@@ -54,6 +55,7 @@ void XMLNode::UpdateAttributeValue(const String &attributeName,
 void XMLNode::SetAttribute(const XMLAttribute &attribute)
 {
     RemoveAttribute(attribute.GetName()); // Just in case
+    m_attributeOrder.PushBack(attribute.GetName());
     m_attributes[attribute.GetName()] = attribute;
 }
 
@@ -219,6 +221,7 @@ void XMLNode::RemoveAttribute(const String &attributeName)
         if (attr.GetName() == attributeName)
         {
             it = m_attributes.Remove(it);
+            m_attributeOrder.Remove(it->first);
             --it;
         }
     }
@@ -341,7 +344,7 @@ const String XMLNode::ToString(const String& indent) const
     String str = "";
 
     str += indent + "<" + m_tagName;
-    for(auto itAttr : m_attributes)
+    for(auto itAttr : GetAttributesListInOrder())
     {
         XMLAttribute attr = itAttr.second;
         str += " " + attr.ToString() + "\n";
@@ -379,6 +382,21 @@ const String &XMLNode::GetTagName() const
 const Map<String, XMLAttribute> &XMLNode::GetAttributes() const
 {
     return m_attributes;
+}
+
+const List<String> &XMLNode::GetAttributesOrderList() const
+{
+    return m_attributeOrder;
+}
+
+List<std::pair<String, XMLAttribute> > XMLNode::GetAttributesListInOrder() const
+{
+    List< std::pair<String, XMLAttribute> > attributes;
+    for (const String& attrName : m_attributeOrder)
+    {
+        attributes.PushBack( std::make_pair(attrName, m_attributes[attrName]) );
+    }
+    return attributes;
 }
 
 const List<XMLNode*>& XMLNode::GetChildren() const

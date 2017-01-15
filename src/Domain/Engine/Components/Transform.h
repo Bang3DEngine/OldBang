@@ -5,6 +5,7 @@
 #include "String.h"
 #include "Vector3.h"
 #include "Matrix4.h"
+#include "Property.h"
 #include "Component.h"
 #include "Quaternion.h"
 
@@ -13,6 +14,9 @@ class ICloneable;
 class Transform : public Component
 {
 public:
+    Vector3    const& position = m_localPosition;
+    Quaternion const& rotation = m_localRotation;
+    Vector3    const& scale    = m_localScale;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;

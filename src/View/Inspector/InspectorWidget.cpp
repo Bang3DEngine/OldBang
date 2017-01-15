@@ -207,7 +207,7 @@ void InspectorWidget::RefreshWidgetValues()
 {
     XMLNode xmlInfo = GetInspectableXMLInfo();
     xmlInfo.SetTagName(m_tagName);
-    for (auto itAttr : xmlInfo.GetAttributes())
+    for (auto itAttr : xmlInfo.GetAttributesListInOrder())
     {
         XMLAttribute attribute = itAttr.second;
         String attrName = attribute.GetName();
@@ -223,7 +223,7 @@ void InspectorWidget::RefreshWidgetValues()
 void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
 {
     m_tagName = xmlInfo.GetTagName();
-    for (auto itAttr : xmlInfo.GetAttributes())
+    for (auto itAttr : xmlInfo.GetAttributesListInOrder())
     {
         XMLAttribute attribute = itAttr.second;
         m_attributes.PushBack(attribute);
