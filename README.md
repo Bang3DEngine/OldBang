@@ -20,3 +20,6 @@ Once installed (see above), you can start Bang using:
 ```Bash
 ./bin/Bang
 ```
+
+# Needed libraries
+You need OpenGL and Qt4 for the moment (will move to Qt5 soon)
