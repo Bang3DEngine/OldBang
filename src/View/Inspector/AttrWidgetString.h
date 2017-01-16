@@ -60,6 +60,8 @@ class TextEdit : public QTextEdit //Slot for a float (label + float)
 public:
     TextEdit(bool readonly);
 
+    QSize sizeHint() const override;
+
     virtual void focusInEvent(QFocusEvent * event) override;
     virtual void focusOutEvent(QFocusEvent * event) override;
     virtual void keyPressEvent(QKeyEvent *event) override;

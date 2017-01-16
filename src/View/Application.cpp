@@ -128,9 +128,15 @@ bool Application::notify(QObject *receiver, QEvent *e)
             }
         }
 
-        if (e->type() == QEvent::Shortcut)
+        // To avoid a bug where Window deactivates and
+        // it doesnt catch any key
+        if (e->type() == QEvent::Shortcut ||
+            e->type() == QEvent::WindowDeactivate ||
+            e->type() == QEvent::ApplicationDeactivate)
         {
-            ShortcutManager::GetInstance()->Clear();
+            //ShortcutManager::GetInstance()->Clear();
+            //EditorWindow::GetInstance()->GetMainWindow()->activateWindow();
+            Debug_Log("Window deactivated....");
         }
     }
 
@@ -154,8 +160,14 @@ bool Application::notify(QObject *receiver, QEvent *e)
     } */
     #endif
 
-    //int eType = e->type();
-    //std::cout << "Notifying " << eType << " to " << receiver << std::endl;
+    /*
+    int eType = int( e->type() );
+    if (eType != 12 && eType != 1 && eType != 77 && eType != 109 && eType != 152 &&
+        eType != 13 && eType != 14 && eType != 74 && eType != 76 && eType != 43)
+    {
+        std::cout << "Notifying " << eType << " to " << receiver->objectName() << std::endl;
+    }
+    */
     return QApplication::notify(receiver, e);
 }
 

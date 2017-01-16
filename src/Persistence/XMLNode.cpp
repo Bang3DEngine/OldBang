@@ -221,7 +221,7 @@ void XMLNode::RemoveAttribute(const String &attributeName)
         if (attr.GetName() == attributeName)
         {
             it = m_attributes.Remove(it);
-            m_attributeOrder.Remove(it->first);
+            m_attributeOrder.Remove(attr.GetName());
             --it;
         }
     }

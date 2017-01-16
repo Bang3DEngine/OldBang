@@ -31,7 +31,7 @@ public:
     static ShortcutManager *GetInstance();
 
     static bool IsPressed(Input::Key key);
-    static bool IsPressed(const Array<Input::Key> keys);
+    static bool IsPressed(const Array<Input::Key> &keys);
 
     void Clear();
 };

@@ -77,6 +77,7 @@ void SceneManager::SetActiveScene(const String &name)
         if (scene->name == name)
         {
             SceneManager::SetActiveScene(scene);
+            scene->_OnStart();
             return;
         }
     }

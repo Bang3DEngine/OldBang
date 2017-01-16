@@ -5,6 +5,16 @@
 #include "Array.h"
 #include "StringUtils.h"
 
+/*
+ * NOT SUPPORTING ENUMS WITH #define VALUES SUCH AS:
+ *
+    NamedEnum(FilterMode,
+        Nearest = GL_NEAREST,
+        Linear = GL_LINEAR
+    );
+ *
+**/
+
 #define NamedEnum(EnumName, ...) \
 \
 enum class EnumName { __VA_ARGS__ }; \

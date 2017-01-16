@@ -1,6 +1,6 @@
 TEMPLATE = app
-QT_VERSION = 4
-QT += core gui opengl
+QT_VERSION = 5
+QT += core gui opengl widgets
 
 # Call this qmake using either:
 #   qmake "BUILD_MODE=EDITOR RELEASE_OR_DEBUG=RELEASE"
@@ -588,5 +588,12 @@ OTHER_FILES += \
     EngineAssets/Shaders/Include/PR.frag \
     EngineAssets/Shaders/Include/D2G.frag \
     EngineAssets/Shaders/Include/PR.vert \
-    EngineAssets/Shaders/Include/D2G.vert
+    EngineAssets/Shaders/Include/D2G.vert \
+    EngineAssets/Materials/RenderGBufferToScreen.bmat \
+    EngineAssets/Materials/PR_SelectionEffect.bmat \
+    EngineAssets/Materials/PR_PointLight_Screen.bmat \
+    EngineAssets/Materials/PR_DirectionalLight_Screen.bmat \
+    EngineAssets/Materials/PR_AmbientLight_Screen.bmat \
+    EngineAssets/Materials/D2G_RotationAxisLine.bmat \
+    EngineAssets/Materials/D2G_Default.bmat
 ######################################

@@ -19,7 +19,6 @@ void TextFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 void TextFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Text file");
-
     xmlInfo->SetString("Contents", m_textFile.GetContents(), {XMLProperty::BigText});
 }
 #endif

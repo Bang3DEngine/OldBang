@@ -29,7 +29,7 @@ Hierarchy::Hierarchy(QWidget *parent) :
             this, SLOT(UpdateHierarchyFromScene()));
     m_refreshFromSceneTimer.start(1000);
 
-    setMinimumWidth(200);
+    setMinimumWidth(150);
 }
 
 Hierarchy::~Hierarchy()
@@ -41,7 +41,7 @@ Hierarchy::~Hierarchy()
 void Hierarchy::OnWindowShown()
 {
     this->SetDragDropEventPossibleSources({
-          Explorer::GetInstance(), this });
+          Explorer::GetInstance(), this});
 }
 
 void Hierarchy::Expand(QTreeWidgetItem *item)
@@ -145,6 +145,7 @@ void Hierarchy::Clear()
 
 void Hierarchy::UpdateHierarchyFromScene()
 {
+    Debug_Log("Update hierarchy....");
     Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
 
     // Refresh go's children. If we find a new child, add it to topLevel.

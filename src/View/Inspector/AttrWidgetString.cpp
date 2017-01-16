@@ -26,6 +26,7 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
     {
         m_textEdit = new TextEdit(m_readonly);
         m_textEdit->setAlignment(Qt::AlignLeft);
+        m_heightSizeHint = 550;
         textWidget = m_textEdit;
     }
 
@@ -145,6 +146,13 @@ TextEdit::TextEdit(bool readonly)
 {
     // setReadOnly(readonly);
     setReadOnly(true);
+    setMinimumHeight(500);
+}
+
+QSize TextEdit::sizeHint() const
+{
+    QSize defaultSize = QTextEdit::sizeHint();
+    return QSize(defaultSize.width(), 500);
 }
 
 void TextEdit::focusInEvent(QFocusEvent *event)

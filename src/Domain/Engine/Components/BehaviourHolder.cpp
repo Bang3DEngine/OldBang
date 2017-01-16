@@ -93,6 +93,7 @@ void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
         if (m_behaviour)
         {
             m_behaviour->Init(this);
+            this->_OnStart();
         }
     }
     else

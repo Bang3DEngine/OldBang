@@ -106,7 +106,11 @@ void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
     m_filepath = xmlInfo->GetFilepath("ImageFilepath");
     LoadFromFile(m_filepath);
 
-    SetFilterMode(FilterMode_FromString(xmlInfo->GetEnumSelectedName("FilterMode")));
+    String filterModeString = xmlInfo->GetEnumSelectedName("FilterMode");
+    Texture::FilterMode filterMode =
+            filterModeString == "Nearest" ? Texture::FilterMode::Nearest :
+                                            Texture::FilterMode::Linear;
+    SetFilterMode(filterMode);
     SetAlphaCuttoff(xmlInfo->GetFloat("AlphaCuttoff"));
 }
 
@@ -117,8 +121,8 @@ void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
 
     xmlInfo->SetFilepath("ImageFilepath", m_filepath, "jpg png bmp");
 
-    int selectedIndex = FilterMode_GetIndexFromValue(GetFilterMode());
-    xmlInfo->SetEnum("FilterMode", FilterMode_GetNamesVector(), selectedIndex, {});
+    int selectedIndex = GetFilterMode();
+    xmlInfo->SetEnum("FilterMode", {"Nearest", "Linear"}, selectedIndex, {});
     xmlInfo->SetFloat("AlphaCuttoff", GetAlphaCuttoff());
 }
 

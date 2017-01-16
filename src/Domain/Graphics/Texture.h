@@ -21,24 +21,27 @@ public:
         Texture1D = GL_TEXTURE_1D,
         Texture2D = GL_TEXTURE_2D,
         Texture3D = GL_TEXTURE_3D,
-        TextureCubeMap = GL_TEXTURE_CUBE_MAP,
+        TextureCubeMap = GL_TEXTURE_CUBE_MAP
     };
 
-    NamedEnum (TextureInternalFormat,
+    enum TextureInternalFormat
+    {
+        InternatlNearest = GL_NEAREST,
+        InternatlLinear = GL_LINEAR
+    };
+
+    enum FilterMode
+    {
         Nearest = GL_NEAREST,
         Linear = GL_LINEAR
-    );
+    };
 
-    NamedEnum (FilterMode,
-        Nearest = GL_NEAREST,
-        Linear = GL_LINEAR
-    );
-
-    NamedEnum (WrapMode,
+    enum WrapMode
+    {
         Repeat = GL_REPEAT,
         Clamp = GL_CLAMP,
         ClampToEdge = GL_CLAMP_TO_EDGE
-    );
+    };
 
 private:
     GLint m_glTextureGetIntegerType = 0;

@@ -12,6 +12,7 @@ ShortcutManager::ShortcutManager()
 
 void ShortcutManager::OnKeyPressed(Input::Key key)
 {
+    Debug_Log("On key pressed " << key);
     if (m_pressedKeys.find(key) == m_pressedKeys.end()) // If it wasn't pressed
     {
         m_pressedKeys.insert(key);
@@ -21,15 +22,18 @@ void ShortcutManager::OnKeyPressed(Input::Key key)
             list->OnShortcutPressed();
         }
     }
+    String set = "";
+    for (auto it = m_pressedKeys.begin(); it != m_pressedKeys.end(); ++it)
+    {
+        set += String::ToString(*it) + ", ";
+    }
+    Debug_Log(set);
 }
 
 void ShortcutManager::OnKeyReleased(Input::Key key)
 {
-    auto it = m_pressedKeys.find(key);
-    if (it != m_pressedKeys.end())
-    {
-        m_pressedKeys.erase(it);
-    }
+    Debug_Log("On key released " << key);
+    m_pressedKeys.erase(key);
 }
 
 void ShortcutManager::RegisterListener(IShortcutListener *list)
@@ -58,10 +62,10 @@ bool ShortcutManager::IsPressed(Input::Key key)
     return ShortcutManager::IsPressed(keys);
 }
 
-bool ShortcutManager::IsPressed(const Array<Input::Key> keys)
+bool ShortcutManager::IsPressed(const Array<Input::Key> &keys)
 {
     ShortcutManager *sm = ShortcutManager::GetInstance();
-    if (!sm) { return false; }
+    ASSERT(sm, "", return false);
 
     for (Input::Key key : keys)
     {
@@ -75,6 +79,6 @@ bool ShortcutManager::IsPressed(const Array<Input::Key> keys)
 
 void ShortcutManager::Clear()
 {
-    //m_pressedKeys.clear();
+    m_pressedKeys.clear();
 }
 
