@@ -145,7 +145,6 @@ void Hierarchy::Clear()
 
 void Hierarchy::UpdateHierarchyFromScene()
 {
-    Debug_Log("Update hierarchy....");
     Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
 
     // Refresh go's children. If we find a new child, add it to topLevel.
@@ -450,7 +449,7 @@ void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
     GameObject *go = GetGameObjectFromItem(item);
     if (go)
     {
-        go->SetName(item->text(column).toStdString());
+        go->SetName(item->text(column));
     }
 }
 

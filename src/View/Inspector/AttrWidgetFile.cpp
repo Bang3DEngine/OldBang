@@ -40,19 +40,20 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     // File Line Edit
     m_filepathLineEdit = new FileLineEdit();
     m_filepathLineEdit->setReadOnly(true);
-    m_filepathLineEdit->setAlignment(Qt::AlignLeft);
+    m_filepathLineEdit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_filepathLineEdit->setMinimumWidth(50);
     hLayout->addWidget(m_filepathLineEdit, 100);
     //
 
     // Browse button
+    static QIcon browseIcon(":/qss_icons/rc/radio_checked.png");
     if (!m_readonly)
     {
-        hLayout->addStretch(1); // add little spacer
-        QPushButton *browseButton = new QPushButton(QString("Browse"));
+        QToolButton *browseButton = new QToolButton();
+        browseButton->setIcon(browseIcon);
         browseButton->setFixedHeight(24);
         connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
-        hLayout->addWidget(browseButton, 20, Qt::AlignRight | Qt::AlignVCenter);
+        hLayout->addWidget(browseButton, 0, Qt::AlignRight | Qt::AlignVCenter);
     }
     //
 

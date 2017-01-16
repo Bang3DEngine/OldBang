@@ -119,7 +119,7 @@ private:
      * @brief How many units in world space do we have to move,
      * for every panned pixel?
      */
-    Vector2 m_mousePanPerPixel = Vector2(100.0f); //Movement with middle button
+    Vector2 m_mousePanPerPixel = Vector2(70.0f); //Movement with middle button
 
     /**
      * @brief startingRotation changes after every lookAt.
@@ -134,7 +134,8 @@ private:
      * @brief How many units in world space do we have to move
      * in camera's forward direction, for every user wheel delta?
      */
-    float m_mouseZoomPerDeltaWheel = 5.0f;
+    float m_mouseZoomPerDeltaWheel = 15.0f;
+    float m_zoomValue = 0.0f;
 
     float m_orthoHeight = 30.0f;
 };

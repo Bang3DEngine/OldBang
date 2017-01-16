@@ -158,7 +158,7 @@ void Explorer::currentChanged(const QModelIndex &current,
     QListView::currentChanged(current, previous);
 
     String selectedPath(m_fileSystemModel->filePath(current));
-    m_labelCurrentPath->setText(selectedPath.ToQString());
+    SetLabelText(selectedPath);
 }
 
 void Explorer::OnShortcutPressed()
@@ -296,8 +296,23 @@ QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const
 void Explorer::SetDir(const String &path)
 {
     String absDir = Persistence::ToAbsolute(path, false);
-    m_labelCurrentPath->setText(absDir.ToQString());
     setRootIndex(m_fileSystemModel->setRootPath(absDir.ToQString()));
+    SetLabelText(absDir);
+}
+
+void Explorer::SetLabelText(const String &absPath)
+{
+    // Eliding
+    const int c_maxTextLength = 65;
+    int maxLength = std::min(int(absPath.Length()), c_maxTextLength);
+    String textDir = absPath;
+    if (absPath.Length() > c_maxTextLength)
+    {
+        textDir = textDir.SubString(absPath.Length() - maxLength,
+                                    absPath.Length() - 1);
+        textDir = "..." + textDir;
+    }
+    m_labelCurrentPath->setText(textDir.ToQString());
 }
 
 void Explorer::OnDirLoaded(QString dir)

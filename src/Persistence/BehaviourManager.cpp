@@ -81,7 +81,7 @@ void BehaviourManager::TreatCompiledBehaviours()
         else
         {
             Debug_Error("There was an error when loading the library '" <<
-                        libraryFilepath << "': " << lib->errorString().toStdString());
+                        libraryFilepath << "': " << lib->errorString());
         }
     }
     m_behFilepath_To_compiledLibrary.Clear();

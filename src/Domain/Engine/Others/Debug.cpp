@@ -132,5 +132,5 @@ std::ostream &operator<<(std::ostream &log, const IToString *s)
 
 std::ostream &operator<<(std::ostream &log, const QString &str)
 {
-    log << str.toStdString(); return log;
+    log << str; return log;
 }

@@ -1,5 +1,7 @@
 #include "AttrWidgetColor.h"
 
+#include "EditorWindow.h"
+
 AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
                                  InspectorWidget *inspectorWidget) :
   AttributeWidget(xmlAttribute, inspectorWidget)
@@ -57,9 +59,10 @@ void AttrWidgetColor::OnColorChanged(const QColor &c)
 // COLOR_DIALOG
 ColorDialog::ColorDialog(QWidget *parent) : QColorDialog(parent)
 {
-    setModal(true);
+    //setModal(true);
     setOption(QColorDialog::NoButtons);
     setOption(QColorDialog::ShowAlphaChannel);
+    setOption(QColorDialog::DontUseNativeDialog);
 }
 
 
@@ -86,10 +89,12 @@ void ColorLabel::SetColor(const Color &c)
 
 void ColorLabel::mousePressEvent(QMouseEvent *e)
 {
-    if (!m_colorDialog->isVisible())
+    //if (!m_colorDialog->isVisible())
     {
         Color c = *m_selectedColor;
+        //m_colorDialog->setModal(true);
+        //m_colorDialog->setParent(EditorWindow::GetInstance()->GetMainWindow());
+        m_colorDialog->open(nullptr, "");
         m_colorDialog->setCurrentColor(c.ToQColor());
-        m_colorDialog->show();
     }
 }

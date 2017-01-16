@@ -70,19 +70,25 @@ void EditorCamera::UpdateRotationVariables()
 
 void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
 {
+    // Update zoom value
+    float mouseWheel = 0.0f;
     if (!Input::GetMouseButton(Input::MouseButton::MMiddle))
     {
-        float mouseWheel = Input::GetMouseWheel();
-        if (mouseWheel != 0.0f)
+        mouseWheel = Input::GetMouseWheel() * m_mouseZoomPerDeltaWheel;
+    }
+    m_zoomValue = (m_zoomValue * 0.9f) + (mouseWheel * 0.1f); // Lerp
+
+    // Apply zoom
+    if (m_zoomValue != 0.0f)
+    {
+        if (m_cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
         {
-            if (m_cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
-            {
-                *moveStep += m_mouseZoomPerDeltaWheel * mouseWheel * m_camt->GetForward();
-                *hasMoved  = true;
-            }
-            m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
-            m_cam->SetOrthoHeight(m_orthoHeight);
+            *moveStep += m_zoomValue * m_camt->GetForward();
+            *hasMoved  = true;
         }
+        //Debug_Log(mouseWheel);
+        m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
+        m_cam->SetOrthoHeight(m_orthoHeight);
     }
 }
 

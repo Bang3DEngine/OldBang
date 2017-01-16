@@ -23,11 +23,6 @@ class Explorer : public DragDropQListView,
 {
     Q_OBJECT
 
-friend class File;
-friend class FileSystemModel;
-friend class ExplorerDirTree;
-friend class ExplorerContextMenu;
-
 public:
     Explorer(QWidget *parent);
     virtual ~Explorer();
@@ -65,6 +60,8 @@ public:
     static Explorer* GetInstance();
     void SetDir(const String &path);
 
+    void SetLabelText(const String &absPath);
+
 public slots:
     void Refresh();
 
@@ -93,6 +90,11 @@ private:
     String GetDirFromModelIndex(const QModelIndex &qmi) const;
     String GetRelativeDirFromModelIndex(const QModelIndex &qmi) const;
     QModelIndex GetModelIndexFromFilepath(const String &filepath) const;
+
+    friend class File;
+    friend class FileSystemModel;
+    friend class ExplorerDirTree;
+    friend class ExplorerContextMenu;
 };
 
 class FileSystemModel : public QFileSystemModel

@@ -29,7 +29,7 @@ Inspector::Inspector(QWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
-    setMinimumWidth(335);
+    setMinimumWidth(300);
 
     horizontalScrollBar()->setEnabled(false);
 }

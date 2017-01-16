@@ -302,7 +302,7 @@ bool SystemUtils::DeleteDynamicBehaviour(Behaviour *b, QLibrary *openLibrary)
     }
     else
     {
-        Debug_Error(openLibrary->errorString().toStdString());
+        Debug_Error(openLibrary->errorString());
         return false;
     }
 }
@@ -311,7 +311,7 @@ void SystemUtils::CloseLibrary(QLibrary *library)
 {
     if (!library->unload())
     {
-        Debug_Error(library->errorString().toStdString());
+        Debug_Error(library->errorString());
     }
 }
 
