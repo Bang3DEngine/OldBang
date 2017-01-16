@@ -3,7 +3,7 @@
 <img src="/EngineAssets/BangLogo.png" width="150">
 <br/>
 Bang 3D Game Engine and Editor. <br/>
-Made with C++, OpenGL, and Qt for the Editor.
+Made with C++, OpenGL, and Qt5 for the Editor.
 
 # Install instructions
 In order to install Bang do the following:
@@ -22,4 +22,4 @@ Once installed (see above), you can start Bang using:
 ```
 
 # Needed libraries
-You need OpenGL and Qt4 for the moment (will move to Qt5 soon)
+You need OpenGL, Qt5 and g++.
