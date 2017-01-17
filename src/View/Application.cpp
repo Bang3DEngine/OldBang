@@ -136,7 +136,7 @@ bool Application::notify(QObject *receiver, QEvent *e)
         {
             //ShortcutManager::GetInstance()->Clear();
             //EditorWindow::GetInstance()->GetMainWindow()->activateWindow();
-            Debug_Log("Window deactivated....");
+            //Debug_Log("Window deactivated....");
         }
     }
 

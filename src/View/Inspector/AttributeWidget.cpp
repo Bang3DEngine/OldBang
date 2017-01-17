@@ -86,8 +86,8 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
     }
     else if (!hasToBeHidden && isHidden())
     {
-        show();
-        if (m_label) { m_label->show(); }
+        setVisible(true); //show();
+        if (m_label) { m_label->setVisible(true); } //show(); }
     }
 }
 

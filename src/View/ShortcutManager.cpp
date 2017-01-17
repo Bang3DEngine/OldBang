@@ -12,7 +12,6 @@ ShortcutManager::ShortcutManager()
 
 void ShortcutManager::OnKeyPressed(Input::Key key)
 {
-    Debug_Log("On key pressed " << key);
     if (m_pressedKeys.find(key) == m_pressedKeys.end()) // If it wasn't pressed
     {
         m_pressedKeys.insert(key);
@@ -27,12 +26,10 @@ void ShortcutManager::OnKeyPressed(Input::Key key)
     {
         set += String::ToString(*it) + ", ";
     }
-    Debug_Log(set);
 }
 
 void ShortcutManager::OnKeyReleased(Input::Key key)
 {
-    Debug_Log("On key released " << key);
     m_pressedKeys.erase(key);
 }
 

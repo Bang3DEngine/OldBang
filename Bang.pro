@@ -239,7 +239,8 @@ HEADERS += \
     src/Persistence/Project.h \
     src/Persistence/EngineConfig.h \
     src/Persistence/BehaviourRefresherTimer.h \
-    src/Domain/Engine/Physics/AABox.h
+    src/Domain/Engine/Physics/AABox.h \
+    src/View/DialogBrowseAssetFile.h
 EDITOR {
 HEADERS += \
     src/View/SelectProjectWindow.h \
@@ -411,7 +412,8 @@ SOURCES += \
     src/Persistence/Project.cpp \
     src/Persistence/EngineConfig.cpp \
     src/Persistence/BehaviourRefresherTimer.cpp \
-    src/Domain/Engine/Physics/AABox.cpp
+    src/Domain/Engine/Physics/AABox.cpp \
+    src/View/DialogBrowseAssetFile.cpp
 EDITOR {
     SOURCES += \
         src/View/GameBuilderJob.cpp \

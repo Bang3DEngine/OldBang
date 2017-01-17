@@ -1,15 +1,18 @@
 #include "AttrWidgetFile.h"
 
 #include <QLabel>
-#include <QPushButton>
 #include <QHBoxLayout>
+#include <QPushButton>
 
 #include "File.h"
 #include "Dialog.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
+#include "Application.h"
 #include "Persistence.h"
+#include "EditorWindow.h"
 #include "InspectorWidget.h"
+#include "DialogBrowseAssetFile.h"
 
 AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :
@@ -18,31 +21,25 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     m_fileExtension = xmlAttribute.GetPropertyValue(
                         XMLProperty::FileExtension.GetName());
 
-    QHBoxLayout *hLayout = new QHBoxLayout();
-    m_layout->addLayout(hLayout, 1);
+    m_hLayout = new QHBoxLayout();
+    m_layout->addLayout(m_hLayout, 1);
 
     // Icon
     String filepath = xmlAttribute.GetValue();
-    filepath = Persistence::ToAbsolute(filepath, xmlAttribute.HasProperty(XMLProperty::IsEngineFile));
-    File file(filepath);
-    File *f = File::GetSpecificFile(file);
-    if (f)
-    {
-        QPixmap pm = f->GetIcon();
-        pm = pm.scaled(16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        QLabel *icon = new QLabel();
-        icon->setPixmap(pm);
-        hLayout->addWidget(icon, 0, Qt::AlignRight);
-        delete f;
-    }
+    filepath = Persistence::ToAbsolute(filepath,
+                                       xmlAttribute.HasProperty(XMLProperty::IsEngineFile));
+
     //
+
+    m_iconLabel = new QLabel();
+    m_hLayout->addWidget(m_iconLabel, 0, Qt::AlignRight | Qt::AlignVCenter);
 
     // File Line Edit
     m_filepathLineEdit = new FileLineEdit();
     m_filepathLineEdit->setReadOnly(true);
     m_filepathLineEdit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_filepathLineEdit->setMinimumWidth(50);
-    hLayout->addWidget(m_filepathLineEdit, 100);
+    m_hLayout->addWidget(m_filepathLineEdit, 100);
     //
 
     // Browse button
@@ -53,14 +50,16 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
         browseButton->setIcon(browseIcon);
         browseButton->setFixedHeight(24);
         connect(browseButton, SIGNAL(clicked()), this, SLOT(Browse()));
-        hLayout->addWidget(browseButton, 0, Qt::AlignRight | Qt::AlignVCenter);
+        m_hLayout->addWidget(browseButton, 0, Qt::AlignRight | Qt::AlignVCenter);
     }
     //
 
-    connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
-            this, SLOT(OnDoubleClick()));
+    QObject::connect(m_filepathLineEdit, SIGNAL(DoubleClicked()),
+                     this, SLOT(OnDoubleClick()));
 
     m_heightSizeHint = 35;
+
+    SetValue(filepath);
 
     AfterConstructor();
 }
@@ -71,13 +70,31 @@ AttrWidgetFile::~AttrWidgetFile()
 
 void AttrWidgetFile::Browse()
 {
-    String selectedFile =
-            Dialog::GetOpenFilename(Persistence::GetProjectAssetsRootAbs(),
-                                    m_fileExtension);
+    String selectedFile = "";
+    DialogBrowseAssetFile *dialog = new DialogBrowseAssetFile(&selectedFile);
+    dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
+                 m_fileExtension.Split(' ').ToList());
+    while (dialog->isVisible()) { Application::GetInstance()->processEvents(); }
+
     if (!selectedFile.Empty())
     {
         SetValue(selectedFile);
         m_inspectorWidget->_OnSlotValueChanged();
+    }
+
+    RefreshIcon();
+}
+
+void AttrWidgetFile::RefreshIcon()
+{
+    File file(m_filepath);
+    File *f = File::GetSpecificFile(file);
+    if (f)
+    {
+        QPixmap pm = f->GetIcon();
+        pm = pm.scaled(16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        m_iconLabel->setPixmap(pm);
+        delete f;
     }
 }
 
@@ -100,6 +117,7 @@ void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
     {
         m_inspectorWidget->_OnSlotValueChanged();
     }
+    RefreshIcon();
 }
 
 String  AttrWidgetFile::GetValue()

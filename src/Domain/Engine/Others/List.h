@@ -77,6 +77,14 @@ public:
         this->PushBack(x);
     }
 
+    void Add(const List<T>& xList)
+    {
+        for (const T &x : xList)
+        {
+            this->Add(x);
+        }
+    }
+
     Iterator Find(const T& x)
     {
         return std::find(this->Begin(), this->End(), x);

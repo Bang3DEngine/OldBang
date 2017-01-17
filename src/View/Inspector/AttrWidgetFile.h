@@ -8,13 +8,13 @@
 #include "AttributeWidget.h"
 #include "IWindowEventManagerListener.h"
 
+class QHBoxLayout;
 class FileLineEdit;
 class AttrWidgetFile : public AttributeWidget,
                        public IWindowEventManagerListener
 {
     Q_OBJECT
 
-private:
 public:
     String m_filepath = "";
     String m_fileExtension = "";
@@ -37,6 +37,12 @@ public:
 public slots:
     void OnDoubleClick();
     void Browse();
+
+private:
+    QLabel *m_iconLabel = nullptr;
+    QHBoxLayout *m_hLayout = nullptr;
+
+    void RefreshIcon();
 };
 
 ////////////////////////////////////////////////////

@@ -24,7 +24,6 @@ class GameBuilderJob : public QObject
 
     protected:
         String m_executableFilepath = "";
-        bool m_runGameAfterBuild = false;
         bool m_canceled = false;
 
     friend class GameBuilder;

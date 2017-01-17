@@ -81,7 +81,6 @@ void GameBuilder::BuildGame(bool runGame)
         }
         m_gameBuilderJob = new GameBuilderJob();
         m_gameBuilderJob->m_executableFilepath = m_latestGameExecutableFilepath;
-        m_gameBuilderJob->m_runGameAfterBuild  = runGame;
         //
 
         // Create and start the building thread
@@ -101,11 +100,11 @@ void GameBuilder::BuildGame(bool runGame)
         QObject::connect(m_gameBuilderThread, SIGNAL(started()),
                          m_gameBuilderJob, SLOT(BuildGame()) );
         QObject::connect(m_gameBuilderJob, SIGNAL(NotifyGameHasBeenBuilt()),
-                         this, SLOT(OnGameHasBeenBuilt()) );
-        QObject::connect(m_gameBuildDialog, SIGNAL(destroyed()),
                          this, SLOT(OnGameHasBeenBuilt()));
         QObject::connect(m_gameBuilderJob, SIGNAL(NotifyGameBuildingHasFailed()),
-                         m_gameBuildDialog, SLOT(cancel()));
+                         this, SLOT(OnGameBuildingHasFailed()));
+        QObject::connect(m_gameBuildDialog, SIGNAL(canceled()),
+                         this, SLOT(OnGameBuildingCanceled()));
         //
 
         // Start the thread
@@ -116,10 +115,11 @@ void GameBuilder::BuildGame(bool runGame)
 
 void GameBuilder::OnGameHasBeenBuilt()
 {
-    if (m_gameBuildDialog) { m_gameBuildDialog->close(); }
+    Debug_Log("OnGameHasBeenBuilt");
+    if (m_gameBuildDialog) { m_gameBuildDialog->finished(0); }
     m_gameBuilderThread->exit(0);
 
-    m_gameBuilderJob->OnGameBuildingCanceled(); // Needed, if the dialog is closed by the user
+    //m_gameBuilderJob->OnGameBuildingCanceled(); // Needed, if the dialog is closed by the user
 
     if (m_runGameAfterBuild)
     {
@@ -135,14 +135,17 @@ void GameBuilder::OnGameBuildingHasFailed()
 
 void GameBuilder::OnDialogError(const QString &title, const QString &msg)
 {
+    Debug_Log("OnGameBuildingHasFailed");
     Dialog::Error(title, msg);
-    if (m_gameBuildDialog) { m_gameBuildDialog->close(); }
+    if (m_gameBuildDialog) { m_gameBuildDialog->finished(1); }
     m_gameBuilderThread->exit(0);
 }
 
 void GameBuilder::OnGameBuildingHasBeenCanceled()
 {
+    Debug_Log("OnGameBuildingHasBeenCanceled");
     m_gameBuilderJob->OnGameBuildingCanceled();
+    if (m_gameBuildDialog) { m_gameBuildDialog->finished(2); }
     m_gameBuilderThread->exit(0);
 }
 

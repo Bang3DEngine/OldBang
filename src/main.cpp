@@ -68,12 +68,12 @@ void LoadStylesheet(QApplication *app)
     darkPalette.setColor(QPalette::Disabled, QPalette::Text, Qt::darkGray);
     darkPalette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
 
+    app->setPalette(darkPalette); // Must go before setStylesheet
     app->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; \
                                    border: 1px solid white; } \
                         QLineEdit { border: 1px solid #666666; border-radius: 2px; \
                                     background-color: #222222; } \
-                        QToolButton:checked { background-color: #000000; }");
-    app->setPalette(darkPalette);
+                        QToolButton:checked { background-color: #111111; }");
 
     /*
     // Load dark Window theme

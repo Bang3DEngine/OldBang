@@ -76,7 +76,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
     {
         mouseWheel = Input::GetMouseWheel() * m_mouseZoomPerDeltaWheel;
     }
-    m_zoomValue = (m_zoomValue * 0.9f) + (mouseWheel * 0.1f); // Lerp
+    m_zoomValue = (m_zoomValue * 0.5f) + (mouseWheel * 0.5f); // Lerp
 
     // Apply zoom
     if (m_zoomValue != 0.0f)
