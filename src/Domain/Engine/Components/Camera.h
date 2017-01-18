@@ -1,13 +1,14 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include "Rect.h"
+#include "AABox.h"
 #include "Color.h"
 #include "String.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "NamedEnum.h"
 #include "Component.h"
-
 
 class Mesh;
 class Screen;
@@ -57,10 +58,13 @@ public:
     Vector3 ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCamera);
 
     virtual const String ToString() const override;
-    virtual String GetName() const override { return "Camera"; }
+    virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
+
+
+    Rect GetScreenBoundingRect(const AABox &bbox);
 
     #ifdef BANG_EDITOR
     void OnDrawGizmos() override;

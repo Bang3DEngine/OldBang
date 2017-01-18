@@ -171,6 +171,11 @@ const String Camera::ToString() const
     return "Camera";
 }
 
+String Camera::GetName() const
+{
+    return "Camera";
+}
+
 void Camera::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
@@ -190,6 +195,31 @@ ICloneable *Camera::Clone() const
     Camera *cam = new Camera();
     CloneInto(cam);
     return cam;
+}
+
+Rect Camera::GetScreenBoundingRect(const AABox &bbox)
+{
+    // If there's a point outside the camera rect, return Empty
+    bool allPointsOutside = true;
+    Rect screenRect = bbox.GetAABoundingScreenRect(this);
+    Vector2 rMin = screenRect.GetMin(), rMax = screenRect.GetMax();
+    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMin.x, rMin.y) );
+    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMin.x, rMax.y) );
+    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMax.x, rMin.y) );
+    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMax.x, rMax.y) );
+    if (allPointsOutside) { return Rect::Empty; }
+
+    // If there's one or more points behind the camera, return ScreenRect
+    // because we don't know how to handle it properly
+    Array<Vector3> points = bbox.GetPoints();
+    Vector3 camForward = transform->GetForward();
+    for (const Vector3 &p : points)
+    {
+        Vector3 dirToP = p - transform->GetPosition();
+        if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::ScreenRect; }
+    }
+
+    return screenRect;
 }
 
 #ifdef BANG_EDITOR

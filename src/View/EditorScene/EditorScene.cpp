@@ -11,13 +11,14 @@
 #include "EditorCamera.h"
 #include "SelectionFramebuffer.h"
 #include "EditorDebugGameObject.h"
+#include "EditorGizmosGameObject.h"
 #include "EditorTranslateAxisGroup.h"
 
 EditorScene::EditorScene() : Scene()
 {
-    m_gizmosGameObject = new EditorGameObject("BANG_GizmosGameObject");
+    m_gizmosGameObject = new EditorGizmosGameObject("BANG_GizmosGameObject");
     m_gizmosGameObject->SetParent(this);
-    Gizmos::InitGizmosGameObject(m_gizmosGameObject);
+    m_gizmosGameObject->Init();
 
     m_debugGameObject = new EditorDebugGameObject();
     m_debugGameObject->SetParent(this);
@@ -38,7 +39,6 @@ EditorScene::EditorScene() : Scene()
 
 EditorScene::~EditorScene()
 {
-    Gizmos::InitGizmosGameObject(nullptr);
     Hierarchy::GetInstance()->Clear(); // To avoid potential bugs (seriously xd)
 }
 
@@ -93,7 +93,7 @@ void EditorScene::SetEditorCamera()
     SetCamera( m_edCameraGameObject->GetCamera() );
 }
 
-EditorGameObject *EditorScene::GetGizmosGameObject() const
+EditorGizmosGameObject *EditorScene::GetGizmosGameObject() const
 {
     return m_gizmosGameObject;
 }

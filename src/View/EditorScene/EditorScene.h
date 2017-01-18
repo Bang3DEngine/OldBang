@@ -7,6 +7,7 @@ class UIText;
 class EditorFloor;
 class EditorCamera;
 class EditorDebugGameObject;
+class EditorGizmosGameObject;
 class EditorTranslateAxisGroup;
 class EditorScene : public Scene
 {
@@ -28,10 +29,10 @@ public:
 
     void SetEditorCamera();
 
-    EditorGameObject *GetGizmosGameObject() const;
+    EditorGizmosGameObject *GetGizmosGameObject() const;
 
 private:
-    EditorGameObject *m_gizmosGameObject = nullptr;
+    EditorGizmosGameObject *m_gizmosGameObject = nullptr;
     EditorDebugGameObject *m_debugGameObject = nullptr;
     EditorCamera *m_edCameraGameObject = nullptr;
     EditorFloor *m_floor = nullptr;

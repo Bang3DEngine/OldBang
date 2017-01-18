@@ -242,29 +242,8 @@ List<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
 Rect GameObject::GetBoundingScreenRect(Camera *cam,
                                        bool includeChildren) const
 {
-    bool firstIter = true;
-    Rect renderRect = Rect::Empty;
-    List<Renderer*> renderers = GetComponents<Renderer>();
-    for (Renderer *rend : renderers)
-    {
-        if (CAN_USE_COMPONENT(rend))
-        {
-            Rect rr = rend->GetBoundingRect(cam);
-            renderRect = firstIter ? rr : Rect::Union(renderRect, rr);
-        }
-        firstIter = false;
-    }
-
-    if (includeChildren)
-    {
-        for (GameObject* child : m_children)
-        {
-            Rect rr = child->GetBoundingScreenRect(cam, true);
-            renderRect = Rect::Union(renderRect, rr);
-        }
-    }
-
-    return renderRect;
+    AABox bbox = GetAABBox(includeChildren);
+    return cam->GetScreenBoundingRect(bbox);
 }
 
 AABox GameObject::GetObjectAABBox(bool includeChildren) const

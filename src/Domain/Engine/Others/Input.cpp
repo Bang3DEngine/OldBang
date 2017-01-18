@@ -156,7 +156,7 @@ void Input::ProcessEventInfo(const EventInfo &ei)
 
 void Input::ProcessMouseWheelEventInfo(const EventInfo &ei)
 {
-    m_lastMouseWheelDelta = float(ei.m_wheelDelta) / (360.0f);
+    m_lastMouseWheelDelta = float(ei.m_wheelDelta);
 }
 
 void Input::ProcessMouseMoveEventInfo(const EventInfo &ei)

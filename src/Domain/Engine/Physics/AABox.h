@@ -72,7 +72,7 @@ public:
      * @param cam
      * @return
      */
-    Rect GetAABoundingScreenRect(Camera *cam);
+    Rect GetAABoundingScreenRect(Camera *cam) const;
 
     const String ToString() const override;
 };

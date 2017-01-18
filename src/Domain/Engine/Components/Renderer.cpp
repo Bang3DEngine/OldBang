@@ -260,34 +260,7 @@ bool Renderer::GetDrawWireframe() const
 
 Rect Renderer::GetBoundingRect(Camera *camera) const
 {
-    Camera *cam = camera ? camera : SceneManager::GetActiveScene()->GetCamera();
-
-    AABox bb = GetAABBox();
-    Matrix4 transformMatrix;
-    transform->GetLocalToWorldMatrix(&transformMatrix);
-    bb = transformMatrix * bb;
-
-    // If there's a point outside the camera rect, return Empty
-    bool allPointsOutside = true;
-    Rect screenRect = bb.GetAABoundingScreenRect(cam);
-    Vector2 rMin = screenRect.GetMin(), rMax = screenRect.GetMax();
-    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMin.x, rMin.y) );
-    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMin.x, rMax.y) );
-    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMax.x, rMin.y) );
-    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMax.x, rMax.y) );
-    if (allPointsOutside) { return Rect::Empty; }
-
-    // If there's one or more points behind the camera, return ScreenRect
-    // because we don't know how to handle it properly
-    Array<Vector3> points = bb.GetPoints();
-    Vector3 camForward = cam->transform->GetForward();
-    for (const Vector3 &p : points)
-    {
-        Vector3 dirToP = p - cam->transform->GetPosition();
-        if (Vector3::Dot(dirToP, camForward) < 0) { return Rect::ScreenRect; }
-    }
-
-    return screenRect;
+    return camera->GetScreenBoundingRect(GetAABBox());
 }
 
 

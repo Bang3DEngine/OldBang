@@ -84,14 +84,17 @@ void EditorFloor::OnDrawGizmos()
         box = selected->GetAABBox(true);
         Gizmos::SetColor(Color::Red);
         //Gizmos::RenderSimpleBox(box);
+        Gizmos::SetColor(Color::Green);
         rect = selected->GetBoundingScreenRect(scene->GetCamera(), true);
+        //rect = box.GetAABoundingScreenRect(scene->GetCamera());
+        //rect = Rect(-0.5f, 0.5f, -0.5f, 0.5f);
         //Gizmos::RenderRect(rect);
-        PointLight *pointLight = selected->GetComponent<PointLight>();
-        if (pointLight)
-        {
-            rect = pointLight->GetRenderRect(scene->GetCamera());
+        //PointLight *pointLight = selected->GetComponent<PointLight>();
+        //if (pointLight)
+        //{
+        //    rect = pointLight->GetRenderRect(scene->GetCamera());
             //Gizmos::RenderRect(rect);
-        }
+        //}
     }
 
     //rect = scene->GetBoundingScreenRect(scene->GetCamera(), true);

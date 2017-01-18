@@ -18,9 +18,7 @@ class SingleLineRenderer;
 class EditorGameObject;
 class Gizmos
 {
-
 public:
-
     static void SetColor(const Color &color);
 
     static void SetPosition(const Vector3 &position);
@@ -51,23 +49,7 @@ public:
 private:
     Gizmos() {}
 
-    static Array<Renderer*> m_renderers;
-
     static void Init();
-
-    // Called by EditorScene
-    static void InitGizmosGameObject(EditorGameObject *gizmosGo);
-    static EditorGameObject* GetGizmosGameObject();
-
-    static bool m_inited;
-
-    static Mesh *m_boxMesh;
-    static Mesh *m_sphereMesh;
-    static Mesh *m_planeMesh;
-    static Material *m_material;
-
-
-    static bool m_resetAllowed;
 
     /**
      * @brief Useful if we want to call for example inside RenderFrustum a lot

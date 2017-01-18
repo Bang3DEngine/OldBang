@@ -134,7 +134,7 @@ private:
      * @brief How many units in world space do we have to move
      * in camera's forward direction, for every user wheel delta?
      */
-    float m_mouseZoomPerDeltaWheel = 15.0f;
+    float m_mouseZoomPerDeltaWheel = 0.05f;
     float m_zoomValue = 0.0f;
 
     float m_orthoHeight = 30.0f;
