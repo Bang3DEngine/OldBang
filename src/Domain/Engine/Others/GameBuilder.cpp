@@ -115,7 +115,6 @@ void GameBuilder::BuildGame(bool runGame)
 
 void GameBuilder::OnGameHasBeenBuilt()
 {
-    Debug_Log("OnGameHasBeenBuilt");
     if (m_gameBuildDialog) { m_gameBuildDialog->finished(0); }
     m_gameBuilderThread->exit(0);
 
@@ -135,7 +134,6 @@ void GameBuilder::OnGameBuildingHasFailed()
 
 void GameBuilder::OnDialogError(const QString &title, const QString &msg)
 {
-    Debug_Log("OnGameBuildingHasFailed");
     Dialog::Error(title, msg);
     if (m_gameBuildDialog) { m_gameBuildDialog->finished(1); }
     m_gameBuilderThread->exit(0);
@@ -143,7 +141,6 @@ void GameBuilder::OnDialogError(const QString &title, const QString &msg)
 
 void GameBuilder::OnGameBuildingHasBeenCanceled()
 {
-    Debug_Log("OnGameBuildingHasBeenCanceled");
     m_gameBuilderJob->OnGameBuildingCanceled();
     if (m_gameBuildDialog) { m_gameBuildDialog->finished(2); }
     m_gameBuilderThread->exit(0);

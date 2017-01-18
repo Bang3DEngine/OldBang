@@ -240,10 +240,10 @@ HEADERS += \
     src/Persistence/EngineConfig.h \
     src/Persistence/BehaviourRefresherTimer.h \
     src/Domain/Engine/Physics/AABox.h \
-    src/View/DialogBrowseAssetFile.h \
-    src/View/EditorGameObject/EditorGizmosGameObject.h
+    src/View/DialogBrowseAssetFile.h
 EDITOR {
 HEADERS += \
+    src/View/EditorGameObject/EditorGizmosGameObject.h \
     src/View/SelectProjectWindow.h \
     src/View/EditorWindow.h \
     src/View/EditorGameObject/EditorSelectionGameObject.h \
@@ -414,10 +414,10 @@ SOURCES += \
     src/Persistence/EngineConfig.cpp \
     src/Persistence/BehaviourRefresherTimer.cpp \
     src/Domain/Engine/Physics/AABox.cpp \
-    src/View/DialogBrowseAssetFile.cpp \
-    src/View/EditorGameObject/EditorGizmosGameObject.cpp
+    src/View/DialogBrowseAssetFile.cpp
 EDITOR {
     SOURCES += \
+        src/View/EditorGameObject/EditorGizmosGameObject.cpp \
         src/View/GameBuilderJob.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/SelectProjectWindow.cpp \

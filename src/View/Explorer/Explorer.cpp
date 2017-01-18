@@ -40,6 +40,9 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 
     m_fileSystemModel = new FileSystemModel();
     setModel(m_fileSystemModel);
+    setGridSize( QSize(100, 100) );
+    setWordWrap(true);
+    setTextElideMode(Qt::TextElideMode::ElideNone);
 
     m_buttonDirUp = EditorWindow::GetInstance()->buttonExplorerDirUp;
     m_buttonChangeViewMode = EditorWindow::GetInstance()->buttonExplorerChangeViewMode;
@@ -516,7 +519,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx,
                     transMode = Qt::TransformationMode::FastTransformation;
                 }
                 delete f;
-                return pm.scaled(32, 32, Qt::IgnoreAspectRatio, transMode);
+                return pm.scaled(c_iconSize, c_iconSize, Qt::IgnoreAspectRatio, transMode);
             }
             delete f;
         }

@@ -20,9 +20,6 @@ DialogBrowseAssetFile::DialogBrowseAssetFile(String *resultFile)
     m_projectFileList = CreateList();
     m_engineFileList  = CreateList();
 
-    QObject::connect(m_projectFileList, SIGNAL(doubleClicked(QModelIndex)),
-                     this, SLOT(OnFileAccepted(QModelIndex)));
-
     m_tabWidget= new QTabWidget();
     m_tabWidget->addTab(m_projectFileList, "Project");
     m_tabWidget->addTab(m_engineFileList,  "Engine");
@@ -35,8 +32,6 @@ DialogBrowseAssetFile::DialogBrowseAssetFile(String *resultFile)
     m_openButton->setEnabled(false);
     QObject::connect(m_openButton, SIGNAL(pressed()),
                      this, SLOT(OnFileAccepted()));
-    QObject::connect(m_projectFileList, SIGNAL(currentRowChanged(int)),
-                     this, SLOT(OnSelectionChange(int)));
 
     botHLayout->addStretch(999);
     botHLayout->addWidget(m_openButton);
@@ -106,6 +101,12 @@ QListWidget *DialogBrowseAssetFile::CreateList() const
     listWidget->setViewMode(QListWidget::ViewMode::IconMode);
     listWidget->setMovement(QListWidget::Static);
     listWidget->setWrapping(true);
+
+    QObject::connect(listWidget, SIGNAL(doubleClicked(QModelIndex)),
+                     this, SLOT(OnFileAccepted(QModelIndex)));
+    QObject::connect(listWidget, SIGNAL(currentRowChanged(int)),
+                     this, SLOT(OnSelectionChange(int)));
+
     return listWidget;
 }
 

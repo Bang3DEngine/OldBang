@@ -112,6 +112,9 @@ protected:
     virtual bool setData(const QModelIndex &idx,
                          const QVariant &value,
                          int role = Qt::EditRole) override;
+
+private:
+    const int c_iconSize = 50;
 };
 
 #endif // EXPLORER_H
