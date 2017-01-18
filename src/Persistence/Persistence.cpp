@@ -45,26 +45,56 @@ String Persistence::GetDir(const String &filepath)
 String Persistence::GetFileName(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");
-    String filename = "";
+    String filename = filepath;
     const size_t lastSlash = filepath.rfind('/');
     if (lastSlash != String::npos)
     {
         filename = filepath.substr(lastSlash + 1);
-        filename = StringUtils::Split(filename, '.')[0];
     }
+    Array<String> parts = filename.Split('.');
+    if (!parts.Empty())
+    {
+        filename = parts[0];
+    }
+
     return filename;
 }
 
 String Persistence::GetFileNameWithExtension(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");
-    String filename = "";
+    String filename = filepath;
     const size_t lastSlash = filepath.rfind('/');
     if (lastSlash != String::npos)
     {
         filename = filepath.substr(lastSlash + 1);
     }
     return filename;
+}
+
+String Persistence::GetFileExtensionFirst(const String &filepath)
+{
+    String fileNameWithExtension = Persistence::GetFileNameWithExtension(filepath);
+    Array<String> parts = fileNameWithExtension.Split('.');
+    if (parts.Size() <= 1) { return ""; }
+    return parts[1];
+}
+
+String Persistence::GetFileExtensionLast(const String &filepath)
+{
+    String fileNameWithExtension = Persistence::GetFileNameWithExtension(filepath);
+    Array<String> parts = fileNameWithExtension.Split('.');
+    if (parts.Size() <= 1) { return ""; }
+    return parts[parts.Size() - 1];
+}
+
+String Persistence::GetFileExtensionComplete(const String &filepath)
+{
+    String fileNameWithExtension = Persistence::GetFileNameWithExtension(filepath);
+    Array<String> parts = fileNameWithExtension.Split('.');
+    if (parts.Size() <= 1) { return ""; }
+    parts.Remove(parts.Begin());
+    return String::Join(parts, ".");
 }
 
 String Persistence::GetPathWithoutExtension(const String &filepath)

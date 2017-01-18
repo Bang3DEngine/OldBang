@@ -51,13 +51,15 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 
     SetDir(Persistence::GetProjectAssetsRootAbs());
 
-    connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
+    QObject::connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
 
-    connect(m_buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
-    connect(m_buttonChangeViewMode, SIGNAL(clicked()),
-            this, SLOT(OnButtonChangeViewModeClicked()));
-    connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
-            this, SLOT(OnDirLoaded(QString)));
+    QObject::connect(m_buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
+    QObject::connect(m_buttonChangeViewMode, SIGNAL(clicked()),
+                     this, SLOT(OnButtonChangeViewModeClicked()));
+    QObject::connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
+                     this, SLOT(OnDirLoaded(QString)));
+    QObject::connect(m_fileSystemModel, SIGNAL(fileRenamed(QString,QString,QString)),
+                     this, SLOT(OnFileRenamed(QString,QString,QString)) );
 }
 
 Explorer::~Explorer()
@@ -97,6 +99,18 @@ void Explorer::OnButtonChangeViewModeClicked()
     {
         setViewMode(ViewMode::ListMode);
     }
+}
+
+void Explorer::OnFileRenamed(const QString &path, const QString &oldName,
+                             const QString &newName)
+{
+    UpdateLabelText();
+}
+
+void Explorer::UpdateLabelText()
+{
+    String absPath = GetSelectedFile().GetAbsolutePath();
+    SetLabelText(absPath);
 }
 
 void Explorer::mousePressEvent(QMouseEvent *e)
@@ -459,12 +473,36 @@ Qt::DropActions FileSystemModel::supportedDropActions() const
     return Qt::MoveAction;
 }
 
-QVariant FileSystemModel::data(const QModelIndex &index,
+bool FileSystemModel::setData(const QModelIndex &idx,
+                              const QVariant &value,
+                              int role)
+{
+   if (role == Qt::EditRole)
+   {
+       String path = filePath(idx);
+       String originalExtension = Persistence::GetFileExtensionComplete(path);
+
+       String userInput = value.toString();
+       String newExtension = Persistence::GetFileExtensionComplete(userInput);
+       newExtension = newExtension.Empty() ? originalExtension : newExtension;
+       String newEditedFileName = Persistence::GetFileName(userInput);
+
+       return QFileSystemModel::setData(
+                   idx,
+                   QVariant( String(newEditedFileName + "." +
+                                    newExtension).ToQString() ),
+                   role);
+   }
+   return QFileSystemModel::setData(idx, value, role);
+}
+
+
+QVariant FileSystemModel::data(const QModelIndex &idx,
                                int role) const
 {
     if (role == Qt::DecorationRole)
     {
-        File file(this, index);
+        File file(this, idx);
         File *f = File::GetSpecificFile(file);
         if (f)
         {
@@ -477,9 +515,15 @@ QVariant FileSystemModel::data(const QModelIndex &index,
                 {
                     transMode = Qt::TransformationMode::FastTransformation;
                 }
+                delete f;
                 return pm.scaled(32, 32, Qt::IgnoreAspectRatio, transMode);
             }
+            delete f;
         }
     }
-    return QFileSystemModel::data(index, role);
+    else if (role == Qt::EditRole)
+    {
+        return QVariant( Persistence::GetFileName(fileName(idx)).ToQString() );
+    }
+    return QFileSystemModel::data(idx, role);
 }

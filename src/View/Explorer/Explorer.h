@@ -68,6 +68,9 @@ public slots:
     void OnDirLoaded(QString dir);
     void OnButtonDirUpClicked();
     void OnButtonChangeViewModeClicked();
+    void OnFileRenamed(const QString &path, const QString &oldName,
+                       const QString &newName);
+    void UpdateLabelText();
 
 protected:
     //To set the scroll step to a smaller one
@@ -105,7 +108,10 @@ public:
 protected:
     Qt::DropActions supportedDropActions() const override;
 
-    QVariant data(const QModelIndex& index, int role) const;
+    QVariant data(const QModelIndex& idx, int role) const override;
+    virtual bool setData(const QModelIndex &idx,
+                         const QVariant &value,
+                         int role = Qt::EditRole) override;
 };
 
 #endif // EXPLORER_H

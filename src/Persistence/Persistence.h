@@ -15,6 +15,9 @@ public:
    static String GetDir(const String &filepath);
    static String GetFileName(const String &filepath);
    static String GetFileNameWithExtension(const String &filepath);
+   static String GetFileExtensionFirst(const String &filepath);
+   static String GetFileExtensionLast(const String &filepath);
+   static String GetFileExtensionComplete(const String &filepath);
    static String GetPathWithoutExtension(const String &filepath);
 
    /**

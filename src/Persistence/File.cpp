@@ -56,14 +56,8 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
     m_isFile = !model->isDir(index);
 
     m_path = model->filePath(index).toStdString();
-    m_name = model->fileName(index).toStdString();
-
-    String::size_type p = m_name.find('.', 2);
-    if (p != String::npos)
-    {
-        m_extension = m_name.substr(p+1, m_name.Length() - p - 1);
-        m_name = m_name.substr(0, p);
-    }
+    m_name = Persistence::GetFileName(m_path);
+    m_extension = Persistence::GetFileExtensionComplete(m_path);
 }
 
 File::~File()
