@@ -3,7 +3,7 @@
 #include "Debug.h"
 #include "Texture2D.h"
 
-#include "freetype2/ftglyph.h"
+#include "ftglyph.h"
 
 FontSheetCreator *FontSheetCreator::m_singleton = nullptr;
 

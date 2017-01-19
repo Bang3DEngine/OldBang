@@ -86,13 +86,19 @@ GAME {
 
 
 # LIBS ###########################
-FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType
-!exists (src/Domain/Graphics/FreeType/build) {
-    FreeTypeTarget.commands += && sh autogen.sh \
-                               && mkdir build ; cd build \
-                               && cmake .. && ../configure
-}
-FreeTypeTarget.commands += && cd build ; make
+#!exists (src/Domain/Graphics/FreeType/build) {
+#    FreeTypeTarget.commands += && sh autogen.sh \
+#                               && mkdir build ; cd build \
+#                               && cmake .. && ../configure
+#}
+FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType && \
+                          rm -rf build ; \
+                          sh autogen.sh && \
+                          mkdir build ; \
+                          cd build && \
+                          #../configure && \
+                          cmake .. && make
+
 QMAKE_EXTRA_TARGETS += FreeTypeTarget
 PRE_TARGETDEPS = FreeTypeTarget
 LIBS += src/Domain/Graphics/FreeType/build/*.o
@@ -111,6 +117,7 @@ INCLUDEPATH += \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
     $$PWD/src/Domain/Graphics/FreeType/include \
+    $$PWD/src/Domain/Graphics/FreeType/include/freetype \
     $$PWD/src/Domain/Graphics/Interfaces/ \
     $$PWD/src/Domain/Engine/Interfaces/ \
     $$PWD/src/Domain/Engine/GameObjects/ \

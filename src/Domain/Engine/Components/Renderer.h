@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include <GL/glew.h>
+#include <functional>
 
 #include "Rect.h"
 #include "Array.h"
