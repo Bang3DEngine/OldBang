@@ -22,4 +22,8 @@ Once installed (see above), you can start Bang using:
 ```
 
 # Needed libraries
-You need OpenGL, Qt5 and g++.
+You need:
+  - OpenGL
+  - GLEW
+  - Qt5
+  - g++.
