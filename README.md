@@ -26,4 +26,5 @@ You need:
   - OpenGL
   - GLEW
   - Qt5
+  - libfreetype, autoconf, aclocal, libtoolize
   - g++.
