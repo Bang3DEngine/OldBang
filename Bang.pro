@@ -91,33 +91,35 @@ GAME {
 #                               && mkdir build ; cd build \
 #                               && cmake .. && ../configure
 #}
-FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType && \
-                          rm -rf build ; \
-                          sh autogen.sh && \
-                          mkdir build ; \
-                          cd build && \
-                          #../configure && \
-                          cmake .. && make
-
-QMAKE_EXTRA_TARGETS += FreeTypeTarget
-PRE_TARGETDEPS = FreeTypeTarget
-LIBS += src/Domain/Graphics/FreeType/build/*.o
+#FreeTypeTarget.commands = cd src/Domain/Graphics/FreeType && \
+#                          rm -rf build ; \
+#                          sh autogen.sh && \
+#                          mkdir build ; \
+#                          cd build && \
+#                          #../configure && \
+#                          cmake .. && make
+#
+#QMAKE_EXTRA_TARGETS += FreeTypeTarget
+#PRE_TARGETDEPS = FreeTypeTarget
+#LIBS += src/Domain/Graphics/FreeType/build/*.o
 LIBS += \
-    -lGLEW  \ # GLEW, just GLEW
-    -ldl    \ # To load libraries and stuff
-    -lpng   \ # To read & write pngs, used by FreeType
-    -lz -lbz2 # Used by FreeType too
+    -lGLEW    \ # GLEW
+    -ldl      \ # To load libraries and stuff
+    -lpng     \ # To read & write pngs, used by FreeType
+    -lz -lbz2 \ # Used by FreeType too
+    -lfreetype
 ########################################
 
 
 
 # INCLUDE PATH ###################
 INCLUDEPATH += \
+    /usr/include /usr/include/freetype2 /usr/include/freetype2/freetype \
     $$PWD/src/ \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
-    $$PWD/src/Domain/Graphics/FreeType/include \
-    $$PWD/src/Domain/Graphics/FreeType/include/freetype \
+ #   $$PWD/src/Domain/Graphics/FreeType/include \
+ #   $$PWD/src/Domain/Graphics/FreeType/include/freetype \
     $$PWD/src/Domain/Graphics/Interfaces/ \
     $$PWD/src/Domain/Engine/Interfaces/ \
     $$PWD/src/Domain/Engine/GameObjects/ \
