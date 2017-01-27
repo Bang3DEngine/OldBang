@@ -114,12 +114,12 @@ LIBS += \
 
 # INCLUDE PATH ###################
 INCLUDEPATH += \
-    /usr/include /usr/include/freetype2 /usr/include/freetype2/freetype \
+    /usr/include \
+    /usr/include/freetype2 \
+    /usr/include/freetype2/freetype \
     $$PWD/src/ \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
- #   $$PWD/src/Domain/Graphics/FreeType/include \
- #   $$PWD/src/Domain/Graphics/FreeType/include/freetype \
     $$PWD/src/Domain/Graphics/Interfaces/ \
     $$PWD/src/Domain/Engine/Interfaces/ \
     $$PWD/src/Domain/Engine/GameObjects/ \
@@ -225,7 +225,7 @@ HEADERS += \
     src/Domain/Engine/Others/SceneManager.h \
     src/Domain/Engine/Others/Debug.h \
     src/Persistence/BehaviourManager.h \
-    src/Persistence/BehaviourManagerCompileThread.h \
+    src/Persistence/BehaviourManagerCompileJob.h \
     src/Domain/Engine/Others/Chrono.h \
     src/Persistence/ImageFile.h \
     src/Persistence/MeshFile.h \
@@ -405,7 +405,7 @@ SOURCES += \
     src/Domain/Engine/Others/SceneManager.cpp \
     src/Domain/Engine/Others/Debug.cpp \
     src/Persistence/BehaviourManager.cpp \
-    src/Persistence/BehaviourManagerCompileThread.cpp \
+    src/Persistence/BehaviourManagerCompileJob.cpp \
     src/Domain/Engine/Others/Chrono.cpp \
     src/Domain/Engine/Others/Map.cpp \
     src/Domain/Engine/Others/List.cpp \

@@ -12,6 +12,7 @@
 #include "FileWriter.h"
 #include "Persistence.h"
 #include "SceneManager.h"
+#include "EngineConfig.h"
 
 #ifdef BANG_EDITOR
 #include "Dialog.h"
@@ -49,6 +50,8 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     Explorer::GetInstance()->SetDir(
                 ProjectManager::s_currentProject->GetProjectAssetsRootFilepath());
 
+    EngineConfig::RegisterInRecentProjectsList(projectFilepath);
+
     // Set window title
     String title = "Bang - " + ProjectManager::s_currentProject->GetProjectName();
     EditorWindow::GetInstance()->GetMainWindow()->setWindowTitle(title.ToQString());
@@ -64,6 +67,8 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     List<String> sceneFilepaths =
             Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true,
                                   {"*." + Scene::GetFileExtensionStatic()});
+
+
     if (!sceneFilepaths.Empty())
     {
         SceneManager::LoadScene(sceneFilepaths.Front());

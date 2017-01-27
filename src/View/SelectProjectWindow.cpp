@@ -42,6 +42,11 @@ String SelectProjectWindow::ExecAndGetProjectFilepath(QMainWindow *window, QAppl
     inst->listRecentProjects->setCurrentItem(inst->listRecentProjects->item(0,0));
     inst->OnRecentProjectListSelectionChanged(0,0);
 
+    if (inst->listRecentProjects->rowCount() == 0)
+    {
+        inst->buttonLoadRecentProject->setEnabled(false);
+    }
+
     while ( inst->m_loadedProjectFile.Empty() && !inst->m_directlyClosedByUser)
     {
         inst->m_directlyClosedByUser = true;
@@ -55,7 +60,6 @@ String SelectProjectWindow::ExecAndGetProjectFilepath(QMainWindow *window, QAppl
     }
     else
     {
-        EngineConfig::RegisterInRecentProjectsList(inst->m_loadedProjectFile);
         return inst->m_loadedProjectFile;
     }
 }

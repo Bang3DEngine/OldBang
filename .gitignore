@@ -14,6 +14,7 @@ ui_*
 *.so.*
 *.dll
 *.dylib
+*.cfg
 callgrind.*
 nohup.out
 bin/*
