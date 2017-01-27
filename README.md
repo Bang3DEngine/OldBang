@@ -23,8 +23,8 @@ Once installed (see above), you can start Bang using:
 
 # Needed libraries
 You need:
-  - OpenGL
-  - GLEW
-  - Qt5
-  - libfreetype, autoconf, aclocal, libtoolize
+  - OpenGL headers.
+  - GLEW (libglew-dev).
+  - Qt5 development libraries (qt5-default).
+  - Freetype development libraries.
   - g++.
