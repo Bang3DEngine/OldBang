@@ -726,7 +726,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,9999">
+        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,9999,0">
          <property name="spacing">
           <number>2</number>
          </property>
@@ -827,6 +827,24 @@
             <bool>true</bool>
            </property>
           </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Icon size</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="sliderExplorerIconSize">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -1177,8 +1195,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="QtResources.qrc"/>
   <include location="qdarkstyle/style.qrc"/>
+  <include location="QtResources.qrc"/>
  </resources>
  <connections>
   <connection>
