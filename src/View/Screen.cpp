@@ -1,17 +1,5 @@
 #include "Screen.h"
 
-#ifdef BANG_EDITOR
-#include "Toolbar.h"
-#include "Explorer.h"
-#include "Hierarchy.h"
-#include "EditorScene.h"
-#include "EditorWindow.h"
-#include "ShortcutManager.h"
-#include "SelectionFramebuffer.h"
-#else
-#include "GameWindow.h"
-#endif
-
 #include "Input.h"
 #include "Debug.h"
 #include "Scene.h"
@@ -25,6 +13,18 @@
 #include "AssetsManager.h"
 #include "GraphicPipeline.h"
 #include "SingletonManager.h"
+
+#ifdef BANG_EDITOR
+#include "Toolbar.h"
+#include "Explorer.h"
+#include "Hierarchy.h"
+#include "EditorScene.h"
+#include "EditorWindow.h"
+#include "ShortcutManager.h"
+#include "SelectionFramebuffer.h"
+#else
+#include "GameWindow.h"
+#endif
 
 Screen::Screen(QWidget* parent) : QGLWidget(parent)
 {
@@ -350,6 +350,11 @@ void Screen::mouseReleaseEvent(QMouseEvent *event)
 void Screen::keyPressEvent(QKeyEvent *event)
 {
     Input::GetInstance()->EnqueueEvent(event);
+    if (event->key() == Input::Key::F)
+    {
+        Hierarchy::GetInstance()->keyPressEvent(event);
+    }
+
     QGLWidget::keyPressEvent(event);
 }
 

@@ -158,45 +158,38 @@ void EditorCamera::HandleLookAtFocus()
     if (m_doingLookAt)
     {
         Camera *cam = GetCamera();
-        if (m_currentFocus->HasComponent<Transform>())
+        Sphere focusBSphere = m_currentFocus->GetBoundingSphere();
+
+        Vector3 thisPos = transform->GetPosition();
+        Vector3 focusPos = focusBSphere.GetCenter();
+        Vector3 focusDir = (focusPos - thisPos).Normalized();
+
+        //LookAt Rotation
+        Quaternion originRot = transform->GetRotation();
+        Quaternion destRot = Quaternion::LookDirection(focusDir, Vector3::Up);
+        Quaternion final = Quaternion::Slerp(
+                    originRot, destRot, Time::GetDeltaTime() * m_lookAtRotSpeed);
+
+        transform->SetLocalRotation(final);
+
+        //LookAt Move
+        float stopDist = 0.0f;
+        float radius = focusBSphere.GetRadius();
+        if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
         {
-            Sphere focusBSphere = m_currentFocus->GetBoundingSphere();
-
-            Vector3 thisPos = transform->GetPosition();
-            Vector3 focusPos = focusBSphere.GetCenter();
-            Vector3 focusDir = (focusPos - thisPos).Normalized();
-
-            //LookAt Rotation
-            if (thisPos != focusPos)
-            {
-                Quaternion origin = transform->GetRotation();
-                Quaternion dest = Quaternion::LookDirection(focusDir, Vector3::Up);
-                Quaternion final = Quaternion::Slerp( origin, dest,
-                            Time::GetDeltaTime() * m_lookAtRotSpeed);
-
-                transform->SetLocalRotation(final);
-            }
-
-            //LookAt Move
-            float stopDist = 0.0f;
-            float radius = focusBSphere.GetRadius();
-            if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
-            {
-                float fov = glm::radians(cam->GetFovDegrees() / 2.0f);
-                stopDist = radius / std::tan(fov) * 1.5f;
-            }
-
-            stopDist = std::max(stopDist, 1.0f); //In case boundingBox is empty
-            Vector3 dest = focusPos - (focusDir * stopDist);
-            float t = Time::GetDeltaTime() * m_lookAtMoveSpeed;
-            transform->SetPosition( Vector3::Lerp(thisPos, dest, t) );
-
-            if ( Vector3::Distance(dest, thisPos) < 0.05f)
-            {
-                m_doingLookAt = false;
-            }
+            float fov = glm::radians(cam->GetFovDegrees() / 2.0f);
+            stopDist = radius / std::tan(fov) * 1.5f;
         }
+        stopDist = std::max(stopDist, 1.0f); //In case boundingBox is empty
+        Vector3 dest = focusPos - (focusDir * stopDist);
+        float t = Time::GetDeltaTime() * m_lookAtMoveSpeed;
+        transform->SetPosition( Vector3::Lerp(thisPos, dest, t) );
+
+        m_doingLookAt =
+                Vector3::Distance(dest, thisPos) > 0.05f ||
+                Vector3::Dot(transform->GetForward(), focusDir) < 0.99999f;
     }
+
 }
 
 void EditorCamera::OnStart()
@@ -249,9 +242,8 @@ void EditorCamera::OnUpdate()
     }
     else
     {
+        UpdateRotationVariables();
         HandleLookAtFocus(); // Modifies m_doingLookAt
-
-        //Update all needed variables in case we are doing a lookAt.
         UpdateRotationVariables();
     }
 
@@ -311,18 +303,24 @@ void EditorCamera::SwitchProjectionModeTo(bool mode3D)
 void EditorCamera::OnHierarchyGameObjectsSelected
     (List<GameObject *> &selectedGameObjects)
 {
+    /*
     if (selectedGameObjects.Size() != 1) return;
-
     GameObject *selected = selectedGameObjects.Front();
     m_currentFocus = selected;
     m_doingLookAt = false;
+    */
 }
 
 
 void EditorCamera::OnHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
     ASSERT(selected);
-    m_currentFocus = selected;
+    StartLookAt(selected);
+}
+
+void EditorCamera::StartLookAt(GameObject *lookAtFocus)
+{
+    m_currentFocus = lookAtFocus;
     m_doingLookAt = true;
 }
 #endif

@@ -252,6 +252,7 @@ void FileReader::ReadScene(const String &filepath, Scene* scene)
     {
         scene->ReadXMLInfo(xmlInfo);
     }
+    scene->SetName( Persistence::GetFileName(filepath) );
     scene->PostReadXMLInfo(xmlInfo);
 }
 

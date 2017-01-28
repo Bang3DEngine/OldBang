@@ -66,20 +66,6 @@ void SceneManager::SetActiveScene(Scene *scene)
         #ifdef BANG_EDITOR
         Hierarchy::GetInstance()->Clear();
         setCamera = Toolbar::GetInstance()->IsPlaying();
-        #else
-        // If it's GAME, load all the behaviours
-        /*
-        Debug_Log("Loading game behaviours");
-        List<BehaviourHolder*> behHolders =
-                sm->m_activeScene->
-                  GetComponentsInThisAndChildren<BehaviourHolder>();
-        for (BehaviourHolder *bHolder : behHolders)
-        {
-            Debug_Log("Loading " << bHolder->GetSourceFilepath() << "...");
-            BehaviourManager::Load(bHolder, bHolder->GetSourceFilepath());
-        }
-        Debug_Log("**********************");
-        */
         #endif
 
         sm->m_activeScene->_OnStart();

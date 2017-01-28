@@ -94,6 +94,11 @@ void EditorScene::SetEditorCamera()
     SetCamera( m_edCameraGameObject->GetCamera() );
 }
 
+EditorCamera *EditorScene::GetEditorCamera() const
+{
+    return m_edCameraGameObject;
+}
+
 EditorGizmosGameObject *EditorScene::GetGizmosGameObject() const
 {
     return m_gizmosGameObject;

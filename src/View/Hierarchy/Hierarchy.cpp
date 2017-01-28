@@ -4,11 +4,13 @@
 #include <algorithm>
 
 #include "Debug.h"
-#include "Debug.h"
 #include "Scene.h"
+#include "Camera.h"
 #include "GameObject.h"
+#include "EditorScene.h"
 #include "EditorWindow.h"
 #include "SceneManager.h"
+#include "EditorCamera.h"
 #include "ShortcutManager.h"
 #include "WindowEventManager.h"
 
@@ -105,6 +107,17 @@ void Hierarchy::UnselectAll()
 
 void Hierarchy::keyPressEvent(QKeyEvent *e)
 {
+    if (e->key() == Input::Key::F)
+    {
+        GameObject *selected = GetFirstSelectedGameObject();
+        if (selected)
+        {
+            Scene *scene = SceneManager::GetActiveScene();
+            EditorScene *edScene = static_cast<EditorScene*>(scene);
+            EditorCamera *edCam = edScene->GetEditorCamera();
+            edCam->StartLookAt(selected);
+        }
+    }
 }
 
 void Hierarchy::mousePressEvent(QMouseEvent *e)

@@ -106,10 +106,12 @@ void SelectionFramebuffer::ProcessSelection()
             if (!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
             {
                 EditorWindow::GetInstance()->widgetHierarchy->SelectGameObject(mouseOverGO);
+                /*
                 if (Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft)) // Double clicking
                 {
                     WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(mouseOverGO);
                 }
+                */
             }
         }
         else // Background has been pressed
