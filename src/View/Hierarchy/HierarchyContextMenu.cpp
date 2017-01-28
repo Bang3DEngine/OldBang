@@ -2,12 +2,14 @@
 
 #include <QTreeWidgetItem>
 
+#include "Debug.h"
 #include "Scene.h"
 #include "Dialog.h"
 #include "Prefab.h"
 #include "Hierarchy.h"
 #include "GameObject.h"
 #include "FileWriter.h"
+#include "Application.h"
 #include "SceneManager.h"
 #include "GameObjectClipboard.h"
 
@@ -117,13 +119,15 @@ void HierarchyContextMenu::OnDuplicateClicked()
 
 void HierarchyContextMenu::OnDeleteClicked()
 {
-    List<QTreeWidgetItem*> items = m_hierarchy->selectedItems().toStdList();
-    m_hierarchy->LeaveOnlyOuterMostItems(&items);
-    m_hierarchy->UnselectAll(); // Needed to avoid bug when trying to restore selection
-    for (QTreeWidgetItem *item : items)
+    List<QTreeWidgetItem*> itemsToDelete = m_hierarchy->selectedItems().toStdList();
+    ASSERT(!itemsToDelete.Empty());
+
+    m_hierarchy->LeaveOnlyOuterMostItems(&itemsToDelete);
+    m_hierarchy->UnselectAll(); // Avoid a bug when trying to restore selection
+    for (QTreeWidgetItem *item : itemsToDelete)
     {
         GameObject *selected = m_hierarchy->GetGameObjectFromItem(item);
-        delete selected;
+        if (selected) { delete selected; }
     }
 }
 

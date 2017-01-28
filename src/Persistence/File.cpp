@@ -71,7 +71,7 @@ bool File::IsTexture2DAsset() const
 
 bool File::IsImageFile() const
 {
-    return  m_isFile && IsOfExtension("jpg jpeg png bmp");
+    return  m_isFile && IsOfExtension("jpg jpeg png bmp tiff");
 }
 
 bool File::IsScene() const

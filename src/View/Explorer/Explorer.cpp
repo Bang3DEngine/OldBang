@@ -38,9 +38,9 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
     setDefaultDropAction(Qt::DropAction::MoveAction);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    m_fileSystemModel = new FileSystemModel();
+    m_fileSystemModel = new FileSystemModel(this);
     setModel(m_fileSystemModel);
-    setWordWrap(false); // Manually done
+    setWordWrap(true); // Needed to be able to wrap manually, dont know why
     setResizeMode(ResizeMode::Adjust);
     setTextElideMode(Qt::TextElideMode::ElideNone);
 
@@ -97,7 +97,7 @@ void Explorer::OnButtonDirUpClicked()
 
 void Explorer::OnButtonChangeViewModeClicked()
 {
-    if (viewMode() == ViewMode::ListMode)
+    if ( IsInListMode() )
     {
         setViewMode(ViewMode::IconMode);
     }
@@ -125,8 +125,7 @@ void Explorer::OnIconSizeSliderValueChanged(int value)
     const int iconSize = c_minIconSize + (float(value) / 100 * iconSizeRange);
     m_fileSystemModel->SetIconSize(iconSize);
 
-    const int gridSize = iconSize + 50; // To let the names be visible
-    setGridSize(QSize(gridSize, gridSize));
+    setGridSize(QSize(iconSize * 2.1f, iconSize + 50));
 }
 
 void Explorer::mousePressEvent(QMouseEvent *e)
@@ -163,8 +162,6 @@ void Explorer::mouseReleaseEvent(QMouseEvent *e)
 
 void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    QListView::mouseDoubleClickEvent(e);
-
     if (e->button() == Qt::LeftButton)
     {
         ASSERT(selectedIndexes().length() > 0);
@@ -180,6 +177,10 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
                 OnFileDoubleClicked(selectedPath);
             }
         }
+    }
+    else
+    {
+        QListView::mouseDoubleClickEvent(e);
     }
 }
 
@@ -287,6 +288,7 @@ void Explorer::SelectFile(const String &path)
     {
         setCurrentIndex(ind);
         selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::SelectCurrent);
+        scrollTo(ind);
         RefreshInspector();
     }
 }
@@ -339,6 +341,16 @@ void Explorer::SetDir(const String &path)
     setRootIndex(m_fileSystemModel->setRootPath(absDir.ToQString()));
     SetLabelText(absDir);
     clearSelection();
+}
+
+bool Explorer::IsEditing() const
+{
+    return state() == QAbstractItemView::EditingState;
+}
+
+bool Explorer::IsInListMode() const
+{
+    return viewMode() == ViewMode::ListMode;
 }
 
 void Explorer::SetLabelText(const String &absPath)
@@ -464,8 +476,11 @@ void Explorer::dropEvent(QDropEvent *e)
 void Explorer::keyPressEvent(QKeyEvent *e)
 {
     DragDropQListView::keyPressEvent(e);
-    if (e->key() == Input::Key::Space ||
-        e->key() == Input::Key::Return)
+
+    if (!IsEditing() &&
+         (e->key() == Input::Key::Space ||
+          e->key() == Input::Key::Return)
+        )
     {
         String selectedPath = GetSelectedFileOrDirPath();
         if (Persistence::Exists(selectedPath))
@@ -490,11 +505,14 @@ void Explorer::updateGeometries()
 
 ///////////////////////////////////////////////////////////////////////
 
-FileSystemModel::FileSystemModel()
+FileSystemModel::FileSystemModel(Explorer *explorer) :
+    QFileSystemModel()
 {
     setFilter(QDir::AllEntries | QDir::NoDot);
     setNameFilterDisables(false);
     setReadOnly(false);
+
+    m_explorer = explorer;
 }
 
 void FileSystemModel::SetIconSize(int iconSize)
@@ -563,8 +581,7 @@ bool FileSystemModel::setData(const QModelIndex &idx,
 
 QSize FileSystemModel::GetCharSize() const
 {
-    Explorer *explorer = Explorer::GetInstance();
-    QFontMetrics fm = explorer->fontMetrics();
+    QFontMetrics fm = m_explorer->fontMetrics();
     return QSize(fm.averageCharWidth(),
                  fm.height());
 }
@@ -578,17 +595,18 @@ int FileSystemModel::GetWordWrappingCharsPerLine() const
 {
     int containerWidth = GetWordWrappingWidth();
     const int charWidth = GetCharSize().width();
-    return std::max(1, (containerWidth / charWidth) - 6);
+    return std::max(1, containerWidth / charWidth);
 }
 
 
 QVariant FileSystemModel::data(const QModelIndex &idx,
                                int role) const
 {
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole && !m_explorer->IsInListMode())
     {
         String data = QFileSystemModel::data(idx, role).toString();
-        const int charsPerLine = GetWordWrappingCharsPerLine();
+        const int justInCase = 4; // To avoid char clamping for some cases
+        const int charsPerLine = GetWordWrappingCharsPerLine() - justInCase;
         for (int i = 1; i < data.Length() / charsPerLine + 1; ++i)
         {
             int breakInsertPos = charsPerLine * i + (i-1);
@@ -628,24 +646,33 @@ QVariant FileSystemModel::data(const QModelIndex &idx,
     }
     else if (role == Qt::EditRole)
     {
-        Explorer *explorer = Explorer::GetInstance();
         if (Persistence::IsFile(filePath(idx)))
         {
-            String fileName = explorer->GetSelectedFile().GetName();
+            String fileName = m_explorer->GetSelectedFile().GetName();
             return QVariant( fileName.ToQString() );
         }
     }
     else if (role == Qt::SizeHintRole)
     {
-        const int c_numLines = 3;
-        const int width      = GetWordWrappingWidth();
-        const int height     = GetCharSize().height() * c_numLines +
-                               (m_iconSize * 1.3f);
-        return QSize(width, height);
+        if (!m_explorer->IsInListMode())
+        {
+            const int c_numLines = 3;
+            const int width      = GetWordWrappingWidth();
+            const int height     = GetCharSize().height() * c_numLines +
+                                   (m_iconSize * 1.3f);
+            return QSize(width, height);
+        }
+        else
+        {
+            QSize defaultSize = QFileSystemModel::data(idx, role).toSize();
+            return QSize(defaultSize.width(), m_iconSize);
+        }
     }
     else if (role == Qt::TextAlignmentRole)
     {
-        return int(Qt::AlignTop | Qt::AlignHCenter);
+        return m_explorer->IsInListMode() ?
+                    int(Qt::AlignVCenter | Qt::AlignLeft) :
+                    int(Qt::AlignTop     | Qt::AlignHCenter);
     }
 
     return QFileSystemModel::data(idx, role);

@@ -61,6 +61,9 @@ public:
     static Explorer* GetInstance();
     void SetDir(const String &path);
 
+    bool IsEditing() const;
+    bool IsInListMode() const;
+
     void SetLabelText(const String &absPath);
 
 public slots:
@@ -78,7 +81,7 @@ protected:
     virtual void updateGeometries() override;
 
 private:
-    const int c_minIconSize = 40;
+    const int c_minIconSize = 20;
     const int c_maxIconSize = 100;
 
     ExplorerContextMenu m_eContextMenu;
@@ -106,11 +109,13 @@ private:
 class FileSystemModel : public QFileSystemModel
 {
 public:
-    FileSystemModel();
+    FileSystemModel(Explorer *explorer);
 
     void SetIconSize(int iconSize);
 
 protected:
+    Explorer *m_explorer = nullptr;
+
     Qt::DropActions supportedDropActions() const override;
 
     QVariant data(const QModelIndex& idx, int role) const override;

@@ -48,7 +48,8 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
-    ASSERT(!m_widget_To_Item.Empty()); // Avoid double clearings
+    // Avoid double clearings
+    ASSERT(!m_widget_To_Item.Empty());
 
     clear();
 

@@ -259,12 +259,10 @@ String Persistence::GetNextDuplicateName(const String &path)
 
     String filePath = path;
     String fileDir  = Persistence::GetDir(filePath);
-    String fileName = Persistence::GetFileNameWithExtension(filePath);
+    String fileName = Persistence::GetFileName(filePath);
+    String fileExtension = Persistence::GetFileExtensionComplete(path);
 
-    Array<String> splitted = StringUtils::Split(fileName, '.');
-    fileName = splitted[0];
-    String fileExtension = splitted.Size() <= 1 ? "" : splitted[1];
-    splitted = StringUtils::Split(fileName, '_');
+    Array<String> splitted = StringUtils::Split(fileName, '_');
     int number = 1;
     if (splitted.Size() > 1)
     {
