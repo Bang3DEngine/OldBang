@@ -46,7 +46,8 @@ public:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
-    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+    void currentChanged(const QModelIndex &current,
+                        const QModelIndex &previous) override;
 
     void OnShortcutPressed() override;
     void OnDirDoubleClicked(const String &dirpath);
@@ -63,7 +64,6 @@ public:
     void SetLabelText(const String &absPath);
 
 public slots:
-    void Refresh();
 
     void OnDirLoaded(QString dir);
     void OnButtonDirUpClicked();
@@ -71,12 +71,16 @@ public slots:
     void OnFileRenamed(const QString &path, const QString &oldName,
                        const QString &newName);
     void UpdateLabelText();
+    void OnIconSizeSliderValueChanged(int value);
 
 protected:
     //To set the scroll step to a smaller one
     virtual void updateGeometries() override;
 
 private:
+    const int c_minIconSize = 20;
+    const int c_maxIconSize = 100;
+
     ExplorerContextMenu m_eContextMenu;
 
     FileSystemModel *m_fileSystemModel = nullptr;
@@ -85,7 +89,6 @@ private:
     IInspectable *m_lastIInspectableInInspector = nullptr;
 
     String m_lastSelectedPath = "";
-    QTimer *m_updateTimer = nullptr;
     QLabel *m_labelCurrentPath = nullptr;
 
     String GetFilepathFromModelIndex(const QModelIndex &qmi) const;
@@ -105,6 +108,8 @@ class FileSystemModel : public QFileSystemModel
 public:
     FileSystemModel();
 
+    void SetIconSize(int iconSize);
+
 protected:
     Qt::DropActions supportedDropActions() const override;
 
@@ -114,7 +119,7 @@ protected:
                          int role = Qt::EditRole) override;
 
 private:
-    const int c_iconSize = 50;
+    int m_iconSize = 50;
 };
 
 #endif // EXPLORER_H

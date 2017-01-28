@@ -56,7 +56,7 @@ private:
      * @brief The cache of libraries. For the hash of the behaviour script
        *.cpp, contains its loaded library (if cached).
      */
-    Map<String, QLibrary*> m_behaviourHash_To_library;
+    Map<String, QLibrary*> m_behHash_To_lib;
 
     /**
      * @brief For wololo.cpp, contains all the demanders of the
@@ -69,13 +69,13 @@ private:
      * @brief Holds the compiled behaviour filepaths that have failed
      * to compile and its hashes
      */
-    Map<String, String> m_failed_behFilepath_To_behaviourHash;
+    Map<String, String> m_failed_behPath_To_behHash;
 
     /**
      * @brief Holds the compiled behaviour filepaths and its
      * compiled libraries
      */
-    Map<String, String> m_behFilepath_To_compiledLibrary;
+    Map<String, String> m_behPath_To_compiledLibrary;
 
     /**
      * @brief Set of behaviours abs paths that are being compiled right now.

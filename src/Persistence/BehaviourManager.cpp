@@ -31,7 +31,7 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourPath,
     QMutexLocker locker(&m_mutex);
     String absPath = Persistence::ToAbsolute(behaviourPath, false);
     m_behPathsBeingCompiled.erase(absPath);
-    m_behFilepath_To_compiledLibrary.Set(behaviourPath, libraryFilepath);
+    m_behPath_To_compiledLibrary.Set(absPath, libraryFilepath);
 }
 
 void BehaviourManager::OnBehaviourFailedCompiling(const String &behaviourPath)
@@ -39,7 +39,7 @@ void BehaviourManager::OnBehaviourFailedCompiling(const String &behaviourPath)
     QMutexLocker locker(&m_mutex);
     String absPath = Persistence::ToAbsolute(behaviourPath, false);
     m_behPathsBeingCompiled.erase(absPath);
-    m_failed_behFilepath_To_behaviourHash.Set(behaviourPath,
+    m_failed_behPath_To_behHash.Set(behaviourPath,
                                               Persistence::GetHash(absPath));
 }
 
@@ -47,8 +47,8 @@ void BehaviourManager::TreatCompiledBehaviours()
 {
     QMutexLocker locker(&m_mutex);
 
-    for (auto it = m_behFilepath_To_compiledLibrary.Begin();
-         it != m_behFilepath_To_compiledLibrary.End(); ++it)
+    for (auto it = m_behPath_To_compiledLibrary.Begin();
+         it != m_behPath_To_compiledLibrary.End(); ++it)
     {
         String behaviourPath = it->first;
         String absPath = Persistence::ToAbsolute(behaviourPath, false);
@@ -62,7 +62,7 @@ void BehaviourManager::TreatCompiledBehaviours()
         lib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
         if (lib->load())
         {
-            bm->m_behaviourHash_To_library[hash] = lib;
+            bm->m_behHash_To_lib[hash] = lib;
 
             // Notify the BehaviourHolder
             List<BehaviourHolder*> behDemanders =
@@ -84,27 +84,29 @@ void BehaviourManager::TreatCompiledBehaviours()
                         libraryFilepath << "': " << lib->errorString());
         }
     }
-    m_behFilepath_To_compiledLibrary.Clear();
+    m_behPath_To_compiledLibrary.Clear();
 }
 
-void BehaviourManager::RemoveOutdatedLibraryFiles(const String &mostRecentLibraryFilepath)
+void BehaviourManager::RemoveOutdatedLibraryFiles(
+        const String &mostRecentLibFilepath)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance(); ASSERT(bm);
 
-    String libraryNameAndExtension =
-            Persistence::GetFileNameWithExtension(mostRecentLibraryFilepath);
-    String libraryName = Persistence::GetFileName(mostRecentLibraryFilepath);
+    String mostRecentLibNameAndExt =
+            Persistence::GetFileNameWithExtension(mostRecentLibFilepath);
+    String mostRecentLibName = Persistence::GetFileName(mostRecentLibFilepath);
+    List<String> libs = Persistence::GetFiles(
+                Persistence::GetProjectAssetsRootAbs(), true, {"*.so.*"});
 
-    List<String> libs = Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(),
-                                              true, {"*.so.*"});
     for (auto it = libs.Begin(); it != libs.End(); ++it)
     {
         const String &libFilepath = *it;
-        bool isOfTheSameBehaviour = (Persistence::GetFileName(libFilepath) == libraryName);
-        bool isTheMostRecentOne = libFilepath.EndsWith(libraryNameAndExtension);
+        String libFileName = Persistence::GetFileName(libFilepath);
+        bool isOfTheSameBehaviour = (libFileName == mostRecentLibName);
+        bool isTheMostRecentOne = libFilepath.EndsWith(mostRecentLibNameAndExt);
         if (isOfTheSameBehaviour && !isTheMostRecentOne)
         {
-            Persistence::Remove(libFilepath); // Remove outdated library
+            Persistence::Remove(libFilepath);
         }
     }
 }
@@ -116,7 +118,7 @@ bool BehaviourManager::IsCached(const String &behaviourPath)
 
     String absPath = Persistence::ToAbsolute(behaviourPath, false);
     String hash = Persistence::GetHash(absPath);
-    return bm->m_behaviourHash_To_library.ContainsKey(hash);
+    return bm->m_behHash_To_lib.ContainsKey(hash);
 }
 
 QLibrary *BehaviourManager::GetCachedLibrary(const String &behaviourPath)
@@ -126,7 +128,7 @@ QLibrary *BehaviourManager::GetCachedLibrary(const String &behaviourPath)
 
     String absPath = Persistence::ToAbsolute(behaviourPath, false);
     String hash = Persistence::GetHash(absPath);
-    return bm->m_behaviourHash_To_library[hash];
+    return bm->m_behHash_To_lib[hash];
 }
 
 bool BehaviourManager::IsBeingCompiled(const String &behaviourPath)
@@ -148,9 +150,9 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
 
     String behAbsPath = Persistence::ToAbsolute(behaviourFilepath, false);
     String hash = Persistence::GetHash(behAbsPath);
-    if (bm->m_failed_behFilepath_To_behaviourHash.ContainsKey(behaviourFilepath))
+    if (bm->m_failed_behPath_To_behHash.ContainsKey(behaviourFilepath))
     {
-        String oldHash = bm->m_failed_behFilepath_To_behaviourHash[behaviourFilepath];
+        String oldHash = bm->m_failed_behPath_To_behHash[behaviourFilepath];
         if (oldHash == hash)
         {
             // A previous compilation of behaviourFilepath has failed,
@@ -159,7 +161,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
         }
         else
         {
-            bm->m_failed_behFilepath_To_behaviourHash.Remove(behaviourFilepath);
+            bm->m_failed_behPath_To_behHash.Remove(behaviourFilepath);
         }
     }
 
@@ -173,7 +175,8 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
     {
         // Add behaviour to the list of demanders
         if (!bm->m_behHash_To_behHolderDemanders.ContainsKey(hash))
-        {   // Init list
+        {
+            // Init list
             bm->m_behHash_To_behHolderDemanders[hash] = List<BehaviourHolder*>();
         }
 
@@ -188,6 +191,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             bm->m_behPathsBeingCompiled.insert(behAbsPath);
 
             #ifdef BANG_EDITOR
+
             // Have to compile and load it. First compile
             BehaviourManagerCompileThread *compileThread =
                     new BehaviourManagerCompileThread(behAbsPath);
@@ -199,6 +203,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             // load the library, and then notify the behaviourHolders waiting for it
 
             #else // GAME
+
             // In Game, we have the behaviour object library in
             // "BEHAVIOUR_DIR/BEHAVIOUR_NAME.so.RANDOM_PROJECT_ID"
             // so we just have to load it directly. I.E., notify the instant load.
@@ -208,6 +213,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
                     ProjectManager::GetCurrentProject()->GetProjectRandomId();
             bm->OnBehaviourFinishedCompiling(behaviourFilepath, libraryFilepath);
             bm->TreatCompiledBehaviours();
+
             #endif
         }
     }

@@ -650,7 +650,7 @@
   <widget class="QDockWidget" name="dockExplorer">
    <property name="minimumSize">
     <size>
-     <width>519</width>
+     <width>603</width>
      <height>210</height>
     </size>
    </property>
@@ -726,7 +726,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,9999,0">
+        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0">
          <property name="spacing">
           <number>2</number>
          </property>
@@ -751,6 +751,25 @@
              <property name="icon">
               <iconset resource="qdarkstyle/style.qrc">
                <normaloff>:/qss_icons/Icons/eye.png</normaloff>:/qss_icons/Icons/eye.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="sliderExplorerIconSize">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>50</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -829,22 +848,7 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>Icon size</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="sliderExplorerIconSize">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          <layout class="QHBoxLayout" name="horizontalLayout_2"/>
          </item>
         </layout>
        </item>

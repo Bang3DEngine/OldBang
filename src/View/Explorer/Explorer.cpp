@@ -40,21 +40,16 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 
     m_fileSystemModel = new FileSystemModel();
     setModel(m_fileSystemModel);
-    setGridSize( QSize(100, 100) );
     setWordWrap(true);
     setTextElideMode(Qt::TextElideMode::ElideNone);
 
-    m_buttonDirUp = EditorWindow::GetInstance()->buttonExplorerDirUp;
-    m_buttonChangeViewMode = EditorWindow::GetInstance()->buttonExplorerChangeViewMode;
+    EditorWindow *win = EditorWindow::GetInstance();
+    m_buttonDirUp = win->buttonExplorerDirUp;
+    m_buttonChangeViewMode = win->buttonExplorerChangeViewMode;
 
-    m_updateTimer = new QTimer(this); //Every X secs, update all the slots values
-    m_updateTimer->start(100);
-
-    m_labelCurrentPath = EditorWindow::GetInstance()->labelCurrentPath;
+    m_labelCurrentPath = win->labelCurrentPath;
 
     SetDir(Persistence::GetProjectAssetsRootAbs());
-
-    QObject::connect(m_updateTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
 
     QObject::connect(m_buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
     QObject::connect(m_buttonChangeViewMode, SIGNAL(clicked()),
@@ -74,6 +69,13 @@ void Explorer::OnWindowShown()
 {
     this->SetDragDropEventPossibleSources({
           Hierarchy::GetInstance(), this });
+
+    EditorWindow *win = EditorWindow::GetInstance();
+    QObject::connect(win->sliderExplorerIconSize, SIGNAL(sliderMoved(int)),
+                     this, SLOT(OnIconSizeSliderValueChanged(int)));
+    QObject::connect(win->sliderExplorerIconSize, SIGNAL(valueChanged(int)),
+                     this, SLOT(OnIconSizeSliderValueChanged(int)));
+    win->sliderExplorerIconSize->setValue(30);
 }
 
 void Explorer::OnButtonDirUpClicked()
@@ -116,11 +118,22 @@ void Explorer::UpdateLabelText()
     SetLabelText(absPath);
 }
 
+void Explorer::OnIconSizeSliderValueChanged(int value)
+{
+    const int iconSizeRange = (c_maxIconSize - c_minIconSize);
+    const int iconSize = c_minIconSize + (float(value) / 100 * iconSizeRange);
+    m_fileSystemModel->SetIconSize(iconSize);
+
+    const int gridSize = iconSize + 20; // To let the names be visible
+    setGridSize(QSize(gridSize, gridSize));
+}
+
 void Explorer::mousePressEvent(QMouseEvent *e)
 {
     QListView::mousePressEvent(e);
 
-    if (!indexAt(e->pos()).isValid()) // Deselect
+    // Clear selection when pressing nowhere
+    if (!indexAt(e->pos()).isValid())
     {
         clearSelection();
     }
@@ -176,19 +189,28 @@ void Explorer::currentChanged(const QModelIndex &current,
 
     String selectedPath(m_fileSystemModel->filePath(current));
     SetLabelText(selectedPath);
+    RefreshInspector();
 }
 
 void Explorer::OnShortcutPressed()
 {
-    if (hasFocus())
+    ASSERT(hasFocus());
+
+    if (ShortcutManager::IsPressed(Input::Key::Delete))
     {
-        if (ShortcutManager::IsPressed(Input::Key::Delete))
+        m_eContextMenu.OnDeleteClicked();
+    }
+    else if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}))
+    {
+        m_eContextMenu.OnDuplicateClicked();
+    }
+    else if (ShortcutManager::IsPressed({Input::Key::F2}))
+    {
+        String selectedPath = GetSelectedFileOrDirPath();
+        Debug_Log("Pressed F2: " << selectedPath);
+        if (!selectedPath.Empty())
         {
-            m_eContextMenu.OnDeleteClicked();
-        }
-        else if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}))
-        {
-            m_eContextMenu.OnDuplicateClicked();
+            StartRenaming(selectedPath);
         }
     }
 }
@@ -264,7 +286,7 @@ void Explorer::SelectFile(const String &path)
     if (ind.isValid())
     {
         setCurrentIndex(ind);
-        selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::ClearAndSelect);
+        selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::SelectCurrent);
         RefreshInspector();
     }
 }
@@ -272,11 +294,6 @@ void Explorer::SelectFile(const String &path)
 Explorer *Explorer::GetInstance()
 {
     return EditorWindow::GetInstance()->widgetListExplorer;
-}
-
-void Explorer::Refresh()
-{
-    // If needed in a future
 }
 
 String Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const
@@ -312,9 +329,16 @@ QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const
 
 void Explorer::SetDir(const String &path)
 {
+    if (!selectedIndexes().empty())
+    {
+        closePersistentEditor( selectedIndexes().front() );
+        clearSelection();
+    }
+
     String absDir = Persistence::ToAbsolute(path, false);
     setRootIndex(m_fileSystemModel->setRootPath(absDir.ToQString()));
     SetLabelText(absDir);
+    clearSelection();
 }
 
 void Explorer::SetLabelText(const String &absPath)
@@ -395,7 +419,9 @@ void Explorer::StartRenaming(const String &filepath)
     SelectFile(filepath);
     if (!selectedIndexes().empty())
     {
-        edit(selectedIndexes().front());
+        QModelIndex selectedIndex = selectedIndexes().front();
+        Debug_Log("editing... " << m_fileSystemModel->filePath(selectedIndex) );
+        edit(selectedIndex);
     }
 }
 
@@ -471,6 +497,11 @@ FileSystemModel::FileSystemModel()
     setReadOnly(false);
 }
 
+void FileSystemModel::SetIconSize(int iconSize)
+{
+    m_iconSize = iconSize;
+}
+
 Qt::DropActions FileSystemModel::supportedDropActions() const
 {
     return Qt::MoveAction;
@@ -483,18 +514,21 @@ bool FileSystemModel::setData(const QModelIndex &idx,
    if (role == Qt::EditRole)
    {
        String path = filePath(idx);
-       String originalExtension = Persistence::GetFileExtensionComplete(path);
+       if (Persistence::IsFile(path))
+       {
+           String originalExtension = Persistence::GetFileExtensionComplete(path);
 
-       String userInput = value.toString();
-       String newExtension = Persistence::GetFileExtensionComplete(userInput);
-       newExtension = newExtension.Empty() ? originalExtension : newExtension;
-       String newEditedFileName = Persistence::GetFileName(userInput);
+           String userInput = value.toString();
+           String newExtension = Persistence::GetFileExtensionComplete(userInput);
+           newExtension = newExtension.Empty() ? originalExtension : newExtension;
+           String newEditedFileName = Persistence::GetFileName(userInput);
 
-       return QFileSystemModel::setData(
-                   idx,
-                   QVariant( String(newEditedFileName + "." +
-                                    newExtension).ToQString() ),
-                   role);
+           return QFileSystemModel::setData(
+                       idx,
+                       QVariant( String(newEditedFileName + "." +
+                                        newExtension).ToQString() ),
+                       role);
+       }
    }
    return QFileSystemModel::setData(idx, value, role);
 }
@@ -506,27 +540,37 @@ QVariant FileSystemModel::data(const QModelIndex &idx,
     if (role == Qt::DecorationRole)
     {
         File file(this, idx);
-        File *f = File::GetSpecificFile(file);
-        if (f)
+        String absPath = file.GetAbsolutePath();
+        if (Persistence::IsFile(absPath))
         {
-            const QPixmap &pm = f->GetIcon();
-            if (!pm.isNull())
+            File *f = File::GetSpecificFile(file);
+            if (f)
             {
-                Qt::TransformationMode transMode =
-                        Qt::TransformationMode::SmoothTransformation;
-                if (f->IsTexture2DAsset() || f->IsImageFile())
+                const QPixmap &pm = f->GetIcon();
+                if (!pm.isNull())
                 {
-                    transMode = Qt::TransformationMode::FastTransformation;
+                    delete f;
+                    return pm.scaled(m_iconSize, m_iconSize, Qt::IgnoreAspectRatio,
+                                     Qt::TransformationMode::SmoothTransformation);
                 }
                 delete f;
-                return pm.scaled(c_iconSize, c_iconSize, Qt::IgnoreAspectRatio, transMode);
             }
-            delete f;
+        }
+        else if (Persistence::IsDir(absPath))
+        {
+            // Take the default pixmap and return it scaled
+            const QIcon &icon = QFileSystemModel::data(idx, role).value<QIcon>();
+            const QPixmap &pm = icon.pixmap(m_iconSize, m_iconSize);
+            return pm.scaled(m_iconSize, m_iconSize, Qt::IgnoreAspectRatio,
+                             Qt::TransformationMode::SmoothTransformation);
         }
     }
     else if (role == Qt::EditRole)
     {
-        return QVariant( Persistence::GetFileName(fileName(idx)).ToQString() );
+        if (Persistence::IsFile(filePath(idx)))
+        {
+            return QVariant( Persistence::GetFileName(fileName(idx)).ToQString() );
+        }
     }
     return QFileSystemModel::data(idx, role);
 }
