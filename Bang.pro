@@ -250,11 +250,13 @@ HEADERS += \
     src/Persistence/BehaviourRefresherTimer.h \
     src/Domain/Engine/Physics/AABox.h \
     src/View/DialogBrowseAssetFile.h
+
 EDITOR {
 HEADERS += \
     src/View/EditorGameObject/EditorGizmosGameObject.h \
     src/View/SelectProjectWindow.h \
     src/View/EditorWindow.h \
+    src/View/Explorer/FileSystemModel.h \
     src/View/EditorGameObject/EditorSelectionGameObject.h \
     src/View/EditorScene/EditorDebugGameObject.h \
     src/View/EditorGameObject/EditorTranslateAxis.h \
@@ -430,6 +432,7 @@ EDITOR {
         src/View/GameBuilderJob.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/SelectProjectWindow.cpp \
+        src/View/Explorer/FileSystemModel.cpp \
         src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
         src/View/EditorGameObject/EditorRotateAxis.cpp \
         src/View/EditorGameObject/EditorAxisGroup.cpp \

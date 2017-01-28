@@ -686,13 +686,13 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="2,10">
        <property name="spacing">
-        <number>2</number>
+        <number>10</number>
        </property>
        <item>
         <widget class="ExplorerDirTree" name="widgetTreeExplorerDirTree">
          <property name="maximumSize">
           <size>
-           <width>150</width>
+           <width>100</width>
            <height>16777215</height>
           </size>
          </property>
@@ -757,25 +757,6 @@
              <property name="icon">
               <iconset resource="qdarkstyle/style.qrc">
                <normaloff>:/qss_icons/Icons/eye.png</normaloff>:/qss_icons/Icons/eye.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="sliderExplorerIconSize">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>50</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
              </property>
             </widget>
            </item>
@@ -854,7 +835,47 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="labelFileName">
+             <property name="text">
+              <string>FileName.txt</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSlider" name="sliderExplorerIconSize">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>50</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -903,6 +924,145 @@
          <number>2</number>
         </property>
         <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QToolButton" name="buttonLoggerClear">
+            <property name="text">
+             <string>Clear</string>
+            </property>
+            <property name="icon">
+             <iconset resource="qdarkstyle/style.qrc">
+              <normaloff>:/qss_icons/Icons/clear.png</normaloff>:/qss_icons/Icons/clear.png</iconset>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextOnly</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButton_2">
+            <property name="text">
+             <string>Collapse</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButton">
+            <property name="text">
+             <string>Clear on Play</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextOnly</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButton_6">
+            <property name="text">
+             <string>Auto Scroll</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextOnly</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButton_3">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="icon">
+             <iconset resource="qdarkstyle/style.qrc">
+              <normaloff>:/qss_icons/Icons/LogIcon.png</normaloff>:/qss_icons/Icons/LogIcon.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButton_4">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="icon">
+             <iconset resource="qdarkstyle/style.qrc">
+              <normaloff>:/qss_icons/Icons/WarnIcon.png</normaloff>:/qss_icons/Icons/WarnIcon.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="toolButton_5">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="icon">
+             <iconset resource="qdarkstyle/style.qrc">
+              <normaloff>:/qss_icons/Icons/ErrorIcon.png</normaloff>:/qss_icons/Icons/ErrorIcon.png</iconset>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="toolButtonStyle">
+             <enum>Qt::ToolButtonTextBesideIcon</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="ListLogger" name="listLogger">
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
@@ -915,17 +1075,6 @@
           </property>
           <property name="horizontalScrollMode">
            <enum>QAbstractItemView::ScrollPerPixel</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="buttonLoggerClear">
-          <property name="text">
-           <string>Clear</string>
-          </property>
-          <property name="icon">
-           <iconset resource="qdarkstyle/style.qrc">
-            <normaloff>:/qss_icons/Icons/clear.png</normaloff>:/qss_icons/Icons/clear.png</iconset>
           </property>
          </widget>
         </item>
@@ -1205,25 +1354,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="qdarkstyle/style.qrc"/>
   <include location="QtResources.qrc"/>
+  <include location="qdarkstyle/style.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>buttonLoggerClear</sender>
-   <signal>clicked()</signal>
-   <receiver>listLogger</receiver>
-   <slot>clear()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>989</x>
-     <y>544</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>989</x>
-     <y>511</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

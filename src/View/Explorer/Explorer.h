@@ -5,7 +5,6 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QToolButton>
-#include <QFileSystemModel>
 
 #include "File.h"
 #include "String.h"
@@ -71,7 +70,8 @@ public slots:
     void OnDirLoaded(QString dir);
     void OnButtonDirUpClicked();
     void OnButtonChangeViewModeClicked();
-    void OnFileRenamed(const QString &path, const QString &oldName,
+    void OnFileRenamed(const QString &path,
+                       const QString &oldName,
                        const QString &newName);
     void UpdateLabelText();
     void OnIconSizeSliderValueChanged(int value);
@@ -93,6 +93,7 @@ private:
 
     String m_lastSelectedPath = "";
     QLabel *m_labelCurrentPath = nullptr;
+    QLabel *m_labelFileName    = nullptr;
 
     String GetFilepathFromModelIndex(const QModelIndex &qmi) const;
     String GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const;
@@ -104,31 +105,6 @@ private:
     friend class FileSystemModel;
     friend class ExplorerDirTree;
     friend class ExplorerContextMenu;
-};
-
-class FileSystemModel : public QFileSystemModel
-{
-public:
-    FileSystemModel(Explorer *explorer);
-
-    void SetIconSize(int iconSize);
-
-protected:
-    Explorer *m_explorer = nullptr;
-
-    Qt::DropActions supportedDropActions() const override;
-
-    QVariant data(const QModelIndex& idx, int role) const override;
-    virtual bool setData(const QModelIndex &idx,
-                         const QVariant &value,
-                         int role = Qt::EditRole) override;
-
-    QSize GetCharSize() const;
-    int GetWordWrappingWidth() const;
-    int GetWordWrappingCharsPerLine() const;
-
-private:
-    int m_iconSize = 50;
 };
 
 #endif // EXPLORER_H

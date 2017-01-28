@@ -21,9 +21,16 @@ public:
     static void AddError(const String &str, int line, const String &fileName);
 
     static ListLogger* GetInstance();
-    static void DecorateLastItem(const QColor &color);
 
     void dropEvent(QDropEvent *e) override;
+
+private slots:
+    void OnAddLog(const String &str, int line, const String &fileName);
+    void OnAddWarn(const String &str, int line, const String &fileName);
+    void OnAddError(const String &str, int line, const String &fileName);
+    void OnClear() const;
+
+    void DecorateLastItem(const Color &color);
 
 private:
     static int c_iconColumn;

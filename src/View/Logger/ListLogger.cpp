@@ -1,6 +1,7 @@
 #include "ListLogger.h"
 
 #include "Debug.h"
+#include "Color.h"
 #include "EditorWindow.h"
 
 int ListLogger::c_iconColumn     = 1;
@@ -15,6 +16,10 @@ ListLogger::ListLogger(QWidget *parent) : DragDropQTreeWidget()
     m_logIcon   = QIcon(":/qss_icons/Icons/LogIcon.png");
     m_warnIcon  = QIcon(":/qss_icons/Icons/WarnIcon.png");
     m_errorIcon = QIcon(":/qss_icons/Icons/ErrorIcon.png");
+
+    EditorWindow *win = EditorWindow::GetInstance();
+    QObject::connect(win->buttonLoggerClear, SIGNAL( pressed() ),
+                     this, SLOT(OnClear()));
 
     // Set headers
     setHeaderHidden(false);
@@ -36,36 +41,29 @@ void ListLogger::Clear()
 void ListLogger::AddLog(const String &str, int line, const String &fileName)
 {
     ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger);
-    listLogger->AddRow(listLogger->m_logIcon, str, line, fileName);
+    listLogger->OnAddLog(str, line, fileName);
 }
 
 void ListLogger::AddWarn(const String &str, int line, const String &fileName)
 {
     ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger);
-    listLogger->AddRow(listLogger->m_warnIcon, str, line, fileName);
-    DecorateLastItem(QColor::fromRgb(255, 255, 100, 255));
+    listLogger->OnAddWarn(str, line, fileName);
 }
 
 void ListLogger::AddError(const String &str, int line, const String &fileName)
 {
     ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger);
-    listLogger->AddRow(listLogger->m_errorIcon, str, line, fileName);
-    DecorateLastItem(QColor::fromRgb(255, 100, 100, 255));
+    listLogger->OnAddError(str, line, fileName);
 }
 
-void ListLogger::DecorateLastItem(const QColor &color)
+void ListLogger::DecorateLastItem(const Color &color)
 {
-    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger);
-
-    QTreeWidgetItem *item =
-            listLogger->topLevelItem(listLogger->topLevelItemCount() - 1);
+    QTreeWidgetItem *item = topLevelItem(topLevelItemCount() - 1);
     if (item)
     {
-        //item->setBackgroundColor(c_msgColumn, color);
-        item->setTextColor(c_msgColumn, color);
+        item->setTextColor(c_msgColumn, color.ToQColor());
     }
-
-    listLogger->scrollToBottom();
+    scrollToBottom();
 }
 
 ListLogger *ListLogger::GetInstance()
@@ -77,6 +75,28 @@ ListLogger *ListLogger::GetInstance()
 void ListLogger::dropEvent(QDropEvent *e)
 {
     e->ignore();
+}
+
+void ListLogger::OnAddLog(const String &str, int line, const String &fileName)
+{
+    AddRow(m_logIcon, str, line, fileName);
+}
+
+void ListLogger::OnAddWarn(const String &str, int line, const String &fileName)
+{
+    AddRow(m_warnIcon, str, line, fileName);
+    DecorateLastItem( Color(1.0f, 1.0f, 0.3f) );
+}
+
+void ListLogger::OnAddError(const String &str, int line, const String &fileName)
+{
+    AddRow(m_errorIcon, str, line, fileName);
+    DecorateLastItem( Color(1.0f, 0.3f, 0.3f) );
+}
+
+void ListLogger::OnClear() const
+{
+    ListLogger::Clear();
 }
 
 void ListLogger::AddRow(const QIcon &icon, const String &msg,

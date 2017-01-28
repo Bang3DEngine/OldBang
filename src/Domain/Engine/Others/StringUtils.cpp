@@ -86,6 +86,19 @@ String StringUtils::Trim(const String &str)
     return str;
 }
 
+String StringUtils::Elide(const String &str, int length)
+{
+    int maxLength = std::min(int(str.Length()), length);
+    String result = str;
+    if (str.Length() > length)
+    {
+        result = result.SubString(str.Length() - maxLength,
+                                  str.Length() - 1);
+        result = "..." + result;
+    }
+    return result;
+}
+
 Array<String> StringUtils::Split(const String &content, char splitter)
 {
     Array<String> result;

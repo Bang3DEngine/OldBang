@@ -49,7 +49,8 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     explorerDock->raise();
 
     window->setCorner(Qt::TopLeftCorner,     Qt::LeftDockWidgetArea);
-    window->setCorner(Qt::BottomLeftCorner,  Qt::LeftDockWidgetArea);
+    //window->setCorner(Qt::BottomLeftCorner,  Qt::LeftDockWidgetArea);
+    window->setCorner(Qt::BottomLeftCorner,  Qt::BottomDockWidgetArea);
     window->setCorner(Qt::TopRightCorner,    Qt::RightDockWidgetArea);
     window->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 }

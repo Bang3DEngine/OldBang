@@ -43,15 +43,15 @@ Color::Color(const Vector4 &v) : Color(v.x, v.y, v.z, v.w)
 {
 }
 
-Color::Color(float r, float g, float b)
+Color::Color(float r, float g, float b)  : Color(r, g, b, 1)
+{
+}
+
+Color::Color(float r, float g, float b, float a)
 {
     this->r = r;
     this->g = g;
     this->b = b;
-}
-
-Color::Color(float r, float g, float b, float a) : Color(r, g, b)
-{
     this->a = a;
 }
 
