@@ -68,31 +68,22 @@ void EditorAxis::OnUpdate()
     }
 
     // Process line color
-    if (m_mouseIsOver)
+    float lineWidth = m_mouseIsOver ? m_axisLineWidth * 2.0f :
+                                      m_axisLineWidth;
+    Color diffColor;
+    if (m_grabbed)
     {
-        GetAxisRenderer()->SetLineWidth(m_axisLineWidth * 2.0f);
-
-        if (m_grabbed)
-        {
-            m_material->SetDiffuseColor(Color(m_lineColor, 1));
-        }
-        else
-        {
-            m_material->SetDiffuseColor(Color(m_lineColor * c_lineColorFadingNotGrabbed, 1));
-        }
+        diffColor = c_colorGrabbed;
     }
     else
     {
-        if (m_grabbed)
-        {
-            m_material->SetDiffuseColor(Color(m_lineColor, 1));
-        }
-        else
-        {
-            GetAxisRenderer()->SetLineWidth(m_axisLineWidth);
-            m_material->SetDiffuseColor(Color(m_lineColor * c_lineColorFadingNotHover, 1));
-        }
+        float fading = m_mouseIsOver ? c_colorFadingNotGrabbed :
+                                       c_colorFadingNotHover;
+        diffColor = Color(m_lineColor * fading, 1);
     }
+
+    GetAxisRenderer()->SetLineWidth(lineWidth);
+    m_material->SetDiffuseColor(diffColor);
 }
 
 void EditorAxis::OnMouseEnter(bool fromChildren)

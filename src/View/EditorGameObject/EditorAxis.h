@@ -31,11 +31,12 @@ protected:
     /**
      * @brief Line color will be multiplied by this when axis not being hovered.
      */
-    const Vector3 c_lineColorFadingNotHover = Vector3(0.7f);
+    const float c_colorFadingNotHover = 0.7f;
     /**
      * @brief Line color will be multiplied by this when axis being hovered, but not grabbed.
      */
-    const Vector3 c_lineColorFadingNotGrabbed = Vector3(0.9f);
+    const float c_colorFadingNotGrabbed = 1.0f;
+    const Color c_colorGrabbed = Color(1.0f, 1.0f, 0.0f, 1.0f);
     Color m_lineColor = Color::Black;
 
     /**
