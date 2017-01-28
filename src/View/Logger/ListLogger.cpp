@@ -18,7 +18,7 @@ ListLogger::ListLogger(QWidget *parent) : DragDropQTreeWidget()
 
     // Set headers
     setHeaderHidden(false);
-    setHeaderLabels( {"", "", "Message", "Line", "FileName"} );
+    setHeaderLabels( {"", "", "Message", "Line", "File name"} );
     header()->setSectionResizeMode(ListLogger::c_iconColumn, QHeaderView::ResizeToContents);
     header()->setSectionResizeMode(ListLogger::c_msgColumn,  QHeaderView::Stretch);
     header()->setSectionResizeMode(ListLogger::c_lineColumn, QHeaderView::Fixed);

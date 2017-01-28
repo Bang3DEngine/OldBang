@@ -81,6 +81,7 @@ void EditorScene::OnEditorStop()
 
 void EditorScene::OnEditorPlay()
 {
+    SetFirstFoundCameraOrDefaultOne();
 }
 
 bool EditorScene::IsEditorGameObject() const

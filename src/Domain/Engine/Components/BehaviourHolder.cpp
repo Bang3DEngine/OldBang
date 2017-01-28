@@ -93,7 +93,6 @@ void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
         if (m_behaviour)
         {
             m_behaviour->Init(this);
-            this->_OnStart();
         }
     }
     else
@@ -205,10 +204,8 @@ void BehaviourHolder::_OnStart()
     Component::_OnStart();
     if (m_behaviour)
     {
-        m_behaviour->m_isStarted = false;
         m_behaviour->_OnStart();
     }
-    m_isStarted = true;
 }
 
 void BehaviourHolder::_OnUpdate()

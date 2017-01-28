@@ -71,7 +71,7 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
 
     if (!sceneFilepaths.Empty())
     {
-        SceneManager::LoadScene(sceneFilepaths.Front());
+        SceneManager::LoadSceneInstantly(sceneFilepaths.Front());
     }
     else
     {

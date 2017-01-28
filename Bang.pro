@@ -225,7 +225,7 @@ HEADERS += \
     src/Domain/Engine/Others/SceneManager.h \
     src/Domain/Engine/Others/Debug.h \
     src/Persistence/BehaviourManager.h \
-    src/Persistence/BehaviourManagerCompileJob.h \
+    src/Persistence/BehaviourManagerCompileThread.h \
     src/Domain/Engine/Others/Chrono.h \
     src/Persistence/ImageFile.h \
     src/Persistence/MeshFile.h \
@@ -405,7 +405,7 @@ SOURCES += \
     src/Domain/Engine/Others/SceneManager.cpp \
     src/Domain/Engine/Others/Debug.cpp \
     src/Persistence/BehaviourManager.cpp \
-    src/Persistence/BehaviourManagerCompileJob.cpp \
+    src/Persistence/BehaviourManagerCompileThread.cpp \
     src/Domain/Engine/Others/Chrono.cpp \
     src/Domain/Engine/Others/Map.cpp \
     src/Domain/Engine/Others/List.cpp \

@@ -53,19 +53,12 @@ void Application::OnDrawTimerTick()
     processEvents();
     Input::GetInstance()->ProcessEnqueuedEvents();
 
+    SceneManager::TryToLoadQueuedScene();
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
-        #ifdef BANG_EDITOR
-        bool canUpdate = true;
-        #else
-        bool canUpdate = activeScene->IsStarted();
-        #endif
-        if (canUpdate)
-        {
-            m_lastRenderTime = Time::GetNow();
-            activeScene->_OnUpdate();
-        }
+        m_lastRenderTime = Time::GetNow();
+        activeScene->_OnUpdate();
     }
 
     Chrono c("FPS");
@@ -179,7 +172,6 @@ void Application::OnPlay()
     Scene *sceneCopy = static_cast<Scene*>( m_latestSceneBeforePlaying->Clone() );
     if (sceneCopy)
     {
-        sceneCopy->_OnStart();
         SceneManager::SetActiveScene(sceneCopy);
     }
 

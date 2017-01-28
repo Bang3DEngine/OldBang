@@ -203,7 +203,7 @@ void Explorer::OnFileDoubleClicked(const String &filepath)
     File f(filepath);
     if (f.IsScene())
     {
-        SceneManager::LoadScene(f.GetAbsolutePath());
+        SceneManager::LoadSceneInstantly(f.GetAbsolutePath());
     }
 }
 

@@ -168,7 +168,7 @@ void MenuBar::OnOpenScene() const
                                               Scene::GetFileExtensionStatic());
     ASSERT(!filename.Empty());
 
-    SceneManager::LoadScene(filename);
+    SceneManager::LoadSceneInstantly(filename);
 }
 
 void MenuBar::OnSaveScene() const

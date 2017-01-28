@@ -13,7 +13,9 @@
 #include "GameObject.h"
 #include "MeshFactory.h"
 #include "SceneManager.h"
+#include "BehaviourHolder.h"
 #include "GraphicPipeline.h"
+#include "BehaviourManager.h"
 #include "DirectionalLight.h"
 
 Scene::Scene() : GameObject("Scene")
@@ -23,8 +25,6 @@ Scene::Scene() : GameObject("Scene")
 void Scene::_OnStart()
 {
     GameObject::_OnStart();
-
-    SetFirstFoundCameraOrDefaultOne();
 }
 
 void Scene::_OnUpdate()
@@ -35,15 +35,6 @@ void Scene::_OnUpdate()
     if (cam  && cam->GetAutoUpdateAspectRatio())
     {
         cam->SetAspectRatio( Screen::GetInstance()->GetAspectRatio() );
-    }
-
-    // Start non-started GameObjects
-    for (GameObject *child : m_children)
-    {
-        if (!child->IsStarted())
-        {
-            child->_OnStart();
-        }
     }
 }
 

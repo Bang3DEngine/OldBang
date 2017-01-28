@@ -58,7 +58,7 @@ void BehaviourManager::TreatCompiledBehaviours()
 
         // Open the library
         String libraryFilepath = it->second;
-        QLibrary *lib = new  QLibrary(libraryFilepath.ToCString());
+        QLibrary *lib = new QLibrary(libraryFilepath.ToCString());
         lib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
         if (lib->load())
         {
@@ -146,8 +146,8 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
     BehaviourManager *bm = BehaviourManager::GetInstance();
     ASSERT(bm);
 
-    String absPath = Persistence::ToAbsolute(behaviourFilepath, false);
-    String hash = Persistence::GetHash(absPath);
+    String behAbsPath = Persistence::ToAbsolute(behaviourFilepath, false);
+    String hash = Persistence::GetHash(behAbsPath);
     if (bm->m_failed_behFilepath_To_behaviourHash.ContainsKey(behaviourFilepath))
     {
         String oldHash = bm->m_failed_behFilepath_To_behaviourHash[behaviourFilepath];
@@ -163,10 +163,10 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
         }
     }
 
-    if (BehaviourManager::IsCached(absPath))
+    if (BehaviourManager::IsCached(behAbsPath))
     {
         // It's cached from a previous load...
-        QLibrary *lib = BehaviourManager::GetCachedLibrary(absPath);
+        QLibrary *lib = BehaviourManager::GetCachedLibrary(behAbsPath);
         behaviourHolder->OnBehaviourLibraryAvailable(lib);
     }
     else
@@ -182,15 +182,15 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             bm->m_behHash_To_behHolderDemanders[hash].PushBack(behaviourHolder);
         }
 
-        if (!BehaviourManager::IsBeingCompiled(absPath))
+        if (!BehaviourManager::IsBeingCompiled(behAbsPath))
         {
             // Compile once
-            bm->m_behPathsBeingCompiled.insert(absPath);
+            bm->m_behPathsBeingCompiled.insert(behAbsPath);
 
             #ifdef BANG_EDITOR
             // Have to compile and load it. First compile
             BehaviourManagerCompileThread *compileThread =
-                    new BehaviourManagerCompileThread(absPath);
+                    new BehaviourManagerCompileThread(behAbsPath);
             compileThread->start();
 
             Debug_Status("Compiling script " <<
@@ -206,8 +206,8 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             const String behaviourFilename = Persistence::GetFileName(behaviourFilepath);
             const String libraryFilepath = behaviourDir + "/" + behaviourFilename + ".so." +
                     ProjectManager::GetCurrentProject()->GetProjectRandomId();
-            //Debug_Log("Loading library " << libraryFilepath);
             bm->OnBehaviourFinishedCompiling(behaviourFilepath, libraryFilepath);
+            bm->TreatCompiledBehaviours();
             #endif
         }
     }

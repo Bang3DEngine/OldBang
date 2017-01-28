@@ -6,8 +6,11 @@
 #include "FileReader.h"
 #include "Persistence.h"
 #include "Application.h"
+#include "BehaviourHolder.h"
+#include "BehaviourManager.h"
 
 #ifdef BANG_EDITOR
+#include "Toolbar.h"
 #include "Hierarchy.h"
 #include "EditorScene.h"
 #endif
@@ -57,15 +60,33 @@ void SceneManager::SetActiveScene(Scene *scene)
     sm->m_activeScene = scene;
     if (sm->m_activeScene)
     {
-        AddScene(scene); // (it does not add repeated ones)
+        AddScene(sm->m_activeScene); // (it does not add repeated ones)
 
+        bool setCamera = true;
         #ifdef BANG_EDITOR
         Hierarchy::GetInstance()->Clear();
+        setCamera = Toolbar::GetInstance()->IsPlaying();
+        #else
+        // If it's GAME, load all the behaviours
+        /*
+        Debug_Log("Loading game behaviours");
+        List<BehaviourHolder*> behHolders =
+                sm->m_activeScene->
+                  GetComponentsInThisAndChildren<BehaviourHolder>();
+        for (BehaviourHolder *bHolder : behHolders)
+        {
+            Debug_Log("Loading " << bHolder->GetSourceFilepath() << "...");
+            BehaviourManager::Load(bHolder, bHolder->GetSourceFilepath());
+        }
+        Debug_Log("**********************");
+        */
         #endif
 
-        #ifndef BANG_EDITOR
         sm->m_activeScene->_OnStart();
-        #endif
+        if (setCamera)
+        {
+            sm->m_activeScene->SetFirstFoundCameraOrDefaultOne();
+        }
     }
 }
 
@@ -77,7 +98,6 @@ void SceneManager::SetActiveScene(const String &name)
         if (scene->name == name)
         {
             SceneManager::SetActiveScene(scene);
-            scene->_OnStart();
             return;
         }
     }
@@ -123,6 +143,43 @@ void SceneManager::RemoveScene(const String &name)
 }
 
 void SceneManager::LoadScene(const String &sceneFilepath)
+{
+    SceneManager *sm = SceneManager::GetInstance();
+
+    String spath = sceneFilepath;
+    if (!Persistence::ExistsFile(spath))
+    {
+        spath = Persistence::ToAbsolute(spath, false);
+    }
+
+    if (!Persistence::ExistsFile(spath))
+    {
+        spath = Persistence::AppendExtension(
+                    spath, Scene::GetFileExtensionStatic());
+    }
+
+    sm->m_queuedSceneFilepath = "";
+    if (Persistence::ExistsFile(spath))
+    {
+        sm->m_queuedSceneFilepath = spath;
+    }
+    else
+    {
+        Debug_Warn("Scene '" << sceneFilepath << "' does not exist.");
+    }
+}
+
+void SceneManager::TryToLoadQueuedScene()
+{
+    SceneManager *sm = SceneManager::GetInstance();
+    if (sm->m_queuedSceneFilepath != "")
+    {
+        SceneManager::LoadSceneInstantly(sm->m_queuedSceneFilepath);
+    }
+    sm->m_queuedSceneFilepath = "";
+}
+
+void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
 {
     Scene *oldScene = SceneManager::GetActiveScene();
     if (oldScene) { delete oldScene; }
