@@ -78,7 +78,7 @@ protected:
     virtual void updateGeometries() override;
 
 private:
-    const int c_minIconSize = 20;
+    const int c_minIconSize = 40;
     const int c_maxIconSize = 100;
 
     ExplorerContextMenu m_eContextMenu;
@@ -117,6 +117,10 @@ protected:
     virtual bool setData(const QModelIndex &idx,
                          const QVariant &value,
                          int role = Qt::EditRole) override;
+
+    QSize GetCharSize() const;
+    int GetWordWrappingWidth() const;
+    int GetWordWrappingCharsPerLine() const;
 
 private:
     int m_iconSize = 50;

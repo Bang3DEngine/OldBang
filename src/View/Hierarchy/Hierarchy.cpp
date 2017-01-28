@@ -31,12 +31,11 @@ Hierarchy::Hierarchy(QWidget *parent) :
             this, SLOT(UpdateHierarchyFromScene()));
     m_refreshFromSceneTimer.start(1000);
 
-    setMinimumWidth(150);
+    setMinimumWidth(150); // For initial size, modify SizeHint
 }
 
 Hierarchy::~Hierarchy()
 {
-    Debug_Log("Deleting hierarchy");
     clear();
 }
 
@@ -516,6 +515,11 @@ void Hierarchy::Print(QTreeWidgetItem *item, const String &indent)
         String indent2 = indent; indent2 += "   ";
         Print(it, indent2);
     }
+}
+
+QSize Hierarchy::sizeHint() const
+{
+    return QSize(150, DragDropQTreeWidget::sizeHint().height());
 }
 
 void Hierarchy::OnGameObjectDestroyed(GameObject *destroyed)

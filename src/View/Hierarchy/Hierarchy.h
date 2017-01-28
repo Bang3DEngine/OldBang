@@ -58,6 +58,8 @@ public:
     void DeleteGameObjectItem(GameObject *go);
     void Print(QTreeWidgetItem *item = nullptr, const String &indent = "");
 
+    QSize sizeHint() const override;
+
 public slots:
     void OnGameObjectDestroyed(GameObject *destroyed) override;
     void OnItemNameChanged(QTreeWidgetItem *item, int column);
