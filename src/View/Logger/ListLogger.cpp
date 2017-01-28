@@ -18,9 +18,27 @@ ListLogger::ListLogger(QWidget *parent) : DragDropQTreeWidget()
     m_errorIcon = QIcon(":/qss_icons/Icons/ErrorIcon.png");
 
     EditorWindow *win = EditorWindow::GetInstance();
+    m_collapse          = win->buttonCollapse->isChecked();
+    m_clearOnPlay       = win->buttonClearOnPlay->isChecked();
+    m_autoScroll        = win->buttonAutoScroll->isChecked();
+    m_showLogMessages   = win->buttonShowLogMessages->isChecked();
+    m_showWarnMessages  = win->buttonShowWarnMessages->isChecked();
+    m_showErrorMessages = win->buttonShowErrorMessages->isChecked();
+
     QObject::connect(win->buttonLoggerClear, SIGNAL( pressed() ),
                      this, SLOT(OnClear()));
-
+    QObject::connect(win->buttonCollapse, SIGNAL(clicked(bool)),
+                     this, SLOT(OnCollapseChanged(bool)));
+    QObject::connect(win->buttonClearOnPlay, SIGNAL(clicked(bool)),
+                     this, SLOT(OnClearOnPlayChanged(bool)));
+    QObject::connect(win->buttonAutoScroll, SIGNAL(clicked(bool)),
+                     this, SLOT(OnAutoScrollChanged(bool)));
+    QObject::connect(win->buttonShowLogMessages, SIGNAL(clicked(bool)),
+                     this, SLOT(OnShowLogMessagesChanged(bool)));
+    QObject::connect(win->buttonShowWarnMessages, SIGNAL(clicked(bool)),
+                     this, SLOT(OnShowWarnMessagesChanged(bool)));
+    QObject::connect(win->buttonShowErrorMessages, SIGNAL(clicked(bool)),
+                     this, SLOT(OnShowErrorMessagesChanged(bool)));
     // Set headers
     setHeaderHidden(false);
     setHeaderLabels( {"", "", "Message", "Line", "File name"} );
@@ -99,6 +117,44 @@ void ListLogger::OnClear() const
     ListLogger::Clear();
 }
 
+void ListLogger::OnEditorPlay()
+{
+    if (m_clearOnPlay)
+    {
+        OnClear();
+    }
+}
+
+void ListLogger::OnCollapseChanged(bool collapse)
+{
+    m_collapse = collapse;
+}
+
+void ListLogger::OnClearOnPlayChanged(bool clearOnPlay)
+{
+    m_clearOnPlay = clearOnPlay;
+}
+
+void ListLogger::OnAutoScrollChanged(bool autoScroll)
+{
+    m_autoScroll = autoScroll;
+}
+
+void ListLogger::OnShowLogMessagesChanged(bool showLogMessages)
+{
+    m_showLogMessages = showLogMessages;
+}
+
+void ListLogger::OnShowWarnMessagesChanged(bool showWarnMessages)
+{
+    m_showWarnMessages = showWarnMessages;
+}
+
+void ListLogger::OnShowErrorMessagesChanged(bool showErrorMessages)
+{
+    m_showErrorMessages = showErrorMessages;
+}
+
 void ListLogger::AddRow(const QIcon &icon, const String &msg,
                         int line, const String &fileName, bool uniqueMessage)
 {
@@ -127,8 +183,8 @@ void ListLogger::AddRow(const QIcon &icon, const String &msg,
     item->setText(c_lineColumn,     String::ToString(line).ToQString());
     item->setText(c_fileNameColumn, fileName.ToQString());
     addTopLevelItem(item);
-    scrollToBottom();
 
+    if (m_autoScroll) { scrollToBottom(); }
     m_currentMessageRowList.Add(msgRow);
 }
 

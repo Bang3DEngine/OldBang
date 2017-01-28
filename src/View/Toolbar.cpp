@@ -138,6 +138,7 @@ void Toolbar::OnPlayClicked()
     if (m_playing == false)
     {
         m_playing = true;
+        ListLogger::GetInstance()->OnEditorPlay();
         Application::GetInstance()->OnPlay();
     }
 

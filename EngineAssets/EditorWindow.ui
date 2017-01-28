@@ -943,7 +943,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="toolButton_2">
+           <widget class="QToolButton" name="buttonCollapse">
             <property name="text">
              <string>Collapse</string>
             </property>
@@ -956,7 +956,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="toolButton">
+           <widget class="QToolButton" name="buttonClearOnPlay">
             <property name="text">
              <string>Clear on Play</string>
             </property>
@@ -972,7 +972,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="toolButton_6">
+           <widget class="QToolButton" name="buttonAutoScroll">
             <property name="text">
              <string>Auto Scroll</string>
             </property>
@@ -1001,7 +1001,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QToolButton" name="toolButton_3">
+           <widget class="QToolButton" name="buttonShowLogMessages">
             <property name="text">
              <string>0</string>
             </property>
@@ -1021,7 +1021,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="toolButton_4">
+           <widget class="QToolButton" name="buttonShowWarnMessages">
             <property name="text">
              <string>0</string>
             </property>
@@ -1041,7 +1041,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="toolButton_5">
+           <widget class="QToolButton" name="buttonShowErrorMessages">
             <property name="text">
              <string>0</string>
             </property>
