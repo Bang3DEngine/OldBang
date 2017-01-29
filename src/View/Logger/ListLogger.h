@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QDropEvent>
 
+#include "Map.h"
 #include "List.h"
 #include "String.h"
 #include "DragDropAgent.h"
@@ -27,8 +28,7 @@ public:
     void OnEditorPlay();
 
 private slots:
-    void OnClear() const;
-
+    void OnClear();
 
     void OnCollapseChanged(bool collapse);
     void OnClearOnPlayChanged(bool clearOnPlay);
@@ -42,6 +42,7 @@ private slots:
 private:
     static int c_iconColumn;
     static int c_msgColumn;
+    static int c_countColumn;
     static int c_lineColumn;
     static int c_fileNameColumn;
 
@@ -52,24 +53,34 @@ private:
     bool m_showWarnMessages  = false;
     bool m_showErrorMessages = false;
 
+    enum MessageType { Log = 0, Warn = 1, Error = 2 };
     struct MessageRow
     {
-        String msg;
         int line;
+        String msg;
         String fileName;
+        MessageType msgType;
         bool operator==(const MessageRow &rhs) const;
+        bool operator<(const MessageRow &rhs) const;
     };
     List<MessageRow> m_currentMessageRowList;
+    Map<MessageRow, int> m_currentCollapsedMsgs;
+    Map<MessageRow, QTreeWidgetItem*> m_messageRowToItem;
 
     QIcon m_logIcon;
     QIcon m_warnIcon;
     QIcon m_errorIcon;
 
+    void RefreshList();
+
+    QTreeWidgetItem *CreateItemFromMessageRow(const MessageRow &mr);
+
     void OnAddLog(const String &str, int line, const String &fileName);
     void OnAddWarn(const String &str, int line, const String &fileName);
     void OnAddError(const String &str, int line, const String &fileName);
-    void AddRow(const QIcon &icon, const String &msg,
-                int line, const String &fileName, bool uniqueMessage = false);
+    void AddRow(int line, const String &msg,
+                const String &fileName, MessageType msgType,
+                bool uniqueMessage = false);
 };
 
 #endif // LISTLOGGER_H

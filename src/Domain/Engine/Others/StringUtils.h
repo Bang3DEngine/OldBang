@@ -23,7 +23,8 @@ public:
     static void Trim(String *str);
     static String Trim(const String &str);
 
-    static String Elide(const String &str, int length);
+    static String Elide(const String &str, int length,
+                        bool elideRight = true);
 
     static Array<String> Split(const String &content, char splitter);
     static Array<String> SplitTrim(const String &content, char splitter);

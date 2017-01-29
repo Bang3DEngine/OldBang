@@ -86,7 +86,7 @@ String StringUtils::Trim(const String &str)
     return str;
 }
 
-String StringUtils::Elide(const String &str, int length)
+String StringUtils::Elide(const String &str, int length, bool elideRight)
 {
     int maxLength = std::min(int(str.Length()), length);
     String result = str;
@@ -94,7 +94,8 @@ String StringUtils::Elide(const String &str, int length)
     {
         result = result.SubString(str.Length() - maxLength,
                                   str.Length() - 1);
-        result = "..." + result;
+        if (elideRight) { result = "..." + result; }
+        else            { result = result + "..."; }
     }
     return result;
 }
