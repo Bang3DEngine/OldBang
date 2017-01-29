@@ -80,11 +80,6 @@ void UIRenderer::Render() const
     glEnable(GL_DEPTH_TEST);
 }
 
-const String UIRenderer::ToString() const
-{
-    return "UIRenderer";
-}
-
 String UIRenderer::GetName() const
 {
     return "UIRenderer";

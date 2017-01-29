@@ -15,11 +15,6 @@ SingleLineRenderer::~SingleLineRenderer()
 {
 }
 
-const String SingleLineRenderer::ToString() const
-{
-    return "SingleLineRenderer";
-}
-
 String SingleLineRenderer::GetName() const
 {
     return "SingleLineRenderer";

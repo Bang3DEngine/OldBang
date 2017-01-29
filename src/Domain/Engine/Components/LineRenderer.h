@@ -17,7 +17,6 @@ class LineRenderer : public Renderer
 public:
     virtual ~LineRenderer();
 
-    virtual const String ToString() const override;
     virtual String GetName() const override;
 
     virtual ICloneable *Clone() const override = 0;

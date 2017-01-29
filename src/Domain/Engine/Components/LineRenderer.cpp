@@ -19,11 +19,6 @@ LineRenderer::~LineRenderer()
 
 }
 
-const String LineRenderer::ToString() const
-{
-    return "LineRenderer";
-}
-
 String LineRenderer::GetName() const
 {
     return "LineRenderer";

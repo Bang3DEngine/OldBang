@@ -10,7 +10,6 @@ class DirectionalLight : public Light
 {
 public:
 
-    virtual const String ToString() const override;
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;

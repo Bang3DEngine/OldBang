@@ -167,11 +167,6 @@ Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCa
     return res;
 }
 
-const String Camera::ToString() const
-{
-    return "Camera";
-}
-
 String Camera::GetName() const
 {
     return "Camera";

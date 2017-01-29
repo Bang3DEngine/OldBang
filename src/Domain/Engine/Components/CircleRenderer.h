@@ -12,7 +12,6 @@ class CircleRenderer : public LineRenderer
 public:
     virtual ~CircleRenderer();
 
-    virtual const String ToString() const override;
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;

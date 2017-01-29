@@ -40,12 +40,6 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
     sp->SetUniformFloat("B_light_range", m_range, false);
 }
 
-
-const String PointLight::ToString() const
-{
-    return "PointLight (" + String::ToString((void*)this) + ")";
-}
-
 String PointLight::GetName() const
 {
     return "PointLight";

@@ -22,7 +22,6 @@ public:
     virtual AABox GetAABBox() const override;
 
     virtual const Mesh* GetMesh();
-    virtual const String ToString() const override;
     virtual String GetName() const override;
 
     #ifdef BANG_EDITOR

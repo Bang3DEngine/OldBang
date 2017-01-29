@@ -19,11 +19,6 @@ UIImage::~UIImage()
 {
 }
 
-const String UIImage::ToString() const
-{
-    return "UIImage";
-}
-
 String UIImage::GetName() const
 {
     return "UIImage";

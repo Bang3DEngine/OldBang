@@ -18,7 +18,6 @@ public:
     virtual void Render() const override;
     virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const override;
 
-    virtual const String ToString() const override;
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;

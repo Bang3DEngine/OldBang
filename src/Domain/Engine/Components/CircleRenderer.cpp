@@ -16,10 +16,6 @@ CircleRenderer::~CircleRenderer()
 
 }
 
-const String CircleRenderer::ToString() const
-{
-    return GetName();
-}
 String CircleRenderer::GetName() const
 {
     return "CircleRenderer";

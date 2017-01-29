@@ -114,7 +114,6 @@ public:
     static Vector3    GetScaleFromMatrix4   (const Matrix4 &transformMatrix);
     static Transform  FromTransformMatrix(const Matrix4 &transformMatrix);
 
-    const String ToString() const override;
     virtual String GetName() const override { return "Transform"; }
 
     #ifdef BANG_EDITOR

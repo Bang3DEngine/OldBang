@@ -9,11 +9,6 @@ Canvas::~Canvas()
 
 }
 
-const String Canvas::ToString() const
-{
-    return "Canvas";
-}
-
 void Canvas::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);

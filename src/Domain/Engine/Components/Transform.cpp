@@ -405,24 +405,6 @@ Vector3 Transform::GetDown() const
     return -GetUp();
 }
 
-
-const String Transform::ToString() const
-{
-    using std::operator<<;
-
-    std::ostringstream msg;
-
-    Vector3 euler = Quaternion::EulerAngles(m_localRotation);
-    msg << "[" <<
-           "Transform: " << std::endl <<
-           "   Position: (" << m_localPosition.x << ", " << m_localPosition.y << ", " << m_localPosition.z << ")"  << std::endl <<
-           "   Rotation: (" << glm::degrees(euler.x) << ", " << glm::degrees(euler.y) << ", " << glm::degrees(euler.z) << ")" << std::endl <<
-           "   Scale: (" << m_localScale.x << ", " << m_localScale.y << ", " << m_localScale.z << ")" << std::endl <<
-           "]" << std::endl;
-
-    return msg.str();
-}
-
 #ifdef BANG_EDITOR
 
 void Transform::OnInspectorXMLNeeded(XMLNode *xmlInfo) const

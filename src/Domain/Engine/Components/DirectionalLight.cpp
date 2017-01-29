@@ -25,11 +25,6 @@ DirectionalLight::~DirectionalLight()
 
 }
 
-const String DirectionalLight::ToString() const
-{
-    return "DirectionalLight";
-}
-
 String DirectionalLight::GetName() const
 {
     return "DirectionalLight";

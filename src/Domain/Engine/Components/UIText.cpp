@@ -39,11 +39,6 @@ void UIText::RenderForSelectionFramebufferWithoutBindingMaterial() const
     glEnable(GL_DEPTH_TEST);
 }
 
-const String UIText::ToString() const
-{
-    return "UIText";
-}
-
 String UIText::GetName() const
 {
     return "UIText";

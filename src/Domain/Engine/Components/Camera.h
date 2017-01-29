@@ -57,7 +57,6 @@ public:
     Vector2 WorldToScreenNDCPoint(const Vector3 &position);
     Vector3 ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCamera);
 
-    virtual const String ToString() const override;
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;

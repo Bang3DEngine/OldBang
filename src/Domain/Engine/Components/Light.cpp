@@ -52,11 +52,6 @@ Rect Light::GetRenderRect(Camera *cam) const
     return Rect::ScreenRect; // By default, no rect rendering constraint
 }
 
-const String Light::ToString() const
-{
-    return "Light";
-}
-
 void Light::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);

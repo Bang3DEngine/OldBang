@@ -27,7 +27,6 @@ public:
 
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
-    virtual const String ToString() const override;
     virtual String GetName() const override;
 
     #ifdef BANG_EDITOR

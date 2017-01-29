@@ -32,13 +32,6 @@ void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
     m_behaviour = newBehaviour;
 }
 
-
-const String BehaviourHolder::ToString() const
-{
-    return "BehaviourHolder ( " +
-            String::ToString((void*)this)  + ")";
-}
-
 String BehaviourHolder::GetName() const
 {
     return "BehaviourHolder";
