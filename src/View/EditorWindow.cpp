@@ -74,6 +74,16 @@ QApplication *EditorWindow::GetApplication() const
     return EditorWindow::GetInstance()->m_app;
 }
 
+bool EditorWindow::IsSceneTabEnabled() const
+{
+    return tabContainerSceneGame->currentWidget() == tabScene;
+}
+
+bool EditorWindow::IsGameTabEnabled() const
+{
+    return tabContainerSceneGame->currentWidget() == tabGame;
+}
+
 void EditorWindow::OnTabSceneGameChanged(int index)
 {
     EditorScene *edScene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
@@ -96,4 +106,6 @@ void EditorWindow::OnTabSceneGameChanged(int index)
 
         edScene->SetFirstFoundCameraOrDefaultOne();
     }
+
+    Toolbar::GetInstance()->OnSceneGameTabChanged();
 }

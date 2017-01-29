@@ -33,6 +33,9 @@ public:
     QMainWindow *GetMainWindow() const override;
     QApplication *GetApplication() const override;
 
+    bool IsSceneTabEnabled() const;
+    bool IsGameTabEnabled() const;
+
 private slots:
     void OnTabSceneGameChanged(int index);
 

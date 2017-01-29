@@ -28,6 +28,7 @@ void Toolbar::Init()
     Toolbar::s_tb->m_buttonScaleMode     = w->buttonScaleMode;
     Toolbar::s_tb->m_buttonGlobalCoords  = w->buttonGlobalCoords;
     Toolbar::s_tb->m_buttonLocalCoords   = w->buttonLocalCoords;
+    Toolbar::s_tb->m_buttonShowGizmos    = w->buttonShowGizmos;
     Toolbar::s_tb->m_buttonPlay          = w->buttonPlay;
     Toolbar::s_tb->m_buttonStop          = w->buttonStop;
     Toolbar::s_tb->m_button3D            = w->buttonOrthoPerspectiveMode;
@@ -44,6 +45,9 @@ void Toolbar::Init()
             Toolbar::s_tb, SLOT(OnGlobalCoordsClicked()));
     connect(Toolbar::s_tb->m_buttonLocalCoords, SIGNAL(clicked()),
             Toolbar::s_tb, SLOT(OnLocalCoordsClicked()));
+
+    connect(Toolbar::s_tb->m_buttonShowGizmos, SIGNAL(clicked(bool)),
+            Toolbar::s_tb, SLOT(OnShowGizmosClicked(bool)));
 
     connect(Toolbar::s_tb->m_buttonPlay, SIGNAL(clicked()),
             Toolbar::s_tb, SLOT(OnPlayClicked()));
@@ -85,12 +89,19 @@ Toolbar::TransformMode Toolbar::GetSelectedTransformMode()
     return m_currentTransformMode;
 }
 
-bool Toolbar::IsPlaying()
+bool Toolbar::IsPlaying() const
 {
     return m_playing;
 }
 
-bool Toolbar::IsInGlobalCoordsMode()
+bool Toolbar::ShowGizmosEnabled() const
+{
+    bool tabGame = EditorWindow::GetInstance()->IsGameTabEnabled();
+    if (tabGame) { return m_showGizmosGame; }
+    return m_showGizmosScene;
+}
+
+bool Toolbar::IsInGlobalCoordsMode() const
 {
     return m_globalCoords;
 }
@@ -128,6 +139,13 @@ void Toolbar::OnLocalCoordsClicked()
     m_buttonGlobalCoords->setChecked(false);
     m_buttonLocalCoords->setChecked(true);
     m_globalCoords = false;
+}
+
+void Toolbar::OnShowGizmosClicked(bool showGizmos)
+{
+    bool tabGame = EditorWindow::GetInstance()->IsGameTabEnabled();
+    if (tabGame) { m_showGizmosGame  = showGizmos; }
+    else         { m_showGizmosScene = showGizmos; }
 }
 
 void Toolbar::OnPlayClicked()
@@ -224,5 +242,12 @@ void Toolbar::OnShortcutPressed()
             m_buttonPlay->click();
         }
     }
+}
+
+void Toolbar::OnSceneGameTabChanged()
+{
+    bool tabGame = EditorWindow::GetInstance()->IsGameTabEnabled();
+    if (tabGame) { m_buttonShowGizmos->setChecked(m_showGizmosGame); }
+    else         { m_buttonShowGizmos->setChecked(m_showGizmosScene); }
 }
 

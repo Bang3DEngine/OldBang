@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1008</width>
+    <width>1043</width>
     <height>592</height>
    </rect>
   </property>
@@ -240,6 +240,19 @@
               </spacer>
              </item>
              <item>
+              <widget class="QToolButton" name="buttonShowGizmos">
+               <property name="text">
+                <string>Gizmos</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QComboBox" name="comboBoxGBufferAttachment">
                <property name="sizeAdjustPolicy">
                 <enum>QComboBox::AdjustToMinimumContentsLength</enum>
@@ -362,7 +375,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1008</width>
+     <width>1043</width>
      <height>25</height>
     </rect>
    </property>

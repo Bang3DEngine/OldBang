@@ -677,6 +677,7 @@ void GameObject::OnDropMaterial(Material *m)
 void GameObject::_OnDrawGizmos()
 {
     #ifdef BANG_EDITOR
+    ASSERT(Toolbar::GetInstance()->ShowGizmosEnabled());
 
     PROPAGATE_EVENT(_OnDrawGizmos, m_children);  // The order matters
 
@@ -695,6 +696,7 @@ void GameObject::_OnDrawGizmos()
 void GameObject::_OnDrawGizmosOverlay()
 {
     #ifdef BANG_EDITOR
+    ASSERT(Toolbar::GetInstance()->ShowGizmosEnabled());
 
     GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();

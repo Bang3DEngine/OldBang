@@ -312,8 +312,8 @@ void GraphicPipeline::RenderGBuffer()
     if (!m_renderingInGame)
     {
         ApplySelectionEffect();
-        RenderGizmosPass(m_gbuffer);
     }
+    RenderGizmosPass(m_gbuffer);
 
     m_gbuffer->UnBind();
 
