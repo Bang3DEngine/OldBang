@@ -42,6 +42,7 @@ ListLogger::ListLogger(QWidget *parent) : DragDropQTreeWidget()
                      this, SLOT(OnShowWarnMessagesChanged(bool)));
     QObject::connect(win->buttonShowErrorMessages, SIGNAL(clicked(bool)),
                      this, SLOT(OnShowErrorMessagesChanged(bool)));
+
     // Set headers
     setHeaderHidden(false);
     setHeaderLabels( {"", "", "Message", "Count", "Line", "File name"} );
@@ -85,7 +86,6 @@ void ListLogger::DecorateLastItem(const Color &color)
     {
         item->setTextColor(c_msgColumn, color.ToQColor());
     }
-    scrollToBottom();
 }
 
 void ListLogger::RefreshList()
@@ -138,13 +138,11 @@ void ListLogger::OnAddLog(const String &str, int line, const String &fileName)
 void ListLogger::OnAddWarn(const String &str, int line, const String &fileName)
 {
     AddRow(line, str, fileName, MessageType::Warn);
-    DecorateLastItem( Color(1.0f, 1.0f, 0.3f) );
 }
 
 void ListLogger::OnAddError(const String &str, int line, const String &fileName)
 {
     AddRow(line, str, fileName, MessageType::Error);
-    DecorateLastItem( Color(1.0f, 0.3f, 0.3f) );
 }
 
 void ListLogger::OnClear()
@@ -178,21 +176,25 @@ void ListLogger::OnClearOnPlayChanged(bool clearOnPlay)
 void ListLogger::OnAutoScrollChanged(bool autoScroll)
 {
     m_autoScroll = autoScroll;
+    if (m_autoScroll) { scrollToBottom(); }
 }
 
 void ListLogger::OnShowLogMessagesChanged(bool showLogMessages)
 {
     m_showLogMessages = showLogMessages;
+    RefreshList();
 }
 
 void ListLogger::OnShowWarnMessagesChanged(bool showWarnMessages)
 {
     m_showWarnMessages = showWarnMessages;
+    RefreshList();
 }
 
 void ListLogger::OnShowErrorMessagesChanged(bool showErrorMessages)
 {
     m_showErrorMessages = showErrorMessages;
+    RefreshList();
 }
 
 void ListLogger::AddRow(int line, const String &msg, const String &fileName,
@@ -209,33 +211,50 @@ void ListLogger::AddRow(int line, const String &msg, const String &fileName,
         return;
     }
 
-    bool dontAddRow = m_collapse &&
-                      m_currentCollapsedMsgs.ContainsKey(msgRow);
+    bool dontAddRow = m_collapse && m_currentCollapsedMsgs.ContainsKey(msgRow);
     if (!m_currentCollapsedMsgs.ContainsKey(msgRow))
     {
-        m_currentCollapsedMsgs[msgRow] = 1;
+        m_currentCollapsedMsgs[msgRow] = 0;
     }
-    else
-    {
-        m_currentCollapsedMsgs[msgRow] += 1;
-    }
+
+    m_currentCollapsedMsgs[msgRow] += 1;
     m_currentMessageRowList.Add(msgRow);
 
     bool hasToAddRow = !dontAddRow;
+    if ( (!m_showLogMessages   && msgRow.msgType == MessageType::Log  ) ||
+         (!m_showWarnMessages  && msgRow.msgType == MessageType::Warn ) ||
+         (!m_showErrorMessages && msgRow.msgType == MessageType::Error)
+       )
+    {
+        hasToAddRow = false;
+    }
+
     if (hasToAddRow)
     {
         QTreeWidgetItem *item = CreateItemFromMessageRow(msgRow);
         m_messageRowToItem[msgRow] = item;
         addTopLevelItem(item);
+
+        if (msgRow.msgType == MessageType::Warn)
+        {
+            DecorateLastItem( Color(1.0f, 1.0f, 0.3f) );
+        }
+        else if (msgRow.msgType == MessageType::Error)
+        {
+            DecorateLastItem( Color(1.0f, 0.3f, 0.3f) );
+        }
     }
 
     if (m_collapse)
     {
         // Update count
         QTreeWidgetItem *item = m_messageRowToItem[msgRow];
-        int newCount = m_currentCollapsedMsgs[msgRow];
-        String newCountStr = String::ToString(newCount);
-        item->setText(ListLogger::c_countColumn, newCountStr.ToQString());
+        if (item)
+        {
+            int newCount = m_currentCollapsedMsgs[msgRow];
+            String newCountStr = String::ToString(newCount);
+            item->setText(ListLogger::c_countColumn, newCountStr.ToQString());
+        }
     }
 
     if (m_autoScroll) { scrollToBottom(); }
