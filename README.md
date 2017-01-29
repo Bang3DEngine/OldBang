@@ -23,9 +23,9 @@ Once installed (see above), you can start Bang using:
 
 # Needed libraries
 You need:
-  - OpenGL headers.
-  - GLEW (libglew-dev).
-  - Qt5 development libraries (qt5-default).
-  - Freetype development libraries.
-  - lbz2 (libbz2-dev).
-  - g++.
+  - OpenGL headers (usually coming by default).
+  - GLEW (libglew-dev in Ubuntu).
+  - Qt5 development libraries (qt5-default in Ubuntu).
+  - Freetype development libraries (libfreetype6-dev in Ubuntu).
+  - lbz2 (libbz2-dev in Ubuntu).
+  - g++ (usually coming by default).
