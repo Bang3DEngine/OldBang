@@ -69,7 +69,7 @@ uniform sampler2D B_color_gout_fin;
         #define VERT_IN_UV_OBJECT()       B_uv_raw_vin
     #endif
     #ifdef BANG_FRAGMENT
-        #define FRAG_IN_POSITION_WORLD()     B_position_world_vout_fin
+        #define FRAG_IN_POSITION_WORLD()     B_position_world_vout_fin.xyz
         #define FRAG_IN_NORMAL_WORLD()       B_normal_world_vout_fin
         #define FRAG_IN_UV()                 B_uv_vout_fin
         #define FRAG_IN_DIFFUSE_COLOR()      (texture2D(B_diffuse_gout_fin, B_screen_coord_norm))

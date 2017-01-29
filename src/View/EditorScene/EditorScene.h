@@ -28,6 +28,7 @@ public:
     bool IsEditorGameObject() const override;
 
     void SetEditorCamera();
+    Camera *GetCamera() const override;
     EditorCamera *GetEditorCamera() const;
 
     EditorGizmosGameObject *GetGizmosGameObject() const;

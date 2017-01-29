@@ -125,11 +125,8 @@ void EditorRotateAxis::OnUpdate()
         }
     }
 
-    // Pass some uniforms to the shader that renders the rotation circles
-    Sphere bSphere = m_attachedGameObject->GetBoundingSphere();
-    float radius = bSphere.GetRadius() / 2.0f;
-    m_material->GetShaderProgram()->SetUniformVec3("B_world_circleCenter", bSphere.GetCenter());
-    m_material->GetShaderProgram()->SetUniformVec3("B_boundingSphereRadius", radius);
+    m_material->GetShaderProgram()->
+            SetUniformVec3("B_world_circleCenter", transform->GetPosition());
 }
 
 void EditorRotateAxis::OnDrawGizmosOverlay()

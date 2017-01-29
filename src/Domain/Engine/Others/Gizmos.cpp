@@ -61,6 +61,11 @@ void Gizmos::SetReceivesLighting(bool receivesLighting)
             SetReceivesLighting(receivesLighting);
 }
 
+void Gizmos::SetBillboard()
+{
+    EditorGizmosGameObject::GetInstance()->SetBillboard();
+}
+
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
     EditorGizmosGameObject::GetInstance()->
@@ -91,6 +96,12 @@ void Gizmos::RenderIcon(const Texture2D *texture,
 {
     EditorGizmosGameObject::GetInstance()->
             RenderIcon(texture, billboard);
+}
+
+void Gizmos::RenderCircle(float radius)
+{
+    EditorGizmosGameObject::GetInstance()->
+            RenderCircle(radius);
 }
 
 void Gizmos::RenderLine(const Vector3 &origin, const Vector3 &destiny)

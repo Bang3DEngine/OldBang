@@ -69,12 +69,12 @@ void Scene::SetCamera(const Camera *cam)
 {
     if (!cam)
     {
-        this->m_cameraGameObject = nullptr;
+        m_cameraGameObject = nullptr;
         SetCamera(m_defaultCamera->GetComponent<Camera>());
     }
     else
     {
-        this->m_cameraGameObject = cam->gameObject;
+        m_cameraGameObject = cam->gameObject;
     }
 }
 
@@ -112,10 +112,13 @@ Scene *Scene::GetActiveScene()
     return SceneManager::GetActiveScene();
 }
 
-Camera *Scene::GetCamera()
+Camera *Scene::GetCamera() const
 {
-    Scene *scene = SceneManager::GetActiveScene();
-    return scene ? scene->GetCurrentCamera() : nullptr;
+    if (!m_cameraGameObject)
+    {
+        return nullptr;
+    }
+    return m_cameraGameObject->GetComponent<Camera>();
 }
 
 Scene *Scene::GetDefaultScene()
@@ -144,15 +147,6 @@ Scene *Scene::GetDefaultScene()
     camera->SetParent(scene);
 
     return scene;
-}
-
-Camera *Scene::GetCurrentCamera() const
-{
-    if (!m_cameraGameObject)
-    {
-        return nullptr;
-    }
-    return m_cameraGameObject->GetComponent<Camera>();
 }
 
 bool Scene::IsScene() const

@@ -24,9 +24,9 @@ public:
     void SetFirstFoundCameraOrDefaultOne();
 
     static Scene *GetActiveScene();
-    static Camera *GetCamera ();
     static Scene *GetDefaultScene();
-    Camera* GetCurrentCamera () const;
+
+    virtual Camera *GetCamera() const;
 
     bool IsScene() const override;
 

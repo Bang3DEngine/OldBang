@@ -103,6 +103,15 @@ void EditorGizmosGameObject::SetReceivesLighting(bool receivesLighting)
     }
 }
 
+void EditorGizmosGameObject::SetBillboard()
+{
+    Scene *scene = SceneManager::GetActiveScene();
+    GameObject *cam = scene->GetCamera()->gameObject;
+    Vector3 lookDir = (cam->transform->GetPosition() - transform->GetPosition());
+    lookDir.Normalize();
+    Gizmos::SetRotation( Quaternion::LookDirection(lookDir) );
+}
+
 void EditorGizmosGameObject::RenderCustomMesh(Mesh *m)
 {
     ASSERT(m);
@@ -165,6 +174,14 @@ void EditorGizmosGameObject::RenderRect(const Rect &r)
     Reset();
 }
 
+void EditorGizmosGameObject::RenderCircle(float radius)
+{
+    CircleRenderer *cr = GetComponent<CircleRenderer>();
+    cr->SetRadius(radius);
+    cr->Render();
+    Reset();
+}
+
 void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
                                         bool billboard)
 {
@@ -176,7 +193,7 @@ void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
     SetReceivesLighting(false);
     if (billboard)
     {
-        Camera *cam = Scene::GetCamera();
+        Camera *cam = SceneManager::GetActiveScene()->GetCamera();
         Vector3 camPos = cam->transform->GetPosition();
 
         float distScale = 1.0f;

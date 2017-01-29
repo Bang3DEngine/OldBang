@@ -21,10 +21,12 @@ public:
     void SetLineWidth(float lineWidth);
     void SetDrawWireframe(bool wireframe);
     void SetReceivesLighting(bool receivesLighting);
+    void SetBillboard();
     void RenderCustomMesh(Mesh *m);
     void RenderSimpleBox(const AABox &b);
     void RenderBox(const AABox &b);
     void RenderRect(const Rect &r);
+    void RenderCircle(float radius);
     void RenderIcon(const Texture2D *texture, bool billboard);
     void RenderLine(const Vector3 &origin, const Vector3 &destiny);
     void RenderScreenLine(const Vector2 &origin, const Vector2 &destiny);

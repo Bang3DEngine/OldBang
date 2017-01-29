@@ -7,6 +7,7 @@
 #include "Texture2D.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "SceneManager.h"
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
@@ -71,7 +72,7 @@ void DirectionalLight::OnDrawGizmos()
     if (gameObject->IsSelected())
     {
         // Draw lines to show light's direction
-        Camera *cam = Scene::GetCamera();
+        Camera *cam = SceneManager::GetActiveScene()->GetCamera();
         float distScale = Vector3::Distance(cam->transform->GetPosition(),
                                             transform->GetPosition());
 

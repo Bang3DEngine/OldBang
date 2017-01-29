@@ -12,6 +12,7 @@ private:
     EditorRotateAxis *m_axisX = nullptr;
     EditorRotateAxis *m_axisY = nullptr;
     EditorRotateAxis *m_axisZ = nullptr;
+    CircleRenderer *m_circle = nullptr;
 
 public:
     EditorRotateAxisGroup(GameObject *attachedGameObject);

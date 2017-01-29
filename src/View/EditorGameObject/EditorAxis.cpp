@@ -68,8 +68,9 @@ void EditorAxis::OnUpdate()
     }
 
     // Process line color
-    float lineWidth = m_mouseIsOver ? m_axisLineWidth * 2.0f :
-                                      m_axisLineWidth;
+    bool thickerLine = m_mouseIsOver || m_grabbed;
+    float lineWidth = m_axisLineWidth * (thickerLine ? 1.5f : 1.0f);
+
     Color diffColor;
     if (m_grabbed)
     {

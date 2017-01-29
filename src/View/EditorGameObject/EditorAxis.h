@@ -46,7 +46,7 @@ protected:
 
     bool m_mouseIsOver = false;
 
-    float m_axisLineWidth = 1.0f;
+    float m_axisLineWidth = 2.0f;
 
     static String GetStringFromDir(EditorAxisDirection dir);
     static Vector3 GetVectorFromDir(EditorAxisDirection dir);

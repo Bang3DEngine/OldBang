@@ -23,6 +23,7 @@
 #include "EditorCamera.h"
 #include "SceneManager.h"
 #include "EditorWindow.h"
+#include "SceneManager.h"
 #include "AssetsManager.h"
 #include "ProjectManager.h"
 #include "DirectionalLight.h"
@@ -316,7 +317,7 @@ void MenuBar::OnAlignGameObjectWithView() const
     if (selected)
     {
         EditorCamera *editorCamera =
-                static_cast<EditorCamera*>(Scene::GetCamera()->gameObject->parent);
+                static_cast<EditorCamera*>(SceneManager::GetActiveScene()->GetCamera()->gameObject->parent);
         selected->transform->SetPosition(editorCamera->transform->GetPosition());
         selected->transform->SetRotation(editorCamera->transform->GetRotation());
     }
@@ -330,7 +331,7 @@ void MenuBar::OnAlignViewWithGameObject() const
     if (selected)
     {
         EditorCamera *editorCamera =
-                static_cast<EditorCamera*>(Scene::GetCamera()->gameObject->parent);
+                static_cast<EditorCamera*>(SceneManager::GetActiveScene()->GetCamera()->gameObject->parent);
         editorCamera->AlignViewWithGameObject(selected);
     }
 

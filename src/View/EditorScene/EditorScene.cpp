@@ -5,6 +5,7 @@
 #include "Debug.h"
 #include "Camera.h"
 #include "UIText.h"
+#include "Toolbar.h"
 #include "Hierarchy.h"
 #include "Transform.h"
 #include "EditorFloor.h"
@@ -92,6 +93,15 @@ bool EditorScene::IsEditorGameObject() const
 void EditorScene::SetEditorCamera()
 {
     SetCamera( m_edCameraGameObject->GetCamera() );
+}
+
+Camera *EditorScene::GetCamera() const
+{
+    if (!Toolbar::GetInstance()->IsPlaying())
+    {
+        return m_edCameraGameObject->GetCamera();
+    }
+    return Scene::GetCamera();
 }
 
 EditorCamera *EditorScene::GetEditorCamera() const

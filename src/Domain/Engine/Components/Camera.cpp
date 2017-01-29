@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "FileReader.h"
 #include "MeshRenderer.h"
+#include "SceneManager.h"
 #include "AssetsManager.h"
 
 bool Camera::s_inited = false;
@@ -229,7 +230,7 @@ void Camera::OnDrawGizmos()
 
     Component::OnDrawGizmos();
 
-    Camera *sceneCam = Scene::GetCamera();
+    Camera *sceneCam = SceneManager::GetActiveScene()->GetCamera();
     float distScale = Vector3::Distance(sceneCam->transform->GetPosition(),
                                         transform->GetPosition());
 
