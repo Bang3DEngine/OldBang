@@ -27,4 +27,5 @@ You need:
   - GLEW (libglew-dev).
   - Qt5 development libraries (qt5-default).
   - Freetype development libraries.
+  - lbz2 (libbz2-dev).
   - g++.
