@@ -3,9 +3,9 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Screen.h"
-#include "Toolbar.h"
 #include "Material.h"
 #include "Transform.h"
+#include "EditorState.h"
 #include "SceneManager.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
@@ -63,8 +63,8 @@ void EditorRotateAxis::OnUpdate()
     Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ASSERT(cam);
     GameObject *ago = m_attachedGameObject;
 
-    SetEnabled(Toolbar::GetInstance()->GetSelectedTransformMode() ==
-               Toolbar::TransformMode::Rotate);
+    SetEnabled(EditorState::GetCurrentTransformMode() ==
+               EditorState::TransformMode::Rotate);
     if (m_grabbed)
     {
         if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
@@ -102,7 +102,7 @@ void EditorRotateAxis::OnUpdate()
 
             // Avoids rotation trembling when not aligned at all
             Vector3 parentAxisDir;
-            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
+            if (EditorState::IsUsingGlobalCoords())
             {
                 parentAxisDir = ago->parent->transform->WorldToLocalDirection(m_oAxisDirection);
             }
@@ -114,7 +114,7 @@ void EditorRotateAxis::OnUpdate()
             parentAxisDir.Normalize();
 
             Quaternion q = Quaternion::AngleAxis(rotAngle, parentAxisDir);
-            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
+            if (EditorState::IsUsingGlobalCoords())
             {
                 ago->transform->SetLocalRotation(q.Normalized() * ago->transform->GetLocalRotation());
             }

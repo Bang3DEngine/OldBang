@@ -27,7 +27,7 @@ WindowEventManager *WindowEventManager::GetInstance()
     if (!WindowEventManager::s_wem)
     {
         WindowEventManager::s_wem =
-                EditorWindow::GetInstance()->GetWindowEventManager();
+                EditorWindow::GetInstance()->m_winEventManager;
     }
     return WindowEventManager::s_wem;
 }

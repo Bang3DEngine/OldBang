@@ -4,7 +4,6 @@
 #include "Scene.h"
 #include "Gizmos.h"
 #include "Camera.h"
-#include "Toolbar.h"
 #include "Material.h"
 #include "Transform.h"
 #include "EditorScene.h"

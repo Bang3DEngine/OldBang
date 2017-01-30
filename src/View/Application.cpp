@@ -164,43 +164,6 @@ bool Application::notify(QObject *receiver, QEvent *e)
     return QApplication::notify(receiver, e);
 }
 
-#ifdef BANG_EDITOR
-void Application::OnPlay()
-{
-    m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
-
-    Scene *sceneCopy = static_cast<Scene*>( m_latestSceneBeforePlaying->Clone() );
-    if (sceneCopy)
-    {
-        SceneManager::SetActiveScene(sceneCopy);
-    }
-
-    EditorScene *edScene = static_cast<EditorScene*>(sceneCopy);
-    edScene->OnEditorPlay();
-
-    EditorWindow *win = EditorWindow::GetInstance();
-    win->tabContainerSceneGame->setCurrentWidget(win->tabGame);
-}
-
-void Application::OnStop()
-{
-    Scene *sceneCopy = SceneManager::GetActiveScene();
-    if (sceneCopy)
-    {
-        Hierarchy::GetInstance()->Clear();
-        SceneManager::SetActiveScene(nullptr);
-        delete sceneCopy;
-    }
-
-    SceneManager::SetActiveScene(m_latestSceneBeforePlaying);
-    EditorScene *edScene = static_cast<EditorScene*>(m_latestSceneBeforePlaying);
-    edScene->OnEditorStop();
-
-    EditorWindow *win = EditorWindow::GetInstance();
-    win->tabContainerSceneGame->setCurrentWidget(win->tabScene);
-}
-#endif
-
 bool Application::CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent)
 {
     return m_lastKeyPressEvInfo.key == keyReleaseEvent->key() &&

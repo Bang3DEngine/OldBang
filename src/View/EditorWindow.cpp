@@ -5,10 +5,12 @@
 #include "Explorer.h"
 #include "Hierarchy.h"
 #include "Inspector.h"
+#include "EditorState.h"
 #include "EditorScene.h"
 #include "SceneManager.h"
 #include "SingletonManager.h"
 #include "WindowEventManager.h"
+#include "EditorPlayStopFlowController.h"
 
 EditorWindow *EditorWindow::s_win = nullptr;
 
@@ -23,7 +25,10 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     IWindow::InitFromMainBinary(window, application);
 
     EditorWindow::s_win = new EditorWindow();
-    EditorWindow::s_win->m_winEventManager = new WindowEventManager();
+    EditorWindow::s_win->m_editorState        = new EditorState();
+    EditorWindow::s_win->m_winEventManager    = new WindowEventManager();
+    EditorWindow::s_win->m_playStopController = new EditorPlayStopFlowController();
+
     SingletonManager::GetInstance()->SetWindowSingleton(EditorWindow::s_win);
 
     EditorWindow::s_win->m_mainWindow = window;
@@ -31,7 +36,6 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
 
     EditorWindow::s_win->setupUi(window);
     EditorWindow::s_win->m_mainWindow->showMaximized();
-
 
     Toolbar::Init();
 
@@ -73,21 +77,6 @@ QMainWindow *EditorWindow::GetMainWindow() const
 QApplication *EditorWindow::GetApplication() const
 {
     return EditorWindow::GetInstance()->m_app;
-}
-
-bool EditorWindow::IsSceneTabEnabled() const
-{
-    return tabContainerSceneGame->currentWidget() == tabScene;
-}
-
-bool EditorWindow::IsGameTabEnabled() const
-{
-    return tabContainerSceneGame->currentWidget() == tabGame;
-}
-
-WindowEventManager *EditorWindow::GetWindowEventManager() const
-{
-    return m_winEventManager;
 }
 
 void EditorWindow::OnTabSceneGameChanged(int index)

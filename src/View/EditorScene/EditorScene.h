@@ -22,9 +22,6 @@ public:
     virtual void _OnStart () override;
     virtual void OnUpdate() override;
 
-    void OnEditorStop();
-    void OnEditorPlay();
-
     bool IsEditorGameObject() const override;
 
     void SetEditorCamera();

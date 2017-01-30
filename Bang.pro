@@ -262,8 +262,10 @@ HEADERS += \
     src/View/EditorGameObject/EditorTranslateAxis.h \
     src/View/EditorGameObject/EditorTranslateAxisGroup.h \
     src/View/Inspector/AttrWidgetButton.h \
+    src/View/EditorPlayStopFlowController.h \
     src/View/Toolbar.h \
     src/View/WindowEventManager.h \
+    src/View/EditorState.h \
     src/View/Dialogs/GameBuildDialog.h \
     src/View/GameBuilderJob.h \
     src/View/Inspector/AttrWidgetFile.h \
@@ -426,6 +428,7 @@ SOURCES += \
     src/Persistence/BehaviourRefresherTimer.cpp \
     src/Domain/Engine/Physics/AABox.cpp \
     src/View/DialogBrowseAssetFile.cpp
+
 EDITOR {
     SOURCES += \
         src/View/EditorGameObject/EditorGizmosGameObject.cpp \
@@ -433,6 +436,8 @@ EDITOR {
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/SelectProjectWindow.cpp \
         src/View/Explorer/FileSystemModel.cpp \
+        src/View/EditorState.cpp \
+        src/View/EditorPlayStopFlowController.cpp \
         src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
         src/View/EditorGameObject/EditorRotateAxis.cpp \
         src/View/EditorGameObject/EditorAxisGroup.cpp \

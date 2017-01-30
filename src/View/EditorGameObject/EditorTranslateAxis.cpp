@@ -2,12 +2,12 @@
 
 #include "Debug.h"
 #include "Scene.h"
+#include "Input.h"
 #include "Camera.h"
-#include "Toolbar.h"
 #include "Matrix4.h"
 #include "Material.h"
 #include "Transform.h"
-#include "Transform.h"
+#include "EditorState.h"
 #include "MeshFactory.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
@@ -70,15 +70,15 @@ void EditorTranslateAxis::OnUpdate()
     GameObject *ago = m_attachedGameObject;
     Vector3 wCamPos = camTransform->GetPosition();
 
-    SetEnabled(Toolbar::GetInstance()->GetSelectedTransformMode() ==
-               Toolbar::TransformMode::Translate);
+    SetEnabled(EditorState::GetCurrentTransformMode() ==
+               EditorState::TransformMode::Translate);
     if (m_grabbed)
     {
         Vector2 sMouseDelta = Input::GetMouseDelta() * Vector2(1.0f, -1.0f);
         if (sMouseDelta.Length() > 0.0f)
         {
             Vector3 wAxisDir, parentAxisDir;
-            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
+            if (EditorState::IsUsingGlobalCoords())
             {
                 wAxisDir = m_oAxisDirection;
                 if (ago->parent)

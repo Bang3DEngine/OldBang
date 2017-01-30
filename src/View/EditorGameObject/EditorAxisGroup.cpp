@@ -2,9 +2,9 @@
 
 #include "Scene.h"
 #include "Camera.h"
-#include "Toolbar.h"
 #include "Transform.h"
 #include "GameObject.h"
+#include "EditorState.h"
 #include "SceneManager.h"
 #include "EditorScaleAxisGroup.h"
 #include "EditorRotateAxisGroup.h"
@@ -33,20 +33,20 @@ void EditorAxisGroup::DisableAllGroups()
 
 void EditorAxisGroup::OnUpdate()
 {
-    Toolbar::TransformMode tm = Toolbar::GetInstance()->
-                                GetSelectedTransformMode();
+    EditorState::TransformMode tm =
+            EditorState::GetCurrentTransformMode();
 
-    if (tm == Toolbar::TransformMode::Translate)
+    if (tm == EditorState::TransformMode::Translate)
     {
         DisableAllGroups();
         m_etag->SetEnabled(true);
     }
-    else if (tm == Toolbar::TransformMode::Rotate)
+    else if (tm == EditorState::TransformMode::Rotate)
     {
         DisableAllGroups();
         m_erag->SetEnabled(true);
     }
-    else if (tm == Toolbar::TransformMode::Scale)
+    else if (tm == EditorState::TransformMode::Scale)
     {
         DisableAllGroups();
         m_esag->SetEnabled(true);
@@ -62,7 +62,7 @@ void EditorAxisGroup::OnUpdate()
             //Box bbox = m_attachedGameObject->GetBoundingBox();
             //transform->SetPosition( bbox.GetCenter() ); // Center
 
-            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
+            if (EditorState::IsUsingGlobalCoords())
             {
                 transform->SetLocalRotation( Quaternion() );
             }

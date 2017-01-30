@@ -13,6 +13,7 @@
 #include "Component.h"
 #include "Transform.h"
 #include "PointLight.h"
+#include "EditorState.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
 #include "GraphicPipeline.h"
@@ -21,12 +22,12 @@
 #include "DirectionalLight.h"
 
 #ifdef BANG_EDITOR
-#include "Toolbar.h"
 #include "Hierarchy.h"
 #include "EditorScene.h"
 #include "WindowEventManager.h"
 #include "SelectionFramebuffer.h"
 #include "EditorSelectionGameObject.h"
+#include "EditorPlayStopFlowController.h"
 #endif
 
 GameObject::GameObject() : GameObject("")
@@ -611,7 +612,7 @@ void GameObject::_OnStart()
 void GameObject::_OnUpdate()
 {
     #ifdef BANG_EDITOR
-    bool canUpdate = Toolbar::GetInstance()->IsPlaying() || IsEditorGameObject();
+    bool canUpdate = EditorPlayStopFlowController::IsPlaying() || IsEditorGameObject();
     #else
     bool canUpdate = true;
     #endif
@@ -677,7 +678,7 @@ void GameObject::OnDropMaterial(Material *m)
 void GameObject::_OnDrawGizmos()
 {
     #ifdef BANG_EDITOR
-    ASSERT(Toolbar::GetInstance()->ShowGizmosEnabled());
+    ASSERT(EditorState::ShowGizmosEnabled());
 
     PROPAGATE_EVENT(_OnDrawGizmos, m_children);  // The order matters
 
@@ -696,7 +697,7 @@ void GameObject::_OnDrawGizmos()
 void GameObject::_OnDrawGizmosOverlay()
 {
     #ifdef BANG_EDITOR
-    ASSERT(Toolbar::GetInstance()->ShowGizmosEnabled());
+    ASSERT(EditorState::ShowGizmosEnabled());
 
     GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();

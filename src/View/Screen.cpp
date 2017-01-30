@@ -15,7 +15,6 @@
 #include "SingletonManager.h"
 
 #ifdef BANG_EDITOR
-#include "Toolbar.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
 #include "EditorScene.h"

@@ -5,7 +5,6 @@
 #include "Debug.h"
 #include "Camera.h"
 #include "UIText.h"
-#include "Toolbar.h"
 #include "Hierarchy.h"
 #include "Transform.h"
 #include "EditorFloor.h"
@@ -14,6 +13,7 @@
 #include "EditorDebugGameObject.h"
 #include "EditorGizmosGameObject.h"
 #include "EditorTranslateAxisGroup.h"
+#include "EditorPlayStopFlowController.h"
 
 EditorScene::EditorScene() : Scene()
 {
@@ -75,16 +75,6 @@ void EditorScene::OnUpdate()
     m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
 }
 
-void EditorScene::OnEditorStop()
-{
-    SetCamera( m_edCameraGameObject->GetCamera() );
-}
-
-void EditorScene::OnEditorPlay()
-{
-    SetFirstFoundCameraOrDefaultOne();
-}
-
 bool EditorScene::IsEditorGameObject() const
 {
     return true;
@@ -97,7 +87,7 @@ void EditorScene::SetEditorCamera()
 
 Camera *EditorScene::GetCamera() const
 {
-    if (!Toolbar::GetInstance()->IsPlaying())
+    if (!EditorPlayStopFlowController::IsPlaying())
     {
         return m_edCameraGameObject->GetCamera();
     }

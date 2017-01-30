@@ -17,22 +17,12 @@ class Toolbar : public QWidget,
     Q_OBJECT
 
 public:
-    enum TransformMode
-    {
-        Translate, Rotate, Scale
-    };
 
     explicit Toolbar(QWidget *parent = nullptr);
     virtual ~Toolbar();
 
     static void Init();
     static Toolbar* GetInstance();
-
-    TransformMode GetSelectedTransformMode();
-
-    bool IsPlaying() const;
-    bool ShowGizmosEnabled() const;
-    bool IsInGlobalCoordsMode() const;
 
 public slots:
 
@@ -55,11 +45,6 @@ public slots:
 private:
     static Toolbar *s_tb;
 
-    bool m_globalCoords = false;
-    bool m_playing = false;
-    bool m_showGizmosScene = true;
-    bool m_showGizmosGame = false;
-
     QToolButton *m_buttonTranslateMode = nullptr;
     QToolButton *m_buttonRotateMode    = nullptr;
     QToolButton *m_buttonScaleMode     = nullptr;
@@ -70,8 +55,6 @@ private:
     QToolButton *m_buttonStop          = nullptr;
     QToolButton *m_button3D            = nullptr;
     QComboBox   *m_gbufferAttachmentComboBox = nullptr;
-
-    TransformMode m_currentTransformMode = TransformMode::Translate;
 
     void UnCheckTransformModeButtons();
 };

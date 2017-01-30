@@ -1,10 +1,9 @@
 #include "Toolbar.h"
 
-#include <QProgressDialog>
-
 #include "Debug.h"
 #include "Scene.h"
 #include "Camera.h"
+#include "EditorState.h"
 #include "Application.h"
 #include "EditorScene.h"
 #include "EditorCamera.h"
@@ -13,6 +12,7 @@
 #include "GraphicPipeline.h"
 #include "ShortcutManager.h"
 #include "BehaviourManager.h"
+#include "EditorPlayStopFlowController.h"
 
 Toolbar *Toolbar::s_tb = nullptr;
 
@@ -89,97 +89,68 @@ Toolbar *Toolbar::GetInstance()
     return s_tb;
 }
 
-Toolbar::TransformMode Toolbar::GetSelectedTransformMode()
-{
-    return m_currentTransformMode;
-}
-
-bool Toolbar::IsPlaying() const
-{
-    return m_playing;
-}
-
-bool Toolbar::ShowGizmosEnabled() const
-{
-    bool tabGame = EditorWindow::GetInstance()->IsGameTabEnabled();
-    if (tabGame) { return m_showGizmosGame; }
-    return m_showGizmosScene;
-}
-
-bool Toolbar::IsInGlobalCoordsMode() const
-{
-    return m_globalCoords;
-}
-
 void Toolbar::OnTranslateClicked()
 {
     UnCheckTransformModeButtons();
     m_buttonTranslateMode->setChecked(true);
-    m_currentTransformMode = TransformMode::Translate;
+    EditorState::GetInstance()->m_currentTransformMode =
+            EditorState::TransformMode::Translate;
 }
 
 void Toolbar::OnRotateClicked()
 {
     UnCheckTransformModeButtons();
     m_buttonRotateMode->setChecked(true);
-    m_currentTransformMode = TransformMode::Rotate;
+    EditorState::GetInstance()->m_currentTransformMode =
+            EditorState::TransformMode::Rotate;
 }
 
 void Toolbar::OnScaleClicked()
 {
     UnCheckTransformModeButtons();
     m_buttonScaleMode->setChecked(true);
-    m_currentTransformMode = TransformMode::Scale;
+    EditorState::GetInstance()->m_currentTransformMode =
+            EditorState::TransformMode::Scale;
 }
 
 void Toolbar::OnGlobalCoordsClicked()
 {
     m_buttonGlobalCoords->setChecked(true);
     m_buttonLocalCoords->setChecked(false);
-    m_globalCoords = true;
+    EditorState::GetInstance()->m_globalCoords = true;
 }
 
 void Toolbar::OnLocalCoordsClicked()
 {
     m_buttonGlobalCoords->setChecked(false);
     m_buttonLocalCoords->setChecked(true);
-    m_globalCoords = false;
+    EditorState::GetInstance()->m_globalCoords = false;
 }
 
 void Toolbar::OnShowGizmosClicked(bool showGizmos)
 {
-    bool tabGame = EditorWindow::GetInstance()->IsGameTabEnabled();
-    if (tabGame) { m_showGizmosGame  = showGizmos; }
-    else         { m_showGizmosScene = showGizmos; }
+    if (EditorState::IsShowingGameTab())
+    {
+        EditorState::GetInstance()->m_showGizmosGame  = showGizmos;
+    }
+    else
+    {
+        EditorState::GetInstance()->m_showGizmosScene = showGizmos;
+    }
 }
 
 void Toolbar::OnPlayClicked()
 {
     m_buttonPlay->setChecked(true);
     m_buttonStop->setChecked(false);
-
-    if (m_playing == false)
-    {
-        m_playing = true;
-
-        ListLogger::GetInstance()->OnEditorPlay();
-        BehaviourManager::RefreshAllBehaviourHoldersSynchronously();
-        Application::GetInstance()->OnPlay();
-    }
-
-    Screen::GetInstance()->setFocus();
+    EditorPlayStopFlowController::OnPlayClicked();
 }
 
 void Toolbar::OnStopClicked()
 {
     m_buttonPlay->setChecked(false);
     m_buttonStop->setChecked(true);
-
-    if (m_playing)
-    {
-        m_playing = false;
-        Application::GetInstance()->OnStop();
-    }
+    EditorPlayStopFlowController::OnStopClicked();
 }
 
 void Toolbar::OnOrthoPerspectiveClicked()
@@ -241,7 +212,7 @@ void Toolbar::OnShortcutPressed()
 {
     if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::P}))
     {
-        if (m_playing)
+        if (EditorPlayStopFlowController::IsPlaying())
         {
             m_buttonStop->click();
         }
@@ -254,8 +225,13 @@ void Toolbar::OnShortcutPressed()
 
 void Toolbar::OnSceneGameTabChanged()
 {
-    bool tabGame = EditorWindow::GetInstance()->IsGameTabEnabled();
-    if (tabGame) { m_buttonShowGizmos->setChecked(m_showGizmosGame); }
-    else         { m_buttonShowGizmos->setChecked(m_showGizmosScene); }
+    if (EditorState::IsShowingGameTab())
+    {
+        m_buttonShowGizmos->setChecked(EditorState::ShowGizmosGameEnabled());
+    }
+    else
+    {
+        m_buttonShowGizmos->setChecked(EditorState::ShowGizmosSceneEnabled());
+    }
 }
 

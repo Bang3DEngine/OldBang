@@ -11,8 +11,10 @@
  *  This will be a singleton shared amongst ALL *.o and *.so
  *  Cross-library shared singleton
  */
+class EditorState;
 class QApplication;
 class WindowEventManager;
+class EditorPlayStopFlowController;
 class EditorWindow : public QObject,
                      public IWindow,
                      public Ui_EditorWindow
@@ -34,18 +36,19 @@ public:
     QMainWindow *GetMainWindow() const override;
     QApplication *GetApplication() const override;
 
-    bool IsSceneTabEnabled() const;
-    bool IsGameTabEnabled() const;
-
-    WindowEventManager *GetWindowEventManager() const;
-
 private slots:
     void OnTabSceneGameChanged(int index);
 
 private:
     static EditorWindow *s_win;
 
+    EditorState *m_editorState = nullptr;
     WindowEventManager *m_winEventManager = nullptr;
+    EditorPlayStopFlowController *m_playStopController = nullptr;
+
+    friend class EditorState;
+    friend class WindowEventManager;
+    friend class EditorPlayStopFlowController;
 };
 
 #endif // WINDOWMAIN_H

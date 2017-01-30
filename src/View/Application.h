@@ -26,16 +26,11 @@ public:
 
     bool notify(QObject *receiver, QEvent *e) override;
 
-    #ifdef BANG_EDITOR
-    void OnPlay();
-    void OnStop();
-    #endif
 
 public slots:
     void OnDrawTimerTick();
 
 private:
-    Scene *m_latestSceneBeforePlaying = nullptr;
     SceneManager *m_sceneManager = nullptr;
     AssetsManager *m_assetsManager = nullptr;
     BehaviourManager *m_behaviourManager = nullptr;

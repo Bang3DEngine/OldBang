@@ -2,13 +2,14 @@
 
 #include "Debug.h"
 #include "Scene.h"
+#include "Input.h"
 #include "Camera.h"
-#include "Toolbar.h"
 #include "Matrix4.h"
 #include "Material.h"
 #include "Renderer.h"
 #include "Transform.h"
 #include "MeshFactory.h"
+#include "EditorState.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
 #include "EditorGameObject.h"
@@ -66,15 +67,15 @@ void EditorScaleAxis::OnUpdate()
     GameObject *ago = m_attachedGameObject; ASSERT(ago->transform);
     Vector3 wCamPos = camTransform->GetPosition();
 
-    SetEnabled(Toolbar::GetInstance()->GetSelectedTransformMode() ==
-               Toolbar::TransformMode::Scale);
+    SetEnabled(EditorState::GetCurrentTransformMode() ==
+               EditorState::TransformMode::Scale);
     if (m_grabbed)
     {
         Vector2 sMouseDelta = Input::GetMouseDelta() * Vector2(1.0f, -1.0f);
         if (sMouseDelta.Length() > 0.0f)
         {
             Vector3 wAxisDir, parentAxisDir;
-            if (Toolbar::GetInstance()->IsInGlobalCoordsMode())
+            if (EditorState::IsUsingGlobalCoords())
             {
                 wAxisDir = m_oAxisDirection;
                 parentAxisDir = ago->transform->WorldToLocalDirection(m_oAxisDirection);
