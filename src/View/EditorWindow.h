@@ -12,6 +12,7 @@
  *  Cross-library shared singleton
  */
 class QApplication;
+class WindowEventManager;
 class EditorWindow : public QObject,
                      public IWindow,
                      public Ui_EditorWindow
@@ -36,12 +37,15 @@ public:
     bool IsSceneTabEnabled() const;
     bool IsGameTabEnabled() const;
 
+    WindowEventManager *GetWindowEventManager() const;
+
 private slots:
     void OnTabSceneGameChanged(int index);
 
 private:
     static EditorWindow *s_win;
 
+    WindowEventManager *m_winEventManager = nullptr;
 };
 
 #endif // WINDOWMAIN_H

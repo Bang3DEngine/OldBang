@@ -12,6 +12,7 @@ class BehaviourManagerCompileThread : public QThread
 
 public:
     BehaviourManagerCompileThread(const String &behaviourRelativeFilepath);
+    void Compile();
 
 protected:
     String m_behaviourRelativeFilepath = "";

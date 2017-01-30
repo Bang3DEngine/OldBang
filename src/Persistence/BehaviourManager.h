@@ -25,12 +25,20 @@ class BehaviourManager : public QObject
     Q_OBJECT
 
 public:
+
+    // Refreshes all the behaviour holders without using async
+    // Useful before playing for example, to ensure all the behaviours
+    // are loaded
+    static void RefreshAllBehaviourHoldersSynchronously();
+
     static bool IsBeingCompiled(const String &behaviourPath);
 
     // This must be called when you want to retrieve the QLibrary from a
     // behaviour source filepath
     static void Load(BehaviourHolder *behaviourHolder,
-                     const String &behaviourFilepath);
+                     const String &behaviourFilepath,
+                     bool synchronously);
+
     static void OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder);
 
     static BehaviourManager* GetInstance();
@@ -75,7 +83,7 @@ private:
      * @brief Holds the compiled behaviour filepaths and its
      * compiled libraries
      */
-    Map<String, String> m_behPath_To_compiledLibrary;
+    Map<String, String> m_behPath_To_compiledLibraryPath;
 
     /**
      * @brief Set of behaviours abs paths that are being compiled right now.

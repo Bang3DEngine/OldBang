@@ -56,7 +56,7 @@ const String &BehaviourHolder::GetSourceFilepath() const
     return m_sourceFilepath;
 }
 
-void BehaviourHolder::Refresh()
+void BehaviourHolder::Refresh(bool synchronous)
 {
     ASSERT(gameObject);
     #ifdef BANG_EDITOR // No refresh on temporary gameObjects
@@ -65,7 +65,7 @@ void BehaviourHolder::Refresh()
 
     String absPath = Persistence::ToAbsolute(m_sourceFilepath, false);
     ASSERT(Persistence::ExistsFile(absPath));
-    BehaviourManager::Load(this, absPath);
+    BehaviourManager::Load(this, absPath, synchronous);
 }
 
 

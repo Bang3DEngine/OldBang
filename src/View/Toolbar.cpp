@@ -1,5 +1,7 @@
 #include "Toolbar.h"
 
+#include <QProgressDialog>
+
 #include "Debug.h"
 #include "Scene.h"
 #include "Camera.h"
@@ -10,10 +12,13 @@
 #include "SceneManager.h"
 #include "GraphicPipeline.h"
 #include "ShortcutManager.h"
+#include "BehaviourManager.h"
 
 Toolbar *Toolbar::s_tb = nullptr;
 
-Toolbar::Toolbar(QWidget *parent) : QWidget(parent) { }
+Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
+{
+}
 
 Toolbar::~Toolbar()
 {
@@ -156,7 +161,9 @@ void Toolbar::OnPlayClicked()
     if (m_playing == false)
     {
         m_playing = true;
+
         ListLogger::GetInstance()->OnEditorPlay();
+        BehaviourManager::RefreshAllBehaviourHoldersSynchronously();
         Application::GetInstance()->OnPlay();
     }
 
@@ -167,6 +174,7 @@ void Toolbar::OnStopClicked()
 {
     m_buttonPlay->setChecked(false);
     m_buttonStop->setChecked(true);
+
     if (m_playing)
     {
         m_playing = false;

@@ -31,7 +31,7 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourPath,
     QMutexLocker locker(&m_mutex);
     String absPath = Persistence::ToAbsolute(behaviourPath, false);
     m_behPathsBeingCompiled.erase(absPath);
-    m_behPath_To_compiledLibrary.Set(absPath, libraryFilepath);
+    m_behPath_To_compiledLibraryPath.Set(absPath, libraryFilepath);
 }
 
 void BehaviourManager::OnBehaviourFailedCompiling(const String &behaviourPath)
@@ -47,8 +47,8 @@ void BehaviourManager::TreatCompiledBehaviours()
 {
     QMutexLocker locker(&m_mutex);
 
-    for (auto it = m_behPath_To_compiledLibrary.Begin();
-         it != m_behPath_To_compiledLibrary.End(); ++it)
+    for (auto it = m_behPath_To_compiledLibraryPath.Begin();
+         it != m_behPath_To_compiledLibraryPath.End(); ++it)
     {
         String behaviourPath = it->first;
         String absPath = Persistence::ToAbsolute(behaviourPath, false);
@@ -84,7 +84,7 @@ void BehaviourManager::TreatCompiledBehaviours()
                         libraryFilepath << "': " << lib->errorString());
         }
     }
-    m_behPath_To_compiledLibrary.Clear();
+    m_behPath_To_compiledLibraryPath.Clear();
 }
 
 void BehaviourManager::RemoveOutdatedLibraryFiles(
@@ -131,6 +131,12 @@ QLibrary *BehaviourManager::GetCachedLibrary(const String &behaviourPath)
     return bm->m_behHash_To_lib[hash];
 }
 
+void BehaviourManager::RefreshAllBehaviourHoldersSynchronously()
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    bm->m_behaviourRefresherTimer.RefreshBehavioursInScene(true);
+}
+
 bool BehaviourManager::IsBeingCompiled(const String &behaviourPath)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
@@ -143,7 +149,8 @@ bool BehaviourManager::IsBeingCompiled(const String &behaviourPath)
 }
 
 void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
-                            const String &behaviourFilepath)
+                            const String &behaviourFilepath,
+                            bool synchronously)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     ASSERT(bm);
@@ -185,36 +192,59 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             bm->m_behHash_To_behHolderDemanders[hash].PushBack(behaviourHolder);
         }
 
-        if (!BehaviourManager::IsBeingCompiled(behAbsPath))
+        if (!synchronously)
         {
-            // Compile once
-            bm->m_behPathsBeingCompiled.insert(behAbsPath);
+            return;
 
-            #ifdef BANG_EDITOR
+            if (!BehaviourManager::IsBeingCompiled(behAbsPath))
+            {
+                // Compile once
+                bm->m_behPathsBeingCompiled.insert(behAbsPath);
 
-            // Have to compile and load it. First compile
-            BehaviourManagerCompileThread *compileThread =
-                    new BehaviourManagerCompileThread(behAbsPath);
-            compileThread->start();
+                #ifdef BANG_EDITOR
 
-            Debug_Status("Compiling script " <<
-                         Persistence::GetFileName(behaviourFilepath) << "...", 5.0f);
-            // And when the compileThread finishes, we will be notified,
-            // load the library, and then notify the behaviourHolders waiting for it
+                // Have to compile and load it.
+                // First compile
+                BehaviourManagerCompileThread *compileThread =
+                        new BehaviourManagerCompileThread(behAbsPath);
+                compileThread->start();
 
-            #else // GAME
+                Debug_Status("Compiling script " <<
+                             Persistence::GetFileName(behaviourFilepath) << "...", 5.0f);
 
-            // In Game, we have the behaviour object library in
-            // "BEHAVIOUR_DIR/BEHAVIOUR_NAME.so.RANDOM_PROJECT_ID"
-            // so we just have to load it directly. I.E., notify the instant load.
-            const String behaviourDir = Persistence::GetDir(behaviourFilepath);
-            const String behaviourFilename = Persistence::GetFileName(behaviourFilepath);
-            const String libraryFilepath = behaviourDir + "/" + behaviourFilename + ".so." +
-                    ProjectManager::GetCurrentProject()->GetProjectRandomId();
-            bm->OnBehaviourFinishedCompiling(behaviourFilepath, libraryFilepath);
-            bm->TreatCompiledBehaviours();
+                // And when the compileThread finishes, we will be notified,
+                // load the library, and then notify the behaviourHolders waiting for it
 
-            #endif
+                #else // GAME
+
+                // In Game, we have the behaviour object library in
+                // "BEHAVIOUR_DIR/BEHAVIOUR_NAME.so.RANDOM_PROJECT_ID"
+                // so we just have to load it directly. I.E., notify the instant load.
+                const String behaviourDir = Persistence::GetDir(behaviourFilepath);
+                const String behaviourFilename = Persistence::GetFileName(behaviourFilepath);
+                const String projRandomId = ProjectManager::GetCurrentProject()->GetProjectRandomId();
+                const String libFilepath = behaviourDir + "/" + behaviourFilename + ".so." +
+                                           projRandomId;
+                bm->OnBehaviourFinishedCompiling(behaviourFilepath, libFilepath);
+                bm->TreatCompiledBehaviours();
+                #endif
+            }
+        }
+        else
+        {
+            if (!BehaviourManager::IsCached(behAbsPath))
+            {
+                // Its a thread, but called synchronously
+                BehaviourManagerCompileThread *compileThread =
+                        new BehaviourManagerCompileThread(behAbsPath);
+                compileThread->Compile();
+            }
+            else
+            {
+                String libFilepath = bm->m_behPath_To_compiledLibraryPath[hash];
+                bm->OnBehaviourFinishedCompiling(behaviourFilepath,
+                                                 libFilepath);
+            }
         }
     }
 }

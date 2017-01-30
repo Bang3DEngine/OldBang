@@ -23,14 +23,15 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     IWindow::InitFromMainBinary(window, application);
 
     EditorWindow::s_win = new EditorWindow();
+    EditorWindow::s_win->m_winEventManager = new WindowEventManager();
     SingletonManager::GetInstance()->SetWindowSingleton(EditorWindow::s_win);
 
-    EditorWindow::s_win->setupUi(window);
-
     EditorWindow::s_win->m_mainWindow = window;
+    EditorWindow::s_win->m_app = application;
+
+    EditorWindow::s_win->setupUi(window);
     EditorWindow::s_win->m_mainWindow->showMaximized();
 
-    EditorWindow::s_win->m_app = application;
 
     Toolbar::Init();
 
@@ -82,6 +83,11 @@ bool EditorWindow::IsSceneTabEnabled() const
 bool EditorWindow::IsGameTabEnabled() const
 {
     return tabContainerSceneGame->currentWidget() == tabGame;
+}
+
+WindowEventManager *EditorWindow::GetWindowEventManager() const
+{
+    return m_winEventManager;
 }
 
 void EditorWindow::OnTabSceneGameChanged(int index)

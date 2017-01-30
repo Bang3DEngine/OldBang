@@ -11,8 +11,11 @@ class BehaviourRefresherTimer : public QObject
 public:
     BehaviourRefresherTimer();
 
+public:
+    void RefreshBehavioursInScene(bool synchronously) const;
+
 private slots:
-    void RefreshBehavioursInScene() const;
+    void OnRefreshTimer() const;
 
 private:
     QTimer m_timer;

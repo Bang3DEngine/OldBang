@@ -3,6 +3,7 @@
 #include "List.h"
 #include "Debug.h"
 #include "Scene.h"
+#include "Application.h"
 #include "Persistence.h"
 #include "SceneManager.h"
 #include "BehaviourHolder.h"
@@ -11,11 +12,16 @@
 BehaviourRefresherTimer::BehaviourRefresherTimer()
 {
     connect(&m_timer, SIGNAL(timeout()),
-            this, SLOT(RefreshBehavioursInScene()));
+            this, SLOT(OnRefreshTimer()));
     m_timer.start(3000);
 }
 
-void BehaviourRefresherTimer::RefreshBehavioursInScene() const
+void BehaviourRefresherTimer::OnRefreshTimer() const
+{
+    RefreshBehavioursInScene(false);
+}
+
+void BehaviourRefresherTimer::RefreshBehavioursInScene(bool synchronously) const
 {
     BehaviourManager *bManager = BehaviourManager::GetInstance();
     Scene *scene = SceneManager::GetActiveScene();
@@ -28,7 +34,13 @@ void BehaviourRefresherTimer::RefreshBehavioursInScene() const
                 scene->GetComponentsInThisAndChildren<BehaviourHolder>();
         for (BehaviourHolder *bh : behHolders)
         {
-            bh->Refresh();
+            bh->Refresh(synchronously);
+            if (synchronously)
+            {
+                // If its sync, let it update the gui between
+                // compilation and compilation...
+                Application::GetInstance()->processEvents();
+            }
         }
     }
 }

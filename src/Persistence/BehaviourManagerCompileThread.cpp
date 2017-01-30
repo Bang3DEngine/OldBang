@@ -12,7 +12,7 @@ BehaviourManagerCompileThread::
     BehaviourManager *bm = BehaviourManager::GetInstance();
 }
 
-void BehaviourManagerCompileThread::run()
+void BehaviourManagerCompileThread::Compile()
 {
     // Compile....
     String soFilepath =
@@ -33,4 +33,9 @@ void BehaviourManagerCompileThread::run()
     }
 
     deleteLater(); // Automatic thread delete
+}
+
+void BehaviourManagerCompileThread::run()
+{
+    Compile();
 }

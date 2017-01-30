@@ -24,12 +24,12 @@ void WindowEventManager::RemoveListener(IWindowEventManagerListener *listener)
 
 WindowEventManager *WindowEventManager::GetInstance()
 {
-    if (!s_wem)
+    if (!WindowEventManager::s_wem)
     {
-        s_wem = EditorWindow::GetInstance()->windowEventManager;
+        WindowEventManager::s_wem =
+                EditorWindow::GetInstance()->GetWindowEventManager();
     }
-
-    return s_wem;
+    return WindowEventManager::s_wem;
 }
 
 void WindowEventManager::NotifyMenuBarActionClicked(MenuBar::Action clickedAction)

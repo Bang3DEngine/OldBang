@@ -3,6 +3,7 @@
 #include <QInputDialog>
 
 #include "Debug.h"
+#include "StringUtils.h"
 #include "EditorWindow.h"
 #include "SelectProjectWindow.h"
 

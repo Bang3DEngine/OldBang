@@ -41,7 +41,7 @@ public:
     #endif
 
     virtual void OnAddedToGameObject() override;
-    void Refresh();
+    void Refresh(bool synchronous = false);
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

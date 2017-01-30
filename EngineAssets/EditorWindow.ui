@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1043</width>
+    <width>1057</width>
     <height>592</height>
    </rect>
   </property>
@@ -52,19 +52,6 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item alignment="Qt::AlignLeft|Qt::AlignTop">
-     <widget class="WindowEventManager" name="windowEventManager" native="true">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
-     </widget>
-    </item>
     <item>
      <widget class="QTabWidget" name="tabContainerSceneGame">
       <property name="sizePolicy">
@@ -91,7 +78,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_11">
         <property name="spacing">
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="leftMargin">
          <number>0</number>
@@ -108,7 +95,7 @@
         <item>
          <layout class="QVBoxLayout" name="tabSceneVLayout" stretch="0,9999">
           <property name="spacing">
-           <number>2</number>
+           <number>0</number>
           </property>
           <item>
            <widget class="Toolbar" name="screenToolbar" native="true">
@@ -343,24 +330,24 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_12">
         <property name="spacing">
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="leftMargin">
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="topMargin">
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="rightMargin">
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="bottomMargin">
-         <number>2</number>
+         <number>0</number>
         </property>
         <item>
          <layout class="QVBoxLayout" name="tabGameVLayout">
           <property name="spacing">
-           <number>2</number>
+           <number>0</number>
           </property>
          </layout>
         </item>
@@ -375,7 +362,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1043</width>
+     <width>1057</width>
      <height>25</height>
     </rect>
    </property>
@@ -745,7 +732,7 @@
         </widget>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,0,0">
+        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="0,1,0">
          <property name="spacing">
           <number>2</number>
          </property>
@@ -924,18 +911,6 @@
      <item>
       <widget class="QWidget" name="widgetLogger" native="true">
        <layout class="QVBoxLayout" name="verticalLayout_6">
-        <property name="leftMargin">
-         <number>2</number>
-        </property>
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="rightMargin">
-         <number>2</number>
-        </property>
-        <property name="bottomMargin">
-         <number>2</number>
-        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <property name="spacing">
@@ -1076,19 +1051,99 @@
          </layout>
         </item>
         <item>
-         <widget class="ListLogger" name="listLogger">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-          <property name="showDropIndicator" stdset="0">
-           <bool>false</bool>
+          <property name="opaqueResize">
+           <bool>true</bool>
           </property>
-          <property name="verticalScrollMode">
-           <enum>QAbstractItemView::ScrollPerPixel</enum>
+          <property name="childrenCollapsible">
+           <bool>true</bool>
           </property>
-          <property name="horizontalScrollMode">
-           <enum>QAbstractItemView::ScrollPerPixel</enum>
-          </property>
+          <widget class="ListLogger" name="listLogger">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>1</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="editTriggers">
+            <set>QAbstractItemView::NoEditTriggers</set>
+           </property>
+           <property name="showDropIndicator" stdset="0">
+            <bool>false</bool>
+           </property>
+           <property name="verticalScrollMode">
+            <enum>QAbstractItemView::ScrollPerPixel</enum>
+           </property>
+           <property name="horizontalScrollMode">
+            <enum>QAbstractItemView::ScrollPerPixel</enum>
+           </property>
+          </widget>
+          <widget class="QWidget" name="horizontalLayoutWidget">
+           <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QScrollArea" name="scrollAreaLabelCompleteLoggerMessage">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="sizeAdjustPolicy">
+               <enum>QAbstractScrollArea::AdjustToContents</enum>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="scrollAreaWidgetContents">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>427</width>
+                 <height>76</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_3">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>5</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="labelCompleteLoggerMessage">
+                  <property name="text">
+                   <string>Complete selected log message</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -1309,16 +1364,6 @@
   <zorder>dockHierarchy</zorder>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>WindowEventManager</class>
-   <extends>QWidget</extends>
-   <header>WindowEventManager.h</header>
-   <container>1</container>
-   <slots>
-    <slot>_NotifyMenuBarItemClicked(int)</slot>
-    <slot>NotifyButtonGlobalCoordsClicked(QAction*)</slot>
-   </slots>
-  </customwidget>
   <customwidget>
    <class>Hierarchy</class>
    <extends>QTreeWidget</extends>

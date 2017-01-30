@@ -2,6 +2,7 @@
 
 #include "Debug.h"
 #include "Color.h"
+#include "StringUtils.h"
 #include "EditorWindow.h"
 
 int ListLogger::c_iconColumn     = 1;
