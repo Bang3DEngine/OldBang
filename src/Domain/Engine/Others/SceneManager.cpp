@@ -12,7 +12,7 @@
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
 #include "EditorScene.h"
-#include "EditorPlayStopFlowController.h"
+#include "EditorState.h"
 #endif
 
 SceneManager::SceneManager()
@@ -65,7 +65,7 @@ void SceneManager::SetActiveScene(Scene *scene)
         bool setCamera = true;
         #ifdef BANG_EDITOR
         Hierarchy::GetInstance()->Clear();
-        setCamera = EditorPlayStopFlowController::IsPlaying();
+        setCamera = EditorState::IsPlaying();
         #endif
 
         sm->m_activeScene->_OnStart();

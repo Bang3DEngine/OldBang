@@ -1,6 +1,7 @@
 #include "EditorState.h"
 
 #include "EditorWindow.h"
+#include "EditorPlayStopFlowController.h"
 
 EditorState::EditorState()
 {
@@ -8,7 +9,7 @@ EditorState::EditorState()
 
 bool EditorState::IsPlaying()
 {
-    return EditorState::GetInstance()->m_isPlaying;
+    return EditorPlayStopFlowController::GetInstance()->m_playing;
 }
 
 bool EditorState::IsUsingGlobalCoords()

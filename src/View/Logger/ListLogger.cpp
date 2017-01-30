@@ -111,7 +111,7 @@ QTreeWidgetItem *ListLogger::CreateItemFromMessageRow(
     else if (mr.msgType == MessageType::Error) { icon = &m_errorIcon; }
     item->setIcon(c_iconColumn, *icon);
 
-    String shortMessage = StringUtils::Elide(mr.msg, 100, true);
+    String shortMessage = mr.msg; // StringUtils::Elide(mr.msg, 100, true);
     item->setText(c_msgColumn, shortMessage.ToQString());
 
     item->setText(c_lineColumn, String::ToString(mr.line).ToQString());

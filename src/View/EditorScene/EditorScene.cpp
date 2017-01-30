@@ -7,13 +7,13 @@
 #include "UIText.h"
 #include "Hierarchy.h"
 #include "Transform.h"
+#include "EditorState.h"
 #include "EditorFloor.h"
 #include "EditorCamera.h"
 #include "SelectionFramebuffer.h"
 #include "EditorDebugGameObject.h"
 #include "EditorGizmosGameObject.h"
 #include "EditorTranslateAxisGroup.h"
-#include "EditorPlayStopFlowController.h"
 
 EditorScene::EditorScene() : Scene()
 {
@@ -87,7 +87,7 @@ void EditorScene::SetEditorCamera()
 
 Camera *EditorScene::GetCamera() const
 {
-    if (!EditorPlayStopFlowController::IsPlaying())
+    if (!EditorState::IsPlaying())
     {
         return m_edCameraGameObject->GetCamera();
     }

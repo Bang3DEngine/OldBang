@@ -85,7 +85,6 @@ Toolbar *Toolbar::GetInstance()
     {
         Toolbar::Init();
     }
-
     return s_tb;
 }
 
@@ -144,7 +143,12 @@ void Toolbar::OnPlayClicked()
     m_buttonPlay->setChecked(true);
     m_buttonStop->setChecked(false);
 
-    EditorPlayStopFlowController::OnPlayClicked();
+    bool startedPlaying = EditorPlayStopFlowController::OnPlayClicked();
+    if (!startedPlaying)
+    {
+        m_buttonPlay->setChecked(false); // Revert the checking of the tool buttons
+        m_buttonStop->setChecked(true);
+    }
 }
 
 void Toolbar::OnStopClicked()
@@ -214,7 +218,7 @@ void Toolbar::OnShortcutPressed()
 {
     if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::P}))
     {
-        if (EditorPlayStopFlowController::IsPlaying())
+        if (EditorState::IsPlaying())
         {
             m_buttonStop->click();
         }

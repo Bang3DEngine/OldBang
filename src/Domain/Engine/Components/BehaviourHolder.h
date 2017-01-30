@@ -41,7 +41,7 @@ public:
     #endif
 
     virtual void OnAddedToGameObject() override;
-    void Refresh(bool synchronous = false);
+    void Refresh();
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
@@ -56,7 +56,8 @@ public:
 
     void OnBehaviourLibraryAvailable(QLibrary *lib);
 
-    // TODO: Add windowEventListener events pass to Behaviour too
+    QLibrary *GetLibraryBeingUsed() const;
+
 
 protected:
     BehaviourHolder();

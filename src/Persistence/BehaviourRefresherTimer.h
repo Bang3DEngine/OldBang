@@ -12,13 +12,14 @@ public:
     BehaviourRefresherTimer();
 
 public:
-    void RefreshBehavioursInScene(bool synchronously) const;
+    void RefreshBehavioursInScene() const;
 
 private slots:
     void OnRefreshTimer() const;
 
 private:
     QTimer m_timer;
+    int c_timeMs = 3000;
 };
 
 #endif // BEHAVIOURREFRESHERTHREAD_H

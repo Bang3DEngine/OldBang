@@ -29,20 +29,25 @@ public:
     // Refreshes all the behaviour holders without using async
     // Useful before playing for example, to ensure all the behaviours
     // are loaded
-    static void RefreshAllBehaviourHoldersSynchronously();
 
-    static bool IsBeingCompiled(const String &behaviourPath);
+    static bool IsBeingCompiled(const String &hash);
 
     // This must be called when you want to retrieve the QLibrary from a
     // behaviour source filepath
     static void Load(BehaviourHolder *behaviourHolder,
-                     const String &behaviourFilepath,
-                     bool synchronously);
+                     const String &behaviourFilepath);
 
     static void OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder);
 
+    static void RefreshAllBehaviours();
+
     static BehaviourManager* GetInstance();
-    static bool IsCached(const String &behaviourPath);
+    static bool IsCached(const String &hash);
+
+    static bool AllBehaviourHoldersUpdated();
+    static bool SomeBehaviourWithError();
+
+    static String GetHash(const String &sourceFilepath);
 
     // Called by the BehaviourManagerCompileThread when has finished
     void OnBehaviourFinishedCompiling(const String &behaviourPath,
@@ -51,13 +56,9 @@ public:
     // Called by the BehaviourManagerCompileThread when has failed
     void OnBehaviourFailedCompiling(const String &behaviourPath);
 
-public slots:
-    void TreatCompiledBehaviours();
-
 private:
     QMutex m_mutex;
 
-    QTimer m_checkCompiledBehavioursTimer;
     BehaviourRefresherTimer m_behaviourRefresherTimer;
 
     /**
@@ -71,32 +72,19 @@ private:
      * library for wololo.cpp. They will be notified when we
     Maphe library
      */
-    Map<String, List<BehaviourHolder*> > m_behHash_To_behHolderDemanders;
+    Map<String, List<BehaviourHolder*> > m_behHash_To_demandersList;
 
     /**
-     * @brief Holds the compiled behaviour filepaths that have failed
-     * to compile and its hashes
+     * @brief Holds the compiled behaviour hashes that have failed to compile.
      */
-    Map<String, String> m_failed_behPath_To_behHash;
-
-    /**
-     * @brief Holds the compiled behaviour filepaths and its
-     * compiled libraries
-     */
-    Map<String, String> m_behPath_To_compiledLibraryPath;
-
-    /**
-     * @brief Set of behaviours abs paths that are being compiled right now.
-     * This is useful in the case when a behaviour is demanded while it's
-     * being compiled.
-     */
-    std::set<String> m_behPathsBeingCompiled;
+    std::set<String> m_failedBehHashes;
 
     BehaviourManager();
 
+    static QLibrary* LoadLibraryFromFilepath(const String &libFilepath);
     static void RemoveOutdatedLibraryFiles(
             const String &mostRecentLibraryFilepath);
-    static QLibrary* GetCachedLibrary(const String &behaviourPath);
+    static QLibrary* GetCachedLibrary(const String &hash);
 
     friend class Application;
     friend class BehaviourManagerCompileThread;

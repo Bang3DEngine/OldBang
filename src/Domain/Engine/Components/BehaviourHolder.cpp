@@ -8,6 +8,7 @@
 #include "FileWriter.h"
 #include "Persistence.h"
 #include "SystemUtils.h"
+#include "EditorState.h"
 #include "BehaviourManager.h"
 
 BehaviourHolder::BehaviourHolder()
@@ -56,7 +57,7 @@ const String &BehaviourHolder::GetSourceFilepath() const
     return m_sourceFilepath;
 }
 
-void BehaviourHolder::Refresh(bool synchronous)
+void BehaviourHolder::Refresh()
 {
     ASSERT(gameObject);
     #ifdef BANG_EDITOR // No refresh on temporary gameObjects
@@ -65,7 +66,7 @@ void BehaviourHolder::Refresh(bool synchronous)
 
     String absPath = Persistence::ToAbsolute(m_sourceFilepath, false);
     ASSERT(Persistence::ExistsFile(absPath));
-    BehaviourManager::Load(this, absPath, synchronous);
+    BehaviourManager::Load(this, absPath);
 }
 
 
@@ -93,6 +94,11 @@ void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
         Debug_Error("Behaviour " << m_sourceFilepath <<
                      " could not be refreshed. See errors above");
     }
+}
+
+QLibrary *BehaviourHolder::GetLibraryBeingUsed() const
+{
+    return m_currentLoadedLibrary;
 }
 
 void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
@@ -197,7 +203,12 @@ void BehaviourHolder::_OnStart()
     Component::_OnStart();
     if (m_behaviour)
     {
-        m_behaviour->_OnStart();
+        #ifdef BANG_EDITOR
+        if (EditorState::IsPlaying())
+        #endif
+        {
+            m_behaviour->_OnStart();
+        }
     }
 }
 

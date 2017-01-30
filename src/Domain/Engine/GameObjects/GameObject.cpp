@@ -612,7 +612,7 @@ void GameObject::_OnStart()
 void GameObject::_OnUpdate()
 {
     #ifdef BANG_EDITOR
-    bool canUpdate = EditorPlayStopFlowController::IsPlaying() || IsEditorGameObject();
+    bool canUpdate = EditorState::IsPlaying() || IsEditorGameObject();
     #else
     bool canUpdate = true;
     #endif

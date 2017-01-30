@@ -269,12 +269,9 @@ Behaviour* SystemUtils::CreateDynamicBehaviour(QLibrary *openLibrary)
         if (createFunction)
         {
             // Call it and get the pointer to the created Behaviour
-            if (createFunction)
-            {
-                // Create the Behaviour, passing to it the SingletonManager
-                // of this main binary, so it can link it.
-                return createFunction(SingletonManager::GetInstance());
-            }
+            // Create the Behaviour, passing to it the SingletonManager
+            // of this main binary, so it can link it.
+            return createFunction(SingletonManager::GetInstance());
         }
         else
         {

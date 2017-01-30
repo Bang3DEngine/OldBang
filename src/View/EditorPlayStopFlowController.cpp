@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Screen.h"
 #include "ListLogger.h"
+#include "EditorState.h"
 #include "Application.h"
 #include "EditorScene.h"
 #include "EditorWindow.h"
@@ -11,19 +12,13 @@
 #include "EditorCamera.h"
 #include "BehaviourManager.h"
 
-
 EditorPlayStopFlowController::EditorPlayStopFlowController()
 {
 }
 
-bool EditorPlayStopFlowController::IsPlaying()
+bool EditorPlayStopFlowController::OnPlayClicked()
 {
-    return EditorPlayStopFlowController::GetInstance()->m_playing;
-}
-
-void EditorPlayStopFlowController::OnPlayClicked()
-{
-    EditorPlayStopFlowController::GetInstance()->PlayScene();
+    return EditorPlayStopFlowController::GetInstance()->PlayScene();
 }
 
 void EditorPlayStopFlowController::OnStopClicked()
@@ -36,13 +31,32 @@ EditorPlayStopFlowController *EditorPlayStopFlowController::GetInstance()
     return EditorWindow::GetInstance()->m_playStopController;
 }
 
-void EditorPlayStopFlowController::PlayScene()
+bool EditorPlayStopFlowController::PlayScene()
 {
-    ASSERT(!EditorPlayStopFlowController::IsPlaying());
-    m_playing = true;
+    ASSERT(!EditorState::IsPlaying(), "", return true);
 
+    // Start refreshing all scene behaviours...
+    BehaviourManager::RefreshAllBehaviours();
+
+    // Wait for all behaviours to be loaded!
+    while (!BehaviourManager::AllBehaviourHoldersUpdated())
+    {
+        if (BehaviourManager::SomeBehaviourWithError())
+        {
+            Debug_Error("Please fix all the behaviour errors before playing.");
+            return false;
+        }
+        QThread::currentThread()->msleep(1000);
+
+
+        // Let the timers tick. Needed to avoid a bug when a behaviour
+        // changes while in this loop.
+        // Thanks to the behaviour refreshing timer it's solved.
+        Application::processEvents();
+    }
+
+    m_playing = true;
     ListLogger::GetInstance()->OnEditorPlay();
-    BehaviourManager::RefreshAllBehaviourHoldersSynchronously();
 
     m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
 
@@ -59,11 +73,14 @@ void EditorPlayStopFlowController::PlayScene()
     win->tabContainerSceneGame->setCurrentWidget(win->tabGame);
 
     Screen::GetInstance()->setFocus();
+
+    return true;
 }
 
 void EditorPlayStopFlowController::StopScene()
 {
-    ASSERT(EditorPlayStopFlowController::IsPlaying());
+    ASSERT(EditorState::IsPlaying());
+
     m_playing = false;
 
     Scene *sceneCopy = SceneManager::GetActiveScene();
