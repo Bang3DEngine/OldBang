@@ -23,17 +23,13 @@ Once installed (see above), you can start Bang using:
 
 # Dependencies
 You need:
-  - OpenGL headers (usually coming by default).
   - GLEW (libglew-dev in Ubuntu).
   - Qt5 development libraries (qt5-default in Ubuntu).
   - Freetype development libraries (libfreetype6-dev in Ubuntu).
-  - lbz2 (libbz2-dev in Ubuntu).
-  - g++ (usually coming by default).
 
 # Install Dependencies in Ubuntu
 ``` Bash
 sudo apt-get install libglew-dev
 sudo apt-get install qt5-default
 sudo apt-get install libfreetype6-dev
-sudo apt-get install libbz2-dev
 ```
