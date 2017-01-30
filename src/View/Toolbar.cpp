@@ -143,6 +143,7 @@ void Toolbar::OnPlayClicked()
 {
     m_buttonPlay->setChecked(true);
     m_buttonStop->setChecked(false);
+
     EditorPlayStopFlowController::OnPlayClicked();
 }
 
@@ -150,6 +151,7 @@ void Toolbar::OnStopClicked()
 {
     m_buttonPlay->setChecked(false);
     m_buttonStop->setChecked(true);
+
     EditorPlayStopFlowController::OnStopClicked();
 }
 
@@ -228,10 +230,24 @@ void Toolbar::OnSceneGameTabChanged()
     if (EditorState::IsShowingGameTab())
     {
         m_buttonShowGizmos->setChecked(EditorState::ShowGizmosGameEnabled());
+
+        m_buttonTranslateMode->setVisible(false);
+        m_buttonRotateMode->setVisible(false);
+        m_buttonScaleMode->setVisible(false);
+        m_buttonGlobalCoords->setVisible(false);
+        m_buttonLocalCoords->setVisible(false);
+        m_button3D->setVisible(false);
     }
     else
     {
         m_buttonShowGizmos->setChecked(EditorState::ShowGizmosSceneEnabled());
+
+        m_buttonTranslateMode->setVisible(true);
+        m_buttonRotateMode->setVisible(true);
+        m_buttonScaleMode->setVisible(true);
+        m_buttonGlobalCoords->setVisible(true);
+        m_buttonLocalCoords->setVisible(true);
+        m_button3D->setVisible(true);
     }
 }
 
