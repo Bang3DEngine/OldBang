@@ -160,14 +160,11 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
     if (bm->m_failed_behPath_To_behHash.ContainsKey(behaviourFilepath))
     {
         String oldHash = bm->m_failed_behPath_To_behHash[behaviourFilepath];
-        if (oldHash == hash)
+        if (oldHash != hash)
         {
-            // A previous compilation of behaviourFilepath has failed,
-            // and the file hasn't changed (same hash)
-            return;
-        }
-        else
-        {
+            // If a previous compilation of behaviourFilepath has failed,
+            // and the file has changed (different hash)
+
             bm->m_failed_behPath_To_behHash.Remove(behaviourFilepath);
         }
     }
@@ -194,8 +191,6 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
 
         if (!synchronously)
         {
-            return;
-
             if (!BehaviourManager::IsBeingCompiled(behAbsPath))
             {
                 // Compile once
