@@ -105,8 +105,6 @@ GAME {
 LIBS += \
     -lGLEW    \ # GLEW
     -ldl      \ # To load libraries and stuff
-    -lpng     \ # To read & write pngs, used by FreeType
-    -lz -lbz2 \ # Used by FreeType too
     -lfreetype
 ########################################
 
