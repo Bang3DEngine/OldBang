@@ -74,7 +74,7 @@ void AttrWidgetFile::Browse()
     DialogBrowseAssetFile *dialog = new DialogBrowseAssetFile(&selectedFile);
     dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
                  m_fileExtension.Split(' ').ToList());
-    while (dialog->isVisible()) { Application::GetInstance()->processEvents(); }
+    while (dialog->isVisible()) { Application::processEvents(); }
 
     if (!selectedFile.Empty())
     {

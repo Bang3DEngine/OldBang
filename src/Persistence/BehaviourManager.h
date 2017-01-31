@@ -44,7 +44,7 @@ public:
     static BehaviourManager* GetInstance();
     static bool IsCached(const String &hash);
 
-    static bool AllBehaviourHoldersUpdated();
+    static bool AllBehaviourHoldersUpdated(float *percentOfBehavioursUpdated = nullptr);
     static bool SomeBehaviourWithError();
 
     static String GetHash(const String &sourceFilepath);

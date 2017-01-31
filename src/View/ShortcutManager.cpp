@@ -17,8 +17,11 @@ void ShortcutManager::OnKeyPressed(Input::Key key)
         m_pressedKeys.insert(key);
         for (IShortcutListener *list : ShortcutManager::m_shortcutsListeners)
         {
-            list->OnShortcutPressedKey(key);
-            list->OnShortcutPressed();
+            if (!QApplication::activeModalWidget()) // Reject if modal/s over
+            {
+                list->OnShortcutPressedKey(key);
+                list->OnShortcutPressed();
+            }
         }
     }
     String set = "";

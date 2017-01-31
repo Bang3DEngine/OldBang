@@ -98,11 +98,12 @@ bool BehaviourManager::IsCached(const String &hash)
     return bm->m_behHash_To_lib.ContainsKey(hash);
 }
 
-bool BehaviourManager::AllBehaviourHoldersUpdated()
+bool BehaviourManager::AllBehaviourHoldersUpdated(float *percentOfBehavioursUpdated)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     QMutexLocker locker(&bm->m_mutex);
 
+    int behHoldersUpdated = 0;
     Scene *scene = SceneManager::GetActiveScene();
     List<BehaviourHolder*> behHolders = scene->GetComponentsInChildren<BehaviourHolder>();
     for (BehaviourHolder *bh : behHolders)
@@ -111,14 +112,21 @@ bool BehaviourManager::AllBehaviourHoldersUpdated()
         String hash = GetHash(srcPath);
 
         QLibrary *updatedLibrary = BehaviourManager::GetCachedLibrary(hash);
-        if (!updatedLibrary) { return false; } // Not even compiled
+        if (!updatedLibrary) { continue; } // Not even compiled
 
         QLibrary *currentBHLibrary = bh->GetLibraryBeingUsed();
 
         bool updated = (currentBHLibrary == updatedLibrary);
-        if (!updated) { return false; }
+        if (updated) { ++behHoldersUpdated; }
     }
-    return true;
+
+    float percentUpdated = float(behHoldersUpdated) / behHolders.Size();
+    if (percentOfBehavioursUpdated)
+    {
+        *percentOfBehavioursUpdated = percentUpdated;
+    }
+
+    return percentUpdated == 1.0f;
 }
 
 bool BehaviourManager::SomeBehaviourWithError()

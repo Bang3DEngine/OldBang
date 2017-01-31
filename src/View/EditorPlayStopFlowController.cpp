@@ -1,8 +1,11 @@
 #include "EditorPlayStopFlowController.h"
 
+#include <QProgressDialog>
+
 #include "Debug.h"
 #include "Scene.h"
 #include "Screen.h"
+#include "Dialog.h"
 #include "ListLogger.h"
 #include "EditorState.h"
 #include "Application.h"
@@ -38,26 +41,13 @@ bool EditorPlayStopFlowController::PlayScene()
     // Start refreshing all scene behaviours...
     BehaviourManager::RefreshAllBehaviours();
 
-    // Wait for all behaviours to be loaded!
-    while (!BehaviourManager::AllBehaviourHoldersUpdated())
-    {
-        if (BehaviourManager::SomeBehaviourWithError())
-        {
-            Debug_Error("Please fix all the behaviour errors before playing.");
-            return false;
-        }
-        QThread::currentThread()->msleep(1000);
-
-
-        // Let the timers tick. Needed to avoid a bug when a behaviour
-        // changes while in this loop.
-        // Thanks to the behaviour refreshing timer it's solved.
-        Application::processEvents();
-    }
+    m_playingCanceled = false; // Wait for behaviours
+    if (!WaitForAllBehavioursToBeLoaded()) { return false; }
 
     m_playing = true;
     ListLogger::GetInstance()->OnEditorPlay();
 
+    // Make a copy of the current scene, to restore it later
     m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
 
     Scene *sceneCopy = static_cast<Scene*>( m_latestSceneBeforePlaying->Clone() );
@@ -97,5 +87,57 @@ void EditorPlayStopFlowController::StopScene()
 
     EditorWindow *win = EditorWindow::GetInstance();
     win->tabContainerSceneGame->setCurrentWidget(win->tabScene);
+}
+
+bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
+{
+    if (BehaviourManager::AllBehaviourHoldersUpdated()) { return true; }
+
+    EditorWindow *win = EditorWindow::GetInstance();
+    QMainWindow *mainWin = win->GetMainWindow();
+
+    // Create a progress dialog to show progress
+    QProgressDialog progressDialog(mainWin);
+    progressDialog.setRange(0, 100);
+    progressDialog.setModal(true); // Important to avoid Ctrl+P smashing
+    progressDialog.setWindowTitle("Compiling behaviours");
+    progressDialog.setLabelText("Waiting for all behaviours to be correctly compiled...");
+    progressDialog.show();
+    QObject::connect(&progressDialog, SIGNAL(canceled()),
+                     this, SLOT(OnWaitingForBehavioursCanceled()));
+
+    // Actual waiting
+    float percentUpdated = 0.0f;
+    Application::processEvents();
+    while ( !BehaviourManager::AllBehaviourHoldersUpdated(&percentUpdated) )
+    {
+        progressDialog.setValue( int(percentUpdated * 100) );
+
+        if (BehaviourManager::SomeBehaviourWithError())
+        {
+            String fixErrorsMsg =
+                    "Please fix all the behaviour errors before playing.";
+            String msg = fixErrorsMsg + "\nCheck the Logger.";
+            Debug_Error(fixErrorsMsg);
+            Dialog::Error("Error", msg);
+            return false;
+        }
+
+        // Progress dialog cancel button pressed
+        if (m_playingCanceled) { return false; }
+
+        QThread::currentThread()->msleep(100);
+
+        // Let the timers tick and update GUI.
+        Application::processEvents();
+    }
+    progressDialog.close();
+
+    return true;
+}
+
+void EditorPlayStopFlowController::OnWaitingForBehavioursCanceled()
+{
+    m_playingCanceled = true;
 }
 
