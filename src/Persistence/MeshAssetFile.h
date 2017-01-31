@@ -12,9 +12,6 @@
 class IInspectable;
 class MeshAssetFile : public File
 {
-private:
-    String m_meshFilepath = "";
-
 public:
     MeshAssetFile(const QFileSystemModel *model, const QModelIndex &index);
     virtual QPixmap GetIcon() const override;
@@ -23,7 +20,11 @@ public:
     virtual IInspectable *GetInspectable() const override;
     #endif
 
+    void SetMeshFilepath(const String &meshFilepath);
     const String& GetMeshFilepath() const;
+
+private:
+    String m_meshFilepath = "";
 };
 
 #endif // FILEMESHASSET_H

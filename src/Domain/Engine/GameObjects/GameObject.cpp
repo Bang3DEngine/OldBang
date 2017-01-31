@@ -13,6 +13,7 @@
 #include "Component.h"
 #include "Transform.h"
 #include "PointLight.h"
+#include "AudioSource.h"
 #include "EditorState.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
@@ -452,6 +453,10 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
             else if (tagName == "BehaviourHolder")
             {
                 c = AddComponent<BehaviourHolder>();
+            }
+            else if (tagName == "AudioSource")
+            {
+                c = AddComponent<AudioSource>();
             }
             else if (tagName == "DirectionalLight")
             {

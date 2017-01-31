@@ -20,6 +20,7 @@ class Application : public QApplication
 
 public:
     Application(int& argc, char** argv);
+    virtual ~Application();
 
     AssetsManager *GetAssetsManager() const;
     static Application *GetInstance();

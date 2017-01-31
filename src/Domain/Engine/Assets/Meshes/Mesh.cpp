@@ -199,7 +199,6 @@ void Mesh::ReadXMLInfo(const XMLNode *xmlInfo)
 void Mesh::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Asset::FillXMLInfo(xmlInfo);
-    xmlInfo->SetTagName("MeshFilepath");
-
+    xmlInfo->SetTagName("Mesh");
     xmlInfo->SetFilepath("MeshFilepath", m_filepath, "obj");
 }

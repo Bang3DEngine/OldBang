@@ -18,6 +18,16 @@ Font::~Font()
     Free();
 }
 
+const String Font::GetFileExtensionStatic()
+{
+    return "bfont";
+}
+
+const String Font::GetFileExtension()
+{
+    return Font::GetFileExtensionStatic();
+}
+
 void Font::LoadFromFile(const String &m_filepath)
 {
     Free();

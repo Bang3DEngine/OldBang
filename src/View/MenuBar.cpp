@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Project.h"
 #include "Material.h"
+#include "AudioClip.h"
 #include "Transform.h"
 #include "Texture2D.h"
 #include "GameObject.h"
@@ -88,6 +89,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnCreateTexture2D()));
     connect(w->actionCreateFont,  SIGNAL(triggered()),
             this, SLOT(OnCreateFont()));
+    connect(w->actionCreateAudioClip,  SIGNAL(triggered()),
+            this, SLOT(OnCreateAudioClip()));
 
     connect(w->actionAddComponentNewBehaviour,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentNewBehaviour()));
@@ -101,6 +104,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnAddComponentSingleLineRenderer()));
     connect(w->actionAddComponentCircleRenderer,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentCircleRenderer()));
+    connect(w->actionAddComponentAudioSource,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentAudioSource()));
     connect(w->actionAddComponentDirectionalLight,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentDirectionalLight()));
     connect(w->actionAddComponentPointLight,  SIGNAL(triggered()),
@@ -395,6 +400,16 @@ void MenuBar::OnCreateFont() const
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 
+void MenuBar::OnCreateAudioClip() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::CreateAudioClip);
+    String filepath = Explorer::GetInstance()->GetCurrentDir();
+    filepath += "/New_AudioClip." + AudioClip::GetFileExtensionStatic();
+    filepath = Persistence::GetDuplicateName(filepath);
+    AssetsManager::Create<AudioClip>(filepath);
+    Explorer::GetInstance()->StartRenaming(filepath);
+}
+
 void MenuBar::OnAddComponentNewBehaviour() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AddComponentNewBehaviour);
@@ -420,6 +435,11 @@ void MenuBar::OnAddComponentSingleLineRenderer() const
 void MenuBar::OnAddComponentCircleRenderer() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AddComponentCircleRenderer);
+}
+
+void MenuBar::OnAddComponentAudioSource() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentAudioSource);
 }
 void MenuBar::OnAddComponentDirectionalLight() const
 {

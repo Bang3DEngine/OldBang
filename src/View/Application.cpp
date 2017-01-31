@@ -1,5 +1,9 @@
 #include "Application.h"
 
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
+
 #ifdef BANG_EDITOR
 #include "EditorScene.h"
 #include "EditorWindow.h"
@@ -31,6 +35,13 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
     m_drawTimer.start(c_redrawDelay);
 
     m_lastRenderTime = Time::GetNow();
+
+    alutInit(0, NULL);
+}
+
+Application::~Application()
+{
+    alutExit();
 }
 
 void Application::OnDrawTimerTick()

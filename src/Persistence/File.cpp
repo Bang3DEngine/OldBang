@@ -14,11 +14,13 @@
 #include "Material.h"
 #include "TextFile.h"
 #include "MeshFile.h"
+#include "AudioClip.h"
 #include "ImageFile.h"
 #include "Texture2D.h"
 #include "Persistence.h"
 #include "MeshAssetFile.h"
 #include "MaterialAssetFile.h"
+#include "AudioClipAssetFile.h"
 #include "Texture2DAssetFile.h"
 
 QPixmap File::AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm)
@@ -62,6 +64,11 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
 
 File::~File()
 {
+}
+
+bool File::IsAudioClipAsset() const
+{
+    return m_isFile && IsOfExtension(AudioClip::GetFileExtensionStatic());
 }
 
 bool File::IsTexture2DAsset() const
@@ -142,7 +149,11 @@ File *File::GetSpecificFile(const File &f)
 {
     if (!f.IsFile()) return nullptr;
 
-    if (f.IsTexture2DAsset())
+    if (f.IsAudioClipAsset())
+    {
+        return new AudioClipAssetFile(f.m_fileSystemModel, f.m_modelIndex);
+    }
+    else if (f.IsTexture2DAsset())
     {
         return new Texture2DAssetFile(f.m_fileSystemModel, f.m_modelIndex);
     }

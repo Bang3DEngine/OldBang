@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1057</width>
+    <width>1062</width>
     <height>592</height>
    </rect>
   </property>
@@ -362,7 +362,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1057</width>
+     <width>1062</width>
      <height>25</height>
     </rect>
    </property>
@@ -379,6 +379,7 @@
     <addaction name="actionCreateShaderProgram"/>
     <addaction name="actionCreateTexture2D"/>
     <addaction name="actionCreateFont"/>
+    <addaction name="actionCreateAudioClip"/>
    </widget>
    <widget class="QMenu" name="menuGameObject">
     <property name="title">
@@ -427,6 +428,8 @@
     <addaction name="actionAddComponentMeshRenderer"/>
     <addaction name="actionAddComponentLineRenderer"/>
     <addaction name="actionAddComponentCircleRenderer"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddComponentAudioSource"/>
     <addaction name="separator"/>
     <addaction name="actionAddComponentDirectionalLight"/>
     <addaction name="actionAddComponentPointLight"/>
@@ -1298,6 +1301,16 @@
   <action name="actionAddComponentNewBehaviour">
    <property name="text">
     <string>New Behaviour</string>
+   </property>
+  </action>
+  <action name="actionAddComponentAudioSource">
+   <property name="text">
+    <string>Audio Source</string>
+   </property>
+  </action>
+  <action name="actionCreateAudioClip">
+   <property name="text">
+    <string>AudioClip</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

@@ -13,7 +13,7 @@ class Light : public Component
 {
 public:
 
-    virtual String GetName() const override { return "Light"; }
+    virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;

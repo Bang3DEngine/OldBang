@@ -12,6 +12,7 @@
 #include "Transform.h"
 #include "PointLight.h"
 #include "GameObject.h"
+#include "AudioSource.h"
 #include "Application.h"
 #include "EditorWindow.h"
 #include "MeshRenderer.h"
@@ -209,6 +210,10 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     else if (clickedAction == MenuBar::Action::AddComponentCircleRenderer)
     {
         CircleRenderer *cr = m_currentGameObject->AddComponent<CircleRenderer>();
+    }
+    else if (clickedAction == MenuBar::Action::AddComponentAudioSource)
+    {
+        AudioSource *as = m_currentGameObject->AddComponent<AudioSource>();
     }
     else if (clickedAction == MenuBar::Action::AddComponentDirectionalLight)
     {

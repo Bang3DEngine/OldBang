@@ -15,6 +15,7 @@
 #include "Shader.h"
 #include "Screen.h"
 #include "XMLNode.h"
+#include "AudioClip.h"
 #include "Behaviour.h"
 #include "Texture2D.h"
 #include "XMLParser.h"
@@ -130,6 +131,7 @@ int main(int argc, char **argv)
         preApp.exit(0);
     }
 
+
     InitSingletonManager();
 
     // Init engine paths, by looking at executable location:
@@ -143,6 +145,7 @@ int main(int argc, char **argv)
     Persistence::GetInstance()->c_EngineAssetsRootAbsolute =
             Persistence::GetEngineRootAbs() + "/EngineAssets";
     #endif
+
 
 
     String loadedProjectFilepath = "";
@@ -163,7 +166,6 @@ int main(int argc, char **argv)
     ASSERT (!loadedProjectFilepath.Empty(),
             "The project filepath has not been specified.", return 0);
 
-
     // Editor / Game
     Application app(argc, argv);
     QMainWindow *editorOrGameWindow = new QMainWindow();
@@ -172,6 +174,9 @@ int main(int argc, char **argv)
     #endif
     InitEditorOrGame(editorOrGameWindow, &app);
     ProjectManager::OpenProject(loadedProjectFilepath); // Load previously selected project
+    AudioClip ac;
+    ac.LoadFromFile( Persistence::ToAbsolute("./door.wav", false) );
+    ac.Play();
     return app.exec();
     //
 }

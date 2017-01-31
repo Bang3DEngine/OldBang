@@ -1,13 +1,12 @@
 #include "MeshRenderer.h"
-#include "GameObject.h"
-#include "FileReader.h"
-
-#include "Debug.h"
 
 #include "VAO.h"
 #include "Mesh.h"
+#include "Debug.h"
 #include "Material.h"
 #include "Transform.h"
+#include "GameObject.h"
+#include "FileReader.h"
 #include "AssetsManager.h"
 
 MeshRenderer::MeshRenderer()
@@ -106,5 +105,6 @@ void MeshRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     {
         xmlInfo->GetAttribute("LineWidth")->SetProperty(XMLProperty::Hidden);
     }
-    xmlInfo->SetFilepath("Mesh", m_mesh ? m_mesh->GetFilepath() : "", "bmesh");
+    xmlInfo->SetFilepath("Mesh", m_mesh ? m_mesh->GetFilepath() : "",
+                         Mesh::GetFileExtensionStatic());
 }

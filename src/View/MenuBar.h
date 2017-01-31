@@ -43,6 +43,7 @@ public:
         CreateShaderProgram,
         CreateTexture2D,
         CreateFont,
+        CreateAudioClip,
 
         AddComponentNewBehaviour,
         AddComponentBehaviour,
@@ -50,6 +51,7 @@ public:
         AddComponentMeshRenderer,
         AddComponenSingleLineRenderer,
         AddComponentCircleRenderer,
+        AddComponentAudioSource,
         AddComponentDirectionalLight,
         AddComponentPointLight,
         AddComponentCanvas,
@@ -93,6 +95,7 @@ public slots:
     void OnCreateShaderProgram() const;
     void OnCreateTexture2D() const;
     void OnCreateFont() const;
+    void OnCreateAudioClip() const;
 
     void OnAddComponentNewBehaviour() const;
     void OnAddComponentBehaviour() const;
@@ -100,6 +103,7 @@ public slots:
     void OnAddComponentMeshRenderer() const;
     void OnAddComponentSingleLineRenderer() const;
     void OnAddComponentCircleRenderer() const;
+    void OnAddComponentAudioSource() const;
     void OnAddComponentDirectionalLight() const;
     void OnAddComponentPointLight() const;
     void OnAddComponentCanvas() const;

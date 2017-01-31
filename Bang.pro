@@ -103,8 +103,9 @@ GAME {
 #PRE_TARGETDEPS = FreeTypeTarget
 #LIBS += src/Domain/Graphics/FreeType/build/*.o
 LIBS += \
-    -lGLEW    \ # GLEW
-    -ldl      \ # To load libraries and stuff
+    -lGLEW            \ # GLEW
+    -ldl              \ # To load libraries and stuff
+    -lalut -lopenal   \ # Alut and OpenAL
     -lfreetype
 ########################################
 
@@ -247,7 +248,11 @@ HEADERS += \
     src/Persistence/EngineConfig.h \
     src/Persistence/BehaviourRefresherTimer.h \
     src/Domain/Engine/Physics/AABox.h \
-    src/View/DialogBrowseAssetFile.h
+    src/View/DialogBrowseAssetFile.h \
+    src/Domain/Engine/Assets/AudioClip.h \
+    src/Domain/Engine/Components/AudioSource.h \
+    src/View/Inspector/AudioClipAssetFileInspectable.h \
+    src/Persistence/AudioClipAssetFile.h
 
 EDITOR {
 HEADERS += \
@@ -425,7 +430,11 @@ SOURCES += \
     src/Persistence/EngineConfig.cpp \
     src/Persistence/BehaviourRefresherTimer.cpp \
     src/Domain/Engine/Physics/AABox.cpp \
-    src/View/DialogBrowseAssetFile.cpp
+    src/View/DialogBrowseAssetFile.cpp \
+    src/Domain/Engine/Assets/AudioClip.cpp \
+    src/Domain/Engine/Components/AudioSource.cpp \
+    src/View/Inspector/AudioClipAssetFileInspectable.cpp \
+    src/Persistence/AudioClipAssetFile.cpp
 
 EDITOR {
     SOURCES += \
