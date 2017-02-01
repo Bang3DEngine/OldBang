@@ -1,8 +1,6 @@
 #include "Application.h"
 
-#include <AL/al.h>
-#include <AL/alc.h>
-#include <AL/alut.h>
+#include <QThreadPool>
 
 #ifdef BANG_EDITOR
 #include "EditorScene.h"
@@ -19,6 +17,7 @@
 #include "Scene.h"
 #include "Screen.h"
 #include "Chrono.h"
+#include "AudioManager.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "BehaviourManager.h"
@@ -26,22 +25,30 @@
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {
+    QThreadPool::globalInstance()->setMaxThreadCount(256);
+
+    m_audioManager = new AudioManager();
     m_sceneManager = new SceneManager();
     m_assetsManager = new AssetsManager();
     m_behaviourManager = new BehaviourManager();
 
+    m_drawTimer.start(c_redrawDelay);
     connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(OnDrawTimerTick()));
 
-    m_drawTimer.start(c_redrawDelay);
-
     m_lastRenderTime = Time::GetNow();
-
-    alutInit(0, NULL);
 }
 
 Application::~Application()
 {
-    alutExit();
+    delete m_audioManager;
+    delete m_sceneManager;
+    delete m_assetsManager;
+    delete m_behaviourManager;
+}
+
+AudioManager *Application::GetAudioManager() const
+{
+    return m_audioManager;
 }
 
 void Application::OnDrawTimerTick()

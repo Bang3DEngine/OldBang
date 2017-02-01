@@ -10,6 +10,7 @@
 #include "Array.h"
 
 class Scene;
+class AudioManager;
 class SceneManager;
 class AssetsManager;
 class ShortcutManager;
@@ -22,6 +23,7 @@ public:
     Application(int& argc, char** argv);
     virtual ~Application();
 
+    AudioManager *GetAudioManager() const;
     AssetsManager *GetAssetsManager() const;
     static Application *GetInstance();
 
@@ -32,6 +34,7 @@ public slots:
     void OnDrawTimerTick();
 
 private:
+    AudioManager *m_audioManager = nullptr;
     SceneManager *m_sceneManager = nullptr;
     AssetsManager *m_assetsManager = nullptr;
     BehaviourManager *m_behaviourManager = nullptr;

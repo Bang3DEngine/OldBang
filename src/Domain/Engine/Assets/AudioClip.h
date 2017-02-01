@@ -46,7 +46,12 @@ private:
     ALuint m_alBufferId = 0;
     ALuint m_alSourceId = 0;
 
+    ALuint GetALBufferId() const;
+    ALuint GetALSourceId() const;
+
     void Free();
+
+    friend class AudioPlayerRunnable;
 };
 
 #endif // AUDIOCLIP_H

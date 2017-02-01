@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 {
     String executableDir = ""; // Get the executable dir
     {
-        Application preApp(argc, argv);
+        QApplication preApp(argc, argv);
         executableDir = preApp.applicationDirPath();
         preApp.exit(0);
     }

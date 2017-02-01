@@ -4,6 +4,7 @@
 
 #include "Debug.h"
 #include "XMLNode.h"
+#include "AudioManager.h"
 
 AudioClip::AudioClip()
 {
@@ -41,12 +42,7 @@ void AudioClip::LoadFromFile(const String &filepath)
 void AudioClip::Play()
 {
     ASSERT(IsLoaded());
-    alSourcePlay(m_alSourceId);
-
-    while (IsPlaying())
-    {
-        QThread::currentThread()->msleep(100);
-    }
+    AudioManager::PlayAudioClip(this);
 }
 
 void AudioClip::Pause()
@@ -102,6 +98,16 @@ void AudioClip::FillXMLInfo(XMLNode *xmlInfo) const
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("AudioClip");
     xmlInfo->SetFilepath("AudioFilepath", m_filepath, "ogg wav");
+}
+
+ALuint AudioClip::GetALBufferId() const
+{
+    return m_alBufferId;
+}
+
+ALuint AudioClip::GetALSourceId() const
+{
+    return m_alSourceId;
 }
 
 void AudioClip::Free()

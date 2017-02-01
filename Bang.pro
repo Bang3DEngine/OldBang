@@ -252,7 +252,9 @@ HEADERS += \
     src/Domain/Engine/Assets/AudioClip.h \
     src/Domain/Engine/Components/AudioSource.h \
     src/View/Inspector/AudioClipAssetFileInspectable.h \
-    src/Persistence/AudioClipAssetFile.h
+    src/Persistence/AudioClipAssetFile.h \
+    src/Domain/Engine/Others/AudioManager.h \
+    src/Domain/Engine/Others/AudioPlayerRunnable.h
 
 EDITOR {
 HEADERS += \
@@ -434,7 +436,9 @@ SOURCES += \
     src/Domain/Engine/Assets/AudioClip.cpp \
     src/Domain/Engine/Components/AudioSource.cpp \
     src/View/Inspector/AudioClipAssetFileInspectable.cpp \
-    src/Persistence/AudioClipAssetFile.cpp
+    src/Persistence/AudioClipAssetFile.cpp \
+    src/Domain/Engine/Others/AudioManager.cpp \
+    src/Domain/Engine/Others/AudioPlayerRunnable.cpp
 
 EDITOR {
     SOURCES += \
