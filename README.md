@@ -26,10 +26,9 @@ You need:
   - GLEW (libglew-dev in Ubuntu).
   - Qt5 development libraries (qt5-default in Ubuntu).
   - Freetype development libraries (libfreetype6-dev in Ubuntu).
+  - OpenAL and ALUT development libraries. (libopenal-dev & libalut-dev in Ubuntu).
 
 # Install Dependencies in Ubuntu
 ``` Bash
-sudo apt-get install libglew-dev
-sudo apt-get install qt5-default
-sudo apt-get install libfreetype6-dev
+sudo apt-get install libglew-dev qt5-default libfreetype6-dev libopenal-dev libalut-dev
 ```
