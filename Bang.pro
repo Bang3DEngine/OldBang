@@ -249,7 +249,6 @@ HEADERS += \
     src/Domain/Graphics/Shaders/ShaderPreprocessor.h \
     src/Domain/Graphics/Shaders/ShaderProgram.h \
     src/Persistence/Behaviours/BehaviourManager.h \
-    src/Persistence/Behaviours/BehaviourManagerCompileThread.h \
     src/Persistence/Behaviours/BehaviourRefresherTimer.h \
     src/Persistence/Files/File.h \
     src/Persistence/IO/FileReader.h \
@@ -291,7 +290,8 @@ HEADERS += \
     src/View/Windows/EditorWindow.h \
     src/View/Windows/IWindow.h \
     src/View/Windows/GameWindow.h \
-    src/View/Windows/SelectProjectWindow.h
+    src/View/Windows/SelectProjectWindow.h \
+    src/Persistence/Behaviours/BehaviourCompileRunnable.h
 
 EDITOR {
 HEADERS += \
@@ -443,7 +443,6 @@ SOURCES += \
     src/Persistence/Files/MeshFile.cpp \
     src/Persistence/Files/Texture2DAssetFile.cpp \
     src/Persistence/Behaviours/BehaviourManager.cpp \
-    src/Persistence/Behaviours/BehaviourManagerCompileThread.cpp \
     src/Persistence/Behaviours/BehaviourRefresherTimer.cpp \
     src/Persistence/IO/FileWriter.cpp \
     src/Persistence/XML/XMLAttribute.cpp \
@@ -456,7 +455,8 @@ SOURCES += \
     src/View/Windows/WindowEventManager.cpp \
     src/View/Windows/IWindow.cpp \
     src/View/Windows/GameWindow.cpp \
-    src/View/Windows/EditorWindow.cpp
+    src/View/Windows/EditorWindow.cpp \
+    src/Persistence/Behaviours/BehaviourCompileRunnable.cpp
 
 EDITOR {
     SOURCES += \

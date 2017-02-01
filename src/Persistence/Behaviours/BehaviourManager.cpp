@@ -11,10 +11,12 @@
 #include "SceneManager.h"
 #include "ProjectManager.h"
 #include "BehaviourHolder.h"
-#include "BehaviourManagerCompileThread.h"
+#include "BehaviourCompileRunnable.h"
 
 BehaviourManager::BehaviourManager()
 {
+    // Only compile N behaviours at a time
+    m_threadPool.setMaxThreadCount(3);
 }
 
 QLibrary *BehaviourManager::LoadLibraryFromFilepath(const String &libFilepath)
@@ -44,6 +46,8 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourPath,
     QMutexLocker locker(&m_mutex);
 
     String hash = BehaviourManager::GetHash(behaviourPath);
+    m_behHashesBeingCompiled.erase(hash);
+
     QLibrary *library = LoadLibraryFromFilepath(libraryFilepath);
     if (library)
     {
@@ -67,6 +71,7 @@ void BehaviourManager::OnBehaviourFailedCompiling(const String &behaviourPath)
 {
     QMutexLocker locker(&m_mutex);
     String hash = BehaviourManager::GetHash(behaviourPath);
+    m_behHashesBeingCompiled.erase(hash);
     m_failedBehHashes.insert(hash);
 }
 
@@ -95,7 +100,8 @@ void BehaviourManager::RemoveOutdatedLibraryFiles(
 bool BehaviourManager::IsCached(const String &hash)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    return bm->m_behHash_To_lib.ContainsKey(hash);
+    return  bm->m_behHash_To_lib.ContainsKey(hash) &&
+           !BehaviourManager::IsBeingCompiled(hash);
 }
 
 bool BehaviourManager::AllBehaviourHoldersUpdated(float *percentOfBehavioursUpdated)
@@ -157,7 +163,11 @@ String BehaviourManager::GetHash(const String &behaviourPath)
 QLibrary *BehaviourManager::GetCachedLibrary(const String &hash)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    return bm->m_behHash_To_lib[hash];
+    if (bm->m_behHash_To_lib.ContainsKey(hash))
+    {
+        return bm->m_behHash_To_lib[hash];
+    }
+    return nullptr;
 }
 
 bool BehaviourManager::IsBeingCompiled(const String &hash)
@@ -166,8 +176,7 @@ bool BehaviourManager::IsBeingCompiled(const String &hash)
 
     // Is being demanded but it has no compiled library associated,
     // this means the behaviour is still being compiled :)
-    return  bm->m_behHash_To_demandersList.ContainsKey(hash) &&
-           !bm->m_behHash_To_lib.ContainsKey(hash);
+    return  bm->m_behHashesBeingCompiled.count(hash) > 0;
 }
 
 void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
@@ -192,35 +201,31 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
     }
     else
     {
-        // Must be done before adding the demander !!!! Order Matters!
-        bool wasBeingCompiled =
-                BehaviourManager::IsBeingCompiled(hash);
-
         // Add behaviour to the list of demanders
-        if (!bm->m_behHash_To_demandersList.ContainsKey(hash))
-        {
-            // Init list
-            bm->m_behHash_To_demandersList.Set(hash, List<BehaviourHolder*>());
-        }
-
         List<BehaviourHolder*> &demanders = bm->m_behHash_To_demandersList.Get(hash);
         if (!demanders.Contains(behaviourHolder))
         {
             demanders.PushBack(behaviourHolder);
         }
 
-        if (!wasBeingCompiled)
+        if ( !BehaviourManager::IsBeingCompiled(hash) )
         {
             #ifdef BANG_EDITOR
 
             // Have to compile and load it.
             // First compile
-            BehaviourManagerCompileThread *compileThread =
-                    new BehaviourManagerCompileThread(behaviourFilepath);
-            compileThread->start();
+            BehaviourCompileRunnable *compileRunnable =
+                    new BehaviourCompileRunnable(behaviourFilepath);
+            bool startedCompiling = bm->m_threadPool.tryStart(compileRunnable);
+            if (!startedCompiling)
+            {
+                return;
+            }
 
-            Debug_Status("Compiling script " <<
-                         Persistence::GetFileName(behaviourFilepath) << "...", 5.0f);
+            bm->m_behHashesBeingCompiled.insert(hash);
+
+            String behaviourName = Persistence::GetFileName(behaviourFilepath);
+            Debug_Status("Compiling script " << behaviourName << "...", 5.0f);
 
             // And when the compileThread finishes, we will be notified,
             // load the library, and then notify the behaviourHolders waiting for it

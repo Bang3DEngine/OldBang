@@ -4,6 +4,7 @@
 #include <set>
 #include <QTimer>
 #include <QMutex>
+#include <QThreadPool>
 #include <QMutexLocker>
 
 #include "Map.h"
@@ -13,7 +14,7 @@
 
 class QLibrary;
 class BehaviourHolder;
-class BehaviourManagerCompileThread;
+class BehaviourCompileRunnable;
 
 /**
  * @brief Manages the compiling and loading of the Behaviour's QLibraries.
@@ -58,6 +59,7 @@ public:
 
 private:
     QMutex m_mutex;
+    QThreadPool m_threadPool;
 
     BehaviourRefresherTimer m_behaviourRefresherTimer;
 
@@ -79,6 +81,8 @@ private:
      */
     std::set<String> m_failedBehHashes;
 
+    std::set<String> m_behHashesBeingCompiled;
+
     BehaviourManager();
 
     static QLibrary* LoadLibraryFromFilepath(const String &libFilepath);
@@ -87,7 +91,7 @@ private:
     static QLibrary* GetCachedLibrary(const String &hash);
 
     friend class Application;
-    friend class BehaviourManagerCompileThread;
+    friend class BehaviourCompileRunnable;
 };
 
 #endif // BEHAVIOURMANAGER_H

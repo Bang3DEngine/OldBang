@@ -1,18 +1,16 @@
-#include "BehaviourManagerCompileThread.h"
+#include "BehaviourCompileRunnable.h"
 
 #include "Debug.h"
 #include "SystemUtils.h"
 #include "BehaviourManager.h"
 
-BehaviourManagerCompileThread::
-    BehaviourManagerCompileThread(const String &behaviourRelativeFilepath)
+BehaviourCompileRunnable::
+    BehaviourCompileRunnable(const String &behaviourRelativeFilepath)
 {
     m_behaviourRelativeFilepath = behaviourRelativeFilepath;
-
-    BehaviourManager *bm = BehaviourManager::GetInstance();
 }
 
-void BehaviourManagerCompileThread::Compile()
+void BehaviourCompileRunnable::Compile()
 {
     // Compile....
     String soFilepath =
@@ -31,11 +29,9 @@ void BehaviourManagerCompileThread::Compile()
         // compile until the behaviour file hash changes
         bm->OnBehaviourFailedCompiling(m_behaviourRelativeFilepath);
     }
-
-    deleteLater(); // Automatic thread delete
 }
 
-void BehaviourManagerCompileThread::run()
+void BehaviourCompileRunnable::run()
 {
     Compile();
 }

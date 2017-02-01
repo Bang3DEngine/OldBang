@@ -174,9 +174,6 @@ int main(int argc, char **argv)
     #endif
     InitEditorOrGame(editorOrGameWindow, &app);
     ProjectManager::OpenProject(loadedProjectFilepath); // Load previously selected project
-    AudioClip ac;
-    ac.LoadFromFile( Persistence::ToAbsolute("./door.wav", false) );
-    ac.Play();
     return app.exec();
     //
 }
