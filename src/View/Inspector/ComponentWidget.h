@@ -1,5 +1,5 @@
-#ifndef LISTINSPECTORITEMWIDGET_H
-#define LISTINSPECTORITEMWIDGET_H
+#ifndef COMPONENTWIDGET_H
+#define COMPONENTWIDGET_H
 
 #include "InspectorWidget.h"
 #include "ComponentWidgetContextMenu.h"
@@ -34,4 +34,4 @@ private:
 
 };
 
-#endif // LISTINSPECTORITEM_H
+#endif // COMPONENTWIDGET_H

@@ -116,24 +116,32 @@ INCLUDEPATH += \
     /usr/include \
     /usr/include/freetype2 \
     /usr/include/freetype2/freetype \
+    \
     $$PWD/src/ \
     $$PWD/src/Domain/Interfaces/ \
     $$PWD/src/Domain/Graphics/ \
+    $$PWD/src/Domain/Graphics/Buffers/ \
+    $$PWD/src/Domain/Graphics/Shaders/ \
     $$PWD/src/Domain/Graphics/Interfaces/ \
     $$PWD/src/Domain/Engine/Interfaces/ \
+    $$PWD/src/Domain/Engine/Debug/ \
     $$PWD/src/Domain/Engine/GameObjects/ \
+    $$PWD/src/Domain/Engine/DataStructures/ \
     $$PWD/src/Domain/Engine/Others/ \
+    $$PWD/src/Domain/Engine/Audio/ \
     $$PWD/src/Domain/Engine/Components/ \
     $$PWD/src/Domain/Engine/Readers/ \
     $$PWD/src/Domain/Engine/Assets/ \
     $$PWD/src/Domain/Engine/Assets/Meshes/ \
     $$PWD/src/Domain/Engine/Assets/Behaviours/ \
     $$PWD/src/Domain/Engine/Physics/ \
+    \
     $$PWD/src/Persistence/ \
-    $$PWD/src/Domain/Graphics/ \
-    $$PWD/src/View/ \
-    $$PWD/BangPreprocessor/GeneratedFiles/ \
-    $$PWD/src/View/Inspector/
+    $$PWD/src/Persistence/Behaviours/ \
+    $$PWD/src/Persistence/Files/ \
+    $$PWD/src/Persistence/IO/ \
+    $$PWD/src/Persistence/XML/
+
 EDITOR {
     INCLUDEPATH += \
         $$PWD/src/View/ \
@@ -145,6 +153,10 @@ EDITOR {
         $$PWD/src/View/EditorCamera/ \
         $$PWD/src/View/EditorGameObject/ \
         $$PWD/src/View/EditorScene/ \
+        $$PWD/src/View/Windows/ \
+        $$PWD/src/View/Inspector/ \
+        $$PWD/src/View/Inspector/Inspectables/ \
+        $$PWD/src/View/Inspector/AttributeWidgets/
 }
 ######################################
 
@@ -155,17 +167,10 @@ HEADERS += \
     src/Domain/Engine/Physics/Rect.h \
     src/Domain/Interfaces/IToString.h \
     src/Domain/Engine/Interfaces/ISceneEventListener.h \
-    src/Domain/Engine/Others/Timer.h \
-    src/Domain/Engine/Others/Time.h \
     src/Domain/Engine/GameObjects/GameObject.h \
     src/Domain/Engine/GameObjects/Scene.h \
-    src/Domain/Graphics/ShaderContract.h \
-    src/Domain/Graphics/ShaderProgram.h \
     src/Domain/Graphics/Texture.h \
     src/Domain/Graphics/VAO.h \
-    src/Domain/Graphics/Framebuffer.h \
-    src/Domain/Graphics/Shader.h \
-    src/Domain/Graphics/GBuffer.h \
     src/Domain/Graphics/TextureRender.h \
     src/Domain/Graphics/VBO.h \
     src/Domain/Graphics/Interfaces/IGLBindable.h \
@@ -184,10 +189,7 @@ HEADERS += \
     src/Domain/Engine/Assets/Prefab.h \
     src/Bang.h \
     src/Persistence/AssetsManager.h \
-    src/Persistence/FileReader.h \
-    src/Persistence/stb_image.h \
     src/Domain/Engine/Others/Input.h \
-    src/Persistence/FileWriter.h \
     src/Persistence/Persistence.h \
     src/Domain/Engine/Components/LineRenderer.h \
     src/Domain/Engine/Components/Renderer.h \
@@ -204,104 +206,119 @@ HEADERS += \
     src/Domain/Engine/Interfaces/ICloneable.h \
     src/View/Screen.h \
     src/Domain/Engine/Others/StringUtils.h \
-    src/View/IWindow.h \
     src/Domain/Engine/Components/DirectionalLight.h \
     src/Domain/Engine/Components/Light.h \
-    src/Domain/Graphics/ShaderPreprocessor.h \
     src/View/GameObjectClipboard.h \
     src/Domain/Engine/Components/PointLight.h \
-    src/Domain/Engine/Others/Property.h \
-    src/Persistence/XMLParser.h \
-    src/Persistence/XMLNode.h \
-    src/Persistence/XMLAttribute.h \
-    src/Persistence/XMLProperty.h \
-    src/Domain/Engine/Others/NamedEnum.h \
     src/Domain/Engine/Physics/Vector4.h \
     src/Domain/Engine/Physics/Vector2.h \
     src/Domain/Engine/Physics/Color.h \
     src/View/Application.h \
-    src/Domain/Engine/Others/String.h \
     src/Domain/Engine/Others/SceneManager.h \
-    src/Domain/Engine/Others/Debug.h \
-    src/Persistence/BehaviourManager.h \
-    src/Persistence/BehaviourManagerCompileThread.h \
-    src/Domain/Engine/Others/Chrono.h \
-    src/Persistence/ImageFile.h \
-    src/Persistence/MeshFile.h \
-    src/Persistence/Texture2DAssetFile.h \
-    src/Persistence/MeshAssetFile.h \
-    src/Persistence/MaterialAssetFile.h \
-    src/Persistence/File.h \
-    src/Domain/Engine/Others/Map.h \
-    src/Domain/Engine/Others/List.h \
-    src/Domain/Engine/Others/Array.h \
     src/Domain/Engine/Others/GraphicPipeline.h \
     src/Domain/Engine/Components/Canvas.h \
     src/Domain/Engine/Components/UIImage.h \
     src/Domain/Engine/Components/UIRenderer.h \
     src/Domain/Graphics/FontSheetCreator.h \
     src/Domain/Engine/Assets/Font.h \
-    src/Persistence/FontAssetFile.h \
     src/Domain/Engine/Components/UIText.h \
     src/Persistence/ProjectManager.h \
     src/Persistence/Project.h \
     src/Persistence/EngineConfig.h \
-    src/Persistence/BehaviourRefresherTimer.h \
     src/Domain/Engine/Physics/AABox.h \
-    src/View/DialogBrowseAssetFile.h \
     src/Domain/Engine/Assets/AudioClip.h \
     src/Domain/Engine/Components/AudioSource.h \
-    src/View/Inspector/AudioClipAssetFileInspectable.h \
-    src/Persistence/AudioClipAssetFile.h \
-    src/Domain/Engine/Others/AudioManager.h \
-    src/Domain/Engine/Others/AudioPlayerRunnable.h
+    src/Domain/Engine/Audio/AudioManager.h \
+    src/Domain/Engine/Audio/AudioPlayerRunnable.h \
+    src/Domain/Engine/DataStructures/Array.h \
+    src/Domain/Engine/DataStructures/List.h \
+    src/Domain/Engine/DataStructures/Map.h \
+    src/Domain/Engine/DataStructures/NamedEnum.h \
+    src/Domain/Engine/DataStructures/Property.h \
+    src/Domain/Engine/DataStructures/String.h \
+    src/Domain/Engine/Debug/Chrono.h \
+    src/Domain/Engine/Debug/Debug.h \
+    src/Domain/Engine/Debug/Gizmos.h \
+    src/Domain/Engine/Debug/Time.h \
+    src/Domain/Engine/DataStructures/Timer.h \
+    src/Domain/Graphics/Buffers/Framebuffer.h \
+    src/Domain/Graphics/Buffers/GBuffer.h \
+    src/Domain/Graphics/Buffers/SelectionFramebuffer.h \
+    src/Domain/Graphics/Shaders/Shader.h \
+    src/Domain/Graphics/Shaders/ShaderContract.h \
+    src/Domain/Graphics/Shaders/ShaderPreprocessor.h \
+    src/Domain/Graphics/Shaders/ShaderProgram.h \
+    src/Persistence/Behaviours/BehaviourManager.h \
+    src/Persistence/Behaviours/BehaviourManagerCompileThread.h \
+    src/Persistence/Behaviours/BehaviourRefresherTimer.h \
+    src/Persistence/Files/File.h \
+    src/Persistence/IO/FileReader.h \
+    src/Persistence/Files/AudioClipAssetFile.h \
+    src/Persistence/IO/FileWriter.h \
+    src/Persistence/Files/ImageFile.h \
+    src/Persistence/Files/FontAssetFile.h \
+    src/Persistence/Files/MaterialAssetFile.h \
+    src/Persistence/Files/MeshAssetFile.h \
+    src/Persistence/Files/MeshFile.h \
+    src/Persistence/Files/Texture2DAssetFile.h \
+    src/Persistence/XML/XMLAttribute.h \
+    src/Persistence/XML/XMLNode.h \
+    src/Persistence/XML/XMLParser.h \
+    src/Persistence/XML/XMLProperty.h \
+    src/Persistence/IO/stb_image.h \
+    src/View/Dialogs/DialogBrowseAssetFile.h \
+    src/View/Inspector/AttributeWidgets/AttributeWidget.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetBool.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetButton.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetColor.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetEnum.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetFile.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetFloat.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetString.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetVectorFloat.h \
+    src/View/Inspector/AttributeWidgets/IAttrWidgetButtonListener.h \
+    src/View/Inspector/Inspectables/IInspectable.h \
+    src/View/Inspector/Inspectables/ImageFileInspectable.h \
+    src/View/Inspector/Inspectables/MaterialAssetFileInspectable.h \
+    src/View/Inspector/Inspectables/MeshAssetFileInspectable.h \
+    src/View/Inspector/Inspectables/MeshFileInspectable.h \
+    src/View/Inspector/Inspectables/PrefabAssetFileInspectable.h \
+    src/View/Inspector/Inspectables/TextFileInspectable.h \
+    src/View/Inspector/Inspectables/Texture2DAssetFileInspectable.h \
+    src/View/Inspector/Inspectables/AudioClipAssetFileInspectable.h \
+    src/Persistence/Files/TextFile.h \
+    src/View/Windows/WindowEventManager.h \
+    src/View/Windows/EditorWindow.h \
+    src/View/Windows/IWindow.h \
+    src/View/Windows/GameWindow.h \
+    src/View/Windows/SelectProjectWindow.h
 
 EDITOR {
 HEADERS += \
     src/View/EditorGameObject/EditorGizmosGameObject.h \
-    src/View/SelectProjectWindow.h \
-    src/View/EditorWindow.h \
     src/View/Explorer/FileSystemModel.h \
     src/View/EditorGameObject/EditorSelectionGameObject.h \
     src/View/EditorScene/EditorDebugGameObject.h \
     src/View/EditorGameObject/EditorTranslateAxis.h \
     src/View/EditorGameObject/EditorTranslateAxisGroup.h \
-    src/View/Inspector/AttrWidgetButton.h \
     src/View/EditorPlayStopFlowController.h \
     src/View/Toolbar.h \
-    src/View/WindowEventManager.h \
     src/View/EditorState.h \
     src/View/Dialogs/GameBuildDialog.h \
     src/View/GameBuilderJob.h \
-    src/View/Inspector/AttrWidgetFile.h \
     src/View/Dialogs/Dialog.h \
     src/View/Interfaces/IWindowEventManagerListener.h \
     src/View/Inspector/Inspector.h \
     src/View/Hierarchy/Hierarchy.h \
     src/View/Inspector/ComponentWidget.h \
-    src/View/Inspector/AttributeWidget.h \
-    src/View/Inspector/AttrWidgetFloat.h \
-    src/View/Inspector/AttrWidgetVectorFloat.h \
     src/View/Logger/ListLogger.h \
-    src/View/Inspector/AttrWidgetEnum.h \
     src/View/Explorer/Explorer.h \
-    src/View/Inspector/IInspectable.h \
     src/View/MenuBar.h \
     src/View/Explorer/ExplorerDirTree.h \
     src/View/Inspector/InspectorWidget.h \
-    src/View/Inspector/TextFile.h \
-    src/View/Inspector/ImageFileInspectable.h \
-    src/View/Inspector/MeshFileInspectable.h \
-    src/View/Inspector/MeshAssetFileInspectable.h \
-    src/View/Inspector/MaterialAssetFileInspectable.h \
-    src/View/Inspector/AttrWidgetString.h \
-    src/View/Inspector/Texture2DAssetFileInspectable.h \
-    src/View/Inspector/PrefabAssetFileInspectable.h \
-    src/View/Inspector/TextFileInspectable.h \
     src/View/EditorCamera/EditorCamera.h \
     src/View/EditorGameObject/EditorGameObject.h \
     src/View/EditorScene/EditorScene.h \
-    src/Domain/Graphics/SelectionFramebuffer.h \
     src/View/EditorGameObject/EditorBBox.h \
     src/View/EditorGameObject/EditorRotateAxisGroup.h \
     src/View/EditorGameObject/EditorRotateAxis.h \
@@ -310,11 +327,7 @@ HEADERS += \
     src/View/EditorGameObject/EditorScaleAxisGroup.h \
     src/View/EditorGameObject/EditorScaleAxis.h \
     src/View/EditorScene/EditorFloor.h \
-    src/Domain/Engine/Others/Gizmos.h \
-    src/View/Inspector/AttrWidgetBool.h \
-    src/View/Inspector/AttrWidgetColor.h \
     src/View/Interfaces/DragDropAgent.h \
-    src/View/Inspector/IAttrWidgetButtonListener.h \
     src/View/Inspector/ComponentClipboard.h \
     src/View/DragDropManager.h \
     src/View/Hierarchy/HierarchyDragDropManager.h \
@@ -330,8 +343,7 @@ HEADERS += \
     src/View/IShortcutListener.h
 }
 GAME {
-    HEADERS += \
-        src/View/GameWindow.h
+    HEADERS +=
 }
 ######################################
 
@@ -340,17 +352,11 @@ GAME {
 # SOURCES #####################
 SOURCES += \
     src/Domain/Engine/Physics/Rect.cpp \
-    src/Domain/Engine/Others/Timer.cpp \
     src/Domain/Engine/Others/Time.cpp \
     src/Domain/Engine/GameObjects/GameObject.cpp \
     src/Domain/Engine/GameObjects/Scene.cpp \
-    src/Domain/Graphics/ShaderProgram.cpp \
-    src/Domain/Graphics/ShaderContract.cpp \
-    src/Domain/Graphics/GBuffer.cpp \
     src/Domain/Graphics/Texture.cpp \
-    src/Domain/Graphics/Framebuffer.cpp \
     src/Domain/Graphics/VAO.cpp \
-    src/Domain/Graphics/Shader.cpp \
     src/Domain/Graphics/TextureRender.cpp \
     src/Domain/Graphics/VBO.cpp \
     src/Domain/Graphics/Interfaces/IGLBindable.cpp \
@@ -365,19 +371,10 @@ SOURCES += \
     src/Domain/Engine/Components/Behaviour.cpp \
     src/Domain/Engine/Assets/Texture2D.cpp \
     src/Domain/Engine/Assets/Prefab.cpp \
-    src/Persistence/stb_image.cpp \
     src/Persistence/AssetsManager.cpp \
-    src/Persistence/FileReader.cpp \
     src/Domain/Engine/Others/Input.cpp \
-    src/Persistence/FileWriter.cpp \
     src/Persistence/Persistence.cpp \
-    src/Persistence/ImageFile.cpp \
-    src/Persistence/MeshFile.cpp \
-    src/Persistence/Texture2DAssetFile.cpp \
-    src/Persistence/MeshAssetFile.cpp \
-    src/Persistence/MaterialAssetFile.cpp \
-    src/View/Inspector/TextFile.cpp \
-    src/Persistence/File.cpp \
+    src/Persistence/Files/TextFile.cpp \
     src/Domain/Engine/Components/LineRenderer.cpp \
     src/Domain/Engine/Components/Renderer.cpp \
     src/Domain/Engine/Physics/Vector3.cpp \
@@ -393,59 +390,79 @@ SOURCES += \
     src/Domain/Engine/Interfaces/ICloneable.cpp \
     src/View/Screen.cpp \
     src/Domain/Engine/Others/StringUtils.cpp \
-    src/View/IWindow.cpp \
     src/Domain/Engine/Components/DirectionalLight.cpp \
     src/Domain/Engine/Components/Light.cpp \
-    src/Domain/Graphics/ShaderPreprocessor.cpp \
     src/View/GameObjectClipboard.cpp \
     src/Domain/Engine/Interfaces/IFileable.cpp \
     src/Domain/Engine/Components/PointLight.cpp \
-    src/Domain/Engine/Others/Property.cpp \
-    src/Persistence/XMLParser.cpp \
-    src/Persistence/XMLNode.cpp \
-    src/Persistence/XMLAttribute.cpp \
-    src/Persistence/XMLProperty.cpp \
     src/Domain/Engine/Physics/Vector4.cpp \
     src/Domain/Engine/Physics/Vector2.cpp \
     src/Domain/Engine/Physics/Color.cpp \
     src/View/Application.cpp \
-    src/View/Inspector/IAttrWidgetButtonListener.cpp \
-    src/Domain/Engine/Others/String.cpp \
+    src/View/Inspector/AttributeWidgets/IAttrWidgetButtonListener.cpp \
     src/Domain/Engine/Others/SceneManager.cpp \
-    src/Domain/Engine/Others/Debug.cpp \
-    src/Persistence/BehaviourManager.cpp \
-    src/Persistence/BehaviourManagerCompileThread.cpp \
-    src/Domain/Engine/Others/Chrono.cpp \
-    src/Domain/Engine/Others/Map.cpp \
-    src/Domain/Engine/Others/List.cpp \
-    src/Domain/Engine/Others/Array.cpp \
     src/Domain/Engine/Others/GraphicPipeline.cpp \
     src/Domain/Engine/Components/Canvas.cpp \
     src/Domain/Engine/Components/UIImage.cpp \
     src/Domain/Engine/Components/UIRenderer.cpp \
     src/Domain/Graphics/FontSheetCreator.cpp \
     src/Domain/Engine/Assets/Font.cpp \
-    src/Persistence/FontAssetFile.cpp \
     src/Domain/Engine/Components/UIText.cpp \
     src/Persistence/ProjectManager.cpp \
     src/Persistence/Project.cpp \
     src/Persistence/EngineConfig.cpp \
-    src/Persistence/BehaviourRefresherTimer.cpp \
     src/Domain/Engine/Physics/AABox.cpp \
-    src/View/DialogBrowseAssetFile.cpp \
     src/Domain/Engine/Assets/AudioClip.cpp \
     src/Domain/Engine/Components/AudioSource.cpp \
-    src/View/Inspector/AudioClipAssetFileInspectable.cpp \
-    src/Persistence/AudioClipAssetFile.cpp \
-    src/Domain/Engine/Others/AudioManager.cpp \
-    src/Domain/Engine/Others/AudioPlayerRunnable.cpp
+    src/View/Inspector/Inspectables/AudioClipAssetFileInspectable.cpp \
+    src/Domain/Engine/Audio/AudioManager.cpp \
+    src/Domain/Engine/Audio/AudioPlayerRunnable.cpp \
+    src/Domain/Engine/DataStructures/List.cpp \
+    src/Domain/Engine/DataStructures/Map.cpp \
+    src/Domain/Engine/DataStructures/Array.cpp \
+    src/Domain/Engine/DataStructures/Timer.cpp \
+    src/Domain/Engine/DataStructures/String.cpp \
+    src/Domain/Engine/DataStructures/Property.cpp \
+    src/Domain/Engine/Debug/Gizmos.cpp \
+    src/Domain/Engine/Debug/Debug.cpp \
+    src/Domain/Engine/Debug/Chrono.cpp \
+    src/Domain/Graphics/Buffers/Framebuffer.cpp \
+    src/Domain/Graphics/Buffers/GBuffer.cpp \
+    src/Domain/Graphics/Buffers/SelectionFramebuffer.cpp \
+    src/Domain/Graphics/Shaders/Shader.cpp \
+    src/Domain/Graphics/Shaders/ShaderContract.cpp \
+    src/Domain/Graphics/Shaders/ShaderPreprocessor.cpp \
+    src/Domain/Graphics/Shaders/ShaderProgram.cpp \
+    src/Persistence/Files/AudioClipAssetFile.cpp \
+    src/Persistence/Files/File.cpp \
+    src/Persistence/IO/FileReader.cpp \
+    src/Persistence/Files/ImageFile.cpp \
+    src/Persistence/Files/FontAssetFile.cpp \
+    src/Persistence/Files/MaterialAssetFile.cpp \
+    src/Persistence/Files/MeshAssetFile.cpp \
+    src/Persistence/Files/MeshFile.cpp \
+    src/Persistence/Files/Texture2DAssetFile.cpp \
+    src/Persistence/Behaviours/BehaviourManager.cpp \
+    src/Persistence/Behaviours/BehaviourManagerCompileThread.cpp \
+    src/Persistence/Behaviours/BehaviourRefresherTimer.cpp \
+    src/Persistence/IO/FileWriter.cpp \
+    src/Persistence/XML/XMLAttribute.cpp \
+    src/Persistence/IO/stb_image.cpp \
+    src/Persistence/XML/XMLNode.cpp \
+    src/Persistence/XML/XMLParser.cpp \
+    src/Persistence/XML/XMLProperty.cpp \
+    src/View/Dialogs/DialogBrowseAssetFile.cpp \
+    src/View/Windows/SelectProjectWindow.cpp \
+    src/View/Windows/WindowEventManager.cpp \
+    src/View/Windows/IWindow.cpp \
+    src/View/Windows/GameWindow.cpp \
+    src/View/Windows/EditorWindow.cpp
 
 EDITOR {
     SOURCES += \
         src/View/EditorGameObject/EditorGizmosGameObject.cpp \
         src/View/GameBuilderJob.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
-        src/View/SelectProjectWindow.cpp \
         src/View/Explorer/FileSystemModel.cpp \
         src/View/EditorState.cpp \
         src/View/EditorPlayStopFlowController.cpp \
@@ -456,46 +473,42 @@ EDITOR {
         src/View/EditorGameObject/EditorScaleAxisGroup.cpp \
         src/View/EditorGameObject/EditorScaleAxis.cpp \
         src/View/EditorScene/EditorFloor.cpp \
-        src/View/EditorWindow.cpp \
-        src/View/WindowEventManager.cpp \
         src/View/Interfaces/IWindowEventManagerListener.cpp \
         src/View/Inspector/Inspector.cpp \
         src/View/Hierarchy/Hierarchy.cpp \
-        src/Domain/Graphics/SelectionFramebuffer.cpp \
         src/View/Inspector/ComponentWidget.cpp \
-        src/View/Inspector/AttributeWidget.cpp \
-        src/View/Inspector/AttrWidgetFloat.cpp \
-        src/View/Inspector/AttrWidgetVectorFloat.cpp \
+        src/View/Inspector/AttributeWidgets/AttributeWidget.cpp \
+        src/View/Inspector/AttributeWidgets/AttrWidgetFloat.cpp \
+        src/View/Inspector/AttributeWidgets/AttrWidgetVectorFloat.cpp \
         src/View/Logger/ListLogger.cpp \
-        src/View/Inspector/AttrWidgetEnum.cpp \
+        src/View/Inspector/AttributeWidgets/AttrWidgetEnum.cpp \
         src/View/Explorer/Explorer.cpp \
-        src/View/Inspector/IInspectable.cpp \
+        src/View/Inspector/Inspectables/IInspectable.cpp \
         src/View/MenuBar.cpp \
         src/View/Dialogs/Dialog.cpp \
-        src/View/Inspector/AttrWidgetFile.cpp \
+        src/View/Inspector/AttributeWidgets/AttrWidgetFile.cpp \
         src/View/Explorer/ExplorerDirTree.cpp \
         src/View/Inspector/InspectorWidget.cpp \
-        src/View/Inspector/AttrWidgetString.cpp \
+        src/View/Inspector/AttributeWidgets/AttrWidgetString.cpp \
         src/View/EditorCamera/EditorCamera.cpp \
         src/View/EditorGameObject/EditorGameObject.cpp \
         src/View/EditorScene/EditorScene.cpp \
-        src/View/Inspector/MeshAssetFileInspectable.cpp \
-        src/View/Inspector/Texture2DAssetFileInspectable.cpp \
-        src/View/Inspector/ImageFileInspectable.cpp \
-        src/View/Inspector/MeshFileInspectable.cpp \
-        src/View/Inspector/MaterialAssetFileInspectable.cpp \
+        src/View/Inspector/Inspectables/MeshAssetFileInspectable.cpp \
+        src/View/Inspector/Inspectables/Texture2DAssetFileInspectable.cpp \
+        src/View/Inspector/Inspectables/ImageFileInspectable.cpp \
+        src/View/Inspector/Inspectables/MeshFileInspectable.cpp \
+        src/View/Inspector/Inspectables/MaterialAssetFileInspectable.cpp \
         src/View/EditorGameObject/EditorBBox.cpp \
         src/View/EditorGameObject/EditorSelectionGameObject.cpp \
         src/View/EditorScene/EditorDebugGameObject.cpp \
         src/View/EditorGameObject/EditorTranslateAxisGroup.cpp \
         src/View/EditorGameObject/EditorTranslateAxis.cpp \
         src/View/Toolbar.cpp \
-        src/View/Inspector/AttrWidgetButton.cpp \
-        src/Domain/Engine/Others/Gizmos.cpp \
-        src/View/Inspector/AttrWidgetBool.cpp \
-        src/View/Inspector/AttrWidgetColor.cpp \
-        src/View/Inspector/TextFileInspectable.cpp \
-        src/View/Inspector/PrefabAssetFileInspectable.cpp \
+        src/View/Inspector/AttributeWidgets/AttrWidgetButton.cpp \
+        src/View/Inspector/AttributeWidgets/AttrWidgetBool.cpp \
+        src/View/Inspector/AttributeWidgets/AttrWidgetColor.cpp \
+        src/View/Inspector/Inspectables/TextFileInspectable.cpp \
+        src/View/Inspector/Inspectables/PrefabAssetFileInspectable.cpp \
         src/View/Interfaces/DragDropAgent.cpp \
         src/View/Inspector/ComponentClipboard.cpp \
         src/View/DragDropManager.cpp \
@@ -512,8 +525,7 @@ EDITOR {
         src/View/EditorGameObject/EditorAxisPlane.cpp
 }
 GAME {
-    SOURCES += \
-        src/View/GameWindow.cpp
+    SOURCES +=
 }
 ######################################
 
