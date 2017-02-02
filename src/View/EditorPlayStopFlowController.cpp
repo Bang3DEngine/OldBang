@@ -38,10 +38,8 @@ bool EditorPlayStopFlowController::PlayScene()
 {
     ASSERT(!EditorState::IsPlaying(), "", return true);
 
-    Debug_Log("RefreshAllBehaviours **************************");
     // Start refreshing all scene behaviours...
     BehaviourManager::RefreshAllBehaviours();
-    Debug_Log("***********************************************");
 
     m_playingCanceled = false; // Wait for behaviours
     if (!WaitForAllBehavioursToBeLoaded()) { return false; }

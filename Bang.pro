@@ -291,7 +291,8 @@ HEADERS += \
     src/View/Windows/IWindow.h \
     src/View/Windows/GameWindow.h \
     src/View/Windows/SelectProjectWindow.h \
-    src/Persistence/Behaviours/BehaviourCompileRunnable.h
+    src/Persistence/Behaviours/BehaviourCompileRunnable.h \
+    src/View/Explorer/ExplorerFileSortProxy.h
 
 EDITOR {
 HEADERS += \
@@ -456,7 +457,8 @@ SOURCES += \
     src/View/Windows/IWindow.cpp \
     src/View/Windows/GameWindow.cpp \
     src/View/Windows/EditorWindow.cpp \
-    src/Persistence/Behaviours/BehaviourCompileRunnable.cpp
+    src/Persistence/Behaviours/BehaviourCompileRunnable.cpp \
+    src/View/Explorer/ExplorerFileSortProxy.cpp
 
 EDITOR {
     SOURCES += \
