@@ -3,6 +3,9 @@ language: cpp
 compiler:
 - g++
 
+dist: trusty
+sudo: required
+
 install:
 - sudo apt-get update
 - sudo apt-get install build-essential
