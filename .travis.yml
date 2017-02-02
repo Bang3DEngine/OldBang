@@ -1,0 +1,20 @@
+language: cpp
+
+compiler:
+- gcc
+- clang
+
+install:
+- sudo apt-get update
+- sudo apt-get install build-essential
+- sudo apt-get install qt5-default
+- sudo apt-get install libglew-dev
+- sudo apt-get install libfreetype6-dev
+- sudo apt-get install libopenal-dev
+- sudo apt-get install libalut-dev
+
+script:
+- ./scripts/fullCompile.sh EDITOR DEBUG_MODE
+- ./scripts/fullCompile.sh EDITOR RELEASE_MODE
+- ./scripts/fullCompile.sh GAME   DEBUG_MODE
+- ./scripts/fullCompile.sh GAME   RELEASE_MODE
