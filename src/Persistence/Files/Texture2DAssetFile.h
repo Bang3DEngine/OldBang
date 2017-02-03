@@ -19,6 +19,8 @@ public:
     #ifdef BANG_EDITOR
     virtual IInspectable *GetInspectable() const override;
     #endif
+
+    virtual bool IsAsset() const override;
 };
 
 #endif // FILETEXTURE2DASSET_H

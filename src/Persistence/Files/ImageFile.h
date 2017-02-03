@@ -5,10 +5,6 @@
 
 class ImageFile : public File
 {
-protected:
-    int m_width = 0, m_height = 0;
-    int m_numComponents = 3;
-
 public:
     ImageFile(const QFileSystemModel *model, const QModelIndex &index);
 
@@ -18,9 +14,15 @@ public:
     virtual IInspectable *GetInspectable() const override;
     #endif
 
+    virtual bool IsAsset() const override;
+
     int GetWidth() const;
     int GetHeight() const;
     int GetNumComponents() const;
+
+protected:
+    int m_width = 0, m_height = 0;
+    int m_numComponents = 3;
 };
 
 #endif // FILEIMAGE_H

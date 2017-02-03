@@ -27,7 +27,7 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModel
 QPixmap MaterialAssetFile::GetIcon() const
 {
     String fp = Persistence::ToAbsolute("./Icons/MaterialAssetIcon.png", true);
-    QPixmap pm(QString::fromStdString(fp));
+    QPixmap pm(fp.ToQString());
     return pm;
 }
 
@@ -37,6 +37,11 @@ IInspectable *MaterialAssetFile::GetInspectable() const
     return new MaterialAssetFileInspectable(*this);
 }
 #endif
+
+bool MaterialAssetFile::IsAsset() const
+{
+    return true;
+}
 
 const String &MaterialAssetFile::GetVertexShaderFilepath() const
 {

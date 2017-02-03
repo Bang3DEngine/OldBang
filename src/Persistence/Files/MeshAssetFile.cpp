@@ -41,6 +41,11 @@ void MeshAssetFile::SetMeshFilepath(const String &meshFilepath)
 
 #endif
 
+bool MeshAssetFile::IsAsset() const
+{
+    return true;
+}
+
 const String& MeshAssetFile::GetMeshFilepath() const
 {
     return m_meshFilepath;

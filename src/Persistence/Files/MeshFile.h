@@ -24,6 +24,8 @@ public:
     virtual IInspectable *GetInspectable() const override;
     #endif
 
+    virtual bool IsAsset() const override;
+
     bool IsTriangles() const;
     bool HasUvs() const;
     bool HasNormals() const;

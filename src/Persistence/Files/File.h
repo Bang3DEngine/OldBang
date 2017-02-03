@@ -17,6 +17,7 @@ public:
 
     virtual ~File();
 
+    bool IsAudioFile() const;
     bool IsAudioClipAsset() const;
 
     bool IsTexture2DAsset() const;
@@ -66,6 +67,8 @@ public:
     const String& GetExtension() const;
     String GetNameAndExtension() const;
 
+    virtual bool IsAsset() const;
+
 protected:
     const QFileSystemModel *m_fileSystemModel = nullptr;
     QModelIndex m_modelIndex;
@@ -77,8 +80,9 @@ protected:
 
     // Adds on top of the passed QPixmap the little icon that
     // distinguishes between assets and noAsset files.
-    static QPixmap AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm);
+    static QPixmap AddIconAssetTypeDistinctor(const QPixmap &pm, bool isAsset);
 
+    friend class FileSystemModel;
 };
 
 #endif // FILE_H

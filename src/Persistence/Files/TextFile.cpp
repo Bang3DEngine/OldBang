@@ -20,3 +20,8 @@ IInspectable *TextFile::GetInspectable() const
     return new TextFileInspectable(*this);
 }
 #endif
+
+bool TextFile::IsAsset() const
+{
+    return false;
+}

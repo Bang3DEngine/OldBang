@@ -21,7 +21,7 @@ FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &i
 QPixmap FontAssetFile::GetIcon() const
 {
     String fp = Persistence::ToAbsolute("./Icons/NoAssetIcon.png", true);
-    QPixmap pm(QString::fromStdString(fp));
+    QPixmap pm(fp.ToQString());
     return pm;
 }
 
@@ -31,6 +31,11 @@ IInspectable *FontAssetFile::GetInspectable() const
     return nullptr;
 }
 #endif
+
+bool FontAssetFile::IsAsset() const
+{
+    return true;
+}
 
 const String &FontAssetFile::GetFontFilepath() const
 {

@@ -1,6 +1,7 @@
 #include "File.h"
 
 #include <fstream>
+#include <QPainter>
 
 #ifdef BANG_EDITOR
 #include "Explorer.h"
@@ -14,6 +15,7 @@
 #include "Material.h"
 #include "TextFile.h"
 #include "MeshFile.h"
+#include "AudioFile.h"
 #include "AudioClip.h"
 #include "ImageFile.h"
 #include "Texture2D.h"
@@ -22,22 +24,6 @@
 #include "MaterialAssetFile.h"
 #include "AudioClipAssetFile.h"
 #include "Texture2DAssetFile.h"
-
-QPixmap File::AddNoAssetFileQPixmapOnTopOf(const QPixmap &pm)
-{
-    /*
-    String fp = Persistence::ToAbsolute("./Icons/NoAssetIcon.png");
-    QPixmap noAssetPixmap(QString::fromStdString(fp));
-
-    QPixmap result(pm.scaled(128, 128, Qt::IgnoreAspectRatio, Qt::TransformationMode::SmoothTransformation));
-    QPainter painter;
-    painter.Begin(&result);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawPixmap(0, 0, 128, 128, noAssetPixmap);
-    painter.End();
-    */
-    return pm; //result;
-}
 
 File::File()
 {
@@ -64,6 +50,11 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
 
 File::~File()
 {
+}
+
+bool File::IsAudioFile() const
+{
+    return m_isFile && IsOfExtension("wav ogg pcm");
 }
 
 bool File::IsAudioClipAsset() const
@@ -153,6 +144,10 @@ File *File::GetSpecificFile(const File &f)
     {
         return new AudioClipAssetFile(f.m_fileSystemModel, f.m_modelIndex);
     }
+    else if (f.IsAudioFile())
+    {
+        return new AudioFile(f.m_fileSystemModel, f.m_modelIndex);
+    }
     else if (f.IsTexture2DAsset())
     {
         return new Texture2DAssetFile(f.m_fileSystemModel, f.m_modelIndex);
@@ -227,21 +222,26 @@ String File::GetContents() const
 QPixmap File::GetIcon() const
 {
     String fp = "";
+    bool isAsset = false;
     if (IsPrefabAsset())
     {
         fp = Persistence::ToAbsolute("./Icons/PrefabAssetIcon.png", true);
+        isAsset = true;
     }
     else if (IsBehaviour())
     {
         fp = Persistence::ToAbsolute("./Icons/BehaviourIcon.png", true);
+        isAsset = true;
     }
     else if (IsScene())
     {
         fp = Persistence::ToAbsolute("./Icons/SceneIcon.png", true);
+        isAsset = true;
     }
     else
     {
         fp = Persistence::ToAbsolute("./Icons/OtherFileIcon.png", true);
+        isAsset = false;
     }
 
     // Its a texture, the icon is the image itself
@@ -282,4 +282,42 @@ String File::GetNameAndExtension() const
     str += ".";
     str += GetExtension();
     return  str;
+}
+
+bool File::IsAsset() const
+{
+    return false;
+}
+
+QPixmap File::AddIconAssetTypeDistinctor(const QPixmap &pm, bool isAsset)
+{
+    String overlayPath = isAsset ? "./Icons/AssetDistinctor.png" :
+                                   "./Icons/NoAssetDistinctor.png";
+    String fp = Persistence::ToAbsolute(overlayPath, true);
+    QPixmap distinctorPixmap( fp.ToQString() );
+    distinctorPixmap = distinctorPixmap.scaled(
+                32, 32, Qt::KeepAspectRatio,
+                Qt::TransformationMode::SmoothTransformation);
+
+    QPixmap result(pm);
+
+    const float pmAR             = float(distinctorPixmap.width()) /
+                                   distinctorPixmap.height();
+    const float distinctorSize   = isAsset ? 0.4f : 0.3f;
+    const float distinctorWidth  = pm.width()  * distinctorSize;
+    const float distinctorHeight = distinctorWidth / pmAR;
+    const float distinctorX      = pm.width()  - distinctorWidth;
+    const float distinctorY      = pm.height() - distinctorHeight;
+
+    QPainter painter;
+    painter.begin(&result);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawPixmap(distinctorX,
+                       distinctorY,
+                       distinctorWidth,
+                       distinctorHeight,
+                       distinctorPixmap);
+    painter.end();
+
+    return result;
 }

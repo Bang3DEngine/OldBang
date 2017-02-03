@@ -20,6 +20,8 @@ public:
     virtual IInspectable *GetInspectable() const override;
     #endif
 
+    virtual bool IsAsset() const override;
+
     void SetMeshFilepath(const String &meshFilepath);
     const String& GetMeshFilepath() const;
 

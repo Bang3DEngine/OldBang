@@ -22,6 +22,8 @@ public:
     void SetAudioFilepath(const String &audioFilepath);
     const String& GetAudioFilepath() const;
 
+    virtual bool IsAsset() const override;
+
 private:
     String m_audioFilepath = "";
 };

@@ -11,9 +11,6 @@
 class IInspectable;
 class FontAssetFile : public File
 {
-private:
-    String m_trueFontFilepath = "";
-
 public:
     FontAssetFile(const QFileSystemModel *model, const QModelIndex &index);
     virtual QPixmap GetIcon() const override;
@@ -22,7 +19,12 @@ public:
     virtual IInspectable *GetInspectable() const override;
     #endif
 
+    virtual bool IsAsset() const override;
+
     const String &GetFontFilepath() const;
+
+private:
+    String m_trueFontFilepath = "";
 };
 
 #endif // FONTASSETFILE_H

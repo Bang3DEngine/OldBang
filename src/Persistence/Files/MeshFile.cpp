@@ -20,7 +20,7 @@ MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex &index)
 QPixmap MeshFile::GetIcon() const
 {
     String fp = Persistence::ToAbsolute("./Icons/MeshAssetIcon.png", true);
-    QPixmap pm(QString::fromStdString(fp));
+    QPixmap pm(fp.ToQString());
     return pm;
 }
 
@@ -30,6 +30,11 @@ IInspectable *MeshFile::GetInspectable() const
     return new MeshFileInspectable(*this);
 }
 #endif
+
+bool MeshFile::IsAsset() const
+{
+    return false;
+}
 
 bool MeshFile::IsTriangles() const
 {

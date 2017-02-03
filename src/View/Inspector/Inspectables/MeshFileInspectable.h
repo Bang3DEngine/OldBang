@@ -5,7 +5,7 @@
 #include "IInspectable.h"
 
 class XMLNode;
-class MeshFileInspectable: public IInspectable
+class MeshFileInspectable : public IInspectable
 {
 private:
     MeshFile m_fileMesh;

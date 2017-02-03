@@ -41,6 +41,7 @@ QPixmap Texture2DAssetFile::GetIcon() const
         QPixmap pm(fp.ToQString());
         filepath_To_Pixmap[fp] = pm;
     }
+
     return filepath_To_Pixmap[fp];
 }
 
@@ -50,3 +51,8 @@ IInspectable *Texture2DAssetFile::GetInspectable() const
     return new Texture2DAssetFileInspectable(*this);
 }
 #endif
+
+bool Texture2DAssetFile::IsAsset() const
+{
+    return true;
+}

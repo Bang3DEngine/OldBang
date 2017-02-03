@@ -36,6 +36,11 @@ IInspectable *ImageFile::GetInspectable() const
 }
 #endif
 
+bool ImageFile::IsAsset() const
+{
+    return false;
+}
+
 int ImageFile::GetWidth() const
 {
     return m_width;

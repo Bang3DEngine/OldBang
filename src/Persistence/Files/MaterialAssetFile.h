@@ -26,6 +26,8 @@ public:
     virtual IInspectable *GetInspectable() const override;
     #endif
 
+    virtual bool IsAsset() const override;
+
     const String& GetVertexShaderFilepath() const;
     const String& GetFragmentShaderFilepath() const;
     int GetTextureCount() const;

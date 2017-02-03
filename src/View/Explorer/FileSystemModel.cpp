@@ -130,15 +130,16 @@ QVariant FileSystemModel::data(const QModelIndex &idx,
     else if (role == Qt::DecorationRole)
     {
         File file(this, idx);
-        String absPath = file.GetAbsolutePath();
+
         QPixmap pm;
+        String absPath = file.GetAbsolutePath();
         if (Persistence::IsFile(absPath))
         {
-            File *f = File::GetSpecificFile(file);
-            if (f)
+            File *sFile = File::GetSpecificFile(file);
+            if (sFile)
             {
-                pm = f->GetIcon();
-                delete f;
+                pm = sFile->GetIcon();
+                delete sFile;
             }
         }
         else if (Persistence::IsDir(absPath))
@@ -152,6 +153,14 @@ QVariant FileSystemModel::data(const QModelIndex &idx,
                     m_iconSize, m_iconSize,
                     Qt::IgnoreAspectRatio,
                     Qt::TransformationMode::SmoothTransformation);
+
+        if (Persistence::IsFile(absPath))
+        {
+            File *sFile = File::GetSpecificFile(file);
+            pmScaled = File::AddIconAssetTypeDistinctor(pmScaled, sFile->IsAsset());
+            delete sFile;
+        }
+
         return pmScaled;
     }
     else if (role == Qt::EditRole)
