@@ -2,7 +2,9 @@
 
 #include "Debug.h"
 #include "XMLNode.h"
+#include "AudioClip.h"
 #include "FileWriter.h"
+#include "AssetsManager.h"
 
 AudioClipAssetFileInspectable::AudioClipAssetFileInspectable(
         const AudioClipAssetFile &audioClipAssetFile)
@@ -14,7 +16,9 @@ AudioClipAssetFileInspectable::AudioClipAssetFileInspectable(
 void AudioClipAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     m_audioClipAssetFile.SetAudioFilepath(xmlInfo->GetFilepath("AudioFilepath"));
-    Debug_Log(m_audioClipAssetFile.GetAbsolutePath());
+
+    AssetsManager::OnAssetFileChanged<AudioClip>(
+                m_audioClipAssetFile.GetAbsolutePath(), xmlInfo);
     FileWriter::WriteToFile(m_audioClipAssetFile.GetAbsolutePath(),
                             xmlInfo->ToString()); //Save
 }

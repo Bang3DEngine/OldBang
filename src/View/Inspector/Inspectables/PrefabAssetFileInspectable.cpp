@@ -45,7 +45,6 @@ GameObject *PrefabAssetFileInspectable::GetPrefabTempGameObject() const
 void PrefabAssetFileInspectable::SaveToFile()
 {
     ASSERT(m_prefabTempGameObject);
-
     FileWriter::WriteToFile(m_file.GetAbsolutePath(),
                             m_prefabTempGameObject->GetXMLInfoString());
 }

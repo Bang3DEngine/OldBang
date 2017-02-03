@@ -11,28 +11,23 @@
 
 class AssetsManager
 {
-private:
+public:
 
     /** For every id, it contains a pointer to the asset
       * created when the assets were loaded.
     **/
     Map<String, Asset*> m_id_To_AssetPointer;
 
-    /** This function prepares a relative path, to be searched by a loading function.
-     * This is, if you pass it "Images/wololo", it will prepend the Assets directory full path.
-     * For example, it would return something like "/home/john123/MyProject/Assets/Images/wololo".
-    **/
-    static String FormatFilepathForSearchingFile(const String &filepath,
-                                                 bool isEngineFilepath);
+    AssetsManager();
+    virtual ~AssetsManager();
 
-    /** This function prepares a path, to be saved as a map key in the assets cache.
-     * It will make sure that the path is always the same (so an asset can be a cache hit even
-     * if the passed path is not exactly the same).
-     * The convention is to use as filepath key string something like: "./Images/wololo", where "."
-     * is the Asset directory for the current project.
+    static bool IsLoaded(const String &filepath, bool isEngineAsset = false);
+
+    /** This function prepares a relative path, to be searched by a loading function.
+     * Or to be saved to the AssetsManager cache.
     **/
-    static String FormatFilepathForCacheMap(const String &filepath,
-                                            bool isEngineFilepath);
+    static String FormatFilepath(const String &filepath,
+                                 bool isEngineFilepath);
 
     template <class T>
     static T* GetAsset(const String &filepath, bool isEngineAsset)
@@ -41,7 +36,7 @@ private:
         if (!AssetsManager::IsLoaded(filepath, isEngineAsset)) return nullptr;
         else
         {
-            String f = AssetsManager::FormatFilepathForCacheMap(filepath,
+            String f = AssetsManager::FormatFilepath(filepath,
                                                                 isEngineAsset);
             return dynamic_cast<T*>(am->m_id_To_AssetPointer[f]);
         }
@@ -54,7 +49,7 @@ private:
     static T* ReadAssetFile(const String &filepath, bool isEngineAsset)
     {
         T *a = nullptr;
-        String absPath = AssetsManager::FormatFilepathForSearchingFile(filepath,
+        String absPath = AssetsManager::FormatFilepath(filepath,
                                                                        isEngineAsset);
         XMLNode *xmlInfo = XMLParser::FromFile(absPath);
         if (xmlInfo)
@@ -66,19 +61,6 @@ private:
         }
         return a;
     }
-
-    static void SaveAssetToMap(const String &filepath, Asset* asset, bool isEngineAsset);
-    static void SaveAssetToFile(const String &filepath, Asset* asset, bool isEngineAsset);
-
-    static AssetsManager* GetCurrent();
-
-public:
-
-    AssetsManager();
-    virtual ~AssetsManager();
-
-    static bool IsLoaded(const String &filepath,
-                         bool isEngineAsset = false);
 
     /** Tries to retrieve an Asset from the AssetsManager cache
       * If there's no such Asset, it is loaded, added to the cache, and returned
@@ -96,8 +78,7 @@ public:
       * If there's no such Asset, it is loaded, added to the cache, and returned
       * If the file can't be read, nullptr is returned  **/
     template <class T>
-    static T* Load(const String &filepath,
-                   bool isEngineAsset = false)
+    static T* Load(const String &filepath, bool isEngineAsset = false)
     {
         T *a = nullptr;
         if (!AssetsManager::IsLoaded(filepath, isEngineAsset))
@@ -112,7 +93,26 @@ public:
         return a;
     }
 
-    static void Unload(Asset *asset, bool isEngineAsset = false);
+    template <class T>
+    static void OnAssetFileChanged(const String &assetFilepath, const XMLNode *xmlChangedInfo)
+    {
+        ASSERT(!assetFilepath.Empty());
+        if (AssetsManager::IsLoaded(assetFilepath, false))
+        {
+            Asset *asset = AssetsManager::GetAsset<T>(assetFilepath, false);
+            asset->OnInspectorXMLChanged(xmlChangedInfo);
+        }
+    }
+
+    static void SaveAssetToMap(const String &filepath, Asset* asset, bool isEngineAsset);
+    static void SaveAssetToFile(const String &filepath, Asset* asset, bool isEngineAsset);
+
+    static void Unload(const String &id);
+    static void Unload(Asset *asset);
+
+    static AssetsManager* GetCurrent();
+
+    friend class Asset;
 };
 
 #endif // ASSETSMANAGER_H
