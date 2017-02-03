@@ -81,8 +81,10 @@ protected:
     // Adds on top of the passed QPixmap the little icon that
     // distinguishes between assets and noAsset files.
     static QPixmap AddIconAssetTypeDistinctor(const QPixmap &pm, bool isAsset);
-
+    static QPixmap CenterPixmapInEmptyPixmap(QPixmap &emptyPixmap,
+                                             const QPixmap &pixmapToCenter);
     friend class FileSystemModel;
+    friend class DialogBrowseAssetFile;
 };
 
 #endif // FILE_H

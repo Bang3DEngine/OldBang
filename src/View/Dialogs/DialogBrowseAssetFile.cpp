@@ -75,6 +75,15 @@ void DialogBrowseAssetFile::ShowOnList(QListWidget *listWidget,
         if (sFile)
         {
             filePixmap = sFile->GetIcon();
+
+            QPixmap pmEmpty(c_iconSize, c_iconSize);
+            pmEmpty.fill( Color(1.0f, 1.0f, 1.0f, 0.0f).ToQColor() );
+
+            filePixmap = filePixmap.scaled(
+                        c_iconSize, c_iconSize,
+                        Qt::KeepAspectRatio,
+                        Qt::TransformationMode::SmoothTransformation);
+            filePixmap = File::CenterPixmapInEmptyPixmap(pmEmpty, filePixmap);
             delete sFile;
         }
 
@@ -83,7 +92,6 @@ void DialogBrowseAssetFile::ShowOnList(QListWidget *listWidget,
             filePixmap = QPixmap(c_iconSize, c_iconSize);
             filePixmap.fill( Color::White.ToQColor() );
         }
-        filePixmap = filePixmap.scaled(c_iconSize, c_iconSize);
 
         QIcon fileIcon(filePixmap);
         QListWidgetItem *item = new QListWidgetItem(fileIcon,

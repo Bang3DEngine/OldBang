@@ -1,5 +1,7 @@
 #include "FileSystemModel.h"
 
+#include <QPainter>
+
 #include "Debug.h"
 #include "String.h"
 #include "Explorer.h"
@@ -107,8 +109,7 @@ int FileSystemModel::GetWordWrappingCharsPerLine() const
 }
 
 
-QVariant FileSystemModel::data(const QModelIndex &idx,
-                               int role) const
+QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
 {
     if (role == Qt::DisplayRole && !m_explorer->IsInListMode())
     {
@@ -149,10 +150,13 @@ QVariant FileSystemModel::data(const QModelIndex &idx,
             pm = icon.pixmap(m_iconSize, m_iconSize);
         }
 
+        QPixmap pmEmpty(m_iconSize, m_iconSize);
+        pmEmpty.fill( Color(1.0f, 1.0f, 1.0f, 0.0f).ToQColor() );
         QPixmap pmScaled = pm.scaled(
                     m_iconSize, m_iconSize,
-                    Qt::IgnoreAspectRatio,
+                    Qt::KeepAspectRatio,
                     Qt::TransformationMode::SmoothTransformation);
+        pmScaled = File::CenterPixmapInEmptyPixmap(pmEmpty, pmScaled);
 
         if (Persistence::IsFile(absPath))
         {
@@ -170,6 +174,58 @@ QVariant FileSystemModel::data(const QModelIndex &idx,
             String fileName = m_explorer->GetSelectedFile().GetName();
             return QVariant( fileName.ToQString() );
         }
+    }
+    else if (role == Qt::TextColorRole)
+    {
+        File file(this, idx);
+        if (Persistence::IsFile(filePath(idx)))
+        {
+            Color textColor;
+            File *sFile = File::GetSpecificFile(file);
+            if (sFile->IsAsset())
+            {
+                if (sFile->IsAudioClipAsset())
+                {
+                    textColor = Color(1.0f, 1.0f, 0.0f);
+                }
+                else if (sFile->IsBehaviour())
+                {
+                    textColor = Color(0.8f, 0.4f, 0.0f);
+                }
+                else if (sFile->IsMaterialAsset())
+                {
+                    textColor = Color(0.3f, 0.6f, 0.9f);
+                }
+                else if (sFile->IsMeshAsset())
+                {
+                    textColor = Color(0.8f, 0.5f, 0.8f);
+                }
+                else
+                {
+                    textColor = Color(1.0f);
+                }
+            }
+            else
+            {
+                textColor = Color(0.8f);
+            }
+            delete sFile;
+            return QVariant(textColor.ToQColor());
+        }
+    }
+    else if (role == Qt::FontRole)
+    {
+        QFont font = QFileSystemModel::data(idx, role).value<QFont>();
+
+        File file(this, idx);
+        if ( Persistence::IsFile(file.GetAbsolutePath()) )
+        {
+            File *sFile = File::GetSpecificFile(file);
+            font.setBold( sFile->IsAsset() );
+            delete sFile;
+        }
+
+        return QVariant(font);
     }
     else if (role == Qt::SizeHintRole)
     {

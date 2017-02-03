@@ -94,8 +94,8 @@ String StringUtils::Elide(const String &str, int length, bool elideRight)
     {
         result = result.SubString(str.Length() - maxLength,
                                   str.Length() - 1);
-        if (elideRight) { result = "..." + result; }
-        else            { result = result + "..."; }
+        if (elideRight) { result = result + "..."; }
+        else            { result = "..." + result; }
     }
     return result;
 }

@@ -99,7 +99,7 @@ bool File::IsBehaviour() const
 
 bool File::IsTextFile() const
 {
-    return m_isFile && IsOfExtension("txt frag vert cpp h");
+    return m_isFile && IsOfExtension("txt frag vert");
 }
 
 bool File::IsFontAssetFile() const
@@ -286,7 +286,9 @@ String File::GetNameAndExtension() const
 
 bool File::IsAsset() const
 {
-    return false;
+    Debug_Log(m_name + "*" + m_extension);
+    return IsFontAssetFile() || IsPrefabAsset() ||
+           IsBehaviour() || IsScene();
 }
 
 QPixmap File::AddIconAssetTypeDistinctor(const QPixmap &pm, bool isAsset)
@@ -320,4 +322,20 @@ QPixmap File::AddIconAssetTypeDistinctor(const QPixmap &pm, bool isAsset)
     painter.end();
 
     return result;
+}
+
+QPixmap File::CenterPixmapInEmptyPixmap(QPixmap &emptyPixmap,
+                                        const QPixmap &pixmapToCenter)
+{
+    QPainter painter;
+    painter.begin(&emptyPixmap);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawPixmap(emptyPixmap.width()  / 2 - pixmapToCenter.width()  / 2,
+                       emptyPixmap.height() / 2 - pixmapToCenter.height() / 2,
+                       pixmapToCenter.width(),
+                       pixmapToCenter.height(),
+                       pixmapToCenter);
+
+    painter.end();
+    return emptyPixmap;
 }

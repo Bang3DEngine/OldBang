@@ -4,6 +4,7 @@
 #include "XMLNode.h"
 #include "AudioClip.h"
 #include "FileWriter.h"
+#include "AudioManager.h"
 #include "AssetsManager.h"
 
 AudioClipAssetFileInspectable::AudioClipAssetFileInspectable(
@@ -26,7 +27,20 @@ void AudioClipAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo
 void AudioClipAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("AudioClipAssetFileInspectable");
-    xmlInfo->SetFilepath("AudioFilepath", m_audioClipAssetFile.GetAudioFilepath(),
+
+    xmlInfo->SetFilepath("AudioFilepath",
+                         m_audioClipAssetFile.GetAudioFilepath(),
                          "ogg wav", {});
+
+    AudioClipAssetFileInspectable *noConstThis =
+            const_cast<AudioClipAssetFileInspectable*>(this);
+    xmlInfo->SetButton("Play", noConstThis, {});
+}
+
+void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
+{
+    String audioFilepath = m_audioClipAssetFile.GetAbsolutePath();
+    AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioFilepath);
+    audioClip->Play();
 }
 
