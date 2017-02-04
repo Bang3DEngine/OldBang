@@ -286,7 +286,6 @@ String File::GetNameAndExtension() const
 
 bool File::IsAsset() const
 {
-    Debug_Log(m_name + "*" + m_extension);
     return IsFontAssetFile() || IsPrefabAsset() ||
            IsBehaviour() || IsScene();
 }

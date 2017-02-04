@@ -183,6 +183,7 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
                             const String &behaviourFilepath)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
+    QMutexLocker locker(&bm->m_mutex);
 
     String hash = BehaviourManager::GetHash(behaviourFilepath);
     if (bm->m_failedBehHashes.count(hash) > 0)
@@ -251,9 +252,10 @@ void BehaviourManager::
     OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
+    QMutexLocker locker(&bm->m_mutex);
 
     // Erase the behaviourHolder from all the demand lists it is in
-    for (auto hash_demandersList : bm->m_behHash_To_demandersList)
+    for (auto &hash_demandersList : bm->m_behHash_To_demandersList)
     {
         List<BehaviourHolder*> &bhList = hash_demandersList.second;
         bhList.RemoveAll(behaviourHolder);

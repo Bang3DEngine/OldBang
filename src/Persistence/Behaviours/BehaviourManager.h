@@ -50,6 +50,7 @@ public:
 
     static String GetHash(const String &sourceFilepath);
 
+public slots:
     // Called by the BehaviourManagerCompileThread when has finished
     void OnBehaviourFinishedCompiling(const String &behaviourPath,
                                       const String &soFilepath);

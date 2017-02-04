@@ -21,13 +21,13 @@ void BehaviourCompileRunnable::Compile()
     if (!soFilepath.Empty())
     {
         // Notify BehaviourManager
-        bm->OnBehaviourFinishedCompiling(m_behaviourRelativeFilepath, soFilepath);
+        emit bm->OnBehaviourFinishedCompiling(m_behaviourRelativeFilepath, soFilepath);
     }
     else
     {
         // If it fails, notify the failure to the BehaviourManager, so it doesnt
         // compile until the behaviour file hash changes
-        bm->OnBehaviourFailedCompiling(m_behaviourRelativeFilepath);
+        emit bm->OnBehaviourFailedCompiling(m_behaviourRelativeFilepath);
     }
 }
 
