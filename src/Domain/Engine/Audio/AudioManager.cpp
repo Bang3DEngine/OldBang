@@ -8,6 +8,7 @@
 #include "Debug.h"
 #include "AudioClip.h"
 #include "Application.h"
+#include "AudioPlayProperties.h"
 #include "AudioPlayerRunnable.h"
 
 AudioManager::AudioManager()
@@ -21,12 +22,14 @@ AudioManager::~AudioManager()
     alutExit();
 }
 
-void AudioManager::PlayAudioClip(AudioClip *audioClip, float delaySeconds)
+void AudioManager::PlayAudioClip(AudioClip *audioClip,
+                                 const AudioPlayProperties &audioPlayProperties)
 {
     ASSERT(audioClip);
     AudioManager *audioManager = AudioManager::GetInstance();
 
-    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, delaySeconds);
+    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
+                                                          audioPlayProperties);
     bool hasBeenAbleToPlay = audioManager->m_threadPool.tryStart(player);
 }
 

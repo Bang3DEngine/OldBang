@@ -294,7 +294,8 @@ HEADERS += \
     src/Persistence/Behaviours/BehaviourCompileRunnable.h \
     src/View/Explorer/ExplorerFileSortProxy.h \
     src/Persistence/Files/AudioFile.h \
-    src/Persistence/Files/AudioFileInspectable.h
+    src/Persistence/Files/AudioFileInspectable.h \
+    src/Domain/Engine/Audio/AudioPlayProperties.h
 
 EDITOR {
 HEADERS += \

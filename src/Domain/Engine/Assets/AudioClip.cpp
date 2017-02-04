@@ -39,10 +39,10 @@ void AudioClip::LoadFromFile(const String &filepath)
     alSourcei(m_alSourceId, AL_BUFFER, m_alBufferId);
 }
 
-void AudioClip::Play(float delaySeconds)
+void AudioClip::Play(const AudioPlayProperties &props)
 {
     ASSERT(IsLoaded());
-    AudioManager::PlayAudioClip(this, delaySeconds);
+    AudioManager::PlayAudioClip(this, props);
 }
 
 void AudioClip::Pause()

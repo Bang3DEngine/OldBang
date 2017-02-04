@@ -8,6 +8,7 @@
 #include "Asset.h"
 #include "String.h"
 #include "Persistence.h"
+#include "AudioPlayProperties.h"
 
 class AudioClip : public Asset
 {
@@ -27,7 +28,7 @@ public:
 
     void LoadFromFile(const String &filepath);
 
-    void Play(float delaySeconds = 0.0f);
+    void Play(const AudioPlayProperties &props);
     void Pause();
     void Stop();
 

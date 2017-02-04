@@ -3,10 +3,16 @@
 
 #include "Component.h"
 
+#include "AudioPlayProperties.h"
+#include "IAttrWidgetButtonListener.h"
+
 class XMLNode;
 class AudioClip;
 class ICloneable;
 class AudioSource : public Component
+                    #ifdef BANG_EDITOR
+                    ,public IAttrWidgetButtonListener
+                    #endif
 {
 public:
     AudioSource();
@@ -32,10 +38,23 @@ public:
     AudioClip* GetAudioClip() const;
     void SetAudioClip(AudioClip *audioClip);
 
+    AudioPlayProperties GetAudioPlayProperties() const;
+
+    void SetVolume(float volume);
+    void SetPitch(float pitch);
+    void SetLooping(bool looping);
+
+    bool IsPlaying() const;
+
+    float GetVolume() const;
+    float GetPitch()  const;
+    bool IsLooping()  const;
+
+    virtual void OnButtonClicked(const String &attrName) override;
+
 private:
     AudioClip *m_audioClip = nullptr;
     float m_volume   = 1.0f;
-    float m_velocity = 1.0f;
     float m_pitch    = 1.0f;
     bool m_looping   = false;
 

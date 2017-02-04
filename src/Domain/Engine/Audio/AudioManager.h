@@ -3,13 +3,16 @@
 
 #include <QThreadPool>
 
+#include "AudioPlayProperties.h"
+
 class AudioClip;
 class AudioManager
 {
 public:
     static AudioManager *GetInstance();
 
-    static void PlayAudioClip(AudioClip *audioClip, float delaySeconds);
+    static void PlayAudioClip(AudioClip *audioClip,
+                              const AudioPlayProperties &audioPlayProperties);
 
 private:
     AudioManager();

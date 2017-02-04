@@ -2,6 +2,7 @@
 
 #include "XMLNode.h"
 #include "AudioClip.h"
+#include "Transform.h"
 #include "ICloneable.h"
 #include "AssetsManager.h"
 
@@ -22,7 +23,10 @@ void AudioSource::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
     AudioSource *as = static_cast<AudioSource*>(clone);
-    as->SetAudioClip( m_audioClip );
+    as->SetAudioClip( GetAudioClip() );
+    as->SetVolume( GetVolume()  );
+    as->SetPitch( GetPitch() );
+    as->SetLooping( IsLooping() );
 }
 
 ICloneable *AudioSource::Clone() const
@@ -55,7 +59,6 @@ void AudioSource::ReadXMLInfo(const XMLNode *xmlInfo)
         SetAudioClip( AssetsManager::Load<AudioClip>(newAudioClipFilepath) );
     }
     m_volume   = xmlInfo->GetFloat("Volume");
-    m_velocity = xmlInfo->GetFloat("Velocity");
     m_pitch    = xmlInfo->GetFloat("Pitch");
     m_looping  = xmlInfo->GetBool("Looping");
 }
@@ -68,16 +71,29 @@ void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
     String audioClipFilepath = m_audioClip ? m_audioClip->GetFilepath() : "";
     xmlInfo->SetFilepath("AudioClip", audioClipFilepath,
                          AudioClip::GetFileExtensionStatic());
-    xmlInfo->SetFloat("Volume", m_volume);
-    xmlInfo->SetFloat("Velocity", m_velocity);
-    xmlInfo->SetFloat("Pitch", m_pitch);
-    xmlInfo->SetBool("Looping", m_looping);
+    xmlInfo->SetFloat("Volume",   m_volume);
+    xmlInfo->SetFloat("Pitch",    m_pitch);
+    xmlInfo->SetBool("Looping",   m_looping);
+
+    Debug_Log("IsPlaying? " << IsPlaying());
+    AudioSource *noConstThis = const_cast<AudioSource*>(this);
+    if (IsPlaying())
+    {
+        xmlInfo->SetButton("Stop", noConstThis);
+    }
+    else
+    {
+        xmlInfo->SetButton("Play", noConstThis);
+    }
 }
 
 void AudioSource::Play(float delaySeconds)
 {
     ASSERT(m_audioClip);
-    m_audioClip->Play(delaySeconds);
+
+    AudioPlayProperties props = GetAudioPlayProperties();
+    props.delayInSeconds = delaySeconds;
+    m_audioClip->Play( props );
 }
 
 void AudioSource::Pause()
@@ -100,4 +116,64 @@ AudioClip *AudioSource::GetAudioClip() const
 void AudioSource::SetAudioClip(AudioClip *audioClip)
 {
     m_audioClip = audioClip;
+}
+
+AudioPlayProperties AudioSource::GetAudioPlayProperties() const
+{
+    AudioPlayProperties props;
+    props.delayInSeconds = 0.0f;
+    props.pitch          = m_pitch;
+    props.volume         = m_volume;
+    props.looping        = m_looping;
+    props.sourcePosition = transform->GetPosition();
+    props.sourceVelocity = Vector3::Zero;
+    return props;
+}
+
+void AudioSource::SetVolume(float volume)
+{
+    m_volume = volume;
+}
+
+void AudioSource::SetPitch(float pitch)
+{
+    m_pitch = pitch;
+}
+
+void AudioSource::SetLooping(bool looping)
+{
+    m_looping = looping;
+}
+
+bool AudioSource::IsPlaying() const
+{
+    AudioClip *ac = GetAudioClip();
+    return ac ? ac->IsPlaying() : false;
+}
+
+float AudioSource::GetVolume() const
+{
+    return m_volume;
+}
+
+float AudioSource::GetPitch() const
+{
+    return m_pitch;
+}
+
+bool AudioSource::IsLooping() const
+{
+    return m_looping;
+}
+
+void AudioSource::OnButtonClicked(const String &attrName)
+{
+    if (IsPlaying())
+    {
+        Stop();
+    }
+    else
+    {
+        Play();
+    }
 }

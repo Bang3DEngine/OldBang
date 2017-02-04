@@ -40,7 +40,9 @@ void AudioClipAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
 {
     String audioFilepath = m_audioClipAssetFile.GetAbsolutePath();
+
     AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioFilepath);
-    audioClip->Play();
+    AudioPlayProperties props;
+    audioClip->Play(props);
 }
 
