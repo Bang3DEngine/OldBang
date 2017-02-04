@@ -25,7 +25,7 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-    void Play();
+    void Play(float delaySeconds = 0.0f);
     void Pause();
     void Stop();
 
@@ -34,6 +34,10 @@ public:
 
 private:
     AudioClip *m_audioClip = nullptr;
+    float m_volume   = 1.0f;
+    float m_velocity = 1.0f;
+    float m_pitch    = 1.0f;
+    bool m_looping   = false;
 
     friend class GameObject;
 };

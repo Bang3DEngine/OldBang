@@ -54,6 +54,10 @@ void AudioSource::ReadXMLInfo(const XMLNode *xmlInfo)
     {
         SetAudioClip( AssetsManager::Load<AudioClip>(newAudioClipFilepath) );
     }
+    m_volume   = xmlInfo->GetFloat("Volume");
+    m_velocity = xmlInfo->GetFloat("Velocity");
+    m_pitch    = xmlInfo->GetFloat("Pitch");
+    m_looping  = xmlInfo->GetBool("Looping");
 }
 
 void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
@@ -64,12 +68,16 @@ void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
     String audioClipFilepath = m_audioClip ? m_audioClip->GetFilepath() : "";
     xmlInfo->SetFilepath("AudioClip", audioClipFilepath,
                          AudioClip::GetFileExtensionStatic());
+    xmlInfo->SetFloat("Volume", m_volume);
+    xmlInfo->SetFloat("Velocity", m_velocity);
+    xmlInfo->SetFloat("Pitch", m_pitch);
+    xmlInfo->SetBool("Looping", m_looping);
 }
 
-void AudioSource::Play()
+void AudioSource::Play(float delaySeconds)
 {
     ASSERT(m_audioClip);
-    m_audioClip->Play();
+    m_audioClip->Play(delaySeconds);
 }
 
 void AudioSource::Pause()

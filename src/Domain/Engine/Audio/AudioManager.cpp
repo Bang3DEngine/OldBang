@@ -21,12 +21,12 @@ AudioManager::~AudioManager()
     alutExit();
 }
 
-void AudioManager::PlayAudioClip(AudioClip *audioClip)
+void AudioManager::PlayAudioClip(AudioClip *audioClip, float delaySeconds)
 {
     ASSERT(audioClip);
     AudioManager *audioManager = AudioManager::GetInstance();
 
-    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip);
+    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, delaySeconds);
     bool hasBeenAbleToPlay = audioManager->m_threadPool.tryStart(player);
 }
 

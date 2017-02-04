@@ -27,7 +27,7 @@ public:
 
     void LoadFromFile(const String &filepath);
 
-    void Play();
+    void Play(float delaySeconds = 0.0f);
     void Pause();
     void Stop();
 

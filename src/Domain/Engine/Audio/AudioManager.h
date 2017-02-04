@@ -9,7 +9,7 @@ class AudioManager
 public:
     static AudioManager *GetInstance();
 
-    static void PlayAudioClip(AudioClip *audioClip);
+    static void PlayAudioClip(AudioClip *audioClip, float delaySeconds);
 
 private:
     AudioManager();
