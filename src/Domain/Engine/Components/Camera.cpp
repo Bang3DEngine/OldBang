@@ -1,5 +1,6 @@
 #include "Camera.h"
 
+#include "Math.h"
 #include "Mesh.h"
 #include "Scene.h"
 #include "Screen.h"
@@ -46,7 +47,7 @@ void Camera::GetProjectionMatrix(Matrix4 *proj) const
             m_aspectRatio = Screen::GetAspectRatio();
         }
 
-        *proj = Matrix4::Perspective(glm::radians(m_fovDegrees), m_aspectRatio, m_zNear, m_zFar);
+        *proj = Matrix4::Perspective(Math::Deg2Rad(m_fovDegrees), m_aspectRatio, m_zNear, m_zFar);
     }
     else //Ortho
     {

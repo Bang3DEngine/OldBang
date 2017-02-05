@@ -1,11 +1,13 @@
 #ifndef BEHAVIOUR_H
 #define BEHAVIOUR_H
 
+#include "Math.h"
 #include "Time.h"
 #include "Debug.h"
 #include "Input.h"
 #include "Debug.h"
 #include "Scene.h"
+#include "Random.h"
 #include "Renderer.h"
 #include "Material.h"
 #include "Transform.h"

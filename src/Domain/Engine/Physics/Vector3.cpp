@@ -1,5 +1,6 @@
 #include "Vector3.h"
 
+#include "Math.h"
 #include "String.h"
 #include "Vector2.h"
 #include "Quaternion.h"
@@ -56,12 +57,12 @@ Vector3 Vector3::Normalized() const
 
 Vector3 Vector3::ToDegrees() const
 {
-    return Vector3(glm::degrees(glm::vec3(*this)));
+    return Vector3( Math::Rad2Deg(x), Math::Rad2Deg(y), Math::Rad2Deg(z));
 }
 
 Vector3 Vector3::ToRadians() const
 {
-    return Vector3(glm::radians(glm::vec3(*this)));
+    return Vector3( Math::Deg2Rad(x), Math::Deg2Rad(y), Math::Deg2Rad(z));
 }
 
 glm::vec3 Vector3::ToGlmVec3() const
@@ -99,7 +100,7 @@ Vector3 Vector3::Lerp(const Vector3 &v1,
 
 Vector3 Vector3::Abs() const
 {
-    return Vector3(glm::abs(x), glm::abs(y), glm::abs(z));
+    return Vector3(Math::Abs(x), Math::Abs(y), Math::Abs(z));
 }
 
 Vector3 Vector3::Abs(const Vector3 &v)

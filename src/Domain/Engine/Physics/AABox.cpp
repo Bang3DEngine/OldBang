@@ -1,8 +1,8 @@
 #include "AABox.h"
 
-#include "Debug.h"
-
+#include "Math.h"
 #include "Rect.h"
+#include "Debug.h"
 #include "Camera.h"
 #include "Sphere.h"
 
@@ -105,9 +105,9 @@ AABox AABox::Union(const AABox &b1, const AABox &b2)
     if (b1 == AABox::Empty) { return b2; }
     if (b2 == AABox::Empty) { return b1; }
     return
-    AABox(glm::min(b1.m_minv.x, b2.m_minv.x), glm::max(b1.m_maxv.x, b2.m_maxv.x),
-          glm::min(b1.m_minv.y, b2.m_minv.y), glm::max(b1.m_maxv.y, b2.m_maxv.y),
-          glm::min(b1.m_minv.z, b2.m_minv.z), glm::max(b1.m_maxv.z, b2.m_maxv.z));
+    AABox(Math::Min(b1.m_minv.x, b2.m_minv.x), Math::Max(b1.m_maxv.x, b2.m_maxv.x),
+          Math::Min(b1.m_minv.y, b2.m_minv.y), Math::Max(b1.m_maxv.y, b2.m_maxv.y),
+          Math::Min(b1.m_minv.z, b2.m_minv.z), Math::Max(b1.m_maxv.z, b2.m_maxv.z));
 }
 
 void AABox::FillFromPositions(const Array<Vector3> &positions)

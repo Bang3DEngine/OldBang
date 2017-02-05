@@ -1,5 +1,6 @@
 #include "Vector2.h"
 
+#include "Math.h"
 #include "String.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -49,12 +50,12 @@ Vector2 Vector2::Normalized() const
 
 Vector2 Vector2::ToDegrees() const
 {
-    return Vector2(glm::degrees(glm::vec2(*this)));
+    return Vector2( Math::Rad2Deg(x), Math::Rad2Deg(y) );
 }
 
 Vector2 Vector2::ToRadians() const
 {
-    return Vector2(glm::radians(glm::vec2(*this)));
+    return Vector2( Math::Deg2Rad(x), Math::Deg2Rad(y) );
 }
 
 glm::vec2 Vector2::ToGlmVec2() const
@@ -82,7 +83,7 @@ Vector2 Vector2::Lerp(const Vector2 &v1,
 
 Vector2 Vector2::Abs() const
 {
-    return Vector2(glm::abs(x), glm::abs(y));
+    return Vector2(Math::Abs(x), Math::Abs(y));
 }
 
 Vector2 Vector2::Abs(const Vector2 &v)

@@ -295,7 +295,9 @@ HEADERS += \
     src/View/Explorer/ExplorerFileSortProxy.h \
     src/Persistence/Files/AudioFile.h \
     src/Persistence/Files/AudioFileInspectable.h \
-    src/Domain/Engine/Audio/AudioPlayProperties.h
+    src/Domain/Engine/Audio/AudioPlayProperties.h \
+    src/Domain/Engine/Physics/Math.h \
+    src/Domain/Engine/Physics/Random.h
 
 EDITOR {
 HEADERS += \
@@ -463,7 +465,9 @@ SOURCES += \
     src/Persistence/Behaviours/BehaviourCompileRunnable.cpp \
     src/View/Explorer/ExplorerFileSortProxy.cpp \
     src/Persistence/Files/AudioFile.cpp \
-    src/Persistence/Files/AudioFileInspectable.cpp
+    src/Persistence/Files/AudioFileInspectable.cpp \
+    src/Domain/Engine/Physics/Math.cpp \
+    src/Domain/Engine/Physics/Random.cpp
 
 EDITOR {
     SOURCES += \

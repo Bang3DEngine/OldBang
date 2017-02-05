@@ -63,9 +63,13 @@ Color Color::Lerp(const Color &c1,
                   const Color &c2,
                   float progression)
 {
-    return Color(Vector4(
-                 glm::mix(glm::vec4(c1.r, c1.g, c1.b, c1.a),
-                          glm::vec4(c2.r, c2.g, c2.b, c2.a), progression)));
+    return Color(
+             Vector4::Lerp(
+                     Vector4(c1.r, c1.g, c1.b, c1.a),
+                     Vector4(c2.r, c2.g, c2.b, c2.a),
+                     progression
+                    )
+                );
 }
 
 String Color::ToStringRgb() const

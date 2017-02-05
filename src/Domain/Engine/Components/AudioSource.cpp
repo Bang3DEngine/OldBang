@@ -19,7 +19,6 @@ AudioSource::~AudioSource()
 
     if (m_audioClip)
     {
-        Debug_Log("Deletting audioSource...");
         m_audioClip->OnAudioSourceDettached(this);
     }
 

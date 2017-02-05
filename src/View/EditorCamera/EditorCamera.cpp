@@ -1,7 +1,8 @@
 #include "EditorCamera.h"
 
-#include "Debug.h"
+#include "Math.h"
 #include "Time.h"
+#include "Debug.h"
 #include "Input.h"
 #include "Scene.h"
 #include "Screen.h"
@@ -51,15 +52,15 @@ void EditorCamera::AdjustSpeeds()
             Vector3 focusPoint = ft->GetPosition();
             float d = Vector3::Distance(focusPoint, transform->GetPosition());
             float ar = c->GetAspectRatio();
-            float halfFov = glm::radians(m_cam->GetFovDegrees()/2.0f);
+            float halfFov = Math::Deg2Rad(m_cam->GetFovDegrees()/2.0f);
             float halfHeightInWorldSpace = glm::tan(halfFov) * d;
             m_mousePanPerPixel.y = (halfHeightInWorldSpace * 2) / ch;
             m_mousePanPerPixel.x = m_mousePanPerPixel.y * ch * ar / cw;
         }
     }
 
-    m_mousePanPerPixel.x = glm::max(m_mousePanPerPixel.x, 0.05f);
-    m_mousePanPerPixel.y = glm::max(m_mousePanPerPixel.y, 0.05f);
+    m_mousePanPerPixel.x = Math::Max(m_mousePanPerPixel.x, 0.05f);
+    m_mousePanPerPixel.y = Math::Max(m_mousePanPerPixel.y, 0.05f);
 }
 
 void EditorCamera::UpdateRotationVariables()
@@ -96,11 +97,11 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
         m_mouseRotDegreesAccum += delta;
 
         transform->SetLocalRotation(m_startingRotation);
-        Quaternion rotX = Quaternion::AngleAxis(glm::radians(m_mouseRotDegreesAccum.x),
+        Quaternion rotX = Quaternion::AngleAxis(Math::Deg2Rad(m_mouseRotDegreesAccum.x),
                                                 Vector3::Up);
         transform->Rotate(rotX);
 
-        Quaternion rotY = Quaternion::AngleAxis(glm::radians(m_mouseRotDegreesAccum.y),
+        Quaternion rotY = Quaternion::AngleAxis(Math::Deg2Rad(m_mouseRotDegreesAccum.y),
                                                 m_camt->GetRight());
         transform->Rotate(rotY);
 
@@ -177,7 +178,7 @@ void EditorCamera::HandleLookAtFocus()
         float radius = focusBSphere.GetRadius();
         if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
         {
-            float fov = glm::radians(cam->GetFovDegrees() / 2.0f);
+            float fov = Math::Deg2Rad(cam->GetFovDegrees() / 2.0f);
             stopDist = radius / std::tan(fov) * 1.5f;
         }
         stopDist = std::max(stopDist, 1.0f); //In case boundingBox is empty
@@ -232,7 +233,7 @@ void EditorCamera::OnUpdate()
         HandleWheelZoom(&moveStep, &hasMoved);
 
         m_keysMoveSpeed += m_keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
-        m_keysMoveSpeed = glm::clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
+        m_keysMoveSpeed = Math::Clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
         if (!hasMoved)
         {
             m_keysMoveSpeed = 0.0f; //reset speed

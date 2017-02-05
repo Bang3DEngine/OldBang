@@ -1,5 +1,6 @@
 #include "Vector4.h"
 
+#include "Math.h"
 #include "Color.h"
 #include "String.h"
 #include "Matrix4.h"
@@ -67,12 +68,12 @@ Vector4 Vector4::Normalized() const
 
 Vector4 Vector4::ToDegrees() const
 {
-    return Vector4(glm::degrees(glm::vec4(*this)));
+    return Vector4( Math::Rad2Deg(x), Math::Rad2Deg(y), Math::Rad2Deg(z), Math::Rad2Deg(w));
 }
 
 Vector4 Vector4::ToRadians() const
 {
-    return Vector4(glm::radians(glm::vec4(*this)));
+    return Vector4( Math::Deg2Rad(x), Math::Deg2Rad(y), Math::Deg2Rad(z), Math::Deg2Rad(w));
 }
 
 glm::vec4 Vector4::ToGlmVec4() const
@@ -102,7 +103,7 @@ Vector4 Vector4::Lerp(const Vector4 &v1,
 
 Vector4 Vector4::Abs() const
 {
-    return Vector4(glm::abs(x), glm::abs(y), glm::abs(z), glm::abs(w));
+    return Vector4(Math::Abs(x), Math::Abs(y), Math::Abs(z), Math::Abs(w));
 }
 
 Vector4 Vector4::Abs(const Vector4 &v)

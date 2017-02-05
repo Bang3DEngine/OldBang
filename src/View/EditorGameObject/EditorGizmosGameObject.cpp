@@ -1,5 +1,6 @@
 #include "EditorGizmosGameObject.h"
 
+#include "Math.h"
 #include "Rect.h"
 #include "Debug.h"
 #include "Scene.h"
@@ -265,7 +266,7 @@ void EditorGizmosGameObject::RenderFrustum(
     const Vector3 &c = origin;
     const Vector3 right = Vector3::Cross(forward, up).Normalized();
 
-    const float fovH = glm::radians(fovDegrees) / 2.0f;
+    const float fovH = Math::Deg2Rad(fovDegrees) / 2.0f;
 
     Vector3 nearPlaneCenter = c + forward * zNear;
     Vector3 farPlaneCenter  = c + forward * zFar;

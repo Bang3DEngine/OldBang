@@ -1,5 +1,6 @@
 #include "Rect.h"
 
+#include "Math.h"
 #include "List.h"
 #include "Camera.h"
 #include "Vector2.h"
@@ -20,10 +21,10 @@ Rect::Rect(float minx, float maxx,
 
 Rect::Rect(const Vector2 &p1, const Vector2 &p2)
 {
-    m_minx = glm::min(p1.x, p2.x);
-    m_maxx = glm::max(p1.x, p2.x);
-    m_miny = glm::min(p1.y, p2.y);
-    m_maxy = glm::max(p1.y, p2.y);
+    m_minx = Math::Min(p1.x, p2.x);
+    m_maxx = Math::Max(p1.x, p2.x);
+    m_miny = Math::Min(p1.y, p2.y);
+    m_maxy = Math::Max(p1.y, p2.y);
 }
 
 Vector2 Rect::GetMin() const
@@ -61,18 +62,18 @@ Rect Rect::Union(const Rect &r1, const Rect &r2)
 {
     if (r1 == Rect::Empty) { return r2; }
     if (r2 == Rect::Empty) { return r1; }
-    return Rect(glm::min(r1.m_minx, r2.m_minx),
-                glm::max(r1.m_maxx, r2.m_maxx),
-                glm::min(r1.m_miny, r2.m_miny),
-                glm::max(r1.m_maxy, r2.m_maxy));
+    return Rect(Math::Min(r1.m_minx, r2.m_minx),
+                Math::Max(r1.m_maxx, r2.m_maxx),
+                Math::Min(r1.m_miny, r2.m_miny),
+                Math::Max(r1.m_maxy, r2.m_maxy));
 }
 
 Rect Rect::Intersection(const Rect &r1, const Rect &r2)
 {
-    float minx = glm::max(r1.m_minx, r2.m_minx);
-    float miny = glm::max(r1.m_miny, r2.m_miny);
-    float maxx = glm::min(r1.m_maxx, r2.m_maxx);
-    float maxy = glm::min(r1.m_maxy, r2.m_maxy);
+    float minx = Math::Max(r1.m_minx, r2.m_minx);
+    float miny = Math::Max(r1.m_miny, r2.m_miny);
+    float maxx = Math::Min(r1.m_maxx, r2.m_maxx);
+    float maxy = Math::Min(r1.m_maxy, r2.m_maxy);
 
     if (minx > maxx || miny > maxy)
     {
@@ -89,10 +90,10 @@ Rect Rect::GetBoundingRectFromPositions(const List<Vector2> &positions)
     Vector2 minv = positions.Front(), maxv = positions.Front();
     for (const Vector2 &p : positions)
     {
-        minv.x = glm::min(p.x, minv.x);
-        minv.y = glm::min(p.y, minv.y);
-        maxv.x = glm::max(p.x, maxv.x);
-        maxv.y = glm::max(p.y, maxv.y);
+        minv.x = Math::Min(p.x, minv.x);
+        minv.y = Math::Min(p.y, minv.y);
+        maxv.x = Math::Max(p.x, maxv.x);
+        maxv.y = Math::Max(p.y, maxv.y);
     }
 
     return Rect(minv, maxv);

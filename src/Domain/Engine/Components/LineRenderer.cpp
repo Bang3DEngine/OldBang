@@ -2,6 +2,7 @@
 
 #include "VBO.h"
 #include "VAO.h"
+#include "Math.h"
 #include "Material.h"
 #include "Transform.h"
 #include "ShaderProgram.h"
@@ -59,12 +60,12 @@ AABox LineRenderer::GetAABBox() const
     Vector3 maxp = m_points.Front();
     for (const Vector3 &p : m_points)
     {
-        minp.x = glm::min(minp.x, p.x);
-        minp.y = glm::min(minp.y, p.y);
-        minp.z = glm::min(minp.z, p.z);
-        maxp.x = glm::max(maxp.x, p.x);
-        maxp.y = glm::max(maxp.y, p.y);
-        maxp.z = glm::max(maxp.z, p.z);
+        minp.x = Math::Min(minp.x, p.x);
+        minp.y = Math::Min(minp.y, p.y);
+        minp.z = Math::Min(minp.z, p.z);
+        maxp.x = Math::Max(maxp.x, p.x);
+        maxp.y = Math::Max(maxp.y, p.y);
+        maxp.z = Math::Max(maxp.z, p.z);
     }
 
     // Add a bit in every dimensions, to avoid flattened Rects
