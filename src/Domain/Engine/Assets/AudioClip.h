@@ -27,6 +27,11 @@ public:
     void Pause();
     void Stop();
 
+    int GetChannels() const;
+    int GetBufferSize() const;
+    int GetBitDepth() const;
+    int GetFrequency() const;
+    float GetLength() const;
     bool IsLoaded() const;
 
     const String &GetAudioFilepath() const;

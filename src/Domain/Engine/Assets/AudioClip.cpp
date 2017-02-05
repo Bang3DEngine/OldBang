@@ -89,6 +89,50 @@ void AudioClip::Stop()
 {
 }
 
+int AudioClip::GetChannels() const
+{
+    if (!IsLoaded()) { return 0; }
+
+    int channels;
+    alGetBufferi(m_alBufferId, AL_CHANNELS, &channels);
+    return channels;
+}
+
+int AudioClip::GetBufferSize() const
+{
+    if (!IsLoaded()) { return 0; }
+
+    int bSize;
+    alGetBufferi(m_alBufferId, AL_SIZE, &bSize);
+    return bSize;
+}
+
+int AudioClip::GetBitDepth() const
+{
+    if (!IsLoaded()) { return 0; }
+
+    int bitDepth;
+    alGetBufferi(m_alBufferId, AL_BITS, &bitDepth);
+    return bitDepth;
+}
+
+int AudioClip::GetFrequency() const
+{
+    if (!IsLoaded()) { return 0; }
+
+    int freq;
+    alGetBufferi(m_alBufferId, AL_FREQUENCY, &freq);
+    return freq;
+}
+
+float AudioClip::GetLength() const
+{
+    if (!IsLoaded()) { return 0.0f; }
+
+    const int bitChannels = (GetBitDepth() / 8) * GetChannels();
+    return (float(GetBufferSize()) / bitChannels) / GetFrequency();
+}
+
 bool AudioClip::IsLoaded() const
 {
     return m_alBufferId != 0;

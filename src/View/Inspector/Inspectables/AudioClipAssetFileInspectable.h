@@ -11,6 +11,7 @@
 #include "IAttrWidgetButtonListener.h"
 
 class XMLNode;
+class AudioClip;
 class AudioSource;
 class AudioClipAssetFileInspectable : public IInspectable,
                                       public IAttrWidgetButtonListener
@@ -26,6 +27,8 @@ public:
 private:
     AudioClipAssetFile m_audioClipAssetFile;
     AudioSource *m_tmpAudioSource = nullptr;
+
+    AudioClip *GetRelatedAudioClip() const;
 };
 
 #endif // AUDIOCLIPFILEINSPECTABLE_H

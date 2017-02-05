@@ -34,11 +34,16 @@ void AudioClipAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo
 
 void AudioClipAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
+    AudioClip *audioClip = GetRelatedAudioClip();
+
     xmlInfo->SetTagName("AudioClipAssetFileInspectable");
 
     xmlInfo->SetFilepath("AudioFilepath",
                          m_audioClipAssetFile.GetAudioFilepath(),
                          "ogg wav", {});
+
+    xmlInfo->SetString("Length", String(audioClip->GetLength()) + " seconds",
+                        {XMLProperty::Readonly});
 
     AudioClipAssetFileInspectable *noConstThis =
             const_cast<AudioClipAssetFileInspectable*>(this);
@@ -66,7 +71,7 @@ void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
         if (!m_tmpAudioSource)
         {
             m_tmpAudioSource = new AudioSource();
-            AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath);
+            AudioClip *audioClip = GetRelatedAudioClip();
             m_tmpAudioSource->SetAudioClip(audioClip);
         }
         m_tmpAudioSource->Play();
@@ -77,5 +82,10 @@ void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
         delete m_tmpAudioSource;
         m_tmpAudioSource = nullptr;
     }
+}
+
+AudioClip *AudioClipAssetFileInspectable::GetRelatedAudioClip() const
+{
+    return AssetsManager::Load<AudioClip>( m_audioClipAssetFile.GetAbsolutePath() );
 }
 

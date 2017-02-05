@@ -60,6 +60,10 @@ public:
 
     State GetState() const;
 
+    /**
+     * @brief Returns the progress of the AudioSource playing in the range [0.0, 1.0].
+     */
+    float GetPlayProgress() const;
     float GetVolume() const;
     float GetPitch()  const;
     bool IsLooping()  const;

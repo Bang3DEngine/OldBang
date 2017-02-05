@@ -195,6 +195,15 @@ AudioSource::State AudioSource::GetState() const
     return static_cast<State>(state);
 }
 
+float AudioSource::GetPlayProgress() const
+{
+    ASSERT(m_audioClip, "", 0.0f);
+
+    float secondsOffset;
+    alGetSourcef(m_alSourceId, AL_SEC_OFFSET, &secondsOffset);
+    return secondsOffset / m_audioClip->GetLength();
+}
+
 float AudioSource::GetVolume() const
 {
     return m_volume;
