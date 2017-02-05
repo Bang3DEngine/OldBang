@@ -78,6 +78,7 @@ private:
     ALuint GetALSourceId() const;
 
     friend class GameObject;
+    friend class AudioClipAssetFileInspectable;
 };
 
 #endif // AUDIOSOURCE_H

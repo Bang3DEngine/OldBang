@@ -4,6 +4,7 @@
 #include "XMLNode.h"
 #include "AudioClip.h"
 #include "FileWriter.h"
+#include "AudioSource.h"
 #include "AudioManager.h"
 #include "AssetsManager.h"
 
@@ -34,15 +35,38 @@ void AudioClipAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 
     AudioClipAssetFileInspectable *noConstThis =
             const_cast<AudioClipAssetFileInspectable*>(this);
-    xmlInfo->SetButton("Play", noConstThis, {});
+    String buttonText = "";
+    if (m_tmpAudioSource && m_tmpAudioSource->IsPlaying())
+    {
+        buttonText = "Stop";
+    }
+    else
+    {
+        buttonText = "Play";
+    }
+    xmlInfo->SetButton(buttonText, noConstThis, {});
 }
 
 void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
 {
     String audioFilepath = m_audioClipAssetFile.GetAbsolutePath();
 
-    AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioFilepath);
-    AudioPlayProperties props;
-    //audioClip->Play();
+    bool hasToPlay = !m_tmpAudioSource || !m_tmpAudioSource->IsPlaying();
+    if (hasToPlay)
+    {
+        if (!m_tmpAudioSource)
+        {
+            m_tmpAudioSource = new AudioSource();
+            AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioFilepath);
+            m_tmpAudioSource->SetAudioClip(audioClip);
+        }
+        m_tmpAudioSource->Play();
+    }
+    else
+    {
+        m_tmpAudioSource->Stop();
+        delete m_tmpAudioSource;
+        m_tmpAudioSource = nullptr;
+    }
 }
 

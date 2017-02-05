@@ -133,7 +133,7 @@ AudioPlayProperties AudioSource::GetAudioPlayProperties() const
     props.pitch          = m_pitch;
     props.volume         = m_volume;
     props.looping        = m_looping;
-    props.sourcePosition = transform->GetPosition();
+    props.sourcePosition = gameObject ? transform->GetPosition() : Vector3::Zero;
     props.sourceVelocity = Vector3::Zero;
     props.alSourceId     = GetALSourceId();
     return props;

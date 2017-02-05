@@ -1,12 +1,17 @@
 #ifndef AUDIOCLIPFILEINSPECTABLE_H
 #define AUDIOCLIPFILEINSPECTABLE_H
 
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
+
 #include "String.h"
 #include "IInspectable.h"
 #include "AudioClipAssetFile.h"
 #include "IAttrWidgetButtonListener.h"
 
 class XMLNode;
+class AudioSource;
 class AudioClipAssetFileInspectable : public IInspectable,
                                       public IAttrWidgetButtonListener
 {
@@ -20,6 +25,7 @@ public:
 
 private:
     AudioClipAssetFile m_audioClipAssetFile;
+    AudioSource *m_tmpAudioSource = nullptr;
 };
 
 #endif // AUDIOCLIPFILEINSPECTABLE_H
