@@ -43,6 +43,6 @@ void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
 
     AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioFilepath);
     AudioPlayProperties props;
-    audioClip->Play(props);
+    //audioClip->Play();
 }
 

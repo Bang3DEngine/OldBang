@@ -13,13 +13,6 @@
 class AudioClip : public Asset
 {
 public:
-    enum State
-    {
-        Playing = AL_PLAYING,
-        Paused  = AL_PAUSED,
-        Stopped = AL_STOPPED
-    };
-
     AudioClip();
     virtual ~AudioClip();
 
@@ -28,30 +21,24 @@ public:
 
     void LoadFromFile(const String &filepath);
 
-    void Play(const AudioPlayProperties &props);
+    void Play();
     void Pause();
     void Stop();
 
     bool IsLoaded() const;
 
-    bool IsPlaying() const;
-    bool IsPaused() const;
-    bool IsStopped() const;
-
-    State GetState() const;
-
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
 private:
+    ALuint m_tempSourceId = 0;
     ALuint m_alBufferId = 0;
-    ALuint m_alSourceId = 0;
 
     ALuint GetALBufferId() const;
-    ALuint GetALSourceId() const;
 
     void Free();
 
+    friend class AudioSource;
     friend class AudioPlayerRunnable;
 };
 

@@ -1,10 +1,9 @@
 #ifndef AUDIOPLAYERRUNNABLE_H
 #define AUDIOPLAYERRUNNABLE_H
 
-#include "Vector3.h"
-
 #include <QRunnable>
 
+#include "Vector3.h"
 #include "AudioPlayProperties.h"
 
 class AudioClip;

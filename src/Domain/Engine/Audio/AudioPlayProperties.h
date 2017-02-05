@@ -11,6 +11,8 @@ struct AudioPlayProperties
     bool looping           = false;
     Vector3 sourceVelocity = Vector3::Zero;
     Vector3 sourcePosition = Vector3::Zero;
+
+    int alSourceId = -1;
 };
 
 #endif // AUDIOPLAYPROPERTIES

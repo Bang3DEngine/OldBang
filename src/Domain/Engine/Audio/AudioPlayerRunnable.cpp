@@ -22,7 +22,7 @@ void AudioPlayerRunnable::run()
     }
 
 
-    ALint sourceId = m_audioClip->GetALSourceId();
+    ALint sourceId = m_properties.alSourceId;
     alSourcef(sourceId,  AL_PITCH,    m_properties.pitch);
     alSourcef(sourceId,  AL_GAIN,     m_properties.volume);
     alSource3f(sourceId, AL_POSITION, m_properties.sourcePosition.x,
@@ -34,8 +34,12 @@ void AudioPlayerRunnable::run()
     alSourcei(sourceId,  AL_LOOPING,  m_properties.looping);
 
     alSourcePlay(sourceId);
-    while (m_audioClip->IsPlaying())
+
+    ALint state;
+    do
     {
+        alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
         QThread::currentThread()->msleep(100);
     }
+    while ( state == AL_PLAYING );
 }

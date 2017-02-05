@@ -1,8 +1,11 @@
 #ifndef AUDIOSOURCE_H
 #define AUDIOSOURCE_H
 
-#include "Component.h"
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
 
+#include "Component.h"
 #include "AudioPlayProperties.h"
 #include "IAttrWidgetButtonListener.h"
 
@@ -15,6 +18,13 @@ class AudioSource : public Component
                     #endif
 {
 public:
+    enum State
+    {
+        Playing = AL_PLAYING,
+        Paused  = AL_PAUSED,
+        Stopped = AL_STOPPED
+    };
+
     AudioSource();
     virtual ~AudioSource();
 
@@ -45,6 +55,10 @@ public:
     void SetLooping(bool looping);
 
     bool IsPlaying() const;
+    bool IsPaused() const;
+    bool IsStopped() const;
+
+    State GetState() const;
 
     float GetVolume() const;
     float GetPitch()  const;
@@ -53,10 +67,15 @@ public:
     virtual void OnButtonClicked(const String &attrName) override;
 
 private:
+    ALuint m_alSourceId = 0;
+
     AudioClip *m_audioClip = nullptr;
     float m_volume   = 1.0f;
     float m_pitch    = 1.0f;
     bool m_looping   = false;
+
+    void Free();
+    ALuint GetALSourceId() const;
 
     friend class GameObject;
 };

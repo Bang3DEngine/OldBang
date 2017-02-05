@@ -33,56 +33,26 @@ void AudioClip::LoadFromFile(const String &filepath)
 
     // Fill buffer from PCM
     m_alBufferId = alutCreateBufferFromFile(filepath.ToCString());
-
-    // Create sound source (use buffer to fill source)
-    alGenSources(1, &m_alSourceId);
-    alSourcei(m_alSourceId, AL_BUFFER, m_alBufferId);
 }
 
-void AudioClip::Play(const AudioPlayProperties &props)
+void AudioClip::Play()
 {
     ASSERT(IsLoaded());
+    AudioPlayProperties props;
     AudioManager::PlayAudioClip(this, props);
 }
 
 void AudioClip::Pause()
 {
-    ASSERT(IsLoaded());
-    ASSERT(IsPlaying());
-    alSourcePause(m_alSourceId);
 }
 
 void AudioClip::Stop()
 {
-    ASSERT(IsLoaded());
-    alSourceStop(m_alSourceId);
 }
 
 bool AudioClip::IsLoaded() const
 {
-    return m_alSourceId != 0;
-}
-
-bool AudioClip::IsPlaying() const
-{
-    return IsLoaded() && GetState() == State::Playing;
-}
-
-bool AudioClip::IsPaused() const
-{
-    return IsLoaded() && GetState() == State::Paused;
-}
-
-bool AudioClip::IsStopped() const
-{
-    return IsLoaded() && GetState() == State::Stopped;
-}
-
-AudioClip::State AudioClip::GetState() const
-{
-    ALint state;
-    alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
-    return static_cast<State>(state);
+    return m_alBufferId != 0;
 }
 
 void AudioClip::ReadXMLInfo(const XMLNode *xmlInfo)
@@ -105,16 +75,10 @@ ALuint AudioClip::GetALBufferId() const
     return m_alBufferId;
 }
 
-ALuint AudioClip::GetALSourceId() const
-{
-    return m_alSourceId;
-}
-
 void AudioClip::Free()
 {
     if ( IsLoaded() )
     {
-        alDeleteSources(1, &m_alSourceId);
         alDeleteBuffers(1, &m_alBufferId);
     }
 }

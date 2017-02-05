@@ -3,15 +3,20 @@
 #include "XMLNode.h"
 #include "AudioClip.h"
 #include "Transform.h"
+#include "AudioClip.h"
 #include "ICloneable.h"
+#include "AudioManager.h"
 #include "AssetsManager.h"
 
 AudioSource::AudioSource()
 {
+    alGenSources(1, &m_alSourceId);
 }
 
 AudioSource::~AudioSource()
 {
+    Stop();
+    alDeleteSources(1, &m_alSourceId);
 }
 
 String AudioSource::GetName() const
@@ -58,9 +63,10 @@ void AudioSource::ReadXMLInfo(const XMLNode *xmlInfo)
     {
         SetAudioClip( AssetsManager::Load<AudioClip>(newAudioClipFilepath) );
     }
-    m_volume   = xmlInfo->GetFloat("Volume");
-    m_pitch    = xmlInfo->GetFloat("Pitch");
-    m_looping  = xmlInfo->GetBool("Looping");
+    SetVolume(xmlInfo->GetFloat("Volume"));
+    SetPitch(xmlInfo->GetFloat("Pitch"));
+    SetLooping(xmlInfo->GetBool("Looping"));
+    Debug_Log("Pitch: " << xmlInfo->GetFloat("Pitch"));
 }
 
 void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
@@ -93,19 +99,19 @@ void AudioSource::Play(float delaySeconds)
 
     AudioPlayProperties props = GetAudioPlayProperties();
     props.delayInSeconds = delaySeconds;
-    m_audioClip->Play( props );
+    AudioManager::PlayAudioClip(m_audioClip, props);
 }
 
 void AudioSource::Pause()
 {
     ASSERT(m_audioClip);
-    m_audioClip->Pause();
+    alSourcePause(m_alSourceId);
 }
 
 void AudioSource::Stop()
 {
     ASSERT(m_audioClip);
-    m_audioClip->Stop();
+    alSourceStop(m_alSourceId);
 }
 
 AudioClip *AudioSource::GetAudioClip() const
@@ -115,7 +121,9 @@ AudioClip *AudioSource::GetAudioClip() const
 
 void AudioSource::SetAudioClip(AudioClip *audioClip)
 {
+    ASSERT(audioClip);
     m_audioClip = audioClip;
+    alSourcei(m_alSourceId, AL_BUFFER, m_audioClip->GetALBufferId());
 }
 
 AudioPlayProperties AudioSource::GetAudioPlayProperties() const
@@ -127,28 +135,48 @@ AudioPlayProperties AudioSource::GetAudioPlayProperties() const
     props.looping        = m_looping;
     props.sourcePosition = transform->GetPosition();
     props.sourceVelocity = Vector3::Zero;
+    props.alSourceId     = GetALSourceId();
     return props;
 }
 
 void AudioSource::SetVolume(float volume)
 {
     m_volume = volume;
+    alSourcef(GetALSourceId(), AL_GAIN, m_volume);
 }
 
 void AudioSource::SetPitch(float pitch)
 {
     m_pitch = pitch;
+    alSourcef(GetALSourceId(), AL_PITCH, m_pitch);
 }
 
 void AudioSource::SetLooping(bool looping)
 {
     m_looping = looping;
+    alSourcef(GetALSourceId(), AL_LOOPING, m_looping);
 }
 
 bool AudioSource::IsPlaying() const
 {
-    AudioClip *ac = GetAudioClip();
-    return ac ? ac->IsPlaying() : false;
+    return GetState() == State::Playing;
+}
+
+bool AudioSource::IsPaused() const
+{
+    return GetState() == State::Paused;
+}
+
+bool AudioSource::IsStopped() const
+{
+    return GetState() == State::Stopped;
+}
+
+AudioSource::State AudioSource::GetState() const
+{
+    ALint state;
+    alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
+    return static_cast<State>(state);
 }
 
 float AudioSource::GetVolume() const
@@ -176,4 +204,9 @@ void AudioSource::OnButtonClicked(const String &attrName)
     {
         Play();
     }
+}
+
+ALuint AudioSource::GetALSourceId() const
+{
+    return m_alSourceId;
 }
