@@ -216,6 +216,10 @@ void InspectorWidget::RefreshWidgetValues()
             AttributeWidget *ws = m_attrName_To_AttrWidget[attrName];
             ws->Refresh(attribute);
         }
+        else
+        {
+            // New attribute detected when refreshing
+        }
     }
     UpdateContentMargins();
 }

@@ -40,12 +40,12 @@ void Asset::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 
 String Asset::GetFilepath() const
 {
-    return m_filepath;
+    return m_assetFilepath;
 }
 
 const String Asset::ToString() const
 {
-    return "Asset '" + m_filepath + "'.";
+    return "Asset '" + m_assetFilepath + "'.";
 }
 
 

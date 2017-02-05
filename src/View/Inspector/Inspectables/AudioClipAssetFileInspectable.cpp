@@ -17,12 +17,19 @@ AudioClipAssetFileInspectable::AudioClipAssetFileInspectable(
 
 void AudioClipAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    m_audioClipAssetFile.SetAudioFilepath(xmlInfo->GetFilepath("AudioFilepath"));
+    String audioFilepath = xmlInfo->GetFilepath("AudioFilepath");
+    m_audioClipAssetFile.SetAudioFilepath(audioFilepath);
 
-    AssetsManager::OnAssetFileChanged<AudioClip>(
-                m_audioClipAssetFile.GetAbsolutePath(), xmlInfo);
-    FileWriter::WriteToFile(m_audioClipAssetFile.GetAbsolutePath(),
-                            xmlInfo->ToString()); //Save
+    String audioClipFilepath = m_audioClipAssetFile.GetAbsolutePath();
+    if (m_tmpAudioSource)
+    {
+        AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath, false);
+        m_tmpAudioSource->SetAudioClip(audioClip);
+    }
+
+    AssetsManager::OnAssetFileChanged<AudioClip>(audioClipFilepath, xmlInfo);
+
+    FileWriter::WriteToFile(audioClipFilepath, xmlInfo->ToString()); //Save
 }
 
 void AudioClipAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
@@ -35,21 +42,23 @@ void AudioClipAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 
     AudioClipAssetFileInspectable *noConstThis =
             const_cast<AudioClipAssetFileInspectable*>(this);
-    String buttonText = "";
-    if (m_tmpAudioSource && m_tmpAudioSource->IsPlaying())
+    bool isPlaying = m_tmpAudioSource && m_tmpAudioSource->IsPlaying();
+    if (isPlaying)
     {
-        buttonText = "Stop";
+        xmlInfo->SetButton("Stop", noConstThis, {});
+        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
     }
     else
     {
-        buttonText = "Play";
+
+        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
+        xmlInfo->SetButton("Play", noConstThis, {});
     }
-    xmlInfo->SetButton(buttonText, noConstThis, {});
 }
 
 void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
 {
-    String audioFilepath = m_audioClipAssetFile.GetAbsolutePath();
+    String audioClipFilepath = m_audioClipAssetFile.GetAbsolutePath();
 
     bool hasToPlay = !m_tmpAudioSource || !m_tmpAudioSource->IsPlaying();
     if (hasToPlay)
@@ -57,7 +66,7 @@ void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
         if (!m_tmpAudioSource)
         {
             m_tmpAudioSource = new AudioSource();
-            AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioFilepath);
+            AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath);
             m_tmpAudioSource->SetAudioClip(audioClip);
         }
         m_tmpAudioSource->Play();

@@ -5,11 +5,13 @@
 #include <AL/alc.h>
 #include <AL/alut.h>
 
+#include "Array.h"
 #include "Asset.h"
 #include "String.h"
 #include "Persistence.h"
 #include "AudioPlayProperties.h"
 
+class AudioSource;
 class AudioClip : public Asset
 {
 public:
@@ -19,7 +21,7 @@ public:
     const static String GetFileExtensionStatic();
     const virtual String GetFileExtension();
 
-    void LoadFromFile(const String &filepath);
+    bool LoadFromFile(const String &filepath);
 
     void Play();
     void Pause();
@@ -27,16 +29,20 @@ public:
 
     bool IsLoaded() const;
 
+    const String &GetAudioFilepath() const;
+
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
+    void OnAudioSourceAttached(AudioSource *as);
+    void OnAudioSourceDettached(AudioSource *as);
+
 private:
-    ALuint m_tempSourceId = 0;
     ALuint m_alBufferId = 0;
+    String m_audioFileFilepath = "";
+    List<AudioSource*> m_audioSourcesUsingThis;
 
     ALuint GetALBufferId() const;
-
-    void Free();
 
     friend class AudioSource;
     friend class AudioPlayerRunnable;

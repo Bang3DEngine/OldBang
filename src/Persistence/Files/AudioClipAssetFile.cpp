@@ -1,8 +1,10 @@
 #include "AudioClipAssetFile.h"
 
 #include "XMLNode.h"
+#include "AudioClip.h"
 #include "XMLParser.h"
 #include "Persistence.h"
+#include "AssetsManager.h"
 #include "AudioClipAssetFileInspectable.h"
 
 #ifdef BANG_EDITOR
@@ -36,6 +38,20 @@ IInspectable *AudioClipAssetFile::GetInspectable() const
 void AudioClipAssetFile::SetAudioFilepath(const String &audioFilepath)
 {
     m_audioFilepath = audioFilepath;
+
+    if (!m_audioFilepath.Empty())
+    {
+        AudioClip *audioClip = AssetsManager::Load<AudioClip>(GetAbsolutePath(),
+                                                              false);
+        if (audioClip)
+        {
+            if (!audioClip->LoadFromFile(m_audioFilepath))
+            {
+                // If loading fails, set to audioFilepath to ""
+                SetAudioFilepath("");
+            }
+        }
+    }
 }
 
 const String &AudioClipAssetFile::GetAudioFilepath() const

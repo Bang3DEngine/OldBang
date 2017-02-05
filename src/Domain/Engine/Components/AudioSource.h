@@ -74,9 +74,10 @@ private:
     float m_pitch    = 1.0f;
     bool m_looping   = false;
 
-    void Free();
     ALuint GetALSourceId() const;
+    void SetAudioClipNoDettachAttach(AudioClip *audioClip);
 
+    friend class AudioClip;
     friend class GameObject;
     friend class AudioClipAssetFileInspectable;
 };

@@ -32,7 +32,7 @@ public:
     Font();
     virtual ~Font();
 
-    void LoadFromFile(const String &m_filepath);
+    void LoadFromFile(const String &m_assetFilepath);
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

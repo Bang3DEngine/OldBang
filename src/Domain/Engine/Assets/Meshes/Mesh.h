@@ -25,7 +25,7 @@ public:
     Mesh(const Mesh& m);
     virtual ~Mesh();
 
-    void LoadFromFile(const String &m_filepath);
+    void LoadFromFile(const String &m_assetFilepath);
     void LoadPositions(const Array<Vector3>& positions);
     void LoadNormals(const Array<Vector3>& normals);
     void LoadUvs(const Array<Vector2>& uvs);
@@ -49,10 +49,14 @@ public:
     const Array<Vector3>& GetNormals();
     const Array<Vector2>& GetUvs();
 
+    const String &GetMeshFilepath() const;
+
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
 private:
+    String m_meshFilepath = "";
+
     Array<Vector3> m_positions;
     Array<Vector3> m_normals;
     Array<Vector2> m_uvs;

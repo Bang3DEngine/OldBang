@@ -2,6 +2,8 @@
 
 #include <QVBoxLayout>
 
+#include "Debug.h"
+
 AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
                                    InspectorWidget *inspectorWidget) :
     AttributeWidget(xmlAttribute, inspectorWidget, false, false)
@@ -12,7 +14,7 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
     m_listener = xmlAttribute.GetButtonListener();
 
     String buttonText = StringUtils::FormatInspectorLabel(xmlAttribute.GetName());
-    m_button = new QPushButton(QString::fromStdString(buttonText));
+    m_button = new QPushButton(buttonText.ToQString());
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(OnButtonClicked(bool)));
     layout->addWidget(m_button);
 
@@ -24,7 +26,7 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
 
 void AttrWidgetButton::SetValue(const String &buttonText)
 {
-    m_button->setText(QString::fromStdString(buttonText));
+    m_button->setText(buttonText.ToQString());
 }
 
 String AttrWidgetButton::GetValue() const
@@ -48,7 +50,7 @@ void AttrWidgetButton::OnButtonClicked(bool _)
 
 QSize AttrWidgetButton::sizeHint() const
 {
-    return QSize(100, 30);
+    return QSize(100, m_heightSizeHint);
 }
 
 

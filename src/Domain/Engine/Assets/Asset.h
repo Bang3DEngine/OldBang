@@ -32,7 +32,7 @@ public:
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
 protected:
-    String m_filepath = "";
+    String m_assetFilepath = "";
 
     Asset();
     virtual ~Asset();

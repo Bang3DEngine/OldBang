@@ -16,6 +16,13 @@ AudioSource::AudioSource()
 AudioSource::~AudioSource()
 {
     Stop();
+
+    if (m_audioClip)
+    {
+        Debug_Log("Deletting audioSource...");
+        m_audioClip->OnAudioSourceDettached(this);
+    }
+
     alDeleteSources(1, &m_alSourceId);
 }
 
@@ -66,7 +73,6 @@ void AudioSource::ReadXMLInfo(const XMLNode *xmlInfo)
     SetVolume(xmlInfo->GetFloat("Volume"));
     SetPitch(xmlInfo->GetFloat("Pitch"));
     SetLooping(xmlInfo->GetBool("Looping"));
-    Debug_Log("Pitch: " << xmlInfo->GetFloat("Pitch"));
 }
 
 void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
@@ -81,15 +87,17 @@ void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("Pitch",    m_pitch);
     xmlInfo->SetBool("Looping",   m_looping);
 
-    Debug_Log("IsPlaying? " << IsPlaying());
     AudioSource *noConstThis = const_cast<AudioSource*>(this);
     if (IsPlaying())
     {
-        xmlInfo->SetButton("Stop", noConstThis);
+        xmlInfo->SetButton("Stop", noConstThis, {});
+        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
     }
     else
     {
-        xmlInfo->SetButton("Play", noConstThis);
+
+        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
+        xmlInfo->SetButton("Play", noConstThis, {});
     }
 }
 
@@ -121,9 +129,17 @@ AudioClip *AudioSource::GetAudioClip() const
 
 void AudioSource::SetAudioClip(AudioClip *audioClip)
 {
-    ASSERT(audioClip);
-    m_audioClip = audioClip;
-    alSourcei(m_alSourceId, AL_BUFFER, m_audioClip->GetALBufferId());
+    if (m_audioClip)
+    {
+        m_audioClip->OnAudioSourceDettached(this);
+    }
+
+    SetAudioClipNoDettachAttach(audioClip);
+
+    if (m_audioClip)
+    {
+        m_audioClip->OnAudioSourceAttached(this);
+    }
 }
 
 AudioPlayProperties AudioSource::GetAudioPlayProperties() const
@@ -209,4 +225,11 @@ void AudioSource::OnButtonClicked(const String &attrName)
 ALuint AudioSource::GetALSourceId() const
 {
     return m_alSourceId;
+}
+
+void AudioSource::SetAudioClipNoDettachAttach(AudioClip *audioClip)
+{
+    m_audioClip = audioClip;
+    alSourcei(m_alSourceId, AL_BUFFER,
+              audioClip ? m_audioClip->GetALBufferId() : 0);
 }

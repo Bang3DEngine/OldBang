@@ -189,16 +189,21 @@ const Array<Vector2> &Mesh::GetUvs()
     return m_uvs;
 }
 
+const String &Mesh::GetMeshFilepath() const
+{
+    return m_meshFilepath;
+}
+
 void Mesh::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
-    m_filepath = xmlInfo->GetFilepath("MeshFilepath");
-    LoadFromFile(m_filepath);
+    m_meshFilepath = xmlInfo->GetFilepath("MeshFilepath");
+    LoadFromFile(m_meshFilepath);
 }
 
 void Mesh::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Mesh");
-    xmlInfo->SetFilepath("MeshFilepath", m_filepath, "obj");
+    xmlInfo->SetFilepath("MeshFilepath", m_meshFilepath, "obj");
 }

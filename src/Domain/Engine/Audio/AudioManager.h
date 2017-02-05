@@ -14,6 +14,9 @@ public:
     static void PlayAudioClip(AudioClip *audioClip,
                               const AudioPlayProperties &audioPlayProperties);
 
+    static void ClearALErrors();
+    static bool CheckALError();
+
 private:
     AudioManager();
     virtual ~AudioManager();

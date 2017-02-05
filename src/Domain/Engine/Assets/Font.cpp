@@ -48,15 +48,15 @@ void Font::LoadFromFile(const String &m_filepath)
 void Font::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
-    m_filepath = xmlInfo->GetFilepath("FontFilepath");
-    LoadFromFile(m_filepath);
+    m_assetFilepath = xmlInfo->GetFilepath("FontFilepath");
+    LoadFromFile(m_assetFilepath);
 }
 
 void Font::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Font");
-    xmlInfo->SetFilepath("FontFilepath", m_filepath, Font::GetFileExtensionStatic());
+    xmlInfo->SetFilepath("FontFilepath", m_assetFilepath, Font::GetFileExtensionStatic());
 }
 
 const Font::CharGlyphMetrics &Font::GetCharacterMetrics(unsigned char c)

@@ -33,6 +33,23 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
     bool hasBeenAbleToPlay = audioManager->m_threadPool.tryStart(player);
 }
 
+void AudioManager::ClearALErrors()
+{
+    alGetError();
+}
+
+bool AudioManager::CheckALError()
+{
+    ALenum error = alGetError();
+    bool hasError = (error != AL_NO_ERROR);
+    if (hasError)
+    {
+        const char *errorStr = alGetString(error);
+        Debug_Error("OpenAL error: " << errorStr);
+    }
+    return hasError;
+}
+
 AudioManager *AudioManager::GetInstance()
 {
     return Application::GetInstance()->GetAudioManager();

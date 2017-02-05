@@ -56,7 +56,7 @@ public:
         {
             a = new T();
             a->ReadXMLInfo(xmlInfo);
-            a->m_filepath = absPath;
+            a->m_assetFilepath = absPath;
             delete xmlInfo;
         }
         return a;

@@ -31,7 +31,7 @@ const String Texture2D::GetFileExtension()
 void Texture2D::LoadFromFile(const String &imageFilepath)
 {
     Bind();
-    m_filepath = imageFilepath;
+    m_assetFilepath = imageFilepath;
     unsigned char *loadedData = FileReader::ReadImage(imageFilepath,
                                                       &m_width, &m_height);
     Fill(loadedData, m_width, m_height);
@@ -86,7 +86,7 @@ void Texture2D::Fill(unsigned char *newData,
 
 String Texture2D::GetImageRelativeFilepath() const
 {
-    return m_filepath;
+    return m_assetFilepath;
 }
 
 void Texture2D::SetAlphaCuttoff(float alphaCuttoff)
@@ -103,8 +103,8 @@ void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
 
-    m_filepath = xmlInfo->GetFilepath("ImageFilepath");
-    LoadFromFile(m_filepath);
+    m_assetFilepath = xmlInfo->GetFilepath("ImageFilepath");
+    LoadFromFile(m_assetFilepath);
 
     String filterModeString = xmlInfo->GetEnumSelectedName("FilterMode");
     Texture::FilterMode filterMode =
@@ -119,7 +119,7 @@ void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Texture2D");
 
-    xmlInfo->SetFilepath("ImageFilepath", m_filepath, "jpg png bmp");
+    xmlInfo->SetFilepath("ImageFilepath", m_assetFilepath, "jpg png bmp");
 
     int selectedIndex = GetFilterMode();
     xmlInfo->SetEnum("FilterMode", {"Nearest", "Linear"}, selectedIndex, {});
