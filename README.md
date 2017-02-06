@@ -3,8 +3,7 @@
 <br/>
 <img src="/EngineAssets/BangLogo.png" width="100">
 <br/> <br/>
-Bang 3D Game Engine and Editor. <br/> 
-Made with C++, OpenGL, and Qt5 for the Editor.
+Bang 3D game engine and editor, using C++. <br/> 
 
 # Table of contents
   * [Install](#install)
@@ -30,10 +29,10 @@ Once [installed](#install), you can start Bang using:
 
 # Dependencies
 In order to compile Bang you will need:
-  - GLEW (libglew-dev in Ubuntu).
-  - Qt5 development libraries (qt5-default in Ubuntu).
-  - Freetype development libraries (libfreetype6-dev in Ubuntu).
-  - OpenAL and ALUT development libraries. (libopenal-dev & libalut-dev in Ubuntu).
+  - GLEW (**libglew-dev** in Ubuntu).
+  - Qt5 development libraries (**qt5-default** in Ubuntu).
+  - Freetype development libraries (**libfreetype6-dev** in Ubuntu).
+  - OpenAL and ALUT development libraries. (**libopenal-dev** & **libalut-dev** in Ubuntu).
 
 # Install Dependencies in Ubuntu
 To install the needed dependencies in Ubuntu try the following:
