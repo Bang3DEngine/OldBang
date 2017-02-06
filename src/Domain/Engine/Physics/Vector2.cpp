@@ -86,6 +86,11 @@ Vector2 Vector2::Abs() const
     return Vector2(Math::Abs(x), Math::Abs(y));
 }
 
+float *Vector2::Values() const
+{
+    return (float*) &x;
+}
+
 Vector2 Vector2::Abs(const Vector2 &v)
 {
     return v.Abs();

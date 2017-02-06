@@ -5,6 +5,7 @@
 #include "IToString.h"
 #include "ICloneable.h"
 #include "ISceneEventListener.h"
+
 #ifdef BANG_EDITOR
 #include "IInspectable.h"
 #include "IWindowEventManagerListener.h"

@@ -40,6 +40,7 @@ void AudioSource::CloneInto(ICloneable *clone) const
     as->SetAudioClip( GetAudioClip() );
     as->SetVolume( GetVolume()  );
     as->SetPitch( GetPitch() );
+    as->SetRange( GetRange() );
     as->SetLooping( IsLooping() );
 }
 
@@ -85,6 +86,7 @@ void AudioSource::ReadXMLInfo(const XMLNode *xmlInfo)
     }
     SetVolume(xmlInfo->GetFloat("Volume"));
     SetPitch(xmlInfo->GetFloat("Pitch"));
+    SetRange(xmlInfo->GetFloat("Range"));
     SetLooping(xmlInfo->GetBool("Looping"));
 }
 
@@ -98,6 +100,7 @@ void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
                          AudioClip::GetFileExtensionStatic());
     xmlInfo->SetFloat("Volume",   m_volume);
     xmlInfo->SetFloat("Pitch",    m_pitch);
+    xmlInfo->SetFloat("Range",    m_range);
     xmlInfo->SetBool("Looping",   m_looping);
 
     #ifdef BANG_EDITOR
@@ -163,6 +166,7 @@ AudioPlayProperties AudioSource::GetAudioPlayProperties() const
     props.delayInSeconds = 0.0f;
     props.pitch          = m_pitch;
     props.volume         = m_volume;
+    props.range          = m_range;
     props.looping        = m_looping;
     props.sourcePosition = gameObject ? transform->GetPosition() : Vector3::Zero;
     props.sourceVelocity = Vector3::Zero;
@@ -180,6 +184,12 @@ void AudioSource::SetPitch(float pitch)
 {
     m_pitch = pitch;
     alSourcef(GetALSourceId(), AL_PITCH, m_pitch);
+}
+
+void AudioSource::SetRange(float range)
+{
+    m_range = range;
+    alSourcef(GetALSourceId(), AL_MAX_DISTANCE, m_range);
 }
 
 void AudioSource::SetLooping(bool looping)
@@ -229,9 +239,21 @@ float AudioSource::GetPitch() const
     return m_pitch;
 }
 
+float AudioSource::GetRange() const
+{
+    return m_range;
+}
+
 bool AudioSource::IsLooping() const
 {
     return m_looping;
+}
+
+void AudioSource::OnUpdate()
+{
+    Component::OnUpdate();
+
+    UpdateALProperties();
 }
 
 void AudioSource::OnDrawGizmos()
@@ -240,13 +262,16 @@ void AudioSource::OnDrawGizmos()
 
     #ifdef BANG_EDITOR
     Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/AudioSourceIcon.btex2d", true);
-    Gizmos::SetColor(Color::White);
     Gizmos::SetPosition(transform->GetPosition());
     Gizmos::SetScale(Vector3::One * 0.1f);
+    Gizmos::SetColor(Color::White);
     Gizmos::RenderIcon(tex);
 
     if (gameObject->IsSelected())
     {
+        Gizmos::SetColor(Color::Orange);
+        Gizmos::SetPosition(transform->GetPosition());
+        Gizmos::RenderSimpleSphere(transform->GetPosition(), m_range);
     }
     #endif
 }
@@ -254,6 +279,23 @@ void AudioSource::OnDrawGizmos()
 ALuint AudioSource::GetALSourceId() const
 {
     return m_alSourceId;
+}
+
+void AudioSource::UpdateALProperties() const
+{
+    alSourcef(m_alSourceId,  AL_GAIN,         m_volume);
+    alSourcef(m_alSourceId,  AL_PITCH,        m_pitch);
+    alSourcei(m_alSourceId,  AL_LOOPING,      m_looping);
+    Vector3 position = gameObject? transform->GetPosition() : Vector3::Zero;
+    alSourcefv(m_alSourceId, AL_POSITION, position.Values());
+    alSourcefv(m_alSourceId, AL_VELOCITY, Vector3::Zero.Values());
+
+    alSourcef(m_alSourceId,  AL_MAX_DISTANCE, m_range);
+    alSourcef(m_alSourceId,  AL_REFERENCE_DISTANCE, m_range * 0.5f);
+
+    //Vector3 at = -transform->GetForward(), up = transform->GetUp();
+    //ALfloat listenerOri[] = { at.x, at.y, at.z, up.x, up.y, up.z };
+    //alSourcefv(m_alSourceId, AL_ORIENTATION, listenerOri);
 }
 
 void AudioSource::SetAudioClipNoDettachAttach(AudioClip *audioClip)

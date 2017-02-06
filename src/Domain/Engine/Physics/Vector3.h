@@ -70,6 +70,8 @@ public:
 
     Vector3 Abs() const;
 
+    float* Values() const;
+
     static Vector3 Abs(const Vector3 &v);
     static Vector3 Cross(const Vector3 &v1, const Vector3 &v2);
     static float Dot(const Vector3 &v1, const Vector3 &v2);

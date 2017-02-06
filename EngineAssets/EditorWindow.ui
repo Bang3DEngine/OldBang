@@ -430,6 +430,7 @@
     <addaction name="actionAddComponentCircleRenderer"/>
     <addaction name="separator"/>
     <addaction name="actionAddComponentAudioSource"/>
+    <addaction name="actionAddComponentAudioListener"/>
     <addaction name="separator"/>
     <addaction name="actionAddComponentDirectionalLight"/>
     <addaction name="actionAddComponentPointLight"/>
@@ -1311,6 +1312,11 @@
   <action name="actionCreateAudioClip">
    <property name="text">
     <string>AudioClip</string>
+   </property>
+  </action>
+  <action name="actionAddComponentAudioListener">
+   <property name="text">
+    <string>Audio Listener</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

@@ -4,6 +4,7 @@
 
 #include "Debug.h"
 #include "AudioClip.h"
+#include "AudioManager.h"
 
 AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
                                          const AudioPlayProperties &properties)
@@ -21,24 +22,13 @@ void AudioPlayerRunnable::run()
         QThread::currentThread()->msleep(m_properties.delayInSeconds * 1000);
     }
 
-
-    ALint sourceId = m_properties.alSourceId;
-    alSourcef(sourceId,  AL_PITCH,    m_properties.pitch);
-    alSourcef(sourceId,  AL_GAIN,     m_properties.volume);
-    alSource3f(sourceId, AL_POSITION, m_properties.sourcePosition.x,
-                                      m_properties.sourcePosition.y,
-                                      m_properties.sourcePosition.z);
-    alSource3f(sourceId, AL_VELOCITY, m_properties.sourceVelocity.x,
-                                      m_properties.sourceVelocity.y,
-                                      m_properties.sourceVelocity.z);
-    alSourcei(sourceId,  AL_LOOPING,  m_properties.looping);
-
-    alSourcePlay(sourceId);
+    AudioManager::CheckALError();
+    alSourcePlay(m_properties.alSourceId);
 
     ALint state;
     do
     {
-        alGetSourcei(sourceId, AL_SOURCE_STATE, &state);
+        alGetSourcei(m_properties.alSourceId, AL_SOURCE_STATE, &state);
         QThread::currentThread()->msleep(100);
     }
     while ( state == AL_PLAYING );

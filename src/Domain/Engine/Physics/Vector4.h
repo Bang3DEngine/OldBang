@@ -68,6 +68,8 @@ public:
 
     Vector4 Abs() const;
 
+    float* Values() const;
+
     static Vector4 Abs(const Vector4 &v);
     static float Dot(const Vector4 &v1, const Vector4 &v2);
     static float Distance(const Vector4 &v1, const Vector4 &v2);

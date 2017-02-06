@@ -17,6 +17,7 @@
 #include "EditorWindow.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
+#include "AudioListener.h"
 #include "CircleRenderer.h"
 #include "ComponentWidget.h"
 #include "BehaviourHolder.h"
@@ -214,6 +215,10 @@ void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     else if (clickedAction == MenuBar::Action::AddComponentAudioSource)
     {
         AudioSource *as = m_currentGameObject->AddComponent<AudioSource>();
+    }
+    else if (clickedAction == MenuBar::Action::AddComponentAudioListener)
+    {
+        AudioListener *al = m_currentGameObject->AddComponent<AudioListener>();
     }
     else if (clickedAction == MenuBar::Action::AddComponentDirectionalLight)
     {

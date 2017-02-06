@@ -275,7 +275,8 @@ HEADERS +=                                                          \
     src/Persistence/Files/AudioFile.h \
     src/Domain/Engine/Audio/AudioPlayProperties.h \
     src/Domain/Engine/Physics/Math.h \
-    src/Domain/Engine/Physics/Random.h
+    src/Domain/Engine/Physics/Random.h \
+    src/Domain/Engine/Components/AudioListener.h
 
 EDITOR {
 HEADERS += \
@@ -462,7 +463,8 @@ SOURCES += \
     src/View/Explorer/ExplorerFileSortProxy.cpp \
     src/Persistence/Files/AudioFile.cpp \
     src/Domain/Engine/Physics/Math.cpp \
-    src/Domain/Engine/Physics/Random.cpp
+    src/Domain/Engine/Physics/Random.cpp \
+    src/Domain/Engine/Components/AudioListener.cpp
 
 EDITOR {
     SOURCES += \

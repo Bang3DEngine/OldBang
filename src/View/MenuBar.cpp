@@ -106,6 +106,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnAddComponentCircleRenderer()));
     connect(w->actionAddComponentAudioSource,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentAudioSource()));
+    connect(w->actionAddComponentAudioListener,  SIGNAL(triggered()),
+            this, SLOT(OnAddComponentAudioListener()));
     connect(w->actionAddComponentDirectionalLight,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentDirectionalLight()));
     connect(w->actionAddComponentPointLight,  SIGNAL(triggered()),
@@ -440,6 +442,11 @@ void MenuBar::OnAddComponentCircleRenderer() const
 void MenuBar::OnAddComponentAudioSource() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::AddComponentAudioSource);
+}
+
+void MenuBar::OnAddComponentAudioListener() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::AddComponentAudioListener);
 }
 void MenuBar::OnAddComponentDirectionalLight() const
 {

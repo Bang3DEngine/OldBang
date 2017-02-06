@@ -5,9 +5,15 @@
 #include <AL/alut.h>
 #include <QThreadPool>
 
+#include "Scene.h"
 #include "Debug.h"
+#include "Camera.h"
+#include "Transform.h"
 #include "AudioClip.h"
+#include "GameObject.h"
 #include "Application.h"
+#include "SceneManager.h"
+#include "AudioListener.h"
 #include "AudioPlayProperties.h"
 #include "AudioPlayerRunnable.h"
 
@@ -28,8 +34,21 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
     ASSERT(audioClip);
     AudioManager *audioManager = AudioManager::GetInstance();
 
-    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip,
-                                                          audioPlayProperties);
+    AudioPlayProperties playProps = audioPlayProperties;
+    AudioListener *listener = SceneManager::GetActiveScene()->
+            GetComponentInChildren<AudioListener>();
+    if (listener)
+    {
+        playProps.listenerPosition    = listener->transform->GetPosition();
+        playProps.listenerOrientation = listener->transform->GetEuler();
+        playProps.listenerVelocity    = Vector3::Zero;
+    }
+    else
+    {
+        Debug_Warn ("The scene does not contain an AudioListener");
+    }
+
+    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, playProps);
     bool hasBeenAbleToPlay = audioManager->m_threadPool.tryStart(player);
 }
 

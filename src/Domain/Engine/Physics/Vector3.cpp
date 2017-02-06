@@ -103,6 +103,11 @@ Vector3 Vector3::Abs() const
     return Vector3(Math::Abs(x), Math::Abs(y), Math::Abs(z));
 }
 
+float* Vector3::Values() const
+{
+    return (float*) &x;
+}
+
 Vector3 Vector3::Abs(const Vector3 &v)
 {
     return v.Abs();

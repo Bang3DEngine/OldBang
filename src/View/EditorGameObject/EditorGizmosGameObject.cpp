@@ -320,14 +320,23 @@ void EditorGizmosGameObject::RenderSimpleSphere(const Vector3 &origin, float rad
 
     transform->SetLocalEuler(0, 0, 0);
     Render(cr);
+    transform->SetLocalEuler(0, 45, 0);
+    Render(cr);
     transform->SetLocalEuler(0, 90, 0);
+    Render(cr);
+    transform->SetLocalEuler(0, 135, 0);
     Render(cr);
 
     transform->SetLocalEuler(0, 0, 0);
     Render(cr);
-    transform->SetLocalEuler(90, 0, 0);
-
+    transform->SetLocalEuler(45, 0, 0);
     Render(cr);
+    transform->SetLocalEuler(90, 0, 0);
+    Render(cr);
+    transform->SetLocalEuler(135, 0, 0);
+    Render(cr);
+
+
     Reset();
 }
 

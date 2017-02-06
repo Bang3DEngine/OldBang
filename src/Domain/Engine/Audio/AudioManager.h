@@ -6,6 +6,7 @@
 #include "AudioPlayProperties.h"
 
 class AudioClip;
+class GameObject;
 class AudioManager
 {
 public:
@@ -22,6 +23,7 @@ private:
     virtual ~AudioManager();
 
     QThreadPool m_threadPool;
+    GameObject *m_currentListener = nullptr;
 
     friend class Application;
 };

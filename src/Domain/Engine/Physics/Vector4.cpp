@@ -106,6 +106,11 @@ Vector4 Vector4::Abs() const
     return Vector4(Math::Abs(x), Math::Abs(y), Math::Abs(z), Math::Abs(w));
 }
 
+float *Vector4::Values() const
+{
+    return (float*) &x;
+}
+
 Vector4 Vector4::Abs(const Vector4 &v)
 {
     return v.Abs();

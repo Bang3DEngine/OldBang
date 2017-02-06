@@ -17,6 +17,7 @@
 #include "EditorState.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
+#include "AudioListener.h"
 #include "GraphicPipeline.h"
 #include "BehaviourHolder.h"
 #include "SingletonManager.h"
@@ -454,6 +455,10 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
             else if (tagName == "AudioSource")
             {
                 c = AddComponent<AudioSource>();
+            }
+            else if (tagName == "AudioListener")
+            {
+                c = AddComponent<AudioListener>();
             }
             else if (tagName == "DirectionalLight")
             {

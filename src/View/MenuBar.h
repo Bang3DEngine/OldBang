@@ -52,6 +52,7 @@ public:
         AddComponenSingleLineRenderer,
         AddComponentCircleRenderer,
         AddComponentAudioSource,
+        AddComponentAudioListener,
         AddComponentDirectionalLight,
         AddComponentPointLight,
         AddComponentCanvas,
@@ -104,6 +105,7 @@ public slots:
     void OnAddComponentSingleLineRenderer() const;
     void OnAddComponentCircleRenderer() const;
     void OnAddComponentAudioSource() const;
+    void OnAddComponentAudioListener() const;
     void OnAddComponentDirectionalLight() const;
     void OnAddComponentPointLight() const;
     void OnAddComponentCanvas() const;
