@@ -1,7 +1,10 @@
 #include "TextFile.h"
 
 #include "FileReader.h"
+
+#ifdef BANG_EDITOR
 #include "TextFileInspectable.h"
+#endif
 
 TextFile::TextFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)

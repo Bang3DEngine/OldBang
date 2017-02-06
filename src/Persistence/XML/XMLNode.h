@@ -65,9 +65,13 @@ public:
                  const Array<String>& enumNames,
                  int selectedEnumIndex,
                  const Array<XMLProperty>& properties = {});
+
+    #ifdef BANG_EDITOR
     void SetButton(const String &attributeName,
                    IAttrWidgetButtonListener* listener,
                    const Array<XMLProperty>& properties = {});
+    #endif
+
     void RemoveAttribute(const String& attributeName);
     XMLAttribute* GetAttribute(const String& attributeName) const;
     String GetAttributeValue(const String& attributeName) const;

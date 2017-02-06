@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "XMLParser.h"
 #include "GameObject.h"
+#include "Persistence.h"
 
 const String FileReader::NoRegisterId = "-";
 void *FileReader::lastIstreamDir = nullptr;

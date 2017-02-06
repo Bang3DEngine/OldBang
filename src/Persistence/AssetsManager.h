@@ -93,6 +93,7 @@ public:
         return a;
     }
 
+    #ifdef BANG_EDITOR
     template <class T>
     static void OnAssetFileChanged(const String &assetFilepath, const XMLNode *xmlChangedInfo)
     {
@@ -103,6 +104,7 @@ public:
             asset->OnInspectorXMLChanged(xmlChangedInfo);
         }
     }
+    #endif
 
     static void SaveAssetToMap(const String &filepath, Asset* asset, bool isEngineAsset);
     static void SaveAssetToFile(const String &filepath, Asset* asset, bool isEngineAsset);

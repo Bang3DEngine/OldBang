@@ -6,7 +6,10 @@
 #include "FileWriter.h"
 #include "Persistence.h"
 #include "StringUtils.h"
+
+#ifdef BANG_EDITOR
 #include "IAttrWidgetButtonListener.h"
+#endif
 
 XMLNode::XMLNode(const String &tagName) :
     m_tagName(tagName)
@@ -193,6 +196,7 @@ void XMLNode::SetEnum(const String &attributeName, const Array<String>& enumName
     SetAttribute(attr);
 }
 
+#ifdef BANG_EDITOR
 void XMLNode::SetButton(const String &attributeName,
                         IAttrWidgetButtonListener* listener,
                         const Array<XMLProperty> &properties)
@@ -202,6 +206,7 @@ void XMLNode::SetButton(const String &attributeName,
     attr.SetButton(attributeName, listener, properties);
     SetAttribute(attr);
 }
+#endif
 
 XMLAttribute* XMLNode::GetAttribute(const String &attributeName) const
 {

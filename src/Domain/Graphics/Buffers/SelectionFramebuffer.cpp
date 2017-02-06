@@ -6,14 +6,14 @@
 #include "Renderer.h"
 #include "GameObject.h"
 #include "Persistence.h"
-#include "EditorWindow.h"
 #include "ShaderProgram.h"
 #include "TextureRender.h"
 #include "ShaderContract.h"
-#include "EditorGameObject.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
+#include "EditorWindow.h"
+#include "EditorGameObject.h"
 #endif
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :

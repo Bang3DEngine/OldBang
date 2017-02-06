@@ -14,8 +14,9 @@ class Renderer;
 class Texture2D;
 class MeshRenderer;
 class CircleRenderer;
-class SingleLineRenderer;
 class EditorGameObject;
+class SingleLineRenderer;
+class EditorGizmosGameObject;
 class Gizmos
 {
 public:
@@ -45,6 +46,8 @@ public:
                               float zNear, float zFar,
                               float fovDegrees, float aspectRatio);
     static void RenderSimpleSphere(const Vector3 &origin, float radius);
+
+    static EditorGizmosGameObject *GetEditorGizmosGameObject();
 
     static void Render(Renderer *rend);
 

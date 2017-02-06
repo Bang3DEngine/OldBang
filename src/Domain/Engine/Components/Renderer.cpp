@@ -320,12 +320,12 @@ void Renderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
     ReadXMLInfo(xmlInfo);
 }
 
+#endif
+
 String Renderer::GetName() const
 {
     return "Renderer";
 }
-
-#endif
 
 void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {

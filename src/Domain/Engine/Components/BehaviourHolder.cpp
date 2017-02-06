@@ -120,8 +120,10 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
 
     xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "cpp");
 
+    #ifdef BANG_EDITOR
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
     xmlInfo->SetButton("CreateNew...", noConstThis);
+    #endif
 }
 
 
@@ -136,19 +138,15 @@ void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)
     ReadXMLInfo(xmlInfo);
     Refresh();
 }
-#endif
 
 void BehaviourHolder::OnButtonClicked(const String &attrName)
 {
-    #ifdef BANG_EDITOR
     if (StringUtils::Contains(attrName, "Create"))
     {
         CreateNewBehaviour();
     }
-    #endif
 }
 
-#ifdef BANG_EDITOR
 void BehaviourHolder::CreateNewBehaviour()
 {
     bool ok;

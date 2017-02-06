@@ -82,10 +82,12 @@ public:
                  const Array<XMLProperty>& properties = {});
     void SetEnum(const Array<String>& enumNames,
                  int selectedEnumIndex, const Array<XMLProperty>& properties = {});
+
+    #ifdef BANG_EDITOR
     void SetButton(const String buttonText,
                    IAttrWidgetButtonListener *listener,
                    const Array<XMLProperty>& properties = {});
-
+    #endif
 
     /**
      * @brief HasVectorLikeType

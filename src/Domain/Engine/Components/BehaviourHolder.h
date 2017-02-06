@@ -2,7 +2,10 @@
 #define BEHAVIOURHOLDER_H
 
 #include "Component.h"
+
+#ifdef BANG_EDITOR
 #include "IAttrWidgetButtonListener.h"
+#endif
 
 /**
  * @brief The BehaviourHolder class is the responsible of holding
@@ -16,7 +19,9 @@
 class QLibrary;
 class Behaviour;
 class BehaviourHolder : public Component
+                       #ifdef BANG_EDITOR
                        ,public IAttrWidgetButtonListener
+                       #endif
 {
 
 public:
@@ -32,11 +37,8 @@ public:
     #ifdef BANG_EDITOR
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
-    #endif
 
     void OnButtonClicked(const String &attrName) override;
-
-    #ifdef BANG_EDITOR
     void CreateNewBehaviour();
     #endif
 

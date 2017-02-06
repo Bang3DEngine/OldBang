@@ -241,8 +241,8 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
             const String projRandomId = ProjectManager::GetCurrentProject()->GetProjectRandomId();
             const String libFilepath = behaviourDir + "/" + behaviourFilename + ".so." +
                                        projRandomId;
+            locker.unlock();
             bm->OnBehaviourFinishedCompiling(behaviourFilepath, libFilepath);
-            bm->TreatCompiledBehaviours();
             #endif
         }
     }

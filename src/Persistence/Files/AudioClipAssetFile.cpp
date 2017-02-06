@@ -5,10 +5,10 @@
 #include "XMLParser.h"
 #include "Persistence.h"
 #include "AssetsManager.h"
-#include "AudioClipAssetFileInspectable.h"
 
 #ifdef BANG_EDITOR
 #include "IInspectable.h";
+#include "AudioClipAssetFileInspectable.h"
 #endif
 
 AudioClipAssetFile::AudioClipAssetFile(
@@ -30,10 +30,12 @@ QPixmap AudioClipAssetFile::GetIcon() const
     return pm;
 }
 
+#ifdef BANG_EDITOR
 IInspectable *AudioClipAssetFile::GetInspectable() const
 {
     return new AudioClipAssetFileInspectable(*this);
 }
+#endif
 
 void AudioClipAssetFile::SetAudioFilepath(const String &audioFilepath)
 {

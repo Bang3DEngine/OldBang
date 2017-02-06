@@ -28,7 +28,7 @@
 Screen::Screen(QWidget* parent) : QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer));
-    //setAutoBufferSwap(false);
+    setAutoBufferSwap(false);
 }
 
 Screen::~Screen()
@@ -351,7 +351,9 @@ void Screen::keyPressEvent(QKeyEvent *event)
     Input::GetInstance()->EnqueueEvent(event);
     if (event->key() == Input::Key::F)
     {
+        #ifdef BANG_EDITOR
         Hierarchy::GetInstance()->keyPressEvent(event);
+        #endif
     }
 
     QGLWidget::keyPressEvent(event);

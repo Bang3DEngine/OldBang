@@ -60,6 +60,17 @@ void AudioSource::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);
 }
+void AudioSource::OnButtonClicked(const String &attrName)
+{
+    if (IsPlaying())
+    {
+        Stop();
+    }
+    else
+    {
+        Play();
+    }
+}
 #endif
 
 void AudioSource::ReadXMLInfo(const XMLNode *xmlInfo)
@@ -89,6 +100,7 @@ void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("Pitch",    m_pitch);
     xmlInfo->SetBool("Looping",   m_looping);
 
+    #ifdef BANG_EDITOR
     AudioSource *noConstThis = const_cast<AudioSource*>(this);
     if (IsPlaying())
     {
@@ -101,6 +113,7 @@ void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
         xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
         xmlInfo->SetButton("Play", noConstThis, {});
     }
+    #endif
 }
 
 void AudioSource::Play(float delaySeconds)
@@ -221,22 +234,11 @@ bool AudioSource::IsLooping() const
     return m_looping;
 }
 
-void AudioSource::OnButtonClicked(const String &attrName)
-{
-    if (IsPlaying())
-    {
-        Stop();
-    }
-    else
-    {
-        Play();
-    }
-}
-
 void AudioSource::OnDrawGizmos()
 {
     Component::OnDrawGizmos();
 
+    #ifdef BANG_EDITOR
     Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/AudioSourceIcon.btex2d", true);
     Gizmos::SetColor(Color::White);
     Gizmos::SetPosition(transform->GetPosition());
@@ -246,6 +248,7 @@ void AudioSource::OnDrawGizmos()
     if (gameObject->IsSelected())
     {
     }
+    #endif
 }
 
 ALuint AudioSource::GetALSourceId() const

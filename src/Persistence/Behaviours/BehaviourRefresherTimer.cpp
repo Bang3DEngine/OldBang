@@ -5,12 +5,15 @@
 #include "List.h"
 #include "Debug.h"
 #include "Scene.h"
-#include "EditorState.h"
 #include "Application.h"
 #include "Persistence.h"
 #include "SceneManager.h"
 #include "BehaviourHolder.h"
 #include "BehaviourManager.h"
+
+#ifdef BANG_EDITOR
+#include "EditorState.h"
+#endif
 
 BehaviourRefresherTimer::BehaviourRefresherTimer()
 {
@@ -26,7 +29,9 @@ void BehaviourRefresherTimer::OnRefreshTimer() const
 
 void BehaviourRefresherTimer::RefreshBehavioursInScene() const
 {
+    #ifdef BANG_EDITOR
     if (EditorState::IsPlaying()) { return; }
+    #endif
 
     BehaviourManager *bManager = BehaviourManager::GetInstance();
     Scene *scene = SceneManager::GetActiveScene();

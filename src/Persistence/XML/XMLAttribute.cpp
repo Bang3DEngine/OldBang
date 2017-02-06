@@ -6,7 +6,10 @@
 #include "Debug.h"
 #include "StringUtils.h"
 #include "Persistence.h"
+
+#ifdef BANG_EDITOR
 #include "IAttrWidgetButtonListener.h"
+#endif
 
 XMLAttribute::XMLAttribute()
 {
@@ -266,6 +269,7 @@ void XMLAttribute::SetEnum(const Array<String> &enumNames,
     }
 }
 
+#ifdef BANG_EDITOR
 void XMLAttribute::SetButton(const String buttonText,
                              IAttrWidgetButtonListener *listener,
                              const Array<XMLProperty> &properties)
@@ -275,6 +279,7 @@ void XMLAttribute::SetButton(const String buttonText,
     XMLProperty prop("Listener", oss.str());
     SetProperty(prop);
 }
+#endif
 
 bool XMLAttribute::HasVectoredType() const
 {
