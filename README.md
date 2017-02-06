@@ -1,8 +1,8 @@
-# Bang
+# Bang    [![Build Status](https://travis-ci.org/Bang3DEngine/Bang.svg?branch=master)](https://travis-ci.org/Bang3DEngine/Bang)
 <br/>
 <img src="/EngineAssets/BangLogo.png" width="150">
-<br/>
-Bang 3D Game Engine and Editor. <br/>
+<br/> <br/>
+Bang 3D Game Engine and Editor. <br/> 
 Made with C++, OpenGL, and Qt5 for the Editor.
 
 # Install
