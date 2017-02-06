@@ -6,6 +6,11 @@ compiler:
 dist: trusty
 sudo: required
 
+notifications:
+  email:
+    on_success: never
+    on_failure: never
+
 install:
 - sudo apt-get update
 - sudo apt-get install build-essential
