@@ -93,7 +93,7 @@ Quaternion Quaternion::LookDirection(const Vector3 &_forward, const Vector3 &_up
     Vector3 right = Vector3::Cross(up, forward);
 
     Quaternion ret;
-    ret.w = glm::sqrt(1.0f + right.x + up.y + forward.z) * 0.5f;
+    ret.w = Math::Sqrt(1.0f + right.x + up.y + forward.z) * 0.5f;
     float w4_recip = 1.0f / (4.0f * ret.w);
     ret.x = (up.z - forward.y) * w4_recip;
     ret.y = (forward.x - right.z) * w4_recip;

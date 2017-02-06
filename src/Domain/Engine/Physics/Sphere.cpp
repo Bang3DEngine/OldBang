@@ -1,5 +1,7 @@
 #include "Sphere.h"
 
+#include "Math.h"
+
 Sphere::Sphere()
 {
 
@@ -41,12 +43,12 @@ float Sphere::GetDiameter() const
 
 float Sphere::GetArea() const
 {
-    return 2 * glm::pi<float>() * m_radius;
+    return 2 * Math::PI * m_radius;
 }
 
 float Sphere::GetVolume() const
 {
-    return glm::pi<float>() * m_radius * m_radius;
+    return Math::PI * m_radius * m_radius;
 }
 
 void Sphere::FillFromBox(const AABox &box)

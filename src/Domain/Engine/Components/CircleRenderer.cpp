@@ -45,7 +45,7 @@ void CircleRenderer::GeneratePoints()
     float step = (2.0f * 3.141592f) / (m_segments);
     for (int i = 0;  i < m_segments + 1; ++i)
     {
-        m_points[i] = Vector3(glm::cos(step*i), glm::sin(step*i), 0.0f) * m_radius;
+        m_points[i] = Vector3(Math::Cos(step*i), Math::Sin(step*i), 0.0f) * m_radius;
     }
 }
 

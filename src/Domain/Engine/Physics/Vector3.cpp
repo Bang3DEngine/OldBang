@@ -37,7 +37,7 @@ Vector3::Vector3(const Vector2 &v, float z) : Vector3(v.x, v.y, z)
 
 float Vector3::Length() const
 {
-    return float(glm::sqrt(x*x + y*y + z*z));
+    return float(Math::Sqrt(x*x + y*y + z*z));
 }
 
 void Vector3::Normalize()

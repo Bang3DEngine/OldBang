@@ -79,10 +79,10 @@ void DirectionalLight::OnDrawGizmos()
         const Vector3 c = transform->GetPosition();
 
         Gizmos::SetReceivesLighting(false);
-        for (float angle = 0.0f; angle <= 2 * glm::pi<float>(); angle += glm::pi<float>() / 4.0f)
+        for (float angle = 0.0f; angle <= 2 * Math::PI; angle += Math::PI / 4.0f)
         {
-            Vector3 offx = right * glm::cos(angle);
-            Vector3 offy = up * glm::sin(angle);
+            Vector3 offx = right * Math::Cos(angle);
+            Vector3 offy = up * Math::Sin(angle);
             Gizmos::SetColor(Color(GetColor(), 1.0f));
             Gizmos::RenderLine(c + offx + offy, c + offx + offy + forward);
         }

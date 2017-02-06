@@ -47,7 +47,7 @@ Vector4::Vector4(const Vector2 &v, float z, float w) : Vector4(v.x, v.y, z, w)
 
 float Vector4::Length() const
 {
-    return float(glm::sqrt(x*x + y*y + z*z + w*w));
+    return float(Math::Sqrt(x*x + y*y + z*z + w*w));
 }
 
 void Vector4::Normalize()

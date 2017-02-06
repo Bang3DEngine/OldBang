@@ -1,6 +1,7 @@
 #ifndef DIRECTIONALLIGHT_H
 #define DIRECTIONALLIGHT_H
 
+#include "Math.h"
 #include "Light.h"
 #include "String.h"
 

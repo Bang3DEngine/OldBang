@@ -271,9 +271,9 @@ void EditorGizmosGameObject::RenderFrustum(
     Vector3 nearPlaneCenter = c + forward * zNear;
     Vector3 farPlaneCenter  = c + forward * zFar;
 
-    float nearHeight2 = zNear * glm::tan(fovH);
+    float nearHeight2 = zNear * Math::Tan(fovH);
     float nearWidth2 = nearHeight2 * aspectRatio;
-    float farHeight2  = zFar  * glm::tan(fovH);
+    float farHeight2  = zFar  * Math::Tan(fovH);
     float farWidth2  = farHeight2 * aspectRatio;
 
     Vector3 nearUpLeft    = nearPlaneCenter - right * nearWidth2 + up * nearHeight2;

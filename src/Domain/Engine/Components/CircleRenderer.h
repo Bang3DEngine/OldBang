@@ -1,6 +1,7 @@
 #ifndef CIRCLERENDERER_H
 #define CIRCLERENDERER_H
 
+#include "Math.h"
 #include "String.h"
 #include "Vector2.h"
 #include "LineRenderer.h"

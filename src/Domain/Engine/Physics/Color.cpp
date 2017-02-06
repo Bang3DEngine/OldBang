@@ -2,6 +2,7 @@
 
 #include <sstream>
 
+#include "Math.h"
 #include "String.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -138,10 +139,10 @@ Vector4 Color::ToVector4() const
 
 void Color::Ceil()
 {
-    r = glm::ceil(r);
-    g = glm::ceil(g);
-    b = glm::ceil(b);
-    a = glm::ceil(a);
+    r = Math::Ceil(r);
+    g = Math::Ceil(g);
+    b = Math::Ceil(b);
+    a = Math::Ceil(a);
 }
 
 Color Color::FromVector3(const Vector3 &v)

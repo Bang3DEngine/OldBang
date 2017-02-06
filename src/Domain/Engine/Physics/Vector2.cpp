@@ -31,7 +31,7 @@ Vector2::Vector2(float x, float y) : glm::vec2(x,y)
 
 float Vector2::Length() const
 {
-    return float(glm::sqrt(x*x + y*y));
+    return float(Math::Sqrt(x*x + y*y));
 }
 
 void Vector2::Normalize()

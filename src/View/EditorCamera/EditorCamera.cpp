@@ -53,7 +53,7 @@ void EditorCamera::AdjustSpeeds()
             float d = Vector3::Distance(focusPoint, transform->GetPosition());
             float ar = c->GetAspectRatio();
             float halfFov = Math::Deg2Rad(m_cam->GetFovDegrees()/2.0f);
-            float halfHeightInWorldSpace = glm::tan(halfFov) * d;
+            float halfHeightInWorldSpace = Math::Tan(halfFov) * d;
             m_mousePanPerPixel.y = (halfHeightInWorldSpace * 2) / ch;
             m_mousePanPerPixel.x = m_mousePanPerPixel.y * ch * ar / cw;
         }
