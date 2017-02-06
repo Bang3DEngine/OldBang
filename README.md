@@ -1,4 +1,5 @@
-# Bang    [![Build Status](https://travis-ci.org/Bang3DEngine/Bang.svg?branch=master)](https://travis-ci.org/Bang3DEngine/Bang)
+[![Build Status](https://travis-ci.org/Bang3DEngine/Bang.svg?branch=master)](https://travis-ci.org/Bang3DEngine/Bang)
+# Bang
 <br/>
 <img src="/EngineAssets/BangLogo.png" width="150">
 <br/> <br/>
