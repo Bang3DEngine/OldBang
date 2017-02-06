@@ -70,6 +70,8 @@ public:
 
     virtual void OnButtonClicked(const String &attrName) override;
 
+    void OnDrawGizmos() override;
+
 private:
     ALuint m_alSourceId = 0;
 

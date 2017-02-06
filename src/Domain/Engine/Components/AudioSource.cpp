@@ -1,9 +1,12 @@
 #include "AudioSource.h"
 
+#include "Gizmos.h"
 #include "XMLNode.h"
 #include "AudioClip.h"
 #include "Transform.h"
 #include "AudioClip.h"
+#include "Texture2D.h"
+#include "GameObject.h"
 #include "ICloneable.h"
 #include "AudioManager.h"
 #include "AssetsManager.h"
@@ -227,6 +230,21 @@ void AudioSource::OnButtonClicked(const String &attrName)
     else
     {
         Play();
+    }
+}
+
+void AudioSource::OnDrawGizmos()
+{
+    Component::OnDrawGizmos();
+
+    Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/AudioSourceIcon.btex2d", true);
+    Gizmos::SetColor(Color::White);
+    Gizmos::SetPosition(transform->GetPosition());
+    Gizmos::SetScale(Vector3::One * 0.1f);
+    Gizmos::RenderIcon(tex);
+
+    if (gameObject->IsSelected())
+    {
     }
 }
 
