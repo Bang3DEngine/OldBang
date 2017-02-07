@@ -396,6 +396,9 @@
     <addaction name="actionCreateDirectionalLight"/>
     <addaction name="actionCreatePointLight"/>
     <addaction name="separator"/>
+    <addaction name="actionCreateUIText"/>
+    <addaction name="actionCreateUIImage"/>
+    <addaction name="separator"/>
     <addaction name="actionAlignViewWithGameObject"/>
     <addaction name="actionAlignGameObjectWithView"/>
    </widget>
@@ -1319,6 +1322,16 @@
     <string>Audio Listener</string>
    </property>
   </action>
+  <action name="actionCreateUIText">
+   <property name="text">
+    <string>UIText</string>
+   </property>
+  </action>
+  <action name="actionCreateUIImage">
+   <property name="text">
+    <string>UIImage</string>
+   </property>
+  </action>
   <zorder>dockExplorer</zorder>
   <zorder>dockHierarchy</zorder>
  </widget>
@@ -1371,8 +1384,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="QtResources.qrc"/>
   <include location="qdarkstyle/style.qrc"/>
+  <include location="QtResources.qrc"/>
  </resources>
  <connections/>
 </ui>

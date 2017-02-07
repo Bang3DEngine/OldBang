@@ -6,7 +6,9 @@
 #include "Screen.h"
 #include "Prefab.h"
 #include "Camera.h"
+#include "UIText.h"
 #include "Project.h"
+#include "UIImage.h"
 #include "Material.h"
 #include "AudioClip.h"
 #include "Transform.h"
@@ -72,6 +74,10 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnCreateDirectionalLight()));
     connect(w->actionCreatePointLight,  SIGNAL(triggered()),
             this, SLOT(OnCreatePointLight()));
+    connect(w->actionCreateUIText,  SIGNAL(triggered()),
+            this, SLOT(OnCreateUIText()));
+    connect(w->actionCreateUIImage,  SIGNAL(triggered()),
+            this, SLOT(OnCreateUIImage()));
     connect(w->actionAlignGameObjectWithView,  SIGNAL(triggered()),
             this, SLOT(OnAlignGameObjectWithView()));
     connect(w->actionAlignViewWithGameObject,  SIGNAL(triggered()),
@@ -313,6 +319,30 @@ void MenuBar::OnCreatePointLight() const
     GameObject *go = new GameObject("PointLight");
     go->SetParent(SceneManager::GetActiveScene());
     go->AddComponent<PointLight>();
+    Hierarchy::GetInstance()->SelectGameObject(go);
+}
+
+void MenuBar::OnCreateUIText() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::CreateUIText);
+    GameObject *go = new GameObject("Text");
+    go->SetParent(SceneManager::GetActiveScene());
+    UIText *text = go->AddComponent<UIText>();
+    text->SetContent("Hello Bang :)");
+    Hierarchy::GetInstance()->SelectGameObject(go);
+}
+
+void MenuBar::OnCreateUIImage() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::CreateUIImage);
+    GameObject *go = new GameObject("Image");
+    go->SetParent(SceneManager::GetActiveScene());
+
+    UIImage *img = go->AddComponent<UIImage>();
+    String defaultImgPath = "Textures/DefaultUIImageTexture.btex2d";
+    Texture2D *defaultTex = AssetsManager::Load<Texture2D>(defaultImgPath, true);
+    img->SetTexture(defaultTex);
+
     Hierarchy::GetInstance()->SelectGameObject(go);
 }
 

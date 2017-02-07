@@ -24,6 +24,10 @@ public:
     virtual void RenderCustomPR() const override;
     virtual void RenderWithMaterial(Material *mat) const override;
 
+    void SetTexture(Texture2D *imageTexture);
+
+    Texture2D *GetTexture() const;
+
 private:
     Texture2D *m_imageTexture = nullptr;
 

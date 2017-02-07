@@ -34,6 +34,8 @@ public:
         CreateCone,
         CreateDirectionalLight,
         CreatePointLight,
+        CreateUIText,
+        CreateUIImage,
         AlignGameObjectWithView,
         AlignViewWithGameObject,
 
@@ -87,6 +89,8 @@ public slots:
     void OnCreateCone() const;
     void OnCreateDirectionalLight() const;
     void OnCreatePointLight() const;
+    void OnCreateUIText() const;
+    void OnCreateUIImage() const;
     void OnAlignGameObjectWithView() const;
     void OnAlignViewWithGameObject() const;
 

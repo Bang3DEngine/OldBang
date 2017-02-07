@@ -51,13 +51,9 @@ void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
     UIRenderer::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName(GetName());
 
-    String texFilepath = "";
-    if (m_imageTexture)
-    {
-        String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";
-        xmlInfo->SetFilepath("Image", texFilepath,
-                             Texture2D::GetFileExtensionStatic(), {});
-    }
+    String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";
+    xmlInfo->SetFilepath("Image", texFilepath,
+                         Texture2D::GetFileExtensionStatic(), {});
 
     xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("Material")->SetProperty({XMLProperty::Hidden});
@@ -90,5 +86,15 @@ void UIImage::RenderWithMaterial(Material *mat) const
         m_material->SetTexture(m_imageTexture);
     }
     UIRenderer::RenderWithMaterial(mat);
+}
+
+void UIImage::SetTexture(Texture2D *imageTexture)
+{
+    m_imageTexture = imageTexture;
+}
+
+Texture2D *UIImage::GetTexture() const
+{
+    return m_imageTexture;
 }
 
