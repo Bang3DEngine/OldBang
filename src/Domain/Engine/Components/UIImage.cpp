@@ -43,11 +43,7 @@ void UIImage::ReadXMLInfo(const XMLNode *xmlInfo)
     UIRenderer::ReadXMLInfo(xmlInfo);
 
     String texFilepath = xmlInfo->GetFilepath("Image");
-    Texture2D *tex = AssetsManager::Load<Texture2D>(texFilepath);
-    if (m_material)
-    {
-        m_material->SetTexture(tex);
-    }
+    m_imageTexture = AssetsManager::Load<Texture2D>(texFilepath);
 }
 
 void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
@@ -56,10 +52,9 @@ void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName(GetName());
 
     String texFilepath = "";
-    if (m_material)
+    if (m_imageTexture)
     {
-        const Texture2D *tex = m_material->GetTexture();
-        texFilepath = tex ? tex->GetFilepath() : "";
+        String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";
         xmlInfo->SetFilepath("Image", texFilepath,
                              Texture2D::GetFileExtensionStatic(), {});
     }
@@ -80,11 +75,20 @@ void UIImage::RenderCustomPR() const
 
     ShaderProgram *sp = m_materialPR->GetShaderProgram();
     sp->SetUniformColor("B_tint",        m_tint);
-    sp->SetUniformTexture("B_texture_0", m_material->GetTexture());
+    sp->SetUniformTexture("B_texture_0", m_imageTexture);
 
     AABox screenBox = gameObject->GetAABBox();
     Rect renderRect(screenBox.GetMin().xy(), screenBox.GetMax().xy());
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
     gb->RenderPassWithMaterial(m_materialPR, renderRect);
+}
+
+void UIImage::RenderWithMaterial(Material *mat) const
+{
+    if (mat == m_material)
+    {
+        m_material->SetTexture(m_imageTexture);
+    }
+    UIRenderer::RenderWithMaterial(mat);
 }
 

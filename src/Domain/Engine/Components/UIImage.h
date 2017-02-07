@@ -2,6 +2,7 @@
 #define UIIMAGE_H
 
 #include "String.h"
+#include "Texture2D.h"
 #include "UIRenderer.h"
 
 class XMLNode;
@@ -21,6 +22,10 @@ public:
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
     virtual void RenderCustomPR() const override;
+    virtual void RenderWithMaterial(Material *mat) const override;
+
+private:
+    Texture2D *m_imageTexture = nullptr;
 
     friend class GameObject;
 };
