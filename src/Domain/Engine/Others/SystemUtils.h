@@ -52,7 +52,9 @@ public:
      * @return The filepath of the created library
      */
     static String CompileToSharedObject(const String &filepathFromProjectRoot,
-                                        bool editorMode = true);
+                                        bool editorMode = true,
+                                        String *warnMessage = nullptr,
+                                        String *errorMesssage = nullptr);
 
     /**
      * @brief Creates a Behaviour from its QLibrary passed as parameter.

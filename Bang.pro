@@ -275,7 +275,8 @@ HEADERS +=                                                          \
     src/Persistence/Files/AudioFile.h \
     src/Domain/Engine/Physics/Math.h \
     src/Domain/Engine/Physics/Random.h \
-    src/Domain/Engine/Components/AudioListener.h
+    src/Domain/Engine/Components/AudioListener.h \
+    src/Persistence/Behaviours/BehaviourManagerStatus.h
 
 EDITOR {
 HEADERS += \
@@ -463,7 +464,8 @@ SOURCES += \
     src/Persistence/Files/AudioFile.cpp \
     src/Domain/Engine/Physics/Math.cpp \
     src/Domain/Engine/Physics/Random.cpp \
-    src/Domain/Engine/Components/AudioListener.cpp
+    src/Domain/Engine/Components/AudioListener.cpp \
+    src/Persistence/Behaviours/BehaviourManagerStatus.cpp
 
 EDITOR {
     SOURCES += \

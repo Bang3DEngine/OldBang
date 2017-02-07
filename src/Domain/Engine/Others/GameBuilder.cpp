@@ -224,7 +224,8 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
         if (*cancel) { return true; }
 
         String compiledLibFilepath =
-                SystemUtils::CompileToSharedObject(behaviourFilepath, false);
+                SystemUtils::CompileToSharedObject(behaviourFilepath, false,
+                                                   nullptr, nullptr);
         if (compiledLibFilepath.Empty())
         {
             Debug_Error("Failed to compile " << behaviourFilepath);

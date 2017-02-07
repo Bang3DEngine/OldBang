@@ -57,6 +57,10 @@ String::String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
 {
 }
 
+String::~String()
+{
+}
+
 char String::At(int index) const
 {
     return at(index);

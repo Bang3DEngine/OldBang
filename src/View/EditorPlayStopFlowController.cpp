@@ -91,7 +91,9 @@ void EditorPlayStopFlowController::StopScene()
 
 bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
 {
-    if (BehaviourManager::AllBehaviourHoldersUpdated()) { return true; }
+    const BehaviourManagerStatus &bmStatus = BehaviourManager::GetStatus();
+    float loadedBehPercent = bmStatus.GetBehaviourHoldersUpdatedPercent();
+    if (loadedBehPercent == 1.0f) { return true; }
 
     EditorWindow *win = EditorWindow::GetInstance();
     QMainWindow *mainWin = win->GetMainWindow();
@@ -107,13 +109,12 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
                      this, SLOT(OnWaitingForBehavioursCanceled()));
 
     // Actual waiting
-    float percentUpdated = 0.0f;
     Application::processEvents();
-    while ( !BehaviourManager::AllBehaviourHoldersUpdated(&percentUpdated) )
+    loadedBehPercent = bmStatus.GetBehaviourHoldersUpdatedPercent();
+    do
     {
-        progressDialog.setValue( int(percentUpdated * 100) );
-
-        if (BehaviourManager::SomeBehaviourWithError())
+        progressDialog.setValue( int(loadedBehPercent * 100) );
+        if (bmStatus.SomeBehaviourWithError())
         {
             String fixErrorsMsg =
                     "Please fix all the behaviour errors before playing.";
@@ -126,11 +127,13 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
         // Progress dialog cancel button pressed
         if (m_playingCanceled) { return false; }
 
-        QThread::currentThread()->msleep(100);
+        loadedBehPercent = bmStatus.GetBehaviourHoldersUpdatedPercent();
 
-        // Let the timers tick and update GUI.
-        Application::processEvents();
+        QThread::currentThread()->msleep(100);
+        Application::processEvents(); // Let the timers tick and update GUI.
     }
+    while (loadedBehPercent < 1.0f);
+
     progressDialog.close();
 
     return true;

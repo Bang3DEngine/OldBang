@@ -4,30 +4,46 @@
 #include "SystemUtils.h"
 #include "BehaviourManager.h"
 
-BehaviourCompileRunnable::
-    BehaviourCompileRunnable(const String &behaviourRelativeFilepath)
+BehaviourCompileRunnable::BehaviourCompileRunnable(QWidget *parent)
+    : QObject(parent)
 {
-    m_behaviourRelativeFilepath = behaviourRelativeFilepath;
+
+}
+
+BehaviourCompileRunnable::
+    BehaviourCompileRunnable(const String &behaviourFilepath)
+{
+    m_behaviourFilepath = behaviourFilepath;
+
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    connect(this, SIGNAL(NotifyFinishedCompiling(QString,QString,QString)),
+            bm, SLOT(OnBehaviourFinishedCompiling(QString,QString,QString)));
+    connect(this, SIGNAL(NotifyFailedCompiling(QString,QString)),
+            bm, SLOT(OnBehaviourFailedCompiling(QString,QString)));
 }
 
 void BehaviourCompileRunnable::Compile()
 {
     // Compile....
-    String soFilepath =
-            SystemUtils::CompileToSharedObject(m_behaviourRelativeFilepath);
+    String warnMessage = "";
+    String errorMessage = "";
+    String libraryFilepath =
+            SystemUtils::CompileToSharedObject(m_behaviourFilepath,
+                                               true, &warnMessage, &errorMessage);
 
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-
-    if (!soFilepath.Empty())
+    if (!libraryFilepath.Empty())
     {
         // Notify BehaviourManager
-        emit bm->OnBehaviourFinishedCompiling(m_behaviourRelativeFilepath, soFilepath);
+        emit NotifyFinishedCompiling(m_behaviourFilepath.ToQString(),
+                                     libraryFilepath.ToQString(),
+                                     warnMessage.ToQString());
     }
     else
     {
         // If it fails, notify the failure to the BehaviourManager, so it doesnt
         // compile until the behaviour file hash changes
-        emit bm->OnBehaviourFailedCompiling(m_behaviourRelativeFilepath);
+        emit NotifyFailedCompiling(m_behaviourFilepath.ToQString(),
+                                   errorMessage.ToQString());
     }
 }
 

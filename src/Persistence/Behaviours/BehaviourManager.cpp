@@ -5,6 +5,7 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Project.h"
+#include "ListLogger.h"
 #include "Persistence.h"
 #include "Application.h"
 #include "SystemUtils.h"
@@ -21,6 +22,7 @@ BehaviourManager::BehaviourManager()
 
 QLibrary *BehaviourManager::LoadLibraryFromFilepath(const String &libFilepath)
 {
+    Debug_Log("LoadLibraryFromFilepath: " << libFilepath);
     QLibrary *lib = new QLibrary(libFilepath.ToCString());
     lib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
     if (lib->load())
@@ -40,47 +42,61 @@ BehaviourManager *BehaviourManager::GetInstance()
 }
 
 // Called by the BehaviourManagerCompileThread when has finished
-void BehaviourManager::OnBehaviourFinishedCompiling(const String &behaviourPath,
-                                                    const String &libraryFilepath)
+void BehaviourManager::OnBehaviourFinishedCompiling(const QString &_behaviourPath,
+                                                    const QString &_libraryFilepath,
+                                                    const QString &_warnMessage)
 {
     QMutexLocker locker(&m_mutex);
 
-    String hash = BehaviourManager::GetHash(behaviourPath);
-    m_behHashesBeingCompiled.erase(hash);
-
+    String behaviourPath   = _behaviourPath;
+    String libraryFilepath = _libraryFilepath;
+    String warnMessage     = _warnMessage;
     QLibrary *library = LoadLibraryFromFilepath(libraryFilepath);
+    m_status.OnBehaviourFinishedCompiling(behaviourPath,
+                                          libraryFilepath,
+                                          warnMessage,
+                                          library);
+
+    if (!warnMessage.Empty())
+    {
+        Debug_Warn(warnMessage);
+    }
+
+    // Clear the error messages from ListLogger
+    /*
+    for (ListLogger::MessageId msgId : m_behPath_to_failMessagesIds[behaviourPath])
+    {
+        ListLogger::GetInstance()->ClearMessage(msgId);
+    }
+    */
+
     if (library)
     {
-        // Notify the BehaviourHolder's that were waiting this library
-        const List<BehaviourHolder*> &behDemanders =
-                m_behHash_To_demandersList[hash];
+        BehaviourId bid(behaviourPath);
 
+        // Notify the BehaviourHolder's that were waiting this library
+        const List<BehaviourHolder*> &behDemanders = m_status.GetDemanders(bid);
         for (BehaviourHolder* bh : behDemanders)
         {
             bh->OnBehaviourLibraryAvailable(library);
         }
-
-        m_behHash_To_demandersList.Remove(hash);
-        m_behHash_To_lib.Set(hash, library);
-
         RemoveOutdatedLibraryFiles(libraryFilepath);
     }
 }
 
-void BehaviourManager::OnBehaviourFailedCompiling(const String &behaviourPath)
+void BehaviourManager::OnBehaviourFailedCompiling(const QString &behaviourPath,
+                                                  const QString &errorMessage)
 {
     QMutexLocker locker(&m_mutex);
-    String hash = BehaviourManager::GetHash(behaviourPath);
-    m_behHashesBeingCompiled.erase(hash);
-    m_failedBehHashes.insert(hash);
+    m_status.OnBehaviourFailedCompiling(String(behaviourPath),
+                                        String(errorMessage));
 }
 
-void BehaviourManager::RemoveOutdatedLibraryFiles(
-        const String &mostRecentLibFilepath)
+void BehaviourManager::RemoveOutdatedLibraryFiles(const String &newLibFilepath)
 {
     String mostRecentLibNameAndExt =
-            Persistence::GetFileNameWithExtension(mostRecentLibFilepath);
-    String mostRecentLibName = Persistence::GetFileName(mostRecentLibFilepath);
+            Persistence::GetFileNameWithExtension(newLibFilepath);
+    String mostRecentLibName = Persistence::GetFileName(newLibFilepath);
     List<String> libs = Persistence::GetFiles(
                 Persistence::GetProjectAssetsRootAbs(), true, {"*.so.*"});
 
@@ -97,135 +113,50 @@ void BehaviourManager::RemoveOutdatedLibraryFiles(
     }
 }
 
-bool BehaviourManager::IsCached(const String &hash)
+void BehaviourManager::TreatIfBehaviourChanged(const String &behaviourPath)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    return  bm->m_behHash_To_lib.ContainsKey(hash) &&
-           !BehaviourManager::IsBeingCompiled(hash);
+    bm->m_status.TreatIfBehaviourChanged(behaviourPath);
 }
 
-bool BehaviourManager::AllBehaviourHoldersUpdated(float *percentOfBehavioursUpdated)
-{
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-    QMutexLocker locker(&bm->m_mutex);
-
-    int behHoldersUpdated = 0;
-    Scene *scene = SceneManager::GetActiveScene();
-    List<BehaviourHolder*> behHolders = scene->GetComponentsInChildren<BehaviourHolder>();
-    for (BehaviourHolder *bh : behHolders)
-    {
-        String srcPath = bh->GetSourceFilepath();
-        String hash = GetHash(srcPath);
-
-        QLibrary *updatedLibrary = BehaviourManager::GetCachedLibrary(hash);
-        if (!updatedLibrary) { continue; } // Not even compiled
-
-        QLibrary *currentBHLibrary = bh->GetLibraryBeingUsed();
-
-        bool updated = (currentBHLibrary == updatedLibrary);
-        if (updated) { ++behHoldersUpdated; }
-    }
-
-    float percentUpdated = float(behHoldersUpdated) / behHolders.Size();
-    if (percentOfBehavioursUpdated)
-    {
-        *percentOfBehavioursUpdated = percentUpdated;
-    }
-
-    return percentUpdated == 1.0f;
-}
-
-bool BehaviourManager::SomeBehaviourWithError()
+void BehaviourManager::Load(BehaviourHolder *bHolder, const String &behaviourPath)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     QMutexLocker locker(&bm->m_mutex);
 
-    Scene *scene = SceneManager::GetActiveScene();
-    List<BehaviourHolder*> behHolders = scene->GetComponentsInChildren<BehaviourHolder>();
-    for (BehaviourHolder *bh : behHolders)
+    // See if the behaviour has changed from the cached one, and
+    // in that case remove the outdated references.
+    //BehaviourManager::TreatIfBehaviourChanged(behaviourPath);
+
+    BehaviourId bid(behaviourPath);
+    if (bm->m_status.HasFailed(bid)) { return; }
+    if (bm->m_status.IsCached(bid))
     {
-        String srcPath = bh->GetSourceFilepath();
-        String hash = GetHash(srcPath);
-        if (bm->m_failedBehHashes.count(hash) > 0)
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-String BehaviourManager::GetHash(const String &behaviourPath)
-{
-    String absPath = Persistence::ToAbsolute(behaviourPath, false);
-    return Persistence::GetHash(absPath);
-}
-
-QLibrary *BehaviourManager::GetCachedLibrary(const String &hash)
-{
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-    if (bm->m_behHash_To_lib.ContainsKey(hash))
-    {
-        return bm->m_behHash_To_lib[hash];
-    }
-    return nullptr;
-}
-
-bool BehaviourManager::IsBeingCompiled(const String &hash)
-{
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-
-    // Is being demanded but it has no compiled library associated,
-    // this means the behaviour is still being compiled :)
-    return  bm->m_behHashesBeingCompiled.count(hash) > 0;
-}
-
-void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
-                            const String &behaviourFilepath)
-{
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-    QMutexLocker locker(&bm->m_mutex);
-
-    String hash = BehaviourManager::GetHash(behaviourFilepath);
-    if (bm->m_failedBehHashes.count(hash) > 0)
-    {
-        return; // This hash has failed before, dont try to recompile it
-    }
-
-    if (BehaviourManager::IsCached(hash))
-    {
-        // It's cached from a previous load...
-        QLibrary *lib = BehaviourManager::GetCachedLibrary(hash);
+        QLibrary *lib = bm->m_status.GetLibrary(bid);
         if (lib)
         {
-            behaviourHolder->OnBehaviourLibraryAvailable(lib);
+            bHolder->OnBehaviourLibraryAvailable(lib);
         }
     }
-    else
+    else // Add behaviour to the list of demanders
     {
-        // Add behaviour to the list of demanders
-        List<BehaviourHolder*> &demanders = bm->m_behHash_To_demandersList.Get(hash);
-        if (!demanders.Contains(behaviourHolder))
-        {
-            demanders.PushBack(behaviourHolder);
-        }
-
-        if ( !BehaviourManager::IsBeingCompiled(hash) )
+        bm->m_status.OnBehaviourDemanded(behaviourPath, bHolder);
+        if (!bm->m_status.IsBeingCompiled(bid))
         {
             #ifdef BANG_EDITOR
-
             // Have to compile and load it.
             // First compile
             BehaviourCompileRunnable *compileRunnable =
-                    new BehaviourCompileRunnable(behaviourFilepath);
+                    new BehaviourCompileRunnable(behaviourPath);
             bool startedCompiling = bm->m_threadPool.tryStart(compileRunnable);
             if (!startedCompiling)
             {
                 return;
             }
 
-            bm->m_behHashesBeingCompiled.insert(hash);
+            bm->m_status.OnBehaviourStartedCompiling(behaviourPath);
 
-            String behaviourName = Persistence::GetFileName(behaviourFilepath);
+            String behaviourName = Persistence::GetFileName(behaviourPath);
             Debug_Status("Compiling script " << behaviourName << "...", 5.0f);
 
             // And when the compileThread finishes, we will be notified,
@@ -248,22 +179,21 @@ void BehaviourManager::Load(BehaviourHolder *behaviourHolder,
     }
 }
 
-void BehaviourManager::
-    OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder)
+void BehaviourManager::OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     QMutexLocker locker(&bm->m_mutex);
-
-    // Erase the behaviourHolder from all the demand lists it is in
-    for (auto &hash_demandersList : bm->m_behHash_To_demandersList)
-    {
-        List<BehaviourHolder*> &bhList = hash_demandersList.second;
-        bhList.RemoveAll(behaviourHolder);
-    }
+    bm->m_status.OnBehaviourHolderDeleted(behaviourHolder);
 }
 
 void BehaviourManager::RefreshAllBehaviours()
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     bm->m_behaviourRefresherTimer.RefreshBehavioursInScene();
+}
+
+const BehaviourManagerStatus &BehaviourManager::GetStatus()
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    return bm->m_status;
 }

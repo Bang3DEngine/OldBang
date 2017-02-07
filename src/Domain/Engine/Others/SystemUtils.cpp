@@ -167,10 +167,15 @@ void SystemUtils::SystemBackground(const String &command)
 }
 
 String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot,
-                                          bool editorMode)
+                                          bool editorMode,
+                                          String *warnMessage,
+                                          String *errorMessage)
 {
     // GET INCLUDES
     // Get all subdirs recursively in a single line, and add -I in Front of every path
+
+    if (warnMessage) { *warnMessage = ""; }
+    if (errorMessage) { *errorMessage = ""; }
 
     String includes = "";
     includes += " . ";
@@ -230,23 +235,12 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot,
 
     if (ok)
     {
-        if (output != "")
-        {
-            Debug_Warn(output);
-        }
+        if (warnMessage) { *warnMessage = output; }
     }
     else // There has been an error
     {
-        if (output != "")
-        {
-            Debug_Error(output);
-        }
-        else
-        {
-            Debug_Error("There was an error compiling the Behaviour...");
-        }
-
         sharedObjectFilepath = "";
+        if (errorMessage) { *errorMessage = output; }
     }
 
     return sharedObjectFilepath;

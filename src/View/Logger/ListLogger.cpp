@@ -62,22 +62,37 @@ void ListLogger::Clear()
     listLogger->OnClear();
 }
 
-void ListLogger::AddLog(const String &str, int line, const String &fileName)
+ListLogger::MessageId ListLogger::AddLog(
+        const String &str, int line,
+        const String &fileName,
+        bool persistent)
 {
-    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger);
-    listLogger->OnAddLog(str, line, fileName);
+    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger, "", -1);
+    Message m(line, str, fileName, persistent, MessageType::Log);
+    ++listLogger->m_totalLogMessages;
+    return listLogger->AddMessage(m);
 }
 
-void ListLogger::AddWarn(const String &str, int line, const String &fileName)
+ListLogger::MessageId ListLogger::AddWarn(
+        const String &str, int line,
+        const String &fileName,
+        bool persistent)
 {
-    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger);
-    listLogger->OnAddWarn(str, line, fileName);
+    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger, "", -1);
+    Message m(line, str, fileName, persistent, MessageType::Warn);
+    ++listLogger->m_totalWarnMessages;
+    return listLogger->AddMessage(m);
 }
 
-void ListLogger::AddError(const String &str, int line, const String &fileName)
+ListLogger::MessageId ListLogger::AddError(
+        const String &str, int line,
+        const String &fileName,
+        bool persistent)
 {
-    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger);
-    listLogger->OnAddError(str, line, fileName);
+    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger, "", -1);
+    Message m(line, str, fileName, persistent, MessageType::Error);
+    ++listLogger->m_totalErrorMessages;
+    return listLogger->AddMessage(m);
 }
 
 void ListLogger::DecorateLastItem(const Color &color)
@@ -91,24 +106,29 @@ void ListLogger::DecorateLastItem(const Color &color)
 
 void ListLogger::RefreshList()
 {
-    List<MessageRow> mrList = m_currentMessageRowList;
+    List<Message> msgsCopy = m_currentMessages.GetValues();
 
-    OnClear();
-    for (const MessageRow &mr : mrList)
+    OnClear(); // Clear
+
+    // ReAdd the messages
+    for (const Message &msg : msgsCopy)
     {
-        AddRow(mr.line, mr.msg, mr.fileName, mr.msgType);
+        if (!msg.persistent)
+        {   // Avoid adding persistent messages twice,
+            // since they are not cleared
+            AddMessage(msg);
+        }
     }
 }
 
-QTreeWidgetItem *ListLogger::CreateItemFromMessageRow(
-        const ListLogger::MessageRow &mr)
+QTreeWidgetItem *ListLogger::CreateItemFromMessageRow(const Message &mr)
 {
     QTreeWidgetItem *item = new QTreeWidgetItem();
 
     const QIcon *icon;
-    if      (mr.msgType == MessageType::Log)   { icon = &m_logIcon;   }
-    else if (mr.msgType == MessageType::Warn)  { icon = &m_warnIcon;  }
-    else if (mr.msgType == MessageType::Error) { icon = &m_errorIcon; }
+    if      (mr.type == MessageType::Log)   { icon = &m_logIcon;   }
+    else if (mr.type == MessageType::Warn)  { icon = &m_warnIcon;  }
+    else if (mr.type == MessageType::Error) { icon = &m_errorIcon; }
     item->setIcon(c_iconColumn, *icon);
 
     String shortMessage = mr.msg; // StringUtils::Elide(mr.msg, 100, true);
@@ -118,6 +138,68 @@ QTreeWidgetItem *ListLogger::CreateItemFromMessageRow(
     item->setText(c_fileNameColumn, mr.fileName.ToQString());
 
     return item;
+}
+
+ListLogger::MessageId ListLogger::AddMessage(const Message &msg,
+                                             int forcedMessageId)
+{
+    MessageId messageId = 0;
+
+    bool hasToAddRow = true;
+    if ( !m_currentMessagesIds.ContainsKey(msg) )
+    {
+        messageId = forcedMessageId >= 0 ? forcedMessageId : ++m_latestMessageId;
+        m_currentMessages.Set(messageId, msg);
+        m_collapsedMsgsCount.Set(messageId, 1);
+        m_currentMessagesIds.Set(msg, messageId);
+    }
+    else // Repeated msg
+    {
+        hasToAddRow = !m_collapse;
+        messageId = forcedMessageId >= 0 ? forcedMessageId : m_currentMessagesIds[msg];
+        m_collapsedMsgsCount[messageId] += 1;
+    }
+
+
+    if ( (!m_showLogMessages   && msg.type == MessageType::Log  ) ||
+         (!m_showWarnMessages  && msg.type == MessageType::Warn ) ||
+         (!m_showErrorMessages && msg.type == MessageType::Error)
+       )
+    {
+        hasToAddRow = false;
+    }
+
+    if (hasToAddRow)
+    {
+        QTreeWidgetItem *item = CreateItemFromMessageRow(msg);
+        m_messageIdToItem[messageId] = item;
+        addTopLevelItem(item);
+
+        if (msg.type == MessageType::Warn)
+        {
+            DecorateLastItem( Color(1.0f, 1.0f, 0.3f) );
+        }
+        else if (msg.type == MessageType::Error)
+        {
+            DecorateLastItem( Color(1.0f, 0.3f, 0.3f) );
+        }
+    }
+
+    if (m_collapse)
+    {
+        // Update count
+        QTreeWidgetItem *item = m_messageIdToItem[messageId];
+        if (item)
+        {
+            int newCount = m_collapsedMsgsCount[messageId];
+            String newCountStr = String::ToString(newCount);
+            item->setText(ListLogger::c_countColumn, newCountStr.ToQString());
+        }
+    }
+
+    if (m_autoScroll) { scrollToBottom(); }
+
+    return messageId;
 }
 
 ListLogger *ListLogger::GetInstance()
@@ -131,27 +213,34 @@ void ListLogger::dropEvent(QDropEvent *e)
     e->ignore();
 }
 
-void ListLogger::OnAddLog(const String &str, int line, const String &fileName)
-{
-    AddRow(line, str, fileName, MessageType::Log);
-}
-
-void ListLogger::OnAddWarn(const String &str, int line, const String &fileName)
-{
-    AddRow(line, str, fileName, MessageType::Warn);
-}
-
-void ListLogger::OnAddError(const String &str, int line, const String &fileName)
-{
-    AddRow(line, str, fileName, MessageType::Error);
-}
-
 void ListLogger::OnClear()
 {
     clear();
-    m_messageRowToItem.Clear();
-    m_currentCollapsedMsgs.Clear();
-    m_currentMessageRowList.Clear();
+    m_totalLogMessages   = 0;
+    m_totalWarnMessages  = 0;
+    m_totalErrorMessages = 0;
+
+    Map<MessageId, Message> persistentMessages;
+    for (const auto &pair : m_currentMessagesIds)
+    {
+        const Message &msg = pair.first;
+        if (msg.persistent)
+        {
+            int messageId = pair.second;
+            persistentMessages.Set(messageId, msg);
+        }
+    }
+
+    m_messageIdToItem.Clear();
+    m_currentMessages.Clear();
+    m_collapsedMsgsCount.Clear();
+    m_currentMessagesIds.Clear();
+
+    // Restore persistent messages
+    for (const auto &pair : persistentMessages)
+    {
+        AddMessage(pair.second, pair.first);
+    }
 }
 
 void ListLogger::OnEditorPlay()
@@ -159,6 +248,22 @@ void ListLogger::OnEditorPlay()
     if (m_clearOnPlay)
     {
         OnClear();
+    }
+}
+
+void ListLogger::ClearMessage(ListLogger::MessageId id)
+{
+    Debug_Log("ClearMessage " << id);
+    if (m_currentMessages.ContainsKey(id))
+    {
+        QTreeWidgetItem *item = m_messageIdToItem[id];
+        if (item) { delete item; }
+
+        const Message &msg = m_currentMessages[id];
+        m_messageIdToItem.Remove(id);
+        m_currentMessages.Remove(id);
+        m_collapsedMsgsCount.Remove(id);
+        m_currentMessagesIds.Remove(msg);
     }
 }
 
@@ -198,79 +303,16 @@ void ListLogger::OnShowErrorMessagesChanged(bool showErrorMessages)
     RefreshList();
 }
 
-void ListLogger::AddRow(int line, const String &msg, const String &fileName,
-                        MessageType msgType, bool uniqueMessage)
+bool ListLogger::Message::operator==(const ListLogger::Message &rhs) const
 {
-    MessageRow msgRow;
-    msgRow.line     = line;
-    msgRow.msg      = msg;
-    msgRow.fileName = fileName;
-    msgRow.msgType  = msgType;
 
-    if (uniqueMessage && m_currentMessageRowList.Contains(msgRow))
-    {
-        return;
-    }
-
-    bool dontAddRow = m_collapse && m_currentCollapsedMsgs.ContainsKey(msgRow);
-    if (!m_currentCollapsedMsgs.ContainsKey(msgRow))
-    {
-        m_currentCollapsedMsgs[msgRow] = 0;
-    }
-
-    m_currentCollapsedMsgs[msgRow] += 1;
-    m_currentMessageRowList.Add(msgRow);
-
-    bool hasToAddRow = !dontAddRow;
-    if ( (!m_showLogMessages   && msgRow.msgType == MessageType::Log  ) ||
-         (!m_showWarnMessages  && msgRow.msgType == MessageType::Warn ) ||
-         (!m_showErrorMessages && msgRow.msgType == MessageType::Error)
-       )
-    {
-        hasToAddRow = false;
-    }
-
-    if (hasToAddRow)
-    {
-        QTreeWidgetItem *item = CreateItemFromMessageRow(msgRow);
-        m_messageRowToItem[msgRow] = item;
-        addTopLevelItem(item);
-
-        if (msgRow.msgType == MessageType::Warn)
-        {
-            DecorateLastItem( Color(1.0f, 1.0f, 0.3f) );
-        }
-        else if (msgRow.msgType == MessageType::Error)
-        {
-            DecorateLastItem( Color(1.0f, 0.3f, 0.3f) );
-        }
-    }
-
-    if (m_collapse)
-    {
-        // Update count
-        QTreeWidgetItem *item = m_messageRowToItem[msgRow];
-        if (item)
-        {
-            int newCount = m_currentCollapsedMsgs[msgRow];
-            String newCountStr = String::ToString(newCount);
-            item->setText(ListLogger::c_countColumn, newCountStr.ToQString());
-        }
-    }
-
-    if (m_autoScroll) { scrollToBottom(); }
-}
-
-
-bool ListLogger::MessageRow::operator==(const ListLogger::MessageRow &rhs) const
-{
-    return line == rhs.line &&
-           fileName == rhs.fileName &&
+    return fileName == rhs.fileName &&
+           line == rhs.line &&
            msg == rhs.msg &&
-           msgType == rhs.msgType;
+           type == rhs.type;
 }
 
-bool ListLogger::MessageRow::operator<(const ListLogger::MessageRow &rhs) const
+bool ListLogger::Message::operator<(const ListLogger::Message &rhs) const
 {
     if (line < rhs.line) return true; else if (line > rhs.line) return false;
     else
@@ -283,7 +325,7 @@ bool ListLogger::MessageRow::operator<(const ListLogger::MessageRow &rhs) const
             if (msgComp < 0) return true; else if (msgComp > 0) return false;
             else
             {
-                return int(msgType) < int(rhs.msgType);
+                return int(type) < int(rhs.type);
             }
         }
     }

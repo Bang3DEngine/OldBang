@@ -14,18 +14,28 @@ class ListLogger : public DragDropQTreeWidget
     Q_OBJECT
 
 public:
+    typedef unsigned long long MessageId;
+
     explicit ListLogger(QWidget *parent = nullptr);
 
     static void Clear();
-    static void AddLog(const String &str, int line, const String &fileName);
-    static void AddWarn(const String &str, int line, const String &fileName);
-    static void AddError(const String &str, int line, const String &fileName);
+    static MessageId AddLog(const String &str, int line,
+                            const String &fileName,
+                            bool persistent = false);
+    static MessageId AddWarn(const String &str, int line,
+                             const String &fileName,
+                             bool persistent = false);
+    static MessageId AddError(const String &str, int line,
+                              const String &fileName,
+                              bool persistent = false);
 
     static ListLogger* GetInstance();
 
     void dropEvent(QDropEvent *e) override;
 
     void OnEditorPlay();
+
+    void ClearMessage(MessageId id);
 
 private slots:
     void OnClear();
@@ -46,26 +56,41 @@ private:
     static int c_lineColumn;
     static int c_fileNameColumn;
 
+    enum MessageType { Log = 0, Warn = 1, Error = 2 };
+    struct Message
+    {
+        int line               = 0;
+        String msg             = "";
+        String fileName        = "";
+        bool persistent        = false;
+        MessageType type       = MessageType::Log;
+        bool operator==(const Message &rhs) const;
+        bool operator<(const Message &rhs) const;
+
+        Message() {}
+        Message(int _line, const String &_msg, const String &_fileName,
+                bool _persistent, MessageType _msgType) :
+            line(_line), msg(_msg), fileName(_fileName), persistent(_persistent),
+            type(_msgType)
+        {
+        }
+    };
+
+    MessageId m_latestMessageId = 0;
+    Map<MessageId, Message> m_currentMessages;
+    Map<Message, MessageId> m_currentMessagesIds;
+    Map<MessageId, int> m_collapsedMsgsCount;
+    Map<MessageId, QTreeWidgetItem*> m_messageIdToItem;
+
     bool m_collapse          = false;
     bool m_clearOnPlay       = false;
     bool m_autoScroll        = false;
     bool m_showLogMessages   = false;
     bool m_showWarnMessages  = false;
     bool m_showErrorMessages = false;
-
-    enum MessageType { Log = 0, Warn = 1, Error = 2 };
-    struct MessageRow
-    {
-        int line;
-        String msg;
-        String fileName;
-        MessageType msgType;
-        bool operator==(const MessageRow &rhs) const;
-        bool operator<(const MessageRow &rhs) const;
-    };
-    List<MessageRow> m_currentMessageRowList;
-    Map<MessageRow, int> m_currentCollapsedMsgs;
-    Map<MessageRow, QTreeWidgetItem*> m_messageRowToItem;
+    int  m_totalLogMessages   = 0;
+    int  m_totalWarnMessages  = 0;
+    int  m_totalErrorMessages = 0;
 
     QIcon m_logIcon;
     QIcon m_warnIcon;
@@ -73,14 +98,9 @@ private:
 
     void RefreshList();
 
-    QTreeWidgetItem *CreateItemFromMessageRow(const MessageRow &mr);
+    QTreeWidgetItem *CreateItemFromMessageRow(const Message &mr);
 
-    void OnAddLog(const String &str, int line, const String &fileName);
-    void OnAddWarn(const String &str, int line, const String &fileName);
-    void OnAddError(const String &str, int line, const String &fileName);
-    void AddRow(int line, const String &msg,
-                const String &fileName, MessageType msgType,
-                bool uniqueMessage = false);
+    MessageId AddMessage(const Message &message, int forcedMessageId = -1);
 };
 
 #endif // LISTLOGGER_H
