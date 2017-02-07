@@ -6,7 +6,6 @@
 #include <AL/alut.h>
 
 #include "Component.h"
-#include "AudioPlayProperties.h"
 
 #ifdef BANG_EDITOR
 #include "IAttrWidgetButtonListener.h"
@@ -51,8 +50,6 @@ public:
 
     AudioClip* GetAudioClip() const;
     void SetAudioClip(AudioClip *audioClip);
-
-    AudioPlayProperties GetAudioPlayProperties() const;
 
     void SetVolume(float volume);
     void SetPitch(float pitch);

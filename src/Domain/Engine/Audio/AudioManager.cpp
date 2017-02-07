@@ -14,7 +14,6 @@
 #include "Application.h"
 #include "SceneManager.h"
 #include "AudioListener.h"
-#include "AudioPlayProperties.h"
 #include "AudioPlayerRunnable.h"
 
 AudioManager::AudioManager()
@@ -28,27 +27,21 @@ AudioManager::~AudioManager()
     alutExit();
 }
 
-void AudioManager::PlayAudioClip(AudioClip *audioClip,
-                                 const AudioPlayProperties &audioPlayProperties)
+void AudioManager::PlayAudioClip(AudioClip *audioClip, int alSourceId,
+                                 float delayInSeconds)
 {
     ASSERT(audioClip);
     AudioManager *audioManager = AudioManager::GetInstance();
 
-    AudioPlayProperties playProps = audioPlayProperties;
     AudioListener *listener = SceneManager::GetActiveScene()->
             GetComponentInChildren<AudioListener>();
-    if (listener)
-    {
-        playProps.listenerPosition    = listener->transform->GetPosition();
-        playProps.listenerOrientation = listener->transform->GetEuler();
-        playProps.listenerVelocity    = Vector3::Zero;
-    }
-    else
+    if (!listener)
     {
         Debug_Warn ("The scene does not contain an AudioListener");
     }
 
-    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, playProps);
+    AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, alSourceId,
+                                                          delayInSeconds);
     bool hasBeenAbleToPlay = audioManager->m_threadPool.tryStart(player);
 }
 

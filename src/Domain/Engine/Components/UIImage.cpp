@@ -12,6 +12,7 @@
 
 UIImage::UIImage()
 {
+    m_material = AssetsManager::Load<Material>("Materials/UI/D2G_UIImage.bmat", true);
     m_materialPR = AssetsManager::Load<Material>("Materials/UI/PR_UIImage.bmat", true);
 }
 

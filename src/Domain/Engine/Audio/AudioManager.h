@@ -3,8 +3,6 @@
 
 #include <QThreadPool>
 
-#include "AudioPlayProperties.h"
-
 class AudioClip;
 class GameObject;
 class AudioManager
@@ -12,8 +10,8 @@ class AudioManager
 public:
     static AudioManager *GetInstance();
 
-    static void PlayAudioClip(AudioClip *audioClip,
-                              const AudioPlayProperties &audioPlayProperties);
+    static void PlayAudioClip(AudioClip *audioClip, int alSourceId,
+                              float delayInSeconds = 0.0f);
 
     static void ClearALErrors();
     static bool CheckALError();

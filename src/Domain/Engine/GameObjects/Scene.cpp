@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include "MeshFactory.h"
 #include "SceneManager.h"
+#include "AudioListener.h"
 #include "BehaviourHolder.h"
 #include "GraphicPipeline.h"
 #include "BehaviourManager.h"
@@ -143,6 +144,7 @@ Scene *Scene::GetDefaultScene()
     Camera *camComp = camera->AddComponent<Camera>();
     camera->transform->SetPosition(Vector3(1, 1, -1) * c_dist);
     camera->transform->LookAt(cube);
+    camera->AddComponent<AudioListener>();
     camComp->SetClearColor(Color::LightBlue);
     camera->SetParent(scene);
 

@@ -74,21 +74,6 @@ bool AudioClip::LoadFromFile(const String &filepath)
     return !hasError;
 }
 
-void AudioClip::Play()
-{
-    ASSERT(IsLoaded());
-    AudioPlayProperties props;
-    AudioManager::PlayAudioClip(this, props);
-}
-
-void AudioClip::Pause()
-{
-}
-
-void AudioClip::Stop()
-{
-}
-
 int AudioClip::GetChannels() const
 {
     if (!IsLoaded()) { return 0; }

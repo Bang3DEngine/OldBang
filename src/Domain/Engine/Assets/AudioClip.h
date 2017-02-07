@@ -9,7 +9,6 @@
 #include "Asset.h"
 #include "String.h"
 #include "Persistence.h"
-#include "AudioPlayProperties.h"
 
 class AudioSource;
 class AudioClip : public Asset
@@ -22,10 +21,6 @@ public:
     const virtual String GetFileExtension();
 
     bool LoadFromFile(const String &filepath);
-
-    void Play();
-    void Pause();
-    void Stop();
 
     int GetChannels() const;
     int GetBufferSize() const;

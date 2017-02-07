@@ -123,9 +123,8 @@ void AudioSource::Play(float delaySeconds)
 {
     ASSERT(m_audioClip);
 
-    AudioPlayProperties props = GetAudioPlayProperties();
-    props.delayInSeconds = delaySeconds;
-    AudioManager::PlayAudioClip(m_audioClip, props);
+    AudioManager::PlayAudioClip(m_audioClip, GetALSourceId(),
+                                delaySeconds);
 }
 
 void AudioSource::Pause()
@@ -158,20 +157,6 @@ void AudioSource::SetAudioClip(AudioClip *audioClip)
     {
         m_audioClip->OnAudioSourceAttached(this);
     }
-}
-
-AudioPlayProperties AudioSource::GetAudioPlayProperties() const
-{
-    AudioPlayProperties props;
-    props.delayInSeconds = 0.0f;
-    props.pitch          = m_pitch;
-    props.volume         = m_volume;
-    props.range          = m_range;
-    props.looping        = m_looping;
-    props.sourcePosition = gameObject ? transform->GetPosition() : Vector3::Zero;
-    props.sourceVelocity = Vector3::Zero;
-    props.alSourceId     = GetALSourceId();
-    return props;
 }
 
 void AudioSource::SetVolume(float volume)

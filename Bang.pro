@@ -273,7 +273,6 @@ HEADERS +=                                                          \
     src/Persistence/Behaviours/BehaviourCompileRunnable.h \
     src/View/Explorer/ExplorerFileSortProxy.h \
     src/Persistence/Files/AudioFile.h \
-    src/Domain/Engine/Audio/AudioPlayProperties.h \
     src/Domain/Engine/Physics/Math.h \
     src/Domain/Engine/Physics/Random.h \
     src/Domain/Engine/Components/AudioListener.h
