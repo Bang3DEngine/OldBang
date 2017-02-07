@@ -309,17 +309,6 @@ void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std:
 {
     ActivateGLStatesBeforeRenderingForSelection = f;
 }
-
-void Renderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void Renderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-
 #endif
 
 String Renderer::GetName() const

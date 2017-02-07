@@ -92,18 +92,6 @@ float Light::GetIntensity() const
     return m_intensity;
 }
 
-#ifdef BANG_EDITOR
-void Light::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void Light::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-#endif
-
 void Light::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);

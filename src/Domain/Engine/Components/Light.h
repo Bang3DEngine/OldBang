@@ -18,11 +18,6 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
 
-    #ifdef BANG_EDITOR
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
-    #endif
-
     void SetColor(const Color &color);
     void SetIntensity(float intensity);
 

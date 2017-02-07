@@ -55,12 +55,20 @@ ICloneable *AudioSource::Clone() const
 void AudioSource::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     FillXMLInfo(xmlInfo);
+    AudioSource *noConstThis = const_cast<AudioSource*>(this);
+    if (IsPlaying())
+    {
+        xmlInfo->SetButton("Stop", noConstThis, {});
+        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
+    }
+    else
+    {
+
+        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
+        xmlInfo->SetButton("Play", noConstThis, {});
+    }
 }
 
-void AudioSource::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
 void AudioSource::OnButtonClicked(const String &attrName)
 {
     if (IsPlaying())
@@ -102,21 +110,6 @@ void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("Pitch",    m_pitch);
     xmlInfo->SetFloat("Range",    m_range);
     xmlInfo->SetBool("Looping",   m_looping);
-
-    #ifdef BANG_EDITOR
-    AudioSource *noConstThis = const_cast<AudioSource*>(this);
-    if (IsPlaying())
-    {
-        xmlInfo->SetButton("Stop", noConstThis, {});
-        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
-    }
-    else
-    {
-
-        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
-        xmlInfo->SetButton("Play", noConstThis, {});
-    }
-    #endif
 }
 
 void AudioSource::Play(float delaySeconds)

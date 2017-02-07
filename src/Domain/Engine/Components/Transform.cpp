@@ -405,20 +405,6 @@ Vector3 Transform::GetDown() const
     return -GetUp();
 }
 
-#ifdef BANG_EDITOR
-
-void Transform::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void Transform::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-
-#endif
-
 void Transform::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Component::ReadXMLInfo(xmlInfo);

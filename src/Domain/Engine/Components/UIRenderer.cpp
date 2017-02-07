@@ -85,18 +85,6 @@ String UIRenderer::GetName() const
     return "UIRenderer";
 }
 
-#ifdef BANG_EDITOR
-void UIRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void UIRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-#endif
-
 void UIRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     MeshRenderer::ReadXMLInfo(xmlInfo);

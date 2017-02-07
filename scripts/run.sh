@@ -3,8 +3,7 @@ cd "$(dirname "$0")"
 
 BUILD_MODE=$1
 
-./compile.sh $1
-
+./compile.sh $1 DEBUG_MODE
 
 if [ $? -ne 0 ]; then
 	exit 1

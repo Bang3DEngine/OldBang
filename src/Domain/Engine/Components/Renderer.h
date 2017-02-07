@@ -78,9 +78,6 @@ public:
 
     #ifdef BANG_EDITOR
     void SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f);
-
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
 
     virtual String GetName() const override;

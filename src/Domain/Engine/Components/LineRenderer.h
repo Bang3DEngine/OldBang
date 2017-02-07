@@ -26,11 +26,6 @@ public:
     virtual AABox GetAABBox() const override;
     const Array<Vector3>& GetPoints() const;
 
-    #ifdef BANG_EDITOR
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
-    #endif
-
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 

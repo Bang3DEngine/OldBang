@@ -119,11 +119,6 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("BehaviourHolder");
 
     xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "cpp");
-
-    #ifdef BANG_EDITOR
-    BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
-    xmlInfo->SetButton("CreateNew...", noConstThis);
-    #endif
 }
 
 
@@ -131,6 +126,8 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
 void BehaviourHolder::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
     FillXMLInfo(xmlInfo);
+    BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
+    xmlInfo->SetButton("CreateNew...", noConstThis);
 }
 
 void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)

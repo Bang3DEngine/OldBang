@@ -3,6 +3,8 @@
 cd "$(dirname "$0")"
 cd .. # Go to root directory
 
+export QT_SELECT=5
+
 command_exists () {
     type "$1" &> /dev/null ;
 }

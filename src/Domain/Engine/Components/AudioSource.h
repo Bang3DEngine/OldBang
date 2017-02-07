@@ -37,7 +37,6 @@ public:
 
     #ifdef BANG_EDITOR
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     virtual void OnButtonClicked(const String &attrName) override;
     #endif
 

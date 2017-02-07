@@ -59,36 +59,6 @@ ICloneable *PointLight::Clone() const
     return pl;
 }
 
-#ifdef BANG_EDITOR
-void PointLight::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void PointLight::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-
-void PointLight::OnDrawGizmos()
-{
-    Light::OnDrawGizmos();
-
-    Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/PointLightIcon.btex2d", true);
-    Gizmos::SetColor(Color(GetColor(), 1));
-    Gizmos::SetPosition(transform->GetPosition());
-    Gizmos::SetScale(Vector3::One * 0.1f);
-    Gizmos::RenderIcon(tex);
-
-    if (gameObject->IsSelected())
-    {
-        Gizmos::SetReceivesLighting(false);
-        Gizmos::SetColor(Color(GetColor(), 1));
-        Gizmos::RenderSimpleSphere(transform->GetPosition(), GetRange());
-    }
-}
-#endif
-
 void PointLight::SetRange(float range)
 {
     m_range = range;
@@ -111,4 +81,22 @@ void PointLight::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("PointLight");
 
     xmlInfo->SetFloat("Range", m_range);
+}
+
+void PointLight::OnDrawGizmos()
+{
+    Light::OnDrawGizmos();
+
+    Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/PointLightIcon.btex2d", true);
+    Gizmos::SetColor(Color(GetColor(), 1));
+    Gizmos::SetPosition(transform->GetPosition());
+    Gizmos::SetScale(Vector3::One * 0.1f);
+    Gizmos::RenderIcon(tex);
+
+    if (gameObject->IsSelected())
+    {
+        Gizmos::SetReceivesLighting(false);
+        Gizmos::SetColor(Color(GetColor(), 1));
+        Gizmos::RenderSimpleSphere(transform->GetPosition(), GetRange());
+    }
 }

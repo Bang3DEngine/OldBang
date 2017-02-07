@@ -78,18 +78,6 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
     m_mesh->GetVAO()->UnBind();
 }
 
-#ifdef BANG_EDITOR
-void MeshRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void MeshRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-#endif
-
 void MeshRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Renderer::ReadXMLInfo(xmlInfo);

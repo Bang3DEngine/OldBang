@@ -81,18 +81,6 @@ const Array<Vector3> &LineRenderer::GetPoints() const
     return m_points;
 }
 
-#ifdef BANG_EDITOR
-void LineRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void LineRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-#endif
-
 void LineRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Renderer::ReadXMLInfo(xmlInfo);

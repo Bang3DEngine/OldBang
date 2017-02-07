@@ -66,6 +66,18 @@ bool Component::IsClosedInInspector() const
     return m_closedInInspector;
 }
 
+#ifdef BANG_EDITOR
+void Component::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
+{
+    FillXMLInfo(xmlInfo);
+}
+
+void Component::OnInspectorXMLChanged(const XMLNode *xmlInfo)
+{
+    ReadXMLInfo(xmlInfo);
+}
+#endif
+
 void Component::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     IFileable::ReadXMLInfo(xmlInfo);

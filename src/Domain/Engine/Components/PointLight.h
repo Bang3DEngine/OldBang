@@ -15,17 +15,13 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
 
-    #ifdef BANG_EDITOR
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
-    virtual void OnDrawGizmos() override;
-    #endif
-
     void SetRange(float range);
     float GetRange() const;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    virtual void OnDrawGizmos() override;
 
 protected:
     float m_range = 1.0f;

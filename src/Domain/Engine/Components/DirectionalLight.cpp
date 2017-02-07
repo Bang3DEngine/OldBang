@@ -43,17 +43,6 @@ ICloneable *DirectionalLight::Clone() const
     return dl;
 }
 
-#ifdef BANG_EDITOR
-void DirectionalLight::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void DirectionalLight::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-
 void DirectionalLight::OnDrawGizmos()
 {
     Light::OnDrawGizmos();
@@ -88,8 +77,6 @@ void DirectionalLight::OnDrawGizmos()
         }
     }
 }
-#endif
-
 
 void DirectionalLight::ReadXMLInfo(const XMLNode *xmlInfo)
 {

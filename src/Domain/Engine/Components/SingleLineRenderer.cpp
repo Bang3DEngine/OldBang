@@ -57,19 +57,6 @@ Vector3 SingleLineRenderer::GetDestiny() const
     return m_points[1];
 }
 
-#ifdef BANG_EDITOR
-void SingleLineRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void SingleLineRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-#endif
-
-
 void SingleLineRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     LineRenderer::ReadXMLInfo(xmlInfo);

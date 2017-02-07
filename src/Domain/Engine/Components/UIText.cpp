@@ -61,18 +61,6 @@ ICloneable *UIText::Clone() const
     return text;
 }
 
-#ifdef BANG_EDITOR
-void UIText::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    FillXMLInfo(xmlInfo);
-}
-
-void UIText::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    ReadXMLInfo(xmlInfo);
-}
-#endif
-
 void UIText::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     UIRenderer::ReadXMLInfo(xmlInfo);
