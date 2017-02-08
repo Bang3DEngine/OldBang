@@ -51,12 +51,14 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 
     m_labelCurrentPath = win->labelCurrentPath;
 
-    QObject::connect(m_buttonDirUp, SIGNAL(clicked()), this, SLOT(OnButtonDirUpClicked()));
+    QObject::connect(m_buttonDirUp, SIGNAL(clicked()), this,
+                     SLOT(OnButtonDirUpClicked()));
     QObject::connect(m_buttonChangeViewMode, SIGNAL(clicked()),
                      this, SLOT(OnButtonChangeViewModeClicked()));
     QObject::connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
                      this, SLOT(OnDirLoaded(QString)));
-    QObject::connect(m_fileSystemModel, SIGNAL(fileRenamed(QString,QString,QString)),
+    QObject::connect(m_fileSystemModel,
+                     SIGNAL(fileRenamed(QString,QString,QString)),
                      this, SLOT(OnFileRenamed(QString,QString,QString)) );
 }
 
@@ -274,7 +276,8 @@ void Explorer::RefreshInspector()
         {
             if (newInspectable)
             {
-                inspector->SetInspectable(newInspectable, f.GetNameAndExtension());
+                inspector->SetInspectable(newInspectable,
+                                          f.GetNameAndExtension());
             }
         }
 
@@ -293,7 +296,8 @@ void Explorer::SelectFile(const String &path)
     if (ind.isValid())
     {
         setCurrentIndex(ind);
-        selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::SelectCurrent);
+        selectionModel()->select(ind, QItemSelectionModel::SelectionFlag::
+                                      SelectCurrent);
         scrollTo(ind);
         RefreshInspector();
     }
@@ -306,7 +310,8 @@ Explorer *Explorer::GetInstance()
 
 String Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const
 {
-    String f = m_fileSystemModel->fileInfo(qmi).absoluteFilePath().toStdString();
+    String f = m_fileSystemModel->fileInfo(qmi)
+               .absoluteFilePath().toStdString();
     return f;
 }
 
@@ -372,7 +377,8 @@ void Explorer::OnDirLoaded(QString dir)
 {
     ASSERT(EditorWindow::GetInstance());
 
-    if (GetCurrentDir().Length() <= Persistence::GetProjectAssetsRootAbs().Length())
+    if (GetCurrentDir().Length() <=
+        Persistence::GetProjectAssetsRootAbs().Length())
     {
         m_buttonDirUp->setEnabled(false);
         m_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
@@ -455,7 +461,8 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
         if (ddi.sourceObject == hierarchy)
         {
             // Create a prefab of selected on the current directory
-            GameObject *selected = hierarchy->GetFirstSelectedGameObject(); ASSERT(selected);
+            GameObject *selected = hierarchy->GetFirstSelectedGameObject();
+            ASSERT(selected);
 
             String path = GetCurrentDir() + "/";
             String gameObjectName = selected->name;

@@ -9,6 +9,7 @@
 #include "String.h"
 #include "DragDropAgent.h"
 
+class QLabel;
 class ListLogger : public DragDropQTreeWidget
 {
     Q_OBJECT
@@ -37,6 +38,8 @@ public:
 
     void ClearMessage(MessageId id);
 
+    void OnWindowShown();
+
 private slots:
     void OnClear();
 
@@ -46,10 +49,14 @@ private slots:
     void OnShowLogMessagesChanged(bool showLogMessages);
     void OnShowWarnMessagesChanged(bool showWarnMessages);
     void OnShowErrorMessagesChanged(bool showErrorMessages);
+    void OnSelectionChanged(QTreeWidgetItem *current,
+                            QTreeWidgetItem *previous);
 
     void DecorateLastItem(const Color &color);
 
 private:
+    static int c_rowHeight;
+
     static int c_iconColumn;
     static int c_msgColumn;
     static int c_countColumn;
@@ -96,6 +103,7 @@ private:
     int  m_totalLogMessages   = 0;
     int  m_totalWarnMessages  = 0;
     int  m_totalErrorMessages = 0;
+    QLabel *m_completeMessageLabel = nullptr;
 
     QIcon m_logIcon;
     QIcon m_warnIcon;

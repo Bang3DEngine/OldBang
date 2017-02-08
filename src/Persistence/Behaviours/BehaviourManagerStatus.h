@@ -47,9 +47,6 @@ public:
     float GetBehaviourHoldersUpdatedPercent() const;
 
 private:
-
-    mutable QMutex m_mutex;
-
     std::set<BehaviourId> m_failed;
     std::set<BehaviourId> m_beingCompiled;
 

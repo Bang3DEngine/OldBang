@@ -14,20 +14,17 @@ BehaviourManagerStatus::BehaviourManagerStatus()
 
 bool BehaviourManagerStatus::IsBeingCompiled(const BehaviourId &bid) const
 {
-    QMutexLocker locker(&m_mutex);
     return m_beingCompiled.count(bid) > 0;
 }
 
 bool BehaviourManagerStatus::HasFailed(const BehaviourId &bid) const
 {
-    QMutexLocker locker(&m_mutex);
     return m_failed.count(bid) > 0;
 }
 
 bool BehaviourManagerStatus::IsCached(const BehaviourId &bid) const
 {
     bool beingCompiled = IsBeingCompiled(bid);
-    QMutexLocker locker(&m_mutex);
     return m_libraries.ContainsKey(bid) && !beingCompiled;
 }
 
@@ -38,7 +35,6 @@ bool BehaviourManagerStatus::IsNewOrHasChanged(const BehaviourId &bid) const
 
 QLibrary *BehaviourManagerStatus::GetLibrary(const BehaviourId &bid) const
 {
-    QMutexLocker locker(&m_mutex);
     if (m_libraries.ContainsKey(bid))
     {
         return m_libraries.Get(bid);
@@ -49,7 +45,6 @@ QLibrary *BehaviourManagerStatus::GetLibrary(const BehaviourId &bid) const
 List<BehaviourHolder*> &BehaviourManagerStatus::
             GetDemanders(const BehaviourId &bid)
 {
-    QMutexLocker locker(&m_mutex);
     return m_demanders.Get(bid);
 }
 
@@ -70,12 +65,19 @@ bool BehaviourManagerStatus::SomeBehaviourWithError() const
 
 float BehaviourManagerStatus::GetBehaviourHoldersUpdatedPercent() const
 {
-    int behHoldersUpdated = 0;
     Scene *scene = SceneManager::GetActiveScene();
+
+    int behHoldersUpdated = 0;
+    int totalBehaviourHolders = 0;
     List<BehaviourHolder*> behHolders = scene->GetComponentsInChildren<BehaviourHolder>();
     for (BehaviourHolder *bh : behHolders)
     {
-        BehaviourId bid( bh->GetSourceFilepath() );
+        String behaviourPath = bh->GetSourceFilepath();
+        if (behaviourPath.Empty()) { continue; }
+
+        ++totalBehaviourHolders;
+
+        BehaviourId bid(behaviourPath);
         QLibrary *updatedLibrary = GetLibrary(bid);
         if (!updatedLibrary) { continue; } // Not even compiled
 
@@ -84,7 +86,7 @@ float BehaviourManagerStatus::GetBehaviourHoldersUpdatedPercent() const
         if (updated) { ++behHoldersUpdated; }
     }
 
-    return float(behHoldersUpdated) / behHolders.Size();
+    return float(behHoldersUpdated) / totalBehaviourHolders;
 }
 
 void BehaviourManagerStatus::TreatIfBehaviourChanged(const String &behaviourPath)
@@ -94,7 +96,6 @@ void BehaviourManagerStatus::TreatIfBehaviourChanged(const String &behaviourPath
 
     bool behaviourHasChanged = IsNewOrHasChanged(newBid);
 
-    QMutexLocker locker(&m_mutex);
     if (behaviourHasChanged)
     {
         // Clear error messages, if there's any error, it will be
@@ -123,7 +124,6 @@ void BehaviourManagerStatus::OnBehaviourDemanded(const String &behaviourPath,
     BehaviourId bid(behaviourPath);
     List<BehaviourHolder*> &demanders = GetDemanders(bid);
 
-    QMutexLocker locker(&m_mutex);
     if (!demanders.Contains(bHolder))
     {
         demanders.PushBack(bHolder);
@@ -132,8 +132,6 @@ void BehaviourManagerStatus::OnBehaviourDemanded(const String &behaviourPath,
 
 void BehaviourManagerStatus::OnBehaviourStartedCompiling(const String &behaviourPath)
 {
-    QMutexLocker locker(&m_mutex);
-
     BehaviourId bid(behaviourPath);
     m_beingCompiled.insert(bid);
 }
@@ -146,7 +144,6 @@ void BehaviourManagerStatus::OnBehaviourSuccessCompiling(const String &behaviour
     BehaviourId bid(behaviourPath);
     ClearFails(bid.behaviourAbsPath);
 
-    QMutexLocker locker(&m_mutex);
     m_libraries.Set(bid, loadedLibrary);
     m_beingCompiled.erase(bid);
     m_demanders.Remove(bid);
@@ -161,7 +158,6 @@ void BehaviourManagerStatus::OnBehaviourFailedCompiling(const String &behaviourP
     // Clear old fails of the same behaviour (but with outdated code)
     ClearFails(bid.behaviourAbsPath);
 
-    QMutexLocker locker(&m_mutex);
     if (!errorMessage.Empty())
     {
         ListLogger *lLog = ListLogger::GetInstance();
@@ -179,7 +175,6 @@ void BehaviourManagerStatus::OnBehaviourHolderDeleted(BehaviourHolder *behaviour
     BehaviourId bid(behaviourHolder->GetSourceFilepath());
     List<BehaviourHolder*> demanders = GetDemanders(bid);
 
-    QMutexLocker locker(&m_mutex);
     demanders.RemoveAll(behaviourHolder);
 }
 

@@ -47,7 +47,7 @@ void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
     EditorScene *es = dynamic_cast<EditorScene*>(s); ASSERT(es);
     EditorDebugGameObject *edgo = es->m_debugGameObject; ASSERT(edgo);
     edgo->DrawScreenLine(origin, destiny, color, lineWidth, secsTime);
-#endif
+    #endif
 }
 
 void Debug::_Clear()
@@ -62,8 +62,11 @@ void Debug::_Status(const String &str, float timeInSeconds)
     std::cerr << c_statusPrefix << str << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    EditorWindow *win = EditorWindow::GetInstance();
-    win->statusbar->showMessage( str.ToQString(), timeInSeconds * 1000 );
+    if (QThread::currentThread() == QApplication::instance()->thread())
+    {
+        EditorWindow *win = EditorWindow::GetInstance();
+        win->statusbar->showMessage( str.ToQString(), timeInSeconds * 1000 );
+    }
     #endif
 }
 
@@ -74,7 +77,10 @@ void Debug::_Log(const String &str, int line, const String &filePath)
                  fileName << "(" << line << ")" <<  std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    ListLogger::AddLog(str, line, fileName);
+    if (QThread::currentThread() == QApplication::instance()->thread())
+    {
+        ListLogger::AddLog(str, line, fileName);
+    }
     #endif
 }
 
@@ -85,19 +91,24 @@ void Debug::_Warn(const String &str, int line, const String &filePath)
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    ListLogger::AddWarn(str, line, fileName);
+    if (QThread::currentThread() == QApplication::instance()->thread())
+    {
+        ListLogger::AddWarn(str, line, fileName);
+    }
     #endif
 }
 
-void Debug::_Error(const String &str, int line, const String &filePath,
-                   bool uniqueMessage)
+void Debug::_Error(const String &str, int line, const String &filePath)
 {
     String fileName = Persistence::GetFileNameWithExtension(filePath);
     std::cerr << c_errorPrefix << str << " | " <<
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    ListLogger::AddError(str, line, fileName);
+    if (QThread::currentThread() == QApplication::instance()->thread())
+    {
+        ListLogger::AddError(str, line, fileName);
+    }
     #endif
 }
 

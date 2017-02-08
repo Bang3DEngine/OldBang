@@ -46,8 +46,7 @@ public:
     static void _Clear();
     static void _Log(const String &str, int line, const String &fileName);
     static void _Warn(const String &str, int line, const String &fileName);
-    static void _Error(const String &str, int line, const String &fileName,
-                       bool uniqueMessage = false);
+    static void _Error(const String &str, int line, const String &fileName);
     static void _Status(const String &str, float timeInSeconds);
 };
 

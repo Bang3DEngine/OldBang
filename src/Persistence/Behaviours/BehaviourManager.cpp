@@ -45,8 +45,6 @@ void BehaviourManager::OnBehaviourSuccessCompiling(const QString &_behaviourPath
                                                    const QString &_libraryFilepath,
                                                    const QString &_warnMessage)
 {
-    QMutexLocker locker(&m_mutex);
-
     String behaviourPath   = _behaviourPath;
     String libraryFilepath = _libraryFilepath;
     String warnMessage     = _warnMessage;
@@ -78,7 +76,6 @@ void BehaviourManager::OnBehaviourSuccessCompiling(const QString &_behaviourPath
 void BehaviourManager::OnBehaviourFailedCompiling(const QString &behaviourPath,
                                                   const QString &errorMessage)
 {
-    QMutexLocker locker(&m_mutex);
     m_status.OnBehaviourFailedCompiling(String(behaviourPath),
                                         String(errorMessage));
 }
@@ -107,7 +104,6 @@ void BehaviourManager::RemoveOutdatedLibraryFiles(const String &newLibFilepath)
 void BehaviourManager::Load(BehaviourHolder *bHolder, const String &behaviourPath)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    QMutexLocker locker(&bm->m_mutex);
     BehaviourId bid(behaviourPath);
 
     // See if the behaviour has changed from the cached one, and
@@ -174,7 +170,6 @@ void BehaviourManager::Load(BehaviourHolder *bHolder, const String &behaviourPat
 void BehaviourManager::OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    QMutexLocker locker(&bm->m_mutex);
     bm->m_status.OnBehaviourHolderDeleted(behaviourHolder);
 }
 

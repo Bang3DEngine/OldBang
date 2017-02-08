@@ -51,7 +51,6 @@ public slots:
                                     const QString &errorMessage);
 
 private:
-    QMutex m_mutex;
     QThreadPool m_threadPool;
 
     BehaviourManagerStatus m_status;

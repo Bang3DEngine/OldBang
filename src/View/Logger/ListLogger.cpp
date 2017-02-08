@@ -1,9 +1,13 @@
 #include "ListLogger.h"
 
+#include <QLabel>
+
 #include "Debug.h"
 #include "Color.h"
 #include "StringUtils.h"
 #include "EditorWindow.h"
+
+int ListLogger::c_rowHeight      = 30;
 
 int ListLogger::c_iconColumn     = 1;
 int ListLogger::c_msgColumn      = 2;
@@ -13,47 +17,9 @@ int ListLogger::c_fileNameColumn = 5;
 
 ListLogger::ListLogger(QWidget *parent) : DragDropQTreeWidget()
 {
-    hideColumn(0); // No arrow
-
     m_logIcon   = QIcon(":/qss_icons/Icons/LogIcon.png");
     m_warnIcon  = QIcon(":/qss_icons/Icons/WarnIcon.png");
     m_errorIcon = QIcon(":/qss_icons/Icons/ErrorIcon.png");
-
-    EditorWindow *win = EditorWindow::GetInstance();
-    m_collapsing          = win->buttonCollapse->isChecked();
-    m_clearOnPlay       = win->buttonClearOnPlay->isChecked();
-    m_autoScroll        = win->buttonAutoScroll->isChecked();
-    m_showLogMessages   = win->buttonShowLogMessages->isChecked();
-    m_showWarnMessages  = win->buttonShowWarnMessages->isChecked();
-    m_showErrorMessages = win->buttonShowErrorMessages->isChecked();
-
-    OnCollapseChanged(m_collapsing);
-
-    QObject::connect(win->buttonLoggerClear, SIGNAL( pressed() ),
-                     this, SLOT(OnClear()));
-    QObject::connect(win->buttonCollapse, SIGNAL(clicked(bool)),
-                     this, SLOT(OnCollapseChanged(bool)));
-    QObject::connect(win->buttonClearOnPlay, SIGNAL(clicked(bool)),
-                     this, SLOT(OnClearOnPlayChanged(bool)));
-    QObject::connect(win->buttonAutoScroll, SIGNAL(clicked(bool)),
-                     this, SLOT(OnAutoScrollChanged(bool)));
-    QObject::connect(win->buttonShowLogMessages, SIGNAL(clicked(bool)),
-                     this, SLOT(OnShowLogMessagesChanged(bool)));
-    QObject::connect(win->buttonShowWarnMessages, SIGNAL(clicked(bool)),
-                     this, SLOT(OnShowWarnMessagesChanged(bool)));
-    QObject::connect(win->buttonShowErrorMessages, SIGNAL(clicked(bool)),
-                     this, SLOT(OnShowErrorMessagesChanged(bool)));
-
-    // Set headers
-    setHeaderHidden(false);
-    setHeaderLabels( {"", "", "Message", "Count", "Line", "File name"} );
-    header()->setSectionResizeMode(ListLogger::c_iconColumn,  QHeaderView::ResizeToContents);
-    header()->setSectionResizeMode(ListLogger::c_msgColumn,   QHeaderView::Stretch);
-    header()->setSectionResizeMode(ListLogger::c_countColumn, QHeaderView::Fixed);
-    header()->setSectionResizeMode(ListLogger::c_lineColumn,  QHeaderView::Fixed);
-    header()->resizeSection(ListLogger::c_countColumn, 50);
-    header()->resizeSection(ListLogger::c_lineColumn, 50);
-    header()->setStretchLastSection(false);
 }
 
 void ListLogger::Clear()
@@ -67,7 +33,8 @@ ListLogger::MessageId ListLogger::AddLog(
         const String &fileName,
         bool persistent)
 {
-    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger, "", -1);
+    ListLogger *listLogger = ListLogger::GetInstance();
+    ASSERT(listLogger, "", -1);
     Message m(line, str, fileName, persistent, MessageType::Log);
     return listLogger->AddMessage(m);
 }
@@ -77,7 +44,8 @@ ListLogger::MessageId ListLogger::AddWarn(
         const String &fileName,
         bool persistent)
 {
-    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger, "", -1);
+    ListLogger *listLogger = ListLogger::GetInstance();
+    ASSERT(listLogger, "", -1);
     Message m(line, str, fileName, persistent, MessageType::Warn);
     return listLogger->AddMessage(m);
 }
@@ -87,7 +55,8 @@ ListLogger::MessageId ListLogger::AddError(
         const String &fileName,
         bool persistent)
 {
-    ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger, "", -1);
+    ListLogger *listLogger = ListLogger::GetInstance();
+    ASSERT(listLogger, "", -1);
     Message m(line, str, fileName, persistent, MessageType::Error);
     return listLogger->AddMessage(m);
 }
@@ -108,7 +77,7 @@ void ListLogger::UpdateMessagesCountTexts()
                                          .ToQString() );
     win->buttonShowWarnMessages->setText( String::ToString(m_totalWarnMessages)
                                           .ToQString() );
-    win->buttonShowErrorMessages->setText( String::ToString(m_totalErrorMessages)
+    win->buttonShowErrorMessages->setText(String::ToString(m_totalErrorMessages)
                                            .ToQString() );
 }
 
@@ -168,6 +137,12 @@ QTreeWidgetItem *ListLogger::CreateItemFromMessageRow(const Message &mr)
     else if (mr.type == MessageType::Warn)  { icon = &m_warnIcon;  }
     else if (mr.type == MessageType::Error) { icon = &m_errorIcon; }
     item->setIcon(c_iconColumn, *icon);
+    item->setSizeHint(0, QSize(item->sizeHint(0).width(), c_rowHeight));
+    item->setSizeHint(1, QSize(item->sizeHint(1).width(), c_rowHeight));
+    item->setSizeHint(2, QSize(item->sizeHint(2).width(), c_rowHeight));
+    item->setSizeHint(3, QSize(item->sizeHint(3).width(), c_rowHeight));
+    item->setSizeHint(4, QSize(item->sizeHint(4).width(), c_rowHeight));
+    item->setSizeHint(5, QSize(item->sizeHint(5).width(), c_rowHeight));
 
     String shortMessage = mr.msg; // StringUtils::Elide(mr.msg, 100, true);
     item->setText(c_msgColumn, shortMessage.ToQString());
@@ -208,8 +183,11 @@ ListLogger::MessageId ListLogger::AddMessage(const Message &msg,
     {
         int count = m_messageCount[msg];
         QTreeWidgetItem *collapsingItem = m_msg_to_collapsingItem[msg];
-        collapsingItem->setText(c_countColumn, String::ToString(count)
-                                               .ToQString());
+        if (collapsingItem)
+        {
+            collapsingItem->setText(c_countColumn, String::ToString(count)
+                                                   .ToQString());
+        }
     }
 
     // Update show toolButtons text
@@ -265,6 +243,7 @@ void ListLogger::OnClear()
         AddMessage(pair.second, pair.first);
     }
 
+    m_completeMessageLabel->setText("");
     UpdateMessagesCountTexts();
 }
 
@@ -303,6 +282,56 @@ void ListLogger::ClearMessage(ListLogger::MessageId id)
     }
 }
 
+void ListLogger::OnWindowShown()
+{
+    hideColumn(0); // No arrow
+
+    EditorWindow *win = EditorWindow::GetInstance();
+    m_collapsing          = win->buttonCollapse->isChecked();
+    m_clearOnPlay       = win->buttonClearOnPlay->isChecked();
+    m_autoScroll        = win->buttonAutoScroll->isChecked();
+    m_showLogMessages   = win->buttonShowLogMessages->isChecked();
+    m_showWarnMessages  = win->buttonShowWarnMessages->isChecked();
+    m_showErrorMessages = win->buttonShowErrorMessages->isChecked();
+
+    m_completeMessageLabel = win->labelLoggerCompleteMessage;
+    m_completeMessageLabel->setText("");
+
+    OnCollapseChanged(m_collapsing);
+
+    QObject::connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*,
+                                                     QTreeWidgetItem*)),
+                     this, SLOT(OnSelectionChanged(QTreeWidgetItem*,
+                                                   QTreeWidgetItem*)));
+    QObject::connect(win->buttonLoggerClear, SIGNAL( pressed() ),
+                     this, SLOT(OnClear()));
+    QObject::connect(win->buttonCollapse, SIGNAL(clicked(bool)),
+                     this, SLOT(OnCollapseChanged(bool)));
+    QObject::connect(win->buttonClearOnPlay, SIGNAL(clicked(bool)),
+                     this, SLOT(OnClearOnPlayChanged(bool)));
+    QObject::connect(win->buttonAutoScroll, SIGNAL(clicked(bool)),
+                     this, SLOT(OnAutoScrollChanged(bool)));
+    QObject::connect(win->buttonShowLogMessages, SIGNAL(clicked(bool)),
+                     this, SLOT(OnShowLogMessagesChanged(bool)));
+    QObject::connect(win->buttonShowWarnMessages, SIGNAL(clicked(bool)),
+                     this, SLOT(OnShowWarnMessagesChanged(bool)));
+    QObject::connect(win->buttonShowErrorMessages, SIGNAL(clicked(bool)),
+                     this, SLOT(OnShowErrorMessagesChanged(bool)));
+
+    // Set headers
+    setHeaderLabels( {"", "", "Message", "Count", "Line", "File name"} );
+    header()->setSectionResizeMode(ListLogger::c_iconColumn,
+                                   QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(ListLogger::c_msgColumn,
+                                   QHeaderView::Stretch);
+    header()->setSectionResizeMode(ListLogger::c_countColumn,
+                                   QHeaderView::Fixed);
+    header()->setSectionResizeMode(ListLogger::c_lineColumn,
+                                   QHeaderView::Fixed);
+    header()->resizeSection(ListLogger::c_countColumn, 50);
+    header()->resizeSection(ListLogger::c_lineColumn, 50);
+}
+
 void ListLogger::OnCollapseChanged(bool collapse)
 {
     m_collapsing = collapse;
@@ -337,6 +366,20 @@ void ListLogger::OnShowErrorMessagesChanged(bool showErrorMessages)
 {
     m_showErrorMessages = showErrorMessages;
     RefreshCollapsingAndShowing();
+}
+
+void ListLogger::OnSelectionChanged(QTreeWidgetItem *current,
+                                    QTreeWidgetItem *previous)
+{
+    if (current)
+    {
+        String msg = String( current->text(ListLogger::c_msgColumn) );
+        m_completeMessageLabel->setText( msg.ToQString() );
+    }
+    else
+    {
+        m_completeMessageLabel->setText("");
+    }
 }
 
 bool ListLogger::Message::operator==(const ListLogger::Message &rhs) const
