@@ -12,8 +12,7 @@ int Random::Range(int minIncluded, int maxExcluded)
 
 float Random::Value()
 {
-    const int div = 100000000;
-    return float(rand() % div) / div;
+    return float(rand()) / RAND_MAX;
 }
 
 Vector2 Random::InsideUnitCircle()

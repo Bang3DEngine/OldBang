@@ -19,7 +19,7 @@ private slots:
 
 private:
     QTimer m_timer;
-    int c_timeMs = 10000;
+    int c_timeMs = 3000;
 };
 
 #endif // BEHAVIOURREFRESHERTHREAD_H

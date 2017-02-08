@@ -20,14 +20,14 @@ ListLogger::ListLogger(QWidget *parent) : DragDropQTreeWidget()
     m_errorIcon = QIcon(":/qss_icons/Icons/ErrorIcon.png");
 
     EditorWindow *win = EditorWindow::GetInstance();
-    m_collapse          = win->buttonCollapse->isChecked();
+    m_collapsing          = win->buttonCollapse->isChecked();
     m_clearOnPlay       = win->buttonClearOnPlay->isChecked();
     m_autoScroll        = win->buttonAutoScroll->isChecked();
     m_showLogMessages   = win->buttonShowLogMessages->isChecked();
     m_showWarnMessages  = win->buttonShowWarnMessages->isChecked();
     m_showErrorMessages = win->buttonShowErrorMessages->isChecked();
 
-    OnCollapseChanged(m_collapse);
+    OnCollapseChanged(m_collapsing);
 
     QObject::connect(win->buttonLoggerClear, SIGNAL( pressed() ),
                      this, SLOT(OnClear()));
@@ -69,7 +69,6 @@ ListLogger::MessageId ListLogger::AddLog(
 {
     ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger, "", -1);
     Message m(line, str, fileName, persistent, MessageType::Log);
-    ++listLogger->m_totalLogMessages;
     return listLogger->AddMessage(m);
 }
 
@@ -80,7 +79,6 @@ ListLogger::MessageId ListLogger::AddWarn(
 {
     ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger, "", -1);
     Message m(line, str, fileName, persistent, MessageType::Warn);
-    ++listLogger->m_totalWarnMessages;
     return listLogger->AddMessage(m);
 }
 
@@ -91,7 +89,6 @@ ListLogger::MessageId ListLogger::AddError(
 {
     ListLogger *listLogger = ListLogger::GetInstance(); ASSERT(listLogger, "", -1);
     Message m(line, str, fileName, persistent, MessageType::Error);
-    ++listLogger->m_totalErrorMessages;
     return listLogger->AddMessage(m);
 }
 
@@ -104,19 +101,60 @@ void ListLogger::DecorateLastItem(const Color &color)
     }
 }
 
-void ListLogger::RefreshList()
+void ListLogger::UpdateMessagesCountTexts()
 {
-    List<Message> msgsCopy = m_currentMessages.GetValues();
+    EditorWindow *win = EditorWindow::GetInstance();
+    win->buttonShowLogMessages->setText( String::ToString(m_totalLogMessages)
+                                         .ToQString() );
+    win->buttonShowWarnMessages->setText( String::ToString(m_totalWarnMessages)
+                                          .ToQString() );
+    win->buttonShowErrorMessages->setText( String::ToString(m_totalErrorMessages)
+                                           .ToQString() );
+}
 
-    OnClear(); // Clear
-
-    // ReAdd the messages
-    for (const Message &msg : msgsCopy)
+bool ListLogger::MustBeShown(const ListLogger::Message &message) const
+{
+    if ((message.type == MessageType::Log   && !m_showLogMessages)   ||
+        (message.type == MessageType::Warn  && !m_showWarnMessages)  ||
+        (message.type == MessageType::Error && !m_showErrorMessages)
+       )
     {
-        if (!msg.persistent)
-        {   // Avoid adding persistent messages twice,
-            // since they are not cleared
-            AddMessage(msg);
+        return false;
+    }
+    return true;
+}
+
+void ListLogger::RefreshCollapsingAndShowing()
+{
+    if (!m_collapsing)
+    {
+        for (const auto& msgId_msg : m_id_to_messages)
+        {
+            MessageId msgId = msgId_msg.first;
+            const Message &msg= msgId_msg.second;
+            QTreeWidgetItem *item = m_id_to_item[msgId];
+            item->setHidden( !MustBeShown(msg) );
+        }
+    }
+    else
+    {
+        for (const auto& msgId_msg : m_id_to_messages)
+        {
+            const Message &msg = msgId_msg.second;
+            MessageId msgId = msgId_msg.first;
+            QTreeWidgetItem *item = m_id_to_item[msgId];
+            bool hide = !MustBeShown(msg) ||
+                        item != m_msg_to_collapsingItem[msg];
+            item->setHidden(hide);
+        }
+
+        // Update count texts
+        for (const auto& msg_count : m_messageCount)
+        {
+            const Message &msg = msg_count.first;
+            QTreeWidgetItem *item = m_msg_to_collapsingItem[msg];
+            int count = m_messageCount[msg];
+            item->setText(c_countColumn, String::ToString(count).ToQString());
         }
     }
 }
@@ -133,68 +171,58 @@ QTreeWidgetItem *ListLogger::CreateItemFromMessageRow(const Message &mr)
 
     String shortMessage = mr.msg; // StringUtils::Elide(mr.msg, 100, true);
     item->setText(c_msgColumn, shortMessage.ToQString());
-
     item->setText(c_lineColumn, String::ToString(mr.line).ToQString());
     item->setText(c_fileNameColumn, mr.fileName.ToQString());
-
     return item;
 }
 
 ListLogger::MessageId ListLogger::AddMessage(const Message &msg,
-                                             int forcedMessageId)
+                                             int forcedMsgId)
 {
-    bool hasToAddRow = true;
-    if ( !m_currentMessagesIds.ContainsKey(msg) )
+    QTreeWidgetItem *item = CreateItemFromMessageRow(msg);
+    addTopLevelItem(item);
+    DecorateLastItem( MessageTypeColor[msg.type] );
+    bool mustCollapse = m_collapsing && m_messageCount.ContainsKey(msg);
+    bool hideItem = !MustBeShown(msg) || mustCollapse;
+    item->setHidden(hideItem);
+
+    MessageId messageId = forcedMsgId >= 0 ? forcedMsgId :
+                                             ++m_latestMessageId;
+    m_id_to_messages.Set(messageId, msg);
+    m_id_to_item.Set(messageId, item);
+
+    if (!m_messageCount.ContainsKey(msg))
     {
-        m_collapsedMsgsCount.Set(msg, 0);
+        m_messageCount.Set(msg, 0);
     }
-    else // Repeated msg
+    m_messageCount[msg]++;
+
+    if (!m_msg_to_collapsingItem.ContainsKey(msg))
     {
-        hasToAddRow = !m_collapse;
+        // The item to collapse into is the first one found
+        m_msg_to_collapsingItem.Set(msg, item);
     }
 
-    MessageId messageId = forcedMessageId >= 0 ? forcedMessageId : ++m_latestMessageId;
-    m_currentMessages.Set(messageId, msg);
-    m_currentMessagesIds.Set(msg, messageId);
-
-    if ( (!m_showLogMessages   && msg.type == MessageType::Log  ) ||
-         (!m_showWarnMessages  && msg.type == MessageType::Warn ) ||
-         (!m_showErrorMessages && msg.type == MessageType::Error)
-       )
+    // Update collapse count text
+    if (m_collapsing)
     {
-        hasToAddRow = false;
+        int count = m_messageCount[msg];
+        QTreeWidgetItem *collapsingItem = m_msg_to_collapsingItem[msg];
+        collapsingItem->setText(c_countColumn, String::ToString(count)
+                                               .ToQString());
     }
 
-    QTreeWidgetItem *item;
-    if (hasToAddRow)
-    {
-        item = CreateItemFromMessageRow(msg);
-        addTopLevelItem(item);
-        DecorateLastItem( MessageTypeColor[msg.type] );
-    }
-    else
-    {
-        item = m_messageToItem[msg];
-    }
-    m_messageToItem[msg] = item;
-
-    if (m_collapse)
-    {
-        // Update collapse count for this message
-        m_collapsedMsgsCount[msg] += 1;
-        String newCountStr = String::ToString( m_collapsedMsgsCount[msg] );
-        item->setText(ListLogger::c_countColumn, newCountStr.ToQString());
-    }
+    // Update show toolButtons text
+    if      (msg.type == MessageType::Log)   { ++m_totalLogMessages; }
+    else if (msg.type == MessageType::Warn)  { ++m_totalWarnMessages; }
+    else if (msg.type == MessageType::Error) { ++m_totalErrorMessages; }
+    UpdateMessagesCountTexts();
 
     if (m_autoScroll)
     {
         scrollToBottom();
     }
 
-    EditorWindow *win = EditorWindow::GetInstance();
-    win->buttonShowLogMessages->setText( String::ToString(m_totalLogMessages).ToQString() );
-    win->buttonShowWarnMessages->setText( String::ToString(m_totalWarnMessages).ToQString() );
-    win->buttonShowErrorMessages->setText( String::ToString(m_totalErrorMessages).ToQString() );
     return messageId;
 }
 
@@ -217,7 +245,7 @@ void ListLogger::OnClear()
     m_totalErrorMessages = 0;
 
     Map<MessageId, Message> persistentMessages;
-    for (const auto &pair : m_currentMessages)
+    for (const auto &pair : m_id_to_messages)
     {
         const Message &msg = pair.second;
         if (msg.persistent)
@@ -226,17 +254,18 @@ void ListLogger::OnClear()
             persistentMessages.Set(messageId, msg);
         }
     }
-
-    m_messageToItem.Clear();
-    m_currentMessages.Clear();
-    m_collapsedMsgsCount.Clear();
-    m_currentMessagesIds.Clear();
+    m_id_to_item.Clear();
+    m_messageCount.Clear();
+    m_id_to_messages.Clear();
+    m_msg_to_collapsingItem.Clear();
 
     // Restore persistent messages
     for (const auto &pair : persistentMessages)
     {
         AddMessage(pair.second, pair.first);
     }
+
+    UpdateMessagesCountTexts();
 }
 
 void ListLogger::OnEditorPlay()
@@ -249,25 +278,36 @@ void ListLogger::OnEditorPlay()
 
 void ListLogger::ClearMessage(ListLogger::MessageId id)
 {
-    if (m_currentMessages.ContainsKey(id))
+    if (m_id_to_messages.ContainsKey(id))
     {
-        const Message &msg = m_currentMessages[id];
+        const Message &msg = m_id_to_messages[id];
+        if      (msg.type == MessageType::Log)   { --m_totalLogMessages; }
+        else if (msg.type == MessageType::Warn)  { --m_totalWarnMessages; }
+        else if (msg.type == MessageType::Error) { --m_totalErrorMessages; }
+        UpdateMessagesCountTexts();
 
-        QTreeWidgetItem *item = m_messageToItem[msg];
+        QTreeWidgetItem *item = m_id_to_item[id];
         if (item) { delete item; }
 
-        m_currentMessagesIds.Remove(msg);
-        m_messageToItem.Remove(msg);
-        m_currentMessages.Remove(id);
-        m_collapsedMsgsCount.Remove(msg);
+        m_id_to_item.Remove(id);
+        m_id_to_messages.Remove(id);
+        if (m_messageCount.ContainsKey(msg))
+        {
+            m_messageCount[msg]--;
+            if (m_messageCount[msg] <= 0)
+            {
+                m_messageCount.Remove(msg);
+                m_msg_to_collapsingItem.Remove(msg);
+            }
+        }
     }
 }
 
 void ListLogger::OnCollapseChanged(bool collapse)
 {
-    m_collapse = collapse;
-    setColumnHidden(ListLogger::c_countColumn, !m_collapse);
-    RefreshList();
+    m_collapsing = collapse;
+    setColumnHidden(ListLogger::c_countColumn, !m_collapsing);
+    RefreshCollapsingAndShowing();
 }
 
 void ListLogger::OnClearOnPlayChanged(bool clearOnPlay)
@@ -284,44 +324,46 @@ void ListLogger::OnAutoScrollChanged(bool autoScroll)
 void ListLogger::OnShowLogMessagesChanged(bool showLogMessages)
 {
     m_showLogMessages = showLogMessages;
-    RefreshList();
+    RefreshCollapsingAndShowing();
 }
 
 void ListLogger::OnShowWarnMessagesChanged(bool showWarnMessages)
 {
     m_showWarnMessages = showWarnMessages;
-    RefreshList();
+    RefreshCollapsingAndShowing();
 }
 
 void ListLogger::OnShowErrorMessagesChanged(bool showErrorMessages)
 {
     m_showErrorMessages = showErrorMessages;
-    RefreshList();
+    RefreshCollapsingAndShowing();
 }
 
 bool ListLogger::Message::operator==(const ListLogger::Message &rhs) const
 {
-
-    return fileName == rhs.fileName &&
+    return type == rhs.type &&
            line == rhs.line &&
-           msg == rhs.msg &&
-           type == rhs.type;
+           fileName == rhs.fileName &&
+           msg == rhs.msg;
 }
 
 bool ListLogger::Message::operator<(const ListLogger::Message &rhs) const
 {
-    if (line < rhs.line) return true; else if (line > rhs.line) return false;
+    if (int(type) < int(rhs.type)) return true;
+    else if (int(type) > int(rhs.type)) return false;
     else
     {
-        int fileNameComp = fileName.compare(rhs.fileName);
-        if (fileNameComp < 0) return true; else if (fileNameComp > 0) return false;
+        if (line < rhs.line) return true;
+        else if (line > rhs.line) return false;
         else
         {
-            int msgComp = msg.compare(rhs.msg);
-            if (msgComp < 0) return true; else if (msgComp > 0) return false;
+            int fileNameComp = fileName.compare(rhs.fileName);
+            if (fileNameComp < 0) return true;
+            else if (fileNameComp > 0) return false;
             else
             {
-                return int(type) < int(rhs.type);
+                int msgComp = msg.compare(rhs.msg);
+                return msgComp < 0;
             }
         }
     }

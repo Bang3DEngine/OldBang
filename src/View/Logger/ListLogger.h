@@ -81,12 +81,13 @@ private:
     };
 
     MessageId m_latestMessageId = 0;
-    Map<MessageId, Message> m_currentMessages;
-    Map<Message, MessageId> m_currentMessagesIds;
-    Map<Message, int> m_collapsedMsgsCount;
-    Map<Message, QTreeWidgetItem*> m_messageToItem;
 
-    bool m_collapse          = false;
+    Map<MessageId, Message> m_id_to_messages;
+    Map<MessageId, QTreeWidgetItem*> m_id_to_item;
+    Map<Message, int> m_messageCount;
+    Map<Message, QTreeWidgetItem*> m_msg_to_collapsingItem;
+
+    bool m_collapsing          = false;
     bool m_clearOnPlay       = false;
     bool m_autoScroll        = false;
     bool m_showLogMessages   = false;
@@ -100,11 +101,14 @@ private:
     QIcon m_warnIcon;
     QIcon m_errorIcon;
 
-    void RefreshList();
+    void UpdateMessagesCountTexts();
+    bool MustBeShown(const Message &message) const;
+    void RefreshCollapsingAndShowing();
 
     QTreeWidgetItem *CreateItemFromMessageRow(const Message &mr);
 
-    MessageId AddMessage(const Message &message, int forcedMessageId = -1);
+    MessageId AddMessage(const Message &message,
+                         int forcedMessageId = -1);
 };
 
 #endif // LISTLOGGER_H
