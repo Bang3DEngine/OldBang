@@ -14,8 +14,8 @@ public:
     Material(const Material &m);
     virtual ~Material();
 
-    const static String GetFileExtensionStatic();
-    const virtual String GetFileExtension();
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension();
 
     void SetShaderProgram(ShaderProgram *program);
     void SetTexture(const Texture2D *mtexture);

@@ -16,8 +16,8 @@ BehaviourCompileRunnable::
     m_behaviourFilepath = behaviourFilepath;
 
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    connect(this, SIGNAL(NotifyFinishedCompiling(QString,QString,QString)),
-            bm, SLOT(OnBehaviourFinishedCompiling(QString,QString,QString)));
+    connect(this, SIGNAL(NotifySuccessCompiling(QString,QString,QString)),
+            bm, SLOT(OnBehaviourSuccessCompiling(QString,QString,QString)));
     connect(this, SIGNAL(NotifyFailedCompiling(QString,QString)),
             bm, SLOT(OnBehaviourFailedCompiling(QString,QString)));
 }
@@ -34,7 +34,7 @@ void BehaviourCompileRunnable::Compile()
     if (!libraryFilepath.Empty())
     {
         // Notify BehaviourManager
-        emit NotifyFinishedCompiling(m_behaviourFilepath.ToQString(),
+        emit NotifySuccessCompiling(m_behaviourFilepath.ToQString(),
                                      libraryFilepath.ToQString(),
                                      warnMessage.ToQString());
     }

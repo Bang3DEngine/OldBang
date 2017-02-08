@@ -190,7 +190,7 @@ AABox operator*(const Matrix4 &m, const AABox &b)
 
 
 
-const String AABox::ToString() const
+String AABox::ToString() const
 {
     std::ostringstream oss;
     oss << "Box: [" << std::endl <<

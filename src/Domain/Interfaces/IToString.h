@@ -9,7 +9,7 @@ protected:
     IToString() {}
 
 public:
-    virtual const String ToString() const = 0;
+    virtual String ToString() const = 0;
 };
 
 #endif // ITOSTRING_H

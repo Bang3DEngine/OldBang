@@ -16,12 +16,12 @@ Asset::~Asset()
 }
 
 
-const String Asset::GetFileExtensionStatic()
+String Asset::GetFileExtensionStatic()
 {
     return "basset";
 }
 
-const String Asset::GetFileExtension()
+String Asset::GetFileExtension()
 {
     return Asset::GetFileExtensionStatic();
 }
@@ -43,7 +43,7 @@ String Asset::GetFilepath() const
     return m_assetFilepath;
 }
 
-const String Asset::ToString() const
+String Asset::ToString() const
 {
     return "Asset '" + m_assetFilepath + "'.";
 }

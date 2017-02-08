@@ -23,9 +23,9 @@ protected:
     void run() override;
 
 signals:
-    void NotifyFinishedCompiling(const QString &behaviourFilepath,
-                                 const QString &libFilepath,
-                                 const QString &warnMessage);
+    void NotifySuccessCompiling(const QString &behaviourFilepath,
+                                const QString &libFilepath,
+                                const QString &warnMessage);
     void NotifyFailedCompiling(const QString &behaviourFilepath,
                                const QString &errorMessage);
 };

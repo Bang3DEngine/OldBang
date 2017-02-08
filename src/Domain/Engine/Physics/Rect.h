@@ -52,7 +52,7 @@ public:
 
     static Rect GetBoundingRectFromPositions(const List<Vector2> &positions);
 
-    const String ToString() const override;
+    String ToString() const override;
 };
 
 bool operator==(const Rect &r1, const Rect &r2);

@@ -9,8 +9,8 @@
 #include "ListLogger.h"
 #include "Persistence.h"
 
-
-class BehaviourId
+#include "IToString.h"
+class BehaviourId : public IToString
 {
 public:
     BehaviourId(const String &behAbsPath)
@@ -25,6 +25,8 @@ public:
         hash = _hash;
     }
 
+    String ToString() const override { return behaviourAbsPath + "(" + hash + ")"; }
+
     String behaviourAbsPath = "";
     String hash = "";
 };
@@ -37,6 +39,7 @@ public:
     bool IsBeingCompiled(const BehaviourId &bid) const;
     bool HasFailed(const BehaviourId &bid) const;
     bool IsCached(const BehaviourId &bid) const;
+    bool IsNewOrHasChanged(const BehaviourId &bid) const;
 
     QLibrary *GetLibrary(const BehaviourId &bid) const;
 
@@ -47,12 +50,12 @@ private:
 
     mutable QMutex m_mutex;
 
-    std::set<BehaviourId> m_beingCompiled;
     std::set<BehaviourId> m_failed;
+    std::set<BehaviourId> m_beingCompiled;
 
     Map<BehaviourId, QLibrary*> m_libraries;
     Map<BehaviourId, List<BehaviourHolder*> > m_demanders;
-    Map<BehaviourId, List<ListLogger::MessageId> > m_failMessages;
+    Map<String, List<ListLogger::MessageId> > m_failMessagesIds;
 
     BehaviourManagerStatus();
 
@@ -63,13 +66,17 @@ private:
     void OnBehaviourDemanded(const String &behaviourPath,
                              BehaviourHolder *bHolder);
     void OnBehaviourStartedCompiling(const String &behaviourPath);
-    void OnBehaviourFinishedCompiling(const String &behaviourPath,
+    void OnBehaviourSuccessCompiling(const String &behaviourPath,
                                       const String &libraryFilepath,
                                       const String &warnMessage,
                                       QLibrary *loadedLibrary);
     void OnBehaviourFailedCompiling(const String &behaviourPath,
                                     const String &errorMessage);
     void OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder);
+
+    void ClearFails(const String &behaviourPath);
+
+    List<BehaviourId> GetCurrentBehaviourIds() const;
 
     friend class BehaviourManager;
 };

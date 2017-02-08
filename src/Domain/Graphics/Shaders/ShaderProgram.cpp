@@ -210,7 +210,7 @@ GLint ShaderProgram::GetAttribLocation(const String &name) const
     return glGetAttribLocation(m_idGL, name.ToCString());
 }
 
-const String ShaderProgram::ToString() const
+String ShaderProgram::ToString() const
 {
     std::ostringstream oss;
     oss << "Shader program: " << std::endl <<

@@ -55,7 +55,7 @@ void AttrWidgetString::SetValue(const String &value)
     }
 }
 
-const String AttrWidgetString::GetValue() const
+String AttrWidgetString::GetValue() const
 {
     if (m_lineEdit)
     {

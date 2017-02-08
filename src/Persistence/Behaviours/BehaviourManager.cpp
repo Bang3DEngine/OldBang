@@ -22,7 +22,6 @@ BehaviourManager::BehaviourManager()
 
 QLibrary *BehaviourManager::LoadLibraryFromFilepath(const String &libFilepath)
 {
-    Debug_Log("LoadLibraryFromFilepath: " << libFilepath);
     QLibrary *lib = new QLibrary(libFilepath.ToCString());
     lib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
     if (lib->load())
@@ -42,9 +41,9 @@ BehaviourManager *BehaviourManager::GetInstance()
 }
 
 // Called by the BehaviourManagerCompileThread when has finished
-void BehaviourManager::OnBehaviourFinishedCompiling(const QString &_behaviourPath,
-                                                    const QString &_libraryFilepath,
-                                                    const QString &_warnMessage)
+void BehaviourManager::OnBehaviourSuccessCompiling(const QString &_behaviourPath,
+                                                   const QString &_libraryFilepath,
+                                                   const QString &_warnMessage)
 {
     QMutexLocker locker(&m_mutex);
 
@@ -52,7 +51,7 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const QString &_behaviourPat
     String libraryFilepath = _libraryFilepath;
     String warnMessage     = _warnMessage;
     QLibrary *library = LoadLibraryFromFilepath(libraryFilepath);
-    m_status.OnBehaviourFinishedCompiling(behaviourPath,
+    m_status.OnBehaviourSuccessCompiling(behaviourPath,
                                           libraryFilepath,
                                           warnMessage,
                                           library);
@@ -61,14 +60,6 @@ void BehaviourManager::OnBehaviourFinishedCompiling(const QString &_behaviourPat
     {
         Debug_Warn(warnMessage);
     }
-
-    // Clear the error messages from ListLogger
-    /*
-    for (ListLogger::MessageId msgId : m_behPath_to_failMessagesIds[behaviourPath])
-    {
-        ListLogger::GetInstance()->ClearMessage(msgId);
-    }
-    */
 
     if (library)
     {
@@ -113,23 +104,25 @@ void BehaviourManager::RemoveOutdatedLibraryFiles(const String &newLibFilepath)
     }
 }
 
-void BehaviourManager::TreatIfBehaviourChanged(const String &behaviourPath)
-{
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-    bm->m_status.TreatIfBehaviourChanged(behaviourPath);
-}
-
 void BehaviourManager::Load(BehaviourHolder *bHolder, const String &behaviourPath)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     QMutexLocker locker(&bm->m_mutex);
+    BehaviourId bid(behaviourPath);
 
     // See if the behaviour has changed from the cached one, and
     // in that case remove the outdated references.
-    //BehaviourManager::TreatIfBehaviourChanged(behaviourPath);
+    bm->m_status.TreatIfBehaviourChanged(behaviourPath);
 
-    BehaviourId bid(behaviourPath);
     if (bm->m_status.HasFailed(bid)) { return; }
+    if (bm->m_status.IsBeingCompiled(bid)) { return; }
+
+    if (!bm->m_status.IsCached(bid))
+    {
+        // Add to demander list
+        bm->m_status.OnBehaviourDemanded(behaviourPath, bHolder);
+    }
+
     if (bm->m_status.IsCached(bid))
     {
         QLibrary *lib = bm->m_status.GetLibrary(bid);
@@ -140,7 +133,6 @@ void BehaviourManager::Load(BehaviourHolder *bHolder, const String &behaviourPat
     }
     else // Add behaviour to the list of demanders
     {
-        bm->m_status.OnBehaviourDemanded(behaviourPath, bHolder);
         if (!bm->m_status.IsBeingCompiled(bid))
         {
             #ifdef BANG_EDITOR

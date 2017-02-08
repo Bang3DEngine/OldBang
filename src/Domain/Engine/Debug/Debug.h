@@ -199,4 +199,23 @@ std::ostream &operator<<(std::ostream &log, const Map<T,S> &m)
     return log << (&m);
 }
 
+// Set
+template <class T, class S>
+std::ostream &operator<<(std::ostream &log, const std::set<T,S> *s)
+{
+    log << "{";
+    for (auto it = s->begin(); it != s->end(); ++it)
+    {
+        if (it != s->begin()) log << ", ";
+        log << (*it);
+    }
+    log << "}";
+    return log;
+}
+template <class T, class S>
+std::ostream &operator<<(std::ostream &log, const std::set<T,S> &m)
+{
+    return log << (&m);
+}
+
 #endif // DEBUG_H

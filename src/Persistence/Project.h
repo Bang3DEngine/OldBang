@@ -10,8 +10,8 @@ public:
     Project();
     virtual ~Project();
 
-    const static String GetFileExtensionStatic();
-    const virtual String GetFileExtension();
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension();
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

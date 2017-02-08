@@ -20,8 +20,8 @@ public:
     Prefab(GameObject *go);
     Prefab(const String &gameObjectXMLInfoContent);
 
-    const static String GetFileExtensionStatic();
-    const virtual String GetFileExtension();
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension();
 
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;

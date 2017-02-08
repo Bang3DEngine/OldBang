@@ -17,8 +17,7 @@
 
 BehaviourRefresherTimer::BehaviourRefresherTimer()
 {
-    connect(&m_timer, SIGNAL(timeout()),
-            this, SLOT(OnRefreshTimer()));
+    connect(&m_timer, SIGNAL(timeout()), this, SLOT(OnRefreshTimer()));
     m_timer.start(c_timeMs);
 }
 

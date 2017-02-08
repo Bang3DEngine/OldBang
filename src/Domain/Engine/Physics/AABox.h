@@ -74,7 +74,7 @@ public:
      */
     Rect GetAABoundingScreenRect(Camera *cam) const;
 
-    const String ToString() const override;
+    String ToString() const override;
 };
 
 AABox operator*(const Matrix4 &m, const AABox &b);

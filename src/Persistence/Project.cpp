@@ -15,12 +15,12 @@ Project::~Project()
 {
 }
 
-const String Project::GetFileExtensionStatic()
+String Project::GetFileExtensionStatic()
 {
     return "bproject";
 }
 
-const String Project::GetFileExtension()
+String Project::GetFileExtension()
 {
     return Project::GetFileExtensionStatic();
 }

@@ -15,8 +15,8 @@ public:
     Texture2D(const String &imageFilepath);
     virtual ~Texture2D();
 
-    const static String GetFileExtensionStatic();
-    const virtual String GetFileExtension();
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension();
 
     void LoadFromFile(const String &imageFilepath);
     void CreateEmpty(int width, int height) override;

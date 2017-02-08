@@ -17,8 +17,8 @@ public:
     AudioClip();
     virtual ~AudioClip();
 
-    const static String GetFileExtensionStatic();
-    const virtual String GetFileExtension();
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension();
 
     bool LoadFromFile(const String &filepath);
 

@@ -31,6 +31,11 @@ bool BehaviourManagerStatus::IsCached(const BehaviourId &bid) const
     return m_libraries.ContainsKey(bid) && !beingCompiled;
 }
 
+bool BehaviourManagerStatus::IsNewOrHasChanged(const BehaviourId &bid) const
+{
+    return (!IsCached(bid) && !HasFailed(bid));
+}
+
 QLibrary *BehaviourManagerStatus::GetLibrary(const BehaviourId &bid) const
 {
     QMutexLocker locker(&m_mutex);
@@ -84,25 +89,37 @@ float BehaviourManagerStatus::GetBehaviourHoldersUpdatedPercent() const
 
 void BehaviourManagerStatus::TreatIfBehaviourChanged(const String &behaviourPath)
 {
-    BehaviourId bid(behaviourPath);
-    bool behaviourHasChanged = !IsCached(bid);
+    BehaviourId newBid(behaviourPath);
+    if ( IsBeingCompiled(newBid) ) { return; }
+
+    bool behaviourHasChanged = IsNewOrHasChanged(newBid);
 
     QMutexLocker locker(&m_mutex);
     if (behaviourHasChanged)
     {
-        // Remove the outdated references
-        m_failed.erase(bid);
-        m_demanders.Remove(bid);
-        m_libraries.Remove(bid);
-        m_beingCompiled.erase(bid);
-        m_failMessages.Remove(bid);
+        // Clear error messages, if there's any error, it will be
+        // produced again when compiling
+        ClearFails(newBid.behaviourAbsPath);
+
+        const List<BehaviourId> &currentBids = GetCurrentBehaviourIds();
+        for (const BehaviourId &possiblyOutdatedBid : currentBids)
+        {
+            if (possiblyOutdatedBid.behaviourAbsPath == newBid.behaviourAbsPath)
+            {
+                // Remove the outdated references and old cached libraries
+                m_failed.erase(possiblyOutdatedBid);
+                m_demanders.Remove(possiblyOutdatedBid);
+                m_libraries.Remove(possiblyOutdatedBid);
+                m_beingCompiled.erase(possiblyOutdatedBid);
+                m_failMessagesIds.Remove(behaviourPath);
+            }
+        }
     }
 }
 
 void BehaviourManagerStatus::OnBehaviourDemanded(const String &behaviourPath,
                                                  BehaviourHolder *bHolder)
 {
-    Debug_Log("Behaviour demanded " << behaviourPath);
     BehaviourId bid(behaviourPath);
     List<BehaviourHolder*> &demanders = GetDemanders(bid);
 
@@ -116,37 +133,33 @@ void BehaviourManagerStatus::OnBehaviourDemanded(const String &behaviourPath,
 void BehaviourManagerStatus::OnBehaviourStartedCompiling(const String &behaviourPath)
 {
     QMutexLocker locker(&m_mutex);
-    Debug_Log("Behaviour started compiling " << behaviourPath);
+
     BehaviourId bid(behaviourPath);
     m_beingCompiled.insert(bid);
-    String str = "";
-    for (BehaviourId ibid : m_beingCompiled)
-    {
-        str += "(" + ibid.behaviourAbsPath + ", " + ibid.hash + "),  ";
-    }
-    Debug_Log(str);
 }
 
-void BehaviourManagerStatus::OnBehaviourFinishedCompiling(const String &behaviourPath,
-                                                          const String &libraryFilepath,
-                                                          const String &warnMessage,
-                                                          QLibrary *loadedLibrary)
+void BehaviourManagerStatus::OnBehaviourSuccessCompiling(const String &behaviourPath,
+                                                         const String &libraryFilepath,
+                                                         const String &warnMessage,
+                                                         QLibrary *loadedLibrary)
 {
-    Debug_Log("Behaviour finished compiling " << behaviourPath);
     BehaviourId bid(behaviourPath);
+    ClearFails(bid.behaviourAbsPath);
 
     QMutexLocker locker(&m_mutex);
     m_libraries.Set(bid, loadedLibrary);
     m_beingCompiled.erase(bid);
-    m_failMessages.Remove(bid);
     m_demanders.Remove(bid);
+    m_failMessagesIds.Remove(bid.behaviourAbsPath);
 }
 
 void BehaviourManagerStatus::OnBehaviourFailedCompiling(const String &behaviourPath,
                                                         const String &errorMessage)
 {
-    Debug_Log("Behaviour failed compiling " << behaviourPath);
     BehaviourId bid(behaviourPath);
+
+    // Clear old fails of the same behaviour (but with outdated code)
+    ClearFails(bid.behaviourAbsPath);
 
     QMutexLocker locker(&m_mutex);
     if (!errorMessage.Empty())
@@ -154,8 +167,7 @@ void BehaviourManagerStatus::OnBehaviourFailedCompiling(const String &behaviourP
         ListLogger *lLog = ListLogger::GetInstance();
         ListLogger::MessageId msgId = lLog->AddError(errorMessage, 1,
                                                      behaviourPath, true);
-        Debug_Log("Adding error message with id: " << msgId);
-        m_failMessages[bid].PushBack(msgId);
+        m_failMessagesIds.Get(behaviourPath).PushBack(msgId);
     }
     m_beingCompiled.erase(bid);
     m_failed.insert(bid);
@@ -169,5 +181,36 @@ void BehaviourManagerStatus::OnBehaviourHolderDeleted(BehaviourHolder *behaviour
 
     QMutexLocker locker(&m_mutex);
     demanders.RemoveAll(behaviourHolder);
+}
+
+void BehaviourManagerStatus::ClearFails(const String &behaviourPath)
+{
+    BehaviourId bid(behaviourPath);
+
+    // Remove from m_failed all the bids with the same path.
+    List<BehaviourId> currentBids = GetCurrentBehaviourIds();
+    for (const BehaviourId &oldBid : currentBids)
+    {
+        if (oldBid.behaviourAbsPath == bid.behaviourAbsPath)
+        {
+            m_failed.erase(oldBid);
+        }
+    }
+
+    // Clear the fail messages from the logger.
+    for (ListLogger::MessageId msgId : m_failMessagesIds.Get(bid.behaviourAbsPath))
+    {
+        ListLogger::GetInstance()->ClearMessage(msgId);
+    }
+    m_failMessagesIds.Remove(bid.behaviourAbsPath);
+}
+
+List<BehaviourId> BehaviourManagerStatus::GetCurrentBehaviourIds() const
+{
+    List<BehaviourId> compiled = m_libraries.GetKeys();
+    List<BehaviourId> failed;
+    for (const BehaviourId &x : m_failed) { failed.Add(x); }
+    compiled.Splice(compiled.End(), failed);
+    return compiled;
 }
 

@@ -20,12 +20,12 @@ AudioClip::~AudioClip()
     }
 }
 
-const String AudioClip::GetFileExtensionStatic()
+String AudioClip::GetFileExtensionStatic()
 {
     return "baudioclip";
 }
 
-const String AudioClip::GetFileExtension()
+String AudioClip::GetFileExtension()
 {
     return AudioClip::GetFileExtension();
 }

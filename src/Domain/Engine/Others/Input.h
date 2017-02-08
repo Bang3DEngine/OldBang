@@ -133,7 +133,7 @@ private:
                 this->pressed = pressed;
             }
 
-            const String ToString() const override
+            String ToString() const override
             {
                 std::ostringstream oss;
                 oss << "(Up: " << up << ", Down: " << down << ", Pressed: " << pressed << ")";

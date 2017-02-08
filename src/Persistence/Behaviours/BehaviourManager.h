@@ -43,7 +43,7 @@ public:
 
 public slots:
     // Called by the BehaviourCompileRunnable when has finished
-    void OnBehaviourFinishedCompiling(const QString &behaviourPath,
+    void OnBehaviourSuccessCompiling(const QString &behaviourPath,
                                       const QString &libraryFilepath,
                                       const QString &warnMessage);
 
@@ -60,7 +60,6 @@ private:
 
     BehaviourManager();
 
-    static void TreatIfBehaviourChanged(const String &behaviourPath);
     static QLibrary* LoadLibraryFromFilepath(const String &libFilepath);
     static void RemoveOutdatedLibraryFiles(const String &newLibraryFilepath);
     static void OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder);

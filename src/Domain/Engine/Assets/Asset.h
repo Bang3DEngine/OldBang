@@ -16,8 +16,8 @@ class Asset : public IToString
              #endif
 {
 public:
-    const static String GetFileExtensionStatic();
-    const virtual String GetFileExtension();
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension();
 
     #ifdef BANG_EDITOR
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
@@ -26,7 +26,7 @@ public:
 
     String GetFilepath() const;
 
-    virtual const String ToString() const override;
+    virtual String ToString() const override;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;

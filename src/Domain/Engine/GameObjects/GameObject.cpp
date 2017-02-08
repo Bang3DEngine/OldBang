@@ -181,7 +181,7 @@ GameObject *GameObject::GetParent() const
     return m_parent;
 }
 
-const String GameObject::GetName() const
+String GameObject::GetName() const
 {
     return m_name;
 }
@@ -566,7 +566,7 @@ bool GameObject::IsDraggedGameObject() const
 }
 #endif
 
-const String GameObject::ToString() const
+String GameObject::ToString() const
 {
     std::ostringstream oss;
     oss << "GameObject: " << m_name << "(" << ((void*)this) << ")";

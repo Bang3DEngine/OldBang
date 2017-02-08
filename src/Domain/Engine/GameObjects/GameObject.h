@@ -56,12 +56,12 @@ public:
 
     void Print(const String& indent = "") const;
 
-    const String ToString() const;
+    String ToString() const;
 
     Scene* GetScene();
     bool IsInsideScene() const;
     GameObject* GetParent() const;
-    const String GetName() const;
+    String GetName() const;
     const List<Component*>& GetComponents() const;
 
     /**

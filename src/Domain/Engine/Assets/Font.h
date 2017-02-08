@@ -23,8 +23,8 @@ public:
         int advance;  // Distance to be moved in X to right when drawing the next character
     };
 
-    const static String GetFileExtensionStatic();
-    const virtual String GetFileExtension();
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension();
 
     static int CharLoadSize;
 

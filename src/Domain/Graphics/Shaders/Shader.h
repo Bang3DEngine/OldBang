@@ -34,7 +34,7 @@ public:
     const String& GetSourceCode() const;
     const String& GetFilepath() const;
     Type GetType() const;
-    const String ToString() const;
+    String ToString() const;
 };
 
 #endif // SHADER_H

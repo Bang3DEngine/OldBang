@@ -17,12 +17,12 @@ Texture2D::~Texture2D()
 {
 }
 
-const String Texture2D::GetFileExtensionStatic()
+String Texture2D::GetFileExtensionStatic()
 {
     return "btex2d";
 }
 
-const String Texture2D::GetFileExtension()
+String Texture2D::GetFileExtension()
 {
     return Texture2D::GetFileExtensionStatic();
 }

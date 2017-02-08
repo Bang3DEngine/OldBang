@@ -344,7 +344,7 @@ const XMLNode *XMLNode::GetChild(const String &name) const
     return nullptr;
 }
 
-const String XMLNode::ToString(const String& indent) const
+String XMLNode::ToString(const String& indent) const
 {
     String str = "";
 
@@ -374,7 +374,7 @@ void XMLNode::SetTagName(const String tagName)
     m_tagName = tagName;
 }
 
-const String XMLNode::ToString() const
+String XMLNode::ToString() const
 {
     return ToString("");
 }

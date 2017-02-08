@@ -315,7 +315,7 @@ void XMLAttribute::SetType(const XMLAttribute::Type &type)
     m_type = type;
 }
 
-const String XMLAttribute::ToString() const
+String XMLAttribute::ToString() const
 {
     String str = "";
     str += GetName();

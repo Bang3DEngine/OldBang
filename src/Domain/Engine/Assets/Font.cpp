@@ -18,12 +18,12 @@ Font::~Font()
     Free();
 }
 
-const String Font::GetFileExtensionStatic()
+String Font::GetFileExtensionStatic()
 {
     return "bfont";
 }
 
-const String Font::GetFileExtension()
+String Font::GetFileExtension()
 {
     return Font::GetFileExtensionStatic();
 }

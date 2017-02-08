@@ -27,7 +27,7 @@ void Component::CloneInto(ICloneable *clone) const
     c->m_enabled = m_enabled;
 }
 
-const String Component::ToString() const
+String Component::ToString() const
 {
     std::ostringstream msg;
     msg << "";

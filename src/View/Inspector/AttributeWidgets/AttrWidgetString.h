@@ -25,7 +25,7 @@ public:
                      InspectorWidget *m_inspectorWidget);
 
     virtual void SetValue(const String &value);
-    virtual const String GetValue() const;
+    virtual String GetValue() const;
 
     virtual void Refresh(const XMLAttribute &attribute) override;
 

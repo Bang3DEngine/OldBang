@@ -99,7 +99,7 @@ Rect Rect::GetBoundingRectFromPositions(const List<Vector2> &positions)
     return Rect(minv, maxv);
 }
 
-const String Rect::ToString() const
+String Rect::ToString() const
 {
     std::ostringstream oss;
     oss << "Rect: [" << std::endl <<

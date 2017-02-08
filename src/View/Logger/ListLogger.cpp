@@ -253,17 +253,16 @@ void ListLogger::OnEditorPlay()
 
 void ListLogger::ClearMessage(ListLogger::MessageId id)
 {
-    Debug_Log("ClearMessage " << id);
     if (m_currentMessages.ContainsKey(id))
     {
         QTreeWidgetItem *item = m_messageIdToItem[id];
         if (item) { delete item; }
 
         const Message &msg = m_currentMessages[id];
+        m_currentMessagesIds.Remove(msg);
         m_messageIdToItem.Remove(id);
         m_currentMessages.Remove(id);
         m_collapsedMsgsCount.Remove(id);
-        m_currentMessagesIds.Remove(msg);
     }
 }
 

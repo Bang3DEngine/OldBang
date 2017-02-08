@@ -36,12 +36,12 @@ Material::~Material()
     }
 }
 
-const String Material::GetFileExtensionStatic()
+String Material::GetFileExtensionStatic()
 {
     return "bmat";
 }
 
-const String Material::GetFileExtension()
+String Material::GetFileExtension()
 {
     return Material::GetFileExtensionStatic();
 }

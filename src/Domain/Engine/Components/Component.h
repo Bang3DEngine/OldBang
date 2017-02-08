@@ -50,7 +50,7 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override = 0;
 
-    virtual const String ToString() const override;
+    virtual String ToString() const override;
 
     virtual String GetName() const;
 

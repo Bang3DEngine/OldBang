@@ -75,7 +75,7 @@ Shader::Type Shader::GetType() const
     return m_type;
 }
 
-const String Shader::ToString() const
+String Shader::ToString() const
 {
     if (m_type == Type::Vertex) return "Vertex Shader: '" + m_filepath + "'";
     return "Fragment Shader: '" + m_filepath + "'";

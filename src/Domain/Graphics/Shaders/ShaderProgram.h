@@ -52,7 +52,7 @@ public:
     GLint GetUniformLocation(const String &name) const;
     GLint GetAttribLocation(const String &name) const;
 
-    const String ToString() const override;
+    String ToString() const override;
 };
 
 #endif // SHADERPROGRAM_H

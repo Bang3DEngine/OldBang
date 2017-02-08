@@ -37,9 +37,12 @@ Mesh::~Mesh()
     if (m_vertexNormalsVBO)   delete m_vertexUvsVBO;
 }
 
-const String Mesh::GetFileExtensionStatic() { return "bmesh"; }
+String Mesh::GetFileExtensionStatic()
+{
+    return "bmesh";
+}
 
-const String Mesh::GetFileExtension()
+String Mesh::GetFileExtension()
 {
     return Mesh::GetFileExtensionStatic();
 }

@@ -101,7 +101,7 @@ public:
      */
     int GetNumberOfFieldsOfType() const;
 
-    const String ToString() const override;
+    String ToString() const override;
 
     const String& GetName() const;
     const XMLAttribute::Type& GetType() const;

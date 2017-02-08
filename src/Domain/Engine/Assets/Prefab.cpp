@@ -26,12 +26,12 @@ Prefab::Prefab(const String &gameObjectXMLInfoContent)
     m_gameObjectXMLInfoContent = gameObjectXMLInfoContent;
 }
 
-const String Prefab::GetFileExtensionStatic()
+String Prefab::GetFileExtensionStatic()
 {
     return "bprefab";
 }
 
-const String Prefab::GetFileExtension()
+String Prefab::GetFileExtension()
 {
     return Prefab::GetFileExtensionStatic();
 }

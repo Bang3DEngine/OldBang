@@ -18,8 +18,8 @@ class ShaderProgram;
 class Mesh : public Asset
 {
 public:
-    const static String GetFileExtensionStatic();
-    const virtual String GetFileExtension();
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension();
 
     Mesh();
     Mesh(const Mesh& m);
