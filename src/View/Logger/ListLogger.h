@@ -57,6 +57,10 @@ private:
     static int c_fileNameColumn;
 
     enum MessageType { Log = 0, Warn = 1, Error = 2 };
+    const Color MessageTypeColor[3] = { Color(1.0f, 1.0f, 1.0f),
+                                        Color(1.0f, 1.0f, 0.3f),
+                                        Color(1.0f, 0.3f, 0.3f)};
+
     struct Message
     {
         int line               = 0;
@@ -79,8 +83,8 @@ private:
     MessageId m_latestMessageId = 0;
     Map<MessageId, Message> m_currentMessages;
     Map<Message, MessageId> m_currentMessagesIds;
-    Map<MessageId, int> m_collapsedMsgsCount;
-    Map<MessageId, QTreeWidgetItem*> m_messageIdToItem;
+    Map<Message, int> m_collapsedMsgsCount;
+    Map<Message, QTreeWidgetItem*> m_messageToItem;
 
     bool m_collapse          = false;
     bool m_clearOnPlay       = false;

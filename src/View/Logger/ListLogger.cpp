@@ -143,23 +143,19 @@ QTreeWidgetItem *ListLogger::CreateItemFromMessageRow(const Message &mr)
 ListLogger::MessageId ListLogger::AddMessage(const Message &msg,
                                              int forcedMessageId)
 {
-    MessageId messageId = 0;
-
     bool hasToAddRow = true;
     if ( !m_currentMessagesIds.ContainsKey(msg) )
     {
-        messageId = forcedMessageId >= 0 ? forcedMessageId : ++m_latestMessageId;
-        m_currentMessages.Set(messageId, msg);
-        m_collapsedMsgsCount.Set(messageId, 1);
-        m_currentMessagesIds.Set(msg, messageId);
+        m_collapsedMsgsCount.Set(msg, 0);
     }
     else // Repeated msg
     {
         hasToAddRow = !m_collapse;
-        messageId = forcedMessageId >= 0 ? forcedMessageId : m_currentMessagesIds[msg];
-        m_collapsedMsgsCount[messageId] += 1;
     }
 
+    MessageId messageId = forcedMessageId >= 0 ? forcedMessageId : ++m_latestMessageId;
+    m_currentMessages.Set(messageId, msg);
+    m_currentMessagesIds.Set(msg, messageId);
 
     if ( (!m_showLogMessages   && msg.type == MessageType::Log  ) ||
          (!m_showWarnMessages  && msg.type == MessageType::Warn ) ||
@@ -169,36 +165,36 @@ ListLogger::MessageId ListLogger::AddMessage(const Message &msg,
         hasToAddRow = false;
     }
 
+    QTreeWidgetItem *item;
     if (hasToAddRow)
     {
-        QTreeWidgetItem *item = CreateItemFromMessageRow(msg);
-        m_messageIdToItem[messageId] = item;
+        item = CreateItemFromMessageRow(msg);
         addTopLevelItem(item);
-
-        if (msg.type == MessageType::Warn)
-        {
-            DecorateLastItem( Color(1.0f, 1.0f, 0.3f) );
-        }
-        else if (msg.type == MessageType::Error)
-        {
-            DecorateLastItem( Color(1.0f, 0.3f, 0.3f) );
-        }
+        DecorateLastItem( MessageTypeColor[msg.type] );
     }
+    else
+    {
+        item = m_messageToItem[msg];
+    }
+    m_messageToItem[msg] = item;
 
     if (m_collapse)
     {
-        // Update count
-        QTreeWidgetItem *item = m_messageIdToItem[messageId];
-        if (item)
-        {
-            int newCount = m_collapsedMsgsCount[messageId];
-            String newCountStr = String::ToString(newCount);
-            item->setText(ListLogger::c_countColumn, newCountStr.ToQString());
-        }
+        // Update collapse count for this message
+        m_collapsedMsgsCount[msg] += 1;
+        String newCountStr = String::ToString( m_collapsedMsgsCount[msg] );
+        item->setText(ListLogger::c_countColumn, newCountStr.ToQString());
     }
 
-    if (m_autoScroll) { scrollToBottom(); }
+    if (m_autoScroll)
+    {
+        scrollToBottom();
+    }
 
+    EditorWindow *win = EditorWindow::GetInstance();
+    win->buttonShowLogMessages->setText( String::ToString(m_totalLogMessages).ToQString() );
+    win->buttonShowWarnMessages->setText( String::ToString(m_totalWarnMessages).ToQString() );
+    win->buttonShowErrorMessages->setText( String::ToString(m_totalErrorMessages).ToQString() );
     return messageId;
 }
 
@@ -221,17 +217,17 @@ void ListLogger::OnClear()
     m_totalErrorMessages = 0;
 
     Map<MessageId, Message> persistentMessages;
-    for (const auto &pair : m_currentMessagesIds)
+    for (const auto &pair : m_currentMessages)
     {
-        const Message &msg = pair.first;
+        const Message &msg = pair.second;
         if (msg.persistent)
         {
-            int messageId = pair.second;
+            int messageId = pair.first;
             persistentMessages.Set(messageId, msg);
         }
     }
 
-    m_messageIdToItem.Clear();
+    m_messageToItem.Clear();
     m_currentMessages.Clear();
     m_collapsedMsgsCount.Clear();
     m_currentMessagesIds.Clear();
@@ -255,14 +251,15 @@ void ListLogger::ClearMessage(ListLogger::MessageId id)
 {
     if (m_currentMessages.ContainsKey(id))
     {
-        QTreeWidgetItem *item = m_messageIdToItem[id];
+        const Message &msg = m_currentMessages[id];
+
+        QTreeWidgetItem *item = m_messageToItem[msg];
         if (item) { delete item; }
 
-        const Message &msg = m_currentMessages[id];
         m_currentMessagesIds.Remove(msg);
-        m_messageIdToItem.Remove(id);
+        m_messageToItem.Remove(msg);
         m_currentMessages.Remove(id);
-        m_collapsedMsgsCount.Remove(id);
+        m_collapsedMsgsCount.Remove(msg);
     }
 }
 

@@ -87,7 +87,10 @@ InspectorWidget::~InspectorWidget()
 XMLNode InspectorWidget::GetInspectableXMLInfo() const
 {
     XMLNode xmlInfo;
-    m_relatedInspectable->OnInspectorXMLNeeded(&xmlInfo);
+    if (m_relatedInspectable)
+    {
+        m_relatedInspectable->OnInspectorXMLNeeded(&xmlInfo);
+    }
     return xmlInfo;
 }
 
