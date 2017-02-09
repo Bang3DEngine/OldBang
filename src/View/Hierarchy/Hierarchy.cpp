@@ -133,7 +133,7 @@ void Hierarchy::OnGameObjectNameChanged(GameObject *go)
     QTreeWidgetItem *item = GetItemFromGameObject(go);
     if (item)
     {
-        item->setText(0, QString::fromStdString(go->name) );
+        item->setText(0, go->name.ToQString());
     }
 }
 
@@ -242,7 +242,7 @@ QTreeWidgetItem* Hierarchy::Update(GameObject *go)
     {
         // New item found! Create item, put name and register into the maps
         goItem = new QTreeWidgetItem();
-        goItem->setText(0, QString::fromStdString(go->name));
+        goItem->setText(0, go->name.ToQString());
 
         m_gameObject_To_TreeItem[go] = goItem;
         m_treeItem_To_GameObject[goItem] = go;
@@ -331,6 +331,10 @@ void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
     if (clickedAction == MenuBar::Action::CreateEmptyGameObject)
     {
         m_hContextMenu.OnCreateEmptyClicked();
+    }
+    else if (clickedAction == MenuBar::Action::CreateEmptyUIGameObject)
+    {
+        m_hContextMenu.OnCreateEmptyUIClicked();
     }
 }
 

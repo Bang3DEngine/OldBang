@@ -14,7 +14,7 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
     Array<String> enumNames = xmlAttribute.GetEnumNames();
     for (String enumString : enumNames)
     {
-        m_comboBox->addItem( QString::fromStdString(enumString) );
+        m_comboBox->addItem( enumString.ToQString() );
     }
     connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
             inspectorWidget, SLOT(_OnSlotValueChanged(QString)));

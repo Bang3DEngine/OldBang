@@ -72,6 +72,7 @@ void UIImage::RenderCustomPR() const
 
     ShaderProgram *sp = m_materialPR->GetShaderProgram();
     sp->SetUniformColor("B_tint",        m_tint);
+    sp->SetUniformFloat("B_hasTexture", m_imageTexture ? 1 : 0);
     sp->SetUniformTexture("B_texture_0", m_imageTexture);
 
     AABox screenBox = gameObject->GetAABBox();
@@ -82,9 +83,10 @@ void UIImage::RenderCustomPR() const
 
 void UIImage::RenderWithMaterial(Material *mat) const
 {
-    if (mat == m_material)
+    if (mat == m_material || mat == m_materialPR)
     {
         m_material->SetTexture(m_imageTexture);
+        m_materialPR->SetTexture(m_imageTexture);
     }
     UIRenderer::RenderWithMaterial(mat);
 }

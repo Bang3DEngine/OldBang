@@ -8,6 +8,7 @@
 #include "Component.h"
 #include "GameObject.h"
 #include "EditorWindow.h"
+#include "AttrWidgetInt.h"
 #include "AttrWidgetEnum.h"
 #include "AttrWidgetFile.h"
 #include "AttrWidgetBool.h"
@@ -55,7 +56,8 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     m_closeOpenButton->setStyleSheet("padding:0px; border: 0px; margin-left:-5px;");
     m_closeButtonPixmap.load(":/qss_icons/rc/branch_closed.png");
     m_openButtonPixmap.load(":/qss_icons/rc/branch_open.png");
-    connect(m_closeOpenButton, SIGNAL(clicked()), this, SLOT(OnCloseOpenButtonClicked()));
+    connect(m_closeOpenButton, SIGNAL(clicked()),
+            this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
 
     String fTitle = StringUtils::FormatInspectorLabel(title);
@@ -115,32 +117,44 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
                     float v = wf->GetValue();
                     attribute.SetFloat(v, attribute.GetProperties());
                 }
+                else if (attrType == XMLAttribute::Type::Int)
+                {
+                    AttrWidgetInt *wi = static_cast<AttrWidgetInt*>(aw);
+                    int v = wi->GetValue();
+                    attribute.SetInt(v, attribute.GetProperties());
+                }
                 else
                 {
-                    AttrWidgetVectorFloat *awv = static_cast<AttrWidgetVectorFloat*>(aw);
+                    AttrWidgetVectorFloat *awv =
+                            static_cast<AttrWidgetVectorFloat*>(aw);
                     Array<float> v = awv->GetValue();
                     if (attrType == XMLAttribute::Type::Vector2)
                     {
-                        attribute.SetVector2(Vector2(v[0], v[1]), attribute.GetProperties());
+                        attribute.SetVector2(Vector2(v[0], v[1]),
+                                             attribute.GetProperties());
                     }
                     else if (attrType == XMLAttribute::Type::Vector3)
                     {
-                        attribute.SetVector3(Vector3(v[0], v[1], v[2]), attribute.GetProperties());
+                        attribute.SetVector3(Vector3(v[0], v[1], v[2]),
+                                             attribute.GetProperties());
                     }
                     else if (attrType == XMLAttribute::Type::Vector4 ||
                              attrType == XMLAttribute::Type::Quaternion ||
                              attrType == XMLAttribute::Type::Rect)
                     {
-                        attribute.SetVector4(Vector4(v[0], v[1], v[2], v[3]), attribute.GetProperties());
+                        attribute.SetVector4(Vector4(v[0], v[1], v[2], v[3]),
+                                             attribute.GetProperties());
                     }
                 }
             }
             else if (attrType == XMLAttribute::Type::File)
             {
                 AttrWidgetFile *awf = static_cast<AttrWidgetFile*>(aw);
-                attribute.SetFilepath(awf->GetValue(),
-                                      attribute.GetPropertyValue(XMLProperty::FileExtension.GetName()),
-                                      attribute.GetProperties());
+                attribute.SetFilepath(
+                    awf->GetValue(),
+                    attribute.GetPropertyValue(XMLProperty::FileExtension
+                                               .GetName()),
+                    attribute.GetProperties());
             }
             else if (attrType == XMLAttribute::Type::String)
             {
@@ -155,7 +169,8 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
             else if (attrType == XMLAttribute::Type::Enum)
             {
                 AttrWidgetEnum *awe = static_cast<AttrWidgetEnum*>(aw);
-                attribute.SetEnum(attribute.GetEnumNames(), awe->GetValue(), // selected index
+                // Selected index<
+                attribute.SetEnum(attribute.GetEnumNames(), awe->GetValue(),
                                   attribute.GetProperties());
             }
             else if (attrType == XMLAttribute::Type::Color)
@@ -182,7 +197,7 @@ int InspectorWidget::GetNextRowIndex() const
 
 void InspectorWidget::SetTitle(const String &title)
 {
-    m_titleLabel->setText(QString::fromStdString(title));
+    m_titleLabel->setText(title.ToQString());
 }
 
 bool InspectorWidget::IsClosed() const

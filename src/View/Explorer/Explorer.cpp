@@ -337,7 +337,7 @@ String Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi) const
 QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const
 {
     String absFilepath = Persistence::ToAbsolute(filepath, false);
-    return m_fileSystemModel->index(QString::fromStdString(absFilepath));
+    return m_fileSystemModel->index(absFilepath.ToQString());
 }
 
 void Explorer::SetDir(const String &path)

@@ -87,7 +87,7 @@ public:
     Vector3 WorldToLocalDirection(const Vector3 &dir) const;
 
 
-    const Matrix4& GetLocalToParentMatrix() const;
+    virtual const Matrix4& GetLocalToParentMatrix() const;
     void GetLocalToParentMatrix(Matrix4 *m) const;
     void GetLocalToWorldMatrix(Matrix4 *m) const;
 
@@ -122,16 +122,14 @@ public:
 protected:
     Transform();
 
-private:
-
     mutable bool m_hasChanged = false;
-    mutable Matrix4 m_localToWorldMatrix;
-    Vector3 m_localPosition = Vector3(0.0f);
-    Quaternion m_localRotation = Quaternion();
-    Vector3 m_localScale = Vector3(1.0f);
+    mutable Matrix4 m_localToParentMatrix;
+    Vector3 m_localPosition = Vector3::Zero;
+    Quaternion m_localRotation = Quaternion::Identity;
+    Vector3 m_localScale = Vector3::One;
 
     // Used in inspector too
-    Vector3 m_localEuler = Vector3(0.0f);
+    Vector3 m_localEuler = Vector3::Zero;
 
     friend class GameObject;
 };

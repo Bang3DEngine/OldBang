@@ -283,7 +283,8 @@ void XMLAttribute::SetButton(const String buttonText,
 
 bool XMLAttribute::HasVectoredType() const
 {
-    return m_type == XMLAttribute::Type::Float   ||
+    return m_type == XMLAttribute::Type::Int     ||
+           m_type == XMLAttribute::Type::Float   ||
            m_type == XMLAttribute::Type::Vector2 ||
            m_type == XMLAttribute::Type::Vector3 ||
            m_type == XMLAttribute::Type::Vector4 ||

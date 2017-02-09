@@ -218,16 +218,16 @@ Vector3 Transform::WorldToLocalDirection(const Vector3 &dir) const
 
 const Matrix4 &Transform::GetLocalToParentMatrix() const
 {
-    if (m_hasChanged || true)
+    if (m_hasChanged)
     {
         Matrix4 T = Matrix4::TranslateMatrix(GetLocalPosition());
         Matrix4 R = Matrix4::RotateMatrix(GetLocalRotation());
         Matrix4 S = Matrix4::ScaleMatrix(GetLocalScale());
 
-        m_localToWorldMatrix = T * R * S;
+        m_localToParentMatrix = T * R * S;
         m_hasChanged = false;
     }
-    return m_localToWorldMatrix;
+    return m_localToParentMatrix;
 }
 
 void Transform::GetLocalToParentMatrix(Matrix4 *m) const

@@ -276,7 +276,10 @@ HEADERS +=                                                          \
     src/Domain/Engine/Physics/Math.h \
     src/Domain/Engine/Physics/Random.h \
     src/Domain/Engine/Components/AudioListener.h \
-    src/Persistence/Behaviours/BehaviourManagerStatus.h
+    src/Persistence/Behaviours/BehaviourManagerStatus.h \
+    src/Domain/Engine/Components/RectTransform.h \
+    src/Domain/Engine/GameObjects/UIGameObject.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetInt.h
 
 EDITOR {
 HEADERS += \
@@ -465,7 +468,10 @@ SOURCES += \
     src/Domain/Engine/Physics/Math.cpp \
     src/Domain/Engine/Physics/Random.cpp \
     src/Domain/Engine/Components/AudioListener.cpp \
-    src/Persistence/Behaviours/BehaviourManagerStatus.cpp
+    src/Persistence/Behaviours/BehaviourManagerStatus.cpp \
+    src/Domain/Engine/Components/RectTransform.cpp \
+    src/Domain/Engine/GameObjects/UIGameObject.cpp \
+    src/View/Inspector/AttributeWidgets/AttrWidgetInt.cpp
 
 EDITOR {
     SOURCES += \
@@ -658,3 +664,6 @@ OTHER_FILES += \
     EngineAssets/Materials/D2G_RotationAxisLine.bmat \
     EngineAssets/Materials/D2G_Default.bmat
 ######################################
+
+DISTFILES += \
+    EngineAssets/Materials/UI/D2G_UIImage.bmat

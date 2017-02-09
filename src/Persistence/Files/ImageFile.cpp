@@ -22,7 +22,7 @@ QPixmap ImageFile::GetIcon() const
     static Map<std::string, QPixmap> filepath_To_Pixmap;
     if (!filepath_To_Pixmap.ContainsKey(fp))
     {
-        QPixmap pm(QString::fromStdString(fp));
+        QPixmap pm(fp.ToQString());
         filepath_To_Pixmap[fp] = pm;
     }
 

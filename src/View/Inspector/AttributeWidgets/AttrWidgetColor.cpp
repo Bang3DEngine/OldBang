@@ -84,7 +84,7 @@ void ColorLabel::SetColor(const Color &c)
 {
     String ss = "background-color: rgb";
     ss += c.ToStringRgb255();
-    setStyleSheet(QString::fromStdString(ss));
+    setStyleSheet( ss.ToQString() );
 }
 
 void ColorLabel::mousePressEvent(QMouseEvent *e)

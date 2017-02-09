@@ -79,7 +79,8 @@ bool ShaderProgram::Link()
     return linked;
 }
 
-bool ShaderProgram::SetUniformFloat(const String &name, float v, bool warn) const
+bool ShaderProgram::SetUniformFloat(const String &name,
+                                    float v, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -91,13 +92,14 @@ bool ShaderProgram::SetUniformFloat(const String &name, float v, bool warn) cons
     else
     {
         if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                                std::endl << this << std::endl << " . Not setting it.");
+                       std::endl << this << std::endl << " . Not setting it.");
     }
 
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec2 (const String &name, const Vector2& v, bool warn) const
+bool ShaderProgram::SetUniformVec2 (const String &name,
+                                    const Vector2& v, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -109,13 +111,14 @@ bool ShaderProgram::SetUniformVec2 (const String &name, const Vector2& v, bool w
     else
     {
         if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                                std::endl << this << std::endl << " . Not setting it.");
+                     std::endl << this << std::endl << " . Not setting it.");
     }
 
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec3 (const String &name, const Vector3& v, bool warn) const
+bool ShaderProgram::SetUniformVec3 (const String &name,
+                                    const Vector3& v, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -127,13 +130,14 @@ bool ShaderProgram::SetUniformVec3 (const String &name, const Vector3& v, bool w
     else
     {
         if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                                std::endl << this << std::endl << " . Not setting it.");
+                      std::endl << this << std::endl << " . Not setting it.");
     }
 
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec4 (const String &name, const Vector4& v, bool warn) const
+bool ShaderProgram::SetUniformVec4 (const String &name,
+                                    const Vector4& v, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -145,18 +149,20 @@ bool ShaderProgram::SetUniformVec4 (const String &name, const Vector4& v, bool w
     else
     {
         if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                                std::endl << this << std::endl << " . Not setting it.");
+                      std::endl << this << std::endl << " . Not setting it.");
     }
 
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformColor(const String &name, const Color &c, bool warn) const
+bool ShaderProgram::SetUniformColor(const String &name,
+                                    const Color &c, bool warn) const
 {
     return SetUniformVec4(name, Vector4(c), warn);
 }
 
-bool ShaderProgram::SetUniformMat4 (const String &name, const Matrix4& m, bool warn) const
+bool ShaderProgram::SetUniformMat4 (const String &name,
+                                    const Matrix4& m, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -168,13 +174,14 @@ bool ShaderProgram::SetUniformMat4 (const String &name, const Matrix4& m, bool w
     else
     {
         if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                                std::endl << this << std::endl << " . Not setting it.");
+                      std::endl << this << std::endl << " . Not setting it.");
     }
 
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformTexture(const String &name, const Texture *texture, bool warn) const
+bool ShaderProgram::SetUniformTexture(const String &name,
+                                      const Texture *texture, bool warn) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -184,7 +191,7 @@ bool ShaderProgram::SetUniformTexture(const String &name, const Texture *texture
     else
     {
         if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                                std::endl << this << std::endl << " . Not setting it.");
+                      std::endl << this << std::endl << " . Not setting it.");
     }
 
     return (location >= 0);
@@ -226,7 +233,8 @@ void ShaderProgram::Bind() const
 
     // Bind textures at the moment we bind the shader program
     int textureUnit = 0;
-    for (auto it = m_names_To_Texture.Begin(); it != m_names_To_Texture.End(); ++it)
+    for (auto it = m_names_To_Texture.Begin();
+         it != m_names_To_Texture.End(); ++it)
     {
         String texName = it->first;
         const Texture *tex = it->second;
@@ -246,7 +254,8 @@ void ShaderProgram::Bind() const
 
 void ShaderProgram::UnBind() const
 {
-    for (auto it = m_names_To_Texture.Begin(); it != m_names_To_Texture.End(); ++it)
+    for (auto it = m_names_To_Texture.Begin();
+         it != m_names_To_Texture.End(); ++it)
     {
         const Texture *tex = it->second;
         if (tex)

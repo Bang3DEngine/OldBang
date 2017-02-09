@@ -119,13 +119,14 @@ bool FloatComponentSlotSpinBox::eventFilter(QObject *obj, QEvent *event)
 void FloatComponentSlotSpinBox::SetFloat(float f)
 {
     String str = StringUtils::FromFloat(f, 2);
-    setText(QString::fromStdString(str));
+    setText( str.ToQString() );
 }
 
 float FloatComponentSlotSpinBox::GetFloat() const
 {
-    String str = text().toStdString();
+    String str( text() );
     StringUtils::Replace(&str, ",", ".");
+    if (str.Empty()) { return 0.0f; }
     return StringUtils::ToFloat(str);
 }
 

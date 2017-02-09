@@ -27,6 +27,7 @@
 #include "SceneManager.h"
 #include "EditorWindow.h"
 #include "SceneManager.h"
+#include "UIGameObject.h"
 #include "AssetsManager.h"
 #include "ProjectManager.h"
 #include "DirectionalLight.h"
@@ -62,6 +63,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 
     connect(w->actionCreateEmptyGameObject,  SIGNAL(triggered()),
             this, SLOT(OnCreateEmptyGameObject()));
+    connect(w->actionCreateEmptyUIGameObject,  SIGNAL(triggered()),
+            this, SLOT(OnCreateEmptyUIGameObject()));
     connect(w->actionCreateFromPrefab,  SIGNAL(triggered()),
             this, SLOT(OnCreateFromPrefab()));
     connect(w->actionCreatePlane,  SIGNAL(triggered()),
@@ -231,13 +234,19 @@ void MenuBar::OnCreateEmptyGameObject() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateEmptyGameObject);
 }
+
+void MenuBar::OnCreateEmptyUIGameObject() const
+{
+    m_wem->NotifyMenuBarActionClicked(Action::CreateEmptyUIGameObject);
+}
+
 void MenuBar::OnCreateFromPrefab() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
 
     String filename = Dialog::GetOpenFilename("Create from prefab...",
-                                                  Prefab::GetFileExtensionStatic());
-    if (filename == "") { return; }
+                                              Prefab::GetFileExtensionStatic());
+    if (filename.Empty()) { return; }
 
     EditorWindow *w = EditorWindow::GetInstance();
 
@@ -250,8 +259,8 @@ void MenuBar::OnCreateFromPrefab() const
         delete xmlInfo;
 
         GameObject *go = p->InstantiateWithoutStarting();
-        GameObject *selectedGameObject = w->widgetHierarchy->GetFirstSelectedGameObject();
-
+        GameObject *selectedGameObject =
+                w->widgetHierarchy->GetFirstSelectedGameObject();
         if (selectedGameObject )
         {
             go->SetParent(selectedGameObject);
@@ -309,7 +318,9 @@ void MenuBar::OnCreateDirectionalLight() const
     m_wem->NotifyMenuBarActionClicked(Action::CreateDirectionalLight);
     GameObject *go = new GameObject("DirectionalLight");
     go->SetParent(SceneManager::GetActiveScene());
+
     go->AddComponent<DirectionalLight>();
+
     Hierarchy::GetInstance()->SelectGameObject(go);
 }
 
@@ -318,24 +329,28 @@ void MenuBar::OnCreatePointLight() const
     m_wem->NotifyMenuBarActionClicked(Action::CreatePointLight);
     GameObject *go = new GameObject("PointLight");
     go->SetParent(SceneManager::GetActiveScene());
+
     go->AddComponent<PointLight>();
+
     Hierarchy::GetInstance()->SelectGameObject(go);
 }
 
 void MenuBar::OnCreateUIText() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateUIText);
-    GameObject *go = new GameObject("Text");
+    GameObject *go = new UIGameObject("Text");
     go->SetParent(SceneManager::GetActiveScene());
+
     UIText *text = go->AddComponent<UIText>();
     text->SetContent("Hello Bang :)");
+
     Hierarchy::GetInstance()->SelectGameObject(go);
 }
 
 void MenuBar::OnCreateUIImage() const
 {
     m_wem->NotifyMenuBarActionClicked(Action::CreateUIImage);
-    GameObject *go = new GameObject("Image");
+    GameObject *go = new UIGameObject("Image");
     go->SetParent(SceneManager::GetActiveScene());
 
     UIImage *img = go->AddComponent<UIImage>();
@@ -354,7 +369,8 @@ void MenuBar::OnAlignGameObjectWithView() const
     if (selected)
     {
         EditorCamera *editorCamera =
-                static_cast<EditorCamera*>(SceneManager::GetActiveScene()->GetCamera()->gameObject->parent);
+                static_cast<EditorCamera*>(SceneManager::GetActiveScene()->
+                                           GetCamera()->gameObject->parent);
         selected->transform->SetPosition(editorCamera->transform->GetPosition());
         selected->transform->SetRotation(editorCamera->transform->GetRotation());
     }
@@ -368,7 +384,8 @@ void MenuBar::OnAlignViewWithGameObject() const
     if (selected)
     {
         EditorCamera *editorCamera =
-                static_cast<EditorCamera*>(SceneManager::GetActiveScene()->GetCamera()->gameObject->parent);
+                static_cast<EditorCamera*>(SceneManager::GetActiveScene()->
+                                           GetCamera()->gameObject->parent);
         editorCamera->AlignViewWithGameObject(selected);
     }
 

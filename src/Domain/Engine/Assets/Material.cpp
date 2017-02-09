@@ -15,17 +15,19 @@ Material::Material() : Asset()
 {
     // TODO: Create shaderProgram asset and use AssetManager to load this
     SetShaderProgram(new ShaderProgram(
-                         Persistence::ToAbsolute("Shaders/D2G_Default.vert", true),
-                         Persistence::ToAbsolute("Shaders/D2G_Default.frag", true)
-                         )
+                      Persistence::ToAbsolute("Shaders/D2G_Default.vert", true),
+                      Persistence::ToAbsolute("Shaders/D2G_Default.frag", true)
+                     )
                     );
 }
 
 Material::Material(const Material &m)
 {
     SetDiffuseColor(m.GetDiffuseColor());
-    SetShaderProgram(new ShaderProgram(m.GetShaderProgram()->GetVertexShader()->GetFilepath(),
-                                       m.GetShaderProgram()->GetFragmentShader()->GetFilepath()));
+    SetShaderProgram(
+                new ShaderProgram(
+                   m.GetShaderProgram()->GetVertexShader()->GetFilepath(),
+                   m.GetShaderProgram()->GetFragmentShader()->GetFilepath()));
 }
 
 Material::~Material()
@@ -51,20 +53,22 @@ void Material::Bind() const
     if (m_shaderProgram)
     {
         m_shaderProgram->Bind();
-        m_shaderProgram->SetUniformColor("B_material_diffuse_color", m_diffuseColor, false);
-        m_shaderProgram->SetUniformVec2("B_screen_size", Screen::GetSize(), false);
-        m_shaderProgram->SetUniformFloat("B_material_shininess", m_shininess, false);
+        m_shaderProgram->SetUniformColor("B_material_diffuse_color",
+                                         m_diffuseColor, false);
+        m_shaderProgram->SetUniformVec2("B_screen_size",
+                                        Screen::GetSize(), false);
+        m_shaderProgram->SetUniformFloat("B_material_shininess",
+                                         m_shininess, false);
 
+        float alphaCuttoff = -1.0f;
         if (m_texture)
         {
+            alphaCuttoff = m_texture->GetAlphaCuttoff();
             m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
-            m_shaderProgram->SetUniformFloat("B_alphaCuttoff", m_texture->GetAlphaCuttoff(), false);
         }
-        else
-        {
-            m_shaderProgram->SetUniformFloat("B_alphaCuttoff", -1.0f, false);
-        }
-        m_shaderProgram->SetUniformFloat("B_hasTexture", m_texture ? 1 : 0, false);
+        m_shaderProgram->SetUniformFloat("B_alphaCuttoff", alphaCuttoff, false);
+        m_shaderProgram->SetUniformFloat("B_hasTexture", m_texture ? 1 : 0,
+                                         false);
     }
 }
 
@@ -84,33 +88,20 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
     SetShininess(xmlInfo->GetFloat("Shininess"));
 
     String texAssetFilepath = xmlInfo->GetString("Texture");
-    bool textureChanged = false;
-    if (!m_texture)
-    {
-        textureChanged = !texAssetFilepath.Empty();
-    }
-    else
-    {
-        textureChanged = (m_texture->GetFilepath() != texAssetFilepath);
-    }
-
-    if (textureChanged)
-    {
-        Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
-        SetTexture(texture);
-    }
+    Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
+    SetTexture(texture);
 
     String vshaderFilepath = xmlInfo->GetFilepath("VertexShader");
     String fshaderFilepath = xmlInfo->GetFilepath("FragmentShader");
     if (!m_shaderProgram ||
-        !m_shaderProgram->GetVertexShader() || !m_shaderProgram->GetFragmentShader() ||
-         vshaderFilepath != m_shaderProgram->GetVertexShader()->GetFilepath()   ||
-         fshaderFilepath != m_shaderProgram->GetFragmentShader()->GetFilepath()
+        !m_shaderProgram->GetVertexShader() ||
+        !m_shaderProgram->GetFragmentShader() ||
+        vshaderFilepath != m_shaderProgram->GetVertexShader()->GetFilepath() ||
+        fshaderFilepath != m_shaderProgram->GetFragmentShader()->GetFilepath()
         )
     {
         SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
     }
-
 }
 
 void Material::FillXMLInfo(XMLNode *xmlInfo) const
@@ -122,7 +113,8 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("Shininess", GetShininess());
 
     String textureFilepath = m_texture ? m_texture->GetFilepath() : "";
-    xmlInfo->SetFilepath("Texture", textureFilepath, Texture2D::GetFileExtensionStatic());
+    xmlInfo->SetFilepath("Texture", textureFilepath,
+                         Texture2D::GetFileExtensionStatic());
 
     String vsFile =  "", fsFile = "";
     if (m_shaderProgram)

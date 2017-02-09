@@ -13,10 +13,11 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
     int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
     for (unsigned int i = 0; i < numberOfFields; ++i)
     {
-        AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget, true);
+        AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget,
+                                                 true);
         m_floatSlots.PushBack(s);
 
-        QLabel *label = new QLabel(QString::fromStdString(labels[i]));
+        QLabel *label = new QLabel(labels[i].ToQString());
         if (i != 0)
         {
             hLayout->setSpacing(3);

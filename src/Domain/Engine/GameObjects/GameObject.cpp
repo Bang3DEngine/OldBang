@@ -15,8 +15,10 @@
 #include "PointLight.h"
 #include "AudioSource.h"
 #include "EditorState.h"
+#include "UIGameObject.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
+#include "RectTransform.h"
 #include "AudioListener.h"
 #include "GraphicPipeline.h"
 #include "BehaviourHolder.h"
@@ -32,12 +34,8 @@
 #include "EditorPlayStopFlowController.h"
 #endif
 
-GameObject::GameObject() : GameObject("")
-{
-}
-
-GameObject::GameObject(const String &name) :
-    m_name(name)
+GameObject::GameObject(const String &name)
+    : m_name(name)
 {
     AddComponent<Transform>();
 }
@@ -423,20 +421,22 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
     for ( XMLNode *xmlChild : xmlInfo->GetChildren() )
     {
         String tagName = xmlChild->GetTagName();
-        if (tagName == "GameObject") // It's a child
+        if (tagName.Contains("GameObject")) // It's a child
         {
-            GameObject *child = new GameObject();
+            GameObject *child = tagName == "UIGameObject" ? new UIGameObject()
+                                                          : new GameObject();
             // Important: this line must be before the ReadXMLInfo, because
             // it will avoid Behaviour to be compiled if it's not in the scene,
-            // and it only can really know if its in scene when executing the Read if
-            // we set it before the Read, not after. Wtf I don't know how to write this xds
+            // and it only can really know if its in scene when executing
+            // the Read if we set it before the Read, not after.
+            // Wtf I don't know how to write this xds
             child->SetParent(this);
             child->ReadXMLInfo(xmlChild);
         }
         else // It's a Component
         {
             Component *c = nullptr;
-            if (tagName == "Transform")
+            if (tagName == "Transform" || tagName == "RectTransform")
             {
                 c = transform;
             }
@@ -547,6 +547,7 @@ void GameObject::OnHierarchyGameObjectsSelected(List<GameObject*> &selectedEntit
         m_selectionGameObject = nullptr;
     }
 }
+
 #endif
 
 void GameObject::SetEnabled(bool enabled)

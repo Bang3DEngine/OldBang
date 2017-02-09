@@ -5,6 +5,7 @@
 
 #include "XMLNode.h"
 #include "XMLAttribute.h"
+#include "AttrWidgetInt.h"
 #include "AttrWidgetBool.h"
 #include "AttrWidgetEnum.h"
 #include "AttrWidgetFile.h"
@@ -111,7 +112,14 @@ AttributeWidget *AttributeWidget::FromXMLAttribute(const XMLAttribute &xmlAttrib
         int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
         if (numberOfFields == 1)
         {
-            w = new AttrWidgetFloat(xmlAttribute, inspectorWidget, false);
+            if (attrType == XMLAttribute::Type::Float)
+            {
+                w = new AttrWidgetFloat(xmlAttribute, inspectorWidget, false);
+            }
+            else if (attrType == XMLAttribute::Type::Int)
+            {
+                w = new AttrWidgetInt(xmlAttribute, inspectorWidget, false);
+            }
         }
         else
         {
