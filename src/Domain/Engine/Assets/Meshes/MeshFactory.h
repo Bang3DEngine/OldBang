@@ -16,6 +16,7 @@ class MeshFactory
 public:
 
     static Mesh* GetPlane();
+    static Mesh* GetUIPlane();
     static Mesh* GetCube();
     static Mesh* GetSphere();
     static Mesh* GetCone();

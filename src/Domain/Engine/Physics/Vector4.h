@@ -14,11 +14,11 @@ class Vector4 : public glm::vec4
 public:
     Vector4();
     explicit Vector4(const glm::vec4 &v);
-    Vector4(float a);
-    Vector4(float x, float y, float z, float w);
-    Vector4(const Color &c);
-    Vector4(const Vector3 &v, float w);
-    Vector4(const Vector2 &v, float z, float w);
+    explicit Vector4(float a);
+    explicit Vector4(float x, float y, float z, float w);
+    explicit Vector4(const Color &c);
+    explicit Vector4(const Vector3 &v, float w);
+    explicit Vector4(const Vector2 &v, float z, float w);
 
     /**
      * @brief Returns the length/magnitude of this Vector

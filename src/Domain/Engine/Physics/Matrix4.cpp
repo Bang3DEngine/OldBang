@@ -261,7 +261,6 @@ Vector4& Matrix4::operator[](int i) const
     return c3;
 }
 
-
 Matrix4 operator*(const Matrix4 &m1, const Matrix4 &m2)
 {
     Matrix4 m;

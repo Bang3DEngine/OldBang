@@ -11,8 +11,8 @@ class Vector2 : public glm::vec2
 public:
     Vector2();
     explicit Vector2(const glm::vec2 &v);
-    Vector2(float a);
-    Vector2(float x, float y);
+    explicit Vector2(float a);
+    explicit Vector2(float x, float y);
 
     /**
      * @brief Returns the length/magnitude of this Vector

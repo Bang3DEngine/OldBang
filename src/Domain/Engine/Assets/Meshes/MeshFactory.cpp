@@ -16,6 +16,11 @@ Mesh* MeshFactory::GetPlane()
     return AssetsManager::Load<Mesh>("Meshes/Plane.bmesh", true);
 }
 
+Mesh *MeshFactory::GetUIPlane()
+{
+    return AssetsManager::Load<Mesh>("Meshes/UIPlane.bmesh", true);
+}
+
 Mesh* MeshFactory::GetCube()
 {
     return AssetsManager::Load<Mesh>("Meshes/Cube.bmesh", true);

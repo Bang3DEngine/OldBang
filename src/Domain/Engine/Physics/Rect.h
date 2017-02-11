@@ -19,9 +19,9 @@ public:
     float m_maxy = 0.0f;
 
     Rect();
-    Rect(float minx, float maxx,
-         float miny, float maxy);
-    Rect(const Vector2 &p1, const Vector2 &p2);
+    explicit Rect(float minx, float maxx,
+                  float miny, float maxy);
+    explicit Rect(const Vector2 &p1, const Vector2 &p2);
 
     Vector2 GetMin() const;
     Vector2 GetMax() const;
@@ -55,6 +55,10 @@ public:
     String ToString() const override;
 };
 
+void operator*=(Rect &r, float a);
+void operator/=(Rect &r, float a);
+void operator*=(Rect &r, const Vector2 &v);
+void operator/=(Rect &r, const Vector2 &v);
 bool operator==(const Rect &r1, const Rect &r2);
 bool operator!=(const Rect &r1, const Rect &r2);
 

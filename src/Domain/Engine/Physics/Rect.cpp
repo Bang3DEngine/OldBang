@@ -124,3 +124,35 @@ bool operator!=(const Rect &r1, const Rect &r2)
 {
     return !(r1 == r2);
 }
+
+void operator*=(Rect &r, float a)
+{
+    r.m_minx *= a;
+    r.m_miny *= a;
+    r.m_maxx *= a;
+    r.m_maxy *= a;
+}
+
+void operator/=(Rect &r, float a)
+{
+    r.m_minx /= a;
+    r.m_miny /= a;
+    r.m_maxx /= a;
+    r.m_maxy /= a;
+}
+
+void operator*=(Rect &r, const Vector2 &v)
+{
+    r.m_minx *= v.x;
+    r.m_miny *= v.y;
+    r.m_maxx *= v.x;
+    r.m_maxy *= v.y;
+}
+
+void operator/=(Rect &r, const Vector2 &v)
+{
+    r.m_minx /= v.x;
+    r.m_miny /= v.y;
+    r.m_maxx /= v.x;
+    r.m_maxy /= v.y;
+}

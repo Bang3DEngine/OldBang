@@ -1,16 +1,16 @@
 #ifndef RECTTRANSFORM_H
 #define RECTTRANSFORM_H
 
-#include "Matrix4.h"
 #include "Vector2.h"
+#include "Matrix4.h"
 #include "Transform.h"
 
 class XMLNode;
 class RectTransform : public Transform
 {
 /**
-  (0,0): left-top.
-  (1,1): bot-right.
+  (-1,-1): left-top.
+  ( 1, 1): right-bot.
 **/
 public:
     virtual ~RectTransform();
@@ -24,33 +24,39 @@ public:
     void SetMarginBot(int marginBot);
 
     void SetPivotPosition(const Vector2 &pivotPosition);
-    void SetAnchorPosLeftTop(const Vector2 &anchorPosLeftTop);
-    void SetAnchorPosRightBot(const Vector2 &anchorPosRightBot);
+    void SetAnchorMin(const Vector2 &anchorMin);
+    void SetAnchorMax(const Vector2 &anchorMax);
 
     int GetMarginLeft()  const;
     int GetMarginTop()   const;
     int GetMarginRight() const;
     int GetMarginBot()   const;
+    Vector2 GetMarginLeftTop() const;
+    Vector2 GetMarginRightBot() const;
 
-    const Vector2& GetPivotPosition()  const;
-    const Vector2& GetAnchorPosLeftTop()  const;
-    const Vector2& GetAnchorPosRightBot() const;
+    Vector2 GetPivotPosition()  const;
+    Vector2 GetAnchorMin()  const;
+    Vector2 GetAnchorMax() const;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+
+    void OnDrawGizmos() override;
 
 protected:
     RectTransform();
 
 private:
+    Vector2 m_anchorScale = Vector2(1.0f, -1.0f);
+
     int m_marginLeft  = 0;
     int m_marginTop   = 0;
     int m_marginRight = 0;
     int m_marginBot   = 0;
 
     Vector2 m_pivotPosition = Vector2::Zero;
-    Vector2 m_anchorPosLeftTop  = Vector2::Zero;
-    Vector2 m_anchorPosRightBot = Vector2::Zero;
+    Vector2 m_anchorMin     = Vector2::Zero;
+    Vector2 m_anchorMax     = Vector2::Zero;
 
     // This determines the transform the pivot must have applied
     // to move it to the parent coords

@@ -13,13 +13,13 @@ public:
     float r, g, b, a;
 
     Color();
-    Color(float m);
-    Color(const Vector2 &v, float b = 0, float a = 1);
-    Color(const Vector3 &v, float a = 1);
-    Color(const Vector4 &v);
-    Color(float r, float g, float b);
-    Color(float r, float g, float b, float a);
-    Color(const Color &c, float a);
+    explicit Color(float m);
+    explicit Color(const Vector2 &v, float b = 0, float a = 1);
+    explicit Color(const Vector3 &v, float a = 1);
+    explicit Color(const Vector4 &v);
+    explicit Color(float r, float g, float b);
+    explicit Color(float r, float g, float b, float a);
+    explicit Color(const Color &c, float a);
 
     /**
      * @brief If progression == 0, returns v1.

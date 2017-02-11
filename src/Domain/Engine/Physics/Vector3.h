@@ -11,9 +11,9 @@ class Vector3 : public glm::vec3
 public:
     Vector3();
     explicit Vector3(const glm::vec3 &v);
-    Vector3(float a);
-    Vector3(float x, float y, float z);
-    Vector3(const Vector2 &v, float z);
+    explicit Vector3(float a);
+    explicit Vector3(float x, float y, float z);
+    explicit Vector3(const Vector2 &v, float z);
 
     /**
      * @brief Returns the length/magnitude of this Vector

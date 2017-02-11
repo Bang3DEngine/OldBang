@@ -11,7 +11,7 @@ UIRenderer::UIRenderer()
 {
     m_hasCustomPRPass = true;
 
-    SetMesh(MeshFactory::GetPlane());
+    SetMesh(MeshFactory::GetUIPlane());
     SetMaterial( AssetsManager::Load<Material>("Materials/D2G_Default.bmat", true) );
     m_materialPR = AssetsManager::Load<Material>("Materials/UI/PR_UIImage.bmat", true);
 
