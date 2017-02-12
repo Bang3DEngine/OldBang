@@ -89,6 +89,13 @@ void Gizmos::SetBillboard()
 #endif
 }
 
+void Gizmos::SetScreenSpaceMode()
+{
+#ifdef BANG_EDITOR
+    Gizmos::GetEditorGizmosGameObject()->SetScreenSpaceMode(true);
+#endif
+}
+
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
 #ifdef BANG_EDITOR
@@ -128,6 +135,15 @@ void Gizmos::RenderIcon(const Texture2D *texture,
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
             RenderIcon(texture, billboard);
+#endif
+}
+
+void Gizmos::RenderScreenIcon(const Texture2D *texture,
+                              const Rect &screenRect)
+{
+#ifdef BANG_EDITOR
+    Gizmos::GetEditorGizmosGameObject()->
+            RenderScreenIcon(texture, screenRect);
 #endif
 }
 

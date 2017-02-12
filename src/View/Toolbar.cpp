@@ -31,6 +31,7 @@ void Toolbar::Init()
     Toolbar::s_tb->m_buttonTranslateMode = w->buttonTranslateMode;
     Toolbar::s_tb->m_buttonRotateMode    = w->buttonRotateMode;
     Toolbar::s_tb->m_buttonScaleMode     = w->buttonScaleMode;
+    Toolbar::s_tb->m_buttonRectTransformMode = w->buttonRectTransformMode;
     Toolbar::s_tb->m_buttonGlobalCoords  = w->buttonGlobalCoords;
     Toolbar::s_tb->m_buttonLocalCoords   = w->buttonLocalCoords;
     Toolbar::s_tb->m_buttonShowGizmos    = w->buttonShowGizmos;
@@ -45,6 +46,8 @@ void Toolbar::Init()
             Toolbar::s_tb, SLOT(OnRotateClicked()));
     connect(Toolbar::s_tb->m_buttonScaleMode, SIGNAL(clicked()),
             Toolbar::s_tb, SLOT(OnScaleClicked()));
+    connect(Toolbar::s_tb->m_buttonRectTransformMode, SIGNAL(clicked()),
+            Toolbar::s_tb, SLOT(OnRectTransformClicked()));
 
     connect(Toolbar::s_tb->m_buttonGlobalCoords, SIGNAL(clicked()),
             Toolbar::s_tb, SLOT(OnGlobalCoordsClicked()));
@@ -77,6 +80,7 @@ void Toolbar::UnCheckTransformModeButtons()
     m_buttonTranslateMode->setChecked(false);
     m_buttonRotateMode->setChecked(false);
     m_buttonScaleMode->setChecked(false);
+    m_buttonRectTransformMode->setChecked(false);
 }
 
 Toolbar *Toolbar::GetInstance()
@@ -86,6 +90,27 @@ Toolbar *Toolbar::GetInstance()
         Toolbar::Init();
     }
     return s_tb;
+}
+
+void Toolbar::SetTransformMode(EditorState::TransformMode transformMode)
+{
+    UnCheckTransformModeButtons();
+    if (transformMode == EditorState::TransformMode::Translate)
+    {
+        m_buttonTranslateMode->click();
+    }
+    else if (transformMode == EditorState::TransformMode::Rotate)
+    {
+        m_buttonRotateMode->click();
+    }
+    else if (transformMode == EditorState::TransformMode::Scale)
+    {
+        m_buttonScaleMode->click();
+    }
+    else if (transformMode == EditorState::TransformMode::RectTransform)
+    {
+        m_buttonRectTransformMode->click();
+    }
 }
 
 void Toolbar::OnTranslateClicked()
@@ -110,6 +135,14 @@ void Toolbar::OnScaleClicked()
     m_buttonScaleMode->setChecked(true);
     EditorState::GetInstance()->m_currentTransformMode =
             EditorState::TransformMode::Scale;
+}
+
+void Toolbar::OnRectTransformClicked()
+{
+    UnCheckTransformModeButtons();
+    m_buttonRectTransformMode->setChecked(true);
+    EditorState::GetInstance()->m_currentTransformMode =
+            EditorState::TransformMode::RectTransform;
 }
 
 void Toolbar::OnGlobalCoordsClicked()
@@ -212,6 +245,10 @@ void Toolbar::OnShortcutPressedKey(Input::Key key)
     {
         m_buttonScaleMode->click();
     }
+    else if (key == Input::Key::T)
+    {
+        m_buttonRectTransformMode->click();
+    }
 }
 
 void Toolbar::OnShortcutPressed()
@@ -238,6 +275,7 @@ void Toolbar::OnSceneGameTabChanged()
         m_buttonTranslateMode->setVisible(false);
         m_buttonRotateMode->setVisible(false);
         m_buttonScaleMode->setVisible(false);
+        m_buttonRectTransformMode->setVisible(false);
         m_buttonGlobalCoords->setVisible(false);
         m_buttonLocalCoords->setVisible(false);
         m_button3D->setVisible(false);
@@ -249,6 +287,7 @@ void Toolbar::OnSceneGameTabChanged()
         m_buttonTranslateMode->setVisible(true);
         m_buttonRotateMode->setVisible(true);
         m_buttonScaleMode->setVisible(true);
+        m_buttonRectTransformMode->setVisible(true);
         m_buttonGlobalCoords->setVisible(true);
         m_buttonLocalCoords->setVisible(true);
         m_button3D->setVisible(true);

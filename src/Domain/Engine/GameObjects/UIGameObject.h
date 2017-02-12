@@ -1,6 +1,7 @@
 #ifndef UIGAMEOBJECT_H
 #define UIGAMEOBJECT_H
 
+#include "List.h"
 #include "GameObject.h"
 
 class XMLNode;
@@ -15,6 +16,8 @@ public:
 
     void FillXMLInfo(XMLNode *xmlInfo) const override;
 
+    void OnHierarchyGameObjectsSelected(
+            List<GameObject*> &selectedGameObjects) override;
 };
 
 #endif // UIGAMEOBJECT_H

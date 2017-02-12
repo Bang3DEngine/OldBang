@@ -30,12 +30,15 @@ public:
     static void SetDrawWireframe(bool wireframe);
     static void SetReceivesLighting(bool receivesLighting);
     static void SetBillboard();
+    static void SetScreenSpaceMode();
     static void RenderCustomMesh(Mesh *m);
     static void RenderBox(const AABox &b);
     static void RenderSimpleBox(const AABox &b);
     static void RenderRect(const Rect &r);
     static void RenderIcon(const Texture2D *texture,
                            bool billboard = true);
+    static void RenderScreenIcon(const Texture2D *texture,
+                                 const Rect &screenRect);
     static void RenderCircle(float radius);
     static void RenderScreenLine(const Vector2 &origin, const Vector2 &destiny);
     static void RenderLine(const Vector3 &origin, const Vector3 &destiny);

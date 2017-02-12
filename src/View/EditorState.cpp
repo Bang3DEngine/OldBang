@@ -53,6 +53,11 @@ bool EditorState::IsShowingSceneTab()
     return win->tabContainerSceneGame->currentWidget() == win->tabScene;
 }
 
+void EditorState::SetTransformMode(EditorState::TransformMode transformMode)
+{
+    Toolbar::GetInstance()->SetTransformMode(transformMode);
+}
+
 EditorState *EditorState::GetInstance()
 {
     return EditorWindow::GetInstance()->m_editorState;

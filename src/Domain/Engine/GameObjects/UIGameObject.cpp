@@ -3,6 +3,7 @@
 #include "Debug.h"
 #include "XMLNode.h"
 #include "ICloneable.h"
+#include "EditorState.h"
 #include "RectTransform.h"
 
 UIGameObject::UIGameObject(const String &name)
@@ -29,4 +30,13 @@ void UIGameObject::FillXMLInfo(XMLNode *xmlInfo) const
 {
     GameObject::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("UIGameObject");
+}
+
+void UIGameObject::OnHierarchyGameObjectsSelected(
+        List<GameObject *> &selectedGameObjects)
+{
+    GameObject::OnHierarchyGameObjectsSelected(selectedGameObjects);
+    if (IsEditorGameObject() || IsScene()) return;
+
+    EditorState::SetTransformMode(EditorState::TransformMode::RectTransform);
 }

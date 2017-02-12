@@ -688,8 +688,6 @@ void GameObject::_OnDrawGizmos()
     #ifdef BANG_EDITOR
     ASSERT(EditorState::ShowGizmosEnabled());
 
-    PROPAGATE_EVENT(_OnDrawGizmos, m_children);  // The order matters
-
     GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (sfb->IsPassing())
@@ -698,6 +696,8 @@ void GameObject::_OnDrawGizmos()
     }
     PROPAGATE_EVENT(_OnDrawGizmos, m_components);  // The order matters
     OnDrawGizmos();
+
+    PROPAGATE_EVENT(_OnDrawGizmos, m_children);  // The order matters
 
     #endif
 }

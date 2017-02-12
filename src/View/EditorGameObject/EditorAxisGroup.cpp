@@ -12,7 +12,7 @@
 
 EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObject("EditorAxisGroup")
 {
-    this->m_attachedGameObject = attachedGameObject;
+    m_attachedGameObject = attachedGameObject;
     m_etag = new EditorTranslateAxisGroup(attachedGameObject);
     m_erag = new EditorRotateAxisGroup(attachedGameObject);
     m_esag = new EditorScaleAxisGroup(attachedGameObject);

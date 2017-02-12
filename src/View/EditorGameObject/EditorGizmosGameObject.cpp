@@ -104,6 +104,12 @@ void EditorGizmosGameObject::SetReceivesLighting(bool receivesLighting)
     }
 }
 
+void EditorGizmosGameObject::SetScreenSpaceMode(bool screenSpaceMode)
+{
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera();
+    cam->SetIdentityMode(screenSpaceMode);
+}
+
 void EditorGizmosGameObject::SetBillboard()
 {
     Scene *scene = SceneManager::GetActiveScene();
@@ -214,7 +220,26 @@ void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
     Reset();
 }
 
-void EditorGizmosGameObject::RenderLine(const Vector3 &origin, const Vector3 &destiny)
+void EditorGizmosGameObject::RenderScreenIcon(const Texture2D *texture,
+                                              const Rect &screenRect)
+{
+    MeshRenderer *mr = GetComponent<MeshRenderer>();
+    ASSERT(m_planeMesh);
+    mr->SetMesh(m_planeMesh);
+
+    Gizmos::SetPosition( Vector3(screenRect.GetCenter(), 0) );
+    Gizmos::SetScale( Vector3(screenRect.GetSize(), 1) );
+
+    SetDrawWireframe(false);
+    SetReceivesLighting(false);
+    mr->GetMaterial()->SetTexture(texture);
+    SetScreenSpaceMode();
+    Render(mr);
+    Reset();
+}
+
+void EditorGizmosGameObject::RenderLine(const Vector3 &origin,
+                                        const Vector3 &destiny)
 {
     SingleLineRenderer *slr = GetComponent<SingleLineRenderer>();
     slr->SetOrigin(origin);
@@ -227,15 +252,13 @@ void EditorGizmosGameObject::RenderLine(const Vector3 &origin, const Vector3 &de
     Reset();
 }
 
-void EditorGizmosGameObject::RenderScreenLine(const Vector2 &origin, const Vector2 &destiny)
+void EditorGizmosGameObject::RenderScreenLine(const Vector2 &origin,
+                                              const Vector2 &destiny)
 {
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ASSERT(cam);
-    const float z = cam->GetZNear() + 0.01f;
-    Vector3 worldPosOrigin  = cam->ScreenNDCPointToWorld(origin,  z);
-    Vector3 worldPosDestiny = cam->ScreenNDCPointToWorld(destiny, z);
+    SetScreenSpaceMode(true);
     bool resetAllowedBefore = m_resetAllowed;
     SetResetAllowed(false);
-    RenderLine(worldPosOrigin, worldPosDestiny);
+    RenderLine( Vector3(origin, 0), Vector3(destiny, 0) );
     SetResetAllowed(resetAllowedBefore);
     Reset();
 }
@@ -352,6 +375,7 @@ void EditorGizmosGameObject::Reset()
     SetLineWidth(1.0f);
     SetReceivesLighting(false);
     SetDrawWireframe(false);
+    SetScreenSpaceMode(false);
 
     List<Renderer*> renderers = GetComponents<Renderer>();
     for (Renderer *rend : renderers)

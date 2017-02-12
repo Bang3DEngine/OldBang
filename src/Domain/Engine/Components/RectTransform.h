@@ -45,8 +45,6 @@ public:
     Rect GetScreenContainingRect() const;
     Rect GetContainingRectInParentSpace() const;
 
-    void OnDrawGizmos() override;
-
     void OnParentSizeChanged();
 
 protected:

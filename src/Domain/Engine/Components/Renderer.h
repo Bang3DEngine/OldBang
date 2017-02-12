@@ -145,11 +145,12 @@ private:
     /**
      * @brief Called by SelectionFramebuffer.
      * Use this if you want to activate
-     * special states before rendering for the selection framebuffer. For example,
-     * you may want to draw a bigger object in order for the selection to be easier to do.
+     * special states before rendering for the selection framebuffer.
+     * For example, you may want to draw a bigger object in order for
+     * the selection to be easier to do.
      *
-     * This is used in the transform axes for example, in which we increase the lineWidth for
-     * an easier axis grabbing.
+     * This is used in the transform axes for example, in which we
+     * increase the lineWidth for an easier axis grabbing.
      */
     std::function<void()> ActivateGLStatesBeforeRenderingForSelection = nullptr;
     #endif

@@ -6,7 +6,7 @@ class EditorState
 public:
     enum TransformMode
     {
-        Translate, Rotate, Scale
+        Translate, Rotate, Scale, RectTransform
     };
 
     EditorState();
@@ -19,6 +19,8 @@ public:
     static TransformMode GetCurrentTransformMode();
     static bool IsShowingGameTab();
     static bool IsShowingSceneTab();
+
+    static void SetTransformMode(TransformMode transformMode);
 
 private:
     static EditorState *GetInstance();

@@ -14,6 +14,7 @@
 #include "Hierarchy.h"
 #include "EditorWindow.h"
 #include "EditorGameObject.h"
+#include "WindowEventManager.h"
 #endif
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
@@ -65,7 +66,6 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 
     GameObject *go = !rend->IsGizmo() ? rend->gameObject :
                                         m_nextGameObjectToBeRendered;
-
     if (CanRenderGameObject(go))
     {
         ShaderProgram *sp = m_material->GetShaderProgram();
@@ -106,12 +106,10 @@ void SelectionFramebuffer::ProcessSelection()
             if (!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
             {
                 EditorWindow::GetInstance()->widgetHierarchy->SelectGameObject(mouseOverGO);
-                /*
                 if (Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft)) // Double clicking
                 {
                     WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(mouseOverGO);
                 }
-                */
             }
         }
         else // Background has been pressed

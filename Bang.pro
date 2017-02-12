@@ -148,17 +148,18 @@ INCLUDEPATH +=                                   \
     $$PWD/src/View/Windows
 
 EDITOR {
-    INCLUDEPATH +=                                  \
-        $$PWD/src/View/Interfaces/                  \
-        $$PWD/src/View/Dialogs/                     \
-        $$PWD/src/View/Hierarchy/                   \
-        $$PWD/src/View/Explorer/                    \
-        $$PWD/src/View/Logger/                      \
-        $$PWD/src/View/EditorCamera/                \
-        $$PWD/src/View/EditorGameObject/            \
-        $$PWD/src/View/EditorScene/                 \
-        $$PWD/src/View/Inspector/                   \
-        $$PWD/src/View/Inspector/Inspectables/      \
+    INCLUDEPATH +=                                           \
+        $$PWD/src/View/Interfaces/                           \
+        $$PWD/src/View/Dialogs/                              \
+        $$PWD/src/View/Hierarchy/                            \
+        $$PWD/src/View/Explorer/                             \
+        $$PWD/src/View/Logger/                               \
+        $$PWD/src/View/EditorCamera/                         \
+        $$PWD/src/View/EditorGameObject/                     \
+        $$PWD/src/View/EditorGameObject/EditorRectTransform  \
+        $$PWD/src/View/EditorScene/                          \
+        $$PWD/src/View/Inspector/                            \
+        $$PWD/src/View/Inspector/Inspectables/               \
         $$PWD/src/View/Inspector/AttributeWidgets/
 }
 ######################################
@@ -279,7 +280,9 @@ HEADERS +=                                                          \
     src/Persistence/Behaviours/BehaviourManagerStatus.h \
     src/Domain/Engine/Components/RectTransform.h \
     src/Domain/Engine/GameObjects/UIGameObject.h \
-    src/View/Inspector/AttributeWidgets/AttrWidgetInt.h
+    src/View/Inspector/AttributeWidgets/AttrWidgetInt.h \
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.h \
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h
 
 EDITOR {
 HEADERS += \
@@ -471,7 +474,9 @@ SOURCES += \
     src/Persistence/Behaviours/BehaviourManagerStatus.cpp \
     src/Domain/Engine/Components/RectTransform.cpp \
     src/Domain/Engine/GameObjects/UIGameObject.cpp \
-    src/View/Inspector/AttributeWidgets/AttrWidgetInt.cpp
+    src/View/Inspector/AttributeWidgets/AttrWidgetInt.cpp \
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp
 
 EDITOR {
     SOURCES += \

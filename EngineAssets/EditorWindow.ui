@@ -185,6 +185,20 @@
               </widget>
              </item>
              <item>
+              <widget class="QToolButton" name="buttonRectTransformMode">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="QtResources.qrc">
+                 <normaloff>:/Bang/Icons/RectTransformIcon.png</normaloff>:/Bang/Icons/RectTransformIcon.png</iconset>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QToolButton" name="buttonGlobalCoords">
                <property name="text">
                 <string>Global</string>
@@ -1513,8 +1527,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="QtResources.qrc"/>
   <include location="qdarkstyle/style.qrc"/>
+  <include location="QtResources.qrc"/>
  </resources>
  <connections/>
 </ui>

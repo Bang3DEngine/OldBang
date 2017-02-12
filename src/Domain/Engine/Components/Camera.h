@@ -74,6 +74,9 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
+    void SetIdentityMode(bool identityMode);
+    bool IsInIdentityMode() const;
+
 protected:
     Camera();
     virtual ~Camera();
@@ -84,6 +87,7 @@ private:
     static void InitStatics();
 
     float m_orthoHeight  = 25.0f;
+    bool m_identityMode = false;
 
     Color m_clearColor = Color(Color(0.4f), 1);
     float m_fovDegrees = 60.0f;

@@ -65,7 +65,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     #endif
 
     m_gbuffer->RenderToScreen(m_gbufferAttachmentToBeShown);
-    // RenderToScreen(m_selectionFB->GetColorTexture()); // Uncomment to see the framebuffer
+    //RenderToScreen(m_selectionFB->GetColorTexture()); // Uncomment to see the framebuffer
 }
 
 void GraphicPipeline::RenderRenderer(Renderer *rend)
@@ -225,6 +225,7 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
 
 void GraphicPipeline::RenderGizmosPass(Framebuffer *fb)
 {
+    glDepthFunc(GL_LEQUAL);
     m_currentDepthLayer = Renderer::DepthLayer::DepthLayerGizmos;
     fb->ClearDepth(); // After each pass, clear the depth
 
@@ -240,6 +241,7 @@ void GraphicPipeline::RenderGizmosPass(Framebuffer *fb)
     {
         go->_OnDrawGizmosOverlay();
     }
+    glDepthFunc(GL_LESS);
 }
 
 void GraphicPipeline::RenderCustomPR(Renderer *rend)

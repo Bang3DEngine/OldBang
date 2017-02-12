@@ -30,6 +30,7 @@ public:
     float GetHeight() const;
     float GetArea() const;
     Vector2 GetSize() const;
+    Vector2 GetCenter() const;
 
     bool Contains(const Vector2 &p) const;
 

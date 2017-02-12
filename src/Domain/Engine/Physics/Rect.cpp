@@ -57,6 +57,11 @@ Vector2 Rect::GetSize() const
     return Vector2(GetWidth(), GetHeight());
 }
 
+Vector2 Rect::GetCenter() const
+{
+    return (GetMin() + GetMax()) * 0.5f;
+}
+
 bool Rect::Contains(const Vector2 &p) const
 {
     return p.x >= m_minx && p.x <= m_maxx &&

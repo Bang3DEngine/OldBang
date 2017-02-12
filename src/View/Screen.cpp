@@ -119,6 +119,11 @@ Vector2 Screen::GetSize()
     return Vector2(Screen::GetWidth(), Screen::GetHeight());
 }
 
+Vector2 Screen::GetPixelClipSize()
+{
+    return 1.0f / Screen::GetSize();
+}
+
 int Screen::GetHeight()
 {
     return Screen::GetInstance()->m_height;

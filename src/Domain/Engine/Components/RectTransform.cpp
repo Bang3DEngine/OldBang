@@ -185,17 +185,6 @@ Rect RectTransform::GetContainingRectInParentSpace() const
     return GetLocalToParentMatrix() * Rect::ScreenRect;
 }
 
-void RectTransform::OnDrawGizmos()
-{
-    if (gameObject->IsSelected())
-    {
-        Rect contRectInScreen = GetScreenContainingRect();
-        Gizmos::SetColor(Color::White);
-        Gizmos::SetLineWidth(2.0f);
-        Gizmos::RenderRect(contRectInScreen);
-    }
-}
-
 void RectTransform::OnChanged()
 {
     m_hasChanged = true;

@@ -7,6 +7,7 @@
 #include <QToolButton>
 
 #include "Input.h"
+#include "EditorState.h"
 #include "IShortcutListener.h"
 #include "IWindowEventManagerListener.h"
 
@@ -24,11 +25,14 @@ public:
     static void Init();
     static Toolbar* GetInstance();
 
+    void SetTransformMode(EditorState::TransformMode transformMode);
+
 public slots:
 
     void OnTranslateClicked();
     void OnRotateClicked();
     void OnScaleClicked();
+    void OnRectTransformClicked();
     void OnGlobalCoordsClicked();
     void OnLocalCoordsClicked();
     void OnShowGizmosClicked(bool showGizmos);
@@ -48,6 +52,7 @@ private:
     QToolButton *m_buttonTranslateMode = nullptr;
     QToolButton *m_buttonRotateMode    = nullptr;
     QToolButton *m_buttonScaleMode     = nullptr;
+    QToolButton *m_buttonRectTransformMode = nullptr;
     QToolButton *m_buttonGlobalCoords  = nullptr;
     QToolButton *m_buttonLocalCoords   = nullptr;
     QToolButton *m_buttonShowGizmos    = nullptr;

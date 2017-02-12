@@ -46,6 +46,7 @@ public:
     static int GetHeight();
     static int GetWidth();
     static Vector2 GetSize();
+    static Vector2 GetPixelClipSize();
 
     static void SetCursor(Qt::CursorShape cs);
 

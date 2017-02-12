@@ -34,12 +34,16 @@ Camera::~Camera()
 
 void Camera::GetViewMatrix(Matrix4 *view) const
 {
+    if (m_identityMode) { *view = Matrix4::Identity; return; }
+
     transform->GetLocalToWorldMatrix(view);
     *view = view->Inversed();
 }
 
 void Camera::GetProjectionMatrix(Matrix4 *proj) const
 {
+    if (m_identityMode) { *proj = Matrix4::Identity; return; }
+
     if (m_projMode == ProjectionMode::Perspective)
     {
         if (m_autoUpdateAspectRatio)
@@ -311,4 +315,14 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
         xmlInfo->SetFloat("OrthoHeight", GetOrthoHeight(), {XMLProperty::Hidden});
         xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
     }
+}
+
+void Camera::SetIdentityMode(bool identityMode)
+{
+    m_identityMode = identityMode;
+}
+
+bool Camera::IsInIdentityMode() const
+{
+    return m_identityMode;
 }
