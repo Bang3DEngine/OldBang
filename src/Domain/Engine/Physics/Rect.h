@@ -29,6 +29,7 @@ public:
     float GetWidth() const;
     float GetHeight() const;
     float GetArea() const;
+    Vector2 GetSize() const;
 
     bool Contains(const Vector2 &p) const;
 
@@ -55,6 +56,7 @@ public:
     String ToString() const override;
 };
 
+Rect operator*(const Matrix4 &m, const Rect &r);
 void operator*=(Rect &r, float a);
 void operator/=(Rect &r, float a);
 void operator*=(Rect &r, const Vector2 &v);

@@ -1,5 +1,6 @@
 #include "RectTransform.h"
 
+#include "Math.h"
 #include "Debug.h"
 #include "Screen.h"
 #include "XMLNode.h"
@@ -40,43 +41,43 @@ ICloneable *RectTransform::Clone() const
 
 void RectTransform::SetMarginLeft(int marginLeft)
 {
-    m_hasChanged = true;
+    OnChanged();
     m_marginLeft = marginLeft;
 }
 
 void RectTransform::SetMarginTop(int marginTop)
 {
-    m_hasChanged = true;
+    OnChanged();
     m_marginTop = marginTop;
 }
 
 void RectTransform::SetMarginRight(int marginRight)
 {
-    m_hasChanged = true;
+    OnChanged();
     m_marginRight = marginRight;
 }
 
 void RectTransform::SetMarginBot(int marginBot)
 {
-    m_hasChanged = true;
+    OnChanged();
     m_marginBot = marginBot;
 }
 
 void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
 {
-    m_hasChanged = true;
+    OnChanged();
     m_pivotPosition = pivotPosition;
 }
 
 void RectTransform::SetAnchorMin(const Vector2 &anchorMin)
 {
-    m_hasChanged = true;
+    OnChanged();
     m_anchorMin = anchorMin;
 }
 
 void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
 {
-    m_hasChanged = true;
+    OnChanged();
     m_anchorMax = anchorMax;
 }
 
@@ -135,75 +136,117 @@ void RectTransform::ReadXMLInfo(const XMLNode *xmlInfo)
     SetMarginBot  ( xmlInfo->GetInt("MarginBot")   );
 
     SetPivotPosition( xmlInfo->GetVector2("PivotPosition") );
-    SetAnchorMin ( xmlInfo->GetVector2("AnchorMin")  );
-    SetAnchorMax( xmlInfo->GetVector2("AnchorMax") );
+    SetAnchorMin    ( xmlInfo->GetVector2("AnchorMin")     );
+    SetAnchorMax    ( xmlInfo->GetVector2("AnchorMax")     );
 }
 
 void RectTransform::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    Transform::FillXMLInfo(xmlInfo);
-    xmlInfo->SetTagName("RectTransform");
-
-    xmlInfo->SetInt("MarginLeft",  GetMarginLeft());
-    xmlInfo->SetInt("MarginTop",   GetMarginTop());
+    xmlInfo->SetInt("MarginLeft",  GetMarginLeft() );
+    xmlInfo->SetInt("MarginTop",   GetMarginTop()  );
     xmlInfo->SetInt("MarginRight", GetMarginRight());
-    xmlInfo->SetInt("MarginBot",   GetMarginBot());
+    xmlInfo->SetInt("MarginBot",   GetMarginBot()  );
 
     xmlInfo->SetVector2("PivotPosition",  GetPivotPosition());
-    xmlInfo->SetVector2("AnchorMin",  GetAnchorMin());
-    xmlInfo->SetVector2("AnchorMax", GetAnchorMax());
+    xmlInfo->SetVector2("AnchorMin",      GetAnchorMin()    );
+    xmlInfo->SetVector2("AnchorMax",      GetAnchorMax()    );
+
+    Transform::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName("RectTransform");
+    xmlInfo->SetVector3("Position", Vector3::Zero, {XMLProperty::Hidden});
+}
+
+Rect RectTransform::GetParentScreenRect() const
+{
+    Rect parentScreenRect = Rect::ScreenRect;
+    RectTransform *parentRectTransform = nullptr;
+    if (gameObject->parent)
+    {
+        parentRectTransform = gameObject->parent->GetComponent<RectTransform>();
+    }
+
+    if (parentRectTransform)
+    {
+        parentScreenRect = parentRectTransform->GetScreenContainingRect();
+    }
+
+    return parentScreenRect;
+}
+
+Rect RectTransform::GetScreenContainingRect() const
+{
+    Matrix4 localToWorld;
+    GetLocalToWorldMatrix(&localToWorld);
+    return localToWorld * Rect::ScreenRect;
+}
+
+Rect RectTransform::GetContainingRectInParentSpace() const
+{
+    return GetLocalToParentMatrix() * Rect::ScreenRect;
 }
 
 void RectTransform::OnDrawGizmos()
 {
     if (gameObject->IsSelected())
     {
-        Vector2 screenSize = Screen::GetSize();
-
-        Rect anchorRect(m_anchorMin, m_anchorMax);
-        //anchorRect /= screenSize;
-        Gizmos::SetColor(Color::Green);
-        Gizmos::RenderRect(anchorRect);
-
-        Rect innerRect(m_anchorMin + GetMarginLeftTop() / screenSize,
-                       m_anchorMax - GetMarginRightBot() / screenSize);
-        //innerRect /= screenSize;
-        Gizmos::SetColor(Color::Red);
-        Gizmos::RenderRect(innerRect);
-
-        //Rect pivotPoint (GetPivotPosition(),
-        //                 GetPivotPosition() + Vector2::One * 5 / screenSize);
-        //pivotPoint /= screenSize;
-        //Gizmos::SetColor(Color::Blue);
-        //Gizmos::RenderRect(pivotPoint);
+        Rect contRectInScreen = GetScreenContainingRect();
+        Gizmos::SetColor(Color::White);
+        Gizmos::SetLineWidth(2.0f);
+        Gizmos::RenderRect(contRectInScreen);
     }
+}
+
+void RectTransform::OnChanged()
+{
+    m_hasChanged = true;
+    List<RectTransform*> rectTransforms =
+            gameObject->GetComponentsInChildren<RectTransform>();
+    for (RectTransform *rt : rectTransforms)
+    {
+        rt->OnParentSizeChanged();
+    }
+}
+
+void RectTransform::OnParentSizeChanged()
+{
+    OnChanged();
 }
 
 const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
-    const Vector3 screenSize = Vector3(Screen::GetSize(), 1.0f);
-    //if (m_hasChanged) // In case screen size changes
+    if (m_hasChanged)
     {
+        const Vector2 screenSize = Screen::GetSize();
+        Vector2 parentSizeInPx = GetParentScreenRect().GetSize() * screenSize;
+        parentSizeInPx.x = Math::Max(1.0f, parentSizeInPx.x);
+        parentSizeInPx.y = Math::Max(1.0f, parentSizeInPx.y);
+
+        const float marginMultiplier = 4.0f; // Dont know why, havent thought
+                                             // it much
+        const Vector2 pixelSizeInParent =
+                (1.0f / parentSizeInPx) * marginMultiplier;
+
         Vector2 minMarginedAnchor
-                (m_anchorMin + GetMarginLeftTop() / screenSize.xy());
+                (m_anchorMin + GetMarginLeftTop()  * pixelSizeInParent);
         Vector2 maxMarginedAnchor
-                (m_anchorMax - GetMarginRightBot() / screenSize.xy());
+                (m_anchorMax - GetMarginRightBot() * pixelSizeInParent);
         Vector3 anchorScalingV
                 ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
         Matrix4 anchorScaling = Matrix4::ScaleMatrix(anchorScalingV);
 
         Vector3 moveToPivotV(-m_pivotPosition, 0);
-        moveToPivotV = (Vector4(moveToPivotV, 1)).xyz();
         moveToPivotV.y *= -1.0f;
         Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
 
         Vector3 moveToAnchorCenterV(
-                    (m_anchorMin + m_anchorMax) * 0.5f, 0);
+                    (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
         moveToAnchorCenterV.y *= -1.0f;
         Matrix4 moveToAnchorCenter =
                 Matrix4::TranslateMatrix(moveToAnchorCenterV);
 
+        const Matrix4 &normalTransform = Transform::GetLocalToParentMatrix();
         m_localToParentMatrix =
+                normalTransform *
                 moveToAnchorCenter *
                 anchorScaling *
                 moveToPivot

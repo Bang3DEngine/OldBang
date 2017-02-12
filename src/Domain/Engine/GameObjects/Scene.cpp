@@ -13,6 +13,7 @@
 #include "GameObject.h"
 #include "MeshFactory.h"
 #include "SceneManager.h"
+#include "RectTransform.h"
 #include "AudioListener.h"
 #include "BehaviourHolder.h"
 #include "GraphicPipeline.h"
@@ -41,6 +42,12 @@ void Scene::_OnUpdate()
 
 void Scene::_OnResize(int newWidth, int newHeight)
 {
+    List<RectTransform*> rectTransforms =
+            GetComponentsInChildren<RectTransform>();
+    for (RectTransform *rt : rectTransforms)
+    {
+        rt->OnParentSizeChanged();
+    }
 }
 
 const String Scene::GetFileExtensionStatic()

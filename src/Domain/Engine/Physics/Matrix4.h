@@ -27,6 +27,7 @@ public:
 
     float *GetFirstAddress() const;
 
+    void SetTranslate(const Vector3 &translate);
     void SetScale(const Vector3 &scale);
 
     glm::mat4 ToGlmMat4() const;

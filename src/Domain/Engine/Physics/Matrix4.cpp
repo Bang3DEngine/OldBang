@@ -201,6 +201,13 @@ float *Matrix4::GetFirstAddress() const
     return static_cast<float*>(&(c0.x));
 }
 
+void Matrix4::SetTranslate(const Vector3 &translate)
+{
+    c3.x = translate.x;
+    c3.y = translate.y;
+    c3.z = translate.z;
+}
+
 void Matrix4::SetScale(const Vector3 &scale)
 {
     c0.x = scale.x;

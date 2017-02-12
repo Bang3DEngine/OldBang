@@ -1,6 +1,7 @@
 #ifndef RECTTRANSFORM_H
 #define RECTTRANSFORM_H
 
+#include "Rect.h"
 #include "Vector2.h"
 #include "Matrix4.h"
 #include "Transform.h"
@@ -41,7 +42,12 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
+    Rect GetScreenContainingRect() const;
+    Rect GetContainingRectInParentSpace() const;
+
     void OnDrawGizmos() override;
+
+    void OnParentSizeChanged();
 
 protected:
     RectTransform();
@@ -55,13 +61,14 @@ private:
     int m_marginBot   = 0;
 
     Vector2 m_pivotPosition = Vector2::Zero;
-    Vector2 m_anchorMin     = Vector2::Zero;
-    Vector2 m_anchorMax     = Vector2::Zero;
+    Vector2 m_anchorMin     = Vector2(-1.0f);
+    Vector2 m_anchorMax     = Vector2( 1.0f);
 
-    // This determines the transform the pivot must have applied
-    // to move it to the parent coords
+    void OnChanged();
+    Rect GetParentScreenRect() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
 
+    friend class Screen;
     friend class GameObject;
 };
 

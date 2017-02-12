@@ -52,6 +52,11 @@ float Rect::GetArea() const
     return (m_maxx-m_minx) * (m_maxy-m_miny);
 }
 
+Vector2 Rect::GetSize() const
+{
+    return Vector2(GetWidth(), GetHeight());
+}
+
 bool Rect::Contains(const Vector2 &p) const
 {
     return p.x >= m_minx && p.x <= m_maxx &&
@@ -102,13 +107,7 @@ Rect Rect::GetBoundingRectFromPositions(const List<Vector2> &positions)
 String Rect::ToString() const
 {
     std::ostringstream oss;
-    oss << "Rect: [" << std::endl <<
-           "  minx:" << m_minx << std::endl <<
-           "  maxx:" << m_maxx << std::endl <<
-           "  miny:" << m_miny << std::endl <<
-           "  maxy:" << m_maxy << std::endl <<
-           "]" << std::endl;
-
+    oss << "Rect(" << GetMin().ToString() << ", " << GetMax().ToString() << ")";
     return String(oss.str());
 }
 
@@ -155,4 +154,10 @@ void operator/=(Rect &r, const Vector2 &v)
     r.m_miny /= v.y;
     r.m_maxx /= v.x;
     r.m_maxy /= v.y;
+}
+
+Rect operator*(const Matrix4 &m, const Rect &r)
+{
+    return Rect( (m * Vector4(r.GetMin(),0,1) ).xy(),
+                 (m * Vector4(r.GetMax(),0,1) ).xy() );
 }

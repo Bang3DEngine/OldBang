@@ -33,7 +33,7 @@ public:
     String(std::istreambuf_iterator<char, std::char_traits<char> > begin,
            std::istreambuf_iterator<char, std::char_traits<char> > end);
 
-    ~String();
+    virtual ~String();
 
     char At(int index) const;
 
