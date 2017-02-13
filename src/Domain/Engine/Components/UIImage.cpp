@@ -39,31 +39,6 @@ ICloneable *UIImage::Clone() const
     return img;
 }
 
-void UIImage::ReadXMLInfo(const XMLNode *xmlInfo)
-{
-    UIRenderer::ReadXMLInfo(xmlInfo);
-
-    String texFilepath = xmlInfo->GetFilepath("Image");
-    m_imageTexture = AssetsManager::Load<Texture2D>(texFilepath);
-}
-
-void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
-{
-    UIRenderer::FillXMLInfo(xmlInfo);
-    xmlInfo->SetTagName(GetName());
-
-    String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";
-    xmlInfo->SetFilepath("Image", texFilepath,
-                         Texture2D::GetFileExtensionStatic(), {});
-
-    xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("Material")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("LineWidth")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("IsTransparent")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("DrawWireframe")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("ReceivesLighting")->SetProperty({XMLProperty::Hidden});
-}
-
 void UIImage::RenderCustomPR() const
 {
     UIRenderer::RenderCustomPR();
@@ -99,5 +74,30 @@ void UIImage::SetTexture(Texture2D *imageTexture)
 Texture2D *UIImage::GetTexture() const
 {
     return m_imageTexture;
+}
+
+void UIImage::ReadXMLInfo(const XMLNode *xmlInfo)
+{
+    UIRenderer::ReadXMLInfo(xmlInfo);
+
+    String texFilepath = xmlInfo->GetFilepath("Image");
+    m_imageTexture = AssetsManager::Load<Texture2D>(texFilepath);
+}
+
+void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
+{
+    UIRenderer::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName(GetName());
+
+    String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";
+    xmlInfo->SetFilepath("Image", texFilepath,
+                         Texture2D::GetFileExtensionStatic(), {});
+
+    xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});
+    xmlInfo->GetAttribute("Material")->SetProperty({XMLProperty::Hidden});
+    xmlInfo->GetAttribute("LineWidth")->SetProperty({XMLProperty::Hidden});
+    xmlInfo->GetAttribute("IsTransparent")->SetProperty({XMLProperty::Hidden});
+    xmlInfo->GetAttribute("DrawWireframe")->SetProperty({XMLProperty::Hidden});
+    xmlInfo->GetAttribute("ReceivesLighting")->SetProperty({XMLProperty::Hidden});
 }
 

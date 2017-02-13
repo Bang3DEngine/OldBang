@@ -143,11 +143,7 @@ void Renderer::RenderWithMaterial(Material *mat) const
     }
     #endif
 
-    bool goodMaterial = mat && mat->GetShaderProgram();
-    if (goodMaterial)
-    {
-        mat->Bind();
-    }
+    if (mat) { mat->Bind(); }
 
     #ifdef BANG_EDITOR
     if (sfb && sfb->IsPassing())
@@ -160,10 +156,7 @@ void Renderer::RenderWithMaterial(Material *mat) const
         RenderWithoutBindingMaterial();
     }
 
-    if (goodMaterial)
-    {
-        mat->UnBind();
-    }
+    if (mat) { mat->UnBind(); }
 }
 
 bool Renderer::IsACanvasRenderer() const

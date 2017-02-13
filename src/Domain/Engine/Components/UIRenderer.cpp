@@ -73,10 +73,10 @@ bool UIRenderer::IsACanvasRenderer() const
     return true;
 }
 
-void UIRenderer::Render() const
+void UIRenderer::RenderWithoutBindingMaterial() const
 {
     glDisable(GL_DEPTH_TEST);
-    MeshRenderer::Render();
+    MeshRenderer::RenderWithoutBindingMaterial();
     glEnable(GL_DEPTH_TEST);
 }
 

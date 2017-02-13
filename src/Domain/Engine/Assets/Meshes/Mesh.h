@@ -33,9 +33,12 @@ public:
                  const Array<Vector3>& normals,
                  const Array<Vector2>& uvs);
 
-    void BindPositionsToShaderProgram(const String &nameInShader, const ShaderProgram &sp);
-    void BindNormalsToShaderProgram(const String &nameInShader, const ShaderProgram &sp);
-    void BindUvsToShaderProgram(const String &nameInShader, const ShaderProgram &sp);
+    void BindPositionsToShaderProgram(const String &nameInShader,
+                                      const ShaderProgram &sp) const;
+    void BindNormalsToShaderProgram(const String &nameInShader,
+                                    const ShaderProgram &sp) const;
+    void BindUvsToShaderProgram(const String &nameInShader,
+                                const ShaderProgram &sp) const;
 
     void BindAllVBOsToShaderProgram(const ShaderProgram &sp);
 
@@ -61,7 +64,7 @@ private:
     Array<Vector3> m_normals;
     Array<Vector2> m_uvs;
 
-    VAO *m_vao = nullptr;
+    mutable VAO *m_vao = nullptr;
     VBO *m_vertexPositionsVBO = nullptr;
     VBO *m_vertexNormalsVBO = nullptr;
     VBO *m_vertexUvsVBO = nullptr;

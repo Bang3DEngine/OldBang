@@ -43,15 +43,15 @@ void MeshRenderer::SetMaterial(Material *m)
 
 void MeshRenderer::SetMesh(Mesh *m)
 {
-    m_mesh = m;
-    ASSERT(m_mesh); ASSERT(m_material); ASSERT(m_material->GetShaderProgram());
+    m_mesh = m; ASSERT(m_mesh);
 
-    m_mesh->BindAllVBOsToShaderProgram(*(m_material->GetShaderProgram()));
     if (!m_mesh->GetFilepath().Empty())
     {
         SetRenderMode(m_mesh->IsATrianglesModel() ?
                       RenderMode::Triangles : RenderMode::Quads);
     }
+
+    BindCurrentMeshToShaderProgram();
 }
 
 AABox MeshRenderer::GetAABBox() const
@@ -74,6 +74,7 @@ void MeshRenderer::RenderWithoutBindingMaterial() const
     ASSERT(m_mesh);
 
     m_mesh->GetVAO()->Bind();
+    BindCurrentMeshToShaderProgram(); // Bind mesh VAO's to shaderProgram
     glDrawArrays(GLint(m_renderMode), 0, m_mesh->GetVertexCount());
     m_mesh->GetVAO()->UnBind();
 }
@@ -95,4 +96,11 @@ void MeshRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     }
     xmlInfo->SetFilepath("Mesh", m_mesh ? m_mesh->GetFilepath() : "",
                          Mesh::GetFileExtensionStatic());
+}
+
+void MeshRenderer::BindCurrentMeshToShaderProgram() const
+{
+    ASSERT(m_mesh); ASSERT(m_material); ASSERT(m_material->GetShaderProgram());
+
+    m_mesh->BindAllVBOsToShaderProgram(*(m_material->GetShaderProgram()));
 }

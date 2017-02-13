@@ -28,8 +28,9 @@ public:
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
 protected:
-    Mesh *m_mesh = nullptr;
+    mutable Mesh *m_mesh = nullptr;
 
+    void BindCurrentMeshToShaderProgram() const;
     virtual void RenderWithoutBindingMaterial() const override;
 
     friend class GameObject;

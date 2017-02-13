@@ -133,8 +133,8 @@ void UIText::RenderText(bool forSelectionFramebuffer) const
     if (!forSelectionFramebuffer) { m_material->SetDiffuseColor(m_textColor); }
 
     #ifdef BANG_EDITOR
-    Material *selFramebufferMaterial = GraphicPipeline::GetActive()->GetSelectionFramebuffer()->
-                                                                     GetSelectionMaterial();
+    //Material *selFramebufferMaterial =
+    //        GraphicPipeline::GetActive()->GetSelectionFramebuffer()->GetSelectionMaterial();
     #endif
 
     Vector3 initialScale = transform->GetScale();
@@ -165,10 +165,10 @@ void UIText::RenderText(bool forSelectionFramebuffer) const
         #ifdef BANG_EDITOR
         if (forSelectionFramebuffer)
         {
-            Matrix4 model, normal, view, projection, pvm;
-            GetMatrices(&model, &normal, &view, &projection, &pvm);
-            SetMatricesUniforms(selFramebufferMaterial, model, normal, view, projection, pvm);
-            UIRenderer::RenderWithoutBindingMaterial(); // RENDER THE CHAR !!!
+            //Matrix4 model, normal, view, projection, pvm;
+            //GetMatrices(&model, &normal, &view, &projection, &pvm);
+            //SetMatricesUniforms(selFramebufferMaterial, model, normal, view, projection, pvm);
+            //UIRenderer::RenderWithoutBindingMaterial(); // RENDER THE CHAR !!!
         }
         else
         #endif

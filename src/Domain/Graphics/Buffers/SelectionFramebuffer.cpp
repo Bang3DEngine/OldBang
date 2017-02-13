@@ -20,12 +20,9 @@
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
-    m_program = new ShaderProgram(
+    m_selectionProgram = new ShaderProgram(
                 Persistence::ToAbsolute("Shaders/SelectionBuffer.vert", true),
                 Persistence::ToAbsolute("Shaders/SelectionBuffer.frag", true));
-
-    m_material = new Material();
-    m_material->SetShaderProgram(m_program);
 
     m_colorTexture = new TextureRender();
     m_worldPosTexture = new TextureRender();
@@ -36,7 +33,7 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
 
 SelectionFramebuffer::~SelectionFramebuffer()
 {
-    delete m_program;
+    delete m_selectionProgram;
 }
 
 void SelectionFramebuffer::PrepareForRender(const Scene *scene)
@@ -68,9 +65,16 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
                                         m_nextGameObjectToBeRendered;
     if (CanRenderGameObject(go))
     {
-        ShaderProgram *sp = m_material->GetShaderProgram();
-        sp->SetUniformColor("selectionColor", GetSelectionColor(go));
-        rend->RenderWithMaterial(m_material);
+        ShaderProgram *selectionSp = m_selectionProgram;
+        selectionSp->SetUniformColor("selectionColor", GetSelectionColor(go));
+
+        Material *rendMaterial = rend->GetMaterial();
+        ShaderProgram *originalSP =
+                rendMaterial ? rendMaterial->GetShaderProgram() : nullptr;
+        rendMaterial->SetShaderProgram( selectionSp );
+        rend->Render();
+        rendMaterial->SetShaderProgram( originalSP );
+
     }
 }
 
@@ -134,11 +138,6 @@ GameObject *SelectionFramebuffer::GetGameObjectInPosition(int x, int y)
 Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
 {
     return MapIdToColor(m_gameObject_To_Id[go]);
-}
-
-Material *SelectionFramebuffer::GetSelectionMaterial() const
-{
-    return m_material;
 }
 
 Vector3 SelectionFramebuffer::GetWorldPositionAt(int x, int y)

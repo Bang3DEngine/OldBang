@@ -15,7 +15,7 @@ public:
     virtual void RenderCustomPR() const override;
     bool IsACanvasRenderer() const override;
 
-    virtual void Render() const override;
+    virtual void RenderWithoutBindingMaterial() const override;
 
     virtual void SetMatricesUniforms(
             Material *mat,

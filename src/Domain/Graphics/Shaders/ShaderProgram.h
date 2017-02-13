@@ -18,11 +18,6 @@ class ShaderProgram : public IGLIdable
                      ,public IGLBindable
                      ,public IToString
 {
-private:
-    Shader *m_vshader;
-    Shader *m_fshader;
-
-    mutable Map<String, const Texture*> m_names_To_Texture;
 
 public:
     ShaderProgram();
@@ -53,6 +48,13 @@ public:
     GLint GetAttribLocation(const String &name) const;
 
     String ToString() const override;
+
+private:
+    Shader *m_vshader = nullptr;
+    Shader *m_fshader = nullptr;
+
+    mutable Map<String, const Texture*> m_names_To_Texture;
+    void UpdateTextureBindings() const;
 };
 
 #endif // SHADERPROGRAM_H

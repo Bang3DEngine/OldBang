@@ -25,15 +25,15 @@ public:
 
     String GetImageRelativeFilepath() const;
 
-    void SetAlphaCuttoff(float alphaCuttoff);
-    float GetAlphaCuttoff() const;
+    void SetalphaCutoff(float alphaCutoff);
+    float GetAlphaCutoff() const;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
 private:
 
-    float m_alphaCuttoff = 0.1f;
+    float m_alphaCutoff = 0.1f;
     Texture2D(const Texture2D &t); // No copy constr.
 };
 

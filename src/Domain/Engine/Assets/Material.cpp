@@ -60,13 +60,9 @@ void Material::Bind() const
         m_shaderProgram->SetUniformFloat("B_material_shininess",
                                          m_shininess, false);
 
-        float alphaCuttoff = -1.0f;
-        if (m_texture)
-        {
-            alphaCuttoff = m_texture->GetAlphaCuttoff();
-            m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
-        }
-        m_shaderProgram->SetUniformFloat("B_alphaCuttoff", alphaCuttoff, false);
+        float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
+        m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
+        m_shaderProgram->SetUniformFloat("B_alphaCutoff", alphaCutoff, false);
         m_shaderProgram->SetUniformFloat("B_hasTexture", m_texture ? 1 : 0,
                                          false);
     }

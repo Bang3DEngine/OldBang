@@ -7,7 +7,7 @@
 #include "Shader.h"
 #include "Texture.h"
 
-ShaderProgram::ShaderProgram() : m_vshader(nullptr), m_fshader(nullptr)
+ShaderProgram::ShaderProgram()
 {
     m_idGL = glCreateProgram();
 }
@@ -29,12 +29,12 @@ ShaderProgram::~ShaderProgram()
 
 void ShaderProgram::BindVertexShader(Shader *vshader)
 {
-    this->m_vshader = vshader;
+    m_vshader = vshader;
 }
 
 void ShaderProgram::BindFragmentShader(Shader *fshader)
 {
-    this->m_fshader = fshader;
+    m_fshader = fshader;
 }
 
 bool ShaderProgram::Link()
@@ -187,6 +187,7 @@ bool ShaderProgram::SetUniformTexture(const String &name,
     if (location >= 0)
     {
         m_names_To_Texture[name] = texture;
+        UpdateTextureBindings();
     }
     else
     {
@@ -231,25 +232,7 @@ void ShaderProgram::Bind() const
     PreBind(GL_CURRENT_PROGRAM);
     glUseProgram(m_idGL);
 
-    // Bind textures at the moment we bind the shader program
-    int textureUnit = 0;
-    for (auto it = m_names_To_Texture.Begin();
-         it != m_names_To_Texture.End(); ++it)
-    {
-        String texName = it->first;
-        const Texture *tex = it->second;
-
-        if (tex)
-        {
-            int location = GetUniformLocation(texName);
-            // Set the uniform with the corresponding texture unit
-            glUniform1i(location, textureUnit);
-
-            // Bind To texture unit
-            tex->BindToTextureUnit(textureUnit); //Leave it bound
-            textureUnit++;
-        }
-    }
+    UpdateTextureBindings();
 }
 
 void ShaderProgram::UnBind() const
@@ -264,5 +247,27 @@ void ShaderProgram::UnBind() const
         }
     }
     glUseProgram(PreUnBind(GL_CURRENT_PROGRAM));
+}
+
+void ShaderProgram::UpdateTextureBindings() const
+{
+    int textureUnit = 0;
+    for (auto it = m_names_To_Texture.Begin();
+         it != m_names_To_Texture.End(); ++it)
+    {
+        const String &texName = it->first;
+        const Texture *tex = it->second;
+
+        if (tex)
+        {
+            int location = GetUniformLocation(texName);
+            // Set the uniform with the corresponding texture unit
+            glUniform1i(location, textureUnit);
+
+            // Bind To texture unit
+            tex->BindToTextureUnit(textureUnit); //Leave it bound
+            textureUnit++;
+        }
+    }
 }
 

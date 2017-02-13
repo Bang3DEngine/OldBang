@@ -52,8 +52,9 @@ void Texture2D::CreateEmpty(int width, int height)
 
 void Texture2D::Resize(int width, int height)
 {
+    int size = width * height;
     const int numChannels = 4, typeSize = 4;
-    unsigned char *newData = new unsigned char[width * height * numChannels * typeSize]; //
+    unsigned char *newData = new unsigned char[size * numChannels * typeSize]; //
     Fill(newData, width, height);
 }
 
@@ -89,14 +90,14 @@ String Texture2D::GetImageRelativeFilepath() const
     return m_assetFilepath;
 }
 
-void Texture2D::SetAlphaCuttoff(float alphaCuttoff)
+void Texture2D::SetalphaCutoff(float alphaCutoff)
 {
-    m_alphaCuttoff = alphaCuttoff;
+    m_alphaCutoff = alphaCutoff;
 }
 
-float Texture2D::GetAlphaCuttoff() const
+float Texture2D::GetAlphaCutoff() const
 {
-    return m_alphaCuttoff;
+    return m_alphaCutoff;
 }
 
 void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
@@ -111,7 +112,7 @@ void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
             filterModeString == "Nearest" ? Texture::FilterMode::Nearest :
                                             Texture::FilterMode::Linear;
     SetFilterMode(filterMode);
-    SetAlphaCuttoff(xmlInfo->GetFloat("AlphaCuttoff"));
+    SetalphaCutoff(xmlInfo->GetFloat("alphaCutoff"));
 }
 
 void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
@@ -123,7 +124,7 @@ void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
 
     int selectedIndex = GetFilterMode();
     xmlInfo->SetEnum("FilterMode", {"Nearest", "Linear"}, selectedIndex, {});
-    xmlInfo->SetFloat("AlphaCuttoff", GetAlphaCuttoff());
+    xmlInfo->SetFloat("alphaCutoff", GetAlphaCutoff());
 }
 
 Texture2D::Texture2D(const Texture2D &t) : Texture2D() {}

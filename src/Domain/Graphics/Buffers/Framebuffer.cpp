@@ -1,5 +1,6 @@
 #include "Framebuffer.h"
 
+#include "Math.h"
 #include "Debug.h"
 #include "Vector2.h"
 #include "TextureRender.h"
@@ -118,8 +119,8 @@ Color Framebuffer::ReadColor(int x, int y, int attachmentId) const
 
 void Framebuffer::Resize(int width, int height)
 {
-    m_width = std::max(width, 1);
-    m_height = std::max(height, 1);
+    m_width  = Math::Max(width,  1);
+    m_height = Math::Max(height, 1);
 
     for (auto it : m_attachmentId_To_Texture)
     {
@@ -134,7 +135,8 @@ void Framebuffer::Resize(int width, int height)
     {
         //TODO:  respect former bindings of renderbuffers
         glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttachmentId);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, m_width, m_height);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
+                              m_width, m_height);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
     }
 }

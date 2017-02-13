@@ -118,7 +118,8 @@ void Mesh::LoadAll(const Array<Vector3> &positions,
     LoadUvs(uvs);
 }
 
-void Mesh::BindPositionsToShaderProgram(const String &nameInShader, const ShaderProgram &sp)
+void Mesh::BindPositionsToShaderProgram(const String &nameInShader,
+                                        const ShaderProgram &sp) const
 {
     if (m_vertexPositionsVBO)
     {
@@ -127,7 +128,8 @@ void Mesh::BindPositionsToShaderProgram(const String &nameInShader, const Shader
     }
 }
 
-void Mesh::BindNormalsToShaderProgram(const String &nameInShader, const ShaderProgram &sp)
+void Mesh::BindNormalsToShaderProgram(const String &nameInShader,
+                                      const ShaderProgram &sp) const
 {
     if (m_vertexNormalsVBO)
     {
@@ -136,7 +138,8 @@ void Mesh::BindNormalsToShaderProgram(const String &nameInShader, const ShaderPr
     }
 }
 
-void Mesh::BindUvsToShaderProgram(const String &nameInShader, const ShaderProgram &sp)
+void Mesh::BindUvsToShaderProgram(const String &nameInShader,
+                                  const ShaderProgram &sp) const
 {
     if (m_vertexUvsVBO)
     {

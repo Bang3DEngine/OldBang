@@ -42,9 +42,7 @@ private:
     bool m_isPassing = false;
     GameObject *m_nextGameObjectToBeRendered = nullptr;
 
-    ShaderProgram *m_program = nullptr;
-    Material *m_material = nullptr;
-
+    ShaderProgram *m_selectionProgram = nullptr;
     /**
      * @brief Keeps track of the last GameObject the mouse was over.
      * This lets us inform of mouseOut events.
@@ -74,7 +72,6 @@ public:
     TextureRender *GetWorldPosTexture() const;
 
     GameObject *GetGameObjectInPosition(int x, int y);
-    Material* GetSelectionMaterial() const;
     Vector3 GetWorldPositionAt(int x, int y);
     bool IsPassing() const;
 

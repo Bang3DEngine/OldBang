@@ -37,8 +37,9 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     #endif
 
     m_renderGBufferToScreenMaterial =
-            AssetsManager::Load<Material>("Materials/RenderGBufferToScreen.bmat", true);
-    m_planeMeshToRenderEntireScreen = MeshFactory::GetPlane();
+         AssetsManager::Load<Material>("Materials/RenderGBufferToScreen.bmat",
+                                       true);
+    m_screenPlaneMesh = MeshFactory::GetUIPlane();
 }
 
 GraphicPipeline::~GraphicPipeline()
@@ -262,13 +263,13 @@ void GraphicPipeline::RenderCustomPR(Renderer *rend)
 void GraphicPipeline::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
 {
     ASSERT(mat);
+    ShaderProgram *sp = mat->GetShaderProgram(); ASSERT(sp);
 
-    m_planeMeshToRenderEntireScreen->
-            BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
-                                         *(mat->GetShaderProgram()));
+    m_screenPlaneMesh->BindPositionsToShaderProgram(
+      ShaderContract::Attr_Vertex_In_Position_Raw, *sp);
 
-    mat->GetShaderProgram()->SetUniformVec2("B_rectMinCoord", renderRect.GetMin());
-    mat->GetShaderProgram()->SetUniformVec2("B_rectMaxCoord", renderRect.GetMax());
+    sp->SetUniformVec2("B_rectMinCoord", renderRect.GetMin());
+    sp->SetUniformVec2("B_rectMaxCoord", renderRect.GetMax());
 
     mat->Bind();
     RenderScreenPlane();
@@ -277,11 +278,12 @@ void GraphicPipeline::RenderPassWithMaterial(Material *mat, const Rect &renderRe
 
 void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
 {
-    m_planeMeshToRenderEntireScreen->
-                BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw,
-                                             *(m_renderGBufferToScreenMaterial->GetShaderProgram()));
+    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
+    ASSERT(sp);
 
-    ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram(); ASSERT(sp);
+    m_screenPlaneMesh->BindPositionsToShaderProgram(
+                ShaderContract::Attr_Vertex_In_Position_Raw, *sp);
+
     sp->SetUniformTexture("B_color_gout_fin", fullScreenTexture, false);
 
     m_renderGBufferToScreenMaterial->Bind();
@@ -291,14 +293,14 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
 
 void GraphicPipeline::RenderScreenPlane()
 {
-    m_planeMeshToRenderEntireScreen->GetVAO()->Bind();
+    m_screenPlaneMesh->GetVAO()->Bind();
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDepthFunc(GL_ALWAYS);
     glDepthMask(GL_FALSE);
-    glDrawArrays(GL_TRIANGLES, 0, m_planeMeshToRenderEntireScreen->GetVertexCount());
+    glDrawArrays(GL_TRIANGLES, 0, m_screenPlaneMesh->GetVertexCount());
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
-    m_planeMeshToRenderEntireScreen->GetVAO()->UnBind();
+    m_screenPlaneMesh->GetVAO()->UnBind();
 }
 
 void GraphicPipeline::RenderGBuffer()
@@ -318,7 +320,6 @@ void GraphicPipeline::RenderGBuffer()
     RenderGizmosPass(m_gbuffer);
 
     m_gbuffer->UnBind();
-
 }
 
 #ifdef BANG_EDITOR

@@ -50,7 +50,7 @@ private:
     bool m_renderingInGame = false; // Rendering for the Game Screen or the Scene screen
 
     Material *m_renderGBufferToScreenMaterial = nullptr;
-    Mesh *m_planeMeshToRenderEntireScreen = nullptr;
+    Mesh *m_screenPlaneMesh = nullptr;
 
     Scene *m_currentScene = nullptr;
     Renderer::DepthLayer m_currentDepthLayer =
