@@ -17,6 +17,9 @@ EditorRectTransformAnchorGizmo::
 {
     m_attachedRectTransform = attachedGameObject->GetComponent<RectTransform>();
 
+    m_cursorIconWhenOver    = Cursor::CursorIcon::OpenHand;
+    m_cursorIconWhenGrabbed = Cursor::CursorIcon::ClosedHand;
+
     m_anchorPosition = anchorPosition;
     m_anchorTexture =
         AssetsManager::Load<Texture2D>("Textures/RectTransformAnchor.btex2d",
@@ -90,12 +93,13 @@ Vector2 EditorRectTransformAnchorGizmo::GetAnchorCenter() const
         offsetSign = Vector2(1.0f, -1.0f);
     }
 
-    Rect parentRect = rtrans->GetParentScreenRect();
+    Rect screenAnchorRect = rtrans->GetParentScreenRect(true);
     anchorPos.x = Math::Map(anchorPos.x, -1.0f, 1.0f,
-                            parentRect.GetMin().x, parentRect.GetMax().x);
-    anchorPos.y = Math::Map(anchorPos.y, -1.0f, 1.0f,
-                            parentRect.GetMin().y, parentRect.GetMax().y);
-    anchorPos.y *= -1.0f;
+                            screenAnchorRect.GetMin().x,
+                            screenAnchorRect.GetMax().x);
+    anchorPos.y = Math::Map(-anchorPos.y, -1.0f, 1.0f,
+                            screenAnchorRect.GetMin().y,
+                            screenAnchorRect.GetMax().y);
 
     Vector2 offset = offsetSign * Screen::GetPixelClipSize() * 20.0f;
     return anchorPos + offset;
@@ -115,12 +119,12 @@ Quaternion EditorRectTransformAnchorGizmo::GetAnchorRotation() const
 void EditorRectTransformAnchorGizmo::ApplyDisplacementToAnchor(
         const Vector2 &mouseDisp)
 {
-    Rect parentScreenRect = m_attachedRectTransform->GetParentScreenRect();
-    Vector2 d = mouseDisp;
-    d.x = Math::Map(d.x, -1.0f, 1.0f,
-                    parentScreenRect.m_minx, parentScreenRect.m_maxx);
-    d.y = Math::Map(d.y, -1.0f, 1.0f,
-                    parentScreenRect.m_miny, parentScreenRect.m_maxy);
+    Rect parentScreenRect = m_attachedRectTransform->GetParentScreenRect(true);
+    Vector2 parentScreenSize( parentScreenRect.GetSize() );
+    parentScreenSize.x = Math::Max(1.0f, parentScreenSize.x);
+    parentScreenSize.y = Math::Max(1.0f, parentScreenSize.y);
+    Vector2 d = mouseDisp / parentScreenSize;
+    d *= 2.0f;
 
     Vector2 anchorMin = m_attachedRectTransform->GetAnchorMin();
     Vector2 anchorMax = m_attachedRectTransform->GetAnchorMax();

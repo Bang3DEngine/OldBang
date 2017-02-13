@@ -63,6 +63,14 @@ void RectTransform::SetMarginBot(int marginBot)
     OnChanged();
 }
 
+void RectTransform::SetMargins(int left, int top, int right, int bot)
+{
+    SetMarginLeft(left);
+    SetMarginTop(top);
+    SetMarginRight(right);
+    SetMarginBot(bot);
+}
+
 void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
 {
     m_pivotPosition = pivotPosition;
@@ -130,6 +138,100 @@ Vector2 RectTransform::GetAnchorMax() const
     return m_anchorMax;
 }
 
+Rect RectTransform::GetScreenSpaceRect(bool takeMarginsIntoAccount) const
+{
+    Matrix4 parentToWorld;
+    if (gameObject->parent)
+    {
+        gameObject->parent->transform->GetLocalToWorldMatrix(&parentToWorld);
+    }
+
+    const Matrix4 &localToParentMatrix =
+            takeMarginsIntoAccount ? GetLocalToParentMatrix() :
+                                     GetLocalToParentMatrix(false);
+    return parentToWorld * localToParentMatrix * Rect::ScreenRect;
+}
+
+Rect RectTransform::GetParentScreenRect(bool takeMarginsIntoAccount) const
+{
+    Rect parentScreenRect = Rect::ScreenRect;
+    if (gameObject->parent)
+    {
+        RectTransform *parentRectTransform =
+                gameObject->parent->GetComponent<RectTransform>();
+        if (parentRectTransform)
+        {
+            parentScreenRect = parentRectTransform->
+                    GetScreenSpaceRect(takeMarginsIntoAccount);
+        }
+    }
+    return parentScreenRect;
+}
+
+void RectTransform::OnChanged()
+{
+    m_hasChanged = true;
+    List<RectTransform*> rectTransforms =
+            gameObject->GetComponentsInChildren<RectTransform>();
+    for (RectTransform *rt : rectTransforms)
+    {
+        rt->OnParentSizeChanged();
+    }
+}
+
+void RectTransform::OnParentSizeChanged()
+{
+    OnChanged();
+}
+
+const Matrix4 &RectTransform::GetLocalToParentMatrix() const
+{
+    if (m_hasChanged)
+    {
+        m_localToParentMatrix = GetLocalToParentMatrix(true);
+        m_hasChanged = false;
+    }
+    return m_localToParentMatrix;
+}
+
+Matrix4 RectTransform::GetLocalToParentMatrix(
+        bool takeMarginsIntoAccount) const
+{
+    const Vector2 screenSize = Screen::GetSize();
+    Vector2 parentSizeInPx = GetParentScreenRect(true).GetSize() * screenSize;
+    parentSizeInPx.x = Math::Max(1.0f, parentSizeInPx.x);
+    parentSizeInPx.y = Math::Max(1.0f, parentSizeInPx.y);
+
+    float marginMultiplier = takeMarginsIntoAccount ? 4.0f : 0.0f;
+    Vector2 pixelSizeInParent = (1.0f / parentSizeInPx) * marginMultiplier;
+
+    Vector2 minMarginedAnchor
+            (m_anchorMin + GetMarginLeftTop()  * pixelSizeInParent);
+    Vector2 maxMarginedAnchor
+            (m_anchorMax - GetMarginRightBot() * pixelSizeInParent);
+    Vector3 anchorScalingV
+            ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
+    Matrix4 anchorScaling = Matrix4::ScaleMatrix(anchorScalingV);
+
+    Vector3 moveToPivotV(-m_pivotPosition, 0);
+    moveToPivotV.y *= -1.0f;
+    Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
+
+    Vector3 moveToAnchorCenterV(
+                (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
+    moveToAnchorCenterV.y *= -1.0f;
+    Matrix4 moveToAnchorCenter =
+            Matrix4::TranslateMatrix(moveToAnchorCenterV);
+
+    //bool beforeHasChanged = m_hasChanged;
+    //Matrix4 rotScaleTransform = Transform::GetLocalToParentMatrix();
+    //m_hasChanged = beforeHasChanged;
+    return //rotScaleTransform *
+           moveToAnchorCenter *
+           anchorScaling *
+           moveToPivot;
+}
+
 void RectTransform::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Transform::ReadXMLInfo(xmlInfo);
@@ -158,89 +260,4 @@ void RectTransform::FillXMLInfo(XMLNode *xmlInfo) const
     Transform::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("RectTransform");
     xmlInfo->SetVector3("Position", Vector3::Zero, {XMLProperty::Hidden});
-}
-
-Rect RectTransform::GetParentScreenRect() const
-{
-    Rect parentScreenRect = Rect::ScreenRect;
-    RectTransform *parentRectTransform = nullptr;
-    if (gameObject->parent)
-    {
-        parentRectTransform = gameObject->parent->GetComponent<RectTransform>();
-    }
-
-    if (parentRectTransform)
-    {
-        parentScreenRect = parentRectTransform->GetScreenContainingRect();
-    }
-
-    return parentScreenRect;
-}
-
-Rect RectTransform::GetScreenContainingRect() const
-{
-    Matrix4 localToWorld;
-    GetLocalToWorldMatrix(&localToWorld);
-    return localToWorld * Rect::ScreenRect;
-}
-
-Rect RectTransform::GetContainingRectInParentSpace() const
-{
-    return GetLocalToParentMatrix() * Rect::ScreenRect;
-}
-
-void RectTransform::OnChanged()
-{
-    m_hasChanged = true;
-    List<RectTransform*> rectTransforms =
-            gameObject->GetComponentsInChildren<RectTransform>();
-    for (RectTransform *rt : rectTransforms)
-    {
-        rt->OnParentSizeChanged();
-    }
-}
-
-void RectTransform::OnParentSizeChanged()
-{
-    OnChanged();
-}
-
-const Matrix4 &RectTransform::GetLocalToParentMatrix() const
-{
-    if (m_hasChanged)
-    {
-        const Vector2 screenSize = Screen::GetSize();
-        Vector2 parentSizeInPx = GetParentScreenRect().GetSize() * screenSize;
-        parentSizeInPx.x = Math::Max(1.0f, parentSizeInPx.x);
-        parentSizeInPx.y = Math::Max(1.0f, parentSizeInPx.y);
-
-        float marginMultiplier = 4.0f; // Dont know why, havent thought it much
-        Vector2 pixelSizeInParent = (1.0f / parentSizeInPx) * marginMultiplier;
-
-        Vector2 minMarginedAnchor
-                (m_anchorMin + GetMarginLeftTop()  * pixelSizeInParent);
-        Vector2 maxMarginedAnchor
-                (m_anchorMax - GetMarginRightBot() * pixelSizeInParent);
-        Vector3 anchorScalingV
-                ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
-        Matrix4 anchorScaling = Matrix4::ScaleMatrix(anchorScalingV);
-
-        Vector3 moveToPivotV(-m_pivotPosition, 0);
-        moveToPivotV.y *= -1.0f;
-        Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
-
-        Vector3 moveToAnchorCenterV(
-                    (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
-        moveToAnchorCenterV.y *= -1.0f;
-        Matrix4 moveToAnchorCenter =
-                Matrix4::TranslateMatrix(moveToAnchorCenterV);
-
-        const Matrix4 &rotScaleTransform = Transform::GetLocalToParentMatrix();
-        m_localToParentMatrix = rotScaleTransform *
-                                moveToAnchorCenter *
-                                anchorScaling *
-                                moveToPivot;
-        m_hasChanged = false;
-    }
-    return m_localToParentMatrix;
 }

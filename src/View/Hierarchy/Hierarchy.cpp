@@ -549,7 +549,8 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
     }
 }
 
-void Hierarchy::_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column)
+void Hierarchy::_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item,
+                                                        int column)
 {
     GameObject *selected = GetGameObjectFromItem(item);
     if (selected)

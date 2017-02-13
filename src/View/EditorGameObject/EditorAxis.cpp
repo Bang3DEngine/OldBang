@@ -12,12 +12,14 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
                        GameObject *attachedGameObject)
     : EditorGizmo(attachedGameObject)
 {
-    m_oAxisDirection = EditorAxis::GetVectorFromDir(dir);
+    m_cursorIconWhenOver    = Cursor::CursorIcon::OpenHand;
+    m_cursorIconWhenGrabbed = Cursor::CursorIcon::ClosedHand;
 
     m_material = AssetsManager::Load<Material>("Materials/D2G_Default.bmat",
                                                true);
     m_material = new Material(*m_material);
 
+    m_oAxisDirection = EditorAxis::GetVectorFromDir(dir);
     m_lineColor = Color(m_oAxisDirection.Abs(), 1);
 }
 

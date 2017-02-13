@@ -129,11 +129,6 @@ int Screen::GetHeight()
     return Screen::GetInstance()->m_height;
 }
 
-void Screen::SetCursor(Qt::CursorShape cs)
-{
-    Application::GetInstance()->setOverrideCursor( cs );
-}
-
 GraphicPipeline *Screen::GetGraphicPipeline() const
 {
     return m_gPipeline;

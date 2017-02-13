@@ -48,8 +48,6 @@ public:
     static Vector2 GetSize();
     static Vector2 GetPixelClipSize();
 
-    static void SetCursor(Qt::CursorShape cs);
-
     GraphicPipeline *GetGraphicPipeline() const;
 
     #ifdef BANG_EDITOR

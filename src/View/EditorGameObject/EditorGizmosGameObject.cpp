@@ -31,8 +31,8 @@ void EditorGizmosGameObject::Init()
     if (!m_inited)
     {
         m_boxMesh = MeshFactory::GetCube();
-        m_sphereMesh = MeshFactory::GetSphere();
         m_planeMesh = MeshFactory::GetPlane();
+        m_sphereMesh = MeshFactory::GetSphere();
         m_material = AssetsManager::Load<Material>("Materials/D2G_Default.bmat",
                                                    true);
         m_material = new Material(*m_material);

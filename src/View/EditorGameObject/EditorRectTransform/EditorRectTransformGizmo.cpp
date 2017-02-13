@@ -72,7 +72,7 @@ void EditorRectTransformGizmo::OnDrawGizmosOverlay()
     ASSERT(EditorState::GetCurrentTransformMode() ==
            EditorState::RectTransform);
 
-    Rect rect = rtrans->GetScreenContainingRect();
+    Rect rect = rtrans->GetScreenSpaceRect(true);
     Gizmos::SetColor(Color::White);
     Gizmos::SetLineWidth(2.0f);
     Gizmos::RenderRect(rect);

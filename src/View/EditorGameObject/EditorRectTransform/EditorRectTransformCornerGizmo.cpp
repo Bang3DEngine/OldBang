@@ -2,9 +2,11 @@
 
 #include "Math.h"
 #include "Debug.h"
+#include "Scene.h"
 #include "Screen.h"
 #include "Texture2D.h"
 #include "EditorState.h"
+#include "SceneManager.h"
 #include "RectTransform.h"
 #include "AssetsManager.h"
 
@@ -13,6 +15,10 @@ EditorRectTransformCornerGizmo::EditorRectTransformCornerGizmo(
         GameObject *attachedGameObject) : EditorGizmo(attachedGameObject)
 {
     m_attachedRectTransform = attachedGameObject->GetComponent<RectTransform>();
+
+    m_cursorIconWhenOver    = Cursor::CursorIcon::OpenHand;
+    m_cursorIconWhenGrabbed = Cursor::CursorIcon::ClosedHand;
+
     m_cornerPosition = cornerPosition;
     m_circleTexture =
             AssetsManager::Load<Texture2D>("Textures/CircleIcon.btex2d", true);
@@ -20,15 +26,20 @@ EditorRectTransformCornerGizmo::EditorRectTransformCornerGizmo(
 
 EditorRectTransformCornerGizmo::~EditorRectTransformCornerGizmo()
 {
-
 }
 
 void EditorRectTransformCornerGizmo::OnUpdate()
 {
     EditorGizmo::OnUpdate();
 
-    if (!m_mouseIsOver) { m_cornerColor = Color(0.0f, 0.0f, 0.6f); }
-    else { m_cornerColor = Color(0.0f, 0.5f, 1.0f); }
+    if (!m_mouseIsOver && !m_grabbed)
+    {
+        m_cornerColor = Color(0.0f, 0.0f, 0.6f);
+    }
+    else
+    {
+        m_cornerColor = Color(0.0f, 0.5f, 1.0f);
+    }
     m_cornerColor.a = 1.0f;
 
     if (m_grabbed)
@@ -47,12 +58,12 @@ void EditorRectTransformCornerGizmo::OnDrawGizmosOverlay()
     ASSERT(EditorState::GetCurrentTransformMode() ==
            EditorState::RectTransform);
 
-    Rect rect = rtrans->GetScreenContainingRect();
+    Rect rect = rtrans->GetScreenSpaceRect(true);
     const Vector2 cornerOffset = GetCornerOffset();
     const Vector2 circleCenter = rect.GetCenter() + cornerOffset;
     const Vector2 circleSize = Vector2(0.025f);
 
-    const float borderColor = m_mouseIsOver ? 1.5f : 1.25f;
+    const float borderColor = (m_mouseIsOver || m_grabbed) ? 1.5f : 1.25f;
     const Rect circleBorderRect(circleCenter - circleSize * borderColor,
                                 circleCenter + circleSize * borderColor);
     Gizmos::SetColor(Color::White);
@@ -67,7 +78,7 @@ void EditorRectTransformCornerGizmo::OnDrawGizmosOverlay()
 Vector2 EditorRectTransformCornerGizmo::GetCornerOffset() const
 {
     RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
-    Rect rect = rtrans->GetScreenContainingRect();
+    Rect rect = rtrans->GetScreenSpaceRect(true);
 
     Vector2 off = Vector2::One;
     Vector2 rectSize = rect.GetSize() * 0.5f;

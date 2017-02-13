@@ -540,6 +540,12 @@ void GameObject::OnHierarchyGameObjectsSelected(List<GameObject*> &selectedEntit
     {
         m_selectionGameObject = new EditorSelectionGameObject(this);
         m_selectionGameObject->SetParent(SceneManager::GetActiveScene());
+
+        if (EditorState::GetCurrentTransformMode() ==
+            EditorState::TransformMode::RectTransform)
+        {
+            EditorState::SetTransformMode(EditorState::TransformMode::Translate);
+        }
     }
     else if (wasSelected && !selected && m_selectionGameObject)
     {

@@ -38,5 +38,9 @@ void UIGameObject::OnHierarchyGameObjectsSelected(
     GameObject::OnHierarchyGameObjectsSelected(selectedGameObjects);
     if (IsEditorGameObject() || IsScene()) return;
 
-    EditorState::SetTransformMode(EditorState::TransformMode::RectTransform);
+    if ( IsSelected() )
+    {
+        EditorState::SetTransformMode(
+                    EditorState::TransformMode::RectTransform);
+    }
 }

@@ -1,6 +1,7 @@
 #ifndef EDITORGIZMO_H
 #define EDITORGIZMO_H
 
+#include "Cursor.h"
 #include "EditorGameObject.h"
 
 class EditorGizmo : public EditorGameObject
@@ -14,6 +15,9 @@ public:
     virtual void OnMouseExit(bool fromChildren) override;
 
 protected:
+    Cursor::CursorIcon m_cursorIconWhenOver    = Cursor::CursorIcon::Arrow;
+    Cursor::CursorIcon m_cursorIconWhenGrabbed = Cursor::CursorIcon::Arrow;
+
     bool m_grabbed = false;
     bool m_mouseIsOver = false;
     GameObject *m_attachedGameObject = nullptr;

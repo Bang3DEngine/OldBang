@@ -23,6 +23,7 @@ public:
     void SetMarginTop(int marginTop);
     void SetMarginRight(int marginRight);
     void SetMarginBot(int marginBot);
+    void SetMargins(int left, int top, int right, int bot);
 
     void SetPivotPosition(const Vector2 &pivotPosition);
     void SetAnchorMin(const Vector2 &anchorMin);
@@ -42,11 +43,11 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-    Rect GetScreenContainingRect() const;
-    Rect GetContainingRectInParentSpace() const;
+    Rect GetScreenSpaceRect(bool takeMarginsIntoAccount) const;
 
-    Rect GetParentScreenRect() const;
+    Rect GetParentScreenRect(bool takeMarginsIntoAccount) const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
+    Matrix4 GetLocalToParentMatrix(bool takeMarginsIntoAccount) const;
 
     void OnParentSizeChanged();
 

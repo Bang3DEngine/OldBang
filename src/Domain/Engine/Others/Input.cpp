@@ -1,6 +1,7 @@
 #include "Input.h"
 
 #include "Time.h"
+#include "Cursor.h"
 #include "Screen.h"
 #include "Application.h"
 #include "SingletonManager.h"
@@ -13,6 +14,7 @@
 
 Input::Input()
 {
+    m_cursor = new Cursor();
 }
 
 void Input::InitFromMainBinary() // Called from Screen

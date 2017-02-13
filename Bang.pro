@@ -284,7 +284,8 @@ HEADERS +=                                                          \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
-    src/View/EditorGameObject/EditorGizmo.h
+    src/View/EditorGameObject/EditorGizmo.h \
+    src/View/Cursor.h
 
 EDITOR {
 HEADERS += \
@@ -480,7 +481,8 @@ SOURCES += \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
-    src/View/EditorGameObject/EditorGizmo.cpp
+    src/View/EditorGameObject/EditorGizmo.cpp \
+    src/View/Cursor.cpp
 
 EDITOR {
     SOURCES += \

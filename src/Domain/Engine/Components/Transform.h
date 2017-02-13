@@ -92,7 +92,6 @@ public:
     virtual const Matrix4& GetLocalToParentMatrix() const;
     void GetLocalToParentMatrix(Matrix4 *m) const;
     void GetLocalToWorldMatrix(Matrix4 *m) const;
-
     void GetLocalToWorldNormalMatrix(Matrix4 *m) const;
 
     Vector3 GetForward() const;

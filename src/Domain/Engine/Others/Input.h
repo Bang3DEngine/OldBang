@@ -10,10 +10,9 @@
 #include "Vector2.h"
 #include "IToString.h"
 
+class Cursor;
 class Input
 {
-friend class Screen;
-friend class Application;
 
 public:
     enum Key
@@ -95,8 +94,56 @@ public:
         MMouseButtonMask  = 0x000000ff
     };
 
-private:
+    static Input* GetInstance();
+    static void InitFromMainBinary();
 
+    static bool GetMouseWrapping();
+    static void SetMouseWrapping(bool m_mouseWrapping);
+
+    static bool GetKey(Key k);
+    static bool GetKeyUp(Key k);
+    static bool GetKeyDown(Key k);
+
+    static float GetMouseWheel();
+
+    static bool GetMouseButton(MouseButton mb);
+    static bool GetMouseButtonUp(MouseButton mb);
+    static bool GetMouseButtonDown(MouseButton mb);
+    static bool GetMouseButtonDoubleClick(MouseButton mb);
+
+    /**
+     * @brief GetMouseAxisX
+     * @return Mouse movement in x divided by screen width [0.0f, 1.0f]
+     */
+    static float GetMouseAxisX();
+
+    /**
+     * @brief GetMouseDeltaY
+     * @return Mouse movement in y divided by screen height [0.0f, 1.0f]
+     */
+    static float GetMouseAxisY();
+    static Vector2 GetMouseAxis();
+
+    /**
+     * @brief GetMouseDeltaX
+     * @return Mouse movement in x in pixels [0.0f, screenWidth]
+     */
+    static float GetMouseDeltaX();
+
+    /**
+     * @brief GetMouseDeltaY
+     * @return Mouse movement in y in pixels [0.0f, screenHeight]
+     */
+    static float GetMouseDeltaY();
+    static Vector2 GetMouseDelta();
+
+    static void LockMouseMovement(bool lock);
+    static bool IsLockMouseMovement();
+
+    static Vector2 GetMouseCoords();
+    static Vector2 GetPreviousMouseCoords();
+
+private:
     Input();
 
     class EventInfo
@@ -147,6 +194,7 @@ private:
      */
     Map<Key, ButtonInfo> m_keyInfos;
 
+    Cursor *m_cursor = nullptr;
 
     /**
      * @brief If true, mouse will loop in x and y when
@@ -210,56 +258,9 @@ private:
     void ProcessEnqueuedEvents();
     void OnFrameFinished();
 
-
-public:
-    static Input* GetInstance();
-    static void InitFromMainBinary();
-
-    static bool GetMouseWrapping();
-    static void SetMouseWrapping(bool m_mouseWrapping);
-
-    static bool GetKey(Key k);
-    static bool GetKeyUp(Key k);
-    static bool GetKeyDown(Key k);
-
-    static float GetMouseWheel();
-
-    static bool GetMouseButton(MouseButton mb);
-    static bool GetMouseButtonUp(MouseButton mb);
-    static bool GetMouseButtonDown(MouseButton mb);
-    static bool GetMouseButtonDoubleClick(MouseButton mb);
-
-    /**
-     * @brief GetMouseAxisX
-     * @return Mouse movement in x divided by screen width [0.0f, 1.0f]
-     */
-    static float GetMouseAxisX();
-
-    /**
-     * @brief GetMouseDeltaY
-     * @return Mouse movement in y divided by screen height [0.0f, 1.0f]
-     */
-    static float GetMouseAxisY();
-    static Vector2 GetMouseAxis();
-
-    /**
-     * @brief GetMouseDeltaX
-     * @return Mouse movement in x in pixels [0.0f, screenWidth]
-     */
-    static float GetMouseDeltaX();
-
-    /**
-     * @brief GetMouseDeltaY
-     * @return Mouse movement in y in pixels [0.0f, screenHeight]
-     */
-    static float GetMouseDeltaY();
-    static Vector2 GetMouseDelta();
-
-    static void LockMouseMovement(bool lock);
-    static bool IsLockMouseMovement();
-
-    static Vector2 GetMouseCoords();
-    static Vector2 GetPreviousMouseCoords();
+    friend class Screen;
+    friend class Cursor;
+    friend class Application;
 };
 
 #endif // INPUT_H

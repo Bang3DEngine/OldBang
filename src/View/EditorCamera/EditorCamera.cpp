@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "Scene.h"
 #include "Screen.h"
+#include "Cursor.h"
 #include "Camera.h"
 #include "Screen.h"
 #include "Transform.h"
@@ -122,7 +123,7 @@ void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
 
         transform->Translate(m_camt->GetRight() * delta.x + m_camt->GetUp() * delta.y);
 
-        Screen::SetCursor(Qt::SizeAllCursor);
+        Cursor::SetIcon(Cursor::CursorIcon::MoveArrows);
         Input::SetMouseWrapping(true);
         *hasMoved  = true;
         *unwrapMouse = false;
@@ -248,10 +249,10 @@ void EditorCamera::OnUpdate()
         UpdateRotationVariables();
     }
 
-    if (unwrapMouse)
+    if (unwrapMouse && Input::GetMouseWrapping())
     {
-        Screen::SetCursor( Qt::ArrowCursor ); //cursor visible
         Input::SetMouseWrapping(false);
+        Cursor::SetIcon(Cursor::CursorIcon::Arrow);
     }
 }
 

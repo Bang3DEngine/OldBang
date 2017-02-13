@@ -36,19 +36,17 @@ void EditorAxisGroup::OnUpdate()
     EditorState::TransformMode tm =
             EditorState::GetCurrentTransformMode();
 
+    DisableAllGroups();
     if (tm == EditorState::TransformMode::Translate)
     {
-        DisableAllGroups();
         m_etag->SetEnabled(true);
     }
     else if (tm == EditorState::TransformMode::Rotate)
     {
-        DisableAllGroups();
         m_erag->SetEnabled(true);
     }
     else if (tm == EditorState::TransformMode::Scale)
     {
-        DisableAllGroups();
         m_esag->SetEnabled(true);
     }
 
