@@ -6,10 +6,14 @@
 #include "Map.h"
 #include "List.h"
 #include "String.h"
-#include "ListLogger.h"
 #include "Persistence.h"
 
+#ifdef BANG_EDITOR
+#include "ListLogger.h"
+#endif
+
 #include "IToString.h"
+
 class BehaviourId : public IToString
 {
 public:
@@ -52,7 +56,12 @@ private:
 
     Map<BehaviourId, QLibrary*> m_libraries;
     Map<BehaviourId, List<BehaviourHolder*> > m_demanders;
+
+    #ifdef BANG_EDITOR
     Map<String, List<ListLogger::MessageId> > m_failMessagesIds;
+    #else
+    Map<String, List<int> > m_failMessagesIds; // useless map :)
+    #endif
 
     BehaviourManagerStatus();
 

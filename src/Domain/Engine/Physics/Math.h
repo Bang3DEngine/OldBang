@@ -215,6 +215,15 @@ public:
         return (b-a) * t + a;
     }
 
+    static float Map(float value,
+                     float srcMin, float srcMax,
+                     float destMin, float destMax)
+    {
+        return ((value-srcMin) / (srcMax - srcMin)) *
+                (destMax - destMin) +
+                destMin;
+    }
+
     static float Deg2Rad(float deg)
     {
         return deg * Math::s_Deg2Rad;

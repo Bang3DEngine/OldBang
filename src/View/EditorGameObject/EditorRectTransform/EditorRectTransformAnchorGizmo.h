@@ -23,6 +23,7 @@ public:
     void OnDrawGizmosOverlay() override;
 
 private:
+    const float c_anchorSize = 0.05f;
     Color m_anchorColor = Color::Zero;
     Texture2D *m_anchorTexture = nullptr;
     AnchorPosition m_anchorPosition = AnchorPosition::TopLeft;

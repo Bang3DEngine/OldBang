@@ -112,7 +112,9 @@ void BehaviourManagerStatus::TreatIfBehaviourChanged(const String &behaviourPath
                 m_demanders.Remove(possiblyOutdatedBid);
                 m_libraries.Remove(possiblyOutdatedBid);
                 m_beingCompiled.erase(possiblyOutdatedBid);
+                #ifdef BANG_EDITOR
                 m_failMessagesIds.Remove(behaviourPath);
+                #endif
             }
         }
     }
@@ -147,7 +149,9 @@ void BehaviourManagerStatus::OnBehaviourSuccessCompiling(const String &behaviour
     m_libraries.Set(bid, loadedLibrary);
     m_beingCompiled.erase(bid);
     m_demanders.Remove(bid);
+    #ifdef BANG_EDITOR
     m_failMessagesIds.Remove(bid.behaviourAbsPath);
+    #endif
 }
 
 void BehaviourManagerStatus::OnBehaviourFailedCompiling(const String &behaviourPath,
@@ -158,6 +162,7 @@ void BehaviourManagerStatus::OnBehaviourFailedCompiling(const String &behaviourP
     // Clear old fails of the same behaviour (but with outdated code)
     ClearFails(bid.behaviourAbsPath);
 
+    #ifdef BANG_EDITOR
     if (!errorMessage.Empty())
     {
         ListLogger *lLog = ListLogger::GetInstance();
@@ -165,6 +170,8 @@ void BehaviourManagerStatus::OnBehaviourFailedCompiling(const String &behaviourP
                                                      behaviourPath, true);
         m_failMessagesIds.Get(behaviourPath).PushBack(msgId);
     }
+    #endif
+
     m_beingCompiled.erase(bid);
     m_failed.insert(bid);
 }
@@ -193,11 +200,13 @@ void BehaviourManagerStatus::ClearFails(const String &behaviourPath)
     }
 
     // Clear the fail messages from the logger.
+    #ifdef BANG_EDITOR
     for (ListLogger::MessageId msgId : m_failMessagesIds.Get(bid.behaviourAbsPath))
     {
         ListLogger::GetInstance()->ClearMessage(msgId);
     }
     m_failMessagesIds.Remove(bid.behaviourAbsPath);
+    #endif
 }
 
 List<BehaviourId> BehaviourManagerStatus::GetCurrentBehaviourIds() const

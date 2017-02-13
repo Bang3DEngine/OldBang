@@ -35,12 +35,13 @@ void EditorRectTransformAnchorGizmo::OnUpdate()
 
 void EditorRectTransformAnchorGizmo::OnDrawGizmosOverlay()
 {
-    ASSERT( m_attachedGameObject->GetComponent<RectTransform>() );
+    RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
+    ASSERT(rtrans);
     ASSERT(EditorState::GetCurrentTransformMode() ==
            EditorState::RectTransform);
 
     const Vector2 anchorCenter = GetAnchorCenter();
-    const Vector2 anchorSize = Vector2(0.05f);
+    const Vector2 anchorSize = Vector2(c_anchorSize);
     const Rect anchorRect(anchorCenter - anchorSize,
                           anchorCenter + anchorSize);
 
@@ -58,29 +59,33 @@ Vector2 EditorRectTransformAnchorGizmo::GetAnchorCenter() const
     Vector2 anchorPos, offsetSign;
     if (m_anchorPosition == AnchorPosition::TopRight)
     {
-        anchorPos = Vector2(aMax.x, aMax.y);
+        anchorPos = Vector2(aMax.x, aMin.y);
         offsetSign = Vector2( 1.0f, 1.0f);
     }
     else if (m_anchorPosition == AnchorPosition::TopLeft )
     {
-        anchorPos = Vector2(aMin.x, aMax.y);
+        anchorPos = Vector2(aMin.x, aMin.y);
         offsetSign = Vector2(-1.0f, 1.0f);
     }
     else if (m_anchorPosition == AnchorPosition::BotLeft )
     {
-        anchorPos = Vector2(aMin.x, aMin.y);
+        anchorPos = Vector2(aMin.x, aMax.y);
         offsetSign = Vector2(-1.0f, -1.0f);
     }
     else if (m_anchorPosition == AnchorPosition::BotRight)
     {
-        anchorPos = Vector2(aMax.x, aMin.y);
+        anchorPos = Vector2(aMax.x, aMax.y);
         offsetSign = Vector2(1.0f, -1.0f);
     }
 
-    Matrix4 localToWorld = rtrans->GetLocalToWorldMatrixAnchors();
-    anchorPos = (localToWorld * Vector4(anchorPos, 0, 1)).xy();
+    Rect parentRect = rtrans->GetParentScreenRect();
+    anchorPos.x = Math::Map(anchorPos.x, -1.0f, 1.0f,
+                            parentRect.GetMin().x, parentRect.GetMax().x);
+    anchorPos.y = Math::Map(anchorPos.y, -1.0f, 1.0f,
+                            parentRect.GetMin().y, parentRect.GetMax().y);
+    anchorPos.y *= -1.0f;
 
-    Vector2 offset = offsetSign * Screen::GetPixelClipSize() * 10.0f;
+    Vector2 offset = offsetSign * Screen::GetPixelClipSize() * 20.0f;
     return anchorPos + offset;
 }
 

@@ -47,7 +47,6 @@ public:
 
     Rect GetParentScreenRect() const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
-    virtual Matrix4 GetLocalToWorldMatrixAnchors() const;
 
     void OnParentSizeChanged();
 
@@ -67,7 +66,6 @@ private:
     Vector2 m_anchorMax     = Vector2( 1.0f);
 
     void OnChanged();
-    Matrix4 GetLocalToParentMatrix(bool takeIntoAccountMargins) const;
 
     friend class Screen;
     friend class GameObject;
