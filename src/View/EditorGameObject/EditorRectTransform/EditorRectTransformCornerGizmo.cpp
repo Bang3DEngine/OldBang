@@ -8,10 +8,9 @@
 #include "AssetsManager.h"
 
 EditorRectTransformCornerGizmo::EditorRectTransformCornerGizmo(
-        GameObject *attachedGameObject,
-        CornerPosition cornerPosition)
+        CornerPosition cornerPosition,
+        GameObject *attachedGameObject) : EditorGizmo(attachedGameObject)
 {
-    m_attachedGameObject = attachedGameObject;
     m_cornerPosition = cornerPosition;
     m_circleTexture =
             AssetsManager::Load<Texture2D>("Textures/CircleIcon.btex2d", true);
@@ -24,12 +23,12 @@ EditorRectTransformCornerGizmo::~EditorRectTransformCornerGizmo()
 
 void EditorRectTransformCornerGizmo::OnUpdate()
 {
-    const float fading = (m_mouseIsOver ? 1.0f : 0.7f);
-    m_cornerColor = fading * Color(0.3f, 0.3f, 1.0f);
+    if (!m_mouseIsOver) { m_cornerColor = Color(0.0f, 0.0f, 0.6f); }
+    else { m_cornerColor = Color(0.0f, 0.5f, 1.0f); }
     m_cornerColor.a = 1.0f;
 }
 
-void EditorRectTransformCornerGizmo::OnDrawGizmos()
+void EditorRectTransformCornerGizmo::OnDrawGizmosOverlay()
 {
     RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
     ASSERT(rtrans);
@@ -39,10 +38,11 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos()
     Rect rect = rtrans->GetScreenContainingRect();
     const Vector2 cornerOffset = GetCornerOffset();
     const Vector2 circleCenter = rect.GetCenter() + cornerOffset;
-    const Vector2 circleSize = Screen::GetPixelClipSize() * 10.0f;
+    const Vector2 circleSize = Vector2(0.025f);
 
-    const Rect circleBorderRect(circleCenter - circleSize * 1.5f,
-                                circleCenter + circleSize * 1.5f);
+    const float borderColor = m_mouseIsOver ? 1.5f : 1.25f;
+    const Rect circleBorderRect(circleCenter - circleSize * borderColor,
+                                circleCenter + circleSize * borderColor);
     Gizmos::SetColor(Color::White);
     Gizmos::RenderScreenIcon(m_circleTexture, circleBorderRect);
 
@@ -50,18 +50,6 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos()
                           circleCenter + circleSize);
     Gizmos::SetColor(m_cornerColor);
     Gizmos::RenderScreenIcon(m_circleTexture, circleRect);
-}
-
-void EditorRectTransformCornerGizmo::OnMouseExit(bool fromChildren)
-{
-    EditorGameObject::OnMouseExit(fromChildren);
-    m_mouseIsOver = false;
-}
-
-void EditorRectTransformCornerGizmo::OnMouseEnter(bool fromChildren)
-{
-    EditorGameObject::OnMouseEnter(fromChildren);
-    m_mouseIsOver = true;
 }
 
 Vector2 EditorRectTransformCornerGizmo::GetCornerOffset() const

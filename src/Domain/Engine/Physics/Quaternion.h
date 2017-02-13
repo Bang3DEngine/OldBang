@@ -30,7 +30,7 @@ public:
     static Quaternion FromTo(const Vector3 &from, const Vector3 &to);
     static Quaternion LookDirection(const Vector3 &_forward,
                                     const Vector3 &_up = Vector3::Up);
-    static Quaternion AngleAxis(float angleDeg, const Vector3 &axis);
+    static Quaternion AngleAxis(float angleRads, const Vector3 &axis);
     static Quaternion FromRotationMatrix(const Matrix4 &rotMatrix);
 
     static Quaternion Identity;

@@ -4,8 +4,7 @@
 #include "Color.h"
 #include "String.h"
 #include "Vector3.h"
-
-#include "EditorGameObject.h"
+#include "EditorGizmo.h"
 
 class Input;
 class Camera;
@@ -13,7 +12,7 @@ class Renderer;
 class Material;
 class Transform;
 class GameObject;
-class EditorAxis : public EditorGameObject
+class EditorAxis : public EditorGizmo
 {
 public:
     enum EditorAxisDirection { X, Y, Z, Central };
@@ -21,7 +20,6 @@ public:
 protected:
 
     Material *m_material = nullptr;
-    GameObject *m_attachedGameObject = nullptr;
 
     /**
      * @brief To know when the user is grabbing the axis with the mouse
@@ -44,8 +42,6 @@ protected:
      */
     Vector3 m_oAxisDirection;
 
-    bool m_mouseIsOver = false;
-
     float m_axisLineWidth = 2.0f;
 
     static String GetStringFromDir(EditorAxisDirection dir);
@@ -62,9 +58,6 @@ public:
     virtual ~EditorAxis();
 
     virtual void OnUpdate() override;
-
-    void OnMouseEnter(bool fromChildren) override;
-    void OnMouseExit(bool fromChildren) override;
 };
 
 #endif // EDITORAXIS_H

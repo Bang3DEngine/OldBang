@@ -47,6 +47,8 @@ public:
     void Rotate(const Quaternion &r);
     void RotateEuler(const Vector3 &degreesEuler);
 
+    void SetLocalScaleAfterRotation(const Vector3 &s);
+
     void SetScale(float s);
     void SetScale(const Vector3 &v);
     void SetLocalScale(float s);
@@ -126,6 +128,7 @@ protected:
     mutable Matrix4 m_localToParentMatrix;
     Vector3 m_localPosition = Vector3::Zero;
     Quaternion m_localRotation = Quaternion::Identity;
+    Vector3 m_localScaleAfterRotation = Vector3::One;
     Vector3 m_localScale = Vector3::One;
 
     // Used in inspector too

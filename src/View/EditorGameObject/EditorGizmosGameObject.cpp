@@ -4,6 +4,7 @@
 #include "Rect.h"
 #include "Debug.h"
 #include "Scene.h"
+#include "Screen.h"
 #include "Camera.h"
 #include "Renderer.h"
 #include "Material.h"
@@ -192,8 +193,7 @@ void EditorGizmosGameObject::RenderCircle(float radius)
 void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
                                         bool billboard)
 {
-    MeshRenderer *mr = GetComponent<MeshRenderer>();
-    ASSERT(m_planeMesh);
+    MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(m_planeMesh);
     mr->SetMesh(m_planeMesh);
 
     SetDrawWireframe(false);
@@ -223,12 +223,14 @@ void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
 void EditorGizmosGameObject::RenderScreenIcon(const Texture2D *texture,
                                               const Rect &screenRect)
 {
-    MeshRenderer *mr = GetComponent<MeshRenderer>();
-    ASSERT(m_planeMesh);
+    MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(m_planeMesh);
     mr->SetMesh(m_planeMesh);
 
     Gizmos::SetPosition( Vector3(screenRect.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(screenRect.GetSize(), 1) );
+
+    float ar = Screen::GetAspectRatio();
+    transform->SetLocalScaleAfterRotation( Vector3(1.0f / ar, 1, 1) );
 
     SetDrawWireframe(false);
     SetReceivesLighting(false);
@@ -371,6 +373,7 @@ void EditorGizmosGameObject::Reset()
     SetPosition(Vector3::Zero);
     SetRotation(Quaternion::Identity);
     SetScale(Vector3::One);
+    transform->SetLocalScaleAfterRotation( Vector3::One );
     SetColor(Color::Green);
     SetLineWidth(1.0f);
     SetReceivesLighting(false);

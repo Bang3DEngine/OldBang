@@ -109,9 +109,9 @@ Vector3 Quaternion::EulerAngles(const Quaternion &q)
     return Vector3(glm::eulerAngles(q));
 }
 
-Quaternion Quaternion::AngleAxis(float angleDeg, const Vector3 &axis)
+Quaternion Quaternion::AngleAxis(float angleRads, const Vector3 &axis)
 {
-    glm::quat q = glm::angleAxis(angleDeg, axis);
+    glm::quat q = glm::angleAxis(angleRads, axis);
     return Quaternion(q);
 }
 

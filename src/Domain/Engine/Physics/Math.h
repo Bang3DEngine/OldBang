@@ -200,7 +200,7 @@ public:
     template<class T>
     static T Modf(const T &value, const T &length)
     {
-        return std::modf(value, length);
+        return std::fmod(value, length);
     }
 
     template<class T>

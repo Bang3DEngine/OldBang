@@ -3,20 +3,9 @@
 
 class Time
 {
-friend class Behaviour;
-friend class GameObject;
-friend class Application;
-friend class SceneManager;
-
-private:
-    float m_deltaTime = 0.0f;
-    static float zero;
-
-    Time() {}
-    static Time* GetInstance();
-
 public:
-
+    static double s_time;
+    static double const& time;
     static float s_deltaTime;
     static float const& deltaTime;
 
@@ -29,11 +18,25 @@ public:
      */
     static float GetDeltaTime();
 
+    static double GetTime();
+
     /**
      * @brief GetNow
      * @return Returns the epoch time.
      */
     static unsigned long long GetNow();
+
+private:
+    double m_time = 0.0f;
+    float m_deltaTime = 0.0f;
+
+    Time() {}
+    static Time* GetInstance();
+
+    friend class Behaviour;
+    friend class GameObject;
+    friend class Application;
+    friend class SceneManager;
 };
 
 #endif // TIME_H

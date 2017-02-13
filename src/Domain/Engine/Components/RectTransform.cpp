@@ -196,6 +196,42 @@ void RectTransform::OnChanged()
     }
 }
 
+Matrix4 RectTransform::GetLocalToParentMatrix(bool takeIntoAccountMargins) const
+{
+    const Vector2 screenSize = Screen::GetSize();
+    Vector2 parentSizeInPx = GetParentScreenRect().GetSize() * screenSize;
+    parentSizeInPx.x = Math::Max(1.0f, parentSizeInPx.x);
+    parentSizeInPx.y = Math::Max(1.0f, parentSizeInPx.y);
+
+    float marginMultiplier = 4.0f; // Dont know why, havent thought it much
+    if (!takeIntoAccountMargins) {  marginMultiplier = 0.0f; }
+    Vector2 pixelSizeInParent = (1.0f / parentSizeInPx) * marginMultiplier;
+
+    Vector2 minMarginedAnchor
+            (m_anchorMin + GetMarginLeftTop()  * pixelSizeInParent);
+    Vector2 maxMarginedAnchor
+            (m_anchorMax - GetMarginRightBot() * pixelSizeInParent);
+    Vector3 anchorScalingV
+            ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
+    Matrix4 anchorScaling = Matrix4::ScaleMatrix(anchorScalingV);
+
+    Vector3 moveToPivotV(-m_pivotPosition, 0);
+    moveToPivotV.y *= -1.0f;
+    Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
+
+    Vector3 moveToAnchorCenterV(
+                (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
+    moveToAnchorCenterV.y *= -1.0f;
+    Matrix4 moveToAnchorCenter =
+            Matrix4::TranslateMatrix(moveToAnchorCenterV);
+
+    const Matrix4 &rotScaleTransform = Transform::GetLocalToParentMatrix();
+    return rotScaleTransform *
+           moveToAnchorCenter *
+           anchorScaling *
+           moveToPivot;
+}
+
 void RectTransform::OnParentSizeChanged()
 {
     OnChanged();
@@ -205,44 +241,21 @@ const Matrix4 &RectTransform::GetLocalToParentMatrix() const
 {
     if (m_hasChanged)
     {
-        const Vector2 screenSize = Screen::GetSize();
-        Vector2 parentSizeInPx = GetParentScreenRect().GetSize() * screenSize;
-        parentSizeInPx.x = Math::Max(1.0f, parentSizeInPx.x);
-        parentSizeInPx.y = Math::Max(1.0f, parentSizeInPx.y);
-
-        const float marginMultiplier = 4.0f; // Dont know why, havent thought
-                                             // it much
-        const Vector2 pixelSizeInParent =
-                (1.0f / parentSizeInPx) * marginMultiplier;
-
-        Vector2 minMarginedAnchor
-                (m_anchorMin + GetMarginLeftTop()  * pixelSizeInParent);
-        Vector2 maxMarginedAnchor
-                (m_anchorMax - GetMarginRightBot() * pixelSizeInParent);
-        Vector3 anchorScalingV
-                ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
-        Matrix4 anchorScaling = Matrix4::ScaleMatrix(anchorScalingV);
-
-        Vector3 moveToPivotV(-m_pivotPosition, 0);
-        moveToPivotV.y *= -1.0f;
-        Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
-
-        Vector3 moveToAnchorCenterV(
-                    (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
-        moveToAnchorCenterV.y *= -1.0f;
-        Matrix4 moveToAnchorCenter =
-                Matrix4::TranslateMatrix(moveToAnchorCenterV);
-
-        const Matrix4 &normalTransform = Transform::GetLocalToParentMatrix();
-        m_localToParentMatrix =
-                normalTransform *
-                moveToAnchorCenter *
-                anchorScaling *
-                moveToPivot
-                ;
-
+        m_localToParentMatrix = GetLocalToParentMatrix(true);
         m_hasChanged = false;
     }
     return m_localToParentMatrix;
+}
+
+Matrix4 RectTransform::GetLocalToWorldMatrixAnchors() const
+{
+    Matrix4 parentToWorld;
+    if (gameObject->parent)
+    {
+        gameObject->parent->transform->GetLocalToWorldMatrix(&parentToWorld);
+    }
+
+    Matrix4 localToParent = GetLocalToParentMatrix(false);
+    return parentToWorld * localToParent;
 }
 

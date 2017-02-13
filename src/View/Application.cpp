@@ -63,6 +63,7 @@ void Application::OnDrawTimerTick()
     // (this is not Behaviours' static deltaTime, theirs is
     //  updated in Behaviour _OnUpdate)
     Time::s_deltaTime = deltaTime;
+    Time::s_time += deltaTime;
     //
 
     // Process mouse and key events, so the Input is available in OnUpdate

@@ -20,6 +20,7 @@ void Behaviour::_OnUpdate()
 
     // Update static Time::deltaTime variable with mainBinary deltaTime
     Time::s_deltaTime = SingletonManager::GetInstance()->GetTimeSingleton()->m_deltaTime;
+    Time::s_time = SingletonManager::GetInstance()->GetTimeSingleton()->m_time;
 }
 
 void Behaviour::Init(BehaviourHolder *bh)

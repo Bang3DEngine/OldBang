@@ -282,7 +282,9 @@ HEADERS +=                                                          \
     src/Domain/Engine/GameObjects/UIGameObject.h \
     src/View/Inspector/AttributeWidgets/AttrWidgetInt.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.h \
-    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
+    src/View/EditorGameObject/EditorGizmo.h
 
 EDITOR {
 HEADERS += \
@@ -476,7 +478,9 @@ SOURCES += \
     src/Domain/Engine/GameObjects/UIGameObject.cpp \
     src/View/Inspector/AttributeWidgets/AttrWidgetInt.cpp \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \
-    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp \
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
+    src/View/EditorGameObject/EditorGizmo.cpp
 
 EDITOR {
     SOURCES += \

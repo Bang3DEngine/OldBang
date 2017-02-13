@@ -3,31 +3,53 @@
 #include "Debug.h"
 #include "EditorState.h"
 #include "RectTransform.h"
+#include "EditorRectTransformAnchorGizmo.h"
 #include "EditorRectTransformCornerGizmo.h"
 
 EditorRectTransformGizmo::EditorRectTransformGizmo(
         GameObject *attachedGameObject)
+    : EditorGizmo(attachedGameObject)
 {
-    m_attachedGameObject = attachedGameObject;
     m_leftTopCorner = new EditorRectTransformCornerGizmo(
-                attachedGameObject,
-                EditorRectTransformCornerGizmo::CornerPosition::TopLeft);
-    m_leftTopCorner->SetParent(this);
+                EditorRectTransformCornerGizmo::CornerPosition::TopLeft,
+                attachedGameObject);
 
     m_rightTopCorner = new EditorRectTransformCornerGizmo(
-                attachedGameObject,
-                EditorRectTransformCornerGizmo::CornerPosition::TopRight);
-    m_rightTopCorner->SetParent(this);
+                EditorRectTransformCornerGizmo::CornerPosition::TopRight,
+                attachedGameObject);
 
     m_leftBotCorner = new EditorRectTransformCornerGizmo(
-                attachedGameObject,
-                EditorRectTransformCornerGizmo::CornerPosition::BotLeft);
-    m_leftBotCorner->SetParent(this);
+                EditorRectTransformCornerGizmo::CornerPosition::BotLeft,
+                attachedGameObject);
 
     m_rightBotCorner = new EditorRectTransformCornerGizmo(
-                attachedGameObject,
-                EditorRectTransformCornerGizmo::CornerPosition::BotRight);
+                EditorRectTransformCornerGizmo::CornerPosition::BotRight,
+                attachedGameObject);
+
+    m_leftTopAnchor = new EditorRectTransformAnchorGizmo(
+                EditorRectTransformAnchorGizmo::AnchorPosition::TopLeft,
+                attachedGameObject);
+
+    m_rightTopAnchor = new EditorRectTransformAnchorGizmo(
+                EditorRectTransformAnchorGizmo::AnchorPosition::TopRight,
+                attachedGameObject);
+
+    m_leftBotAnchor = new EditorRectTransformAnchorGizmo(
+                EditorRectTransformAnchorGizmo::AnchorPosition::BotLeft,
+                attachedGameObject);
+
+    m_rightBotAnchor = new EditorRectTransformAnchorGizmo(
+                EditorRectTransformAnchorGizmo::AnchorPosition::BotRight,
+                attachedGameObject);
+
+    m_leftTopCorner->SetParent(this);
+    m_rightTopCorner->SetParent(this);
+    m_leftBotCorner->SetParent(this);
     m_rightBotCorner->SetParent(this);
+    m_leftTopAnchor->SetParent(this);
+    m_rightTopAnchor->SetParent(this);
+    m_leftBotAnchor->SetParent(this);
+    m_rightBotAnchor->SetParent(this);
 }
 
 EditorRectTransformGizmo::~EditorRectTransformGizmo()
@@ -38,7 +60,7 @@ void EditorRectTransformGizmo::OnUpdate()
 {
 }
 
-void EditorRectTransformGizmo::OnDrawGizmos()
+void EditorRectTransformGizmo::OnDrawGizmosOverlay()
 {
     RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
     ASSERT(rtrans);

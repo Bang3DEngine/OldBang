@@ -2,9 +2,9 @@
 #define EDITORRECTTRANSFORMCORNERGIZMO_H
 
 #include "Texture2D.h"
-#include "EditorGameObject.h"
+#include "EditorGizmo.h"
 
-class EditorRectTransformCornerGizmo : public EditorGameObject
+class EditorRectTransformCornerGizmo : public EditorGizmo
 {
 public:
     enum CornerPosition
@@ -15,22 +15,16 @@ public:
         BotLeft
     };
 
-    EditorRectTransformCornerGizmo(GameObject *attachedGameObject,
-                                   CornerPosition cornerPosition);
+    EditorRectTransformCornerGizmo(CornerPosition cornerPosition,
+                                   GameObject *attachedGameObject);
     virtual ~EditorRectTransformCornerGizmo();
 
     void OnUpdate() override;
-    void OnDrawGizmos() override;
-
-    void OnMouseEnter(bool fromChildren) override;
-    void OnMouseExit(bool fromChildren) override;
+    void OnDrawGizmosOverlay() override;
 
 private:
     Color m_cornerColor = Color::Zero;
-
-    bool m_mouseIsOver = false;
     Texture2D *m_circleTexture = nullptr;
-    GameObject *m_attachedGameObject = nullptr;
     CornerPosition m_cornerPosition = CornerPosition::TopLeft;
 
     Vector2 GetCornerOffset() const;
