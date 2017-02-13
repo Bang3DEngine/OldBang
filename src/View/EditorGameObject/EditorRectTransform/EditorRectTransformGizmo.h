@@ -19,6 +19,7 @@ private:
     EditorRectTransformCornerGizmo *m_rightTopCorner = nullptr;
     EditorRectTransformCornerGizmo *m_leftBotCorner  = nullptr;
     EditorRectTransformCornerGizmo *m_rightBotCorner = nullptr;
+    EditorRectTransformCornerGizmo *m_centerCorner   = nullptr;
 
     EditorRectTransformAnchorGizmo *m_leftTopAnchor  = nullptr;
     EditorRectTransformAnchorGizmo *m_rightTopAnchor = nullptr;

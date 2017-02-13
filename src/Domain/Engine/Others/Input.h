@@ -259,6 +259,7 @@ public:
     static bool IsLockMouseMovement();
 
     static Vector2 GetMouseCoords();
+    static Vector2 GetPreviousMouseCoords();
 };
 
 #endif // INPUT_H

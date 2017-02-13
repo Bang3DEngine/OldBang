@@ -44,27 +44,7 @@ Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir)
 
 void EditorAxis::OnUpdate()
 {
-    EditorGameObject::OnUpdate();
-
-    // Process grabbing
-    if (m_mouseIsOver && Input::GetMouseButtonDown(Input::MouseButton::MLeft))
-    {
-        // User has clicked on me!
-        m_grabbed = true;
-    }
-
-    if (m_grabbed)
-    {
-        if (Input::GetMouseButtonUp(Input::MouseButton::MLeft))
-        {
-            m_grabbed = false;
-            Input::SetMouseWrapping(false);
-        }
-        else
-        {
-            Input::SetMouseWrapping(true);
-        }
-    }
+    EditorGizmo::OnUpdate();
 
     // Process line color
     bool thickerLine = m_mouseIsOver || m_grabbed;

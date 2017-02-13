@@ -15,6 +15,8 @@ EditorRectTransformAnchorGizmo::
                                    GameObject *attachedGameObject)
     : EditorGizmo(attachedGameObject)
 {
+    m_attachedRectTransform = attachedGameObject->GetComponent<RectTransform>();
+
     m_anchorPosition = anchorPosition;
     m_anchorTexture =
         AssetsManager::Load<Texture2D>("Textures/RectTransformAnchor.btex2d",
@@ -29,8 +31,18 @@ EditorRectTransformAnchorGizmo::~EditorRectTransformAnchorGizmo()
 
 void EditorRectTransformAnchorGizmo::OnUpdate()
 {
-    float fading = (m_mouseIsOver ? 1.0f : 0.75f);
+    EditorGizmo::OnUpdate();
+
+    float fading = (m_mouseIsOver || m_grabbed ? 1.0f : 0.75f);
     m_anchorColor = Color(Color::White * fading, 1);
+
+    if (m_grabbed)
+    {
+        Vector2 mpLast = Input::GetPreviousMouseCoords() / Screen::GetSize();
+        Vector2 mp = Input::GetMouseCoords() / Screen::GetSize();
+        Vector2 anchorDisplacement = mp - mpLast;
+        ApplyDisplacementToAnchor(anchorDisplacement);
+    }
 }
 
 void EditorRectTransformAnchorGizmo::OnDrawGizmosOverlay()
@@ -98,5 +110,41 @@ Quaternion EditorRectTransformAnchorGizmo::GetAnchorRotation() const
     if (m_anchorPosition == AnchorPosition::BotRight) { angle =  135.0f; }
 
     return Quaternion::AngleAxis(Math::Deg2Rad(angle), Vector3::Forward);
+}
+
+void EditorRectTransformAnchorGizmo::ApplyDisplacementToAnchor(
+        const Vector2 &mouseDisp)
+{
+    Rect parentScreenRect = m_attachedRectTransform->GetParentScreenRect();
+    Vector2 d = mouseDisp;
+    d.x = Math::Map(d.x, -1.0f, 1.0f,
+                    parentScreenRect.m_minx, parentScreenRect.m_maxx);
+    d.y = Math::Map(d.y, -1.0f, 1.0f,
+                    parentScreenRect.m_miny, parentScreenRect.m_maxy);
+
+    Vector2 anchorMin = m_attachedRectTransform->GetAnchorMin();
+    Vector2 anchorMax = m_attachedRectTransform->GetAnchorMax();
+    if (m_anchorPosition == AnchorPosition::TopLeft)
+    {
+        anchorMin += Vector2(d.x, d.y);
+        anchorMax += Vector2(0.0, 0.0);
+    }
+    else if (m_anchorPosition == AnchorPosition::TopRight)
+    {
+        anchorMin += Vector2(0.0, d.y);
+        anchorMax += Vector2(d.x, 0.0);
+    }
+    else if (m_anchorPosition == AnchorPosition::BotLeft)
+    {
+        anchorMin += Vector2(d.x, 0.0);
+        anchorMax += Vector2(0.0, d.y);
+    }
+    else if (m_anchorPosition == AnchorPosition::BotRight)
+    {
+        anchorMin += Vector2(0.0, 0.0);
+        anchorMax += Vector2(d.x, d.y);
+    }
+    m_attachedRectTransform->SetAnchorMin(anchorMin);
+    m_attachedRectTransform->SetAnchorMax(anchorMax);
 }
 

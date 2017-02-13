@@ -41,44 +41,48 @@ ICloneable *RectTransform::Clone() const
 
 void RectTransform::SetMarginLeft(int marginLeft)
 {
-    OnChanged();
     m_marginLeft = marginLeft;
+    OnChanged();
 }
 
 void RectTransform::SetMarginTop(int marginTop)
 {
-    OnChanged();
     m_marginTop = marginTop;
+    OnChanged();
 }
 
 void RectTransform::SetMarginRight(int marginRight)
 {
-    OnChanged();
     m_marginRight = marginRight;
+    OnChanged();
 }
 
 void RectTransform::SetMarginBot(int marginBot)
 {
-    OnChanged();
     m_marginBot = marginBot;
+    OnChanged();
 }
 
 void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
 {
-    OnChanged();
     m_pivotPosition = pivotPosition;
+    OnChanged();
 }
 
 void RectTransform::SetAnchorMin(const Vector2 &anchorMin)
 {
-    OnChanged();
     m_anchorMin = anchorMin;
+    m_anchorMin.x = Math::Min(m_anchorMin.x, m_anchorMax.x);
+    m_anchorMin.y = Math::Min(m_anchorMin.y, m_anchorMax.y);
+    OnChanged();
 }
 
 void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
 {
-    OnChanged();
     m_anchorMax = anchorMax;
+    m_anchorMax.x = Math::Max(m_anchorMax.x, m_anchorMin.x);
+    m_anchorMax.y = Math::Max(m_anchorMax.y, m_anchorMin.y);
+    OnChanged();
 }
 
 int RectTransform::GetMarginLeft() const

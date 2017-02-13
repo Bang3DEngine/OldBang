@@ -22,16 +22,12 @@ protected:
     Material *m_material = nullptr;
 
     /**
-     * @brief To know when the user is grabbing the axis with the mouse
-     */
-    bool m_grabbed = false;
-
-    /**
      * @brief Line color will be multiplied by this when axis not being hovered.
      */
     const float c_colorFadingNotHover = 0.7f;
     /**
-     * @brief Line color will be multiplied by this when axis being hovered, but not grabbed.
+     * @brief Line color will be multiplied by this when axis being hovered,
+     * but not grabbed.
      */
     const float c_colorFadingNotGrabbed = 1.0f;
     const Color c_colorGrabbed = Color(1.0f, 1.0f, 0.0f, 1.0f);

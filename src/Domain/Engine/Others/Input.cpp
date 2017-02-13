@@ -375,6 +375,12 @@ Vector2 Input::GetMouseCoords()
     return inp->m_mouseCoords;
 }
 
+Vector2 Input::GetPreviousMouseCoords()
+{
+    Input *inp = Input::GetInstance();
+    return inp->m_lastMouseCoords;
+}
+
 
 Input::EventInfo::EventInfo(const QEvent *e)
 {

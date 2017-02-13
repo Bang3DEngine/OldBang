@@ -9,10 +9,12 @@ public:
     EditorGizmo(GameObject *attachedGameObject);
     virtual ~EditorGizmo();
 
-    void OnMouseEnter(bool fromChildren) override;
-    void OnMouseExit(bool fromChildren) override;
+    virtual void OnUpdate() override;
+    virtual void OnMouseEnter(bool fromChildren) override;
+    virtual void OnMouseExit(bool fromChildren) override;
 
 protected:
+    bool m_grabbed = false;
     bool m_mouseIsOver = false;
     GameObject *m_attachedGameObject = nullptr;
 };
