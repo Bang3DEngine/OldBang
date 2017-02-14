@@ -23,6 +23,8 @@ public:
                   float miny, float maxy);
     explicit Rect(const Vector2 &p1, const Vector2 &p2);
 
+    void InvertY();
+
     Vector2 GetMin() const;
     Vector2 GetMax() const;
 

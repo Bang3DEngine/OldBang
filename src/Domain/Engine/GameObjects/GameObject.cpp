@@ -100,7 +100,9 @@ GameObject::~GameObject()
     #endif
 }
 
-void GameObject::SetParent(GameObject *newParent, bool keepWorldTransform, GameObject *aboveThisChild)
+void GameObject::SetParent(GameObject *newParent,
+                           bool keepWorldTransform,
+                           GameObject *aboveThisChild)
 {
     if (m_parent)
     {

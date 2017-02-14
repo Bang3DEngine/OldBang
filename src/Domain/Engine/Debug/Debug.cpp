@@ -1,7 +1,6 @@
 #include "Debug.h"
 
 #include "Scene.h"
-#include "Color.h"
 #include "String.h"
 #include "Vector2.h"
 #include "Vector3.h"

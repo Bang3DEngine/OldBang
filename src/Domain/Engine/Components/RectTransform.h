@@ -14,6 +14,7 @@ class RectTransform : public Transform
   ( 1, 1): right-bot.
 **/
 public:
+    RectTransform();
     virtual ~RectTransform();
 
     void CloneInto(ICloneable *clone) const;
@@ -28,13 +29,14 @@ public:
     void SetPivotPosition(const Vector2 &pivotPosition);
     void SetAnchorMin(const Vector2 &anchorMin);
     void SetAnchorMax(const Vector2 &anchorMax);
+    void SetAnchors(const Vector2 &anchorMin, const Vector2 &anchorMax);
 
     int GetMarginLeft()  const;
     int GetMarginTop()   const;
     int GetMarginRight() const;
     int GetMarginBot()   const;
-    Vector2 GetMarginLeftTop() const;
-    Vector2 GetMarginRightBot() const;
+    Vector2 GetMarginLeftBot() const;
+    Vector2 GetMarginRightTop() const;
 
     Vector2 GetPivotPosition()  const;
     Vector2 GetAnchorMin()  const;
@@ -50,9 +52,6 @@ public:
     Matrix4 GetLocalToParentMatrix(bool takeMarginsIntoAccount) const;
 
     void OnParentSizeChanged();
-
-protected:
-    RectTransform();
 
 private:
     Vector2 m_anchorScale = Vector2(1.0f, -1.0f);

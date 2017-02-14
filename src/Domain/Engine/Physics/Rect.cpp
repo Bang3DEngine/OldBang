@@ -27,6 +27,12 @@ Rect::Rect(const Vector2 &p1, const Vector2 &p2)
     m_maxy = Math::Max(p1.y, p2.y);
 }
 
+void Rect::InvertY()
+{
+    m_miny *= -1; m_maxy *= -1;
+    std::swap(m_miny, m_maxy);
+}
+
 Vector2 Rect::GetMin() const
 {
     return Vector2(m_minx, m_miny);

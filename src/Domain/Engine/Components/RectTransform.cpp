@@ -25,8 +25,7 @@ void RectTransform::CloneInto(ICloneable *clone) const
     rt->SetMarginRight( GetMarginRight() );
     rt->SetMarginBot  ( GetMarginBot()   );
 
-    rt->SetAnchorMin( GetAnchorMin()  );
-    rt->SetAnchorMax( GetAnchorMax()  );
+    rt->SetAnchors( GetAnchorMin(), GetAnchorMax() );
 
     rt->SetPivotPosition( GetPivotPosition() );
 }
@@ -93,6 +92,16 @@ void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
     OnChanged();
 }
 
+void RectTransform::SetAnchors(const Vector2 &anchorMin,
+                               const Vector2 &anchorMax)
+{
+    // Bypass Min/Max clamping. Sometimes needed.
+    m_anchorMin = anchorMin;
+    m_anchorMax = anchorMax;
+    SetAnchorMin(anchorMin);
+    SetAnchorMax(anchorMax);
+}
+
 int RectTransform::GetMarginLeft() const
 {
     return m_marginLeft;
@@ -113,14 +122,14 @@ int RectTransform::GetMarginBot() const
     return m_marginBot;
 }
 
-Vector2 RectTransform::GetMarginLeftTop() const
+Vector2 RectTransform::GetMarginLeftBot() const
 {
-    return Vector2(m_marginLeft, m_marginTop);
+    return Vector2(m_marginLeft, m_marginBot);
 }
 
-Vector2 RectTransform::GetMarginRightBot() const
+Vector2 RectTransform::GetMarginRightTop() const
 {
-    return Vector2(m_marginRight, m_marginBot);
+    return Vector2(m_marginRight, m_marginTop);
 }
 
 Vector2 RectTransform::GetPivotPosition() const
@@ -206,20 +215,18 @@ Matrix4 RectTransform::GetLocalToParentMatrix(
     Vector2 pixelSizeInParent = (1.0f / parentSizeInPx) * marginMultiplier;
 
     Vector2 minMarginedAnchor
-            (m_anchorMin + GetMarginLeftTop()  * pixelSizeInParent);
+            (m_anchorMin + GetMarginLeftBot()  * pixelSizeInParent);
     Vector2 maxMarginedAnchor
-            (m_anchorMax - GetMarginRightBot() * pixelSizeInParent);
+            (m_anchorMax - GetMarginRightTop() * pixelSizeInParent);
     Vector3 anchorScalingV
             ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
     Matrix4 anchorScaling = Matrix4::ScaleMatrix(anchorScalingV);
 
     Vector3 moveToPivotV(-m_pivotPosition, 0);
-    moveToPivotV.y *= -1.0f;
     Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
 
     Vector3 moveToAnchorCenterV(
                 (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
-    moveToAnchorCenterV.y *= -1.0f;
     Matrix4 moveToAnchorCenter =
             Matrix4::TranslateMatrix(moveToAnchorCenterV);
 

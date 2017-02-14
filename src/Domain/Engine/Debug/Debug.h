@@ -9,8 +9,8 @@
 #include "Map.h"
 #include "List.h"
 #include "Array.h"
+#include "Color.h"
 
-class Color;
 class String;
 class Vector2;
 class Vector3;
@@ -32,14 +32,14 @@ public:
 
     static void DrawLine(const Vector3 &origin,
                          const Vector3 &destiny,
-                         const Color &color,
+                         const Color &color = Color::Green,
                          float lineWidth = 1.0f,
                          float secsTime = 1.0f,
                          bool depthTest = true);
 
     static void DrawScreenLine(const Vector2 &origin,
                                const Vector2 &destiny,
-                               const Color &color,
+                               const Color &color = Color::Green,
                                float lineWidth = 1.0f,
                                float secsTime = 1.0f);
 

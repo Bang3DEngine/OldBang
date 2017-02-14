@@ -42,7 +42,7 @@ private:
     int m_textSize = 32; // Set in the constructor
     String m_content = "";
 
-    void RenderText(bool forSelectionFramebuffer) const;
+    void RenderText() const;
     friend class GameObject;
 };
 
