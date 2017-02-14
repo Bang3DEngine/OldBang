@@ -34,9 +34,8 @@ UIText::~UIText()
 
 void UIText::Render() const
 {
-    glDisable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
     RenderText();
-    glEnable(GL_DEPTH_TEST);
 }
 
 void UIText::RenderForSelectionFramebufferWithoutBindingMaterial() const
@@ -91,6 +90,16 @@ int UIText::GetTextSize() const
     return m_textSize;
 }
 
+void UIText::SetHorizontalSpacing(int horizontalSpacing)
+{
+    m_horizontalSpacing = horizontalSpacing;
+}
+
+int UIText::GetHorizontalSpacing() const
+{
+    return m_horizontalSpacing;
+}
+
 Rect UIText::GetBoundingRect(Camera *camera) const
 {
     return Rect::ScreenRect;
@@ -110,55 +119,56 @@ void UIText::RenderText() const
     RectTransform *rtransCopy = copyGo->GetComponent<RectTransform>();
     rtrans->CloneInto(rtransCopy);
 
+    constexpr float scaleFactor = 0.05f;
     Rect screenRectNDC = rtrans->GetScreenSpaceRect(true);
-    Vector2 rectSizeNDC = screenRectNDC.GetSize();
-    Vector2 charSizeNDC = m_textSize / Screen::GetSize();
+    Vector2 textSizeNDC = m_textSize / Screen::GetSize() * scaleFactor;
+    float horizontalSpacingNDC = m_horizontalSpacing * textSizeNDC.x;
 
     GameObject *originalParent = gameObject->parent;
     gameObject->SetParent(nullptr);
 
+    float xDisplacementFromBeginning = 0.0f;
     rtrans->SetMargins(0,0,0,0);
-    rtrans->SetAnchorMin( screenRectNDC.GetMin() );
-    rtrans->SetAnchorMax( screenRectNDC.GetMax() );
-
-    for (int i = 0; i < m_content.Length() && i < 1; ++i)
+    for (int i = 0; i < m_content.Length(); ++i)
     {
         char c = m_content[i];
         const Font::CharGlyphMetrics &charMetrics = m_font->GetCharacterMetrics(c);
         Texture2D *charTexture = m_font->GetCharacterTexture(c);
 
-        //Vector3 quadScale (charMetrics.width, charMetrics.height, 1.0f);
-        //rtrans->SetScale(quadScale);          // The quad must have the dimensions of the char
-        //rtrans->Translate(-quadScale / 2.0f * Vector3::Up); // Move from center to topleft
+        Vector2 charSizePx (charMetrics.width, charMetrics.height);
+        if (!charTexture) { charSizePx = Vector2(40,40); }
 
-        //rtrans->SetAnchorMax( rtrans->GetAnchorMin() + charSize );
+        charSizePx *= textSizeNDC;
+
+        Vector2 charAnchorMin = screenRectNDC.GetMin();
+        charAnchorMin.x += xDisplacementFromBeginning;
 
         // Apply Bearings(X/Y)
-        //Vector3 bearing = Vector3(charMetrics.bearingX, charMetrics.bearingY, 0);
-        //transform->Translate(bearing);
+        Vector2 bearing (charMetrics.bearingX, charMetrics.bearingY);
+        charAnchorMin   += bearing * textSizeNDC;
+        charAnchorMin.y -= (charMetrics.height - charMetrics.originY) *
+                            textSizeNDC.y;
 
         // Set corresponding char texture to material
-        //int mLeft = rtrans->GetMarginLeft();
-        //rtrans->SetMarginLeft(mLeft + quadScale.x + bearing);
-
-        m_material->SetTexture(charTexture);
-        UIRenderer::Render();
-        m_material->SetTexture(nullptr);
-
-        //rtrans->SetMarginLeft(mLeft);
-        // Unapply Bearings(X/Y)
-        //transform->Translate(-bearing);
-        //transform->Translate(quadScale / 2.0f * Vector3::Up); // Move from topleft to center again
+        rtrans->SetAnchorMin(charAnchorMin);
+        rtrans->SetAnchorMax(charAnchorMin + charSizePx);
+        if (charTexture)
+        {
+            m_material->SetTexture(charTexture);
+            UIRenderer::Render();
+            m_material->SetTexture(nullptr);
+        }
 
         // Move to the right the advance distance
-        //float advance = charMetrics.advance;
-        //if (i > 0)
-        //{
+        float advance = charMetrics.advance;
+        if (i > 0)
+        {
             // Try to get the kerningX instead of advance
-            //float advx = m_font->GetKerningX(m_content[i-1], m_content[i]);
-            //if (advx > 0) { advance = advx; }
-        //}
-        //rtrans->SetMarginLeft(mLeft + advance);
+            float advx = m_font->GetKerningX(m_content[i-1], m_content[i]);
+            if (advx > 0) { advance = advx; }
+        }
+        xDisplacementFromBeginning += advance * textSizeNDC.x;
+        //xDisplacementFromBeginning += horizontalSpacingNDC;
     }
 
     rtransCopy->CloneInto(rtrans);
@@ -179,6 +189,7 @@ void UIText::ReadXMLInfo(const XMLNode *xmlInfo)
     m_textColor = xmlInfo->GetColor("Color");
     SetContent(xmlInfo->GetString("Content"));
     SetTextSize(xmlInfo->GetFloat("TextSize"));
+    SetHorizontalSpacing(xmlInfo->GetFloat("HorizontalSpacing"));
 }
 
 void UIText::FillXMLInfo(XMLNode *xmlInfo) const
@@ -190,6 +201,7 @@ void UIText::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetColor("Color", m_textColor);
     xmlInfo->SetString("Content", m_content, {XMLProperty::Inline});
     xmlInfo->SetFloat("TextSize", m_textSize);
+    xmlInfo->SetFloat("HorizontalSpacing", m_horizontalSpacing);
 
     xmlInfo->GetAttribute("Tint")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});

@@ -21,6 +21,7 @@ public:
         int bearingY; // Offset upwards from the baseline where the char pixels begin
         int bearingX; // Offset to right from the pen position where the char pixels begin
         int advance;  // Distance to be moved in X to right when drawing the next character
+        int originY;
     };
 
     static String GetFileExtensionStatic();

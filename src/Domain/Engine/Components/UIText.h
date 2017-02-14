@@ -34,12 +34,16 @@ public:
     void SetTextSize(int size);
     int GetTextSize() const;
 
+    void SetHorizontalSpacing(int horizontalSpacing);
+    int GetHorizontalSpacing() const;
+
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 private:
     Font *m_font = nullptr;
     Color m_textColor = Color::Black;
     int m_textSize = 32; // Set in the constructor
+    int m_horizontalSpacing = 10;
     String m_content = "";
 
     void RenderText() const;

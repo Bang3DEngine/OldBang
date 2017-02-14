@@ -103,11 +103,12 @@ bool FontSheetCreator::LoadCharTexture(const String &fontFilepath,
     // Get some metrics (they are given in 1/64 pixels...)
     // These are measurements relative to the full texture quad (size x size)
     Font::CharGlyphMetrics metrics;
-    metrics.width    = face->glyph->metrics.width  / 64;
-    metrics.height   = face->glyph->metrics.height / 64;
+    metrics.width    =  face->glyph->metrics.width  / 64;
+    metrics.height   =  face->glyph->metrics.height / 64;
     metrics.bearingX = (face->glyph->metrics.horiBearingX) / 64;
     metrics.bearingY = (face->glyph->metrics.horiBearingY) / 64;
     metrics.advance  = (face->glyph->metrics.horiAdvance)  / 64;
+    metrics.originY  =  origin.y / 64;
 
     Texture2D *fontTexture = new Texture2D();
     if (metrics.width * metrics.height > 0)
