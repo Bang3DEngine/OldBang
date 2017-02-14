@@ -12,11 +12,15 @@ class ICloneable;
 class UIText : public UIRenderer
 {
 public:
+    enum class HorizontalAlignment { Left = 0, Center, Right };
+    enum class VerticalAlignment { Top = 0, Center, Bot };
+
     UIText();
     virtual ~UIText();
 
     virtual void Render() const override;
-    virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const override;
+    virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const
+                override;
 
     virtual String GetName() const override;
 
@@ -28,6 +32,15 @@ public:
 
     virtual void RenderCustomPR() const override;
 
+    void SetHorizontalAlign(HorizontalAlignment horizontalAlignment);
+    HorizontalAlignment GetHorizontalAlignment() const;
+
+    void SetVerticalAlign(VerticalAlignment verticalAlignment);
+    VerticalAlignment GetVerticalAlignment() const;
+
+    void SetKerning(bool kerning);
+    bool GetKerning() const;
+
     void SetContent(const String &content);
     const String& GetContent() const;
 
@@ -37,16 +50,33 @@ public:
     void SetHorizontalSpacing(int horizontalSpacing);
     int GetHorizontalSpacing() const;
 
+    Vector2 GetContentNDCSize() const;
+
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 private:
     Font *m_font = nullptr;
     Color m_textColor = Color::Black;
     int m_textSize = 32; // Set in the constructor
-    int m_horizontalSpacing = 10;
+    int m_horizontalSpacing = 5;
+    bool m_kerning = false;
+
+    HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
+    VerticalAlignment m_verticalAlignment = VerticalAlignment::Center;
+
     String m_content = "";
 
     void RenderText() const;
+
+    bool IsValidChar(char c) const;
+
+    Vector2 GetTextSizeNDC() const;
+    Rect GetNDCRectOfChar(char c) const;
+    Rect GetNDCRectOfChar(char c, const Rect &screenRectNDC) const;
+    float GetNDCAdvance(char current, char next = '\0') const;
+
+    Vector2 GetAlignmentNDCOffset() const;
+
     friend class GameObject;
 };
 

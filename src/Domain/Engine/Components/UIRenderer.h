@@ -35,8 +35,6 @@ public:
 protected:
     Material *m_materialPR = nullptr;
     Color m_tint = Color::Zero;
-    Color m_strokeColor = Color::White;
-    float m_stroke = 0.0f;
 
     UIRenderer();
     virtual ~UIRenderer();

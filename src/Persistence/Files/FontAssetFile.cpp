@@ -1,7 +1,6 @@
 #include "FontAssetFile.h"
 
 #include "Debug.h"
-
 #include "FileReader.h"
 #include "Persistence.h"
 #include "AssetsManager.h"

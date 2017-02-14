@@ -34,8 +34,6 @@ void UIRenderer::CloneInto(ICloneable *clone) const
     UIRenderer *rend = static_cast<UIRenderer*>(clone);
     MeshRenderer::CloneInto(rend);
     rend->m_tint = m_tint;
-    rend->m_stroke = m_stroke;
-    rend->m_strokeColor = m_strokeColor;
 }
 
 ICloneable *UIRenderer::Clone() const
@@ -92,8 +90,6 @@ void UIRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
     MeshRenderer::ReadXMLInfo(xmlInfo);
 
     m_tint = xmlInfo->GetColor("Tint");
-    m_strokeColor = xmlInfo->GetColor("StrokeColor");
-    m_stroke = xmlInfo->GetFloat("Stroke");
 }
 
 void UIRenderer::FillXMLInfo(XMLNode *xmlInfo) const
@@ -101,6 +97,4 @@ void UIRenderer::FillXMLInfo(XMLNode *xmlInfo) const
     MeshRenderer::FillXMLInfo(xmlInfo);
 
     xmlInfo->SetColor("Tint", m_tint);
-    xmlInfo->SetColor("StrokeColor", m_strokeColor);
-    xmlInfo->SetFloat("Stroke", m_stroke);
 }
