@@ -34,9 +34,9 @@ public slots:
     void OnDrawTimerTick();
 
 private:
-    AudioManager *m_audioManager = nullptr;
-    SceneManager *m_sceneManager = nullptr;
-    AssetsManager *m_assetsManager = nullptr;
+    AudioManager *m_audioManager         = nullptr;
+    SceneManager *m_sceneManager         = nullptr;
+    AssetsManager *m_assetsManager       = nullptr;
     BehaviourManager *m_behaviourManager = nullptr;
 
     unsigned long long m_lastRenderTime = 0;
@@ -57,7 +57,6 @@ private:
 
 private slots:
     bool CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent);
-
 
     friend class SceneManager;
     friend class ShortcutManager;

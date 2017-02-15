@@ -80,14 +80,11 @@ void Application::OnDrawTimerTick()
         activeScene->_OnUpdate();
     }
 
-    Chrono c("FPS");
     // Render screen
-    c.MarkEvent("Render");
     Screen::GetInstance()->Render();
     Screen::GetInstance()->swapBuffers();
-    //c.Log();
 
-    Input::GetInstance()->OnFrameFinished(); // Notify to Input that a new frame has passed
+    Input::GetInstance()->OnFrameFinished();
 }
 
 AssetsManager *Application::GetAssetsManager() const
@@ -140,46 +137,15 @@ bool Application::notify(QObject *receiver, QEvent *e)
             }
         }
 
-        // To avoid a bug where Window deactivates and
-        // it doesnt catch any key
         if (e->type() == QEvent::Shortcut ||
             e->type() == QEvent::WindowDeactivate ||
             e->type() == QEvent::ApplicationDeactivate)
         {
-            //ShortcutManager::GetInstance()->Clear();
-            //EditorWindow::GetInstance()->GetMainWindow()->activateWindow();
-            //Debug_Log("Window deactivated....");
+            ShortcutManager::GetInstance()->Clear();
         }
     }
-
-    /*
-    if (e->type() == QEvent::MouseButtonDblClick)
-    {
-        QMouseEvent *e = dynamic_cast<QMouseEvent*>(e);
-        //if (e->button() == Qt::MouseButton::)
-        {
-            QWidget *w = dynamic_cast<QWidget*>(receiver);
-            if (w)
-            {
-                String L[] = {"A", "B", "C", "D", "E", "F"};
-                String color = "";
-                color += L[rand() % 6]; color += L[rand() % 6];
-                color += L[rand() % 6]; color += L[rand() % 6];
-                color += L[rand() % 6]; color += L[rand() % 6];
-                w->setStyleSheet( String(String("background-color:#") + color).ToQString() );
-            }
-        }
-    } */
     #endif
 
-    /*
-    int eType = int( e->type() );
-    if (eType != 12 && eType != 1 && eType != 77 && eType != 109 && eType != 152 &&
-        eType != 13 && eType != 14 && eType != 74 && eType != 76 && eType != 43)
-    {
-        std::cout << "Notifying " << eType << " to " << receiver->objectName() << std::endl;
-    }
-    */
     return QApplication::notify(receiver, e);
 }
 
