@@ -23,13 +23,26 @@ class SelectionFramebuffer : public Framebuffer
                             ,public IWindowEventManagerListener
                             #endif
 {
-private:
+public:
+    SelectionFramebuffer(int width, int height);
+    virtual ~SelectionFramebuffer();
 
-    enum Attachment
-    {
-        ColorAttachment = 0,
-        WorldPosition = 1
-    };
+    void PrepareForRender(const Scene *scene);
+    void PrepareNextGameObject(GameObject *go);
+    void RenderForSelectionBuffer(Renderer *renderer);
+    void ProcessSelection();
+
+    TextureRender *GetColorTexture() const;
+    TextureRender *GetWorldPosTexture() const;
+
+    GameObject *GetGameObjectInPosition(int x, int y);
+    Vector3 GetWorldPositionAt(int x, int y);
+    bool IsPassing() const;
+
+    void OnGameObjectDestroyed(GameObject *destroyed) override;
+
+private:
+    enum Attachment { ColorAttachment = 0, WorldPosition = 1 };
 
     TextureRender *m_colorTexture    = nullptr;
     TextureRender *m_worldPosTexture = nullptr;
@@ -58,24 +71,6 @@ private:
     bool CanRenderGameObject(const GameObject *go);
 
     Color GetSelectionColor(GameObject *go) const;
-
-public:
-    SelectionFramebuffer(int width, int height);
-    virtual ~SelectionFramebuffer();
-
-    void PrepareForRender(const Scene *scene);
-    void PrepareNextGameObject(GameObject *go);
-    void RenderForSelectionBuffer(Renderer *renderer);
-    void ProcessSelection();
-
-    TextureRender *GetColorTexture() const;
-    TextureRender *GetWorldPosTexture() const;
-
-    GameObject *GetGameObjectInPosition(int x, int y);
-    Vector3 GetWorldPositionAt(int x, int y);
-    bool IsPassing() const;
-
-    void OnGameObjectDestroyed(GameObject *destroyed) override;
 
     friend class Gizmos;
     friend class GraphicPipeline;

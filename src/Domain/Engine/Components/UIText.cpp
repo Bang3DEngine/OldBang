@@ -24,7 +24,7 @@ UIText::UIText() : UIRenderer()
 {
     m_material = AssetsManager::Load<Material>("Materials/UI/D2G_UIText.bmat",
                                                true);
-    m_font = AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true);
+    SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
 }
 
 UIText::~UIText()
@@ -51,10 +51,12 @@ void UIText::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
     UIText *text = static_cast<UIText*>(clone);
-    text->SetContent(m_content);
-    text->SetTextSize(m_textSize);
-    text->m_font = m_font;
-    text->m_textColor = m_textColor;
+    text->SetContent( GetContent() );
+    text->SetTextSize( GetTextSize() );
+    text->SetFont ( GetFont() );
+    text->SetColor ( GetColor() );
+    text->SetHorizontalAlign( GetHorizontalAlignment() );
+    text->SetVerticalAlign( GetVerticalAlignment() );
 }
 
 ICloneable *UIText::Clone() const
@@ -87,6 +89,26 @@ void UIText::SetVerticalAlign(UIText::VerticalAlignment verticalAlignment)
 UIText::VerticalAlignment UIText::GetVerticalAlignment() const
 {
     return m_verticalAlignment;
+}
+
+void UIText::SetColor(const Color &color)
+{
+    m_textColor = color;
+}
+
+Color UIText::GetColor() const
+{
+    return m_textColor;
+}
+
+void UIText::SetFont(Font *font)
+{
+    m_font = font;
+}
+
+Font *UIText::GetFont() const
+{
+    return m_font;
 }
 
 void UIText::SetKerning(bool kerning)
@@ -127,6 +149,41 @@ void UIText::SetHorizontalSpacing(int horizontalSpacing)
 int UIText::GetHorizontalSpacing() const
 {
     return m_horizontalSpacing;
+}
+
+void UIText::GetContentNDCBounds(Vector2 *min, Vector2 *max,
+                                 bool applyAlign) const
+{
+    if (!applyAlign)
+    {
+        const Vector2 textSizeNDC = GetTextSizeNDC();
+
+        float totalAdvX = 0.0f;
+        min->x = min->y = Math::Infinity<float>();
+        max->x = max->y = Math::NegativeInfinity<float>();
+        for (int i = 0; i < m_content.Length(); ++i)
+        {
+            Rect charRectNDC = GetNDCRectOfChar(m_content[i]);
+            min->x = Math::Min(charRectNDC.m_minx, min->x);
+            min->y = Math::Min(charRectNDC.m_miny, min->y);
+            max->x = Math::Max(totalAdvX + charRectNDC.m_maxx, max->x);
+            max->y = Math::Max(charRectNDC.m_maxy, max->y);
+
+            if (i >= 0 && i < m_content.Length() - 1)
+            {
+                totalAdvX += m_horizontalSpacing * textSizeNDC.x;
+            }
+            char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
+            totalAdvX += GetNDCAdvance(m_content[i], nextChar);
+        }
+        max->x = Math::Max(max->x, min->x + totalAdvX);
+    }
+    else
+    {
+        GetContentNDCBounds(min, max, false);
+        Vector2 alignOffset = GetAlignmentNDCOffset();
+        *min += alignOffset; *max += alignOffset;
+    }
 }
 
 Rect UIText::GetBoundingRect(Camera *camera) const
@@ -200,31 +257,10 @@ Vector2 UIText::GetTextSizeNDC() const
     return m_textSize / Screen::GetSize() * scaleFactor;
 }
 
-Vector2 UIText::GetContentNDCSize() const
-{
-    const Vector2 textSizeNDC = GetTextSizeNDC();
-
-    float minContentY = Math::Infinity<float>();
-    float maxContentY = Math::NegativeInfinity<float>();
-    Vector2 contentSize (0, 0);
-    for (int i = 0; i < m_content.Length(); ++i)
-    {
-        contentSize.x += m_horizontalSpacing * textSizeNDC.x;
-
-        char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
-        contentSize.x += GetNDCAdvance(m_content[i], nextChar);
-
-        Rect charRectNDC = GetNDCRectOfChar(m_content[i]);
-        minContentY = Math::Min(charRectNDC.m_miny, minContentY);
-        maxContentY = Math::Max(charRectNDC.m_maxy, maxContentY);
-    }
-    contentSize.y = maxContentY - minContentY;
-    return contentSize;
-}
-
 Rect UIText::GetNDCRectOfChar(char c) const
 {
     RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
+    ASSERT(rtrans, "", return Rect::Empty);
     Rect screenRectNDC = rtrans->GetScreenSpaceRect(true);
     return GetNDCRectOfChar(c, screenRectNDC);
 }
@@ -253,7 +289,7 @@ float UIText::GetNDCAdvance(char current, char next) const
     const Font::CharGlyphMetrics &charMetrics =
             m_font->GetCharacterMetrics(current);
     int advancePx = charMetrics.advance;
-    if (next == '\0' || !IsValidChar(current) || !IsValidChar(next))
+    if (!IsValidChar(current) || !IsValidChar(next))
     {
         advancePx = 40;
     }
@@ -271,41 +307,38 @@ float UIText::GetNDCAdvance(char current, char next) const
 Vector2 UIText::GetAlignmentNDCOffset() const
 {
     RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
-    Vector2 contentSize = GetContentNDCSize();
-    Vector2 screenRectNDCSize = rtrans->GetScreenSpaceRect(true).GetSize();
+    Vector2 contentMin, contentMax;
+    GetContentNDCBounds(&contentMin, &contentMax, false);
+    Vector2 contentCenter = (contentMax + contentMin) * 0.5f;
+    Rect screenRectNDC = rtrans->GetScreenSpaceRect(true);
 
     Vector2 alignNDCOffset;
     if (m_horizontalAlignment == HorizontalAlignment::Left)
     {
-        alignNDCOffset.x = 0.0f;
+        alignNDCOffset.x = (screenRectNDC.GetMin() - contentMin).x;
     }
     else if (m_horizontalAlignment == HorizontalAlignment::Center)
     {
-        alignNDCOffset.x = contentSize.x * -0.5f +
-                           screenRectNDCSize.x * 0.5f;
+        alignNDCOffset.x = (screenRectNDC.GetCenter() - contentCenter).x;
     }
     else if (m_horizontalAlignment == HorizontalAlignment::Right)
     {
-        alignNDCOffset.x = contentSize.x * -1.0f +
-                           screenRectNDCSize.x * 1.0f;
+        alignNDCOffset.x = (screenRectNDC.GetMax() - contentMax).x;
     }
+
 
     if (m_verticalAlignment == VerticalAlignment::Top)
     {
-        alignNDCOffset.y = contentSize.y * -1.0f +
-                           screenRectNDCSize.y * 1.0f;
+        alignNDCOffset.y = (screenRectNDC.GetMax() - contentMax).y;
     }
     else if (m_verticalAlignment == VerticalAlignment::Center)
     {
-        alignNDCOffset.y = contentSize.y * -0.5f +
-                           screenRectNDCSize.y * 0.5f;
+        alignNDCOffset.y = (screenRectNDC.GetCenter() - contentCenter).y;
     }
     else if (m_verticalAlignment == VerticalAlignment::Bot)
     {
-        alignNDCOffset.y = 0.0f;
+        alignNDCOffset.y = (screenRectNDC.GetMin() - contentMin).y;
     }
-
-    Debug_Log(contentSize);
 
     return alignNDCOffset;
 }

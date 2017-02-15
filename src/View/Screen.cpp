@@ -124,6 +124,11 @@ Vector2 Screen::GetPixelClipSize()
     return 1.0f / Screen::GetSize();
 }
 
+bool Screen::MouseOver()
+{
+    return Screen::GetInstance()->underMouse();
+}
+
 int Screen::GetHeight()
 {
     return Screen::GetInstance()->m_height;
@@ -319,6 +324,7 @@ void Screen::OnDrop(const DragDropInfo &ddi)
     m_lastGameObjectOvered = nullptr;
     m_gameObjectBeingDragged = nullptr;
 }
+
 #endif
 
 void Screen::wheelEvent(QWheelEvent *event)

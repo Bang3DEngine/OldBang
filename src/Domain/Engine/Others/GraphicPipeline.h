@@ -37,17 +37,19 @@ public:
 
     void SetGBufferAttachmentToBeRendered(GBuffer::Attachment attachment);
 
-    GBuffer *GetGBuffer() const;
+    GBuffer *GetGBuffer();
     Renderer::DepthLayer GetCurrentDepthLayer() const;
 
     #ifdef BANG_EDITOR
-    SelectionFramebuffer* GetSelectionFramebuffer() const;
+    SelectionFramebuffer* GetSelectionFramebuffer();
     #endif
 
 private:
-    GBuffer::Attachment m_gbufferAttachmentToBeShown = GBuffer::Attachment::Color;
+    GBuffer::Attachment m_gbufferAttachmentToBeShown =
+            GBuffer::Attachment::Color;
 
-    bool m_renderingInGame = false; // Rendering for the Game Screen or the Scene screen
+    // Rendering for the Game Screen or the Scene screen
+    bool m_renderingInGame = false;
 
     Material *m_renderGBufferToScreenMaterial = nullptr;
     Mesh *m_screenPlaneMesh = nullptr;

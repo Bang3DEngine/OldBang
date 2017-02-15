@@ -38,6 +38,12 @@ public:
     void SetVerticalAlign(VerticalAlignment verticalAlignment);
     VerticalAlignment GetVerticalAlignment() const;
 
+    void SetColor (const Color &color);
+    Color GetColor() const;
+
+    void SetFont (Font *font);
+    Font* GetFont() const;
+
     void SetKerning(bool kerning);
     bool GetKerning() const;
 
@@ -50,7 +56,8 @@ public:
     void SetHorizontalSpacing(int horizontalSpacing);
     int GetHorizontalSpacing() const;
 
-    Vector2 GetContentNDCSize() const;
+    void GetContentNDCBounds(Vector2 *min, Vector2 *max,
+                             bool applyAlign = true) const;
 
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 

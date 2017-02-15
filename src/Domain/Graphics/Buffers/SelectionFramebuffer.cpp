@@ -74,7 +74,6 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
         rendMaterial->SetShaderProgram( selectionSp );
         rend->Render();
         rendMaterial->SetShaderProgram( originalSP );
-
     }
 }
 
@@ -84,6 +83,7 @@ void SelectionFramebuffer::ProcessSelection()
     Vector2 coords = Input::GetMouseCoords();
     coords.y = Screen::GetHeight() - coords.y;
     GameObject *mouseOverGO = GetGameObjectInPosition(coords.x, coords.y);
+    if (!Screen::MouseOver()) { mouseOverGO = nullptr; }
 
     if (m_lastMouseOverGO  && m_lastMouseOverGO != mouseOverGO)
     {
@@ -109,10 +109,13 @@ void SelectionFramebuffer::ProcessSelection()
         {
             if (!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
             {
-                EditorWindow::GetInstance()->widgetHierarchy->SelectGameObject(mouseOverGO);
-                if (Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft)) // Double clicking
+                EditorWindow::GetInstance()->
+                        widgetHierarchy->SelectGameObject(mouseOverGO);
+                if (Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft))
                 {
-                    WindowEventManager::NotifyHierarchyGameObjectDoubleClicked(mouseOverGO);
+                    // Double clicking
+                    WindowEventManager::
+                            NotifyHierarchyGameObjectDoubleClicked(mouseOverGO);
                 }
             }
         }

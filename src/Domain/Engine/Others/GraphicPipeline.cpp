@@ -342,7 +342,7 @@ void GraphicPipeline::RenderSelectionFramebuffer()
     m_selectionFB->m_isPassing = false;
 }
 
-SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer() const
+SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
 {
     return m_selectionFB;
 }
@@ -368,7 +368,7 @@ void GraphicPipeline::SetGBufferAttachmentToBeRendered(GBuffer::Attachment attac
     m_gbufferAttachmentToBeShown = attachment;
 }
 
-GBuffer *GraphicPipeline::GetGBuffer() const
+GBuffer *GraphicPipeline::GetGBuffer()
 {
     return m_gbuffer;
 }
