@@ -369,8 +369,8 @@ void MenuBar::OnAlignGameObjectWithView() const
     if (selected)
     {
         EditorCamera *editorCamera =
-                static_cast<EditorCamera*>(SceneManager::GetActiveScene()->
-                                           GetCamera()->gameObject->parent);
+                dynamic_cast<EditorCamera*>(SceneManager::GetActiveScene()->
+                                            GetCamera()->gameObject->parent);
         selected->transform->SetPosition(editorCamera->transform->GetPosition());
         selected->transform->SetRotation(editorCamera->transform->GetRotation());
     }
@@ -384,8 +384,8 @@ void MenuBar::OnAlignViewWithGameObject() const
     if (selected)
     {
         EditorCamera *editorCamera =
-                static_cast<EditorCamera*>(SceneManager::GetActiveScene()->
-                                           GetCamera()->gameObject->parent);
+                dynamic_cast<EditorCamera*>(SceneManager::GetActiveScene()->
+                                            GetCamera()->gameObject->parent);
         editorCamera->AlignViewWithGameObject(selected);
     }
 

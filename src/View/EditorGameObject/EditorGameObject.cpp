@@ -17,7 +17,7 @@ EditorGameObject::~EditorGameObject()
 void EditorGameObject::CloneInto(ICloneable *clone) const
 {
     GameObject::CloneInto(clone);
-    EditorGameObject *go = static_cast<EditorGameObject*>(clone);
+    EditorGameObject *go = dynamic_cast<EditorGameObject*>(clone);
     go->m_renderInSelectionFramebuffer = m_renderInSelectionFramebuffer;
 }
 

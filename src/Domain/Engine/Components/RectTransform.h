@@ -24,6 +24,7 @@ public:
     void SetMarginTop(int marginTop);
     void SetMarginRight(int marginRight);
     void SetMarginBot(int marginBot);
+    void SetMargins(int marginAll);
     void SetMargins(int left, int top, int right, int bot);
 
     void SetPivotPosition(const Vector2 &pivotPosition);

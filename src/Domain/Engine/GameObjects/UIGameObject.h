@@ -6,7 +6,7 @@
 
 class XMLNode;
 class ICloneable;
-class UIGameObject : public GameObject
+class UIGameObject : public virtual GameObject
 {
 public:
     UIGameObject(const String &name = "");

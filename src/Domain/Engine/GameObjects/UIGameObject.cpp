@@ -15,7 +15,7 @@ UIGameObject::UIGameObject(const String &name)
 
 void UIGameObject::CloneInto(ICloneable *clone) const
 {
-    UIGameObject *go = static_cast<UIGameObject*>(clone);
+    UIGameObject *go = dynamic_cast<UIGameObject*>(clone);
     GameObject::CloneInto(go);
 }
 

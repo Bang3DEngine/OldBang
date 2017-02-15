@@ -10,6 +10,8 @@
 #include "EditorState.h"
 #include "EditorFloor.h"
 #include "EditorCamera.h"
+#include "RectTransform.h"
+#include "EditorUIGameObject.h"
 #include "SelectionFramebuffer.h"
 #include "EditorDebugGameObject.h"
 #include "EditorGizmosGameObject.h"
@@ -31,11 +33,15 @@ EditorScene::EditorScene() : Scene()
     m_floor = new EditorFloor();
     m_floor->SetParent(this);
 
-    m_fpsCounter = new EditorGameObject();
+    m_fpsCounter = new EditorUIGameObject();
     m_fpsCounter->SetParent(this);
+    RectTransform *rtrans = static_cast<RectTransform*>(m_fpsCounter->transform);
     m_fpsCounterText = m_fpsCounter->AddComponent<UIText>();
+    rtrans->SetAnchors(Vector2(-1,-1), Vector2(1,1));
+    rtrans->SetMargins(15);
+    m_fpsCounterText->SetHorizontalAlign(UIText::HorizontalAlignment::Right);
+    m_fpsCounterText->SetVerticalAlign(UIText::VerticalAlignment::Top);
     m_fpsCounterText->SetTextSize(10);
-    m_fpsCounter->transform->SetLocalPosition(Vector3(0.7f, 0.92f, 1.0f));
 }
 
 EditorScene::~EditorScene()

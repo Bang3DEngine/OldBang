@@ -187,7 +187,7 @@ bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
 {
     if (go->IsEditorGameObject())
     {
-       const EditorGameObject *ego = static_cast<const EditorGameObject*>(go);
+       const EditorGameObject *ego = dynamic_cast<const EditorGameObject*>(go);
        return ego && ego->IsEnabled() && !ego->IsDraggedGameObject() &&
               ego->IsRenderInSelectionFramebuffer();
     }

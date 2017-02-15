@@ -62,12 +62,17 @@ void RectTransform::SetMarginBot(int marginBot)
     OnChanged();
 }
 
+void RectTransform::SetMargins(int marginAll)
+{
+    SetMargins(marginAll, marginAll, marginAll, marginAll);
+}
+
 void RectTransform::SetMargins(int left, int top, int right, int bot)
 {
-    SetMarginLeft(left);
     SetMarginTop(top);
-    SetMarginRight(right);
     SetMarginBot(bot);
+    SetMarginLeft(left);
+    SetMarginRight(right);
 }
 
 void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
