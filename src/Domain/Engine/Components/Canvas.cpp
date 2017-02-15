@@ -1,5 +1,7 @@
 #include "Canvas.h"
 
+#include "XMLNode.h"
+
 Canvas::Canvas()
 {
 }
@@ -35,4 +37,5 @@ void Canvas::ReadXMLInfo(const XMLNode *xmlInfo)
 void Canvas::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Component::FillXMLInfo(xmlInfo);
+    xmlInfo->SetTagName( GetName() );
 }

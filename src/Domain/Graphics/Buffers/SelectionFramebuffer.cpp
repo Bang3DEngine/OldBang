@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "Debug.h"
+#include "Cursor.h"
 #include "Material.h"
 #include "Renderer.h"
 #include "GameObject.h"
@@ -157,6 +158,7 @@ void SelectionFramebuffer::OnGameObjectDestroyed(GameObject *destroyed)
 {
     if (destroyed == m_lastMouseOverGO)
     {
+        Cursor::SetIcon( Cursor::CursorIcon::Arrow );
         m_lastMouseOverGO = nullptr;
     }
 }

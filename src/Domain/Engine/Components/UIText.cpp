@@ -55,6 +55,7 @@ void UIText::CloneInto(ICloneable *clone) const
     text->SetTextSize( GetTextSize() );
     text->SetFont ( GetFont() );
     text->SetColor ( GetColor() );
+    text->SetHorizontalSpacing( GetHorizontalSpacing() );
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
 }

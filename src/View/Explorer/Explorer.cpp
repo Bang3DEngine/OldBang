@@ -197,6 +197,8 @@ void Explorer::currentChanged(const QModelIndex &current,
 {
     QListView::currentChanged(current, previous);
 
+    scrollTo(current);
+
     String selectedPath(m_fileSystemModel->filePath(current));
     SetLabelText(selectedPath);
     RefreshInspector();
