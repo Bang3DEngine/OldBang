@@ -15,7 +15,8 @@ IWindowEventManagerListener::~IWindowEventManagerListener()
 void IWindowEventManagerListener::OnChildAdded(GameObject *child)
 {
 }
-void IWindowEventManagerListener::OnChildChangedParent(GameObject *child, GameObject *previousParent)
+void IWindowEventManagerListener::OnChildChangedParent(
+        GameObject *child, GameObject *previousParent)
 {
 }
 void IWindowEventManagerListener::OnChildRemoved(GameObject *child)
@@ -24,13 +25,21 @@ void IWindowEventManagerListener::OnChildRemoved(GameObject *child)
 void IWindowEventManagerListener::OnGameObjectDestroyed(GameObject *destroyed)
 {
 }
-void IWindowEventManagerListener::OnInspectorSlotChanged(InspectorWidget *inspectorItem)
+
+void IWindowEventManagerListener::OnFilenameChanged(
+        const String &absFilepathBefore, const String &absFilepathNow)
 {
 }
-void IWindowEventManagerListener::OnHierarchyGameObjectsSelected(List<GameObject *> &selectedGameObjects)
+void IWindowEventManagerListener::OnInspectorSlotChanged(
+        InspectorWidget *inspectorItem)
 {
 }
-void IWindowEventManagerListener::OnHierarchyGameObjectDoubleClicked(GameObject *gameObject)
+void IWindowEventManagerListener::OnHierarchyGameObjectsSelected(
+        List<GameObject *> &selectedGameObjects)
+{
+}
+void IWindowEventManagerListener::OnHierarchyGameObjectDoubleClicked(
+        GameObject *gameObject)
 {
 }
 

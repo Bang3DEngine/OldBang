@@ -19,6 +19,7 @@
 #include "FileSystemModel.h"
 #include "MaterialAssetFile.h"
 #include "Texture2DAssetFile.h"
+#include "WindowEventManager.h"
 #include "MeshFileInspectable.h"
 #include "TextFileInspectable.h"
 #include "ExplorerContextMenu.h"
@@ -118,7 +119,32 @@ void Explorer::OnFileRenamed(const QString &path,
                              const QString &newName)
 {
     UpdateLabelText();
-    SelectFile(path + "/" + newName);
+
+    String newPath = path + "/" + newName;
+    SelectFile(newPath);
+
+    String oldPath = path + "/" + oldName;
+    IFileable::OnFileNameChangedStatic(oldPath, newPath);
+
+    String oldRelPath = Persistence::ToRelative(oldPath, false);
+    String newRelPath = Persistence::ToRelative(newPath, false);
+    List<String> allFiles =
+          Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true);
+    for (const String &filepath : allFiles)
+    {
+        File f(filepath);
+        if (!f.IsAsset()) { continue; }
+
+        Debug_Log("Replacing on files " << filepath);
+
+        String fileXMLContents = f.GetContents();
+        int replacements = fileXMLContents.Replace(oldRelPath, newRelPath);
+        if (replacements > 0)
+        {
+            FileWriter::WriteToFile(filepath, fileXMLContents);
+        }
+    }
+    WindowEventManager::NotifyFilenameChanged(oldPath, newPath);
 }
 
 void Explorer::UpdateLabelText()

@@ -32,7 +32,16 @@ bool FileSystemModel::setData(const QModelIndex &idx,
 {
    if (role == Qt::EditRole)
    {
+
+       bool error = false;
+       String errorMsg = "";
+       const String c_invalidChars = "/*,;:\\ ";
+
        String path = filePath(idx);
+       String dir = Persistence::GetDir(path);
+       String oldFileOrDirNameWithExt =
+               Persistence::GetFileNameWithExtension(path);
+       String newFileOrDirNameWithExt = value.toString();
        if (Persistence::IsFile(path))
        {
            String originalExtension = Persistence::GetFileExtensionComplete(path);
@@ -42,19 +51,7 @@ bool FileSystemModel::setData(const QModelIndex &idx,
            newExtension = newExtension.Empty() ? originalExtension : newExtension;
            String newEditedFileName = Persistence::GetFileName(userInput);
            String newEditedFileNameExt = newEditedFileName + "." + newExtension;
-           String dir = Persistence::GetDir(path);
-           String newPath = dir + "/" + newEditedFileNameExt;
-           if (path == newPath) { return false; }
-
-           // File name checks
-           bool error = false;
-           String errorMsg = "";
-           String invalidChars = "/*,;:\\ ";
-           if (String(value.toString()).IndexOfOneOf(invalidChars) >= 0)
-           {
-               error = true;
-               errorMsg = "File name containing invalid characters.";
-           }
+           newFileOrDirNameWithExt = newEditedFileNameExt;
 
            if (String(value.toString()).Empty())
            {
@@ -62,29 +59,35 @@ bool FileSystemModel::setData(const QModelIndex &idx,
                errorMsg = "File name is empty.";
            }
 
-           if (Persistence::Exists(newPath))
+           if (Persistence::Exists(newFileOrDirNameWithExt))
            {
                error = true;
                errorMsg = "File with that name existed before.";
            }
-
-           if (error)
-           {
-               Dialog::Error("Error renaming file", errorMsg);
-               return false;
-           }
-
-           bool ok = Persistence::Move(path, newPath);
-           if (ok)
-           {
-               String originalFileNameExt =
-                       Persistence::GetFileNameWithExtension(path);
-               emit fileRenamed(dir.ToQString(),
-                                originalFileNameExt.ToQString(),
-                                newEditedFileNameExt.ToQString());
-           }
-           return ok;
        }
+       if (oldFileOrDirNameWithExt == newFileOrDirNameWithExt) { return false; }
+
+       if (String(value.toString()).IndexOfOneOf(c_invalidChars) >= 0)
+       {
+           error = true;
+           errorMsg = "File/dir name containing invalid characters.";
+       }
+
+       if (error)
+       {
+           Dialog::Error("Error renaming file or dir", errorMsg);
+           return false;
+       }
+
+       bool ok = Persistence::Move(dir + "/" + oldFileOrDirNameWithExt,
+                                   dir + "/" + newFileOrDirNameWithExt);
+       if (ok)
+       {
+           emit fileRenamed(dir.ToQString(),
+                            oldFileOrDirNameWithExt.ToQString(),
+                            newFileOrDirNameWithExt.ToQString());
+       }
+       return ok;
    }
    return QFileSystemModel::setData(idx, value, role);
 }

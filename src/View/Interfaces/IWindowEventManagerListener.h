@@ -21,6 +21,9 @@ public:
 
     virtual void OnGameObjectDestroyed(GameObject *destroyed);
 
+    virtual void OnFilenameChanged(const String &absFilepathBefore,
+                                   const String &absFilepathNow);
+
     virtual void OnInspectorSlotChanged(InspectorWidget *inspectorItem);
     virtual void OnHierarchyGameObjectsSelected(
                                     List<GameObject*> &selectedGameObjects);

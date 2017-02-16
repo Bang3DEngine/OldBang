@@ -286,7 +286,8 @@ String File::GetNameAndExtension() const
 
 bool File::IsAsset() const
 {
-    return IsFontAssetFile() || IsPrefabAsset() ||
+    return IsFontAssetFile() || IsTexture2DAsset() || IsMaterialAsset() ||
+           IsMeshAsset() || IsAudioClipAsset() || IsPrefabAsset() ||
            IsBehaviour() || IsScene();
 }
 

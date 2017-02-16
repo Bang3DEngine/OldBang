@@ -5,9 +5,8 @@
 #include "Persistence.h"
 #include "AssetsManager.h"
 
-Asset::Asset()
+Asset::Asset() : IFileable()
 {
-
 }
 
 Asset::~Asset()

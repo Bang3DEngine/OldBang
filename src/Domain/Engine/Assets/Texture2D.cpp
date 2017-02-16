@@ -61,26 +61,19 @@ void Texture2D::Resize(int width, int height)
 void Texture2D::Fill(unsigned char *newData,
                      int width, int height, bool genMipMaps)
 {
-    if (m_data && m_data != newData) delete m_data;
+    if (m_data && m_data != newData) { delete m_data; }
 
     m_data = newData; // TODO: Copy (?)
     m_width = width;
     m_height = height;
+    if (!m_data) { m_width = m_height = 0; }
 
     Bind();
-    glTexImage2D(GL_TEXTURE_2D, 0, m_glInternalFormat, width, height, 0, m_glFormat, m_glType, m_data);
-    if (genMipMaps && width > 0 && height > 0)
+    glTexImage2D(GL_TEXTURE_2D, 0, m_glInternalFormat, m_width, m_height, 0,
+                 m_glFormat, m_glType, m_data);
+    if (genMipMaps && m_width > 0 && m_height > 0)
     {
-        bool isAllZero = true; // TODO, this avoids a segfault
-        for (int i = 0; i < width * height; ++i)
-        {
-            if (m_data[i] != 0) { isAllZero = false; break; }
-        }
-
-        if (!isAllZero)
-        {
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
     UnBind();
 }

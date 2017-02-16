@@ -66,7 +66,8 @@ public slots:
 
     virtual void _OnSlotValueChanged();
     /**
-     * @brief Refreshes all the widget values with the related IInspectable current values.
+     * @brief Refreshes all the widget values with the related IInspectable
+     * current values.
      */
     void RefreshWidgetValues();
 
@@ -90,7 +91,8 @@ protected:
     virtual void SetClosed(bool closedWidget);
 
 private:
-    /** @brief This variable is used to avoid premature OnSlotValueChanged, before creating the widget**/
+    /** @brief This variable is used to avoid premature OnSlotValueChanged,
+     * before creating the widget**/
     bool m_created = false;
 
     String m_tagName = "";

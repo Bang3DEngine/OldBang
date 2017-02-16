@@ -420,6 +420,9 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
     SetEnabled( xmlInfo->GetBool("enabled") );
     SetName( xmlInfo->GetString("name") );  //Read GameObject name
 
+    bool firstRead = GetChildren().Size() == 0; // No editor stuff added before
+    if (!firstRead) { return; } // To avoid file renaming readding children
+
     for ( XMLNode *xmlChild : xmlInfo->GetChildren() )
     {
         String tagName = xmlChild->GetTagName();

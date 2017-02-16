@@ -1,6 +1,8 @@
 #ifndef IFILEABLE_H
 #define IFILEABLE_H
 
+#include <set>
+
 //Describes something than can be written and read to/from a file
 class String;
 class XMLNode;
@@ -23,8 +25,19 @@ public:
     virtual void PostReadXMLInfo(const XMLNode *xmlInfo);
     virtual void PostFillXMLInfo(XMLNode *xmlInfo) const;
 
+    virtual void OnFileNameChanged(const String &absFilepathBefore,
+                                   const String &absFilepathNow);
+
 protected:
     IFileable();
+    virtual ~IFileable();
+
+    #ifdef BANG_EDITOR
+    static void OnFileNameChangedStatic(const String &absFilepathBefore,
+                                        const String &absFilepathNow);
+    #endif
+
+    friend class Explorer;
 };
 
 #endif // IFILEABLE_H

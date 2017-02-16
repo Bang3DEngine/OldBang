@@ -14,6 +14,7 @@
 #include "ExplorerContextMenu.h"
 #include "IWindowEventManagerListener.h"
 
+class IFileable;
 class FileSystemModel;
 class Explorer : public DragDropQListView,
                  public IDragDropListener,
@@ -86,6 +87,8 @@ private:
 
     ExplorerContextMenu m_eContextMenu;
 
+    std::set<IFileable*> m_fileables;
+
     FileSystemModel *m_fileSystemModel = nullptr;
     QToolButton *m_buttonDirUp = nullptr;
     QToolButton *m_buttonChangeViewMode = nullptr;
@@ -102,6 +105,7 @@ private:
     QModelIndex GetModelIndexFromFilepath(const String &filepath) const;
 
     friend class File;
+    friend class IFileable;
     friend class FileSystemModel;
     friend class ExplorerDirTree;
     friend class ExplorerContextMenu;
