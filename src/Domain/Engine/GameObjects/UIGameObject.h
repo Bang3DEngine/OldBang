@@ -16,8 +16,10 @@ public:
 
     void FillXMLInfo(XMLNode *xmlInfo) const override;
 
+    #ifdef BANG_EDITOR
     void OnHierarchyGameObjectsSelected(
             List<GameObject*> &selectedGameObjects) override;
+    #endif
 };
 
 #endif // UIGAMEOBJECT_H

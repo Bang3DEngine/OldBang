@@ -101,8 +101,9 @@ void GameBuilder::BuildGame(bool runGame)
                          m_gameBuilderJob, SLOT(BuildGame()) );
         QObject::connect(m_gameBuilderJob, SIGNAL(NotifyGameHasBeenBuilt()),
                          this, SLOT(OnGameHasBeenBuilt()));
-        QObject::connect(m_gameBuilderJob, SIGNAL(NotifyGameBuildingHasFailed()),
-                         this, SLOT(OnGameBuildingHasFailed()));
+        QObject::connect(m_gameBuilderJob,
+                         SIGNAL(NotifyGameBuildingHasFailed(const QString&)),
+                         this, SLOT(OnGameBuildingHasFailed(const QString&)));
         QObject::connect(m_gameBuildDialog, SIGNAL(canceled()),
                          this, SLOT(OnGameBuildingCanceled()));
         //
@@ -126,10 +127,12 @@ void GameBuilder::OnGameHasBeenBuilt()
     }
 }
 
-void GameBuilder::OnGameBuildingHasFailed()
+void GameBuilder::OnGameBuildingHasFailed(const QString &errorMsg)
 {
+    Debug_Error(errorMsg);
     OnDialogError("Error building game",
-                  "The game could not be built.");
+                  "The game could not be built.\n"
+                  "Look the Logger errors for more information.");
 }
 
 void GameBuilder::OnDialogError(const QString &title, const QString &msg)
@@ -155,15 +158,17 @@ bool GameBuilder::CompileGameExecutable()
     {
         emit
         DialogError("Error building game",
-                    "Please save at least one scene in the Assets directory to build the game");
-        emit m_gameBuilderJob->NotifyGameBuildingHasFailed();
+                    "Please save at least one scene in the \
+                     Assets directory to build the game");
         return false;
     }
 
     String output = "";
-    String cmd = Persistence::GetEngineRootAbs() + "/scripts/compile.sh GAME RELEASE_MODE";
+    String cmd = Persistence::GetEngineRootAbs() +
+                    "/scripts/compile.sh GAME RELEASE_MODE";
 
-    const String initialOutputDir = Persistence::GetEngineRootAbs() + "/bin/Game.exe";
+    const String initialOutputDir = Persistence::GetEngineRootAbs() +
+                                        "/bin/Game.exe";
     Persistence::Remove(initialOutputDir);
 
     bool ok = false;
@@ -223,12 +228,14 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
     {
         if (*cancel) { return true; }
 
+        String errorMessage;
         String compiledLibFilepath =
                 SystemUtils::CompileToSharedObject(behaviourFilepath, false,
-                                                   nullptr, nullptr);
+                                                   nullptr, &errorMessage);
         if (compiledLibFilepath.Empty())
         {
-            Debug_Error("Failed to compile " << behaviourFilepath);
+            Debug_Error("Failed to compile " << behaviourFilepath << ". " <<
+                        errorMessage);
             return false;
         }
 

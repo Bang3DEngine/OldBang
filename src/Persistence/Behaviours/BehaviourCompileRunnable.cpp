@@ -4,10 +4,8 @@
 #include "SystemUtils.h"
 #include "BehaviourManager.h"
 
-BehaviourCompileRunnable::BehaviourCompileRunnable(QWidget *parent)
-    : QObject(parent)
+BehaviourCompileRunnable::BehaviourCompileRunnable()
 {
-
 }
 
 BehaviourCompileRunnable::
@@ -28,8 +26,8 @@ void BehaviourCompileRunnable::Compile()
     String warnMessage = "";
     String errorMessage = "";
     String libraryFilepath =
-            SystemUtils::CompileToSharedObject(m_behaviourFilepath,
-                                               true, &warnMessage, &errorMessage);
+            SystemUtils::CompileToSharedObject(
+                m_behaviourFilepath, true, &warnMessage, &errorMessage);
 
     if (!libraryFilepath.Empty())
     {

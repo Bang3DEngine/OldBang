@@ -36,7 +36,7 @@ ListLogger::MessageId ListLogger::AddLog(
     ListLogger *listLogger = ListLogger::GetInstance();
     ASSERT(listLogger, "", -1);
     Message m(line, str, fileName, persistent, MessageType::Log);
-    return listLogger->AddMessage(m);
+    return listLogger->EnqueueMessage(m);
 }
 
 ListLogger::MessageId ListLogger::AddWarn(
@@ -47,7 +47,7 @@ ListLogger::MessageId ListLogger::AddWarn(
     ListLogger *listLogger = ListLogger::GetInstance();
     ASSERT(listLogger, "", -1);
     Message m(line, str, fileName, persistent, MessageType::Warn);
-    return listLogger->AddMessage(m);
+    return listLogger->EnqueueMessage(m);
 }
 
 ListLogger::MessageId ListLogger::AddError(
@@ -58,7 +58,7 @@ ListLogger::MessageId ListLogger::AddError(
     ListLogger *listLogger = ListLogger::GetInstance();
     ASSERT(listLogger, "", -1);
     Message m(line, str, fileName, persistent, MessageType::Error);
-    return listLogger->AddMessage(m);
+    return listLogger->EnqueueMessage(m);
 }
 
 void ListLogger::DecorateLastItem(const Color &color)
@@ -68,6 +68,23 @@ void ListLogger::DecorateLastItem(const Color &color)
     {
         item->setTextColor(c_msgColumn, color.ToQColor());
     }
+}
+
+void ListLogger::ProcessMessagesQueue()
+{
+    while (!m_messageQueue.empty())
+    {
+        const Message &msg = m_messageQueue.front();
+        AddMessage(msg);
+        m_messageQueue.pop();
+    }
+}
+
+ListLogger::MessageId ListLogger::EnqueueMessage(ListLogger::Message &message)
+{
+    QMutexLocker locker(&m_messageQueueMutex);
+    message.id = ++m_latestMessageId;
+    m_messageQueue.push(message);
 }
 
 void ListLogger::UpdateMessagesCountTexts()
@@ -161,8 +178,7 @@ ListLogger::MessageId ListLogger::AddMessage(const Message &msg,
     bool hideItem = !MustBeShown(msg) || mustCollapse;
     item->setHidden(hideItem);
 
-    MessageId messageId = forcedMsgId >= 0 ? forcedMsgId :
-                                             ++m_latestMessageId;
+    MessageId messageId = forcedMsgId >= 0 ? forcedMsgId : msg.id;
     m_id_to_messages.Set(messageId, msg);
     m_id_to_item.Set(messageId, item);
 

@@ -66,9 +66,6 @@ private:
     BehaviourHolder *m_behaviourHolder = nullptr;
 
     void Init(BehaviourHolder *bh);
-    void SetSourceFilepath(const String &m_sourceFilepath);
-    String GetSourceFilepath() const;
-
     virtual void _OnUpdate() override;
 
     friend class BehaviourHolder;

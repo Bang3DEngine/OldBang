@@ -524,13 +524,17 @@ void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
     }
 }
 
-
-#ifdef BANG_EDITOR
 bool GameObject::IsSelected() const
 {
+    #ifdef BANG_EDITOR
     return m_isSelectedInHierarchy;
+    #else
+    return false;
+    #endif
 }
 
+
+#ifdef BANG_EDITOR
 void GameObject::OnHierarchyGameObjectsSelected(List<GameObject*> &selectedEntities)
 {
     if (IsEditorGameObject() || IsScene()) return;

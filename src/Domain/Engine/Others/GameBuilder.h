@@ -21,7 +21,7 @@ public:
 
 public slots:
     void OnGameHasBeenBuilt();
-    void OnGameBuildingHasFailed();
+    void OnGameBuildingHasFailed(const QString &errorMsg);
     void OnDialogError(const QString &title, const QString &msg);
 
 signals:

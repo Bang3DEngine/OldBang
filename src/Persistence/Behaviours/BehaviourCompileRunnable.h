@@ -14,7 +14,7 @@ class BehaviourCompileRunnable : public QObject,
     Q_OBJECT
 
 public:
-    BehaviourCompileRunnable(QWidget *parent = nullptr);
+    BehaviourCompileRunnable();
     BehaviourCompileRunnable(const String &behaviourFilepath);
     void Compile();
 

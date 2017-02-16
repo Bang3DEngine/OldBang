@@ -55,7 +55,6 @@ private:
     std::set<BehaviourId> m_beingCompiled;
 
     Map<BehaviourId, QLibrary*> m_libraries;
-    Map<BehaviourId, List<BehaviourHolder*> > m_demanders;
 
     #ifdef BANG_EDITOR
     Map<String, List<ListLogger::MessageId> > m_failMessagesIds;
@@ -65,12 +64,8 @@ private:
 
     BehaviourManagerStatus();
 
-    List<BehaviourHolder*>& GetDemanders(const BehaviourId &bid);
-
     void TreatIfBehaviourChanged(const String &behaviourPath);
 
-    void OnBehaviourDemanded(const String &behaviourPath,
-                             BehaviourHolder *bHolder);
     void OnBehaviourStartedCompiling(const String &behaviourPath);
     void OnBehaviourSuccessCompiling(const String &behaviourPath,
                                       const String &libraryFilepath,
@@ -78,7 +73,6 @@ private:
                                       QLibrary *loadedLibrary);
     void OnBehaviourFailedCompiling(const String &behaviourPath,
                                     const String &errorMessage);
-    void OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder);
 
     void ClearFails(const String &behaviourPath);
 

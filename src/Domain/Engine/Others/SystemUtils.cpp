@@ -249,16 +249,14 @@ String SystemUtils::CompileToSharedObject(const String &filepathFromProjectRoot,
 Behaviour* SystemUtils::CreateDynamicBehaviour(QLibrary *openLibrary)
 {
     QLibrary *lib = openLibrary;
-    if (!lib)
-    {
-        return nullptr;
-    }
-
+    String errorString = "";
+    ASSERT(lib, "", return nullptr);
     if (lib->isLoaded())
     {
         // Get the pointer to the CreateDynamically function
         Behaviour* (*createFunction)(SingletonManager*) =
-                (Behaviour* (*)(SingletonManager*)) (lib->resolve("CreateDynamically"));
+                (Behaviour* (*)(SingletonManager*)) (
+                    lib->resolve("CreateDynamically"));
 
         if (createFunction)
         {
@@ -269,9 +267,16 @@ Behaviour* SystemUtils::CreateDynamicBehaviour(QLibrary *openLibrary)
         }
         else
         {
-            Debug_Error(lib->errorString());
+            errorString = lib->errorString();
         }
     }
+    else
+    {
+        errorString = lib->errorString();
+    }
+
+    Debug_Error("Error loading the library " << openLibrary->fileName()
+                << "." << errorString);
     return nullptr;
 }
 

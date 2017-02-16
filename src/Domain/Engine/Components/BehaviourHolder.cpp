@@ -17,7 +17,6 @@ BehaviourHolder::BehaviourHolder()
 
 BehaviourHolder::~BehaviourHolder()
 {
-    BehaviourManager::OnBehaviourHolderDeleted(this);
     if (m_behaviour)
     {
         delete m_behaviour;

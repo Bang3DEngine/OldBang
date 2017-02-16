@@ -4,9 +4,12 @@
 
 #include "Scene.h"
 #include "Debug.h"
-#include "ListLogger.h"
 #include "SceneManager.h"
 #include "BehaviourHolder.h"
+
+#ifdef BANG_EDITOR
+#include "ListLogger.h"
+#endif
 
 BehaviourManagerStatus::BehaviourManagerStatus()
 {
@@ -42,16 +45,11 @@ QLibrary *BehaviourManagerStatus::GetLibrary(const BehaviourId &bid) const
     return nullptr;
 }
 
-List<BehaviourHolder*> &BehaviourManagerStatus::
-            GetDemanders(const BehaviourId &bid)
-{
-    return m_demanders.Get(bid);
-}
-
 bool BehaviourManagerStatus::SomeBehaviourWithError() const
 {
     Scene *scene = SceneManager::GetActiveScene();
-    List<BehaviourHolder*> behHolders = scene->GetComponentsInChildren<BehaviourHolder>();
+    List<BehaviourHolder*> behHolders =
+            scene->GetComponentsInChildren<BehaviourHolder>();
     for (BehaviourHolder *bh : behHolders)
     {
         BehaviourId bid( bh->GetSourceFilepath() );
@@ -69,7 +67,8 @@ float BehaviourManagerStatus::GetBehaviourHoldersUpdatedPercent() const
 
     int behHoldersUpdated = 0;
     int totalBehaviourHolders = 0;
-    List<BehaviourHolder*> behHolders = scene->GetComponentsInChildren<BehaviourHolder>();
+    List<BehaviourHolder*> behHolders =
+            scene->GetComponentsInChildren<BehaviourHolder>();
     for (BehaviourHolder *bh : behHolders)
     {
         String behaviourPath = bh->GetSourceFilepath();
@@ -89,9 +88,9 @@ float BehaviourManagerStatus::GetBehaviourHoldersUpdatedPercent() const
     return float(behHoldersUpdated) / totalBehaviourHolders;
 }
 
-void BehaviourManagerStatus::TreatIfBehaviourChanged(const String &behaviourPath)
+void BehaviourManagerStatus::TreatIfBehaviourChanged(const String &behPath)
 {
-    BehaviourId newBid(behaviourPath);
+    BehaviourId newBid(behPath);
     if ( IsBeingCompiled(newBid) ) { return; }
 
     bool behaviourHasChanged = IsNewOrHasChanged(newBid);
@@ -109,53 +108,42 @@ void BehaviourManagerStatus::TreatIfBehaviourChanged(const String &behaviourPath
             {
                 // Remove the outdated references and old cached libraries
                 m_failed.erase(possiblyOutdatedBid);
-                m_demanders.Remove(possiblyOutdatedBid);
                 m_libraries.Remove(possiblyOutdatedBid);
                 m_beingCompiled.erase(possiblyOutdatedBid);
                 #ifdef BANG_EDITOR
-                m_failMessagesIds.Remove(behaviourPath);
+                m_failMessagesIds.Remove(behPath);
                 #endif
             }
         }
     }
 }
 
-void BehaviourManagerStatus::OnBehaviourDemanded(const String &behaviourPath,
-                                                 BehaviourHolder *bHolder)
-{
-    BehaviourId bid(behaviourPath);
-    List<BehaviourHolder*> &demanders = GetDemanders(bid);
-
-    if (!demanders.Contains(bHolder))
-    {
-        demanders.PushBack(bHolder);
-    }
-}
-
-void BehaviourManagerStatus::OnBehaviourStartedCompiling(const String &behaviourPath)
+void BehaviourManagerStatus::OnBehaviourStartedCompiling(
+        const String &behaviourPath)
 {
     BehaviourId bid(behaviourPath);
     m_beingCompiled.insert(bid);
 }
 
-void BehaviourManagerStatus::OnBehaviourSuccessCompiling(const String &behaviourPath,
-                                                         const String &libraryFilepath,
-                                                         const String &warnMessage,
-                                                         QLibrary *loadedLibrary)
+void BehaviourManagerStatus::OnBehaviourSuccessCompiling(
+                                                const String &behaviourPath,
+                                                const String &libraryFilepath,
+                                                const String &warnMessage,
+                                                QLibrary *loadedLibrary)
 {
     BehaviourId bid(behaviourPath);
     ClearFails(bid.behaviourAbsPath);
 
     m_libraries.Set(bid, loadedLibrary);
     m_beingCompiled.erase(bid);
-    m_demanders.Remove(bid);
     #ifdef BANG_EDITOR
     m_failMessagesIds.Remove(bid.behaviourAbsPath);
     #endif
 }
 
-void BehaviourManagerStatus::OnBehaviourFailedCompiling(const String &behaviourPath,
-                                                        const String &errorMessage)
+void BehaviourManagerStatus::OnBehaviourFailedCompiling(
+                                                const String &behaviourPath,
+                                                const String &errorMessage)
 {
     BehaviourId bid(behaviourPath);
 
@@ -176,15 +164,6 @@ void BehaviourManagerStatus::OnBehaviourFailedCompiling(const String &behaviourP
     m_failed.insert(bid);
 }
 
-void BehaviourManagerStatus::OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder)
-{
-    // Erase the behaviourHolder from all the demand lists it is in
-    BehaviourId bid(behaviourHolder->GetSourceFilepath());
-    List<BehaviourHolder*> demanders = GetDemanders(bid);
-
-    demanders.RemoveAll(behaviourHolder);
-}
-
 void BehaviourManagerStatus::ClearFails(const String &behaviourPath)
 {
     BehaviourId bid(behaviourPath);
@@ -201,7 +180,8 @@ void BehaviourManagerStatus::ClearFails(const String &behaviourPath)
 
     // Clear the fail messages from the logger.
     #ifdef BANG_EDITOR
-    for (ListLogger::MessageId msgId : m_failMessagesIds.Get(bid.behaviourAbsPath))
+    for (ListLogger::MessageId msgId
+                : m_failMessagesIds.Get(bid.behaviourAbsPath))
     {
         ListLogger::GetInstance()->ClearMessage(msgId);
     }

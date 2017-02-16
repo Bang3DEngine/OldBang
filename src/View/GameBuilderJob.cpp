@@ -5,7 +5,8 @@
 #include "GameBuilder.h"
 #include "GameBuildDialog.h"
 
-#define CHECK_CANCEL if (m_canceled) {  QThread::currentThread()->exit(0); return; }
+#define CHECK_CANCEL if (m_canceled) \
+                     { QThread::currentThread()->exit(0); return; }
 
 GameBuilderJob::GameBuilderJob()
 {
@@ -25,8 +26,7 @@ void GameBuilderJob::BuildGame()
     emit NotifyMessage("Compiling the game executable...");
     if (!gb->CompileGameExecutable())
     {
-        Debug_Error("Could not compile game executable" );
-        emit NotifyGameBuildingHasFailed();
+        emit NotifyGameBuildingHasFailed("Could not compile game executable");
         return;
     }
     emit NotifyPercent(0.5f);
@@ -36,8 +36,7 @@ void GameBuilderJob::BuildGame()
     emit NotifyMessage("Copying assets into data directory...");
     if (!gb->CreateDataDirectory(executableDir))
     {
-        Debug_Error("Could not create data directory");
-        emit NotifyGameBuildingHasFailed();
+        emit NotifyGameBuildingHasFailed("Could not create data directory");
         return;
     }
     emit NotifyPercent(0.75f);
@@ -48,8 +47,7 @@ void GameBuilderJob::BuildGame()
     Project *gameProject = gb->CreateGameProject(executableDir);
     if (!gameProject)
     {
-        Debug_Error("Could not create game project file");
-        emit NotifyGameBuildingHasFailed();
+        emit NotifyGameBuildingHasFailed("Could not create game project file");
         return;
     }
 
@@ -58,8 +56,7 @@ void GameBuilderJob::BuildGame()
     emit NotifyMessage("Compiling behaviours...");
     if (!gb->CompileBehaviours(executableDir, gameProject, &m_canceled))
     {
-        Debug_Error("Could not compile the behaviours");
-        emit NotifyGameBuildingHasFailed();
+        emit NotifyGameBuildingHasFailed("Could not compile the behaviours");
         return;
     }
     emit NotifyPercent(0.95f);
@@ -67,7 +64,8 @@ void GameBuilderJob::BuildGame()
     CHECK_CANCEL;
 
     emit NotifyMessage("Moving the executable into the desired location...");
-    const String c_initialOutputDir = Persistence::GetEngineRootAbs() + "/bin/Game.exe";
+    const String c_initialOutputDir = Persistence::GetEngineRootAbs() +
+                                      "/bin/Game.exe";
     Persistence::Remove(m_executableFilepath);
     Persistence::Move(c_initialOutputDir, m_executableFilepath);
 

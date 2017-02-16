@@ -60,7 +60,6 @@ private:
 
     static QLibrary* LoadLibraryFromFilepath(const String &libFilepath);
     static void RemoveOutdatedLibraryFiles(const String &newLibraryFilepath);
-    static void OnBehaviourHolderDeleted(BehaviourHolder *behaviourHolder);
 
     friend class Application;
     friend class BehaviourHolder;

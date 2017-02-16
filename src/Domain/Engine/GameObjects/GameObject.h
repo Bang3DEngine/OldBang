@@ -287,11 +287,12 @@ public:
     void SetEnabled(bool m_enabled);
     bool IsEnabled() const;
 
+    bool IsSelected() const;
+
     #ifdef BANG_EDITOR
     // Is it being dragged from hierarchy into screen?
     bool IsDraggedGameObject() const;
 
-    bool IsSelected() const;
     void OnHierarchyGameObjectsSelected(
             List<GameObject*> &selectedEntities) override;
     #endif

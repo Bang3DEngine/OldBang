@@ -20,14 +20,6 @@ class IToString;
 class Quaternion;
 class Debug
 {
-private:
-    Debug();
-
-    static const String c_logPrefix;
-    static const String c_warnPrefix;
-    static const String c_errorPrefix;
-    static const String c_statusPrefix;
-
 public:
 
     static void DrawLine(const Vector3 &origin,
@@ -48,6 +40,14 @@ public:
     static void _Warn(const String &str, int line, const String &fileName);
     static void _Error(const String &str, int line, const String &fileName);
     static void _Status(const String &str, float timeInSeconds);
+
+private:
+    Debug();
+
+    static const String c_logPrefix;
+    static const String c_warnPrefix;
+    static const String c_errorPrefix;
+    static const String c_statusPrefix;
 };
 
 // ASSERT

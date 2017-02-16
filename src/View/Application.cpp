@@ -85,6 +85,10 @@ void Application::OnDrawTimerTick()
     Screen::GetInstance()->swapBuffers();
 
     Input::GetInstance()->OnFrameFinished();
+
+    #ifdef BANG_EDITOR
+    ListLogger::GetInstance()->ProcessMessagesQueue();
+    #endif
 }
 
 AssetsManager *Application::GetAssetsManager() const

@@ -20,7 +20,7 @@ class GameBuilderJob : public QObject
         void NotifyPercent(float);
         void NotifyMessage(const QString &message);
         void NotifyGameHasBeenBuilt();
-        void NotifyGameBuildingHasFailed();
+        void NotifyGameBuildingHasFailed(const QString &errorMsg);
 
     protected:
         String m_executableFilepath = "";

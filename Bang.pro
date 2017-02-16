@@ -272,7 +272,6 @@ HEADERS +=                                                          \
     src/View/Windows/IWindow.h \
     src/View/Windows/GameWindow.h \
     src/Persistence/Behaviours/BehaviourCompileRunnable.h \
-    src/View/Explorer/ExplorerFileSortProxy.h \
     src/Persistence/Files/AudioFile.h \
     src/Domain/Engine/Physics/Math.h \
     src/Domain/Engine/Physics/Random.h \
@@ -280,13 +279,7 @@ HEADERS +=                                                          \
     src/Persistence/Behaviours/BehaviourManagerStatus.h \
     src/Domain/Engine/Components/RectTransform.h \
     src/Domain/Engine/GameObjects/UIGameObject.h \
-    src/View/Inspector/AttributeWidgets/AttrWidgetInt.h \
-    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.h \
-    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
-    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
-    src/View/EditorGameObject/EditorGizmo.h \
     src/View/Cursor.h \
-    src/View/EditorGameObject/EditorUIGameObject.h
 
 EDITOR {
 HEADERS += \
@@ -360,6 +353,13 @@ HEADERS += \
     src/Domain/Engine/Others/GameBuilder.h \
     src/View/ShortcutManager.h \
     src/View/EditorGameObject/EditorAxisPlane.h \
+    src/View/Explorer/ExplorerFileSortProxy.h \
+    src/View/Inspector/AttributeWidgets/AttrWidgetInt.h \
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.h \
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
+    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
+    src/View/EditorGameObject/EditorGizmo.h \
+    src/View/EditorGameObject/EditorUIGameObject.h \
     src/View/IShortcutListener.h
 }
 GAME {
@@ -470,7 +470,6 @@ SOURCES += \
     src/View/Windows/IWindow.cpp \
     src/View/Windows/GameWindow.cpp \
     src/Persistence/Behaviours/BehaviourCompileRunnable.cpp \
-    src/View/Explorer/ExplorerFileSortProxy.cpp \
     src/Persistence/Files/AudioFile.cpp \
     src/Domain/Engine/Physics/Math.cpp \
     src/Domain/Engine/Physics/Random.cpp \
@@ -478,13 +477,7 @@ SOURCES += \
     src/Persistence/Behaviours/BehaviourManagerStatus.cpp \
     src/Domain/Engine/Components/RectTransform.cpp \
     src/Domain/Engine/GameObjects/UIGameObject.cpp \
-    src/View/Inspector/AttributeWidgets/AttrWidgetInt.cpp \
-    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \
-    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp \
-    src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
-    src/View/EditorGameObject/EditorGizmo.cpp \
-    src/View/Cursor.cpp \
-    src/View/EditorGameObject/EditorUIGameObject.cpp
+    src/View/Cursor.cpp
 
 EDITOR {
     SOURCES += \
@@ -558,10 +551,17 @@ EDITOR {
         src/View/ContextMenu.cpp \
         src/View/ShortcutManager.cpp \
         src/View/IShortcutListener.cpp \
+        src/View/Explorer/ExplorerFileSortProxy.cpp \
+        src/View/Inspector/AttributeWidgets/AttrWidgetInt.cpp \
+        src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \
+        src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp \
+        src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
+        src/View/EditorGameObject/EditorGizmo.cpp \
+        src/View/EditorGameObject/EditorUIGameObject.cpp \
         src/View/EditorGameObject/EditorAxisPlane.cpp
 }
 GAME {
-    SOURCES +=
+    #SOURCES +=
 }
 ######################################
 

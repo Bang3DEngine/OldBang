@@ -32,6 +32,7 @@ void UIGameObject::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("UIGameObject");
 }
 
+#ifdef BANG_EDITOR
 void UIGameObject::OnHierarchyGameObjectsSelected(
         List<GameObject *> &selectedGameObjects)
 {
@@ -44,3 +45,4 @@ void UIGameObject::OnHierarchyGameObjectsSelected(
                     EditorState::TransformMode::RectTransform);
     }
 }
+#endif

@@ -23,12 +23,11 @@ const String Debug::c_warnPrefix   = "[ WARNING ]: ";
 const String Debug::c_errorPrefix  = "[  ERROR  ]: ";
 const String Debug::c_statusPrefix = "[  STATUS ]: ";
 
-Debug::Debug()
-{
-}
+Debug::Debug() { }
 
-void Debug::DrawLine(const Vector3 &origin, const Vector3 &destiny, const Color &color,
-                     float lineWidth, float secsTime, bool depthTest)
+void Debug::DrawLine(const Vector3 &origin, const Vector3 &destiny,
+                     const Color &color, float lineWidth, float secsTime,
+                     bool depthTest)
 {
     #ifdef BANG_EDITOR
     Scene *s = SceneManager::GetActiveScene(); ASSERT(s);
@@ -76,10 +75,7 @@ void Debug::_Log(const String &str, int line, const String &filePath)
                  fileName << "(" << line << ")" <<  std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    if (QThread::currentThread() == QApplication::instance()->thread())
-    {
-        ListLogger::AddLog(str, line, fileName);
-    }
+    ListLogger::AddLog(str, line, fileName);
     #endif
 }
 
@@ -90,10 +86,7 @@ void Debug::_Warn(const String &str, int line, const String &filePath)
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    if (QThread::currentThread() == QApplication::instance()->thread())
-    {
-        ListLogger::AddWarn(str, line, fileName);
-    }
+    ListLogger::AddWarn(str, line, fileName);
     #endif
 }
 
@@ -104,10 +97,7 @@ void Debug::_Error(const String &str, int line, const String &filePath)
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    if (QThread::currentThread() == QApplication::instance()->thread())
-    {
-        ListLogger::AddError(str, line, fileName);
-    }
+    ListLogger::AddError(str, line, fileName);
     #endif
 }
 

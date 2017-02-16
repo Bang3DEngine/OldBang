@@ -1,7 +1,9 @@
 #ifndef LISTLOGGER_H
 #define LISTLOGGER_H
 
+#include <queue>
 #include <QColor>
+#include <QMutex>
 #include <QDropEvent>
 
 #include "Map.h"
@@ -15,7 +17,7 @@ class ListLogger : public DragDropQTreeWidget
     Q_OBJECT
 
 public:
-    typedef unsigned long long MessageId;
+    typedef long long MessageId;
 
     explicit ListLogger(QWidget *parent = nullptr);
 
@@ -55,14 +57,6 @@ private slots:
     void DecorateLastItem(const Color &color);
 
 private:
-    static int c_rowHeight;
-
-    static int c_iconColumn;
-    static int c_msgColumn;
-    static int c_countColumn;
-    static int c_lineColumn;
-    static int c_fileNameColumn;
-
     enum MessageType { Log = 0, Warn = 1, Error = 2 };
     const Color MessageTypeColor[3] = { Color(1.0f, 1.0f, 1.0f),
                                         Color(1.0f, 1.0f, 0.3f),
@@ -70,7 +64,8 @@ private:
 
     struct Message
     {
-        int line               = 0;
+        MessageId id           = -1;
+        int line               =  0;
         String msg             = "";
         String fileName        = "";
         bool persistent        = false;
@@ -86,6 +81,13 @@ private:
         {
         }
     };
+
+    static int c_rowHeight;
+    static int c_iconColumn, c_msgColumn, c_countColumn, c_lineColumn,
+               c_fileNameColumn;
+
+    QMutex m_messageQueueMutex;
+    std::queue<Message> m_messageQueue;
 
     MessageId m_latestMessageId = 0;
 
@@ -109,6 +111,9 @@ private:
     QIcon m_warnIcon;
     QIcon m_errorIcon;
 
+    void ProcessMessagesQueue();
+    MessageId EnqueueMessage(Message &message);
+
     void UpdateMessagesCountTexts();
     bool MustBeShown(const Message &message) const;
     void RefreshCollapsingAndShowing();
@@ -117,6 +122,8 @@ private:
 
     MessageId AddMessage(const Message &message,
                          int forcedMessageId = -1);
+
+    friend class Application;
 };
 
 #endif // LISTLOGGER_H
