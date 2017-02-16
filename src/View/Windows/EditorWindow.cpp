@@ -42,7 +42,7 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     Hierarchy::GetInstance()->OnWindowShown();
     Explorer::GetInstance()->OnWindowShown();
     Inspector::GetInstance()->OnWindowShown();
-    ListLogger::GetInstance()->OnWindowShown();
+    Console::GetInstance()->OnWindowShown();
 
     QObject::connect(EditorWindow::s_win->tabContainerSceneGame,
                      SIGNAL(currentChanged(int)),
@@ -51,23 +51,23 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     QDockWidget *hierarchyDock = EditorWindow::s_win->dockHierarchy;
     QDockWidget *inspectorDock = EditorWindow::s_win->dockInspector;
     QDockWidget *explorerDock = EditorWindow::s_win->dockExplorer;
-    QDockWidget *loggerDock = EditorWindow::s_win->dockLogger;
+    QDockWidget *ConsoleDock = EditorWindow::s_win->dockConsole;
 
     // Take out dock titles above
     /*
     hierarchyDock->setTitleBarWidget(new QWidget());
     inspectorDock->setTitleBarWidget(new QWidget());
     explorerDock->setTitleBarWidget(new QWidget());
-    loggerDock->setTitleBarWidget(new QWidget());
+    ConsoleDock->setTitleBarWidget(new QWidget());
     */
 
     // Take out 'X' buttons
     hierarchyDock->setWindowFlags(Qt::WindowTitleHint);
     inspectorDock->setWindowFlags(Qt::WindowTitleHint);
     explorerDock->setWindowFlags(Qt::WindowTitleHint);
-    loggerDock->setWindowFlags(Qt::WindowTitleHint);
+    ConsoleDock->setWindowFlags(Qt::WindowTitleHint);
 
-    window->tabifyDockWidget(explorerDock, loggerDock);
+    window->tabifyDockWidget(explorerDock, ConsoleDock);
     explorerDock->raise();
 
     window->setCorner(Qt::TopLeftCorner,     Qt::LeftDockWidgetArea);

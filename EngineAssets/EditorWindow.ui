@@ -903,12 +903,12 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockLogger">
+  <widget class="QDockWidget" name="dockConsole">
    <property name="features">
     <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="windowTitle">
-    <string>Logger</string>
+    <string>Console</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
@@ -928,7 +928,7 @@
       <number>2</number>
      </property>
      <item>
-      <widget class="QWidget" name="widgetLogger" native="true">
+      <widget class="QWidget" name="widgetConsole" native="true">
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <property name="spacing">
          <number>0</number>
@@ -951,7 +951,7 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QToolButton" name="buttonLoggerClear">
+           <widget class="QToolButton" name="buttonConsoleClear">
             <property name="text">
              <string>Clear</string>
             </property>
@@ -1095,7 +1095,7 @@
           <property name="childrenCollapsible">
            <bool>false</bool>
           </property>
-          <widget class="ListLogger" name="listLogger">
+          <widget class="Console" name="console">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -1214,7 +1214,7 @@
               <number>0</number>
              </property>
              <item row="0" column="0">
-              <widget class="QLabel" name="labelLoggerCompleteMessage">
+              <widget class="QLabel" name="labelConsoleCompleteMessage">
                <property name="text">
                 <string>kasdhjgkajshdsladhsasjdlk</string>
                </property>
@@ -1521,9 +1521,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ListLogger</class>
+   <class>Console</class>
    <extends>QTreeWidget</extends>
-   <header>ListLogger.h</header>
+   <header>Console.h</header>
   </customwidget>
  </customwidgets>
  <resources>

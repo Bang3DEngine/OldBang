@@ -12,7 +12,7 @@
 #include "SceneManager.h"
 
 #ifdef BANG_EDITOR
-#include "ListLogger.h"
+#include "Console.h"
 #include "EditorScene.h"
 #include "EditorWindow.h"
 #include "EditorDebugGameObject.h"
@@ -51,7 +51,7 @@ void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
 void Debug::_Clear()
 {
     #ifdef BANG_EDITOR
-    ListLogger::Clear();
+    Console::Clear();
     #endif
 }
 
@@ -75,7 +75,7 @@ void Debug::_Log(const String &str, int line, const String &filePath)
                  fileName << "(" << line << ")" <<  std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    ListLogger::AddLog(str, line, fileName);
+    Console::AddLog(str, line, fileName);
     #endif
 }
 
@@ -86,7 +86,7 @@ void Debug::_Warn(const String &str, int line, const String &filePath)
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    ListLogger::AddWarn(str, line, fileName);
+    Console::AddWarn(str, line, fileName);
     #endif
 }
 
@@ -97,7 +97,7 @@ void Debug::_Error(const String &str, int line, const String &filePath)
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
     #ifdef BANG_EDITOR
-    ListLogger::AddError(str, line, fileName);
+    Console::AddError(str, line, fileName);
     #endif
 }
 

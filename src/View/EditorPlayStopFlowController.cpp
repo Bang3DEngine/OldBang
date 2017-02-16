@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include "Screen.h"
 #include "Dialog.h"
-#include "ListLogger.h"
+#include "Console.h"
 #include "EditorState.h"
 #include "Application.h"
 #include "EditorScene.h"
@@ -45,7 +45,7 @@ bool EditorPlayStopFlowController::PlayScene()
     if (!WaitForAllBehavioursToBeLoaded()) { return false; }
 
     m_playing = true;
-    ListLogger::GetInstance()->OnEditorPlay();
+    Console::GetInstance()->OnEditorPlay();
 
     // Make a copy of the current scene, to restore it later
     m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
@@ -118,7 +118,7 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
         {
             String fixErrorsMsg =
                     "Please fix all the behaviour errors before playing.";
-            String msg = fixErrorsMsg + "\nCheck the Logger.";
+            String msg = fixErrorsMsg + "\nCheck the Console.";
             Debug_Error(fixErrorsMsg);
             Dialog::Error("Error", msg);
             return false;

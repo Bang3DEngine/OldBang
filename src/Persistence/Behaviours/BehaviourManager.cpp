@@ -14,7 +14,7 @@
 #include "BehaviourCompileRunnable.h"
 
 #ifdef BANG_EDITOR
-#include "ListLogger.h"
+#include "Console.h"
 #endif
 
 BehaviourManager::BehaviourManager()

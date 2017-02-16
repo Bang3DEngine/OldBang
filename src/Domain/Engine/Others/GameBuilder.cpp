@@ -136,7 +136,7 @@ void GameBuilder::OnGameBuildingHasFailed(const QString &errorMsg)
     Debug_Error(errorMsg);
     OnDialogError("Error building game",
                   "The game could not be built.\n"
-                  "Look the Logger errors for more information.");
+                  "Look the Console errors for more information.");
 }
 
 void GameBuilder::OnDialogError(const QString &title, const QString &msg)

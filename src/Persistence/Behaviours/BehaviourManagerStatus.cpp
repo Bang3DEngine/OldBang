@@ -8,7 +8,7 @@
 #include "BehaviourHolder.h"
 
 #ifdef BANG_EDITOR
-#include "ListLogger.h"
+#include "Console.h"
 #endif
 
 BehaviourManagerStatus::BehaviourManagerStatus()
@@ -153,8 +153,8 @@ void BehaviourManagerStatus::OnBehaviourFailedCompiling(
     #ifdef BANG_EDITOR
     if (!errorMessage.Empty())
     {
-        ListLogger *lLog = ListLogger::GetInstance();
-        ListLogger::MessageId msgId = lLog->AddError(errorMessage, 1,
+        Console *lLog = Console::GetInstance();
+        Console::MessageId msgId = lLog->AddError(errorMessage, 1,
                                                      behaviourPath, true);
         m_failMessagesIds.Get(behaviourPath).PushBack(msgId);
     }
@@ -178,12 +178,12 @@ void BehaviourManagerStatus::ClearFails(const String &behaviourPath)
         }
     }
 
-    // Clear the fail messages from the logger.
+    // Clear the fail messages from the Console.
     #ifdef BANG_EDITOR
-    for (ListLogger::MessageId msgId
+    for (Console::MessageId msgId
                 : m_failMessagesIds.Get(bid.behaviourAbsPath))
     {
-        ListLogger::GetInstance()->ClearMessage(msgId);
+        Console::GetInstance()->ClearMessage(msgId);
     }
     m_failMessagesIds.Remove(bid.behaviourAbsPath);
     #endif

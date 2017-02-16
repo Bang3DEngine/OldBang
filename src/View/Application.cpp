@@ -87,7 +87,7 @@ void Application::OnDrawTimerTick()
     Input::GetInstance()->OnFrameFinished();
 
     #ifdef BANG_EDITOR
-    ListLogger::GetInstance()->ProcessMessagesQueue();
+    Console::GetInstance()->ProcessMessagesQueue();
     #endif
 }
 

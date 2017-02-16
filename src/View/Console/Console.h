@@ -1,5 +1,5 @@
-#ifndef LISTLOGGER_H
-#define LISTLOGGER_H
+#ifndef CONSOLE_H
+#define CONSOLE_H
 
 #include <queue>
 #include <QColor>
@@ -12,14 +12,14 @@
 #include "DragDropAgent.h"
 
 class QLabel;
-class ListLogger : public DragDropQTreeWidget
+class Console : public DragDropQTreeWidget
 {
     Q_OBJECT
 
 public:
     typedef long long MessageId;
 
-    explicit ListLogger(QWidget *parent = nullptr);
+    explicit Console(QWidget *parent = nullptr);
 
     static void Clear();
     static MessageId AddLog(const String &str, int line,
@@ -32,7 +32,7 @@ public:
                               const String &fileName,
                               bool persistent = false);
 
-    static ListLogger* GetInstance();
+    static Console* GetInstance();
 
     void dropEvent(QDropEvent *e) override;
 
@@ -126,4 +126,4 @@ private:
     friend class Application;
 };
 
-#endif // LISTLOGGER_H
+#endif // CONSOLE_H

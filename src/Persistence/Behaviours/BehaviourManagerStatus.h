@@ -9,7 +9,7 @@
 #include "Persistence.h"
 
 #ifdef BANG_EDITOR
-#include "ListLogger.h"
+#include "Console.h"
 #endif
 
 #include "IToString.h"
@@ -57,7 +57,7 @@ private:
     Map<BehaviourId, QLibrary*> m_libraries;
 
     #ifdef BANG_EDITOR
-    Map<String, List<ListLogger::MessageId> > m_failMessagesIds;
+    Map<String, List<Console::MessageId> > m_failMessagesIds;
     #else
     Map<String, List<int> > m_failMessagesIds; // useless map :)
     #endif

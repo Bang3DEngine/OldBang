@@ -153,7 +153,7 @@ EDITOR {
         $$PWD/src/View/Dialogs/                              \
         $$PWD/src/View/Hierarchy/                            \
         $$PWD/src/View/Explorer/                             \
-        $$PWD/src/View/Logger/                               \
+        $$PWD/src/View/Console/                               \
         $$PWD/src/View/EditorCamera/                         \
         $$PWD/src/View/EditorGameObject/                     \
         $$PWD/src/View/EditorGameObject/EditorRectTransform  \
@@ -324,7 +324,7 @@ HEADERS += \
     src/View/Inspector/Inspector.h \
     src/View/Hierarchy/Hierarchy.h \
     src/View/Inspector/ComponentWidget.h \
-    src/View/Logger/ListLogger.h \
+    src/View/Console/Console.h \
     src/View/Explorer/Explorer.h \
     src/View/MenuBar.h \
     src/View/Explorer/ExplorerDirTree.h \
@@ -509,7 +509,7 @@ EDITOR {
         src/View/Inspector/AttributeWidgets/AttributeWidget.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetFloat.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetVectorFloat.cpp \
-        src/View/Logger/ListLogger.cpp \
+        src/View/Console/Console.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetEnum.cpp \
         src/View/Explorer/Explorer.cpp \
         src/View/Inspector/Inspectables/IInspectable.cpp \

@@ -6,7 +6,7 @@
  * the program and the shared libraries of the custom Behaviours.
  *
  * When adding a custom user Behaviour, it must use the global
- * Singleton's that were in use by the main program (the Logger,
+ * Singleton's that were in use by the main program (the Console,
  * the EditorWindow, etc.)
  *
  * So, every time a user Behaviour is linked to the main binary,
@@ -20,7 +20,7 @@
 
 class Time;
 class Input;
-class Logger;
+class Console;
 class IWindow;
 class Persistence;
 class EditorWindow;
