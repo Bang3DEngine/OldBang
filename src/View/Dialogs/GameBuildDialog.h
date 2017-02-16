@@ -11,6 +11,7 @@ class GameBuildDialog : public QProgressDialog
 
 public:
     GameBuildDialog();
+    void Destroy();
 
 public slots:
     /**

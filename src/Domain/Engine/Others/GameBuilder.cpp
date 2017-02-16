@@ -116,7 +116,11 @@ void GameBuilder::BuildGame(bool runGame)
 
 void GameBuilder::OnGameHasBeenBuilt()
 {
-    if (m_gameBuildDialog) { m_gameBuildDialog->finished(0); }
+    if (m_gameBuildDialog)
+    {
+        m_gameBuildDialog->finished(0);
+        m_gameBuildDialog->Destroy();
+    }
     m_gameBuilderThread->exit(0);
 
     //m_gameBuilderJob->OnGameBuildingCanceled(); // Needed, if the dialog is closed by the user
@@ -138,14 +142,22 @@ void GameBuilder::OnGameBuildingHasFailed(const QString &errorMsg)
 void GameBuilder::OnDialogError(const QString &title, const QString &msg)
 {
     Dialog::Error(title, msg);
-    if (m_gameBuildDialog) { m_gameBuildDialog->finished(1); }
+    if (m_gameBuildDialog)
+    {
+        m_gameBuildDialog->finished(1);
+        m_gameBuildDialog->Destroy();
+    }
     m_gameBuilderThread->exit(0);
 }
 
 void GameBuilder::OnGameBuildingHasBeenCanceled()
 {
     m_gameBuilderJob->OnGameBuildingCanceled();
-    if (m_gameBuildDialog) { m_gameBuildDialog->finished(2); }
+    if (m_gameBuildDialog)
+    {
+        m_gameBuildDialog->finished(2);
+        m_gameBuildDialog->Destroy();
+    }
     m_gameBuilderThread->exit(0);
 }
 

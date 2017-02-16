@@ -11,14 +11,15 @@ GameBuildDialog::GameBuildDialog() :
     setModal(true);
     setWindowTitle("Building game...");
     setWindowModality(Qt::WindowModality::ApplicationModal);
-
-
-    QObject::connect(this, SIGNAL(canceled()),
-                     this, SLOT(OnCanceled()));
-
+    QObject::connect(this, SIGNAL(canceled()), this, SLOT(OnCanceled()));
     show();
     raise();
     activateWindow();
+}
+
+void GameBuildDialog::Destroy()
+{
+    close();
 }
 
 void GameBuildDialog::SetPercent(float percent)
