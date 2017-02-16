@@ -54,6 +54,7 @@ class FileLineEdit : public QLineEdit
 public:
     FileLineEdit(QWidget *parent = nullptr);
 
+    void SetBold(bool bold);
     virtual void mouseDoubleClickEvent(QMouseEvent *e) override;
 
 public slots:

@@ -54,8 +54,10 @@ void DialogBrowseAssetFile::Show(QWidget *parent,
             Persistence::GetFiles(Persistence::GetEngineAssetsRootAbs(),
                                   true, extensions);
 
-    ShowOnList(m_projectFileList, false, projectFilepaths);
+    engineFilepaths.PushFront("None");
+    projectFilepaths.PushFront("None");
     ShowOnList(m_engineFileList,  true,  engineFilepaths);
+    ShowOnList(m_projectFileList, false, projectFilepaths);
     show();
 }
 

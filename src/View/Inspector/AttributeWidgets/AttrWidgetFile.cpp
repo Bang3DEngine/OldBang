@@ -26,8 +26,8 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
 
     // Icon
     String filepath = xmlAttribute.GetValue();
-    filepath = Persistence::ToAbsolute(filepath,
-                                       xmlAttribute.HasProperty(XMLProperty::IsEngineFile));
+    bool isEngineFile = xmlAttribute.HasProperty(XMLProperty::IsEngineFile);
+    filepath = Persistence::ToAbsolute(filepath, isEngineFile);
 
     //
 
@@ -60,7 +60,6 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     m_heightSizeHint = 35;
 
     SetValue(filepath);
-
     AfterConstructor();
 }
 
@@ -111,7 +110,9 @@ void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
                                m_xmlAttribute.GetProperties());
 
     String fileName = Persistence::GetFileName(m_filepath);
-    m_filepathLineEdit->setText(fileName.ToQString());
+    String fileText = !fileName.Empty() ? fileName : "None";
+    m_filepathLineEdit->SetBold( !fileName.Empty() );
+    m_filepathLineEdit->setText(fileText.ToQString());
 
     if (draggedFile)
     {
@@ -134,14 +135,17 @@ void AttrWidgetFile::OnDragStart(const DragDropInfo &ddi)
         {
             File f = explorer->GetSelectedFile();
             String extensions =
-                    m_xmlAttribute.GetPropertyValue(XMLProperty::FileExtension.GetName());
+                    m_xmlAttribute.GetPropertyValue(
+                        XMLProperty::FileExtension.GetName());
             if (f.IsOfExtension(extensions))
             {
-                m_filepathLineEdit->setStyleSheet(IDragDropListener::acceptDragStyle);
+                m_filepathLineEdit->setStyleSheet(
+                            IDragDropListener::acceptDragStyle);
             }
             else
             {
-                m_filepathLineEdit->setStyleSheet(IDragDropListener::rejectDragStyle);
+                m_filepathLineEdit->setStyleSheet(
+                            IDragDropListener::rejectDragStyle);
             }
         }
     }
@@ -198,11 +202,16 @@ void AttrWidgetFile::OnDoubleClick()
 
 FileLineEdit::FileLineEdit(QWidget *parent) : QLineEdit(parent)
 {
-    connect (this, SIGNAL(selectionChanged()),
-             this, SLOT(Deselect()));
-
     setFixedHeight(24);
     setAlignment(Qt::AlignmentFlag::AlignLeft);
+    connect (this, SIGNAL(selectionChanged()), this, SLOT(Deselect()));
+}
+
+void FileLineEdit::SetBold(bool bold)
+{
+    QFont currentFont = font();
+    currentFont.setBold(bold);
+    setFont( currentFont );
 }
 
 void FileLineEdit::mouseDoubleClickEvent(QMouseEvent *e)

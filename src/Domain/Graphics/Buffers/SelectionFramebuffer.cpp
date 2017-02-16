@@ -69,7 +69,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
         ShaderProgram *selectionSp = m_selectionProgram;
         selectionSp->SetUniformColor("selectionColor", GetSelectionColor(go));
 
-        Material *rendMaterial = rend->GetMaterial();
+        Material *rendMaterial = rend->GetMaterial(); ASSERT(rendMaterial);
         ShaderProgram *originalSP =
                 rendMaterial ? rendMaterial->GetShaderProgram() : nullptr;
         rendMaterial->SetShaderProgram( selectionSp );
