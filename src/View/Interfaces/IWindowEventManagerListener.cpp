@@ -12,9 +12,6 @@ IWindowEventManagerListener::~IWindowEventManagerListener()
     WindowEventManager::GetInstance()->RemoveListener(this);
 }
 
-void IWindowEventManagerListener::OnMenuBarActionClicked(MenuBar::Action clickedAction)
-{
-}
 void IWindowEventManagerListener::OnChildAdded(GameObject *child)
 {
 }
@@ -24,17 +21,6 @@ void IWindowEventManagerListener::OnChildChangedParent(GameObject *child, GameOb
 void IWindowEventManagerListener::OnChildRemoved(GameObject *child)
 {
 }
-
-void IWindowEventManagerListener::OnButtonTranslateModeSelected()
-{
-}
-void IWindowEventManagerListener::OnButtonRotateModeSelected()
-{
-}
-void IWindowEventManagerListener::OnButtonScaleModeSelected()
-{
-}
-
 void IWindowEventManagerListener::OnGameObjectDestroyed(GameObject *destroyed)
 {
 }

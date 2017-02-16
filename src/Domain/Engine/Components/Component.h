@@ -24,7 +24,6 @@ class Component :
              ,public IFileable
              ,public ICloneable
             #ifdef BANG_EDITOR
-             ,public IWindowEventManagerListener
              ,public IInspectable
             #endif
 {

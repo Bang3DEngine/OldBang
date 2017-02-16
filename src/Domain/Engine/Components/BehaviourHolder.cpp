@@ -155,7 +155,6 @@ void BehaviourHolder::CreateNewBehaviour()
     if (ok && !className.Empty())
     {
         // TODO: Check that the class name is a valid name!
-
         String currentDir = Explorer::GetInstance()->GetCurrentDir();
 
         // Create header file

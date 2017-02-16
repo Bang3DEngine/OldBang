@@ -148,6 +148,13 @@ void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInsp
     m_currentInspectables.PushBack(prefabInspectable);
 }
 
+void Inspector::OnMenuBarAddNewBehaviourClicked()
+{
+    ASSERT(m_currentGameObject);
+    BehaviourHolder *bh = m_currentGameObject->AddComponent<BehaviourHolder>();
+    bh->CreateNewBehaviour();
+}
+
 void Inspector::AddWidget(InspectorWidget *widget, int row)
 {
     ASSERT(widget);
@@ -181,67 +188,6 @@ Inspector *Inspector::GetInstance()
 void Inspector::dropEvent(QDropEvent *e)
 {
     e->ignore();
-}
-
-void Inspector::OnMenuBarActionClicked(MenuBar::Action clickedAction)
-{
-    ASSERT(m_currentGameObject);
-
-    if (clickedAction == MenuBar::Action::AddComponentNewBehaviour)
-    {
-        BehaviourHolder *bh = m_currentGameObject->AddComponent<BehaviourHolder>();
-        bh->CreateNewBehaviour();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentBehaviour)
-    {
-        BehaviourHolder *bh = m_currentGameObject->AddComponent<BehaviourHolder>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentCamera)
-    {
-        Camera *c = m_currentGameObject->AddComponent<Camera>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentMeshRenderer)
-    {
-        MeshRenderer *m = m_currentGameObject->AddComponent<MeshRenderer>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponenSingleLineRenderer)
-    {
-        SingleLineRenderer *slr = m_currentGameObject->AddComponent<SingleLineRenderer>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentCircleRenderer)
-    {
-        CircleRenderer *cr = m_currentGameObject->AddComponent<CircleRenderer>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentAudioSource)
-    {
-        AudioSource *as = m_currentGameObject->AddComponent<AudioSource>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentAudioListener)
-    {
-        AudioListener *al = m_currentGameObject->AddComponent<AudioListener>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentDirectionalLight)
-    {
-        DirectionalLight *dl = m_currentGameObject->AddComponent<DirectionalLight>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentPointLight)
-    {
-        PointLight *pl = m_currentGameObject->AddComponent<PointLight>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentCanvas)
-    {
-        Canvas *c = m_currentGameObject->AddComponent<Canvas>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentUIImage)
-    {
-        UIImage *img = m_currentGameObject->AddComponent<UIImage>();
-    }
-    else if (clickedAction == MenuBar::Action::AddComponentUIText)
-    {
-        UIText *text = m_currentGameObject->AddComponent<UIText>();
-    }
-
-    Refresh();
 }
 
 void Inspector::OnGameObjectDestroyed(GameObject *destroyed)

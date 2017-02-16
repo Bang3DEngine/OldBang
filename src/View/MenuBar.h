@@ -17,52 +17,6 @@ class MenuBar : public QMenuBar
 public:
     Q_ENUMS(Action);
 
-    enum Action
-    {
-        NewScene,
-        OpenScene,
-        SaveScene,
-        SaveSceneAs,
-        Build,
-        BuildAndRun,
-
-        CreateEmptyGameObject,
-        CreateEmptyUIGameObject,
-        CreateFromPrefab,
-        CreatePlane,
-        CreateCube,
-        CreateSphere,
-        CreateCone,
-        CreateDirectionalLight,
-        CreatePointLight,
-        CreateUIText,
-        CreateUIImage,
-        AlignGameObjectWithView,
-        AlignViewWithGameObject,
-
-        CreatePrefab,
-        CreateMaterial,
-        CreateMesh,
-        CreateShaderProgram,
-        CreateTexture2D,
-        CreateFont,
-        CreateAudioClip,
-
-        AddComponentNewBehaviour,
-        AddComponentBehaviour,
-        AddComponentCamera,
-        AddComponentMeshRenderer,
-        AddComponenSingleLineRenderer,
-        AddComponentCircleRenderer,
-        AddComponentAudioSource,
-        AddComponentAudioListener,
-        AddComponentDirectionalLight,
-        AddComponentPointLight,
-        AddComponentCanvas,
-        AddComponentUIImage,
-        AddComponentUIText
-    };
-
     MenuBar(QWidget *parent = nullptr);
 
     void CreateNewScene() const;

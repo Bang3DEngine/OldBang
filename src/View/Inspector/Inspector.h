@@ -5,6 +5,9 @@
 #include <QDropEvent>
 
 #include "Map.h"
+#include "Debug.h"
+#include "Component.h"
+#include "GameObject.h"
 #include "DragDropAgent.h"
 #include "InspectorContextMenu.h"
 #include "PrefabAssetFileInspectable.h"
@@ -43,8 +46,14 @@ public slots:
 public:
     void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
 
-    // IWindowEventManagerListener
-    void OnMenuBarActionClicked(MenuBar::Action clickedAction) override;
+    template<class ComponentClass>
+    void OnMenuBarAddComponentClicked()
+    {
+        ASSERT(m_currentGameObject);
+        m_currentGameObject->AddComponent<ComponentClass>();
+        Refresh();
+    }
+    void OnMenuBarAddNewBehaviourClicked();
     void OnGameObjectDestroyed(GameObject *destroyed);
 
     void AddWidget(InspectorWidget *widget, int row = -1);

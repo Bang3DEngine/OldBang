@@ -24,7 +24,6 @@
 
 #ifdef BANG_EDITOR
 #include "EditorWindow.h"
-#include "IWindowEventManagerListener.h"
 #endif
 
 class BehaviourHolder;

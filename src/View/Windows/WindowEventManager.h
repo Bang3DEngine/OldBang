@@ -43,12 +43,6 @@ public:
 
 public slots:
 
-    static void NotifyMenuBarActionClicked(MenuBar::Action clickedAction);
-
-    static void NotifyButtonTranslateModeSelected();
-    static void NotifyButtonRotateModeSelected();
-    static void NotifyButtonScaleModeSelected();
-
     static void NotifyGameObjectDestroyed(GameObject *destroyed);
 
     static void NotifyInspectorSlotChanged(InspectorWidget *inspectorItem);

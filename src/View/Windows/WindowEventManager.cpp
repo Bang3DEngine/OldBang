@@ -32,26 +32,6 @@ WindowEventManager *WindowEventManager::GetInstance()
     return WindowEventManager::s_wem;
 }
 
-void WindowEventManager::NotifyMenuBarActionClicked(MenuBar::Action clickedAction)
-{
-    PROPAGATE_EVENT_PAR(OnMenuBarActionClicked(clickedAction), s_wem->m_listeners);
-}
-
-void WindowEventManager::NotifyButtonTranslateModeSelected()
-{
-    PROPAGATE_EVENT_PAR(OnButtonTranslateModeSelected(), s_wem->m_listeners);
-}
-
-void WindowEventManager::NotifyButtonRotateModeSelected()
-{
-    PROPAGATE_EVENT_PAR(OnButtonRotateModeSelected(), s_wem->m_listeners);
-}
-
-void WindowEventManager::NotifyButtonScaleModeSelected()
-{
-    PROPAGATE_EVENT_PAR(OnButtonScaleModeSelected(), s_wem->m_listeners);
-}
-
 void WindowEventManager::NotifyGameObjectDestroyed(GameObject *destroyed)
 {
     PROPAGATE_EVENT_PAR(OnGameObjectDestroyed(destroyed), s_wem->m_listeners);

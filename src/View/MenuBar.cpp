@@ -3,6 +3,7 @@
 #include "Font.h"
 #include "Mesh.h"
 #include "Debug.h"
+#include "Canvas.h"
 #include "Screen.h"
 #include "Prefab.h"
 #include "Camera.h"
@@ -17,6 +18,7 @@
 #include "FileReader.h"
 #include "FileWriter.h"
 #include "PointLight.h"
+#include "AudioSource.h"
 #include "MeshFactory.h"
 #include "SystemUtils.h"
 #include "Persistence.h"
@@ -28,9 +30,13 @@
 #include "EditorWindow.h"
 #include "SceneManager.h"
 #include "UIGameObject.h"
+#include "AudioListener.h"
 #include "AssetsManager.h"
+#include "CircleRenderer.h"
 #include "ProjectManager.h"
+#include "BehaviourHolder.h"
 #include "DirectionalLight.h"
+#include "SingleLineRenderer.h"
 #include "WindowEventManager.h"
 
 MenuBar *MenuBar::s_instance = nullptr;
@@ -170,16 +176,13 @@ void MenuBar::OnSaveProject() const
 
 void MenuBar::OnNewScene() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::NewScene);
     if (AskForSavingActiveScene() == Dialog::Reply::Cancel) return;
     CreateNewScene();
 }
 
 void MenuBar::OnOpenScene() const
 {
-    if (AskForSavingActiveScene() == Dialog::Reply::Cancel) return;
-
-    m_wem->NotifyMenuBarActionClicked(Action::OpenScene);
+    if (AskForSavingActiveScene() == Dialog::Reply::Cancel) { return; }
 
     String filename = Dialog::GetOpenFilename("Open scene...",
                                               Scene::GetFileExtensionStatic());
@@ -190,8 +193,6 @@ void MenuBar::OnOpenScene() const
 
 void MenuBar::OnSaveScene() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::SaveScene);
-
     String filename = Persistence::GetCurrentSceneFilepath();
     if ( filename == "" ) //Give the scene a name
     {
@@ -206,15 +207,13 @@ void MenuBar::OnSaveScene() const
 
 void MenuBar::OnSaveSceneAs() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::SaveSceneAs);
-
     Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
-
-    String filename = Dialog::GetSaveFilename("Save scene as...",
-                                              Scene::GetFileExtensionStatic(),
-                                              Persistence::GetProjectAssetsRootAbs(),
-                                              scene->name);
-    if (filename == "") return;
+    String filename = Dialog::GetSaveFilename(
+                             "Save scene as...",
+                             Scene::GetFileExtensionStatic(),
+                             Persistence::GetProjectAssetsRootAbs(),
+                             scene->name);
+    ASSERT(!filename.Empty());
 
     FileWriter::WriteScene(filename, scene);
 }
@@ -232,21 +231,19 @@ void MenuBar::OnBuildAndRun() const
 
 void MenuBar::OnCreateEmptyGameObject() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateEmptyGameObject);
+    Hierarchy::GetInstance()->OnMenuBarCreateEmptyClicked();
 }
 
 void MenuBar::OnCreateEmptyUIGameObject() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateEmptyUIGameObject);
+    Hierarchy::GetInstance()->OnMenuBarCreateEmptyUIClicked();
 }
 
 void MenuBar::OnCreateFromPrefab() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateFromPrefab);
-
     String filename = Dialog::GetOpenFilename("Create from prefab...",
                                               Prefab::GetFileExtensionStatic());
-    if (filename.Empty()) { return; }
+    ASSERT (!filename.Empty());
 
     EditorWindow *w = EditorWindow::GetInstance();
 
@@ -287,7 +284,6 @@ void MenuBar::OnCreateFromPrefab() const
 GameObject* MenuBar::CreatePrimitiveGameObject(Mesh *m, const String &name) const
 {
     GameObject *go = MeshFactory::CreatePrimitiveGameObject(m, name);
-
     go->SetParent(SceneManager::GetActiveScene());
     Hierarchy::GetInstance()->SelectGameObject(go);
     return go;
@@ -315,7 +311,6 @@ void MenuBar::OnCreateCone() const
 
 void MenuBar::OnCreateDirectionalLight() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateDirectionalLight);
     GameObject *go = new GameObject("DirectionalLight");
     go->SetParent(SceneManager::GetActiveScene());
 
@@ -326,7 +321,6 @@ void MenuBar::OnCreateDirectionalLight() const
 
 void MenuBar::OnCreatePointLight() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreatePointLight);
     GameObject *go = new GameObject("PointLight");
     go->SetParent(SceneManager::GetActiveScene());
 
@@ -337,7 +331,6 @@ void MenuBar::OnCreatePointLight() const
 
 void MenuBar::OnCreateUIText() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateUIText);
     GameObject *go = new UIGameObject("Text");
     go->SetParent(SceneManager::GetActiveScene());
 
@@ -349,7 +342,6 @@ void MenuBar::OnCreateUIText() const
 
 void MenuBar::OnCreateUIImage() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateUIImage);
     GameObject *go = new UIGameObject("Image");
     go->SetParent(SceneManager::GetActiveScene());
 
@@ -363,8 +355,6 @@ void MenuBar::OnCreateUIImage() const
 
 void MenuBar::OnAlignGameObjectWithView() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AlignGameObjectWithView);
-
     GameObject *selected = Hierarchy::GetInstance()->GetFirstSelectedGameObject();
     if (selected)
     {
@@ -378,8 +368,6 @@ void MenuBar::OnAlignGameObjectWithView() const
 
 void MenuBar::OnAlignViewWithGameObject() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AlignViewWithGameObject);
-
     GameObject *selected = Hierarchy::GetInstance()->GetFirstSelectedGameObject();
     if (selected)
     {
@@ -393,7 +381,6 @@ void MenuBar::OnAlignViewWithGameObject() const
 
 void MenuBar::OnCreatePrefab() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreatePrefab);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Prefab." + Prefab::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath);
@@ -402,7 +389,6 @@ void MenuBar::OnCreatePrefab() const
 }
 void MenuBar::OnCreateMaterial() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateMaterial);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Material." + Material::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath);
@@ -411,7 +397,6 @@ void MenuBar::OnCreateMaterial() const
 }
 void MenuBar::OnCreateMesh() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateMesh);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Mesh." + Mesh::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath);
@@ -420,7 +405,6 @@ void MenuBar::OnCreateMesh() const
 }
 void MenuBar::OnCreateShaderProgram() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateShaderProgram);
     /*
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_ShaderProgram." + ShaderProgram::GetFileExtensionStatic();
@@ -431,7 +415,6 @@ void MenuBar::OnCreateShaderProgram() const
 }
 void MenuBar::OnCreateTexture2D() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateTexture2D);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Texture2D." + Texture2D::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath);
@@ -441,7 +424,6 @@ void MenuBar::OnCreateTexture2D() const
 
 void MenuBar::OnCreateFont() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateFont);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Font." + Font::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath);
@@ -451,7 +433,6 @@ void MenuBar::OnCreateFont() const
 
 void MenuBar::OnCreateAudioClip() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::CreateAudioClip);
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_AudioClip." + AudioClip::GetFileExtensionStatic();
     filepath = Persistence::GetDuplicateName(filepath);
@@ -461,60 +442,59 @@ void MenuBar::OnCreateAudioClip() const
 
 void MenuBar::OnAddComponentNewBehaviour() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentNewBehaviour);
+    Inspector::GetInstance()->OnMenuBarAddNewBehaviourClicked();
 }
-
-
 void MenuBar::OnAddComponentBehaviour() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentBehaviour);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<BehaviourHolder>();
 }
 void MenuBar::OnAddComponentCamera() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentCamera);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<Camera>();
 }
 void MenuBar::OnAddComponentMeshRenderer() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentMeshRenderer);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<MeshRenderer>();
 }
 void MenuBar::OnAddComponentSingleLineRenderer() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponenSingleLineRenderer);
+    Inspector::GetInstance()->
+            OnMenuBarAddComponentClicked<SingleLineRenderer>();
 }
 void MenuBar::OnAddComponentCircleRenderer() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentCircleRenderer);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<CircleRenderer>();
 }
 
 void MenuBar::OnAddComponentAudioSource() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentAudioSource);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<AudioSource>();
 }
 
 void MenuBar::OnAddComponentAudioListener() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentAudioListener);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<AudioListener>();
 }
 void MenuBar::OnAddComponentDirectionalLight() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentDirectionalLight);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<DirectionalLight>();
 }
 void MenuBar::OnAddComponentPointLight() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentPointLight);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<PointLight>();
 }
 void MenuBar::OnAddComponentCanvas() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentCanvas);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<Canvas>();
 }
 void MenuBar::OnAddComponentUIImage() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentUIImage);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<UIImage>();
 }
 
 void MenuBar::OnAddComponentUIText() const
 {
-    m_wem->NotifyMenuBarActionClicked(Action::AddComponentUIText);
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<UIText>();
 }
 
 MenuBar *MenuBar::GetInstance()

@@ -322,20 +322,21 @@ void Hierarchy::ExpandToggle(GameObject *go)
 
 GameObject *Hierarchy::GetFirstSelectedGameObject() const
 {
-    if (!selectedItems().empty()) return GetGameObjectFromItem(selectedItems().front());
+    if (!selectedItems().empty())
+    {
+        return GetGameObjectFromItem(selectedItems().front());
+    }
     return nullptr;
 }
 
-void Hierarchy::OnMenuBarActionClicked(MenuBar::Action clickedAction)
+void Hierarchy::OnMenuBarCreateEmptyClicked()
 {
-    if (clickedAction == MenuBar::Action::CreateEmptyGameObject)
-    {
-        m_hContextMenu.OnCreateEmptyClicked();
-    }
-    else if (clickedAction == MenuBar::Action::CreateEmptyUIGameObject)
-    {
-        m_hContextMenu.OnCreateEmptyUIClicked();
-    }
+    m_hContextMenu.OnCreateEmptyClicked();
+}
+
+void Hierarchy::OnMenuBarCreateEmptyUIClicked()
+{
+    m_hContextMenu.OnCreateEmptyUIClicked();
 }
 
 void Hierarchy::OnShortcutPressed()

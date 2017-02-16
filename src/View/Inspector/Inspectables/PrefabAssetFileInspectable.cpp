@@ -32,7 +32,8 @@ void PrefabAssetFileInspectable::ShowInInspector()
     Inspector::GetInstance()->ShowPrefabInspectableInfo(this);
 }
 
-void PrefabAssetFileInspectable::OnInspectorSlotChanged(InspectorWidget *inspectorItem)
+void PrefabAssetFileInspectable::OnInspectorSlotChanged(
+        InspectorWidget *inspectorItem)
 {
     SaveToFile();
 }
