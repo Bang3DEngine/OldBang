@@ -281,6 +281,8 @@ public:
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name);
 
+    void UpdateXMLInfo(const XMLNode *xmlInfo);
+    void ReadXMLInfoFirstTime(const XMLNode *xmlInfo);
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 

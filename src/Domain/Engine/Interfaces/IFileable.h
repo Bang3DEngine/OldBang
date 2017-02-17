@@ -25,8 +25,8 @@ public:
     virtual void PostReadXMLInfo(const XMLNode *xmlInfo);
     virtual void PostFillXMLInfo(XMLNode *xmlInfo) const;
 
-    virtual void OnFileNameChanged(const String &absFilepathBefore,
-                                   const String &absFilepathNow);
+    virtual void OnFileOrDirNameChanged(const String &absFilepathBefore,
+                                        const String &absFilepathNow);
 
 protected:
     IFileable();

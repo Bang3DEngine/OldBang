@@ -55,11 +55,15 @@ void Inspector::Clear()
 
     clear();
 
+    for (InspectorWidget *iw : m_currentInspectorWidgets)
+    {
+        delete iw;
+    }
+    m_currentInspectorWidgets.Clear();
+
     m_widget_To_Item.Clear();
     m_currentGameObject = nullptr;
     m_titleLabel->setText(tr(""));
-
-    m_currentInspectorWidgets.Clear();
     m_widget_To_Inspectables.Clear();
     m_currentInspectables.Clear();
 }

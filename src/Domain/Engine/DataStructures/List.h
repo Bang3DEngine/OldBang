@@ -7,6 +7,7 @@
 #include <algorithm>
 
 class String;
+template <class T> class Array;
 template <class T>
 class List : private std::list<T>
 {
@@ -182,6 +183,17 @@ public:
     void PushBack(const T& x)
     {
         this->push_back(x);
+    }
+
+
+    Array<T> ToArray() const
+    {
+        Array<T> array;
+        for (const T &x : *this)
+        {
+            array.PushBack(x);
+        }
+        return array;
     }
 
     Iterator Begin() { return this->begin(); }

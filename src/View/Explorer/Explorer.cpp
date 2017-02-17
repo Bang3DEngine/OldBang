@@ -120,14 +120,20 @@ void Explorer::OnFileRenamed(const QString &path,
 {
     UpdateLabelText();
 
-    String newPath = path + "/" + newName;
-    SelectFile(newPath);
+    String newAbsPath = path + "/" + newName;
+    SelectFile(newAbsPath);
 
-    String oldPath = path + "/" + oldName;
-    IFileable::OnFileNameChangedStatic(oldPath, newPath);
+    String oldAbsPath = path + "/" + oldName;
+    OnFileRenamed(oldAbsPath, newAbsPath);
+}
 
-    String oldRelPath = Persistence::ToRelative(oldPath, false);
-    String newRelPath = Persistence::ToRelative(newPath, false);
+void Explorer::OnFileRenamed(const String &oldFileAbsPath,
+                             const String &newFileAbsPath)
+{
+    IFileable::OnFileNameChangedStatic(oldFileAbsPath, newFileAbsPath);
+
+    String oldRelPath = Persistence::ToRelative(oldFileAbsPath, false);
+    String newRelPath = Persistence::ToRelative(newFileAbsPath, false);
     List<String> allFiles =
           Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true);
     for (const String &filepath : allFiles)
@@ -135,16 +141,22 @@ void Explorer::OnFileRenamed(const QString &path,
         File f(filepath);
         if (!f.IsAsset()) { continue; }
 
-        Debug_Log("Replacing on files " << filepath);
-
+       // Debug_Log("Replacing on file " << filepath << ": " << oldRelPath << " by " << newRelPath);
         String fileXMLContents = f.GetContents();
         int replacements = fileXMLContents.Replace(oldRelPath, newRelPath);
         if (replacements > 0)
         {
+          //  Debug_Log("REPLACED " << replacements << " !!!");
             FileWriter::WriteToFile(filepath, fileXMLContents);
         }
     }
-    WindowEventManager::NotifyFilenameChanged(oldPath, newPath);
+    WindowEventManager::NotifyFilenameChanged(oldFileAbsPath, newFileAbsPath);
+}
+
+void Explorer::OnFileOrDirMoved(const String &oldFileOrDirAbsPath,
+                                const String &newFileOrDirAbsPath)
+{
+    OnFileRenamed(oldFileOrDirAbsPath, newFileOrDirAbsPath);
 }
 
 void Explorer::UpdateLabelText()
@@ -272,7 +284,8 @@ void Explorer::RefreshInspector()
 
     QModelIndex selectedIndex = selectedIndexes().front();
     File f(m_fileSystemModel, selectedIndex);
-    if (f.IsFile())
+    if (selectedIndex.isValid() && f.IsFile() &&
+        Persistence::Exists(f.GetAbsolutePath()))
     {
         m_lastSelectedPath = f.GetRelativePath();
 
@@ -286,7 +299,8 @@ void Explorer::RefreshInspector()
 
         IInspectable *newInspectable = nullptr;
         File *specificFile = File::GetSpecificFile(f);
-        newInspectable = specificFile->GetInspectable();
+        Debug_Log(specificFile);
+        if (specificFile) { newInspectable = specificFile->GetInspectable(); }
         if (!newInspectable && !f.IsDir())
         {
             inspector->Clear();
@@ -478,11 +492,37 @@ void Explorer::OnDragStart(const DragDropInfo &ddi)
     {
         setStyleSheet(IDragDropListener::acceptDragStyle);
     }
+
+    m_fileBeingDragged = GetSelectedFileOrDirPath();
 }
 
 void Explorer::OnDrop(const DragDropInfo &ddi)
 {
     setStyleSheet("/* */");
+
+    if (ddi.sourceObject == this && underMouse()) // Handle file moving
+    {
+        String oldMovedFileOrDirPath = m_fileBeingDragged;
+        File destDir(m_fileSystemModel,
+                     indexAt( mapFromGlobal(QCursor::pos()) ));
+        String destDirPath = destDir.GetAbsolutePath();
+
+        String movedFileOrDirName =
+                Persistence::GetFileNameWithExtension(oldMovedFileOrDirPath);
+        String newMovedFileOrDirPath = destDirPath + "/" + movedFileOrDirName;
+
+        bool fileHasMoved =
+                !oldMovedFileOrDirPath.Empty() &&
+                !Persistence::Exists(oldMovedFileOrDirPath) &&
+                Persistence::ExistsDirectory(destDirPath) &&
+                Persistence::Exists(newMovedFileOrDirPath);
+
+        if (fileHasMoved) // Sometimes it triggers drop but nothing is moved
+        {
+            OnFileOrDirMoved(oldMovedFileOrDirPath, newMovedFileOrDirPath);
+        }
+    }
+
     if (ddi.currentObject == this)
     {
         Hierarchy *hierarchy = Hierarchy::GetInstance();
@@ -500,6 +540,8 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
             FileWriter::WriteToFile(path, selected);
         }
     }
+
+    m_fileBeingDragged = "";
 }
 
 void Explorer::dropEvent(QDropEvent *e)

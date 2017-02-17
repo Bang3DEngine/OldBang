@@ -44,6 +44,7 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
     m_isFile = !model->isDir(index);
 
     m_path = model->filePath(index).toStdString();
+    m_path = Persistence::ToAbsolute(m_path, false); // To canonical
     m_name = Persistence::GetFileName(m_path);
     m_extension = Persistence::GetFileExtensionComplete(m_path);
 }

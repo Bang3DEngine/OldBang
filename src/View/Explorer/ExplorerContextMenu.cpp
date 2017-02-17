@@ -77,6 +77,7 @@ void ExplorerContextMenu::OnDeleteClicked()
 {
     String path = m_explorer->GetSelectedFile().GetAbsolutePath();
     String name = Persistence::GetFileNameWithExtension(path);
+    ASSERT( Persistence::Exists(path) );
     Dialog::Reply reply = Dialog::GetYesNo(
                 "Delete file or directory",
                 "Are you sure you want to remove '" + name + "' ? \n" +

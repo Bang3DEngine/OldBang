@@ -74,6 +74,10 @@ public slots:
     void OnFileRenamed(const QString &path,
                        const QString &oldName,
                        const QString &newName);
+    void OnFileRenamed(const String &oldFileAbsPath,
+                       const String &newFileAbsPath);
+    void OnFileOrDirMoved(const String &oldFileOrDirAbsPath,
+                          const String &newFileOrDirAbsPath);
     void UpdateLabelText();
     void OnIconSizeSliderValueChanged(int value);
 
@@ -88,6 +92,7 @@ private:
     ExplorerContextMenu m_eContextMenu;
 
     std::set<IFileable*> m_fileables;
+    String m_fileBeingDragged = "";
 
     FileSystemModel *m_fileSystemModel = nullptr;
     QToolButton *m_buttonDirUp = nullptr;

@@ -46,8 +46,9 @@ void IFileable::FillXMLInfo(XMLNode *xmlInfo) const
 void IFileable::PostReadXMLInfo(const XMLNode *xmlInfo) {}
 void IFileable::PostFillXMLInfo(XMLNode *xmlInfo) const {}
 
-void IFileable::OnFileNameChanged(const String &absFilepathBefore,
-                                  const String &absFilepathNow)
+#include "GameObject.h"
+void IFileable::OnFileOrDirNameChanged(const String &absFilepathBefore,
+                                       const String &absFilepathNow)
 {
     String xmlInfoStr = GetXMLInfoString();
 
@@ -55,8 +56,18 @@ void IFileable::OnFileNameChanged(const String &absFilepathBefore,
     String relPathNow    = Persistence::ToRelative(absFilepathNow, false);
     int replacements = xmlInfoStr.Replace(relPathBefore, relPathNow);
 
+    GameObject *go = dynamic_cast<GameObject*>(this);
+    if (go && go->name == "CharacterMesh")
+    {
+        if (go) { Debug_Log("Trying to replace in " << go->name << " " << relPathBefore << " by " << relPathNow); }
+        Debug_Log(xmlInfoStr);
+    }
+
     if (replacements > 0)
     {
+        Debug_Log("Replacing " << replacements << "of " << relPathBefore <<
+                  " by " << relPathNow << " in " <<
+                  xmlInfoStr);
         XMLNode *newXMLInfo = XMLNode::FromString(xmlInfoStr);
         ReadXMLInfo(newXMLInfo);
         delete newXMLInfo;
@@ -86,7 +97,7 @@ void IFileable::OnFileNameChangedStatic(const String &absFilepathBefore,
     Explorer *exp = Explorer::GetInstance();
     for (IFileable *fileable : exp->m_fileables)
     {
-        fileable->OnFileNameChanged(absFilepathBefore, absFilepathNow);
+        fileable->OnFileOrDirNameChanged(absFilepathBefore, absFilepathNow);
     }
 }
 #endif

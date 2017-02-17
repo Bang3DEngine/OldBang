@@ -56,8 +56,8 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     m_closeOpenButton->setStyleSheet("padding:0px; border: 0px; margin-left:-5px;");
     m_closeButtonPixmap.load(":/qss_icons/rc/branch_closed.png");
     m_openButtonPixmap.load(":/qss_icons/rc/branch_open.png");
-    connect(m_closeOpenButton, SIGNAL(clicked()),
-            this, SLOT(OnCloseOpenButtonClicked()));
+    QObject::connect(m_closeOpenButton, SIGNAL(clicked()),
+                     this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
 
     String fTitle = StringUtils::FormatInspectorLabel(title);
@@ -74,8 +74,8 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     if (autoUpdate)
     {
         // To refresh all the slots values
-        connect(&m_refreshTimer, SIGNAL(timeout()),
-                this, SLOT(RefreshWidgetValues()));
+        QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
+                         this, SLOT(RefreshWidgetValues()));
         m_refreshTimer.start(100);
     }
 
@@ -84,6 +84,9 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
 InspectorWidget::~InspectorWidget()
 {
+    m_refreshTimer.stop();
+    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
+                        this, SLOT(RefreshWidgetValues()));
 }
 
 XMLNode InspectorWidget::GetInspectableXMLInfo() const

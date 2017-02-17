@@ -413,28 +413,53 @@ GameObject *GameObject::FindInChildren(const String &name)
     return nullptr;
 }
 
-void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
+void GameObject::UpdateXMLInfo(const XMLNode *xmlInfo)
 {
     IFileable::ReadXMLInfo(xmlInfo);
 
     SetEnabled( xmlInfo->GetBool("enabled") );
-    SetName( xmlInfo->GetString("name") );  //Read GameObject name
+    SetName( xmlInfo->GetString("name") );
 
-    bool firstRead = GetChildren().Size() == 0; // No editor stuff added before
-    if (!firstRead) { return; } // To avoid file renaming readding children
+    // IMPORTANT: The order of the xmlNodes must match the order
+    // of the children and components list, in order to update every child/comp
+    // with its info, and not with another one !!!!!!!!!!!!!!!!!
+
+    List<XMLNode*> xmlChildren = xmlInfo->GetChildren();
+    Array<GameObject*> children = GetChildren().ToArray();
+    Array<Component*> components = GetComponents().ToArray();
+    int iChildren = 0, iComponents = 0;
+    for (XMLNode *xmlChildInfo : xmlChildren)
+    {
+        String tagName = xmlChildInfo->GetTagName();
+        if (tagName.Contains("GameObject"))
+        {
+            ++iChildren; ASSERT(iChildren < children.Size());
+            GameObject *child = children[iChildren];
+            child->ReadXMLInfo(xmlChildInfo);
+        }
+        else
+        {
+            ++iComponents; ASSERT(iComponents < components.Size());
+            Component *component = components[iComponents];
+            component->ReadXMLInfo(xmlChildInfo);
+        }
+    }
+}
+
+void GameObject::ReadXMLInfoFirstTime(const XMLNode *xmlInfo)
+{
+    IFileable::ReadXMLInfo(xmlInfo);
+
+    SetEnabled( xmlInfo->GetBool("enabled") );
+    SetName( xmlInfo->GetString("name") );
 
     for ( XMLNode *xmlChild : xmlInfo->GetChildren() )
     {
         String tagName = xmlChild->GetTagName();
-        if (tagName.Contains("GameObject")) // It's a child
+        if (tagName.Contains("GameObject"))
         {
             GameObject *child = tagName == "UIGameObject" ? new UIGameObject()
                                                           : new GameObject();
-            // Important: this line must be before the ReadXMLInfo, because
-            // it will avoid Behaviour to be compiled if it's not in the scene,
-            // and it only can really know if its in scene when executing
-            // the Read if we set it before the Read, not after.
-            // Wtf I don't know how to write this xds
             child->SetParent(this);
             child->ReadXMLInfo(xmlChild);
         }
@@ -491,6 +516,20 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
                 c->ReadXMLInfo(xmlChild);
             }
         }
+    }
+}
+
+void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
+{
+    // No editor stuff added before
+    bool firstRead = GetChildren().Size() == 0 && GetComponents().Size() <= 1;
+    if (firstRead)
+    {
+        ReadXMLInfoFirstTime(xmlInfo);
+    }
+    else
+    {
+        UpdateXMLInfo(xmlInfo);
     }
 }
 
