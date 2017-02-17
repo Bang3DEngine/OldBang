@@ -150,10 +150,11 @@ INCLUDEPATH +=                                   \
 EDITOR {
     INCLUDEPATH +=                                           \
         $$PWD/src/View/Interfaces/                           \
+        $$PWD/src/View/DragDrop/                             \
         $$PWD/src/View/Dialogs/                              \
         $$PWD/src/View/Hierarchy/                            \
         $$PWD/src/View/Explorer/                             \
-        $$PWD/src/View/Console/                               \
+        $$PWD/src/View/Console/                              \
         $$PWD/src/View/EditorCamera/                         \
         $$PWD/src/View/EditorGameObject/                     \
         $$PWD/src/View/EditorGameObject/EditorRectTransform  \
@@ -280,6 +281,13 @@ HEADERS +=                                                          \
     src/Domain/Engine/Components/RectTransform.h \
     src/Domain/Engine/GameObjects/UIGameObject.h \
     src/View/Cursor.h \
+    src/View/DragDrop/DragDropQWidget.h \
+    src/View/DragDrop/DragDropQListView.h \
+    src/View/DragDrop/DragDropQTreeWidget.h \
+    src/View/DragDrop/DragDropQListWidget.h \
+    src/View/DragDrop/DragDropAgent.h \
+    src/View/DragDrop/IDragDropListener.h \
+    src/View/DragDrop/DragDropManager.h
 
 EDITOR {
 HEADERS += \
@@ -340,11 +348,8 @@ HEADERS += \
     src/View/EditorGameObject/EditorScaleAxisGroup.h \
     src/View/EditorGameObject/EditorScaleAxis.h \
     src/View/EditorScene/EditorFloor.h \
-    src/View/Interfaces/DragDropAgent.h \
     src/View/Inspector/ComponentClipboard.h \
-    src/View/DragDropManager.h \
     src/View/Hierarchy/HierarchyDragDropManager.h \
-    src/View/Interfaces/IDragDropListener.h \
     src/View/Hierarchy/HierarchyContextMenu.h \
     src/View/Explorer/ExplorerContextMenu.h \
     src/View/Inspector/ComponentWidgetContextMenu.h \
@@ -477,7 +482,14 @@ SOURCES += \
     src/Persistence/Behaviours/BehaviourManagerStatus.cpp \
     src/Domain/Engine/Components/RectTransform.cpp \
     src/Domain/Engine/GameObjects/UIGameObject.cpp \
-    src/View/Cursor.cpp
+    src/View/Cursor.cpp \
+    src/View/DragDrop/DragDropManager.cpp \
+    src/View/DragDrop/DragDropQWidget.cpp \
+    src/View/DragDrop/DragDropQListView.cpp \
+    src/View/DragDrop/DragDropQTreeWidget.cpp \
+    src/View/DragDrop/DragDropQListWidget.cpp \
+    src/View/DragDrop/DragDropAgent.cpp \
+    src/View/DragDrop/IDragDropListener.cpp
 
 EDITOR {
     SOURCES += \
@@ -538,11 +550,8 @@ EDITOR {
         src/View/Inspector/AttributeWidgets/AttrWidgetColor.cpp \
         src/View/Inspector/Inspectables/TextFileInspectable.cpp \
         src/View/Inspector/Inspectables/PrefabAssetFileInspectable.cpp \
-        src/View/Interfaces/DragDropAgent.cpp \
         src/View/Inspector/ComponentClipboard.cpp \
-        src/View/DragDropManager.cpp \
         src/View/Hierarchy/HierarchyDragDropManager.cpp \
-        src/View/Interfaces/IDragDropListener.cpp \
         src/View/Hierarchy/HierarchyContextMenu.cpp \
         src/View/Explorer/ExplorerContextMenu.cpp \
         src/View/Inspector/ComponentWidgetContextMenu.cpp \

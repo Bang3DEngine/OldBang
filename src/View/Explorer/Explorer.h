@@ -8,7 +8,7 @@
 
 #include "File.h"
 #include "String.h"
-#include "DragDropAgent.h"
+#include "DragDropQListView.h"
 #include "IDragDropListener.h"
 #include "IShortcutListener.h"
 #include "ExplorerContextMenu.h"

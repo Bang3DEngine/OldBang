@@ -420,6 +420,9 @@ void GameObject::UpdateXMLInfo(const XMLNode *xmlInfo)
     SetEnabled( xmlInfo->GetBool("enabled") );
     SetName( xmlInfo->GetString("name") );
 
+    Debug_Log("UpdateXMLInfo of " << name);
+    Debug_Log(xmlInfo->ToString());
+
     // IMPORTANT: The order of the xmlNodes must match the order
     // of the children and components list, in order to update every child/comp
     // with its info, and not with another one !!!!!!!!!!!!!!!!!
@@ -433,15 +436,20 @@ void GameObject::UpdateXMLInfo(const XMLNode *xmlInfo)
         String tagName = xmlChildInfo->GetTagName();
         if (tagName.Contains("GameObject"))
         {
-            ++iChildren; ASSERT(iChildren < children.Size());
+            ASSERT(iChildren < children.Size());
             GameObject *child = children[iChildren];
             child->ReadXMLInfo(xmlChildInfo);
+            ++iChildren;
         }
         else
         {
-            ++iComponents; ASSERT(iComponents < components.Size());
+            Debug_Log(components);
+            ASSERT(iComponents < components.Size());
             Component *component = components[iComponents];
+            Debug_Log("UpdateXMLInfo COMPONENT of " << component);
+            Debug_Log(xmlChildInfo->ToString());
             component->ReadXMLInfo(xmlChildInfo);
+            ++iComponents;
         }
     }
 }

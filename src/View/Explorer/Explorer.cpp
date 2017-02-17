@@ -293,14 +293,18 @@ void Explorer::RefreshInspector()
         if (m_lastIInspectableInInspector)
         {
             inspector->Clear();
-            delete m_lastIInspectableInInspector;
+            // delete m_lastIInspectableInInspector;
             m_lastIInspectableInInspector = nullptr;
         }
 
         IInspectable *newInspectable = nullptr;
         File *specificFile = File::GetSpecificFile(f);
-        Debug_Log(specificFile);
-        if (specificFile) { newInspectable = specificFile->GetInspectable(); }
+        if (specificFile)
+        {
+            newInspectable = specificFile->GetInspectable();
+            delete specificFile;
+        }
+
         if (!newInspectable && !f.IsDir())
         {
             inspector->Clear();

@@ -20,7 +20,7 @@
 #include "Debug.h"
 #include "XMLNode.h"
 #include "IInspectable.h"
-#include "DragDropAgent.h"
+#include "DragDropQWidget.h"
 
 class Component;
 class GameObject;

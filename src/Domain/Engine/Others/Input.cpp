@@ -192,10 +192,10 @@ void Input::ProcessMousePressEventInfo(const EventInfo &ei)
     bool up = false;
     if (m_mouseInfo.ContainsKey(mb))
     {
-        up = m_mouseInfo[mb].up;
+        up = m_mouseInfo.Get(mb).up;
     }
 
-    m_mouseInfo[mb] = ButtonInfo(up, true, true);
+    m_mouseInfo.Set(mb, ButtonInfo(up, true, true));
     if (m_secsSinceLastMouseDown <= c_doubleClickMaxSeconds &&
         m_secsSinceLastMouseDown != 0)
         // Reject clicks in the same frame as double-clicking (secs... != 0)
@@ -214,7 +214,8 @@ void Input::ProcessMouseReleaseEventInfo(const EventInfo &ei)
         // Only if it was pressed before
         // We must respect the down and pressed, just in case they happen
         // in the same frame (this does happen sometimes)
-        m_mouseInfo[mb] = ButtonInfo(true, m_mouseInfo[mb].down, m_mouseInfo[mb].pressed);
+        m_mouseInfo.Set(mb, ButtonInfo(true, m_mouseInfo[mb].down,
+                                       m_mouseInfo[mb].pressed));
     }
 }
 

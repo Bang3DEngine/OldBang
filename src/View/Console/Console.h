@@ -9,7 +9,7 @@
 #include "Map.h"
 #include "List.h"
 #include "String.h"
-#include "DragDropAgent.h"
+#include "DragDropQTreeWidget.h"
 
 class QLabel;
 class Console : public DragDropQTreeWidget

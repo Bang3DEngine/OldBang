@@ -61,7 +61,7 @@ void Texture2D::Resize(int width, int height)
 void Texture2D::Fill(unsigned char *newData,
                      int width, int height, bool genMipMaps)
 {
-    if (m_data && m_data != newData) { delete m_data; }
+    if (m_data && m_data != newData) { delete[] m_data; }
 
     m_data = newData; // TODO: Copy (?)
     m_width = width;

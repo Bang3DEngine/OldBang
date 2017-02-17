@@ -22,6 +22,7 @@
 
 
 InspectorWidget::InspectorWidget()
+    : DragDropQWidget()
 {
 }
 
@@ -76,7 +77,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
         // To refresh all the slots values
         QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
                          this, SLOT(RefreshWidgetValues()));
-        m_refreshTimer.start(100);
+        m_refreshTimer.start(1);
     }
 
     m_created = true;

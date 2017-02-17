@@ -3,7 +3,7 @@
 
 
 #include "XMLAttribute.h"
-#include "DragDropAgent.h"
+#include "DragDropQWidget.h"
 #include "IDragDropListener.h"
 
 class QLabel;

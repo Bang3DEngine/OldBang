@@ -60,7 +60,7 @@ void IFileable::OnFileOrDirNameChanged(const String &absFilepathBefore,
     if (go && go->name == "CharacterMesh")
     {
         if (go) { Debug_Log("Trying to replace in " << go->name << " " << relPathBefore << " by " << relPathNow); }
-        Debug_Log(xmlInfoStr);
+        //Debug_Log(xmlInfoStr);
     }
 
     if (replacements > 0)

@@ -53,19 +53,20 @@ void Inspector::Clear()
     // Avoid double clearings
     ASSERT(!m_widget_To_Item.Empty());
 
-    clear();
-
-    for (InspectorWidget *iw : m_currentInspectorWidgets)
-    {
-        delete iw;
-    }
+    //for (InspectorWidget *iw : m_currentInspectorWidgets)
+    //{
+        // TODO: Dont know if this is needed
+        //delete iw;
+    //}
     m_currentInspectorWidgets.Clear();
-
     m_widget_To_Item.Clear();
-    m_currentGameObject = nullptr;
-    m_titleLabel->setText(tr(""));
     m_widget_To_Inspectables.Clear();
     m_currentInspectables.Clear();
+
+    clear();
+
+    m_titleLabel->setText(tr(""));
+    m_currentGameObject = nullptr;
 }
 
 void Inspector::Refresh()
@@ -101,6 +102,7 @@ void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget, int moveme
 
 void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
 {
+    Debug_Log("Setting inspectable " << inspectable << " to " << title);
     Clear();
     InspectorWidget *iw = new InspectorWidget();
     iw->Init(title, inspectable);

@@ -7,9 +7,6 @@
 class Component;
 class ComponentWidget : public InspectorWidget
 {
-friend class InspectorContextMenu;
-friend class ComponentWidgetContextMenu;
-
     Q_OBJECT
 
 public:
@@ -32,6 +29,8 @@ private:
     Component *m_relatedComponent = nullptr;
     QCheckBox *m_enabledCheckbox = nullptr;
 
+    friend class InspectorContextMenu;
+    friend class ComponentWidgetContextMenu;
 };
 
 #endif // COMPONENTWIDGET_H

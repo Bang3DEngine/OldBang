@@ -132,14 +132,14 @@ bool FontSheetCreator::LoadCharTexture(const String &fontFilepath,
         fontTexture->SetGLFormat(GL_RGBA);
         fontTexture->SetGLInternalFormat(GL_RGBA);
         fontTexture->Fill(colorMap, metrics.width, metrics.height);
-        delete colorMap;
+        delete[] colorMap;
     }
     else
     {
         fontTexture->CreateEmpty(16, 16);
     }
 
-    delete bitmap.buffer;
+    free(bitmap.buffer);
 
     *resultTexture = fontTexture;
     *resultMetrics = metrics;

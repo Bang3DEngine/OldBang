@@ -12,7 +12,8 @@ SelectProjectWindow::SelectProjectWindow()
 {
 }
 
-String SelectProjectWindow::ExecAndGetProjectFilepath(QMainWindow *window, QApplication *app)
+String SelectProjectWindow::ExecAndGetProjectFilepath(QMainWindow *window,
+                                                      QApplication *app)
 {
     SelectProjectWindow::s_instance = new SelectProjectWindow();
     SelectProjectWindow *inst = SelectProjectWindow::s_instance;
