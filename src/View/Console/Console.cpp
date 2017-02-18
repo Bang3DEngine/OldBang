@@ -32,7 +32,7 @@ Console::MessageId Console::AddLog(const String &str, int line,
                                    const String &fileName,
                                    bool persistent)
 {
-    Console *console = Console::GetInstance(); ASSERT(console, "", -1);
+    Console *console = Console::GetInstance(); ASSERT(console, "", return -1);
     Message m(line, str, fileName, persistent, MessageType::Log);
     return console->EnqueueMessage(m);
 }
@@ -41,7 +41,7 @@ Console::MessageId Console::AddWarn(const String &str, int line,
                                     const String &fileName,
                                     bool persistent)
 {
-    Console *console = Console::GetInstance(); ASSERT(console, "", -1);
+    Console *console = Console::GetInstance(); ASSERT(console, "", return -1);
     Message m(line, str, fileName, persistent, MessageType::Warn);
     return console->EnqueueMessage(m);
 }
@@ -50,7 +50,7 @@ Console::MessageId Console::AddError(const String &str, int line,
                                      const String &fileName,
                                      bool persistent)
 {
-    Console *console = Console::GetInstance(); ASSERT(console, "", -1);
+    Console *console = Console::GetInstance(); ASSERT(console, "", return -1);
     Message m(line, str, fileName, persistent, MessageType::Error);
     return console->EnqueueMessage(m);
 }

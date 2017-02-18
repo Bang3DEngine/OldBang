@@ -44,7 +44,12 @@ void Screen::initializeGL()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 
-    m_gPipeline = new GraphicPipeline(this);
+    static bool firstInitializeGL = true;
+    if (firstInitializeGL)
+    {
+        m_gPipeline = new GraphicPipeline(this);
+        firstInitializeGL = false;
+    }
 }
 
 void Screen::paintGL()
