@@ -50,22 +50,24 @@ String Material::GetFileExtension()
 
 void Material::Bind() const
 {
-    if (m_shaderProgram)
-    {
-        m_shaderProgram->Bind();
-        m_shaderProgram->SetUniformColor("B_material_diffuse_color",
-                                         m_diffuseColor, false);
-        m_shaderProgram->SetUniformVec2("B_screen_size",
-                                        Screen::GetSize(), false);
-        m_shaderProgram->SetUniformFloat("B_material_shininess",
-                                         m_shininess, false);
+    ASSERT(m_shaderProgram);
 
-        float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
-        m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
-        m_shaderProgram->SetUniformFloat("B_alphaCutoff", alphaCutoff, false);
-        m_shaderProgram->SetUniformFloat("B_hasTexture", m_texture ? 1 : 0,
-                                         false);
-    }
+    m_shaderProgram->Bind();
+    m_shaderProgram->SetUniformColor("B_material_diffuse_color",
+                                     m_diffuseColor, false);
+    m_shaderProgram->SetUniformVec2("B_screen_size",
+                                    Screen::GetSize(), false);
+    m_shaderProgram->SetUniformFloat("B_material_shininess",
+                                     m_shininess, false);
+    m_shaderProgram->SetUniformFloat("B_material_receivesLighting",
+                                 m_receivesLighting ? 1.0f : 0.0f, false);
+
+
+    float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
+    m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
+    m_shaderProgram->SetUniformFloat("B_alphaCutoff", alphaCutoff, false);
+    m_shaderProgram->SetUniformFloat("B_hasTexture", m_texture ? 1 : 0,
+                                     false);
 }
 
 void Material::UnBind() const
@@ -82,6 +84,7 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
 
     SetDiffuseColor(xmlInfo->GetColor("DiffuseColor"));
     SetShininess(xmlInfo->GetFloat("Shininess"));
+    SetReceivesLighting(xmlInfo->GetBool("ReceivesLighting"));
 
     String texAssetFilepath = xmlInfo->GetString("Texture");
     Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
@@ -107,6 +110,7 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
 
     xmlInfo->SetColor("DiffuseColor", GetDiffuseColor());
     xmlInfo->SetFloat("Shininess", GetShininess());
+    xmlInfo->SetBool("ReceivesLighting", ReceivesLighting());
 
     String textureFilepath = m_texture ? m_texture->GetFilepath() : "";
     xmlInfo->SetFilepath("Texture", textureFilepath,
@@ -143,6 +147,11 @@ void Material::SetTexture(const Texture2D *texture)
     }
 }
 
+void Material::SetReceivesLighting(bool receivesLighting)
+{
+    m_receivesLighting = receivesLighting;
+}
+
 void Material::SetShininess(float shininess)
 {
     m_shininess = shininess;
@@ -161,6 +170,11 @@ ShaderProgram *Material::GetShaderProgram() const
 const Texture2D *Material::GetTexture() const
 {
     return m_texture;
+}
+
+bool Material::ReceivesLighting() const
+{
+    return m_receivesLighting;
 }
 
 float Material::GetShininess() const

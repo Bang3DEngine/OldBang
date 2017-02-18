@@ -46,7 +46,6 @@ void EditorGizmosGameObject::Init()
         {
             rend->SetIsGizmo(true);
             rend->SetMaterial(m_material);
-            rend->SetReceivesLighting(false);
             rend->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
         }
 
@@ -102,7 +101,8 @@ void EditorGizmosGameObject::SetReceivesLighting(bool receivesLighting)
     List<Renderer*> renderers = GetComponents<Renderer>();
     for (Renderer *rend : renderers)
     {
-        rend->SetReceivesLighting(receivesLighting);
+        if (!rend->GetMaterial()) { continue; }
+        rend->GetMaterial()->SetReceivesLighting(receivesLighting);
     }
 }
 
@@ -226,6 +226,7 @@ void EditorGizmosGameObject::RenderScreenIcon(const Texture2D *texture,
                                               const Rect &screenRect)
 {
     MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(m_planeMesh);
+    ASSERT(mr->GetMaterial());
     mr->SetMesh(m_planeMesh);
 
     Gizmos::SetPosition( Vector3(screenRect.GetCenter(), 0) );
@@ -389,7 +390,10 @@ void EditorGizmosGameObject::Reset()
     }
 
     MeshRenderer *mr = GetComponent<MeshRenderer>();
-    mr->GetMaterial()->SetTexture(nullptr);
+    if (mr->GetMaterial())
+    {
+        mr->GetMaterial()->SetTexture(nullptr);
+    }
 }
 
 void EditorGizmosGameObject::Render(Renderer *rend)

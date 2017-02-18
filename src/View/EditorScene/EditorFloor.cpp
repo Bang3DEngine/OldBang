@@ -12,7 +12,8 @@
 
 EditorFloor::EditorFloor()
 {
-    m_material = new Material(*AssetsManager::Load<Material>("Materials/D2G_Default.bmat", true));
+    m_material = new Material(*AssetsManager::Load<Material>(
+                                  "Materials/D2G_Default.bmat", true));
     m_material->SetDiffuseColor(Color::White * 0.7f);
 
     const int GridSize2 = 2 * (c_gridSize + 1);
@@ -20,7 +21,6 @@ EditorFloor::EditorFloor()
     for (int i = 0; i < GridSize2; ++i)
     {
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
-        m_lineRenderers[i]->SetReceivesLighting(false);
         m_lineRenderers[i]->SetMaterial(m_material);
     }
 

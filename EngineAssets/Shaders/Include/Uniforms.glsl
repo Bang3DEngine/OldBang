@@ -21,7 +21,7 @@ uniform bool B_stencilWriteEnabled;
 uniform bool B_stencilTestEnabled;
 
 // Material related
-uniform bool  B_renderer_receivesLighting;
+uniform bool  B_material_receivesLighting;
 uniform vec4  B_material_diffuse_color;
 uniform float B_alphaCutoff = -1.0f;
 uniform float B_material_shininess;

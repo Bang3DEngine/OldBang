@@ -67,9 +67,6 @@ public:
     void SetLineWidth(float w);
     float GetLineWidth() const;
 
-    void SetReceivesLighting(bool receivesLighting);
-    bool ReceivesLighting() const;
-
     virtual void Render() const;
     virtual void RenderCustomPR() const;
     virtual void RenderWithMaterial(Material *mat) const;
@@ -102,7 +99,6 @@ protected:
     Material *m_material = nullptr;
 
     bool m_drawWireframe = false;
-    bool m_receivesLighting = true;
     bool m_hasCustomPRPass = false;
     CullMode m_cullMode = CullMode::Back;
     RenderMode m_renderMode = RenderMode::Triangles;

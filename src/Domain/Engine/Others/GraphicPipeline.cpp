@@ -176,7 +176,8 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 
     m_gbuffer->SetStencilTest(true); // We have marked from before the zone where we want to apply the effect
 
-    if (!rend || rend->ReceivesLighting())
+    Material *rendMat = rend ? rend->GetMaterial() : nullptr;
+    if ( !rend || (rendMat && rendMat->ReceivesLighting()) )
     {
         List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
         for (Light *light : lights)

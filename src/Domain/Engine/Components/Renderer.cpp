@@ -44,7 +44,6 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetCullMode(GetCullMode());
     r->SetRenderMode(GetRenderMode());
     r->SetLineWidth(GetLineWidth());
-    r->SetReceivesLighting(ReceivesLighting());
     r->SetClosedInInspector(IsClosedInInspector());
     r->SetTransparent(IsTransparent());
     r->SetIsGizmo(IsGizmo());
@@ -91,13 +90,15 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
         {
             Transform *t = camera->gameObject->transform;
             ShaderProgram *sp = mat->GetShaderProgram();
-            sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera, t->GetPosition(), false);
-            sp->SetUniformFloat("B_renderer_receivesLighting", m_receivesLighting ? 1.0f : 0.0f, false);
+            sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
+                               t->GetPosition(), false);
 
             #ifdef BANG_EDITOR
             if (gameObject)
             {
-                sp->SetUniformFloat("B_gameObject_isSelected", gameObject->IsSelected() ? 1.0f : 0.0f, false);
+                sp->SetUniformFloat("B_gameObject_isSelected",
+                                    gameObject->IsSelected() ? 1.0f : 0.0f,
+                                    false);
             }
             #endif
         }
@@ -131,12 +132,19 @@ void Renderer::RenderCustomPR() const
     // To override by child classes if they want to implement some PR pass
 }
 
-void Renderer::RenderWithMaterial(Material *mat) const
+void Renderer::RenderWithMaterial(Material *_mat) const
 {
+    Material *mat = _mat;
+    if (!mat)
+    {
+        mat = AssetsManager::Load<Material>("./Materials/Missing.bmat", true);
+    }
+
     ActivateGLStatesBeforeRendering(mat);
 
     #ifdef BANG_EDITOR
-    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+    SelectionFramebuffer *sfb =
+            GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     if (sfb && sfb->IsPassing())
     {
         ActivateGLStatesBeforeRenderingForSelection();
@@ -286,16 +294,6 @@ float Renderer::GetLineWidth() const
     return m_lineWidth;
 }
 
-void Renderer::SetReceivesLighting(bool receivesLighting)
-{
-    m_receivesLighting = receivesLighting;
-}
-
-bool Renderer::ReceivesLighting() const
-{
-    return m_receivesLighting;
-}
-
 #ifdef BANG_EDITOR
 
 void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f)
@@ -326,7 +324,6 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
     SetTransparent(xmlInfo->GetBool("IsTransparent"));
     SetLineWidth(xmlInfo->GetFloat("LineWidth"));
     SetDrawWireframe(xmlInfo->GetBool("DrawWireframe"));
-    SetReceivesLighting(xmlInfo->GetBool("ReceivesLighting"));
 }
 
 void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
@@ -354,5 +351,4 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("LineWidth", GetLineWidth());
     xmlInfo->SetBool("IsTransparent", IsTransparent(), {XMLProperty::Inline});
     xmlInfo->SetBool("DrawWireframe", GetDrawWireframe(), {XMLProperty::Inline});
-    xmlInfo->SetBool("ReceivesLighting", ReceivesLighting(), {XMLProperty::Inline});
 }

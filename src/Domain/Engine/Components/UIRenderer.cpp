@@ -16,8 +16,6 @@ UIRenderer::UIRenderer()
                                                true) );
     m_materialPR = AssetsManager::Load<Material>("Materials/UI/PR_UIImage.bmat",
                                                  true);
-
-    SetReceivesLighting(false);
     SetTransparent(false);
     SetDepthLayer(Renderer::DepthLayer::DepthLayerCanvas);
 

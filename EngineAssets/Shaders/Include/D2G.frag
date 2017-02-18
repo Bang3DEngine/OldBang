@@ -36,7 +36,7 @@ void InitMain()
     B_vout.position_world      = FRAG_IN_POSITION_WORLD().xyz;
     B_vout.normal_world        = FRAG_IN_NORMAL_WORLD().xyz;
     B_vout.uv                  = FRAG_IN_UV();
-    B_vout.receivesLighting    = B_renderer_receivesLighting;
+    B_vout.receivesLighting    = B_material_receivesLighting;
     B_vout.shininess           = B_material_shininess;
     B_vout.diffuseColor        = B_material_diffuse_color;
     B_vout.depth               = gl_FragCoord.z;
@@ -61,7 +61,7 @@ void EndMain()
         B_stencil_fout_gin = vec4(B_vout.stencil);
     }
 
-    float ambientLight = (B_renderer_receivesLighting ? 0.1 : 1.0);
+    float ambientLight = (B_material_receivesLighting ? 0.1 : 1.0);
     vec3 outColor = ambientLight * B_vout.diffuseColor.rgb;
     B_vout.color = vec4( mix(FRAG_IN_COLOR().rgb, outColor, B_vout.color.a), 1);
     B_color_fout_gin = B_vout.color;

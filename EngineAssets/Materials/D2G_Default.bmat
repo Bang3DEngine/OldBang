@@ -1,5 +1,6 @@
 <Material DiffuseColor:Color="(1, 1, 1, 1)"{}
           Shininess:Float="60"{}
+	  ReceivesLighting:Bool="true"{}
           VertexShader:File="./Shaders/D2G_Default.vert"{FileExtension="vert",IsEngineFile}
           FragmentShader:File="./Shaders/D2G_Default.frag"{FileExtension="frag",IsEngineFile}
          >

@@ -9,6 +9,7 @@
 #include "Persistence.h"
 #include "ShaderProgram.h"
 #include "TextureRender.h"
+#include "AssetsManager.h"
 #include "ShaderContract.h"
 
 #ifdef BANG_EDITOR
@@ -66,12 +67,17 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
                                         m_nextGameObjectToBeRendered;
     if (CanRenderGameObject(go))
     {
+        Material *rendMaterial = rend->GetMaterial();
+        if (!rendMaterial)
+        {
+            rendMaterial =
+               AssetsManager::Load<Material>("./Materials/Missing.bmat", true);
+        }
+
+        ShaderProgram *originalSP = rendMaterial->GetShaderProgram();
         ShaderProgram *selectionSp = m_selectionProgram;
         selectionSp->SetUniformColor("selectionColor", GetSelectionColor(go));
 
-        Material *rendMaterial = rend->GetMaterial(); ASSERT(rendMaterial);
-        ShaderProgram *originalSP =
-                rendMaterial ? rendMaterial->GetShaderProgram() : nullptr;
         rendMaterial->SetShaderProgram( selectionSp );
         rend->Render();
         rendMaterial->SetShaderProgram( originalSP );

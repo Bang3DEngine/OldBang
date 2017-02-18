@@ -27,8 +27,6 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
                 "Materials/D2G_RotationAxisLine.bmat", true);
     m_material = new Material(*mat);
     m_circle->SetMaterial(m_material);
-
-    m_circle->SetReceivesLighting(false);
     m_circle->SetIsGizmo(true);
     m_circle->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
     m_circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()

@@ -690,4 +690,6 @@ OTHER_FILES += \
 ######################################
 
 DISTFILES += \
-    EngineAssets/Materials/UI/D2G_UIImage.bmat
+    EngineAssets/Materials/UI/D2G_UIImage.bmat \
+    EngineAssets/Shaders/D2G_Missing.frag \
+    EngineAssets/Materials/Missing.bmat
