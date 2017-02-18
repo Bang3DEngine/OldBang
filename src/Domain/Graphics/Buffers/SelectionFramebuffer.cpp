@@ -8,7 +8,7 @@
 #include "GameObject.h"
 #include "Persistence.h"
 #include "ShaderProgram.h"
-#include "TextureRender.h"
+#include "RenderTexture.h"
 #include "AssetsManager.h"
 #include "ShaderContract.h"
 
@@ -26,10 +26,10 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
                 Persistence::ToAbsolute("Shaders/SelectionBuffer.vert", true),
                 Persistence::ToAbsolute("Shaders/SelectionBuffer.frag", true));
 
-    m_colorTexture = new TextureRender();
-    m_worldPosTexture = new TextureRender();
-    SetColorAttachment(Attachment::ColorAttachment, m_colorTexture);
-    SetColorAttachment(Attachment::WorldPosition,   m_worldPosTexture);
+    m_colorTexture = new RenderTexture();
+    m_worldPosTexture = new RenderTexture();
+    SetAttachment(Attachment::ColorAttachment, m_colorTexture);
+    SetAttachment(Attachment::WorldPosition,   m_worldPosTexture);
     CreateDepthRenderbufferAttachment();
 }
 
@@ -201,12 +201,12 @@ bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
 }
 
 
-TextureRender *SelectionFramebuffer::GetColorTexture() const
+RenderTexture *SelectionFramebuffer::GetColorTexture() const
 {
     return m_colorTexture;
 }
 
-TextureRender *SelectionFramebuffer::GetWorldPosTexture() const
+RenderTexture *SelectionFramebuffer::GetWorldPosTexture() const
 {
     return m_worldPosTexture;
 }

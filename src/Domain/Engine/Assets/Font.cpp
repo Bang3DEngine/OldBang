@@ -28,17 +28,18 @@ String Font::GetFileExtension()
     return Font::GetFileExtensionStatic();
 }
 
-void Font::LoadFromFile(const String &m_filepath)
+void Font::LoadFromTTF(const String &m_filepath)
 {
     Free();
     for (int c = 0; c <= 255; ++c)
     {
         Texture2D *charTexture = nullptr;
         CharGlyphMetrics charMetrics;
-        if (FontSheetCreator::LoadCharTexture(m_filepath, Font::CharLoadSize, char(c),
-                                              &charTexture, &charMetrics, &m_freetypeFace))
+        if (FontSheetCreator::LoadCharTexture(
+                    m_filepath, Font::CharLoadSize, char(c),
+                    &charTexture, &charMetrics, &m_freetypeFace))
         {
-            charTexture->SetFilterMode(Texture2D::FilterMode::Linear);
+            charTexture->SetFilterMode(Texture2D::FilterMode::Trilinear);
             m_charMetrics.Add(charMetrics);
             m_charTextures.Add(charTexture);
         }
@@ -48,15 +49,15 @@ void Font::LoadFromFile(const String &m_filepath)
 void Font::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
-    m_assetFilepath = xmlInfo->GetFilepath("FontFilepath");
-    LoadFromFile(m_assetFilepath);
+    m_fontFilepath = xmlInfo->GetFilepath("FontFilepath");
+    LoadFromTTF(m_fontFilepath);
 }
 
 void Font::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Font");
-    xmlInfo->SetFilepath("FontFilepath", m_assetFilepath, Font::GetFileExtensionStatic());
+    xmlInfo->SetFilepath("FontFilepath", m_fontFilepath, Font::GetFileExtensionStatic());
 }
 
 const Font::CharGlyphMetrics &Font::GetCharacterMetrics(unsigned char c)

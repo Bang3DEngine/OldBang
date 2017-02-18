@@ -16,11 +16,14 @@ public:
     static String GetFileExtensionStatic();
     virtual String GetFileExtension();
 
-    void LoadFromFile(const String &imageFilepath);
+    void LoadFromImage(const String &imageFilepath);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
     void Fill(unsigned char *newData, int width, int height,
+              Texture::Format imageFormat,
               bool genMipMaps = true);
+    void Fill(unsigned char *newData, int width, int height,
+              int sizeOfNewData, bool genMipMaps = true);
 
     String GetImageFilepath() const;
 

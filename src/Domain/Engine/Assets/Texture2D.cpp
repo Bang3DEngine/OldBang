@@ -1,16 +1,19 @@
 #include "Texture2D.h"
 
+#include "stb_image.h"
+
 #include "Debug.h"
 #include "XMLNode.h"
 #include "FileReader.h"
 
-Texture2D::Texture2D() : Texture(TextureType::Texture2D)
+Texture2D::Texture2D() : Texture(Target::Texture2D)
 {
+    CreateEmpty(1,1);
 }
 
 Texture2D::Texture2D(const String &imageFilepath) : Texture2D()
 {
-    LoadFromFile(imageFilepath);
+    LoadFromImage(imageFilepath);
 }
 
 Texture2D::~Texture2D()
@@ -28,54 +31,63 @@ String Texture2D::GetFileExtension()
 }
 
 
-void Texture2D::LoadFromFile(const String &imageFilepath)
+void Texture2D::LoadFromImage(const String &imageFilepath)
 {
-    Bind();
     m_imageFilepath = imageFilepath;
     unsigned char *loadedData = FileReader::ReadImage(m_imageFilepath,
                                                       &m_width, &m_height);
-    Fill(loadedData, m_width, m_height);
-    UnBind();
+    SetFormat(Texture::Format::RGBA_Byte8);
+    Fill(loadedData, m_width, m_height, Texture::Format::RGBA_Byte8);
+    stbi_image_free(loadedData);
 }
 
 void Texture2D::CreateEmpty(int width, int height)
 {
-    int size = width * height;
-    const int numChannels = 4, typeSize = 4;
-    unsigned char *data = new unsigned char[size * numChannels * typeSize];
-    for (int i = 0; i < size; ++i)
-    {
-        data[i] = 0;
-    }
-    Fill(data, width, height, false);
+    int dataSize = width * height * Texture::GetPixelBytesSize(m_format);
+    unsigned char *data = new unsigned char[dataSize];
+    memset(data, 0, dataSize);
+    Fill(data, width, height, dataSize, true);
+    delete data;
 }
 
 void Texture2D::Resize(int width, int height)
 {
-    int size = width * height;
-    const int numChannels = 4, typeSize = 4;
-    unsigned char *newData = new unsigned char[size * numChannels * typeSize]; //
-    Fill(newData, width, height);
+    CreateEmpty(width, height);
 }
 
-void Texture2D::Fill(unsigned char *newData,
-                     int width, int height, bool genMipMaps)
+void Texture2D::Fill(unsigned char *newData, int width, int height,
+                     int sizeOfNewData, bool genMipMaps)
 {
-    if (m_data && m_data != newData) { delete[] m_data; }
+    if (m_data) { delete[] m_data; }
 
-    m_data = newData; // TODO: Copy (?)
+    unsigned int dataSize = sizeOfNewData >= 0 ?
+                                    sizeOfNewData : (width * height * 16);
+    m_data = new unsigned char[dataSize];
+    memcpy(m_data, newData, dataSize); // Copy data
     m_width = width;
     m_height = height;
     if (!m_data) { m_width = m_height = 0; }
 
     Bind();
-    glTexImage2D(GL_TEXTURE_2D, 0, m_glInternalFormat, m_width, m_height, 0,
-                 m_glFormat, m_glType, m_data);
+    glTexImage2D(m_target, 0, GetGLInternalFormat(),
+                 m_width, m_height, 0,
+                 GetGLFormat(), GetGLDataType(), m_data);
     if (genMipMaps && m_width > 0 && m_height > 0)
     {
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     UnBind();
+}
+
+void Texture2D::Fill(unsigned char *newData, int width, int height,
+                     Texture::Format imageFormat,
+                     bool genMipMaps)
+{
+    SetFormat(imageFormat);
+
+    int sizeOfNewData =
+            width * height * Texture::GetPixelBytesSize(imageFormat);
+    Fill(newData, width, height, sizeOfNewData, genMipMaps);
 }
 
 String Texture2D::GetImageFilepath() const
@@ -98,7 +110,7 @@ void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
     Asset::ReadXMLInfo(xmlInfo);
 
     String imageFilepath = xmlInfo->GetFilepath("ImageFilepath");
-    LoadFromFile(imageFilepath);
+    LoadFromImage(imageFilepath);
 
     String filterModeString = xmlInfo->GetEnumSelectedName("FilterMode");
     Texture::FilterMode filterMode = FilterMode::Nearest;

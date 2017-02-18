@@ -23,11 +23,14 @@ Material::Material() : Asset()
 
 Material::Material(const Material &m)
 {
-    SetDiffuseColor(m.GetDiffuseColor());
     SetShaderProgram(
                 new ShaderProgram(
                    m.GetShaderProgram()->GetVertexShader()->GetFilepath(),
                    m.GetShaderProgram()->GetFragmentShader()->GetFilepath()));
+    SetDiffuseColor(m.GetDiffuseColor());
+    SetReceivesLighting(ReceivesLighting());
+    SetShininess(GetShininess());
+    SetTexture(GetTexture());
 }
 
 Material::~Material()

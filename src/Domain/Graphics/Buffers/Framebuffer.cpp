@@ -3,7 +3,7 @@
 #include "Math.h"
 #include "Debug.h"
 #include "Vector2.h"
-#include "TextureRender.h"
+#include "RenderTexture.h"
 
 Framebuffer::Framebuffer(int width, int height) : m_width(width),
                                                   m_height(height),
@@ -16,8 +16,8 @@ Framebuffer::~Framebuffer()
 {
     for (auto it : m_attachmentId_To_Texture)
     {
-        TextureRender *t = it.second;
-        delete t;
+        RenderTexture *t = it.second;
+        // delete t;
     }
 
     if (m_depthAttachmentId != 0)
@@ -28,16 +28,18 @@ Framebuffer::~Framebuffer()
     glDeleteFramebuffers(1, &m_idGL);
 }
 
-void Framebuffer::SetColorAttachment(int attachmentId, TextureRender *tex)
+void Framebuffer::SetAttachment(int attachmentId, RenderTexture *tex)
 {
     tex->CreateEmpty(GetWidth(), GetHeight());
-    GLuint glAttachment = GL_COLOR_ATTACHMENT0 + m_attachmentId_To_Texture.Size();
+
+    GLuint glAttachment = GL_COLOR_ATTACHMENT0 +
+                          m_attachmentId_To_Texture.Size();
     m_attachmentId_To_Texture[attachmentId] = tex;
     m_attachmentId_To_GLAttachment[attachmentId] = glAttachment;
 
     //Attach it to framebuffer
     Bind();
-    glFramebufferTexture2D(GL_FRAMEBUFFER, glAttachment,
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, glAttachment,
                            GL_TEXTURE_2D, tex->GetGLId(), 0);
     CheckFramebufferError();
     UnBind();
@@ -46,19 +48,21 @@ void Framebuffer::SetColorAttachment(int attachmentId, TextureRender *tex)
 
 void Framebuffer::CreateDepthRenderbufferAttachment()
 {
-    Bind();
+    Bind(); //TODO:  respect former bindings of renderbuffers
+
     glGenRenderbuffers(1, &m_depthAttachmentId);
-    //TODO:  respect former bindings of renderbuffers
     glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttachmentId);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, m_width, m_height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthAttachmentId);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
+                          m_width, m_height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                              GL_RENDERBUFFER, m_depthAttachmentId);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     CheckFramebufferError();
     UnBind();
 }
 
-TextureRender *Framebuffer::GetColorAttachment(int attachmentId) const
+RenderTexture *Framebuffer::GetColorAttachment(int attachmentId) const
 {
     if (!m_attachmentId_To_Texture.ContainsKey(attachmentId))
     {
@@ -109,9 +113,9 @@ Color Framebuffer::ReadColor(int x, int y, int attachmentId) const
 {
     Bind();
     Color c;
-    TextureRender *t = GetColorAttachment(attachmentId);
+    RenderTexture *t = GetColorAttachment(attachmentId);
     SetReadBuffer(attachmentId);
-    glReadPixels(x, y, 1, 1, t->GetGLFormat(), t->GetGLType(), &c);
+    glReadPixels(x, y, 1, 1, t->GetGLFormat(), t->GetGLDataType(), &c);
     UnBind();
     return c;
 }
@@ -124,7 +128,7 @@ void Framebuffer::Resize(int width, int height)
 
     for (auto it : m_attachmentId_To_Texture)
     {
-        TextureRender *t = it.second;
+        RenderTexture *t = it.second;
         if (t)
         {
             t->Resize(m_width, m_height);
@@ -186,7 +190,9 @@ void Framebuffer::CheckFramebufferError() const
 {
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
-        Debug_Error("There was an error when creating an attachment for a Framebuffer.");
+        String errMsg =
+           "There was an error when creating an attachment for a framebuffer.";
+        //Debug_Error(errMsg);
     }
 }
 

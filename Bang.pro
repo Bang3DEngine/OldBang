@@ -176,7 +176,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/GameObjects/Scene.h                           \
     src/Domain/Graphics/Texture.h                                   \
     src/Domain/Graphics/VAO.h                                       \
-    src/Domain/Graphics/TextureRender.h                             \
     src/Domain/Graphics/VBO.h                                       \
     src/Domain/Graphics/Interfaces/IGLBindable.h                    \
     src/Domain/Graphics/Interfaces/IToString.h                      \
@@ -288,7 +287,8 @@ HEADERS +=                                                          \
     src/View/DragDrop/DragDropAgent.h \
     src/View/DragDrop/IDragDropListener.h \
     src/View/DragDrop/DragDropManager.h \
-    src/View/Explorer/FileReferencesManager.h
+    src/View/Explorer/FileReferencesManager.h \
+    src/Domain/Graphics/RenderTexture.h
 
 EDITOR {
 HEADERS += \
@@ -383,7 +383,6 @@ SOURCES += \
     src/Domain/Engine/GameObjects/Scene.cpp \
     src/Domain/Graphics/Texture.cpp \
     src/Domain/Graphics/VAO.cpp \
-    src/Domain/Graphics/TextureRender.cpp \
     src/Domain/Graphics/VBO.cpp \
     src/Domain/Graphics/Interfaces/IGLBindable.cpp \
     src/Domain/Engine/Components/Transform.cpp \
@@ -491,7 +490,8 @@ SOURCES += \
     src/View/DragDrop/DragDropQListWidget.cpp \
     src/View/DragDrop/DragDropAgent.cpp \
     src/View/DragDrop/IDragDropListener.cpp \
-    src/View/Explorer/FileReferencesManager.cpp
+    src/View/Explorer/FileReferencesManager.cpp \
+    src/Domain/Graphics/RenderTexture.cpp
 
 EDITOR {
     SOURCES += \

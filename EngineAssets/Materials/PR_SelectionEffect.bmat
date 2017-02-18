@@ -1,4 +1,5 @@
 <Material DiffuseColor:Color="(1, 1, 1, 0)"{}
+          ReceivesLighting:Bool="false"{}
           FragmentShader:File="./Shaders/PR_SelectionEffect.frag"{FileExtension="frag",IsEngineFile}
           TextureCount:Int="0"{}
           VertexShader:File="./Shaders/PR_ScreenPass.vert"{FileExtension="vert",IsEngineFile}

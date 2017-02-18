@@ -3,12 +3,12 @@
 
 #include "Texture2D.h"
 
-class TextureRender : public Texture2D
+class RenderTexture : public Texture2D
 {
 
 public:
-    TextureRender();
-    virtual ~TextureRender();
+    RenderTexture();
+    virtual ~RenderTexture();
 
     /*
     void CreateEmpty(int width, int height) override;

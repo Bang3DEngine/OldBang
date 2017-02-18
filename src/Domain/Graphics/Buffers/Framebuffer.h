@@ -8,7 +8,7 @@
 #include "IGLIdable.h"
 #include "IGLBindable.h"
 
-class TextureRender;
+class RenderTexture;
 class Framebuffer : public IGLBindable
                    ,public IGLIdable
 {
@@ -19,7 +19,7 @@ private:
     int m_height;
     GLuint m_depthAttachmentId = 0;
     Map<int, GLuint> m_attachmentId_To_GLAttachment;
-    Map<int, TextureRender*> m_attachmentId_To_Texture;
+    Map<int, RenderTexture*> m_attachmentId_To_Texture;
     mutable Array<int> m_currentDrawAttachmentIds;
 
 protected:
@@ -30,10 +30,10 @@ public:
     Framebuffer(int width, int height);
     virtual ~Framebuffer();
 
-    void SetColorAttachment(int attachmentId, TextureRender *tex);
+    void SetAttachment(int attachmentId, RenderTexture *tex);
     void CreateDepthRenderbufferAttachment();
 
-    TextureRender* GetColorAttachment(int attachmentId) const;
+    RenderTexture* GetColorAttachment(int attachmentId) const;
 
     void SetAllDrawBuffers() const;
     void SetDrawBuffers(const Array<int> &attachmentIds) const;

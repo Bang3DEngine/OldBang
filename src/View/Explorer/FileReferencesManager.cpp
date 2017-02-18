@@ -1,5 +1,6 @@
 #include "FileReferencesManager.h"
 
+#include "Map.h"
 #include "File.h"
 #include "Debug.h"
 #include "XMLNode.h"
@@ -7,6 +8,7 @@
 #include "IFileable.h"
 #include "FileWriter.h"
 #include "Persistence.h"
+#include "XMLAttribute.h"
 
 FileReferencesManager::FileReferencesManager()
 {
@@ -78,11 +80,12 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
         if (!f.IsAsset()) { continue; }
 
         String fileXMLContents = f.GetContents();
-        int replacements = fileXMLContents.Replace(relPathBefore, relPathNow);
-        if (replacements > 0)
-        {
-            FileWriter::WriteToFile(filepath, fileXMLContents);
-        }
+        XMLNode *auxXMLInfo = XMLNode::FromString(fileXMLContents);
+        RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow);
+
+        FileWriter::WriteToFile(filepath, auxXMLInfo->ToString());
+
+        delete auxXMLInfo;
     }
 }
 
@@ -91,19 +94,44 @@ void FileReferencesManager::RefactorIFileables(const String &relPathBefore,
 {
     for (IFileable *fileable : m_inMemoryFileables)
     {
-        // First get its xml description and try to replace the old path with
-        // the new path
+        // First get its xml description, create an XMLNode, pass it to the
+        // refactoring function, let the fileable read it to be updated, and
+        // delete the created aux XMLNode
         String xmlInfoStr = fileable->GetXMLInfoString();
-        int replacements = xmlInfoStr.Replace(relPathBefore, relPathNow);
+        XMLNode *auxXMLInfo = XMLNode::FromString(xmlInfoStr);
+        RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow);
 
-        // If some replacement has been done, tell it to refresh itself with
-        // the new refactored info.
-        if (replacements > 0)
+        fileable->ReadXMLInfo(auxXMLInfo);
+
+        delete auxXMLInfo;
+    }
+}
+
+void FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
+                                            const String &relPathBefore,
+                                            const String &relPathNow)
+{
+    // Refactor all its file attributes that are non-engine
+    const Map<String, XMLAttribute> &xmlAttributes = xmlInfo->GetAttributes();
+    for (const std::pair<String, XMLAttribute> &name_attr : xmlAttributes)
+    {
+        XMLAttribute attr = name_attr.second;
+        if (attr.GetType() != XMLAttribute::Type::File) { continue; }
+        if (!attr.HasProperty(XMLProperty::IsEngineFile)) { continue; }
+
+        String filepath = attr.GetFilepath();
+        if (filepath.Replace(relPathBefore, relPathNow) > 0)
         {
-            XMLNode *newXMLInfo = XMLNode::FromString(xmlInfoStr);
-            fileable->ReadXMLInfo(newXMLInfo);
-            delete newXMLInfo;
+            attr.SetValue(filepath);
+            xmlInfo->SetAttribute(attr);
         }
+    }
+
+    // Now refactor its children
+    List<XMLNode*> xmlChildren = xmlInfo->GetChildren();
+    for (XMLNode *xmlChild : xmlChildren)
+    {
+        RefactorXMLInfo(xmlChild, relPathBefore, relPathNow);
     }
 }
 

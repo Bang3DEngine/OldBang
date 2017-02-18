@@ -50,6 +50,8 @@ public:
     {
         T *a = nullptr;
         String absPath = AssetsManager::FormatFilepath(filepath, isEngineAsset);
+        if(!Persistence::ExistsFile(absPath)) { return nullptr; }
+
         XMLNode *xmlInfo = XMLParser::FromFile(absPath);
         if (xmlInfo)
         {

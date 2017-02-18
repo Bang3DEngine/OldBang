@@ -391,5 +391,4 @@ void UIText::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->GetAttribute("LineWidth")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("IsTransparent")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("DrawWireframe")->SetProperty({XMLProperty::Hidden});
-    xmlInfo->GetAttribute("ReceivesLighting")->SetProperty({XMLProperty::Hidden});
 }

@@ -13,29 +13,29 @@
 #include "MeshFactory.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
-#include "TextureRender.h"
+#include "RenderTexture.h"
 #include "ShaderContract.h"
 #include "GraphicPipeline.h"
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
-    m_positionTexture = new TextureRender();
-    m_normalTexture   = new TextureRender();
-    m_uvTexture       = new TextureRender();
-    m_diffuseTexture  = new TextureRender();
-    m_matPropsTexture = new TextureRender();
-    m_depthTexture    = new TextureRender();
-    m_stencilTexture  = new TextureRender();
-    m_colorTexture    = new TextureRender();
+    m_positionTexture = new RenderTexture();
+    m_normalTexture   = new RenderTexture();
+    m_uvTexture       = new RenderTexture();
+    m_diffuseTexture  = new RenderTexture();
+    m_matPropsTexture = new RenderTexture();
+    m_depthTexture    = new RenderTexture();
+    m_stencilTexture  = new RenderTexture();
+    m_colorTexture    = new RenderTexture();
 
-    SetColorAttachment(Attachment::Position,           m_positionTexture);
-    SetColorAttachment(Attachment::Normal,             m_normalTexture);
-    SetColorAttachment(Attachment::Uv,                 m_uvTexture);
-    SetColorAttachment(Attachment::Diffuse,            m_diffuseTexture);
-    SetColorAttachment(Attachment::MaterialProperties, m_matPropsTexture);
-    SetColorAttachment(Attachment::Depth,              m_depthTexture);
-    SetColorAttachment(Attachment::Stencil,            m_stencilTexture);
-    SetColorAttachment(Attachment::Color,              m_colorTexture);
+    SetAttachment(Attachment::Position,           m_positionTexture);
+    SetAttachment(Attachment::Normal,             m_normalTexture);
+    SetAttachment(Attachment::Uv,                 m_uvTexture);
+    SetAttachment(Attachment::Diffuse,            m_diffuseTexture);
+    SetAttachment(Attachment::MaterialProperties, m_matPropsTexture);
+    SetAttachment(Attachment::Depth,              m_depthTexture);
+    SetAttachment(Attachment::Stencil,            m_stencilTexture);
+    SetAttachment(Attachment::Color,              m_colorTexture);
     CreateDepthRenderbufferAttachment();
 }
 
@@ -49,14 +49,14 @@ void GBuffer::SetUniformsBeforeRendering(Material *mat)
     ShaderProgram *sp = mat->GetShaderProgram(); ASSERT(sp);
 
     // Color Attachments bindings as Shader Inputs
-    sp->SetUniformTexture("B_position_gout_fin",           m_positionTexture, false);
-    sp->SetUniformTexture("B_normal_gout_fin",             m_normalTexture,   false);
-    sp->SetUniformTexture("B_uv_gout_fin",                 m_uvTexture,       false);
-    sp->SetUniformTexture("B_diffuse_gout_fin",            m_diffuseTexture,  false);
-    sp->SetUniformTexture("B_materialProps_gout_fin",      m_matPropsTexture, false);
-    sp->SetUniformTexture("B_depth_gout_fin",              m_depthTexture,    false);
-    sp->SetUniformTexture("B_stencil_gout_fin",            m_stencilTexture,  false);
-    sp->SetUniformTexture("B_color_gout_fin",              m_colorTexture,    false);
+    sp->SetUniformTexture("B_position_gout_fin",      m_positionTexture, false);
+    sp->SetUniformTexture("B_normal_gout_fin",        m_normalTexture,   false);
+    sp->SetUniformTexture("B_uv_gout_fin",            m_uvTexture,       false);
+    sp->SetUniformTexture("B_diffuse_gout_fin",       m_diffuseTexture,  false);
+    sp->SetUniformTexture("B_materialProps_gout_fin", m_matPropsTexture, false);
+    sp->SetUniformTexture("B_depth_gout_fin",         m_depthTexture,    false);
+    sp->SetUniformTexture("B_stencil_gout_fin",       m_stencilTexture,  false);
+    sp->SetUniformTexture("B_color_gout_fin",         m_colorTexture,    false);
 
     Camera *camera = Scene::GetActiveScene()->GetCamera();
     if (camera)
@@ -66,8 +66,10 @@ void GBuffer::SetUniformsBeforeRendering(Material *mat)
     }
 
     // Stencil uniforms
-    sp->SetUniformFloat("B_stencilWriteEnabled", m_stencilWriteEnabled ? 1.0f : 0.0f);
-    sp->SetUniformFloat("B_stencilTestEnabled",  m_stencilTestEnabled  ? 1.0f : 0.0f);
+    sp->SetUniformFloat("B_stencilWriteEnabled",
+                        m_stencilWriteEnabled ? 1.0f : 0.0f);
+    sp->SetUniformFloat("B_stencilTestEnabled",
+                        m_stencilTestEnabled  ? 1.0f : 0.0f);
 }
 
 

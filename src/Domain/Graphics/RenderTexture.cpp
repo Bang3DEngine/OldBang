@@ -1,19 +1,18 @@
-#include "TextureRender.h"
+#include "RenderTexture.h"
 #include "Debug.h"
 
-TextureRender::TextureRender() : Texture2D()
+RenderTexture::RenderTexture() : Texture2D()
 {
     SetFilterMode(Texture::FilterMode::Linear);
     SetWrapMode(Texture::WrapMode::Clamp);
-    SetGLInternalFormat(GL_RGBA32F);
-    SetGLFormat(GL_RGBA);
-    SetGLType(GL_FLOAT);
+    SetFormat(Texture::Format::RGBA_Float32);
 }
 
-TextureRender::~TextureRender()
+RenderTexture::~RenderTexture()
 {
 
 }
+
 /*
 void TextureRender::CreateEmpty(int width, int height)
 {

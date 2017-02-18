@@ -23,14 +23,14 @@ public:
         Color
     };
 
-    TextureRender *m_positionTexture = nullptr;
-    TextureRender *m_normalTexture   = nullptr;
-    TextureRender *m_uvTexture       = nullptr;
-    TextureRender *m_diffuseTexture  = nullptr;
-    TextureRender *m_matPropsTexture = nullptr;
-    TextureRender *m_depthTexture    = nullptr;
-    TextureRender *m_stencilTexture  = nullptr;
-    TextureRender *m_colorTexture    = nullptr;
+    RenderTexture *m_positionTexture = nullptr;
+    RenderTexture *m_normalTexture   = nullptr;
+    RenderTexture *m_uvTexture       = nullptr;
+    RenderTexture *m_diffuseTexture  = nullptr;
+    RenderTexture *m_matPropsTexture = nullptr;
+    RenderTexture *m_depthTexture    = nullptr;
+    RenderTexture *m_stencilTexture  = nullptr;
+    RenderTexture *m_colorTexture    = nullptr;
 
 private:
 

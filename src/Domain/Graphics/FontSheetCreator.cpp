@@ -114,13 +114,16 @@ bool FontSheetCreator::LoadCharTexture(const String &fontFilepath,
     if (metrics.width * metrics.height > 0)
     {
         // Create a RGBA bitmap from the pixmap provided by FreeType
-        unsigned char* colorMap = new unsigned char[metrics.width * metrics.height * 4];
+        unsigned char* colorMap = new unsigned char[metrics.width *
+                                                    metrics.height * 4];
         for(int y = 0; y < metrics.height; y++)
         {
             for(int x = 0; x < metrics.width; x++)
             {
                 int k = y * metrics.width + x;
-                colorMap[k * 4 + 0] = colorMap[k * 4 + 1] = colorMap[k * 4 + 2] = 255;
+                colorMap[k * 4 + 0] = 255;
+                colorMap[k * 4 + 1] = 255;
+                colorMap[k * 4 + 2] = 255;
                 colorMap[k * 4 + 3] = bitmap.buffer[k]; // Alpha is the gray
             }
         }
@@ -128,10 +131,9 @@ bool FontSheetCreator::LoadCharTexture(const String &fontFilepath,
         // Create texture
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         fontTexture->SetWrapMode(Texture::WrapMode::ClampToEdge);
-        fontTexture->SetFilterMode(Texture::FilterMode::Linear);
-        fontTexture->SetGLFormat(GL_RGBA);
-        fontTexture->SetGLInternalFormat(GL_RGBA);
-        fontTexture->Fill(colorMap, metrics.width, metrics.height);
+        fontTexture->SetFilterMode(Texture::FilterMode::Trilinear);
+        fontTexture->Fill(colorMap, metrics.width, metrics.height,
+                          Texture::Format::RGBA_Byte8, true);
         delete[] colorMap;
     }
     else

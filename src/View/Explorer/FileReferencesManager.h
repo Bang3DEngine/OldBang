@@ -12,6 +12,7 @@
  * We must delay the file reference refactoring to let the explorer actually
  * move/rename the files.
  */
+class XMLNode;
 class IFileable;
 class FileReferencesManager : public QObject
 {
@@ -38,6 +39,10 @@ private:
     void RefactorFiles(const String &relPathBefore, const String &relPathNow);
     void RefactorIFileables(const String &relPathBefore,
                             const String &relPathNow);
+
+    void RefactorXMLInfo(XMLNode *xmlInfo,
+                         const String &relPathBefore,
+                         const String &relPathNow);
 
 private slots:
     void TreatNextQueuedFileOrDirNameChange();

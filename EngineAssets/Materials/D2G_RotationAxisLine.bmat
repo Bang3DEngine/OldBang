@@ -1,5 +1,5 @@
 <Material DiffuseColor:Color="(1, 1, 1, 1)"{}
-	  ReceivesLighting:Bool="false"
+          ReceivesLighting:Bool="false"{}
           FragmentShader:File="./Shaders/D2G_RotationAxisLine.frag"{FileExtension="frag",IsEngineFile}
           TextureCount:Int="0"{}
           VertexShader:File="./Shaders/D2G_Default.vert"{FileExtension="vert",IsEngineFile}

@@ -17,7 +17,7 @@
 #include "GameObject.h"
 #include "MeshFactory.h"
 #include "SceneManager.h"
-#include "TextureRender.h"
+#include "RenderTexture.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
 #include "ShaderContract.h"

@@ -16,7 +16,7 @@ private:
     Texture(const Texture &t) {}
 
 public:
-    enum TextureType
+    enum Target
     {
         Texture1D = GL_TEXTURE_1D,
         Texture2D = GL_TEXTURE_2D,
@@ -24,10 +24,10 @@ public:
         TextureCubeMap = GL_TEXTURE_CUBE_MAP
     };
 
-    enum TextureInternalFormat
+    enum Format
     {
-        InternatlNearest = GL_NEAREST,
-        InternatlLinear = GL_LINEAR
+        RGBA_Byte8 = 0,
+        RGBA_Float32
     };
 
     enum FilterMode
@@ -44,13 +44,37 @@ public:
         ClampToEdge = GL_CLAMP_TO_EDGE
     };
 
-private:
-    GLint m_glTextureGetIntegerType = 0;
+public:
+    Texture();
+    Texture(Target texTarget);
+    virtual ~Texture();
+
+    virtual void CreateEmpty(int width, int height) = 0;
+    virtual void Resize(int width, int height) = 0;
+
+    void SetTarget(Target target);
+    void SetFormat(Format format);
+    void SetFilterMode(FilterMode filterMode);
+    void SetWrapMode(WrapMode wrapMode);
+    void SetTextureUnit(int textureSlot);
+
+    int GetWidth() const;
+    int GetHeight() const;
+    Format GetFormat() const;
+    FilterMode GetFilterMode() const;
+    WrapMode GetWrapMode() const;
+    int GetTextureUnit() const;
+
+    GLint GetGLDataType() const;
+    GLint GetGLFormat() const;
+    GLint GetGLInternalFormat() const;
+    unsigned int GetBytesSize() const;
+
+    void Bind() const override;
+    void BindToTextureUnit(int textureUnit) const;
+    void UnBind() const override;
 
 protected:
-    GLint m_glType = GL_UNSIGNED_BYTE;
-    GLint m_glInternalFormat = GL_RGBA;
-    GLint m_glFormat = GL_RGBA;
 
     int m_width = 0;
     int m_height = 0;
@@ -61,38 +85,13 @@ protected:
 
     unsigned char *m_data = nullptr;
 
-    TextureType m_glTextureType = TextureType::Texture2D;
+    Format m_format = Format::RGBA_Float32;
+    Target m_target = Target::Texture2D;
 
-public:
-    Texture();
-    Texture(TextureType m_glTextureType);
-    virtual ~Texture();
-
-    virtual void CreateEmpty(int width, int height) = 0;
-    virtual void Resize(int width, int height) = 0;
-
-    void SetGLType(GLint glType);
-    void SetGLInternalFormat(GLint glInternalFormat);
-    void SetGLFormat(GLint glFormat);
-    void SetFilterMode(FilterMode filterMode);
-    void SetWrapMode(WrapMode wrapMode);
-    void SetTextureUnit(int textureSlot);
-
-    int GetWidth() const;
-    int GetHeight() const;
-    GLint GetGLType() const;
-    GLint GetGLInternalFormat() const;
-    GLint GetGLFormat() const;
-    FilterMode GetFilterMode() const;
-    WrapMode GetWrapMode() const;
-    int GetTextureUnit() const;
-
-protected:
-    void Bind() const override;
-
-public:
-    void BindToTextureUnit(int textureUnit) const;
-    void UnBind() const override;
+    static unsigned int GetPixelBytesSize(Format texFormat);
+    static GLint GetGLDataTypeFrom(Format texFormat);
+    static GLint GetGLFormatFrom(Format texFormat);
+    static GLint GetGLInternalFormatFrom(Format texFormat);
 };
 
 #endif // TEXTURE_H

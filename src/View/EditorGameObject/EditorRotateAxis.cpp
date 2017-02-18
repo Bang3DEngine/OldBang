@@ -24,8 +24,9 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
 
     delete m_material; // Delete default EditorAxis material
     Material *mat = AssetsManager::Load<Material>(
-                "Materials/D2G_RotationAxisLine.bmat", true);
+                "./Materials/D2G_RotationAxisLine.bmat", true);
     m_material = new Material(*mat);
+    m_material->SetReceivesLighting(false);
     m_circle->SetMaterial(m_material);
     m_circle->SetIsGizmo(true);
     m_circle->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);

@@ -32,8 +32,8 @@ public:
     void RenderForSelectionBuffer(Renderer *renderer);
     void ProcessSelection();
 
-    TextureRender *GetColorTexture() const;
-    TextureRender *GetWorldPosTexture() const;
+    RenderTexture *GetColorTexture() const;
+    RenderTexture *GetWorldPosTexture() const;
 
     GameObject *GetGameObjectInPosition(int x, int y);
     Vector3 GetWorldPositionAt(int x, int y);
@@ -44,8 +44,8 @@ public:
 private:
     enum Attachment { ColorAttachment = 0, WorldPosition = 1 };
 
-    TextureRender *m_colorTexture    = nullptr;
-    TextureRender *m_worldPosTexture = nullptr;
+    RenderTexture *m_colorTexture    = nullptr;
+    RenderTexture *m_worldPosTexture = nullptr;
 
     /**
      * @brief m_isPassing is true only when SelectionFrambuffer is rendering.

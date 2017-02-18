@@ -33,7 +33,7 @@ public:
     Font();
     virtual ~Font();
 
-    void LoadFromFile(const String &m_assetFilepath);
+    void LoadFromTTF(const String &m_assetFilepath);
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
@@ -49,6 +49,7 @@ public:
 
 private:
 
+    String m_fontFilepath = "";
     FT_Face m_freetypeFace;
 
     /**
