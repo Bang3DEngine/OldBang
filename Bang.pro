@@ -56,7 +56,8 @@ DEBUG_MODE {
 RELEASE_MODE {
     OPTIMIZATION_OPT = -O3 -Wl,-O3
 }
-OTHER_OPTS = -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wunused-variable -Wno-sign-compare -fPIC
+OTHER_OPTS = -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter \
+             -Wunused-variable -Wno-sign-compare -fPIC
 QMAKE_CFLAGS           -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
 QMAKE_CFLAGS_DEBUG     -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
 QMAKE_CFLAGS_RELEASE   -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
@@ -280,20 +281,20 @@ HEADERS +=                                                          \
     src/Domain/Engine/Components/RectTransform.h \
     src/Domain/Engine/GameObjects/UIGameObject.h \
     src/View/Cursor.h \
-    src/View/DragDrop/DragDropQWidget.h \
-    src/View/DragDrop/DragDropQListView.h \
-    src/View/DragDrop/DragDropQTreeWidget.h \
-    src/View/DragDrop/DragDropQListWidget.h \
-    src/View/DragDrop/DragDropAgent.h \
-    src/View/DragDrop/IDragDropListener.h \
-    src/View/DragDrop/DragDropManager.h \
-    src/View/Explorer/FileReferencesManager.h \
     src/Domain/Graphics/RenderTexture.h
 
 EDITOR {
 HEADERS += \
     src/View/Windows/EditorWindow.h \
     src/View/EditorGameObject/EditorGizmosGameObject.h \
+    src/View/DragDrop/DragDropQWidget.h \
+    src/View/DragDrop/DragDropQListView.h \
+    src/View/Explorer/FileReferencesManager.h \
+    src/View/DragDrop/DragDropQTreeWidget.h \
+    src/View/DragDrop/DragDropQListWidget.h \
+    src/View/DragDrop/DragDropAgent.h \
+    src/View/DragDrop/IDragDropListener.h \
+    src/View/DragDrop/DragDropManager.h \
     src/View/Explorer/FileSystemModel.h \
     src/View/EditorGameObject/EditorSelectionGameObject.h \
     src/View/EditorScene/EditorDebugGameObject.h \
@@ -483,14 +484,6 @@ SOURCES += \
     src/Domain/Engine/Components/RectTransform.cpp \
     src/Domain/Engine/GameObjects/UIGameObject.cpp \
     src/View/Cursor.cpp \
-    src/View/DragDrop/DragDropManager.cpp \
-    src/View/DragDrop/DragDropQWidget.cpp \
-    src/View/DragDrop/DragDropQListView.cpp \
-    src/View/DragDrop/DragDropQTreeWidget.cpp \
-    src/View/DragDrop/DragDropQListWidget.cpp \
-    src/View/DragDrop/DragDropAgent.cpp \
-    src/View/DragDrop/IDragDropListener.cpp \
-    src/View/Explorer/FileReferencesManager.cpp \
     src/Domain/Graphics/RenderTexture.cpp
 
 EDITOR {
@@ -500,6 +493,14 @@ EDITOR {
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/Explorer/FileSystemModel.cpp \
         src/View/EditorState.cpp \
+        src/View/DragDrop/DragDropManager.cpp \
+        src/View/DragDrop/DragDropQWidget.cpp \
+        src/View/Explorer/FileReferencesManager.cpp \
+        src/View/DragDrop/DragDropQListView.cpp \
+        src/View/DragDrop/DragDropQTreeWidget.cpp \
+        src/View/DragDrop/DragDropQListWidget.cpp \
+        src/View/DragDrop/DragDropAgent.cpp \
+        src/View/DragDrop/IDragDropListener.cpp \
         src/Domain/Graphics/Buffers/SelectionFramebuffer.cpp \
         src/View/EditorPlayStopFlowController.cpp \
         src/View/EditorGameObject/EditorRotateAxisGroup.cpp \

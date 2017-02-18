@@ -169,7 +169,10 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     }
     else
     {
-        renderRect = m_currentScene->GetBoundingScreenRect(sceneCam, true);
+        // Apply deferred lights to the whole scene
+        // TODO: fix getting bounding screen rect of scene InGame
+        // renderRect = m_currentScene->GetBoundingScreenRect(sceneCam, true);
+        renderRect = Rect::ScreenRect;
     }
 
     ASSERT(renderRect != Rect::Empty); // If the rect is empty, dont waste time rendering nothing

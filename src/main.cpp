@@ -134,10 +134,6 @@ int main(int argc, char **argv)
 
     InitSingletonManager();
 
-    String str = "./Meshes2/Boy.obj";
-    str.Replace(str, "a");
-    std::cout << str << std::endl;
-
     // Init engine paths, by looking at executable location:
     #ifdef BANG_EDITOR
     String engineRootDirAbs = Persistence::GetDirUp(executableDir);

@@ -15,6 +15,7 @@ void Main()
                                     B_light_color.rgb,
                                     B_position_camera.xyz);
 
-        B_vout.color = vec4(FRAG_IN_COLOR().rgb + dirLightApport, FRAG_IN_DIFFUSE_COLOR().a);
+        B_vout.color = vec4(FRAG_IN_COLOR().rgb + dirLightApport,
+                            FRAG_IN_DIFFUSE_COLOR().a);
     }
 }
