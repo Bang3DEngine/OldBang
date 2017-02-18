@@ -211,6 +211,8 @@ XMLNode *XMLParser::FromFile(const String &filepath)
 
 XMLNode* XMLParser::FromString(const String &xml)
 {
+    if (xml.Empty()) { return nullptr; }
+
     ClearPointerIds();
 
     XMLNode* root = new XMLNode();

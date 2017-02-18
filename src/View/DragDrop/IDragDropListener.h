@@ -36,11 +36,6 @@ protected:
     virtual void OnDragMove(const DragDropInfo &ddi)      {} // Moves over a widget
     virtual void OnDragLeave(const DragDropInfo &ddi)     {} // Leaves a widget
     virtual void OnDrop(const DragDropInfo &ddi)          {} // Drag Ends
-    virtual void OnDragStartHere(const DragDropInfo &ddi) {} // Drag Starts Here
-    virtual void OnDragEnterHere(const DragDropInfo &ddi) {} // Enters a widget Here
-    virtual void OnDragMoveHere(const DragDropInfo &ddi)  {} // Moves over a widget Here
-    virtual void OnDragLeaveHere(const DragDropInfo &ddi) {} // Leaves a widget Here
-    virtual void OnDropHere(const DragDropInfo &ddi)      {} // Drag Ends Here
 
     bool MouseOverMe() const;
     static bool MouseOver(QWidget *w);

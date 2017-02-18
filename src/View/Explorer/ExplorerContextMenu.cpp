@@ -31,7 +31,8 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
     connect(&actionCreateDir, SIGNAL(triggered()),
             this, SLOT(OnCreateDirClicked()));
 
-    if (m_explorer->indexAt(point).isValid())
+    QPoint mousePoint = m_explorer->viewport()->mapFromGlobal(point);
+    if (m_explorer->indexAt(mousePoint).isValid())
     {
         if (m_explorer->IsSelectedAFile())
         {
@@ -52,7 +53,7 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
         contextMenu.addAction(&actionCreateDir);
     }
 
-    contextMenu.exec(m_explorer->mapToGlobal(point));
+    contextMenu.exec(m_explorer->viewport()->mapToGlobal(point));
 }
 
 void ExplorerContextMenu::OnDuplicateClicked()
@@ -78,6 +79,7 @@ void ExplorerContextMenu::OnDeleteClicked()
     String path = m_explorer->GetSelectedFile().GetAbsolutePath();
     String name = Persistence::GetFileNameWithExtension(path);
     ASSERT( Persistence::Exists(path) );
+
     Dialog::Reply reply = Dialog::GetYesNo(
                 "Delete file or directory",
                 "Are you sure you want to remove '" + name + "' ? \n" +
@@ -86,7 +88,8 @@ void ExplorerContextMenu::OnDeleteClicked()
     if (reply == Dialog::Reply::Yes)
     {
         Inspector *inspector = Inspector::GetInstance();
-        IInspectable *lastInspectable = m_explorer->m_lastIInspectableInInspector;
+        IInspectable *lastInspectable =
+                m_explorer->m_lastIInspectableInInspector;
         if (inspector->IsShowingInspectable(lastInspectable))
         {
             inspector->Clear();
@@ -104,6 +107,6 @@ void ExplorerContextMenu::OnCreateDirClicked()
     dirPath = Persistence::GetDuplicateName(dirPath);
     dirPath = Persistence::ToAbsolute(dirPath, false);
 
-    QDir().mkpath(dirPath.ToQString());
+    Persistence::CreateDirectory(dirPath);
     m_explorer->StartRenaming(dirPath);
 }

@@ -10,8 +10,8 @@ DragDropManager *DragDropManager::s_ddManager = nullptr;
 
 DragDropManager::DragDropManager()
 {
-    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(Update()));
-    m_updateTimer.start(c_UpdateTime * 1000);
+    QObject::connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(Update()));
+    m_updateTimer.start(c_updateTime);
 
     InstallEventFilters();
 }
@@ -80,7 +80,7 @@ void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
     DragDropManager *m = DragDropManager::s_ddManager; ASSERT(m);
     m->m_mouseDown = true;
     m->m_latestUpdateDragging = m->m_dragging = false;
-    m->m_timeSinceLastMouseDown = 0.0f;
+    m->m_timeSinceLastMouseDown = 0;
 
     DragDropAgent *currentDDAgentBelowMouse = DragDropManager::GetDragDropAgentBelowMouse();
     m->m_ddInfo.sourceObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
@@ -140,13 +140,9 @@ void DragDropManager::Update()
         }
 
         // Drag Moves in currentDDAgentBelowMouse
-        bool isDragMove = currentDDAgentBelowMouse && !changingOfDragDropAgent;
-        if (isDragMove)
+        for (IDragDropListener *d : m_dragDropListeners)
         {
-            for (IDragDropListener *d : m_dragDropListeners)
-            {
-                d->OnDragMove(m_ddInfo);
-            }
+            d->OnDragMove(m_ddInfo);
         }
 
         // Drag Leaves m_latestDDAgentBelowMouse
@@ -178,11 +174,11 @@ void DragDropManager::Update()
 
     if (m_mouseDown)
     {
-        m_timeSinceLastMouseDown += c_UpdateTime;
+        m_timeSinceLastMouseDown += 100;
     }
     else
     {
-        m_timeSinceLastMouseDown = 0.0f;
+        m_timeSinceLastMouseDown = 0;
     }
 }
 

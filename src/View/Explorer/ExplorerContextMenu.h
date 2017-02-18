@@ -8,9 +8,6 @@ class ExplorerContextMenu : public ContextMenu
 {
     Q_OBJECT
 
-private:
-    Explorer *m_explorer;
-
 public:
     ExplorerContextMenu(Explorer *explorer);
 
@@ -20,6 +17,9 @@ public slots:
     void OnDuplicateClicked();
     void OnDeleteClicked();
     void OnCreateDirClicked();
+
+private:
+    Explorer *m_explorer = nullptr;
 };
 
 #endif // EXPLORERCONTEXTMENU_H

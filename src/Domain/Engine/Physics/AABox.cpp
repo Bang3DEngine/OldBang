@@ -181,8 +181,6 @@ AABox operator*(const Matrix4 &m, const AABox &b)
             (m * Vector4(points[7], 1)).xyz()
         };
 
-    // Debug_Log(newTransformedBoxPoints);
-
     AABox br;
     br.FillFromPositions(newTransformedBoxPoints);
     return br;

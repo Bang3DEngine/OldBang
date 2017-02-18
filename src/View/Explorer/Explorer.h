@@ -16,6 +16,7 @@
 
 class IFileable;
 class FileSystemModel;
+class FileReferencesManager;
 class Explorer : public DragDropQListView,
                  public IDragDropListener,
                  public IShortcutListener,
@@ -39,6 +40,7 @@ public:
     void StartRenaming(const String &filepath);
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
+    virtual void OnDragMove(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
     void dropEvent(QDropEvent *e) override;
@@ -74,10 +76,6 @@ public slots:
     void OnFileRenamed(const QString &path,
                        const QString &oldName,
                        const QString &newName);
-    void OnFileRenamed(const String &oldFileAbsPath,
-                       const String &newFileAbsPath);
-    void OnFileOrDirMoved(const String &oldFileOrDirAbsPath,
-                          const String &newFileOrDirAbsPath);
     void UpdateLabelText();
     void OnIconSizeSliderValueChanged(int value);
 
@@ -86,13 +84,15 @@ protected:
     virtual void updateGeometries() override;
 
 private:
+    FileReferencesManager *m_fileRefsManager = nullptr;
+
     const int c_minIconSize = 20;
     const int c_maxIconSize = 100;
 
     ExplorerContextMenu m_eContextMenu;
 
-    std::set<IFileable*> m_fileables;
     String m_fileBeingDragged = "";
+    String m_fileUnderMouse = "";
 
     FileSystemModel *m_fileSystemModel = nullptr;
     QToolButton *m_buttonDirUp = nullptr;
@@ -114,6 +114,7 @@ private:
     friend class FileSystemModel;
     friend class ExplorerDirTree;
     friend class ExplorerContextMenu;
+    friend class FileReferencesManager;
 };
 
 #endif // EXPLORER_H

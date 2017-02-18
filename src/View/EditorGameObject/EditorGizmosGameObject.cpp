@@ -195,6 +195,7 @@ void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
                                         bool billboard)
 {
     MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(m_planeMesh);
+    ASSERT(mr->GetMaterial());
     mr->SetMesh(m_planeMesh);
 
     SetDrawWireframe(false);

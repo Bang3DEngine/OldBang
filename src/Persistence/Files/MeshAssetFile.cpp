@@ -10,7 +10,8 @@
 #endif
 
 MeshAssetFile::MeshAssetFile(
-        const QFileSystemModel *model, const QModelIndex &index) : File(model, index)
+        const QFileSystemModel *model, const QModelIndex &index)
+    : File(model, index)
 {
     XMLNode *xmlInfo;
     xmlInfo = XMLParser::FromFile(m_path);

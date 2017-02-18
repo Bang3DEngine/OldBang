@@ -25,19 +25,9 @@ public:
     virtual void PostReadXMLInfo(const XMLNode *xmlInfo);
     virtual void PostFillXMLInfo(XMLNode *xmlInfo) const;
 
-    virtual void OnFileOrDirNameChanged(const String &absFilepathBefore,
-                                        const String &absFilepathNow);
-
 protected:
     IFileable();
     virtual ~IFileable();
-
-    #ifdef BANG_EDITOR
-    static void OnFileNameChangedStatic(const String &absFilepathBefore,
-                                        const String &absFilepathNow);
-    #endif
-
-    friend class Explorer;
 };
 
 #endif // IFILEABLE_H

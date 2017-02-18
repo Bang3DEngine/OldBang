@@ -25,7 +25,7 @@ EditorRectTransformAnchorGizmo::
     m_anchorTexture =
         AssetsManager::Load<Texture2D>("Textures/RectTransformAnchor.btex2d",
                                        true);
-    m_anchorTexture->SetalphaCutoff(0.1f);
+    m_anchorTexture->SetAlphaCutoff(0.1f);
 }
 
 EditorRectTransformAnchorGizmo::~EditorRectTransformAnchorGizmo()

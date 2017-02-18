@@ -24,6 +24,7 @@
 #include "TextFileInspectable.h"
 #include "ExplorerContextMenu.h"
 #include "ImageFileInspectable.h"
+#include "FileReferencesManager.h"
 #include "MeshAssetFileInspectable.h"
 #include "PrefabAssetFileInspectable.h"
 #include "MaterialAssetFileInspectable.h"
@@ -39,6 +40,8 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
     setDropIndicatorShown(true);
     setDefaultDropAction(Qt::DropAction::MoveAction);
     setSelectionMode(QAbstractItemView::SingleSelection);
+
+    m_fileRefsManager = new FileReferencesManager();
 
     m_fileSystemModel = new FileSystemModel(this);
     setModel(m_fileSystemModel);
@@ -66,6 +69,7 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 Explorer::~Explorer()
 {
     delete m_fileSystemModel;
+    delete m_fileRefsManager;
 }
 
 void Explorer::OnWindowShown()
@@ -124,39 +128,7 @@ void Explorer::OnFileRenamed(const QString &path,
     SelectFile(newAbsPath);
 
     String oldAbsPath = path + "/" + oldName;
-    OnFileRenamed(oldAbsPath, newAbsPath);
-}
-
-void Explorer::OnFileRenamed(const String &oldFileAbsPath,
-                             const String &newFileAbsPath)
-{
-    IFileable::OnFileNameChangedStatic(oldFileAbsPath, newFileAbsPath);
-
-    String oldRelPath = Persistence::ToRelative(oldFileAbsPath, false);
-    String newRelPath = Persistence::ToRelative(newFileAbsPath, false);
-    List<String> allFiles =
-          Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true);
-    for (const String &filepath : allFiles)
-    {
-        File f(filepath);
-        if (!f.IsAsset()) { continue; }
-
-       // Debug_Log("Replacing on file " << filepath << ": " << oldRelPath << " by " << newRelPath);
-        String fileXMLContents = f.GetContents();
-        int replacements = fileXMLContents.Replace(oldRelPath, newRelPath);
-        if (replacements > 0)
-        {
-          //  Debug_Log("REPLACED " << replacements << " !!!");
-            FileWriter::WriteToFile(filepath, fileXMLContents);
-        }
-    }
-    WindowEventManager::NotifyFilenameChanged(oldFileAbsPath, newFileAbsPath);
-}
-
-void Explorer::OnFileOrDirMoved(const String &oldFileOrDirAbsPath,
-                                const String &newFileOrDirAbsPath)
-{
-    OnFileRenamed(oldFileOrDirAbsPath, newFileOrDirAbsPath);
+    m_fileRefsManager->OnFileOrDirNameAboutToBeChanged(oldAbsPath, newAbsPath);
 }
 
 void Explorer::UpdateLabelText()
@@ -182,11 +154,6 @@ void Explorer::mousePressEvent(QMouseEvent *e)
     if (!indexAt(e->pos()).isValid())
     {
         clearSelection();
-    }
-
-    if (e->button() == Qt::RightButton)
-    {
-        m_eContextMenu.OnCustomContextMenuRequested(e->pos());
     }
 }
 
@@ -500,6 +467,14 @@ void Explorer::OnDragStart(const DragDropInfo &ddi)
     m_fileBeingDragged = GetSelectedFileOrDirPath();
 }
 
+void Explorer::OnDragMove(const DragDropInfo &ddi)
+{
+
+    File destDir(m_fileSystemModel,
+                 indexAt( viewport()->mapFromGlobal(QCursor::pos()) ));
+    m_fileUnderMouse = destDir.GetAbsolutePath();
+}
+
 void Explorer::OnDrop(const DragDropInfo &ddi)
 {
     setStyleSheet("/* */");
@@ -507,23 +482,16 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
     if (ddi.sourceObject == this && underMouse()) // Handle file moving
     {
         String oldMovedFileOrDirPath = m_fileBeingDragged;
-        File destDir(m_fileSystemModel,
-                     indexAt( mapFromGlobal(QCursor::pos()) ));
-        String destDirPath = destDir.GetAbsolutePath();
+        String destDirPath = m_fileUnderMouse;
 
-        String movedFileOrDirName =
-                Persistence::GetFileNameWithExtension(oldMovedFileOrDirPath);
-        String newMovedFileOrDirPath = destDirPath + "/" + movedFileOrDirName;
-
-        bool fileHasMoved =
-                !oldMovedFileOrDirPath.Empty() &&
-                !Persistence::Exists(oldMovedFileOrDirPath) &&
-                Persistence::ExistsDirectory(destDirPath) &&
-                Persistence::Exists(newMovedFileOrDirPath);
-
-        if (fileHasMoved) // Sometimes it triggers drop but nothing is moved
+        if (!destDirPath.Empty())
         {
-            OnFileOrDirMoved(oldMovedFileOrDirPath, newMovedFileOrDirPath);
+            String movedFileOrDirName =
+                    Persistence::GetFileNameWithExtension(oldMovedFileOrDirPath);
+            String newMovedFileOrDirPath = destDirPath + "/" + movedFileOrDirName;
+            m_fileRefsManager->OnFileOrDirNameAboutToBeChanged(
+                                                      oldMovedFileOrDirPath,
+                                                      newMovedFileOrDirPath);
         }
     }
 

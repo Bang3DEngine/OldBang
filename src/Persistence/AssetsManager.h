@@ -23,8 +23,8 @@ public:
 
     static bool IsLoaded(const String &filepath, bool isEngineAsset = false);
 
-    /** This function prepares a relative path, to be searched by a loading function.
-     * Or to be saved to the AssetsManager cache.
+    /** This function prepares a relative path, to be searched by
+     *   a loading function. Or to be saved to the AssetsManager cache.
     **/
     static String FormatFilepath(const String &filepath,
                                  bool isEngineFilepath);
@@ -49,8 +49,7 @@ public:
     static T* ReadAssetFile(const String &filepath, bool isEngineAsset)
     {
         T *a = nullptr;
-        String absPath = AssetsManager::FormatFilepath(filepath,
-                                                                       isEngineAsset);
+        String absPath = AssetsManager::FormatFilepath(filepath, isEngineAsset);
         XMLNode *xmlInfo = XMLParser::FromFile(absPath);
         if (xmlInfo)
         {
@@ -84,7 +83,7 @@ public:
         if (!AssetsManager::IsLoaded(filepath, isEngineAsset))
         {
             a = AssetsManager::ReadAssetFile<T>(filepath, isEngineAsset);
-            AssetsManager::SaveAssetToMap(filepath, a, isEngineAsset); // Register it
+            AssetsManager::SaveAssetToMap(filepath, a, isEngineAsset);
         }
         else
         {
@@ -95,7 +94,8 @@ public:
 
     #ifdef BANG_EDITOR
     template <class T>
-    static void OnAssetFileChanged(const String &assetFilepath, const XMLNode *xmlChangedInfo)
+    static void OnAssetFileChanged(const String &assetFilepath,
+                                   const XMLNode *xmlChangedInfo)
     {
         ASSERT(!assetFilepath.Empty());
         if (AssetsManager::IsLoaded(assetFilepath, false))
@@ -106,8 +106,10 @@ public:
     }
     #endif
 
-    static void SaveAssetToMap(const String &filepath, Asset* asset, bool isEngineAsset);
-    static void SaveAssetToFile(const String &filepath, Asset* asset, bool isEngineAsset);
+    static void SaveAssetToMap(const String &filepath, Asset* asset,
+                               bool isEngineAsset);
+    static void SaveAssetToFile(const String &filepath, Asset* asset,
+                                bool isEngineAsset);
 
     static void Unload(const String &id);
     static void Unload(Asset *asset);

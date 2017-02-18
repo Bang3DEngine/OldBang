@@ -58,6 +58,7 @@ void UIImage::RenderCustomPR() const
 
 void UIImage::RenderWithMaterial(Material *mat) const
 {
+    ASSERT(mat);
     if (mat == m_material || mat == m_materialPR)
     {
         m_material->SetTexture(m_imageTexture);

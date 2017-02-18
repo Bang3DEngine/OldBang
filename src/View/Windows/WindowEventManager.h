@@ -42,8 +42,6 @@ public:
 
 
     static void NotifyGameObjectDestroyed(GameObject *destroyed);
-    static void NotifyFilenameChanged(const String &absFilepathBefore,
-                                      const String &absFilepathNow);
     static void NotifyInspectorSlotChanged(InspectorWidget *inspectorItem);
     static void NotifyHierarchyGameObjectsSelected(List<GameObject*> &selectedGameObjects);
     static void NotifyHierarchyGameObjectDoubleClicked(GameObject *selected);

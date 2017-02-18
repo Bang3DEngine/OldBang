@@ -33,7 +33,8 @@ public:
     enum FilterMode
     {
         Nearest = GL_NEAREST,
-        Linear = GL_LINEAR
+        Linear = GL_LINEAR,
+        Trilinear = GL_LINEAR_MIPMAP_LINEAR
     };
 
     enum WrapMode

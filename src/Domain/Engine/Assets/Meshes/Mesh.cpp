@@ -76,7 +76,8 @@ void Mesh::LoadPositions(const Array<Vector3>& positions)
         m_positions.PushBack( Vector3::Zero );
     }
     m_vertexPositionsVBO = new VBO();
-    m_vertexPositionsVBO->Fill((void*)(&m_positions[0]), m_positions.Size() * sizeof(float) * 3);
+    m_vertexPositionsVBO->Fill((void*)(&m_positions[0]),
+                               m_positions.Size() * sizeof(float) * 3);
     m_vertexCount = m_positions.Size();
 
     m_bBox.FillFromPositions(m_positions);
@@ -93,7 +94,8 @@ void Mesh::LoadNormals(const Array<Vector3> &normals)
         m_normals.PushBack( Vector3::Zero );
     }
     m_vertexNormalsVBO = new VBO();
-    m_vertexNormalsVBO->Fill((void*)(&m_normals[0]), m_normals.Size() * sizeof(float) * 3);
+    m_vertexNormalsVBO->Fill((void*)(&m_normals[0]),
+                                     m_normals.Size() * sizeof(float) * 3);
 }
 
 void Mesh::LoadUvs(const Array<Vector2> &uvs)

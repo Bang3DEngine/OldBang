@@ -60,11 +60,11 @@ private:
     static DragDropManager *s_ddManager;
 
     DragDropInfo m_ddInfo;
-    const float c_UpdateTime = 0.05f;
     QTimer m_updateTimer;
 
-    float m_timeSinceLastMouseDown = 0.0f;
-    const float c_TimeToStartDrag = 0.1f;
+    const int c_updateTime = 100;
+    int m_timeSinceLastMouseDown = 0;
+    const int c_TimeToStartDrag = 100;
     bool m_mouseDown = false;
     bool m_dragging  = false, m_latestUpdateDragging  = false;
 

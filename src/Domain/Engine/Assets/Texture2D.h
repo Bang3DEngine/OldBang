@@ -6,11 +6,9 @@
 #include "Asset.h"
 #include "Texture.h"
 
-class Texture2D : public Texture,
-                  public Asset
+class Texture2D : public Texture, public Asset
 {
 public:
-
     Texture2D();
     Texture2D(const String &imageFilepath);
     virtual ~Texture2D();
@@ -21,11 +19,12 @@ public:
     void LoadFromFile(const String &imageFilepath);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
-    void Fill(unsigned char *newData, int width, int height, bool genMipMaps = true);
+    void Fill(unsigned char *newData, int width, int height,
+              bool genMipMaps = true);
 
-    String GetImageRelativeFilepath() const;
+    String GetImageFilepath() const;
 
-    void SetalphaCutoff(float alphaCutoff);
+    void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
@@ -33,7 +32,9 @@ public:
 
 private:
 
+    String m_imageFilepath = "";
     float m_alphaCutoff = 0.1f;
+
     Texture2D(const Texture2D &t); // No copy constr.
 };
 

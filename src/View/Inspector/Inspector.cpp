@@ -102,7 +102,6 @@ void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget, int moveme
 
 void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
 {
-    Debug_Log("Setting inspectable " << inspectable << " to " << title);
     Clear();
     InspectorWidget *iw = new InspectorWidget();
     iw->Init(title, inspectable);

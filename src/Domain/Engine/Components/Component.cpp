@@ -90,7 +90,6 @@ void Component::FillXMLInfo(XMLNode *xmlInfo) const
 {
     IFileable::FillXMLInfo(xmlInfo);
 
-    //Debug_Log("FillXMLInfo of " << GetName());
     xmlInfo->SetTagName("Component");
     xmlInfo->SetPointer("id", this,
                         {XMLProperty::Hidden,

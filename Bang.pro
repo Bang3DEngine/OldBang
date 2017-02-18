@@ -287,7 +287,8 @@ HEADERS +=                                                          \
     src/View/DragDrop/DragDropQListWidget.h \
     src/View/DragDrop/DragDropAgent.h \
     src/View/DragDrop/IDragDropListener.h \
-    src/View/DragDrop/DragDropManager.h
+    src/View/DragDrop/DragDropManager.h \
+    src/View/Explorer/FileReferencesManager.h
 
 EDITOR {
 HEADERS += \
@@ -489,7 +490,8 @@ SOURCES += \
     src/View/DragDrop/DragDropQTreeWidget.cpp \
     src/View/DragDrop/DragDropQListWidget.cpp \
     src/View/DragDrop/DragDropAgent.cpp \
-    src/View/DragDrop/IDragDropListener.cpp
+    src/View/DragDrop/IDragDropListener.cpp \
+    src/View/Explorer/FileReferencesManager.cpp
 
 EDITOR {
     SOURCES += \

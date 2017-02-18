@@ -31,8 +31,8 @@ String Texture2D::GetFileExtension()
 void Texture2D::LoadFromFile(const String &imageFilepath)
 {
     Bind();
-    m_assetFilepath = imageFilepath;
-    unsigned char *loadedData = FileReader::ReadImage(imageFilepath,
+    m_imageFilepath = imageFilepath;
+    unsigned char *loadedData = FileReader::ReadImage(m_imageFilepath,
                                                       &m_width, &m_height);
     Fill(loadedData, m_width, m_height);
     UnBind();
@@ -78,12 +78,12 @@ void Texture2D::Fill(unsigned char *newData,
     UnBind();
 }
 
-String Texture2D::GetImageRelativeFilepath() const
+String Texture2D::GetImageFilepath() const
 {
-    return m_assetFilepath;
+    return m_imageFilepath;
 }
 
-void Texture2D::SetalphaCutoff(float alphaCutoff)
+void Texture2D::SetAlphaCutoff(float alphaCutoff)
 {
     m_alphaCutoff = alphaCutoff;
 }
@@ -97,15 +97,20 @@ void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
 
-    m_assetFilepath = xmlInfo->GetFilepath("ImageFilepath");
-    LoadFromFile(m_assetFilepath);
+    String imageFilepath = xmlInfo->GetFilepath("ImageFilepath");
+    LoadFromFile(imageFilepath);
 
     String filterModeString = xmlInfo->GetEnumSelectedName("FilterMode");
-    Texture::FilterMode filterMode =
-            filterModeString == "Nearest" ? Texture::FilterMode::Nearest :
-                                            Texture::FilterMode::Linear;
+    Texture::FilterMode filterMode = FilterMode::Nearest;
+    if (filterModeString == "Nearest") { filterMode = FilterMode::Nearest; }
+    else if (filterModeString == "Linear") { filterMode = FilterMode::Linear; }
+    else if (filterModeString == "Trilinear")
+    {
+        filterMode = FilterMode::Trilinear;
+    }
     SetFilterMode(filterMode);
-    SetalphaCutoff(xmlInfo->GetFloat("alphaCutoff"));
+
+    SetAlphaCutoff(xmlInfo->GetFloat("AlphaCutoff"));
 }
 
 void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
@@ -113,11 +118,16 @@ void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
     Asset::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Texture2D");
 
-    xmlInfo->SetFilepath("ImageFilepath", m_assetFilepath, "jpg png bmp");
+    xmlInfo->SetFilepath("ImageFilepath", m_imageFilepath, "jpg png bmp");
 
     int selectedIndex = GetFilterMode();
-    xmlInfo->SetEnum("FilterMode", {"Nearest", "Linear"}, selectedIndex, {});
-    xmlInfo->SetFloat("alphaCutoff", GetAlphaCutoff());
+    if (GetFilterMode() == FilterMode::Nearest)        { selectedIndex = 0; }
+    else if (GetFilterMode() == FilterMode::Linear)    { selectedIndex = 1; }
+    else if (GetFilterMode() == FilterMode::Trilinear) { selectedIndex = 2; }
+    xmlInfo->SetEnum("FilterMode", {"Nearest", "Linear", "Trilinear"},
+                     selectedIndex, {});
+
+    xmlInfo->SetFloat("AlphaCutoff", GetAlphaCutoff());
 }
 
 Texture2D::Texture2D(const Texture2D &t) : Texture2D() {}

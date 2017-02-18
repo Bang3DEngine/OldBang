@@ -20,7 +20,7 @@ unsigned char* FileReader::ReadImage(const String& filepath,
                                     width, height, &comps, 4);
     if (!data)
     {
-        Debug_Error("Error loading the texture '" << filepath <<
+        Debug_Error("Error loading the image '" << filepath <<
                      "', couldn't open/read the file.");
     }
     return data;
@@ -278,15 +278,16 @@ String FileReader::GetContents(const String &filepath)
 {
     if (filepath == "") return "";
 
+    String contents = "";
     std::fstream f;
     f.open(filepath);
     if (f.is_open())
     {
-        String contents((std::istreambuf_iterator<char>(f)),
-                              std::istreambuf_iterator<char>());
-        return contents;
+        contents = String((std::istreambuf_iterator<char>(f)),
+                           std::istreambuf_iterator<char>());
+        f.close();
     }
-    return "";
+    return contents;
 }
 
 void FileReader::GetImageFormat(const String &filepath, int *width,
