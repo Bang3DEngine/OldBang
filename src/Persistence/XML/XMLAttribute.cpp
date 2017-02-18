@@ -221,8 +221,8 @@ void XMLAttribute::SetFilepath(const String &filepath,
                                const String &fileExtension,
                                const Array<XMLProperty> &properties)
 {
-    String relFilepath = filepath.Empty() ? "None" :
-                                            Persistence::ToRelative(filepath);
+    String relFilepath = filepath.Empty() ?
+                             "" : Persistence::ToRelative(filepath);
     Set(m_name, relFilepath, XMLAttribute::Type::File, properties);
 
     if (!fileExtension.Empty())

@@ -254,8 +254,7 @@ int String::Replace(const String &from,
 
     int lastIndex = 0;
     int numReplacements = 0;
-    while (lastIndex != -1 &&
-           lastIndex + from.Length() < Length() - 1)
+    while (lastIndex != -1 && lastIndex + from.Length() <= Length())
     {
         lastIndex = IndexOf(from, lastIndex);
         if (lastIndex >= 0)

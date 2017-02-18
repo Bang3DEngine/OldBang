@@ -5,6 +5,7 @@
 #include "Debug.h"
 #include "XMLNode.h"
 #include "FileReader.h"
+#include "Persistence.h"
 
 Texture2D::Texture2D() : Texture(Target::Texture2D)
 {
@@ -33,12 +34,17 @@ String Texture2D::GetFileExtension()
 
 void Texture2D::LoadFromImage(const String &imageFilepath)
 {
+    ASSERT(!imageFilepath.Empty());
+
     m_imageFilepath = imageFilepath;
     unsigned char *loadedData = FileReader::ReadImage(m_imageFilepath,
                                                       &m_width, &m_height);
-    SetFormat(Texture::Format::RGBA_Byte8);
-    Fill(loadedData, m_width, m_height, Texture::Format::RGBA_Byte8);
-    stbi_image_free(loadedData);
+    if (loadedData)
+    {
+        SetFormat(Texture::Format::RGBA_Byte8);
+        Fill(loadedData, m_width, m_height, Texture::Format::RGBA_Byte8);
+        stbi_image_free(loadedData);
+    }
 }
 
 void Texture2D::CreateEmpty(int width, int height)

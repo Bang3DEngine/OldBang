@@ -50,7 +50,7 @@ void FileReferencesManager::TreatNextQueuedFileOrDirNameChange()
                         !Persistence::Exists(absFilepathBefore) &&
                          Persistence::Exists(absFilepathNow);
 
-    if (fileHasMoved) // Sometimes it triggers drop but nothing is moved
+    if (fileHasMoved) // Sometimes it triggers drop but nothing is moved, check
     {
         String relPathBefore = Persistence::ToRelative(absFilepathBefore,false);
         String relPathNow    = Persistence::ToRelative(absFilepathNow, false);
@@ -81,11 +81,12 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
 
         String fileXMLContents = f.GetContents();
         XMLNode *auxXMLInfo = XMLNode::FromString(fileXMLContents);
-        RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow);
+        if (auxXMLInfo && RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow))
+        {
+            FileWriter::WriteToFile(filepath, auxXMLInfo->ToString());
+        }
 
-        FileWriter::WriteToFile(filepath, auxXMLInfo->ToString());
-
-        delete auxXMLInfo;
+        if (auxXMLInfo) { delete auxXMLInfo; }
     }
 }
 
@@ -99,31 +100,40 @@ void FileReferencesManager::RefactorIFileables(const String &relPathBefore,
         // delete the created aux XMLNode
         String xmlInfoStr = fileable->GetXMLInfoString();
         XMLNode *auxXMLInfo = XMLNode::FromString(xmlInfoStr);
-        RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow);
+        if (auxXMLInfo && RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow))
+        {
+            fileable->ReadXMLInfo(auxXMLInfo);
+        }
 
-        fileable->ReadXMLInfo(auxXMLInfo);
-
-        delete auxXMLInfo;
+        if (auxXMLInfo) { delete auxXMLInfo; }
     }
 }
 
-void FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
+bool FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
                                             const String &relPathBefore,
                                             const String &relPathNow)
 {
+    bool hasBeenModified = false;
+
     // Refactor all its file attributes that are non-engine
     const Map<String, XMLAttribute> &xmlAttributes = xmlInfo->GetAttributes();
     for (const std::pair<String, XMLAttribute> &name_attr : xmlAttributes)
     {
         XMLAttribute attr = name_attr.second;
         if (attr.GetType() != XMLAttribute::Type::File) { continue; }
-        if (!attr.HasProperty(XMLProperty::IsEngineFile)) { continue; }
+        if (attr.HasProperty(XMLProperty::IsEngineFile)) { continue; }
 
-        String filepath = attr.GetFilepath();
-        if (filepath.Replace(relPathBefore, relPathNow) > 0)
+        String relFilepath = attr.GetValue();
+        //Debug_Log(relFilepath << ", " << relPathBefore);
+        int numReplacements = relFilepath.Replace(relPathBefore, relPathNow);
+        if (numReplacements > 0)
         {
-            attr.SetValue(filepath);
+          //  Debug_Log("Refactored in " << relFilepath << " attr " <<
+          //            name_attr.first << ": " << relPathBefore <<
+          //            " by " << relPathNow);
+            attr.SetValue(relFilepath);
             xmlInfo->SetAttribute(attr);
+            hasBeenModified = true;
         }
     }
 
@@ -131,7 +141,10 @@ void FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
     List<XMLNode*> xmlChildren = xmlInfo->GetChildren();
     for (XMLNode *xmlChild : xmlChildren)
     {
-        RefactorXMLInfo(xmlChild, relPathBefore, relPathNow);
+        hasBeenModified = hasBeenModified ||
+                          RefactorXMLInfo(xmlChild, relPathBefore, relPathNow);
     }
+
+    return hasBeenModified;
 }
 

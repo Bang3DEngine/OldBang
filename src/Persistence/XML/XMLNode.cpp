@@ -57,9 +57,17 @@ void XMLNode::UpdateAttributeValue(const String &attributeName,
 
 void XMLNode::SetAttribute(const XMLAttribute &attribute)
 {
-    RemoveAttribute(attribute.GetName()); // Just in case
-    m_attributeOrder.PushBack(attribute.GetName());
-    m_attributes[attribute.GetName()] = attribute;
+    XMLAttribute *attr = GetAttribute(attribute.GetName());
+    if (!attr)
+    {
+        m_attributeOrder.PushBack(attribute.GetName());
+        m_attributes[attribute.GetName()] = attribute;
+    }
+    else
+    {
+        attr->SetValue( attribute.GetValue() );
+        attr->SetProperties( attr->GetProperties() );
+    }
 }
 
 void XMLNode::SetGenericAttribute(const String &attributeName,

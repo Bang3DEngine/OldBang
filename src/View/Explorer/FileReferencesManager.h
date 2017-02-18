@@ -40,7 +40,7 @@ private:
     void RefactorIFileables(const String &relPathBefore,
                             const String &relPathNow);
 
-    void RefactorXMLInfo(XMLNode *xmlInfo,
+    bool RefactorXMLInfo(XMLNode *xmlInfo,
                          const String &relPathBefore,
                          const String &relPathNow);
 
