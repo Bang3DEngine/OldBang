@@ -291,6 +291,8 @@ public:
 
     bool IsSelected() const;
 
+    void ChangeTransformByRectTransform();
+
     #ifdef BANG_EDITOR
     // Is it being dragged from hierarchy into screen?
     bool IsDraggedGameObject() const;

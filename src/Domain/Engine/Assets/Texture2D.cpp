@@ -53,7 +53,7 @@ void Texture2D::CreateEmpty(int width, int height)
     unsigned char *data = new unsigned char[dataSize];
     memset(data, 0, dataSize);
     Fill(data, width, height, dataSize, true);
-    delete data;
+    delete[] data;
 }
 
 void Texture2D::Resize(int width, int height)

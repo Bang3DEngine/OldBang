@@ -89,7 +89,9 @@ void Transform::SetRotation(const Quaternion &q)
     if (!gameObject->parent) SetLocalRotation(q.Normalized());
     else
     {
-        SetLocalRotation(Quaternion(-gameObject->parent->transform->GetRotation() * q.Normalized()));
+        SetLocalRotation(
+            Quaternion(-gameObject->parent->transform->GetRotation() *
+                        q.Normalized()));
     }
 }
 void Transform::SetEuler(const Vector3 &degreesEuler)

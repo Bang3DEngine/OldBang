@@ -14,6 +14,7 @@ EditorRectTransformCornerGizmo::EditorRectTransformCornerGizmo(
         CornerPosition cornerPosition,
         GameObject *attachedGameObject) : EditorGizmo(attachedGameObject)
 {
+    ChangeTransformByRectTransform();
     m_attachedRectTransform = attachedGameObject->GetComponent<RectTransform>();
 
     m_cursorIconWhenOver    = Cursor::CursorIcon::OpenHand;

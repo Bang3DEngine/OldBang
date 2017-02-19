@@ -2,7 +2,6 @@
 
 #include "XMLParser.h"
 #include "GameObject.h"
-#include "UIGameObject.h"
 
 Prefab::Prefab()
 {
@@ -52,8 +51,7 @@ GameObject *Prefab::InstantiateWithoutStarting() const
     if (m_gameObjectXMLInfoContent != "")
     {
         XMLNode *xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
-        GameObject *go = xmlInfo->GetTagName() == "UIGameObject" ?
-                            new UIGameObject() : new GameObject();
+        GameObject *go = new GameObject();
         go->ReadXMLInfo(xmlInfo);
         return go;
     }

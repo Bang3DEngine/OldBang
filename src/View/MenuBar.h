@@ -37,7 +37,6 @@ public slots:
     void OnBuildAndRun() const;
 
     void OnCreateEmptyGameObject() const;
-    void OnCreateEmptyUIGameObject() const;
     void OnCreateFromPrefab() const;
     void OnCreatePlane() const;
     void OnCreateCube() const;

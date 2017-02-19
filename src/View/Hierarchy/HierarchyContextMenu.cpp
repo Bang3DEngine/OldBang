@@ -10,7 +10,6 @@
 #include "GameObject.h"
 #include "FileWriter.h"
 #include "Application.h"
-#include "UIGameObject.h"
 #include "SceneManager.h"
 #include "GameObjectClipboard.h"
 
@@ -60,25 +59,7 @@ void HierarchyContextMenu::OnCustomContextMenuRequested(QPoint point)
 
 void HierarchyContextMenu::OnCreateEmptyClicked()
 {
-    OnCreateEmptyClicked(false);
-}
-
-void HierarchyContextMenu::OnCreateEmptyUIClicked()
-{
-    OnCreateEmptyClicked(true);
-}
-
-void HierarchyContextMenu::OnCreateEmptyClicked(bool ui)
-{
-    GameObject *empty = nullptr;
-    if (!ui)
-    {
-        empty = new GameObject("Empty");
-    }
-    else
-    {
-        empty = new UIGameObject("EmptyUI");
-    }
+    GameObject *empty = new GameObject("Empty");
 
     foreach(QTreeWidgetItem *item, m_hierarchy->selectedItems())
     {

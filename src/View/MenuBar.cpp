@@ -29,7 +29,7 @@
 #include "SceneManager.h"
 #include "EditorWindow.h"
 #include "SceneManager.h"
-#include "UIGameObject.h"
+#include "RectTransform.h"
 #include "AudioListener.h"
 #include "AssetsManager.h"
 #include "CircleRenderer.h"
@@ -69,8 +69,6 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 
     connect(w->actionCreateEmptyGameObject,  SIGNAL(triggered()),
             this, SLOT(OnCreateEmptyGameObject()));
-    connect(w->actionCreateEmptyUIGameObject,  SIGNAL(triggered()),
-            this, SLOT(OnCreateEmptyUIGameObject()));
     connect(w->actionCreateFromPrefab,  SIGNAL(triggered()),
             this, SLOT(OnCreateFromPrefab()));
     connect(w->actionCreatePlane,  SIGNAL(triggered()),
@@ -234,11 +232,6 @@ void MenuBar::OnCreateEmptyGameObject() const
     Hierarchy::GetInstance()->OnMenuBarCreateEmptyClicked();
 }
 
-void MenuBar::OnCreateEmptyUIGameObject() const
-{
-    Hierarchy::GetInstance()->OnMenuBarCreateEmptyUIClicked();
-}
-
 void MenuBar::OnCreateFromPrefab() const
 {
     String filename = Dialog::GetOpenFilename("Create from prefab...",
@@ -331,24 +324,35 @@ void MenuBar::OnCreatePointLight() const
 
 void MenuBar::OnCreateUIText() const
 {
-    GameObject *go = new UIGameObject("Text");
+    GameObject *go = new GameObject("Text");
+    go->ChangeTransformByRectTransform();
     go->SetParent(SceneManager::GetActiveScene());
 
     UIText *text = go->AddComponent<UIText>();
     text->SetContent("Hello Bang :)");
+
+    Vector2 min, max;
+    text->GetContentNDCBounds(&min, &max, true);
+    RectTransform *rt = go->GetComponent<RectTransform>();
+    rt->SetAnchors(min, max);
 
     Hierarchy::GetInstance()->SelectGameObject(go);
 }
 
 void MenuBar::OnCreateUIImage() const
 {
-    GameObject *go = new UIGameObject("Image");
+    GameObject *go = new GameObject("Image");
+    go->ChangeTransformByRectTransform();
     go->SetParent(SceneManager::GetActiveScene());
+    go->ChangeTransformByRectTransform();
 
     UIImage *img = go->AddComponent<UIImage>();
     String defaultImgPath = "Textures/DefaultUIImageTexture.btex2d";
     Texture2D *defaultTex = AssetsManager::Load<Texture2D>(defaultImgPath, true);
     img->SetTexture(defaultTex);
+
+    RectTransform *rt = go->GetComponent<RectTransform>();
+    rt->SetAnchors(Vector2(-0.3f), Vector2(0.3f));
 
     Hierarchy::GetInstance()->SelectGameObject(go);
 }

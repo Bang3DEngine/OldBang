@@ -397,7 +397,6 @@
      <string>GameObjects</string>
     </property>
     <addaction name="actionCreateEmptyGameObject"/>
-    <addaction name="actionCreateEmptyUIGameObject"/>
     <addaction name="separator"/>
     <addaction name="actionCreateFromPrefab"/>
     <addaction name="separator"/>
@@ -1527,8 +1526,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="qdarkstyle/style.qrc"/>
   <include location="QtResources.qrc"/>
+  <include location="qdarkstyle/style.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -39,7 +39,6 @@ public:
     GameObject* GetFirstSelectedGameObject() const;
 
     void OnMenuBarCreateEmptyClicked();
-    void OnMenuBarCreateEmptyUIClicked();
     void OnShortcutPressed() override;
 
     List<GameObject*> GetSelectedGameObjects(bool excludeInternal = false);

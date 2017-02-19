@@ -334,11 +334,6 @@ void Hierarchy::OnMenuBarCreateEmptyClicked()
     m_hContextMenu.OnCreateEmptyClicked();
 }
 
-void Hierarchy::OnMenuBarCreateEmptyUIClicked()
-{
-    m_hContextMenu.OnCreateEmptyUIClicked();
-}
-
 void Hierarchy::OnShortcutPressed()
 {
     if (hasFocus())

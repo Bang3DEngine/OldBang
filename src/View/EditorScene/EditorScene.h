@@ -6,7 +6,6 @@
 class UIText;
 class EditorFloor;
 class EditorCamera;
-class EditorUIGameObject;
 class EditorDebugGameObject;
 class EditorGizmosGameObject;
 class EditorTranslateAxisGroup;
@@ -37,7 +36,7 @@ private:
     EditorCamera *m_edCameraGameObject = nullptr;
     EditorFloor *m_floor = nullptr;
 
-    EditorUIGameObject *m_fpsCounter = nullptr;
+    EditorGameObject *m_fpsCounter = nullptr;
     UIText *m_fpsCounterText = nullptr;
 
     friend class Debug;

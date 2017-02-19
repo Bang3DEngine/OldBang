@@ -15,7 +15,6 @@
 #include "PointLight.h"
 #include "AudioSource.h"
 #include "EditorState.h"
-#include "UIGameObject.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
 #include "RectTransform.h"
@@ -44,6 +43,10 @@ GameObject::GameObject(const String &name)
 void GameObject::CloneInto(ICloneable *clone) const
 {
     GameObject *go = static_cast<GameObject*>(clone);
+    if (HasComponent<RectTransform>())
+    {
+        go->ChangeTransformByRectTransform();
+    }
 
     go->SetName(m_name);
     go->SetParent(nullptr);
@@ -307,9 +310,11 @@ void GameObject::AddComponent(Component *c)
             delete c;
             return;
         }
-        m_transform = t;
+        else
+        {
+            m_transform = t;
+        }
     }
-
     c->SetGameObject(this);
     m_components.PushBack(c);
 }
@@ -339,11 +344,7 @@ Transform *GameObject::GetTransform() const
 
 void GameObject::RemoveComponent(Component *c)
 {
-    Transform *t = dynamic_cast<Transform*>(c);
-    if (!t)
-    {
-        m_components.Remove(c);
-    }
+    m_components.Remove(c);
 }
 
 GameObject *GameObject::GetChild(const String &name) const
@@ -460,17 +461,21 @@ void GameObject::ReadXMLInfoFirstTime(const XMLNode *xmlInfo)
         String tagName = xmlChild->GetTagName();
         if (tagName.Contains("GameObject"))
         {
-            GameObject *child = tagName == "UIGameObject" ? new UIGameObject()
-                                                          : new GameObject();
+            GameObject *child = new GameObject();
             child->SetParent(this);
             child->ReadXMLInfo(xmlChild);
         }
         else // It's a Component
         {
             Component *c = nullptr;
-            if (tagName == "Transform" || tagName == "RectTransform")
+            if (tagName == "Transform")
             {
-                c = transform;
+                c = m_transform;
+            }
+            else if (tagName == "RectTransform")
+            {
+                ChangeTransformByRectTransform();
+                c = m_transform;
             }
             else if (tagName == "MeshRenderer")
             {
@@ -574,7 +579,16 @@ bool GameObject::IsSelected() const
     return m_isSelectedInHierarchy;
     #else
     return false;
-    #endif
+#endif
+}
+
+void GameObject::ChangeTransformByRectTransform()
+{
+    if (!HasComponent<RectTransform>())
+    {
+        RemoveComponent<Transform>();
+        AddComponent<RectTransform>();
+    }
 }
 
 
@@ -586,15 +600,25 @@ void GameObject::OnHierarchyGameObjectsSelected(List<GameObject*> &selectedEntit
     bool selected = selectedEntities.Contains(this);
     bool wasSelected = IsSelected();
     m_isSelectedInHierarchy = selected;
+
     if (!wasSelected && selected)
     {
         m_selectionGameObject = new EditorSelectionGameObject(this);
         m_selectionGameObject->SetParent(SceneManager::GetActiveScene());
 
-        if (EditorState::GetCurrentTransformMode() ==
-            EditorState::TransformMode::RectTransform)
+        if (!HasComponent<RectTransform>())
         {
-            EditorState::SetTransformMode(EditorState::TransformMode::Translate);
+            if (EditorState::GetCurrentTransformMode() ==
+                EditorState::TransformMode::RectTransform)
+            {
+                EditorState::SetTransformMode(
+                            EditorState::TransformMode::Translate);
+            }
+        }
+        else
+        {
+            EditorState::SetTransformMode(
+                        EditorState::TransformMode::RectTransform);
         }
     }
     else if (wasSelected && !selected && m_selectionGameObject)

@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-class EditorGameObject : public virtual GameObject
+class EditorGameObject : public GameObject
 {
 public:
     EditorGameObject();

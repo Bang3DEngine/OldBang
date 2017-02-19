@@ -279,7 +279,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/Components/AudioListener.h \
     src/Persistence/Behaviours/BehaviourManagerStatus.h \
     src/Domain/Engine/Components/RectTransform.h \
-    src/Domain/Engine/GameObjects/UIGameObject.h \
     src/View/Cursor.h \
     src/Domain/Graphics/RenderTexture.h
 
@@ -366,7 +365,6 @@ HEADERS += \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
     src/View/EditorGameObject/EditorGizmo.h \
-    src/View/EditorGameObject/EditorUIGameObject.h \
     src/View/IShortcutListener.h
 }
 GAME {
@@ -482,7 +480,6 @@ SOURCES += \
     src/Domain/Engine/Components/AudioListener.cpp \
     src/Persistence/Behaviours/BehaviourManagerStatus.cpp \
     src/Domain/Engine/Components/RectTransform.cpp \
-    src/Domain/Engine/GameObjects/UIGameObject.cpp \
     src/View/Cursor.cpp \
     src/Domain/Graphics/RenderTexture.cpp
 
@@ -569,7 +566,6 @@ EDITOR {
         src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp \
         src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
         src/View/EditorGameObject/EditorGizmo.cpp \
-        src/View/EditorGameObject/EditorUIGameObject.cpp \
         src/View/EditorGameObject/EditorAxisPlane.cpp
 }
 GAME {

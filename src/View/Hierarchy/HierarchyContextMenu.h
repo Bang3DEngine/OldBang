@@ -20,15 +20,11 @@ public slots:
     void OnCustomContextMenuRequested(QPoint point) override;
 
     void OnCreateEmptyClicked();
-    void OnCreateEmptyUIClicked();
     void OnCopyClicked();
     void OnPasteClicked();
     void OnDuplicateClicked();
     void OnCreatePrefab();
     void OnDeleteClicked();
-
-private:
-    void OnCreateEmptyClicked(bool ui);
 };
 
 #endif // HIERARCHYCONTEXTMENU_H

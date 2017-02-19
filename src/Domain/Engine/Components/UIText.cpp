@@ -9,7 +9,6 @@
 #include "XMLNode.h"
 #include "Material.h"
 #include "Transform.h"
-#include "UIGameObject.h"
 #include "SceneManager.h"
 #include "RectTransform.h"
 #include "AssetsManager.h"
@@ -199,12 +198,14 @@ void UIText::RenderText() const
     ASSERT(m_material->GetShaderProgram());
     m_material->SetDiffuseColor(m_textColor);
 
-    RectTransform *rtrans = gameObject->GetComponent<RectTransform>(); ASSERT(rtrans);
+    RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
+    ASSERT(rtrans);
     Rect screenRectNDC = rtrans->GetScreenSpaceRect(true);
     Vector2 alignOffset = GetAlignmentNDCOffset();
     Vector2 textSizeNDC = GetTextSizeNDC();
 
-    UIGameObject *copyGo = new UIGameObject();
+    GameObject *copyGo = new GameObject("Text rectTransform copyGo");
+    copyGo->ChangeTransformByRectTransform();
     RectTransform *rtransCopy = copyGo->GetComponent<RectTransform>();
     rtrans->CloneInto(rtransCopy);
     rtrans->SetMargins(0,0,0,0);
