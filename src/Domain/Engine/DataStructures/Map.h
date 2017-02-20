@@ -26,12 +26,12 @@ public:
 
     void Set(const Key &key, const Value &value)
     {
-        (*this)[ key ] = value;
+        (*this)[key] = value;
     }
 
     void Remove(const Key &key)
     {
-        this->erase( key );
+        this->erase(key);
     }
 
     Iterator Remove(Iterator it)
@@ -58,7 +58,8 @@ public:
 
     const Value& Get(const Key &key) const
     {
-        return (*this).at(key);
+        Map<Key, Value> *noConstThis = const_cast< Map<Key, Value>* >(this);
+        return (*noConstThis)[key];
     }
 
     void Clear()
@@ -78,7 +79,7 @@ public:
 
     bool ContainsKey(const Key &key) const
     {
-        return this->find( key ) != this->end();
+        return this->find(key) != this->end();
     }
 
     bool ContainsValue(const Value &value) const
@@ -99,6 +100,7 @@ public:
         }
         return result;
     }
+
     List<Value> GetValues() const
     {
         List<Value> result;

@@ -343,6 +343,11 @@ Transform *GameObject::GetTransform() const
 void GameObject::RemoveComponent(Component *c)
 {
     m_components.Remove(c);
+    if (m_transform == c)
+    {
+        delete m_transform;
+        m_transform = nullptr;
+    }
 }
 
 GameObject *GameObject::GetChild(const String &name) const
