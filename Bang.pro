@@ -283,7 +283,8 @@ HEADERS +=                                                          \
     src/View/Cursor.h \
     src/Domain/Graphics/RenderTexture.h \
     src/Domain/Engine/HideFlags.h \
-    src/Domain/Engine/Object.h
+    src/Domain/Engine/Object.h \
+    src/Domain/Engine/DataStructures/TypeMap.h
 
 EDITOR {
 HEADERS += \
@@ -484,7 +485,8 @@ SOURCES += \
     src/Domain/Engine/Components/RectTransform.cpp \
     src/View/Cursor.cpp \
     src/Domain/Graphics/RenderTexture.cpp \
-    src/Domain/Engine/Object.cpp
+    src/Domain/Engine/Object.cpp \
+    src/Domain/Engine/DataStructures/TypeMap.cpp
 
 EDITOR {
     SOURCES += \

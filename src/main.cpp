@@ -122,6 +122,8 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
     Screen::GetInstance()->initializeGL();
 }
 
+#include "TypeMap.h"
+
 int main(int argc, char **argv)
 {
     String executableDir = ""; // Get the executable dir
