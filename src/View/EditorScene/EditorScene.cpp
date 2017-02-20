@@ -32,8 +32,8 @@ EditorScene::EditorScene() : Scene()
     m_floor = new EditorFloor();
     m_floor->SetParent(this);
 
-    m_fpsCounter = new GameObject();
-   // m_fpsCounter->AddHideFlag(HideFlags::HideAndDontSave);
+    m_fpsCounter = new GameObject("FPS_Counter");
+    m_fpsCounter->AddHideFlag(HideFlags::HideAndDontSave);
     m_fpsCounter->ChangeTransformByRectTransform();
     m_fpsCounter->SetParent(this);
     RectTransform *rtrans = Object::SCast<RectTransform>(m_fpsCounter->transform);
@@ -43,6 +43,8 @@ EditorScene::EditorScene() : Scene()
     m_fpsCounterText->SetHorizontalAlign(UIText::HorizontalAlignment::Right);
     m_fpsCounterText->SetVerticalAlign(UIText::VerticalAlignment::Top);
     m_fpsCounterText->SetTextSize(10);
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorScene::~EditorScene()
@@ -79,6 +81,7 @@ void EditorScene::OnUpdate()
     int fpsSum = 0;
     for (int f : latestFPS) { fpsSum += f; }
     int fpsMean = fpsSum / latestFPS.Size();
+    Debug_Log(fpsMean);
     m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
 }
 

@@ -39,7 +39,7 @@ public:
     Transform* const& transform = m_transform;
     //
 
-    GameObject(const String &m_name = "");
+    GameObject(const String &m_name = "GameObject");
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;
