@@ -182,12 +182,14 @@ void Scene::PostReadXMLInfo(const XMLNode *xmlInfo)
 {
     GameObject::PostReadXMLInfo(xmlInfo);
 
-    if (!HasHideFlag(HideFlags::HideInHierarchy)) // In EditorScene we'll use the EditorCamera
+    // In the Editor Scene we'll use the EditorCamera, so skip this
+    if (!HasHideFlag(HideFlags::HideInHierarchy))
     {
         String camId = xmlInfo->GetString("Camera");
         if (!camId.Empty())
         {
-            const Camera *cam = dynamic_cast<const Camera*>(XMLParser::GetPointerFromId(camId));
+            const Camera *cam = dynamic_cast<const Camera*>(
+                        XMLParser::GetPointerFromId(camId));
             if (cam)
             {
                 SetCamera(cam);

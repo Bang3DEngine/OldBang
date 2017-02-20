@@ -7,7 +7,7 @@
 #include "FileWriter.h"
 #include "EditorWindow.h"
 #include "InspectorWidget.h"
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
 PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
     m_file(f)

@@ -9,7 +9,7 @@
 
 Material *EditorBBox::s_boxMaterial = nullptr;
 
-EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("EditorBBox")
+EditorBBox::EditorBBox(GameObject *attachedGameObject) : GameObject("EditorBBox")
 {
     this->m_attachedGameObject = attachedGameObject;
 
@@ -36,6 +36,8 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : EditorGameObject("Edito
     mr->SetDrawWireframe(true);
     mr->SetCullMode(Renderer::CullMode::Back);
     mr->SetRenderMode(Renderer::RenderMode::Triangles);
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 void EditorBBox::OnUpdate()

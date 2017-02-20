@@ -23,6 +23,8 @@ EditorFloor::EditorFloor()
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
         m_lineRenderers[i]->SetMaterial(m_material);
     }
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorFloor::~EditorFloor()
@@ -32,7 +34,7 @@ EditorFloor::~EditorFloor()
 
 void EditorFloor::OnUpdate()
 {
-    EditorGameObject::OnUpdate();
+    GameObject::OnUpdate();
 
     Camera *cam  = SceneManager::GetActiveScene()->GetCamera();
     Transform *camt = cam->gameObject->transform;

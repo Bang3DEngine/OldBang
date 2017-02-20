@@ -3,10 +3,10 @@
 
 #include "Array.h"
 
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
 class SingleLineRenderer;
-class EditorFloor : public EditorGameObject
+class EditorFloor : public GameObject
 {
 public:
 

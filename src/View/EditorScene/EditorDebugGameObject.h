@@ -6,9 +6,9 @@
 #include "Color.h"
 #include "Vector2.h"
 #include "Vector3.h"
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
-class EditorDebugGameObject : public EditorGameObject
+class EditorDebugGameObject : public GameObject
 {
 private:
     struct DebugLine

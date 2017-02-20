@@ -48,6 +48,8 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     {
         transform->SetLocalEuler(Vector3::Up * 180.0f);
     }
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorRotateAxis::~EditorRotateAxis()

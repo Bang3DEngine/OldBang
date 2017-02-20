@@ -342,7 +342,6 @@ HEADERS += \
     src/View/Explorer/ExplorerDirTree.h \
     src/View/Inspector/InspectorWidget.h \
     src/View/EditorCamera/EditorCamera.h \
-    src/View/EditorGameObject/EditorGameObject.h \
     src/View/EditorScene/EditorScene.h \
     src/View/EditorGameObject/EditorBBox.h \
     src/View/EditorGameObject/EditorRotateAxisGroup.h \
@@ -536,7 +535,6 @@ EDITOR {
         src/View/Inspector/InspectorWidget.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetString.cpp \
         src/View/EditorCamera/EditorCamera.cpp \
-        src/View/EditorGameObject/EditorGameObject.cpp \
         src/View/EditorScene/EditorScene.cpp \
         src/View/Inspector/Inspectables/MeshAssetFileInspectable.cpp \
         src/View/Inspector/Inspectables/Texture2DAssetFileInspectable.cpp \

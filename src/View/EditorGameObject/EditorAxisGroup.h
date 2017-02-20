@@ -1,7 +1,7 @@
 #ifndef EDITORAXISGROUP_H
 #define EDITORAXISGROUP_H
 
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
 class GameObject;
 class EditorScaleAxisGroup;
@@ -14,7 +14,7 @@ class EditorTranslateAxisGroup;
  * This is the responsible of enabling or disabling them, depending on
  * the mode selected in the Toolbar
  */
-class EditorAxisGroup : public EditorGameObject
+class EditorAxisGroup : public GameObject
 {
 
 private:

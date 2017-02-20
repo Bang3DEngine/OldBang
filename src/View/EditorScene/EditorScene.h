@@ -34,7 +34,7 @@ private:
     EditorCamera *m_edCameraGameObject = nullptr;
     EditorFloor *m_floor = nullptr;
 
-    EditorGameObject *m_fpsCounter = nullptr;
+    GameObject *m_fpsCounter = nullptr;
     UIText *m_fpsCounterText = nullptr;
 
     friend class Debug;

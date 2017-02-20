@@ -10,7 +10,7 @@
 #include "EditorRotateAxisGroup.h"
 #include "EditorTranslateAxisGroup.h"
 
-EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObject("EditorAxisGroup")
+EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : GameObject("EditorAxisGroup")
 {
     m_attachedGameObject = attachedGameObject;
     m_etag = new EditorTranslateAxisGroup(attachedGameObject);
@@ -22,6 +22,8 @@ EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : EditorGameObj
     m_esag->SetParent(this);
 
     DisableAllGroups();
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 void EditorAxisGroup::DisableAllGroups()

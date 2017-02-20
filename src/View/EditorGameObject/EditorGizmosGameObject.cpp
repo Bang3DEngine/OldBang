@@ -17,13 +17,14 @@
 #include "AssetsManager.h"
 #include "CircleRenderer.h"
 #include "GraphicPipeline.h"
-#include "EditorGameObject.h"
+#include "GameObject.h"
 #include "SingleLineRenderer.h"
 #include "EditorGizmosGameObject.h"
 
 EditorGizmosGameObject::EditorGizmosGameObject(const String &name) :
-    EditorGameObject(name)
+    GameObject(name)
 {
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 void EditorGizmosGameObject::Init()

@@ -8,7 +8,7 @@
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "EditorGameObject.h"
+#include "GameObject.h"
 #endif
 
 Mesh* MeshFactory::GetPlane()
@@ -52,23 +52,6 @@ GameObject* MeshFactory::CreatePrimitiveGameObject(Mesh *m, const String &name)
     return go;
 }
 
-
-#ifdef BANG_EDITOR
-EditorGameObject* MeshFactory::CreatePrimitiveEditorGameObject(Mesh *m, const String &name)
-{
-    EditorGameObject *go = new EditorGameObject(name);
-
-    Material *mat = AssetsManager::Load<Material>("Materials/D2G_Default.bmat", true);
-
-    MeshRenderer *r = go->AddComponent<MeshRenderer>();
-    r->SetRenderMode(MeshRenderer::RenderMode::Triangles);
-    r->SetMaterial(mat);
-    r->SetMesh(m);
-
-    return go;
-}
-#endif
-
 GameObject *MeshFactory::GetPlaneGameObject()
 {
     return CreatePrimitiveGameObject(GetPlane(), "Plane");
@@ -88,26 +71,3 @@ GameObject *MeshFactory::GetConeGameObject()
 {
     return CreatePrimitiveGameObject(GetCone(), "Cone");
 }
-
-
-#ifdef BANG_EDITOR
-EditorGameObject *MeshFactory::GetPlaneEditorGameObject()
-{
-    return CreatePrimitiveEditorGameObject(GetPlane(), "Plane");
-}
-
-EditorGameObject *MeshFactory::GetCubeEditorGameObject()
-{
-    return CreatePrimitiveEditorGameObject(GetCube(), "Cube");
-}
-
-EditorGameObject *MeshFactory::GetSphereEditorGameObject()
-{
-    return CreatePrimitiveEditorGameObject(GetSphere(), "Sphere");
-}
-
-EditorGameObject *MeshFactory::GetConeEditorGameObject()
-{
-    return CreatePrimitiveEditorGameObject(GetCone(), "Cone");
-}
-#endif

@@ -4,7 +4,7 @@
 #include "EditorTranslateAxis.h"
 
 EditorTranslateAxisGroup::EditorTranslateAxisGroup(GameObject *attachedGameObject)
-    : EditorGameObject("EditorTranslateAxisGroup")
+    : GameObject("EditorTranslateAxisGroup")
 {
     m_axisX = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
     m_axisY = new EditorTranslateAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
@@ -19,6 +19,8 @@ EditorTranslateAxisGroup::EditorTranslateAxisGroup(GameObject *attachedGameObjec
     //m_planeXY->SetParent(this);
     //m_planeXZ->SetParent(this);
     //m_planeYZ->SetParent(this);
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorTranslateAxisGroup::~EditorTranslateAxisGroup()

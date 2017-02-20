@@ -8,6 +8,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "Texture2D.h"
+#include "GameObject.h"
 #include "MeshFactory.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
@@ -18,7 +19,6 @@
 
 #ifdef BANG_EDITOR
 #include "EditorScene.h"
-#include "EditorGameObject.h"
 #include "EditorGizmosGameObject.h"
 #else
 class EditorGizmosGameObject {};

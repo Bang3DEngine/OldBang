@@ -6,7 +6,7 @@
 
 class Renderer;
 class GameObject;
-class EditorGameObject;
+class GameObject;
 class SingleLineRenderer;
 class EditorScaleAxis : public EditorAxis
 {
@@ -21,7 +21,7 @@ protected:
     virtual Renderer *GetAxisRenderer() const override;
 
 private:
-    EditorGameObject *m_axisCap = nullptr;
+    GameObject *m_axisCap = nullptr;
     SingleLineRenderer *m_line = nullptr;
 
      // If its the central axis, we must do little tweaks

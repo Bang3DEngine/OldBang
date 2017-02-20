@@ -66,7 +66,7 @@ public:
 
     /**
      * TODO: Change so this method returns a reference, putting
-     *       editorGameObjects into another list...
+     *       GameObjects into another list...
      * @brief GetChildren
      * @return
      */

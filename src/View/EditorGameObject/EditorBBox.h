@@ -4,11 +4,11 @@
 #include "Array.h"
 #include "Vector3.h"
 
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
 class Material;
 class GameObject;
-class EditorBBox : public EditorGameObject
+class EditorBBox : public GameObject
 {
 private:
     static Array<Vector3> s_boxVertices;

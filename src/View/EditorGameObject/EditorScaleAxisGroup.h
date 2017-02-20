@@ -1,17 +1,17 @@
 #ifndef EDITORSCALEAXISGROUP_H
 #define EDITORSCALEAXISGROUP_H
 
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
 class Material;
 class EditorScaleAxis;
 /**
  * @brief The EditorScaleAxisGroup class represents a group of EditorScaleAxises.
- * There will be X,Y,Z EditorScaleAxis, which will be children of this EditorGameObject.
+ * There will be X,Y,Z EditorScaleAxis, which will be children of this GameObject.
  * We need to handle them separately to be able to detect the mouse events separately
  * on each one.
  */
-class EditorScaleAxisGroup : public EditorGameObject
+class EditorScaleAxisGroup : public GameObject
 {
 private:
     EditorScaleAxis *m_axisX = nullptr;

@@ -5,7 +5,7 @@
 #include "EditorRectTransformGizmo.h"
 
 EditorSelectionGameObject::EditorSelectionGameObject(GameObject *attachedGameObject) :
-    EditorGameObject("EditorSelectionGameObject")
+    GameObject("EditorSelectionGameObject")
 {
     m_axisGroup = new EditorAxisGroup(attachedGameObject);
     m_axisGroup->SetParent(this);
@@ -17,6 +17,8 @@ EditorSelectionGameObject::EditorSelectionGameObject(GameObject *attachedGameObj
     //bbox->GetComponent<MeshRenderer>()->GetMaterial()->
     //                            SetDiffuseColor(Vector4(1,0,0,1));
     //bbox->SetParent(this);
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorSelectionGameObject::~EditorSelectionGameObject()

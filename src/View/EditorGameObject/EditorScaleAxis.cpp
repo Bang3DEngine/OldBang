@@ -12,7 +12,7 @@
 #include "EditorState.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
-#include "EditorGameObject.h"
+#include "GameObject.h"
 #include "SingleLineRenderer.h"
 
 EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
@@ -35,7 +35,8 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     );
 
     // Scale axis cap configuration (the cube at the end)
-    m_axisCap = MeshFactory::GetCubeEditorGameObject();
+    m_axisCap = MeshFactory::GetCubeGameObject();
+    m_axisCap->AddHideFlag(HideFlags::HideAndDontSave);
     m_axisCap->SetParent(this);
     m_axisCap->transform->SetLocalPosition(m_oAxisDirection);
     m_axisCap->transform->SetLocalScale(Vector3(0.2f));
@@ -48,6 +49,8 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     {
         ConfigureCentralAxis();
     }
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorScaleAxis::~EditorScaleAxis()

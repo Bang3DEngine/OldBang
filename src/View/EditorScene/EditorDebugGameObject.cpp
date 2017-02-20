@@ -4,8 +4,9 @@
 #include "Gizmos.h"
 
 EditorDebugGameObject::EditorDebugGameObject() :
-    EditorGameObject("EditorDebugGameObject")
+    GameObject("EditorDebugGameObject")
 {
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorDebugGameObject::~EditorDebugGameObject()

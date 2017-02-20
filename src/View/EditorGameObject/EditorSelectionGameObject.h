@@ -1,7 +1,7 @@
 #ifndef EDITORSELECTIONGAMEOBJECT_H
 #define EDITORSELECTIONGAMEOBJECT_H
 
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
 class EditorAxisGroup;
 class EditorRectTransformGizmo;
@@ -11,7 +11,7 @@ class EditorRectTransformGizmo;
  * It contains:
  *      - EditorTranslateAxis
  */
-class EditorSelectionGameObject : public EditorGameObject
+class EditorSelectionGameObject : public GameObject
 {
 public:
     EditorSelectionGameObject(GameObject *attachedGameObject);

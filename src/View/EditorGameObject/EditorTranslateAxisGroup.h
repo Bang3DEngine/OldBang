@@ -1,17 +1,17 @@
 #ifndef EDITORTRANSLATEAXISGROUP_H
 #define EDITORTRANSLATEAXISGROUP_H
 
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
 class EditorAxisPlane;
 class EditorTranslateAxis;
 /**
  * @brief The EditorTranslateAxisGroup class represents a group of EditorTranslateAxises.
- * There will be X,Y,Z EditorTranslateAxis, which will be children of this EditorGameObject.
+ * There will be X,Y,Z EditorTranslateAxis, which will be children of this GameObject.
  * We need to handle them separately to be able to detect the mouse events separately
  * on each one.
  */
-class EditorTranslateAxisGroup : public EditorGameObject
+class EditorTranslateAxisGroup : public GameObject
 {
 private:
     EditorTranslateAxis *m_axisX = nullptr;

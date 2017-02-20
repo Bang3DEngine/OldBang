@@ -14,7 +14,7 @@ class Renderer;
 class Texture2D;
 class MeshRenderer;
 class CircleRenderer;
-class EditorGameObject;
+class GameObject;
 class SingleLineRenderer;
 class EditorGizmosGameObject;
 class Gizmos

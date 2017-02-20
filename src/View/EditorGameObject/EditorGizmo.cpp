@@ -5,6 +5,8 @@
 EditorGizmo::EditorGizmo(GameObject *attachedGameObject)
 {
     m_attachedGameObject = attachedGameObject;
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorGizmo::~EditorGizmo()
@@ -14,7 +16,7 @@ EditorGizmo::~EditorGizmo()
 
 void EditorGizmo::OnUpdate()
 {
-    EditorGameObject::OnUpdate();
+    GameObject::OnUpdate();
 
     if (m_mouseIsOver &&
         Input::GetMouseButtonDown(Input::MouseButton::MLeft))
@@ -42,7 +44,7 @@ void EditorGizmo::OnUpdate()
 
 void EditorGizmo::OnMouseEnter(bool fromChildren)
 {
-    EditorGameObject::OnMouseEnter(fromChildren);
+    GameObject::OnMouseEnter(fromChildren);
     if (!m_mouseIsOver)
     {
         m_mouseIsOver = true;
@@ -55,7 +57,7 @@ void EditorGizmo::OnMouseEnter(bool fromChildren)
 
 void EditorGizmo::OnMouseExit(bool fromChildren)
 {
-    EditorGameObject::OnMouseExit(fromChildren);
+    GameObject::OnMouseExit(fromChildren);
     if (m_mouseIsOver)
     {
         m_mouseIsOver = false;

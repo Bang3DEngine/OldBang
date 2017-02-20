@@ -1,9 +1,9 @@
 #ifndef EDITORGIZMOSGAMEOBJECT_H
 #define EDITORGIZMOSGAMEOBJECT_H
 
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
-class EditorGizmosGameObject : public EditorGameObject
+class EditorGizmosGameObject : public GameObject
 {
 public:
     EditorGizmosGameObject(const String &name = "");

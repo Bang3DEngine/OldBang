@@ -3,12 +3,12 @@
 
 #include "EditorAxis.h"
 
-class EditorGameObject;
+class GameObject;
 class SingleLineRenderer;
 class EditorTranslateAxis : public EditorAxis
 {
 private:
-    EditorGameObject *m_axisCap = nullptr;
+    GameObject *m_axisCap = nullptr;
     SingleLineRenderer *m_line = nullptr;
 
 protected:

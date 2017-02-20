@@ -15,7 +15,7 @@
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
 #include "EditorWindow.h"
-#include "EditorGameObject.h"
+#include "GameObject.h"
 #include "WindowEventManager.h"
 #endif
 
@@ -109,7 +109,7 @@ void SelectionFramebuffer::ProcessSelection()
 
     m_lastMouseOverGO = mouseOverGO;
 
-    // Selection (clicking over) Here we just handle non-EditorGameObjects
+    // Selection (clicking over) Here we just handle non-GameObjects
     if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
     {
         if (mouseOverGO)
@@ -193,9 +193,8 @@ bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
 {
     if (go->HasHideFlag(HideFlags::HideInHierarchy))
     {
-       const EditorGameObject *ego = dynamic_cast<const EditorGameObject*>(go);
-       return ego && ego->IsEnabled() && !ego->IsDraggedGameObject() &&
-              ego->HasHideFlag(HideFlags::HideInSelection);
+       return go && go->IsEnabled() && !go->IsDraggedGameObject() &&
+              go->HasHideFlag(HideFlags::HideInSelection);
     }
     return go && go->IsEnabled() && !go->IsDraggedGameObject();
 }

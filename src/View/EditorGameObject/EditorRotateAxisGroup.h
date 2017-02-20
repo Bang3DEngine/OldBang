@@ -1,12 +1,12 @@
 #ifndef EDITORROTATEAXISGROUP_H
 #define EDITORROTATEAXISGROUP_H
 
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
 class Toolbar;
 class MeshRenderer;
 class EditorRotateAxis;
-class EditorRotateAxisGroup : public EditorGameObject
+class EditorRotateAxisGroup : public GameObject
 {
 private:
     EditorRotateAxis *m_axisX = nullptr;

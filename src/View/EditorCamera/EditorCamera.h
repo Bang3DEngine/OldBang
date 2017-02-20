@@ -6,7 +6,7 @@
 #include "Vector2.h"
 #include "Vector3.h"
 #include "Quaternion.h"
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
 class Input;
 class Camera;
@@ -18,7 +18,7 @@ class Screen;
  * and a child "Yaw-Node", which rotates in x.
  * The Yaw-Node contains the camera Component itself
 **/
-class EditorCamera : public EditorGameObject
+class EditorCamera : public GameObject
 {
 public:
 
@@ -101,7 +101,7 @@ protected:
 private:
     Camera *m_cam = nullptr;
     Transform *m_camt = nullptr; //YawNode transform
-    EditorGameObject *m_yawNode = nullptr;
+    GameObject *m_yawNode = nullptr;
 
     GameObject *m_currentFocus = nullptr;
     bool m_doingLookAt = false;

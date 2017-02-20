@@ -11,7 +11,7 @@
 #include "MeshFactory.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
-#include "EditorGameObject.h"
+#include "GameObject.h"
 #include "SingleLineRenderer.h"
 
 EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
@@ -32,7 +32,8 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
         }
     );
 
-    m_axisCap = MeshFactory::GetConeEditorGameObject();
+    m_axisCap = MeshFactory::GetConeGameObject();
+    m_axisCap->AddHideFlag(HideFlags::HideAndDontSave);
     m_axisCap->SetParent(this);
     if (dir == EditorAxis::EditorAxisDirection::X)
     {
@@ -52,6 +53,8 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->GetComponent<MeshRenderer>()->SetIsGizmo(true);
     m_axisCap->GetComponent<MeshRenderer>()->
             SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorTranslateAxis::~EditorTranslateAxis()

@@ -19,6 +19,8 @@ EditorAxisPlane::EditorAxisPlane(EditorAxis *axis1, EditorAxis *axis2)
     m_planeRenderer->SetMaterial(m_material);
 
     SetTransformAccordingToAxis();
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorAxisPlane::~EditorAxisPlane()

@@ -14,7 +14,7 @@
 #include "EditorRotateAxis.h"
 
 EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
-    : EditorGameObject("EditorRotateAxisGroup")
+    : GameObject("EditorRotateAxisGroup")
 {
     m_axisX = new EditorRotateAxis(EditorAxis::EditorAxisDirection::X, attachedGameObject);
     m_axisY = new EditorRotateAxis(EditorAxis::EditorAxisDirection::Y, attachedGameObject);
@@ -29,6 +29,8 @@ EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     matCopy->SetDiffuseColor( Color::White );
     m_circle->SetMaterial(matCopy);
     m_circle->SetIsGizmo(true);
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorRotateAxisGroup::~EditorRotateAxisGroup()
@@ -38,12 +40,12 @@ EditorRotateAxisGroup::~EditorRotateAxisGroup()
 
 void EditorRotateAxisGroup::OnUpdate()
 {
-    EditorGameObject::OnUpdate();
+    GameObject::OnUpdate();
 }
 
 void EditorRotateAxisGroup::OnDrawGizmosOverlay()
 {
-    EditorGameObject::OnDrawGizmosOverlay();
+    GameObject::OnDrawGizmosOverlay();
 
     Vector3 center = m_axisX->m_attachedGameObject->transform->GetPosition();
     float radius = 0.9f * m_axisX->m_circle->GetRadius() * transform->GetScale().x;

@@ -2,9 +2,9 @@
 #define EDITORGIZMO_H
 
 #include "Cursor.h"
-#include "EditorGameObject.h"
+#include "GameObject.h"
 
-class EditorGizmo : public EditorGameObject
+class EditorGizmo : public GameObject
 {
 public:
     EditorGizmo(GameObject *attachedGameObject);

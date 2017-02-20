@@ -22,6 +22,8 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
 
     m_oAxisDirection = EditorAxis::GetVectorFromDir(dir);
     m_lineColor = Color(m_oAxisDirection.Abs(), 1);
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorAxis::~EditorAxis()

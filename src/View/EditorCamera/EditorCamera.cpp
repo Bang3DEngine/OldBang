@@ -16,9 +16,10 @@ float EditorCamera::s_initialFovDegrees = 60.0f;
 float EditorCamera::s_initialZNear      = 0.05f;
 float EditorCamera::s_initialZFar       = 9999.9f;
 
-EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
+EditorCamera::EditorCamera() : GameObject("BANG_EditorCamera")
 {
-    m_yawNode = new EditorGameObject("BANG_EditorYawNode");
+    m_yawNode = new GameObject("BANG_EditorYawNode");
+    m_yawNode->AddHideFlag(HideFlags::HideAndDontSave);
     m_yawNode->SetParent(this);
 
     m_cam = m_yawNode->AddComponent<Camera>();
@@ -29,6 +30,8 @@ EditorCamera::EditorCamera() : EditorGameObject("BANG_EditorCamera")
     m_cam->SetZNear(s_initialZNear);
     m_cam->SetZFar(s_initialZFar);
     m_cam->SetFovDegrees(EditorCamera::s_initialFovDegrees);
+
+    AddHideFlag(HideFlags::HideAndDontSave);
 }
 
 EditorCamera::~EditorCamera()
@@ -196,7 +199,7 @@ void EditorCamera::HandleLookAtFocus()
 
 void EditorCamera::OnStart()
 {
-    EditorGameObject::OnStart();
+    GameObject::OnStart();
 
     Sphere sceneSphere = SceneManager::GetActiveScene()->GetBoundingSphere();
     if (sceneSphere.GetRadius() > 0)
@@ -215,7 +218,7 @@ void EditorCamera::OnStart()
 
 void EditorCamera::OnUpdate()
 {
-    EditorGameObject::OnUpdate();
+    GameObject::OnUpdate();
     AdjustSpeeds();
 
     Vector3 moveStep(0.0f);
