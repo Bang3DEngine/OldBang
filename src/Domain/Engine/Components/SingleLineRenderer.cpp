@@ -23,7 +23,7 @@ String SingleLineRenderer::GetName() const
 void SingleLineRenderer::CloneInto(ICloneable *clone) const
 {
     LineRenderer::CloneInto(clone);
-    SingleLineRenderer *slr = static_cast<SingleLineRenderer*>(clone);
+    SingleLineRenderer *slr = Object::SCast<SingleLineRenderer>(clone);
     slr->SetOrigin(GetOrigin());
     slr->SetDestiny(GetDestiny());
 }

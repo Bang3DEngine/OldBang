@@ -19,7 +19,7 @@ String Canvas::GetName() const
 void Canvas::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Canvas *c = static_cast<Canvas*>(clone);
+    Canvas *c = Object::SCast<Canvas>(clone);
 }
 
 ICloneable *Canvas::Clone() const

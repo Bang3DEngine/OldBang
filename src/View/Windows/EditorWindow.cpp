@@ -83,7 +83,7 @@ EditorWindow *EditorWindow::GetInstance()
     if (sm)
     {
         IWindow *w = sm->GetWindowSingleton();
-        return w ? static_cast<EditorWindow*>(w) : nullptr;
+        return w ? Object::SCast<EditorWindow>(w) : nullptr;
     }
     return nullptr;
 }
@@ -103,7 +103,7 @@ QApplication *EditorWindow::GetApplication() const
 void EditorWindow::OnTabSceneGameChanged(int index)
 {
     EditorScene *edScene =
-            static_cast<EditorScene*>(SceneManager::GetActiveScene());
+            Object::SCast<EditorScene>(SceneManager::GetActiveScene());
     bool scene = tabContainerSceneGame->widget(index) == tabScene;
     if (scene)
     {

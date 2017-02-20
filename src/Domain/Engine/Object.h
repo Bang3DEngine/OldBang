@@ -48,9 +48,9 @@ public:
     template <class T>
     bool IsOfType() const { return Object::IsOfType<T>(this); }
     template <class T>
-    T *SCast() { return static_cast<T*>(this); }
+    T *SCast() { return Object::SCast<T>(this); }
     template <class T>
-    const T *SConstCast() const { return static_cast<const T*>(this); }
+    const T *SConstCast() const { return Object::SCast<const T>(this); }
     template <class T>
     T *Cast() { return Object::Cast<T>(this); }
     template <class T>

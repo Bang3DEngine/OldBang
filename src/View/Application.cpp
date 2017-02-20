@@ -100,11 +100,11 @@ Application *Application::GetInstance()
 {
     #ifdef BANG_EDITOR
     ASSERT(EditorWindow::GetInstance(), "", return nullptr);
-    return static_cast<Application*>(
+    return Object::SCast<Application>(
                 EditorWindow::GetInstance()->GetApplication());
     #else
     ASSERT(GameWindow::GetInstance(), "", return nullptr);
-    return static_cast<Application*>(
+    return Object::SCast<Application>(
                 GameWindow::GetInstance()->GetApplication());
     #endif
 }
@@ -126,7 +126,7 @@ bool Application::notify(QObject *receiver, QEvent *e)
     {
         if (e->type() == QEvent::KeyPress)
         {
-            QKeyEvent *ev = static_cast<QKeyEvent*>(e);
+            QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
             m_lastKeyPressEvInfo.time = Time::GetNow();
             m_lastKeyPressEvInfo.key = ev->key();
             if (!ev->isAutoRepeat())
@@ -136,7 +136,7 @@ bool Application::notify(QObject *receiver, QEvent *e)
         }
         else if (e->type() == QEvent::KeyRelease)
         {
-            QKeyEvent *ev = static_cast<QKeyEvent*>(e);
+            QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
             if (!ev->isAutoRepeat())
             {
                 ShortcutManager::GetInstance()->OnKeyReleased( Input::Key(ev->key()) );

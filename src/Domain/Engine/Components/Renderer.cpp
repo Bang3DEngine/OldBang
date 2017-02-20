@@ -38,7 +38,7 @@ Renderer::~Renderer()
 void Renderer::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Renderer *r = static_cast<Renderer*>(clone);
+    Renderer *r = Object::SCast<Renderer>(clone);
     r->SetMaterial(GetMaterial());
     r->SetDrawWireframe(GetDrawWireframe());
     r->SetCullMode(GetCullMode());

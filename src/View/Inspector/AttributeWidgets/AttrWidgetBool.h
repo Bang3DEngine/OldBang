@@ -41,13 +41,13 @@ public:
     {
         QLineEdit::focusInEvent(event);
         QTimer::singleShot(50, this, SLOT(SelectAll()));
-        static_cast<AttrWidgetString*>(parent())->OnFocusIn();
+        Object::SCast<AttrWidgetString>(parent())->OnFocusIn();
     }
 
     virtual void focusOutEvent(QFocusEvent * event) override
     {
         QLineEdit::focusOutEvent(event);
-        static_cast<AttrWidgetString*>(parent())->OnFocusOut();
+        Object::SCast<AttrWidgetString>(parent())->OnFocusOut();
     }
 
     virtual void  keyPressEvent(QKeyEvent *event) override
@@ -55,7 +55,7 @@ public:
         QLineEdit::keyPressEvent(event);
         if (event->key() == QKeyEvent::Enter)
         {
-            static_cast<AttrWidgetString*>(parent())->OnFocusOut();
+            Object::SCast<AttrWidgetString>(parent())->OnFocusOut();
         }
     }
 

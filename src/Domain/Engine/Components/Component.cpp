@@ -23,7 +23,7 @@ void Component::OnDrawGizmosOverlay()
 
 void Component::CloneInto(ICloneable *clone) const
 {
-    Component *c = static_cast<Component*>(clone);
+    Component *c = Object::SCast<Component>(clone);
     c->m_enabled = m_enabled;
 }
 

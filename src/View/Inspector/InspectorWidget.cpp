@@ -117,20 +117,20 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
             {
                 if (attrType == XMLAttribute::Type::Float)
                 {
-                    AttrWidgetFloat *wf = static_cast<AttrWidgetFloat*>(aw);
+                    AttrWidgetFloat *wf = Object::SCast<AttrWidgetFloat>(aw);
                     float v = wf->GetValue();
                     attribute.SetFloat(v, attribute.GetProperties());
                 }
                 else if (attrType == XMLAttribute::Type::Int)
                 {
-                    AttrWidgetInt *wi = static_cast<AttrWidgetInt*>(aw);
+                    AttrWidgetInt *wi = Object::SCast<AttrWidgetInt>(aw);
                     int v = wi->GetValue();
                     attribute.SetInt(v, attribute.GetProperties());
                 }
                 else
                 {
                     AttrWidgetVectorFloat *awv =
-                            static_cast<AttrWidgetVectorFloat*>(aw);
+                            Object::SCast<AttrWidgetVectorFloat>(aw);
                     Array<float> v = awv->GetValue();
                     if (attrType == XMLAttribute::Type::Vector2)
                     {
@@ -153,7 +153,7 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
             }
             else if (attrType == XMLAttribute::Type::File)
             {
-                AttrWidgetFile *awf = static_cast<AttrWidgetFile*>(aw);
+                AttrWidgetFile *awf = Object::SCast<AttrWidgetFile>(aw);
                 attribute.SetFilepath(
                     awf->GetValue(),
                     attribute.GetPropertyValue(XMLProperty::FileExtension
@@ -162,24 +162,24 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
             }
             else if (attrType == XMLAttribute::Type::String)
             {
-                AttrWidgetString *aws = static_cast<AttrWidgetString*>(aw);
+                AttrWidgetString *aws = Object::SCast<AttrWidgetString>(aw);
                 attribute.SetString(aws->GetValue(), attribute.GetProperties());
             }
             else if (attrType == XMLAttribute::Type::Bool)
             {
-                AttrWidgetBool *wb = static_cast<AttrWidgetBool*>(aw);
+                AttrWidgetBool *wb = Object::SCast<AttrWidgetBool>(aw);
                 attribute.SetBool(wb->GetValue(), attribute.GetProperties());
             }
             else if (attrType == XMLAttribute::Type::Enum)
             {
-                AttrWidgetEnum *awe = static_cast<AttrWidgetEnum*>(aw);
+                AttrWidgetEnum *awe = Object::SCast<AttrWidgetEnum>(aw);
                 // Selected index<
                 attribute.SetEnum(attribute.GetEnumNames(), awe->GetValue(),
                                   attribute.GetProperties());
             }
             else if (attrType == XMLAttribute::Type::Color)
             {
-                AttrWidgetColor *awc = static_cast<AttrWidgetColor*>(aw);
+                AttrWidgetColor *awc = Object::SCast<AttrWidgetColor>(aw);
                 attribute.SetColor(awc->GetValue(), attribute.GetProperties());
             }
         }
