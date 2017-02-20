@@ -228,7 +228,7 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
 #ifdef BANG_EDITOR
 void Camera::OnDrawGizmos()
 {
-    if (gameObject->IsEditorGameObject()) return;
+    if (gameObject->HasHideFlag(HideFlags::HideInHierarchy)) return;
 
     Component::OnDrawGizmos();
 

@@ -81,11 +81,6 @@ void EditorScene::OnUpdate()
     m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
 }
 
-bool EditorScene::IsEditorGameObject() const
-{
-    return true;
-}
-
 void EditorScene::SetEditorCamera()
 {
     SetCamera( m_edCameraGameObject->GetCamera() );

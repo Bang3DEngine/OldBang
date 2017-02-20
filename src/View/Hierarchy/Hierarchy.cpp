@@ -235,7 +235,7 @@ void Hierarchy::LocateGameObject(GameObject *gameObjectToLocate,
 QTreeWidgetItem* Hierarchy::Update(GameObject *go)
 {
     if (!SceneManager::GetActiveScene()) { return nullptr; }
-    if (go->IsEditorGameObject()) { return nullptr; }
+    if (go->HasHideFlag(HideFlags::HideInHierarchy)) { return nullptr; }
 
     QTreeWidgetItem *goItem = GetItemFromGameObject(go);
     if (!goItem)

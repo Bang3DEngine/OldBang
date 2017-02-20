@@ -126,6 +126,7 @@ INCLUDEPATH +=                                   \
     $$PWD/src/Domain/Graphics/Buffers/           \
     $$PWD/src/Domain/Graphics/Shaders/           \
     $$PWD/src/Domain/Graphics/Interfaces/        \
+    $$PWD/src/Domain/Engine/                     \
     $$PWD/src/Domain/Engine/Interfaces/          \
     $$PWD/src/Domain/Engine/Debug/               \
     $$PWD/src/Domain/Engine/GameObjects/         \
@@ -280,7 +281,9 @@ HEADERS +=                                                          \
     src/Persistence/Behaviours/BehaviourManagerStatus.h \
     src/Domain/Engine/Components/RectTransform.h \
     src/View/Cursor.h \
-    src/Domain/Graphics/RenderTexture.h
+    src/Domain/Graphics/RenderTexture.h \
+    src/Domain/Engine/HideFlags.h \
+    src/Domain/Engine/Object.h
 
 EDITOR {
 HEADERS += \
@@ -481,7 +484,8 @@ SOURCES += \
     src/Persistence/Behaviours/BehaviourManagerStatus.cpp \
     src/Domain/Engine/Components/RectTransform.cpp \
     src/View/Cursor.cpp \
-    src/Domain/Graphics/RenderTexture.cpp
+    src/Domain/Graphics/RenderTexture.cpp \
+    src/Domain/Engine/Object.cpp
 
 EDITOR {
     SOURCES += \

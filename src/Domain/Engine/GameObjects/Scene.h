@@ -28,8 +28,6 @@ public:
 
     virtual Camera *GetCamera() const;
 
-    bool IsScene() const override;
-
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
     virtual void PostReadXMLInfo(const XMLNode *xmlInfo) override;

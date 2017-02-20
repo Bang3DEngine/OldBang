@@ -200,7 +200,7 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     List<Renderer*> renderers = m_currentScene->GetComponentsInChildren<Renderer>();
     for (Renderer *rend : renderers) // Opaque
     {
-        if (m_renderingInGame && rend->gameObject->IsEditorGameObject()) { continue; }
+        if (m_renderingInGame && rend->gameObject->HasHideFlag(HideFlags::HideInHierarchy)) { continue; }
 
         if (!rend->IsTransparent() && !rend->HasCustomPRPass() && !rend->IsGizmo())
         {
@@ -219,7 +219,7 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     // Either is transparent or has a custom PR Pass (gizmos are left for the end...)
     for (Renderer *rend : renderers)
     {
-        if (m_renderingInGame && rend->gameObject->IsEditorGameObject()) { continue; }
+        if (m_renderingInGame && rend->gameObject->HasHideFlag(HideFlags::HideInHierarchy)) { continue; }
 
         if ((rend->IsTransparent() || rend->HasCustomPRPass()) &&
              !rend->IsGizmo())

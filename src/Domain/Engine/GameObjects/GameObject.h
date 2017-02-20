@@ -1,14 +1,15 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+
+#include "List.h"
+#include "AABox.h"
+#include "Object.h"
+#include "Sphere.h"
 #include "IFileable.h"
 #include "IToString.h"
 #include "ICloneable.h"
 #include "ISceneEventListener.h"
-
-#include "AABox.h"
-#include "List.h"
-#include "Sphere.h"
 
 #ifdef BANG_EDITOR
 #include "Gizmos.h"
@@ -21,7 +22,8 @@ class Component;
 class Transform;
 class EditorSelectionGameObject;
 class GameObject :
-                public ISceneEventListener
+                public Object
+               ,public ISceneEventListener
                ,public IToString
                ,public IFileable
                ,public ICloneable
@@ -183,7 +185,7 @@ public:
     {
         for (auto c = m_children.Begin(); c != m_children.End(); ++c)
         {
-            if ((*c)->IsEditorGameObject()) continue;
+            if ((*c)->HasHideFlag(HideFlags::HideInHierarchy)) continue;
 
             T *comp = (*c)->GetComponent<T>();
             if (comp) return comp;
@@ -275,8 +277,6 @@ public:
     virtual void OnMouseExit(bool fromChildren);
 
     bool IsChildOf(const GameObject *parent, bool recursive = true) const;
-    virtual bool IsEditorGameObject() const;
-    virtual bool IsScene() const;
 
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name);

@@ -23,8 +23,6 @@ EditorFloor::EditorFloor()
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
         m_lineRenderers[i]->SetMaterial(m_material);
     }
-
-    m_renderInSelectionFramebuffer = false;
 }
 
 EditorFloor::~EditorFloor()

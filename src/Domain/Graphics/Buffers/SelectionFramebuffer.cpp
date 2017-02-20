@@ -114,7 +114,7 @@ void SelectionFramebuffer::ProcessSelection()
     {
         if (mouseOverGO)
         {
-            if (!mouseOverGO->IsEditorGameObject()) // Selection of a GameObject
+            if (!mouseOverGO->HasHideFlag(HideFlags::HideInHierarchy)) // Selection of a GameObject
             {
                 EditorWindow::GetInstance()->
                         widgetHierarchy->SelectGameObject(mouseOverGO);
@@ -191,11 +191,11 @@ long SelectionFramebuffer::MapColorToId(const Color &color)
 
 bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
 {
-    if (go->IsEditorGameObject())
+    if (go->HasHideFlag(HideFlags::HideInHierarchy))
     {
        const EditorGameObject *ego = dynamic_cast<const EditorGameObject*>(go);
        return ego && ego->IsEnabled() && !ego->IsDraggedGameObject() &&
-              ego->IsRenderInSelectionFramebuffer();
+              ego->HasHideFlag(HideFlags::HideInSelection);
     }
     return go && go->IsEnabled() && !go->IsDraggedGameObject();
 }

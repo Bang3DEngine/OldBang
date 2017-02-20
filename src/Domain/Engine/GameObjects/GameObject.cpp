@@ -53,7 +53,7 @@ void GameObject::CloneInto(ICloneable *clone) const
 
     for (GameObject *child : m_children)
     {
-        if (child->IsEditorGameObject()) continue;
+        if (child->HasHideFlag(HideFlags::HideInHierarchy)) continue;
         GameObject *childClone = static_cast<GameObject*>(child->Clone());
         childClone->SetParent(go);
     }
@@ -167,14 +167,14 @@ void GameObject::SetParent(GameObject *newParent,
 
 Scene *GameObject::GetScene()
 {
-    if (IsScene()) { return (Scene*) this; }
+    if (dynamic_cast<const Scene*>(this)) { return (Scene*) this; }
     if (m_parent) return m_parent->GetScene();
     return nullptr;
 }
 
 bool GameObject::IsInsideScene() const
 {
-    if (IsScene()) { return true; }
+    if (dynamic_cast<const Scene*>(this)) { return true; }
     if (parent) return parent->IsInsideScene();
     return false;
 }
@@ -200,7 +200,7 @@ const List<GameObject *> GameObject::GetChildren() const
     List<GameObject *> cc;
     for (GameObject *c : m_children)
     {
-        if (!c->IsEditorGameObject()) cc.PushBack(c);
+        if (!c->HasHideFlag(HideFlags::HideInHierarchy)) cc.PushBack(c);
     }
     return cc;
 }
@@ -221,7 +221,7 @@ List<GameObject*> GameObject::GetChildrenRecursively() const
     List<GameObject*> cc;
     for (GameObject *c : m_children)
     {
-        if (!c->IsEditorGameObject()) cc.PushBack(c);
+        if (!c->HasHideFlag(HideFlags::HideInHierarchy)) cc.PushBack(c);
         List<GameObject*> childChildren = c->GetChildrenRecursively();
         cc.Splice(cc.Begin(), childChildren); //concat
     }
@@ -266,7 +266,7 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
         for (GameObject *child : m_children)
         {
             #ifdef BANG_EDITOR
-            if (child->IsEditorGameObject() ||
+            if (child->HasHideFlag(HideFlags::HideInHierarchy) ||
                 child->IsDraggedGameObject()) continue;
             #endif
 
@@ -376,16 +376,6 @@ void GameObject::Print(const String &indent) const
     {
         child->Print(indent2);
     }
-}
-
-bool GameObject::IsEditorGameObject() const
-{
-    return false;
-}
-
-bool GameObject::IsScene() const
-{
-    return false;
 }
 
 GameObject *GameObject::Find(const String &name)
@@ -564,7 +554,7 @@ void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
 
     for (GameObject *child : m_children)
     {
-        if (!child->IsEditorGameObject())
+        if (!child->HasHideFlag(HideFlags::HideInHierarchy))
         {
             XMLNode *xmlChild = new XMLNode();
             child->FillXMLInfo(xmlChild);
@@ -593,9 +583,11 @@ void GameObject::ChangeTransformByRectTransform()
 
 
 #ifdef BANG_EDITOR
-void GameObject::OnHierarchyGameObjectsSelected(List<GameObject*> &selectedEntities)
+void GameObject::OnHierarchyGameObjectsSelected(
+        List<GameObject*> &selectedEntities)
 {
-    if (IsEditorGameObject() || IsScene()) return;
+    if (HasHideFlag(HideFlags::HideInHierarchy) ||
+        dynamic_cast<Scene*>(this)) return;
 
     bool selected = selectedEntities.Contains(this);
     bool wasSelected = IsSelected();
@@ -700,7 +692,7 @@ void GameObject::_OnStart()
 void GameObject::_OnUpdate()
 {
     #ifdef BANG_EDITOR
-    bool canUpdate = EditorState::IsPlaying() || IsEditorGameObject();
+    bool canUpdate = EditorState::IsPlaying() || HasHideFlag(HideFlags::HideInHierarchy);
     #else
     bool canUpdate = true;
     #endif

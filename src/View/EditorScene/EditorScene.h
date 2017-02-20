@@ -22,8 +22,6 @@ public:
     virtual void _OnStart () override;
     virtual void OnUpdate() override;
 
-    bool IsEditorGameObject() const override;
-
     void SetEditorCamera();
     Camera *GetCamera() const override;
     EditorCamera *GetEditorCamera() const;
