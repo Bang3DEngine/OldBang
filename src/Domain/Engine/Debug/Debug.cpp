@@ -31,7 +31,7 @@ void Debug::DrawLine(const Vector3 &origin, const Vector3 &destiny,
 {
     #ifdef BANG_EDITOR
     Scene *s = SceneManager::GetActiveScene(); ASSERT(s);
-    EditorScene *es = dynamic_cast<EditorScene*>(s); ASSERT(es);
+    EditorScene *es = s->Cast<EditorScene>(); ASSERT(es);
     EditorDebugGameObject *edgo = es->m_debugGameObject; ASSERT(edgo);
     edgo->DrawLine(origin, destiny, color, lineWidth, secsTime, depthTest);
     #endif
@@ -42,7 +42,7 @@ void Debug::DrawScreenLine(const Vector2 &origin, const Vector2 &destiny,
 {
     #ifdef BANG_EDITOR
     Scene *s = SceneManager::GetActiveScene(); ASSERT(s);
-    EditorScene *es = dynamic_cast<EditorScene*>(s); ASSERT(es);
+    EditorScene *es = s->Cast<EditorScene>(); ASSERT(es);
     EditorDebugGameObject *edgo = es->m_debugGameObject; ASSERT(edgo);
     edgo->DrawScreenLine(origin, destiny, color, lineWidth, secsTime);
     #endif

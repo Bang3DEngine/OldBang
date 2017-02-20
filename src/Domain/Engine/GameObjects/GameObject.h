@@ -1,7 +1,6 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-
 #include "List.h"
 #include "AABox.h"
 #include "Object.h"
@@ -156,8 +155,8 @@ public:
     {
         for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
         {
-            T *tp = dynamic_cast<T*>(*comp);
-            if (tp) return tp;
+            T *tp = Object::Cast<T>(*comp);
+            if (tp) { return tp; }
         }
         return nullptr;
     }
@@ -171,8 +170,8 @@ public:
         List<T*> comps_l;
         for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
         {
-            T *tp = dynamic_cast<T*>(*comp);
-            if (tp) comps_l.PushBack(tp);
+            T *tp = Object::Cast<T>(*comp);
+            if (tp) { comps_l.PushBack(tp); }
         }
         return comps_l;
     }
@@ -241,13 +240,10 @@ public:
     int CountComponents() const
     {
         int count = 0;
-        for (auto it = m_components.Begin(); it != m_components.End(); ++it)
+        for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
         {
-            T *tp = dynamic_cast<T*>(*it);
-            if (tp)
-            {
-                ++count;
-            }
+            T *tp = Object::Cast<T>(*comp);
+            if (tp) { ++count; }
         }
         return count;
     }
@@ -258,12 +254,13 @@ public:
     template <class T>
     void RemoveComponent()
     {
-        for (auto it = m_components.Begin(); it != m_components.End(); ++it)
+        for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
         {
-            T *tp = dynamic_cast<T*>(*it);
+            T *tp = Object::Cast<T>(*comp);
             if (tp)
             {
-                it = m_components.Remove(it); --it;
+                comp = m_components.Remove(comp);
+                --comp;
                 delete tp;
                 break;
             }

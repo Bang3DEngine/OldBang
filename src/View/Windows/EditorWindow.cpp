@@ -79,26 +79,31 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
 
 EditorWindow *EditorWindow::GetInstance()
 {
-    // This will always be initialized,
-    // since main inits it using EditorWindow::InitFromMainBinary()
-    return SingletonManager::GetInstance() ?
-                static_cast<EditorWindow*>(SingletonManager::GetInstance()->GetWindowSingleton()) :
-                nullptr;
+    SingletonManager *sm = SingletonManager::GetInstance();
+    if (sm)
+    {
+        IWindow *w = sm->GetWindowSingleton();
+        return w ? static_cast<EditorWindow*>(w) : nullptr;
+    }
+    return nullptr;
 }
 
 QMainWindow *EditorWindow::GetMainWindow() const
 {
-    return EditorWindow::GetInstance()->m_mainWindow;
+    EditorWindow *ew = EditorWindow::GetInstance();
+    return ew ? ew->m_mainWindow : nullptr;
 }
 
 QApplication *EditorWindow::GetApplication() const
 {
-    return EditorWindow::GetInstance()->m_app;
+    EditorWindow *ew = EditorWindow::GetInstance();
+    return ew ? ew->m_app : nullptr;
 }
 
 void EditorWindow::OnTabSceneGameChanged(int index)
 {
-    EditorScene *edScene = static_cast<EditorScene*>(SceneManager::GetActiveScene());
+    EditorScene *edScene =
+            Object::SCast<EditorScene>(SceneManager::GetActiveScene());
     bool scene = tabContainerSceneGame->widget(index) == tabScene;
     if (scene)
     {

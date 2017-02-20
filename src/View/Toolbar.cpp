@@ -198,7 +198,7 @@ void Toolbar::OnOrthoPerspectiveClicked()
     ASSERT(currentScene);
 
     Camera *cam = currentScene->GetCamera(); ASSERT(cam);
-    EditorCamera *edCam = dynamic_cast<EditorCamera*>( cam->gameObject->parent );
+    EditorCamera *edCam = cam->Cast<EditorCamera>( cam->gameObject->parent );
     ASSERT(edCam);
 
     bool mode3D = m_button3D->isChecked();

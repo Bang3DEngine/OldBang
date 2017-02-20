@@ -24,7 +24,7 @@ void InspectorContextMenu::OnCustomContextMenuRequested(QPoint point)
     contextMenu.addActions(EditorWindow::GetInstance()->menuComponents->actions());
     contextMenu.addSeparator();
 
-    ComponentWidget *cw = static_cast<ComponentWidget*>(
+    ComponentWidget *cw = Object::SCast<ComponentWidget>(
                 m_inspector->m_currentInspectorWidgets.Front());
 
     QAction actionPasteComponent("Paste Component", m_inspector);

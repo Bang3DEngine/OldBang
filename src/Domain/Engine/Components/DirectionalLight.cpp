@@ -33,7 +33,7 @@ String DirectionalLight::GetName() const
 void DirectionalLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);
-    DirectionalLight *dl = static_cast<DirectionalLight*>(clone);
+    DirectionalLight *dl = Object::SCast<DirectionalLight>(clone);
 }
 
 ICloneable *DirectionalLight::Clone() const

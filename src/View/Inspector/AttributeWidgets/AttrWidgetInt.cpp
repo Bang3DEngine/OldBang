@@ -2,6 +2,7 @@
 
 #include <QVBoxLayout>
 
+#include "Object.h"
 #include "StringUtils.h"
 #include "XMLAttribute.h"
 #include "InspectorWidget.h"
@@ -75,13 +76,13 @@ void IntComponentSlotSpinBox::focusInEvent(QFocusEvent *event)
 {
     QLineEdit::focusInEvent(event);
     QTimer::singleShot(50, this, SLOT(SelectAll()));
-    static_cast<AttrWidgetInt*>(parent())->OnLineEditFocusIn();
+    Object::SCast<AttrWidgetInt>(parent())->OnLineEditFocusIn();
 }
 
 void IntComponentSlotSpinBox::focusOutEvent(QFocusEvent *event)
 {
     QLineEdit::focusOutEvent(event);
-    static_cast<AttrWidgetInt*>(parent())->OnLineEditFocusOut();
+    Object::SCast<AttrWidgetInt>(parent())->OnLineEditFocusOut();
 }
 
 void IntComponentSlotSpinBox::keyPressEvent(QKeyEvent *event)

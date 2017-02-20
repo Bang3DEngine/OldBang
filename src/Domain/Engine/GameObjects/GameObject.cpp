@@ -42,7 +42,7 @@ GameObject::GameObject(const String &name)
 
 void GameObject::CloneInto(ICloneable *clone) const
 {
-    GameObject *go = static_cast<GameObject*>(clone);
+    GameObject *go = Object::SCast<GameObject>(clone);
     if (HasComponent<RectTransform>())
     {
         go->ChangeTransformByRectTransform();
@@ -54,16 +54,15 @@ void GameObject::CloneInto(ICloneable *clone) const
     for (GameObject *child : m_children)
     {
         if (child->HasHideFlag(HideFlags::HideInHierarchy)) continue;
-        GameObject *childClone = static_cast<GameObject*>(child->Clone());
+        GameObject *childClone = Object::SCast<GameObject>(child->Clone());
         childClone->SetParent(go);
     }
 
     for (Component *comp : m_components)
     {
-        Transform* t = dynamic_cast<Transform*>(comp);
-        if (!t)
+        if (!comp->IsOfType<Transform>())
         {
-            go->AddComponent( static_cast<Component*>(comp->Clone()) );
+            go->AddComponent( Object::SCast<Component>(comp->Clone()) );
         }
         else
         {
@@ -167,14 +166,14 @@ void GameObject::SetParent(GameObject *newParent,
 
 Scene *GameObject::GetScene()
 {
-    if (dynamic_cast<const Scene*>(this)) { return (Scene*) this; }
+    if (IsOfType<Scene>()) { return this->Cast<Scene>(); }
     if (m_parent) return m_parent->GetScene();
     return nullptr;
 }
 
 bool GameObject::IsInsideScene() const
 {
-    if (dynamic_cast<const Scene*>(this)) { return true; }
+    if (IsOfType<Scene>()) { return true; }
     if (parent) return parent->IsInsideScene();
     return false;
 }
@@ -301,18 +300,17 @@ Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 
 void GameObject::AddComponent(Component *c)
 {
-    Transform *t = dynamic_cast<Transform*>(c);
-    if (t)
+    if (c->IsOfType<Transform>())
     {
-        if (HasComponent<Transform>())
+        if (!HasComponent<Transform>())
+        {
+            m_transform = c->Cast<Transform>();
+        }
+        else
         {
             Debug_Error("A gameObject must contain one and only one Transform.");
             delete c;
             return;
-        }
-        else
-        {
-            m_transform = t;
         }
     }
     c->SetGameObject(this);
@@ -587,7 +585,7 @@ void GameObject::OnHierarchyGameObjectsSelected(
         List<GameObject*> &selectedEntities)
 {
     if (HasHideFlag(HideFlags::HideInHierarchy) ||
-        dynamic_cast<Scene*>(this)) return;
+        IsOfType<Scene>()) return;
 
     bool selected = selectedEntities.Contains(this);
     bool wasSelected = IsSelected();

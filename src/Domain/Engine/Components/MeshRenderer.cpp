@@ -16,7 +16,7 @@ MeshRenderer::MeshRenderer()
 void MeshRenderer::CloneInto(ICloneable *clone) const
 {
     Renderer::CloneInto(clone);
-    MeshRenderer *mr = static_cast<MeshRenderer*>(clone);
+    MeshRenderer *mr = Object::SCast<MeshRenderer>(clone);
     mr->SetMesh(m_mesh);
 }
 

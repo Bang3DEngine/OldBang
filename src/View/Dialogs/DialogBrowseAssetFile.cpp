@@ -9,6 +9,7 @@
 #include "File.h"
 #include "Color.h"
 #include "Debug.h"
+#include "Object.h"
 #include "Persistence.h"
 
 DialogBrowseAssetFile::DialogBrowseAssetFile(String *resultFile)
@@ -128,7 +129,7 @@ void DialogBrowseAssetFile::OnSelectionChange(int newIndex)
 void DialogBrowseAssetFile::OnFileAccepted()
 {
     QListWidget *currentListWidget =
-            static_cast<QListWidget*>(m_tabWidget->currentWidget());
+            Object::SCast<QListWidget>(m_tabWidget->currentWidget());
 
     String selectedFilepath = "";
     QList<QListWidgetItem*> selectedItems = currentListWidget->selectedItems();

@@ -4,6 +4,7 @@
 #include <QLayout>
 
 #include "Screen.h"
+#include "Object.h"
 #include "SingletonManager.h"
 
 GameWindow *GameWindow::s_m_win = nullptr;
@@ -44,7 +45,8 @@ void GameWindow::InitFromMainBinary(QMainWindow *window, QApplication *applicati
 
 GameWindow *GameWindow::GetInstance()
 {
-    return static_cast<GameWindow*>(SingletonManager::GetInstance()->GetWindowSingleton());
+    return Object::SCast<GameWindow>(
+                SingletonManager::GetInstance()->GetWindowSingleton());
 }
 
 QMainWindow *GameWindow::GetMainWindow() const

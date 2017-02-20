@@ -17,6 +17,9 @@
 class BehaviourId : public IToString
 {
 public:
+    String behaviourAbsPath = "";
+    String hash = "";
+
     BehaviourId(const String &behAbsPath)
     {
         behaviourAbsPath = Persistence::ToAbsolute(behAbsPath, false);
@@ -29,10 +32,10 @@ public:
         hash = _hash;
     }
 
-    String ToString() const override { return behaviourAbsPath + "(" + hash + ")"; }
-
-    String behaviourAbsPath = "";
-    String hash = "";
+    String ToString() const override
+    {
+        return behaviourAbsPath + "(" + hash + ")";
+    }
 };
 
 class QLibrary;

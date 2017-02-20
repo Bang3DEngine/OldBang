@@ -1,6 +1,7 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include "Object.h"
 #include "IFileable.h"
 #include "IToString.h"
 #include "ICloneable.h"
@@ -19,7 +20,8 @@ class XMLNode;
 class Transform;
 class GameObject;
 class Component :
-              public ISceneEventListener
+              public Object
+             ,public ISceneEventListener
              ,public IToString
              ,public IFileable
              ,public ICloneable

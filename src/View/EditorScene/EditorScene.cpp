@@ -36,7 +36,7 @@ EditorScene::EditorScene() : Scene()
     m_fpsCounter->AddHideFlag(HideFlags::HideAndDontSave);
     m_fpsCounter->ChangeTransformByRectTransform();
     m_fpsCounter->SetParent(this);
-    RectTransform *rtrans = static_cast<RectTransform*>(m_fpsCounter->transform);
+    RectTransform *rtrans = Object::SCast<RectTransform>(m_fpsCounter->transform);
     m_fpsCounterText = m_fpsCounter->AddComponent<UIText>();
     rtrans->SetAnchors(Vector2(-1,-1), Vector2(1,1));
     rtrans->SetMargins(15);
@@ -52,7 +52,7 @@ EditorScene::~EditorScene()
 
 void EditorScene::CloneInto(ICloneable *clone) const
 {
-    EditorScene *edScene = static_cast<EditorScene*>(clone);
+    EditorScene *edScene = Object::SCast<EditorScene>(clone);
     Scene::CloneInto(edScene);
 }
 

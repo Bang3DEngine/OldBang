@@ -188,8 +188,8 @@ void Scene::PostReadXMLInfo(const XMLNode *xmlInfo)
         String camId = xmlInfo->GetString("Camera");
         if (!camId.Empty())
         {
-            const Camera *cam = dynamic_cast<const Camera*>(
-                        XMLParser::GetPointerFromId(camId));
+            const IFileable *f = XMLParser::GetPointerFromId(camId);
+            const Camera *cam = Object::ConstCast<Camera>(f);
             if (cam)
             {
                 SetCamera(cam);

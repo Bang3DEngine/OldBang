@@ -120,7 +120,7 @@ void SelectProjectWindow::OnLoadRecentProject()
 
     m_loadedProjectFile = m_selectedRecentProjectFilepath;
     m_directlyClosedByUser = false;
-    m_window->close();
+    delete m_window;
 }
 
 void SelectProjectWindow::OnCreateNewProject()

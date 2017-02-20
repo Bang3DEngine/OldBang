@@ -22,10 +22,11 @@ void DragDropManager::InstallEventFilters()
     // Do this every certain time, just in case new Widgets appear hehe
     QTimer::singleShot(1000, this, SLOT(InstallEventFilters()));
 
-    EditorWindow *wm = EditorWindow::GetInstance();
-    if (wm && wm->GetMainWindow())
+    EditorWindow *ew = EditorWindow::GetInstance();
+    if (ew &&
+        ew->GetMainWindow())
     {
-        QMainWindow *mw = wm->GetMainWindow();
+        QMainWindow *mw = ew->GetMainWindow();
         QList<QWidget*> widgets = mw->findChildren<QWidget*>();
         foreach(QWidget *w, widgets)
         {
@@ -49,8 +50,8 @@ DragDropAgent* DragDropManager::GetDragDropAgentBelowMouse()
     QObject *objBelowMouse = IWindow::GetWidgetBelowMouse();
     while (objBelowMouse != nullptr)
     {
-        DragDropAgent *dda = dynamic_cast<DragDropAgent*>(objBelowMouse);
-        if (dda) return dda;
+        DragDropAgent *dda = Object::Cast<DragDropAgent>(objBelowMouse);
+        if (dda) { return dda; }
         objBelowMouse = objBelowMouse->parent();
     }
     return nullptr;
@@ -61,16 +62,19 @@ DragDropInfo* DragDropManager::GetDragDropInfo()
     return &(DragDropManager::s_ddManager->m_ddInfo);
 }
 
-void DragDropManager::RegisterDragDropAgent(IDragDropListener *dragDropListener)
+void DragDropManager::RegisterDragDropAgent(
+        IDragDropListener *dragDropListener)
 {
     if (!DragDropManager::s_ddManager)
     {
         DragDropManager::s_ddManager = new DragDropManager();
     }
-    DragDropManager::s_ddManager->m_dragDropListeners.PushBack(dragDropListener);
+    DragDropManager::s_ddManager->m_dragDropListeners.PushBack(
+                dragDropListener);
 }
 
-void DragDropManager::UnregisterDragDropAgent(IDragDropListener *dragDropListener)
+void DragDropManager::UnregisterDragDropAgent(
+        IDragDropListener *dragDropListener)
 {
     DragDropManager::s_ddManager->m_dragDropListeners.Remove(dragDropListener);
 }
@@ -79,11 +83,12 @@ void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
 {
     DragDropManager *m = DragDropManager::s_ddManager; ASSERT(m);
     m->m_mouseDown = true;
-    m->m_latestUpdateDragging = m->m_dragging = false;
     m->m_timeSinceLastMouseDown = 0;
+    m->m_latestUpdateDragging = m->m_dragging = false;
 
-    DragDropAgent *currentDDAgentBelowMouse = DragDropManager::GetDragDropAgentBelowMouse();
-    m->m_ddInfo.sourceObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
+    DragDropAgent *currentDDAgentBelowMouse =
+            DragDropManager::GetDragDropAgentBelowMouse();
+    m->m_ddInfo.sourceObject = Object::Cast<QObject>(currentDDAgentBelowMouse);
 }
 
 void DragDropManager::HandleGlobalMouseRelease(QObject *obj, QEvent *e)
@@ -110,12 +115,14 @@ void DragDropManager::Update()
                      (m_timeSinceLastMouseDown >= c_TimeToStartDrag)
                     );
 
-    DragDropAgent *currentDDAgentBelowMouse = DragDropManager::GetDragDropAgentBelowMouse();
+    DragDropAgent *currentDDAgentBelowMouse =
+            DragDropManager::GetDragDropAgentBelowMouse();
 
     m_ddInfo.previousObject = m_ddInfo.currentObject;
-    m_ddInfo.currentObject = dynamic_cast<QObject*>(currentDDAgentBelowMouse);
+    m_ddInfo.currentObject = Object::Cast<QObject>(currentDDAgentBelowMouse);
 
-    bool changingOfDragDropAgent = currentDDAgentBelowMouse != m_latestDDAgentBelowMouse;
+    bool changingOfDragDropAgent =
+            (currentDDAgentBelowMouse != m_latestDDAgentBelowMouse);
 
     // Drag Starts in currentDDAgentBelowMouse
     bool isDragStart = !m_latestUpdateDragging && m_dragging;

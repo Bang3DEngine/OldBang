@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "Debug.h"
 #include "Asset.h"
+#include "Object.h"
 #include "XMLParser.h"
 #include "BehaviourManager.h"
 
@@ -33,12 +34,14 @@ public:
     static T* GetAsset(const String &filepath, bool isEngineAsset)
     {
         AssetsManager *am = AssetsManager::GetCurrent();
-        if (!AssetsManager::IsLoaded(filepath, isEngineAsset)) return nullptr;
+        if (!AssetsManager::IsLoaded(filepath, isEngineAsset))
+        {
+            return nullptr;
+        }
         else
         {
-            String f = AssetsManager::FormatFilepath(filepath,
-                                                                isEngineAsset);
-            return dynamic_cast<T*>(am->m_id_To_AssetPointer[f]);
+            String f = AssetsManager::FormatFilepath(filepath, isEngineAsset);
+            return Object::Cast<T>(am->m_id_To_AssetPointer[f]);
         }
     }
 

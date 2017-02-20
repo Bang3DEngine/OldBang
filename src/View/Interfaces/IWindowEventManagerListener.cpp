@@ -1,14 +1,17 @@
 #include "IWindowEventManagerListener.h"
 
+#include "Debug.h"
 #include "WindowEventManager.h"
 
 IWindowEventManagerListener::IWindowEventManagerListener()
 {
+    ASSERT(WindowEventManager::GetInstance());
     WindowEventManager::GetInstance()->AddListener(this);
 }
 
 IWindowEventManagerListener::~IWindowEventManagerListener()
 {
+    ASSERT(WindowEventManager::GetInstance());
     WindowEventManager::GetInstance()->RemoveListener(this);
 }
 

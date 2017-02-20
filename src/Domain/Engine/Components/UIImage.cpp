@@ -28,7 +28,7 @@ String UIImage::GetName() const
 void UIImage::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
-    UIImage *img = static_cast<UIImage*>(clone);
+    UIImage *img = Object::SCast<UIImage>(clone);
     img->SetTexture( GetTexture() );
 }
 

@@ -9,10 +9,8 @@
 #include "Input.h"
 #include "EditorState.h"
 #include "IShortcutListener.h"
-#include "IWindowEventManagerListener.h"
 
 class Toolbar : public QWidget,
-                public IWindowEventManagerListener,
                 public IShortcutListener
 {
     Q_OBJECT

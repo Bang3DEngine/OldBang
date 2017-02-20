@@ -3,6 +3,7 @@
 #include "Time.h"
 #include "Cursor.h"
 #include "Screen.h"
+#include "Object.h"
 #include "Application.h"
 #include "SingletonManager.h"
 
@@ -391,7 +392,7 @@ Input::EventInfo::EventInfo(const QEvent *e)
     if (m_eventType == QEvent::KeyPress ||
             m_eventType == QEvent::KeyRelease)
     {
-        const QKeyEvent *ke = static_cast<const QKeyEvent*>(e);
+        const QKeyEvent *ke = Object::SConstCast<QKeyEvent>(e);
         int k = ke->key();
         m_autoRepeat = ke->isAutoRepeat();
         m_key = static_cast<Input::Key>(k);
@@ -400,7 +401,7 @@ Input::EventInfo::EventInfo(const QEvent *e)
              m_eventType == QEvent::MouseButtonRelease ||
              m_eventType == QEvent::MouseMove)
     {
-        const QMouseEvent *me = static_cast<const QMouseEvent*>(e);
+        const QMouseEvent *me = Object::SConstCast<QMouseEvent>(e);
         Qt::MouseButton mb = me->button();
         m_mouseButton = static_cast<Input::MouseButton>(mb);
         m_x = me->pos().x();
@@ -408,7 +409,7 @@ Input::EventInfo::EventInfo(const QEvent *e)
     }
     else if (m_eventType == QEvent::Wheel)
     {
-        const QWheelEvent *we = static_cast<const QWheelEvent*>(e);
+        const QWheelEvent *we = Object::SConstCast<QWheelEvent>(e);
         m_wheelDelta = we->angleDelta().y();
     }
 }
