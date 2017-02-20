@@ -33,7 +33,7 @@ EditorScene::EditorScene() : Scene()
     m_floor->SetParent(this);
 
     m_fpsCounter = new GameObject();
-    m_fpsCounter->AddHideFlag(HideFlags::HideAndDontSave);
+   // m_fpsCounter->AddHideFlag(HideFlags::HideAndDontSave);
     m_fpsCounter->ChangeTransformByRectTransform();
     m_fpsCounter->SetParent(this);
     RectTransform *rtrans = Object::SCast<RectTransform>(m_fpsCounter->transform);

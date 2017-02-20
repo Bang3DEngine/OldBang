@@ -44,7 +44,7 @@ void SelectionFramebuffer::PrepareForRender(const Scene *scene)
     int id = 0;
     m_gameObject_To_Id.Clear();
     m_id_To_GameObject.Clear();
-    List<GameObject*> gameObjects = scene->GetChildrenRecursivelyEditor();
+    List<GameObject*> gameObjects = scene->GetChildrenRecursively();
     for (GameObject *go : gameObjects)
     {
         m_gameObject_To_Id[go] = id;

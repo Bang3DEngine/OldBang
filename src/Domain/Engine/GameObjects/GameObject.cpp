@@ -194,52 +194,22 @@ const List<Component *> &GameObject::GetComponents() const
     return m_components;
 }
 
-const List<GameObject *> GameObject::GetChildren() const
+const List<GameObject*>& GameObject::GetChildren() const
 {
-    List<GameObject *> cc;
-    for (GameObject *c : m_children)
-    {
-        if (!c->HasHideFlag(HideFlags::HideInHierarchy)) cc.PushBack(c);
-    }
-    return cc;
+    return m_children;
 }
-
-const List<GameObject *> GameObject::GetChildrenEditor() const
-{
-    List<GameObject *> cc;
-    for (GameObject *c : m_children)
-    {
-        cc.PushBack(c);
-    }
-    return cc;
-}
-
 
 List<GameObject*> GameObject::GetChildrenRecursively() const
 {
     List<GameObject*> cc;
     for (GameObject *c : m_children)
     {
-        if (!c->HasHideFlag(HideFlags::HideInHierarchy)) cc.PushBack(c);
-        List<GameObject*> childChildren = c->GetChildrenRecursively();
-        cc.Splice(cc.Begin(), childChildren); //concat
-    }
-    return cc;
-}
-
-#ifdef BANG_EDITOR
-List<GameObject*> GameObject::GetChildrenRecursivelyEditor() const
-{
-    List<GameObject*> cc;
-    for (GameObject *c : m_children)
-    {
         cc.PushBack(c);
-        List<GameObject*> childChildren = c->GetChildrenRecursivelyEditor();
+        List<GameObject*> childChildren = c->GetChildrenRecursively();
         cc.Splice(cc.Begin(), childChildren);
     }
     return cc;
 }
-#endif
 
 Rect GameObject::GetBoundingScreenRect(Camera *cam,
                                        bool includeChildren) const
@@ -429,6 +399,10 @@ void GameObject::UpdateXMLInfo(const XMLNode *xmlInfo)
         {
             ASSERT(iChildren < children.Size());
             GameObject *child = children[iChildren];
+            while (children[iChildren]->HasHideFlag(HideFlags::DontSerialize))
+            {
+                ++iChildren;
+            }
             child->ReadXMLInfo(xmlChildInfo);
             ++iChildren;
         }
@@ -522,10 +496,10 @@ void GameObject::ReadXMLInfoFirstTime(const XMLNode *xmlInfo)
 void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     // No editor stuff added before
-    bool firstRead = GetChildren().Size() == 0 && GetComponents().Size() <= 1;
-    if (firstRead)
+    if (!m_hasBeenReadOnce)
     {
         ReadXMLInfoFirstTime(xmlInfo);
+        m_hasBeenReadOnce = true;
     }
     else
     {
@@ -557,7 +531,7 @@ void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
 
     for (GameObject *child : m_children)
     {
-        if (!child->HasHideFlag(HideFlags::HideInHierarchy))
+        if (!child->HasHideFlag(HideFlags::DontSerialize))
         {
             XMLNode *xmlChild = new XMLNode();
             child->FillXMLInfo(xmlChild);

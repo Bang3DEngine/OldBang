@@ -165,7 +165,7 @@ void Scene::ReadXMLInfo(const XMLNode *xmlInfo)
 
 void Scene::FillXMLInfo(XMLNode *xmlInfo) const
 {
-    if (HasHideFlag(HideFlags::DontSaveToScene))
+    if (HasHideFlag(HideFlags::DontSerialize))
     {
         xmlInfo = nullptr;
         return;

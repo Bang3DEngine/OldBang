@@ -7,13 +7,13 @@ enum HideFlags
 
     HideInHierarchy = 1,
     HideInInspector = 2,
-    DontSaveToScene = 4,
+    DontSerialize = 4,
     HideInSelection = 8,
     HideInChildren  = 16,
 
     HideAndDontSave = HideInHierarchy | HideInInspector |
                       HideInChildren  | HideInSelection |
-                      DontSaveToScene
+                      DontSerialize
 };
 
 

@@ -132,7 +132,7 @@ void GraphicPipeline::ApplySelectionEffect()
     if (!Hierarchy::GetInstance()->GetFirstSelectedGameObject()) { return; }
 
     List<GameObject*> sceneGameObjects =
-            m_currentScene->GetChildrenRecursivelyEditor();
+            m_currentScene->GetChildrenRecursively();
 
     // Create stencil mask that the selection pass will use
     m_gbuffer->ClearDepth();
@@ -235,7 +235,7 @@ void GraphicPipeline::RenderGizmosPass(Framebuffer *fb)
     m_currentDepthLayer = Renderer::DepthLayer::DepthLayerGizmos;
     fb->ClearDepth(); // After each pass, clear the depth
 
-    List<GameObject*> sceneGameObjects = m_currentScene->GetChildrenEditor();
+    const List<GameObject*> &sceneGameObjects = m_currentScene->GetChildren();
     for (GameObject *go : sceneGameObjects)
     {
         go->_OnDrawGizmos();

@@ -69,17 +69,13 @@ public:
      * @brief GetChildren
      * @return
      */
-    const List<GameObject*> GetChildren() const;
+    const List<GameObject*>& GetChildren() const;
 
     /**
      * @brief GetChildrenRecursively
      * @return
      */
     List<GameObject*> GetChildrenRecursively() const;
-
-    #ifdef BANG_EDITOR
-    List<GameObject*> GetChildrenRecursivelyEditor() const;
-    #endif
 
     /**
      * @brief Returns the bounding screen rect of the gameObject rendered
@@ -122,8 +118,6 @@ public:
      */
     void MoveComponent(Component *c, int distance);
     #endif
-
-    const List<GameObject *> GetChildrenEditor() const;
 
     /**
      * Removes the Component c
@@ -306,6 +300,7 @@ protected:
     GameObject *m_parent = nullptr;
 
     bool m_enabled = true;
+    bool m_hasBeenReadOnce = false;
 
     #ifdef BANG_EDITOR
     // Dont load Behaviours. Used on drags from hierarchy for example

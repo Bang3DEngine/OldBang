@@ -160,7 +160,7 @@ void Hierarchy::UpdateHierarchyFromScene()
     Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
 
     // Refresh go's children. If we find a new child, add it to topLevel.
-    const List<GameObject*> sceneChildren = scene->GetChildren();
+    const List<GameObject*> &sceneChildren = scene->GetChildren();
     for (GameObject* child : sceneChildren)
     {
         QTreeWidgetItem *childItem = GetItemFromGameObject(child);
@@ -249,7 +249,7 @@ QTreeWidgetItem* Hierarchy::Update(GameObject *go)
     }
 
     // Refresh go's children. If we find a new child, add it to goItem.
-    const List<GameObject*> children = go->GetChildren();
+    const List<GameObject*> &children = go->GetChildren();
     for (GameObject* cgo : children)
     {
         QTreeWidgetItem *citem = GetItemFromGameObject(cgo);
