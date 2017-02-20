@@ -112,7 +112,7 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
         if (selected)
         {
             Scene *scene = SceneManager::GetActiveScene();
-            EditorScene *edScene = Object::SCast<EditorScene>(scene);
+            EditorScene *edScene = static_cast<EditorScene*>(scene);
             EditorCamera *edCam = edScene->GetEditorCamera();
             edCam->StartLookAt(selected);
         }

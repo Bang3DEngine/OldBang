@@ -105,7 +105,7 @@ Screen *Screen::GetInstance()
     #ifdef BANG_EDITOR
     return EditorWindow::GetInstance()->screen;
     #else
-    return Object::SCast<GameWindow>(
+    return static_cast<GameWindow*>(
                 SingletonManager::GetInstance()->GetWindowSingleton())->screen;
     #endif
 }
@@ -177,7 +177,7 @@ void Screen::dragEnterEvent(QDragEnterEvent *e)
 void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
 {
     Scene *activeScene = SceneManager::GetActiveScene();
-    EditorScene *scene = Object::SCast<EditorScene>(activeScene);
+    EditorScene *scene = static_cast<EditorScene*>(activeScene);
     SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     int x = e->pos().x();
     int y = Screen::GetHeight() - e->pos().y();
@@ -194,7 +194,7 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
             if (selectedGo)
             {
                 m_gameObjectBeingDragged =
-                        Object::SCast<GameObject>(selectedGo->Clone());
+                        static_cast<GameObject*>(selectedGo->Clone());
             }
         }
         else if (origin == explorer)
@@ -248,7 +248,7 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
     Scene *activeScene = SceneManager::GetActiveScene();
     ASSERT(activeScene);
 
-    EditorScene *scene = Object::SCast<EditorScene>(activeScene);
+    EditorScene *scene = static_cast<EditorScene*>(activeScene);
     SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     int x = e->pos().x(), y = Screen::GetHeight() - e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);

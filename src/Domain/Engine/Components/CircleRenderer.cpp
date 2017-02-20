@@ -24,7 +24,7 @@ String CircleRenderer::GetName() const
 void CircleRenderer::CloneInto(ICloneable *clone) const
 {
     LineRenderer::CloneInto(clone);
-    CircleRenderer *cr = Object::SCast<CircleRenderer>(clone);
+    CircleRenderer *cr = static_cast<CircleRenderer*>(clone);
     cr->SetRadius(GetRadius());
     cr->SetSegments(GetSegments());
 }

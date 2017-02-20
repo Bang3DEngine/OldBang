@@ -48,7 +48,7 @@ String PointLight::GetName() const
 void PointLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);
-    PointLight *pl = Object::SCast<PointLight>(clone);
+    PointLight *pl = static_cast<PointLight*>(clone);
     pl->SetRange(GetRange());
 }
 

@@ -40,7 +40,7 @@ String BehaviourHolder::GetName() const
 void BehaviourHolder::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    BehaviourHolder *bh = Object::SCast<BehaviourHolder>(clone);
+    BehaviourHolder *bh = static_cast<BehaviourHolder*>(clone);
     bh->m_sourceFilepath = m_sourceFilepath;
 }
 

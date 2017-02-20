@@ -81,14 +81,14 @@ void FloatComponentSlotSpinBox::focusInEvent(QFocusEvent *event)
     QLineEdit::focusInEvent(event);
     //AdjustStep();
     QTimer::singleShot(50, this, SLOT(SelectAll()));
-    Object::SCast<AttrWidgetFloat>(parent())->OnLineEditFocusIn();
+    static_cast<AttrWidgetFloat*>(parent())->OnLineEditFocusIn();
 }
 
 void FloatComponentSlotSpinBox::focusOutEvent(QFocusEvent *event)
 {
     QLineEdit::focusOutEvent(event);
     //AdjustStep();
-    Object::SCast<AttrWidgetFloat>(parent())->OnLineEditFocusOut();
+    static_cast<AttrWidgetFloat*>(parent())->OnLineEditFocusOut();
 }
 
 void FloatComponentSlotSpinBox::keyPressEvent(QKeyEvent *event)

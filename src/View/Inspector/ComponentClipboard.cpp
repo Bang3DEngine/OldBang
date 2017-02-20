@@ -32,12 +32,12 @@ void ComponentClipboard::CopyComponent(Component *componentToCopy)
         s_copiedComponent = nullptr;
     }
 
-    s_copiedComponent = Object::SCast<Component>(componentToCopy->Clone());
+    s_copiedComponent = static_cast<Component*>(componentToCopy->Clone());
 }
 
 void ComponentClipboard::PasteComponentInto(GameObject *go)
 {
-    go->AddComponent( Object::SCast<Component>(s_copiedComponent->Clone()) );
+    go->AddComponent( static_cast<Component*>(s_copiedComponent->Clone()) );
 }
 
 void ComponentClipboard::PasteComponentValuesInto(Component *comp)

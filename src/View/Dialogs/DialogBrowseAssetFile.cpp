@@ -129,7 +129,7 @@ void DialogBrowseAssetFile::OnSelectionChange(int newIndex)
 void DialogBrowseAssetFile::OnFileAccepted()
 {
     QListWidget *currentListWidget =
-            Object::SCast<QListWidget>(m_tabWidget->currentWidget());
+            static_cast<QListWidget*>(m_tabWidget->currentWidget());
 
     String selectedFilepath = "";
     QList<QListWidgetItem*> selectedItems = currentListWidget->selectedItems();

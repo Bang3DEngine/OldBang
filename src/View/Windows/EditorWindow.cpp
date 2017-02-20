@@ -103,7 +103,7 @@ QApplication *EditorWindow::GetApplication() const
 void EditorWindow::OnTabSceneGameChanged(int index)
 {
     EditorScene *edScene =
-            Object::SCast<EditorScene>(SceneManager::GetActiveScene());
+            static_cast<EditorScene*>(SceneManager::GetActiveScene());
     bool scene = tabContainerSceneGame->widget(index) == tabScene;
     if (scene)
     {

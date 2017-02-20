@@ -18,7 +18,7 @@ RectTransform::~RectTransform()
 void RectTransform::CloneInto(ICloneable *clone) const
 {
     Transform::CloneInto(clone);
-    RectTransform *rt = Object::SCast<RectTransform>(clone);
+    RectTransform *rt = static_cast<RectTransform*>(clone);
 
     rt->SetMarginLeft ( GetMarginLeft()  );
     rt->SetMarginTop  ( GetMarginTop()   );

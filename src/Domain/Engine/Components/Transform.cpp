@@ -15,7 +15,7 @@ Transform::Transform()
 void Transform::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Transform *t = Object::SCast<Transform>(clone);
+    Transform *t = static_cast<Transform*>(clone);
     t->SetLocalPosition(GetLocalPosition());
     t->SetLocalRotation(GetLocalRotation());
     t->SetLocalScale(GetLocalScale());

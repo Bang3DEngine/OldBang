@@ -51,13 +51,13 @@ bool EditorPlayStopFlowController::PlayScene()
     m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
 
     Scene *sceneCopy =
-            Object::SCast<Scene>( m_latestSceneBeforePlaying->Clone() );
+            static_cast<Scene*>( m_latestSceneBeforePlaying->Clone() );
     if (sceneCopy)
     {
         SceneManager::SetActiveScene(sceneCopy);
     }
 
-    EditorScene *edScene = Object::SCast<EditorScene>(sceneCopy);
+    EditorScene *edScene = static_cast<EditorScene*>(sceneCopy);
     edScene->SetFirstFoundCameraOrDefaultOne();
 
     EditorWindow *win = EditorWindow::GetInstance();
@@ -83,7 +83,7 @@ void EditorPlayStopFlowController::StopScene()
     }
 
     SceneManager::SetActiveScene(m_latestSceneBeforePlaying);
-    EditorScene *edScene = Object::SCast<EditorScene>(
+    EditorScene *edScene = static_cast<EditorScene*>(
                 m_latestSceneBeforePlaying);
     edScene->SetCamera( edScene->GetEditorCamera()->GetCamera() );
 

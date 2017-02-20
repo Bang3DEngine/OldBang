@@ -33,24 +33,24 @@ public:
         return dynamic_cast<const TO*>(obj);
     }
 
-    template <class T>
-    static T* SCast(void *obj)
+    template <class TO, class FROM>
+    static TO* SCast(FROM *obj)
     {
-        return static_cast<T*>(obj);
+        return static_cast<TO*>(obj);
     }
 
-    template <class T>
-    static const T* SConstCast(const void *obj)
+    template <class TO, class FROM>
+    static const TO* SConstCast(const FROM *obj)
     {
-        return static_cast<const T*>(obj);
+        return static_cast<const TO*>(obj);
     }
 
     template <class T>
     bool IsOfType() const { return Object::IsOfType<T>(this); }
     template <class T>
-    T *SCast() { return Object::SCast<T>(this); }
+    T *SCast() { return static_cast<T*>(this); }
     template <class T>
-    const T *SConstCast() const { return Object::SCast<const T>(this); }
+    const T *SConstCast() const { return static_cast<const T*>(this); }
     template <class T>
     T *Cast() { return Object::Cast<T>(this); }
     template <class T>

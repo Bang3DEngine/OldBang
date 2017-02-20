@@ -42,7 +42,7 @@ GameObject::GameObject(const String &name)
 
 void GameObject::CloneInto(ICloneable *clone) const
 {
-    GameObject *go = Object::SCast<GameObject>(clone);
+    GameObject *go = static_cast<GameObject*>(clone);
     if (HasComponent<RectTransform>())
     {
         go->ChangeTransformByRectTransform();
@@ -54,7 +54,7 @@ void GameObject::CloneInto(ICloneable *clone) const
     for (GameObject *child : m_children)
     {
         if (child->HasHideFlag(HideFlags::HideInHierarchy)) continue;
-        GameObject *childClone = Object::SCast<GameObject>(child->Clone());
+        GameObject *childClone = static_cast<GameObject*>(child->Clone());
         childClone->SetParent(go);
     }
 
@@ -62,7 +62,7 @@ void GameObject::CloneInto(ICloneable *clone) const
     {
         if (!comp->IsOfType<Transform>())
         {
-            go->AddComponent( Object::SCast<Component>(comp->Clone()) );
+            go->AddComponent( static_cast<Component*>(comp->Clone()) );
         }
         else
         {

@@ -113,19 +113,19 @@ void LineEdit::focusInEvent(QFocusEvent *event)
 {
     QLineEdit::focusInEvent(event);
     QTimer::singleShot(50, this, SLOT(SelectAll()));
-    Object::SCast<AttrWidgetString>(parent())->OnFocusIn();
+    static_cast<AttrWidgetString*>(parent())->OnFocusIn();
 }
 
 void LineEdit::focusOutEvent(QFocusEvent *event)
 {
     QLineEdit::focusOutEvent(event);
-    Object::SCast<AttrWidgetString>(parent())->OnFocusOut();
+    static_cast<AttrWidgetString*>(parent())->OnFocusOut();
 }
 
 void LineEdit::keyPressEvent(QKeyEvent *event)
 {
     QLineEdit::keyPressEvent(event);
-    Object::SCast<AttrWidgetString>(parent())->OnKeyPressed();
+    static_cast<AttrWidgetString*>(parent())->OnKeyPressed();
 }
 
 void LineEdit::Deselect()
@@ -159,17 +159,17 @@ QSize TextEdit::sizeHint() const
 void TextEdit::focusInEvent(QFocusEvent *event)
 {
     QTextEdit::focusInEvent(event);
-    Object::SCast<AttrWidgetString>(parent())->OnFocusIn();
+    static_cast<AttrWidgetString*>(parent())->OnFocusIn();
 }
 
 void TextEdit::focusOutEvent(QFocusEvent *event)
 {
     QTextEdit::focusOutEvent(event);
-    Object::SCast<AttrWidgetString>(parent())->OnFocusOut();
+    static_cast<AttrWidgetString*>(parent())->OnFocusOut();
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *event)
 {
     QTextEdit::keyPressEvent(event);
-    Object::SCast<AttrWidgetString>(parent())->OnKeyPressed();
+    static_cast<AttrWidgetString*>(parent())->OnKeyPressed();
 }

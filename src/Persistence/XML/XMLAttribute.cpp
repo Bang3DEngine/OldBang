@@ -446,7 +446,7 @@ IAttrWidgetButtonListener *XMLAttribute::GetButtonListener() const
     if (lp)
     {
         IAttrWidgetButtonListener *listener =
-           Object::SCast<IAttrWidgetButtonListener>(lp);
+           static_cast<IAttrWidgetButtonListener*>(lp);
         return listener;
     }
     return nullptr;

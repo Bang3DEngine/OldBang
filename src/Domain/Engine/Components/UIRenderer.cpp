@@ -29,7 +29,7 @@ UIRenderer::~UIRenderer()
 
 void UIRenderer::CloneInto(ICloneable *clone) const
 {
-    UIRenderer *rend = Object::SCast<UIRenderer>(clone);
+    UIRenderer *rend = static_cast<UIRenderer*>(clone);
     MeshRenderer::CloneInto(rend);
     rend->m_tint = m_tint;
 }

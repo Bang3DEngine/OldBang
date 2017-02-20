@@ -413,7 +413,7 @@ EditorGizmosGameObject *EditorGizmosGameObject::GetInstance()
 {
     Scene *scene = SceneManager::GetActiveScene();
     ASSERT(scene, "", return nullptr);
-    EditorScene *edScene = Object::SCast<EditorScene>(scene);
+    EditorScene *edScene = static_cast<EditorScene*>(scene);
 
     EditorGizmosGameObject *gizmosGo = edScene->GetGizmosGameObject();
     gizmosGo->Init(); // Just in case

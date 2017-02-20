@@ -22,7 +22,7 @@ String AudioListener::GetName() const
 void AudioListener::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    AudioListener *al = Object::SCast<AudioListener>(clone);
+    AudioListener *al = static_cast<AudioListener*>(clone);
 }
 
 ICloneable *AudioListener::Clone() const

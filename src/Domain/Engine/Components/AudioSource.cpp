@@ -36,7 +36,7 @@ String AudioSource::GetName() const
 void AudioSource::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    AudioSource *as = Object::SCast<AudioSource>(clone);
+    AudioSource *as = static_cast<AudioSource*>(clone);
     as->SetAudioClip( GetAudioClip() );
     as->SetVolume( GetVolume()  );
     as->SetPitch( GetPitch() );

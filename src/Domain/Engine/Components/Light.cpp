@@ -60,7 +60,7 @@ String Light::GetName() const
 void Light::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
-    Light *l = Object::SCast<Light>(clone);
+    Light *l = static_cast<Light*>(clone);
     l->SetIntensity(GetIntensity());
     l->SetColor(GetColor());
 }

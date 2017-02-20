@@ -49,7 +49,7 @@ String UIText::GetName() const
 void UIText::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
-    UIText *text = Object::SCast<UIText>(clone);
+    UIText *text = static_cast<UIText*>(clone);
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );
     text->SetFont ( GetFont() );
