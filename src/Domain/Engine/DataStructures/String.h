@@ -96,7 +96,7 @@ public:
 
     static String ToString(int i);
     static String ToString(float f);
-    static String ToString(void *v);
+    static String ToString(const void *v);
     static String ToString(const Color &v);
     static String ToString(const String &v);
     static String ToString(const Vector2 &v);

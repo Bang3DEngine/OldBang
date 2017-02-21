@@ -21,6 +21,7 @@
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
 #include "ShaderContract.h"
+#include "GraphicPipelineDebugger.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
@@ -54,6 +55,7 @@ GraphicPipeline::~GraphicPipeline()
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
+    GraphicPipelineDebugger::Reset();
     m_currentScene = scene; ASSERT(m_currentScene);
     m_renderingInGame = inGame;
 
@@ -67,6 +69,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     #endif
 
     m_gbuffer->RenderToScreen(m_gbufferAttachmentToBeShown);
+    GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer, m_gbufferAttachmentToBeShown, "ColorFinal");
     //RenderToScreen(m_selectionFB->GetColorTexture()); // Uncomment to see the framebuffer
 }
 
@@ -115,6 +118,19 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
                 RenderCustomPR(rend);
             }
             glDepthMask(GL_TRUE);
+
+            GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer,
+                                                     GBuffer::Attachment::Depth,
+                                                     "DepthAfter" + rend->GetInstanceId());
+            GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer,
+                                                     GBuffer::Attachment::Diffuse,
+                                                     "DiffAfter" + rend->GetInstanceId());
+            GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer,
+                                                     GBuffer::Attachment::Color,
+                                                     "ColorAfter" + rend->GetInstanceId());
+            GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer,
+                                                     GBuffer::Attachment::Stencil,
+                                                     "StencilAfter" + rend->GetInstanceId());
         }
     }
     #ifdef BANG_EDITOR

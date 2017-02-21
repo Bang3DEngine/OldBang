@@ -283,7 +283,9 @@ HEADERS +=                                                          \
     src/View/Cursor.h \
     src/Domain/Graphics/RenderTexture.h \
     src/Domain/Engine/HideFlags.h \
-    src/Domain/Engine/Object.h
+    src/Domain/Engine/Object.h \
+    src/Persistence/IO/stb_image_write.h \
+    src/Domain/Engine/Others/GraphicPipelineDebugger.h
 
 EDITOR {
 HEADERS += \
@@ -484,7 +486,8 @@ SOURCES += \
     src/Domain/Engine/Components/RectTransform.cpp \
     src/View/Cursor.cpp \
     src/Domain/Graphics/RenderTexture.cpp \
-    src/Domain/Engine/Object.cpp
+    src/Domain/Engine/Object.cpp \
+    src/Domain/Engine/Others/GraphicPipelineDebugger.cpp
 
 EDITOR {
     SOURCES += \

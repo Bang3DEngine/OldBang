@@ -12,20 +12,6 @@ class RenderTexture;
 class Framebuffer : public IGLBindable
                    ,public IGLIdable
 {
-
-private:
-
-    int m_width;
-    int m_height;
-    GLuint m_depthAttachmentId = 0;
-    Map<int, GLuint> m_attachmentId_To_GLAttachment;
-    Map<int, RenderTexture*> m_attachmentId_To_Texture;
-    mutable Array<int> m_currentDrawAttachmentIds;
-
-protected:
-
-    void CheckFramebufferError() const;
-
 public:
     Framebuffer(int width, int height);
     virtual ~Framebuffer();
@@ -54,6 +40,20 @@ public:
 
     virtual void Bind() const override;
     virtual void UnBind() const override;
+
+    void SaveToImage(int attachmentId, const String &filepath,
+                     bool invertY = false) const;
+
+protected:
+    void CheckFramebufferError() const;
+
+private:
+    int m_width;
+    int m_height;
+    GLuint m_depthAttachmentId = 0;
+    Map<int, GLuint> m_attachmentId_To_GLAttachment;
+    Map<int, RenderTexture*> m_attachmentId_To_Texture;
+    mutable Array<int> m_currentDrawAttachmentIds;
 };
 
 #endif // FRAMEBUFFER_H

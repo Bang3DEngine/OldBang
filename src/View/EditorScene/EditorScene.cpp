@@ -3,6 +3,7 @@
 #include "Time.h"
 #include "List.h"
 #include "Debug.h"
+#include "Random.h"
 #include "Camera.h"
 #include "UIText.h"
 #include "Hierarchy.h"
@@ -81,7 +82,7 @@ void EditorScene::OnUpdate()
     int fpsSum = 0;
     for (int f : latestFPS) { fpsSum += f; }
     int fpsMean = fpsSum / latestFPS.Size();
-    Debug_Log(fpsMean);
+    if (Random::Value() > 0.95f) { Debug_Log("FPS: " << fpsMean); }
     m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
 }
 

@@ -1,6 +1,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include "String.h"
 #include "HideFlags.h"
 
 class Object
@@ -14,6 +15,8 @@ public:
 
     void AddHideFlag(const HideFlags &hideFlag);
     void RemoveHideFlag(const HideFlags &hideFlag);
+
+    String GetInstanceId() const;
 
     template <class TO, class FROM>
     static bool IsOfType(const FROM obj)

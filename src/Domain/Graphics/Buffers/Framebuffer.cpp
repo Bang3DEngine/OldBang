@@ -1,5 +1,9 @@
 #include "Framebuffer.h"
 
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
 #include "Math.h"
 #include "Debug.h"
 #include "Vector2.h"
@@ -206,6 +210,41 @@ void Framebuffer::Bind() const
 void Framebuffer::UnBind() const
 {
     glBindFramebuffer(GL_FRAMEBUFFER, PreUnBind(GL_FRAMEBUFFER_BINDING));
+}
+
+void Framebuffer::SaveToImage(int attachmentId, const String &filepath,
+                              bool invertY) const
+{
+    Texture *tex = m_attachmentId_To_Texture.Get(attachmentId);
+    if (tex)
+    {
+        SetReadBuffer(attachmentId);
+        unsigned int bytesSize = m_width * m_height * 4;
+        unsigned char *pixels = new unsigned char[bytesSize];
+        glReadPixels(0, 0, m_width, m_height,
+                     GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+        if (invertY)
+        {
+            unsigned char *pixelsCpy = new unsigned char[bytesSize];
+            memcpy(pixelsCpy, pixels, bytesSize);
+            for (int i = 0; i < m_width; ++i)
+            {
+                for (int j = 0; j < m_height; ++j)
+                {
+                    int coords    = j * m_width + i;
+                    int invCoords = (m_height - j - 1) * m_width + i;
+                    coords *= 4; invCoords *= 4;
+                    pixels[coords + 0] = pixelsCpy[invCoords + 0];
+                    pixels[coords + 1] = pixelsCpy[invCoords + 1];
+                    pixels[coords + 2] = pixelsCpy[invCoords + 2];
+                    pixels[coords + 3] = pixelsCpy[invCoords + 3];
+                }
+            }
+            delete[] pixelsCpy;
+        }
+        stbi_write_bmp(filepath.ToCString(), m_width, m_height, 4, pixels);
+        delete[] pixels;
+    }
 }
 
 

@@ -30,3 +30,8 @@ void Object::RemoveHideFlag(const HideFlags &hideFlag)
     m_hideFlags = m_hideFlags ^ hideFlag;
 }
 
+String Object::GetInstanceId() const
+{
+    return String::ToString( static_cast<const void*>(this) );
+}
+

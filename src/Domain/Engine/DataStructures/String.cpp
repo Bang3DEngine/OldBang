@@ -315,7 +315,7 @@ String String::ToString(float f)
     return String(std::to_string(f));
 }
 
-String String::ToString(void *v)
+String String::ToString(const void *v)
 {
     std::ostringstream log;
     log << v;
