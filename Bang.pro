@@ -128,6 +128,7 @@ INCLUDEPATH +=                                   \
     $$PWD/src/Domain/Graphics/Interfaces/        \
     $$PWD/src/Domain/Engine/                     \
     $$PWD/src/Domain/Engine/Interfaces/          \
+    $$PWD/src/Domain/Engine/GraphicPipeline/     \
     $$PWD/src/Domain/Engine/Debug/               \
     $$PWD/src/Domain/Engine/GameObjects/         \
     $$PWD/src/Domain/Engine/DataStructures/      \
@@ -221,7 +222,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/Physics/Color.h                               \
     src/View/Application.h                                          \
     src/Domain/Engine/Others/SceneManager.h                         \
-    src/Domain/Engine/Others/GraphicPipeline.h                      \
     src/Domain/Engine/Components/Canvas.h                           \
     src/Domain/Engine/Components/UIImage.h                          \
     src/Domain/Engine/Components/UIRenderer.h                       \
@@ -285,7 +285,12 @@ HEADERS +=                                                          \
     src/Domain/Engine/HideFlags.h \
     src/Domain/Engine/Object.h \
     src/Persistence/IO/stb_image_write.h \
-    src/Domain/Engine/Others/GraphicPipelineDebugger.h
+    src/Domain/Engine/Others/GraphicPipelineDebugger.h \
+    src/Domain/Engine/GraphicPipeline/GraphicPipeline.h \
+    src/Domain/Engine/GraphicPipeline/GraphicPipelinePass.h \
+    src/Domain/Engine/GraphicPipeline/GPDepthLayerPass.h \
+    src/Domain/Engine/GraphicPipeline/GPOpaquePass.h \
+    src/Domain/Engine/GraphicPipeline/GPDeferredLightsPass.h
 
 EDITOR {
 HEADERS += \
@@ -428,7 +433,6 @@ SOURCES += \
     src/Domain/Engine/Physics/Color.cpp \
     src/View/Application.cpp \
     src/Domain/Engine/Others/SceneManager.cpp \
-    src/Domain/Engine/Others/GraphicPipeline.cpp \
     src/Domain/Engine/Components/Canvas.cpp \
     src/Domain/Engine/Components/UIImage.cpp \
     src/Domain/Engine/Components/UIRenderer.cpp \
@@ -487,7 +491,12 @@ SOURCES += \
     src/View/Cursor.cpp \
     src/Domain/Graphics/RenderTexture.cpp \
     src/Domain/Engine/Object.cpp \
-    src/Domain/Engine/Others/GraphicPipelineDebugger.cpp
+    src/Domain/Engine/Others/GraphicPipelineDebugger.cpp \
+    src/Domain/Engine/GraphicPipeline/GraphicPipeline.cpp \
+    src/Domain/Engine/GraphicPipeline/GraphicPipelinePass.cpp \
+    src/Domain/Engine/GraphicPipeline/GPDepthLayerPass.cpp \
+    src/Domain/Engine/GraphicPipeline/GPOpaquePass.cpp \
+    src/Domain/Engine/GraphicPipeline/GPDeferredLightsPass.cpp
 
 EDITOR {
     SOURCES += \

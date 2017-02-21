@@ -16,11 +16,13 @@
 #include "Material.h"
 #include "GameObject.h"
 #include "MeshFactory.h"
+#include "GPOpaquePass.h"
 #include "SceneManager.h"
 #include "RenderTexture.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
 #include "ShaderContract.h"
+#include "GPDeferredLightsPass.h"
 #include "GraphicPipelineDebugger.h"
 
 #ifdef BANG_EDITOR
@@ -29,6 +31,10 @@
 #endif
 
 GraphicPipeline::GraphicPipeline(Screen *screen)
+    : m_gbuffer(new GBuffer(screen->m_width, screen->m_height)),
+      m_scenePass (this, Renderer::DepthLayer::DepthLayerScene),
+      m_canvasPass(this, Renderer::DepthLayer::DepthLayerCanvas),
+      m_gizmosPass(this, Renderer::DepthLayer::DepthLayerGizmos)
 {
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
                 "Materials/PR_SelectionEffect.bmat", true);
@@ -42,12 +48,18 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
          AssetsManager::Load<Material>("Materials/RenderGBufferToScreen.bmat",
                                        true);
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
+
+    m_scenePass.AddSubPass (new GPOpaquePass(this));
+    m_scenePass.AddSubPass (new GPDeferredLightsPass(this));
+    m_canvasPass.AddSubPass(new GPOpaquePass(this));
+    m_gizmosPass.AddSubPass(new GPOpaquePass(this));
 }
 
 GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
     delete m_matSelectionEffectScreen;
+
     #ifdef BANG_EDITOR
     delete m_selectionFB;
     #endif
@@ -55,8 +67,23 @@ GraphicPipeline::~GraphicPipeline()
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
+    p_scene = scene; ASSERT(p_scene);
+
+    // GBuffer
+    Color bgColor = p_scene->GetCamera()->GetClearColor();
+    m_gbuffer->ClearBuffersAndBackground(bgColor);
+    m_gbuffer->Bind();
+
+    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
+    m_scenePass.Pass(renderers);
+    m_canvasPass.Pass(renderers);
+    m_gizmosPass.Pass(renderers);
+
+    m_gbuffer->UnBind();
+    m_gbuffer->RenderToScreen(m_gbufferAttachmentToBeShown);
+
+    /*
     GraphicPipelineDebugger::Reset();
-    m_currentScene = scene; ASSERT(m_currentScene);
     m_renderingInGame = inGame;
 
     RenderGBuffer();
@@ -71,6 +98,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     m_gbuffer->RenderToScreen(m_gbufferAttachmentToBeShown);
     GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer, m_gbufferAttachmentToBeShown, "ColorFinal");
     //RenderToScreen(m_selectionFB->GetColorTexture()); // Uncomment to see the framebuffer
+    */
 }
 
 void GraphicPipeline::RenderRenderer(Renderer *rend)
@@ -148,7 +176,7 @@ void GraphicPipeline::ApplySelectionEffect()
     if (!Hierarchy::GetInstance()->GetFirstSelectedGameObject()) { return; }
 
     List<GameObject*> sceneGameObjects =
-            m_currentScene->GetChildrenRecursively();
+            p_scene->GetChildrenRecursively();
 
     // Create stencil mask that the selection pass will use
     m_gbuffer->ClearDepth();
@@ -178,7 +206,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 {
     // Limit rendering to the renderer visible rect
     Rect renderRect = Rect::ScreenRect;
-    Camera *sceneCam = m_currentScene->GetCamera();
+    Camera *sceneCam = p_scene->GetCamera();
     if (rend)
     {
         renderRect = rend->gameObject->GetBoundingScreenRect(sceneCam, false);
@@ -198,7 +226,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     Material *rendMat = rend ? rend->GetMaterial() : nullptr;
     if ( !rend || (rendMat && rendMat->ReceivesLighting()) )
     {
-        List<Light*> lights = m_currentScene->GetComponentsInChildren<Light>();
+        List<Light*> lights = p_scene->GetComponentsInChildren<Light>();
         for (Light *light : lights)
         {
             if (!CAN_USE_COMPONENT(light)) { continue; }
@@ -213,7 +241,7 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     m_currentDepthLayer = depthLayer;
     fb->ClearDepth(); // After each pass, clear the depth
 
-    List<Renderer*> renderers = m_currentScene->GetComponentsInChildren<Renderer>();
+    List<Renderer*> renderers = p_scene->GetComponentsInChildren<Renderer>();
     for (Renderer *rend : renderers) // Opaque
     {
         if (m_renderingInGame &&
@@ -253,7 +281,7 @@ void GraphicPipeline::RenderGizmosPass(Framebuffer *fb)
     m_currentDepthLayer = Renderer::DepthLayer::DepthLayerGizmos;
     fb->ClearDepth(); // After each pass, clear the depth
 
-    const List<GameObject*> &sceneGameObjects = m_currentScene->GetChildren();
+    const List<GameObject*> &sceneGameObjects = p_scene->GetChildren();
     for (GameObject *go : sceneGameObjects)
     {
         go->_OnDrawGizmos();
@@ -328,7 +356,7 @@ void GraphicPipeline::RenderScreenPlane()
 
 void GraphicPipeline::RenderGBuffer()
 {
-    Color bgColor = m_currentScene->GetCamera()->GetClearColor();
+    Color bgColor = p_scene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
 
     m_gbuffer->Bind();
@@ -349,7 +377,7 @@ void GraphicPipeline::RenderGBuffer()
 void GraphicPipeline::RenderSelectionFramebuffer()
 {
     m_selectionFB->m_isPassing = true;
-    m_selectionFB->PrepareForRender(m_currentScene);
+    m_selectionFB->PrepareForRender(p_scene);
 
     m_selectionFB->Bind();
     m_selectionFB->Clear();
@@ -385,7 +413,8 @@ void GraphicPipeline::OnResize(int newWidth, int newHeight)
     #endif
 }
 
-void GraphicPipeline::SetGBufferAttachmentToBeRendered(GBuffer::Attachment attachment)
+void GraphicPipeline::SetGBufferAttachmentToBeRendered(
+        GBuffer::Attachment attachment)
 {
     m_gbufferAttachmentToBeShown = attachment;
 }

@@ -3,6 +3,7 @@
 
 #include "GBuffer.h"
 #include "Renderer.h"
+#include "GPDepthLayerPass.h"
 
 class Mesh;
 class Scene;
@@ -44,7 +45,19 @@ public:
     SelectionFramebuffer* GetSelectionFramebuffer();
     #endif
 
+    /**
+     * @brief Apply all the scene lights over the current gbuffer.
+     */
+    void ApplyDeferredLights(Renderer *rend = nullptr);
+
 private:
+    GBuffer *m_gbuffer = nullptr;
+    #ifdef BANG_EDITOR
+    SelectionFramebuffer *m_selectionFB = nullptr;
+    #endif
+
+    GPDepthLayerPass m_scenePass, m_canvasPass, m_gizmosPass;
+
     GBuffer::Attachment m_gbufferAttachmentToBeShown =
             GBuffer::Attachment::Color;
 
@@ -54,24 +67,15 @@ private:
     Material *m_renderGBufferToScreenMaterial = nullptr;
     Mesh *m_screenPlaneMesh = nullptr;
 
-    Scene *m_currentScene = nullptr;
+    Scene *p_scene = nullptr;
     Renderer::DepthLayer m_currentDepthLayer =
                              Renderer::DepthLayer::DepthLayerScene;
-
-    GBuffer *m_gbuffer = nullptr;
-    #ifdef BANG_EDITOR
-    SelectionFramebuffer *m_selectionFB = nullptr;
-    #endif
 
     // For opaque
     Material *m_matSelectionEffectScreen = nullptr;
 
     void ApplySelectionEffect();
 
-    /**
-     * @brief Apply all the scene lights over the current gbuffer.
-     */
-    void ApplyDeferredLights(Renderer *rend = nullptr);
     void RenderGBuffer();
 
     #ifdef BANG_EDITOR
