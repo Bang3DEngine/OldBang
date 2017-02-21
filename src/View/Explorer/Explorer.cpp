@@ -318,7 +318,8 @@ void Explorer::SelectFile(const String &path)
 
 Explorer *Explorer::GetInstance()
 {
-    return EditorWindow::GetInstance()->widgetListExplorer;
+    EditorWindow *ew = EditorWindow::GetInstance();
+    return ew ? ew->widgetListExplorer : nullptr;
 }
 
 String Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const

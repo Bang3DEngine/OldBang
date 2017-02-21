@@ -92,7 +92,7 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     bool cameraFound = false;
     for (Camera *cam : cameras)
     {
-        if (!cam->gameObject->HasHideFlag(HideFlags::HideInHierarchy))
+        if (!cam->gameObject->HasHideFlag(HideFlags::HideInGame))
         {
             SetCamera(cam);
             cameraFound = true;
@@ -183,7 +183,7 @@ void Scene::PostReadXMLInfo(const XMLNode *xmlInfo)
     GameObject::PostReadXMLInfo(xmlInfo);
 
     // In the Editor Scene we'll use the EditorCamera, so skip this
-    if (!HasHideFlag(HideFlags::HideInHierarchy))
+    if (!HasHideFlag(HideFlags::HideInGame))
     {
         String camId = xmlInfo->GetString("Camera");
         if (!camId.Empty())

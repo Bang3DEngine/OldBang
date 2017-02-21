@@ -48,13 +48,15 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     #ifdef BANG_EDITOR
     // Set directory of the explorer to the Assets' root of the new project
     Explorer::GetInstance()->SetDir(
-                ProjectManager::s_currentProject->GetProjectAssetsRootFilepath());
+             ProjectManager::s_currentProject->GetProjectAssetsRootFilepath());
 
     EngineConfig::RegisterInRecentProjectsList(projectFilepath);
 
     // Set window title
-    String title = "Bang - " + ProjectManager::s_currentProject->GetProjectName();
-    EditorWindow::GetInstance()->GetMainWindow()->setWindowTitle(title.ToQString());
+    String title = "Bang - " +
+            ProjectManager::s_currentProject->GetProjectName();
+    EditorWindow::GetInstance()->GetMainWindow()->
+            setWindowTitle(title.ToQString());
     #endif
 
     // Set persistence variables
@@ -94,14 +96,16 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
     {
         if (!Persistence::CreateDirectory(projectDir))
         {
-            Debug_Error ("Could not create project in directory '" << projectDir << "'.");
+            Debug_Error ("Could not create project in directory '" <<
+                         projectDir << "'.");
             return nullptr;
         }
     }
     else
     {
         // TODO: Add overwrite window warning
-        Debug_Warn("Directory '" << projectDir << "' already existed, using it.");
+        Debug_Warn("Directory '" << projectDir <<
+                   "' already existed, using it.");
     }
 
     ProjectManager::CloseCurrentProject();
@@ -109,7 +113,8 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
     String projectFileFilepath = projectDir + "/" +
             projectName + "." + Project::GetFileExtensionStatic();
 
-    ProjectManager::s_currentProject = CreateNewProjectFileOnly(projectFileFilepath);
+    ProjectManager::s_currentProject =
+            CreateNewProjectFileOnly(projectFileFilepath);
     ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 
     Persistence::CreateDirectory(projectDir + "/Assets");
@@ -131,7 +136,8 @@ void ProjectManager::SaveProject(const Project *project)
                                       project->GetXMLInfoString());
     if (ok)
     {
-        Debug_Status("Project '" << project->GetProjectName() << "' successfully saved.", 5.0f);
+        Debug_Status("Project '" << project->GetProjectName() <<
+                     "' successfully saved.", 5.0f);
     }
     else
     {
@@ -157,27 +163,31 @@ void ProjectManager::CloseCurrentProject()
 
 String ProjectManager::DialogCreateNewProject()
 {
-    String dirPath = Dialog::GetOpenDirname("Select the project containing directory");
+    String dirPath = Dialog::GetOpenDirname(
+                "Select the project containing directory");
     if (!dirPath.Empty())
     {
         bool ok;
-        String projectName = Dialog::GetInputString("Please specify your new project's name",
-                                                    "Project name:",
-                                                    "MyBangProject",
-                                                    &ok);
+        String projectName =
+                Dialog::GetInputString("Please specify your new project's name",
+                                       "Project name:",
+                                       "MyBangProject",
+                                       &ok);
         if (ok)
         {
             String projectPath = dirPath + "/" + projectName;
             if (!Persistence::ExistsDirectory(projectPath))
             {
                 ProjectManager::CreateNewProject(dirPath, projectName);
-                return ProjectManager::GetCurrentProject()->GetProjectFileFilepath();
+                return ProjectManager::GetCurrentProject()->
+                        GetProjectFileFilepath();
             }
             else
             {
-                Dialog::Error("Error creating the project",
-                              "The directory '" + projectPath + "' existed before.\n" +
-                              "Please select another name for your project.");
+                Dialog::Error(
+                      "Error creating the project",
+                      "The directory '" + projectPath + "' existed before.\n" +
+                      "Please select another name for your project.");
             }
         }
     }

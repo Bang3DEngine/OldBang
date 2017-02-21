@@ -66,7 +66,8 @@ void FileReferencesManager::TreatNextQueuedFileOrDirNameChange()
 
 FileReferencesManager *FileReferencesManager::GetInstance()
 {
-    return Explorer::GetInstance()->m_fileRefsManager;
+    Explorer *exp = Explorer::GetInstance();
+    return exp ? exp->m_fileRefsManager : nullptr;
 }
 
 void FileReferencesManager::RefactorFiles(const String &relPathBefore,

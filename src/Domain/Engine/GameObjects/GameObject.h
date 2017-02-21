@@ -178,8 +178,6 @@ public:
     {
         for (auto c = m_children.Begin(); c != m_children.End(); ++c)
         {
-            if ((*c)->HasHideFlag(HideFlags::HideInHierarchy)) continue;
-
             T *comp = (*c)->GetComponent<T>();
             if (comp) return comp;
             comp = (*c)->GetComponentInChildren<T>();

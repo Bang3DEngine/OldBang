@@ -124,13 +124,11 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
 
 int main(int argc, char **argv)
 {
-    String executableDir = ""; // Get the executable dir
-    {
-        QApplication preApp(argc, argv);
-        executableDir = preApp.applicationDirPath();
-        preApp.exit(0);
-    }
-
+    // Get the executable dir
+    QApplication *preApp = new QApplication(argc, argv);
+    String executableDir = preApp->applicationDirPath();
+    preApp->exit(0);
+    delete preApp;
 
     InitSingletonManager();
 
@@ -158,6 +156,7 @@ int main(int argc, char **argv)
     loadedProjectFilepath =
             SelectProjectWindow::ExecAndGetProjectFilepath(selectProjectWindow,
                                                            selectProjectApp);
+    delete selectProjectApp;
     #else
     loadedProjectFilepath = executableDir + "/GameData/Game.bproject";
     #endif

@@ -45,7 +45,7 @@ EditorScene::EditorScene() : Scene()
     m_fpsCounterText->SetVerticalAlign(UIText::VerticalAlignment::Top);
     m_fpsCounterText->SetTextSize(10);
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    AddHideFlag(HideFlags::HideInGame); // To enable updates in editor time
 }
 
 EditorScene::~EditorScene()
@@ -82,7 +82,6 @@ void EditorScene::OnUpdate()
     int fpsSum = 0;
     for (int f : latestFPS) { fpsSum += f; }
     int fpsMean = fpsSum / latestFPS.Size();
-    if (Random::Value() > 0.95f) { Debug_Log("FPS: " << fpsMean); }
     m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
 }
 

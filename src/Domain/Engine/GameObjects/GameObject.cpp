@@ -53,7 +53,7 @@ void GameObject::CloneInto(ICloneable *clone) const
 
     for (GameObject *child : m_children)
     {
-        if (child->HasHideFlag(HideFlags::HideInHierarchy)) continue;
+        if (child->HasHideFlag(HideFlags::DontClone)) { continue; }
         GameObject *childClone = Object::SCast<GameObject>(child->Clone());
         childClone->SetParent(go);
     }
@@ -235,7 +235,7 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
         for (GameObject *child : m_children)
         {
             #ifdef BANG_EDITOR
-            if (child->HasHideFlag(HideFlags::HideInHierarchy) ||
+            if (child->HasHideFlag(HideFlags::HideInGame) ||
                 child->IsDraggedGameObject()) continue;
             #endif
 
@@ -669,7 +669,8 @@ void GameObject::_OnStart()
 void GameObject::_OnUpdate()
 {
     #ifdef BANG_EDITOR
-    bool canUpdate = EditorState::IsPlaying() || HasHideFlag(HideFlags::HideInHierarchy);
+    bool canUpdate = EditorState::IsPlaying() ||
+                     HasHideFlag(HideFlags::HideInGame);
     #else
     bool canUpdate = true;
     #endif
