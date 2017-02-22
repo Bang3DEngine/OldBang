@@ -3,6 +3,7 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "GBuffer.h"
+#include "SelectionFramebuffer.h"
 
 GPPass_DepthLayer::GPPass_DepthLayer(GraphicPipeline *graphicPipeline,
                                      Renderer::DepthLayer depthLayer) :
@@ -15,7 +16,14 @@ void GPPass_DepthLayer::PrePass(const List<Renderer*> &renderers,
                                 const List<GameObject*> &sceneChildren)
 {
     GraphicPipelinePass::PrePass(renderers, sceneChildren);
-    p_gbuffer->ClearAllBuffersExceptColor();
+    if (!p_selectionFramebuffer->IsPassing())
+    {
+        p_gbuffer->ClearAllBuffersExceptColor();
+    }
+    else
+    {
+        p_selectionFramebuffer->ClearDepth();
+    }
 }
 
 bool GPPass_DepthLayer::CanRender(const Renderer *renderer) const

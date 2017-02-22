@@ -160,6 +160,11 @@ bool SelectionFramebuffer::IsPassing() const
     return m_isPassing;
 }
 
+ShaderProgram *SelectionFramebuffer::GetSelectionShaderProgram() const
+{
+    return m_selectionProgram;
+}
+
 void SelectionFramebuffer::OnGameObjectDestroyed(GameObject *destroyed)
 {
     if (destroyed == m_lastMouseOverGO)

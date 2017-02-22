@@ -57,6 +57,8 @@ private:
     #endif
 
     GPPass_DepthLayer m_scenePass, m_canvasPass, m_gizmosPass;
+    GPPass_DepthLayer m_sceneSelectionPass, m_canvasSelectionPass,
+                      m_gizmosSelectionPass;
 
     GBuffer::Attachment m_gbufferAttachmentToBeShown =
             GBuffer::Attachment::Color;

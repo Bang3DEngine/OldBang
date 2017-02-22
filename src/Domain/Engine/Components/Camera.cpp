@@ -32,6 +32,16 @@ Camera::~Camera()
 
 }
 
+void Camera::SetReplacementShaderProgram(ShaderProgram *replacementSP)
+{
+    m_replacementShaderProgram = replacementSP;
+}
+
+ShaderProgram *Camera::GetReplacementShaderProgram() const
+{
+    return m_replacementShaderProgram;
+}
+
 void Camera::GetViewMatrix(Matrix4 *view) const
 {
     if (m_identityMode) { *view = Matrix4::Identity; return; }

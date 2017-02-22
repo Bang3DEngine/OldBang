@@ -16,6 +16,7 @@ class Matrix4;
 class XMLNode;
 class ICloneable;
 class MeshRenderer;
+class ShaderProgram;
 class Camera : public Component
 {
 public:
@@ -23,6 +24,9 @@ public:
         Orthographic,
         Perspective
     );
+
+    void SetReplacementShaderProgram(ShaderProgram *replacementShaderProgram);
+    ShaderProgram *GetReplacementShaderProgram() const;
 
     void GetViewMatrix(Matrix4 *view) const;
     void GetProjectionMatrix(Matrix4 *proj) const;
@@ -86,6 +90,7 @@ private:
     static Mesh* s_camMesh;
     static void InitStatics();
 
+    ShaderProgram *m_replacementShaderProgram = nullptr;
     float m_orthoHeight  = 25.0f;
     bool m_identityMode = false;
 

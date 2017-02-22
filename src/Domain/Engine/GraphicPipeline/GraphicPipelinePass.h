@@ -8,6 +8,7 @@ class GBuffer;
 class Renderer;
 class GameObject;
 class GraphicPipeline;
+class SelectionFramebuffer;
 class GraphicPipelinePass
 {
 public:
@@ -32,6 +33,7 @@ protected:
     GBuffer *p_gbuffer = nullptr;
     GraphicPipeline *p_graphicPipeline = nullptr;
     GraphicPipelinePass *p_parentPass = nullptr;
+    SelectionFramebuffer *p_selectionFramebuffer = nullptr;
     List<GraphicPipelinePass*> m_subPasses;
 
 };

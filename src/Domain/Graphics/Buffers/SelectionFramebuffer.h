@@ -39,6 +39,8 @@ public:
     Vector3 GetWorldPositionAt(int x, int y);
     bool IsPassing() const;
 
+    ShaderProgram *GetSelectionShaderProgram() const;
+
     void OnGameObjectDestroyed(GameObject *destroyed) override;
 
 private:

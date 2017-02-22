@@ -23,6 +23,7 @@
 #include "ShaderContract.h"
 #include "GPPass_G_Gizmos.h"
 #include "GPPass_G_OpaqueSP.h"
+#include "GPPass_Selection.h"
 #include "GPPass_G_OpaqueNoSP.h"
 #include "GraphicPipelineDebugger.h"
 #include "GPPass_SP_DeferredLights.h"
@@ -33,18 +34,19 @@
 #endif
 
 GraphicPipeline::GraphicPipeline(Screen *screen)
-    : m_gbuffer(new GBuffer(screen->m_width, screen->m_height)),
-      m_scenePass (this, Renderer::DepthLayer::DepthLayerScene),
-      m_canvasPass(this, Renderer::DepthLayer::DepthLayerCanvas),
-      m_gizmosPass(this, Renderer::DepthLayer::DepthLayerGizmos)
+  : m_gbuffer(new GBuffer(screen->m_width, screen->m_height)),
+    #ifdef BANG_EDITOR
+    m_selectionFB(new SelectionFramebuffer(screen->m_width, screen->m_height)),
+    #endif
+    m_scenePass (this, Renderer::DepthLayer::DepthLayerScene),
+    m_canvasPass(this, Renderer::DepthLayer::DepthLayerCanvas),
+    m_gizmosPass(this, Renderer::DepthLayer::DepthLayerGizmos),
+    m_sceneSelectionPass (this, Renderer::DepthLayer::DepthLayerScene),
+    m_canvasSelectionPass(this, Renderer::DepthLayer::DepthLayerCanvas),
+    m_gizmosSelectionPass(this, Renderer::DepthLayer::DepthLayerGizmos)
 {
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
                 "Materials/SP_SelectionEffect.bmat", true);
-
-    m_gbuffer = new GBuffer(screen->m_width, screen->m_height);
-    #ifdef BANG_EDITOR
-    m_selectionFB = new SelectionFramebuffer(screen->m_width, screen->m_height);
-    #endif
 
     m_renderGBufferToScreenMaterial =
          AssetsManager::Load<Material>("Materials/RenderGBufferToScreen.bmat",
@@ -55,10 +57,12 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     m_scenePass.AddSubPass (new GPPass_G_OpaqueSP(this));
     m_scenePass.AddSubPass (new GPPass_SP_DeferredLights(this));
     m_scenePass.AddSubPass (new GPPass_G_OpaqueNoSP(this));
-
     m_canvasPass.AddSubPass(new GPPass_G_OpaqueNoSP(this));
-
     m_gizmosPass.AddSubPass(new GPPass_G_Gizmos(this));
+
+    m_sceneSelectionPass.AddSubPass(new GPPass_Selection(this));
+    m_canvasSelectionPass.AddSubPass(new GPPass_Selection(this));
+    m_gizmosSelectionPass.AddSubPass(new GPPass_Selection(this));
 }
 
 GraphicPipeline::~GraphicPipeline()
@@ -75,19 +79,41 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
     p_scene = scene; ASSERT(p_scene);
 
+    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
+    List<GameObject*> sceneChildren = scene->GetChildren();
+
     // GBuffer
     Color bgColor = p_scene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
     m_gbuffer->Bind();
 
-    List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
-    List<GameObject*> sceneChildren = scene->GetChildren();
     m_scenePass.Pass(renderers, sceneChildren);
     m_canvasPass.Pass(renderers, sceneChildren);
     m_gizmosPass.Pass(renderers, sceneChildren);
 
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen(m_gbufferAttachmentToBeShown);
+    //
+
+    // Selection buffer
+    m_selectionFB->m_isPassing = true;
+    m_selectionFB->PrepareForRender(scene);
+
+    m_selectionFB->Bind();
+
+    m_selectionFB->ClearColor();
+    m_sceneSelectionPass.Pass(renderers, sceneChildren);
+    m_canvasSelectionPass.Pass(renderers, sceneChildren);
+    m_gizmosSelectionPass.Pass(renderers, sceneChildren);
+
+    m_selectionFB->UnBind();
+
+    m_selectionFB->ProcessSelection();
+    m_selectionFB->m_isPassing = false;
+
+    // Uncomment this line to see the selection framebuffer in the screen
+    //RenderToScreen(m_selectionFB->GetColorTexture());
+    //
 
     /*
     GraphicPipelineDebugger::Reset();

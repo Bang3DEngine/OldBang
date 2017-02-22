@@ -47,7 +47,8 @@ bool GraphicPipelinePass::CanRender(const Renderer *renderer) const
 
 GraphicPipelinePass::GraphicPipelinePass(GraphicPipeline *graphicPipeline) :
     p_graphicPipeline(graphicPipeline),
-    p_gbuffer(graphicPipeline->GetGBuffer())
+    p_gbuffer(graphicPipeline->GetGBuffer()),
+    p_selectionFramebuffer(graphicPipeline->GetSelectionFramebuffer())
 {
 }
 

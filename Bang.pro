@@ -292,7 +292,8 @@ HEADERS +=                                                          \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.h \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.h \
     src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h
+    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h \
+    src/Domain/Engine/GraphicPipeline/GPPass_Selection.h
 
 EDITOR {
 HEADERS += \
@@ -500,7 +501,8 @@ SOURCES += \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp
+    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass_Selection.cpp
 
 EDITOR {
     SOURCES += \

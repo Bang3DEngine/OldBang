@@ -138,11 +138,6 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
 
 void Material::SetShaderProgram(ShaderProgram *program)
 {
-    if (m_shaderProgram)
-    {
-        delete m_shaderProgram;
-    }
-
     m_shaderProgram = program;
 }
 

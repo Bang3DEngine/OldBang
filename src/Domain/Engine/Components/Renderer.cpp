@@ -89,7 +89,11 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
         if (camera)
         {
             Transform *t = camera->gameObject->transform;
-            ShaderProgram *sp = mat->GetShaderProgram();
+            ShaderProgram *sp =
+                    camera->GetReplacementShaderProgram() ?
+                        camera->GetReplacementShaderProgram() :
+                        mat->GetShaderProgram();
+
             sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
                                t->GetPosition(), false);
 
