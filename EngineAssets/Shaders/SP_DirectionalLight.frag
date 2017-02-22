@@ -1,4 +1,4 @@
-#include "PR.frag"
+#include "SP.frag"
 #include "DirectionalLight.glsl"
 
 void Main()

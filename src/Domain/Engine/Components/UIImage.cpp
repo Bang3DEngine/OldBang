@@ -12,8 +12,8 @@
 
 UIImage::UIImage()
 {
-    m_material = AssetsManager::Load<Material>("Materials/UI/D2G_UIImage.bmat", true);
-    m_materialPR = AssetsManager::Load<Material>("Materials/UI/PR_UIImage.bmat", true);
+    m_material = AssetsManager::Load<Material>("Materials/UI/G_UIImage.bmat", true);
+    m_materialSP = AssetsManager::Load<Material>("Materials/UI/SP_UIImage.bmat", true);
 }
 
 UIImage::~UIImage()
@@ -39,13 +39,13 @@ ICloneable *UIImage::Clone() const
     return img;
 }
 
-void UIImage::RenderCustomPR() const
+void UIImage::RenderCustomSP() const
 {
-    UIRenderer::RenderCustomPR();
+    UIRenderer::RenderCustomSP();
 
-    ASSERT(m_material); ASSERT(m_materialPR);
+    ASSERT(m_material); ASSERT(m_materialSP);
 
-    ShaderProgram *sp = m_materialPR->GetShaderProgram();
+    ShaderProgram *sp = m_materialSP->GetShaderProgram();
     sp->SetUniformColor("B_tint",        m_tint);
     sp->SetUniformFloat("B_hasTexture", m_imageTexture ? 1 : 0);
     sp->SetUniformTexture("B_texture_0", m_imageTexture);
@@ -53,16 +53,16 @@ void UIImage::RenderCustomPR() const
     AABox screenBox = gameObject->GetAABBox();
     Rect renderRect(screenBox.GetMin().xy(), screenBox.GetMax().xy());
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
-    gb->RenderPassWithMaterial(m_materialPR, renderRect);
+    gb->RenderPassWithMaterial(m_materialSP, renderRect);
 }
 
 void UIImage::RenderWithMaterial(Material *mat) const
 {
     ASSERT(mat);
-    if (mat == m_material || mat == m_materialPR)
+    if (mat == m_material || mat == m_materialSP)
     {
         m_material->SetTexture(m_imageTexture);
-        m_materialPR->SetTexture(m_imageTexture);
+        m_materialSP->SetTexture(m_imageTexture);
     }
     UIRenderer::RenderWithMaterial(mat);
 }

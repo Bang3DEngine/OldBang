@@ -13,7 +13,7 @@
 EditorFloor::EditorFloor()
 {
     m_material = new Material(*AssetsManager::Load<Material>(
-                                  "Materials/D2G_Default.bmat", true));
+                                  "Materials/G_DefaultNoSP.bmat", true));
     m_material->SetDiffuseColor(Color::White * 0.7f);
 
     const int GridSize2 = 2 * (c_gridSize + 1);

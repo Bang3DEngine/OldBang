@@ -1,5 +1,5 @@
 #define BANG_VERTEX
-#define BANG_PR
+#define BANG_SP
 #include "Uniforms.glsl"
 
 void InitMain()

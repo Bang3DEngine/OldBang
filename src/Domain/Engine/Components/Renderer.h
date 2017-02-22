@@ -68,7 +68,7 @@ public:
     float GetLineWidth() const;
 
     virtual void Render() const;
-    virtual void RenderCustomPR() const;
+    virtual void RenderCustomSP() const;
     virtual void RenderWithMaterial(Material *mat) const;
 
     virtual bool IsACanvasRenderer() const;
@@ -89,7 +89,7 @@ public:
     void SetIsGizmo(bool isGizmo);
     bool IsGizmo() const;
 
-    bool HasCustomPRPass() const;
+    bool HasCustomSPPass() const;
 
     void SetDepthLayer(DepthLayer dl);
     DepthLayer GetDepthLayer() const;
@@ -99,7 +99,7 @@ protected:
     Material *m_material = nullptr;
 
     bool m_drawWireframe = false;
-    bool m_hasCustomPRPass = false;
+    bool m_hasCustomSPPass = false;
     CullMode m_cullMode = CullMode::Back;
     RenderMode m_renderMode = RenderMode::Triangles;
 

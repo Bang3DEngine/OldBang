@@ -288,9 +288,11 @@ HEADERS +=                                                          \
     src/Domain/Engine/Others/GraphicPipelineDebugger.h \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.h \
     src/Domain/Engine/GraphicPipeline/GraphicPipelinePass.h \
-    src/Domain/Engine/GraphicPipeline/GPDepthLayerPass.h \
-    src/Domain/Engine/GraphicPipeline/GPOpaquePass.h \
-    src/Domain/Engine/GraphicPipeline/GPDeferredLightsPass.h
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.h \
+    src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.h \
+    src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.h \
+    src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.h \
+    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h
 
 EDITOR {
 HEADERS += \
@@ -494,9 +496,11 @@ SOURCES += \
     src/Domain/Engine/Others/GraphicPipelineDebugger.cpp \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.cpp \
     src/Domain/Engine/GraphicPipeline/GraphicPipelinePass.cpp \
-    src/Domain/Engine/GraphicPipeline/GPDepthLayerPass.cpp \
-    src/Domain/Engine/GraphicPipeline/GPOpaquePass.cpp \
-    src/Domain/Engine/GraphicPipeline/GPDeferredLightsPass.cpp
+    src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp
 
 EDITOR {
     SOURCES += \
@@ -612,21 +616,21 @@ OTHER_FILES += \
     Assets/Engine/Meshes/Cone.bmesh \
     Assets/Engine/Meshes/Sphere.bmesh \
     Assets/Engine/Meshes/Pyramid.bmesh \
-    Assets/Engine/Shaders/PR_DirectionalLight.frag \
-    Assets/Engine/Shaders/D2G_Default.frag \
-    Assets/Engine/Shaders/D2G_Default.vert \
+    Assets/Engine/Shaders/SP_DirectionalLight.frag \
+    Assets/Engine/Shaders/G_Default.frag \
+    Assets/Engine/Shaders/G_Default.vert \
     Assets/Materials/luigiMaterial.bmat \
     Assets/Materials/testMaterial.bmat \
     Assets/Materials/testMaterial2.bmat \
     Assets/Engine/Shaders/SelectionBuffer.frag \
     Assets/Engine/Shaders/RenderGBufferToScreen.frag \
-    Assets/Engine/Shaders/PR_PointLight.frag \
+    Assets/Engine/Shaders/SP_PointLight.frag \
     Assets/Scenes/tmp.bscene \
     Assets/Scenes/test2.bscene \
-    Assets/Engine/Materials/D2G_Default.bmat \
-    Assets/Engine/Materials/PR_EditorEffects.bmat \
-    Assets/Engine/Materials/PR_DirectionalLight.bmat \
-    Assets/Engine/Materials/PR_PointLight.bmat \
+    Assets/Engine/Materials/G_Default.bmat \
+    Assets/Engine/Materials/SP_EditorEffects.bmat \
+    Assets/Engine/Materials/SP_DirectionalLight.bmat \
+    Assets/Engine/Materials/SP_PointLight.bmat \
     Assets/Behaviours/RandomScale.h \
     Assets/Behaviours/RandomScale.cpp \
     Assets/Materials/victor.bmat \
@@ -640,67 +644,71 @@ OTHER_FILES += \
     Assets/Scenes/test.bscene \
     Assets/Engine/Textures/DirectionalLightIcon.btex2d \
     Assets/Engine/Textures/PointLightIcon.btex2d \
-    Assets/Engine/Shaders/D2G.vert \
-    Assets/Engine/Shaders/PR.vert \
-    Assets/Engine/Shaders/PR.frag \
-    Assets/Engine/Shaders/Include/D2G.frag \
-    Assets/Engine/Shaders/Include/PR.frag \
-    Assets/Engine/Shaders/Include/D2G.vert \
-    Assets/Engine/Shaders/Include/PR.vert \
+    Assets/Engine/Shaders/G.vert \
+    Assets/Engine/Shaders/SP.vert \
+    Assets/Engine/Shaders/SP.frag \
+    Assets/Engine/Shaders/Include/G.frag \
+    Assets/Engine/Shaders/Include/SP.frag \
+    Assets/Engine/Shaders/Include/G.vert \
+    Assets/Engine/Shaders/Include/SP.vert \
     Assets/Engine/Shaders/Include/Uniforms.glsl \
     Assets/Engine/Shaders/Include/PointLight.glsl \
     Assets/Engine/Shaders/Include/DirectionalLight.glsl \
-    Assets/Engine/Shaders/PR_MeshPass.vert \
-    Assets/Engine/Materials/PR_DirectionalLight_Screen.bmat \
-    Assets/Engine/Materials/PR_PointLight_Screen.bmat \
-    Assets/Engine/Shaders/UI/PR_UIImage.frag \
-    Assets/Engine/Materials/UI/PR_UIImage.bmat \
-    Assets/Engine/Shaders/PR_RenderBackground.frag \
+    Assets/Engine/Shaders/SP_MeshPass.vert \
+    Assets/Engine/Materials/SP_DirectionalLight_Screen.bmat \
+    Assets/Engine/Materials/SP_PointLight_Screen.bmat \
+    Assets/Engine/Shaders/UI/SP_UIImage.frag \
+    Assets/Engine/Materials/UI/SP_UIImage.bmat \
+    Assets/Engine/Shaders/SP_RenderBackground.frag \
     Assets/Engine/Shaders/Include/Main.glsl \
     Assets/Engine/Shaders/SelectionBuffer.vert \
-    Assets/Engine/Shaders/PR_SelectionEffect.frag \
-    Assets/Engine/Shaders/D2G_RotationAxisLine.frag \
-    Assets/Engine/Materials/D2G_RotationAxisLine.bmat \
-    Assets/Engine/Materials/PR_MeshPass.bmat \
+    Assets/Engine/Shaders/SP_SelectionEffect.frag \
+    Assets/Engine/Shaders/G_RotationAxisLine.frag \
+    Assets/Engine/Materials/G_RotationAxisLine.bmat \
+    Assets/Engine/Materials/SP_MeshPass.bmat \
     Assets/Engine/Materials/RenderGBufferToScreen.bmat \
-    Assets/Engine/Shaders/PR_ScreenPass.vert \
-    Assets/Engine/Shaders/PR_MeshPass.vert \
-    Assets/Engine/Materials/PR_SelectionEffect.bmat \
-    Assets/Engine/Shaders/UI/D2G_UIText.frag \
-    Assets/Engine/Materials/UI/D2G_UIText.bmat \
+    Assets/Engine/Shaders/SP_ScreenPass.vert \
+    Assets/Engine/Shaders/SP_MeshPass.vert \
+    Assets/Engine/Materials/SP_SelectionEffect.bmat \
+    Assets/Engine/Shaders/UI/G_UIText.frag \
+    Assets/Engine/Materials/UI/G_UIText.bmat \
     EngineAssets/Shaders/SelectionBuffer.frag \
     EngineAssets/Shaders/RenderGBufferToScreen.frag \
-    EngineAssets/Shaders/PR_Template.frag \
-    EngineAssets/Shaders/PR_SelectionEffect.frag \
-    EngineAssets/Shaders/PR_PointLight.frag \
-    EngineAssets/Shaders/PR_DirectionalLight.frag \
-    EngineAssets/Shaders/D2G_Template.frag \
-    EngineAssets/Shaders/D2G_RotationAxisLine.frag \
-    EngineAssets/Shaders/D2G_Default.frag \
+    EngineAssets/Shaders/G_Template.frag \
+    EngineAssets/Shaders/G_RotationAxisLine.frag \
+    EngineAssets/Shaders/G_Default.frag \
     EngineAssets/Shaders/SelectionBuffer.vert \
-    EngineAssets/Shaders/PR_ScreenPass.vert \
-    EngineAssets/Shaders/D2G_Template.vert \
-    EngineAssets/Shaders/D2G_Default.vert \
-    EngineAssets/Shaders/UI/PR_UIImage.frag \
-    EngineAssets/Shaders/UI/D2G_UIText.frag \
+    EngineAssets/Shaders/G_Template.vert \
+    EngineAssets/Shaders/G_Default.vert \
+    EngineAssets/Shaders/UI/SP_UIImage.frag \
+    EngineAssets/Shaders/UI/G_UIText.frag \
     EngineAssets/Shaders/Include/Uniforms.glsl \
     EngineAssets/Shaders/Include/PointLight.glsl \
     EngineAssets/Shaders/Include/Main.glsl \
     EngineAssets/Shaders/Include/DirectionalLight.glsl \
-    EngineAssets/Shaders/Include/PR.frag \
-    EngineAssets/Shaders/Include/D2G.frag \
-    EngineAssets/Shaders/Include/PR.vert \
-    EngineAssets/Shaders/Include/D2G.vert \
+    EngineAssets/Shaders/Include/G.frag \
+    EngineAssets/Shaders/Include/G.vert \
     EngineAssets/Materials/RenderGBufferToScreen.bmat \
-    EngineAssets/Materials/PR_SelectionEffect.bmat \
-    EngineAssets/Materials/PR_PointLight_Screen.bmat \
-    EngineAssets/Materials/PR_DirectionalLight_Screen.bmat \
-    EngineAssets/Materials/PR_AmbientLight_Screen.bmat \
-    EngineAssets/Materials/D2G_RotationAxisLine.bmat \
-    EngineAssets/Materials/D2G_Default.bmat
+    EngineAssets/Materials/G_RotationAxisLine.bmat \
+    EngineAssets/Materials/G_Default.bmat
 ######################################
 
 DISTFILES += \
-    EngineAssets/Materials/UI/D2G_UIImage.bmat \
-    EngineAssets/Shaders/D2G_Missing.frag \
-    EngineAssets/Materials/Missing.bmat
+    EngineAssets/Materials/UI/G_UIImage.bmat \
+    EngineAssets/Shaders/G_Missing.frag \
+    EngineAssets/Materials/Missing.bmat \
+    EngineAssets/Materials/SP_AmbientLight_Screen.bmat \
+    EngineAssets/Materials/SP_SelectionEffect.bmat \
+    EngineAssets/Materials/SP_PointLight_Screen.bmat \
+    EngineAssets/Materials/SP_DirectionalLight_Screen.bmat \
+    EngineAssets/Shaders/Include/SP.frag \
+    EngineAssets/Shaders/Include/SP.vert \
+    EngineAssets/Shaders/SP_DirectionalLight.frag \
+    EngineAssets/Shaders/SP_ScreenPass.vert \
+    EngineAssets/Shaders/SP_PointLight.frag \
+    EngineAssets/Shaders/SP_SelectionEffect.frag \
+    EngineAssets/Shaders/SP_Template.frag \
+    EngineAssets/Materials/G_DefaultNoSP.bmat \
+    EngineAssets/Materials/UI/G_UIImage.bmat \
+    EngineAssets/Materials/UI/G_UIText.bmat \
+    EngineAssets/Materials/UI/SP_UIImage.bmat

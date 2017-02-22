@@ -1,4 +1,4 @@
-#include "D2G.frag"
+#include "G.frag"
 
 void Main()
 {

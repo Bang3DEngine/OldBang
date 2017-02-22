@@ -1,0 +1,6 @@
+<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
+          ReceivesLighting:Bool="false"{}
+          FragmentShader:File="./Shaders/UI/G_UIText.frag"{FileExtension="frag",IsEngineFile}
+          VertexShader:File="./Shaders/G_Default.vert"{FileExtension="vert",IsEngineFile}
+         >
+</Material>

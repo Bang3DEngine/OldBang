@@ -56,7 +56,7 @@ public:
 
     /**
      * @brief Sets all GBuffer's draw buffers, except for the color one.
-     * This is useful for D2G render pass.
+     * This is useful for G render pass.
      */
     void SetAllDrawBuffersExceptColor();
     void SetColorDrawBuffer();

@@ -1,19 +1,21 @@
-#include "GPOpaquePass.h"
+#include "GPPass_G_OpaqueSP.h"
 
 #include "Debug.h"
 #include "Scene.h"
 #include "GBuffer.h"
+#include "Material.h"
 #include "Renderer.h"
 #include "GraphicPipeline.h"
 
-GPOpaquePass::GPOpaquePass(GraphicPipeline *graphicPipeline)
+GPPass_G_OpaqueSP::GPPass_G_OpaqueSP(GraphicPipeline *graphicPipeline)
     : GraphicPipelinePass(graphicPipeline)
 {
 }
 
-void GPOpaquePass::InPass(const List<Renderer*> &renderers)
+void GPPass_G_OpaqueSP::InPass(const List<Renderer*> &renderers,
+                               const List<GameObject*> &sceneChildren)
 {
-    GraphicPipelinePass::InPass(renderers);
+    GraphicPipelinePass::InPass(renderers, sceneChildren);
 
     p_gbuffer->SetAllDrawBuffers();
     for (Renderer *rend : renderers)
@@ -31,13 +33,11 @@ void GPOpaquePass::InPass(const List<Renderer*> &renderers)
     }
 }
 
-void GPOpaquePass::PostPass(const List<Renderer *> &renderers)
+bool GPPass_G_OpaqueSP::CanRender(const Renderer *renderer) const
 {
-    GraphicPipelinePass::PostPass(renderers);
-}
-
-bool GPOpaquePass::CanRender(const Renderer *renderer) const
-{
+    Material *rendMaterial = renderer->GetMaterial();
+    bool receivesLighting = rendMaterial && rendMaterial->ReceivesLighting();
     return (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
-            !renderer->IsTransparent();
+            !renderer->IsTransparent() &&
+            receivesLighting;
 }

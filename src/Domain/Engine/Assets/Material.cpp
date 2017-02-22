@@ -15,8 +15,8 @@ Material::Material() : Asset()
 {
     // TODO: Create shaderProgram asset and use AssetManager to load this
     SetShaderProgram(new ShaderProgram(
-                      Persistence::ToAbsolute("Shaders/D2G_Default.vert", true),
-                      Persistence::ToAbsolute("Shaders/D2G_Default.frag", true)
+                      Persistence::ToAbsolute("Shaders/G_Default.vert", true),
+                      Persistence::ToAbsolute("Shaders/G_Default.frag", true)
                      )
                     );
 }
@@ -28,9 +28,9 @@ Material::Material(const Material &m)
                    m.GetShaderProgram()->GetVertexShader()->GetFilepath(),
                    m.GetShaderProgram()->GetFragmentShader()->GetFilepath()));
     SetDiffuseColor(m.GetDiffuseColor());
-    SetReceivesLighting(ReceivesLighting());
-    SetShininess(GetShininess());
-    SetTexture(GetTexture());
+    SetReceivesLighting(m.ReceivesLighting());
+    SetShininess(m.GetShininess());
+    SetTexture(m.GetTexture());
 }
 
 Material::~Material()
@@ -138,6 +138,11 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
 
 void Material::SetShaderProgram(ShaderProgram *program)
 {
+    if (m_shaderProgram)
+    {
+        delete m_shaderProgram;
+    }
+
     m_shaderProgram = program;
 }
 

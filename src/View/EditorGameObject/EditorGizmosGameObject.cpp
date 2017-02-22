@@ -34,8 +34,8 @@ void EditorGizmosGameObject::Init()
         m_boxMesh = MeshFactory::GetCube();
         m_planeMesh = MeshFactory::GetPlane();
         m_sphereMesh = MeshFactory::GetSphere();
-        m_material = AssetsManager::Load<Material>("./Materials/D2G_Default.bmat",
-                                                   true);
+        m_material = AssetsManager::Load<Material>(
+                    "./Materials/G_DefaultNoSP.bmat", true);
         m_material = new Material(*m_material);
 
         AddComponent<SingleLineRenderer>();
@@ -339,7 +339,8 @@ void EditorGizmosGameObject::RenderFrustum(
     Reset();
 }
 
-void EditorGizmosGameObject::RenderSimpleSphere(const Vector3 &origin, float radius)
+void EditorGizmosGameObject::RenderSimpleSphere(const Vector3 &origin,
+                                                float radius)
 {
     CircleRenderer *cr = GetComponent<CircleRenderer>();
     cr->SetEnabled(true);
@@ -399,6 +400,7 @@ void EditorGizmosGameObject::Reset()
 
 void EditorGizmosGameObject::Render(Renderer *rend)
 {
+    /*
     List<Renderer*> renderers = GetComponents<Renderer>();
     for (Renderer *r : renderers)
     {
@@ -407,6 +409,8 @@ void EditorGizmosGameObject::Render(Renderer *rend)
 
     GraphicPipeline *gp = GraphicPipeline::GetActive(); ASSERT(gp);
     gp->RenderRenderer(rend);
+    */
+    rend->Render();
 }
 
 EditorGizmosGameObject *EditorGizmosGameObject::GetInstance()

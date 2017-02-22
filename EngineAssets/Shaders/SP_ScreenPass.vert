@@ -1,4 +1,4 @@
-#include "PR.vert"
+#include "SP.vert"
 
 uniform vec2 B_rectMinCoord = vec2(-1, -1);
 uniform vec2 B_rectMaxCoord = vec2( 1,  1);

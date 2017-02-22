@@ -1,6 +1,6 @@
-<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
+<Material DiffuseColor:Color="(1, 1, 1, 0)"{}
           ReceivesLighting:Bool="false"{}
-          FragmentShader:File="./Shaders/RenderGBufferToScreen.frag"{FileExtension="frag",IsEngineFile}
+          FragmentShader:File="./Shaders/SP_AmbientLight.frag"{FileExtension="frag",IsEngineFile}
           TextureCount:Int="0"{}
           VertexShader:File="./Shaders/SP_ScreenPass.vert"{FileExtension="vert",IsEngineFile}
          >

@@ -12,7 +12,7 @@ class ICloneable;
 class UIRenderer : public MeshRenderer
 {
 public:
-    virtual void RenderCustomPR() const override;
+    virtual void RenderCustomSP() const override;
     bool IsACanvasRenderer() const override;
 
     virtual void RenderWithoutBindingMaterial() const override;
@@ -33,7 +33,7 @@ public:
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
 protected:
-    Material *m_materialPR = nullptr;
+    Material *m_materialSP = nullptr;
     Color m_tint = Color::Zero;
 
     UIRenderer();

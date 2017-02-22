@@ -1,4 +1,4 @@
-#include "D2G.frag"
+#include "G.frag"
 
 uniform vec3  B_world_circleCenter;
 

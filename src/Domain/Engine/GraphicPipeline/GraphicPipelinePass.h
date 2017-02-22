@@ -6,6 +6,7 @@
 class Scene;
 class GBuffer;
 class Renderer;
+class GameObject;
 class GraphicPipeline;
 class GraphicPipelinePass
 {
@@ -13,11 +14,15 @@ public:
     GraphicPipelinePass(GraphicPipeline *graphicPipeline);
     virtual ~GraphicPipelinePass();
 
-    virtual void PrePass(const List<Renderer*> &renderers);
-    virtual void InPass(const List<Renderer*> &renderers);
-    virtual void PostPass(const List<Renderer*> &renderers);
+    virtual void PrePass(const List<Renderer*> &renderers,
+                         const List<GameObject*> &sceneChildren);
+    virtual void InPass(const List<Renderer*> &renderers,
+                        const List<GameObject*> &sceneChildren);
+    virtual void PostPass(const List<Renderer*> &renderers,
+                          const List<GameObject*> &sceneChildren);
 
-    virtual void Pass(const List<Renderer*> &renderers);
+    virtual void Pass(const List<Renderer*> &renderers,
+                      const List<GameObject*> &sceneChildren);
 
     void AddSubPass(GraphicPipelinePass *subPass);
     virtual bool CanRender(const Renderer *renderer) const;

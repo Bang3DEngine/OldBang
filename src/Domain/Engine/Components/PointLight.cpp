@@ -16,7 +16,7 @@
 PointLight::PointLight() : Light()
 {
     m_lightMaterialScreen = AssetsManager::Load<Material>(
-                "Materials/PR_PointLight_Screen.bmat", true);
+                "Materials/SP_PointLight_Screen.bmat", true);
 }
 
 PointLight::~PointLight()

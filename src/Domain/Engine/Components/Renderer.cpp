@@ -27,7 +27,7 @@ Renderer::Renderer()
     ActivateGLStatesBeforeRenderingForSelection = [](){};
     #endif
 
-    m_material = AssetsManager::Load<Material>("Materials/D2G_Default.bmat", true);
+    m_material = AssetsManager::Load<Material>("Materials/G_Default.bmat", true);
 }
 
 Renderer::~Renderer()
@@ -47,7 +47,7 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetClosedInInspector(IsClosedInInspector());
     r->SetTransparent(IsTransparent());
     r->SetIsGizmo(IsGizmo());
-    r->m_hasCustomPRPass = HasCustomPRPass();
+    r->m_hasCustomSPPass = HasCustomSPPass();
 }
 
 Material *Renderer::GetMaterial() const
@@ -127,9 +127,9 @@ void Renderer::Render() const
     if (IsTransparent()) { glDepthMask(GL_TRUE); }
 }
 
-void Renderer::RenderCustomPR() const
+void Renderer::RenderCustomSP() const
 {
-    // To override by child classes if they want to implement some PR pass
+    // To override by child classes if they want to implement some SP pass
 }
 
 void Renderer::RenderWithMaterial(Material *_mat) const
@@ -191,9 +191,9 @@ bool Renderer::IsGizmo() const
     return m_isGizmo;
 }
 
-bool Renderer::HasCustomPRPass() const
+bool Renderer::HasCustomSPPass() const
 {
-    return m_hasCustomPRPass;
+    return m_hasCustomSPPass;
 }
 
 void Renderer::SetDepthLayer(Renderer::DepthLayer dl)

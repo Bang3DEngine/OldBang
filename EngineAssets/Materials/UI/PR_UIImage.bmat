@@ -1,6 +1,0 @@
-<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
-          FragmentShader:File="./Shaders/UI/PR_UIImage.frag"{FileExtension="frag",IsEngineFile}
-          TextureCount:Int="0"{}
-          VertexShader:File="./Shaders/PR_ScreenPass.vert"{FileExtension="vert",IsEngineFile}
-         >
-</Material>

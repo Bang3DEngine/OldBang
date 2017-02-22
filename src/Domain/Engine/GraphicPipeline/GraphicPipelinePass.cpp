@@ -5,29 +5,33 @@
 #include "SceneManager.h"
 #include "GraphicPipeline.h"
 
-void GraphicPipelinePass::PrePass(const List<Renderer*> &renderers)
+void GraphicPipelinePass::PrePass(const List<Renderer*> &renderers,
+                                  const List<GameObject*> &sceneChildren)
 {
 }
-void GraphicPipelinePass::InPass(const List<Renderer*> &renderers)
+void GraphicPipelinePass::InPass(const List<Renderer*> &renderers,
+                                 const List<GameObject*> &sceneChildren)
 {
 }
-void GraphicPipelinePass::PostPass(const List<Renderer*> &renderers)
+void GraphicPipelinePass::PostPass(const List<Renderer*> &renderers,
+                                   const List<GameObject*> &sceneChildren)
 {
 }
 
-void GraphicPipelinePass::Pass(const List<Renderer*> &renderers)
+void GraphicPipelinePass::Pass(const List<Renderer*> &renderers,
+                               const List<GameObject*> &sceneChildren)
 {
     p_scene = SceneManager::GetActiveScene();
 
-    PrePass(renderers);
-    InPass(renderers);
+    PrePass(renderers, sceneChildren);
+    InPass(renderers, sceneChildren);
 
     for (GraphicPipelinePass *gpSubPass : m_subPasses)
     {
-        gpSubPass->Pass(renderers);
+        gpSubPass->Pass(renderers, sceneChildren);
     }
 
-    PostPass(renderers);
+    PostPass(renderers, sceneChildren);
 }
 
 void GraphicPipelinePass::AddSubPass(GraphicPipelinePass *subPass)

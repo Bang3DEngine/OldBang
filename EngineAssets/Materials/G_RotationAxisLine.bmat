@@ -1,0 +1,6 @@
+<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
+          ReceivesLighting:Bool="false"{}
+          FragmentShader:File="./Shaders/G_RotationAxisLine.frag"{FileExtension="frag",IsEngineFile}
+          TextureCount:Int="0"{}
+          VertexShader:File="./Shaders/G_Default.vert"{FileExtension="vert",IsEngineFile}
+</Material>

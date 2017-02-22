@@ -159,7 +159,7 @@ void GBuffer::ClearDepth()
     SaveCurrentDrawBuffers();
     SetDrawBuffers({GBuffer::Attachment::Depth});
     glClearColor(1, 1, 1, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     LoadSavedDrawBuffers();
 }
 
@@ -172,7 +172,8 @@ void GBuffer::ClearAllBuffersExceptColor()
                     GBuffer::Attachment::Normal,
                     GBuffer::Attachment::Uv,
                     GBuffer::Attachment::Diffuse,
-                    GBuffer::Attachment::MaterialProperties});
+                    GBuffer::Attachment::MaterialProperties
+                   });
     glClear(GL_COLOR_BUFFER_BIT);
     ClearDepth();
     ClearStencil();

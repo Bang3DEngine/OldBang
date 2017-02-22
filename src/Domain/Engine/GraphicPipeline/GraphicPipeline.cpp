@@ -16,14 +16,16 @@
 #include "Material.h"
 #include "GameObject.h"
 #include "MeshFactory.h"
-#include "GPOpaquePass.h"
 #include "SceneManager.h"
 #include "RenderTexture.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
 #include "ShaderContract.h"
-#include "GPDeferredLightsPass.h"
+#include "GPPass_G_Gizmos.h"
+#include "GPPass_G_OpaqueSP.h"
+#include "GPPass_G_OpaqueNoSP.h"
 #include "GraphicPipelineDebugger.h"
+#include "GPPass_SP_DeferredLights.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"
@@ -37,7 +39,7 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
       m_gizmosPass(this, Renderer::DepthLayer::DepthLayerGizmos)
 {
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
-                "Materials/PR_SelectionEffect.bmat", true);
+                "Materials/SP_SelectionEffect.bmat", true);
 
     m_gbuffer = new GBuffer(screen->m_width, screen->m_height);
     #ifdef BANG_EDITOR
@@ -49,10 +51,14 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
                                        true);
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 
-    m_scenePass.AddSubPass (new GPOpaquePass(this));
-    m_scenePass.AddSubPass (new GPDeferredLightsPass(this));
-    m_canvasPass.AddSubPass(new GPOpaquePass(this));
-    m_gizmosPass.AddSubPass(new GPOpaquePass(this));
+    // Set up graphic pipeline passes
+    m_scenePass.AddSubPass (new GPPass_G_OpaqueSP(this));
+    m_scenePass.AddSubPass (new GPPass_SP_DeferredLights(this));
+    m_scenePass.AddSubPass (new GPPass_G_OpaqueNoSP(this));
+
+    m_canvasPass.AddSubPass(new GPPass_G_OpaqueNoSP(this));
+
+    m_gizmosPass.AddSubPass(new GPPass_G_Gizmos(this));
 }
 
 GraphicPipeline::~GraphicPipeline()
@@ -75,9 +81,10 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     m_gbuffer->Bind();
 
     List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
-    m_scenePass.Pass(renderers);
-    m_canvasPass.Pass(renderers);
-    m_gizmosPass.Pass(renderers);
+    List<GameObject*> sceneChildren = scene->GetChildren();
+    m_scenePass.Pass(renderers, sceneChildren);
+    m_canvasPass.Pass(renderers, sceneChildren);
+    m_gizmosPass.Pass(renderers, sceneChildren);
 
     m_gbuffer->UnBind();
     m_gbuffer->RenderToScreen(m_gbufferAttachmentToBeShown);
@@ -118,7 +125,7 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
         // stuff, because if we render another transparent object above it, we would
         // be blending wrong colors
         bool immediatePostRender = (rend->IsTransparent()   ||
-                                    rend->HasCustomPRPass() ||
+                                    rend->HasCustomSPPass() ||
                                     rend->IsGizmo());
         if (immediatePostRender)
         {
@@ -137,13 +144,13 @@ void GraphicPipeline::RenderRenderer(Renderer *rend)
 
         rend->Render(); // Render without writing to the final color buffer
 
-        if (immediatePostRender) // In case we need to apply immediately some PR
+        if (immediatePostRender) // In case we need to apply immediately some SP
         {
-            // These PR's are stenciled from the Render before
+            // These SP's are stenciled from the Render before
             ApplyDeferredLights(rend); // Only apply lights to the needed zone
-            if (rend->HasCustomPRPass())
+            if (rend->HasCustomSPPass())
             {
-                RenderCustomPR(rend);
+                RenderCustomSP(rend);
             }
             glDepthMask(GL_TRUE);
 
@@ -247,7 +254,7 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
         if (m_renderingInGame &&
             rend->gameObject->HasHideFlag(HideFlags::HideInGame)) { continue; }
 
-        if (!rend->IsTransparent() && !rend->HasCustomPRPass() && !rend->IsGizmo())
+        if (!rend->IsTransparent() && !rend->HasCustomSPPass() && !rend->IsGizmo())
         {
             RenderRenderer(rend);
         }
@@ -261,13 +268,13 @@ void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
     }
 
     // Post-render passes (screen passes).
-    // Either is transparent or has a custom PR Pass (gizmos are left for the end...)
+    // Either is transparent or has a custom SP Pass (gizmos are left for the end...)
     for (Renderer *rend : renderers)
     {
         if (m_renderingInGame &&
             rend->gameObject->HasHideFlag(HideFlags::HideInGame)) { continue; }
 
-        if ((rend->IsTransparent() || rend->HasCustomPRPass()) &&
+        if ((rend->IsTransparent() || rend->HasCustomSPPass()) &&
              !rend->IsGizmo())
         {
             RenderRenderer(rend);
@@ -296,7 +303,7 @@ void GraphicPipeline::RenderGizmosPass(Framebuffer *fb)
     glDepthFunc(GL_LESS);
 }
 
-void GraphicPipeline::RenderCustomPR(Renderer *rend)
+void GraphicPipeline::RenderCustomSP(Renderer *rend)
 {
     if (!CAN_USE_COMPONENT(rend)) { return; }
     if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
@@ -308,7 +315,7 @@ void GraphicPipeline::RenderCustomPR(Renderer *rend)
         m_gbuffer->SetStencilWrite(false);
         m_gbuffer->SetStencilTest(true);
     }
-    rend->RenderCustomPR();
+    rend->RenderCustomSP();
 }
 
 void GraphicPipeline::RenderPassWithMaterial(Material *mat, const Rect &renderRect)

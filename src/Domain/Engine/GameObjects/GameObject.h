@@ -329,6 +329,7 @@ protected:
     friend class Prefab;
     friend class Hierarchy;
     friend class SceneManager;
+    friend class GPPass_G_Gizmos;
     friend class GraphicPipeline;
     friend class SelectionFramebuffer;
 };

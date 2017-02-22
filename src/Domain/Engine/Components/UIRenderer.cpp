@@ -9,17 +9,17 @@
 
 UIRenderer::UIRenderer()
 {
-    m_hasCustomPRPass = true;
+    m_hasCustomSPPass = true;
 
     SetMesh(MeshFactory::GetUIPlane());
-    SetMaterial( AssetsManager::Load<Material>("Materials/D2G_Default.bmat",
+    SetMaterial( AssetsManager::Load<Material>("Materials/G_DefaultNoSP.bmat",
                                                true) );
-    m_materialPR = AssetsManager::Load<Material>("Materials/UI/PR_UIImage.bmat",
+    m_materialSP = AssetsManager::Load<Material>("Materials/UI/SP_UIImage.bmat",
                                                  true);
     SetTransparent(false);
     SetDepthLayer(Renderer::DepthLayer::DepthLayerCanvas);
 
-    m_materialPR = new Material();
+    m_materialSP = new Material();
     m_material->SetDiffuseColor(Color::White);
 }
 
@@ -61,9 +61,9 @@ Rect UIRenderer::GetBoundingRect(Camera *camera) const
     return MeshRenderer::GetBoundingRect(camera);
 }
 
-void UIRenderer::RenderCustomPR() const
+void UIRenderer::RenderCustomSP() const
 {
-    MeshRenderer::RenderCustomPR();
+    MeshRenderer::RenderCustomSP();
 }
 
 bool UIRenderer::IsACanvasRenderer() const

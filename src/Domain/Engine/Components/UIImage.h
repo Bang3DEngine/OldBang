@@ -21,7 +21,7 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-    virtual void RenderCustomPR() const override;
+    virtual void RenderCustomSP() const override;
     virtual void RenderWithMaterial(Material *mat) const override;
 
     void SetTexture(Texture2D *imageTexture);

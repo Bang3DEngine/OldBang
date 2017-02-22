@@ -11,7 +11,7 @@
 EditorAxisPlane::EditorAxisPlane(EditorAxis *axis1, EditorAxis *axis2)
     : m_axis1(axis1), m_axis2(axis2)
 {
-    m_material = AssetsManager::Load<Material>("Materials/D2G_Default.bmat", true);
+    m_material = AssetsManager::Load<Material>("Materials/G_Default.bmat", true);
     m_material = new Material(*m_material);
 
     m_planeRenderer = AddComponent<MeshRenderer>();

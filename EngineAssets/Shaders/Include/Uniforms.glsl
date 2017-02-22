@@ -49,7 +49,7 @@ uniform sampler2D B_color_gout_fin;
 
 // Getters
 
-#ifdef BANG_PR
+#ifdef BANG_SP
     #define FRAG_IN_UV_SCREEN()                    B_screen_coord_norm
     #define FRAG_IN_COLOR()                        (texture2D(B_color_gout_fin,         B_screen_coord_norm))
     #define FRAG_IN_POSITION_WORLD()               (texture2D(B_position_gout_fin,      B_screen_coord_norm).xyz)
@@ -62,7 +62,7 @@ uniform sampler2D B_color_gout_fin;
     #define FRAG_IN_STENCIL()                      (texture2D(B_stencil_gout_fin,       B_screen_coord_norm).x)
 #endif
 
-#ifdef BANG_D2G
+#ifdef BANG_G
     #ifdef BANG_VERTEX
         #define VERT_IN_POSITION_OBJECT() B_position_raw_vin
         #define VERT_IN_NORMAL_OBJECT()   B_normal_raw_vin

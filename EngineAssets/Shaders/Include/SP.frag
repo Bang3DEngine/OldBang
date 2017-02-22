@@ -1,5 +1,5 @@
 #define BANG_FRAGMENT
-#define BANG_PR
+#define BANG_SP
 #include "Uniforms.glsl"
 
 struct B_VertexOut

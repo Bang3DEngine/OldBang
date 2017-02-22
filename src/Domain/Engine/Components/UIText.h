@@ -30,7 +30,7 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-    virtual void RenderCustomPR() const override;
+    virtual void RenderCustomSP() const override;
 
     void SetHorizontalAlign(HorizontalAlignment horizontalAlignment);
     HorizontalAlignment GetHorizontalAlignment() const;

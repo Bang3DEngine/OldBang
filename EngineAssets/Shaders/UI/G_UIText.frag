@@ -1,4 +1,4 @@
-#include "D2G.frag"
+#include "G.frag"
 
 void Main()
 {
@@ -8,7 +8,7 @@ void Main()
     //   - You cant simply blend with diffuse buffer, since you could have below
     //     some stuff with PR.
     //   - You cant simply blend with color, because you are rendering all the string
-    //     of quad chars in one D2G pass. So you are not writing to the color buffer in
+    //     of quad chars in one G pass. So you are not writing to the color buffer in
     //     any moment.
     // The solution is to use the stencil to know when we are on top of a pixel previously written
     // by another char or not:

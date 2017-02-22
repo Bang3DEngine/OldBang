@@ -1,5 +1,5 @@
 #define BANG_NO_STENCIL_TEST
-#include "PR.frag"
+#include "SP.frag"
 
 bool IsSelected(vec2 offset)
 {

@@ -17,7 +17,7 @@
 DirectionalLight::DirectionalLight() : Light()
 {
     m_lightMaterialScreen = AssetsManager::Load<Material>(
-                "Materials/PR_DirectionalLight_Screen.bmat", true);
+                "Materials/SP_DirectionalLight_Screen.bmat", true);
 }
 
 DirectionalLight::~DirectionalLight()

@@ -21,8 +21,7 @@
 
 UIText::UIText() : UIRenderer()
 {
-    m_material = AssetsManager::Load<Material>("Materials/UI/D2G_UIText.bmat",
-                                               true);
+    m_material = AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat", true);
     SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
 }
 
@@ -66,9 +65,9 @@ ICloneable *UIText::Clone() const
     return text;
 }
 
-void UIText::RenderCustomPR() const
+void UIText::RenderCustomSP() const
 {
-    UIRenderer::RenderCustomPR();
+    UIRenderer::RenderCustomSP();
 }
 
 void UIText::SetHorizontalAlign(UIText::HorizontalAlignment horizontalAlignment)

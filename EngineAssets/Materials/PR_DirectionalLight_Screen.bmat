@@ -1,7 +1,0 @@
-<Material DiffuseColor:Color="(1, 1, 1, 1)"{}
-          ReceivesLighting:Bool="false"{}
-          FragmentShader:File="./Shaders/PR_DirectionalLight.frag"{FileExtension="frag",IsEngineFile}
-          TextureCount:Int="0"{}
-          VertexShader:File="./Shaders/PR_ScreenPass.vert"{FileExtension="vert",IsEngineFile}
-         >
-</Material>

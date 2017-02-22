@@ -3,7 +3,7 @@
 
 #include "GBuffer.h"
 #include "Renderer.h"
-#include "GPDepthLayerPass.h"
+#include "GPPass_DepthLayer.h"
 
 class Mesh;
 class Scene;
@@ -26,7 +26,7 @@ public:
 
     void RenderScene(Scene *scene, bool inGame);
     void RenderRenderer(Renderer *rend);
-    void RenderCustomPR(Renderer *rend);
+    void RenderCustomSP(Renderer *rend);
     void RenderToScreen(Texture *fullScreenTexture);
     void RenderPassWithMaterial(Material *mat,
                                 const Rect &renderRect = Rect(-1, 1, -1, 1));
@@ -34,7 +34,7 @@ public:
 
     void OnResize(int newWidth, int newHeight);
 
-    void ApplyPREffectToRenderer(const Renderer *renderer, Material *mat);
+    void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);
 
     void SetGBufferAttachmentToBeRendered(GBuffer::Attachment attachment);
 
@@ -56,7 +56,7 @@ private:
     SelectionFramebuffer *m_selectionFB = nullptr;
     #endif
 
-    GPDepthLayerPass m_scenePass, m_canvasPass, m_gizmosPass;
+    GPPass_DepthLayer m_scenePass, m_canvasPass, m_gizmosPass;
 
     GBuffer::Attachment m_gbufferAttachmentToBeShown =
             GBuffer::Attachment::Color;
