@@ -401,14 +401,6 @@ void EditorGizmosGameObject::Reset()
 
 void EditorGizmosGameObject::Render(Renderer *rend)
 {
-    /*
-    List<Renderer*> renderers = GetComponents<Renderer>();
-    for (Renderer *r : renderers)
-    {
-        r->SetEnabled(r == rend); // Enable only rend
-    }
-    */
-
     GraphicPipeline *gp = GraphicPipeline::GetActive(); ASSERT(gp);
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (!sfb->IsPassing())

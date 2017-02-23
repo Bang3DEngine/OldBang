@@ -57,11 +57,13 @@ private:
     #endif
 
     GPPass_DepthLayer m_scenePass, m_canvasPass, m_gizmosPass;
+
+    #ifdef BANG_EDITOR
     GPPass_DepthLayer m_sceneSelectionPass, m_canvasSelectionPass,
                       m_gizmosSelectionPass;
+    #endif
 
-    GBuffer::Attachment m_gbufferAttachmentToBeShown =
-            GBuffer::Attachment::Color;
+    GBuffer::Attachment m_gbufferAttachToBeShown = GBuffer::Attachment::Color;
 
     // Rendering for the Game Screen or the Scene screen
     bool m_renderingInGame = false;

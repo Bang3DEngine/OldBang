@@ -47,8 +47,10 @@ bool GraphicPipelinePass::CanRender(const Renderer *renderer) const
 
 GraphicPipelinePass::GraphicPipelinePass(GraphicPipeline *graphicPipeline) :
     p_graphicPipeline(graphicPipeline),
-    p_gbuffer(graphicPipeline->GetGBuffer()),
-    p_selectionFramebuffer(graphicPipeline->GetSelectionFramebuffer())
+    p_gbuffer(graphicPipeline->GetGBuffer())
+  #ifdef BANG_EDITOR
+   ,p_selectionFramebuffer(graphicPipeline->GetSelectionFramebuffer())
+  #endif
 {
 }
 

@@ -292,12 +292,12 @@ HEADERS +=                                                          \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.h \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.h \
     src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_Selection.h
+    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h
 
 EDITOR {
 HEADERS += \
     src/View/Windows/EditorWindow.h \
+    src/Domain/Engine/GraphicPipeline/GPPass_Selection.h \
     src/View/EditorGameObject/EditorGizmosGameObject.h \
     src/View/DragDrop/DragDropQWidget.h \
     src/View/DragDrop/DragDropQListView.h \
@@ -501,12 +501,12 @@ SOURCES += \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_Selection.cpp
+    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp
 
 EDITOR {
     SOURCES += \
         src/View/EditorGameObject/EditorGizmosGameObject.cpp \
+        src/Domain/Engine/GraphicPipeline/GPPass_Selection.cpp \
         src/View/GameBuilderJob.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/Explorer/FileSystemModel.cpp \

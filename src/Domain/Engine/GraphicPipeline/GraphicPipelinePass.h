@@ -33,8 +33,11 @@ protected:
     GBuffer *p_gbuffer = nullptr;
     GraphicPipeline *p_graphicPipeline = nullptr;
     GraphicPipelinePass *p_parentPass = nullptr;
-    SelectionFramebuffer *p_selectionFramebuffer = nullptr;
     List<GraphicPipelinePass*> m_subPasses;
+
+    #ifdef BANG_EDITOR
+    SelectionFramebuffer *p_selectionFramebuffer = nullptr;
+    #endif
 
 };
 

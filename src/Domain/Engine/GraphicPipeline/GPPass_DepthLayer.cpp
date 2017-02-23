@@ -3,7 +3,10 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "GBuffer.h"
+
+#ifdef BANG_EDITOR
 #include "SelectionFramebuffer.h"
+#endif
 
 GPPass_DepthLayer::GPPass_DepthLayer(GraphicPipeline *graphicPipeline,
                                      Renderer::DepthLayer depthLayer) :
@@ -16,13 +19,16 @@ void GPPass_DepthLayer::PrePass(const List<Renderer*> &renderers,
                                 const List<GameObject*> &sceneChildren)
 {
     GraphicPipelinePass::PrePass(renderers, sceneChildren);
+
+    #ifdef BANG_EDITOR
     if (!p_selectionFramebuffer->IsPassing())
     {
-        p_gbuffer->ClearAllBuffersExceptColor();
+        p_selectionFramebuffer->ClearDepth();
     }
     else
+    #endif
     {
-        p_selectionFramebuffer->ClearDepth();
+        p_gbuffer->ClearAllBuffersExceptColor();
     }
 }
 
