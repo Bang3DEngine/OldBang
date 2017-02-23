@@ -96,8 +96,10 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     //
 
     // Selection buffer
+    Camera *cam = p_scene->GetCamera();
     m_selectionFB->m_isPassing = true;
     m_selectionFB->PrepareForRender(scene);
+    cam->SetReplacementShaderProgram(m_selectionFB->GetSelectionShaderProgram());
 
     m_selectionFB->Bind();
 
@@ -108,98 +110,9 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 
     m_selectionFB->UnBind();
 
+    cam->SetReplacementShaderProgram(nullptr);
     m_selectionFB->ProcessSelection();
     m_selectionFB->m_isPassing = false;
-
-    // Uncomment this line to see the selection framebuffer in the screen
-    //RenderToScreen(m_selectionFB->GetColorTexture());
-    //
-
-    /*
-    GraphicPipelineDebugger::Reset();
-    m_renderingInGame = inGame;
-
-    RenderGBuffer();
-
-    #ifdef BANG_EDITOR
-    if (!m_renderingInGame)
-    {
-        RenderSelectionFramebuffer();
-    }
-    #endif
-
-    m_gbuffer->RenderToScreen(m_gbufferAttachmentToBeShown);
-    GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer, m_gbufferAttachmentToBeShown, "ColorFinal");
-    //RenderToScreen(m_selectionFB->GetColorTexture()); // Uncomment to see the framebuffer
-    */
-}
-
-void GraphicPipeline::RenderRenderer(Renderer *rend)
-{
-    if (!CAN_USE_COMPONENT(rend)) { return; }
-    if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
-
-    #ifdef BANG_EDITOR
-    if (!m_selectionFB->IsPassing())
-    #endif
-    {
-        // Rendering to GBuffer
-
-        // immediatePostRender means we have to apply the light and possibly
-        // other postRender effects immediately. For example, in transparent
-        // objects we need to apply deferred light locally before we render another
-        // stuff, because if we render another transparent object above it, we would
-        // be blending wrong colors
-        bool immediatePostRender = (rend->IsTransparent()   ||
-                                    rend->HasCustomSPPass() ||
-                                    rend->IsGizmo());
-        if (immediatePostRender)
-        {
-            // If there's a renderer with a postRender effect,
-            // then do not accumulate the stenciling. The stencil
-            // accumulation is basically used to apply the deferred lighting
-            glDepthMask(GL_FALSE); // Do not write to depth
-
-            // We need a brand new stencil to later apply the custom effects
-            m_gbuffer->ClearStencil();
-        }
-
-        m_gbuffer->SetStencilTest(false); // Don't want to be filtered by the stencil
-        m_gbuffer->SetStencilWrite(true); // We are going to mark into the stencil (to later let the deferred lighting be applied here)
-        m_gbuffer->SetAllDrawBuffers(); // But we DO write to diffuseColor (color != diffuseColor !!!)
-
-        rend->Render(); // Render without writing to the final color buffer
-
-        if (immediatePostRender) // In case we need to apply immediately some SP
-        {
-            // These SP's are stenciled from the Render before
-            ApplyDeferredLights(rend); // Only apply lights to the needed zone
-            if (rend->HasCustomSPPass())
-            {
-                RenderCustomSP(rend);
-            }
-            glDepthMask(GL_TRUE);
-
-            GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer,
-                                                     GBuffer::Attachment::Depth,
-                                                     "DepthAfter" + rend->GetInstanceId());
-            GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer,
-                                                     GBuffer::Attachment::Diffuse,
-                                                     "DiffAfter" + rend->GetInstanceId());
-            GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer,
-                                                     GBuffer::Attachment::Color,
-                                                     "ColorAfter" + rend->GetInstanceId());
-            GraphicPipelineDebugger::TakeGBufferShot(m_gbuffer,
-                                                     GBuffer::Attachment::Stencil,
-                                                     "StencilAfter" + rend->GetInstanceId());
-        }
-    }
-    #ifdef BANG_EDITOR
-    else
-    {
-        m_selectionFB->RenderForSelectionBuffer(rend);
-    }
-    #endif
 }
 
 void GraphicPipeline::ApplySelectionEffect()
@@ -268,71 +181,9 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     }
 }
 
-void GraphicPipeline::RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
-                                               Framebuffer *fb)
-{
-    m_currentDepthLayer = depthLayer;
-    fb->ClearDepth(); // After each pass, clear the depth
-
-    List<Renderer*> renderers = p_scene->GetComponentsInChildren<Renderer>();
-    for (Renderer *rend : renderers) // Opaque
-    {
-        if (m_renderingInGame &&
-            rend->gameObject->HasHideFlag(HideFlags::HideInGame)) { continue; }
-
-        if (!rend->IsTransparent() && !rend->HasCustomSPPass() && !rend->IsGizmo())
-        {
-            RenderRenderer(rend);
-        }
-    }
-
-    // Apply deferred lights to opaque objects
-    if (fb == m_gbuffer)
-    {
-        ApplyDeferredLights();
-        m_gbuffer->ClearStencil();
-    }
-
-    // Post-render passes (screen passes).
-    // Either is transparent or has a custom SP Pass (gizmos are left for the end...)
-    for (Renderer *rend : renderers)
-    {
-        if (m_renderingInGame &&
-            rend->gameObject->HasHideFlag(HideFlags::HideInGame)) { continue; }
-
-        if ((rend->IsTransparent() || rend->HasCustomSPPass()) &&
-             !rend->IsGizmo())
-        {
-            RenderRenderer(rend);
-        }
-    }
-}
-
-void GraphicPipeline::RenderGizmosPass(Framebuffer *fb)
-{
-    glDepthFunc(GL_LEQUAL);
-    m_currentDepthLayer = Renderer::DepthLayer::DepthLayerGizmos;
-    fb->ClearDepth(); // After each pass, clear the depth
-
-    const List<GameObject*> &sceneGameObjects = p_scene->GetChildren();
-    for (GameObject *go : sceneGameObjects)
-    {
-        go->_OnDrawGizmos();
-    }
-
-    fb->ClearDepth();
-
-    for (GameObject *go : sceneGameObjects)
-    {
-        go->_OnDrawGizmosOverlay();
-    }
-    glDepthFunc(GL_LESS);
-}
-
 void GraphicPipeline::RenderCustomSP(Renderer *rend)
 {
     if (!CAN_USE_COMPONENT(rend)) { return; }
-    if (rend->GetDepthLayer() != m_currentDepthLayer) { return; }
 
     #ifdef BANG_EDITOR
     if (!m_selectionFB->IsPassing())
@@ -344,7 +195,8 @@ void GraphicPipeline::RenderCustomSP(Renderer *rend)
     rend->RenderCustomSP();
 }
 
-void GraphicPipeline::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
+void GraphicPipeline::RenderPassWithMaterial(Material *mat,
+                                             const Rect &renderRect)
 {
     ASSERT(mat);
     ShaderProgram *sp = mat->GetShaderProgram(); ASSERT(sp);
@@ -387,44 +239,7 @@ void GraphicPipeline::RenderScreenPlane()
     m_screenPlaneMesh->GetVAO()->UnBind();
 }
 
-void GraphicPipeline::RenderGBuffer()
-{
-    Color bgColor = p_scene->GetCamera()->GetClearColor();
-    m_gbuffer->ClearBuffersAndBackground(bgColor);
-
-    m_gbuffer->Bind();
-    m_gbuffer->SetAllDrawBuffers();
-
-    RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerScene, m_gbuffer);
-    RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerCanvas, m_gbuffer);
-    if (!m_renderingInGame)
-    {
-        ApplySelectionEffect();
-    }
-    RenderGizmosPass(m_gbuffer);
-
-    m_gbuffer->UnBind();
-}
-
 #ifdef BANG_EDITOR
-void GraphicPipeline::RenderSelectionFramebuffer()
-{
-    m_selectionFB->m_isPassing = true;
-    m_selectionFB->PrepareForRender(p_scene);
-
-    m_selectionFB->Bind();
-    m_selectionFB->Clear();
-
-    RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerScene, m_selectionFB);
-    RenderPassWithDepthLayer(Renderer::DepthLayer::DepthLayerCanvas, m_selectionFB);
-    RenderGizmosPass(m_selectionFB);
-
-    m_selectionFB->UnBind();
-
-    m_selectionFB->ProcessSelection();
-    m_selectionFB->m_isPassing = false;
-}
-
 SelectionFramebuffer *GraphicPipeline::GetSelectionFramebuffer()
 {
     return m_selectionFB;
@@ -455,9 +270,4 @@ void GraphicPipeline::SetGBufferAttachmentToBeRendered(
 GBuffer *GraphicPipeline::GetGBuffer()
 {
     return m_gbuffer;
-}
-
-Renderer::DepthLayer GraphicPipeline::GetCurrentDepthLayer() const
-{
-    return m_currentDepthLayer;
 }

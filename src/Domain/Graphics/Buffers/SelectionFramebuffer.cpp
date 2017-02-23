@@ -68,19 +68,10 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
     if (CanRenderGameObject(go))
     {
         Material *rendMaterial = rend->GetMaterial();
-        if (!rendMaterial)
-        {
-            rendMaterial =
-               AssetsManager::Load<Material>("./Materials/Missing.bmat", true);
-        }
-
-        ShaderProgram *originalSP = rendMaterial->GetShaderProgram();
-        ShaderProgram *selectionSp = m_selectionProgram;
-        selectionSp->SetUniformColor("selectionColor", GetSelectionColor(go));
-
-        rendMaterial->SetShaderProgram( selectionSp );
+        // This ShaderProgram is a selection ReplacementShader put by the GP
+        ShaderProgram *sp = rendMaterial->GetShaderProgram();
+        sp->SetUniformColor("selectionColor", GetSelectionColor(go));
         rend->Render();
-        rendMaterial->SetShaderProgram( originalSP );
     }
 }
 

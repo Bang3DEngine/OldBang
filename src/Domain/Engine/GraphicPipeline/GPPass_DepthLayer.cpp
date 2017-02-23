@@ -29,5 +29,10 @@ void GPPass_DepthLayer::PrePass(const List<Renderer*> &renderers,
 bool GPPass_DepthLayer::CanRender(const Renderer *renderer) const
 {
     return (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
-           renderer->GetDepthLayer() == m_depthLayer;
+            renderer->GetDepthLayer() == m_depthLayer;
+}
+
+Renderer::DepthLayer GPPass_DepthLayer::GetDepthLayer() const
+{
+    return m_depthLayer;
 }

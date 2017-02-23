@@ -740,10 +740,7 @@ void GameObject::_OnDrawGizmos()
 
     GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
-    if (sfb->IsPassing())
-    {
-        sfb->PrepareNextGameObject(this);
-    }
+    if (sfb->IsPassing()) { sfb->PrepareNextGameObject(this); }
     PROPAGATE_EVENT(_OnDrawGizmos, m_components);  // The order matters
     OnDrawGizmos();
 
@@ -759,10 +756,7 @@ void GameObject::_OnDrawGizmosOverlay()
 
     GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
-    if (sfb->IsPassing())
-    {
-        sfb->PrepareNextGameObject(this);
-    }
+    if (sfb->IsPassing()) { sfb->PrepareNextGameObject(this); }
     PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_components);  // The order matters
     OnDrawGizmosOverlay();
 

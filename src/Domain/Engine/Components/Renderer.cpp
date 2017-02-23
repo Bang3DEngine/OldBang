@@ -52,7 +52,14 @@ void Renderer::CloneInto(ICloneable *clone) const
 
 Material *Renderer::GetMaterial() const
 {
-    return m_material;
+    if (m_material)
+    {
+        return m_material;
+    }
+    else // Return missing material
+    {
+        return AssetsManager::Load<Material>("./Materials/Missing.bmat", true);
+    }
 }
 
 void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
@@ -89,11 +96,7 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
         if (camera)
         {
             Transform *t = camera->gameObject->transform;
-            ShaderProgram *sp =
-                    camera->GetReplacementShaderProgram() ?
-                        camera->GetReplacementShaderProgram() :
-                        mat->GetShaderProgram();
-
+            ShaderProgram *sp = mat->GetShaderProgram();
             sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
                                t->GetPosition(), false);
 
@@ -240,9 +243,9 @@ void Renderer::SetMatricesUniforms(Material *mat,
                                    const Matrix4 &projection,
                                    const Matrix4 &pvm) const
 {
-    ASSERT(mat); ASSERT(mat->m_shaderProgram);
+    ASSERT(mat);
+    ShaderProgram *sp = mat->GetShaderProgram(); ASSERT(sp);
 
-    ShaderProgram *sp = mat->m_shaderProgram;
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);
     sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal, normal, false);

@@ -19,6 +19,8 @@ public:
 
     virtual bool CanRender(const Renderer *renderer) const override;
 
+    Renderer::DepthLayer GetDepthLayer() const;
+
 protected:
     const Renderer::DepthLayer m_depthLayer;
 };

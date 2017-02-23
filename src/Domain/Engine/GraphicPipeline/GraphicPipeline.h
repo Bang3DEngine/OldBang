@@ -70,23 +70,10 @@ private:
     Mesh *m_screenPlaneMesh = nullptr;
 
     Scene *p_scene = nullptr;
-    Renderer::DepthLayer m_currentDepthLayer =
-                             Renderer::DepthLayer::DepthLayerScene;
 
-    // For opaque
     Material *m_matSelectionEffectScreen = nullptr;
 
     void ApplySelectionEffect();
-
-    void RenderGBuffer();
-
-    #ifdef BANG_EDITOR
-    void RenderSelectionFramebuffer();
-    #endif
-
-    void RenderPassWithDepthLayer(Renderer::DepthLayer depthLayer,
-                                  Framebuffer *fb);
-    void RenderGizmosPass(Framebuffer *fb);
 };
 
 #endif // GRAPHICPIPELINE_H

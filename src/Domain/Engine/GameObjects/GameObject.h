@@ -331,6 +331,7 @@ protected:
     friend class SceneManager;
     friend class GPPass_G_Gizmos;
     friend class GraphicPipeline;
+    friend class GPPass_Selection;
     friend class SelectionFramebuffer;
 };
 

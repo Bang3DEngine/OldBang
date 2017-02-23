@@ -10,6 +10,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "Texture2D.h"
+#include "GameObject.h"
 #include "EditorScene.h"
 #include "MeshFactory.h"
 #include "MeshRenderer.h"
@@ -17,8 +18,8 @@
 #include "AssetsManager.h"
 #include "CircleRenderer.h"
 #include "GraphicPipeline.h"
-#include "GameObject.h"
 #include "SingleLineRenderer.h"
+#include "SelectionFramebuffer.h"
 #include "EditorGizmosGameObject.h"
 
 EditorGizmosGameObject::EditorGizmosGameObject(const String &name) :
@@ -406,11 +407,18 @@ void EditorGizmosGameObject::Render(Renderer *rend)
     {
         r->SetEnabled(r == rend); // Enable only rend
     }
+    */
 
     GraphicPipeline *gp = GraphicPipeline::GetActive(); ASSERT(gp);
-    gp->RenderRenderer(rend);
-    */
-    rend->Render();
+    SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
+    if (!sfb->IsPassing())
+    {
+        rend->Render();
+    }
+    else
+    {
+        sfb->RenderForSelectionBuffer(rend);
+    }
 }
 
 EditorGizmosGameObject *EditorGizmosGameObject::GetInstance()

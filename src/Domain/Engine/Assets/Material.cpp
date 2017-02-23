@@ -1,13 +1,16 @@
 #include "Material.h"
 
+#include "Scene.h"
 #include "Screen.h"
 #include "Shader.h"
+#include "Camera.h"
 #include "Vector4.h"
 #include "Texture.h"
 #include "Texture2D.h"
 #include "Persistence.h"
-#include "ShaderContract.h"
+#include "SceneManager.h"
 #include "ShaderProgram.h"
+#include "ShaderContract.h"
 
 #include "AssetsManager.h"
 
@@ -37,7 +40,7 @@ Material::~Material()
 {
     if (m_shaderProgram)
     {
-        delete m_shaderProgram;
+        // delete m_shaderProgram; // TODO: Fix this to avoid bug
     }
 }
 
@@ -53,31 +56,27 @@ String Material::GetFileExtension()
 
 void Material::Bind() const
 {
-    ASSERT(m_shaderProgram);
+    ShaderProgram *sp = GetShaderProgram(); ASSERT(sp);
 
-    m_shaderProgram->Bind();
-    m_shaderProgram->SetUniformColor("B_material_diffuse_color",
-                                     m_diffuseColor, false);
-    m_shaderProgram->SetUniformVec2("B_screen_size",
-                                    Screen::GetSize(), false);
-    m_shaderProgram->SetUniformFloat("B_material_shininess",
-                                     m_shininess, false);
-    m_shaderProgram->SetUniformFloat("B_material_receivesLighting",
+    sp->Bind();
+    sp->SetUniformColor("B_material_diffuse_color", m_diffuseColor, false);
+    sp->SetUniformVec2("B_screen_size", Screen::GetSize(), false);
+    sp->SetUniformFloat("B_material_shininess", m_shininess, false);
+    sp->SetUniformFloat("B_material_receivesLighting",
                                  m_receivesLighting ? 1.0f : 0.0f, false);
 
-
     float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
-    m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
-    m_shaderProgram->SetUniformFloat("B_alphaCutoff", alphaCutoff, false);
-    m_shaderProgram->SetUniformFloat("B_hasTexture", m_texture ? 1 : 0,
-                                     false);
+    sp->SetUniformTexture("B_texture_0", m_texture, false);
+    sp->SetUniformFloat("B_alphaCutoff", alphaCutoff, false);
+    sp->SetUniformFloat("B_hasTexture", m_texture ? 1 : 0, false);
 }
 
 void Material::UnBind() const
 {
-    if (m_shaderProgram)
+    ShaderProgram *sp = GetShaderProgram();
+    if (sp)
     {
-        m_shaderProgram->UnBind();
+        sp->UnBind();
     }
 }
 
@@ -93,14 +92,13 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
     Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
     SetTexture(texture);
 
+    ShaderProgram *sp = GetShaderProgram();
     String vshaderFilepath = xmlInfo->GetFilepath("VertexShader");
     String fshaderFilepath = xmlInfo->GetFilepath("FragmentShader");
-    if (!m_shaderProgram ||
-        !m_shaderProgram->GetVertexShader() ||
-        !m_shaderProgram->GetFragmentShader() ||
-        vshaderFilepath != m_shaderProgram->GetVertexShader()->GetFilepath() ||
-        fshaderFilepath != m_shaderProgram->GetFragmentShader()->GetFilepath()
-        )
+    if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
+        vshaderFilepath != sp->GetVertexShader()->GetFilepath() ||
+        fshaderFilepath != sp->GetFragmentShader()->GetFilepath()
+       )
     {
         SetShaderProgram(new ShaderProgram(vshaderFilepath, fshaderFilepath));
     }
@@ -120,16 +118,17 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
                          Texture2D::GetFileExtensionStatic());
 
     String vsFile =  "", fsFile = "";
-    if (m_shaderProgram)
+    ShaderProgram *sp = GetShaderProgram();
+    if (sp)
     {
-        if (m_shaderProgram->GetVertexShader())
+        if (sp->GetVertexShader())
         {
-            vsFile = m_shaderProgram->GetVertexShader()->GetFilepath();
+            vsFile = sp->GetVertexShader()->GetFilepath();
         }
 
-        if (m_shaderProgram->GetFragmentShader())
+        if (sp->GetFragmentShader())
         {
-            fsFile = m_shaderProgram->GetFragmentShader()->GetFilepath();
+            fsFile = sp->GetFragmentShader()->GetFilepath();
         }
     }
     xmlInfo->SetFilepath("VertexShader", vsFile, "vert");
@@ -146,7 +145,7 @@ void Material::SetTexture(const Texture2D *texture)
     m_texture = texture;
     if (m_texture)
     {
-        m_shaderProgram->SetUniformTexture("B_texture_0", m_texture, false);
+        GetShaderProgram()->SetUniformTexture("B_texture_0", m_texture, false);
     }
 }
 
@@ -167,7 +166,11 @@ void Material::SetDiffuseColor(const Color &diffuseColor)
 
 ShaderProgram *Material::GetShaderProgram() const
 {
-    return m_shaderProgram;
+    Scene *scene = SceneManager::GetActiveScene();
+    if (!scene) { return m_shaderProgram; }
+    Camera *cam = scene->GetCamera(); if (!cam) { return m_shaderProgram; }
+    ShaderProgram *camReplacementSP = cam->GetReplacementShaderProgram();
+    return !camReplacementSP ? m_shaderProgram : camReplacementSP;
 }
 
 const Texture2D *Material::GetTexture() const
