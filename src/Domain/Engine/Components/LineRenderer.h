@@ -35,10 +35,10 @@ protected:
     VBO *m_vbo = nullptr;
     VAO *m_vao = nullptr;
 
-    RenderMode m_drawLinesMode = RenderMode::Lines;
+    GL::RenderMode m_drawLinesMode = GL::RenderMode::Lines;
 
     virtual void BindPointsToVAO() const;
-    virtual void RenderWithoutBindingMaterial() const override;
+    virtual void RenderWithoutMaterial() const override;
 
     LineRenderer();
 

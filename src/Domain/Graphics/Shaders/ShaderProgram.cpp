@@ -79,8 +79,17 @@ bool ShaderProgram::Link()
     return linked;
 }
 
-bool ShaderProgram::SetUniformFloat(const String &name,
-                                    float v, bool warn) const
+void ShaderProgram::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
+{
+    Bind();
+}
+
+void ShaderProgram::OnRenderingEnds(GameObject *go, ShaderProgram *sp)
+{
+    UnBind();
+}
+
+bool ShaderProgram::SetFloat(const String &name, float v) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -89,17 +98,10 @@ bool ShaderProgram::SetUniformFloat(const String &name,
         glUniform1fv(location, 1, &v);
         UnBind();
     }
-    else
-    {
-        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                       std::endl << this << std::endl << " . Not setting it.");
-    }
-
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec2 (const String &name,
-                                    const Vector2& v, bool warn) const
+bool ShaderProgram::SetVec2 (const String &name, const Vector2& v) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -108,17 +110,10 @@ bool ShaderProgram::SetUniformVec2 (const String &name,
         glUniform2fv(location, 1, &v.x);
         UnBind();
     }
-    else
-    {
-        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                     std::endl << this << std::endl << " . Not setting it.");
-    }
-
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec3 (const String &name,
-                                    const Vector3& v, bool warn) const
+bool ShaderProgram::SetVec3 (const String &name, const Vector3& v) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -127,17 +122,10 @@ bool ShaderProgram::SetUniformVec3 (const String &name,
         glUniform3fv(location, 1, &v.x);
         UnBind();
     }
-    else
-    {
-        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                      std::endl << this << std::endl << " . Not setting it.");
-    }
-
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformVec4 (const String &name,
-                                    const Vector4& v, bool warn) const
+bool ShaderProgram::SetVec4 (const String &name, const Vector4& v) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -146,23 +134,15 @@ bool ShaderProgram::SetUniformVec4 (const String &name,
         glUniform4fv(location, 1, &v.x);
         UnBind();
     }
-    else
-    {
-        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                      std::endl << this << std::endl << " . Not setting it.");
-    }
-
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformColor(const String &name,
-                                    const Color &c, bool warn) const
+bool ShaderProgram::SetColor(const String &name, const Color &c) const
 {
-    return SetUniformVec4(name, Vector4(c), warn);
+    return SetVec4(name, Vector4(c));
 }
 
-bool ShaderProgram::SetUniformMat4 (const String &name,
-                                    const Matrix4& m, bool warn) const
+bool ShaderProgram::SetMat4(const String &name, const Matrix4& m) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -171,17 +151,10 @@ bool ShaderProgram::SetUniformMat4 (const String &name,
         glUniformMatrix4fv(location, 1, GL_FALSE, m.GetFirstAddress());
         UnBind();
     }
-    else
-    {
-        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                      std::endl << this << std::endl << " . Not setting it.");
-    }
-
     return (location >= 0);
 }
 
-bool ShaderProgram::SetUniformTexture(const String &name,
-                                      const Texture *texture, bool warn) const
+bool ShaderProgram::SetTexture(const String &name, const Texture *texture) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
@@ -189,12 +162,6 @@ bool ShaderProgram::SetUniformTexture(const String &name,
         m_names_To_Texture[name] = texture;
         UpdateTextureBindings();
     }
-    else
-    {
-        if (warn) Debug_Warn("Couldn't find uniform '" + name + "' in " <<
-                      std::endl << this << std::endl << " . Not setting it.");
-    }
-
     return (location >= 0);
 }
 

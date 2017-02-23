@@ -34,8 +34,8 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : GameObject("EditorBBox"
 
     mr->SetMesh(mesh);
     mr->SetDrawWireframe(true);
-    mr->SetCullMode(Renderer::CullMode::Back);
-    mr->SetRenderMode(Renderer::RenderMode::Triangles);
+    mr->SetCullMode(GL::CullMode::Back);
+    mr->SetRenderMode(GL::RenderMode::Triangles);
 
     AddHideFlag(HideFlags::HideAndDontSave);
 }

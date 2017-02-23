@@ -37,9 +37,9 @@ void UIText::Render() const
     RenderText();
 }
 
-void UIText::RenderForSelectionFramebufferWithoutBindingMaterial() const
+void UIText::RenderForSelectionWithoutMaterial() const
 {
-    RenderWithoutBindingMaterial();
+    RenderWithoutMaterial();
 }
 
 String UIText::GetName() const
@@ -65,11 +65,6 @@ ICloneable *UIText::Clone() const
     UIText *text = new UIText();
     CloneInto(text);
     return text;
-}
-
-void UIText::RenderCustomSP() const
-{
-    UIRenderer::RenderCustomSP();
 }
 
 void UIText::SetHorizontalAlign(UIText::HorizontalAlignment horizontalAlignment)

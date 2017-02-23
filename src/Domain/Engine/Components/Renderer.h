@@ -4,34 +4,22 @@
 #include <GL/glew.h>
 #include <functional>
 
+#include "GL.h"
 #include "Rect.h"
 #include "Array.h"
 #include "NamedEnum.h"
 #include "Component.h"
+#include "IRenderAgent.h"
 
 class AABox;
 class Camera;
 class Material;
 class SceneManager;
 class SelectionFramebuffer;
-class Renderer : public Component
+class Renderer : public Component,
+                 public IRenderAgent
 {
 public:
-    NamedEnum (RenderMode,
-        Points = GL_POINTS,
-        Lines = GL_LINES,
-        LineStrip = GL_LINE_STRIP,
-        Triangles = GL_TRIANGLES,
-        Quads = GL_QUADS
-    );
-
-    NamedEnum (CullMode,
-        Front = GL_FRONT,
-        Back = GL_BACK,
-        FrontAndBack = GL_FRONT_AND_BACK,
-        None = GL_NONE
-    );
-
     enum DepthLayer
     {
         DepthLayerScene,
@@ -58,24 +46,25 @@ public:
      */
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const;
 
-    void SetCullMode(CullMode m_cullMode);
-    CullMode GetCullMode() const;
+    void SetCullMode(GL::CullMode m_cullMode);
+    GL::CullMode GetCullMode() const;
 
-    void SetRenderMode(RenderMode m_renderMode);
-    RenderMode GetRenderMode() const;
+    void SetRenderMode(GL::RenderMode m_renderMode);
+    GL::RenderMode GetRenderMode() const;
 
     void SetLineWidth(float w);
     float GetLineWidth() const;
 
     virtual void Render() const;
-    virtual void RenderCustomSP() const;
     virtual void RenderWithMaterial(Material *mat) const;
 
-    virtual bool IsACanvasRenderer() const;
-
     #ifdef BANG_EDITOR
-    void SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f);
+    void SetOnRenderingStartsForSelectionFunction(
+            const std::function<void()> &f);
     #endif
+
+    void OnRenderingStarts(GameObject *go, ShaderProgram *sp) const;
+    void OnRenderingEnds(GameObject *go, ShaderProgram *sp) const;
 
     virtual String GetName() const override;
     virtual ICloneable *Clone() const override = 0;
@@ -86,53 +75,25 @@ public:
     void SetTransparent(bool transparent);
     bool IsTransparent() const;
 
-    void SetIsGizmo(bool isGizmo);
-    bool IsGizmo() const;
-
-    bool HasCustomSPPass() const;
-
     void SetDepthLayer(DepthLayer dl);
     DepthLayer GetDepthLayer() const;
 
 protected:
 
-    Material *m_material = nullptr;
-
     bool m_drawWireframe = false;
-    bool m_hasCustomSPPass = false;
-    CullMode m_cullMode = CullMode::Back;
-    RenderMode m_renderMode = RenderMode::Triangles;
+    Material *m_material = nullptr;
+    GL::CullMode m_cullMode     = GL::CullMode::Back;
+    GL::RenderMode m_renderMode = GL::RenderMode::Triangles;
 
-    virtual void OnRenderingStarts(Material *mat) const;
-    virtual void OnJustBeforeRendering(Material *mat) const;
-    virtual void OnJustAfterRendering(Material *mat) const;
-    virtual void OnRenderingEnds(Material *mat) const;
+    virtual void RenderWithoutMaterial() const = 0;
+    virtual void RenderForSelectionWithoutMaterial() const;
 
-    virtual void RenderWithoutBindingMaterial() const = 0;
-    virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const;
-
-    void GetMatrices(Matrix4 *model,
-                     Matrix4 *normal,
-                     Matrix4 *view,
-                     Matrix4 *projection,
-                     Matrix4 *pvm) const;
-
-    virtual void SetMatricesUniforms(
-            Material *mat,
-            const Matrix4 &model,
-            const Matrix4 &normal,
-            const Matrix4 &view,
-            const Matrix4 &projection,
-            const Matrix4 &pvm) const;
-
-protected:
     Renderer();
     virtual ~Renderer();
 
 private:
 
     DepthLayer m_depthLayer = DepthLayerScene;
-    bool m_isGizmo = false;
     bool m_isTransparent = false;
 
     /**
@@ -152,7 +113,7 @@ private:
      * This is used in the transform axes for example, in which we
      * increase the lineWidth for an easier axis grabbing.
      */
-    std::function<void()> ActivateGLStatesBeforeRenderingForSelection = nullptr;
+    std::function<void()> p_OnRenderingStartsForSelectionFunc = nullptr;
     #endif
 
     friend class GameObject;

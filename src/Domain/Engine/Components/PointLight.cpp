@@ -37,7 +37,7 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
     Light::SetUniformsBeforeApplyingLight(mat);
 
     ShaderProgram *sp = mat->GetShaderProgram();
-    sp->SetUniformFloat("B_light_range", m_range, false);
+    sp->SetFloat("B_light_range", m_range);
 }
 
 String PointLight::GetName() const

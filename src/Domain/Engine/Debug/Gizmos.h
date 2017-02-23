@@ -12,9 +12,9 @@ class Rect;
 class Material;
 class Renderer;
 class Texture2D;
+class GameObject;
 class MeshRenderer;
 class CircleRenderer;
-class GameObject;
 class SingleLineRenderer;
 class EditorGizmosGameObject;
 class Gizmos
@@ -67,9 +67,12 @@ private:
     static void SetResetAllowed(bool allowed);
     static void Reset();
 
+    static bool IsGizmoRenderer(Renderer *rend);
+
     friend class Screen;
     friend class EditorScene;
     friend class GraphicPipeline;
+    friend class SelectionFramebuffer;
 };
 
 #endif // GIZMOS_H

@@ -43,32 +43,22 @@ GBuffer::~GBuffer()
 {
 }
 
-void GBuffer::SetUniformsBeforeRendering(Material *mat)
+void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 {
-    ASSERT(mat);
-    ShaderProgram *sp = mat->GetShaderProgram(); ASSERT(sp);
-
     // Color Attachments bindings as Shader Inputs
-    sp->SetUniformTexture("B_position_gout_fin",      m_positionTexture, false);
-    sp->SetUniformTexture("B_normal_gout_fin",        m_normalTexture,   false);
-    sp->SetUniformTexture("B_uv_gout_fin",            m_uvTexture,       false);
-    sp->SetUniformTexture("B_diffuse_gout_fin",       m_diffuseTexture,  false);
-    sp->SetUniformTexture("B_materialProps_gout_fin", m_matPropsTexture, false);
-    sp->SetUniformTexture("B_depth_gout_fin",         m_depthTexture,    false);
-    sp->SetUniformTexture("B_stencil_gout_fin",       m_stencilTexture,  false);
-    sp->SetUniformTexture("B_color_gout_fin",         m_colorTexture,    false);
-
-    Camera *camera = Scene::GetActiveScene()->GetCamera();
-    if (camera)
-    {
-        sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
-                           camera->transform->GetPosition(), false);
-    }
+    sp->SetTexture("B_position_gout_fin",      m_positionTexture);
+    sp->SetTexture("B_normal_gout_fin",        m_normalTexture);
+    sp->SetTexture("B_uv_gout_fin",            m_uvTexture);
+    sp->SetTexture("B_diffuse_gout_fin",       m_diffuseTexture);
+    sp->SetTexture("B_materialProps_gout_fin", m_matPropsTexture);
+    sp->SetTexture("B_depth_gout_fin",         m_depthTexture);
+    sp->SetTexture("B_stencil_gout_fin",       m_stencilTexture);
+    sp->SetTexture("B_color_gout_fin",         m_colorTexture);
 
     // Stencil uniforms
-    sp->SetUniformFloat("B_stencilWriteEnabled",
+    sp->SetFloat("B_stencilWriteEnabled",
                         m_stencilWriteEnabled ? 1.0f : 0.0f);
-    sp->SetUniformFloat("B_stencilTestEnabled",
+    sp->SetFloat("B_stencilTestEnabled",
                         m_stencilTestEnabled  ? 1.0f : 0.0f);
 }
 
@@ -80,7 +70,7 @@ void GBuffer::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
     bool prevStencilWrite = m_stencilWriteEnabled;
     SetStencilWrite(false);
 
-    SetUniformsBeforeRendering(mat);
+    OnRenderingStarts(nullptr, mat->GetShaderProgram());
     SaveCurrentDrawBuffers();
 
     // Set as only draw output: "B_color_gout_gin". To accumulate color in there

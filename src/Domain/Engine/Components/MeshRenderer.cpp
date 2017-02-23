@@ -48,7 +48,7 @@ void MeshRenderer::SetMesh(Mesh *m)
     if (!m_mesh->GetFilepath().Empty())
     {
         SetRenderMode(m_mesh->IsATrianglesModel() ?
-                      RenderMode::Triangles : RenderMode::Quads);
+                      GL::RenderMode::Triangles : GL::RenderMode::Quads);
     }
 
     BindCurrentMeshToShaderProgram();
@@ -69,7 +69,7 @@ String MeshRenderer::GetName() const
     return "MeshRenderer";
 }
 
-void MeshRenderer::RenderWithoutBindingMaterial() const
+void MeshRenderer::RenderWithoutMaterial() const
 {
     ASSERT(m_mesh);
 

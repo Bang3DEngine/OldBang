@@ -28,9 +28,8 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     m_material = new Material(*mat);
     m_material->SetReceivesLighting(false);
     m_circle->SetMaterial(m_material);
-    m_circle->SetIsGizmo(true);
     m_circle->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
-    m_circle->SetActivateGLStatesBeforeRenderingForSelectionFunction([]()
+    m_circle->SetOnRenderingStartsForSelectionFunction([]()
         {
             glLineWidth(10.0f); // Easier grab
         }
@@ -127,7 +126,7 @@ void EditorRotateAxis::OnUpdate()
     }
 
     m_material->GetShaderProgram()->
-            SetUniformVec3("B_world_circleCenter", transform->GetPosition());
+            SetVec3("B_world_circleCenter", transform->GetPosition());
 }
 
 void EditorRotateAxis::OnDrawGizmosOverlay()

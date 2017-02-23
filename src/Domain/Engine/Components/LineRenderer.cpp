@@ -39,7 +39,7 @@ void LineRenderer::BindPointsToVAO() const
     }
 }
 
-void LineRenderer::RenderWithoutBindingMaterial() const
+void LineRenderer::RenderWithoutMaterial() const
 {
     m_vao->Bind();
     glDrawArrays(GLint(m_drawLinesMode), 0, m_points.Size());

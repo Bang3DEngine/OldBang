@@ -31,7 +31,7 @@ protected:
     mutable Mesh *m_mesh = nullptr;
 
     void BindCurrentMeshToShaderProgram() const;
-    virtual void RenderWithoutBindingMaterial() const override;
+    virtual void RenderWithoutMaterial() const override;
 
     friend class GameObject;
 };

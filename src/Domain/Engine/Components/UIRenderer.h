@@ -12,18 +12,7 @@ class ICloneable;
 class UIRenderer : public MeshRenderer
 {
 public:
-    virtual void RenderCustomSP() const override;
-    bool IsACanvasRenderer() const override;
-
-    virtual void RenderWithoutBindingMaterial() const override;
-
-    virtual void SetMatricesUniforms(
-            Material *mat,
-            const Matrix4 &model      = Matrix4::Identity,
-            const Matrix4 &normal     = Matrix4::Identity,
-            const Matrix4 &view       = Matrix4::Identity,
-            const Matrix4 &projection = Matrix4::Identity,
-            const Matrix4 &pvm        = Matrix4::Identity) const override;
+    virtual void RenderWithoutMaterial() const override;
 
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
@@ -39,7 +28,8 @@ protected:
     UIRenderer();
     virtual ~UIRenderer();
 
-    virtual void OnJustBeforeRendering(Material *mat) const override;
+    virtual void OnJustBeforeRendering(GameObject *go,
+                                       ShaderProgram *sp) override;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;

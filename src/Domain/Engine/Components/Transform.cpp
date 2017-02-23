@@ -255,13 +255,6 @@ void Transform::GetLocalToWorldMatrix(Matrix4 *m) const
     }
 }
 
-void Transform::GetLocalToWorldNormalMatrix(Matrix4 *m) const
-{
-    GetLocalToWorldMatrix(m);
-    *m = m->Inversed().Transposed();
-}
-
-
 void Transform::LookAt(const Vector3 &target, const Vector3 &_up)
 {
     ASSERT(target != m_localPosition, "LookAt target is the same as position.", return);

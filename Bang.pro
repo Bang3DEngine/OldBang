@@ -292,7 +292,11 @@ HEADERS +=                                                          \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.h \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.h \
     src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h
+    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h \
+    src/Domain/Graphics/Interfaces/IRenderAgent.h \
+    src/Domain/Graphics/GLContext.h \
+    src/Domain/Graphics/GL.h \
+    src/Domain/Engine/DataStructures/TypeMap.h
 
 EDITOR {
 HEADERS += \
@@ -501,7 +505,10 @@ SOURCES += \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp
+    src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp \
+    src/Domain/Graphics/GLContext.cpp \
+    src/Domain/Graphics/GL.cpp \
+    src/Domain/Engine/DataStructures/TypeMap.cpp
 
 EDITOR {
     SOURCES += \
@@ -713,5 +720,4 @@ DISTFILES += \
     EngineAssets/Materials/G_DefaultNoSP.bmat \
     EngineAssets/Materials/UI/G_UIImage.bmat \
     EngineAssets/Materials/UI/G_UIText.bmat \
-    EngineAssets/Materials/UI/SP_UIImage.bmat \
-    EngineAssets/Shaders/GSP_Default.frag
+    EngineAssets/Materials/UI/SP_UIImage.bmat

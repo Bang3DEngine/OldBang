@@ -21,8 +21,6 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-    virtual void RenderCustomSP() const override;
-
     void SetTexture(Texture2D *imageTexture);
 
     Texture2D *GetTexture() const;
@@ -30,7 +28,8 @@ public:
 private:
     Texture2D *m_imageTexture = nullptr;
 
-    virtual void OnJustBeforeRendering(Material *mat) const override;
+    virtual void OnJustBeforeRendering(GameObject *go,
+                                       ShaderProgram *sp) override;
 
     friend class GameObject;
 };

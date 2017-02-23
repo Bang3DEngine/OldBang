@@ -8,7 +8,7 @@
 
 CircleRenderer::CircleRenderer()
 {
-    this->m_drawLinesMode = RenderMode::LineStrip;
+    this->m_drawLinesMode = GL::RenderMode::LineStrip;
 }
 
 CircleRenderer::~CircleRenderer()

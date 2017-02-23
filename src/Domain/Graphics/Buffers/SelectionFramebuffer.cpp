@@ -63,14 +63,14 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     SetAllDrawBuffers();
 
-    GameObject *go = !rend->IsGizmo() ? rend->gameObject :
-                                        m_nextGameObjectToBeRendered;
+    GameObject *go = Gizmos::IsGizmoRenderer(rend) ?
+                rend->gameObject : m_nextGameObjectToBeRendered;
     if (CanRenderGameObject(go))
     {
         Material *rendMaterial = rend->GetMaterial();
         // This ShaderProgram is a selection ReplacementShader put by the GP
         ShaderProgram *sp = rendMaterial->GetShaderProgram();
-        sp->SetUniformColor("selectionColor", GetSelectionColor(go));
+        sp->SetColor("selectionColor", GetSelectionColor(go));
         rend->Render();
     }
 }
@@ -187,12 +187,13 @@ long SelectionFramebuffer::MapColorToId(const Color &color)
 
 bool SelectionFramebuffer::CanRenderGameObject(const GameObject *go)
 {
+    if (!go) { return false; }
     if (go->HasHideFlag(HideFlags::HideInHierarchy))
     {
-       return go && go->IsEnabled() && !go->IsDraggedGameObject() &&
+       return go->IsEnabled() && !go->IsDraggedGameObject() &&
               go->HasHideFlag(HideFlags::HideInSelection);
     }
-    return go && go->IsEnabled() && !go->IsDraggedGameObject();
+    return go->IsEnabled() && !go->IsDraggedGameObject();
 }
 
 

@@ -46,7 +46,6 @@ void EditorGizmosGameObject::Init()
         List<Renderer*> renderers = GetComponents<Renderer>();
         for (Renderer *rend : renderers)
         {
-            rend->SetIsGizmo(true);
             rend->SetMaterial(m_material);
             rend->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
         }
@@ -411,6 +410,11 @@ void EditorGizmosGameObject::Render(Renderer *rend)
     {
         sfb->RenderForSelectionBuffer(rend);
     }
+}
+
+bool EditorGizmosGameObject::IsGizmoRenderer(Renderer *rend)
+{
+    return GetComponents<Renderer>().Contains(rend);
 }
 
 EditorGizmosGameObject *EditorGizmosGameObject::GetInstance()

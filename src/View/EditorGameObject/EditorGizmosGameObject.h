@@ -42,7 +42,6 @@ public:
     void Render(Renderer *rend);
 
 private:
-
     Mesh *m_boxMesh = nullptr;
     Mesh *m_sphereMesh = nullptr;
     Mesh *m_planeMesh = nullptr;
@@ -50,6 +49,10 @@ private:
 
     bool m_inited = false;
     bool m_resetAllowed = true;
+
+    bool IsGizmoRenderer(Renderer *rend);
+
+    friend class Gizmos;
 };
 
 #endif // EDITORGIZMOSGAMEOBJECT_H

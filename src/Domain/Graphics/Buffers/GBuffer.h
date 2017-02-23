@@ -5,10 +5,12 @@
 #include "Color.h"
 #include "String.h"
 #include "Framebuffer.h"
+#include "IRenderAgent.h"
 
 class Mesh;
 class Material;
-class GBuffer : public Framebuffer
+class GBuffer : public Framebuffer,
+                public IRenderAgent
 {
 public:
     enum Attachment
@@ -48,7 +50,8 @@ public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    void SetUniformsBeforeRendering(Material *mat);
+    virtual void OnRenderingStarts(GameObject *go,
+                                   ShaderProgram *sp) override;
     void RenderPassWithMaterial(Material *mat,
                                 const Rect &renderRect = Rect(-1, 1, -1, 1));
     void RenderToScreen(Attachment attachmentId);

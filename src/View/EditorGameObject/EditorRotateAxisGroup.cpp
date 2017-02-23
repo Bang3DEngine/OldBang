@@ -28,7 +28,6 @@ EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     Material *matCopy = new Material( *(m_circle->GetMaterial()) );
     matCopy->SetDiffuseColor( Color::White );
     m_circle->SetMaterial(matCopy);
-    m_circle->SetIsGizmo(true);
 
     AddHideFlag(HideFlags::HideAndDontSave);
 }

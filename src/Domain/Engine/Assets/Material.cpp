@@ -54,32 +54,6 @@ String Material::GetFileExtension()
     return Material::GetFileExtensionStatic();
 }
 
-void Material::Bind() const
-{
-    ShaderProgram *sp = GetShaderProgram(); ASSERT(sp);
-
-    sp->Bind();
-    sp->SetUniformColor("B_material_diffuse_color", m_diffuseColor, false);
-    sp->SetUniformVec2("B_screen_size", Screen::GetSize(), false);
-    sp->SetUniformFloat("B_material_shininess", m_shininess, false);
-    sp->SetUniformFloat("B_material_receivesLighting",
-                                 m_receivesLighting ? 1.0f : 0.0f, false);
-
-    float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
-    sp->SetUniformTexture("B_texture_0", m_texture, false);
-    sp->SetUniformFloat("B_alphaCutoff", alphaCutoff, false);
-    sp->SetUniformFloat("B_hasTexture", m_texture ? 1 : 0, false);
-}
-
-void Material::UnBind() const
-{
-    ShaderProgram *sp = GetShaderProgram();
-    if (sp)
-    {
-        sp->UnBind();
-    }
-}
-
 void Material::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
@@ -135,6 +109,11 @@ void Material::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFilepath("FragmentShader", fsFile, "frag");
 }
 
+Material *Material::GetMissingMaterial()
+{
+    return AssetsManager::Load<Material>("./Materials/Missing.bmat", true);
+}
+
 void Material::SetShaderProgram(ShaderProgram *program)
 {
     m_shaderProgram = program;
@@ -145,7 +124,7 @@ void Material::SetTexture(const Texture2D *texture)
     m_texture = texture;
     if (m_texture)
     {
-        GetShaderProgram()->SetUniformTexture("B_texture_0", m_texture, false);
+        GetShaderProgram()->SetTexture("B_texture_0", m_texture);
     }
 }
 
@@ -191,4 +170,18 @@ float Material::GetShininess() const
 const Color& Material::GetDiffuseColor() const
 {
     return m_diffuseColor;
+}
+
+void Material::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
+{
+    sp->SetColor("B_material_diffuse_color", m_diffuseColor);
+    sp->SetVec2("B_screen_size", Screen::GetSize());
+    sp->SetFloat("B_material_shininess", m_shininess);
+    sp->SetFloat("B_material_receivesLighting",
+                                 m_receivesLighting ? 1.0f : 0.0f);
+
+    float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
+    sp->SetTexture("B_texture_0", m_texture);
+    sp->SetFloat("B_alphaCutoff", alphaCutoff);
+    sp->SetFloat("B_hasTexture", m_texture ? 1 : 0);
 }

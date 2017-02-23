@@ -8,6 +8,7 @@
 #include "IFileable.h"
 #include "IToString.h"
 #include "ICloneable.h"
+#include "IRenderAgent.h"
 #include "ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
@@ -26,6 +27,7 @@ class GameObject :
                ,public IToString
                ,public IFileable
                ,public ICloneable
+               ,public IRenderAgent
                #ifdef BANG_EDITOR
                ,public IWindowEventManagerListener
                #endif
@@ -104,6 +106,9 @@ public:
      * @return
      */
     Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
+
+    virtual void OnRenderingStarts(GameObject *go,
+                                   ShaderProgram *sp) override;
 
     /**
      * @brief Returns this GameObject's bounding sphere in world space

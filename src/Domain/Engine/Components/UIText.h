@@ -13,13 +13,13 @@ class UIText : public UIRenderer
 {
 public:
     enum class HorizontalAlignment { Left = 0, Center, Right };
-    enum class VerticalAlignment { Top = 0, Center, Bot };
+    enum class VerticalAlignment   { Top  = 0, Center, Bot   };
 
     UIText();
     virtual ~UIText();
 
     virtual void Render() const override;
-    virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const
+    virtual void RenderForSelectionWithoutMaterial() const
                 override;
 
     virtual String GetName() const override;
@@ -29,8 +29,6 @@ public:
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
-
-    virtual void RenderCustomSP() const override;
 
     void SetHorizontalAlign(HorizontalAlignment horizontalAlignment);
     HorizontalAlignment GetHorizontalAlignment() const;

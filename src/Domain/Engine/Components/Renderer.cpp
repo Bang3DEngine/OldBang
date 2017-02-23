@@ -24,7 +24,7 @@
 Renderer::Renderer()
 {
     #ifdef BANG_EDITOR
-    ActivateGLStatesBeforeRenderingForSelection = [](){};
+    p_OnRenderingStartsForSelectionFunc = [](){};
     #endif
 
     m_material = AssetsManager::Load<Material>("Materials/G_Default.bmat", true);
@@ -46,151 +46,83 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetLineWidth(GetLineWidth());
     r->SetClosedInInspector(IsClosedInInspector());
     r->SetTransparent(IsTransparent());
-    r->SetIsGizmo(IsGizmo());
-    r->m_hasCustomSPPass = HasCustomSPPass();
 }
 
 Material *Renderer::GetMaterial() const
 {
-    if (m_material)
-    {
-        return m_material;
-    }
-    else // Return missing material
-    {
-        return AssetsManager::Load<Material>("./Materials/Missing.bmat", true);
-    }
+    return m_material ? m_material : Material::GetMissingMaterial();
 }
 
-void Renderer::OnRenderingStarts(Material *mat) const
+void Renderer::OnRenderingStarts(GameObject *go, ShaderProgram *sp) const
 {
-    //Set polygon mode
-    if (m_drawWireframe)
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
-    else
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
-
-    //Set culling mode
-    if (m_cullMode != CullMode::None)
-    {
-        glEnable(GL_CULL_FACE);
-        glCullFace(GLint(m_cullMode));
-    }
-    else
-    {
-        glDisable(GL_CULL_FACE);
-    }
-
+    GL::SetWireframe(m_drawWireframe);
+    GL::SetCullMode(m_cullMode);
     glLineWidth(m_lineWidth);
 
-    // Set uniforms
+    go->OnRenderingStarts(go, sp);
+    sp->OnRenderingStarts(go, sp);
+
     Scene *scene = SceneManager::GetActiveScene();
     Camera *camera = scene->GetCamera();
-    bool goodMaterial = mat && mat->GetShaderProgram();
-    if (goodMaterial)
-    {
-        if (camera)
-        {
-            Transform *t = camera->gameObject->transform;
-            ShaderProgram *sp = mat->GetShaderProgram();
-            sp->SetUniformVec3(ShaderContract::Uniform_Position_Camera,
-                               t->GetPosition(), false);
+    if (camera) { camera->OnRenderingStarts(go, sp); }
 
-            #ifdef BANG_EDITOR
-            if (gameObject)
-            {
-                sp->SetUniformFloat("B_gameObject_isSelected",
-                                    gameObject->IsSelected() ? 1.0f : 0.0f,
-                                    false);
-            }
-            #endif
-        }
-
-        Matrix4 model, normal, view, projection, pvm;
-        GetMatrices(&model, &normal, &view, &projection, &pvm);
-        SetMatricesUniforms(mat, model, normal, view, projection, pvm);
-
-        GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
-        gb->SetUniformsBeforeRendering(mat);
-    }
+    GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
+    gb->OnRenderingStarts(go, sp);
 }
 
-void Renderer::OnJustBeforeRendering(Material *mat) const
+void Renderer::RenderForSelectionWithoutMaterial() const
 {
-}
-
-void Renderer::OnJustAfterRendering(Material *mat) const
-{
-}
-
-void Renderer::OnRenderingEnds(Material *mat) const
-{
-}
-
-void Renderer::RenderForSelectionFramebufferWithoutBindingMaterial() const
-{
-    RenderWithoutBindingMaterial();
+    RenderWithoutMaterial();
 }
 
 void Renderer::Render() const
 {
-    // TODO: Transparent renderers must not write to the depth buffer (?)
-    if (IsTransparent()) { glDepthMask(GL_FALSE); }
-
     RenderWithMaterial(m_material);
-
-    if (IsTransparent()) { glDepthMask(GL_TRUE); }
-}
-
-void Renderer::RenderCustomSP() const
-{
-    // To override by child classes if they want to implement some SP pass
 }
 
 void Renderer::RenderWithMaterial(Material *_mat) const
 {
-    Material *mat = _mat;
-    if (!mat)
-    {
-        mat = AssetsManager::Load<Material>("./Materials/Missing.bmat", true);
-    }
+    Renderer *ncThis = const_cast<Renderer*>(this);
+    Material *mat = _mat ? _mat : Material::GetMissingMaterial();
 
-    OnRenderingStarts(mat);
+    ShaderProgram *sp = mat->GetShaderProgram();
+    ncThis->OnRenderingStarts(gameObject, sp);
+    mat->OnRenderingStarts(gameObject, sp);
 
-    #ifdef BANG_EDITOR
-    SelectionFramebuffer *sfb =
-            GraphicPipeline::GetActive()->GetSelectionFramebuffer();
-    if (sfb && sfb->IsPassing())
-    {
-        ActivateGLStatesBeforeRenderingForSelection();
-    }
-    #endif
+    sp->OnJustBeforeRendering(gameObject, sp);
+    mat->OnJustBeforeRendering(gameObject, sp);
+    ncThis->OnJustBeforeRendering(gameObject, sp);
 
-    if (mat) { mat->Bind(); }
+    GL::Apply();
+    GL::ApplyToShaderProgram(sp);
 
     #ifdef BANG_EDITOR
-    if (sfb && sfb->IsPassing())
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
+    if (sfb->IsPassing())
     {
-        RenderForSelectionFramebufferWithoutBindingMaterial();
+        p_OnRenderingStartsForSelectionFunc();
+        RenderForSelectionWithoutMaterial();
     }
     else
     #endif
     {
-        OnJustBeforeRendering(mat);
-        RenderWithoutBindingMaterial();
-        OnJustAfterRendering(mat);
+        RenderWithoutMaterial();
     }
 
-    if (mat) { mat->UnBind(); }
+    ncThis->OnJustAfterRendering(gameObject, sp);
+    mat->OnJustAfterRendering(gameObject, sp);
+    sp->OnJustAfterRendering(gameObject, sp);
+
+    GL::Reset();
+
+    ncThis->OnRenderingEnds(gameObject, sp);
+    mat->OnRenderingEnds(gameObject, sp);
 }
 
-bool Renderer::IsACanvasRenderer() const
+void Renderer::OnRenderingEnds(GameObject *go, ShaderProgram *sp) const
 {
-    return false;
+    sp->OnRenderingEnds(go, sp);
 }
 
 void Renderer::SetTransparent(bool transparent)
@@ -202,21 +134,6 @@ bool Renderer::IsTransparent() const
     return m_isTransparent;
 }
 
-void Renderer::SetIsGizmo(bool isGizmo)
-{
-    m_isGizmo = isGizmo;
-}
-
-bool Renderer::IsGizmo() const
-{
-    return m_isGizmo;
-}
-
-bool Renderer::HasCustomSPPass() const
-{
-    return m_hasCustomSPPass;
-}
-
 void Renderer::SetDepthLayer(Renderer::DepthLayer dl)
 {
     m_depthLayer = dl;
@@ -225,50 +142,6 @@ void Renderer::SetDepthLayer(Renderer::DepthLayer dl)
 Renderer::DepthLayer Renderer::GetDepthLayer() const
 {
     return m_depthLayer;
-}
-
-void Renderer::GetMatrices(Matrix4 *model,
-                           Matrix4 *normal,
-                           Matrix4 *view,
-                           Matrix4 *projection,
-                           Matrix4 *pvm) const
-{
-    //We assume cam, scene and transform do exist.
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera();
-    if (gameObject)
-    {
-        gameObject->transform->GetLocalToWorldMatrix(model);
-        gameObject->transform->GetLocalToWorldNormalMatrix(normal);
-    }
-    else
-    {
-        *model = *normal = Matrix4::Identity;
-    }
-
-    cam->GetViewMatrix(view);
-    cam->GetProjectionMatrix(projection);
-    *pvm = (*projection) * (*view) * (*model);
-}
-
-void Renderer::SetMatricesUniforms(Material *mat,
-                                   const Matrix4 &model,
-                                   const Matrix4 &normal,
-                                   const Matrix4 &view,
-                                   const Matrix4 &projection,
-                                   const Matrix4 &pvm) const
-{
-    ASSERT(mat);
-    ShaderProgram *sp = mat->GetShaderProgram(); ASSERT(sp);
-
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model, model, false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Model_Inverse, model.Inversed(), false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal, normal, false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Normal_Inverse, normal.Inversed(), false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_View, view, false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_View_Inverse, view.Inversed(), false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection, projection, false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_Projection_Inverse, projection.Inversed(), false);
-    sp->SetUniformMat4(ShaderContract::Uniform_Matrix_PVM, pvm, false);
 }
 
 void Renderer::SetDrawWireframe(bool drawWireframe)
@@ -286,21 +159,21 @@ Rect Renderer::GetBoundingRect(Camera *camera) const
 }
 
 
-void Renderer::SetCullMode(Renderer::CullMode cullMode)
+void Renderer::SetCullMode(GL::CullMode cullMode)
 {
     m_cullMode = cullMode;
 }
-Renderer::CullMode Renderer::GetCullMode() const
+GL::CullMode Renderer::GetCullMode() const
 {
     return m_cullMode;
 }
 
 
-void Renderer::SetRenderMode(Renderer::RenderMode renderMode)
+void Renderer::SetRenderMode(GL::RenderMode renderMode)
 {
     m_renderMode = renderMode;
 }
-Renderer::RenderMode Renderer::GetRenderMode() const
+GL::RenderMode Renderer::GetRenderMode() const
 {
     return m_renderMode;
 }
@@ -316,10 +189,10 @@ float Renderer::GetLineWidth() const
 }
 
 #ifdef BANG_EDITOR
-
-void Renderer::SetActivateGLStatesBeforeRenderingForSelectionFunction(const std::function<void()> &f)
+void Renderer::SetOnRenderingStartsForSelectionFunction(
+        const std::function<void()> &f)
 {
-    ActivateGLStatesBeforeRenderingForSelection = f;
+    p_OnRenderingStartsForSelectionFunc = f;
 }
 #endif
 

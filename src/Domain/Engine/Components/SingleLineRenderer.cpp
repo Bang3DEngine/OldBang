@@ -8,7 +8,7 @@ SingleLineRenderer::SingleLineRenderer()
     m_points[0] = Vector3(0.0f);
     m_points[1] = Vector3(1.0f);
 
-    m_drawLinesMode = RenderMode::Lines;
+    m_drawLinesMode = GL::RenderMode::Lines;
 }
 
 SingleLineRenderer::~SingleLineRenderer()

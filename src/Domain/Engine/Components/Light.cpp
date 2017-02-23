@@ -27,10 +27,12 @@ Light::~Light()
 void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 {
     ShaderProgram *sp = mat->GetShaderProgram();
-    sp->SetUniformFloat("B_light_intensity",      m_intensity                         );
-    sp->SetUniformColor("B_light_color",          m_color                             );
-    sp->SetUniformVec3 ("B_light_forward_world",  gameObject->transform->GetForward() );
-    sp->SetUniformVec3 ("B_light_position_world", gameObject->transform->GetPosition());
+    sp->SetFloat("B_light_intensity", m_intensity);
+    sp->SetColor("B_light_color", m_color);
+
+    Transform *t = gameObject->transform;
+    sp->SetVec3("B_light_forward_world",  t->GetForward());
+    sp->SetVec3("B_light_position_world", t->GetPosition());
 }
 
 void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const

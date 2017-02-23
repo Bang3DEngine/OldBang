@@ -14,6 +14,7 @@
 #include "GBuffer.h"
 #include "Texture.h"
 #include "Material.h"
+#include "GLContext.h"
 #include "GameObject.h"
 #include "MeshFactory.h"
 #include "SceneManager.h"
@@ -47,6 +48,8 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     m_gizmosSelectionPass(this, Renderer::DepthLayer::DepthLayerGizmos)
     #endif
 {
+    m_glContext = new GLContext();
+
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
                 "Materials/SP_SelectionEffect.bmat", true);
 
@@ -73,6 +76,8 @@ GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
     delete m_matSelectionEffectScreen;
+
+    delete m_glContext;
 
     #ifdef BANG_EDITOR
     delete m_selectionFB;
@@ -188,20 +193,6 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     }
 }
 
-void GraphicPipeline::RenderCustomSP(Renderer *rend)
-{
-    if (!CAN_USE_COMPONENT(rend)) { return; }
-
-    #ifdef BANG_EDITOR
-    if (!m_selectionFB->IsPassing())
-    #endif
-    {
-        m_gbuffer->SetStencilWrite(false);
-        m_gbuffer->SetStencilTest(true);
-    }
-    rend->RenderCustomSP();
-}
-
 void GraphicPipeline::RenderPassWithMaterial(Material *mat,
                                              const Rect &renderRect)
 {
@@ -211,12 +202,14 @@ void GraphicPipeline::RenderPassWithMaterial(Material *mat,
     m_screenPlaneMesh->BindPositionsToShaderProgram(
       ShaderContract::Attr_Vertex_In_Position_Raw, *sp);
 
-    sp->SetUniformVec2("B_rectMinCoord", renderRect.GetMin());
-    sp->SetUniformVec2("B_rectMaxCoord", renderRect.GetMax());
+    sp->SetVec2("B_rectMinCoord", renderRect.GetMin());
+    sp->SetVec2("B_rectMaxCoord", renderRect.GetMax());
 
-    mat->Bind();
+    sp->OnRenderingStarts(nullptr, sp);
+    mat->OnRenderingStarts(nullptr, sp);
     RenderScreenPlane();
-    mat->UnBind();
+    mat->OnRenderingEnds(nullptr, sp);
+    sp->OnRenderingEnds(nullptr, sp);
 }
 
 void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
@@ -227,11 +220,13 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
     m_screenPlaneMesh->BindPositionsToShaderProgram(
                 ShaderContract::Attr_Vertex_In_Position_Raw, *sp);
 
-    sp->SetUniformTexture("B_color_gout_fin", fullScreenTexture, false);
+    sp->SetTexture("B_color_gout_fin", fullScreenTexture);
 
-    m_renderGBufferToScreenMaterial->Bind();
+    sp->OnRenderingStarts(nullptr, sp);
+    m_renderGBufferToScreenMaterial->OnRenderingStarts(nullptr, sp);
     GraphicPipeline::RenderScreenPlane();
-    m_renderGBufferToScreenMaterial->UnBind();
+    m_renderGBufferToScreenMaterial->OnRenderingEnds(nullptr, sp);
+    sp->OnRenderingEnds(nullptr, sp);
 }
 
 void GraphicPipeline::RenderScreenPlane()
@@ -272,6 +267,11 @@ void GraphicPipeline::SetGBufferAttachmentToBeRendered(
         GBuffer::Attachment attachment)
 {
     m_gbufferAttachToBeShown = attachment;
+}
+
+GLContext *GraphicPipeline::GetGLContext() const
+{
+    return m_glContext;
 }
 
 GBuffer *GraphicPipeline::GetGBuffer()

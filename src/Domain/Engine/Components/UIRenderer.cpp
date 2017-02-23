@@ -1,5 +1,6 @@
 #include "UIRenderer.h"
 
+#include "GL.h"
 #include "Mesh.h"
 #include "Rect.h"
 #include "Material.h"
@@ -7,11 +8,10 @@
 #include "MeshFactory.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
+#include "ShaderContract.h"
 
 UIRenderer::UIRenderer()
 {
-    m_hasCustomSPPass = true;
-
     SetMesh(MeshFactory::GetUIPlane());
     SetMaterial( AssetsManager::Load<Material>("Materials/G_DefaultNoSP.bmat",
                                                true) );
@@ -28,11 +28,14 @@ UIRenderer::~UIRenderer()
 {
 }
 
-void UIRenderer::OnJustBeforeRendering(Material *mat) const
+void UIRenderer::OnJustBeforeRendering(GameObject *go,
+                                       ShaderProgram *sp)
 {
-    MeshRenderer::OnJustBeforeRendering(mat);
-    mat->GetShaderProgram()->SetUniformColor("B_material_diffuse_color",
-                                             m_tint);
+    MeshRenderer::OnJustBeforeRendering(go, sp);
+    GL::SetViewMatrix(Matrix4::Identity);
+    GL::SetProjectionMatrix(Matrix4::Identity);
+
+    sp->SetColor("B_material_diffuse_color", m_tint);
 }
 
 void UIRenderer::CloneInto(ICloneable *clone) const
@@ -49,40 +52,15 @@ ICloneable *UIRenderer::Clone() const
     return uiRend;
 }
 
-void UIRenderer::SetMatricesUniforms(Material *mat,
-                                     const Matrix4 &model,
-                                     const Matrix4 &normal,
-                                     const Matrix4 &view,
-                                     const Matrix4 &projection,
-                                     const Matrix4 &pvm) const
-{
-    MeshRenderer::SetMatricesUniforms(mat,
-                                      model,
-                                      normal,
-                                      Matrix4::Identity,
-                                      Matrix4::Identity,
-                                      model);
-}
-
 Rect UIRenderer::GetBoundingRect(Camera *camera) const
 {
     return MeshRenderer::GetBoundingRect(camera);
 }
 
-void UIRenderer::RenderCustomSP() const
-{
-    MeshRenderer::RenderCustomSP();
-}
-
-bool UIRenderer::IsACanvasRenderer() const
-{
-    return true;
-}
-
-void UIRenderer::RenderWithoutBindingMaterial() const
+void UIRenderer::RenderWithoutMaterial() const
 {
     glDisable(GL_DEPTH_TEST);
-    MeshRenderer::RenderWithoutBindingMaterial();
+    MeshRenderer::RenderWithoutMaterial();
     glEnable(GL_DEPTH_TEST);
 }
 

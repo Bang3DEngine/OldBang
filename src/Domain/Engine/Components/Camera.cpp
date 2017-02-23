@@ -1,5 +1,6 @@
 #include "Camera.h"
 
+#include "GL.h"
 #include "Math.h"
 #include "Mesh.h"
 #include "Scene.h"
@@ -9,7 +10,9 @@
 #include "FileReader.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
+#include "ShaderProgram.h"
 #include "AssetsManager.h"
+#include "ShaderContract.h"
 
 bool Camera::s_inited = false;
 Mesh* Camera::s_camMesh = nullptr;
@@ -40,6 +43,14 @@ void Camera::SetReplacementShaderProgram(ShaderProgram *replacementSP)
 ShaderProgram *Camera::GetReplacementShaderProgram() const
 {
     return m_replacementShaderProgram;
+}
+
+void Camera::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
+{
+    Matrix4 view;       GetViewMatrix(&view);
+    Matrix4 projection; GetProjectionMatrix(&projection);
+    GL::SetViewMatrix(view);
+    GL::SetProjectionMatrix(projection);
 }
 
 void Camera::GetViewMatrix(Matrix4 *view) const
@@ -170,7 +181,8 @@ Vector2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
     return Vector2(v4.xy());
 }
 
-Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCamera)
+Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos,
+                                      float zFromCamera)
 {
     Matrix4 p, v;
     GetProjectionMatrix(&p);
@@ -216,10 +228,14 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
     bool allPointsOutside = true;
     Rect screenRect = bbox.GetAABoundingScreenRect(this);
     Vector2 rMin = screenRect.GetMin(), rMax = screenRect.GetMax();
-    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMin.x, rMin.y) );
-    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMin.x, rMax.y) );
-    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMax.x, rMin.y) );
-    allPointsOutside = allPointsOutside && !screenRect.Contains( Vector2(rMax.x, rMax.y) );
+    allPointsOutside = allPointsOutside &&
+                       !screenRect.Contains( Vector2(rMin.x, rMin.y) );
+    allPointsOutside = allPointsOutside &&
+                       !screenRect.Contains( Vector2(rMin.x, rMax.y) );
+    allPointsOutside = allPointsOutside &&
+                       !screenRect.Contains( Vector2(rMax.x, rMin.y) );
+    allPointsOutside = allPointsOutside &&
+                       !screenRect.Contains( Vector2(rMax.x, rMax.y) );
     if (allPointsOutside) { return Rect::Empty; }
 
     // If there's one or more points behind the camera, return ScreenRect
@@ -269,8 +285,10 @@ void Camera::OnDrawGizmos()
         else
         {
             AABox orthoBox;
-            orthoBox.SetMin(transform->GetPosition() + Vector3(-GetOrthoWidth(), -GetOrthoHeight(), -GetZNear()));
-            orthoBox.SetMax(transform->GetPosition() + Vector3( GetOrthoWidth(),  GetOrthoHeight(), -GetZFar()));
+            orthoBox.SetMin(transform->GetPosition() +
+                   Vector3(-GetOrthoWidth(), -GetOrthoHeight(), -GetZNear()));
+            orthoBox.SetMax(transform->GetPosition() +
+                   Vector3( GetOrthoWidth(), GetOrthoHeight(), -GetZFar()));
             Gizmos::SetRotation(transform->GetRotation());
             Gizmos::RenderSimpleBox(orthoBox);
         }
@@ -297,7 +315,8 @@ void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
     SetFovDegrees(xmlInfo->GetFloat("FOVDegrees"));
     SetZNear(xmlInfo->GetFloat("ZNear"));
     SetZFar(xmlInfo->GetFloat("ZFar"));
-    ProjectionMode pm = ProjectionMode_FromString(xmlInfo->GetEnumSelectedName("ProjectionMode"));
+    ProjectionMode pm = ProjectionMode_FromString(
+                xmlInfo->GetEnumSelectedName("ProjectionMode"));
     SetProjectionMode(pm);
     SetAspectRatio( xmlInfo->GetFloat("AspectRatio") );
     SetOrthoHeight( xmlInfo->GetFloat("OrthoHeight") );
@@ -324,7 +343,8 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
     }
     else
     {
-        xmlInfo->SetFloat("OrthoHeight", GetOrthoHeight(), {XMLProperty::Hidden});
+        xmlInfo->SetFloat("OrthoHeight", GetOrthoHeight(),
+                          {XMLProperty::Hidden});
         xmlInfo->SetFloat("FOVDegrees", GetFovDegrees());
     }
 }
