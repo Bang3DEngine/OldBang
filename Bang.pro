@@ -713,4 +713,5 @@ DISTFILES += \
     EngineAssets/Materials/G_DefaultNoSP.bmat \
     EngineAssets/Materials/UI/G_UIImage.bmat \
     EngineAssets/Materials/UI/G_UIText.bmat \
-    EngineAssets/Materials/UI/SP_UIImage.bmat
+    EngineAssets/Materials/UI/SP_UIImage.bmat \
+    EngineAssets/Shaders/GSP_Default.frag

@@ -22,7 +22,6 @@ public:
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
     virtual void RenderCustomSP() const override;
-    virtual void RenderWithMaterial(Material *mat) const override;
 
     void SetTexture(Texture2D *imageTexture);
 
@@ -30,6 +29,8 @@ public:
 
 private:
     Texture2D *m_imageTexture = nullptr;
+
+    virtual void OnJustBeforeRendering(Material *mat) const override;
 
     friend class GameObject;
 };

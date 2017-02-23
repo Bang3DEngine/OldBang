@@ -103,7 +103,11 @@ protected:
     CullMode m_cullMode = CullMode::Back;
     RenderMode m_renderMode = RenderMode::Triangles;
 
-    virtual void ActivateGLStatesBeforeRendering(Material *mat) const;
+    virtual void OnRenderingStarts(Material *mat) const;
+    virtual void OnJustBeforeRendering(Material *mat) const;
+    virtual void OnJustAfterRendering(Material *mat) const;
+    virtual void OnRenderingEnds(Material *mat) const;
+
     virtual void RenderWithoutBindingMaterial() const = 0;
     virtual void RenderForSelectionFramebufferWithoutBindingMaterial() const;
 

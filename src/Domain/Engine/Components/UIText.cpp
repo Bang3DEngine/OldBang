@@ -21,8 +21,10 @@
 
 UIText::UIText() : UIRenderer()
 {
-    m_material = AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat", true);
-    SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
+    m_material = AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
+                                               true);
+    SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont",
+                                       true) );
 }
 
 UIText::~UIText()
@@ -354,7 +356,7 @@ void UIText::ReadXMLInfo(const XMLNode *xmlInfo)
         m_font = AssetsManager::Load<Font>(fontFilepath);
     }
 
-    m_textColor = xmlInfo->GetColor("Color");
+    m_tint = xmlInfo->GetColor("Color");
     SetContent(xmlInfo->GetString("Content"));
     SetTextSize(xmlInfo->GetFloat("TextSize"));
     SetHorizontalSpacing(xmlInfo->GetFloat("HSpacing"));
@@ -375,7 +377,7 @@ void UIText::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetTagName(GetName());
 
     xmlInfo->SetFilepath("Font", m_font ? m_font->GetFilepath() : "", "bfont");
-    xmlInfo->SetColor("Color", m_textColor);
+    xmlInfo->SetColor("Color", m_tint);
     xmlInfo->SetString("Content", m_content, {XMLProperty::Inline});
     xmlInfo->SetFloat("TextSize", m_textSize);
     xmlInfo->SetFloat("HSpacing", m_horizontalSpacing);

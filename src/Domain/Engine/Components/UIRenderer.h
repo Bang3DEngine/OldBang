@@ -34,10 +34,12 @@ public:
 
 protected:
     Material *m_materialSP = nullptr;
-    Color m_tint = Color::Zero;
+    Color m_tint = Color::White;
 
     UIRenderer();
     virtual ~UIRenderer();
+
+    virtual void OnJustBeforeRendering(Material *mat) const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
     virtual ICloneable *Clone() const override;

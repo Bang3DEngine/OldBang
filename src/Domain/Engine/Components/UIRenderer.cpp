@@ -5,6 +5,7 @@
 #include "Material.h"
 #include "GameObject.h"
 #include "MeshFactory.h"
+#include "ShaderProgram.h"
 #include "AssetsManager.h"
 
 UIRenderer::UIRenderer()
@@ -25,6 +26,13 @@ UIRenderer::UIRenderer()
 
 UIRenderer::~UIRenderer()
 {
+}
+
+void UIRenderer::OnJustBeforeRendering(Material *mat) const
+{
+    MeshRenderer::OnJustBeforeRendering(mat);
+    mat->GetShaderProgram()->SetUniformColor("B_material_diffuse_color",
+                                             m_tint);
 }
 
 void UIRenderer::CloneInto(ICloneable *clone) const

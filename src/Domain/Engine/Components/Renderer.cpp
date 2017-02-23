@@ -62,7 +62,7 @@ Material *Renderer::GetMaterial() const
     }
 }
 
-void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
+void Renderer::OnRenderingStarts(Material *mat) const
 {
     //Set polygon mode
     if (m_drawWireframe)
@@ -119,6 +119,18 @@ void Renderer::ActivateGLStatesBeforeRendering(Material *mat) const
     }
 }
 
+void Renderer::OnJustBeforeRendering(Material *mat) const
+{
+}
+
+void Renderer::OnJustAfterRendering(Material *mat) const
+{
+}
+
+void Renderer::OnRenderingEnds(Material *mat) const
+{
+}
+
 void Renderer::RenderForSelectionFramebufferWithoutBindingMaterial() const
 {
     RenderWithoutBindingMaterial();
@@ -147,7 +159,7 @@ void Renderer::RenderWithMaterial(Material *_mat) const
         mat = AssetsManager::Load<Material>("./Materials/Missing.bmat", true);
     }
 
-    ActivateGLStatesBeforeRendering(mat);
+    OnRenderingStarts(mat);
 
     #ifdef BANG_EDITOR
     SelectionFramebuffer *sfb =
@@ -168,7 +180,9 @@ void Renderer::RenderWithMaterial(Material *_mat) const
     else
     #endif
     {
+        OnJustBeforeRendering(mat);
         RenderWithoutBindingMaterial();
+        OnJustAfterRendering(mat);
     }
 
     if (mat) { mat->UnBind(); }
