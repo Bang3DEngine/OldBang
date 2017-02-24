@@ -172,7 +172,7 @@ int main(int argc, char **argv)
     LoadStylesheet(&app);
     #endif
     InitEditorOrGame(editorOrGameWindow, &app);
-    ProjectManager::OpenProject(loadedProjectFilepath); // Load previously selected project
+    ProjectManager::OpenProject(loadedProjectFilepath); // Load selected project
     return app.exec();
     //
 }

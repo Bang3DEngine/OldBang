@@ -78,6 +78,7 @@ public:
    static void SetActiveSceneFilepath(const String &scenePath);
    static bool Rename(const String &oldPath, const String &newPath);
    static bool Move(const String &oldPath, const String &newPath);
+   static bool WriteToFile(const String &absFilepath, const String &contents);
 
    static String GetHash(const String &filepath);
    static String GetHashFromString(const String &str);

@@ -142,6 +142,7 @@ INCLUDEPATH +=                                   \
     $$PWD/src/Domain/Engine/Physics/             \
     $$PWD/src/View/                              \
     $$PWD/src/Persistence/                       \
+    $$PWD/src/Persistence/Project                \
     $$PWD/src/Persistence/Behaviours/            \
     $$PWD/src/Persistence/Files/                 \
     $$PWD/src/Persistence/IO/                    \
@@ -228,8 +229,6 @@ HEADERS +=                                                          \
     src/Domain/Graphics/FontSheetCreator.h                          \
     src/Domain/Engine/Assets/Font.h                                 \
     src/Domain/Engine/Components/UIText.h                           \
-    src/Persistence/ProjectManager.h                                \
-    src/Persistence/Project.h                                       \
     src/Persistence/EngineConfig.h                                  \
     src/Domain/Engine/Physics/AABox.h                               \
     src/Domain/Engine/Assets/AudioClip.h                            \
@@ -297,7 +296,9 @@ HEADERS +=                                                          \
     src/Domain/Graphics/GL.h \
     src/Domain/Engine/DataStructures/TypeMap.h \
     src/Domain/Engine/CodePreprocessor.h \
-    src/Domain/Graphics/Shaders/ShaderPreprocessor.h
+    src/Domain/Graphics/Shaders/ShaderPreprocessor.h \
+    src/Persistence/Project/Project.h \
+    src/Persistence/Project/ProjectManager.h
 
 EDITOR {
 HEADERS += \
@@ -305,6 +306,7 @@ HEADERS += \
     src/Domain/Engine/GraphicPipeline/GPPass_Selection.h \
     src/View/EditorGameObject/EditorGizmosGameObject.h \
     src/View/DragDrop/DragDropQWidget.h \
+    src/Persistence/Project/QtProjectManager.h \
     src/View/DragDrop/DragDropQListView.h \
     src/View/Explorer/FileReferencesManager.h \
     src/View/DragDrop/DragDropQTreeWidget.h \
@@ -447,8 +449,6 @@ SOURCES += \
     src/Domain/Graphics/FontSheetCreator.cpp \
     src/Domain/Engine/Assets/Font.cpp \
     src/Domain/Engine/Components/UIText.cpp \
-    src/Persistence/ProjectManager.cpp \
-    src/Persistence/Project.cpp \
     src/Persistence/EngineConfig.cpp \
     src/Domain/Engine/Physics/AABox.cpp \
     src/Domain/Engine/Assets/AudioClip.cpp \
@@ -510,7 +510,9 @@ SOURCES += \
     src/Domain/Graphics/GL.cpp \
     src/Domain/Engine/DataStructures/TypeMap.cpp \
     src/Domain/Engine/CodePreprocessor.cpp \
-    src/Domain/Graphics/Shaders/ShaderPreprocessor.cpp
+    src/Domain/Graphics/Shaders/ShaderPreprocessor.cpp \
+    src/Persistence/Project/ProjectManager.cpp \
+    src/Persistence/Project/Project.cpp
 
 EDITOR {
     SOURCES += \
@@ -519,6 +521,7 @@ EDITOR {
         src/View/GameBuilderJob.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/Explorer/FileSystemModel.cpp \
+        src/Persistence/Project/QtProjectManager.cpp \
         src/View/EditorState.cpp \
         src/View/DragDrop/DragDropManager.cpp \
         src/View/DragDrop/DragDropQWidget.cpp \

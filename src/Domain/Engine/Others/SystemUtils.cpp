@@ -1,5 +1,6 @@
 #include "SystemUtils.h"
 
+#include <QProcess>
 #include <QLibrary>
 
 #include "Behaviour.h"
@@ -76,6 +77,23 @@ String SystemUtils::GetQtLibrariesDirs()
 
 void SystemUtils::System(const String &command, String *output, bool *success)
 {
+    /*
+    List<String> args = command.Split(' ').ToList();
+    args.PopFront();
+    QStringList argsList;
+    for (const String &arg : args)
+    {
+        argsList.push_back(arg.ToQString());
+    }
+
+    QProcess process;
+    process.start(command.ToQString(), argsList.ToQString());
+    bool ok = process.waitForFinished(999999);
+    process.setReadChannel(QProcess::ProcessChannel::StandardOutput);
+    QString out( process.readAll() );
+    if (output) { *output = String(out) ; }
+    if (success) { *success = ok; }
+    /*/
     int fd[2];
     int old_fd[3] = {dup(STDIN_FILENO), dup(STDOUT_FILENO), dup(STDERR_FILENO)};
     int pipeResult = pipe(fd);
@@ -115,7 +133,8 @@ void SystemUtils::System(const String &command, String *output, bool *success)
     }
     else if (pid == -1)
     {
-        Debug_Error("There was an error doing a fork to execute a System instruction.");
+        Debug_Error(
+           "There was an error doing a fork to execute a System instruction.");
         quick_exit(1);
     }
 
@@ -128,7 +147,7 @@ void SystemUtils::System(const String &command, String *output, bool *success)
         *output = "";
     }
 
-    const int bufferSize = 1024;
+    const int bufferSize = 16384;
     char buff[bufferSize + 1];
     memset((char*) &buff, 0, bufferSize + 1);
 
@@ -138,7 +157,6 @@ void SystemUtils::System(const String &command, String *output, bool *success)
         {
             output->append(buff);
         }
-
         memset(buff, 0, bufferSize);
     }
 
@@ -158,6 +176,7 @@ void SystemUtils::System(const String &command, String *output, bool *success)
     {
         *success = (result == 0);
     }
+    //*/
 }
 
 void SystemUtils::SystemBackground(const String &command)

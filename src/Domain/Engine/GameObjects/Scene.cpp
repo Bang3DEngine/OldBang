@@ -32,12 +32,6 @@ void Scene::_OnStart()
 void Scene::_OnUpdate()
 {
     GameObject::_OnUpdate();
-
-    Camera *cam = m_cameraGameObject->GetComponent<Camera>();
-    if (cam  && cam->GetAutoUpdateAspectRatio())
-    {
-        cam->SetAspectRatio( Screen::GetInstance()->GetAspectRatio() );
-    }
 }
 
 void Scene::_OnResize(int newWidth, int newHeight)

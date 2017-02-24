@@ -23,7 +23,6 @@ EditorCamera::EditorCamera() : GameObject("BANG_EditorCamera")
     m_yawNode->SetParent(this);
 
     m_cam = m_yawNode->AddComponent<Camera>();
-    m_cam->SetAutoUpdateAspectRatio(true);
     m_cam->SetProjectionMode(Camera::ProjectionMode::Perspective);
 
     m_camt = m_yawNode->transform;

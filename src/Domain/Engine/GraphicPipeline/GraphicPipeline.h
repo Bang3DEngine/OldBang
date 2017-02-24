@@ -81,9 +81,13 @@ private:
 
     void RenderGBuffer(const List<Renderer*> &renderers,
                        const List<GameObject*> &sceneChildren);
+
+    #ifdef BANG_EDITOR
     void RenderSelectionBuffer(const List<Renderer*> &renderers,
                                const List<GameObject*> &sceneChildren,
                                Scene *scene);
+    #endif
+
     void ApplySelectionOutline();
 };
 

@@ -14,20 +14,9 @@
 #include "AssetsManager.h"
 #include "ShaderContract.h"
 
-bool Camera::s_inited = false;
-Mesh* Camera::s_camMesh = nullptr;
-
-void Camera::InitStatics()
-{
-    if (s_inited) return;
-
-    s_camMesh = AssetsManager::Load<Mesh>("Meshes/Camera.bmesh", true);
-    s_inited = true;
-}
-
 Camera::Camera()
 {
-    InitStatics();
+    p_camMesh = AssetsManager::Load<Mesh>("Meshes/Camera.bmesh", true);
 }
 
 Camera::~Camera()
@@ -67,13 +56,8 @@ void Camera::GetProjectionMatrix(Matrix4 *proj) const
 
     if (m_projMode == ProjectionMode::Perspective)
     {
-        if (m_autoUpdateAspectRatio)
-        {
-            m_aspectRatio = Screen::GetAspectRatio();
-        }
-
         *proj = Matrix4::Perspective(
-                    Math::Deg2Rad(m_fovDegrees), m_aspectRatio,
+                    Math::Deg2Rad(m_fovDegrees), Screen::GetAspectRatio(),
                     m_zNear, m_zFar);
     }
     else //Ortho
@@ -99,11 +83,6 @@ void Camera::SetFovDegrees(float fovDegrees)
     this->m_fovDegrees = fovDegrees;
 }
 
-void Camera::SetAspectRatio(float aspectRatio)
-{
-    this->m_aspectRatio = aspectRatio;
-}
-
 void Camera::SetZNear(float zNear)
 {
     this->m_zNear = zNear;
@@ -119,11 +98,6 @@ void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
     this->m_projMode = projMode;
 }
 
-void Camera::SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio)
-{
-    this->m_autoUpdateAspectRatio = autoUpdateAspectRatio;
-}
-
 const Color &Camera::GetClearColor() const
 {
     return m_clearColor;
@@ -131,7 +105,7 @@ const Color &Camera::GetClearColor() const
 
 float Camera::GetOrthoWidth() const
 {
-    return GetOrthoHeight() * GetAspectRatio();
+    return GetOrthoHeight() * Screen::GetAspectRatio();
 }
 
 float Camera::GetOrthoHeight() const
@@ -143,11 +117,6 @@ float Camera::GetOrthoHeight() const
 float Camera::GetFovDegrees() const
 {
     return m_fovDegrees;
-}
-
-float Camera::GetAspectRatio() const
-{
-    return m_aspectRatio;
 }
 
 float Camera::GetZNear() const
@@ -163,11 +132,6 @@ float Camera::GetZFar() const
 Camera::ProjectionMode Camera::GetProjectionMode() const
 {
     return m_projMode;
-}
-
-bool Camera::GetAutoUpdateAspectRatio() const
-{
-    return m_autoUpdateAspectRatio;
 }
 
 Vector2 Camera::WorldToScreenNDCPoint(const Vector3 &position)
@@ -210,9 +174,7 @@ void Camera::CloneInto(ICloneable *clone) const
     cam->SetClearColor(GetClearColor());
     cam->SetFovDegrees(GetFovDegrees());
     cam->SetOrthoHeight(GetOrthoHeight());
-    cam->SetAspectRatio(GetAspectRatio());
     cam->SetProjectionMode(GetProjectionMode());
-    cam->SetAutoUpdateAspectRatio(GetAutoUpdateAspectRatio());
 }
 
 ICloneable *Camera::Clone() const
@@ -268,7 +230,7 @@ void Camera::OnDrawGizmos()
     Gizmos::SetRotation(transform->GetRotation());
     Gizmos::SetScale(Vector3::One * 0.02f * distScale);
     Gizmos::SetColor(Color::White);
-    Gizmos::RenderCustomMesh(Camera::s_camMesh);
+    Gizmos::RenderCustomMesh(p_camMesh);
 
     if (gameObject->IsSelected())
     {
@@ -280,7 +242,7 @@ void Camera::OnDrawGizmos()
             Gizmos::RenderFrustum(transform->GetForward(), transform->GetUp(),
                                   transform->GetPosition(),
                                   GetZNear(), GetZFar(),
-                                  GetFovDegrees(), GetAspectRatio());
+                                  GetFovDegrees(), Screen::GetAspectRatio());
         }
         else
         {
@@ -318,7 +280,6 @@ void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
     ProjectionMode pm = ProjectionMode_FromString(
                 xmlInfo->GetEnumSelectedName("ProjectionMode"));
     SetProjectionMode(pm);
-    SetAspectRatio( xmlInfo->GetFloat("AspectRatio") );
     SetOrthoHeight( xmlInfo->GetFloat("OrthoHeight") );
 }
 
@@ -334,7 +295,6 @@ void Camera::FillXMLInfo(XMLNode *xmlInfo) const
                      ProjectionMode_GetNamesVector(),
                      ProjectionMode_GetIndexFromValue(m_projMode),
                      {XMLProperty::Readonly});
-    xmlInfo->SetFloat("AspectRatio", GetAspectRatio());
 
     if (GetProjectionMode() == ProjectionMode::Orthographic)
     {

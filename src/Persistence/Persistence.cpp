@@ -1,16 +1,18 @@
 #include "Persistence.h"
 
-#ifdef BANG_EDITOR
-#include "Explorer.h"
-#endif
-
 #include <QDir>
 #include <QFile>
+#include <ostream>
+#include <fstream>
 #include <QCryptographicHash>
 
 #include "Debug.h"
 #include "StringUtils.h"
 #include "SingletonManager.h"
+
+#ifdef BANG_EDITOR
+#include "Explorer.h"
+#endif
 
 bool Persistence::IsDir(const String &path)
 {
@@ -442,6 +444,18 @@ bool Persistence::Rename(const String &oldPath, const String &newPath)
 bool Persistence::Move(const String &oldPath, const String &newPath)
 {
     return Persistence::Rename(oldPath, newPath);
+}
+
+bool Persistence::WriteToFile(const String &absFilepath, const String &contents)
+{
+    std::ofstream out(absFilepath);
+    if (out.is_open())
+    {
+        out << contents;
+        out.close();
+        return true;
+    }
+    return false;
 }
 
 String Persistence::GetHash(const String &filepath)

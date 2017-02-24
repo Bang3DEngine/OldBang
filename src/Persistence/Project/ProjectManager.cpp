@@ -19,6 +19,7 @@
 #include "MenuBar.h"
 #include "Explorer.h"
 #include "EditorWindow.h"
+#include "QtProjectManager.h"
 #endif
 
 Project *ProjectManager::s_currentProject = nullptr;
@@ -70,6 +71,9 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
             Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true,
                                   {"*." + Scene::GetFileExtensionStatic()});
 
+    #ifdef BANG_EDITOR
+    QtProjectManager::CreateQtProjectFile();
+    #endif
 
     if (!sceneFilepaths.Empty())
     {

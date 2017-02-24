@@ -11,12 +11,14 @@
 #include "Hierarchy.h"
 #include "GameObject.h"
 #include "FileWriter.h"
+#include "SystemUtils.h"
 #include "Persistence.h"
 #include "SceneManager.h"
 #include "EditorWindow.h"
 #include "MeshAssetFile.h"
 #include "ShortcutManager.h"
 #include "FileSystemModel.h"
+#include "QtProjectManager.h"
 #include "MaterialAssetFile.h"
 #include "Texture2DAssetFile.h"
 #include "WindowEventManager.h"
@@ -241,7 +243,12 @@ void Explorer::OnFileDoubleClicked(const String &filepath)
     File f(filepath);
     if (f.IsScene())
     {
+        // TODO: Check for scene saving.
         SceneManager::LoadSceneInstantly(f.GetAbsolutePath());
+    }
+    else if (f.IsBehaviour())
+    {
+        QtProjectManager::OpenBehaviourInQtCreator(filepath);
     }
 }
 

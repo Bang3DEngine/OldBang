@@ -45,19 +45,13 @@ public:
 
     void SetProjectionMode(ProjectionMode projMode);
 
-    void SetAspectRatio(float aspectRatio);
-
-    void SetAutoUpdateAspectRatio(bool autoUpdateAspectRatio);
-
     const Color& GetClearColor() const;
     float GetOrthoWidth() const;
     float GetOrthoHeight() const;
     float GetFovDegrees() const;
-    float GetAspectRatio() const;
     float GetZNear() const;
     float GetZFar() const;
     ProjectionMode GetProjectionMode() const;
-    bool  GetAutoUpdateAspectRatio() const;
 
     /**
      * @brief Converts a point from world coods to Screen NDC.
@@ -91,24 +85,17 @@ protected:
     virtual ~Camera();
 
 private:
-    static bool s_inited;
-    static Mesh* s_camMesh;
-    static void InitStatics();
-
     ShaderProgram *m_replacementShaderProgram = nullptr;
     float m_orthoHeight  = 25.0f;
     bool m_identityMode = false;
+    Mesh *p_camMesh = nullptr;
 
     Color m_clearColor = Color(Color(0.4f), 1);
     float m_fovDegrees = 60.0f;
     float m_zNear = 0.1f;
     float m_zFar = 100.0f;
 
-    mutable float m_aspectRatio = 1.0f;
-
     ProjectionMode m_projMode = ProjectionMode::Perspective;
-
-    bool m_autoUpdateAspectRatio = true;
 
     friend class GameObject;
 };

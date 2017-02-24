@@ -186,6 +186,7 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
     m_gbuffer->UnBind();
 }
 
+#ifdef BANG_EDITOR
 void GraphicPipeline::RenderSelectionBuffer(
                         const List<Renderer*> &renderers,
                         const List<GameObject*> &sceneChildren,
@@ -209,6 +210,7 @@ void GraphicPipeline::RenderSelectionBuffer(
     m_selectionFB->ProcessSelection();
     m_selectionFB->m_isPassing = false;
 }
+#endif
 
 void GraphicPipeline::RenderPassWithMaterial(Material *mat,
                                              const Rect &renderRect)
