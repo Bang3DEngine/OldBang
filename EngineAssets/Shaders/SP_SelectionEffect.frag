@@ -15,15 +15,15 @@ void Main()
     const float fillOpacity = 0.0f;
     const int   stroke = 2;
 
-    bool isSelected = FRAG_IN_STENCIL() == 1;
-    if (isSelected)
+    bool isOutsideStencil = FRAG_IN_STENCIL() == 0;
+    if (isOutsideStencil)
     {
         bool isOutline = false;
         for (int i = -stroke; i <= stroke && !isOutline; ++i)
         {
             for (int j = -stroke; j <= stroke && !isOutline; ++j)
             {
-                isOutline = !IsSelected( vec2(i,j) );
+                isOutline = IsSelected( vec2(i,j) );
             }
             if (isOutline) break;
         }

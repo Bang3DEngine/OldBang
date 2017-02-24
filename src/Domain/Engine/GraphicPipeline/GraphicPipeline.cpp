@@ -86,6 +86,8 @@ GraphicPipeline::~GraphicPipeline()
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
+    GraphicPipelineDebugger::Reset();
+
     p_scene = scene; ASSERT(p_scene);
     m_renderingInGame = inGame;
 
@@ -102,7 +104,6 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     m_gizmosPass.Pass(renderers, sceneChildren);
 
     m_gbuffer->UnBind();
-    m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
     //
 
     #ifdef BANG_EDITOR
@@ -124,39 +125,46 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     cam->SetReplacementShaderProgram(nullptr);
     m_selectionFB->ProcessSelection();
     m_selectionFB->m_isPassing = false;
+
+    ApplySelectionEffect();
     #endif
+
+    m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 }
 
 void GraphicPipeline::ApplySelectionEffect()
 {
     #ifdef BANG_EDITOR
-
     if (!Hierarchy::GetInstance()->GetFirstSelectedGameObject()) { return; }
 
     List<GameObject*> sceneGameObjects =
             p_scene->GetChildrenRecursively();
 
     // Create stencil mask that the selection pass will use
+    m_gbuffer->Bind();
     m_gbuffer->ClearDepth();
-    m_gbuffer->SetAllDrawBuffersExceptColor();
-
     m_gbuffer->ClearStencil();
     m_gbuffer->SetStencilTest(false);
     m_gbuffer->SetStencilWrite(true);
+    m_gbuffer->SetAllDrawBuffersExceptColor();
     for (GameObject *go : sceneGameObjects)
     {
-        if (!go->IsSelected()) { continue; }
-
-        List<Renderer*> rends = go->GetComponents<Renderer>();
-        for (Renderer *rend : rends)
+        if (go->IsSelected())
         {
-            if (!CAN_USE_COMPONENT(rend)) { continue; }
-            rend->Render();
+            List<Renderer*> rends = go->GetComponents<Renderer>();
+            for (Renderer *rend : rends)
+            {
+                if (CAN_USE_COMPONENT(rend))
+                {
+                    rend->Render();
+                }
+            }
         }
     }
 
     // Apply selection outline
     m_gbuffer->RenderPassWithMaterial(m_matSelectionEffectScreen);
+    m_gbuffer->UnBind();
     #endif
 }
 

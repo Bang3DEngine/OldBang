@@ -63,7 +63,7 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
 {
     SetAllDrawBuffers();
 
-    GameObject *go = Gizmos::IsGizmoRenderer(rend) ?
+    GameObject *go = !Gizmos::IsGizmoRenderer(rend) ?
                 rend->gameObject : m_nextGameObjectToBeRendered;
     if (CanRenderGameObject(go))
     {
