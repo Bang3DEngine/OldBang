@@ -79,7 +79,12 @@ private:
 
     Material *m_matSelectionEffectScreen = nullptr;
 
-    void ApplySelectionEffect();
+    void RenderGBuffer(const List<Renderer*> &renderers,
+                       const List<GameObject*> &sceneChildren);
+    void RenderSelectionBuffer(const List<Renderer*> &renderers,
+                               const List<GameObject*> &sceneChildren,
+                               Scene *scene);
+    void ApplySelectionOutline();
 };
 
 #endif // GRAPHICPIPELINE_H

@@ -24,7 +24,8 @@ bool Shader::LoadFromFile(const String& filepath)
     f.open(filepath);
     if (!f.is_open())
     {
-        Debug_Error("Could not open shader file '" + filepath + "'. Does it exist / is reachable?");
+        Debug_Error("Could not open shader file '" + filepath +
+                    "'. Does it exist / is reachable?");
         return false;
     }
 
@@ -32,7 +33,7 @@ bool Shader::LoadFromFile(const String& filepath)
     ss << f.rdbuf();
     m_sourceCode = ss.str();
 
-    ShaderPreprocessor::PreprocessShaderCode(&m_sourceCode);
+    ShaderPreprocessor::PreprocessCode(&m_sourceCode);
 
     m_idGL = glCreateShader(GLint(m_type));
 
@@ -52,7 +53,8 @@ bool Shader::LoadFromFile(const String& filepath)
         glGetShaderInfoLog(m_idGL, maxLength, &maxLength, &v[0]);
 
         String errorStr(v.begin(), v.end());
-        Debug_Error("Failed to compile shader: '" + filepath + "': " + errorStr);
+        Debug_Error("Failed to compile shader: '"
+                    + filepath + "': " + errorStr);
         glDeleteShader(m_idGL);
         return false;
     }

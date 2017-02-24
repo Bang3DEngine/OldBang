@@ -5,7 +5,6 @@
 #include "VBO.h"
 #include "Mesh.h"
 #include "Debug.h"
-#include "Debug.h"
 #include "Scene.h"
 #include "Light.h"
 #include "Chrono.h"
@@ -14,6 +13,7 @@
 #include "GBuffer.h"
 #include "Texture.h"
 #include "Material.h"
+#include "Transform.h"
 #include "GLContext.h"
 #include "GameObject.h"
 #include "MeshFactory.h"
@@ -21,6 +21,7 @@
 #include "RenderTexture.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
+#include "RectTransform.h"
 #include "ShaderContract.h"
 #include "GPPass_G_Gizmos.h"
 #include "GPPass_G_OpaqueSP.h"
@@ -94,51 +95,21 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
     List<GameObject*> sceneChildren = scene->GetChildren();
 
-    // GBuffer
-    Color bgColor = p_scene->GetCamera()->GetClearColor();
-    m_gbuffer->ClearBuffersAndBackground(bgColor);
-    m_gbuffer->Bind();
-
-    m_scenePass.Pass(renderers, sceneChildren);
-    m_canvasPass.Pass(renderers, sceneChildren);
-    m_gizmosPass.Pass(renderers, sceneChildren);
-
-    m_gbuffer->UnBind();
-    //
+    RenderGBuffer(renderers, sceneChildren);
+    ApplySelectionOutline();
+    m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 
     #ifdef BANG_EDITOR
-    // Selection buffer
-    Camera *cam = p_scene->GetCamera();
-    m_selectionFB->m_isPassing = true;
-    m_selectionFB->PrepareForRender(scene);
-    cam->SetReplacementShaderProgram(m_selectionFB->GetSelectionShaderProgram());
-
-    m_selectionFB->Bind();
-
-    m_selectionFB->ClearColor();
-    m_sceneSelectionPass.Pass(renderers, sceneChildren);
-    m_canvasSelectionPass.Pass(renderers, sceneChildren);
-    m_gizmosSelectionPass.Pass(renderers, sceneChildren);
-
-    m_selectionFB->UnBind();
-
-    cam->SetReplacementShaderProgram(nullptr);
-    m_selectionFB->ProcessSelection();
-    m_selectionFB->m_isPassing = false;
-
-    ApplySelectionEffect();
+    RenderSelectionBuffer(renderers, sceneChildren, p_scene);
     #endif
-
-    m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 }
 
-void GraphicPipeline::ApplySelectionEffect()
+void GraphicPipeline::ApplySelectionOutline()
 {
     #ifdef BANG_EDITOR
     if (!Hierarchy::GetInstance()->GetFirstSelectedGameObject()) { return; }
 
-    List<GameObject*> sceneGameObjects =
-            p_scene->GetChildrenRecursively();
+    List<GameObject*> sceneGameObjects = p_scene->GetChildrenRecursively();
 
     // Create stencil mask that the selection pass will use
     m_gbuffer->Bind();
@@ -149,7 +120,7 @@ void GraphicPipeline::ApplySelectionEffect()
     m_gbuffer->SetAllDrawBuffersExceptColor();
     for (GameObject *go : sceneGameObjects)
     {
-        if (go->IsSelected())
+        if (go->IsSelected() && !go->transform->IsOfType<RectTransform>())
         {
             List<Renderer*> rends = go->GetComponents<Renderer>();
             for (Renderer *rend : rends)
@@ -199,6 +170,44 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
             light->ApplyLight(m_gbuffer, renderRect);
         }
     }
+}
+
+void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
+                                    const List<GameObject*> &sceneChildren)
+{
+    Color bgColor = p_scene->GetCamera()->GetClearColor();
+    m_gbuffer->ClearBuffersAndBackground(bgColor);
+    m_gbuffer->Bind();
+
+    m_scenePass.Pass(renderers, sceneChildren);
+    m_canvasPass.Pass(renderers, sceneChildren);
+    m_gizmosPass.Pass(renderers, sceneChildren);
+
+    m_gbuffer->UnBind();
+}
+
+void GraphicPipeline::RenderSelectionBuffer(
+                        const List<Renderer*> &renderers,
+                        const List<GameObject*> &sceneChildren,
+                        Scene *scene)
+{
+    Camera *cam = p_scene->GetCamera();
+    m_selectionFB->m_isPassing = true;
+    m_selectionFB->PrepareForRender(scene);
+    cam->SetReplacementShaderProgram(m_selectionFB->GetSelectionShaderProgram());
+
+    m_selectionFB->Bind();
+
+    m_selectionFB->ClearColor();
+    m_sceneSelectionPass.Pass(renderers, sceneChildren);
+    m_canvasSelectionPass.Pass(renderers, sceneChildren);
+    m_gizmosSelectionPass.Pass(renderers, sceneChildren);
+
+    m_selectionFB->UnBind();
+
+    cam->SetReplacementShaderProgram(nullptr);
+    m_selectionFB->ProcessSelection();
+    m_selectionFB->m_isPassing = false;
 }
 
 void GraphicPipeline::RenderPassWithMaterial(Material *mat,

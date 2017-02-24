@@ -5,8 +5,10 @@
 
 #include "Map.h"
 #include "List.h"
+#include "File.h"
 #include "String.h"
 #include "Persistence.h"
+#include "CodePreprocessor.h"
 
 #ifdef BANG_EDITOR
 #include "Console.h"
@@ -23,7 +25,13 @@ public:
     BehaviourId(const String &behAbsPath)
     {
         behaviourAbsPath = Persistence::ToAbsolute(behAbsPath, false);
-        hash = Persistence::GetHash(behaviourAbsPath);
+        String code = File::GetContents(behaviourAbsPath);
+
+        List<String> includePaths = Persistence::GetSubDirectories(
+                    Persistence::GetProjectAssetsRootAbs(), true);
+        CodePreprocessor::PreprocessCode(&code, includePaths);
+
+        hash = Persistence::GetHashFromString(code);
     }
 
     BehaviourId(const String &behAbsPath, const String &_hash)

@@ -142,6 +142,11 @@ void Inspector::RefreshSizeHints()
     }
 }
 
+void Inspector::OnEditorPlay()
+{
+    Clear();
+}
+
 void Inspector::ShowCurrentGameObjectInfo()
 {
     ShowGameObjectInfo(m_currentGameObject);

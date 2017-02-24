@@ -1,6 +1,8 @@
 #ifndef PERSISTENCE_H
 #define PERSISTENCE_H
 
+#include <QByteArray>
+
 #include "List.h"
 #include "String.h"
 
@@ -78,6 +80,8 @@ public:
    static bool Move(const String &oldPath, const String &newPath);
 
    static String GetHash(const String &filepath);
+   static String GetHashFromString(const String &str);
+   static String GetHashFromByteArray(const QByteArray &byteArray);
 
    //Appends an extension to a filepath only if that filename does not contain the extension
    static String AppendExtension(const String &filepath, const String extNoDot);

@@ -21,7 +21,6 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
     m_positionTexture = new RenderTexture();
     m_normalTexture   = new RenderTexture();
-    m_uvTexture       = new RenderTexture();
     m_diffuseTexture  = new RenderTexture();
     m_matPropsTexture = new RenderTexture();
     m_depthTexture    = new RenderTexture();
@@ -30,7 +29,6 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 
     SetAttachment(Attachment::Position,           m_positionTexture);
     SetAttachment(Attachment::Normal,             m_normalTexture);
-    SetAttachment(Attachment::Uv,                 m_uvTexture);
     SetAttachment(Attachment::Diffuse,            m_diffuseTexture);
     SetAttachment(Attachment::MaterialProperties, m_matPropsTexture);
     SetAttachment(Attachment::Depth,              m_depthTexture);
@@ -48,7 +46,6 @@ void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
     // Color Attachments bindings as Shader Inputs
     sp->SetTexture("B_position_gout_fin",      m_positionTexture);
     sp->SetTexture("B_normal_gout_fin",        m_normalTexture);
-    sp->SetTexture("B_uv_gout_fin",            m_uvTexture);
     sp->SetTexture("B_diffuse_gout_fin",       m_diffuseTexture);
     sp->SetTexture("B_materialProps_gout_fin", m_matPropsTexture);
     sp->SetTexture("B_depth_gout_fin",         m_depthTexture);
@@ -56,10 +53,8 @@ void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
     sp->SetTexture("B_color_gout_fin",         m_colorTexture);
 
     // Stencil uniforms
-    sp->SetFloat("B_stencilWriteEnabled",
-                        m_stencilWriteEnabled ? 1.0f : 0.0f);
-    sp->SetFloat("B_stencilTestEnabled",
-                        m_stencilTestEnabled  ? 1.0f : 0.0f);
+    sp->SetFloat("B_stencilWriteEnabled",  m_stencilWriteEnabled ? 1.0f : 0.0f);
+    sp->SetFloat("B_stencilTestEnabled", m_stencilTestEnabled  ? 1.0f : 0.0f);
 }
 
 
@@ -107,7 +102,6 @@ void GBuffer::SetAllDrawBuffersExceptColor()
 {
     SetDrawBuffers({GBuffer::Attachment::Position,
                     GBuffer::Attachment::Normal,
-                    GBuffer::Attachment::Uv,
                     GBuffer::Attachment::Diffuse,
                     GBuffer::Attachment::MaterialProperties,
                     GBuffer::Attachment::Depth,
@@ -160,7 +154,6 @@ void GBuffer::ClearAllBuffersExceptColor()
     Bind();
     SetDrawBuffers({GBuffer::Attachment::Position,
                     GBuffer::Attachment::Normal,
-                    GBuffer::Attachment::Uv,
                     GBuffer::Attachment::Diffuse,
                     GBuffer::Attachment::MaterialProperties
                    });
@@ -181,7 +174,6 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor,
 
     SetDrawBuffers({GBuffer::Attachment::Position,
                     GBuffer::Attachment::Normal,
-                    GBuffer::Attachment::Uv,
                     GBuffer::Attachment::Diffuse,
                     GBuffer::Attachment::MaterialProperties,
                     GBuffer::Attachment::Color});

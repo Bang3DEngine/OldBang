@@ -46,6 +46,7 @@ bool EditorPlayStopFlowController::PlayScene()
 
     m_playing = true;
     Console::GetInstance()->OnEditorPlay();
+    Inspector::GetInstance()->OnEditorPlay();
 
     // Make a copy of the current scene, to restore it later
     m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
@@ -56,6 +57,7 @@ bool EditorPlayStopFlowController::PlayScene()
     {
         SceneManager::SetActiveScene(sceneCopy);
     }
+
 
     EditorScene *edScene = Object::SCast<EditorScene>(sceneCopy);
     edScene->SetFirstFoundCameraOrDefaultOne();

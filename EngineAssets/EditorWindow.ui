@@ -284,11 +284,6 @@
                </item>
                <item>
                 <property name="text">
-                 <string>Uv</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
                  <string>Diffuse Color</string>
                 </property>
                </item>
@@ -1526,8 +1521,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="QtResources.qrc"/>
   <include location="qdarkstyle/style.qrc"/>
+  <include location="QtResources.qrc"/>
  </resources>
  <connections/>
 </ui>

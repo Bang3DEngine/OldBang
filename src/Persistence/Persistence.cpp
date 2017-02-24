@@ -448,15 +448,26 @@ String Persistence::GetHash(const String &filepath)
 {
     ASSERT(Persistence::ExistsFile(filepath), "", return "");
 
+    String result = "";
     QFile file(filepath.ToQString());
     if(file.open(QIODevice::ReadOnly))
     {
-        QCryptographicHash hash(QCryptographicHash::Sha1);
-        QByteArray result = hash.hash(file.readAll(), QCryptographicHash::Sha1);
+        result = Persistence::GetHashFromByteArray(file.readAll());
         file.close();
-        return String( QString(result.toHex()) );
     }
-    return "";
+    return result;
+}
+
+String Persistence::GetHashFromString(const String &str)
+{
+    return Persistence::GetHashFromByteArray( str.ToQString().toUtf8() );
+}
+
+String Persistence::GetHashFromByteArray(const QByteArray &byteArray)
+{
+    QCryptographicHash hash(QCryptographicHash::Sha1);
+    QByteArray hashBytes = hash.hash(byteArray, QCryptographicHash::Sha1);
+    return String( QString(hashBytes.toHex()) );
 }
 
 String Persistence::AppendExtension(const String &filepath, const String extNoDot)

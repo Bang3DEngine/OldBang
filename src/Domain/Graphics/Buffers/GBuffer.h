@@ -17,7 +17,6 @@ public:
     {
         Position = 0,
         Normal,
-        Uv,
         Diffuse,
         MaterialProperties, // (receivesLighting, shininess, -, -)
         Depth,
@@ -27,7 +26,6 @@ public:
 
     RenderTexture *m_positionTexture = nullptr;
     RenderTexture *m_normalTexture   = nullptr;
-    RenderTexture *m_uvTexture       = nullptr;
     RenderTexture *m_diffuseTexture  = nullptr;
     RenderTexture *m_matPropsTexture = nullptr;
     RenderTexture *m_depthTexture    = nullptr;

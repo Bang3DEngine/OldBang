@@ -30,6 +30,7 @@ public:
     void ShowGameObjectInfo(GameObject *gameObject);
 
     void RefreshSizeHints();
+    void OnEditorPlay();
 
 public slots:
     void ShowCurrentGameObjectInfo();

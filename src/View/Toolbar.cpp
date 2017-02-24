@@ -223,10 +223,6 @@ void Toolbar::OnGBufferAttachmentIndexChanged(int newIndex)
     }
     else if (newIndex == 3)
     {
-        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Uv);
-    }
-    else if (newIndex == 4)
-    {
         gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Diffuse);
     }
 }

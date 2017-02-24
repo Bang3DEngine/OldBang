@@ -272,4 +272,7 @@ void RectTransform::FillXMLInfo(XMLNode *xmlInfo) const
     Transform::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("RectTransform");
     xmlInfo->SetVector3("Position", Vector3::Zero, {XMLProperty::Hidden});
+    xmlInfo->SetQuaternion("Rotation", Quaternion::Identity,
+                           {XMLProperty::Hidden});
+    xmlInfo->SetVector3("Scale",    Vector3::Zero, {XMLProperty::Hidden});
 }

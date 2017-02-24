@@ -251,7 +251,6 @@ HEADERS +=                                                          \
     src/Domain/Graphics/Buffers/GBuffer.h                           \
     src/Domain/Graphics/Shaders/Shader.h                            \
     src/Domain/Graphics/Shaders/ShaderContract.h                    \
-    src/Domain/Graphics/Shaders/ShaderPreprocessor.h                \
     src/Domain/Graphics/Shaders/ShaderProgram.h                     \
     src/Persistence/Behaviours/BehaviourManager.h                   \
     src/Persistence/Behaviours/BehaviourRefresherTimer.h            \
@@ -296,7 +295,9 @@ HEADERS +=                                                          \
     src/Domain/Graphics/Interfaces/IRenderAgent.h \
     src/Domain/Graphics/GLContext.h \
     src/Domain/Graphics/GL.h \
-    src/Domain/Engine/DataStructures/TypeMap.h
+    src/Domain/Engine/DataStructures/TypeMap.h \
+    src/Domain/Engine/CodePreprocessor.h \
+    src/Domain/Graphics/Shaders/ShaderPreprocessor.h
 
 EDITOR {
 HEADERS += \
@@ -467,7 +468,6 @@ SOURCES += \
     src/Domain/Graphics/Buffers/GBuffer.cpp \
     src/Domain/Graphics/Shaders/Shader.cpp \
     src/Domain/Graphics/Shaders/ShaderContract.cpp \
-    src/Domain/Graphics/Shaders/ShaderPreprocessor.cpp \
     src/Domain/Graphics/Shaders/ShaderProgram.cpp \
     src/Persistence/Files/AudioClipAssetFile.cpp \
     src/Persistence/Files/File.cpp \
@@ -508,7 +508,9 @@ SOURCES += \
     src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp \
     src/Domain/Graphics/GLContext.cpp \
     src/Domain/Graphics/GL.cpp \
-    src/Domain/Engine/DataStructures/TypeMap.cpp
+    src/Domain/Engine/DataStructures/TypeMap.cpp \
+    src/Domain/Engine/CodePreprocessor.cpp \
+    src/Domain/Graphics/Shaders/ShaderPreprocessor.cpp
 
 EDITOR {
     SOURCES += \
