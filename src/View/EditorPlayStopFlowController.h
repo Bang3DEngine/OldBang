@@ -20,7 +20,7 @@ public:
 private:
     bool m_playing = false;
     bool m_playingCanceled = false;
-    Scene *m_latestSceneBeforePlaying = nullptr;
+    Scene *p_latestSceneBeforePlaying = nullptr;
 
     bool PlayScene();
     void StopScene();

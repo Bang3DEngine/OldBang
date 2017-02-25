@@ -3,6 +3,7 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "GBuffer.h"
+#include "EditorState.h"
 
 #ifdef BANG_EDITOR
 #include "SelectionFramebuffer.h"
@@ -34,8 +35,13 @@ void GPPass_DepthLayer::PrePass(const List<Renderer*> &renderers,
 
 bool GPPass_DepthLayer::CanRender(const Renderer *renderer) const
 {
+    bool dontRenderEditorStuffInGame =
+            !(EditorState::IsShowingGameTab() &&
+              renderer->gameObject->HasHideFlag(HideFlags::DontSerialize));
+
     return (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
-            renderer->GetDepthLayer() == m_depthLayer;
+            renderer->GetDepthLayer() == m_depthLayer &&
+            dontRenderEditorStuffInGame;
 }
 
 Renderer::DepthLayer GPPass_DepthLayer::GetDepthLayer() const

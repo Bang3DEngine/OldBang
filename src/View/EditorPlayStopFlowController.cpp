@@ -45,19 +45,19 @@ bool EditorPlayStopFlowController::PlayScene()
     if (!WaitForAllBehavioursToBeLoaded()) { return false; }
 
     m_playing = true;
+    Hierarchy::GetInstance()->clearSelection();
     Console::GetInstance()->OnEditorPlay();
     Inspector::GetInstance()->OnEditorPlay();
 
-    // Make a copy of the current scene, to restore it later
-    m_latestSceneBeforePlaying = SceneManager::GetActiveScene();
+    // Pick the reference of the current scene, to restore it later
+    p_latestSceneBeforePlaying = SceneManager::GetActiveScene();
 
     Scene *sceneCopy =
-            Object::SCast<Scene>( m_latestSceneBeforePlaying->Clone() );
+            Object::SCast<Scene>( p_latestSceneBeforePlaying->Clone() );
     if (sceneCopy)
     {
         SceneManager::SetActiveScene(sceneCopy);
     }
-
 
     EditorScene *edScene = Object::SCast<EditorScene>(sceneCopy);
     edScene->SetFirstFoundCameraOrDefaultOne();
@@ -84,9 +84,9 @@ void EditorPlayStopFlowController::StopScene()
         delete sceneCopy;
     }
 
-    SceneManager::SetActiveScene(m_latestSceneBeforePlaying);
+    SceneManager::SetActiveScene(p_latestSceneBeforePlaying);
     EditorScene *edScene = Object::SCast<EditorScene>(
-                m_latestSceneBeforePlaying);
+                p_latestSceneBeforePlaying);
     edScene->SetCamera( edScene->GetEditorCamera()->GetCamera() );
 
     EditorWindow *win = EditorWindow::GetInstance();
