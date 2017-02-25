@@ -7,17 +7,15 @@
 class IWindow
 {
 public:
-
-    static void InitFromMainBinary(QMainWindow *window, QApplication *application);
-
     static QWidget* GetWidgetBelowMouse();
-    static IWindow *GetInstance();
+    static IWindow* GetInstance();
 
     virtual QMainWindow *GetMainWindow() const = 0;
     virtual QApplication *GetApplication() const = 0;
 
+    static bool IsInFront();
+
 protected:
-    static IWindow *m_instance;
     QMainWindow *m_mainWindow = nullptr;
     QApplication *m_app = nullptr;
 

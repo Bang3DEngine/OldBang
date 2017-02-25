@@ -6,8 +6,9 @@
 #include "GameObject.h"
 #include "FileWriter.h"
 #include "EditorWindow.h"
+#include "AssetsManager.h"
 #include "InspectorWidget.h"
-#include "GameObject.h"
+#include "FileReferencesManager.h"
 
 PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
     m_file(f)
@@ -35,19 +36,17 @@ void PrefabAssetFileInspectable::ShowInInspector()
 void PrefabAssetFileInspectable::OnInspectorSlotChanged(
         InspectorWidget *inspectorItem)
 {
-    SaveToFile();
+    Debug_Log("OnInspectorSlotChanged");
+    XMLNode *xmlInfo = new XMLNode();
+    m_prefabTempGameObject->FillXMLInfo(xmlInfo);
+    Debug_Log("xmlInfo.ToString(): " << xmlInfo->ToString());
+    AssetsManager::OnAssetFileChanged<Prefab>(m_file.GetAbsolutePath(), xmlInfo);
+    delete xmlInfo;
 }
 
 GameObject *PrefabAssetFileInspectable::GetPrefabTempGameObject() const
 {
     return m_prefabTempGameObject;
-}
-
-void PrefabAssetFileInspectable::SaveToFile()
-{
-    ASSERT(m_prefabTempGameObject);
-    FileWriter::WriteToFile(m_file.GetAbsolutePath(),
-                            m_prefabTempGameObject->GetXMLInfoString());
 }
 
 

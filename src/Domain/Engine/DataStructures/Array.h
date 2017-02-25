@@ -28,6 +28,10 @@ public:
     {
     }
 
+    Array(int size, const T& initValue) : std::vector<T>(size, initValue)
+    {
+    }
+
     // Allow "v = {1,2,3...}" initialization
     Array(std::initializer_list<T> l) : std::vector<T>(l)
     {

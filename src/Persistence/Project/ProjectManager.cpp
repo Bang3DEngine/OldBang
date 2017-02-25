@@ -129,15 +129,15 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
 Project *ProjectManager::CreateNewProjectFileOnly(const String &projectFilepath)
 {
     Project *proj = new Project();
-    FileWriter::WriteToFile(projectFilepath, proj->GetXMLInfoString());
+    Persistence::WriteToFile(projectFilepath, proj->GetXMLInfoString());
     return proj;
 }
 
 void ProjectManager::SaveProject(const Project *project)
 {
     ASSERT(project);
-    bool ok = FileWriter::WriteToFile(project->GetProjectFileFilepath(),
-                                      project->GetXMLInfoString());
+    bool ok = Persistence::WriteToFile(project->GetProjectFileFilepath(),
+                                       project->GetXMLInfoString());
     if (ok)
     {
         Debug_Status("Project '" << project->GetProjectName() <<

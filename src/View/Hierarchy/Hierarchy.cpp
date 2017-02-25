@@ -529,6 +529,7 @@ void Hierarchy::OnGameObjectDestroyed(GameObject *destroyed)
 
 void Hierarchy::OnSelectionChanged()
 {
+    Explorer::GetInstance()->clearSelection();
     _NotifyHierarchyGameObjectSelectionChanged();
 }
 

@@ -99,6 +99,7 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
     float loadedBehPercent = bmStatus.GetBehaviourHoldersUpdatedPercent();
     if (loadedBehPercent == 1.0f) { return true; }
 
+
     EditorWindow *win = EditorWindow::GetInstance();
     QMainWindow *mainWin = win->GetMainWindow();
 
@@ -113,6 +114,7 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
                      this, SLOT(OnWaitingForBehavioursCanceled()));
 
     // Actual waiting
+    BehaviourManager::RefreshAllBehaviours();
     Application::processEvents();
     loadedBehPercent = bmStatus.GetBehaviourHoldersUpdatedPercent();
     do

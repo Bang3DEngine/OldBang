@@ -48,7 +48,7 @@ void LineRenderer::RenderWithoutMaterial() const
 
 void LineRenderer::SetMaterial(Material *m)
 {
-    m_material = m;
+    Renderer::SetMaterial(m);
     BindPointsToVAO();
 }
 

@@ -22,8 +22,6 @@ EditorWindow::EditorWindow(QWidget *parent) :
 
 void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *application)
 {
-    IWindow::InitFromMainBinary(window, application);
-
     EditorWindow::s_win = new EditorWindow();
     EditorWindow::s_win->m_editorState        = new EditorState();
     EditorWindow::s_win->m_winEventManager    = new WindowEventManager();

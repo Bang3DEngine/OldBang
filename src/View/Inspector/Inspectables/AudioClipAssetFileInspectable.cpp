@@ -23,13 +23,12 @@ void AudioClipAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo
     String audioClipFilepath = m_audioClipAssetFile.GetAbsolutePath();
     if (m_tmpAudioSource)
     {
-        AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath, false);
+        AudioClip *audioClip = AssetsManager::Load<AudioClip>(audioClipFilepath,
+                                                              false);
         m_tmpAudioSource->SetAudioClip(audioClip);
     }
 
     AssetsManager::OnAssetFileChanged<AudioClip>(audioClipFilepath, xmlInfo);
-
-    FileWriter::WriteToFile(audioClipFilepath, xmlInfo->ToString()); //Save
 }
 
 void AudioClipAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const

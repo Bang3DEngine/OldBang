@@ -21,8 +21,8 @@ Texture2DAssetFileInspectable::Texture2DAssetFileInspectable
 void Texture2DAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     // Update live instances currently being used
-    AssetsManager::OnAssetFileChanged<Texture2D>(m_fileTex.GetAbsolutePath(), xmlInfo);
-    FileWriter::WriteToFile(m_fileTex.GetRelativePath(), xmlInfo->ToString()); //Save
+    AssetsManager::OnAssetFileChanged<Texture2D>(m_fileTex.GetAbsolutePath(),
+                                                 xmlInfo);
     m_xmlInfo = *xmlInfo;
 }
 

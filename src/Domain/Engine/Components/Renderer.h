@@ -29,8 +29,9 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    virtual void SetMaterial(Material *m) = 0;
+    virtual void SetMaterial(Material *m);
     virtual Material* GetMaterial() const;
+    virtual Material* GetSharedMaterial() const;
 
     void SetDrawWireframe(bool m_drawWireframe);
     bool GetDrawWireframe() const;
@@ -58,6 +59,8 @@ public:
     virtual void Render() const;
     virtual void RenderWithMaterial(Material *mat) const;
 
+    void UseMaterialCopy();
+
     #ifdef BANG_EDITOR
     void SetOnRenderingStartsForSelectionFunction(
             const std::function<void()> &f);
@@ -82,6 +85,7 @@ protected:
 
     bool m_drawWireframe = false;
     Material *m_material = nullptr;
+    Material *m_materialCopy = nullptr;
     GL::CullMode m_cullMode     = GL::CullMode::Back;
     GL::RenderMode m_renderMode = GL::RenderMode::Triangles;
 

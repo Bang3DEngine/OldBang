@@ -1,7 +1,15 @@
 #include "Prefab.h"
 
+#include "Scene.h"
+#include "Debug.h"
 #include "XMLParser.h"
 #include "GameObject.h"
+#include "SceneManager.h"
+#include "AssetsManager.h"
+
+#ifdef BANG_EDITOR
+#include "EditorState.h"
+#endif
 
 Prefab::Prefab()
 {
@@ -39,8 +47,16 @@ String Prefab::GetFileExtension()
 GameObject *Prefab::Instantiate() const
 {
     GameObject *go = InstantiateWithoutStarting();
-    if (go)
+    bool canStart = go;
+
+    #ifdef BANG_EDITOR
+    canStart = canStart && EditorState::IsPlaying();
+    #endif
+
+    if (canStart)
     {
+        Scene *scene = SceneManager::GetActiveScene();
+        go->SetParent(scene);
         go->_OnStart();
     }
     return go;
@@ -48,7 +64,7 @@ GameObject *Prefab::Instantiate() const
 
 GameObject *Prefab::InstantiateWithoutStarting() const
 {
-    if (m_gameObjectXMLInfoContent != "")
+    if (!m_gameObjectXMLInfoContent.Empty())
     {
         XMLNode *xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
         GameObject *go = new GameObject();
@@ -61,7 +77,12 @@ GameObject *Prefab::InstantiateWithoutStarting() const
 void Prefab::ReadXMLInfo(const XMLNode *xmlInfo)
 {
     Asset::ReadXMLInfo(xmlInfo);
-    m_gameObjectXMLInfoContent = xmlInfo->ToString();
+    String newXMLInfo = xmlInfo->ToString();
+    if (m_gameObjectXMLInfoContent != newXMLInfo)
+    {
+        m_gameObjectXMLInfoContent = xmlInfo->ToString();
+        AssetsManager::OnAssetFileChanged<Prefab>(m_assetFilepath, xmlInfo);
+    }
 }
 
 void Prefab::FillXMLInfo(XMLNode *xmlInfo) const

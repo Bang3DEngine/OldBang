@@ -10,6 +10,7 @@
 #include "SystemUtils.h"
 #include "EditorState.h"
 #include "BehaviourManager.h"
+#include "QtProjectManager.h"
 
 BehaviourHolder::BehaviourHolder()
 {
@@ -163,7 +164,7 @@ void BehaviourHolder::CreateNewBehaviour()
         String headerFilepath = currentDir + "/" + className;
         headerFilepath = Persistence::AppendExtension(headerFilepath, "h");
         ASSERT(!Persistence::ExistsFile(headerFilepath));
-        FileWriter::WriteToFile(headerFilepath, headerCode);
+        Persistence::WriteToFile(headerFilepath, headerCode);
 
         // Create source file
         String sourceCode = Behaviour::s_behaviourSourceTemplate;
@@ -171,7 +172,7 @@ void BehaviourHolder::CreateNewBehaviour()
         String sourceFilepath = currentDir + "/" + className;
         sourceFilepath = Persistence::AppendExtension(sourceFilepath, "cpp");
         ASSERT(!Persistence::ExistsFile(sourceFilepath));
-        FileWriter::WriteToFile(sourceFilepath, sourceCode);
+        Persistence::WriteToFile(sourceFilepath, sourceCode);
 
         // Update Behaviour file
         m_sourceFilepath = sourceFilepath;
@@ -179,8 +180,9 @@ void BehaviourHolder::CreateNewBehaviour()
 
         // Open with system editor
         // TODO: Make cross-platform
-        SystemUtils::SystemBackground("xdg-open " + headerFilepath);
-        SystemUtils::SystemBackground("xdg-open " + sourceFilepath);
+        QtProjectManager::OpenBehaviourInQtCreator(headerFilepath);
+        QtProjectManager::OpenBehaviourInQtCreator(sourceFilepath);
+        QtProjectManager::CreateQtProjectFile(); // Refresh it
     }
 }
 #endif

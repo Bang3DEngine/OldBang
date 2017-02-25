@@ -13,6 +13,7 @@
 
 #ifdef BANG_EDITOR
 #include "EditorState.h"
+#include "EditorWindow.h"
 #endif
 
 BehaviourRefresherTimer::BehaviourRefresherTimer()
@@ -23,15 +24,17 @@ BehaviourRefresherTimer::BehaviourRefresherTimer()
 
 void BehaviourRefresherTimer::OnRefreshTimer() const
 {
-    RefreshBehavioursInScene();
+    #ifdef BANG_EDITOR
+    if (EditorState::IsPlaying() ||
+        !IWindow::GetInstance()->IsInFront())
+    {
+        RefreshBehavioursInScene();
+    }
+    #endif
 }
 
 void BehaviourRefresherTimer::RefreshBehavioursInScene() const
 {
-    #ifdef BANG_EDITOR
-    if (EditorState::IsPlaying()) { return; }
-    #endif
-
     BehaviourManager *bManager = BehaviourManager::GetInstance();
     Scene *scene = SceneManager::GetActiveScene();
 

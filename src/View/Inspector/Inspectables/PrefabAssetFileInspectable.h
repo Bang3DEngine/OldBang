@@ -27,7 +27,6 @@ public:
     void OnInspectorSlotChanged(InspectorWidget *inspectorItem) override;
 
     GameObject *GetPrefabTempGameObject() const;
-    void SaveToFile();
 };
 
 #endif // PREFABASSETFILEINSPECTABLE_H

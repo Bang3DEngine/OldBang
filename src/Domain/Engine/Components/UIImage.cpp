@@ -12,8 +12,8 @@
 
 UIImage::UIImage()
 {
-    m_material = AssetsManager::Load<Material>("Materials/UI/G_UIImage.bmat",
-                                               true);
+    SetMaterial( AssetsManager::Load<Material>("Materials/UI/G_UIImage.bmat",
+                                               true) );
     m_materialSP = AssetsManager::Load<Material>("Materials/UI/SP_UIImage.bmat",
                                                  true);
 }

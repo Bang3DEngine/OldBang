@@ -84,7 +84,7 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
         XMLNode *auxXMLInfo = XMLNode::FromString(fileXMLContents);
         if (auxXMLInfo && RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow))
         {
-            FileWriter::WriteToFile(filepath, auxXMLInfo->ToString());
+            Persistence::WriteToFile(filepath, auxXMLInfo->ToString());
         }
 
         if (auxXMLInfo) { delete auxXMLInfo; }

@@ -27,19 +27,22 @@ Renderer::Renderer()
     p_OnRenderingStartsForSelectionFunc = [](){};
     #endif
 
-    m_material = AssetsManager::Load<Material>("Materials/G_Default.bmat", true);
+    SetMaterial( AssetsManager::Load<Material>("Materials/G_Default.bmat", true));
 }
 
 Renderer::~Renderer()
 {
-
+    if (m_materialCopy)
+    {
+        delete m_materialCopy;
+    }
 }
 
 void Renderer::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
     Renderer *r = Object::SCast<Renderer>(clone);
-    r->SetMaterial(GetMaterial());
+    r->SetMaterial(GetSharedMaterial());
     r->SetDrawWireframe(GetDrawWireframe());
     r->SetCullMode(GetCullMode());
     r->SetRenderMode(GetRenderMode());
@@ -48,9 +51,20 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetTransparent(IsTransparent());
 }
 
+void Renderer::SetMaterial(Material *m)
+{
+    m_material = m;
+}
+
 Material *Renderer::GetMaterial() const
 {
+    if (m_materialCopy) { return m_materialCopy; }
     return m_material ? m_material : Material::GetMissingMaterial();
+}
+
+Material *Renderer::GetSharedMaterial() const
+{
+    return m_material;
 }
 
 void Renderer::OnRenderingStarts(GameObject *go, ShaderProgram *sp) const
@@ -77,7 +91,7 @@ void Renderer::RenderForSelectionWithoutMaterial() const
 
 void Renderer::Render() const
 {
-    RenderWithMaterial(m_material);
+    RenderWithMaterial( GetMaterial() );
 }
 
 void Renderer::RenderWithMaterial(Material *_mat) const
@@ -118,6 +132,15 @@ void Renderer::RenderWithMaterial(Material *_mat) const
 
     ncThis->OnRenderingEnds(gameObject, sp);
     mat->OnRenderingEnds(gameObject, sp);
+}
+
+void Renderer::UseMaterialCopy()
+{
+    if (m_materialCopy) { delete m_materialCopy; }
+    if (GetSharedMaterial())
+    {
+        m_materialCopy = new Material( *GetSharedMaterial() );
+    }
 }
 
 void Renderer::OnRenderingEnds(GameObject *go, ShaderProgram *sp) const
@@ -225,15 +248,16 @@ void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
     Component::FillXMLInfo(xmlInfo);
     xmlInfo->SetTagName("Renderer");
 
-    if (m_material)
+    Material *sharedMat = GetSharedMaterial();
+    if (sharedMat)
     {
-        if (m_material->GetFilepath() != "")
+        if (sharedMat->GetFilepath() != "")
         {
-            xmlInfo->SetFilepath("Material", m_material->GetFilepath(), "bmat");
+            xmlInfo->SetFilepath("Material", sharedMat->GetFilepath(), "bmat");
         }
         else //In case the asset is created in runtime, write its mem address
         {
-            String memAddress = String::ToString((void*) m_material);
+            String memAddress = String::ToString((void*) sharedMat);
             xmlInfo->SetFilepath("Material", memAddress, "bmat");
         }
     }

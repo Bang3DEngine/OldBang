@@ -37,7 +37,7 @@ void EngineConfig::WriteListToFile(const String &filepath,
         content += "\n";
     }
 
-    FileWriter::WriteToFile(filepath, content);
+    Persistence::WriteToFile(filepath, content);
 }
 
 String EngineConfig::GetRecentProjectsFilepath()

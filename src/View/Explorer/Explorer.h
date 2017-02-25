@@ -36,6 +36,7 @@ public:
     bool IsSelectedAFile() const;
     bool IsSelectedADir() const;
     const QFileSystemModel* GetFileSystemModel() const;
+    FileReferencesManager *GetFileReferencesManager() const;
 
     void StartRenaming(const String &filepath);
 

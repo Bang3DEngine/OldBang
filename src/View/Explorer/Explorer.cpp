@@ -207,6 +207,12 @@ void Explorer::currentChanged(const QModelIndex &current,
     scrollTo(current);
 
     String selectedPath(m_fileSystemModel->filePath(current));
+
+    if ( Persistence::IsFile(selectedPath) )
+    {
+        Hierarchy::GetInstance()->clearSelection();
+    }
+
     SetLabelText(selectedPath);
     RefreshInspector();
 }
@@ -453,6 +459,11 @@ const QFileSystemModel *Explorer::GetFileSystemModel() const
     return m_fileSystemModel;
 }
 
+FileReferencesManager *Explorer::GetFileReferencesManager() const
+{
+    return m_fileRefsManager;
+}
+
 void Explorer::StartRenaming(const String &filepath)
 {
     SelectFile(filepath);
@@ -512,12 +523,11 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
             GameObject *selected = hierarchy->GetFirstSelectedGameObject();
             ASSERT(selected);
 
-            String path = GetCurrentDir() + "/";
-            String gameObjectName = selected->name;
-            path += gameObjectName;
+            String path = GetCurrentDir() + "/" + selected->name;
             path = Persistence::AppendExtension(path,
                           Prefab::GetFileExtensionStatic());
-            FileWriter::WriteToFile(path, selected);
+            Debug_Log("selected->GetXMLInfoString(): " << selected->GetXMLInfoString());
+            Persistence::WriteToFile(path, selected->GetXMLInfoString());
         }
     }
 

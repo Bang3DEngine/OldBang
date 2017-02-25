@@ -26,10 +26,9 @@ Material::Material() : Asset()
 
 Material::Material(const Material &m)
 {
-    SetShaderProgram(
-                new ShaderProgram(
-                   m.GetShaderProgram()->GetVertexShader()->GetFilepath(),
-                   m.GetShaderProgram()->GetFragmentShader()->GetFilepath()));
+    ShaderProgram *sp = m.GetShaderProgram();
+    SetShaderProgram(new ShaderProgram(sp->GetVertexShader()->GetFilepath(),
+                                       sp->GetFragmentShader()->GetFilepath()));
     SetDiffuseColor(m.GetDiffuseColor());
     SetReceivesLighting(m.ReceivesLighting());
     SetShininess(m.GetShininess());
@@ -40,7 +39,7 @@ Material::~Material()
 {
     if (m_shaderProgram)
     {
-        // delete m_shaderProgram; // TODO: Fix this to avoid bug
+        delete m_shaderProgram;
     }
 }
 
@@ -145,11 +144,24 @@ void Material::SetDiffuseColor(const Color &diffuseColor)
 
 ShaderProgram *Material::GetShaderProgram() const
 {
+    ShaderProgram *camReplacementSP = nullptr;
     Scene *scene = SceneManager::GetActiveScene();
-    if (!scene) { return m_shaderProgram; }
-    Camera *cam = scene->GetCamera(); if (!cam) { return m_shaderProgram; }
-    ShaderProgram *camReplacementSP = cam->GetReplacementShaderProgram();
-    return !camReplacementSP ? m_shaderProgram : camReplacementSP;
+    if (scene)
+    {
+        Camera *cam = scene->GetCamera();
+        if (cam) { camReplacementSP = cam->GetReplacementShaderProgram(); }
+    }
+
+    if (camReplacementSP)
+    {
+        return camReplacementSP;
+    }
+    else if (!m_shaderProgram)
+    {
+        ShaderProgram *defaultSP = nullptr;
+        defaultSP = Material::GetMissingMaterial()->GetShaderProgram();
+    }
+    return m_shaderProgram;
 }
 
 const Texture2D *Material::GetTexture() const

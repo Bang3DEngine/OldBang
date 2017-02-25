@@ -33,9 +33,9 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::SetMaterial(Material *m)
 {
-    m_material = m;
+    Renderer::SetMaterial(m);
     if (m_mesh  && m_material  &&
-       m_material->GetShaderProgram() )
+        m_material->GetShaderProgram() )
     {
         m_mesh->BindAllVBOsToShaderProgram(*(m_material->GetShaderProgram()));
     }

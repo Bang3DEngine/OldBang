@@ -22,8 +22,8 @@ MaterialAssetFileInspectable::MaterialAssetFileInspectable
 void MaterialAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     // Update live instances currently being used
-    AssetsManager::OnAssetFileChanged<Material>(m_materialAssetFile.GetAbsolutePath(), xmlInfo);
-    FileWriter::WriteToFile(m_materialAssetFile.GetRelativePath(), xmlInfo->ToString()); //Save
+    AssetsManager::OnAssetFileChanged<Material>(
+                m_materialAssetFile.GetAbsolutePath(), xmlInfo);
     m_xmlInfo = *xmlInfo;
 }
 

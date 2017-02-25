@@ -13,11 +13,9 @@ MeshAssetFileInspectable::MeshAssetFileInspectable(
 
 void MeshAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    AssetsManager::OnAssetFileChanged<Mesh>( m_meshAssetFile.GetAbsolutePath(),
-                                             xmlInfo);
     m_meshAssetFile.SetMeshFilepath( xmlInfo->GetFilepath("MeshFilepath") );
-    FileWriter::WriteToFile(m_meshAssetFile.GetAbsolutePath(),
-                            xmlInfo->ToString());
+    AssetsManager::OnAssetFileChanged<Mesh>(m_meshAssetFile.GetAbsolutePath(),
+                                            xmlInfo);
 }
 
 void MeshAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const

@@ -140,7 +140,7 @@ void HierarchyContextMenu::OnCreatePrefab()
     if (filename != "")
     {
         Prefab *prefab = new Prefab(go);
-        FileWriter::WriteToFile(filename, prefab);
+        Persistence::WriteToFile(filename, prefab->GetXMLInfoString());
         delete prefab;
     }
 }

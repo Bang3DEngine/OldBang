@@ -102,11 +102,17 @@ public:
     static void OnAssetFileChanged(const String &assetFilepath,
                                    const XMLNode *xmlChangedInfo)
     {
+        // Update live instances and rewrite the file
         ASSERT(!assetFilepath.Empty());
         if (AssetsManager::IsLoaded(assetFilepath, false))
         {
             Asset *asset = AssetsManager::GetAsset<T>(assetFilepath, false);
             asset->OnInspectorXMLChanged(xmlChangedInfo);
+        }
+
+        if (Persistence::ExistsFile(assetFilepath))
+        {
+            Persistence::WriteToFile(assetFilepath, xmlChangedInfo->ToString());
         }
     }
     #endif

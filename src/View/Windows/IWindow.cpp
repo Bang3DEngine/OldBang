@@ -2,14 +2,14 @@
 
 #include "Application.h"
 
-IWindow *IWindow::m_instance = nullptr;
+#ifdef BANG_EDITOR
+#include "EditorWindow.h"
+#else
+#include "GameWindow.h"
+#endif
+
 
 IWindow::IWindow()
-{
-    IWindow::m_instance = this;
-}
-
-void IWindow::InitFromMainBinary(QMainWindow *window, QApplication *application)
 {
 }
 
@@ -21,7 +21,16 @@ QWidget *IWindow::GetWidgetBelowMouse()
 
 IWindow *IWindow::GetInstance()
 {
-    return m_instance;
+    #ifdef BANG_EDITOR
+    return EditorWindow::GetInstance();
+    #else
+    return GameWindow::GetInstance();
+    #endif
+}
+
+bool IWindow::IsInFront()
+{
+    return IWindow::GetInstance()->GetMainWindow()->isActiveWindow();
 }
 
 QWidget *IWindow::_GetWidgetBelowMouse() const

@@ -21,8 +21,8 @@
 
 UIText::UIText() : UIRenderer()
 {
-    m_material = AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
-                                               true);
+    SetMaterial( AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
+                                               true) );
     SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont",
                                        true) );
 }

@@ -72,11 +72,12 @@ void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset, bool is
     }
 }
 
-void AssetsManager::SaveAssetToFile(const String &filepath, Asset *asset, bool isEngineAsset)
+void AssetsManager::SaveAssetToFile(const String &filepath, Asset *asset,
+                                    bool isEngineAsset)
 {
     if (!filepath.Empty() && asset)
     {
         String f = FormatFilepath(filepath, isEngineAsset);
-        FileWriter::WriteToFile(f, asset);
+        Persistence::WriteToFile(f, asset->GetXMLInfoString());
     }
 }

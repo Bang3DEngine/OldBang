@@ -85,6 +85,7 @@ float BehaviourManagerStatus::GetBehaviourHoldersUpdatedPercent() const
         if (updated) { ++behHoldersUpdated; }
     }
 
+    Debug_Log(behHoldersUpdated << " / " << totalBehaviourHolders);
     return float(behHoldersUpdated) / totalBehaviourHolders;
 }
 
