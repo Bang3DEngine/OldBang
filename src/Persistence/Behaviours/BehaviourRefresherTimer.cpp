@@ -46,7 +46,7 @@ void BehaviourRefresherTimer::RefreshBehavioursInScene() const
                 scene->GetComponentsInThisAndChildren<BehaviourHolder>();
         for (BehaviourHolder *bh : behHolders)
         {
-            bh->Refresh();
+            bh->RefreshBehaviourLib();
         }
     }
 }

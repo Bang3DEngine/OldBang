@@ -100,6 +100,41 @@ float AABox::GetVolume() const
     return w * h * d;
 }
 
+Vector3 AABox::GetClosestPointInAABB(const Vector3 &point) const
+{
+    Vector3 closestPoint;
+    closestPoint.x = Math::Clamp(point.x, m_minv.x, m_maxv.x);
+    closestPoint.y = Math::Clamp(point.y, m_minv.y, m_maxv.y);
+    closestPoint.z = Math::Clamp(point.z, m_minv.z, m_maxv.z);
+    return closestPoint;
+}
+
+bool AABox::CheckCollision(const Sphere &sphere) const
+{
+    if (Contains(sphere.GetCenter())) { return true; }
+    Vector3 closestPoint = GetClosestPointInAABB(sphere.GetCenter());
+
+    float sphereRadius = sphere.GetRadius();
+    float dCenterClosest = Vector3::Distance(closestPoint, sphere.GetCenter());
+    return dCenterClosest <= sphereRadius * sphereRadius;
+}
+
+bool AABox::CheckCollision(const AABox &aabox) const
+{
+    Array<Vector3> points = aabox.GetPoints();
+    return Contains(points[0]) || Contains(points[1]) || Contains(points[2]) ||
+           Contains(points[3]) || Contains(points[4]) || Contains(points[5]) ||
+           Contains(points[6]) || Contains(points[7]);
+
+}
+
+bool AABox::Contains(const Vector3 &point) const
+{
+    return point.x >= m_minv.x && point.x <= m_maxv.x &&
+           point.y >= m_minv.y && point.y <= m_maxv.y &&
+           point.z >= m_minv.z && point.z <= m_maxv.z;
+}
+
 AABox AABox::Union(const AABox &b1, const AABox &b2)
 {
     if (b1 == AABox::Empty) { return b2; }

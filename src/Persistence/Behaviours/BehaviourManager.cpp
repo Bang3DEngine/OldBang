@@ -2,16 +2,18 @@
 
 #include <QLibrary>
 
+#include "Time.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "Project.h"
+#include "StringUtils.h"
 #include "Persistence.h"
 #include "Application.h"
 #include "SystemUtils.h"
 #include "SceneManager.h"
 #include "ProjectManager.h"
 #include "BehaviourHolder.h"
-#include "BehaviourCompileRunnable.h"
+#include "CodePreprocessor.h"
 
 #ifdef BANG_EDITOR
 #include "Console.h"
@@ -19,21 +21,32 @@
 
 BehaviourManager::BehaviourManager()
 {
-    m_threadPool.setMaxThreadCount(3); // Only compile N behaviours at a time
+}
+
+bool BehaviourManager::SomeBehaviourHasChanged()
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+
+    Map<String, String> newBehHashMap = GetBehaviourHashesMap();
+    return newBehHashMap != bm->m_behaviourPathToHash;
+}
+
+Map<String, String> BehaviourManager::GetBehaviourHashesMap()
+{
+    Map<String, String> behaviourPathToHash;
+
+    List<String> sourceFilepaths = Persistence::GetFiles(
+                Persistence::GetProjectAssetsRootAbs(), true, {"cpp"});
+    for (const String &sourceFilepath : sourceFilepaths)
+    {
+        String hash = GetBehaviourHash(sourceFilepath);
+        behaviourPathToHash.Set(sourceFilepath, hash);
+    }
+    return behaviourPathToHash;
 }
 
 QLibrary *BehaviourManager::LoadLibraryFromFilepath(const String &libFilepath)
 {
-    QLibrary *lib = new QLibrary(libFilepath.ToCString());
-    lib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
-    if (lib->load())
-    {
-        return lib;
-    }
-
-    Debug_Error("There was an error when loading the library '" <<
-                 libFilepath << "': " << lib->errorString());
-    return nullptr;
 }
 
 BehaviourManager *BehaviourManager::GetInstance()
@@ -42,120 +55,154 @@ BehaviourManager *BehaviourManager::GetInstance()
     return app ? app->m_behaviourManager : nullptr;
 }
 
-// Called by the BehaviourManagerCompileThread when has finished
-void BehaviourManager::OnBehaviourSuccessCompiling(
-                                    const QString &_behaviourPath,
-                                    const QString &_libraryFilepath,
-                                    const QString &_warnMessage)
+void BehaviourManager::RemoveLibraryFiles()
 {
-    String behaviourPath   = _behaviourPath;
-    String libraryFilepath = _libraryFilepath;
-    String warnMessage     = _warnMessage;
-    QLibrary *library = LoadLibraryFromFilepath(libraryFilepath);
-    m_status.OnBehaviourSuccessCompiling(behaviourPath, libraryFilepath,
-                                         warnMessage, library);
-    if (!warnMessage.Empty())
+    const String libsDir = Persistence::GetProjectLibsRootAbs();
+    List<String> libFilepaths = Persistence::GetFiles(libsDir, true);
+    for (const String &libFilepath : libFilepaths)
     {
-        Debug_Warn(warnMessage);
-    }
-
-    RemoveOutdatedLibraryFiles(libraryFilepath);
-}
-
-void BehaviourManager::OnBehaviourFailedCompiling(const QString &behaviourPath,
-                                                  const QString &errorMessage)
-{
-    m_status.OnBehaviourFailedCompiling(String(behaviourPath),
-                                        String(errorMessage));
-}
-
-void BehaviourManager::RemoveOutdatedLibraryFiles(const String &newLibFilepath)
-{
-    String mostRecentLibNameAndExt =
-            Persistence::GetFileNameWithExtension(newLibFilepath);
-    String mostRecentLibName = Persistence::GetFileName(newLibFilepath);
-    List<String> libs = Persistence::GetFiles(
-                Persistence::GetProjectAssetsRootAbs(), true, {"*.so.*"});
-
-    for (auto it = libs.Begin(); it != libs.End(); ++it)
-    {
-        const String &libFilepath = *it;
-        String libFileName = Persistence::GetFileName(libFilepath);
-        bool isOfTheSameBehaviour = (libFileName == mostRecentLibName);
-        bool isTheMostRecentOne = libFilepath.EndsWith(mostRecentLibNameAndExt);
-        if (isOfTheSameBehaviour && !isTheMostRecentOne)
-        {
-            Persistence::Remove(libFilepath);
-        }
+        Persistence::Remove(libFilepath);
     }
 }
 
-void BehaviourManager::Load(BehaviourHolder *bHolder,
-                            const String &behaviourPath)
+QLibrary *BehaviourManager::GetBehavioursLibrary()
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    BehaviourId bid(behaviourPath);
+    return bm->m_behavioursLibrary;
+}
 
-    #ifndef BANG_EDITOR // GAME
-    if (!bm->m_status.IsCached(bid))
+void BehaviourManager::RefreshBehavioursLibrary()
+{
+    Debug_Log("RefreshBehavioursLibrary");
+    if (BehaviourManager::GetState() == BehaviourManager::State::Compiling)
     {
-        // In Game, we have the behaviour object library in
-        // "BEHAVIOUR_DIR/BEHAVIOUR_NAME.so.RANDOM_PROJECT_ID".
-        // So we just have to load it directly. Notify the instant load.
-        const String behDir = Persistence::GetDir(behaviourPath);
-        const String behFilename = Persistence::GetFileName(behaviourPath);
-        const String projRandomId =
-                ProjectManager::GetCurrentProject()->GetProjectRandomId();
-        const String libFilepath = behDir + "/" + behFilename + ".so." +
-                                   projRandomId;
-        bm->OnBehaviourSuccessCompiling(behaviourPath.ToQString(),
-                                        libFilepath.ToQString(), "");
+        Debug_Log("   Cancelled, currently compiling...");
+        return;
     }
+
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+
+    Debug_Log("   SomeBehaviourHasChanged? " << SomeBehaviourHasChanged());
+    if (!SomeBehaviourHasChanged()) { return; }
+
+    bm->m_state = State::Compiling;
+    bm->m_behaviourPathToHash = GetBehaviourHashesMap();
+
+    RemoveLibraryFiles();
+
+    bm->moveToThread(&bm->m_compileThread);
+    QObject::connect(&bm->m_compileThread, SIGNAL(started()),
+                     bm, SLOT(CompileBehavioursLibrary()));
+    bm->m_compileThread.start();
+}
+
+BehaviourManager::State BehaviourManager::GetState()
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    return bm->m_state;
+}
+
+void BehaviourManager::OnBehavioursLibraryCompiled(const String &libFilepath,
+                                                   const String &warnMessage)
+{
+    if (!warnMessage.Empty()) { Debug_Warn(warnMessage); }
+
+    Debug_Log("OnBehavioursLibraryCompiled " << libFilepath);
+
+    QLibrary *behavioursLib = new QLibrary(libFilepath.ToQString());
+    behavioursLib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);
+    bool success = behavioursLib->load();
+
+    m_behavioursLibrary = success ? behavioursLib : nullptr;
+    m_state = success ? State::Success : State::Failed;
+
+    if (!success)
+    {
+        Debug_Error("There was an error when loading the library '" <<
+                     libFilepath << "': " << behavioursLib->errorString());
+    }
+}
+
+void BehaviourManager::OnBehavioursLibraryCompilationFailed(
+        const String &errorMessage)
+{
+    if (!errorMessage.Empty()) { Debug_Error(errorMessage); }
+
+    m_state = State::Failed;
+}
+
+void BehaviourManager::CompileBehavioursLibrary()
+{
+    Debug_Log("CompileBehavioursLibrary();");
+
+    bool editorMode = false;
+    #ifdef BANG_EDITOR
+    editorMode = true;
     #endif
 
-    // See if the behaviour has changed from the cached one, and
-    // in that case remove the outdated references.
-    bm->m_status.TreatIfBehaviourChanged(behaviourPath);
+    String warnMessage = "", errorMessage = "";
 
-    if (bm->m_status.HasFailed(bid))       { return; }
-    if (bm->m_status.IsBeingCompiled(bid)) { return; }
+    String includes = " . " + SystemUtils::GetAllProjectSubDirs() + " " +
+                              SystemUtils::GetAllEngineSubDirs()  + " " +
+                              SystemUtils::GetQtIncludes()        + " ";
+    includes.Replace("\n", " ");
+    StringUtils::AddInFrontOfWords("-I", &includes);
 
-    if (bm->m_status.IsCached(bid))
+    String objs = SystemUtils::GetAllProjectObjects()          + " " +
+                  SystemUtils::GetAllEngineObjects(editorMode) + " ";
+
+    String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
+    qtLibDirs.Replace("\n", " ");
+    StringUtils::AddInFrontOfWords("-L", &qtLibDirs);
+
+    String options = " " + objs  + " -O0 -g ";
+    if (editorMode) { options += " -DBANG_EDITOR "; }
+    options += " -Wl,--export-dynamic --std=c++11 " + includes +
+               " -lGLEW -lGL -lpthread " + qtLibDirs + " -fPIC";
+
+    List<String> sources = Persistence::GetFiles(
+                Persistence::GetProjectAssetsRootAbs(), true, {"cpp"});
+    String sourcesStr = " " + String::Join(sources, " ") + " ";
+
+    String libsDir = Persistence::GetProjectLibsRootAbs();
+    Persistence::CreateDirectory(libsDir);
+    String libraryFilepath =
+            Persistence::GetProjectLibsRootAbs() + "/Behaviours.so";
+    libraryFilepath += "." + std::to_string(Time::GetNow()) + ".1.1";
+
+    String cmd = "/usr/bin/g++ -shared " + sourcesStr + " " + options +
+                 " -o " + libraryFilepath;
+    cmd.Replace("\n", " ");
+
+    String output = "";
+    bool successCompiling = false;
+    Debug_Log("cmd: " << cmd);
+    SystemUtils::System(cmd, &output, &successCompiling);
+    Debug_Log("output: " << output);
+
+    if (successCompiling)
     {
-        QLibrary *lib = bm->m_status.GetLibrary(bid);
-        if (lib)
-        {
-            bHolder->OnBehaviourLibraryAvailable(lib);
-        }
+        OnBehavioursLibraryCompiled(libraryFilepath.ToQString(),
+                                    output.ToQString());
     }
-    else // Start compiling behaviour
+    else
     {
-        #ifdef BANG_EDITOR
-        // Have to compile and load it. First compile
-        BehaviourCompileRunnable *compileRunnable =
-                new BehaviourCompileRunnable(behaviourPath);
-        bool startedCompiling = bm->m_threadPool.tryStart(compileRunnable);
-        if (!startedCompiling) { return; }
-
-        bm->m_status.OnBehaviourStartedCompiling(behaviourPath);
-
-        String behaviourName = Persistence::GetFileName(behaviourPath);
-        Debug_Status("Compiling script " << behaviourName << "...", 5.0f);
-
-        // And when the compileThread finishes, we will be notified by
-        // the runnable.
-        #endif
+        OnBehavioursLibraryCompilationFailed(output.ToQString());
     }
+
+
+    QObject::disconnect(&m_compileThread, SIGNAL(started()),
+                        this, SLOT(CompileBehavioursLibrary()));
+    m_compileThread.quit();
 }
 
-void BehaviourManager::RefreshAllBehaviours()
+String BehaviourManager::GetBehaviourHash(const String &behaviourFilepath)
 {
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-    bm->m_behaviourRefresherTimer.RefreshBehavioursInScene();
-}
+    String code = Persistence::GetFileContents(behaviourFilepath);
 
-const BehaviourManagerStatus &BehaviourManager::GetStatus()
-{
-    BehaviourManager *bm = BehaviourManager::GetInstance();
-    return bm->m_status;
+    List<String> includePaths = Persistence::GetSubDirectories(
+                Persistence::GetProjectAssetsRootAbs(), true);
+    CodePreprocessor::PreprocessCode(&code, includePaths);
+
+    return Persistence::GetHashFromString(code);
 }

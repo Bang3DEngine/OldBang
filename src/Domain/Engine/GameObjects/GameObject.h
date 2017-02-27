@@ -7,7 +7,6 @@
 #include "Sphere.h"
 #include "IFileable.h"
 #include "IToString.h"
-#include "ICloneable.h"
 #include "IRenderAgent.h"
 #include "ISceneEventListener.h"
 
@@ -26,7 +25,6 @@ class GameObject :
                ,public ISceneEventListener
                ,public IToString
                ,public IFileable
-               ,public ICloneable
                ,public IRenderAgent
                #ifdef BANG_EDITOR
                ,public IWindowEventManagerListener

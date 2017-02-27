@@ -19,6 +19,7 @@ public:
      * @brief Returns the length/magnitude of this Vector
      */
     float Length() const;
+    float LengthSquared() const;
 
     /**
      * @brief Normalizes this Vector
@@ -47,6 +48,7 @@ public:
     String ToString() const;
 
     float Distance(const Vector3 &p) const;
+    float DistanceSquared(const Vector3 &p) const;
 
     /**
      * @brief Makes v1 and v2 orthogonal and normalizes them.
@@ -76,6 +78,7 @@ public:
     static Vector3 Cross(const Vector3 &v1, const Vector3 &v2);
     static float Dot(const Vector3 &v1, const Vector3 &v2);
     static float Distance(const Vector3 &v1, const Vector3 &v2);
+    static float DistanceSquared(const Vector3 &v1, const Vector3 &v2);
 
     const static Vector3 Up;
     const static Vector3 Down;

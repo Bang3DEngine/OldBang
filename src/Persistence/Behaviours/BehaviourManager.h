@@ -4,18 +4,18 @@
 #include <set>
 #include <QTimer>
 #include <QMutex>
+#include <QLibrary>
 #include <QThreadPool>
 #include <QMutexLocker>
 
 #include "Map.h"
 #include "List.h"
 #include "String.h"
-#include "BehaviourManagerStatus.h"
 #include "BehaviourRefresherTimer.h"
 
 class QLibrary;
 class BehaviourHolder;
-class BehaviourCompileRunnable;
+class BehavioursLibCompileRunnable;
 
 /**
  * @brief Manages the compiling and loading of the Behaviour's QLibraries.
@@ -27,6 +27,13 @@ class BehaviourManager : public QObject
     Q_OBJECT
 
 public:
+    enum State
+    {
+        Idle,
+        Compiling,
+        Success,
+        Failed
+    };
 
     static BehaviourManager* GetInstance();
 
@@ -34,36 +41,42 @@ public:
      * This must be called when you want to retrieve the QLibrary from a
      * behaviour source filepath.
     **/
-    static void Load(BehaviourHolder *behaviourHolder, const String &behaviourPath);
+    static void Load(const String &behaviourPath,
+                     BehaviourHolder *behaviourHolder = nullptr);
 
-    static void RefreshAllBehaviours();
+    static QLibrary* GetBehavioursLibrary();
+    static void RefreshBehavioursLibrary();
 
-    static const BehaviourManagerStatus &GetStatus();
+    static State GetState();
 
 public slots:
-    // Called by the BehaviourCompileRunnable when has finished
-    void OnBehaviourSuccessCompiling(const QString &behaviourPath,
-                                      const QString &libraryFilepath,
-                                      const QString &warnMessage);
+    void OnBehavioursLibraryCompiled(const String &libFilepath,
+                                     const String &warnMessage);
+    void OnBehavioursLibraryCompilationFailed(const String &errorMessage);
 
-    // Called by the BehaviourCompileRunnable when has failed
-    void OnBehaviourFailedCompiling(const QString &behaviourPath,
-                                    const QString &errorMessage);
+private slots:
+    void CompileBehavioursLibrary();
 
 private:
-    QThreadPool m_threadPool;
+    State m_state = State::Idle;
+    QThread m_compileThread;
+    //BehaviourRefresherTimer m_behaviourRefresherTimer;
 
-    BehaviourManagerStatus m_status;
-    BehaviourRefresherTimer m_behaviourRefresherTimer;
+    Map<String, String> m_behaviourPathToHash;
+    QLibrary *m_behavioursLibrary = nullptr;
 
     BehaviourManager();
 
+    static bool SomeBehaviourHasChanged();
+    static Map<String, String> GetBehaviourHashesMap();
+    static String GetBehaviourHash(const String &behaviourFilepath);
+
     static QLibrary* LoadLibraryFromFilepath(const String &libFilepath);
-    static void RemoveOutdatedLibraryFiles(const String &newLibraryFilepath);
+    static void RemoveLibraryFiles();
 
     friend class Application;
     friend class BehaviourHolder;
-    friend class BehaviourCompileRunnable;
+    friend class BehavioursLibCompileRunnable;
 };
 
 #endif // BEHAVIOURMANAGER_H

@@ -195,8 +195,8 @@ Console::MessageId Console::AddMessage(const Message &msg,
         QTreeWidgetItem *collapsingItem = m_msg_to_collapsingItem[msg];
         if (collapsingItem)
         {
-            collapsingItem->setText(c_countColumn, String::ToString(count)
-                                                   .ToQString());
+            collapsingItem->setText(c_countColumn,
+                                    String::ToString(count).ToQString());
         }
     }
 

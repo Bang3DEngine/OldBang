@@ -12,7 +12,7 @@ Sphere::Sphere(float radius) :
 {
 }
 
-Sphere::Sphere(Vector3 center, float radius) :
+Sphere::Sphere(const Vector3 & center, float radius) :
     m_center(center),
     m_radius(radius)
 {
@@ -51,6 +51,23 @@ float Sphere::GetVolume() const
     return Math::PI * m_radius * m_radius;
 }
 
+bool Sphere::Contains(const Vector3 &point) const
+{
+    return Vector3::DistanceSquared(point, GetCenter()) <
+            GetRadius() * GetRadius();
+}
+
+bool Sphere::CheckCollision(const Sphere &sphere) const
+{
+    return Vector3::DistanceSquared(GetCenter(), sphere.GetCenter()) <
+           ( GetRadius()*GetRadius() + sphere.GetRadius()*sphere.GetRadius() );
+}
+
+bool Sphere::CheckCollision(const AABox &aabox) const
+{
+    return aabox.CheckCollision(*this);
+}
+
 void Sphere::FillFromBox(const AABox &box)
 {
     m_radius = box.GetDiagonal().Length() / 2.0f;
@@ -69,7 +86,7 @@ void Sphere::SetCenter(const Vector3 &center)
     this->m_center = center;
 }
 
-Vector3 Sphere::GetCenter() const
+const Vector3 & Sphere::GetCenter() const
 {
     return m_center;
 }

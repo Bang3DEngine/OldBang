@@ -241,6 +241,7 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
         if (*cancel) { return true; }
 
         String errorMessage;
+        /*
         String compiledLibFilepath =
                 SystemUtils::CompileToSharedObject(behaviourFilepath, false,
                                                    nullptr, &errorMessage);
@@ -264,6 +265,7 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
         String gameLibWithRandomProjectId =
                 gameLibFilepathWithoutTimestamp + "." + randomProjectId;
         Persistence::Rename(compiledLibFilepath, gameLibWithRandomProjectId);
+        */
     }
 
     return true;

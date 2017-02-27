@@ -271,7 +271,6 @@ HEADERS +=                                                          \
     src/Persistence/Files/TextFile.h \
     src/View/Windows/IWindow.h \
     src/View/Windows/GameWindow.h \
-    src/Persistence/Behaviours/BehaviourCompileRunnable.h \
     src/Persistence/Files/AudioFile.h \
     src/Domain/Engine/Physics/Math.h \
     src/Domain/Engine/Physics/Random.h \
@@ -298,7 +297,8 @@ HEADERS +=                                                          \
     src/Domain/Engine/CodePreprocessor.h \
     src/Domain/Graphics/Shaders/ShaderPreprocessor.h \
     src/Persistence/Project/Project.h \
-    src/Persistence/Project/ProjectManager.h
+    src/Persistence/Project/ProjectManager.h \
+    src/Persistence/Behaviours/BehavioursLibCompileRunnable.h
 
 EDITOR {
 HEADERS += \
@@ -488,7 +488,6 @@ SOURCES += \
     src/Persistence/XML/XMLProperty.cpp \
     src/View/Windows/IWindow.cpp \
     src/View/Windows/GameWindow.cpp \
-    src/Persistence/Behaviours/BehaviourCompileRunnable.cpp \
     src/Persistence/Files/AudioFile.cpp \
     src/Domain/Engine/Physics/Math.cpp \
     src/Domain/Engine/Physics/Random.cpp \
@@ -512,7 +511,8 @@ SOURCES += \
     src/Domain/Engine/CodePreprocessor.cpp \
     src/Domain/Graphics/Shaders/ShaderPreprocessor.cpp \
     src/Persistence/Project/ProjectManager.cpp \
-    src/Persistence/Project/Project.cpp
+    src/Persistence/Project/Project.cpp \
+    src/Persistence/Behaviours/BehavioursLibCompileRunnable.cpp
 
 EDITOR {
     SOURCES += \

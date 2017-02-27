@@ -92,10 +92,6 @@ void EditorScene::SetEditorCamera()
 
 Camera *EditorScene::GetCamera() const
 {
-    if (!EditorState::IsPlaying())
-    {
-        return m_edCameraGameObject->GetCamera();
-    }
     return Scene::GetCamera();
 }
 

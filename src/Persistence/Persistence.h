@@ -19,6 +19,7 @@ public:
    static String GetFileNameWithExtension(const String &filepath);
    static String GetFileExtensionFirst(const String &filepath);
    static String GetFileExtensionLast(const String &filepath);
+   static String GetFileContents(const String &filepath);
    static String GetFileExtensionComplete(const String &filepath);
    static String GetPathWithoutExtension(const String &filepath);
 
@@ -92,6 +93,7 @@ public:
    static Persistence *GetInstance();
    static const String& GetCurrentSceneFilepath();
    static const String& GetProjectRootAbs();
+   static String GetProjectLibsRootAbs();
    static const String& GetProjectAssetsRootAbs();
    static const String& GetEngineRootAbs();
    static const String& GetEngineAssetsRootAbs();

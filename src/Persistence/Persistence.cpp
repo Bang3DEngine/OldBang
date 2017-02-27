@@ -90,6 +90,22 @@ String Persistence::GetFileExtensionLast(const String &filepath)
     return parts[parts.Size() - 1];
 }
 
+String Persistence::GetFileContents(const String &filepath)
+{
+    if (!Persistence::ExistsFile(filepath)) { return ""; }
+
+    String contents = "";
+    std::fstream f;
+    f.open(filepath);
+    if (f.is_open())
+    {
+        contents = String((std::istreambuf_iterator<char>(f)),
+                           std::istreambuf_iterator<char>());
+        f.close();
+    }
+    return contents;
+}
+
 String Persistence::GetFileExtensionComplete(const String &filepath)
 {
     String fileNameWithExtension = Persistence::GetFileNameWithExtension(filepath);
@@ -508,6 +524,11 @@ const String &Persistence::GetCurrentSceneFilepath()
 const String &Persistence::GetProjectRootAbs()
 {
     return Persistence::GetInstance()->c_ProjectRootAbsolute;
+}
+
+String Persistence::GetProjectLibsRootAbs()
+{
+    return Persistence::GetInstance()->c_ProjectRootAbsolute + "/Libraries";
 }
 const String &Persistence::GetProjectAssetsRootAbs()
 {

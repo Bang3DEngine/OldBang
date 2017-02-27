@@ -3,12 +3,16 @@
 
 #include "String.h"
 #include "HideFlags.h"
+#include "ICloneable.h"
 
-class Object
+class Object : public ICloneable
 {
 public:
     Object();
     virtual ~Object();
+
+    virtual void CloneInto(ICloneable *clone) const override;
+    virtual ICloneable *Clone() const override;
 
     const HideFlags &GetHideFlags() const;
     bool HasHideFlag(const HideFlags &hideFlag) const;

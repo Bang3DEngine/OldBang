@@ -39,7 +39,7 @@ bool EditorPlayStopFlowController::PlayScene()
     ASSERT(!EditorState::IsPlaying(), "", return true);
 
     // Start refreshing all scene behaviours...
-    BehaviourManager::RefreshAllBehaviours();
+    BehaviourManager::RefreshBehavioursLibrary();
 
     m_playingCanceled = false; // Wait for behaviours
     if (!WaitForAllBehavioursToBeLoaded()) { return false; }
@@ -95,11 +95,6 @@ void EditorPlayStopFlowController::StopScene()
 
 bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
 {
-    const BehaviourManagerStatus &bmStatus = BehaviourManager::GetStatus();
-    float loadedBehPercent = bmStatus.GetBehaviourHoldersUpdatedPercent();
-    if (loadedBehPercent == 1.0f) { return true; }
-
-
     EditorWindow *win = EditorWindow::GetInstance();
     QMainWindow *mainWin = win->GetMainWindow();
 
@@ -108,37 +103,34 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
     progressDialog.setRange(0, 100);
     progressDialog.setModal(true); // Important to avoid Ctrl+P smashing
     progressDialog.setWindowTitle("Compiling behaviours");
-    progressDialog.setLabelText("Waiting for all behaviours to be correctly compiled...");
+    progressDialog.setLabelText(
+                "Waiting for all behaviours to be correctly compiled...");
     progressDialog.show();
     QObject::connect(&progressDialog, SIGNAL(canceled()),
                      this, SLOT(OnWaitingForBehavioursCanceled()));
 
     // Actual waiting
-    BehaviourManager::RefreshAllBehaviours();
+    BehaviourManager *behaviourMgr = BehaviourManager::GetInstance();
     Application::processEvents();
-    loadedBehPercent = bmStatus.GetBehaviourHoldersUpdatedPercent();
     do
     {
-        progressDialog.setValue( int(loadedBehPercent * 100) );
-        if (bmStatus.SomeBehaviourWithError())
-        {
-            String fixErrorsMsg =
-                    "Please fix all the behaviour errors before playing.";
-            String msg = fixErrorsMsg + "\nCheck the Console.";
-            Debug_Error(fixErrorsMsg);
-            Dialog::Error("Error", msg);
-            return false;
-        }
-
-        // Progress dialog cancel button pressed
+        progressDialog.setValue( int(0) );
         if (m_playingCanceled) { return false; }
-
-        loadedBehPercent = bmStatus.GetBehaviourHoldersUpdatedPercent();
 
         QThread::currentThread()->msleep(100);
         Application::processEvents(); // Let the timers tick and update GUI.
     }
-    while (loadedBehPercent < 1.0f);
+    while (BehaviourManager::GetState() == BehaviourManager::State::Compiling);
+
+    if (BehaviourManager::GetState() == BehaviourManager::State::Failed)
+    {
+        String fixErrorsMsg =
+                "Please fix all the behaviour errors before playing.";
+        String msg = fixErrorsMsg + "\nCheck the Console.";
+        Debug_Error(fixErrorsMsg);
+        Dialog::Error("Error", msg);
+        return false;
+    }
 
     progressDialog.close();
 

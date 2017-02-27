@@ -43,7 +43,7 @@ public:
     #endif
 
     virtual void OnAddedToGameObject() override;
-    void Refresh();
+    void RefreshBehaviourLib();
 
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
@@ -55,8 +55,6 @@ public:
     // They will only override if they are in BANG_EDITOR
     virtual void _OnDrawGizmos ();
     virtual void _OnDrawGizmosOverlay ();
-
-    void OnBehaviourLibraryAvailable(QLibrary *lib);
 
     QLibrary *GetLibraryBeingUsed() const;
 
@@ -79,6 +77,12 @@ private:
     String m_sourceFilepath = "";
 
     void ChangeBehaviour(Behaviour *newBehaviour);
+
+    Behaviour* CreateDynamicBehaviour(const String &behaviourName,
+                                      QLibrary *openLibrary);
+
+    bool DeleteDynamicBehaviour(const String &behaviourName,
+                                Behaviour *b, QLibrary *openLibrary);
 
     friend class GameObject;
 };

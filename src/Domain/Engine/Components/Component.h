@@ -4,7 +4,6 @@
 #include "Object.h"
 #include "IFileable.h"
 #include "IToString.h"
-#include "ICloneable.h"
 #include "ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
@@ -24,7 +23,6 @@ class Component :
              ,public ISceneEventListener
              ,public IToString
              ,public IFileable
-             ,public ICloneable
             #ifdef BANG_EDITOR
              ,public IInspectable
             #endif

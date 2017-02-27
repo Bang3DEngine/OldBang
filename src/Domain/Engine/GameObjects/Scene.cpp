@@ -86,7 +86,7 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     bool cameraFound = false;
     for (Camera *cam : cameras)
     {
-        if (!cam->gameObject->HasHideFlag(HideFlags::HideInGame))
+        if (!cam->gameObject->HasHideFlag(HideFlags::HideInHierarchy))
         {
             SetCamera(cam);
             cameraFound = true;

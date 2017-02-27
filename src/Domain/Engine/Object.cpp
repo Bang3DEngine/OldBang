@@ -10,6 +10,19 @@ Object::~Object()
 
 }
 
+void Object::CloneInto(ICloneable *clone) const
+{
+    Object *obj = Object::SCast<Object>(clone);
+    obj->AddHideFlag( GetHideFlags() );
+}
+
+ICloneable *Object::Clone() const
+{
+    Object *obj = new Object();
+    CloneInto(obj);
+    return obj;
+}
+
 const HideFlags &Object::GetHideFlags() const
 {
     return m_hideFlags;

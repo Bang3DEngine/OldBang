@@ -44,6 +44,11 @@ public:
     float GetArea() const;
     float GetVolume() const;
 
+    Vector3 GetClosestPointInAABB(const Vector3 &point) const;
+    bool CheckCollision(const Sphere &sphere) const;
+    bool CheckCollision(const AABox &aabox) const;
+    bool Contains(const Vector3 &point) const;
+
     /**
      * @brief For every coord, it gets the max and min values of b1 and b2.
      * For example

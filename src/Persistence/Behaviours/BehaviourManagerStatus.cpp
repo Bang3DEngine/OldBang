@@ -63,30 +63,22 @@ bool BehaviourManagerStatus::SomeBehaviourWithError() const
 
 float BehaviourManagerStatus::GetBehaviourHoldersUpdatedPercent() const
 {
-    Scene *scene = SceneManager::GetActiveScene();
+    // Before calling this function RefreshAllBehaviours must be called,
+    // in order for them to start compiling
 
-    int behHoldersUpdated = 0;
-    int totalBehaviourHolders = 0;
-    List<BehaviourHolder*> behHolders =
-            scene->GetComponentsInChildren<BehaviourHolder>();
-    for (BehaviourHolder *bh : behHolders)
+    int updatedBehaviours = 0;
+    int totalBehaviours = 0;
+    List<String> behaviourFiles = Persistence::GetFiles(
+                Persistence::GetProjectAssetsRootAbs(), true, {"cpp"});
+    for (String behaviourPath : behaviourFiles)
     {
-        String behaviourPath = bh->GetSourceFilepath();
-        if (behaviourPath.Empty()) { continue; }
-
-        ++totalBehaviourHolders;
+        ++totalBehaviours;
 
         BehaviourId bid(behaviourPath);
-        QLibrary *updatedLibrary = GetLibrary(bid);
-        if (!updatedLibrary) { continue; } // Not even compiled
-
-        QLibrary *currentBHLibrary = bh->GetLibraryBeingUsed();
-        bool updated = (currentBHLibrary == updatedLibrary);
-        if (updated) { ++behHoldersUpdated; }
+        bool updated = !IsBeingCompiled(bid) && !HasFailed(bid);
+        if (updated) { ++updatedBehaviours; }
     }
-
-    Debug_Log(behHoldersUpdated << " / " << totalBehaviourHolders);
-    return float(behHoldersUpdated) / totalBehaviourHolders;
+    return float(updatedBehaviours) / totalBehaviours;
 }
 
 void BehaviourManagerStatus::TreatIfBehaviourChanged(const String &behPath)

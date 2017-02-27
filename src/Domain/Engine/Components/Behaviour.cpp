@@ -10,6 +10,17 @@ Behaviour::~Behaviour()
 {
 }
 
+String Behaviour::GetBehaviourName() const
+{
+    String bName = "";
+    if (p_behaviourHolder)
+    {
+        const String srcFilepath = p_behaviourHolder->GetSourceFilepath();
+        bName = Persistence::GetFileName(srcFilepath);
+    }
+    return bName;
+}
+
 void Behaviour::OnUpdate()
 {
 }
@@ -25,7 +36,7 @@ void Behaviour::_OnUpdate()
 
 void Behaviour::Init(BehaviourHolder *bh)
 {
-    m_behaviourHolder = bh;
+    p_behaviourHolder = bh;
     m_gameObject = bh->gameObject;
     m_parent = m_gameObject->parent;
     m_transform = m_gameObject->transform;
@@ -38,17 +49,18 @@ String Behaviour::s_behaviourHeaderTemplate =
 \n\
 #include \"Behaviour.h\" \n\
 \n\
+// Here go your includes \n\
+\n\
 class CLASS_NAME : public Behaviour \n\
 { \n\
 public: \n\
- \n\
     void OnStart() override; \n\
     void OnUpdate() override; \n\
 }; \n\
 \n\
-BANG_BEHAVIOUR_CLASS(CLASS_NAME) \n\
-\n\
 #endif // CLASS_NAME_H \n\
+\n\
+BANG_BEHAVIOUR_CLASS(CLASS_NAME);\
 "
 ;
 
@@ -67,6 +79,7 @@ void CLASS_NAME::OnUpdate() \n\
 { \n\
     Behaviour::OnUpdate(); \n\
 } \n\
-\
+\n\
+BANG_BEHAVIOUR_CLASS_IMPL(CLASS_NAME);\
 "
 ;

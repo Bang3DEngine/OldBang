@@ -8,7 +8,7 @@
 #include "String.h"
 
 template <class Key, class Value>
-class Map : private std::map<Key, Value>
+class Map : public std::map<Key, Value>
 {
 public:
     typedef typename std::map<Key, Value>::iterator Iterator;

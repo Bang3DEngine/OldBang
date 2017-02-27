@@ -8,6 +8,7 @@
 #include "Asset.h"
 #include "Object.h"
 #include "XMLParser.h"
+#include "Persistence.h"
 #include "BehaviourManager.h"
 
 class AssetsManager

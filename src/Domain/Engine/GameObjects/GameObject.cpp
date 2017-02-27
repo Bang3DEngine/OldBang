@@ -45,6 +45,7 @@ GameObject::GameObject(const String &name)
 
 void GameObject::CloneInto(ICloneable *clone) const
 {
+    Object::CloneInto(clone);
     GameObject *go = Object::SCast<GameObject>(clone);
     if (HasComponent<RectTransform>())
     {

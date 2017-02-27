@@ -37,7 +37,12 @@ Vector3::Vector3(const Vector2 &v, float z) : Vector3(v.x, v.y, z)
 
 float Vector3::Length() const
 {
-    return float(Math::Sqrt(x*x + y*y + z*z));
+    return float( Math::Sqrt(LengthSquared()) );
+}
+
+float Vector3::LengthSquared() const
+{
+    return x*x + y*y + z*z;
 }
 
 void Vector3::Normalize()
@@ -80,6 +85,11 @@ String Vector3::ToString() const
 float Vector3::Distance(const Vector3 &p) const
 {
     return Vector3::Distance(*this, p);
+}
+
+float Vector3::DistanceSquared(const Vector3 &p) const
+{
+    return Vector3::DistanceSquared(*this, p);
 }
 
 void Vector3::OrthoNormalize(Vector3 &v1, Vector3 &v2)
@@ -126,6 +136,11 @@ float Vector3::Dot(const Vector3 &v1, const Vector3 &v2)
 float Vector3::Distance(const Vector3 &v1, const Vector3 &v2)
 {
     return (v1 - v2).Length();
+}
+
+float Vector3::DistanceSquared(const Vector3 &v1, const Vector3 &v2)
+{
+    return (v1 - v2).LengthSquared();
 }
 
 Vector2 Vector3::xy() const

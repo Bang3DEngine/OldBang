@@ -33,6 +33,64 @@ void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
     m_behaviour = newBehaviour;
 }
 
+Behaviour *BehaviourHolder::CreateDynamicBehaviour(const String &behaviourName,
+                                                   QLibrary *openLibrary)
+{
+    QLibrary *lib = openLibrary; ASSERT(lib, "", return nullptr);
+    String errorString = "";
+    if (lib->isLoaded())
+    {
+        // Get the pointer to the CreateDynamically function
+        String funcName = "CreateDynamically_" + behaviourName;
+        Behaviour* (*createFunction)(SingletonManager*) =
+                (Behaviour* (*)(SingletonManager*)) (
+                    lib->resolve(funcName.ToCString()));
+
+        if (createFunction)
+        {
+            // Call it and get the pointer to the created Behaviour
+            // Create the Behaviour, passing to it the SingletonManager
+            // of this main binary, so it can link it.
+            return createFunction(SingletonManager::GetInstance());
+        }
+        else
+        {
+            errorString = lib->errorString();
+        }
+    }
+    else
+    {
+        errorString = lib->errorString();
+    }
+
+    Debug_Error("Error loading the library " << openLibrary->fileName()
+                << "." << errorString);
+    return nullptr;
+}
+
+bool BehaviourHolder::DeleteDynamicBehaviour(const String &behaviourName,
+                                             Behaviour *b,
+                                             QLibrary *openLibrary)
+{
+    if (!openLibrary) { return false; }
+
+    // Get the pointer to the DeleteDynamically function
+    String funcName = "DeleteDinamically_" + behaviourName;
+    void (*deleteFunction)(Behaviour*) =
+            (void (*)(Behaviour*)) (openLibrary->resolve(funcName.ToCString()));
+
+    if (deleteFunction)
+    {
+        deleteFunction(b);
+        return true;
+    }
+    else
+    {
+        Debug_Error(openLibrary->errorString());
+        return false;
+    }
+}
+
 String BehaviourHolder::GetName() const
 {
     return "BehaviourHolder";
@@ -57,42 +115,37 @@ const String &BehaviourHolder::GetSourceFilepath() const
     return m_sourceFilepath;
 }
 
-void BehaviourHolder::Refresh()
+void BehaviourHolder::RefreshBehaviourLib()
 {
     ASSERT(gameObject);
-    #ifdef BANG_EDITOR // No refresh on temporary gameObjects
+    #ifdef BANG_EDITOR
     ASSERT(!gameObject->IsDraggedGameObject());
     #endif
 
     String absPath = Persistence::ToAbsolute(m_sourceFilepath, false);
     ASSERT(Persistence::ExistsFile(absPath));
-    BehaviourManager::Load(this, absPath);
-}
+    String behaviourName = Persistence::GetFileName(GetSourceFilepath());
+    ASSERT(!behaviourName.Empty());
 
-
-void BehaviourHolder::OnBehaviourLibraryAvailable(QLibrary *lib)
-{
-    ASSERT(gameObject);
-    ASSERT(m_currentLoadedLibrary != lib); // Its the same lib, no need to do anything
-
-    // Create new Behaviour
-    Behaviour *createdBehaviour = SystemUtils::CreateDynamicBehaviour(lib);
-    m_currentLoadedLibrary = lib;
-
-    // Change to newly created or nullptr, depending on success
-    ChangeBehaviour(createdBehaviour);
-
-    if (createdBehaviour)
+    QLibrary *newLib = BehaviourManager::GetBehavioursLibrary();
+    if (newLib && m_currentLoadedLibrary != newLib)
     {
-        if (m_behaviour)
+        m_currentLoadedLibrary = newLib;
+
+        // Create new Behaviour
+        Behaviour *createdBehaviour =
+                CreateDynamicBehaviour(behaviourName, m_currentLoadedLibrary);
+
+        ChangeBehaviour(createdBehaviour);
+        if (createdBehaviour)
         {
-            m_behaviour->Init(this);
+            if (m_behaviour) { m_behaviour->Init(this); }
         }
-    }
-    else
-    {
-        Debug_Error("Behaviour " << m_sourceFilepath <<
-                     " could not be refreshed. See errors above");
+        else
+        {
+            Debug_Error("Behaviour " << m_sourceFilepath <<
+                         " could not be refreshed. See errors above");
+        }
     }
 }
 
@@ -109,7 +162,7 @@ void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
     if (lastFilepath != m_sourceFilepath &&
         gameObject->IsInsideScene())
     {
-        Refresh();
+        RefreshBehaviourLib();
     }
 }
 
@@ -133,7 +186,7 @@ void BehaviourHolder::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
     ReadXMLInfo(xmlInfo);
-    Refresh();
+    RefreshBehaviourLib();
 }
 
 void BehaviourHolder::OnButtonClicked(const String &attrName)
@@ -176,7 +229,7 @@ void BehaviourHolder::CreateNewBehaviour()
 
         // Update Behaviour file
         m_sourceFilepath = sourceFilepath;
-        Refresh();
+        RefreshBehaviourLib();
 
         // Open with system editor
         // TODO: Make cross-platform
@@ -190,12 +243,14 @@ void BehaviourHolder::CreateNewBehaviour()
 void BehaviourHolder::OnAddedToGameObject()
 {
     Component::OnAddedToGameObject();
-    Refresh();
+    RefreshBehaviourLib();
 }
 
 void BehaviourHolder::_OnStart()
 {
     Component::_OnStart();
+
+    RefreshBehaviourLib();
     if (m_behaviour)
     {
         #ifdef BANG_EDITOR

@@ -45,6 +45,8 @@ public:
     static String s_behaviourHeaderTemplate;
     static String s_behaviourSourceTemplate;
 
+    String GetBehaviourName() const;
+
 /**
  * These variables must be copied from BehaviourHolder
  */
@@ -64,10 +66,31 @@ protected:
  * adding this Behaviour to itself.
  */
 private:
-    BehaviourHolder *m_behaviourHolder = nullptr;
+    BehaviourHolder *p_behaviourHolder = nullptr;
 
     void Init(BehaviourHolder *bh);
     virtual void _OnUpdate() override;
+
+    /**
+     * @brief Creates a Behaviour from its QLibrary passed as parameter.
+     * This will try to call the function CreateDynamically, loading the library
+     * passed as parameter. This method CreateDynamically should be defined
+     * in the XXXBehaviour.cpp file, as extern "C".
+     * @param The dynamic library of the Behaviour that you must have opened before.
+     * @return The created Behaviour.
+     */
+    static Behaviour* CreateDynamicBehaviour(const String &behaviourName,
+                                             QLibrary *openLibrary);
+
+    /**
+     * @brief Delete dynamic Behaviour from a sharedObject passed as parameter.
+     * @param The Behaviour you want to delete
+     * @param The library that has been opened for the Behaviour you want to delete.
+     * @return Success or not.
+     */
+    static bool DeleteDynamicBehaviour(const String &behaviourName,
+                                       Behaviour *b,
+                                       QLibrary *openLibrary);
 
     friend class BehaviourHolder;
 };
@@ -78,21 +101,30 @@ private:
 // DEFINES
 
 #define BANG_BEHAVIOUR_CLASS(CLASS_NAME) \
-extern "C" Behaviour *CreateDynamically(SingletonManager *mainBinarySingletonManager) \
+extern "C" Behaviour *CreateDynamically_##CLASS_NAME(\
+        SingletonManager *mainBinarySingletonManager); \
+extern "C" void DeleteDynamically_##CLASS_NAME(Behaviour *b);
+
+#define BANG_BEHAVIOUR_CLASS_IMPL(CLASS_NAME) \
+extern "C" Behaviour *CreateDynamically_##CLASS_NAME(\
+        SingletonManager *mainBinarySingletonManager) \
 { \
 \
-    /* This line links the SingletonManager in the main binary to the SingletonManager \
-       in the behaviour loaded library. */ \
-    SingletonManager::SetSingletonManagerInstanceFromBehaviourLibrary(mainBinarySingletonManager); \
+    /* This line links the SingletonManager in the main binary \
+        to the SingletonManager in the behaviour loaded library. */ \
+    SingletonManager::SetSingletonManagerInstanceFromBehaviourLibrary(\
+                mainBinarySingletonManager); \
 \
-    Behaviour *b = new CLASS_NAME(); \
-    return b; \
+    return new CLASS_NAME(); \
 } \
 \
-extern "C" void DeleteDynamically(Behaviour *b) \
+extern "C" void DeleteDynamically_##CLASS_NAME(Behaviour *b) \
 { \
     delete b; \
 }
+
+
+
 
 
 
