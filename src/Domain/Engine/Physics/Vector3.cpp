@@ -143,6 +143,12 @@ float Vector3::DistanceSquared(const Vector3 &v1, const Vector3 &v2)
     return (v1 - v2).LengthSquared();
 }
 
+Vector3 Vector3::Reflect(const Vector3 &incident, const Vector3 &normal)
+{
+    Vector3 n = normal.Normalized();
+    return incident - 2 * ( Vector3::Dot(incident, n) ) * n;
+}
+
 Vector2 Vector3::xy() const
 {
     return Vector2(x, y);

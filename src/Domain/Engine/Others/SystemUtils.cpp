@@ -237,9 +237,9 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
                  + " -o " + outputLibFilepath;
     cmd.Replace("\n", " ");
 
-    Debug_Log("cmd: " << cmd);
+    //Debug_Log("cmd: " << cmd);
     SystemUtils::System(cmd, output, success);
-    Debug_Log("output: " << *output);
+    //Debug_Log("output: " << *output);
 }
 
 void SystemUtils::CloseLibrary(QLibrary *library)

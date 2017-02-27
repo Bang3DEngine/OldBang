@@ -109,20 +109,39 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
     QObject::connect(&progressDialog, SIGNAL(canceled()),
                      this, SLOT(OnWaitingForBehavioursCanceled()));
 
-    // Actual waiting
+    // Compile all behaviour objects
     BehaviourManager *behaviourMgr = BehaviourManager::GetInstance();
-    Application::processEvents();
+    const BehaviourManagerStatus& bmStatus = behaviourMgr->GetStatus();
     do
     {
-        progressDialog.setValue( int(0) );
+        behaviourMgr->StartCompilingAllBehaviourObjects();
+
+        float percent = bmStatus.GetPercentOfReadyBehaviours();
+        progressDialog.setValue( int(percent * 100) );
         if (m_playingCanceled) { return false; }
 
         QThread::currentThread()->msleep(100);
-        Application::processEvents(); // Let the timers tick and update GUI.
+        Application::GetInstance()->processEvents();
     }
-    while (BehaviourManager::GetState() == BehaviourManager::MergingState::Merging);
+    while(!bmStatus.AllBehavioursReadyOrFailed());
 
-    if (BehaviourManager::GetState() == BehaviourManager::MergingState::Failed)
+    bool error = !bmStatus.AllBehavioursReady();
+    if (!error)
+    {
+        // Merge
+        behaviourMgr->StartMergingBehavioursObjects();
+        do
+        {
+            Application::processEvents(); // Let the timers tick and update GUI.
+            QThread::currentThread()->msleep(100);
+        }
+        while (BehaviourManager::GetMergeState() ==
+               BehaviourManager::MergingState::Merging);
+    }
+    error = error || BehaviourManager::GetMergeState() ==
+                     BehaviourManager::MergingState::Failed;
+
+    if (error)
     {
         String fixErrorsMsg =
                 "Please fix all the behaviour errors before playing.";

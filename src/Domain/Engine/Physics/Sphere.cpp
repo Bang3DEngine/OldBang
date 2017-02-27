@@ -63,9 +63,11 @@ bool Sphere::CheckCollision(const Sphere &sphere) const
            ( GetRadius()*GetRadius() + sphere.GetRadius()*sphere.GetRadius() );
 }
 
-bool Sphere::CheckCollision(const AABox &aabox) const
+bool Sphere::CheckCollision(const AABox &aabox,
+                            Vector3 *point,
+                            Vector3 *normal) const
 {
-    return aabox.CheckCollision(*this);
+    return aabox.CheckCollision(*this, point, normal);
 }
 
 void Sphere::FillFromBox(const AABox &box)

@@ -13,8 +13,8 @@
 #include "SceneManager.h"
 #include "ProjectManager.h"
 #include "BehaviourHolder.h"
-#include "BehaviourObjectCompileRunnable.h"
 #include "CodePreprocessor.h"
+#include "BehaviourObjectCompileRunnable.h"
 
 #ifdef BANG_EDITOR
 #include "Console.h"
@@ -62,71 +62,50 @@ List<String> BehaviourManager::GetBehavioursObjectsFilepathsList()
 void BehaviourManager::StartMergingBehavioursObjects()
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-
-    Debug_Log("StartMergingBehavioursObjects");
-    if (BehaviourManager::GetState() ==
-            BehaviourManager::MergingState::Merging)
-    {
-        Debug_Log("  Cancelled, currently merging...");
-        return;
-    }
+    if (BehaviourManager::GetMergeState() == MergingState::Merging) { return; }
 
     RemoveMergedLibraryFiles();
-
-    List<String> allBehaviourSources =
-            BehaviourManager::GetBehavioursSourcesFilepathsList();
-    Debug_Log(allBehaviourSources);
-
-    Debug_Log("  Waiting for all behaviour objects to be ready!");
-    bool allBehaviourObjectsReady = false;
-    while (!allBehaviourObjectsReady)
-    {
-        allBehaviourObjectsReady = true;
-        for (const String &behFilepath : allBehaviourSources)
-        {
-            Debug_Log ("  Is " << behFilepath << " ready? "
-                       << bm->m_status.IsReady(behFilepath));
-
-            if (bm->m_status.HasFailed(behFilepath))
-            {
-                bm->m_state = BehaviourManager::MergingState::Failed;
-                return;
-            }
-
-            if (!bm->m_status.IsReady(behFilepath))
-            {
-                allBehaviourObjectsReady = false;
-                if (!bm->m_status.IsBeingCompiled(behFilepath))
-                {
-                    StartCompilingBehaviourObject(behFilepath);
-                }
-            }
-        }
-        Application::GetInstance()->processEvents();
-        QThread::currentThread()->msleep(500);
-        Application::GetInstance()->processEvents();
-    }
-
-    Debug_Log("  All Behaviour Objects Ready!");
-
     bm->m_state = MergingState::Merging;
-
-    Debug_Log("  Starting merging...");
     bm->moveToThread(&bm->m_mergeObjectsThread);
     QObject::connect(&bm->m_mergeObjectsThread, SIGNAL(started()),
                      bm, SLOT(CompileMergedLibrary()));
     bm->m_mergeObjectsThread.start();
 }
 
-void BehaviourManager::StartCompilingBehaviourObject(
-        const String &behaviourFilepath)
+void BehaviourManager::StartCompilingAllBehaviourObjects()
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
 
-    Debug_Status("Compiling " << behaviourFilepath, 3.0f);
+    List<String> allBehaviourSources =
+            BehaviourManager::GetBehavioursSourcesFilepathsList();
+    for (const String &behFilepath : allBehaviourSources)
+    {
+        Debug_Log ("  Is " << behFilepath << " ready? "
+                   << bm->m_status.IsReady(behFilepath));
+
+        if (!bm->m_status.HasFailed(behFilepath) &&
+            !bm->m_status.IsReady(behFilepath) &&
+            !bm->m_status.IsBeingCompiled(behFilepath))
+        {
+            StartCompilingBehaviourObject(behFilepath);
+        }
+    }
+}
+
+void BehaviourManager::StartCompilingBehaviourObject(const String &behFilepath)
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+
+    if (bm->GetStatus().IsBeingCompiled(behFilepath) ||
+        bm->GetStatus().HasFailed(behFilepath))
+    {
+        return;
+    }
+
+    Debug_Status("Compiling " << behFilepath, 3.0f);
 
     BehaviourObjectCompileRunnable *objRunn =
-            new BehaviourObjectCompileRunnable(behaviourFilepath);
+            new BehaviourObjectCompileRunnable(behFilepath);
     bool started = bm->m_behaviourObjectCompileThreadPool.tryStart(objRunn);
     if (started)
     {
@@ -136,11 +115,11 @@ void BehaviourManager::StartCompilingBehaviourObject(
         connect(objRunn, SIGNAL(NotifyFailedCompiling(QString, QString)),
                 bm, SLOT(OnBehaviourObjectCompilationFailed(QString, QString)),
                 Qt::DirectConnection);
-        bm->m_status.OnBehaviourStartedCompiling(behaviourFilepath);
+        bm->m_status.OnBehaviourStartedCompiling(behFilepath);
     }
 }
 
-BehaviourManager::MergingState BehaviourManager::GetState()
+BehaviourManager::MergingState BehaviourManager::GetMergeState()
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     return bm->m_state;

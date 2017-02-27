@@ -45,7 +45,9 @@ public:
     float GetVolume() const;
 
     Vector3 GetClosestPointInAABB(const Vector3 &point) const;
-    bool CheckCollision(const Sphere &sphere) const;
+    bool CheckCollision(const Sphere &sphere,
+                        Vector3 *point  = nullptr,
+                        Vector3 *normal = nullptr) const;
     bool CheckCollision(const AABox &aabox) const;
     bool Contains(const Vector3 &point) const;
 

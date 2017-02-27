@@ -16,6 +16,48 @@ BehaviourManagerStatus::BehaviourManagerStatus()
 {
 }
 
+bool BehaviourManagerStatus::AllBehavioursReady() const
+{
+    return GetPercentOfReadyBehaviours() >= 1.0f;
+}
+
+bool BehaviourManagerStatus::SomeBehaviourBeingCompiled() const
+{
+    List<String> sourcesFilepaths =
+            BehaviourManager::GetBehavioursSourcesFilepathsList();
+    for (const String &srcFilepath : sourcesFilepaths)
+    {
+        if (IsBeingCompiled(srcFilepath)) { return true; }
+    }
+    return false;
+}
+
+bool BehaviourManagerStatus::AllBehavioursReadyOrFailed() const
+{
+    List<String> sourcesFilepaths =
+            BehaviourManager::GetBehavioursSourcesFilepathsList();
+    for (const String &srcFilepath : sourcesFilepaths)
+    {
+        if (!IsReady(srcFilepath) && !HasFailed(srcFilepath))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+float BehaviourManagerStatus::GetPercentOfReadyBehaviours() const
+{
+    List<String> sourcesFilepaths =
+            BehaviourManager::GetBehavioursSourcesFilepathsList();
+    int compiledBehaviours = 0;
+    for (const String &srcFilepath : sourcesFilepaths)
+    {
+        if (IsReady(srcFilepath)) { ++compiledBehaviours; }
+    }
+    return float(compiledBehaviours) / sourcesFilepaths.Size();
+}
+
 bool BehaviourManagerStatus::IsBeingCompiled(const BehaviourId &bid) const
 {
     return m_beingCompiled.count(bid) > 0;
@@ -45,38 +87,13 @@ bool BehaviourManagerStatus::IsReady(const String &behaviourFilepath) const
 
 bool BehaviourManagerStatus::SomeBehaviourWithError() const
 {
-    Scene *scene = SceneManager::GetActiveScene();
-    List<BehaviourHolder*> behHolders =
-            scene->GetComponentsInChildren<BehaviourHolder>();
-    for (BehaviourHolder *bh : behHolders)
+    List<String> sourcesFilepaths =
+            BehaviourManager::GetBehavioursSourcesFilepathsList();
+    for (const String &srcFilepath : sourcesFilepaths)
     {
-        BehaviourId bid( bh->GetSourceFilepath() );
-        if ( HasFailed(bid) )
-        {
-            return true;
-        }
+        if (HasFailed(srcFilepath)) { return true; }
     }
     return false;
-}
-
-float BehaviourManagerStatus::GetBehaviourHoldersUpdatedPercent() const
-{
-    // Before calling this function RefreshAllBehaviours must be called,
-    // in order for them to start compiling
-
-    int updatedBehaviours = 0;
-    int totalBehaviours = 0;
-    List<String> behaviourFiles = Persistence::GetFiles(
-                Persistence::GetProjectAssetsRootAbs(), true, {"cpp"});
-    for (String behaviourPath : behaviourFiles)
-    {
-        ++totalBehaviours;
-
-        BehaviourId bid(behaviourPath);
-        bool updated = !IsBeingCompiled(bid) && !HasFailed(bid);
-        if (updated) { ++updatedBehaviours; }
-    }
-    return float(updatedBehaviours) / totalBehaviours;
 }
 
 void BehaviourManagerStatus::OnBehaviourStartedCompiling(

@@ -43,9 +43,10 @@ public:
     static List<String> GetBehavioursObjectsFilepathsList();
 
     static void StartMergingBehavioursObjects();
+    static void StartCompilingAllBehaviourObjects();
     static void StartCompilingBehaviourObject(const String &behaviourFilepath);
 
-    static MergingState GetState();
+    static MergingState GetMergeState();
     static const BehaviourManagerStatus& GetStatus();
 
 // Behaviour Objects signals and slots

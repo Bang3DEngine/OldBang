@@ -51,6 +51,10 @@ class BehaviourHolder;
 class BehaviourManagerStatus
 {
 public:
+    bool AllBehavioursReady() const;
+    bool SomeBehaviourBeingCompiled() const;
+    bool AllBehavioursReadyOrFailed() const;
+    float GetPercentOfReadyBehaviours() const;
     bool IsBeingCompiled(const BehaviourId &bid) const;
     bool HasFailed(const BehaviourId &bid) const;
     bool HasFailed(const String &behaviourFilepath) const;
@@ -58,7 +62,6 @@ public:
     bool IsReady(const String &behaviourFilepath) const;
 
     bool SomeBehaviourWithError() const;
-    float GetBehaviourHoldersUpdatedPercent() const;
 
 private:
     std::set<BehaviourId> m_failed;

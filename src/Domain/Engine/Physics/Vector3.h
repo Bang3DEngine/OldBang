@@ -79,6 +79,7 @@ public:
     static float Dot(const Vector3 &v1, const Vector3 &v2);
     static float Distance(const Vector3 &v1, const Vector3 &v2);
     static float DistanceSquared(const Vector3 &v1, const Vector3 &v2);
+    static Vector3 Reflect(const Vector3 &incident, const Vector3 &normal);
 
     const static Vector3 Up;
     const static Vector3 Down;

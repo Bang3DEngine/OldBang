@@ -109,14 +109,22 @@ Vector3 AABox::GetClosestPointInAABB(const Vector3 &point) const
     return closestPoint;
 }
 
-bool AABox::CheckCollision(const Sphere &sphere) const
+bool AABox::CheckCollision(const Sphere &sphere,
+                           Vector3 *point,
+                           Vector3 *normal) const
 {
-    if (Contains(sphere.GetCenter())) { return true; }
-    Vector3 closestPoint = GetClosestPointInAABB(sphere.GetCenter());
+    Vector3 closestPointToAABox = GetClosestPointInAABB(sphere.GetCenter());
 
-    float sphereRadius = sphere.GetRadius();
-    float dCenterClosest = Vector3::Distance(closestPoint, sphere.GetCenter());
-    return dCenterClosest <= sphereRadius * sphereRadius;
+    float sRadius = sphere.GetRadius();
+    const Vector3 &sCenter = sphere.GetCenter();
+    float dCenterClosest = Vector3::Distance(closestPointToAABox, sCenter);
+    bool collides = ( dCenterClosest <= sRadius * sRadius );
+    if (collides)
+    {
+        if (point)  { *point = closestPointToAABox; }
+        if (normal) { *normal = (closestPointToAABox - sCenter).Normalized(); }
+    }
+    return collides;
 }
 
 bool AABox::CheckCollision(const AABox &aabox) const
