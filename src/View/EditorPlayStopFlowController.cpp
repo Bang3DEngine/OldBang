@@ -39,7 +39,7 @@ bool EditorPlayStopFlowController::PlayScene()
     ASSERT(!EditorState::IsPlaying(), "", return true);
 
     // Start refreshing all scene behaviours...
-    BehaviourManager::RefreshBehavioursLibrary();
+    BehaviourManager::StartMergingBehavioursObjects();
 
     m_playingCanceled = false; // Wait for behaviours
     if (!WaitForAllBehavioursToBeLoaded()) { return false; }
@@ -120,9 +120,9 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
         QThread::currentThread()->msleep(100);
         Application::processEvents(); // Let the timers tick and update GUI.
     }
-    while (BehaviourManager::GetState() == BehaviourManager::State::Compiling);
+    while (BehaviourManager::GetState() == BehaviourManager::MergingState::Merging);
 
-    if (BehaviourManager::GetState() == BehaviourManager::State::Failed)
+    if (BehaviourManager::GetState() == BehaviourManager::MergingState::Failed)
     {
         String fixErrorsMsg =
                 "Please fix all the behaviour errors before playing.";

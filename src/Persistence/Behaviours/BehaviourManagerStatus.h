@@ -53,10 +53,9 @@ class BehaviourManagerStatus
 public:
     bool IsBeingCompiled(const BehaviourId &bid) const;
     bool HasFailed(const BehaviourId &bid) const;
-    bool IsCached(const BehaviourId &bid) const;
-    bool IsNewOrHasChanged(const BehaviourId &bid) const;
-
-    QLibrary *GetLibrary(const BehaviourId &bid) const;
+    bool HasFailed(const String &behaviourFilepath) const;
+    bool IsReady(const BehaviourId &bid) const;
+    bool IsReady(const String &behaviourFilepath) const;
 
     bool SomeBehaviourWithError() const;
     float GetBehaviourHoldersUpdatedPercent() const;
@@ -64,8 +63,7 @@ public:
 private:
     std::set<BehaviourId> m_failed;
     std::set<BehaviourId> m_beingCompiled;
-
-    Map<BehaviourId, QLibrary*> m_libraries;
+    std::set<BehaviourId> m_successfullyCompiled;
 
     #ifdef BANG_EDITOR
     Map<String, List<Console::MessageId> > m_failMessagesIds;
@@ -75,15 +73,9 @@ private:
 
     BehaviourManagerStatus();
 
-    void TreatIfBehaviourChanged(const String &behaviourPath);
-
     void OnBehaviourStartedCompiling(const String &behaviourPath);
-    void OnBehaviourSuccessCompiling(const String &behaviourPath,
-                                      const String &libraryFilepath,
-                                      const String &warnMessage,
-                                      QLibrary *loadedLibrary);
-    void OnBehaviourFailedCompiling(const String &behaviourPath,
-                                    const String &errorMessage);
+    void OnBehaviourSuccessCompiling(const String &behaviourPath);
+    void OnBehaviourFailedCompiling(const String &behaviourPath);
 
     void ClearFails(const String &behaviourPath);
 

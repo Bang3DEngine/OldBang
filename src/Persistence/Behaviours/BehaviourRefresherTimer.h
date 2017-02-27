@@ -12,7 +12,7 @@ public:
     BehaviourRefresherTimer();
 
 public:
-    void RefreshBehavioursInScene() const;
+    void RefreshBehaviours() const;
 
 private slots:
     void OnRefreshTimer() const;

@@ -11,11 +11,12 @@
 #include "Map.h"
 #include "List.h"
 #include "String.h"
+#include "BehaviourManagerStatus.h"
 #include "BehaviourRefresherTimer.h"
 
 class QLibrary;
 class BehaviourHolder;
-class BehavioursLibCompileRunnable;
+class BehaviourObjectCompileRunnable;
 
 /**
  * @brief Manages the compiling and loading of the Behaviour's QLibraries.
@@ -27,56 +28,62 @@ class BehaviourManager : public QObject
     Q_OBJECT
 
 public:
-    enum State
+    enum MergingState
     {
         Idle,
-        Compiling,
+        Merging,
         Success,
         Failed
     };
 
     static BehaviourManager* GetInstance();
 
-    /**
-     * This must be called when you want to retrieve the QLibrary from a
-     * behaviour source filepath.
-    **/
-    static void Load(const String &behaviourPath,
-                     BehaviourHolder *behaviourHolder = nullptr);
+    static QLibrary* GetBehavioursMergedLibrary();
+    static List<String> GetBehavioursSourcesFilepathsList();
+    static List<String> GetBehavioursObjectsFilepathsList();
 
-    static QLibrary* GetBehavioursLibrary();
-    static void RefreshBehavioursLibrary();
+    static void StartMergingBehavioursObjects();
+    static void StartCompilingBehaviourObject(const String &behaviourFilepath);
 
-    static State GetState();
+    static MergingState GetState();
+    static const BehaviourManagerStatus& GetStatus();
 
+// Behaviour Objects signals and slots
 public slots:
-    void OnBehavioursLibraryCompiled(const String &libFilepath,
-                                     const String &warnMessage);
-    void OnBehavioursLibraryCompilationFailed(const String &errorMessage);
+    void OnBehaviourObjectCompiled(const QString &behaviourFilepath,
+                                   const QString &warnMessage);
+    void OnBehaviourObjectCompilationFailed(const QString &behaviourFilepath,
+                                            const QString &errorMessage);
 
+// Merging signals and slots
+signals:
+    void NotifyMergedLibraryCompiled(const QString &libFilepath,
+                                     const QString &warnMessage);
+    void NotifyMergedLibraryCompilationFailed(const QString &libFilepath,
+                                              const QString &errorMessage);
 private slots:
-    void CompileBehavioursLibrary();
+    void OnMergedLibraryCompiled(const QString &libFilepath,
+                                 const QString &warnMessage);
+    void OnMergedLibraryCompilationFailed(const QString &errorMessage);
+    void CompileMergedLibrary();
 
 private:
-    State m_state = State::Idle;
-    QThread m_compileThread;
-    //BehaviourRefresherTimer m_behaviourRefresherTimer;
+    MergingState m_state = MergingState::Idle;
+    BehaviourManagerStatus m_status;
 
-    Map<String, String> m_behaviourPathToHash;
+    QThread m_mergeObjectsThread;
+    QThreadPool m_behaviourObjectCompileThreadPool;
+    BehaviourRefresherTimer m_behaviourRefresherTimer;
+
     QLibrary *m_behavioursLibrary = nullptr;
 
     BehaviourManager();
 
-    static bool SomeBehaviourHasChanged();
-    static Map<String, String> GetBehaviourHashesMap();
-    static String GetBehaviourHash(const String &behaviourFilepath);
-
-    static QLibrary* LoadLibraryFromFilepath(const String &libFilepath);
-    static void RemoveLibraryFiles();
+    static void RemoveMergedLibraryFiles();
 
     friend class Application;
     friend class BehaviourHolder;
-    friend class BehavioursLibCompileRunnable;
+    friend class BehaviourObjectCompileRunnable;
 };
 
 #endif // BEHAVIOURMANAGER_H

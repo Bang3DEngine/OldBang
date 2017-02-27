@@ -13,7 +13,7 @@
 String SystemUtils::GetAllProjectObjects()
 {
     List<String> files =
-            Persistence::GetFiles(Persistence::GetProjectRootAbs(),
+            Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(),
                                   true, {"*.o"});
     return String::Join(files, " ");
 }
@@ -102,7 +102,8 @@ void SystemUtils::System(const String &command, String *output, bool *success)
     {
         if (output)
         {
-            *output = "There has been an error when creating a pipe to execute a System instruction.";
+            *output =
+                 "Error when creating a pipe to execute a System instruction.";
         }
 
         if (success)
@@ -184,6 +185,61 @@ void SystemUtils::SystemBackground(const String &command)
 {
     String cmd = command + " &";
     system(cmd.ToCString());
+}
+
+void SystemUtils::Compile(List<String> &sourceFilesList,
+                          const String &outputLibFilepath,
+                          bool *success,
+                          String *output,
+                          CompilationFlags clFlags)
+{
+    typedef CompilationFlags CLFlags;
+    bool editorMode = false;
+    #ifdef BANG_EDITOR
+    editorMode = true;
+    #endif
+
+    String includes = " . " + SystemUtils::GetAllProjectSubDirs() + " " +
+                              SystemUtils::GetAllEngineSubDirs()  + " " +
+                              SystemUtils::GetQtIncludes()        + " ";
+    includes.Replace("\n", " ");
+    StringUtils::AddInFrontOfWords("-I", &includes);
+
+    String objs = "";
+    bool addProjectObjectFiles = clFlags & CLFlags::AddProjectObjectFiles > 0;
+    objs += addProjectObjectFiles ?
+                  (SystemUtils::GetAllProjectObjects() + " ") : "";
+
+    bool addEngineObjectFiles = clFlags & CLFlags::AddProjectObjectFiles > 0;
+    objs += addEngineObjectFiles ?
+                (SystemUtils::GetAllEngineObjects(editorMode) + " ") : "";
+
+
+    String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
+    qtLibDirs.Replace("\n", " ");
+    StringUtils::AddInFrontOfWords("-L", &qtLibDirs);
+
+
+    String options = " " + objs  + " -O0 -g ";
+    if (editorMode) { options += " -DBANG_EDITOR "; }
+    options += " -Wl,--export-dynamic --std=c++11 " + includes +
+               " -lGLEW -lGL -lpthread " + qtLibDirs + " -fPIC";
+
+    String sourcesStr = " " + String::Join(sourceFilesList, " ") + " ";
+
+    String libsDir = Persistence::GetProjectLibsRootAbs();
+    Persistence::CreateDirectory(libsDir);
+
+    bool produceSharedLib = clFlags & CLFlags::ProduceSharedLib > 0;
+    String sharedOpt = (produceSharedLib ? "-shared" : "-c");
+    String cmd = "/usr/bin/g++ " + sharedOpt + " "
+                 + sourcesStr + " " + options
+                 + " -o " + outputLibFilepath;
+    cmd.Replace("\n", " ");
+
+    Debug_Log("cmd: " << cmd);
+    SystemUtils::System(cmd, output, success);
+    Debug_Log("output: " << *output);
 }
 
 void SystemUtils::CloseLibrary(QLibrary *library)

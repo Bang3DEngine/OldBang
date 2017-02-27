@@ -127,7 +127,7 @@ void BehaviourHolder::RefreshBehaviourLib()
     String behaviourName = Persistence::GetFileName(GetSourceFilepath());
     ASSERT(!behaviourName.Empty());
 
-    QLibrary *newLib = BehaviourManager::GetBehavioursLibrary();
+    QLibrary *newLib = BehaviourManager::GetBehavioursMergedLibrary();
     if (newLib && m_currentLoadedLibrary != newLib)
     {
         m_currentLoadedLibrary = newLib;

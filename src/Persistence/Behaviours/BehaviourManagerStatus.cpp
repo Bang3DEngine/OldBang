@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "SceneManager.h"
 #include "BehaviourHolder.h"
+#include "BehaviourManager.h"
 
 #ifdef BANG_EDITOR
 #include "Console.h"
@@ -25,24 +26,21 @@ bool BehaviourManagerStatus::HasFailed(const BehaviourId &bid) const
     return m_failed.count(bid) > 0;
 }
 
-bool BehaviourManagerStatus::IsCached(const BehaviourId &bid) const
+bool BehaviourManagerStatus::HasFailed(const String &behaviourFilepath) const
 {
-    bool beingCompiled = IsBeingCompiled(bid);
-    return m_libraries.ContainsKey(bid) && !beingCompiled;
+    return HasFailed( BehaviourId(behaviourFilepath) );
 }
 
-bool BehaviourManagerStatus::IsNewOrHasChanged(const BehaviourId &bid) const
+bool BehaviourManagerStatus::IsReady(const BehaviourId &bid) const
 {
-    return (!IsCached(bid) && !HasFailed(bid));
+    return m_successfullyCompiled.count(bid) > 0 &&
+           !IsBeingCompiled(bid) &&
+           !HasFailed(bid);
 }
 
-QLibrary *BehaviourManagerStatus::GetLibrary(const BehaviourId &bid) const
+bool BehaviourManagerStatus::IsReady(const String &behaviourFilepath) const
 {
-    if (m_libraries.ContainsKey(bid))
-    {
-        return m_libraries.Get(bid);
-    }
-    return nullptr;
+    return IsReady( BehaviourId(behaviourFilepath) );
 }
 
 bool BehaviourManagerStatus::SomeBehaviourWithError() const
@@ -81,36 +79,6 @@ float BehaviourManagerStatus::GetBehaviourHoldersUpdatedPercent() const
     return float(updatedBehaviours) / totalBehaviours;
 }
 
-void BehaviourManagerStatus::TreatIfBehaviourChanged(const String &behPath)
-{
-    BehaviourId newBid(behPath);
-    if ( IsBeingCompiled(newBid) ) { return; }
-
-    bool behaviourHasChanged = IsNewOrHasChanged(newBid);
-
-    if (behaviourHasChanged)
-    {
-        // Clear error messages, if there's any error, it will be
-        // produced again when compiling
-        ClearFails(newBid.behaviourAbsPath);
-
-        const List<BehaviourId> &currentBids = GetCurrentBehaviourIds();
-        for (const BehaviourId &possiblyOutdatedBid : currentBids)
-        {
-            if (possiblyOutdatedBid.behaviourAbsPath == newBid.behaviourAbsPath)
-            {
-                // Remove the outdated references and old cached libraries
-                m_failed.erase(possiblyOutdatedBid);
-                m_libraries.Remove(possiblyOutdatedBid);
-                m_beingCompiled.erase(possiblyOutdatedBid);
-                #ifdef BANG_EDITOR
-                m_failMessagesIds.Remove(behPath);
-                #endif
-            }
-        }
-    }
-}
-
 void BehaviourManagerStatus::OnBehaviourStartedCompiling(
         const String &behaviourPath)
 {
@@ -118,40 +86,24 @@ void BehaviourManagerStatus::OnBehaviourStartedCompiling(
     m_beingCompiled.insert(bid);
 }
 
-void BehaviourManagerStatus::OnBehaviourSuccessCompiling(
-                                                const String &behaviourPath,
-                                                const String &libraryFilepath,
-                                                const String &warnMessage,
-                                                QLibrary *loadedLibrary)
+void BehaviourManagerStatus::OnBehaviourSuccessCompiling(const String &behPath)
 {
-    BehaviourId bid(behaviourPath);
+    BehaviourId bid(behPath);
     ClearFails(bid.behaviourAbsPath);
 
-    m_libraries.Set(bid, loadedLibrary);
+    m_successfullyCompiled.insert(bid);
     m_beingCompiled.erase(bid);
     #ifdef BANG_EDITOR
     m_failMessagesIds.Remove(bid.behaviourAbsPath);
     #endif
+
+    Debug_Log("  m_successfullyCompiled: " << m_successfullyCompiled);
 }
 
 void BehaviourManagerStatus::OnBehaviourFailedCompiling(
-                                                const String &behaviourPath,
-                                                const String &errorMessage)
+                                                const String &behaviourPath)
 {
     BehaviourId bid(behaviourPath);
-
-    // Clear old fails of the same behaviour (but with outdated code)
-    ClearFails(bid.behaviourAbsPath);
-
-    #ifdef BANG_EDITOR
-    if (!errorMessage.Empty())
-    {
-        Console *lLog = Console::GetInstance();
-        Console::MessageId msgId = lLog->AddError(errorMessage, 1,
-                                                     behaviourPath, true);
-        m_failMessagesIds.Get(behaviourPath).PushBack(msgId);
-    }
-    #endif
 
     m_beingCompiled.erase(bid);
     m_failed.insert(bid);
@@ -184,7 +136,8 @@ void BehaviourManagerStatus::ClearFails(const String &behaviourPath)
 
 List<BehaviourId> BehaviourManagerStatus::GetCurrentBehaviourIds() const
 {
-    List<BehaviourId> compiled = m_libraries.GetKeys();
+    List<BehaviourId> compiled;
+    for (const BehaviourId &x : m_successfullyCompiled) { compiled.Add(x); }
     List<BehaviourId> failed;
     for (const BehaviourId &x : m_failed) { failed.Add(x); }
     compiled.Splice(compiled.End(), failed);

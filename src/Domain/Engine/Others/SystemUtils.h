@@ -11,17 +11,23 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-
+#include "List.h"
 #include "String.h"
 
 class QLibrary;
 class Behaviour;
 class SystemUtils
 {
-private:
-    SystemUtils() {}
 
 public:
+    enum CompilationFlags
+    {
+        None                  = 0,
+        ProduceSharedLib      = 1,
+        AddEngineObjectFiles  = 2,
+        AddProjectObjectFiles = 4,
+        Default = AddProjectObjectFiles | AddEngineObjectFiles
+    };
 
     static String GetAllProjectObjects();
     static String GetAllEngineObjects(bool editorMode);
@@ -44,7 +50,31 @@ public:
 
     static void SystemBackground(const String &command);
 
+    static void Compile(List<String> &sourceFilesList,
+                        const String &outputLibFilepath,
+                        bool *success,
+                        String *output,
+                        CompilationFlags compilationFlags =
+                            CompilationFlags::Default);
+
     static void CloseLibrary(QLibrary *library);
+
+private:
+    SystemUtils() {}
 };
+
+inline SystemUtils::CompilationFlags operator|(SystemUtils::CompilationFlags a,
+                                               SystemUtils::CompilationFlags b)
+{
+    return static_cast<SystemUtils::CompilationFlags>(static_cast<int>(a) |
+                                                      static_cast<int>(b));
+}
+
+inline SystemUtils::CompilationFlags operator^(SystemUtils::CompilationFlags a,
+                                               SystemUtils::CompilationFlags b)
+{
+    return static_cast<SystemUtils::CompilationFlags>(static_cast<int>(a) ^
+                                                      static_cast<int>(b));
+}
 
 #endif // SYSTEMUTILS_H

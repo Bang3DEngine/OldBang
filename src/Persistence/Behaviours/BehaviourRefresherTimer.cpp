@@ -25,28 +25,22 @@ BehaviourRefresherTimer::BehaviourRefresherTimer()
 void BehaviourRefresherTimer::OnRefreshTimer() const
 {
     #ifdef BANG_EDITOR
-    if (EditorState::IsPlaying() ||
-        !IWindow::GetInstance()->IsInFront())
+    if (IWindow::GetInstance()->IsInFront())
     {
-        RefreshBehavioursInScene();
+        RefreshBehaviours();
     }
     #endif
 }
 
-void BehaviourRefresherTimer::RefreshBehavioursInScene() const
+void BehaviourRefresherTimer::RefreshBehaviours() const
 {
-    BehaviourManager *bManager = BehaviourManager::GetInstance();
-    Scene *scene = SceneManager::GetActiveScene();
-
-    bool canRefresh = (bManager && scene);
-    if (canRefresh)
+    List<String> behaviourSources =
+            BehaviourManager::GetBehavioursSourcesFilepathsList();
+    for (String behaviourSource : behaviourSources)
     {
-        // Look for all behaviour holders in the scene and update its scripts
-        List<BehaviourHolder*> behHolders =
-                scene->GetComponentsInThisAndChildren<BehaviourHolder>();
-        for (BehaviourHolder *bh : behHolders)
+        if (!BehaviourManager::GetStatus().IsReady(behaviourSource))
         {
-            bh->RefreshBehaviourLib();
+            BehaviourManager::StartCompilingBehaviourObject(behaviourSource);
         }
     }
 }
