@@ -298,7 +298,8 @@ HEADERS +=                                                          \
     src/Domain/Graphics/Shaders/ShaderPreprocessor.h \
     src/Persistence/Project/Project.h \
     src/Persistence/Project/ProjectManager.h \
-    src/Persistence/Behaviours/BehaviourObjectCompileRunnable.h
+    src/Persistence/Behaviours/BehaviourObjectCompileRunnable.h \
+    src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h
 
 EDITOR {
 HEADERS += \
@@ -512,7 +513,8 @@ SOURCES += \
     src/Domain/Graphics/Shaders/ShaderPreprocessor.cpp \
     src/Persistence/Project/ProjectManager.cpp \
     src/Persistence/Project/Project.cpp \
-    src/Persistence/Behaviours/BehaviourObjectCompileRunnable.cpp
+    src/Persistence/Behaviours/BehaviourObjectCompileRunnable.cpp \
+    src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.cpp
 
 EDITOR {
     SOURCES += \

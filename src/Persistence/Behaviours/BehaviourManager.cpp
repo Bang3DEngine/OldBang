@@ -14,6 +14,7 @@
 #include "ProjectManager.h"
 #include "BehaviourHolder.h"
 #include "CodePreprocessor.h"
+#include "BehaviourMergeObjectsRunnable.h"
 #include "BehaviourObjectCompileRunnable.h"
 
 #ifdef BANG_EDITOR
@@ -22,7 +23,7 @@
 
 BehaviourManager::BehaviourManager()
 {
-    m_behaviourObjectCompileThreadPool.setMaxThreadCount(5);
+    m_threadPool.setMaxThreadCount(5);
 }
 
 BehaviourManager *BehaviourManager::GetInstance()
@@ -59,17 +60,80 @@ List<String> BehaviourManager::GetBehavioursObjectsFilepathsList()
                                  true, {"o"});
 }
 
-void BehaviourManager::StartMergingBehavioursObjects()
+bool BehaviourManager::PrepareBehavioursLibrary(bool *stopFlag)
+{
+    Debug_Log("PrepareBehavioursLibrary...");
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    do
+    {
+        bm->StartCompilingAllBehaviourObjects();
+
+        float percent = bm->m_status.GetPercentOfReadyBehaviours();
+        emit bm->NotifyPrepareBehavioursLibraryProgressed( int(percent * 100) );
+        if (stopFlag && *stopFlag) { return false; }
+
+        QThread::currentThread()->msleep(100);
+        Application::GetInstance()->processEvents();
+    }
+    while(!bm->m_status.AllBehavioursReadyOrFailed());
+    Debug_Log("All behaviour objects Ready!....");
+
+    emit bm->NotifyPrepareBehavioursLibraryProgressed(99);
+
+    bool error = !bm->m_status.AllBehavioursReady();
+    if (!error && !bm->m_status.IsBehavioursLibraryReady())
+    {
+        Debug_Log("MERGING THE SHIAT!....");
+        // Merge
+        bool mergingStarted = false;
+        do
+        {
+            mergingStarted = BehaviourManager::StartMergingBehavioursObjects();
+            QThread::currentThread()->msleep(100);
+            Application::processEvents();
+        }
+        while (!mergingStarted || BehaviourManager::GetMergeState() ==
+                                    BehaviourManager::MergingState::Merging);
+
+        error = (BehaviourManager::GetMergeState() !=
+                 BehaviourManager::MergingState::Success);
+        if (!error) { bm->m_status.OnBehavioursLibraryReady(); }
+        else
+        {
+            Debug_Log("Errored :///");
+        }
+    }
+
+    Debug_Log("Error: " << error);
+    return !error;
+}
+
+bool BehaviourManager::StartMergingBehavioursObjects()
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-    if (BehaviourManager::GetMergeState() == MergingState::Merging) { return; }
+    if (!bm->GetStatus().AllBehavioursReady()) { return false; }
+    if (BehaviourManager::GetMergeState() == MergingState::Merging)
+    {
+        return true;
+    }
+
+    Debug_Log("StartMergingBehavioursObjects");
 
     RemoveMergedLibraryFiles();
-    bm->m_state = MergingState::Merging;
-    bm->moveToThread(&bm->m_mergeObjectsThread);
-    QObject::connect(&bm->m_mergeObjectsThread, SIGNAL(started()),
-                     bm, SLOT(CompileMergedLibrary()));
-    bm->m_mergeObjectsThread.start();
+    BehaviourMergeObjectsRunnable *mergeRunn =
+            new BehaviourMergeObjectsRunnable();
+    bool mergingStarted = bm->m_threadPool.tryStart(mergeRunn);
+    if (mergingStarted)
+    {
+        connect(mergeRunn, SIGNAL(NotifySuccessMerging(QString, QString)),
+                bm, SLOT(OnMergedLibraryCompiled(QString, QString)));
+        connect(mergeRunn, SIGNAL(NotifyFailedMerging(QString)),
+                bm, SLOT(OnMergedLibraryCompilationFailed(QString)));
+        bm->m_state = MergingState::Merging;
+    }
+    else { delete mergeRunn; }
+
+    return mergingStarted;
 }
 
 void BehaviourManager::StartCompilingAllBehaviourObjects()
@@ -106,18 +170,16 @@ void BehaviourManager::StartCompilingBehaviourObject(const String &behFilepath)
 
     BehaviourObjectCompileRunnable *objRunn =
             new BehaviourObjectCompileRunnable(behFilepath);
-    bool started = bm->m_behaviourObjectCompileThreadPool.tryStart(objRunn);
+    bool started = bm->m_threadPool.tryStart(objRunn);
     if (started)
     {
-        // TODO: DirectConnection may cause RaceConditions, use queued instead
         connect(objRunn, SIGNAL(NotifySuccessCompiling(QString,QString)),
-                bm, SLOT(OnBehaviourObjectCompiled(QString,QString)),
-                Qt::DirectConnection);
+                bm, SLOT(OnBehaviourObjectCompiled(QString,QString)));
         connect(objRunn, SIGNAL(NotifyFailedCompiling(QString, QString)),
-                bm, SLOT(OnBehaviourObjectCompilationFailed(QString, QString)),
-                Qt::DirectConnection);
+                bm, SLOT(OnBehaviourObjectCompilationFailed(QString, QString)));
         bm->m_status.OnBehaviourStartedCompiling(behFilepath);
     }
+    else { delete objRunn; }
 }
 
 BehaviourManager::MergingState BehaviourManager::GetMergeState()
@@ -151,8 +213,8 @@ void BehaviourManager::OnBehaviourObjectCompilationFailed(
                 errorMessage);
 }
 
-void BehaviourManager::OnMergedLibraryCompiled(const QString &libFilepath,
-                                               const QString &warnMessage)
+void BehaviourManager::OnMergedLibraryCompiled(QString libFilepath,
+                                               QString warnMessage)
 {
     String warn(warnMessage);
     if (!warn.Empty()) { Debug_Warn(warn); }
@@ -173,42 +235,9 @@ void BehaviourManager::OnMergedLibraryCompiled(const QString &libFilepath,
     }
 }
 
-void BehaviourManager::OnMergedLibraryCompilationFailed(
-        const QString &errorMessage)
+void BehaviourManager::OnMergedLibraryCompilationFailed(QString errorMessage)
 {
     Debug_Error("Error while merging behaviour objects into a single shared "
                 << "library: " << errorMessage);
     m_state = MergingState::Failed;
-}
-
-void BehaviourManager::CompileMergedLibrary()
-{
-    Debug_Log("CompileBehavioursLibrary();");
-
-    List<String> behaviourObjects =
-            BehaviourManager::GetBehavioursObjectsFilepathsList();
-    String libOutputFilepath =
-            Persistence::GetProjectLibsRootAbs() + "/Behaviours.so";
-    libOutputFilepath += "." + std::to_string(Time::GetNow()) + ".1.1";
-
-    typedef SystemUtils::CompilationFlags CLFlags;
-    bool successCompiling; String output;
-    SystemUtils::Compile(behaviourObjects, libOutputFilepath,
-                         &successCompiling, &output,
-                           CLFlags::AddEngineObjectFiles  |
-                           CLFlags::AddProjectObjectFiles |
-                           CLFlags::ProduceSharedLib);
-    if (successCompiling)
-    {
-        OnMergedLibraryCompiled(libOutputFilepath.ToQString(),
-                                output.ToQString());
-    }
-    else
-    {
-        OnMergedLibraryCompilationFailed(output.ToQString());
-    }
-
-    QObject::disconnect(&m_mergeObjectsThread, SIGNAL(started()),
-                        this, SLOT(CompileMergedLibrary()));
-    m_mergeObjectsThread.quit();
 }

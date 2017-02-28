@@ -28,13 +28,7 @@ class BehaviourManager : public QObject
     Q_OBJECT
 
 public:
-    enum MergingState
-    {
-        Idle,
-        Merging,
-        Success,
-        Failed
-    };
+    enum MergingState { Idle, Merging, Success, Failed };
 
     static BehaviourManager* GetInstance();
 
@@ -42,12 +36,13 @@ public:
     static List<String> GetBehavioursSourcesFilepathsList();
     static List<String> GetBehavioursObjectsFilepathsList();
 
-    static void StartMergingBehavioursObjects();
-    static void StartCompilingAllBehaviourObjects();
-    static void StartCompilingBehaviourObject(const String &behaviourFilepath);
+    static bool PrepareBehavioursLibrary(bool *stopFlag = nullptr);
 
     static MergingState GetMergeState();
     static const BehaviourManagerStatus& GetStatus();
+
+signals:
+    void NotifyPrepareBehavioursLibraryProgressed(int newProgress);
 
 // Behaviour Objects signals and slots
 public slots:
@@ -56,24 +51,16 @@ public slots:
     void OnBehaviourObjectCompilationFailed(const QString &behaviourFilepath,
                                             const QString &errorMessage);
 
-// Merging signals and slots
-signals:
-    void NotifyMergedLibraryCompiled(const QString &libFilepath,
-                                     const QString &warnMessage);
-    void NotifyMergedLibraryCompilationFailed(const QString &libFilepath,
-                                              const QString &errorMessage);
+// Merging slots
 private slots:
-    void OnMergedLibraryCompiled(const QString &libFilepath,
-                                 const QString &warnMessage);
-    void OnMergedLibraryCompilationFailed(const QString &errorMessage);
-    void CompileMergedLibrary();
+    void OnMergedLibraryCompiled(QString libFilepath, QString warnMessage);
+    void OnMergedLibraryCompilationFailed(QString errorMessage);
 
 private:
     MergingState m_state = MergingState::Idle;
     BehaviourManagerStatus m_status;
 
-    QThread m_mergeObjectsThread;
-    QThreadPool m_behaviourObjectCompileThreadPool;
+    QThreadPool m_threadPool;
     BehaviourRefresherTimer m_behaviourRefresherTimer;
 
     QLibrary *m_behavioursLibrary = nullptr;
@@ -82,8 +69,13 @@ private:
 
     static void RemoveMergedLibraryFiles();
 
+    static bool StartMergingBehavioursObjects();
+    static void StartCompilingAllBehaviourObjects();
+    static void StartCompilingBehaviourObject(const String &behaviourFilepath);
+
     friend class Application;
     friend class BehaviourHolder;
+    friend class BehaviourRefresherTimer;
     friend class BehaviourObjectCompileRunnable;
 };
 

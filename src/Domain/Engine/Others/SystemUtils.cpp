@@ -144,10 +144,7 @@ void SystemUtils::System(const String &command, String *output, bool *success)
     dup2(fd[0], STDIN_FILENO);
 
     // Get system's output
-    if (output)
-    {
-        *output = "";
-    }
+    if (output) { *output = ""; }
 
     const int bufferSize = 16384;
     char buff[bufferSize + 1];
@@ -155,10 +152,7 @@ void SystemUtils::System(const String &command, String *output, bool *success)
 
     while ( read(fd[0], buff, bufferSize) )
     {
-        if (output)
-        {
-            output->append(buff);
-        }
+        if (output) { output->append(buff); }
         memset(buff, 0, bufferSize);
     }
 
@@ -177,6 +171,7 @@ void SystemUtils::System(const String &command, String *output, bool *success)
     if (success)
     {
         *success = (result == 0);
+        Debug_Log("cmd " << command.SubString(0, 20) << ", result: " << result);
     }
     //*/
 }
@@ -218,7 +213,6 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
     String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
     qtLibDirs.Replace("\n", " ");
     StringUtils::AddInFrontOfWords("-L", &qtLibDirs);
-
 
     String options = " " + objs  + " -O0 -g ";
     if (editorMode) { options += " -DBANG_EDITOR "; }

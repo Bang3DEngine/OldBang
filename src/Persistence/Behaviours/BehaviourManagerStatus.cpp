@@ -75,9 +75,13 @@ bool BehaviourManagerStatus::HasFailed(const String &behaviourFilepath) const
 
 bool BehaviourManagerStatus::IsReady(const BehaviourId &bid) const
 {
+    String behaviourName = Persistence::GetFileName(bid.behaviourAbsPath);
+    String behaviourObjectFilepath =
+            Persistence::GetProjectLibsRootAbs() + "/" + behaviourName + ".o";
     return m_successfullyCompiled.count(bid) > 0 &&
            !IsBeingCompiled(bid) &&
-           !HasFailed(bid);
+           !HasFailed(bid) &&
+           Persistence::Exists(behaviourObjectFilepath);
 }
 
 bool BehaviourManagerStatus::IsReady(const String &behaviourFilepath) const
@@ -96,9 +100,15 @@ bool BehaviourManagerStatus::SomeBehaviourWithError() const
     return false;
 }
 
+bool BehaviourManagerStatus::IsBehavioursLibraryReady() const
+{
+    return m_behavioursLibraryReady;
+}
+
 void BehaviourManagerStatus::OnBehaviourStartedCompiling(
         const String &behaviourPath)
 {
+    m_behavioursLibraryReady = false;
     BehaviourId bid(behaviourPath);
     m_beingCompiled.insert(bid);
 }
@@ -121,9 +131,13 @@ void BehaviourManagerStatus::OnBehaviourFailedCompiling(
                                                 const String &behaviourPath)
 {
     BehaviourId bid(behaviourPath);
-
     m_beingCompiled.erase(bid);
     m_failed.insert(bid);
+}
+
+void BehaviourManagerStatus::OnBehavioursLibraryReady()
+{
+    m_behavioursLibraryReady = true;
 }
 
 void BehaviourManagerStatus::ClearFails(const String &behaviourPath)

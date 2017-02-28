@@ -53,7 +53,6 @@ bool ShaderProgram::Link()
 
     glAttachShader(m_idGL, m_vshader->GetGLId());
     glAttachShader(m_idGL, m_fshader->GetGLId());
-
     glLinkProgram(m_idGL);
 
     GLint linked;

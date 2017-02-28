@@ -38,10 +38,6 @@ bool EditorPlayStopFlowController::PlayScene()
 {
     ASSERT(!EditorState::IsPlaying(), "", return true);
 
-    // Start refreshing all scene behaviours...
-    BehaviourManager::StartMergingBehavioursObjects();
-
-    m_playingCanceled = false; // Wait for behaviours
     if (!WaitForAllBehavioursToBeLoaded()) { return false; }
 
     m_playing = true;
@@ -98,6 +94,8 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
     EditorWindow *win = EditorWindow::GetInstance();
     QMainWindow *mainWin = win->GetMainWindow();
 
+    m_playingCanceled = false;
+
     // Create a progress dialog to show progress
     QProgressDialog progressDialog(mainWin);
     progressDialog.setRange(0, 100);
@@ -106,54 +104,31 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
     progressDialog.setLabelText(
                 "Waiting for all behaviours to be correctly compiled...");
     progressDialog.show();
-    QObject::connect(&progressDialog, SIGNAL(canceled()),
-                     this, SLOT(OnWaitingForBehavioursCanceled()));
 
-    // Compile all behaviour objects
-    BehaviourManager *behaviourMgr = BehaviourManager::GetInstance();
-    const BehaviourManagerStatus& bmStatus = behaviourMgr->GetStatus();
-    do
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+
+    connect(&progressDialog, SIGNAL(canceled()),
+            this, SLOT(OnWaitingForBehavioursCanceled()));
+    connect(bm, SIGNAL(NotifyPrepareBehavioursLibraryProgressed(int)),
+            &progressDialog, SLOT(setValue(int)));
+
+    bool success = BehaviourManager::PrepareBehavioursLibrary(&m_playingCanceled);
+    if (!success && !m_playingCanceled)
     {
-        behaviourMgr->StartCompilingAllBehaviourObjects();
-
-        float percent = bmStatus.GetPercentOfReadyBehaviours();
-        progressDialog.setValue( int(percent * 100) );
-        if (m_playingCanceled) { return false; }
-
-        QThread::currentThread()->msleep(100);
-        Application::GetInstance()->processEvents();
-    }
-    while(!bmStatus.AllBehavioursReadyOrFailed());
-
-    bool error = !bmStatus.AllBehavioursReady();
-    if (!error)
-    {
-        // Merge
-        behaviourMgr->StartMergingBehavioursObjects();
-        do
-        {
-            Application::processEvents(); // Let the timers tick and update GUI.
-            QThread::currentThread()->msleep(100);
-        }
-        while (BehaviourManager::GetMergeState() ==
-               BehaviourManager::MergingState::Merging);
-    }
-    error = error || BehaviourManager::GetMergeState() ==
-                     BehaviourManager::MergingState::Failed;
-
-    if (error)
-    {
-        String fixErrorsMsg =
-                "Please fix all the behaviour errors before playing.";
-        String msg = fixErrorsMsg + "\nCheck the Console.";
-        Debug_Error(fixErrorsMsg);
-        Dialog::Error("Error", msg);
+        String errMsg = "Please fix all the behaviour errors before playing.";
+        Dialog::Error("Error", errMsg + "\nCheck the Console.");
+        Debug_Error(errMsg);
         return false;
     }
 
+    disconnect(&progressDialog, SIGNAL(canceled()),
+            this, SLOT(OnWaitingForBehavioursCanceled()));
+    disconnect(bm, SIGNAL(NotifyPrepareBehavioursLibraryProgressed(int)),
+               &progressDialog, SLOT(setValue(int)));
+
     progressDialog.close();
 
-    return true;
+    return success && !m_playingCanceled;
 }
 
 void EditorPlayStopFlowController::OnWaitingForBehavioursCanceled()

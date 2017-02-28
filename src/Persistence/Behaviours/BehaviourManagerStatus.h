@@ -62,8 +62,11 @@ public:
     bool IsReady(const String &behaviourFilepath) const;
 
     bool SomeBehaviourWithError() const;
+    bool IsBehavioursLibraryReady() const;
 
 private:
+    bool m_behavioursLibraryReady = false;
+
     std::set<BehaviourId> m_failed;
     std::set<BehaviourId> m_beingCompiled;
     std::set<BehaviourId> m_successfullyCompiled;
@@ -79,6 +82,7 @@ private:
     void OnBehaviourStartedCompiling(const String &behaviourPath);
     void OnBehaviourSuccessCompiling(const String &behaviourPath);
     void OnBehaviourFailedCompiling(const String &behaviourPath);
+    void OnBehavioursLibraryReady();
 
     void ClearFails(const String &behaviourPath);
 
