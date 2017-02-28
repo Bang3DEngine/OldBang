@@ -1,19 +1,35 @@
 #include "AttrWidgetColor.h"
 
+#include "Math.h"
 #include "EditorWindow.h"
 
 AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
                                  InspectorWidget *inspectorWidget) :
   AttributeWidget(xmlAttribute, inspectorWidget)
 {
-    QLayout *layout = new QHBoxLayout();
-    m_layout->addLayout(layout, 1);
+    QVBoxLayout *vLayout = new QVBoxLayout();
+    vLayout->setMargin(0); vLayout->setSpacing(0);
+    m_layout->addLayout(vLayout, 1);
 
     m_colorDialog = new ColorDialog();
     m_colorLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
-    m_colorLabel->setMinimumHeight(20);
+    m_colorLabel->setFixedHeight(17);
     m_colorLabel->SetColor(m_selectedColor);
-    layout->addWidget(m_colorLabel);
+    vLayout->addWidget(m_colorLabel, 1);
+
+    m_alphaWhiteLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
+    m_alphaBlackLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
+    m_alphaWhiteLabel->setFixedHeight(3);
+    m_alphaBlackLabel->setFixedHeight(3);
+    m_alphaWhiteLabel->SetColor( Color::White );
+    m_alphaBlackLabel->SetColor( Color::Black );
+
+    m_alphaHorizontalLayout = new QHBoxLayout();
+    m_alphaHorizontalLayout->addWidget(m_alphaWhiteLabel, 1);
+    m_alphaHorizontalLayout->addWidget(m_alphaBlackLabel, 0);
+    vLayout->addLayout(m_alphaHorizontalLayout, 0);
+
+    SetValue(m_selectedColor);
 
     connect(m_colorDialog, SIGNAL(currentColorChanged(const QColor&)),
             this, SLOT(OnColorChanged(const QColor&)));
@@ -24,13 +40,22 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
 AttrWidgetColor::~AttrWidgetColor()
 {
     if (m_colorDialog) { delete m_colorDialog; }
-    if (m_colorLabel) { delete m_colorLabel; }
+    if (m_colorLabel)  { delete m_colorLabel; }
+    if (m_alphaWhiteLabel)  { delete m_alphaWhiteLabel; }
+    if (m_alphaBlackLabel)  { delete m_alphaBlackLabel; }
 }
 
 void AttrWidgetColor::SetValue(const Color &c)
 {
     m_selectedColor = c;
     m_colorLabel->SetColor(m_selectedColor);
+
+    int whiteStretch = Math::Round(1000 * m_selectedColor.a);
+    int blackStretch = 1000 - whiteStretch;
+    m_alphaHorizontalLayout->setStretch(0, whiteStretch);
+    m_alphaHorizontalLayout->setStretch(1, blackStretch);
+    m_alphaBlackLabel->setHidden( (blackStretch == 0) );
+    m_alphaWhiteLabel->setHidden( (whiteStretch == 0) );
 }
 
 const Color& AttrWidgetColor::GetValue() const

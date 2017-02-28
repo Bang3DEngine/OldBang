@@ -109,6 +109,7 @@ void BehaviourManager::StartCompilingBehaviourObject(const String &behFilepath)
     bool started = bm->m_behaviourObjectCompileThreadPool.tryStart(objRunn);
     if (started)
     {
+        // TODO: DirectConnection may cause RaceConditions, use queued instead
         connect(objRunn, SIGNAL(NotifySuccessCompiling(QString,QString)),
                 bm, SLOT(OnBehaviourObjectCompiled(QString,QString)),
                 Qt::DirectConnection);

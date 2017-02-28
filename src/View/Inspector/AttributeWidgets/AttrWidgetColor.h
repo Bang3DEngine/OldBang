@@ -18,6 +18,11 @@ private:
 
     ColorDialog *m_colorDialog = nullptr;
     ColorLabel *m_colorLabel = nullptr;
+
+    QHBoxLayout *m_alphaHorizontalLayout = nullptr;
+    ColorLabel *m_alphaWhiteLabel = nullptr;
+    ColorLabel *m_alphaBlackLabel = nullptr;
+
     Color m_selectedColor = Color::White;
 
     void RefreshLabelColor();
