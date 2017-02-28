@@ -56,8 +56,9 @@ DEBUG_MODE {
 RELEASE_MODE {
     OPTIMIZATION_OPT = -O3 -Wl,-O3
 }
-OTHER_OPTS = -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter \
-             -Wunused-variable -Wno-sign-compare -fPIC
+#OTHER_OPTS = -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter \
+             #-Wunused-variable -Wno-sign-compare -fPIC
+OTHER_OPTS = -Wall --std=c++11 -Wl,--export-dynamic -fPIC
 QMAKE_CFLAGS           -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
 QMAKE_CFLAGS_DEBUG     -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
 QMAKE_CFLAGS_RELEASE   -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g

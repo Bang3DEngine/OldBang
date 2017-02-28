@@ -62,7 +62,6 @@ List<String> BehaviourManager::GetBehavioursObjectsFilepathsList()
 
 bool BehaviourManager::PrepareBehavioursLibrary(bool *stopFlag)
 {
-    Debug_Log("PrepareBehavioursLibrary...");
     BehaviourManager *bm = BehaviourManager::GetInstance();
     do
     {
@@ -76,15 +75,13 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool *stopFlag)
         Application::GetInstance()->processEvents();
     }
     while(!bm->m_status.AllBehavioursReadyOrFailed());
-    Debug_Log("All behaviour objects Ready!....");
 
     emit bm->NotifyPrepareBehavioursLibraryProgressed(99);
 
+    // Now merge them
     bool error = !bm->m_status.AllBehavioursReady();
     if (!error && !bm->m_status.IsBehavioursLibraryReady())
     {
-        Debug_Log("MERGING THE SHIAT!....");
-        // Merge
         bool mergingStarted = false;
         do
         {
@@ -98,13 +95,7 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool *stopFlag)
         error = (BehaviourManager::GetMergeState() !=
                  BehaviourManager::MergingState::Success);
         if (!error) { bm->m_status.OnBehavioursLibraryReady(); }
-        else
-        {
-            Debug_Log("Errored :///");
-        }
     }
-
-    Debug_Log("Error: " << error);
     return !error;
 }
 
@@ -116,8 +107,6 @@ bool BehaviourManager::StartMergingBehavioursObjects()
     {
         return true;
     }
-
-    Debug_Log("StartMergingBehavioursObjects");
 
     RemoveMergedLibraryFiles();
     BehaviourMergeObjectsRunnable *mergeRunn =
@@ -144,9 +133,6 @@ void BehaviourManager::StartCompilingAllBehaviourObjects()
             BehaviourManager::GetBehavioursSourcesFilepathsList();
     for (const String &behFilepath : allBehaviourSources)
     {
-        Debug_Log ("  Is " << behFilepath << " ready? "
-                   << bm->m_status.IsReady(behFilepath));
-
         if (!bm->m_status.HasFailed(behFilepath) &&
             !bm->m_status.IsReady(behFilepath) &&
             !bm->m_status.IsBeingCompiled(behFilepath))
@@ -197,7 +183,6 @@ const BehaviourManagerStatus &BehaviourManager::GetStatus()
 void BehaviourManager::OnBehaviourObjectCompiled(const QString &behFilepath,
                                                  const QString &warnMessage)
 {
-    Debug_Log("OnBehaviourObjectCompiled " << behFilepath);
     m_status.OnBehaviourSuccessCompiling(behFilepath);
     String warn(warnMessage);
     if (!warn.Empty()) { Debug_Warn(warn); }
@@ -207,10 +192,7 @@ void BehaviourManager::OnBehaviourObjectCompilationFailed(
         const QString &behaviourFilepath,
         const QString &errorMessage)
 {
-    Debug_Log("OnBehaviourObjectCompilationFailed " << behaviourFilepath);
-    m_status.OnBehaviourFailedCompiling(behaviourFilepath);
-    Debug_Error("There was an error compiling " << behaviourFilepath << ": " <<
-                errorMessage);
+    m_status.OnBehaviourFailedCompiling(behaviourFilepath, errorMessage);
 }
 
 void BehaviourManager::OnMergedLibraryCompiled(QString libFilepath,
@@ -218,8 +200,6 @@ void BehaviourManager::OnMergedLibraryCompiled(QString libFilepath,
 {
     String warn(warnMessage);
     if (!warn.Empty()) { Debug_Warn(warn); }
-
-    Debug_Log("OnBehavioursLibraryCompiled " << libFilepath);
 
     QLibrary *behavioursLib = new QLibrary(libFilepath);
     behavioursLib->setLoadHints(QLibrary::LoadHint::ResolveAllSymbolsHint);

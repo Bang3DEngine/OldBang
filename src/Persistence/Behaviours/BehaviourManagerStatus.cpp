@@ -111,28 +111,28 @@ void BehaviourManagerStatus::OnBehaviourStartedCompiling(
     m_behavioursLibraryReady = false;
     BehaviourId bid(behaviourPath);
     m_beingCompiled.insert(bid);
+    ClearFails(bid.behaviourAbsPath);
 }
 
 void BehaviourManagerStatus::OnBehaviourSuccessCompiling(const String &behPath)
 {
     BehaviourId bid(behPath);
-    ClearFails(bid.behaviourAbsPath);
-
     m_successfullyCompiled.insert(bid);
     m_beingCompiled.erase(bid);
-    #ifdef BANG_EDITOR
-    m_failMessagesIds.Remove(bid.behaviourAbsPath);
-    #endif
-
-    Debug_Log("  m_successfullyCompiled: " << m_successfullyCompiled);
+    ClearFails(bid.behaviourAbsPath);
 }
 
 void BehaviourManagerStatus::OnBehaviourFailedCompiling(
-                                                const String &behaviourPath)
+        const String &behaviourPath, const String &errorMessage)
 {
+    ClearFails(behaviourPath);
     BehaviourId bid(behaviourPath);
     m_beingCompiled.erase(bid);
     m_failed.insert(bid);
+
+    Console::MessageId failMsgId =
+            Console::AddError(errorMessage, __LINE__, __FILE__, true);
+    m_failMessagesIds[behaviourPath].PushBack(failMsgId);
 }
 
 void BehaviourManagerStatus::OnBehavioursLibraryReady()

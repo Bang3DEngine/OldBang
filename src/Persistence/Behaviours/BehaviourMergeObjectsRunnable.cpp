@@ -19,8 +19,6 @@ void BehaviourMergeObjectsRunnable::run()
 
 void BehaviourMergeObjectsRunnable::Merge()
 {
-    Debug_Log("Merge();");
-
     List<String> behaviourObjects =
             BehaviourManager::GetBehavioursObjectsFilepathsList();
     String libOutputFilepath =
@@ -36,14 +34,9 @@ void BehaviourMergeObjectsRunnable::Merge()
                            CLFlags::ProduceSharedLib);
     if (successCompiling)
     {
-        Debug_Log("NotifySuccessMerging");
         emit NotifySuccessMerging(libOutputFilepath.ToQString(),
                                   output.ToQString());
     }
-    else
-    {
-        Debug_Log("NotifyFailedMerging");
-        emit  NotifyFailedMerging(output.ToQString());
-    }
+    else { emit NotifyFailedMerging(output.ToQString()); }
 }
 

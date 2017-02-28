@@ -105,12 +105,7 @@ void SystemUtils::System(const String &command, String *output, bool *success)
             *output =
                  "Error when creating a pipe to execute a System instruction.";
         }
-
-        if (success)
-        {
-            *success = false;
-        }
-
+        if (success) { *success = false; }
         return;
     }
 
@@ -149,7 +144,6 @@ void SystemUtils::System(const String &command, String *output, bool *success)
     const int bufferSize = 16384;
     char buff[bufferSize + 1];
     memset((char*) &buff, 0, bufferSize + 1);
-
     while ( read(fd[0], buff, bufferSize) )
     {
         if (output) { output->append(buff); }
@@ -168,12 +162,7 @@ void SystemUtils::System(const String &command, String *output, bool *success)
     dup2(STDERR_FILENO, old_fd[2]);
 
     // Set output parameters
-    if (success)
-    {
-        *success = (result == 0);
-        Debug_Log("cmd " << command.SubString(0, 20) << ", result: " << result);
-    }
-    //*/
+    if (success) { *success = (result == 0); }
 }
 
 void SystemUtils::SystemBackground(const String &command)

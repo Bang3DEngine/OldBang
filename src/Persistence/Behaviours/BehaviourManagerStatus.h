@@ -81,7 +81,8 @@ private:
 
     void OnBehaviourStartedCompiling(const String &behaviourPath);
     void OnBehaviourSuccessCompiling(const String &behaviourPath);
-    void OnBehaviourFailedCompiling(const String &behaviourPath);
+    void OnBehaviourFailedCompiling(const String &behaviourPath,
+                                    const String &errorMessage);
     void OnBehavioursLibraryReady();
 
     void ClearFails(const String &behaviourPath);

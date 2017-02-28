@@ -79,6 +79,7 @@ Console::MessageId Console::EnqueueMessage(Console::Message &message)
     QMutexLocker locker(&m_messageQueueMutex);
     message.id = ++m_latestMessageId;
     m_messageQueue.push(message);
+    return message.id;
 }
 
 void Console::UpdateMessagesCountTexts()
@@ -267,6 +268,7 @@ void Console::OnEditorPlay()
 
 void Console::ClearMessage(Console::MessageId id)
 {
+    //Debug_Log("ClearMessage: " << m_id_to_messages);
     if (m_id_to_messages.ContainsKey(id))
     {
         const Message &msg = m_id_to_messages[id];
