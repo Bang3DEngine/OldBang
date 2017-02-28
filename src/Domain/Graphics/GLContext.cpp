@@ -119,3 +119,7 @@ GLContext::GLContext()
 {
 }
 
+GLContext::~GLContext()
+{
+}
+

@@ -112,6 +112,7 @@ Application *Application::GetInstance()
 bool Application::notify(QObject *receiver, QEvent *e)
 {
     #ifdef BANG_EDITOR
+    Input::GetInstance()->EnqueueEvent(e);
 
     if (e->type() == QEvent::MouseButtonPress)
     {
@@ -122,6 +123,7 @@ bool Application::notify(QObject *receiver, QEvent *e)
         DragDropManager::HandleGlobalMouseRelease(receiver, e);
     }
 
+    ShortcutManager *sm = ShortcutManager::GetInstance();
     if (receiver == focusWidget())
     {
         if (e->type() == QEvent::KeyPress)
@@ -131,7 +133,7 @@ bool Application::notify(QObject *receiver, QEvent *e)
             m_lastKeyPressEvInfo.key = ev->key();
             if (!ev->isAutoRepeat())
             {
-                ShortcutManager::GetInstance()->OnKeyPressed( Input::Key(ev->key()) );
+                sm->OnKeyPressed( Input::Key(ev->key()) );
             }
         }
         else if (e->type() == QEvent::KeyRelease)
@@ -139,7 +141,7 @@ bool Application::notify(QObject *receiver, QEvent *e)
             QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
             if (!ev->isAutoRepeat())
             {
-                ShortcutManager::GetInstance()->OnKeyReleased( Input::Key(ev->key()) );
+                sm->OnKeyReleased( Input::Key(ev->key()) );
             }
         }
 
@@ -147,7 +149,7 @@ bool Application::notify(QObject *receiver, QEvent *e)
             e->type() == QEvent::WindowDeactivate ||
             e->type() == QEvent::ApplicationDeactivate)
         {
-            ShortcutManager::GetInstance()->Clear();
+            sm->Clear();
         }
     }
     #endif

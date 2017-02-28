@@ -16,6 +16,7 @@ class GLContext : public IRenderAgent
 {
 public:
     GLContext();
+    virtual ~GLContext();
 
     virtual void ApplyToShaderProgram(ShaderProgram *sp) const;
     virtual void Apply() const;

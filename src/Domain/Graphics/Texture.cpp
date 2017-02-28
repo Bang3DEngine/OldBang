@@ -112,6 +112,7 @@ GLint Texture::GetGLDataTypeFrom(Texture::Format texFormat)
     {
         return GL_FLOAT;
     }
+    return GL_FLOAT;
 }
 
 GLint Texture::GetGLFormatFrom(Texture::Format texFormat)
@@ -121,6 +122,7 @@ GLint Texture::GetGLFormatFrom(Texture::Format texFormat)
     {
         return GL_RGBA;
     }
+    return GL_RGBA;
 }
 
 GLint Texture::GetGLInternalFormatFrom(Texture::Format texFormat)
@@ -133,6 +135,7 @@ GLint Texture::GetGLInternalFormatFrom(Texture::Format texFormat)
     {
         return GL_RGBA32F;
     }
+    return GL_RGBA;
 }
 
 Texture::FilterMode Texture::GetFilterMode() const

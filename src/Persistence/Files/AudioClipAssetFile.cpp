@@ -7,12 +7,13 @@
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "IInspectable.h";
+#include "IInspectable.h"
 #include "AudioClipAssetFileInspectable.h"
 #endif
 
 AudioClipAssetFile::AudioClipAssetFile(
-        const QFileSystemModel *model, const QModelIndex &index) : File(model, index)
+        const QFileSystemModel *model, const QModelIndex &index)
+    : File(model, index)
 {
     XMLNode *xmlInfo;
     xmlInfo = XMLParser::FromFile(m_path);

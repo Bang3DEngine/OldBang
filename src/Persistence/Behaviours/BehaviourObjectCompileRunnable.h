@@ -14,8 +14,8 @@ class BehaviourObjectCompileRunnable : public QObject,
     Q_OBJECT
 
 public:
-    BehaviourObjectCompileRunnable(const String &behaviourFilepath);
-    void CompileBehavioursLibrary();
+    BehaviourObjectCompileRunnable(const String &behaviourFilepath,
+                                   bool forGame);
 
 protected:
     void run() override;
@@ -27,7 +27,9 @@ signals:
                                const QString &errorMessage);
 
 private:
+    bool m_forGame = false;
     String m_behaviourFilepath = "";
+
     void CompileBehaviourObject();
 };
 

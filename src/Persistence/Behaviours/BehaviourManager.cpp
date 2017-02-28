@@ -34,8 +34,8 @@ BehaviourManager *BehaviourManager::GetInstance()
 
 void BehaviourManager::RemoveMergedLibraryFiles()
 {
-    const String libsDir = Persistence::GetProjectLibsRootAbs();
-    List<String> libFilepaths = Persistence::GetFiles(libsDir, true, {"*.so.*"});
+    List<String> libFilepaths = Persistence::GetFiles(
+                BehaviourManager::GetCurrentLibsDir(), true, {"*.so.*"});
     for (const String &libFilepath : libFilepaths)
     {
         Persistence::Remove(libFilepath);
@@ -56,16 +56,17 @@ List<String> BehaviourManager::GetBehavioursSourcesFilepathsList()
 
 List<String> BehaviourManager::GetBehavioursObjectsFilepathsList()
 {
-    return Persistence::GetFiles(Persistence::GetProjectLibsRootAbs(),
+    return Persistence::GetFiles(BehaviourManager::GetCurrentLibsDir(),
                                  true, {"o"});
 }
 
-bool BehaviourManager::PrepareBehavioursLibrary(bool *stopFlag)
+bool BehaviourManager::PrepareBehavioursLibrary(bool forGame, bool *stopFlag)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
+    #ifdef BANG_EDITOR
     do
     {
-        bm->StartCompilingAllBehaviourObjects();
+        bm->StartCompilingAllBehaviourObjects(forGame);
 
         float percent = bm->m_status.GetPercentOfReadyBehaviours();
         emit bm->NotifyPrepareBehavioursLibraryProgressed( int(percent * 100) );
@@ -85,21 +86,45 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool *stopFlag)
         bool mergingStarted = false;
         do
         {
-            mergingStarted = BehaviourManager::StartMergingBehavioursObjects();
+            mergingStarted =
+                    BehaviourManager::StartMergingBehavioursObjects(forGame);
             QThread::currentThread()->msleep(100);
             Application::processEvents();
         }
         while (!mergingStarted || BehaviourManager::GetMergeState() ==
-                                    BehaviourManager::MergingState::Merging);
+               BehaviourManager::MergingState::Merging);
 
         error = (BehaviourManager::GetMergeState() !=
-                 BehaviourManager::MergingState::Success);
+                BehaviourManager::MergingState::Success);
         if (!error) { bm->m_status.OnBehavioursLibraryReady(); }
     }
     return !error;
+    #else
+    // In game, the library is compiled from before.
+    Project *project = ProjectManager::GetCurrentProject();
+    String libDir = Persistence::GetProjectLibsRootAbs();
+    String projId = project->GetProjectRandomId();
+    String libFilepath = "Behaviours.so." + projId + ".1.1";
+    String libOutput = libDir + "/" + libFilepath;
+    bm->OnMergedLibraryCompiled(libOutput.ToQString(), "");
+    return true;
+    #endif
 }
 
-bool BehaviourManager::StartMergingBehavioursObjects()
+
+
+void BehaviourManager::SetCurrentLibsDir(const String &libsDir)
+{
+    BehaviourManager *bm = BehaviourManager::GetInstance();
+    bm->m_currentLibsDir = libsDir;
+}
+
+const String &BehaviourManager::GetCurrentLibsDir()
+{
+    return BehaviourManager::GetInstance()->m_currentLibsDir;
+}
+
+bool BehaviourManager::StartMergingBehavioursObjects(bool forGame)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
     if (!bm->GetStatus().AllBehavioursReady()) { return false; }
@@ -110,7 +135,7 @@ bool BehaviourManager::StartMergingBehavioursObjects()
 
     RemoveMergedLibraryFiles();
     BehaviourMergeObjectsRunnable *mergeRunn =
-            new BehaviourMergeObjectsRunnable();
+            new BehaviourMergeObjectsRunnable(forGame);
     bool mergingStarted = bm->m_threadPool.tryStart(mergeRunn);
     if (mergingStarted)
     {
@@ -125,28 +150,30 @@ bool BehaviourManager::StartMergingBehavioursObjects()
     return mergingStarted;
 }
 
-void BehaviourManager::StartCompilingAllBehaviourObjects()
+void BehaviourManager::StartCompilingAllBehaviourObjects(bool forGame)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
-
     List<String> allBehaviourSources =
             BehaviourManager::GetBehavioursSourcesFilepathsList();
     for (const String &behFilepath : allBehaviourSources)
     {
         if (!bm->m_status.HasFailed(behFilepath) &&
-            !bm->m_status.IsReady(behFilepath) &&
-            !bm->m_status.IsBeingCompiled(behFilepath))
+                !bm->m_status.IsReady(behFilepath) &&
+                !bm->m_status.IsBeingCompiled(behFilepath))
         {
-            StartCompilingBehaviourObject(behFilepath);
+            BehaviourManager::StartCompilingBehaviourObject(behFilepath,
+                                                            forGame);
         }
     }
 }
 
-void BehaviourManager::StartCompilingBehaviourObject(const String &behFilepath)
+void BehaviourManager::StartCompilingBehaviourObject(const String &behFilepath,
+                                                     bool forGame)
 {
     BehaviourManager *bm = BehaviourManager::GetInstance();
 
-    if (bm->GetStatus().IsBeingCompiled(behFilepath) ||
+    if (bm->GetStatus().IsReady(behFilepath) ||
+        bm->GetStatus().IsBeingCompiled(behFilepath) ||
         bm->GetStatus().HasFailed(behFilepath))
     {
         return;
@@ -155,7 +182,7 @@ void BehaviourManager::StartCompilingBehaviourObject(const String &behFilepath)
     Debug_Status("Compiling " << behFilepath, 3.0f);
 
     BehaviourObjectCompileRunnable *objRunn =
-            new BehaviourObjectCompileRunnable(behFilepath);
+            new BehaviourObjectCompileRunnable(behFilepath, forGame);
     bool started = bm->m_threadPool.tryStart(objRunn);
     if (started)
     {

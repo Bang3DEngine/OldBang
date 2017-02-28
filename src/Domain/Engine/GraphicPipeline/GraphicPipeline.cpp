@@ -311,6 +311,13 @@ GBuffer *GraphicPipeline::GetGBuffer()
 Vector2 GraphicPipeline::GetBuffersSize()
 {
     GraphicPipeline *gp = GraphicPipeline::GetActive();
-    if (!gp->m_selectionFB->IsPassing()) { return gp->m_gbuffer->GetSize(); }
+    #ifndef BANG_EDITOR
+    return gp->m_gbuffer->GetSize();
+    #else
+    if (!gp->m_selectionFB->IsPassing())
+    {
+        return gp->m_gbuffer->GetSize();
+    }
     return gp->m_selectionFB->GetSize();
+    #endif
 }

@@ -34,13 +34,16 @@ void BehaviourRefresherTimer::OnRefreshTimer() const
 
 void BehaviourRefresherTimer::RefreshBehaviours() const
 {
+    BehaviourManager::SetCurrentLibsDir( Persistence::GetProjectLibsRootAbs() );
+
     List<String> behaviourSources =
             BehaviourManager::GetBehavioursSourcesFilepathsList();
     for (String behaviourSource : behaviourSources)
     {
         if (!BehaviourManager::GetStatus().IsReady(behaviourSource))
         {
-            BehaviourManager::StartCompilingBehaviourObject(behaviourSource);
+            BehaviourManager::StartCompilingBehaviourObject(
+                        behaviourSource, false);
         }
     }
 }

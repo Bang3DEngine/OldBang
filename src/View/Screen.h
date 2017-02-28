@@ -60,13 +60,6 @@ public:
     void OnDrop(const DragDropInfo &ddi) override;
     #endif
 
-    void wheelEvent(QWheelEvent* event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
-
 private:
     QWidget *m_dragOrigin = nullptr;
     GraphicPipeline *m_gPipeline = nullptr;

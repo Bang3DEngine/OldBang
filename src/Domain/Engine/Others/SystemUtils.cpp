@@ -12,10 +12,6 @@
 
 String SystemUtils::GetAllProjectObjects()
 {
-    List<String> files =
-            Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(),
-                                  true, {"*.o"});
-    return String::Join(files, " ");
 }
 
 String SystemUtils::GetAllEngineObjects(bool editorMode)
@@ -173,15 +169,11 @@ void SystemUtils::SystemBackground(const String &command)
 
 void SystemUtils::Compile(List<String> &sourceFilesList,
                           const String &outputLibFilepath,
-                          bool *success,
-                          String *output,
-                          CompilationFlags clFlags)
+                          CompilationFlags clFlags,
+                          bool *success, String *output)
 {
     typedef CompilationFlags CLFlags;
-    bool editorMode = false;
-    #ifdef BANG_EDITOR
-    editorMode = true;
-    #endif
+    bool editorMode = (clFlags & CLFlags::ForGame) == 0;
 
     String includes = " . " + SystemUtils::GetAllProjectSubDirs() + " " +
                               SystemUtils::GetAllEngineSubDirs()  + " " +
@@ -190,14 +182,17 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
     StringUtils::AddInFrontOfWords("-I", &includes);
 
     String objs = "";
-    bool addProjectObjectFiles = clFlags & CLFlags::AddProjectObjectFiles > 0;
-    objs += addProjectObjectFiles ?
-                  (SystemUtils::GetAllProjectObjects() + " ") : "";
-
-    bool addEngineObjectFiles = clFlags & CLFlags::AddProjectObjectFiles > 0;
+    if ((clFlags & CLFlags::AddProjectObjectFiles) > 0)
+    {
+        List<String> objFiles =
+                Persistence::GetFiles(Persistence::GetDir(outputLibFilepath),
+                                      true, {"*.o"});
+        objs += String::Join(objFiles, " ");
+        objs += " ";
+    }
+    bool addEngineObjectFiles = (clFlags & CLFlags::AddEngineObjectFiles) > 0;
     objs += addEngineObjectFiles ?
                 (SystemUtils::GetAllEngineObjects(editorMode) + " ") : "";
-
 
     String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
     qtLibDirs.Replace("\n", " ");
@@ -210,10 +205,10 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
 
     String sourcesStr = " " + String::Join(sourceFilesList, " ") + " ";
 
-    String libsDir = Persistence::GetProjectLibsRootAbs();
+    String libsDir = BehaviourManager::GetCurrentLibsDir();
     Persistence::CreateDirectory(libsDir);
 
-    bool produceSharedLib = clFlags & CLFlags::ProduceSharedLib > 0;
+    bool produceSharedLib = (clFlags & CLFlags::ProduceSharedLib) > 0;
     String sharedOpt = (produceSharedLib ? "-shared" : "-c");
     String cmd = "/usr/bin/g++ " + sharedOpt + " "
                  + sourcesStr + " " + options

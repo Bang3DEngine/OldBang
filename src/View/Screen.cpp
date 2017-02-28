@@ -248,8 +248,8 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
     Scene *activeScene = SceneManager::GetActiveScene();
     ASSERT(activeScene);
 
-    EditorScene *scene = Object::SCast<EditorScene>(activeScene);
-    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+    SelectionFramebuffer *sfb =
+            GraphicPipeline::GetActive()->GetSelectionFramebuffer();
     int x = e->pos().x(), y = Screen::GetHeight() - e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);
 
@@ -333,47 +333,3 @@ void Screen::OnDrop(const DragDropInfo &ddi)
 }
 
 #endif
-
-void Screen::wheelEvent(QWheelEvent *event)
-{
-    Input::GetInstance()->EnqueueEvent(event);
-    QGLWidget::wheelEvent(event);
-}
-
-void Screen::mouseMoveEvent(QMouseEvent *event)
-{
-    Input::GetInstance()->EnqueueEvent(event);
-    QGLWidget::mouseMoveEvent(event);
-}
-
-void Screen::mousePressEvent(QMouseEvent *event)
-{
-    Input::GetInstance()->EnqueueEvent(event);
-    QGLWidget::mousePressEvent(event);
-    setFocus();
-}
-
-void Screen::mouseReleaseEvent(QMouseEvent *event)
-{
-    Input::GetInstance()->EnqueueEvent(event);
-    QGLWidget::mouseReleaseEvent(event);
-}
-
-void Screen::keyPressEvent(QKeyEvent *event)
-{
-    Input::GetInstance()->EnqueueEvent(event);
-    if (event->key() == Input::Key::F)
-    {
-        #ifdef BANG_EDITOR
-        Hierarchy::GetInstance()->keyPressEvent(event);
-        #endif
-    }
-
-    QGLWidget::keyPressEvent(event);
-}
-
-void Screen::keyReleaseEvent(QKeyEvent *event)
-{
-    Input::GetInstance()->EnqueueEvent(event);
-    QGLWidget::keyReleaseEvent(event);
-}

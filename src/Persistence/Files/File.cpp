@@ -223,26 +223,21 @@ String File::GetContents() const
 QPixmap File::GetIcon() const
 {
     String fp = "";
-    bool isAsset = false;
     if (IsPrefabAsset())
     {
         fp = Persistence::ToAbsolute("./Icons/PrefabAssetIcon.png", true);
-        isAsset = true;
     }
     else if (IsBehaviour())
     {
         fp = Persistence::ToAbsolute("./Icons/BehaviourIcon.png", true);
-        isAsset = true;
     }
     else if (IsScene())
     {
         fp = Persistence::ToAbsolute("./Icons/SceneIcon.png", true);
-        isAsset = true;
     }
     else
     {
         fp = Persistence::ToAbsolute("./Icons/OtherFileIcon.png", true);
-        isAsset = false;
     }
 
     // Its a texture, the icon is the image itself

@@ -18,11 +18,11 @@ Framebuffer::Framebuffer(int width, int height) : m_width(width),
 
 Framebuffer::~Framebuffer()
 {
-    for (auto it : m_attachmentId_To_Texture)
-    {
-        RenderTexture *t = it.second;
+    //for (auto it : m_attachmentId_To_Texture)
+    //{
+        // RenderTexture *t = it.second;
         // delete t;
-    }
+    //}
 
     if (m_depthAttachmentId != 0)
     {

@@ -55,7 +55,7 @@ void AudioListener::UpdateALProperties() const
     //alDistanceModel(AL_EXPONENT_DISTANCE);
 
     Vector3 at = -transform->GetForward();
-    Vector3 up = up = transform->GetUp();
+    Vector3 up = transform->GetUp();
     ALfloat listenerOri[] = { at.x, at.y, at.z, up.x, up.y, up.z };
     alListenerfv(AL_ORIENTATION, listenerOri);
     //alListenerfv(AL_DIRECTION, transform->GetEuler().Values());

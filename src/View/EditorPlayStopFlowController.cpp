@@ -61,8 +61,6 @@ bool EditorPlayStopFlowController::PlayScene()
     EditorWindow *win = EditorWindow::GetInstance();
     win->tabContainerSceneGame->setCurrentWidget(win->tabGame);
 
-    Screen::GetInstance()->setFocus();
-
     return true;
 }
 
@@ -112,7 +110,10 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
     connect(bm, SIGNAL(NotifyPrepareBehavioursLibraryProgressed(int)),
             &progressDialog, SLOT(setValue(int)));
 
-    bool success = BehaviourManager::PrepareBehavioursLibrary(&m_playingCanceled);
+    BehaviourManager::SetCurrentLibsDir( Persistence::GetProjectLibsRootAbs() );
+    bool success = BehaviourManager::PrepareBehavioursLibrary(false,
+                                                             &m_playingCanceled);
+
     if (!success && !m_playingCanceled)
     {
         String errMsg = "Please fix all the behaviour errors before playing.";

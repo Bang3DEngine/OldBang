@@ -26,6 +26,7 @@ public:
         ProduceSharedLib      = 1,
         AddEngineObjectFiles  = 2,
         AddProjectObjectFiles = 4,
+        ForGame               = 8,
         Default = AddProjectObjectFiles | AddEngineObjectFiles
     };
 
@@ -52,10 +53,8 @@ public:
 
     static void Compile(List<String> &sourceFilesList,
                         const String &outputLibFilepath,
-                        bool *success,
-                        String *output,
-                        CompilationFlags compilationFlags =
-                            CompilationFlags::Default);
+                        CompilationFlags clFlags = CompilationFlags::Default,
+                        bool *success = nullptr, String *output = nullptr);
 
     static void CloseLibrary(QLibrary *library);
 

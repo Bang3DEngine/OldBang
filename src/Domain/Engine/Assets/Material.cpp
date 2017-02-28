@@ -160,6 +160,7 @@ ShaderProgram *Material::GetShaderProgram() const
     {
         ShaderProgram *defaultSP = nullptr;
         defaultSP = Material::GetMissingMaterial()->GetShaderProgram();
+        return defaultSP;
     }
     return m_shaderProgram;
 }

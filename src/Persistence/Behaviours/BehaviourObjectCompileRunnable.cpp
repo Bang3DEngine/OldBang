@@ -5,8 +5,9 @@
 #include "BehaviourManager.h"
 
 BehaviourObjectCompileRunnable::BehaviourObjectCompileRunnable(
-        const String &behaviourFilepath)
+        const String &behaviourFilepath, bool forGame)
 {
+    m_forGame = forGame;
     m_behaviourFilepath = behaviourFilepath;
 }
 
@@ -19,11 +20,16 @@ void BehaviourObjectCompileRunnable::CompileBehaviourObject()
 {
     String behaviourName = Persistence::GetFileName(m_behaviourFilepath);
     String objFilepath =
-            Persistence::GetProjectLibsRootAbs() + "/" + behaviourName + ".o";
+            BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o";
 
+    Persistence::Remove(objFilepath);
+
+    typedef SystemUtils::CompilationFlags CLFlags;
     bool successCompiling = false; String output = "";
     List<String> sources = {m_behaviourFilepath};
-    SystemUtils::Compile(sources, objFilepath, &successCompiling, &output);
+    SystemUtils::Compile(sources, objFilepath,
+                         (m_forGame ? CLFlags::ForGame : CLFlags::None),
+                         &successCompiling, &output);
     if (successCompiling)
     {
         emit NotifySuccessCompiling(m_behaviourFilepath.ToQString(),

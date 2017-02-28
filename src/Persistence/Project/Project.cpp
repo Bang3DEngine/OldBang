@@ -41,6 +41,11 @@ const String&  Project::GetProjectRootFilepath() const
     return m_projectRootFilepath;
 }
 
+String Project::GetProjectDir() const
+{
+    return Persistence::GetDir(m_projectRootFilepath);
+}
+
 String Project::GetProjectAssetsRootFilepath() const
 {
     return m_projectRootFilepath + "/Assets";

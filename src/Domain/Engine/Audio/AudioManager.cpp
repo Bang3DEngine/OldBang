@@ -42,7 +42,7 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip, int alSourceId,
 
     AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, alSourceId,
                                                           delayInSeconds);
-    bool hasBeenAbleToPlay = audioManager->m_threadPool.tryStart(player);
+    audioManager->m_threadPool.tryStart(player);
 }
 
 void AudioManager::ClearALErrors()

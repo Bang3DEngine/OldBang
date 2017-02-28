@@ -17,10 +17,10 @@ public:
     static GameBuilder* GetInstance();
 
     void BuildGame(bool runGame = false);
-    void OnGameBuildingHasBeenCanceled();
 
 public slots:
     void OnGameHasBeenBuilt();
+    void OnGameBuildingHasBeenCanceled();
     void OnGameBuildingHasFailed(const QString &errorMsg);
     void OnDialogError(const QString &title, const QString &msg);
 

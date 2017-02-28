@@ -17,6 +17,7 @@ public:
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
     const String& GetProjectRootFilepath() const;
+    String GetProjectDir() const;
     String GetProjectAssetsRootFilepath() const;
     String GetProjectFileFilepath() const;
     String GetProjectName() const;

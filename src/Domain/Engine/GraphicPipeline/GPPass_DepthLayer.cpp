@@ -35,9 +35,13 @@ void GPPass_DepthLayer::PrePass(const List<Renderer*> &renderers,
 
 bool GPPass_DepthLayer::CanRender(const Renderer *renderer) const
 {
+    #ifdef BANG_EDITOR
     bool dontRenderEditorStuffInGame =
             !(EditorState::IsShowingGameTab() &&
               renderer->gameObject->HasHideFlag(HideFlags::DontSerialize));
+    #else
+    bool dontRenderEditorStuffInGame = true;
+    #endif
 
     return (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
             renderer->GetDepthLayer() == m_depthLayer &&

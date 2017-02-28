@@ -10,7 +10,7 @@ class BehaviourMergeObjectsRunnable : public QObject,
     Q_OBJECT
 
 public:
-    BehaviourMergeObjectsRunnable();
+    BehaviourMergeObjectsRunnable(bool forGame);
 
 protected:
     void run() override;
@@ -21,6 +21,8 @@ signals:
     void NotifyFailedMerging(QString errorMessage);
 
 private:
+    bool m_forGame = false;
+
     void Merge();
 };
 

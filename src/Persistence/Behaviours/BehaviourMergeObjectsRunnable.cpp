@@ -3,13 +3,16 @@
 #include "Time.h"
 #include "List.h"
 #include "Debug.h"
+#include "XMLNode.h"
+#include "Project.h"
 #include "SystemUtils.h"
 #include "Persistence.h"
+#include "ProjectManager.h"
 #include "BehaviourManager.h"
 
-BehaviourMergeObjectsRunnable::BehaviourMergeObjectsRunnable()
+BehaviourMergeObjectsRunnable::BehaviourMergeObjectsRunnable(bool forGame)
 {
-
+    m_forGame = forGame;
 }
 
 void BehaviourMergeObjectsRunnable::run()
@@ -22,16 +25,29 @@ void BehaviourMergeObjectsRunnable::Merge()
     List<String> behaviourObjects =
             BehaviourManager::GetBehavioursObjectsFilepathsList();
     String libOutputFilepath =
-            Persistence::GetProjectLibsRootAbs() + "/Behaviours.so";
-    libOutputFilepath += "." + std::to_string(Time::GetNow()) + ".1.1";
+            BehaviourManager::GetCurrentLibsDir() + "/Behaviours.so.";
+    String version = std::to_string(Time::GetNow());
+    if (m_forGame)
+    {
+        String gameProjectDir = Persistence::GetDir(libOutputFilepath);
+        gameProjectDir = Persistence::GetDirUp(gameProjectDir);
+        String gameProjectFilepath = gameProjectDir + "/Game.bproject";
+
+        String gameProjectContents =
+                Persistence::GetFileContents(gameProjectFilepath);
+        Project *gameProject = new Project();
+        gameProject->ReadXMLInfoFromString(gameProjectContents);
+        version = gameProject->GetProjectRandomId();
+    }
+    libOutputFilepath += version + ".1.1";
 
     typedef SystemUtils::CompilationFlags CLFlags;
     bool successCompiling; String output;
     SystemUtils::Compile(behaviourObjects, libOutputFilepath,
-                         &successCompiling, &output,
-                           CLFlags::AddEngineObjectFiles  |
-                           CLFlags::AddProjectObjectFiles |
-                           CLFlags::ProduceSharedLib);
+                         CLFlags::AddEngineObjectFiles  |
+                         CLFlags::ProduceSharedLib |
+                         (m_forGame ? CLFlags::ForGame : CLFlags::None),
+                         &successCompiling, &output);
     if (successCompiling)
     {
         emit NotifySuccessMerging(libOutputFilepath.ToQString(),

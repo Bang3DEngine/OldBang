@@ -10,7 +10,9 @@
 
 #include "Map.h"
 #include "List.h"
+#include "Debug.h"
 #include "String.h"
+#include "Application.h"
 #include "BehaviourManagerStatus.h"
 #include "BehaviourRefresherTimer.h"
 
@@ -36,8 +38,11 @@ public:
     static List<String> GetBehavioursSourcesFilepathsList();
     static List<String> GetBehavioursObjectsFilepathsList();
 
-    static bool PrepareBehavioursLibrary(bool *stopFlag = nullptr);
+    static bool PrepareBehavioursLibrary(bool forGame = false,
+                                         bool *stopFlag = nullptr);
 
+    static void SetCurrentLibsDir(const String &currentLibsDir);
+    static const String &GetCurrentLibsDir();
     static MergingState GetMergeState();
     static const BehaviourManagerStatus& GetStatus();
 
@@ -57,6 +62,7 @@ private slots:
     void OnMergedLibraryCompilationFailed(QString errorMessage);
 
 private:
+    String m_currentLibsDir = "";
     MergingState m_state = MergingState::Idle;
     BehaviourManagerStatus m_status;
 
@@ -69,9 +75,10 @@ private:
 
     static void RemoveMergedLibraryFiles();
 
-    static bool StartMergingBehavioursObjects();
-    static void StartCompilingAllBehaviourObjects();
-    static void StartCompilingBehaviourObject(const String &behaviourFilepath);
+    static bool StartMergingBehavioursObjects(bool forGame = false);
+    static void StartCompilingAllBehaviourObjects(bool forGame = false);
+    static void StartCompilingBehaviourObject(const String &behaviourFilepath,
+                                              bool forGame = false);
 
     friend class Application;
     friend class BehaviourHolder;

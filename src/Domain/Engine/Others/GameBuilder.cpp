@@ -67,21 +67,13 @@ void GameBuilder::BuildGame(bool runGame)
         ASSERT(!m_latestGameExecutableFilepath.Empty());
 
         // Create the progress window
-        if (m_gameBuildDialog)
-        {
-            delete m_gameBuildDialog;
-        }
+        if (m_gameBuildDialog) { delete m_gameBuildDialog; }
         m_gameBuildDialog = new GameBuildDialog();
-        //
 
         // Create the game builder job and connect stuff
-        if (m_gameBuilderJob)
-        {
-            delete m_gameBuilderJob;
-        }
+        if (m_gameBuilderJob) { delete m_gameBuilderJob; }
         m_gameBuilderJob = new GameBuilderJob();
         m_gameBuilderJob->m_executableFilepath = m_latestGameExecutableFilepath;
-        //
 
         // Create and start the building thread
         if (m_gameBuilderThread)
@@ -90,7 +82,6 @@ void GameBuilder::BuildGame(bool runGame)
             delete m_gameBuilderThread;
         }
         m_gameBuilderThread = new QThread();
-        //
 
         // Connect stuff
         QObject::connect(m_gameBuilderJob, SIGNAL(NotifyPercent(float)),
@@ -106,7 +97,6 @@ void GameBuilder::BuildGame(bool runGame)
                          this, SLOT(OnGameBuildingHasFailed(const QString&)));
         QObject::connect(m_gameBuildDialog, SIGNAL(canceled()),
                          this, SLOT(OnGameBuildingCanceled()));
-        //
 
         // Start the thread
         m_gameBuilderJob->moveToThread(m_gameBuilderThread);
@@ -122,8 +112,6 @@ void GameBuilder::OnGameHasBeenBuilt()
         m_gameBuildDialog->Destroy();
     }
     m_gameBuilderThread->exit(0);
-
-    //m_gameBuilderJob->OnGameBuildingCanceled(); // Needed, if the dialog is closed by the user
 
     if (m_runGameAfterBuild)
     {
@@ -229,46 +217,14 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
                                     Project *gameProject,
                                     bool *cancel)
 {
+    if (*cancel) { return true; }
+
     String dataDir = executableDir + "/GameData";
-
-    // Compile the behaviours and save them so the Game can
-    // load them instantly and doesn't need to compile them
-    List<String> behaviourFilepaths =
-            Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(),
-                                  true, { "*.cpp" });
-    for (const String &behaviourFilepath : behaviourFilepaths)
-    {
-        if (*cancel) { return true; }
-
-        String errorMessage;
-        /*
-        String compiledLibFilepath =
-                SystemUtils::CompileToSharedObject(behaviourFilepath, false,
-                                                   nullptr, &errorMessage);
-        if (compiledLibFilepath.Empty())
-        {
-            Debug_Error("Failed to compile " << behaviourFilepath << ". " <<
-                        errorMessage);
-            return false;
-        }
-
-        String gameLibFilepath = compiledLibFilepath;
-        gameLibFilepath.Replace(Persistence::GetProjectAssetsRootAbs(),
-                               dataDir + "/Assets");
-        String gameLibFilepathWithoutTimestamp =
-                Persistence::GetDir(gameLibFilepath) + "/" +
-                Persistence::GetFileName(gameLibFilepath) + ".so";
-
-        // Add the random project Id to the name, to avoid library(*.so)
-        // caching from by operative system (it happens, yes)
-        String randomProjectId = gameProject->GetProjectRandomId();
-        String gameLibWithRandomProjectId =
-                gameLibFilepathWithoutTimestamp + "." + randomProjectId;
-        Persistence::Rename(compiledLibFilepath, gameLibWithRandomProjectId);
-        */
-    }
-
-    return true;
+    String libsDir = dataDir + "/Libraries";
+    BehaviourManager::SetCurrentLibsDir(libsDir);
+    Persistence::CreateDirectory(libsDir);
+    bool success = BehaviourManager::PrepareBehavioursLibrary(true, cancel);
+    return success;
 }
 
 void GameBuilder::RemoveLatestGameBuild()

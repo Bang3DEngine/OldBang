@@ -52,7 +52,6 @@ class BehaviourManagerStatus
 {
 public:
     bool AllBehavioursReady() const;
-    bool SomeBehaviourBeingCompiled() const;
     bool AllBehavioursReadyOrFailed() const;
     float GetPercentOfReadyBehaviours() const;
     bool IsBeingCompiled(const BehaviourId &bid) const;
@@ -92,20 +91,7 @@ private:
     friend class BehaviourManager;
 };
 
-static bool operator<(BehaviourId bid0, BehaviourId bid1)
-{
-    int pathCompare = bid0.behaviourAbsPath.compare(bid1.behaviourAbsPath);
-    if (pathCompare == 0)
-    {
-        return bid0.hash.compare(bid1.hash) < 0;
-    }
-    return pathCompare <= 0;
-}
-
-static bool operator==(BehaviourId bid0, BehaviourId bid1)
-{
-    return (bid0.behaviourAbsPath == bid1.behaviourAbsPath) &&
-           (bid0.hash == bid1.hash);
-}
+bool operator<(BehaviourId bid0, BehaviourId bid1);
+bool operator==(BehaviourId bid0, BehaviourId bid1);
 
 #endif // BEHAVIOURMANAGERSTATUS_H
