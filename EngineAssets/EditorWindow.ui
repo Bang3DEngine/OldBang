@@ -337,7 +337,11 @@
            </widget>
           </item>
           <item>
-           <widget class="Screen" name="screen" native="true"/>
+           <widget class="Screen" name="screen" native="true">
+            <property name="focusPolicy">
+             <enum>Qt::StrongFocus</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -382,7 +386,7 @@
      <x>0</x>
      <y>0</y>
      <width>1062</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -1201,7 +1205,7 @@
               <x>0</x>
               <y>0</y>
               <width>448</width>
-              <height>76</height>
+              <height>68</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout">

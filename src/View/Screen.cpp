@@ -102,11 +102,11 @@ bool Screen::IsRenderingInGame() const
 
 Screen *Screen::GetInstance()
 {
+    IWindow *w = IWindow::GetInstance();
     #ifdef BANG_EDITOR
-    return EditorWindow::GetInstance()->screen;
+    return w ? Object::SCast<EditorWindow>(w)->screen : nullptr;
     #else
-    return Object::SCast<GameWindow>(
-                SingletonManager::GetInstance()->GetWindowSingleton())->screen;
+    return w ? Object::SCast<GameWindow>(w)->screen : nullptr;
     #endif
 }
 
@@ -178,7 +178,8 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
 {
     Scene *activeScene = SceneManager::GetActiveScene();
     EditorScene *scene = Object::SCast<EditorScene>(activeScene);
-    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->GetSelectionFramebuffer();
+    SelectionFramebuffer *sfb = GraphicPipeline::GetActive()->
+                                                    GetSelectionFramebuffer();
     int x = e->pos().x();
     int y = Screen::GetHeight() - e->pos().y();
     GameObject *overedGo = sfb->GetGameObjectInPosition(x, y);

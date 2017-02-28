@@ -111,9 +111,13 @@ Application *Application::GetInstance()
 
 bool Application::notify(QObject *receiver, QEvent *e)
 {
-    #ifdef BANG_EDITOR
-    Input::GetInstance()->EnqueueEvent(e);
+    Screen *screen = Screen::GetInstance();
+    if (screen && receiver == screen)
+    {
+        Input::GetInstance()->EnqueueEvent(e);
+    }
 
+    #ifdef BANG_EDITOR
     if (e->type() == QEvent::MouseButtonPress)
     {
         DragDropManager::HandleGlobalMousePress(receiver, e);
@@ -124,33 +128,30 @@ bool Application::notify(QObject *receiver, QEvent *e)
     }
 
     ShortcutManager *sm = ShortcutManager::GetInstance();
-    if (receiver == focusWidget())
+    if (e->type() == QEvent::KeyPress)
     {
-        if (e->type() == QEvent::KeyPress)
+        QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
+        m_lastKeyPressEvInfo.time = Time::GetNow();
+        m_lastKeyPressEvInfo.key = ev->key();
+        if (!ev->isAutoRepeat())
         {
-            QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
-            m_lastKeyPressEvInfo.time = Time::GetNow();
-            m_lastKeyPressEvInfo.key = ev->key();
-            if (!ev->isAutoRepeat())
-            {
-                sm->OnKeyPressed( Input::Key(ev->key()) );
-            }
+            sm->OnKeyPressed( Input::Key(ev->key()) );
         }
-        else if (e->type() == QEvent::KeyRelease)
+    }
+    else if (e->type() == QEvent::KeyRelease)
+    {
+        QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
+        if (!ev->isAutoRepeat())
         {
-            QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
-            if (!ev->isAutoRepeat())
-            {
-                sm->OnKeyReleased( Input::Key(ev->key()) );
-            }
+            sm->OnKeyReleased( Input::Key(ev->key()) );
         }
+    }
 
-        if (e->type() == QEvent::Shortcut ||
-            e->type() == QEvent::WindowDeactivate ||
-            e->type() == QEvent::ApplicationDeactivate)
-        {
-            sm->Clear();
-        }
+    if (e->type() == QEvent::Shortcut ||
+        e->type() == QEvent::WindowDeactivate ||
+        e->type() == QEvent::ApplicationDeactivate)
+    {
+        sm->Clear();
     }
     #endif
 

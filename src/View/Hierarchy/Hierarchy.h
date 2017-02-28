@@ -98,7 +98,6 @@ private:
     GameObject *GetGameObjectFromItem(QTreeWidgetItem *item) const;
     QTreeWidgetItem *GetItemFromGameObject(GameObject *go) const;
 
-
     friend class Screen;
     friend class HierarchyContextMenu;
     friend class HierarchyDragDropManager;

@@ -182,6 +182,7 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
 
     m_scenePass.Pass(renderers, sceneChildren);
     if (!m_renderingInGame) { ApplySelectionOutline(); }
+    m_gbuffer->ClearStencil();
     m_canvasPass.Pass(renderers, sceneChildren);
     m_gizmosPass.Pass(renderers, sceneChildren);
 
