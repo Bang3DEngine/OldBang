@@ -30,11 +30,18 @@ uniform sampler2D B_texture_0;
 
 // Screen related
 uniform vec2 B_screen_size;
+uniform vec2 B_buffer_size;
+
 #ifdef BANG_FRAGMENT
 float B_screen_aspect_ratio = B_screen_size.x / B_screen_size.y;
 vec2  B_screen_coord = gl_FragCoord.xy;
 vec2  B_screen_coord_norm = B_screen_coord / B_screen_size;
-vec2  B_pixel_step = 1.0f / B_screen_size;
+vec2  B_screen_pixel_step = 1.0 / B_screen_size;
+
+float B_buffer_aspect_ratio = B_buffer_size.x / B_buffer_size.y;
+vec2  B_buffer_coord = gl_FragCoord.xy;
+vec2  B_buffer_coord_norm = B_buffer_coord / B_buffer_size;
+vec2  B_buffer_pixel_step = 1.0 / B_buffer_size;
 #endif
 
 // GBuffer textures
@@ -49,15 +56,15 @@ uniform sampler2D B_color_gout_fin;
 // Getters
 
 #ifdef BANG_SP
-    #define FRAG_IN_UV_SCREEN()                    B_screen_coord_norm
-    #define FRAG_IN_COLOR()                        (texture2D(B_color_gout_fin,         B_screen_coord_norm))
-    #define FRAG_IN_POSITION_WORLD()               (texture2D(B_position_gout_fin,      B_screen_coord_norm).xyz)
-    #define FRAG_IN_NORMAL_WORLD()      normalize(  texture2D(B_normal_gout_fin,        B_screen_coord_norm).xyz )
-    #define FRAG_IN_DIFFUSE_COLOR()                (texture2D(B_diffuse_gout_fin,       B_screen_coord_norm))
-    #define FRAG_IN_RECEIVES_LIGHTING()            (texture2D(B_materialProps_gout_fin, B_screen_coord_norm).x > 0.5f)
-    #define FRAG_IN_SHININESS()                    (texture2D(B_materialProps_gout_fin, B_screen_coord_norm).y)
-    #define FRAG_IN_DEPTH()                        (texture2D(B_depth_gout_fin,         B_screen_coord_norm).x)
-    #define FRAG_IN_STENCIL()                      (texture2D(B_stencil_gout_fin,       B_screen_coord_norm).x)
+    #define FRAG_IN_UV_SCREEN()                    B_buffer_coord_norm;
+    #define FRAG_IN_COLOR()                        (texture2D(B_color_gout_fin,         B_buffer_coord_norm))
+    #define FRAG_IN_POSITION_WORLD()               (texture2D(B_position_gout_fin,      B_buffer_coord_norm).xyz)
+    #define FRAG_IN_NORMAL_WORLD()      normalize(  texture2D(B_normal_gout_fin,        B_buffer_coord_norm).xyz )
+    #define FRAG_IN_DIFFUSE_COLOR()                (texture2D(B_diffuse_gout_fin,       B_buffer_coord_norm))
+    #define FRAG_IN_RECEIVES_LIGHTING()            (texture2D(B_materialProps_gout_fin, B_buffer_coord_norm).x > 0.5f)
+    #define FRAG_IN_SHININESS()                    (texture2D(B_materialProps_gout_fin, B_buffer_coord_norm).y)
+    #define FRAG_IN_DEPTH()                        (texture2D(B_depth_gout_fin,         B_buffer_coord_norm).x)
+    #define FRAG_IN_STENCIL()                      (texture2D(B_stencil_gout_fin,       B_buffer_coord_norm).x)
 #endif
 
 #ifdef BANG_G
@@ -70,10 +77,10 @@ uniform sampler2D B_color_gout_fin;
         #define FRAG_IN_POSITION_WORLD()     B_position_world_vout_fin.xyz
         #define FRAG_IN_NORMAL_WORLD()       B_normal_world_vout_fin
         #define FRAG_IN_UV()                 B_uv_vout_fin
-        #define FRAG_IN_DIFFUSE_COLOR()      (texture2D(B_diffuse_gout_fin, B_screen_coord_norm))
-        #define FRAG_IN_DEPTH()              (texture2D(B_depth_gout_fin,   B_screen_coord_norm).x)
-        #define FRAG_IN_STENCIL()            (texture2D(B_stencil_gout_fin, B_screen_coord_norm).x)
-        #define FRAG_IN_COLOR()              (texture2D(B_color_gout_fin,   B_screen_coord_norm))
+        #define FRAG_IN_DIFFUSE_COLOR()      (texture2D(B_diffuse_gout_fin, B_buffer_coord_norm))
+        #define FRAG_IN_DEPTH()              (texture2D(B_depth_gout_fin,   B_buffer_coord_norm).x)
+        #define FRAG_IN_STENCIL()            (texture2D(B_stencil_gout_fin, B_buffer_coord_norm).x)
+        #define FRAG_IN_COLOR()              (texture2D(B_color_gout_fin,   B_buffer_coord_norm))
     #endif
 #endif
 

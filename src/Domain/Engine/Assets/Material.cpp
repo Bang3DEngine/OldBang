@@ -9,10 +9,10 @@
 #include "Texture2D.h"
 #include "Persistence.h"
 #include "SceneManager.h"
+#include "AssetsManager.h"
 #include "ShaderProgram.h"
 #include "ShaderContract.h"
-
-#include "AssetsManager.h"
+#include "GraphicPipeline.h"
 
 Material::Material() : Asset()
 {
@@ -186,8 +186,10 @@ const Color& Material::GetDiffuseColor() const
 
 void Material::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 {
-    sp->SetColor("B_material_diffuse_color", m_diffuseColor);
+    Vector2 buffersSize = GraphicPipeline::GetBuffersSize();
+    sp->SetVec2("B_buffer_size", buffersSize);
     sp->SetVec2("B_screen_size", Screen::GetSize());
+    sp->SetColor("B_material_diffuse_color", m_diffuseColor);
     sp->SetFloat("B_material_shininess", m_shininess);
     sp->SetFloat("B_material_receivesLighting",
                                  m_receivesLighting ? 1.0f : 0.0f);

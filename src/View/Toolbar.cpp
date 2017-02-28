@@ -28,51 +28,56 @@ void Toolbar::Init()
 {
     EditorWindow *w = EditorWindow::GetInstance();
     Toolbar::s_tb = w->screenToolbar;
-    Toolbar::s_tb->m_buttonTranslateMode = w->buttonTranslateMode;
-    Toolbar::s_tb->m_buttonRotateMode    = w->buttonRotateMode;
-    Toolbar::s_tb->m_buttonScaleMode     = w->buttonScaleMode;
-    Toolbar::s_tb->m_buttonRectTransformMode = w->buttonRectTransformMode;
-    Toolbar::s_tb->m_buttonGlobalCoords  = w->buttonGlobalCoords;
-    Toolbar::s_tb->m_buttonLocalCoords   = w->buttonLocalCoords;
-    Toolbar::s_tb->m_buttonShowGizmos    = w->buttonShowGizmos;
-    Toolbar::s_tb->m_buttonPlay          = w->buttonPlay;
-    Toolbar::s_tb->m_buttonStop          = w->buttonStop;
-    Toolbar::s_tb->m_button3D            = w->buttonOrthoPerspectiveMode;
-    Toolbar::s_tb->m_gbufferAttachmentComboBox = w->comboBoxGBufferAttachment;
+    Toolbar *tb = Toolbar::s_tb;
+    tb->m_buttonTranslateMode       = w->buttonTranslateMode;
+    tb->m_buttonRotateMode          = w->buttonRotateMode;
+    tb->m_buttonScaleMode           = w->buttonScaleMode;
+    tb->m_buttonRectTransformMode   = w->buttonRectTransformMode;
+    tb->m_buttonGlobalCoords        = w->buttonGlobalCoords;
+    tb->m_buttonLocalCoords         = w->buttonLocalCoords;
+    tb->m_buttonShowGizmos          = w->buttonShowGizmos;
+    tb->m_buttonMSAA                = w->buttonMSAA;
+    tb->m_buttonPlay                = w->buttonPlay;
+    tb->m_buttonStop                = w->buttonStop;
+    tb->m_button3D                  = w->buttonOrthoPerspectiveMode;
+    tb->m_gbufferAttachmentComboBox = w->comboBoxGBufferAttachment;
 
-    connect(Toolbar::s_tb->m_buttonTranslateMode, SIGNAL(clicked()),
-            Toolbar::s_tb, SLOT(OnTranslateClicked()));
-    connect(Toolbar::s_tb->m_buttonRotateMode, SIGNAL(clicked()),
-            Toolbar::s_tb, SLOT(OnRotateClicked()));
-    connect(Toolbar::s_tb->m_buttonScaleMode, SIGNAL(clicked()),
-            Toolbar::s_tb, SLOT(OnScaleClicked()));
-    connect(Toolbar::s_tb->m_buttonRectTransformMode, SIGNAL(clicked()),
-            Toolbar::s_tb, SLOT(OnRectTransformClicked()));
+    connect(tb->m_buttonTranslateMode, SIGNAL(clicked()),
+            tb, SLOT(OnTranslateClicked()));
+    connect(tb->m_buttonRotateMode, SIGNAL(clicked()),
+            tb, SLOT(OnRotateClicked()));
+    connect(tb->m_buttonScaleMode, SIGNAL(clicked()),
+            tb, SLOT(OnScaleClicked()));
+    connect(tb->m_buttonRectTransformMode, SIGNAL(clicked()),
+            tb, SLOT(OnRectTransformClicked()));
 
-    connect(Toolbar::s_tb->m_buttonGlobalCoords, SIGNAL(clicked()),
-            Toolbar::s_tb, SLOT(OnGlobalCoordsClicked()));
-    connect(Toolbar::s_tb->m_buttonLocalCoords, SIGNAL(clicked()),
-            Toolbar::s_tb, SLOT(OnLocalCoordsClicked()));
+    connect(tb->m_buttonGlobalCoords, SIGNAL(clicked()),
+            tb, SLOT(OnGlobalCoordsClicked()));
+    connect(tb->m_buttonLocalCoords, SIGNAL(clicked()),
+            tb, SLOT(OnLocalCoordsClicked()));
 
-    connect(Toolbar::s_tb->m_buttonShowGizmos, SIGNAL(clicked(bool)),
-            Toolbar::s_tb, SLOT(OnShowGizmosClicked(bool)));
+    connect(tb->m_buttonMSAA, SIGNAL(clicked(bool)), tb,
+            SLOT(OnMSAAClicked(bool)));
+    tb->OnMSAAClicked( tb->m_buttonMSAA->isChecked() );
 
-    connect(Toolbar::s_tb->m_buttonPlay, SIGNAL(clicked()),
-            Toolbar::s_tb, SLOT(OnPlayClicked()));
-    connect(Toolbar::s_tb->m_buttonStop, SIGNAL(clicked()),
-            Toolbar::s_tb, SLOT(OnStopClicked()));
+    connect(tb->m_buttonShowGizmos, SIGNAL(clicked(bool)),
+            tb, SLOT(OnShowGizmosClicked(bool)));
+    tb->OnShowGizmosClicked( tb->m_buttonShowGizmos->isChecked() );
 
-    connect(Toolbar::s_tb->m_button3D, SIGNAL(clicked()),
-            Toolbar::s_tb, SLOT(OnOrthoPerspectiveClicked()));
+    connect(tb->m_buttonPlay, SIGNAL(clicked()), tb, SLOT(OnPlayClicked()));
+    connect(tb->m_buttonStop, SIGNAL(clicked()), tb, SLOT(OnStopClicked()));
 
-    connect(Toolbar::s_tb->m_gbufferAttachmentComboBox, SIGNAL(currentIndexChanged(int)),
-            Toolbar::s_tb, SLOT(OnGBufferAttachmentIndexChanged(int)));
+    connect(tb->m_button3D, SIGNAL(clicked()),
+            tb, SLOT(OnOrthoPerspectiveClicked()));
 
-    Toolbar::s_tb->m_buttonTranslateMode->click();
-    Toolbar::s_tb->m_buttonGlobalCoords->click();
-    Toolbar::s_tb->m_buttonStop->click();
+    connect(tb->m_gbufferAttachmentComboBox, SIGNAL(currentIndexChanged(int)),
+            tb, SLOT(OnGBufferAttachmentIndexChanged(int)));
 
-    Toolbar::s_tb->setFocusPolicy(Qt::ClickFocus);
+    tb->m_buttonTranslateMode->click();
+    tb->m_buttonGlobalCoords->click();
+    tb->m_buttonStop->click();
+
+    tb->setFocusPolicy(Qt::ClickFocus);
 }
 
 void Toolbar::UnCheckTransformModeButtons()
@@ -157,6 +162,11 @@ void Toolbar::OnLocalCoordsClicked()
     m_buttonGlobalCoords->setChecked(false);
     m_buttonLocalCoords->setChecked(true);
     EditorState::GetInstance()->m_globalCoords = false;
+}
+
+void Toolbar::OnMSAAClicked(bool msaa)
+{
+    GraphicPipeline::GetActive()->SetMSAA( msaa ? 2 : 1 );
 }
 
 void Toolbar::OnShowGizmosClicked(bool showGizmos)

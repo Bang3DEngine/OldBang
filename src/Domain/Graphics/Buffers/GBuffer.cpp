@@ -35,6 +35,8 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     SetAttachment(Attachment::Stencil,            m_stencilTexture);
     SetAttachment(Attachment::Color,              m_colorTexture);
     CreateDepthRenderbufferAttachment();
+
+    m_stencilTexture->SetFilterMode(Texture::FilterMode::Nearest);
 }
 
 GBuffer::~GBuffer()

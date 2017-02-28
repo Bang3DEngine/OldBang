@@ -96,11 +96,14 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     List<GameObject*> sceneChildren = scene->GetChildren();
 
     RenderGBuffer(renderers, sceneChildren);
-    ApplySelectionOutline();
     m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 
     #ifdef BANG_EDITOR
-    RenderSelectionBuffer(renderers, sceneChildren, p_scene);
+    if (!m_renderingInGame)
+    {
+        RenderSelectionBuffer(renderers, sceneChildren, p_scene);
+        // RenderToScreen(m_selectionFB->GetColorTexture()); // To see it
+    }
     #endif
 }
 
@@ -112,8 +115,8 @@ void GraphicPipeline::ApplySelectionOutline()
     List<GameObject*> sceneGameObjects = p_scene->GetChildrenRecursively();
 
     // Create stencil mask that the selection pass will use
+    glDepthFunc(GL_ALWAYS);
     m_gbuffer->Bind();
-    m_gbuffer->ClearDepth();
     m_gbuffer->ClearStencil();
     m_gbuffer->SetStencilTest(false);
     m_gbuffer->SetStencilWrite(true);
@@ -125,10 +128,7 @@ void GraphicPipeline::ApplySelectionOutline()
             List<Renderer*> rends = go->GetComponents<Renderer>();
             for (Renderer *rend : rends)
             {
-                if (CAN_USE_COMPONENT(rend))
-                {
-                    rend->Render();
-                }
+                if (CAN_USE_COMPONENT(rend)) { rend->Render(); }
             }
         }
     }
@@ -136,6 +136,7 @@ void GraphicPipeline::ApplySelectionOutline()
     // Apply selection outline
     m_gbuffer->RenderPassWithMaterial(m_matSelectionEffectScreen);
     m_gbuffer->UnBind();
+    glDepthFunc(GL_LESS);
     #endif
 }
 
@@ -180,6 +181,7 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
     m_gbuffer->Bind();
 
     m_scenePass.Pass(renderers, sceneChildren);
+    if (!m_renderingInGame) { ApplySelectionOutline(); }
     m_canvasPass.Pass(renderers, sceneChildren);
     m_gizmosPass.Pass(renderers, sceneChildren);
 
@@ -275,8 +277,7 @@ GraphicPipeline* GraphicPipeline::GetActive()
 
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
-    m_gbuffer->Resize(newWidth, newHeight);
-
+    m_gbuffer->Resize(newWidth  * m_MSAA, newHeight * m_MSAA);
     #ifdef BANG_EDITOR
     m_selectionFB->Resize(newWidth, newHeight);
     #endif
@@ -288,6 +289,15 @@ void GraphicPipeline::SetGBufferAttachmentToBeRendered(
     m_gbufferAttachToBeShown = attachment;
 }
 
+void GraphicPipeline::SetMSAA(int MSAA)
+{
+    if (m_MSAA != MSAA)
+    {
+        m_MSAA = MSAA;
+        OnResize(Screen::GetWidth(), Screen::GetHeight()); // Trigger resizing
+    }
+}
+
 GLContext *GraphicPipeline::GetGLContext() const
 {
     return m_glContext;
@@ -296,4 +306,11 @@ GLContext *GraphicPipeline::GetGLContext() const
 GBuffer *GraphicPipeline::GetGBuffer()
 {
     return m_gbuffer;
+}
+
+Vector2 GraphicPipeline::GetBuffersSize()
+{
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    if (!gp->m_selectionFB->IsPassing()) { return gp->m_gbuffer->GetSize(); }
+    return gp->m_selectionFB->GetSize();
 }

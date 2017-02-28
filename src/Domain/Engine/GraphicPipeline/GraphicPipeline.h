@@ -38,10 +38,13 @@ public:
 
     void SetGBufferAttachmentToBeRendered(GBuffer::Attachment attachment);
 
-    GLContext *GetGLContext() const;
+    void SetMSAA(int MSAA);
 
+    GLContext *GetGLContext() const;
     GBuffer *GetGBuffer();
     Renderer::DepthLayer GetCurrentDepthLayer() const;
+
+    static Vector2 GetBuffersSize();
 
     #ifdef BANG_EDITOR
     SelectionFramebuffer* GetSelectionFramebuffer();
@@ -53,6 +56,7 @@ public:
     void ApplyDeferredLights(Renderer *rend = nullptr);
 
 private:
+    int m_MSAA = 2;
     GLContext *m_glContext = nullptr;
 
     GBuffer *m_gbuffer = nullptr;
