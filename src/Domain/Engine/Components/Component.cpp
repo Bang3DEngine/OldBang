@@ -13,11 +13,7 @@ Component::~Component()
 {
 }
 
-void Component::OnDrawGizmos()
-{
-}
-
-void Component::OnDrawGizmosOverlay()
+void Component::OnDrawGizmos(bool depthed, bool overlay)
 {
 }
 

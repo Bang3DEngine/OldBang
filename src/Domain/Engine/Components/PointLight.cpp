@@ -83,17 +83,21 @@ void PointLight::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("Range", m_range);
 }
 
-void PointLight::OnDrawGizmos()
+void PointLight::OnDrawGizmos(bool depthed, bool overlay)
 {
-    Light::OnDrawGizmos();
+    Light::OnDrawGizmos(depthed, overlay);
 
-    Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/PointLightIcon.btex2d", true);
-    Gizmos::SetColor(Color(GetColor(), 1));
-    Gizmos::SetPosition(transform->GetPosition());
-    Gizmos::SetScale(Vector3::One * 0.1f);
-    Gizmos::RenderIcon(tex);
+    if (!depthed && !overlay)
+    {
+        Texture2D *tex = AssetsManager::Load<Texture2D>(
+                    "Textures/PointLightIcon.btex2d", true);
+        Gizmos::SetColor(Color(GetColor(), 1));
+        Gizmos::SetPosition(transform->GetPosition());
+        Gizmos::SetScale(Vector3::One * 0.1f);
+        Gizmos::RenderIcon(tex);
+    }
 
-    if (gameObject->IsSelected())
+    if (depthed && gameObject->IsSelected())
     {
         Gizmos::SetReceivesLighting(false);
         Gizmos::SetColor(Color(GetColor(), 1));

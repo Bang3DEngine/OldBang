@@ -322,10 +322,8 @@ protected:
     void OnDropMaterial(Material *m);
     #endif
 
-    virtual void _OnDrawGizmos () override;
-    virtual void _OnDrawGizmosOverlay () override;
-    virtual void OnDrawGizmos() override;
-    virtual void OnDrawGizmosOverlay() override;
+    virtual void _OnDrawGizmos (bool depthed, bool overlay) override;
+    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
     friend class Scene;
     friend class Screen;

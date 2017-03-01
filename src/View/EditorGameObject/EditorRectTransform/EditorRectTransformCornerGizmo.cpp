@@ -52,28 +52,31 @@ void EditorRectTransformCornerGizmo::OnUpdate()
     }
 }
 
-void EditorRectTransformCornerGizmo::OnDrawGizmosOverlay()
+void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
 {
     RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
     ASSERT(rtrans);
     ASSERT(EditorState::GetCurrentTransformMode() ==
            EditorState::RectTransform);
 
-    Rect rect = rtrans->GetScreenSpaceRect(true);
-    const Vector2 cornerOffset = GetCornerOffset();
-    const Vector2 circleCenter = rect.GetCenter() + cornerOffset;
-    const Vector2 circleSize = Vector2(0.025f);
+    if (overlay)
+    {
+        Rect rect = rtrans->GetScreenSpaceRect(true);
+        const Vector2 cornerOffset = GetCornerOffset();
+        const Vector2 circleCenter = rect.GetCenter() + cornerOffset;
+        const Vector2 circleSize = Vector2(0.025f);
 
-    const float borderColor = (m_mouseIsOver || m_grabbed) ? 1.5f : 1.25f;
-    const Rect circleBorderRect(circleCenter - circleSize * borderColor,
-                                circleCenter + circleSize * borderColor);
-    Gizmos::SetColor(Color::White);
-    Gizmos::RenderScreenIcon(m_circleTexture, circleBorderRect);
+        const float borderColor = (m_mouseIsOver || m_grabbed) ? 1.5f : 1.25f;
+        const Rect circleBorderRect(circleCenter - circleSize * borderColor,
+                                    circleCenter + circleSize * borderColor);
+        Gizmos::SetColor(Color::White);
+        Gizmos::RenderScreenIcon(m_circleTexture, circleBorderRect);
 
-    const Rect circleRect(circleCenter - circleSize,
-                          circleCenter + circleSize);
-    Gizmos::SetColor(m_cornerColor);
-    Gizmos::RenderScreenIcon(m_circleTexture, circleRect);
+        const Rect circleRect(circleCenter - circleSize,
+                              circleCenter + circleSize);
+        Gizmos::SetColor(m_cornerColor);
+        Gizmos::RenderScreenIcon(m_circleTexture, circleRect);
+    }
 }
 
 Vector2 EditorRectTransformCornerGizmo::GetCornerOffset() const

@@ -12,7 +12,7 @@ public:
     virtual ~EditorRectTransformGizmo();
 
     void OnUpdate() override;
-    void OnDrawGizmosOverlay() override;
+    void OnDrawGizmos(bool depthed, bool overlay) override;
 
 private:
     EditorRectTransformCornerGizmo *m_leftTopCorner  = nullptr;

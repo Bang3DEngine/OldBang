@@ -214,11 +214,11 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
 }
 
 #ifdef BANG_EDITOR
-void Camera::OnDrawGizmos()
+void Camera::OnDrawGizmos(bool depthed, bool overlay)
 {
     if (gameObject->HasHideFlag(HideFlags::HideInGame)) return;
 
-    Component::OnDrawGizmos();
+    Component::OnDrawGizmos(depthed, overlay);
 
     Camera *sceneCam = SceneManager::GetActiveScene()->GetCamera();
     float distScale = Vector3::Distance(sceneCam->transform->GetPosition(),
@@ -232,7 +232,7 @@ void Camera::OnDrawGizmos()
     Gizmos::SetColor(Color::White);
     Gizmos::RenderCustomMesh(p_camMesh);
 
-    if (gameObject->IsSelected())
+    if (depthed && gameObject->IsSelected())
     {
         Gizmos::SetColor(Color::Red);
         Gizmos::SetReceivesLighting(false);

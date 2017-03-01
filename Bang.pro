@@ -288,8 +288,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.h \
     src/Domain/Engine/GraphicPipeline/GraphicPipelinePass.h \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.h \
     src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.h \
     src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h \
     src/Domain/Graphics/Interfaces/IRenderAgent.h \
@@ -301,7 +299,8 @@ HEADERS +=                                                          \
     src/Persistence/Project/Project.h \
     src/Persistence/Project/ProjectManager.h \
     src/Persistence/Behaviours/BehaviourObjectCompileRunnable.h \
-    src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h
+    src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h \
+    src/Domain/Engine/GraphicPipeline/GPPass_G.h
 
 EDITOR {
 HEADERS += \
@@ -504,8 +503,6 @@ SOURCES += \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.cpp \
     src/Domain/Engine/GraphicPipeline/GraphicPipelinePass.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueNoSP.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_G_OpaqueSP.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp \
     src/Domain/Graphics/GLContext.cpp \
@@ -516,7 +513,8 @@ SOURCES += \
     src/Persistence/Project/ProjectManager.cpp \
     src/Persistence/Project/Project.cpp \
     src/Persistence/Behaviours/BehaviourObjectCompileRunnable.cpp \
-    src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.cpp
+    src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass_G.cpp
 
 EDITOR {
     SOURCES += \

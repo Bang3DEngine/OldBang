@@ -45,8 +45,7 @@ public:
                         float lineWidth = 1.0f, float livingTimeSecs = -1.0f);
 
     void OnUpdate() override;
-    void OnDrawGizmos() override;
-    void OnDrawGizmosOverlay() override;
+    void OnDrawGizmos(bool depthed, bool overlay) override;
 };
 
 #endif // EDITORDEBUGGAMEOBJECT_H

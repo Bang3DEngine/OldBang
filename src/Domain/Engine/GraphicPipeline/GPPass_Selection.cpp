@@ -34,17 +34,23 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
     }
     else
     {
+        glDepthFunc(GL_LESS);
         for (GameObject *go : sceneChildren)
         {
-            go->_OnDrawGizmos();
+            go->_OnDrawGizmos(true, false);
         }
 
-        p_selectionFramebuffer->ClearDepth();
+        glDepthFunc(GL_ALWAYS);
+        for (GameObject *go : sceneChildren)
+        {
+            go->_OnDrawGizmos(false, false);
+        }
 
         for (GameObject *go : sceneChildren)
         {
-            go->_OnDrawGizmosOverlay();
+            go->_OnDrawGizmos(false, true);
         }
+        glDepthFunc(GL_LESS);
     }
 }
 

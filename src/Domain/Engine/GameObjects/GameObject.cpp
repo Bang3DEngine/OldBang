@@ -678,8 +678,8 @@ bool GameObject::IsChildOf(const GameObject *goParent, bool recursive) const
 void GameObject::_OnStart()
 {
     OnStart();
-    PROPAGATE_EVENT(_OnStart, m_components);
-    PROPAGATE_EVENT(_OnStart, m_children);
+    PROPAGATE_EVENT(_OnStart(), m_components);
+    PROPAGATE_EVENT(_OnStart(), m_children);
 }
 
 
@@ -699,17 +699,17 @@ void GameObject::_OnUpdate()
 
     if (canUpdate)
     {
-        PROPAGATE_EVENT(_OnUpdate, m_components);
+        PROPAGATE_EVENT(_OnUpdate(), m_components);
     }
 
-    PROPAGATE_EVENT(_OnUpdate, m_children);
+    PROPAGATE_EVENT(_OnUpdate(), m_children);
 }
 
 void GameObject::_OnDestroy()
 {
     //No need to propagate _OnDestroy to children, just on components,
     //since the "delete child" itself propagates it (look at the destructor)
-    PROPAGATE_EVENT(_OnDestroy, m_components);
+    PROPAGATE_EVENT(_OnDestroy(), m_components);
 
     OnDestroy();
 }
@@ -750,7 +750,7 @@ void GameObject::OnDropMaterial(Material *m)
 
 #endif
 
-void GameObject::_OnDrawGizmos()
+void GameObject::_OnDrawGizmos(bool depthed, bool overlay)
 {
     #ifdef BANG_EDITOR
     ASSERT(EditorState::ShowGizmosEnabled());
@@ -758,35 +758,15 @@ void GameObject::_OnDrawGizmos()
     GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (sfb->IsPassing()) { sfb->PrepareNextGameObject(this); }
-    PROPAGATE_EVENT(_OnDrawGizmos, m_components);  // The order matters
-    OnDrawGizmos();
+    PROPAGATE_EVENT(_OnDrawGizmos(depthed, overlay), m_components);
+    OnDrawGizmos(depthed, overlay);
 
-    PROPAGATE_EVENT(_OnDrawGizmos, m_children);  // The order matters
-
-    #endif
-}
-
-void GameObject::_OnDrawGizmosOverlay()
-{
-    #ifdef BANG_EDITOR
-    ASSERT(EditorState::ShowGizmosEnabled());
-
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
-    SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
-    if (sfb->IsPassing()) { sfb->PrepareNextGameObject(this); }
-    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_components);  // The order matters
-    OnDrawGizmosOverlay();
-
-    PROPAGATE_EVENT(_OnDrawGizmosOverlay, m_children); // The order matters
+    PROPAGATE_EVENT(_OnDrawGizmos(depthed, overlay), m_children);
 
     #endif
 }
 
-void GameObject::OnDrawGizmos()
-{
-}
-
-void GameObject::OnDrawGizmosOverlay()
+void GameObject::OnDrawGizmos(bool depthed, bool overlay)
 {
 }
 

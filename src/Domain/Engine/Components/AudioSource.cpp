@@ -234,18 +234,22 @@ void AudioSource::OnUpdate()
     UpdateALProperties();
 }
 
-void AudioSource::OnDrawGizmos()
+void AudioSource::OnDrawGizmos(bool depthed, bool overlay)
 {
-    Component::OnDrawGizmos();
+    Component::OnDrawGizmos(depthed, overlay);
 
     #ifdef BANG_EDITOR
-    Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/AudioSourceIcon.btex2d", true);
-    Gizmos::SetPosition(transform->GetPosition());
-    Gizmos::SetScale(Vector3::One * 0.1f);
-    Gizmos::SetColor(Color::White);
-    Gizmos::RenderIcon(tex);
+    if (!depthed && !overlay)
+    {
+        Texture2D *tex = AssetsManager::Load<Texture2D>(
+                    "Textures/AudioSourceIcon.btex2d", true);
+        Gizmos::SetPosition(transform->GetPosition());
+        Gizmos::SetScale(Vector3::One * 0.1f);
+        Gizmos::SetColor(Color::White);
+        Gizmos::RenderIcon(tex);
+    }
 
-    if (gameObject->IsSelected())
+    if (depthed && gameObject->IsSelected())
     {
         Gizmos::SetColor(Color::Orange);
         Gizmos::SetPosition(transform->GetPosition());

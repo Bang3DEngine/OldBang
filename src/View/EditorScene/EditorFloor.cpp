@@ -72,12 +72,13 @@ void EditorFloor::OnUpdate()
 }
 
 #include "Hierarchy.h"
-void EditorFloor::OnDrawGizmos()
+void EditorFloor::OnDrawGizmos(bool depthed, bool overlay)
 {
     Scene *scene = SceneManager::GetActiveScene();
 
     Rect rect;
-    GameObject *selected = Hierarchy::GetInstance()->GetFirstSelectedGameObject();
+    GameObject *selected =
+            Hierarchy::GetInstance()->GetFirstSelectedGameObject();
     if (selected)
     {
         AABox box;

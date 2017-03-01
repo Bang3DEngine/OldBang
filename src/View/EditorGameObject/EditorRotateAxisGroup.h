@@ -19,7 +19,7 @@ public:
     virtual ~EditorRotateAxisGroup();
 
     void OnUpdate() override;
-    void OnDrawGizmosOverlay() override;
+    void OnDrawGizmos(bool depthed, bool overlay) override;
 };
 
 #endif // EDITORROTATEAXISGROUP_H

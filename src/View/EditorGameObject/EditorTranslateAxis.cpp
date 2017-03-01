@@ -82,7 +82,8 @@ void EditorTranslateAxis::OnUpdate()
                 wAxisDir = m_oAxisDirection;
                 if (ago->parent)
                 {
-                    parentAxisDir = ago->parent->transform->WorldToLocalDirection(m_oAxisDirection);
+                    parentAxisDir = ago->parent->transform->
+                            WorldToLocalDirection(m_oAxisDirection);
                 }
             }
             else
@@ -95,28 +96,35 @@ void EditorTranslateAxis::OnUpdate()
 
             // Alignment
             Vector3 wAxisCenter = transform->GetPosition();
-            Vector2 screenAxisDir = cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
-                                    cam->WorldToScreenNDCPoint(wAxisCenter);
+            Vector2 screenAxisDir =
+                    cam->WorldToScreenNDCPoint(wAxisCenter + wAxisDir) -
+                    cam->WorldToScreenNDCPoint(wAxisCenter);
             screenAxisDir.Normalize();
-            float alignment = Vector2::Dot(screenAxisDir, sMouseDelta.Normalized());
+            float alignment = Vector2::Dot(screenAxisDir,
+                                           sMouseDelta.Normalized());
             //
 
             Vector3 worldMove = alignment *
                                 parentAxisDir *
                                 sMouseDelta.Length() *
-                                Vector3::Distance(wCamPos, ago->transform->GetPosition()) * 0.002f;
+                                Vector3::Distance(wCamPos,
+                                                  ago->transform->GetPosition())
+                                                    * 0.002f;
             worldMove *= 1.0f / ago->parent->transform->GetScale();
             ago->transform->TranslateLocal(worldMove);
         }
     }
 }
 
-void EditorTranslateAxis::OnDrawGizmosOverlay()
+void EditorTranslateAxis::OnDrawGizmos(bool depthed, bool overlay)
 {
-    EditorAxis::OnDrawGizmosOverlay();
+    EditorAxis::OnDrawGizmos(depthed, overlay);
 
-    Gizmos::Render(m_line);
-    Gizmos::Render(m_axisCap->GetComponent<Renderer>());
+    if (overlay && !depthed)
+    {
+        Gizmos::Render(m_line);
+        Gizmos::Render(m_axisCap->GetComponent<Renderer>());
+    }
 }
 
 Renderer *EditorTranslateAxis::GetAxisRenderer() const

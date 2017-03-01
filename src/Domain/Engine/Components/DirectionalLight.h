@@ -19,7 +19,7 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-    virtual void OnDrawGizmos() override;
+    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
 protected:
     DirectionalLight();

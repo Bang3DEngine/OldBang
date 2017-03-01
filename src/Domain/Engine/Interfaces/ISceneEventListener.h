@@ -7,7 +7,7 @@
     for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
     {\
         if ((*it)->IsEnabled()) { \
-            (*it)->FUNCTION();   \
+            (*it)->FUNCTION;   \
         } \
     }\
 } while (0)
@@ -33,25 +33,17 @@ protected:
         OnDestroy();
     }
 
-    virtual void _OnDrawGizmos()
+    virtual void _OnDrawGizmos(bool depthed, bool overlay)
     {
         #ifdef BANG_EDITOR
-        OnDrawGizmos();
-        #endif
-    }
-
-    virtual void _OnDrawGizmosOverlay()
-    {
-        #ifdef BANG_EDITOR
-        OnDrawGizmosOverlay();
+        OnDrawGizmos(depthed, overlay);
         #endif
     }
 
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
     virtual void OnDestroy() {}
-    virtual void OnDrawGizmos() {}
-    virtual void OnDrawGizmosOverlay() {}
+    virtual void OnDrawGizmos(bool depthed, bool overlay) {}
 };
 
 #endif // SCENEEVENTLISTENER_H

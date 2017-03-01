@@ -24,8 +24,7 @@
 #include "RectTransform.h"
 #include "ShaderContract.h"
 #include "GPPass_G_Gizmos.h"
-#include "GPPass_G_OpaqueSP.h"
-#include "GPPass_G_OpaqueNoSP.h"
+#include "GPPass_G.h"
 #include "GraphicPipelineDebugger.h"
 #include "GPPass_SP_DeferredLights.h"
 
@@ -44,9 +43,9 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     m_canvasPass(this, Renderer::DepthLayer::DepthLayerCanvas),
     m_gizmosPass(this, Renderer::DepthLayer::DepthLayerGizmos)
     #ifdef BANG_EDITOR
-   ,m_sceneSelectionPass (this, Renderer::DepthLayer::DepthLayerScene),
-    m_canvasSelectionPass(this, Renderer::DepthLayer::DepthLayerCanvas),
-    m_gizmosSelectionPass(this, Renderer::DepthLayer::DepthLayerGizmos)
+    ,m_sceneSelectionPass (this, Renderer::DepthLayer::DepthLayerScene)
+    ,m_canvasSelectionPass(this, Renderer::DepthLayer::DepthLayerCanvas)
+    ,m_gizmosSelectionPass(this, Renderer::DepthLayer::DepthLayerGizmos)
     #endif
 {
     m_glContext = new GLContext();
@@ -60,14 +59,23 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 
     // Set up graphic pipeline passes
-    m_scenePass.AddSubPass (new GPPass_G_OpaqueSP(this));
+    m_scenePass.AddSubPass (new GPPass_G(this, true, false));
     m_scenePass.AddSubPass (new GPPass_SP_DeferredLights(this));
-    m_scenePass.AddSubPass (new GPPass_G_OpaqueNoSP(this));
-    m_canvasPass.AddSubPass(new GPPass_G_OpaqueNoSP(this));
-    m_gizmosPass.AddSubPass(new GPPass_G_Gizmos(this));
+    m_scenePass.AddSubPass (new GPPass_G(this, false, false));
+      GPPass_G *transparentLightedPass = new GPPass_G(this, true, true);
+      transparentLightedPass->AddSubPass(new GPPass_SP_DeferredLights(this));
+    m_scenePass.AddSubPass (transparentLightedPass);
+    m_scenePass.AddSubPass (new GPPass_G(this, false, true));
+
+    m_canvasPass.AddSubPass(new GPPass_G(this, false, false));
+    m_canvasPass.AddSubPass(new GPPass_G(this, false, true));
+
+    m_gizmosPass.AddSubPass(new GPPass_G_Gizmos(this, true, false));
+    m_gizmosPass.AddSubPass(new GPPass_G_Gizmos(this, false, false));
+    m_gizmosPass.AddSubPass(new GPPass_G_Gizmos(this, false, true));
 
     #ifdef BANG_EDITOR
-    m_sceneSelectionPass.AddSubPass(new GPPass_Selection(this));
+    m_sceneSelectionPass.AddSubPass (new GPPass_Selection(this));
     m_canvasSelectionPass.AddSubPass(new GPPass_Selection(this));
     m_gizmosSelectionPass.AddSubPass(new GPPass_Selection(this));
     #endif
@@ -76,13 +84,12 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
 GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
-    delete m_matSelectionEffectScreen;
-
-    delete m_glContext;
-
     #ifdef BANG_EDITOR
     delete m_selectionFB;
     #endif
+
+    delete m_matSelectionEffectScreen;
+    delete m_glContext;
 }
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)

@@ -72,7 +72,7 @@ public:
 
 protected:
     virtual void OnUpdate() override;
-    virtual void OnDrawGizmos() override;
+    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
 private:
     ALuint m_alSourceId = 0;

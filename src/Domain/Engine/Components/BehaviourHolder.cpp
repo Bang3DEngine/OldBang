@@ -271,27 +271,15 @@ void BehaviourHolder::_OnUpdate()
     }
 }
 
-void BehaviourHolder::_OnDrawGizmos()
+void BehaviourHolder::_OnDrawGizmos(bool depthed, bool overlay)
 {
     #ifdef BANG_EDITOR
-    Component::_OnDrawGizmos();
+    Component::_OnDrawGizmos(depthed, overlay);
     #endif
 
     if (m_behaviour)
     {
-        m_behaviour->_OnDrawGizmos();
-    }
-}
-
-void BehaviourHolder::_OnDrawGizmosOverlay()
-{
-    #ifdef BANG_EDITOR
-    Component::_OnDrawGizmosOverlay();
-    #endif
-
-    if (m_behaviour)
-    {
-        m_behaviour->_OnDrawGizmosOverlay();
+        m_behaviour->_OnDrawGizmos(depthed, overlay);
     }
 }
 

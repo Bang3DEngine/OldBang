@@ -16,7 +16,7 @@
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
     for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \
     {\
-        if ((*it) ) (*it)->FUNCTION;\
+        if ((*it)) (*it)->FUNCTION;\
     }\
 } while (0)
 

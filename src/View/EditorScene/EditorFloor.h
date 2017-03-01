@@ -19,7 +19,7 @@ public:
     virtual ~EditorFloor();
 
     void OnUpdate() override;
-    virtual void OnDrawGizmos() override;
+    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
 private:
     Material *m_material = nullptr;

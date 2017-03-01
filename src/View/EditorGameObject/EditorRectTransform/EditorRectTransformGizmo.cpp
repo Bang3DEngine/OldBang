@@ -65,16 +65,19 @@ void EditorRectTransformGizmo::OnUpdate()
 {
 }
 
-void EditorRectTransformGizmo::OnDrawGizmosOverlay()
+void EditorRectTransformGizmo::OnDrawGizmos(bool depthed, bool overlay)
 {
     RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
     ASSERT(rtrans);
     ASSERT(EditorState::GetCurrentTransformMode() ==
            EditorState::RectTransform);
 
-    Rect rect = rtrans->GetScreenSpaceRect(true);
-    Gizmos::SetColor(Color::White);
-    Gizmos::SetLineWidth(2.0f);
-    Gizmos::RenderRect(rect);
+    if (overlay)
+    {
+        Rect rect = rtrans->GetScreenSpaceRect(true);
+        Gizmos::SetColor(Color::White);
+        Gizmos::SetLineWidth(2.0f);
+        Gizmos::RenderRect(rect);
+    }
 }
 

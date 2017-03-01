@@ -70,19 +70,18 @@ void EditorDebugGameObject::OnUpdate()
     }
 }
 
-void EditorDebugGameObject::OnDrawGizmos()
+void EditorDebugGameObject::OnDrawGizmos(bool depthed, bool overlay)
 {
-    DrawLines(true);
-}
-
-void EditorDebugGameObject::OnDrawGizmosOverlay()
-{
-    DrawLines(false);
+    DrawLines(overlay);
 }
 
 
-
-EditorDebugGameObject::DebugLine::DebugLine(const Vector3 &origin, const Vector3 &destiny, const Color &color, float lineWidth, float livingTimeSecs, bool depthTest, bool screen) :
+EditorDebugGameObject::DebugLine::DebugLine(const Vector3 &origin,
+                                            const Vector3 &destiny,
+                                            const Color &color,
+                                            float lineWidth,
+                                            float livingTimeSecs,
+                                            bool depthTest, bool screen) :
     m_origin(origin), m_destiny(destiny), m_color(color),
     m_depthTest(depthTest), m_lineWidth(lineWidth),
     m_livingTimeSecs(livingTimeSecs), m_screen(screen)

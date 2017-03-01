@@ -129,11 +129,14 @@ void EditorRotateAxis::OnUpdate()
             SetVec3("B_world_circleCenter", transform->GetPosition());
 }
 
-void EditorRotateAxis::OnDrawGizmosOverlay()
+void EditorRotateAxis::OnDrawGizmos(bool depthed, bool overlay)
 {
-    EditorAxis::OnDrawGizmosOverlay();
+    EditorAxis::OnDrawGizmos(depthed, overlay);
 
-    Gizmos::Render(m_circle);
+    if (overlay)
+    {
+        Gizmos::Render(m_circle);
+    }
 }
 
 Renderer *EditorRotateAxis::GetAxisRenderer() const

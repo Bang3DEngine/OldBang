@@ -43,37 +43,41 @@ ICloneable *DirectionalLight::Clone() const
     return dl;
 }
 
-void DirectionalLight::OnDrawGizmos()
+void DirectionalLight::OnDrawGizmos(bool depthed, bool overlay)
 {
-    Light::OnDrawGizmos();
+    Light::OnDrawGizmos(depthed, overlay);
 
-    Texture2D *tex = AssetsManager::Load<Texture2D>("Textures/DirectionalLightIcon.btex2d", true);
-    Gizmos::SetColor(Color(GetColor(), 1.0f));
-    Gizmos::SetPosition(transform->GetPosition());
-    Gizmos::SetScale(Vector3::One * 0.1f);
-    Gizmos::RenderIcon(tex);
-
-    if (gameObject->IsSelected())
+    if (!depthed && !overlay)
     {
-        // Draw lines to show light's direction
-        Camera *cam = SceneManager::GetActiveScene()->GetCamera();
-        float distScale = Vector3::Distance(cam->transform->GetPosition(),
-                                            transform->GetPosition());
+        Texture2D *tex = AssetsManager::Load<Texture2D>(
+                    "Textures/DirectionalLightIcon.btex2d", true);
+        Gizmos::SetColor(Color(GetColor(), 1.0f));
+        Gizmos::SetPosition(transform->GetPosition());
+        Gizmos::SetScale(Vector3::One * 0.1f);
+        Gizmos::RenderIcon(tex);
 
-        const float radius = 0.03f * distScale;
-        const float length = 0.2f * distScale;
-        const Vector3 up = transform->GetUp() * radius;
-        const Vector3 right = transform->GetRight() * radius;
-        const Vector3 forward = transform->GetForward() * length;
-        const Vector3 c = transform->GetPosition();
-
-        Gizmos::SetReceivesLighting(false);
-        for (float angle = 0.0f; angle <= 2 * Math::PI; angle += Math::PI / 4.0f)
+        if (gameObject->IsSelected())
         {
-            Vector3 offx = right * Math::Cos(angle);
-            Vector3 offy = up * Math::Sin(angle);
-            Gizmos::SetColor(Color(GetColor(), 1.0f));
-            Gizmos::RenderLine(c + offx + offy, c + offx + offy + forward);
+            // Draw lines to show light's direction
+            Camera *cam = SceneManager::GetActiveScene()->GetCamera();
+            float distScale = Vector3::Distance(cam->transform->GetPosition(),
+                                                transform->GetPosition());
+
+            const float radius = 0.03f * distScale;
+            const float length = 0.2f * distScale;
+            const Vector3 up = transform->GetUp() * radius;
+            const Vector3 right = transform->GetRight() * radius;
+            const Vector3 forward = transform->GetForward() * length;
+            const Vector3 c = transform->GetPosition();
+
+            Gizmos::SetReceivesLighting(false);
+            for (float ang = 0.0f; ang <= 2 * Math::PI; ang += Math::PI / 4.0f)
+            {
+                Vector3 offx = right * Math::Cos(ang);
+                Vector3 offy = up * Math::Sin(ang);
+                Gizmos::SetColor(Color(GetColor(), 1.0f));
+                Gizmos::RenderLine(c + offx + offy, c + offx + offy + forward);
+            }
         }
     }
 }

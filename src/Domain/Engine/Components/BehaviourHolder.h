@@ -51,10 +51,7 @@ public:
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
     virtual void _OnDestroy () override;
-
-    // They will only override if they are in BANG_EDITOR
-    virtual void _OnDrawGizmos ();
-    virtual void _OnDrawGizmosOverlay ();
+    virtual void _OnDrawGizmos (bool depthed, bool overlay) override;
 
     QLibrary *GetLibraryBeingUsed() const;
 

@@ -15,7 +15,7 @@ public:
     virtual ~EditorScaleAxis();
 
     void OnUpdate() override;
-    void OnDrawGizmosOverlay() override;
+    void OnDrawGizmos(bool depthed, bool overlay) override;
 
 protected:
     virtual Renderer *GetAxisRenderer() const override;

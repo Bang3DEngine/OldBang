@@ -107,12 +107,15 @@ void EditorScaleAxis::OnUpdate()
     }
 }
 
-void EditorScaleAxis::OnDrawGizmosOverlay()
+void EditorScaleAxis::OnDrawGizmos(bool depthed, bool overlay)
 {
-    EditorAxis::OnDrawGizmosOverlay();
+    EditorAxis::OnDrawGizmos(depthed, overlay);
 
-    Gizmos::Render(m_line);
-    Gizmos::Render(m_axisCap->GetComponent<Renderer>());
+    if (overlay)
+    {
+        Gizmos::Render(m_line);
+        Gizmos::Render(m_axisCap->GetComponent<Renderer>());
+    }
 }
 
 Renderer *EditorScaleAxis::GetAxisRenderer() const

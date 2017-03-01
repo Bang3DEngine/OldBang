@@ -30,7 +30,7 @@ void Main()
         if (isOutline)
         {
             float pixelDepth   = FRAG_IN_DEPTH();
-            float depthFade  = (pixelDepth < closestDepth) ? 0.15f : 1.0f;
+            float depthFade  = (pixelDepth < closestDepth) ? 0.4f : 1.0f;
             B_vout.color = vec4(outlineColor.rgb, outlineColor.a * depthFade);
         }
     }

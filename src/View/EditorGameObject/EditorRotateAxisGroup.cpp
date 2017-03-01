@@ -42,17 +42,20 @@ void EditorRotateAxisGroup::OnUpdate()
     GameObject::OnUpdate();
 }
 
-void EditorRotateAxisGroup::OnDrawGizmosOverlay()
+void EditorRotateAxisGroup::OnDrawGizmos(bool depthed, bool overlay)
 {
-    GameObject::OnDrawGizmosOverlay();
+    GameObject::OnDrawGizmos(depthed, overlay);
 
-    Vector3 center = m_axisX->m_attachedGameObject->transform->GetPosition();
-    float radius = 0.9f * m_axisX->m_circle->GetRadius() * transform->GetScale().x;
+    if (overlay)
+    {
+        Vector3 center = m_axisX->m_attachedGameObject->transform->GetPosition();
+        float radius = 0.9f * m_axisX->m_circle->GetRadius() * transform->GetScale().x;
 
-    // Billboard-scaling taken into account too
-    Gizmos::SetColor(Color::Gray);
-    Gizmos::SetReceivesLighting(false);
-    Gizmos::SetPosition(center);
-    Gizmos::SetBillboard();
-    Gizmos::RenderCircle(radius);
+        // Billboard-scaling taken into account too
+        Gizmos::SetColor(Color::Gray);
+        Gizmos::SetReceivesLighting(false);
+        Gizmos::SetPosition(center);
+        Gizmos::SetBillboard();
+        Gizmos::RenderCircle(radius);
+    }
 }

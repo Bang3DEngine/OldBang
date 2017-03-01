@@ -21,7 +21,7 @@ public:
     virtual ~EditorRectTransformAnchorGizmo();
 
     void OnUpdate() override;
-    void OnDrawGizmosOverlay() override;
+    void OnDrawGizmos(bool depthed, bool overlay) override;
 
 private:
     RectTransform *m_attachedRectTransform = nullptr;

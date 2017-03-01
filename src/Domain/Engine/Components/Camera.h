@@ -69,7 +69,7 @@ public:
     Rect GetScreenBoundingRect(const AABox &bbox);
 
     #ifdef BANG_EDITOR
-    void OnDrawGizmos() override;
+    void OnDrawGizmos(bool depthed, bool overlay) override;
     virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
