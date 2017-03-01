@@ -11,12 +11,12 @@ float const& Time::deltaTime = Time::s_deltaTime;
 
 void Time::InitFromMainBinary()
 {
-   SingletonManager::GetInstance()->SetTimeSingleton(new Time());
+   SingletonManager::Set<Time>(new Time());
 }
 
 Time* Time::GetInstance()
 {
-    return SingletonManager::GetInstance()->GetTimeSingleton();
+    return SingletonManager::Get<Time>();
 }
 
 float Time::GetDeltaTime()

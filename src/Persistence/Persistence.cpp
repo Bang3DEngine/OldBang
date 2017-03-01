@@ -509,12 +509,12 @@ String Persistence::AppendExtension(const String &filepath, const String extNoDo
 
 void Persistence::InitFromMainBinary()
 {
-    SingletonManager::GetInstance()->SetPersistenceSingleton(new Persistence());
+    SingletonManager::Set<Persistence>(new Persistence());
 }
 
 Persistence *Persistence::GetInstance()
 {
-    return SingletonManager::GetInstance()->GetPersistenceSingleton();
+    return SingletonManager::Get<Persistence>();
 }
 
 const String &Persistence::GetCurrentSceneFilepath()

@@ -32,7 +32,7 @@ void GameWindow::SetupUI()
 void GameWindow::InitFromMainBinary(QMainWindow *window, QApplication *application)
 {
     GameWindow::s_m_win = new GameWindow(window);
-    SingletonManager::GetInstance()->SetWindowSingleton(GameWindow::s_m_win);
+    SingletonManager::Set<IWindow>(GameWindow::s_m_win);
 
     GameWindow::s_m_win->m_mainWindow = window;
     GameWindow::s_m_win->SetupUI();
@@ -44,7 +44,7 @@ void GameWindow::InitFromMainBinary(QMainWindow *window, QApplication *applicati
 GameWindow *GameWindow::GetInstance()
 {
     return Object::SCast<GameWindow>(
-                SingletonManager::GetInstance()->GetWindowSingleton());
+                SingletonManager::Get<IWindow>());
 }
 
 QMainWindow *GameWindow::GetMainWindow() const

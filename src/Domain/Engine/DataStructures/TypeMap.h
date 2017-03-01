@@ -27,13 +27,11 @@ public:
     template<class Class>
     Value& Get()
     {
-        std::cout << typeid(Class).name() << std::endl;
         return Map<TypeId, Value>::Get( typeid(Class).name() );
     }
     template<class Class>
     const Value& Get() const
     {
-        std::cout << typeid(Class).name() << std::endl;
         return Map<TypeId, Value>::Get( typeid(Class).name() );
     }
 

@@ -27,7 +27,7 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     EditorWindow::s_win->m_winEventManager    = new WindowEventManager();
     EditorWindow::s_win->m_playStopController = new EditorPlayStopFlowController();
 
-    SingletonManager::GetInstance()->SetWindowSingleton(EditorWindow::s_win);
+    SingletonManager::Set<IWindow>(EditorWindow::s_win);
 
     EditorWindow::s_win->m_mainWindow = window;
     EditorWindow::s_win->m_app = application;
@@ -77,13 +77,8 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
 
 EditorWindow *EditorWindow::GetInstance()
 {
-    SingletonManager *sm = SingletonManager::GetInstance();
-    if (sm)
-    {
-        IWindow *w = sm->GetWindowSingleton();
-        return w ? Object::SCast<EditorWindow>(w) : nullptr;
-    }
-    return nullptr;
+    IWindow *w = SingletonManager::Get<IWindow>();
+    return w ? Object::SCast<EditorWindow>(w) : nullptr;
 }
 
 QMainWindow *EditorWindow::GetMainWindow() const

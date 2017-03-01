@@ -9,11 +9,6 @@
 #include "BehaviourHolder.h"
 #include "SingletonManager.h"
 
-
-String SystemUtils::GetAllProjectObjects()
-{
-}
-
 String SystemUtils::GetAllEngineObjects(bool editorMode)
 {
     String subdir = editorMode ? "/bin/objEditor" : "/bin/objGame";

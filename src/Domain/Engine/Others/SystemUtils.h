@@ -30,7 +30,6 @@ public:
         Default = AddProjectObjectFiles | AddEngineObjectFiles
     };
 
-    static String GetAllProjectObjects();
     static String GetAllEngineObjects(bool editorMode);
 
     static String GetAllProjectSubDirs();

@@ -30,8 +30,8 @@ void Behaviour::_OnUpdate()
     ISceneEventListener::_OnUpdate();
 
     // Update static Time::deltaTime variable with mainBinary deltaTime
-    Time::s_deltaTime = SingletonManager::GetInstance()->GetTimeSingleton()->m_deltaTime;
-    Time::s_time = SingletonManager::GetInstance()->GetTimeSingleton()->m_time;
+    Time::s_deltaTime = SingletonManager::Get<Time>()->m_deltaTime;
+    Time::s_time = SingletonManager::Get<Time>()->m_time;
 }
 
 void Behaviour::Init(BehaviourHolder *bh)

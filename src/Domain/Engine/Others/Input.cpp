@@ -20,7 +20,7 @@ Input::Input()
 
 void Input::InitFromMainBinary() // Called from Screen
 {
-    SingletonManager::GetInstance()->SetInputSingleton(new Input());
+    SingletonManager::Set<Input>(new Input());
 }
 
 void Input::OnFrameFinished()
@@ -264,7 +264,7 @@ void Input::ProcessEnqueuedEvents()
 
 Input *Input::GetInstance()
 {
-    return SingletonManager::GetInstance()->GetInputSingleton();
+    return SingletonManager::Get<Input>();
 }
 
 bool Input::GetMouseWrapping()

@@ -36,9 +36,9 @@ void BehaviourRefresherTimer::RefreshBehaviours() const
 {
     BehaviourManager::SetCurrentLibsDir( Persistence::GetProjectLibsRootAbs() );
 
-    List<String> behaviourSources =
+    const List<String>& behaviourSources =
             BehaviourManager::GetBehavioursSourcesFilepathsList();
-    for (String behaviourSource : behaviourSources)
+    for (const String &behaviourSource : behaviourSources)
     {
         if (!BehaviourManager::GetStatus().IsReady(behaviourSource))
         {

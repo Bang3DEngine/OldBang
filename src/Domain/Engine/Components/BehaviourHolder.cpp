@@ -51,7 +51,7 @@ Behaviour *BehaviourHolder::CreateDynamicBehaviour(const String &behaviourName,
             // Call it and get the pointer to the created Behaviour
             // Create the Behaviour, passing to it the SingletonManager
             // of this main binary, so it can link it.
-            return createFunction(SingletonManager::GetInstance());
+            return createFunction(SingletonManager::s_mainBinarySM);
         }
         else
         {

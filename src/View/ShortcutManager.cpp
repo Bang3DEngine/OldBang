@@ -48,12 +48,12 @@ void ShortcutManager::UnregisterListener(IShortcutListener *list)
 
 void ShortcutManager::InitFromMainBinary()
 {
-    SingletonManager::GetInstance()->SetShortcutManagerSingleton(new ShortcutManager());
+    SingletonManager::Set<ShortcutManager>(new ShortcutManager());
 }
 
 ShortcutManager *ShortcutManager::GetInstance()
 {
-    return SingletonManager::GetInstance()->GetShortcutManagerSingleton();
+    return SingletonManager::Get<ShortcutManager>();
 }
 
 bool ShortcutManager::IsPressed(Input::Key key)

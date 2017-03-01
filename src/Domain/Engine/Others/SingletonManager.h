@@ -1,6 +1,20 @@
 #ifndef SINGLETONMANAGER_H
 #define SINGLETONMANAGER_H
 
+#include "Time.h"
+#include "Input.h"
+#include "Object.h"
+#include "TypeMap.h"
+#include "IWindow.h"
+#include "Persistence.h"
+
+class Time;
+class Input;
+class Console;
+class IWindow;
+class Persistence;
+class EditorWindow;
+class ShortcutManager;
 /**
  * @brief This class manages the global Singleton's across
  * the program and the shared libraries of the custom Behaviours.
@@ -18,61 +32,29 @@
  * in the MAIN BINARY.
  */
 
-class Time;
-class Input;
-class Console;
-class IWindow;
-class Persistence;
-class EditorWindow;
-class ShortcutManager;
 class SingletonManager
 {
-private:
-
-    static SingletonManager *s_mainBinarySM;
-
-    IWindow *m_mainBinaryWindow = nullptr;
-    Time *m_mainBinaryTime = nullptr;
-    Input *m_mainBinaryInput = nullptr;
-    Persistence *m_mainBinaryPersistence = nullptr;
-
-    #ifdef BANG_EDITOR
-    ShortcutManager *m_mainBinaryShortcutManager = nullptr;
-    #endif
-
-    SingletonManager() {}
-
 public:
-
-
     /**
-     * The SetXXXXSingleton methods should only be called by the main binary.
+     * The Set methods should only be called by the main binary.
      * So, they should be called in the main() function.
      */
-
-    void SetWindowSingleton(IWindow* mainBinaryEditorWindow);
-    void SetTimeSingleton(Time* mainBinaryTime);
-    void SetInputSingleton(Input* mainBinaryInput);
-    void SetPersistenceSingleton(Persistence* mainBinaryPersistence);
-
-    #ifdef BANG_EDITOR
-    void SetShortcutManagerSingleton(ShortcutManager* mainBinaryShortcutManager);
-    #endif
+    template<class T>
+    static void Set(T* singleton)
+    {
+        return SingletonManager::s_mainBinarySM->m_singletons.Set<T>(singleton);
+    }
 
     /**
-     * The GetXXXXSingleton methods should only be called by the method that
+     * The Get methods should only be called by the method that
      * creates dynamically a user Behaviour.
      */
-
-    IWindow* GetWindowSingleton();
-    Time* GetTimeSingleton();
-    Input* GetInputSingleton();
-    Persistence* GetPersistenceSingleton();
-
-    #ifdef BANG_EDITOR
-    ShortcutManager* GetShortcutManagerSingleton();
-    #endif
-
+    template<class T>
+    static T* Get()
+    {
+        return Object::SCast<T>(
+                    SingletonManager::s_mainBinarySM->m_singletons.Get<T>());
+    }
 
     /**
      * @brief This method should be called ONLY by the behaviour libraries.
@@ -87,16 +69,14 @@ public:
      */
     static void InitSingletonManagerFromMainBinary();
 
-    /**
-     * @brief This method should be called ONLY by the main binary, and passed
-     * to the shared libraries as a parameter of the createFunction of the user
-     * Behaviours (as a SingletonManager* pointer).
-     *
-     * If we try to get it from a shared library, it will return another pointer,
-     * which won't be the one being used in the main binary, so this class would
-     * be useless
-     */
-    static SingletonManager* GetInstance();
+
+private:
+    static SingletonManager *s_mainBinarySM;
+    TypeMap<void*> m_singletons;
+
+    SingletonManager();
+
+    friend class BehaviourHolder;
 };
 
 #endif // SINGLETONMANAGER_H
