@@ -141,7 +141,7 @@ void GraphicPipeline::ApplySelectionOutline()
     }
 
     // Apply selection outline
-    m_gbuffer->RenderPassWithMaterial(m_matSelectionEffectScreen);
+    m_gbuffer->ApplyPass(m_matSelectionEffectScreen->GetShaderProgram());
     m_gbuffer->UnBind();
     glDepthFunc(GL_LESS);
     #endif
@@ -222,22 +222,16 @@ void GraphicPipeline::RenderSelectionBuffer(
 }
 #endif
 
-void GraphicPipeline::RenderPassWithMaterial(Material *mat,
-                                             const Rect &renderRect)
+void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 {
-    ASSERT(mat);
-    ShaderProgram *sp = mat->GetShaderProgram(); ASSERT(sp);
-
     m_screenPlaneMesh->BindPositionsToShaderProgram(
       ShaderContract::Attr_Vertex_In_Position_Raw, *sp);
 
-    sp->SetVec2("B_rectMinCoord", renderRect.GetMin());
-    sp->SetVec2("B_rectMaxCoord", renderRect.GetMax());
+    sp->SetVec2("B_rectMinCoord", mask.GetMin());
+    sp->SetVec2("B_rectMaxCoord", mask.GetMax());
 
     sp->OnRenderingStarts(nullptr, sp);
-    mat->OnRenderingStarts(nullptr, sp);
     RenderScreenPlane();
-    mat->OnRenderingEnds(nullptr, sp);
     sp->OnRenderingEnds(nullptr, sp);
 }
 

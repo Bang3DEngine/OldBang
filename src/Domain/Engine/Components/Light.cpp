@@ -44,7 +44,8 @@ void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
     // Intersect with light rect to draw exactly what we need
     Camera *cam = SceneManager::GetActiveScene()->GetCamera();
     Rect improvedRenderRect = renderRect; //Rect::Intersection(GetRenderRect(cam), renderRect);
-    gbuffer->RenderPassWithMaterial(m_lightMaterialScreen, improvedRenderRect);
+    gbuffer->ApplyPass(m_lightMaterialScreen->GetShaderProgram(),
+                                    improvedRenderRect);
 
     gbuffer->UnBind();
 }

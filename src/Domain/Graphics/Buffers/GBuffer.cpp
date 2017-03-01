@@ -8,6 +8,7 @@
 #include "Color.h"
 #include "Array.h"
 #include "Camera.h"
+#include "Screen.h"
 #include "Material.h"
 #include "Transform.h"
 #include "MeshFactory.h"
@@ -60,19 +61,21 @@ void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 }
 
 
-void GBuffer::RenderPassWithMaterial(Material *mat, const Rect &renderRect)
+void GBuffer::ApplyPass(ShaderProgram *sp, const Rect &mask)
 {
-    ASSERT(mat);
+    Vector2 buffersSize = GraphicPipeline::GetBuffersSize();
+    sp->SetVec2("B_buffer_size", buffersSize);
+    sp->SetVec2("B_screen_size", Screen::GetSize());
 
     bool prevStencilWrite = m_stencilWriteEnabled;
     SetStencilWrite(false);
 
-    OnRenderingStarts(nullptr, mat->GetShaderProgram());
+    OnRenderingStarts(nullptr, sp);
     SaveCurrentDrawBuffers();
 
-    // Set as only draw output: "B_color_gout_gin". To accumulate color in there
+    // Set as only draw output: "B_color_gout_gin". Accumulate color there.
     SetColorDrawBuffer();
-    GraphicPipeline::GetActive()->RenderPassWithMaterial(mat, renderRect);
+    GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
 
     SetStencilWrite(prevStencilWrite);
     LoadSavedDrawBuffers();

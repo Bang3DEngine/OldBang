@@ -50,8 +50,8 @@ public:
 
     virtual void OnRenderingStarts(GameObject *go,
                                    ShaderProgram *sp) override;
-    void RenderPassWithMaterial(Material *mat,
-                                const Rect &renderRect = Rect(-1, 1, -1, 1));
+    void ApplyPass(ShaderProgram *sp,
+                                const Rect &mask = Rect::ScreenRect);
     void RenderToScreen(Attachment attachmentId);
     void RenderToScreen();
 

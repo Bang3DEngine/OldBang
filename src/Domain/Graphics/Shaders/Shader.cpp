@@ -19,6 +19,12 @@ Shader::Shader(Shader::Type t, const String &shaderPath) : Shader(t)
 
 bool Shader::LoadFromFile(const String& filepath)
 {
+    if (!Persistence::ExistsFile(filepath))
+    {
+        Debug_Error("Shader '" << filepath << "' does not exist.");
+        return false;
+    }
+
     // Mini cache to avoid recompiling
     static Map<String, GLuint> s_cacheFilepathToIdGL;
 

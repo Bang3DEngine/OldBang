@@ -190,6 +190,7 @@ void Material::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
     Vector2 buffersSize = GraphicPipeline::GetBuffersSize();
     sp->SetVec2("B_buffer_size", buffersSize);
     sp->SetVec2("B_screen_size", Screen::GetSize());
+
     sp->SetColor("B_material_diffuse_color", m_diffuseColor);
     sp->SetFloat("B_material_shininess", m_shininess);
     sp->SetFloat("B_material_receivesLighting",

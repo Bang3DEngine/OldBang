@@ -28,8 +28,7 @@ public:
     void RenderScene(Scene *scene, bool inGame);
     void RenderRenderer(Renderer *rend);
     void RenderToScreen(Texture *fullScreenTexture);
-    void RenderPassWithMaterial(Material *mat,
-                                const Rect &renderRect = Rect(-1, 1, -1, 1));
+    void ApplyScreenPass(ShaderProgram *sp, const Rect &mask = Rect::ScreenRect);
     void RenderScreenPlane();
 
     void OnResize(int newWidth, int newHeight);
@@ -43,9 +42,7 @@ public:
     GLContext *GetGLContext() const;
     GBuffer *GetGBuffer();
     Renderer::DepthLayer GetCurrentDepthLayer() const;
-
     static Vector2 GetBuffersSize();
-
     #ifdef BANG_EDITOR
     SelectionFramebuffer* GetSelectionFramebuffer();
     #endif
