@@ -26,6 +26,9 @@ public:
         None = GL_NONE
     };
 
+    static void ClearColorBuffer(const Color& clearColor = Color::Black);
+    static void ClearDepthBuffer(float clearDepth = 1.0f);
+
     static void SetWriteDepth(bool writeDepth);
     static void SetTestDepth(bool testDepth);
     static void SetWireframe(bool wireframe);

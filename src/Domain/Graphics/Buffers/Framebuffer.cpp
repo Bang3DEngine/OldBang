@@ -1,9 +1,9 @@
 #include "Framebuffer.h"
 
-
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+#include "GL.h"
 #include "Math.h"
 #include "Debug.h"
 #include "Vector2.h"
@@ -168,17 +168,15 @@ void Framebuffer::Clear()
 {
     Bind();
     SetAllDrawBuffers();
-    glClear(GL_STENCIL_BUFFER_BIT |
-            GL_DEPTH_BUFFER_BIT   |
-            GL_COLOR_BUFFER_BIT);
+    GL::ClearDepthBuffer();
+    GL::ClearColorBuffer();
     UnBind();
 }
 
 void Framebuffer::ClearDepth()
 {
     Bind();
-    glClearDepth(1.0f);
-    glClear(GL_DEPTH_BUFFER_BIT);
+    GL::ClearDepthBuffer();
     UnBind();
 }
 
@@ -186,7 +184,7 @@ void Framebuffer::ClearColor()
 {
     Bind();
     SetAllDrawBuffers();
-    glClear(GL_COLOR_BUFFER_BIT);
+    GL::ClearColorBuffer();
     UnBind();
 }
 

@@ -102,9 +102,11 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
     List<GameObject*> sceneChildren = scene->GetChildren();
 
+    //*
     RenderGBuffer(renderers, sceneChildren);
     m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 
+    //*/
     #ifdef BANG_EDITOR
     if (!m_renderingInGame)
     {
@@ -112,6 +114,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
         // RenderToScreen(m_selectionFB->GetColorTexture()); // To see it
     }
     #endif
+    //*/
 }
 
 void GraphicPipeline::ApplySelectionOutline()
