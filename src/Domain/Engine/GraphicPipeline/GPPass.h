@@ -9,11 +9,12 @@ class Renderer;
 class GameObject;
 class GraphicPipeline;
 class SelectionFramebuffer;
-class GraphicPipelinePass
+class GPPass
 {
 public:
-    GraphicPipelinePass(GraphicPipeline *graphicPipeline);
-    virtual ~GraphicPipelinePass();
+    GPPass(GraphicPipeline *graphicPipeline,
+                        const List<GPPass*> &subPasses = {});
+    virtual ~GPPass();
 
     virtual void PrePass(const List<Renderer*> &renderers,
                          const List<GameObject*> &sceneChildren);
@@ -25,15 +26,16 @@ public:
     virtual void Pass(const List<Renderer*> &renderers,
                       const List<GameObject*> &sceneChildren);
 
-    void AddSubPass(GraphicPipelinePass *subPass);
+    void AddSubPass(GPPass *subPass);
     virtual bool CanRender(const Renderer *renderer) const;
 
 protected:
     Scene *p_scene = nullptr;
     GBuffer *p_gbuffer = nullptr;
+    GPPass *p_parentPass = nullptr;
     GraphicPipeline *p_graphicPipeline = nullptr;
-    GraphicPipelinePass *p_parentPass = nullptr;
-    List<GraphicPipelinePass*> m_subPasses;
+
+    List<GPPass*> m_subPasses;
 
     #ifdef BANG_EDITOR
     SelectionFramebuffer *p_selectionFramebuffer = nullptr;

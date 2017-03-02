@@ -32,6 +32,7 @@ EditorRectTransformCornerGizmo::~EditorRectTransformCornerGizmo()
 void EditorRectTransformCornerGizmo::OnUpdate()
 {
     EditorGizmo::OnUpdate();
+    ASSERT(m_attachedRectTransform);
 
     if (!m_mouseIsOver && !m_grabbed)
     {
@@ -54,14 +55,13 @@ void EditorRectTransformCornerGizmo::OnUpdate()
 
 void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
 {
-    RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
-    ASSERT(rtrans);
+    ASSERT(m_attachedRectTransform);
     ASSERT(EditorState::GetCurrentTransformMode() ==
            EditorState::RectTransform);
 
     if (overlay)
     {
-        Rect rect = rtrans->GetScreenSpaceRect(true);
+        Rect rect = m_attachedRectTransform->GetScreenSpaceRect(true);
         const Vector2 cornerOffset = GetCornerOffset();
         const Vector2 circleCenter = rect.GetCenter() + cornerOffset;
         const Vector2 circleSize = Vector2(0.025f);

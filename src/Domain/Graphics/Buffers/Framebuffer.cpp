@@ -173,18 +173,18 @@ void Framebuffer::Clear()
     UnBind();
 }
 
-void Framebuffer::ClearDepth()
+void Framebuffer::ClearDepth(float clearDepth)
 {
     Bind();
-    GL::ClearDepthBuffer();
+    GL::ClearDepthBuffer(clearDepth);
     UnBind();
 }
 
-void Framebuffer::ClearColor()
+void Framebuffer::ClearColor(const Color &clearColor)
 {
     Bind();
     SetAllDrawBuffers();
-    GL::ClearColorBuffer();
+    GL::ClearColorBuffer(clearColor);
     UnBind();
 }
 

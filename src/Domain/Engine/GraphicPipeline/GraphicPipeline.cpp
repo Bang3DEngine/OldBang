@@ -13,6 +13,7 @@
 #include "GBuffer.h"
 #include "Texture.h"
 #include "Material.h"
+#include "GPPass_G.h"
 #include "Transform.h"
 #include "GLContext.h"
 #include "GameObject.h"
@@ -24,7 +25,6 @@
 #include "RectTransform.h"
 #include "ShaderContract.h"
 #include "GPPass_G_Gizmos.h"
-#include "GPPass_G.h"
 #include "GraphicPipelineDebugger.h"
 #include "GPPass_SP_DeferredLights.h"
 
@@ -37,15 +37,7 @@
 GraphicPipeline::GraphicPipeline(Screen *screen)
   : m_gbuffer(new GBuffer(screen->m_width, screen->m_height)),
     #ifdef BANG_EDITOR
-    m_selectionFB(new SelectionFramebuffer(screen->m_width, screen->m_height)),
-    #endif
-    m_scenePass (this, Renderer::DepthLayer::DepthLayerScene),
-    m_canvasPass(this, Renderer::DepthLayer::DepthLayerCanvas),
-    m_gizmosPass(this, Renderer::DepthLayer::DepthLayerGizmos)
-    #ifdef BANG_EDITOR
-    ,m_sceneSelectionPass (this, Renderer::DepthLayer::DepthLayerScene)
-    ,m_canvasSelectionPass(this, Renderer::DepthLayer::DepthLayerCanvas)
-    ,m_gizmosSelectionPass(this, Renderer::DepthLayer::DepthLayerGizmos)
+    m_selectionFB(new SelectionFramebuffer(screen->m_width, screen->m_height))
     #endif
 {
     m_glContext = new GLContext();
@@ -59,33 +51,63 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 
     // Set up graphic pipeline passes
-    m_scenePass.AddSubPass (new GPPass_G(this, true, false));
-    m_scenePass.AddSubPass (new GPPass_SP_DeferredLights(this));
-    m_scenePass.AddSubPass (new GPPass_G(this, false, false));
-      GPPass_G *transparentLightedPass = new GPPass_G(this, true, true);
-      transparentLightedPass->AddSubPass(new GPPass_SP_DeferredLights(this));
-    m_scenePass.AddSubPass (transparentLightedPass);
-    m_scenePass.AddSubPass (new GPPass_G(this, false, true));
+    typedef Renderer::DepthLayer DL;
+    m_scenePass  =
+     new GPPass_DepthLayer(this, DL::DepthLayerScene,
+     {
+       new GPPass_G(this, true, false),     // Lighted opaques G Pass
+       new GPPass_SP_DeferredLights(this),  // Apply light to opaques
+       new GPPass_G(this, false, false),    // UnLighted opaques G Pass
 
-    m_canvasPass.AddSubPass(new GPPass_G(this, false, false));
-    m_canvasPass.AddSubPass(new GPPass_G(this, false, true));
+       new GPPass_G(this, true, true,       // Lighted Transparent G pass
+       {
+         new GPPass_SP_DeferredLights(this) //   Add light to transparent
+       }),
+       new GPPass_G(this, false, true)      // Unlighted Transparent
+     });
 
-    m_gizmosPass.AddSubPass(new GPPass_G_Gizmos(this, true, false));
-    m_gizmosPass.AddSubPass(new GPPass_G_Gizmos(this, false, false));
-    m_gizmosPass.AddSubPass(new GPPass_G_Gizmos(this, false, true));
+    m_canvasPass =
+     new GPPass_DepthLayer(this, DL::DepthLayerCanvas,
+     {
+      new GPPass_G(this, false, false),  // Canvas opaques
+      new GPPass_G(this, false, true)    // Canvas transparents
+     });
+
+    m_gizmosPass = new GPPass_DepthLayer(this, DL::DepthLayerGizmos,
+    {
+     new GPPass_G_Gizmos(this, true, false), // Gizmos with depth
+     new GPPass_G_Gizmos(this, true, false), // Gizmos normal
+     new GPPass_G_Gizmos(this, true, false)  // Gizmos with overlay
+    });
 
     #ifdef BANG_EDITOR
-    m_sceneSelectionPass.AddSubPass (new GPPass_Selection(this));
-    m_canvasSelectionPass.AddSubPass(new GPPass_Selection(this));
-    m_gizmosSelectionPass.AddSubPass(new GPPass_Selection(this));
+    m_sceneSelectionPass  = new GPPass_DepthLayer(this, DL::DepthLayerScene,
+    {
+      new GPPass_Selection(this)
+    });
+    m_canvasSelectionPass  = new GPPass_DepthLayer(this, DL::DepthLayerCanvas,
+    {
+      new GPPass_Selection(this)
+    });
+    m_gizmosSelectionPass  = new GPPass_DepthLayer(this, DL::DepthLayerGizmos,
+    {
+      new GPPass_Selection(this)
+    });
     #endif
 }
 
 GraphicPipeline::~GraphicPipeline()
 {
     delete m_gbuffer;
+    delete m_scenePass;
+    delete m_canvasPass;
+    delete m_gizmosPass;
+
     #ifdef BANG_EDITOR
     delete m_selectionFB;
+    delete m_sceneSelectionPass;
+    delete m_canvasSelectionPass;
+    delete m_gizmosSelectionPass;
     #endif
 
     delete m_matSelectionEffectScreen;
@@ -190,11 +212,11 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
     m_gbuffer->ClearBuffersAndBackground(bgColor);
     m_gbuffer->Bind();
 
-    m_scenePass.Pass(renderers, sceneChildren);
+    m_scenePass->Pass(renderers, sceneChildren);
     if (!m_renderingInGame) { ApplySelectionOutline(); }
     m_gbuffer->ClearStencil();
-    m_canvasPass.Pass(renderers, sceneChildren);
-    m_gizmosPass.Pass(renderers, sceneChildren);
+    m_canvasPass->Pass(renderers, sceneChildren);
+    m_gizmosPass->Pass(renderers, sceneChildren);
 
     m_gbuffer->UnBind();
 }
@@ -212,10 +234,10 @@ void GraphicPipeline::RenderSelectionBuffer(
 
     m_selectionFB->Bind();
 
-    m_selectionFB->ClearColor();
-    m_sceneSelectionPass.Pass(renderers, sceneChildren);
-    m_canvasSelectionPass.Pass(renderers, sceneChildren);
-    m_gizmosSelectionPass.Pass(renderers, sceneChildren);
+    m_selectionFB->ClearColor(Color::One);
+    m_sceneSelectionPass->Pass(renderers, sceneChildren);
+    m_canvasSelectionPass->Pass(renderers, sceneChildren);
+    m_gizmosSelectionPass->Pass(renderers, sceneChildren);
 
     m_selectionFB->UnBind();
 

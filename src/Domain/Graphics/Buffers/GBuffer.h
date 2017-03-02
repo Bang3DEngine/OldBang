@@ -65,10 +65,10 @@ public:
     void SetStencilWrite(bool writeEnabled);
     void SetStencilTest(bool testEnabled);
     void ClearStencil();
-    void ClearDepth() override;
+    void ClearDepth(float clearDepth = 1.0f) override;
 
-    void ClearAllBuffersExceptColor();
-    void ClearBuffersAndBackground(const ::Color& backgroundColor, const ::Color& clearValue = ::Color::Zero);
+    void ClearBuffersAndBackground(const ::Color& backgroundColor,
+                                   const ::Color& clearValue = ::Color::Zero);
 };
 
 #endif // GBUFFER_H

@@ -40,7 +40,6 @@ SelectionFramebuffer::~SelectionFramebuffer()
 
 void SelectionFramebuffer::PrepareForRender(const Scene *scene)
 {
-    // Assign id's
     int id = 0;
     m_gameObject_To_Id.Clear();
     m_id_To_GameObject.Clear();
@@ -51,7 +50,6 @@ void SelectionFramebuffer::PrepareForRender(const Scene *scene)
         m_id_To_GameObject[id] = go;
         ++id;
     }
-    //
 }
 
 void SelectionFramebuffer::PrepareNextGameObject(GameObject *go)

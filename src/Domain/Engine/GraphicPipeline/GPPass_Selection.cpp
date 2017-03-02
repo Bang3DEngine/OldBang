@@ -9,15 +9,16 @@
 #include "GPPass_DepthLayer.h"
 #include "SelectionFramebuffer.h"
 
-GPPass_Selection::GPPass_Selection(GraphicPipeline *graphicPipeline)
-    : GraphicPipelinePass(graphicPipeline)
+GPPass_Selection::GPPass_Selection(GraphicPipeline *graphicPipeline,
+                                   const List<GPPass*> &subPasses)
+    : GPPass(graphicPipeline, subPasses)
 {
 }
 
 void GPPass_Selection::InPass(const List<Renderer *> &renderers,
                               const List<GameObject *> &sceneChildren)
 {
-    GraphicPipelinePass::InPass(renderers, sceneChildren);
+    GPPass::InPass(renderers, sceneChildren);
 
     p_selectionFramebuffer->SetAllDrawBuffers();
 
@@ -56,7 +57,7 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
 
 bool GPPass_Selection::CanRender(const Renderer *renderer) const
 {
-    return GraphicPipelinePass::CanRender(renderer) &&
+    return GPPass::CanRender(renderer) &&
            !renderer->gameObject->HasHideFlag(HideFlags::HideInSelection);
 }
 

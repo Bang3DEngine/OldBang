@@ -35,8 +35,8 @@ public:
     Vector2 GetSize() const;
 
     void Clear();
-    virtual void ClearDepth();
-    void ClearColor();
+    virtual void ClearDepth(float clearDepth = 1.0f);
+    void ClearColor(const Color &clearColor = Color::Zero);
 
     virtual void Bind() const override;
     virtual void UnBind() const override;

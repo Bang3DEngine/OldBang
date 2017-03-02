@@ -286,7 +286,6 @@ HEADERS +=                                                          \
     src/Persistence/IO/stb_image_write.h \
     src/Domain/Engine/Others/GraphicPipelineDebugger.h \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.h \
-    src/Domain/Engine/GraphicPipeline/GraphicPipelinePass.h \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.h \
     src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.h \
     src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h \
@@ -300,7 +299,8 @@ HEADERS +=                                                          \
     src/Persistence/Project/ProjectManager.h \
     src/Persistence/Behaviours/BehaviourObjectCompileRunnable.h \
     src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_G.h
+    src/Domain/Engine/GraphicPipeline/GPPass_G.h \
+    src/Domain/Engine/GraphicPipeline/GPPass.h
 
 EDITOR {
 HEADERS += \
@@ -501,7 +501,6 @@ SOURCES += \
     src/Domain/Engine/Object.cpp \
     src/Domain/Engine/Others/GraphicPipelineDebugger.cpp \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.cpp \
-    src/Domain/Engine/GraphicPipeline/GraphicPipelinePass.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.cpp \
@@ -514,7 +513,8 @@ SOURCES += \
     src/Persistence/Project/Project.cpp \
     src/Persistence/Behaviours/BehaviourObjectCompileRunnable.cpp \
     src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_G.cpp
+    src/Domain/Engine/GraphicPipeline/GPPass_G.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass.cpp
 
 EDITOR {
     SOURCES += \

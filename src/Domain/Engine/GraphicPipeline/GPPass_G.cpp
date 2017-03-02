@@ -8,9 +8,9 @@
 #include "GraphicPipeline.h"
 
 GPPass_G::GPPass_G(GraphicPipeline *graphicPipeline,
-                   bool receiveLighting,
-                   bool transparent)
-    : GraphicPipelinePass(graphicPipeline)
+                   bool receiveLighting, bool transparent,
+                   const List<GPPass*> &subPasses)
+    : GPPass(graphicPipeline, subPasses)
 {
     m_receiveLighting = receiveLighting;
     m_transparent = transparent;
@@ -19,7 +19,7 @@ GPPass_G::GPPass_G(GraphicPipeline *graphicPipeline,
 void GPPass_G::InPass(const List<Renderer*> &renderers,
                       const List<GameObject*> &sceneChildren)
 {
-    GraphicPipelinePass::InPass(renderers, sceneChildren);
+    GPPass::InPass(renderers, sceneChildren);
 
     p_gbuffer->SetAllDrawBuffers();
     if (m_transparent) { GL::SetWriteDepth(false); }
@@ -39,7 +39,7 @@ bool GPPass_G::CanRender(const Renderer *renderer) const
 {
     Material *rendMaterial = renderer->GetMaterial();
     bool receivesLighting = rendMaterial && rendMaterial->ReceivesLighting();
-    return GraphicPipelinePass::CanRender(renderer) &&
+    return GPPass::CanRender(renderer) &&
            (m_transparent == renderer->IsTransparent()) &&
            (m_receiveLighting == receivesLighting);
 }

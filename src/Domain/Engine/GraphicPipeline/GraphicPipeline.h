@@ -61,11 +61,14 @@ private:
     SelectionFramebuffer *m_selectionFB = nullptr;
     #endif
 
-    GPPass_DepthLayer m_scenePass, m_canvasPass, m_gizmosPass;
+    GPPass_DepthLayer *m_scenePass  = nullptr;
+    GPPass_DepthLayer *m_canvasPass = nullptr;
+    GPPass_DepthLayer *m_gizmosPass = nullptr;
 
     #ifdef BANG_EDITOR
-    GPPass_DepthLayer m_sceneSelectionPass, m_canvasSelectionPass,
-                      m_gizmosSelectionPass;
+    GPPass_DepthLayer *m_sceneSelectionPass  = nullptr;
+    GPPass_DepthLayer *m_canvasSelectionPass = nullptr;
+    GPPass_DepthLayer *m_gizmosSelectionPass = nullptr;
     #endif
 
     GBuffer::Attachment m_gbufferAttachToBeShown = GBuffer::Attachment::Color;

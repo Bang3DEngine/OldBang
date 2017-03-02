@@ -10,16 +10,17 @@
 #endif
 
 GPPass_DepthLayer::GPPass_DepthLayer(GraphicPipeline *graphicPipeline,
-                                     Renderer::DepthLayer depthLayer) :
-    GraphicPipelinePass(graphicPipeline),
-    m_depthLayer(depthLayer)
+                                     Renderer::DepthLayer depthLayer,
+                                     const List<GPPass*> &subPasses)
+    : GPPass(graphicPipeline, subPasses)
 {
+    m_depthLayer = depthLayer;
 }
 
 void GPPass_DepthLayer::PrePass(const List<Renderer*> &renderers,
                                 const List<GameObject*> &sceneChildren)
 {
-    GraphicPipelinePass::PrePass(renderers, sceneChildren);
+    GPPass::PrePass(renderers, sceneChildren);
 
     #ifdef BANG_EDITOR
     if (!p_selectionFramebuffer->IsPassing())
@@ -29,7 +30,7 @@ void GPPass_DepthLayer::PrePass(const List<Renderer*> &renderers,
     else
     #endif
     {
-        p_gbuffer->ClearAllBuffersExceptColor();
+        p_gbuffer->ClearDepth();
     }
 }
 
@@ -43,7 +44,7 @@ bool GPPass_DepthLayer::CanRender(const Renderer *renderer) const
     bool dontRenderEditorStuffInGame = true;
     #endif
 
-    return GraphicPipelinePass::CanRender(renderer) &&
+    return GPPass::CanRender(renderer) &&
            renderer->GetDepthLayer() == m_depthLayer &&
            dontRenderEditorStuffInGame;
 }

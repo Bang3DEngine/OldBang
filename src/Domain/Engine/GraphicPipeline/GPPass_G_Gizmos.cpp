@@ -6,8 +6,9 @@
 #include "GameObject.h"
 
 GPPass_G_Gizmos::GPPass_G_Gizmos(GraphicPipeline *graphicPipeline,
-                                 bool depthed, bool overlay)
-    : GraphicPipelinePass(graphicPipeline)
+                                 bool depthed, bool overlay,
+                                 const List<GPPass*> &subPasses)
+    : GPPass(graphicPipeline, subPasses)
 {
     m_depthed = depthed;
     m_overlay = overlay;
@@ -16,7 +17,7 @@ GPPass_G_Gizmos::GPPass_G_Gizmos(GraphicPipeline *graphicPipeline,
 void GPPass_G_Gizmos::InPass(const List<Renderer*> &renderers,
                              const List<GameObject*> &sceneChildren)
 {
-    GraphicPipelinePass::InPass(renderers, sceneChildren);
+    GPPass::InPass(renderers, sceneChildren);
 
     p_gbuffer->SetAllDrawBuffers();
     p_gbuffer->SetStencilTest(false);
