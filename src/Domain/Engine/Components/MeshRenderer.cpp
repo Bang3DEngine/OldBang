@@ -73,10 +73,8 @@ void MeshRenderer::RenderWithoutMaterial() const
 {
     ASSERT(m_mesh);
 
-    m_mesh->GetVAO()->Bind();
-    BindCurrentMeshToShaderProgram(); // Bind mesh VAO's to shaderProgram
-    glDrawArrays(GLint(m_renderMode), 0, m_mesh->GetVertexCount());
-    m_mesh->GetVAO()->UnBind();
+    BindCurrentMeshToShaderProgram();
+    GL::Render(m_mesh->GetVAO(), m_renderMode, m_mesh->GetVertexCount());
 }
 
 void MeshRenderer::ReadXMLInfo(const XMLNode *xmlInfo)

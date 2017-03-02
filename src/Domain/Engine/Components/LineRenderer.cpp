@@ -41,9 +41,7 @@ void LineRenderer::BindPointsToVAO() const
 
 void LineRenderer::RenderWithoutMaterial() const
 {
-    m_vao->Bind();
-    glDrawArrays(GLint(m_drawLinesMode), 0, m_points.Size());
-    m_vao->UnBind();
+    GL::Render(m_vao, m_drawLinesMode, m_points.Size());
 }
 
 void LineRenderer::SetMaterial(Material *m)

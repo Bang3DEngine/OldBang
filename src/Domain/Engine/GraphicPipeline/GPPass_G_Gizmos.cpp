@@ -22,11 +22,11 @@ void GPPass_G_Gizmos::InPass(const List<Renderer*> &renderers,
     p_gbuffer->SetStencilTest(false);
     p_gbuffer->SetStencilWrite(false);
 
-    glDepthFunc(GL_LESS);
-    if (m_overlay || !m_depthed) { glDepthFunc(GL_ALWAYS); }
+    GL::SetTestDepth(true);
+    if (m_overlay || !m_depthed) { GL::SetTestDepth(false); }
     for (GameObject *go : sceneChildren)
     {
         go->_OnDrawGizmos(m_depthed, m_overlay);
     }
-    glDepthFunc(GL_LESS);
+    GL::SetTestDepth(true);
 }

@@ -34,13 +34,13 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
     }
     else
     {
-        glDepthFunc(GL_LESS);
+        GL::SetTestDepth(true);
         for (GameObject *go : sceneChildren)
         {
             go->_OnDrawGizmos(true, false);
         }
 
-        glDepthFunc(GL_ALWAYS);
+        GL::SetTestDepth(false);
         for (GameObject *go : sceneChildren)
         {
             go->_OnDrawGizmos(false, false);
@@ -50,14 +50,13 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
         {
             go->_OnDrawGizmos(false, true);
         }
-        glDepthFunc(GL_LESS);
+        GL::SetTestDepth(true);
     }
 }
 
 bool GPPass_Selection::CanRender(const Renderer *renderer) const
 {
-    return renderer &&
-           (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
+    return GraphicPipelinePass::CanRender(renderer) &&
            !renderer->gameObject->HasHideFlag(HideFlags::HideInSelection);
 }
 

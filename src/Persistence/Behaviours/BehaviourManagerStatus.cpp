@@ -78,17 +78,6 @@ bool BehaviourManagerStatus::IsReady(const String &behaviourFilepath) const
     return IsReady( BehaviourId(behaviourFilepath) );
 }
 
-bool BehaviourManagerStatus::SomeBehaviourWithError() const
-{
-    List<String> sourcesFilepaths =
-            BehaviourManager::GetBehavioursSourcesFilepathsList();
-    for (const String &srcFilepath : sourcesFilepaths)
-    {
-        if (HasFailed(srcFilepath)) { return true; }
-    }
-    return false;
-}
-
 bool BehaviourManagerStatus::IsBehavioursLibraryReady() const
 {
     return m_behavioursLibraryReady;

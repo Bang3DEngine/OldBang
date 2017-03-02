@@ -33,7 +33,6 @@ UIText::~UIText()
 
 void UIText::Render() const
 {
-    glDepthFunc(GL_LEQUAL);
     RenderText();
 }
 

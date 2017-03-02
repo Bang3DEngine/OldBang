@@ -42,7 +42,8 @@ void GraphicPipelinePass::AddSubPass(GraphicPipelinePass *subPass)
 
 bool GraphicPipelinePass::CanRender(const Renderer *renderer) const
 {
-    return true;
+    return (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
+            CAN_USE_COMPONENT(renderer);
 }
 
 GraphicPipelinePass::GraphicPipelinePass(GraphicPipeline *graphicPipeline) :

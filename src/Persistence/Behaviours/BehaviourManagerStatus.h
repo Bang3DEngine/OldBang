@@ -60,7 +60,6 @@ public:
     bool IsReady(const BehaviourId &bid) const;
     bool IsReady(const String &behaviourFilepath) const;
 
-    bool SomeBehaviourWithError() const;
     bool IsBehavioursLibraryReady() const;
 
 private:

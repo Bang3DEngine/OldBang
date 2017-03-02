@@ -4,6 +4,7 @@
 #include "Matrix4.h"
 #include "ShaderProgram.h"
 
+class VAO;
 class GLContext;
 class GL
 {
@@ -25,6 +26,8 @@ public:
         None = GL_NONE
     };
 
+    static void SetWriteDepth(bool writeDepth);
+    static void SetTestDepth(bool testDepth);
     static void SetWireframe(bool wireframe);
     static void SetCullMode(const GL::CullMode cullMode);
     static void SetModelMatrix(const Matrix4 &model);
@@ -32,9 +35,13 @@ public:
     static void SetProjectionMatrix(const Matrix4 &projection);
 
     static void ApplyToShaderProgram(ShaderProgram *sp);
-    static void Apply();
-    static void Reset();
+    static void Render(const VAO* vao,
+                       GL::RenderMode renderMode,
+                       int elementsCount,
+                       int startElementIndex = 0);
 
+    static bool IsWriteDepth();
+    static bool IsTestDepth();
     static bool IsWireframe();
     static GL::CullMode GetCullMode();
     static const Matrix4 &GetModelMatrix();

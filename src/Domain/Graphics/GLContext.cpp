@@ -3,6 +3,7 @@
 #include "GL/gl.h"
 #include "GL/glew.h"
 
+#include "VAO.h"
 #include "Debug.h"
 #include "Scene.h"
 #include "Camera.h"
@@ -38,37 +39,41 @@ void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
     sp->UnBind();
 }
 
-void GLContext::Apply() const
+void GLContext::Render(const VAO* vao, GL::RenderMode renderMode,
+                       int elementsCount, int startIndex) const
 {
-    glPolygonMode(GL_FRONT_AND_BACK, m_wireframe ? GL_LINE : GL_FILL);
+    vao->Bind();
+    glDrawArrays( static_cast<GLint>(renderMode), startIndex, elementsCount);
+    vao->UnBind();
+}
 
+void GLContext::SetWriteDepth(bool writeDepth)
+{
+    m_writeDepth = writeDepth;
+    glDepthMask(m_writeDepth ? GL_TRUE : GL_FALSE);
+}
+
+void GLContext::SetTestDepth(bool testDepth)
+{
+    m_testDepth = testDepth;
+    glDepthFunc(m_testDepth ? GL_LEQUAL : GL_ALWAYS);
+}
+
+void GLContext::SetWireframe(bool wireframe)
+{
+    m_wireframe = wireframe;
+    glPolygonMode(GL_FRONT_AND_BACK, m_wireframe ? GL_LINE : GL_FILL);
+}
+
+void GLContext::SetCullMode(GL::CullMode cullMode)
+{
+    m_cullMode = cullMode;
     if (m_cullMode != GL::CullMode::None)
     {
         glEnable(GL_CULL_FACE);
         glCullFace(GLint(m_cullMode));
     }
     else { glDisable(GL_CULL_FACE); }
-}
-
-void GLContext::Reset()
-{
-    SetWireframe(false);
-    SetCullMode(GL::CullMode::None);
-    SetModelMatrix(Matrix4::Identity);
-    SetViewMatrix(Matrix4::Identity);
-    SetProjectionMatrix(Matrix4::Identity);
-}
-
-
-
-void GLContext::SetWireframe(bool wireframe)
-{
-    m_wireframe = wireframe;
-}
-
-void GLContext::SetCullMode(GL::CullMode cullMode)
-{
-    m_cullMode = cullMode;
 }
 
 void GLContext::SetModelMatrix(const Matrix4 &model)
@@ -87,6 +92,17 @@ void GLContext::SetProjectionMatrix(const Matrix4 &projection)
 }
 
 
+
+
+bool GLContext::IsWriteDepth() const
+{
+    return m_writeDepth;
+}
+
+bool GLContext::IsTestDepth() const
+{
+    return m_testDepth;
+}
 
 bool GLContext::IsWireframe() const
 {

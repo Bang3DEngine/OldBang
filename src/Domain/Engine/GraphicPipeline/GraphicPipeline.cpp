@@ -122,7 +122,7 @@ void GraphicPipeline::ApplySelectionOutline()
     List<GameObject*> sceneGameObjects = p_scene->GetChildrenRecursively();
 
     // Create stencil mask that the selection pass will use
-    glDepthFunc(GL_ALWAYS);
+    GL::SetTestDepth(false);
     m_gbuffer->Bind();
     m_gbuffer->ClearStencil();
     m_gbuffer->SetStencilTest(false);
@@ -143,7 +143,7 @@ void GraphicPipeline::ApplySelectionOutline()
     // Apply selection outline
     m_gbuffer->ApplyPass(m_matSelectionEffectScreen->GetShaderProgram());
     m_gbuffer->UnBind();
-    glDepthFunc(GL_LESS);
+    GL::SetTestDepth(true);
     #endif
 }
 
@@ -254,14 +254,13 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
 
 void GraphicPipeline::RenderScreenPlane()
 {
-    m_screenPlaneMesh->GetVAO()->Bind();
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glDepthFunc(GL_ALWAYS);
-    glDepthMask(GL_FALSE);
-    glDrawArrays(GL_TRIANGLES, 0, m_screenPlaneMesh->GetVertexCount());
-    glDepthMask(GL_TRUE);
-    glDepthFunc(GL_LESS);
-    m_screenPlaneMesh->GetVAO()->UnBind();
+    GL::SetWireframe(false);
+    GL::SetTestDepth(false);
+    GL::SetWriteDepth(false);
+    GL::Render(m_screenPlaneMesh->GetVAO(), GL::RenderMode::Triangles,
+               m_screenPlaneMesh->GetVertexCount());
+    GL::SetWriteDepth(true);
+    GL::SetTestDepth(true);
 }
 
 #ifdef BANG_EDITOR

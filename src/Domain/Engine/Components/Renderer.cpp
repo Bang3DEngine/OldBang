@@ -107,7 +107,6 @@ void Renderer::RenderWithMaterial(Material *_mat) const
     mat->OnJustBeforeRendering(gameObject, sp);
     ncThis->OnJustBeforeRendering(gameObject, sp);
 
-    GL::Apply();
     GL::ApplyToShaderProgram(sp);
 
     #ifdef BANG_EDITOR
@@ -127,8 +126,6 @@ void Renderer::RenderWithMaterial(Material *_mat) const
     ncThis->OnJustAfterRendering(gameObject, sp);
     mat->OnJustAfterRendering(gameObject, sp);
     sp->OnJustAfterRendering(gameObject, sp);
-
-    GL::Reset();
 
     ncThis->OnRenderingEnds(gameObject, sp);
     mat->OnRenderingEnds(gameObject, sp);

@@ -43,9 +43,9 @@ bool GPPass_DepthLayer::CanRender(const Renderer *renderer) const
     bool dontRenderEditorStuffInGame = true;
     #endif
 
-    return (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
-            renderer->GetDepthLayer() == m_depthLayer &&
-            dontRenderEditorStuffInGame;
+    return GraphicPipelinePass::CanRender(renderer) &&
+           renderer->GetDepthLayer() == m_depthLayer &&
+           dontRenderEditorStuffInGame;
 }
 
 Renderer::DepthLayer GPPass_DepthLayer::GetDepthLayer() const

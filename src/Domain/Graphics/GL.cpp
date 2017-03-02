@@ -3,6 +3,16 @@
 #include "GLContext.h"
 #include "GraphicPipeline.h"
 
+void GL::SetWriteDepth(bool writeDepth)
+{
+    GL::GetGLContext()->SetWriteDepth(writeDepth);
+}
+
+void GL::SetTestDepth(bool testDepth)
+{
+    GL::GetGLContext()->SetTestDepth(testDepth);
+}
+
 void GL::SetWireframe(bool wireframe)
 {
     GL::GetGLContext()->SetWireframe(wireframe);
@@ -33,14 +43,20 @@ void GL::ApplyToShaderProgram(ShaderProgram *sp)
     GL::GetGLContext()->ApplyToShaderProgram(sp);
 }
 
-void GL::Apply()
+void GL::Render(const VAO *vao, GL::RenderMode renderMode, int elementsCount,
+                int startIdx)
 {
-    GL::GetGLContext()->Apply();
+    return GL::GetGLContext()->Render(vao, renderMode, elementsCount, startIdx);
 }
 
-void GL::Reset()
+bool GL::IsWriteDepth()
 {
-    GL::GetGLContext()->Reset();
+    return GL::GetGLContext()->IsWriteDepth();
+}
+
+bool GL::IsTestDepth()
+{
+    return GL::GetGLContext()->IsTestDepth();
 }
 
 bool GL::IsWireframe()

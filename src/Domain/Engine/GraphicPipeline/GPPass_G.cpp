@@ -22,7 +22,7 @@ void GPPass_G::InPass(const List<Renderer*> &renderers,
     GraphicPipelinePass::InPass(renderers, sceneChildren);
 
     p_gbuffer->SetAllDrawBuffers();
-    if (m_transparent) { glDepthMask(false); }
+    if (m_transparent) { GL::SetWriteDepth(false); }
 
     p_gbuffer->SetStencilTest(false); // Don't want to be filtered by stencil
     // Mark into the stencil (for deferred lighting be applied here)
@@ -32,14 +32,14 @@ void GPPass_G::InPass(const List<Renderer*> &renderers,
         if (!CanRender(rend)) { continue; }
         rend->Render();
     }
-    glDepthMask(true);
+    GL::SetWriteDepth(true);
 }
 
 bool GPPass_G::CanRender(const Renderer *renderer) const
 {
     Material *rendMaterial = renderer->GetMaterial();
     bool receivesLighting = rendMaterial && rendMaterial->ReceivesLighting();
-    return (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
+    return GraphicPipelinePass::CanRender(renderer) &&
            (m_transparent == renderer->IsTransparent()) &&
            (m_receiveLighting == receivesLighting);
 }
