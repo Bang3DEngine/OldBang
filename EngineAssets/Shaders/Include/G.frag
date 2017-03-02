@@ -21,9 +21,7 @@ in vec2 B_uv_vout_fin;
 out vec4 B_position_fout_gin;
 out vec4 B_normal_fout_gin;
 out vec4 B_diffuse_fout_gin;
-out vec4 B_materialProps_fout_gin;
-out vec4 B_depth_fout_gin;
-out vec4 B_stencil_fout_gin;
+out vec4 B_misc_fout_gin;
 out vec4 B_color_fout_gin;
 
 B_VertexOut_GBufferIn B_vout;
@@ -46,14 +44,10 @@ void EndMain()
     B_position_fout_gin              = vec4(B_vout.position_world, 1);
     B_normal_fout_gin                = vec4(B_vout.normal_world, 0);
     B_diffuse_fout_gin               = B_vout.diffuseColor;
-    B_materialProps_fout_gin.x       = B_vout.receivesLighting ? 1 : 0;
-    B_materialProps_fout_gin.y       = B_vout.shininess;
-    B_depth_fout_gin                 = vec4(B_vout.depth);
-
-    if (B_stencilWriteEnabled)
-    {
-        B_stencil_fout_gin = vec4(B_vout.stencil);
-    }
+    B_misc_fout_gin.r = B_vout.receivesLighting ? 1 : 0;
+    B_misc_fout_gin.g = B_vout.shininess;
+    B_misc_fout_gin.b = B_vout.depth;
+    if (B_stencilWriteEnabled) { B_misc_fout_gin.a = B_vout.stencil; }
 
     float ambientLight = (B_material_receivesLighting ? 0.1 : 1.0);
     vec3 outColor = ambientLight * B_vout.diffuseColor.rgb;

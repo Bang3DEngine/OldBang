@@ -48,9 +48,7 @@ vec2  B_buffer_pixel_step = 1.0 / B_buffer_size;
 uniform sampler2D B_position_gout_fin;
 uniform sampler2D B_normal_gout_fin;
 uniform sampler2D B_diffuse_gout_fin;
-uniform sampler2D B_materialProps_gout_fin;
-uniform sampler2D B_depth_gout_fin;
-uniform sampler2D B_stencil_gout_fin;
+uniform sampler2D B_misc_gout_fin;
 uniform sampler2D B_color_gout_fin;
 
 // Getters
@@ -61,10 +59,10 @@ uniform sampler2D B_color_gout_fin;
     #define FRAG_IN_POSITION_WORLD()               (texture2D(B_position_gout_fin,      B_buffer_coord_norm).xyz)
     #define FRAG_IN_NORMAL_WORLD()      normalize(  texture2D(B_normal_gout_fin,        B_buffer_coord_norm).xyz )
     #define FRAG_IN_DIFFUSE_COLOR()                (texture2D(B_diffuse_gout_fin,       B_buffer_coord_norm))
-    #define FRAG_IN_RECEIVES_LIGHTING()            (texture2D(B_materialProps_gout_fin, B_buffer_coord_norm).x > 0.5f)
-    #define FRAG_IN_SHININESS()                    (texture2D(B_materialProps_gout_fin, B_buffer_coord_norm).y)
-    #define FRAG_IN_DEPTH()                        (texture2D(B_depth_gout_fin,         B_buffer_coord_norm).x)
-    #define FRAG_IN_STENCIL()                      (texture2D(B_stencil_gout_fin,       B_buffer_coord_norm).x)
+    #define FRAG_IN_RECEIVES_LIGHTING()            (texture2D(B_misc_gout_fin, B_buffer_coord_norm).r > 0.5f)
+    #define FRAG_IN_SHININESS()                    (texture2D(B_misc_gout_fin, B_buffer_coord_norm).g)
+    #define FRAG_IN_DEPTH()                        (texture2D(B_misc_gout_fin, B_buffer_coord_norm).b)
+    #define FRAG_IN_STENCIL()                      (texture2D(B_misc_gout_fin, B_buffer_coord_norm).a)
 #endif
 
 #ifdef BANG_G
@@ -78,8 +76,8 @@ uniform sampler2D B_color_gout_fin;
         #define FRAG_IN_NORMAL_WORLD()       B_normal_world_vout_fin
         #define FRAG_IN_UV()                 B_uv_vout_fin
         #define FRAG_IN_DIFFUSE_COLOR()      (texture2D(B_diffuse_gout_fin, B_buffer_coord_norm))
-        #define FRAG_IN_DEPTH()              (texture2D(B_depth_gout_fin,   B_buffer_coord_norm).x)
-        #define FRAG_IN_STENCIL()            (texture2D(B_stencil_gout_fin, B_buffer_coord_norm).x)
+        #define FRAG_IN_DEPTH()              (texture2D(B_misc_gout_fin,    B_buffer_coord_norm).b)
+        #define FRAG_IN_STENCIL()            (texture2D(B_misc_gout_fin,    B_buffer_coord_norm).a)
         #define FRAG_IN_COLOR()              (texture2D(B_color_gout_fin,   B_buffer_coord_norm))
     #endif
 #endif

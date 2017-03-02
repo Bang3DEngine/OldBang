@@ -26,7 +26,9 @@ public:
         None = GL_NONE
     };
 
-    static void ClearColorBuffer(const Color& clearColor = Color::Zero);
+    static void ClearColorBuffer(const Color& clearColor = Color::Zero,
+                                 bool clearR = true, bool clearG = true,
+                                 bool clearB = true, bool clearA = true);
     static void ClearDepthBuffer(float clearDepth = 1.0f);
 
     static void SetWriteDepth(bool writeDepth);
@@ -50,6 +52,8 @@ public:
     static const Matrix4 &GetModelMatrix();
     static const Matrix4 &GetViewMatrix();
     static const Matrix4 &GetProjectionMatrix();
+
+    static void SaveToImage(const Texture *tex, const String &filepath);
 
     static GLContext* GetGLContext();
 

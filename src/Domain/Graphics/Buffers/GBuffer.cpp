@@ -23,21 +23,15 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     m_positionTexture = new RenderTexture();
     m_normalTexture   = new RenderTexture();
     m_diffuseTexture  = new RenderTexture();
-    m_matPropsTexture = new RenderTexture();
-    m_depthTexture    = new RenderTexture();
-    m_stencilTexture  = new RenderTexture();
+    m_miscTexture     = new RenderTexture();
     m_colorTexture    = new RenderTexture();
 
-    SetAttachment(Attachment::Position,           m_positionTexture);
-    SetAttachment(Attachment::Normal,             m_normalTexture);
-    SetAttachment(Attachment::Diffuse,            m_diffuseTexture);
-    SetAttachment(Attachment::MaterialProperties, m_matPropsTexture);
-    SetAttachment(Attachment::Depth,              m_depthTexture);
-    SetAttachment(Attachment::Stencil,            m_stencilTexture);
-    SetAttachment(Attachment::Color,              m_colorTexture);
+    SetAttachment(Attachment::Position, m_positionTexture);
+    SetAttachment(Attachment::Normal,   m_normalTexture);
+    SetAttachment(Attachment::Diffuse,  m_diffuseTexture);
+    SetAttachment(Attachment::Misc,     m_miscTexture);
+    SetAttachment(Attachment::Color,    m_colorTexture);
     CreateDepthRenderbufferAttachment();
-
-    m_stencilTexture->SetFilterMode(Texture::FilterMode::Nearest);
 }
 
 GBuffer::~GBuffer()
@@ -47,17 +41,15 @@ GBuffer::~GBuffer()
 void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 {
     // Color Attachments bindings as Shader Inputs
-    sp->SetTexture("B_position_gout_fin",      m_positionTexture);
-    sp->SetTexture("B_normal_gout_fin",        m_normalTexture);
-    sp->SetTexture("B_diffuse_gout_fin",       m_diffuseTexture);
-    sp->SetTexture("B_materialProps_gout_fin", m_matPropsTexture);
-    sp->SetTexture("B_depth_gout_fin",         m_depthTexture);
-    sp->SetTexture("B_stencil_gout_fin",       m_stencilTexture);
-    sp->SetTexture("B_color_gout_fin",         m_colorTexture);
+    sp->SetTexture("B_position_gout_fin", m_positionTexture);
+    sp->SetTexture("B_normal_gout_fin",   m_normalTexture);
+    sp->SetTexture("B_diffuse_gout_fin",  m_diffuseTexture);
+    sp->SetTexture("B_misc_gout_fin",     m_miscTexture);
+    sp->SetTexture("B_color_gout_fin",    m_colorTexture);
 
     // Stencil uniforms
-    sp->SetFloat("B_stencilWriteEnabled",  m_stencilWriteEnabled ? 1.0f : 0.0f);
-    sp->SetFloat("B_stencilTestEnabled", m_stencilTestEnabled  ? 1.0f : 0.0f);
+    sp->SetFloat("B_stencilWriteEnabled", m_stencilWriteEnabled ? 1.0f : 0.0f);
+    sp->SetFloat("B_stencilTestEnabled",  m_stencilTestEnabled  ? 1.0f : 0.0f);
 }
 
 
@@ -108,9 +100,7 @@ void GBuffer::SetAllDrawBuffersExceptColor()
     SetDrawBuffers({GBuffer::Attachment::Position,
                     GBuffer::Attachment::Normal,
                     GBuffer::Attachment::Diffuse,
-                    GBuffer::Attachment::MaterialProperties,
-                    GBuffer::Attachment::Depth,
-                    GBuffer::Attachment::Stencil});
+                    GBuffer::Attachment::Misc});
 }
 
 void GBuffer::SetColorDrawBuffer()
@@ -130,14 +120,12 @@ void GBuffer::SetStencilTest(bool testEnabled)
 
 void GBuffer::ClearStencil()
 {
-    SaveCurrentDrawBuffers();
-
     Bind();
-    SetDrawBuffers({GBuffer::Attachment::Stencil});
-    GL::ClearColorBuffer(Color::Zero);
-    UnBind();
-
+    SaveCurrentDrawBuffers();
+    SetDrawBuffers({GBuffer::Attachment::Misc});
+    GL::ClearColorBuffer(Color::Zero, false, false, false, true);
     LoadSavedDrawBuffers();
+    UnBind();
 }
 
 void GBuffer::ClearDepth(float clearDepth)
@@ -146,8 +134,8 @@ void GBuffer::ClearDepth(float clearDepth)
 
     Bind();
     SaveCurrentDrawBuffers();
-    SetDrawBuffers({GBuffer::Attachment::Depth});
-    GL::ClearColorBuffer(Color::One);
+    SetDrawBuffers({GBuffer::Attachment::Misc});
+    GL::ClearColorBuffer(Color::One, false, false, true, false);
     LoadSavedDrawBuffers();
     UnBind();
 }
@@ -162,7 +150,7 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor,
     SetDrawBuffers({GBuffer::Attachment::Position,
                     GBuffer::Attachment::Normal,
                     GBuffer::Attachment::Diffuse,
-                    GBuffer::Attachment::MaterialProperties});
+                    GBuffer::Attachment::Misc});
     GL::ClearColorBuffer(clearValue);
 
     SetColorDrawBuffer();

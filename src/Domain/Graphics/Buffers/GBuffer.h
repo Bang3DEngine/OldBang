@@ -18,18 +18,14 @@ public:
         Position = 0,
         Normal,
         Diffuse,
-        MaterialProperties, // (receivesLighting, shininess, -, -)
-        Depth,
-        Stencil,
+        Misc,    // (receivesLighting, shininess, depth, stencil)
         Color
     };
 
     RenderTexture *m_positionTexture = nullptr;
     RenderTexture *m_normalTexture   = nullptr;
     RenderTexture *m_diffuseTexture  = nullptr;
-    RenderTexture *m_matPropsTexture = nullptr;
-    RenderTexture *m_depthTexture    = nullptr;
-    RenderTexture *m_stencilTexture  = nullptr;
+    RenderTexture *m_miscTexture     = nullptr;
     RenderTexture *m_colorTexture    = nullptr;
 
 private:

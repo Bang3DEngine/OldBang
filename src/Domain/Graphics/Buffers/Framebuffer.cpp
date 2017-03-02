@@ -213,6 +213,7 @@ void Framebuffer::UnBind() const
 void Framebuffer::SaveToImage(int attachmentId, const String &filepath,
                               bool invertY) const
 {
+    Bind();
     Texture *tex = m_attachmentId_To_Texture.Get(attachmentId);
     if (tex)
     {
@@ -243,6 +244,7 @@ void Framebuffer::SaveToImage(int attachmentId, const String &filepath,
         stbi_write_bmp(filepath.ToCString(), m_width, m_height, 4, pixels);
         delete[] pixels;
     }
+    UnBind();
 }
 
 

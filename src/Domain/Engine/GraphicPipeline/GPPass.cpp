@@ -26,20 +26,20 @@ GPPass::~GPPass()
 }
 
 void GPPass::PrePass(const List<Renderer*> &renderers,
-                                  const List<GameObject*> &sceneChildren)
+                     const List<GameObject*> &sceneChildren)
 {
 }
 void GPPass::InPass(const List<Renderer*> &renderers,
-                                 const List<GameObject*> &sceneChildren)
+                    const List<GameObject*> &sceneChildren)
 {
 }
 void GPPass::PostPass(const List<Renderer*> &renderers,
-                                   const List<GameObject*> &sceneChildren)
+                      const List<GameObject*> &sceneChildren)
 {
 }
 
 void GPPass::Pass(const List<Renderer*> &renderers,
-                               const List<GameObject*> &sceneChildren)
+                  const List<GameObject*> &sceneChildren)
 {
     p_scene = SceneManager::GetActiveScene();
 
@@ -56,8 +56,8 @@ void GPPass::Pass(const List<Renderer*> &renderers,
 
 void GPPass::AddSubPass(GPPass *subPass)
 {
-    m_subPasses.PushBack(subPass);
     subPass->p_parentPass = this;
+    m_subPasses.PushBack(subPass);
 }
 
 bool GPPass::CanRender(const Renderer *renderer) const

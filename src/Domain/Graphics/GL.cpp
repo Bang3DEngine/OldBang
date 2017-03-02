@@ -3,10 +3,13 @@
 #include "GLContext.h"
 #include "GraphicPipeline.h"
 
-void GL::ClearColorBuffer(const Color &clearColor)
+void GL::ClearColorBuffer(const Color &clearColor,
+                          bool clearR, bool clearG, bool clearB, bool clearA)
 {
+    glColorMask(clearR, clearG, clearB, clearA);
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT);
+    glColorMask(true, true, true, true);
 }
 
 void GL::ClearDepthBuffer(float clearDepth)
@@ -94,6 +97,11 @@ const Matrix4 &GL::GetViewMatrix()
 const Matrix4 &GL::GetProjectionMatrix()
 {
     return GL::GetGLContext()->GetProjectionMatrix();
+}
+
+void GL::SaveToImage(const Texture *tex, const String &filepath)
+{
+    // TODO
 }
 
 GL::GL()

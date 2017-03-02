@@ -75,9 +75,9 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
 
     m_gizmosPass = new GPPass_DepthLayer(this, DL::DepthLayerGizmos,
     {
-     new GPPass_G_Gizmos(this, true, false), // Gizmos with depth
-     new GPPass_G_Gizmos(this, true, false), // Gizmos normal
-     new GPPass_G_Gizmos(this, true, false)  // Gizmos with overlay
+     new GPPass_G_Gizmos(this, true,  false), // Gizmos with depth
+     new GPPass_G_Gizmos(this, false, false), // Gizmos normal
+     new GPPass_G_Gizmos(this, false,  true)  // Gizmos with overlay
     });
 
     #ifdef BANG_EDITOR
@@ -124,11 +124,9 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
     List<GameObject*> sceneChildren = scene->GetChildren();
 
-    //*
     RenderGBuffer(renderers, sceneChildren);
     m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 
-    //*/
     #ifdef BANG_EDITOR
     if (!m_renderingInGame)
     {
@@ -136,7 +134,6 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
         // RenderToScreen(m_selectionFB->GetColorTexture()); // To see it
     }
     #endif
-    //*/
 }
 
 void GraphicPipeline::ApplySelectionOutline()
@@ -282,6 +279,7 @@ void GraphicPipeline::RenderScreenPlane()
     GL::SetWireframe(false);
     GL::SetTestDepth(false);
     GL::SetWriteDepth(false);
+    GL::SetCullMode(GL::CullMode::None);
     GL::Render(m_screenPlaneMesh->GetVAO(), GL::RenderMode::Triangles,
                m_screenPlaneMesh->GetVertexCount());
     GL::SetWriteDepth(true);

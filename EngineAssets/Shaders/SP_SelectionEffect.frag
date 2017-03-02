@@ -19,10 +19,10 @@ void Main()
             for (int j = -stroke; j <= stroke && !isOutline; ++j)
             {
                 vec2 uv = screenUv + vec2(i,j)*ps;
-                isOutline = texture2D(B_stencil_gout_fin, uv).x > 0.5f;
+                isOutline = texture2D(B_misc_gout_fin, uv).a > 0.5f;
                 if (isOutline)
                 {
-                    closestDepth = texture2D(B_depth_gout_fin, uv).x;
+                    closestDepth = texture2D(B_misc_gout_fin, uv).b;
                 }
             }
         }
