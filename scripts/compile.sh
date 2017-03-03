@@ -20,7 +20,6 @@ then
 	echo "If you want to change it, specify as first argument: EDITOR or GAME"
 	echo 
 fi
-sleep 1
 if [ -z ${RELEASE_OR_DEBUG} ] 
 then
 	RELEASE_OR_DEBUG="RELEASE_MODE"
@@ -28,11 +27,14 @@ then
 	echo "If you want to change it, specify as second argument: RELEASE_MODE or DEBUG_MODE"
 	echo 
 fi
-sleep 1
+
 
 # Make and run Bang
+echo "-----"
 echo "BUILD_MODE on compile.sh:       '${BUILD_MODE}'"
 echo "RELEASE_OR_DEBUG on compile.sh: '${RELEASE_OR_DEBUG}'"
+echo "-----"
+sleep 5
 qmake "BUILD_MODE=${BUILD_MODE}" "RELEASE_OR_DEBUG=${RELEASE_OR_DEBUG}"
 if [ $(command_exists colormake) ] && [ "${BUILD_MODE}" != "GAME" ]
 then
@@ -40,3 +42,4 @@ then
 else
 	make -j${NUM_THREADS}
 fi
+

@@ -59,6 +59,7 @@ public:
     void SetStencilTest(bool testEnabled);
     void ClearStencil();
     void ClearDepth(float clearDepth = 1.0f) override;
+    void ClearStencilDepth();
 
     void ClearBuffersAndBackground(const ::Color& backgroundColor,
                                    const ::Color& clearValue = ::Color::Zero);

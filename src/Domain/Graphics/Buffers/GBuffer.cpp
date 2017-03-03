@@ -136,6 +136,17 @@ void GBuffer::ClearDepth(float clearDepth)
     UnBind();
 }
 
+void GBuffer::ClearStencilDepth()
+{
+    Bind();
+    SaveCurrentDrawBuffers();
+    SetDrawBuffers({GBuffer::Attachment::Misc});
+    GL::ClearColorBuffer(::Color(0,0,1,0), false, false, true, true);
+    GL::ClearDepthBuffer(1.0f);
+    LoadSavedDrawBuffers();
+    UnBind();
+}
+
 void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor,
                                         const ::Color &clearValue)
 {
@@ -144,15 +155,16 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor,
     SaveCurrentDrawBuffers();
 
     SetDrawBuffers({GBuffer::Attachment::Normal,
-                    GBuffer::Attachment::Diffuse,
-                    GBuffer::Attachment::Misc});
+                    GBuffer::Attachment::Diffuse});
     GL::ClearColorBuffer(clearValue);
+
+    SetDrawBuffers({GBuffer::Attachment::Misc});
+    GL::ClearColorBuffer(::Color(0,0,1,0));
+
+    GL::ClearDepthBuffer(1.0f);
 
     SetColorDrawBuffer();
     GL::ClearColorBuffer(backgroundColor);
-
-    ClearDepth();
-    ClearStencil();
 
     LoadSavedDrawBuffers();
 

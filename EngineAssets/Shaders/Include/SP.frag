@@ -29,8 +29,6 @@ void EndMain()
 void Main();
 void main()
 {
-    InitMain();
-
     #ifdef BANG_NO_STENCIL_TEST
     bool passStencil = true;
     #else
@@ -38,9 +36,10 @@ void main()
     #endif
     if (passStencil)
     {
+        InitMain();
         Main();
+        EndMain();
     }
-
-    EndMain();
+    else { discard; }
 }
 

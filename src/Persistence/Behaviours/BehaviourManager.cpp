@@ -23,7 +23,7 @@
 
 BehaviourManager::BehaviourManager()
 {
-    m_threadPool.setMaxThreadCount(5);
+    m_threadPool.setMaxThreadCount(2);
 }
 
 BehaviourManager *BehaviourManager::GetInstance()
