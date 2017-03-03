@@ -15,14 +15,12 @@ class GBuffer : public Framebuffer,
 public:
     enum Attachment
     {
-        Position = 0,
-        Normal,
+        Normal = 0,
         Diffuse,
         Misc,    // (receivesLighting, shininess, depth, stencil)
         Color
     };
 
-    RenderTexture *m_positionTexture = nullptr;
     RenderTexture *m_normalTexture   = nullptr;
     RenderTexture *m_diffuseTexture  = nullptr;
     RenderTexture *m_miscTexture     = nullptr;
@@ -46,8 +44,7 @@ public:
 
     virtual void OnRenderingStarts(GameObject *go,
                                    ShaderProgram *sp) override;
-    void ApplyPass(ShaderProgram *sp,
-                                const Rect &mask = Rect::ScreenRect);
+    void ApplyPass(ShaderProgram *sp, const Rect &mask = Rect::ScreenRect);
     void RenderToScreen(Attachment attachmentId);
     void RenderToScreen();
 

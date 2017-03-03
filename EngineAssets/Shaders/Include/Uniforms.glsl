@@ -45,24 +45,35 @@ vec2  B_buffer_pixel_step = 1.0 / B_buffer_size;
 #endif
 
 // GBuffer textures
-uniform sampler2D B_position_gout_fin;
 uniform sampler2D B_normal_gout_fin;
 uniform sampler2D B_diffuse_gout_fin;
 uniform sampler2D B_misc_gout_fin;
 uniform sampler2D B_color_gout_fin;
 
 // Getters
-
 #ifdef BANG_SP
-    #define FRAG_IN_UV_SCREEN()                    B_buffer_coord_norm;
+  #ifdef BANG_FRAGMENT
+    #define FRAG_IN_UV_SCREEN()                    B_buffer_coord_norm
     #define FRAG_IN_COLOR()                        (texture2D(B_color_gout_fin,         B_buffer_coord_norm))
-    #define FRAG_IN_POSITION_WORLD()               (texture2D(B_position_gout_fin,      B_buffer_coord_norm).xyz)
+    #define FRAG_IN_POSITION_WORLD()               vec3(1,1,1) //(texture2D(B_position_gout_fin,      B_buffer_coord_norm).xyz)
     #define FRAG_IN_NORMAL_WORLD()      normalize(  texture2D(B_normal_gout_fin,        B_buffer_coord_norm).xyz )
     #define FRAG_IN_DIFFUSE_COLOR()                (texture2D(B_diffuse_gout_fin,       B_buffer_coord_norm))
     #define FRAG_IN_RECEIVES_LIGHTING()            (texture2D(B_misc_gout_fin, B_buffer_coord_norm).r > 0.5f)
     #define FRAG_IN_SHININESS()                    (texture2D(B_misc_gout_fin, B_buffer_coord_norm).g)
     #define FRAG_IN_DEPTH()                        (texture2D(B_misc_gout_fin, B_buffer_coord_norm).b)
     #define FRAG_IN_STENCIL()                      (texture2D(B_misc_gout_fin, B_buffer_coord_norm).a)
+
+    vec3 B_ComputeWorldPosition(float depth)
+    {
+        float x = FRAG_IN_UV_SCREEN().x * 2.0 - 1.0;
+        float y = FRAG_IN_UV_SCREEN().y * 2.0 - 1.0;
+        float z = depth * 2.0 - 1.0;
+        vec4 projectedPos = vec4(x, y, z, 1);
+        vec4 worldPos = (B_matrix_projection_inv * projectedPos);
+        worldPos = (B_matrix_view_inv * (worldPos/worldPos.w));
+        return worldPos.xyz;
+    }
+  #endif
 #endif
 
 #ifdef BANG_G

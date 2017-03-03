@@ -223,10 +223,6 @@ void Toolbar::OnGBufferAttachmentIndexChanged(int newIndex)
     {
         gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Color);
     }
-    else if (newIndex == 1)
-    {
-        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Position);
-    }
     else if (newIndex == 2)
     {
         gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Normal);

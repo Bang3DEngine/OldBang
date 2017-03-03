@@ -5,10 +5,12 @@ void Main()
 {
     if (FRAG_IN_RECEIVES_LIGHTING())
     {
+        vec4 diffColor = FRAG_IN_DIFFUSE_COLOR();
+        vec3 worldPos = B_ComputeWorldPosition( FRAG_IN_DEPTH() );
         vec3 pointLightApport = GetPointLightColorApportation(
-                                      FRAG_IN_POSITION_WORLD(),
+                                      worldPos,
                                       FRAG_IN_NORMAL_WORLD(),
-                                      FRAG_IN_DIFFUSE_COLOR().rgb,
+                                      diffColor.rgb,
                                       FRAG_IN_SHININESS(),
                                       B_light_position_world,
                                       B_light_intensity,
@@ -16,6 +18,6 @@ void Main()
                                       B_light_color.rgb,
                                       B_position_camera.xyz);
 
-        B_vout.color = vec4(FRAG_IN_COLOR().rgb + pointLightApport, FRAG_IN_DIFFUSE_COLOR().a);
+        B_vout.color = vec4(FRAG_IN_COLOR().rgb + pointLightApport, diffColor.a);
     }
 }

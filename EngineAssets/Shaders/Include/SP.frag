@@ -11,7 +11,6 @@ B_VertexOut B_vout;
 
 out vec4 B_color_gout_gin; // Accumulated color
 
-
 void InitMain()
 {
     // Default value
@@ -21,7 +20,8 @@ void InitMain()
 void EndMain()
 {
     vec4 inColor = FRAG_IN_COLOR();
-    B_vout.color = vec4( mix(inColor.rgb, B_vout.color.rgb, B_vout.color.a), B_vout.color.a);
+    B_vout.color = vec4( mix(inColor.rgb, B_vout.color.rgb, B_vout.color.a),
+                         B_vout.color.a);
     B_color_gout_gin = B_vout.color;
 }
 

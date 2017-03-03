@@ -20,13 +20,11 @@
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
-    m_positionTexture = new RenderTexture();
     m_normalTexture   = new RenderTexture();
     m_diffuseTexture  = new RenderTexture();
     m_miscTexture     = new RenderTexture();
     m_colorTexture    = new RenderTexture();
 
-    SetAttachment(Attachment::Position, m_positionTexture);
     SetAttachment(Attachment::Normal,   m_normalTexture);
     SetAttachment(Attachment::Diffuse,  m_diffuseTexture);
     SetAttachment(Attachment::Misc,     m_miscTexture);
@@ -41,7 +39,6 @@ GBuffer::~GBuffer()
 void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 {
     // Color Attachments bindings as Shader Inputs
-    sp->SetTexture("B_position_gout_fin", m_positionTexture);
     sp->SetTexture("B_normal_gout_fin",   m_normalTexture);
     sp->SetTexture("B_diffuse_gout_fin",  m_diffuseTexture);
     sp->SetTexture("B_misc_gout_fin",     m_miscTexture);
@@ -97,8 +94,7 @@ void GBuffer::RenderToScreen()
 
 void GBuffer::SetAllDrawBuffersExceptColor()
 {
-    SetDrawBuffers({GBuffer::Attachment::Position,
-                    GBuffer::Attachment::Normal,
+    SetDrawBuffers({GBuffer::Attachment::Normal,
                     GBuffer::Attachment::Diffuse,
                     GBuffer::Attachment::Misc});
 }
@@ -147,8 +143,7 @@ void GBuffer::ClearBuffersAndBackground(const ::Color &backgroundColor,
 
     SaveCurrentDrawBuffers();
 
-    SetDrawBuffers({GBuffer::Attachment::Position,
-                    GBuffer::Attachment::Normal,
+    SetDrawBuffers({GBuffer::Attachment::Normal,
                     GBuffer::Attachment::Diffuse,
                     GBuffer::Attachment::Misc});
     GL::ClearColorBuffer(clearValue);

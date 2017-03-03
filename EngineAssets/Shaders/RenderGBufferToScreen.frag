@@ -1,3 +1,4 @@
+#define BANG_SP
 #define BANG_FRAGMENT
 #include "Uniforms.glsl"
 

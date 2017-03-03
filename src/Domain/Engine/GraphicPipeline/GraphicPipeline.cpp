@@ -269,6 +269,7 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
 
     sp->OnRenderingStarts(nullptr, sp);
     m_renderGBufferToScreenMaterial->OnRenderingStarts(nullptr, sp);
+    GL::ApplyToShaderProgram(sp);
     GraphicPipeline::RenderScreenPlane();
     m_renderGBufferToScreenMaterial->OnRenderingEnds(nullptr, sp);
     sp->OnRenderingEnds(nullptr, sp);
