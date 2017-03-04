@@ -44,9 +44,6 @@ public:
     void SaveToImage(int attachmentId, const String &filepath,
                      bool invertY = false) const;
 
-protected:
-    void CheckFramebufferError() const;
-
 private:
     int m_width;
     int m_height;

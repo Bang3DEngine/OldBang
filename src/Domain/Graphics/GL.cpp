@@ -1,7 +1,35 @@
 #include "GL.h"
 
+#include "Debug.h"
 #include "GLContext.h"
 #include "GraphicPipeline.h"
+
+#define GL_CheckError() ( GL::CheckError(__LINE__, __FILE__) )
+
+bool GL::CheckError(int line, const String &file)
+{
+    GLenum glError;
+    bool error = false;
+
+    glError = glGetError();
+    if (glError != GL_NO_ERROR)
+    {
+        const char *err = reinterpret_cast<const char*>(gluErrorString(glError));
+        Debug_Error("OpenGL error: " << err << " At " << file << ":" << line);
+        error = true;
+    }
+    return error;
+}
+
+bool GL::CheckFramebufferError()
+{
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    {
+        String errMsg = "There was a framebuffer error.";
+        Debug_Error(errMsg);
+        GL_CheckError();
+    }
+}
 
 void GL::ClearColorBuffer(const Color &clearColor,
                           bool clearR, bool clearG, bool clearB, bool clearA)

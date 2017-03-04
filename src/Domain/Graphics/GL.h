@@ -11,20 +11,23 @@ class GL
 public:
     enum class RenderMode
     {
-        Points = GL_POINTS,
-        Lines = GL_LINES,
+        Points    = GL_POINTS,
+        Lines     = GL_LINES,
         LineStrip = GL_LINE_STRIP,
         Triangles = GL_TRIANGLES,
-        Quads = GL_QUADS
+        Quads     = GL_QUADS
     };
 
     enum class CullMode
     {
-        Front = GL_FRONT,
-        Back = GL_BACK,
+        Front        = GL_FRONT,
+        Back         = GL_BACK,
         FrontAndBack = GL_FRONT_AND_BACK,
-        None = GL_NONE
+        None         = GL_NONE
     };
+
+    static bool CheckError(int line = 0, const String &file = "");
+    static bool CheckFramebufferError();
 
     static void ClearColorBuffer(const Color& clearColor = Color::Zero,
                                  bool clearR = true, bool clearG = true,

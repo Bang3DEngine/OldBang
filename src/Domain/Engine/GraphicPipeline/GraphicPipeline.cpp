@@ -185,8 +185,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
         // renderRect = m_currentScene->GetBoundingScreenRect(sceneCam, true);
         renderRect = Rect::ScreenRect;
     }
-
-    ASSERT(renderRect != Rect::Empty); // If the rect is empty, dont waste time rendering nothing
+    ASSERT(renderRect != Rect::Empty);
 
     m_gbuffer->SetStencilTest(true); // We have marked from before the zone where we want to apply the effect
 

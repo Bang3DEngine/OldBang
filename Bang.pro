@@ -109,6 +109,7 @@ GAME {
 #LIBS += src/Domain/Graphics/FreeType/build/*.o
 LIBS += \
     -lGLEW            \ # GLEW
+    -lGLU             \
     -ldl              \ # To load libraries and stuff
     -lalut -lopenal   \ # Alut and OpenAL
     -lfreetype

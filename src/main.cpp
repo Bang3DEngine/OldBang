@@ -122,6 +122,7 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
     Screen::GetInstance()->initializeGL();
 }
 
+using namespace std;
 int main(int argc, char **argv)
 {
     // Get the executable dir

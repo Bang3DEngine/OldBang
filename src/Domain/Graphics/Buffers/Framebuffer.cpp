@@ -45,15 +45,14 @@ void Framebuffer::SetAttachment(int attachmentId, RenderTexture *tex)
     Bind();
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, glAttachment,
                            GL_TEXTURE_2D, tex->GetGLId(), 0);
-    CheckFramebufferError();
+    GL::CheckFramebufferError();
     UnBind();
     //
 }
 
 void Framebuffer::CreateDepthRenderbufferAttachment()
 {
-    Bind(); //TODO:  respect former bindings of renderbuffers
-
+    Bind();
     glGenRenderbuffers(1, &m_depthAttachmentId);
     glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttachmentId);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
@@ -62,7 +61,7 @@ void Framebuffer::CreateDepthRenderbufferAttachment()
                               GL_RENDERBUFFER, m_depthAttachmentId);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-    CheckFramebufferError();
+    GL::CheckFramebufferError();
     UnBind();
 }
 
@@ -96,7 +95,7 @@ void Framebuffer::SetDrawBuffers(const Array<int> &attachmentIds) const
 
     Bind();
     glDrawBuffers(drawBuffers.Size(), &drawBuffers[0]);
-    CheckFramebufferError();
+    GL::CheckFramebufferError();
     UnBind();
 }
 
@@ -104,7 +103,7 @@ void Framebuffer::SetReadBuffer(int attachmentId) const
 {
     Bind();
     glReadBuffer(m_attachmentId_To_GLAttachment.Get(attachmentId));
-    CheckFramebufferError();
+    GL::CheckFramebufferError();
     UnBind();
 }
 
@@ -186,16 +185,6 @@ void Framebuffer::ClearColor(const Color &clearColor)
     SetAllDrawBuffers();
     GL::ClearColorBuffer(clearColor);
     UnBind();
-}
-
-void Framebuffer::CheckFramebufferError() const
-{
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    {
-        String errMsg =
-           "There was an error when creating an attachment for a framebuffer.";
-        //Debug_Error(errMsg);
-    }
 }
 
 void Framebuffer::Bind() const
