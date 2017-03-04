@@ -3,11 +3,9 @@
 
 #include <GL/glew.h>
 
-#include "IGLIdable.h"
-#include "IGLBindable.h"
+#include "GLObject.h"
 
-class VBO : public IGLIdable,
-            public IGLBindable
+class VBO : public GLObject
 {
 public:
     VBO();
@@ -15,6 +13,7 @@ public:
 
     void Fill(const void *data, int dataSize, GLenum usage = GL_STATIC_DRAW);
 
+    GL::BindTarget GetGLBindTarget() const override;
     void Bind() const override;
     void UnBind() const override;
 };

@@ -80,12 +80,17 @@ bool ShaderProgram::Link()
 
 void ShaderProgram::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 {
-    Bind();
+    GL::Bind(this);
 }
 
 void ShaderProgram::OnRenderingEnds(GameObject *go, ShaderProgram *sp)
 {
-    UnBind();
+    GL::UnBind(this);
+}
+
+GL::BindTarget ShaderProgram::GetGLBindTarget() const
+{
+    return GL::BindTarget::ShaderProgram;
 }
 
 bool ShaderProgram::SetFloat(const String &name, float v) const
@@ -195,9 +200,7 @@ String ShaderProgram::ToString() const
 
 void ShaderProgram::Bind() const
 {
-    PreBind(GL_CURRENT_PROGRAM);
-    glUseProgram(m_idGL);
-
+    GL::Bind(this);
     UpdateTextureBindings();
 }
 
@@ -212,7 +215,7 @@ void ShaderProgram::UnBind() const
             tex->UnBind();
         }
     }
-    glUseProgram(PreUnBind(GL_CURRENT_PROGRAM));
+    GL::UnBind(this);
 }
 
 void ShaderProgram::UpdateTextureBindings() const

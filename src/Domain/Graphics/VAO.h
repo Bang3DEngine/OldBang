@@ -5,19 +5,12 @@
 
 #include "Array.h"
 
-#include "IGLIdable.h"
-#include "IGLBindable.h"
+#include "GLObject.h"
 
 class VBO;
-class VAO : public IGLIdable,
-            public IGLBindable
+class VAO : public GLObject
 {
-private:
-
-    Array<const VBO*> m_vbos;
-
 public:
-
     VAO();
     virtual ~VAO();
 
@@ -31,12 +24,17 @@ public:
 
     void UnBindVBO(GLint location);
 
+    GL::BindTarget GetGLBindTarget() const override;
+
     void Bind() const override;
     void UnBind() const override;
 
     const VBO *GetVBOByLocation(int location) const;
 
     int GetVBOCount() const;
+
+private:
+    Array<const VBO*> m_vbos;
 };
 
 #endif // VAO_H

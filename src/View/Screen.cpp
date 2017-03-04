@@ -41,8 +41,8 @@ void Screen::initializeGL()
     glewExperimental = GL_TRUE;
     glewInit();
 
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    GL::Enable(GL_DEPTH_TEST);
+    GL::Enable(GL_CULL_FACE);
 
     static bool firstInitializeGL = true;
     if (firstInitializeGL)
@@ -73,7 +73,7 @@ void Screen::Render()
 
 void Screen::resizeGL(int w, int h)
 {
-    glViewport(0, 0, (GLint)w, (GLint)h);
+    GL::SetViewport(0, 0, w, h);
     m_width = w;
     m_height = h;
     m_aspectRatio = float(w) / h;

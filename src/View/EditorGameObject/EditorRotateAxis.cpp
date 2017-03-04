@@ -31,7 +31,7 @@ EditorRotateAxis::EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
     m_circle->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
     m_circle->SetOnRenderingStartsForSelectionFunction([]()
         {
-            glLineWidth(10.0f); // Easier grab
+            GL::SetLineWidth(10.0f); // Easier grab
         }
     );
 

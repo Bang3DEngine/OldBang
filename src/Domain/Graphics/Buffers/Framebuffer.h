@@ -5,12 +5,10 @@
 
 #include "Map.h"
 #include "Color.h"
-#include "IGLIdable.h"
-#include "IGLBindable.h"
+#include "GLObject.h"
 
 class RenderTexture;
-class Framebuffer : public IGLBindable
-                   ,public IGLIdable
+class Framebuffer : public GLObject
 {
 public:
     Framebuffer(int width, int height);
@@ -38,6 +36,7 @@ public:
     virtual void ClearDepth(float clearDepth = 1.0f);
     void ClearColor(const Color &clearColor = Color::Zero);
 
+    GL::BindTarget GetGLBindTarget() const override;
     virtual void Bind() const override;
     virtual void UnBind() const override;
 

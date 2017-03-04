@@ -184,9 +184,7 @@ HEADERS +=                                                          \
     src/Domain/Graphics/Texture.h                                   \
     src/Domain/Graphics/VAO.h                                       \
     src/Domain/Graphics/VBO.h                                       \
-    src/Domain/Graphics/Interfaces/IGLBindable.h                    \
     src/Domain/Graphics/Interfaces/IToString.h                      \
-    src/Domain/Graphics/Interfaces/IGLIdable.h                      \
     src/Domain/Engine/Components/Transform.h                        \
     src/Domain/Engine/Components/Component.h                        \
     src/Domain/Engine/Components/MeshRenderer.h                     \
@@ -301,7 +299,8 @@ HEADERS +=                                                          \
     src/Persistence/Behaviours/BehaviourObjectCompileRunnable.h \
     src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h \
     src/Domain/Engine/GraphicPipeline/GPPass_G.h \
-    src/Domain/Engine/GraphicPipeline/GPPass.h
+    src/Domain/Engine/GraphicPipeline/GPPass.h \
+    src/Domain/Graphics/Interfaces/GLObject.h
 
 EDITOR {
 HEADERS += \
@@ -405,7 +404,6 @@ SOURCES += \
     src/Domain/Graphics/Texture.cpp \
     src/Domain/Graphics/VAO.cpp \
     src/Domain/Graphics/VBO.cpp \
-    src/Domain/Graphics/Interfaces/IGLBindable.cpp \
     src/Domain/Engine/Components/Transform.cpp \
     src/Domain/Engine/Components/Component.cpp \
     src/Domain/Engine/Components/MeshRenderer.cpp \
@@ -515,7 +513,8 @@ SOURCES += \
     src/Persistence/Behaviours/BehaviourObjectCompileRunnable.cpp \
     src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_G.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass.cpp
+    src/Domain/Engine/GraphicPipeline/GPPass.cpp \
+    src/Domain/Graphics/Interfaces/GLObject.cpp
 
 EDITOR {
     SOURCES += \

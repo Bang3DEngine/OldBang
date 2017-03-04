@@ -159,15 +159,7 @@ void Texture::BindToTextureUnit(int textureUnit) const
     Bind();
 }
 
-
-void Texture::Bind() const
+GL::BindTarget Texture::GetGLBindTarget() const
 {
-    // TODO: Change Prebind for all kind of texture targets.
-    PreBind(GL_TEXTURE_BINDING_2D);
-    glBindTexture(m_target, m_idGL);
-}
-
-void Texture::UnBind() const
-{
-    glBindTexture(m_target, PreUnBind(GL_TEXTURE_BINDING_2D));
+    return GL::BindTarget::Texture2D;
 }

@@ -1,11 +1,20 @@
 #ifndef GL_H
 #define GL_H
 
+#include <GL/glew.h>
+
+#include "GL/gl.h"
+#include "Color.h"
+#include "String.h"
 #include "Matrix4.h"
-#include "ShaderProgram.h"
+
+typedef GLuint GLId;
 
 class VAO;
+class Texture;
+class GLObject;
 class GLContext;
+class ShaderProgram;
 class GL
 {
 public:
@@ -26,6 +35,16 @@ public:
         None         = GL_NONE
     };
 
+    enum class BindTarget
+    {
+        None           = 0,
+        Texture2D      = GL_TEXTURE_2D,
+        ShaderProgram  ,
+        Framebuffer    = GL_FRAMEBUFFER,
+        VAO            ,
+        VBO
+    };
+
     static bool CheckError(int line = 0, const String &file = "");
     static bool CheckFramebufferError();
 
@@ -33,6 +52,12 @@ public:
                                  bool clearR = true, bool clearG = true,
                                  bool clearB = true, bool clearA = true);
     static void ClearDepthBuffer(float clearDepth = 1.0f);
+
+    static void Enable (GLenum glEnum);
+    static void Disable(GLenum glEnum);
+
+    static void SetViewport(int x, int y, int width, int height);
+    static void SetLineWidth(float lineWidth);
 
     static void SetWriteDepth(bool writeDepth);
     static void SetTestDepth(bool testDepth);
@@ -58,10 +83,19 @@ public:
 
     static void SaveToImage(const Texture *tex, const String &filepath);
 
+    static void Bind(const GLObject *bindable);
+    static void Bind(BindTarget bindTarget, GLId glId);
+    static void UnBind(const GLObject *bindable);
+    static void UnBind(BindTarget bindTarget);
+
     static GLContext* GetGLContext();
 
 private:
     GL();
+
+    static void _Bind(BindTarget bindTarget, GLId glId);
+
+    friend class GLContext;
 };
 
 #endif // GL_H

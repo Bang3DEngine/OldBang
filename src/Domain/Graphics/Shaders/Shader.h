@@ -5,18 +5,19 @@
 
 #include "Array.h"
 #include "Asset.h"
+#include "GLObject.h"
 #include "NamedEnum.h"
-#include "IGLIdable.h"
 #include "IToString.h"
 
-class Shader : public IToString,
-               public IGLIdable
+class Shader : public GLObject,
+               public IToString
 {
 public:
-    NamedEnum (Type,
+    enum class Type
+    {
         Vertex = GL_VERTEX_SHADER,
         Fragment = GL_FRAGMENT_SHADER
-    );
+    };
 
 private:
     String m_sourceCode = "";
@@ -24,11 +25,12 @@ private:
     Type m_type;
 
 public:
-
     Shader(Shader::Type t);
     Shader(Shader::Type t, const String &shaderPath);
 
     bool LoadFromFile(const String &filepath);
+
+    GL::BindTarget GetGLBindTarget() const override;
 
     const String& GetSourceCode() const;
     const String& GetFilepath() const;

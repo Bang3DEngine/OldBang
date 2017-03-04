@@ -1,7 +1,10 @@
 #include "GL.h"
 
 #include "Debug.h"
+#include "Texture.h"
+#include "GLObject.h"
 #include "GLContext.h"
+#include "ShaderProgram.h"
 #include "GraphicPipeline.h"
 
 #define GL_CheckError() ( GL::CheckError(__LINE__, __FILE__) )
@@ -23,12 +26,15 @@ bool GL::CheckError(int line, const String &file)
 
 bool GL::CheckFramebufferError()
 {
+    bool error = false;
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
         String errMsg = "There was a framebuffer error.";
         Debug_Error(errMsg);
         GL_CheckError();
+        error = true;
     }
+    return error;
 }
 
 void GL::ClearColorBuffer(const Color &clearColor,
@@ -44,6 +50,26 @@ void GL::ClearDepthBuffer(float clearDepth)
 {
     glClearDepth(clearDepth);
     glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void GL::Enable(GLenum glEnum)
+{
+    glEnable(glEnum);
+}
+
+void GL::Disable(GLenum glEnum)
+{
+    glDisable(glEnum);
+}
+
+void GL::SetViewport(int x, int y, int width, int height)
+{
+    glViewport(x, y, width, height);
+}
+
+void GL::SetLineWidth(float lineWidth)
+{
+    glLineWidth(lineWidth);
 }
 
 void GL::SetWriteDepth(bool writeDepth)
@@ -132,12 +158,66 @@ void GL::SaveToImage(const Texture *tex, const String &filepath)
     // TODO
 }
 
+void GL::Bind(const GLObject *bindable)
+{
+    GL::Bind(bindable->GetGLBindTarget(), bindable->GetGLId());
+}
+
+void GL::Bind(GL::BindTarget bindTarget, GLId glId)
+{
+    GLContext *glContext = GL::GetGLContext();
+    if (glContext) { glContext->OnBind(bindTarget, glId); }
+    GL::_Bind(bindTarget, glId);
+}
+
+void GL::_Bind(GL::BindTarget bindTarget, GLId glId)
+{
+    if (bindTarget == BindTarget::Texture2D)
+    {
+        glBindTexture(GL_TEXTURE_2D, glId);
+    }
+    else if (bindTarget == BindTarget::ShaderProgram)
+    {
+        glUseProgram(glId);
+    }
+    else if (bindTarget == BindTarget::Framebuffer)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, glId);
+    }
+    else if (bindTarget == BindTarget::VAO)
+    {
+        glBindVertexArray(glId);
+    }
+    else if (bindTarget == BindTarget::VBO)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, glId);
+    }
+}
+
+void GL::UnBind(const GLObject *bindable)
+{
+    GL::UnBind(bindable->GetGLBindTarget());
+}
+
+void GL::UnBind(GL::BindTarget bindTarget)
+{
+    GLContext *glc = GL::GetGLContext();
+    if (glc)
+    {
+        glc->OnUnBind(bindTarget);
+    }
+    else
+    {
+        GL::_Bind(bindTarget, 0);
+    }
+}
+
 GL::GL()
 {
 }
 
 GLContext *GL::GetGLContext()
 {
-    return GraphicPipeline::GetActive()->GetGLContext();
+    GraphicPipeline *gp = GraphicPipeline::GetActive();
+    return gp ? gp->GetGLContext() : nullptr;
 }
-

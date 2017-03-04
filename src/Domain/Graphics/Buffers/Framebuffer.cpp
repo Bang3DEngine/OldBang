@@ -187,16 +187,19 @@ void Framebuffer::ClearColor(const Color &clearColor)
     UnBind();
 }
 
-void Framebuffer::Bind() const
+GL::BindTarget Framebuffer::GetGLBindTarget() const
 {
-    PreBind(GL_FRAMEBUFFER_BINDING);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_idGL);
-    glViewport(0, 0, m_width, m_height);
+    return GL::BindTarget::Framebuffer;
 }
 
+void Framebuffer::Bind() const
+{
+    GL::Bind(this);
+    GL::SetViewport(0, 0, m_width, m_height);
+}
 void Framebuffer::UnBind() const
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, PreUnBind(GL_FRAMEBUFFER_BINDING));
+    GL::UnBind(this);
 }
 
 void Framebuffer::SaveToImage(int attachmentId, const String &filepath,

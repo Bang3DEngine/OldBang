@@ -129,6 +129,35 @@ const Matrix4 &GLContext::GetProjectionMatrix() const
     return m_projectionMatrix;
 }
 
+GLId GLContext::GetBoundId(GL::BindTarget bindTarget) const
+{
+    if (!m_glBoundIds.ContainsKey(bindTarget)) { return 0; }
+    const std::stack<GLId> &boundIds = m_glBoundIds.Get(bindTarget);
+    return boundIds.empty() ? 0 : boundIds.top();
+}
+
+void GLContext::OnBind(GL::BindTarget bindTarget, GLId glId)
+{
+    if (!m_glBoundIds.ContainsKey(bindTarget))
+    {
+        m_glBoundIds.Set(bindTarget, std::stack<GLId>());
+    }
+    m_glBoundIds[bindTarget].push(glId);
+}
+
+void GLContext::OnUnBind(GL::BindTarget bindTarget)
+{
+    GLId previousBoundId = 0;
+    if (m_glBoundIds.ContainsKey(bindTarget))
+    {
+        if (!m_glBoundIds[bindTarget].empty())
+        {
+            m_glBoundIds[bindTarget].pop();
+        }
+        previousBoundId = GetBoundId(bindTarget);
+    }
+    GL::_Bind(bindTarget, previousBoundId);
+}
 
 
 GLContext::GLContext()

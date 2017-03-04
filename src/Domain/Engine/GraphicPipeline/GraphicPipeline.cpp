@@ -35,12 +35,13 @@
 #endif
 
 GraphicPipeline::GraphicPipeline(Screen *screen)
-  : m_gbuffer(new GBuffer(screen->m_width, screen->m_height)),
-    #ifdef BANG_EDITOR
-    m_selectionFB(new SelectionFramebuffer(screen->m_width, screen->m_height))
-    #endif
 {
     m_glContext = new GLContext();
+
+    m_gbuffer = new GBuffer(screen->m_width, screen->m_height);
+    #ifdef BANG_EDITOR
+    m_selectionFB = new SelectionFramebuffer(screen->m_width, screen->m_height);
+    #endif
 
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
                 "Materials/SP_SelectionEffect.bmat", true);
@@ -48,6 +49,7 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     m_renderGBufferToScreenMaterial =
          AssetsManager::Load<Material>("Materials/RenderGBufferToScreen.bmat",
                                        true);
+
     m_screenPlaneMesh = MeshFactory::GetUIPlane();
 
     // Set up graphic pipeline passes

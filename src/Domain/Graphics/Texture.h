@@ -4,17 +4,10 @@
 #include <GL/glew.h>
 
 #include "NamedEnum.h"
-#include "IGLIdable.h"
-#include "IGLBindable.h"
+#include "GLObject.h"
 
-class Texture : public IGLIdable,
-                protected IGLBindable // Only for internal use
+class Texture : public GLObject
 {
-
-private:
-    //NON COPYABLE:
-    Texture(const Texture &t) {}
-
 public:
     enum Target
     {
@@ -44,7 +37,6 @@ public:
         ClampToEdge = GL_CLAMP_TO_EDGE
     };
 
-public:
     Texture();
     Texture(Target texTarget);
     virtual ~Texture();
@@ -70,9 +62,8 @@ public:
     GLint GetGLInternalFormat() const;
     unsigned int GetBytesSize() const;
 
-    void Bind() const override;
+    GL::BindTarget GetGLBindTarget() const override;
     void BindToTextureUnit(int textureUnit) const;
-    void UnBind() const override;
 
 protected:
 
@@ -92,6 +83,10 @@ protected:
     static GLint GetGLDataTypeFrom(Format texFormat);
     static GLint GetGLFormatFrom(Format texFormat);
     static GLint GetGLInternalFormatFrom(Format texFormat);
+
+private:
+    //NON COPYABLE:
+    Texture(const Texture &t) {}
 };
 
 #endif // TEXTURE_H

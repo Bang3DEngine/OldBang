@@ -8,7 +8,8 @@
 #include "Persistence.h"
 #include "ShaderPreprocessor.h"
 
-Shader::Shader(Shader::Type t) : m_sourceCode(""), m_filepath(""), m_type(t)
+Shader::Shader(Shader::Type t)
+    : m_sourceCode(""), m_filepath(""), m_type(t)
 {
 }
 
@@ -72,6 +73,11 @@ bool Shader::LoadFromFile(const String& filepath)
         s_cacheFilepathToIdGL.Set(m_filepath, m_idGL);
     }
     return true;
+}
+
+GL::BindTarget Shader::GetGLBindTarget() const
+{
+    return GL::BindTarget::None;
 }
 
 const String& Shader::GetSourceCode() const

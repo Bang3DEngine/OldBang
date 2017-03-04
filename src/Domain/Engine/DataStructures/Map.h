@@ -58,8 +58,7 @@ public:
 
     const Value& Get(const Key &key) const
     {
-        Map<Key, Value> *noConstThis = const_cast< Map<Key, Value>* >(this);
-        return (*noConstThis)[key];
+        return this->at(key);
     }
 
     void Clear()

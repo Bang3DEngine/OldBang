@@ -8,15 +8,13 @@
 #include "Vector4.h"
 #include "Matrix4.h"
 
-#include "IGLIdable.h"
+#include "GLObject.h"
 #include "IToString.h"
-#include "IGLBindable.h"
 #include "IRenderAgent.h"
 
 class Shader;
 class Texture;
-class ShaderProgram : public IGLIdable
-                     ,public IGLBindable
+class ShaderProgram : public GLObject
                      ,public IToString
                      ,public IRenderAgent
 {
@@ -32,10 +30,9 @@ public:
 
     bool Link();
 
-    virtual void OnRenderingStarts(GameObject *go,
-                                   ShaderProgram *sp) override;
-    virtual void OnRenderingEnds(GameObject *go,
-                                   ShaderProgram *sp) override;
+    virtual void OnRenderingStarts(GameObject *go, ShaderProgram *sp) override;
+    virtual void OnRenderingEnds  (GameObject *go, ShaderProgram *sp) override;
+    GL::BindTarget GetGLBindTarget() const override;
     void Bind() const override;
     void UnBind() const override;
 

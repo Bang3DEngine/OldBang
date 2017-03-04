@@ -17,12 +17,16 @@ void VBO::Fill(const void *data, int dataSize, GLenum usage)
     UnBind();
 }
 
+GL::BindTarget VBO::GetGLBindTarget() const
+{
+    return GL::BindTarget::VBO;
+}
+
 void VBO::Bind() const
 {
-    PreBind(GL_ARRAY_BUFFER);
-    glBindBuffer(GL_ARRAY_BUFFER, m_idGL);
+    GL::Bind(this);
 }
 void VBO::UnBind() const
 {
-    glBindBuffer(GL_ARRAY_BUFFER, PreUnBind(GL_ARRAY_BUFFER));
+    GL::UnBind(this);
 }

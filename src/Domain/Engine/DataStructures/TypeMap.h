@@ -17,6 +17,10 @@ public:
     {
         Map<TypeId, Value>::Set( typeid(Class).name(), value );
     }
+    void Set(const TypeId &className, const Value &value)
+    {
+        Map<TypeId, Value>::Set( className, value );
+    }
 
     template <class Class>
     void Remove()
@@ -29,10 +33,19 @@ public:
     {
         return Map<TypeId, Value>::Get( typeid(Class).name() );
     }
+    Value& Get(const TypeId &className)
+    {
+        return Map<TypeId, Value>::Get( className );
+    }
+
     template<class Class>
     const Value& Get() const
     {
         return Map<TypeId, Value>::Get( typeid(Class).name() );
+    }
+    const Value& Get(const TypeId &className) const
+    {
+        return Map<TypeId, Value>::Get( className );
     }
 
     template<class Class>

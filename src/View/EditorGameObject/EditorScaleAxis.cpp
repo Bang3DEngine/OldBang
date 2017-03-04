@@ -29,7 +29,7 @@ EditorScaleAxis::EditorScaleAxis(EditorAxis::EditorAxisDirection dir,
     m_line->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
     m_line->SetOnRenderingStartsForSelectionFunction([]()
         {
-            glLineWidth(25.0f); // Easier grab
+            GL::SetLineWidth(25.0f); // Easier grab
         }
     );
 

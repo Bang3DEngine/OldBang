@@ -1,7 +1,10 @@
 #ifndef GLCONTEXT_H
 #define GLCONTEXT_H
 
+#include <stack>
+
 #include "GL.h"
+#include "Map.h"
 #include "List.h"
 #include "Color.h"
 #include "Vector2.h"
@@ -44,8 +47,15 @@ private:
     bool m_writeDepth = true, m_testDepth = true;
     bool m_wireframe = false;
     GL::CullMode m_cullMode = GL::CullMode::None;
+    Map<GL::BindTarget, std::stack<GLId> > m_glBoundIds;
 
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
+
+    GLId GetBoundId(GL::BindTarget bindTarget) const;
+    void OnBind(GL::BindTarget bindTarget, GLId glId);
+    void OnUnBind(GL::BindTarget bindTarget);
+
+    friend class GL;
 };
 
 #endif // GLCONTEXT_H

@@ -53,16 +53,18 @@ void VAO::UnBindVBO(GLint location)
     }
 }
 
+GL::BindTarget VAO::GetGLBindTarget() const
+{
+    return GL::BindTarget::VAO;
+}
 
 void VAO::Bind() const
 {
-    PreBind(GL_VERTEX_ARRAY_BINDING);
-    glBindVertexArray(m_idGL);
+    GL::Bind(this);
 }
-
 void VAO::UnBind() const
 {
-    glBindVertexArray(PreUnBind(GL_VERTEX_ARRAY_BINDING));
+    GL::UnBind(this);
 }
 
 const VBO* VAO::GetVBOByLocation(GLint location) const
