@@ -42,6 +42,7 @@ public:
     template<class T>
     static void Set(T* singleton)
     {
+        if (!SingletonManager::s_mainBinarySM) { return; }
         return SingletonManager::s_mainBinarySM->m_singletons.Set<T>(singleton);
     }
 
@@ -52,6 +53,7 @@ public:
     template<class T>
     static T* Get()
     {
+        if (!SingletonManager::s_mainBinarySM) { return nullptr; }
         return Object::SCast<T>(
                     SingletonManager::s_mainBinarySM->m_singletons.Get<T>());
     }
