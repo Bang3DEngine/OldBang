@@ -25,6 +25,10 @@
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {
+}
+
+void Application::StartEditor()
+{
     QThreadPool::globalInstance()->setMaxThreadCount(256);
 
     m_audioManager = new AudioManager();

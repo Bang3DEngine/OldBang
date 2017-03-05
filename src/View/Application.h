@@ -23,6 +23,8 @@ public:
     Application(int& argc, char** argv);
     virtual ~Application();
 
+    void StartEditor();
+
     AudioManager *GetAudioManager() const;
     AssetsManager *GetAssetsManager() const;
     static Application *GetInstance();

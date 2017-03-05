@@ -125,13 +125,12 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
 using namespace std;
 int main(int argc, char **argv)
 {
-    // Get the executable dir
-    QApplication *preApp = new QApplication(argc, argv);
-    String executableDir = preApp->applicationDirPath();
-    preApp->exit(0);
-    delete preApp;
+    Application app(argc, argv);
+    LoadStylesheet(&app);
 
     InitSingletonManager();
+
+    String executableDir = Application::applicationDirPath();
 
     // Init engine paths, by looking at executable location:
     #ifdef BANG_EDITOR
@@ -145,35 +144,23 @@ int main(int argc, char **argv)
             Persistence::GetEngineRootAbs() + "/EngineAssets";
     #endif
 
-
-
     String loadedProjectFilepath = "";
-
     #ifdef BANG_EDITOR
     // Select project
-    QApplication *selectProjectApp = new QApplication(argc, argv);
     QMainWindow *selectProjectWindow = new QMainWindow();
-    LoadStylesheet(selectProjectApp);
     loadedProjectFilepath =
             SelectProjectWindow::ExecAndGetProjectFilepath(selectProjectWindow,
-                                                           selectProjectApp);
-    delete selectProjectApp;
+                                                           &app);
     #else
     loadedProjectFilepath = executableDir + "/GameData/Game.bproject";
     #endif
-    //
 
     ASSERT (!loadedProjectFilepath.Empty(),
             "The project filepath has not been specified.", return 0);
 
-    // Editor / Game
-    Application app(argc, argv);
+    app.StartEditor();
     QMainWindow *editorOrGameWindow = new QMainWindow();
-    #ifdef BANG_EDITOR
-    LoadStylesheet(&app);
-    #endif
     InitEditorOrGame(editorOrGameWindow, &app);
     ProjectManager::OpenProject(loadedProjectFilepath); // Load selected project
     return app.exec();
-    //
 }
