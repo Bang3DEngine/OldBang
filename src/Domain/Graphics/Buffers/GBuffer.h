@@ -13,13 +13,12 @@ class GBuffer : public Framebuffer,
                 public IRenderAgent
 {
 public:
-    enum Attachment
-    {
-        Normal = 0,
-        Diffuse,
-        Misc,    // (receivesLighting, shininess, depth, stencil)
-        Color
-    };
+    static const AttachmentId AttNormal  = AttachmentId::ColorAttachment0;
+    static const AttachmentId AttDiffuse = AttachmentId::ColorAttachment1;
+
+    // (receivesLighting, shininess, depth, stencil)
+    static const AttachmentId AttMisc    = AttachmentId::ColorAttachment2;
+    static const AttachmentId AttColor   = AttachmentId::ColorAttachment3;
 
     RenderTexture *m_normalTexture   = nullptr;
     RenderTexture *m_diffuseTexture  = nullptr;
@@ -33,11 +32,6 @@ private:
 
     void RenderScreenPlane();
 
-    // To preserve state
-    mutable Array<int> m_previousDrawAttachmentsIds;
-    void SaveCurrentDrawBuffers();
-    void LoadSavedDrawBuffers();
-
 public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
@@ -45,7 +39,7 @@ public:
     virtual void OnRenderingStarts(GameObject *go,
                                    ShaderProgram *sp) override;
     void ApplyPass(ShaderProgram *sp, const Rect &mask = Rect::ScreenRect);
-    void RenderToScreen(Attachment attachmentId);
+    void RenderToScreen(AttachmentId attachmentId);
     void RenderToScreen();
 
     /**

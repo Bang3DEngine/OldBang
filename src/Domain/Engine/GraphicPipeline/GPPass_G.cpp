@@ -19,14 +19,12 @@ GPPass_G::GPPass_G(GraphicPipeline *graphicPipeline,
 void GPPass_G::InPass(const List<Renderer*> &renderers,
                       const List<GameObject*> &sceneChildren)
 {
-    return;
     GPPass::InPass(renderers, sceneChildren);
 
     p_gbuffer->SetAllDrawBuffers();
     if (m_transparentPass) { GL::SetWriteDepth(false); }
 
-    p_gbuffer->SetStencilTest(false); // Don't want to be filtered by stencil
-    // Mark into the stencil (for deferred lighting be applied here)
+    p_gbuffer->SetStencilTest(false);
     p_gbuffer->SetStencilWrite(true);
     for (Renderer *rend : renderers)
     {

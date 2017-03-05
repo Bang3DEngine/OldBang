@@ -37,8 +37,6 @@ void Light::SetUniformsBeforeApplyingLight(Material *mat) const
 
 void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
 {
-    gbuffer->Bind();
-
     SetUniformsBeforeApplyingLight(m_lightMaterialScreen);
 
     // Intersect with light rect to draw exactly what we need
@@ -47,8 +45,6 @@ void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
     GL::ApplyToShaderProgram(m_lightMaterialScreen->GetShaderProgram());
     gbuffer->ApplyPass(m_lightMaterialScreen->GetShaderProgram(),
                        improvedRenderRect);
-
-    gbuffer->UnBind();
 }
 
 Rect Light::GetRenderRect(Camera *cam) const

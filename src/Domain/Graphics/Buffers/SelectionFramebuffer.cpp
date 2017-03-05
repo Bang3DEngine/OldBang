@@ -26,11 +26,12 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
                 Persistence::ToAbsolute("Shaders/SelectionBuffer.vert", true),
                 Persistence::ToAbsolute("Shaders/SelectionBuffer.frag", true));
 
-    m_colorTexture = new RenderTexture();
-    m_worldPosTexture = new RenderTexture();
-    SetAttachment(Attachment::ColorAttachment, m_colorTexture);
-    SetAttachment(Attachment::WorldPosition,   m_worldPosTexture);
+    CreateColorAttachment(AttColor);
+    CreateColorAttachment(AttWorldPos);
     CreateDepthRenderbufferAttachment();
+
+    m_colorTexture    = GetAttachmentTexture(AttColor);
+    m_worldPosTexture = GetAttachmentTexture(AttWorldPos);
 }
 
 SelectionFramebuffer::~SelectionFramebuffer()
@@ -103,7 +104,8 @@ void SelectionFramebuffer::ProcessSelection()
     {
         if (mouseOverGO)
         {
-            if (!mouseOverGO->HasHideFlag(HideFlags::HideInHierarchy)) // Selection of a GameObject
+            // Selection of a GameObject
+            if (!mouseOverGO->HasHideFlag(HideFlags::HideInHierarchy))
             {
                 EditorWindow::GetInstance()->
                         widgetHierarchy->SelectGameObject(mouseOverGO);
@@ -124,7 +126,7 @@ void SelectionFramebuffer::ProcessSelection()
 
 GameObject *SelectionFramebuffer::GetGameObjectInPosition(int x, int y)
 {
-    Color mouseOverColor = ReadColor(x, y, Attachment::ColorAttachment);
+    Color mouseOverColor = ReadColor(x, y, AttColor);
     int id = MapColorToId(mouseOverColor);
     if (mouseOverColor != Color::Zero &&
         m_id_To_GameObject.ContainsKey(id))
@@ -141,7 +143,7 @@ Color SelectionFramebuffer::GetSelectionColor(GameObject *go) const
 
 Vector3 SelectionFramebuffer::GetWorldPositionAt(int x, int y)
 {
-    return ReadColor(x, y, Attachment::WorldPosition).ToVector3();
+    return ReadColor(x, y, AttWorldPos).ToVector3();
 }
 
 bool SelectionFramebuffer::IsPassing() const

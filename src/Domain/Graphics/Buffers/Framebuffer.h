@@ -11,21 +11,34 @@ class RenderTexture;
 class Framebuffer : public GLObject
 {
 public:
+    enum AttachmentId
+    {
+        ColorAttachment0 = GL_COLOR_ATTACHMENT0,
+        ColorAttachment1 = GL_COLOR_ATTACHMENT1,
+        ColorAttachment2 = GL_COLOR_ATTACHMENT2,
+        ColorAttachment3 = GL_COLOR_ATTACHMENT3,
+        ColorAttachment4 = GL_COLOR_ATTACHMENT4,
+        ColorAttachment5 = GL_COLOR_ATTACHMENT5,
+        ColorAttachment6 = GL_COLOR_ATTACHMENT6,
+        ColorAttachment7 = GL_COLOR_ATTACHMENT7,
+        DepthAttachment  = GL_DEPTH_ATTACHMENT
+    };
+
     Framebuffer(int width, int height);
     virtual ~Framebuffer();
 
-    void SetAttachment(int attachmentId, RenderTexture *tex);
+    void CreateColorAttachment(AttachmentId attId);
     void CreateDepthRenderbufferAttachment();
 
-    RenderTexture* GetColorAttachment(int attachmentId) const;
+    RenderTexture* GetAttachmentTexture(AttachmentId attId) const;
 
     void SetAllDrawBuffers() const;
-    void SetDrawBuffers(const Array<int> &attachmentIds) const;
-    void SetReadBuffer(int attachmentId) const;
+    void SetDrawBuffers(const Array<AttachmentId> &attIds) const;
+    void SetReadBuffer(AttachmentId attId) const;
 
-    const Array<int>& GetCurrentDrawAttachmentIds() const;
+    const Array<AttachmentId>& GetCurrentDrawAttachmentIds() const;
 
-    Color ReadColor(int x, int y, int attachmentId) const;
+    Color ReadColor(int x, int y, AttachmentId attId) const;
     void Resize(int width, int height);
 
     int GetWidth() const;
@@ -40,16 +53,15 @@ public:
     virtual void Bind() const override;
     virtual void UnBind() const override;
 
-    void SaveToImage(int attachmentId, const String &filepath,
+    void SaveToImage(AttachmentId attachmentId, const String &filepath,
                      bool invertY = false) const;
 
 private:
-    int m_width;
-    int m_height;
-    GLuint m_depthAttachmentId = 0;
-    Map<int, GLuint> m_attachmentId_To_GLAttachment;
-    Map<int, RenderTexture*> m_attachmentId_To_Texture;
-    mutable Array<int> m_currentDrawAttachmentIds;
+    int m_width = 0;
+    int m_height = 0;
+    GLuint m_depthRenderBufferId = 0;
+    Array<AttachmentId> m_colorAttachmentIds;
+    Map<AttachmentId, RenderTexture*> m_attachmentId_To_Texture;
 };
 
 #endif // FRAMEBUFFER_H

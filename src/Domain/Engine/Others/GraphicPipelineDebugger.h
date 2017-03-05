@@ -9,7 +9,7 @@ public:
     static String c_debugDir;
     static void Reset();
     static void TakeGBufferShot(GBuffer *gbuffer,
-                                GBuffer::Attachment att,
+                                GBuffer::AttachmentId att,
                                 const String &screenshotName);
 
 private:

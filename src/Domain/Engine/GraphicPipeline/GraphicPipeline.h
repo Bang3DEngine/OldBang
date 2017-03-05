@@ -35,7 +35,7 @@ public:
 
     void ApplySPEffectToRenderer(const Renderer *renderer, Material *mat);
 
-    void SetGBufferAttachmentToBeRendered(GBuffer::Attachment attachment);
+    void SetGBufferAttachmentToBeRendered(GBuffer::AttachmentId attachment);
 
     void SetMSAA(int MSAA);
 
@@ -71,7 +71,7 @@ private:
     GPPass_DepthLayer *m_gizmosSelectionPass = nullptr;
     #endif
 
-    GBuffer::Attachment m_gbufferAttachToBeShown = GBuffer::Attachment::Color;
+    GBuffer::AttachmentId m_gbufferAttachToBeShown = GBuffer::AttColor;
 
     // Rendering for the Game Screen or the Scene screen
     bool m_renderingInGame = false;

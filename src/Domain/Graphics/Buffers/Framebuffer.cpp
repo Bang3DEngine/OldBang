@@ -10,41 +10,31 @@
 #include "RenderTexture.h"
 
 Framebuffer::Framebuffer(int width, int height) : m_width(width),
-                                                  m_height(height),
-                                                  m_depthAttachmentId(0)
+                                                  m_height(height)
 {
     glGenFramebuffers(1, &m_idGL);
 }
 
 Framebuffer::~Framebuffer()
 {
-    //for (auto it : m_attachmentId_To_Texture)
-    //{
-        // RenderTexture *t = it.second;
-        // delete t;
-    //}
-
-    if (m_depthAttachmentId != 0)
+    if (m_depthRenderBufferId != 0)
     {
-        glDeleteRenderbuffers(1, &m_depthAttachmentId);
+        glDeleteRenderbuffers(1, &m_depthRenderBufferId);
     }
-
     glDeleteFramebuffers(1, &m_idGL);
 }
 
-void Framebuffer::SetAttachment(int attachmentId, RenderTexture *tex)
+void Framebuffer::CreateColorAttachment(AttachmentId attId)
 {
+    RenderTexture *tex = new RenderTexture();
     tex->CreateEmpty(GetWidth(), GetHeight());
 
-    GLuint glAttachment = GL_COLOR_ATTACHMENT0 +
-                          m_attachmentId_To_Texture.Size();
-    m_attachmentId_To_Texture[attachmentId] = tex;
-    m_attachmentId_To_GLAttachment[attachmentId] = glAttachment;
+    m_colorAttachmentIds.PushBack(attId);
+    m_attachmentId_To_Texture.Set(attId, tex);
 
-    //Attach it to framebuffer
     Bind();
-    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, glAttachment,
-                           GL_TEXTURE_2D, tex->GetGLId(), 0);
+    glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attId, GL_TEXTURE_2D,
+                           tex->GetGLId(), 0);
     GL::CheckFramebufferError();
     UnBind();
     //
@@ -53,71 +43,47 @@ void Framebuffer::SetAttachment(int attachmentId, RenderTexture *tex)
 void Framebuffer::CreateDepthRenderbufferAttachment()
 {
     Bind();
-    glGenRenderbuffers(1, &m_depthAttachmentId);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttachmentId);
+    glGenRenderbuffers(1, &m_depthRenderBufferId);
+    glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferId);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
                           m_width, m_height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
-                              GL_RENDERBUFFER, m_depthAttachmentId);
+                              GL_RENDERBUFFER, m_depthRenderBufferId);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     GL::CheckFramebufferError();
     UnBind();
 }
 
-RenderTexture *Framebuffer::GetColorAttachment(int attachmentId) const
+RenderTexture *Framebuffer::GetAttachmentTexture(AttachmentId attId) const
 {
-    if (!m_attachmentId_To_Texture.ContainsKey(attachmentId))
-    {
-        return nullptr;
-    }
-    return m_attachmentId_To_Texture.Get(attachmentId);
+    if (!m_attachmentId_To_Texture.ContainsKey(attId)) { return nullptr; }
+    return m_attachmentId_To_Texture.Get(attId);
 }
 
 void Framebuffer::SetAllDrawBuffers() const
 {
-    Array<int> attachmentIds;
-    for (int i = 0; i < m_attachmentId_To_GLAttachment.Size(); ++i)
-    {
-        attachmentIds.PushBack(i);
-    }
-    SetDrawBuffers(attachmentIds);
+    SetDrawBuffers(m_colorAttachmentIds);
 }
 
-void Framebuffer::SetDrawBuffers(const Array<int> &attachmentIds) const
+void Framebuffer::SetDrawBuffers(const Array<AttachmentId> &attIds) const
 {
-    m_currentDrawAttachmentIds = attachmentIds;
-    Array<GLenum> drawBuffers;
-    for (int attId : attachmentIds)
-    {
-        drawBuffers.PushBack(m_attachmentId_To_GLAttachment.Get(attId));
-    }
-
-    Bind();
-    glDrawBuffers(drawBuffers.Size(), &drawBuffers[0]);
+    glDrawBuffers(attIds.Size(), (const GLenum*)(&attIds[0]));
     GL::CheckFramebufferError();
-    UnBind();
 }
 
-void Framebuffer::SetReadBuffer(int attachmentId) const
+void Framebuffer::SetReadBuffer(AttachmentId attId) const
 {
-    Bind();
-    glReadBuffer(m_attachmentId_To_GLAttachment.Get(attachmentId));
+    glReadBuffer(attId);
     GL::CheckFramebufferError();
-    UnBind();
 }
 
-const Array<int> &Framebuffer::GetCurrentDrawAttachmentIds() const
-{
-    return m_currentDrawAttachmentIds;
-}
-
-Color Framebuffer::ReadColor(int x, int y, int attachmentId) const
+Color Framebuffer::ReadColor(int x, int y, AttachmentId attId) const
 {
     Bind();
     Color c;
-    RenderTexture *t = GetColorAttachment(attachmentId);
-    SetReadBuffer(attachmentId);
+    RenderTexture *t = GetAttachmentTexture(attId);
+    SetReadBuffer(attId);
     glReadPixels(x, y, 1, 1, t->GetGLFormat(), t->GetGLDataType(), &c);
     UnBind();
     return c;
@@ -138,10 +104,10 @@ void Framebuffer::Resize(int width, int height)
         }
     }
 
-    if (m_depthAttachmentId != 0)
+    if (m_depthRenderBufferId != 0)
     {
         //TODO:  respect former bindings of renderbuffers
-        glBindRenderbuffer(GL_RENDERBUFFER, m_depthAttachmentId);
+        glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferId);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
                               m_width, m_height);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
@@ -165,26 +131,20 @@ Vector2 Framebuffer::GetSize() const
 
 void Framebuffer::Clear()
 {
-    Bind();
     SetAllDrawBuffers();
     GL::ClearDepthBuffer();
     GL::ClearColorBuffer();
-    UnBind();
 }
 
 void Framebuffer::ClearDepth(float clearDepth)
 {
-    Bind();
     GL::ClearDepthBuffer(clearDepth);
-    UnBind();
 }
 
 void Framebuffer::ClearColor(const Color &clearColor)
 {
-    Bind();
     SetAllDrawBuffers();
     GL::ClearColorBuffer(clearColor);
-    UnBind();
 }
 
 GL::BindTarget Framebuffer::GetGLBindTarget() const
@@ -202,14 +162,14 @@ void Framebuffer::UnBind() const
     GL::UnBind(this);
 }
 
-void Framebuffer::SaveToImage(int attachmentId, const String &filepath,
+void Framebuffer::SaveToImage(AttachmentId attId, const String &filepath,
                               bool invertY) const
 {
     Bind();
-    Texture *tex = m_attachmentId_To_Texture.Get(attachmentId);
+    Texture *tex = m_attachmentId_To_Texture.Get(attId);
     if (tex)
     {
-        SetReadBuffer(attachmentId);
+        SetReadBuffer(attId);
         unsigned int bytesSize = m_width * m_height * 4;
         unsigned char *pixels = new unsigned char[bytesSize];
         glReadPixels(0, 0, m_width, m_height,

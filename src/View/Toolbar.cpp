@@ -221,15 +221,15 @@ void Toolbar::OnGBufferAttachmentIndexChanged(int newIndex)
 
     if (newIndex == 0)
     {
-        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Color);
+        gp->SetGBufferAttachmentToBeRendered(GBuffer::AttColor);
     }
     else if (newIndex == 2)
     {
-        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Normal);
+        gp->SetGBufferAttachmentToBeRendered(GBuffer::AttNormal);
     }
     else if (newIndex == 3)
     {
-        gp->SetGBufferAttachmentToBeRendered(GBuffer::Attachment::Diffuse);
+        gp->SetGBufferAttachmentToBeRendered(GBuffer::AttDiffuse);
     }
 }
 

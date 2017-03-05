@@ -43,6 +43,8 @@ public:
     const Matrix4 &GetViewMatrix() const;
     const Matrix4 &GetProjectionMatrix() const;
 
+    GLId GetBoundId(GL::BindTarget bindTarget) const;
+
 private:
     bool m_writeDepth = true, m_testDepth = true;
     bool m_wireframe = false;
@@ -51,7 +53,6 @@ private:
 
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
 
-    GLId GetBoundId(GL::BindTarget bindTarget) const;
     void OnBind(GL::BindTarget bindTarget, GLId glId);
     void OnUnBind(GL::BindTarget bindTarget);
 

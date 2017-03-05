@@ -126,16 +126,24 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
     List<GameObject*> sceneChildren = scene->GetChildren();
 
+    glFlush();
+    Chrono c;
+    c.MarkEvent("RenderGBuffer");
     RenderGBuffer(renderers, sceneChildren);
+
+    c.MarkEvent("RenderToScreen");
     m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 
     #ifdef BANG_EDITOR
     if (!m_renderingInGame)
     {
+        c.MarkEvent("RenderSelectionBuffer");
         RenderSelectionBuffer(renderers, sceneChildren, p_scene);
         // RenderToScreen(m_selectionFB->GetColorTexture()); // To see it
     }
     #endif
+    glFlush();
+    c.Log();
 }
 
 void GraphicPipeline::ApplySelectionOutline()
@@ -189,7 +197,8 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     }
     ASSERT(renderRect != Rect::Empty);
 
-    m_gbuffer->SetStencilTest(true); // We have marked from before the zone where we want to apply the effect
+    // We have marked from before the zone where we want to apply the effect
+    m_gbuffer->SetStencilTest(true);
 
     Material *rendMat = rend ? rend->GetMaterial() : nullptr;
     if ( !rend || (rendMat && rendMat->ReceivesLighting()) )
@@ -206,9 +215,10 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
 void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
                                     const List<GameObject*> &sceneChildren)
 {
+    m_gbuffer->Bind();
+
     Color bgColor = p_scene->GetCamera()->GetClearColor();
     m_gbuffer->ClearBuffersAndBackground(bgColor);
-    m_gbuffer->Bind();
 
     m_scenePass->Pass(renderers, sceneChildren);
     if (!m_renderingInGame) { ApplySelectionOutline(); }
@@ -310,7 +320,7 @@ void GraphicPipeline::OnResize(int newWidth, int newHeight)
 }
 
 void GraphicPipeline::SetGBufferAttachmentToBeRendered(
-        GBuffer::Attachment attachment)
+        GBuffer::AttachmentId attachment)
 {
     m_gbufferAttachToBeShown = attachment;
 }

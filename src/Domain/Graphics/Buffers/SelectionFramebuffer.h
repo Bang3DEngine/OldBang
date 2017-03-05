@@ -44,7 +44,8 @@ public:
     void OnGameObjectDestroyed(GameObject *destroyed) override;
 
 private:
-    enum Attachment { ColorAttachment = 0, WorldPosition = 1 };
+    static const AttachmentId AttColor    = AttachmentId::ColorAttachment0;
+    static const AttachmentId AttWorldPos = AttachmentId::ColorAttachment1;
 
     RenderTexture *m_colorTexture    = nullptr;
     RenderTexture *m_worldPosTexture = nullptr;
