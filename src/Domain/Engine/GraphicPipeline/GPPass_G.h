@@ -13,7 +13,7 @@ class GPPass_G : public GPPass
 {
 public:
     GPPass_G(GraphicPipeline *graphicPipeline,
-             bool receiveLighting, bool transparent,
+             bool receiveLighting, bool transparentPass,
              const List<GPPass*> &subPasses = {});
 
     virtual void InPass(const List<Renderer*> &renderers,
@@ -23,7 +23,7 @@ public:
 
 private:
     bool m_receiveLighting = false;
-    bool m_transparent = false;
+    bool m_transparentPass = false;
 };
 
 #endif // GPPASS_G_H
