@@ -33,15 +33,13 @@ uniform vec2 B_screen_size;
 uniform vec2 B_buffer_size;
 
 #ifdef BANG_FRAGMENT
-float B_screen_aspect_ratio = B_screen_size.x / B_screen_size.y;
+vec2  B_screen_pixel_step = 1.0 / B_screen_size;
 vec2  B_screen_coord = gl_FragCoord.xy;
 vec2  B_screen_coord_norm = B_screen_coord / B_screen_size;
-vec2  B_screen_pixel_step = 1.0 / B_screen_size;
 
-float B_buffer_aspect_ratio = B_buffer_size.x / B_buffer_size.y;
+vec2  B_buffer_pixel_step = 1.0 / B_buffer_size;
 vec2  B_buffer_coord = gl_FragCoord.xy;
 vec2  B_buffer_coord_norm = B_buffer_coord / B_buffer_size;
-vec2  B_buffer_pixel_step = 1.0 / B_buffer_size;
 #endif
 
 // GBuffer textures

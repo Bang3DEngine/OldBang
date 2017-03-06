@@ -1,5 +1,6 @@
 # C++ objects and libs
 
+*.trace
 tmp/*
 *BangPreprocessor*
 ui_*

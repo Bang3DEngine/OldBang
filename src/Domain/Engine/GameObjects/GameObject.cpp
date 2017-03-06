@@ -701,7 +701,6 @@ void GameObject::_OnUpdate()
     {
         PROPAGATE_EVENT(_OnUpdate(), m_components);
     }
-
     PROPAGATE_EVENT(_OnUpdate(), m_children);
 }
 

@@ -56,7 +56,7 @@ public:
     void SaveToImage(AttachmentId attachmentId, const String &filepath,
                      bool invertY = false) const;
 
-private:
+protected:
     int m_width = 0;
     int m_height = 0;
     GLuint m_depthRenderBufferId = 0;

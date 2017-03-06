@@ -158,9 +158,12 @@ int main(int argc, char **argv)
     ASSERT (!loadedProjectFilepath.Empty(),
             "The project filepath has not been specified.", return 0);
 
-    app.StartEditor();
+    app.InitManagers();
+
     QMainWindow *editorOrGameWindow = new QMainWindow();
     InitEditorOrGame(editorOrGameWindow, &app);
     ProjectManager::OpenProject(loadedProjectFilepath); // Load selected project
-    return app.exec();
+
+    app.MainLoop();
+    return 0;
 }

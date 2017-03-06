@@ -158,11 +158,11 @@ void SceneManager::LoadScene(const String &sceneFilepath)
 void SceneManager::TryToLoadQueuedScene()
 {
     SceneManager *sm = SceneManager::GetInstance();
-    if (sm->m_queuedSceneFilepath != "")
+    if (!sm->m_queuedSceneFilepath.Empty())
     {
         SceneManager::LoadSceneInstantly(sm->m_queuedSceneFilepath);
+        sm->m_queuedSceneFilepath = "";
     }
-    sm->m_queuedSceneFilepath = "";
 }
 
 void SceneManager::LoadSceneInstantly(const String &sceneFilepath)

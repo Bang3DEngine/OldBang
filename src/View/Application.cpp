@@ -12,6 +12,7 @@
 #include "GameWindow.h"
 #endif
 
+#include "Math.h"
 #include "Time.h"
 #include "Input.h"
 #include "Scene.h"
@@ -27,19 +28,12 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {
 }
 
-void Application::StartEditor()
+void Application::InitManagers()
 {
-    QThreadPool::globalInstance()->setMaxThreadCount(256);
-
     m_audioManager = new AudioManager();
     m_sceneManager = new SceneManager();
     m_assetsManager = new AssetsManager();
     m_behaviourManager = new BehaviourManager();
-
-    m_drawTimer.start(c_redrawDelay);
-    connect(&m_drawTimer, SIGNAL(timeout()), this, SLOT(OnDrawTimerTick()));
-
-    m_lastRenderTime = Time::GetNow();
 }
 
 Application::~Application()
@@ -55,44 +49,54 @@ AudioManager *Application::GetAudioManager() const
     return m_audioManager;
 }
 
-void Application::OnDrawTimerTick()
+void Application::MainLoop()
 {
-    ASSERT(Screen::GetInstance());
-
-    // Update deltaTime
-    float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
-    Time::GetInstance()->m_deltaTime = deltaTime;
-
-    // Update mainBinary static deltaTime, for internal engine use
-    // (this is not Behaviours' static deltaTime, theirs is
-    //  updated in Behaviour _OnUpdate)
-    Time::s_deltaTime = deltaTime;
-    Time::s_time += deltaTime;
-    //
-
-    // Process mouse and key events, so the Input is available in OnUpdate
-    // as accurate as possible.
-    // Lost events in between Update and Render will be delayed by Input.
-    processEvents();
-    Input::GetInstance()->ProcessEnqueuedEvents();
-
-    SceneManager::TryToLoadQueuedScene();
-    Scene *activeScene = SceneManager::GetActiveScene();
-    if (activeScene)
+    while (true)
     {
+        processEvents();
+        if (!Screen::GetInstance()) { continue; }
+
+        Chrono c;
+
+        // Update deltaTime
+        float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
         m_lastRenderTime = Time::GetNow();
-        activeScene->_OnUpdate();
+        Time::GetInstance()->m_deltaTime = deltaTime;
+        Time::s_deltaTime = deltaTime;
+        Time::s_time += deltaTime;
+        //
+
+        // Process mouse and key events, so the Input is available in OnUpdate
+        // as accurate as possible.
+        // Lost events in between Update and Render will be delayed by Input.
+        //processEvents();
+        c.MarkEvent("Input::ProcessEnqueuedEvents()");
+        Input::GetInstance()->ProcessEnqueuedEvents();
+
+        SceneManager::TryToLoadQueuedScene();
+        Scene *activeScene = SceneManager::GetActiveScene();
+        if (activeScene)
+        {
+            c.MarkEvent("activeScene->_OnUpdate");
+            activeScene->_OnUpdate();
+        }
+
+        // Render screen
+        c.MarkEvent("Render()");
+        Screen::GetInstance()->Render();
+        c.MarkEvent("swapBuffers()");
+        Screen::GetInstance()->swapBuffers();
+
+        c.MarkEvent("Input::OnFrameFinished()");
+        Input::GetInstance()->OnFrameFinished();
+
+        #ifdef BANG_EDITOR
+        c.MarkEvent("Console::ProcessMessagesQueue()");
+        Console::GetInstance()->ProcessMessagesQueue();
+        #endif
+
+        c.Log();
     }
-
-    // Render screen
-    Screen::GetInstance()->Render();
-    Screen::GetInstance()->swapBuffers();
-
-    Input::GetInstance()->OnFrameFinished();
-
-    #ifdef BANG_EDITOR
-    Console::GetInstance()->ProcessMessagesQueue();
-    #endif
 }
 
 AssetsManager *Application::GetAssetsManager() const

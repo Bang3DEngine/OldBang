@@ -7,11 +7,11 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Light.h"
-#include "Chrono.h"
 #include "Screen.h"
 #include "Camera.h"
 #include "GBuffer.h"
 #include "Texture.h"
+#include "ChronoGL.h"
 #include "Material.h"
 #include "GPPass_G.h"
 #include "Transform.h"
@@ -118,16 +118,13 @@ GraphicPipeline::~GraphicPipeline()
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
-    GraphicPipelineDebugger::Reset();
-
     p_scene = scene; ASSERT(p_scene);
     m_renderingInGame = inGame;
 
     List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
     List<GameObject*> sceneChildren = scene->GetChildren();
 
-    glFlush();
-    Chrono c;
+    ChronoGL c;
     c.MarkEvent("RenderGBuffer");
     RenderGBuffer(renderers, sceneChildren);
 
@@ -138,11 +135,10 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     if (!m_renderingInGame)
     {
         c.MarkEvent("RenderSelectionBuffer");
-        RenderSelectionBuffer(renderers, sceneChildren, p_scene);
+        // RenderSelectionBuffer(renderers, sceneChildren, p_scene);
         // RenderToScreen(m_selectionFB->GetColorTexture()); // To see it
     }
     #endif
-    glFlush();
     c.Log();
 }
 

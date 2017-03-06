@@ -7,9 +7,12 @@
 #include "ShaderProgram.h"
 #include "GraphicPipeline.h"
 
-#define GL_CheckError() ( GL::CheckError(__LINE__, __FILE__) )
+void GL::ClearError()
+{
+    glGetError();
+}
 
-bool GL::CheckError(int line, const String &file)
+bool GL::CheckError(int line, const String &func, const String &file)
 {
     GLenum glError;
     bool error = false;
@@ -18,7 +21,8 @@ bool GL::CheckError(int line, const String &file)
     if (glError != GL_NO_ERROR)
     {
         const char *err = reinterpret_cast<const char*>(gluErrorString(glError));
-        Debug_Error("OpenGL error: " << err << " At " << file << ":" << line);
+        Debug_Error("OpenGL error: " << err << " At function " << func << " in "
+                    << file << ":" << line);
         error = true;
     }
     return error;

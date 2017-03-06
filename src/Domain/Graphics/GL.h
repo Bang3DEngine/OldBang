@@ -8,6 +8,8 @@
 #include "String.h"
 #include "Matrix4.h"
 
+#define GL_CheckError() ( GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
+
 typedef GLuint GLId;
 
 class VAO;
@@ -45,7 +47,9 @@ public:
         VBO
     };
 
-    static bool CheckError(int line = 0, const String &file = "");
+    static void ClearError();
+    static bool CheckError(int line = 0, const String &func = "",
+                           const String &file = "");
     static bool CheckFramebufferError();
 
     static void ClearColorBuffer(const Color& clearColor = Color::Zero,

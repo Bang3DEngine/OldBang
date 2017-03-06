@@ -33,8 +33,10 @@ void Framebuffer::CreateColorAttachment(AttachmentId attId)
     m_attachmentId_To_Texture.Set(attId, tex);
 
     Bind();
+    GL::ClearError();
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attId, GL_TEXTURE_2D,
                            tex->GetGLId(), 0);
+    GL_CheckError();
     GL::CheckFramebufferError();
     UnBind();
     //
@@ -43,6 +45,7 @@ void Framebuffer::CreateColorAttachment(AttachmentId attId)
 void Framebuffer::CreateDepthRenderbufferAttachment()
 {
     Bind();
+    GL::ClearError();
     glGenRenderbuffers(1, &m_depthRenderBufferId);
     glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferId);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
@@ -51,6 +54,7 @@ void Framebuffer::CreateDepthRenderbufferAttachment()
                               GL_RENDERBUFFER, m_depthRenderBufferId);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
+    GL_CheckError();
     GL::CheckFramebufferError();
     UnBind();
 }
@@ -68,25 +72,27 @@ void Framebuffer::SetAllDrawBuffers() const
 
 void Framebuffer::SetDrawBuffers(const Array<AttachmentId> &attIds) const
 {
+    GL::ClearError();
     glDrawBuffers(attIds.Size(), (const GLenum*)(&attIds[0]));
-    GL::CheckFramebufferError();
+    GL_CheckError();
 }
 
 void Framebuffer::SetReadBuffer(AttachmentId attId) const
 {
+    GL::ClearError();
     glReadBuffer(attId);
-    GL::CheckFramebufferError();
+    GL_CheckError();
 }
 
 Color Framebuffer::ReadColor(int x, int y, AttachmentId attId) const
 {
     Bind();
-    Color c;
     RenderTexture *t = GetAttachmentTexture(attId);
     SetReadBuffer(attId);
-    glReadPixels(x, y, 1, 1, t->GetGLFormat(), t->GetGLDataType(), &c);
+    Color readColor;
+    glReadPixels(x, y, 1, 1, t->GetGLFormat(), t->GetGLDataType(), &readColor);
     UnBind();
-    return c;
+    return readColor;
 }
 
 

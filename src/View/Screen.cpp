@@ -67,7 +67,7 @@ void Screen::Render()
     else
     {
         GL::ClearDepthBuffer();
-        GL::ClearColorBuffer(Color::One);
+        GL::ClearColorBuffer(Color::Purple);
     }
 }
 

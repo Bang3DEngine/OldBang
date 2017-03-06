@@ -23,7 +23,8 @@ public:
     Application(int& argc, char** argv);
     virtual ~Application();
 
-    void StartEditor();
+    void InitManagers();
+    void MainLoop();
 
     AudioManager *GetAudioManager() const;
     AssetsManager *GetAssetsManager() const;
@@ -32,9 +33,6 @@ public:
     bool notify(QObject *receiver, QEvent *e) override;
 
 
-public slots:
-    void OnDrawTimerTick();
-
 private:
     AudioManager *m_audioManager         = nullptr;
     SceneManager *m_sceneManager         = nullptr;
@@ -42,7 +40,6 @@ private:
     BehaviourManager *m_behaviourManager = nullptr;
 
     unsigned long long m_lastRenderTime = 0;
-    QTimer m_drawTimer;
 
     // If this is too low, Qt stops it when dragging
     // something around the window :(

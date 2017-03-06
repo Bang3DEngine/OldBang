@@ -300,7 +300,8 @@ HEADERS +=                                                          \
     src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h \
     src/Domain/Engine/GraphicPipeline/GPPass_G.h \
     src/Domain/Engine/GraphicPipeline/GPPass.h \
-    src/Domain/Graphics/Interfaces/GLObject.h
+    src/Domain/Graphics/Interfaces/GLObject.h \
+    src/Domain/Engine/Debug/ChronoGL.h
 
 EDITOR {
 HEADERS += \
@@ -514,7 +515,8 @@ SOURCES += \
     src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_G.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass.cpp \
-    src/Domain/Graphics/Interfaces/GLObject.cpp
+    src/Domain/Graphics/Interfaces/GLObject.cpp \
+    src/Domain/Engine/Debug/ChronoGL.cpp
 
 EDITOR {
     SOURCES += \

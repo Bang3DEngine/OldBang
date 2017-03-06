@@ -25,18 +25,16 @@ void VAO::BindVBO(const VBO *vbo,
 
     if (location < 0) return;
 
-    this->Bind();
+    Bind();
 
     vbo->Bind();
-
     glEnableVertexAttribArray(location);
     glVertexAttribPointer(location,
                           dataComponentsCount, dataType,
                           dataNormalized, dataStride, (void*) dataOffset);
-
     vbo->UnBind();
 
-    this->UnBind();
+    UnBind();
 
     while (m_vbos.Size() <= location) m_vbos.PushBack(nullptr);
     m_vbos[location] = vbo;
