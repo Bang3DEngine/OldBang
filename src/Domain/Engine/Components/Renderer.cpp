@@ -143,6 +143,9 @@ void Renderer::UseMaterialCopy()
 void Renderer::OnRenderingEnds(GameObject *go, ShaderProgram *sp) const
 {
     sp->OnRenderingEnds(go, sp);
+
+    GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
+    gb->OnRenderingEnds(go, sp);
 }
 
 void Renderer::SetTransparent(bool transparent)

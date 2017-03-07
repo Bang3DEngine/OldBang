@@ -24,6 +24,7 @@
 #include "AssetsManager.h"
 #include "RectTransform.h"
 #include "ShaderContract.h"
+#include "GPPass_SP_FXAA.h"
 #include "GPPass_G_Gizmos.h"
 #include "GraphicPipelineDebugger.h"
 #include "GPPass_SP_DeferredLights.h"
@@ -65,7 +66,8 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
        {
          new GPPass_SP_DeferredLights(this) //   Add light to transparent
        }),
-       new GPPass_G(this, false, true)      // Unlighted Transparent
+       new GPPass_G(this, false, true),     // Unlighted Transparent
+       new GPPass_SP_FXAA(this)
      });
 
     m_canvasPass =
@@ -135,7 +137,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     if (!m_renderingInGame)
     {
         c.MarkEvent("RenderSelectionBuffer");
-        // RenderSelectionBuffer(renderers, sceneChildren, p_scene);
+        RenderSelectionBuffer(renderers, sceneChildren, p_scene);
         // RenderToScreen(m_selectionFB->GetColorTexture()); // To see it
     }
     #endif
@@ -309,7 +311,7 @@ GraphicPipeline* GraphicPipeline::GetActive()
 
 void GraphicPipeline::OnResize(int newWidth, int newHeight)
 {
-    m_gbuffer->Resize(newWidth  * m_MSAA, newHeight * m_MSAA);
+    m_gbuffer->Resize(newWidth, newHeight);
     #ifdef BANG_EDITOR
     m_selectionFB->Resize(newWidth, newHeight);
     #endif
@@ -321,13 +323,14 @@ void GraphicPipeline::SetGBufferAttachmentToBeRendered(
     m_gbufferAttachToBeShown = attachment;
 }
 
-void GraphicPipeline::SetMSAA(int MSAA)
+void GraphicPipeline::SetFXAA(bool enabled)
 {
-    if (m_MSAA != MSAA)
-    {
-        m_MSAA = MSAA;
-        OnResize(Screen::GetWidth(), Screen::GetHeight()); // Trigger resizing
-    }
+    m_FXAA = enabled;
+}
+
+bool GraphicPipeline::GetFXAA() const
+{
+    return m_FXAA;
 }
 
 GLContext *GraphicPipeline::GetGLContext() const

@@ -37,7 +37,8 @@ public:
 
     void SetGBufferAttachmentToBeRendered(GBuffer::AttachmentId attachment);
 
-    void SetMSAA(int MSAA);
+    void SetFXAA(bool enabled);
+    bool GetFXAA() const;
 
     GLContext *GetGLContext() const;
     GBuffer *GetGBuffer();
@@ -53,7 +54,7 @@ public:
     void ApplyDeferredLights(Renderer *rend = nullptr);
 
 private:
-    int m_MSAA = 2;
+    bool m_FXAA = 1;
     GLContext *m_glContext = nullptr;
 
     GBuffer *m_gbuffer = nullptr;

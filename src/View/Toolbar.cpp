@@ -36,7 +36,7 @@ void Toolbar::Init()
     tb->m_buttonGlobalCoords        = w->buttonGlobalCoords;
     tb->m_buttonLocalCoords         = w->buttonLocalCoords;
     tb->m_buttonShowGizmos          = w->buttonShowGizmos;
-    tb->m_buttonMSAA                = w->buttonMSAA;
+    tb->m_buttonFXAA                = w->buttonFXAA;
     tb->m_buttonPlay                = w->buttonPlay;
     tb->m_buttonStop                = w->buttonStop;
     tb->m_button3D                  = w->buttonOrthoPerspectiveMode;
@@ -56,9 +56,9 @@ void Toolbar::Init()
     connect(tb->m_buttonLocalCoords, SIGNAL(clicked()),
             tb, SLOT(OnLocalCoordsClicked()));
 
-    connect(tb->m_buttonMSAA, SIGNAL(clicked(bool)), tb,
-            SLOT(OnMSAAClicked(bool)));
-    tb->OnMSAAClicked( tb->m_buttonMSAA->isChecked() );
+    connect(tb->m_buttonFXAA, SIGNAL(clicked(bool)), tb,
+            SLOT(OnFXAAClicked(bool)));
+    tb->OnFXAAClicked( tb->m_buttonFXAA->isChecked() );
 
     connect(tb->m_buttonShowGizmos, SIGNAL(clicked(bool)),
             tb, SLOT(OnShowGizmosClicked(bool)));
@@ -164,9 +164,9 @@ void Toolbar::OnLocalCoordsClicked()
     EditorState::GetInstance()->m_globalCoords = false;
 }
 
-void Toolbar::OnMSAAClicked(bool msaa)
+void Toolbar::OnFXAAClicked(bool fxaa)
 {
-    GraphicPipeline::GetActive()->SetMSAA( msaa ? 2 : 1 );
+    GraphicPipeline::GetActive()->SetFXAA(fxaa);
 }
 
 void Toolbar::OnShowGizmosClicked(bool showGizmos)

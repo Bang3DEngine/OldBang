@@ -90,7 +90,7 @@ private:
     bool m_identityMode = false;
     Mesh *p_camMesh = nullptr;
 
-    Color m_clearColor = Color(Color(0.4f), 1);
+    Color m_clearColor = Color(Color(0.3f), 1);
     float m_fovDegrees = 60.0f;
     float m_zNear = 0.1f;
     float m_zFar = 100.0f;

@@ -53,13 +53,28 @@ uniform sampler2D B_color_gout_fin;
   #ifdef BANG_FRAGMENT
     #define FRAG_IN_UV_SCREEN()                    B_buffer_coord_norm
     #define FRAG_IN_COLOR()                        (texture2D(B_color_gout_fin,         B_buffer_coord_norm))
-    #define FRAG_IN_POSITION_WORLD()               vec3(1,1,1) //(texture2D(B_position_gout_fin,      B_buffer_coord_norm).xyz)
     #define FRAG_IN_NORMAL_WORLD()      normalize(  texture2D(B_normal_gout_fin,        B_buffer_coord_norm).xyz )
     #define FRAG_IN_DIFFUSE_COLOR()                (texture2D(B_diffuse_gout_fin,       B_buffer_coord_norm))
     #define FRAG_IN_RECEIVES_LIGHTING()            (texture2D(B_misc_gout_fin, B_buffer_coord_norm).r > 0.5f)
     #define FRAG_IN_SHININESS()                    (texture2D(B_misc_gout_fin, B_buffer_coord_norm).g)
-    #define FRAG_IN_DEPTH()                        (texture2D(B_misc_gout_fin, B_buffer_coord_norm).b)
+    #define FRAG_IN_DEPTH()                        ( B_SampleDepth() )
     #define FRAG_IN_STENCIL()                      (texture2D(B_misc_gout_fin, B_buffer_coord_norm).a)
+
+    vec3 B_SampleNormal( vec2 uv )
+    {
+        return texture2D(B_normal_gout_fin, uv).xyz;
+    }
+    vec4 B_SampleColor( vec2 uv )
+    {
+        return texture2D(B_color_gout_fin, uv);
+    }
+    float B_SampleDepth( vec2 uv )
+    {
+        return texture2D(B_misc_gout_fin, uv).b;
+    }
+    vec3 B_SampleNormal() { return B_SampleNormal( B_buffer_coord_norm ); }
+    vec4 B_SampleColor()  { return B_SampleColor ( B_buffer_coord_norm ); }
+    float B_SampleDepth() { return B_SampleDepth ( B_buffer_coord_norm ); }
 
     vec3 B_ComputeWorldPosition(float depth)
     {

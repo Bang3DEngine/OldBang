@@ -51,7 +51,8 @@ AudioManager *Application::GetAudioManager() const
 
 void Application::MainLoop()
 {
-    while (true)
+    IWindow *win = IWindow::GetInstance();
+    while ( win->GetMainWindow()->isVisible() )
     {
         processEvents();
         if (!Screen::GetInstance()) { continue; }

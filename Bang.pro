@@ -301,7 +301,8 @@ HEADERS +=                                                          \
     src/Domain/Engine/GraphicPipeline/GPPass_G.h \
     src/Domain/Engine/GraphicPipeline/GPPass.h \
     src/Domain/Graphics/Interfaces/GLObject.h \
-    src/Domain/Engine/Debug/ChronoGL.h
+    src/Domain/Engine/Debug/ChronoGL.h \
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.h
 
 EDITOR {
 HEADERS += \
@@ -516,7 +517,8 @@ SOURCES += \
     src/Domain/Engine/GraphicPipeline/GPPass_G.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass.cpp \
     src/Domain/Graphics/Interfaces/GLObject.cpp \
-    src/Domain/Engine/Debug/ChronoGL.cpp
+    src/Domain/Engine/Debug/ChronoGL.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.cpp
 
 EDITOR {
     SOURCES += \
@@ -729,4 +731,5 @@ DISTFILES += \
     EngineAssets/Materials/G_DefaultNoSP.bmat \
     EngineAssets/Materials/UI/G_UIImage.bmat \
     EngineAssets/Materials/UI/G_UIText.bmat \
-    EngineAssets/Materials/UI/SP_UIImage.bmat
+    EngineAssets/Materials/UI/SP_UIImage.bmat \
+    EngineAssets/Shaders/SP_FXAA.frag

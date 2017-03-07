@@ -238,9 +238,9 @@
               </spacer>
              </item>
              <item>
-              <widget class="QToolButton" name="buttonMSAA">
+              <widget class="QToolButton" name="buttonFXAA">
                <property name="text">
-                <string>MSAA</string>
+                <string>FXAA</string>
                </property>
                <property name="checkable">
                 <bool>true</bool>

@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Color.h"
 #include "Array.h"
+#include "Input.h"
 #include "Camera.h"
 #include "Screen.h"
 #include "Material.h"
@@ -23,13 +24,15 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateColorAttachment( AttachmentId( AttNormal  ) );
     CreateColorAttachment( AttachmentId( AttDiffuse ) );
     CreateColorAttachment( AttachmentId( AttMisc    ) );
-    CreateColorAttachment( AttachmentId( AttColor   ) );
+    CreateColorAttachment( AttachmentId( AttColor  ) );
+    CreateColorAttachment( AttachmentId( AttColorRead  ) );
     CreateDepthRenderbufferAttachment();
 
-    m_normalTexture  = GetAttachmentTexture(AttNormal);
-    m_diffuseTexture = GetAttachmentTexture(AttDiffuse);
-    m_miscTexture    = GetAttachmentTexture(AttMisc);
-    m_colorTexture   = GetAttachmentTexture(AttColor);
+    m_normalTexture    = GetAttachmentTexture(AttNormal);
+    m_diffuseTexture   = GetAttachmentTexture(AttDiffuse);
+    m_miscTexture      = GetAttachmentTexture(AttMisc);
+    m_colorTexture     = GetAttachmentTexture(AttColor);
+    m_colorReadTexture = GetAttachmentTexture(AttColorRead);
 }
 
 GBuffer::~GBuffer()
@@ -49,8 +52,14 @@ void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
     sp->SetFloat("B_stencilTestEnabled",  m_stencilTestEnabled  ? 1.0f : 0.0f);
 }
 
+void GBuffer::OnRenderingEnds(GameObject *go, ShaderProgram *sp)
+{
+}
 
-void GBuffer::ApplyPass(ShaderProgram *sp, const Rect &mask)
+
+void GBuffer::ApplyPass(ShaderProgram *sp,
+                        bool copyColorBuffer,
+                        const Rect &mask)
 {
     Vector2 buffersSize = GraphicPipeline::GetBuffersSize();
     sp->SetVec2("B_buffer_size", buffersSize);
@@ -61,23 +70,41 @@ void GBuffer::ApplyPass(ShaderProgram *sp, const Rect &mask)
 
     OnRenderingStarts(nullptr, sp);
 
+    if (copyColorBuffer)
+    {
+        SetReadBuffer(AttColor);
+        SetDrawBuffers({AttColorRead});
+        glBlitFramebuffer(0, 0, GetWidth(), GetHeight(),
+                          0, 0, GetWidth(), GetHeight(),
+                          GL_COLOR_BUFFER_BIT, GL_LINEAR);
+        sp->SetTexture("B_color_gout_fin", m_colorReadTexture);
+    }
+
     // Set as only draw output: "B_color_gout_gin". Accumulate color there.
     SetColorDrawBuffer();
     GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
 
+    OnRenderingEnds(nullptr, sp);
+
     SetStencilWrite(prevStencilWrite);
 }
 
-void GBuffer::RenderToScreen(GBuffer::AttachmentId attachmentId)
+void GBuffer::RenderToScreen(GBuffer::AttachmentId attId)
 {
     // Assumes gbuffer is not bound, hence directly writing to screen
-    Texture *tex = GetAttachmentTexture(attachmentId); ASSERT(tex);
+    Texture *tex = GetAttachmentTexture(attId); ASSERT(tex);
     GraphicPipeline::GetActive()->RenderToScreen(tex);
 }
 
 void GBuffer::RenderToScreen()
 {
     RenderToScreen(GBuffer::AttColor);
+}
+
+void GBuffer::SetAllDrawBuffers() const
+{
+    SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse, GBuffer::AttMisc,
+                    GBuffer::AttColor});
 }
 
 void GBuffer::SetAllDrawBuffersExceptColor()
@@ -131,6 +158,13 @@ void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor,
 
     GL::ClearDepthBuffer(1.0f);
 
+    //*
     SetColorDrawBuffer();
     GL::ClearColorBuffer(backgroundColor);
+    /*/
+    SetDrawBuffers({GBuffer::AttColor0});
+    GL::ClearColorBuffer(Color::Red);
+    SetDrawBuffers({GBuffer::AttColor1});
+    GL::ClearColorBuffer(Color::Blue);
+    //*/
 }

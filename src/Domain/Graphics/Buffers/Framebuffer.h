@@ -32,7 +32,7 @@ public:
 
     RenderTexture* GetAttachmentTexture(AttachmentId attId) const;
 
-    void SetAllDrawBuffers() const;
+    virtual void SetAllDrawBuffers() const;
     void SetDrawBuffers(const Array<AttachmentId> &attIds) const;
     void SetReadBuffer(AttachmentId attId) const;
 
