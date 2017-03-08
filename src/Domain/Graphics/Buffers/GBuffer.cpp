@@ -16,7 +16,6 @@
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
 #include "RenderTexture.h"
-#include "ShaderContract.h"
 #include "GraphicPipeline.h"
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
@@ -48,8 +47,8 @@ void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
     sp->SetTexture("B_color_gout_fin",    m_colorTexture);
 
     // Stencil uniforms
-    sp->SetFloat("B_stencilWriteEnabled", m_stencilWriteEnabled ? 1.0f : 0.0f);
-    sp->SetFloat("B_stencilTestEnabled",  m_stencilTestEnabled  ? 1.0f : 0.0f);
+    sp->SetFloat("B_StencilWriteEnabled", m_stencilWriteEnabled ? 1.0f : 0.0f);
+    sp->SetFloat("B_StencilTestEnabled",  m_stencilTestEnabled  ? 1.0f : 0.0f);
 }
 
 void GBuffer::OnRenderingEnds(GameObject *go, ShaderProgram *sp)
@@ -61,9 +60,7 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
                         bool copyColorBuffer,
                         const Rect &mask)
 {
-    Vector2 buffersSize = GraphicPipeline::GetBuffersSize();
-    sp->SetVec2("B_buffer_size", buffersSize);
-    sp->SetVec2("B_screen_size", Screen::GetSize());
+    sp->SetVec2("B_ScreenSize", Screen::GetSize());
 
     bool prevStencilWrite = m_stencilWriteEnabled;
     SetStencilWrite(false);

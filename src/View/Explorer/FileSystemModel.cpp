@@ -35,7 +35,7 @@ bool FileSystemModel::setData(const QModelIndex &idx,
 
        bool error = false;
        String errorMsg = "";
-       const String c_invalidChars = "/*,;:\\ ";
+       const String calidChars = "/*,;:\\ ";
 
        String path = filePath(idx);
        String dir = Persistence::GetDir(path);
@@ -67,7 +67,7 @@ bool FileSystemModel::setData(const QModelIndex &idx,
        }
        if (oldFileOrDirNameWithExt == newFileOrDirNameWithExt) { return false; }
 
-       if (String(value.toString()).IndexOfOneOf(c_invalidChars) >= 0)
+       if (String(value.toString()).IndexOfOneOf(calidChars) >= 0)
        {
            error = true;
            errorMsg = "File/dir name containing invalid characters.";

@@ -21,7 +21,6 @@
 #include "ShaderProgram.h"
 #include "RectTransform.h"
 #include "AudioListener.h"
-#include "ShaderContract.h"
 #include "GraphicPipeline.h"
 #include "BehaviourHolder.h"
 #include "SingletonManager.h"
@@ -271,13 +270,6 @@ void GameObject::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 {
     Matrix4 model; transform->GetLocalToWorldMatrix(&model);
     GL::SetModelMatrix(model);
-
-    #ifdef BANG_EDITOR
-    if (go)
-    {
-        sp->SetFloat("B_gameObject_isSelected", go->IsSelected() ? 1 : 0);
-    }
-    #endif
 }
 
 Sphere GameObject::GetBoundingSphere(bool includeChildren) const

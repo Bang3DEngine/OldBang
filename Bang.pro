@@ -250,7 +250,6 @@ HEADERS +=                                                          \
     src/Domain/Graphics/Buffers/Framebuffer.h                       \
     src/Domain/Graphics/Buffers/GBuffer.h                           \
     src/Domain/Graphics/Shaders/Shader.h                            \
-    src/Domain/Graphics/Shaders/ShaderContract.h                    \
     src/Domain/Graphics/Shaders/ShaderProgram.h                     \
     src/Persistence/Behaviours/BehaviourManager.h                   \
     src/Persistence/Behaviours/BehaviourRefresherTimer.h            \
@@ -470,7 +469,6 @@ SOURCES += \
     src/Domain/Graphics/Buffers/Framebuffer.cpp \
     src/Domain/Graphics/Buffers/GBuffer.cpp \
     src/Domain/Graphics/Shaders/Shader.cpp \
-    src/Domain/Graphics/Shaders/ShaderContract.cpp \
     src/Domain/Graphics/Shaders/ShaderProgram.cpp \
     src/Persistence/Files/AudioClipAssetFile.cpp \
     src/Persistence/Files/File.cpp \

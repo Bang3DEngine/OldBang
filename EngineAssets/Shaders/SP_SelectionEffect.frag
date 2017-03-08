@@ -3,14 +3,12 @@
 
 void Main()
 {
-    bool isOutsideStencil = (FRAG_IN_STENCIL() <= 0.5);
+    bool isOutsideStencil = (B_SampleStencil() <= 0.5);
     if (isOutsideStencil)
     {
         const vec4  outlineColor = vec4(1, 0.5, 0, 1);
         const float fillOpacity  = 0.0f;
         const int   stroke       = 2;
-        vec2  screenUv           = FRAG_IN_UV_SCREEN();
-        vec2  ps                 = B_buffer_pixel_step;
 
         float closestDepth = 0.0f;
         bool isOutline = false;
@@ -18,7 +16,7 @@ void Main()
         {
             for (int j = -stroke; j <= stroke && !isOutline; ++j)
             {
-                vec2 uv = screenUv + vec2(i,j)*ps;
+                vec2 uv = B_ScreenUv + vec2(i,j) * B_ScreenStep;
                 isOutline = texture2D(B_misc_gout_fin, uv).a > 0.5f;
                 if (isOutline)
                 {
@@ -29,7 +27,7 @@ void Main()
 
         if (isOutline)
         {
-            float pixelDepth   = FRAG_IN_DEPTH();
+            float pixelDepth   = B_SampleDepth();
             float depthFade  = (pixelDepth < closestDepth) ? 0.4f : 1.0f;
             B_vout.color = vec4(outlineColor.rgb, outlineColor.a * depthFade);
         }

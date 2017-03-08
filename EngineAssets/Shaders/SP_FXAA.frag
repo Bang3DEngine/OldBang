@@ -2,7 +2,7 @@
 #define BANG_FRAGMENT
 #include "Uniforms.glsl"
 
-in vec2 B_uv_vout_fin;
+in vec2 B_InUv;
 in vec4 B_position_raw_vout_fin;
 
 out vec4 fragColor;
@@ -19,7 +19,6 @@ Very nice explanation and implementation of FXAA!
 #define SUBPIXEL_QUALITY 0.75
 #define ITERATIONS 12
 
-
 float rgb2luma(vec3 rgb)
 {
     return sqrt(dot(rgb, vec3(0.299, 0.587, 0.114)));
@@ -27,9 +26,9 @@ float rgb2luma(vec3 rgb)
 
 void main()
 {
-  vec2 uv = B_buffer_coord_norm;
-  vec2 ps = B_buffer_pixel_step;
-  vec3 colorCenter = B_SampleColor(uv).rgb;
+  vec2 uv = B_ScreenUv;
+  vec2 ps = B_ScreenStep;
+  vec3 colorCenter = B_SampleColor().rgb;
 
   // Get lumas around
   float lumaM = rgb2luma(colorCenter);
@@ -92,7 +91,7 @@ void main()
   float gradientScaled = 0.25 * max( abs(gradient1), abs(gradient2) );
 
   // Choose the step size (one pixel) according to the edge direction.
-  vec2 inverseScreenSize = 1.0 / B_screen_size;
+  vec2 inverseScreenSize = 1.0 / B_ScreenSize;
   float stepLength = isHorizontal ? inverseScreenSize.y : inverseScreenSize.x;
 
   // Average luma in the correct direction.

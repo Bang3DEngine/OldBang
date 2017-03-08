@@ -1,6 +1,6 @@
 B_DRAW_TO_GBUFFER_FS_DECLARE();
 
-uniform sampler2D B_texture_0;
+uniform sampler2D B_Texture0;
 
 struct B_VertexIn
 {

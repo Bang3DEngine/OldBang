@@ -15,7 +15,7 @@ struct B_VertexOut_GBufferIn   // GBuffer
 
 in vec4 B_position_world_vout_fin;
 in vec4 B_normal_world_vout_fin;
-in vec2 B_uv_vout_fin;
+in vec2 B_uv_world_vout_fin;
 
 out vec4 B_normal_fout_gin;
 out vec4 B_diffuse_fout_gin;
@@ -27,13 +27,13 @@ B_VertexOut_GBufferIn B_vout;
 void InitMain()
 {
     // Some default values
-    B_vout.normal_world        = FRAG_IN_NORMAL_WORLD().xyz;
-    B_vout.receivesLighting    = B_material_receivesLighting;
-    B_vout.shininess           = B_material_shininess;
-    B_vout.diffuseColor        = B_material_diffuse_color;
+    B_vout.normal_world        = B_normal_world_vout_fin.xyz;
+    B_vout.receivesLighting    = B_MaterialReceivesLighting;
+    B_vout.shininess           = B_MaterialShininess;
+    B_vout.diffuseColor        = B_MaterialDiffuseColor;
     B_vout.depth               = gl_FragCoord.z;
     B_vout.stencil             = 1;
-    B_vout.color               = B_material_diffuse_color;
+    B_vout.color               = B_MaterialDiffuseColor;
 }
 
 void EndMain()
@@ -43,11 +43,11 @@ void EndMain()
     B_misc_fout_gin.r = B_vout.receivesLighting ? 1 : 0;
     B_misc_fout_gin.g = B_vout.shininess;
     B_misc_fout_gin.b = B_vout.depth;
-    if (B_stencilWriteEnabled) { B_misc_fout_gin.a = B_vout.stencil; }
+    if (B_StencilWriteEnabled) { B_misc_fout_gin.a = B_vout.stencil; }
 
-    float ambientLight = (B_material_receivesLighting ? 0.1 : 1.0);
+    float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
     vec3 outColor = ambientLight * B_vout.diffuseColor.rgb;
-    B_vout.color = vec4( mix(FRAG_IN_COLOR().rgb, outColor, B_vout.color.a), 1);
+    B_vout.color = vec4( mix(B_SampleColor().rgb, outColor, B_vout.color.a), 1);
     B_color_fout_gin = B_vout.color;
 }
 

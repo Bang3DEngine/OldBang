@@ -8,7 +8,6 @@
 #include "MeshFactory.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
-#include "ShaderContract.h"
 
 UIRenderer::UIRenderer()
 {
@@ -35,7 +34,7 @@ void UIRenderer::OnJustBeforeRendering(GameObject *go,
     GL::SetViewMatrix(Matrix4::Identity);
     GL::SetProjectionMatrix(Matrix4::Identity);
 
-    sp->SetColor("B_material_diffuse_color", m_tint);
+    sp->SetColor("B_MaterialDiffuseColor", m_tint);
 }
 
 void UIRenderer::CloneInto(ICloneable *clone) const

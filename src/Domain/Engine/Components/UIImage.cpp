@@ -45,8 +45,8 @@ void UIImage::OnJustBeforeRendering(GameObject *go,
                                     ShaderProgram *sp)
 {
     UIRenderer::OnJustBeforeRendering(go, sp);
-    sp->SetFloat("B_hasTexture", m_imageTexture ? 1 : 0);
-    sp->SetTexture("B_texture_0", m_imageTexture);
+    sp->SetFloat("B_HasTexture", m_imageTexture ? 1 : 0);
+    sp->SetTexture("B_Texture0", m_imageTexture);
 }
 
 void UIImage::SetTexture(Texture2D *imageTexture)

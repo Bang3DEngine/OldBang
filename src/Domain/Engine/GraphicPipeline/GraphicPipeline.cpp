@@ -23,7 +23,6 @@
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
 #include "RectTransform.h"
-#include "ShaderContract.h"
 #include "GPPass_SP_FXAA.h"
 #include "GPPass_G_Gizmos.h"
 #include "GraphicPipelineDebugger.h"
@@ -255,8 +254,7 @@ void GraphicPipeline::RenderSelectionBuffer(
 
 void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 {
-    m_screenPlaneMesh->BindPositionsToShaderProgram(
-      ShaderContract::Attr_Vertex_In_Position_Raw, *sp);
+    m_screenPlaneMesh->BindPositionsToShaderProgram("B_InPositionObject", *sp);
 
     sp->SetVec2("B_rectMinCoord", mask.GetMin());
     sp->SetVec2("B_rectMaxCoord", mask.GetMax());
@@ -271,8 +269,7 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     ASSERT(sp);
 
-    m_screenPlaneMesh->BindPositionsToShaderProgram(
-                ShaderContract::Attr_Vertex_In_Position_Raw, *sp);
+    m_screenPlaneMesh->BindPositionsToShaderProgram("B_InPositionObject", *sp);
 
     sp->SetTexture("B_color_gout_fin", fullScreenTexture);
 

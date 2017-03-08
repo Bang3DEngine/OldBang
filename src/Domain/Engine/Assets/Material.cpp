@@ -11,7 +11,6 @@
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "ShaderProgram.h"
-#include "ShaderContract.h"
 #include "GraphicPipeline.h"
 
 Material::Material() : Asset()
@@ -123,7 +122,7 @@ void Material::SetTexture(const Texture2D *texture)
     m_texture = texture;
     if (m_texture)
     {
-        GetShaderProgram()->SetTexture("B_texture_0", m_texture);
+        GetShaderProgram()->SetTexture("B_Texture0", m_texture);
     }
 }
 
@@ -187,17 +186,15 @@ const Color& Material::GetDiffuseColor() const
 
 void Material::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 {
-    Vector2 buffersSize = GraphicPipeline::GetBuffersSize();
-    sp->SetVec2("B_buffer_size", buffersSize);
-    sp->SetVec2("B_screen_size", Screen::GetSize());
+    sp->SetVec2("B_ScreenSize", Screen::GetSize());
 
-    sp->SetColor("B_material_diffuse_color", m_diffuseColor);
-    sp->SetFloat("B_material_shininess", m_shininess);
-    sp->SetFloat("B_material_receivesLighting",
+    sp->SetColor("B_MaterialDiffuseColor", m_diffuseColor);
+    sp->SetFloat("B_MaterialShininess", m_shininess);
+    sp->SetFloat("B_MaterialReceivesLighting",
                                  m_receivesLighting ? 1.0f : 0.0f);
 
     float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
-    sp->SetTexture("B_texture_0", m_texture);
-    sp->SetFloat("B_alphaCutoff", alphaCutoff);
-    sp->SetFloat("B_hasTexture", m_texture ? 1 : 0);
+    sp->SetTexture("B_Texture0", m_texture);
+    sp->SetFloat("B_AlphaCutoff", alphaCutoff);
+    sp->SetFloat("B_HasTexture", m_texture ? 1 : 0);
 }

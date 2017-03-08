@@ -6,7 +6,6 @@
 #include "Debug.h"
 #include "StringUtils.h"
 #include "Persistence.h"
-#include "ShaderContract.h"
 
 String CodePreprocessor::
        GetIncludeReplacementString(const String &includeDirective,

@@ -10,31 +10,29 @@
 #include "Transform.h"
 #include "SceneManager.h"
 #include "ShaderProgram.h"
-#include "ShaderContract.h"
 
 void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
 {
     sp->Bind();
 
     Camera *cam = SceneManager::GetActiveScene()->GetCamera();
-    sp->SetVec3(ShaderContract::Uniform_Position_Camera,
-                cam->gameObject->transform->GetPosition());
+    sp->SetVec3("B_CameraPositionWorld", cam->gameObject->transform->GetPosition());
 
-    sp->SetMat4(ShaderContract::Uniform_Matrix_Model, m_modelMatrix);
-    sp->SetMat4(ShaderContract::Uniform_Matrix_Model_Inverse, m_modelMatrix.Inversed());
+    sp->SetMat4("B_Model", m_modelMatrix);
+    sp->SetMat4("B_ModelInv", m_modelMatrix.Inversed());
 
     Matrix4 normalMatrix = m_modelMatrix.Inversed().Transposed();
-    sp->SetMat4(ShaderContract::Uniform_Matrix_Normal, normalMatrix);
-    sp->SetMat4(ShaderContract::Uniform_Matrix_Normal_Inverse, normalMatrix.Inversed());
+    sp->SetMat4("B_Normal", normalMatrix);
+    sp->SetMat4("B_NormalInv", normalMatrix.Inversed());
 
-    sp->SetMat4(ShaderContract::Uniform_Matrix_View, m_viewMatrix);
-    sp->SetMat4(ShaderContract::Uniform_Matrix_View_Inverse, m_viewMatrix.Inversed());
+    sp->SetMat4("B_View", m_viewMatrix);
+    sp->SetMat4("B_ViewInv", m_viewMatrix.Inversed());
 
-    sp->SetMat4(ShaderContract::Uniform_Matrix_Projection, m_projectionMatrix);
-    sp->SetMat4(ShaderContract::Uniform_Matrix_Projection_Inverse, m_projectionMatrix.Inversed());
+    sp->SetMat4("B_Projection", m_projectionMatrix);
+    sp->SetMat4("B_ProjectionInv", m_projectionMatrix.Inversed());
 
     Matrix4 pvmMatrix = m_projectionMatrix * m_viewMatrix * m_modelMatrix;
-    sp->SetMat4(ShaderContract::Uniform_Matrix_PVM, pvmMatrix);
+    sp->SetMat4("B_PVM", pvmMatrix);
 
     sp->UnBind();
 }

@@ -8,7 +8,6 @@
 #include "IFileable.h"
 #include "FileReader.h"
 #include "ShaderProgram.h"
-#include "ShaderContract.h"
 
 Mesh::Mesh()
 {
@@ -152,9 +151,9 @@ void Mesh::BindUvsToShaderProgram(const String &nameInShader,
 
 void Mesh::BindAllVBOsToShaderProgram(const ShaderProgram &sp)
 {
-    BindPositionsToShaderProgram(ShaderContract::Attr_Vertex_In_Position_Raw, sp);
-    BindNormalsToShaderProgram(ShaderContract::Attr_Vertex_In_Normal_Raw, sp);
-    BindUvsToShaderProgram(ShaderContract::Attr_Vertex_In_Uv_Raw, sp);
+    BindPositionsToShaderProgram("B_InPositionObject", sp);
+    BindNormalsToShaderProgram("B_InNormalObject", sp);
+    BindUvsToShaderProgram("B_InUv", sp);
 }
 
 VAO *Mesh::GetVAO() const

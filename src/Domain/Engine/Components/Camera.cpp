@@ -12,7 +12,6 @@
 #include "SceneManager.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
-#include "ShaderContract.h"
 
 Camera::Camera()
 {

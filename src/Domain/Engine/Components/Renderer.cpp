@@ -13,7 +13,6 @@
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "ShaderProgram.h"
-#include "ShaderContract.h"
 #include "GraphicPipeline.h"
 
 #ifdef BANG_EDITOR

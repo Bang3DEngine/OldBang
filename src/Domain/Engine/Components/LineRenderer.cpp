@@ -7,7 +7,6 @@
 #include "Transform.h"
 #include "ShaderProgram.h"
 #include "AssetsManager.h"
-#include "ShaderContract.h"
 
 LineRenderer::LineRenderer()
 {
@@ -33,7 +32,7 @@ void LineRenderer::BindPointsToVAO() const
     {
         m_vbo->Fill(m_points.Data(), m_points.Size() * sizeof(Vector3));
         GLint verticesShaderLocation = m_material->GetShaderProgram()->
-                GetAttribLocation(ShaderContract::Attr_Vertex_In_Position_Raw);
+                GetAttribLocation("B_InPositionObject");
         m_vao->UnBindVBO(verticesShaderLocation);
         m_vao->BindVBO(m_vbo, verticesShaderLocation, 3, GL_FLOAT);
     }

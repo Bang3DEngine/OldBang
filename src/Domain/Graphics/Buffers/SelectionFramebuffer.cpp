@@ -10,7 +10,6 @@
 #include "ShaderProgram.h"
 #include "RenderTexture.h"
 #include "AssetsManager.h"
-#include "ShaderContract.h"
 
 #ifdef BANG_EDITOR
 #include "Hierarchy.h"

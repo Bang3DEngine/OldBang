@@ -4,6 +4,6 @@
 
 void main()
 {
-    vec4 color   = texture2D(B_color_gout_fin, B_screen_coord_norm);
+    vec4 color   = texture2D(B_color_gout_fin, B_ScreenUv);
     gl_FragColor = vec4(color.rgb, 1);
 }

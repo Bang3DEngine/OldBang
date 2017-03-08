@@ -19,7 +19,6 @@
 #include "MeshRenderer.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"
-#include "ShaderContract.h"
 #include "SingletonManager.h"
 #include "ISceneEventListener.h"
 
