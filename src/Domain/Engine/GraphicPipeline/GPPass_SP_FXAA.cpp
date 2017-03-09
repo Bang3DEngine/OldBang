@@ -16,9 +16,6 @@ GPPass_SP_FXAA::GPPass_SP_FXAA(GraphicPipeline *graphicPipeline,
 void GPPass_SP_FXAA::InPass(const List<Renderer *> &renderers,
                             const List<GameObject *> &sceneChildren)
 {
-    if (p_graphicPipeline->GetFXAA())
-    {
-        p_gbuffer->SetStencilTest(false);
-        p_gbuffer->ApplyPass(m_fxaaSP, true);
-    }
+    p_gbuffer->SetStencilTest(false);
+    p_gbuffer->ApplyPass(m_fxaaSP, true);
 }

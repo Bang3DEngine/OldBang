@@ -96,7 +96,7 @@ void Application::MainLoop()
         Console::GetInstance()->ProcessMessagesQueue();
         #endif
 
-        c.Log();
+        //c.Log();
     }
 }
 

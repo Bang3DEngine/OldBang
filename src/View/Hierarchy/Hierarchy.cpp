@@ -106,7 +106,7 @@ void Hierarchy::UnselectAll()
 
 void Hierarchy::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Input::Key::F)
+    if (static_cast<Input::Key>(e->key()) == Input::Key::F)
     {
         GameObject *selected = GetFirstSelectedGameObject();
         if (selected)

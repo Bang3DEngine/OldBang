@@ -1,6 +1,7 @@
 #include "Console.h"
 
 #include <QLabel>
+#include <QScrollBar>
 
 #include "Debug.h"
 #include "Color.h"
@@ -166,6 +167,9 @@ QTreeWidgetItem *Console::CreateItemFromMessageRow(const Message &mr)
 Console::MessageId Console::AddMessage(const Message &msg,
                                              int forcedMsgId)
 {
+    QScrollBar *scroll = verticalScrollBar();
+    m_autoScroll = (scroll->value() == scroll->maximum());
+
     QTreeWidgetItem *item = CreateItemFromMessageRow(msg);
     addTopLevelItem(item);
     DecorateLastItem( MessageTypeColor[msg.type] );
@@ -299,9 +303,8 @@ void Console::OnWindowShown()
     hideColumn(0); // No arrow
 
     EditorWindow *win = EditorWindow::GetInstance();
-    m_collapsing          = win->buttonCollapse->isChecked();
+    m_collapsing        = win->buttonCollapse->isChecked();
     m_clearOnPlay       = win->buttonClearOnPlay->isChecked();
-    m_autoScroll        = win->buttonAutoScroll->isChecked();
     m_showLogMessages   = win->buttonShowLogMessages->isChecked();
     m_showWarnMessages  = win->buttonShowWarnMessages->isChecked();
     m_showErrorMessages = win->buttonShowErrorMessages->isChecked();
@@ -321,8 +324,6 @@ void Console::OnWindowShown()
                      this, SLOT(OnCollapseChanged(bool)));
     QObject::connect(win->buttonClearOnPlay, SIGNAL(clicked(bool)),
                      this, SLOT(OnClearOnPlayChanged(bool)));
-    QObject::connect(win->buttonAutoScroll, SIGNAL(clicked(bool)),
-                     this, SLOT(OnAutoScrollChanged(bool)));
     QObject::connect(win->buttonShowLogMessages, SIGNAL(clicked(bool)),
                      this, SLOT(OnShowLogMessagesChanged(bool)));
     QObject::connect(win->buttonShowWarnMessages, SIGNAL(clicked(bool)),
@@ -354,12 +355,6 @@ void Console::OnCollapseChanged(bool collapse)
 void Console::OnClearOnPlayChanged(bool clearOnPlay)
 {
     m_clearOnPlay = clearOnPlay;
-}
-
-void Console::OnAutoScrollChanged(bool autoScroll)
-{
-    m_autoScroll = autoScroll;
-    if (m_autoScroll) { scrollToBottom(); }
 }
 
 void Console::OnShowLogMessagesChanged(bool showLogMessages)

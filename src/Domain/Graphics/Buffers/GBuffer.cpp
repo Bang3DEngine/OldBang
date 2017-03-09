@@ -41,10 +41,10 @@ GBuffer::~GBuffer()
 void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 {
     // Color Attachments bindings as Shader Inputs
-    sp->SetTexture("B_normal_gout_fin",   m_normalTexture);
-    sp->SetTexture("B_diffuse_gout_fin",  m_diffuseTexture);
-    sp->SetTexture("B_misc_gout_fin",     m_miscTexture);
-    sp->SetTexture("B_color_gout_fin",    m_colorTexture);
+    sp->SetTexture("B_GTex_Normal",    m_normalTexture);
+    sp->SetTexture("B_GTex_DiffColor", m_diffuseTexture);
+    sp->SetTexture("B_GTex_Misc",      m_miscTexture);
+    sp->SetTexture("B_GTex_Color",     m_colorTexture);
 
     // Stencil uniforms
     sp->SetFloat("B_StencilWriteEnabled", m_stencilWriteEnabled ? 1.0f : 0.0f);
@@ -74,10 +74,9 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
         glBlitFramebuffer(0, 0, GetWidth(), GetHeight(),
                           0, 0, GetWidth(), GetHeight(),
                           GL_COLOR_BUFFER_BIT, GL_LINEAR);
-        sp->SetTexture("B_color_gout_fin", m_colorReadTexture);
+        sp->SetTexture("B_GTex_Color", m_colorReadTexture);
     }
 
-    // Set as only draw output: "B_color_gout_gin". Accumulate color there.
     SetColorDrawBuffer();
     GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
 

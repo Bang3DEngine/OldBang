@@ -13,7 +13,6 @@ public:
 
     static const String TOKEN_SPACE;
 
-    static bool Contains(const String &str, const String &whatToFind);
     static float ToFloat(const String &str, bool *ok = nullptr);
     static int ToInt(const String &str, bool *ok = nullptr);
     static String FromFloat(float f, int precision = 6);

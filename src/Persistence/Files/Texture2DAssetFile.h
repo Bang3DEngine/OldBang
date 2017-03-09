@@ -13,7 +13,7 @@ class Texture2DAssetFile : public File
 public:
     Texture2DAssetFile(const QFileSystemModel *model, const QModelIndex &index);
 
-    String GetImageFilepath() const;
+    String GetImageAbsFilepath() const;
     virtual QPixmap GetIcon() const override;
 
     #ifdef BANG_EDITOR

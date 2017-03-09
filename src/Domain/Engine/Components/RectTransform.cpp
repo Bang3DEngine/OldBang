@@ -84,23 +84,18 @@ void RectTransform::SetPivotPosition(const Vector2 &pivotPosition)
 void RectTransform::SetAnchorMin(const Vector2 &anchorMin)
 {
     m_anchorMin = anchorMin;
-    m_anchorMin.x = Math::Min(m_anchorMin.x, m_anchorMax.x);
-    m_anchorMin.y = Math::Min(m_anchorMin.y, m_anchorMax.y);
     OnChanged();
 }
 
 void RectTransform::SetAnchorMax(const Vector2 &anchorMax)
 {
     m_anchorMax = anchorMax;
-    m_anchorMax.x = Math::Max(m_anchorMax.x, m_anchorMin.x);
-    m_anchorMax.y = Math::Max(m_anchorMax.y, m_anchorMin.y);
     OnChanged();
 }
 
 void RectTransform::SetAnchors(const Vector2 &anchorMin,
                                const Vector2 &anchorMax)
 {
-    // Bypass Min/Max clamping. Sometimes needed.
     m_anchorMin = anchorMin;
     m_anchorMax = anchorMax;
     SetAnchorMin(anchorMin);
@@ -270,9 +265,14 @@ void RectTransform::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetVector2("AnchorMax",      GetAnchorMax()    );
 
     Transform::FillXMLInfo(xmlInfo);
-    xmlInfo->SetTagName("RectTransform");
-    xmlInfo->SetVector3("Position", Vector3::Zero, {XMLProperty::Hidden});
-    xmlInfo->SetQuaternion("Rotation", Quaternion::Identity,
-                           {XMLProperty::Hidden});
-    xmlInfo->SetVector3("Scale",    Vector3::Zero, {XMLProperty::Hidden});
+    xmlInfo->GetAttribute("Position")->SetProperty(XMLProperty::Hidden);
+    xmlInfo->GetAttribute("Rotation")->SetProperty(XMLProperty::Hidden);
+    xmlInfo->GetAttribute("Scale")->SetProperty(XMLProperty::Hidden);
+
+    xmlInfo->SetTagName( GetName() );
+}
+
+String RectTransform::GetName() const
+{
+    return "RectTransform";
 }

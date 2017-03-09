@@ -19,6 +19,7 @@ public:
     DialogBrowseAssetFile(String *resultFile);
 
     void Show(QWidget *parent = nullptr,
+              const String &assetNameForTitle = "Asset",
               const List<String> &extensions = {});
 
 private:

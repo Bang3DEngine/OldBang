@@ -191,7 +191,7 @@ void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 
 void BehaviourHolder::OnButtonClicked(const String &attrName)
 {
-    if (StringUtils::Contains(attrName, "Create"))
+    if (attrName.Contains("Create"))
     {
         CreateNewBehaviour();
     }

@@ -1,11 +1,4 @@
-#define BANG_SP
-#define BANG_FRAGMENT
-#include "Uniforms.glsl"
-
-in vec2 B_InUv;
-in vec4 B_position_raw_vout_fin;
-
-out vec4 fragColor;
+#include "SP.frag"
 
 /*********************************************
 This was copied from:
@@ -16,7 +9,7 @@ Very nice explanation and implementation of FXAA!
 
 #define EDGE_THRESHOLD_MIN 0.0312
 #define EDGE_THRESHOLD_MAX 0.125
-#define SUBPIXEL_QUALITY 0.75
+#define SUBPIXEL_QUALITY 1.5
 #define ITERATIONS 12
 
 float rgb2luma(vec3 rgb)
@@ -24,7 +17,7 @@ float rgb2luma(vec3 rgb)
     return sqrt(dot(rgb, vec3(0.299, 0.587, 0.114)));
 }
 
-void main()
+void Main()
 {
   vec2 uv = B_ScreenUv;
   vec2 ps = B_ScreenStep;
@@ -32,10 +25,10 @@ void main()
 
   // Get lumas around
   float lumaM = rgb2luma(colorCenter);
-  float lumaS = rgb2luma(B_SampleColor(uv + ps * vec2( 0,-1)).rgb);
-  float lumaN = rgb2luma(B_SampleColor(uv + ps * vec2( 0, 1)).rgb);
-  float lumaW = rgb2luma(B_SampleColor(uv + ps * vec2(-1, 0)).rgb);
-  float lumaE = rgb2luma(B_SampleColor(uv + ps * vec2( 1, 0)).rgb);
+  float lumaS = rgb2luma(B_SampleColorOffset(vec2( 0,-1)).rgb);
+  float lumaN = rgb2luma(B_SampleColorOffset(vec2( 0, 1)).rgb);
+  float lumaW = rgb2luma(B_SampleColorOffset(vec2(-1, 0)).rgb);
+  float lumaE = rgb2luma(B_SampleColorOffset(vec2( 1, 0)).rgb);
 
   // Find the maximum and minimum luma around the current fragment.
   float lumaMin = min(lumaM, min(min(lumaS,lumaN), min(lumaW,lumaE)));
@@ -46,15 +39,15 @@ void main()
   // dark area), we are not on an edge, don't perform any AA.
   if (lumaRange < max(EDGE_THRESHOLD_MIN, lumaMax * EDGE_THRESHOLD_MAX))
   {
-      fragColor = vec4(colorCenter, 1);
+      B_Out_Color = vec4(colorCenter, 1);
       return;
   }
 
   // Query the 4 remaining corners lumas.
-  float lumaSW = rgb2luma(B_SampleColor(uv + ps * vec2(-1,-1)).rgb);
-  float lumaNE = rgb2luma(B_SampleColor(uv + ps * vec2( 1, 1)).rgb);
-  float lumaNW = rgb2luma(B_SampleColor(uv + ps * vec2(-1, 1)).rgb);
-  float lumaSE = rgb2luma(B_SampleColor(uv + ps * vec2( 1,-1)).rgb);
+  float lumaSW = rgb2luma(B_SampleColorOffset(vec2(-1,-1)).rgb);
+  float lumaNE = rgb2luma(B_SampleColorOffset(vec2( 1, 1)).rgb);
+  float lumaNW = rgb2luma(B_SampleColorOffset(vec2(-1, 1)).rgb);
+  float lumaSE = rgb2luma(B_SampleColorOffset(vec2( 1,-1)).rgb);
 
   // Combine the four edges lumas (using intermediary variables for future
   // computations with the same values). And for corners.
@@ -216,5 +209,5 @@ void main()
 
   // Read the color at the new UV coordinates, and use it.
   vec3 finalColor = B_SampleColor(finalUv).rgb;
-  fragColor = vec4(finalColor, 1);
+  B_Out_Color = vec4(finalColor, 1);
 }

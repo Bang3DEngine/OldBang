@@ -5,6 +5,7 @@
 #include "EditorGizmo.h"
 
 class RectTransform;
+class EditorRectTransformGizmo;
 class EditorRectTransformCornerGizmo : public EditorGizmo
 {
 public:
@@ -25,6 +26,7 @@ public:
     void OnDrawGizmos(bool depthed, bool overlay) override;
 
 private:
+    EditorRectTransformGizmo *m_parentGizmo = nullptr;
     RectTransform *m_attachedRectTransform = nullptr;
     Texture2D *m_circleTexture = nullptr;
 

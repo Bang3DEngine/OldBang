@@ -19,7 +19,7 @@ void EditorGizmo::OnUpdate()
     GameObject::OnUpdate();
 
     if (m_mouseIsOver &&
-        Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+        Input::GetMouseButton(Input::MouseButton::Left))
     {
         m_grabbed = true;
         Cursor::SetIcon(m_cursorIconWhenGrabbed);
@@ -27,7 +27,7 @@ void EditorGizmo::OnUpdate()
 
     if (m_grabbed)
     {
-        if (Input::GetMouseButtonUp(Input::MouseButton::MLeft))
+        if (Input::GetMouseButtonUp(Input::MouseButton::Left))
         {
             m_grabbed = false;
             Input::SetMouseWrapping(false);
@@ -66,5 +66,10 @@ void EditorGizmo::OnMouseExit(bool fromChildren)
             Cursor::SetIcon(Cursor::CursorIcon::Arrow);
         }
     }
+}
+
+bool EditorGizmo::IsGrabbed() const
+{
+    return m_grabbed;
 }
 

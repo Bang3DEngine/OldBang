@@ -22,10 +22,10 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
 
     p_selectionFramebuffer->SetAllDrawBuffers();
 
-    GPPass_DepthLayer *parentDepthLayer =
+    GPPass_DepthLayer *parentPassDepthLayer =
             Object::SCast<GPPass_DepthLayer>(p_parentPass);
 
-    if (parentDepthLayer->GetDepthLayer() != Renderer::DepthLayerGizmos)
+    if (parentPassDepthLayer->GetDepthLayer() != Renderer::DepthLayerGizmos)
     {
         for (Renderer *rend : renderers)
         {

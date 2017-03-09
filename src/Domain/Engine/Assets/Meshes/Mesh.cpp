@@ -151,9 +151,9 @@ void Mesh::BindUvsToShaderProgram(const String &nameInShader,
 
 void Mesh::BindAllVBOsToShaderProgram(const ShaderProgram &sp)
 {
-    BindPositionsToShaderProgram("B_InPositionObject", sp);
-    BindNormalsToShaderProgram("B_InNormalObject", sp);
-    BindUvsToShaderProgram("B_InUv", sp);
+    BindPositionsToShaderProgram("B_In_PositionObject", sp);
+    BindNormalsToShaderProgram("B_In_NormalObject", sp);
+    BindUvsToShaderProgram("B_In_Uv", sp);
 }
 
 VAO *Mesh::GetVAO() const

@@ -122,7 +122,8 @@ void Material::SetTexture(const Texture2D *texture)
     m_texture = texture;
     if (m_texture)
     {
-        GetShaderProgram()->SetTexture("B_Texture0", m_texture);
+        ShaderProgram *sp = GetShaderProgram();
+        sp->SetTexture("B_Texture0", m_texture);
     }
 }
 
@@ -188,13 +189,12 @@ void Material::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
 {
     sp->SetVec2("B_ScreenSize", Screen::GetSize());
 
-    sp->SetColor("B_MaterialDiffuseColor", m_diffuseColor);
-    sp->SetFloat("B_MaterialShininess", m_shininess);
-    sp->SetFloat("B_MaterialReceivesLighting",
-                                 m_receivesLighting ? 1.0f : 0.0f);
+    sp->SetColor("B_MaterialDiffuseColor",     m_diffuseColor);
+    sp->SetFloat("B_MaterialShininess",        m_shininess);
+    sp->SetFloat("B_MaterialReceivesLighting", m_receivesLighting ? 1.0f : 0.0f);
 
     float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
-    sp->SetTexture("B_Texture0", m_texture);
+    sp->SetTexture("B_Texture0",  m_texture);
     sp->SetFloat("B_AlphaCutoff", alphaCutoff);
-    sp->SetFloat("B_HasTexture", m_texture ? 1 : 0);
+    sp->SetFloat("B_HasTexture",  m_texture ? 1 : 0);
 }

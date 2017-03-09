@@ -27,6 +27,7 @@ public:
     void RenderSimpleBox(const AABox &b);
     void RenderBox(const AABox &b);
     void RenderRect(const Rect &r);
+    void RenderFillRect(const Rect &r, const Color &fillColor);
     void RenderCircle(float radius);
     void RenderIcon(const Texture2D *texture, bool billboard);
     void RenderScreenIcon(const Texture2D *texture, const Rect &screenRect);

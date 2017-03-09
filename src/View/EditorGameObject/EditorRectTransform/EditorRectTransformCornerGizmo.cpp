@@ -9,10 +9,14 @@
 #include "SceneManager.h"
 #include "RectTransform.h"
 #include "AssetsManager.h"
+#include "GraphicPipeline.h"
+#include "SelectionFramebuffer.h"
+#include "EditorRectTransformGizmo.h"
 
 EditorRectTransformCornerGizmo::EditorRectTransformCornerGizmo(
         CornerPosition cornerPosition,
-        GameObject *attachedGameObject) : EditorGizmo(attachedGameObject)
+        GameObject *attachedGameObject)
+    : EditorGizmo(attachedGameObject)
 {
     ChangeTransformByRectTransform();
     m_attachedRectTransform = attachedGameObject->GetComponent<RectTransform>();
@@ -61,7 +65,16 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
 
     if (overlay)
     {
-        Rect rect = m_attachedRectTransform->GetScreenSpaceRect(true);
+        Rect rect = m_attachedRectTransform->GetScreenSpaceRect();
+        if (GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
+        {
+            if (m_cornerPosition == CornerPosition::Center)
+            {
+                // To enable dragging ui from any point, not just the center
+                Gizmos::RenderFillRect(rect, Color::Green);
+            }
+        }
+
         const Vector2 cornerOffset = GetCornerOffset();
         const Vector2 circleCenter = rect.GetCenter() + cornerOffset;
         const Vector2 circleSize = Vector2(0.025f);
@@ -82,7 +95,7 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
 Vector2 EditorRectTransformCornerGizmo::GetCornerOffset() const
 {
     RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
-    Rect rect = rtrans->GetScreenSpaceRect(true);
+    Rect rect = rtrans->GetScreenSpaceRect();
 
     Vector2 off = Vector2::One;
     Vector2 rectSize = rect.GetSize() * 0.5f;

@@ -47,7 +47,6 @@ private slots:
 
     void OnCollapseChanged(bool collapse);
     void OnClearOnPlayChanged(bool clearOnPlay);
-    void OnAutoScrollChanged(bool autoScroll);
     void OnShowLogMessagesChanged(bool showLogMessages);
     void OnShowWarnMessagesChanged(bool showWarnMessages);
     void OnShowErrorMessagesChanged(bool showErrorMessages);
@@ -96,12 +95,12 @@ private:
     Map<Message, int> m_messageCount;
     Map<Message, QTreeWidgetItem*> m_msg_to_collapsingItem;
 
-    bool m_collapsing          = false;
-    bool m_clearOnPlay       = false;
-    bool m_autoScroll        = false;
-    bool m_showLogMessages   = false;
-    bool m_showWarnMessages  = false;
-    bool m_showErrorMessages = false;
+    bool m_collapsing         = false;
+    bool m_clearOnPlay        = false;
+    bool m_autoScroll         = true;
+    bool m_showLogMessages    = false;
+    bool m_showWarnMessages   = false;
+    bool m_showErrorMessages  = false;
     int  m_totalLogMessages   = 0;
     int  m_totalWarnMessages  = 0;
     int  m_totalErrorMessages = 0;

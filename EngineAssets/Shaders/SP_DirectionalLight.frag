@@ -7,15 +7,15 @@ void Main()
     {
         vec4 diffColor = B_SampleDiffColor();
         vec3 dirLightApport = GetDirectionalLightColorApportation(
-                                    B_InPositionWorld,
-                                    B_InNormalWorld,
+                                    B_ComputeWorldPosition(),
+                                    B_SampleNormal(),
                                     diffColor.rgb,
-                                    FRAG_IN_SHININESS(),
+                                    B_SampleShininess(),
                                     B_LightForwardWorld,
                                     B_LightIntensity,
                                     B_LightColor.rgb,
                                     B_CameraPositionWorld.xyz);
 
-        B_vout.color = vec4(B_SampleColor().rgb + dirLightApport, diffColor.a);
+        B_Out_Color = vec4(B_SampleColor().rgb + dirLightApport, diffColor.a);
     }
 }

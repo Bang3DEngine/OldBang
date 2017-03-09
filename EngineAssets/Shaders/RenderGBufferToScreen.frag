@@ -1,9 +1,9 @@
 #define BANG_SP
 #define BANG_FRAGMENT
-#include "Uniforms.glsl"
+#include "Common.glsl"
 
 void main()
 {
-    vec4 color   = texture2D(B_color_gout_fin, B_ScreenUv);
+    vec4 color   = B_SampleColor();
     gl_FragColor = vec4(color.rgb, 1);
 }

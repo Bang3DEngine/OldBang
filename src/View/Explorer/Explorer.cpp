@@ -545,8 +545,8 @@ void Explorer::keyPressEvent(QKeyEvent *e)
     DragDropQListView::keyPressEvent(e);
 
     if (!IsEditing() &&
-         (e->key() == Input::Key::Space ||
-          e->key() == Input::Key::Return)
+         (static_cast<Input::Key>(e->key()) == Input::Key::Space ||
+          static_cast<Input::Key>(e->key()) == Input::Key::Return)
         )
     {
         String selectedPath = GetSelectedFileOrDirPath();

@@ -418,8 +418,6 @@ void Transform::ReadXMLInfo(const XMLNode *xmlInfo)
 void Transform::FillXMLInfo(XMLNode *xmlInfo) const
 {
     Component::FillXMLInfo(xmlInfo);
-    xmlInfo->SetTagName("Transform");
-
     xmlInfo->SetVector3("Position", GetLocalPosition());
     xmlInfo->SetVector3("Rotation", GetLocalEuler());
     xmlInfo->SetVector3("Scale",    GetLocalScale());

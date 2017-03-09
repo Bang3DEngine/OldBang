@@ -21,7 +21,9 @@ int ComponentWidget::GetHeightSizeHint()
 
 void ComponentWidget::Start()
 {
-    Init(m_relatedComponent->GetName(), m_relatedComponent);
+    XMLNode xmlInfo;
+    m_relatedComponent->FillXMLInfo(&xmlInfo);
+    Init(xmlInfo.GetTagName(), m_relatedComponent);
 
     m_closed = m_relatedComponent->IsClosedInInspector();
     SetClosed(m_closed);
@@ -32,7 +34,8 @@ void ComponentWidget::Start()
         m_enabledCheckbox->setChecked(m_relatedComponent->IsEnabled());
         connect(m_enabledCheckbox, SIGNAL(clicked(bool)),
                 this, SLOT(OnEnabledCheckboxPressed(bool)));
-        m_header->addWidget(m_enabledCheckbox, 0, Qt::AlignRight | Qt::AlignVCenter);
+        m_header->addWidget(m_enabledCheckbox, 0,
+                            Qt::AlignRight | Qt::AlignVCenter);
     }
     RefreshWidgetValues();
 }

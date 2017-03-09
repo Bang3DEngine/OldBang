@@ -669,7 +669,7 @@ OTHER_FILES += \
     Assets/Engine/Shaders/Include/SP.frag \
     Assets/Engine/Shaders/Include/G.vert \
     Assets/Engine/Shaders/Include/SP.vert \
-    Assets/Engine/Shaders/Include/Uniforms.glsl \
+    Assets/Engine/Shaders/Include/Common.glsl \
     Assets/Engine/Shaders/Include/PointLight.glsl \
     Assets/Engine/Shaders/Include/DirectionalLight.glsl \
     Assets/Engine/Shaders/SP_MeshPass.vert \
@@ -700,7 +700,6 @@ OTHER_FILES += \
     EngineAssets/Shaders/G_Default.vert \
     EngineAssets/Shaders/UI/SP_UIImage.frag \
     EngineAssets/Shaders/UI/G_UIText.frag \
-    EngineAssets/Shaders/Include/Uniforms.glsl \
     EngineAssets/Shaders/Include/PointLight.glsl \
     EngineAssets/Shaders/Include/Main.glsl \
     EngineAssets/Shaders/Include/DirectionalLight.glsl \
@@ -730,4 +729,5 @@ DISTFILES += \
     EngineAssets/Materials/UI/G_UIImage.bmat \
     EngineAssets/Materials/UI/G_UIText.bmat \
     EngineAssets/Materials/UI/SP_UIImage.bmat \
-    EngineAssets/Shaders/SP_FXAA.frag
+    EngineAssets/Shaders/SP_FXAA.frag \
+    EngineAssets/Shaders/Include/Common.glsl

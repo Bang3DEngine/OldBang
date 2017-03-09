@@ -1005,22 +1005,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QToolButton" name="buttonAutoScroll">
-            <property name="text">
-             <string>Auto Scroll</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <property name="toolButtonStyle">
-             <enum>Qt::ToolButtonTextOnly</enum>
-            </property>
-           </widget>
-          </item>
-          <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>

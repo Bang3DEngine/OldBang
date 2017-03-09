@@ -15,7 +15,7 @@ class Input
 {
 
 public:
-    enum Key
+    enum class Key
     {
         Return = 0x01000004, Enter = 0x01000005, Insert = 0x01000006,
         Delete = 0x01000007, Pause = 0x01000008, Print = 0x01000009,
@@ -83,15 +83,15 @@ public:
         Mode_switch= 0x0100117e, Unknown = 0x01ffffff
     };
 
-    enum MouseButton
+    enum class MouseButton
     {
-        MNoButton         = 0x00000000,
-        MLeft             = 0x00000001,
-        MRight            = 0x00000002,
-        MMiddle           = 0x00000004,
-        MXButton1         = 0x00000008,
-        MXButton2         = 0x00000010,
-        MMouseButtonMask  = 0x000000ff
+        NoButton         = 0x00000000,
+        Left             = 0x00000001,
+        Right            = 0x00000002,
+        Middle           = 0x00000004,
+        XButton1         = 0x00000008,
+        XButton2         = 0x00000010,
+        MouseButtonMask  = 0x000000ff
     };
 
     static Input* GetInstance();
@@ -141,6 +141,7 @@ public:
     static bool IsLockMouseMovement();
 
     static Vector2 GetMouseCoords();
+    static Vector2 GetMouseCoordsNDC();
     static Vector2 GetPreviousMouseCoords();
 
 private:

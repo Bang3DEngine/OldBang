@@ -16,6 +16,9 @@ UIImage::UIImage()
                                                true) );
     m_materialSP = AssetsManager::Load<Material>("Materials/UI/SP_UIImage.bmat",
                                                  true);
+
+    m_imageTexture = new Texture2D();
+    m_imageTexture->CreateEmpty(1,1);
 }
 
 UIImage::~UIImage()
@@ -45,6 +48,7 @@ void UIImage::OnJustBeforeRendering(GameObject *go,
                                     ShaderProgram *sp)
 {
     UIRenderer::OnJustBeforeRendering(go, sp);
+    sp->SetFloat("B_AlphaCutoff", m_imageTexture->GetAlphaCutoff());
     sp->SetFloat("B_HasTexture", m_imageTexture ? 1 : 0);
     sp->SetTexture("B_Texture0", m_imageTexture);
 }

@@ -32,10 +32,9 @@ void Main()
             backgroundColorToBlendWith = B_SampleColor();
         }
 
-        vec2 inUv = B_uv_world_vout_fin;
-        vec4 charTexColor = texture2D(B_Texture0, inUv);
-        B_vout.diffuseColor = mix(backgroundColorToBlendWith,
-                                  charTexColor * B_MaterialDiffuseColor,
-                                  charTexColor.a);
+        vec4 charTexColor = texture2D(B_Texture0, B_FragIn_Uv);
+        B_Out_DiffColor = mix(backgroundColorToBlendWith,
+                              charTexColor * B_MaterialDiffuseColor,
+                              charTexColor.a);
     }
 }

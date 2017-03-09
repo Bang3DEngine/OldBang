@@ -37,7 +37,7 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
     Light::SetUniformsBeforeApplyingLight(mat);
 
     ShaderProgram *sp = mat->GetShaderProgram();
-    sp->SetFloat("B_light_range", m_range);
+    sp->SetFloat("B_LightRange", m_range);
 }
 
 String PointLight::GetName() const
@@ -83,6 +83,8 @@ void PointLight::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("Range", m_range);
 }
 
+#include "GraphicPipeline.h"
+#include "SelectionFramebuffer.h"
 void PointLight::OnDrawGizmos(bool depthed, bool overlay)
 {
     Light::OnDrawGizmos(depthed, overlay);

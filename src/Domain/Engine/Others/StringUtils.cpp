@@ -8,11 +8,6 @@
 
 const String StringUtils::TOKEN_SPACE = " \t\n";
 
-bool StringUtils::Contains(const String &str, const String &whatToFind)
-{
-    return str.find(whatToFind.ToCString(), 0) != String::npos;
-}
-
 float StringUtils::ToFloat(const String &str, bool *ok)
 {
     String number = str;

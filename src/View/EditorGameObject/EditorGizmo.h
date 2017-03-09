@@ -14,6 +14,8 @@ public:
     virtual void OnMouseEnter(bool fromChildren) override;
     virtual void OnMouseExit(bool fromChildren) override;
 
+    bool IsGrabbed() const;
+
 protected:
     Cursor::CursorIcon m_cursorIconWhenOver    = Cursor::CursorIcon::Arrow;
     Cursor::CursorIcon m_cursorIconWhenGrabbed = Cursor::CursorIcon::Arrow;

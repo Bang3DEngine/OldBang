@@ -32,7 +32,7 @@ void LineRenderer::BindPointsToVAO() const
     {
         m_vbo->Fill(m_points.Data(), m_points.Size() * sizeof(Vector3));
         GLint verticesShaderLocation = m_material->GetShaderProgram()->
-                GetAttribLocation("B_InPositionObject");
+                GetAttribLocation("B_In_PositionObject");
         m_vao->UnBindVBO(verticesShaderLocation);
         m_vao->BindVBO(m_vbo, verticesShaderLocation, 3, GL_FLOAT);
     }

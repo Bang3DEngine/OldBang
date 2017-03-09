@@ -10,6 +10,7 @@
 #include "BehaviourManager.h"
 
 #ifdef BANG_EDITOR
+#include "Inspector.h"
 #include "Hierarchy.h"
 #include "EditorScene.h"
 #include "EditorState.h"
@@ -169,6 +170,9 @@ void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
 {
     Scene *oldScene = SceneManager::GetActiveScene();
     if (oldScene) { delete oldScene; }
+
+    Inspector::GetInstance()->Clear();
+    Hierarchy::GetInstance()->Clear();
     SceneManager::SetActiveScene(nullptr);
 
     #ifdef BANG_EDITOR

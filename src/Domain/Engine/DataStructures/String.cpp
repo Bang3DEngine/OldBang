@@ -137,17 +137,7 @@ Array<String> String::Split(char splitter, bool trimResults) const
 
 String String::Join(const Array<String> &parts, String joiner)
 {
-    String all = "";
-    for (int i = 0; i < parts.Size(); ++i)
-    {
-        const String &part = parts[i];
-        all += part;
-        if (i < parts.Size() - 1)
-        {
-            all += joiner;
-        }
-    }
-    return all;
+    return String::Join(parts.ToList(), joiner);
 }
 
 String String::Join(const List<String> &parts, String joiner)

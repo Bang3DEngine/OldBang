@@ -27,7 +27,7 @@ void ShortcutManager::OnKeyPressed(Input::Key key)
     String set = "";
     for (auto it = m_pressedKeys.begin(); it != m_pressedKeys.end(); ++it)
     {
-        set += String::ToString(*it) + ", ";
+        set += String::ToString( int(*it) ) + ", ";
     }
 }
 

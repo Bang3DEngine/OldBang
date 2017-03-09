@@ -99,7 +99,7 @@ void SelectionFramebuffer::ProcessSelection()
     m_lastMouseOverGO = mouseOverGO;
 
     // Selection (clicking over) Here we just handle non-GameObjects
-    if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+    if (Input::GetMouseButtonDown(Input::MouseButton::Left))
     {
         if (mouseOverGO)
         {
@@ -108,7 +108,7 @@ void SelectionFramebuffer::ProcessSelection()
             {
                 EditorWindow::GetInstance()->
                         widgetHierarchy->SelectGameObject(mouseOverGO);
-                if (Input::GetMouseButtonDoubleClick(Input::MouseButton::MLeft))
+                if (Input::GetMouseButtonDoubleClick(Input::MouseButton::Left))
                 {
                     // Double clicking
                     WindowEventManager::

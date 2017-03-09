@@ -65,8 +65,7 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
        {
          new GPPass_SP_DeferredLights(this) //   Add light to transparent
        }),
-       new GPPass_G(this, false, true),     // Unlighted Transparent
-       new GPPass_SP_FXAA(this)
+       new GPPass_G(this, false, true)     // Unlighted Transparent
      });
 
     m_canvasPass =
@@ -82,6 +81,8 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
      new GPPass_G_Gizmos(this, false, false), // Gizmos normal
      new GPPass_G_Gizmos(this, false,  true)  // Gizmos with overlay
     });
+
+    m_fxaaPass = new GPPass_SP_FXAA(this);
 
     #ifdef BANG_EDITOR
     m_sceneSelectionPass  = new GPPass_DepthLayer(this, DL::DepthLayerScene,
@@ -105,6 +106,7 @@ GraphicPipeline::~GraphicPipeline()
     delete m_scenePass;
     delete m_canvasPass;
     delete m_gizmosPass;
+    delete m_fxaaPass;
 
     #ifdef BANG_EDITOR
     delete m_selectionFB;
@@ -137,10 +139,13 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     {
         c.MarkEvent("RenderSelectionBuffer");
         RenderSelectionBuffer(renderers, sceneChildren, p_scene);
-        // RenderToScreen(m_selectionFB->GetColorTexture()); // To see it
+        if (Input::GetKey(Input::Key::S))
+        {
+            RenderToScreen(m_selectionFB->GetColorTexture()); // To see selFB
+        }
     }
     #endif
-    c.Log();
+    //c.Log();
 }
 
 void GraphicPipeline::ApplySelectionOutline()
@@ -220,6 +225,8 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
     m_scenePass->Pass(renderers, sceneChildren);
     if (!m_renderingInGame) { ApplySelectionOutline(); }
     m_gbuffer->ClearStencilDepth();
+    if (GetFXAA()) { m_fxaaPass->Pass(renderers, sceneChildren); }
+
     m_canvasPass->Pass(renderers, sceneChildren);
     m_gizmosPass->Pass(renderers, sceneChildren);
 
@@ -254,7 +261,7 @@ void GraphicPipeline::RenderSelectionBuffer(
 
 void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 {
-    m_screenPlaneMesh->BindPositionsToShaderProgram("B_InPositionObject", *sp);
+    m_screenPlaneMesh->BindPositionsToShaderProgram("B_In_PositionObject", *sp);
 
     sp->SetVec2("B_rectMinCoord", mask.GetMin());
     sp->SetVec2("B_rectMaxCoord", mask.GetMax());
@@ -269,9 +276,8 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     ASSERT(sp);
 
-    m_screenPlaneMesh->BindPositionsToShaderProgram("B_InPositionObject", *sp);
-
-    sp->SetTexture("B_color_gout_fin", fullScreenTexture);
+    m_screenPlaneMesh->BindPositionsToShaderProgram("B_In_PositionObject", *sp);
+    sp->SetTexture("B_GTex_Color", fullScreenTexture);
 
     sp->OnRenderingStarts(nullptr, sp);
     m_renderGBufferToScreenMaterial->OnRenderingStarts(nullptr, sp);
@@ -338,18 +344,4 @@ GLContext *GraphicPipeline::GetGLContext() const
 GBuffer *GraphicPipeline::GetGBuffer()
 {
     return m_gbuffer;
-}
-
-Vector2 GraphicPipeline::GetBuffersSize()
-{
-    GraphicPipeline *gp = GraphicPipeline::GetActive();
-    #ifndef BANG_EDITOR
-    return gp->m_gbuffer->GetSize();
-    #else
-    if (!gp->m_selectionFB->IsPassing())
-    {
-        return gp->m_gbuffer->GetSize();
-    }
-    return gp->m_selectionFB->GetSize();
-    #endif
 }

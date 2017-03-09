@@ -13,6 +13,7 @@ class Material;
 class GLContext;
 class GameObject;
 class Framebuffer;
+class GPPass_SP_FXAA;
 class SelectionFramebuffer;
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
@@ -42,8 +43,6 @@ public:
 
     GLContext *GetGLContext() const;
     GBuffer *GetGBuffer();
-    Renderer::DepthLayer GetCurrentDepthLayer() const;
-    static Vector2 GetBuffersSize();
     #ifdef BANG_EDITOR
     SelectionFramebuffer* GetSelectionFramebuffer();
     #endif
@@ -65,6 +64,7 @@ private:
     GPPass_DepthLayer *m_scenePass  = nullptr;
     GPPass_DepthLayer *m_canvasPass = nullptr;
     GPPass_DepthLayer *m_gizmosPass = nullptr;
+    GPPass_SP_FXAA *m_fxaaPass = nullptr;
 
     #ifdef BANG_EDITOR
     GPPass_DepthLayer *m_sceneSelectionPass  = nullptr;

@@ -94,7 +94,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
 
 bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 {
-    if (Input::GetMouseButton(Input::MouseButton::MRight))
+    if (Input::GetMouseButton(Input::MouseButton::Right))
     {
         Vector2 delta = -Input::GetMouseDelta() * m_mouseRotDegreesPerPixel;
         m_mouseRotDegreesAccum += delta;
@@ -118,7 +118,7 @@ bool EditorCamera::HandleMouseRotation(bool *hasMoved, bool *unwrapMouse)
 
 void EditorCamera::HandleMousePanning(bool *hasMoved, bool *unwrapMouse)
 {
-    if (Input::GetMouseButton(Input::MouseButton::MMiddle))
+    if (Input::GetMouseButton(Input::MouseButton::Middle))
     {
         Vector2 delta = -Input::GetMouseDelta() * m_mousePanPerPixel;
         delta.y *= -1.0f;

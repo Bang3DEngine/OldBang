@@ -14,8 +14,6 @@
 
 DialogBrowseAssetFile::DialogBrowseAssetFile(String *resultFile)
 {
-    setWindowTitle("Browse Asset...");
-
     QVBoxLayout *vLayout = new QVBoxLayout();
 
     m_projectFileList = CreateList();
@@ -44,9 +42,12 @@ DialogBrowseAssetFile::DialogBrowseAssetFile(String *resultFile)
 }
 
 void DialogBrowseAssetFile::Show(QWidget *parent,
+                                 const String &assetNameForTitle,
                                  const List<String> &extensions)
 {
     setModal(parent != nullptr);
+    String title = "Browse Asset ( " + String::Join(extensions, ", ") + " )";
+    setWindowTitle(title.ToQString());
 
     List<String> projectFilepaths =
             Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(),

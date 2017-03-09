@@ -35,6 +35,7 @@ public:
     static void RenderBox(const AABox &b);
     static void RenderSimpleBox(const AABox &b);
     static void RenderRect(const Rect &r);
+    static void RenderFillRect(const Rect &r, const Color &fillColor);
     static void RenderIcon(const Texture2D *texture,
                            bool billboard = true);
     static void RenderScreenIcon(const Texture2D *texture,

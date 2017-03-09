@@ -184,11 +184,30 @@ void EditorGizmosGameObject::RenderRect(const Rect &r)
     Reset();
 }
 
+void EditorGizmosGameObject::RenderFillRect(const Rect &r,
+                                            const Color &fillColor)
+{
+    MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(mr);
+    mr->SetMesh(m_planeMesh);
+
+    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ASSERT(cam);
+    cam->SetIdentityMode(true);
+    Gizmos::SetPosition( Vector3(r.GetCenter(), 0) );
+    Gizmos::SetScale( Vector3(r.GetSize(), 1) );
+
+    Material *mat = mr->GetMaterial(); ASSERT(mat);
+    mat->SetTexture(nullptr);
+    mat->SetDiffuseColor(fillColor);
+
+    Gizmos::Render(mr);
+    Reset();
+}
+
 void EditorGizmosGameObject::RenderCircle(float radius)
 {
     CircleRenderer *cr = GetComponent<CircleRenderer>();
     cr->SetRadius(radius);
-    cr->Render();
+    Gizmos::Render(cr);
     Reset();
 }
 

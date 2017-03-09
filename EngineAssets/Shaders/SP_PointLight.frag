@@ -14,10 +14,10 @@ void Main()
                                       B_SampleShininess(),
                                       B_LightPositionWorld,
                                       B_LightIntensity,
-                                      B_light_range,
+                                      B_LightRange,
                                       B_LightColor.rgb,
                                       B_CameraPositionWorld.xyz);
 
-        B_vout.color = vec4(B_SampleColor().rgb + pointLightApport, diffColor.a);
+        B_Out_Color = vec4(B_SampleColor().rgb + pointLightApport, diffColor.a);
     }
 }

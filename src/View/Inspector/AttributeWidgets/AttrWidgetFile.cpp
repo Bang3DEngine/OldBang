@@ -72,6 +72,7 @@ void AttrWidgetFile::Browse()
     String selectedFile = "";
     DialogBrowseAssetFile *dialog = new DialogBrowseAssetFile(&selectedFile);
     dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
+                 m_inspectorWidget->GetInspectableXMLInfo().GetTagName(),
                  m_fileExtension.Split(' ').ToList());
     while (dialog->isVisible()) { Application::processEvents(); }
 

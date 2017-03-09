@@ -2,6 +2,6 @@
 
 void Main()
 {
-    B_vout.diffuseColor = vec4(1,0,1,1);
-    B_vout.receivesLighting = false;
+    B_Out_ReceivesLighting = false;
+    B_Out_Color = vec4(1,0,1,1);
 }

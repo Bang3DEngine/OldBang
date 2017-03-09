@@ -1,54 +1,31 @@
 #define BANG_FRAGMENT
 #define BANG_G
-#include "Uniforms.glsl"
-
-struct B_VertexOut_GBufferIn   // GBuffer
-{
-    vec3 normal_world;
-    vec4 diffuseColor;
-    vec4 color;
-    bool receivesLighting;
-    float shininess;
-    float depth;
-    float stencil;
-};
-
-in vec4 B_position_world_vout_fin;
-in vec4 B_normal_world_vout_fin;
-in vec2 B_uv_world_vout_fin;
-
-out vec4 B_normal_fout_gin;
-out vec4 B_diffuse_fout_gin;
-out vec4 B_misc_fout_gin;
-out vec4 B_color_fout_gin;
-
-B_VertexOut_GBufferIn B_vout;
+#include "Common.glsl"
 
 void InitMain()
 {
-    // Some default values
-    B_vout.normal_world        = B_normal_world_vout_fin.xyz;
-    B_vout.receivesLighting    = B_MaterialReceivesLighting;
-    B_vout.shininess           = B_MaterialShininess;
-    B_vout.diffuseColor        = B_MaterialDiffuseColor;
-    B_vout.depth               = gl_FragCoord.z;
-    B_vout.stencil             = 1;
-    B_vout.color               = B_MaterialDiffuseColor;
+    B_Out_NormalWorld      = B_FragIn_NormalWorld.xyz;
+    B_Out_ReceivesLighting = B_MaterialReceivesLighting;
+    B_Out_Shininess        = B_MaterialShininess;
+    B_Out_DiffColor        = B_MaterialDiffuseColor;
+    B_Out_Depth            = gl_FragCoord.z;
+    B_Out_Stencil          = 1;
+    B_Out_Color            = B_MaterialDiffuseColor;
 }
 
 void EndMain()
 {
-    B_normal_fout_gin                = vec4(B_vout.normal_world, 0);
-    B_diffuse_fout_gin               = B_vout.diffuseColor;
-    B_misc_fout_gin.r = B_vout.receivesLighting ? 1 : 0;
-    B_misc_fout_gin.g = B_vout.shininess;
-    B_misc_fout_gin.b = B_vout.depth;
-    if (B_StencilWriteEnabled) { B_misc_fout_gin.a = B_vout.stencil; }
+    B_GIn_NormalWorld  = vec4(B_Out_NormalWorld, 0);
+    B_GIn_DiffColor               = B_Out_DiffColor;
+    B_GIn_Misc.r = B_Out_ReceivesLighting ? 1 : 0;
+    B_GIn_Misc.g = B_Out_Shininess;
+    B_GIn_Misc.b = B_Out_Depth;
+    B_GIn_Misc.a = B_StencilWriteEnabled ? B_Out_Stencil : B_SampleStencil();
 
     float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
-    vec3 outColor = ambientLight * B_vout.diffuseColor.rgb;
-    B_vout.color = vec4( mix(B_SampleColor().rgb, outColor, B_vout.color.a), 1);
-    B_color_fout_gin = B_vout.color;
+    vec3 outColor = ambientLight * B_Out_DiffColor.rgb;
+    B_Out_Color = vec4( mix(B_SampleColor().rgb, outColor, B_Out_Color.a), 1);
+    B_GIn_Color = B_Out_Color;
 }
 
 #include "Main.glsl"

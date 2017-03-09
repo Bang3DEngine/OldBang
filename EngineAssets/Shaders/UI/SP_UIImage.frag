@@ -11,6 +11,6 @@ void Main()
     {
         textureColor = texture2D(B_Texture0, inUv);
     }
-    B_vout.color = vec4(mix(textureColor, B_tint, B_tint.a).rgb, 1);
+    B_Out_Color = vec4(mix(textureColor, B_tint, B_tint.a).rgb, 1);
     */
 }

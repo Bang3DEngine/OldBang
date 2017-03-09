@@ -116,16 +116,21 @@ void Gizmos::RenderSimpleBox(const AABox &b)
 void Gizmos::RenderBox(const AABox &b)
 {
 #ifdef BANG_EDITOR
-    Gizmos::GetEditorGizmosGameObject()->
-            RenderBox(b);
+    Gizmos::GetEditorGizmosGameObject()->RenderBox(b);
 #endif
 }
 
 void Gizmos::RenderRect(const Rect &r)
 {
 #ifdef BANG_EDITOR
-    Gizmos::GetEditorGizmosGameObject()->
-            RenderRect(r);
+    Gizmos::GetEditorGizmosGameObject()->RenderRect(r);
+#endif
+}
+
+void Gizmos::RenderFillRect(const Rect &r, const Color &fillColor)
+{
+#ifdef BANG_EDITOR
+    Gizmos::GetEditorGizmosGameObject()->RenderFillRect(r, fillColor);
 #endif
 }
 

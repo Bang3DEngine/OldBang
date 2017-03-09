@@ -53,11 +53,7 @@ void Inspector::Clear()
     // Avoid double clearings
     ASSERT(!m_widget_To_Item.Empty());
 
-    //for (InspectorWidget *iw : m_currentInspectorWidgets)
-    //{
-        // TODO: Dont know if this is needed
-        //delete iw;
-    //}
+    for (InspectorWidget *iw : m_currentInspectorWidgets) { delete iw; }
     m_currentInspectorWidgets.Clear();
     m_widget_To_Item.Clear();
     m_widget_To_Inspectables.Clear();

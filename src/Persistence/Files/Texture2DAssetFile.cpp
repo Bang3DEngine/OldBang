@@ -17,14 +17,14 @@ Texture2DAssetFile::Texture2DAssetFile
 {
 }
 
-String Texture2DAssetFile::GetImageFilepath() const
+String Texture2DAssetFile::GetImageAbsFilepath() const
 {
     String contents = FileReader::GetContents(GetAbsolutePath());
     XMLNode *xmlInfo = XMLNode::FromString(contents);
     String result = "";
     if (xmlInfo)
     {
-        result = xmlInfo->GetString("ImageFilepath");
+        result = xmlInfo->GetFilepath("ImageFilepath");
         delete xmlInfo;
     }
     return result;
@@ -32,8 +32,7 @@ String Texture2DAssetFile::GetImageFilepath() const
 
 QPixmap Texture2DAssetFile::GetIcon() const
 {
-    String fp = GetImageFilepath();
-    fp = Persistence::ToAbsolute(fp, false);
+    String fp = GetImageAbsFilepath();
 
     static Map<std::string, QPixmap> filepath_To_Pixmap;
     if (!filepath_To_Pixmap.ContainsKey(fp))

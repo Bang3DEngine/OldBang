@@ -46,9 +46,11 @@ public:
     virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
     virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
 
-    Rect GetScreenSpaceRect(bool takeMarginsIntoAccount) const;
+    virtual String GetName() const override;
 
-    Rect GetParentScreenRect(bool takeMarginsIntoAccount) const;
+    Rect GetScreenSpaceRect(bool takeMarginsIntoAccount = true) const;
+
+    Rect GetParentScreenRect(bool takeMarginsIntoAccount = true) const;
     virtual const Matrix4& GetLocalToParentMatrix() const override;
     Matrix4 GetLocalToParentMatrix(bool takeMarginsIntoAccount) const;
 

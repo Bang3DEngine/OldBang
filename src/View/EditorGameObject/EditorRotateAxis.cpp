@@ -67,7 +67,7 @@ void EditorRotateAxis::OnUpdate()
                EditorState::TransformMode::Rotate);
     if (m_grabbed)
     {
-        if (Input::GetMouseButtonDown(Input::MouseButton::MLeft))
+        if (Input::GetMouseButtonDown(Input::MouseButton::Left))
         {
             // This will be done once every grab
             Vector2 sMousePos= Input::GetMouseCoords();
