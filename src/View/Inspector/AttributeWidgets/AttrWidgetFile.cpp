@@ -28,10 +28,10 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     String filepath = xmlAttribute.GetValue();
     bool isEngineFile = xmlAttribute.HasProperty(XMLProperty::IsEngineFile);
     filepath = Persistence::ToAbsolute(filepath, isEngineFile);
-
     //
 
     m_iconLabel = new QLabel();
+    m_iconLabel->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_hLayout->addWidget(m_iconLabel, 0, Qt::AlignRight | Qt::AlignVCenter);
 
     // File Line Edit
@@ -39,6 +39,7 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     m_filepathLineEdit->setReadOnly(true);
     m_filepathLineEdit->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_filepathLineEdit->setMinimumWidth(50);
+    m_filepathLineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_hLayout->addWidget(m_filepathLineEdit, 100);
     //
 

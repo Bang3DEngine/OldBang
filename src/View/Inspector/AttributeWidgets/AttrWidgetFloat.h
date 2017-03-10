@@ -15,10 +15,6 @@ class AttrWidgetFloat : public AttributeWidget //Slot for a float (label + float
 {
     Q_OBJECT
 
-private:
-    FloatComponentSlotSpinBox *m_lineEdit = nullptr;
-    bool _editing = false;
-
 public:
 
     // isSubWidget indicates if it belongs to another parent attributeWidget,
@@ -34,6 +30,10 @@ public:
 
     virtual void OnLineEditFocusIn();
     virtual void OnLineEditFocusOut();
+
+private:
+    bool _editing = false;
+    FloatComponentSlotSpinBox *m_lineEdit = nullptr;
 };
 
 class FloatComponentSlotSpinBox : public QLineEdit //Slot for a float (label + float)
@@ -46,7 +46,6 @@ public:
     virtual void focusInEvent(QFocusEvent * event) override;
     virtual void focusOutEvent(QFocusEvent * event) override;
     virtual void  keyPressEvent(QKeyEvent *event) override;
-    bool eventFilter(QObject *obj, QEvent *event);
 
     void SetFloat(float f);
     float GetFloat() const;

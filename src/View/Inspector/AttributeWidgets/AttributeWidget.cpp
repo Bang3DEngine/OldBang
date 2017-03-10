@@ -29,14 +29,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
 
     m_layout = new QHBoxLayout();
     m_layout->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    if (!labelAbove)
-    {
-        m_layout->setContentsMargins(5,0,0,0);
-    }
-    else
-    {
-        m_layout->setContentsMargins(0,0,0,0);
-    }
+    m_layout->setContentsMargins(labelAbove ? 0 : 5,0,0,0);
 
     if (!isSubWidget)
     {
@@ -64,6 +57,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     Refresh(xmlAttribute);
 
     setLayout(m_layout);
+    setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_heightSizeHint = labelAbove ? 45 : 25;
 }
 

@@ -16,6 +16,7 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
 
     String buttonText = Inspector::FormatInspectorLabel(xmlAttribute.GetName());
     m_button = new QPushButton(buttonText.ToQString());
+    m_button->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     connect(m_button, SIGNAL(clicked(bool)), this, SLOT(OnButtonClicked(bool)));
     layout->addWidget(m_button);
 

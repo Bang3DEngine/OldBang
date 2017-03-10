@@ -15,6 +15,7 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
     m_colorLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
     m_colorLabel->setFixedHeight(17);
     m_colorLabel->SetColor(m_selectedColor);
+    m_colorLabel->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     vLayout->addWidget(m_colorLabel, 1);
 
     m_alphaWhiteLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);
@@ -23,6 +24,8 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
     m_alphaBlackLabel->setFixedHeight(3);
     m_alphaWhiteLabel->SetColor( Color::White );
     m_alphaBlackLabel->SetColor( Color::Black );
+    m_alphaWhiteLabel->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    m_alphaBlackLabel->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 
     m_alphaHorizontalLayout = new QHBoxLayout();
     m_alphaHorizontalLayout->addWidget(m_alphaWhiteLabel, 1);

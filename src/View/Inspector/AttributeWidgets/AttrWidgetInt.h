@@ -45,7 +45,6 @@ public:
     virtual void focusInEvent(QFocusEvent * event) override;
     virtual void focusOutEvent(QFocusEvent * event) override;
     virtual void keyPressEvent(QKeyEvent *event) override;
-    bool eventFilter(QObject *obj, QEvent *event);
 
     void SetInt(int a);
     int GetInt() const;

@@ -21,12 +21,14 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
     {
         m_lineEdit = new LineEdit(m_readonly); //Right side
         m_lineEdit->setAlignment(Qt::AlignLeft);
+        m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
         textWidget = m_lineEdit;
     }
     else
     {
         m_textEdit = new TextEdit(m_readonly);
         m_textEdit->setAlignment(Qt::AlignLeft);
+        m_textEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
         m_heightSizeHint = 550;
         textWidget = m_textEdit;
     }

@@ -9,7 +9,7 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
     QLayout *layout = new QHBoxLayout();
     m_layout->addLayout(layout, 1);
 
-    m_comboBox = new QComboBox();
+    m_comboBox = new ComboBox(this);
     layout->addWidget(m_comboBox);
     Array<String> enumNames = xmlAttribute.GetEnumNames();
     for (String enumString : enumNames)
@@ -40,4 +40,23 @@ void AttrWidgetEnum::Refresh(const XMLAttribute &attribute)
     if (attribute.GetType() != XMLAttribute::Type::Enum) return;
     SetValue( attribute.GetEnumSelectedIndex() );
 }
+
+ComboBox::ComboBox(QWidget *parent)
+    : QComboBox(parent)
+{
+    setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+}
+
+void ComboBox::wheelEvent(QWheelEvent *event)
+{
+    if (hasFocus())
+    {
+        QComboBox::wheelEvent(event);
+    }
+    else
+    {
+        event->ignore();
+    }
+}
+
 

@@ -17,6 +17,7 @@ AttrWidgetInt::AttrWidgetInt(const XMLAttribute &xmlAttribute,
 
     m_lineEdit = new IntComponentSlotSpinBox();
     m_lineEdit->setAlignment(Qt::AlignLeft);
+    m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 
     layout->addWidget(m_lineEdit);
 
@@ -98,16 +99,6 @@ void IntComponentSlotSpinBox::keyPressEvent(QKeyEvent *event)
     else if (event->key() == Qt::Key::Key_Down)
     {
     }
-}
-
-bool IntComponentSlotSpinBox::eventFilter(QObject *obj, QEvent *event)
-{
-    if (event->type() == QEvent::Wheel && obj == this)
-    {
-        return true; // Block wheel event :D
-    }
-
-    return false;
 }
 
 void IntComponentSlotSpinBox::SetInt(int a)
