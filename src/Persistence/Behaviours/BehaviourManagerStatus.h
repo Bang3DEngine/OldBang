@@ -3,6 +3,7 @@
 
 #include <QMutex>
 
+#include "Set.h"
 #include "Map.h"
 #include "List.h"
 #include "File.h"
@@ -65,9 +66,9 @@ public:
 private:
     bool m_behavioursLibraryReady = false;
 
-    std::set<BehaviourId> m_failed;
-    std::set<BehaviourId> m_beingCompiled;
-    std::set<BehaviourId> m_successfullyCompiled;
+    Set<BehaviourId> m_failed;
+    Set<BehaviourId> m_beingCompiled;
+    Set<BehaviourId> m_successfullyCompiled;
 
     #ifdef BANG_EDITOR
     Map<String, List<Console::MessageId> > m_failMessagesIds;

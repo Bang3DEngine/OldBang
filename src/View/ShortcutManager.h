@@ -1,10 +1,9 @@
 #ifndef SHORTCUTMANAGER_H
 #define SHORTCUTMANAGER_H
 
-#include <set>
-#include "Array.h"
-
+#include "Set.h"
 #include "List.h"
+#include "Array.h"
 #include "Input.h"
 
 class IShortcutListener;
@@ -15,7 +14,7 @@ friend class IShortcutListener;
 
 private:
     List<IShortcutListener*> m_shortcutsListeners;
-    std::set<Input::Key> m_pressedKeys;
+    Set<Input::Key> m_pressedKeys;
 
     ShortcutManager();
 

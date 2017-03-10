@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "Map.h"
+#include "Set.h"
 #include "List.h"
 #include "Array.h"
 #include "Color.h"
@@ -199,8 +200,8 @@ std::ostream &operator<<(std::ostream &log, const Map<T,S> &m)
 }
 
 // Set
-template <class T, class S>
-std::ostream &operator<<(std::ostream &log, const std::set<T,S> *s)
+template <class T>
+std::ostream &operator<<(std::ostream &log, const Set<T> *s)
 {
     log << "{";
     for (auto it = s->begin(); it != s->end(); ++it)
@@ -211,8 +212,8 @@ std::ostream &operator<<(std::ostream &log, const std::set<T,S> *s)
     log << "}";
     return log;
 }
-template <class T, class S>
-std::ostream &operator<<(std::ostream &log, const std::set<T,S> &m)
+template <class T>
+std::ostream &operator<<(std::ostream &log, const Set<T> &m)
 {
     return log << (&m);
 }

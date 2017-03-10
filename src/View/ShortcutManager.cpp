@@ -12,9 +12,9 @@ ShortcutManager::ShortcutManager()
 
 void ShortcutManager::OnKeyPressed(Input::Key key)
 {
-    if (m_pressedKeys.find(key) == m_pressedKeys.end()) // If it wasn't pressed
+    if (!m_pressedKeys.Contains(key)) // If it wasn't pressed
     {
-        m_pressedKeys.insert(key);
+        m_pressedKeys.Insert(key);
         for (IShortcutListener *list : ShortcutManager::m_shortcutsListeners)
         {
             if (!QApplication::activeModalWidget()) // Reject if modal/s over
@@ -25,7 +25,7 @@ void ShortcutManager::OnKeyPressed(Input::Key key)
         }
     }
     String set = "";
-    for (auto it = m_pressedKeys.begin(); it != m_pressedKeys.end(); ++it)
+    for (auto it = m_pressedKeys.Begin(); it != m_pressedKeys.End(); ++it)
     {
         set += String::ToString( int(*it) ) + ", ";
     }
@@ -33,7 +33,7 @@ void ShortcutManager::OnKeyPressed(Input::Key key)
 
 void ShortcutManager::OnKeyReleased(Input::Key key)
 {
-    m_pressedKeys.erase(key);
+    m_pressedKeys.Remove(key);
 }
 
 void ShortcutManager::RegisterListener(IShortcutListener *list)
@@ -69,7 +69,7 @@ bool ShortcutManager::IsPressed(const Array<Input::Key> &keys)
 
     for (Input::Key key : keys)
     {
-        if (sm->m_pressedKeys.find(key) == sm->m_pressedKeys.end())
+        if (!sm->m_pressedKeys.Contains(key))
         {
             return false;
         }
@@ -79,6 +79,6 @@ bool ShortcutManager::IsPressed(const Array<Input::Key> &keys)
 
 void ShortcutManager::Clear()
 {
-    m_pressedKeys.clear();
+    m_pressedKeys.Clear();
 }
 

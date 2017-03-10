@@ -300,7 +300,8 @@ HEADERS +=                                                          \
     src/Domain/Engine/GraphicPipeline/GPPass.h \
     src/Domain/Graphics/Interfaces/GLObject.h \
     src/Domain/Engine/Debug/ChronoGL.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.h
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.h \
+    src/Domain/Engine/DataStructures/Set.h
 
 EDITOR {
 HEADERS += \
@@ -514,7 +515,8 @@ SOURCES += \
     src/Domain/Engine/GraphicPipeline/GPPass.cpp \
     src/Domain/Graphics/Interfaces/GLObject.cpp \
     src/Domain/Engine/Debug/ChronoGL.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.cpp
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.cpp \
+    src/Domain/Engine/DataStructures/Set.cpp
 
 EDITOR {
     SOURCES += \

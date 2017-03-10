@@ -21,12 +21,12 @@ FileReferencesManager::~FileReferencesManager()
 
 void FileReferencesManager::RegisterIFileable(IFileable *fileable)
 {
-    m_inMemoryFileables.insert(fileable);
+    m_inMemoryFileables.Insert(fileable);
 }
 
 void FileReferencesManager::UnRegisterIFileable(IFileable *fileable)
 {
-    m_inMemoryFileables.erase(fileable);
+    m_inMemoryFileables.Remove(fileable);
 }
 
 void FileReferencesManager::OnFileOrDirNameAboutToBeChanged(

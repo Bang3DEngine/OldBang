@@ -1,11 +1,11 @@
 #ifndef FILEREFERENCESMANAGER_H
 #define FILEREFERENCESMANAGER_H
 
-#include <set>
 #include <queue>
 
 #include <QObject>
 
+#include "Set.h"
 #include "String.h"
 
 /**
@@ -29,7 +29,7 @@ private:
     // Queue with the changes we are asked for to refactor references.
     // Its a queue of pairs (oldAbsPath, newAbsPath)
     std::queue< std::pair<String, String> > m_queuedNameChanges;
-    std::set<IFileable*> m_inMemoryFileables;
+    Set<IFileable*> m_inMemoryFileables;
 
     FileReferencesManager();
     virtual ~FileReferencesManager();

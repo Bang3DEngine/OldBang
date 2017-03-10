@@ -49,12 +49,12 @@ float BehaviourManagerStatus::GetPercentOfReadyBehaviours() const
 
 bool BehaviourManagerStatus::IsBeingCompiled(const BehaviourId &bid) const
 {
-    return m_beingCompiled.count(bid) > 0;
+    return m_beingCompiled.Contains(bid);
 }
 
 bool BehaviourManagerStatus::HasFailed(const BehaviourId &bid) const
 {
-    return m_failed.count(bid) > 0;
+    return m_failed.Contains(bid);
 }
 
 bool BehaviourManagerStatus::HasFailed(const String &behaviourFilepath) const
@@ -67,7 +67,7 @@ bool BehaviourManagerStatus::IsReady(const BehaviourId &bid) const
     String behaviourName = Persistence::GetFileName(bid.behaviourAbsPath);
     String behaviourObjectFilepath =
             BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o";
-    return m_successfullyCompiled.count(bid) > 0 &&
+    return m_successfullyCompiled.Contains(bid) &&
            !IsBeingCompiled(bid) &&
            !HasFailed(bid) &&
            Persistence::Exists(behaviourObjectFilepath);
@@ -88,15 +88,15 @@ void BehaviourManagerStatus::OnBehaviourStartedCompiling(
 {
     m_behavioursLibraryReady = false;
     BehaviourId bid(behaviourPath);
-    m_beingCompiled.insert(bid);
+    m_beingCompiled.Insert(bid);
     ClearFails(bid.behaviourAbsPath);
 }
 
 void BehaviourManagerStatus::OnBehaviourSuccessCompiling(const String &behPath)
 {
     BehaviourId bid(behPath);
-    m_successfullyCompiled.insert(bid);
-    m_beingCompiled.erase(bid);
+    m_successfullyCompiled.Insert(bid);
+    m_beingCompiled.Remove(bid);
     ClearFails(bid.behaviourAbsPath);
 }
 
@@ -105,8 +105,8 @@ void BehaviourManagerStatus::OnBehaviourFailedCompiling(
 {
     ClearFails(behaviourPath);
     BehaviourId bid(behaviourPath);
-    m_beingCompiled.erase(bid);
-    m_failed.insert(bid);
+    m_beingCompiled.Remove(bid);
+    m_failed.Insert(bid);
 
     #ifdef BANG_EDITOR
     Console::MessageId failMsgId =
@@ -130,7 +130,7 @@ void BehaviourManagerStatus::ClearFails(const String &behaviourPath)
     {
         if (oldBid.behaviourAbsPath == bid.behaviourAbsPath)
         {
-            m_failed.erase(oldBid);
+            m_failed.Remove(oldBid);
         }
     }
 
