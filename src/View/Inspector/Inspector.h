@@ -65,6 +65,13 @@ public:
 
     void dropEvent(QDropEvent *e) override;
 
+    /**
+     * @brief FormatInspectorLabel
+     * @param labelString
+     * @return Returns the label formatted. It replaces "_" with spaces.
+     */
+    static String FormatInspectorLabel(const String &labelString);
+
 protected:
     //To set the scroll step to a smaller one
     virtual void updateGeometries() override;

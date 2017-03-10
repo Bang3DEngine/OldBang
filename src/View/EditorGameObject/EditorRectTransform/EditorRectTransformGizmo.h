@@ -14,6 +14,8 @@ public:
     void OnUpdate() override;
     void OnDrawGizmos(bool depthed, bool overlay) override;
 
+    bool SomeOtherCornerGrabbed(EditorRectTransformCornerGizmo *corner) const;
+
 private:
     EditorRectTransformCornerGizmo *m_leftTopCorner  = nullptr;
     EditorRectTransformCornerGizmo *m_rightTopCorner = nullptr;

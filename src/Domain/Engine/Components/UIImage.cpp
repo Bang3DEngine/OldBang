@@ -48,7 +48,8 @@ void UIImage::OnJustBeforeRendering(GameObject *go,
                                     ShaderProgram *sp)
 {
     UIRenderer::OnJustBeforeRendering(go, sp);
-    sp->SetFloat("B_AlphaCutoff", m_imageTexture->GetAlphaCutoff());
+    sp->SetFloat("B_AlphaCutoff", !m_imageTexture ?
+                                  1 : m_imageTexture->GetAlphaCutoff());
     sp->SetFloat("B_HasTexture", m_imageTexture ? 1 : 0);
     sp->SetTexture("B_Texture0", m_imageTexture);
 }

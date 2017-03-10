@@ -1,6 +1,6 @@
 #include "XMLProperty.h"
 
-#include "StringUtils.h"
+#include "Array.h"
 
 const XMLProperty XMLProperty::Hidden("Hidden");
 const XMLProperty XMLProperty::Inline("Inline");
@@ -42,10 +42,8 @@ const String &XMLProperty::GetValue() const
 
 XMLProperty XMLProperty::FromString(const String &string)
 {
-    String propString = string;
-
-    StringUtils::Trim(&propString);
-    Array<String> parts = StringUtils::Split(propString, '=');
+    String propString = string.Trim();
+    Array<String> parts = propString.Split('=');
 
     String name = parts[0];
 

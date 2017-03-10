@@ -4,7 +4,6 @@
 
 #include "File.h"
 #include "Debug.h"
-#include "StringUtils.h"
 #include "Persistence.h"
 
 String CodePreprocessor::
@@ -75,7 +74,7 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
     // It supports recursive #include's.
     for (auto it = lines.Begin(); it != lines.End(); ++it)
     {
-        String line = (*it).Trimmed();
+        String line = (*it).Trim();
         if (line.BeginsWith("#include"))
         {
             it = lines.Remove(it);

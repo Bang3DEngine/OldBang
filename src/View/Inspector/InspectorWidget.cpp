@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 
 #include "Debug.h"
+#include "Inspector.h"
 #include "Component.h"
 #include "GameObject.h"
 #include "EditorWindow.h"
@@ -22,7 +23,7 @@
 
 
 InspectorWidget::InspectorWidget()
-    : DragDropQWidget()
+    : DragDropQWidget(Inspector::GetInstance())
 {
 }
 
@@ -46,7 +47,6 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
     m_vLayout->addLayout(m_header, 0);
     m_vLayout->addLayout(m_gridLayout, 99);
-    setLayout(m_vLayout);
 
     m_header->setSpacing(5);
     m_header->addWidget(m_closeOpenButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
@@ -61,7 +61,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
                      this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
 
-    String fTitle = StringUtils::FormatInspectorLabel(title);
+    String fTitle = Inspector::FormatInspectorLabel(title);
     m_titleLabel->setText(fTitle.ToQString());
     QFont font = m_titleLabel->font();
     font.setPixelSize(13);
@@ -80,6 +80,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
         m_refreshTimer.start(10);
     }
 
+    setLayout(m_vLayout);
     m_created = true;
 }
 
@@ -223,6 +224,14 @@ int InspectorWidget::GetHeightSizeHint()
     }
 
     return heightSizeHint;
+}
+
+void InspectorWidget::OnDestroy()
+{
+    m_refreshTimer.stop();
+    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
+                        this, SLOT(RefreshWidgetValues()));
+    m_relatedInspectable = nullptr;
 }
 
 void InspectorWidget::RefreshWidgetValues()

@@ -4,6 +4,7 @@
 #include <QBoxLayout>
 
 #include "XMLNode.h"
+#include "Inspector.h"
 #include "XMLAttribute.h"
 #include "AttrWidgetInt.h"
 #include "AttrWidgetBool.h"
@@ -36,7 +37,6 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     {
         m_layout->setContentsMargins(0,0,0,0);
     }
-    setLayout(m_layout);
 
     if (!isSubWidget)
     {
@@ -44,7 +44,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
         if (createLabel)
         {
             String name = xmlAttribute.GetName();
-            name = StringUtils::FormatInspectorLabel(name);
+            name = Inspector::FormatInspectorLabel(name);
             label = name.ToQString();
         }
 
@@ -63,6 +63,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     }
     Refresh(xmlAttribute);
 
+    setLayout(m_layout);
     m_heightSizeHint = labelAbove ? 45 : 25;
 }
 

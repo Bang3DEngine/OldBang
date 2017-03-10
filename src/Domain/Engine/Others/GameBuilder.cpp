@@ -5,7 +5,6 @@
 #include "Dialog.h"
 #include "Project.h"
 #include "Persistence.h"
-#include "StringUtils.h"
 #include "SystemUtils.h"
 #include "EditorWindow.h"
 #include "ProjectManager.h"

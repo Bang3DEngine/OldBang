@@ -214,7 +214,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/Assets/Meshes/MeshFactory.h                   \
     src/Domain/Engine/Interfaces/ICloneable.h                       \
     src/View/Screen.h                                               \
-    src/Domain/Engine/Others/StringUtils.h                          \
     src/Domain/Engine/Components/DirectionalLight.h                 \
     src/Domain/Engine/Components/Light.h                            \
     src/View/GameObjectClipboard.h                                  \
@@ -434,7 +433,6 @@ SOURCES += \
     src/Domain/Engine/Assets/Meshes/MeshFactory.cpp \
     src/Domain/Engine/Interfaces/ICloneable.cpp \
     src/View/Screen.cpp \
-    src/Domain/Engine/Others/StringUtils.cpp \
     src/Domain/Engine/Components/DirectionalLight.cpp \
     src/Domain/Engine/Components/Light.cpp \
     src/View/GameObjectClipboard.cpp \

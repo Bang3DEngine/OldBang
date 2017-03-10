@@ -3,7 +3,6 @@
 #include <QVBoxLayout>
 
 #include "Object.h"
-#include "StringUtils.h"
 #include "XMLAttribute.h"
 #include "InspectorWidget.h"
 
@@ -120,9 +119,9 @@ void IntComponentSlotSpinBox::SetInt(int a)
 int IntComponentSlotSpinBox::GetInt() const
 {
     String str( text() );
-    StringUtils::Replace(&str, ",", ".");
+    str = str.Replace(",", ".");
     if (str.Empty()) { return 0; }
-    return StringUtils::ToInt(str);
+    return String::ToInt(str);
 }
 
 void IntComponentSlotSpinBox::SelectAll()

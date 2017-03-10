@@ -18,8 +18,7 @@ void EditorGizmo::OnUpdate()
 {
     GameObject::OnUpdate();
 
-    if (m_mouseIsOver &&
-        Input::GetMouseButton(Input::MouseButton::Left))
+    if (m_mouseIsOver && Input::GetMouseButtonDown(Input::MouseButton::Left))
     {
         m_grabbed = true;
         Cursor::SetIcon(m_cursorIconWhenGrabbed);

@@ -53,7 +53,7 @@ void Inspector::Clear()
     // Avoid double clearings
     ASSERT(!m_widget_To_Item.Empty());
 
-    for (InspectorWidget *iw : m_currentInspectorWidgets) { delete iw; }
+    for (InspectorWidget *iw : m_currentInspectorWidgets) { iw->OnDestroy(); }
     m_currentInspectorWidgets.Clear();
     m_widget_To_Item.Clear();
     m_widget_To_Inspectables.Clear();
@@ -195,6 +195,29 @@ void Inspector::dropEvent(QDropEvent *e)
 {
     e->ignore();
 }
+
+
+String Inspector::FormatInspectorLabel(const String &labelString)
+{
+    String labelFormatted = labelString.Replace("_", " ");
+
+    // Add space after every cap (except for consecutive caps).
+    for (auto it = labelFormatted.Begin(); it != labelFormatted.End(); ++it)
+    {
+        ++it;
+        bool nextOneIsCap = (it != labelFormatted.End()) && String::IsUpperCase(*it);
+        --it;
+        if (!nextOneIsCap && String::IsUpperCase(*it) && it != labelFormatted.Begin())
+        {
+            it = labelFormatted.insert(it, ' ');
+            ++it;
+        }
+    }
+
+    labelFormatted = labelFormatted;
+    return labelFormatted.Replace("  ", " ");
+}
+
 
 void Inspector::OnGameObjectDestroyed(GameObject *destroyed)
 {

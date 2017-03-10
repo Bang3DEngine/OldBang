@@ -81,3 +81,14 @@ void EditorRectTransformGizmo::OnDrawGizmos(bool depthed, bool overlay)
     }
 }
 
+bool EditorRectTransformGizmo::SomeOtherCornerGrabbed(
+        EditorRectTransformCornerGizmo *corner) const
+{
+    return
+       (corner == m_leftTopCorner  ? false : m_leftTopCorner->IsGrabbed())  ||
+       (corner == m_rightTopCorner ? false : m_rightTopCorner->IsGrabbed()) ||
+       (corner == m_leftBotCorner  ? false : m_leftBotCorner->IsGrabbed())  ||
+       (corner == m_rightBotCorner ? false : m_rightBotCorner->IsGrabbed()) ||
+       (corner == m_centerCorner   ? false : m_centerCorner->IsGrabbed());
+}
+

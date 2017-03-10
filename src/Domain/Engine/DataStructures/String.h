@@ -37,11 +37,8 @@ public:
 
     char At(int index) const;
 
-    String TrimmedLeft();
-    String TrimmedRight();
-    String Trimmed();
-
     Array<String> Split(char splitter, bool trimResults = false) const;
+
     static String Join(const Array<String> &parts, String joiner = "");
     static String Join(const List<String>  &parts, String joiner = "");
 
@@ -82,9 +79,21 @@ public:
     const char *ToCString() const;
     QString ToQString() const;
 
-    int Replace(const String &from,
-                const String &to,
+    int ReplaceInSitu(const String &from, const String &to,
                 int maxNumberOfReplacements = -1);
+    String Replace(const String &from, const String &to,
+                   int maxNumberOfReplacements = -1) const;
+
+    String Elide(int length, bool elideRight) const;
+    String ElideRight(int length) const;
+    String ElideLeft(int length) const;
+    String TrimLeft(List<char> trimChars) const;
+    String TrimRight(List<char> trimChars) const;
+    String Trim(List<char> trimChars) const;
+    String TrimLeft() const;
+    String TrimRight() const;
+    String Trim() const;
+    String AddInFrontOfWords(String particle) const;
 
     long Length() const;
     bool Empty() const;
@@ -94,8 +103,16 @@ public:
 
     String& operator=(const char *cstr);
 
+    static bool IsNumber(char c);
+    static bool IsLetter(char c);
+    static bool IsUpperCase(char c);
+    static bool IsLowerCase(char c);
+
+    static int ToInt(const String &str, bool *ok = nullptr);
+    static float ToFloat(const String &str, bool *ok = nullptr);
+
     static String ToString(int i);
-    static String ToString(float f);
+    static String ToString(float f, int decimalPlaces = -1);
     static String ToString(const void *v);
     static String ToString(const Color &v);
     static String ToString(const String &v);

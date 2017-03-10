@@ -27,11 +27,12 @@ const IFileable *XMLParser::GetPointerFromId(const String &id)
 
 String XMLParser::GetTagName(const String &tag, int *tagNameBegin, int *tagNameEnd)
 {
+    const String TokenSpace = " \t\n";
     int tagBegin = tag.IndexOfOneOf("<");
     int tagBegin2 = tag.IndexOfOneOf("/", tagBegin);
     tagBegin = (tagBegin2 == tagBegin + 1) ? tagBegin2 : tagBegin;
-    int nameBegin = tag.IndexOfOneNotOf(StringUtils::TOKEN_SPACE, tagBegin + 1);
-    int nameEnd = tag.IndexOfOneOf(StringUtils::TOKEN_SPACE + ">", nameBegin + 1);
+    int nameBegin = tag.IndexOfOneNotOf(TokenSpace, tagBegin + 1);
+    int nameEnd = tag.IndexOfOneOf(TokenSpace + ">", nameBegin + 1);
 
     if (tagNameBegin) *tagNameBegin = nameBegin;
     if (tagNameEnd) *tagNameEnd = nameEnd;

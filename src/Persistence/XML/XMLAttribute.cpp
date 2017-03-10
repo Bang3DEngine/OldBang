@@ -5,7 +5,6 @@
 
 #include "Debug.h"
 #include "Object.h"
-#include "StringUtils.h"
 #include "Persistence.h"
 
 #ifdef BANG_EDITOR
@@ -371,7 +370,7 @@ int XMLAttribute::GetInt() const
 
 float XMLAttribute::GetFloat() const
 {
-    return StringUtils::ToFloat(m_value);
+    return String::ToFloat(m_value);
 }
 
 String XMLAttribute::GetFilepath() const
@@ -387,36 +386,38 @@ String XMLAttribute::GetString() const
 Vector2 XMLAttribute::GetVector2() const
 {
     float x = 0, y = 0;
-    String insidePars = StringUtils::Split(m_value, '(')[1];
-    insidePars =  StringUtils::Split(insidePars, ')')[0];
-    Array<String> numbers = StringUtils::Split(insidePars, ',');
-    x = StringUtils::ToFloat(numbers[0]);
-    y = StringUtils::ToFloat(numbers[1]);
+    String insidePars = m_value.Split('(')[1];
+    insidePars =  insidePars.Split(')')[0];
+    Array<String> numbers = insidePars.Split(',');
+    x = String::ToFloat(numbers[0]);
+    y = String::ToFloat(numbers[1]);
     return Vector2(x,y);
 }
 
 Vector3 XMLAttribute::GetVector3() const
 {
     float x = 0, y = 0, z = 0;
-    String insidePars = StringUtils::Split(m_value, '(')[1];
-    insidePars =  StringUtils::Split(insidePars, ')')[0];
-    Array<String> numbers = StringUtils::Split(insidePars, ',');
-    x = StringUtils::ToFloat(numbers[0]);
-    y = StringUtils::ToFloat(numbers[1]);
-    z = StringUtils::ToFloat(numbers[2]);
+    String insidePars = m_value.Split('(')[1];
+    insidePars =  insidePars.Split(')')[0];
+    Array<String> numbers = insidePars.Split(',');
+    x = String::ToFloat(numbers[0]);
+    y = String::ToFloat(numbers[1]);
+    z = String::ToFloat(numbers[2]);
     return Vector3(x,y,z);
 }
 
 Vector4 XMLAttribute::GetVector4() const
 {
     float x = 0, y = 0, z = 0, w = 0;
-    String insidePars = StringUtils::Split(m_value, '(')[1];
-    insidePars =  StringUtils::Split(insidePars, ')')[0];
-    Array<String> numbers = StringUtils::Split(insidePars, ',');
-    x = StringUtils::ToFloat(numbers[0]);
-    y = StringUtils::ToFloat(numbers[1]);
-    z = StringUtils::ToFloat(numbers[2]);
-    w = StringUtils::ToFloat(numbers[3]);
+    Array<String> arr = m_value.Split('(');
+    String insidePars = arr[1];
+    arr = insidePars.Split(')');
+    insidePars =  arr[0];
+    Array<String> numbers = insidePars.Split(',');
+    x = String::ToFloat(numbers[0]);
+    y = String::ToFloat(numbers[1]);
+    z = String::ToFloat(numbers[2]);
+    w = String::ToFloat(numbers[3]);
     return Vector4(x,y,z,w);
 }
 
@@ -492,19 +493,19 @@ XMLAttribute XMLAttribute::FromString(const String &string)
 {
     XMLAttribute attribute;
 
-    String str = string;
-    StringUtils::Trim(&str);
+    String str = string.Trim();
 
-    int attrNameBegin = str.find_first_not_of(StringUtils::TOKEN_SPACE, 0);
+    const String TokenSpace = " \t\n";
+    int attrNameBegin = str.find_first_not_of(TokenSpace, 0);
     if (attrNameBegin == -1) { return attribute; }
 
-    int attrNameEnd = str.find_first_of(StringUtils::TOKEN_SPACE + ":", attrNameBegin + 1);
+    int attrNameEnd = str.find_first_of(TokenSpace + ":", attrNameBegin + 1);
     if (attrNameEnd == -1) { return attribute; }
 
-    int attrTypeBegin = str.find_first_not_of(StringUtils::TOKEN_SPACE, attrNameEnd + 1);
+    int attrTypeBegin = str.find_first_not_of(TokenSpace, attrNameEnd + 1);
     if (attrTypeBegin == -1) { return attribute; }
 
-    int attrTypeEnd = str.find_first_of(StringUtils::TOKEN_SPACE + "=", attrTypeBegin + 1);
+    int attrTypeEnd = str.find_first_of(TokenSpace + "=", attrTypeBegin + 1);
     if (attrTypeEnd == -1) { return attribute; }
 
     int attrValueBegin = str.find_first_of("\"", attrTypeEnd + 1) + 1;
@@ -522,8 +523,9 @@ XMLAttribute XMLAttribute::FromString(const String &string)
     String name = str.substr(attrNameBegin, attrNameEnd - attrNameBegin);
     String typeString = str.substr(attrTypeBegin, attrTypeEnd - attrTypeBegin);
     String value = str.substr(attrValueBegin, attrValueEnd - attrValueBegin);
-    String propertiesString = str.substr(attrPropertiesBegin, attrPropertiesEnd - attrPropertiesBegin);
-    Array<String> properties = StringUtils::Split(propertiesString, ',');
+    String propertiesString = str.substr(attrPropertiesBegin,
+                                      attrPropertiesEnd - attrPropertiesBegin);
+    Array<String> properties = propertiesString.Split(',');
 
     attribute.SetName(name);
     attribute.SetType(XMLAttribute::Type_FromString(typeString));

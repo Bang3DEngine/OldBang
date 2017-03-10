@@ -7,7 +7,6 @@
 #include <QCryptographicHash>
 
 #include "Debug.h"
-#include "StringUtils.h"
 #include "SingletonManager.h"
 
 #ifdef BANG_EDITOR
@@ -226,7 +225,7 @@ String Persistence::GetDirUp(const String &filepath)
 
 String Persistence::GetRightmostDir(const String &dir)
 {
-    Array<String> parts = StringUtils::Split(dir, '/');
+    Array<String> parts = dir.Split('/');
     ASSERT(!parts.Empty(), "", return "");
     return parts.Back();
 }
@@ -280,13 +279,13 @@ String Persistence::GetNextDuplicateName(const String &path)
     String fileName = Persistence::GetFileName(filePath);
     String fileExtension = Persistence::GetFileExtensionComplete(path);
 
-    Array<String> splitted = StringUtils::Split(fileName, '_');
+    Array<String> splitted = fileName.Split('_');
     int number = 1;
     if (splitted.Size() > 1)
     {
         String numberString = splitted[splitted.Size() - 1];
         bool ok = false;
-        int readNumber = StringUtils::ToInt(numberString, &ok);
+        int readNumber = String::ToInt(numberString, &ok);
         if (ok)
         {
             number = readNumber + 1;

@@ -38,15 +38,20 @@ void EditorRectTransformCornerGizmo::OnUpdate()
     EditorGizmo::OnUpdate();
     ASSERT(m_attachedRectTransform);
 
-    if (!m_mouseIsOver && !m_grabbed)
+    m_cornerColor = (!m_mouseIsOver && !m_grabbed) ?
+                Color(0.0f, 0.0f, 0.6f) : Color(0.0f, 0.5f, 1.0f);
+
+    EditorRectTransformGizmo *rectTransformGizmo = parent ?
+                Object::SCast<EditorRectTransformGizmo>(parent) : nullptr;
+
+    if (m_cornerPosition == CornerPosition::Center)
     {
-        m_cornerColor = Color(0.0f, 0.0f, 0.6f);
+        // Special case for moving UI. Grab instant (Button instead of ButtonDown)
+        // and make sure not grabbing corner and center at the same time
+        m_grabbed = m_mouseIsOver &&
+                    Input::GetMouseButton(Input::MouseButton::Left) &&
+                    !rectTransformGizmo->SomeOtherCornerGrabbed(this);
     }
-    else
-    {
-        m_cornerColor = Color(0.0f, 0.5f, 1.0f);
-    }
-    m_cornerColor.a = 1.0f;
 
     if (m_grabbed)
     {
@@ -65,6 +70,7 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
 
     if (overlay)
     {
+
         Rect rect = m_attachedRectTransform->GetScreenSpaceRect();
         if (GraphicPipeline::GetActive()->GetSelectionFramebuffer()->IsPassing())
         {

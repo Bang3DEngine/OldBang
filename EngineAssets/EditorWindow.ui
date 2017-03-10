@@ -427,12 +427,11 @@
    </widget>
    <widget class="QMenu" name="menuProject">
     <property name="title">
-     <string>Project</string>
+     <string>File</string>
     </property>
     <addaction name="actionNewProject"/>
     <addaction name="actionOpenProject"/>
     <addaction name="actionSaveProject"/>
-    <addaction name="actionProjectSettings"/>
     <addaction name="separator"/>
     <addaction name="actionNewScene"/>
     <addaction name="actionOpenScene"/>
@@ -465,7 +464,18 @@
     <addaction name="actionAddComponentUIImage"/>
     <addaction name="actionAddComponentUIText"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionProjectSettings"/>
+    <addaction name="actionEditorSettings"/>
+    <addaction name="separator"/>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+   </widget>
    <addaction name="menuProject"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuAssets"/>
    <addaction name="menuGameObject"/>
    <addaction name="menuComponents"/>
@@ -1188,7 +1198,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>448</width>
+              <width>416</width>
               <height>68</height>
              </rect>
             </property>
@@ -1270,7 +1280,7 @@
   </action>
   <action name="actionProjectSettings">
    <property name="text">
-    <string>Project Settings</string>
+    <string>Project Settings...</string>
    </property>
   </action>
   <action name="actionCreatePrefab">
@@ -1468,6 +1478,21 @@
   <action name="actionCreateEmptyUIGameObject">
    <property name="text">
     <string>Empty UI</string>
+   </property>
+  </action>
+  <action name="actionEditorSettings">
+   <property name="text">
+    <string>Editor Settings...</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo </string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
    </property>
   </action>
   <zorder>dockExplorer</zorder>

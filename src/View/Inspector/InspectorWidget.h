@@ -36,8 +36,7 @@ class InspectorWidget : public DragDropQWidget
 
 public:
     InspectorWidget();
-    void Init(const String &title,
-              IInspectable *relatedInspectable);
+    void Init(const String &title, IInspectable *relatedInspectable);
 
     virtual ~InspectorWidget();
 
@@ -61,6 +60,7 @@ public:
     bool IsClosed() const;
 
     virtual int GetHeightSizeHint();
+    void OnDestroy();
 
 public slots:
 

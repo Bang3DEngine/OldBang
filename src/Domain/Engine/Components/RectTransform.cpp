@@ -180,6 +180,8 @@ Rect RectTransform::GetParentScreenRect(bool takeMarginsIntoAccount) const
 void RectTransform::OnChanged()
 {
     m_hasChanged = true;
+
+    ASSERT(gameObject);
     List<RectTransform*> rectTransforms =
             gameObject->GetComponentsInChildren<RectTransform>();
     for (RectTransform *rt : rectTransforms)

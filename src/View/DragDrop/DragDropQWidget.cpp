@@ -1,7 +1,7 @@
 #include "DragDropQWidget.h"
 
-DragDropQWidget::DragDropQWidget()
-    : QWidget(), DragDropAgent()
+DragDropQWidget::DragDropQWidget(QWidget *parent)
+    : QWidget(parent), DragDropAgent()
 {
     setAcceptDrops(true);
 }

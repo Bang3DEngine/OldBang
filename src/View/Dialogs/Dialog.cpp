@@ -3,7 +3,6 @@
 #include <QInputDialog>
 
 #include "Debug.h"
-#include "StringUtils.h"
 #include "EditorWindow.h"
 #include "SelectProjectWindow.h"
 
@@ -13,8 +12,7 @@ Dialog::Dialog()
 
 String Dialog::GetExtensionFilterString(const String &extension)
 {
-    String ext = extension;
-    StringUtils::AddInFrontOfWords("*.", &ext);
+    String ext = extension.AddInFrontOfWords("*.");
     return ext + "(" + ext + ")" ;
 }
 

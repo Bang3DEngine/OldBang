@@ -1,5 +1,9 @@
 #include "String.h"
 
+#include <sstream>
+#include <iomanip>
+#include <iostream>
+
 #include <QString>
 
 #include "Map.h"
@@ -66,45 +70,6 @@ char String::At(int index) const
     return at(index);
 }
 
-String String::TrimmedLeft()
-{
-    String result = *this;
-    if (!Empty())
-    {
-        int i = 0;
-        for (; i < Length(); ++i)
-        {
-            if (At(i) != ' ' && At(i) != '\t') break;
-        }
-
-        if (i == Length()) { result = ""; }
-        else { result = result.SubString(i); }
-    }
-    return result;
-}
-
-String String::TrimmedRight()
-{
-    String result = *this;
-    if (!Empty())
-    {
-        int i = Length() - 1;
-        for (; i >= 0; --i)
-        {
-            if (At(i) != ' ' && At(i) != '\t') break;
-        }
-
-        if (i < 0) { result = ""; }
-        else { result = result.SubString(0, i); }
-    }
-    return result;
-}
-
-String String::Trimmed()
-{
-    return (*this).TrimmedLeft().TrimmedRight();
-}
-
 Array<String> String::Split(char splitter, bool trimResults) const
 {
     Array<String> result;
@@ -121,12 +86,16 @@ Array<String> String::Split(char splitter, bool trimResults) const
             indexFound = Length();
         }
 
-        if (indexFound != lastIndexFound)
+        if (indexFound == lastIndexFound)
+        {
+            result.PushBack("");
+        }
+        else
         {
             String particle = SubString(lastIndexFound, indexFound - 1);
             if (trimResults)
             {
-                particle = particle.Trimmed();
+                particle = particle.Trim();
             }
             result.PushBack(particle);
         }
@@ -202,22 +171,26 @@ void String::Erase(int beginIndex, int endIndexInclusive)
 
 long String::IndexOf(char c, long startingPos) const
 {
-    return find(c, startingPos);
+    int index = find(c, startingPos);
+    return index == String::npos ? - 1 : index;
 }
 
 long String::IndexOf(const String &str, long startingPos) const
 {
-    return find(str, startingPos);
+    int index = find(str, startingPos);
+    return index == String::npos ? - 1 : index;
 }
 
 long String::IndexOfOneOf(const String &charSet, long startingPos) const
 {
-    return find_first_of(charSet, startingPos);
+    int index = find_first_of(charSet, startingPos);
+    return index == String::npos ? - 1 : index;
 }
 
 long String::IndexOfOneNotOf(const String &charSet, long startingPos) const
 {
-    return find_first_not_of(charSet, startingPos);
+    int index = find_first_not_of(charSet, startingPos);
+    return index == String::npos ? - 1 : index;
 }
 
 String String::SubString(long startIndex, long endIndex) const
@@ -236,7 +209,7 @@ QString String::ToQString() const
     return QString::fromStdString(*this);
 }
 
-int String::Replace(const String &from,
+int String::ReplaceInSitu(const String &from,
                     const String &to,
                     int maxNumberOfReplacements)
 {
@@ -261,6 +234,139 @@ int String::Replace(const String &from,
         }
     }
     return numReplacements;
+}
+
+String String::Replace(const String &from, const String &to,
+                       int maxNumberOfReplacements) const
+{
+    String str = *this;
+    str.ReplaceInSitu(from, to, maxNumberOfReplacements);
+    return str;
+}
+
+String String::Elide(int length, bool elideRight) const
+{
+    int maxLength = std::min(int(Length()), length);
+    String result = (*this);
+    if (result.Length() > length)
+    {
+        result = result.SubString(result.Length() - maxLength,
+                                  result.Length() - 1);
+        if (elideRight) { result = result + "..."; }
+        else            { result = "..." + result; }
+    }
+    return result;
+}
+
+String String::ElideRight(int length) const
+{
+    return Elide(length, true);
+}
+
+String String::ElideLeft(int length) const
+{
+    return Elide(length, false);
+}
+
+String String::TrimLeft(List<char> trimChars) const
+{
+    if(Empty()) { return ""; }
+
+    int i = 0;
+    for (; i < Length(); ++i)
+    {
+        if (!trimChars.Contains( At(i) )) break;
+    }
+    return (i == Length()) ? "" : SubString(i, Length());
+}
+
+String String::TrimRight(List<char> trimChars) const
+{
+    if(Empty()) { return ""; }
+
+    int i = Length() - 1;
+    for (; i >= 0; --i)
+    {
+        if (!trimChars.Contains( At(i) )) break;
+    }
+    return (i < 0) ? "" : SubString(0, i+1);
+}
+
+String String::Trim(List<char> trimChars) const
+{
+    return (*this).TrimLeft(trimChars).TrimRight(trimChars);
+}
+
+String String::TrimLeft() const
+{
+    return TrimLeft({' ', '\t'});
+}
+
+String String::TrimRight() const
+{
+    return TrimRight({' ', '\t'});
+}
+
+String String::Trim() const
+{
+    return Trim({' ', '\t'});
+}
+
+String String::AddInFrontOfWords(String particle) const
+{
+    String result = *this;
+    if (!result.Empty() && result.At(0) != ' ') { result.Insert(0, particle); }
+
+    for (int i = 0; i < result.Length() - 1; ++i)
+    {
+        if (result.At(i) == ' ' && result.At(i+1) != ' ')
+        {
+            result.Insert(i+1, particle);
+            i += 2;
+        }
+    }
+    return result;
+}
+
+
+bool String::IsNumber(char c)
+{
+    return c >= 48 && c <= 57;
+}
+
+bool String::IsLetter(char c)
+{
+    return  IsLowerCase(c) || IsUpperCase(c);
+}
+
+bool String::IsUpperCase(char c)
+{
+    return c >= 65 && c <= 90;
+}
+
+bool String::IsLowerCase(char c)
+{
+    return c >= 97 && c <= 122;
+}
+
+int String::ToInt(const String &str, bool *ok)
+{
+    String number = str.Trim();
+    std::istringstream iss(number);
+    int v;
+    iss >> v;
+    if (ok) *ok = !iss.fail();
+    return v;
+}
+
+float String::ToFloat(const String &str, bool *ok)
+{
+    String number = str.Trim();
+    std::istringstream iss(number);
+    float v;
+    iss >> v;
+    if (ok) *ok = !iss.fail();
+    return v;
 }
 
 long String::Length() const
@@ -300,9 +406,20 @@ String String::ToString(int i)
     return String(std::to_string(i));
 }
 
-String String::ToString(float f)
+String String::ToString(float f, int decimalPlaces)
 {
-    return String(std::to_string(f));
+    String str = "";
+    if (decimalPlaces >= 0)
+    {
+        std::ostringstream oss;
+        oss << std::fixed << std::setprecision(decimalPlaces) << f;
+        str = oss.str();
+    }
+    else
+    {
+        str = String(std::to_string(f));
+    }
+    return str;
 }
 
 String String::ToString(const void *v)

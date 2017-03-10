@@ -3,7 +3,6 @@
 #include <QVBoxLayout>
 
 #include "Object.h"
-#include "StringUtils.h"
 #include "XMLAttribute.h"
 #include "InspectorWidget.h"
 
@@ -119,16 +118,16 @@ bool FloatComponentSlotSpinBox::eventFilter(QObject *obj, QEvent *event)
 
 void FloatComponentSlotSpinBox::SetFloat(float f)
 {
-    String str = StringUtils::FromFloat(f, 2);
+    String str = String::ToString(f, 2);
     setText( str.ToQString() );
 }
 
 float FloatComponentSlotSpinBox::GetFloat() const
 {
     String str( text() );
-    StringUtils::Replace(&str, ",", ".");
+    str = str.Replace(",", ".");
     if (str.Empty()) { return 0.0f; }
-    return StringUtils::ToFloat(str);
+    return String::ToFloat(str);
 }
 
 void FloatComponentSlotSpinBox::AdjustStep()

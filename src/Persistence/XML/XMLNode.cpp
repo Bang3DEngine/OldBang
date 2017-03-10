@@ -5,7 +5,6 @@
 #include "FileReader.h"
 #include "FileWriter.h"
 #include "Persistence.h"
-#include "StringUtils.h"
 
 #ifdef BANG_EDITOR
 #include "IAttrWidgetButtonListener.h"

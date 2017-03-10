@@ -5,7 +5,6 @@
 
 #include "Behaviour.h"
 #include "Persistence.h"
-#include "StringUtils.h"
 #include "BehaviourHolder.h"
 #include "SingletonManager.h"
 
@@ -173,8 +172,8 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
     String includes = " . " + SystemUtils::GetAllProjectSubDirs() + " " +
                               SystemUtils::GetAllEngineSubDirs()  + " " +
                               SystemUtils::GetQtIncludes()        + " ";
-    includes.Replace("\n", " ");
-    StringUtils::AddInFrontOfWords("-I", &includes);
+    includes.ReplaceInSitu("\n", " ");
+    includes = includes.AddInFrontOfWords("-I");
 
     String objs = "";
     if ((clFlags & CLFlags::AddProjectObjectFiles) > 0)
@@ -190,8 +189,8 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
                 (SystemUtils::GetAllEngineObjects(editorMode) + " ") : "";
 
     String qtLibDirs = SystemUtils::GetQtLibrariesDirs();
-    qtLibDirs.Replace("\n", " ");
-    StringUtils::AddInFrontOfWords("-L", &qtLibDirs);
+    qtLibDirs.ReplaceInSitu("\n", " ");
+    qtLibDirs = qtLibDirs.AddInFrontOfWords("-L");
 
     String options = " " + objs  + " -O0 -g ";
     if (editorMode) { options += " -DBANG_EDITOR "; }
@@ -208,7 +207,7 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
     String cmd = "/usr/bin/g++ " + sharedOpt + " "
                  + sourcesStr + " " + options
                  + " -o " + outputLibFilepath;
-    cmd.Replace("\n", " ");
+    cmd.ReplaceInSitu("\n", " ");
 
     //Debug_Log("cmd: " << cmd);
     SystemUtils::System(cmd, output, success);

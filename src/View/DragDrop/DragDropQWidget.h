@@ -10,7 +10,7 @@ class DragDropQWidget : public QWidget,
 
 {
 public:
-    DragDropQWidget();
+    DragDropQWidget(QWidget *parent = nullptr);
     virtual ~DragDropQWidget();
 
     void dragEnterEvent(QDragEnterEvent *e) override;

@@ -3,7 +3,48 @@
 
 #include "Map.h"
 #include "Array.h"
-#include "StringUtils.h"
+#include "String.h"
+
+static Array<String> VariadicStringToNamesArray(const String &_va_args_)
+{
+    // We receive something like "Wololo, Apple = 49, Pear=29, Lololo=2193, Banana,Sandwich, Monkey=32"
+    // We want this vector: ["Wololo", "Apple", "Pear", "Lololo", "Banana", "Sandwich", "Monkey"]
+    Array<String> result = _va_args_.Split(',', true);
+    for (int i = 0; i < result.Size(); ++i)
+    {
+        const Array<String> parts = result[i].Split('=', true);
+        if (!parts.Empty()) { result[i] = parts[0]; }
+    }
+    return result;
+}
+
+template <class EnumName>
+static Array<EnumName> VariadicStringToValuesArray(const String &_va_args_)
+{
+    // We receive something like "Wololo, Apple = 49, Pear=29, Lololo=2193, Banana,Sandwich, Monkey=32"
+    // We want this vector: [0, 49, 29, 2193, 2194, 2195, 32]
+    Array<EnumName> result;
+    Array<String> splitted = _va_args_.Split(',', true);
+    int lastValue = -1;
+    for (String str : splitted)
+    {
+        str = str.Trim();
+        Array<String> equalSplitted = str.Split('=', true);
+        int val;
+        if (equalSplitted.Size() == 2) // Has value
+        {
+            val = std::atoi(equalSplitted[1].ToCString());
+        }
+        else // Has no value, one more than the last one
+        {
+            val = lastValue + 1;
+        }
+
+        lastValue = val;
+        result.PushBack(static_cast<EnumName>(val));
+    }
+    return result;
+}
 
 /*
  * NOT SUPPORTING ENUMS WITH #define VALUES SUCH AS:
@@ -26,14 +67,14 @@ static const String EnumName##_GetEnumName() { \
 \
 /* Returns the array of names of the enum. */ \
 static const Array<String>& EnumName##_GetNamesVector() { \
-    static const Array<String> names = StringUtils::BangEnumVariadicStringToNamesArray(#__VA_ARGS__); \
+    static const Array<String> names = VariadicStringToNamesArray(#__VA_ARGS__); \
     return names; \
 } \
 \
 /* Returns the array of values of the enum. */ \
 static const Array<EnumName>& EnumName##_GetValuesVector() { \
     static const Array<EnumName> values = /* Holds the user values of each Enum entry */ \
-                StringUtils::BangEnumVariadicStringToValuesArray<EnumName>(#__VA_ARGS__); \
+                VariadicStringToValuesArray<EnumName>(#__VA_ARGS__); \
     return values; \
 } \
 \

@@ -213,7 +213,7 @@ void BehaviourHolder::CreateNewBehaviour()
 
         // Create header file
         String headerCode = Behaviour::s_behaviourHeaderTemplate;
-        StringUtils::Replace(&headerCode, "CLASS_NAME", className);
+        headerCode = headerCode.Replace("CLASS_NAME", className);
         String headerFilepath = currentDir + "/" + className;
         headerFilepath = Persistence::AppendExtension(headerFilepath, "h");
         ASSERT(!Persistence::ExistsFile(headerFilepath));
@@ -221,7 +221,7 @@ void BehaviourHolder::CreateNewBehaviour()
 
         // Create source file
         String sourceCode = Behaviour::s_behaviourSourceTemplate;
-        StringUtils::Replace(&sourceCode, "CLASS_NAME", className);
+        sourceCode = sourceCode.Replace("CLASS_NAME", className);
         String sourceFilepath = currentDir + "/" + className;
         sourceFilepath = Persistence::AppendExtension(sourceFilepath, "cpp");
         ASSERT(!Persistence::ExistsFile(sourceFilepath));

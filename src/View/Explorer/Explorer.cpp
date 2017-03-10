@@ -393,7 +393,7 @@ bool Explorer::IsInListMode() const
 
 void Explorer::SetLabelText(const String &absPath)
 {
-    String textDir = StringUtils::Elide(absPath, 65, false);
+    String textDir = absPath.ElideLeft(65);
     m_labelCurrentPath->setText(textDir.ToQString());
 
     String fileNameExt = Persistence::GetFileNameWithExtension(absPath);

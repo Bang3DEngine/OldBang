@@ -126,7 +126,7 @@ bool FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
 
         String relFilepath = attr.GetValue();
         //Debug_Log(relFilepath << ", " << relPathBefore);
-        int numReplacements = relFilepath.Replace(relPathBefore, relPathNow);
+        int numReplacements = relFilepath.ReplaceInSitu(relPathBefore, relPathNow);
         if (numReplacements > 0)
         {
           //  Debug_Log("Refactored in " << relFilepath << " attr " <<

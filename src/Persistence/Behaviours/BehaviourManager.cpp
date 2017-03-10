@@ -6,7 +6,6 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Project.h"
-#include "StringUtils.h"
 #include "Persistence.h"
 #include "Application.h"
 #include "SystemUtils.h"

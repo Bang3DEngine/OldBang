@@ -5,7 +5,6 @@
 
 #include "Debug.h"
 #include "Color.h"
-#include "StringUtils.h"
 #include "EditorWindow.h"
 
 int Console::c_rowHeight      = 30;
@@ -157,7 +156,7 @@ QTreeWidgetItem *Console::CreateItemFromMessageRow(const Message &mr)
     item->setSizeHint(4, QSize(item->sizeHint(4).width(), c_rowHeight));
     item->setSizeHint(5, QSize(item->sizeHint(5).width(), c_rowHeight));
 
-    String shortMessage = mr.msg; // StringUtils::Elide(mr.msg, 100, true);
+    String shortMessage = mr.msg; // .ElideRight(mr.msg, 100);
     item->setText(c_msgColumn, shortMessage.ToQString());
     item->setText(c_lineColumn, String::ToString(mr.line).ToQString());
     item->setText(c_fileNameColumn, mr.fileName.ToQString());
