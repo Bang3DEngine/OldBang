@@ -26,8 +26,8 @@ public:
     Vector3 GetOrigin() const;
     Vector3 GetDestiny() const;
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 };
 
 #endif // SINGLELINERENDERER_H

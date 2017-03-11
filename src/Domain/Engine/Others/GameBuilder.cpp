@@ -4,7 +4,7 @@
 #include "Scene.h"
 #include "Dialog.h"
 #include "Project.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "SystemUtils.h"
 #include "EditorWindow.h"
 #include "ProjectManager.h"
@@ -35,7 +35,7 @@ GameBuilder *GameBuilder::GetInstance()
 String GameBuilder::AskForExecutableFilepath()
 {
     // Get the executable output filepath
-    const String defaultOutputDirectory = Persistence::GetProjectRootAbs();
+    const String defaultOutputDirectory = IO::GetProjectRootAbs();
     const String projectName = ProjectManager::GetCurrentProject()->GetProjectName();
     String executableFilepath =
         Dialog::GetSaveFilename("Choose the file where you want to create your game",
@@ -46,7 +46,7 @@ String GameBuilder::AskForExecutableFilepath()
     if (!executableFilepath.Empty())
     {
         executableFilepath =
-                Persistence::AppendExtension(executableFilepath, "exe");
+                IO::AppendExtension(executableFilepath, "exe");
     }
     return executableFilepath;
 }
@@ -114,7 +114,7 @@ void GameBuilder::OnGameHasBeenBuilt()
 
     if (m_runGameAfterBuild)
     {
-        SystemUtils::SystemBackground(m_latestGameExecutableFilepath);
+        SystemUtils::SystemBackground(m_latestGameExecutableFilepath, {});
     }
 }
 
@@ -151,7 +151,7 @@ void GameBuilder::OnGameBuildingHasBeenCanceled()
 bool GameBuilder::CompileGameExecutable()
 {
     List<String> sceneFiles =
-        Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true,
+        IO::GetFiles(IO::GetProjectAssetsRootAbs(), true,
                               {"*." + Scene::GetFileExtensionStatic()});
     if (sceneFiles.Empty())
     {
@@ -163,16 +163,16 @@ bool GameBuilder::CompileGameExecutable()
     }
 
     String output = "";
-    String cmd = Persistence::GetEngineRootAbs() +
+    String cmd = IO::GetEngineRootAbs() +
                     "/scripts/compile.sh GAME RELEASE_MODE";
 
-    const String initialOutputDir = Persistence::GetEngineRootAbs() +
+    const String initialOutputDir = IO::GetEngineRootAbs() +
                                         "/bin/Game.exe";
-    Persistence::Remove(initialOutputDir);
+    IO::Remove(initialOutputDir);
 
     bool ok = false;
-    SystemUtils::System(cmd.ToCString(), &output, &ok);
-    ok = ok && Persistence::ExistsFile(initialOutputDir);
+    SystemUtils::System(cmd.ToCString(), {}, &output, &ok);
+    ok = ok && IO::ExistsFile(initialOutputDir);
     if (!ok)
     {
         Debug_Error(output);
@@ -184,18 +184,18 @@ bool GameBuilder::CompileGameExecutable()
 bool GameBuilder::CreateDataDirectory(const String &executableDir)
 {
     String dataDir = executableDir + "/GameData";
-    Persistence::Remove(dataDir);
-    if (!Persistence::CreateDirectory(dataDir)) { return false; }
+    IO::Remove(dataDir);
+    if (!IO::CreateDirectory(dataDir)) { return false; }
 
     // Copy the Engine Assets in the GameData directory
-    if (!Persistence::DuplicateDir(Persistence::GetEngineAssetsRootAbs(),
+    if (!IO::DuplicateDir(IO::GetEngineAssetsRootAbs(),
                                    dataDir + "/EngineAssets"))
     {
         return false;
     }
 
     // Copy the Project Assets in the GameData directory
-    if (!Persistence::DuplicateDir(Persistence::GetProjectAssetsRootAbs(),
+    if (!IO::DuplicateDir(IO::GetProjectAssetsRootAbs(),
                                    dataDir + "/Assets"))
     {
         return false;
@@ -221,18 +221,18 @@ bool GameBuilder::CompileBehaviours(const String &executableDir,
     String dataDir = executableDir + "/GameData";
     String libsDir = dataDir + "/Libraries";
     BehaviourManager::SetCurrentLibsDir(libsDir);
-    Persistence::CreateDirectory(libsDir);
+    IO::CreateDirectory(libsDir);
     bool success = BehaviourManager::PrepareBehavioursLibrary(true, cancel);
     return success;
 }
 
 void GameBuilder::RemoveLatestGameBuild()
 {
-    Persistence::Remove(m_latestGameExecutableFilepath);
+    IO::Remove(m_latestGameExecutableFilepath);
 
-    String executableDir = Persistence::GetDir(m_latestGameExecutableFilepath);
+    String executableDir = IO::GetDir(m_latestGameExecutableFilepath);
     String gameDataDir = executableDir + "/GameData";
-    Persistence::Remove(gameDataDir);
+    IO::Remove(gameDataDir);
 }
 
 GameBuildDialog *GameBuilder::GetGameBuildDialog()

@@ -76,15 +76,15 @@ void MeshRenderer::RenderWithoutMaterial() const
     GL::Render(m_mesh->GetVAO(), m_renderMode, m_mesh->GetVertexCount());
 }
 
-void MeshRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
+void MeshRenderer::Read(const XMLNode *xmlInfo)
 {
-    Renderer::ReadXMLInfo(xmlInfo);
+    Renderer::Read(xmlInfo);
     SetMesh( AssetsManager::Load<Mesh>( xmlInfo->GetFilepath("Mesh") ) );
 }
 
-void MeshRenderer::FillXMLInfo(XMLNode *xmlInfo) const
+void MeshRenderer::Write(XMLNode *xmlInfo) const
 {
-    Renderer::FillXMLInfo(xmlInfo);
+    Renderer::Write(xmlInfo);
     xmlInfo->SetTagName("MeshRenderer");
 
     if (!GetDrawWireframe())

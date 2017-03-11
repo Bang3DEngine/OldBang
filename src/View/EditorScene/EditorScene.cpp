@@ -83,7 +83,7 @@ void EditorScene::OnUpdate()
     for (int f : latestFPS) { fpsSum += f; }
     int fpsMean = fpsSum / latestFPS.Size();
     m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
-    if (rand()%10 == 0) Debug_Log(fpsMean);
+    //if (rand()%10 == 0) Debug_Log(fpsMean);
 }
 
 void EditorScene::SetEditorCamera()

@@ -40,8 +40,8 @@ public:
     virtual void OnButtonClicked(const String &attrName) override;
     #endif
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     void Play(float delaySeconds = 0.0f);
     void Pause();

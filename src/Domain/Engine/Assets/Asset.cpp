@@ -1,11 +1,10 @@
 #include "Asset.h"
 
-#include "FileWriter.h"
 #include "FileReader.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "AssetsManager.h"
 
-Asset::Asset() : IFileable()
+Asset::Asset() : SerializableObject()
 {
 }
 
@@ -28,12 +27,12 @@ String Asset::GetFileExtension()
 #ifdef BANG_EDITOR
 void Asset::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    ReadXMLInfo(xmlInfo);
+    Read(xmlInfo);
 }
 
 void Asset::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    FillXMLInfo(xmlInfo);
+    Write(xmlInfo);
 }
 #endif
 
@@ -47,15 +46,13 @@ String Asset::ToString() const
     return "Asset '" + m_assetFilepath + "'.";
 }
 
-
-void Asset::ReadXMLInfo(const XMLNode *xmlInfo)
+void Asset::Read(const XMLNode *xmlInfo)
 {
-    IFileable::ReadXMLInfo(xmlInfo);
+    SerializableObject::Read(xmlInfo);
 }
 
-void Asset::FillXMLInfo(XMLNode *xmlInfo) const
+void Asset::Write(XMLNode *xmlInfo) const
 {
-    IFileable::FillXMLInfo(xmlInfo);
+    SerializableObject::Write(xmlInfo);
     xmlInfo->SetTagName("Asset");
-    //xmlInfo->SetFilepath("filepath", m_filepath);
 }

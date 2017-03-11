@@ -16,7 +16,7 @@ String Behaviour::GetBehaviourName() const
     if (p_behaviourHolder)
     {
         const String srcFilepath = p_behaviourHolder->GetSourceFilepath();
-        bName = Persistence::GetFileName(srcFilepath);
+        bName = IO::GetFileName(srcFilepath);
     }
     return bName;
 }

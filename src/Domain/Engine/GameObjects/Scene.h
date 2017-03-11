@@ -28,9 +28,9 @@ public:
 
     virtual Camera *GetCamera() const;
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
-    virtual void PostReadXMLInfo(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
+    virtual void PostRead(const XMLNode *xmlInfo) override;
 
 protected:
     GameObject *m_defaultCamera = nullptr;

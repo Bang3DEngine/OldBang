@@ -5,7 +5,7 @@
 #include "Debug.h"
 #include "XMLNode.h"
 #include "FileReader.h"
-#include "Persistence.h"
+#include "IO.h"
 
 Texture2D::Texture2D() : Texture(Target::Texture2D)
 {
@@ -111,9 +111,9 @@ float Texture2D::GetAlphaCutoff() const
     return m_alphaCutoff;
 }
 
-void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
+void Texture2D::Read(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLInfo(xmlInfo);
+    Asset::Read(xmlInfo);
 
     String imageFilepath = xmlInfo->GetFilepath("ImageFilepath");
     LoadFromImage(imageFilepath);
@@ -131,9 +131,9 @@ void Texture2D::ReadXMLInfo(const XMLNode *xmlInfo)
     SetAlphaCutoff(xmlInfo->GetFloat("AlphaCutoff"));
 }
 
-void Texture2D::FillXMLInfo(XMLNode *xmlInfo) const
+void Texture2D::Write(XMLNode *xmlInfo) const
 {
-    Asset::FillXMLInfo(xmlInfo);
+    Asset::Write(xmlInfo);
     xmlInfo->SetTagName("Texture2D");
 
     xmlInfo->SetFilepath("ImageFilepath", m_imageFilepath, "jpg png bmp");

@@ -3,9 +3,8 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "FileReader.h"
-#include "FileWriter.h"
 #include "Application.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "SceneManager.h"
 
 AssetsManager::AssetsManager()
@@ -30,11 +29,11 @@ AssetsManager *AssetsManager::GetCurrent()
 String AssetsManager::FormatFilepath(const String &filepath,
                                      bool isEngineAsset)
 {
-    if (Persistence::IsAbsolute(filepath))
+    if (IO::IsAbsolute(filepath))
     {   // Do nothing, maybe the user is looking for something outside of Assets
         return filepath;
     }
-    return Persistence::ToAbsolute(filepath, isEngineAsset);
+    return IO::ToAbsolute(filepath, isEngineAsset);
 }
 
 bool AssetsManager::IsLoaded(const String &filepath,
@@ -72,12 +71,13 @@ void AssetsManager::SaveAssetToMap(const String &filepath, Asset *asset, bool is
     }
 }
 
-void AssetsManager::SaveAssetToFile(const String &filepath, Asset *asset,
+void AssetsManager::SaveAssetToFile(const String &filepath,
+                                    Asset *asset,
                                     bool isEngineAsset)
 {
     if (!filepath.Empty() && asset)
     {
         String f = FormatFilepath(filepath, isEngineAsset);
-        Persistence::WriteToFile(f, asset->GetXMLInfoString());
+        IO::WriteToFile(f, asset->GetSerializedString());
     }
 }

@@ -8,7 +8,7 @@
 #include "Asset.h"
 #include "Object.h"
 #include "XMLParser.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "BehaviourManager.h"
 
 class AssetsManager
@@ -54,13 +54,13 @@ public:
     {
         T *a = nullptr;
         String absPath = AssetsManager::FormatFilepath(filepath, isEngineAsset);
-        if(!Persistence::ExistsFile(absPath)) { return nullptr; }
+        if(!IO::ExistsFile(absPath)) { return nullptr; }
 
         XMLNode *xmlInfo = XMLParser::FromFile(absPath);
         if (xmlInfo)
         {
             a = new T();
-            a->ReadXMLInfo(xmlInfo);
+            a->Read(xmlInfo);
             a->m_assetFilepath = absPath;
             delete xmlInfo;
         }
@@ -111,9 +111,9 @@ public:
             asset->OnInspectorXMLChanged(xmlChangedInfo);
         }
 
-        if (Persistence::ExistsFile(assetFilepath))
+        if (IO::ExistsFile(assetFilepath))
         {
-            Persistence::WriteToFile(assetFilepath, xmlChangedInfo->ToString());
+            IO::WriteToFile(assetFilepath, xmlChangedInfo->ToString());
         }
     }
     #endif

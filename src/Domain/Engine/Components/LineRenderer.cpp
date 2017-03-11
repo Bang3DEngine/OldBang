@@ -78,13 +78,13 @@ const Array<Vector3> &LineRenderer::GetPoints() const
     return m_points;
 }
 
-void LineRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
+void LineRenderer::Read(const XMLNode *xmlInfo)
 {
-    Renderer::ReadXMLInfo(xmlInfo);
+    Renderer::Read(xmlInfo);
 }
 
-void LineRenderer::FillXMLInfo(XMLNode *xmlInfo) const
+void LineRenderer::Write(XMLNode *xmlInfo) const
 {
-    Renderer::FillXMLInfo(xmlInfo);
+    Renderer::Write(xmlInfo);
     xmlInfo->SetTagName("LineRenderer");
 }

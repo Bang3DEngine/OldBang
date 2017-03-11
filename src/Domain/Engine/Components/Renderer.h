@@ -72,8 +72,8 @@ public:
     virtual String GetName() const override;
     virtual ICloneable *Clone() const override = 0;
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     void SetTransparent(bool transparent);
     bool IsTransparent() const;

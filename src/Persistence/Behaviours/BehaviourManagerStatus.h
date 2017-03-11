@@ -8,7 +8,7 @@
 #include "List.h"
 #include "File.h"
 #include "String.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "CodePreprocessor.h"
 
 #ifdef BANG_EDITOR
@@ -25,19 +25,19 @@ public:
 
     BehaviourId(const String &behAbsPath)
     {
-        behaviourAbsPath = Persistence::ToAbsolute(behAbsPath, false);
+        behaviourAbsPath = IO::ToAbsolute(behAbsPath, false);
         String code = File::GetContents(behaviourAbsPath);
 
-        List<String> includePaths = Persistence::GetSubDirectories(
-                    Persistence::GetProjectAssetsRootAbs(), true);
+        List<String> includePaths = IO::GetSubDirectories(
+                    IO::GetProjectAssetsRootAbs(), true);
         CodePreprocessor::PreprocessCode(&code, includePaths);
 
-        hash = Persistence::GetHashFromString(code);
+        hash = IO::GetHashFromString(code);
     }
 
     BehaviourId(const String &behAbsPath, const String &_hash)
     {
-        behaviourAbsPath = Persistence::ToAbsolute(behAbsPath, false);
+        behaviourAbsPath = IO::ToAbsolute(behAbsPath, false);
         hash = _hash;
     }
 

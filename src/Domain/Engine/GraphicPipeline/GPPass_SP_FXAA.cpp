@@ -9,8 +9,8 @@ GPPass_SP_FXAA::GPPass_SP_FXAA(GraphicPipeline *graphicPipeline,
     : GPPass(graphicPipeline, subPasses)
 {
     m_fxaaSP = new ShaderProgram(
-                Persistence::ToAbsolute("Shaders/SP_ScreenPass.vert", true),
-                Persistence::ToAbsolute("Shaders/SP_FXAA.frag", true));
+                IO::ToAbsolute("Shaders/SP_ScreenPass.vert", true),
+                IO::ToAbsolute("Shaders/SP_FXAA.frag", true));
 }
 
 void GPPass_SP_FXAA::InPass(const List<Renderer *> &renderers,

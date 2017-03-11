@@ -13,14 +13,14 @@
  * move/rename the files.
  */
 class XMLNode;
-class IFileable;
+class SerializableObject;
 class FileReferencesManager : public QObject
 {
     Q_OBJECT
 
 public:
-    void RegisterIFileable(IFileable *fileable);
-    void UnRegisterIFileable(IFileable *fileable);
+    void RegisterSerializableObject(SerializableObject *fileable);
+    void UnRegisterSerializableObject(SerializableObject *fileable);
 
     void OnFileOrDirNameAboutToBeChanged(const String &absFilepathBefore,
                                          const String &absFilepathNow);
@@ -29,7 +29,7 @@ private:
     // Queue with the changes we are asked for to refactor references.
     // Its a queue of pairs (oldAbsPath, newAbsPath)
     std::queue< std::pair<String, String> > m_queuedNameChanges;
-    Set<IFileable*> m_inMemoryFileables;
+    Set<SerializableObject*> m_inMemoryFileables;
 
     FileReferencesManager();
     virtual ~FileReferencesManager();
@@ -37,7 +37,7 @@ private:
     static FileReferencesManager *GetInstance();
 
     void RefactorFiles(const String &relPathBefore, const String &relPathNow);
-    void RefactorIFileables(const String &relPathBefore,
+    void RefactorSerializableObject(const String &relPathBefore,
                             const String &relPathNow);
 
     bool RefactorXMLInfo(XMLNode *xmlInfo,
@@ -48,7 +48,7 @@ private slots:
     void TreatNextQueuedFileOrDirNameChange();
 
     friend class Explorer;
-    friend class IFileable;
+    friend class SerializableObject;
 };
 
 #endif // FILEREFERENCESMANAGER_H

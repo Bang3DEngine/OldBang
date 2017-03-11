@@ -2,7 +2,7 @@
 
 #include "Debug.h"
 #include "FileReader.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
@@ -19,7 +19,7 @@ FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &i
 
 QPixmap FontAssetFile::GetIcon() const
 {
-    String fp = Persistence::ToAbsolute("./Icons/NoAssetIcon.png", true);
+    String fp = IO::ToAbsolute("./Icons/NoAssetIcon.png", true);
     QPixmap pm(fp.ToQString());
     return pm;
 }

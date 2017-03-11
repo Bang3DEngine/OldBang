@@ -6,13 +6,13 @@
 #include "Object.h"
 #include "TypeMap.h"
 #include "IWindow.h"
-#include "Persistence.h"
+#include "IO.h"
 
 class Time;
 class Input;
 class Console;
 class IWindow;
-class Persistence;
+class IO;
 class EditorWindow;
 class ShortcutManager;
 /**

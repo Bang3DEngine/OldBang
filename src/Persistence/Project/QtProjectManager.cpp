@@ -3,7 +3,7 @@
 #include "Debug.h"
 #include "Project.h"
 #include "SystemUtils.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "EditorWindow.h"
 #include "ProjectManager.h"
 
@@ -32,34 +32,41 @@ String QtProjectManager::GetQtProjectFilepathPrefix()
 
 bool QtProjectManager::IsQtCreatorOpenedCurrentProject()
 {
-    String projFilepath = QtProjectManager::GetQtProjectFilepath();
-    String query = "ps -e";
-
     String output;
-    SystemUtils::System(query, &output);
-    return output.Contains("qtcreator");
+    SystemUtils::System("ps", {"-eo", "command"}, &output);
+
+    bool alreadyOpened = false;
+    List<String> outputLines = output.Split('\n').ToList();
+    for (const String &line : outputLines)
+    {
+        if (line.Contains("qtcreator") && !line.Contains("Bang.pro"))
+        {
+            alreadyOpened = true;
+            break;
+        }
+    }
+    return alreadyOpened;
 }
 
 void QtProjectManager::CreateQtProjectFile()
 {
     Project *p_proj = ProjectManager::GetCurrentProject();
     String projAbsDir = p_proj->GetProjectRootFilepath();
-    String projName = p_proj->GetProjectName();
- const String &engineAbsDir = Persistence::GetEngineRootAbs();
+    const String &engineAbsDir = IO::GetEngineRootAbs();
     const String &projAssetsDir = projAbsDir + "/Assets";
 
-    List<String> headers = Persistence::GetFiles(projAssetsDir, true, {"h"});
+    List<String> headers = IO::GetFiles(projAssetsDir, true, {"h"});
     List<String> engineHeaders =
-            Persistence::GetFiles(engineAbsDir, true, {"h"});
+            IO::GetFiles(engineAbsDir, true, {"h"});
 
-    List<String> sources = Persistence::GetFiles(projAssetsDir, true, {"cpp"});
+    List<String> sources = IO::GetFiles(projAssetsDir, true, {"cpp"});
     List<String> engineSources =
-            Persistence::GetFiles(engineAbsDir, true, {"cpp"});
+            IO::GetFiles(engineAbsDir, true, {"cpp"});
 
     List<String> projIncludePaths =
-         Persistence::GetSubDirectories(projAssetsDir, true);
+         IO::GetSubDirectories(projAssetsDir, true);
     List<String> engineIncludePaths =
-         Persistence::GetSubDirectories(engineAbsDir, true);
+         IO::GetSubDirectories(engineAbsDir, true);
 
     String headersString = String::Join(headers, "\n");
     String engineHeadersString = String::Join(engineHeaders, "\n");
@@ -68,31 +75,33 @@ void QtProjectManager::CreateQtProjectFile()
     String projIncludePathsString = String::Join(projIncludePaths, "\n");
     String engineIncludePathsString = String::Join(engineIncludePaths, "\n");
 
-    Persistence::CreateDirectory(QtProjectManager::GetQtProjectFilepathDir());
+    IO::CreateDirectory(QtProjectManager::GetQtProjectFilepathDir());
 
     String projFilepathPrefix = QtProjectManager::GetQtProjectFilepathPrefix();
 
-    Persistence::WriteToFile(projFilepathPrefix + ".files",
-                                  headersString + "\n" +
-                                  sourcesString + "\n" +
-                                  engineHeadersString + "\n" +
-                                  engineSourcesString);
+    IO::WriteToFile(projFilepathPrefix + ".files",
+                             headersString + "\n" +
+                             sourcesString + "\n" +
+                             engineHeadersString + "\n" +
+                             engineSourcesString);
 
-    Persistence::WriteToFile(projFilepathPrefix + ".includes",
-                                  projIncludePathsString + "\n" +
-                                  engineIncludePathsString);
+    IO::WriteToFile(projFilepathPrefix + ".includes",
+                             projIncludePathsString + "\n" +
+                             engineIncludePathsString);
 
-    Persistence::WriteToFile(projFilepathPrefix + ".creator", "[General]");
-    Persistence::WriteToFile(projFilepathPrefix + ".config", "");
+    IO::WriteToFile(projFilepathPrefix + ".creator", "[General]");
+    IO::WriteToFile(projFilepathPrefix + ".config", "");
 }
 
 void QtProjectManager::OpenBehaviourInQtCreator(const String &behFilepath)
 {
     bool alreadyOpened = QtProjectManager::IsQtCreatorOpenedCurrentProject();
-    String qtProjFilepath = alreadyOpened ?
-                " -client " : QtProjectManager::GetQtProjectFilepath();
-    String cmd = "qtcreator " + qtProjFilepath + " " + behFilepath;
-    SystemUtils::SystemBackground(cmd);
+
+    List<String> args = {};
+    if (alreadyOpened) { args.PushBack("-client"); }
+    else { args.PushBack(QtProjectManager::GetQtProjectFilepath()); }
+    args.PushBack(behFilepath);
+    SystemUtils::SystemBackground("qtcreator", args);
 }
 
 QtProjectManager::QtProjectManager()

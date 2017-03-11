@@ -1,8 +1,7 @@
 #include "EngineConfig.h"
 
-#include "FileWriter.h"
 #include "FileReader.h"
-#include "Persistence.h"
+#include "IO.h"
 
 EngineConfig::EngineConfig()
 {
@@ -15,7 +14,7 @@ void EngineConfig::CleanOutdatedRecentProjectList()
          it != recentProjectsList.End(); ++it)
     {
         String recentProject = *it;
-        if (!Persistence::ExistsFile(recentProject) ||              // Remove non-existing
+        if (!IO::ExistsFile(recentProject) ||              // Remove non-existing
             recentProjectsList.CountOccurrences(recentProject) > 1) // Remove repeated
         {
             it = recentProjectsList.Remove(it);
@@ -36,20 +35,19 @@ void EngineConfig::WriteListToFile(const String &filepath,
         content += str;
         content += "\n";
     }
-
-    Persistence::WriteToFile(filepath, content);
+    IO::WriteToFile(filepath, content);
 }
 
 String EngineConfig::GetRecentProjectsFilepath()
 {
-    return Persistence::GetEngineRootAbs() + "/config/RecentProjects.cfg";
+    return IO::GetEngineRootAbs() + "/config/RecentProjects.cfg";
 }
 
 List<String> EngineConfig::GetRecentProjectsList()
 {
     String recentProjectConfigFilepath = EngineConfig::GetRecentProjectsFilepath();
     String recentProjectsContent =
-            FileReader::GetContents(recentProjectConfigFilepath);
+            IO::GetFileContents(recentProjectConfigFilepath);
 
     Array<String> projectsList = recentProjectsContent.Split('\n');
 

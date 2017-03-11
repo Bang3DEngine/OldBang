@@ -4,7 +4,7 @@
 
 #include "Time.h"
 #include "XMLNode.h"
-#include "Persistence.h"
+#include "IO.h"
 
 Project::Project()
 {
@@ -25,12 +25,12 @@ String Project::GetFileExtension()
     return Project::GetFileExtensionStatic();
 }
 
-void Project::ReadXMLInfo(const XMLNode *xmlInfo)
+void Project::Read(const XMLNode *xmlInfo)
 {
     m_randomId = xmlInfo->GetString("RandomID");
 }
 
-void Project::FillXMLInfo(XMLNode *xmlInfo) const
+void Project::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Project");
     xmlInfo->SetString("RandomID", m_randomId);
@@ -43,7 +43,7 @@ const String&  Project::GetProjectRootFilepath() const
 
 String Project::GetProjectDir() const
 {
-    return Persistence::GetDir(m_projectRootFilepath);
+    return IO::GetDir(m_projectRootFilepath);
 }
 
 String Project::GetProjectAssetsRootFilepath() const
@@ -59,7 +59,7 @@ String Project::GetProjectFileFilepath() const
 
 String Project::GetProjectName() const
 {
-    return Persistence::GetFileName(m_projectRootFilepath);
+    return IO::GetFileName(m_projectRootFilepath);
 }
 
 String Project::GetProjectRandomId() const

@@ -66,26 +66,26 @@ bool Component::IsClosedInInspector() const
 #ifdef BANG_EDITOR
 void Component::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    FillXMLInfo(xmlInfo);
+    Write(xmlInfo);
 }
 
 void Component::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    ReadXMLInfo(xmlInfo);
+    Read(xmlInfo);
 }
 #endif
 
-void Component::ReadXMLInfo(const XMLNode *xmlInfo)
+void Component::Read(const XMLNode *xmlInfo)
 {
-    IFileable::ReadXMLInfo(xmlInfo);
+    SerializableObject::Read(xmlInfo);
 
     SetEnabled(xmlInfo->GetBool("enabled"));
     SetClosedInInspector(xmlInfo->GetBool("closedInInspector"));
 }
 
-void Component::FillXMLInfo(XMLNode *xmlInfo) const
+void Component::Write(XMLNode *xmlInfo) const
 {
-    IFileable::FillXMLInfo(xmlInfo);
+    SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName( GetName() );
     xmlInfo->SetPointer("id", this,

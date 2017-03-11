@@ -19,7 +19,7 @@
 #include "AudioClip.h"
 #include "ImageFile.h"
 #include "Texture2D.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "MeshAssetFile.h"
 #include "MaterialAssetFile.h"
 #include "AudioClipAssetFile.h"
@@ -44,9 +44,9 @@ File::File(const QFileSystemModel *model, const QModelIndex &index) :
     m_isFile = !model->isDir(index);
 
     m_path = model->filePath(index).toStdString();
-    m_path = Persistence::ToAbsolute(m_path, false); // To canonical
-    m_name = Persistence::GetFileName(m_path);
-    m_extension = Persistence::GetFileExtensionComplete(m_path);
+    m_path = IO::ToAbsolute(m_path, false); // To canonical
+    m_name = IO::GetFileName(m_path);
+    m_extension = IO::GetFileExtensionComplete(m_path);
 }
 
 File::~File()
@@ -183,7 +183,7 @@ File *File::GetSpecificFile(const File &f)
 
 bool File::Exists(const String &filepath)
 {
-    String absFilepath = Persistence::ToAbsolute(filepath, false);
+    String absFilepath = IO::ToAbsolute(filepath, false);
     QFileInfo f(absFilepath.ToQString());
     return f.exists();
 }
@@ -212,12 +212,12 @@ void File::Write(const String &filepath, const List<String> &lines)
 
 String File::GetContents(const String &filepath)
 {
-    return FileReader::GetContents(filepath);
+    return IO::GetFileContents(filepath);
 }
 
 String File::GetContents() const
 {
-    return FileReader::GetContents(m_path);
+    return IO::GetFileContents(m_path);
 }
 
 QPixmap File::GetIcon() const
@@ -225,19 +225,19 @@ QPixmap File::GetIcon() const
     String fp = "";
     if (IsPrefabAsset())
     {
-        fp = Persistence::ToAbsolute("./Icons/PrefabAssetIcon.png", true);
+        fp = IO::ToAbsolute("./Icons/PrefabAssetIcon.png", true);
     }
     else if (IsBehaviour())
     {
-        fp = Persistence::ToAbsolute("./Icons/BehaviourIcon.png", true);
+        fp = IO::ToAbsolute("./Icons/BehaviourIcon.png", true);
     }
     else if (IsScene())
     {
-        fp = Persistence::ToAbsolute("./Icons/SceneIcon.png", true);
+        fp = IO::ToAbsolute("./Icons/SceneIcon.png", true);
     }
     else
     {
-        fp = Persistence::ToAbsolute("./Icons/OtherFileIcon.png", true);
+        fp = IO::ToAbsolute("./Icons/OtherFileIcon.png", true);
     }
 
     // Its a texture, the icon is the image itself
@@ -291,7 +291,7 @@ QPixmap File::AddIconAssetTypeDistinctor(const QPixmap &pm, bool isAsset)
 {
     String overlayPath = isAsset ? "./Icons/AssetDistinctor.png" :
                                    "./Icons/NoAssetDistinctor.png";
-    String fp = Persistence::ToAbsolute(overlayPath, true);
+    String fp = IO::ToAbsolute(overlayPath, true);
     QPixmap distinctorPixmap( fp.ToQString() );
     distinctorPixmap = distinctorPixmap.scaled(
                 32, 32, Qt::KeepAspectRatio,

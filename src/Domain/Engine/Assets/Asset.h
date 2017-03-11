@@ -2,7 +2,7 @@
 #define ASSET_H
 
 #include "IToString.h"
-#include "IFileable.h"
+#include "SerializableObject.h"
 
 #ifdef BANG_EDITOR
 #include "IInspectable.h"
@@ -10,7 +10,7 @@
 
 class AssetsManager;
 class Asset : public IToString
-             ,public IFileable
+             ,public SerializableObject
              #ifdef BANG_EDITOR
              ,public IInspectable
              #endif
@@ -28,8 +28,8 @@ public:
 
     virtual String ToString() const override;
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
     String m_assetFilepath = "";

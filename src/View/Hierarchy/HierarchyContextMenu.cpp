@@ -8,7 +8,6 @@
 #include "Prefab.h"
 #include "Hierarchy.h"
 #include "GameObject.h"
-#include "FileWriter.h"
 #include "Application.h"
 #include "SceneManager.h"
 #include "GameObjectClipboard.h"
@@ -140,7 +139,7 @@ void HierarchyContextMenu::OnCreatePrefab()
     if (filename != "")
     {
         Prefab *prefab = new Prefab(go);
-        Persistence::WriteToFile(filename, prefab->GetXMLInfoString());
+        IO::WriteToFile(filename, prefab->GetSerializedString());
         delete prefab;
     }
 }

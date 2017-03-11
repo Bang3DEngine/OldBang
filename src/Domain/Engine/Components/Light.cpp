@@ -93,16 +93,16 @@ float Light::GetIntensity() const
     return m_intensity;
 }
 
-void Light::ReadXMLInfo(const XMLNode *xmlInfo)
+void Light::Read(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLInfo(xmlInfo);
+    Component::Read(xmlInfo);
     SetIntensity(xmlInfo->GetFloat("Intensity"));
     SetColor(xmlInfo->GetColor("Color"));
 }
 
-void Light::FillXMLInfo(XMLNode *xmlInfo) const
+void Light::Write(XMLNode *xmlInfo) const
 {
-    Component::FillXMLInfo(xmlInfo);
+    Component::Write(xmlInfo);
     xmlInfo->SetTagName("Light");
 
     xmlInfo->SetFloat("Intensity", GetIntensity());

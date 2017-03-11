@@ -223,9 +223,9 @@ String Renderer::GetName() const
     return "Renderer";
 }
 
-void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
+void Renderer::Read(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLInfo(xmlInfo);
+    Component::Read(xmlInfo);
 
     String materialFilepath = xmlInfo->GetFilepath("Material");
     if (!materialFilepath.Empty())
@@ -242,9 +242,9 @@ void Renderer::ReadXMLInfo(const XMLNode *xmlInfo)
     SetDrawWireframe(xmlInfo->GetBool("DrawWireframe"));
 }
 
-void Renderer::FillXMLInfo(XMLNode *xmlInfo) const
+void Renderer::Write(XMLNode *xmlInfo) const
 {
-    Component::FillXMLInfo(xmlInfo);
+    Component::Write(xmlInfo);
     xmlInfo->SetTagName("Renderer");
 
     Material *sharedMat = GetSharedMaterial();

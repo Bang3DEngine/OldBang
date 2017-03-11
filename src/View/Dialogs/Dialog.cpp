@@ -47,7 +47,7 @@ String Dialog::GetOpenDirname(const String &caption,
                     //QFileDialog::DontUseNativeDialog
                 )
             );
-    ASSERT(Persistence::ExistsDirectory(dir), "", return "");
+    ASSERT(IO::ExistsDirectory(dir), "", return "");
 
     return dir;
 }
@@ -67,7 +67,7 @@ String Dialog::GetOpenFilename(const String &caption,
                     0 // QFileDialog::DontUseNativeDialog
                 )
             );
-    ASSERT(Persistence::ExistsFile(filepath), "", return "");
+    ASSERT(IO::ExistsFile(filepath), "", return "");
 
     return filepath;
 }
@@ -91,7 +91,7 @@ String Dialog::GetSaveFilename(const String &caption,
             );
 
     //This function auto detects if it was in the filepath already.
-    filepath = Persistence::AppendExtension(filepath, extension);
+    filepath = IO::AppendExtension(filepath, extension);
     return filepath;
 }
 

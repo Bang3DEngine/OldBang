@@ -82,13 +82,13 @@ void DirectionalLight::OnDrawGizmos(bool depthed, bool overlay)
     }
 }
 
-void DirectionalLight::ReadXMLInfo(const XMLNode *xmlInfo)
+void DirectionalLight::Read(const XMLNode *xmlInfo)
 {
-    Light::ReadXMLInfo(xmlInfo);
+    Light::Read(xmlInfo);
 }
 
-void DirectionalLight::FillXMLInfo(XMLNode *xmlInfo) const
+void DirectionalLight::Write(XMLNode *xmlInfo) const
 {
-    Light::FillXMLInfo(xmlInfo);
+    Light::Write(xmlInfo);
     xmlInfo->SetTagName("DirectionalLight");
 }

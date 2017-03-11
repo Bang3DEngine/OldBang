@@ -29,13 +29,13 @@ ICloneable *Canvas::Clone() const
     return cv;
 }
 
-void Canvas::ReadXMLInfo(const XMLNode *xmlInfo)
+void Canvas::Read(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLInfo(xmlInfo);
+    Component::Read(xmlInfo);
 }
 
-void Canvas::FillXMLInfo(XMLNode *xmlInfo) const
+void Canvas::Write(XMLNode *xmlInfo) const
 {
-    Component::FillXMLInfo(xmlInfo);
+    Component::Write(xmlInfo);
     xmlInfo->SetTagName( GetName() );
 }

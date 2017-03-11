@@ -1,10 +1,8 @@
 #include "XMLNode.h"
 
 #include "XMLParser.h"
-
 #include "FileReader.h"
-#include "FileWriter.h"
-#include "Persistence.h"
+#include "IO.h"
 
 #ifdef BANG_EDITOR
 #include "IAttrWidgetButtonListener.h"

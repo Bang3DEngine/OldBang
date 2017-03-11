@@ -2,9 +2,9 @@
 
 #include "Debug.h"
 #include "Scene.h"
-#include "Debug.h"
+#include "XMLParser.h"
 #include "FileReader.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "Application.h"
 #include "BehaviourHolder.h"
 #include "BehaviourManager.h"
@@ -134,19 +134,19 @@ void SceneManager::LoadScene(const String &sceneFilepath)
     SceneManager *sm = SceneManager::GetInstance();
 
     String spath = sceneFilepath;
-    if (!Persistence::ExistsFile(spath))
+    if (!IO::ExistsFile(spath))
     {
-        spath = Persistence::ToAbsolute(spath, false);
+        spath = IO::ToAbsolute(spath, false);
     }
 
-    if (!Persistence::ExistsFile(spath))
+    if (!IO::ExistsFile(spath))
     {
-        spath = Persistence::AppendExtension(
+        spath = IO::AppendExtension(
                     spath, Scene::GetFileExtensionStatic());
     }
 
     sm->m_queuedSceneFilepath = "";
-    if (Persistence::ExistsFile(spath))
+    if (IO::ExistsFile(spath))
     {
         sm->m_queuedSceneFilepath = spath;
     }
@@ -181,12 +181,12 @@ void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
     Scene *scene = new Scene();
     #endif
 
-    FileReader::ReadScene(sceneFilepath, scene);
     if (scene)
     {
+        scene->ReadFromFile(sceneFilepath);
         SceneManager::AddScene(scene);
         SceneManager::SetActiveScene(scene);
-        Persistence::SetActiveSceneFilepath(sceneFilepath);
+        IO::SetActiveSceneFilepath(sceneFilepath);
     }
     else
     {

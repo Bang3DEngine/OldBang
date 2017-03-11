@@ -9,7 +9,7 @@
 #include "Explorer.h"
 #include "Hierarchy.h"
 #include "Application.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "EditorWindow.h"
 #include "InspectorWidget.h"
 #include "DialogBrowseAssetFile.h"
@@ -27,7 +27,7 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
     // Icon
     String filepath = xmlAttribute.GetValue();
     bool isEngineFile = xmlAttribute.HasProperty(XMLProperty::IsEngineFile);
-    filepath = Persistence::ToAbsolute(filepath, isEngineFile);
+    filepath = IO::ToAbsolute(filepath, isEngineFile);
     //
 
     m_iconLabel = new QLabel();
@@ -111,7 +111,7 @@ void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
                                    XMLProperty::FileExtension.GetName()),
                                m_xmlAttribute.GetProperties());
 
-    String fileName = Persistence::GetFileName(m_filepath);
+    String fileName = IO::GetFileName(m_filepath);
     String fileText = !fileName.Empty() ? fileName : "None";
     m_filepathLineEdit->SetBold( !fileName.Empty() );
     m_filepathLineEdit->setText(fileText.ToQString());
@@ -194,8 +194,8 @@ void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
 
 void AttrWidgetFile::OnDoubleClick()
 {
-    ASSERT(Persistence::ExistsFile(m_filepath));
-    ASSERT(!Persistence::IsEngineFile(m_filepath));
+    ASSERT(IO::ExistsFile(m_filepath));
+    ASSERT(!IO::IsEngineFile(m_filepath));
     Explorer::GetInstance()->SelectFile(m_filepath);
 }
 

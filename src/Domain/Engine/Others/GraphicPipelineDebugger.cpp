@@ -2,7 +2,7 @@
 
 #include "Time.h"
 #include "Input.h"
-#include "Persistence.h"
+#include "IO.h"
 
 String GraphicPipelineDebugger::c_debugDir = "/home/sephirot47/Bang/tmp";
 
@@ -15,8 +15,8 @@ void GraphicPipelineDebugger::Reset()
 {
     if (Input::GetKeyDown(Input::Key::Q))
     {
-        Persistence::Remove(GraphicPipelineDebugger::c_debugDir);
-        Persistence::CreateDirectory(GraphicPipelineDebugger::c_debugDir);
+        IO::Remove(GraphicPipelineDebugger::c_debugDir);
+        IO::CreateDirectory(GraphicPipelineDebugger::c_debugDir);
     }
 }
 

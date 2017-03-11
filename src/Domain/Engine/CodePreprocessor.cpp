@@ -4,7 +4,7 @@
 
 #include "File.h"
 #include "Debug.h"
-#include "Persistence.h"
+#include "IO.h"
 
 String CodePreprocessor::
        GetIncludeReplacementString(const String &includeDirective,
@@ -22,11 +22,11 @@ String CodePreprocessor::
     for (String includePathDir : includePaths)
     {
         String filepath = "";
-        includePathDir = Persistence::ToAbsolute(includePathDir, true);
+        includePathDir = IO::ToAbsolute(includePathDir, true);
         filepath = includePathDir + "/" + includeFile;
         if (!File::Exists(filepath))
         {
-            includePathDir = Persistence::ToAbsolute(includePathDir, false);
+            includePathDir = IO::ToAbsolute(includePathDir, false);
         }
         filepath = includePathDir + "/" + includeFile;
 

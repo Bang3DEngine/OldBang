@@ -1,6 +1,7 @@
 #include "TextFile.h"
 
 #include "FileReader.h"
+#include "IO.h"
 
 #ifdef BANG_EDITOR
 #include "TextFileInspectable.h"
@@ -9,7 +10,7 @@
 TextFile::TextFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    m_contents = FileReader::GetContents(m_path);
+    m_contents = IO::GetFileContents(m_path);
 }
 
 String TextFile::GetContents() const

@@ -9,8 +9,7 @@
 #include "Project.h"
 #include "XMLNode.h"
 #include "XMLParser.h"
-#include "FileWriter.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "SceneManager.h"
 #include "EngineConfig.h"
 
@@ -42,8 +41,8 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     #endif
 
     ProjectManager::s_currentProject = new Project();
-    ProjectManager::s_currentProject->ReadXMLInfo(xmlInfo);
-    String projectDir = Persistence::GetDir(projectFilepath);
+    ProjectManager::s_currentProject->Read(xmlInfo);
+    String projectDir = IO::GetDir(projectFilepath);
     ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 
     #ifdef BANG_EDITOR
@@ -61,14 +60,14 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     #endif
 
     // Set persistence variables
-    Persistence::GetInstance()->c_ProjectRootAbsolute =
+    IO::GetInstance()->c_ProjectRootAbsolute =
             ProjectManager::s_currentProject->GetProjectRootFilepath();
-    Persistence::GetInstance()->c_ProjectAssetsRootAbsolute =
-            Persistence::GetProjectRootAbs() + "/Assets";
+    IO::GetInstance()->c_ProjectAssetsRootAbsolute =
+            IO::GetProjectRootAbs() + "/Assets";
 
     // Open the first found scene
     List<String> sceneFilepaths =
-            Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true,
+            IO::GetFiles(IO::GetProjectAssetsRootAbs(), true,
                                   {"*." + Scene::GetFileExtensionStatic()});
 
     #ifdef BANG_EDITOR
@@ -96,9 +95,9 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
                                           const String &projectName)
 {
     String projectDir = projectContainingDir + "/" + projectName;
-    if (!Persistence::ExistsDirectory(projectDir))
+    if (!IO::ExistsDirectory(projectDir))
     {
-        if (!Persistence::CreateDirectory(projectDir))
+        if (!IO::CreateDirectory(projectDir))
         {
             Debug_Error ("Could not create project in directory '" <<
                          projectDir << "'.");
@@ -121,7 +120,7 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
             CreateNewProjectFileOnly(projectFileFilepath);
     ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 
-    Persistence::CreateDirectory(projectDir + "/Assets");
+    IO::CreateDirectory(projectDir + "/Assets");
 
     return ProjectManager::s_currentProject;
 }
@@ -129,15 +128,14 @@ Project* ProjectManager::CreateNewProject(const String &projectContainingDir,
 Project *ProjectManager::CreateNewProjectFileOnly(const String &projectFilepath)
 {
     Project *proj = new Project();
-    Persistence::WriteToFile(projectFilepath, proj->GetXMLInfoString());
+    proj->WriteToFile(projectFilepath);
     return proj;
 }
 
 void ProjectManager::SaveProject(const Project *project)
 {
     ASSERT(project);
-    bool ok = Persistence::WriteToFile(project->GetProjectFileFilepath(),
-                                       project->GetXMLInfoString());
+    bool ok = project->WriteToFile(project->GetProjectFileFilepath());
     if (ok)
     {
         Debug_Status("Project '" << project->GetProjectName() <<
@@ -180,7 +178,7 @@ String ProjectManager::DialogCreateNewProject()
         if (ok)
         {
             String projectPath = dirPath + "/" + projectName;
-            if (!Persistence::ExistsDirectory(projectPath))
+            if (!IO::ExistsDirectory(projectPath))
             {
                 ProjectManager::CreateNewProject(dirPath, projectName);
                 return ProjectManager::GetCurrentProject()->

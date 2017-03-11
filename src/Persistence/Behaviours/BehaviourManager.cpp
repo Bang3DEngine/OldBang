@@ -6,7 +6,7 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Project.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "Application.h"
 #include "SystemUtils.h"
 #include "SceneManager.h"
@@ -33,11 +33,11 @@ BehaviourManager *BehaviourManager::GetInstance()
 
 void BehaviourManager::RemoveMergedLibraryFiles()
 {
-    List<String> libFilepaths = Persistence::GetFiles(
+    List<String> libFilepaths = IO::GetFiles(
                 BehaviourManager::GetCurrentLibsDir(), true, {"*.so.*"});
     for (const String &libFilepath : libFilepaths)
     {
-        Persistence::Remove(libFilepath);
+        IO::Remove(libFilepath);
     }
 }
 
@@ -49,13 +49,13 @@ QLibrary *BehaviourManager::GetBehavioursMergedLibrary()
 
 List<String> BehaviourManager::GetBehavioursSourcesFilepathsList()
 {
-    return Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(),
+    return IO::GetFiles(IO::GetProjectAssetsRootAbs(),
                                  true, {"cpp"});
 }
 
 List<String> BehaviourManager::GetBehavioursObjectsFilepathsList()
 {
-    return Persistence::GetFiles(BehaviourManager::GetCurrentLibsDir(),
+    return IO::GetFiles(BehaviourManager::GetCurrentLibsDir(),
                                  true, {"o"});
 }
 
@@ -101,7 +101,7 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool forGame, bool *stopFlag)
     #else
     // In game, the library is compiled from before.
     Project *project = ProjectManager::GetCurrentProject();
-    String libDir = Persistence::GetProjectLibsRootAbs();
+    String libDir = IO::GetProjectLibsRootAbs();
     String projId = project->GetProjectRandomId();
     String libFilepath = "Behaviours.so." + projId + ".1.1";
     String libOutput = libDir + "/" + libFilepath;

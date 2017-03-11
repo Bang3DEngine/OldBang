@@ -3,7 +3,7 @@
 #include "Debug.h"
 
 #include "FileReader.h"
-#include "Persistence.h"
+#include "IO.h"
 
 #ifdef BANG_EDITOR
 #include "IInspectable.h"
@@ -19,7 +19,7 @@ MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex &index)
 
 QPixmap MeshFile::GetIcon() const
 {
-    String fp = Persistence::ToAbsolute("./Icons/MeshAssetIcon.png", true);
+    String fp = IO::ToAbsolute("./Icons/MeshAssetIcon.png", true);
     QPixmap pm(fp.ToQString());
     return pm;
 }

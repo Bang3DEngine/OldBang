@@ -35,13 +35,6 @@ public:
         Button
     );
 
-private:
-    String m_name = "";
-    XMLAttribute::Type m_type = XMLAttribute::Type::Bool;
-    String m_value = "";
-    Array<XMLProperty> m_properties;
-
-public:
     XMLAttribute();
     XMLAttribute(const String &name,
                  const String &value,
@@ -127,6 +120,13 @@ public:
     const Array<XMLProperty>& GetProperties() const;
 
     static XMLAttribute FromString(const String &string);
+
+private:
+    String m_name = "";
+    XMLAttribute::Type m_type = XMLAttribute::Type::Bool;
+    String m_value = "";
+    Array<XMLProperty> m_properties;
+
 };
 
 #endif // XMLATTRIBUTE_H

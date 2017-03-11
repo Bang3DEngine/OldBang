@@ -64,17 +64,17 @@ Texture2D *UIImage::GetTexture() const
     return m_imageTexture;
 }
 
-void UIImage::ReadXMLInfo(const XMLNode *xmlInfo)
+void UIImage::Read(const XMLNode *xmlInfo)
 {
-    UIRenderer::ReadXMLInfo(xmlInfo);
+    UIRenderer::Read(xmlInfo);
 
     String texFilepath = xmlInfo->GetFilepath("Image");
     m_imageTexture = AssetsManager::Load<Texture2D>(texFilepath);
 }
 
-void UIImage::FillXMLInfo(XMLNode *xmlInfo) const
+void UIImage::Write(XMLNode *xmlInfo) const
 {
-    UIRenderer::FillXMLInfo(xmlInfo);
+    UIRenderer::Write(xmlInfo);
     xmlInfo->SetTagName(GetName());
 
     String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";

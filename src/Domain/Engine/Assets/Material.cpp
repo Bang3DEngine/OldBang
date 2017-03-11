@@ -7,7 +7,7 @@
 #include "Vector4.h"
 #include "Texture.h"
 #include "Texture2D.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"
 #include "ShaderProgram.h"
@@ -17,8 +17,8 @@ Material::Material() : Asset()
 {
     // TODO: Create shaderProgram asset and use AssetManager to load this
     SetShaderProgram(new ShaderProgram(
-                      Persistence::ToAbsolute("Shaders/G_Default.vert", true),
-                      Persistence::ToAbsolute("Shaders/G_Default.frag", true)
+                      IO::ToAbsolute("Shaders/G_Default.vert", true),
+                      IO::ToAbsolute("Shaders/G_Default.frag", true)
                      )
                     );
 }
@@ -52,9 +52,9 @@ String Material::GetFileExtension()
     return Material::GetFileExtensionStatic();
 }
 
-void Material::ReadXMLInfo(const XMLNode *xmlInfo)
+void Material::Read(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLInfo(xmlInfo);
+    Asset::Read(xmlInfo);
 
     SetDiffuseColor(xmlInfo->GetColor("DiffuseColor"));
     SetShininess(xmlInfo->GetFloat("Shininess"));
@@ -76,9 +76,9 @@ void Material::ReadXMLInfo(const XMLNode *xmlInfo)
     }
 }
 
-void Material::FillXMLInfo(XMLNode *xmlInfo) const
+void Material::Write(XMLNode *xmlInfo) const
 {
-    Asset::FillXMLInfo(xmlInfo);
+    Asset::Write(xmlInfo);
     xmlInfo->SetTagName("Material");
 
     xmlInfo->SetColor("DiffuseColor", GetDiffuseColor());

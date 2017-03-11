@@ -8,7 +8,7 @@
 #include "Array.h"
 #include "Asset.h"
 #include "String.h"
-#include "Persistence.h"
+#include "IO.h"
 
 class AudioSource;
 class AudioClip : public Asset
@@ -31,8 +31,8 @@ public:
 
     const String &GetAudioFilepath() const;
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     void OnAudioSourceAttached(AudioSource *as);
     void OnAudioSourceDettached(AudioSource *as);

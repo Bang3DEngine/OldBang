@@ -6,7 +6,7 @@
 #include "XMLNode.h"
 #include "Project.h"
 #include "SystemUtils.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "ProjectManager.h"
 #include "BehaviourManager.h"
 
@@ -29,14 +29,12 @@ void BehaviourMergeObjectsRunnable::Merge()
     String version = std::to_string(Time::GetNow());
     if (m_forGame)
     {
-        String gameProjectDir = Persistence::GetDir(libOutputFilepath);
-        gameProjectDir = Persistence::GetDirUp(gameProjectDir);
+        String gameProjectDir = IO::GetDir(libOutputFilepath);
+        gameProjectDir = IO::GetDirUp(gameProjectDir);
         String gameProjectFilepath = gameProjectDir + "/Game.bproject";
 
-        String gameProjectContents =
-                Persistence::GetFileContents(gameProjectFilepath);
         Project *gameProject = new Project();
-        gameProject->ReadXMLInfoFromString(gameProjectContents);
+        gameProject->ReadFromString(gameProjectFilepath);
         version = gameProject->GetProjectRandomId();
     }
     libOutputFilepath += version + ".1.1";

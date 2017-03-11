@@ -9,7 +9,7 @@
 #include "Inspector.h"
 #include "EditorWindow.h"
 #include "GameObjectClipboard.h"
-#include "Persistence.h"
+#include "IO.h"
 
 ExplorerContextMenu::ExplorerContextMenu(Explorer *explorer) :
     ContextMenu(explorer), m_explorer(explorer)
@@ -61,14 +61,14 @@ void ExplorerContextMenu::OnDuplicateClicked()
     ASSERT(!m_explorer->GetSelectedFileOrDirPath().Empty());
 
     String fromPath = m_explorer->GetSelectedFileOrDirPath();
-    String toPath = Persistence::GetDuplicateName(fromPath);
-    if (Persistence::IsFile(fromPath))
+    String toPath = IO::GetDuplicateName(fromPath);
+    if (IO::IsFile(fromPath))
     {
-        Persistence::DuplicateFile(fromPath, toPath);
+        IO::DuplicateFile(fromPath, toPath);
     }
-    else if (Persistence::IsDir(fromPath))
+    else if (IO::IsDir(fromPath))
     {
-        Persistence::DuplicateDir(fromPath, toPath);
+        IO::DuplicateDir(fromPath, toPath);
     }
 
     m_explorer->SelectFile(toPath);
@@ -77,8 +77,8 @@ void ExplorerContextMenu::OnDuplicateClicked()
 void ExplorerContextMenu::OnDeleteClicked()
 {
     String path = m_explorer->GetSelectedFile().GetAbsolutePath();
-    String name = Persistence::GetFileNameWithExtension(path);
-    ASSERT( Persistence::Exists(path) );
+    String name = IO::GetFileNameWithExtension(path);
+    ASSERT( IO::Exists(path) );
 
     Dialog::Reply reply = Dialog::GetYesNo(
                 "Delete file or directory",
@@ -96,7 +96,7 @@ void ExplorerContextMenu::OnDeleteClicked()
             delete lastInspectable;
             m_explorer->m_lastIInspectableInInspector = nullptr;
         }
-        Persistence::Remove(path);
+        IO::Remove(path);
     }
 }
 
@@ -104,9 +104,9 @@ void ExplorerContextMenu::OnCreateDirClicked()
 {
     String currentDir = m_explorer->GetCurrentDir();
     String dirPath = currentDir + "/New_Folder";
-    dirPath = Persistence::GetDuplicateName(dirPath);
-    dirPath = Persistence::ToAbsolute(dirPath, false);
+    dirPath = IO::GetDuplicateName(dirPath);
+    dirPath = IO::ToAbsolute(dirPath, false);
 
-    Persistence::CreateDirectory(dirPath);
+    IO::CreateDirectory(dirPath);
     m_explorer->StartRenaming(dirPath);
 }

@@ -1,7 +1,7 @@
 #include "GameBuilderJob.h"
 
 #include "Debug.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "GameBuilder.h"
 #include "GameBuildDialog.h"
 
@@ -17,7 +17,7 @@ void GameBuilderJob::BuildGame()
     ASSERT(!m_executableFilepath.Empty());
     GameBuilder *gb = GameBuilder::GetInstance(); ASSERT(gb);
 
-    String executableDir = Persistence::GetDir(m_executableFilepath);
+    String executableDir = IO::GetDir(m_executableFilepath);
 
     emit NotifyPercent(0.0f);
 
@@ -64,10 +64,10 @@ void GameBuilderJob::BuildGame()
     CHECK_CANCEL;
 
     emit NotifyMessage("Moving the executable into the desired location...");
-    const String c_initialOutputDir = Persistence::GetEngineRootAbs() +
+    const String c_initialOutputDir = IO::GetEngineRootAbs() +
                                       "/bin/Game.exe";
-    Persistence::Remove(m_executableFilepath);
-    Persistence::Move(c_initialOutputDir, m_executableFilepath);
+    IO::Remove(m_executableFilepath);
+    IO::Move(c_initialOutputDir, m_executableFilepath);
 
     emit NotifyPercent(1.0f);
 

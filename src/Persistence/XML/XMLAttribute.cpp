@@ -5,7 +5,7 @@
 
 #include "Debug.h"
 #include "Object.h"
-#include "Persistence.h"
+#include "IO.h"
 
 #ifdef BANG_EDITOR
 #include "IAttrWidgetButtonListener.h"
@@ -222,7 +222,7 @@ void XMLAttribute::SetFilepath(const String &filepath,
                                const Array<XMLProperty> &properties)
 {
     String relFilepath = filepath.Empty() ?
-                             "" : Persistence::ToRelative(filepath);
+                             "" : IO::ToRelative(filepath);
     Set(m_name, relFilepath, XMLAttribute::Type::File, properties);
 
     if (!fileExtension.Empty())
@@ -232,7 +232,7 @@ void XMLAttribute::SetFilepath(const String &filepath,
         SetProperty(extensionProp);
     }
 
-    if (Persistence::IsEngineFile(filepath))
+    if (IO::IsEngineFile(filepath))
     {
         SetProperty(XMLProperty::IsEngineFile);
     }
@@ -375,7 +375,7 @@ float XMLAttribute::GetFloat() const
 
 String XMLAttribute::GetFilepath() const
 {
-    return Persistence::ToAbsolute(GetValue(), HasProperty(XMLProperty::IsEngineFile));
+    return IO::ToAbsolute(GetValue(), HasProperty(XMLProperty::IsEngineFile));
 }
 
 String XMLAttribute::GetString() const
@@ -496,35 +496,34 @@ XMLAttribute XMLAttribute::FromString(const String &string)
     String str = string.Trim();
 
     const String TokenSpace = " \t\n";
-    int attrNameBegin = str.find_first_not_of(TokenSpace, 0);
-    if (attrNameBegin == -1) { return attribute; }
+    int nameBegin = str.IndexOfOneNotOf(TokenSpace, 0);
+    if (nameBegin == -1) { return attribute; }
 
-    int attrNameEnd = str.find_first_of(TokenSpace + ":", attrNameBegin + 1);
-    if (attrNameEnd == -1) { return attribute; }
+    int nameEnd = str.IndexOfOneOf(TokenSpace + ":", nameBegin + 1);
+    if (nameEnd == -1) { return attribute; }
 
-    int attrTypeBegin = str.find_first_not_of(TokenSpace, attrNameEnd + 1);
-    if (attrTypeBegin == -1) { return attribute; }
+    int typeBegin = str.IndexOfOneNotOf(TokenSpace, nameEnd + 1);
+    if (typeBegin == -1) { return attribute; }
 
-    int attrTypeEnd = str.find_first_of(TokenSpace + "=", attrTypeBegin + 1);
-    if (attrTypeEnd == -1) { return attribute; }
+    int typeEnd = str.IndexOfOneOf(TokenSpace + "=", typeBegin + 1);
+    if (typeEnd == -1) { return attribute; }
 
-    int attrValueBegin = str.find_first_of("\"", attrTypeEnd + 1) + 1;
-    if (attrValueBegin == -1) { return attribute; }
+    int valueBegin = str.IndexOfOneOf("\"", typeEnd + 1) + 1;
+    if (valueBegin == -1) { return attribute; }
 
-    int attrValueEnd = str.find_first_of("\"", attrValueBegin);
-    if (attrValueEnd == -1) { return attribute; }
+    int valueEnd = str.IndexOfOneOf("\"", valueBegin);
+    if (valueEnd == -1) { return attribute; }
 
-    int attrPropertiesBegin = str.find_first_of("{", attrValueEnd) + 1;
-    if (attrPropertiesBegin == -1) { return attribute; }
+    int propertiesBegin = str.IndexOfOneOf("{", valueEnd) + 1;
+    if (propertiesBegin == -1) { return attribute; }
 
-    int attrPropertiesEnd = str.find_first_of("}", attrPropertiesBegin);
-    if (attrPropertiesEnd == -1) { return attribute; }
+    int propertiesEnd = str.IndexOfOneOf("}", propertiesBegin);
+    if (propertiesEnd == -1) { return attribute; }
 
-    String name = str.substr(attrNameBegin, attrNameEnd - attrNameBegin);
-    String typeString = str.substr(attrTypeBegin, attrTypeEnd - attrTypeBegin);
-    String value = str.substr(attrValueBegin, attrValueEnd - attrValueBegin);
-    String propertiesString = str.substr(attrPropertiesBegin,
-                                      attrPropertiesEnd - attrPropertiesBegin);
+    String name = str.SubString(nameBegin, nameEnd-1);
+    String typeString = str.SubString(typeBegin, typeEnd-1);
+    String value = str.SubString(valueBegin, valueEnd-1);
+    String propertiesString = str.SubString(propertiesBegin, propertiesEnd-1);
     Array<String> properties = propertiesString.Split(',');
 
     attribute.SetName(name);

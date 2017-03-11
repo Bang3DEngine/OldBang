@@ -259,18 +259,18 @@ void Camera::OnDrawGizmos(bool depthed, bool overlay)
 
 void Camera::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    FillXMLInfo(xmlInfo);
+    Write(xmlInfo);
 }
 
 void Camera::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    ReadXMLInfo(xmlInfo);
+    Read(xmlInfo);
 }
 #endif
 
-void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
+void Camera::Read(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLInfo(xmlInfo);
+    Component::Read(xmlInfo);
 
     SetClearColor(xmlInfo->GetColor("ClearColor"));
     SetFovDegrees(xmlInfo->GetFloat("FOVDegrees"));
@@ -282,9 +282,9 @@ void Camera::ReadXMLInfo(const XMLNode *xmlInfo)
     SetOrthoHeight( xmlInfo->GetFloat("OrthoHeight") );
 }
 
-void Camera::FillXMLInfo(XMLNode *xmlInfo) const
+void Camera::Write(XMLNode *xmlInfo) const
 {
-    Component::FillXMLInfo(xmlInfo);
+    Component::Write(xmlInfo);
     xmlInfo->SetTagName("Camera");
 
     xmlInfo->SetColor("ClearColor", GetClearColor());

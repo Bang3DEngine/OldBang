@@ -158,12 +158,12 @@ Scene *Scene::GetDefaultScene()
     return scene;
 }
 
-void Scene::ReadXMLInfo(const XMLNode *xmlInfo)
+void Scene::Read(const XMLNode *xmlInfo)
 {
-    GameObject::ReadXMLInfo(xmlInfo);
+    GameObject::Read(xmlInfo);
 }
 
-void Scene::FillXMLInfo(XMLNode *xmlInfo) const
+void Scene::Write(XMLNode *xmlInfo) const
 {
     if (HasHideFlag(HideFlags::DontSerialize))
     {
@@ -171,16 +171,16 @@ void Scene::FillXMLInfo(XMLNode *xmlInfo) const
         return;
     }
 
-    GameObject::FillXMLInfo(xmlInfo);
+    GameObject::Write(xmlInfo);
     xmlInfo->SetTagName("Scene");
 
     Camera *cam = GetCamera();
     xmlInfo->SetPointer("id", cam, {XMLProperty::Hidden});
 }
 
-void Scene::PostReadXMLInfo(const XMLNode *xmlInfo)
+void Scene::PostRead(const XMLNode *xmlInfo)
 {
-    GameObject::PostReadXMLInfo(xmlInfo);
+    GameObject::PostRead(xmlInfo);
 
     // In the Editor Scene we'll use the EditorCamera, so skip this
     if (!HasHideFlag(HideFlags::HideInGame))
@@ -188,7 +188,7 @@ void Scene::PostReadXMLInfo(const XMLNode *xmlInfo)
         String camId = xmlInfo->GetString("Camera");
         if (!camId.Empty())
         {
-            const IFileable *f = XMLParser::GetPointerFromId(camId);
+            const SerializableObject *f = XMLParser::GetPointerFromId(camId);
             const Camera *cam = Object::ConstCast<Camera>(f);
             if (cam)
             {

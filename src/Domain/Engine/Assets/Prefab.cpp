@@ -25,7 +25,7 @@ Prefab::Prefab(GameObject *go)
 {
     if (go)
     {
-        m_gameObjectXMLInfoContent = go->GetXMLInfoString();
+        m_gameObjectXMLInfoContent = go->GetSerializedString();
     }
 }
 
@@ -68,15 +68,15 @@ GameObject *Prefab::InstantiateWithoutStarting() const
     {
         XMLNode *xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
         GameObject *go = new GameObject();
-        go->ReadXMLInfo(xmlInfo);
+        go->Read(xmlInfo);
         return go;
     }
     return nullptr;
 }
 
-void Prefab::ReadXMLInfo(const XMLNode *xmlInfo)
+void Prefab::Read(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLInfo(xmlInfo);
+    Asset::Read(xmlInfo);
     String newXMLInfo = xmlInfo->ToString();
     if (m_gameObjectXMLInfoContent != newXMLInfo)
     {
@@ -87,9 +87,9 @@ void Prefab::ReadXMLInfo(const XMLNode *xmlInfo)
     }
 }
 
-void Prefab::FillXMLInfo(XMLNode *xmlInfo) const
+void Prefab::Write(XMLNode *xmlInfo) const
 {
-    Asset::FillXMLInfo(xmlInfo);
+    Asset::Write(xmlInfo);
 
     XMLNode *goInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
     if (goInfo)

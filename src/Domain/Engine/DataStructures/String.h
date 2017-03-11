@@ -73,8 +73,8 @@ public:
     long IndexOfOneNotOf(const String &charSet, long startingPos = 0) const;
 
     // Both startIndex and endIndex are inclusive
-    String SubString(long startIndex,
-                     long endIndex = std::string::npos) const;
+    String SubString(long startIndexInclusive,
+                     long endIndexInclusive = String::npos) const;
 
     const char *ToCString() const;
     QString ToQString() const;
@@ -97,9 +97,11 @@ public:
 
     long Length() const;
     bool Empty() const;
-    bool Contains(const String& str) const;
+    bool Contains(const String& str, bool caseSensitive = true) const;
     bool BeginsWith(const String& str) const;
     bool EndsWith(const String& str) const;
+    String ToUpper() const;
+    String ToLower() const;
 
     String& operator=(const char *cstr);
 
@@ -107,12 +109,15 @@ public:
     static bool IsLetter(char c);
     static bool IsUpperCase(char c);
     static bool IsLowerCase(char c);
+    static char ToUpper(char c);
+    static char ToLower(char c);
 
     static int ToInt(const String &str, bool *ok = nullptr);
     static float ToFloat(const String &str, bool *ok = nullptr);
 
     static String ToString(int i);
     static String ToString(float f, int decimalPlaces = -1);
+    static String ToString(double f, int decimalPlaces = -1);
     static String ToString(const void *v);
     static String ToString(const Color &v);
     static String ToString(const String &v);

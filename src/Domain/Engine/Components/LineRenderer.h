@@ -26,8 +26,8 @@ public:
     virtual AABox GetAABBox() const override;
     const Array<Vector3>& GetPoints() const;
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
     Array<Vector3> m_points;

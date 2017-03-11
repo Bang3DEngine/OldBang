@@ -1,8 +1,7 @@
 #include "Texture2DAssetFileInspectable.h"
 
 #include "Texture2D.h"
-#include "FileWriter.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "AssetsManager.h"
 
 Texture2DAssetFileInspectable::Texture2DAssetFileInspectable

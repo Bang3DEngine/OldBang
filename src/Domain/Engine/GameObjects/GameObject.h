@@ -5,7 +5,7 @@
 #include "AABox.h"
 #include "Object.h"
 #include "Sphere.h"
-#include "IFileable.h"
+#include "SerializableObject.h"
 #include "IToString.h"
 #include "IRenderAgent.h"
 #include "ISceneEventListener.h"
@@ -24,7 +24,7 @@ class GameObject :
                 public Object
                ,public ISceneEventListener
                ,public IToString
-               ,public IFileable
+               ,public SerializableObject
                ,public IRenderAgent
                #ifdef BANG_EDITOR
                ,public IWindowEventManagerListener
@@ -274,9 +274,9 @@ public:
     GameObject *FindInChildren(const String &name);
 
     void UpdateXMLInfo(const XMLNode *xmlInfo);
-    void ReadXMLInfoFirstTime(const XMLNode *xmlInfo);
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    void ReadFirstTime(const XMLNode *xmlInfo);
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     void SetEnabled(bool m_enabled);
     bool IsEnabled() const;

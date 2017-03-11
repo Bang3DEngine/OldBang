@@ -30,13 +30,13 @@ public:
         Default = AddProjectObjectFiles | AddEngineObjectFiles
     };
 
-    static String GetAllEngineObjects(bool editorMode);
+    static List<String> GetAllEngineObjects(bool editorMode);
 
-    static String GetAllProjectSubDirs();
-    static String GetAllEngineSubDirs();
+    static List<String> GetAllProjectSubDirs();
+    static List<String> GetAllEngineSubDirs();
 
-    static String GetQtIncludes();
-    static String GetQtLibrariesDirs();
+    static List<String> GetQtIncludes();
+    static List<String> GetQtLibrariesDirs();
 
     /**
      * @brief Executes a system command.
@@ -45,10 +45,12 @@ public:
      * @param Whether it's been successful or not
      */
     static void System(const String &command,
+                       const List<String> &argsList = {},
                        String *output = nullptr,
                        bool *success = nullptr);
 
-    static void SystemBackground(const String &command);
+    static void SystemBackground(const String &command,
+                                 const List<String> &argsList = {});
 
     static void Compile(List<String> &sourceFilesList,
                         const String &outputLibFilepath,
@@ -59,6 +61,13 @@ public:
 
 private:
     SystemUtils() {}
+
+    static void _System(const String &command,
+                        const List<String> &argsList,
+                        String *output,
+                        bool *success,
+                        bool background);
+
 };
 
 inline SystemUtils::CompilationFlags operator|(SystemUtils::CompilationFlags a,

@@ -5,7 +5,7 @@
 #include "VAO.h"
 #include "VBO.h"
 #include "XMLNode.h"
-#include "IFileable.h"
+#include "SerializableObject.h"
 #include "FileReader.h"
 #include "ShaderProgram.h"
 
@@ -201,16 +201,16 @@ const String &Mesh::GetMeshFilepath() const
     return m_meshFilepath;
 }
 
-void Mesh::ReadXMLInfo(const XMLNode *xmlInfo)
+void Mesh::Read(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLInfo(xmlInfo);
+    Asset::Read(xmlInfo);
     m_meshFilepath = xmlInfo->GetFilepath("MeshFilepath");
     LoadFromFile(m_meshFilepath);
 }
 
-void Mesh::FillXMLInfo(XMLNode *xmlInfo) const
+void Mesh::Write(XMLNode *xmlInfo) const
 {
-    Asset::FillXMLInfo(xmlInfo);
+    Asset::Write(xmlInfo);
     xmlInfo->SetTagName("Mesh");
     xmlInfo->SetFilepath("MeshFilepath", m_meshFilepath, "obj");
 }

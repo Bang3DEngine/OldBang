@@ -2,7 +2,7 @@
 
 #include "Debug.h"
 #include "Project.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "EngineConfig.h"
 #include "ProjectManager.h"
 
@@ -87,7 +87,7 @@ void SelectProjectWindow::FillRecentProjectsList()
     for (String recentProject : recentProjectsFilepath)
     {
         QTableWidgetItem *projNameItem = new QTableWidgetItem(
-                    Persistence::GetFileName(recentProject).ToQString());
+                    IO::GetFileName(recentProject).ToQString());
         QTableWidgetItem *projPathItem = new QTableWidgetItem(
                     recentProject.ToQString());
         listRecentProjects->setItem(i, 0, projNameItem);
@@ -104,7 +104,7 @@ void SelectProjectWindow::OnRecentProjectListSelectionChanged(int row, int colum
     m_selectedRecentProjectFilepath = selectedItem->text();
 
     String newButtonText =
-        "Load " + Persistence::GetFileName(m_selectedRecentProjectFilepath);
+        "Load " + IO::GetFileName(m_selectedRecentProjectFilepath);
 
     buttonLoadRecentProject->setText(newButtonText.ToQString());
 }

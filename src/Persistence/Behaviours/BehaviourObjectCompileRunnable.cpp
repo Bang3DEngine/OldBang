@@ -18,11 +18,11 @@ void BehaviourObjectCompileRunnable::run()
 
 void BehaviourObjectCompileRunnable::CompileBehaviourObject()
 {
-    String behaviourName = Persistence::GetFileName(m_behaviourFilepath);
+    String behaviourName = IO::GetFileName(m_behaviourFilepath);
     String objFilepath =
             BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o";
 
-    Persistence::Remove(objFilepath);
+    IO::Remove(objFilepath);
 
     typedef SystemUtils::CompilationFlags CLFlags;
     bool successCompiling = false; String output = "";

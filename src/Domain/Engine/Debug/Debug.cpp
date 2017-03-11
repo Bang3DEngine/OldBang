@@ -8,7 +8,7 @@
 #include "Matrix4.h"
 #include "IToString.h"
 #include "Quaternion.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "SceneManager.h"
 
 #ifdef BANG_EDITOR
@@ -70,7 +70,7 @@ void Debug::_Status(const String &str, float timeInSeconds)
 
 void Debug::_Log(const String &str, int line, const String &filePath)
 {
-    String fileName = Persistence::GetFileNameWithExtension(filePath);
+    String fileName = IO::GetFileNameWithExtension(filePath);
     std::cerr << c_logPrefix << str << " | " <<
                  fileName << "(" << line << ")" <<  std::endl;
     std::cerr.flush();
@@ -81,7 +81,7 @@ void Debug::_Log(const String &str, int line, const String &filePath)
 
 void Debug::_Warn(const String &str, int line, const String &filePath)
 {
-    String fileName = Persistence::GetFileNameWithExtension(filePath);
+    String fileName = IO::GetFileNameWithExtension(filePath);
     std::cerr << c_warnPrefix << str << " | " <<
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();
@@ -92,7 +92,7 @@ void Debug::_Warn(const String &str, int line, const String &filePath)
 
 void Debug::_Error(const String &str, int line, const String &filePath)
 {
-    String fileName = Persistence::GetFileNameWithExtension(filePath);
+    String fileName = IO::GetFileNameWithExtension(filePath);
     std::cerr << c_errorPrefix << str << " | " <<
                  fileName << "(" << line << ")" << std::endl;
     std::cerr.flush();

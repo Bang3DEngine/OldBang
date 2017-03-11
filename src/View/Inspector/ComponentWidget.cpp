@@ -22,7 +22,7 @@ int ComponentWidget::GetHeightSizeHint()
 void ComponentWidget::Start()
 {
     XMLNode xmlInfo;
-    m_relatedComponent->FillXMLInfo(&xmlInfo);
+    m_relatedComponent->Write(&xmlInfo);
     Init(xmlInfo.GetTagName(), m_relatedComponent);
 
     m_closed = m_relatedComponent->IsClosedInInspector();

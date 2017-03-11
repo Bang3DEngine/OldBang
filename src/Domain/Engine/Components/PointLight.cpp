@@ -69,15 +69,15 @@ float PointLight::GetRange() const
     return m_range;
 }
 
-void PointLight::ReadXMLInfo(const XMLNode *xmlInfo)
+void PointLight::Read(const XMLNode *xmlInfo)
 {
-    Light::ReadXMLInfo(xmlInfo);
+    Light::Read(xmlInfo);
     SetRange(xmlInfo->GetFloat("Range"));
 }
 
-void PointLight::FillXMLInfo(XMLNode *xmlInfo) const
+void PointLight::Write(XMLNode *xmlInfo) const
 {
-    Light::FillXMLInfo(xmlInfo);
+    Light::Write(xmlInfo);
     xmlInfo->SetTagName("PointLight");
 
     xmlInfo->SetFloat("Range", m_range);

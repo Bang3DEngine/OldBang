@@ -2,9 +2,9 @@
 #define PROJECT_H
 
 #include "String.h"
-#include "IFileable.h"
+#include "SerializableObject.h"
 
-class Project : public IFileable
+class Project : public SerializableObject
 {
 public:
     Project();
@@ -13,8 +13,8 @@ public:
     static String GetFileExtensionStatic();
     virtual String GetFileExtension();
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     const String& GetProjectRootFilepath() const;
     String GetProjectDir() const;

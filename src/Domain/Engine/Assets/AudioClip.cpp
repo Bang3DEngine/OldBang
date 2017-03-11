@@ -128,17 +128,17 @@ const String &AudioClip::GetAudioFilepath() const
     return m_audioFileFilepath;
 }
 
-void AudioClip::ReadXMLInfo(const XMLNode *xmlInfo)
+void AudioClip::Read(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLInfo(xmlInfo);
+    Asset::Read(xmlInfo);
 
     m_audioFileFilepath = xmlInfo->GetFilepath("AudioFilepath");
     LoadFromFile( m_audioFileFilepath );
 }
 
-void AudioClip::FillXMLInfo(XMLNode *xmlInfo) const
+void AudioClip::Write(XMLNode *xmlInfo) const
 {
-    Asset::FillXMLInfo(xmlInfo);
+    Asset::Write(xmlInfo);
     xmlInfo->SetTagName("AudioClip");
     xmlInfo->SetFilepath("AudioFilepath", m_audioFileFilepath, "ogg wav");
 }

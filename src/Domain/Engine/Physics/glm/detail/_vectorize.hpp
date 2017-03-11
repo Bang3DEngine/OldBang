@@ -106,7 +106,7 @@ namespace detail
 		GLM_FUNC_QUALIFIER static tvec3<T, P> call(T (*Func) (T x, T y), tvec3<T, P> const & a, tvec3<T, P> const & b)
 		{
 			return tvec3<T, P>(Func(a.x, b.x), Func(a.y, b.y), Func(a.z, b.z));
-		}
+                }
 	};
 
 	template <typename T, precision P>

@@ -6,7 +6,7 @@
 #include <QMessageBox>
 
 #include "String.h"
-#include "Persistence.h"
+#include "IO.h"
 
 class Dialog
 {
@@ -22,10 +22,10 @@ public:
                                  const String &initDirectory = String(QDir::homePath()) );
     static String GetOpenFilename(const String &caption = "Open file",
                                   const String &extension = "*",
-                                  const String &initDir = Persistence::GetProjectAssetsRootAbs());
+                                  const String &initDir = IO::GetProjectAssetsRootAbs());
     static String GetSaveFilename(const String &caption = "Save file",
                                   const String &extension = "*",
-                                  const String &initPath = Persistence::GetProjectAssetsRootAbs(),
+                                  const String &initPath = IO::GetProjectAssetsRootAbs(),
                                   const String &suggestedFilename = "",
                                   QWidget *parent = nullptr);
 

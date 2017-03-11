@@ -388,7 +388,7 @@ GameObject *GameObject::FindInChildren(const String &name)
 
 void GameObject::UpdateXMLInfo(const XMLNode *xmlInfo)
 {
-    IFileable::ReadXMLInfo(xmlInfo);
+    SerializableObject::Read(xmlInfo);
 
     SetEnabled( xmlInfo->GetBool("enabled") );
     SetName( xmlInfo->GetString("name") );
@@ -412,22 +412,22 @@ void GameObject::UpdateXMLInfo(const XMLNode *xmlInfo)
             {
                 ++iChildren;
             }
-            child->ReadXMLInfo(xmlChildInfo);
+            child->Read(xmlChildInfo);
             ++iChildren;
         }
         else
         {
             ASSERT(iComponents < components.Size());
             Component *component = components[iComponents];
-            component->ReadXMLInfo(xmlChildInfo);
+            component->Read(xmlChildInfo);
             ++iComponents;
         }
     }
 }
 
-void GameObject::ReadXMLInfoFirstTime(const XMLNode *xmlInfo)
+void GameObject::ReadFirstTime(const XMLNode *xmlInfo)
 {
-    IFileable::ReadXMLInfo(xmlInfo);
+    SerializableObject::Read(xmlInfo);
 
     SetEnabled( xmlInfo->GetBool("enabled") );
     SetName( xmlInfo->GetString("name") );
@@ -439,7 +439,7 @@ void GameObject::ReadXMLInfoFirstTime(const XMLNode *xmlInfo)
         {
             GameObject *child = new GameObject();
             child->SetParent(this);
-            child->ReadXMLInfo(xmlChild);
+            child->Read(xmlChild);
         }
         else // It's a Component
         {
@@ -496,18 +496,18 @@ void GameObject::ReadXMLInfoFirstTime(const XMLNode *xmlInfo)
 
             if (c)
             {
-                c->ReadXMLInfo(xmlChild);
+                c->Read(xmlChild);
             }
         }
     }
 }
 
-void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
+void GameObject::Read(const XMLNode *xmlInfo)
 {
     // No editor stuff added before
     if (!m_hasBeenReadOnce)
     {
-        ReadXMLInfoFirstTime(xmlInfo);
+        ReadFirstTime(xmlInfo);
         m_hasBeenReadOnce = true;
     }
     else
@@ -516,9 +516,9 @@ void GameObject::ReadXMLInfo(const XMLNode *xmlInfo)
     }
 }
 
-void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
+void GameObject::Write(XMLNode *xmlInfo) const
 {
-    IFileable::FillXMLInfo(xmlInfo);
+    SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName("GameObject");
     xmlInfo->SetPointer("id", this,
@@ -534,7 +534,7 @@ void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
     for (Component *c : m_components)
     {
         XMLNode *xmlComp = new XMLNode();
-        c->FillXMLInfo(xmlComp);
+        c->Write(xmlComp);
         xmlInfo->AddChild(xmlComp);
     }
 
@@ -543,7 +543,7 @@ void GameObject::FillXMLInfo(XMLNode *xmlInfo) const
         if (!child->HasHideFlag(HideFlags::DontSerialize))
         {
             XMLNode *xmlChild = new XMLNode();
-            child->FillXMLInfo(xmlChild);
+            child->Write(xmlChild);
             xmlInfo->AddChild(xmlChild);
         }
     }

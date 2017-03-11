@@ -340,9 +340,9 @@ Vector2 UIText::GetAlignmentNDCOffset() const
     return alignNDCOffset;
 }
 
-void UIText::ReadXMLInfo(const XMLNode *xmlInfo)
+void UIText::Read(const XMLNode *xmlInfo)
 {
-    UIRenderer::ReadXMLInfo(xmlInfo);
+    UIRenderer::Read(xmlInfo);
 
     String fontFilepath = xmlInfo->GetFilepath("Font");
     if (!fontFilepath.Empty())
@@ -365,9 +365,9 @@ void UIText::ReadXMLInfo(const XMLNode *xmlInfo)
     SetHorizontalAlign(hAlign);
 }
 
-void UIText::FillXMLInfo(XMLNode *xmlInfo) const
+void UIText::Write(XMLNode *xmlInfo) const
 {
-    UIRenderer::FillXMLInfo(xmlInfo);
+    UIRenderer::Write(xmlInfo);
     xmlInfo->SetTagName(GetName());
 
     xmlInfo->SetFilepath("Font", m_font ? m_font->GetFilepath() : "", "bfont");

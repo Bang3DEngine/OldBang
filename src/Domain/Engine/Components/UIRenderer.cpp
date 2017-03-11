@@ -68,16 +68,16 @@ String UIRenderer::GetName() const
     return "UIRenderer";
 }
 
-void UIRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
+void UIRenderer::Read(const XMLNode *xmlInfo)
 {
-    MeshRenderer::ReadXMLInfo(xmlInfo);
+    MeshRenderer::Read(xmlInfo);
 
     m_tint = xmlInfo->GetColor("Tint");
 }
 
-void UIRenderer::FillXMLInfo(XMLNode *xmlInfo) const
+void UIRenderer::Write(XMLNode *xmlInfo) const
 {
-    MeshRenderer::FillXMLInfo(xmlInfo);
+    MeshRenderer::Write(xmlInfo);
 
     xmlInfo->SetColor("Tint", m_tint);
 }

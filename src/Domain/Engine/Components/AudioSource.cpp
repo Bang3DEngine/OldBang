@@ -54,7 +54,7 @@ ICloneable *AudioSource::Clone() const
 #ifdef BANG_EDITOR
 void AudioSource::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    FillXMLInfo(xmlInfo);
+    Write(xmlInfo);
     AudioSource *noConstThis = const_cast<AudioSource*>(this);
     if (IsPlaying())
     {
@@ -82,9 +82,9 @@ void AudioSource::OnButtonClicked(const String &attrName)
 }
 #endif
 
-void AudioSource::ReadXMLInfo(const XMLNode *xmlInfo)
+void AudioSource::Read(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLInfo(xmlInfo);
+    Component::Read(xmlInfo);
 
     String audioClipFilepath = m_audioClip ? m_audioClip->GetFilepath() : "";
     String newAudioClipFilepath = xmlInfo->GetFilepath("AudioClip");
@@ -98,9 +98,9 @@ void AudioSource::ReadXMLInfo(const XMLNode *xmlInfo)
     SetLooping(xmlInfo->GetBool("Looping"));
 }
 
-void AudioSource::FillXMLInfo(XMLNode *xmlInfo) const
+void AudioSource::Write(XMLNode *xmlInfo) const
 {
-    Component::FillXMLInfo(xmlInfo);
+    Component::Write(xmlInfo);
     xmlInfo->SetTagName( GetName() );
 
     String audioClipFilepath = m_audioClip ? m_audioClip->GetFilepath() : "";

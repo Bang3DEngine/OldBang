@@ -1,7 +1,7 @@
 #include "MaterialAssetFile.h"
 
 #include "XMLParser.h"
-#include "Persistence.h"
+#include "IO.h"
 
 #ifdef BANG_EDITOR
 #include "MaterialAssetFileInspectable.h"
@@ -26,7 +26,7 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModel
 
 QPixmap MaterialAssetFile::GetIcon() const
 {
-    String fp = Persistence::ToAbsolute("./Icons/MaterialAssetIcon.png", true);
+    String fp = IO::ToAbsolute("./Icons/MaterialAssetIcon.png", true);
     QPixmap pm(fp.ToQString());
     return pm;
 }

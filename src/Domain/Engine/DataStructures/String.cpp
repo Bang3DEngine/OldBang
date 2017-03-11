@@ -193,10 +193,14 @@ long String::IndexOfOneNotOf(const String &charSet, long startingPos) const
     return index == String::npos ? - 1 : index;
 }
 
-String String::SubString(long startIndex, long endIndex) const
+String String::SubString(long startIndexInclusive, long endIndexInclusive) const
 {
-    if (endIndex == std::string::npos) return substr(startIndex);
-    else return substr(startIndex, endIndex - startIndex + 1);
+    if (endIndexInclusive == String::npos)
+    {
+        return substr(startIndexInclusive);
+    }
+    return substr(startIndexInclusive,
+                  endIndexInclusive - startIndexInclusive + 1);
 }
 
 const char *String::ToCString() const
@@ -349,6 +353,16 @@ bool String::IsLowerCase(char c)
     return c >= 97 && c <= 122;
 }
 
+char String::ToUpper(char c)
+{
+    return std::toupper(c);
+}
+
+char String::ToLower(char c)
+{
+    return std::tolower(c);
+}
+
 int String::ToInt(const String &str, bool *ok)
 {
     String number = str.Trim();
@@ -379,9 +393,18 @@ bool String::Empty() const
     return Length() == 0;
 }
 
-bool String::Contains(const String &str) const
+bool String::Contains(const String &str, bool caseSensitive) const
 {
-    return find(str) != std::string::npos;
+    if (!caseSensitive)
+    {
+        auto it = std::search(Begin(), End(), str.Begin(), str.End(),
+          [](char ch1, char ch2) {
+            return String::ToUpper(ch1) == String::ToUpper(ch2);
+          }
+        );
+        return (it != End() );
+    }
+    return find(str) != String::npos;
 }
 
 bool String::BeginsWith(const String &str) const
@@ -392,6 +415,26 @@ bool String::BeginsWith(const String &str) const
 bool String::EndsWith(const String &str) const
 {
     return this->IndexOf(str) == Length() - str.Length();
+}
+
+String String::ToUpper() const
+{
+    String result = *this;
+    for (int i = 0; i < Length(); ++i)
+    {
+        result[i] = String::ToUpper(result[i]);
+    }
+    return result;
+}
+
+String String::ToLower() const
+{
+    String result = *this;
+    for (int i = 0; i < Length(); ++i)
+    {
+        result[i] = String::ToLower(result[i]);
+    }
+    return result;
 }
 
 
@@ -407,6 +450,11 @@ String String::ToString(int i)
 }
 
 String String::ToString(float f, int decimalPlaces)
+{
+    return ToString(static_cast<double>(f), decimalPlaces);
+}
+
+String String::ToString(double f, int decimalPlaces)
 {
     String str = "";
     if (decimalPlaces >= 0)

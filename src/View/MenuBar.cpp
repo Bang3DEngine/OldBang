@@ -16,12 +16,11 @@
 #include "Texture2D.h"
 #include "GameObject.h"
 #include "FileReader.h"
-#include "FileWriter.h"
 #include "PointLight.h"
 #include "AudioSource.h"
 #include "MeshFactory.h"
 #include "SystemUtils.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "EditorScene.h"
 #include "Application.h"
 #include "GameBuilder.h"
@@ -138,7 +137,7 @@ void MenuBar::CreateNewScene() const
     SceneManager::SetActiveScene(nullptr);
     Scene *scene = Scene::GetDefaultScene();
     SceneManager::SetActiveScene(scene);
-    Persistence::SetActiveSceneFilepath("");
+    IO::SetActiveSceneFilepath("");
 }
 
 Dialog::Reply MenuBar::AskForSavingActiveScene() const
@@ -191,29 +190,29 @@ void MenuBar::OnOpenScene() const
 
 void MenuBar::OnSaveScene() const
 {
-    String filename = Persistence::GetCurrentSceneFilepath();
-    if ( filename == "" ) //Give the scene a name
-    {
-        OnSaveSceneAs();
-    }
-    else //Save directly
+    String filepath = IO::GetCurrentSceneFilepath();
+    if (filepath.Empty()) { OnSaveSceneAs(); }
+    else
     {
         Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
-        FileWriter::WriteScene(filename, scene);
+        filepath = IO::AppendExtension(
+                               filepath, Scene::GetFileExtensionStatic());
+        scene->WriteToFile(filepath);
     }
 }
 
 void MenuBar::OnSaveSceneAs() const
 {
     Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
-    String filename = Dialog::GetSaveFilename(
+    String filepath = Dialog::GetSaveFilename(
                              "Save scene as...",
                              Scene::GetFileExtensionStatic(),
-                             Persistence::GetProjectAssetsRootAbs(),
+                             IO::GetProjectAssetsRootAbs(),
                              scene->name);
-    ASSERT(!filename.Empty());
+    ASSERT(!filepath.Empty());
 
-    FileWriter::WriteScene(filename, scene);
+    filepath = IO::AppendExtension(filepath, Scene::GetFileExtensionStatic());
+    scene->WriteToFile(filepath);
 }
 
 void MenuBar::OnBuild() const
@@ -245,7 +244,7 @@ void MenuBar::OnCreateFromPrefab() const
     XMLNode *xmlInfo = XMLParser::FromFile(filename);
     if (xmlInfo)
     {
-        p->ReadXMLInfo(xmlInfo);
+        p->Read(xmlInfo);
         delete xmlInfo;
 
         GameObject *go = p->InstantiateWithoutStarting();
@@ -387,7 +386,7 @@ void MenuBar::OnCreatePrefab() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Prefab." + Prefab::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicateName(filepath);
     AssetsManager::Create<Prefab>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -395,7 +394,7 @@ void MenuBar::OnCreateMaterial() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Material." + Material::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicateName(filepath);
     AssetsManager::Create<Material>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -403,7 +402,7 @@ void MenuBar::OnCreateMesh() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Mesh." + Mesh::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicateName(filepath);
     AssetsManager::Create<Mesh>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -412,7 +411,7 @@ void MenuBar::OnCreateShaderProgram() const
     /*
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_ShaderProgram." + ShaderProgram::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicateName(filepath);
     AssetsManager::CreateAsset<ShaderProgram>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
     */
@@ -421,7 +420,7 @@ void MenuBar::OnCreateTexture2D() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Texture2D." + Texture2D::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicateName(filepath);
     AssetsManager::Create<Texture2D>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -430,7 +429,7 @@ void MenuBar::OnCreateFont() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Font." + Font::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicateName(filepath);
     AssetsManager::Create<Font>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -439,7 +438,7 @@ void MenuBar::OnCreateAudioClip() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_AudioClip." + AudioClip::GetFileExtensionStatic();
-    filepath = Persistence::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicateName(filepath);
     AssetsManager::Create<AudioClip>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }

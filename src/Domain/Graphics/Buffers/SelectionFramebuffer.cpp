@@ -6,7 +6,7 @@
 #include "Material.h"
 #include "Renderer.h"
 #include "GameObject.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "ShaderProgram.h"
 #include "RenderTexture.h"
 #include "AssetsManager.h"
@@ -22,8 +22,8 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
     Framebuffer(width, height)
 {
     m_selectionProgram = new ShaderProgram(
-                Persistence::ToAbsolute("Shaders/SelectionBuffer.vert", true),
-                Persistence::ToAbsolute("Shaders/SelectionBuffer.frag", true));
+                IO::ToAbsolute("Shaders/SelectionBuffer.vert", true),
+                IO::ToAbsolute("Shaders/SelectionBuffer.frag", true));
 
     CreateColorAttachment(AttColor);
     CreateColorAttachment(AttWorldPos);

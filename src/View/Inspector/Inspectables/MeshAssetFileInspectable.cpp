@@ -2,7 +2,6 @@
 
 #include "Mesh.h"
 #include "XMLNode.h"
-#include "FileWriter.h"
 #include "AssetsManager.h"
 
 MeshAssetFileInspectable::MeshAssetFileInspectable(

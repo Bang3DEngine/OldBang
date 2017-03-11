@@ -32,14 +32,14 @@ ICloneable *AudioListener::Clone() const
     return al;
 }
 
-void AudioListener::ReadXMLInfo(const XMLNode *xmlInfo)
+void AudioListener::Read(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLInfo(xmlInfo);
+    Component::Read(xmlInfo);
 }
 
-void AudioListener::FillXMLInfo(XMLNode *xmlInfo) const
+void AudioListener::Write(XMLNode *xmlInfo) const
 {
-    Component::FillXMLInfo(xmlInfo);
+    Component::Write(xmlInfo);
     xmlInfo->SetTagName( GetName() );
 }
 

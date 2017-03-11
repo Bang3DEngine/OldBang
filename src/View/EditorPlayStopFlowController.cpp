@@ -110,7 +110,7 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
     connect(bm, SIGNAL(NotifyPrepareBehavioursLibraryProgressed(int)),
             &progressDialog, SLOT(setValue(int)));
 
-    BehaviourManager::SetCurrentLibsDir( Persistence::GetProjectLibsRootAbs() );
+    BehaviourManager::SetCurrentLibsDir( IO::GetProjectLibsRootAbs() );
     bool success = BehaviourManager::PrepareBehavioursLibrary(false,
                                                              &m_playingCanceled);
 

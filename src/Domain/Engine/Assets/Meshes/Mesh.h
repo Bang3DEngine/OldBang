@@ -12,7 +12,7 @@ class Sphere;
 class Vector2;
 class Vector3;
 class XMLNode;
-class IFileable;
+class SerializableObject;
 class FileReader;
 class ShaderProgram;
 class Mesh : public Asset
@@ -54,8 +54,8 @@ public:
 
     const String &GetMeshFilepath() const;
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
     String m_meshFilepath = "";

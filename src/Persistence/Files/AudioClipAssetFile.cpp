@@ -3,7 +3,7 @@
 #include "XMLNode.h"
 #include "AudioClip.h"
 #include "XMLParser.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
@@ -26,7 +26,7 @@ AudioClipAssetFile::AudioClipAssetFile(
 
 QPixmap AudioClipAssetFile::GetIcon() const
 {
-    String fp = Persistence::ToAbsolute("./Icons/AudioClipIcon.png", true);
+    String fp = IO::ToAbsolute("./Icons/AudioClipIcon.png", true);
     QPixmap pm(fp.ToQString());
     return pm;
 }

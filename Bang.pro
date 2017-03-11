@@ -193,13 +193,12 @@ HEADERS +=                                                          \
     src/Domain/Engine/Assets/Material.h                             \
     src/Domain/Engine/Assets/Meshes/Mesh.h                          \
     src/Domain/Engine/Components/Behaviour.h                        \
-    src/Domain/Engine/Interfaces/IFileable.h                        \
     src/Domain/Engine/Assets/Texture2D.h                            \
     src/Domain/Engine/Assets/Prefab.h                               \
     src/Bang.h                                                      \
     src/Persistence/AssetsManager.h                                 \
     src/Domain/Engine/Others/Input.h                                \
-    src/Persistence/Persistence.h                                   \
+    src/Persistence/IO.h                                   \
     src/Domain/Engine/Components/LineRenderer.h                     \
     src/Domain/Engine/Components/Renderer.h                         \
     src/Domain/Engine/Physics/Vector3.h                             \
@@ -255,7 +254,6 @@ HEADERS +=                                                          \
     src/Persistence/Files/File.h                                    \
     src/Persistence/IO/FileReader.h                                 \
     src/Persistence/Files/AudioClipAssetFile.h                      \
-    src/Persistence/IO/FileWriter.h                                 \
     src/Persistence/Files/ImageFile.h                               \
     src/Persistence/Files/FontAssetFile.h                           \
     src/Persistence/Files/MaterialAssetFile.h                       \
@@ -301,7 +299,8 @@ HEADERS +=                                                          \
     src/Domain/Graphics/Interfaces/GLObject.h \
     src/Domain/Engine/Debug/ChronoGL.h \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.h \
-    src/Domain/Engine/DataStructures/Set.h
+    src/Domain/Engine/DataStructures/Set.h \
+    src/Domain/Engine/Interfaces/SerializableObject.h
 
 EDITOR {
 HEADERS += \
@@ -418,7 +417,7 @@ SOURCES += \
     src/Domain/Engine/Assets/Prefab.cpp \
     src/Persistence/AssetsManager.cpp \
     src/Domain/Engine/Others/Input.cpp \
-    src/Persistence/Persistence.cpp \
+    src/Persistence/IO.cpp \
     src/Persistence/Files/TextFile.cpp \
     src/Domain/Engine/Components/LineRenderer.cpp \
     src/Domain/Engine/Components/Renderer.cpp \
@@ -437,7 +436,6 @@ SOURCES += \
     src/Domain/Engine/Components/DirectionalLight.cpp \
     src/Domain/Engine/Components/Light.cpp \
     src/View/GameObjectClipboard.cpp \
-    src/Domain/Engine/Interfaces/IFileable.cpp \
     src/Domain/Engine/Components/PointLight.cpp \
     src/Domain/Engine/Physics/Vector4.cpp \
     src/Domain/Engine/Physics/Vector2.cpp \
@@ -480,7 +478,6 @@ SOURCES += \
     src/Persistence/Files/Texture2DAssetFile.cpp \
     src/Persistence/Behaviours/BehaviourManager.cpp \
     src/Persistence/Behaviours/BehaviourRefresherTimer.cpp \
-    src/Persistence/IO/FileWriter.cpp \
     src/Persistence/XML/XMLAttribute.cpp \
     src/Persistence/IO/stb_image.cpp \
     src/Persistence/XML/XMLNode.cpp \
@@ -516,7 +513,8 @@ SOURCES += \
     src/Domain/Graphics/Interfaces/GLObject.cpp \
     src/Domain/Engine/Debug/ChronoGL.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.cpp \
-    src/Domain/Engine/DataStructures/Set.cpp
+    src/Domain/Engine/DataStructures/Set.cpp \
+    src/Domain/Engine/Interfaces/SerializableObject.cpp
 
 EDITOR {
     SOURCES += \

@@ -1,6 +1,6 @@
 #include "AudioFile.h"
 
-#include "Persistence.h"
+#include "IO.h"
 
 #ifdef BANG_EDITOR
 #include "AudioFileInspectable.h"
@@ -14,7 +14,7 @@ AudioFile::AudioFile(const QFileSystemModel *model, const QModelIndex &index)
 
 QPixmap AudioFile::GetIcon() const
 {
-    String fp = Persistence::ToAbsolute("./Icons/AudioIcon.png", true);
+    String fp = IO::ToAbsolute("./Icons/AudioIcon.png", true);
     QPixmap pm(fp.ToQString());
     return pm;
 }

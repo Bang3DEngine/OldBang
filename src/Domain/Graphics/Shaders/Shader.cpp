@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "Debug.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "ShaderPreprocessor.h"
 
 Shader::Shader(Shader::Type t)
@@ -20,7 +20,7 @@ Shader::Shader(Shader::Type t, const String &shaderPath) : Shader(t)
 
 bool Shader::LoadFromFile(const String& filepath)
 {
-    if (!Persistence::ExistsFile(filepath))
+    if (!IO::ExistsFile(filepath))
     {
         Debug_Error("Shader '" << filepath << "' does not exist.");
         return false;
@@ -37,7 +37,7 @@ bool Shader::LoadFromFile(const String& filepath)
     }
     else
     {
-        m_sourceCode = Persistence::GetFileContents(m_filepath);
+        m_sourceCode = IO::GetFileContents(m_filepath);
         if (m_filepath.Empty())
         {
             Debug_Error("Could not open shader file '" + filepath +

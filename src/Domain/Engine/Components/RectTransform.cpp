@@ -241,9 +241,9 @@ Matrix4 RectTransform::GetLocalToParentMatrix(
            moveToPivot;
 }
 
-void RectTransform::ReadXMLInfo(const XMLNode *xmlInfo)
+void RectTransform::Read(const XMLNode *xmlInfo)
 {
-    Transform::ReadXMLInfo(xmlInfo);
+    Transform::Read(xmlInfo);
 
     SetMarginLeft ( xmlInfo->GetInt("MarginLeft")  );
     SetMarginTop  ( xmlInfo->GetInt("MarginTop")   );
@@ -255,7 +255,7 @@ void RectTransform::ReadXMLInfo(const XMLNode *xmlInfo)
     SetAnchorMax    ( xmlInfo->GetVector2("AnchorMax")     );
 }
 
-void RectTransform::FillXMLInfo(XMLNode *xmlInfo) const
+void RectTransform::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetInt("MarginLeft",  GetMarginLeft() );
     xmlInfo->SetInt("MarginTop",   GetMarginTop()  );
@@ -266,7 +266,7 @@ void RectTransform::FillXMLInfo(XMLNode *xmlInfo) const
     xmlInfo->SetVector2("AnchorMin",      GetAnchorMin()    );
     xmlInfo->SetVector2("AnchorMax",      GetAnchorMax()    );
 
-    Transform::FillXMLInfo(xmlInfo);
+    Transform::Write(xmlInfo);
     xmlInfo->GetAttribute("Position")->SetProperty(XMLProperty::Hidden);
     xmlInfo->GetAttribute("Rotation")->SetProperty(XMLProperty::Hidden);
     xmlInfo->GetAttribute("Scale")->SetProperty(XMLProperty::Hidden);

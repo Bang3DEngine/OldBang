@@ -10,9 +10,8 @@
 #include "ImageFile.h"
 #include "Hierarchy.h"
 #include "GameObject.h"
-#include "FileWriter.h"
 #include "SystemUtils.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "SceneManager.h"
 #include "EditorWindow.h"
 #include "MeshAssetFile.h"
@@ -89,7 +88,7 @@ void Explorer::OnWindowShown()
                      this, SLOT(OnIconSizeSliderValueChanged(int)));
 
     win->sliderExplorerIconSize->setValue(30);
-    SetDir(Persistence::GetProjectAssetsRootAbs());
+    SetDir(IO::GetProjectAssetsRootAbs());
 }
 
 void Explorer::OnButtonDirUpClicked()
@@ -181,9 +180,9 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
     {
         ASSERT(selectedIndexes().length() > 0);
         String selectedPath = GetSelectedFileOrDirPath();
-        if (Persistence::Exists(selectedPath))
+        if (IO::Exists(selectedPath))
         {
-            if (Persistence::IsDir(selectedPath))
+            if (IO::IsDir(selectedPath))
             {
                 OnDirDoubleClicked(selectedPath);
             }
@@ -208,7 +207,7 @@ void Explorer::currentChanged(const QModelIndex &current,
 
     String selectedPath(m_fileSystemModel->filePath(current));
 
-    if ( Persistence::IsFile(selectedPath) )
+    if ( IO::IsFile(selectedPath) )
     {
         Hierarchy::GetInstance()->clearSelection();
     }
@@ -265,7 +264,7 @@ void Explorer::RefreshInspector()
     QModelIndex selectedIndex = selectedIndexes().front();
     File f(m_fileSystemModel, selectedIndex);
     if (selectedIndex.isValid() && f.IsFile() &&
-        Persistence::Exists(f.GetAbsolutePath()))
+        IO::Exists(f.GetAbsolutePath()))
     {
         m_lastSelectedPath = f.GetRelativePath();
 
@@ -316,7 +315,7 @@ void Explorer::RefreshInspector()
 
 void Explorer::SelectFile(const String &path)
 {
-    SetDir(Persistence::GetDir(path));
+    SetDir(IO::GetDir(path));
 
     QModelIndex ind = GetModelIndexFromFilepath(path);
     if (ind.isValid())
@@ -345,7 +344,7 @@ String Explorer::GetFilepathFromModelIndex(const QModelIndex &qmi) const
 String Explorer::GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const
 {
     String f = GetFilepathFromModelIndex(qmi);
-    return Persistence::ToRelative(f);
+    return IO::ToRelative(f);
 }
 
 String Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
@@ -358,12 +357,12 @@ String Explorer::GetDirFromModelIndex(const QModelIndex &qmi) const
 String Explorer::GetRelativeDirFromModelIndex(const QModelIndex &qmi) const
 {
     String f = GetDirFromModelIndex(qmi);
-    return Persistence::ToRelative(f);
+    return IO::ToRelative(f);
 }
 
 QModelIndex Explorer::GetModelIndexFromFilepath(const String &filepath) const
 {
-    String absFilepath = Persistence::ToAbsolute(filepath, false);
+    String absFilepath = IO::ToAbsolute(filepath, false);
     return m_fileSystemModel->index(absFilepath.ToQString());
 }
 
@@ -375,7 +374,7 @@ void Explorer::SetDir(const String &path)
         clearSelection();
     }
 
-    String absDir = Persistence::ToAbsolute(path, false);
+    String absDir = IO::ToAbsolute(path, false);
     setRootIndex(m_fileSystemModel->setRootPath(absDir.ToQString()));
     SetLabelText(absDir);
     clearSelection();
@@ -396,7 +395,7 @@ void Explorer::SetLabelText(const String &absPath)
     String textDir = absPath.ElideLeft(65);
     m_labelCurrentPath->setText(textDir.ToQString());
 
-    String fileNameExt = Persistence::GetFileNameWithExtension(absPath);
+    String fileNameExt = IO::GetFileNameWithExtension(absPath);
     m_labelFileName->setText( fileNameExt.ToQString() );
 }
 
@@ -405,7 +404,7 @@ void Explorer::OnDirLoaded(QString dir)
     ASSERT(EditorWindow::GetInstance());
 
     if (GetCurrentDir().Length() <=
-        Persistence::GetProjectAssetsRootAbs().Length())
+        IO::GetProjectAssetsRootAbs().Length())
     {
         m_buttonDirUp->setEnabled(false);
         m_fileSystemModel->setFilter(QDir::AllEntries | QDir::NoDotAndDotDot);
@@ -506,7 +505,7 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
         if (!destDirPath.Empty())
         {
             String movedFileOrDirName =
-                    Persistence::GetFileNameWithExtension(oldMovedFileOrDirPath);
+                    IO::GetFileNameWithExtension(oldMovedFileOrDirPath);
             String newMovedFileOrDirPath = destDirPath + "/" + movedFileOrDirName;
             m_fileRefsManager->OnFileOrDirNameAboutToBeChanged(
                                                       oldMovedFileOrDirPath,
@@ -524,10 +523,9 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
             ASSERT(selected);
 
             String path = GetCurrentDir() + "/" + selected->name;
-            path = Persistence::AppendExtension(path,
+            path = IO::AppendExtension(path,
                           Prefab::GetFileExtensionStatic());
-            Debug_Log("selected->GetXMLInfoString(): " << selected->GetXMLInfoString());
-            Persistence::WriteToFile(path, selected->GetXMLInfoString());
+            IO::WriteToFile(path, selected->GetSerializedString());
         }
     }
 
@@ -550,9 +548,9 @@ void Explorer::keyPressEvent(QKeyEvent *e)
         )
     {
         String selectedPath = GetSelectedFileOrDirPath();
-        if (Persistence::Exists(selectedPath))
+        if (IO::Exists(selectedPath))
         {
-            if (Persistence::IsDir(selectedPath))
+            if (IO::IsDir(selectedPath))
             {
                 OnDirDoubleClicked(selectedPath);
             }

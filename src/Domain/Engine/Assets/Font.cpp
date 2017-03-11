@@ -46,16 +46,16 @@ void Font::LoadFromTTF(const String &m_filepath)
     }
 }
 
-void Font::ReadXMLInfo(const XMLNode *xmlInfo)
+void Font::Read(const XMLNode *xmlInfo)
 {
-    Asset::ReadXMLInfo(xmlInfo);
+    Asset::Read(xmlInfo);
     m_fontFilepath = xmlInfo->GetFilepath("FontFilepath");
     LoadFromTTF(m_fontFilepath);
 }
 
-void Font::FillXMLInfo(XMLNode *xmlInfo) const
+void Font::Write(XMLNode *xmlInfo) const
 {
-    Asset::FillXMLInfo(xmlInfo);
+    Asset::Write(xmlInfo);
     xmlInfo->SetTagName("Font");
     xmlInfo->SetFilepath("FontFilepath", m_fontFilepath, Font::GetFileExtensionStatic());
 }

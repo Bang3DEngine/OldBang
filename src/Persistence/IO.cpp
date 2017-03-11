@@ -1,4 +1,4 @@
-#include "Persistence.h"
+#include "IO.h"
 
 #include <QDir>
 #include <QFile>
@@ -13,25 +13,25 @@
 #include "Explorer.h"
 #endif
 
-bool Persistence::IsDir(const String &path)
+bool IO::IsDir(const String &path)
 {
     ASSERT(!path.Empty(), "", return false);
     return QFileInfo(path.ToQString()).isDir();
 }
 
-bool Persistence::IsFile(const String &path)
+bool IO::IsFile(const String &path)
 {
     ASSERT(!path.Empty(), "", return false);
     return QFileInfo(path.ToQString()).isFile();
 }
 
-bool Persistence::IsAbsolute(const String &path)
+bool IO::IsAbsolute(const String &path)
 {
     ASSERT(!path.Empty(), "", return false);
     return QFileInfo(path.ToQString()).isAbsolute();
 }
 
-String Persistence::GetDir(const String &filepath)
+String IO::GetDir(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");
     String directory = "";
@@ -43,7 +43,7 @@ String Persistence::GetDir(const String &filepath)
     return directory;
 }
 
-String Persistence::GetFileName(const String &filepath)
+String IO::GetFileName(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");
     String filename = filepath;
@@ -61,7 +61,7 @@ String Persistence::GetFileName(const String &filepath)
     return filename;
 }
 
-String Persistence::GetFileNameWithExtension(const String &filepath)
+String IO::GetFileNameWithExtension(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");
     String filename = filepath;
@@ -73,25 +73,25 @@ String Persistence::GetFileNameWithExtension(const String &filepath)
     return filename;
 }
 
-String Persistence::GetFileExtensionFirst(const String &filepath)
+String IO::GetFileExtensionFirst(const String &filepath)
 {
-    String fileNameWithExtension = Persistence::GetFileNameWithExtension(filepath);
+    String fileNameWithExtension = IO::GetFileNameWithExtension(filepath);
     Array<String> parts = fileNameWithExtension.Split('.');
     if (parts.Size() <= 1) { return ""; }
     return parts[1];
 }
 
-String Persistence::GetFileExtensionLast(const String &filepath)
+String IO::GetFileExtensionLast(const String &filepath)
 {
-    String fileNameWithExtension = Persistence::GetFileNameWithExtension(filepath);
+    String fileNameWithExtension = IO::GetFileNameWithExtension(filepath);
     Array<String> parts = fileNameWithExtension.Split('.');
     if (parts.Size() <= 1) { return ""; }
     return parts[parts.Size() - 1];
 }
 
-String Persistence::GetFileContents(const String &filepath)
+String IO::GetFileContents(const String &filepath)
 {
-    if (!Persistence::ExistsFile(filepath)) { return ""; }
+    if (!IO::ExistsFile(filepath)) { return ""; }
 
     String contents = "";
     std::fstream f;
@@ -105,16 +105,16 @@ String Persistence::GetFileContents(const String &filepath)
     return contents;
 }
 
-String Persistence::GetFileExtensionComplete(const String &filepath)
+String IO::GetFileExtensionComplete(const String &filepath)
 {
-    String fileNameWithExtension = Persistence::GetFileNameWithExtension(filepath);
+    String fileNameWithExtension = IO::GetFileNameWithExtension(filepath);
     Array<String> parts = fileNameWithExtension.Split('.');
     if (parts.Size() <= 1) { return ""; }
     parts.Remove(parts.Begin());
     return String::Join(parts, ".");
 }
 
-String Persistence::GetPathWithoutExtension(const String &filepath)
+String IO::GetPathWithoutExtension(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");
     String path = GetDir(filepath);
@@ -123,13 +123,13 @@ String Persistence::GetPathWithoutExtension(const String &filepath)
 }
 
 
-String Persistence::ToAbsolute(const String &relPath,
+String IO::ToAbsolute(const String &relPath,
                                const String &prependDirectory)
 {
     ASSERT(!relPath.Empty(), "", return "");
 
     String result = "";
-    if (Persistence::IsAbsolute(relPath))
+    if (IO::IsAbsolute(relPath))
     {
         result = relPath;
     }
@@ -156,7 +156,7 @@ String Persistence::ToAbsolute(const String &relPath,
 
     // If we try to get canonical for non-existing filepath,
     // then it returns empty string, we must handle this
-    if (Persistence::Exists(result))
+    if (IO::Exists(result))
     {
         result = QFileInfo(result.ToQString()).canonicalFilePath();
     }
@@ -164,15 +164,15 @@ String Persistence::ToAbsolute(const String &relPath,
     return result;
 }
 
-String Persistence::ToAbsolute(const String &relPath, bool isEngineFile)
+String IO::ToAbsolute(const String &relPath, bool isEngineFile)
 {
     ASSERT(!relPath.Empty(), "", return "");
-    return Persistence::ToAbsolute(relPath,
-              isEngineFile ? Persistence::GetEngineAssetsRootAbs() :
-                             Persistence::GetProjectAssetsRootAbs());
+    return IO::ToAbsolute(relPath,
+              isEngineFile ? IO::GetEngineAssetsRootAbs() :
+                             IO::GetProjectAssetsRootAbs());
 }
 
-String Persistence::ToRelative(const String &absPath,
+String IO::ToRelative(const String &absPath,
                                const String &prependDirectory)
 {
     ASSERT(!absPath.Empty(), "", return "");
@@ -194,75 +194,75 @@ String Persistence::ToRelative(const String &absPath,
     return relPath;
 }
 
-String Persistence::ToRelative(const String &relPath, bool isEngineFile)
+String IO::ToRelative(const String &relPath, bool isEngineFile)
 {
     ASSERT(!relPath.Empty(), "", return "");
-    return Persistence::ToRelative(relPath,
-              isEngineFile ? Persistence::GetEngineAssetsRootAbs() :
-                             Persistence::GetProjectAssetsRootAbs());
+    return IO::ToRelative(relPath,
+              isEngineFile ? IO::GetEngineAssetsRootAbs() :
+                             IO::GetProjectAssetsRootAbs());
 }
 
-String Persistence::ToRelative(const String &absPath)
+String IO::ToRelative(const String &absPath)
 {
     ASSERT(!absPath.Empty(), "", return "");
-    return Persistence::ToRelative(absPath, Persistence::IsEngineFile(absPath));
+    return IO::ToRelative(absPath, IO::IsEngineFile(absPath));
 }
 
-bool Persistence::IsEngineFile(const String &filepath)
+bool IO::IsEngineFile(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");
-    return filepath.BeginsWith(Persistence::GetEngineAssetsRootAbs());
+    return filepath.BeginsWith(IO::GetEngineAssetsRootAbs());
 }
 
-String Persistence::GetDirUp(const String &filepath)
+String IO::GetDirUp(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return "");
     Array<String> splits = filepath.Split('/');
     splits.PopBack();
-    return (Persistence::IsAbsolute(filepath) ? "/" : "") +
+    return (IO::IsAbsolute(filepath) ? "/" : "") +
             String::Join(splits, "/");
 }
 
-String Persistence::GetRightmostDir(const String &dir)
+String IO::GetRightmostDir(const String &dir)
 {
     Array<String> parts = dir.Split('/');
     ASSERT(!parts.Empty(), "", return "");
     return parts.Back();
 }
 
-bool Persistence::DuplicateFile(const String &fromFilepath,
+bool IO::DuplicateFile(const String &fromFilepath,
                                 const String &toFilepath,
                                 bool overwrite)
 {
-    ASSERT(Persistence::ExistsFile(fromFilepath), "", return false);
-    if (overwrite) { Persistence::Remove(toFilepath); }
+    ASSERT(IO::ExistsFile(fromFilepath), "", return false);
+    if (overwrite) { IO::Remove(toFilepath); }
     bool ok = QFile::copy(fromFilepath.ToQString(), toFilepath.ToQString());
     return ok;
 }
 
-bool Persistence::DuplicateDir(const String &fromDirpath,
+bool IO::DuplicateDir(const String &fromDirpath,
                                const String &toDirpath,
                                bool overwrite)
 {
-    ASSERT(Persistence::ExistsDirectory(fromDirpath), "", return false);
+    ASSERT(IO::ExistsDirectory(fromDirpath), "", return false);
 
-    if (!Persistence::CreateDirectory(toDirpath)) { return false; }
-    List<String> filepaths = Persistence::GetFiles(fromDirpath, false);
+    if (!IO::CreateDirectory(toDirpath)) { return false; }
+    List<String> filepaths = IO::GetFiles(fromDirpath, false);
     for(const String & filepath : filepaths)
     {
-        String fileName = Persistence::GetFileNameWithExtension(filepath);
-        bool ok = Persistence::DuplicateFile(fromDirpath + "/" + fileName,
+        String fileName = IO::GetFileNameWithExtension(filepath);
+        bool ok = IO::DuplicateFile(fromDirpath + "/" + fileName,
                                              toDirpath   + "/" + fileName,
                                              overwrite);
         if (!ok) { return false; }
     }
 
-    List<String> subdirs = Persistence::GetSubDirectories(fromDirpath, false);
+    List<String> subdirs = IO::GetSubDirectories(fromDirpath, false);
     for (const String &subdir : subdirs)
     {
-        bool ok = Persistence::DuplicateDir(
+        bool ok = IO::DuplicateDir(
                             subdir,
-                            toDirpath + "/" + Persistence::GetRightmostDir(subdir),
+                            toDirpath + "/" + IO::GetRightmostDir(subdir),
                             overwrite);
         if (!ok) { return false; }
     }
@@ -270,14 +270,14 @@ bool Persistence::DuplicateDir(const String &fromDirpath,
 }
 
 #ifdef BANG_EDITOR
-String Persistence::GetNextDuplicateName(const String &path)
+String IO::GetNextDuplicateName(const String &path)
 {
     ASSERT(!path.Empty(), "", return "");
 
     String filePath = path;
-    String fileDir  = Persistence::GetDir(filePath);
-    String fileName = Persistence::GetFileName(filePath);
-    String fileExtension = Persistence::GetFileExtensionComplete(path);
+    String fileDir  = IO::GetDir(filePath);
+    String fileName = IO::GetFileName(filePath);
+    String fileExtension = IO::GetFileExtensionComplete(path);
 
     Array<String> splitted = fileName.Split('_');
     int number = 1;
@@ -312,24 +312,24 @@ String Persistence::GetNextDuplicateName(const String &path)
     return result;
 }
 
-String Persistence::GetDuplicateName(const String &path)
+String IO::GetDuplicateName(const String &path)
 {
     ASSERT(!path.Empty(), "", return "");
     String result = path;
-    while (Persistence::Exists(result))
+    while (IO::Exists(result))
     {
-        result = Persistence::GetNextDuplicateName(result);
+        result = IO::GetNextDuplicateName(result);
     }
     return result;
 }
 #endif
 
-List<String> Persistence::GetSubDirectories(const String &dirPath,
+List<String> IO::GetSubDirectories(const String &dirPath,
                                             bool recursive)
 {
     ASSERT(!dirPath.Empty(), "", return {});
     List<String> subdirsList;
-    if (!Persistence::ExistsDirectory(dirPath)) { return subdirsList; }
+    if (!IO::ExistsDirectory(dirPath)) { return subdirsList; }
 
     QStringList subdirs =  QDir(dirPath.ToQString()).entryList();
     for (QString qSubdir : subdirs)
@@ -338,7 +338,7 @@ List<String> Persistence::GetSubDirectories(const String &dirPath,
 
         String subdirName = String(qSubdir);
         String subdirPath = dirPath + "/" + subdirName;
-        if (Persistence::IsDir(subdirPath))
+        if (IO::IsDir(subdirPath))
         {
             subdirsList.Add(subdirPath);
             if (recursive)
@@ -352,7 +352,7 @@ List<String> Persistence::GetSubDirectories(const String &dirPath,
     return subdirsList;
 }
 
-List<String> Persistence::GetFiles(const String &dirPath,
+List<String> IO::GetFiles(const String &dirPath,
                                    bool recursive,
                                    const List<String> &extensions)
 {
@@ -382,7 +382,7 @@ List<String> Persistence::GetFiles(const String &dirPath,
             String filepath(qFilepath);
             filepath = subdir + "/" + filepath;
             if (filepath == "." || filepath == ".." ||
-                !Persistence::IsFile(filepath)) { continue; }
+                !IO::IsFile(filepath)) { continue; }
 
             filesList.Add(filepath);
         }
@@ -390,10 +390,10 @@ List<String> Persistence::GetFiles(const String &dirPath,
     return filesList;
 }
 
-bool Persistence::Remove(const String &path)
+bool IO::Remove(const String &path)
 {
-    ASSERT(Persistence::ExistsFile(path), "", return false);
-    if (Persistence::IsFile(path))
+    ASSERT(IO::ExistsFile(path), "", return false);
+    if (IO::IsFile(path))
     {
         QFile f(path.ToQString());
         return f.remove();
@@ -401,52 +401,52 @@ bool Persistence::Remove(const String &path)
     else
     {
         List<String> subDirs  = GetSubDirectories(path, false);
-        for (String subDir : subDirs) { Persistence::Remove(subDir); }
+        for (String subDir : subDirs) { IO::Remove(subDir); }
         List<String> subFiles = GetFiles(path, false);
-        for (String subFile : subFiles) { Persistence::Remove(subFile); }
+        for (String subFile : subFiles) { IO::Remove(subFile); }
         QDir().rmdir(path.ToQString());
     }
     return false;
 }
 
-bool Persistence::ExistsFile(const String &filepath)
+bool IO::ExistsFile(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return false);
     return QFile(filepath.ToQString()).exists();
 }
 
-bool Persistence::ExistsDirectory(const String &dirPath)
+bool IO::ExistsDirectory(const String &dirPath)
 {
     ASSERT(!dirPath.Empty(), "", return false);
     return QDir(dirPath.ToQString()).exists();
 }
 
-bool Persistence::Exists(const String &filepath)
+bool IO::Exists(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return false);
-    if (Persistence::IsDir(filepath))
+    if (IO::IsDir(filepath))
     {
-        return Persistence::ExistsDirectory(filepath);
+        return IO::ExistsDirectory(filepath);
     }
-    return Persistence::ExistsFile(filepath);
+    return IO::ExistsFile(filepath);
 }
 
-bool Persistence::CreateDirectory(const String &dirPath)
+bool IO::CreateDirectory(const String &dirPath)
 {
     ASSERT(!dirPath.Empty(), "", return false);
-    if (Persistence::ExistsDirectory(dirPath)) { return true; }
+    if (IO::ExistsDirectory(dirPath)) { return true; }
     return QDir().mkdir(dirPath.ToQString());
 }
 
-void Persistence::SetActiveSceneFilepath(const String &scenePath)
+void IO::SetActiveSceneFilepath(const String &scenePath)
 {
-    Persistence::GetInstance()->c_currentSceneFilepath = scenePath;
+    IO::GetInstance()->c_currentSceneFilepath = scenePath;
 }
 
-bool Persistence::Rename(const String &oldPath, const String &newPath)
+bool IO::Rename(const String &oldPath, const String &newPath)
 {
-    ASSERT(Persistence::Exists(oldPath), "", return false);
-    if (Persistence::IsDir(oldPath))
+    ASSERT(IO::Exists(oldPath), "", return false);
+    if (IO::IsDir(oldPath))
     {
         return QDir().rename(oldPath.ToQString(), newPath.ToQString());
     }
@@ -456,12 +456,12 @@ bool Persistence::Rename(const String &oldPath, const String &newPath)
     }
 }
 
-bool Persistence::Move(const String &oldPath, const String &newPath)
+bool IO::Move(const String &oldPath, const String &newPath)
 {
-    return Persistence::Rename(oldPath, newPath);
+    return IO::Rename(oldPath, newPath);
 }
 
-bool Persistence::WriteToFile(const String &absFilepath, const String &contents)
+bool IO::WriteToFile(const String &absFilepath, const String &contents)
 {
     std::ofstream out(absFilepath);
     if (out.is_open())
@@ -473,73 +473,73 @@ bool Persistence::WriteToFile(const String &absFilepath, const String &contents)
     return false;
 }
 
-String Persistence::GetHash(const String &filepath)
+String IO::GetHash(const String &filepath)
 {
-    ASSERT(Persistence::ExistsFile(filepath), "", return "");
+    ASSERT(IO::ExistsFile(filepath), "", return "");
 
     String result = "";
     QFile file(filepath.ToQString());
     if(file.open(QIODevice::ReadOnly))
     {
-        result = Persistence::GetHashFromByteArray(file.readAll());
+        result = IO::GetHashFromByteArray(file.readAll());
         file.close();
     }
     return result;
 }
 
-String Persistence::GetHashFromString(const String &str)
+String IO::GetHashFromString(const String &str)
 {
-    return Persistence::GetHashFromByteArray( str.ToQString().toUtf8() );
+    return IO::GetHashFromByteArray( str.ToQString().toUtf8() );
 }
 
-String Persistence::GetHashFromByteArray(const QByteArray &byteArray)
+String IO::GetHashFromByteArray(const QByteArray &byteArray)
 {
     QCryptographicHash hash(QCryptographicHash::Sha1);
     QByteArray hashBytes = hash.hash(byteArray, QCryptographicHash::Sha1);
     return String( QString(hashBytes.toHex()) );
 }
 
-String Persistence::AppendExtension(const String &filepath, const String extNoDot)
+String IO::AppendExtension(const String &filepath, const String extNoDot)
 {
     ASSERT(!filepath.Empty(), "", return "");
-    if (filepath.find("." + extNoDot) != String::npos) return filepath;
+    if (filepath.EndsWith("." + extNoDot)) { return filepath; }
     return filepath + "." + extNoDot;
 }
 
-void Persistence::InitFromMainBinary()
+void IO::InitFromMainBinary()
 {
-    SingletonManager::Set<Persistence>(new Persistence());
+    SingletonManager::Set<IO>(new IO());
 }
 
-Persistence *Persistence::GetInstance()
+IO *IO::GetInstance()
 {
-    return SingletonManager::Get<Persistence>();
+    return SingletonManager::Get<IO>();
 }
 
-const String &Persistence::GetCurrentSceneFilepath()
+const String &IO::GetCurrentSceneFilepath()
 {
-    return Persistence::GetInstance()->c_currentSceneFilepath;
+    return IO::GetInstance()->c_currentSceneFilepath;
 }
-const String &Persistence::GetProjectRootAbs()
+const String &IO::GetProjectRootAbs()
 {
-    return Persistence::GetInstance()->c_ProjectRootAbsolute;
+    return IO::GetInstance()->c_ProjectRootAbsolute;
 }
 
-String Persistence::GetProjectLibsRootAbs()
+String IO::GetProjectLibsRootAbs()
 {
-    return Persistence::GetInstance()->c_ProjectRootAbsolute + "/Libraries";
+    return IO::GetInstance()->c_ProjectRootAbsolute + "/Libraries";
 }
-const String &Persistence::GetProjectAssetsRootAbs()
+const String &IO::GetProjectAssetsRootAbs()
 {
-    return Persistence::GetInstance()->c_ProjectAssetsRootAbsolute;
+    return IO::GetInstance()->c_ProjectAssetsRootAbsolute;
 }
-const String &Persistence::GetEngineRootAbs()
+const String &IO::GetEngineRootAbs()
 {
-    return Persistence::GetInstance()->c_EngineRootAbsolute;
+    return IO::GetInstance()->c_EngineRootAbsolute;
 }
-const String &Persistence::GetEngineAssetsRootAbs()
+const String &IO::GetEngineAssetsRootAbs()
 {
-    return Persistence::GetInstance()->c_EngineAssetsRootAbsolute;
+    return IO::GetInstance()->c_EngineAssetsRootAbsolute;
 }
 
 

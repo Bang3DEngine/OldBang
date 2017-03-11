@@ -5,7 +5,7 @@
 #include "Debug.h"
 #include "XMLNode.h"
 #include "FileReader.h"
-#include "Persistence.h"
+#include "IO.h"
 
 #ifdef BANG_EDITOR
 #include "IInspectable.h"
@@ -19,7 +19,7 @@ Texture2DAssetFile::Texture2DAssetFile
 
 String Texture2DAssetFile::GetImageAbsFilepath() const
 {
-    String contents = FileReader::GetContents(GetAbsolutePath());
+    String contents = IO::GetFileContents(GetAbsolutePath());
     XMLNode *xmlInfo = XMLNode::FromString(contents);
     String result = "";
     if (xmlInfo)

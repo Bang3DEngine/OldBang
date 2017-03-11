@@ -2,7 +2,7 @@
 #define COMPONENT_H
 
 #include "Object.h"
-#include "IFileable.h"
+#include "SerializableObject.h"
 #include "IToString.h"
 #include "ISceneEventListener.h"
 
@@ -22,7 +22,7 @@ class Component :
               public Object
              ,public ISceneEventListener
              ,public IToString
-             ,public IFileable
+             ,public SerializableObject
             #ifdef BANG_EDITOR
              ,public IInspectable
             #endif
@@ -65,8 +65,8 @@ public:
     virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     friend class GameObject;
     friend class ComponentClipboard;

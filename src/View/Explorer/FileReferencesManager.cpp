@@ -5,10 +5,9 @@
 #include "Debug.h"
 #include "XMLNode.h"
 #include "Explorer.h"
-#include "IFileable.h"
-#include "FileWriter.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "XMLAttribute.h"
+#include "SerializableObject.h"
 
 FileReferencesManager::FileReferencesManager()
 {
@@ -19,12 +18,12 @@ FileReferencesManager::~FileReferencesManager()
 
 }
 
-void FileReferencesManager::RegisterIFileable(IFileable *fileable)
+void FileReferencesManager::RegisterSerializableObject(SerializableObject *fileable)
 {
     m_inMemoryFileables.Insert(fileable);
 }
 
-void FileReferencesManager::UnRegisterIFileable(IFileable *fileable)
+void FileReferencesManager::UnRegisterSerializableObject(SerializableObject *fileable)
 {
     m_inMemoryFileables.Remove(fileable);
 }
@@ -47,20 +46,20 @@ void FileReferencesManager::TreatNextQueuedFileOrDirNameChange()
     m_queuedNameChanges.pop();
 
     bool fileHasMoved = !absFilepathBefore.Empty() &&
-                        !Persistence::Exists(absFilepathBefore) &&
-                         Persistence::Exists(absFilepathNow);
+                        !IO::Exists(absFilepathBefore) &&
+                         IO::Exists(absFilepathNow);
 
     if (fileHasMoved) // Sometimes it triggers drop but nothing is moved, check
     {
-        String relPathBefore = Persistence::ToRelative(absFilepathBefore,false);
-        String relPathNow    = Persistence::ToRelative(absFilepathNow, false);
-        if ( Persistence::IsDir(absFilepathNow) )
+        String relPathBefore = IO::ToRelative(absFilepathBefore,false);
+        String relPathNow    = IO::ToRelative(absFilepathNow, false);
+        if ( IO::IsDir(absFilepathNow) )
         {
             relPathBefore += "/";
             relPathNow += "/";
         }
         RefactorFiles(relPathBefore, relPathNow);
-        RefactorIFileables(relPathBefore, relPathNow);
+        RefactorSerializableObject(relPathBefore, relPathNow);
     }
 }
 
@@ -74,7 +73,7 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
                                           const String &relPathNow)
 {
     List<String> allFiles =
-          Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(), true);
+          IO::GetFiles(IO::GetProjectAssetsRootAbs(), true);
     for (const String &filepath : allFiles)
     {
         File f(filepath);
@@ -84,26 +83,26 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
         XMLNode *auxXMLInfo = XMLNode::FromString(fileXMLContents);
         if (auxXMLInfo && RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow))
         {
-            Persistence::WriteToFile(filepath, auxXMLInfo->ToString());
+            IO::WriteToFile(filepath, auxXMLInfo->ToString());
         }
 
         if (auxXMLInfo) { delete auxXMLInfo; }
     }
 }
 
-void FileReferencesManager::RefactorIFileables(const String &relPathBefore,
+void FileReferencesManager::RefactorSerializableObject(const String &relPathBefore,
                                                const String &relPathNow)
 {
-    for (IFileable *fileable : m_inMemoryFileables)
+    for (SerializableObject *fileable : m_inMemoryFileables)
     {
         // First get its xml description, create an XMLNode, pass it to the
         // refactoring function, let the fileable read it to be updated, and
         // delete the created aux XMLNode
-        String xmlInfoStr = fileable->GetXMLInfoString();
+        String xmlInfoStr = fileable->GetSerializedString();
         XMLNode *auxXMLInfo = XMLNode::FromString(xmlInfoStr);
         if (auxXMLInfo && RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow))
         {
-            fileable->ReadXMLInfo(auxXMLInfo);
+            fileable->Read(auxXMLInfo);
         }
 
         if (auxXMLInfo) { delete auxXMLInfo; }

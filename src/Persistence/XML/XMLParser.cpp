@@ -1,22 +1,22 @@
 #include "XMLParser.h"
 
 #include "Debug.h"
-#include "IFileable.h"
-#include "Persistence.h"
+#include "SerializableObject.h"
+#include "IO.h"
 
-Map<String, const IFileable*> XMLParser::m_id_To_Pointer;
+Map<String, const SerializableObject*> XMLParser::m_id_To_Pointer;
 
 XMLParser::XMLParser()
 {
 }
 
-void XMLParser::RegisterId(const XMLNode *xmlInfo, const IFileable *pointer)
+void XMLParser::RegisterId(const XMLNode *xmlInfo, const SerializableObject *pointer)
 {
     String id = xmlInfo->GetString("id");
     m_id_To_Pointer[id] = pointer;
 }
 
-const IFileable *XMLParser::GetPointerFromId(const String &id)
+const SerializableObject *XMLParser::GetPointerFromId(const String &id)
 {
     if (m_id_To_Pointer.ContainsKey(id))
     {
@@ -187,7 +187,7 @@ void XMLParser::GetNextTag(const String &xml,
 XMLNode *XMLParser::FromFile(const String &filepath)
 {
     ASSERT(!filepath.Empty(), "", return nullptr);
-    ASSERT(Persistence::ExistsFile(filepath), "", return nullptr);
+    ASSERT(IO::ExistsFile(filepath), "", return nullptr);
 
     std::ifstream f;
     try

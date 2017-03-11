@@ -24,8 +24,8 @@ public:
     Color GetColor() const;
     float GetIntensity() const;
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
     float m_intensity = 1.0f;

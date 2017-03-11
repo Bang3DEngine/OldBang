@@ -64,13 +64,13 @@ bool BehaviourManagerStatus::HasFailed(const String &behaviourFilepath) const
 
 bool BehaviourManagerStatus::IsReady(const BehaviourId &bid) const
 {
-    String behaviourName = Persistence::GetFileName(bid.behaviourAbsPath);
+    String behaviourName = IO::GetFileName(bid.behaviourAbsPath);
     String behaviourObjectFilepath =
             BehaviourManager::GetCurrentLibsDir() + "/" + behaviourName + ".o";
     return m_successfullyCompiled.Contains(bid) &&
            !IsBeingCompiled(bid) &&
            !HasFailed(bid) &&
-           Persistence::Exists(behaviourObjectFilepath);
+           IO::Exists(behaviourObjectFilepath);
 }
 
 bool BehaviourManagerStatus::IsReady(const String &behaviourFilepath) const

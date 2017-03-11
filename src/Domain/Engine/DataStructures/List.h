@@ -184,7 +184,17 @@ public:
     {
         this->push_back(x);
     }
+    void PushBack(const List<T>& l)
+    {
+        this->Add(l);
+    }
 
+    List<T> Concat(const List<T> &l) const
+    {
+        List<T> result = *this;
+        for(const T& x : l) { result.PushBack(x); }
+        return result;
+    }
 
     Array<T> ToArray() const
     {

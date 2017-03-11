@@ -5,8 +5,7 @@
 
 #include "XMLNode.h"
 #include "Behaviour.h"
-#include "FileWriter.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "SystemUtils.h"
 #include "EditorState.h"
 #include "BehaviourManager.h"
@@ -122,9 +121,9 @@ void BehaviourHolder::RefreshBehaviourLib()
     ASSERT(!gameObject->IsDraggedGameObject());
     #endif
 
-    String absPath = Persistence::ToAbsolute(m_sourceFilepath, false);
-    ASSERT(Persistence::ExistsFile(absPath));
-    String behaviourName = Persistence::GetFileName(GetSourceFilepath());
+    String absPath = IO::ToAbsolute(m_sourceFilepath, false);
+    ASSERT(IO::ExistsFile(absPath));
+    String behaviourName = IO::GetFileName(GetSourceFilepath());
     ASSERT(!behaviourName.Empty());
 
     QLibrary *newLib = BehaviourManager::GetBehavioursMergedLibrary();
@@ -154,9 +153,9 @@ QLibrary *BehaviourHolder::GetLibraryBeingUsed() const
     return m_currentLoadedLibrary;
 }
 
-void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
+void BehaviourHolder::Read(const XMLNode *xmlInfo)
 {
-    Component::ReadXMLInfo(xmlInfo);
+    Component::Read(xmlInfo);
     String lastFilepath = m_sourceFilepath;
     m_sourceFilepath = xmlInfo->GetString("BehaviourScript");
     if (lastFilepath != m_sourceFilepath &&
@@ -166,9 +165,9 @@ void BehaviourHolder::ReadXMLInfo(const XMLNode *xmlInfo)
     }
 }
 
-void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
+void BehaviourHolder::Write(XMLNode *xmlInfo) const
 {
-    Component::FillXMLInfo(xmlInfo);
+    Component::Write(xmlInfo);
     xmlInfo->SetTagName("BehaviourHolder");
 
     xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "cpp");
@@ -178,14 +177,14 @@ void BehaviourHolder::FillXMLInfo(XMLNode *xmlInfo) const
 #ifdef BANG_EDITOR
 void BehaviourHolder::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    FillXMLInfo(xmlInfo);
+    Write(xmlInfo);
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
     xmlInfo->SetButton("CreateNew...", noConstThis);
 }
 
 void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    ReadXMLInfo(xmlInfo);
+    Read(xmlInfo);
     RefreshBehaviourLib();
 }
 
@@ -215,17 +214,17 @@ void BehaviourHolder::CreateNewBehaviour()
         String headerCode = Behaviour::s_behaviourHeaderTemplate;
         headerCode = headerCode.Replace("CLASS_NAME", className);
         String headerFilepath = currentDir + "/" + className;
-        headerFilepath = Persistence::AppendExtension(headerFilepath, "h");
-        ASSERT(!Persistence::ExistsFile(headerFilepath));
-        Persistence::WriteToFile(headerFilepath, headerCode);
+        headerFilepath = IO::AppendExtension(headerFilepath, "h");
+        ASSERT(!IO::ExistsFile(headerFilepath));
+        IO::WriteToFile(headerFilepath, headerCode);
 
         // Create source file
         String sourceCode = Behaviour::s_behaviourSourceTemplate;
         sourceCode = sourceCode.Replace("CLASS_NAME", className);
         String sourceFilepath = currentDir + "/" + className;
-        sourceFilepath = Persistence::AppendExtension(sourceFilepath, "cpp");
-        ASSERT(!Persistence::ExistsFile(sourceFilepath));
-        Persistence::WriteToFile(sourceFilepath, sourceCode);
+        sourceFilepath = IO::AppendExtension(sourceFilepath, "cpp");
+        ASSERT(!IO::ExistsFile(sourceFilepath));
+        IO::WriteToFile(sourceFilepath, sourceCode);
 
         // Update Behaviour file
         m_sourceFilepath = sourceFilepath;

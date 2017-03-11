@@ -10,7 +10,7 @@
 #include "Color.h"
 #include "Debug.h"
 #include "Object.h"
-#include "Persistence.h"
+#include "IO.h"
 
 DialogBrowseAssetFile::DialogBrowseAssetFile(String *resultFile)
 {
@@ -50,10 +50,10 @@ void DialogBrowseAssetFile::Show(QWidget *parent,
     setWindowTitle(title.ToQString());
 
     List<String> projectFilepaths =
-            Persistence::GetFiles(Persistence::GetProjectAssetsRootAbs(),
+            IO::GetFiles(IO::GetProjectAssetsRootAbs(),
                                   true, extensions);
     List<String> engineFilepaths =
-            Persistence::GetFiles(Persistence::GetEngineAssetsRootAbs(),
+            IO::GetFiles(IO::GetEngineAssetsRootAbs(),
                                   true, extensions);
 
     engineFilepaths.PushFront("None");
@@ -69,9 +69,9 @@ void DialogBrowseAssetFile::ShowOnList(QListWidget *listWidget,
 {
     for (const String &filepath : filepaths)
     {
-        String fileName = Persistence::GetFileNameWithExtension(filepath);
+        String fileName = IO::GetFileNameWithExtension(filepath);
 
-        String absFilepath = Persistence::ToAbsolute(filepath, engineFilepaths);
+        String absFilepath = IO::ToAbsolute(filepath, engineFilepaths);
         File file(absFilepath);
 
         QPixmap filePixmap;

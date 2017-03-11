@@ -6,7 +6,7 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Application.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "SceneManager.h"
 #include "BehaviourHolder.h"
 #include "BehaviourManager.h"
@@ -35,7 +35,7 @@ void BehaviourRefresherTimer::OnRefreshTimer() const
 
 void BehaviourRefresherTimer::RefreshBehaviours() const
 {
-    BehaviourManager::SetCurrentLibsDir( Persistence::GetProjectLibsRootAbs() );
+    BehaviourManager::SetCurrentLibsDir( IO::GetProjectLibsRootAbs() );
 
     const List<String>& behaviourSources =
             BehaviourManager::GetBehavioursSourcesFilepathsList();

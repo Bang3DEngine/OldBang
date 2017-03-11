@@ -57,16 +57,16 @@ Vector3 SingleLineRenderer::GetDestiny() const
     return m_points[1];
 }
 
-void SingleLineRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
+void SingleLineRenderer::Read(const XMLNode *xmlInfo)
 {
-    LineRenderer::ReadXMLInfo(xmlInfo);
+    LineRenderer::Read(xmlInfo);
     SetOrigin(xmlInfo->GetVector3("Origin"));
     SetDestiny(xmlInfo->GetVector3("Destiny"));
 }
 
-void SingleLineRenderer::FillXMLInfo(XMLNode *xmlInfo) const
+void SingleLineRenderer::Write(XMLNode *xmlInfo) const
 {
-    LineRenderer::FillXMLInfo(xmlInfo);
+    LineRenderer::Write(xmlInfo);
     xmlInfo->SetTagName("SingleLineRenderer");
 
     xmlInfo->SetVector3("Origin", GetOrigin());

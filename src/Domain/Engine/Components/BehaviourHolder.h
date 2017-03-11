@@ -45,8 +45,8 @@ public:
     virtual void OnAddedToGameObject() override;
     void RefreshBehaviourLib();
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;

@@ -38,18 +38,18 @@ bool FileSystemModel::setData(const QModelIndex &idx,
        const String calidChars = "/*,;:\\ ";
 
        String path = filePath(idx);
-       String dir = Persistence::GetDir(path);
+       String dir = IO::GetDir(path);
        String oldFileOrDirNameWithExt =
-               Persistence::GetFileNameWithExtension(path);
+               IO::GetFileNameWithExtension(path);
        String newFileOrDirNameWithExt = value.toString();
-       if (Persistence::IsFile(path))
+       if (IO::IsFile(path))
        {
-           String originalExtension = Persistence::GetFileExtensionComplete(path);
+           String originalExtension = IO::GetFileExtensionComplete(path);
 
            String userInput = value.toString();
-           String newExtension = Persistence::GetFileExtensionComplete(userInput);
+           String newExtension = IO::GetFileExtensionComplete(userInput);
            newExtension = newExtension.Empty() ? originalExtension : newExtension;
-           String newEditedFileName = Persistence::GetFileName(userInput);
+           String newEditedFileName = IO::GetFileName(userInput);
            String newEditedFileNameExt = newEditedFileName + "." + newExtension;
            newFileOrDirNameWithExt = newEditedFileNameExt;
 
@@ -59,7 +59,7 @@ bool FileSystemModel::setData(const QModelIndex &idx,
                errorMsg = "File name is empty.";
            }
 
-           if (Persistence::Exists(newFileOrDirNameWithExt))
+           if (IO::Exists(newFileOrDirNameWithExt))
            {
                error = true;
                errorMsg = "File with that name existed before.";
@@ -79,7 +79,7 @@ bool FileSystemModel::setData(const QModelIndex &idx,
            return false;
        }
 
-       bool ok = Persistence::Move(dir + "/" + oldFileOrDirNameWithExt,
+       bool ok = IO::Move(dir + "/" + oldFileOrDirNameWithExt,
                                    dir + "/" + newFileOrDirNameWithExt);
        if (ok)
        {
@@ -117,7 +117,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     if (role == Qt::DisplayRole && !m_explorer->IsInListMode())
     {
         String data = QFileSystemModel::data(idx, role).toString();
-        String fileName = Persistence::GetFileName(data);
+        String fileName = IO::GetFileName(data);
 
         const int justInCase = 4; // To avoid char clamping for some cases
         const int charsPerLine = GetWordWrappingCharsPerLine() - justInCase;
@@ -137,7 +137,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
 
         QPixmap pm;
         String absPath = file.GetAbsolutePath();
-        if (Persistence::IsFile(absPath))
+        if (IO::IsFile(absPath))
         {
             File *sFile = File::GetSpecificFile(file);
             if (sFile)
@@ -146,7 +146,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
                 delete sFile;
             }
         }
-        else if (Persistence::IsDir(absPath))
+        else if (IO::IsDir(absPath))
         {
             // Take the default pixmap and return it scaled
             const QIcon &icon = QFileSystemModel::data(idx, role).value<QIcon>();
@@ -161,7 +161,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
                     Qt::TransformationMode::SmoothTransformation);
         pmScaled = File::CenterPixmapInEmptyPixmap(pmEmpty, pmScaled);
 
-        if (Persistence::IsFile(absPath))
+        if (IO::IsFile(absPath))
         {
             File *sFile = File::GetSpecificFile(file);
             pmScaled = File::AddIconAssetTypeDistinctor(pmScaled, sFile->IsAsset());
@@ -172,7 +172,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     }
     else if (role == Qt::EditRole)
     {
-        if (Persistence::IsFile(filePath(idx)))
+        if (IO::IsFile(filePath(idx)))
         {
             String fileName = m_explorer->GetSelectedFile().GetName();
             return QVariant( fileName.ToQString() );
@@ -181,7 +181,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     else if (role == Qt::TextColorRole)
     {
         File file(this, idx);
-        if (Persistence::IsFile(filePath(idx)))
+        if (IO::IsFile(filePath(idx)))
         {
             Color textColor;
             File *sFile = File::GetSpecificFile(file);
@@ -221,7 +221,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
         QFont font = QFileSystemModel::data(idx, role).value<QFont>();
 
         File file(this, idx);
-        if ( Persistence::IsFile(file.GetAbsolutePath()) )
+        if ( IO::IsFile(file.GetAbsolutePath()) )
         {
             File *sFile = File::GetSpecificFile(file);
             font.setBold( sFile->IsAsset() );

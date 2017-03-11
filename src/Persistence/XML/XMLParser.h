@@ -7,12 +7,12 @@
 
 #include "XMLNode.h"
 
-class IFileable;
+class SerializableObject;
 class XMLParser
 {
 private:
 public:
-    static Map<String, const IFileable*> m_id_To_Pointer;
+    static Map<String, const SerializableObject*> m_id_To_Pointer;
 
     static void ClearPointerIds();
 
@@ -44,8 +44,8 @@ public:
 public:
     XMLParser();
 
-    static void RegisterId(const XMLNode *xmlInfo, const IFileable *pointer);
-    static const IFileable* GetPointerFromId(const String &id);
+    static void RegisterId(const XMLNode *xmlInfo, const SerializableObject *pointer);
+    static const SerializableObject* GetPointerFromId(const String &id);
 
     static String GetTagName(const String &tag,
                                   int *tagNameBegin = nullptr, int *tagNameEnd = nullptr);

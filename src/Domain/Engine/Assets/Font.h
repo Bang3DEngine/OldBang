@@ -35,8 +35,8 @@ public:
 
     void LoadFromTTF(const String &m_assetFilepath);
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     const Font::CharGlyphMetrics &GetCharacterMetrics(unsigned char c);
     Texture2D *GetCharacterTexture(unsigned char c) const;

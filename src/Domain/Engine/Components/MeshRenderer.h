@@ -24,8 +24,8 @@ public:
     virtual const Mesh* GetMesh();
     virtual String GetName() const override;
 
-    virtual void ReadXMLInfo(const XMLNode *xmlInfo) override;
-    virtual void FillXMLInfo(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
     mutable Mesh *m_mesh = nullptr;

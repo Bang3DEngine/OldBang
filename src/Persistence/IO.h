@@ -7,7 +7,7 @@
 #include "String.h"
 
 class Explorer;
-class Persistence
+class IO
 {
 public:
    static bool IsDir(const String &path);
@@ -90,7 +90,7 @@ public:
 
    static void InitFromMainBinary();
 
-   static Persistence *GetInstance();
+   static IO *GetInstance();
    static const String& GetCurrentSceneFilepath();
    static const String& GetProjectRootAbs();
    static String GetProjectLibsRootAbs();

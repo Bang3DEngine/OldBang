@@ -1,7 +1,7 @@
 #include "MeshAssetFile.h"
 
 #include "Mesh.h"
-#include "Persistence.h"
+#include "IO.h"
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
@@ -24,7 +24,7 @@ MeshAssetFile::MeshAssetFile(
 
 QPixmap MeshAssetFile::GetIcon() const
 {
-    String fp = Persistence::ToAbsolute("./Icons/MeshAssetIcon.png", true);
+    String fp = IO::ToAbsolute("./Icons/MeshAssetIcon.png", true);
     QPixmap pm(fp.ToQString());
     return pm;
 }

@@ -109,25 +109,25 @@ int CircleRenderer::GetSegments() const
 #ifdef BANG_EDITOR
 void CircleRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
 {
-    FillXMLInfo(xmlInfo);
+    Write(xmlInfo);
 }
 
 void CircleRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
 {
-    ReadXMLInfo(xmlInfo);
+    Read(xmlInfo);
 }
 #endif
 
-void CircleRenderer::ReadXMLInfo(const XMLNode *xmlInfo)
+void CircleRenderer::Read(const XMLNode *xmlInfo)
 {
-    LineRenderer::ReadXMLInfo(xmlInfo);
+    LineRenderer::Read(xmlInfo);
     SetRadius(xmlInfo->GetFloat("Radius"));
     SetSegments(xmlInfo->GetFloat("Segments"));
 }
 
-void CircleRenderer::FillXMLInfo(XMLNode *xmlInfo) const
+void CircleRenderer::Write(XMLNode *xmlInfo) const
 {
-    LineRenderer::FillXMLInfo(xmlInfo);
+    LineRenderer::Write(xmlInfo);
     xmlInfo->SetTagName("CircleRenderer");
 
     xmlInfo->SetFloat("Radius", GetRadius());
