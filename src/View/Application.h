@@ -29,6 +29,7 @@ public:
     AudioManager *GetAudioManager() const;
     AssetsManager *GetAssetsManager() const;
     static Application *GetInstance();
+    void ResetDeltaTime();
 
     bool notify(QObject *receiver, QEvent *e) override;
 

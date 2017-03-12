@@ -83,8 +83,6 @@ void PointLight::Write(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("Range", m_range);
 }
 
-#include "GraphicPipeline.h"
-#include "SelectionFramebuffer.h"
 void PointLight::OnDrawGizmos(bool depthed, bool overlay)
 {
     Light::OnDrawGizmos(depthed, overlay);

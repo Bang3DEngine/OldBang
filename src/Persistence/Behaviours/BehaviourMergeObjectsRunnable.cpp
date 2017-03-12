@@ -26,16 +26,20 @@ void BehaviourMergeObjectsRunnable::Merge()
             BehaviourManager::GetBehavioursObjectsFilepathsList();
     String libOutputFilepath =
             BehaviourManager::GetCurrentLibsDir() + "/Behaviours.so.";
-    String version = std::to_string(Time::GetNow());
-    if (m_forGame)
+    String version = "";
+    if (!m_forGame)
+    {
+        std::to_string(Time::GetNow());
+    }
+    else
     {
         String gameProjectDir = IO::GetDir(libOutputFilepath);
         gameProjectDir = IO::GetDirUp(gameProjectDir);
         String gameProjectFilepath = gameProjectDir + "/Game.bproject";
 
-        Project *gameProject = new Project();
-        gameProject->ReadFromString(gameProjectFilepath);
-        version = gameProject->GetProjectRandomId();
+        Project gameProject;
+        gameProject.ReadFromFile(gameProjectFilepath);
+        version = gameProject.GetProjectRandomId();
     }
     libOutputFilepath += version + ".1.1";
 

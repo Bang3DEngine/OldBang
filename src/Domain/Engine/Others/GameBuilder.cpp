@@ -162,16 +162,14 @@ bool GameBuilder::CompileGameExecutable()
         return false;
     }
 
-    String output = "";
-    String cmd = IO::GetEngineRootAbs() +
-                    "/scripts/compile.sh GAME RELEASE_MODE";
-
-    const String initialOutputDir = IO::GetEngineRootAbs() +
-                                        "/bin/Game.exe";
+    const String initialOutputDir = IO::GetEngineRootAbs() + "/bin/Game.exe";
     IO::Remove(initialOutputDir);
 
     bool ok = false;
-    SystemUtils::System(cmd.ToCString(), {}, &output, &ok);
+    String output = "";
+    String cmd = IO::GetEngineRootAbs() + "/scripts/compile.sh";
+    SystemUtils::System(cmd.ToCString(), {"GAME", "RELEASE_MODE"},
+                        &output, &ok);
     ok = ok && IO::ExistsFile(initialOutputDir);
     if (!ok)
     {
@@ -189,14 +187,13 @@ bool GameBuilder::CreateDataDirectory(const String &executableDir)
 
     // Copy the Engine Assets in the GameData directory
     if (!IO::DuplicateDir(IO::GetEngineAssetsRootAbs(),
-                                   dataDir + "/EngineAssets"))
+                          dataDir + "/EngineAssets"))
     {
         return false;
     }
 
     // Copy the Project Assets in the GameData directory
-    if (!IO::DuplicateDir(IO::GetProjectAssetsRootAbs(),
-                                   dataDir + "/Assets"))
+    if (!IO::DuplicateDir(IO::GetProjectAssetsRootAbs(), dataDir + "/Assets"))
     {
         return false;
     }

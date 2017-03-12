@@ -9,7 +9,10 @@ GPPass::GPPass(GraphicPipeline *graphicPipeline, const List<GPPass*> &subPasses)
 {
     p_graphicPipeline = graphicPipeline;
     p_gbuffer = graphicPipeline->GetGBuffer();
+    #ifdef BANG_EDITOR
     p_selectionFramebuffer = graphicPipeline->GetSelectionFramebuffer();
+    #endif
+
     for (GPPass *subPass : subPasses)
     {
         m_subPasses.PushBack(subPass);

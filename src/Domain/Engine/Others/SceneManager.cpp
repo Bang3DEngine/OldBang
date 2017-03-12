@@ -69,7 +69,9 @@ void SceneManager::SetActiveScene(Scene *scene)
         setCamera = EditorState::IsPlaying();
         #endif
 
+        Application::GetInstance()->ResetDeltaTime();
         sm->m_activeScene->_OnStart();
+        Debug_Log("Active Scene OnStart");
         if (setCamera)
         {
             sm->m_activeScene->SetFirstFoundCameraOrDefaultOne();
@@ -171,8 +173,10 @@ void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
     Scene *oldScene = SceneManager::GetActiveScene();
     if (oldScene) { delete oldScene; }
 
+    #ifdef BANG_EDITOR
     Inspector::GetInstance()->Clear();
     Hierarchy::GetInstance()->Clear();
+    #endif
     SceneManager::SetActiveScene(nullptr);
 
     #ifdef BANG_EDITOR

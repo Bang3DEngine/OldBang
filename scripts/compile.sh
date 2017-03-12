@@ -13,24 +13,32 @@ NUM_THREADS=16
 BUILD_MODE=$1
 RELEASE_OR_DEBUG=$2
 
-if [ -z ${BUILD_MODE} ] 
+echo "-----"
+ERROR=0
+if [ "${BUILD_MODE}" != "EDITOR" ] && [ "${BUILD_MODE}" != "GAME" ]
 then
-	BUILD_MODE="EDITOR"
-	echo "Build mode not specified. Picking EDITOR mode (default)."
-	echo "If you want to change it, specify as first argument: EDITOR or GAME"
-	echo 
+	echo "Option '${BUILD_MODE}' for the first parameter not recognised. Valid options are:"
+	echo "   - 'EDITOR'"
+	echo "   - 'GAME'"
+	ERROR=1
 fi
-if [ -z ${RELEASE_OR_DEBUG} ] 
+if [ "${RELEASE_OR_DEBUG}" != "DEBUG_MODE" ] && [ "${RELEASE_OR_DEBUG}" != "RELEASE_MODE" ]
 then
-	RELEASE_OR_DEBUG="RELEASE_MODE"
-	echo "Release or Debug not specified. Picking RELEASE_MODE mode (default)."
-	echo "If you want to change it, specify as second argument: RELEASE_MODE or DEBUG_MODE"
-	echo 
+	echo "Option '${RELEASE_OR_DEBUG}' for the second parameter not recognised. Valid options are:"
+	echo "   - 'DEBUG_MODE'"
+	echo "   - 'RELEASE_MODE'"
+	ERROR=1
+fi
+
+if [ $ERROR -eq 1 ]
+then
+	echo ""; echo "Please fix the errors."; echo ""	
+	echo "-----"
+	exit 1
 fi
 
 
 # Make and run Bang
-echo "-----"
 echo "BUILD_MODE on compile.sh:       '${BUILD_MODE}'"
 echo "RELEASE_OR_DEBUG on compile.sh: '${RELEASE_OR_DEBUG}'"
 echo "-----"

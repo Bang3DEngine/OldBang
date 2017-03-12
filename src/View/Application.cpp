@@ -59,7 +59,6 @@ void Application::MainLoop()
 
         Chrono c;
 
-        // Update deltaTime
         float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
         m_lastRenderTime = Time::GetNow();
         Time::GetInstance()->m_deltaTime = deltaTime;
@@ -115,18 +114,23 @@ Application *Application::GetInstance()
     ASSERT(GameWindow::GetInstance(), "", return nullptr);
     return Object::SCast<Application>(
                 GameWindow::GetInstance()->GetApplication());
-    #endif
+#endif
+}
+
+void Application::ResetDeltaTime()
+{
+    m_lastRenderTime = Time::GetNow();
 }
 
 bool Application::notify(QObject *receiver, QEvent *e)
 {
+    #ifdef BANG_EDITOR
     Screen *screen = Screen::GetInstance();
     if (screen && receiver == screen)
     {
         Input::GetInstance()->EnqueueEvent(e);
     }
 
-    #ifdef BANG_EDITOR
     if (e->type() == QEvent::MouseButtonPress)
     {
         DragDropManager::HandleGlobalMousePress(receiver, e);
@@ -162,6 +166,15 @@ bool Application::notify(QObject *receiver, QEvent *e)
     {
         sm->Clear();
     }
+
+    #else // GAME
+
+    Input *input = Input::GetInstance();
+    if (input)
+    {
+        input->EnqueueEvent(e);
+    }
+
     #endif
 
     return QApplication::notify(receiver, e);
