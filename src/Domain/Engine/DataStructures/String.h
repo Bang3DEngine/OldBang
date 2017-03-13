@@ -103,6 +103,7 @@ public:
     String ToUpper() const;
     String ToLower() const;
 
+    std::size_t operator()(const String &str) const;
     String& operator=(const char *cstr);
 
     static bool IsNumber(char c);
@@ -126,6 +127,7 @@ public:
     static String ToString(const Vector4 &v);
     static String ToString(const Matrix4 &v);
     static String ToString(const Quaternion &v);
+
 };
 
 // OPERATORS

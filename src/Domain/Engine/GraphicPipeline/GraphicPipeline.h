@@ -14,6 +14,7 @@ class GLContext;
 class GameObject;
 class Framebuffer;
 class GPPass_SP_FXAA;
+class TextureUnitManager;
 class SelectionFramebuffer;
 /**
  * @brief The GraphicPipeline class is the responsible of rendering the scene.
@@ -43,6 +44,7 @@ public:
 
     GLContext *GetGLContext() const;
     GBuffer *GetGBuffer();
+    TextureUnitManager *GetTextureUnitManager() const;
     #ifdef BANG_EDITOR
     SelectionFramebuffer* GetSelectionFramebuffer();
     #endif
@@ -54,6 +56,7 @@ public:
 
 private:
     bool m_FXAA = 1;
+    TextureUnitManager *m_texUnitManager = nullptr;
     GLContext *m_glContext = nullptr;
 
     GBuffer *m_gbuffer = nullptr;

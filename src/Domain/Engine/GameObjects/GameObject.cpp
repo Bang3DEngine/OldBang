@@ -109,9 +109,9 @@ void GameObject::SetParent(GameObject *newParent,
                            bool keepWorldTransform,
                            GameObject *aboveThisChild)
 {
-    if (m_parent)
+    if (p_parent)
     {
-        m_parent->m_children.Remove(this);
+        p_parent->m_children.Remove(this);
     }
 
     if (keepWorldTransform)
@@ -137,22 +137,22 @@ void GameObject::SetParent(GameObject *newParent,
         transform->SetLocalScale   (t.GetLocalScale());
     }
 
-    m_parent = newParent;
+    p_parent = newParent;
 
-    if (m_parent)
+    if (p_parent)
     {
         if (!aboveThisChild)
         {
-            m_parent->m_children.PushBack(this); // Add it to the end
+            p_parent->m_children.PushBack(this); // Add it to the end
         }
         else
         {
             bool itemToBeAboveOfFound = false;
-            for (auto it = m_parent->m_children.Begin(); it != m_parent->m_children.End(); ++it)
+            for (auto it = p_parent->m_children.Begin(); it != p_parent->m_children.End(); ++it)
             {
                 if (aboveThisChild == *it)
                 {
-                    m_parent->m_children.InsertBefore(it, this);
+                    p_parent->m_children.InsertBefore(it, this);
                     itemToBeAboveOfFound = true;
                     break;
                 }
@@ -160,7 +160,7 @@ void GameObject::SetParent(GameObject *newParent,
 
             if (!itemToBeAboveOfFound)
             {
-                m_parent->m_children.PushBack(this); // Just in case, add to the end
+                p_parent->m_children.PushBack(this); // Just in case, add to the end
             }
         }
     }
@@ -170,7 +170,7 @@ void GameObject::SetParent(GameObject *newParent,
 Scene *GameObject::GetScene()
 {
     if (IsOfType<Scene>()) { return this->Cast<Scene>(); }
-    if (m_parent) return m_parent->GetScene();
+    if (p_parent) return p_parent->GetScene();
     return nullptr;
 }
 
@@ -183,7 +183,7 @@ bool GameObject::IsInsideScene() const
 
 GameObject *GameObject::GetParent() const
 {
-    return m_parent;
+    return p_parent;
 }
 
 String GameObject::GetName() const
@@ -227,7 +227,7 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
     AABox aabBox = AABox::Empty;
     for (Renderer *rend : rends)
     {
-        if (CAN_USE_COMPONENT(rend))
+        if (rend && rend->IsEnabled())
         {
             aabBox = AABox::Union(aabBox, rend->GetAABBox());
         }
@@ -615,7 +615,7 @@ void GameObject::SetEnabled(bool enabled)
 
 bool GameObject::IsEnabled() const
 {
-    return m_enabled && (!m_parent ? true : m_parent->IsEnabled());
+    return m_enabled && (!p_parent ? true : p_parent->IsEnabled());
 }
 
 #ifdef BANG_EDITOR
@@ -634,25 +634,25 @@ String GameObject::ToString() const
 
 void GameObject::OnMouseEnter(bool fromChildren)
 {
-    if (m_parent)
+    if (p_parent)
     {
-        m_parent->OnMouseEnter(true);
+        p_parent->OnMouseEnter(true);
     }
 }
 
 void GameObject::OnMouseOver(bool fromChildren)
 {
-    if (m_parent)
+    if (p_parent)
     {
-        m_parent->OnMouseOver(true);
+        p_parent->OnMouseOver(true);
     }
 }
 
 void GameObject::OnMouseExit(bool fromChildren)
 {
-    if (m_parent)
+    if (p_parent)
     {
-        m_parent->OnMouseExit(true);
+        p_parent->OnMouseExit(true);
     }
 }
 

@@ -23,8 +23,7 @@ UIText::UIText() : UIRenderer()
 {
     SetMaterial( AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
                                                true) );
-    SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont",
-                                       true) );
+    SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
 }
 
 UIText::~UIText()
@@ -232,7 +231,6 @@ void UIText::RenderText() const
                 m_material->SetTexture(nullptr);
             }
         }
-
         char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
         totalAdvX += GetNDCAdvance(c, nextChar) + hSpacingNDC;
     }
@@ -272,7 +270,6 @@ Rect UIText::GetNDCRectOfChar(char c, const Rect &screenRectNDC) const
 
     Vector2 charAnchorMin = screenRectNDC.GetMin();
 
-    // Apply Bearings(X/Y)
     Vector2 bearing (charMetrics.bearingX, charMetrics.bearingY);
     charAnchorMin   += bearing * textSizeNDC;
     charAnchorMin.y -= (charMetrics.height - charMetrics.originY) *

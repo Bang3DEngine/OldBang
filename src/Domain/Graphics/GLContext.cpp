@@ -47,31 +47,43 @@ void GLContext::Render(const VAO* vao, GL::RenderMode renderMode,
 
 void GLContext::SetWriteDepth(bool writeDepth)
 {
-    m_writeDepth = writeDepth;
-    glDepthMask(m_writeDepth ? GL_TRUE : GL_FALSE);
+    if (writeDepth != m_writeDepth)
+    {
+        m_writeDepth = writeDepth;
+        glDepthMask(m_writeDepth ? GL_TRUE : GL_FALSE);
+    }
 }
 
 void GLContext::SetTestDepth(bool testDepth)
 {
-    m_testDepth = testDepth;
-    glDepthFunc(m_testDepth ? GL_LEQUAL : GL_ALWAYS);
+    if (m_testDepth != testDepth)
+    {
+        m_testDepth = testDepth;
+        glDepthFunc(m_testDepth ? GL_LEQUAL : GL_ALWAYS);
+    }
 }
 
 void GLContext::SetWireframe(bool wireframe)
 {
-    m_wireframe = wireframe;
-    glPolygonMode(GL_FRONT_AND_BACK, m_wireframe ? GL_LINE : GL_FILL);
+    if (m_wireframe != wireframe)
+    {
+        m_wireframe = wireframe;
+        glPolygonMode(GL_FRONT_AND_BACK, m_wireframe ? GL_LINE : GL_FILL);
+    }
 }
 
 void GLContext::SetCullMode(GL::CullMode cullMode)
 {
-    m_cullMode = cullMode;
-    if (m_cullMode != GL::CullMode::None)
+    if (cullMode != m_cullMode)
     {
-        glEnable(GL_CULL_FACE);
-        glCullFace(GLint(m_cullMode));
+        m_cullMode = cullMode;
+        if (m_cullMode != GL::CullMode::None)
+        {
+            GL::Enable(GL_CULL_FACE);
+            glCullFace(GLint(m_cullMode));
+        }
+        else { GL::Disable(GL_CULL_FACE); }
     }
-    else { glDisable(GL_CULL_FACE); }
 }
 
 void GLContext::SetModelMatrix(const Matrix4 &model)
@@ -105,6 +117,17 @@ bool GLContext::IsTestDepth() const
 bool GLContext::IsWireframe() const
 {
     return m_wireframe;
+}
+
+bool GLContext::IsBound(GL::BindTarget bindTarget, GLId glId) const
+{
+    auto it = m_glBoundIds.Find(bindTarget);
+    if (it != m_glBoundIds.End())
+    {
+        const std::stack<GLId>& boundIds = it->second;
+        return !boundIds.empty() && boundIds.top() == glId;
+    }
+    return false;
 }
 
 GL::CullMode GLContext::GetCullMode() const
@@ -156,7 +179,6 @@ void GLContext::OnUnBind(GL::BindTarget bindTarget)
     }
     GL::_Bind(bindTarget, previousBoundId);
 }
-
 
 GLContext::GLContext()
 {

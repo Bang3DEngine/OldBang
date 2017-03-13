@@ -2,6 +2,7 @@
 #define SHADERPROGRAM_H
 
 #include "Map.h"
+#include "UMap.h"
 #include "Color.h"
 #include "Vector2.h"
 #include "Vector3.h"
@@ -56,7 +57,11 @@ private:
     Shader *m_vshader = nullptr;
     Shader *m_fshader = nullptr;
 
-    mutable Map<String, const Texture*> m_names_To_Texture;
+    mutable Map<String, GLuint> m_nameToLocationCache;
+    mutable Map<String, const Texture*> m_namesToTexture;
+
+    bool BindTextureToAvailableUnit(const String &texName,
+                                    const Texture *texture) const;
     void UpdateTextureBindings() const;
 };
 

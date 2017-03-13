@@ -437,6 +437,11 @@ String String::ToLower() const
     return result;
 }
 
+std::size_t String::operator()(const String &str) const
+{
+    return std::hash<std::string>()(str);
+}
+
 
 String& String::operator=(const char *cstr)
 {

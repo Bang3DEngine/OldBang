@@ -38,6 +38,8 @@ public:
     bool IsWriteDepth() const;
     bool IsTestDepth() const;
     bool IsWireframe() const;
+    bool IsBound(GL::BindTarget bindTarget, GLId glId) const;
+
     GL::CullMode GetCullMode() const;
     const Matrix4 &GetModelMatrix() const;
     const Matrix4 &GetViewMatrix() const;
@@ -46,8 +48,7 @@ public:
     GLId GetBoundId(GL::BindTarget bindTarget) const;
 
 private:
-    bool m_writeDepth = true, m_testDepth = true;
-    bool m_wireframe = false;
+    bool m_writeDepth = true, m_testDepth = true, m_wireframe = false;
     GL::CullMode m_cullMode = GL::CullMode::None;
     Map<GL::BindTarget, std::stack<GLId> > m_glBoundIds;
 

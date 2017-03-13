@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "TextureUnitManager.h"
 
 ShaderProgram::ShaderProgram()
 {
@@ -160,13 +161,12 @@ bool ShaderProgram::SetMat4(const String &name, const Matrix4& m) const
 
 bool ShaderProgram::SetTexture(const String &name, const Texture *texture) const
 {
-    int location = GetUniformLocation(name);
-    if (location >= 0)
+    bool uniformIsUsed = BindTextureToAvailableUnit(name, texture);
+    if (uniformIsUsed)
     {
-        m_names_To_Texture[name] = texture;
-        UpdateTextureBindings();
+        m_namesToTexture[name] = texture;
     }
-    return (location >= 0);
+    return uniformIsUsed;
 }
 
 Shader *ShaderProgram::GetVertexShader() const
@@ -181,7 +181,12 @@ Shader *ShaderProgram::GetFragmentShader() const
 
 GLint ShaderProgram::GetUniformLocation(const String &name) const
 {
-    return glGetUniformLocation(m_idGL, name.ToCString());
+    auto it = m_nameToLocationCache.Find(name);
+    if (it != m_nameToLocationCache.End()) { return it->second; }
+
+    const GLuint location = glGetUniformLocation(m_idGL, name.ToCString());
+    if (location >= 0) { m_nameToLocationCache[name] = location; }
+    return location;
 }
 
 GLint ShaderProgram::GetAttribLocation(const String &name) const
@@ -198,6 +203,22 @@ String ShaderProgram::ToString() const
     return oss.str();
 }
 
+bool ShaderProgram::BindTextureToAvailableUnit(const String &texName,
+                                               const Texture *texture) const
+{
+    int location = -1;
+    if (texture)
+    {
+        location = GetUniformLocation(texName);
+        if (location >= 0)
+        {
+            GLuint texUnit = TextureUnitManager::BindTexture(texture);
+            glUniform1i(location, texUnit);
+        }
+    }
+    return (location >= 0);
+}
+
 void ShaderProgram::Bind() const
 {
     GL::Bind(this);
@@ -206,37 +227,14 @@ void ShaderProgram::Bind() const
 
 void ShaderProgram::UnBind() const
 {
-    for (auto it = m_names_To_Texture.Begin();
-         it != m_names_To_Texture.End(); ++it)
-    {
-        const Texture *tex = it->second;
-        if (tex)
-        {
-            tex->UnBind();
-        }
-    }
     GL::UnBind(this);
 }
 
 void ShaderProgram::UpdateTextureBindings() const
 {
-    int textureUnit = 0;
-    for (auto it = m_names_To_Texture.Begin();
-         it != m_names_To_Texture.End(); ++it)
+    for (auto it = m_namesToTexture.Begin(); it != m_namesToTexture.End(); ++it)
     {
-        const String &texName = it->first;
-        const Texture *tex = it->second;
-
-        if (tex)
-        {
-            int location = GetUniformLocation(texName);
-            // Set the uniform with the corresponding texture unit
-            glUniform1i(location, textureUnit);
-
-            // Bind To texture unit
-            tex->BindToTextureUnit(textureUnit); //Leave it bound
-            textureUnit++;
-        }
+        BindTextureToAvailableUnit(it->first, it->second);
     }
 }
 

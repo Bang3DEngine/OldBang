@@ -75,15 +75,25 @@ void EditorScene::OnUpdate()
 {
     Scene::OnUpdate();
 
-    static List<int> latestFPS = {0,0,0,0,0};
+    static List<int> latestFPS = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     int fps = 1.0f / (Time::s_deltaTime + 0.0001f);
+
     latestFPS.PushFront(fps);
     latestFPS.PopBack();
     int fpsSum = 0;
     for (int f : latestFPS) { fpsSum += f; }
     int fpsMean = fpsSum / latestFPS.Size();
     m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
-    //if (rand()%10 == 0) Debug_Log(fpsMean);
+    //if (rand()%5 == 0) Debug_Log(fpsMean);
+
+    //if (rand()%5 == 0) Debug_Log(fps);
+
+    static double totalTime = 0.0;
+    static int totalFrameCount = 0;
+    totalTime += Time::s_deltaTime;
+    ++totalFrameCount;
+    int fpsTotalMean = 1.0 / (totalTime / totalFrameCount);
+    if (rand()%20 == 0) Debug_Log(totalTime << ", " << totalFrameCount << ": " << fpsTotalMean);
 }
 
 void EditorScene::SetEditorCamera()

@@ -25,6 +25,7 @@
 #include "RectTransform.h"
 #include "GPPass_SP_FXAA.h"
 #include "GPPass_G_Gizmos.h"
+#include "TextureUnitManager.h"
 #include "GraphicPipelineDebugger.h"
 #include "GPPass_SP_DeferredLights.h"
 
@@ -37,6 +38,7 @@
 GraphicPipeline::GraphicPipeline(Screen *screen)
 {
     m_glContext = new GLContext();
+    m_texUnitManager = new TextureUnitManager();
 
     m_gbuffer = new GBuffer(screen->m_width, screen->m_height);
     #ifdef BANG_EDITOR
@@ -116,6 +118,7 @@ GraphicPipeline::~GraphicPipeline()
     #endif
 
     delete m_matSelectionEffectScreen;
+    delete m_texUnitManager;
     delete m_glContext;
 }
 
@@ -127,17 +130,17 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
     List<GameObject*> sceneChildren = scene->GetChildren();
 
-    ChronoGL c;
-    c.MarkEvent("RenderGBuffer");
+    //ChronoGL c;
+    //c.MarkEvent("RenderGBuffer");
     RenderGBuffer(renderers, sceneChildren);
 
-    c.MarkEvent("RenderToScreen");
+    //c.MarkEvent("RenderToScreen");
     m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 
     #ifdef BANG_EDITOR
     if (!m_renderingInGame)
     {
-        c.MarkEvent("RenderSelectionBuffer");
+        //c.MarkEvent("RenderSelectionBuffer");
         RenderSelectionBuffer(renderers, sceneChildren, p_scene);
         if (Input::GetKey(Input::Key::S))
         {
@@ -169,7 +172,7 @@ void GraphicPipeline::ApplySelectionOutline()
             List<Renderer*> rends = go->GetComponents<Renderer>();
             for (Renderer *rend : rends)
             {
-                if (CAN_USE_COMPONENT(rend)) { rend->Render(); }
+                if (rend && rend->IsEnabled()) { rend->Render(); }
             }
         }
     }
@@ -208,7 +211,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
         List<Light*> lights = p_scene->GetComponentsInChildren<Light>();
         for (Light *light : lights)
         {
-            if (!CAN_USE_COMPONENT(light)) { continue; }
+            if (!light || !light->IsEnabled()) { continue; }
             light->ApplyLight(m_gbuffer, renderRect);
         }
     }
@@ -344,4 +347,9 @@ GLContext *GraphicPipeline::GetGLContext() const
 GBuffer *GraphicPipeline::GetGBuffer()
 {
     return m_gbuffer;
+}
+
+TextureUnitManager *GraphicPipeline::GetTextureUnitManager() const
+{
+    return m_texUnitManager;
 }

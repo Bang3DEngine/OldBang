@@ -66,5 +66,5 @@ void GPPass::AddSubPass(GPPass *subPass)
 bool GPPass::CanRender(const Renderer *renderer) const
 {
     return (p_parentPass ? p_parentPass->CanRender(renderer) : true) &&
-            CAN_USE_COMPONENT(renderer);
+            (renderer && renderer->IsEnabled());
 }

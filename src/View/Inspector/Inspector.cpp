@@ -31,7 +31,12 @@ Inspector::Inspector(QWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
+    m_enableGameObjectCheckBox =
+            parent->findChild<QCheckBox*>("enableGameObjectCheckBox");
     setMinimumWidth(300);
+
+    QObject::connect(m_enableGameObjectCheckBox, SIGNAL(toggled(bool)),
+                     this, SLOT( OnEnableGameObjectCheckBoxChanged(bool) ));
 
     horizontalScrollBar()->setEnabled(false);
 }
@@ -40,6 +45,7 @@ void Inspector::OnWindowShown()
 {
     this->SetDragDropEventPossibleSources({
           Explorer::GetInstance(), Hierarchy::GetInstance()});
+    Clear();
 }
 
 void Inspector::updateGeometries()
@@ -50,26 +56,28 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
+    m_enableGameObjectCheckBox->setVisible(false);
+
     // Avoid double clearings
     ASSERT(!m_widget_To_Item.Empty());
 
     for (InspectorWidget *iw : m_currentInspectorWidgets) { iw->OnDestroy(); }
     m_currentInspectorWidgets.Clear();
-    m_widget_To_Item.Clear();
     m_widget_To_Inspectables.Clear();
     m_currentInspectables.Clear();
+    m_widget_To_Item.Clear();
 
     clear();
 
     m_titleLabel->setText(tr(""));
-    m_currentGameObject = nullptr;
+    p_currentGameObject = nullptr;
 }
 
 void Inspector::Refresh()
 {
-    if (m_currentGameObject)
+    if (p_currentGameObject)
     {
-        ShowGameObjectInfo(m_currentGameObject);
+        ShowGameObjectInfo(p_currentGameObject);
     }
     else
     {
@@ -112,7 +120,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     Clear();
 
     ASSERT(gameObject);
-    m_currentGameObject = gameObject;
+    p_currentGameObject = gameObject;
 
     for (Component *c : gameObject->GetComponents())
     {
@@ -125,6 +133,8 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 
     RefreshSizeHints();
     m_titleLabel->setText(gameObject->name.ToQString());
+    m_enableGameObjectCheckBox->setVisible(true);
+    m_enableGameObjectCheckBox->setChecked( p_currentGameObject->IsEnabled() );
 }
 
 void Inspector::RefreshSizeHints()
@@ -145,10 +155,19 @@ void Inspector::OnEditorPlay()
 
 void Inspector::ShowCurrentGameObjectInfo()
 {
-    ShowGameObjectInfo(m_currentGameObject);
+    ShowGameObjectInfo(p_currentGameObject);
 }
 
-void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable)
+void Inspector::OnEnableGameObjectCheckBoxChanged(bool checked)
+{
+    if (p_currentGameObject)
+    {
+        p_currentGameObject->SetEnabled(checked);
+    }
+}
+
+void Inspector::ShowPrefabInspectableInfo(
+        PrefabAssetFileInspectable *prefabInspectable)
 {
     ShowGameObjectInfo(prefabInspectable->GetPrefabTempGameObject());
     m_currentInspectables.PushBack(prefabInspectable);
@@ -156,8 +175,8 @@ void Inspector::ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInsp
 
 void Inspector::OnMenuBarAddNewBehaviourClicked()
 {
-    ASSERT(m_currentGameObject);
-    BehaviourHolder *bh = m_currentGameObject->AddComponent<BehaviourHolder>();
+    ASSERT(p_currentGameObject);
+    BehaviourHolder *bh = p_currentGameObject->AddComponent<BehaviourHolder>();
     bh->CreateNewBehaviour();
 }
 
@@ -221,7 +240,7 @@ String Inspector::FormatInspectorLabel(const String &labelString)
 
 void Inspector::OnGameObjectDestroyed(GameObject *destroyed)
 {
-    if (m_currentGameObject == destroyed)
+    if (p_currentGameObject == destroyed)
     {
         Clear();
     }

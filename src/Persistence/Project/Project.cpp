@@ -2,9 +2,9 @@
 
 #include <string>
 
+#include "IO.h"
 #include "Time.h"
 #include "XMLNode.h"
-#include "IO.h"
 
 Project::Project()
 {

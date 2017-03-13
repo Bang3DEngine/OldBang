@@ -32,10 +32,9 @@ class GameObject :
 {
 
 public:
-
     // PROPERTIES
     String const& name   = m_name;
-    GameObject* const& parent = m_parent;
+    GameObject* const& parent = p_parent;
     Transform* const& transform = m_transform;
     //
 
@@ -298,7 +297,7 @@ protected:
     List<Component*> m_components;
     List<GameObject*> m_children;
     Transform *m_transform = nullptr;
-    GameObject *m_parent = nullptr;
+    GameObject *p_parent = nullptr;
 
     bool m_enabled = true;
     bool m_hasBeenReadOnce = false;

@@ -13,8 +13,6 @@
 
 #include "String.h"
 
-#define CAN_USE_COMPONENT(comp)  ( comp  && comp->IsEnabled() )
-
 class XMLNode;
 class Transform;
 class GameObject;

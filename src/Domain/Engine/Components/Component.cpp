@@ -91,7 +91,7 @@ void Component::Write(XMLNode *xmlInfo) const
     xmlInfo->SetPointer("id", this,
                         {XMLProperty::Hidden,
                          XMLProperty::Readonly});
-    xmlInfo->SetBool("enabled", IsEnabled(),
+    xmlInfo->SetBool("enabled", m_enabled,
                      {XMLProperty::Hidden,
                       XMLProperty::Readonly});
     xmlInfo->SetBool("closedInInspector", IsClosedInInspector(),

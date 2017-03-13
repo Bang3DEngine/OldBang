@@ -34,6 +34,7 @@ public:
 
 public slots:
     void ShowCurrentGameObjectInfo();
+    void OnEnableGameObjectCheckBoxChanged(bool checked);
 
     /**
      * @brief RefreshHard must be used when some hidden or non-hidden
@@ -50,8 +51,8 @@ public:
     template<class ComponentClass>
     void OnMenuBarAddComponentClicked()
     {
-        ASSERT(m_currentGameObject);
-        m_currentGameObject->AddComponent<ComponentClass>();
+        ASSERT(p_currentGameObject);
+        p_currentGameObject->AddComponent<ComponentClass>();
         Refresh();
     }
     void OnMenuBarAddNewBehaviourClicked();
@@ -80,7 +81,9 @@ private:
     InspectorContextMenu m_iContextMenu;
 
     QLabel *m_titleLabel = nullptr;
-    GameObject *m_currentGameObject = nullptr;
+    QCheckBox *m_enableGameObjectCheckBox = nullptr;
+
+    GameObject *p_currentGameObject = nullptr;
     List<InspectorWidget*> m_currentInspectorWidgets;
     List<IInspectable*> m_currentInspectables;
 

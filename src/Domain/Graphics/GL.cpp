@@ -176,25 +176,23 @@ void GL::Bind(GL::BindTarget bindTarget, GLId glId)
 
 void GL::_Bind(GL::BindTarget bindTarget, GLId glId)
 {
-    if (bindTarget == BindTarget::Texture2D)
+    switch (bindTarget)
     {
-        glBindTexture(GL_TEXTURE_2D, glId);
-    }
-    else if (bindTarget == BindTarget::ShaderProgram)
-    {
-        glUseProgram(glId);
-    }
-    else if (bindTarget == BindTarget::Framebuffer)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, glId);
-    }
-    else if (bindTarget == BindTarget::VAO)
-    {
-        glBindVertexArray(glId);
-    }
-    else if (bindTarget == BindTarget::VBO)
-    {
-        glBindBuffer(GL_ARRAY_BUFFER, glId);
+        case BindTarget::Texture2D:
+            glBindTexture(GL_TEXTURE_2D, glId);
+        break;
+        case BindTarget::ShaderProgram:
+            glUseProgram(glId);
+        break;
+        case BindTarget::Framebuffer:
+            glBindFramebuffer(GL_FRAMEBUFFER, glId);
+        break;
+        case BindTarget::VAO:
+            glBindVertexArray(glId);
+        break;
+        case BindTarget::VBO:
+            glBindBuffer(GL_ARRAY_BUFFER, glId);
+        break;
     }
 }
 

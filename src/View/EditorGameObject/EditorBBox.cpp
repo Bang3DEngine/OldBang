@@ -49,10 +49,10 @@ void EditorBBox::OnUpdate()
     List<Renderer*> rends = m_attachedGameObject->GetComponents<Renderer>();
     for (auto it_r = rends.Begin(); it_r != rends.End(); ++it_r)
     {
-        Renderer *r = *it_r;
-        if (CAN_USE_COMPONENT(r))
+        Renderer *rend = *it_r;
+        if (rend && rend->IsEnabled())
         {
-            AABox mbox = r->GetAABBox();
+            AABox mbox = rend->GetAABBox();
             bbox = AABox::Union(bbox, mbox);
         }
     }

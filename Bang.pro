@@ -300,7 +300,9 @@ HEADERS +=                                                          \
     src/Domain/Engine/Debug/ChronoGL.h \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.h \
     src/Domain/Engine/DataStructures/Set.h \
-    src/Domain/Engine/Interfaces/SerializableObject.h
+    src/Domain/Engine/Interfaces/SerializableObject.h \
+    src/Domain/Engine/GraphicPipeline/TextureUnitManager.h \
+    src/Domain/Engine/DataStructures/UMap.h
 
 EDITOR {
 HEADERS += \
@@ -514,7 +516,9 @@ SOURCES += \
     src/Domain/Engine/Debug/ChronoGL.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.cpp \
     src/Domain/Engine/DataStructures/Set.cpp \
-    src/Domain/Engine/Interfaces/SerializableObject.cpp
+    src/Domain/Engine/Interfaces/SerializableObject.cpp \
+    src/Domain/Engine/GraphicPipeline/TextureUnitManager.cpp \
+    src/Domain/Engine/DataStructures/UMap.cpp
 
 EDITOR {
     SOURCES += \
