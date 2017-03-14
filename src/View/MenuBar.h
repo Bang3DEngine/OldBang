@@ -8,6 +8,8 @@
 #include "String.h"
 
 class Mesh;
+class Material;
+class Texture2D;
 class GameObject;
 class WindowEventManager;
 class MenuBar : public QMenuBar
@@ -50,10 +52,12 @@ public slots:
     void OnAlignViewWithGameObject() const;
 
     void OnCreatePrefab() const;
-    void OnCreateMaterial() const;
+    Material* OnCreateMaterial(
+            const String &matFilepath = "New_Material") const;
     void OnCreateMesh() const;
     void OnCreateShaderProgram() const;
-    void OnCreateTexture2D() const;
+    Texture2D* OnCreateTexture2D(
+            const String &tex2DFilepath = "New_Texture2D") const;
     void OnCreateFont() const;
     void OnCreateAudioClip() const;
 

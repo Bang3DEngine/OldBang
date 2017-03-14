@@ -74,7 +74,7 @@ public slots:
     void OnDirLoaded(QString dir);
     void OnButtonDirUpClicked();
     void OnButtonChangeViewModeClicked();
-    void OnFileRenamed(const QString &path,
+    void OnFileRenamed(const QString &dirPath,
                        const QString &oldName,
                        const QString &newName);
     void UpdateLabelText();

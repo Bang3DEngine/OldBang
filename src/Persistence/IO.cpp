@@ -270,7 +270,7 @@ bool IO::DuplicateDir(const String &fromDirpath,
 }
 
 #ifdef BANG_EDITOR
-String IO::GetNextDuplicateName(const String &path)
+String IO::GetNextDuplicatePath(const String &path)
 {
     ASSERT(!path.Empty(), "", return "");
 
@@ -312,13 +312,13 @@ String IO::GetNextDuplicateName(const String &path)
     return result;
 }
 
-String IO::GetDuplicateName(const String &path)
+String IO::GetDuplicatePath(const String &path)
 {
     ASSERT(!path.Empty(), "", return "");
     String result = path;
     while (IO::Exists(result))
     {
-        result = IO::GetNextDuplicateName(result);
+        result = IO::GetNextDuplicatePath(result);
     }
     return result;
 }
@@ -445,20 +445,17 @@ void IO::SetActiveSceneFilepath(const String &scenePath)
 
 bool IO::Rename(const String &oldPath, const String &newPath)
 {
+    return IO::Move(oldPath, newPath);
+}
+
+bool IO::Move(const String &oldPath, const String &newPath)
+{
     ASSERT(IO::Exists(oldPath), "", return false);
     if (IO::IsDir(oldPath))
     {
         return QDir().rename(oldPath.ToQString(), newPath.ToQString());
     }
-    else
-    {
-        return QFile().rename(oldPath.ToQString(), newPath.ToQString());
-    }
-}
-
-bool IO::Move(const String &oldPath, const String &newPath)
-{
-    return IO::Rename(oldPath, newPath);
+    return QFile().rename(oldPath.ToQString(), newPath.ToQString());
 }
 
 bool IO::WriteToFile(const String &absFilepath, const String &contents)

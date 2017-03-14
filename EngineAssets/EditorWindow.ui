@@ -1320,6 +1320,10 @@
    </property>
   </action>
   <action name="actionAddComponentBehaviour">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/BehaviourIcon.png</normaloff>:/Bang/Icons/BehaviourIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Behaviour</string>
    </property>
@@ -1457,6 +1461,10 @@
    </property>
   </action>
   <action name="actionAddComponentNewBehaviour">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/BehaviourIcon.png</normaloff>:/Bang/Icons/BehaviourIcon.png</iconset>
+   </property>
    <property name="text">
     <string>New Behaviour</string>
    </property>

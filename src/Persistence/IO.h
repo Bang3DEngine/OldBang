@@ -61,8 +61,8 @@ public:
     * @param path
     * @return
     */
-   static String GetNextDuplicateName(const String &path);
-   static String GetDuplicateName(const String &path);
+   private: static String GetNextDuplicatePath(const String &path);
+   public:  static String GetDuplicatePath(const String &path);
     #endif
 
    static List<String> GetSubDirectories(const String& dirPath,

@@ -74,7 +74,8 @@ public:
     static T* Create(const String &filepath,
                      bool isEngineAsset = false)
     {
-        T *a = new T(); //a->m_filepath = filepath;
+        T *a = new T();
+        a->m_assetFilepath = filepath;
         AssetsManager::SaveAssetToFile(filepath, a, isEngineAsset);
         return a;
     }
@@ -111,8 +112,10 @@ public:
             asset->OnInspectorXMLChanged(xmlChangedInfo);
         }
 
+        Debug_Log("Exists " << assetFilepath << "?");
         if (IO::ExistsFile(assetFilepath))
         {
+            Debug_Log("YES");
             IO::WriteToFile(assetFilepath, xmlChangedInfo->ToString());
         }
     }

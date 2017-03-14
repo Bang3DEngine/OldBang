@@ -2,6 +2,7 @@
 
 #include <QScrollBar>
 
+#include "IO.h"
 #include "Input.h"
 #include "Debug.h"
 #include "Prefab.h"
@@ -11,7 +12,6 @@
 #include "Hierarchy.h"
 #include "GameObject.h"
 #include "SystemUtils.h"
-#include "IO.h"
 #include "SceneManager.h"
 #include "EditorWindow.h"
 #include "MeshAssetFile.h"
@@ -109,26 +109,19 @@ void Explorer::OnButtonDirUpClicked()
 
 void Explorer::OnButtonChangeViewModeClicked()
 {
-    if ( IsInListMode() )
-    {
-        setViewMode(ViewMode::IconMode);
-    }
-    else
-    {
-        setViewMode(ViewMode::ListMode);
-    }
+    setViewMode(IsInListMode() ? ViewMode::IconMode : ViewMode::ListMode);
 }
 
-void Explorer::OnFileRenamed(const QString &path,
+void Explorer::OnFileRenamed(const QString &dirPath,
                              const QString &oldName,
                              const QString &newName)
 {
     UpdateLabelText();
 
-    String newAbsPath = path + "/" + newName;
+    String newAbsPath = dirPath + "/" + newName;
     SelectFile(newAbsPath);
 
-    String oldAbsPath = path + "/" + oldName;
+    String oldAbsPath = dirPath + "/" + oldName;
     m_fileRefsManager->OnFileOrDirNameAboutToBeChanged(oldAbsPath, newAbsPath);
 }
 

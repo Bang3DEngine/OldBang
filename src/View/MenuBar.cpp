@@ -386,23 +386,25 @@ void MenuBar::OnCreatePrefab() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Prefab." + Prefab::GetFileExtensionStatic();
-    filepath = IO::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicatePath(filepath);
     AssetsManager::Create<Prefab>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
-void MenuBar::OnCreateMaterial() const
+Material* MenuBar::OnCreateMaterial(const String &matFilepath) const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath += "/New_Material." + Material::GetFileExtensionStatic();
-    filepath = IO::GetDuplicateName(filepath);
-    AssetsManager::Create<Material>(filepath);
+    filepath += "/" + IO::AppendExtension(matFilepath,
+                                          Material::GetFileExtensionStatic());
+    filepath = IO::GetDuplicatePath(filepath);
+    Material *mat = AssetsManager::Create<Material>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
+    return mat;
 }
 void MenuBar::OnCreateMesh() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Mesh." + Mesh::GetFileExtensionStatic();
-    filepath = IO::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicatePath(filepath);
     AssetsManager::Create<Mesh>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -416,20 +418,22 @@ void MenuBar::OnCreateShaderProgram() const
     Explorer::GetInstance()->StartRenaming(filepath);
     */
 }
-void MenuBar::OnCreateTexture2D() const
+Texture2D* MenuBar::OnCreateTexture2D(const String &tex2DFilepath) const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath += "/New_Texture2D." + Texture2D::GetFileExtensionStatic();
-    filepath = IO::GetDuplicateName(filepath);
-    AssetsManager::Create<Texture2D>(filepath);
+    filepath += "/" + IO::AppendExtension(tex2DFilepath,
+                                          Texture2D::GetFileExtensionStatic());
+    filepath = IO::GetDuplicatePath(filepath);
+    Texture2D* tex = AssetsManager::Create<Texture2D>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
+    return tex;
 }
 
 void MenuBar::OnCreateFont() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_Font." + Font::GetFileExtensionStatic();
-    filepath = IO::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicatePath(filepath);
     AssetsManager::Create<Font>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }
@@ -438,7 +442,7 @@ void MenuBar::OnCreateAudioClip() const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_AudioClip." + AudioClip::GetFileExtensionStatic();
-    filepath = IO::GetDuplicateName(filepath);
+    filepath = IO::GetDuplicatePath(filepath);
     AssetsManager::Create<AudioClip>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
 }

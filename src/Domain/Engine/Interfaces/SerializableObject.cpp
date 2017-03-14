@@ -14,6 +14,13 @@
 #include "FileReferencesManager.h"
 #endif
 
+XMLNode SerializableObject::GetXMLInfo() const
+{
+    XMLNode xmlInfo;
+    Write(&xmlInfo);
+    return xmlInfo;
+}
+
 String SerializableObject::GetSerializedString() const
 {
     XMLNode *xmlInfo = new XMLNode();

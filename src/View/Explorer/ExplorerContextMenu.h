@@ -4,6 +4,8 @@
 #include "ContextMenu.h"
 
 class Explorer;
+class Material;
+class Texture2D;
 class ExplorerContextMenu : public ContextMenu
 {
     Q_OBJECT
@@ -14,12 +16,16 @@ public:
 public slots:
     void OnCustomContextMenuRequested(QPoint point) override;
 
+    Texture2D* OnCreateTextureFromImageClicked();
+    Material* OnCreateMaterialFromImageClicked();
+    Material* OnCreateMaterialFromTextureClicked(Texture2D *tex = nullptr);
+
     void OnDuplicateClicked();
     void OnDeleteClicked();
     void OnCreateDirClicked();
 
 private:
-    Explorer *m_explorer = nullptr;
+    Explorer *p_explorer = nullptr;
 };
 
 #endif // EXPLORERCONTEXTMENU_H

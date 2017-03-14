@@ -79,13 +79,10 @@ void Inspector::Refresh()
     {
         ShowGameObjectInfo(p_currentGameObject);
     }
-    else
+    else if(m_currentInspectables.Size() == 1)
     {
-        if(m_currentInspectables.Size() == 1)
-        {
-            IInspectable *insp = m_currentInspectables.Front();
-            SetInspectable(insp);
-        }
+        IInspectable *insp = m_currentInspectables.Front();
+        SetInspectable(insp);
     }
     RefreshSizeHints();
 }

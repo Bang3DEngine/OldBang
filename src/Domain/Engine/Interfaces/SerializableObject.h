@@ -9,6 +9,7 @@ class XMLNode;
 class SerializableObject
 {
 public:
+    XMLNode GetXMLInfo() const;
     String GetSerializedString() const;
     void ReadFromString(const String &xmlInfoString);
 

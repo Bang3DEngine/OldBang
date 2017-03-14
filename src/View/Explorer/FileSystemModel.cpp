@@ -118,6 +118,7 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
     {
         String data = QFileSystemModel::data(idx, role).toString();
         String fileName = IO::GetFileName(data);
+        if (data == "..") { return data.ToQString(); }
 
         const int justInCase = 4; // To avoid char clamping for some cases
         const int charsPerLine = GetWordWrappingCharsPerLine() - justInCase;
