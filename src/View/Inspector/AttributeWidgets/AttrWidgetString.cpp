@@ -12,8 +12,8 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
                     xmlAttribute.HasProperty(XMLProperty::BigText))
 {
     QLayout *layout = new QVBoxLayout();
-    m_layout->addLayout(layout, 0);
-    m_layout->setContentsMargins(0,0,0,0);
+    m_layout.addLayout(layout, 0);
+    m_layout.setContentsMargins(0,0,0,0);
 
     bool bigText = xmlAttribute.HasProperty(XMLProperty::BigText);
     QWidget *textWidget = nullptr;
@@ -36,7 +36,7 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
     //connect(m_strField, SIGNAL(textChanged()),
     //        m_parent, SLOT(_OnSlotValueChanged()));
 
-    m_layout->addWidget(textWidget);
+    m_layout.addWidget(textWidget);
 
     AfterConstructor();
 }

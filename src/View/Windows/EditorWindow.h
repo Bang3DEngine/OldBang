@@ -31,6 +31,8 @@ public:
      * @return The created Singleton,
      */
     static void InitFromMainBinary(QMainWindow *window, QApplication *app);
+    bool IsSceneTabActive() const;
+    bool IsGameTabActive() const;
 
     static EditorWindow *GetInstance();
     QMainWindow *GetMainWindow() const override;

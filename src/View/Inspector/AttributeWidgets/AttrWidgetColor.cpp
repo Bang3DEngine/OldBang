@@ -9,7 +9,7 @@ AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
 {
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->setMargin(0); vLayout->setSpacing(0);
-    m_layout->addLayout(vLayout, 1);
+    m_layout.addLayout(vLayout, 1);
 
     m_colorDialog = new ColorDialog();
     m_colorLabel = new ColorLabel(this, m_colorDialog, &m_selectedColor);

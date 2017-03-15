@@ -75,6 +75,16 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     window->setCorner(Qt::BottomRightCorner, Qt::RightDockWidgetArea);
 }
 
+bool EditorWindow::IsSceneTabActive() const
+{
+    return tabContainerSceneGame->currentWidget() == tabScene;
+}
+
+bool EditorWindow::IsGameTabActive() const
+{
+    return tabContainerSceneGame->currentWidget() == tabGame;
+}
+
 EditorWindow *EditorWindow::GetInstance()
 {
     IWindow *w = SingletonManager::Get<IWindow>();

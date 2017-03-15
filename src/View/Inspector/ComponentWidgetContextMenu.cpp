@@ -45,7 +45,7 @@ void ComponentWidgetContextMenu::OnCustomContextMenuRequested(QPoint point)
     contextMenu.addAction(&actionRemoveComponent);
 
     if (ComponentClipboard::GetCopiedComponentName() !=
-            m_cWidget->m_relatedComponent->GetName())
+            m_cWidget->p_relatedComponent->GetName())
     {
         actionPasteComponentValues.setEnabled(false);
     }
@@ -61,7 +61,7 @@ void ComponentWidgetContextMenu::OnCustomContextMenuRequested(QPoint point)
         actionPasteComponentValues.setEnabled(false);
     }
 
-    if (m_cWidget->m_relatedComponent->GetName() == "Transform")
+    if (m_cWidget->p_relatedComponent->GetName() == "Transform")
     {
         actionRemoveComponent.setEnabled(false);
     }
@@ -75,8 +75,8 @@ void ComponentWidgetContextMenu::OnMoveUpSelected()
 }
 void ComponentWidgetContextMenu::MenuMoveUpSelected()
 {
-    m_cWidget->m_relatedComponent->gameObject->
-            MoveComponent(m_cWidget->m_relatedComponent, -1);
+    m_cWidget->p_relatedComponent->gameObject->
+            MoveComponent(m_cWidget->p_relatedComponent, -1);
     Inspector::GetInstance()->Refresh();
 }
 
@@ -86,8 +86,8 @@ void ComponentWidgetContextMenu::OnMoveDownSelected()
 }
 void ComponentWidgetContextMenu::MenuMoveDownSelected()
 {
-    m_cWidget->m_relatedComponent->gameObject->
-            MoveComponent(m_cWidget->m_relatedComponent, 1);
+    m_cWidget->p_relatedComponent->gameObject->
+            MoveComponent(m_cWidget->p_relatedComponent, 1);
     Inspector::GetInstance()->Refresh();
 }
 
@@ -98,7 +98,7 @@ void ComponentWidgetContextMenu::OnCopyComponentSelected()
 void ComponentWidgetContextMenu::CopyComponentSelected()
 {
     ComponentClipboard::CopyComponent(
-                m_cWidget->m_relatedComponent);
+                m_cWidget->p_relatedComponent);
     Inspector::GetInstance()->Refresh();
 }
 
@@ -109,7 +109,7 @@ void ComponentWidgetContextMenu::OnPasteComponentSelected()
 void ComponentWidgetContextMenu::PasteComponentSelected()
 {
     ComponentClipboard::PasteComponentInto(
-                m_cWidget->m_relatedComponent->gameObject);
+                m_cWidget->p_relatedComponent->gameObject);
     Inspector::GetInstance()->Refresh();
 }
 
@@ -120,7 +120,7 @@ void ComponentWidgetContextMenu::OnPasteComponentValuesSelected()
 void ComponentWidgetContextMenu::PasteComponentValuesSelected()
 {
     ComponentClipboard::PasteComponentValuesInto(
-                m_cWidget->m_relatedComponent);
+                m_cWidget->p_relatedComponent);
     Inspector::GetInstance()->Refresh();
 }
 
@@ -130,7 +130,7 @@ void ComponentWidgetContextMenu::OnRemoveComponentSelected()
 }
 void ComponentWidgetContextMenu::RemoveComponentSelected()
 {
-    m_cWidget->m_relatedComponent->gameObject->
-            RemoveComponent(m_cWidget->m_relatedComponent);
+    m_cWidget->p_relatedComponent->gameObject->
+            RemoveComponent(m_cWidget->p_relatedComponent);
     Inspector::GetInstance()->Refresh();
 }

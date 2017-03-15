@@ -1,13 +1,31 @@
 #include "ComponentWidget.h"
 
+#include "Chrono.h"
 #include "Component.h"
 #include "EditorWindow.h"
 
 ComponentWidget::ComponentWidget(Component *relatedComponent) :
     InspectorWidget(), m_cwContextMenu(this)
 {
-    m_relatedComponent = relatedComponent;
-    Start();
+    Chrono c;
+    c.MarkEvent("Construct ComponentWidget " + relatedComponent->GetName());
+    p_relatedComponent = relatedComponent;
+    Init(p_relatedComponent->GetName(), p_relatedComponent);
+
+    m_closed = p_relatedComponent->IsClosedInInspector();
+    SetClosed(m_closed);
+    UpdateCloseOpenButtonIcon();
+
+    if (!p_relatedComponent->GetName().Contains("Transform"))
+    {
+        m_enabledCheckbox.setChecked(p_relatedComponent->IsEnabled());
+        connect(&m_enabledCheckbox, SIGNAL(clicked(bool)),
+                this, SLOT(OnEnabledCheckboxPressed(bool)));
+        m_header.addWidget(&m_enabledCheckbox, 0,
+                           Qt::AlignRight | Qt::AlignVCenter);
+    }
+    RefreshWidgetValues();
+    c.Log();
 }
 
 ComponentWidget::~ComponentWidget()
@@ -19,37 +37,16 @@ int ComponentWidget::GetHeightSizeHint()
     return InspectorWidget::GetHeightSizeHint();
 }
 
-void ComponentWidget::Start()
-{
-    XMLNode xmlInfo;
-    m_relatedComponent->Write(&xmlInfo);
-    Init(xmlInfo.GetTagName(), m_relatedComponent);
-
-    m_closed = m_relatedComponent->IsClosedInInspector();
-    SetClosed(m_closed);
-    UpdateCloseOpenButtonIcon();
-    if (m_relatedComponent->GetName() != "Transform")
-    {
-        m_enabledCheckbox = new QCheckBox();
-        m_enabledCheckbox->setChecked(m_relatedComponent->IsEnabled());
-        connect(m_enabledCheckbox, SIGNAL(clicked(bool)),
-                this, SLOT(OnEnabledCheckboxPressed(bool)));
-        m_header->addWidget(m_enabledCheckbox, 0,
-                            Qt::AlignRight | Qt::AlignVCenter);
-    }
-    RefreshWidgetValues();
-}
-
 void ComponentWidget::OnEnabledCheckboxPressed(bool checked)
 {
-    ASSERT(m_relatedComponent);
-    m_relatedComponent->SetEnabled(checked);
+    ASSERT(p_relatedComponent);
+    p_relatedComponent->SetEnabled(checked);
 }
 
 void ComponentWidget::SetClosed(bool closed)
 {
-    ASSERT(m_relatedComponent);
+    ASSERT(p_relatedComponent);
     InspectorWidget::SetClosed(closed);
-    m_relatedComponent->SetClosedInInspector(closed);
+    p_relatedComponent->SetClosedInInspector(closed);
 }
 

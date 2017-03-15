@@ -1,6 +1,8 @@
 #ifndef INSPECTORSW_H
 #define INSPECTORSW_H
 
+#include <QLabel>
+#include <QHBoxLayout>
 
 #include "XMLAttribute.h"
 #include "DragDropQWidget.h"
@@ -8,7 +10,7 @@
 
 class QLabel;
 class XMLNode;
-class QBoxLayout;
+class QHBoxLayout;
 class InspectorWidget;
 class AttributeWidget : public DragDropQWidget,
                         public IDragDropListener
@@ -24,7 +26,7 @@ public:
                                              InspectorWidget *inspectorWidget);
 
 protected:
-    QBoxLayout *m_layout = nullptr;
+    QHBoxLayout m_layout;
     QLabel *m_label = nullptr;
     int m_rowIndexInGridLayout = 0;
     int m_heightSizeHint = -1;

@@ -5,9 +5,9 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
     AttributeWidget(xmlAttribute, inspectorWidget, false, true, true)
 {
     QHBoxLayout *hLayout = new QHBoxLayout();
-    m_layout->addLayout(hLayout, 1);
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
+    m_layout.addLayout(hLayout, 1);
+    m_layout.setSpacing(0);
+    m_layout.setMargin(0);
 
     String labels[] = {"X", "Y", "Z", "W"};
     int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();

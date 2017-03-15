@@ -7,7 +7,7 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
     AttributeWidget(xmlAttribute, inspectorWidget)
 {
     QLayout *layout = new QHBoxLayout();
-    m_layout->addLayout(layout, 1);
+    m_layout.addLayout(layout, 1);
 
     m_comboBox = new ComboBox(this);
     layout->addWidget(m_comboBox);

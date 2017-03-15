@@ -53,7 +53,7 @@ public:
      */
     XMLNode GetWidgetXMLInfo() const;
 
-    QGridLayout *GetGridLayout() const;
+    QGridLayout *GetGridLayout();
     int GetNextRowIndex() const;
 
     void SetTitle(const String &title);
@@ -74,12 +74,11 @@ public slots:
 protected:
     IInspectable *m_relatedInspectable = nullptr;
 
-    QVBoxLayout *m_vLayout = nullptr;
-        QHBoxLayout *m_header = nullptr;
-            QToolButton *m_closeOpenButton = nullptr;
-            QPixmap m_openButtonPixmap, m_closeButtonPixmap;
-            QLabel *m_titleLabel = nullptr;
-    QGridLayout *m_gridLayout = nullptr;
+    QVBoxLayout m_vLayout;
+    QHBoxLayout m_header;
+    QToolButton m_closeOpenButton;
+    QLabel m_titleLabel;
+    QGridLayout m_gridLayout;
 
     bool m_closed = false;
 

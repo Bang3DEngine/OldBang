@@ -103,10 +103,11 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     if (!cameraFound) // Create default camera
     {
         Debug_Warn("No camera was found. Creating default camera...");
-        GameObject *m_defaultCamera = new GameObject("DefaultCamera");
+        m_defaultCamera = new GameObject("DefaultCamera");
         m_defaultCamera->transform->SetPosition(Vector3(90));
         m_defaultCamera->transform->LookAt(Vector3::Zero);
         m_defaultCamera->SetParent(this);
+        m_defaultCamera->AddHideFlag(HideFlags::HideAndDontSave);
 
         Camera *cam = m_defaultCamera->AddComponent<Camera>();
         cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);

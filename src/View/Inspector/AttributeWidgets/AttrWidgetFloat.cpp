@@ -12,8 +12,8 @@ AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
     AttributeWidget(xmlAttribute, inspectorWidget, isSubWidget, !isSubWidget)
 {
     QVBoxLayout *layout = new QVBoxLayout();
-    m_layout->addLayout(layout, 1);
-    m_layout->setMargin(1);
+    m_layout.addLayout(layout, 1);
+    m_layout.setMargin(1);
 
     m_lineEdit = new FloatComponentSlotSpinBox();
     m_lineEdit->setAlignment(Qt::AlignLeft);

@@ -235,6 +235,10 @@ QPixmap File::GetIcon() const
     {
         fp = IO::ToAbsolute("./Icons/SceneIcon.png", true);
     }
+    else if (IsFontAssetFile())
+    {
+        fp = IO::ToAbsolute("./Icons/LetterIcon.png", true);
+    }
     else
     {
         fp = IO::ToAbsolute("./Icons/OtherFileIcon.png", true);

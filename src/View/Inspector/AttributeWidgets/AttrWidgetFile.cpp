@@ -22,7 +22,7 @@ AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
                         XMLProperty::FileExtension.GetName());
 
     m_hLayout = new QHBoxLayout();
-    m_layout->addLayout(m_hLayout, 1);
+    m_layout.addLayout(m_hLayout, 1);
 
     // Icon
     String filepath = xmlAttribute.GetValue();

@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "Debug.h"
+#include "Chrono.h"
 #include "UIText.h"
 #include "Canvas.h"
 #include "Camera.h"
@@ -114,6 +115,8 @@ void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
+    Chrono ch;
+    ch.MarkEvent("Clear");
     Clear();
 
     ASSERT(gameObject);
@@ -121,6 +124,8 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 
     for (Component *c : gameObject->GetComponents())
     {
+        String str = "Create ComponentWidget for "; str += c->ToString();
+        ch.MarkEvent(str);
         ComponentWidget *w = new ComponentWidget(c);
         m_currentInspectables.PushBack(c);
         m_widget_To_Inspectables[w] = c;
@@ -128,10 +133,12 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
         AddWidget(w);
     }
 
+    ch.MarkEvent("Refresh Size hints");
     RefreshSizeHints();
     m_titleLabel->setText(gameObject->name.ToQString());
     m_enableGameObjectCheckBox->setVisible(true);
     m_enableGameObjectCheckBox->setChecked( p_currentGameObject->IsEnabled() );
+    ch.Log();
 }
 
 void Inspector::RefreshSizeHints()

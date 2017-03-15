@@ -10,7 +10,7 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
     AttributeWidget(xmlAttribute, inspectorWidget, false, false)
 {
     QLayout *layout = new QVBoxLayout();
-    m_layout->addLayout(layout, 1);
+    m_layout.addLayout(layout, 1);
 
     m_listener = xmlAttribute.GetButtonListener();
 
@@ -23,7 +23,7 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
     m_heightSizeHint = 50;
 
     AfterConstructor();
-    m_layout->setAlignment(Qt::AlignRight);
+    m_layout.setAlignment(Qt::AlignRight);
 }
 
 void AttrWidgetButton::SetValue(const String &buttonText)

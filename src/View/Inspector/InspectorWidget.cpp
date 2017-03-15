@@ -41,35 +41,27 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 {
     setVisible(false);
 
-    m_vLayout = new QVBoxLayout();
-        m_header = new QHBoxLayout();
-            m_closeOpenButton = new QToolButton();
-            m_titleLabel = new QLabel();
-        m_gridLayout = new QGridLayout();
+    m_vLayout.addLayout(&m_header, 0);
+    m_vLayout.addLayout(&m_gridLayout, 99);
 
-    m_vLayout->addLayout(m_header, 0);
-    m_vLayout->addLayout(m_gridLayout, 99);
+    m_header.setSpacing(5);
+    m_header.addWidget(&m_closeOpenButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
+    m_header.addWidget(&m_titleLabel,     99, Qt::AlignLeft | Qt::AlignVCenter);
 
-    m_header->setSpacing(5);
-    m_header->addWidget(m_closeOpenButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    m_header->addWidget(m_titleLabel,     99, Qt::AlignLeft | Qt::AlignVCenter);
+    m_gridLayout.setSpacing(0);
 
-    m_gridLayout->setSpacing(0);
-
-    m_closeOpenButton->setStyleSheet("padding:0px; border: 0px; margin-left:-5px;");
-    m_closeButtonPixmap.load(":/qss_icons/rc/branch_closed.png");
-    m_openButtonPixmap.load(":/qss_icons/rc/branch_open.png");
-    QObject::connect(m_closeOpenButton, SIGNAL(clicked()),
+    m_closeOpenButton.setStyleSheet("padding:0px; border: 0px; margin-left:-5px;");
+    QObject::connect(&m_closeOpenButton, SIGNAL(clicked()),
                      this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
 
     String fTitle = Inspector::FormatInspectorLabel(title);
-    m_titleLabel->setText(fTitle.ToQString());
-    QFont font = m_titleLabel->font();
+    m_titleLabel.setText(fTitle.ToQString());
+    QFont font = m_titleLabel.font();
     font.setPixelSize(13);
     font.setBold(true);
-    m_titleLabel->setFont(font);
-    m_titleLabel->setAlignment(Qt::AlignLeft);
+    m_titleLabel.setFont(font);
+    m_titleLabel.setAlignment(Qt::AlignLeft);
 
     CreateWidgetSlots(xmlInfo);
     RefreshWidgetValues();
@@ -82,7 +74,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
         m_refreshTimer.start(10);
     }
 
-    setLayout(m_vLayout);
+    setLayout(&m_vLayout);
     m_created = true;
     setVisible(true);
 }
@@ -193,19 +185,19 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
     return xmlInfo;
 }
 
-QGridLayout *InspectorWidget::GetGridLayout() const
+QGridLayout *InspectorWidget::GetGridLayout()
 {
-    return m_gridLayout;
+    return &m_gridLayout;
 }
 
 int InspectorWidget::GetNextRowIndex() const
 {
-    return m_gridLayout->rowCount();
+    return m_gridLayout.rowCount();
 }
 
 void InspectorWidget::SetTitle(const String &title)
 {
-    m_titleLabel->setText(title.ToQString());
+    m_titleLabel.setText(title.ToQString());
 }
 
 bool InspectorWidget::IsClosed() const
@@ -296,9 +288,9 @@ void InspectorWidget::OnCloseOpenButtonClicked()
 
 void InspectorWidget::SetClosed(bool closedWidget)
 {
-    for (int i = 0; i < m_gridLayout->count(); ++i)
+    for (int i = 0; i < m_gridLayout.count(); ++i)
     {
-        QLayoutItem *item = m_gridLayout->itemAt(i);
+        QLayoutItem *item = m_gridLayout.itemAt(i);
         if (!item->widget()) { continue; }
         item->widget()->setHidden(closedWidget);
     }
@@ -313,15 +305,17 @@ void InspectorWidget::UpdateContentMargins()
     const int c_marginTop = IsClosed() ? 0 : 10;
     const int c_marginRight = scrollbarVisible ? 20 : 5;
     const int c_marginBot = IsClosed() ? 0 : 20;
-    m_vLayout->setContentsMargins(c_marginLeft,  c_marginTop,
+    m_vLayout.setContentsMargins(c_marginLeft,  c_marginTop,
                                   c_marginRight, c_marginBot);
 }
 
 void InspectorWidget::UpdateCloseOpenButtonIcon()
 {
-    const QPixmap &pixmap = m_closed ? m_closeButtonPixmap :
-                                       m_openButtonPixmap;
-    m_closeOpenButton->setIcon( QIcon(pixmap) );
+    static QPixmap closeButtonPixmap(":/qss_icons/rc/branch_closed.png");
+    static QPixmap openButtonPixmap(":/qss_icons/rc/branch_open.png");
+
+    const QPixmap &pixmap = m_closed ? closeButtonPixmap : openButtonPixmap;
+    m_closeOpenButton.setIcon( QIcon(pixmap) );
 }
 
 void InspectorWidget::_OnSlotValueChanged(int _)

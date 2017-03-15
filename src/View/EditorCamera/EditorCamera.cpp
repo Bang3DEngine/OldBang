@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "Screen.h"
 #include "Transform.h"
+#include "EditorWindow.h"
 #include "SceneManager.h"
 
 float EditorCamera::s_initialFovDegrees = 60.0f;
@@ -218,6 +219,8 @@ void EditorCamera::OnStart()
 void EditorCamera::OnUpdate()
 {
     GameObject::OnUpdate();
+    ASSERT (EditorWindow::GetInstance()->IsSceneTabActive());
+
     AdjustSpeeds();
 
     Vector3 moveStep(0.0f);

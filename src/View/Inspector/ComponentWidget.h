@@ -1,6 +1,8 @@
 #ifndef COMPONENTWIDGET_H
 #define COMPONENTWIDGET_H
 
+#include <QCheckBox>
+
 #include "InspectorWidget.h"
 #include "ComponentWidgetContextMenu.h"
 
@@ -16,7 +18,6 @@ public:
     int GetHeightSizeHint() override;
 
 public slots:
-    void Start();
     void OnEnabledCheckboxPressed(bool checked);
 
 protected:
@@ -26,8 +27,8 @@ private:
 
     ComponentWidgetContextMenu m_cwContextMenu;
 
-    Component *m_relatedComponent = nullptr;
-    QCheckBox *m_enabledCheckbox = nullptr;
+    Component *p_relatedComponent = nullptr;
+    QCheckBox m_enabledCheckbox;
 
     friend class InspectorContextMenu;
     friend class ComponentWidgetContextMenu;

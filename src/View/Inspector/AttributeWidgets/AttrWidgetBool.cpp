@@ -6,7 +6,7 @@ AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute,
 {
     m_checkbox = new CheckboxWidget();
     m_checkbox->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
-    m_layout->addWidget(m_checkbox, 1, Qt::AlignLeft | Qt::AlignVCenter);
+    m_layout.addWidget(m_checkbox, 1, Qt::AlignLeft | Qt::AlignVCenter);
 
     connect(m_checkbox, SIGNAL(stateChanged(int)),
             inspectorWidget, SLOT(_OnSlotValueChanged(int)));

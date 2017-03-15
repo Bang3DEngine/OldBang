@@ -24,7 +24,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="QtResources.qrc">
-    <normaloff>:/Bang/BangIcon.png</normaloff>:/Bang/BangIcon.png</iconset>
+    <normaloff>:/Bang/BangLogo.png</normaloff>:/Bang/BangLogo.png</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -70,6 +70,10 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <attribute name="icon">
+        <iconset resource="QtResources.qrc">
+         <normaloff>:/Bang/Icons/SceneIcon.png</normaloff>:/Bang/Icons/SceneIcon.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Scene</string>
        </attribute>
@@ -348,6 +352,10 @@
        </layout>
       </widget>
       <widget class="QWidget" name="tabGame">
+       <attribute name="icon">
+        <iconset resource="QtResources.qrc">
+         <normaloff>:/Bang/Icons/play.png</normaloff>:/Bang/Icons/play.png</iconset>
+       </attribute>
        <attribute name="title">
         <string>Game</string>
        </attribute>
@@ -710,6 +718,10 @@
      <width>603</width>
      <height>210</height>
     </size>
+   </property>
+   <property name="windowIcon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/OpenIcon.png</normaloff>:/Bang/Icons/OpenIcon.png</iconset>
    </property>
    <property name="features">
     <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetMovable</set>
@@ -1254,6 +1266,10 @@
    </widget>
   </widget>
   <action name="actionOpenScene">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/OpenIcon.png</normaloff>:/Bang/Icons/OpenIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Open Scene...</string>
    </property>
@@ -1262,6 +1278,10 @@
    </property>
   </action>
   <action name="actionSaveSceneAs">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/SaveIcon.png</normaloff>:/Bang/Icons/SaveIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Save Scene as...</string>
    </property>
@@ -1270,11 +1290,19 @@
    </property>
   </action>
   <action name="actionCreateMaterial">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/MaterialAssetIcon.png</normaloff>:/Bang/Icons/MaterialAssetIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Material</string>
    </property>
   </action>
   <action name="actionCreateMesh">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/MeshAssetIcon.png</normaloff>:/Bang/Icons/MeshAssetIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Mesh</string>
    </property>
@@ -1290,11 +1318,19 @@
    </property>
   </action>
   <action name="actionProjectSettings">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/SettingsIcon.png</normaloff>:/Bang/Icons/SettingsIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Project Settings...</string>
    </property>
   </action>
   <action name="actionCreatePrefab">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/PrefabAssetIcon.png</normaloff>:/Bang/Icons/PrefabAssetIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Prefab</string>
    </property>
@@ -1310,6 +1346,10 @@
    </property>
   </action>
   <action name="actionAddComponentCamera">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Textures/CameraIcon.png</normaloff>:/Bang/Textures/CameraIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Camera</string>
    </property>
@@ -1329,6 +1369,10 @@
    </property>
   </action>
   <action name="actionNewScene">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/AddIcon.png</normaloff>:/Bang/Icons/AddIcon.png</iconset>
+   </property>
    <property name="text">
     <string>New Scene</string>
    </property>
@@ -1337,6 +1381,10 @@
    </property>
   </action>
   <action name="actionSaveScene">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/SaveIcon.png</normaloff>:/Bang/Icons/SaveIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Save Scene</string>
    </property>
@@ -1355,6 +1403,10 @@
    </property>
   </action>
   <action name="actionCreateFromPrefab">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/PrefabAssetIcon.png</normaloff>:/Bang/Icons/PrefabAssetIcon.png</iconset>
+   </property>
    <property name="text">
     <string>From Prefab</string>
    </property>
@@ -1396,21 +1448,37 @@
    </property>
   </action>
   <action name="actionAddComponentDirectionalLight">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Textures/DirectionalLightIcon.png</normaloff>:/Bang/Textures/DirectionalLightIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Directional Light</string>
    </property>
   </action>
   <action name="actionAddComponentPointLight">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Textures/PointLightIcon.png</normaloff>:/Bang/Textures/PointLightIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Point Light</string>
    </property>
   </action>
   <action name="actionCreateDirectionalLight">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Textures/DirectionalLightIcon.png</normaloff>:/Bang/Textures/DirectionalLightIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Directional Light</string>
    </property>
   </action>
   <action name="actionCreatePointLight">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Textures/PointLightIcon.png</normaloff>:/Bang/Textures/PointLightIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Point Light</string>
    </property>
@@ -1436,26 +1504,46 @@
    </property>
   </action>
   <action name="actionCreateFont">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/LetterIcon.png</normaloff>:/Bang/Icons/LetterIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Font</string>
    </property>
   </action>
   <action name="actionAddComponentUIText">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/LetterIcon.png</normaloff>:/Bang/Icons/LetterIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Text</string>
    </property>
   </action>
   <action name="actionNewProject">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/AddIcon.png</normaloff>:/Bang/Icons/AddIcon.png</iconset>
+   </property>
    <property name="text">
     <string>New Project</string>
    </property>
   </action>
   <action name="actionOpenProject">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/OpenIcon.png</normaloff>:/Bang/Icons/OpenIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Open Project...</string>
    </property>
   </action>
   <action name="actionSaveProject">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/SaveIcon.png</normaloff>:/Bang/Icons/SaveIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Save Project</string>
    </property>
@@ -1470,11 +1558,19 @@
    </property>
   </action>
   <action name="actionAddComponentAudioSource">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/AudioIcon.png</normaloff>:/Bang/Icons/AudioIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Audio Source</string>
    </property>
   </action>
   <action name="actionCreateAudioClip">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/AudioClipIcon.png</normaloff>:/Bang/Icons/AudioClipIcon.png</iconset>
+   </property>
    <property name="text">
     <string>AudioClip</string>
    </property>
@@ -1485,6 +1581,10 @@
    </property>
   </action>
   <action name="actionCreateUIText">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/LetterIcon.png</normaloff>:/Bang/Icons/LetterIcon.png</iconset>
+   </property>
    <property name="text">
     <string>UIText</string>
    </property>
@@ -1500,6 +1600,10 @@
    </property>
   </action>
   <action name="actionEditorSettings">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/SettingsIcon.png</normaloff>:/Bang/Icons/SettingsIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Editor Settings...</string>
    </property>
