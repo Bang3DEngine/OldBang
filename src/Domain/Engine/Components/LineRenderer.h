@@ -19,7 +19,7 @@ public:
 
     virtual String GetName() const override;
 
-    virtual ICloneable *Clone() const override = 0;
+    virtual ICloneable *Clone() const override;
 
     virtual void SetMaterial(Material *m) override;
 

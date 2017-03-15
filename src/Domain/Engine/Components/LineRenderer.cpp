@@ -24,11 +24,18 @@ String LineRenderer::GetName() const
     return "LineRenderer";
 }
 
+ICloneable *LineRenderer::Clone() const
+{
+    LineRenderer *lr = new LineRenderer();
+    CloneInto(lr);
+    return lr;
+}
+
 
 void LineRenderer::BindPointsToVAO() const
 {
     if (m_points.Size() >= 2 &&
-       m_material  && m_material->GetShaderProgram() )
+        m_material  && m_material->GetShaderProgram() )
     {
         m_vbo->Fill(m_points.Data(), m_points.Size() * sizeof(Vector3));
         GLint verticesShaderLocation = m_material->GetShaderProgram()->

@@ -3,17 +3,19 @@
 
 #include "Vector2.h"
 #include "EditorAxis.h"
+#include "CircleRenderer.h"
 
+class CircleCulledRenderer;
 class EditorRotateAxis : public EditorAxis
 {
 friend class EditorRotateAxisGroup;
 
 private:
 
-    const float c_rotationBoost = 0.1f;
+    const float c_rotationBoost = 0.2f;
     const float c_rotationStep  = 15.0f; // When pressing Control key
 
-    CircleRenderer *m_circle = nullptr;
+    CircleCulledRenderer *m_circle = nullptr;
 
     /**
      * @brief These anchorPoints refer to points of the Circle rendered by the CircleRenderer.
@@ -37,6 +39,22 @@ public:
 
     void OnUpdate() override;
     void OnDrawGizmos(bool depthed, bool overlay) override;
+};
+
+class CircleCulledRenderer : public LineRenderer
+{
+public:
+    float GetRadius() const;
+    void OnUpdate() override;
+
+    void GetTwoClosestPointsInScreenSpace(
+            const Vector2 &sOrigin,
+            Vector2 *p0, int *i0,
+            Vector2 *p1, int *i1 ) const;
+
+protected:
+    void GeneratePoints();
+    Vector3 GetCircleLocalPoint(float angle) const;
 };
 
 #endif // EDITORROTATEAXIS_H

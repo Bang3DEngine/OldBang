@@ -683,8 +683,6 @@ OTHER_FILES += \
     Assets/Engine/Shaders/Include/Main.glsl \
     Assets/Engine/Shaders/SelectionBuffer.vert \
     Assets/Engine/Shaders/SP_SelectionEffect.frag \
-    Assets/Engine/Shaders/G_RotationAxisLine.frag \
-    Assets/Engine/Materials/G_RotationAxisLine.bmat \
     Assets/Engine/Materials/SP_MeshPass.bmat \
     Assets/Engine/Materials/RenderGBufferToScreen.bmat \
     Assets/Engine/Shaders/SP_ScreenPass.vert \
@@ -695,7 +693,6 @@ OTHER_FILES += \
     EngineAssets/Shaders/SelectionBuffer.frag \
     EngineAssets/Shaders/RenderGBufferToScreen.frag \
     EngineAssets/Shaders/G_Template.frag \
-    EngineAssets/Shaders/G_RotationAxisLine.frag \
     EngineAssets/Shaders/G_Default.frag \
     EngineAssets/Shaders/SelectionBuffer.vert \
     EngineAssets/Shaders/G_Template.vert \
@@ -708,7 +705,6 @@ OTHER_FILES += \
     EngineAssets/Shaders/Include/G.frag \
     EngineAssets/Shaders/Include/G.vert \
     EngineAssets/Materials/RenderGBufferToScreen.bmat \
-    EngineAssets/Materials/G_RotationAxisLine.bmat \
     EngineAssets/Materials/G_Default.bmat
 ######################################
 

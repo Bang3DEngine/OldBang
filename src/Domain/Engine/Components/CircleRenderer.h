@@ -35,17 +35,10 @@ public:
 protected:
     CircleRenderer();
 
-private:
     float m_radius = 1.0f;
     int m_segments = 32;
 
-    void GeneratePoints();
-
-    // Used by EditorRotateAxis mainly
-    void GetTwoClosestPointsInScreenSpace(
-            const Vector2 &sOrigin,
-            Vector2 *p0, int *i0,
-            Vector2 *p1, int *i1 ) const;
+    virtual void GeneratePoints();
 
     friend class GameObject;
     friend class EditorRotateAxis;
