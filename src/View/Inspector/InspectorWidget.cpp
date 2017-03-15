@@ -39,6 +39,8 @@ void InspectorWidget::Init(const String &title, IInspectable *relatedInspectable
 void InspectorWidget::ConstructFromWidgetXMLInfo(
         const String &title, XMLNode &xmlInfo, bool autoUpdate)
 {
+    setVisible(false);
+
     m_vLayout = new QVBoxLayout();
         m_header = new QHBoxLayout();
             m_closeOpenButton = new QToolButton();
@@ -82,6 +84,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
     setLayout(m_vLayout);
     m_created = true;
+    setVisible(true);
 }
 
 InspectorWidget::~InspectorWidget()

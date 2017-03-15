@@ -24,6 +24,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
                                  bool labelAbove ) :
     m_inspectorWidget(inspectorWidget)
 {
+    setVisible(false);
     m_xmlAttribute = xmlAttribute;
     Refresh(xmlAttribute);
 
@@ -59,6 +60,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     setLayout(m_layout);
     setFocusPolicy(Qt::FocusPolicy::StrongFocus);
     m_heightSizeHint = labelAbove ? 45 : 25;
+    setVisible(true);
 }
 
 void AttributeWidget::AfterConstructor()
