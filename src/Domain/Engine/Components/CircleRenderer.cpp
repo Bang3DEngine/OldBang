@@ -16,11 +16,6 @@ CircleRenderer::~CircleRenderer()
 {
 }
 
-String CircleRenderer::GetName() const
-{
-    return "CircleRenderer";
-}
-
 void CircleRenderer::CloneInto(ICloneable *clone) const
 {
     LineRenderer::CloneInto(clone);

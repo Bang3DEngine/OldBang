@@ -57,11 +57,6 @@ const Mesh *MeshRenderer::GetMesh()
     return m_mesh;
 }
 
-String MeshRenderer::GetName() const
-{
-    return "MeshRenderer";
-}
-
 void MeshRenderer::RenderWithoutMaterial() const
 {
     ASSERT(m_mesh);

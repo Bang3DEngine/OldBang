@@ -19,6 +19,7 @@ class AudioSource : public Component
                     ,public IAttrWidgetButtonListener
                     #endif
 {
+    OBJECT(AudioSource)
     ICLONEABLE(AudioSource)
 
 public:
@@ -31,8 +32,6 @@ public:
 
     AudioSource();
     virtual ~AudioSource();
-
-    virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -88,7 +87,6 @@ private:
     void SetAudioClipNoDettachAttach(AudioClip *audioClip);
 
     friend class AudioClip;
-    friend class GameObject;
     friend class AudioClipAssetFileInspectable;
 };
 

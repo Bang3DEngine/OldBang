@@ -28,11 +28,6 @@ AudioSource::~AudioSource()
     alDeleteSources(1, &m_alSourceId);
 }
 
-String AudioSource::GetName() const
-{
-    return "AudioSource";
-}
-
 void AudioSource::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
@@ -77,7 +72,6 @@ void AudioSource::Read(const XMLNode &xmlInfo)
 void AudioSource::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
-    xmlInfo->SetTagName( GetName() );
 
     String audioClipFilepath = m_audioClip ? m_audioClip->GetFilepath() : "";
     xmlInfo->SetFilepath("AudioClip", audioClipFilepath,

@@ -9,11 +9,10 @@ class XMLNode;
 class ICloneable;
 class DirectionalLight : public Light
 {
+    OBJECT(DirectionalLight)
     ICLONEABLE(DirectionalLight)
 
 public:
-    virtual String GetName() const override;
-
     virtual void CloneInto(ICloneable *clone) const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
@@ -24,8 +23,6 @@ public:
 protected:
     DirectionalLight();
     virtual ~DirectionalLight();
-
-    friend class GameObject;
 };
 
 #endif // DIRECTIONALLIGHT_H

@@ -5,6 +5,14 @@
 #include "HideFlags.h"
 #include "ICloneable.h"
 
+#define OBJECT(CLASS) \
+        public: \
+        String GetClassName() const override { return #CLASS; } \
+        friend class GameObject;
+#define OBJECT_NO_FRIEND(CLASS) \
+        public: \
+        String GetClassName() const override { return #CLASS; }
+
 class Object : public ICloneable
 {
 public:
@@ -19,6 +27,7 @@ public:
     void AddHideFlag(const HideFlags &hideFlag);
     void RemoveHideFlag(const HideFlags &hideFlag);
 
+    virtual String GetClassName() const = 0;
     String GetInstanceId() const;
 
     template <class TO, class FROM>

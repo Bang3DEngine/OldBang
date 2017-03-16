@@ -2,8 +2,8 @@
 #define COMPONENT_H
 
 #include "Object.h"
-#include "SerializableObject.h"
 #include "IToString.h"
+#include "SerializableObject.h"
 #include "ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
@@ -22,6 +22,7 @@ class Component :
               public IToString,
               public SerializableObject
 {
+    OBJECT(Component)
     ICLONEABLE(Component)
 
 public:
@@ -33,8 +34,6 @@ public:
     virtual void CloneInto(ICloneable *clone) const override;
 
     virtual String ToString() const override;
-
-    virtual String GetName() const;
 
     void SetGameObject(GameObject *gameObject);
 
@@ -58,7 +57,6 @@ protected:
 
     virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
-    friend class GameObject;
     friend class ComponentClipboard;
 };
 

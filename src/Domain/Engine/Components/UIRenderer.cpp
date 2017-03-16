@@ -56,11 +56,6 @@ void UIRenderer::RenderWithoutMaterial() const
     glEnable(GL_DEPTH_TEST);
 }
 
-String UIRenderer::GetName() const
-{
-    return "UIRenderer";
-}
-
 void UIRenderer::Read(const XMLNode &xmlInfo)
 {
     MeshRenderer::Read(xmlInfo);

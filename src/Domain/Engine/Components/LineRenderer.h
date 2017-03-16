@@ -14,12 +14,11 @@ class Material;
 class ICloneable;
 class LineRenderer : public Renderer
 {
+    OBJECT(LineRenderer)
     ICLONEABLE(LineRenderer)
 
 public:
     virtual ~LineRenderer();
-
-    virtual String GetName() const override;
 
     virtual void SetMaterial(Material *m) override;
 
@@ -41,8 +40,6 @@ protected:
     virtual void RenderWithoutMaterial() const override;
 
     LineRenderer();
-
-    friend class GameObject;
 };
 
 #endif // LINERENDERER_H

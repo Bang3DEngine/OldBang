@@ -19,11 +19,6 @@ LineRenderer::~LineRenderer()
 
 }
 
-String LineRenderer::GetName() const
-{
-    return "LineRenderer";
-}
-
 void LineRenderer::BindPointsToVAO() const
 {
     if (m_points.Size() >= 2 &&

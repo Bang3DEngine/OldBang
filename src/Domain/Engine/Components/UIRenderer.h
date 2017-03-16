@@ -11,14 +11,13 @@ class Material;
 class ICloneable;
 class UIRenderer : public MeshRenderer
 {
+    OBJECT(UIRenderer)
     ICLONEABLE(UIRenderer)
 
 public:
     virtual void RenderWithoutMaterial() const override;
 
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
-
-    virtual String GetName() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
@@ -34,8 +33,6 @@ protected:
                                        ShaderProgram *sp) override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-
-    friend class GameObject;
 };
 
 #endif // UIRENDERER_H

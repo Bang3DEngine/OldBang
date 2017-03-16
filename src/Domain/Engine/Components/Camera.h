@@ -21,6 +21,7 @@ class ShaderProgram;
 class Camera : public Component,
                public IRenderAgent
 {
+    OBJECT(Camera)
     ICLONEABLE(Camera)
 
 public:
@@ -62,8 +63,6 @@ public:
     Vector2 WorldToScreenNDCPoint(const Vector3 &position);
     Vector3 ScreenNDCPointToWorld(const Vector2 &screenNDCPos, float zFromCamera);
 
-    virtual String GetName() const override;
-
     virtual void CloneInto(ICloneable *clone) const override;
 
     Rect GetScreenBoundingRect(const AABox &bbox);
@@ -94,8 +93,6 @@ private:
     float m_zFar = 100.0f;
 
     ProjectionMode m_projMode = ProjectionMode::Perspective;
-
-    friend class GameObject;
 };
 
 #endif // CAMERA_H

@@ -9,13 +9,12 @@ class XMLNode;
 class ICloneable;
 class UIImage : public UIRenderer
 {
+    OBJECT(UIImage)
     ICLONEABLE(UIImage)
 
 public:
     UIImage();
     virtual ~UIImage();
-
-    virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -31,8 +30,6 @@ private:
 
     virtual void OnJustBeforeRendering(GameObject *go,
                                        ShaderProgram *sp) override;
-
-    friend class GameObject;
 };
 
 #endif // UIIMAGE_H

@@ -5,9 +5,9 @@
 #include "AABox.h"
 #include "Object.h"
 #include "Sphere.h"
-#include "SerializableObject.h"
 #include "IToString.h"
 #include "IRenderAgent.h"
+#include "SerializableObject.h"
 #include "ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
@@ -30,6 +30,7 @@ class GameObject :
                ,public IWindowEventManagerListener
                #endif
 {
+    OBJECT_NO_FRIEND(GameObject)
     ICLONEABLE(GameObject)
 
 public:
@@ -59,7 +60,7 @@ public:
     Scene* GetScene();
     bool IsInsideScene() const;
     GameObject* GetParent() const;
-    String GetName() const;
+    const String& GetName() const;
     const List<Component*>& GetComponents() const;
 
     /**

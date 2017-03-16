@@ -179,11 +179,10 @@ GameObject *GameObject::GetParent() const
     return p_parent;
 }
 
-String GameObject::GetName() const
+const String& GameObject::GetName() const
 {
     return m_name;
 }
-
 
 const List<Component *> &GameObject::GetComponents() const
 {

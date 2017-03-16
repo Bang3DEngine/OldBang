@@ -40,11 +40,6 @@ void PointLight::SetUniformsBeforeApplyingLight(Material *mat) const
     sp->SetFloat("B_LightRange", m_range);
 }
 
-String PointLight::GetName() const
-{
-    return "PointLight";
-}
-
 void PointLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);

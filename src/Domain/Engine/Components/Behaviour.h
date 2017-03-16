@@ -1,6 +1,7 @@
 #ifndef BEHAVIOUR_H
 #define BEHAVIOUR_H
 
+#include "IO.h"
 #include "Math.h"
 #include "Time.h"
 #include "Debug.h"
@@ -15,7 +16,6 @@
 #include "AudioClip.h"
 #include "GameObject.h"
 #include "AudioSource.h"
-#include "IO.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"

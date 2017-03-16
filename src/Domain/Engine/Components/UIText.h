@@ -11,6 +11,7 @@ class XMLNode;
 class ICloneable;
 class UIText : public UIRenderer
 {
+    OBJECT(UIText)
     ICLONEABLE(UIText)
 
 public:
@@ -21,10 +22,7 @@ public:
     virtual ~UIText();
 
     virtual void Render() const override;
-    virtual void RenderForSelectionWithoutMaterial() const
-                override;
-
-    virtual String GetName() const override;
+    virtual void RenderForSelectionWithoutMaterial() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -82,8 +80,6 @@ private:
     float GetNDCAdvance(char current, char next = '\0') const;
 
     Vector2 GetAlignmentNDCOffset() const;
-
-    friend class GameObject;
 };
 
 #endif // UITEXT_H

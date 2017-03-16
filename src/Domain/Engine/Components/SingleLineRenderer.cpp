@@ -15,11 +15,6 @@ SingleLineRenderer::~SingleLineRenderer()
 {
 }
 
-String SingleLineRenderer::GetName() const
-{
-    return "SingleLineRenderer";
-}
-
 void SingleLineRenderer::CloneInto(ICloneable *clone) const
 {
     LineRenderer::CloneInto(clone);

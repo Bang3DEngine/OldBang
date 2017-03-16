@@ -16,7 +16,8 @@ void ImageFileInspectable::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("ImageFileInspectable");
 
-    xmlInfo->SetString("FileName", m_fileImage.GetName() + "." + m_fileImage.GetExtension(),
+    xmlInfo->SetString("FileName", m_fileImage.GetName() +
+                                  "." + m_fileImage.GetExtension(),
                        {XMLProperty::Readonly});
     xmlInfo->SetFilepath("ImageFilePath", m_fileImage.GetRelativePath(), "",
                          {XMLProperty::Readonly});

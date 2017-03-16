@@ -13,6 +13,7 @@ class XMLNode;
 class ICloneable;
 class Transform : public Component
 {
+    OBJECT(Transform)
     ICLONEABLE(Transform)
 
 public:
@@ -115,8 +116,6 @@ public:
     static Vector3    GetScaleFromMatrix4   (const Matrix4 &transformMatrix);
     static Transform  FromTransformMatrix(const Matrix4 &transformMatrix);
 
-    virtual String GetName() const override { return "Transform"; }
-
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
@@ -132,8 +131,6 @@ protected:
 
     // Used in inspector too
     Vector3 m_localEuler = Vector3::Zero;
-
-    friend class GameObject;
 };
 
 #endif // TRANSFORM_H

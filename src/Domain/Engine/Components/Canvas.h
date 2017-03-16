@@ -8,11 +8,10 @@ class XMLNode;
 class ICloneable;
 class Canvas : public Component
 {
+    OBJECT(Canvas)
     ICLONEABLE(Canvas)
 
 public:
-    virtual String GetName() const override;
-
     virtual void CloneInto(ICloneable *clone) const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
@@ -21,8 +20,6 @@ public:
 protected:
     Canvas();
     virtual ~Canvas();
-
-    friend class GameObject;
 };
 
 #endif // CANVAS_H

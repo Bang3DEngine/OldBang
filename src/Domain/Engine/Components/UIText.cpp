@@ -40,11 +40,6 @@ void UIText::RenderForSelectionWithoutMaterial() const
     RenderWithoutMaterial();
 }
 
-String UIText::GetName() const
-{
-    return "UIText";
-}
-
 void UIText::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
@@ -358,7 +353,6 @@ void UIText::Read(const XMLNode &xmlInfo)
 void UIText::Write(XMLNode *xmlInfo) const
 {
     UIRenderer::Write(xmlInfo);
-    xmlInfo->SetTagName(GetName());
 
     xmlInfo->SetFilepath("Font", m_font ? m_font->GetFilepath() : "", "bfont");
     xmlInfo->SetColor("Color", m_tint);

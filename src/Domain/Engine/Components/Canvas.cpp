@@ -11,11 +11,6 @@ Canvas::~Canvas()
 
 }
 
-String Canvas::GetName() const
-{
-    return "Canvas";
-}
-
 void Canvas::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);
@@ -30,5 +25,4 @@ void Canvas::Read(const XMLNode &xmlInfo)
 void Canvas::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
-    xmlInfo->SetTagName( GetName() );
 }

@@ -25,11 +25,6 @@ DirectionalLight::~DirectionalLight()
 
 }
 
-String DirectionalLight::GetName() const
-{
-    return "DirectionalLight";
-}
-
 void DirectionalLight::CloneInto(ICloneable *clone) const
 {
     Light::CloneInto(clone);

@@ -90,11 +90,6 @@ bool BehaviourHolder::DeleteDynamicBehaviour(const String &behaviourName,
     }
 }
 
-String BehaviourHolder::GetName() const
-{
-    return "BehaviourHolder";
-}
-
 void BehaviourHolder::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);

@@ -11,11 +11,10 @@ class Material;
 class Renderer;
 class Light : public Component
 {
+    OBJECT(Light)
     ICLONEABLE(Light)
 
 public:
-    virtual String GetName() const override;
-
     virtual void CloneInto(ICloneable *clone) const override;
 
     void SetColor(const Color &color);
@@ -49,7 +48,6 @@ protected:
     Light();
     virtual ~Light();
 
-    friend class GameObject;
     friend class GraphicPipeline;
 };
 

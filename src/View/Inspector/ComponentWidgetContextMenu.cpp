@@ -45,7 +45,7 @@ void ComponentWidgetContextMenu::OnCustomContextMenuRequested(QPoint point)
     contextMenu.addAction(&actionRemoveComponent);
 
     if (ComponentClipboard::GetCopiedComponentName() !=
-            m_cWidget->p_relatedComponent->GetName())
+            m_cWidget->p_relatedComponent->GetClassName())
     {
         actionPasteComponentValues.setEnabled(false);
     }
@@ -61,7 +61,7 @@ void ComponentWidgetContextMenu::OnCustomContextMenuRequested(QPoint point)
         actionPasteComponentValues.setEnabled(false);
     }
 
-    if (m_cWidget->p_relatedComponent->GetName() == "Transform")
+    if (m_cWidget->p_relatedComponent->GetClassName() == "Transform")
     {
         actionRemoveComponent.setEnabled(false);
     }

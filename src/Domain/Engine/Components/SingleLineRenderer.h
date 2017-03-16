@@ -7,12 +7,11 @@
 
 class SingleLineRenderer : public LineRenderer
 {
+    OBJECT(SingleLineRenderer)
     ICLONEABLE(SingleLineRenderer)
 
 public:
     virtual ~SingleLineRenderer();
-
-    virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -27,8 +26,6 @@ public:
 
 protected:
     SingleLineRenderer();
-
-    friend class GameObject;
 };
 
 #endif // SINGLELINERENDERER_H

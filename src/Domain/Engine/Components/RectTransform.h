@@ -9,6 +9,7 @@
 class XMLNode;
 class RectTransform : public Transform
 {
+    OBJECT(RectTransform)
     ICLONEABLE(RectTransform)
 
 public:
@@ -43,8 +44,6 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    virtual String GetName() const override;
-
     Rect GetScreenSpaceRect(bool takeMarginsIntoAccount = true) const;
 
     Rect GetParentScreenRect(bool takeMarginsIntoAccount = true) const;
@@ -68,7 +67,6 @@ private:
     void OnChanged();
 
     friend class Screen;
-    friend class GameObject;
 };
 
 #endif // RECTTRANSFORM_H

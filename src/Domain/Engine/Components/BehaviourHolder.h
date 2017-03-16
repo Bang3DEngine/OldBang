@@ -23,12 +23,11 @@ class BehaviourHolder : public Component
                        ,public IAttrWidgetButtonListener
                        #endif
 {
+    OBJECT(BehaviourHolder)
     ICLONEABLE(BehaviourHolder)
 
 public:
     virtual ~BehaviourHolder();
-
-    virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
 
@@ -77,8 +76,6 @@ private:
 
     bool DeleteDynamicBehaviour(const String &behaviourName,
                                 Behaviour *b, QLibrary *openLibrary);
-
-    friend class GameObject;
 };
 
 #endif

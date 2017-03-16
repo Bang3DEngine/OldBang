@@ -25,11 +25,6 @@ UIImage::~UIImage()
 {
 }
 
-String UIImage::GetName() const
-{
-    return "UIImage";
-}
-
 void UIImage::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
@@ -67,7 +62,6 @@ void UIImage::Read(const XMLNode &xmlInfo)
 void UIImage::Write(XMLNode *xmlInfo) const
 {
     UIRenderer::Write(xmlInfo);
-    xmlInfo->SetTagName(GetName());
 
     String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";
     xmlInfo->SetFilepath("Image", texFilepath,

@@ -8,6 +8,7 @@ class Mesh;
 class Material;
 class MeshRenderer : public Renderer
 {
+    OBJECT(MeshRenderer)
     ICLONEABLE(MeshRenderer)
 
 public:
@@ -22,7 +23,6 @@ public:
     virtual AABox GetAABBox() const override;
 
     virtual const Mesh* GetMesh();
-    virtual String GetName() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
@@ -32,8 +32,6 @@ protected:
 
     void BindCurrentMeshToShaderProgram() const;
     virtual void RenderWithoutMaterial() const override;
-
-    friend class GameObject;
 };
 
 #endif // MESHRENDERER_H

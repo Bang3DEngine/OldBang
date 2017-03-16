@@ -28,12 +28,7 @@ String Component::ToString() const
 {
     std::ostringstream msg;
     msg << "";
-    return GetName() + "(" + String::ToString((void*)this) + ")";
-}
-
-String Component::GetName() const
-{
-    return "Component";
+    return GetClassName() + "(" + String::ToString((void*)this) + ")";
 }
 
 void Component::SetGameObject(GameObject *gameObject)
@@ -75,7 +70,7 @@ void Component::Write(XMLNode *xmlInfo) const
 {
     SerializableObject::Write(xmlInfo);
 
-    xmlInfo->SetTagName( GetName() );
+    xmlInfo->SetTagName( GetClassName() );
     xmlInfo->SetPointer("id", this,
                         {XMLProperty::Hidden,
                          XMLProperty::Readonly});

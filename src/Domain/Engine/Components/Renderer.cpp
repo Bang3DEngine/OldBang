@@ -218,11 +218,6 @@ void Renderer::SetOnRenderingStartsForSelectionFunction(
 }
 #endif
 
-String Renderer::GetName() const
-{
-    return "Renderer";
-}
-
 void Renderer::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);

@@ -12,16 +12,12 @@ bool ComponentClipboard::IsEmpty()
 
 bool ComponentClipboard::IsCopiedTransform()
 {
-    return !IsEmpty() && s_copiedComponent->GetName() == "Transform";
+    return !IsEmpty() && s_copiedComponent->GetClassName().Contains("Transform");
 }
 
 String ComponentClipboard::GetCopiedComponentName()
 {
-    if (!IsEmpty())
-    {
-        return s_copiedComponent->GetName();
-    }
-    return "";
+    return !IsEmpty() ? s_copiedComponent->GetClassName() : "";
 }
 
 void ComponentClipboard::CopyComponent(Component *componentToCopy)

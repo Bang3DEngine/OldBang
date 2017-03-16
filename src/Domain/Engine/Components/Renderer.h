@@ -69,8 +69,6 @@ public:
     void OnRenderingStarts(GameObject *go, ShaderProgram *sp) const;
     void OnRenderingEnds(GameObject *go, ShaderProgram *sp) const;
 
-    virtual String GetName() const override;
-
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
@@ -119,7 +117,6 @@ private:
     std::function<void()> p_OnRenderingStartsForSelectionFunc = nullptr;
     #endif
 
-    friend class GameObject;
     friend class GraphicPipeline;
     friend class SelectionFramebuffer;
 };

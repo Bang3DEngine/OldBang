@@ -8,15 +8,15 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
     InspectorWidget(), m_cwContextMenu(this)
 {
     Chrono c;
-    c.MarkEvent("Construct ComponentWidget " + relatedComponent->GetName());
+    c.MarkEvent("Construct ComponentWidget " + relatedComponent->GetClassName());
     p_relatedComponent = relatedComponent;
-    Init(p_relatedComponent->GetName(), p_relatedComponent);
+    Init(p_relatedComponent->GetClassName(), p_relatedComponent);
 
     m_closed = p_relatedComponent->IsClosedInInspector();
     SetClosed(m_closed);
     UpdateCloseOpenButtonIcon();
 
-    if (!p_relatedComponent->GetName().Contains("Transform"))
+    if (!p_relatedComponent->GetClassName().Contains("Transform"))
     {
         m_enabledCheckbox.setChecked(p_relatedComponent->IsEnabled());
         connect(&m_enabledCheckbox, SIGNAL(clicked(bool)),

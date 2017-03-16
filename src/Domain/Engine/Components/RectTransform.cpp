@@ -264,10 +264,5 @@ void RectTransform::Write(XMLNode *xmlInfo) const
     xmlInfo->GetAttribute("Rotation")->SetProperty(XMLProperty::Hidden);
     xmlInfo->GetAttribute("Scale")->SetProperty(XMLProperty::Hidden);
 
-    xmlInfo->SetTagName( GetName() );
-}
-
-String RectTransform::GetName() const
-{
-    return "RectTransform";
+    xmlInfo->SetTagName( GetClassName() );
 }

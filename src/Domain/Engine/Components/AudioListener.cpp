@@ -14,11 +14,6 @@ AudioListener::~AudioListener()
 
 }
 
-String AudioListener::GetName() const
-{
-    return "AudioListener";
-}
-
 void AudioListener::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
@@ -27,7 +22,6 @@ void AudioListener::Read(const XMLNode &xmlInfo)
 void AudioListener::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
-    xmlInfo->SetTagName( GetName() );
 }
 
 void AudioListener::OnUpdate()

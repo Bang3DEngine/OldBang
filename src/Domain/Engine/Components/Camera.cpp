@@ -159,11 +159,6 @@ Vector3 Camera::ScreenNDCPointToWorld(const Vector2 &screenNDCPos,
     return res;
 }
 
-String Camera::GetName() const
-{
-    return "Camera";
-}
-
 void Camera::CloneInto(ICloneable *clone) const
 {
     Component::CloneInto(clone);

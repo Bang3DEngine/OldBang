@@ -261,7 +261,7 @@ const String &File::GetAbsolutePath() const
     return m_path;
 }
 
-const String &File::GetName() const
+const String& File::GetName() const
 {
     return m_name;
 }
