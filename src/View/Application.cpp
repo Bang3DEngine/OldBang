@@ -6,7 +6,6 @@
 #include "EditorScene.h"
 #include "EditorWindow.h"
 #include "DragDropManager.h"
-#include "ShortcutManager.h"
 #include "WindowEventManager.h"
 #else
 #include "GameWindow.h"
@@ -140,31 +139,11 @@ bool Application::notify(QObject *receiver, QEvent *e)
         DragDropManager::HandleGlobalMouseRelease(receiver, e);
     }
 
-    ShortcutManager *sm = ShortcutManager::GetInstance();
     if (e->type() == QEvent::KeyPress)
     {
         QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
         m_lastKeyPressEvInfo.time = Time::GetNow();
         m_lastKeyPressEvInfo.key = ev->key();
-        if (!ev->isAutoRepeat())
-        {
-            sm->OnKeyPressed( Input::Key(ev->key()) );
-        }
-    }
-    else if (e->type() == QEvent::KeyRelease)
-    {
-        QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
-        if (!ev->isAutoRepeat())
-        {
-            sm->OnKeyReleased( Input::Key(ev->key()) );
-        }
-    }
-
-    if (e->type() == QEvent::Shortcut ||
-        e->type() == QEvent::WindowDeactivate ||
-        e->type() == QEvent::ApplicationDeactivate)
-    {
-        sm->Clear();
     }
 
     #else // GAME

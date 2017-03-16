@@ -19,13 +19,17 @@
 #include "Hierarchy.h"
 #include "EditorScene.h"
 #include "EditorWindow.h"
-#include "ShortcutManager.h"
 #include "SelectionFramebuffer.h"
 #else
 #include "GameWindow.h"
 #endif
 
-Screen::Screen(QWidget* parent) : QGLWidget(parent)
+Screen::Screen(QWidget* parent)
+    : m_copyShortcut     (this, KSeq("Ctrl+C"), SLOT(OnCopyClicked())),
+      m_pasteShortcut    (this, KSeq("Ctrl+V"), SLOT(OnPasteClicked())),
+      m_duplicateShortcut(this, KSeq("Ctrl+D"), SLOT(OnDuplicateClicked())),
+      m_deleteShortcut   (this, KSeq("Del"),    SLOT(OnDeleteClicked())),
+      QGLWidget(parent)
 {
     setFormat(QGLFormat(QGL::DoubleBuffer));
     setAutoBufferSwap(false);
@@ -146,29 +150,6 @@ GraphicPipeline *Screen::GetGraphicPipeline() const
 }
 
 #ifdef BANG_EDITOR
-void Screen::OnShortcutPressed()
-{
-    if (hasFocus())
-    {
-        if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::C}) )
-        { // Copy
-            Hierarchy::GetInstance()->m_hContextMenu.OnCopyClicked();
-        }
-        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::V}) )
-        { // Paste
-            Hierarchy::GetInstance()->m_hContextMenu.OnPasteClicked();
-        }
-        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}) )
-        { // Duplicate
-            Hierarchy::GetInstance()->m_hContextMenu.OnDuplicateClicked();
-        }
-        else if (ShortcutManager::IsPressed(Input::Key::Delete))
-        { // Delete
-            Hierarchy::GetInstance()->m_hContextMenu.OnDeleteClicked();
-        }
-    }
-}
-
 void Screen::dragEnterEvent(QDragEnterEvent *e)
 {
     e->accept();
@@ -331,6 +312,23 @@ void Screen::OnDrop(const DragDropInfo &ddi)
 
     m_lastGameObjectOvered = nullptr;
     m_gameObjectBeingDragged = nullptr;
+}
+
+void Screen::OnCopyClicked()
+{
+    Hierarchy::GetInstance()->m_hContextMenu.OnCopyClicked();
+}
+void Screen::OnPasteClicked()
+{
+    Hierarchy::GetInstance()->m_hContextMenu.OnPasteClicked();
+}
+void Screen::OnDuplicateClicked()
+{
+    Hierarchy::GetInstance()->m_hContextMenu.OnDuplicateClicked();
+}
+void Screen::OnDeleteClicked()
+{
+    Hierarchy::GetInstance()->m_hContextMenu.OnDeleteClicked();
 }
 
 #endif

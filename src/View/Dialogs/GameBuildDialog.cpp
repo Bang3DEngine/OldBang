@@ -11,7 +11,7 @@ GameBuildDialog::GameBuildDialog() :
     setModal(true);
     setWindowTitle("Building game...");
     setWindowModality(Qt::WindowModality::ApplicationModal);
-    QObject::connect(this, SIGNAL(canceled()), this, SLOT(OnCanceled()));
+    QObject::connect(this, SIGNAL(canceled()), SLOT(OnCanceled()));
     show();
     raise();
     activateWindow();

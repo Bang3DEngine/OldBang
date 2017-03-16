@@ -291,11 +291,6 @@
                </item>
                <item>
                 <property name="text">
-                 <string>Position</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
                  <string>Normal</string>
                 </property>
                </item>
@@ -1176,7 +1171,7 @@
             <number>6</number>
            </property>
            <attribute name="headerDefaultSectionSize">
-            <number>50</number>
+            <number>150</number>
            </attribute>
            <attribute name="headerStretchLastSection">
             <bool>false</bool>

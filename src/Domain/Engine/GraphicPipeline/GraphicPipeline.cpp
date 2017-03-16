@@ -7,6 +7,7 @@
 #include "Debug.h"
 #include "Scene.h"
 #include "Light.h"
+#include "Input.h"
 #include "Screen.h"
 #include "Camera.h"
 #include "GBuffer.h"

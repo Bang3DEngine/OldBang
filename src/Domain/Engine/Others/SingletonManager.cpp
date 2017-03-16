@@ -2,10 +2,6 @@
 
 #include "Debug.h"
 
-#ifdef BANG_EDITOR
-#include "ShortcutManager.h"
-#endif
-
 SingletonManager *SingletonManager::s_mainBinarySM = nullptr;
 
 void SingletonManager::SetSingletonManagerInstanceFromBehaviourLibrary(

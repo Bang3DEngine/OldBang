@@ -1,8 +1,8 @@
 // Matrices //////////////////////////////
 uniform mat4 B_Model;
 uniform mat4 B_ModelInv;
-uniform mat4 B_Normal;
-uniform mat4 B_NormalInv;
+uniform mat3 B_Normal;
+uniform mat3 B_NormalInv;
 uniform mat4 B_View;
 uniform mat4 B_ViewInv;
 uniform mat4 B_Projection;
@@ -73,7 +73,7 @@ uniform sampler2D B_GTex_Color;
         in vec2 B_In_Uv;
 
         out vec4 B_FragIn_PositionWorld;
-        out vec4 B_FragIn_NormalWorld;
+        out vec3 B_FragIn_NormalWorld;
         out vec2 B_FragIn_Uv;
     #endif
 
@@ -87,7 +87,7 @@ uniform sampler2D B_GTex_Color;
         float B_Out_Stencil;
 
         in vec4 B_FragIn_PositionWorld;
-        in vec4 B_FragIn_NormalWorld;
+        in vec3 B_FragIn_NormalWorld;
         in vec2 B_FragIn_Uv;
 
         out vec4 B_GIn_NormalWorld;

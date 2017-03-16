@@ -4,7 +4,7 @@
 
 void InitMain()
 {
-    B_Out_NormalWorld      = B_FragIn_NormalWorld.xyz;
+    B_Out_NormalWorld      = B_FragIn_NormalWorld;
     B_Out_ReceivesLighting = B_MaterialReceivesLighting;
     B_Out_Shininess        = B_MaterialShininess;
     B_Out_DiffColor        = B_MaterialDiffuseColor;
@@ -16,16 +16,18 @@ void InitMain()
 void EndMain()
 {
     B_GIn_NormalWorld  = vec4(B_Out_NormalWorld, 0);
-    B_GIn_DiffColor               = B_Out_DiffColor;
-    B_GIn_Misc.r = B_Out_ReceivesLighting ? 1 : 0;
-    B_GIn_Misc.g = B_Out_Shininess;
-    B_GIn_Misc.b = B_Out_Depth;
-    B_GIn_Misc.a = B_StencilWriteEnabled ? B_Out_Stencil : B_SampleStencil();
+    B_GIn_DiffColor    = B_Out_DiffColor;
+    B_GIn_Misc.r       = B_Out_ReceivesLighting ? 1 : 0;
+    B_GIn_Misc.g       = B_Out_Shininess;
+    B_GIn_Misc.b       = B_Out_Depth;
+    B_GIn_Misc.a       = B_StencilWriteEnabled ? B_Out_Stencil
+                                               : B_SampleStencil();
 
     float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
-    vec3 outColor = ambientLight * B_Out_DiffColor.rgb;
-    B_Out_Color = vec4( mix(B_SampleColor().rgb, outColor, B_Out_Color.a), 1);
-    B_GIn_Color = B_Out_Color;
+    vec3 outColor      = ambientLight * B_Out_DiffColor.rgb;
+    B_Out_Color        = vec4( mix(B_SampleColor().rgb,
+                                   outColor, B_Out_Color.a), 1);
+    B_GIn_Color        = B_Out_Color;
 }
 
 #include "Main.glsl"

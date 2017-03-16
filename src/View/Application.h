@@ -13,7 +13,6 @@ class Scene;
 class AudioManager;
 class SceneManager;
 class AssetsManager;
-class ShortcutManager;
 class BehaviourManager;
 class Application : public QApplication
 {
@@ -59,9 +58,7 @@ private slots:
     bool CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent);
 
     friend class SceneManager;
-    friend class ShortcutManager;
     friend class BehaviourManager;
-    friend class IShortcutListener;
 };
 
 #endif // APPLICATION_H

@@ -71,7 +71,6 @@ void SceneManager::SetActiveScene(Scene *scene)
 
         Application::GetInstance()->ResetDeltaTime();
         sm->m_activeScene->_OnStart();
-        Debug_Log("Active Scene OnStart");
         if (setCamera)
         {
             sm->m_activeScene->SetFirstFoundCameraOrDefaultOne();

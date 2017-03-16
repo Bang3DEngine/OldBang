@@ -10,8 +10,7 @@
 
 #include "Map.h"
 #include "List.h"
-
-#include "IShortcutListener.h"
+#include "Shortcut.h"
 #include "DragDropQTreeWidget.h"
 #include "HierarchyContextMenu.h"
 #include "HierarchyDragDropManager.h"
@@ -19,8 +18,7 @@
 
 class GameObject;
 class Hierarchy : public DragDropQTreeWidget,
-                  public IWindowEventManagerListener,
-                  public IShortcutListener
+                  public IWindowEventManagerListener
 {
     Q_OBJECT
 
@@ -39,7 +37,6 @@ public:
     GameObject* GetFirstSelectedGameObject() const;
 
     void OnMenuBarCreateEmptyClicked();
-    void OnShortcutPressed() override;
 
     List<GameObject*> GetSelectedGameObjects(bool excludeInternal = false);
     void SelectGameObject(GameObject *go);
@@ -63,6 +60,16 @@ public slots:
     void OnGameObjectDestroyed(GameObject *destroyed) override;
     void OnItemNameChanged(QTreeWidgetItem *item, int column);
 
+    void OnUpClicked();
+    void OnDownClicked();
+    void OnRightClicked();
+    void OnLeftClicked();
+    void OnToggleClicked();
+    void OnRenameClicked();
+    void OnCopyClicked();
+    void OnPasteClicked();
+    void OnDuplicateClicked();
+    void OnDeleteClicked();
     void OnSelectionChanged();
     void _NotifyHierarchyGameObjectSelectionChanged();
     void _NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column);
@@ -82,6 +89,11 @@ private:
     //in order to update :)
     mutable Map<GameObject*, QTreeWidgetItem*> m_gameObject_To_TreeItem;
     mutable Map<QTreeWidgetItem*,GameObject*> m_treeItem_To_GameObject;
+
+    LocalShortcut m_upShortcut, m_downShortcut, m_rightShortcut, m_leftShortcut;
+    LocalShortcut m_renameShortcut, m_toggleShortcut, m_toggleShortcut2;
+    LocalShortcut m_copyShortcut, m_pasteShortcut,
+                  m_duplicateShortcut, m_deleteShortcut;
 
     QTimer m_refreshFromSceneTimer;
     HierarchyContextMenu m_hContextMenu;

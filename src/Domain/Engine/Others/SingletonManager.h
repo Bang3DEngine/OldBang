@@ -8,13 +8,12 @@
 #include "IWindow.h"
 #include "IO.h"
 
+class IO;
 class Time;
 class Input;
 class Console;
 class IWindow;
-class IO;
 class EditorWindow;
-class ShortcutManager;
 /**
  * @brief This class manages the global Singleton's across
  * the program and the shared libraries of the custom Behaviours.

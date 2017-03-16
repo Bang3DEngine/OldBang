@@ -147,6 +147,18 @@ bool ShaderProgram::SetColor(const String &name, const Color &c) const
     return SetVec4(name, Vector4(c));
 }
 
+bool ShaderProgram::SetMat3(const String &name, const glm::mat3 &m) const
+{
+    int location = GetUniformLocation(name);
+    if (location >= 0)
+    {
+        Bind();
+        glUniformMatrix3fv(location, 1, GL_FALSE, &m[0][0]);
+        UnBind();
+    }
+    return (location >= 0);
+}
+
 bool ShaderProgram::SetMat4(const String &name, const Matrix4& m) const
 {
     int location = GetUniformLocation(name);

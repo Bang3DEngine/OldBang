@@ -69,7 +69,7 @@ void AttrWidgetFloat::OnLineEditFocusOut()
 
 FloatComponentSlotSpinBox::FloatComponentSlotSpinBox() : QLineEdit()
 {
-    //connect(this, SIGNAL(valueChanged(double)), this, SLOT(AdjustStep(double)));
+    //connect(this, SIGNAL(valueChanged(double)), SLOT(AdjustStep(double)));
     setMinimumWidth(15);
     setFixedHeight(18);
     //AdjustStep();

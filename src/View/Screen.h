@@ -10,13 +10,12 @@
 #include <QApplication>
 
 #include "Array.h"
+#include "Shortcut.h"
 
 #ifdef BANG_EDITOR
 #include "IDragDropListener.h"
-#include "IShortcutListener.h"
 #else
-class IDragDropListener { }; // To solve a Qt moc bug
-class IShortcutListener { }; // To solve a Qt moc bug
+class IDragDropListener { }; // To solve a Qt moc stuff
 #endif
 
 class GameObject;
@@ -25,8 +24,7 @@ class EditorWindow;
 class GraphicPipeline;
 class SelectionFramebuffer;
 class Screen : public QGLWidget,
-               public IDragDropListener, // Must be in non-editor compile too. Weird QT moc bug
-               public IShortcutListener
+               public IDragDropListener
 {
     Q_OBJECT
 
@@ -52,7 +50,6 @@ public:
     GraphicPipeline *GetGraphicPipeline() const;
 
     #ifdef BANG_EDITOR
-    void OnShortcutPressed() override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dragLeaveEvent(QDragLeaveEvent *e) override;
@@ -60,7 +57,16 @@ public:
     void OnDrop(const DragDropInfo &ddi) override;
     #endif
 
+public slots:
+    void OnCopyClicked();
+    void OnPasteClicked();
+    void OnDuplicateClicked();
+    void OnDeleteClicked();
+
 private:
+    LocalShortcut m_copyShortcut, m_pasteShortcut,
+                  m_duplicateShortcut, m_deleteShortcut;
+
     QWidget *m_dragOrigin = nullptr;
     GraphicPipeline *m_gPipeline = nullptr;
 

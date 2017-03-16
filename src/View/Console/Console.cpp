@@ -313,10 +313,9 @@ void Console::OnWindowShown()
 
     OnCollapseChanged(m_collapsing);
 
-    QObject::connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*,
-                                                     QTreeWidgetItem*)),
-                     this, SLOT(OnSelectionChanged(QTreeWidgetItem*,
-                                                   QTreeWidgetItem*)));
+    QObject::connect(this,
+                SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+                SLOT(  OnSelectionChanged(QTreeWidgetItem*, QTreeWidgetItem*)));
     QObject::connect(win->buttonConsoleClear, SIGNAL( pressed() ),
                      this, SLOT(OnClear()));
     QObject::connect(win->buttonCollapse, SIGNAL(clicked(bool)),

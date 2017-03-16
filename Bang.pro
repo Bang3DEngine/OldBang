@@ -302,7 +302,8 @@ HEADERS +=                                                          \
     src/Domain/Engine/DataStructures/Set.h \
     src/Domain/Engine/Interfaces/SerializableObject.h \
     src/Domain/Engine/GraphicPipeline/TextureUnitManager.h \
-    src/Domain/Engine/DataStructures/UMap.h
+    src/Domain/Engine/DataStructures/UMap.h \
+    src/View/Shortcut.h
 
 EDITOR {
 HEADERS += \
@@ -380,15 +381,13 @@ HEADERS += \
     src/View/Inspector/InspectorContextMenu.h \
     src/View/ContextMenu.h \
     src/Domain/Engine/Others/GameBuilder.h \
-    src/View/ShortcutManager.h \
     src/View/EditorGameObject/EditorAxisPlane.h \
     src/View/Explorer/ExplorerFileSortProxy.h \
     src/View/Inspector/AttributeWidgets/AttrWidgetInt.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
-    src/View/EditorGameObject/EditorGizmo.h \
-    src/View/IShortcutListener.h
+    src/View/EditorGameObject/EditorGizmo.h
 }
 GAME {
     HEADERS +=
@@ -518,7 +517,8 @@ SOURCES += \
     src/Domain/Engine/DataStructures/Set.cpp \
     src/Domain/Engine/Interfaces/SerializableObject.cpp \
     src/Domain/Engine/GraphicPipeline/TextureUnitManager.cpp \
-    src/Domain/Engine/DataStructures/UMap.cpp
+    src/Domain/Engine/DataStructures/UMap.cpp \
+    src/View/Shortcut.cpp
 
 EDITOR {
     SOURCES += \
@@ -596,8 +596,6 @@ EDITOR {
         src/View/Inspector/InspectorContextMenu.cpp \
         src/Domain/Engine/Others/GameBuilder.cpp \
         src/View/ContextMenu.cpp \
-        src/View/ShortcutManager.cpp \
-        src/View/IShortcutListener.cpp \
         src/View/Explorer/ExplorerFileSortProxy.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetInt.cpp \
         src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.cpp \

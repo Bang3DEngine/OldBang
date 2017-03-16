@@ -93,7 +93,7 @@ void EditorScene::OnUpdate()
     totalTime += Time::s_deltaTime;
     ++totalFrameCount;
     int fpsTotalMean = 1.0 / (totalTime / totalFrameCount);
-    if (rand()%20 == 0) Debug_Log(totalTime << ", " << totalFrameCount << ": " << fpsTotalMean);
+    //if (rand()%20 == 0) Debug_Log(totalTime << ", " << totalFrameCount << ": " << fpsTotalMean);
 }
 
 void EditorScene::SetEditorCamera()

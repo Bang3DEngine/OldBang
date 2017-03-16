@@ -39,6 +39,8 @@ float BehaviourManagerStatus::GetPercentOfReadyBehaviours() const
 {
     List<String> sourcesFilepaths =
             BehaviourManager::GetBehavioursSourcesFilepathsList();
+    if (sourcesFilepaths.Empty()) { return 1.0f; }
+
     int compiledBehaviours = 0;
     for (const String &srcFilepath : sourcesFilepaths)
     {

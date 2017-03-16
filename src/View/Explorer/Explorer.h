@@ -8,9 +8,9 @@
 
 #include "File.h"
 #include "String.h"
+#include "Shortcut.h"
 #include "DragDropQListView.h"
 #include "IDragDropListener.h"
-#include "IShortcutListener.h"
 #include "ExplorerContextMenu.h"
 #include "IWindowEventManagerListener.h"
 
@@ -19,7 +19,6 @@ class FileSystemModel;
 class FileReferencesManager;
 class Explorer : public DragDropQListView,
                  public IDragDropListener,
-                 public IShortcutListener,
                  public IWindowEventManagerListener
 {
     Q_OBJECT
@@ -52,7 +51,6 @@ public:
     void currentChanged(const QModelIndex &current,
                         const QModelIndex &previous) override;
 
-    void OnShortcutPressed() override;
     void OnDirDoubleClicked(const String &dirpath);
     void OnFileDoubleClicked(const String &filepath);
 
@@ -70,9 +68,11 @@ public:
     void SetLabelText(const String &absPath);
 
 public slots:
-
     void OnDirLoaded(QString dir);
     void OnButtonDirUpClicked();
+    void OnRenameClicked();
+    void OnDeleteClicked();
+    void OnDuplicateClicked();
     void OnButtonChangeViewModeClicked();
     void OnFileRenamed(const QString &dirPath,
                        const QString &oldName,
@@ -85,6 +85,8 @@ protected:
     virtual void updateGeometries() override;
 
 private:
+    LocalShortcut m_renameShortcut, m_duplicateShortcut, m_deleteShortcut;
+
     FileReferencesManager *m_fileRefsManager = nullptr;
 
     const int c_minIconSize = 20;

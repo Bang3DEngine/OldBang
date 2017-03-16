@@ -15,7 +15,6 @@
 #include "SceneManager.h"
 #include "EditorWindow.h"
 #include "MeshAssetFile.h"
-#include "ShortcutManager.h"
 #include "FileSystemModel.h"
 #include "QtProjectManager.h"
 #include "MaterialAssetFile.h"
@@ -31,7 +30,11 @@
 #include "MaterialAssetFileInspectable.h"
 #include "Texture2DAssetFileInspectable.h"
 
-Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
+Explorer::Explorer(QWidget *parent)
+    : m_renameShortcut    (this, KSeq("F2"),     SLOT(OnRenameClicked())),
+      m_duplicateShortcut (this, KSeq("Ctrl+D"), SLOT(OnDuplicateClicked())),
+      m_deleteShortcut    (this, KSeq("Del"),    SLOT(OnDeleteClicked())),
+      m_eContextMenu(this)
 {
     setAcceptDrops(true);
     viewport()->setAcceptDrops(true);
@@ -56,15 +59,12 @@ Explorer::Explorer(QWidget *parent) : m_eContextMenu(this)
 
     m_labelCurrentPath = win->labelCurrentPath;
 
-    QObject::connect(m_buttonDirUp, SIGNAL(clicked()), this,
-                     SLOT(OnButtonDirUpClicked()));
-    QObject::connect(m_buttonChangeViewMode, SIGNAL(clicked()),
-                     this, SLOT(OnButtonChangeViewModeClicked()));
-    QObject::connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
-                     this, SLOT(OnDirLoaded(QString)));
-    QObject::connect(m_fileSystemModel,
-                     SIGNAL(fileRenamed(QString,QString,QString)),
-                     this, SLOT(OnFileRenamed(QString,QString,QString)) );
+    connect(m_buttonChangeViewMode, SIGNAL(clicked()),
+            this, SLOT(OnButtonChangeViewModeClicked()));
+    connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
+            this, SLOT(OnDirLoaded(QString)));
+    connect(m_fileSystemModel, SIGNAL(fileRenamed(QString,QString,QString)),
+            this, SLOT(OnFileRenamed(QString,QString,QString)) );
 }
 
 Explorer::~Explorer()
@@ -105,6 +105,25 @@ void Explorer::OnButtonDirUpClicked()
         }
     }
     SetDir(parentDirPath);
+}
+
+void Explorer::OnRenameClicked()
+{
+    String selectedPath = GetSelectedFileOrDirPath();
+    if (!selectedPath.Empty())
+    {
+        StartRenaming(selectedPath);
+    }
+}
+
+void Explorer::OnDeleteClicked()
+{
+    m_eContextMenu.OnDeleteClicked();
+}
+
+void Explorer::OnDuplicateClicked()
+{
+    m_eContextMenu.OnDuplicateClicked();
 }
 
 void Explorer::OnButtonChangeViewModeClicked()
@@ -207,28 +226,6 @@ void Explorer::currentChanged(const QModelIndex &current,
 
     SetLabelText(selectedPath);
     RefreshInspector();
-}
-
-void Explorer::OnShortcutPressed()
-{
-    ASSERT(hasFocus());
-
-    if (ShortcutManager::IsPressed(Input::Key::Delete))
-    {
-        m_eContextMenu.OnDeleteClicked();
-    }
-    else if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}))
-    {
-        m_eContextMenu.OnDuplicateClicked();
-    }
-    else if (ShortcutManager::IsPressed({Input::Key::F2}))
-    {
-        String selectedPath = GetSelectedFileOrDirPath();
-        if (!selectedPath.Empty())
-        {
-            StartRenaming(selectedPath);
-        }
-    }
 }
 
 void Explorer::OnDirDoubleClicked(const String &dirpath)

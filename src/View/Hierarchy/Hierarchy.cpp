@@ -11,22 +11,28 @@
 #include "EditorWindow.h"
 #include "SceneManager.h"
 #include "EditorCamera.h"
-#include "ShortcutManager.h"
 #include "WindowEventManager.h"
 
-Hierarchy::Hierarchy(QWidget *parent) :
-    m_hContextMenu(this), m_hDragDropManager(this)
+Hierarchy::Hierarchy(QWidget *parent)
+ :m_upShortcut       (this, KSeq(Qt::Key_Up),     SLOT(OnUpClicked())),
+  m_downShortcut     (this, KSeq(Qt::Key_Down),   SLOT(OnDownClicked())),
+  m_rightShortcut    (this, KSeq(Qt::Key_Right),  SLOT(OnRightClicked())),
+  m_leftShortcut     (this, KSeq(Qt::Key_Left),   SLOT(OnLeftClicked())),
+  m_renameShortcut   (this, KSeq(Qt::Key_F2),     SLOT(OnRenameClicked())),
+  m_toggleShortcut   (this, KSeq(Qt::Key_Return), SLOT(OnToggleClicked())),
+  m_toggleShortcut2  (this, KSeq(Qt::Key_Space),  SLOT(OnToggleClicked())),
+  m_copyShortcut     (this, KSeq("Ctrl+C"),       SLOT(OnCopyClicked())),
+  m_pasteShortcut    (this, KSeq("Ctrl+V"),       SLOT(OnPasteClicked())),
+  m_duplicateShortcut(this, KSeq("Ctrl+D"),       SLOT(OnDuplicateClicked())),
+  m_deleteShortcut   (this, KSeq("Del"),          SLOT(OnDeleteClicked())),
+  m_hContextMenu(this),
+  m_hDragDropManager(this)
 {
     connect(this, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
-            this, SLOT(OnItemNameChanged(QTreeWidgetItem*,int)));
-
-    connect(this, SIGNAL(itemSelectionChanged()),
-            this, SLOT(OnSelectionChanged()));
-
+            SLOT(OnItemNameChanged(QTreeWidgetItem*,int)));
+    connect(this, SIGNAL(itemSelectionChanged()), SLOT(OnSelectionChanged()));
     connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
-            this, SLOT(_NotifyHierarchyGameObjectDoubleClicked(
-                           QTreeWidgetItem*,int)));
-
+           SLOT(_NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem*,int)));
     connect(&m_refreshFromSceneTimer, SIGNAL(timeout()),
             this, SLOT(UpdateHierarchyFromScene()));
     m_refreshFromSceneTimer.start(1000);
@@ -305,8 +311,7 @@ bool Hierarchy::IsSelected(QTreeWidgetItem *item)
 
 void Hierarchy::ExpandToggle(GameObject *go)
 {
-    if (go &&
-        m_gameObject_To_TreeItem.ContainsKey(go))
+    if (go && m_gameObject_To_TreeItem.ContainsKey(go))
     {
         QTreeWidgetItem *item = m_gameObject_To_TreeItem[go];
         if (!item->isExpanded())
@@ -332,71 +337,6 @@ GameObject *Hierarchy::GetFirstSelectedGameObject() const
 void Hierarchy::OnMenuBarCreateEmptyClicked()
 {
     m_hContextMenu.OnCreateEmptyClicked();
-}
-
-void Hierarchy::OnShortcutPressed()
-{
-    if (hasFocus())
-    {
-        if ( ShortcutManager::IsPressed(Input::Key::Enter) ||
-             ShortcutManager::IsPressed(Input::Key::Space))
-        {
-            GameObject *go = GetFirstSelectedGameObject();
-            ExpandToggle(go);
-        }
-        else if ( ShortcutManager::IsPressed(Input::Key::Up))
-        {
-            SelectItemAboveOrBelowSelected(true);
-        }
-        else if ( ShortcutManager::IsPressed(Input::Key::Down))
-        {
-            SelectItemAboveOrBelowSelected(false);
-        }
-        else if ( ShortcutManager::IsPressed(Input::Key::Left))
-        {
-            QTreeWidgetItem *item = GetFirstSelectedItem();
-            if (item)
-            {
-                item->setExpanded(false);
-            }
-        }
-        else if ( ShortcutManager::IsPressed(Input::Key::Right))
-        {
-            QTreeWidgetItem *item = GetFirstSelectedItem();
-            if (item)
-            {
-                item->setExpanded(true);
-            }
-        }
-        else if ( ShortcutManager::IsPressed(Input::Key::F2) )
-        { // Edit name
-            if (selectedItems().length() <= 0) return;
-            QTreeWidgetItem *selected = selectedItems().at(0);
-            if (selected)
-            {
-                Qt::ItemFlags oldFlags = selected->flags();
-                selected->setFlags(oldFlags | Qt::ItemFlag::ItemIsEditable);
-
-                editItem(selected, 0); // Name can be edited now
-            }
-        }
-        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::C}) )
-        { // Copy
-            m_hContextMenu.OnCopyClicked();
-        }
-        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::V}) )
-        { // Paste
-            m_hContextMenu.OnPasteClicked();
-        }
-        else if ( ShortcutManager::IsPressed({Input::Key::Control, Input::Key::D}) )
-        { // Duplicate
-            m_hContextMenu.OnDuplicateClicked();
-        }
-        else if (ShortcutManager::IsPressed(Input::Key::Delete)) // Delete item
-        { // Delete
-            m_hContextMenu.OnDeleteClicked();
-        }
-    }
 }
 
 
@@ -463,6 +403,66 @@ void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
     {
         go->SetName(item->text(column));
     }
+}
+
+void Hierarchy::OnUpClicked()
+{
+    SelectItemAboveOrBelowSelected(true);
+}
+
+void Hierarchy::OnDownClicked()
+{
+    SelectItemAboveOrBelowSelected(false);
+}
+
+void Hierarchy::OnRightClicked()
+{
+    QTreeWidgetItem *item = GetFirstSelectedItem();
+    if (item) { item->setExpanded(true); }
+}
+
+void Hierarchy::OnLeftClicked()
+{
+    QTreeWidgetItem *item = GetFirstSelectedItem();
+    if (item) { item->setExpanded(false); }
+}
+
+void Hierarchy::OnToggleClicked()
+{
+    GameObject *go = GetFirstSelectedGameObject();
+    ExpandToggle(go);
+}
+
+void Hierarchy::OnRenameClicked()
+{
+    Debug_Log("Rename clicked!");
+    QTreeWidgetItem *selected = GetFirstSelectedItem();
+    if (selected)
+    {
+        Qt::ItemFlags oldFlags = selected->flags();
+        selected->setFlags(oldFlags | Qt::ItemFlag::ItemIsEditable);
+        editItem(selected, 0);
+    }
+}
+
+void Hierarchy::OnCopyClicked()
+{
+    m_hContextMenu.OnCopyClicked();
+}
+
+void Hierarchy::OnPasteClicked()
+{
+    m_hContextMenu.OnPasteClicked();
+}
+
+void Hierarchy::OnDuplicateClicked()
+{
+    m_hContextMenu.OnDuplicateClicked();
+}
+
+void Hierarchy::OnDeleteClicked()
+{
+    m_hContextMenu.OnDeleteClicked();
 }
 
 void Hierarchy::DeleteGameObjectItem(GameObject *go)

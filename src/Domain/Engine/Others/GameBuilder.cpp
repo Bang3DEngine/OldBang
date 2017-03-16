@@ -16,7 +16,7 @@ GameBuilder *GameBuilder::s_instance = nullptr;
 GameBuilder::GameBuilder()
 {
     QObject::connect(this, SIGNAL(DialogError(const QString&, const QString&)),
-                     this, SLOT(OnDialogError(const QString&, const QString&)));
+                     SLOT(OnDialogError(const QString&, const QString&)));
 }
 
 GameBuilder::~GameBuilder()

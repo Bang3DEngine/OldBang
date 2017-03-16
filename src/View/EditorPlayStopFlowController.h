@@ -22,12 +22,12 @@ private:
     bool m_playingCanceled = false;
     Scene *p_latestSceneBeforePlaying = nullptr;
 
-    bool PlayScene();
-    void StopScene();
-
     bool WaitForAllBehavioursToBeLoaded();
 
 private slots:
+    bool PlayScene();
+    void StopScene();
+
     void OnWaitingForBehavioursCanceled();
 
     friend class EditorState;

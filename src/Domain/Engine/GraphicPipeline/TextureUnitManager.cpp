@@ -7,8 +7,6 @@
 TextureUnitManager::TextureUnitManager()
 {
     glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &c_numTextureUnits);
-
-    Debug_Log("Tex units: " << c_numTextureUnits);
 }
 
 TextureUnitManager::TexUnit TextureUnitManager::BindTexture(const Texture *tex)

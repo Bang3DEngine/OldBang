@@ -7,11 +7,10 @@
 #include <QToolButton>
 
 #include "Input.h"
+#include "Shortcut.h"
 #include "EditorState.h"
-#include "IShortcutListener.h"
 
-class Toolbar : public QWidget,
-                public IShortcutListener
+class Toolbar : public QWidget
 {
     Q_OBJECT
 
@@ -26,7 +25,7 @@ public:
     void SetTransformMode(EditorState::TransformMode transformMode);
 
 public slots:
-
+    bool OnPlayStopShortcut();
     void OnTranslateClicked();
     void OnRotateClicked();
     void OnScaleClicked();
@@ -40,13 +39,13 @@ public slots:
     void OnOrthoPerspectiveClicked();
     void OnGBufferAttachmentIndexChanged(int newIndex);
 
-    void OnShortcutPressedKey(Input::Key key) override;
-    void OnShortcutPressed() override;
-
     void OnSceneGameTabChanged();
 
 private:
     static Toolbar *s_tb;
+
+    GlobalShortcut m_playStopShortcut, m_translateShortcut, m_rotateShortcut;
+    GlobalShortcut m_scaleShortcut, m_rectTransformShortcut;
 
     QToolButton *m_buttonTranslateMode = nullptr;
     QToolButton *m_buttonRotateMode    = nullptr;

@@ -10,13 +10,18 @@
 #include "EditorWindow.h"
 #include "SceneManager.h"
 #include "GraphicPipeline.h"
-#include "ShortcutManager.h"
 #include "BehaviourManager.h"
 #include "EditorPlayStopFlowController.h"
 
 Toolbar *Toolbar::s_tb = nullptr;
 
-Toolbar::Toolbar(QWidget *parent) : QWidget(parent)
+Toolbar::Toolbar(QWidget *parent)
+: m_playStopShortcut     (this, KSeq("Ctrl+P"), SLOT(OnPlayStopShortcut())),
+  m_translateShortcut    (this, KSeq("W"),      SLOT(OnTranslateClicked())),
+  m_rotateShortcut       (this, KSeq("E"),      SLOT(OnRotateClicked())),
+  m_scaleShortcut        (this, KSeq("R"),      SLOT(OnScaleClicked())),
+  m_rectTransformShortcut(this, KSeq("T"),      SLOT(OnRectTransformClicked())),
+  QWidget(parent)
 {
 }
 
@@ -223,48 +228,13 @@ void Toolbar::OnGBufferAttachmentIndexChanged(int newIndex)
     {
         gp->SetGBufferAttachmentToBeRendered(GBuffer::AttColor);
     }
-    else if (newIndex == 2)
+    else if (newIndex == 1)
     {
         gp->SetGBufferAttachmentToBeRendered(GBuffer::AttNormal);
     }
-    else if (newIndex == 3)
+    else if (newIndex == 2)
     {
         gp->SetGBufferAttachmentToBeRendered(GBuffer::AttDiffuse);
-    }
-}
-
-void Toolbar::OnShortcutPressedKey(Input::Key key)
-{
-    if (key == Input::Key::W)
-    {
-        m_buttonTranslateMode->click();
-    }
-    else if (key == Input::Key::E)
-    {
-        m_buttonRotateMode->click();
-    }
-    else if (key == Input::Key::R)
-    {
-        m_buttonScaleMode->click();
-    }
-    else if (key == Input::Key::T)
-    {
-        m_buttonRectTransformMode->click();
-    }
-}
-
-void Toolbar::OnShortcutPressed()
-{
-    if (ShortcutManager::IsPressed({Input::Key::Control, Input::Key::P}))
-    {
-        if (EditorState::IsPlaying())
-        {
-            m_buttonStop->click();
-        }
-        else
-        {
-            m_buttonPlay->click();
-        }
     }
 }
 
@@ -296,3 +266,8 @@ void Toolbar::OnSceneGameTabChanged()
     }
 }
 
+bool Toolbar::OnPlayStopShortcut()
+{
+    if (EditorState::IsPlaying()) { m_buttonStop->click(); }
+    else { m_buttonPlay->click(); }
+}

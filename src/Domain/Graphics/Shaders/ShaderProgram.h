@@ -42,6 +42,7 @@ public:
     bool SetVec3(const String &name, const Vector3& v) const;
     bool SetVec4(const String &name, const Vector4& v) const;
     bool SetColor(const String &name, const Color& c) const;
+    bool SetMat3(const String &name, const glm::mat3& m) const;
     bool SetMat4(const String &name, const Matrix4& m) const;
     bool SetTexture(const String &name, const Texture *texture) const;
 

@@ -34,7 +34,6 @@
 
 #include "EditorScene.h"
 #include "EditorWindow.h"
-#include "ShortcutManager.h"
 #include "SelectProjectWindow.h"
 
 #else
@@ -101,10 +100,6 @@ void LoadStylesheet(QApplication *app)
 void InitSingletonManager()
 {
     SingletonManager::InitSingletonManagerFromMainBinary();
-    #ifdef BANG_EDITOR
-    ShortcutManager::InitFromMainBinary(); // It must go before Application init
-    #endif
-
     Time::InitFromMainBinary();
     Input::InitFromMainBinary();
     IO::InitFromMainBinary();
