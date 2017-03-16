@@ -27,13 +27,7 @@ void SingleLineRenderer::CloneInto(ICloneable *clone) const
     slr->SetOrigin(GetOrigin());
     slr->SetDestiny(GetDestiny());
 }
-
-ICloneable *SingleLineRenderer::Clone() const
-{
-    SingleLineRenderer *slr = new SingleLineRenderer();
-    CloneInto(slr);
-    return slr;
-}
+ICloneable *SingleLineRenderer::CloneVirtual() const { return _Clone<SingleLineRenderer>(); }
 
 void SingleLineRenderer::SetOrigin(const Vector3 &o)
 {
@@ -57,11 +51,11 @@ Vector3 SingleLineRenderer::GetDestiny() const
     return m_points[1];
 }
 
-void SingleLineRenderer::Read(const XMLNode *xmlInfo)
+void SingleLineRenderer::Read(const XMLNode &xmlInfo)
 {
     LineRenderer::Read(xmlInfo);
-    SetOrigin(xmlInfo->GetVector3("Origin"));
-    SetDestiny(xmlInfo->GetVector3("Destiny"));
+    SetOrigin(xmlInfo.GetVector3("Origin"));
+    SetDestiny(xmlInfo.GetVector3("Destiny"));
 }
 
 void SingleLineRenderer::Write(XMLNode *xmlInfo) const

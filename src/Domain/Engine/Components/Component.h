@@ -7,7 +7,7 @@
 #include "ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #include "IWindowEventManagerListener.h"
 #endif
 
@@ -17,13 +17,10 @@ class XMLNode;
 class Transform;
 class GameObject;
 class Component :
-              public Object
-             ,public ISceneEventListener
-             ,public IToString
-             ,public SerializableObject
-            #ifdef BANG_EDITOR
-             ,public IInspectable
-            #endif
+              public Object,
+              public ISceneEventListener,
+              public IToString,
+              public SerializableObject
 {
 protected:
     bool m_enabled = true;
@@ -44,7 +41,7 @@ public:
     Transform* const& transform = m_gameObjectTransform; // shortcut
 
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override = 0;
+    ICloneable *CloneVirtual() const override;
 
     virtual String ToString() const override;
 
@@ -58,15 +55,11 @@ public:
     void SetClosedInInspector(bool closed);
     bool IsClosedInInspector() const;
 
-    #ifdef BANG_EDITOR
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
-    #endif
-
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     friend class GameObject;
+    friend class ICloneable;
     friend class ComponentClipboard;
 };
 

@@ -60,7 +60,7 @@ public:
         if (xmlInfo)
         {
             a = new T();
-            a->Read(xmlInfo);
+            a->Read(*xmlInfo);
             a->m_assetFilepath = absPath;
             delete xmlInfo;
         }
@@ -102,21 +102,19 @@ public:
     #ifdef BANG_EDITOR
     template <class T>
     static void OnAssetFileChanged(const String &assetFilepath,
-                                   const XMLNode *xmlChangedInfo)
+                                   const XMLNode &xmlChangedInfo)
     {
         // Update live instances and rewrite the file
         ASSERT(!assetFilepath.Empty());
         if (AssetsManager::IsLoaded(assetFilepath, false))
         {
             Asset *asset = AssetsManager::GetAsset<T>(assetFilepath, false);
-            asset->OnInspectorXMLChanged(xmlChangedInfo);
+            asset->Read(xmlChangedInfo);
         }
 
-        Debug_Log("Exists " << assetFilepath << "?");
         if (IO::ExistsFile(assetFilepath))
         {
-            Debug_Log("YES");
-            IO::WriteToFile(assetFilepath, xmlChangedInfo->ToString());
+            IO::WriteToFile(assetFilepath, xmlChangedInfo.ToString());
         }
     }
     #endif

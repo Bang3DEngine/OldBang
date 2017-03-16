@@ -18,7 +18,7 @@ public:
     virtual ~AudioClip();
 
     static String GetFileExtensionStatic();
-    virtual String GetFileExtension();
+    virtual String GetFileExtension() const override ;
 
     bool LoadFromFile(const String &filepath);
 
@@ -31,7 +31,7 @@ public:
 
     const String &GetAudioFilepath() const;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     void OnAudioSourceAttached(AudioSource *as);

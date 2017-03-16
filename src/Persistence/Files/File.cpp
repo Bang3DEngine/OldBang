@@ -5,7 +5,7 @@
 
 #ifdef BANG_EDITOR
 #include "Explorer.h"
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #endif
 
 #include "Font.h"
@@ -250,7 +250,7 @@ QPixmap File::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *File::GetInspectable() const
+SerializableObject *File::GetInspectable() const
 {
     return nullptr;
 }

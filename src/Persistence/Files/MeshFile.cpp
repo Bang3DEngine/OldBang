@@ -6,7 +6,7 @@
 #include "IO.h"
 
 #ifdef BANG_EDITOR
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #include "MeshFileInspectable.h"
 #endif
 
@@ -25,7 +25,7 @@ QPixmap MeshFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *MeshFile::GetInspectable() const
+SerializableObject *MeshFile::GetInspectable() const
 {
     return new MeshFileInspectable(*this);
 }

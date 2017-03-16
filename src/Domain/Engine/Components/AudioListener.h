@@ -11,10 +11,9 @@ public:
 
     virtual String GetName() const override;
 
-    virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
+    virtual ICloneable* CloneVirtual() const override;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     virtual void OnUpdate() override;

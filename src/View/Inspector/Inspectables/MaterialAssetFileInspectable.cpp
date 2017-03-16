@@ -18,15 +18,15 @@ MaterialAssetFileInspectable::MaterialAssetFileInspectable
     }
 }
 
-void MaterialAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
+void MaterialAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
     // Update live instances currently being used
     AssetsManager::OnAssetFileChanged<Material>(
                 m_materialAssetFile.GetAbsolutePath(), xmlInfo);
-    m_xmlInfo = *xmlInfo;
+    m_xmlInfo = xmlInfo;
 }
 
-void MaterialAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
+void MaterialAssetFileInspectable::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("MaterialAssetFileInspectable");
     *xmlInfo = m_xmlInfo;

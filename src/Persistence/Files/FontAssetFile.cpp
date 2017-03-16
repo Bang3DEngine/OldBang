@@ -6,7 +6,7 @@
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #endif
 
 FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &index)
@@ -25,7 +25,7 @@ QPixmap FontAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *FontAssetFile::GetInspectable() const
+SerializableObject *FontAssetFile::GetInspectable() const
 {
     return nullptr;
 }

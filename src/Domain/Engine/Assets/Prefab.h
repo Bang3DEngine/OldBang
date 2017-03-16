@@ -21,12 +21,12 @@ public:
     Prefab(const String &gameObjectXMLInfoContent);
 
     static String GetFileExtensionStatic();
-    virtual String GetFileExtension();
+    virtual String GetFileExtension() const override ;
 
     GameObject* Instantiate() const;
     GameObject* InstantiateWithoutStarting() const;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:

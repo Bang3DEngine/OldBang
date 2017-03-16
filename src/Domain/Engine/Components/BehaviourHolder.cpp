@@ -102,12 +102,7 @@ void BehaviourHolder::CloneInto(ICloneable *clone) const
     bh->m_sourceFilepath = m_sourceFilepath;
 }
 
-ICloneable *BehaviourHolder::Clone() const
-{
-    BehaviourHolder *bh = new BehaviourHolder();
-    CloneInto(bh);
-    return bh;
-}
+ICloneable *BehaviourHolder::CloneVirtual() const { return _Clone<BehaviourHolder>(); }
 
 const String &BehaviourHolder::GetSourceFilepath() const
 {
@@ -153,13 +148,12 @@ QLibrary *BehaviourHolder::GetLibraryBeingUsed() const
     return m_currentLoadedLibrary;
 }
 
-void BehaviourHolder::Read(const XMLNode *xmlInfo)
+void BehaviourHolder::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
     String lastFilepath = m_sourceFilepath;
-    m_sourceFilepath = xmlInfo->GetString("BehaviourScript");
-    if (lastFilepath != m_sourceFilepath &&
-        gameObject->IsInsideScene())
+    m_sourceFilepath = xmlInfo.GetString("BehaviourScript");
+    if (lastFilepath != m_sourceFilepath && gameObject->IsInsideScene())
     {
         RefreshBehaviourLib();
     }
@@ -171,23 +165,13 @@ void BehaviourHolder::Write(XMLNode *xmlInfo) const
     xmlInfo->SetTagName("BehaviourHolder");
 
     xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "cpp");
-}
 
-
-#ifdef BANG_EDITOR
-void BehaviourHolder::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    Write(xmlInfo);
     BehaviourHolder *noConstThis = const_cast<BehaviourHolder*>(this);
     xmlInfo->SetButton("CreateNew...", noConstThis);
 }
 
-void BehaviourHolder::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    Read(xmlInfo);
-    RefreshBehaviourLib();
-}
 
+#ifdef BANG_EDITOR
 void BehaviourHolder::OnButtonClicked(const String &attrName)
 {
     if (attrName.Contains("Create"))

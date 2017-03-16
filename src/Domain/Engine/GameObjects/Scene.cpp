@@ -61,18 +61,6 @@ Scene::~Scene()
     delete m_defaultCamera;
 }
 
-void Scene::CloneInto(ICloneable *clone) const
-{
-    GameObject::CloneInto(clone);
-}
-
-ICloneable *Scene::Clone() const
-{
-    Scene *scene = new Scene();
-    CloneInto(scene);
-    return scene;
-}
-
 void Scene::SetCamera(const Camera *cam)
 {
     if (!cam)
@@ -115,6 +103,8 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
         SetCamera(cam);
     }
 }
+
+ICloneable *Scene::CloneVirtual() const { return _Clone<Scene>(); }
 
 Scene *Scene::GetActiveScene()
 {
@@ -159,7 +149,7 @@ Scene *Scene::GetDefaultScene()
     return scene;
 }
 
-void Scene::Read(const XMLNode *xmlInfo)
+void Scene::Read(const XMLNode &xmlInfo)
 {
     GameObject::Read(xmlInfo);
 }
@@ -179,14 +169,14 @@ void Scene::Write(XMLNode *xmlInfo) const
     xmlInfo->SetPointer("id", cam, {XMLProperty::Hidden});
 }
 
-void Scene::PostRead(const XMLNode *xmlInfo)
+void Scene::PostRead(const XMLNode &xmlInfo)
 {
     GameObject::PostRead(xmlInfo);
 
     // In the Editor Scene we'll use the EditorCamera, so skip this
     if (!HasHideFlag(HideFlags::HideInGame))
     {
-        String camId = xmlInfo->GetString("Camera");
+        String camId = xmlInfo.GetString("Camera");
         if (!camId.Empty())
         {
             const SerializableObject *f = XMLParser::GetPointerFromId(camId);

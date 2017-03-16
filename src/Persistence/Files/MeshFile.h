@@ -7,7 +7,7 @@
 
 #include "File.h"
 
-class IInspectable;
+class SerializableObject;
 class MeshFile : public File
 {
     bool m_isTris = true;
@@ -21,7 +21,7 @@ public:
     virtual QPixmap GetIcon() const override;
 
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetInspectable() const override;
+    virtual SerializableObject *GetInspectable() const override;
     #endif
 
     virtual bool IsAsset() const override;

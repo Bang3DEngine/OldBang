@@ -14,9 +14,9 @@ AudioClipAssetFileInspectable::AudioClipAssetFileInspectable(
 
 }
 
-void AudioClipAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
+void AudioClipAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
-    String audioFilepath = xmlInfo->GetFilepath("AudioFilepath");
+    String audioFilepath = xmlInfo.GetFilepath("AudioFilepath");
     m_audioClipAssetFile.SetAudioFilepath(audioFilepath);
 
     String audioClipFilepath = m_audioClipAssetFile.GetAbsolutePath();
@@ -30,7 +30,7 @@ void AudioClipAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo
     AssetsManager::OnAssetFileChanged<AudioClip>(audioClipFilepath, xmlInfo);
 }
 
-void AudioClipAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
+void AudioClipAssetFileInspectable::Write(XMLNode *xmlInfo) const
 {
     AudioClip *audioClip = GetRelatedAudioClip();
 

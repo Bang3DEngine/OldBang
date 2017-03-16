@@ -26,7 +26,7 @@ String Texture2D::GetFileExtensionStatic()
     return "btex2d";
 }
 
-String Texture2D::GetFileExtension()
+String Texture2D::GetFileExtension() const
 {
     return Texture2D::GetFileExtensionStatic();
 }
@@ -111,14 +111,14 @@ float Texture2D::GetAlphaCutoff() const
     return m_alphaCutoff;
 }
 
-void Texture2D::Read(const XMLNode *xmlInfo)
+void Texture2D::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    String imageFilepath = xmlInfo->GetFilepath("ImageFilepath");
+    String imageFilepath = xmlInfo.GetFilepath("ImageFilepath");
     LoadFromImage(imageFilepath);
 
-    String filterModeString = xmlInfo->GetEnumSelectedName("FilterMode");
+    String filterModeString = xmlInfo.GetEnumSelectedName("FilterMode");
     Texture::FilterMode filterMode = FilterMode::Nearest;
     if (filterModeString == "Nearest") { filterMode = FilterMode::Nearest; }
     else if (filterModeString == "Linear") { filterMode = FilterMode::Linear; }
@@ -128,7 +128,7 @@ void Texture2D::Read(const XMLNode *xmlInfo)
     }
     SetFilterMode(filterMode);
 
-    SetAlphaCutoff(xmlInfo->GetFloat("AlphaCutoff"));
+    SetAlphaCutoff(xmlInfo.GetFloat("AlphaCutoff"));
 }
 
 void Texture2D::Write(XMLNode *xmlInfo) const

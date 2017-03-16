@@ -17,15 +17,15 @@ Texture2DAssetFileInspectable::Texture2DAssetFileInspectable
     }
 }
 
-void Texture2DAssetFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
+void Texture2DAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
     // Update live instances currently being used
     AssetsManager::OnAssetFileChanged<Texture2D>(m_fileTex.GetAbsolutePath(),
                                                  xmlInfo);
-    m_xmlInfo = *xmlInfo;
+    m_xmlInfo = xmlInfo;
 }
 
-void Texture2DAssetFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
+void Texture2DAssetFileInspectable::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Texture2DAssetFileInspectable");
     *xmlInfo = m_xmlInfo;

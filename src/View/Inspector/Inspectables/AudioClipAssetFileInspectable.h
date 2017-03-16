@@ -6,21 +6,21 @@
 #include <AL/alut.h>
 
 #include "String.h"
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #include "AudioClipAssetFile.h"
 #include "IAttrWidgetButtonListener.h"
 
 class XMLNode;
 class AudioClip;
 class AudioSource;
-class AudioClipAssetFileInspectable : public IInspectable,
+class AudioClipAssetFileInspectable : public SerializableObject,
                                       public IAttrWidgetButtonListener
 {
 public:
     AudioClipAssetFileInspectable(const AudioClipAssetFile &audioClipAssetFile);
 
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
     virtual void OnButtonClicked(const String &attrName);
 

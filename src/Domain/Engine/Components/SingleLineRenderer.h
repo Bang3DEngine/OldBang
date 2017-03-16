@@ -18,7 +18,7 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
+    ICloneable *CloneVirtual() const override;
 
     void SetOrigin(const Vector3 &o);
     void SetDestiny(const Vector3 &d);
@@ -26,8 +26,10 @@ public:
     Vector3 GetOrigin() const;
     Vector3 GetDestiny() const;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
+
+    friend class ICloneable;
 };
 
 #endif // SINGLELINERENDERER_H

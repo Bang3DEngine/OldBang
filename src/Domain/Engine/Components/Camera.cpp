@@ -176,12 +176,7 @@ void Camera::CloneInto(ICloneable *clone) const
     cam->SetProjectionMode(GetProjectionMode());
 }
 
-ICloneable *Camera::Clone() const
-{
-    Camera *cam = new Camera();
-    CloneInto(cam);
-    return cam;
-}
+ICloneable *Camera::CloneVirtual() const { return _Clone<Camera>(); }
 
 Rect Camera::GetScreenBoundingRect(const AABox &bbox)
 {
@@ -255,31 +250,20 @@ void Camera::OnDrawGizmos(bool depthed, bool overlay)
         }
     }
 }
-
-
-void Camera::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    Write(xmlInfo);
-}
-
-void Camera::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    Read(xmlInfo);
-}
 #endif
 
-void Camera::Read(const XMLNode *xmlInfo)
+void Camera::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    SetClearColor(xmlInfo->GetColor("ClearColor"));
-    SetFovDegrees(xmlInfo->GetFloat("FOVDegrees"));
-    SetZNear(xmlInfo->GetFloat("ZNear"));
-    SetZFar(xmlInfo->GetFloat("ZFar"));
+    SetClearColor(xmlInfo.GetColor("ClearColor"));
+    SetFovDegrees(xmlInfo.GetFloat("FOVDegrees"));
+    SetZNear(xmlInfo.GetFloat("ZNear"));
+    SetZFar(xmlInfo.GetFloat("ZFar"));
     ProjectionMode pm = ProjectionMode_FromString(
-                xmlInfo->GetEnumSelectedName("ProjectionMode"));
+                xmlInfo.GetEnumSelectedName("ProjectionMode"));
     SetProjectionMode(pm);
-    SetOrthoHeight( xmlInfo->GetFloat("OrthoHeight") );
+    SetOrthoHeight( xmlInfo.GetFloat("OrthoHeight") );
 }
 
 void Camera::Write(XMLNode *xmlInfo) const

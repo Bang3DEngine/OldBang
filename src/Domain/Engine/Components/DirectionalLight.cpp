@@ -14,7 +14,7 @@
 #include "InspectorWidget.h"
 #endif
 
-DirectionalLight::DirectionalLight() : Light()
+DirectionalLight::DirectionalLight()
 {
     m_lightMaterialScreen = AssetsManager::Load<Material>(
                 "Materials/SP_DirectionalLight_Screen.bmat", true);
@@ -35,13 +35,7 @@ void DirectionalLight::CloneInto(ICloneable *clone) const
     Light::CloneInto(clone);
     DirectionalLight *dl = Object::SCast<DirectionalLight>(clone);
 }
-
-ICloneable *DirectionalLight::Clone() const
-{
-    DirectionalLight *dl = new DirectionalLight();
-    CloneInto(dl);
-    return dl;
-}
+ICloneable *DirectionalLight::CloneVirtual() const { return _Clone<DirectionalLight>(); }
 
 void DirectionalLight::OnDrawGizmos(bool depthed, bool overlay)
 {
@@ -82,7 +76,7 @@ void DirectionalLight::OnDrawGizmos(bool depthed, bool overlay)
     }
 }
 
-void DirectionalLight::Read(const XMLNode *xmlInfo)
+void DirectionalLight::Read(const XMLNode &xmlInfo)
 {
     Light::Read(xmlInfo);
 }

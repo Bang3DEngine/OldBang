@@ -2,16 +2,16 @@
 #define AUDIOFILEINSPECTABLE_H
 
 #include "AudioFile.h"
-#include "IInspectable.h"
+#include "SerializableObject.h"
 
 class XMLNode;
-class AudioFileInspectable : public IInspectable
+class AudioFileInspectable : public SerializableObject
 {
 public:
     AudioFileInspectable(const AudioFile &audioFile);
 
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
     AudioFile m_audioFile;

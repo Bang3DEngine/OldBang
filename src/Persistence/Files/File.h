@@ -5,8 +5,8 @@
 #include <QFileSystemModel>
 
 #include "String.h"
+#include "SerializableObject.h"
 
-class IInspectable;
 class File
 {
 public:
@@ -62,7 +62,7 @@ public:
     virtual QPixmap GetIcon() const;
 
     #ifdef BANG_EDITOR
-    virtual IInspectable *GetInspectable() const;
+    virtual SerializableObject *GetInspectable() const;
     #endif
 
     String GetContents() const;

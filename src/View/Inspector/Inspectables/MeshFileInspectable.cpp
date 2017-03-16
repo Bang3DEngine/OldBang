@@ -7,12 +7,12 @@ MeshFileInspectable::MeshFileInspectable(const MeshFile &fileMesh) :
 {
 }
 
-void MeshFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
+void MeshFileInspectable::Read(const XMLNode &xmlInfo)
 {
     // They all are readonly properties, so we wont do anything here
 }
 
-void MeshFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
+void MeshFileInspectable::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("MeshFileInspectable");
 

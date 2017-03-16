@@ -25,7 +25,7 @@ String AudioClip::GetFileExtensionStatic()
     return "baudioclip";
 }
 
-String AudioClip::GetFileExtension()
+String AudioClip::GetFileExtension() const
 {
     return AudioClip::GetFileExtension();
 }
@@ -128,11 +128,10 @@ const String &AudioClip::GetAudioFilepath() const
     return m_audioFileFilepath;
 }
 
-void AudioClip::Read(const XMLNode *xmlInfo)
+void AudioClip::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-
-    m_audioFileFilepath = xmlInfo->GetFilepath("AudioFilepath");
+    m_audioFileFilepath = xmlInfo.GetFilepath("AudioFilepath");
     LoadFromFile( m_audioFileFilepath );
 }
 

@@ -70,9 +70,8 @@ public:
     void OnRenderingEnds(GameObject *go, ShaderProgram *sp) const;
 
     virtual String GetName() const override;
-    virtual ICloneable *Clone() const override = 0;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     void SetTransparent(bool transparent);

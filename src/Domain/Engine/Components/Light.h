@@ -16,7 +16,7 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
+    ICloneable *CloneVirtual() const override;
 
     void SetColor(const Color &color);
     void SetIntensity(float intensity);
@@ -24,7 +24,7 @@ public:
     Color GetColor() const;
     float GetIntensity() const;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
@@ -50,6 +50,7 @@ protected:
     virtual ~Light();
 
     friend class GameObject;
+    friend class ICloneable;
     friend class GraphicPipeline;
 };
 

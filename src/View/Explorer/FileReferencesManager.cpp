@@ -102,9 +102,8 @@ void FileReferencesManager::RefactorSerializableObject(const String &relPathBefo
         XMLNode *auxXMLInfo = XMLNode::FromString(xmlInfoStr);
         if (auxXMLInfo && RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow))
         {
-            fileable->Read(auxXMLInfo);
+            fileable->Read(*auxXMLInfo);
         }
-
         if (auxXMLInfo) { delete auxXMLInfo; }
     }
 }

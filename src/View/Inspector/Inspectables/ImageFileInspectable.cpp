@@ -8,11 +8,11 @@ ImageFileInspectable::ImageFileInspectable(const ImageFile &fileImage) :
 {
 }
 
-void ImageFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
+void ImageFileInspectable::Read(const XMLNode &xmlInfo)
 {
 }
 
-void ImageFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
+void ImageFileInspectable::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("ImageFileInspectable");
 

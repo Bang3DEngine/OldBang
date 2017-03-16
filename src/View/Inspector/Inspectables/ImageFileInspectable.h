@@ -2,9 +2,9 @@
 #define INSPECTORTEXTURE2DWIDGET_H
 
 #include "ImageFile.h"
-#include "IInspectable.h"
+#include "SerializableObject.h"
 
-class ImageFileInspectable : public IInspectable
+class ImageFileInspectable : public SerializableObject
 {
 private:
     ImageFile m_fileImage;
@@ -12,8 +12,8 @@ private:
 public:
     ImageFileInspectable(const ImageFile &fileImage);
 
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 };
 
 #endif // INSPECTORTEXTURE2DWIDGET_H

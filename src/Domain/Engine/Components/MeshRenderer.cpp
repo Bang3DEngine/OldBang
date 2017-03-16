@@ -13,23 +13,17 @@ MeshRenderer::MeshRenderer()
 {
 }
 
+MeshRenderer::~MeshRenderer()
+{
+}
+
 void MeshRenderer::CloneInto(ICloneable *clone) const
 {
     Renderer::CloneInto(clone);
     MeshRenderer *mr = Object::SCast<MeshRenderer>(clone);
     mr->SetMesh(m_mesh);
 }
-
-ICloneable *MeshRenderer::Clone() const
-{
-    MeshRenderer *mr = new MeshRenderer();
-    CloneInto(mr);
-    return mr;
-}
-
-MeshRenderer::~MeshRenderer()
-{
-}
+ICloneable *MeshRenderer::CloneVirtual() const { return _Clone<MeshRenderer>(); }
 
 void MeshRenderer::SetMaterial(Material *m)
 {
@@ -76,10 +70,10 @@ void MeshRenderer::RenderWithoutMaterial() const
     GL::Render(m_mesh->GetVAO(), m_renderMode, m_mesh->GetVertexCount());
 }
 
-void MeshRenderer::Read(const XMLNode *xmlInfo)
+void MeshRenderer::Read(const XMLNode &xmlInfo)
 {
     Renderer::Read(xmlInfo);
-    SetMesh( AssetsManager::Load<Mesh>( xmlInfo->GetFilepath("Mesh") ) );
+    SetMesh( AssetsManager::Load<Mesh>( xmlInfo.GetFilepath("Mesh") ) );
 }
 
 void MeshRenderer::Write(XMLNode *xmlInfo) const

@@ -5,7 +5,7 @@
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #include "MeshAssetFileInspectable.h"
 #endif
 
@@ -30,7 +30,7 @@ QPixmap MeshAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *MeshAssetFile::GetInspectable() const
+SerializableObject *MeshAssetFile::GetInspectable() const
 {
     return new MeshAssetFileInspectable(*this);
 }

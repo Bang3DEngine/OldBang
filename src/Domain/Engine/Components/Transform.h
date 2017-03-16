@@ -15,7 +15,7 @@ class Transform : public Component
 {
 public:
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
+    ICloneable *CloneVirtual() const override;
 
     virtual ~Transform();
 
@@ -116,7 +116,7 @@ public:
 
     virtual String GetName() const override { return "Transform"; }
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
@@ -133,6 +133,7 @@ protected:
     Vector3 m_localEuler = Vector3::Zero;
 
     friend class GameObject;
+    friend class ICloneable;
 };
 
 #endif // TRANSFORM_H

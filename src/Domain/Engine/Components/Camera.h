@@ -63,18 +63,15 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
-
+    ICloneable *CloneVirtual() const override;
 
     Rect GetScreenBoundingRect(const AABox &bbox);
 
     #ifdef BANG_EDITOR
     void OnDrawGizmos(bool depthed, bool overlay) override;
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
     #endif
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     void SetIdentityMode(bool identityMode);
@@ -98,6 +95,7 @@ private:
     ProjectionMode m_projMode = ProjectionMode::Perspective;
 
     friend class GameObject;
+    friend class ICloneable;
 };
 
 #endif // CAMERA_H

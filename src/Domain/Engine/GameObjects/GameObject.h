@@ -41,7 +41,7 @@ public:
     GameObject(const String &m_name = "GameObject");
 
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
+    ICloneable *CloneVirtual() const override;
 
     virtual ~GameObject();
 
@@ -272,9 +272,9 @@ public:
     static GameObject *Find(const String &name);
     GameObject *FindInChildren(const String &name);
 
-    void UpdateXMLInfo(const XMLNode *xmlInfo);
-    void ReadFirstTime(const XMLNode *xmlInfo);
-    virtual void Read(const XMLNode *xmlInfo) override;
+    void UpdateXMLInfo(const XMLNode &xmlInfo);
+    void ReadFirstTime(const XMLNode &xmlInfo);
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     void SetEnabled(bool m_enabled);

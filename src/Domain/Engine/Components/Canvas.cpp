@@ -21,15 +21,9 @@ void Canvas::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     Canvas *c = Object::SCast<Canvas>(clone);
 }
+ICloneable *Canvas::CloneVirtual() const { return _Clone<Canvas>(); }
 
-ICloneable *Canvas::Clone() const
-{
-    Canvas *cv = new Canvas();
-    CloneInto(cv);
-    return cv;
-}
-
-void Canvas::Read(const XMLNode *xmlInfo)
+void Canvas::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 }

@@ -57,7 +57,7 @@ void GameObject::CloneInto(ICloneable *clone) const
     for (GameObject *child : m_children)
     {
         if (child->HasHideFlag(HideFlags::DontClone)) { continue; }
-        GameObject *childClone = Object::SCast<GameObject>(child->Clone());
+        GameObject *childClone = child->Clone<GameObject>();
         childClone->SetParent(go);
     }
 
@@ -65,7 +65,7 @@ void GameObject::CloneInto(ICloneable *clone) const
     {
         if (!comp->IsOfType<Transform>())
         {
-            go->AddComponent( Object::SCast<Component>(comp->Clone()) );
+            go->AddComponent(comp->Clone<Component>());
         }
         else
         {
@@ -73,13 +73,7 @@ void GameObject::CloneInto(ICloneable *clone) const
         }
     }
 }
-
-ICloneable* GameObject::Clone() const
-{
-    GameObject *clone = new GameObject();
-    CloneInto(clone);
-    return clone;
-}
+ICloneable *GameObject::CloneVirtual() const { return _Clone<GameObject>(); }
 
 GameObject::~GameObject()
 {
@@ -386,18 +380,18 @@ GameObject *GameObject::FindInChildren(const String &name)
     return nullptr;
 }
 
-void GameObject::UpdateXMLInfo(const XMLNode *xmlInfo)
+void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
 
-    SetEnabled( xmlInfo->GetBool("enabled") );
-    SetName( xmlInfo->GetString("name") );
+    SetEnabled( xmlInfo.GetBool("enabled") );
+    SetName( xmlInfo.GetString("name") );
 
     // IMPORTANT: The order of the xmlNodes must match the order
     // of the children and components list, in order to update every child/comp
     // with its info, and not with another one !!!!!!!!!!!!!!!!!
 
-    List<XMLNode*> xmlChildren = xmlInfo->GetChildren();
+    List<XMLNode*> xmlChildren = xmlInfo.GetChildren();
     Array<GameObject*> children = GetChildren().ToArray();
     Array<Component*> components = GetComponents().ToArray();
     int iChildren = 0, iComponents = 0;
@@ -412,34 +406,34 @@ void GameObject::UpdateXMLInfo(const XMLNode *xmlInfo)
             {
                 ++iChildren;
             }
-            child->Read(xmlChildInfo);
+            child->Read(*xmlChildInfo);
             ++iChildren;
         }
         else
         {
             ASSERT(iComponents < components.Size());
             Component *component = components[iComponents];
-            component->Read(xmlChildInfo);
+            component->Read(*xmlChildInfo);
             ++iComponents;
         }
     }
 }
 
-void GameObject::ReadFirstTime(const XMLNode *xmlInfo)
+void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
 
-    SetEnabled( xmlInfo->GetBool("enabled") );
-    SetName( xmlInfo->GetString("name") );
+    SetEnabled( xmlInfo.GetBool("enabled") );
+    SetName( xmlInfo.GetString("name") );
 
-    for ( XMLNode *xmlChild : xmlInfo->GetChildren() )
+    for (const XMLNode *xmlChild : xmlInfo.GetChildren() )
     {
         String tagName = xmlChild->GetTagName();
         if (tagName.Contains("GameObject"))
         {
             GameObject *child = new GameObject();
             child->SetParent(this);
-            child->Read(xmlChild);
+            child->Read(*xmlChild);
         }
         else // It's a Component
         {
@@ -496,13 +490,13 @@ void GameObject::ReadFirstTime(const XMLNode *xmlInfo)
 
             if (c)
             {
-                c->Read(xmlChild);
+                c->Read(*xmlChild);
             }
         }
     }
 }
 
-void GameObject::Read(const XMLNode *xmlInfo)
+void GameObject::Read(const XMLNode &xmlInfo)
 {
     // No editor stuff added before
     if (!m_hasBeenReadOnce)

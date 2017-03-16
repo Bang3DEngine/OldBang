@@ -18,7 +18,7 @@ public:
 
     virtual String GetName() const override;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
@@ -32,9 +32,10 @@ protected:
                                        ShaderProgram *sp) override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
+    ICloneable *CloneVirtual() const override;
 
     friend class GameObject;
+    friend class ICloneable;
 };
 
 #endif // UIRENDERER_H

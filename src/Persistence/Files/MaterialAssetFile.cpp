@@ -32,7 +32,7 @@ QPixmap MaterialAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *MaterialAssetFile::GetInspectable() const
+SerializableObject *MaterialAssetFile::GetInspectable() const
 {
     return new MaterialAssetFileInspectable(*this);
 }

@@ -20,14 +20,14 @@ String Project::GetFileExtensionStatic()
     return "bproject";
 }
 
-String Project::GetFileExtension()
+String Project::GetFileExtension() const
 {
     return Project::GetFileExtensionStatic();
 }
 
-void Project::Read(const XMLNode *xmlInfo)
+void Project::Read(const XMLNode &xmlInfo)
 {
-    m_randomId = xmlInfo->GetString("RandomID");
+    m_randomId = xmlInfo.GetString("RandomID");
 }
 
 void Project::Write(XMLNode *xmlInfo) const

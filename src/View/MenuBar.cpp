@@ -244,7 +244,7 @@ void MenuBar::OnCreateFromPrefab() const
     XMLNode *xmlInfo = XMLParser::FromFile(filename);
     if (xmlInfo)
     {
-        p->Read(xmlInfo);
+        p->Read(*xmlInfo);
         delete xmlInfo;
 
         GameObject *go = p->InstantiateWithoutStarting();

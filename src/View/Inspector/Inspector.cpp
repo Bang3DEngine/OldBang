@@ -82,7 +82,7 @@ void Inspector::Refresh()
     }
     else if(m_currentInspectables.Size() == 1)
     {
-        IInspectable *insp = m_currentInspectables.Front();
+        SerializableObject *insp = m_currentInspectables.Front();
         SetInspectable(insp);
     }
     RefreshSizeHints();
@@ -102,7 +102,7 @@ void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget, int moveme
     insertItem(newRow, movingItem);
 }
 
-void Inspector::SetInspectable(IInspectable *inspectable, const String &title)
+void Inspector::SetInspectable(SerializableObject *inspectable, const String &title)
 {
     Clear();
     InspectorWidget *iw = new InspectorWidget();
@@ -199,12 +199,12 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
     setItemWidget(item, widget);
 }
 
-List<IInspectable *> Inspector::GetCurrentInspectables() const
+List<SerializableObject *> Inspector::GetCurrentInspectables() const
 {
     return m_currentInspectables;
 }
 
-bool Inspector::IsShowingInspectable(IInspectable *inspectable) const
+bool Inspector::IsShowingInspectable(SerializableObject *inspectable) const
 {
     return m_currentInspectables.Contains(inspectable);
 }

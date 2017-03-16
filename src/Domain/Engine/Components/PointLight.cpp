@@ -51,13 +51,7 @@ void PointLight::CloneInto(ICloneable *clone) const
     PointLight *pl = Object::SCast<PointLight>(clone);
     pl->SetRange(GetRange());
 }
-
-ICloneable *PointLight::Clone() const
-{
-    PointLight *pl = new PointLight();
-    CloneInto(pl);
-    return pl;
-}
+ICloneable *PointLight::CloneVirtual() const { return _Clone<PointLight>(); }
 
 void PointLight::SetRange(float range)
 {
@@ -69,17 +63,16 @@ float PointLight::GetRange() const
     return m_range;
 }
 
-void PointLight::Read(const XMLNode *xmlInfo)
+void PointLight::Read(const XMLNode &xmlInfo)
 {
     Light::Read(xmlInfo);
-    SetRange(xmlInfo->GetFloat("Range"));
+    SetRange(xmlInfo.GetFloat("Range"));
 }
 
 void PointLight::Write(XMLNode *xmlInfo) const
 {
     Light::Write(xmlInfo);
     xmlInfo->SetTagName("PointLight");
-
     xmlInfo->SetFloat("Range", m_range);
 }
 

@@ -14,7 +14,7 @@ public:
     virtual ~MeshRenderer();
 
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
+    ICloneable *CloneVirtual() const override;
 
     void SetMaterial(Material *m) override;
     virtual void SetMesh(Mesh *m);
@@ -24,7 +24,7 @@ public:
     virtual const Mesh* GetMesh();
     virtual String GetName() const override;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:

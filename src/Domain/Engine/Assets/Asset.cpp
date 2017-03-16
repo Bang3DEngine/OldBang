@@ -19,22 +19,10 @@ String Asset::GetFileExtensionStatic()
     return "basset";
 }
 
-String Asset::GetFileExtension()
+String Asset::GetFileExtension() const
 {
     return Asset::GetFileExtensionStatic();
 }
-
-#ifdef BANG_EDITOR
-void Asset::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    Read(xmlInfo);
-}
-
-void Asset::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    Write(xmlInfo);
-}
-#endif
 
 String Asset::GetFilepath() const
 {
@@ -46,7 +34,7 @@ String Asset::ToString() const
     return "Asset '" + m_assetFilepath + "'.";
 }
 
-void Asset::Read(const XMLNode *xmlInfo)
+void Asset::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
 }

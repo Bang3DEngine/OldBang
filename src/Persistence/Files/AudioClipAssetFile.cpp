@@ -7,7 +7,7 @@
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #include "AudioClipAssetFileInspectable.h"
 #endif
 
@@ -32,7 +32,7 @@ QPixmap AudioClipAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *AudioClipAssetFile::GetInspectable() const
+SerializableObject *AudioClipAssetFile::GetInspectable() const
 {
     return new AudioClipAssetFileInspectable(*this);
 }

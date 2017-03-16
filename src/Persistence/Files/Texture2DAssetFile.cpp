@@ -8,7 +8,7 @@
 #include "IO.h"
 
 #ifdef BANG_EDITOR
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #include "Texture2DAssetFileInspectable.h"
 #endif
 
@@ -45,7 +45,7 @@ QPixmap Texture2DAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-IInspectable *Texture2DAssetFile::GetInspectable() const
+SerializableObject *Texture2DAssetFile::GetInspectable() const
 {
     return new Texture2DAssetFileInspectable(*this);
 }

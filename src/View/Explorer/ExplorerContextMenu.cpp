@@ -97,8 +97,8 @@ Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
 
     Texture2D *tex = mb->OnCreateTexture2D(newTexName);
     tex->LoadFromImage(f.GetAbsolutePath());
-    XMLNode xmlInfo = tex->GetXMLInfo();
-    AssetsManager::OnAssetFileChanged<Texture2D>(tex->GetFilepath(), &xmlInfo);
+    AssetsManager::OnAssetFileChanged<Texture2D>(tex->GetFilepath(),
+                                                 tex->GetXMLInfo());
     Inspector::GetInstance()->SetInspectable(tex, newTexName);
 
     return tex;
@@ -131,8 +131,8 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
 
     Material *mat = mb->OnCreateMaterial(newMatName);
     mat->SetTexture(fromTexture);
-    XMLNode xmlInfo = mat->GetXMLInfo();
-    AssetsManager::OnAssetFileChanged<Material>(mat->GetFilepath(), &xmlInfo);
+    AssetsManager::OnAssetFileChanged<Material>(mat->GetFilepath(),
+                                                mat->GetXMLInfo());
     Inspector::GetInstance()->SetInspectable(mat, newMatName);
     return mat;
 }
@@ -169,13 +169,13 @@ void ExplorerContextMenu::OnDeleteClicked()
     if (reply == Dialog::Reply::Yes)
     {
         Inspector *inspector = Inspector::GetInstance();
-        IInspectable *lastInspectable =
-                p_explorer->m_lastIInspectableInInspector;
+        SerializableObject *lastInspectable =
+                p_explorer->m_lastInspectableInInspector;
         if (inspector->IsShowingInspectable(lastInspectable))
         {
             inspector->Clear();
             delete lastInspectable;
-            p_explorer->m_lastIInspectableInInspector = nullptr;
+            p_explorer->m_lastInspectableInInspector = nullptr;
         }
         IO::Remove(path);
     }

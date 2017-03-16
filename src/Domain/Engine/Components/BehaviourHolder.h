@@ -30,14 +30,11 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
+    ICloneable *CloneVirtual() const override;
 
     const String &GetSourceFilepath() const;
 
     #ifdef BANG_EDITOR
-    virtual void OnInspectorXMLNeeded(XMLNode *xmlInfo) const override;
-    virtual void OnInspectorXMLChanged(const XMLNode *xmlInfo) override;
-
     void OnButtonClicked(const String &attrName) override;
     void CreateNewBehaviour();
     #endif
@@ -45,7 +42,7 @@ public:
     virtual void OnAddedToGameObject() override;
     void RefreshBehaviourLib();
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     virtual void _OnStart () override;
@@ -82,6 +79,7 @@ private:
                                 Behaviour *b, QLibrary *openLibrary);
 
     friend class GameObject;
+    friend class ICloneable;
 };
 
 #endif

@@ -41,7 +41,7 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
     #endif
 
     ProjectManager::s_currentProject = new Project();
-    ProjectManager::s_currentProject->Read(xmlInfo);
+    ProjectManager::s_currentProject->Read(*xmlInfo);
     String projectDir = IO::GetDir(projectFilepath);
     ProjectManager::s_currentProject->SetProjectRootFilepath(projectDir);
 

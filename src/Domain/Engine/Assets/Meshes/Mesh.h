@@ -19,7 +19,7 @@ class Mesh : public Asset
 {
 public:
     static String GetFileExtensionStatic();
-    virtual String GetFileExtension();
+    virtual String GetFileExtension() const override ;
 
     Mesh();
     Mesh(const Mesh& m);
@@ -54,7 +54,7 @@ public:
 
     const String &GetMeshFilepath() const;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:

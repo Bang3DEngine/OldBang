@@ -39,7 +39,7 @@ String Prefab::GetFileExtensionStatic()
     return "bprefab";
 }
 
-String Prefab::GetFileExtension()
+String Prefab::GetFileExtension() const
 {
     return Prefab::GetFileExtensionStatic();
 }
@@ -67,20 +67,24 @@ GameObject *Prefab::InstantiateWithoutStarting() const
     if (!m_gameObjectXMLInfoContent.Empty())
     {
         XMLNode *xmlInfo = XMLParser::FromString(m_gameObjectXMLInfoContent);
-        GameObject *go = new GameObject();
-        go->Read(xmlInfo);
-        return go;
+        if (xmlInfo)
+        {
+            GameObject *go = new GameObject();
+            go->Read(*xmlInfo);
+            delete xmlInfo;
+            return go;
+        }
     }
     return nullptr;
 }
 
-void Prefab::Read(const XMLNode *xmlInfo)
+void Prefab::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    String newXMLInfo = xmlInfo->ToString();
+    String newXMLInfo = xmlInfo.ToString();
     if (m_gameObjectXMLInfoContent != newXMLInfo)
     {
-        m_gameObjectXMLInfoContent = xmlInfo->ToString();
+        m_gameObjectXMLInfoContent = xmlInfo.ToString();
         #ifdef BANG_EDITOR
         AssetsManager::OnAssetFileChanged<Prefab>(m_assetFilepath, xmlInfo);
         #endif

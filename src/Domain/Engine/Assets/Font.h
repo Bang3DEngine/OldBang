@@ -25,7 +25,7 @@ public:
     };
 
     static String GetFileExtensionStatic();
-    virtual String GetFileExtension();
+    virtual String GetFileExtension() const override ;
 
     static int CharLoadSize;
 
@@ -35,7 +35,7 @@ public:
 
     void LoadFromTTF(const String &m_assetFilepath);
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     const Font::CharGlyphMetrics &GetCharacterMetrics(unsigned char c);

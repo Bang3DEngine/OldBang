@@ -18,7 +18,7 @@ public:
     virtual ~RectTransform();
 
     void CloneInto(ICloneable *clone) const;
-    ICloneable *Clone() const;
+    ICloneable *CloneVirtual() const override;
 
     void SetMarginLeft(int marginLeft);
     void SetMarginTop(int marginTop);
@@ -43,7 +43,7 @@ public:
     Vector2 GetAnchorMin()  const;
     Vector2 GetAnchorMax() const;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     virtual String GetName() const override;

@@ -17,20 +17,19 @@ public:
     Scene();
     virtual ~Scene();
 
-    virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
-
     void SetCamera (const Camera *cam);
     void SetFirstFoundCameraOrDefaultOne();
+
+    ICloneable *CloneVirtual() const;
 
     static Scene *GetActiveScene();
     static Scene *GetDefaultScene();
 
     virtual Camera *GetCamera() const;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
-    virtual void PostRead(const XMLNode *xmlInfo) override;
+    virtual void PostRead(const XMLNode &xmlInfo) override;
 
 protected:
     GameObject *m_defaultCamera = nullptr;

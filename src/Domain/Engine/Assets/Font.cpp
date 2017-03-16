@@ -23,7 +23,7 @@ String Font::GetFileExtensionStatic()
     return "bfont";
 }
 
-String Font::GetFileExtension()
+String Font::GetFileExtension() const
 {
     return Font::GetFileExtensionStatic();
 }
@@ -46,10 +46,10 @@ void Font::LoadFromTTF(const String &m_filepath)
     }
 }
 
-void Font::Read(const XMLNode *xmlInfo)
+void Font::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    m_fontFilepath = xmlInfo->GetFilepath("FontFilepath");
+    m_fontFilepath = xmlInfo.GetFilepath("FontFilepath");
     LoadFromTTF(m_fontFilepath);
 }
 

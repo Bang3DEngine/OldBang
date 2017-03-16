@@ -59,13 +59,6 @@ void EditorScene::CloneInto(ICloneable *clone) const
     Scene::CloneInto(edScene);
 }
 
-ICloneable *EditorScene::Clone() const
-{
-    EditorScene *edScene = new EditorScene();
-    CloneInto(edScene);
-    return edScene;
-}
-
 void EditorScene::_OnStart()
 {
     Scene::_OnStart();

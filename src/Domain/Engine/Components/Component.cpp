@@ -23,6 +23,7 @@ void Component::CloneInto(ICloneable *clone) const
     Component *c = Object::SCast<Component>(clone);
     c->m_enabled = m_enabled;
 }
+ICloneable *Component::CloneVirtual() const { return _Clone<Component>(); }
 
 String Component::ToString() const
 {
@@ -63,24 +64,12 @@ bool Component::IsClosedInInspector() const
     return m_closedInInspector;
 }
 
-#ifdef BANG_EDITOR
-void Component::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    Write(xmlInfo);
-}
-
-void Component::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    Read(xmlInfo);
-}
-#endif
-
-void Component::Read(const XMLNode *xmlInfo)
+void Component::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
 
-    SetEnabled(xmlInfo->GetBool("enabled"));
-    SetClosedInInspector(xmlInfo->GetBool("closedInInspector"));
+    SetEnabled(xmlInfo.GetBool("enabled"));
+    SetClosedInInspector(xmlInfo.GetBool("closedInInspector"));
 }
 
 void Component::Write(XMLNode *xmlInfo) const

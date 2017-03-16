@@ -11,6 +11,7 @@
 #include "Shortcut.h"
 #include "DragDropQListView.h"
 #include "IDragDropListener.h"
+#include "SerializableObject.h"
 #include "ExplorerContextMenu.h"
 #include "IWindowEventManagerListener.h"
 
@@ -100,7 +101,7 @@ private:
     FileSystemModel *m_fileSystemModel = nullptr;
     QToolButton *m_buttonDirUp = nullptr;
     QToolButton *m_buttonChangeViewMode = nullptr;
-    IInspectable *m_lastIInspectableInInspector = nullptr;
+    SerializableObject *m_lastInspectableInInspector = nullptr;
 
     String m_lastSelectedPath = "";
     QLabel *m_labelCurrentPath = nullptr;

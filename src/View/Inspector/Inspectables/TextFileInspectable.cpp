@@ -9,13 +9,13 @@ TextFileInspectable::TextFileInspectable(const TextFile &textFile) :
 }
 
 #ifdef BANG_EDITOR
-void TextFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
+void TextFileInspectable::Read(const XMLNode &xmlInfo)
 {
-    String contents = xmlInfo->GetString("Contents");
+    String contents = xmlInfo.GetString("Contents");
     IO::WriteToFile(m_textFile.GetAbsolutePath(), contents);
 }
 
-void TextFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
+void TextFileInspectable::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("Text file");
     xmlInfo->SetString("Contents", m_textFile.GetContents(),

@@ -14,7 +14,7 @@ public:
     virtual ~Texture2D();
 
     static String GetFileExtensionStatic();
-    virtual String GetFileExtension();
+    virtual String GetFileExtension() const override ;
 
     void LoadFromImage(const String &imageFilepath);
     void CreateEmpty(int width, int height) override;
@@ -30,7 +30,7 @@ public:
     void SetAlphaCutoff(float alphaCutoff);
     float GetAlphaCutoff() const;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 private:

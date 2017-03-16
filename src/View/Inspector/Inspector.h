@@ -26,7 +26,7 @@ public:
     void Clear();
 
     void MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement);
-    void SetInspectable(IInspectable *inspectable, const String &title = "");
+    void SetInspectable(SerializableObject *inspectable, const String &title = "");
     void ShowGameObjectInfo(GameObject *gameObject);
 
     void RefreshSizeHints();
@@ -60,8 +60,8 @@ public:
 
     void AddWidget(InspectorWidget *widget, int row = -1);
 
-    List<IInspectable*> GetCurrentInspectables() const;
-    bool IsShowingInspectable(IInspectable *inspectable) const;
+    List<SerializableObject*> GetCurrentInspectables() const;
+    bool IsShowingInspectable(SerializableObject *inspectable) const;
     static Inspector* GetInstance();
 
     void dropEvent(QDropEvent *e) override;
@@ -85,10 +85,10 @@ private:
 
     GameObject *p_currentGameObject = nullptr;
     List<InspectorWidget*> m_currentInspectorWidgets;
-    List<IInspectable*> m_currentInspectables;
+    List<SerializableObject*> m_currentInspectables;
 
     Map<InspectorWidget*, QListWidgetItem*> m_widget_To_Item;
-    Map<InspectorWidget*, IInspectable*> m_widget_To_Inspectables;
+    Map<InspectorWidget*, SerializableObject*> m_widget_To_Inspectables;
 
     friend class InspectorWidget;
     friend class InspectorContextMenu;

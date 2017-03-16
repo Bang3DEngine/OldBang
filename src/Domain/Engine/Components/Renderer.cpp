@@ -223,11 +223,11 @@ String Renderer::GetName() const
     return "Renderer";
 }
 
-void Renderer::Read(const XMLNode *xmlInfo)
+void Renderer::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
-    String materialFilepath = xmlInfo->GetFilepath("Material");
+    String materialFilepath = xmlInfo.GetFilepath("Material");
     if (!materialFilepath.Empty())
     {
         SetMaterial( AssetsManager::Load<Material>(materialFilepath) );
@@ -237,9 +237,9 @@ void Renderer::Read(const XMLNode *xmlInfo)
         SetMaterial (nullptr);
     }
 
-    SetTransparent(xmlInfo->GetBool("IsTransparent"));
-    SetLineWidth(xmlInfo->GetFloat("LineWidth"));
-    SetDrawWireframe(xmlInfo->GetBool("DrawWireframe"));
+    SetTransparent(xmlInfo.GetBool("IsTransparent"));
+    SetLineWidth(xmlInfo.GetFloat("LineWidth"));
+    SetDrawWireframe(xmlInfo.GetBool("DrawWireframe"));
 }
 
 void Renderer::Write(XMLNode *xmlInfo) const

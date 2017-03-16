@@ -259,14 +259,14 @@ void Explorer::RefreshInspector()
         m_lastSelectedPath = f.GetRelativePath();
 
         Inspector *inspector = Inspector::GetInstance();
-        if (m_lastIInspectableInInspector)
+        if (m_lastInspectableInInspector)
         {
             inspector->Clear();
-            // delete m_lastIInspectableInInspector;
-            m_lastIInspectableInInspector = nullptr;
+            // delete m_lastSerializableObjectInInspector;
+            m_lastInspectableInInspector = nullptr;
         }
 
-        IInspectable *newInspectable = nullptr;
+        SerializableObject *newInspectable = nullptr;
         File *specificFile = File::GetSpecificFile(f);
         if (specificFile)
         {
@@ -298,7 +298,7 @@ void Explorer::RefreshInspector()
 
         if (newInspectable)
         {
-            m_lastIInspectableInInspector = newInspectable;
+            m_lastInspectableInInspector = newInspectable;
         }
     }
 }

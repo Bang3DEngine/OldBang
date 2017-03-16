@@ -12,7 +12,6 @@ public:
     virtual ~Object();
 
     virtual void CloneInto(ICloneable *clone) const override;
-    virtual ICloneable *Clone() const override;
 
     const HideFlags &GetHideFlags() const;
     bool HasHideFlag(const HideFlags &hideFlag) const;

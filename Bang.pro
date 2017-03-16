@@ -337,7 +337,6 @@ HEADERS += \
     src/View/Inspector/AttributeWidgets/AttrWidgetString.h          \
     src/View/Inspector/AttributeWidgets/AttrWidgetVectorFloat.h     \
     src/View/Inspector/AttributeWidgets/IAttrWidgetButtonListener.h \
-    src/View/Inspector/Inspectables/IInspectable.h                  \
     src/View/Inspector/Inspectables/ImageFileInspectable.h          \
     src/View/Inspector/Inspectables/MaterialAssetFileInspectable.h  \
     src/View/Inspector/Inspectables/MeshAssetFileInspectable.h      \
@@ -563,7 +562,6 @@ EDITOR {
         src/View/Console/Console.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetEnum.cpp \
         src/View/Explorer/Explorer.cpp \
-        src/View/Inspector/Inspectables/IInspectable.cpp \
         src/View/MenuBar.cpp \
         src/View/Dialogs/Dialog.cpp \
         src/View/Inspector/AttributeWidgets/AttrWidgetFile.cpp \

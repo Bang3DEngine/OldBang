@@ -4,13 +4,13 @@
 #include <QTimer>
 
 #include "File.h"
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #include "IWindowEventManagerListener.h"
 
 class GameObject;
 class InspectorWidget;
 class GameObjectPrefabInspectable;
-class PrefabAssetFileInspectable : public IInspectable,
+class PrefabAssetFileInspectable : public SerializableObject,
                                    public IWindowEventManagerListener
 {
 

@@ -19,14 +19,14 @@ public:
 
     virtual String GetName() const override;
 
-    virtual ICloneable *Clone() const override;
+    ICloneable *CloneVirtual() const override;
 
     virtual void SetMaterial(Material *m) override;
 
     virtual AABox GetAABBox() const override;
     const Array<Vector3>& GetPoints() const;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
 protected:
@@ -43,6 +43,7 @@ protected:
     LineRenderer();
 
     friend class GameObject;
+    friend class ICloneable;
 };
 
 #endif // LINERENDERER_H

@@ -8,12 +8,12 @@ AudioFileInspectable::AudioFileInspectable(const AudioFile &audioFile)
 
 }
 
-void AudioFileInspectable::OnInspectorXMLChanged(const XMLNode *xmlInfo)
+void AudioFileInspectable::Read(const XMLNode &xmlInfo)
 {
     // They all are readonly properties, so we wont do anything here
 }
 
-void AudioFileInspectable::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
+void AudioFileInspectable::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("AudioFileInspectable");
 

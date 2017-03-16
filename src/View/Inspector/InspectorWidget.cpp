@@ -27,7 +27,7 @@ InspectorWidget::InspectorWidget()
 {
 }
 
-void InspectorWidget::Init(const String &title, IInspectable *relatedInspectable)
+void InspectorWidget::Init(const String &title, SerializableObject *relatedInspectable)
 {
     m_relatedInspectable = relatedInspectable;
     XMLNode xmlInfo = GetInspectableXMLInfo();
@@ -91,7 +91,7 @@ XMLNode InspectorWidget::GetInspectableXMLInfo() const
     XMLNode xmlInfo;
     if (m_relatedInspectable)
     {
-        m_relatedInspectable->OnInspectorXMLNeeded(&xmlInfo);
+        m_relatedInspectable->Write(&xmlInfo);
     }
     return xmlInfo;
 }
@@ -269,11 +269,7 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
 void InspectorWidget::_OnSlotValueChanged()
 {
     ASSERT(m_relatedInspectable);
-    if (m_created)
-    {
-        XMLNode xmlInfo = GetWidgetXMLInfo();
-        m_relatedInspectable->OnInspectorXMLChanged(&xmlInfo);
-    }
+    if (m_created) { m_relatedInspectable->Read( GetWidgetXMLInfo() ); }
     WindowEventManager::GetInstance()->NotifyInspectorSlotChanged(this);
 }
 

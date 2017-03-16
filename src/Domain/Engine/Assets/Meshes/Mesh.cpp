@@ -41,7 +41,7 @@ String Mesh::GetFileExtensionStatic()
     return "bmesh";
 }
 
-String Mesh::GetFileExtension()
+String Mesh::GetFileExtension() const
 {
     return Mesh::GetFileExtensionStatic();
 }
@@ -201,10 +201,10 @@ const String &Mesh::GetMeshFilepath() const
     return m_meshFilepath;
 }
 
-void Mesh::Read(const XMLNode *xmlInfo)
+void Mesh::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
-    m_meshFilepath = xmlInfo->GetFilepath("MeshFilepath");
+    m_meshFilepath = xmlInfo.GetFilepath("MeshFilepath");
     LoadFromFile(m_meshFilepath);
 }
 

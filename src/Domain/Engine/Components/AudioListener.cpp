@@ -19,20 +19,9 @@ String AudioListener::GetName() const
     return "AudioListener";
 }
 
-void AudioListener::CloneInto(ICloneable *clone) const
-{
-    Component::CloneInto(clone);
-    AudioListener *al = Object::SCast<AudioListener>(clone);
-}
+ICloneable *AudioListener::CloneVirtual() const { return _Clone<AudioListener>(); }
 
-ICloneable *AudioListener::Clone() const
-{
-    AudioListener *al = new AudioListener();
-    CloneInto(al);
-    return al;
-}
-
-void AudioListener::Read(const XMLNode *xmlInfo)
+void AudioListener::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 }

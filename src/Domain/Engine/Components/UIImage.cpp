@@ -36,13 +36,7 @@ void UIImage::CloneInto(ICloneable *clone) const
     UIImage *img = Object::SCast<UIImage>(clone);
     img->SetTexture( GetTexture() );
 }
-
-ICloneable *UIImage::Clone() const
-{
-    UIImage *img = new UIImage();
-    CloneInto(img);
-    return img;
-}
+ICloneable *UIImage::CloneVirtual() const { return _Clone<UIImage>(); }
 
 void UIImage::OnJustBeforeRendering(GameObject *go,
                                     ShaderProgram *sp)
@@ -64,11 +58,10 @@ Texture2D *UIImage::GetTexture() const
     return m_imageTexture;
 }
 
-void UIImage::Read(const XMLNode *xmlInfo)
+void UIImage::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
-
-    String texFilepath = xmlInfo->GetFilepath("Image");
+    String texFilepath = xmlInfo.GetFilepath("Image");
     m_imageTexture = AssetsManager::Load<Texture2D>(texFilepath);
 }
 

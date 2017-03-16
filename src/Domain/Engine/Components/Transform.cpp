@@ -21,13 +21,7 @@ void Transform::CloneInto(ICloneable *clone) const
     t->SetLocalScale(GetLocalScale());
 }
 
-
-ICloneable *Transform::Clone() const
-{
-    Transform *t = new Transform();
-    CloneInto(t);
-    return t;
-}
+ICloneable *Transform::CloneVirtual() const { return _Clone<Transform>(); }
 
 Transform::~Transform()
 {
@@ -407,12 +401,12 @@ Vector3 Transform::GetDown() const
     return -GetUp();
 }
 
-void Transform::Read(const XMLNode *xmlInfo)
+void Transform::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
-    SetLocalPosition(xmlInfo->GetVector3("Position"));
-    SetLocalEuler(xmlInfo->GetVector3("Rotation"));
-    SetLocalScale(xmlInfo->GetVector3("Scale"));
+    SetLocalPosition(xmlInfo.GetVector3("Position"));
+    SetLocalEuler(xmlInfo.GetVector3("Rotation"));
+    SetLocalScale(xmlInfo.GetVector3("Scale"));
 }
 
 void Transform::Write(XMLNode *xmlInfo) const

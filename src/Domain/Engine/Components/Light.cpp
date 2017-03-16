@@ -65,13 +65,7 @@ void Light::CloneInto(ICloneable *clone) const
     l->SetIntensity(GetIntensity());
     l->SetColor(GetColor());
 }
-
-ICloneable *Light::Clone() const
-{
-    Light *l = new Light();
-    CloneInto(l);
-    return l;
-}
+ICloneable *Light::CloneVirtual() const { return _Clone<Light>(); }
 
 void Light::SetColor(const Color &color)
 {
@@ -93,11 +87,11 @@ float Light::GetIntensity() const
     return m_intensity;
 }
 
-void Light::Read(const XMLNode *xmlInfo)
+void Light::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
-    SetIntensity(xmlInfo->GetFloat("Intensity"));
-    SetColor(xmlInfo->GetColor("Color"));
+    SetIntensity(xmlInfo.GetFloat("Intensity"));
+    SetColor(xmlInfo.GetColor("Color"));
 }
 
 void Light::Write(XMLNode *xmlInfo) const

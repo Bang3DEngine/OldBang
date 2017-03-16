@@ -24,13 +24,7 @@ String LineRenderer::GetName() const
     return "LineRenderer";
 }
 
-ICloneable *LineRenderer::Clone() const
-{
-    LineRenderer *lr = new LineRenderer();
-    CloneInto(lr);
-    return lr;
-}
-
+ICloneable *LineRenderer::CloneVirtual() const { return _Clone<LineRenderer>(); }
 
 void LineRenderer::BindPointsToVAO() const
 {
@@ -85,7 +79,7 @@ const Array<Vector3> &LineRenderer::GetPoints() const
     return m_points;
 }
 
-void LineRenderer::Read(const XMLNode *xmlInfo)
+void LineRenderer::Read(const XMLNode &xmlInfo)
 {
     Renderer::Read(xmlInfo);
 }

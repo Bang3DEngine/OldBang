@@ -47,26 +47,26 @@ String Material::GetFileExtensionStatic()
     return "bmat";
 }
 
-String Material::GetFileExtension()
+String Material::GetFileExtension() const
 {
     return Material::GetFileExtensionStatic();
 }
 
-void Material::Read(const XMLNode *xmlInfo)
+void Material::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
 
-    SetDiffuseColor(xmlInfo->GetColor("DiffuseColor"));
-    SetShininess(xmlInfo->GetFloat("Shininess"));
-    SetReceivesLighting(xmlInfo->GetBool("ReceivesLighting"));
+    SetDiffuseColor(xmlInfo.GetColor("DiffuseColor"));
+    SetShininess(xmlInfo.GetFloat("Shininess"));
+    SetReceivesLighting(xmlInfo.GetBool("ReceivesLighting"));
 
-    String texAssetFilepath = xmlInfo->GetString("Texture");
+    String texAssetFilepath = xmlInfo.GetString("Texture");
     Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
     SetTexture(texture);
 
     ShaderProgram *sp = GetShaderProgram();
-    String vshaderFilepath = xmlInfo->GetFilepath("VertexShader");
-    String fshaderFilepath = xmlInfo->GetFilepath("FragmentShader");
+    String vshaderFilepath = xmlInfo.GetFilepath("VertexShader");
+    String fshaderFilepath = xmlInfo.GetFilepath("FragmentShader");
     if (!sp || !sp->GetVertexShader() || !sp->GetFragmentShader() ||
         vshaderFilepath != sp->GetVertexShader()->GetFilepath() ||
         fshaderFilepath != sp->GetFragmentShader()->GetFilepath()

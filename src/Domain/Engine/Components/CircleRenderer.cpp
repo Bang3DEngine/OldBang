@@ -29,13 +29,7 @@ void CircleRenderer::CloneInto(ICloneable *clone) const
     cr->SetSegments(GetSegments());
 }
 
-ICloneable *CircleRenderer::Clone() const
-{
-    CircleRenderer *cr = new CircleRenderer();
-    CloneInto(cr);
-    return cr;
-}
-
+ICloneable *CircleRenderer::CloneVirtual() const { return _Clone<CircleRenderer>(); }
 
 void CircleRenderer::GeneratePoints()
 {
@@ -74,23 +68,11 @@ int CircleRenderer::GetSegments() const
     return m_segments;
 }
 
-#ifdef BANG_EDITOR
-void CircleRenderer::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    Write(xmlInfo);
-}
-
-void CircleRenderer::OnInspectorXMLChanged(const XMLNode *xmlInfo)
-{
-    Read(xmlInfo);
-}
-#endif
-
-void CircleRenderer::Read(const XMLNode *xmlInfo)
+void CircleRenderer::Read(const XMLNode &xmlInfo)
 {
     LineRenderer::Read(xmlInfo);
-    SetRadius(xmlInfo->GetFloat("Radius"));
-    SetSegments(xmlInfo->GetFloat("Segments"));
+    SetRadius(xmlInfo.GetFloat("Radius"));
+    SetSegments(xmlInfo.GetFloat("Segments"));
 }
 
 void CircleRenderer::Write(XMLNode *xmlInfo) const

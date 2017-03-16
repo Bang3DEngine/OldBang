@@ -19,8 +19,8 @@
 #include "File.h"
 #include "Debug.h"
 #include "XMLNode.h"
-#include "IInspectable.h"
 #include "DragDropQWidget.h"
+#include "SerializableObject.h"
 
 class Component;
 class GameObject;
@@ -36,13 +36,13 @@ class InspectorWidget : public DragDropQWidget
 
 public:
     InspectorWidget();
-    void Init(const String &title, IInspectable *relatedInspectable);
+    void Init(const String &title, SerializableObject *relatedInspectable);
 
     virtual ~InspectorWidget();
 
     /**
      * @brief GetUpdatedWidgetXMLInfo
-     * @return An XMLNode with the information of the related IInspectable.
+     * @return An XMLNode with the information of the related SerializableObject.
      *         It's not updated.
      */
     XMLNode GetInspectableXMLInfo() const;
@@ -66,13 +66,13 @@ public slots:
 
     virtual void _OnSlotValueChanged();
     /**
-     * @brief Refreshes all the widget values with the related IInspectable
+     * @brief Refreshes all the widget values with the related SerializableObject
      * current values.
      */
     void RefreshWidgetValues();
 
 protected:
-    IInspectable *m_relatedInspectable = nullptr;
+    SerializableObject *m_relatedInspectable = nullptr;
 
     QVBoxLayout m_vLayout;
     QHBoxLayout m_header;

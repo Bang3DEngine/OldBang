@@ -15,7 +15,7 @@
 #include "GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
-#include "IInspectable.h"
+#include "SerializableObject.h"
 #include "SelectionFramebuffer.h"
 #endif
 
@@ -57,13 +57,7 @@ void UIText::CloneInto(ICloneable *clone) const
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
 }
-
-ICloneable *UIText::Clone() const
-{
-    UIText *text = new UIText();
-    CloneInto(text);
-    return text;
-}
+ICloneable *UIText::CloneVirtual() const { return _Clone<UIText>(); }
 
 void UIText::SetHorizontalAlign(UIText::HorizontalAlignment horizontalAlignment)
 {
@@ -337,27 +331,27 @@ Vector2 UIText::GetAlignmentNDCOffset() const
     return alignNDCOffset;
 }
 
-void UIText::Read(const XMLNode *xmlInfo)
+void UIText::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
 
-    String fontFilepath = xmlInfo->GetFilepath("Font");
+    String fontFilepath = xmlInfo.GetFilepath("Font");
     if (!fontFilepath.Empty())
     {
         m_font = AssetsManager::Load<Font>(fontFilepath);
     }
 
-    m_tint = xmlInfo->GetColor("Color");
-    SetContent(xmlInfo->GetString("Content"));
-    SetTextSize(xmlInfo->GetFloat("TextSize"));
-    SetHorizontalSpacing(xmlInfo->GetFloat("HSpacing"));
-    SetKerning(xmlInfo->GetBool("Kerning"));
+    m_tint = xmlInfo.GetColor("Color");
+    SetContent(xmlInfo.GetString("Content"));
+    SetTextSize(xmlInfo.GetFloat("TextSize"));
+    SetHorizontalSpacing(xmlInfo.GetFloat("HSpacing"));
+    SetKerning(xmlInfo.GetBool("Kerning"));
 
-    int vAlignIndex = xmlInfo->GetEnumSelectedIndex("VerticalAlign");
+    int vAlignIndex = xmlInfo.GetEnumSelectedIndex("VerticalAlign");
     VerticalAlignment vAlign = static_cast<VerticalAlignment>(vAlignIndex);
     SetVerticalAlign(vAlign);
 
-    int hAlignIndex = xmlInfo->GetEnumSelectedIndex("HorizontalAlign");
+    int hAlignIndex = xmlInfo.GetEnumSelectedIndex("HorizontalAlign");
     HorizontalAlignment hAlign = static_cast<HorizontalAlignment>(hAlignIndex);
     SetHorizontalAlign(hAlign);
 }

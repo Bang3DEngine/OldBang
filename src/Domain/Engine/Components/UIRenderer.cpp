@@ -43,13 +43,7 @@ void UIRenderer::CloneInto(ICloneable *clone) const
     MeshRenderer::CloneInto(rend);
     rend->m_tint = m_tint;
 }
-
-ICloneable *UIRenderer::Clone() const
-{
-    UIRenderer *uiRend = new UIRenderer();
-    CloneInto(uiRend);
-    return uiRend;
-}
+ICloneable *UIRenderer::CloneVirtual() const { return _Clone<UIRenderer>(); }
 
 Rect UIRenderer::GetBoundingRect(Camera *camera) const
 {
@@ -68,11 +62,10 @@ String UIRenderer::GetName() const
     return "UIRenderer";
 }
 
-void UIRenderer::Read(const XMLNode *xmlInfo)
+void UIRenderer::Read(const XMLNode &xmlInfo)
 {
     MeshRenderer::Read(xmlInfo);
-
-    m_tint = xmlInfo->GetColor("Tint");
+    m_tint = xmlInfo.GetColor("Tint");
 }
 
 void UIRenderer::Write(XMLNode *xmlInfo) const

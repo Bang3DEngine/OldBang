@@ -29,14 +29,7 @@ void RectTransform::CloneInto(ICloneable *clone) const
 
     rt->SetPivotPosition( GetPivotPosition() );
 }
-
-
-ICloneable *RectTransform::Clone() const
-{
-    RectTransform *rt = new RectTransform();
-    CloneInto(rt);
-    return rt;
-}
+ICloneable *RectTransform::CloneVirtual() const { return _Clone<RectTransform>(); }
 
 void RectTransform::SetMarginLeft(int marginLeft)
 {
@@ -242,18 +235,18 @@ Matrix4 RectTransform::GetLocalToParentMatrix(
            moveToPivot;
 }
 
-void RectTransform::Read(const XMLNode *xmlInfo)
+void RectTransform::Read(const XMLNode &xmlInfo)
 {
     Transform::Read(xmlInfo);
 
-    SetMarginLeft ( xmlInfo->GetInt("MarginLeft")  );
-    SetMarginTop  ( xmlInfo->GetInt("MarginTop")   );
-    SetMarginRight( xmlInfo->GetInt("MarginRight") );
-    SetMarginBot  ( xmlInfo->GetInt("MarginBot")   );
+    SetMarginLeft ( xmlInfo.GetInt("MarginLeft")  );
+    SetMarginTop  ( xmlInfo.GetInt("MarginTop")   );
+    SetMarginRight( xmlInfo.GetInt("MarginRight") );
+    SetMarginBot  ( xmlInfo.GetInt("MarginBot")   );
 
-    SetPivotPosition( xmlInfo->GetVector2("PivotPosition") );
-    SetAnchorMin    ( xmlInfo->GetVector2("AnchorMin")     );
-    SetAnchorMax    ( xmlInfo->GetVector2("AnchorMax")     );
+    SetPivotPosition( xmlInfo.GetVector2("PivotPosition") );
+    SetAnchorMin    ( xmlInfo.GetVector2("AnchorMin")     );
+    SetAnchorMax    ( xmlInfo.GetVector2("AnchorMax")     );
 }
 
 void RectTransform::Write(XMLNode *xmlInfo) const

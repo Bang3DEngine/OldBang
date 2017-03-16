@@ -44,31 +44,9 @@ void AudioSource::CloneInto(ICloneable *clone) const
     as->SetLooping( IsLooping() );
 }
 
-ICloneable *AudioSource::Clone() const
-{
-    AudioSource *as = new AudioSource();
-    CloneInto(as);
-    return as;
-}
+ICloneable *AudioSource::CloneVirtual() const { return _Clone<AudioSource>(); }
 
 #ifdef BANG_EDITOR
-void AudioSource::OnInspectorXMLNeeded(XMLNode *xmlInfo) const
-{
-    Write(xmlInfo);
-    AudioSource *noConstThis = const_cast<AudioSource*>(this);
-    if (IsPlaying())
-    {
-        xmlInfo->SetButton("Stop", noConstThis, {});
-        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
-    }
-    else
-    {
-
-        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
-        xmlInfo->SetButton("Play", noConstThis, {});
-    }
-}
-
 void AudioSource::OnButtonClicked(const String &attrName)
 {
     if (IsPlaying())
@@ -82,20 +60,20 @@ void AudioSource::OnButtonClicked(const String &attrName)
 }
 #endif
 
-void AudioSource::Read(const XMLNode *xmlInfo)
+void AudioSource::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
 
     String audioClipFilepath = m_audioClip ? m_audioClip->GetFilepath() : "";
-    String newAudioClipFilepath = xmlInfo->GetFilepath("AudioClip");
+    String newAudioClipFilepath = xmlInfo.GetFilepath("AudioClip");
     if (audioClipFilepath != newAudioClipFilepath)
     {
         SetAudioClip( AssetsManager::Load<AudioClip>(newAudioClipFilepath) );
     }
-    SetVolume(xmlInfo->GetFloat("Volume"));
-    SetPitch(xmlInfo->GetFloat("Pitch"));
-    SetRange(xmlInfo->GetFloat("Range"));
-    SetLooping(xmlInfo->GetBool("Looping"));
+    SetVolume(xmlInfo.GetFloat("Volume"));
+    SetPitch(xmlInfo.GetFloat("Pitch"));
+    SetRange(xmlInfo.GetFloat("Range"));
+    SetLooping(xmlInfo.GetBool("Looping"));
 }
 
 void AudioSource::Write(XMLNode *xmlInfo) const
@@ -110,6 +88,19 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     xmlInfo->SetFloat("Pitch",    m_pitch);
     xmlInfo->SetFloat("Range",    m_range);
     xmlInfo->SetBool("Looping",   m_looping);
+
+    AudioSource *noConstThis = const_cast<AudioSource*>(this);
+    if (IsPlaying())
+    {
+        xmlInfo->SetButton("Stop", noConstThis, {});
+        xmlInfo->SetButton("Play", noConstThis, {XMLProperty::Hidden});
+    }
+    else
+    {
+
+        xmlInfo->SetButton("Stop", noConstThis, {XMLProperty::Hidden});
+        xmlInfo->SetButton("Play", noConstThis, {});
+    }
 }
 
 void AudioSource::Play(float delaySeconds)

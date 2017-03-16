@@ -17,7 +17,7 @@ public:
     virtual ~Material();
 
     static String GetFileExtensionStatic();
-    virtual String GetFileExtension();
+    virtual String GetFileExtension() const override ;
 
     void SetShaderProgram(ShaderProgram *program);
     void SetTexture(const Texture2D *mtexture);
@@ -34,7 +34,7 @@ public:
     virtual void OnRenderingStarts(GameObject *go,
                                    ShaderProgram *sp) override;
 
-    virtual void Read(const XMLNode *xmlInfo) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
     static Material* GetMissingMaterial();
