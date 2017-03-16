@@ -43,7 +43,6 @@ void UIRenderer::CloneInto(ICloneable *clone) const
     MeshRenderer::CloneInto(rend);
     rend->m_tint = m_tint;
 }
-ICloneable *UIRenderer::CloneVirtual() const { return _Clone<UIRenderer>(); }
 
 Rect UIRenderer::GetBoundingRect(Camera *camera) const
 {

@@ -30,6 +30,7 @@ class GameObject :
                ,public IWindowEventManagerListener
                #endif
 {
+    ICLONEABLE(GameObject)
 
 public:
     // PROPERTIES
@@ -41,7 +42,6 @@ public:
     GameObject(const String &m_name = "GameObject");
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     virtual ~GameObject();
 

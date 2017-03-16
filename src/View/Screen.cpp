@@ -175,7 +175,7 @@ void Screen::HandleGameObjectDragging(QDragMoveEvent *e, QWidget *origin)
             GameObject *selectedGo = hierarchy->GetFirstSelectedGameObject();
             if (selectedGo)
             {
-                m_gameObjectBeingDragged = selectedGo->Clone<GameObject>();
+                m_gameObjectBeingDragged = selectedGo->Clone();
             }
         }
         else if (origin == explorer)

@@ -29,8 +29,6 @@ void CircleRenderer::CloneInto(ICloneable *clone) const
     cr->SetSegments(GetSegments());
 }
 
-ICloneable *CircleRenderer::CloneVirtual() const { return _Clone<CircleRenderer>(); }
-
 void CircleRenderer::GeneratePoints()
 {
     m_points.Clear();

@@ -44,8 +44,6 @@ void AudioSource::CloneInto(ICloneable *clone) const
     as->SetLooping( IsLooping() );
 }
 
-ICloneable *AudioSource::CloneVirtual() const { return _Clone<AudioSource>(); }
-
 #ifdef BANG_EDITOR
 void AudioSource::OnButtonClicked(const String &attrName)
 {

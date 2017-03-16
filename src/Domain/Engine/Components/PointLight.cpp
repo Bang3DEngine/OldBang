@@ -51,7 +51,6 @@ void PointLight::CloneInto(ICloneable *clone) const
     PointLight *pl = Object::SCast<PointLight>(clone);
     pl->SetRange(GetRange());
 }
-ICloneable *PointLight::CloneVirtual() const { return _Clone<PointLight>(); }
 
 void PointLight::SetRange(float range)
 {

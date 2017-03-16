@@ -7,10 +7,7 @@
 
 class SingleLineRenderer : public LineRenderer
 {
-friend class GameObject;
-
-protected:
-    SingleLineRenderer();
+    ICLONEABLE(SingleLineRenderer)
 
 public:
     virtual ~SingleLineRenderer();
@@ -18,7 +15,6 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     void SetOrigin(const Vector3 &o);
     void SetDestiny(const Vector3 &d);
@@ -29,7 +25,10 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    friend class ICloneable;
+protected:
+    SingleLineRenderer();
+
+    friend class GameObject;
 };
 
 #endif // SINGLELINERENDERER_H

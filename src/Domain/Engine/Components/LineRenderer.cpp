@@ -24,8 +24,6 @@ String LineRenderer::GetName() const
     return "LineRenderer";
 }
 
-ICloneable *LineRenderer::CloneVirtual() const { return _Clone<LineRenderer>(); }
-
 void LineRenderer::BindPointsToVAO() const
 {
     if (m_points.Size() >= 2 &&

@@ -10,13 +10,14 @@ class XMLNode;
 class ICloneable;
 class CircleRenderer : public LineRenderer
 {
+    ICLONEABLE(CircleRenderer)
+
 public:
     virtual ~CircleRenderer();
 
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     void SetRadius(float m_radius);
     void SetSegments(int m_segments);
@@ -36,7 +37,6 @@ protected:
     virtual void GeneratePoints();
 
     friend class GameObject;
-    friend class ICloneable;
     friend class EditorRotateAxis;
 };
 

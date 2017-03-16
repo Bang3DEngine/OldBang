@@ -104,8 +104,6 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     }
 }
 
-ICloneable *Scene::CloneVirtual() const { return _Clone<Scene>(); }
-
 Scene *Scene::GetActiveScene()
 {
     return SceneManager::GetActiveScene();

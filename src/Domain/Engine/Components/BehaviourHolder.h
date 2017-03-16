@@ -23,6 +23,7 @@ class BehaviourHolder : public Component
                        ,public IAttrWidgetButtonListener
                        #endif
 {
+    ICLONEABLE(BehaviourHolder)
 
 public:
     virtual ~BehaviourHolder();
@@ -30,7 +31,6 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     const String &GetSourceFilepath() const;
 
@@ -79,7 +79,6 @@ private:
                                 Behaviour *b, QLibrary *openLibrary);
 
     friend class GameObject;
-    friend class ICloneable;
 };
 
 #endif

@@ -29,7 +29,6 @@ void RectTransform::CloneInto(ICloneable *clone) const
 
     rt->SetPivotPosition( GetPivotPosition() );
 }
-ICloneable *RectTransform::CloneVirtual() const { return _Clone<RectTransform>(); }
 
 void RectTransform::SetMarginLeft(int marginLeft)
 {

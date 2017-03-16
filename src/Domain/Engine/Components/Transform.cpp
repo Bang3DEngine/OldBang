@@ -21,8 +21,6 @@ void Transform::CloneInto(ICloneable *clone) const
     t->SetLocalScale(GetLocalScale());
 }
 
-ICloneable *Transform::CloneVirtual() const { return _Clone<Transform>(); }
-
 Transform::~Transform()
 {
 }

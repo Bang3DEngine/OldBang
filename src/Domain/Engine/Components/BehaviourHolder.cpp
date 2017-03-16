@@ -102,8 +102,6 @@ void BehaviourHolder::CloneInto(ICloneable *clone) const
     bh->m_sourceFilepath = m_sourceFilepath;
 }
 
-ICloneable *BehaviourHolder::CloneVirtual() const { return _Clone<BehaviourHolder>(); }
-
 const String &BehaviourHolder::GetSourceFilepath() const
 {
     return m_sourceFilepath;

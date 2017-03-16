@@ -35,7 +35,6 @@ void DirectionalLight::CloneInto(ICloneable *clone) const
     Light::CloneInto(clone);
     DirectionalLight *dl = Object::SCast<DirectionalLight>(clone);
 }
-ICloneable *DirectionalLight::CloneVirtual() const { return _Clone<DirectionalLight>(); }
 
 void DirectionalLight::OnDrawGizmos(bool depthed, bool overlay)
 {

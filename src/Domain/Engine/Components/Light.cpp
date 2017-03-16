@@ -65,7 +65,6 @@ void Light::CloneInto(ICloneable *clone) const
     l->SetIntensity(GetIntensity());
     l->SetColor(GetColor());
 }
-ICloneable *Light::CloneVirtual() const { return _Clone<Light>(); }
 
 void Light::SetColor(const Color &color)
 {

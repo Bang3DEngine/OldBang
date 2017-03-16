@@ -23,7 +23,6 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
     MeshRenderer *mr = Object::SCast<MeshRenderer>(clone);
     mr->SetMesh(m_mesh);
 }
-ICloneable *MeshRenderer::CloneVirtual() const { return _Clone<MeshRenderer>(); }
 
 void MeshRenderer::SetMaterial(Material *m)
 {

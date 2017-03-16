@@ -11,6 +11,8 @@ class Material;
 class ICloneable;
 class UIRenderer : public MeshRenderer
 {
+    ICLONEABLE(UIRenderer)
+
 public:
     virtual void RenderWithoutMaterial() const override;
 
@@ -32,10 +34,8 @@ protected:
                                        ShaderProgram *sp) override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     friend class GameObject;
-    friend class ICloneable;
 };
 
 #endif // UIRENDERER_H

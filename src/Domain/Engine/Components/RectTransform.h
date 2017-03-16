@@ -9,16 +9,13 @@
 class XMLNode;
 class RectTransform : public Transform
 {
-/**
-  (-1,-1): left-top.
-  ( 1, 1): right-bot.
-**/
+    ICLONEABLE(RectTransform)
+
 public:
     RectTransform();
     virtual ~RectTransform();
 
     void CloneInto(ICloneable *clone) const;
-    ICloneable *CloneVirtual() const override;
 
     void SetMarginLeft(int marginLeft);
     void SetMarginTop(int marginTop);

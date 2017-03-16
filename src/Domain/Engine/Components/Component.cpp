@@ -23,7 +23,6 @@ void Component::CloneInto(ICloneable *clone) const
     Component *c = Object::SCast<Component>(clone);
     c->m_enabled = m_enabled;
 }
-ICloneable *Component::CloneVirtual() const { return _Clone<Component>(); }
 
 String Component::ToString() const
 {

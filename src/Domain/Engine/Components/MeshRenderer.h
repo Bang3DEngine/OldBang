@@ -8,13 +8,13 @@ class Mesh;
 class Material;
 class MeshRenderer : public Renderer
 {
-public:
+    ICLONEABLE(MeshRenderer)
 
+public:
     MeshRenderer();
     virtual ~MeshRenderer();
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     void SetMaterial(Material *m) override;
     virtual void SetMesh(Mesh *m);

@@ -22,26 +22,15 @@ class Component :
               public IToString,
               public SerializableObject
 {
-protected:
-    bool m_enabled = true;
-    bool m_closedInInspector = false;
-
-    Component();
-    virtual ~Component();
-
-    virtual void OnAddedToGameObject() {}
-
-    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
+    ICLONEABLE(Component)
 
 public:
-
     GameObject *m_gameObject = nullptr;
     Transform *m_gameObjectTransform = nullptr;
     GameObject* const& gameObject = m_gameObject;
     Transform* const& transform = m_gameObjectTransform; // shortcut
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     virtual String ToString() const override;
 
@@ -58,8 +47,18 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
+protected:
+    bool m_enabled = true;
+    bool m_closedInInspector = false;
+
+    Component();
+    virtual ~Component();
+
+    virtual void OnAddedToGameObject() {}
+
+    virtual void OnDrawGizmos(bool depthed, bool overlay) override;
+
     friend class GameObject;
-    friend class ICloneable;
     friend class ComponentClipboard;
 };
 

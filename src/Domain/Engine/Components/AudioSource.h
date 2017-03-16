@@ -19,6 +19,8 @@ class AudioSource : public Component
                     ,public IAttrWidgetButtonListener
                     #endif
 {
+    ICLONEABLE(AudioSource)
+
 public:
     enum State
     {
@@ -33,7 +35,6 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     #ifdef BANG_EDITOR
     virtual void OnButtonClicked(const String &attrName) override;

@@ -11,6 +11,8 @@ class GraphicPipeline;
 class SelectionFramebuffer;
 class Scene : public GameObject
 {
+    ICLONEABLE(Scene)
+
 public:
     const static String GetFileExtensionStatic ();
 
@@ -19,8 +21,6 @@ public:
 
     void SetCamera (const Camera *cam);
     void SetFirstFoundCameraOrDefaultOne();
-
-    ICloneable *CloneVirtual() const;
 
     static Scene *GetActiveScene();
     static Scene *GetDefaultScene();

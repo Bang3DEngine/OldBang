@@ -9,6 +9,8 @@ class XMLNode;
 class ICloneable;
 class UIImage : public UIRenderer
 {
+    ICLONEABLE(UIImage)
+
 public:
     UIImage();
     virtual ~UIImage();
@@ -16,7 +18,6 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

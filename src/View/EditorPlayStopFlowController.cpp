@@ -48,7 +48,7 @@ bool EditorPlayStopFlowController::PlayScene()
     // Pick the reference of the current scene, to restore it later
     p_latestSceneBeforePlaying = SceneManager::GetActiveScene();
 
-    Scene *sceneCopy = p_latestSceneBeforePlaying->Clone<Scene>();
+    Scene *sceneCopy = p_latestSceneBeforePlaying->Clone();
     if (sceneCopy)
     {
         SceneManager::SetActiveScene(sceneCopy);

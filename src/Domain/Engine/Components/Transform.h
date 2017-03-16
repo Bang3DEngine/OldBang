@@ -13,9 +13,10 @@ class XMLNode;
 class ICloneable;
 class Transform : public Component
 {
+    ICLONEABLE(Transform)
+
 public:
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     virtual ~Transform();
 
@@ -133,7 +134,6 @@ protected:
     Vector3 m_localEuler = Vector3::Zero;
 
     friend class GameObject;
-    friend class ICloneable;
 };
 
 #endif // TRANSFORM_H

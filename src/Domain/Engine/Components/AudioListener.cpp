@@ -19,8 +19,6 @@ String AudioListener::GetName() const
     return "AudioListener";
 }
 
-ICloneable *AudioListener::CloneVirtual() const { return _Clone<AudioListener>(); }
-
 void AudioListener::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);

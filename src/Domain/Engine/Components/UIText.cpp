@@ -57,7 +57,6 @@ void UIText::CloneInto(ICloneable *clone) const
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
 }
-ICloneable *UIText::CloneVirtual() const { return _Clone<UIText>(); }
 
 void UIText::SetHorizontalAlign(UIText::HorizontalAlignment horizontalAlignment)
 {

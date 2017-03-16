@@ -14,12 +14,12 @@ class Material;
 class ICloneable;
 class LineRenderer : public Renderer
 {
+    ICLONEABLE(LineRenderer)
+
 public:
     virtual ~LineRenderer();
 
     virtual String GetName() const override;
-
-    ICloneable *CloneVirtual() const override;
 
     virtual void SetMaterial(Material *m) override;
 
@@ -43,7 +43,6 @@ protected:
     LineRenderer();
 
     friend class GameObject;
-    friend class ICloneable;
 };
 
 #endif // LINERENDERER_H

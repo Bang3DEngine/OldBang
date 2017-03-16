@@ -57,7 +57,7 @@ void GameObject::CloneInto(ICloneable *clone) const
     for (GameObject *child : m_children)
     {
         if (child->HasHideFlag(HideFlags::DontClone)) { continue; }
-        GameObject *childClone = child->Clone<GameObject>();
+        GameObject *childClone = child->Clone();
         childClone->SetParent(go);
     }
 
@@ -65,7 +65,7 @@ void GameObject::CloneInto(ICloneable *clone) const
     {
         if (!comp->IsOfType<Transform>())
         {
-            go->AddComponent(comp->Clone<Component>());
+            go->AddComponent(comp->Clone());
         }
         else
         {
@@ -73,7 +73,6 @@ void GameObject::CloneInto(ICloneable *clone) const
         }
     }
 }
-ICloneable *GameObject::CloneVirtual() const { return _Clone<GameObject>(); }
 
 GameObject::~GameObject()
 {

@@ -27,7 +27,6 @@ void SingleLineRenderer::CloneInto(ICloneable *clone) const
     slr->SetOrigin(GetOrigin());
     slr->SetDestiny(GetDestiny());
 }
-ICloneable *SingleLineRenderer::CloneVirtual() const { return _Clone<SingleLineRenderer>(); }
 
 void SingleLineRenderer::SetOrigin(const Vector3 &o)
 {

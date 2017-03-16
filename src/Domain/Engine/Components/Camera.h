@@ -21,6 +21,8 @@ class ShaderProgram;
 class Camera : public Component,
                public IRenderAgent
 {
+    ICLONEABLE(Camera)
+
 public:
     NamedEnum (ProjectionMode,
         Orthographic,
@@ -63,7 +65,6 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     Rect GetScreenBoundingRect(const AABox &bbox);
 
@@ -95,7 +96,6 @@ private:
     ProjectionMode m_projMode = ProjectionMode::Perspective;
 
     friend class GameObject;
-    friend class ICloneable;
 };
 
 #endif // CAMERA_H

@@ -9,11 +9,12 @@ class Material;
 class ICloneable;
 class PointLight : public Light
 {
+    ICLONEABLE(PointLight)
+
 public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     void SetRange(float range);
     float GetRange() const;
@@ -33,7 +34,6 @@ protected:
     virtual void SetUniformsBeforeApplyingLight(Material *mat) const override;
 
     friend class GameObject;
-    friend class ICloneable;
     friend class EditorFloor;
 };
 

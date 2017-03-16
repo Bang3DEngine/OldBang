@@ -11,6 +11,8 @@ class XMLNode;
 class ICloneable;
 class UIText : public UIRenderer
 {
+    ICLONEABLE(UIText)
+
 public:
     enum class HorizontalAlignment { Left = 0, Center, Right };
     enum class VerticalAlignment   { Top  = 0, Center, Bot   };
@@ -25,7 +27,6 @@ public:
     virtual String GetName() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
-    ICloneable *CloneVirtual() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

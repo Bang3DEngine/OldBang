@@ -5,13 +5,13 @@
 
 class AudioListener : public Component
 {
+    ICLONEABLE(AudioListener)
+
 public:
     AudioListener();
     virtual ~AudioListener();
 
     virtual String GetName() const override;
-
-    virtual ICloneable* CloneVirtual() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

@@ -176,8 +176,6 @@ void Camera::CloneInto(ICloneable *clone) const
     cam->SetProjectionMode(GetProjectionMode());
 }
 
-ICloneable *Camera::CloneVirtual() const { return _Clone<Camera>(); }
-
 Rect Camera::GetScreenBoundingRect(const AABox &bbox)
 {
     // If there's a point outside the camera rect, return Empty

@@ -36,7 +36,6 @@ void UIImage::CloneInto(ICloneable *clone) const
     UIImage *img = Object::SCast<UIImage>(clone);
     img->SetTexture( GetTexture() );
 }
-ICloneable *UIImage::CloneVirtual() const { return _Clone<UIImage>(); }
 
 void UIImage::OnJustBeforeRendering(GameObject *go,
                                     ShaderProgram *sp)

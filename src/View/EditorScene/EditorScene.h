@@ -11,6 +11,7 @@ class EditorGizmosGameObject;
 class EditorTranslateAxisGroup;
 class EditorScene : public Scene
 {
+    ICLONEABLE(EditorScene)
 
 public:
     EditorScene();
