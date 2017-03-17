@@ -1,6 +1,7 @@
 #include "AudioFile.h"
 
 #include "IO.h"
+#include "IconManager.h"
 
 #ifdef BANG_EDITOR
 #include "AudioFileInspectable.h"
@@ -12,11 +13,10 @@ AudioFile::AudioFile(const QFileSystemModel *model, const QModelIndex &index)
 
 }
 
-QPixmap AudioFile::GetIcon() const
+const QPixmap& AudioFile::GetIcon() const
 {
-    String fp = IO::ToAbsolute("./Icons/AudioIcon.png", true);
-    QPixmap pm(fp.ToQString());
-    return pm;
+    return IconManager::LoadPixmap("./Icons/AudioIcon.png",
+                                   IconManager::IconOverlay::Data, true);
 }
 
 #ifdef BANG_EDITOR

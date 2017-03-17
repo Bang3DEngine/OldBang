@@ -59,7 +59,7 @@ public:
     static void Write(const String &filepath, const List<String> &lines);
     static String GetContents(const String &filepath);
 
-    virtual QPixmap GetIcon() const;
+    virtual const QPixmap& GetIcon() const;
 
     #ifdef BANG_EDITOR
     virtual SerializableObject *GetInspectable() const;
@@ -84,11 +84,6 @@ protected:
     String m_name = "";
     String m_extension = "";
 
-    // Adds on top of the passed QPixmap the little icon that
-    // distinguishes between assets and noAsset files.
-    static QPixmap AddIconAssetTypeDistinctor(const QPixmap &pm, bool isAsset);
-    static QPixmap CenterPixmapInEmptyPixmap(QPixmap &emptyPixmap,
-                                             const QPixmap &pixmapToCenter);
     friend class FileSystemModel;
     friend class DialogBrowseAssetFile;
 };

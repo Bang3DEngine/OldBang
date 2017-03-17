@@ -13,7 +13,7 @@ class FontAssetFile : public File
 {
 public:
     FontAssetFile(const QFileSystemModel *model, const QModelIndex &index);
-    virtual QPixmap GetIcon() const override;
+    virtual const QPixmap& GetIcon() const override;
 
     #ifdef BANG_EDITOR
     virtual SerializableObject *GetInspectable() const override;

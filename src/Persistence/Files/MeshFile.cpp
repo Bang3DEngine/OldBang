@@ -2,8 +2,9 @@
 
 #include "Debug.h"
 
-#include "FileReader.h"
 #include "IO.h"
+#include "FileReader.h"
+#include "IconManager.h"
 
 #ifdef BANG_EDITOR
 #include "SerializableObject.h"
@@ -17,11 +18,10 @@ MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex &index)
     m_numFaces = FileReader::GetOBJNumFaces(m_path);
 }
 
-QPixmap MeshFile::GetIcon() const
+const QPixmap& MeshFile::GetIcon() const
 {
-    String fp = IO::ToAbsolute("./Icons/MeshAssetIcon.png", true);
-    QPixmap pm(fp.ToQString());
-    return pm;
+    return IconManager::LoadPixmap("./Icons/MeshAssetIcon.png",
+                                   IconManager::IconOverlay::Data, true);
 }
 
 #ifdef BANG_EDITOR

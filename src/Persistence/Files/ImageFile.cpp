@@ -3,6 +3,7 @@
 #include "stb_image.h"
 
 #include "Debug.h"
+#include "IconManager.h"
 
 #ifdef BANG_EDITOR
 #include "ImageFileInspectable.h"
@@ -14,19 +15,10 @@ ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
     stbi_info(m_path.ToCString(), &m_width, &m_height, &m_numComponents);
 }
 
-QPixmap ImageFile::GetIcon() const
+const QPixmap& ImageFile::GetIcon() const
 {
-    String fp = GetAbsolutePath();
-
-    // Mini cache
-    static Map<std::string, QPixmap> filepath_To_Pixmap;
-    if (!filepath_To_Pixmap.ContainsKey(fp))
-    {
-        QPixmap pm(fp.ToQString());
-        filepath_To_Pixmap[fp] = pm;
-    }
-
-    return filepath_To_Pixmap[fp];
+    return IconManager::LoadPixmap(GetAbsolutePath(),
+                                   IconManager::IconOverlay::Data);
 }
 
 #ifdef BANG_EDITOR

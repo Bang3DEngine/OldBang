@@ -5,6 +5,7 @@
 #include "Debug.h"
 #include "String.h"
 #include "Explorer.h"
+#include "IconManager.h"
 
 FileSystemModel::FileSystemModel(Explorer *explorer) :
     QFileSystemModel()
@@ -160,15 +161,18 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
                     m_iconSize, m_iconSize,
                     Qt::KeepAspectRatio,
                     Qt::TransformationMode::SmoothTransformation);
-        pmScaled = File::CenterPixmapInEmptyPixmap(pmEmpty, pmScaled);
+        pmScaled = IconManager::CenterPixmapInEmptyPixmap(pmEmpty, pmScaled);
 
         if (IO::IsFile(absPath))
         {
             File *sFile = File::GetSpecificFile(file);
-            pmScaled = File::AddIconAssetTypeDistinctor(pmScaled, sFile->IsAsset());
+            /*pmScaled = IconManager::AddIconOverlay(
+                            pmScaled,
+                            sFile->IsAsset() ? IconManager::IconOverlay::Asset :
+                                               IconManager::IconOverlay::Data);
+            */
             delete sFile;
         }
-
         return pmScaled;
     }
     else if (role == Qt::EditRole)

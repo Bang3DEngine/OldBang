@@ -6,11 +6,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+#include "IO.h"
 #include "File.h"
 #include "Color.h"
 #include "Debug.h"
 #include "Object.h"
-#include "IO.h"
+#include "IconManager.h"
 
 DialogBrowseAssetFile::DialogBrowseAssetFile(String *resultFile)
 {
@@ -87,7 +88,8 @@ void DialogBrowseAssetFile::ShowOnList(QListWidget *listWidget,
                         c_iconSize, c_iconSize,
                         Qt::KeepAspectRatio,
                         Qt::TransformationMode::SmoothTransformation);
-            filePixmap = File::CenterPixmapInEmptyPixmap(pmEmpty, filePixmap);
+            filePixmap = IconManager::CenterPixmapInEmptyPixmap(pmEmpty,
+                                                                filePixmap);
             delete sFile;
         }
 

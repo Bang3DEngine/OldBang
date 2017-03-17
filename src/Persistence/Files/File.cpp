@@ -8,6 +8,7 @@
 #include "SerializableObject.h"
 #endif
 
+#include "IO.h"
 #include "Font.h"
 #include "Mesh.h"
 #include "Scene.h"
@@ -19,7 +20,7 @@
 #include "AudioClip.h"
 #include "ImageFile.h"
 #include "Texture2D.h"
-#include "IO.h"
+#include "IconManager.h"
 #include "MeshAssetFile.h"
 #include "MaterialAssetFile.h"
 #include "AudioClipAssetFile.h"
@@ -220,7 +221,7 @@ String File::GetContents() const
     return IO::GetFileContents(m_path);
 }
 
-QPixmap File::GetIcon() const
+const QPixmap& File::GetIcon() const
 {
     String fp = "";
     if (IsPrefabAsset())
@@ -245,7 +246,8 @@ QPixmap File::GetIcon() const
     }
 
     // Its a texture, the icon is the image itself
-    QPixmap pm(fp.ToQString());
+    const QPixmap &pm =
+         IconManager::LoadPixmap(fp, IconManager::IconOverlay::None, false);
     return pm;
 }
 
@@ -289,53 +291,4 @@ bool File::IsAsset() const
     return IsFontAssetFile() || IsTexture2DAsset() || IsMaterialAsset() ||
            IsMeshAsset() || IsAudioClipAsset() || IsPrefabAsset() ||
            IsBehaviour() || IsScene();
-}
-
-QPixmap File::AddIconAssetTypeDistinctor(const QPixmap &pm, bool isAsset)
-{
-    String overlayPath = isAsset ? "./Icons/AssetDistinctor.png" :
-                                   "./Icons/NoAssetDistinctor.png";
-    String fp = IO::ToAbsolute(overlayPath, true);
-    QPixmap distinctorPixmap( fp.ToQString() );
-    distinctorPixmap = distinctorPixmap.scaled(
-                32, 32, Qt::KeepAspectRatio,
-                Qt::TransformationMode::SmoothTransformation);
-
-    QPixmap result(pm);
-
-    const float pmAR             = float(distinctorPixmap.width()) /
-                                   distinctorPixmap.height();
-    const float distinctorSize   = isAsset ? 0.4f : 0.3f;
-    const float distinctorWidth  = pm.width()  * distinctorSize;
-    const float distinctorHeight = distinctorWidth / pmAR;
-    const float distinctorX      = pm.width()  - distinctorWidth;
-    const float distinctorY      = pm.height() - distinctorHeight;
-
-    QPainter painter;
-    painter.begin(&result);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawPixmap(distinctorX,
-                       distinctorY,
-                       distinctorWidth,
-                       distinctorHeight,
-                       distinctorPixmap);
-    painter.end();
-
-    return result;
-}
-
-QPixmap File::CenterPixmapInEmptyPixmap(QPixmap &emptyPixmap,
-                                        const QPixmap &pixmapToCenter)
-{
-    QPainter painter;
-    painter.begin(&emptyPixmap);
-    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-    painter.drawPixmap(emptyPixmap.width()  / 2 - pixmapToCenter.width()  / 2,
-                       emptyPixmap.height() / 2 - pixmapToCenter.height() / 2,
-                       pixmapToCenter.width(),
-                       pixmapToCenter.height(),
-                       pixmapToCenter);
-
-    painter.end();
-    return emptyPixmap;
 }

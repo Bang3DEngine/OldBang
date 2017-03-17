@@ -303,7 +303,8 @@ HEADERS +=                                                          \
     src/Domain/Engine/Interfaces/SerializableObject.h \
     src/Domain/Engine/GraphicPipeline/TextureUnitManager.h \
     src/Domain/Engine/DataStructures/UMap.h \
-    src/View/Shortcut.h
+    src/View/Shortcut.h \
+    src/View/IconManager.h
 
 EDITOR {
 HEADERS += \
@@ -517,7 +518,8 @@ SOURCES += \
     src/Domain/Engine/Interfaces/SerializableObject.cpp \
     src/Domain/Engine/GraphicPipeline/TextureUnitManager.cpp \
     src/Domain/Engine/DataStructures/UMap.cpp \
-    src/View/Shortcut.cpp
+    src/View/Shortcut.cpp \
+    src/View/IconManager.cpp
 
 EDITOR {
     SOURCES += \

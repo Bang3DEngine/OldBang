@@ -1,7 +1,8 @@
 #include "MeshAssetFile.h"
 
-#include "Mesh.h"
 #include "IO.h"
+#include "Mesh.h"
+#include "IconManager.h"
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
@@ -22,11 +23,10 @@ MeshAssetFile::MeshAssetFile(
     }
 }
 
-QPixmap MeshAssetFile::GetIcon() const
+const QPixmap& MeshAssetFile::GetIcon() const
 {
-    String fp = IO::ToAbsolute("./Icons/MeshAssetIcon.png", true);
-    QPixmap pm(fp.ToQString());
-    return pm;
+    return IconManager::LoadPixmap("./Icons/MeshAssetIcon.png",
+                                   IconManager::IconOverlay::Asset, true);
 }
 
 #ifdef BANG_EDITOR

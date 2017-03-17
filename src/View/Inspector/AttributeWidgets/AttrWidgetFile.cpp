@@ -92,9 +92,9 @@ void AttrWidgetFile::RefreshIcon()
     File *f = File::GetSpecificFile(file);
     if (f)
     {
-        QPixmap pm = f->GetIcon();
-        pm = pm.scaled(16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-        m_iconLabel->setPixmap(pm);
+        const QPixmap& pm = f->GetIcon();
+        QPixmap pmCopy = pm.scaled(16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        m_iconLabel->setPixmap(pmCopy);
         delete f;
     }
 }

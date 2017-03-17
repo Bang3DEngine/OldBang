@@ -1,8 +1,9 @@
 #include "FontAssetFile.h"
 
+#include "IO.h"
 #include "Debug.h"
 #include "FileReader.h"
-#include "IO.h"
+#include "IconManager.h"
 #include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
@@ -17,11 +18,10 @@ FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &i
     delete xmlInfo;
 }
 
-QPixmap FontAssetFile::GetIcon() const
+const QPixmap& FontAssetFile::GetIcon() const
 {
-    String fp = IO::ToAbsolute("./Icons/NoAssetIcon.png", true);
-    QPixmap pm(fp.ToQString());
-    return pm;
+    return IconManager::LoadPixmap("./Icons/LetterIcon.png",
+                                   IconManager::IconOverlay::Asset, true);
 }
 
 #ifdef BANG_EDITOR

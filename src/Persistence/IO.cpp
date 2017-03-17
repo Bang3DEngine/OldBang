@@ -161,7 +161,7 @@ String IO::ToAbsolute(const String &relPath,
         result = QFileInfo(result.ToQString()).canonicalFilePath();
     }
 
-    return result;
+    return result.Replace("//", "/");
 }
 
 String IO::ToAbsolute(const String &relPath, bool isEngineFile)

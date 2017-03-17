@@ -1,7 +1,8 @@
 #include "MaterialAssetFile.h"
 
-#include "XMLParser.h"
 #include "IO.h"
+#include "XMLParser.h"
+#include "IconManager.h"
 
 #ifdef BANG_EDITOR
 #include "MaterialAssetFileInspectable.h"
@@ -24,11 +25,10 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModel
     }
 }
 
-QPixmap MaterialAssetFile::GetIcon() const
+const QPixmap& MaterialAssetFile::GetIcon() const
 {
-    String fp = IO::ToAbsolute("./Icons/MaterialAssetIcon.png", true);
-    QPixmap pm(fp.ToQString());
-    return pm;
+    return IconManager::LoadPixmap("./Icons/MaterialAssetIcon.png",
+                                   IconManager::IconOverlay::Asset, true);
 }
 
 #ifdef BANG_EDITOR
