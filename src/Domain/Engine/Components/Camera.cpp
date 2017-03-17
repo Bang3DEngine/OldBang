@@ -33,14 +33,6 @@ ShaderProgram *Camera::GetReplacementShaderProgram() const
     return m_replacementShaderProgram;
 }
 
-void Camera::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
-{
-    Matrix4 view;       GetViewMatrix(&view);
-    Matrix4 projection; GetProjectionMatrix(&projection);
-    GL::SetViewMatrix(view);
-    GL::SetProjectionMatrix(projection);
-}
-
 void Camera::GetViewMatrix(Matrix4 *view) const
 {
     if (m_identityMode) { *view = Matrix4::Identity; return; }

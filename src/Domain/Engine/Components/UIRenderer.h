@@ -29,8 +29,7 @@ protected:
     UIRenderer();
     virtual ~UIRenderer();
 
-    virtual void OnJustBeforeRendering(GameObject *go,
-                                       ShaderProgram *sp) override;
+    virtual void Bind() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
 };

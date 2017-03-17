@@ -4,12 +4,10 @@
 #include "Array.h"
 #include "Asset.h"
 #include "Color.h"
-#include "IRenderAgent.h"
 
 class Texture2D;
 class ShaderProgram;
-class Material : public Asset,
-                 public IRenderAgent
+class Material : public Asset
 {
 public:
     Material();
@@ -31,8 +29,7 @@ public:
     float GetShininess() const;
     const Color& GetDiffuseColor() const;
 
-    virtual void OnRenderingStarts(GameObject *go,
-                                   ShaderProgram *sp) override;
+    virtual void Bind() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

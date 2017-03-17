@@ -23,7 +23,7 @@
 Renderer::Renderer()
 {
     #ifdef BANG_EDITOR
-    p_OnRenderingStartsForSelectionFunc = [](){};
+    p_OnBindForSelectionFunc = [](){};
     #endif
 
     SetMaterial( AssetsManager::Load<Material>("Materials/G_Default.bmat", true));
@@ -66,21 +66,31 @@ Material *Renderer::GetSharedMaterial() const
     return m_material;
 }
 
-void Renderer::OnRenderingStarts(GameObject *go, ShaderProgram *sp) const
+void Renderer::Bind() const
 {
     GL::SetWireframe(m_drawWireframe);
     GL::SetCullMode(m_cullMode);
     glLineWidth(m_lineWidth);
 
-    go->OnRenderingStarts(go, sp);
-    sp->OnRenderingStarts(go, sp);
+    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
+    sp->Bind();
+
+    Matrix4 model; transform->GetLocalToWorldMatrix(&model);
+    GL::SetModelMatrix(model);
 
     Scene *scene = SceneManager::GetActiveScene();
     Camera *camera = scene->GetCamera();
-    if (camera) { camera->OnRenderingStarts(go, sp); }
+    if (camera)
+    {
+        Matrix4 view, projection;
+        camera->GetViewMatrix(&view);
+        camera->GetProjectionMatrix(&projection);
+        GL::SetViewMatrix(view);
+        GL::SetProjectionMatrix(projection);
+    }
 
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
-    gb->OnRenderingStarts(go, sp);
+    gb->BindTextureBuffersTo(sp);
 }
 
 void Renderer::RenderForSelectionWithoutMaterial() const
@@ -95,16 +105,13 @@ void Renderer::Render() const
 
 void Renderer::RenderWithMaterial(Material *_mat) const
 {
-    Renderer *ncThis = const_cast<Renderer*>(this);
     Material *mat = _mat ? _mat : Material::GetMissingMaterial();
 
-    ShaderProgram *sp = mat->GetShaderProgram();
-    ncThis->OnRenderingStarts(gameObject, sp);
-    mat->OnRenderingStarts(gameObject, sp);
+    Bind();
 
-    sp->OnJustBeforeRendering(gameObject, sp);
-    mat->OnJustBeforeRendering(gameObject, sp);
-    ncThis->OnJustBeforeRendering(gameObject, sp);
+    ShaderProgram *sp = mat->GetShaderProgram();
+    sp->Bind();
+    mat->Bind();
 
     GL::ApplyToShaderProgram(sp);
 
@@ -113,7 +120,7 @@ void Renderer::RenderWithMaterial(Material *_mat) const
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (sfb->IsPassing())
     {
-        p_OnRenderingStartsForSelectionFunc();
+        p_OnBindForSelectionFunc();
         RenderForSelectionWithoutMaterial();
     }
     else
@@ -122,12 +129,8 @@ void Renderer::RenderWithMaterial(Material *_mat) const
         RenderWithoutMaterial();
     }
 
-    ncThis->OnJustAfterRendering(gameObject, sp);
-    mat->OnJustAfterRendering(gameObject, sp);
-    sp->OnJustAfterRendering(gameObject, sp);
-
-    ncThis->OnRenderingEnds(gameObject, sp);
-    mat->OnRenderingEnds(gameObject, sp);
+    sp->UnBind();
+    UnBind();
 }
 
 void Renderer::UseMaterialCopy()
@@ -139,12 +142,10 @@ void Renderer::UseMaterialCopy()
     }
 }
 
-void Renderer::OnRenderingEnds(GameObject *go, ShaderProgram *sp) const
+void Renderer::UnBind() const
 {
-    sp->OnRenderingEnds(go, sp);
-
-    GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
-    gb->OnRenderingEnds(go, sp);
+    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
+    sp->UnBind();
 }
 
 void Renderer::SetTransparent(bool transparent)
@@ -211,10 +212,10 @@ float Renderer::GetLineWidth() const
 }
 
 #ifdef BANG_EDITOR
-void Renderer::SetOnRenderingStartsForSelectionFunction(
+void Renderer::SetBindForSelectionFunction(
         const std::function<void()> &f)
 {
-    p_OnRenderingStartsForSelectionFunc = f;
+    p_OnBindForSelectionFunc = f;
 }
 #endif
 

@@ -7,17 +7,17 @@
 #include "GL.h"
 #include "Rect.h"
 #include "Array.h"
+#include "GLObject.h"
 #include "NamedEnum.h"
 #include "Component.h"
-#include "IRenderAgent.h"
 
 class AABox;
 class Camera;
 class Material;
 class SceneManager;
 class SelectionFramebuffer;
-class Renderer : public Component,
-                 public IRenderAgent
+class Renderer : public GLObject,
+                 public Component
 {
 public:
     enum DepthLayer
@@ -62,12 +62,12 @@ public:
     void UseMaterialCopy();
 
     #ifdef BANG_EDITOR
-    void SetOnRenderingStartsForSelectionFunction(
+    void SetBindForSelectionFunction(
             const std::function<void()> &f);
     #endif
 
-    void OnRenderingStarts(GameObject *go, ShaderProgram *sp) const;
-    void OnRenderingEnds(GameObject *go, ShaderProgram *sp) const;
+    virtual void Bind() const override;
+    virtual void UnBind() const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
@@ -114,7 +114,7 @@ private:
      * This is used in the transform axes for example, in which we
      * increase the lineWidth for an easier axis grabbing.
      */
-    std::function<void()> p_OnRenderingStartsForSelectionFunc = nullptr;
+    std::function<void()> p_OnBindForSelectionFunc = nullptr;
     #endif
 
     friend class GraphicPipeline;

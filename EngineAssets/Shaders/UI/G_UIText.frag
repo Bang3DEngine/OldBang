@@ -1,5 +1,6 @@
 #include "G.frag"
 
+uniform vec4 B_Tint;
 void Main()
 {
     // Stencil has to 1 only the pixels that have been drawn by text before
@@ -34,7 +35,7 @@ void Main()
 
         vec4 charTexColor = texture2D(B_Texture0, B_FragIn_Uv);
         B_Out_DiffColor = mix(backgroundColorToBlendWith,
-                              charTexColor * B_MaterialDiffuseColor,
+                              charTexColor * B_Tint,
                               charTexColor.a);
     }
 }

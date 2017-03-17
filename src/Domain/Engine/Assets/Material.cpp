@@ -185,8 +185,9 @@ const Color& Material::GetDiffuseColor() const
     return m_diffuseColor;
 }
 
-void Material::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
+void Material::Bind() const
 {
+    ShaderProgram *sp = GetShaderProgram();
     sp->SetVec2("B_ScreenSize", Screen::GetSize());
 
     sp->SetColor("B_MaterialDiffuseColor",     m_diffuseColor);

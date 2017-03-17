@@ -75,8 +75,7 @@ void Texture2D::Fill(unsigned char *newData, int width, int height,
     if (!m_data) { m_width = m_height = 0; }
 
     Bind();
-    glTexImage2D(m_target, 0, GetGLInternalFormat(),
-                 m_width, m_height, 0,
+    glTexImage2D(m_target, 0, GetGLInternalFormat(), m_width, m_height, 0,
                  GetGLFormat(), GetGLDataType(), m_data);
     if (genMipMaps && m_width > 0 && m_height > 0)
     {

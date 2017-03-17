@@ -27,14 +27,14 @@ UIRenderer::~UIRenderer()
 {
 }
 
-void UIRenderer::OnJustBeforeRendering(GameObject *go,
-                                       ShaderProgram *sp)
+void UIRenderer::Bind() const
 {
-    MeshRenderer::OnJustBeforeRendering(go, sp);
+    MeshRenderer::Bind();
     GL::SetViewMatrix(Matrix4::Identity);
     GL::SetProjectionMatrix(Matrix4::Identity);
 
-    sp->SetColor("B_MaterialDiffuseColor", m_tint);
+    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
+    sp->SetColor("B_Tint", m_tint);
 }
 
 void UIRenderer::CloneInto(ICloneable *clone) const

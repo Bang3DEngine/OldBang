@@ -6,7 +6,6 @@
 #include "Object.h"
 #include "Sphere.h"
 #include "IToString.h"
-#include "IRenderAgent.h"
 #include "SerializableObject.h"
 #include "ISceneEventListener.h"
 
@@ -25,7 +24,6 @@ class GameObject :
                ,public ISceneEventListener
                ,public IToString
                ,public SerializableObject
-               ,public IRenderAgent
                #ifdef BANG_EDITOR
                ,public IWindowEventManagerListener
                #endif
@@ -104,9 +102,6 @@ public:
      * @return
      */
     Sphere GetObjectBoundingSphere(bool includeChildren = true) const;
-
-    virtual void OnRenderingStarts(GameObject *go,
-                                   ShaderProgram *sp) override;
 
     /**
      * @brief Returns this GameObject's bounding sphere in world space

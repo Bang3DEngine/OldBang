@@ -25,7 +25,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     m_line->SetMaterial(m_material);
     m_line->SetLineWidth(2.0f);
     m_line->SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
-    m_line->SetOnRenderingStartsForSelectionFunction([]()
+    m_line->SetBindForSelectionFunction([]()
         {
             GL::SetLineWidth(25.0f); // Easier grab
         }

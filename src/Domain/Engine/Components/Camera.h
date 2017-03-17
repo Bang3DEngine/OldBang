@@ -9,7 +9,6 @@
 #include "Vector3.h"
 #include "NamedEnum.h"
 #include "Component.h"
-#include "IRenderAgent.h"
 
 class Mesh;
 class Screen;
@@ -18,8 +17,7 @@ class XMLNode;
 class ICloneable;
 class MeshRenderer;
 class ShaderProgram;
-class Camera : public Component,
-               public IRenderAgent
+class Camera : public Component
 {
     OBJECT(Camera)
     ICLONEABLE(Camera)
@@ -32,9 +30,6 @@ public:
 
     void SetReplacementShaderProgram(ShaderProgram *replacementShaderProgram);
     ShaderProgram *GetReplacementShaderProgram() const;
-
-    virtual void OnRenderingStarts(GameObject *go,
-                                   ShaderProgram *sp) override;
 
     void GetViewMatrix(Matrix4 *view) const;
     void GetProjectionMatrix(Matrix4 *proj) const;

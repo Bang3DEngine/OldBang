@@ -270,9 +270,9 @@ void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
     sp->SetVec2("B_rectMinCoord", mask.GetMin());
     sp->SetVec2("B_rectMaxCoord", mask.GetMax());
 
-    sp->OnRenderingStarts(nullptr, sp);
+    sp->Bind();
     RenderScreenPlane();
-    sp->OnRenderingEnds(nullptr, sp);
+    sp->UnBind();
 }
 
 void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
@@ -283,12 +283,12 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
     m_screenPlaneMesh->BindPositionsToShaderProgram("B_In_PositionObject", *sp);
     sp->SetTexture("B_GTex_Color", fullScreenTexture);
 
-    sp->OnRenderingStarts(nullptr, sp);
-    m_renderGBufferToScreenMaterial->OnRenderingStarts(nullptr, sp);
+    sp->Bind();
+    m_renderGBufferToScreenMaterial->Bind();
     GL::ApplyToShaderProgram(sp);
     GraphicPipeline::RenderScreenPlane();
-    m_renderGBufferToScreenMaterial->OnRenderingEnds(nullptr, sp);
-    sp->OnRenderingEnds(nullptr, sp);
+    m_renderGBufferToScreenMaterial->Bind();
+    sp->UnBind();
 }
 
 void GraphicPipeline::RenderScreenPlane()

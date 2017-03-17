@@ -11,13 +11,11 @@
 
 #include "GLObject.h"
 #include "IToString.h"
-#include "IRenderAgent.h"
 
 class Shader;
 class Texture;
-class ShaderProgram : public GLObject
-                     ,public IToString
-                     ,public IRenderAgent
+class ShaderProgram : public GLObject,
+                      public IToString
 {
 
 public:
@@ -31,11 +29,9 @@ public:
 
     bool Link();
 
-    virtual void OnRenderingStarts(GameObject *go, ShaderProgram *sp) override;
-    virtual void OnRenderingEnds  (GameObject *go, ShaderProgram *sp) override;
-    GL::BindTarget GetGLBindTarget() const override;
     void Bind() const override;
     void UnBind() const override;
+    GL::BindTarget GetGLBindTarget() const override;
 
     bool SetFloat(const String &name, float v) const;
     bool SetVec2(const String &name, const Vector2& v) const;

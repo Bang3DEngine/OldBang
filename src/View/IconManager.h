@@ -30,6 +30,9 @@ public:
                                  IconOverlay overlay = IconOverlay::None,
                                  bool isEnginePath = false);
 
+    static QPixmap CenterPixmapInEmptyPixmap(QPixmap& emptyPixmap,
+                                             const QPixmap& pixmapToCenter);
+
 private:
     QPixmap m_overlayAsset, m_overlayData;
 
@@ -37,8 +40,6 @@ private:
     Map<String, QIcon> m_icons;
 
     static QPixmap AddIconOverlay(const QPixmap& pm, IconOverlay overlay);
-    static QPixmap CenterPixmapInEmptyPixmap(QPixmap& emptyPixmap,
-                                             const QPixmap& pixmapToCenter);
 
     static String GetStringId(const String &absPath, IconOverlay overlay);
 

@@ -32,10 +32,10 @@ void UIImage::CloneInto(ICloneable *clone) const
     img->SetTexture( GetTexture() );
 }
 
-void UIImage::OnJustBeforeRendering(GameObject *go,
-                                    ShaderProgram *sp)
+void UIImage::Bind() const
 {
-    UIRenderer::OnJustBeforeRendering(go, sp);
+    UIRenderer::Bind();
+    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     sp->SetFloat("B_AlphaCutoff", !m_imageTexture ?
                                   1 : m_imageTexture->GetAlphaCutoff());
     sp->SetFloat("B_HasTexture", m_imageTexture ? 1 : 0);

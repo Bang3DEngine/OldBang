@@ -13,10 +13,9 @@
 #include "Matrix4.h"
 #include "TypeMap.h"
 #include "Texture.h"
-#include "IRenderAgent.h"
 
 class VAO;
-class GLContext : public IRenderAgent
+class GLContext
 {
 public:
     GLContext();

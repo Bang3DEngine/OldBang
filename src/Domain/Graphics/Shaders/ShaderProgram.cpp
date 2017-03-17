@@ -79,16 +79,6 @@ bool ShaderProgram::Link()
     return linked;
 }
 
-void ShaderProgram::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
-{
-    GL::Bind(this);
-}
-
-void ShaderProgram::OnRenderingEnds(GameObject *go, ShaderProgram *sp)
-{
-    GL::UnBind(this);
-}
-
 GL::BindTarget ShaderProgram::GetGLBindTarget() const
 {
     return GL::BindTarget::ShaderProgram;

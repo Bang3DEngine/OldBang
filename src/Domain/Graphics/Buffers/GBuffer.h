@@ -5,12 +5,10 @@
 #include "Color.h"
 #include "String.h"
 #include "Framebuffer.h"
-#include "IRenderAgent.h"
 
 class Mesh;
 class Material;
-class GBuffer : public Framebuffer,
-                public IRenderAgent
+class GBuffer : public Framebuffer
 {
 public:
     static const AttachmentId AttNormal    = AttachmentId::ColorAttachment0;
@@ -28,8 +26,8 @@ public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    virtual void OnRenderingStarts(GameObject *go, ShaderProgram *sp) override;
-    virtual void OnRenderingEnds(GameObject *go, ShaderProgram *sp) override;
+    virtual void BindTextureBuffersTo(ShaderProgram *sp) const;
+
     void ApplyPass(ShaderProgram *sp,
                    bool copyColorBuffer = false,
                    const Rect &mask = Rect::ScreenRect);

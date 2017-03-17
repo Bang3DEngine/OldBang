@@ -38,7 +38,7 @@ GBuffer::~GBuffer()
 {
 }
 
-void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
+void GBuffer::BindTextureBuffersTo(ShaderProgram *sp) const
 {
     // Color Attachments bindings as Shader Inputs
     sp->SetTexture("B_GTex_Normal",    m_normalTexture);
@@ -51,10 +51,6 @@ void GBuffer::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
     sp->SetFloat("B_StencilTestEnabled",  m_stencilTestEnabled  ? 1.0f : 0.0f);
 }
 
-void GBuffer::OnRenderingEnds(GameObject *go, ShaderProgram *sp)
-{
-}
-
 
 void GBuffer::ApplyPass(ShaderProgram *sp,
                         bool copyColorBuffer,
@@ -65,7 +61,8 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
     bool prevStencilWrite = m_stencilWriteEnabled;
     SetStencilWrite(false);
 
-    OnRenderingStarts(nullptr, sp);
+    Bind();
+    BindTextureBuffersTo(sp);
 
     if (copyColorBuffer)
     {
@@ -80,7 +77,7 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
     SetColorDrawBuffer();
     GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
 
-    OnRenderingEnds(nullptr, sp);
+    UnBind();
 
     SetStencilWrite(prevStencilWrite);
 }

@@ -258,12 +258,6 @@ Sphere GameObject::GetObjectBoundingSphere(bool includeChildren) const
     return Sphere::FromBox(GetObjectAABBox(includeChildren));
 }
 
-void GameObject::OnRenderingStarts(GameObject *go, ShaderProgram *sp)
-{
-    Matrix4 model; transform->GetLocalToWorldMatrix(&model);
-    GL::SetModelMatrix(model);
-}
-
 Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 {
     return Sphere::FromBox(GetAABBox(includeChildren));

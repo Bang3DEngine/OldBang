@@ -28,8 +28,7 @@ public:
 private:
     Texture2D *m_imageTexture = nullptr;
 
-    virtual void OnJustBeforeRendering(GameObject *go,
-                                       ShaderProgram *sp) override;
+    virtual void Bind() const override;
 };
 
 #endif // UIIMAGE_H

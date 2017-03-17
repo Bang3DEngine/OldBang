@@ -162,17 +162,6 @@ QVariant FileSystemModel::data(const QModelIndex &idx, int role) const
                     Qt::KeepAspectRatio,
                     Qt::TransformationMode::SmoothTransformation);
         pmScaled = IconManager::CenterPixmapInEmptyPixmap(pmEmpty, pmScaled);
-
-        if (IO::IsFile(absPath))
-        {
-            File *sFile = File::GetSpecificFile(file);
-            /*pmScaled = IconManager::AddIconOverlay(
-                            pmScaled,
-                            sFile->IsAsset() ? IconManager::IconOverlay::Asset :
-                                               IconManager::IconOverlay::Data);
-            */
-            delete sFile;
-        }
         return pmScaled;
     }
     else if (role == Qt::EditRole)

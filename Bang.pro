@@ -284,7 +284,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.h \
     src/Domain/Engine/GraphicPipeline/GPPass_DepthLayer.h \
     src/Domain/Engine/GraphicPipeline/GPPass_G_Gizmos.h \
-    src/Domain/Graphics/Interfaces/IRenderAgent.h \
     src/Domain/Graphics/GLContext.h \
     src/Domain/Graphics/GL.h \
     src/Domain/Engine/DataStructures/TypeMap.h \
