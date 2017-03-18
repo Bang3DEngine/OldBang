@@ -131,6 +131,9 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
     List<GameObject*> sceneChildren = scene->GetChildren();
 
+    Camera *camera = scene->GetCamera();
+    if (camera) { camera->Bind(); }
+
     //ChronoGL c;
     //c.MarkEvent("RenderGBuffer");
     RenderGBuffer(renderers, sceneChildren);
@@ -285,7 +288,7 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
 
     sp->Bind();
     m_renderGBufferToScreenMaterial->Bind();
-    GL::ApplyToShaderProgram(sp);
+    GL::ApplyContextToShaderProgram(sp);
     GraphicPipeline::RenderScreenPlane();
     m_renderGBufferToScreenMaterial->Bind();
     sp->UnBind();

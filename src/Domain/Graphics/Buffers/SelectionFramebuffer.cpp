@@ -1,12 +1,12 @@
 #include "SelectionFramebuffer.h"
 
+#include "IO.h"
 #include "Scene.h"
 #include "Debug.h"
 #include "Cursor.h"
 #include "Material.h"
 #include "Renderer.h"
 #include "GameObject.h"
-#include "IO.h"
 #include "ShaderProgram.h"
 #include "RenderTexture.h"
 #include "AssetsManager.h"
@@ -66,9 +66,12 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
     if (CanRenderGameObject(go))
     {
         Material *rendMaterial = rend->GetMaterial();
-        // This ShaderProgram is a selection ReplacementShader put by the GP
+
+        // This should be a selection ReplacementShader put by the GP
         ShaderProgram *sp = rendMaterial->GetShaderProgram();
         sp->SetColor("selectionColor", GetSelectionColor(go));
+
+        GL::ApplyContextToShaderProgram(sp);
         rend->Render();
     }
 }

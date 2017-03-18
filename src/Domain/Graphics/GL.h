@@ -71,7 +71,7 @@ public:
     static void SetViewMatrix(const Matrix4 &view);
     static void SetProjectionMatrix(const Matrix4 &projection);
 
-    static void ApplyToShaderProgram(ShaderProgram *sp);
+    static void ApplyContextToShaderProgram(ShaderProgram *sp);
     static void Render(const VAO* vao,
                        GL::RenderMode renderMode,
                        int elementsCount,

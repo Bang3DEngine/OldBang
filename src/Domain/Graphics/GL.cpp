@@ -111,7 +111,7 @@ void GL::SetProjectionMatrix(const Matrix4 &projection)
     GL::GetGLContext()->SetProjectionMatrix(projection);
 }
 
-void GL::ApplyToShaderProgram(ShaderProgram *sp)
+void GL::ApplyContextToShaderProgram(ShaderProgram *sp)
 {
     GL::GetGLContext()->ApplyToShaderProgram(sp);
 }

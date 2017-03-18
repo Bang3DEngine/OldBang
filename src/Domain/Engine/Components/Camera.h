@@ -43,6 +43,8 @@ public:
 
     void SetProjectionMode(ProjectionMode projMode);
 
+    virtual void Bind() const;
+
     const Color& GetClearColor() const;
     float GetOrthoWidth() const;
     float GetOrthoHeight() const;

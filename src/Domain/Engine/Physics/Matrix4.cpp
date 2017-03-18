@@ -157,7 +157,8 @@ Matrix4 Matrix4::Inversed() const
                m[2].x * m[0].z * m[1].y;
 
 
-    float det = m[0].x * inv[0].x + m[0].y * inv[1].x + m[0].z * inv[2].x + m[0].w * inv[3].x;
+    float det = m[0].x * inv[0].x + m[0].y * inv[1].x + m[0].z * inv[2].x +
+                m[0].w * inv[3].x;
     if (det == 0) return *this;
 
     inv.c0 *= 1.0f / det;

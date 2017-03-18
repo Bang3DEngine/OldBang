@@ -14,7 +14,7 @@ void Main()
                                     B_LightForwardWorld,
                                     B_LightIntensity,
                                     B_LightColor.rgb,
-                                    B_CameraPositionWorld.xyz);
+                                    B_GetCameraPositionWorld() );
 
         B_Out_Color = vec4(B_SampleColor().rgb + dirLightApport, diffColor.a);
     }

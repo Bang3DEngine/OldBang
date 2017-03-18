@@ -30,8 +30,6 @@ UIRenderer::~UIRenderer()
 void UIRenderer::Bind() const
 {
     MeshRenderer::Bind();
-    GL::SetViewMatrix(Matrix4::Identity);
-    GL::SetProjectionMatrix(Matrix4::Identity);
 
     ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     sp->SetColor("B_Tint", m_tint);

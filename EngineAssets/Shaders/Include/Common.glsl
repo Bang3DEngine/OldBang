@@ -12,7 +12,7 @@ uniform mat4 B_PVM;
 
 
 // Camera ////////////////////////////////
-uniform vec3 B_CameraPositionWorld;
+uniform bool B_IdentityViewProj;
 // ///////////////////////////////////////
 
 
@@ -140,6 +140,11 @@ uniform sampler2D B_GTex_Color;
       { return B_SampleDepth(B_ScreenUv + B_ScreenStep * pixOffset); }
     float B_SampleStencilOffset(vec2 pixOffset)
       { return B_SampleStencil(B_ScreenUv + B_ScreenStep * pixOffset); }
+
+    vec3 B_GetCameraPositionWorld()
+    {
+        return B_ViewInv[3].xyz;
+    }
 
     vec3 B_ComputeWorldPosition(float depth)
     {

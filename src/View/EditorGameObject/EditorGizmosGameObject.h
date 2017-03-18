@@ -21,7 +21,6 @@ public:
     void SetLineWidth(float lineWidth);
     void SetDrawWireframe(bool wireframe);
     void SetReceivesLighting(bool receivesLighting);
-    void SetScreenSpaceMode(bool screenSpaceMode = true);
     void SetBillboard();
     void RenderCustomMesh(Mesh *m);
     void RenderSimpleBox(const AABox &b);
@@ -51,6 +50,7 @@ private:
     bool m_inited = false;
     bool m_resetAllowed = true;
 
+    void SetScreenSpaceMode(Material *mat, bool screenSpaceMode);
     bool IsGizmoRenderer(Renderer *rend);
 
     friend class Gizmos;

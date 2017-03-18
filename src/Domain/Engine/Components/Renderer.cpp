@@ -72,22 +72,12 @@ void Renderer::Bind() const
     GL::SetCullMode(m_cullMode);
     glLineWidth(m_lineWidth);
 
-    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
-    sp->Bind();
-
     Matrix4 model; transform->GetLocalToWorldMatrix(&model);
     GL::SetModelMatrix(model);
 
-    Scene *scene = SceneManager::GetActiveScene();
-    Camera *camera = scene->GetCamera();
-    if (camera)
-    {
-        Matrix4 view, projection;
-        camera->GetViewMatrix(&view);
-        camera->GetProjectionMatrix(&projection);
-        GL::SetViewMatrix(view);
-        GL::SetProjectionMatrix(projection);
-    }
+    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
+    sp->Bind();
+    GL::ApplyContextToShaderProgram(sp);
 
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
     gb->BindTextureBuffersTo(sp);
@@ -105,15 +95,10 @@ void Renderer::Render() const
 
 void Renderer::RenderWithMaterial(Material *_mat) const
 {
-    Material *mat = _mat ? _mat : Material::GetMissingMaterial();
-
     Bind();
 
-    ShaderProgram *sp = mat->GetShaderProgram();
-    sp->Bind();
+    Material *mat = _mat ? _mat : Material::GetMissingMaterial();
     mat->Bind();
-
-    GL::ApplyToShaderProgram(sp);
 
     #ifdef BANG_EDITOR
     GraphicPipeline *gp = GraphicPipeline::GetActive();
@@ -129,7 +114,6 @@ void Renderer::RenderWithMaterial(Material *_mat) const
         RenderWithoutMaterial();
     }
 
-    sp->UnBind();
     UnBind();
 }
 

@@ -89,13 +89,6 @@ void Gizmos::SetBillboard()
 #endif
 }
 
-void Gizmos::SetScreenSpaceMode()
-{
-#ifdef BANG_EDITOR
-    Gizmos::GetEditorGizmosGameObject()->SetScreenSpaceMode(true);
-#endif
-}
-
 void Gizmos::RenderCustomMesh(Mesh *m)
 {
 #ifdef BANG_EDITOR

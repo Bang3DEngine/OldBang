@@ -13,12 +13,6 @@
 
 void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
 {
-    sp->Bind();
-
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera();
-    sp->SetVec3("B_CameraPositionWorld",
-                cam->gameObject->transform->GetPosition());
-
     sp->SetMat4("B_Model",    m_modelMatrix);
     sp->SetMat4("B_ModelInv", m_modelMatrix.Inversed());
 
@@ -26,7 +20,6 @@ void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
                                        m_modelMatrix.c1.xyz(),
                                        m_modelMatrix.c2.xyz());
     normalMatrix = glm::inverse( glm::transpose(normalMatrix) );
-    // Matrix4 normalMatrix = m_modelMatrix.Inversed().Transposed();
     sp->SetMat3("B_Normal",    normalMatrix);
     sp->SetMat3("B_NormalInv", glm::inverse( normalMatrix ));
 
@@ -38,8 +31,6 @@ void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
 
     Matrix4 pvmMatrix = m_projectionMatrix * m_viewMatrix * m_modelMatrix;
     sp->SetMat4("B_PVM", pvmMatrix);
-
-    sp->UnBind();
 }
 
 void GLContext::Render(const VAO* vao, GL::RenderMode renderMode,

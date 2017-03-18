@@ -89,6 +89,15 @@ void Camera::SetProjectionMode(Camera::ProjectionMode projMode)
     this->m_projMode = projMode;
 }
 
+void Camera::Bind() const
+{
+    Matrix4 view, projection;
+    GetViewMatrix(&view);
+    GetProjectionMatrix(&projection);
+    GL::SetViewMatrix(view);
+    GL::SetProjectionMatrix(projection);
+}
+
 const Color &Camera::GetClearColor() const
 {
     return m_clearColor;

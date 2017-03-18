@@ -10,6 +10,7 @@
 #include "Material.h"
 #include "Transform.h"
 #include "SceneManager.h"
+#include "ShaderProgram.h"
 #include "RectTransform.h"
 #include "AssetsManager.h"
 #include "GraphicPipeline.h"
@@ -195,6 +196,7 @@ void UIText::RenderText() const
     GameObject *originalParent = gameObject->parent;
     gameObject->SetParent(nullptr);
 
+    m_material->GetShaderProgram()->SetBool("B_IdentityViewProj", true);
 
     float totalAdvX = 0.0f;
     const float hSpacingNDC = m_horizontalSpacing * textSizeNDC.x;
@@ -222,6 +224,8 @@ void UIText::RenderText() const
         char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
         totalAdvX += GetNDCAdvance(c, nextChar) + hSpacingNDC;
     }
+
+    m_material->GetShaderProgram()->SetBool("B_IdentityViewProj", false);
 
     rtransCopy->CloneInto(rtrans);
     delete copyGo;

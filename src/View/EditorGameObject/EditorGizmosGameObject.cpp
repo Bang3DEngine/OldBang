@@ -15,6 +15,7 @@
 #include "MeshFactory.h"
 #include "MeshRenderer.h"
 #include "SceneManager.h"
+#include "ShaderProgram.h"
 #include "AssetsManager.h"
 #include "CircleRenderer.h"
 #include "GraphicPipeline.h"
@@ -107,12 +108,6 @@ void EditorGizmosGameObject::SetReceivesLighting(bool receivesLighting)
     }
 }
 
-void EditorGizmosGameObject::SetScreenSpaceMode(bool screenSpaceMode)
-{
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera();
-    cam->SetIdentityMode(screenSpaceMode);
-}
-
 void EditorGizmosGameObject::SetBillboard()
 {
     Scene *scene = SceneManager::GetActiveScene();
@@ -190,8 +185,6 @@ void EditorGizmosGameObject::RenderFillRect(const Rect &r,
     MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(mr);
     mr->SetMesh(m_planeMesh);
 
-    Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ASSERT(cam);
-    cam->SetIdentityMode(true);
     Gizmos::SetPosition( Vector3(r.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(r.GetSize(), 1) );
 
@@ -199,8 +192,10 @@ void EditorGizmosGameObject::RenderFillRect(const Rect &r,
     mat->SetTexture(nullptr);
     mat->SetDiffuseColor(fillColor);
 
+    SetScreenSpaceMode(mat, true);
     Gizmos::Render(mr);
     Reset();
+    SetScreenSpaceMode(mat, false);
 }
 
 void EditorGizmosGameObject::RenderCircle(float radius)
@@ -257,10 +252,12 @@ void EditorGizmosGameObject::RenderScreenIcon(const Texture2D *texture,
 
     SetDrawWireframe(false);
     SetReceivesLighting(false);
-    mr->GetMaterial()->SetTexture(texture);
-    SetScreenSpaceMode();
+    Material *mat = mr->GetMaterial();
+    mat->SetTexture(texture);
+    SetScreenSpaceMode(mat, true);
     Render(mr);
     Reset();
+    SetScreenSpaceMode(mat, false);
 }
 
 void EditorGizmosGameObject::RenderLine(const Vector3 &origin,
@@ -280,11 +277,19 @@ void EditorGizmosGameObject::RenderLine(const Vector3 &origin,
 void EditorGizmosGameObject::RenderScreenLine(const Vector2 &origin,
                                               const Vector2 &destiny)
 {
-    SetScreenSpaceMode(true);
-    bool resetAllowedBefore = m_resetAllowed;
-    SetResetAllowed(false);
-    RenderLine( Vector3(origin, 0), Vector3(destiny, 0) );
-    SetResetAllowed(resetAllowedBefore);
+    SingleLineRenderer *slr = GetComponent<SingleLineRenderer>();
+    slr->SetOrigin( Vector3(origin, 0) );
+    slr->SetDestiny( Vector3(destiny, 0) );
+
+    transform->SetPosition(Vector3::Zero);
+    transform->SetScale(Vector3::One);
+
+    Material *mat = slr->GetMaterial();
+
+    SetScreenSpaceMode(mat, true);
+    Render(slr);
+    SetScreenSpaceMode(mat, false);
+
     Reset();
 }
 
@@ -401,7 +406,6 @@ void EditorGizmosGameObject::Reset()
     SetLineWidth(1.0f);
     SetReceivesLighting(false);
     SetDrawWireframe(false);
-    SetScreenSpaceMode(false);
 
     List<Renderer*> renderers = GetComponents<Renderer>();
     for (Renderer *rend : renderers)
@@ -428,6 +432,12 @@ void EditorGizmosGameObject::Render(Renderer *rend)
     {
         sfb->RenderForSelectionBuffer(rend);
     }
+}
+
+void EditorGizmosGameObject::SetScreenSpaceMode(Material *mat,
+                                                bool screenSpaceMode)
+{
+    mat->GetShaderProgram()->SetBool("B_IdentityViewProj", screenSpaceMode);
 }
 
 bool EditorGizmosGameObject::IsGizmoRenderer(Renderer *rend)

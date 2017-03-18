@@ -34,6 +34,7 @@ public:
     GL::BindTarget GetGLBindTarget() const override;
 
     bool SetFloat(const String &name, float v) const;
+    bool SetBool(const String &name, bool v) const;
     bool SetVec2(const String &name, const Vector2& v) const;
     bool SetVec3(const String &name, const Vector3& v) const;
     bool SetVec4(const String &name, const Vector4& v) const;

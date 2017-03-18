@@ -42,7 +42,7 @@ void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
     // Intersect with light rect to draw exactly what we need
     Camera *cam = SceneManager::GetActiveScene()->GetCamera();
     Rect improvedRenderRect = renderRect; //Rect::Intersection(GetRenderRect(cam), renderRect);
-    GL::ApplyToShaderProgram(m_lightMaterialScreen->GetShaderProgram());
+    GL::ApplyContextToShaderProgram(m_lightMaterialScreen->GetShaderProgram());
     gbuffer->ApplyPass(m_lightMaterialScreen->GetShaderProgram(),
                        false,
                        improvedRenderRect);
