@@ -33,6 +33,7 @@ public:
     void UnBind() const override;
     GL::BindTarget GetGLBindTarget() const override;
 
+    bool SetInt(const String &name, int v) const;
     bool SetFloat(const String &name, float v) const;
     bool SetBool(const String &name, bool v) const;
     bool SetVec2(const String &name, const Vector2& v) const;

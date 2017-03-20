@@ -84,13 +84,25 @@ GL::BindTarget ShaderProgram::GetGLBindTarget() const
     return GL::BindTarget::ShaderProgram;
 }
 
+bool ShaderProgram::SetInt(const String &name, int v) const
+{
+    int location = GetUniformLocation(name);
+    if (location >= 0)
+    {
+        Bind();
+        glUniform1i(location, v);
+        UnBind();
+    }
+    return (location >= 0);
+}
+
 bool ShaderProgram::SetFloat(const String &name, float v) const
 {
     int location = GetUniformLocation(name);
     if (location >= 0)
     {
         Bind();
-        glUniform1fv(location, 1, &v);
+        glUniform1f(location, v);
         UnBind();
     }
     return (location >= 0);

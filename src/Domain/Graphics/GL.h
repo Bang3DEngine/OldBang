@@ -47,6 +47,13 @@ public:
         VBO
     };
 
+    enum class ViewProjMode
+    {
+        UseBoth            = 0,
+        OnlyFixAspectRatio = 1,
+        IgnoreBoth         = 2
+    };
+
     static void ClearError();
     static bool CheckError(int line = 0, const String &func = "",
                            const String &file = "");
@@ -63,6 +70,7 @@ public:
     static void SetViewport(int x, int y, int width, int height);
     static void SetLineWidth(float lineWidth);
 
+    static void SetViewProjMode(ViewProjMode mode);
     static void SetWriteDepth(bool writeDepth);
     static void SetTestDepth(bool testDepth);
     static void SetWireframe(bool wireframe);

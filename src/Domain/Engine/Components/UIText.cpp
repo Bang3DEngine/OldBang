@@ -196,7 +196,7 @@ void UIText::RenderText() const
     GameObject *originalParent = gameObject->parent;
     gameObject->SetParent(nullptr);
 
-    m_material->GetShaderProgram()->SetBool("B_IdentityViewProj", true);
+    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
 
     float totalAdvX = 0.0f;
     const float hSpacingNDC = m_horizontalSpacing * textSizeNDC.x;
@@ -225,7 +225,7 @@ void UIText::RenderText() const
         totalAdvX += GetNDCAdvance(c, nextChar) + hSpacingNDC;
     }
 
-    m_material->GetShaderProgram()->SetBool("B_IdentityViewProj", false);
+    GL::SetViewProjMode(GL::ViewProjMode::UseBoth);
 
     rtransCopy->CloneInto(rtrans);
     delete copyGo;

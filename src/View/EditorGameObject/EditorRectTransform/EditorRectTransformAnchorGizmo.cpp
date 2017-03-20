@@ -52,21 +52,17 @@ void EditorRectTransformAnchorGizmo::OnUpdate()
 
 void EditorRectTransformAnchorGizmo::OnDrawGizmos(bool depthed, bool overlay)
 {
-    RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
-    ASSERT(rtrans);
-    ASSERT(EditorState::GetCurrentTransformMode() ==
-           EditorState::RectTransform);
-
+    ASSERT(EditorState::GetCurrentTransformMode() == EditorState::RectTransform);
     if (overlay)
     {
-        const Vector2 anchorCenter = GetAnchorCenter();
-        const Vector2 anchorSize = Vector2(c_anchorSize);
-        const Rect anchorRect(anchorCenter - anchorSize,
-                              anchorCenter + anchorSize);
-
         Gizmos::SetColor( m_anchorColor );
         Gizmos::SetRotation( GetAnchorRotation() );
-        Gizmos::RenderScreenIcon(m_anchorTexture, anchorRect);
+
+        const Vector2 anchorCenter = GetAnchorCenter();
+        const Rect anchorRect(anchorCenter - c_anchorSize,
+                              anchorCenter + c_anchorSize);
+
+        Gizmos::RenderScreenIcon(m_anchorTexture, anchorRect, true);
     }
 }
 

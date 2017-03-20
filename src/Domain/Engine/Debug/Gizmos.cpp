@@ -137,11 +137,12 @@ void Gizmos::RenderIcon(const Texture2D *texture,
 }
 
 void Gizmos::RenderScreenIcon(const Texture2D *texture,
-                              const Rect &screenRect)
+                              const Rect &screenRect,
+                              bool fixAspectRatio)
 {
 #ifdef BANG_EDITOR
     Gizmos::GetEditorGizmosGameObject()->
-            RenderScreenIcon(texture, screenRect);
+            RenderScreenIcon(texture, screenRect, fixAspectRatio);
 #endif
 }
 

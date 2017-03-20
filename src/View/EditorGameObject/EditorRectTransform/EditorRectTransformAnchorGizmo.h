@@ -1,6 +1,7 @@
 #ifndef EDITORRECTTRANSFORMANCHORGIZMO_H
 #define EDITORRECTTRANSFORMANCHORGIZMO_H
 
+#include "Vector2.h"
 #include "EditorGizmo.h"
 
 class Texture2D;
@@ -27,7 +28,7 @@ private:
     RectTransform *m_attachedRectTransform = nullptr;
     Texture2D *m_anchorTexture = nullptr;
 
-    const float c_anchorSize = 0.05f;
+    const Vector2 c_anchorSize = 0.05f * Vector2(1, 1.25);
     Color m_anchorColor = Color::Zero;
     AnchorPosition m_anchorPosition = AnchorPosition::TopLeft;
 

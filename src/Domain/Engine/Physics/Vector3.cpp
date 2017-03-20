@@ -159,11 +159,14 @@ Vector2 Vector3::xy() const
 
 
 
-
-
 Vector3 operator*(Quaternion q, const Vector3 &rhs)
 {
     return Vector3(q * glm::vec3(rhs.x, rhs.y, rhs.z));
+}
+
+Vector3 operator*(const Vector3 &lhs, Quaternion q)
+{
+    return Vector3(glm::vec3(lhs.x, lhs.y, lhs.z) * q);
 }
 
 

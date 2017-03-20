@@ -90,12 +90,12 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
         const Rect circleBorderRect(circleCenter - circleSize * borderColor,
                                     circleCenter + circleSize * borderColor);
         Gizmos::SetColor(Color::White);
-        Gizmos::RenderScreenIcon(m_circleTexture, circleBorderRect);
+        Gizmos::RenderScreenIcon(m_circleTexture, circleBorderRect, true);
 
         const Rect circleRect(circleCenter - circleSize,
                               circleCenter + circleSize);
         Gizmos::SetColor(m_cornerColor);
-        Gizmos::RenderScreenIcon(m_circleTexture, circleRect);
+        Gizmos::RenderScreenIcon(m_circleTexture, circleRect, true);
     }
 }
 

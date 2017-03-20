@@ -6,7 +6,9 @@
 #include "VAO.h"
 #include "Debug.h"
 #include "Scene.h"
+#include "Screen.h"
 #include "Camera.h"
+#include "Matrix4.h"
 #include "Transform.h"
 #include "SceneManager.h"
 #include "ShaderProgram.h"
@@ -29,7 +31,34 @@ void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
     sp->SetMat4("B_Projection",    m_projectionMatrix);
     sp->SetMat4("B_ProjectionInv", m_projectionMatrix.Inversed());
 
-    Matrix4 pvmMatrix = m_projectionMatrix * m_viewMatrix * m_modelMatrix;
+    Matrix4 pvmMatrix;
+    if (m_viewProjMode == GL::ViewProjMode::UseBoth)
+    {
+        pvmMatrix = m_projectionMatrix * m_viewMatrix * m_modelMatrix;
+    }
+    else if (m_viewProjMode == GL::ViewProjMode::OnlyFixAspectRatio)
+    {
+        Matrix4 modelTranslate( Vector4(1,0,0,0),
+                                Vector4(0,1,0,0),
+                                Vector4(0,0,1,0),
+                                m_modelMatrix.c3);
+
+        Matrix4 modelNoTranslate = m_modelMatrix;
+        modelNoTranslate.SetTranslate( Vector3(0,0,0) );
+
+        float ar = 1.0f / Screen::GetAspectRatio();
+        Matrix4 fixAR(ar, 0, 0, 0,
+                       0, 1, 0, 0,
+                       0, 0, 1, 0,
+                       0, 0, 0, 1);
+
+        pvmMatrix = modelTranslate * fixAR * modelNoTranslate;
+    }
+    else if (m_viewProjMode == GL::ViewProjMode::IgnoreBoth)
+    {
+        pvmMatrix = m_modelMatrix;
+    }
+
     sp->SetMat4("B_PVM", pvmMatrix);
 }
 
@@ -39,6 +68,11 @@ void GLContext::Render(const VAO* vao, GL::RenderMode renderMode,
     vao->Bind();
     glDrawArrays( static_cast<GLint>(renderMode), startIndex, elementsCount);
     vao->UnBind();
+}
+
+void GLContext::SetViewProjMode(GL::ViewProjMode mode)
+{
+    m_viewProjMode = mode;
 }
 
 void GLContext::SetWriteDepth(bool writeDepth)

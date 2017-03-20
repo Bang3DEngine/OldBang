@@ -222,8 +222,7 @@ Matrix4 RectTransform::GetLocalToParentMatrix(
 
     Vector3 moveToAnchorCenterV(
                 (maxMarginedAnchor + minMarginedAnchor) * 0.5f, 0);
-    Matrix4 moveToAnchorCenter =
-            Matrix4::TranslateMatrix(moveToAnchorCenterV);
+    Matrix4 moveToAnchorCenter = Matrix4::TranslateMatrix(moveToAnchorCenterV);
 
     //bool beforeHasChanged = m_hasChanged;
     //Matrix4 rotScaleTransform = Transform::GetLocalToParentMatrix();

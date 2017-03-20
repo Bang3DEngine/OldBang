@@ -80,9 +80,6 @@ void EditorRotateAxis::OnUpdate()
                                                        &m_sAnchorPoint1,
                                                        &anchorIndex1);
 
-            Debug::DrawScreenLine(Vector2::Zero, m_sAnchorPoint0, Color::Green);
-            Debug::DrawScreenLine(Vector2::Zero, m_sAnchorPoint1, Color::Red);
-
             // This is needed to properly compute the rotation
             if (anchorIndex1 < anchorIndex0)
             {

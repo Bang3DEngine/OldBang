@@ -76,6 +76,11 @@ void GL::SetLineWidth(float lineWidth)
     glLineWidth(lineWidth);
 }
 
+void GL::SetViewProjMode(GL::ViewProjMode mode)
+{
+    GL::GetGLContext()->SetViewProjMode(mode);
+}
+
 void GL::SetWriteDepth(bool writeDepth)
 {
     GL::GetGLContext()->SetWriteDepth(writeDepth);

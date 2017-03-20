@@ -192,10 +192,9 @@ void EditorGizmosGameObject::RenderFillRect(const Rect &r,
     mat->SetTexture(nullptr);
     mat->SetDiffuseColor(fillColor);
 
-    SetScreenSpaceMode(mat, true);
+    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     Gizmos::Render(mr);
     Reset();
-    SetScreenSpaceMode(mat, false);
 }
 
 void EditorGizmosGameObject::RenderCircle(float radius)
@@ -218,17 +217,17 @@ void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
     if (billboard)
     {
         Camera *cam = SceneManager::GetActiveScene()->GetCamera();
-        Vector3 camPos = cam->transform->GetPosition();
 
+        Vector3 camPos = cam->transform->GetPosition();
         float distScale = 1.0f;
         if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
         {
            Vector3 pos = transform->GetPosition();
            distScale = Vector3::Distance(camPos, pos);
         }
-
         Vector3 scale = transform->GetScale();
         transform->SetScale(distScale * scale);
+
         transform->LookInDirection(cam->transform->GetForward(),
                                    cam->transform->GetUp());
     }
@@ -238,7 +237,8 @@ void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
 }
 
 void EditorGizmosGameObject::RenderScreenIcon(const Texture2D *texture,
-                                              const Rect &screenRect)
+                                              const Rect &screenRect,
+                                              bool fixAspectRatio)
 {
     MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(m_planeMesh);
     ASSERT(mr->GetMaterial());
@@ -247,17 +247,14 @@ void EditorGizmosGameObject::RenderScreenIcon(const Texture2D *texture,
     Gizmos::SetPosition( Vector3(screenRect.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(screenRect.GetSize(), 1) );
 
-    float ar = Screen::GetAspectRatio();
-    transform->SetLocalScaleAfterRotation( Vector3(1.0f / ar, 1, 1) );
-
     SetDrawWireframe(false);
     SetReceivesLighting(false);
     Material *mat = mr->GetMaterial();
     mat->SetTexture(texture);
-    SetScreenSpaceMode(mat, true);
+    GL::SetViewProjMode(fixAspectRatio ? GL::ViewProjMode::OnlyFixAspectRatio :
+                                         GL::ViewProjMode::IgnoreBoth);
     Render(mr);
     Reset();
-    SetScreenSpaceMode(mat, false);
 }
 
 void EditorGizmosGameObject::RenderLine(const Vector3 &origin,
@@ -286,10 +283,8 @@ void EditorGizmosGameObject::RenderScreenLine(const Vector2 &origin,
 
     Material *mat = slr->GetMaterial();
 
-    SetScreenSpaceMode(mat, true);
+    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     Render(slr);
-    SetScreenSpaceMode(mat, false);
-
     Reset();
 }
 
@@ -401,11 +396,11 @@ void EditorGizmosGameObject::Reset()
     SetPosition(Vector3::Zero);
     SetRotation(Quaternion::Identity);
     SetScale(Vector3::One);
-    transform->SetLocalScaleAfterRotation( Vector3::One );
     SetColor(Color::Green);
     SetLineWidth(1.0f);
     SetReceivesLighting(false);
     SetDrawWireframe(false);
+    GL::SetViewProjMode(GL::ViewProjMode::UseBoth);
 
     List<Renderer*> renderers = GetComponents<Renderer>();
     for (Renderer *rend : renderers)
@@ -432,12 +427,6 @@ void EditorGizmosGameObject::Render(Renderer *rend)
     {
         sfb->RenderForSelectionBuffer(rend);
     }
-}
-
-void EditorGizmosGameObject::SetScreenSpaceMode(Material *mat,
-                                                bool screenSpaceMode)
-{
-    mat->GetShaderProgram()->SetBool("B_IdentityViewProj", screenSpaceMode);
 }
 
 bool EditorGizmosGameObject::IsGizmoRenderer(Renderer *rend)

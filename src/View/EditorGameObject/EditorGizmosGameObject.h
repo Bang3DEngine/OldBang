@@ -29,7 +29,8 @@ public:
     void RenderFillRect(const Rect &r, const Color &fillColor);
     void RenderCircle(float radius);
     void RenderIcon(const Texture2D *texture, bool billboard);
-    void RenderScreenIcon(const Texture2D *texture, const Rect &screenRect);
+    void RenderScreenIcon(const Texture2D *texture, const Rect &screenRect,
+                          bool fixAspectRatio);
     void RenderLine(const Vector3 &origin, const Vector3 &destiny);
     void RenderScreenLine(const Vector2 &origin, const Vector2 &destiny);
     void RenderRay(const Vector3 &origin, const Vector3 &rayDir);
@@ -50,7 +51,6 @@ private:
     bool m_inited = false;
     bool m_resetAllowed = true;
 
-    void SetScreenSpaceMode(Material *mat, bool screenSpaceMode);
     bool IsGizmoRenderer(Renderer *rend);
 
     friend class Gizmos;

@@ -26,6 +26,7 @@ public:
     void Render(const VAO* vao, GL::RenderMode renderMode,
                 int elementsCount, int startIndex) const;
 
+    void SetViewProjMode(GL::ViewProjMode mode);
     void SetWriteDepth(bool writeDepth);
     void SetTestDepth(bool testDepth);
     void SetWireframe(bool wireframe);
@@ -51,6 +52,7 @@ private:
     GL::CullMode m_cullMode = GL::CullMode::None;
     Map<GL::BindTarget, std::stack<GLId> > m_glBoundIds;
 
+    GL::ViewProjMode m_viewProjMode = GL::ViewProjMode::UseBoth;
     Matrix4 m_modelMatrix, m_viewMatrix, m_projectionMatrix;
 
     void OnBind(GL::BindTarget bindTarget, GLId glId);

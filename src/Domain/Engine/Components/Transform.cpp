@@ -116,14 +116,6 @@ void Transform::RotateEuler(const Vector3 &degreesEuler)
     SetEuler(GetEuler() + degreesEuler);
 }
 
-void Transform::SetLocalScaleAfterRotation(const Vector3 &s)
-{
-    m_hasChanged = true;
-    m_localScaleAfterRotation = s;
-}
-
-
-
 void Transform::SetScale(float s)
 {
     SetScale(Vector3(s));
@@ -221,11 +213,10 @@ const Matrix4 &Transform::GetLocalToParentMatrix() const
     if (m_hasChanged)
     {
         Matrix4 T  = Matrix4::TranslateMatrix(GetLocalPosition());
-        Matrix4 SR = Matrix4::ScaleMatrix(m_localScaleAfterRotation);
         Matrix4 R  = Matrix4::RotateMatrix(GetLocalRotation());
         Matrix4 S  = Matrix4::ScaleMatrix(GetLocalScale());
 
-        m_localToParentMatrix = T * SR * R * S;
+        m_localToParentMatrix = T * R * S;
         m_hasChanged = false;
     }
     return m_localToParentMatrix;
