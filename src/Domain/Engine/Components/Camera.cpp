@@ -263,7 +263,6 @@ void Camera::Read(const XMLNode &xmlInfo)
 void Camera::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
-    xmlInfo->SetTagName("Camera");
 
     xmlInfo->SetColor("ClearColor", GetClearColor());
     xmlInfo->SetFloat("ZNear", GetZNear());

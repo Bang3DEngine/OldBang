@@ -133,7 +133,6 @@ void Texture2D::Read(const XMLNode &xmlInfo)
 void Texture2D::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetTagName("Texture2D");
 
     xmlInfo->SetFilepath("ImageFilepath", m_imageFilepath, "jpg png bmp");
 

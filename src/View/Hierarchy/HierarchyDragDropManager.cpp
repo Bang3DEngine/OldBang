@@ -30,15 +30,20 @@ QTreeWidgetItem *HierarchyDragDropManager::GetDropTargetItem() const
     return m_hierarchy->itemAt(pos);
 }
 
-void HierarchyDragDropManager::GetDropTargetGameObject(GameObject **dropTargetGameObject,
-                                                       bool *above, bool *below) const
+void HierarchyDragDropManager::GetDropTargetGameObject(
+                                            GameObject **dropTargetGameObject,
+                                            bool *above, bool *below) const
 {
     QTreeWidgetItem *targetItem = GetDropTargetItem();
 
-    QTreeWidget::DropIndicatorPosition dropPos = m_hierarchy->dropIndicatorPosition();
+    QTreeWidget::DropIndicatorPosition dropPos =
+            m_hierarchy->dropIndicatorPosition();
     *dropTargetGameObject = m_hierarchy->GetGameObjectFromItem(targetItem);
     *below = (dropPos == QTreeWidget::BelowItem);
     *above = (dropPos == QTreeWidget::AboveItem);
+    if (*below) { Debug_Log("Below of " << dropTargetGameObject); }
+    if (*above) { Debug_Log("Above of " << dropTargetGameObject); }
+    Debug_Log("-------------");
 }
 
 void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
@@ -68,15 +73,10 @@ void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
         }
         else if (ddi.sourceObject == m_hierarchy)
         {
-            OnDropHereFromHierarchy(ddi);
+            m_hierarchy->UpdateSceneFromHierarchy();
+            m_hierarchy->UpdateHierarchyFromScene();
         }
     }
-}
-
-void HierarchyDragDropManager::OnDropHereFromHierarchy(const DragDropInfo &ddi)
-{
-    m_hierarchy->UpdateSceneFromHierarchy();
-    m_hierarchy->UpdateHierarchyFromScene();
 }
 
 void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
@@ -90,8 +90,9 @@ void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
         bool above, below;
         GetDropTargetGameObject(&dropTargetGameObject, &above, &below);
         GameObject *aboveGameObject = dropTargetGameObject;
-        dropTargetGameObject = dropTargetGameObject ? dropTargetGameObject->parent :
-                                                      SceneManager::GetActiveScene();
+        dropTargetGameObject =
+                dropTargetGameObject ? dropTargetGameObject->parent :
+                                       SceneManager::GetActiveScene();
         ASSERT(dropTargetGameObject);
 
         Prefab *prefab = new Prefab();

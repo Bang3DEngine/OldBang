@@ -55,7 +55,6 @@ void SingleLineRenderer::Read(const XMLNode &xmlInfo)
 void SingleLineRenderer::Write(XMLNode *xmlInfo) const
 {
     LineRenderer::Write(xmlInfo);
-    xmlInfo->SetTagName("SingleLineRenderer");
 
     xmlInfo->SetVector3("Origin", GetOrigin());
     xmlInfo->SetVector3("Destiny", GetDestiny());

@@ -225,7 +225,6 @@ void Renderer::Read(const XMLNode &xmlInfo)
 void Renderer::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
-    xmlInfo->SetTagName("Renderer");
 
     Material *sharedMat = GetSharedMaterial();
     if (sharedMat)

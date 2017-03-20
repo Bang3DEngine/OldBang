@@ -49,9 +49,9 @@ Rect UIRenderer::GetBoundingRect(Camera *camera) const
 
 void UIRenderer::RenderWithoutMaterial() const
 {
-    glDisable(GL_DEPTH_TEST);
+    GL::SetTestDepth(false);
     MeshRenderer::RenderWithoutMaterial();
-    glEnable(GL_DEPTH_TEST);
+    GL::SetTestDepth(true);
 }
 
 void UIRenderer::Read(const XMLNode &xmlInfo)

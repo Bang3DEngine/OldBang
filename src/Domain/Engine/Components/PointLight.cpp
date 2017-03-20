@@ -66,7 +66,6 @@ void PointLight::Read(const XMLNode &xmlInfo)
 void PointLight::Write(XMLNode *xmlInfo) const
 {
     Light::Write(xmlInfo);
-    xmlInfo->SetTagName("PointLight");
     xmlInfo->SetFloat("Range", m_range);
 }
 

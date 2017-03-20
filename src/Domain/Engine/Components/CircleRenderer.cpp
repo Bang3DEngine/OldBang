@@ -71,7 +71,6 @@ void CircleRenderer::Read(const XMLNode &xmlInfo)
 void CircleRenderer::Write(XMLNode *xmlInfo) const
 {
     LineRenderer::Write(xmlInfo);
-    xmlInfo->SetTagName("CircleRenderer");
 
     xmlInfo->SetFloat("Radius", GetRadius());
     xmlInfo->SetInt("Segments", GetSegments());

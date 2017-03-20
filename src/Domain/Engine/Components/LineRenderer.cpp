@@ -80,5 +80,4 @@ void LineRenderer::Read(const XMLNode &xmlInfo)
 void LineRenderer::Write(XMLNode *xmlInfo) const
 {
     Renderer::Write(xmlInfo);
-    xmlInfo->SetTagName("LineRenderer");
 }

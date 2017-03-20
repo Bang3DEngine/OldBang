@@ -78,5 +78,4 @@ void DirectionalLight::Read(const XMLNode &xmlInfo)
 void DirectionalLight::Write(XMLNode *xmlInfo) const
 {
     Light::Write(xmlInfo);
-    xmlInfo->SetTagName("DirectionalLight");
 }

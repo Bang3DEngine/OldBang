@@ -138,7 +138,6 @@ void AudioClip::Read(const XMLNode &xmlInfo)
 void AudioClip::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetTagName("AudioClip");
     xmlInfo->SetFilepath("AudioFilepath", m_audioFileFilepath, "ogg wav");
 }
 

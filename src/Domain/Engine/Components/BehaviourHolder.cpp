@@ -155,7 +155,6 @@ void BehaviourHolder::Read(const XMLNode &xmlInfo)
 void BehaviourHolder::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
-    xmlInfo->SetTagName("BehaviourHolder");
 
     xmlInfo->SetFilepath("BehaviourScript", m_sourceFilepath, "cpp");
 

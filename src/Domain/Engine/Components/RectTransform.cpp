@@ -262,6 +262,4 @@ void RectTransform::Write(XMLNode *xmlInfo) const
     xmlInfo->GetAttribute("Position")->SetProperty(XMLProperty::Hidden);
     xmlInfo->GetAttribute("Rotation")->SetProperty(XMLProperty::Hidden);
     xmlInfo->GetAttribute("Scale")->SetProperty(XMLProperty::Hidden);
-
-    xmlInfo->SetTagName( GetClassName() );
 }

@@ -79,7 +79,6 @@ void Material::Read(const XMLNode &xmlInfo)
 void Material::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetTagName("Material");
 
     xmlInfo->SetColor("DiffuseColor", GetDiffuseColor());
     xmlInfo->SetFloat("Shininess", GetShininess());

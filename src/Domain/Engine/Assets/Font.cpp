@@ -56,7 +56,6 @@ void Font::Read(const XMLNode &xmlInfo)
 void Font::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
-    xmlInfo->SetTagName("Font");
     xmlInfo->SetFilepath("FontFilepath", m_fontFilepath,
                          Font::GetFileExtensionStatic());
 }

@@ -73,7 +73,6 @@ void MeshRenderer::Read(const XMLNode &xmlInfo)
 void MeshRenderer::Write(XMLNode *xmlInfo) const
 {
     Renderer::Write(xmlInfo);
-    xmlInfo->SetTagName("MeshRenderer");
 
     if (!GetDrawWireframe())
     {

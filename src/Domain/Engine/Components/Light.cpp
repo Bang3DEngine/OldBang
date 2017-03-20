@@ -91,7 +91,6 @@ void Light::Read(const XMLNode &xmlInfo)
 void Light::Write(XMLNode *xmlInfo) const
 {
     Component::Write(xmlInfo);
-    xmlInfo->SetTagName("Light");
 
     xmlInfo->SetFloat("Intensity", GetIntensity());
     xmlInfo->SetColor("Color", GetColor());

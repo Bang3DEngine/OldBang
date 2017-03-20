@@ -27,7 +27,6 @@ private:
     virtual void OnDragStart(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
-    void OnDropHereFromHierarchy(const DragDropInfo &ddi);
     void OnDropHereFromExplorer(const File &f, const DragDropInfo &ddi);
 
 public:
