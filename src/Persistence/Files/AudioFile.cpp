@@ -15,8 +15,8 @@ AudioFile::AudioFile(const QFileSystemModel *model, const QModelIndex &index)
 
 const QPixmap& AudioFile::GetIcon() const
 {
-    return IconManager::LoadPixmap("./Icons/AudioIcon.png",
-                                   IconManager::IconOverlay::Data, true);
+    String path = IO::ToAbsolute("./Icons/AudioIcon.png", true);
+    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Data);
 }
 
 #ifdef BANG_EDITOR

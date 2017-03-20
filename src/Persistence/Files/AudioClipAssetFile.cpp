@@ -27,8 +27,8 @@ AudioClipAssetFile::AudioClipAssetFile(
 
 const QPixmap& AudioClipAssetFile::GetIcon() const
 {
-    return IconManager::LoadPixmap("./Icons/AudioClipIcon.png",
-                                   IconManager::IconOverlay::Asset, true);
+    String path = IO::ToAbsolute("./Icons/AudioClipIcon.png", true);
+    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Asset);
 }
 
 #ifdef BANG_EDITOR

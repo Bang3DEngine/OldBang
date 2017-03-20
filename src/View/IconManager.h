@@ -26,9 +26,10 @@ public:
 
     IconManager();
 
-    static const QPixmap& LoadPixmap(const String &path,
-                                     IconOverlay overlay = IconOverlay::None,
-                                     bool isEnginePath = false);
+    static const QImage& LoadImage(const String &absPath,
+                                   IconOverlay overlay = IconOverlay::None);
+    static const QPixmap& LoadPixmap(const String &absPath,
+                                     IconOverlay overlay = IconOverlay::None);
     static const QPixmap& LoadMaterialPixmap(const Material *mat);
 
     static void InvalidatePixmap(Material *mat);
@@ -46,17 +47,18 @@ private:
         Multiplicative = QPainter::CompositionMode_Multiply
     };
 
-    QPixmap m_overlayAsset, m_overlayData;
+    QImage m_overlayAsset, m_overlayData, m_materialBase;
 
+    Map<String, QImage> m_images;
     Map<String, QPixmap> m_pixmaps;
 
-    static QPixmap AddPixmapOverlay(const QPixmap& pm, IconOverlay overlay);
-    static QPixmap BlendPixmaps(const QPixmap &pmBase, const QPixmap &pmOver,
-                                float pmOverOpacity, BlendMode blendMode);
-    static QPixmap BlendColor(const QPixmap &pmBase, const Color &color,
-                              BlendMode blendMode);
+    static QImage AddImageOverlay(const QImage& img, IconOverlay overlay);
+    static QImage BlendImages(const QImage &imgBase, const QImage &imgOver,
+                              float imgOverOpacity, BlendMode blendMode);
+    static QImage BlendColor(const QImage &imgBase, const Color &color,
+                             BlendMode blendMode);
 
-    static QPixmap SetQPixmapAlpha(const QPixmap &base, float alpha);
+    static QImage SetQImageAlpha(const QImage &base, float alpha);
 
     static String GetStringId(const String &absPath, IconOverlay overlay);
 

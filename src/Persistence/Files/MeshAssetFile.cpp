@@ -25,8 +25,8 @@ MeshAssetFile::MeshAssetFile(
 
 const QPixmap& MeshAssetFile::GetIcon() const
 {
-    return IconManager::LoadPixmap("./Icons/MeshAssetIcon.png",
-                                   IconManager::IconOverlay::Asset, true);
+    String path = IO::ToAbsolute("./Icons/MeshAssetIcon.png", true);
+    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Asset);
 }
 
 #ifdef BANG_EDITOR

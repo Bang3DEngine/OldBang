@@ -20,8 +20,8 @@ MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex &index)
 
 const QPixmap& MeshFile::GetIcon() const
 {
-    return IconManager::LoadPixmap("./Icons/MeshAssetIcon.png",
-                                   IconManager::IconOverlay::Data, true);
+    String path = IO::ToAbsolute("./Icons/MeshAssetIcon.png", true);
+    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Data);
 }
 
 #ifdef BANG_EDITOR

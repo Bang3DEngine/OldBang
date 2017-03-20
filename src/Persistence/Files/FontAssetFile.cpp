@@ -20,8 +20,8 @@ FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &i
 
 const QPixmap& FontAssetFile::GetIcon() const
 {
-    return IconManager::LoadPixmap("./Icons/LetterIcon.png",
-                                   IconManager::IconOverlay::Asset, true);
+    String path = IO::ToAbsolute("./Icons/LetterIcon.png", true);
+    return IconManager::LoadPixmap(path, IconManager::IconOverlay::Asset);
 }
 
 #ifdef BANG_EDITOR

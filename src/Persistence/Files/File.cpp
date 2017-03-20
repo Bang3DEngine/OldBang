@@ -223,31 +223,31 @@ String File::GetContents() const
 
 const QPixmap& File::GetIcon() const
 {
-    String fp = "";
+    String absPath = "";
     if (IsPrefabAsset())
     {
-        fp = IO::ToAbsolute("./Icons/PrefabAssetIcon.png", true);
+        absPath = IO::ToAbsolute("./Icons/PrefabAssetIcon.png", true);
     }
     else if (IsBehaviour())
     {
-        fp = IO::ToAbsolute("./Icons/BehaviourIcon.png", true);
+        absPath = IO::ToAbsolute("./Icons/BehaviourIcon.png", true);
     }
     else if (IsScene())
     {
-        fp = IO::ToAbsolute("./Icons/SceneIcon.png", true);
+        absPath = IO::ToAbsolute("./Icons/SceneIcon.png", true);
     }
     else if (IsFontAssetFile())
     {
-        fp = IO::ToAbsolute("./Icons/LetterIcon.png", true);
+        absPath = IO::ToAbsolute("./Icons/LetterIcon.png", true);
     }
     else
     {
-        fp = IO::ToAbsolute("./Icons/OtherFileIcon.png", true);
+        absPath = IO::ToAbsolute("./Icons/OtherFileIcon.png", true);
     }
 
     // Its a texture, the icon is the image itself
     const QPixmap &pm =
-         IconManager::LoadPixmap(fp, IconManager::IconOverlay::None, false);
+         IconManager::LoadPixmap(absPath, IconManager::IconOverlay::None);
     return pm;
 }
 

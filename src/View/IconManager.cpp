@@ -8,10 +8,12 @@
 
 IconManager::IconManager()
 {
-    m_overlayAsset = QPixmap(
+    m_overlayAsset = QImage(
               IO::ToAbsolute("Icons/AssetDistinctor.png", true).ToQString());
-    m_overlayData = QPixmap(
+    m_overlayData = QImage(
               IO::ToAbsolute("Icons/NoAssetDistinctor.png", true).ToQString());
+    m_materialBase = QImage(
+              IO::ToAbsolute("Icons/MaterialAssetIcon.png", true).ToQString());
 
     m_overlayAsset = m_overlayAsset.scaled(
                 32, 32, Qt::KeepAspectRatio,
@@ -31,22 +33,37 @@ IconManager *IconManager::GetInstance()
     return SingletonManager::Get<IconManager>();
 }
 
-const QPixmap& IconManager::LoadPixmap(const String &path,
-                                       IconOverlay overlay,
-                                       bool isEnginePath)
+const QImage &IconManager::LoadImage(const String &absPath,
+                                     IconManager::IconOverlay overlay)
 {
     IconManager *im = GetInstance();
-    String absPath = IO::ToAbsolute(path, isEnginePath);
     String id = IconManager::GetStringId(absPath, overlay);
     if (!im->m_pixmaps.ContainsKey(id))
     {
-        QPixmap pm(absPath.ToQString());
+        QImage img = (overlay == IconOverlay::None) ?
+                            QImage(absPath.ToQString())
+                          : IconManager::LoadImage(absPath, IconOverlay::None);
+        img = img.scaled(256, 256, Qt::KeepAspectRatio,
+                         Qt::TransformationMode::SmoothTransformation);
+
         if (overlay != IconOverlay::None)
         {
-            pm = AddPixmapOverlay(pm, overlay);
+            img = AddImageOverlay(img, overlay);
         }
-        im->m_pixmaps.Set(id, pm);
+
+        im->m_images.Set(id, img);
+        im->m_pixmaps.Set(id, QPixmap::fromImage(img));
     }
+    return im->m_images.Get(id);
+}
+
+
+const QPixmap& IconManager::LoadPixmap(const String &absPath,
+                                       IconOverlay overlay)
+{
+    IconManager *im = GetInstance();
+    IconManager::LoadImage(absPath, overlay);
+    String id = IconManager::GetStringId(absPath, overlay);
     return im->m_pixmaps.Get(id);
 }
 
@@ -58,11 +75,12 @@ void IconManager::InvalidatePixmap(Material *mat)
 void IconManager::InvalidatePixmap(const String &absPath)
 {
     IconManager *im = GetInstance();
-    List<String> ids = im->m_pixmaps.GetKeys();
+    List<String> ids = im->m_images.GetKeys();
     for (const String &id : ids)
     {
         if ( id.Contains(absPath) )
         {
+            im->m_images.Remove(id);
             im->m_pixmaps.Remove(id);
         }
     }
@@ -75,92 +93,110 @@ const QPixmap &IconManager::LoadMaterialPixmap(const Material *mat)
     String id = IconManager::GetStringId(matPath, IconOverlay::None);
     if (!im->m_pixmaps.ContainsKey(id))
     {
-        QPixmap result =
-            IconManager::LoadPixmap("Icons/MaterialAssetIcon.png",
-                                    IconOverlay::None, true);
+        QImage result = im->m_materialBase;
 
         const Texture2D *tex = mat->GetTexture();
         if (tex)
         {
-            const QPixmap& texturePixmap =
-                    IconManager::LoadPixmap(tex->GetImageFilepath(),
-                                            IconOverlay::None);
-            result = IconManager::BlendPixmaps(result, texturePixmap, 0.6f,
-                                               BlendMode::Blend);
+            const QImage& textureImg =
+                    IconManager::LoadImage(tex->GetImageFilepath(),
+                                           IconOverlay::None);
+            result = IconManager::BlendImages(result, textureImg, 0.6f,
+                                              BlendMode::Blend);
         }
 
-        //result = IconManager::BlendColor(result, mat->GetDiffuseColor(),
-        //                                 BlendMode::Multiplicative);
-        result =  IconManager::AddPixmapOverlay(result, IconOverlay::Asset);
+        result = IconManager::BlendColor(result, mat->GetDiffuseColor(),
+                                         BlendMode::Multiplicative);
+        result =  IconManager::AddImageOverlay(result, IconOverlay::Asset);
 
-        im->m_pixmaps.Set(id, result);
+        im->m_images.Set(id, result);
+        im->m_pixmaps.Set( id, QPixmap::fromImage(result) );
     }
 
     return im->m_pixmaps.Get(id);
 }
 
-
-QPixmap IconManager::AddPixmapOverlay(const QPixmap& pixmap, IconOverlay overlay)
+QImage IconManager::AddImageOverlay(const QImage& img, IconOverlay overlay)
 {
     IconManager *im = IconManager::GetInstance();
 
-    QPixmap *overlayPM = nullptr;
-    if (overlay == IconOverlay::Asset) { overlayPM = &im->m_overlayAsset; }
-    else if (overlay == IconOverlay::Data) { overlayPM = &im->m_overlayData; }
+    QImage *overlayImg = nullptr;
+    if (overlay == IconOverlay::Asset) { overlayImg = &im->m_overlayAsset; }
+    else if (overlay == IconOverlay::Data) { overlayImg = &im->m_overlayData; }
 
-    const float pixmapAR      = float(overlayPM->width()) / overlayPM->height();
+    const float pixmapAR      = float(overlayImg->width()) /
+                                      overlayImg->height();
     const float overlaySize   = overlay == IconOverlay::Asset ? 0.4f : 0.3f;
-    const float overlayWidth  = pixmap.width()  * overlaySize;
+    const float overlayWidth  = img.width()  * overlaySize;
     const float overlayHeight = overlayWidth / pixmapAR;
-    const float overlayX      = pixmap.width()  - overlayWidth;
-    const float overlayY      = pixmap.height() - overlayHeight;
+    const float overlayX      = img.width()  - overlayWidth;
+    const float overlayY      = img.height() - overlayHeight;
 
-    QPixmap result(pixmap);
+    QImage result(img);
     QPainter painter;
     painter.begin(&result);
     painter.setCompositionMode( static_cast<CompMode>( BlendMode::Over ) );
-    painter.drawPixmap(overlayX, overlayY, overlayWidth, overlayHeight,
-                       *overlayPM);
+    painter.drawImage(overlayX, overlayY, *overlayImg,
+                      overlayWidth, overlayHeight);
     painter.end();
     return result;
 }
 
-QPixmap IconManager::SetQPixmapAlpha(const QPixmap &base, float alpha)
+QImage IconManager::SetQImageAlpha(const QImage &base, float alpha)
 {
-    QImage image(base.size(), QImage::Format_ARGB32_Premultiplied);
+    QImage image(base.size(), QImage::Format_ARGB32);
 
     image.fill(Qt::transparent);
     QPainter painter(&image);
     painter.setOpacity(alpha);
-    painter.drawPixmap(0, 0, base);
+    painter.drawImage(0, 0, base);
     painter.end();
 
-    return QPixmap::fromImage(image);
+    return image;
 }
 
-QPixmap IconManager::BlendPixmaps(const QPixmap &pmBase, const QPixmap &pmOver,
-                                  float pmOverOpacity, BlendMode blendMode)
+QImage IconManager::BlendImages(const QImage &imgBase, const QImage &imgOver,
+                                float imgOverOpacity, BlendMode blendMode)
 {
-    QPixmap result(pmBase);
-    QPixmap over = IconManager::SetQPixmapAlpha(pmOver, pmOverOpacity);
-    over = over.scaled(pmBase.width(), pmBase.height());
+    QImage result(imgBase);
+    QImage over = IconManager::SetQImageAlpha(imgOver, imgOverOpacity);
+    over = over.scaled(imgBase.width(), imgBase.height());
 
-    QPainter painter;
-    painter.begin(&result);
-    painter.setCompositionMode( static_cast<CompMode>(blendMode) );
-    painter.drawPixmap(0, 0, over.width(), over.height(), over);
-    painter.end();
+    if (blendMode == BlendMode::Multiplicative)
+    {
+        for (int i = 0; i < result.height(); ++i)
+        {
+            for (int j = 0; j < result.width(); ++j)
+            {
+                Color srcColor  = Color::FromQColor( result.pixel(j, i) );
+                srcColor.a = qAlpha(result.pixel(j, i)) / 255.0f;
+                Color overColor = Color::FromQColor( over.pixel(j, i) );
 
+                QColor totalColor = (srcColor * overColor).ToQColor();
+                result.setPixel(j, i, qRgba(totalColor.red(),
+                                            totalColor.green(),
+                                            totalColor.blue(),
+                                            totalColor.alpha()));
+            }
+        }
+    }
+    else
+    {
+        QPainter painter;
+        painter.begin(&result);
+        painter.setCompositionMode( static_cast<CompMode>(blendMode) );
+        painter.drawImage(0, 0, over);
+        painter.end();
+    }
     return result;
 }
 
-QPixmap IconManager::BlendColor(const QPixmap &pmBase, const Color &color,
+QImage IconManager::BlendColor(const QImage &imgBase, const Color &color,
                                 BlendMode blendMode)
 {
-    QImage img(1, 1, QImage::Format_ARGB32_Premultiplied);
-    img.fill( color.ToQColor() );
-    QPixmap colorPM = QPixmap::fromImage(img);
-    return BlendPixmaps(pmBase, colorPM, color.a, blendMode);
+    QImage colorImg(1, 1, QImage::Format_ARGB32);
+    colorImg.fill( color.ToQColor() );
+    return BlendImages(imgBase, colorImg, color.a, blendMode);
 }
 
 QPixmap IconManager::CenterPixmapInEmptyPixmap(QPixmap& emptyPixmap,
