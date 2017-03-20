@@ -1,14 +1,17 @@
 #include "MaterialAssetFile.h"
 
 #include "IO.h"
+#include "Material.h"
 #include "XMLParser.h"
 #include "IconManager.h"
+#include "AssetsManager.h"
 
 #ifdef BANG_EDITOR
 #include "MaterialAssetFileInspectable.h"
 #endif
 
-MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModelIndex &index) :
+MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model,
+                                     const QModelIndex &index) :
     File(model, index)
 {
     XMLNode *xmlInfo;
@@ -27,8 +30,8 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model, const QModel
 
 const QPixmap& MaterialAssetFile::GetIcon() const
 {
-    return IconManager::LoadPixmap("./Icons/MaterialAssetIcon.png",
-                                   IconManager::IconOverlay::Asset, true);
+    Material *mat = AssetsManager::Load<Material>( GetAbsolutePath() );
+    return IconManager::LoadMaterialPixmap(mat);
 }
 
 #ifdef BANG_EDITOR

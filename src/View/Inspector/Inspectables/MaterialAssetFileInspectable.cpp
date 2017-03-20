@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "Material.h"
 #include "Renderer.h"
+#include "IconManager.h"
 #include "SceneManager.h"
 #include "AssetsManager.h"
 
@@ -30,4 +31,6 @@ void MaterialAssetFileInspectable::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("MaterialAssetFileInspectable");
     *xmlInfo = m_xmlInfo;
+
+    IconManager::InvalidatePixmap( m_materialAssetFile.GetAbsolutePath() );
 }
