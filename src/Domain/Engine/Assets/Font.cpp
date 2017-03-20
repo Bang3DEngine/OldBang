@@ -57,7 +57,8 @@ void Font::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
     xmlInfo->SetTagName("Font");
-    xmlInfo->SetFilepath("FontFilepath", m_fontFilepath, Font::GetFileExtensionStatic());
+    xmlInfo->SetFilepath("FontFilepath", m_fontFilepath,
+                         Font::GetFileExtensionStatic());
 }
 
 const Font::CharGlyphMetrics &Font::GetCharacterMetrics(unsigned char c)
@@ -75,8 +76,10 @@ int Font::GetKerningX(char leftChar, char rightChar)
     if (!FT_HAS_KERNING(m_freetypeFace)) { return -1; }
 
     FT_Vector kerning;
-    int leftGlyphIndex  = FontSheetCreator::GetGlyphIndex(m_freetypeFace,  leftChar);
-    int rightGlyphIndex = FontSheetCreator::GetGlyphIndex(m_freetypeFace, rightChar);
+    int leftGlyphIndex  = FontSheetCreator::GetGlyphIndex(m_freetypeFace,
+                                                          leftChar);
+    int rightGlyphIndex = FontSheetCreator::GetGlyphIndex(m_freetypeFace,
+                                                          rightChar);
     int error = FT_Get_Kerning(m_freetypeFace,
                                leftGlyphIndex, rightGlyphIndex,
                                FT_KERNING_DEFAULT, &kerning);

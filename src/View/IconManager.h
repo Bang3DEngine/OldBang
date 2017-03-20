@@ -47,7 +47,8 @@ private:
         Multiplicative = QPainter::CompositionMode_Multiply
     };
 
-    QImage m_overlayAsset, m_overlayData, m_materialBase;
+    QPixmap m_overlayAsset, m_overlayData;
+    QImage m_materialBase;
 
     Map<String, QImage> m_images;
     Map<String, QPixmap> m_pixmaps;

@@ -8,9 +8,9 @@
 
 IconManager::IconManager()
 {
-    m_overlayAsset = QImage(
+    m_overlayAsset = QPixmap(
               IO::ToAbsolute("Icons/AssetDistinctor.png", true).ToQString());
-    m_overlayData = QImage(
+    m_overlayData = QPixmap(
               IO::ToAbsolute("Icons/NoAssetDistinctor.png", true).ToQString());
     m_materialBase = QImage(
               IO::ToAbsolute("Icons/MaterialAssetIcon.png", true).ToQString());
@@ -120,12 +120,12 @@ QImage IconManager::AddImageOverlay(const QImage& img, IconOverlay overlay)
 {
     IconManager *im = IconManager::GetInstance();
 
-    QImage *overlayImg = nullptr;
-    if (overlay == IconOverlay::Asset) { overlayImg = &im->m_overlayAsset; }
-    else if (overlay == IconOverlay::Data) { overlayImg = &im->m_overlayData; }
+    QPixmap *overlayPM = nullptr;
+    if (overlay == IconOverlay::Asset) { overlayPM = &im->m_overlayAsset; }
+    else if (overlay == IconOverlay::Data) { overlayPM = &im->m_overlayData; }
 
-    const float pixmapAR      = float(overlayImg->width()) /
-                                      overlayImg->height();
+    const float pixmapAR      = float(overlayPM->width()) /
+                                      overlayPM->height();
     const float overlaySize   = overlay == IconOverlay::Asset ? 0.4f : 0.3f;
     const float overlayWidth  = img.width()  * overlaySize;
     const float overlayHeight = overlayWidth / pixmapAR;
@@ -136,8 +136,8 @@ QImage IconManager::AddImageOverlay(const QImage& img, IconOverlay overlay)
     QPainter painter;
     painter.begin(&result);
     painter.setCompositionMode( static_cast<CompMode>( BlendMode::Over ) );
-    painter.drawImage(overlayX, overlayY, *overlayImg,
-                      overlayWidth, overlayHeight);
+    painter.drawPixmap(overlayX, overlayY, overlayWidth, overlayHeight,
+                       *overlayPM);
     painter.end();
     return result;
 }
