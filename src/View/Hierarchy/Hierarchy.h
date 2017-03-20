@@ -54,6 +54,8 @@ public:
     void DeleteGameObjectItem(GameObject *go);
     void Print(QTreeWidgetItem *item = nullptr, const String &indent = "");
 
+    void dropEvent(QDropEvent *e) override;
+
     QSize sizeHint() const override;
 
 public slots:
@@ -72,7 +74,8 @@ public slots:
     void OnDeleteClicked();
     void OnSelectionChanged();
     void _NotifyHierarchyGameObjectSelectionChanged();
-    void _NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item, int column);
+    void _NotifyHierarchyGameObjectDoubleClicked(QTreeWidgetItem *item,
+                                                 int column);
 
 private slots:
     void UpdateHierarchyFromScene();

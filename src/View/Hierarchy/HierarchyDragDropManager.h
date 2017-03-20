@@ -8,9 +8,12 @@ class Hierarchy;
 class GameObject;
 class HierarchyDragDropManager : public IDragDropListener
 {
+public:
+    HierarchyDragDropManager(Hierarchy *hierarchy);
+    bool AcceptDrop();
+
 private:
-    Hierarchy *m_hierarchy;
-    GameObject *m_draggingStartGameObject = nullptr;
+    Hierarchy *p_hierarchy;
 
     QTreeWidgetItem *GetDropTargetItem() const;
 
@@ -27,10 +30,8 @@ private:
     virtual void OnDragStart(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
-    void OnDropHereFromExplorer(const File &f, const DragDropInfo &ddi);
 
-public:
-    HierarchyDragDropManager(Hierarchy *hierarchy);
+    void OnDropHereFromExplorer(const File &f, const DragDropInfo &ddi);
 
 };
 

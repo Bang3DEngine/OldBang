@@ -435,7 +435,6 @@ void Hierarchy::OnToggleClicked()
 
 void Hierarchy::OnRenameClicked()
 {
-    Debug_Log("Rename clicked!");
     QTreeWidgetItem *selected = GetFirstSelectedItem();
     if (selected)
     {
@@ -515,6 +514,12 @@ void Hierarchy::Print(QTreeWidgetItem *item, const String &indent)
         String indent2 = indent; indent2 += "   ";
         Print(it, indent2);
     }
+}
+
+void Hierarchy::dropEvent(QDropEvent *e)
+{
+    DragDropQTreeWidget::dropEvent(e);
+    e->setAccepted(m_hDragDropManager.AcceptDrop());
 }
 
 QSize Hierarchy::sizeHint() const
