@@ -22,14 +22,13 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    void SetTexture(Texture2D *imageTexture);
+    void SetImage(Texture2D *imageTexture);
 
-    Texture2D *GetTexture() const;
+    Texture2D *GetImage() const;
 
 private:
+    Material *m_materialCopy = nullptr;
     Texture2D *m_imageTexture = nullptr;
-
-    virtual void Bind() const override;
 };
 
 #endif // UIIMAGE_H

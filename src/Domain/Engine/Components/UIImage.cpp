@@ -12,8 +12,10 @@
 
 UIImage::UIImage()
 {
-    SetMaterial( AssetsManager::Load<Material>("Materials/UI/G_UIImage.bmat",
-                                               true) );
+    m_materialCopy = new Material( *AssetsManager::Load<Material>(
+                                        "Materials/UI/G_UIImage.bmat", true) );
+    SetMaterial(m_materialCopy);
+
     m_materialSP = AssetsManager::Load<Material>("Materials/UI/SP_UIImage.bmat",
                                                  true);
 
@@ -23,31 +25,23 @@ UIImage::UIImage()
 
 UIImage::~UIImage()
 {
+    delete m_materialCopy;
 }
 
 void UIImage::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
     UIImage *img = Object::SCast<UIImage>(clone);
-    img->SetTexture( GetTexture() );
+    img->SetImage( GetImage() );
 }
 
-void UIImage::Bind() const
-{
-    UIRenderer::Bind();
-    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
-    sp->SetFloat("B_AlphaCutoff", !m_imageTexture ?
-                                  1 : m_imageTexture->GetAlphaCutoff());
-    sp->SetBool("B_HasTexture", m_imageTexture != nullptr);
-    sp->SetTexture("B_Texture0", m_imageTexture);
-}
-
-void UIImage::SetTexture(Texture2D *imageTexture)
+void UIImage::SetImage(Texture2D *imageTexture)
 {
     m_imageTexture = imageTexture;
+    m_material->SetTexture(m_imageTexture);
 }
 
-Texture2D *UIImage::GetTexture() const
+Texture2D *UIImage::GetImage() const
 {
     return m_imageTexture;
 }
@@ -56,7 +50,7 @@ void UIImage::Read(const XMLNode &xmlInfo)
 {
     UIRenderer::Read(xmlInfo);
     String texFilepath = xmlInfo.GetFilepath("Image");
-    m_imageTexture = AssetsManager::Load<Texture2D>(texFilepath);
+    SetImage( AssetsManager::Load<Texture2D>(texFilepath) );
 }
 
 void UIImage::Write(XMLNode *xmlInfo) const
@@ -65,7 +59,7 @@ void UIImage::Write(XMLNode *xmlInfo) const
 
     String texFilepath = m_imageTexture ? m_imageTexture->GetFilepath() : "";
     xmlInfo->SetFilepath("Image", texFilepath,
-                         Texture2D::GetFileExtensionStatic(), {});
+                         Texture2D::GetFileExtensionStatic());
 
     xmlInfo->GetAttribute("Mesh")->SetProperty({XMLProperty::Hidden});
     xmlInfo->GetAttribute("Material")->SetProperty({XMLProperty::Hidden});

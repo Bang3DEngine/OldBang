@@ -29,9 +29,9 @@ UIRenderer::~UIRenderer()
 
 void UIRenderer::Bind() const
 {
-    MeshRenderer::Bind();
-
     GL::SetViewProjMode( GL::ViewProjMode::IgnoreBoth );
+
+    MeshRenderer::Bind();
 
     ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     sp->SetColor("B_Tint", m_tint);

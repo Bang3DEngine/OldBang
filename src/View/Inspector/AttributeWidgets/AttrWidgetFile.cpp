@@ -1,15 +1,15 @@
-#include "AttrWidgetFile.h"
+﻿#include "AttrWidgetFile.h"
 
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QPushButton>
 
+#include "IO.h"
 #include "File.h"
 #include "Dialog.h"
 #include "Explorer.h"
 #include "Hierarchy.h"
 #include "Application.h"
-#include "IO.h"
 #include "EditorWindow.h"
 #include "InspectorWidget.h"
 #include "DialogBrowseAssetFile.h"
@@ -93,7 +93,8 @@ void AttrWidgetFile::RefreshIcon()
     if (f)
     {
         const QPixmap& pm = f->GetIcon();
-        QPixmap pmCopy = pm.scaled(16, 16, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QPixmap pmCopy = pm.scaled(16, 16, Qt::IgnoreAspectRatio,
+                                   Qt::SmoothTransformation);
         m_iconLabel->setPixmap(pmCopy);
         delete f;
     }
@@ -123,7 +124,7 @@ void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
     RefreshIcon();
 }
 
-String  AttrWidgetFile::GetValue()
+String AttrWidgetFile::GetValue()
 {
     return m_filepath;
 }
@@ -196,6 +197,7 @@ void AttrWidgetFile::OnDoubleClick()
 {
     ASSERT(IO::ExistsFile(m_filepath));
     ASSERT(!IO::IsEngineFile(m_filepath));
+    ASSERT( m_filepath.BeginsWith( IO::GetProjectRootAbs() ) );
     Explorer::GetInstance()->SelectFile(m_filepath);
 }
 

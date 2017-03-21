@@ -110,7 +110,7 @@ bool ShaderProgram::SetFloat(const String &name, float v) const
 
 bool ShaderProgram::SetBool(const String &name, bool v) const
 {
-    return SetFloat(name, v ? 1.0f : 0.0f);
+    return SetInt(name, v ? 1 : 0);
 }
 
 bool ShaderProgram::SetVec2 (const String &name, const Vector2& v) const

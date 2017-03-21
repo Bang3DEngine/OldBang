@@ -25,6 +25,8 @@ UIText::UIText() : UIRenderer()
     SetMaterial( AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
                                                true) );
     SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
+
+    m_content = "Hello Bang";
 }
 
 UIText::~UIText()

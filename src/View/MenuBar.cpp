@@ -348,7 +348,7 @@ void MenuBar::OnCreateUIImage() const
     UIImage *img = go->AddComponent<UIImage>();
     String defaultImgPath = "Textures/DefaultUIImageTexture.btex2d";
     Texture2D *defaultTex = AssetsManager::Load<Texture2D>(defaultImgPath, true);
-    img->SetTexture(defaultTex);
+    img->SetImage(defaultTex);
 
     RectTransform *rt = go->GetComponent<RectTransform>();
     rt->SetAnchors(Vector2(-0.3f), Vector2(0.3f));

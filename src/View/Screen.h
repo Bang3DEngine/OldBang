@@ -61,8 +61,7 @@ public slots:
     void OnPasteClicked();
     void OnDuplicateClicked();
     void OnDeleteClicked();
-
-#endif
+    #endif
 
 private:
     LocalShortcut m_copyShortcut, m_pasteShortcut,
