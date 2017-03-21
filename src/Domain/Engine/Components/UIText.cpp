@@ -196,7 +196,6 @@ void UIText::RenderText() const
     GameObject *originalParent = gameObject->parent;
     gameObject->SetParent(nullptr);
 
-    GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
 
     float totalAdvX = 0.0f;
     const float hSpacingNDC = m_horizontalSpacing * textSizeNDC.x;
@@ -205,6 +204,7 @@ void UIText::RenderText() const
         char c = m_content[i];
         if ( IsValidChar(c) )
         {
+            GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
             Rect charNDCRect = GetNDCRectOfChar(c, screenRectNDC);
             Vector2 charNDCRectMin = charNDCRect.GetMin();
             Vector2 charNDCRectMax = charNDCRect.GetMax();

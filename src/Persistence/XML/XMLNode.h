@@ -70,6 +70,10 @@ public:
     void SetButton(const String &attributeName,
                    IAttrWidgetButtonListener* listener,
                    const Array<XMLProperty>& properties = {});
+    #else
+    // Dummy function
+    void SetButton(const String &attributeName, void* listener,
+                   const Array<XMLProperty>& properties = {}) {}
     #endif
 
     void RemoveAttribute(const String& attributeName);

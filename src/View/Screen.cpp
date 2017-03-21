@@ -312,22 +312,4 @@ void Screen::OnDrop(const DragDropInfo &ddi)
     m_lastGameObjectOvered = nullptr;
     m_gameObjectBeingDragged = nullptr;
 }
-
-void Screen::OnCopyClicked()
-{
-    Hierarchy::GetInstance()->m_hContextMenu.OnCopyClicked();
-}
-void Screen::OnPasteClicked()
-{
-    Hierarchy::GetInstance()->m_hContextMenu.OnPasteClicked();
-}
-void Screen::OnDuplicateClicked()
-{
-    Hierarchy::GetInstance()->m_hContextMenu.OnDuplicateClicked();
-}
-void Screen::OnDeleteClicked()
-{
-    Hierarchy::GetInstance()->m_hContextMenu.OnDeleteClicked();
-}
-
 #endif

@@ -39,7 +39,7 @@ void UIRenderer::Bind() const
 
 void UIRenderer::UnBind() const
 {
-    //GL::SetViewProjMode( GL::ViewProjMode::UseBoth );
+    GL::SetViewProjMode( GL::ViewProjMode::UseBoth );
     MeshRenderer::UnBind();
 }
 
@@ -57,11 +57,9 @@ Rect UIRenderer::GetBoundingRect(Camera *camera) const
 
 void UIRenderer::RenderWithoutMaterial() const
 {
-    glDisable(GL_DEPTH_TEST);
-    //GL::SetTestDepth(false);
+    GL::SetTestDepth(false);
     MeshRenderer::RenderWithoutMaterial();
-    //GL::SetTestDepth(true);
-    glEnable(GL_DEPTH_TEST);
+    GL::SetTestDepth(true);
 }
 
 void UIRenderer::Read(const XMLNode &xmlInfo)
