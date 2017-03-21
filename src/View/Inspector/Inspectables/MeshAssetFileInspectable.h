@@ -10,6 +10,8 @@ class MeshAssetFileInspectable : public SerializableObject
 public:
     MeshAssetFileInspectable(const MeshAssetFile &meshFile);
 
+    const QPixmap& GetIcon() const override;
+
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

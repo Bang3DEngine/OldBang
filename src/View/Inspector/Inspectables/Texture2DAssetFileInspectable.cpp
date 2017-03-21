@@ -1,7 +1,7 @@
 #include "Texture2DAssetFileInspectable.h"
 
-#include "Texture2D.h"
 #include "IO.h"
+#include "Texture2D.h"
 #include "AssetsManager.h"
 
 Texture2DAssetFileInspectable::Texture2DAssetFileInspectable
@@ -12,9 +12,15 @@ Texture2DAssetFileInspectable::Texture2DAssetFileInspectable
     XMLNode *xmlTexInfo = XMLParser::FromFile(m_fileTex.GetRelativePath());
     if (xmlTexInfo)
     {
-        m_xmlInfo = *xmlTexInfo; // We can do this safely, xmlTexInfo wont have children.
+        // We can do this safely, xmlTexInfo wont have children.
+        m_xmlInfo = *xmlTexInfo;
         delete xmlTexInfo;
     }
+}
+
+const QPixmap &Texture2DAssetFileInspectable::GetIcon() const
+{
+    return Texture2D::GetIconStatic();
 }
 
 void Texture2DAssetFileInspectable::Read(const XMLNode &xmlInfo)

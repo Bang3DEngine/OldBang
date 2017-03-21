@@ -12,6 +12,7 @@ class CircleRenderer : public LineRenderer
 {
     OBJECT(CircleRenderer)
     ICLONEABLE(CircleRenderer)
+    COMPONENT_ICON(CircleRenderer, "Icons/eye.png")
 
 public:
     virtual ~CircleRenderer();

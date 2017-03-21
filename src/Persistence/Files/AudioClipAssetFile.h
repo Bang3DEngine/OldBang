@@ -13,6 +13,7 @@ class AudioClipAssetFile : public File
 public:
     AudioClipAssetFile(const QFileSystemModel *model,
                        const QModelIndex &index);
+
     virtual const QPixmap& GetIcon() const override;
 
     #ifdef BANG_EDITOR

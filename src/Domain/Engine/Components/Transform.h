@@ -15,6 +15,7 @@ class Transform : public Component
 {
     OBJECT(Transform)
     ICLONEABLE(Transform)
+    COMPONENT_ICON(Transform, "Icons/TransformIcon.png")
 
 public:
     virtual void CloneInto(ICloneable *clone) const override;

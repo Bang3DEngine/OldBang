@@ -11,6 +11,7 @@ class DirectionalLight : public Light
 {
     OBJECT(DirectionalLight)
     ICLONEABLE(DirectionalLight)
+    COMPONENT_ICON(DirectionalLight, "Icons/DirectionalLightIcon.png")
 
 public:
     virtual void CloneInto(ICloneable *clone) const override;

@@ -59,6 +59,8 @@ Explorer::Explorer(QWidget *parent)
 
     m_labelCurrentPath = win->labelCurrentPath;
 
+    connect(m_buttonDirUp, SIGNAL(clicked()),
+            this, SLOT(OnButtonDirUpClicked()));
     connect(m_buttonChangeViewMode, SIGNAL(clicked()),
             this, SLOT(OnButtonChangeViewModeClicked()));
     connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
@@ -94,16 +96,7 @@ void Explorer::OnWindowShown()
 void Explorer::OnButtonDirUpClicked()
 {
     String rootPath = GetCurrentDir();
-    String parentDirPath = "";
-
-    for (int i = rootPath.Length() - 1; i >= 0; --i)
-    {
-        if (rootPath[i] == '/')
-        {
-            parentDirPath = rootPath.substr(0, i);
-            break;
-        }
-    }
+    String parentDirPath = IO::GetDirUp(rootPath);
     SetDir(parentDirPath);
 }
 

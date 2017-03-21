@@ -1,10 +1,16 @@
 #include "MeshFileInspectable.h"
 
+#include "Mesh.h"
 #include "XMLNode.h"
 
 MeshFileInspectable::MeshFileInspectable(const MeshFile &fileMesh) :
     m_fileMesh(fileMesh)
 {
+}
+
+const QPixmap &MeshFileInspectable::GetIcon() const
+{
+    return Mesh::GetIconStatic();
 }
 
 void MeshFileInspectable::Read(const XMLNode &xmlInfo)

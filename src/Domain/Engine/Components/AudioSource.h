@@ -21,6 +21,7 @@ class AudioSource : public Component
 {
     OBJECT(AudioSource)
     ICLONEABLE(AudioSource)
+    COMPONENT_ICON(AudioSource, "Icons/AudioIcon.png")
 
 public:
     enum State

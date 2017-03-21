@@ -2,27 +2,30 @@
 
 #include "Chrono.h"
 #include "Component.h"
+#include "IconManager.h"
 #include "EditorWindow.h"
 
 ComponentWidget::ComponentWidget(Component *relatedComponent) :
-    InspectorWidget(), m_cwContextMenu(this)
+    InspectorWidget(),
+    m_iconLabel(this),
+    m_cwContextMenu(this)
 {
     Chrono c;
     c.MarkEvent("Construct ComponentWidget " + relatedComponent->GetClassName());
-    p_relatedComponent = relatedComponent;
-    Init(p_relatedComponent->GetClassName(), p_relatedComponent);
+    p_component = relatedComponent;
+    InspectorWidget::Init(p_component->GetClassName(), p_component);
 
-    m_closed = p_relatedComponent->IsClosedInInspector();
+    m_closed = p_component->IsClosedInInspector();
     SetClosed(m_closed);
     UpdateCloseOpenButtonIcon();
 
-    if (!p_relatedComponent->GetClassName().Contains("Transform"))
+    if (!p_component->GetClassName().Contains("Transform"))
     {
-        m_enabledCheckbox.setChecked(p_relatedComponent->IsEnabled());
+        m_enabledCheckbox.setChecked(p_component->IsEnabled());
         connect(&m_enabledCheckbox, SIGNAL(clicked(bool)),
                 this, SLOT(OnEnabledCheckboxPressed(bool)));
-        m_header.addWidget(&m_enabledCheckbox, 0,
-                           Qt::AlignRight | Qt::AlignVCenter);
+        m_headerLayout.addWidget(&m_enabledCheckbox, 0,
+                                 Qt::AlignRight | Qt::AlignVCenter);
     }
     RefreshWidgetValues();
     c.Log();
@@ -39,14 +42,14 @@ int ComponentWidget::GetHeightSizeHint()
 
 void ComponentWidget::OnEnabledCheckboxPressed(bool checked)
 {
-    ASSERT(p_relatedComponent);
-    p_relatedComponent->SetEnabled(checked);
+    ASSERT(p_component);
+    p_component->SetEnabled(checked);
 }
 
 void ComponentWidget::SetClosed(bool closed)
 {
-    ASSERT(p_relatedComponent);
+    ASSERT(p_component);
     InspectorWidget::SetClosed(closed);
-    p_relatedComponent->SetClosedInInspector(closed);
+    p_component->SetClosedInInspector(closed);
 }
 

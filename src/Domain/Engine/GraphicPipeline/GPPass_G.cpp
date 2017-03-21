@@ -22,16 +22,22 @@ void GPPass_G::InPass(const List<Renderer*> &renderers,
     GPPass::InPass(renderers, sceneChildren);
 
     p_gbuffer->SetAllDrawBuffers();
-    if (m_transparentPass) { GL::SetWriteDepth(false); }
+    //if (m_transparentPass) { GL::SetWriteDepth(false); }
 
     p_gbuffer->SetStencilTest(false);
     p_gbuffer->SetStencilWrite(true);
     for (Renderer *rend : renderers)
     {
         if (!CanRender(rend)) { continue; }
+        if (rend->IsTransparent())
+        {
+            p_gbuffer->PrepareColorReadBuffer(
+                        rend->GetMaterial()->GetShaderProgram());
+            p_gbuffer->SetAllDrawBuffers();
+        }
         rend->Render();
     }
-    GL::SetWriteDepth(true);
+    //if (m_transparentPass) { GL::SetWriteDepth(true); }
 }
 
 bool GPPass_G::CanRender(const Renderer *renderer) const

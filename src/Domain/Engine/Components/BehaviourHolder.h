@@ -25,6 +25,7 @@ class BehaviourHolder : public Component
 {
     OBJECT(BehaviourHolder)
     ICLONEABLE(BehaviourHolder)
+    COMPONENT_ICON(BehaviourHolder, "Icons/BehaviourIcon.png")
 
 public:
     virtual ~BehaviourHolder();

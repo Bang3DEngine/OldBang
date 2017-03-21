@@ -196,5 +196,5 @@ void Material::Bind() const
     float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
     sp->SetTexture("B_Texture0",  m_texture);
     sp->SetFloat("B_AlphaCutoff", alphaCutoff);
-    sp->SetFloat("B_HasTexture",  m_texture ? 1 : 0);
+    sp->SetBool("B_HasTexture",  m_texture != nullptr);
 }

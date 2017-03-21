@@ -27,11 +27,16 @@ InspectorWidget::InspectorWidget()
 {
 }
 
-void InspectorWidget::Init(const String &title, SerializableObject *relatedInspectable)
+void InspectorWidget::Init(const String &title,
+                           SerializableObject *relatedInspectable)
 {
     m_relatedInspectable = relatedInspectable;
+
     XMLNode xmlInfo = GetInspectableXMLInfo();
     ConstructFromWidgetXMLInfo(title, xmlInfo);
+
+    SetIcon( relatedInspectable->GetIcon() );
+
     setAcceptDrops(true);
     RefreshWidgetValues();
 }
@@ -41,16 +46,19 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 {
     setVisible(false);
 
-    m_vLayout.addLayout(&m_header, 0);
+    m_vLayout.addLayout(&m_headerLayout, 0);
     m_vLayout.addLayout(&m_gridLayout, 99);
 
-    m_header.setSpacing(5);
-    m_header.addWidget(&m_closeOpenButton, 0, Qt::AlignLeft | Qt::AlignVCenter);
-    m_header.addWidget(&m_titleLabel,     99, Qt::AlignLeft | Qt::AlignVCenter);
+    m_headerLayout.setSpacing(5);
+    m_headerLayout.addWidget(&m_closeOpenButton, 0,
+                             Qt::AlignLeft | Qt::AlignVCenter);
+    m_headerLayout.addWidget(&m_titleLabel,     99,
+                             Qt::AlignLeft | Qt::AlignVCenter);
 
     m_gridLayout.setSpacing(0);
 
-    m_closeOpenButton.setStyleSheet("padding:0px; border: 0px; margin-left:-5px;");
+    m_closeOpenButton.setStyleSheet(
+                "padding:0px; border: 0px; margin-left:-5px;");
     QObject::connect(&m_closeOpenButton, SIGNAL(clicked()),
                      this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
@@ -71,7 +79,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
         // To refresh all the slots values
         QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
                          this, SLOT(RefreshWidgetValues()));
-        m_refreshTimer.start(10);
+        m_refreshTimer.start(50);
     }
 
     setLayout(&m_vLayout);
@@ -248,6 +256,14 @@ void InspectorWidget::RefreshWidgetValues()
         }
     }
     UpdateContentMargins();
+}
+
+void InspectorWidget::SetIcon(const QPixmap &icon)
+{
+    QPixmap pm = icon.scaled(16, 16, Qt::IgnoreAspectRatio,
+                             Qt::SmoothTransformation);
+    m_iconLabel.setPixmap(pm);
+    m_headerLayout.insertWidget(1, &m_iconLabel, 0, Qt::AlignCenter);
 }
 
 void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)

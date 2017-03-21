@@ -10,6 +10,7 @@ class MeshRenderer : public Renderer
 {
     OBJECT(MeshRenderer)
     ICLONEABLE(MeshRenderer)
+    COMPONENT_ICON(MeshRenderer, "Icons/eye.png")
 
 public:
     MeshRenderer();

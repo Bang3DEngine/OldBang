@@ -31,8 +31,16 @@ void UIRenderer::Bind() const
 {
     MeshRenderer::Bind();
 
+    GL::SetViewProjMode( GL::ViewProjMode::IgnoreBoth );
+
     ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     sp->SetColor("B_Tint", m_tint);
+}
+
+void UIRenderer::UnBind() const
+{
+    //GL::SetViewProjMode( GL::ViewProjMode::UseBoth );
+    MeshRenderer::UnBind();
 }
 
 void UIRenderer::CloneInto(ICloneable *clone) const
@@ -49,9 +57,11 @@ Rect UIRenderer::GetBoundingRect(Camera *camera) const
 
 void UIRenderer::RenderWithoutMaterial() const
 {
-    GL::SetTestDepth(false);
+    glDisable(GL_DEPTH_TEST);
+    //GL::SetTestDepth(false);
     MeshRenderer::RenderWithoutMaterial();
-    GL::SetTestDepth(true);
+    //GL::SetTestDepth(true);
+    glEnable(GL_DEPTH_TEST);
 }
 
 void UIRenderer::Read(const XMLNode &xmlInfo)

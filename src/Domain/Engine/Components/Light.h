@@ -13,6 +13,7 @@ class Light : public Component
 {
     OBJECT(Light)
     ICLONEABLE(Light)
+    COMPONENT_ICON(Light, "Icons/PointLightIcon.png")
 
 public:
     virtual void CloneInto(ICloneable *clone) const override;

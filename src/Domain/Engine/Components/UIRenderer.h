@@ -30,6 +30,7 @@ protected:
     virtual ~UIRenderer();
 
     virtual void Bind() const override;
+    virtual void UnBind() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
 };

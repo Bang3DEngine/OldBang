@@ -25,9 +25,10 @@ protected:
 
 private:
 
+    QLabel m_iconLabel;
     ComponentWidgetContextMenu m_cwContextMenu;
 
-    Component *p_relatedComponent = nullptr;
+    Component *p_component = nullptr;
     QCheckBox m_enabledCheckbox;
 
     friend class InspectorContextMenu;

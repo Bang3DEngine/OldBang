@@ -59,6 +59,11 @@ void AudioClipAssetFileInspectable::Write(XMLNode *xmlInfo) const
     }
 }
 
+const QPixmap &AudioClipAssetFileInspectable::GetIcon() const
+{
+    return AudioClip::GetIconStatic();
+}
+
 void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
 {
     String audioClipFilepath = m_audioClipAssetFile.GetAbsolutePath();

@@ -72,12 +72,9 @@ void Component::Write(XMLNode *xmlInfo) const
 
     xmlInfo->SetTagName( GetClassName() );
     xmlInfo->SetPointer("id", this,
-                        {XMLProperty::Hidden,
-                         XMLProperty::Readonly});
+                        {XMLProperty::Hidden, XMLProperty::Readonly});
     xmlInfo->SetBool("enabled", m_enabled,
-                     {XMLProperty::Hidden,
-                      XMLProperty::Readonly});
+                     {XMLProperty::Hidden, XMLProperty::Readonly});
     xmlInfo->SetBool("closedInInspector", IsClosedInInspector(),
-                     {XMLProperty::Hidden,
-                      XMLProperty::Readonly});
+                     {XMLProperty::Hidden, XMLProperty::Readonly});
 }

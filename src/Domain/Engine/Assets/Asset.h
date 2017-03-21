@@ -1,7 +1,9 @@
 #ifndef ASSET_H
 #define ASSET_H
 
+#include "IO.h"
 #include "IToString.h"
+#include "IconManager.h"
 #include "SerializableObject.h"
 
 #ifdef BANG_EDITOR
@@ -31,5 +33,17 @@ protected:
 
     friend class AssetsManager;
 };
+
+#define ASSET_ICON(CLASS, ICON_PATH) \
+public: \
+    static const QPixmap& GetIconStatic() \
+    {\
+        String path = IO::ToAbsolute(ICON_PATH, true); \
+        return IconManager::LoadPixmap(path); \
+    } \
+    const virtual QPixmap& GetIcon() const override \
+    { \
+        return CLASS::GetIconStatic(); \
+    }
 
 #endif // ASSET_H

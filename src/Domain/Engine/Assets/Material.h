@@ -9,6 +9,8 @@ class Texture2D;
 class ShaderProgram;
 class Material : public Asset
 {
+    ASSET_ICON(Material, "Icons/MaterialAssetIcon.png")
+
 public:
     Material();
     Material(const Material &m);

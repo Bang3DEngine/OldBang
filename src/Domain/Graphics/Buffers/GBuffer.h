@@ -29,10 +29,12 @@ public:
     virtual void BindTextureBuffersTo(ShaderProgram *sp) const;
 
     void ApplyPass(ShaderProgram *sp,
-                   bool copyColorBuffer = false,
+                   bool prepareReadFromColorBuffer = false,
                    const Rect &mask = Rect::ScreenRect);
     void RenderToScreen(AttachmentId attachmentId);
     void RenderToScreen();
+
+    void PrepareColorReadBuffer(ShaderProgram *sp);
 
     void SetAllDrawBuffers() const override;
     /**
@@ -58,6 +60,7 @@ private:
     RenderTexture *m_colorTexture     = nullptr;
     RenderTexture *m_colorReadTexture = nullptr;
 
+    mutable bool m_willReadFromColorRead = false;
     bool m_stencilWriteEnabled = false;
     bool m_stencilTestEnabled  = false;
 

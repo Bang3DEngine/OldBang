@@ -10,6 +10,7 @@ class Canvas : public Component
 {
     OBJECT(Canvas)
     ICLONEABLE(Canvas)
+    COMPONENT_ICON(Canvas, "Icons/RectTransformIcon.png")
 
 public:
     virtual void CloneInto(ICloneable *clone) const override;

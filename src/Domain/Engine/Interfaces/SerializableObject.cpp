@@ -5,9 +5,10 @@
 #include <sstream>
 #include <fstream>
 
+#include "IO.h"
 #include "XMLParser.h"
 #include "FileReader.h"
-#include "IO.h"
+#include "IconManager.h"
 
 #ifdef BANG_EDITOR
 #include "Explorer.h"
@@ -66,6 +67,11 @@ bool SerializableObject::WriteToFile(const String &absPath) const
 }
 
 void SerializableObject::PostRead(const XMLNode &xmlInfo) {}
+
+const QPixmap &SerializableObject::GetIcon() const
+{
+    return IconManager::GetEmptyPixmap();
+}
 
 String SerializableObject::GetFileExtension() const
 {

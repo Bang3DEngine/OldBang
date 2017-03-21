@@ -35,7 +35,7 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
     connect(&actionCreateDir, SIGNAL(triggered()),
             this, SLOT(OnCreateDirClicked()));
 
-    QPoint mousePoint = point;//m_explorer->viewport()->mapFromGlobal(point);
+    QPoint mousePoint = point;//p_explorer->viewport()->mapFromGlobal(point);
     if (p_explorer->indexAt(mousePoint).isValid())
     {
         if (p_explorer->IsSelectedAFile())
@@ -76,7 +76,9 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
     else
     {
         QMenu *assetsMenu = EditorWindow::GetInstance()->menuAssets;
-        contextMenu.addActions(assetsMenu->actions());
+        QMenu *createAssetsMenu = new QMenu("Create Asset");
+        createAssetsMenu->addActions(assetsMenu->actions());
+        contextMenu.addMenu(createAssetsMenu);
         contextMenu.addSeparator();
         contextMenu.addAction(&actionCreateDir);
     }

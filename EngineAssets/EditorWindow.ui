@@ -389,7 +389,7 @@
      <x>0</x>
      <y>0</y>
      <width>1062</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -715,7 +715,7 @@
     </size>
    </property>
    <property name="windowIcon">
-    <iconset resource="QtResources.qrc">
+    <iconset>
      <normaloff>:/Bang/Icons/OpenIcon.png</normaloff>:/Bang/Icons/OpenIcon.png</iconset>
    </property>
    <property name="features">
@@ -1216,8 +1216,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>416</width>
-              <height>68</height>
+              <width>406</width>
+              <height>76</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout">
@@ -1263,7 +1263,7 @@
   <action name="actionOpenScene">
    <property name="icon">
     <iconset resource="QtResources.qrc">
-     <normaloff>:/Bang/Icons/OpenIcon.png</normaloff>:/Bang/Icons/OpenIcon.png</iconset>
+     <normaloff>:/Bang/Icons/SceneIcon.png</normaloff>:/Bang/Icons/SceneIcon.png</iconset>
    </property>
    <property name="text">
     <string>Open Scene...</string>
@@ -1303,11 +1303,19 @@
    </property>
   </action>
   <action name="actionCreateShaderProgram">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/BehaviourIcon.png</normaloff>:/Bang/Icons/BehaviourIcon.png</iconset>
+   </property>
    <property name="text">
     <string>ShaderProgram</string>
    </property>
   </action>
   <action name="actionCreateTexture2D">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/ImageIcon.png</normaloff>:/Bang/Icons/ImageIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Texture2D</string>
    </property>
@@ -1336,6 +1344,10 @@
    </property>
   </action>
   <action name="actionAddComponentMeshRenderer">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/eye.png</normaloff>:/Bang/Icons/eye.png</iconset>
+   </property>
    <property name="text">
     <string>Mesh Renderer</string>
    </property>
@@ -1388,11 +1400,19 @@
    </property>
   </action>
   <action name="actionAddComponentLineRenderer">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/eye.png</normaloff>:/Bang/Icons/eye.png</iconset>
+   </property>
    <property name="text">
     <string>Line Renderer</string>
    </property>
   </action>
   <action name="actionAddComponentCircleRenderer">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/eye.png</normaloff>:/Bang/Icons/eye.png</iconset>
+   </property>
    <property name="text">
     <string>Circle Renderer</string>
    </property>
@@ -1412,21 +1432,37 @@
    </property>
   </action>
   <action name="actionCreatePlane">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/stop.png</normaloff>:/Bang/Icons/stop.png</iconset>
+   </property>
    <property name="text">
     <string>Plane</string>
    </property>
   </action>
   <action name="actionCreateCube">
+   <property name="icon">
+    <iconset resource="qdarkstyle/style.qrc">
+     <normaloff>:/qss_icons/Icons/MeshAssetIcon.png</normaloff>:/qss_icons/Icons/MeshAssetIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Cube</string>
    </property>
   </action>
   <action name="actionCreateSphere">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/CircleIcon.png</normaloff>:/Bang/Icons/CircleIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Sphere</string>
    </property>
   </action>
   <action name="actionBuild">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/SettingsIcon.png</normaloff>:/Bang/Icons/SettingsIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Build</string>
    </property>
@@ -1435,6 +1471,10 @@
    </property>
   </action>
   <action name="actionBuildAndRun">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/play.png</normaloff>:/Bang/Icons/play.png</iconset>
+   </property>
    <property name="text">
     <string>Build and Run</string>
    </property>
@@ -1489,11 +1529,19 @@
    </property>
   </action>
   <action name="actionAddComponentCanvas">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/RectTransformIcon.png</normaloff>:/Bang/Icons/RectTransformIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Canvas</string>
    </property>
   </action>
   <action name="actionAddComponentUIImage">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/ImageIcon.png</normaloff>:/Bang/Icons/ImageIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Image</string>
    </property>
@@ -1528,7 +1576,7 @@
   <action name="actionOpenProject">
    <property name="icon">
     <iconset resource="QtResources.qrc">
-     <normaloff>:/Bang/Icons/OpenIcon.png</normaloff>:/Bang/Icons/OpenIcon.png</iconset>
+     <normaloff>:/Bang/Icons/FolderIcon.png</normaloff>:/Bang/Icons/FolderIcon.png</iconset>
    </property>
    <property name="text">
     <string>Open Project...</string>
@@ -1571,6 +1619,10 @@
    </property>
   </action>
   <action name="actionAddComponentAudioListener">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/AudioClipIcon.png</normaloff>:/Bang/Icons/AudioClipIcon.png</iconset>
+   </property>
    <property name="text">
     <string>Audio Listener</string>
    </property>
@@ -1585,6 +1637,10 @@
    </property>
   </action>
   <action name="actionCreateUIImage">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/ImageIcon.png</normaloff>:/Bang/Icons/ImageIcon.png</iconset>
+   </property>
    <property name="text">
     <string>UIImage</string>
    </property>

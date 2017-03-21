@@ -14,6 +14,8 @@ private:
 public:
     MaterialAssetFileInspectable(const MaterialAssetFile &materialAssetFile);
 
+    virtual const QPixmap& GetIcon() const override;
+
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 };

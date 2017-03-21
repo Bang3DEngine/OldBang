@@ -16,6 +16,7 @@ class LineRenderer : public Renderer
 {
     OBJECT(LineRenderer)
     ICLONEABLE(LineRenderer)
+    COMPONENT_ICON(LineRenderer, "Icons/eye.png")
 
 public:
     virtual ~LineRenderer();

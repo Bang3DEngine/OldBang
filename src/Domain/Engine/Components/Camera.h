@@ -21,6 +21,7 @@ class Camera : public Component
 {
     OBJECT(Camera)
     ICLONEABLE(Camera)
+    COMPONENT_ICON(Camera, "Icons/CameraIcon.png")
 
 public:
     NamedEnum (ProjectionMode,

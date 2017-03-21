@@ -42,7 +42,7 @@ public:
 
     /**
      * @brief GetUpdatedWidgetXMLInfo
-     * @return An XMLNode with the information of the related SerializableObject.
+     * @return An XMLNode with the info of the related SerializableObject.
      *         It's not updated.
      */
     XMLNode GetInspectableXMLInfo() const;
@@ -66,7 +66,7 @@ public slots:
 
     virtual void _OnSlotValueChanged();
     /**
-     * @brief Refreshes all the widget values with the related SerializableObject
+     * @brief Refreshes all widget values with the related SerializableObject
      * current values.
      */
     void RefreshWidgetValues();
@@ -75,19 +75,20 @@ protected:
     SerializableObject *m_relatedInspectable = nullptr;
 
     QVBoxLayout m_vLayout;
-    QHBoxLayout m_header;
+    QHBoxLayout m_headerLayout;
     QToolButton m_closeOpenButton;
+    QLabel m_iconLabel;
     QLabel m_titleLabel;
     QGridLayout m_gridLayout;
 
     bool m_closed = false;
 
-protected slots:
-    void OnCloseOpenButtonClicked();
-
-protected:
+    void SetIcon(const QPixmap &icon);
     void UpdateCloseOpenButtonIcon();
     virtual void SetClosed(bool closedWidget);
+
+protected slots:
+    void OnCloseOpenButtonClicked();
 
 private:
     /** @brief This variable is used to avoid premature OnSlotValueChanged,

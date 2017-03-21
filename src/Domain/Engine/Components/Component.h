@@ -1,8 +1,13 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <QPixmap>
+
+#include "IO.h"
 #include "Object.h"
+#include "String.h"
 #include "IToString.h"
+#include "IconManager.h"
 #include "SerializableObject.h"
 #include "ISceneEventListener.h"
 
@@ -10,8 +15,6 @@
 #include "SerializableObject.h"
 #include "IWindowEventManagerListener.h"
 #endif
-
-#include "String.h"
 
 class XMLNode;
 class Transform;
@@ -59,5 +62,17 @@ protected:
 
     friend class ComponentClipboard;
 };
+
+#define COMPONENT_ICON(CLASS, ICON_PATH) \
+public: \
+    static const QPixmap& GetIconStatic() \
+    {\
+        String path = IO::ToAbsolute(ICON_PATH, true); \
+        return IconManager::LoadPixmap(path); \
+    } \
+    const virtual QPixmap& GetIcon() const override \
+    { \
+        return CLASS::GetIconStatic(); \
+    }
 
 #endif // COMPONENT_H

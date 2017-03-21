@@ -22,6 +22,8 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
+    virtual const QPixmap& GetIcon() const override;
+
     virtual void OnButtonClicked(const String &attrName);
 
 private:

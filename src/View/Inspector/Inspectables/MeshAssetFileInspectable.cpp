@@ -10,6 +10,11 @@ MeshAssetFileInspectable::MeshAssetFileInspectable(
 {
 }
 
+const QPixmap &MeshAssetFileInspectable::GetIcon() const
+{
+    return Mesh::GetIconStatic();
+}
+
 void MeshAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
     m_meshAssetFile.SetMeshFilepath( xmlInfo.GetFilepath("MeshFilepath") );

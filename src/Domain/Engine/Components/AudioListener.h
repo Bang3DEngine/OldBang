@@ -7,6 +7,7 @@ class AudioListener : public Component
 {
     OBJECT(AudioListener)
     ICLONEABLE(AudioListener)
+    COMPONENT_ICON(AudioListener, "Icons/AudioIcon.png")
 
 public:
     AudioListener();

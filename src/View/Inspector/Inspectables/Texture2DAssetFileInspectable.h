@@ -14,6 +14,8 @@ private:
 public:
     Texture2DAssetFileInspectable(const Texture2DAssetFile &fileTex);
 
+    virtual const QPixmap& GetIcon() const override;
+
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 };

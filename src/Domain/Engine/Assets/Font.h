@@ -10,6 +10,8 @@
 class Texture2D;
 class Font : public Asset
 {
+    ASSET_ICON(Font, "Icons/LetterIcon.png")
+
 public:
     /**
      * @brief Structure to hold metrics for a character glyph.

@@ -26,6 +26,7 @@ public:
 
     IconManager();
 
+    static const QPixmap& GetEmptyPixmap();
     static const QImage& LoadImage(const String &absPath,
                                    IconOverlay overlay = IconOverlay::None);
     static const QPixmap& LoadPixmap(const String &absPath,
@@ -47,6 +48,7 @@ private:
         Multiplicative = QPainter::CompositionMode_Multiply
     };
 
+    QPixmap m_emptyPixmap;
     QPixmap m_overlayAsset, m_overlayData;
     QImage m_materialBase;
 

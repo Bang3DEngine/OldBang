@@ -1,10 +1,12 @@
 <RCC>
   <qresource prefix="/Bang">
+    <file>Icons/FolderIcon.png</file>
     <file>Icons/LetterIcon.png</file>
     <file>Icons/AddIcon.png</file>
+    <file>Icons/ImageIcon.png</file>
     <file>Icons/SaveIcon.png</file>
     <file>Icons/RectTransformIcon.png</file>
-    <file>Icons/OpenIcon.png</file>
+    <file>Icons/TransformIcon.png</file>
     <file>Icons/SettingsIcon.png</file>
     <file>Icons/translate.png</file>
     <file>Icons/NoAssetDistinctor.png</file>

@@ -44,16 +44,21 @@ void GBuffer::BindTextureBuffersTo(ShaderProgram *sp) const
     sp->SetTexture("B_GTex_Normal",    m_normalTexture);
     sp->SetTexture("B_GTex_DiffColor", m_diffuseTexture);
     sp->SetTexture("B_GTex_Misc",      m_miscTexture);
-    sp->SetTexture("B_GTex_Color",     m_colorTexture);
+
+    sp->SetTexture("B_GTex_Color",
+                   m_willReadFromColorRead ? m_colorReadTexture :
+                                             m_colorTexture);
+    m_willReadFromColorRead = false;
 
     // Stencil uniforms
     sp->SetFloat("B_StencilWriteEnabled", m_stencilWriteEnabled ? 1.0f : 0.0f);
     sp->SetFloat("B_StencilTestEnabled",  m_stencilTestEnabled  ? 1.0f : 0.0f);
+
 }
 
 
 void GBuffer::ApplyPass(ShaderProgram *sp,
-                        bool copyColorBuffer,
+                        bool prepareReadFromColorBuffer,
                         const Rect &mask)
 {
     sp->SetVec2("B_ScreenSize", Screen::GetSize());
@@ -64,14 +69,9 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
     Bind();
     BindTextureBuffersTo(sp);
 
-    if (copyColorBuffer)
+    if (prepareReadFromColorBuffer)
     {
-        SetReadBuffer(AttColor);
-        SetDrawBuffers({AttColorRead});
-        glBlitFramebuffer(0, 0, GetWidth(), GetHeight(),
-                          0, 0, GetWidth(), GetHeight(),
-                          GL_COLOR_BUFFER_BIT, GL_LINEAR);
-        sp->SetTexture("B_GTex_Color", m_colorReadTexture);
+        PrepareColorReadBuffer(sp);
     }
 
     SetColorDrawBuffer();
@@ -92,6 +92,17 @@ void GBuffer::RenderToScreen(GBuffer::AttachmentId attId)
 void GBuffer::RenderToScreen()
 {
     RenderToScreen(GBuffer::AttColor);
+}
+
+void GBuffer::PrepareColorReadBuffer(ShaderProgram *sp)
+{
+    SetReadBuffer(AttColor);
+    SetDrawBuffers({AttColorRead});
+    glBlitFramebuffer(0, 0, GetWidth(), GetHeight(),
+                      0, 0, GetWidth(), GetHeight(),
+                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+    m_willReadFromColorRead = true;
 }
 
 void GBuffer::SetAllDrawBuffers() const

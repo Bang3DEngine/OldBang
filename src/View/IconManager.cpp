@@ -24,6 +24,11 @@ IconManager::IconManager()
                 Qt::TransformationMode::SmoothTransformation);
 }
 
+const QPixmap &IconManager::GetEmptyPixmap()
+{
+    return IconManager::GetInstance()->m_emptyPixmap;
+}
+
 IconManager *IconManager::GetInstance()
 {
     if (!SingletonManager::Get<IconManager>())

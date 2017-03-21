@@ -11,12 +11,18 @@ MaterialAssetFileInspectable::MaterialAssetFileInspectable
     (const MaterialAssetFile &materialAssetFile) :
         m_materialAssetFile(materialAssetFile)
 {
-    XMLNode *xmlMatInfo = XMLParser::FromFile(m_materialAssetFile.GetRelativePath());
+    XMLNode *xmlMatInfo = XMLParser::FromFile(
+                m_materialAssetFile.GetRelativePath());
     if (xmlMatInfo)
     {
         m_xmlInfo = *xmlMatInfo;
         delete xmlMatInfo;
     }
+}
+
+const QPixmap &MaterialAssetFileInspectable::GetIcon() const
+{
+    return Material::GetIconStatic();
 }
 
 void MaterialAssetFileInspectable::Read(const XMLNode &xmlInfo)

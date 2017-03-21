@@ -38,7 +38,7 @@ void UIImage::Bind() const
     ShaderProgram *sp = GetMaterial()->GetShaderProgram();
     sp->SetFloat("B_AlphaCutoff", !m_imageTexture ?
                                   1 : m_imageTexture->GetAlphaCutoff());
-    sp->SetFloat("B_HasTexture", m_imageTexture ? 1 : 0);
+    sp->SetBool("B_HasTexture", m_imageTexture != nullptr);
     sp->SetTexture("B_Texture0", m_imageTexture);
 }
 

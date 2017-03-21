@@ -13,6 +13,8 @@
 class AudioSource;
 class AudioClip : public Asset
 {
+    ASSET_ICON(AudioClip, "Icons/AudioIcon.png")
+
 public:
     AudioClip();
     virtual ~AudioClip();

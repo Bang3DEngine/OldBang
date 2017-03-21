@@ -11,6 +11,7 @@ class RectTransform : public Transform
 {
     OBJECT(RectTransform)
     ICLONEABLE(RectTransform)
+    COMPONENT_ICON(RectTransform, "Icons/RectTransformIcon.png")
 
 public:
     RectTransform();

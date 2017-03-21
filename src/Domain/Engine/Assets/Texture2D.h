@@ -2,12 +2,13 @@
 #define TEXTURE2D_H
 
 #include "Array.h"
-
 #include "Asset.h"
 #include "Texture.h"
 
 class Texture2D : public Texture, public Asset
 {
+    ASSET_ICON(Texture2D, "Icons/ImageIcon.png")
+
 public:
     Texture2D();
     Texture2D(const String &imageFilepath);

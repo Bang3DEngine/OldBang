@@ -1,11 +1,19 @@
 #include "ImageFileInspectable.h"
 
+#include "IO.h"
 #include "XMLNode.h"
+#include "IconManager.h"
 #include "InspectorWidget.h"
 
 ImageFileInspectable::ImageFileInspectable(const ImageFile &fileImage) :
     m_fileImage(fileImage)
 {
+}
+
+const QPixmap &ImageFileInspectable::GetIcon() const
+{
+    String path = IO::ToAbsolute("Icons/ImageIcon.png", true);
+    return IconManager::LoadPixmap(path);
 }
 
 void ImageFileInspectable::Read(const XMLNode &xmlInfo)

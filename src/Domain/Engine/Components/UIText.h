@@ -13,6 +13,7 @@ class UIText : public UIRenderer
 {
     OBJECT(UIText)
     ICLONEABLE(UIText)
+    COMPONENT_ICON(UIText, "Icons/LetterIcon.png")
 
 public:
     enum class HorizontalAlignment { Left = 0, Center, Right };

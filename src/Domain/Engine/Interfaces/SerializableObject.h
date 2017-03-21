@@ -2,6 +2,8 @@
 #define SERIALIZABLEOBJECT_H
 
 #include <set>
+#include <QPixmap>
+
 #include "String.h"
 
 class String;
@@ -29,6 +31,7 @@ public:
      */
     virtual void PostRead(const XMLNode &xmlInfo);
 
+    virtual const QPixmap& GetIcon() const;
     virtual String GetFileExtension() const;
 
 protected:
