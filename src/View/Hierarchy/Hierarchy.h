@@ -78,14 +78,14 @@ public slots:
                                                  int column);
 
 private slots:
-    void UpdateHierarchyFromScene();
-    void UpdateSceneFromHierarchy();
-    void UpdateGameObjectFromHierarchy(QTreeWidgetItem *goItem);
+    void SyncHierarchyFromScene();
+    void SyncSceneFromHierarchy();
+    void SyncGameObjectFromHierarchy(QTreeWidgetItem *goItem);
     void LocateGameObject(GameObject *gameObjectToLocate,
                           GameObject **gameObjectParent,
                           GameObject **gameObjectAbove,
                           GameObject **gameObjectBelow);
-    QTreeWidgetItem* Update(GameObject *go);
+    QTreeWidgetItem* SyncHierarchyFromGameObject(GameObject *go);
 
 private:
     //For every gameObject, we have the associated treeItem,
@@ -98,7 +98,7 @@ private:
     LocalShortcut m_copyShortcut, m_pasteShortcut,
                   m_duplicateShortcut, m_deleteShortcut;
 
-    QTimer m_refreshFromSceneTimer;
+    QTimer m_syncHierarchyFromSceneTimer;
     HierarchyContextMenu m_hContextMenu;
     HierarchyDragDropManager m_hDragDropManager;
 

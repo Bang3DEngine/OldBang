@@ -39,12 +39,14 @@ void HierarchyDragDropManager::GetDropTargetGameObject(
     QTreeWidget::DropIndicatorPosition dropPos =
             p_hierarchy->dropIndicatorPosition();
     *dropTargetGameObject = p_hierarchy->GetGameObjectFromItem(targetItem);
-    *below = (dropPos == QTreeWidget::BelowItem);
-    *above = (dropPos == QTreeWidget::AboveItem);
+    if (below) { *below = (dropPos == QTreeWidget::BelowItem); }
+    if (above) { *above = (dropPos == QTreeWidget::AboveItem); }
 }
 
 void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
 {
+    p_selectedItemInDragStart = p_hierarchy->GetFirstSelectedItem();
+
     Explorer *explorer = Explorer::GetInstance();
     if (ddi.sourceObject == explorer)
     {
@@ -59,7 +61,6 @@ void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)
 void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
 {
     Explorer *explorer = Explorer::GetInstance();
-
     if (ddi.currentObject == p_hierarchy)
     {
         if (ddi.sourceObject == explorer)
@@ -70,25 +71,40 @@ void HierarchyDragDropManager::OnDrop(const DragDropInfo &ddi)
         {
             if ( AcceptDrop() )
             {
-                p_hierarchy->UpdateSceneFromHierarchy();
-                p_hierarchy->UpdateHierarchyFromScene();
+                p_hierarchy->SyncSceneFromHierarchy();
+                p_hierarchy->SyncHierarchyFromScene();
+
+                GameObject *selectedGo = p_hierarchy->GetGameObjectFromItem(
+                                                     p_selectedItemInDragStart);
+                p_hierarchy->SelectGameObject(selectedGo);
             }
         }
     }
+
+    p_selectedItemInDragStart = nullptr;
 }
 
 bool HierarchyDragDropManager::AcceptDrop()
 {
+    if (!p_selectedItemInDragStart) { return false; }
+
     GameObject *dropTargetGameObject;
     bool above, below;
     GetDropTargetGameObject(&dropTargetGameObject, &above, &below);
     if (!dropTargetGameObject) { return true; }
 
-    GameObject *selectedGameObject = p_hierarchy->GetFirstSelectedGameObject();
+    GameObject *selectedGameObject =
+         p_hierarchy->GetGameObjectFromItem(p_selectedItemInDragStart);
     if (!selectedGameObject) { return true; }
 
-    return (dropTargetGameObject != selectedGameObject) &&
-           !dropTargetGameObject->IsChildOf(selectedGameObject);
+    bool insertingIntoItem = (!above && !below);
+    if ( insertingIntoItem && (dropTargetGameObject == selectedGameObject) )
+    {
+        return false; // Avoid drop into itself
+    }
+
+    // Avoid drop into children
+    return !dropTargetGameObject->IsChildOf(selectedGameObject);
 }
 
 void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,

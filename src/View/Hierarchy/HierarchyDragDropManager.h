@@ -14,6 +14,7 @@ public:
 
 private:
     Hierarchy *p_hierarchy;
+    QTreeWidgetItem *p_selectedItemInDragStart = nullptr;
 
     QTreeWidgetItem *GetDropTargetItem() const;
 
@@ -25,7 +26,8 @@ private:
      * the gameObject. In case it's being dropped below or above, then they won't be the same.
      */
     void GetDropTargetGameObject(GameObject **dropTargetGameObject,
-                                 bool *above, bool *below) const;
+                                 bool *above = nullptr,
+                                 bool *below = nullptr) const;
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
