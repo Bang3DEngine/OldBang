@@ -48,6 +48,7 @@ void Renderer::CloneInto(ICloneable *clone) const
     r->SetLineWidth(GetLineWidth());
     r->SetClosedInInspector(IsClosedInInspector());
     r->SetTransparent(IsTransparent());
+
 }
 
 void Renderer::SetMaterial(Material *m)

@@ -21,11 +21,11 @@ LineRenderer::~LineRenderer()
 
 void LineRenderer::BindPointsToVAO() const
 {
-    if (m_points.Size() >= 2 &&
-        m_material  && m_material->GetShaderProgram() )
+    Material *mat = GetMaterial();
+    if (m_points.Size() >= 2 && mat && mat->GetShaderProgram() )
     {
         m_vbo->Fill(m_points.Data(), m_points.Size() * sizeof(Vector3));
-        GLint verticesShaderLocation = m_material->GetShaderProgram()->
+        GLint verticesShaderLocation = mat->GetShaderProgram()->
                 GetAttribLocation("B_In_PositionObject");
         m_vao->UnBindVBO(verticesShaderLocation);
         m_vao->BindVBO(m_vbo, verticesShaderLocation, 3, GL_FLOAT);

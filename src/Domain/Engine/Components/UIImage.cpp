@@ -12,12 +12,9 @@
 
 UIImage::UIImage()
 {
-    m_materialCopy = new Material( *AssetsManager::Load<Material>(
-                                        "Materials/UI/G_UIImage.bmat", true) );
-    SetMaterial(m_materialCopy);
-
-    m_materialSP = AssetsManager::Load<Material>("Materials/UI/SP_UIImage.bmat",
-                                                 true);
+    SetMaterial(AssetsManager::Load<Material>("Materials/UI/G_UIImage.bmat",
+                                              true) );
+    UseMaterialCopy();
 
     m_imageTexture = new Texture2D();
     m_imageTexture->CreateEmpty(1,1);
@@ -25,7 +22,6 @@ UIImage::UIImage()
 
 UIImage::~UIImage()
 {
-    delete m_materialCopy;
 }
 
 void UIImage::CloneInto(ICloneable *clone) const
@@ -38,7 +34,7 @@ void UIImage::CloneInto(ICloneable *clone) const
 void UIImage::SetImage(Texture2D *imageTexture)
 {
     m_imageTexture = imageTexture;
-    m_material->SetTexture(m_imageTexture);
+    GetMaterial()->SetTexture(m_imageTexture);
 }
 
 Texture2D *UIImage::GetImage() const

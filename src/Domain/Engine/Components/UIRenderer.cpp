@@ -14,27 +14,32 @@ UIRenderer::UIRenderer()
     SetMesh(MeshFactory::GetUIPlane());
     SetMaterial( AssetsManager::Load<Material>("Materials/G_DefaultNoSP.bmat",
                                                true) );
-    m_materialSP = AssetsManager::Load<Material>("Materials/UI/SP_UIImage.bmat",
-                                                 true);
+    UseMaterialCopy();
+    GetMaterial()->SetDiffuseColor(m_tint);
+
     SetTransparent(false);
     SetDepthLayer(Renderer::DepthLayer::DepthLayerCanvas);
-
-    m_materialSP = new Material();
-    m_material->SetDiffuseColor(Color::White);
 }
 
 UIRenderer::~UIRenderer()
 {
 }
 
+void UIRenderer::SetTint(const Color &tint)
+{
+    m_tint = tint;
+    GetMaterial()->SetDiffuseColor(m_tint);
+}
+
+const Color &UIRenderer::GetTint() const
+{
+    return m_tint;
+}
+
 void UIRenderer::Bind() const
 {
     GL::SetViewProjMode( GL::ViewProjMode::IgnoreBoth );
-
     MeshRenderer::Bind();
-
-    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
-    sp->SetColor("B_Tint", m_tint);
 }
 
 void UIRenderer::UnBind() const
@@ -47,7 +52,7 @@ void UIRenderer::CloneInto(ICloneable *clone) const
 {
     UIRenderer *rend = Object::SCast<UIRenderer>(clone);
     MeshRenderer::CloneInto(rend);
-    rend->m_tint = m_tint;
+    rend->SetTint( GetTint() );
 }
 
 Rect UIRenderer::GetBoundingRect(Camera *camera) const
@@ -65,12 +70,11 @@ void UIRenderer::RenderWithoutMaterial() const
 void UIRenderer::Read(const XMLNode &xmlInfo)
 {
     MeshRenderer::Read(xmlInfo);
-    m_tint = xmlInfo.GetColor("Tint");
+    SetTint( xmlInfo.GetColor("Tint") );
 }
 
 void UIRenderer::Write(XMLNode *xmlInfo) const
 {
     MeshRenderer::Write(xmlInfo);
-
-    xmlInfo->SetColor("Tint", m_tint);
+    xmlInfo->SetColor("Tint", GetTint());
 }

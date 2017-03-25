@@ -1,6 +1,5 @@
 #include "G.frag"
 
-uniform vec4 B_Tint;
 void Main()
 {
     // Stencil has to 1 only the pixels that have been drawn by text before
@@ -23,8 +22,8 @@ void Main()
         if (inStencil > 0.5)
         {
             // We are on top of another char, just blend with diffuse
-            // ( the previous char has a full quad blended with the color buffer,
-            //   so everything will be okay)
+            // (the previous char has a full quad blended with the color buffer,
+            //  so everything will be okay)
             backgroundColorToBlendWith = B_SampleDiffColor();
         }
         else
@@ -35,7 +34,7 @@ void Main()
 
         vec4 charTexColor = texture2D(B_Texture0, B_FragIn_Uv);
         B_Out_DiffColor = mix(backgroundColorToBlendWith,
-                              charTexColor * B_Tint,
+                              charTexColor * B_MaterialDiffuseColor,
                               charTexColor.a);
     }
 }

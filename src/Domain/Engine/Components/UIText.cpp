@@ -24,6 +24,8 @@ UIText::UIText() : UIRenderer()
 {
     SetMaterial( AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
                                                true) );
+    UseMaterialCopy();
+
     SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
 
     m_content = "Hello Bang";
@@ -47,10 +49,9 @@ void UIText::CloneInto(ICloneable *clone) const
 {
     UIRenderer::CloneInto(clone);
     UIText *text = Object::SCast<UIText>(clone);
+    text->SetFont ( GetFont() );
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );
-    text->SetFont ( GetFont() );
-    text->SetColor ( GetColor() );
     text->SetHorizontalSpacing( GetHorizontalSpacing() );
     text->SetHorizontalAlign( GetHorizontalAlignment() );
     text->SetVerticalAlign( GetVerticalAlignment() );
@@ -74,16 +75,6 @@ void UIText::SetVerticalAlign(UIText::VerticalAlignment verticalAlignment)
 UIText::VerticalAlignment UIText::GetVerticalAlignment() const
 {
     return m_verticalAlignment;
-}
-
-void UIText::SetColor(const Color &color)
-{
-    m_textColor = color;
-}
-
-Color UIText::GetColor() const
-{
-    return m_textColor;
 }
 
 void UIText::SetFont(Font *font)
@@ -179,9 +170,8 @@ Rect UIText::GetBoundingRect(Camera *camera) const
 void UIText::RenderText() const
 {
     ASSERT(m_font);
-    ASSERT(m_material);
-    ASSERT(m_material->GetShaderProgram());
-    m_material->SetDiffuseColor(m_textColor);
+    Material *mat = GetMaterial();
+    ASSERT(mat); ASSERT(mat->GetShaderProgram());
 
     RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
     ASSERT(rtrans);
@@ -197,7 +187,6 @@ void UIText::RenderText() const
 
     GameObject *originalParent = gameObject->parent;
     gameObject->SetParent(nullptr);
-
 
     float totalAdvX = 0.0f;
     const float hSpacingNDC = m_horizontalSpacing * textSizeNDC.x;
@@ -218,9 +207,9 @@ void UIText::RenderText() const
             Texture2D *charTexture = m_font->GetCharacterTexture(c);
             if (charTexture)
             {
-                m_material->SetTexture(charTexture);
+                mat->SetTexture(charTexture);
                 UIRenderer::Render();
-                m_material->SetTexture(nullptr);
+                mat->SetTexture(nullptr);
             }
         }
         char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';

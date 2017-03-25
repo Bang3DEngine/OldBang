@@ -27,10 +27,10 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
 void MeshRenderer::SetMaterial(Material *m)
 {
     Renderer::SetMaterial(m);
-    if (m_mesh  && m_material  &&
-        m_material->GetShaderProgram() )
+    Material *mat = GetMaterial();
+    if (m_mesh && mat && mat->GetShaderProgram() )
     {
-        m_mesh->BindAllVBOsToShaderProgram(*(m_material->GetShaderProgram()));
+        m_mesh->BindAllVBOsToShaderProgram(*(mat->GetShaderProgram()));
     }
 }
 
@@ -84,7 +84,8 @@ void MeshRenderer::Write(XMLNode *xmlInfo) const
 
 void MeshRenderer::BindCurrentMeshToShaderProgram() const
 {
-    ASSERT(m_mesh); ASSERT(m_material); ASSERT(m_material->GetShaderProgram());
+    Material *mat = GetMaterial();
+    ASSERT(m_mesh); ASSERT(mat); ASSERT(mat->GetShaderProgram());
 
-    m_mesh->BindAllVBOsToShaderProgram(*(m_material->GetShaderProgram()));
+    m_mesh->BindAllVBOsToShaderProgram(*(mat->GetShaderProgram()));
 }

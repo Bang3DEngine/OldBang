@@ -27,7 +27,6 @@ public:
     Texture2D *GetImage() const;
 
 private:
-    Material *m_materialCopy = nullptr;
     Texture2D *m_imageTexture = nullptr;
 };
 

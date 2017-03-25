@@ -36,9 +36,6 @@ public:
     void SetVerticalAlign(VerticalAlignment verticalAlignment);
     VerticalAlignment GetVerticalAlignment() const;
 
-    void SetColor (const Color &color);
-    Color GetColor() const;
-
     void SetFont (Font *font);
     Font* GetFont() const;
 
@@ -61,7 +58,6 @@ public:
 
 private:
     Font *m_font = nullptr;
-    Color m_textColor = Color::Black;
     int m_textSize = 32; // Set in the constructor
     int m_horizontalSpacing = 5;
     bool m_kerning = false;
