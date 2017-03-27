@@ -55,13 +55,13 @@ public:
     void dragLeaveEvent(QDragLeaveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
     void OnDrop(const DragDropInfo &ddi) override;
+    #endif
 
 public slots:
     void OnCopyClicked();
     void OnPasteClicked();
     void OnDuplicateClicked();
     void OnDeleteClicked();
-    #endif
 
 private:
     LocalShortcut m_copyShortcut, m_pasteShortcut,

@@ -28,7 +28,7 @@ void CircleRenderer::GeneratePoints()
 {
     m_points.Clear();
     m_points.Resize(m_segments);
-    const float step = (2.0f * Math::PI) / m_segments;
+    const float step = (2.0f * Math::PI) / (m_segments - 1);
     for (int i = 0; i < m_segments; ++i)
     {
         m_points[i] =

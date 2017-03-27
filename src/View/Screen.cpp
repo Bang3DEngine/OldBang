@@ -312,22 +312,30 @@ void Screen::OnDrop(const DragDropInfo &ddi)
     m_lastGameObjectOvered = nullptr;
     m_gameObjectBeingDragged = nullptr;
 }
+#endif
 
 void Screen::OnCopyClicked()
 {
+#ifdef BANG_EDITOR
     Hierarchy::GetInstance()->m_hContextMenu.OnCopyClicked();
+#endif
 }
 void Screen::OnPasteClicked()
 {
+#ifdef BANG_EDITOR
     Hierarchy::GetInstance()->m_hContextMenu.OnPasteClicked();
+#endif
 }
 void Screen::OnDuplicateClicked()
 {
+#ifdef BANG_EDITOR
     Hierarchy::GetInstance()->m_hContextMenu.OnDuplicateClicked();
+#endif
 }
 void Screen::OnDeleteClicked()
 {
+#ifdef BANG_EDITOR
     Hierarchy::GetInstance()->m_hContextMenu.OnDeleteClicked();
+#endif
 }
 
-#endif
