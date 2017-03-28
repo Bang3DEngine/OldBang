@@ -1,12 +1,12 @@
-#include "SystemUtils.h"
+#include "Bang/SystemUtils.h"
 
 #include <QProcess>
 #include <QLibrary>
 
-#include "Behaviour.h"
-#include "IO.h"
-#include "BehaviourHolder.h"
-#include "SingletonManager.h"
+#include "Bang/Behaviour.h"
+#include "Bang/IO.h"
+#include "Bang/BehaviourHolder.h"
+#include "Bang/SingletonManager.h"
 
 List<String> SystemUtils::GetAllEngineObjects(bool editorMode)
 {
@@ -145,12 +145,7 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
     if (editorMode) { args.PushBack("-DBANG_EDITOR"); }
 
     {
-    List<String> includes = List<String>({"."}).Concat(
-                            SystemUtils::GetAllProjectSubDirs().Concat(
-                            SystemUtils::GetAllEngineSubDirs().Concat(
-                            SystemUtils::GetQtIncludes())));
-    for(String &inc : includes) { inc.Prepend("-I"); }
-    args.PushBack(includes);
+    args.PushBack("-Iinclude/Bang");
     }
 
     {

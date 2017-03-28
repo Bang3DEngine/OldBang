@@ -1,8 +1,8 @@
 #ifndef INSPECTORMESHFILEWIDGET_H
 #define INSPECTORMESHFILEWIDGET_H
 
-#include "MeshFile.h"
-#include "SerializableObject.h"
+#include "Bang/MeshFile.h"
+#include "Bang/SerializableObject.h"
 
 class XMLNode;
 class MeshFileInspectable : public SerializableObject

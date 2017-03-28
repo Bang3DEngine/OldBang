@@ -1,8 +1,8 @@
-#include "GPPass_SP_FXAA.h"
+#include "Bang/GPPass_SP_FXAA.h"
 
-#include "ShaderProgram.h"
-#include "AssetsManager.h"
-#include "GraphicPipeline.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/GraphicPipeline.h"
 
 GPPass_SP_FXAA::GPPass_SP_FXAA(GraphicPipeline *graphicPipeline,
                                const List<GPPass *> &subPasses)

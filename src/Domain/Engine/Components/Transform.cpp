@@ -1,12 +1,12 @@
-#include "Transform.h"
+#include "Bang/Transform.h"
 
 #include <sstream>
 #include <ostream>
 
-#include "Debug.h"
-#include "Debug.h"
-#include "XMLNode.h"
-#include "GameObject.h"
+#include "Bang/Debug.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/GameObject.h"
 
 Transform::Transform()
 {

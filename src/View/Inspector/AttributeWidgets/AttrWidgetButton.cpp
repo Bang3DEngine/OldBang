@@ -1,9 +1,9 @@
-#include "AttrWidgetButton.h"
+#include "Bang/AttrWidgetButton.h"
 
 #include <QVBoxLayout>
 
-#include "Debug.h"
-#include "Inspector.h"
+#include "Bang/Debug.h"
+#include "Bang/Inspector.h"
 
 AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
                                    InspectorWidget *inspectorWidget) :

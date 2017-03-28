@@ -3,7 +3,7 @@
 
 #include <QPoint>
 
-#include "ContextMenu.h"
+#include "Bang/ContextMenu.h"
 
 class Inspector;
 class InspectorContextMenu : public ContextMenu

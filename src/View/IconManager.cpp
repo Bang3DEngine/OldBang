@@ -1,10 +1,10 @@
-#include "IconManager.h"
+#include "Bang/IconManager.h"
 
-#include "IO.h"
-#include "Debug.h"
-#include "Material.h"
-#include "Texture2D.h"
-#include "SingletonManager.h"
+#include "Bang/IO.h"
+#include "Bang/Debug.h"
+#include "Bang/Material.h"
+#include "Bang/Texture2D.h"
+#include "Bang/SingletonManager.h"
 
 IconManager::IconManager()
 {

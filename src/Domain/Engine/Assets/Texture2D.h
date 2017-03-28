@@ -1,9 +1,9 @@
 ﻿#ifndef TEXTURE2D_H
 #define TEXTURE2D_H
 
-#include "Array.h"
-#include "Asset.h"
-#include "Texture.h"
+#include "Bang/Array.h"
+#include "Bang/Asset.h"
+#include "Bang/Texture.h"
 
 class Texture2D : public Texture, public Asset
 {

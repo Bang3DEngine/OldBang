@@ -1,11 +1,11 @@
-#include "AudioClipAssetFileInspectable.h"
+#include "Bang/AudioClipAssetFileInspectable.h"
 
-#include "Debug.h"
-#include "XMLNode.h"
-#include "AudioClip.h"
-#include "AudioSource.h"
-#include "AudioManager.h"
-#include "AssetsManager.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/AudioClip.h"
+#include "Bang/AudioSource.h"
+#include "Bang/AudioManager.h"
+#include "Bang/AssetsManager.h"
 
 AudioClipAssetFileInspectable::AudioClipAssetFileInspectable(
         const AudioClipAssetFile &audioClipAssetFile)

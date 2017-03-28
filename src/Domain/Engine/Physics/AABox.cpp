@@ -1,10 +1,10 @@
-#include "AABox.h"
+#include "Bang/AABox.h"
 
-#include "Math.h"
-#include "Rect.h"
-#include "Debug.h"
-#include "Camera.h"
-#include "Sphere.h"
+#include "Bang/Math.h"
+#include "Bang/Rect.h"
+#include "Bang/Debug.h"
+#include "Bang/Camera.h"
+#include "Bang/Sphere.h"
 
 AABox AABox::Empty = AABox(0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
 

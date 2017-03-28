@@ -1,7 +1,7 @@
-#include "EditorTranslateAxisGroup.h"
+#include "Bang/EditorTranslateAxisGroup.h"
 
-#include "EditorAxisPlane.h"
-#include "EditorTranslateAxis.h"
+#include "Bang/EditorAxisPlane.h"
+#include "Bang/EditorTranslateAxis.h"
 
 EditorTranslateAxisGroup::EditorTranslateAxisGroup(GameObject *attachedGameObject)
     : GameObject("EditorTranslateAxisGroup")

@@ -1,21 +1,21 @@
-#include "AttributeWidget.h"
+#include "Bang/AttributeWidget.h"
 
 #include <QLabel>
 #include <QBoxLayout>
 
-#include "XMLNode.h"
-#include "Inspector.h"
-#include "XMLAttribute.h"
-#include "AttrWidgetInt.h"
-#include "AttrWidgetBool.h"
-#include "AttrWidgetEnum.h"
-#include "AttrWidgetFile.h"
-#include "AttrWidgetColor.h"
-#include "AttrWidgetFloat.h"
-#include "InspectorWidget.h"
-#include "AttrWidgetString.h"
-#include "AttrWidgetButton.h"
-#include "AttrWidgetVectorFloat.h"
+#include "Bang/XMLNode.h"
+#include "Bang/Inspector.h"
+#include "Bang/XMLAttribute.h"
+#include "Bang/AttrWidgetInt.h"
+#include "Bang/AttrWidgetBool.h"
+#include "Bang/AttrWidgetEnum.h"
+#include "Bang/AttrWidgetFile.h"
+#include "Bang/AttrWidgetColor.h"
+#include "Bang/AttrWidgetFloat.h"
+#include "Bang/InspectorWidget.h"
+#include "Bang/AttrWidgetString.h"
+#include "Bang/AttrWidgetButton.h"
+#include "Bang/AttrWidgetVectorFloat.h"
 
 AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
                                  InspectorWidget *inspectorWidget,
@@ -28,7 +28,6 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
     m_xmlAttribute = xmlAttribute;
     Refresh(xmlAttribute);
 
-    m_layout;
     m_layout.setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_layout.setContentsMargins(labelAbove ? 0 : 5,0,0,0);
 

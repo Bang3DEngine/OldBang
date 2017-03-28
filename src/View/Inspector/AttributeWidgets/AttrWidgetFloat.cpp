@@ -1,10 +1,10 @@
-#include "AttrWidgetFloat.h"
+#include "Bang/AttrWidgetFloat.h"
 
 #include <QVBoxLayout>
 
-#include "Object.h"
-#include "XMLAttribute.h"
-#include "InspectorWidget.h"
+#include "Bang/Object.h"
+#include "Bang/XMLAttribute.h"
+#include "Bang/InspectorWidget.h"
 
 AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
                                  InspectorWidget *inspectorWidget,

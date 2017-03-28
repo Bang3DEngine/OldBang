@@ -1,13 +1,13 @@
-#include "GPPass_Selection.h"
+#include "Bang/GPPass_Selection.h"
 
-#include "Debug.h"
-#include "Scene.h"
-#include "GBuffer.h"
-#include "Material.h"
-#include "Renderer.h"
-#include "GraphicPipeline.h"
-#include "GPPass_DepthLayer.h"
-#include "SelectionFramebuffer.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/GBuffer.h"
+#include "Bang/Material.h"
+#include "Bang/Renderer.h"
+#include "Bang/GraphicPipeline.h"
+#include "Bang/GPPass_DepthLayer.h"
+#include "Bang/SelectionFramebuffer.h"
 
 GPPass_Selection::GPPass_Selection(GraphicPipeline *graphicPipeline,
                                    const List<GPPass*> &subPasses)

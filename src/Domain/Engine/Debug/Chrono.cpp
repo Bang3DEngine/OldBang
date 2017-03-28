@@ -1,8 +1,8 @@
-#include "Chrono.h"
+#include "Bang/Chrono.h"
 
 #include <iostream>
 
-#include "Time.h"
+#include "Bang/Time.h"
 
 Chrono::Chrono(const String &chronoName)
 {

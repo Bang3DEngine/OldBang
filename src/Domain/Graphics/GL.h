@@ -4,9 +4,9 @@
 #include <GL/glew.h>
 
 #include "GL/gl.h"
-#include "Color.h"
-#include "String.h"
-#include "Matrix4.h"
+#include "Bang/Color.h"
+#include "Bang/String.h"
+#include "Bang/Matrix4.h"
 
 #define GL_CheckError() ( GL::CheckError(__LINE__, __FUNCTION__, __FILE__) )
 

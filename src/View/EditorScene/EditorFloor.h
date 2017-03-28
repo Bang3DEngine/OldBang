@@ -1,9 +1,9 @@
 #ifndef EDITORFLOOR_H
 #define EDITORFLOOR_H
 
-#include "Array.h"
+#include "Bang/Array.h"
 
-#include "GameObject.h"
+#include "Bang/GameObject.h"
 
 class SingleLineRenderer;
 class EditorFloor : public GameObject

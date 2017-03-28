@@ -1,7 +1,7 @@
 #ifndef VECTOR2_H
 #define VECTOR2_H
 
-#include "glm/glm.hpp"
+#include "Bang/glm/glm.hpp"
 
 class String;
 class Matrix4;

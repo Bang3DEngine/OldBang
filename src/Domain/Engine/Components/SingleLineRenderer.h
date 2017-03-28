@@ -1,9 +1,9 @@
 #ifndef SINGLELINERENDERER_H
 #define SINGLELINERENDERER_H
 
-#include "Array.h"
+#include "Bang/Array.h"
 
-#include "LineRenderer.h"
+#include "Bang/LineRenderer.h"
 
 class SingleLineRenderer : public LineRenderer
 {

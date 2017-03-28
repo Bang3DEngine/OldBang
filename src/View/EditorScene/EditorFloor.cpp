@@ -1,14 +1,14 @@
-#include "EditorFloor.h"
+#include "Bang/EditorFloor.h"
 
-#include "Scene.h"
-#include "Camera.h"
-#include "Vector3.h"
-#include "Material.h"
-#include "Transform.h"
-#include "PointLight.h"
-#include "SceneManager.h"
-#include "AssetsManager.h"
-#include "SingleLineRenderer.h"
+#include "Bang/Scene.h"
+#include "Bang/Camera.h"
+#include "Bang/Vector3.h"
+#include "Bang/Material.h"
+#include "Bang/Transform.h"
+#include "Bang/PointLight.h"
+#include "Bang/SceneManager.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/SingleLineRenderer.h"
 
 EditorFloor::EditorFloor()
 {
@@ -72,7 +72,7 @@ void EditorFloor::OnUpdate()
     }
 }
 
-#include "Hierarchy.h"
+#include "Bang/Hierarchy.h"
 void EditorFloor::OnDrawGizmos(bool depthed, bool overlay)
 {
     Scene *scene = SceneManager::GetActiveScene();

@@ -1,7 +1,7 @@
 #ifndef EDITORAXISPLANE_H
 #define EDITORAXISPLANE_H
 
-#include "GameObject.h"
+#include "Bang/GameObject.h"
 
 class Material;
 class EditorAxis;

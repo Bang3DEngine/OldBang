@@ -1,6 +1,6 @@
-#include "Canvas.h"
+#include "Bang/Canvas.h"
 
-#include "XMLNode.h"
+#include "Bang/XMLNode.h"
 
 Canvas::Canvas()
 {

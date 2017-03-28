@@ -1,4 +1,4 @@
-#include "ExplorerFileSortProxy.h"
+#include "Bang/ExplorerFileSortProxy.h"
 
 ExplorerFileSortProxy::ExplorerFileSortProxy()
 {

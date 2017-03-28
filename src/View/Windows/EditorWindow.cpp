@@ -1,16 +1,16 @@
-#include "EditorWindow.h"
+#include "Bang/EditorWindow.h"
 
-#include "Debug.h"
-#include "Toolbar.h"
-#include "Explorer.h"
-#include "Hierarchy.h"
-#include "Inspector.h"
-#include "EditorState.h"
-#include "EditorScene.h"
-#include "SceneManager.h"
-#include "SingletonManager.h"
-#include "WindowEventManager.h"
-#include "EditorPlayStopFlowController.h"
+#include "Bang/Debug.h"
+#include "Bang/Toolbar.h"
+#include "Bang/Explorer.h"
+#include "Bang/Hierarchy.h"
+#include "Bang/Inspector.h"
+#include "Bang/EditorState.h"
+#include "Bang/EditorScene.h"
+#include "Bang/SceneManager.h"
+#include "Bang/SingletonManager.h"
+#include "Bang/WindowEventManager.h"
+#include "Bang/EditorPlayStopFlowController.h"
 
 EditorWindow *EditorWindow::s_win = nullptr;
 

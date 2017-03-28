@@ -1,15 +1,15 @@
-#include "PointLight.h"
+#include "Bang/PointLight.h"
 
-#include "Gizmos.h"
-#include "Material.h"
-#include "Texture2D.h"
-#include "Transform.h"
-#include "GameObject.h"
-#include "AssetsManager.h"
-#include "ShaderProgram.h"
+#include "Bang/Gizmos.h"
+#include "Bang/Material.h"
+#include "Bang/Texture2D.h"
+#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/ShaderProgram.h"
 
 #ifdef BANG_EDITOR
-#include "InspectorWidget.h"
+#include "Bang/InspectorWidget.h"
 #endif
 
 

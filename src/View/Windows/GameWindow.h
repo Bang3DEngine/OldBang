@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QApplication>
 
-#include "IWindow.h"
+#include "Bang/IWindow.h"
 
 class Screen;
 class GameWindow : public IWindow

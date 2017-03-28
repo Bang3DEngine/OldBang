@@ -1,10 +1,10 @@
-#include "CodePreprocessor.h"
+#include "Bang/CodePreprocessor.h"
 
 #include <algorithm>
 
-#include "File.h"
-#include "Debug.h"
-#include "IO.h"
+#include "Bang/File.h"
+#include "Bang/Debug.h"
+#include "Bang/IO.h"
 
 String CodePreprocessor::
        GetIncludeReplacementString(const String &includeDirective,

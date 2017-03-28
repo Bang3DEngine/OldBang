@@ -5,10 +5,10 @@
 #include <AL/alc.h>
 #include <AL/alut.h>
 
-#include "Array.h"
-#include "Asset.h"
-#include "String.h"
-#include "IO.h"
+#include "Bang/Array.h"
+#include "Bang/Asset.h"
+#include "Bang/String.h"
+#include "Bang/IO.h"
 
 class AudioSource;
 class AudioClip : public Asset

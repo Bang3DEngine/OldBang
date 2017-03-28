@@ -1,13 +1,13 @@
-#include "InspectorContextMenu.h"
+#include "Bang/InspectorContextMenu.h"
 
 #include <QMenu>
 #include <QAction>
 
-#include "Inspector.h"
-#include "EditorWindow.h"
-#include "InspectorWidget.h"
-#include "ComponentWidget.h"
-#include "ComponentClipboard.h"
+#include "Bang/Inspector.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/InspectorWidget.h"
+#include "Bang/ComponentWidget.h"
+#include "Bang/ComponentClipboard.h"
 
 InspectorContextMenu::InspectorContextMenu(Inspector *inspector)
     : ContextMenu(inspector), m_inspector(inspector)

@@ -1,11 +1,11 @@
-#include "EditorBBox.h"
+#include "Bang/EditorBBox.h"
 
-#include "Debug.h"
-#include "Mesh.h"
-#include "Material.h"
-#include "Transform.h"
-#include "MeshRenderer.h"
-#include "AssetsManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Mesh.h"
+#include "Bang/Material.h"
+#include "Bang/Transform.h"
+#include "Bang/MeshRenderer.h"
+#include "Bang/AssetsManager.h"
 
 Material *EditorBBox::s_boxMaterial = nullptr;
 

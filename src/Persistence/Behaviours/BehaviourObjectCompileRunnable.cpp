@@ -1,8 +1,8 @@
-#include "BehaviourObjectCompileRunnable.h"
+#include "Bang/BehaviourObjectCompileRunnable.h"
 
-#include "Debug.h"
-#include "SystemUtils.h"
-#include "BehaviourManager.h"
+#include "Bang/Debug.h"
+#include "Bang/SystemUtils.h"
+#include "Bang/BehaviourManager.h"
 
 BehaviourObjectCompileRunnable::BehaviourObjectCompileRunnable(
         const String &behaviourFilepath, bool forGame)

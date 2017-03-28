@@ -1,17 +1,17 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-#include "List.h"
-#include "AABox.h"
-#include "Object.h"
-#include "Sphere.h"
-#include "IToString.h"
-#include "SerializableObject.h"
-#include "ISceneEventListener.h"
+#include "Bang/List.h"
+#include "Bang/AABox.h"
+#include "Bang/Object.h"
+#include "Bang/Sphere.h"
+#include "Bang/IToString.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
-#include "Gizmos.h"
-#include "IWindowEventManagerListener.h"
+#include "Bang/Gizmos.h"
+#include "Bang/IWindowEventManagerListener.h"
 #endif
 
 class Scene;

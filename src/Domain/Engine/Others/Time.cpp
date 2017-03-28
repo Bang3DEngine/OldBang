@@ -1,8 +1,8 @@
-#include "Time.h"
+#include "Bang/Time.h"
 
 #include <chrono>
 
-#include "SingletonManager.h"
+#include "Bang/SingletonManager.h"
 
 double Time::s_time = 0.0f;
 double const& Time::time = Time::s_time;

@@ -1,10 +1,10 @@
-#include "TextFile.h"
+#include "Bang/TextFile.h"
 
-#include "FileReader.h"
-#include "IO.h"
+#include "Bang/FileReader.h"
+#include "Bang/IO.h"
 
 #ifdef BANG_EDITOR
-#include "TextFileInspectable.h"
+#include "Bang/TextFileInspectable.h"
 #endif
 
 TextFile::TextFile(const QFileSystemModel *model, const QModelIndex &index)

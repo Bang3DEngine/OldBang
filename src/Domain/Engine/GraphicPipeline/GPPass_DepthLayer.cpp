@@ -1,12 +1,12 @@
-#include "GPPass_DepthLayer.h"
+#include "Bang/GPPass_DepthLayer.h"
 
-#include "Debug.h"
-#include "Scene.h"
-#include "GBuffer.h"
-#include "EditorState.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/GBuffer.h"
+#include "Bang/EditorState.h"
 
 #ifdef BANG_EDITOR
-#include "SelectionFramebuffer.h"
+#include "Bang/SelectionFramebuffer.h"
 #endif
 
 GPPass_DepthLayer::GPPass_DepthLayer(GraphicPipeline *graphicPipeline,

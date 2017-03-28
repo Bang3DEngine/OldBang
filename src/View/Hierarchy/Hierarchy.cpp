@@ -1,17 +1,17 @@
-#include "Hierarchy.h"
+#include "Bang/Hierarchy.h"
 
 #include <chrono>
 #include <algorithm>
 
-#include "Debug.h"
-#include "Scene.h"
-#include "Camera.h"
-#include "GameObject.h"
-#include "EditorScene.h"
-#include "EditorWindow.h"
-#include "SceneManager.h"
-#include "EditorCamera.h"
-#include "WindowEventManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Camera.h"
+#include "Bang/GameObject.h"
+#include "Bang/EditorScene.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/SceneManager.h"
+#include "Bang/EditorCamera.h"
+#include "Bang/WindowEventManager.h"
 
 Hierarchy::Hierarchy(QWidget *parent)
  :m_upShortcut       (this, KSeq(Qt::Key_Up),     SLOT(OnUpClicked())),

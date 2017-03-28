@@ -3,9 +3,9 @@
 
 #include <GL/glew.h>
 
-#include "Array.h"
+#include "Bang/Array.h"
 
-#include "GLObject.h"
+#include "Bang/GLObject.h"
 
 class VBO;
 class VAO : public GLObject

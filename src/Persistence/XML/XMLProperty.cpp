@@ -1,6 +1,6 @@
-#include "XMLProperty.h"
+#include "Bang/XMLProperty.h"
 
-#include "Array.h"
+#include "Bang/Array.h"
 
 const XMLProperty XMLProperty::Hidden("Hidden");
 const XMLProperty XMLProperty::Inline("Inline");

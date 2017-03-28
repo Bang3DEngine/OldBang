@@ -3,9 +3,9 @@
 
 #include <QComboBox>
 
-#include "XMLAttribute.h"
-#include "InspectorWidget.h"
-#include "AttributeWidget.h"
+#include "Bang/XMLAttribute.h"
+#include "Bang/InspectorWidget.h"
+#include "Bang/AttributeWidget.h"
 
 class ComboBox;
 class AttrWidgetEnum  : public AttributeWidget

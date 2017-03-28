@@ -1,9 +1,9 @@
-#include "Rect.h"
+#include "Bang/Rect.h"
 
-#include "Math.h"
-#include "List.h"
-#include "Camera.h"
-#include "Vector2.h"
+#include "Bang/Math.h"
+#include "Bang/List.h"
+#include "Bang/Camera.h"
+#include "Bang/Vector2.h"
 
 Rect Rect::ScreenRect = Rect(Vector2(-1), Vector2(1));
 Rect Rect::Empty = Rect(0, 0, 0, 0);

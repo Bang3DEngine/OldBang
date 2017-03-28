@@ -1,11 +1,11 @@
 #ifndef LINERENDERER_H
 #define LINERENDERER_H
 
-#include "AABox.h"
-#include "Array.h"
-#include "String.h"
-#include "Vector3.h"
-#include "Renderer.h"
+#include "Bang/AABox.h"
+#include "Bang/Array.h"
+#include "Bang/String.h"
+#include "Bang/Vector3.h"
+#include "Bang/Renderer.h"
 
 class VBO;
 class VAO;

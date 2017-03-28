@@ -1,14 +1,14 @@
-#include "MeshFile.h"
+#include "Bang/MeshFile.h"
 
-#include "Debug.h"
+#include "Bang/Debug.h"
 
-#include "IO.h"
-#include "FileReader.h"
-#include "IconManager.h"
+#include "Bang/IO.h"
+#include "Bang/FileReader.h"
+#include "Bang/IconManager.h"
 
 #ifdef BANG_EDITOR
-#include "SerializableObject.h"
-#include "MeshFileInspectable.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/MeshFileInspectable.h"
 #endif
 
 MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex &index)

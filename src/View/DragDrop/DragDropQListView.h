@@ -3,7 +3,7 @@
 
 #include <QListView>
 
-#include "DragDropAgent.h"
+#include "Bang/DragDropAgent.h"
 
 class DragDropQListView : public QListView,
                           public DragDropAgent

@@ -4,11 +4,11 @@
 #include <iostream>
 #include <QKeyEvent>
 
-#include "Map.h"
-#include "Array.h"
-#include "String.h"
-#include "Vector2.h"
-#include "IToString.h"
+#include "Bang/Map.h"
+#include "Bang/Array.h"
+#include "Bang/String.h"
+#include "Bang/Vector2.h"
+#include "Bang/IToString.h"
 
 class Cursor;
 class Input

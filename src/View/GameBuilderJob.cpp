@@ -1,9 +1,9 @@
-#include "GameBuilderJob.h"
+#include "Bang/GameBuilderJob.h"
 
-#include "Debug.h"
-#include "IO.h"
-#include "GameBuilder.h"
-#include "GameBuildDialog.h"
+#include "Bang/Debug.h"
+#include "Bang/IO.h"
+#include "Bang/GameBuilder.h"
+#include "Bang/GameBuildDialog.h"
 
 #define CHECK_CANCEL if (m_canceled) \
                      { QThread::currentThread()->exit(0); return; }

@@ -1,5 +1,5 @@
-#include "RenderTexture.h"
-#include "Debug.h"
+#include "Bang/RenderTexture.h"
+#include "Bang/Debug.h"
 
 RenderTexture::RenderTexture() : Texture2D()
 {

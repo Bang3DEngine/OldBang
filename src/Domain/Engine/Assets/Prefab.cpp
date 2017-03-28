@@ -1,14 +1,14 @@
-#include "Prefab.h"
+#include "Bang/Prefab.h"
 
-#include "Scene.h"
-#include "Debug.h"
-#include "XMLParser.h"
-#include "GameObject.h"
-#include "SceneManager.h"
-#include "AssetsManager.h"
+#include "Bang/Scene.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLParser.h"
+#include "Bang/GameObject.h"
+#include "Bang/SceneManager.h"
+#include "Bang/AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "EditorState.h"
+#include "Bang/EditorState.h"
 #endif
 
 Prefab::Prefab()

@@ -1,8 +1,8 @@
-#include "XMLParser.h"
+#include "Bang/XMLParser.h"
 
-#include "Debug.h"
-#include "SerializableObject.h"
-#include "IO.h"
+#include "Bang/Debug.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/IO.h"
 
 Map<String, const SerializableObject*> XMLParser::m_id_To_Pointer;
 

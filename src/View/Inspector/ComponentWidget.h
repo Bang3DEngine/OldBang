@@ -3,8 +3,8 @@
 
 #include <QCheckBox>
 
-#include "InspectorWidget.h"
-#include "ComponentWidgetContextMenu.h"
+#include "Bang/InspectorWidget.h"
+#include "Bang/ComponentWidgetContextMenu.h"
 
 class Component;
 class ComponentWidget : public InspectorWidget

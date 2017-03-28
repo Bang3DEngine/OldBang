@@ -7,7 +7,7 @@
 #include <QFocusEvent>
 #include <QDoubleSpinBox>
 
-#include "AttributeWidget.h"
+#include "Bang/AttributeWidget.h"
 
 class XMLAttribute;
 class InspectorWidget;

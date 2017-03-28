@@ -1,12 +1,12 @@
-#include "EditorAxisPlane.h"
+#include "Bang/EditorAxisPlane.h"
 
-#include "Debug.h"
-#include "Material.h"
-#include "Transform.h"
-#include "EditorAxis.h"
-#include "MeshFactory.h"
-#include "MeshRenderer.h"
-#include "AssetsManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Material.h"
+#include "Bang/Transform.h"
+#include "Bang/EditorAxis.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/MeshRenderer.h"
+#include "Bang/AssetsManager.h"
 
 EditorAxisPlane::EditorAxisPlane(EditorAxis *axis1, EditorAxis *axis2)
     : m_axis1(axis1), m_axis2(axis2)

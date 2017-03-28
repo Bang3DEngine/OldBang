@@ -1,18 +1,18 @@
-#include "SerializableObject.h"
+#include "Bang/SerializableObject.h"
 
 #include <istream>
 #include <ostream>
 #include <sstream>
 #include <fstream>
 
-#include "IO.h"
-#include "XMLParser.h"
-#include "FileReader.h"
-#include "IconManager.h"
+#include "Bang/IO.h"
+#include "Bang/XMLParser.h"
+#include "Bang/FileReader.h"
+#include "Bang/IconManager.h"
 
 #ifdef BANG_EDITOR
-#include "Explorer.h"
-#include "FileReferencesManager.h"
+#include "Bang/Explorer.h"
+#include "Bang/FileReferencesManager.h"
 #endif
 
 XMLNode SerializableObject::GetXMLInfo() const

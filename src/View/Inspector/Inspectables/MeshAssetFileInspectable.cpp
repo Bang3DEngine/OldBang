@@ -1,8 +1,8 @@
-#include "MeshAssetFileInspectable.h"
+#include "Bang/MeshAssetFileInspectable.h"
 
-#include "Mesh.h"
-#include "XMLNode.h"
-#include "AssetsManager.h"
+#include "Bang/Mesh.h"
+#include "Bang/XMLNode.h"
+#include "Bang/AssetsManager.h"
 
 MeshAssetFileInspectable::MeshAssetFileInspectable(
         const MeshAssetFile &meshFile)

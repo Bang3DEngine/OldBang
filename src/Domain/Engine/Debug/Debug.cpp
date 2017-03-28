@@ -1,21 +1,21 @@
-#include "Debug.h"
+#include "Bang/Debug.h"
 
-#include "Scene.h"
-#include "String.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Matrix4.h"
-#include "IToString.h"
-#include "Quaternion.h"
-#include "IO.h"
-#include "SceneManager.h"
+#include "Bang/Scene.h"
+#include "Bang/String.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
+#include "Bang/Matrix4.h"
+#include "Bang/IToString.h"
+#include "Bang/Quaternion.h"
+#include "Bang/IO.h"
+#include "Bang/SceneManager.h"
 
 #ifdef BANG_EDITOR
-#include "Console.h"
-#include "EditorScene.h"
-#include "EditorWindow.h"
-#include "EditorDebugGameObject.h"
+#include "Bang/Console.h"
+#include "Bang/EditorScene.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/EditorDebugGameObject.h"
 #endif
 
 const String Debug::c_logPrefix    = "[   LOG   ]: ";

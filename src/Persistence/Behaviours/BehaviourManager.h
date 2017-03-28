@@ -8,13 +8,13 @@
 #include <QThreadPool>
 #include <QMutexLocker>
 
-#include "Map.h"
-#include "List.h"
-#include "Debug.h"
-#include "String.h"
-#include "Application.h"
-#include "BehaviourManagerStatus.h"
-#include "BehaviourRefresherTimer.h"
+#include "Bang/Map.h"
+#include "Bang/List.h"
+#include "Bang/Debug.h"
+#include "Bang/String.h"
+#include "Bang/Application.h"
+#include "Bang/BehaviourManagerStatus.h"
+#include "Bang/BehaviourRefresherTimer.h"
 
 class QLibrary;
 class BehaviourHolder;

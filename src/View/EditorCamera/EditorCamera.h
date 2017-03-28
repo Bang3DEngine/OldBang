@@ -3,10 +3,10 @@
 
 #include <cmath>
 
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Quaternion.h"
-#include "GameObject.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Quaternion.h"
+#include "Bang/GameObject.h"
 
 class Input;
 class Camera;

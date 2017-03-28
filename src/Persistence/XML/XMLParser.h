@@ -5,7 +5,7 @@
 #include <sstream>
 #include <fstream>
 
-#include "XMLNode.h"
+#include "Bang/XMLNode.h"
 
 class SerializableObject;
 class XMLParser

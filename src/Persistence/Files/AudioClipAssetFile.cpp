@@ -1,15 +1,15 @@
-#include "AudioClipAssetFile.h"
+#include "Bang/AudioClipAssetFile.h"
 
-#include "IO.h"
-#include "XMLNode.h"
-#include "AudioClip.h"
-#include "XMLParser.h"
-#include "IconManager.h"
-#include "AssetsManager.h"
+#include "Bang/IO.h"
+#include "Bang/XMLNode.h"
+#include "Bang/AudioClip.h"
+#include "Bang/XMLParser.h"
+#include "Bang/IconManager.h"
+#include "Bang/AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "SerializableObject.h"
-#include "AudioClipAssetFileInspectable.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/AudioClipAssetFileInspectable.h"
 #endif
 
 AudioClipAssetFile::AudioClipAssetFile(

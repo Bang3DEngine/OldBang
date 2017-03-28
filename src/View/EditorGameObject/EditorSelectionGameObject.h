@@ -1,7 +1,7 @@
 #ifndef EDITORSELECTIONGAMEOBJECT_H
 #define EDITORSELECTIONGAMEOBJECT_H
 
-#include "GameObject.h"
+#include "Bang/GameObject.h"
 
 class EditorAxisGroup;
 class EditorRectTransformGizmo;

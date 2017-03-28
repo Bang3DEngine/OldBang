@@ -4,7 +4,7 @@
 #include <QTimer>
 #include <QTreeWidgetItem>
 
-#include "ContextMenu.h"
+#include "Bang/ContextMenu.h"
 
 class ComponentWidget;
 class ComponentWidgetContextMenu : public ContextMenu

@@ -1,11 +1,11 @@
-#include "GPPass_G.h"
+#include "Bang/GPPass_G.h"
 
-#include "Debug.h"
-#include "Scene.h"
-#include "GBuffer.h"
-#include "Material.h"
-#include "Renderer.h"
-#include "GraphicPipeline.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/GBuffer.h"
+#include "Bang/Material.h"
+#include "Bang/Renderer.h"
+#include "Bang/GraphicPipeline.h"
 
 GPPass_G::GPPass_G(GraphicPipeline *graphicPipeline,
                    bool receiveLighting, bool transparentPass,

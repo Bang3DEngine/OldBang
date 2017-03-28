@@ -1,4 +1,4 @@
-#include "Texture.h"
+#include "Bang/Texture.h"
 
 Texture::Texture()
 {

@@ -4,7 +4,7 @@
 #include <QShortcut>
 #include <QKeySequence>
 
-#include "String.h"
+#include "Bang/String.h"
 
 typedef QKeySequence KSeq;
 

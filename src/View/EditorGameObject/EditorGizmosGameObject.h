@@ -1,7 +1,7 @@
 #ifndef EDITORGIZMOSGAMEOBJECT_H
 #define EDITORGIZMOSGAMEOBJECT_H
 
-#include "GameObject.h"
+#include "Bang/GameObject.h"
 
 class EditorGizmosGameObject : public GameObject
 {

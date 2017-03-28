@@ -1,7 +1,7 @@
 #ifndef EDITORSCENE_H
 #define EDITORSCENE_H
 
-#include "Scene.h"
+#include "Bang/Scene.h"
 
 class UIText;
 class EditorFloor;

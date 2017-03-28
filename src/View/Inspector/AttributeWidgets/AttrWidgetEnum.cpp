@@ -1,6 +1,6 @@
-#include "AttrWidgetEnum.h"
+#include "Bang/AttrWidgetEnum.h"
 
-#include "Array.h"
+#include "Bang/Array.h"
 
 AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :

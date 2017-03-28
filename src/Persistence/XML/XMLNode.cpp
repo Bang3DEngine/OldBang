@@ -1,11 +1,11 @@
-#include "XMLNode.h"
+#include "Bang/XMLNode.h"
 
-#include "XMLParser.h"
-#include "FileReader.h"
-#include "IO.h"
+#include "Bang/XMLParser.h"
+#include "Bang/FileReader.h"
+#include "Bang/IO.h"
 
 #ifdef BANG_EDITOR
-#include "IAttrWidgetButtonListener.h"
+#include "Bang/IAttrWidgetButtonListener.h"
 #endif
 
 XMLNode::XMLNode(const String &tagName) :

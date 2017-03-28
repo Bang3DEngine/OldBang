@@ -1,8 +1,8 @@
-#include "Asset.h"
+#include "Bang/Asset.h"
 
-#include "FileReader.h"
-#include "IO.h"
-#include "AssetsManager.h"
+#include "Bang/FileReader.h"
+#include "Bang/IO.h"
+#include "Bang/AssetsManager.h"
 
 Asset::Asset() : SerializableObject()
 {

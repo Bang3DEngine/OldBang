@@ -1,11 +1,11 @@
-#include "GL.h"
+#include "Bang/GL.h"
 
-#include "Debug.h"
-#include "Texture.h"
-#include "GLObject.h"
-#include "GLContext.h"
-#include "ShaderProgram.h"
-#include "GraphicPipeline.h"
+#include "Bang/Debug.h"
+#include "Bang/Texture.h"
+#include "Bang/GLObject.h"
+#include "Bang/GLContext.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/GraphicPipeline.h"
 
 void GL::ClearError()
 {

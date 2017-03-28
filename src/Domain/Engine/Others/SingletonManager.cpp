@@ -1,6 +1,6 @@
-#include "SingletonManager.h"
+#include "Bang/SingletonManager.h"
 
-#include "Debug.h"
+#include "Bang/Debug.h"
 
 SingletonManager *SingletonManager::s_mainBinarySM = nullptr;
 

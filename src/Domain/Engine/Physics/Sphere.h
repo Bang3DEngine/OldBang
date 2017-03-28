@@ -1,9 +1,9 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "Array.h"
-#include "AABox.h"
-#include "Vector3.h"
+#include "Bang/Array.h"
+#include "Bang/AABox.h"
+#include "Bang/Vector3.h"
 
 class Sphere
 {

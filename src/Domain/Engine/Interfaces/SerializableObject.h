@@ -4,7 +4,7 @@
 #include <set>
 #include <QPixmap>
 
-#include "String.h"
+#include "Bang/String.h"
 
 class String;
 class XMLNode;

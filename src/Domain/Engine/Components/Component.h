@@ -3,17 +3,17 @@
 
 #include <QPixmap>
 
-#include "IO.h"
-#include "Object.h"
-#include "String.h"
-#include "IToString.h"
-#include "IconManager.h"
-#include "SerializableObject.h"
-#include "ISceneEventListener.h"
+#include "Bang/IO.h"
+#include "Bang/Object.h"
+#include "Bang/String.h"
+#include "Bang/IToString.h"
+#include "Bang/IconManager.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
-#include "SerializableObject.h"
-#include "IWindowEventManagerListener.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/IWindowEventManagerListener.h"
 #endif
 
 class XMLNode;

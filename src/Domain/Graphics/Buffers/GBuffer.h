@@ -1,10 +1,10 @@
 #ifndef GBUFFER_H
 #define GBUFFER_H
 
-#include "Rect.h"
-#include "Color.h"
-#include "String.h"
-#include "Framebuffer.h"
+#include "Bang/Rect.h"
+#include "Bang/Color.h"
+#include "Bang/String.h"
+#include "Bang/Framebuffer.h"
 
 class Mesh;
 class Material;

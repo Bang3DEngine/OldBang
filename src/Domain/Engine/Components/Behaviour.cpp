@@ -1,6 +1,6 @@
-#include "Behaviour.h"
+#include "Bang/Behaviour.h"
 
-#include "BehaviourHolder.h"
+#include "Bang/BehaviourHolder.h"
 
 Behaviour::Behaviour()
 {

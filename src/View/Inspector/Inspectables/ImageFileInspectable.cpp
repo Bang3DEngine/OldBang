@@ -1,9 +1,9 @@
-#include "ImageFileInspectable.h"
+#include "Bang/ImageFileInspectable.h"
 
-#include "IO.h"
-#include "XMLNode.h"
-#include "IconManager.h"
-#include "InspectorWidget.h"
+#include "Bang/IO.h"
+#include "Bang/XMLNode.h"
+#include "Bang/IconManager.h"
+#include "Bang/InspectorWidget.h"
 
 ImageFileInspectable::ImageFileInspectable(const ImageFile &fileImage) :
     m_fileImage(fileImage)

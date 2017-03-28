@@ -1,15 +1,15 @@
-#include "AudioSource.h"
+#include "Bang/AudioSource.h"
 
-#include "Gizmos.h"
-#include "XMLNode.h"
-#include "AudioClip.h"
-#include "Transform.h"
-#include "AudioClip.h"
-#include "Texture2D.h"
-#include "GameObject.h"
-#include "ICloneable.h"
-#include "AudioManager.h"
-#include "AssetsManager.h"
+#include "Bang/Gizmos.h"
+#include "Bang/XMLNode.h"
+#include "Bang/AudioClip.h"
+#include "Bang/Transform.h"
+#include "Bang/AudioClip.h"
+#include "Bang/Texture2D.h"
+#include "Bang/GameObject.h"
+#include "Bang/ICloneable.h"
+#include "Bang/AudioManager.h"
+#include "Bang/AssetsManager.h"
 
 AudioSource::AudioSource()
 {

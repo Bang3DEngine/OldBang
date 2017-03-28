@@ -1,12 +1,12 @@
-#include "ImageFile.h"
+#include "Bang/ImageFile.h"
 
-#include "stb_image.h"
+#include "Bang/stb_image.h"
 
-#include "Debug.h"
-#include "IconManager.h"
+#include "Bang/Debug.h"
+#include "Bang/IconManager.h"
 
 #ifdef BANG_EDITOR
-#include "ImageFileInspectable.h"
+#include "Bang/ImageFileInspectable.h"
 #endif
 
 ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)

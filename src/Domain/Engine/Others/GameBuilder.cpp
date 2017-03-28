@@ -1,15 +1,15 @@
-#include "GameBuilder.h"
+#include "Bang/GameBuilder.h"
 
-#include "Debug.h"
-#include "Scene.h"
-#include "Dialog.h"
-#include "Project.h"
-#include "IO.h"
-#include "SystemUtils.h"
-#include "EditorWindow.h"
-#include "ProjectManager.h"
-#include "GameBuildDialog.h"
-#include "BehaviourManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Dialog.h"
+#include "Bang/Project.h"
+#include "Bang/IO.h"
+#include "Bang/SystemUtils.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/ProjectManager.h"
+#include "Bang/GameBuildDialog.h"
+#include "Bang/BehaviourManager.h"
 
 GameBuilder *GameBuilder::s_instance = nullptr;
 

@@ -1,9 +1,9 @@
 #ifndef NAMEDENUM_H
 #define NAMEDENUM_H
 
-#include "Map.h"
-#include "Array.h"
-#include "String.h"
+#include "Bang/Map.h"
+#include "Bang/Array.h"
+#include "Bang/String.h"
 
 static Array<String> VariadicStringToNamesArray(const String &_va_args_)
 {

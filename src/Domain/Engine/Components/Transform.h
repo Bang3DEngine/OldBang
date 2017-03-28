@@ -2,12 +2,12 @@
 #define TRANSFORM_H
 
 
-#include "String.h"
-#include "Vector3.h"
-#include "Matrix4.h"
-#include "Property.h"
-#include "Component.h"
-#include "Quaternion.h"
+#include "Bang/String.h"
+#include "Bang/Vector3.h"
+#include "Bang/Matrix4.h"
+#include "Bang/Property.h"
+#include "Bang/Component.h"
+#include "Bang/Quaternion.h"
 
 class XMLNode;
 class ICloneable;

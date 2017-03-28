@@ -1,7 +1,7 @@
 #ifndef FILEIMAGE_H
 #define FILEIMAGE_H
 
-#include "File.h"
+#include "Bang/File.h"
 
 class ImageFile : public File
 {

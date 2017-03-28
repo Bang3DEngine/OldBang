@@ -1,11 +1,11 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
-#include "Array.h"
+#include "Bang/Array.h"
 
-#include "Map.h"
-#include "Color.h"
-#include "GLObject.h"
+#include "Bang/Map.h"
+#include "Bang/Color.h"
+#include "Bang/GLObject.h"
 
 class RenderTexture;
 class Framebuffer : public GLObject

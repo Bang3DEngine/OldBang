@@ -1,23 +1,23 @@
-#include "Renderer.h"
+#include "Bang/Renderer.h"
 
 #include <functional>
 
-#include "AABox.h"
-#include "Debug.h"
-#include "Scene.h"
-#include "Camera.h"
-#include "GBuffer.h"
-#include "Material.h"
-#include "Transform.h"
-#include "GameObject.h"
-#include "SceneManager.h"
-#include "AssetsManager.h"
-#include "ShaderProgram.h"
-#include "GraphicPipeline.h"
+#include "Bang/AABox.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Camera.h"
+#include "Bang/GBuffer.h"
+#include "Bang/Material.h"
+#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
+#include "Bang/SceneManager.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/GraphicPipeline.h"
 
 #ifdef BANG_EDITOR
-#include "EditorScene.h"
-#include "SelectionFramebuffer.h"
+#include "Bang/EditorScene.h"
+#include "Bang/SelectionFramebuffer.h"
 #endif
 
 Renderer::Renderer()

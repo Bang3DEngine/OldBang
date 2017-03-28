@@ -6,14 +6,14 @@
 #include <QMouseEvent>
 #include <QToolButton>
 
-#include "File.h"
-#include "String.h"
-#include "Shortcut.h"
-#include "DragDropQListView.h"
-#include "IDragDropListener.h"
-#include "SerializableObject.h"
-#include "ExplorerContextMenu.h"
-#include "IWindowEventManagerListener.h"
+#include "Bang/File.h"
+#include "Bang/String.h"
+#include "Bang/Shortcut.h"
+#include "Bang/DragDropQListView.h"
+#include "Bang/IDragDropListener.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/ExplorerContextMenu.h"
+#include "Bang/IWindowEventManagerListener.h"
 
 class SerializableObject;
 class FileSystemModel;

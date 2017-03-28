@@ -1,7 +1,7 @@
 #ifndef TEXTURERENDER_H
 #define TEXTURERENDER_H
 
-#include "Texture2D.h"
+#include "Bang/Texture2D.h"
 
 class RenderTexture : public Texture2D
 {

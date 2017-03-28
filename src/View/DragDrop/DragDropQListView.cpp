@@ -1,4 +1,4 @@
-#include "DragDropQListView.h"
+#include "Bang/DragDropQListView.h"
 
 DragDropQListView::DragDropQListView()
     : QListView(), DragDropAgent()

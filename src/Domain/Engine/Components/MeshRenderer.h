@@ -1,7 +1,7 @@
 #ifndef MESHRENDERER_H
 #define MESHRENDERER_H
 
-#include "Renderer.h"
+#include "Bang/Renderer.h"
 
 class VAO;
 class Mesh;

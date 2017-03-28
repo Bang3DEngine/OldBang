@@ -1,19 +1,19 @@
-#include "ExplorerContextMenu.h"
+#include "Bang/ExplorerContextMenu.h"
 
 #include <QTreeWidgetItem>
 
-#include "IO.h"
-#include "Debug.h"
-#include "Dialog.h"
-#include "Prefab.h"
-#include "MenuBar.h"
-#include "Material.h"
-#include "Explorer.h"
-#include "Texture2D.h"
-#include "Inspector.h"
-#include "EditorWindow.h"
-#include "AssetsManager.h"
-#include "GameObjectClipboard.h"
+#include "Bang/IO.h"
+#include "Bang/Debug.h"
+#include "Bang/Dialog.h"
+#include "Bang/Prefab.h"
+#include "Bang/MenuBar.h"
+#include "Bang/Material.h"
+#include "Bang/Explorer.h"
+#include "Bang/Texture2D.h"
+#include "Bang/Inspector.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/GameObjectClipboard.h"
 
 ExplorerContextMenu::ExplorerContextMenu(Explorer *explorer) :
     ContextMenu(explorer), p_explorer(explorer)

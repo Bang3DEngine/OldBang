@@ -1,11 +1,11 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
-#include "Color.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Quaternion.h"
+#include "Bang/Color.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
+#include "Bang/Quaternion.h"
 
 class Random
 {

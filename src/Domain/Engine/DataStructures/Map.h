@@ -4,8 +4,8 @@
 #include <map>
 #include <sstream>
 
-#include "List.h"
-#include "String.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
 
 template <class Key, class Value>
 class Map : public std::map<Key, Value>

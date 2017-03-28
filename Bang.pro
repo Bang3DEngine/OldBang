@@ -121,55 +121,8 @@ LIBS += \
 INCLUDEPATH +=                                   \
     /usr/include                                 \
     /usr/include/freetype2                       \
-    /usr/include/freetype2/freetype              \
-                                                 \
-    $$PWD/src/                                   \
-    $$PWD/src/Domain/Interfaces/                 \
-    $$PWD/src/Domain/Graphics/                   \
-    $$PWD/src/Domain/Graphics/Buffers/           \
-    $$PWD/src/Domain/Graphics/Shaders/           \
-    $$PWD/src/Domain/Graphics/Interfaces/        \
-    $$PWD/src/Domain/Engine/                     \
-    $$PWD/src/Domain/Engine/Interfaces/          \
-    $$PWD/src/Domain/Engine/GraphicPipeline/     \
-    $$PWD/src/Domain/Engine/Debug/               \
-    $$PWD/src/Domain/Engine/GameObjects/         \
-    $$PWD/src/Domain/Engine/DataStructures/      \
-    $$PWD/src/Domain/Engine/Others/              \
-    $$PWD/src/Domain/Engine/Audio/               \
-    $$PWD/src/Domain/Engine/Components/          \
-    $$PWD/src/Domain/Engine/Readers/             \
-    $$PWD/src/Domain/Engine/Assets/              \
-    $$PWD/src/Domain/Engine/Assets/Meshes/       \
-    $$PWD/src/Domain/Engine/Assets/Behaviours/   \
-    $$PWD/src/Domain/Engine/Physics/             \
-    $$PWD/src/View/                              \
-    $$PWD/src/Persistence/                       \
-    $$PWD/src/Persistence/Project                \
-    $$PWD/src/Persistence/Behaviours/            \
-    $$PWD/src/Persistence/Files/                 \
-    $$PWD/src/Persistence/IO/                    \
-    $$PWD/src/Persistence/XML/                   \
-                                                 \
-    $$PWD/src/View/                              \
-    $$PWD/src/View/Windows
-
-EDITOR {
-    INCLUDEPATH +=                                           \
-        $$PWD/src/View/Interfaces/                           \
-        $$PWD/src/View/DragDrop/                             \
-        $$PWD/src/View/Dialogs/                              \
-        $$PWD/src/View/Hierarchy/                            \
-        $$PWD/src/View/Explorer/                             \
-        $$PWD/src/View/Console/                              \
-        $$PWD/src/View/EditorCamera/                         \
-        $$PWD/src/View/EditorGameObject/                     \
-        $$PWD/src/View/EditorGameObject/EditorRectTransform  \
-        $$PWD/src/View/EditorScene/                          \
-        $$PWD/src/View/Inspector/                            \
-        $$PWD/src/View/Inspector/Inspectables/               \
-        $$PWD/src/View/Inspector/AttributeWidgets/
-}
+        /usr/include/freetype2/freetype          \
+        $$PWD/include
 ######################################
 
 

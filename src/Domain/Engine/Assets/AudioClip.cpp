@@ -1,11 +1,11 @@
-#include "AudioClip.h"
+#include "Bang/AudioClip.h"
 
 #include <QThread>
 
-#include "Debug.h"
-#include "XMLNode.h"
-#include "AudioSource.h"
-#include "AudioManager.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/AudioSource.h"
+#include "Bang/AudioManager.h"
 
 AudioClip::AudioClip()
 {

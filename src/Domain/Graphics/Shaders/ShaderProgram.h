@@ -1,16 +1,16 @@
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
 
-#include "Map.h"
-#include "UMap.h"
-#include "Color.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Matrix4.h"
+#include "Bang/Map.h"
+#include "Bang/UMap.h"
+#include "Bang/Color.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
+#include "Bang/Matrix4.h"
 
-#include "GLObject.h"
-#include "IToString.h"
+#include "Bang/GLObject.h"
+#include "Bang/IToString.h"
 
 class Shader;
 class Texture;

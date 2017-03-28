@@ -1,9 +1,9 @@
-#include "ComponentWidget.h"
+#include "Bang/ComponentWidget.h"
 
-#include "Chrono.h"
-#include "Component.h"
-#include "IconManager.h"
-#include "EditorWindow.h"
+#include "Bang/Chrono.h"
+#include "Bang/Component.h"
+#include "Bang/IconManager.h"
+#include "Bang/EditorWindow.h"
 
 ComponentWidget::ComponentWidget(Component *relatedComponent) :
     InspectorWidget(),

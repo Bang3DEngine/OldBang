@@ -1,12 +1,12 @@
-#include "Quaternion.h"
+#include "Bang/Quaternion.h"
 
-#include "String.h"
-#include "Vector3.h"
-#include "Matrix4.h"
+#include "Bang/String.h"
+#include "Bang/Vector3.h"
+#include "Bang/Matrix4.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtx/transform.hpp"
-#include "glm/gtc/quaternion.hpp"
+#include "Bang/glm/glm.hpp"
+#include "Bang/glm/gtx/transform.hpp"
+#include "Bang/glm/gtc/quaternion.hpp"
 
 Quaternion Quaternion::Identity = Quaternion();
 

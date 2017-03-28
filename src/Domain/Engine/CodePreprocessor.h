@@ -1,8 +1,8 @@
 #ifndef CODEPREPROCESSOR_H
 #define CODEPREPROCESSOR_H
 
-#include "Array.h"
-#include "String.h"
+#include "Bang/Array.h"
+#include "Bang/String.h"
 
 class CodePreprocessor
 {
@@ -20,7 +20,7 @@ protected:
     /**
      * @brief Given an include directive, returns
      * the String that it should be replaced with.
-     * @param includeDirective '#include "myShaderFile.frag"'
+     * @param includeDirective '#include "Bang/myShaderFile.frag"'
      * @return The String that the include directive
      * should be replaced with.
      */

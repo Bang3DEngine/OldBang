@@ -3,9 +3,9 @@
 
 #include <QTimer>
 
-#include "File.h"
-#include "SerializableObject.h"
-#include "IWindowEventManagerListener.h"
+#include "Bang/File.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/IWindowEventManagerListener.h"
 
 class GameObject;
 class InspectorWidget;

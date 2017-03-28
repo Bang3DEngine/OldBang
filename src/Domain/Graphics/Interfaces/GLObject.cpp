@@ -1,7 +1,7 @@
-#include "GLObject.h"
+#include "Bang/GLObject.h"
 
 #include <iostream>
-#include "Debug.h"
+#include "Bang/Debug.h"
 
 GLObject::GLObject() {}
 

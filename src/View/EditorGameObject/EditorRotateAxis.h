@@ -1,9 +1,9 @@
 #ifndef EDITORROTATEAXIS_H
 #define EDITORROTATEAXIS_H
 
-#include "Vector2.h"
-#include "EditorAxis.h"
-#include "CircleRenderer.h"
+#include "Bang/Vector2.h"
+#include "Bang/EditorAxis.h"
+#include "Bang/CircleRenderer.h"
 
 class CircleCulledRenderer;
 class EditorRotateAxis : public EditorAxis

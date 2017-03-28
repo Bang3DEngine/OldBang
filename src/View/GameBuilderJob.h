@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "String.h"
+#include "Bang/String.h"
 
 class GameBuilderJob : public QObject
 {

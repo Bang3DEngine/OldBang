@@ -1,7 +1,7 @@
 #ifndef GPPASS_SP_DEFERREDLIGHTS_H
 #define GPPASS_SP_DEFERREDLIGHTS_H
 
-#include "GPPass.h"
+#include "Bang/GPPass.h"
 
 /**
  * @brief The GPDeferredLightsPass class is a GraphicPipeline pass

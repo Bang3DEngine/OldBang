@@ -1,13 +1,13 @@
 #ifndef ASSET_H
 #define ASSET_H
 
-#include "IO.h"
-#include "IToString.h"
-#include "IconManager.h"
-#include "SerializableObject.h"
+#include "Bang/IO.h"
+#include "Bang/IToString.h"
+#include "Bang/IconManager.h"
+#include "Bang/SerializableObject.h"
 
 #ifdef BANG_EDITOR
-#include "SerializableObject.h"
+#include "Bang/SerializableObject.h"
 #endif
 
 class AssetsManager;

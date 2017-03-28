@@ -1,13 +1,13 @@
-#include "PrefabAssetFileInspectable.h"
+#include "Bang/PrefabAssetFileInspectable.h"
 
-#include "Debug.h"
-#include "Prefab.h"
-#include "Inspector.h"
-#include "GameObject.h"
-#include "EditorWindow.h"
-#include "AssetsManager.h"
-#include "InspectorWidget.h"
-#include "FileReferencesManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Prefab.h"
+#include "Bang/Inspector.h"
+#include "Bang/GameObject.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/InspectorWidget.h"
+#include "Bang/FileReferencesManager.h"
 
 PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
     m_file(f)

@@ -1,20 +1,20 @@
-#include "AudioManager.h"
+#include "Bang/AudioManager.h"
 
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <AL/alut.h>
 #include <QThreadPool>
 
-#include "Scene.h"
-#include "Debug.h"
-#include "Camera.h"
-#include "Transform.h"
-#include "AudioClip.h"
-#include "GameObject.h"
-#include "Application.h"
-#include "SceneManager.h"
-#include "AudioListener.h"
-#include "AudioPlayerRunnable.h"
+#include "Bang/Scene.h"
+#include "Bang/Debug.h"
+#include "Bang/Camera.h"
+#include "Bang/Transform.h"
+#include "Bang/AudioClip.h"
+#include "Bang/GameObject.h"
+#include "Bang/Application.h"
+#include "Bang/SceneManager.h"
+#include "Bang/AudioListener.h"
+#include "Bang/AudioPlayerRunnable.h"
 
 AudioManager::AudioManager()
 {

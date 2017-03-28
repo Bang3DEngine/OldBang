@@ -2,7 +2,7 @@
 #define EDITORSCALEAXIS_H
 
 
-#include "EditorAxis.h"
+#include "Bang/EditorAxis.h"
 
 class Renderer;
 class GameObject;

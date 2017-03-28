@@ -1,7 +1,7 @@
-#include "EditorState.h"
+#include "Bang/EditorState.h"
 
-#include "EditorWindow.h"
-#include "EditorPlayStopFlowController.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/EditorPlayStopFlowController.h"
 
 EditorState::EditorState()
 {

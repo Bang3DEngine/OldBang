@@ -4,9 +4,9 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-#include "XMLAttribute.h"
-#include "DragDropQWidget.h"
-#include "IDragDropListener.h"
+#include "Bang/XMLAttribute.h"
+#include "Bang/DragDropQWidget.h"
+#include "Bang/IDragDropListener.h"
 
 class QLabel;
 class XMLNode;

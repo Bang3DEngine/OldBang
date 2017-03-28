@@ -1,8 +1,8 @@
 #ifndef INSPECTORTEXTURE2DWIDGET_H
 #define INSPECTORTEXTURE2DWIDGET_H
 
-#include "ImageFile.h"
-#include "SerializableObject.h"
+#include "Bang/ImageFile.h"
+#include "Bang/SerializableObject.h"
 
 class ImageFileInspectable : public SerializableObject
 {

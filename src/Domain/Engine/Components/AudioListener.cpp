@@ -1,9 +1,9 @@
-#include "AudioListener.h"
+#include "Bang/AudioListener.h"
 
 #include <AL/al.h>
 
-#include "XMLNode.h"
-#include "Transform.h"
+#include "Bang/XMLNode.h"
+#include "Bang/Transform.h"
 
 AudioListener::AudioListener()
 {

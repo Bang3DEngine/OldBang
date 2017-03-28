@@ -1,8 +1,8 @@
 #ifndef CHRONO_H
 #define CHRONO_H
 
-#include "Array.h"
-#include "String.h"
+#include "Bang/Array.h"
+#include "Bang/String.h"
 
 class Chrono
 {

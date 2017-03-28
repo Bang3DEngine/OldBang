@@ -3,8 +3,8 @@
 
 #include <QMainWindow>
 
-#include "String.h"
-#include "ui_SelectProjectWindow.h"
+#include "Bang/String.h"
+#include "Bang/ui_SelectProjectWindow.h"
 
 class SelectProjectWindow :
         public QObject,

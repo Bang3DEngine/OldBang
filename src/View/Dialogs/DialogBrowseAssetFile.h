@@ -4,9 +4,9 @@
 #include <QDialog>
 #include <QModelIndex>
 
-#include "Map.h"
-#include "List.h"
-#include "String.h"
+#include "Bang/Map.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
 
 class QTabWidget;
 class QListWidget;

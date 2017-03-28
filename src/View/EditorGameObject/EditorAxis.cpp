@@ -1,12 +1,12 @@
-#include "EditorAxis.h"
+#include "Bang/EditorAxis.h"
 
-#include "Input.h"
-#include "Camera.h"
-#include "Screen.h"
-#include "Material.h"
-#include "Renderer.h"
-#include "Transform.h"
-#include "AssetsManager.h"
+#include "Bang/Input.h"
+#include "Bang/Camera.h"
+#include "Bang/Screen.h"
+#include "Bang/Material.h"
+#include "Bang/Renderer.h"
+#include "Bang/Transform.h"
+#include "Bang/AssetsManager.h"
 
 EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
                        GameObject *attachedGameObject)

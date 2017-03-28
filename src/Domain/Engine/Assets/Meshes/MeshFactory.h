@@ -1,7 +1,7 @@
 #ifndef MESHFACTORY_H
 #define MESHFACTORY_H
 
-#include "Array.h"
+#include "Bang/Array.h"
 
 class Mesh;
 class Vector3;

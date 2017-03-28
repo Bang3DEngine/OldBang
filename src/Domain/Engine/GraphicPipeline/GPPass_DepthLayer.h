@@ -1,8 +1,8 @@
 #ifndef GPPASS_DEPTH_LAYER_H
 #define GPPASS_DEPTH_LAYER_H
 
-#include "Renderer.h"
-#include "GPPass.h"
+#include "Bang/Renderer.h"
+#include "Bang/GPPass.h"
 
 /**
  * @brief The GPDepthLayerPass class is a GraphicPipeline pass that does nothing

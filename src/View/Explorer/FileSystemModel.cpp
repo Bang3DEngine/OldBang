@@ -1,11 +1,11 @@
-#include "FileSystemModel.h"
+#include "Bang/FileSystemModel.h"
 
 #include <QPainter>
 
-#include "Debug.h"
-#include "String.h"
-#include "Explorer.h"
-#include "IconManager.h"
+#include "Bang/Debug.h"
+#include "Bang/String.h"
+#include "Bang/Explorer.h"
+#include "Bang/IconManager.h"
 
 FileSystemModel::FileSystemModel(Explorer *explorer) :
     QFileSystemModel()

@@ -1,7 +1,7 @@
 #ifndef AUDIOLISTENER_H
 #define AUDIOLISTENER_H
 
-#include "Component.h"
+#include "Bang/Component.h"
 
 class AudioListener : public Component
 {

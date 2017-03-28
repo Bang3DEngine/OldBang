@@ -1,9 +1,9 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include "String.h"
-#include "HideFlags.h"
-#include "ICloneable.h"
+#include "Bang/String.h"
+#include "Bang/HideFlags.h"
+#include "Bang/ICloneable.h"
 
 #define OBJECT(CLASS) \
         public: \

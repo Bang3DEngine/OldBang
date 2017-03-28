@@ -1,4 +1,4 @@
-#include "Object.h"
+#include "Bang/Object.h"
 
 #include <typeinfo>
 

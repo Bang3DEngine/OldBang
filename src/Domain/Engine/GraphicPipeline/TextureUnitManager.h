@@ -3,8 +3,8 @@
 
 #include <queue>
 
-#include "GL.h"
-#include "Map.h"
+#include "Bang/GL.h"
+#include "Bang/Map.h"
 
 class Texture;
 class TextureUnitManager

@@ -1,15 +1,15 @@
-#include "EditorRectTransformAnchorGizmo.h"
+#include "Bang/EditorRectTransformAnchorGizmo.h"
 
-#include "Math.h"
-#include "Time.h"
-#include "Input.h"
-#include "Debug.h"
-#include "Screen.h"
-#include "Vector2.h"
-#include "Texture2D.h"
-#include "EditorState.h"
-#include "AssetsManager.h"
-#include "RectTransform.h"
+#include "Bang/Math.h"
+#include "Bang/Time.h"
+#include "Bang/Input.h"
+#include "Bang/Debug.h"
+#include "Bang/Screen.h"
+#include "Bang/Vector2.h"
+#include "Bang/Texture2D.h"
+#include "Bang/EditorState.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/RectTransform.h"
 
 EditorRectTransformAnchorGizmo::
     EditorRectTransformAnchorGizmo(AnchorPosition anchorPosition,

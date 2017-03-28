@@ -1,10 +1,10 @@
 #ifndef BEHAVIOURHOLDER_H
 #define BEHAVIOURHOLDER_H
 
-#include "Component.h"
+#include "Bang/Component.h"
 
 #ifdef BANG_EDITOR
-#include "IAttrWidgetButtonListener.h"
+#include "Bang/IAttrWidgetButtonListener.h"
 #endif
 
 /**

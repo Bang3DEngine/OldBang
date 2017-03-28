@@ -1,14 +1,14 @@
-#include "BehaviourMergeObjectsRunnable.h"
+#include "Bang/BehaviourMergeObjectsRunnable.h"
 
-#include "Time.h"
-#include "List.h"
-#include "Debug.h"
-#include "XMLNode.h"
-#include "Project.h"
-#include "SystemUtils.h"
-#include "IO.h"
-#include "ProjectManager.h"
-#include "BehaviourManager.h"
+#include "Bang/Time.h"
+#include "Bang/List.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/Project.h"
+#include "Bang/SystemUtils.h"
+#include "Bang/IO.h"
+#include "Bang/ProjectManager.h"
+#include "Bang/BehaviourManager.h"
 
 BehaviourMergeObjectsRunnable::BehaviourMergeObjectsRunnable(bool forGame)
 {

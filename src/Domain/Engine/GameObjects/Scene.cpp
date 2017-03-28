@@ -1,24 +1,24 @@
-#include "Scene.h"
+#include "Bang/Scene.h"
 
 #ifdef BANG_EDITOR
-#include "EditorScene.h"
+#include "Bang/EditorScene.h"
 #endif
 
-#include "Debug.h"
-#include "Screen.h"
-#include "Camera.h"
-#include "Material.h"
-#include "XMLParser.h"
-#include "Transform.h"
-#include "GameObject.h"
-#include "MeshFactory.h"
-#include "SceneManager.h"
-#include "RectTransform.h"
-#include "AudioListener.h"
-#include "BehaviourHolder.h"
-#include "GraphicPipeline.h"
-#include "BehaviourManager.h"
-#include "DirectionalLight.h"
+#include "Bang/Debug.h"
+#include "Bang/Screen.h"
+#include "Bang/Camera.h"
+#include "Bang/Material.h"
+#include "Bang/XMLParser.h"
+#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/SceneManager.h"
+#include "Bang/RectTransform.h"
+#include "Bang/AudioListener.h"
+#include "Bang/BehaviourHolder.h"
+#include "Bang/GraphicPipeline.h"
+#include "Bang/BehaviourManager.h"
+#include "Bang/DirectionalLight.h"
 
 Scene::Scene() : GameObject("Scene")
 {

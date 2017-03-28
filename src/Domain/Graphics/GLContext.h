@@ -3,16 +3,16 @@
 
 #include <stack>
 
-#include "GL.h"
-#include "Map.h"
-#include "List.h"
-#include "Color.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Matrix4.h"
-#include "TypeMap.h"
-#include "Texture.h"
+#include "Bang/GL.h"
+#include "Bang/Map.h"
+#include "Bang/List.h"
+#include "Bang/Color.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
+#include "Bang/Matrix4.h"
+#include "Bang/TypeMap.h"
+#include "Bang/Texture.h"
 
 class VAO;
 class GLContext

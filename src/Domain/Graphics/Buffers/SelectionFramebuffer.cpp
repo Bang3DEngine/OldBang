@@ -1,21 +1,21 @@
-#include "SelectionFramebuffer.h"
+#include "Bang/SelectionFramebuffer.h"
 
-#include "IO.h"
-#include "Scene.h"
-#include "Debug.h"
-#include "Cursor.h"
-#include "Material.h"
-#include "Renderer.h"
-#include "GameObject.h"
-#include "ShaderProgram.h"
-#include "RenderTexture.h"
-#include "AssetsManager.h"
+#include "Bang/IO.h"
+#include "Bang/Scene.h"
+#include "Bang/Debug.h"
+#include "Bang/Cursor.h"
+#include "Bang/Material.h"
+#include "Bang/Renderer.h"
+#include "Bang/GameObject.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/RenderTexture.h"
+#include "Bang/AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "Hierarchy.h"
-#include "EditorWindow.h"
-#include "GameObject.h"
-#include "WindowEventManager.h"
+#include "Bang/Hierarchy.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/GameObject.h"
+#include "Bang/WindowEventManager.h"
 #endif
 
 SelectionFramebuffer::SelectionFramebuffer(int width, int height) :

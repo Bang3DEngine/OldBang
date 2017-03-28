@@ -1,14 +1,14 @@
-#include "EditorAxisGroup.h"
+#include "Bang/EditorAxisGroup.h"
 
-#include "Scene.h"
-#include "Camera.h"
-#include "Transform.h"
-#include "GameObject.h"
-#include "EditorState.h"
-#include "SceneManager.h"
-#include "EditorScaleAxisGroup.h"
-#include "EditorRotateAxisGroup.h"
-#include "EditorTranslateAxisGroup.h"
+#include "Bang/Scene.h"
+#include "Bang/Camera.h"
+#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
+#include "Bang/EditorState.h"
+#include "Bang/SceneManager.h"
+#include "Bang/EditorScaleAxisGroup.h"
+#include "Bang/EditorRotateAxisGroup.h"
+#include "Bang/EditorTranslateAxisGroup.h"
 
 EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : GameObject("EditorAxisGroup")
 {

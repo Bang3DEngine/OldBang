@@ -1,7 +1,7 @@
 #ifndef QTPROJECTMANAGER_H
 #define QTPROJECTMANAGER_H
 
-#include "String.h"
+#include "Bang/String.h"
 
 /**
  * @brief The QtProjectManager class handles the creation of the .pro file that

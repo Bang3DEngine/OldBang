@@ -4,8 +4,8 @@
 #include <iostream>
 #include <typeinfo>
 
-#include "Map.h"
-#include "String.h"
+#include "Bang/Map.h"
+#include "Bang/String.h"
 
 typedef String TypeId;
 template <class Value>

@@ -3,11 +3,11 @@
 
 #include <QPixmap>
 
-#include "File.h"
-#include "Array.h"
-#include "Color.h"
-#include "String.h"
-#include "Vector4.h"
+#include "Bang/File.h"
+#include "Bang/Array.h"
+#include "Bang/Color.h"
+#include "Bang/String.h"
+#include "Bang/Vector4.h"
 
 class MaterialAssetFile : public File
 {

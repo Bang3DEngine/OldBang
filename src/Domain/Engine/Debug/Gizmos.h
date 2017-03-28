@@ -1,11 +1,11 @@
 #ifndef GIZMOS_H
 #define GIZMOS_H
 
-#include "AABox.h"
-#include "Color.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Quaternion.h"
+#include "Bang/AABox.h"
+#include "Bang/Color.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
+#include "Bang/Quaternion.h"
 
 class Mesh;
 class Rect;

@@ -4,8 +4,8 @@
 #include <QModelIndex>
 #include <QFileSystemModel>
 
-#include "String.h"
-#include "SerializableObject.h"
+#include "Bang/String.h"
+#include "Bang/SerializableObject.h"
 
 class File
 {

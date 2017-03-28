@@ -5,10 +5,10 @@
 #include <AL/alc.h>
 #include <AL/alut.h>
 
-#include "String.h"
-#include "SerializableObject.h"
-#include "AudioClipAssetFile.h"
-#include "IAttrWidgetButtonListener.h"
+#include "Bang/String.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/AudioClipAssetFile.h"
+#include "Bang/IAttrWidgetButtonListener.h"
 
 class XMLNode;
 class AudioClip;

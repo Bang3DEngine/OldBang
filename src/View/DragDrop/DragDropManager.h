@@ -9,8 +9,8 @@
 
 #include <QTimer>
 
-#include "List.h"
-#include "Vector2.h"
+#include "Bang/List.h"
+#include "Bang/Vector2.h"
 
 class DragDropInfo
 {

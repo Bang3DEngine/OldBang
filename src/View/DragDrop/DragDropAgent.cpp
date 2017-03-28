@@ -1,13 +1,13 @@
-#include "DragDropAgent.h"
+#include "Bang/DragDropAgent.h"
 
-#include "EditorWindow.h"
-#include "WindowEventManager.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/WindowEventManager.h"
 
-#include "File.h"
-#include "Debug.h"
-#include "Explorer.h"
-#include "Hierarchy.h"
-#include "GameObject.h"
+#include "Bang/File.h"
+#include "Bang/Debug.h"
+#include "Bang/Explorer.h"
+#include "Bang/Hierarchy.h"
+#include "Bang/GameObject.h"
 
 void DragDropAgent::SetDragDropEventPossibleSources(
         const List<QObject *> &possibleDragDropEventSources)

@@ -1,4 +1,4 @@
-#include "ContextMenu.h"
+#include "Bang/ContextMenu.h"
 
 ContextMenu::ContextMenu(QWidget *widget)
 {

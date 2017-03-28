@@ -1,7 +1,7 @@
 #ifndef EDITORRECTTRANSFORMGIZMO_H
 #define EDITORRECTTRANSFORMGIZMO_H
 
-#include "EditorGizmo.h"
+#include "Bang/EditorGizmo.h"
 
 class EditorRectTransformAnchorGizmo;
 class EditorRectTransformCornerGizmo;

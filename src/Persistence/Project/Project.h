@@ -1,8 +1,8 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include "String.h"
-#include "SerializableObject.h"
+#include "Bang/String.h"
+#include "Bang/SerializableObject.h"
 
 class Project : public SerializableObject
 {

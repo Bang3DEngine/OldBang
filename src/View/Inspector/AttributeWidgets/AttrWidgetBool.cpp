@@ -1,4 +1,4 @@
-#include "AttrWidgetBool.h"
+#include "Bang/AttrWidgetBool.h"
 
 AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :

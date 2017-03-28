@@ -1,12 +1,12 @@
-#include "Vector4.h"
+#include "Bang/Vector4.h"
 
-#include "Math.h"
-#include "Color.h"
-#include "String.h"
-#include "Matrix4.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Quaternion.h"
+#include "Bang/Math.h"
+#include "Bang/Color.h"
+#include "Bang/String.h"
+#include "Bang/Matrix4.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Quaternion.h"
 
 const Vector4 Vector4::Up      = Vector4( 0,  1,  0, 0);
 const Vector4 Vector4::Down    = Vector4( 0, -1,  0, 0);

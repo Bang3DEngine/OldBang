@@ -5,7 +5,7 @@
 #include <QModelIndex>
 #include <QFileSystemModel>
 
-#include "File.h"
+#include "Bang/File.h"
 
 class AudioFile : public File
 {

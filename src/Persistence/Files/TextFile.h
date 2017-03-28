@@ -1,7 +1,7 @@
 #ifndef TEXTFILE_H
 #define TEXTFILE_H
 
-#include "File.h"
+#include "Bang/File.h"
 
 class TextFile : public File
 {

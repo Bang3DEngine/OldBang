@@ -1,7 +1,7 @@
 #ifndef EDITORROTATEAXISGROUP_H
 #define EDITORROTATEAXISGROUP_H
 
-#include "GameObject.h"
+#include "Bang/GameObject.h"
 
 class Toolbar;
 class MeshRenderer;

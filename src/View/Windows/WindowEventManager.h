@@ -9,9 +9,9 @@
 #include <QApplication>
 #include <QTreeWidgetItem>
 
-#include "Array.h"
-#include "MenuBar.h"
-#include "XMLNode.h"
+#include "Bang/Array.h"
+#include "Bang/MenuBar.h"
+#include "Bang/XMLNode.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\
     for (auto it = (ITERABLE).Begin(); it != (ITERABLE).End(); ++it ) \

@@ -3,7 +3,7 @@
 
 #include <QTreeWidget>
 
-#include "DragDropAgent.h"
+#include "Bang/DragDropAgent.h"
 
 class DragDropQTreeWidget : public QTreeWidget,
                             public DragDropAgent

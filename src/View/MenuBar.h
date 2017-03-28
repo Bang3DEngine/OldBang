@@ -4,8 +4,8 @@
 #include <QMenuBar>
 #include <QMessageBox>
 
-#include "Dialog.h"
-#include "String.h"
+#include "Bang/Dialog.h"
+#include "Bang/String.h"
 
 class Mesh;
 class Material;

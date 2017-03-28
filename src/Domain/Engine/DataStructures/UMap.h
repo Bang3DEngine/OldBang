@@ -6,8 +6,8 @@
 #include <functional>
 #include <unordered_map>
 
-#include "List.h"
-#include "String.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
 
 template <class Key, class Value>
 class UMap : public std::unordered_map<Key, Value>

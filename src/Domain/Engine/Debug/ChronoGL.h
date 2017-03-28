@@ -3,8 +3,8 @@
 
 #include <GL/glew.h>
 
-#include "Array.h"
-#include "String.h"
+#include "Bang/Array.h"
+#include "Bang/String.h"
 
 class ChronoGL
 {

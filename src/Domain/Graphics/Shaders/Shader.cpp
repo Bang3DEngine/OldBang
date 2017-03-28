@@ -1,12 +1,12 @@
-#include "Shader.h"
+#include "Bang/Shader.h"
 
 #include <sstream>
 #include <fstream>
 #include <iostream>
 
-#include "Debug.h"
-#include "IO.h"
-#include "ShaderPreprocessor.h"
+#include "Bang/Debug.h"
+#include "Bang/IO.h"
+#include "Bang/ShaderPreprocessor.h"
 
 Shader::Shader(Shader::Type t)
     : m_sourceCode(""), m_filepath(""), m_type(t)

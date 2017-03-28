@@ -1,10 +1,10 @@
-#include "SelectProjectWindow.h"
+#include "Bang/SelectProjectWindow.h"
 
-#include "Debug.h"
-#include "Project.h"
-#include "IO.h"
-#include "EngineConfig.h"
-#include "ProjectManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Project.h"
+#include "Bang/IO.h"
+#include "Bang/EngineConfig.h"
+#include "Bang/ProjectManager.h"
 
 SelectProjectWindow *SelectProjectWindow::s_instance = nullptr;
 

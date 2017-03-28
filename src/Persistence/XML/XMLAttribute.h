@@ -1,18 +1,18 @@
 #ifndef XMLATTRIBUTE_H
 #define XMLATTRIBUTE_H
 
-#include "Array.h"
+#include "Bang/Array.h"
 
-#include "NamedEnum.h"
+#include "Bang/NamedEnum.h"
 
-#include "Rect.h"
-#include "Color.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "IToString.h"
-#include "Quaternion.h"
-#include "XMLProperty.h"
+#include "Bang/Rect.h"
+#include "Bang/Color.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
+#include "Bang/IToString.h"
+#include "Bang/Quaternion.h"
+#include "Bang/XMLProperty.h"
 
 class IAttrWidgetButtonListener;
 class XMLAttribute : public IToString

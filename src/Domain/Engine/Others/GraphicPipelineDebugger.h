@@ -1,7 +1,7 @@
 #ifndef GRAPHICPIPELINEDEBUGGER_H
 #define GRAPHICPIPELINEDEBUGGER_H
 
-#include "GBuffer.h"
+#include "Bang/GBuffer.h"
 
 class GraphicPipelineDebugger
 {

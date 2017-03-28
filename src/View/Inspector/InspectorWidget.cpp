@@ -1,25 +1,25 @@
-#include "InspectorWidget.h"
+#include "Bang/InspectorWidget.h"
 
 #include <QScrollBar>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include "Debug.h"
-#include "Inspector.h"
-#include "Component.h"
-#include "GameObject.h"
-#include "EditorWindow.h"
-#include "AttrWidgetInt.h"
-#include "AttrWidgetEnum.h"
-#include "AttrWidgetFile.h"
-#include "AttrWidgetBool.h"
-#include "AttrWidgetFloat.h"
-#include "AttrWidgetColor.h"
-#include "AttributeWidget.h"
-#include "AttrWidgetButton.h"
-#include "AttrWidgetString.h"
-#include "WindowEventManager.h"
-#include "AttrWidgetVectorFloat.h"
+#include "Bang/Debug.h"
+#include "Bang/Inspector.h"
+#include "Bang/Component.h"
+#include "Bang/GameObject.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/AttrWidgetInt.h"
+#include "Bang/AttrWidgetEnum.h"
+#include "Bang/AttrWidgetFile.h"
+#include "Bang/AttrWidgetBool.h"
+#include "Bang/AttrWidgetFloat.h"
+#include "Bang/AttrWidgetColor.h"
+#include "Bang/AttributeWidget.h"
+#include "Bang/AttrWidgetButton.h"
+#include "Bang/AttrWidgetString.h"
+#include "Bang/WindowEventManager.h"
+#include "Bang/AttrWidgetVectorFloat.h"
 
 
 InspectorWidget::InspectorWidget()

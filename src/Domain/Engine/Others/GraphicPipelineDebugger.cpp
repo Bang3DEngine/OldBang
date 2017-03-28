@@ -1,8 +1,8 @@
-#include "GraphicPipelineDebugger.h"
+#include "Bang/GraphicPipelineDebugger.h"
 
-#include "Time.h"
-#include "Input.h"
-#include "IO.h"
+#include "Bang/Time.h"
+#include "Bang/Input.h"
+#include "Bang/IO.h"
 
 String GraphicPipelineDebugger::c_debugDir = "/home/sephirot47/Bang/tmp";
 

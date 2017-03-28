@@ -1,10 +1,10 @@
 #ifndef UIRENDERER_H
 #define UIRENDERER_H
 
-#include "Color.h"
-#include "String.h"
-#include "Matrix4.h"
-#include "MeshRenderer.h"
+#include "Bang/Color.h"
+#include "Bang/String.h"
+#include "Bang/Matrix4.h"
+#include "Bang/MeshRenderer.h"
 
 class XMLNode;
 class Material;

@@ -1,10 +1,10 @@
-#include "Matrix4.h"
+#include "Bang/Matrix4.h"
 
 #include <sstream>
 
-#include "String.h"
-#include "Vector3.h"
-#include "Quaternion.h"
+#include "Bang/String.h"
+#include "Bang/Vector3.h"
+#include "Bang/Quaternion.h"
 
 Matrix4 Matrix4::Identity = Matrix4();
 

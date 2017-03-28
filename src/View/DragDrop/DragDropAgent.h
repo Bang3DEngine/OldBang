@@ -10,9 +10,9 @@
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 
-#include "Color.h"
-#include "Vector2.h"
-#include "DragDropManager.h"
+#include "Bang/Color.h"
+#include "Bang/Vector2.h"
+#include "Bang/DragDropManager.h"
 
 class File;
 class GameObject;

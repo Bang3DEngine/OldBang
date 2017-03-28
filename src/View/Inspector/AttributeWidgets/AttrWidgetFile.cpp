@@ -1,18 +1,18 @@
-﻿#include "AttrWidgetFile.h"
+﻿#include "Bang/AttrWidgetFile.h"
 
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QPushButton>
 
-#include "IO.h"
-#include "File.h"
-#include "Dialog.h"
-#include "Explorer.h"
-#include "Hierarchy.h"
-#include "Application.h"
-#include "EditorWindow.h"
-#include "InspectorWidget.h"
-#include "DialogBrowseAssetFile.h"
+#include "Bang/IO.h"
+#include "Bang/File.h"
+#include "Bang/Dialog.h"
+#include "Bang/Explorer.h"
+#include "Bang/Hierarchy.h"
+#include "Bang/Application.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/InspectorWidget.h"
+#include "Bang/DialogBrowseAssetFile.h"
 
 AttrWidgetFile::AttrWidgetFile(const XMLAttribute &xmlAttribute,
                                InspectorWidget *inspectorWidget) :

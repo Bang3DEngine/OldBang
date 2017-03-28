@@ -1,19 +1,19 @@
-#include "EditorPlayStopFlowController.h"
+#include "Bang/EditorPlayStopFlowController.h"
 
 #include <QProgressDialog>
 
-#include "Debug.h"
-#include "Scene.h"
-#include "Screen.h"
-#include "Dialog.h"
-#include "Console.h"
-#include "EditorState.h"
-#include "Application.h"
-#include "EditorScene.h"
-#include "EditorWindow.h"
-#include "SceneManager.h"
-#include "EditorCamera.h"
-#include "BehaviourManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Screen.h"
+#include "Bang/Dialog.h"
+#include "Bang/Console.h"
+#include "Bang/EditorState.h"
+#include "Bang/Application.h"
+#include "Bang/EditorScene.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/SceneManager.h"
+#include "Bang/EditorCamera.h"
+#include "Bang/BehaviourManager.h"
 
 EditorPlayStopFlowController::EditorPlayStopFlowController()
 {

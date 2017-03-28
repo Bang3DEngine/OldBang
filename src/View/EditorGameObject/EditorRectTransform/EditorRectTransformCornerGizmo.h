@@ -1,8 +1,8 @@
 #ifndef EDITORRECTTRANSFORMCORNERGIZMO_H
 #define EDITORRECTTRANSFORMCORNERGIZMO_H
 
-#include "Texture2D.h"
-#include "EditorGizmo.h"
+#include "Bang/Texture2D.h"
+#include "Bang/EditorGizmo.h"
 
 class RectTransform;
 class EditorRectTransformGizmo;

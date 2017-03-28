@@ -1,8 +1,8 @@
 #ifndef TEXTFILEINSPECTABLE_H
 #define TEXTFILEINSPECTABLE_H
 
-#include "TextFile.h"
-#include "SerializableObject.h"
+#include "Bang/TextFile.h"
+#include "Bang/SerializableObject.h"
 
 class XMLNode;
 class TextFileInspectable : public SerializableObject

@@ -1,13 +1,13 @@
-#include "MeshAssetFile.h"
+#include "Bang/MeshAssetFile.h"
 
-#include "IO.h"
-#include "Mesh.h"
-#include "IconManager.h"
-#include "AssetsManager.h"
+#include "Bang/IO.h"
+#include "Bang/Mesh.h"
+#include "Bang/IconManager.h"
+#include "Bang/AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "SerializableObject.h"
-#include "MeshAssetFileInspectable.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/MeshAssetFileInspectable.h"
 #endif
 
 MeshAssetFile::MeshAssetFile(

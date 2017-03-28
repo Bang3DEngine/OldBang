@@ -1,7 +1,7 @@
 #ifndef EDITORTRANSLATEAXIS_H
 #define EDITORTRANSLATEAXIS_H
 
-#include "EditorAxis.h"
+#include "Bang/EditorAxis.h"
 
 class GameObject;
 class SingleLineRenderer;

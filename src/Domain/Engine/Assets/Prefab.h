@@ -1,8 +1,8 @@
 #ifndef BANGFAB_H
 #define BANGFAB_H
 
-#include "Asset.h"
-#include "String.h"
+#include "Bang/Asset.h"
+#include "Bang/String.h"
 
 //Represents an GameObject that can be saved as an asset, and
 //can be instantiated.

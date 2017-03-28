@@ -1,8 +1,8 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "String.h"
-#include "Component.h"
+#include "Bang/String.h"
+#include "Bang/Component.h"
 
 class XMLNode;
 class ICloneable;

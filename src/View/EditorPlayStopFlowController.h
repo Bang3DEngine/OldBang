@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "Scene.h"
+#include "Bang/Scene.h"
 
 class EditorPlayStopFlowController : public QObject
 {

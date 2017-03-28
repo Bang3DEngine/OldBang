@@ -4,8 +4,8 @@
 #include <QThread>
 #include <QProgressDialog>
 
-#include "String.h"
-#include "GameBuilderJob.h"
+#include "Bang/String.h"
+#include "Bang/GameBuilderJob.h"
 
 class Project;
 class GameBuildDialog;

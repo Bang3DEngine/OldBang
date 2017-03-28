@@ -1,13 +1,13 @@
-#include "FileReferencesManager.h"
+#include "Bang/FileReferencesManager.h"
 
-#include "Map.h"
-#include "File.h"
-#include "Debug.h"
-#include "XMLNode.h"
-#include "Explorer.h"
-#include "IO.h"
-#include "XMLAttribute.h"
-#include "SerializableObject.h"
+#include "Bang/Map.h"
+#include "Bang/File.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/Explorer.h"
+#include "Bang/IO.h"
+#include "Bang/XMLAttribute.h"
+#include "Bang/SerializableObject.h"
 
 FileReferencesManager::FileReferencesManager()
 {

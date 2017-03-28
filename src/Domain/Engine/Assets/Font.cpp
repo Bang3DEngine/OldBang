@@ -1,11 +1,11 @@
-#include "Font.h"
+#include "Bang/Font.h"
 
 #include <GL/glew.h>
 
-#include "Debug.h"
-#include "XMLNode.h"
-#include "Texture2D.h"
-#include "FontSheetCreator.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/Texture2D.h"
+#include "Bang/FontSheetCreator.h"
 
 int Font::CharLoadSize = 64;
 

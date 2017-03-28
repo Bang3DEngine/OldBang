@@ -5,9 +5,9 @@
 #include <QPixmap>
 #include <QPainter>
 
-#include "Map.h"
-#include "String.h"
-#include "NamedEnum.h"
+#include "Bang/Map.h"
+#include "Bang/String.h"
+#include "Bang/NamedEnum.h"
 
 class Material;
 

@@ -3,9 +3,9 @@
 
 #include <QPushButton>
 
-#include "XMLAttribute.h"
-#include "AttributeWidget.h"
-#include "IAttrWidgetButtonListener.h"
+#include "Bang/XMLAttribute.h"
+#include "Bang/AttributeWidget.h"
+#include "Bang/IAttrWidgetButtonListener.h"
 
 class AttrWidgetButton : public AttributeWidget
 {

@@ -1,11 +1,11 @@
-#include "RectTransform.h"
+#include "Bang/RectTransform.h"
 
-#include "Math.h"
-#include "Debug.h"
-#include "Screen.h"
-#include "XMLNode.h"
-#include "Vector4.h"
-#include "GameObject.h"
+#include "Bang/Math.h"
+#include "Bang/Debug.h"
+#include "Bang/Screen.h"
+#include "Bang/XMLNode.h"
+#include "Bang/Vector4.h"
+#include "Bang/GameObject.h"
 
 RectTransform::RectTransform()
 {

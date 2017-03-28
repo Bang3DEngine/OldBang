@@ -3,8 +3,8 @@
 
 #include <QByteArray>
 
-#include "List.h"
-#include "String.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
 
 class Explorer;
 class IO

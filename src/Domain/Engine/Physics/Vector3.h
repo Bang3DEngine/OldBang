@@ -1,7 +1,7 @@
 #ifndef VECTOR3_H
 #define VECTOR3_H
 
-#include "glm/glm.hpp"
+#include "Bang/glm/glm.hpp"
 
 class String;
 class Vector2;

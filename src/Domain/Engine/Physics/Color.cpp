@@ -1,12 +1,12 @@
-#include "Color.h"
+#include "Bang/Color.h"
 
 #include <sstream>
 
-#include "Math.h"
-#include "String.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
+#include "Bang/Math.h"
+#include "Bang/String.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
 
 const Color Color::Red         = Color(1,     0,   0,  1);
 const Color Color::Orange      = Color(1,   0.5,   0,  1);

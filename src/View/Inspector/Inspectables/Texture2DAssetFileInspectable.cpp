@@ -1,8 +1,8 @@
-#include "Texture2DAssetFileInspectable.h"
+#include "Bang/Texture2DAssetFileInspectable.h"
 
-#include "IO.h"
-#include "Texture2D.h"
-#include "AssetsManager.h"
+#include "Bang/IO.h"
+#include "Bang/Texture2D.h"
+#include "Bang/AssetsManager.h"
 
 Texture2DAssetFileInspectable::Texture2DAssetFileInspectable
     (const Texture2DAssetFile &fileTex) :

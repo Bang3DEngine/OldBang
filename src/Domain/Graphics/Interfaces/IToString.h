@@ -1,7 +1,7 @@
 #ifndef ITOSTRING_H
 #define ITOSTRING_H
 
-#include "String.h"
+#include "Bang/String.h"
 
 class IToString
 {

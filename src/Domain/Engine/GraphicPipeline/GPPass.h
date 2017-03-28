@@ -1,7 +1,7 @@
 #ifndef GRAPHICPIPELINEPASS_H
 #define GRAPHICPIPELINEPASS_H
 
-#include "List.h"
+#include "Bang/List.h"
 
 class Scene;
 class GBuffer;

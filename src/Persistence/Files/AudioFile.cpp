@@ -1,10 +1,10 @@
-#include "AudioFile.h"
+#include "Bang/AudioFile.h"
 
-#include "IO.h"
-#include "IconManager.h"
+#include "Bang/IO.h"
+#include "Bang/IconManager.h"
 
 #ifdef BANG_EDITOR
-#include "AudioFileInspectable.h"
+#include "Bang/AudioFileInspectable.h"
 #endif
 
 AudioFile::AudioFile(const QFileSystemModel *model, const QModelIndex &index)

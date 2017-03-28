@@ -1,7 +1,7 @@
-#include "EngineConfig.h"
+#include "Bang/EngineConfig.h"
 
-#include "FileReader.h"
-#include "IO.h"
+#include "Bang/FileReader.h"
+#include "Bang/IO.h"
 
 EngineConfig::EngineConfig()
 {

@@ -1,13 +1,13 @@
-#include "Framebuffer.h"
+#include "Bang/Framebuffer.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#include "Bang/stb_image_write.h"
 
-#include "GL.h"
-#include "Math.h"
-#include "Debug.h"
-#include "Vector2.h"
-#include "RenderTexture.h"
+#include "Bang/GL.h"
+#include "Bang/Math.h"
+#include "Bang/Debug.h"
+#include "Bang/Vector2.h"
+#include "Bang/RenderTexture.h"
 
 Framebuffer::Framebuffer(int width, int height) : m_width(width),
                                                   m_height(height)

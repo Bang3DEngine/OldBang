@@ -1,8 +1,8 @@
 #ifndef ENGINECONFIG_H
 #define ENGINECONFIG_H
 
-#include "List.h"
-#include "String.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
 
 class EngineConfig
 {

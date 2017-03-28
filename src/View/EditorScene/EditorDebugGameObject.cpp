@@ -1,7 +1,7 @@
-#include "EditorDebugGameObject.h"
+#include "Bang/EditorDebugGameObject.h"
 
-#include "Time.h"
-#include "Gizmos.h"
+#include "Bang/Time.h"
+#include "Bang/Gizmos.h"
 
 EditorDebugGameObject::EditorDebugGameObject() :
     GameObject("EditorDebugGameObject")

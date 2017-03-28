@@ -1,13 +1,13 @@
 #ifndef XMLNODE_H
 #define XMLNODE_H
 
-#include "Map.h"
-#include "List.h"
-#include "Rect.h"
-#include "Vector3.h"
-#include "IToString.h"
-#include "Quaternion.h"
-#include "XMLAttribute.h"
+#include "Bang/Map.h"
+#include "Bang/List.h"
+#include "Bang/Rect.h"
+#include "Bang/Vector3.h"
+#include "Bang/IToString.h"
+#include "Bang/Quaternion.h"
+#include "Bang/XMLAttribute.h"
 
 class IAttrWidgetButtonListener;
 class XMLNode : public IToString

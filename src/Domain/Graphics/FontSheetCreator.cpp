@@ -1,9 +1,9 @@
-#include "FontSheetCreator.h"
+#include "Bang/FontSheetCreator.h"
 
-#include "Debug.h"
-#include "Texture2D.h"
+#include "Bang/Debug.h"
+#include "Bang/Texture2D.h"
 
-#include "ftglyph.h"
+#include <ftglyph.h>
 
 FontSheetCreator *FontSheetCreator::m_singleton = nullptr;
 

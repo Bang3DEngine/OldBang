@@ -1,12 +1,12 @@
-#include "ShaderProgram.h"
+#include "Bang/ShaderProgram.h"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "Bang/glm/glm.hpp"
+#include "Bang/glm/gtc/type_ptr.hpp"
 
-#include "Debug.h"
-#include "Shader.h"
-#include "Texture.h"
-#include "TextureUnitManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Shader.h"
+#include "Bang/Texture.h"
+#include "Bang/TextureUnitManager.h"
 
 ShaderProgram::ShaderProgram()
 {

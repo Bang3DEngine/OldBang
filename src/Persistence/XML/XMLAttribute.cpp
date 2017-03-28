@@ -1,14 +1,14 @@
-#include "XMLAttribute.h"
+#include "Bang/XMLAttribute.h"
 
 #include <iostream>
 #include <functional>
 
-#include "Debug.h"
-#include "Object.h"
-#include "IO.h"
+#include "Bang/Debug.h"
+#include "Bang/Object.h"
+#include "Bang/IO.h"
 
 #ifdef BANG_EDITOR
-#include "IAttrWidgetButtonListener.h"
+#include "Bang/IAttrWidgetButtonListener.h"
 #endif
 
 XMLAttribute::XMLAttribute()

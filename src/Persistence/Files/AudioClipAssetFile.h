@@ -4,8 +4,8 @@
 #include <QModelIndex>
 #include <QFileSystemModel>
 
-#include "File.h"
-#include "String.h"
+#include "Bang/File.h"
+#include "Bang/String.h"
 
 class SerializableObject;
 class AudioClipAssetFile : public File

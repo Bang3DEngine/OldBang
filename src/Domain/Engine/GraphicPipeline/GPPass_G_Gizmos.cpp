@@ -1,9 +1,9 @@
-#include "GPPass_G_Gizmos.h"
+#include "Bang/GPPass_G_Gizmos.h"
 
-#include "Debug.h"
-#include "GBuffer.h"
-#include "Renderer.h"
-#include "GameObject.h"
+#include "Bang/Debug.h"
+#include "Bang/GBuffer.h"
+#include "Bang/Renderer.h"
+#include "Bang/GameObject.h"
 
 GPPass_G_Gizmos::GPPass_G_Gizmos(GraphicPipeline *graphicPipeline,
                                  bool depthed, bool overlay,

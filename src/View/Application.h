@@ -6,8 +6,8 @@
 #include <QKeyEvent>
 #include <QApplication>
 
-#include "Map.h"
-#include "Array.h"
+#include "Bang/Map.h"
+#include "Bang/Array.h"
 
 class Scene;
 class AudioManager;

@@ -3,12 +3,12 @@
 
 #include <cmath>
 
-#include "List.h"
-#include "Array.h"
-#include "Vector3.h"
-#include "Matrix4.h"
-#include "IToString.h"
-#include "Quaternion.h"
+#include "Bang/List.h"
+#include "Bang/Array.h"
+#include "Bang/Vector3.h"
+#include "Bang/Matrix4.h"
+#include "Bang/IToString.h"
+#include "Bang/Quaternion.h"
 
 
 class Rect;

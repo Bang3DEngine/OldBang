@@ -1,27 +1,27 @@
-#include "Application.h"
+#include "Bang/Application.h"
 
 #include <QThreadPool>
 
 #ifdef BANG_EDITOR
-#include "EditorScene.h"
-#include "EditorWindow.h"
-#include "DragDropManager.h"
-#include "WindowEventManager.h"
+#include "Bang/EditorScene.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/DragDropManager.h"
+#include "Bang/WindowEventManager.h"
 #else
-#include "GameWindow.h"
+#include "Bang/GameWindow.h"
 #endif
 
-#include "Math.h"
-#include "Time.h"
-#include "Input.h"
-#include "Scene.h"
-#include "Screen.h"
-#include "Chrono.h"
-#include "AudioManager.h"
-#include "SceneManager.h"
-#include "AssetsManager.h"
-#include "BehaviourManager.h"
-#include "FontSheetCreator.h"
+#include "Bang/Math.h"
+#include "Bang/Time.h"
+#include "Bang/Input.h"
+#include "Bang/Scene.h"
+#include "Bang/Screen.h"
+#include "Bang/Chrono.h"
+#include "Bang/AudioManager.h"
+#include "Bang/SceneManager.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/BehaviourManager.h"
+#include "Bang/FontSheetCreator.h"
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 {

@@ -1,14 +1,14 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "Rect.h"
-#include "AABox.h"
-#include "Color.h"
-#include "String.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "NamedEnum.h"
-#include "Component.h"
+#include "Bang/Rect.h"
+#include "Bang/AABox.h"
+#include "Bang/Color.h"
+#include "Bang/String.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/NamedEnum.h"
+#include "Bang/Component.h"
 
 class Mesh;
 class Screen;

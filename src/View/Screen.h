@@ -9,11 +9,11 @@
 #include <QGLWidget>
 #include <QApplication>
 
-#include "Array.h"
-#include "Shortcut.h"
+#include "Bang/Array.h"
+#include "Bang/Shortcut.h"
 
 #ifdef BANG_EDITOR
-#include "IDragDropListener.h"
+#include "Bang/IDragDropListener.h"
 #else
 class IDragDropListener { }; // To solve a Qt moc stuff
 #endif

@@ -1,7 +1,7 @@
 #ifndef POINTLIGHT_H
 #define POINTLIGHT_H
 
-#include "Light.h"
+#include "Bang/Light.h"
 
 class Camera;
 class XMLNode;

@@ -6,10 +6,10 @@
 #include <QMutex>
 #include <QDropEvent>
 
-#include "Map.h"
-#include "List.h"
-#include "String.h"
-#include "DragDropQTreeWidget.h"
+#include "Bang/Map.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
+#include "Bang/DragDropQTreeWidget.h"
 
 class QLabel;
 class Console : public DragDropQTreeWidget

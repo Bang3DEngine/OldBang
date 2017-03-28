@@ -1,9 +1,9 @@
 #ifndef GRAPHICPIPELINE_H
 #define GRAPHICPIPELINE_H
 
-#include "GBuffer.h"
-#include "Renderer.h"
-#include "GPPass_DepthLayer.h"
+#include "Bang/GBuffer.h"
+#include "Bang/Renderer.h"
+#include "Bang/GPPass_DepthLayer.h"
 
 class Mesh;
 class Scene;

@@ -5,8 +5,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "String.h"
-#include "IO.h"
+#include "Bang/String.h"
+#include "Bang/IO.h"
 
 class Dialog
 {

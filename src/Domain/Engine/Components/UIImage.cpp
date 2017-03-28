@@ -1,14 +1,14 @@
-﻿#include "UIImage.h"
+﻿#include "Bang/UIImage.h"
 
-#include "Rect.h"
-#include "GBuffer.h"
-#include "Material.h"
-#include "Texture2D.h"
-#include "GameObject.h"
-#include "MeshFactory.h"
-#include "ShaderProgram.h"
-#include "AssetsManager.h"
-#include "GraphicPipeline.h"
+#include "Bang/Rect.h"
+#include "Bang/GBuffer.h"
+#include "Bang/Material.h"
+#include "Bang/Texture2D.h"
+#include "Bang/GameObject.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/GraphicPipeline.h"
 
 UIImage::UIImage()
 {

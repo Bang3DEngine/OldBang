@@ -1,10 +1,10 @@
-#include "EditorRectTransformGizmo.h"
+#include "Bang/EditorRectTransformGizmo.h"
 
-#include "Debug.h"
-#include "EditorState.h"
-#include "RectTransform.h"
-#include "EditorRectTransformAnchorGizmo.h"
-#include "EditorRectTransformCornerGizmo.h"
+#include "Bang/Debug.h"
+#include "Bang/EditorState.h"
+#include "Bang/RectTransform.h"
+#include "Bang/EditorRectTransformAnchorGizmo.h"
+#include "Bang/EditorRectTransformCornerGizmo.h"
 
 EditorRectTransformGizmo::EditorRectTransformGizmo(
         GameObject *attachedGameObject)

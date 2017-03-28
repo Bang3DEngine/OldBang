@@ -1,16 +1,16 @@
-#include "Texture2DAssetFile.h"
+#include "Bang/Texture2DAssetFile.h"
 
-#include "stb_image.h"
+#include "Bang/stb_image.h"
 
-#include "IO.h"
-#include "Debug.h"
-#include "XMLNode.h"
-#include "FileReader.h"
-#include "IconManager.h"
+#include "Bang/IO.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/FileReader.h"
+#include "Bang/IconManager.h"
 
 #ifdef BANG_EDITOR
-#include "SerializableObject.h"
-#include "Texture2DAssetFileInspectable.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/Texture2DAssetFileInspectable.h"
 #endif
 
 Texture2DAssetFile::Texture2DAssetFile

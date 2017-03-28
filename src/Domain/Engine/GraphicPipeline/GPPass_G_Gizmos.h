@@ -1,7 +1,7 @@
 #ifndef GPPASS_G_GIZMOS_H
 #define GPPASS_G_GIZMOS_H
 
-#include "GPPass.h"
+#include "Bang/GPPass.h"
 
 class GPPass_G_Gizmos : public GPPass
 {

@@ -1,13 +1,13 @@
-#include "Mesh.h"
+#include "Bang/Mesh.h"
 
 #include <GL/glew.h>
 
-#include "VAO.h"
-#include "VBO.h"
-#include "XMLNode.h"
-#include "SerializableObject.h"
-#include "FileReader.h"
-#include "ShaderProgram.h"
+#include "Bang/VAO.h"
+#include "Bang/VBO.h"
+#include "Bang/XMLNode.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/FileReader.h"
+#include "Bang/ShaderProgram.h"
 
 Mesh::Mesh()
 {

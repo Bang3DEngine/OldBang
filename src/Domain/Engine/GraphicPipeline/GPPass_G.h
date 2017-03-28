@@ -1,7 +1,7 @@
 #ifndef GPPASS_G_H
 #define GPPASS_G_H
 
-#include "GPPass.h"
+#include "Bang/GPPass.h"
 
 class GBuffer;
 class Renderer;

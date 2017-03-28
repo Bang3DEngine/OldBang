@@ -1,10 +1,10 @@
-#include "AudioPlayerRunnable.h"
+#include "Bang/AudioPlayerRunnable.h"
 
 #include <QThread>
 
-#include "Debug.h"
-#include "AudioClip.h"
-#include "AudioManager.h"
+#include "Bang/Debug.h"
+#include "Bang/AudioClip.h"
+#include "Bang/AudioManager.h"
 
 AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
                                          int alSourceId,

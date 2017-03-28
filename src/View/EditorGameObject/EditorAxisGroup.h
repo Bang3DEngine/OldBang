@@ -1,7 +1,7 @@
 #ifndef EDITORAXISGROUP_H
 #define EDITORAXISGROUP_H
 
-#include "GameObject.h"
+#include "Bang/GameObject.h"
 
 class GameObject;
 class EditorScaleAxisGroup;

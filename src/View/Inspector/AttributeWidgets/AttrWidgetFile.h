@@ -4,9 +4,9 @@
 #include <QDir>
 #include <QLineEdit>
 
-#include "String.h"
-#include "AttributeWidget.h"
-#include "IWindowEventManagerListener.h"
+#include "Bang/String.h"
+#include "Bang/AttributeWidget.h"
+#include "Bang/IWindowEventManagerListener.h"
 
 class QHBoxLayout;
 class FileLineEdit;

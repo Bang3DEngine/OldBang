@@ -1,4 +1,4 @@
-#include "IO.h"
+#include "Bang/IO.h"
 
 #include <QDir>
 #include <QFile>
@@ -6,11 +6,11 @@
 #include <fstream>
 #include <QCryptographicHash>
 
-#include "Debug.h"
-#include "SingletonManager.h"
+#include "Bang/Debug.h"
+#include "Bang/SingletonManager.h"
 
 #ifdef BANG_EDITOR
-#include "Explorer.h"
+#include "Bang/Explorer.h"
 #endif
 
 bool IO::IsDir(const String &path)

@@ -1,10 +1,10 @@
 #ifndef MATRIX4_H
 #define MATRIX4_H
 
-#include "Vector4.h"
+#include "Bang/Vector4.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtx/transform.hpp"
+#include "Bang/glm/glm.hpp"
+#include "Bang/glm/gtx/transform.hpp"
 
 class String;
 class Vector3;

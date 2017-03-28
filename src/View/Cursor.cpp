@@ -1,15 +1,15 @@
-#include "Cursor.h"
+#include "Bang/Cursor.h"
 
 #include <QCursor>
 
-#include "Input.h"
-#include "Application.h"
+#include "Bang/Input.h"
+#include "Bang/Application.h"
 
 Cursor::Cursor()
 {
 }
 
-#include "Debug.h"
+#include "Bang/Debug.h"
 void Cursor::SetIcon(Cursor::CursorIcon icon)
 {
     QCursor cursor;

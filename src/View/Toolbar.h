@@ -6,9 +6,9 @@
 #include <QComboBox>
 #include <QToolButton>
 
-#include "Input.h"
-#include "Shortcut.h"
-#include "EditorState.h"
+#include "Bang/Input.h"
+#include "Bang/Shortcut.h"
+#include "Bang/EditorState.h"
 
 class Toolbar : public QWidget
 {

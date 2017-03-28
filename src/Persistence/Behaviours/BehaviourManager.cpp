@@ -1,23 +1,23 @@
-#include "BehaviourManager.h"
+#include "Bang/BehaviourManager.h"
 
 #include <QLibrary>
 
-#include "Time.h"
-#include "Debug.h"
-#include "Scene.h"
-#include "Project.h"
-#include "IO.h"
-#include "Application.h"
-#include "SystemUtils.h"
-#include "SceneManager.h"
-#include "ProjectManager.h"
-#include "BehaviourHolder.h"
-#include "CodePreprocessor.h"
-#include "BehaviourMergeObjectsRunnable.h"
-#include "BehaviourObjectCompileRunnable.h"
+#include "Bang/Time.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Project.h"
+#include "Bang/IO.h"
+#include "Bang/Application.h"
+#include "Bang/SystemUtils.h"
+#include "Bang/SceneManager.h"
+#include "Bang/ProjectManager.h"
+#include "Bang/BehaviourHolder.h"
+#include "Bang/CodePreprocessor.h"
+#include "Bang/BehaviourMergeObjectsRunnable.h"
+#include "Bang/BehaviourObjectCompileRunnable.h"
 
 #ifdef BANG_EDITOR
-#include "Console.h"
+#include "Bang/Console.h"
 #endif
 
 BehaviourManager::BehaviourManager()

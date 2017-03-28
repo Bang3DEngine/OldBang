@@ -1,12 +1,12 @@
-#include "LineRenderer.h"
+#include "Bang/LineRenderer.h"
 
-#include "VBO.h"
-#include "VAO.h"
-#include "Math.h"
-#include "Material.h"
-#include "Transform.h"
-#include "ShaderProgram.h"
-#include "AssetsManager.h"
+#include "Bang/VBO.h"
+#include "Bang/VAO.h"
+#include "Bang/Math.h"
+#include "Bang/Material.h"
+#include "Bang/Transform.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/AssetsManager.h"
 
 LineRenderer::LineRenderer()
 {

@@ -3,13 +3,13 @@
 
 #include <sstream>
 
-#include "Map.h"
-#include "Debug.h"
-#include "Asset.h"
-#include "Object.h"
-#include "XMLParser.h"
-#include "IO.h"
-#include "BehaviourManager.h"
+#include "Bang/Map.h"
+#include "Bang/Debug.h"
+#include "Bang/Asset.h"
+#include "Bang/Object.h"
+#include "Bang/XMLParser.h"
+#include "Bang/IO.h"
+#include "Bang/BehaviourManager.h"
 
 class AssetsManager
 {

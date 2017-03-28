@@ -1,11 +1,11 @@
-#include "IWindow.h"
+#include "Bang/IWindow.h"
 
-#include "Application.h"
+#include "Bang/Application.h"
 
 #ifdef BANG_EDITOR
-#include "EditorWindow.h"
+#include "Bang/EditorWindow.h"
 #else
-#include "GameWindow.h"
+#include "Bang/GameWindow.h"
 #endif
 
 

@@ -1,7 +1,7 @@
-#include "ComponentClipboard.h"
+#include "Bang/ComponentClipboard.h"
 
-#include "Component.h"
-#include "GameObject.h"
+#include "Bang/Component.h"
+#include "Bang/GameObject.h"
 
 Component* ComponentClipboard::s_copiedComponent = nullptr;
 

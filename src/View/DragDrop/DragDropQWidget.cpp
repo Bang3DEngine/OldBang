@@ -1,4 +1,4 @@
-#include "DragDropQWidget.h"
+#include "Bang/DragDropQWidget.h"
 
 DragDropQWidget::DragDropQWidget(QWidget *parent)
     : QWidget(parent), DragDropAgent()

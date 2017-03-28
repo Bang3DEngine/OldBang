@@ -1,7 +1,7 @@
 #ifndef FILEREADER_H
 #define FILEREADER_H
 
-#include "Array.h"
+#include "Bang/Array.h"
 
 #include <fstream>
 #include <sstream>
@@ -10,9 +10,9 @@
 #include <iostream>
 #include <string.h>
 
-#include "Map.h"
-#include "Rect.h"
-#include "Debug.h"
+#include "Bang/Map.h"
+#include "Bang/Rect.h"
+#include "Bang/Debug.h"
 
 class Scene;
 class GameObject;

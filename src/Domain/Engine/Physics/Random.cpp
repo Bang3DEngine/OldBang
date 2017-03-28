@@ -1,4 +1,4 @@
-#include "Random.h"
+#include "Bang/Random.h"
 
 float Random::Range(float minIncluded, float maxIncluded)
 {

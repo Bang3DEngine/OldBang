@@ -1,9 +1,9 @@
-#include "WindowEventManager.h"
+#include "Bang/WindowEventManager.h"
 
-#include "GameObject.h"
-#include "EditorWindow.h"
-#include "InspectorWidget.h"
-#include "IWindowEventManagerListener.h"
+#include "Bang/GameObject.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/InspectorWidget.h"
+#include "Bang/IWindowEventManagerListener.h"
 
 WindowEventManager *WindowEventManager::s_wem = nullptr;
 

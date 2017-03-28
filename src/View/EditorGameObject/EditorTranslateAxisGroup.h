@@ -1,7 +1,7 @@
 #ifndef EDITORTRANSLATEAXISGROUP_H
 #define EDITORTRANSLATEAXISGROUP_H
 
-#include "GameObject.h"
+#include "Bang/GameObject.h"
 
 class EditorAxisPlane;
 class EditorTranslateAxis;

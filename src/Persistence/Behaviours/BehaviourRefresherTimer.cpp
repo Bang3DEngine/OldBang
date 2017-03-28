@@ -1,19 +1,19 @@
-#include "BehaviourRefresherTimer.h"
+#include "Bang/BehaviourRefresherTimer.h"
 
 #include <QThread>
 
-#include "List.h"
-#include "Debug.h"
-#include "Scene.h"
-#include "Application.h"
-#include "IO.h"
-#include "SceneManager.h"
-#include "BehaviourHolder.h"
-#include "BehaviourManager.h"
+#include "Bang/List.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Application.h"
+#include "Bang/IO.h"
+#include "Bang/SceneManager.h"
+#include "Bang/BehaviourHolder.h"
+#include "Bang/BehaviourManager.h"
 
 #ifdef BANG_EDITOR
-#include "EditorState.h"
-#include "EditorWindow.h"
+#include "Bang/EditorState.h"
+#include "Bang/EditorWindow.h"
 #endif
 
 BehaviourRefresherTimer::BehaviourRefresherTimer()

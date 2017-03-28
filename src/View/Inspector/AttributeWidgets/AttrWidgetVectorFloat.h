@@ -1,14 +1,14 @@
 #ifndef INSPECTORVECTORFLOATCOMPONENTSLOTWIDGET_H
 #define INSPECTORVECTORFLOATCOMPONENTSLOTWIDGET_H
 
-#include "Array.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Quaternion.h"
+#include "Bang/Array.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
+#include "Bang/Quaternion.h"
 
-#include "ComponentWidget.h"
-#include "AttrWidgetFloat.h"
+#include "Bang/ComponentWidget.h"
+#include "Bang/AttrWidgetFloat.h"
 
 class AttrWidgetVectorFloat : public AttributeWidget //Slot for a vector of size N
 {

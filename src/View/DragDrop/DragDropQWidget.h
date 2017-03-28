@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "DragDropAgent.h"
+#include "Bang/DragDropAgent.h"
 
 class DragDropQWidget : public QWidget,
                         public DragDropAgent

@@ -1,6 +1,6 @@
-#include "AudioFileInspectable.h"
+#include "Bang/AudioFileInspectable.h"
 
-#include "XMLNode.h"
+#include "Bang/XMLNode.h"
 
 AudioFileInspectable::AudioFileInspectable(const AudioFile &audioFile)
     : m_audioFile(audioFile)

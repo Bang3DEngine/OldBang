@@ -1,10 +1,10 @@
 #ifndef EDITORAXIS_H
 #define EDITORAXIS_H
 
-#include "Color.h"
-#include "String.h"
-#include "Vector3.h"
-#include "EditorGizmo.h"
+#include "Bang/Color.h"
+#include "Bang/String.h"
+#include "Bang/Vector3.h"
+#include "Bang/EditorGizmo.h"
 
 class Input;
 class Camera;

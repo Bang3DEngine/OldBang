@@ -1,17 +1,17 @@
-#include "DirectionalLight.h"
+#include "Bang/DirectionalLight.h"
 
-#include "Scene.h"
-#include "Camera.h"
-#include "Gizmos.h"
-#include "Material.h"
-#include "Texture2D.h"
-#include "Transform.h"
-#include "GameObject.h"
-#include "SceneManager.h"
-#include "AssetsManager.h"
+#include "Bang/Scene.h"
+#include "Bang/Camera.h"
+#include "Bang/Gizmos.h"
+#include "Bang/Material.h"
+#include "Bang/Texture2D.h"
+#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
+#include "Bang/SceneManager.h"
+#include "Bang/AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "InspectorWidget.h"
+#include "Bang/InspectorWidget.h"
 #endif
 
 DirectionalLight::DirectionalLight()

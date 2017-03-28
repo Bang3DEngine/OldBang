@@ -1,10 +1,10 @@
-#include "Dialog.h"
+#include "Bang/Dialog.h"
 
 #include <QInputDialog>
 
-#include "Debug.h"
-#include "EditorWindow.h"
-#include "SelectProjectWindow.h"
+#include "Bang/Debug.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/SelectProjectWindow.h"
 
 Dialog::Dialog()
 {

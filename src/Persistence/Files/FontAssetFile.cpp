@@ -1,13 +1,13 @@
-#include "FontAssetFile.h"
+#include "Bang/FontAssetFile.h"
 
-#include "IO.h"
-#include "Debug.h"
-#include "FileReader.h"
-#include "IconManager.h"
-#include "AssetsManager.h"
+#include "Bang/IO.h"
+#include "Bang/Debug.h"
+#include "Bang/FileReader.h"
+#include "Bang/IconManager.h"
+#include "Bang/AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "SerializableObject.h"
+#include "Bang/SerializableObject.h"
 #endif
 
 FontAssetFile::FontAssetFile(const QFileSystemModel *model, const QModelIndex &index)

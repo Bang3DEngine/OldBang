@@ -1,8 +1,8 @@
-#include "ChronoGL.h"
+#include "Bang/ChronoGL.h"
 
 #include <iostream>
 
-#include "Time.h"
+#include "Bang/Time.h"
 
 ChronoGL::ChronoGL(const String &chronoName)
 {

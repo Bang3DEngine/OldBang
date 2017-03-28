@@ -1,10 +1,10 @@
 #ifndef EDITORBBOX_H
 #define EDITORBBOX_H
 
-#include "Array.h"
-#include "Vector3.h"
+#include "Bang/Array.h"
+#include "Bang/Vector3.h"
 
-#include "GameObject.h"
+#include "Bang/GameObject.h"
 
 class Material;
 class GameObject;

@@ -1,11 +1,11 @@
-#include "CircleRenderer.h"
+#include "Bang/CircleRenderer.h"
 
-#include "Debug.h"
-#include "Scene.h"
-#include "Camera.h"
-#include "XMLNode.h"
-#include "Transform.h"
-#include "SceneManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Camera.h"
+#include "Bang/XMLNode.h"
+#include "Bang/Transform.h"
+#include "Bang/SceneManager.h"
 
 CircleRenderer::CircleRenderer()
 {

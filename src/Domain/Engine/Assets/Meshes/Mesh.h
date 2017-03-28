@@ -1,10 +1,10 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "AABox.h"
-#include "Array.h"
-#include "Asset.h"
-#include "Sphere.h"
+#include "Bang/AABox.h"
+#include "Bang/Array.h"
+#include "Bang/Asset.h"
+#include "Bang/Sphere.h"
 
 class VAO;
 class VBO;

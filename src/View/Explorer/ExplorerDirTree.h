@@ -4,7 +4,7 @@
 #include <QTimer>
 #include <QTreeView>
 
-#include "String.h"
+#include "Bang/String.h"
 
 class QTimer;
 class Explorer;

@@ -1,49 +1,49 @@
-#include "Array.h"
+#include "Bang/Array.h"
 
 #include <iostream>
 
 #include <QTextStream>
 #include <QStyleFactory>
 
-#include "glm/glm.hpp"
+#include "Bang/glm/glm.hpp"
 
-#include "Debug.h"
-#include "Input.h"
-#include "Timer.h"
-#include "Debug.h"
-#include "Camera.h"
-#include "Shader.h"
-#include "Screen.h"
-#include "XMLNode.h"
-#include "AudioClip.h"
-#include "Behaviour.h"
-#include "Texture2D.h"
-#include "XMLParser.h"
-#include "GameObject.h"
-#include "FileReader.h"
-#include "IO.h"
-#include "Application.h"
-#include "Framebuffer.h"
-#include "SceneManager.h"
-#include "MeshRenderer.h"
-#include "ShaderProgram.h"
-#include "ProjectManager.h"
-#include "SingletonManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Input.h"
+#include "Bang/Timer.h"
+#include "Bang/Debug.h"
+#include "Bang/Camera.h"
+#include "Bang/Shader.h"
+#include "Bang/Screen.h"
+#include "Bang/XMLNode.h"
+#include "Bang/AudioClip.h"
+#include "Bang/Behaviour.h"
+#include "Bang/Texture2D.h"
+#include "Bang/XMLParser.h"
+#include "Bang/GameObject.h"
+#include "Bang/FileReader.h"
+#include "Bang/IO.h"
+#include "Bang/Application.h"
+#include "Bang/Framebuffer.h"
+#include "Bang/SceneManager.h"
+#include "Bang/MeshRenderer.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/ProjectManager.h"
+#include "Bang/SingletonManager.h"
 
 #ifdef BANG_EDITOR
 
-#include "EditorScene.h"
-#include "EditorWindow.h"
-#include "SelectProjectWindow.h"
+#include "Bang/EditorScene.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/SelectProjectWindow.h"
 
 #else
 
-#include "GameWindow.h"
+#include "Bang/GameWindow.h"
 
 #endif
 
-#include "Array.h"
-#include "String.h"
+#include "Bang/Array.h"
+#include "Bang/String.h"
 
 void LoadStylesheet(QApplication *app)
 {
@@ -119,7 +119,7 @@ void InitEditorOrGame(QMainWindow *window, Application *app)
 
 using namespace std;
 #include <QProcess>
-#include "SystemUtils.h"
+#include "Bang/SystemUtils.h"
 int main(int argc, char **argv)
 {
     String out;

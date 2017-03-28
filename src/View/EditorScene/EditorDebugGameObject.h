@@ -1,12 +1,12 @@
 #ifndef EDITORDEBUGGAMEOBJECT_H
 #define EDITORDEBUGGAMEOBJECT_H
 
-#include "List.h"
+#include "Bang/List.h"
 
-#include "Color.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "GameObject.h"
+#include "Bang/Color.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/GameObject.h"
 
 class EditorDebugGameObject : public GameObject
 {

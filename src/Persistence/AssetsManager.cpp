@@ -1,11 +1,11 @@
-#include "AssetsManager.h"
+#include "Bang/AssetsManager.h"
 
-#include "Debug.h"
-#include "Scene.h"
-#include "FileReader.h"
-#include "Application.h"
-#include "IO.h"
-#include "SceneManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/FileReader.h"
+#include "Bang/Application.h"
+#include "Bang/IO.h"
+#include "Bang/SceneManager.h"
 
 AssetsManager::AssetsManager()
 {

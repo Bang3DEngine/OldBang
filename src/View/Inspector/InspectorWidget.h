@@ -16,11 +16,11 @@
 #include <QListWidget>
 #include <QDoubleSpinBox>
 
-#include "File.h"
-#include "Debug.h"
-#include "XMLNode.h"
-#include "DragDropQWidget.h"
-#include "SerializableObject.h"
+#include "Bang/File.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/DragDropQWidget.h"
+#include "Bang/SerializableObject.h"
 
 class Component;
 class GameObject;

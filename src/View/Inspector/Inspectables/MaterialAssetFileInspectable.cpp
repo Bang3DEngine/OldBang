@@ -1,11 +1,11 @@
-#include "MaterialAssetFileInspectable.h"
+#include "Bang/MaterialAssetFileInspectable.h"
 
-#include "Scene.h"
-#include "Material.h"
-#include "Renderer.h"
-#include "IconManager.h"
-#include "SceneManager.h"
-#include "AssetsManager.h"
+#include "Bang/Scene.h"
+#include "Bang/Material.h"
+#include "Bang/Renderer.h"
+#include "Bang/IconManager.h"
+#include "Bang/SceneManager.h"
+#include "Bang/AssetsManager.h"
 
 MaterialAssetFileInspectable::MaterialAssetFileInspectable
     (const MaterialAssetFile &materialAssetFile) :

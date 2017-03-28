@@ -1,9 +1,9 @@
 #ifndef IWINDOWEVENTMANAGERLISTENER_H
 #define IWINDOWEVENTMANAGERLISTENER_H
 
-#include "List.h"
+#include "Bang/List.h"
 
-#include "MenuBar.h"
+#include "Bang/MenuBar.h"
 
 class GameObject;
 class InspectorWidget;

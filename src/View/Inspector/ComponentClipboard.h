@@ -1,7 +1,7 @@
 #ifndef COMPONENTCLIPBOARD_H
 #define COMPONENTCLIPBOARD_H
 
-#include "String.h"
+#include "Bang/String.h"
 
 class Component;
 class GameObject;

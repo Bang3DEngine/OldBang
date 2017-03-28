@@ -1,15 +1,15 @@
-#include "BehaviourHolder.h"
+#include "Bang/BehaviourHolder.h"
 
 #include <QLibrary>
 #include <QInputDialog>
 
-#include "XMLNode.h"
-#include "Behaviour.h"
-#include "IO.h"
-#include "SystemUtils.h"
-#include "EditorState.h"
-#include "BehaviourManager.h"
-#include "QtProjectManager.h"
+#include "Bang/XMLNode.h"
+#include "Bang/Behaviour.h"
+#include "Bang/IO.h"
+#include "Bang/SystemUtils.h"
+#include "Bang/EditorState.h"
+#include "Bang/BehaviourManager.h"
+#include "Bang/QtProjectManager.h"
 
 BehaviourHolder::BehaviourHolder()
 {

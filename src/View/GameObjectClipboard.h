@@ -1,8 +1,8 @@
 #ifndef COPYPASTEGAMEOBJECTMANAGER_H
 #define COPYPASTEGAMEOBJECTMANAGER_H
 
-#include "Map.h"
-#include "List.h"
+#include "Bang/Map.h"
+#include "Bang/List.h"
 
 class GameObject;
 class GameObjectClipboard

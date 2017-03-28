@@ -1,13 +1,13 @@
-#include "ExplorerDirTree.h"
+#include "Bang/ExplorerDirTree.h"
 
 #include <QTimer>
 #include <QMouseEvent>
 #include <QToolButton>
 #include <QFileSystemModel>
 
-#include "Debug.h"
-#include "Explorer.h"
-#include "EditorWindow.h"
+#include "Bang/Debug.h"
+#include "Bang/Explorer.h"
+#include "Bang/EditorWindow.h"
 
 ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
 {

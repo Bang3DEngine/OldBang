@@ -1,8 +1,8 @@
-#include "TextureUnitManager.h"
+#include "Bang/TextureUnitManager.h"
 
-#include "Debug.h"
-#include "Texture.h"
-#include "GraphicPipeline.h"
+#include "Bang/Debug.h"
+#include "Bang/Texture.h"
+#include "Bang/GraphicPipeline.h"
 
 TextureUnitManager::TextureUnitManager()
 {

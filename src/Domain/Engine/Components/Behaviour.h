@@ -1,30 +1,30 @@
 #ifndef BEHAVIOUR_H
 #define BEHAVIOUR_H
 
-#include "IO.h"
-#include "Math.h"
-#include "Time.h"
-#include "Debug.h"
-#include "Input.h"
-#include "Debug.h"
-#include "Scene.h"
-#include "Prefab.h"
-#include "Random.h"
-#include "Renderer.h"
-#include "Material.h"
-#include "Transform.h"
-#include "AudioClip.h"
-#include "GameObject.h"
-#include "AudioSource.h"
-#include "MeshRenderer.h"
-#include "SceneManager.h"
-#include "AssetsManager.h"
-#include "SingletonManager.h"
-#include "ISceneEventListener.h"
+#include "Bang/IO.h"
+#include "Bang/Math.h"
+#include "Bang/Time.h"
+#include "Bang/Debug.h"
+#include "Bang/Input.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Prefab.h"
+#include "Bang/Random.h"
+#include "Bang/Renderer.h"
+#include "Bang/Material.h"
+#include "Bang/Transform.h"
+#include "Bang/AudioClip.h"
+#include "Bang/GameObject.h"
+#include "Bang/AudioSource.h"
+#include "Bang/MeshRenderer.h"
+#include "Bang/SceneManager.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/SingletonManager.h"
+#include "Bang/ISceneEventListener.h"
 
 
 #ifdef BANG_EDITOR
-#include "EditorWindow.h"
+#include "Bang/EditorWindow.h"
 #endif
 
 class BehaviourHolder;

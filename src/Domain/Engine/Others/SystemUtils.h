@@ -11,8 +11,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include "List.h"
-#include "String.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
 
 class QLibrary;
 class Behaviour;

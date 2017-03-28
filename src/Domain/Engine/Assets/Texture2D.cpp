@@ -1,11 +1,11 @@
-#include "Texture2D.h"
+#include "Bang/Texture2D.h"
 
-#include "stb_image.h"
+#include "Bang/stb_image.h"
 
-#include "Debug.h"
-#include "XMLNode.h"
-#include "FileReader.h"
-#include "IO.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/FileReader.h"
+#include "Bang/IO.h"
 
 Texture2D::Texture2D() : Texture(Target::Texture2D)
 {

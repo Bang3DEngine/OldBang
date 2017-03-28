@@ -4,8 +4,8 @@
 #include "ft2build.h"
 #include "freetype.h"
 
-#include "Array.h"
-#include "Asset.h"
+#include "Bang/Array.h"
+#include "Bang/Asset.h"
 
 class Texture2D;
 class Font : public Asset

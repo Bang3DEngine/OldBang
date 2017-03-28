@@ -3,7 +3,7 @@
 
 #ifndef STBI_HEADER_FILE_ONLY
 
-#include "stb_image.h"
+#include "Bang/stb_image.h"
 
 #ifndef STBI_NO_HDR
 #include <math.h>  // ldexp

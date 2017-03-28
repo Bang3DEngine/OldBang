@@ -1,8 +1,8 @@
 #ifndef RECT_H
 #define RECT_H
 
-#include "List.h"
-#include "IToString.h"
+#include "Bang/List.h"
+#include "Bang/IToString.h"
 
 class AABox;
 class Camera;

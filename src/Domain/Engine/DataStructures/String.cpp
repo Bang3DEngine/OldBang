@@ -1,4 +1,4 @@
-#include "String.h"
+#include "Bang/String.h"
 
 #include <sstream>
 #include <iomanip>
@@ -6,16 +6,16 @@
 
 #include <QString>
 
-#include "Map.h"
-#include "List.h"
-#include "Array.h"
-#include "Color.h"
-#include "Debug.h"
-#include "Vector2.h"
-#include "Vector3.h"
-#include "Vector4.h"
-#include "Matrix4.h"
-#include "Quaternion.h"
+#include "Bang/Map.h"
+#include "Bang/List.h"
+#include "Bang/Array.h"
+#include "Bang/Color.h"
+#include "Bang/Debug.h"
+#include "Bang/Vector2.h"
+#include "Bang/Vector3.h"
+#include "Bang/Vector4.h"
+#include "Bang/Matrix4.h"
+#include "Bang/Quaternion.h"
 
 String::String() :
     std::string("")

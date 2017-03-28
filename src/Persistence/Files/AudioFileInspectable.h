@@ -1,8 +1,8 @@
 #ifndef AUDIOFILEINSPECTABLE_H
 #define AUDIOFILEINSPECTABLE_H
 
-#include "AudioFile.h"
-#include "SerializableObject.h"
+#include "Bang/AudioFile.h"
+#include "Bang/SerializableObject.h"
 
 class XMLNode;
 class AudioFileInspectable : public SerializableObject

@@ -1,6 +1,6 @@
-#include "EditorGizmo.h"
+#include "Bang/EditorGizmo.h"
 
-#include "Input.h"
+#include "Bang/Input.h"
 
 EditorGizmo::EditorGizmo(GameObject *attachedGameObject)
 {

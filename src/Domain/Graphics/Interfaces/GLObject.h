@@ -4,8 +4,8 @@
 #include <stack>
 #include <GL/glew.h>
 
-#include "GL.h"
-#include "Map.h"
+#include "Bang/GL.h"
+#include "Bang/Map.h"
 
 class GLObject
 {

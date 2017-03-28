@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "String.h"
+#include "Bang/String.h"
 
 template <class T> class List;
 template <class T>

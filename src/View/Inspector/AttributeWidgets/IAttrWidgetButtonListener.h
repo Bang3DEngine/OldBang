@@ -1,7 +1,7 @@
 #ifndef ATTRWIDGETBUTTONLISTENER_H
 #define ATTRWIDGETBUTTONLISTENER_H
 
-#include "String.h"
+#include "Bang/String.h"
 
 class IAttrWidgetButtonListener
 {

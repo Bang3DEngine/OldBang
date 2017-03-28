@@ -1,30 +1,30 @@
-#include "File.h"
+#include "Bang/File.h"
 
 #include <fstream>
 #include <QPainter>
 
 #ifdef BANG_EDITOR
-#include "Explorer.h"
-#include "SerializableObject.h"
+#include "Bang/Explorer.h"
+#include "Bang/SerializableObject.h"
 #endif
 
-#include "IO.h"
-#include "Font.h"
-#include "Mesh.h"
-#include "Scene.h"
-#include "Prefab.h"
-#include "Material.h"
-#include "TextFile.h"
-#include "MeshFile.h"
-#include "AudioFile.h"
-#include "AudioClip.h"
-#include "ImageFile.h"
-#include "Texture2D.h"
-#include "IconManager.h"
-#include "MeshAssetFile.h"
-#include "MaterialAssetFile.h"
-#include "AudioClipAssetFile.h"
-#include "Texture2DAssetFile.h"
+#include "Bang/IO.h"
+#include "Bang/Font.h"
+#include "Bang/Mesh.h"
+#include "Bang/Scene.h"
+#include "Bang/Prefab.h"
+#include "Bang/Material.h"
+#include "Bang/TextFile.h"
+#include "Bang/MeshFile.h"
+#include "Bang/AudioFile.h"
+#include "Bang/AudioClip.h"
+#include "Bang/ImageFile.h"
+#include "Bang/Texture2D.h"
+#include "Bang/IconManager.h"
+#include "Bang/MeshAssetFile.h"
+#include "Bang/MaterialAssetFile.h"
+#include "Bang/AudioClipAssetFile.h"
+#include "Bang/Texture2DAssetFile.h"
 
 File::File()
 {

@@ -1,8 +1,8 @@
-#include "EditorSelectionGameObject.h"
+#include "Bang/EditorSelectionGameObject.h"
 
-#include "EditorBBox.h"
-#include "EditorAxisGroup.h"
-#include "EditorRectTransformGizmo.h"
+#include "Bang/EditorBBox.h"
+#include "Bang/EditorAxisGroup.h"
+#include "Bang/EditorRectTransformGizmo.h"
 
 EditorSelectionGameObject::EditorSelectionGameObject(GameObject *attachedGameObject) :
     GameObject("EditorSelectionGameObject")

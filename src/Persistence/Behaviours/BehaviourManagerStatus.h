@@ -3,19 +3,19 @@
 
 #include <QMutex>
 
-#include "Set.h"
-#include "Map.h"
-#include "List.h"
-#include "File.h"
-#include "String.h"
-#include "IO.h"
-#include "CodePreprocessor.h"
+#include "Bang/Set.h"
+#include "Bang/Map.h"
+#include "Bang/List.h"
+#include "Bang/File.h"
+#include "Bang/String.h"
+#include "Bang/IO.h"
+#include "Bang/CodePreprocessor.h"
 
 #ifdef BANG_EDITOR
-#include "Console.h"
+#include "Bang/Console.h"
 #endif
 
-#include "IToString.h"
+#include "Bang/IToString.h"
 
 class BehaviourId : public IToString
 {

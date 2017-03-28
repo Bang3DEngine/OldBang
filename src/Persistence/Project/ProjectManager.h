@@ -1,7 +1,7 @@
 #ifndef PROJECTMANAGER_H
 #define PROJECTMANAGER_H
 
-#include "String.h"
+#include "Bang/String.h"
 
 class Project;
 class ProjectManager

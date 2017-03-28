@@ -1,12 +1,12 @@
-#include "FileReader.h"
+#include "Bang/FileReader.h"
 
-#include "stb_image.h"
+#include "Bang/stb_image.h"
 
-#include "Scene.h"
-#include "Debug.h"
-#include "XMLParser.h"
-#include "GameObject.h"
-#include "IO.h"
+#include "Bang/Scene.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLParser.h"
+#include "Bang/GameObject.h"
+#include "Bang/IO.h"
 
 unsigned char* FileReader::ReadImage(const String& filepath,
                                      int *width, int *height)

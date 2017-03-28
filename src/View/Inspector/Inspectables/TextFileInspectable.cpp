@@ -1,7 +1,7 @@
-#include "TextFileInspectable.h"
+#include "Bang/TextFileInspectable.h"
 
-#include "IO.h"
-#include "XMLNode.h"
+#include "Bang/IO.h"
+#include "Bang/XMLNode.h"
 
 TextFileInspectable::TextFileInspectable(const TextFile &textFile) :
     m_textFile(textFile)

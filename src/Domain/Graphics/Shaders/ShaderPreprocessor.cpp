@@ -1,6 +1,6 @@
-#include "ShaderPreprocessor.h"
+#include "Bang/ShaderPreprocessor.h"
 
-#include "CodePreprocessor.h"
+#include "Bang/CodePreprocessor.h"
 
 const String ShaderPreprocessor::c_version = "#version 130";
 

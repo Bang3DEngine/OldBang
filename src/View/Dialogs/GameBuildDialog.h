@@ -3,7 +3,7 @@
 
 #include <QProgressDialog>
 
-#include "String.h"
+#include "Bang/String.h"
 
 class GameBuildDialog : public QProgressDialog
 {

@@ -1,10 +1,10 @@
-#include "AttrWidgetInt.h"
+#include "Bang/AttrWidgetInt.h"
 
 #include <QVBoxLayout>
 
-#include "Object.h"
-#include "XMLAttribute.h"
-#include "InspectorWidget.h"
+#include "Bang/Object.h"
+#include "Bang/XMLAttribute.h"
+#include "Bang/InspectorWidget.h"
 
 AttrWidgetInt::AttrWidgetInt(const XMLAttribute &xmlAttribute,
                              InspectorWidget *inspectorWidget,

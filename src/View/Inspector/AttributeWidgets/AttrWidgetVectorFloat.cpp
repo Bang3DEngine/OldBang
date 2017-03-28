@@ -1,4 +1,4 @@
-#include "AttrWidgetVectorFloat.h"
+#include "Bang/AttrWidgetVectorFloat.h"
 
 AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
                                              InspectorWidget *inspectorWidget) :

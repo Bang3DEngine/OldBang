@@ -1,9 +1,9 @@
-#include "Vector3.h"
+#include "Bang/Vector3.h"
 
-#include "Math.h"
-#include "String.h"
-#include "Vector2.h"
-#include "Quaternion.h"
+#include "Bang/Math.h"
+#include "Bang/String.h"
+#include "Bang/Vector2.h"
+#include "Bang/Quaternion.h"
 
 const Vector3 Vector3::Up      = Vector3( 0, 1,  0);
 const Vector3 Vector3::Down    = Vector3( 0,-1,  0);

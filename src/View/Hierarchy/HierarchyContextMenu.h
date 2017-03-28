@@ -1,7 +1,7 @@
 #ifndef HIERARCHYCONTEXTMENU_H
 #define HIERARCHYCONTEXTMENU_H
 
-#include "ContextMenu.h"
+#include "Bang/ContextMenu.h"
 
 class Hierarchy;
 class HierarchyContextMenu : public ContextMenu

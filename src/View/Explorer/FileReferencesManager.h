@@ -5,8 +5,8 @@
 
 #include <QObject>
 
-#include "Set.h"
-#include "String.h"
+#include "Bang/Set.h"
+#include "Bang/String.h"
 
 /**
  * We must delay the file reference refactoring to let the explorer actually

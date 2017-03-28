@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QRunnable>
 
-#include "String.h"
+#include "Bang/String.h"
 
 class BehaviourManager;
 

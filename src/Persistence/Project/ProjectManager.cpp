@@ -1,24 +1,24 @@
-#include "ProjectManager.h"
+#include "Bang/ProjectManager.h"
 
 #include <string>
 
-#include "Time.h"
-#include "List.h"
-#include "Debug.h"
-#include "Scene.h"
-#include "Project.h"
-#include "XMLNode.h"
-#include "XMLParser.h"
-#include "IO.h"
-#include "SceneManager.h"
-#include "EngineConfig.h"
+#include "Bang/Time.h"
+#include "Bang/List.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Project.h"
+#include "Bang/XMLNode.h"
+#include "Bang/XMLParser.h"
+#include "Bang/IO.h"
+#include "Bang/SceneManager.h"
+#include "Bang/EngineConfig.h"
 
 #ifdef BANG_EDITOR
-#include "Dialog.h"
-#include "MenuBar.h"
-#include "Explorer.h"
-#include "EditorWindow.h"
-#include "QtProjectManager.h"
+#include "Bang/Dialog.h"
+#include "Bang/MenuBar.h"
+#include "Bang/Explorer.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/QtProjectManager.h"
 #endif
 
 Project *ProjectManager::s_currentProject = nullptr;

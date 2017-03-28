@@ -1,7 +1,7 @@
-#include "MeshFileInspectable.h"
+#include "Bang/MeshFileInspectable.h"
 
-#include "Mesh.h"
-#include "XMLNode.h"
+#include "Bang/Mesh.h"
+#include "Bang/XMLNode.h"
 
 MeshFileInspectable::MeshFileInspectable(const MeshFile &fileMesh) :
     m_fileMesh(fileMesh)

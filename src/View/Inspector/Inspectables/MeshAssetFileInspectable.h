@@ -1,8 +1,8 @@
 #ifndef MESHASSETFILEINSPECTABLE_H
 #define MESHASSETFILEINSPECTABLE_H
 
-#include "SerializableObject.h"
-#include "MeshAssetFile.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/MeshAssetFile.h"
 
 class XMLNode;
 class MeshAssetFileInspectable : public SerializableObject

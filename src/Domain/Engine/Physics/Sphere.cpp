@@ -1,6 +1,6 @@
-#include "Sphere.h"
+#include "Bang/Sphere.h"
 
-#include "Math.h"
+#include "Bang/Math.h"
 
 Sphere::Sphere()
 {

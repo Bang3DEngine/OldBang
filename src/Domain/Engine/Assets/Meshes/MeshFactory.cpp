@@ -1,14 +1,14 @@
-#include "MeshFactory.h"
+#include "Bang/MeshFactory.h"
 
-#include "Mesh.h"
-#include "Vector3.h"
-#include "Material.h"
-#include "GameObject.h"
-#include "MeshRenderer.h"
-#include "AssetsManager.h"
+#include "Bang/Mesh.h"
+#include "Bang/Vector3.h"
+#include "Bang/Material.h"
+#include "Bang/GameObject.h"
+#include "Bang/MeshRenderer.h"
+#include "Bang/AssetsManager.h"
 
 #ifdef BANG_EDITOR
-#include "GameObject.h"
+#include "Bang/GameObject.h"
 #endif
 
 Mesh* MeshFactory::GetPlane()

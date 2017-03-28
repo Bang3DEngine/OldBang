@@ -1,10 +1,10 @@
 #ifndef UITEXT_H
 #define UITEXT_H
 
-#include "Rect.h"
-#include "Color.h"
-#include "String.h"
-#include "UIRenderer.h"
+#include "Bang/Rect.h"
+#include "Bang/Color.h"
+#include "Bang/String.h"
+#include "Bang/UIRenderer.h"
 
 class Font;
 class XMLNode;

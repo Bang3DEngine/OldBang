@@ -1,7 +1,7 @@
-#include "VAO.h"
+#include "Bang/VAO.h"
 
-#include "VBO.h"
-#include "ShaderProgram.h"
+#include "Bang/VBO.h"
+#include "Bang/ShaderProgram.h"
 
 VAO::VAO()
 {

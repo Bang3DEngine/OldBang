@@ -1,6 +1,6 @@
-#include "IDragDropListener.h"
+#include "Bang/IDragDropListener.h"
 
-#include "Object.h"
+#include "Bang/Object.h"
 
 QString IDragDropListener::acceptDragStyleOnlyBorder =
      "border: 1px solid #0F0";

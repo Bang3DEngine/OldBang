@@ -1,10 +1,10 @@
 #ifndef RECTTRANSFORM_H
 #define RECTTRANSFORM_H
 
-#include "Rect.h"
-#include "Vector2.h"
-#include "Matrix4.h"
-#include "Transform.h"
+#include "Bang/Rect.h"
+#include "Bang/Vector2.h"
+#include "Bang/Matrix4.h"
+#include "Bang/Transform.h"
 
 class XMLNode;
 class RectTransform : public Transform

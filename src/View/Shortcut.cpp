@@ -1,4 +1,4 @@
-#include "Shortcut.h"
+#include "Bang/Shortcut.h"
 
 Shortcut::Shortcut(QWidget *parent,
                    const QKeySequence &keySequence, const String &slot)

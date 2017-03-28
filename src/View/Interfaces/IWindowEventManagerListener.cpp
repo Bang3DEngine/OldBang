@@ -1,7 +1,7 @@
-#include "IWindowEventManagerListener.h"
+#include "Bang/IWindowEventManagerListener.h"
 
-#include "Debug.h"
-#include "WindowEventManager.h"
+#include "Bang/Debug.h"
+#include "Bang/WindowEventManager.h"
 
 IWindowEventManagerListener::IWindowEventManagerListener()
 {

@@ -3,9 +3,9 @@
 
 #include <QApplication>
 
-#include "Screen.h"
-#include "IWindow.h"
-#include "ui_EditorWindow.h"
+#include "Bang/Screen.h"
+#include "Bang/IWindow.h"
+#include "Bang/ui_EditorWindow.h"
 
 /**
  *  This will be a singleton shared amongst ALL *.o and *.so

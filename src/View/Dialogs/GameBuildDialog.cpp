@@ -1,8 +1,8 @@
-#include "GameBuildDialog.h"
+#include "Bang/GameBuildDialog.h"
 
-#include "Debug.h"
-#include "GameBuilder.h"
-#include "EditorWindow.h"
+#include "Bang/Debug.h"
+#include "Bang/GameBuilder.h"
+#include "Bang/EditorWindow.h"
 
 GameBuildDialog::GameBuildDialog() :
     QProgressDialog("Building game...",

@@ -4,14 +4,14 @@
 #include <QLabel>
 #include <QDropEvent>
 
-#include "Map.h"
-#include "Debug.h"
-#include "Component.h"
-#include "GameObject.h"
-#include "DragDropQListWidget.h"
-#include "InspectorContextMenu.h"
-#include "PrefabAssetFileInspectable.h"
-#include "IWindowEventManagerListener.h"
+#include "Bang/Map.h"
+#include "Bang/Debug.h"
+#include "Bang/Component.h"
+#include "Bang/GameObject.h"
+#include "Bang/DragDropQListWidget.h"
+#include "Bang/InspectorContextMenu.h"
+#include "Bang/PrefabAssetFileInspectable.h"
+#include "Bang/IWindowEventManagerListener.h"
 
 class Inspector : public DragDropQListWidget,
                   public IWindowEventManagerListener

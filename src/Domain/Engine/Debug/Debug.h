@@ -6,11 +6,11 @@
 #include <sstream>
 #include <iostream>
 
-#include "Map.h"
-#include "Set.h"
-#include "List.h"
-#include "Array.h"
-#include "Color.h"
+#include "Bang/Map.h"
+#include "Bang/Set.h"
+#include "Bang/List.h"
+#include "Bang/Array.h"
+#include "Bang/Color.h"
 
 class String;
 class Vector2;

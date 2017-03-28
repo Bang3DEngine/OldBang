@@ -1,11 +1,11 @@
-#include "Console.h"
+#include "Bang/Console.h"
 
 #include <QLabel>
 #include <QScrollBar>
 
-#include "Debug.h"
-#include "Color.h"
-#include "EditorWindow.h"
+#include "Bang/Debug.h"
+#include "Bang/Color.h"
+#include "Bang/EditorWindow.h"
 
 int Console::c_rowHeight      = 30;
 

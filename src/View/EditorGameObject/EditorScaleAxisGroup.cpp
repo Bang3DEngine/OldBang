@@ -1,11 +1,11 @@
-#include "EditorScaleAxisGroup.h"
+#include "Bang/EditorScaleAxisGroup.h"
 
-#include "Material.h"
-#include "EditorAxis.h"
-#include "MeshFactory.h"
-#include "MeshRenderer.h"
-#include "AssetsManager.h"
-#include "EditorScaleAxis.h"
+#include "Bang/Material.h"
+#include "Bang/EditorAxis.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/MeshRenderer.h"
+#include "Bang/AssetsManager.h"
+#include "Bang/EditorScaleAxis.h"
 
 EditorScaleAxisGroup::EditorScaleAxisGroup(GameObject *attachedGameObject) :
     GameObject("EditorScaleAxisGroup")

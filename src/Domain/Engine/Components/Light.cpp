@@ -1,18 +1,18 @@
-#include "Light.h"
+#include "Bang/Light.h"
 
-#include "Scene.h"
-#include "Gizmos.h"
-#include "XMLNode.h"
-#include "GBuffer.h"
-#include "Renderer.h"
-#include "Material.h"
-#include "Transform.h"
-#include "GameObject.h"
-#include "SceneManager.h"
-#include "ShaderProgram.h"
+#include "Bang/Scene.h"
+#include "Bang/Gizmos.h"
+#include "Bang/XMLNode.h"
+#include "Bang/GBuffer.h"
+#include "Bang/Renderer.h"
+#include "Bang/Material.h"
+#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
+#include "Bang/SceneManager.h"
+#include "Bang/ShaderProgram.h"
 
 #ifdef BANG_EDITOR
-#include "InspectorWidget.h"
+#include "Bang/InspectorWidget.h"
 #endif
 
 Light::Light()

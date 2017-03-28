@@ -1,10 +1,10 @@
 #ifndef CIRCLERENDERER_H
 #define CIRCLERENDERER_H
 
-#include "Math.h"
-#include "String.h"
-#include "Vector2.h"
-#include "LineRenderer.h"
+#include "Bang/Math.h"
+#include "Bang/String.h"
+#include "Bang/Vector2.h"
+#include "Bang/LineRenderer.h"
 
 class XMLNode;
 class ICloneable;

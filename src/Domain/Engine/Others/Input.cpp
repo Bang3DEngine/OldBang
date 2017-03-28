@@ -1,16 +1,16 @@
-#include "Input.h"
+#include "Bang/Input.h"
 
-#include "Time.h"
-#include "Cursor.h"
-#include "Screen.h"
-#include "Object.h"
-#include "Application.h"
-#include "SingletonManager.h"
+#include "Bang/Time.h"
+#include "Bang/Cursor.h"
+#include "Bang/Screen.h"
+#include "Bang/Object.h"
+#include "Bang/Application.h"
+#include "Bang/SingletonManager.h"
 
 #ifdef BANG_EDITOR
-#include "EditorWindow.h"
+#include "Bang/EditorWindow.h"
 #else
-#include "GameWindow.h"
+#include "Bang/GameWindow.h"
 #endif
 
 Input::Input()

@@ -1,13 +1,13 @@
-#include "UIRenderer.h"
+#include "Bang/UIRenderer.h"
 
-#include "GL.h"
-#include "Mesh.h"
-#include "Rect.h"
-#include "Material.h"
-#include "GameObject.h"
-#include "MeshFactory.h"
-#include "ShaderProgram.h"
-#include "AssetsManager.h"
+#include "Bang/GL.h"
+#include "Bang/Mesh.h"
+#include "Bang/Rect.h"
+#include "Bang/Material.h"
+#include "Bang/GameObject.h"
+#include "Bang/MeshFactory.h"
+#include "Bang/ShaderProgram.h"
+#include "Bang/AssetsManager.h"
 
 UIRenderer::UIRenderer()
 {

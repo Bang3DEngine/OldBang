@@ -1,8 +1,8 @@
 #ifndef EDITORGIZMO_H
 #define EDITORGIZMO_H
 
-#include "Cursor.h"
-#include "GameObject.h"
+#include "Bang/Cursor.h"
+#include "Bang/GameObject.h"
 
 class EditorGizmo : public GameObject
 {

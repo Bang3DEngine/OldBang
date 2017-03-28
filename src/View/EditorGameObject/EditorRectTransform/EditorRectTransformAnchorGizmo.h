@@ -1,8 +1,8 @@
 #ifndef EDITORRECTTRANSFORMANCHORGIZMO_H
 #define EDITORRECTTRANSFORMANCHORGIZMO_H
 
-#include "Vector2.h"
-#include "EditorGizmo.h"
+#include "Bang/Vector2.h"
+#include "Bang/EditorGizmo.h"
 
 class Texture2D;
 class RectTransform;

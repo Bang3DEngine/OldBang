@@ -1,11 +1,11 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
 
-#include "glm/glm.hpp"
-#include "glm/gtx/transform.hpp"
-#include "glm/gtc/quaternion.hpp"
+#include "Bang/glm/glm.hpp"
+#include "Bang/glm/gtx/transform.hpp"
+#include "Bang/glm/gtc/quaternion.hpp"
 
-#include "Vector3.h"
+#include "Bang/Vector3.h"
 
 class String;
 class Matrix4;

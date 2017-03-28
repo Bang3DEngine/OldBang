@@ -1,9 +1,9 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "Rect.h"
-#include "Color.h"
-#include "Component.h"
+#include "Bang/Rect.h"
+#include "Bang/Color.h"
+#include "Bang/Component.h"
 
 class Camera;
 class GBuffer;

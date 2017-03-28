@@ -1,6 +1,6 @@
-#include "SingleLineRenderer.h"
+#include "Bang/SingleLineRenderer.h"
 
-#include "XMLNode.h"
+#include "Bang/XMLNode.h"
 
 SingleLineRenderer::SingleLineRenderer()
 {

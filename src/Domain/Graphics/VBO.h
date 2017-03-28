@@ -3,7 +3,7 @@
 
 #include <GL/glew.h>
 
-#include "GLObject.h"
+#include "Bang/GLObject.h"
 
 class VBO : public GLObject
 {

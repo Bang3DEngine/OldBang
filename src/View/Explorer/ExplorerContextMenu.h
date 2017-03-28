@@ -1,7 +1,7 @@
 #ifndef EXPLORERCONTEXTMENU_H
 #define EXPLORERCONTEXTMENU_H
 
-#include "ContextMenu.h"
+#include "Bang/ContextMenu.h"
 
 class Explorer;
 class Material;

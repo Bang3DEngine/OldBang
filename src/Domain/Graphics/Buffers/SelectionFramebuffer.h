@@ -1,12 +1,12 @@
 #ifndef SELECTIONFRAMEBUFFER_H
 #define SELECTIONFRAMEBUFFER_H
 
-#include "Map.h"
-#include "Vector3.h"
-#include "Framebuffer.h"
+#include "Bang/Map.h"
+#include "Bang/Vector3.h"
+#include "Bang/Framebuffer.h"
 
 #ifdef BANG_EDITOR
-#include "IWindowEventManagerListener.h"
+#include "Bang/IWindowEventManagerListener.h"
 #endif
 
 class Scene;

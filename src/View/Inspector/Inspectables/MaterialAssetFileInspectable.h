@@ -1,9 +1,9 @@
 #ifndef MATERIALASSETFILEINSPECTABLE_H
 #define MATERIALASSETFILEINSPECTABLE_H
 
-#include "XMLNode.h"
-#include "SerializableObject.h"
-#include "MaterialAssetFile.h"
+#include "Bang/XMLNode.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/MaterialAssetFile.h"
 
 class MaterialAssetFileInspectable : public SerializableObject
 {

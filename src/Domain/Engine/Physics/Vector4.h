@@ -1,7 +1,7 @@
 #ifndef VECTOR4_H
 #define VECTOR4_H
 
-#include "glm/glm.hpp"
+#include "Bang/glm/glm.hpp"
 
 class Color;
 class String;

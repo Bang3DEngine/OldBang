@@ -1,7 +1,7 @@
-#include "AttrWidgetColor.h"
+#include "Bang/AttrWidgetColor.h"
 
-#include "Math.h"
-#include "EditorWindow.h"
+#include "Bang/Math.h"
+#include "Bang/EditorWindow.h"
 
 AttrWidgetColor::AttrWidgetColor(const XMLAttribute &xmlAttribute,
                                  InspectorWidget *inspectorWidget) :

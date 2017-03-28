@@ -1,9 +1,9 @@
 ﻿#ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "Array.h"
-#include "Asset.h"
-#include "Color.h"
+#include "Bang/Array.h"
+#include "Bang/Asset.h"
+#include "Bang/Color.h"
 
 class Texture2D;
 class ShaderProgram;

@@ -4,12 +4,12 @@
 #include <GL/glew.h>
 #include <functional>
 
-#include "GL.h"
-#include "Rect.h"
-#include "Array.h"
-#include "GLObject.h"
-#include "NamedEnum.h"
-#include "Component.h"
+#include "Bang/GL.h"
+#include "Bang/Rect.h"
+#include "Bang/Array.h"
+#include "Bang/GLObject.h"
+#include "Bang/NamedEnum.h"
+#include "Bang/Component.h"
 
 class AABox;
 class Camera;

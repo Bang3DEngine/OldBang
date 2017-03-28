@@ -4,8 +4,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#include "Font.h"
-#include "String.h"
+#include "Bang/Font.h"
+#include "Bang/String.h"
 
 /**
  * @brief The FontSheetCreator class uses the Freetype

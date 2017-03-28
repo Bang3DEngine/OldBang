@@ -1,19 +1,19 @@
-#include "SceneManager.h"
+#include "Bang/SceneManager.h"
 
-#include "Debug.h"
-#include "Scene.h"
-#include "XMLParser.h"
-#include "FileReader.h"
-#include "IO.h"
-#include "Application.h"
-#include "BehaviourHolder.h"
-#include "BehaviourManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/XMLParser.h"
+#include "Bang/FileReader.h"
+#include "Bang/IO.h"
+#include "Bang/Application.h"
+#include "Bang/BehaviourHolder.h"
+#include "Bang/BehaviourManager.h"
 
 #ifdef BANG_EDITOR
-#include "Inspector.h"
-#include "Hierarchy.h"
-#include "EditorScene.h"
-#include "EditorState.h"
+#include "Bang/Inspector.h"
+#include "Bang/Hierarchy.h"
+#include "Bang/EditorScene.h"
+#include "Bang/EditorState.h"
 #endif
 
 SceneManager::SceneManager()

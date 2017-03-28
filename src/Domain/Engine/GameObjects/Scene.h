@@ -1,10 +1,10 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "List.h"
+#include "Bang/List.h"
 
-#include "Color.h"
-#include "GameObject.h"
+#include "Bang/Color.h"
+#include "Bang/GameObject.h"
 
 class Camera;
 class GraphicPipeline;

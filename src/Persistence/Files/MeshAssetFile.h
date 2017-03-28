@@ -5,9 +5,9 @@
 #include <QModelIndex>
 #include <QFileSystemModel>
 
-#include "File.h"
-#include "String.h"
-#include "FileReader.h"
+#include "Bang/File.h"
+#include "Bang/String.h"
+#include "Bang/FileReader.h"
 
 class SerializableObject;
 class MeshAssetFile : public File

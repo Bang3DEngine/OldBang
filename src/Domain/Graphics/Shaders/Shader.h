@@ -3,11 +3,11 @@
 
 #include <GL/glew.h>
 
-#include "Array.h"
-#include "Asset.h"
-#include "GLObject.h"
-#include "NamedEnum.h"
-#include "IToString.h"
+#include "Bang/Array.h"
+#include "Bang/Asset.h"
+#include "Bang/GLObject.h"
+#include "Bang/NamedEnum.h"
+#include "Bang/IToString.h"
 
 class Shader : public GLObject,
                public IToString

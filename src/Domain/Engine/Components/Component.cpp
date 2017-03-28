@@ -1,9 +1,9 @@
-#include "Component.h"
+#include "Bang/Component.h"
 
-#include "Debug.h"
-#include "XMLNode.h"
-#include "Transform.h"
-#include "GameObject.h"
+#include "Bang/Debug.h"
+#include "Bang/XMLNode.h"
+#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
 
 Component::Component()
 {

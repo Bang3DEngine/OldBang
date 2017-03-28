@@ -1,9 +1,9 @@
-#include "GPPass.h"
+#include "Bang/GPPass.h"
 
-#include "Scene.h"
-#include "GBuffer.h"
-#include "SceneManager.h"
-#include "GraphicPipeline.h"
+#include "Bang/Scene.h"
+#include "Bang/GBuffer.h"
+#include "Bang/SceneManager.h"
+#include "Bang/GraphicPipeline.h"
 
 GPPass::GPPass(GraphicPipeline *graphicPipeline, const List<GPPass*> &subPasses)
 {

@@ -1,4 +1,4 @@
-#include "DialogBrowseAssetFile.h"
+#include "Bang/DialogBrowseAssetFile.h"
 
 #include <QTabWidget>
 #include <QListWidget>
@@ -6,12 +6,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include "IO.h"
-#include "File.h"
-#include "Color.h"
-#include "Debug.h"
-#include "Object.h"
-#include "IconManager.h"
+#include "Bang/IO.h"
+#include "Bang/File.h"
+#include "Bang/Color.h"
+#include "Bang/Debug.h"
+#include "Bang/Object.h"
+#include "Bang/IconManager.h"
 
 DialogBrowseAssetFile::DialogBrowseAssetFile(String *resultFile)
 {

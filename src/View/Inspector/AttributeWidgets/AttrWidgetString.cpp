@@ -1,9 +1,9 @@
-#include "AttrWidgetString.h"
+#include "Bang/AttrWidgetString.h"
 
 #include <QVBoxLayout>
 
-#include "Object.h"
-#include "InspectorWidget.h"
+#include "Bang/Object.h"
+#include "Bang/InspectorWidget.h"
 
 
 AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,

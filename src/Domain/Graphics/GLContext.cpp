@@ -1,17 +1,17 @@
-#include "GLContext.h"
+#include "Bang/GLContext.h"
 
 #include "GL/gl.h"
 #include "GL/glew.h"
 
-#include "VAO.h"
-#include "Debug.h"
-#include "Scene.h"
-#include "Screen.h"
-#include "Camera.h"
-#include "Matrix4.h"
-#include "Transform.h"
-#include "SceneManager.h"
-#include "ShaderProgram.h"
+#include "Bang/VAO.h"
+#include "Bang/Debug.h"
+#include "Bang/Scene.h"
+#include "Bang/Screen.h"
+#include "Bang/Camera.h"
+#include "Bang/Matrix4.h"
+#include "Bang/Transform.h"
+#include "Bang/SceneManager.h"
+#include "Bang/ShaderProgram.h"
 
 void GLContext::ApplyToShaderProgram(ShaderProgram *sp) const
 {

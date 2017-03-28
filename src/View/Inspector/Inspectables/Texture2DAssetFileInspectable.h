@@ -1,9 +1,9 @@
 #ifndef INSPECTORTEXTURE2DASSETWIDGET_H
 #define INSPECTORTEXTURE2DASSETWIDGET_H
 
-#include "XMLNode.h"
-#include "SerializableObject.h"
-#include "Texture2DAssetFile.h"
+#include "Bang/XMLNode.h"
+#include "Bang/SerializableObject.h"
+#include "Bang/Texture2DAssetFile.h"
 
 class Texture2DAssetFileInspectable : public SerializableObject
 {

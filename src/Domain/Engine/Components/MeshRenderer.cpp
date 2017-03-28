@@ -1,13 +1,13 @@
-#include "MeshRenderer.h"
+#include "Bang/MeshRenderer.h"
 
-#include "VAO.h"
-#include "Mesh.h"
-#include "Debug.h"
-#include "Material.h"
-#include "Transform.h"
-#include "GameObject.h"
-#include "FileReader.h"
-#include "AssetsManager.h"
+#include "Bang/VAO.h"
+#include "Bang/Mesh.h"
+#include "Bang/Debug.h"
+#include "Bang/Material.h"
+#include "Bang/Transform.h"
+#include "Bang/GameObject.h"
+#include "Bang/FileReader.h"
+#include "Bang/AssetsManager.h"
 
 MeshRenderer::MeshRenderer()
 {

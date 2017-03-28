@@ -1,6 +1,6 @@
-#include "List.h"
+#include "Bang/List.h"
 
-#include "String.h"
+#include "Bang/String.h"
 
 template <class T>
 String List<T>::ToString()

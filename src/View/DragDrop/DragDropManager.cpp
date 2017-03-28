@@ -1,10 +1,10 @@
-#include "DragDropManager.h"
+#include "Bang/DragDropManager.h"
 
-#include "Time.h"
-#include "Debug.h"
-#include "EditorWindow.h"
-#include "DragDropAgent.h"
-#include "IDragDropListener.h"
+#include "Bang/Time.h"
+#include "Bang/Debug.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/DragDropAgent.h"
+#include "Bang/IDragDropListener.h"
 
 DragDropManager *DragDropManager::s_ddManager = nullptr;
 

@@ -1,7 +1,7 @@
 #ifndef HIERARCHYDRAGDROPMANAGER_H
 #define HIERARCHYDRAGDROPMANAGER_H
 
-#include "IDragDropListener.h"
+#include "Bang/IDragDropListener.h"
 
 class File;
 class Hierarchy;

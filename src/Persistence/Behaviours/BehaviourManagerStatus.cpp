@@ -1,15 +1,15 @@
-#include "BehaviourManagerStatus.h"
+#include "Bang/BehaviourManagerStatus.h"
 
 #include <QLibrary>
 
-#include "Scene.h"
-#include "Debug.h"
-#include "SceneManager.h"
-#include "BehaviourHolder.h"
-#include "BehaviourManager.h"
+#include "Bang/Scene.h"
+#include "Bang/Debug.h"
+#include "Bang/SceneManager.h"
+#include "Bang/BehaviourHolder.h"
+#include "Bang/BehaviourManager.h"
 
 #ifdef BANG_EDITOR
-#include "Console.h"
+#include "Bang/Console.h"
 #endif
 
 BehaviourManagerStatus::BehaviourManagerStatus()

@@ -1,10 +1,10 @@
-#include "Project.h"
+#include "Bang/Project.h"
 
 #include <string>
 
-#include "IO.h"
-#include "Time.h"
-#include "XMLNode.h"
+#include "Bang/IO.h"
+#include "Bang/Time.h"
+#include "Bang/XMLNode.h"
 
 Project::Project()
 {

@@ -3,8 +3,8 @@
 
 #include <set>
 
-#include "List.h"
-#include "String.h"
+#include "Bang/List.h"
+#include "Bang/String.h"
 
 template<class Key>
 class Set : private std::set<Key>

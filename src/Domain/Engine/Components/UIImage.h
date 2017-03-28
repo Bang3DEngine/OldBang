@@ -1,9 +1,9 @@
 #ifndef UIIMAGE_H
 #define UIIMAGE_H
 
-#include "String.h"
-#include "Texture2D.h"
-#include "UIRenderer.h"
+#include "Bang/String.h"
+#include "Bang/Texture2D.h"
+#include "Bang/UIRenderer.h"
 
 class XMLNode;
 class ICloneable;

@@ -389,7 +389,7 @@
      <x>0</x>
      <y>0</y>
      <width>1062</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -1216,8 +1216,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>406</width>
-              <height>76</height>
+              <width>416</width>
+              <height>68</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout">
@@ -1676,7 +1676,7 @@
   <customwidget>
    <class>Hierarchy</class>
    <extends>QTreeWidget</extends>
-   <header>Hierarchy.h</header>
+   <header>Bang/Hierarchy.h</header>
    <slots>
     <slot>_NotifyHierarchyItemSelectionChanged()</slot>
     <slot>OnCustomContextMenuRequested(QPoint)</slot>
@@ -1685,39 +1685,39 @@
   <customwidget>
    <class>Inspector</class>
    <extends>QListWidget</extends>
-   <header>Inspector.h</header>
+   <header>Bang/Inspector.h</header>
   </customwidget>
   <customwidget>
    <class>Explorer</class>
    <extends>QListView</extends>
-   <header>Explorer.h</header>
+   <header>Bang/Explorer.h</header>
   </customwidget>
   <customwidget>
    <class>MenuBar</class>
    <extends>QMenuBar</extends>
-   <header>MenuBar.h</header>
+   <header>Bang/MenuBar.h</header>
   </customwidget>
   <customwidget>
    <class>ExplorerDirTree</class>
    <extends>QTreeView</extends>
-   <header>ExplorerDirTree.h</header>
+   <header>Bang/ExplorerDirTree.h</header>
   </customwidget>
   <customwidget>
    <class>Toolbar</class>
    <extends>QWidget</extends>
-   <header>Toolbar.h</header>
+   <header>Bang/Toolbar.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Screen</class>
    <extends>QWidget</extends>
-   <header>Screen.h</header>
+   <header>Bang/Screen.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Console</class>
    <extends>QTreeWidget</extends>
-   <header>Console.h</header>
+   <header>Bang/Console.h</header>
   </customwidget>
  </customwidgets>
  <resources>

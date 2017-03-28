@@ -1,11 +1,11 @@
-#include "GameWindow.h"
+#include "Bang/GameWindow.h"
 
 #include <QLabel>
 #include <QLayout>
 
-#include "Screen.h"
-#include "Object.h"
-#include "SingletonManager.h"
+#include "Bang/Screen.h"
+#include "Bang/Object.h"
+#include "Bang/SingletonManager.h"
 
 GameWindow *GameWindow::s_m_win = nullptr;
 

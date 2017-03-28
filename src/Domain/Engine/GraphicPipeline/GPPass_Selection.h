@@ -1,7 +1,7 @@
 #ifndef GPPASS_SELECTION_H
 #define GPPASS_SELECTION_H
 
-#include "GPPass.h"
+#include "Bang/GPPass.h"
 
 class SelectionFramebuffer;
 class GPPass_Selection : public GPPass

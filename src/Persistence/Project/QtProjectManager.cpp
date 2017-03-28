@@ -1,11 +1,11 @@
-#include "QtProjectManager.h"
+#include "Bang/QtProjectManager.h"
 
-#include "Debug.h"
-#include "Project.h"
-#include "SystemUtils.h"
-#include "IO.h"
-#include "EditorWindow.h"
-#include "ProjectManager.h"
+#include "Bang/Debug.h"
+#include "Bang/Project.h"
+#include "Bang/SystemUtils.h"
+#include "Bang/IO.h"
+#include "Bang/EditorWindow.h"
+#include "Bang/ProjectManager.h"
 
 String QtProjectManager::GetQtProjectFilepathDir()
 {

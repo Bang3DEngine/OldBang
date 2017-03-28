@@ -1,12 +1,12 @@
 #ifndef SINGLETONMANAGER_H
 #define SINGLETONMANAGER_H
 
-#include "Time.h"
-#include "Input.h"
-#include "Object.h"
-#include "TypeMap.h"
-#include "IWindow.h"
-#include "IO.h"
+#include "Bang/Time.h"
+#include "Bang/Input.h"
+#include "Bang/Object.h"
+#include "Bang/TypeMap.h"
+#include "Bang/IWindow.h"
+#include "Bang/IO.h"
 
 class IO;
 class Time;

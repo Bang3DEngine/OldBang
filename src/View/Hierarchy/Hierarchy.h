@@ -3,18 +3,18 @@
 
 #include <GL/glew.h>
 
-#include "Array.h"
+#include "Bang/Array.h"
 
 #include <QTimer>
 #include <QTreeWidget>
 
-#include "Map.h"
-#include "List.h"
-#include "Shortcut.h"
-#include "DragDropQTreeWidget.h"
-#include "HierarchyContextMenu.h"
-#include "HierarchyDragDropManager.h"
-#include "IWindowEventManagerListener.h"
+#include "Bang/Map.h"
+#include "Bang/List.h"
+#include "Bang/Shortcut.h"
+#include "Bang/DragDropQTreeWidget.h"
+#include "Bang/HierarchyContextMenu.h"
+#include "Bang/HierarchyDragDropManager.h"
+#include "Bang/IWindowEventManagerListener.h"
 
 class GameObject;
 class Hierarchy : public DragDropQTreeWidget,
