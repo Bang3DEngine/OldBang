@@ -1,6 +1,7 @@
 #include "Bang/AudioPlayerRunnable.h"
 
 #include <QThread>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/AudioClip.h"

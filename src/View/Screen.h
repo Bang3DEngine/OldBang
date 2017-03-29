@@ -8,6 +8,7 @@
 #include <QThread>
 #include <QGLWidget>
 #include <QApplication>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Array.h"
 #include "Bang/Shortcut.h"

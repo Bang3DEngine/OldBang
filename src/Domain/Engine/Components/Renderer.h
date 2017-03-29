@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <functional>
+#include "Bang/WinUndef.h"
 
 #include "Bang/GL.h"
 #include "Bang/Rect.h"

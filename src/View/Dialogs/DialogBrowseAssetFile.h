@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QModelIndex>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/List.h"

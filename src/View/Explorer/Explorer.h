@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QToolButton>
+#include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
 #include "Bang/String.h"

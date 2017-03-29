@@ -4,6 +4,7 @@
 #include <queue>
 
 #include <QObject>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Set.h"
 #include "Bang/String.h"

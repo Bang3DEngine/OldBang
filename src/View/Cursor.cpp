@@ -1,6 +1,7 @@
 #include "Bang/Cursor.h"
 
 #include <QCursor>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Input.h"
 #include "Bang/Application.h"

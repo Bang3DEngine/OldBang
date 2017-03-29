@@ -2,6 +2,7 @@
 #define ATTRWIDGETCOLOR_H
 
 #include <QColorDialog>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Color.h"
 #include "Bang/XMLAttribute.h"

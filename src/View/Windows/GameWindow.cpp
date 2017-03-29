@@ -2,6 +2,7 @@
 
 #include <QLabel>
 #include <QLayout>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Screen.h"
 #include "Bang/Object.h"

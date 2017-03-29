@@ -1,6 +1,7 @@
 #include "Bang/BehaviourManagerStatus.h"
 
 #include <QLibrary>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"

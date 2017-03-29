@@ -2,9 +2,14 @@
 
 *.trace
 tmp/*
-*BangPreprocessor*
+*.vcxproj.filters
+*.vcxproj.user
+*.db
+*.opendb
 ui_*
 *.swp
+.vs/*
+src/Qt_MOCs/*
 *.exe
 *.slo
 *.lo

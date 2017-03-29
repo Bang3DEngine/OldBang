@@ -3,6 +3,7 @@
 #include <QScrollBar>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/Inspector.h"

@@ -4,6 +4,7 @@
 #include <AL/alc.h>
 #include <AL/alut.h>
 #include <QThreadPool>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"

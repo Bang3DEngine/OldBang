@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QDropEvent>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/Debug.h"

@@ -14,6 +14,7 @@
 #include "Bang/IWindowEventManagerListener.h"
 #endif
 
+
 class Scene;
 class Material;
 class Component;

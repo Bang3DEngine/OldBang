@@ -2,6 +2,7 @@
 #define DRAGDROPQWIDGET_H
 
 #include <QWidget>
+#include "Bang/WinUndef.h"
 
 #include "Bang/DragDropAgent.h"
 

@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <QPainter>
+#include "Bang/WinUndef.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/Explorer.h"

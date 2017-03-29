@@ -1,6 +1,7 @@
 #include "Bang/Dialog.h"
 
 #include <QInputDialog>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/EditorWindow.h"
@@ -47,7 +48,7 @@ String Dialog::GetOpenDirname(const String &caption,
                     //QFileDialog::DontUseNativeDialog
                 )
             );
-    ASSERT(IO::ExistsDirectory(dir), "", return "");
+	if (!IO::ExistsDirectory(dir)) { return ""; }
 
     return dir;
 }
@@ -67,7 +68,7 @@ String Dialog::GetOpenFilename(const String &caption,
                     0 // QFileDialog::DontUseNativeDialog
                 )
             );
-    ASSERT(IO::ExistsFile(filepath), "", return "");
+	if (!IO::ExistsFile(filepath)) { return ""; }
 
     return filepath;
 }

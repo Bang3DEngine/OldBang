@@ -1,12 +1,13 @@
 #include "Bang/BehaviourRefresherTimer.h"
 
 #include <QThread>
+#include "Bang/WinUndef.h"
 
+#include "Bang/IO.h"
 #include "Bang/List.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Application.h"
-#include "Bang/IO.h"
 #include "Bang/SceneManager.h"
 #include "Bang/BehaviourHolder.h"
 #include "Bang/BehaviourManager.h"

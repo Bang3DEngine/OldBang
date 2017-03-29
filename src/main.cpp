@@ -163,8 +163,11 @@ int main(int argc, char **argv)
     loadedProjectFilepath = executableDir + "/GameData/Game.bproject";
     #endif
 
-    ASSERT (!loadedProjectFilepath.Empty(),
-            "The project filepath has not been specified.", return 0);
+	if (loadedProjectFilepath.Empty())
+	{
+		Debug_Error("The project filepath has not been specified.");
+		return 1;
+	}
 
     app.InitManagers();
 

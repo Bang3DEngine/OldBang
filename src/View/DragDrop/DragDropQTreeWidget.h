@@ -2,6 +2,7 @@
 #define DRAGDROPQTREEWIDGET_H
 
 #include <QTreeWidget>
+#include "Bang/WinUndef.h"
 
 #include "Bang/DragDropAgent.h"
 

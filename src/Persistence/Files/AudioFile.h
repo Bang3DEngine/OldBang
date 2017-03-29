@@ -4,6 +4,7 @@
 #include <QPixmap>
 #include <QModelIndex>
 #include <QFileSystemModel>
+#include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
 

@@ -226,12 +226,12 @@ public:
 
     static float Deg2Rad(float deg)
     {
-        return deg * Math::s_Deg2Rad;
+        return deg * static_cast<float>(Math::s_Deg2Rad);
     }
 
     static float Rad2Deg(float rad)
     {
-        return rad * Math::s_Rad2Deg;
+		return rad * static_cast<float>(Math::s_Rad2Deg);
     }
 
     static double Deg2Rad(double deg)

@@ -3,13 +3,13 @@
 
 #include <GL/glew.h>
 
-#include "Bang/Array.h"
-
 #include <QTimer>
 #include <QTreeWidget>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/List.h"
+#include "Bang/Array.h"
 #include "Bang/Shortcut.h"
 #include "Bang/DragDropQTreeWidget.h"
 #include "Bang/HierarchyContextMenu.h"

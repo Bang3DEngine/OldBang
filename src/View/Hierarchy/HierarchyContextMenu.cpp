@@ -1,6 +1,7 @@
 #include "Bang/HierarchyContextMenu.h"
 
 #include <QTreeWidgetItem>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"

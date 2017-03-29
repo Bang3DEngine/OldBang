@@ -1,6 +1,7 @@
 #include "Bang/AttrWidgetFloat.h"
 
 #include <QVBoxLayout>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Object.h"
 #include "Bang/XMLAttribute.h"

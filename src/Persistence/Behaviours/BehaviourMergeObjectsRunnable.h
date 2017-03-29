@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QRunnable>
+#include "Bang/WinUndef.h"
 
 class BehaviourMergeObjectsRunnable : public QObject,
                                       public QRunnable

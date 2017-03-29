@@ -3,6 +3,7 @@
 
 #include <QLabel>
 #include <QHBoxLayout>
+#include "Bang/WinUndef.h"
 
 #include "Bang/XMLAttribute.h"
 #include "Bang/DragDropQWidget.h"

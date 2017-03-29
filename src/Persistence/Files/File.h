@@ -3,6 +3,7 @@
 
 #include <QModelIndex>
 #include <QFileSystemModel>
+#include "Bang/WinUndef.h"
 
 #include "Bang/String.h"
 #include "Bang/SerializableObject.h"

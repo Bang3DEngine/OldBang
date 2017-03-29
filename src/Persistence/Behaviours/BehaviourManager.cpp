@@ -1,12 +1,13 @@
 #include "Bang/BehaviourManager.h"
 
 #include <QLibrary>
+#include "Bang/WinUndef.h"
 
+#include "Bang/IO.h"
 #include "Bang/Time.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Project.h"
-#include "Bang/IO.h"
 #include "Bang/Application.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/SceneManager.h"

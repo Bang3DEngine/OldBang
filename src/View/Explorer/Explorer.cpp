@@ -1,6 +1,7 @@
 #include "Bang/Explorer.h"
 
 #include <QScrollBar>
+#include "Bang/WinUndef.h"
 
 #include "Bang/IO.h"
 #include "Bang/Input.h"
@@ -375,6 +376,7 @@ bool Explorer::IsInListMode() const
 
 void Explorer::SetLabelText(const String &absPath)
 {
+	if (!m_labelCurrentPath) { return; }
     String textDir = absPath.ElideLeft(65);
     m_labelCurrentPath->setText(textDir.ToQString());
 

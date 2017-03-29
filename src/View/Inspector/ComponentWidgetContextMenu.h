@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QTreeWidgetItem>
+#include "Bang/WinUndef.h"
 
 #include "Bang/ContextMenu.h"
 

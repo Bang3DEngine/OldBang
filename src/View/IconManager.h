@@ -4,6 +4,7 @@
 #include <QIcon>
 #include <QPixmap>
 #include <QPainter>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/String.h"

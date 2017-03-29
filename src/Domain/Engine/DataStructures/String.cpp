@@ -1,10 +1,12 @@
 #include "Bang/String.h"
 
+#include <ctype.h>
 #include <sstream>
 #include <iomanip>
 #include <iostream>
 
 #include <QString>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/List.h"
@@ -217,7 +219,7 @@ int String::ReplaceInSitu(const String &from,
                     const String &to,
                     int maxNumberOfReplacements)
 {
-    ASSERT(!from.Empty(), "", return 0);
+	if (from.Empty()) { return 0; }
 
     int lastIndex = 0;
     int numReplacements = 0;
@@ -355,12 +357,12 @@ bool String::IsLowerCase(char c)
 
 char String::ToUpper(char c)
 {
-    return std::toupper(c);
+    return toupper(c);
 }
 
 char String::ToLower(char c)
 {
-    return std::tolower(c);
+    return tolower(c);
 }
 
 int String::ToInt(const String &str, bool *ok)

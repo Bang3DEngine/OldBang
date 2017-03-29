@@ -1,6 +1,7 @@
 #include "Bang/HierarchyDragDropManager.h"
 
 #include <QTreeWidgetItem>
+#include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
 #include "Bang/Scene.h"
@@ -39,8 +40,8 @@ void HierarchyDragDropManager::GetDropTargetGameObject(
     QTreeWidget::DropIndicatorPosition dropPos =
             p_hierarchy->dropIndicatorPosition();
     *dropTargetGameObject = p_hierarchy->GetGameObjectFromItem(targetItem);
-    if (below) { *below = (dropPos == QTreeWidget::BelowItem); }
-    if (above) { *above = (dropPos == QTreeWidget::AboveItem); }
+    if (below) { *below = (dropPos == QTreeWidget::DropIndicatorPosition::BelowItem); }
+    if (above) { *above = (dropPos == QTreeWidget::DropIndicatorPosition::AboveItem); }
 }
 
 void HierarchyDragDropManager::OnDragStart(const DragDropInfo &ddi)

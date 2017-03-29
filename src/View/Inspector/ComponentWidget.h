@@ -2,6 +2,7 @@
 #define COMPONENTWIDGET_H
 
 #include <QCheckBox>
+#include "Bang/WinUndef.h"
 
 #include "Bang/InspectorWidget.h"
 #include "Bang/ComponentWidgetContextMenu.h"

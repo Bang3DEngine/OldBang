@@ -2,10 +2,11 @@
 #define WINDOWMAIN_H
 
 #include <QApplication>
+#include "Bang/ui_EditorWindow.h"
+#include "Bang/WinUndef.h"
 
 #include "Bang/Screen.h"
 #include "Bang/IWindow.h"
-#include "Bang/ui_EditorWindow.h"
 
 /**
  *  This will be a singleton shared amongst ALL *.o and *.so

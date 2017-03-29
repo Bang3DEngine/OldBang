@@ -270,4 +270,5 @@ bool Toolbar::OnPlayStopShortcut()
 {
     if (EditorState::IsPlaying()) { m_buttonStop->click(); }
     else { m_buttonPlay->click(); }
+	return true;
 }

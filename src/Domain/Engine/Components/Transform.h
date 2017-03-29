@@ -1,7 +1,6 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-
 #include "Bang/String.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"

@@ -1,6 +1,7 @@
 #include "Bang/AudioClip.h"
 
 #include <QThread>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
@@ -32,8 +33,9 @@ String AudioClip::GetFileExtension() const
 
 bool AudioClip::LoadFromFile(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", false);
-    ASSERT(filepath != m_audioFileFilepath, "", true);
+	if (filepath.Empty()) { return false; }
+	if (filepath == m_audioFileFilepath) { return true; }
+
     if (filepath.EndsWith(".ogg"))
     {
         Debug_Error("OGG audio file format for " << filepath << " not supported.");

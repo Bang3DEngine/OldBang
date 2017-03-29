@@ -2,6 +2,7 @@
 
 #include <QLabel>
 #include <QBoxLayout>
+#include "Bang/WinUndef.h"
 
 #include "Bang/XMLNode.h"
 #include "Bang/Inspector.h"

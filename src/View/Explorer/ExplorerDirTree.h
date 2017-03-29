@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QTreeView>
+#include "Bang/WinUndef.h"
 
 #include "Bang/String.h"
 

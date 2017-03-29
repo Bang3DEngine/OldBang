@@ -5,6 +5,7 @@
 #include <ostream>
 #include <fstream>
 #include <QCryptographicHash>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/SingletonManager.h"
@@ -15,25 +16,25 @@
 
 bool IO::IsDir(const String &path)
 {
-    ASSERT(!path.Empty(), "", return false);
+	if (path.Empty()) { return false; }
     return QFileInfo(path.ToQString()).isDir();
 }
 
 bool IO::IsFile(const String &path)
 {
-    ASSERT(!path.Empty(), "", return false);
+	if (path.Empty()) { return false; }
     return QFileInfo(path.ToQString()).isFile();
 }
 
 bool IO::IsAbsolute(const String &path)
 {
-    ASSERT(!path.Empty(), "", return false);
+	if (path.Empty()) { return false; }
     return QFileInfo(path.ToQString()).isAbsolute();
 }
 
 String IO::GetDir(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", return "");
+	if (filepath.Empty()) { return ""; }
     String directory = "";
     const size_t lastSlash = filepath.rfind('/');
     if (lastSlash != String::npos)
@@ -45,7 +46,7 @@ String IO::GetDir(const String &filepath)
 
 String IO::GetFileName(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", return "");
+	if (filepath.Empty()) { return ""; }
     String filename = filepath;
     const size_t lastSlash = filepath.rfind('/');
     if (lastSlash != String::npos)
@@ -63,7 +64,7 @@ String IO::GetFileName(const String &filepath)
 
 String IO::GetFileNameWithExtension(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", return "");
+	if (filepath.Empty()) { return ""; }
     String filename = filepath;
     const size_t lastSlash = filepath.rfind('/');
     if (lastSlash != String::npos)
@@ -116,7 +117,7 @@ String IO::GetFileExtensionComplete(const String &filepath)
 
 String IO::GetPathWithoutExtension(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", return "");
+	if (filepath.Empty()) { return ""; }
     String path = GetDir(filepath);
     path += GetFileName(filepath);
     return path;
@@ -124,9 +125,9 @@ String IO::GetPathWithoutExtension(const String &filepath)
 
 
 String IO::ToAbsolute(const String &relPath,
-                               const String &prependDirectory)
+                      const String &prependDirectory)
 {
-    ASSERT(!relPath.Empty(), "", return "");
+	if (relPath.Empty()) { return ""; }
 
     String result = "";
     if (IO::IsAbsolute(relPath))
@@ -166,7 +167,7 @@ String IO::ToAbsolute(const String &relPath,
 
 String IO::ToAbsolute(const String &relPath, bool isEngineFile)
 {
-    ASSERT(!relPath.Empty(), "", return "");
+	if (relPath.Empty()) { return ""; }
     return IO::ToAbsolute(relPath,
               isEngineFile ? IO::GetEngineAssetsRootAbs() :
                              IO::GetProjectAssetsRootAbs());
@@ -175,7 +176,7 @@ String IO::ToAbsolute(const String &relPath, bool isEngineFile)
 String IO::ToRelative(const String &absPath,
                                const String &prependDirectory)
 {
-    ASSERT(!absPath.Empty(), "", return "");
+	if (absPath.Empty()) { return ""; }
 
     if (!IsAbsolute(absPath))
     {
@@ -196,7 +197,8 @@ String IO::ToRelative(const String &absPath,
 
 String IO::ToRelative(const String &relPath, bool isEngineFile)
 {
-    ASSERT(!relPath.Empty(), "", return "");
+	if (relPath.Empty()) { return ""; }
+
     return IO::ToRelative(relPath,
               isEngineFile ? IO::GetEngineAssetsRootAbs() :
                              IO::GetProjectAssetsRootAbs());
@@ -204,19 +206,19 @@ String IO::ToRelative(const String &relPath, bool isEngineFile)
 
 String IO::ToRelative(const String &absPath)
 {
-    ASSERT(!absPath.Empty(), "", return "");
+	if (absPath.Empty()) { return ""; }
     return IO::ToRelative(absPath, IO::IsEngineFile(absPath));
 }
 
 bool IO::IsEngineFile(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", return "");
+	if (filepath.Empty()) { return ""; }
     return filepath.BeginsWith(IO::GetEngineAssetsRootAbs());
 }
 
 String IO::GetDirUp(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", return "");
+	if (filepath.Empty()) { return ""; }
     Array<String> splits = filepath.Split('/');
     splits.PopBack();
     return (IO::IsAbsolute(filepath) ? "/" : "") +
@@ -226,7 +228,7 @@ String IO::GetDirUp(const String &filepath)
 String IO::GetRightmostDir(const String &dir)
 {
     Array<String> parts = dir.Split('/');
-    ASSERT(!parts.Empty(), "", return "");
+	if (parts.Empty()) { return ""; }
     return parts.Back();
 }
 
@@ -234,7 +236,7 @@ bool IO::DuplicateFile(const String &fromFilepath,
                                 const String &toFilepath,
                                 bool overwrite)
 {
-    ASSERT(IO::ExistsFile(fromFilepath), "", return false);
+	if (!IO::ExistsFile(fromFilepath)) { return false; }
     if (overwrite) { IO::Remove(toFilepath); }
     bool ok = QFile::copy(fromFilepath.ToQString(), toFilepath.ToQString());
     return ok;
@@ -244,7 +246,7 @@ bool IO::DuplicateDir(const String &fromDirpath,
                                const String &toDirpath,
                                bool overwrite)
 {
-    ASSERT(IO::ExistsDirectory(fromDirpath), "", return false);
+	if (!IO::ExistsDirectory(fromDirpath)) { return false; }
 
     if (!IO::CreateDirectory(toDirpath)) { return false; }
     List<String> filepaths = IO::GetFiles(fromDirpath, false);
@@ -272,7 +274,7 @@ bool IO::DuplicateDir(const String &fromDirpath,
 #ifdef BANG_EDITOR
 String IO::GetNextDuplicatePath(const String &path)
 {
-    ASSERT(!path.Empty(), "", return "");
+	if (path.Empty()) { return ""; }
 
     String filePath = path;
     String fileDir  = IO::GetDir(filePath);
@@ -314,7 +316,7 @@ String IO::GetNextDuplicatePath(const String &path)
 
 String IO::GetDuplicatePath(const String &path)
 {
-    ASSERT(!path.Empty(), "", return "");
+	if (path.Empty()) { return ""; }
     String result = path;
     while (IO::Exists(result))
     {
@@ -327,7 +329,7 @@ String IO::GetDuplicatePath(const String &path)
 List<String> IO::GetSubDirectories(const String &dirPath,
                                             bool recursive)
 {
-    ASSERT(!dirPath.Empty(), "", return {});
+	if (dirPath.Empty()) { return {}; }
     List<String> subdirsList;
     if (!IO::ExistsDirectory(dirPath)) { return subdirsList; }
 
@@ -356,7 +358,7 @@ List<String> IO::GetFiles(const String &dirPath,
                                    bool recursive,
                                    const List<String> &extensions)
 {
-    ASSERT(!dirPath.Empty(), "", return {});
+	if (dirPath.Empty()) { return {}; }
     List<String> filesList;
     QStringList extensionList;
     for (String ext : extensions)
@@ -392,7 +394,7 @@ List<String> IO::GetFiles(const String &dirPath,
 
 bool IO::Remove(const String &path)
 {
-    ASSERT(IO::ExistsFile(path), "", return false);
+	if (!IO::ExistsFile(path)) { return false; }
     if (IO::IsFile(path))
     {
         QFile f(path.ToQString());
@@ -411,19 +413,19 @@ bool IO::Remove(const String &path)
 
 bool IO::ExistsFile(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", return false);
+	if (filepath.Empty()) { return false; }
     return QFile(filepath.ToQString()).exists();
 }
 
 bool IO::ExistsDirectory(const String &dirPath)
 {
-    ASSERT(!dirPath.Empty(), "", return false);
+	if (dirPath.Empty()) { return false; }
     return QDir(dirPath.ToQString()).exists();
 }
 
 bool IO::Exists(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", return false);
+	if (filepath.Empty()) { return false; }
     if (IO::IsDir(filepath))
     {
         return IO::ExistsDirectory(filepath);
@@ -433,7 +435,7 @@ bool IO::Exists(const String &filepath)
 
 bool IO::CreateDirectory(const String &dirPath)
 {
-    ASSERT(!dirPath.Empty(), "", return false);
+	if (dirPath.Empty()) { return false; }
     if (IO::ExistsDirectory(dirPath)) { return true; }
     return QDir().mkdir(dirPath.ToQString());
 }
@@ -450,7 +452,7 @@ bool IO::Rename(const String &oldPath, const String &newPath)
 
 bool IO::Move(const String &oldPath, const String &newPath)
 {
-    ASSERT(IO::Exists(oldPath), "", return false);
+	if (!IO::Exists(oldPath)) { return false; }
     if (IO::IsDir(oldPath))
     {
         return QDir().rename(oldPath.ToQString(), newPath.ToQString());
@@ -472,7 +474,7 @@ bool IO::WriteToFile(const String &absFilepath, const String &contents)
 
 String IO::GetHash(const String &filepath)
 {
-    ASSERT(IO::ExistsFile(filepath), "", return "");
+	if (!IO::ExistsFile(filepath)) { return ""; }
 
     String result = "";
     QFile file(filepath.ToQString());
@@ -498,7 +500,7 @@ String IO::GetHashFromByteArray(const QByteArray &byteArray)
 
 String IO::AppendExtension(const String &filepath, const String extNoDot)
 {
-    ASSERT(!filepath.Empty(), "", return "");
+	if (filepath.Empty()) { return ""; }
     if (filepath.EndsWith("." + extNoDot)) { return filepath; }
     return filepath + "." + extNoDot;
 }

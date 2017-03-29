@@ -2,6 +2,7 @@
 #define FILESYSTEMMODEL_H
 
 #include <QFileSystemModel>
+#include "Bang/WinUndef.h"
 
 class Explorer;
 class FileSystemModel : public QFileSystemModel

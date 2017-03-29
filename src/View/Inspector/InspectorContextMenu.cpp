@@ -2,6 +2,7 @@
 
 #include <QMenu>
 #include <QAction>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Inspector.h"
 #include "Bang/EditorWindow.h"

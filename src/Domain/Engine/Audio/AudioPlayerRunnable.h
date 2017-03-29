@@ -2,6 +2,7 @@
 #define AUDIOPLAYERRUNNABLE_H
 
 #include <QRunnable>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Vector3.h"
 

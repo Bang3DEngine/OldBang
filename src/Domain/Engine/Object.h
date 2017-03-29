@@ -4,6 +4,7 @@
 #include "Bang/String.h"
 #include "Bang/HideFlags.h"
 #include "Bang/ICloneable.h"
+#include "Bang/WinUndef.h"
 
 #define OBJECT(CLASS) \
         public: \

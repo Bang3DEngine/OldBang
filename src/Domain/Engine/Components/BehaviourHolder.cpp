@@ -2,10 +2,11 @@
 
 #include <QLibrary>
 #include <QInputDialog>
+#include "Bang/WinUndef.h"
 
+#include "Bang/IO.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Behaviour.h"
-#include "Bang/IO.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/EditorState.h"
 #include "Bang/BehaviourManager.h"
@@ -35,7 +36,7 @@ void BehaviourHolder::ChangeBehaviour(Behaviour *newBehaviour)
 Behaviour *BehaviourHolder::CreateDynamicBehaviour(const String &behaviourName,
                                                    QLibrary *openLibrary)
 {
-    QLibrary *lib = openLibrary; ASSERT(lib, "", return nullptr);
+	QLibrary *lib = openLibrary; if (!lib) { return nullptr; }
     String errorString = "";
     if (lib->isLoaded())
     {

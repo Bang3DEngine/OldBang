@@ -2,6 +2,7 @@
 #define DRAGDROPQLISTVIEW_H
 
 #include <QListView>
+#include "Bang/WinUndef.h"
 
 #include "Bang/DragDropAgent.h"
 

@@ -5,6 +5,7 @@
 #include <QAction>
 #include <QComboBox>
 #include <QToolButton>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Input.h"
 #include "Bang/Shortcut.h"

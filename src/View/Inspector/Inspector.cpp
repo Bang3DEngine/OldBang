@@ -1,6 +1,7 @@
 #include "Bang/Inspector.h"
 
 #include <QScrollBar>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"

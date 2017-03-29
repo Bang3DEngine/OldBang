@@ -238,7 +238,7 @@ Vector2 UIText::GetTextSizeNDC() const
 Rect UIText::GetNDCRectOfChar(char c) const
 {
     RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
-    ASSERT(rtrans, "", return Rect::Empty);
+	if (!rtrans) { return Rect::Empty; }
     Rect screenRectNDC = rtrans->GetScreenSpaceRect(true);
     return GetNDCRectOfChar(c, screenRectNDC);
 }

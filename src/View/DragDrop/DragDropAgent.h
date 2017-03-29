@@ -9,6 +9,7 @@
 #include <QDragMoveEvent>
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"

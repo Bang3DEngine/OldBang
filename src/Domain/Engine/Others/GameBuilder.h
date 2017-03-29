@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QProgressDialog>
+#include "Bang/WinUndef.h"
 
 #include "Bang/String.h"
 #include "Bang/GameBuilderJob.h"

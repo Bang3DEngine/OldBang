@@ -2,6 +2,7 @@
 #define COMPONENT_H
 
 #include <QPixmap>
+#include "Bang/WinUndef.h"
 
 #include "Bang/IO.h"
 #include "Bang/Object.h"
@@ -12,7 +13,6 @@
 #include "Bang/ISceneEventListener.h"
 
 #ifdef BANG_EDITOR
-#include "Bang/SerializableObject.h"
 #include "Bang/IWindowEventManagerListener.h"
 #endif
 

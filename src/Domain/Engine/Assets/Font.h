@@ -1,8 +1,8 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "ft2build.h"
-#include "freetype.h"
+#include "freetype\ft2build.h"
+#include "freetype\freetype.h"
 
 #include "Bang/Array.h"
 #include "Bang/Asset.h"

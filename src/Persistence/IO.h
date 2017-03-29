@@ -1,7 +1,12 @@
 #ifndef PERSISTENCE_H
 #define PERSISTENCE_H
 
+#ifdef _WIN32
+	#undef CreateDirectory
+#endif
+
 #include <QByteArray>
+#include "Bang/WinUndef.h"
 
 #include "Bang/List.h"
 #include "Bang/String.h"

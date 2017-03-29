@@ -437,7 +437,7 @@ bool EditorGizmosGameObject::IsGizmoRenderer(Renderer *rend)
 EditorGizmosGameObject *EditorGizmosGameObject::GetInstance()
 {
     Scene *scene = SceneManager::GetActiveScene();
-    ASSERT(scene, "", return nullptr);
+	if (!scene) { return nullptr; }
     EditorScene *edScene = Object::SCast<EditorScene>(scene);
 
     EditorGizmosGameObject *gizmosGo = edScene->GetGizmosGameObject();

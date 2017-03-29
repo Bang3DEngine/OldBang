@@ -16,6 +16,9 @@
  * In case the BehaviourHolder has a Behaviour correctly loaded, it will
  * pass the events to the behaviour. Otherwise, it will just do nothing.
  */
+
+#include "Bang/WinUndef.h"
+
 class QLibrary;
 class Behaviour;
 class BehaviourHolder : public Component

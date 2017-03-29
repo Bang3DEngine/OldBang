@@ -3,6 +3,7 @@
 
 #include <QPoint>
 #include <QWidget>
+#include "Bang/WinUndef.h"
 
 class ContextMenu : public QObject
 {

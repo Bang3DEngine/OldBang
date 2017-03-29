@@ -2,6 +2,7 @@
 #define INSPECTORCONTEXTMENU_H
 
 #include <QPoint>
+#include "Bang/WinUndef.h"
 
 #include "Bang/ContextMenu.h"
 

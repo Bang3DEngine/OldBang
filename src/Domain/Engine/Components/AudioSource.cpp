@@ -183,7 +183,7 @@ AudioSource::State AudioSource::GetState() const
 
 float AudioSource::GetPlayProgress() const
 {
-    ASSERT(m_audioClip, "", 0.0f);
+	if (!m_audioClip) { return 0.0f; }
 
     float secondsOffset;
     alGetSourcef(m_alSourceId, AL_SEC_OFFSET, &secondsOffset);

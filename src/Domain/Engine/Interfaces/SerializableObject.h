@@ -3,6 +3,7 @@
 
 #include <set>
 #include <QPixmap>
+#include "Bang/WinUndef.h"
 
 #include "Bang/String.h"
 

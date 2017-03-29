@@ -1,6 +1,7 @@
 #include "Bang/EditorPlayStopFlowController.h"
 
 #include <QProgressDialog>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
@@ -36,7 +37,7 @@ EditorPlayStopFlowController *EditorPlayStopFlowController::GetInstance()
 
 bool EditorPlayStopFlowController::PlayScene()
 {
-    ASSERT(!EditorState::IsPlaying(), "", return true);
+	if (EditorState::IsPlaying()) { return true; }
 
     if (!WaitForAllBehavioursToBeLoaded()) { return false; }
 

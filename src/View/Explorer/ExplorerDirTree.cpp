@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <QToolButton>
 #include <QFileSystemModel>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/Explorer.h"

@@ -1,6 +1,7 @@
 #include "Bang/FileSystemModel.h"
 
 #include <QPainter>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Debug.h"
 #include "Bang/String.h"

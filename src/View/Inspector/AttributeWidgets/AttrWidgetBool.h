@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QCheckBox>
 #include <QFocusEvent>
+#include "Bang/WinUndef.h"
 
 #include "Bang/XMLAttribute.h"
 #include "Bang/InspectorWidget.h"

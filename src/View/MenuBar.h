@@ -3,6 +3,7 @@
 
 #include <QMenuBar>
 #include <QMessageBox>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Dialog.h"
 #include "Bang/String.h"

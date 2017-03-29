@@ -186,8 +186,8 @@ void XMLParser::GetNextTag(const String &xml,
 
 XMLNode *XMLParser::FromFile(const String &filepath)
 {
-    ASSERT(!filepath.Empty(), "", return nullptr);
-    ASSERT(IO::ExistsFile(filepath), "", return nullptr);
+	if (!filepath.Empty()) { return nullptr; }
+	if (!IO::ExistsFile(filepath)) { return nullptr; }
 
     std::ifstream f;
     try

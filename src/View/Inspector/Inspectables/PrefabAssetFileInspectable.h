@@ -2,6 +2,7 @@
 #define PREFABASSETFILEINSPECTABLE_H
 
 #include <QTimer>
+#include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
 #include "Bang/SerializableObject.h"

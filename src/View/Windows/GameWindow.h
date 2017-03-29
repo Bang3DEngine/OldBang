@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QApplication>
+#include "Bang/WinUndef.h"
 
 #include "Bang/IWindow.h"
 

@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QFocusEvent>
 #include <QDoubleSpinBox>
+#include "Bang/WinUndef.h"
 
 #include "Bang/AttributeWidget.h"
 

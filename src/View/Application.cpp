@@ -1,6 +1,7 @@
 #include "Bang/Application.h"
 
 #include <QThreadPool>
+#include "Bang/WinUndef.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/EditorScene.h"
@@ -106,7 +107,7 @@ AssetsManager *Application::GetAssetsManager() const
 Application *Application::GetInstance()
 {
     #ifdef BANG_EDITOR
-    ASSERT(EditorWindow::GetInstance(), "", return nullptr);
+	if (!EditorWindow::GetInstance()) { return nullptr; }
     return Object::SCast<Application>(
                 EditorWindow::GetInstance()->GetApplication());
     #else

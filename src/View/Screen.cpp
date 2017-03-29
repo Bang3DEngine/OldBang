@@ -95,7 +95,7 @@ bool Screen::IsRenderingInGame() const
 {
     #ifdef BANG_EDITOR
     EditorWindow *win = EditorWindow::GetInstance();
-    ASSERT(win, "", return false);
+	if (!win) { return false; }
 
     return win->tabContainerSceneGame->currentWidget() ==
            win->tabGame;

@@ -2,6 +2,7 @@
 #define EDITORPLAYSTOPFLOWCONTROLLER_H
 
 #include <QObject>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Scene.h"
 

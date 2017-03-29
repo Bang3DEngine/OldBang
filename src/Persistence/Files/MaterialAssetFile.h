@@ -2,6 +2,7 @@
 #define MATERIALASSETFILE_H
 
 #include <QPixmap>
+#include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
 #include "Bang/Array.h"

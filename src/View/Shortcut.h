@@ -3,6 +3,7 @@
 
 #include <QShortcut>
 #include <QKeySequence>
+#include "Bang/WinUndef.h"
 
 #include "Bang/String.h"
 

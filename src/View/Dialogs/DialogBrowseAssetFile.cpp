@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include "Bang/WinUndef.h"
 
 #include "Bang/IO.h"
 #include "Bang/File.h"

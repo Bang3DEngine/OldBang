@@ -2,6 +2,7 @@
 #define GAMEBUILDDIALOG_H
 
 #include <QProgressDialog>
+#include "Bang/WinUndef.h"
 
 #include "Bang/String.h"
 

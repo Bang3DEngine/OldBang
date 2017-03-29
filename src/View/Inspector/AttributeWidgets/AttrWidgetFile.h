@@ -3,6 +3,7 @@
 
 #include <QDir>
 #include <QLineEdit>
+#include "Bang/WinUndef.h"
 
 #include "Bang/String.h"
 #include "Bang/AttributeWidget.h"

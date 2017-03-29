@@ -5,6 +5,7 @@
 #include <QString>
 #include <sstream>
 #include <iostream>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/Set.h"
@@ -52,29 +53,14 @@ private:
 };
 
 // ASSERT
-    #define ASSERT1(mustBeTrue) do{\
+	#define ASSERT(mustBeTrue) do{\
         if (!(mustBeTrue)) {\
             return;\
-        }\
-    } while (0)
-
-    #define ASSERT2(mustBeTrue, message) do{\
-        if (!(mustBeTrue)) {\
-            if (strcmp(message, "") != 0) { Debug_Error("Assertion failed: " << message); }\
-            return;\
-        }\
-    } while (0)
-
-    #define ASSERT3(mustBeTrue, message, returnAction) do{\
-        if (!(mustBeTrue)) {\
-            if (strcmp(message, "") != 0) { Debug_Error("Assertion failed: " << message); }\
-            returnAction;\
         }\
     } while (0)
 
     #define NUMARGS(...)  (sizeof((int[]){__VA_ARGS__})/sizeof(int))
     #define GET_MACRO(_1, _2, _3, NAME, ...) NAME // Enable macro overloading
-    #define ASSERT(...) GET_MACRO(__VA_ARGS__, ASSERT3, ASSERT2, ASSERT1)(__VA_ARGS__)
 //
 
 #define Debug_Clear() do{\

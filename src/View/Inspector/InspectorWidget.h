@@ -15,6 +15,7 @@
 #include <QPushButton>
 #include <QListWidget>
 #include <QDoubleSpinBox>
+#include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
 #include "Bang/Debug.h"

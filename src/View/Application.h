@@ -5,6 +5,7 @@
 #include <iostream>
 #include <QKeyEvent>
 #include <QApplication>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/Array.h"

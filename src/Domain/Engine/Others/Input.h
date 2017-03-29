@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <QKeyEvent>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/Array.h"

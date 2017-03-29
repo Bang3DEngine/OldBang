@@ -5,6 +5,7 @@
 #include <QColor>
 #include <QMutex>
 #include <QDropEvent>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Map.h"
 #include "Bang/List.h"

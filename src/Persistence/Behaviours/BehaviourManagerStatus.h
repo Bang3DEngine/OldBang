@@ -2,13 +2,14 @@
 #define BEHAVIOURMANAGERSTATUS_H
 
 #include <QMutex>
+#include "Bang/WinUndef.h"
 
+#include "Bang/IO.h"
 #include "Bang/Set.h"
 #include "Bang/Map.h"
 #include "Bang/List.h"
 #include "Bang/File.h"
 #include "Bang/String.h"
-#include "Bang/IO.h"
 #include "Bang/CodePreprocessor.h"
 
 #ifdef BANG_EDITOR

@@ -1,6 +1,7 @@
 #include "Bang/ExplorerContextMenu.h"
 
 #include <QTreeWidgetItem>
+#include "Bang/WinUndef.h"
 
 #include "Bang/IO.h"
 #include "Bang/Debug.h"
@@ -14,6 +15,7 @@
 #include "Bang/EditorWindow.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/GameObjectClipboard.h"
+
 
 ExplorerContextMenu::ExplorerContextMenu(Explorer *explorer) :
     ContextMenu(explorer), p_explorer(explorer)
@@ -120,7 +122,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
         fromTexture = AssetsManager::Load<Texture2D>(
                     p_explorer->GetSelectedFileOrDirPath(), false);
     }
-    ASSERT(fromTexture, "", nullptr);
+	if (!fromTexture) { return nullptr; }
 
     File f (fromTexture->GetFilepath());
     MenuBar *mb = MenuBar::GetInstance();

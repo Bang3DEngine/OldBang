@@ -8,6 +8,7 @@
 #include <QGLWidget>
 #include <QApplication>
 #include <QTreeWidgetItem>
+#include "Bang/WinUndef.h"
 
 #include "Bang/Array.h"
 #include "Bang/MenuBar.h"

@@ -4,9 +4,10 @@
 #include <QDialog>
 #include <QFileDialog>
 #include <QMessageBox>
+#include "Bang/WinUndef.h"
 
-#include "Bang/String.h"
 #include "Bang/IO.h"
+#include "Bang/String.h"
 
 class Dialog
 {

@@ -1,0 +1,1119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E128A2DF-792F-36B4-910E-A2F3A72AC8B9}</ProjectGuid>
+    <RootNamespace>Bang</RootNamespace>
+    <Keyword>Qt4VSv1.0</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <PlatformToolSet>v140</PlatformToolSet>
+    <OutputDirectory>release\bin\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>NotSet</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>bin\objEditor\</IntermediateDirectory>
+    <PrimaryOutput>Bang</PrimaryOutput>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <PlatformToolSet>v140</PlatformToolSet>
+    <OutputDirectory>debug\bin\</OutputDirectory>
+    <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>Application</ConfigurationType>
+    <IntermediateDirectory>bin\objEditor\</IntermediateDirectory>
+    <PrimaryOutput>Bang</PrimaryOutput>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bin\objEditor\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Bang</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</IgnoreImportLibrary>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bin\objEditor\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Bang</TargetName>
+    <IgnoreImportLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</IgnoreImportLibrary>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;/usr/include;/usr/include/freetype2;/usr/include/freetype2/freetype;include;..\..\..\Qt\5.8\msvc2015_64\include;..\..\..\Qt\5.8\msvc2015_64\include\QtOpenGL;..\..\..\Qt\5.8\msvc2015_64\include\QtWidgets;..\..\..\Qt\5.8\msvc2015_64\include\QtGui;..\..\..\Qt\5.8\msvc2015_64\include\QtANGLE;..\..\..\Qt\5.8\msvc2015_64\include\QtCore;src\Qt_MOCs;.;..\..\..\Qt\5.8\msvc2015_64\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>--std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wno-sign-compare -O3 -Wl,-O3 -Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>bin\objEditor\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>bin\objEditor\</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_PROJECT_PATH="C:/Users/sephirot47/Bang";BANG_EDITOR;QT_NO_DEBUG;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>
+      </ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>C:\Qt\5.8\msvc2015_64\lib\qtmain.lib;shell32.lib;GLEW.lib;GLU.lib;dl.lib;alut.lib;openal.lib;freetype.lib;C:\Qt\5.8\msvc2015_64\lib\Qt5OpenGL.lib;C:\Qt\5.8\msvc2015_64\lib\Qt5Widgets.lib;C:\Qt\5.8\msvc2015_64\lib\Qt5Gui.lib;C:\Qt\5.8\msvc2015_64\lib\Qt5Core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\5.8\msvc2015_64\lib;C:\utils\my_sql\my_sql\lib;C:\utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wno-sign-compare -fPIC -O3 -Wl,-O3 "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <LinkIncremental>false</LinkIncremental>
+      <OutputFile>$(OutDir)\Bang.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\";BANG_EDITOR;QT_NO_DEBUG;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;/usr/include;/usr/include/freetype2;/usr/include/freetype2/freetype;include;..\..\..\Qt\5.8\msvc2015_64\include;..\..\..\Qt\5.8\msvc2015_64\include\QtOpenGL;..\..\..\Qt\5.8\msvc2015_64\include\QtWidgets;..\..\..\Qt\5.8\msvc2015_64\include\QtGui;..\..\..\Qt\5.8\msvc2015_64\include\QtANGLE;..\..\..\Qt\5.8\msvc2015_64\include\QtCore;src\Qt_MOCs;.;..\..\..\Qt\5.8\msvc2015_64\mkspecs\win32-msvc2013;include;include/AL;include/GL;include/freetype;lib/freetype;lib/OpenAL/lib/OpenGL;lib/ALut;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>bin\objEditor\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ObjectFileName>bin\objEditor\</ObjectFileName>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_PROJECT_PATH="C:/Users/sephirot47/Bang";BANG_EDITOR;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>glu32.lib;opengl32.lib;glew32.lib;lib\freetype\freetype27d.lib;lib\OpenAL\OpenAL32.lib;lib\Alut\Alut.lib;C:\Qt\5.8\msvc2015_64\lib\qtmaind.lib;shell32.lib;C:\Qt\5.8\msvc2015_64\lib\Qt5OpenGLd.lib;C:\Qt\5.8\msvc2015_64\lib\Qt5Widgetsd.lib;C:\Qt\5.8\msvc2015_64\lib\Qt5Guid.lib;C:\Qt\5.8\msvc2015_64\lib\Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Qt\5.8\msvc2015_64\lib;lib\OpenAL;lib\OpenGL;C:\utils\my_sql\my_sql\lib;C:\utils\postgresql\pgsql\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>-Wl,--export-dynamic -fPIC "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+      <OutputFile>$(OutDir)\Bang.exe</OutputFile>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;WIN64;QT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\";BANG_EDITOR;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Domain\Engine\Physics\AABox.cpp" />
+    <ClCompile Include="src\View\Application.cpp" />
+    <ClCompile Include="src\Domain\Engine\DataStructures\Array.cpp" />
+    <ClCompile Include="src\Domain\Engine\Assets\Asset.cpp" />
+    <ClCompile Include="src\Persistence\AssetsManager.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttrWidgetBool.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttrWidgetButton.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttrWidgetColor.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttrWidgetEnum.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttrWidgetFile.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttrWidgetFloat.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttrWidgetInt.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttrWidgetString.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttrWidgetVectorFloat.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\AttributeWidget.cpp" />
+    <ClCompile Include="src\Domain\Engine\Assets\AudioClip.cpp" />
+    <ClCompile Include="src\Persistence\Files\AudioClipAssetFile.cpp" />
+    <ClCompile Include="src\View\Inspector\Inspectables\AudioClipAssetFileInspectable.cpp" />
+    <ClCompile Include="src\Persistence\Files\AudioFile.cpp" />
+    <ClCompile Include="src\Persistence\Files\AudioFileInspectable.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\AudioListener.cpp" />
+    <ClCompile Include="src\Domain\Engine\Audio\AudioManager.cpp" />
+    <ClCompile Include="src\Domain\Engine\Audio\AudioPlayerRunnable.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\AudioSource.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\Behaviour.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\BehaviourHolder.cpp" />
+    <ClCompile Include="src\Persistence\Behaviours\BehaviourManager.cpp" />
+    <ClCompile Include="src\Persistence\Behaviours\BehaviourManagerStatus.cpp" />
+    <ClCompile Include="src\Persistence\Behaviours\BehaviourMergeObjectsRunnable.cpp" />
+    <ClCompile Include="src\Persistence\Behaviours\BehaviourObjectCompileRunnable.cpp" />
+    <ClCompile Include="src\Persistence\Behaviours\BehaviourRefresherTimer.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\Camera.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\Canvas.cpp" />
+    <ClCompile Include="src\Domain\Engine\Debug\Chrono.cpp" />
+    <ClCompile Include="src\Domain\Engine\Debug\ChronoGL.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\CircleRenderer.cpp" />
+    <ClCompile Include="src\Domain\Engine\CodePreprocessor.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Color.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\Component.cpp" />
+    <ClCompile Include="src\View\Inspector\ComponentClipboard.cpp" />
+    <ClCompile Include="src\View\Inspector\ComponentWidget.cpp" />
+    <ClCompile Include="src\View\Inspector\ComponentWidgetContextMenu.cpp" />
+    <ClCompile Include="src\View\Console\Console.cpp" />
+    <ClCompile Include="src\View\ContextMenu.cpp" />
+    <ClCompile Include="src\View\Cursor.cpp" />
+    <ClCompile Include="src\Domain\Engine\Debug\Debug.cpp" />
+    <ClCompile Include="src\View\Dialogs\Dialog.cpp" />
+    <ClCompile Include="src\View\Dialogs\DialogBrowseAssetFile.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\DirectionalLight.cpp" />
+    <ClCompile Include="src\View\DragDrop\DragDropAgent.cpp" />
+    <ClCompile Include="src\View\DragDrop\DragDropManager.cpp" />
+    <ClCompile Include="src\View\DragDrop\DragDropQListView.cpp" />
+    <ClCompile Include="src\View\DragDrop\DragDropQListWidget.cpp" />
+    <ClCompile Include="src\View\DragDrop\DragDropQTreeWidget.cpp" />
+    <ClCompile Include="src\View\DragDrop\DragDropQWidget.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorAxis.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorAxisGroup.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorAxisPlane.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorBBox.cpp" />
+    <ClCompile Include="src\View\EditorCamera\EditorCamera.cpp" />
+    <ClCompile Include="src\View\EditorScene\EditorDebugGameObject.cpp" />
+    <ClCompile Include="src\View\EditorScene\EditorFloor.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorGizmo.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorGizmosGameObject.cpp" />
+    <ClCompile Include="src\View\EditorPlayStopFlowController.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorRectTransform\EditorRectTransformAnchorGizmo.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorRectTransform\EditorRectTransformCornerGizmo.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorRectTransform\EditorRectTransformGizmo.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorRotateAxis.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorRotateAxisGroup.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorScaleAxis.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorScaleAxisGroup.cpp" />
+    <ClCompile Include="src\View\EditorScene\EditorScene.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorSelectionGameObject.cpp" />
+    <ClCompile Include="src\View\EditorState.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorTranslateAxis.cpp" />
+    <ClCompile Include="src\View\EditorGameObject\EditorTranslateAxisGroup.cpp" />
+    <ClCompile Include="src\View\Windows\EditorWindow.cpp" />
+    <ClCompile Include="src\Persistence\EngineConfig.cpp" />
+    <ClCompile Include="src\View\Explorer\Explorer.cpp" />
+    <ClCompile Include="src\View\Explorer\ExplorerContextMenu.cpp" />
+    <ClCompile Include="src\View\Explorer\ExplorerDirTree.cpp" />
+    <ClCompile Include="src\View\Explorer\ExplorerFileSortProxy.cpp" />
+    <ClCompile Include="src\Persistence\Files\File.cpp" />
+    <ClCompile Include="src\Persistence\IO\FileReader.cpp" />
+    <ClCompile Include="src\View\Explorer\FileReferencesManager.cpp" />
+    <ClCompile Include="src\View\Explorer\FileSystemModel.cpp" />
+    <ClCompile Include="src\Domain\Engine\Assets\Font.cpp" />
+    <ClCompile Include="src\Persistence\Files\FontAssetFile.cpp" />
+    <ClCompile Include="src\Domain\Graphics\FontSheetCreator.cpp" />
+    <ClCompile Include="src\Domain\Graphics\Buffers\Framebuffer.cpp" />
+    <ClCompile Include="src\Domain\Graphics\Buffers\GBuffer.cpp" />
+    <ClCompile Include="src\Domain\Graphics\GL.cpp" />
+    <ClCompile Include="src\Domain\Graphics\GLContext.cpp" />
+    <ClCompile Include="src\Domain\Graphics\Interfaces\GLObject.cpp" />
+    <ClCompile Include="src\Domain\Engine\GraphicPipeline\GPPass.cpp" />
+    <ClCompile Include="src\Domain\Engine\GraphicPipeline\GPPass_DepthLayer.cpp" />
+    <ClCompile Include="src\Domain\Engine\GraphicPipeline\GPPass_G.cpp" />
+    <ClCompile Include="src\Domain\Engine\GraphicPipeline\GPPass_G_Gizmos.cpp" />
+    <ClCompile Include="src\Domain\Engine\GraphicPipeline\GPPass_SP_DeferredLights.cpp" />
+    <ClCompile Include="src\Domain\Engine\GraphicPipeline\GPPass_SP_FXAA.cpp" />
+    <ClCompile Include="src\Domain\Engine\GraphicPipeline\GPPass_Selection.cpp" />
+    <ClCompile Include="src\View\Dialogs\GameBuildDialog.cpp" />
+    <ClCompile Include="src\Domain\Engine\Others\GameBuilder.cpp" />
+    <ClCompile Include="src\View\GameBuilderJob.cpp" />
+    <ClCompile Include="src\Domain\Engine\GameObjects\GameObject.cpp" />
+    <ClCompile Include="src\View\GameObjectClipboard.cpp" />
+    <ClCompile Include="src\View\Windows\GameWindow.cpp" />
+    <ClCompile Include="src\Domain\Engine\Debug\Gizmos.cpp" />
+    <ClCompile Include="src\Domain\Engine\GraphicPipeline\GraphicPipeline.cpp" />
+    <ClCompile Include="src\Domain\Engine\Others\GraphicPipelineDebugger.cpp" />
+    <ClCompile Include="src\View\Hierarchy\Hierarchy.cpp" />
+    <ClCompile Include="src\View\Hierarchy\HierarchyContextMenu.cpp" />
+    <ClCompile Include="src\View\Hierarchy\HierarchyDragDropManager.cpp" />
+    <ClCompile Include="src\View\Inspector\AttributeWidgets\IAttrWidgetButtonListener.cpp" />
+    <ClCompile Include="src\Domain\Engine\Interfaces\ICloneable.cpp" />
+    <ClCompile Include="src\View\DragDrop\IDragDropListener.cpp" />
+    <ClCompile Include="src\Persistence\IO.cpp" />
+    <ClCompile Include="src\View\Windows\IWindow.cpp" />
+    <ClCompile Include="src\View\Interfaces\IWindowEventManagerListener.cpp" />
+    <ClCompile Include="src\View\IconManager.cpp" />
+    <ClCompile Include="src\Persistence\Files\ImageFile.cpp" />
+    <ClCompile Include="src\View\Inspector\Inspectables\ImageFileInspectable.cpp" />
+    <ClCompile Include="src\Domain\Engine\Others\Input.cpp" />
+    <ClCompile Include="src\View\Inspector\Inspector.cpp" />
+    <ClCompile Include="src\View\Inspector\InspectorContextMenu.cpp" />
+    <ClCompile Include="src\View\Inspector\InspectorWidget.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\Light.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\LineRenderer.cpp" />
+    <ClCompile Include="src\Domain\Engine\DataStructures\List.cpp" />
+    <ClCompile Include="src\Domain\Engine\DataStructures\Map.cpp" />
+    <ClCompile Include="src\Domain\Engine\Assets\Material.cpp" />
+    <ClCompile Include="src\Persistence\Files\MaterialAssetFile.cpp" />
+    <ClCompile Include="src\View\Inspector\Inspectables\MaterialAssetFileInspectable.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Math.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Matrix4.cpp" />
+    <ClCompile Include="src\View\MenuBar.cpp" />
+    <ClCompile Include="src\Domain\Engine\Assets\Meshes\Mesh.cpp" />
+    <ClCompile Include="src\Persistence\Files\MeshAssetFile.cpp" />
+    <ClCompile Include="src\View\Inspector\Inspectables\MeshAssetFileInspectable.cpp" />
+    <ClCompile Include="src\Domain\Engine\Assets\Meshes\MeshFactory.cpp" />
+    <ClCompile Include="src\Persistence\Files\MeshFile.cpp" />
+    <ClCompile Include="src\View\Inspector\Inspectables\MeshFileInspectable.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\MeshRenderer.cpp" />
+    <ClCompile Include="src\Domain\Engine\Object.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\PointLight.cpp" />
+    <ClCompile Include="src\Domain\Engine\Assets\Prefab.cpp" />
+    <ClCompile Include="src\View\Inspector\Inspectables\PrefabAssetFileInspectable.cpp" />
+    <ClCompile Include="src\Persistence\Project\Project.cpp" />
+    <ClCompile Include="src\Persistence\Project\ProjectManager.cpp" />
+    <ClCompile Include="src\Domain\Engine\DataStructures\Property.cpp" />
+    <ClCompile Include="src\Persistence\Project\QtProjectManager.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Quaternion.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Random.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Rect.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\RectTransform.cpp" />
+    <ClCompile Include="src\Domain\Graphics\RenderTexture.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\Renderer.cpp" />
+    <ClCompile Include="src\Domain\Engine\GameObjects\Scene.cpp" />
+    <ClCompile Include="src\Domain\Engine\Others\SceneManager.cpp" />
+    <ClCompile Include="src\View\Screen.cpp" />
+    <ClCompile Include="src\View\Windows\SelectProjectWindow.cpp" />
+    <ClCompile Include="src\Domain\Graphics\Buffers\SelectionFramebuffer.cpp" />
+    <ClCompile Include="src\Domain\Engine\Interfaces\SerializableObject.cpp" />
+    <ClCompile Include="src\Domain\Engine\DataStructures\Set.cpp" />
+    <ClCompile Include="src\Domain\Graphics\Shaders\Shader.cpp" />
+    <ClCompile Include="src\Domain\Graphics\Shaders\ShaderPreprocessor.cpp" />
+    <ClCompile Include="src\Domain\Graphics\Shaders\ShaderProgram.cpp" />
+    <ClCompile Include="src\View\Shortcut.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\SingleLineRenderer.cpp" />
+    <ClCompile Include="src\Domain\Engine\Others\SingletonManager.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Sphere.cpp" />
+    <ClCompile Include="src\Domain\Engine\DataStructures\String.cpp" />
+    <ClCompile Include="src\Domain\Engine\Others\SystemUtils.cpp" />
+    <ClCompile Include="src\Persistence\Files\TextFile.cpp" />
+    <ClCompile Include="src\View\Inspector\Inspectables\TextFileInspectable.cpp" />
+    <ClCompile Include="src\Domain\Graphics\Texture.cpp" />
+    <ClCompile Include="src\Domain\Engine\Assets\Texture2D.cpp" />
+    <ClCompile Include="src\Persistence\Files\Texture2DAssetFile.cpp" />
+    <ClCompile Include="src\View\Inspector\Inspectables\Texture2DAssetFileInspectable.cpp" />
+    <ClCompile Include="src\Domain\Engine\GraphicPipeline\TextureUnitManager.cpp" />
+    <ClCompile Include="src\Domain\Engine\Others\Time.cpp" />
+    <ClCompile Include="src\Domain\Engine\DataStructures\Timer.cpp" />
+    <ClCompile Include="src\View\Toolbar.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\Transform.cpp" />
+    <ClCompile Include="src\Domain\Engine\DataStructures\TypeMap.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\UIImage.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\UIRenderer.cpp" />
+    <ClCompile Include="src\Domain\Engine\Components\UIText.cpp" />
+    <ClCompile Include="src\Domain\Engine\DataStructures\UMap.cpp" />
+    <ClCompile Include="src\Domain\Graphics\VAO.cpp" />
+    <ClCompile Include="src\Domain\Graphics\VBO.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Vector2.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Vector3.cpp" />
+    <ClCompile Include="src\Domain\Engine\Physics\Vector4.cpp" />
+    <ClCompile Include="src\View\Windows\WindowEventManager.cpp" />
+    <ClCompile Include="src\Persistence\XML\XMLAttribute.cpp" />
+    <ClCompile Include="src\Persistence\XML\XMLNode.cpp" />
+    <ClCompile Include="src\Persistence\XML\XMLParser.cpp" />
+    <ClCompile Include="src\Persistence\XML\XMLProperty.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Persistence\IO\stb_image.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Domain\Engine\Physics\AABox.h" />
+    <CustomBuild Include="src\View\Application.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Application.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Application.h -o src\Qt_MOCs\moc_Application.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Application.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_Application.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Application.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Application.h -o src\Qt_MOCs\moc_Application.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Application.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_Application.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Domain\Engine\DataStructures\Array.h" />
+    <ClInclude Include="src\Domain\Engine\Assets\Asset.h" />
+    <ClInclude Include="src\Persistence\AssetsManager.h" />
+    <CustomBuild Include="src\View\Inspector\AttributeWidgets\AttrWidgetBool.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetBool.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetBool.h -o src\Qt_MOCs\moc_AttrWidgetBool.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetBool.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_AttrWidgetBool.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetBool.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetBool.h -o src\Qt_MOCs\moc_AttrWidgetBool.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetBool.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_AttrWidgetBool.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Inspector\AttributeWidgets\AttrWidgetButton.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetButton.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetButton.h -o src\Qt_MOCs\moc_AttrWidgetButton.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetButton.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_AttrWidgetButton.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetButton.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetButton.h -o src\Qt_MOCs\moc_AttrWidgetButton.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetButton.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_AttrWidgetButton.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Inspector\AttributeWidgets\AttrWidgetColor.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetColor.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetColor.h -o src\Qt_MOCs\moc_AttrWidgetColor.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetColor.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_AttrWidgetColor.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetColor.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetColor.h -o src\Qt_MOCs\moc_AttrWidgetColor.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetColor.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_AttrWidgetColor.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\View\Inspector\AttributeWidgets\AttrWidgetEnum.h" />
+    <CustomBuild Include="src\View\Inspector\AttributeWidgets\AttrWidgetFile.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetFile.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetFile.h -o src\Qt_MOCs\moc_AttrWidgetFile.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetFile.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_AttrWidgetFile.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetFile.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetFile.h -o src\Qt_MOCs\moc_AttrWidgetFile.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetFile.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_AttrWidgetFile.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Inspector\AttributeWidgets\AttrWidgetFloat.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetFloat.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetFloat.h -o src\Qt_MOCs\moc_AttrWidgetFloat.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetFloat.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_AttrWidgetFloat.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetFloat.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetFloat.h -o src\Qt_MOCs\moc_AttrWidgetFloat.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetFloat.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_AttrWidgetFloat.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Inspector\AttributeWidgets\AttrWidgetInt.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetInt.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetInt.h -o src\Qt_MOCs\moc_AttrWidgetInt.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetInt.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_AttrWidgetInt.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetInt.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetInt.h -o src\Qt_MOCs\moc_AttrWidgetInt.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetInt.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_AttrWidgetInt.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Inspector\AttributeWidgets\AttrWidgetString.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetString.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetString.h -o src\Qt_MOCs\moc_AttrWidgetString.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetString.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_AttrWidgetString.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\AttributeWidgets\AttrWidgetString.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttrWidgetString.h -o src\Qt_MOCs\moc_AttrWidgetString.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/AttributeWidgets/AttrWidgetString.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_AttrWidgetString.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\View\Inspector\AttributeWidgets\AttrWidgetVectorFloat.h" />
+    <CustomBuild Include="src\View\Inspector\AttributeWidgets\AttributeWidget.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\AttributeWidgets\AttributeWidget.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttributeWidget.h -o src\Qt_MOCs\moc_AttributeWidget.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/AttributeWidgets/AttributeWidget.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_AttributeWidget.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\AttributeWidgets\AttributeWidget.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\AttributeWidgets\AttributeWidget.h -o src\Qt_MOCs\moc_AttributeWidget.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/AttributeWidgets/AttributeWidget.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_AttributeWidget.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Domain\Engine\Assets\AudioClip.h" />
+    <ClInclude Include="src\Persistence\Files\AudioClipAssetFile.h" />
+    <ClInclude Include="src\View\Inspector\Inspectables\AudioClipAssetFileInspectable.h" />
+    <ClInclude Include="src\Persistence\Files\AudioFile.h" />
+    <ClInclude Include="src\Persistence\Files\AudioFileInspectable.h" />
+    <ClInclude Include="src\Domain\Engine\Components\AudioListener.h" />
+    <ClInclude Include="src\Domain\Engine\Audio\AudioManager.h" />
+    <ClInclude Include="src\Domain\Engine\Audio\AudioPlayerRunnable.h" />
+    <ClInclude Include="src\Domain\Engine\Components\AudioSource.h" />
+    <ClInclude Include="src\Bang.h" />
+    <ClInclude Include="src\Domain\Engine\Components\Behaviour.h" />
+    <ClInclude Include="src\Domain\Engine\Components\BehaviourHolder.h" />
+    <CustomBuild Include="src\Persistence\Behaviours\BehaviourManager.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Persistence\Behaviours\BehaviourManager.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Persistence\Behaviours\BehaviourManager.h -o src\Qt_MOCs\moc_BehaviourManager.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/Persistence/Behaviours/BehaviourManager.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_BehaviourManager.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Persistence\Behaviours\BehaviourManager.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Persistence\Behaviours\BehaviourManager.h -o src\Qt_MOCs\moc_BehaviourManager.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/Persistence/Behaviours/BehaviourManager.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_BehaviourManager.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Persistence\Behaviours\BehaviourManagerStatus.h" />
+    <CustomBuild Include="src\Persistence\Behaviours\BehaviourMergeObjectsRunnable.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Persistence\Behaviours\BehaviourMergeObjectsRunnable.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Persistence\Behaviours\BehaviourMergeObjectsRunnable.h -o src\Qt_MOCs\moc_BehaviourMergeObjectsRunnable.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_BehaviourMergeObjectsRunnable.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Persistence\Behaviours\BehaviourMergeObjectsRunnable.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Persistence\Behaviours\BehaviourMergeObjectsRunnable.h -o src\Qt_MOCs\moc_BehaviourMergeObjectsRunnable.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/Persistence/Behaviours/BehaviourMergeObjectsRunnable.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_BehaviourMergeObjectsRunnable.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\Persistence\Behaviours\BehaviourObjectCompileRunnable.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Persistence\Behaviours\BehaviourObjectCompileRunnable.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Persistence\Behaviours\BehaviourObjectCompileRunnable.h -o src\Qt_MOCs\moc_BehaviourObjectCompileRunnable.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/Persistence/Behaviours/BehaviourObjectCompileRunnable.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_BehaviourObjectCompileRunnable.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Persistence\Behaviours\BehaviourObjectCompileRunnable.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Persistence\Behaviours\BehaviourObjectCompileRunnable.h -o src\Qt_MOCs\moc_BehaviourObjectCompileRunnable.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/Persistence/Behaviours/BehaviourObjectCompileRunnable.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_BehaviourObjectCompileRunnable.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\Persistence\Behaviours\BehaviourRefresherTimer.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Persistence\Behaviours\BehaviourRefresherTimer.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Persistence\Behaviours\BehaviourRefresherTimer.h -o src\Qt_MOCs\moc_BehaviourRefresherTimer.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/Persistence/Behaviours/BehaviourRefresherTimer.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_BehaviourRefresherTimer.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Persistence\Behaviours\BehaviourRefresherTimer.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Persistence\Behaviours\BehaviourRefresherTimer.h -o src\Qt_MOCs\moc_BehaviourRefresherTimer.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/Persistence/Behaviours/BehaviourRefresherTimer.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_BehaviourRefresherTimer.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Domain\Engine\Components\Camera.h" />
+    <ClInclude Include="src\Domain\Engine\Components\Canvas.h" />
+    <ClInclude Include="src\Domain\Engine\Debug\Chrono.h" />
+    <ClInclude Include="src\Domain\Engine\Debug\ChronoGL.h" />
+    <ClInclude Include="src\Domain\Engine\Components\CircleRenderer.h" />
+    <ClInclude Include="src\Domain\Engine\CodePreprocessor.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Color.h" />
+    <ClInclude Include="src\Domain\Engine\Components\Component.h" />
+    <ClInclude Include="src\View\Inspector\ComponentClipboard.h" />
+    <CustomBuild Include="src\View\Inspector\ComponentWidget.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\ComponentWidget.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\ComponentWidget.h -o src\Qt_MOCs\moc_ComponentWidget.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/ComponentWidget.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_ComponentWidget.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\ComponentWidget.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\ComponentWidget.h -o src\Qt_MOCs\moc_ComponentWidget.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/ComponentWidget.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_ComponentWidget.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Inspector\ComponentWidgetContextMenu.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\ComponentWidgetContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\ComponentWidgetContextMenu.h -o src\Qt_MOCs\moc_ComponentWidgetContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/ComponentWidgetContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_ComponentWidgetContextMenu.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\ComponentWidgetContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\ComponentWidgetContextMenu.h -o src\Qt_MOCs\moc_ComponentWidgetContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/ComponentWidgetContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_ComponentWidgetContextMenu.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Console\Console.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Console\Console.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Console\Console.h -o src\Qt_MOCs\moc_Console.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Console/Console.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_Console.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Console\Console.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Console\Console.h -o src\Qt_MOCs\moc_Console.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Console/Console.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_Console.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\ContextMenu.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\ContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\ContextMenu.h -o src\Qt_MOCs\moc_ContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/ContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_ContextMenu.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\ContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\ContextMenu.h -o src\Qt_MOCs\moc_ContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/ContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_ContextMenu.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\View\Cursor.h" />
+    <ClInclude Include="src\Domain\Engine\Debug\Debug.h" />
+    <ClInclude Include="src\View\Dialogs\Dialog.h" />
+    <CustomBuild Include="src\View\Dialogs\DialogBrowseAssetFile.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Dialogs\DialogBrowseAssetFile.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Dialogs\DialogBrowseAssetFile.h -o src\Qt_MOCs\moc_DialogBrowseAssetFile.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Dialogs/DialogBrowseAssetFile.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_DialogBrowseAssetFile.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Dialogs\DialogBrowseAssetFile.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Dialogs\DialogBrowseAssetFile.h -o src\Qt_MOCs\moc_DialogBrowseAssetFile.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Dialogs/DialogBrowseAssetFile.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_DialogBrowseAssetFile.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Domain\Engine\Components\DirectionalLight.h" />
+    <ClInclude Include="src\View\DragDrop\DragDropAgent.h" />
+    <CustomBuild Include="src\View\DragDrop\DragDropManager.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\DragDrop\DragDropManager.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\DragDrop\DragDropManager.h -o src\Qt_MOCs\moc_DragDropManager.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/DragDrop/DragDropManager.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_DragDropManager.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\DragDrop\DragDropManager.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\DragDrop\DragDropManager.h -o src\Qt_MOCs\moc_DragDropManager.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/DragDrop/DragDropManager.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_DragDropManager.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\View\DragDrop\DragDropQListView.h" />
+    <ClInclude Include="src\View\DragDrop\DragDropQListWidget.h" />
+    <ClInclude Include="src\View\DragDrop\DragDropQTreeWidget.h" />
+    <ClInclude Include="src\View\DragDrop\DragDropQWidget.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorAxis.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorAxisGroup.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorAxisPlane.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorBBox.h" />
+    <ClInclude Include="src\View\EditorCamera\EditorCamera.h" />
+    <ClInclude Include="src\View\EditorScene\EditorDebugGameObject.h" />
+    <ClInclude Include="src\View\EditorScene\EditorFloor.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorGizmo.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorGizmosGameObject.h" />
+    <CustomBuild Include="src\View\EditorPlayStopFlowController.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\EditorPlayStopFlowController.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\EditorPlayStopFlowController.h -o src\Qt_MOCs\moc_EditorPlayStopFlowController.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/EditorPlayStopFlowController.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_EditorPlayStopFlowController.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\EditorPlayStopFlowController.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\EditorPlayStopFlowController.h -o src\Qt_MOCs\moc_EditorPlayStopFlowController.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/EditorPlayStopFlowController.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_EditorPlayStopFlowController.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\View\EditorGameObject\EditorRectTransform\EditorRectTransformAnchorGizmo.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorRectTransform\EditorRectTransformCornerGizmo.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorRectTransform\EditorRectTransformGizmo.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorRotateAxis.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorRotateAxisGroup.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorScaleAxis.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorScaleAxisGroup.h" />
+    <ClInclude Include="src\View\EditorScene\EditorScene.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorSelectionGameObject.h" />
+    <ClInclude Include="src\View\EditorState.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorTranslateAxis.h" />
+    <ClInclude Include="src\View\EditorGameObject\EditorTranslateAxisGroup.h" />
+    <CustomBuild Include="src\View\Windows\EditorWindow.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Windows\EditorWindow.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Windows\EditorWindow.h -o src\Qt_MOCs\moc_EditorWindow.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Windows/EditorWindow.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_EditorWindow.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Windows\EditorWindow.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Windows\EditorWindow.h -o src\Qt_MOCs\moc_EditorWindow.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Windows/EditorWindow.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_EditorWindow.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Persistence\EngineConfig.h" />
+    <CustomBuild Include="src\View\Explorer\Explorer.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Explorer\Explorer.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Explorer\Explorer.h -o src\Qt_MOCs\moc_Explorer.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Explorer/Explorer.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_Explorer.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Explorer\Explorer.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Explorer\Explorer.h -o src\Qt_MOCs\moc_Explorer.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Explorer/Explorer.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_Explorer.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Explorer\ExplorerContextMenu.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Explorer\ExplorerContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Explorer\ExplorerContextMenu.h -o src\Qt_MOCs\moc_ExplorerContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Explorer/ExplorerContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_ExplorerContextMenu.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Explorer\ExplorerContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Explorer\ExplorerContextMenu.h -o src\Qt_MOCs\moc_ExplorerContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Explorer/ExplorerContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_ExplorerContextMenu.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Explorer\ExplorerDirTree.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Explorer\ExplorerDirTree.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Explorer\ExplorerDirTree.h -o src\Qt_MOCs\moc_ExplorerDirTree.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Explorer/ExplorerDirTree.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_ExplorerDirTree.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Explorer\ExplorerDirTree.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Explorer\ExplorerDirTree.h -o src\Qt_MOCs\moc_ExplorerDirTree.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Explorer/ExplorerDirTree.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_ExplorerDirTree.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\View\Explorer\ExplorerFileSortProxy.h" />
+    <ClInclude Include="src\Persistence\Files\File.h" />
+    <ClInclude Include="src\Persistence\IO\FileReader.h" />
+    <CustomBuild Include="src\View\Explorer\FileReferencesManager.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Explorer\FileReferencesManager.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Explorer\FileReferencesManager.h -o src\Qt_MOCs\moc_FileReferencesManager.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Explorer/FileReferencesManager.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_FileReferencesManager.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Explorer\FileReferencesManager.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Explorer\FileReferencesManager.h -o src\Qt_MOCs\moc_FileReferencesManager.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Explorer/FileReferencesManager.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_FileReferencesManager.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\View\Explorer\FileSystemModel.h" />
+    <ClInclude Include="src\Domain\Engine\Assets\Font.h" />
+    <ClInclude Include="src\Persistence\Files\FontAssetFile.h" />
+    <ClInclude Include="src\Domain\Graphics\FontSheetCreator.h" />
+    <ClInclude Include="src\Domain\Graphics\Buffers\Framebuffer.h" />
+    <ClInclude Include="src\Domain\Graphics\Buffers\GBuffer.h" />
+    <ClInclude Include="src\Domain\Graphics\GL.h" />
+    <ClInclude Include="src\Domain\Graphics\GLContext.h" />
+    <ClInclude Include="src\Domain\Graphics\Interfaces\GLObject.h" />
+    <ClInclude Include="src\Domain\Engine\GraphicPipeline\GPPass.h" />
+    <ClInclude Include="src\Domain\Engine\GraphicPipeline\GPPass_DepthLayer.h" />
+    <ClInclude Include="src\Domain\Engine\GraphicPipeline\GPPass_G.h" />
+    <ClInclude Include="src\Domain\Engine\GraphicPipeline\GPPass_G_Gizmos.h" />
+    <ClInclude Include="src\Domain\Engine\GraphicPipeline\GPPass_SP_DeferredLights.h" />
+    <ClInclude Include="src\Domain\Engine\GraphicPipeline\GPPass_SP_FXAA.h" />
+    <ClInclude Include="src\Domain\Engine\GraphicPipeline\GPPass_Selection.h" />
+    <CustomBuild Include="src\View\Dialogs\GameBuildDialog.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Dialogs\GameBuildDialog.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Dialogs\GameBuildDialog.h -o src\Qt_MOCs\moc_GameBuildDialog.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Dialogs/GameBuildDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_GameBuildDialog.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Dialogs\GameBuildDialog.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Dialogs\GameBuildDialog.h -o src\Qt_MOCs\moc_GameBuildDialog.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Dialogs/GameBuildDialog.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_GameBuildDialog.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\Domain\Engine\Others\GameBuilder.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Domain\Engine\Others\GameBuilder.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Domain\Engine\Others\GameBuilder.h -o src\Qt_MOCs\moc_GameBuilder.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/Domain/Engine/Others/GameBuilder.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_GameBuilder.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Domain\Engine\Others\GameBuilder.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\Domain\Engine\Others\GameBuilder.h -o src\Qt_MOCs\moc_GameBuilder.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/Domain/Engine/Others/GameBuilder.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_GameBuilder.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\GameBuilderJob.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\GameBuilderJob.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\GameBuilderJob.h -o src\Qt_MOCs\moc_GameBuilderJob.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/GameBuilderJob.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_GameBuilderJob.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\GameBuilderJob.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\GameBuilderJob.h -o src\Qt_MOCs\moc_GameBuilderJob.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/GameBuilderJob.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_GameBuilderJob.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Domain\Engine\GameObjects\GameObject.h" />
+    <ClInclude Include="src\View\GameObjectClipboard.h" />
+    <ClInclude Include="src\View\Windows\GameWindow.h" />
+    <ClInclude Include="src\Domain\Engine\Debug\Gizmos.h" />
+    <ClInclude Include="src\Domain\Engine\GraphicPipeline\GraphicPipeline.h" />
+    <ClInclude Include="src\Domain\Engine\Others\GraphicPipelineDebugger.h" />
+    <ClInclude Include="src\Domain\Engine\HideFlags.h" />
+    <CustomBuild Include="src\View\Hierarchy\Hierarchy.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Hierarchy\Hierarchy.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Hierarchy\Hierarchy.h -o src\Qt_MOCs\moc_Hierarchy.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Hierarchy/Hierarchy.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_Hierarchy.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Hierarchy\Hierarchy.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Hierarchy\Hierarchy.h -o src\Qt_MOCs\moc_Hierarchy.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Hierarchy/Hierarchy.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_Hierarchy.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Hierarchy\HierarchyContextMenu.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Hierarchy\HierarchyContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Hierarchy\HierarchyContextMenu.h -o src\Qt_MOCs\moc_HierarchyContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Hierarchy/HierarchyContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_HierarchyContextMenu.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Hierarchy\HierarchyContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Hierarchy\HierarchyContextMenu.h -o src\Qt_MOCs\moc_HierarchyContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Hierarchy/HierarchyContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_HierarchyContextMenu.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\View\Hierarchy\HierarchyDragDropManager.h" />
+    <ClInclude Include="src\View\Inspector\AttributeWidgets\IAttrWidgetButtonListener.h" />
+    <ClInclude Include="src\Domain\Engine\Interfaces\ICloneable.h" />
+    <ClInclude Include="src\View\DragDrop\IDragDropListener.h" />
+    <ClInclude Include="src\Persistence\IO.h" />
+    <ClInclude Include="src\Domain\Engine\Interfaces\ISceneEventListener.h" />
+    <ClInclude Include="src\Domain\Graphics\Interfaces\IToString.h" />
+    <ClInclude Include="src\Domain\Interfaces\IToString.h" />
+    <ClInclude Include="src\View\Windows\IWindow.h" />
+    <ClInclude Include="src\View\Interfaces\IWindowEventManagerListener.h" />
+    <ClInclude Include="src\View\IconManager.h" />
+    <ClInclude Include="src\Persistence\Files\ImageFile.h" />
+    <ClInclude Include="src\View\Inspector\Inspectables\ImageFileInspectable.h" />
+    <ClInclude Include="src\Domain\Engine\Others\Input.h" />
+    <CustomBuild Include="src\View\Inspector\Inspector.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\Inspector.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\Inspector.h -o src\Qt_MOCs\moc_Inspector.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/Inspector.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_Inspector.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\Inspector.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\Inspector.h -o src\Qt_MOCs\moc_Inspector.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/Inspector.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_Inspector.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Inspector\InspectorContextMenu.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\InspectorContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\InspectorContextMenu.h -o src\Qt_MOCs\moc_InspectorContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/InspectorContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_InspectorContextMenu.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\InspectorContextMenu.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\InspectorContextMenu.h -o src\Qt_MOCs\moc_InspectorContextMenu.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/InspectorContextMenu.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_InspectorContextMenu.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Inspector\InspectorWidget.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Inspector\InspectorWidget.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\InspectorWidget.h -o src\Qt_MOCs\moc_InspectorWidget.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Inspector/InspectorWidget.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_InspectorWidget.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Inspector\InspectorWidget.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Inspector\InspectorWidget.h -o src\Qt_MOCs\moc_InspectorWidget.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Inspector/InspectorWidget.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_InspectorWidget.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Domain\Engine\Components\Light.h" />
+    <ClInclude Include="src\Domain\Engine\Components\LineRenderer.h" />
+    <ClInclude Include="src\Domain\Engine\DataStructures\List.h" />
+    <ClInclude Include="src\Domain\Engine\DataStructures\Map.h" />
+    <ClInclude Include="src\Domain\Engine\Assets\Material.h" />
+    <ClInclude Include="src\Persistence\Files\MaterialAssetFile.h" />
+    <ClInclude Include="src\View\Inspector\Inspectables\MaterialAssetFileInspectable.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Math.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Matrix4.h" />
+    <CustomBuild Include="src\View\MenuBar.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\MenuBar.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\MenuBar.h -o src\Qt_MOCs\moc_MenuBar.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/MenuBar.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_MenuBar.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\MenuBar.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\MenuBar.h -o src\Qt_MOCs\moc_MenuBar.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/MenuBar.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_MenuBar.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Domain\Engine\Assets\Meshes\Mesh.h" />
+    <ClInclude Include="src\Persistence\Files\MeshAssetFile.h" />
+    <ClInclude Include="src\View\Inspector\Inspectables\MeshAssetFileInspectable.h" />
+    <ClInclude Include="src\Domain\Engine\Assets\Meshes\MeshFactory.h" />
+    <ClInclude Include="src\Persistence\Files\MeshFile.h" />
+    <ClInclude Include="src\View\Inspector\Inspectables\MeshFileInspectable.h" />
+    <ClInclude Include="src\Domain\Engine\Components\MeshRenderer.h" />
+    <ClInclude Include="src\Domain\Engine\DataStructures\NamedEnum.h" />
+    <ClInclude Include="src\Domain\Engine\Object.h" />
+    <ClInclude Include="src\Domain\Engine\Components\PointLight.h" />
+    <ClInclude Include="src\Domain\Engine\Assets\Prefab.h" />
+    <ClInclude Include="src\View\Inspector\Inspectables\PrefabAssetFileInspectable.h" />
+    <ClInclude Include="src\Persistence\Project\Project.h" />
+    <ClInclude Include="src\Persistence\Project\ProjectManager.h" />
+    <ClInclude Include="src\Domain\Engine\DataStructures\Property.h" />
+    <ClInclude Include="src\Persistence\Project\QtProjectManager.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Quaternion.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Random.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Rect.h" />
+    <ClInclude Include="src\Domain\Engine\Components\RectTransform.h" />
+    <ClInclude Include="src\Domain\Graphics\RenderTexture.h" />
+    <ClInclude Include="src\Domain\Engine\Components\Renderer.h" />
+    <ClInclude Include="src\Domain\Engine\GameObjects\Scene.h" />
+    <ClInclude Include="src\Domain\Engine\Others\SceneManager.h" />
+    <CustomBuild Include="src\View\Screen.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Screen.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Screen.h -o src\Qt_MOCs\moc_Screen.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Screen.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_Screen.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Screen.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Screen.h -o src\Qt_MOCs\moc_Screen.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Screen.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_Screen.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\View\Windows\SelectProjectWindow.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Windows\SelectProjectWindow.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Windows\SelectProjectWindow.h -o src\Qt_MOCs\moc_SelectProjectWindow.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Windows/SelectProjectWindow.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_SelectProjectWindow.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Windows\SelectProjectWindow.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Windows\SelectProjectWindow.h -o src\Qt_MOCs\moc_SelectProjectWindow.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Windows/SelectProjectWindow.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_SelectProjectWindow.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Domain\Graphics\Buffers\SelectionFramebuffer.h" />
+    <ClInclude Include="src\Domain\Engine\Interfaces\SerializableObject.h" />
+    <ClInclude Include="src\Domain\Engine\DataStructures\Set.h" />
+    <ClInclude Include="src\Domain\Graphics\Shaders\Shader.h" />
+    <ClInclude Include="src\Domain\Graphics\Shaders\ShaderPreprocessor.h" />
+    <ClInclude Include="src\Domain\Graphics\Shaders\ShaderProgram.h" />
+    <ClInclude Include="src\View\Shortcut.h" />
+    <ClInclude Include="src\Domain\Engine\Components\SingleLineRenderer.h" />
+    <ClInclude Include="src\Domain\Engine\Others\SingletonManager.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Sphere.h" />
+    <ClInclude Include="src\Domain\Engine\DataStructures\String.h" />
+    <ClInclude Include="src\Domain\Engine\Others\SystemUtils.h" />
+    <ClInclude Include="src\Persistence\Files\TextFile.h" />
+    <ClInclude Include="src\View\Inspector\Inspectables\TextFileInspectable.h" />
+    <ClInclude Include="src\Domain\Graphics\Texture.h" />
+    <ClInclude Include="src\Domain\Engine\Assets\Texture2D.h" />
+    <ClInclude Include="src\Persistence\Files\Texture2DAssetFile.h" />
+    <ClInclude Include="src\View\Inspector\Inspectables\Texture2DAssetFileInspectable.h" />
+    <ClInclude Include="src\Domain\Engine\GraphicPipeline\TextureUnitManager.h" />
+    <ClInclude Include="src\Domain\Engine\Debug\Time.h" />
+    <ClInclude Include="src\Domain\Engine\DataStructures\Timer.h" />
+    <CustomBuild Include="src\View\Toolbar.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Toolbar.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Toolbar.h -o src\Qt_MOCs\moc_Toolbar.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Toolbar.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_Toolbar.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Toolbar.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Toolbar.h -o src\Qt_MOCs\moc_Toolbar.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Toolbar.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_Toolbar.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Domain\Engine\Components\Transform.h" />
+    <ClInclude Include="src\Domain\Engine\DataStructures\TypeMap.h" />
+    <ClInclude Include="src\Domain\Engine\Components\UIImage.h" />
+    <ClInclude Include="src\Domain\Engine\Components\UIRenderer.h" />
+    <ClInclude Include="src\Domain\Engine\Components\UIText.h" />
+    <ClInclude Include="src\Domain\Engine\DataStructures\UMap.h" />
+    <ClInclude Include="src\Domain\Graphics\VAO.h" />
+    <ClInclude Include="src\Domain\Graphics\VBO.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Vector2.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Vector3.h" />
+    <ClInclude Include="src\Domain\Engine\Physics\Vector4.h" />
+    <CustomBuild Include="src\View\Windows\WindowEventManager.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\View\Windows\WindowEventManager.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_NO_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Windows\WindowEventManager.h -o src\Qt_MOCs\moc_WindowEventManager.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MOC src/View/Windows/WindowEventManager.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_WindowEventManager.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\View\Windows\WindowEventManager.h;src\Qt_MOCs\moc_predefs.h;C:\Qt\5.8\msvc2015_64\bin\moc.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\moc.exe  -DUNICODE -DWIN32 -DWIN64 -DQT_PROJECT_PATH=\"C:/Users/sephirot47/Bang\" -DBANG_EDITOR -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB --compiler-flavor=msvc --include src/Qt_MOCs//moc_predefs.h -IC:/Qt/5.8/msvc2015_64/mkspecs/win32-msvc2013 -IC:/Users/sephirot47/Bang -I/usr/include -I/usr/include/freetype2 -I/usr/include/freetype2/freetype -IC:/Users/sephirot47/Bang/include -IC:/Qt/5.8/msvc2015_64/include -IC:/Qt/5.8/msvc2015_64/include/QtOpenGL -IC:/Qt/5.8/msvc2015_64/include/QtWidgets -IC:/Qt/5.8/msvc2015_64/include/QtGui -IC:/Qt/5.8/msvc2015_64/include/QtANGLE -IC:/Qt/5.8/msvc2015_64/include/QtCore src\View\Windows\WindowEventManager.h -o src\Qt_MOCs\moc_WindowEventManager.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MOC src/View/Windows/WindowEventManager.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_WindowEventManager.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClInclude Include="src\Persistence\XML\XMLAttribute.h" />
+    <ClInclude Include="src\Persistence\XML\XMLNode.h" />
+    <ClInclude Include="src\Persistence\XML\XMLParser.h" />
+    <ClInclude Include="src\Persistence\XML\XMLProperty.h" />
+    <ClInclude Include="src\Persistence\IO\stb_image.h" />
+    <ClInclude Include="src\Persistence\IO\stb_image_write.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Qt_MOCs\moc_Application.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_AttrWidgetBool.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_AttrWidgetButton.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_AttrWidgetColor.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_AttrWidgetFile.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_AttrWidgetFloat.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_AttrWidgetInt.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_AttrWidgetString.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_AttributeWidget.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_BehaviourManager.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_BehaviourMergeObjectsRunnable.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_BehaviourObjectCompileRunnable.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_BehaviourRefresherTimer.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_ComponentWidget.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_ComponentWidgetContextMenu.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_Console.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_ContextMenu.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_DialogBrowseAssetFile.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_DragDropManager.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_EditorPlayStopFlowController.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_EditorWindow.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_Explorer.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_ExplorerContextMenu.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_ExplorerDirTree.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_FileReferencesManager.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_GameBuildDialog.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_GameBuilder.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_GameBuilderJob.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_Hierarchy.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_HierarchyContextMenu.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_Inspector.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_InspectorContextMenu.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_InspectorWidget.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_MenuBar.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_Screen.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_SelectProjectWindow.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_Toolbar.cpp" />
+    <ClCompile Include="src\Qt_MOCs\moc_WindowEventManager.cpp" />
+    <CustomBuild Include="src\Qt_MOCs\moc_predefs.h.cbt">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\Qt\5.8\msvc2015_64\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cl -BxC:\Qt\5.8\msvc2015_64\bin\qmake.exe -nologo -Zc:wchar_t -FS -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wno-sign-compare -fPIC -O3 -Wl,-O3 -MD -Zc:strictStrings -E -Za ..\..\..\Qt\5.8\msvc2015_64\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;src\Qt_MOCs\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">src\Qt_MOCs\moc_predefs.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\Qt\5.8\msvc2015_64\mkspecs\features\data\dummy.cpp;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cl -BxC:\Qt\5.8\msvc2015_64\bin\qmake.exe -nologo -Zc:wchar_t -FS -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter -Wno-sign-compare -fPIC -O3 -Wl,-O3 -Zi -MDd -E -Za ..\..\..\Qt\5.8\msvc2015_64\mkspecs\features\data\dummy.cpp 2&gt;NUL &gt;src\Qt_MOCs\moc_predefs.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generate moc_predefs.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">src\Qt_MOCs\moc_predefs.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <ClCompile Include="debug\qrc_QtResources.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="release\qrc_QtResources.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="debug\qrc_style.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="release\qrc_style.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClInclude Include="ui_EditorWindow.h" />
+    <ClInclude Include="ui_SelectProjectWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="EngineAssets\EditorWindow.ui">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EngineAssets\EditorWindow.ui;C:\Qt\5.8\msvc2015_64\bin\uic.exe;Bang\Hierarchy.h;Bang\Inspector.h;Bang\Explorer.h;Bang\MenuBar.h;Bang\ExplorerDirTree.h;Bang\Toolbar.h;Bang\Screen.h;Bang\Console.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\uic.exe EngineAssets\EditorWindow.ui -o ui_EditorWindow.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC EngineAssets/EditorWindow.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ui_EditorWindow.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EngineAssets\EditorWindow.ui;C:\Qt\5.8\msvc2015_64\bin\uic.exe;Bang\Hierarchy.h;Bang\Inspector.h;Bang\Explorer.h;Bang\MenuBar.h;Bang\ExplorerDirTree.h;Bang\Toolbar.h;Bang\Screen.h;Bang\Console.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\uic.exe EngineAssets\EditorWindow.ui -o ui_EditorWindow.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UIC EngineAssets/EditorWindow.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ui_EditorWindow.h;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="EngineAssets\SelectProjectWindow.ui">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EngineAssets\SelectProjectWindow.ui;C:\Qt\5.8\msvc2015_64\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\uic.exe EngineAssets\SelectProjectWindow.ui -o ui_SelectProjectWindow.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UIC EngineAssets/SelectProjectWindow.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">ui_SelectProjectWindow.h;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EngineAssets\SelectProjectWindow.ui;C:\Qt\5.8\msvc2015_64\bin\uic.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\uic.exe EngineAssets\SelectProjectWindow.ui -o ui_SelectProjectWindow.h</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UIC EngineAssets/SelectProjectWindow.ui</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ui_SelectProjectWindow.h;%(Outputs)</Outputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EngineAssets\Icons\AddIcon.png" />
+    <None Include="EngineAssets\Icons\AssetDistinctor.png" />
+    <None Include="EngineAssets\Icons\AudioClipIcon.png" />
+    <None Include="EngineAssets\Icons\AudioIcon.png" />
+    <None Include="EngineAssets\Textures\AudioSourceIcon.png" />
+    <None Include="EngineAssets\BangIcon.png" />
+    <None Include="EngineAssets\BangLogo.png" />
+    <None Include="EngineAssets\Icons\BehaviourIcon.png" />
+    <None Include="EngineAssets\Textures\CameraIcon.png" />
+    <None Include="EngineAssets\Icons\CircleIcon.png" />
+    <None Include="EngineAssets\Textures\DefaultUIImageTexture.png" />
+    <None Include="EngineAssets\Textures\DirectionalLightIcon.png" />
+    <None Include="EngineAssets\Icons\ErrorIcon.png" />
+    <None Include="EngineAssets\Icons\FolderIcon.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\Hmovetoolbar.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\Hsepartoolbar.png" />
+    <None Include="EngineAssets\Icons\ImageIcon.png" />
+    <None Include="EngineAssets\Icons\LetterIcon.png" />
+    <None Include="EngineAssets\Icons\LogIcon.png" />
+    <None Include="EngineAssets\Icons\MaterialAssetIcon.png" />
+    <None Include="EngineAssets\Icons\MeshAssetIcon.png" />
+    <None Include="EngineAssets\Icons\NoAssetDistinctor.png" />
+    <None Include="EngineAssets\Icons\NoAssetIcon.png" />
+    <None Include="EngineAssets\Icons\OtherFileIcon.png" />
+    <None Include="EngineAssets\Textures\PointLightIcon.png" />
+    <None Include="EngineAssets\Icons\PrefabAssetIcon.png" />
+    <CustomBuild Include="EngineAssets\QtResources.qrc">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EngineAssets\QtResources.qrc;C:\Qt\5.8\msvc2015_64\bin\rcc.exe;EngineAssets\BangLogo.png;EngineAssets\BangIcon.png;EngineAssets\Textures\DirectionalLightIcon.png;EngineAssets\Textures\PointLightIcon.png;EngineAssets\Textures\DefaultUIImageTexture.png;EngineAssets\Textures\RectTransformAnchor.png;EngineAssets\Textures\AudioSourceIcon.png;EngineAssets\Textures\CameraIcon.png;EngineAssets\Icons\translate.png;EngineAssets\Icons\clear.png;EngineAssets\Icons\TransformIcon.png;EngineAssets\Icons\AudioIcon.png;EngineAssets\Icons\OtherFileIcon.png;EngineAssets\Icons\NoAssetDistinctor.png;EngineAssets\Icons\BehaviourIcon.png;EngineAssets\Icons\RectTransformIcon.png;EngineAssets\Icons\FolderIcon.png;EngineAssets\Icons\PrefabAssetIcon.png;EngineAssets\Icons\play.png;EngineAssets\Icons\ErrorIcon.png;EngineAssets\Icons\WarnIcon.png;EngineAssets\Icons\MeshAssetIcon.png;EngineAssets\Icons\dirUpIcon.png;EngineAssets\Icons\LogIcon.png;EngineAssets\Icons\AddIcon.png;EngineAssets\Icons\SaveIcon.png;EngineAssets\Icons\SceneIcon.png;EngineAssets\Icons\AssetDistinctor.png;EngineAssets\Icons\mesh.png;EngineAssets\Icons\LetterIcon.png;EngineAssets\Icons\textFile.png;EngineAssets\Icons\NoAssetIcon.png;EngineAssets\Icons\rotate.png;EngineAssets\Icons\MaterialAssetIcon.png;EngineAssets\Icons\ImageIcon.png;EngineAssets\Icons\AudioClipIcon.png;EngineAssets\Icons\SettingsIcon.png;EngineAssets\Icons\sphere.png;EngineAssets\Icons\capsule.png;EngineAssets\Icons\eye.png;EngineAssets\Icons\filePaper.png;EngineAssets\Icons\CircleIcon.png;EngineAssets\Icons\scale.png;EngineAssets\Icons\stop.png;EngineAssets\Icons\brackets.png;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\rcc.exe -name QtResources EngineAssets\QtResources.qrc -o release\qrc_QtResources.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC EngineAssets/QtResources.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\qrc_QtResources.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EngineAssets\QtResources.qrc;C:\Qt\5.8\msvc2015_64\bin\rcc.exe;EngineAssets\BangLogo.png;EngineAssets\BangIcon.png;EngineAssets\Textures\DirectionalLightIcon.png;EngineAssets\Textures\PointLightIcon.png;EngineAssets\Textures\DefaultUIImageTexture.png;EngineAssets\Textures\RectTransformAnchor.png;EngineAssets\Textures\AudioSourceIcon.png;EngineAssets\Textures\CameraIcon.png;EngineAssets\Icons\translate.png;EngineAssets\Icons\clear.png;EngineAssets\Icons\TransformIcon.png;EngineAssets\Icons\AudioIcon.png;EngineAssets\Icons\OtherFileIcon.png;EngineAssets\Icons\NoAssetDistinctor.png;EngineAssets\Icons\BehaviourIcon.png;EngineAssets\Icons\RectTransformIcon.png;EngineAssets\Icons\FolderIcon.png;EngineAssets\Icons\PrefabAssetIcon.png;EngineAssets\Icons\play.png;EngineAssets\Icons\ErrorIcon.png;EngineAssets\Icons\WarnIcon.png;EngineAssets\Icons\MeshAssetIcon.png;EngineAssets\Icons\dirUpIcon.png;EngineAssets\Icons\LogIcon.png;EngineAssets\Icons\AddIcon.png;EngineAssets\Icons\SaveIcon.png;EngineAssets\Icons\SceneIcon.png;EngineAssets\Icons\AssetDistinctor.png;EngineAssets\Icons\mesh.png;EngineAssets\Icons\LetterIcon.png;EngineAssets\Icons\textFile.png;EngineAssets\Icons\NoAssetIcon.png;EngineAssets\Icons\rotate.png;EngineAssets\Icons\MaterialAssetIcon.png;EngineAssets\Icons\ImageIcon.png;EngineAssets\Icons\AudioClipIcon.png;EngineAssets\Icons\SettingsIcon.png;EngineAssets\Icons\sphere.png;EngineAssets\Icons\capsule.png;EngineAssets\Icons\eye.png;EngineAssets\Icons\filePaper.png;EngineAssets\Icons\CircleIcon.png;EngineAssets\Icons\scale.png;EngineAssets\Icons\stop.png;EngineAssets\Icons\brackets.png;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\rcc.exe -name QtResources EngineAssets\QtResources.qrc -o debug\qrc_QtResources.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC EngineAssets/QtResources.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\qrc_QtResources.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="EngineAssets\Textures\RectTransformAnchor.png" />
+    <None Include="EngineAssets\Icons\RectTransformIcon.png" />
+    <None Include="EngineAssets\Icons\SaveIcon.png" />
+    <None Include="EngineAssets\Icons\SceneIcon.png" />
+    <None Include="EngineAssets\Icons\SettingsIcon.png" />
+    <None Include="EngineAssets\Icons\TransformIcon.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\Vmovetoolbar.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\Vsepartoolbar.png" />
+    <None Include="EngineAssets\Icons\WarnIcon.png" />
+    <None Include="EngineAssets\Icons\brackets.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\branch_closed-on.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\branch_closed.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\branch_open-on.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\branch_open.png" />
+    <None Include="EngineAssets\Icons\capsule.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\checkbox_checked.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\checkbox_checked_disabled.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\checkbox_checked_focus.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\checkbox_indeterminate.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\checkbox_indeterminate_focus.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\checkbox_unchecked.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\checkbox_unchecked_disabled.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\checkbox_unchecked_focus.png" />
+    <None Include="EngineAssets\Icons\clear.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\close-hover.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\close-pressed.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\close.png" />
+    <None Include="EngineAssets\Icons\dirUpIcon.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\down_arrow.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\down_arrow_disabled.png" />
+    <None Include="EngineAssets\Icons\eye.png" />
+    <None Include="EngineAssets\Icons\filePaper.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\left_arrow.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\left_arrow_disabled.png" />
+    <None Include="EngineAssets\Icons\mesh.png" />
+    <None Include="EngineAssets\Icons\play.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\radio_checked.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\radio_checked_disabled.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\radio_checked_focus.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\radio_unchecked.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\radio_unchecked_disabled.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\radio_unchecked_focus.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\right_arrow.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\right_arrow_disabled.png" />
+    <None Include="EngineAssets\Icons\rotate.png" />
+    <None Include="EngineAssets\Icons\scale.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\sizegrip.png" />
+    <None Include="EngineAssets\Icons\sphere.png" />
+    <None Include="EngineAssets\Icons\stop.png" />
+    <CustomBuild Include="EngineAssets\qdarkstyle\style.qrc">
+      <FileType>Document</FileType>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EngineAssets\qdarkstyle\style.qrc;C:\Qt\5.8\msvc2015_64\bin\rcc.exe;EngineAssets\qdarkstyle\rc\Vsepartoolbar.png;EngineAssets\qdarkstyle\rc\close-pressed.png;EngineAssets\qdarkstyle\rc\Hmovetoolbar.png;EngineAssets\qdarkstyle\rc\up_arrow.png;EngineAssets\qdarkstyle\rc\left_arrow_disabled.png;EngineAssets\qdarkstyle\rc\close-hover.png;EngineAssets\qdarkstyle\rc\checkbox_unchecked.png;EngineAssets\qdarkstyle\rc\radio_unchecked_disabled.png;EngineAssets\qdarkstyle\rc\radio_checked.png;EngineAssets\qdarkstyle\rc\checkbox_checked_disabled.png;EngineAssets\qdarkstyle\rc\Hsepartoolbar.png;EngineAssets\qdarkstyle\rc\sizegrip.png;EngineAssets\qdarkstyle\rc\down_arrow.png;EngineAssets\qdarkstyle\rc\stylesheet-branch-more.png;EngineAssets\qdarkstyle\rc\radio_unchecked.png;EngineAssets\qdarkstyle\rc\branch_closed-on.png;EngineAssets\qdarkstyle\rc\checkbox_unchecked_disabled.png;EngineAssets\qdarkstyle\rc\branch_open.png;EngineAssets\qdarkstyle\rc\left_arrow.png;EngineAssets\qdarkstyle\rc\stylesheet-branch-end.png;EngineAssets\qdarkstyle\rc\undock.png;EngineAssets\qdarkstyle\rc\right_arrow.png;EngineAssets\qdarkstyle\rc\checkbox_indeterminate.png;EngineAssets\qdarkstyle\rc\checkbox_checked_focus.png;EngineAssets\qdarkstyle\rc\stylesheet-vline.png;EngineAssets\qdarkstyle\rc\radio_checked_focus.png;EngineAssets\qdarkstyle\rc\branch_closed.png;EngineAssets\qdarkstyle\rc\right_arrow_disabled.png;EngineAssets\qdarkstyle\rc\down_arrow_disabled.png;EngineAssets\qdarkstyle\rc\branch_open-on.png;EngineAssets\qdarkstyle\rc\radio_unchecked_focus.png;EngineAssets\qdarkstyle\rc\Vmovetoolbar.png;EngineAssets\qdarkstyle\rc\transparent.png;EngineAssets\qdarkstyle\rc\close.png;EngineAssets\qdarkstyle\rc\radio_checked_disabled.png;EngineAssets\qdarkstyle\rc\checkbox_checked.png;EngineAssets\qdarkstyle\rc\up_arrow_disabled.png;EngineAssets\qdarkstyle\rc\checkbox_indeterminate_focus.png;EngineAssets\qdarkstyle\rc\checkbox_unchecked_focus.png;EngineAssets\Icons\translate.png;EngineAssets\Icons\clear.png;EngineAssets\Icons\OtherFileIcon.png;EngineAssets\Icons\BehaviourIcon.png;EngineAssets\Icons\play.png;EngineAssets\Icons\PrefabAssetIcon.png;EngineAssets\Icons\ErrorIcon.png;EngineAssets\Icons\WarnIcon.png;EngineAssets\Icons\MeshAssetIcon.png;EngineAssets\Icons\dirUpIcon.png;EngineAssets\Icons\LogIcon.png;EngineAssets\Icons\mesh.png;EngineAssets\Icons\textFile.png;EngineAssets\Icons\NoAssetIcon.png;EngineAssets\Icons\rotate.png;EngineAssets\Icons\MaterialAssetIcon.png;EngineAssets\Icons\sphere.png;EngineAssets\Icons\capsule.png;EngineAssets\Icons\eye.png;EngineAssets\Icons\filePaper.png;EngineAssets\Icons\scale.png;EngineAssets\Icons\stop.png;EngineAssets\Icons\brackets.png;EngineAssets\qdarkstyle\style.qss;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Qt\5.8\msvc2015_64\bin\rcc.exe -name style EngineAssets\qdarkstyle\style.qrc -o release\qrc_style.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">RCC EngineAssets/qdarkstyle/style.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">release\qrc_style.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EngineAssets\qdarkstyle\style.qrc;C:\Qt\5.8\msvc2015_64\bin\rcc.exe;EngineAssets\qdarkstyle\rc\Vsepartoolbar.png;EngineAssets\qdarkstyle\rc\close-pressed.png;EngineAssets\qdarkstyle\rc\Hmovetoolbar.png;EngineAssets\qdarkstyle\rc\up_arrow.png;EngineAssets\qdarkstyle\rc\left_arrow_disabled.png;EngineAssets\qdarkstyle\rc\close-hover.png;EngineAssets\qdarkstyle\rc\checkbox_unchecked.png;EngineAssets\qdarkstyle\rc\radio_unchecked_disabled.png;EngineAssets\qdarkstyle\rc\radio_checked.png;EngineAssets\qdarkstyle\rc\checkbox_checked_disabled.png;EngineAssets\qdarkstyle\rc\Hsepartoolbar.png;EngineAssets\qdarkstyle\rc\sizegrip.png;EngineAssets\qdarkstyle\rc\down_arrow.png;EngineAssets\qdarkstyle\rc\stylesheet-branch-more.png;EngineAssets\qdarkstyle\rc\radio_unchecked.png;EngineAssets\qdarkstyle\rc\branch_closed-on.png;EngineAssets\qdarkstyle\rc\checkbox_unchecked_disabled.png;EngineAssets\qdarkstyle\rc\branch_open.png;EngineAssets\qdarkstyle\rc\left_arrow.png;EngineAssets\qdarkstyle\rc\stylesheet-branch-end.png;EngineAssets\qdarkstyle\rc\undock.png;EngineAssets\qdarkstyle\rc\right_arrow.png;EngineAssets\qdarkstyle\rc\checkbox_indeterminate.png;EngineAssets\qdarkstyle\rc\checkbox_checked_focus.png;EngineAssets\qdarkstyle\rc\stylesheet-vline.png;EngineAssets\qdarkstyle\rc\radio_checked_focus.png;EngineAssets\qdarkstyle\rc\branch_closed.png;EngineAssets\qdarkstyle\rc\right_arrow_disabled.png;EngineAssets\qdarkstyle\rc\down_arrow_disabled.png;EngineAssets\qdarkstyle\rc\branch_open-on.png;EngineAssets\qdarkstyle\rc\radio_unchecked_focus.png;EngineAssets\qdarkstyle\rc\Vmovetoolbar.png;EngineAssets\qdarkstyle\rc\transparent.png;EngineAssets\qdarkstyle\rc\close.png;EngineAssets\qdarkstyle\rc\radio_checked_disabled.png;EngineAssets\qdarkstyle\rc\checkbox_checked.png;EngineAssets\qdarkstyle\rc\up_arrow_disabled.png;EngineAssets\qdarkstyle\rc\checkbox_indeterminate_focus.png;EngineAssets\qdarkstyle\rc\checkbox_unchecked_focus.png;EngineAssets\Icons\translate.png;EngineAssets\Icons\clear.png;EngineAssets\Icons\OtherFileIcon.png;EngineAssets\Icons\BehaviourIcon.png;EngineAssets\Icons\play.png;EngineAssets\Icons\PrefabAssetIcon.png;EngineAssets\Icons\ErrorIcon.png;EngineAssets\Icons\WarnIcon.png;EngineAssets\Icons\MeshAssetIcon.png;EngineAssets\Icons\dirUpIcon.png;EngineAssets\Icons\LogIcon.png;EngineAssets\Icons\mesh.png;EngineAssets\Icons\textFile.png;EngineAssets\Icons\NoAssetIcon.png;EngineAssets\Icons\rotate.png;EngineAssets\Icons\MaterialAssetIcon.png;EngineAssets\Icons\sphere.png;EngineAssets\Icons\capsule.png;EngineAssets\Icons\eye.png;EngineAssets\Icons\filePaper.png;EngineAssets\Icons\scale.png;EngineAssets\Icons\stop.png;EngineAssets\Icons\brackets.png;EngineAssets\qdarkstyle\style.qss;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Qt\5.8\msvc2015_64\bin\rcc.exe -name style EngineAssets\qdarkstyle\style.qrc -o debug\qrc_style.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">RCC EngineAssets/qdarkstyle/style.qrc</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">debug\qrc_style.cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <None Include="EngineAssets\qdarkstyle\style.qss" />
+    <None Include="EngineAssets\qdarkstyle\rc\stylesheet-branch-end.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\stylesheet-branch-more.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\stylesheet-vline.png" />
+    <None Include="EngineAssets\Icons\textFile.png" />
+    <None Include="EngineAssets\Icons\translate.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\transparent.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\undock.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\up_arrow.png" />
+    <None Include="EngineAssets\qdarkstyle\rc\up_arrow_disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EngineAssets\Shaders\Include\Common.glsl" />
+    <None Include="EngineAssets\Materials\G_DefaultNoSP.bmat" />
+    <None Include="EngineAssets\Shaders\G_Missing.frag" />
+    <None Include="EngineAssets\Materials\UI\G_UIImage.bmat" />
+    <None Include="EngineAssets\Materials\UI\G_UIText.bmat" />
+    <None Include="EngineAssets\Materials\Missing.bmat" />
+    <None Include="EngineAssets\Shaders\Include\SP.frag" />
+    <None Include="EngineAssets\Shaders\Include\SP.vert" />
+    <None Include="EngineAssets\Materials\SP_AmbientLight_Screen.bmat" />
+    <None Include="EngineAssets\Shaders\SP_DirectionalLight.frag" />
+    <None Include="EngineAssets\Materials\SP_DirectionalLight_Screen.bmat" />
+    <None Include="EngineAssets\Shaders\SP_FXAA.frag" />
+    <None Include="EngineAssets\Shaders\SP_PointLight.frag" />
+    <None Include="EngineAssets\Materials\SP_PointLight_Screen.bmat" />
+    <None Include="EngineAssets\Shaders\SP_ScreenPass.vert" />
+    <None Include="EngineAssets\Materials\SP_SelectionEffect.bmat" />
+    <None Include="EngineAssets\Shaders\SP_SelectionEffect.frag" />
+    <None Include="EngineAssets\Shaders\SP_Template.frag" />
+    <None Include="EngineAssets\Materials\UI\SP_UIImage.bmat" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

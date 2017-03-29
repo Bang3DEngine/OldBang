@@ -2,6 +2,7 @@
 #define AUDIOMANAGER_H
 
 #include <QThreadPool>
+#include "Bang/WinUndef.h"
 
 class AudioClip;
 class GameObject;

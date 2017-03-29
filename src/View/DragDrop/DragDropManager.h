@@ -1,13 +1,13 @@
 ﻿#ifndef DRAGDROPMANAGER_H
 #define DRAGDROPMANAGER_H
 
+#include <QTimer>
 #include <QObject>
 #include <QDropEvent>
 #include <QDragMoveEvent>
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
-
-#include <QTimer>
+#include "Bang/WinUndef.h"
 
 #include "Bang/List.h"
 #include "Bang/Vector2.h"

@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QObject>
+#include "Bang/WinUndef.h"
 
 class BehaviourRefresherTimer : public QObject
 {
