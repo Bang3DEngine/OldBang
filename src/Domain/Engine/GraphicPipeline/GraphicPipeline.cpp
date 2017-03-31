@@ -45,6 +45,7 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
     m_selectionFB = new SelectionFramebuffer(screen->m_width, screen->m_height);
     #endif
 
+
     m_matSelectionEffectScreen = AssetsManager::Load<Material>(
                 "Materials/SP_SelectionEffect.bmat", true);
 

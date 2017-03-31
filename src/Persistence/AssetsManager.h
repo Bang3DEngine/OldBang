@@ -52,10 +52,10 @@ public:
     template <class T>
     static T* ReadAssetFile(const String &filepath, bool isEngineAsset)
     {
+        if (filepath.Empty()) { return nullptr; }
+
         T *a = nullptr;
         String absPath = AssetsManager::FormatFilepath(filepath, isEngineAsset);
-        if(!IO::ExistsFile(absPath)) { return nullptr; }
-
         XMLNode *xmlInfo = XMLParser::FromFile(absPath);
         if (xmlInfo)
         {
@@ -86,6 +86,8 @@ public:
     template <class T>
     static T* Load(const String &filepath, bool isEngineAsset = false)
     {
+        if (filepath.Empty()) { return nullptr; }
+
         T *a = nullptr;
         if (!AssetsManager::IsLoaded(filepath, isEngineAsset))
         {

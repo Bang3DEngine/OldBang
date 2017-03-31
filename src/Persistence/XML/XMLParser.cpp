@@ -187,21 +187,11 @@ void XMLParser::GetNextTag(const String &xml,
 XMLNode *XMLParser::FromFile(const String &filepath)
 {
 	if (filepath.Empty()) { return nullptr; }
-	if (!IO::ExistsFile(filepath)) { return nullptr; }
+    if (!IO::ExistsFile(filepath)) { return nullptr; }
 
-    std::ifstream f;
-	try { f.open(filepath); }
-    catch (std::ifstream::failure) { return nullptr; }
-
-    if (f.is_open())
-    {
-        String contents((std::istreambuf_iterator<char>(f)),
-                         std::istreambuf_iterator<char>());
-        XMLNode *xmlInfo = XMLParser::FromString(contents);
-        f.close();
-        return xmlInfo;
-    }
-    return nullptr;
+    String fileContents = IO::GetFileContents(filepath);
+    XMLNode *xmlInfo = XMLParser::FromString(fileContents);
+    return xmlInfo;
 }
 
 XMLNode* XMLParser::FromString(const String &xml)

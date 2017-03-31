@@ -33,7 +33,7 @@ String AssetsManager::FormatFilepath(const String &filepath,
     {   // Do nothing, maybe the user is looking for something outside of Assets
         return filepath;
     }
-    return IO::ToAbsolute(filepath, isEngineAsset);
+    return IO::GetEngineAssetsRootAbs() + "/" + filepath;
 }
 
 bool AssetsManager::IsLoaded(const String &filepath,

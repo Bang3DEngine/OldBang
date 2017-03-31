@@ -89,6 +89,7 @@ bool FontSheetCreator::LoadCharTexture(const String &fontFilepath,
     if (error)
     {
         Debug_Error("Failed to get glyph '" << character << "' for font '" << fontFilepath << "': Error(" << error << ")");
+        FT_Done_Face(face);
         return false;
     }
 
@@ -141,8 +142,8 @@ bool FontSheetCreator::LoadCharTexture(const String &fontFilepath,
         fontTexture->CreateEmpty(16, 16);
     }
 
-    free(bitmap.buffer);
-
+    FT_Done_Glyph(glyph);
+    FT_Done_Face(face);
     *resultTexture = fontTexture;
     *resultMetrics = metrics;
     *fontFace = face;

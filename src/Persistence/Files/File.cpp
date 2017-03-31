@@ -193,7 +193,7 @@ bool File::Exists(const String &filepath)
 void File::Write(const String &filepath, const String &contents)
 {
     std::ofstream out(filepath);
-    if (out.is_open())
+    if (out)
     {
         out << contents;
         out.close();

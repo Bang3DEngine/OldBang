@@ -95,13 +95,16 @@ String IO::GetFileContents(const String &filepath)
     if (!IO::ExistsFile(filepath)) { return ""; }
 
     String contents = "";
-    std::fstream f;
-    f.open(filepath);
-    if (f.is_open())
+    std::ifstream ifs(filepath);
+    if (ifs)
     {
-        contents = String((std::istreambuf_iterator<char>(f)),
+        contents = String((std::istreambuf_iterator<char>(ifs)),
                            std::istreambuf_iterator<char>());
-        f.close();
+        ifs.close();
+    }
+    else
+    {
+        Debug_Error("Can't open file '" << filepath << "': " << std::strerror(errno));
     }
     return contents;
 }

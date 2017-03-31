@@ -15,7 +15,7 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
     m_cursorIconWhenOver    = Cursor::CursorIcon::OpenHand;
     m_cursorIconWhenGrabbed = Cursor::CursorIcon::ClosedHand;
 
-    m_material = AssetsManager::Load<Material>("./Materials/G_Default.bmat",
+    m_material = AssetsManager::Load<Material>("Materials/G_Default.bmat",
                                                true);
     m_material = new Material(*m_material);
     m_material->SetReceivesLighting(false);

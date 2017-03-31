@@ -1,7 +1,7 @@
 #ifndef FONTSHEETCREATOR_H
 #define FONTSHEETCREATOR_H
 
-#include "freetype\ft2build.h"
+#include "freetype/ft2build.h"
 #include FT_FREETYPE_H
 
 #include "Bang/Font.h"

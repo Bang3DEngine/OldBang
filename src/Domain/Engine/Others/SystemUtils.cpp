@@ -115,6 +115,7 @@ void SystemUtils::_System(const String &command,
               QString( process.readAllStandardError() );
         if (output) { *output = String(out) ; }
         if (success) { *success = ok; }
+        process.close();
     }
     else
     {

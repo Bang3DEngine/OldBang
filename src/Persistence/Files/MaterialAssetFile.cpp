@@ -30,7 +30,8 @@ MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model,
 
 const QPixmap& MaterialAssetFile::GetIcon() const
 {
-    Material *mat = AssetsManager::Load<Material>( GetAbsolutePath() );
+    String absPath = GetAbsolutePath();
+    Material *mat = AssetsManager::Load<Material>(absPath);
     return IconManager::LoadMaterialPixmap(mat);
 }
 
