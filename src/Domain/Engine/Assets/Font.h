@@ -10,6 +10,7 @@
 class Texture2D;
 class Font : public Asset
 {
+	OBJECT(Font)
     ASSET_ICON(Font, "Icons/LetterIcon.png")
 
 public:

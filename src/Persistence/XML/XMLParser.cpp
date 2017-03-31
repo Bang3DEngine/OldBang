@@ -27,7 +27,7 @@ const SerializableObject *XMLParser::GetPointerFromId(const String &id)
 
 String XMLParser::GetTagName(const String &tag, int *tagNameBegin, int *tagNameEnd)
 {
-    const String TokenSpace = " \t\n";
+    const String TokenSpace = " \t\n\r";
     int tagBegin = tag.IndexOfOneOf("<");
     int tagBegin2 = tag.IndexOfOneOf("/", tagBegin);
     tagBegin = (tagBegin2 == tagBegin + 1) ? tagBegin2 : tagBegin;
@@ -186,18 +186,12 @@ void XMLParser::GetNextTag(const String &xml,
 
 XMLNode *XMLParser::FromFile(const String &filepath)
 {
-	if (!filepath.Empty()) { return nullptr; }
+	if (filepath.Empty()) { return nullptr; }
 	if (!IO::ExistsFile(filepath)) { return nullptr; }
 
     std::ifstream f;
-    try
-    {
-        f.open(filepath);
-    }
-    catch (std::ifstream::failure)
-    {
-        return nullptr;
-    }
+	try { f.open(filepath); }
+    catch (std::ifstream::failure) { return nullptr; }
 
     if (f.is_open())
     {

@@ -225,15 +225,15 @@ XMLAttribute* XMLNode::GetAttribute(const String &attributeName) const
 
 void XMLNode::RemoveAttribute(const String &attributeName)
 {
-    for (auto it = m_attributes.Begin(); it != m_attributes.End(); ++it)
+    for (auto it = m_attributes.Begin(); it != m_attributes.End();)
     {
         XMLAttribute &attr = it->second;
         if (attr.GetName() == attributeName)
         {
-            it = m_attributes.Remove(it);
+            m_attributes.Remove(it++);
             m_attributeOrder.Remove(attr.GetName());
-            --it;
         }
+        else { ++it; }
     }
 }
 

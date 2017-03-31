@@ -221,8 +221,8 @@ String IO::GetDirUp(const String &filepath)
 	if (filepath.Empty()) { return ""; }
     Array<String> splits = filepath.Split('/');
     splits.PopBack();
-    return (IO::IsAbsolute(filepath) ? "/" : "") +
-            String::Join(splits, "/");
+	String path = String::Join(splits, "/");
+    return IO::IsAbsolute(filepath) ? IO::ToAbsolute(path, IO::IsEngineFile(filepath)) : path;
 }
 
 String IO::GetRightmostDir(const String &dir)

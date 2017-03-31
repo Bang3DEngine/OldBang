@@ -219,24 +219,35 @@ bool FileReader::ReadOBJ(const String& filepath,
 
     for (unsigned int i = 0; i < vertexPosIndexes.Size(); ++i)
     {
-        vertexPos->PushBack(disorderedVertexPos[vertexPosIndexes[i]-1]);
+		const int vIndex = vertexPosIndexes[i] - 1;
+		if (vIndex < disorderedVertexPos.Size())
+		{
+			vertexPos->PushBack(disorderedVertexPos[vIndex]);
+		}
     }
 
     if (hasNormals)
     {
         for (unsigned int i = 0; i < vertexNormIndexes.Size(); ++i)
         {
-            vertexNormals->PushBack(
-                        disorderedVertexNormals[vertexNormIndexes[i]-1]);
+			const int vIndex = vertexNormIndexes[i] - 1;
+			if (vIndex < disorderedVertexNormals.Size())
+			{
+				vertexNormals->PushBack( disorderedVertexNormals[vIndex]);
+			}
         }
     }
 
     if (hasUvs)
     {
-        for (unsigned int i = 0; i < vertexUvsIndexes.Size(); ++i)
-        {
-            vertexUvs->PushBack(disorderedVertexUvs[vertexUvsIndexes[i]-1]);
-        }
+		for (unsigned int i = 0; i < vertexUvsIndexes.Size(); ++i)
+		{
+			const int vIndex = vertexUvsIndexes[i] - 1;
+			if (vIndex < disorderedVertexUvs.Size())
+			{
+				vertexUvs->PushBack(disorderedVertexUvs[vIndex]);
+			}
+		}
     }
 
     return true;

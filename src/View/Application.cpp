@@ -85,6 +85,7 @@ void Application::MainLoop()
         c.MarkEvent("Render()");
         Screen::GetInstance()->Render();
         c.MarkEvent("swapBuffers()");
+		Screen::GetInstance()->makeCurrent();
         Screen::GetInstance()->swapBuffers();
 
         c.MarkEvent("Input::OnFrameFinished()");

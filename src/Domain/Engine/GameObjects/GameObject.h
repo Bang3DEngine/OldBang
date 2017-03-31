@@ -250,8 +250,7 @@ public:
             T *tp = Object::Cast<T>(*comp);
             if (tp)
             {
-                comp = m_components.Remove(comp);
-                --comp;
+				m_components.Remove(comp);
                 delete tp;
                 break;
             }

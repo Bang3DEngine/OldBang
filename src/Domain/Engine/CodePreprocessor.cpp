@@ -71,20 +71,15 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
     // Keep track of the user's source line number, to use #line directive
     int originalLineNum = 1;
 
-    // It supports recursive #include's.
     for (auto it = lines.Begin(); it != lines.End(); ++it)
     {
         String line = (*it).Trim();
         if (line.BeginsWith("#include"))
         {
-            it = lines.Remove(it);
+			String l = *it;
+			lines.Remove(it++);
 
-            --it;
-            List<String>::Iterator beforeInsertingContent = it;
-            ++it;
-
-            String content = GetIncludeReplacementString(line, originalLineNum,
-                                                         includePaths);
+            String content = GetIncludeReplacementString(line, originalLineNum, includePaths);
 
             // Get the include content lines, and add it to the overall lines.
             // This way we can process it recursively, since the included lines
@@ -93,9 +88,9 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
             originalLineNum -= contentLines.Size(); // Do this before the splice
 
             lines.Splice(it, contentLines, contentLines.Begin(), contentLines.End());
-
-            it = beforeInsertingContent;
+            it = lines.Begin();
         }
+
         ++originalLineNum;
     }
 

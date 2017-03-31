@@ -41,14 +41,14 @@ List<String> SystemUtils::GetQtIncludes()
     }
     qtDir = qtDir.Replace("\n", "");
     List<String> incs = IO::GetSubDirectories(qtDir, true);
-    for (auto it = incs.Begin(); it != incs.End(); ++it)
+    for (auto it = incs.Begin(); it != incs.End();)
     {
         const String& incDir = *it;
-        if (!incDir.Contains("qt", false) || !IO::IsDir(incDir)
-           )
+        if (!incDir.Contains("qt", false) || !IO::IsDir(incDir))
         {
-            incs.Remove(it); --it;
+            incs.Remove(it++);
         }
+        else { ++it; }
     }
     incs.PushFront(qtDir);
     return incs;
@@ -66,13 +66,14 @@ List<String> SystemUtils::GetQtLibrariesDirs()
     }
     qtDir = qtDir.Replace("\n", "");
     List<String> libs = IO::GetSubDirectories(qtDir, true);
-    for (auto it = libs.Begin(); it != libs.End(); ++it)
+    for (auto it = libs.Begin(); it != libs.End();)
     {
         const String& libDir = *it;
         if ( !libDir.Contains("qt", false) || !IO::IsDir(libDir) )
         {
-            it = libs.Remove(it); --it;
+            it = libs.Remove(it++);
         }
+        else { ++it; }
     }
     libs.PushFront(qtDir);
     return libs;

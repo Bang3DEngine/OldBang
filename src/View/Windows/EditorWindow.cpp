@@ -107,6 +107,8 @@ void EditorWindow::OnTabSceneGameChanged(int index)
 {
     EditorScene *edScene =
             Object::SCast<EditorScene>(SceneManager::GetActiveScene());
+	if (!edScene) { return; }
+
     bool scene = tabContainerSceneGame->widget(index) == tabScene;
     if (scene)
     {

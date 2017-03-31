@@ -29,6 +29,10 @@ String Asset::GetFilepath() const
     return m_assetFilepath;
 }
 
+void Asset::CloneInto(ICloneable * clone) const
+{
+}
+
 String Asset::ToString() const
 {
     return "Asset '" + m_assetFilepath + "'.";
@@ -42,4 +46,5 @@ void Asset::Read(const XMLNode &xmlInfo)
 void Asset::Write(XMLNode *xmlInfo) const
 {
     SerializableObject::Write(xmlInfo);
+    xmlInfo->SetTagName( GetClassName() );
 }

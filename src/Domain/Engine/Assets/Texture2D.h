@@ -7,6 +7,7 @@
 
 class Texture2D : public Texture, public Asset
 {
+	OBJECT(Texture2D)
     ASSET_ICON(Texture2D, "Icons/ImageIcon.png")
 
 public:

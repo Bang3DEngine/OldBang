@@ -10,16 +10,15 @@ EngineConfig::EngineConfig()
 void EngineConfig::CleanOutdatedRecentProjectList()
 {
     List<String> recentProjectsList = EngineConfig::GetRecentProjectsList();
-    for (auto it = recentProjectsList.Begin();
-         it != recentProjectsList.End(); ++it)
+    for (auto it = recentProjectsList.Begin(); it != recentProjectsList.End();)
     {
         String recentProject = *it;
         if (!IO::ExistsFile(recentProject) ||              // Remove non-existing
             recentProjectsList.CountOccurrences(recentProject) > 1) // Remove repeated
         {
-            it = recentProjectsList.Remove(it);
-            --it;
+            recentProjectsList.Remove(it++);
         }
+        else { ++it; }
     }
 
     WriteListToFile(EngineConfig::GetRecentProjectsFilepath(),

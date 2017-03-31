@@ -2,6 +2,7 @@
 #define ASSET_H
 
 #include "Bang/IO.h"
+#include "Bang/Object.h"
 #include "Bang/IToString.h"
 #include "Bang/IconManager.h"
 #include "Bang/SerializableObject.h"
@@ -11,14 +12,20 @@
 #endif
 
 class AssetsManager;
-class Asset : public IToString,
+class Asset : public Object,
+		      public IToString,
               public SerializableObject
 {
+	OBJECT(Asset)
+    ICLONEABLE(Asset)
+
 public:
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override;
 
     String GetFilepath() const;
+
+    virtual void CloneInto(ICloneable *clone) const override;
 
     virtual String ToString() const override;
 

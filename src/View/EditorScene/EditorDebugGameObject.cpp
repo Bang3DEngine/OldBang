@@ -58,15 +58,15 @@ void EditorDebugGameObject::OnUpdate()
 {
     // Remove the ones that have exhausted its time
     float dTime = Time::deltaTime;
-    for (auto it = m_debugLines.Begin(); it != m_debugLines.End(); ++it)
+    for (auto it = m_debugLines.Begin(); it != m_debugLines.End();)
     {
         DebugLine &dl = *it;
         dl.m_elapsedTimeSecs += dTime;
         if (dl.m_elapsedTimeSecs >= dl.m_livingTimeSecs)
         {
-            it = m_debugLines.Remove(it);
-            --it;
+            m_debugLines.Remove(it++);
         }
+        else { ++it; }
     }
 }
 

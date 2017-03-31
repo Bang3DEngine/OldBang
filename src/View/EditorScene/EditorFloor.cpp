@@ -22,7 +22,7 @@ EditorFloor::EditorFloor()
     {
         m_lineRenderers[i] = AddComponent<SingleLineRenderer>();
         m_lineRenderers[i]->SetMaterial(m_material);
-        m_lineRenderers[i]->SetEnabled(false);
+        //m_lineRenderers[i]->SetEnabled(false);
     }
 
     AddHideFlag(HideFlags::HideAndDontSave);

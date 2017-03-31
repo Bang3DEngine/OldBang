@@ -26,7 +26,7 @@ void Input::InitFromMainBinary() // Called from Screen
 void Input::OnFrameFinished()
 {
     // KEYS
-    for (auto it = m_keyInfos.Begin(); it != m_keyInfos.End(); ++it)
+    for (auto it = m_keyInfos.Begin(); it != m_keyInfos.End();)
     {
         ButtonInfo &kInfo = it->second;
         if (kInfo.down)
@@ -36,13 +36,14 @@ void Input::OnFrameFinished()
 
         if (kInfo.up) //After a frame where it was Up
         {
-            m_keyInfos.Remove(it);
+            m_keyInfos.Remove(it++);
         }
+        else { ++it; }
     }
     //
 
     // MOUSE
-    for (auto it = m_mouseInfo.Begin(); it != m_mouseInfo.End(); ++it)
+    for (auto it = m_mouseInfo.Begin(); it != m_mouseInfo.End();)
     {
         ButtonInfo &mbInfo = it->second;
         if (mbInfo.down)
@@ -50,10 +51,8 @@ void Input::OnFrameFinished()
             mbInfo.down = false; // Not down anymore, just pressed.
         }
 
-        if (mbInfo.up)
-        {
-            m_mouseInfo.Remove(it);
-        }
+        if (mbInfo.up) { m_mouseInfo.Remove(it++); }
+        else { ++it; }
 
         m_isADoubleClick = false; // Reset double click
     }

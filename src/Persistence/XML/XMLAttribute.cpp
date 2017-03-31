@@ -111,8 +111,7 @@ void XMLAttribute::RemoveProperty(const String &propertyName)
         const XMLProperty &prop = *it;
         if (prop.GetName() == propertyName)
         {
-            it = m_properties.Remove(it);
-            --it;
+            m_properties.Remove(it);
             return;
         }
     }

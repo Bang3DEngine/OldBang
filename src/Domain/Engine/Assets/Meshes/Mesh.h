@@ -17,6 +17,7 @@ class FileReader;
 class ShaderProgram;
 class Mesh : public Asset
 {
+	OBJECT(Mesh)
     ASSET_ICON(Mesh, "Icons/MeshAssetIcon.png")
 
 public:

@@ -13,6 +13,7 @@
 class AudioSource;
 class AudioClip : public Asset
 {
+	OBJECT(AudioClip)
     ASSET_ICON(AudioClip, "Icons/AudioIcon.png")
 
 public:
