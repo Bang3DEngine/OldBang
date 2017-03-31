@@ -111,7 +111,7 @@ bool HierarchyDragDropManager::AcceptDrop()
 void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
                                                       const DragDropInfo &ddi)
 {
-    ASSERT(!f.GetRelativePath().Empty() > 0, "", return);
+    if (f.GetRelativePath().Empty()) { return; }
 
     if (f.IsPrefabAsset())
     {

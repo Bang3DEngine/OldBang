@@ -56,3 +56,7 @@ Makefile*
 #QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+
+!include/freetype/*.h
+
+
