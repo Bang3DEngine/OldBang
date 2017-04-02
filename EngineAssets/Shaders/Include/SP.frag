@@ -19,6 +19,8 @@ void EndMain()
 void Main();
 void main()
 {
+    InitCommon();
+
     #ifdef BANG_NO_STENCIL_TEST
     bool passStencil = true;
     #else
