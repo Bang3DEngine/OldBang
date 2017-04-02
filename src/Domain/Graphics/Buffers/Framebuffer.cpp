@@ -26,20 +26,20 @@ Framebuffer::~Framebuffer()
 
 void Framebuffer::CreateColorAttachment(AttachmentId attId)
 {
+    Bind();
     RenderTexture *tex = new RenderTexture();
+    tex->Bind();
     tex->CreateEmpty(GetWidth(), GetHeight());
 
     m_colorAttachmentIds.PushBack(attId);
     m_attachmentId_To_Texture.Set(attId, tex);
 
-    Bind();
-    GL::ClearError();
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, attId, GL_TEXTURE_2D,
                            tex->GetGLId(), 0);
-    GL_CheckError();
     GL::CheckFramebufferError();
+    GL_CheckError();
+    tex->UnBind();
     UnBind();
-    //
 }
 
 void Framebuffer::CreateDepthRenderbufferAttachment()
@@ -48,14 +48,14 @@ void Framebuffer::CreateDepthRenderbufferAttachment()
     GL::ClearError();
     glGenRenderbuffers(1, &m_depthRenderBufferId);
     glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferId);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
                           m_width, m_height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT,
                               GL_RENDERBUFFER, m_depthRenderBufferId);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-    GL_CheckError();
     GL::CheckFramebufferError();
+    GL_CheckError();
     UnBind();
 }
 
@@ -106,15 +106,17 @@ void Framebuffer::Resize(int width, int height)
         RenderTexture *t = it.second;
         if (t)
         {
+            GL::ClearError();
             t->Resize(m_width, m_height);
         }
     }
 
     if (m_depthRenderBufferId != 0)
     {
+        GL::ClearError();
         //TODO:  respect former bindings of renderbuffers
         glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferId);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24,
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
                               m_width, m_height);
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
     }

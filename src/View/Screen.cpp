@@ -53,6 +53,7 @@ void Screen::initializeGL()
     {
         m_gPipeline = new GraphicPipeline(this);
         firstInitializeGL = false;
+        makeCurrent();
     }
 }
 

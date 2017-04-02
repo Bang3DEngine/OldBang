@@ -21,7 +21,7 @@ void VAO::BindVBO(const VBO *vbo,
                   GLsizei dataStride,
                   GLuint dataOffset)
 {
-    UnBindVBO(location); //unbind in case its a vbo replacement
+    UnBindVBO(location); // unbind in case its a vbo replacement
 
     if (location < 0) return;
 

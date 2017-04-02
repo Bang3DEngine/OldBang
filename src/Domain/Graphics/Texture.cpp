@@ -33,7 +33,16 @@ void Texture::SetFilterMode(Texture::FilterMode filterMode)
 {
     m_filterMode = filterMode;
     Bind();
-    glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GLint(filterMode));
+    if (filterMode != FilterMode::Trilinear)
+    {
+        glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, GLint(filterMode));
+    }
+    else
+    {
+        glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, 
+                        GLint(FilterMode::Linear));
+    }
+
     glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, GLint(filterMode));
     UnBind();
 }

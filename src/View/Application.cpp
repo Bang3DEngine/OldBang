@@ -115,7 +115,7 @@ Application *Application::GetInstance()
     ASSERT(GameWindow::GetInstance(), "", return nullptr);
     return Object::SCast<Application>(
                 GameWindow::GetInstance()->GetApplication());
-#endif
+    #endif
 }
 
 void Application::ResetDeltaTime()

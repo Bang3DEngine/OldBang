@@ -17,23 +17,23 @@ float Random::Value()
 
 Vector2 Random::InsideUnitCircle()
 {
-    return Vector2(Random::Value(),
-                   Random::Value());
+    return Vector2(Random::Range(-1.0f, 1.0f),
+                   Random::Range(-1.0f, 1.0f));
 }
 
 Vector3 Random::InsideUnitSphere()
 {
-    return Vector3(Random::Value(),
-                   Random::Value(),
-                   Random::Value());
+    return Vector3(Random::Range(-1.0f, 1.0f),
+                   Random::Range(-1.0f, 1.0f),
+                   Random::Range(-1.0f, 1.0f));
 }
 
 Vector4 Random::RandomVector4()
 {
-    return Vector4(Random::Value(),
-                   Random::Value(),
-                   Random::Value(),
-                   Random::Value());
+    return Vector4(Random::Range(-1.0f, 1.0f),
+                   Random::Range(-1.0f, 1.0f),
+                   Random::Range(-1.0f, 1.0f),
+                   Random::Range(-1.0f, 1.0f));
 }
 
 Quaternion Random::GetRotation()

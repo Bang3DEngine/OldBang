@@ -37,9 +37,9 @@ uniform sampler2D B_Texture0;
 // Screen related /////////////////////////
 uniform vec2 B_ScreenSize;
 #ifdef BANG_FRAGMENT
-vec2  B_ScreenStep = 1.0 / B_ScreenSize;
-vec2  B_ScreenPos  = gl_FragCoord.xy;
-vec2  B_ScreenUv   = B_ScreenPos / B_ScreenSize;
+vec2 B_ScreenStep;
+vec2 B_ScreenPos;
+vec2 B_ScreenUv;
 #endif
 // ///////////////////////////////////////
 
@@ -157,6 +157,15 @@ uniform sampler2D B_GTex_Color;
     }
     vec3 B_ComputeWorldPosition() { return B_ComputeWorldPosition( B_SampleDepth() ); }
 #endif
+
+void InitCommon()
+{
+    #ifdef BANG_FRAGMENT
+    B_ScreenStep = 1.0 / B_ScreenSize;
+    B_ScreenPos  = gl_FragCoord.xy;
+    B_ScreenUv   = B_ScreenPos / B_ScreenSize;
+    #endif
+}
 // ///////////////////////////////////////
 
 

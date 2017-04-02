@@ -86,21 +86,13 @@ void FileReader::GetOBJFormat(const String& filepath, bool *hasUvs,
 
 int FileReader::GetOBJNumFaces(const String &filepath)
 {
-    std::ifstream f(filepath);
-    if (!f.is_open())
-        Debug_Error("Error opening the mesh file '" << filepath << "'");
-
     int numFaces = 0;
-    String line;
-    while (std::getline(f, line))
+    String contents = IO::GetFileContents(filepath);
+    Array<String> lines = contents.Split('\n');
+    for (const String& line : lines)
     {
-        if (!line.Empty() && line.At(0) == 'f')
-        {
-            ++numFaces;
-        }
+        if (!line.Empty() && line.At(0) == 'f') { ++numFaces; }
     }
-
-    f.close();
     return numFaces;
 }
 
@@ -119,12 +111,9 @@ bool FileReader::ReadOBJ(const String& filepath,
 
     GetOBJFormat(filepath, &hasUvs, &hasNormals, isTriangles);
 
-    std::ifstream f(filepath);
-    if (!f.is_open())
-        Debug_Error("Error opening the mesh file '" << filepath << "'");
-    String line;
-
-    while (std::getline(f, line))
+    String contents = IO::GetFileContents(filepath);
+    Array<String> lines = contents.Split('\n');
+    for (const String& line : lines)
     {
         std::stringstream ss(line);
         String lineHeader;
@@ -251,7 +240,6 @@ bool FileReader::ReadOBJ(const String& filepath,
 		}
     }
 
-    f.close();
 
     return true;
 }

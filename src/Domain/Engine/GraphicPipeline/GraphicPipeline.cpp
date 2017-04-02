@@ -283,10 +283,11 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
     ASSERT(sp);
 
+    sp->Bind();
+
     m_screenPlaneMesh->BindPositionsToShaderProgram("B_In_PositionObject", *sp);
     sp->SetTexture("B_GTex_Color", fullScreenTexture);
 
-    sp->Bind();
     m_renderGBufferToScreenMaterial->Bind();
     GL::ApplyContextToShaderProgram(sp);
     GraphicPipeline::RenderScreenPlane();
