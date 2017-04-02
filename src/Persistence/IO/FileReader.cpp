@@ -25,63 +25,33 @@ unsigned char* FileReader::ReadImage(const String& filepath,
 void FileReader::GetOBJFormat(const String& filepath, bool *hasUvs,
                               bool *hasNormals, bool *isTriangles)
 {
-    std::FILE *f;
-    f = fopen(filepath.ToCString(), "r");
-    if (!f)
+    Array<String> lines = IO::GetFileContents(filepath).Split('\n');
+    for (const String &_line : lines)
     {
-        Debug_Error("Error trying to open '" << filepath << "'");
-        return;
-    }
-
-    fseek(f, -3, SEEK_END);
-    int n = 1;
-
-    char c, lastChar;
-    while (ftell(f) > 0)
-    {
-        lastChar = fgetc(f);
-        c = fgetc(f);
-        if ((lastChar == '\n' || lastChar == '\r') && c == 'f')
+        String line = _line.Replace("\r", "");
+        if (line.BeginsWith("f"))
         {
-            int foo;
-            while (fgetc(f) == ' '); // Read spaces after 'f'
-            fseek(f, -1, SEEK_CUR);
-            foo = fscanf(f, "%d", &foo); // Read first index
-             // Single index without slashes
-            if (fgetc(f) == ' ') *hasUvs = *hasNormals = false;
-            else //  Something like  5/*
+            while (line.Contains("  ")) { line = line.Replace("  ", " "); }
+            Array<String> faceVertices = line.Split(' ');
+            String samplePart = "";
+            for (const String &part : faceVertices)
             {
-                *hasUvs = (fgetc(f) != '/');
-                if (!*hasUvs) *hasNormals = true; // Something like 5//8
-                if (*hasUvs) // Something like 5/8*
+                if (part.Contains("/")) { samplePart = part; break; }
+            }
+
+            if (!samplePart.Empty())
+            {
+                Array<String> vertexIndices = samplePart.Split('/');
+                if (vertexIndices.Size() >= 3)
                 {
-                    fseek(f, -1, SEEK_CUR);
-                    foo = fscanf(f, "%d", &foo); // Read second index
-                    if (fgetc(f) == '/') // Something like 5/8/11
-                    {
-                        fseek(f, -1, SEEK_CUR);
-                        foo = fscanf(f, "%d", &foo); // Read last index
-                        *hasNormals = true;
-                    }
-                    else *hasNormals = false;
+                    *hasUvs     = !vertexIndices[1].Empty();
+                    *hasNormals = !vertexIndices[2].Empty();
+                    *isTriangles = faceVertices.Size() == 1 + 3;  // "f" + "//" + "//" + "//"
+                    return;
                 }
             }
-
-            // Are they tris or quads?
-            lastChar = c;
-            while (!feof(f) && (c = fgetc(f)) != '\n')
-            {
-                if (lastChar == ' ' && c != ' ') ++n;
-                lastChar = c;
-            }
-            *isTriangles = (n <= 3);
-            break;
         }
-        fseek(f, -3, SEEK_CUR);
     }
-    fclose(f);
-
-    *isTriangles = true;
 }
 
 int FileReader::GetOBJNumFaces(const String &filepath)
@@ -89,9 +59,10 @@ int FileReader::GetOBJNumFaces(const String &filepath)
     int numFaces = 0;
     String contents = IO::GetFileContents(filepath);
     Array<String> lines = contents.Split('\n');
-    for (const String& line : lines)
+    for (const String& _line : lines)
     {
-        if (!line.Empty() && line.At(0) == 'f') { ++numFaces; }
+        String line = _line.Replace("\r", "");
+        if (!line.Empty() && line.BeginsWith("f")) { ++numFaces; }
     }
     return numFaces;
 }
@@ -113,8 +84,10 @@ bool FileReader::ReadOBJ(const String& filepath,
 
     String contents = IO::GetFileContents(filepath);
     Array<String> lines = contents.Split('\n');
-    for (const String& line : lines)
+    for (const String& _line : lines)
     {
+        String line = _line.Replace("\r", "");
+
         std::stringstream ss(line);
         String lineHeader;
         if (!(ss >> lineHeader)) continue;
@@ -124,13 +97,13 @@ bool FileReader::ReadOBJ(const String& filepath,
             ss >> pos.x >> pos.y >> pos.z;
             disorderedVertexPos.PushBack(pos);
         }
-        else if (hasUvs && lineHeader == "vt") //Cargamos uvs
+        else if (hasUvs && lineHeader == "vt") // Load uvs
         {
             Vector2 uv;
             ss >> uv.x >> uv.y;
             disorderedVertexUvs.PushBack(uv);
         }
-        else if (hasNormals && lineHeader == "vn") //Cargamos normals
+        else if (hasNormals && lineHeader == "vn") // Load normals
         {
             Vector3 normal;
             ss >> normal.x >> normal.y >> normal.z;
@@ -144,46 +117,46 @@ bool FileReader::ReadOBJ(const String& filepath,
 
             for (int i = 0; i < 3; ++i)
             {
+                while (ss.peek() == '/' || ss.peek() == ' ') ss.ignore();
                 ss >> posIndices[i];
                 if (hasUvs)
                 {
-                    while (ss.peek() == '/') ss.ignore();  //Read the '/'s
+                    while (ss.peek() == '/' || ss.peek() == ' ') ss.ignore();
                     ss >> uvIndices[i];
                 }
 
                 if (hasNormals)
                 {
-                    while (ss.peek() == '/') ss.ignore();
+                    while (ss.peek() == '/' || ss.peek() == ' ') ss.ignore();
                     ss >> normalIndices[i];
                 }
             }
 
             //Vertices 0,1 same for tris and quads in CCW
-            for (int j = 0; j <= 1; ++j)
+            for (int i = 0; i <= 1; ++i)
             {
-                vertexPosIndexes.PushBack(posIndices[j]);
-                vertexUvsIndexes.PushBack(uvIndices[j]);
-                vertexNormIndexes.PushBack(normalIndices[j]);
+                vertexPosIndexes.PushBack(posIndices[i]);
+                vertexUvsIndexes.PushBack(uvIndices[i]);
+                vertexNormIndexes.PushBack(normalIndices[i]);
             }
 
-            bool theresAFaceLeft = false;
             while (ss.peek() == '\n' || ss.peek() == '\r' || ss.peek() == ' ')
                 ss.ignore();
-            theresAFaceLeft = (ss.peek() != EOF);
 
-            if (theresAFaceLeft)
+            const bool theresAVertexLeft = (ss.peek() != EOF);
+            if (theresAVertexLeft)
             {
                 //QUAD FOUND, turn it into two triangles
                 //Finish first triangle in CCW
                 ss >> posIndices[3];
                 if (hasUvs)
                 {
-                    while (ss.peek() == '/') ss.ignore();
+                    while (ss.peek() == ' ' || ss.peek() == '/') ss.ignore();
                     ss >> uvIndices[3];
                 }
                 if (hasNormals)
                 {
-                    while (ss.peek() == '/') ss.ignore();
+                    while (ss.peek() == ' ' || ss.peek() == '/') ss.ignore();
                     ss >> normalIndices[3];
                 }
                 vertexPosIndexes.PushBack(posIndices[3]);
@@ -239,7 +212,5 @@ bool FileReader::ReadOBJ(const String& filepath,
 			}
 		}
     }
-
-
     return true;
 }
