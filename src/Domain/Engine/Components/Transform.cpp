@@ -240,7 +240,7 @@ void Transform::GetLocalToWorldMatrix(Matrix4 *m) const
 
 void Transform::LookAt(const Vector3 &target, const Vector3 &_up)
 {
-    ASSERT(target != m_localPosition, "LookAt target is the same as position.", return);
+    if(target == m_localPosition) { return; }
     Vector3 up = _up.Normalized();
     SetRotation(Quaternion::LookDirection(target - GetPosition(), up) );
 }

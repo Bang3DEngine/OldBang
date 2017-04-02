@@ -118,11 +118,10 @@ LIBS += \
 
 
 # INCLUDE PATH ###################
-INCLUDEPATH +=                                   \
-    /usr/include                                 \
-    /usr/include/freetype2                       \
-        /usr/include/freetype2/freetype          \
-        $$PWD/include
+INCLUDEPATH +=                       \
+    /usr/include                     \
+    include                          \
+    include/freetype
 ######################################
 
 
