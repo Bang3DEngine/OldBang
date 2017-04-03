@@ -9,7 +9,6 @@
 #include "Bang/Scene.h"
 #include "Bang/Project.h"
 #include "Bang/Application.h"
-#include "Bang/SystemUtils.h"
 #include "Bang/SceneManager.h"
 #include "Bang/ProjectManager.h"
 #include "Bang/BehaviourHolder.h"

@@ -1,6 +1,6 @@
 # C++ objects and libs
 *.trace
-tmp/*
+tmp
 *.exe
 **.slo
 **.lo

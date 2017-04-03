@@ -138,8 +138,7 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
     const bool addEngineObjects = (clFlags & CLFlags::AddEngineObjectFiles) > 0;
     const bool produceSharedLib = (clFlags & CLFlags::ProduceSharedLib) > 0;
 
-    List<String> args = {};
-
+    List<String> args;
     args.PushBack( produceSharedLib ? "-shared" : "-c" );
     args.PushBack(sourceFilesList);
     args.PushBack({"-O0", "-g", "-Wl,-O0,--export-dynamic", "-fPIC",
@@ -148,7 +147,10 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
     if (editorMode) { args.PushBack("-DBANG_EDITOR"); }
 
     {
-    args.PushBack("-Iinclude/Bang");
+    List<String> qtIncludeDirs = SystemUtils::GetQtIncludes();
+    for(String &qtIncludeDir : qtIncludeDirs) { qtIncludeDir.Prepend("-I"); }
+    args.PushBack(qtIncludeDirs);
+    args.PushBack("-I" + IO::GetEngineRootAbs() + "/include");
     }
 
     {

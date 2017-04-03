@@ -1,9 +1,9 @@
 #include "Bang/QtProjectManager.h"
 
+#include "Bang/IO.h"
 #include "Bang/Debug.h"
 #include "Bang/Project.h"
 #include "Bang/SystemUtils.h"
-#include "Bang/IO.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/ProjectManager.h"
 
@@ -65,8 +65,7 @@ void QtProjectManager::CreateQtProjectFile()
 
     List<String> projIncludePaths =
          IO::GetSubDirectories(projAssetsDir, true);
-    List<String> engineIncludePaths =
-         IO::GetSubDirectories(engineAbsDir, true);
+    List<String> engineIncludePaths = { IO::GetEngineRootAbs() + "/include" };
 
     String headersString = String::Join(headers, "\n");
     String engineHeadersString = String::Join(engineHeaders, "\n");

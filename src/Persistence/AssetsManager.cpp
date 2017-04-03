@@ -30,10 +30,15 @@ String AssetsManager::FormatFilepath(const String &filepath,
                                      bool isEngineAsset)
 {
     if (IO::IsAbsolute(filepath))
-    {   // Do nothing, maybe the user is looking for something outside of Assets
+    {   // Do nothing, maybe the user is looking for something out of Assets
         return filepath;
     }
-    return IO::GetEngineAssetsRootAbs() + "/" + filepath;
+
+    if (isEngineAsset)
+    {
+        return IO::GetEngineAssetsRootAbs() + "/" + filepath;
+    }
+    return IO::GetProjectAssetsRootAbs() + "/" + filepath;
 }
 
 bool AssetsManager::IsLoaded(const String &filepath,

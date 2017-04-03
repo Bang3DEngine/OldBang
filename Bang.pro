@@ -78,12 +78,15 @@ EDITOR {
     DEFINES += BANG_EDITOR
     RESOURCES += EngineAssets/qdarkstyle/style.qrc
     RESOURCES += EngineAssets/QtResources.qrc
-    OBJECTS_DIR = bin/objEditor/
     TARGET = bin/Bang
+    DEBUG_MODE { OBJECTS_DIR = bin/objEditorDebug/ }
+    RELEASE_MODE { OBJECTS_DIR = bin/objEditorRelease/ }
 }
+
 GAME {
-    OBJECTS_DIR = bin/objGame/
     TARGET = bin/Game.exe
+    DEBUG_MODE { OBJECTS_DIR = bin/objGameDebug/ }
+    RELEASE_MODE { OBJECTS_DIR = bin/objGameRelease/ }
 }
 ###################################################
 
