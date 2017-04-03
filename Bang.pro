@@ -57,9 +57,9 @@ RELEASE_MODE {
     OPTIMIZATION_OPT = -O3 -Wl,-O3
 }
 #OTHER_OPTS = -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter \
-             #-Wunused-variable -Wno-sign-compare -fPIC
+             #-Wunused-variable -Wswitch -Wno-sign-compare -fPIC
 OTHER_OPTS = -Wall --std=c++11 -Wl,--export-dynamic -Wno-unused-parameter \
-             -Wno-sign-compare -fPIC
+             -Wno-sign-compare -Wswitch -fPIC
 QMAKE_CFLAGS           -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
 QMAKE_CFLAGS_DEBUG     -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
 QMAKE_CFLAGS_RELEASE   -= -O0 -O1 -O2 -O3 -Wl,-O0 -Wl,-O1 -Wl,-O2 -Wl,-O3 -g
@@ -219,7 +219,6 @@ HEADERS +=                                                          \
     src/Persistence/XML/XMLNode.h                                   \
     src/Persistence/XML/XMLParser.h                                 \
     src/Persistence/XML/XMLProperty.h                               \
-    src/Persistence/IO/stb_image.h                                  \
     src/Persistence/Files/TextFile.h \
     src/View/Windows/IWindow.h \
     src/View/Windows/GameWindow.h \
@@ -233,7 +232,6 @@ HEADERS +=                                                          \
     src/Domain/Graphics/RenderTexture.h \
     src/Domain/Engine/HideFlags.h \
     src/Domain/Engine/Object.h \
-    src/Persistence/IO/stb_image_write.h \
     src/Domain/Engine/Others/GraphicPipelineDebugger.h \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.h \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_DeferredLights.h \
@@ -258,7 +256,8 @@ HEADERS +=                                                          \
     src/Domain/Engine/GraphicPipeline/TextureUnitManager.h \
     src/Domain/Engine/DataStructures/UMap.h \
     src/View/Shortcut.h \
-    src/View/IconManager.h
+    src/View/IconManager.h \
+    src/Domain/Engine/Image.h
 
 EDITOR {
 HEADERS += \
@@ -434,7 +433,6 @@ SOURCES += \
     src/Persistence/Behaviours/BehaviourManager.cpp \
     src/Persistence/Behaviours/BehaviourRefresherTimer.cpp \
     src/Persistence/XML/XMLAttribute.cpp \
-    src/Persistence/IO/stb_image.cpp \
     src/Persistence/XML/XMLNode.cpp \
     src/Persistence/XML/XMLParser.cpp \
     src/Persistence/XML/XMLProperty.cpp \
@@ -473,7 +471,8 @@ SOURCES += \
     src/Domain/Engine/GraphicPipeline/TextureUnitManager.cpp \
     src/Domain/Engine/DataStructures/UMap.cpp \
     src/View/Shortcut.cpp \
-    src/View/IconManager.cpp
+    src/View/IconManager.cpp \
+    src/Domain/Engine/Image.cpp
 
 EDITOR {
     SOURCES += \

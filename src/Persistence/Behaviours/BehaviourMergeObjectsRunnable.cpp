@@ -29,7 +29,7 @@ void BehaviourMergeObjectsRunnable::Merge()
     String version = "";
     if (!m_forGame)
     {
-        std::to_string(Time::GetNow());
+        version = String::ToString( Time::GetNow() );
     }
     else
     {

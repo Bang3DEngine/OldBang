@@ -1,11 +1,9 @@
 #include "Bang/Texture2D.h"
 
-#include "Bang/stb_image.h"
-
+#include "Bang/IO.h"
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/FileReader.h"
-#include "Bang/IO.h"
 
 Texture2D::Texture2D() : Texture(Target::Texture2D)
 {
@@ -37,13 +35,15 @@ void Texture2D::LoadFromImage(const String &imageFilepath)
     ASSERT(!imageFilepath.Empty());
 
     m_imageFilepath = imageFilepath;
-    unsigned char *loadedData = FileReader::ReadImage(m_imageFilepath,
-                                                      &m_width, &m_height);
-    if (loadedData)
+    Image img = Image::FromFile(m_imageFilepath);
+    if (img.GetData())
     {
+        m_width  = img.GetWidth();
+        m_height = img.GetHeight();
+
+        img.ConvertToRGBA8();
         SetFormat(Texture::Format::RGBA_Byte8);
-        Fill(loadedData, m_width, m_height, Texture::Format::RGBA_Byte8);
-        stbi_image_free(loadedData);
+        Fill(img.GetData(), m_width, m_height, Texture::Format::RGBA_Byte8);
     }
 }
 
@@ -61,7 +61,7 @@ void Texture2D::Resize(int width, int height)
     CreateEmpty(width, height);
 }
 
-void Texture2D::Fill(unsigned char *newData, int width, int height,
+void Texture2D::Fill(const unsigned char *newData, int width, int height,
                      int sizeOfNewData, bool genMipMaps)
 {
     if (m_data) { delete[] m_data; }
@@ -84,7 +84,7 @@ void Texture2D::Fill(unsigned char *newData, int width, int height,
     UnBind();
 }
 
-void Texture2D::Fill(unsigned char *newData, int width, int height,
+void Texture2D::Fill(const unsigned char *newData, int width, int height,
                      Texture::Format imageFormat,
                      bool genMipMaps)
 {

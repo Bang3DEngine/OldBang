@@ -19,9 +19,6 @@ class GameObject;
 class FileReader
 {
 public:
-    static unsigned char* ReadImage(const String& filepath,
-                                    int *width, int *height);
-
     static void GetOBJFormat(const String& filepath, bool *hasUvs,
                              bool *hasNormals, bool *isTriangles);
     static int GetOBJNumFaces(const String& filepath);

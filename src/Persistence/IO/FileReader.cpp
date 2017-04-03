@@ -1,26 +1,10 @@
 #include "Bang/FileReader.h"
 
-#include "Bang/stb_image.h"
-
+#include "Bang/IO.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
-#include "Bang/IO.h"
-
-unsigned char* FileReader::ReadImage(const String& filepath,
-                                     int *width, int *height)
-{
-    int comps;
-    unsigned char* data = stbi_load(filepath.ToCString(),
-                                    width, height, &comps, 4);
-    if (!data)
-    {
-        Debug_Error("Error loading the image '" << filepath <<
-                     "', couldn't open/read the file.");
-    }
-    return data;
-}
 
 void FileReader::GetOBJFormat(const String& filepath, bool *hasUvs,
                               bool *hasNormals, bool *isTriangles)
@@ -46,7 +30,7 @@ void FileReader::GetOBJFormat(const String& filepath, bool *hasUvs,
                 {
                     *hasUvs     = !vertexIndices[1].Empty();
                     *hasNormals = !vertexIndices[2].Empty();
-                    *isTriangles = faceVertices.Size() == 1 + 3;  // "f" + "//" + "//" + "//"
+                    *isTriangles = faceVertices.Size() == 1 + 3; // f + ...
                     return;
                 }
             }

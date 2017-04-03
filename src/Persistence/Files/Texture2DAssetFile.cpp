@@ -1,7 +1,5 @@
 #include "Bang/Texture2DAssetFile.h"
 
-#include "Bang/stb_image.h"
-
 #include "Bang/IO.h"
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"

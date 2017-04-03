@@ -117,6 +117,8 @@ public:
     static float ToFloat(const String &str, bool *ok = nullptr);
 
     static String ToString(int i);
+    static String ToString(long v);
+    static String ToString(long long unsigned v);
     static String ToString(float f, int decimalPlaces = -1);
     static String ToString(double f, int decimalPlaces = -1);
     static String ToString(const void *v);

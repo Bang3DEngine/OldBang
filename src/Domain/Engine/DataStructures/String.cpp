@@ -455,6 +455,14 @@ String String::ToString(int i)
 {
     return String(std::to_string(i));
 }
+String String::ToString(long v)
+{
+    return String(std::to_string(v));
+}
+String String::ToString(long long unsigned v)
+{
+    return String(std::to_string(v));
+}
 
 String String::ToString(float f, int decimalPlaces)
 {

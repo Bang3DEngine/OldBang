@@ -204,7 +204,7 @@ GLint ShaderProgram::GetUniformLocation(const String &name) const
     if (it != m_nameToLocationCache.End()) { return it->second; }
 
     const GLuint location = glGetUniformLocation(m_idGL, name.ToCString());
-    if (location >= 0) { m_nameToLocationCache[name] = location; }
+    m_nameToLocationCache[name] = location;
     return location;
 }
 

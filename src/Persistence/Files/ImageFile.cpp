@@ -1,8 +1,7 @@
 #include "Bang/ImageFile.h"
 
-#include "Bang/stb_image.h"
-
 #include "Bang/Debug.h"
+#include "Bang/Image.h"
 #include "Bang/IconManager.h"
 
 #ifdef BANG_EDITOR
@@ -12,7 +11,10 @@
 ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    stbi_info(m_path.ToCString(), &m_width, &m_height, &m_numComponents);
+    Image img = Image::FromFile(GetAbsolutePath().ToQString() );
+    m_width  = img.GetWidth();
+    m_height = img.GetHeight();
+    m_numComponents = img.GetBytesPerTexel();
 }
 
 const QPixmap& ImageFile::GetIcon() const

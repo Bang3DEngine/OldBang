@@ -1,8 +1,5 @@
 #include "Bang/Framebuffer.h"
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "Bang/stb_image_write.h"
-
 #include "Bang/GL.h"
 #include "Bang/Math.h"
 #include "Bang/Debug.h"
@@ -170,6 +167,7 @@ void Framebuffer::UnBind() const
     GL::UnBind(this);
 }
 
+// TODO: not saving the file
 void Framebuffer::SaveToImage(AttachmentId attId, const String &filepath,
                               bool invertY) const
 {
@@ -201,7 +199,7 @@ void Framebuffer::SaveToImage(AttachmentId attId, const String &filepath,
             }
             delete[] pixelsCpy;
         }
-        stbi_write_bmp(filepath.ToCString(), m_width, m_height, 4, pixels);
+        // TODO: Save file with QImage
         delete[] pixels;
     }
     UnBind();

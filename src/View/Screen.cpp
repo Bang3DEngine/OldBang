@@ -58,7 +58,7 @@ void Screen::initializeGL()
 
 void Screen::paintGL()
 {
-    // Render();
+    Render();
 }
 
 void Screen::Render()
