@@ -1,19 +1,12 @@
 # C++ objects and libs
-
 *.trace
 tmp/*
-*.vcxproj.filters
-*.vcxproj.user
-*.db
-*.opendb
-ui_*
-*.swp
-.vs/*
-src/Qt_MOCs/*
 *.exe
-*.slo
-*.lo
+**.slo
+**.lo
+*.obj
 *.o
+*.obj
 *.a
 *.la
 *.lai
@@ -26,6 +19,18 @@ callgrind.*
 nohup.out
 bin/*
 
+# Visual Studio
+DependenciesProjects/freealut-1.1.0/Alut/.vs/*
+DependenciesProjects/freealut-1.1.0/Alut/x64
+DependenciesProjects/freealut-1.1.0/Alut/Alut/x64
+*.vcxproj.filters
+*.vcxproj.user
+*.db
+*.opendb
+*.swp
+.vs/*
+
+
 # CMake
 *CMakeCache.txt
 *CMakeFiles/*
@@ -33,7 +38,8 @@ objs*/*
 build/*
 
 # Qt-es
-
+ui_*
+src/Qt_MOCs/*
 /.qmake.cache
 /.qmake.stash
 *.pro.user
@@ -53,10 +59,12 @@ Makefile*
 
 *.autosave
 
-#QtCtreator Qml
+# QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
 
-!include/freetype/*.h
 
+# Freetype
+!include/freetype/*.h
+include/freetype/ftcache.h
 

@@ -53,13 +53,12 @@ void Screen::initializeGL()
     {
         m_gPipeline = new GraphicPipeline(this);
         firstInitializeGL = false;
-        makeCurrent();
     }
 }
 
 void Screen::paintGL()
 {
-    Render();
+    // Render();
 }
 
 void Screen::Render()
@@ -72,7 +71,7 @@ void Screen::Render()
     else
     {
         GL::ClearDepthBuffer();
-        GL::ClearColorBuffer(Color::Purple);
+        GL::ClearColorBuffer(Color::Pink);
     }
 }
 

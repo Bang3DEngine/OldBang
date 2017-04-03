@@ -112,7 +112,7 @@ Application *Application::GetInstance()
     return Object::SCast<Application>(
                 EditorWindow::GetInstance()->GetApplication());
     #else
-    ASSERT(GameWindow::GetInstance(), "", return nullptr);
+    if (!GameWindow::GetInstance()) { return nullptr; }
     return Object::SCast<Application>(
                 GameWindow::GetInstance()->GetApplication());
     #endif
