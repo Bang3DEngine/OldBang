@@ -18,8 +18,7 @@ const QPixmap &MeshAssetFileInspectable::GetIcon() const
 void MeshAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
     m_meshAssetFile.SetMeshFilepath( xmlInfo.GetFilepath("MeshFilepath") );
-    AssetsManager::OnAssetFileChanged<Mesh>(m_meshAssetFile.GetAbsolutePath(),
-                                            xmlInfo);
+    AssetsManager::UpdateAsset(m_meshAssetFile.GetAbsolutePath(), xmlInfo);
 }
 
 void MeshAssetFileInspectable::Write(XMLNode *xmlInfo) const

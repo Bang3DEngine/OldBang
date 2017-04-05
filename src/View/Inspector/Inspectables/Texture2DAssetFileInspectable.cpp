@@ -26,8 +26,7 @@ const QPixmap &Texture2DAssetFileInspectable::GetIcon() const
 void Texture2DAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
     // Update live instances currently being used
-    AssetsManager::OnAssetFileChanged<Texture2D>(m_fileTex.GetAbsolutePath(),
-                                                 xmlInfo);
+    AssetsManager::UpdateAsset(m_fileTex.GetAbsolutePath(), xmlInfo);
     m_xmlInfo = xmlInfo;
 }
 

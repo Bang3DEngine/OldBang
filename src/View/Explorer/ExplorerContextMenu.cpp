@@ -101,8 +101,7 @@ Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
 
     Texture2D *tex = mb->OnCreateTexture2D(newTexName);
     tex->LoadFromImage(f.GetAbsolutePath());
-    AssetsManager::OnAssetFileChanged<Texture2D>(tex->GetFilepath(),
-                                                 tex->GetXMLInfo());
+    AssetsManager::UpdateAsset(tex->GetFilepath(), tex->GetXMLInfo());
     Inspector::GetInstance()->SetInspectable(tex, newTexName);
 
     return tex;
@@ -135,8 +134,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
 
     Material *mat = mb->OnCreateMaterial(newMatName);
     mat->SetTexture(fromTexture);
-    AssetsManager::OnAssetFileChanged<Material>(mat->GetFilepath(),
-                                                mat->GetXMLInfo());
+    AssetsManager::UpdateAsset(mat->GetFilepath(), mat->GetXMLInfo());
     Inspector::GetInstance()->SetInspectable(mat, newMatName);
     return mat;
 }

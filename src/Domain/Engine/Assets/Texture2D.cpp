@@ -36,14 +36,13 @@ void Texture2D::LoadFromImage(const String &imageFilepath)
 
     m_imageFilepath = imageFilepath;
     Image img = Image::FromFile(m_imageFilepath);
-    if (img.GetData())
+    if (img.GetData8())
     {
         m_width  = img.GetWidth();
         m_height = img.GetHeight();
 
-        img.ConvertToRGBA8();
         SetFormat(Texture::Format::RGBA_Byte8);
-        Fill(img.GetData(), m_width, m_height, Texture::Format::RGBA_Byte8);
+        Fill(img.GetData8(), m_width, m_height, Texture::Format::RGBA_Byte8);
     }
 }
 

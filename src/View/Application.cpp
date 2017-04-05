@@ -30,14 +30,16 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::InitManagers()
 {
-    m_audioManager = new AudioManager();
-    m_sceneManager = new SceneManager();
-    m_assetsManager = new AssetsManager();
+    m_fileTracker      = new FileTracker();
+    m_audioManager     = new AudioManager();
+    m_sceneManager     = new SceneManager();
+    m_assetsManager    = new AssetsManager();
     m_behaviourManager = new BehaviourManager();
 }
 
 Application::~Application()
 {
+    delete m_fileTracker;
     delete m_audioManager;
     delete m_sceneManager;
     delete m_assetsManager;

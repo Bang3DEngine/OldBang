@@ -28,8 +28,7 @@ const QPixmap &MaterialAssetFileInspectable::GetIcon() const
 void MaterialAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
     // Update live instances currently being used
-    AssetsManager::OnAssetFileChanged<Material>(
-                m_materialAssetFile.GetAbsolutePath(), xmlInfo);
+    AssetsManager::UpdateAsset(m_materialAssetFile.GetAbsolutePath(), xmlInfo);
     m_xmlInfo = xmlInfo;
 }
 

@@ -39,7 +39,7 @@ void PrefabAssetFileInspectable::OnInspectorSlotChanged(
     XMLNode *xmlInfo = new XMLNode();
     m_prefabTempGameObject->Write(xmlInfo);
     Debug_Log("xmlInfo.ToString(): " << xmlInfo->ToString());
-    AssetsManager::OnAssetFileChanged<Prefab>(m_file.GetAbsolutePath(), *xmlInfo);
+    AssetsManager::UpdateAsset(m_file.GetAbsolutePath(), *xmlInfo);
     delete xmlInfo;
 }
 

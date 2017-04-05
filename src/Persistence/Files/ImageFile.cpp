@@ -14,7 +14,7 @@ ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
     Image img = Image::FromFile(GetAbsolutePath().ToQString() );
     m_width  = img.GetWidth();
     m_height = img.GetHeight();
-    m_numComponents = img.GetBytesPerTexel();
+    m_numComponents = 4;
 }
 
 const QPixmap& ImageFile::GetIcon() const

@@ -86,7 +86,7 @@ void Prefab::Read(const XMLNode &xmlInfo)
     {
         m_gameObjectXMLInfoContent = xmlInfo.ToString();
         #ifdef BANG_EDITOR
-        AssetsManager::OnAssetFileChanged<Prefab>(m_assetFilepath, xmlInfo);
+        AssetsManager::UpdateAsset(m_assetFilepath, xmlInfo);
         #endif
     }
 }

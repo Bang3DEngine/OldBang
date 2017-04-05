@@ -27,8 +27,8 @@ public:
     bool Contains(const Vector3 &point) const;
     bool CheckCollision(const Sphere &sphere) const;
     bool CheckCollision(const AABox &aabox,
-                        Vector3 *point,
-                        Vector3 *normal) const;
+                        Vector3 *point  = nullptr,
+                        Vector3 *normal = nullptr) const;
 
     /**
      * @brief Converts this sphere to a boundingSphere

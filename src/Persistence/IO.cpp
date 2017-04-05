@@ -133,39 +133,14 @@ String IO::ToAbsolute(const String &relPath,
 	if (relPath.Empty()) { return ""; }
 
     String result = "";
-    if (IO::IsAbsolute(relPath))
-    {
-        result = relPath;
-    }
-    else
-    {
-        String pDir = prependDirectory;
-        if (!pDir.Empty())
-        {
-            if (pDir[pDir.Length()-1] == '/')
-            {
-                pDir = pDir.SubString(1, pDir.Length()-1);
-            }
-        }
+    if (IO::IsAbsolute(relPath)) { result = relPath; }
+    else { result = prependDirectory + "/" + relPath; }
 
-        String rPath = relPath;
-        if (rPath[0] == '.' && rPath[1] == '/') // Something like "./Images/wololo"
-        {
-            return  pDir + "/" +
-                    relPath.substr(2, relPath.Length() - 1);
-        }
-
-        result = pDir + "/" + relPath;
-    }
-
-    // If we try to get canonical for non-existing filepath,
-    // then it returns empty string, we must handle this
     if (IO::Exists(result))
     {
-        result = QFileInfo(result.ToQString()).canonicalFilePath();
+        return QFileInfo(result.ToQString()).canonicalFilePath();
     }
-
-    return result.Replace("//", "/");
+    return result;
 }
 
 String IO::ToAbsolute(const String &relPath, bool isEngineFile)

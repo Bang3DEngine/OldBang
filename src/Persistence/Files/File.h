@@ -18,12 +18,6 @@ public:
 
     virtual ~File();
 
-    template<class T> // T must be an Asset class
-    bool IsAsset() const
-    {
-        return m_isFile && IsOfExtension( T::GetFileExtensionStatic() );
-    }
-
     bool IsAudioFile() const;
     bool IsAudioClipAsset() const;
 

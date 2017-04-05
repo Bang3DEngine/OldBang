@@ -18,7 +18,7 @@ public:
     /** For every id, it contains a pointer to the asset
       * created when the assets were loaded.
     **/
-    Map<String, Asset*> m_id_To_AssetPointer;
+    Map<String, Asset*> m_idToAssetPointer;
 
     AssetsManager();
     virtual ~AssetsManager();
@@ -28,23 +28,16 @@ public:
     /** This function prepares a relative path, to be searched by
      *   a loading function. Or to be saved to the AssetsManager cache.
     **/
-    static String FormatFilepath(const String &filepath,
-                                 bool isEngineFilepath);
+    static String FormatFilepath(const String &filepath, bool isEngineFilepath);
 
     template <class T>
     static T* GetAsset(const String &filepath, bool isEngineAsset)
     {
-        AssetsManager *am = AssetsManager::GetCurrent();
-        if (!AssetsManager::IsLoaded(filepath, isEngineAsset))
-        {
-            return nullptr;
-        }
-        else
-        {
-            String f = AssetsManager::FormatFilepath(filepath, isEngineAsset);
-            return Object::Cast<T>(am->m_id_To_AssetPointer[f]);
-        }
+        return Object::Cast<T>( GetAsset(filepath, isEngineAsset) );
     }
+
+    static Asset* GetAsset(const String &filepath, bool isEngineAsset);
+
 
     /** Reads a specific asset file (btex2d, bmesh, etc.)
       * from a filepath.
@@ -102,23 +95,10 @@ public:
     }
 
     #ifdef BANG_EDITOR
-    template <class T>
-    static void OnAssetFileChanged(const String &assetFilepath,
-                                   const XMLNode &xmlChangedInfo)
-    {
-        // Update live instances and rewrite the file
-        ASSERT(!assetFilepath.Empty());
-        if (AssetsManager::IsLoaded(assetFilepath, false))
-        {
-            Asset *asset = AssetsManager::GetAsset<T>(assetFilepath, false);
-            asset->Read(xmlChangedInfo);
-        }
-
-        if (IO::ExistsFile(assetFilepath))
-        {
-            IO::WriteToFile(assetFilepath, xmlChangedInfo.ToString());
-        }
-    }
+    static void UpdateAsset(const String &assetFilepath,
+                            const XMLNode &xmlChangedInfo);
+    static void InvalidateAsset(const String &assetFilepath);
+    static void ReloadAsset(const String &assetFilepath);
     #endif
 
     static void SaveAssetToMap(const String &filepath, Asset* asset,

@@ -27,7 +27,7 @@ void AudioClipAssetFileInspectable::Read(const XMLNode &xmlInfo)
         m_tmpAudioSource->SetAudioClip(audioClip);
     }
 
-    AssetsManager::OnAssetFileChanged<AudioClip>(audioClipFilepath, xmlInfo);
+    AssetsManager::UpdateAsset(audioClipFilepath, xmlInfo);
 }
 
 void AudioClipAssetFileInspectable::Write(XMLNode *xmlInfo) const

@@ -4,31 +4,29 @@
 #include <QImage>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Array.h"
 #include "Bang/String.h"
 
 class Image
 {
 public:
-    enum Format { RGB, RGBA, ARGB };
-
     Image();
 
-    void ConvertToRGBA8();
+    void SetPixel(int x, int y, const Color& color);
 
-    const unsigned char* GetData() const;
+    const unsigned char* GetData8() const;
+    const Color& GetPixel(int x, int y) const;
     unsigned int GetWidth() const;
     unsigned int GetHeight() const;
-    unsigned int GetBitsPerTexel() const;
-    unsigned int GetBytesPerTexel() const;
-    unsigned int GetBytesCount() const;
 
     static Image FromFile(const String &filepath);
     static Image FromQImage(const QImage &qImage);
 
-    Format GetFormat() const;
-
 private:
-    QImage m_image;
+    int m_width  = 0;
+    int m_height = 0;
+    Array<unsigned char> m_pixels8;
+    Array<Color> m_pixels;
 };
 
 #endif // IMAGE_H
