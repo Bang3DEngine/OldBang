@@ -62,9 +62,9 @@ public:
     const String& GetName() const;
     const List<Component*>& GetComponents() const;
 
+    static void Destroy(GameObject *gameObject);
+
     /**
-     * TODO: Change so this method returns a reference, putting
-     *       GameObjects into another list...
      * @brief GetChildren
      * @return
      */
@@ -161,7 +161,8 @@ public:
     List<T*> GetComponents() const
     {
         List<T*> comps_l;
-        for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
+        for (auto comp = m_components.Begin();
+             comp != m_components.End(); ++comp)
         {
             T *tp = Object::Cast<T>(*comp);
             if (tp) { comps_l.PushBack(tp); }

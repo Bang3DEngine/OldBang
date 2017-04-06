@@ -69,6 +69,7 @@ void EditorRectTransformAnchorGizmo::OnDrawGizmos(bool depthed, bool overlay)
 Vector2 EditorRectTransformAnchorGizmo::GetAnchorCenter() const
 {
     RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
+    if (!rtrans) { return Vector2::Zero; }
 
     Vector2 aMin = rtrans->GetAnchorMin();
     Vector2 aMax = rtrans->GetAnchorMax();
@@ -120,6 +121,8 @@ Quaternion EditorRectTransformAnchorGizmo::GetAnchorRotation() const
 void EditorRectTransformAnchorGizmo::ApplyDisplacementToAnchor(
         const Vector2 &mouseDisp)
 {
+    ASSERT(m_attachedRectTransform);
+
     Rect parentScreenRect = m_attachedRectTransform->GetParentScreenRect(true);
     Vector2 parentScreenSize( parentScreenRect.GetSize() );
     parentScreenSize.x = Math::Max(1.0f, parentScreenSize.x);

@@ -80,6 +80,11 @@ bool BehaviourManager::PrepareBehavioursLibrary(bool forGame, bool *stopFlag)
 
     // Now merge them
     bool error = !bm->m_status.AllBehavioursReady();
+
+    // Invalidating will force a new library with new name reload, and thus
+    // forcing static reinitialization, instead of them keeping latest lib
+    // values, which is exactly what we want (static reinitialization)
+    bm->m_status.InvalidateBehavioursLibraryReady();
     if (!error && !bm->m_status.IsBehavioursLibraryReady())
     {
         bool mergingStarted = false;

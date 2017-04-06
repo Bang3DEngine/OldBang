@@ -76,8 +76,6 @@ void GameObject::CloneInto(ICloneable *clone) const
 
 GameObject::~GameObject()
 {
-    _OnDestroy();
-
     while (!m_children.Empty())
     {
         GameObject *child = m_children.Front();
@@ -187,6 +185,11 @@ const String& GameObject::GetName() const
 const List<Component *> &GameObject::GetComponents() const
 {
     return m_components;
+}
+
+void GameObject::Destroy(GameObject *gameObject)
+{
+    SceneManager::GetActiveScene()->Destroy(gameObject);
 }
 
 const List<GameObject*>& GameObject::GetChildren() const
@@ -684,8 +687,7 @@ void GameObject::_OnUpdate()
 
 void GameObject::_OnDestroy()
 {
-    //No need to propagate _OnDestroy to children, just on components,
-    //since the "delete child" itself propagates it (look at the destructor)
+    PROPAGATE_EVENT(_OnDestroy(), m_children);
     PROPAGATE_EVENT(_OnDestroy(), m_components);
 
     OnDestroy();

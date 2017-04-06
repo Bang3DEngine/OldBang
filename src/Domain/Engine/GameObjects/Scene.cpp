@@ -49,7 +49,6 @@ void Scene::_OnResize(int newWidth, int newHeight)
         rt->OnParentSizeChanged();
     }
 }
-
 const String Scene::GetFileExtensionStatic()
 {
     return "bscene";
@@ -57,7 +56,6 @@ const String Scene::GetFileExtensionStatic()
 
 Scene::~Scene()
 {
-    _OnDestroy();
     delete m_defaultCamera;
 }
 
@@ -147,6 +145,27 @@ Scene *Scene::GetDefaultScene()
     return scene;
 }
 
+void Scene::Destroy(GameObject *gameObject)
+{
+    m_gameObjectsToBeDestroyed.push(gameObject);
+}
+
+void Scene::DestroyImmediate(GameObject *gameObject)
+{
+    gameObject->_OnDestroy();
+    delete gameObject;
+}
+
+void Scene::DestroyQueuedGameObjects()
+{
+    while (!m_gameObjectsToBeDestroyed.empty())
+    {
+        GameObject *go = m_gameObjectsToBeDestroyed.front();
+        DestroyImmediate(go);
+        m_gameObjectsToBeDestroyed.pop();
+    }
+}
+
 void Scene::Read(const XMLNode &xmlInfo)
 {
     GameObject::Read(xmlInfo);
@@ -171,18 +190,14 @@ void Scene::PostRead(const XMLNode &xmlInfo)
 {
     GameObject::PostRead(xmlInfo);
 
-    // In the Editor Scene we'll use the EditorCamera, so skip this
-    if (!HasHideFlag(HideFlags::HideInGame))
+    String camId = xmlInfo.GetString("Camera");
+    if (!camId.Empty())
     {
-        String camId = xmlInfo.GetString("Camera");
-        if (!camId.Empty())
+        const SerializableObject *f = XMLParser::GetPointerFromId(camId);
+        const Camera *cam = Object::ConstCast<Camera>(f);
+        if (cam)
         {
-            const SerializableObject *f = XMLParser::GetPointerFromId(camId);
-            const Camera *cam = Object::ConstCast<Camera>(f);
-            if (cam)
-            {
-                SetCamera(cam);
-            }
+            SetCamera(cam);
         }
     }
 }

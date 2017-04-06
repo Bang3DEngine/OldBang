@@ -153,7 +153,7 @@ HEADERS +=                                                          \
     src/Bang.h                                                      \
     src/Persistence/AssetsManager.h                                 \
     src/Domain/Engine/Others/Input.h                                \
-    src/Persistence/IO.h                                   \
+    src/Persistence/IO.h                                            \
     src/Domain/Engine/Components/LineRenderer.h                     \
     src/Domain/Engine/Components/Renderer.h                         \
     src/Domain/Engine/Physics/Vector3.h                             \
@@ -257,8 +257,7 @@ HEADERS +=                                                          \
     src/Domain/Engine/DataStructures/UMap.h \
     src/View/Shortcut.h \
     src/View/IconManager.h \
-    src/Domain/Engine/Image.h \
-    src/Persistence/FileTracker.h
+    src/Domain/Engine/Image.h
 
 EDITOR {
 HEADERS += \
@@ -341,7 +340,8 @@ HEADERS += \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformGizmo.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
-    src/View/EditorGameObject/EditorGizmo.h
+    src/View/EditorGameObject/EditorGizmo.h \
+    src/Persistence/FileTracker.h
 }
 GAME {
     HEADERS +=
@@ -473,8 +473,7 @@ SOURCES += \
     src/Domain/Engine/DataStructures/UMap.cpp \
     src/View/Shortcut.cpp \
     src/View/IconManager.cpp \
-    src/Domain/Engine/Image.cpp \
-    src/Persistence/FileTracker.cpp
+    src/Domain/Engine/Image.cpp
 
 EDITOR {
     SOURCES += \
@@ -557,7 +556,8 @@ EDITOR {
         src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.cpp \
         src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
         src/View/EditorGameObject/EditorGizmo.cpp \
-        src/View/EditorGameObject/EditorAxisPlane.cpp
+        src/View/EditorGameObject/EditorAxisPlane.cpp \
+        src/Persistence/FileTracker.cpp
 }
 GAME {
     #SOURCES +=

@@ -84,6 +84,7 @@ private:
     void OnBehaviourFailedCompiling(const String &behaviourPath,
                                     const String &errorMessage);
     void OnBehavioursLibraryReady();
+    void InvalidateBehavioursLibraryReady();
 
     void ClearFails(const String &behaviourPath);
 

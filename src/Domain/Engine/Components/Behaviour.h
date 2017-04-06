@@ -46,10 +46,9 @@ public:
 
     String GetBehaviourName() const;
 
-/**
- * These variables must be copied from BehaviourHolder
- */
-protected:
+    /**
+     * These variables must be copied from BehaviourHolder
+     */
     GameObject* m_gameObject = nullptr;
     GameObject* m_parent = nullptr;
     Transform* m_transform = nullptr;

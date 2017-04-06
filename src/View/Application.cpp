@@ -30,7 +30,10 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv)
 
 void Application::InitManagers()
 {
+    #ifdef BANG_EDITOR
     m_fileTracker      = new FileTracker();
+    #endif
+
     m_audioManager     = new AudioManager();
     m_sceneManager     = new SceneManager();
     m_assetsManager    = new AssetsManager();
@@ -39,7 +42,10 @@ void Application::InitManagers()
 
 Application::~Application()
 {
+    #ifdef BANG_EDITOR
     delete m_fileTracker;
+    #endif
+
     delete m_audioManager;
     delete m_sceneManager;
     delete m_assetsManager;
@@ -71,30 +77,24 @@ void Application::MainLoop()
         // Process mouse and key events, so the Input is available in OnUpdate
         // as accurate as possible.
         // Lost events in between Update and Render will be delayed by Input.
-        //processEvents();
-        c.MarkEvent("Input::ProcessEnqueuedEvents()");
         Input::GetInstance()->ProcessEnqueuedEvents();
 
         SceneManager::TryToLoadQueuedScene();
         Scene *activeScene = SceneManager::GetActiveScene();
         if (activeScene)
         {
-            c.MarkEvent("activeScene->_OnUpdate");
             activeScene->_OnUpdate();
         }
+        activeScene->DestroyQueuedGameObjects();
 
         // Render screen
-        c.MarkEvent("Render()");
         Screen::GetInstance()->Render();
-        c.MarkEvent("swapBuffers()");
 		Screen::GetInstance()->makeCurrent();
         Screen::GetInstance()->swapBuffers();
 
-        c.MarkEvent("Input::OnFrameFinished()");
         Input::GetInstance()->OnFrameFinished();
 
         #ifdef BANG_EDITOR
-        c.MarkEvent("Console::ProcessMessagesQueue()");
         Console::GetInstance()->ProcessMessagesQueue();
         #endif
 

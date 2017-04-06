@@ -9,7 +9,10 @@
 
 #include "Bang/Map.h"
 #include "Bang/Array.h"
+
+#ifdef BANG_EDITOR
 #include "Bang/FileTracker.h"
+#endif
 
 class Scene;
 class AudioManager;
@@ -35,7 +38,10 @@ public:
     bool notify(QObject *receiver, QEvent *e) override;
 
 private:
+    #ifdef BANG_EDITOR
     FileTracker *m_fileTracker           = nullptr;
+    #endif
+
     AudioManager *m_audioManager         = nullptr;
     SceneManager *m_sceneManager         = nullptr;
     AssetsManager *m_assetsManager       = nullptr;

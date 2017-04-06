@@ -108,3 +108,9 @@ EditorGizmosGameObject *EditorScene::GetGizmosGameObject() const
 {
     return m_gizmosGameObject;
 }
+
+// Dont erase this override, this bypasses stuff Scene does
+void EditorScene::PostRead(const XMLNode &xmlInfo)
+{
+    GameObject::PostRead(xmlInfo);
+}

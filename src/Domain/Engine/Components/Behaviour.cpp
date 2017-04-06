@@ -47,7 +47,7 @@ String Behaviour::s_behaviourHeaderTemplate =
 #ifndef CLASS_NAME_H \n\
 #define CLASS_NAME_H \n\
 \n\
-#include \"Behaviour.h\" \n\
+#include \"Bang/Behaviour.h\" \n\
 \n\
 // Here go your includes \n\
 \n\

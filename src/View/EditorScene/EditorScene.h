@@ -28,6 +28,8 @@ public:
 
     EditorGizmosGameObject *GetGizmosGameObject() const;
 
+    virtual void PostRead(const XMLNode &xmlInfo) override;
+
 private:
     EditorGizmosGameObject *m_gizmosGameObject = nullptr;
     EditorDebugGameObject *m_debugGameObject = nullptr;

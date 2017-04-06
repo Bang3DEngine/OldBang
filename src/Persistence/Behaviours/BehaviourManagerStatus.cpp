@@ -123,6 +123,11 @@ void BehaviourManagerStatus::OnBehavioursLibraryReady()
     m_behavioursLibraryReady = true;
 }
 
+void BehaviourManagerStatus::InvalidateBehavioursLibraryReady()
+{
+    m_behavioursLibraryReady = false;
+}
+
 void BehaviourManagerStatus::ClearFails(const String &behaviourPath)
 {
     BehaviourId bid(behaviourPath);

@@ -1,8 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Bang/List.h"
+#include <queue>
 
+#include "Bang/List.h"
 #include "Bang/Color.h"
 #include "Bang/GameObject.h"
 
@@ -26,6 +27,9 @@ public:
     static Scene *GetActiveScene();
     static Scene *GetDefaultScene();
 
+    void Destroy(GameObject *gameObject);
+    void DestroyImmediate(GameObject *gameObject);
+
     virtual Camera *GetCamera() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
@@ -33,6 +37,7 @@ public:
     virtual void PostRead(const XMLNode &xmlInfo) override;
 
 protected:
+    std::queue<GameObject*> m_gameObjectsToBeDestroyed;
     GameObject *m_defaultCamera = nullptr;
 
     //Framebuffer for positions, normals, uvs and diffuse
@@ -41,6 +46,8 @@ protected:
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
     virtual void _OnResize (int newWidth, int newHeight);
+
+    void DestroyQueuedGameObjects();
 
     friend class Screen;
     friend class Toolbar;

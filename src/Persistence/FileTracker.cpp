@@ -12,18 +12,25 @@
 
 FileTracker::FileTracker()
 {
-    m_refreshTimer.start(3000);
+    m_refreshTimer.setInterval(c_refreshTime);
+    m_refreshTimer.moveToThread(&m_refreshThread);
     QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
-                     this, SLOT(Refresh()));
+                     this, SLOT(Refresh()), Qt::DirectConnection);
+    m_refreshTimer.connect(&m_refreshThread, SIGNAL(started()), SLOT(start()));
+    m_refreshThread.start();
+
+    QObject::connect(this, SIGNAL(ChangedFilesRefreshed()),
+                     this, SLOT(ReloadChangedFiles()));
 }
 
 void FileTracker::Refresh()
 {
-    EpochTime timeBeforeRefreshing = QDateTime::currentMSecsSinceEpoch();
+    m_timeBeforeRefreshing = QDateTime::currentMSecsSinceEpoch();
 
     List <String> allFiles = IO::GetFiles(IO::GetProjectAssetsRootAbs(), true);
 
     // Refresh files modification date and dependencies
+    bool someFileHasChanged = false;
     for (const String& absFilepath : allFiles)
     {
         bool isNewFile = !m_fileChangeTimes.ContainsKey(absFilepath);
@@ -31,20 +38,34 @@ void FileTracker::Refresh()
         RefreshFileModificationDate(absFilepath);
         if (isNewFile || HasChanged(absFilepath))
         {
+            someFileHasChanged = true;
             RefreshFileDependencies(absFilepath);
         }
     }
 
-    // Check if some file has changed, and if so, notify the engine properly
-    // Do this twice, to avoid cases in which file dependencies update after
-    ReloadChangedFiles(allFiles);
-    ReloadChangedFiles(allFiles);
+    if (someFileHasChanged)
+    {
+        emit ChangedFilesRefreshed(); // ReloadChangedFiles()
+    }
+}
+
+void FileTracker::ReloadChangedFiles()
+{
+    List <String> allFiles = IO::GetFiles(IO::GetProjectAssetsRootAbs(), true);
+    for (const String& absFilepath : allFiles)
+    {
+        File file(absFilepath); // Treat file in case it has changed
+        if (file.IsAsset() && HasChanged(absFilepath))
+        {
+            AssetsManager::ReloadAsset(absFilepath);
+        }
+    }
 
     // Mark them as seen later, not before, because we need to be aware of
     // changed files through the whole refresh process above, so no mark there.
     for (const String& absFilepath : allFiles)
     {
-        m_fileSeenTimes.Set(absFilepath, timeBeforeRefreshing);
+        m_fileSeenTimes.Set(absFilepath, m_timeBeforeRefreshing);
     }
 }
 
@@ -97,19 +118,6 @@ void FileTracker::RefreshFileDependencies(const String &absFilepath)
     }
 }
 
-void FileTracker::ReloadChangedFiles(const List<String>& allFiles) const
-{
-    for (const String& absFilepath : allFiles)
-    {
-        File file(absFilepath); // Treat file in case it has changed
-        if (file.IsAsset() && HasChanged(absFilepath))
-        {
-          Debug_Log("Reloading asset: " << absFilepath);
-          AssetsManager::ReloadAsset(absFilepath);
-        }
-    }
-}
-
 bool FileTracker::HasChanged(const String &absFilepath) const
 {
     Set<String> alreadyCheckedFiles;
@@ -133,6 +141,5 @@ bool FileTracker::HasChanged(const String& absFilepath,
 
     EpochTime changedTime = m_fileChangeTimes.Get(absFilepath);
     EpochTime seenTime    = m_fileSeenTimes.Get(absFilepath);
-    if (changedTime > seenTime) { Debug_Log("HasChanged: " << absFilepath); }
     return changedTime > seenTime;
 }
