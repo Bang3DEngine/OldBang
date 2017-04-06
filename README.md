@@ -33,6 +33,7 @@ In order to compile Bang you will need:
   - Qt5 development libraries (**qt5-default** in Ubuntu).
   - Freetype development libraries (**libfreetype6-dev** in Ubuntu).
   - OpenAL and ALUT development libraries. (**libopenal-dev** & **libalut-dev** in Ubuntu).
+  - Assimp to load 3D meshes. (**libassimp-dev** in Ubuntu).
 
 Recommended:  
   - QtCreator to edit the scripts with auto-complete. The editor uses it as the main script editor. (**qtcreator** in Ubuntu).
@@ -40,5 +41,5 @@ Recommended:
 # Install Dependencies in Ubuntu
 To install the needed dependencies in Ubuntu try the following:
 ``` Bash
-sudo apt-get install libglew-dev qt5-default libfreetype6-dev libopenal-dev libalut-dev qtcreator
+sudo apt-get install libglew-dev qt5-default libfreetype6-dev libopenal-dev libalut-dev libassimp-dev qtcreator
 ```
