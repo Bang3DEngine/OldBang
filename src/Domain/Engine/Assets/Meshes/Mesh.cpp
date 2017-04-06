@@ -51,9 +51,7 @@ void Mesh::LoadFromFile(const String &filepath)
     m_positions.Clear();
     m_normals.Clear();
     m_uvs.Clear();
-    if ( FileReader::ReadOBJ(filepath,
-                             &m_positions, &m_normals, &m_uvs,
-                             &m_trisModel))
+    if ( FileReader::ReadMesh(filepath, &m_positions, &m_normals, &m_uvs))
     {
         LoadPositions(m_positions);
         LoadNormals(m_normals);
@@ -168,7 +166,7 @@ int Mesh::GetVertexCount() const
 
 bool Mesh::IsATrianglesModel() const
 {
-    return m_trisModel;
+    return true;
 }
 
 const AABox &Mesh::GetAABBox() const

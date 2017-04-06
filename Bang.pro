@@ -115,6 +115,7 @@ LIBS += \
     -lGLU             \
     -ldl              \ # To load libraries and stuff
     -lalut -lopenal   \ # Alut and OpenAL
+    -lassimp          \
     -lfreetype
 ########################################
 

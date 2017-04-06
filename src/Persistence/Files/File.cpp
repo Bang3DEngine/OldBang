@@ -87,7 +87,8 @@ bool File::IsMeshAsset() const
 
 bool File::IsMeshFile() const
 {
-    return  m_isFile && IsOfExtension("obj");
+    return  m_isFile &&
+            IsOfExtension("obj fbx dae 3ds ply stl ase blend md2 md3 ");
 }
 
 bool File::IsMaterialAsset() const
@@ -129,9 +130,9 @@ bool File::IsOfExtension(const String &extensions) const
 {
     // We receive something like "jpg png bmp obj"
     Array<String> extensionsList = extensions.Split(' ', true);
-    for (String ext : extensionsList)
+    for (const String& ext : extensionsList)
     {
-        if (ext == GetExtension())
+        if ( ext.EqualsNoCase(GetExtension()) )
         {
             return true;
         }

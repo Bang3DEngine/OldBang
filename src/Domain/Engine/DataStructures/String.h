@@ -96,6 +96,7 @@ public:
     String AddInFrontOfWords(String particle) const;
 
     long Length() const;
+    bool EqualsNoCase(const String &str) const;
     bool Empty() const;
     bool Contains(const String& str, bool caseSensitive = true) const;
     bool BeginsWith(const String& str) const;

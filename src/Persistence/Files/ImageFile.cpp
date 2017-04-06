@@ -11,9 +11,9 @@
 ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
-    Image img = Image::FromFile(GetAbsolutePath().ToQString() );
-    m_width  = img.GetWidth();
-    m_height = img.GetHeight();
+    QImage img = IconManager::LoadImage(GetAbsolutePath().ToQString());
+    m_width  = img.width();
+    m_height = img.height();
     m_numComponents = 4;
 }
 

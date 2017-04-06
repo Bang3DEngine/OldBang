@@ -390,6 +390,11 @@ long String::Length() const
     return length();
 }
 
+bool String::EqualsNoCase(const String &str) const
+{
+    return Contains(str, false) && (Length() == str.Length());
+}
+
 bool String::Empty() const
 {
     return Length() == 0;

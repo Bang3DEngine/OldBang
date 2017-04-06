@@ -2,6 +2,7 @@
 
 #include <QFileInfo>
 #include <QDateTime>
+#include "Bang/WinUndef.h"
 
 #include "Bang/IO.h"
 #include "Bang/File.h"

@@ -1,200 +1,88 @@
 #include "Bang/FileReader.h"
 
+#include <assimp/scene.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+
 #include "Bang/IO.h"
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
 #include "Bang/XMLParser.h"
 #include "Bang/GameObject.h"
 
-void FileReader::GetOBJFormat(const String& filepath, bool *hasUvs,
-                              bool *hasNormals, bool *isTriangles)
+int FileReader::GetMeshNumTriangles(const String &filepath)
 {
-    Array<String> lines = IO::GetFileContents(filepath).Split('\n');
-    for (const String &_line : lines)
-    {
-        String line = _line.Replace("\r", "");
-        if (line.BeginsWith("f"))
-        {
-            while (line.Contains("  ")) { line = line.Replace("  ", " "); }
-            Array<String> faceVertices = line.Split(' ');
-            String samplePart = "";
-            for (const String &part : faceVertices)
-            {
-                if (part.Contains("/")) { samplePart = part; break; }
-            }
-
-            if (!samplePart.Empty())
-            {
-                Array<String> vertexIndices = samplePart.Split('/');
-                if (vertexIndices.Size() >= 3)
-                {
-                    *hasUvs     = !vertexIndices[1].Empty();
-                    *hasNormals = !vertexIndices[2].Empty();
-                    *isTriangles = faceVertices.Size() == 1 + 3; // f + ...
-                    return;
-                }
-            }
-        }
-    }
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(filepath.ToCString(),
+          aiProcess_Triangulate            |
+          aiProcess_JoinIdenticalVertices  |
+          aiProcess_SortByPType);
+    if (scene && scene->HasMeshes()) { return scene->mMeshes[0]->mNumFaces; }
+    return 0;
 }
 
-int FileReader::GetOBJNumFaces(const String &filepath)
+Vector3 AIVectorToVec3(const aiVector3D &v) { return Vector3(v.x, v.y, v.z); }
+
+bool FileReader::ReadMesh(const String& filepath,
+                          Array<Vector3> *vertexPos,
+                          Array<Vector3> *vertexNormals,
+                          Array<Vector2> *vertexUvs)
 {
-    int numFaces = 0;
-    String contents = IO::GetFileContents(filepath);
-    Array<String> lines = contents.Split('\n');
-    for (const String& _line : lines)
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(filepath.ToCString(),
+          aiProcess_Triangulate            |
+          aiProcess_JoinIdenticalVertices  |
+          aiProcess_SortByPType);
+
+    bool ok = false;
+    if (scene)
     {
-        String line = _line.Replace("\r", "");
-        if (!line.Empty() && line.BeginsWith("f")) { ++numFaces; }
-    }
-    return numFaces;
-}
-
-bool FileReader::ReadOBJ(const String& filepath,
-                         Array<Vector3> *vertexPos,
-                         Array<Vector3> *vertexNormals,
-                         Array<Vector2> *vertexUvs,
-                         bool *isTriangles)
-{
-    Array<Vector3> disorderedVertexPos, disorderedVertexNormals;
-    Array<Vector2> disorderedVertexUvs;
-    Array<unsigned int> vertexPosIndexes,
-                        vertexUvsIndexes,
-                        vertexNormIndexes;
-    bool hasUvs, hasNormals;
-
-    GetOBJFormat(filepath, &hasUvs, &hasNormals, isTriangles);
-
-    String contents = IO::GetFileContents(filepath);
-    Array<String> lines = contents.Split('\n');
-    for (const String& _line : lines)
-    {
-        String line = _line.Replace("\r", "");
-
-        std::stringstream ss(line);
-        String lineHeader;
-        if (!(ss >> lineHeader)) continue;
-        if (lineHeader == "v")
+        for (int mi = 0; mi < scene->mNumMeshes; ++mi)
         {
-            Vector3 pos;
-            ss >> pos.x >> pos.y >> pos.z;
-            disorderedVertexPos.PushBack(pos);
-        }
-        else if (hasUvs && lineHeader == "vt") // Load uvs
-        {
-            Vector2 uv;
-            ss >> uv.x >> uv.y;
-            disorderedVertexUvs.PushBack(uv);
-        }
-        else if (hasNormals && lineHeader == "vn") // Load normals
-        {
-            Vector3 normal;
-            ss >> normal.x >> normal.y >> normal.z;
-            disorderedVertexNormals.PushBack(normal);
-        }
-        else if (lineHeader == "f")
-        {
-            unsigned int posIndices[4];
-            unsigned int uvIndices[4];
-            unsigned int normalIndices[4];
-
-            for (int i = 0; i < 3; ++i)
+            aiMesh *mesh = scene->mMeshes[mi];
+            for (int i = 0; i < mesh->mNumFaces; ++i)
             {
-                while (ss.peek() == '/' || ss.peek() == ' ') ss.ignore();
-                ss >> posIndices[i];
-                if (hasUvs)
+                const int iV0 = mesh->mFaces[i].mIndices[0];
+                const int iV1 = mesh->mFaces[i].mIndices[1];
+                const int iV2 = mesh->mFaces[i].mIndices[2];
+
+                if (mesh->HasPositions())
                 {
-                    while (ss.peek() == '/' || ss.peek() == ' ') ss.ignore();
-                    ss >> uvIndices[i];
+                    Vector3 v0 = AIVectorToVec3(mesh->mVertices[iV0]);
+                    Vector3 v1 = AIVectorToVec3(mesh->mVertices[iV1]);
+                    Vector3 v2 = AIVectorToVec3(mesh->mVertices[iV2]);
+                    vertexPos->PushBack(v0);
+                    vertexPos->PushBack(v1);
+                    vertexPos->PushBack(v2);
                 }
 
-                if (hasNormals)
+                if (mesh->GetNumUVChannels() > 0)
                 {
-                    while (ss.peek() == '/' || ss.peek() == ' ') ss.ignore();
-                    ss >> normalIndices[i];
+                    Vector2 uv0 = AIVectorToVec3(mesh->mTextureCoords[0][iV0]).xy();
+                    Vector2 uv1 = AIVectorToVec3(mesh->mTextureCoords[0][iV1]).xy();
+                    Vector2 uv2 = AIVectorToVec3(mesh->mTextureCoords[0][iV2]).xy();
+                    vertexUvs->PushBack(uv0);
+                    vertexUvs->PushBack(uv1);
+                    vertexUvs->PushBack(uv2);
+                }
+
+                if (mesh->HasNormals())
+                {
+                    Vector3 norm0 = AIVectorToVec3(mesh->mNormals[iV0]);
+                    Vector3 norm1 = AIVectorToVec3(mesh->mNormals[iV1]);
+                    Vector3 norm2 = AIVectorToVec3(mesh->mNormals[iV2]);
+                    vertexNormals->PushBack(norm0);
+                    vertexNormals->PushBack(norm1);
+                    vertexNormals->PushBack(norm2);
                 }
             }
-
-            //Vertices 0,1 same for tris and quads in CCW
-            for (int i = 0; i <= 1; ++i)
-            {
-                vertexPosIndexes.PushBack(posIndices[i]);
-                vertexUvsIndexes.PushBack(uvIndices[i]);
-                vertexNormIndexes.PushBack(normalIndices[i]);
-            }
-
-            while (ss.peek() == '\n' || ss.peek() == '\r' || ss.peek() == ' ')
-                ss.ignore();
-
-            const bool theresAVertexLeft = (ss.peek() != EOF);
-            if (theresAVertexLeft)
-            {
-                //QUAD FOUND, turn it into two triangles
-                //Finish first triangle in CCW
-                ss >> posIndices[3];
-                if (hasUvs)
-                {
-                    while (ss.peek() == ' ' || ss.peek() == '/') ss.ignore();
-                    ss >> uvIndices[3];
-                }
-                if (hasNormals)
-                {
-                    while (ss.peek() == ' ' || ss.peek() == '/') ss.ignore();
-                    ss >> normalIndices[3];
-                }
-                vertexPosIndexes.PushBack(posIndices[3]);
-                vertexUvsIndexes.PushBack(uvIndices[3]);
-                vertexNormIndexes.PushBack(normalIndices[3]);
-
-                //Make second triangle in CCW
-                for (int j = 1; j <= 3; ++j) //3,2,1
-                {
-                    vertexPosIndexes.PushBack(posIndices[j]);
-                    vertexUvsIndexes.PushBack(uvIndices[j]);
-                    vertexNormIndexes.PushBack(normalIndices[j]);
-                }
-            }
-            else //Triangles, finish with index 2
-            {
-                vertexPosIndexes.PushBack(posIndices[2]);
-                vertexUvsIndexes.PushBack(uvIndices[2]);
-                vertexNormIndexes.PushBack(normalIndices[2]);
-            }
         }
+        ok = true;
+    }
+    else
+    {
+        Debug_Error("Could not load mesh " << filepath);
     }
 
-    for (unsigned int i = 0; i < vertexPosIndexes.Size(); ++i)
-    {
-		const int vIndex = vertexPosIndexes[i] - 1;
-		if (vIndex < disorderedVertexPos.Size())
-		{
-			vertexPos->PushBack(disorderedVertexPos[vIndex]);
-		}
-    }
-
-    if (hasNormals)
-    {
-        for (unsigned int i = 0; i < vertexNormIndexes.Size(); ++i)
-        {
-			const int vIndex = vertexNormIndexes[i] - 1;
-			if (vIndex < disorderedVertexNormals.Size())
-			{
-				vertexNormals->PushBack( disorderedVertexNormals[vIndex]);
-			}
-        }
-    }
-
-    if (hasUvs)
-    {
-		for (unsigned int i = 0; i < vertexUvsIndexes.Size(); ++i)
-		{
-			const int vIndex = vertexUvsIndexes[i] - 1;
-			if (vIndex < disorderedVertexUvs.Size())
-			{
-				vertexUvs->PushBack(disorderedVertexUvs[vIndex]);
-			}
-		}
-    }
-    return true;
+    return ok;
 }

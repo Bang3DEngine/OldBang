@@ -19,14 +19,11 @@ class GameObject;
 class FileReader
 {
 public:
-    static void GetOBJFormat(const String& filepath, bool *hasUvs,
-                             bool *hasNormals, bool *isTriangles);
-    static int GetOBJNumFaces(const String& filepath);
-    static bool ReadOBJ(const String& filepath,
+    static int GetMeshNumTriangles(const String& filepath);
+    static bool ReadMesh(const String& filepath,
                         Array<Vector3> *vertexPos,
                         Array<Vector3> *vertexNormals,
-                        Array<Vector2> *vertexUvs,
-                        bool *isTriangles);
+                        Array<Vector2> *vertexUvs);
 private:
     FileReader() {}
 };
