@@ -9,7 +9,6 @@ void InitMain()
     B_Out_Shininess        = B_MaterialShininess;
     B_Out_DiffColor        = B_MaterialDiffuseColor;
     B_Out_Depth            = gl_FragCoord.z;
-    B_Out_Stencil          = 1;
     B_Out_Color            = B_MaterialDiffuseColor;
 }
 
@@ -17,11 +16,10 @@ void EndMain()
 {
     B_GIn_NormalWorld  = vec4(B_Out_NormalWorld, 0);
     B_GIn_DiffColor    = B_Out_DiffColor;
-    B_GIn_Misc.r       = B_Out_ReceivesLighting ? 1 : 0;
-    B_GIn_Misc.g       = B_Out_Shininess;
-    B_GIn_Misc.b       = B_Out_Depth;
-    B_GIn_Misc.a       = B_StencilWriteEnabled ? B_Out_Stencil
-                                               : B_SampleStencil();
+    B_GIn_Misc         = vec4(B_Out_ReceivesLighting ? 1 : 0,
+                              B_Out_Shininess,
+                              B_Out_Depth,
+                              0);
 
     float ambientLight = (B_MaterialReceivesLighting ? 0.1 : 1.0);
     vec3 outColor      = ambientLight * B_Out_DiffColor.rgb;

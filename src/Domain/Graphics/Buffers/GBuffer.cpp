@@ -54,11 +54,6 @@ void GBuffer::BindTextureBuffersTo(ShaderProgram *sp) const
                    m_willReadFromColorRead ? m_colorReadTexture :
                                              m_colorTexture);
     m_willReadFromColorRead = false;
-
-    // Stencil uniforms
-    sp->SetFloat("B_StencilWriteEnabled", m_stencilWriteEnabled ? 1.0f : 0.0f);
-    sp->SetFloat("B_StencilTestEnabled",  m_stencilTestEnabled  ? 1.0f : 0.0f);
-
 }
 
 
@@ -68,7 +63,7 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
 {
     sp->SetVec2("B_ScreenSize", Screen::GetSize());
 
-    bool prevStencilWrite = m_stencilWriteEnabled;
+    bool prevStencilWrite = m_stencilWrite;
     SetStencilWrite(false);
 
     Bind();
@@ -128,18 +123,26 @@ void GBuffer::SetColorDrawBuffer()
 
 void GBuffer::SetStencilWrite(bool writeEnabled)
 {
-    m_stencilWriteEnabled = writeEnabled;
+    // Replace is to ref value 1
+    if (m_stencilWrite != writeEnabled)
+    {
+        glStencilOp(writeEnabled ? GL_REPLACE : GL_KEEP, GL_KEEP, GL_KEEP);
+    }
+    m_stencilWrite = writeEnabled;
 }
 
 void GBuffer::SetStencilTest(bool testEnabled)
 {
-    m_stencilTestEnabled = testEnabled;
+    if (m_stencilTest != testEnabled)
+    {
+        glStencilFunc(testEnabled ? GL_GEQUAL : GL_ALWAYS, 1, 0xFF);
+    }
+    m_stencilTest = testEnabled;
 }
 
 void GBuffer::ClearStencil()
 {
-    SetDrawBuffers({GBuffer::AttMisc});
-    GL::ClearColorBuffer(Color::Zero, false, false, false, true);
+    glClear(GL_STENCIL_BUFFER_BIT);
 }
 
 void GBuffer::ClearDepth(float clearDepth)
@@ -147,13 +150,6 @@ void GBuffer::ClearDepth(float clearDepth)
     Framebuffer::ClearDepth(clearDepth); // Clear typical depth buffer
     SetDrawBuffers({GBuffer::AttMisc});
     GL::ClearColorBuffer(Color::One, false, false, true, false);
-}
-
-void GBuffer::ClearStencilDepth()
-{
-    SetDrawBuffers({GBuffer::AttMisc});
-    GL::ClearColorBuffer(Color(0,0,1,0), false, false, true, true);
-    GL::ClearDepthBuffer(1.0f);
 }
 
 void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor,
@@ -167,13 +163,6 @@ void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor,
 
     GL::ClearDepthBuffer(1.0f);
 
-    //*
     SetColorDrawBuffer();
     GL::ClearColorBuffer(backgroundColor);
-    /*/
-    SetDrawBuffers({GBuffer::AttColor0});
-    GL::ClearColorBuffer(Color::Red);
-    SetDrawBuffers({GBuffer::AttColor1});
-    GL::ClearColorBuffer(Color::Blue);
-    //*/
 }

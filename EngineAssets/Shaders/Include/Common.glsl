@@ -15,14 +15,6 @@ uniform mat4 B_PVM;
 // ///////////////////////////////////////
 
 
-
-// Stencil ///////////////////////////////
-uniform bool B_StencilWriteEnabled;
-uniform bool B_StencilTestEnabled;
-// ///////////////////////////////////////
-
-
-
 // Material related /////////////////////////
 uniform bool  B_MaterialReceivesLighting;
 uniform vec4  B_MaterialDiffuseColor;
@@ -83,7 +75,6 @@ uniform sampler2D B_GTex_Color;
         bool  B_Out_ReceivesLighting;
         float B_Out_Shininess;
         float B_Out_Depth;
-        float B_Out_Stencil;
 
         in vec4 B_FragIn_PositionWorld;
         in vec3 B_FragIn_NormalWorld;
@@ -115,7 +106,6 @@ uniform sampler2D B_GTex_Color;
     bool  B_SampleReceivesLight (vec2 uv) { return texture2D(B_GTex_Misc, uv).r > 0.5; }
     float B_SampleShininess (vec2 uv) { return texture2D(B_GTex_Misc, uv).g; }
     float B_SampleDepth(vec2 uv) { return texture2D(B_GTex_Misc, uv).b; }
-    float B_SampleStencil (vec2 uv) { return texture2D(B_GTex_Misc, uv).a; }
 
     vec4  B_SampleColor()  { return B_SampleColor(B_ScreenUv); }
     vec3  B_SampleNormal() { return B_SampleNormal(B_ScreenUv); }
@@ -123,7 +113,6 @@ uniform sampler2D B_GTex_Color;
     bool  B_SampleReceivesLight() { return B_SampleReceivesLight(B_ScreenUv); }
     float B_SampleShininess () { return B_SampleShininess(B_ScreenUv); }
     float B_SampleDepth() { return B_SampleDepth(B_ScreenUv); }
-    float B_SampleStencil() { return B_SampleStencil(B_ScreenUv); }
 
     vec4  B_SampleColorOffset(vec2 pixOffset)
       { return B_SampleColor(B_ScreenUv + B_ScreenStep * pixOffset); }
@@ -137,8 +126,6 @@ uniform sampler2D B_GTex_Color;
       { return B_SampleShininess(B_ScreenUv + B_ScreenStep * pixOffset); }
     float B_SampleDepthOffset(vec2 pixOffset)
       { return B_SampleDepth(B_ScreenUv + B_ScreenStep * pixOffset); }
-    float B_SampleStencilOffset(vec2 pixOffset)
-      { return B_SampleStencil(B_ScreenUv + B_ScreenStep * pixOffset); }
 
     vec3 B_GetCameraPositionWorld()
     {

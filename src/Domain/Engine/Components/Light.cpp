@@ -41,7 +41,7 @@ void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
 
     // Intersect with light rect to draw exactly what we need
     Camera *cam = SceneManager::GetActiveScene()->GetCamera();
-    Rect improvedRenderRect = renderRect; //Rect::Intersection(GetRenderRect(cam), renderRect);
+    Rect improvedRenderRect = Rect::Intersection(GetRenderRect(cam), renderRect);
     GL::ApplyContextToShaderProgram(m_lightMaterialScreen->GetShaderProgram());
     gbuffer->ApplyPass(m_lightMaterialScreen->GetShaderProgram(),
                        false,
@@ -50,7 +50,8 @@ void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
 
 Rect Light::GetRenderRect(Camera *cam) const
 {
-    return Rect::ScreenRect; // By default, no rect rendering constraint
+    // Well implemented for each kind of light
+    return Rect::ScreenRect;
 }
 
 void Light::CloneInto(ICloneable *clone) const

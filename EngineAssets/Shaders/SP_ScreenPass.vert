@@ -7,7 +7,7 @@ in vec3 B_In_PositionObject; // Plane positions
 
 void Main()
 {
-    vec2 rectSize = B_rectMaxCoord - B_rectMinCoord;
+    vec2 rectSize   = B_rectMaxCoord - B_rectMinCoord;
     vec2 rectCenter =  (B_rectMaxCoord + B_rectMinCoord) * 0.5;
     gl_Position = vec4( (B_In_PositionObject * 2.0f).xy *
                         rectSize  * 0.5 + rectCenter,

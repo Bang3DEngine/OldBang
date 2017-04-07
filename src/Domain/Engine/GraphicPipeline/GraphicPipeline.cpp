@@ -200,9 +200,8 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
     else
     {
         // Apply deferred lights to the whole scene
-        // TODO: fix getting bounding screen rect of scene InGame
-        // renderRect = m_currentScene->GetBoundingScreenRect(sceneCam, true);
-        renderRect = Rect::ScreenRect;
+        renderRect = p_scene->GetBoundingScreenRect(sceneCam, true);
+        // renderRect = Rect::ScreenRect;
     }
     ASSERT(renderRect != Rect::Empty);
 
@@ -231,7 +230,7 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
 
     m_scenePass->Pass(renderers, sceneChildren);
     if (!m_renderingInGame) { ApplySelectionOutline(); }
-    m_gbuffer->ClearStencilDepth();
+    m_gbuffer->ClearStencil();
     if (GetFXAA()) { m_fxaaPass->Pass(renderers, sceneChildren); }
 
     m_canvasPass->Pass(renderers, sceneChildren);

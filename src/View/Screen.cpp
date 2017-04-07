@@ -46,6 +46,7 @@ void Screen::initializeGL()
     glewInit();
 
     GL::Enable(GL_DEPTH_TEST);
+    GL::Enable(GL_STENCIL_TEST);
     GL::Enable(GL_CULL_FACE);
 
     static bool firstInitializeGL = true;

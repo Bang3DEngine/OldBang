@@ -14,7 +14,7 @@ public:
     static const AttachmentId AttNormal    = AttachmentId::ColorAttachment0;
     static const AttachmentId AttDiffuse   = AttachmentId::ColorAttachment1;
 
-    // (receivesLighting, shininess, depth, stencil)
+    // (receivesLighting, shininess, depth, ---)
     static const AttachmentId AttMisc      = AttachmentId::ColorAttachment2;
 
     // We need 2 color textures to PingPong them. This is to be able to do
@@ -48,7 +48,6 @@ public:
     void SetStencilTest(bool testEnabled);
     void ClearStencil();
     void ClearDepth(float clearDepth = 1.0f) override;
-    void ClearStencilDepth();
 
     void ClearBuffersAndBackground(const ::Color& backgroundColor,
                                    const ::Color& clearValue = ::Color::Zero);
@@ -61,8 +60,8 @@ private:
     RenderTexture *m_colorReadTexture = nullptr;
 
     mutable bool m_willReadFromColorRead = false;
-    bool m_stencilWriteEnabled = false;
-    bool m_stencilTestEnabled  = false;
+    bool m_stencilWrite = false;
+    bool m_stencilTest  = false;
 
     void RenderScreenPlane();
 

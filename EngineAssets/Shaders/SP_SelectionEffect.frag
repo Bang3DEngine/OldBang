@@ -1,10 +1,9 @@
-#define BANG_NO_STENCIL_TEST
 #include "SP.frag"
 
 void Main()
 {
-    bool isOutsideStencil = (B_SampleStencil() <= 0.5);
-    if (isOutsideStencil)
+    bool isOutside = (B_SampleDepth() <= 0.5);
+    if (isOutside)
     {
         const vec4  outlineColor = vec4(1, 0.5, 0, 1);
         const float fillOpacity  = 0.0f;
@@ -16,7 +15,7 @@ void Main()
         {
             for (int j = -stroke; j <= stroke && !isOutline; ++j)
             {
-                isOutline = B_SampleStencilOffset( vec2(i,j) ) > 0.5f;
+                isOutline = B_SampleDepthOffset( vec2(i,j) ) > 0.5f;
                 if (isOutline)
                 {
                     closestDepth = B_SampleDepthOffset( vec2(i,j) );
