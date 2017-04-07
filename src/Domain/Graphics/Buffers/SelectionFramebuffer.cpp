@@ -25,8 +25,10 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
                 IO::ToAbsolute("Shaders/SelectionBuffer.vert", true),
                 IO::ToAbsolute("Shaders/SelectionBuffer.frag", true));
 
-    CreateColorAttachment(AttColor);
-    CreateColorAttachment(AttWorldPos);
+    CreateColorAttachment(AttColor,
+                          Texture::Format::RGBA_Float16);
+    CreateColorAttachment(AttWorldPos,
+                          Texture::Format::RGBA_Float16);
     CreateDepthRenderbufferAttachment();
 
     m_colorTexture    = GetAttachmentTexture(AttColor);

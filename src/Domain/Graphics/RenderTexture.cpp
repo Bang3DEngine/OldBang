@@ -3,7 +3,7 @@
 
 RenderTexture::RenderTexture() : Texture2D()
 {
-    SetFilterMode(Texture::FilterMode::Nearest);
+    SetFilterMode(Texture::FilterMode::Linear);
     SetWrapMode(Texture::WrapMode::Clamp);
     SetFormat(Texture::Format::RGBA_Float32);
 }

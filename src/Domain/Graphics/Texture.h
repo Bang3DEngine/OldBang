@@ -20,6 +20,7 @@ public:
     enum Format
     {
         RGBA_Byte8 = 0,
+        RGBA_Float16,
         RGBA_Float32
     };
 

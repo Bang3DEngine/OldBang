@@ -20,11 +20,16 @@
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
-    CreateColorAttachment( AttachmentId( AttNormal  ) );
-    CreateColorAttachment( AttachmentId( AttDiffuse ) );
-    CreateColorAttachment( AttachmentId( AttMisc    ) );
-    CreateColorAttachment( AttachmentId( AttColor  ) );
-    CreateColorAttachment( AttachmentId( AttColorRead  ) );
+    CreateColorAttachment( AttachmentId( AttNormal  ),
+                           Texture::Format::RGBA_Byte8 );
+    CreateColorAttachment( AttachmentId( AttDiffuse ),
+                           Texture::Format::RGBA_Float16 );
+    CreateColorAttachment( AttachmentId( AttMisc    ),
+                           Texture::Format::RGBA_Float32  );
+    CreateColorAttachment( AttachmentId( AttColor  ),
+                           Texture::Format::RGBA_Float16  );
+    CreateColorAttachment( AttachmentId( AttColorRead  ),
+                           Texture::Format::RGBA_Float16  );
     CreateDepthRenderbufferAttachment();
 
     m_normalTexture    = GetAttachmentTexture(AttNormal);

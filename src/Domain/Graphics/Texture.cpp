@@ -117,7 +117,8 @@ GLint Texture::GetGLDataTypeFrom(Texture::Format texFormat)
     {
         return GL_UNSIGNED_BYTE;
     }
-    else if (texFormat == Texture::Format::RGBA_Float32)
+    else if (texFormat == Texture::Format::RGBA_Float16 ||
+             texFormat == Texture::Format::RGBA_Float32)
     {
         return GL_FLOAT;
     }
@@ -127,6 +128,7 @@ GLint Texture::GetGLDataTypeFrom(Texture::Format texFormat)
 GLint Texture::GetGLFormatFrom(Texture::Format texFormat)
 {
     if (texFormat == Texture::Format::RGBA_Byte8 ||
+        texFormat == Texture::Format::RGBA_Float16 ||
         texFormat == Texture::Format::RGBA_Float32)
     {
         return GL_RGBA;
@@ -139,6 +141,10 @@ GLint Texture::GetGLInternalFormatFrom(Texture::Format texFormat)
     if (texFormat == Texture::Format::RGBA_Byte8)
     {
         return GL_RGBA;
+    }
+    else if (texFormat == Texture::Format::RGBA_Float16)
+    {
+        return GL_RGBA16F;
     }
     else if (texFormat == Texture::Format::RGBA_Float32)
     {

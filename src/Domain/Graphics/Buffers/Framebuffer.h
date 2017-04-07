@@ -6,6 +6,7 @@
 #include "Bang/Map.h"
 #include "Bang/Color.h"
 #include "Bang/GLObject.h"
+#include "Bang/Texture2D.h"
 
 class RenderTexture;
 class Framebuffer : public GLObject
@@ -27,7 +28,8 @@ public:
     Framebuffer(int width, int height);
     virtual ~Framebuffer();
 
-    void CreateColorAttachment(AttachmentId attId);
+    void CreateColorAttachment(AttachmentId attId,
+                 Texture2D::Format texFormat = Texture2D::Format::RGBA_Float32);
     void CreateDepthRenderbufferAttachment();
 
     RenderTexture* GetAttachmentTexture(AttachmentId attId) const;

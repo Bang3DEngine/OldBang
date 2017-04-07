@@ -21,10 +21,12 @@ Framebuffer::~Framebuffer()
     glDeleteFramebuffers(1, &m_idGL);
 }
 
-void Framebuffer::CreateColorAttachment(AttachmentId attId)
+void Framebuffer::CreateColorAttachment(AttachmentId attId,
+                                        Texture2D::Format texFormat)
 {
     Bind();
     RenderTexture *tex = new RenderTexture();
+    tex->SetFormat(texFormat);
     tex->Bind();
     tex->CreateEmpty(GetWidth(), GetHeight());
 
