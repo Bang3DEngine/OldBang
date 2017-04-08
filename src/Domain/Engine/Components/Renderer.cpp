@@ -234,7 +234,7 @@ void Renderer::Write(XMLNode *xmlInfo) const
         {
             xmlInfo->SetFilepath("Material", sharedMat->GetFilepath(), "bmat");
         }
-        else //In case the asset is created in runtime, write its mem address
+        else // In case the asset is created in runtime, write its mem address
         {
             String memAddress = String::ToString((void*) sharedMat);
             xmlInfo->SetFilepath("Material", memAddress, "bmat");

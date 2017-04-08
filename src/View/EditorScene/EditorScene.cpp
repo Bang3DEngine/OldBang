@@ -38,12 +38,12 @@ EditorScene::EditorScene() : Scene()
     m_fpsCounter->ChangeTransformByRectTransform();
     m_fpsCounter->SetParent(this);
     RectTransform *rtrans = Object::SCast<RectTransform>(m_fpsCounter->transform);
-    m_fpsCounterText = m_fpsCounter->AddComponent<UIText>();
+    //m_fpsCounterText = m_fpsCounter->AddComponent<UIText>();
     rtrans->SetAnchors(Vector2(-1,-1), Vector2(1,1));
     rtrans->SetMargins(15);
-    m_fpsCounterText->SetHorizontalAlign(UIText::HorizontalAlignment::Right);
-    m_fpsCounterText->SetVerticalAlign(UIText::VerticalAlignment::Top);
-    m_fpsCounterText->SetTextSize(10);
+    //m_fpsCounterText->SetHorizontalAlign(UIText::HorizontalAlignment::Right);
+   // m_fpsCounterText->SetVerticalAlign(UIText::VerticalAlignment::Top);
+   // m_fpsCounterText->SetTextSize(10);
 
     AddHideFlag(HideFlags::HideInGame); // To enable updates in editor time
 }
@@ -76,7 +76,7 @@ void EditorScene::OnUpdate()
     int fpsSum = 0;
     for (int f : latestFPS) { fpsSum += f; }
     int fpsMean = fpsSum / latestFPS.Size();
-    m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
+    //m_fpsCounterText->SetContent("FPS: " + String(fpsMean));
     //if (rand()%5 == 0) Debug_Log(fpsMean);
 
     //if (rand()%5 == 0) Debug_Log(fps);

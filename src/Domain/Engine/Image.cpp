@@ -1,10 +1,36 @@
 #include "Image.h"
 
+#include "Bang/IO.h"
 #include "Bang/Debug.h"
 
 Image::Image()
 {
 
+}
+
+Image::Image(int width, int height)
+{
+    Create(width, height, Color::Zero);
+}
+
+void Image::Create(int width, int height)
+{
+    m_width = width;
+    m_height = height;
+    m_pixels.Resize(m_width * m_height);
+    m_pixels8.Resize(m_width * m_height * 4);
+}
+
+void Image::Create(int width, int height, const Color &backgroundColor)
+{
+    Create(width, height);
+    for (int i = 0; i < GetHeight(); ++i)
+    {
+        for (int j = 0; j < GetWidth(); ++j)
+        {
+            SetPixel(j, i, backgroundColor);
+        }
+    }
 }
 
 void Image::SetPixel(int x, int y, const Color& color)
@@ -39,16 +65,29 @@ unsigned int Image::GetHeight() const
     return m_height;
 }
 
+void Image::SaveToFile(const String &filepath) const
+{
+    QImage qimg (GetWidth(), GetHeight(), QImage::Format::Format_ARGB32);
+    for (int i = 0; i < GetHeight(); ++i)
+    {
+        for (int j = 0; j < GetWidth(); ++j)
+        {
+            Color px = GetPixel(j, i) * 255;
+            qimg.setPixel(j, i, qRgba(px.r, px.g, px.b, px.a));
+        }
+    }
+    String ext = IO::GetFileExtensionComplete(filepath);
+    if (ext.Empty()) { ext = "png"; }
+    qimg.save(filepath.ToQString(), ext.ToCString());
+}
+
 Image Image::FromFile(const String &filepath)
 {
     Image img;
     QImage qimg(filepath.ToQString());
     if (!qimg.isNull())
     {
-        img.m_width  = qimg.width();
-        img.m_height = qimg.height();
-        img.m_pixels.Resize ( img.GetWidth() * img.GetHeight() );
-        img.m_pixels8.Resize( img.GetWidth() * img.GetHeight() * 4);
+        img.Create(qimg.width(), qimg.height());
         for (int i = 0; i < img.GetHeight(); ++i)
         {
             for (int j = 0; j < img.GetWidth(); ++j)

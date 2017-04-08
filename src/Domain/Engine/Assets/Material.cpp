@@ -1,5 +1,6 @@
 #include "Bang/Material.h"
 
+#include "Bang/IO.h"
 #include "Bang/Scene.h"
 #include "Bang/Screen.h"
 #include "Bang/Shader.h"
@@ -7,7 +8,6 @@
 #include "Bang/Vector4.h"
 #include "Bang/Texture.h"
 #include "Bang/Texture2D.h"
-#include "Bang/IO.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/ShaderProgram.h"

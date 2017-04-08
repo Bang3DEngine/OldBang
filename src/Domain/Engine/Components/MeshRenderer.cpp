@@ -60,7 +60,6 @@ const Mesh *MeshRenderer::GetMesh()
 void MeshRenderer::RenderWithoutMaterial() const
 {
     ASSERT(m_mesh);
-    BindCurrentMeshToShaderProgram();
     GL::Render(m_mesh->GetVAO(), m_renderMode, m_mesh->GetVertexCount());
 }
 

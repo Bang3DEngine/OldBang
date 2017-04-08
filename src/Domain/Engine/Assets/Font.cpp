@@ -7,8 +7,6 @@
 #include "Bang/Texture2D.h"
 #include "Bang/FontSheetCreator.h"
 
-int Font::CharLoadSize = 64;
-
 Font::Font()
 {
 }
@@ -31,18 +29,16 @@ String Font::GetFileExtension() const
 void Font::LoadFromTTF(const String &m_filepath)
 {
     Free();
-    for (int c = 0; c <= 255; ++c)
+    if (FontSheetCreator::LoadAtlasTexture(
+                m_filepath,
+                Font::c_charLoadSize,
+                &m_atlasTexture,
+                &m_charUvsInAtlas,
+                &m_charMetrics,
+                &m_freetypeFace))
     {
-        Texture2D *charTexture = nullptr;
-        CharGlyphMetrics charMetrics;
-        if (FontSheetCreator::LoadCharTexture(
-                    m_filepath, Font::CharLoadSize, char(c),
-                    &charTexture, &charMetrics, &m_freetypeFace))
-        {
-            charTexture->SetFilterMode(Texture2D::FilterMode::Trilinear);
-            m_charMetrics.Add(charMetrics);
-            m_charTextures.Add(charTexture);
-        }
+        m_atlasTexture->GenerateMipMaps();
+        m_atlasTexture->SetFilterMode(Texture2D::FilterMode::Trilinear);
     }
 }
 
@@ -60,14 +56,31 @@ void Font::Write(XMLNode *xmlInfo) const
                          Font::GetFileExtensionStatic());
 }
 
-const Font::CharGlyphMetrics &Font::GetCharacterMetrics(unsigned char c)
+Font::CharGlyphMetrics Font::GetCharacterMetrics(unsigned char c)
 {
-    return m_charMetrics[c];
+    if (!m_charMetrics.ContainsKey(c))
+    {
+        Font::CharGlyphMetrics cgm; // Empty
+        return cgm;
+    }
+    return m_charMetrics.Get(c);
 }
 
-Texture2D *Font::GetCharacterTexture(unsigned char c) const
+Vector2 Font::GetCharMinUvInAtlas(char c) const
 {
-    return m_charTextures[c];
+    if (!m_charUvsInAtlas.ContainsKey(c)) { return Vector2::Zero; }
+    return m_charUvsInAtlas.Get(c).first;
+}
+
+Vector2 Font::GetCharMaxUvInAtlas(char c) const
+{
+    if (!m_charUvsInAtlas.ContainsKey(c)) { return Vector2::Zero; }
+    return m_charUvsInAtlas.Get(c).second;
+}
+
+Texture2D *Font::GetAtlasTexture() const
+{
+    return m_atlasTexture;
 }
 
 int Font::GetKerningX(char leftChar, char rightChar)
@@ -93,9 +106,11 @@ void Font::Free()
 {
     m_charMetrics.Clear();
 
-    for (Texture2D* charTexture : m_charTextures)
+    /*
+    for (Texture2D* charTexture : m_charUvsInAtlas)
     {
         delete charTexture;
     }
-    m_charTextures.Clear();
+    */
+    m_charUvsInAtlas.Clear();
 }

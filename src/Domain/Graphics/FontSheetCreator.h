@@ -16,6 +16,16 @@ class Font;
 class Texture2D;
 class FontSheetCreator
 {
+public:
+    static int GetGlyphIndex(FT_Face face, char c);
+
+    static bool LoadAtlasTexture(
+                         const String &fontFilepath,
+                         int glyphSizePx,
+                         Texture2D **resultTexture,
+                         Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
+                         Map<char, Font::CharGlyphMetrics> *resultMetrics,
+                         FT_Face *fontFace);
 private:
     FontSheetCreator();
     ~FontSheetCreator();
@@ -25,13 +35,6 @@ private:
 
     static FontSheetCreator *m_singleton;
 
-public:
-    static int GetGlyphIndex(FT_Face face, char c);
-    static bool LoadCharTexture(const String &fontFilepath,
-                                int glyphSizePx, char character,
-                                Texture2D **resultTexture,
-                                Font::CharGlyphMetrics *resultMetrics,
-                                FT_Face *fontFace);
 };
 
 #endif // FONTSHEETCREATOR_H

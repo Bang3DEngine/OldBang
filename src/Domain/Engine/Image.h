@@ -11,7 +11,10 @@ class Image
 {
 public:
     Image();
+    Image(int width, int height);
 
+    void Create(int width, int height);
+    void Create(int width, int height, const Color& backgroundColor);
     void SetPixel(int x, int y, const Color& color);
 
     const unsigned char* GetData8() const;
@@ -19,6 +22,7 @@ public:
     unsigned int GetWidth() const;
     unsigned int GetHeight() const;
 
+    void SaveToFile(const String &filepath) const;
     static Image FromFile(const String &filepath);
     static Image FromQImage(const QImage &qImage);
 

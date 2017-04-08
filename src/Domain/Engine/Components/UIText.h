@@ -1,6 +1,7 @@
 #ifndef UITEXT_H
 #define UITEXT_H
 
+#include "Bang/Mesh.h"
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
 #include "Bang/String.h"
@@ -22,7 +23,7 @@ public:
     UIText();
     virtual ~UIText();
 
-    virtual void Render() const override;
+    virtual void RenderWithoutMaterial() const override;
     virtual void RenderForSelectionWithoutMaterial() const override;
 
     virtual void CloneInto(ICloneable *clone) const override;
@@ -57,17 +58,17 @@ public:
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 private:
+    String m_content = "";
+
+    mutable Mesh m_textQuadsMesh; // Positions and uvs in atlas of each char quad
+
     Font *m_font = nullptr;
     int m_textSize = 32; // Set in the constructor
     int m_horizontalSpacing = 5;
     bool m_kerning = false;
 
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
-    VerticalAlignment m_verticalAlignment = VerticalAlignment::Center;
-
-    String m_content = "";
-
-    void RenderText() const;
+    VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;
 
     bool IsValidChar(char c) const;
 
@@ -75,6 +76,9 @@ private:
     Rect GetNDCRectOfChar(char c) const;
     Rect GetNDCRectOfChar(char c, const Rect &screenRectNDC) const;
     float GetNDCAdvance(char current, char next = '\0') const;
+
+    void FillQuadsMeshPositions();
+    void FillQuadsMeshUvs();
 
     Vector2 GetAlignmentNDCOffset() const;
 };

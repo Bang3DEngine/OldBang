@@ -36,14 +36,21 @@ void Texture2D::LoadFromImage(const String &imageFilepath)
 
     m_imageFilepath = imageFilepath;
     Image img = Image::FromFile(m_imageFilepath);
-    if (img.GetData8())
+    LoadFromImage(img);
+}
+
+void Texture2D::LoadFromImage(const Image &image)
+{
+    m_imageFilepath = "";
+    if (image.GetData8())
     {
-        m_width  = img.GetWidth();
-        m_height = img.GetHeight();
+        m_width  = image.GetWidth();
+        m_height = image.GetHeight();
 
         SetFormat(Texture::Format::RGBA_Byte8);
-        Fill(img.GetData8(), m_width, m_height, Texture::Format::RGBA_Byte8);
+        Fill(image.GetData8(), m_width, m_height, Texture::Format::RGBA_Byte8);
     }
+
 }
 
 void Texture2D::CreateEmpty(int width, int height)
@@ -78,8 +85,15 @@ void Texture2D::Fill(const unsigned char *newData, int width, int height,
                  GetGLFormat(), GetGLDataType(), m_data);
     if (genMipMaps && m_width > 0 && m_height > 0)
     {
-        glGenerateMipmap(GL_TEXTURE_2D);
+        GenerateMipMaps();
     }
+    UnBind();
+}
+
+void Texture2D::GenerateMipMaps() const
+{
+    Bind();
+    glGenerateMipmap(GL_TEXTURE_2D);
     UnBind();
 }
 

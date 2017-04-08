@@ -2,6 +2,12 @@
 
 void Main()
 {
+    vec2 charAtlasUv = B_FragIn_Uv;
+    B_Out_DiffColor = vec4(vec2(charAtlasUv.x, charAtlasUv.y), 0, 1);
+    float alpha = texture2D(B_Texture0, charAtlasUv).a;
+     B_Out_DiffColor = vec4(vec3(alpha), alpha);
+    return;
+
     float inDepth = B_SampleDepth();
     vec4 backgroundColorToBlendWith = vec4(0.0);
     if (inDepth > 0.5)

@@ -1,6 +1,9 @@
 #include "Bang/FontSheetCreator.h"
 
+#include "Bang/Math.h"
+#include "Bang/Array.h"
 #include "Bang/Debug.h"
+#include "Bang/Vector2.h"
 #include "Bang/Texture2D.h"
 
 #include <ftglyph.h>
@@ -34,118 +37,126 @@ int FontSheetCreator::GetGlyphIndex(FT_Face face, char c)
     return glyph_index;
 }
 
-bool FontSheetCreator::LoadCharTexture(const String &fontFilepath,
-                                       int glyphSizePx, char character,
-                                       Texture2D **resultTexture,
-                                       Font::CharGlyphMetrics *resultMetrics,
-                                       FT_Face *fontFace)
+bool FontSheetCreator::LoadAtlasTexture(
+                         const String &fontFilepath,
+                         int glyphSizePx,
+                         Texture2D **atlasTexture,
+                         Map<char, std::pair<Vector2, Vector2> > *charAtlasUvs,
+                         Map<char, Font::CharGlyphMetrics> *resultMetrics,
+                         FT_Face *fontFace)
 {
     if (!FontSheetCreator::Init()) { return false; }
 
-    // Load the face
+    charAtlasUvs->Clear();
+    resultMetrics->Clear();
+
     FT_Face face;
-    int error = FT_New_Face(m_singleton->m_ftLibrary, fontFilepath.c_str(), 0, &face);
+    int error = FT_New_Face(m_singleton->m_ftLibrary, fontFilepath.c_str(),
+                            0, &face);
     if (error)
     {
-        Debug_Error("Failed to load font '" << fontFilepath << "': Error(" << error << ")");
+        Debug_Error("Failed to load font '" << fontFilepath << "': Error("
+                    << error << ")");
         return false;
     }
-
-    /*
-    // Set size to load glyphs as
-    FT_Set_Pixel_Sizes(face, 0, glyphSizePx);
-
-    // Disable byte-alignment restriction
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    */
-
-    /*
-    const int resolution = 300;
-    FT_Set_Char_Size(face,
-                     0, // 0 means same as height
-                     glyphSizePx * 64,
-                     resolution,
-                     resolution);
-    */
 
     // Set the pixel size ( rasterize (?) )
     error = FT_Set_Pixel_Sizes(face, glyphSizePx, glyphSizePx);
     if (error)
     {
-        Debug_Error("Failed to set font pixel size of '" << fontFilepath << "': Error(" << error << ")");
+        Debug_Error("Failed to set font pixel size of '" << fontFilepath
+                    << "': Error(" << error << ")");
         return false;
     }
 
-    error = FT_Load_Glyph(face, FontSheetCreator::GetGlyphIndex(face, character), FT_LOAD_DEFAULT);
-    if (error)
+    String charactersToLoadStr = "";
+    charactersToLoadStr += "abcdefghijklmnopqrstuvwxyz";
+    charactersToLoadStr += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    charactersToLoadStr += "0123456789 ()[]*.,;:-_=!<>+";
+
+    // Generate the atlas, adding each char in a simple grid
+    unsigned int numChars       = charactersToLoadStr.Length();
+    unsigned int charsPerRowCol = Math::Sqrt(numChars) + 1;
+    unsigned int sideSize       = charsPerRowCol * Font::c_charLoadSize;
+    Image atlasImage(sideSize, sideSize);
+    for (int i = 0; i < numChars; ++i)
     {
-        Debug_Error("Failed to load glyph '" << character << "': Error(" << error << ")");
-        return false;
-    }
+        const char c = charactersToLoadStr[i];
+        const unsigned int charRow = i / charsPerRowCol;
+        const unsigned int charCol = i % charsPerRowCol;
 
-    // Move the face's glyph into a glyph object.
-    FT_Glyph glyph;
-    error = FT_Get_Glyph( face->glyph, &glyph );
-    if (error)
-    {
-        Debug_Error("Failed to get glyph '" << character << "' for font '" << fontFilepath << "': Error(" << error << ")");
-        FT_Done_Face(face);
-        return false;
-    }
+        float uvSize  = 1.0f / charsPerRowCol;
+        Vector2 uvMin = Vector2(charCol, charRow+1) / charsPerRowCol;
+        uvMin.y       = 1.0 - uvMin.y;
+        Vector2 uvMax = uvMin + uvSize;
 
+        charAtlasUvs->Set(c, std::make_pair(uvMin, uvMax) );
 
-    // Convert the glyph to a bitmap.
-    FT_Vector  origin; origin.x = origin.y = 0;
-    FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, &origin, true);
-    FT_BitmapGlyph bitmap_glyph = FT_BitmapGlyph(glyph);
-    FT_Bitmap &bitmap = bitmap_glyph->bitmap;
-
-
-    // Get some metrics (they are given in 1/64 pixels...)
-    // These are measurements relative to the full texture quad (size x size)
-    Font::CharGlyphMetrics metrics;
-    metrics.width    =  face->glyph->metrics.width  / 64;
-    metrics.height   =  face->glyph->metrics.height / 64;
-    metrics.bearingX = (face->glyph->metrics.horiBearingX) / 64;
-    metrics.bearingY = (face->glyph->metrics.horiBearingY) / 64;
-    metrics.advance  = (face->glyph->metrics.horiAdvance)  / 64;
-    metrics.originY  =  origin.y / 64;
-
-    Texture2D *fontTexture = new Texture2D();
-    if (metrics.width * metrics.height > 0)
-    {
-        // Create a RGBA bitmap from the pixmap provided by FreeType
-        unsigned char* colorMap = new unsigned char[metrics.width *
-                                                    metrics.height * 4];
-        for(int y = 0; y < metrics.height; y++)
+        error = FT_Load_Glyph(face, FontSheetCreator::GetGlyphIndex(face, c),
+                              FT_LOAD_DEFAULT);
+        if (error)
         {
-            for(int x = 0; x < metrics.width; x++)
-            {
-                int k = y * metrics.width + x;
-                colorMap[k * 4 + 0] = 255;
-                colorMap[k * 4 + 1] = 255;
-                colorMap[k * 4 + 2] = 255;
-                colorMap[k * 4 + 3] = bitmap.buffer[k]; // Alpha is the gray
-            }
+            Debug_Error("Failed to load glyph '" << c <<
+                        "': Error(" << error << ")");
+            continue;
         }
 
-        // Create texture
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        fontTexture->SetWrapMode(Texture::WrapMode::ClampToEdge);
-        fontTexture->SetFilterMode(Texture::FilterMode::Trilinear);
-        fontTexture->Fill(colorMap, metrics.width, metrics.height,
-                          Texture::Format::RGBA_Byte8, true);
-        delete[] colorMap;
-    }
-    else
-    {
-        fontTexture->CreateEmpty(16, 16);
+        // Move the face's glyph into a glyph object.
+        FT_Glyph glyph;
+        error = FT_Get_Glyph( face->glyph, &glyph );
+        if (error)
+        {
+            Debug_Error("Failed to get glyph '" << c << "' for font '"
+                        << fontFilepath << "': Error(" << error << ")");
+            continue;
+        }
+
+
+        // Convert the glyph to a bitmap.
+        FT_Vector  origin; origin.x = origin.y = 0;
+        FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, &origin, true);
+        FT_BitmapGlyph bitmap_glyph = FT_BitmapGlyph(glyph);
+        FT_Bitmap &bitmap = bitmap_glyph->bitmap;
+
+
+        // Get some metrics (they are given in 1/64 pixels...)
+        // These are measurements relative to the full tex quad (size x size)
+        Font::CharGlyphMetrics charMetrics;
+        charMetrics.width    =  face->glyph->metrics.width  / 64;
+        charMetrics.height   =  face->glyph->metrics.height / 64;
+        charMetrics.bearingX = (face->glyph->metrics.horiBearingX) / 64;
+        charMetrics.bearingY = (face->glyph->metrics.horiBearingY) / 64;
+        charMetrics.advance  = (face->glyph->metrics.horiAdvance)  / 64;
+        charMetrics.originY  =  origin.y / 64;
+        resultMetrics->Set(c, charMetrics);
+
+        if (charMetrics.width > 0 && charMetrics.height > 0)
+        {
+            const unsigned int offX = Font::c_charLoadSize * charCol;
+            const unsigned int offY = Font::c_charLoadSize * charRow;
+            for(int y = 0; y < charMetrics.height; y++)
+            {
+                for(int x = 0; x < charMetrics.width; x++)
+                {
+                    float pixelAlpha = bitmap.buffer[y * charMetrics.width + x];
+                    Color pxColor = Color(1.0f, 1.0f, 1.0f,
+                                          pixelAlpha / 255.0f);
+                    atlasImage.SetPixel(offX + x, offY + y, pxColor);
+                }
+            }
+        }
+        FT_Done_Glyph(glyph);
     }
 
-    FT_Done_Glyph(glyph);
-    FT_Done_Face(face);
-    *resultTexture = fontTexture;
-    *resultMetrics = metrics;
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    *atlasTexture = new Texture2D();
+    (*atlasTexture)->LoadFromImage(atlasImage);
+    (*atlasTexture)->SetWrapMode(Texture::WrapMode::ClampToEdge);
+    (*atlasTexture)->SetFilterMode(Texture::FilterMode::Trilinear);
+    (*atlasTexture)->GenerateMipMaps();
+
+    atlasImage.SaveToFile("atlas.png");
+
     *fontFace = face;
-    return true;
+    FT_Done_Face(face);
 }

@@ -20,6 +20,7 @@ public:
     virtual String GetFileExtension() const override ;
 
     void LoadFromImage(const String &imageFilepath);
+    void LoadFromImage(const Image &image);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
     void Fill(const unsigned char *newData, int width, int height,
@@ -27,6 +28,7 @@ public:
               bool genMipMaps = true);
     void Fill(const unsigned char *newData, int width, int height,
               int sizeOfNewData, bool genMipMaps = true);
+    void GenerateMipMaps() const;
 
     String GetImageFilepath() const;
 
