@@ -652,7 +652,6 @@ OTHER_FILES += \
     EngineAssets/Shaders/G_Template.vert \
     EngineAssets/Shaders/G_Default.vert \
     EngineAssets/Shaders/UI/SP_UIImage.frag \
-    EngineAssets/Shaders/UI/G_UIText.frag \
     EngineAssets/Shaders/Include/PointLight.glsl \
     EngineAssets/Shaders/Include/Main.glsl \
     EngineAssets/Shaders/Include/DirectionalLight.glsl \
@@ -679,7 +678,29 @@ DISTFILES += \
     EngineAssets/Shaders/SP_Template.frag \
     EngineAssets/Materials/G_DefaultNoSP.bmat \
     EngineAssets/Materials/UI/G_UIImage.bmat \
-    EngineAssets/Materials/UI/G_UIText.bmat \
     EngineAssets/Materials/UI/SP_UIImage.bmat \
     EngineAssets/Shaders/SP_FXAA.frag \
-    EngineAssets/Shaders/Include/Common.glsl
+    EngineAssets/Shaders/Include/Common.glsl \
+    EngineAssets/Fonts/GreatFont.bfont \
+    EngineAssets/Fonts/HandwrittenFont.bfont \
+    EngineAssets/Fonts/PrettyFont.bfont \
+    EngineAssets/Fonts/UbuntuFont.bfont \
+    EngineAssets/Meshes/Camera.bmesh \
+    EngineAssets/Meshes/Cone.bmesh \
+    EngineAssets/Meshes/Cube.bmesh \
+    EngineAssets/Meshes/Plane.bmesh \
+    EngineAssets/Meshes/Pyramid.bmesh \
+    EngineAssets/Meshes/Sphere.bmesh \
+    EngineAssets/Meshes/UIPlane.bmesh \
+    EngineAssets/Textures/AudioSourceIcon.btex2d \
+    EngineAssets/Textures/CameraIcon.btex2d \
+    EngineAssets/Textures/CircleIcon.btex2d \
+    EngineAssets/Textures/DefaultUIImageTexture.btex2d \
+    EngineAssets/Textures/DirectionalLightIcon.btex2d \
+    EngineAssets/Textures/PointLightIcon.btex2d \
+    EngineAssets/Textures/RectTransformAnchor.btex2d \
+    EngineAssets/Shaders/SP_Default.vert \
+    EngineAssets/Materials/UI/G_UIText_Pass2.bmat \
+    EngineAssets/Materials/UI/G_UIText_Pass1.bmat \
+    EngineAssets/Shaders/UI/G_UIText_Pass1.frag \
+    EngineAssets/Shaders/UI/G_UIText_Pass2.frag

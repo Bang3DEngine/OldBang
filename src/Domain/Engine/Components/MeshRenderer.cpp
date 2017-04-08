@@ -66,7 +66,10 @@ void MeshRenderer::RenderWithoutMaterial() const
 void MeshRenderer::Read(const XMLNode &xmlInfo)
 {
     Renderer::Read(xmlInfo);
-    SetMesh( AssetsManager::Load<Mesh>( xmlInfo.GetFilepath("Mesh") ) );
+    if (!xmlInfo.GetAttribute("Mesh")->HasProperty(XMLProperty::Hidden))
+    {
+        SetMesh( AssetsManager::Load<Mesh>( xmlInfo.GetFilepath("Mesh") ) );
+    }
 }
 
 void MeshRenderer::Write(XMLNode *xmlInfo) const

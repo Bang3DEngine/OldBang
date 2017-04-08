@@ -33,6 +33,7 @@ public:
     const Color& GetDiffuseColor() const;
 
     virtual void Bind() const;
+    virtual void UnBind() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

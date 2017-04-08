@@ -23,8 +23,12 @@
 
 UIText::UIText() : UIRenderer()
 {
-    SetMaterial( AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
-                                               true) );
+    m_mesh = new Mesh();
+    SetMesh(m_mesh);
+
+    SetMaterial(
+            AssetsManager::Load<Material>("Materials/UI/G_UIText_Pass1.bmat",
+                                          true) );
     UseMaterialCopy();
 
     SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
@@ -34,22 +38,17 @@ UIText::UIText() : UIRenderer()
 
 UIText::~UIText()
 {
+    if (m_mesh) { delete m_mesh; }
 }
 
 void UIText::RenderWithoutMaterial() const
 {
     ASSERT(m_font);
-
-    GL::SetViewProjMode(GL::ViewProjMode::OnlyFixAspectRatio);
-    GL::ApplyContextToShaderProgram(GetMaterial()->GetShaderProgram());
-
     Texture2D *atlasTexture = m_font->GetAtlasTexture();
     if (atlasTexture)
     {
-        MeshRenderer::RenderWithoutMaterial();
+        UIRenderer::RenderWithoutMaterial();
     }
-
-    GL::SetViewProjMode(GL::ViewProjMode::UseBoth);
 }
 
 void UIText::RenderForSelectionWithoutMaterial() const
@@ -190,16 +189,15 @@ void UIText::FillQuadsMeshPositions()
         char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
         totalAdvX += GetNDCAdvance(c, nextChar) + hSpacingNDC;
 
-        float size = 0.15f;
-        Vector3 off = Vector3(-1.0 + i,0,0) * (size * 4.0f);
+        float size = 0.1f;
+        Vector3 off = Vector3(-1.0 + i,0,0) * (size);
         quadPositions.PushBack( off + Vector3(-1, -1, 0) * size );
         quadPositions.PushBack( off + Vector3( 1, -1, 0) * size );
         quadPositions.PushBack( off + Vector3( 1,  1, 0) * size );
         quadPositions.PushBack( off + Vector3(-1,  1, 0) * size );
     }
 
-    m_textQuadsMesh.LoadPositions(quadPositions);
-    SetMesh(&m_textQuadsMesh);
+    m_mesh->LoadPositions(quadPositions);
     SetRenderMode(GL::RenderMode::Quads);
 
     GameObject *originalParent = gameObject->parent;
@@ -225,7 +223,7 @@ void UIText::FillQuadsMeshUvs()
         quadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
     }
 
-    m_textQuadsMesh.LoadUvs(quadUvs);
+    m_mesh->LoadUvs(quadUvs);
 }
 
 Vector2 UIText::GetAlignmentNDCOffset() const
@@ -390,7 +388,7 @@ void UIText::Read(const XMLNode &xmlInfo)
     SetHorizontalAlign(hAlign);
 
     SetContent(xmlInfo.GetString("Content")); // Order matters
-    SetMesh(&m_textQuadsMesh);
+    SetMesh(m_mesh);
 }
 
 void UIText::Write(XMLNode *xmlInfo) const

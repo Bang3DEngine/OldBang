@@ -63,6 +63,7 @@ public:
                                  bool clearR = true, bool clearG = true,
                                  bool clearB = true, bool clearA = true);
     static void ClearDepthBuffer(float clearDepth = 1.0f);
+    static void ClearStencilBuffer();
 
     static void Enable (GLenum glEnum);
     static void Disable(GLenum glEnum);
@@ -99,6 +100,8 @@ public:
     static void Bind(BindTarget bindTarget, GLId glId);
     static void UnBind(const GLObject *bindable);
     static void UnBind(BindTarget bindTarget);
+    static bool IsBound(const GLObject *bindable);
+    static bool IsBound(BindTarget bindTarget, GLId glId);
 
     static GLContext* GetGLContext();
 

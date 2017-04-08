@@ -56,6 +56,11 @@ void GL::ClearDepthBuffer(float clearDepth)
     glClear(GL_DEPTH_BUFFER_BIT);
 }
 
+void GL::ClearStencilBuffer()
+{
+    glClear(GL_STENCIL_BUFFER_BIT);
+}
+
 void GL::Enable(GLenum glEnum)
 {
     glEnable(glEnum);
@@ -217,6 +222,18 @@ void GL::UnBind(GL::BindTarget bindTarget)
     {
         GL::_Bind(bindTarget, 0);
     }
+}
+
+bool GL::IsBound(const GLObject *bindable)
+{
+    return GL::IsBound(bindable->GetGLBindTarget(), bindable->GetGLId());
+}
+
+bool GL::IsBound(GL::BindTarget bindTarget, GLId glId)
+{
+    GLContext *glc = GL::GetGLContext();
+    if (glc) { return glc->IsBound(bindTarget, glId); }
+    return false;
 }
 
 GL::GL()

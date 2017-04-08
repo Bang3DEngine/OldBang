@@ -186,7 +186,13 @@ const Color& Material::GetDiffuseColor() const
 
 void Material::Bind() const
 {
-    ShaderProgram *sp = GetShaderProgram();
+    ShaderProgram *sp = GetShaderProgram(); ASSERT(sp);
+    sp->Bind();
+    GL::ApplyContextToShaderProgram(sp);
+
+    GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
+    gb->BindTextureBuffersTo(sp);
+
     sp->SetVec2("B_ScreenSize", Screen::GetSize());
 
     sp->SetColor("B_MaterialDiffuseColor",     m_diffuseColor);
@@ -197,4 +203,10 @@ void Material::Bind() const
     sp->SetTexture("B_Texture0",  m_texture);
     sp->SetFloat("B_AlphaCutoff", alphaCutoff);
     sp->SetBool("B_HasTexture",  m_texture != nullptr);
+}
+
+void Material::UnBind() const
+{
+    ShaderProgram *sp = GetShaderProgram(); ASSERT(sp);
+    sp->UnBind();
 }

@@ -75,13 +75,6 @@ void Renderer::Bind() const
 
     Matrix4 model; transform->GetLocalToWorldMatrix(&model);
     GL::SetModelMatrix(model);
-
-    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
-    sp->Bind();
-    GL::ApplyContextToShaderProgram(sp);
-
-    GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
-    gb->BindTextureBuffersTo(sp);
 }
 
 void Renderer::RenderForSelectionWithoutMaterial() const
@@ -114,6 +107,8 @@ void Renderer::RenderWithMaterial(Material *_mat) const
     {
         RenderWithoutMaterial();
     }
+
+    mat->UnBind();
 
     UnBind();
 }

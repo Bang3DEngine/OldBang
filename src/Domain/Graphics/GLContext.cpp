@@ -193,21 +193,30 @@ void GLContext::OnBind(GL::BindTarget bindTarget, GLId glId)
     {
         m_glBoundIds.Set(bindTarget, std::stack<GLId>());
     }
-    m_glBoundIds[bindTarget].push(glId);
+
+    // Push id if it was not bound, push a 0 to indicate its a redundant bind
+    const GLId idToBind = IsBound(bindTarget, glId) ? 0 : glId;
+    m_glBoundIds[bindTarget].push(idToBind);
 }
 
 void GLContext::OnUnBind(GL::BindTarget bindTarget)
 {
-    GLId previousBoundId = 0;
-    if (m_glBoundIds.ContainsKey(bindTarget))
+    if (!m_glBoundIds.ContainsKey(bindTarget)) { return; }
+
+    std::stack<GLId> &boundIds = m_glBoundIds.Get(bindTarget);
+    if (!boundIds.empty())
     {
-        if (!m_glBoundIds[bindTarget].empty())
+        boundIds.pop();
+        if (boundIds.empty()) { GL::_Bind(bindTarget, 0); }
+        else
         {
-            m_glBoundIds[bindTarget].pop();
+            const GLId previousBoundId = GetBoundId(bindTarget);
+            if (previousBoundId > 0)
+            {
+                GL::_Bind(bindTarget, previousBoundId);
+            }
         }
-        previousBoundId = GetBoundId(bindTarget);
     }
-    GL::_Bind(bindTarget, previousBoundId);
 }
 
 GLContext::GLContext()

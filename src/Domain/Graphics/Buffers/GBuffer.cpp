@@ -21,7 +21,7 @@
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
     CreateColorAttachment( AttachmentId( AttNormal  ),
-                           Texture::Format::RGBA_Byte8 );
+                           Texture::Format::RGBA_Float16 );
     CreateColorAttachment( AttachmentId( AttDiffuse ),
                            Texture::Format::RGBA_Float16 );
     CreateColorAttachment( AttachmentId( AttMisc    ),
@@ -142,7 +142,7 @@ void GBuffer::SetStencilTest(bool testEnabled)
 
 void GBuffer::ClearStencil()
 {
-    glClear(GL_STENCIL_BUFFER_BIT);
+    GL::ClearStencilBuffer();
 }
 
 void GBuffer::ClearDepth(float clearDepth)
