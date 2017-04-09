@@ -68,15 +68,16 @@ private:
 
     bool IsValidChar(char c) const;
 
-    Vector2 GetTextSizeNDC() const;
-    Rect GetNDCRectOfChar(char c) const;
+    Vector2 GetTextSizeScaled() const;
+    Rect GetCharRect(char c) const;
     float GetNDCAdvance(char current, char next = '\0') const;
 
     void FillQuadsMeshPositions();
     void FillQuadsMeshUvs();
     void RefreshMesh();
 
-    Vector2 GetAlignmentOffset(const Vector2& contentSize) const;
+    Vector2 ApplyAlignmentOffset(const Vector2& contentSize,
+                                 Vector2 *minPosition) const;
 };
 
 #endif // UITEXT_H

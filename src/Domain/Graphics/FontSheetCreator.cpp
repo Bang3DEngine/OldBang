@@ -72,7 +72,8 @@ bool FontSheetCreator::LoadAtlasTexture(
     String charactersToLoadStr = "";
     charactersToLoadStr += "abcdefghijklmnopqrstuvwxyz";
     charactersToLoadStr += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    charactersToLoadStr += "0123456789 ()[]*.,;:-_=!<>+";
+    charactersToLoadStr += "0123456789()[]{}*.,;:-_=!<>+";
+    charactersToLoadStr += "/\\$%&@\"'#¿?^";
 
     // Generate the atlas, adding each char in a simple grid
     unsigned int numChars        = charactersToLoadStr.Length();
