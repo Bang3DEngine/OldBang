@@ -45,6 +45,7 @@ void EditorRectTransformCornerGizmo::OnUpdate()
     EditorRectTransformGizmo *rectTransformGizmo = parent ?
                 Object::SCast<EditorRectTransformGizmo>(parent) : nullptr;
 
+    /*
     if (m_cornerPosition == CornerPosition::Center)
     {
         // Special case for moving UI. Grab instant (Button instead of ButtonDown)
@@ -53,6 +54,7 @@ void EditorRectTransformCornerGizmo::OnUpdate()
                     Input::GetMouseButton(Input::MouseButton::Left) &&
                     !rectTransformGizmo->SomeOtherCornerGrabbed(this);
     }
+    */
 
     if (m_grabbed)
     {

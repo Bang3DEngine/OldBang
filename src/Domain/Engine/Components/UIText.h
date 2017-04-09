@@ -61,7 +61,7 @@ private:
     String m_content = "";
 
     Font *m_font = nullptr;
-    int m_textSize = 32; // Set in the constructor
+    int m_textSize = 64; // Set in the constructor
     int m_horizontalSpacing = 5;
     bool m_kerning = false;
     Material *m_textDrawOverUvsMaterial = nullptr;

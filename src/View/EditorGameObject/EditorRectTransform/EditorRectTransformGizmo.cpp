@@ -46,6 +46,7 @@ EditorRectTransformGizmo::EditorRectTransformGizmo(
                 EditorRectTransformAnchorGizmo::AnchorPosition::BotRight,
                 attachedGameObject);
 
+    m_centerCorner->SetParent(this);
     m_leftTopCorner->SetParent(this);
     m_rightTopCorner->SetParent(this);
     m_leftBotCorner->SetParent(this);
@@ -54,7 +55,6 @@ EditorRectTransformGizmo::EditorRectTransformGizmo(
     m_rightTopAnchor->SetParent(this);
     m_leftBotAnchor->SetParent(this);
     m_rightBotAnchor->SetParent(this);
-    m_centerCorner->SetParent(this);
 }
 
 EditorRectTransformGizmo::~EditorRectTransformGizmo()

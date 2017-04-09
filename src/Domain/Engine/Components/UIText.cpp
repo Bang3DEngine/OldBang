@@ -23,17 +23,13 @@
 
 UIText::UIText() : UIRenderer()
 {
-    m_mesh = new Mesh();
-    SetMesh(m_mesh);
-
-    SetMaterial(
-            AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
-                                          true) );
+    SetMesh( new Mesh() );
+    SetMaterial(AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
+                                               true) );
     UseMaterialCopy();
 
     SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
-
-    m_content = "";
+    SetContent("");
     RefreshMesh();
 }
 
@@ -45,6 +41,12 @@ UIText::~UIText()
 void UIText::RenderWithoutMaterial() const
 {
     ASSERT(m_font);
+
+    ASSERT(gameObject);
+    RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
+    ASSERT(rtrans);
+    Rect ndcRect = rtrans->GetScreenSpaceRect(true);
+
     Texture2D *atlasTexture = m_font->GetAtlasTexture();
     if (atlasTexture)
     {
@@ -62,11 +64,9 @@ void UIText::GetContentNDCBounds(Vector2 *min, Vector2 *max,
 {
     if (!applyAlign)
     {
-        const Vector2 textSizeNDC = GetTextSizeNDC();
-
         float totalAdvX = 0.0f;
-        min->x = min->y = Math::Infinity<float>();
-        max->x = max->y = Math::NegativeInfinity<float>();
+        *min = Vector2(Math::Infinity<float>());
+        *max = Vector2(Math::NegativeInfinity<float>());
         for (int i = 0; i < m_content.Length(); ++i)
         {
             Rect charRectNDC = GetNDCRectOfChar(m_content[i]);
@@ -80,7 +80,7 @@ void UIText::GetContentNDCBounds(Vector2 *min, Vector2 *max,
 
             if (i >= 0 && i < m_content.Length() - 1)
             {
-                totalAdvX += m_horizontalSpacing * textSizeNDC.x;
+                totalAdvX += m_horizontalSpacing * GetTextSizeNDC().x;
             }
             char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
             totalAdvX += GetNDCAdvance(m_content[i], nextChar);
@@ -140,47 +140,42 @@ Rect UIText::GetNDCRectOfChar(char c, const Rect &screenRectNDC) const
 
 float UIText::GetNDCAdvance(char current, char next) const
 {
-    const Font::CharGlyphMetrics &charMetrics =
-            m_font->GetCharacterMetrics(current);
-    int advancePx = charMetrics.advance;
+    int advancePx = -1;
     if (!IsValidChar(current) || !IsValidChar(next))
     {
         advancePx = 40;
     }
-    else
+    else if (m_kerning && next != '\0')
     {
-        if (m_kerning && next != '\0')
-        {
-            float kernX = m_font->GetKerningX(current, next);
-            if (kernX > 5) { advancePx = kernX; }
-        }
+        float kernX = m_font->GetKerningX(current, next);
+        if (kernX > 5) { advancePx = kernX; }
+    }
+
+    if (advancePx == -1)
+    {
+        Font::CharGlyphMetrics charMetrics = m_font->GetCharacterMetrics(current);
+        advancePx = charMetrics.advance;
     }
     return advancePx * GetTextSizeNDC().x;
 }
 
 void UIText::FillQuadsMeshPositions()
 {
-    ASSERT(gameObject);
-    RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
-    ASSERT(rtrans);
-    Rect screenRectNDC = rtrans->GetScreenSpaceRect(true);
-    Vector2 alignOffset = GetAlignmentNDCOffset();
-    Vector2 textSizeNDC = GetTextSizeNDC();
-
     Array<Vector3> quadPos;
 
     float totalAdvX = 0.0f;
-    const float hSpacingNDC = m_horizontalSpacing * textSizeNDC.x;
+    const float hSpacingNDC = m_horizontalSpacing * GetTextSizeNDC().x;
     for (int i = 0; i < m_content.Length(); ++i)
     {
         char c = m_content[i];
         if ( IsValidChar(c) )
         {
-            Rect charNDCRect = GetNDCRectOfChar(c, screenRectNDC);
+            Rect charNDCRect = GetNDCRectOfChar(c, Rect::ScreenRect);
             Vector2 charNDCRectMin = charNDCRect.GetMin();
             Vector2 charNDCRectMax = charNDCRect.GetMax();
-            charNDCRectMin += alignOffset + Vector2(totalAdvX, 0);
-            charNDCRectMax += alignOffset + Vector2(totalAdvX, 0);
+            charNDCRectMin += Vector2(totalAdvX, 0);
+            charNDCRectMax += Vector2(totalAdvX, 0);
+
             quadPos.PushBack( Vector3(charNDCRectMin.x, charNDCRectMin.y, 0) );
             quadPos.PushBack( Vector3(charNDCRectMax.x, charNDCRectMin.y, 0) );
             quadPos.PushBack( Vector3(charNDCRectMax.x, charNDCRectMax.y, 0) );
