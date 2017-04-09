@@ -6,6 +6,7 @@
 
 #include "Bang/Array.h"
 #include "Bang/String.h"
+#include "Bang/Vector2.h"
 
 class Image
 {
@@ -21,6 +22,7 @@ public:
     const Color& GetPixel(int x, int y) const;
     unsigned int GetWidth() const;
     unsigned int GetHeight() const;
+    Vector2 GetSize() const;
 
     void SaveToFile(const String &filepath) const;
     static Image FromFile(const String &filepath);

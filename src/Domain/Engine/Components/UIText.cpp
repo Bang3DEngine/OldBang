@@ -27,13 +27,14 @@ UIText::UIText() : UIRenderer()
     SetMesh(m_mesh);
 
     SetMaterial(
-            AssetsManager::Load<Material>("Materials/UI/G_UIText_Pass1.bmat",
+            AssetsManager::Load<Material>("Materials/UI/G_UIText.bmat",
                                           true) );
     UseMaterialCopy();
 
     SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
 
     m_content = "";
+    RefreshMesh();
 }
 
 UIText::~UIText()
@@ -69,10 +70,13 @@ void UIText::GetContentNDCBounds(Vector2 *min, Vector2 *max,
         for (int i = 0; i < m_content.Length(); ++i)
         {
             Rect charRectNDC = GetNDCRectOfChar(m_content[i]);
-            min->x = Math::Min(charRectNDC.m_minx, min->x);
-            min->y = Math::Min(charRectNDC.m_miny, min->y);
-            max->x = Math::Max(totalAdvX + charRectNDC.m_maxx, max->x);
-            max->y = Math::Max(charRectNDC.m_maxy, max->y);
+            min->x = Math::Min(charRectNDC.GetMin().x, min->x);
+            min->y = Math::Min(charRectNDC.GetMin().y, min->y);
+            max->x = Math::Max(totalAdvX + charRectNDC.GetMax().x, max->x);
+            max->y = Math::Max(            charRectNDC.GetMax().y, max->y);
+
+            Debug::DrawScreenLine(charRectNDC.GetMin(), charRectNDC.GetMax(),
+                                  Color::Red);
 
             if (i >= 0 && i < m_content.Length() - 1)
             {
@@ -120,7 +124,7 @@ Rect UIText::GetNDCRectOfChar(char c, const Rect &screenRectNDC) const
 {
     Vector2 textSizeNDC = GetTextSizeNDC();
 
-    const Font::CharGlyphMetrics &charMetrics = m_font->GetCharacterMetrics(c);
+    Font::CharGlyphMetrics charMetrics = m_font->GetCharacterMetrics(c);
     Vector2 charSizeNDC (charMetrics.width, charMetrics.height);
     charSizeNDC *= textSizeNDC;
 
@@ -163,13 +167,7 @@ void UIText::FillQuadsMeshPositions()
     Vector2 alignOffset = GetAlignmentNDCOffset();
     Vector2 textSizeNDC = GetTextSizeNDC();
 
-    GameObject *copyGo = new GameObject("Text rectTransform copyGo");
-    copyGo->ChangeTransformByRectTransform();
-    RectTransform *rtransCopy = copyGo->GetComponent<RectTransform>();
-    rtrans->CloneInto(rtransCopy);
-    rtrans->SetMargins(0,0,0,0);
-
-    Array<Vector3> quadPositions;
+    Array<Vector3> quadPos;
 
     float totalAdvX = 0.0f;
     const float hSpacingNDC = m_horizontalSpacing * textSizeNDC.x;
@@ -183,29 +181,17 @@ void UIText::FillQuadsMeshPositions()
             Vector2 charNDCRectMax = charNDCRect.GetMax();
             charNDCRectMin += alignOffset + Vector2(totalAdvX, 0);
             charNDCRectMax += alignOffset + Vector2(totalAdvX, 0);
-
-            rtrans->SetAnchors(charNDCRectMin, charNDCRectMax);
+            quadPos.PushBack( Vector3(charNDCRectMin.x, charNDCRectMin.y, 0) );
+            quadPos.PushBack( Vector3(charNDCRectMax.x, charNDCRectMin.y, 0) );
+            quadPos.PushBack( Vector3(charNDCRectMax.x, charNDCRectMax.y, 0) );
+            quadPos.PushBack( Vector3(charNDCRectMin.x, charNDCRectMax.y, 0) );
         }
         char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
         totalAdvX += GetNDCAdvance(c, nextChar) + hSpacingNDC;
-
-        float size = 0.1f;
-        Vector3 off = Vector3(-1.0 + i,0,0) * (size);
-        quadPositions.PushBack( off + Vector3(-1, -1, 0) * size );
-        quadPositions.PushBack( off + Vector3( 1, -1, 0) * size );
-        quadPositions.PushBack( off + Vector3( 1,  1, 0) * size );
-        quadPositions.PushBack( off + Vector3(-1,  1, 0) * size );
     }
 
-    m_mesh->LoadPositions(quadPositions);
+    m_mesh->LoadPositions(quadPos);
     SetRenderMode(GL::RenderMode::Quads);
-
-    GameObject *originalParent = gameObject->parent;
-    gameObject->SetParent(nullptr);
-
-    rtransCopy->CloneInto(rtrans);
-    delete copyGo;
-    gameObject->SetParent(originalParent);
 }
 
 void UIText::FillQuadsMeshUvs()
@@ -217,13 +203,20 @@ void UIText::FillQuadsMeshUvs()
     {
         Vector2 minUv = m_font->GetCharMinUvInAtlas(c);
         Vector2 maxUv = m_font->GetCharMaxUvInAtlas(c);
-        quadUvs.PushBack( Vector2(minUv.x, minUv.y) );
-        quadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
-        quadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
         quadUvs.PushBack( Vector2(minUv.x, maxUv.y) );
+        quadUvs.PushBack( Vector2(maxUv.x, maxUv.y) );
+        quadUvs.PushBack( Vector2(maxUv.x, minUv.y) );
+        quadUvs.PushBack( Vector2(minUv.x, minUv.y) );
     }
 
     m_mesh->LoadUvs(quadUvs);
+}
+
+void UIText::RefreshMesh()
+{
+    ASSERT(m_font);
+    FillQuadsMeshPositions();
+    FillQuadsMeshUvs();
 }
 
 Vector2 UIText::GetAlignmentNDCOffset() const
@@ -302,12 +295,8 @@ void UIText::SetFont(Font *font)
     if (m_font != font)
     {
         m_font = font;
-        if (m_font)
-        {
-            FillQuadsMeshPositions();
-            FillQuadsMeshUvs();
-            GetMaterial()->SetTexture( m_font->GetAtlasTexture() );
-        }
+        RefreshMesh();
+        GetMaterial()->SetTexture( m_font->GetAtlasTexture() );
     }
 }
 
@@ -318,7 +307,11 @@ Font *UIText::GetFont() const
 
 void UIText::SetKerning(bool kerning)
 {
-    m_kerning = kerning;
+    if (m_kerning != kerning)
+    {
+        m_kerning = kerning;
+        RefreshMesh();
+    }
 }
 
 bool UIText::GetKerning() const
@@ -331,11 +324,7 @@ void UIText::SetContent(const String &content)
     if (m_content != content)
     {
         m_content = content;
-        if (m_font)
-        {
-            FillQuadsMeshPositions();
-            FillQuadsMeshUvs();
-        }
+        RefreshMesh();
     }
 }
 
@@ -346,7 +335,11 @@ const String &UIText::GetContent() const
 
 void UIText::SetTextSize(int size)
 {
-    m_textSize = size;
+    if (m_textSize != size)
+    {
+        m_textSize = size;
+        RefreshMesh();
+    }
 }
 
 int UIText::GetTextSize() const
@@ -356,7 +349,11 @@ int UIText::GetTextSize() const
 
 void UIText::SetHorizontalSpacing(int horizontalSpacing)
 {
-    m_horizontalSpacing = horizontalSpacing;
+    if (m_horizontalSpacing != horizontalSpacing)
+    {
+        m_horizontalSpacing = horizontalSpacing;
+        RefreshMesh();
+    }
 }
 
 int UIText::GetHorizontalSpacing() const
@@ -388,6 +385,7 @@ void UIText::Read(const XMLNode &xmlInfo)
     SetHorizontalAlign(hAlign);
 
     SetContent(xmlInfo.GetString("Content")); // Order matters
+    RefreshMesh();
     SetMesh(m_mesh);
 }
 

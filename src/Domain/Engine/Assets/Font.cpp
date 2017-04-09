@@ -29,17 +29,13 @@ String Font::GetFileExtension() const
 void Font::LoadFromTTF(const String &m_filepath)
 {
     Free();
-    if (FontSheetCreator::LoadAtlasTexture(
+    FontSheetCreator::LoadAtlasTexture(
                 m_filepath,
                 Font::c_charLoadSize,
                 &m_atlasTexture,
                 &m_charUvsInAtlas,
                 &m_charMetrics,
-                &m_freetypeFace))
-    {
-        m_atlasTexture->GenerateMipMaps();
-        m_atlasTexture->SetFilterMode(Texture2D::FilterMode::Trilinear);
-    }
+                &m_freetypeFace);
 }
 
 void Font::Read(const XMLNode &xmlInfo)

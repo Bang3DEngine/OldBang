@@ -65,6 +65,11 @@ unsigned int Image::GetHeight() const
     return m_height;
 }
 
+Vector2 Image::GetSize() const
+{
+    return Vector2(GetWidth(), GetHeight());
+}
+
 void Image::SaveToFile(const String &filepath) const
 {
     QImage qimg (GetWidth(), GetHeight(), QImage::Format::Format_ARGB32);

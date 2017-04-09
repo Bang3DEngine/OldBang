@@ -75,22 +75,14 @@ bool FontSheetCreator::LoadAtlasTexture(
     charactersToLoadStr += "0123456789 ()[]*.,;:-_=!<>+";
 
     // Generate the atlas, adding each char in a simple grid
-    unsigned int numChars       = charactersToLoadStr.Length();
-    unsigned int charsPerRowCol = Math::Sqrt(numChars) + 1;
-    unsigned int sideSize       = charsPerRowCol * Font::c_charLoadSize;
+    unsigned int numChars        = charactersToLoadStr.Length();
+    unsigned int charsPerRowCol  = Math::Sqrt(numChars) + 1;
+    unsigned int charInAtlasSize = Font::c_charLoadSize * 2;
+    unsigned int sideSize        = charsPerRowCol * charInAtlasSize;
     Image atlasImage(sideSize, sideSize);
     for (int i = 0; i < numChars; ++i)
     {
         const char c = charactersToLoadStr[i];
-        const unsigned int charRow = i / charsPerRowCol;
-        const unsigned int charCol = i % charsPerRowCol;
-
-        float uvSize  = 1.0f / charsPerRowCol;
-        Vector2 uvMin = Vector2(charCol, charRow+1) / charsPerRowCol;
-        uvMin.y       = 1.0 - uvMin.y;
-        Vector2 uvMax = uvMin + uvSize;
-
-        charAtlasUvs->Set(c, std::make_pair(uvMin, uvMax) );
 
         error = FT_Load_Glyph(face, FontSheetCreator::GetGlyphIndex(face, c),
                               FT_LOAD_DEFAULT);
@@ -130,10 +122,15 @@ bool FontSheetCreator::LoadAtlasTexture(
         charMetrics.originY  =  origin.y / 64;
         resultMetrics->Set(c, charMetrics);
 
+        const unsigned int charRow = i / charsPerRowCol;
+        const unsigned int charCol = i % charsPerRowCol;
+
+        Vector2 minPixel(Math::Infinity<float>());
+        Vector2 maxPixel(Math::NegativeInfinity<float>());
         if (charMetrics.width > 0 && charMetrics.height > 0)
         {
-            const unsigned int offX = Font::c_charLoadSize * charCol;
-            const unsigned int offY = Font::c_charLoadSize * charRow;
+            const unsigned int offX = charInAtlasSize * charCol;
+            const unsigned int offY = charInAtlasSize * charRow;
             for(int y = 0; y < charMetrics.height; y++)
             {
                 for(int x = 0; x < charMetrics.width; x++)
@@ -141,10 +138,21 @@ bool FontSheetCreator::LoadAtlasTexture(
                     float pixelAlpha = bitmap.buffer[y * charMetrics.width + x];
                     Color pxColor = Color(1.0f, 1.0f, 1.0f,
                                           pixelAlpha / 255.0f);
+                    minPixel.x = Math::Min(minPixel.x, float(offX + x));
+                    minPixel.y = Math::Min(minPixel.y, float(offY + y));
+                    maxPixel.x = Math::Max(maxPixel.x, float(offX + x));
+                    maxPixel.y = Math::Max(maxPixel.y, float(offY + y));
                     atlasImage.SetPixel(offX + x, offY + y, pxColor);
                 }
             }
         }
+
+        Vector2 uvMin = minPixel / atlasImage.GetSize();
+        Vector2 uvMax = maxPixel / atlasImage.GetSize();
+        uvMin.y       = 1.0 - uvMin.y;
+        uvMax.y       = 1.0 - uvMax.y;
+        charAtlasUvs->Set(c, std::make_pair(uvMin, uvMax) );
+
         FT_Done_Glyph(glyph);
     }
 
@@ -154,8 +162,6 @@ bool FontSheetCreator::LoadAtlasTexture(
     (*atlasTexture)->SetWrapMode(Texture::WrapMode::ClampToEdge);
     (*atlasTexture)->SetFilterMode(Texture::FilterMode::Trilinear);
     (*atlasTexture)->GenerateMipMaps();
-
-    atlasImage.SaveToFile("atlas.png");
 
     *fontFace = face;
     FT_Done_Face(face);

@@ -147,7 +147,7 @@ Rect RectTransform::GetScreenSpaceRect(bool takeMarginsIntoAccount) const
         gameObject->parent->transform->GetLocalToWorldMatrix(&parentToWorld);
     }
 
-    const Matrix4 &localToParentMatrix =
+    Matrix4 localToParentMatrix =
             takeMarginsIntoAccount ? GetLocalToParentMatrix() :
                                      GetLocalToParentMatrix(false);
     return parentToWorld * localToParentMatrix * Rect::ScreenRect;

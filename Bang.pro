@@ -701,6 +701,6 @@ DISTFILES += \
     EngineAssets/Textures/RectTransformAnchor.btex2d \
     EngineAssets/Shaders/SP_Default.vert \
     EngineAssets/Materials/UI/G_UIText_Pass2.bmat \
-    EngineAssets/Materials/UI/G_UIText_Pass1.bmat \
-    EngineAssets/Shaders/UI/G_UIText_Pass1.frag \
-    EngineAssets/Shaders/UI/G_UIText_Pass2.frag
+    EngineAssets/Shaders/UI/G_UIText_Pass2.frag \
+    EngineAssets/Materials/UI/G_UIText.bmat \
+    EngineAssets/Shaders/UI/G_UIText.frag

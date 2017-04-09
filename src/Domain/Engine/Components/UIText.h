@@ -78,6 +78,7 @@ private:
 
     void FillQuadsMeshPositions();
     void FillQuadsMeshUvs();
+    void RefreshMesh();
 
     Vector2 GetAlignmentNDCOffset() const;
 };
