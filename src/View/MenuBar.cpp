@@ -328,12 +328,7 @@ void MenuBar::OnCreateUIText() const
     go->SetParent(SceneManager::GetActiveScene());
 
     UIText *text = go->AddComponent<UIText>();
-    text->SetContent("Hello Bang :)");
-
-    Vector2 min, max;
-    text->GetContentNDCBounds(&min, &max, true);
-    RectTransform *rt = go->GetComponent<RectTransform>();
-    rt->SetAnchors(min, max);
+    text->SetContent("Bang");
 
     Hierarchy::GetInstance()->SelectGameObject(go);
 }

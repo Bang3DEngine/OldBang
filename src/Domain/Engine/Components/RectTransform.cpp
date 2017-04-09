@@ -217,7 +217,7 @@ Matrix4 RectTransform::GetLocalToParentMatrix(
             ((maxMarginedAnchor - minMarginedAnchor) * 0.5f, 1);
     Matrix4 anchorScaling = Matrix4::ScaleMatrix(anchorScalingV);
 
-    Vector3 moveToPivotV(-m_pivotPosition, 0);
+    Vector3 moveToPivotV(-m_pivotPosition - Vector2::One, 0);
     Matrix4 moveToPivot = Matrix4::TranslateMatrix(moveToPivotV);
 
     Vector3 moveToAnchorCenterV(

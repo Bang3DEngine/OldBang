@@ -52,9 +52,6 @@ public:
     void SetHorizontalSpacing(int horizontalSpacing);
     int GetHorizontalSpacing() const;
 
-    void GetContentNDCBounds(Vector2 *min, Vector2 *max,
-                             bool applyAlign = true) const;
-
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 private:
@@ -73,14 +70,13 @@ private:
 
     Vector2 GetTextSizeNDC() const;
     Rect GetNDCRectOfChar(char c) const;
-    Rect GetNDCRectOfChar(char c, const Rect &screenRectNDC) const;
     float GetNDCAdvance(char current, char next = '\0') const;
 
     void FillQuadsMeshPositions();
     void FillQuadsMeshUvs();
     void RefreshMesh();
 
-    Vector2 GetAlignmentNDCOffset() const;
+    Vector2 GetAlignmentOffset(const Vector2& contentSize) const;
 };
 
 #endif // UITEXT_H

@@ -10,9 +10,7 @@
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
 #include "Bang/SceneManager.h"
-#include "Bang/RectTransform.h"
 #include "Bang/ShaderProgram.h"
-#include "Bang/RectTransform.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/GraphicPipeline.h"
 
@@ -29,8 +27,7 @@ UIText::UIText() : UIRenderer()
     UseMaterialCopy();
 
     SetFont( AssetsManager::Load<Font>("Fonts/UbuntuFont.bfont", true) );
-    SetContent("");
-    RefreshMesh();
+    SetContent("abcdef");
 }
 
 UIText::~UIText()
@@ -41,12 +38,6 @@ UIText::~UIText()
 void UIText::RenderWithoutMaterial() const
 {
     ASSERT(m_font);
-
-    ASSERT(gameObject);
-    RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
-    ASSERT(rtrans);
-    Rect ndcRect = rtrans->GetScreenSpaceRect(true);
-
     Texture2D *atlasTexture = m_font->GetAtlasTexture();
     if (atlasTexture)
     {
@@ -57,42 +48,6 @@ void UIText::RenderWithoutMaterial() const
 void UIText::RenderForSelectionWithoutMaterial() const
 {
     RenderWithoutMaterial();
-}
-
-void UIText::GetContentNDCBounds(Vector2 *min, Vector2 *max,
-                                 bool applyAlign) const
-{
-    if (!applyAlign)
-    {
-        float totalAdvX = 0.0f;
-        *min = Vector2(Math::Infinity<float>());
-        *max = Vector2(Math::NegativeInfinity<float>());
-        for (int i = 0; i < m_content.Length(); ++i)
-        {
-            Rect charRectNDC = GetNDCRectOfChar(m_content[i]);
-            min->x = Math::Min(charRectNDC.GetMin().x, min->x);
-            min->y = Math::Min(charRectNDC.GetMin().y, min->y);
-            max->x = Math::Max(totalAdvX + charRectNDC.GetMax().x, max->x);
-            max->y = Math::Max(            charRectNDC.GetMax().y, max->y);
-
-            Debug::DrawScreenLine(charRectNDC.GetMin(), charRectNDC.GetMax(),
-                                  Color::Red);
-
-            if (i >= 0 && i < m_content.Length() - 1)
-            {
-                totalAdvX += m_horizontalSpacing * GetTextSizeNDC().x;
-            }
-            char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
-            totalAdvX += GetNDCAdvance(m_content[i], nextChar);
-        }
-        max->x = Math::Max(max->x, min->x + totalAdvX);
-    }
-    else
-    {
-        GetContentNDCBounds(min, max, false);
-        Vector2 alignOffset = GetAlignmentNDCOffset();
-        *min += alignOffset; *max += alignOffset;
-    }
 }
 
 Rect UIText::GetBoundingRect(Camera *camera) const
@@ -114,28 +69,19 @@ Vector2 UIText::GetTextSizeNDC() const
 
 Rect UIText::GetNDCRectOfChar(char c) const
 {
-    RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
-	if (!rtrans) { return Rect::Empty; }
-    Rect screenRectNDC = rtrans->GetScreenSpaceRect(true);
-    return GetNDCRectOfChar(c, screenRectNDC);
-}
-
-Rect UIText::GetNDCRectOfChar(char c, const Rect &screenRectNDC) const
-{
     Vector2 textSizeNDC = GetTextSizeNDC();
 
     Font::CharGlyphMetrics charMetrics = m_font->GetCharacterMetrics(c);
     Vector2 charSizeNDC (charMetrics.width, charMetrics.height);
     charSizeNDC *= textSizeNDC;
 
-    Vector2 charAnchorMin = screenRectNDC.GetMin();
-
     Vector2 bearing (charMetrics.bearingX, charMetrics.bearingY);
-    charAnchorMin   += bearing * textSizeNDC;
-    charAnchorMin.y -= (charMetrics.height - charMetrics.originY) *
-                        textSizeNDC.y;
 
-    return Rect(charAnchorMin, charAnchorMin + charSizeNDC);
+    Vector2 charMin = -Vector2::One;
+    charMin   += bearing * textSizeNDC;
+    charMin.y -= (charMetrics.height - charMetrics.originY) * textSizeNDC.y;
+
+    return Rect(charMin, charMin + charSizeNDC);
 }
 
 float UIText::GetNDCAdvance(char current, char next) const
@@ -164,17 +110,23 @@ void UIText::FillQuadsMeshPositions()
     Array<Vector3> quadPos;
 
     float totalAdvX = 0.0f;
+    Vector2 contentBoundMin = Vector2(Math::Infinity<float>());
+    Vector2 contentBoundMax = Vector2(Math::NegativeInfinity<float>());
     const float hSpacingNDC = m_horizontalSpacing * GetTextSizeNDC().x;
     for (int i = 0; i < m_content.Length(); ++i)
     {
         char c = m_content[i];
         if ( IsValidChar(c) )
         {
-            Rect charNDCRect = GetNDCRectOfChar(c, Rect::ScreenRect);
+            Rect charNDCRect = GetNDCRectOfChar(c);
             Vector2 charNDCRectMin = charNDCRect.GetMin();
             Vector2 charNDCRectMax = charNDCRect.GetMax();
             charNDCRectMin += Vector2(totalAdvX, 0);
             charNDCRectMax += Vector2(totalAdvX, 0);
+            contentBoundMin.x = Math::Min(contentBoundMin.x, charNDCRectMin.x);
+            contentBoundMin.y = Math::Min(contentBoundMin.y, charNDCRectMin.y);
+            contentBoundMax.x = Math::Max(contentBoundMax.x, charNDCRectMax.x);
+            contentBoundMax.y = Math::Max(contentBoundMax.y, charNDCRectMax.y);
 
             quadPos.PushBack( Vector3(charNDCRectMin.x, charNDCRectMin.y, 0) );
             quadPos.PushBack( Vector3(charNDCRectMax.x, charNDCRectMin.y, 0) );
@@ -184,6 +136,10 @@ void UIText::FillQuadsMeshPositions()
         char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
         totalAdvX += GetNDCAdvance(c, nextChar) + hSpacingNDC;
     }
+
+    Vector2 contentSize = contentBoundMax - contentBoundMin;
+    Vector2 alignDisplacement = GetAlignmentOffset(contentSize);
+    for (Vector3 &pos : quadPos) { pos = pos + Vector3(alignDisplacement, 0); }
 
     m_mesh->LoadPositions(quadPos);
     SetRenderMode(GL::RenderMode::Quads);
@@ -210,47 +166,43 @@ void UIText::FillQuadsMeshUvs()
 void UIText::RefreshMesh()
 {
     ASSERT(m_font);
+    SetMesh(m_mesh);
     FillQuadsMeshPositions();
     FillQuadsMeshUvs();
+    if (!m_content.Contains("FPS"))
+    Debug_Log(GetXMLInfo().ToString());
 }
 
-Vector2 UIText::GetAlignmentNDCOffset() const
+Vector2 UIText::GetAlignmentOffset(const Vector2& contentSize) const
 {
-    RectTransform *rtrans = gameObject->GetComponent<RectTransform>();
-    Vector2 contentMin, contentMax;
-    GetContentNDCBounds(&contentMin, &contentMax, false);
-    Vector2 contentCenter = (contentMax + contentMin) * 0.5f;
-    Rect screenRectNDC = rtrans->GetScreenSpaceRect(true);
-
-    Vector2 alignNDCOffset;
+    Vector2 alignOffset;
     if (m_horizontalAlignment == HorizontalAlignment::Left)
     {
-        alignNDCOffset.x = (screenRectNDC.GetMin() - contentMin).x;
+        alignOffset.x = 0.0f;
     }
     else if (m_horizontalAlignment == HorizontalAlignment::Center)
     {
-        alignNDCOffset.x = (screenRectNDC.GetCenter() - contentCenter).x;
+        alignOffset.x = -contentSize.x * 0.5f;
     }
     else if (m_horizontalAlignment == HorizontalAlignment::Right)
     {
-        alignNDCOffset.x = (screenRectNDC.GetMax() - contentMax).x;
+        alignOffset.x = -contentSize.x;
     }
 
-
-    if (m_verticalAlignment == VerticalAlignment::Top)
+    if (m_verticalAlignment == VerticalAlignment::Bot)
     {
-        alignNDCOffset.y = (screenRectNDC.GetMax() - contentMax).y;
+        alignOffset.y = -contentSize.y * 0.5f;
     }
     else if (m_verticalAlignment == VerticalAlignment::Center)
     {
-        alignNDCOffset.y = (screenRectNDC.GetCenter() - contentCenter).y;
+        alignOffset.y = 0.0f;
     }
-    else if (m_verticalAlignment == VerticalAlignment::Bot)
+    else if (m_verticalAlignment == VerticalAlignment::Top)
     {
-        alignNDCOffset.y = (screenRectNDC.GetMin() - contentMin).y;
+        alignOffset.y = contentSize.y * 0.5f;
     }
 
-    return alignNDCOffset;
+    return alignOffset;
 }
 
 void UIText::CloneInto(ICloneable *clone) const
@@ -366,7 +318,9 @@ void UIText::Read(const XMLNode &xmlInfo)
         SetFont( AssetsManager::Load<Font>(fontFilepath) );
     }
 
-    m_tint = xmlInfo.GetColor("Color");
+    SetContent(xmlInfo.GetString("Content"));
+
+    SetTint(xmlInfo.GetColor("Color"));
     SetTextSize(xmlInfo.GetFloat("TextSize"));
     SetHorizontalSpacing(xmlInfo.GetFloat("HSpacing"));
     SetKerning(xmlInfo.GetBool("Kerning"));
@@ -379,9 +333,7 @@ void UIText::Read(const XMLNode &xmlInfo)
     HorizontalAlignment hAlign = static_cast<HorizontalAlignment>(hAlignIndex);
     SetHorizontalAlign(hAlign);
 
-    SetContent(xmlInfo.GetString("Content")); // Order matters
     RefreshMesh();
-    SetMesh(m_mesh);
 }
 
 void UIText::Write(XMLNode *xmlInfo) const
