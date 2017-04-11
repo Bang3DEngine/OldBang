@@ -119,7 +119,7 @@ void UIText::FillQuadsMeshPositions()
 
 void UIText::FillQuadsMeshUvs()
 {
-    ASSERT(m_font);
+    ENSURE(m_font);
     Array<Vector2> quadUvs;
 
     for (char c : m_content)
@@ -137,7 +137,7 @@ void UIText::FillQuadsMeshUvs()
 
 void UIText::RefreshMesh()
 {
-    ASSERT(m_font);
+    ENSURE(m_font);
     FillQuadsMeshPositions();
     FillQuadsMeshUvs();
     SetMesh(m_mesh);

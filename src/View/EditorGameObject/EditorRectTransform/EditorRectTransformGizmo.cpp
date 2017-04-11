@@ -68,8 +68,8 @@ void EditorRectTransformGizmo::OnUpdate()
 void EditorRectTransformGizmo::OnDrawGizmos(bool depthed, bool overlay)
 {
     RectTransform *rtrans = m_attachedGameObject->GetComponent<RectTransform>();
-    ASSERT(rtrans);
-    ASSERT(EditorState::GetCurrentTransformMode() ==
+    ENSURE(rtrans);
+    ENSURE(EditorState::GetCurrentTransformMode() ==
            EditorState::RectTransform);
 
     if (overlay)

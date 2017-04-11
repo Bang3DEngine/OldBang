@@ -81,7 +81,7 @@ void DragDropManager::UnregisterDragDropAgent(
 
 void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
 {
-    DragDropManager *m = DragDropManager::s_ddManager; ASSERT(m);
+    DragDropManager *m = DragDropManager::s_ddManager; ENSURE(m);
     m->m_mouseDown = true;
     m->m_timeSinceLastMouseDown = 0;
     m->m_latestUpdateDragging = m->m_dragging = false;
@@ -93,7 +93,7 @@ void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
 
 void DragDropManager::HandleGlobalMouseRelease(QObject *obj, QEvent *e)
 {
-    DragDropManager *m = DragDropManager::s_ddManager; ASSERT(m);
+    DragDropManager *m = DragDropManager::s_ddManager; ENSURE(m);
     m->m_mouseDown = false;
 }
 

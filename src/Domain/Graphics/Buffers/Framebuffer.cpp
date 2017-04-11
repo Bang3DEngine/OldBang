@@ -178,13 +178,13 @@ void Framebuffer::SaveToImage(AttachmentId attId, const String &filepath,
     if (tex)
     {
         SetReadBuffer(attId);
-        unsigned int bytesSize = m_width * m_height * 4;
-        unsigned char *pixels = new unsigned char[bytesSize];
+        uint bytesSize = m_width * m_height * 4;
+        byte *pixels = new byte[bytesSize];
         glReadPixels(0, 0, m_width, m_height,
                      GL_RGBA, GL_UNSIGNED_BYTE, pixels);
         if (invertY)
         {
-            unsigned char *pixelsCpy = new unsigned char[bytesSize];
+            byte *pixelsCpy = new byte[bytesSize];
             memcpy(pixelsCpy, pixels, bytesSize);
             for (int i = 0; i < m_width; ++i)
             {

@@ -32,7 +32,7 @@ void FileReferencesManager::OnFileOrDirNameAboutToBeChanged(
                                             const String &absFilepathBefore,
                                             const String &absFilepathNow)
 {
-    ASSERT(!absFilepathBefore.Empty()); ASSERT(!absFilepathNow.Empty());
+    ENSURE(!absFilepathBefore.Empty()); ENSURE(!absFilepathNow.Empty());
     m_queuedNameChanges.push( std::make_pair(absFilepathBefore,
                                              absFilepathNow));
     QTimer::singleShot(100, this, SLOT(TreatNextQueuedFileOrDirNameChange()));

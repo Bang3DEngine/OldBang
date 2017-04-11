@@ -38,13 +38,13 @@ void Image::SetPixel(int x, int y, const Color& color)
     if (x < 0 || x >= m_width || y < 0 || y >= m_height) { return; }
     int coord = y * m_width + x;
     m_pixels [coord]         = color;
-    m_pixels8[coord * 4 + 0] = static_cast<unsigned char>(color.r * 255);
-    m_pixels8[coord * 4 + 1] = static_cast<unsigned char>(color.g * 255);
-    m_pixels8[coord * 4 + 2] = static_cast<unsigned char>(color.b * 255);
-    m_pixels8[coord * 4 + 3] = static_cast<unsigned char>(color.a * 255);
+    m_pixels8[coord * 4 + 0] = static_cast<byte>(color.r * 255);
+    m_pixels8[coord * 4 + 1] = static_cast<byte>(color.g * 255);
+    m_pixels8[coord * 4 + 2] = static_cast<byte>(color.b * 255);
+    m_pixels8[coord * 4 + 3] = static_cast<byte>(color.a * 255);
 }
 
-const unsigned char *Image::GetData8() const
+const byte *Image::GetData8() const
 {
     return &m_pixels8[0];
 }
@@ -55,12 +55,12 @@ const Color &Image::GetPixel(int x, int y) const
     return m_pixels[y * m_width + x];
 }
 
-unsigned int Image::GetWidth() const
+uint Image::GetWidth() const
 {
     return m_width;
 }
 
-unsigned int Image::GetHeight() const
+uint Image::GetHeight() const
 {
     return m_height;
 }

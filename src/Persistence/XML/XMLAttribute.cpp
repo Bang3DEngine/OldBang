@@ -53,7 +53,7 @@ void XMLAttribute::SetProperty(const String &propertyName, const String &propert
 {
     for (const XMLProperty& prop : m_properties) //Dont add repeated
     {
-        ASSERT (prop.GetName() != propertyName);
+        ENSURE (prop.GetName() != propertyName);
     }
 
     XMLProperty prop(propertyName, propertyValue);

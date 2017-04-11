@@ -42,7 +42,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : GameObject("EditorBBox"
 
 void EditorBBox::OnUpdate()
 {
-    ASSERT(m_attachedGameObject);
+    ENSURE(m_attachedGameObject);
 
     // Adjust transform to wrap all the vertices of the parent and children
     AABox bbox;

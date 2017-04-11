@@ -45,7 +45,7 @@ public:
     {
         return this->Size() == 0;
     }
-    unsigned int Size() const
+    uint Size() const
     {
         return this->size();
     }

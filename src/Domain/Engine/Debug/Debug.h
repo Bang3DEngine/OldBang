@@ -52,17 +52,6 @@ private:
     static const String c_statusPrefix;
 };
 
-// ASSERT
-	#define ASSERT(mustBeTrue) do{\
-        if (!(mustBeTrue)) {\
-            return;\
-        }\
-    } while (0)
-
-    #define NUMARGS(...)  (sizeof((int[]){__VA_ARGS__})/sizeof(int))
-    #define GET_MACRO(_1, _2, _3, NAME, ...) NAME // Enable macro overloading
-//
-
 #define Debug_Clear() do{\
     Debug::_Clear(); \
 } while (0)

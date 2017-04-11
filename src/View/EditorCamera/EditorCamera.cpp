@@ -219,7 +219,7 @@ void EditorCamera::OnStart()
 void EditorCamera::OnUpdate()
 {
     GameObject::OnUpdate();
-    ASSERT (EditorWindow::GetInstance()->IsSceneTabActive());
+    ENSURE (EditorWindow::GetInstance()->IsSceneTabActive());
 
     AdjustSpeeds();
 
@@ -321,7 +321,7 @@ void EditorCamera::OnHierarchyGameObjectsSelected
 
 void EditorCamera::OnHierarchyGameObjectDoubleClicked(GameObject *selected)
 {
-    ASSERT(selected);
+    ENSURE(selected);
     StartLookAt(selected);
 }
 

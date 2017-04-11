@@ -173,7 +173,7 @@ void RectTransform::OnChanged()
 {
     m_hasChanged = true;
 
-    ASSERT(gameObject);
+    ENSURE(gameObject);
 
     List<RectTransform*> rectTransforms =
             gameObject->GetComponentsInChildren<RectTransform>();

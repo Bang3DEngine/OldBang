@@ -120,7 +120,7 @@ void HierarchyContextMenu::OnDuplicateClicked()
 void HierarchyContextMenu::OnDeleteClicked()
 {
     List<QTreeWidgetItem*> itemsToDelete = m_hierarchy->selectedItems().toStdList();
-    ASSERT(!itemsToDelete.Empty());
+    ENSURE(!itemsToDelete.Empty());
 
     m_hierarchy->LeaveOnlyOuterMostItems(&itemsToDelete);
     m_hierarchy->UnselectAll(); // Avoid a bug when trying to restore selection

@@ -4,7 +4,8 @@
 typedef unsigned int  uint;
 typedef unsigned char byte;
 
-#define DELETE    (x) if (x) { delete   x; }
-#define DELETE_ARR(x) if (x) { delete[] x; }
+#define ENSURE(mustBeTrue) do{\
+    if (!(mustBeTrue)) { return; }\
+} while (false)
 
 #endif // BANG_H

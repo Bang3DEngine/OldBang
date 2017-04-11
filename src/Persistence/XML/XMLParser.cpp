@@ -89,7 +89,7 @@ void XMLParser::GetCorrespondingCloseTag(const String &xml,
     String resultTag = "";
     int end = startPositionAfterOpenTag;
 
-    unsigned int tagDeepness = 0;
+    uint tagDeepness = 0;
     while (end != -1)
     {
         String tag;

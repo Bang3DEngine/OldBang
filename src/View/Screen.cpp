@@ -228,7 +228,7 @@ void Screen::dragMoveEvent(QDragMoveEvent *e)
     e->accept();
 
     Scene *activeScene = SceneManager::GetActiveScene();
-    ASSERT(activeScene);
+    ENSURE(activeScene);
 
     SelectionFramebuffer *sfb =
             GraphicPipeline::GetActive()->GetSelectionFramebuffer();
@@ -285,7 +285,7 @@ void Screen::dragLeaveEvent(QDragLeaveEvent *e)
 
 void Screen::dropEvent(QDropEvent *e)
 {
-    // ASSERT(m_activeScene);
+    // ENSURE(m_activeScene);
     e->ignore();
 }
 

@@ -105,15 +105,15 @@ const String &BehaviourHolder::GetSourceFilepath() const
 
 void BehaviourHolder::RefreshBehaviourLib()
 {
-    ASSERT(gameObject);
+    ENSURE(gameObject);
     #ifdef BANG_EDITOR
-    ASSERT(!gameObject->IsDraggedGameObject());
+    ENSURE(!gameObject->IsDraggedGameObject());
     #endif
 
     String absPath = IO::ToAbsolute(m_sourceFilepath, false);
-    ASSERT(IO::ExistsFile(absPath));
+    ENSURE(IO::ExistsFile(absPath));
     String behaviourName = IO::GetFileName(GetSourceFilepath());
-    ASSERT(!behaviourName.Empty());
+    ENSURE(!behaviourName.Empty());
 
     QLibrary *newLib = BehaviourManager::GetBehavioursMergedLibrary();
     if (newLib && m_currentLoadedLibrary != newLib)
@@ -192,7 +192,7 @@ void BehaviourHolder::CreateNewBehaviour()
         headerCode = headerCode.Replace("CLASS_NAME", className);
         String headerFilepath = currentDir + "/" + className;
         headerFilepath = IO::AppendExtension(headerFilepath, "h");
-        ASSERT(!IO::ExistsFile(headerFilepath));
+        ENSURE(!IO::ExistsFile(headerFilepath));
         IO::WriteToFile(headerFilepath, headerCode);
 
         // Create source file
@@ -200,7 +200,7 @@ void BehaviourHolder::CreateNewBehaviour()
         sourceCode = sourceCode.Replace("CLASS_NAME", className);
         String sourceFilepath = currentDir + "/" + className;
         sourceFilepath = IO::AppendExtension(sourceFilepath, "cpp");
-        ASSERT(!IO::ExistsFile(sourceFilepath));
+        ENSURE(!IO::ExistsFile(sourceFilepath));
         IO::WriteToFile(sourceFilepath, sourceCode);
 
         // Update Behaviour file

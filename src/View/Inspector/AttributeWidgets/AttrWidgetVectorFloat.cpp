@@ -11,7 +11,7 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
 
     String labels[] = {"X", "Y", "Z", "W"};
     int numberOfFields = xmlAttribute.GetNumberOfFieldsOfType();
-    for (unsigned int i = 0; i < numberOfFields; ++i)
+    for (uint i = 0; i < numberOfFields; ++i)
     {
         AttrWidgetFloat *s = new AttrWidgetFloat(xmlAttribute, inspectorWidget,
                                                  true);
@@ -33,7 +33,7 @@ AttrWidgetVectorFloat::AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
 
 void AttrWidgetVectorFloat::SetValue(const Array<float> &v)
 {
-    for (unsigned int i = 0; i < m_floatSlots.Size(); ++i)
+    for (uint i = 0; i < m_floatSlots.Size(); ++i)
     {
         m_floatSlots[i]->SetValue(v[i]);
     }
@@ -42,7 +42,7 @@ void AttrWidgetVectorFloat::SetValue(const Array<float> &v)
 Array<float>  AttrWidgetVectorFloat::GetValue()
 {
     Array<float> result;
-    for (unsigned int i = 0; i < m_floatSlots.Size(); ++i)
+    for (uint i = 0; i < m_floatSlots.Size(); ++i)
     {
         float f = m_floatSlots[i]->GetValue();
         result.PushBack(f);

@@ -395,7 +395,7 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
         String tagName = xmlChildInfo->GetTagName();
         if (tagName.Contains("GameObject"))
         {
-            ASSERT(iChildren < children.Size());
+            ENSURE(iChildren < children.Size());
             GameObject *child = children[iChildren];
             while (children[iChildren]->HasHideFlag(HideFlags::DontSerialize))
             {
@@ -406,7 +406,7 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
         }
         else
         {
-            ASSERT(iComponents < components.Size());
+            ENSURE(iComponents < components.Size());
             Component *component = components[iComponents];
             component->Read(*xmlChildInfo);
             ++iComponents;
@@ -732,7 +732,7 @@ void GameObject::OnDropMaterial(Material *m)
 void GameObject::_OnDrawGizmos(bool depthed, bool overlay)
 {
     #ifdef BANG_EDITOR
-    ASSERT(EditorState::ShowGizmosEnabled());
+    ENSURE(EditorState::ShowGizmosEnabled());
 
     GraphicPipeline *gp = GraphicPipeline::GetActive();
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();

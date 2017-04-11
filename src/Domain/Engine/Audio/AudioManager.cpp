@@ -31,7 +31,7 @@ AudioManager::~AudioManager()
 void AudioManager::PlayAudioClip(AudioClip *audioClip, int alSourceId,
                                  float delayInSeconds)
 {
-    ASSERT(audioClip);
+    ENSURE(audioClip);
     AudioManager *audioManager = AudioManager::GetInstance();
 
     AudioListener *listener = SceneManager::GetActiveScene()->

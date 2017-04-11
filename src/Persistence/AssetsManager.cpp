@@ -49,7 +49,7 @@ void AssetsManager::UpdateAsset(const String &assetFilepath,
                                 const XMLNode &xmlChangedInfo)
 {
     // Update live instances and rewrite the file
-    ASSERT(!assetFilepath.Empty());
+    ENSURE(!assetFilepath.Empty());
     if (AssetsManager::IsLoaded(assetFilepath, false))
     {
         Asset *asset = AssetsManager::GetAsset(assetFilepath, false);
@@ -71,7 +71,7 @@ void AssetsManager::InvalidateAsset(const String &assetFilepath)
 
 void AssetsManager::ReloadAsset(const String &assetFilepath)
 {
-    ASSERT(!assetFilepath.Empty());
+    ENSURE(!assetFilepath.Empty());
     Asset *asset = AssetsManager::GetAsset(assetFilepath, false);
     if (asset)
     {
@@ -93,14 +93,14 @@ bool AssetsManager::IsLoaded(const String &filepath,
 
 void AssetsManager::Unload(const String &id)
 {
-    AssetsManager *am = AssetsManager::GetCurrent(); ASSERT(am);
+    AssetsManager *am = AssetsManager::GetCurrent(); ENSURE(am);
     String f = AssetsManager::FormatFilepath(id, false);
     am->m_idToAssetPointer.Remove(f);
 }
 
 void AssetsManager::Unload(Asset *asset)
 {
-    AssetsManager *am = AssetsManager::GetCurrent(); ASSERT(am);
+    AssetsManager *am = AssetsManager::GetCurrent(); ENSURE(am);
     am->m_idToAssetPointer.RemoveValues(asset);
 }
 
@@ -108,7 +108,7 @@ void AssetsManager::SaveAssetToMap(const String &filepath,
                                    Asset *asset,
                                    bool isEngineAsset)
 {
-    AssetsManager *am = AssetsManager::GetCurrent(); ASSERT(am);
+    AssetsManager *am = AssetsManager::GetCurrent(); ENSURE(am);
     if (!filepath.Empty() && asset)
     {
         String f = FormatFilepath(filepath, isEngineAsset);

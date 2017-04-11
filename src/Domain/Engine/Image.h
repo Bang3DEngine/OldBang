@@ -18,10 +18,10 @@ public:
     void Create(int width, int height, const Color& backgroundColor);
     void SetPixel(int x, int y, const Color& color);
 
-    const unsigned char* GetData8() const;
+    const byte* GetData8() const;
     const Color& GetPixel(int x, int y) const;
-    unsigned int GetWidth() const;
-    unsigned int GetHeight() const;
+    uint GetWidth() const;
+    uint GetHeight() const;
     Vector2 GetSize() const;
 
     void SaveToFile(const String &filepath) const;
@@ -31,7 +31,7 @@ public:
 private:
     int m_width  = 0;
     int m_height = 0;
-    Array<unsigned char> m_pixels8;
+    Array<byte> m_pixels8;
     Array<Color> m_pixels;
 };
 

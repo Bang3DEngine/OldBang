@@ -122,11 +122,11 @@ void HierarchyDragDropManager::OnDropHereFromExplorer(const File &f,
         dropTargetGameObject =
                 dropTargetGameObject ? dropTargetGameObject->parent :
                                        SceneManager::GetActiveScene();
-        ASSERT(dropTargetGameObject);
+        ENSURE(dropTargetGameObject);
 
         Prefab *prefab = new Prefab();
         prefab->ReadFromFile(f.GetAbsolutePath());
-        GameObject *go = prefab->Instantiate(); ASSERT(go);
+        GameObject *go = prefab->Instantiate(); ENSURE(go);
         go->SetParent(dropTargetGameObject, false, aboveGameObject);
     }
 }

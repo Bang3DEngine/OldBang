@@ -37,7 +37,7 @@ EditorRectTransformCornerGizmo::~EditorRectTransformCornerGizmo()
 void EditorRectTransformCornerGizmo::OnUpdate()
 {
     EditorGizmo::OnUpdate();
-    ASSERT(m_attachedRectTransform);
+    ENSURE(m_attachedRectTransform);
 
     m_cornerColor = (!m_mouseIsOver && !m_grabbed) ?
                 Color(0.0f, 0.0f, 0.6f) : Color(0.0f, 0.5f, 1.0f);
@@ -67,8 +67,8 @@ void EditorRectTransformCornerGizmo::OnUpdate()
 
 void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
 {
-    ASSERT(m_attachedRectTransform);
-    ASSERT(EditorState::GetCurrentTransformMode() ==
+    ENSURE(m_attachedRectTransform);
+    ENSURE(EditorState::GetCurrentTransformMode() ==
            EditorState::RectTransform);
 
     if (overlay)

@@ -61,7 +61,7 @@ void Inspector::Clear()
     m_enableGameObjectCheckBox->setVisible(false);
 
     // Avoid double clearings
-    ASSERT(!m_widget_To_Item.Empty());
+    ENSURE(!m_widget_To_Item.Empty());
 
     for (InspectorWidget *iw : m_currentInspectorWidgets) { iw->OnDestroy(); }
     m_currentInspectorWidgets.Clear();
@@ -92,11 +92,11 @@ void Inspector::Refresh()
 void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement)
 {
     QListWidgetItem *movingItem = m_widget_To_Item[inspectorWidget];
-    ASSERT(movingItem);
+    ENSURE(movingItem);
 
     const int itemCount = count();
     const int oldRow = row(movingItem);
-    ASSERT(oldRow >= 0 && oldRow < itemCount);
+    ENSURE(oldRow >= 0 && oldRow < itemCount);
 
     takeItem(oldRow);
     const int newRow = (oldRow + movement + itemCount) % itemCount;
@@ -120,7 +120,7 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     ch.MarkEvent("Clear");
     Clear();
 
-    ASSERT(gameObject);
+    ENSURE(gameObject);
     p_currentGameObject = gameObject;
 
     for (Component *c : gameObject->GetComponents())
@@ -180,14 +180,14 @@ void Inspector::ShowPrefabInspectableInfo(
 
 void Inspector::OnMenuBarAddNewBehaviourClicked()
 {
-    ASSERT(p_currentGameObject);
+    ENSURE(p_currentGameObject);
     BehaviourHolder *bh = p_currentGameObject->AddComponent<BehaviourHolder>();
     bh->CreateNewBehaviour();
 }
 
 void Inspector::AddWidget(InspectorWidget *widget, int row)
 {
-    ASSERT(widget);
+    ENSURE(widget);
 
     int newRow = (row == -1 ? count() : row);
 

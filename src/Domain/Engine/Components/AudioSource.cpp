@@ -97,7 +97,7 @@ void AudioSource::Write(XMLNode *xmlInfo) const
 
 void AudioSource::Play(float delaySeconds)
 {
-    ASSERT(m_audioClip);
+    ENSURE(m_audioClip);
 
     AudioManager::PlayAudioClip(m_audioClip, GetALSourceId(),
                                 delaySeconds);
@@ -105,13 +105,13 @@ void AudioSource::Play(float delaySeconds)
 
 void AudioSource::Pause()
 {
-    ASSERT(m_audioClip);
+    ENSURE(m_audioClip);
     alSourcePause(m_alSourceId);
 }
 
 void AudioSource::Stop()
 {
-    ASSERT(m_audioClip);
+    ENSURE(m_audioClip);
     alSourceStop(m_alSourceId);
 }
 

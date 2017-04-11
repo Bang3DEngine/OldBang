@@ -42,13 +42,13 @@ int ComponentWidget::GetHeightSizeHint()
 
 void ComponentWidget::OnEnabledCheckboxPressed(bool checked)
 {
-    ASSERT(p_component);
+    ENSURE(p_component);
     p_component->SetEnabled(checked);
 }
 
 void ComponentWidget::SetClosed(bool closed)
 {
-    ASSERT(p_component);
+    ENSURE(p_component);
     InspectorWidget::SetClosed(closed);
     p_component->SetClosedInInspector(closed);
 }

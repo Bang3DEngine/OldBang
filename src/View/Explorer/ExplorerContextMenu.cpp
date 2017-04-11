@@ -141,7 +141,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
 
 void ExplorerContextMenu::OnDuplicateClicked()
 {
-    ASSERT(!p_explorer->GetSelectedFileOrDirPath().Empty());
+    ENSURE(!p_explorer->GetSelectedFileOrDirPath().Empty());
 
     String fromPath = p_explorer->GetSelectedFileOrDirPath();
     String toPath = IO::GetDuplicatePath(fromPath);
@@ -161,7 +161,7 @@ void ExplorerContextMenu::OnDeleteClicked()
 {
     String path = p_explorer->GetSelectedFile().GetAbsolutePath();
     String name = IO::GetFileNameWithExtension(path);
-    ASSERT( IO::Exists(path) );
+    ENSURE( IO::Exists(path) );
 
     Dialog::Reply reply = Dialog::GetYesNo(
                 "Delete file or directory",

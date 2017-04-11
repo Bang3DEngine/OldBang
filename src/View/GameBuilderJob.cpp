@@ -14,8 +14,8 @@ GameBuilderJob::GameBuilderJob()
 
 void GameBuilderJob::BuildGame()
 {
-    ASSERT(!m_executableFilepath.Empty());
-    GameBuilder *gb = GameBuilder::GetInstance(); ASSERT(gb);
+    ENSURE(!m_executableFilepath.Empty());
+    GameBuilder *gb = GameBuilder::GetInstance(); ENSURE(gb);
 
     String executableDir = IO::GetDir(m_executableFilepath);
 

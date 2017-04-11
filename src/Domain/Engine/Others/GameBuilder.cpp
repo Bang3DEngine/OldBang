@@ -64,7 +64,7 @@ void GameBuilder::BuildGame(bool runGame)
 
         // First ask for the executable output file (in the main thread)
         m_latestGameExecutableFilepath = AskForExecutableFilepath();
-        ASSERT(!m_latestGameExecutableFilepath.Empty());
+        ENSURE(!m_latestGameExecutableFilepath.Empty());
 
         // Create the progress window
         if (m_gameBuildDialog) { delete m_gameBuildDialog; }

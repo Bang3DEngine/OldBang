@@ -5,13 +5,13 @@
 
 IWindowEventManagerListener::IWindowEventManagerListener()
 {
-    ASSERT(WindowEventManager::GetInstance());
+    ENSURE(WindowEventManager::GetInstance());
     WindowEventManager::GetInstance()->AddListener(this);
 }
 
 IWindowEventManagerListener::~IWindowEventManagerListener()
 {
-    ASSERT(WindowEventManager::GetInstance());
+    ENSURE(WindowEventManager::GetInstance());
     WindowEventManager::GetInstance()->RemoveListener(this);
 }
 

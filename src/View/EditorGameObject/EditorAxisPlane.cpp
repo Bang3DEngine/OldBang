@@ -34,7 +34,7 @@ void EditorAxisPlane::OnUpdate()
 
 void EditorAxisPlane::SetTransformAccordingToAxis()
 {
-    ASSERT(m_axis1); ASSERT(m_axis2);
+    ENSURE(m_axis1); ENSURE(m_axis2);
     Vector3 pos = Vector3::Zero;
     Vector3 scale = Vector3::One;
 

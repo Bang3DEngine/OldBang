@@ -18,7 +18,7 @@ AudioPlayerRunnable::AudioPlayerRunnable(AudioClip *clip,
 
 void AudioPlayerRunnable::run()
 {
-    ASSERT(m_audioClip->IsLoaded());
+    ENSURE(m_audioClip->IsLoaded());
 
     if (m_delayInSeconds > 0.0f)
     {

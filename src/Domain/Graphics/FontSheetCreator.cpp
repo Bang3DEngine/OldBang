@@ -76,10 +76,10 @@ bool FontSheetCreator::LoadAtlasTexture(
     charactersToLoadStr += "/\\$%&@\"'#¿?^";
 
     // Generate the atlas, adding each char in a simple grid
-    unsigned int numChars        = charactersToLoadStr.Length();
-    unsigned int charsPerRowCol  = Math::Sqrt(numChars) + 1;
-    unsigned int charInAtlasSize = Font::c_charLoadSize * 2;
-    unsigned int sideSize        = charsPerRowCol * charInAtlasSize;
+    uint numChars        = charactersToLoadStr.Length();
+    uint charsPerRowCol  = Math::Sqrt(numChars) + 1;
+    uint charInAtlasSize = Font::c_charLoadSize * 2;
+    uint sideSize        = charsPerRowCol * charInAtlasSize;
     Image atlasImage(sideSize, sideSize);
     for (int i = 0; i < numChars; ++i)
     {
@@ -123,15 +123,15 @@ bool FontSheetCreator::LoadAtlasTexture(
         charMetrics.originY  =  origin.y / 64;
         resultMetrics->Set(c, charMetrics);
 
-        const unsigned int charRow = i / charsPerRowCol;
-        const unsigned int charCol = i % charsPerRowCol;
+        const uint charRow = i / charsPerRowCol;
+        const uint charCol = i % charsPerRowCol;
 
         Vector2 minPixel(Math::Infinity<float>());
         Vector2 maxPixel(Math::NegativeInfinity<float>());
         if (charMetrics.width > 0 && charMetrics.height > 0)
         {
-            const unsigned int offX = charInAtlasSize * charCol;
-            const unsigned int offY = charInAtlasSize * charRow;
+            const uint offX = charInAtlasSize * charCol;
+            const uint offY = charInAtlasSize * charRow;
             for(int y = 0; y < charMetrics.height; y++)
             {
                 for(int x = 0; x < charMetrics.width; x++)

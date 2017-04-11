@@ -99,7 +99,7 @@ void SelectProjectWindow::FillRecentProjectsList()
 void SelectProjectWindow::OnRecentProjectListSelectionChanged(int row, int column)
 {
     QTableWidgetItem *selectedItem = listRecentProjects->item(row, 1);
-    ASSERT(selectedItem);
+    ENSURE(selectedItem);
 
     m_selectedRecentProjectFilepath = selectedItem->text();
 

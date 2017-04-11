@@ -85,7 +85,7 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
 void GBuffer::RenderToScreen(GBuffer::AttachmentId attId)
 {
     // Assumes gbuffer is not bound, hence directly writing to screen
-    Texture *tex = GetAttachmentTexture(attId); ASSERT(tex);
+    Texture *tex = GetAttachmentTexture(attId); ENSURE(tex);
     GraphicPipeline::GetActive()->RenderToScreen(tex);
 }
 

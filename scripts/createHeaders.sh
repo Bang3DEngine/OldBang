@@ -11,7 +11,10 @@ FILES="$FILES $(find . | grep -E "stb_.*\.h$" | xargs)"
 for f in $FILES 
 do 
 	filename=$(echo $(basename "$f"));
-	echo "#include \"../../$f\"" > "./include/Bang/${filename}"
+	filepath="./include/Bang/${filename}"
+	echo ""                      >  "${filepath}"
+	echo "#include \"Bang.h\""   >> "${filepath}"
+	echo "#include \"../../$f\"" >> "${filepath}"
 done
 
 

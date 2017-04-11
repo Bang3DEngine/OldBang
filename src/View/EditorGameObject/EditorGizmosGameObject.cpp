@@ -119,7 +119,7 @@ void EditorGizmosGameObject::SetBillboard()
 
 void EditorGizmosGameObject::RenderCustomMesh(Mesh *m)
 {
-    ASSERT(m);
+    ENSURE(m);
     MeshRenderer *mr = GetComponent<MeshRenderer>();
     mr->SetEnabled(true);
     mr->SetMesh(m);
@@ -182,13 +182,13 @@ void EditorGizmosGameObject::RenderRect(const Rect &r)
 void EditorGizmosGameObject::RenderFillRect(const Rect &r,
                                             const Color &fillColor)
 {
-    MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(mr);
+    MeshRenderer *mr = GetComponent<MeshRenderer>(); ENSURE(mr);
     mr->SetMesh(m_planeMesh);
 
     Gizmos::SetPosition( Vector3(r.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(r.GetSize(), 1) );
 
-    Material *mat = mr->GetMaterial(); ASSERT(mat);
+    Material *mat = mr->GetMaterial(); ENSURE(mat);
     mat->SetTexture(nullptr);
     mat->SetDiffuseColor(fillColor);
 
@@ -208,8 +208,8 @@ void EditorGizmosGameObject::RenderCircle(float radius)
 void EditorGizmosGameObject::RenderIcon(const Texture2D *texture,
                                         bool billboard)
 {
-    MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(m_planeMesh);
-    ASSERT(mr->GetMaterial());
+    MeshRenderer *mr = GetComponent<MeshRenderer>(); ENSURE(m_planeMesh);
+    ENSURE(mr->GetMaterial());
     mr->SetMesh(m_planeMesh);
 
     SetDrawWireframe(false);
@@ -240,8 +240,8 @@ void EditorGizmosGameObject::RenderScreenIcon(const Texture2D *texture,
                                               const Rect &screenRect,
                                               bool fixAspectRatio)
 {
-    MeshRenderer *mr = GetComponent<MeshRenderer>(); ASSERT(m_planeMesh);
-    ASSERT(mr->GetMaterial());
+    MeshRenderer *mr = GetComponent<MeshRenderer>(); ENSURE(m_planeMesh);
+    ENSURE(mr->GetMaterial());
     mr->SetMesh(m_planeMesh);
 
     Gizmos::SetPosition( Vector3(screenRect.GetCenter(), 0) );
@@ -417,7 +417,7 @@ void EditorGizmosGameObject::Reset()
 
 void EditorGizmosGameObject::Render(Renderer *rend)
 {
-    GraphicPipeline *gp = GraphicPipeline::GetActive(); ASSERT(gp);
+    GraphicPipeline *gp = GraphicPipeline::GetActive(); ENSURE(gp);
     SelectionFramebuffer *sfb = gp->GetSelectionFramebuffer();
     if (!sfb->IsPassing())
     {

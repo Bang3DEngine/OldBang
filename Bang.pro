@@ -258,7 +258,8 @@ HEADERS +=                                                          \
     src/Domain/Engine/DataStructures/UMap.h \
     src/View/Shortcut.h \
     src/View/IconManager.h \
-    src/Domain/Engine/Image.h
+    src/Domain/Engine/Image.h \
+    include/Bang/Bang.h
 
 EDITOR {
 HEADERS += \

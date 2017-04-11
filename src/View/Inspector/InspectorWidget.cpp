@@ -285,7 +285,7 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
 
 void InspectorWidget::_OnSlotValueChanged()
 {
-    ASSERT(m_relatedInspectable);
+    ENSURE(m_relatedInspectable);
     if (m_created) { m_relatedInspectable->Read( GetWidgetXMLInfo() ); }
     WindowEventManager::GetInstance()->NotifyInspectorSlotChanged(this);
 }

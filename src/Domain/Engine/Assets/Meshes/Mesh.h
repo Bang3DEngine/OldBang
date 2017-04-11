@@ -20,9 +20,9 @@ class Mesh : public Asset
     ASSET_ICON(Mesh, "Icons/MeshAssetIcon.png")
 
 public:
-    static constexpr unsigned int DefaultPositionsVBOLocation = 0;
-    static constexpr unsigned int DefaultNormalsVBOLocation   = 1;
-    static constexpr unsigned int DefaultUvsVBOLocation       = 2;
+    static constexpr uint DefaultPositionsVBOLocation = 0;
+    static constexpr uint DefaultNormalsVBOLocation   = 1;
+    static constexpr uint DefaultUvsVBOLocation       = 2;
 
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override ;

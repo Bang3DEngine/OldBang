@@ -34,7 +34,7 @@ EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
 
 EditorRotateAxisGroup::~EditorRotateAxisGroup()
 {
-    delete m_circle->GetMaterial();
+    if (m_circle->GetMaterial()) { delete m_circle->GetMaterial(); }
 }
 
 void EditorRotateAxisGroup::OnUpdate()

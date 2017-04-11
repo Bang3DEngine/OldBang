@@ -23,10 +23,10 @@ public:
     void LoadFromImage(const Image &image);
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
-    void Fill(const unsigned char *newData, int width, int height,
+    void Fill(const byte *newData, int width, int height,
               Texture::Format imageFormat,
               bool genMipMaps = true);
-    void Fill(const unsigned char *newData, int width, int height,
+    void Fill(const byte *newData, int width, int height,
               int sizeOfNewData, bool genMipMaps = true);
     void GenerateMipMaps() const;
 

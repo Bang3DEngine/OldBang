@@ -61,7 +61,7 @@ public:
     GLint GetGLDataType() const;
     GLint GetGLFormat() const;
     GLint GetGLInternalFormat() const;
-    unsigned int GetBytesSize() const;
+    uint GetBytesSize() const;
 
     GL::BindTarget GetGLBindTarget() const override;
     void BindToTextureUnit(int textureUnit) const;
@@ -75,12 +75,12 @@ protected:
     WrapMode m_wrapMode = WrapMode::Repeat;
     int m_textureUnit = 0;
 
-    unsigned char *m_data = nullptr;
+    byte *m_data = nullptr;
 
     Format m_format = Format::RGBA_Float32;
     Target m_target = Target::Texture2D;
 
-    static unsigned int GetPixelBytesSize(Format texFormat);
+    static uint GetPixelBytesSize(Format texFormat);
     static GLint GetGLDataTypeFrom(Format texFormat);
     static GLint GetGLFormatFrom(Format texFormat);
     static GLint GetGLInternalFormatFrom(Format texFormat);

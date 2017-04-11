@@ -134,7 +134,7 @@ Project *ProjectManager::CreateNewProjectFileOnly(const String &projectFilepath)
 
 void ProjectManager::SaveProject(const Project *project)
 {
-    ASSERT(project);
+    ENSURE(project);
     bool ok = project->WriteToFile(project->GetProjectFileFilepath());
     if (ok)
     {

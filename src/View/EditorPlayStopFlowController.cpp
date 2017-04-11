@@ -66,7 +66,7 @@ bool EditorPlayStopFlowController::PlayScene()
 
 void EditorPlayStopFlowController::StopScene()
 {
-    ASSERT(EditorState::IsPlaying());
+    ENSURE(EditorState::IsPlaying());
 
     m_playing = false;
 

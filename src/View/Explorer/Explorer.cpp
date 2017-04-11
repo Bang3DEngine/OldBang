@@ -184,7 +184,7 @@ void Explorer::mouseDoubleClickEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton)
     {
-        ASSERT(selectedIndexes().length() > 0);
+        ENSURE(selectedIndexes().length() > 0);
         String selectedPath = GetSelectedFileOrDirPath();
         if (IO::Exists(selectedPath))
         {
@@ -386,7 +386,7 @@ void Explorer::SetLabelText(const String &absPath)
 
 void Explorer::OnDirLoaded(QString dir)
 {
-    ASSERT(EditorWindow::GetInstance());
+    ENSURE(EditorWindow::GetInstance());
 
     if (GetCurrentDir().Length() <=
         IO::GetProjectAssetsRootAbs().Length())
@@ -505,7 +505,7 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
         {
             // Create a prefab of selected on the current directory
             GameObject *selected = hierarchy->GetFirstSelectedGameObject();
-            ASSERT(selected);
+            ENSURE(selected);
 
             String path = GetCurrentDir() + "/" + selected->name;
             path = IO::AppendExtension(path,

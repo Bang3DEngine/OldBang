@@ -26,7 +26,7 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
 
 void MeshRenderer::SetMesh(Mesh *m)
 {
-    m_mesh = m; ASSERT(m_mesh);
+    m_mesh = m; ENSURE(m_mesh);
 
     if (!m_mesh->GetFilepath().Empty())
     {
@@ -47,7 +47,7 @@ const Mesh *MeshRenderer::GetMesh()
 
 void MeshRenderer::RenderWithoutMaterial() const
 {
-    ASSERT(m_mesh);
+    ENSURE(m_mesh);
     GL::Render(m_mesh->GetVAO(), m_renderMode, m_mesh->GetVertexCount());
 }
 

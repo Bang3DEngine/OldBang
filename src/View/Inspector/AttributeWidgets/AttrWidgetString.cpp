@@ -75,7 +75,7 @@ String AttrWidgetString::GetValue() const
 void AttrWidgetString::Refresh(const XMLAttribute &attribute)
 {
     AttributeWidget::Refresh(attribute);
-    ASSERT (attribute.GetType() == XMLAttribute::Type::String);
+    ENSURE (attribute.GetType() == XMLAttribute::Type::String);
     SetValue( attribute.GetString() );
 }
 

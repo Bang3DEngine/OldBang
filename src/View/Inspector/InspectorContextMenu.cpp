@@ -17,9 +17,9 @@ InspectorContextMenu::InspectorContextMenu(Inspector *inspector)
 
 void InspectorContextMenu::OnCustomContextMenuRequested(QPoint point)
 {
-    ASSERT(m_inspector);
-    ASSERT(m_inspector->p_currentGameObject);
-    ASSERT(!m_inspector->m_currentInspectorWidgets.Empty());
+    ENSURE(m_inspector);
+    ENSURE(m_inspector->p_currentGameObject);
+    ENSURE(!m_inspector->m_currentInspectorWidgets.Empty());
 
     QMenu contextMenu(tr("Inspector context menu"), m_inspector);
     contextMenu.addActions(EditorWindow::GetInstance()->menuComponents->actions());

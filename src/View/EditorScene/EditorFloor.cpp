@@ -30,7 +30,7 @@ EditorFloor::EditorFloor()
 
 EditorFloor::~EditorFloor()
 {
-    delete m_material;
+    if (m_material) { delete m_material; }
 }
 
 void EditorFloor::OnUpdate()

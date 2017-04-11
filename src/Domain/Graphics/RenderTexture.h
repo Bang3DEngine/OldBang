@@ -13,7 +13,7 @@ public:
     /*
     void CreateEmpty(int width, int height) override;
     void Resize(int width, int height) override;
-    void Fill(unsigned char *newData, int width, int height);
+    void Fill(byte *newData, int width, int height);
     */
 };
 

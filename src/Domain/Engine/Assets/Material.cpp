@@ -186,7 +186,7 @@ const Color& Material::GetDiffuseColor() const
 
 void Material::Bind() const
 {
-    ShaderProgram *sp = GetShaderProgram(); ASSERT(sp);
+    ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->Bind();
 
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
@@ -208,6 +208,6 @@ void Material::Bind() const
 
 void Material::UnBind() const
 {
-    ShaderProgram *sp = GetShaderProgram(); ASSERT(sp);
+    ShaderProgram *sp = GetShaderProgram(); ENSURE(sp);
     sp->UnBind();
 }

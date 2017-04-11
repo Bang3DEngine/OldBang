@@ -125,7 +125,7 @@ GraphicPipeline::~GraphicPipeline()
 
 void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
 {
-    p_scene = scene; ASSERT(p_scene);
+    p_scene = scene; ENSURE(p_scene);
     m_renderingInGame = inGame;
 
     List<Renderer*> renderers = scene->GetComponentsInChildren<Renderer>();
@@ -203,7 +203,7 @@ void GraphicPipeline::ApplyDeferredLights(Renderer *rend)
         renderRect = p_scene->GetBoundingScreenRect(sceneCam, true);
         // renderRect = Rect::ScreenRect;
     }
-    ASSERT(renderRect != Rect::Empty);
+    ENSURE(renderRect != Rect::Empty);
 
     // We have marked from before the zone where we want to apply the effect
     m_gbuffer->SetStencilTest(true);
@@ -278,7 +278,7 @@ void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
 {
     ShaderProgram *sp = m_renderGBufferToScreenMaterial->GetShaderProgram();
-    ASSERT(sp);
+    ENSURE(sp);
 
     m_renderGBufferToScreenMaterial->Bind();
     GL::ApplyContextToShaderProgram(sp);

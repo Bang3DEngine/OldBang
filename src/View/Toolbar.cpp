@@ -210,11 +210,11 @@ void Toolbar::OnStopClicked()
 void Toolbar::OnOrthoPerspectiveClicked()
 {
     Scene *currentScene = SceneManager::GetActiveScene();
-    ASSERT(currentScene);
+    ENSURE(currentScene);
 
-    Camera *cam = currentScene->GetCamera(); ASSERT(cam);
+    Camera *cam = currentScene->GetCamera(); ENSURE(cam);
     EditorCamera *edCam = cam->Cast<EditorCamera>( cam->gameObject->parent );
-    ASSERT(edCam);
+    ENSURE(edCam);
 
     bool mode3D = m_button3D->isChecked();
     edCam->SwitchProjectionModeTo(mode3D);

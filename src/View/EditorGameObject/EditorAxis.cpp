@@ -28,7 +28,7 @@ EditorAxis::EditorAxis(EditorAxis::EditorAxisDirection dir,
 
 EditorAxis::~EditorAxis()
 {
-    delete m_material;
+    if (m_material) { delete m_material; }
 }
 
 String EditorAxis::GetStringFromDir(EditorAxis::EditorAxisDirection dir)

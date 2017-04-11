@@ -183,7 +183,7 @@ void MenuBar::OnOpenScene() const
 
     String filename = Dialog::GetOpenFilename("Open scene...",
                                               Scene::GetFileExtensionStatic());
-    ASSERT(!filename.Empty());
+    ENSURE(!filename.Empty());
 
     SceneManager::LoadSceneInstantly(filename);
 }
@@ -194,7 +194,7 @@ void MenuBar::OnSaveScene() const
     if (filepath.Empty()) { OnSaveSceneAs(); }
     else
     {
-        Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
+        Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
         filepath = IO::AppendExtension(
                                filepath, Scene::GetFileExtensionStatic());
         scene->WriteToFile(filepath);
@@ -203,13 +203,13 @@ void MenuBar::OnSaveScene() const
 
 void MenuBar::OnSaveSceneAs() const
 {
-    Scene *scene = SceneManager::GetActiveScene(); ASSERT(scene);
+    Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
     String filepath = Dialog::GetSaveFilename(
                              "Save scene as...",
                              Scene::GetFileExtensionStatic(),
                              IO::GetProjectAssetsRootAbs(),
                              scene->name);
-    ASSERT(!filepath.Empty());
+    ENSURE(!filepath.Empty());
 
     filepath = IO::AppendExtension(filepath, Scene::GetFileExtensionStatic());
     scene->WriteToFile(filepath);
@@ -235,7 +235,7 @@ void MenuBar::OnCreateFromPrefab() const
 {
     String filename = Dialog::GetOpenFilename("Create from prefab...",
                                               Prefab::GetFileExtensionStatic());
-    ASSERT (!filename.Empty());
+    ENSURE (!filename.Empty());
 
     EditorWindow *w = EditorWindow::GetInstance();
 

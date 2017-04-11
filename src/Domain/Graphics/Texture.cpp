@@ -92,20 +92,20 @@ GLint Texture::GetGLInternalFormat() const
     return Texture::GetGLInternalFormatFrom(m_format);
 }
 
-unsigned int Texture::GetBytesSize() const
+uint Texture::GetBytesSize() const
 {
     return m_width * m_height * Texture::GetPixelBytesSize(m_format);
 }
 
-unsigned int Texture::GetPixelBytesSize(Texture::Format texFormat)
+uint Texture::GetPixelBytesSize(Texture::Format texFormat)
 {
     GLint glNumComponents = Texture::GetGLFormatFrom(texFormat);
     GLint glDataType      = Texture::GetGLDataTypeFrom(texFormat);
 
-    unsigned int numComps = 1;
+    uint numComps = 1;
     if (glNumComponents == GL_RGBA) { numComps = 4; }
 
-    unsigned int dataSize = 1;
+    uint dataSize = 1;
     if (glDataType == GL_FLOAT) { dataSize = 4; }
 
     return numComps * dataSize;

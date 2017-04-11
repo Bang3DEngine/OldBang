@@ -52,7 +52,7 @@ public:
     template<class ComponentClass>
     void OnMenuBarAddComponentClicked()
     {
-        ASSERT(p_currentGameObject);
+        ENSURE(p_currentGameObject);
         p_currentGameObject->AddComponent<ComponentClass>();
         Refresh();
     }

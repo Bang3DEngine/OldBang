@@ -32,7 +32,7 @@ String Texture2D::GetFileExtension() const
 
 void Texture2D::LoadFromImage(const String &imageFilepath)
 {
-    ASSERT(!imageFilepath.Empty());
+    ENSURE(!imageFilepath.Empty());
 
     m_imageFilepath = imageFilepath;
     Image img = Image::FromFile(m_imageFilepath);
@@ -56,7 +56,7 @@ void Texture2D::LoadFromImage(const Image &image)
 void Texture2D::CreateEmpty(int width, int height)
 {
     int dataSize = width * height * Texture::GetPixelBytesSize(m_format);
-    unsigned char *data = new unsigned char[dataSize];
+    byte *data = new byte[dataSize];
     memset(data, 0, dataSize);
     Fill(data, width, height, dataSize, true);
     delete[] data;
@@ -67,14 +67,14 @@ void Texture2D::Resize(int width, int height)
     CreateEmpty(width, height);
 }
 
-void Texture2D::Fill(const unsigned char *newData, int width, int height,
+void Texture2D::Fill(const byte *newData, int width, int height,
                      int sizeOfNewData, bool genMipMaps)
 {
     if (m_data) { delete[] m_data; }
 
-    unsigned int dataSize = sizeOfNewData >= 0 ?
+    uint dataSize = sizeOfNewData >= 0 ?
                                     sizeOfNewData : (width * height * 16);
-    m_data = new unsigned char[dataSize];
+    m_data = new byte[dataSize];
     memcpy(m_data, newData, dataSize); // Copy data
     m_width = width;
     m_height = height;
@@ -97,7 +97,7 @@ void Texture2D::GenerateMipMaps() const
     UnBind();
 }
 
-void Texture2D::Fill(const unsigned char *newData, int width, int height,
+void Texture2D::Fill(const byte *newData, int width, int height,
                      Texture::Format imageFormat,
                      bool genMipMaps)
 {

@@ -24,7 +24,7 @@ void TextureRender::Resize(int width, int height)
     Fill(m_data, width, height);
 }
 
-void TextureRender::Fill(unsigned char *newData, int width, int height)
+void TextureRender::Fill(byte *newData, int width, int height)
 {
     if (this->m_data  && this->m_data != newData)
         delete this->m_data;

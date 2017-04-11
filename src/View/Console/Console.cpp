@@ -25,7 +25,7 @@ Console::Console(QWidget *parent) : DragDropQTreeWidget()
 
 void Console::Clear()
 {
-    Console *console = Console::GetInstance(); ASSERT(console);
+    Console *console = Console::GetInstance(); ENSURE(console);
     console->OnClear();
 }
 

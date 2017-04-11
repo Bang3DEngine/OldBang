@@ -103,7 +103,7 @@ void AttrWidgetFile::RefreshIcon()
 
 void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
 {
-    ASSERT(m_filepath != filepath);
+    ENSURE(m_filepath != filepath);
 
     m_filepath = filepath;
 
@@ -196,9 +196,9 @@ void AttrWidgetFile::Refresh(const XMLAttribute &attribute)
 
 void AttrWidgetFile::OnDoubleClick()
 {
-    ASSERT(IO::ExistsFile(m_filepath));
-    ASSERT(!IO::IsEngineFile(m_filepath));
-    ASSERT( m_filepath.BeginsWith( IO::GetProjectRootAbs() ) );
+    ENSURE(IO::ExistsFile(m_filepath));
+    ENSURE(!IO::IsEngineFile(m_filepath));
+    ENSURE( m_filepath.BeginsWith( IO::GetProjectRootAbs() ) );
     Explorer::GetInstance()->SelectFile(m_filepath);
 }
 

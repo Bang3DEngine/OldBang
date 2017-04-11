@@ -35,7 +35,7 @@ ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
 
 ExplorerDirTree::~ExplorerDirTree()
 {
-   delete m_fileSystemModel;
+   if (m_fileSystemModel) { delete m_fileSystemModel; }
 }
 
 void ExplorerDirTree::CheckSelection()

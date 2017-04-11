@@ -52,7 +52,7 @@ void EditorRectTransformAnchorGizmo::OnUpdate()
 
 void EditorRectTransformAnchorGizmo::OnDrawGizmos(bool depthed, bool overlay)
 {
-    ASSERT(EditorState::GetCurrentTransformMode() == EditorState::RectTransform);
+    ENSURE(EditorState::GetCurrentTransformMode() == EditorState::RectTransform);
     if (overlay)
     {
         Gizmos::SetColor( m_anchorColor );
@@ -121,7 +121,7 @@ Quaternion EditorRectTransformAnchorGizmo::GetAnchorRotation() const
 void EditorRectTransformAnchorGizmo::ApplyDisplacementToAnchor(
         const Vector2 &mouseDisp)
 {
-    ASSERT(m_attachedRectTransform);
+    ENSURE(m_attachedRectTransform);
 
     Rect parentScreenRect = m_attachedRectTransform->GetParentScreenRect(true);
     Vector2 parentScreenSize( parentScreenRect.GetSize() );
