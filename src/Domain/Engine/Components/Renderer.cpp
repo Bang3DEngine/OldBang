@@ -26,7 +26,8 @@ Renderer::Renderer()
     p_OnBindForSelectionFunc = [](){};
     #endif
 
-    SetMaterial( AssetsManager::Load<Material>("Materials/G_Default.bmat", true));
+    SetMaterial( AssetsManager::Load<Material>("Materials/G_Default.bmat",
+                                               true));
 }
 
 Renderer::~Renderer()
@@ -225,7 +226,7 @@ void Renderer::Write(XMLNode *xmlInfo) const
     Material *sharedMat = GetSharedMaterial();
     if (sharedMat)
     {
-        if (sharedMat->GetFilepath() != "")
+        if (!sharedMat->GetFilepath().Empty())
         {
             xmlInfo->SetFilepath("Material", sharedMat->GetFilepath(), "bmat");
         }

@@ -2,7 +2,7 @@
 #define SINGLELINERENDERER_H
 
 #include "Bang/Array.h"
-
+#include "Bang/Vector3.h"
 #include "Bang/LineRenderer.h"
 
 class SingleLineRenderer : public LineRenderer

@@ -22,7 +22,6 @@ Mesh::Mesh(const Mesh &m)
     m_vertexPositionsVBO = m.m_vertexPositionsVBO;
     m_vertexNormalsVBO = m.m_vertexNormalsVBO;
     m_vertexUvsVBO = m.m_vertexUvsVBO;
-    m_vertexCount = m.m_vertexCount;
     m_positions = m.m_positions;
     m_normals = m.m_normals;
     m_uvs = m.m_uvs;
@@ -58,7 +57,8 @@ void Mesh::LoadFromFile(const String &filepath)
     }
     else
     {
-        Debug_Error("There was an error when reading mesh file '" << filepath << "'.");
+        Debug_Error("There was an error when reading mesh file '" <<
+                    filepath << "'.");
     }
 }
 
@@ -71,10 +71,10 @@ void Mesh::LoadPositions(const Array<Vector3>& positions)
     {
         m_positions.PushBack( Vector3::Zero );
     }
+
     m_vertexPositionsVBO = new VBO();
     m_vertexPositionsVBO->Fill((void*)(&m_positions[0]),
                                m_positions.Size() * sizeof(float) * 3);
-    m_vertexCount = m_positions.Size();
     BindPositionsVBOToLocation(Mesh::DefaultPositionsVBOLocation);
 
     m_bBox.FillFromPositions(m_positions);
@@ -141,12 +141,7 @@ VAO *Mesh::GetVAO() const
 
 int Mesh::GetVertexCount() const
 {
-    return m_vertexCount;
-}
-
-bool Mesh::IsATrianglesModel() const
-{
-    return true;
+    return m_positions.Size();
 }
 
 const AABox &Mesh::GetAABBox() const

@@ -259,7 +259,8 @@ HEADERS +=                                                          \
     src/View/Shortcut.h \
     src/View/IconManager.h \
     src/Domain/Engine/Image.h \
-    include/Bang/Bang.h
+    include/Bang/Bang.h \
+    src/Domain/Engine/Components/CircleCulledRenderer.h
 
 EDITOR {
 HEADERS += \
@@ -475,7 +476,8 @@ SOURCES += \
     src/Domain/Engine/DataStructures/UMap.cpp \
     src/View/Shortcut.cpp \
     src/View/IconManager.cpp \
-    src/Domain/Engine/Image.cpp
+    src/Domain/Engine/Image.cpp \
+    src/Domain/Engine/Components/CircleCulledRenderer.cpp
 
 EDITOR {
     SOURCES += \

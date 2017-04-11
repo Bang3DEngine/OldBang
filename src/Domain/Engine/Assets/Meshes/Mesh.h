@@ -41,7 +41,6 @@ public:
 
     VAO *GetVAO() const;
     int GetVertexCount() const;
-    bool IsATrianglesModel() const;
     const AABox& GetAABBox() const;
     const Sphere& GetBoundingSphere() const;
 
@@ -69,7 +68,6 @@ private:
     VBO *m_vertexPositionsVBO = nullptr;
     VBO *m_vertexNormalsVBO = nullptr;
     VBO *m_vertexUvsVBO = nullptr;
-    int m_vertexCount = 0;
 
     AABox m_bBox;
     Sphere m_bSphere;

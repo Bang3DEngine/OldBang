@@ -146,9 +146,9 @@ public:
     template <class T>
     T* GetComponent() const
     {
-        for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
+        for (Component *comp : m_components)
         {
-            T *tp = Object::Cast<T>(*comp);
+            T *tp = Object::Cast<T>(comp);
             if (tp) { return tp; }
         }
         return nullptr;
@@ -161,10 +161,9 @@ public:
     List<T*> GetComponents() const
     {
         List<T*> comps_l;
-        for (auto comp = m_components.Begin();
-             comp != m_components.End(); ++comp)
+        for (Component *comp : m_components)
         {
-            T *tp = Object::Cast<T>(*comp);
+            T *tp = Object::Cast<T>(comp);
             if (tp) { comps_l.PushBack(tp); }
         }
         return comps_l;

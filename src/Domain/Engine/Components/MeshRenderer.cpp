@@ -11,6 +11,7 @@
 
 MeshRenderer::MeshRenderer()
 {
+    SetRenderMode( GL::RenderMode::Triangles );
 }
 
 MeshRenderer::~MeshRenderer()
@@ -26,13 +27,7 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
 
 void MeshRenderer::SetMesh(Mesh *m)
 {
-    m_mesh = m; ENSURE(m_mesh);
-
-    if (!m_mesh->GetFilepath().Empty())
-    {
-        SetRenderMode(m_mesh->IsATrianglesModel() ?
-                      GL::RenderMode::Triangles : GL::RenderMode::Quads);
-    }
+    m_mesh = m;
 }
 
 AABox MeshRenderer::GetAABBox() const
@@ -48,7 +43,7 @@ const Mesh *MeshRenderer::GetMesh()
 void MeshRenderer::RenderWithoutMaterial() const
 {
     ENSURE(m_mesh);
-    GL::Render(m_mesh->GetVAO(), m_renderMode, m_mesh->GetVertexCount());
+    GL::Render(m_mesh->GetVAO(), GetRenderMode(), m_mesh->GetVertexCount());
 }
 
 void MeshRenderer::Read(const XMLNode &xmlInfo)

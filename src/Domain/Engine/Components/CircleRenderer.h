@@ -34,7 +34,7 @@ protected:
     float m_radius = 1.0f;
     int m_segments = 32;
 
-    virtual void GeneratePoints();
+    virtual void RefreshPoints() override;
 
     friend class EditorRotateAxis;
 };

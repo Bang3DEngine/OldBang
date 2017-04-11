@@ -1,14 +1,16 @@
 #include "Bang/SingleLineRenderer.h"
 
+#include "Bang/Mesh.h"
 #include "Bang/XMLNode.h"
 
 SingleLineRenderer::SingleLineRenderer()
 {
     m_points.Resize(2);
-    m_points[0] = Vector3(0.0f);
-    m_points[1] = Vector3(1.0f);
+    SetOrigin(Vector3::Zero);
+    SetDestiny(Vector3::One);
+    RefreshPoints();
 
-    m_drawLinesMode = GL::RenderMode::Lines;
+    SetRenderMode(GL::RenderMode::Lines);
 }
 
 SingleLineRenderer::~SingleLineRenderer()
@@ -26,13 +28,13 @@ void SingleLineRenderer::CloneInto(ICloneable *clone) const
 void SingleLineRenderer::SetOrigin(const Vector3 &o)
 {
     m_points[0] = o;
-    BindPointsToVAO();
+    RefreshPoints();
 }
 
 void SingleLineRenderer::SetDestiny(const Vector3 &d)
 {
     m_points[1] = d;
-    BindPointsToVAO();
+    RefreshPoints();
 }
 
 Vector3 SingleLineRenderer::GetOrigin() const
@@ -48,6 +50,7 @@ Vector3 SingleLineRenderer::GetDestiny() const
 void SingleLineRenderer::Read(const XMLNode &xmlInfo)
 {
     LineRenderer::Read(xmlInfo);
+
     SetOrigin(xmlInfo.GetVector3("Origin"));
     SetDestiny(xmlInfo.GetVector3("Destiny"));
 }

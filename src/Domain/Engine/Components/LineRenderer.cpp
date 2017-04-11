@@ -1,7 +1,6 @@
 #include "Bang/LineRenderer.h"
 
-#include "Bang/VBO.h"
-#include "Bang/VAO.h"
+#include "Bang/Mesh.h"
 #include "Bang/Math.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
@@ -10,37 +9,24 @@
 
 LineRenderer::LineRenderer()
 {
-    m_vbo = new VBO();
-    m_vao = new VAO();
+    m_linesMesh = new Mesh();
+    SetRenderMode(GL::RenderMode::Lines);
 }
 
-LineRenderer::~LineRenderer()
+void LineRenderer::RefreshPoints()
 {
-
-}
-
-void LineRenderer::BindPointsToVAO() const
-{
-    Material *mat = GetMaterial();
-    if (m_points.Size() >= 2 && mat && mat->GetShaderProgram() )
-    {
-        m_vbo->Fill(m_points.Data(), m_points.Size() * sizeof(Vector3));
-        GLint verticesShaderLocation = mat->GetShaderProgram()->
-                GetAttribLocation("B_In_PositionObject");
-        m_vao->UnBindVBO(verticesShaderLocation);
-        m_vao->BindVBO(m_vbo, verticesShaderLocation, 3, GL_FLOAT);
-    }
+    m_linesMesh->LoadPositions(m_points);
 }
 
 void LineRenderer::RenderWithoutMaterial() const
 {
-    GL::Render(m_vao, m_drawLinesMode, m_points.Size());
+    GL::Render(m_linesMesh->GetVAO(), GetRenderMode(),
+               m_linesMesh->GetVertexCount());
 }
 
-void LineRenderer::SetMaterial(Material *m)
+LineRenderer::~LineRenderer()
 {
-    Renderer::SetMaterial(m);
-    BindPointsToVAO();
+    if (m_linesMesh) { delete m_linesMesh; }
 }
 
 AABox LineRenderer::GetAABBox() const
@@ -51,12 +37,12 @@ AABox LineRenderer::GetAABBox() const
     Vector3 maxp = m_points.Front();
     for (const Vector3 &p : m_points)
     {
-        minp.x = Math::Min(minp.x, p.x);
-        minp.y = Math::Min(minp.y, p.y);
-        minp.z = Math::Min(minp.z, p.z);
-        maxp.x = Math::Max(maxp.x, p.x);
-        maxp.y = Math::Max(maxp.y, p.y);
-        maxp.z = Math::Max(maxp.z, p.z);
+       minp.x = Math::Min(minp.x, p.x);
+       minp.y = Math::Min(minp.y, p.y);
+       minp.z = Math::Min(minp.z, p.z);
+       maxp.x = Math::Max(maxp.x, p.x);
+       maxp.y = Math::Max(maxp.y, p.y);
+       maxp.z = Math::Max(maxp.z, p.z);
     }
 
     // Add a bit in every dimensions, to avoid flattened Rects
@@ -65,11 +51,7 @@ AABox LineRenderer::GetAABBox() const
     minp.y -= strokeAdd; maxp.y += strokeAdd;
     minp.z -= strokeAdd; maxp.z += strokeAdd;
     return AABox(minp, maxp);
-}
 
-const Array<Vector3> &LineRenderer::GetPoints() const
-{
-    return m_points;
 }
 
 void LineRenderer::Read(const XMLNode &xmlInfo)

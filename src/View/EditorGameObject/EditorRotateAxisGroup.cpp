@@ -12,6 +12,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/EditorRotateAxis.h"
+#include "Bang/CircleCulledRenderer.h"
 
 EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     : GameObject("EditorRotateAxisGroup")

@@ -52,12 +52,11 @@ public:
     virtual Rect GetBoundingRect(Camera *camera = nullptr) const override;
 
 private:
-    String m_content = "";
-
-    Font *m_font = nullptr;
-    int m_textSize = 64; // Set in the constructor
+    String m_content        = "";
+    Font *m_font            = nullptr;
+    int m_textSize          = 64;
     int m_horizontalSpacing = 5;
-    bool m_kerning = false;
+    bool m_kerning          = false;
 
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;
@@ -70,8 +69,8 @@ private:
     void FillQuadsMeshUvs();
     void RefreshMesh();
 
-    Vector2 ApplyAlignmentOffset(const Vector2& contentSize,
-                                 Vector2 *minPosition) const;
+    void ApplyAlignmentOffset(const Vector2& contentSize,
+                              Vector2 *minPosition) const;
 };
 
 #endif // UITEXT_H

@@ -44,7 +44,7 @@ AttrWidgetColor::~AttrWidgetColor()
 {
     if (m_colorDialog)     { delete m_colorDialog; }
     if (m_colorLabel)      { delete m_colorLabel; }
-    if (m_alphaWhiteLabel) { delete m_colorLabel; }
+    if (m_alphaWhiteLabel) { delete m_alphaWhiteLabel; }
     if (m_alphaBlackLabel) { delete m_alphaBlackLabel; }
 }
 

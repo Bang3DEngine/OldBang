@@ -143,8 +143,8 @@ void UIText::RefreshMesh()
     SetMesh(m_mesh);
 }
 
-Vector2 UIText::ApplyAlignmentOffset(const Vector2& contentSize,
-                                     Vector2 *minPosition) const
+void UIText::ApplyAlignmentOffset(const Vector2& contentSize,
+                                  Vector2 *minPosition) const
 {
     if (m_horizontalAlignment == HorizontalAlignment::Center)
     {

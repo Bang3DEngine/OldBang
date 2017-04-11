@@ -7,8 +7,7 @@
 #include "Bang/Vector3.h"
 #include "Bang/Renderer.h"
 
-class VBO;
-class VAO;
+class Mesh;
 class XMLNode;
 class Material;
 class ICloneable;
@@ -21,10 +20,7 @@ class LineRenderer : public Renderer
 public:
     virtual ~LineRenderer();
 
-    virtual void SetMaterial(Material *m) override;
-
     virtual AABox GetAABBox() const override;
-    const Array<Vector3>& GetPoints() const;
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
@@ -32,15 +28,13 @@ public:
 protected:
     Array<Vector3> m_points;
 
-    VBO *m_vbo = nullptr;
-    VAO *m_vao = nullptr;
+    LineRenderer();
 
-    GL::RenderMode m_drawLinesMode = GL::RenderMode::Lines;
-
-    virtual void BindPointsToVAO() const;
+    virtual void RefreshPoints();
     virtual void RenderWithoutMaterial() const override;
 
-    LineRenderer();
+private:
+    Mesh *m_linesMesh = nullptr;
 };
 
 #endif // LINERENDERER_H

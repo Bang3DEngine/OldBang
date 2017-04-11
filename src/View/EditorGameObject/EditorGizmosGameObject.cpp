@@ -33,12 +33,12 @@ void EditorGizmosGameObject::Init()
 {
     if (!m_inited)
     {
-        m_boxMesh = MeshFactory::GetCube();
-        m_planeMesh = MeshFactory::GetPlane();
+        m_boxMesh    = MeshFactory::GetCube();
+        m_planeMesh  = MeshFactory::GetPlane();
         m_sphereMesh = MeshFactory::GetSphere();
-        m_material = AssetsManager::Load<Material>(
-                    "./Materials/G_DefaultNoSP.bmat", true);
-        m_material = new Material(*m_material);
+        m_material   = AssetsManager::Load<Material>(
+                              "./Materials/G_DefaultNoSP.bmat", true);
+        m_material   = new Material(*m_material);
 
         AddComponent<SingleLineRenderer>();
         AddComponent<CircleRenderer>();
@@ -247,10 +247,9 @@ void EditorGizmosGameObject::RenderScreenIcon(const Texture2D *texture,
     Gizmos::SetPosition( Vector3(screenRect.GetCenter(), 0) );
     Gizmos::SetScale( Vector3(screenRect.GetSize(), 1) );
 
-    SetDrawWireframe(false);
+    mr->SetDrawWireframe(false);
     SetReceivesLighting(false);
-    Material *mat = mr->GetMaterial();
-    mat->SetTexture(texture);
+    mr->GetMaterial()->SetTexture(texture);
     GL::SetViewProjMode(fixAspectRatio ? GL::ViewProjMode::OnlyFixAspectRatio :
                                          GL::ViewProjMode::IgnoreBoth);
     Render(mr);

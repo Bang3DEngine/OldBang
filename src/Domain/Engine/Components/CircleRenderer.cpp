@@ -1,5 +1,7 @@
 #include "Bang/CircleRenderer.h"
 
+#include "Bang/Mesh.h"
+#include "Bang/Array.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Camera.h"
@@ -9,7 +11,7 @@
 
 CircleRenderer::CircleRenderer()
 {
-    m_drawLinesMode = GL::RenderMode::LineStrip;
+    SetRenderMode(GL::RenderMode::LineStrip);
 }
 
 CircleRenderer::~CircleRenderer()
@@ -24,31 +26,31 @@ void CircleRenderer::CloneInto(ICloneable *clone) const
     cr->SetSegments(GetSegments());
 }
 
-void CircleRenderer::GeneratePoints()
+void CircleRenderer::RefreshPoints()
 {
-    m_points.Clear();
     m_points.Resize(m_segments);
     const float step = (2.0f * Math::PI) / (m_segments - 1);
     for (int i = 0; i < m_segments; ++i)
     {
-        m_points[i] =
-              Vector3(Math::Cos(step*i), Math::Sin(step*i), 0.0f) * m_radius;
+        m_points[i] = Vector3(Math::Cos(step*i),
+                              Math::Sin(step*i),
+                              0.0f) * m_radius;
     }
+
+    LineRenderer::RefreshPoints();
 }
 
 
 void CircleRenderer::SetRadius(float radius)
 {
-    this->m_radius = radius;
-    GeneratePoints();
-    BindPointsToVAO();
+    m_radius = radius;
+    RefreshPoints();
 }
 
 void CircleRenderer::SetSegments(int segments)
 {
-    this->m_segments = segments;
-    GeneratePoints();
-    BindPointsToVAO();
+    m_segments = segments;
+    RefreshPoints();
 }
 
 float CircleRenderer::GetRadius() const

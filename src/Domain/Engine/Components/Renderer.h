@@ -82,8 +82,7 @@ public:
     DepthLayer GetDepthLayer() const;
 
 protected:
-
-    bool m_drawWireframe = false;
+    bool m_drawWireframe        = false;
     GL::CullMode m_cullMode     = GL::CullMode::Back;
     GL::RenderMode m_renderMode = GL::RenderMode::Triangles;
 
@@ -94,11 +93,11 @@ protected:
     virtual ~Renderer();
 
 private:
-    Material *m_material = nullptr;
+    Material *m_material     = nullptr;
     Material *m_materialCopy = nullptr;
 
     DepthLayer m_depthLayer = DepthLayerScene;
-    bool m_isTransparent = false;
+    bool m_isTransparent    = false;
 
     /**
      * @brief Width of the lines if rendering with Lines RenderMode

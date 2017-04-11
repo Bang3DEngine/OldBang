@@ -41,20 +41,5 @@ public:
     void OnDrawGizmos(bool depthed, bool overlay) override;
 };
 
-class CircleCulledRenderer : public LineRenderer
-{
-public:
-    float GetRadius() const;
-    void OnUpdate() override;
-
-    void GetTwoClosestPointsInScreenSpace(
-            const Vector2 &sOrigin,
-            Vector2 *p0, int *i0,
-            Vector2 *p1, int *i1 ) const;
-
-protected:
-    void GeneratePoints();
-    Vector3 GetCircleLocalPoint(float angle) const;
-};
 
 #endif // EDITORROTATEAXIS_H
