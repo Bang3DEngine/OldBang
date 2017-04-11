@@ -47,6 +47,12 @@ void MeshRenderer::SetMesh(Mesh *m)
     BindCurrentMeshToShaderProgram();
 }
 
+void MeshRenderer::Bind() const
+{
+    BindCurrentMeshToShaderProgram();
+    Renderer::Bind();
+}
+
 AABox MeshRenderer::GetAABBox() const
 {
     return m_mesh ? m_mesh->GetAABBox() : AABox::Empty;

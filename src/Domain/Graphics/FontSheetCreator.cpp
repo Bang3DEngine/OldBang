@@ -162,6 +162,7 @@ bool FontSheetCreator::LoadAtlasTexture(
     (*atlasTexture)->LoadFromImage(atlasImage);
     (*atlasTexture)->SetWrapMode(Texture::WrapMode::ClampToEdge);
     (*atlasTexture)->SetFilterMode(Texture::FilterMode::Trilinear);
+    (*atlasTexture)->SetAlphaCutoff(0.0f);
     (*atlasTexture)->GenerateMipMaps();
 
     *fontFace = face;

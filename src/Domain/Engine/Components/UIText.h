@@ -23,9 +23,6 @@ public:
     UIText();
     virtual ~UIText();
 
-    virtual void RenderWithoutMaterial() const override;
-    virtual void RenderForSelectionWithoutMaterial() const override;
-
     virtual void CloneInto(ICloneable *clone) const override;
 
     virtual void Read(const XMLNode &xmlInfo) override;
@@ -61,16 +58,13 @@ private:
     int m_textSize = 64; // Set in the constructor
     int m_horizontalSpacing = 5;
     bool m_kerning = false;
-    Material *m_textDrawOverUvsMaterial = nullptr;
 
     HorizontalAlignment m_horizontalAlignment = HorizontalAlignment::Left;
     VerticalAlignment m_verticalAlignment     = VerticalAlignment::Center;
 
-    bool IsValidChar(char c) const;
-
     Vector2 GetTextSizeScaled() const;
     Rect GetCharRect(char c) const;
-    float GetNDCAdvance(char current, char next = '\0') const;
+    float GetCharAdvance(char current, char next = '\0') const;
 
     void FillQuadsMeshPositions();
     void FillQuadsMeshUvs();

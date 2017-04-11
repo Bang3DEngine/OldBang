@@ -20,6 +20,7 @@ public:
 
     void SetMaterial(Material *m) override;
     virtual void SetMesh(Mesh *m);
+    void Bind() const override;
 
     virtual AABox GetAABBox() const override;
 

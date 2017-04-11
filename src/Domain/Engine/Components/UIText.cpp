@@ -37,21 +37,6 @@ UIText::~UIText()
     if (m_mesh) { delete m_mesh; }
 }
 
-void UIText::RenderWithoutMaterial() const
-{
-    ASSERT(m_font);
-    Texture2D *atlasTexture = m_font->GetAtlasTexture();
-    if (atlasTexture)
-    {
-        UIRenderer::RenderWithoutMaterial();
-    }
-}
-
-void UIText::RenderForSelectionWithoutMaterial() const
-{
-    RenderWithoutMaterial();
-}
-
 Rect UIText::GetCharRect(char c) const
 {
     Vector2 textSize = GetTextSizeScaled();
@@ -69,7 +54,7 @@ Rect UIText::GetCharRect(char c) const
     return Rect(charMin, charMin + charSize);
 }
 
-float UIText::GetNDCAdvance(char current, char next) const
+float UIText::GetCharAdvance(char current, char next) const
 {
     int advancePx = -1;
 
@@ -80,10 +65,10 @@ float UIText::GetNDCAdvance(char current, char next) const
     //    if (kernX > 5) { advancePx = kernX; }
     //}
 
-    if ( !IsValidChar(current) ) { advancePx = 100; }
+    Font::CharGlyphMetrics charMetrics = m_font->GetCharacterMetrics(current);
+    if (current == ' ' || charMetrics.width <= 0 ) { advancePx = 100; }
     if (advancePx < 0)
     {
-        Font::CharGlyphMetrics charMetrics = m_font->GetCharacterMetrics(current);
         advancePx = charMetrics.advance;
     }
     return advancePx * GetTextSizeScaled().x;
@@ -115,7 +100,7 @@ void UIText::FillQuadsMeshPositions()
         quadPos.PushBack( Vector3(charRectMin.x, charRectMax.y, 0) );
 
         const char nextChar = i < m_content.Length() - 1 ? m_content[i+1] : '\0';
-        const float advance = GetNDCAdvance(c, nextChar);
+        const float advance = GetCharAdvance(c, nextChar);
         totalAdv += advance + hSpacingNDC;
     }
     contentBoundMax.x = Math::Max(contentBoundMax.x,
@@ -153,9 +138,9 @@ void UIText::FillQuadsMeshUvs()
 void UIText::RefreshMesh()
 {
     ASSERT(m_font);
-    SetMesh(m_mesh);
     FillQuadsMeshPositions();
     FillQuadsMeshUvs();
+    SetMesh(m_mesh);
 }
 
 Vector2 UIText::ApplyAlignmentOffset(const Vector2& contentSize,
@@ -297,12 +282,6 @@ int UIText::GetHorizontalSpacing() const
 Rect UIText::GetBoundingRect(Camera *camera) const
 {
     return Rect::ScreenRect;
-}
-
-bool UIText::IsValidChar(char c) const
-{
-    Font::CharGlyphMetrics charMetrics = m_font->GetCharacterMetrics(c);
-    return c != ' ' && charMetrics.width > 0;
 }
 
 Vector2 UIText::GetTextSizeScaled() const

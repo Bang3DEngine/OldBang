@@ -13,8 +13,8 @@
 
 #ifdef BANG_EDITOR
 #include "Bang/Hierarchy.h"
-#include "Bang/EditorWindow.h"
 #include "Bang/GameObject.h"
+#include "Bang/EditorWindow.h"
 #include "Bang/WindowEventManager.h"
 #endif
 
@@ -25,10 +25,8 @@ SelectionFramebuffer::SelectionFramebuffer(int width, int height) :
                 IO::ToAbsolute("Shaders/SelectionBuffer.vert", true),
                 IO::ToAbsolute("Shaders/SelectionBuffer.frag", true));
 
-    CreateColorAttachment(AttColor,
-                          Texture::Format::RGBA_Float16);
-    CreateColorAttachment(AttWorldPos,
-                          Texture::Format::RGBA_Float16);
+    CreateColorAttachment(AttColor,    Texture::Format::RGBA_Float16);
+    CreateColorAttachment(AttWorldPos, Texture::Format::RGBA_Float16);
     CreateDepthRenderbufferAttachment();
 
     m_colorTexture    = GetAttachmentTexture(AttColor);
@@ -67,13 +65,11 @@ void SelectionFramebuffer::RenderForSelectionBuffer(Renderer *rend)
                 rend->gameObject : m_nextGameObjectToBeRendered;
     if (CanRenderGameObject(go))
     {
-        Material *rendMaterial = rend->GetMaterial();
-
         // This should be a selection ReplacementShader put by the GP
+        Material *rendMaterial = rend->GetMaterial();
         ShaderProgram *sp = rendMaterial->GetShaderProgram();
         sp->SetColor("selectionColor", GetSelectionColor(go));
 
-        GL::ApplyContextToShaderProgram(sp);
         rend->Render();
     }
 }

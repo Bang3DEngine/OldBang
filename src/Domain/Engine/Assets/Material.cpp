@@ -188,7 +188,6 @@ void Material::Bind() const
 {
     ShaderProgram *sp = GetShaderProgram(); ASSERT(sp);
     sp->Bind();
-    GL::ApplyContextToShaderProgram(sp);
 
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
     gb->BindTextureBuffersTo(sp);
@@ -203,6 +202,8 @@ void Material::Bind() const
     sp->SetTexture("B_Texture0",  m_texture);
     sp->SetFloat("B_AlphaCutoff", alphaCutoff);
     sp->SetBool("B_HasTexture",  m_texture != nullptr);
+
+    GL::ApplyContextToShaderProgram(sp);
 }
 
 void Material::UnBind() const

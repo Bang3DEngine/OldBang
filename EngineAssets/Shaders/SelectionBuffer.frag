@@ -13,7 +13,7 @@ void main()
     if (B_HasTexture)
     {
         vec4 texColor = texture2D(B_Texture0, B_FragIn_Uv);
-        if (texColor.a <= B_AlphaCutoff) { discard; }
+        if (texColor.a <= 0.0f) { discard; }
     }
 
     fragColor = selectionColor;
