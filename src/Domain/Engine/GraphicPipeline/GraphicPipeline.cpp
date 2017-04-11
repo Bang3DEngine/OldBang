@@ -267,8 +267,6 @@ void GraphicPipeline::RenderSelectionBuffer(
 
 void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 {
-    m_screenPlaneMesh->BindPositionsToShaderProgram("B_In_PositionObject", *sp);
-
     sp->SetVec2("B_rectMinCoord", mask.GetMin());
     sp->SetVec2("B_rectMaxCoord", mask.GetMax());
 
@@ -285,7 +283,6 @@ void GraphicPipeline::RenderToScreen(Texture *fullScreenTexture)
     m_renderGBufferToScreenMaterial->Bind();
     GL::ApplyContextToShaderProgram(sp);
 
-    m_screenPlaneMesh->BindPositionsToShaderProgram("B_In_PositionObject", *sp);
     sp->SetTexture("B_GTex_Color", fullScreenTexture);
 
     GraphicPipeline::RenderScreenPlane();

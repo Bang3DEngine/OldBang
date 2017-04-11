@@ -5,9 +5,8 @@
 #include "Bang/VAO.h"
 #include "Bang/VBO.h"
 #include "Bang/XMLNode.h"
-#include "Bang/SerializableObject.h"
 #include "Bang/FileReader.h"
-#include "Bang/ShaderProgram.h"
+#include "Bang/SerializableObject.h"
 
 Mesh::Mesh()
 {
@@ -31,9 +30,9 @@ Mesh::Mesh(const Mesh &m)
 
 Mesh::~Mesh()
 {
-    if (m_vertexPositionsVBO) delete m_vertexPositionsVBO;
-    if (m_vertexNormalsVBO)   delete m_vertexNormalsVBO;
-    if (m_vertexNormalsVBO)   delete m_vertexUvsVBO;
+    if (m_vertexPositionsVBO) { delete m_vertexPositionsVBO; }
+    if (m_vertexNormalsVBO)   { delete m_vertexNormalsVBO;   }
+    if (m_vertexUvsVBO)       { delete m_vertexUvsVBO;       }
 }
 
 String Mesh::GetFileExtensionStatic()
@@ -65,7 +64,7 @@ void Mesh::LoadFromFile(const String &filepath)
 
 void Mesh::LoadPositions(const Array<Vector3>& positions)
 {
-    if (m_vertexPositionsVBO) delete m_vertexPositionsVBO;
+    if (m_vertexPositionsVBO) { delete m_vertexPositionsVBO; }
 
     m_positions = positions;
     if (m_positions.Empty())
@@ -76,6 +75,7 @@ void Mesh::LoadPositions(const Array<Vector3>& positions)
     m_vertexPositionsVBO->Fill((void*)(&m_positions[0]),
                                m_positions.Size() * sizeof(float) * 3);
     m_vertexCount = m_positions.Size();
+    BindPositionsVBOToLocation(Mesh::DefaultPositionsVBOLocation);
 
     m_bBox.FillFromPositions(m_positions);
     m_bSphere.FromBox(m_bBox);
@@ -93,6 +93,7 @@ void Mesh::LoadNormals(const Array<Vector3> &normals)
     m_vertexNormalsVBO = new VBO();
     m_vertexNormalsVBO->Fill((void*)(&m_normals[0]),
                                      m_normals.Size() * sizeof(float) * 3);
+    BindNormalsVBOToLocation(Mesh::DefaultNormalsVBOLocation);
 }
 
 void Mesh::LoadUvs(const Array<Vector2> &uvs)
@@ -106,6 +107,7 @@ void Mesh::LoadUvs(const Array<Vector2> &uvs)
     }
     m_vertexUvsVBO = new VBO();
     m_vertexUvsVBO->Fill((void*)(&m_uvs[0]), m_uvs.Size() * sizeof(float) * 2);
+    BindUvsVBOToLocation(Mesh::DefaultUvsVBOLocation);
 }
 
 void Mesh::LoadAll(const Array<Vector3> &positions,
@@ -117,41 +119,19 @@ void Mesh::LoadAll(const Array<Vector3> &positions,
     LoadUvs(uvs);
 }
 
-void Mesh::BindPositionsToShaderProgram(const String &nameInShader,
-                                        const ShaderProgram &sp) const
+void Mesh::BindPositionsVBOToLocation(int positionsVBOLocation)
 {
-    if (m_vertexPositionsVBO)
-    {
-        GLint location = sp.GetAttribLocation(nameInShader);
-        m_vao->BindVBO(m_vertexPositionsVBO, location, 3);
-    }
+    m_vao->BindVBO(m_vertexPositionsVBO, positionsVBOLocation, 3);
 }
 
-void Mesh::BindNormalsToShaderProgram(const String &nameInShader,
-                                      const ShaderProgram &sp) const
+void Mesh::BindNormalsVBOToLocation(int normalsVBOLocation)
 {
-    if (m_vertexNormalsVBO)
-    {
-        GLint location = sp.GetAttribLocation(nameInShader);
-        m_vao->BindVBO(m_vertexNormalsVBO, location, 3);
-    }
+    m_vao->BindVBO(m_vertexNormalsVBO, normalsVBOLocation, 3);
 }
 
-void Mesh::BindUvsToShaderProgram(const String &nameInShader,
-                                  const ShaderProgram &sp) const
+void Mesh::BindUvsVBOToLocation(int uvsVBOLocation)
 {
-    if (m_vertexUvsVBO)
-    {
-        GLint location = sp.GetAttribLocation(nameInShader);
-        m_vao->BindVBO(m_vertexUvsVBO, location, 2);
-    }
-}
-
-void Mesh::BindAllVBOsToShaderProgram(const ShaderProgram &sp)
-{
-    BindPositionsToShaderProgram("B_In_PositionObject", sp);
-    BindNormalsToShaderProgram("B_In_NormalObject", sp);
-    BindUvsToShaderProgram("B_In_Uv", sp);
+    m_vao->BindVBO(m_vertexUvsVBO, uvsVBOLocation, 2);
 }
 
 VAO *Mesh::GetVAO() const
@@ -211,3 +191,4 @@ void Mesh::Write(XMLNode *xmlInfo) const
     Asset::Write(xmlInfo);
     xmlInfo->SetFilepath("MeshFilepath", m_meshFilepath, "obj");
 }
+

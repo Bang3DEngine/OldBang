@@ -2,7 +2,7 @@
 
 #include "Bang/CodePreprocessor.h"
 
-const String ShaderPreprocessor::c_version = "#version 130";
+const String ShaderPreprocessor::GLSLVersionString = "#version 130";
 
 void ShaderPreprocessor::PreprocessCode(String *shaderSourceCode)
 {
@@ -11,8 +11,7 @@ void ShaderPreprocessor::PreprocessCode(String *shaderSourceCode)
 
     String &code = *shaderSourceCode;
 
-    // Add the version. It must be the very first line
-    code.Prepend(ShaderPreprocessor::c_version + "\n");
+    code.Prepend(ShaderPreprocessor::GLSLVersionString + "\n");
 }
 
 ShaderPreprocessor::ShaderPreprocessor()

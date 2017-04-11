@@ -11,7 +11,9 @@ uniform mat4 B_PVM;
 // ///////////////////////////////////////
 
 
-// Camera ////////////////////////////////
+// Misc ////////////////////////////////
+// Uniform that's always False. Useful to fool glsl optimization.
+uniform bool B_False = false;
 // ///////////////////////////////////////
 
 
@@ -59,7 +61,7 @@ uniform sampler2D B_GTex_Color;
 // In/Out Structures ///////////////////////////
 #ifdef BANG_G
     #ifdef BANG_VERTEX
-        in vec3 B_In_PositionObject;
+        in vec3 B_In_PositionObject; // Order is important, for vao-vbo location
         in vec3 B_In_NormalObject;
         in vec2 B_In_Uv;
 

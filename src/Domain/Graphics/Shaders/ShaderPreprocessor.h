@@ -15,7 +15,7 @@ public:
     static void PreprocessCode(String *shaderSourceCode);
 
 protected:
-    static const String c_version;
+    static const String GLSLVersionString;
 
 private:
     ShaderPreprocessor();

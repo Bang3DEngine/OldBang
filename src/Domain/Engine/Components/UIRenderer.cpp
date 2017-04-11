@@ -39,7 +39,7 @@ const Color &UIRenderer::GetTint() const
 void UIRenderer::Bind() const
 {
     GL::SetViewProjMode( GL::ViewProjMode::IgnoreBoth );
-    MeshRenderer::Bind();
+    Renderer::Bind();
 }
 
 void UIRenderer::UnBind() const

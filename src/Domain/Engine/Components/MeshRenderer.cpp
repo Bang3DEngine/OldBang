@@ -24,16 +24,6 @@ void MeshRenderer::CloneInto(ICloneable *clone) const
     mr->SetMesh(m_mesh);
 }
 
-void MeshRenderer::SetMaterial(Material *m)
-{
-    Renderer::SetMaterial(m);
-    Material *mat = GetMaterial();
-    if (m_mesh && mat && mat->GetShaderProgram() )
-    {
-        m_mesh->BindAllVBOsToShaderProgram(*(mat->GetShaderProgram()));
-    }
-}
-
 void MeshRenderer::SetMesh(Mesh *m)
 {
     m_mesh = m; ASSERT(m_mesh);
@@ -43,14 +33,6 @@ void MeshRenderer::SetMesh(Mesh *m)
         SetRenderMode(m_mesh->IsATrianglesModel() ?
                       GL::RenderMode::Triangles : GL::RenderMode::Quads);
     }
-
-    BindCurrentMeshToShaderProgram();
-}
-
-void MeshRenderer::Bind() const
-{
-    BindCurrentMeshToShaderProgram();
-    Renderer::Bind();
 }
 
 AABox MeshRenderer::GetAABBox() const
@@ -88,12 +70,4 @@ void MeshRenderer::Write(XMLNode *xmlInfo) const
     }
     xmlInfo->SetFilepath("Mesh", m_mesh ? m_mesh->GetFilepath() : "",
                          Mesh::GetFileExtensionStatic());
-}
-
-void MeshRenderer::BindCurrentMeshToShaderProgram() const
-{
-    Material *mat = GetMaterial();
-    ASSERT(m_mesh); ASSERT(mat); ASSERT(mat->GetShaderProgram());
-
-    m_mesh->BindAllVBOsToShaderProgram(*(mat->GetShaderProgram()));
 }

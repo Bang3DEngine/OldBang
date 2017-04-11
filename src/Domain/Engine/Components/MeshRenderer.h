@@ -18,9 +18,7 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    void SetMaterial(Material *m) override;
     virtual void SetMesh(Mesh *m);
-    void Bind() const override;
 
     virtual AABox GetAABBox() const override;
 
@@ -32,7 +30,6 @@ public:
 protected:
     mutable Mesh *m_mesh = nullptr;
 
-    void BindCurrentMeshToShaderProgram() const;
     virtual void RenderWithoutMaterial() const override;
 };
 

@@ -2,8 +2,9 @@
 
 uniform vec4 selectionColor;
 
-in vec2 B_FragIn_Uv;
 in vec4 B_FragIn_PositionWorld;
+in vec3 B_FragIn_NormalWorld;
+in vec2 B_FragIn_Uv;
 
 out vec4 fragColor;
 out vec4 worldPosition;

@@ -12,15 +12,18 @@ class Sphere;
 class Vector2;
 class Vector3;
 class XMLNode;
-class SerializableObject;
 class FileReader;
-class ShaderProgram;
+class SerializableObject;
 class Mesh : public Asset
 {
 	OBJECT(Mesh)
     ASSET_ICON(Mesh, "Icons/MeshAssetIcon.png")
 
 public:
+    static constexpr unsigned int DefaultPositionsVBOLocation = 0;
+    static constexpr unsigned int DefaultNormalsVBOLocation   = 1;
+    static constexpr unsigned int DefaultUvsVBOLocation       = 2;
+
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override ;
 
@@ -36,15 +39,6 @@ public:
                  const Array<Vector3>& normals,
                  const Array<Vector2>& uvs);
 
-    void BindPositionsToShaderProgram(const String &nameInShader,
-                                      const ShaderProgram &sp) const;
-    void BindNormalsToShaderProgram(const String &nameInShader,
-                                    const ShaderProgram &sp) const;
-    void BindUvsToShaderProgram(const String &nameInShader,
-                                const ShaderProgram &sp) const;
-
-    void BindAllVBOsToShaderProgram(const ShaderProgram &sp);
-
     VAO *GetVAO() const;
     int GetVertexCount() const;
     bool IsATrianglesModel() const;
@@ -59,6 +53,10 @@ public:
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
+
+    void BindPositionsVBOToLocation(int positionsVBOLocation);
+    void BindNormalsVBOToLocation(int normalsVBOLocation);
+    void BindUvsVBOToLocation(int uvsVBOLocation);
 
 private:
     String m_meshFilepath = "";
