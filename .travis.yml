@@ -29,7 +29,6 @@ install:
 - sudo apt-get install libassimp-dev
 - export QT_SELECT=5
 
-
 addons:
   coverity_scan:
     project:
@@ -37,8 +36,8 @@ addons:
       description: "Description"
     notification_email: victorantondominguez@gmail.com
     build_command_prepend: ""
-    build_command:   "./scripts/fullCompile.sh EDITOR DEBUG_MODE"
-    branch_pattern: coverity_scan
+    build_command: "./scripts/fullCompile.sh EDITOR DEBUG_MODE"
+    branch_pattern: master
 
 script:
 - ./scripts/fullCompile.sh EDITOR DEBUG_MODE
