@@ -40,6 +40,7 @@ isEmpty(RELEASE_OR_DEBUG) {
 CONFIG += $$BUILD_MODE $$RELEASE_OR_DEBUG
 CONFIG += qt
 MOC_DIR = src/Qt_MOCs/
+UI_DIR  = include/Bang
 EDITOR {
     FORMS   += EngineAssets/EditorWindow.ui
     FORMS   += EngineAssets/SelectProjectWindow.ui
@@ -151,7 +152,7 @@ HEADERS +=                                                          \
     src/Domain/Engine/Components/Behaviour.h                        \
     src/Domain/Engine/Assets/Texture2D.h                            \
     src/Domain/Engine/Assets/Prefab.h                               \
-    src/Bang.h                                                      \
+    include/Bang/Bang.h                                             \
     src/Persistence/AssetsManager.h                                 \
     src/Domain/Engine/Others/Input.h                                \
     src/Persistence/IO.h                                            \
@@ -259,7 +260,6 @@ HEADERS +=                                                          \
     src/View/Shortcut.h \
     src/View/IconManager.h \
     src/Domain/Engine/Image.h \
-    include/Bang/Bang.h \
     src/Domain/Engine/Components/CircleCulledRenderer.h
 
 EDITOR {
