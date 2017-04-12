@@ -3,6 +3,10 @@ language: cpp
 compiler:
 - g++
 
+env:
+  global:
+   - secure: "LaeiBMaCHz5NWn93kxmY9fDdrgTe9A+yXXfVJAWT0t3zXyZDkET9JY0ZarNyxTuS76+oifgsIdPKpSVcea9/qkY3oj4TLhIndXVER0zN/Cw+In3eTyaV+RGhHWwJSUoCia8QmB4CmPwEbhMol7WxPjlV6CJgfSHqVHxNJPFo7PERZPQhz/JaGYkgelcYl4TqEs+dM/UAp5TkPCPYp8rJaYRCEGntyUsJUuDAqMdGATFF0ERh15XWjWRCdNdvc1Cjfa8VhsZXjwe0V1rh53VBCPEkdq9oROTTxKNPh//HsB7LlVqikbf6I+1CBkzQW8PPNniiC2sq0/pcD1rGpe6SmaC7KxTuJhOhecsZQipTOE2oLk4dq7krBlJEJj3zjC80zt8aTVtsjo+GCtfkG8F1Zabjd0ZrRMgxaFKcvqfD5v5TEe63G9Ib55kSizGsfykqMfnRbsXl/8cRAGY14xaGBW5ScA5vkee766Vb7xnO6tW/zhI3ZBShA5OdcdPvdr0Z9zSbxGlvWrPB7obCUELG+uiuOIBvIz7Bu+Zfqg8i0Y3eBpaOVTvgMWI4PjbePHPBWAGCnPXhR4E01tkoN0JCbRYXgCL0vmTKJUktV5bQX1XYgchxXX4TzesUSmFE/IjGRmkZgtMoutPgBV/XMxEi5NkMeRTsGOmQRhFFadcnLc4="
+
 dist: trusty
 sudo: required
 
@@ -10,6 +14,9 @@ notifications:
   email:
     on_success: never
     on_failure: never
+
+before_install:
+      - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 
 install:
 - sudo apt-get update
@@ -19,7 +26,19 @@ install:
 - sudo apt-get install libfreetype6-dev
 - sudo apt-get install libopenal-dev
 - sudo apt-get install libalut-dev
+- sudo apt-get install libassimp-dev
 - export QT_SELECT=5
+
+
+addons:
+  coverity_scan:
+    project:
+      name: "Bang3DEngine/Bang"
+      description: "Description"
+    notification_email: victorantondominguez@gmail.com
+    build_command_prepend: ""
+    build_command:   "./scripts/fullCompile.sh EDITOR DEBUG_MODE"
+    branch_pattern: coverity_scan
 
 script:
 - ./scripts/fullCompile.sh EDITOR DEBUG_MODE
