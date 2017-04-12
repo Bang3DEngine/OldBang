@@ -19,12 +19,12 @@ public:
         Cancel = QMessageBox::Cancel
     };
 
-    static String GetOpenDirname(const String &caption = "Choose a directory",
+    static String GetOpenDirpath(const String &caption = "Choose a directory",
                                  const String &initDirectory = String(QDir::homePath()) );
-    static String GetOpenFilename(const String &caption = "Open file",
+    static String GetOpenFilepath(const String &caption = "Open file",
                                   const String &extension = "*",
                                   const String &initDir = IO::GetProjectAssetsRootAbs());
-    static String GetSaveFilename(const String &caption = "Save file",
+    static String GetSaveFilepath(const String &caption = "Save file",
                                   const String &extension = "*",
                                   const String &initPath = IO::GetProjectAssetsRootAbs(),
                                   const String &suggestedFilename = "",

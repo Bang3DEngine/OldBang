@@ -1,6 +1,7 @@
 #include "Bang/EditorWindow.h"
 
 #include "Bang/Debug.h"
+#include "Bang/Project.h"
 #include "Bang/Toolbar.h"
 #include "Bang/Explorer.h"
 #include "Bang/Hierarchy.h"
@@ -8,6 +9,7 @@
 #include "Bang/EditorState.h"
 #include "Bang/EditorScene.h"
 #include "Bang/SceneManager.h"
+#include "Bang/ProjectManager.h"
 #include "Bang/SingletonManager.h"
 #include "Bang/WindowEventManager.h"
 #include "Bang/EditorPlayStopFlowController.h"
@@ -17,7 +19,9 @@ EditorWindow *EditorWindow::s_win = nullptr;
 EditorWindow::EditorWindow(QWidget *parent) :
     QObject(parent), Ui_EditorWindow()
 {
-
+    m_refreshTimer.start(1000);
+    QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
+                     this, SLOT(Refresh()));
 }
 
 void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *application)
@@ -48,8 +52,8 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
 
     QDockWidget *hierarchyDock = EditorWindow::s_win->dockHierarchy;
     QDockWidget *inspectorDock = EditorWindow::s_win->dockInspector;
-    QDockWidget *explorerDock = EditorWindow::s_win->dockExplorer;
-    QDockWidget *ConsoleDock = EditorWindow::s_win->dockConsole;
+    QDockWidget *explorerDock  = EditorWindow::s_win->dockExplorer;
+    QDockWidget *consoleDock   = EditorWindow::s_win->dockConsole;
 
     // Take out dock titles above
     /*
@@ -63,9 +67,9 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     hierarchyDock->setWindowFlags(Qt::WindowTitleHint);
     inspectorDock->setWindowFlags(Qt::WindowTitleHint);
     explorerDock->setWindowFlags(Qt::WindowTitleHint);
-    ConsoleDock->setWindowFlags(Qt::WindowTitleHint);
+    consoleDock->setWindowFlags(Qt::WindowTitleHint);
 
-    window->tabifyDockWidget(explorerDock, ConsoleDock);
+    window->tabifyDockWidget(explorerDock, consoleDock);
     explorerDock->raise();
 
     window->setCorner(Qt::TopLeftCorner,     Qt::LeftDockWidgetArea);
@@ -83,6 +87,23 @@ bool EditorWindow::IsSceneTabActive() const
 bool EditorWindow::IsGameTabActive() const
 {
     return tabContainerSceneGame->currentWidget() == tabGame;
+}
+
+void EditorWindow::RefreshDocksAndWindowTitles()
+{
+    String windowTitle = "Bang - ";
+    windowTitle += ProjectManager::GetCurrentProject()->GetProjectName();
+
+    String sceneTitle = SceneManager::GetOpenSceneFilepath();
+    sceneTitle = IO::GetFileName(sceneTitle);
+    if (!SceneManager::IsCurrentSceneSaved())
+    {
+        sceneTitle += " *";
+    }
+    windowTitle += " - " + sceneTitle;
+
+    tabContainerSceneGame->setTabText(0, sceneTitle.ToQString());
+    m_mainWindow->setWindowTitle(windowTitle.ToQString());
 }
 
 EditorWindow *EditorWindow::GetInstance()
@@ -130,4 +151,9 @@ void EditorWindow::OnTabSceneGameChanged(int index)
     }
 
     Toolbar::GetInstance()->OnSceneGameTabChanged();
+}
+
+void EditorWindow::Refresh()
+{
+    RefreshDocksAndWindowTitles();
 }

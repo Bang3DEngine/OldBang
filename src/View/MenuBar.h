@@ -34,6 +34,7 @@ public slots:
     void OnSaveProject() const;
     void OnNewScene() const;
     void OnOpenScene() const;
+    void OpenScene(const String &filepath) const;
     void OnSaveScene() const;
     void OnSaveSceneAs() const;
     void OnBuild() const;

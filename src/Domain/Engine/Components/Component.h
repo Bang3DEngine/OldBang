@@ -46,6 +46,7 @@ public:
     void SetClosedInInspector(bool closed);
     bool IsClosedInInspector() const;
 
+    virtual String GetInstanceId() const override;
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

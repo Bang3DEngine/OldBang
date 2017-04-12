@@ -270,6 +270,7 @@ public:
 
     void UpdateXMLInfo(const XMLNode &xmlInfo);
     void ReadFirstTime(const XMLNode &xmlInfo);
+    virtual String GetInstanceId() const override;
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 

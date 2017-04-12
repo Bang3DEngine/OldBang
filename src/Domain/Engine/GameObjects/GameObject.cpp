@@ -510,9 +510,9 @@ void GameObject::Write(XMLNode *xmlInfo) const
     SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName("GameObject");
-    xmlInfo->SetPointer("id", this,
-                        {XMLProperty::Hidden,
-                         XMLProperty::Readonly});
+    xmlInfo->SetString("id", GetInstanceId(),
+                       {XMLProperty::Hidden,
+                        XMLProperty::Readonly});
     xmlInfo->SetBool("enabled", m_enabled,
                      {XMLProperty::Hidden,
                       XMLProperty::Readonly});
@@ -725,6 +725,19 @@ void GameObject::OnDropMaterial(Material *m)
     {
         r->SetMaterial(m);
     }
+}
+
+String GameObject::GetInstanceId() const
+{
+    String instanceId = name;
+    if (parent)
+    {
+        instanceId.Prepend( parent->GetInstanceId() + "_");
+        GameObject *ncThis = const_cast<GameObject*>(this);
+        int indexInParent = parent->GetChildren().IndexOf(ncThis);
+        instanceId.Append( String::ToString(indexInParent) );
+    }
+    return instanceId;
 }
 
 #endif

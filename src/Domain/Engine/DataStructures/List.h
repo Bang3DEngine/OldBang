@@ -49,7 +49,6 @@ public:
         this->splice(insertAfter, src, srcRangeBegin, srcRangeEnd);
     }
 
-
     void Clear()
     {
         this->clear();
@@ -104,7 +103,18 @@ public:
         return End();
     }
 
-    int CountOccurrences(const T& x)
+    int IndexOf(const T& x) const
+    {
+        int i = 0;
+        for (const T& y : *this)
+        {
+            if (x == y)  { return i; }
+            ++i;
+        }
+        return -1;
+    }
+
+    int CountOccurrences(const T& x) const
     {
         int c = 0;
         for (auto it = Begin(); it != End(); ++it)

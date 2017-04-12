@@ -39,7 +39,7 @@ String GameBuilder::AskForExecutableFilepath()
     const String defaultOutputDirectory = IO::GetProjectRootAbs();
     const String projectName = ProjectManager::GetCurrentProject()->GetProjectName();
     String executableFilepath =
-        Dialog::GetSaveFilename("Choose the file where you want to create your game",
+        Dialog::GetSaveFilepath("Choose the file where you want to create your game",
                                 "exe",
                                 defaultOutputDirectory,
                                 projectName + ".exe");

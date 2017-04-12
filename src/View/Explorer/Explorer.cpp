@@ -232,8 +232,7 @@ void Explorer::OnFileDoubleClicked(const String &filepath)
     File f(filepath);
     if (f.IsScene())
     {
-        // TODO: Check for scene saving.
-        SceneManager::LoadSceneInstantly(f.GetAbsolutePath());
+        MenuBar::GetInstance()->OpenScene(f.GetAbsolutePath());
     }
     else if (f.IsBehaviour())
     {

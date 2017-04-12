@@ -34,8 +34,8 @@ QWidget *Dialog::GetCurrentWindow()
     return nullptr;
 }
 
-String Dialog::GetOpenDirname(const String &caption,
-                                  const String &initDirectory)
+String Dialog::GetOpenDirpath(const String &caption,
+                              const String &initDirectory)
 {
     String dir =
             String(
@@ -53,7 +53,7 @@ String Dialog::GetOpenDirname(const String &caption,
     return dir;
 }
 
-String Dialog::GetOpenFilename(const String &caption,
+String Dialog::GetOpenFilepath(const String &caption,
                                const String &extension,
                                const String &initDir)
 {
@@ -73,11 +73,11 @@ String Dialog::GetOpenFilename(const String &caption,
     return filepath;
 }
 
-String Dialog::GetSaveFilename(const String &caption,
-                                   const String &extension,
-                                   const String &initPath,
-                                   const String &suggestedFilename,
-                                   QWidget *parent)
+String Dialog::GetSaveFilepath(const String &caption,
+                               const String &extension,
+                               const String &initPath,
+                               const String &suggestedFilename,
+                               QWidget *parent)
 {
     String filepath =
             String(

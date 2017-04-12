@@ -96,7 +96,6 @@ public:
    static void InitFromMainBinary();
 
    static IO *GetInstance();
-   static const String& GetCurrentSceneFilepath();
    static const String& GetProjectRootAbs();
    static String GetProjectLibsRootAbs();
    static const String& GetProjectAssetsRootAbs();
@@ -104,7 +103,6 @@ public:
    static const String& GetEngineAssetsRootAbs();
 
 private:
-   String c_currentSceneFilepath      = "";
    String c_ProjectRootAbsolute       = "";
    String c_ProjectAssetsRootAbsolute = "";
    String c_EngineRootAbsolute        = "";

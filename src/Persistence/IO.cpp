@@ -418,11 +418,6 @@ bool IO::CreateDirectory(const String &dirPath)
     return QDir().mkdir(dirPath.ToQString());
 }
 
-void IO::SetActiveSceneFilepath(const String &scenePath)
-{
-    IO::GetInstance()->c_currentSceneFilepath = scenePath;
-}
-
 bool IO::Rename(const String &oldPath, const String &newPath)
 {
     return IO::Move(oldPath, newPath);
@@ -493,10 +488,6 @@ IO *IO::GetInstance()
     return SingletonManager::Get<IO>();
 }
 
-const String &IO::GetCurrentSceneFilepath()
-{
-    return IO::GetInstance()->c_currentSceneFilepath;
-}
 const String &IO::GetProjectRootAbs()
 {
     return IO::GetInstance()->c_ProjectRootAbsolute;

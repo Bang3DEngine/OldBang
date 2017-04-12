@@ -52,11 +52,7 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
 
     EngineConfig::RegisterInRecentProjectsList(projectFilepath);
 
-    // Set window title
-    String title = "Bang - " +
-            ProjectManager::s_currentProject->GetProjectName();
-    EditorWindow::GetInstance()->GetMainWindow()->
-            setWindowTitle(title.ToQString());
+    EditorWindow::GetInstance()->RefreshDocksAndWindowTitles();
     #endif
 
     // Set persistence variables
@@ -76,7 +72,7 @@ Project* ProjectManager::OpenProject(const String &projectFilepath)
 
     if (!sceneFilepaths.Empty())
     {
-        SceneManager::LoadSceneInstantly(sceneFilepaths.Front());
+        SceneManager::OpenScene(sceneFilepaths.Front());
     }
     else
     {
@@ -165,7 +161,7 @@ void ProjectManager::CloseCurrentProject()
 
 String ProjectManager::DialogCreateNewProject()
 {
-    String dirPath = Dialog::GetOpenDirname(
+    String dirPath = Dialog::GetOpenDirpath(
                 "Select the project containing directory");
     if (!dirPath.Empty())
     {
@@ -199,7 +195,7 @@ String ProjectManager::DialogCreateNewProject()
 String ProjectManager::DialogOpenProject()
 {
     String projectFilepath =
-            Dialog::GetOpenFilename("Select the project file to be opened",
+            Dialog::GetOpenFilepath("Select the project file to be opened",
                                     Project::GetFileExtensionStatic(),
                                     String(QDir::homePath()) );
     return projectFilepath;

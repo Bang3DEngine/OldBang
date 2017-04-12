@@ -17,7 +17,7 @@ public:
     static bool IsInFront();
 
 protected:
-    QMainWindow *m_mainWindow = nullptr;
+    QMainWindow  *m_mainWindow = nullptr;
     QApplication *m_app = nullptr;
 
     IWindow();

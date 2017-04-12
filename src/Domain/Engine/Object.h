@@ -29,7 +29,7 @@ public:
     void RemoveHideFlag(const HideFlags &hideFlag);
 
     virtual String GetClassName() const = 0;
-    String GetInstanceId() const;
+    virtual String GetInstanceId() const;
 
     template <class TO, class FROM>
     static bool IsOfType(const FROM obj)

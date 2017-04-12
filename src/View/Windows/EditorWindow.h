@@ -35,16 +35,20 @@ public:
     bool IsSceneTabActive() const;
     bool IsGameTabActive() const;
 
+    void RefreshDocksAndWindowTitles();
+
     static EditorWindow *GetInstance();
     QMainWindow *GetMainWindow() const override;
     QApplication *GetApplication() const override;
 
 private slots:
     void OnTabSceneGameChanged(int index);
+    void Refresh();
 
 private:
     static EditorWindow *s_win;
 
+    QTimer m_refreshTimer;
     EditorState *m_editorState = nullptr;
     WindowEventManager *m_winEventManager = nullptr;
     EditorPlayStopFlowController *m_playStopController = nullptr;

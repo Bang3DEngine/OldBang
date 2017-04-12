@@ -134,7 +134,7 @@ void HierarchyContextMenu::OnDeleteClicked()
 void HierarchyContextMenu::OnCreatePrefab()
 {
     GameObject *go = m_hierarchy->GetFirstSelectedGameObject();
-    String filename = Dialog::GetSaveFilename("Create Prefab...",
+    String filename = Dialog::GetSaveFilepath("Create Prefab...",
                                               Prefab::GetFileExtensionStatic(),
                                               go->name);
     if (filename != "")

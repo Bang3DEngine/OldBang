@@ -1,5 +1,6 @@
 #include "Bang/MenuBar.h"
 
+#include "Bang/IO.h"
 #include "Bang/Font.h"
 #include "Bang/Mesh.h"
 #include "Bang/Debug.h"
@@ -20,7 +21,6 @@
 #include "Bang/AudioSource.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SystemUtils.h"
-#include "Bang/IO.h"
 #include "Bang/EditorScene.h"
 #include "Bang/Application.h"
 #include "Bang/GameBuilder.h"
@@ -134,14 +134,16 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
 
 void MenuBar::CreateNewScene() const
 {
+    SceneManager::CloseOpenScene();
     SceneManager::SetActiveScene(nullptr);
     Scene *scene = Scene::GetDefaultScene();
     SceneManager::SetActiveScene(scene);
-    IO::SetActiveSceneFilepath("");
 }
 
 Dialog::Reply MenuBar::AskForSavingActiveScene() const
 {
+    if (SceneManager::IsCurrentSceneSaved()) { return Dialog::Reply::No; }
+
     Dialog::Reply reply = Dialog::GetYesNoCancel(
                 "Save Scene",
                 "Do you want to save the current Scene?");
@@ -179,40 +181,48 @@ void MenuBar::OnNewScene() const
 
 void MenuBar::OnOpenScene() const
 {
-    if (AskForSavingActiveScene() == Dialog::Reply::Cancel) { return; }
-
-    String filename = Dialog::GetOpenFilename("Open scene...",
+    String filepath = Dialog::GetOpenFilepath("Open scene...",
                                               Scene::GetFileExtensionStatic());
-    ENSURE(!filename.Empty());
+    ENSURE(!filepath.Empty());
+    OpenScene(filepath);
+}
 
-    SceneManager::LoadSceneInstantly(filename);
+void MenuBar::OpenScene(const String &filepath) const
+{
+    if (AskForSavingActiveScene() == Dialog::Reply::Cancel) { return; }
+    SceneManager::OpenScene(filepath);
 }
 
 void MenuBar::OnSaveScene() const
 {
-    String filepath = IO::GetCurrentSceneFilepath();
-    if (filepath.Empty()) { OnSaveSceneAs(); }
-    else
+    String filepath = SceneManager::GetOpenSceneFilepath();
+    filepath = IO::AppendExtension(
+                           filepath, Scene::GetFileExtensionStatic());
+
+    if (IO::ExistsFile(filepath))
     {
         Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
-        filepath = IO::AppendExtension(
-                               filepath, Scene::GetFileExtensionStatic());
         scene->WriteToFile(filepath);
     }
+    else { OnSaveSceneAs(); }
 }
 
 void MenuBar::OnSaveSceneAs() const
 {
     Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
-    String filepath = Dialog::GetSaveFilename(
+    String sceneFilepath = SceneManager::GetOpenSceneFilepath();
+    String sceneName = IO::GetFileName(sceneFilepath);
+    sceneFilepath = Dialog::GetSaveFilepath(
                              "Save scene as...",
                              Scene::GetFileExtensionStatic(),
                              IO::GetProjectAssetsRootAbs(),
-                             scene->name);
-    ENSURE(!filepath.Empty());
+                             sceneName);
+    ENSURE(!sceneFilepath.Empty());
 
-    filepath = IO::AppendExtension(filepath, Scene::GetFileExtensionStatic());
-    scene->WriteToFile(filepath);
+    sceneFilepath = IO::AppendExtension(sceneFilepath,
+                                        Scene::GetFileExtensionStatic());
+    SceneManager::OnCurrentSceneSavedAs(sceneFilepath);
+    scene->WriteToFile(sceneFilepath);
 }
 
 void MenuBar::OnBuild() const
@@ -233,7 +243,7 @@ void MenuBar::OnCreateEmptyGameObject() const
 
 void MenuBar::OnCreateFromPrefab() const
 {
-    String filename = Dialog::GetOpenFilename("Create from prefab...",
+    String filename = Dialog::GetOpenFilepath("Create from prefab...",
                                               Prefab::GetFileExtensionStatic());
     ENSURE (!filename.Empty());
 

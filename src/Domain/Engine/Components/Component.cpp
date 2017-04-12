@@ -58,6 +58,19 @@ bool Component::IsClosedInInspector() const
     return m_closedInInspector;
 }
 
+String Component::GetInstanceId() const
+{
+    String instanceId = "Component";
+    if (gameObject)
+    {
+        instanceId.Prepend(gameObject->GetInstanceId() + "_");
+        Component *ncThis = const_cast<Component*>(this);
+        int indInGameObject = gameObject->GetComponents().IndexOf(ncThis);
+        instanceId.Append( String::ToString(indInGameObject) );
+    }
+    return instanceId;
+}
+
 void Component::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
@@ -71,8 +84,8 @@ void Component::Write(XMLNode *xmlInfo) const
     SerializableObject::Write(xmlInfo);
 
     xmlInfo->SetTagName( GetClassName() );
-    xmlInfo->SetPointer("id", this,
-                        {XMLProperty::Hidden, XMLProperty::Readonly});
+    xmlInfo->SetString("id", GetInstanceId(),
+                       {XMLProperty::Hidden, XMLProperty::Readonly});
     xmlInfo->SetBool("enabled", m_enabled,
                      {XMLProperty::Hidden, XMLProperty::Readonly});
     xmlInfo->SetBool("closedInInspector", IsClosedInInspector(),
