@@ -34,10 +34,10 @@ addons:
     project:
       name: "Bang3DEngine/Bang"
       description: "Description"
-    notification_email: victorantondominguez@gmail.com
+    notification_email: ""
     build_command_prepend: ""
     build_command: "./scripts/fullCompile.sh EDITOR DEBUG_MODE"
-    branch_pattern: master
+    branch_pattern: coverity_scan
 
 script:
 - ./scripts/fullCompile.sh EDITOR DEBUG_MODE
