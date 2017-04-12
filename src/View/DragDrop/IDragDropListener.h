@@ -1,6 +1,8 @@
 #ifndef IDRAGDROPLISTENER_H
 #define IDRAGDROPLISTENER_H
 
+#ifdef BANG_EDITOR
+
 #include <QWidget>
 #include <QListView>
 #include <QTreeWidget>
@@ -44,5 +46,11 @@ protected:
     friend class DragDropManager;
     friend class DragDropAgent;
 };
+
+#else
+
+class IDragDropListener { }; // To solve a Qt moc stuff
+
+#endif
 
 #endif // IDRAGDROPLISTENER_H

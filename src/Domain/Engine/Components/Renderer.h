@@ -9,7 +9,6 @@
 #include "Bang/Rect.h"
 #include "Bang/Array.h"
 #include "Bang/GLObject.h"
-#include "Bang/NamedEnum.h"
 #include "Bang/Component.h"
 
 class AABox;

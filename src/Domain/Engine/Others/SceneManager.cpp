@@ -6,7 +6,6 @@
 #include "Bang/XMLParser.h"
 #include "Bang/FileReader.h"
 #include "Bang/Application.h"
-#include "Bang/EditorWindow.h"
 #include "Bang/BehaviourHolder.h"
 #include "Bang/BehaviourManager.h"
 
@@ -15,6 +14,7 @@
 #include "Bang/Hierarchy.h"
 #include "Bang/EditorScene.h"
 #include "Bang/EditorState.h"
+#include "Bang/EditorWindow.h"
 #endif
 
 SceneManager::SceneManager()
@@ -108,7 +108,9 @@ void SceneManager::OpenScene(const String &filepath)
     ENSURE(IO::ExistsFile(filepath));
     SceneManager::GetInstance()->m_currentSceneFilepath = filepath;
     SceneManager::LoadSceneInstantly(filepath);
+    #ifdef BANG_EDITOR
     EditorWindow::GetInstance()->RefreshDocksAndWindowTitles();
+    #endif
 }
 
 void SceneManager::CloseOpenScene()

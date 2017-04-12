@@ -3,7 +3,6 @@
 
 #include <GL/glew.h>
 
-#include "Bang/NamedEnum.h"
 #include "Bang/GLObject.h"
 
 class Texture : public GLObject

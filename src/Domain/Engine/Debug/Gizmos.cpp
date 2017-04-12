@@ -227,6 +227,7 @@ bool Gizmos::IsGizmoRenderer(Renderer *rend)
 #ifdef BANG_EDITOR
     return Gizmos::GetEditorGizmosGameObject()->IsGizmoRenderer(rend);
 #endif
+    return false;
 }
 
 void Gizmos::Render(Renderer *rend)

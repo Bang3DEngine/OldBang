@@ -41,7 +41,7 @@ addons:
     branch_pattern: coverity_scan
 
 script:
-- ./scripts/createHeaders.sh && ./scripts/fullCompile.sh EDITOR DEBUG_MODE
-- ./scripts/createHeaders.sh && ./scripts/fullCompile.sh EDITOR RELEASE_MODE
-- ./scripts/createHeaders.sh && ./scripts/fullCompile.sh GAME   DEBUG_MODE
-- ./scripts/createHeaders.sh && ./scripts/fullCompile.sh GAME   RELEASE_MODE
+- ./scripts/fullCompile.sh EDITOR DEBUG_MODE
+- ./scripts/fullCompile.sh EDITOR RELEASE_MODE
+- ./scripts/fullCompile.sh GAME   DEBUG_MODE
+- ./scripts/fullCompile.sh GAME   RELEASE_MODE

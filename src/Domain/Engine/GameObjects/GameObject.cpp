@@ -727,6 +727,8 @@ void GameObject::OnDropMaterial(Material *m)
     }
 }
 
+#endif
+
 String GameObject::GetInstanceId() const
 {
     String instanceId = name;
@@ -739,8 +741,6 @@ String GameObject::GetInstanceId() const
     }
     return instanceId;
 }
-
-#endif
 
 void GameObject::_OnDrawGizmos(bool depthed, bool overlay)
 {

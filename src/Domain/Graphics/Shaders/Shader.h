@@ -6,7 +6,6 @@
 #include "Bang/Array.h"
 #include "Bang/Asset.h"
 #include "Bang/GLObject.h"
-#include "Bang/NamedEnum.h"
 #include "Bang/IToString.h"
 
 class Shader : public GLObject,

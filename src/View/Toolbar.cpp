@@ -16,12 +16,13 @@
 Toolbar *Toolbar::s_tb = nullptr;
 
 Toolbar::Toolbar(QWidget *parent)
-: m_playStopShortcut     (this, KSeq("Ctrl+P"), SLOT(OnPlayStopShortcut())),
+: QWidget(parent),
+  m_playStopShortcut     (this, KSeq("Ctrl+P"), SLOT(OnPlayStopShortcut())),
   m_translateShortcut    (this, KSeq("W"),      SLOT(OnTranslateClicked())),
   m_rotateShortcut       (this, KSeq("E"),      SLOT(OnRotateClicked())),
   m_scaleShortcut        (this, KSeq("R"),      SLOT(OnScaleClicked())),
-  m_rectTransformShortcut(this, KSeq("T"),      SLOT(OnRectTransformClicked())),
-  QWidget(parent)
+  m_rectTransformShortcut(this, KSeq("T"),      SLOT(OnRectTransformClicked()))
+
 {
 }
 

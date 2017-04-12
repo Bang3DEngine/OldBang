@@ -12,12 +12,7 @@
 
 #include "Bang/Array.h"
 #include "Bang/Shortcut.h"
-
-#ifdef BANG_EDITOR
 #include "Bang/IDragDropListener.h"
-#else
-class IDragDropListener { }; // To solve a Qt moc stuff
-#endif
 
 class GameObject;
 class GameWindow;

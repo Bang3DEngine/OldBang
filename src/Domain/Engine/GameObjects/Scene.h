@@ -51,7 +51,6 @@ protected:
 
     friend class Screen;
     friend class Toolbar;
-    friend class GameObject;
     friend class Application;
     friend class SceneManager;
     friend class GraphicPipeline;

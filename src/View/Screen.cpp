@@ -25,11 +25,11 @@
 #endif
 
 Screen::Screen(QWidget* parent)
-    : m_copyShortcut     (this, KSeq("Ctrl+C"), SLOT(OnCopyClicked())),
+    : QGLWidget(parent),
+      m_copyShortcut     (this, KSeq("Ctrl+C"), SLOT(OnCopyClicked())),
       m_pasteShortcut    (this, KSeq("Ctrl+V"), SLOT(OnPasteClicked())),
       m_duplicateShortcut(this, KSeq("Ctrl+D"), SLOT(OnDuplicateClicked())),
-      m_deleteShortcut   (this, KSeq("Del"),    SLOT(OnDeleteClicked())),
-      QGLWidget(parent)
+      m_deleteShortcut   (this, KSeq("Del"),    SLOT(OnDeleteClicked()))
 {
     setFormat(QGLFormat(QGL::DoubleBuffer));
     setAutoBufferSwap(false);

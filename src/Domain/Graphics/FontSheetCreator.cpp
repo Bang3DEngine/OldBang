@@ -167,4 +167,5 @@ bool FontSheetCreator::LoadAtlasTexture(
 
     *fontFace = face;
     FT_Done_Face(face);
+    return true;
 }

@@ -203,6 +203,8 @@ void GL::_Bind(GL::BindTarget bindTarget, GLId glId)
         case BindTarget::VBO:
             glBindBuffer(GL_ARRAY_BUFFER, glId);
         break;
+        default:
+        break;
     }
 }
 
