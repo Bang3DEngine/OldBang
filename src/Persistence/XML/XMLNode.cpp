@@ -349,7 +349,7 @@ const XMLNode *XMLNode::GetChild(const String &name) const
     return nullptr;
 }
 
-String XMLNode::ToString(const String& indent) const
+String XMLNode::ToString(bool writeToFile, const String& indent) const
 {
     String str = "";
 
@@ -357,6 +357,10 @@ String XMLNode::ToString(const String& indent) const
     for (auto itAttr : GetAttributesListInOrder())
     {
         const XMLAttribute& attr = itAttr.second;
+        if (writeToFile && attr.HasProperty(XMLProperty::DontWriteToFile))
+        {
+            continue;
+        }
 
         str += " " + attr.ToString() + "\n";
         for (int i = 0; i < m_tagName.Length() + indent.Length() + 1; ++i )
@@ -367,9 +371,9 @@ String XMLNode::ToString(const String& indent) const
     str += ">\n";
 
     const String newIndent = indent + "    ";
-    for(XMLNode *child : m_children)
+    for (XMLNode *child : m_children)
     {
-        str += child->ToString(newIndent);
+        str += child->ToString(writeToFile, newIndent);
     }
     str += indent + "</" + m_tagName + ">\n";
     return str;
@@ -382,7 +386,12 @@ void XMLNode::SetTagName(const String tagName)
 
 String XMLNode::ToString() const
 {
-    return ToString("");
+    return ToString(false);
+}
+
+String XMLNode::ToString(bool writeToFile) const
+{
+    return ToString(writeToFile, "");
 }
 
 const String &XMLNode::GetTagName() const

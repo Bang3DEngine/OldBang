@@ -14,15 +14,16 @@ public:
     static void LoadScene(const String &sceneFilepath);
 
     static Scene* GetActiveScene();
+    static String GetActiveSceneFilepath();
 
     static SceneManager* GetInstance();
 
 private:
     SceneManager();
 
-    Scene *m_activeScene = nullptr;
-    String m_queuedSceneFilepath = "";
-    String m_currentSceneFilepath      = "";
+    Scene *m_activeScene          = nullptr;
+    String m_queuedSceneFilepath  = "";
+    String m_currentSceneFilepath = "";
 
     static void TryToLoadQueuedScene();
     static const String& GetOpenSceneFilepath();
@@ -30,6 +31,7 @@ private:
     static void CloseOpenScene();
     static bool IsCurrentSceneSaved();
     static void OnCurrentSceneSavedAs(const String &filepath);
+    static void LoadSceneInstantly(Scene *scene);
     static void LoadSceneInstantly(const String &sceneFilepath);
 
     friend class MenuBar;

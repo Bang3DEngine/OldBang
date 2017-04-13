@@ -170,6 +170,7 @@ void UIText::CloneInto(ICloneable *clone) const
     UIRenderer::CloneInto(clone);
 
     UIText *text = Object::SCast<UIText>(clone);
+    text->SetMesh( new Mesh() );
     text->SetFont ( GetFont() );
     text->SetContent( GetContent() );
     text->SetTextSize( GetTextSize() );

@@ -9,6 +9,7 @@ const XMLProperty XMLProperty::Readonly("Readonly");
 const XMLProperty XMLProperty::Disabled("Disabled");
 const XMLProperty XMLProperty::IsEngineFile("IsEngineFile");
 const XMLProperty XMLProperty::FileExtension("FileExtension");
+const XMLProperty XMLProperty::DontWriteToFile("DontWriteToFile");
 
 XMLProperty::XMLProperty()
 {

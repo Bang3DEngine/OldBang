@@ -61,6 +61,12 @@ Scene *SceneManager::GetActiveScene()
     return sm ? sm->m_activeScene : nullptr;
 }
 
+String SceneManager::GetActiveSceneFilepath()
+{
+    SceneManager *sm = SceneManager::GetInstance();
+    return sm->m_currentSceneFilepath;
+}
+
 void SceneManager::LoadScene(const String &sceneFilepath)
 {
     SceneManager *sm = SceneManager::GetInstance();
@@ -105,7 +111,6 @@ const String &SceneManager::GetOpenSceneFilepath()
 void SceneManager::OpenScene(const String &filepath)
 {
     ENSURE(IO::ExistsFile(filepath));
-    SceneManager::GetInstance()->m_currentSceneFilepath = filepath;
     SceneManager::LoadSceneInstantly(filepath);
     #ifdef BANG_EDITOR
     EditorWindow::GetInstance()->RefreshDocksAndWindowTitles();
@@ -124,9 +129,7 @@ bool SceneManager::IsCurrentSceneSaved()
 
     String openSceneFilepath = SceneManager::GetOpenSceneFilepath();
     String savedFileXML    = IO::GetFileContents(openSceneFilepath);
-    String currentSceneXML = activeScene->GetXMLInfo().ToString();
-    Debug_Log(savedFileXML);
-    Debug_Log(currentSceneXML);
+    String currentSceneXML = activeScene->GetXMLInfo().ToString(true);
     return (savedFileXML == currentSceneXML);
 }
 
@@ -135,7 +138,7 @@ void SceneManager::OnCurrentSceneSavedAs(const String &filepath)
     SceneManager::GetInstance()->m_currentSceneFilepath = filepath;
 }
 
-void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
+void SceneManager::LoadSceneInstantly(Scene *scene)
 {
     Scene *oldScene = SceneManager::GetActiveScene();
     if (oldScene) { delete oldScene; }
@@ -146,16 +149,24 @@ void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
     #endif
     SceneManager::SetActiveScene(nullptr);
 
+    if (scene)
+    {
+        SceneManager::SetActiveScene(scene);
+    }
+}
+
+void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
+{
     #ifdef BANG_EDITOR
     EditorScene *scene = new EditorScene();
     #else
     Scene *scene = new Scene();
     #endif
 
-    scene->ReadFromFile(sceneFilepath);
-    if (scene)
+    SceneManager::GetInstance()->m_currentSceneFilepath = sceneFilepath;
+    if (scene->ReadFromFile(sceneFilepath))
     {
-        SceneManager::SetActiveScene(scene);
+        SceneManager::LoadSceneInstantly(scene);
     }
     else
     {

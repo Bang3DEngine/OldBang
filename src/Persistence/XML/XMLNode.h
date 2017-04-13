@@ -100,7 +100,8 @@ public:
     const XMLNode *GetChild(const String &name) const;
     void SetTagName(const String tagName);
     String ToString() const override;
-    String ToString(const String& indent) const;
+    String ToString(bool writeToFile) const;
+    String ToString(bool writeToFile, const String& indent) const;
 
     const String& GetTagName() const;
     const Map<String, XMLAttribute>& GetAttributes() const;

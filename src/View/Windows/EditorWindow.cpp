@@ -155,5 +155,8 @@ void EditorWindow::OnTabSceneGameChanged(int index)
 
 void EditorWindow::Refresh()
 {
-    RefreshDocksAndWindowTitles();
+    if (!EditorState::IsPlaying())
+    {
+        RefreshDocksAndWindowTitles();
+    }
 }

@@ -6,6 +6,7 @@
 #include "Bang/Object.h"
 #include "Bang/Sphere.h"
 #include "Bang/IToString.h"
+#include "Bang/BehaviourHolder.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 

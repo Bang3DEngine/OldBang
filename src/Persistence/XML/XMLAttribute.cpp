@@ -122,7 +122,9 @@ void XMLAttribute::SetPointer(const void *value,
 {
     std::ostringstream oss;
     oss << value;
-    Set(m_name, oss.str(), XMLAttribute::Type::String, properties);
+    Array<XMLProperty> props = properties;
+    props.PushBack(XMLProperty::DontWriteToFile);
+    Set(m_name, oss.str(), XMLAttribute::Type::String, props);
 }
 
 void XMLAttribute::SetBool(bool value,
@@ -279,6 +281,7 @@ void XMLAttribute::SetButton(const String buttonText,
     Set(m_name, buttonText, XMLAttribute::Type::Button, properties);
     std::ostringstream oss; oss << ( (void*) listener );
     XMLProperty prop("Listener", oss.str());
+    SetProperty(XMLProperty::DontWriteToFile);
     SetProperty(prop);
 }
 #endif

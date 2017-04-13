@@ -15,7 +15,7 @@ public:
     virtual ~SerializableObject();
 
     XMLNode GetXMLInfo() const;
-    String GetSerializedString() const;
+    String GetSerializedString(bool writeToFile = true) const;
     void ReadFromString(const String &xmlInfoString);
 
     virtual void Read(const XMLNode &xmlInfo);
