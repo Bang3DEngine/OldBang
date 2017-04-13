@@ -65,8 +65,6 @@ void Application::MainLoop()
         processEvents();
         if (!Screen::GetInstance()) { continue; }
 
-        Chrono c;
-
         float deltaTime = float(Time::GetNow() - m_lastRenderTime) / 1000.0f;
         m_lastRenderTime = Time::GetNow();
         Time::GetInstance()->m_deltaTime = deltaTime;
@@ -97,8 +95,6 @@ void Application::MainLoop()
         #ifdef BANG_EDITOR
         Console::GetInstance()->ProcessMessagesQueue();
         #endif
-
-        //c.Log();
     }
 }
 

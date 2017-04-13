@@ -10,6 +10,7 @@
 #include "Bang/MenuBar.h"
 #include "Bang/Material.h"
 #include "Bang/Explorer.h"
+#include "Bang/AudioClip.h"
 #include "Bang/Texture2D.h"
 #include "Bang/Inspector.h"
 #include "Bang/EditorWindow.h"
@@ -65,6 +66,14 @@ void ExplorerContextMenu::OnCustomContextMenuRequested(QPoint point)
                         this, SLOT(OnCreateMaterialFromTextureClicked()));
                 contextMenu.addSeparator();
             }
+            else if (f.IsSound())
+            {
+                QAction *actionCreateAudioFromSound =
+                        contextMenu.addAction("Create AudioClip from Sound");
+                connect(actionCreateAudioFromSound, SIGNAL(triggered()),
+                        this, SLOT(OnCreateAudioClipFromSound()));
+                contextMenu.addSeparator();
+            }
 
             contextMenu.addAction(&actionDuplicate);
             contextMenu.addAction(&actionDelete);
@@ -111,6 +120,25 @@ Material* ExplorerContextMenu::OnCreateMaterialFromImageClicked()
 {
     Texture2D *tex = OnCreateTextureFromImageClicked();
     return OnCreateMaterialFromTextureClicked(tex);
+}
+
+AudioClip *ExplorerContextMenu::OnCreateAudioClipFromSound()
+{
+    File f = p_explorer->GetSelectedFile();
+    MenuBar *mb = MenuBar::GetInstance();
+
+    String dirPath = Explorer::GetInstance()->GetCurrentDir();
+    String newPath = dirPath + "/" + f.GetName() +
+                     "." + AudioClip::GetFileExtensionStatic();
+    newPath = IO::GetDuplicatePath(newPath);
+    String newAudioName = IO::GetFileNameWithExtension(newPath);
+
+    AudioClip *audio = mb->OnCreateAudioClip(newAudioName);
+    audio->LoadFromFile(f.GetAbsolutePath());
+    AssetsManager::UpdateAsset(audio->GetFilepath(), audio->GetXMLInfo());
+    Inspector::GetInstance()->SetInspectable(audio, newAudioName);
+
+    return audio;
 }
 
 Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex)

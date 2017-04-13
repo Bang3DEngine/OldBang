@@ -5,10 +5,6 @@
 
 class XMLProperty
 {
-private:
-    String m_name = "";
-    String m_value = "";
-
 public:
     const static XMLProperty Hidden;
     const static XMLProperty Inline;
@@ -30,6 +26,10 @@ public:
     static XMLProperty FromString(const String &string);
 
     bool operator==(const XMLProperty &rhs) const;
+
+private:
+    String m_name = "";
+    String m_value = "";
 };
 
 #endif // XMLPROPERTY_H

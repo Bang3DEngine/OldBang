@@ -443,13 +443,15 @@ void MenuBar::OnCreateFont() const
     Explorer::GetInstance()->StartRenaming(filepath);
 }
 
-void MenuBar::OnCreateAudioClip() const
+AudioClip* MenuBar::OnCreateAudioClip(const String &audioClipName) const
 {
     String filepath = Explorer::GetInstance()->GetCurrentDir();
-    filepath += "/New_AudioClip." + AudioClip::GetFileExtensionStatic();
+    filepath += "/" + IO::AppendExtension(audioClipName,
+                                          AudioClip::GetFileExtensionStatic());
     filepath = IO::GetDuplicatePath(filepath);
-    AssetsManager::Create<AudioClip>(filepath);
+    AudioClip* audioClip = AssetsManager::Create<AudioClip>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
+    return audioClip;
 }
 
 void MenuBar::OnAddComponentNewBehaviour() const

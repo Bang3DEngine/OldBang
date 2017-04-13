@@ -55,7 +55,7 @@ File::~File()
 {
 }
 
-bool File::IsAudioFile() const
+bool File::IsSound() const
 {
     return m_isFile && IsOfExtension("wav ogg pcm");
 }
@@ -148,7 +148,7 @@ File *File::GetSpecificFile(const File &f)
     {
         return new AudioClipAssetFile(f.m_fileSystemModel, f.m_modelIndex);
     }
-    else if (f.IsAudioFile())
+    else if (f.IsSound())
     {
         return new AudioFile(f.m_fileSystemModel, f.m_modelIndex);
     }

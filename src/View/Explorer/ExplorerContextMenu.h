@@ -6,6 +6,7 @@
 class Explorer;
 class Material;
 class Texture2D;
+class AudioClip;
 class ExplorerContextMenu : public ContextMenu
 {
     Q_OBJECT
@@ -18,6 +19,7 @@ public slots:
 
     Texture2D* OnCreateTextureFromImageClicked();
     Material* OnCreateMaterialFromImageClicked();
+    AudioClip* OnCreateAudioClipFromSound();
     Material* OnCreateMaterialFromTextureClicked(Texture2D *tex = nullptr);
 
     void OnDuplicateClicked();

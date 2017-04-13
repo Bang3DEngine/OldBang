@@ -77,7 +77,6 @@ void SceneManager::LoadScene(const String &sceneFilepath)
                     spath, Scene::GetFileExtensionStatic());
     }
 
-    sm->m_queuedSceneFilepath = "";
     if (IO::ExistsFile(spath))
     {
         sm->m_queuedSceneFilepath = spath;
@@ -124,8 +123,11 @@ bool SceneManager::IsCurrentSceneSaved()
     if (!activeScene) { return false; }
 
     String openSceneFilepath = SceneManager::GetOpenSceneFilepath();
-    String savedFileXML = IO::GetFileContents(openSceneFilepath);
-    return savedFileXML == activeScene->GetXMLInfo().ToString();
+    String savedFileXML    = IO::GetFileContents(openSceneFilepath);
+    String currentSceneXML = activeScene->GetXMLInfo().ToString();
+    Debug_Log(savedFileXML);
+    Debug_Log(currentSceneXML);
+    return (savedFileXML == currentSceneXML);
 }
 
 void SceneManager::OnCurrentSceneSavedAs(const String &filepath)
@@ -150,9 +152,9 @@ void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
     Scene *scene = new Scene();
     #endif
 
+    scene->ReadFromFile(sceneFilepath);
     if (scene)
     {
-        scene->ReadFromFile(sceneFilepath);
         SceneManager::SetActiveScene(scene);
     }
     else

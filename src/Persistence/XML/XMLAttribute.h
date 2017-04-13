@@ -1,15 +1,13 @@
 #ifndef XMLATTRIBUTE_H
 #define XMLATTRIBUTE_H
 
-#include "Bang/Array.h"
-
-#include "Bang/NamedEnum.h"
-
 #include "Bang/Rect.h"
 #include "Bang/Color.h"
+#include "Bang/Array.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
+#include "Bang/NamedEnum.h"
 #include "Bang/IToString.h"
 #include "Bang/Quaternion.h"
 #include "Bang/XMLProperty.h"
@@ -56,7 +54,6 @@ public:
     bool HasProperty(const String &propertyName) const;
     void RemoveProperty(const String &propertyName);
 
-
     void SetPointer(const void *value, const Array<XMLProperty>& properties = {});
     void SetBool(bool value, const Array<XMLProperty>& properties = {});
     void SetInt(int value, const Array<XMLProperty>& properties = {});
@@ -74,12 +71,14 @@ public:
                  const String& selectedEnumName,
                  const Array<XMLProperty>& properties = {});
     void SetEnum(const Array<String>& enumNames,
-                 int selectedEnumIndex, const Array<XMLProperty>& properties = {});
+                 int selectedEnumIndex,
+                 const Array<XMLProperty>& properties = {});
 
     #ifdef BANG_EDITOR
-    void SetButton(const String buttonText,
-                   IAttrWidgetButtonListener *listener,
-                   const Array<XMLProperty>& properties = {});
+    void SetButton(
+         const String buttonText,
+         IAttrWidgetButtonListener *listener,
+         const Array<XMLProperty>& properties = {});
     #endif
 
     /**

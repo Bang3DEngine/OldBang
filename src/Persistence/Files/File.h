@@ -18,7 +18,7 @@ public:
 
     virtual ~File();
 
-    bool IsAudioFile() const;
+    bool IsSound() const;
     bool IsAudioClipAsset() const;
 
     bool IsTexture2DAsset() const;

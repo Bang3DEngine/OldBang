@@ -259,9 +259,11 @@ void XMLAttribute::SetEnum(const Array<String> &enumNames,
 }
 
 void XMLAttribute::SetEnum(const Array<String> &enumNames,
-                           int selectedEnumIndex, const Array<XMLProperty> &properties)
+                           int selectedEnumIndex,
+                           const Array<XMLProperty> &properties)
 {
-    Set(m_name, std::to_string(selectedEnumIndex), XMLAttribute::Type::Enum, properties);
+    Set(m_name, std::to_string(selectedEnumIndex),
+        XMLAttribute::Type::Enum, properties);
     for (int i = 0; i < enumNames.Size(); ++i)
     {
         XMLProperty prop("EnumName" + std::to_string(i), enumNames[i]);
@@ -328,11 +330,7 @@ String XMLAttribute::ToString() const
     bool first = true;
     for (const XMLProperty &prop : GetProperties())
     {
-        if (!first)
-        {
-            str += ",";
-        }
-
+        if (!first) { str += ","; }
         str += prop.GetName();
         if (!prop.GetValue().Empty())
         {
@@ -343,6 +341,7 @@ String XMLAttribute::ToString() const
     }
     str += "}";
     return str;
+
 }
 
 const String& XMLAttribute::GetName() const

@@ -67,9 +67,10 @@ public:
                  const Array<XMLProperty>& properties = {});
 
     #ifdef BANG_EDITOR
-    void SetButton(const String &attributeName,
-                   IAttrWidgetButtonListener* listener,
-                   const Array<XMLProperty>& properties = {});
+    void SetButton(
+           const String &attributeName,
+           IAttrWidgetButtonListener* listener,
+           const Array<XMLProperty>& properties = {});
     #else
     // Dummy function
     void SetButton(const String &attributeName, void* listener,

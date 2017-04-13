@@ -354,9 +354,10 @@ String XMLNode::ToString(const String& indent) const
     String str = "";
 
     str += indent + "<" + m_tagName;
-    for(auto itAttr : GetAttributesListInOrder())
+    for (auto itAttr : GetAttributesListInOrder())
     {
-        XMLAttribute attr = itAttr.second;
+        const XMLAttribute& attr = itAttr.second;
+
         str += " " + attr.ToString() + "\n";
         for (int i = 0; i < m_tagName.Length() + indent.Length() + 1; ++i )
         {

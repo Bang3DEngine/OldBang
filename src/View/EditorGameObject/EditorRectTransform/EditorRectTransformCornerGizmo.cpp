@@ -80,7 +80,7 @@ void EditorRectTransformCornerGizmo::OnDrawGizmos(bool depthed, bool overlay)
             if (m_cornerPosition == CornerPosition::Center)
             {
                 // To enable dragging ui from any point, not just the center
-                Gizmos::RenderFillRect(rect, Color::Green);
+                // Gizmos::RenderFillRect(rect, Color::Green);
             }
         }
 
@@ -121,6 +121,8 @@ void EditorRectTransformCornerGizmo::ApplyMarginDisplacement(
         const Vector2 &mouseDisp)
 {
     Vector2 d = mouseDisp * Screen::GetSize();
+    d.x = int( Math::Round(d.x) ); // Needed to avoid precission issues
+    d.y = int( Math::Round(d.y) );
 
     int marginLeft  = m_attachedRectTransform->GetMarginLeft();
     int marginTop   = m_attachedRectTransform->GetMarginTop();
@@ -149,10 +151,12 @@ void EditorRectTransformCornerGizmo::ApplyMarginDisplacement(
     }
     else if (m_cornerPosition == CornerPosition::Center)
     {
+        Debug_Log("Before: " << marginLeft << ", " << marginRight);
         marginLeft  += d.x;
         marginTop   += d.y;
         marginRight -= d.x;
         marginBot   -= d.y;
+        Debug_Log("After: " << marginLeft << ", " << marginRight);
     }
 
     m_attachedRectTransform->SetMarginLeft (marginLeft);

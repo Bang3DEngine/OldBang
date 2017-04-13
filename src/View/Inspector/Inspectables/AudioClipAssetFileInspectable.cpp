@@ -41,7 +41,7 @@ void AudioClipAssetFileInspectable::Write(XMLNode *xmlInfo) const
                          "ogg wav", {});
 
     xmlInfo->SetString("Length", String(audioClip->GetLength()) + " seconds",
-                        {XMLProperty::Readonly});
+                       {XMLProperty::Readonly});
 
     AudioClipAssetFileInspectable *noConstThis =
             const_cast<AudioClipAssetFileInspectable*>(this);

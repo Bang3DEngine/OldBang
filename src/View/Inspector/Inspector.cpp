@@ -89,7 +89,8 @@ void Inspector::Refresh()
     RefreshSizeHints();
 }
 
-void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement)
+void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget,
+                                    int movement)
 {
     QListWidgetItem *movingItem = m_widget_To_Item[inspectorWidget];
     ENSURE(movingItem);
@@ -103,7 +104,8 @@ void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget, int moveme
     insertItem(newRow, movingItem);
 }
 
-void Inspector::SetInspectable(SerializableObject *inspectable, const String &title)
+void Inspector::SetInspectable(SerializableObject *inspectable,
+                               const String &title)
 {
     Clear();
     InspectorWidget *iw = new InspectorWidget();
@@ -229,9 +231,11 @@ String Inspector::FormatInspectorLabel(const String &labelString)
     for (auto it = labelFormatted.Begin(); it != labelFormatted.End(); ++it)
     {
         ++it;
-        bool nextOneIsCap = (it != labelFormatted.End()) && String::IsUpperCase(*it);
+        bool nextOneIsCap = (it != labelFormatted.End()) &&
+                             String::IsUpperCase(*it);
         --it;
-        if (!nextOneIsCap && String::IsUpperCase(*it) && it != labelFormatted.Begin())
+        if (!nextOneIsCap && String::IsUpperCase(*it) &&
+            it != labelFormatted.Begin())
         {
             it = labelFormatted.insert(it, ' ');
             ++it;

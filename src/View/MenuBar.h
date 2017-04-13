@@ -10,6 +10,7 @@
 
 class Mesh;
 class Material;
+class AudioClip;
 class Texture2D;
 class GameObject;
 class WindowEventManager;
@@ -61,7 +62,8 @@ public slots:
     Texture2D* OnCreateTexture2D(
             const String &tex2DFilepath = "New_Texture2D") const;
     void OnCreateFont() const;
-    void OnCreateAudioClip() const;
+    AudioClip* OnCreateAudioClip(
+            const String &audioClipName = "New_AudioClip") const;
 
     void OnAddComponentNewBehaviour() const;
     void OnAddComponentBehaviour() const;

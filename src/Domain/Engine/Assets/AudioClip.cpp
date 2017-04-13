@@ -33,12 +33,12 @@ String AudioClip::GetFileExtension() const
 
 bool AudioClip::LoadFromFile(const String &filepath)
 {
-	if (filepath.Empty()) { return false; }
-	if (filepath == m_audioFileFilepath) { return true; }
+    if (!IO::ExistsFile(filepath)) { return false; }
 
     if (filepath.EndsWith(".ogg"))
     {
-        Debug_Error("OGG audio file format for " << filepath << " not supported.");
+        Debug_Error("OGG audio file format for " << filepath
+                    << " not supported.");
         return false;
     }
 
@@ -54,18 +54,19 @@ bool AudioClip::LoadFromFile(const String &filepath)
     }
 
     ALsizei size; ALfloat freq; ALenum format;
-    ALvoid *data =
-         alutLoadMemoryFromFile(filepath.ToCString(),
-                                &format, &size, &freq);
+    ALvoid *data = alutLoadMemoryFromFile(filepath.ToCString(),
+                                          &format, &size, &freq);
 
     bool hasError = AudioManager::CheckALError();
     if (!hasError)
     {
         alBufferData(m_alBufferId, format, data, size, freq);
+        m_audioFileFilepath = filepath;
         free(data);
 
         hasError = AudioManager::CheckALError();
     }
+    else { m_audioFileFilepath = ""; }
 
     // Rebind all previously dettached sources
     for (AudioSource *as : m_audioSourcesUsingThis)
