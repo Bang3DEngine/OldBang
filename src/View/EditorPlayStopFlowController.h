@@ -22,6 +22,7 @@ private:
     bool m_playing = false;
     bool m_playingCanceled = false;
     Scene *p_latestSceneBeforePlaying = nullptr;
+    String m_latestSceneBeforePlayingFilepath = "";
 
     bool WaitForAllBehavioursToBeLoaded();
 

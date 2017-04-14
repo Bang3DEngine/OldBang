@@ -61,12 +61,6 @@ Scene *SceneManager::GetActiveScene()
     return sm ? sm->m_activeScene : nullptr;
 }
 
-String SceneManager::GetActiveSceneFilepath()
-{
-    SceneManager *sm = SceneManager::GetInstance();
-    return sm->m_currentSceneFilepath;
-}
-
 void SceneManager::LoadScene(const String &sceneFilepath)
 {
     SceneManager *sm = SceneManager::GetInstance();
@@ -103,9 +97,9 @@ void SceneManager::TryToLoadQueuedScene()
     }
 }
 
-const String &SceneManager::GetOpenSceneFilepath()
+const String& SceneManager::GetActiveSceneFilepath()
 {
-    return SceneManager::GetInstance()->m_currentSceneFilepath;
+    return SceneManager::GetInstance()->m_activeSceneFilepath;
 }
 
 void SceneManager::OpenScene(const String &filepath)
@@ -117,25 +111,31 @@ void SceneManager::OpenScene(const String &filepath)
     #endif
 }
 
-void SceneManager::CloseOpenScene()
+void SceneManager::SetActiveSceneFilepath(const String &sceneFilepath)
 {
-    SceneManager::GetInstance()->m_currentSceneFilepath = "";
+    SceneManager *sm = SceneManager::GetInstance();
+    sm->m_activeSceneFilepath = sceneFilepath;
 }
 
-bool SceneManager::IsCurrentSceneSaved()
+void SceneManager::CloseOpenScene()
+{
+    SceneManager::SetActiveSceneFilepath("");
+}
+
+bool SceneManager::IsActiveSceneSaved()
 {
     Scene *activeScene = SceneManager::GetActiveScene();
     if (!activeScene) { return false; }
 
-    String openSceneFilepath = SceneManager::GetOpenSceneFilepath();
+    String openSceneFilepath = SceneManager::GetActiveSceneFilepath();
     String savedFileXML    = IO::GetFileContents(openSceneFilepath);
     String currentSceneXML = activeScene->GetXMLInfo().ToString(true);
     return (savedFileXML == currentSceneXML);
 }
 
-void SceneManager::OnCurrentSceneSavedAs(const String &filepath)
+void SceneManager::OnActiveSceneSavedAs(const String &filepath)
 {
-    SceneManager::GetInstance()->m_currentSceneFilepath = filepath;
+    SceneManager::SetActiveSceneFilepath(filepath);
 }
 
 void SceneManager::LoadSceneInstantly(Scene *scene)
@@ -163,7 +163,7 @@ void SceneManager::LoadSceneInstantly(const String &sceneFilepath)
     Scene *scene = new Scene();
     #endif
 
-    SceneManager::GetInstance()->m_currentSceneFilepath = sceneFilepath;
+    SceneManager::SetActiveSceneFilepath( sceneFilepath );
     if (scene->ReadFromFile(sceneFilepath))
     {
         SceneManager::LoadSceneInstantly(scene);

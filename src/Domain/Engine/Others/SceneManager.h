@@ -14,7 +14,7 @@ public:
     static void LoadScene(const String &sceneFilepath);
 
     static Scene* GetActiveScene();
-    static String GetActiveSceneFilepath();
+    static const String& GetActiveSceneFilepath();
 
     static SceneManager* GetInstance();
 
@@ -23,14 +23,14 @@ private:
 
     Scene *m_activeScene          = nullptr;
     String m_queuedSceneFilepath  = "";
-    String m_currentSceneFilepath = "";
+    String m_activeSceneFilepath = "";
 
     static void TryToLoadQueuedScene();
-    static const String& GetOpenSceneFilepath();
     static void OpenScene(const String &filepath);
+    static void SetActiveSceneFilepath(const String &sceneFilepath);
     static void CloseOpenScene();
-    static bool IsCurrentSceneSaved();
-    static void OnCurrentSceneSavedAs(const String &filepath);
+    static bool IsActiveSceneSaved();
+    static void OnActiveSceneSavedAs(const String &filepath);
     static void LoadSceneInstantly(Scene *scene);
     static void LoadSceneInstantly(const String &sceneFilepath);
 
@@ -39,6 +39,7 @@ private:
     friend class Application;
     friend class EditorWindow;
     friend class ProjectManager;
+    friend class EditorPlayStopFlowController;
 };
 
 #endif // SCENEMANAGER_H

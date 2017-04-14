@@ -48,6 +48,7 @@ bool EditorPlayStopFlowController::PlayScene()
 
     // Pick the reference of the current scene, to restore it later
     p_latestSceneBeforePlaying = SceneManager::GetActiveScene();
+    m_latestSceneBeforePlayingFilepath = SceneManager::GetActiveSceneFilepath();
 
     Scene *sceneCopy = p_latestSceneBeforePlaying->Clone();
     if (sceneCopy)
@@ -79,6 +80,7 @@ void EditorPlayStopFlowController::StopScene()
     }
 
     SceneManager::SetActiveScene(p_latestSceneBeforePlaying);
+    SceneManager::SetActiveSceneFilepath(m_latestSceneBeforePlayingFilepath);
     EditorScene *edScene = Object::SCast<EditorScene>(
                 p_latestSceneBeforePlaying);
     edScene->SetCamera( edScene->GetEditorCamera()->GetCamera() );

@@ -142,7 +142,7 @@ void MenuBar::CreateNewScene() const
 
 Dialog::Reply MenuBar::AskForSavingActiveScene() const
 {
-    if (SceneManager::IsCurrentSceneSaved()) { return Dialog::Reply::No; }
+    if (SceneManager::IsActiveSceneSaved()) { return Dialog::Reply::No; }
 
     Dialog::Reply reply = Dialog::GetYesNoCancel(
                 "Save Scene",
@@ -195,7 +195,7 @@ void MenuBar::OpenScene(const String &filepath) const
 
 void MenuBar::OnSaveScene() const
 {
-    String filepath = SceneManager::GetOpenSceneFilepath();
+    String filepath = SceneManager::GetActiveSceneFilepath();
     filepath = IO::AppendExtension(
                            filepath, Scene::GetFileExtensionStatic());
 
@@ -210,7 +210,7 @@ void MenuBar::OnSaveScene() const
 void MenuBar::OnSaveSceneAs() const
 {
     Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
-    String sceneFilepath = SceneManager::GetOpenSceneFilepath();
+    String sceneFilepath = SceneManager::GetActiveSceneFilepath();
     String sceneName = IO::GetFileName(sceneFilepath);
     sceneFilepath = Dialog::GetSaveFilepath(
                              "Save scene as...",
@@ -221,7 +221,7 @@ void MenuBar::OnSaveSceneAs() const
 
     sceneFilepath = IO::AppendExtension(sceneFilepath,
                                         Scene::GetFileExtensionStatic());
-    SceneManager::OnCurrentSceneSavedAs(sceneFilepath);
+    SceneManager::OnActiveSceneSavedAs(sceneFilepath);
     scene->WriteToFile(sceneFilepath);
 }
 

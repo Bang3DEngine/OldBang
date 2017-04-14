@@ -91,18 +91,17 @@ bool EditorWindow::IsGameTabActive() const
 
 void EditorWindow::RefreshDocksAndWindowTitles()
 {
-    String windowTitle = "Bang - ";
-    windowTitle += ProjectManager::GetCurrentProject()->GetProjectName();
-
-    String sceneTitle = SceneManager::GetOpenSceneFilepath();
-    sceneTitle = IO::GetFileName(sceneTitle);
-    if (!SceneManager::IsCurrentSceneSaved())
+    String sceneTitle = IO::GetFileName(
+                            SceneManager::GetActiveSceneFilepath() );
+    if (!EditorState::IsPlaying() && !SceneManager::IsActiveSceneSaved())
     {
         sceneTitle += " *";
     }
-    windowTitle += " - " + sceneTitle;
-
     tabContainerSceneGame->setTabText(0, sceneTitle.ToQString());
+
+    String windowTitle = "Bang - ";
+    windowTitle += ProjectManager::GetCurrentProject()->GetProjectName();
+    windowTitle += " - " + sceneTitle;
     m_mainWindow->setWindowTitle(windowTitle.ToQString());
 }
 
@@ -155,8 +154,5 @@ void EditorWindow::OnTabSceneGameChanged(int index)
 
 void EditorWindow::Refresh()
 {
-    if (!EditorState::IsPlaying())
-    {
-        RefreshDocksAndWindowTitles();
-    }
+    RefreshDocksAndWindowTitles();
 }
