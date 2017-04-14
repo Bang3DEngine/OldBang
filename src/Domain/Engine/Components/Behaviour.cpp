@@ -41,12 +41,8 @@ void Behaviour::_OnUpdate()
 void Behaviour::Read(const XMLNode &xmlInfo)
 {
     Component::Read(xmlInfo);
-    String lastFilepath = GetSourceFilepath();
     m_sourceFilepath = xmlInfo.GetString("BehaviourScript");
-    if (lastFilepath != GetSourceFilepath())
-    {
-        RefreshBehaviourLib();
-    }
+    RefreshBehaviourLib();
 }
 
 void Behaviour::Write(XMLNode *xmlInfo) const
@@ -190,7 +186,6 @@ const String &Behaviour::GetSourceFilepath() const
 
 void Behaviour::RefreshBehaviourLib()
 {
-    Debug_Log("RefreshBehaviourLib for " << GetSourceFilepath() << ", " << GetClassName());
     ENSURE(gameObject);
     ENSURE(!IsLoaded());
     #ifdef BANG_EDITOR
@@ -200,7 +195,6 @@ void Behaviour::RefreshBehaviourLib()
     String behaviourName = IO::GetFileName(GetSourceFilepath());
     ENSURE(!behaviourName.Empty());
 
-
     // Create new Behaviour, and replace in the parent gameObject this old
     // behaviour with the new one created dynamically
     QLibrary *behavioursLib = BehaviourManager::GetBehavioursMergedLibrary();
@@ -208,8 +202,8 @@ void Behaviour::RefreshBehaviourLib()
 
     Behaviour *createdBehaviour = CreateDynamicBehaviour(behaviourName,
                                                          behavioursLib);
-    Debug_Log("CreateDynamicBehaviour for " << GetSourceFilepath() << ", " << createdBehaviour->GetClassName());
     gameObject->AddComponent(createdBehaviour);
+    CloneInto(createdBehaviour);
     gameObject->RemoveComponent(this);
 }
 

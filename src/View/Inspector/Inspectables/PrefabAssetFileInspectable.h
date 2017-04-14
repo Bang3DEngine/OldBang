@@ -17,12 +17,16 @@ class PrefabAssetFileInspectable : public SerializableObject,
     OBJECT(PrefabAssetFileInspectable)
 
 public:
+    PrefabAssetFileInspectable();
     PrefabAssetFileInspectable(const File &f);
     virtual ~PrefabAssetFileInspectable();
 
     void ShowInInspector();
 
+    virtual void Write(XMLNode *xmlInfo) const override;
     virtual void Read(const XMLNode &xmlInfo) override;
+
+    void OnInspectorSlotChanged(InspectorWidget *InspectorWidget) override;
 
     GameObject *GetPrefabTempGameObject() const;
 

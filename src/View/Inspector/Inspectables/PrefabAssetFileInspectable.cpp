@@ -36,7 +36,12 @@ void PrefabAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
     SerializableObject::Read(xmlInfo);
     m_prefabTempGameObject->Read(xmlInfo);
-    Debug_Log("Reading m_file " << m_file.GetAbsolutePath());
+}
+
+void PrefabAssetFileInspectable::OnInspectorSlotChanged(
+        InspectorWidget *inspectorWidget)
+{
+    Debug_Log("OnInspectorSlotChanged" << m_prefabTempGameObject->GetXMLInfo());
     AssetsManager::UpdateAsset(m_file.GetAbsolutePath(),
                                m_prefabTempGameObject->GetXMLInfo());
 }

@@ -21,6 +21,7 @@
 #include "Bang/AudioClip.h"
 #include "Bang/ImageFile.h"
 #include "Bang/Texture2D.h"
+#include "Bang/PrefabFile.h"
 #include "Bang/IconManager.h"
 #include "Bang/MeshAssetFile.h"
 #include "Bang/MaterialAssetFile.h"
@@ -174,7 +175,7 @@ File *File::GetSpecificFile(const File &f)
     }
     else if (f.IsPrefabAsset())
     {
-        return new File(f.m_fileSystemModel, f.m_modelIndex);
+        return new PrefabFile(f.m_fileSystemModel, f.m_modelIndex);
     }
     else if (f.IsTextFile())
     {

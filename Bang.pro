@@ -259,7 +259,8 @@ HEADERS +=                                                          \
     src/View/Shortcut.h \
     src/View/IconManager.h \
     src/Domain/Engine/Image.h \
-    src/Domain/Engine/Components/CircleCulledRenderer.h
+    src/Domain/Engine/Components/CircleCulledRenderer.h \
+    src/Persistence/Files/PrefabFile.h
 
 EDITOR {
 HEADERS += \
@@ -475,7 +476,8 @@ SOURCES += \
     src/View/Shortcut.cpp \
     src/View/IconManager.cpp \
     src/Domain/Engine/Image.cpp \
-    src/Domain/Engine/Components/CircleCulledRenderer.cpp
+    src/Domain/Engine/Components/CircleCulledRenderer.cpp \
+    src/Persistence/Files/PrefabFile.cpp
 
 EDITOR {
     SOURCES += \
