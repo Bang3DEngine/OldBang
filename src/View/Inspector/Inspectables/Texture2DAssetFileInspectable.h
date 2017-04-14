@@ -7,11 +7,14 @@
 
 class Texture2DAssetFileInspectable : public SerializableObject
 {
+    OBJECT(Texture2DAssetFileInspectable)
+
 private:
     XMLNode m_xmlInfo;
     Texture2DAssetFile m_fileTex;
 
 public:
+    Texture2DAssetFileInspectable();
     Texture2DAssetFileInspectable(const Texture2DAssetFile &fileTex);
 
     virtual const QPixmap& GetIcon() const override;

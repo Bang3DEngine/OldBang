@@ -49,7 +49,7 @@ public:
 };
 
 class QLibrary;
-class BehaviourHolder;
+class Behaviour;
 class BehaviourManagerStatus
 {
 public:

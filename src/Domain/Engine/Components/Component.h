@@ -19,14 +19,11 @@
 class XMLNode;
 class Transform;
 class GameObject;
-class Component :
-              public Object,
-              public ISceneEventListener,
-              public IToString,
-              public SerializableObject
+class Component : public ISceneEventListener,
+                  public IToString,
+                  public SerializableObject
 {
     OBJECT(Component)
-    ICLONEABLE(Component)
 
 public:
     GameObject *m_gameObject = nullptr;

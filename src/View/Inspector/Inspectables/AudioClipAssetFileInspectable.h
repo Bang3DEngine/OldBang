@@ -16,7 +16,10 @@ class AudioSource;
 class AudioClipAssetFileInspectable : public SerializableObject,
                                       public IAttrWidgetButtonListener
 {
+    OBJECT(AudioClipAssetFileInspectable)
+
 public:
+    AudioClipAssetFileInspectable();
     AudioClipAssetFileInspectable(const AudioClipAssetFile &audioClipAssetFile);
 
     virtual void Read(const XMLNode &xmlInfo) override;

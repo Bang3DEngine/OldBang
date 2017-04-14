@@ -5,12 +5,15 @@
 #include <QPixmap>
 #include "Bang/WinUndef.h"
 
+#include "Bang/Object.h"
 #include "Bang/String.h"
 
 class String;
 class XMLNode;
-class SerializableObject
+class SerializableObject : public Object
 {
+    OBJECT(SerializableObject)
+
 public:
     virtual ~SerializableObject();
 

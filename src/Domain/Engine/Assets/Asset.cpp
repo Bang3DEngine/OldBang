@@ -46,5 +46,4 @@ void Asset::Read(const XMLNode &xmlInfo)
 void Asset::Write(XMLNode *xmlInfo) const
 {
     SerializableObject::Write(xmlInfo);
-    xmlInfo->SetTagName( GetClassName() );
 }

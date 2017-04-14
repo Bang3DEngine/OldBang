@@ -12,6 +12,10 @@
 #include "Bang/AudioClipAssetFileInspectable.h"
 #endif
 
+AudioClipAssetFile::AudioClipAssetFile()
+{
+}
+
 AudioClipAssetFile::AudioClipAssetFile(
         const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)

@@ -12,6 +12,7 @@
 #include "Bang/UIImage.h"
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
+#include "Bang/Behaviour.h"
 #include "Bang/PointLight.h"
 #include "Bang/GameObject.h"
 #include "Bang/AudioSource.h"
@@ -22,7 +23,6 @@
 #include "Bang/AudioListener.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/ComponentWidget.h"
-#include "Bang/BehaviourHolder.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/SingleLineRenderer.h"
 
@@ -183,8 +183,8 @@ void Inspector::ShowPrefabInspectableInfo(
 void Inspector::OnMenuBarAddNewBehaviourClicked()
 {
     ENSURE(p_currentGameObject);
-    BehaviourHolder *bh = p_currentGameObject->AddComponent<BehaviourHolder>();
-    bh->CreateNewBehaviour();
+    Behaviour *newBehaviour = Behaviour::CreateNewBehaviour();
+    p_currentGameObject->AddComponent(newBehaviour);
 }
 
 void Inspector::AddWidget(InspectorWidget *widget, int row)

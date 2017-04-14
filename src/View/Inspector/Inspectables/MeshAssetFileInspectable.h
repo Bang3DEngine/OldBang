@@ -7,7 +7,10 @@
 class XMLNode;
 class MeshAssetFileInspectable : public SerializableObject
 {
+    OBJECT(MeshAssetFileInspectable)
+
 public:
+    MeshAssetFileInspectable();
     MeshAssetFileInspectable(const MeshAssetFile &meshFile);
 
     const QPixmap& GetIcon() const override;

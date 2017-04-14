@@ -6,7 +6,6 @@
 
 #include "Bang/IO.h"
 #include "Bang/Behaviour.h"
-#include "Bang/BehaviourHolder.h"
 #include "Bang/SingletonManager.h"
 
 List<String> SystemUtils::GetAllEngineObjects(bool editorMode)

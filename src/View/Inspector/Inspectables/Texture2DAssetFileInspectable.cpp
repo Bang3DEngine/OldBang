@@ -4,6 +4,10 @@
 #include "Bang/Texture2D.h"
 #include "Bang/AssetsManager.h"
 
+Texture2DAssetFileInspectable::Texture2DAssetFileInspectable()
+{
+}
+
 Texture2DAssetFileInspectable::Texture2DAssetFileInspectable
     (const Texture2DAssetFile &fileTex) :
     m_fileTex(fileTex)

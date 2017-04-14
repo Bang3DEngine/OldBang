@@ -7,6 +7,10 @@
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
 
+MaterialAssetFileInspectable::MaterialAssetFileInspectable()
+{
+}
+
 MaterialAssetFileInspectable::MaterialAssetFileInspectable
     (const MaterialAssetFile &materialAssetFile) :
         m_materialAssetFile(materialAssetFile)

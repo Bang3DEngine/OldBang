@@ -8,6 +8,10 @@
 #include "Bang/ImageFileInspectable.h"
 #endif
 
+ImageFile::ImageFile()
+{
+}
+
 ImageFile::ImageFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {

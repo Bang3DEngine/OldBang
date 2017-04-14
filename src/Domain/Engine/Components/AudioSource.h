@@ -20,7 +20,6 @@ class AudioSource : public Component
                     #endif
 {
     OBJECT(AudioSource)
-    ICLONEABLE(AudioSource)
     COMPONENT_ICON(AudioSource, "Icons/AudioIcon.png")
 
 public:

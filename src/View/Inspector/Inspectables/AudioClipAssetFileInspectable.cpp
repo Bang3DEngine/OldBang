@@ -7,6 +7,10 @@
 #include "Bang/AudioManager.h"
 #include "Bang/AssetsManager.h"
 
+AudioClipAssetFileInspectable::AudioClipAssetFileInspectable()
+{
+}
+
 AudioClipAssetFileInspectable::AudioClipAssetFileInspectable(
         const AudioClipAssetFile &audioClipAssetFile)
     : m_audioClipAssetFile(audioClipAssetFile)

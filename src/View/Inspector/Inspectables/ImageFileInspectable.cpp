@@ -5,6 +5,10 @@
 #include "Bang/IconManager.h"
 #include "Bang/InspectorWidget.h"
 
+ImageFileInspectable::ImageFileInspectable()
+{
+}
+
 ImageFileInspectable::ImageFileInspectable(const ImageFile &fileImage) :
     m_fileImage(fileImage)
 {

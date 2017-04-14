@@ -16,6 +16,7 @@
 #include "Bang/Transform.h"
 #include "Bang/Texture2D.h"
 #include "Bang/GameObject.h"
+#include "Bang/Behaviour.h"
 #include "Bang/FileReader.h"
 #include "Bang/PointLight.h"
 #include "Bang/AudioSource.h"
@@ -33,7 +34,6 @@
 #include "Bang/AssetsManager.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/ProjectManager.h"
-#include "Bang/BehaviourHolder.h"
 #include "Bang/DirectionalLight.h"
 #include "Bang/SingleLineRenderer.h"
 #include "Bang/WindowEventManager.h"
@@ -460,7 +460,7 @@ void MenuBar::OnAddComponentNewBehaviour() const
 }
 void MenuBar::OnAddComponentBehaviour() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<BehaviourHolder>();
+    Inspector::GetInstance()->OnMenuBarAddComponentClicked<Behaviour>();
 }
 void MenuBar::OnAddComponentCamera() const
 {

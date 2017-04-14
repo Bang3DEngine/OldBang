@@ -1,12 +1,13 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#include <queue>
+
 #include "Bang/List.h"
 #include "Bang/AABox.h"
 #include "Bang/Object.h"
 #include "Bang/Sphere.h"
 #include "Bang/IToString.h"
-#include "Bang/BehaviourHolder.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/ISceneEventListener.h"
 
@@ -21,17 +22,14 @@ class Material;
 class Component;
 class Transform;
 class EditorSelectionGameObject;
-class GameObject :
-                public Object
-               ,public ISceneEventListener
-               ,public IToString
-               ,public SerializableObject
-               #ifdef BANG_EDITOR
-               ,public IWindowEventManagerListener
-               #endif
+class GameObject : public ISceneEventListener
+                  ,public IToString
+                  ,public SerializableObject
+                  #ifdef BANG_EDITOR
+                  ,public IWindowEventManagerListener
+                  #endif
 {
     OBJECT_NO_FRIEND(GameObject)
-    ICLONEABLE(GameObject)
 
 public:
     // PROPERTIES
@@ -119,10 +117,6 @@ public:
     void MoveComponent(Component *c, int distance);
     #endif
 
-    /**
-     * Removes the Component c
-     */
-    void RemoveComponent(Component *c);
 
     /**
      * Adds the Component c to this.
@@ -241,18 +235,24 @@ public:
     }
 
     /**
+     * Removes the Component c
+     */
+    void RemoveComponent(Component *c);
+    void RemoveComponentInstantly(Component *c);
+    void RemoveQueuedComponents();
+
+    /**
      * Removes the first found Component of type T
      */
     template <class T>
     void RemoveComponent()
     {
-        for (auto comp = m_components.Begin(); comp != m_components.End(); ++comp)
+        for (Component *comp : m_components)
         {
-            T *tp = Object::Cast<T>(*comp);
-            if (tp)
+            T *compT = Object::Cast<T>(comp);
+            if (compT)
             {
-				m_components.Remove(comp);
-                delete tp;
+                RemoveComponent(compT);
                 break;
             }
         }
@@ -297,8 +297,11 @@ protected:
     Transform *m_transform = nullptr;
     GameObject *p_parent = nullptr;
 
+    std::queue<Component*> m_componentsToBeRemoved;
+
     bool m_enabled = true;
     bool m_hasBeenReadOnce = false;
+    bool m_iteratingComponents = false;
 
     #ifdef BANG_EDITOR
     // Dont load Behaviours. Used on drags from hierarchy for example

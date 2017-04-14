@@ -3,6 +3,10 @@
 #include "Bang/Mesh.h"
 #include "Bang/XMLNode.h"
 
+MeshFileInspectable::MeshFileInspectable()
+{
+}
+
 MeshFileInspectable::MeshFileInspectable(const MeshFile &fileMesh) :
     m_fileMesh(fileMesh)
 {

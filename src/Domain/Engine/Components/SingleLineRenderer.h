@@ -8,7 +8,6 @@
 class SingleLineRenderer : public LineRenderer
 {
     OBJECT(SingleLineRenderer)
-    ICLONEABLE(SingleLineRenderer)
 
 public:
     virtual ~SingleLineRenderer();

@@ -12,6 +12,7 @@ class SerializableObject;
 class AudioClipAssetFile : public File
 {
 public:
+    AudioClipAssetFile();
     AudioClipAssetFile(const QFileSystemModel *model,
                        const QModelIndex &index);
 

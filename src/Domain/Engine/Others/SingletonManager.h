@@ -77,7 +77,7 @@ private:
 
     SingletonManager();
 
-    friend class BehaviourHolder;
+    friend class Behaviour;
 };
 
 #endif // SINGLETONMANAGER_H

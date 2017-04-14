@@ -15,6 +15,7 @@ class MeshFile : public File
     int m_numFaces = 0;
 
 public:
+    MeshFile();
     MeshFile(const QFileSystemModel *model, const QModelIndex &index);
 
     virtual const QPixmap& GetIcon() const override;

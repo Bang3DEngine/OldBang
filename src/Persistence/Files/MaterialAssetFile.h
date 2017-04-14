@@ -19,6 +19,7 @@ private:
     Color m_diffuseColor = Color(0.0f);
 
 public:
+    MaterialAssetFile();
     MaterialAssetFile(const QFileSystemModel *model, const QModelIndex &index);
 
     virtual const QPixmap& GetIcon() const override;

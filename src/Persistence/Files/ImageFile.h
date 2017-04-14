@@ -6,6 +6,7 @@
 class ImageFile : public File
 {
 public:
+    ImageFile();
     ImageFile(const QFileSystemModel *model, const QModelIndex &index);
 
     virtual const QPixmap& GetIcon() const override;

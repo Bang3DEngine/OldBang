@@ -7,16 +7,19 @@
 class XMLNode;
 class TextFileInspectable : public SerializableObject
 {
-private:
-    TextFile m_textFile;
+    OBJECT(TextFileInspectable)
 
 public:
+    TextFileInspectable();
     TextFileInspectable(const TextFile &textFile);
 
     #ifdef BANG_EDITOR
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
     #endif
+
+private:
+    TextFile m_textFile;
 };
 
 #endif // TEXTFILEINSPECTABLE_H

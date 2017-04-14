@@ -14,10 +14,7 @@ class GameObjectPrefabInspectable;
 class PrefabAssetFileInspectable : public SerializableObject,
                                    public IWindowEventManagerListener
 {
-
-private:
-    File m_file;
-    GameObject *m_prefabTempGameObject = nullptr;
+    OBJECT(PrefabAssetFileInspectable)
 
 public:
     PrefabAssetFileInspectable(const File &f);
@@ -25,9 +22,13 @@ public:
 
     void ShowInInspector();
 
-    void OnInspectorSlotChanged(InspectorWidget *inspectorItem) override;
+    virtual void Read(const XMLNode &xmlInfo) override;
 
     GameObject *GetPrefabTempGameObject() const;
+
+private:
+    File m_file;
+    GameObject *m_prefabTempGameObject = nullptr;
 };
 
 #endif // PREFABASSETFILEINSPECTABLE_H

@@ -48,6 +48,7 @@ void SerializableObject::Read(const XMLNode &xmlInfo)
 void SerializableObject::Write(XMLNode *xmlInfo) const
 {
     XMLParser::RegisterId(xmlInfo, this);
+    xmlInfo->SetTagName( GetClassName() );
 }
 
 bool SerializableObject::ReadFromFile(const String &absPath)

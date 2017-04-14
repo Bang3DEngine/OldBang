@@ -12,7 +12,6 @@ class ICloneable;
 class UIRenderer : public MeshRenderer
 {
     OBJECT(UIRenderer)
-    ICLONEABLE(UIRenderer)
 
 public:
     virtual void RenderWithoutMaterial() const override;

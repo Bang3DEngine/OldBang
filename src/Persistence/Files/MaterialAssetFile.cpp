@@ -10,6 +10,10 @@
 #include "Bang/MaterialAssetFileInspectable.h"
 #endif
 
+MaterialAssetFile::MaterialAssetFile()
+{
+}
+
 MaterialAssetFile::MaterialAssetFile(const QFileSystemModel *model,
                                      const QModelIndex &index) :
     File(model, index)

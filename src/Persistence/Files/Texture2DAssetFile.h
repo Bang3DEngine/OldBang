@@ -12,6 +12,7 @@ class SerializableObject;
 class Texture2DAssetFile : public File
 {
 public:
+    Texture2DAssetFile();
     Texture2DAssetFile(const QFileSystemModel *model, const QModelIndex &index);
 
     String GetImageAbsFilepath() const;

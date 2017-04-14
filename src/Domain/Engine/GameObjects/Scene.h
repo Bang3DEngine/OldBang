@@ -13,7 +13,6 @@ class SelectionFramebuffer;
 class Scene : public GameObject
 {
     OBJECT(Scene)
-    ICLONEABLE(Scene)
 
 public:
     const static String GetFileExtensionStatic ();

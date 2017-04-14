@@ -12,12 +12,10 @@
 #endif
 
 class AssetsManager;
-class Asset : public Object,
-		      public IToString,
+class Asset : public IToString,
               public SerializableObject
 {
-	OBJECT(Asset)
-    ICLONEABLE(Asset)
+    OBJECT(Asset)
 
 public:
     static String GetFileExtensionStatic();

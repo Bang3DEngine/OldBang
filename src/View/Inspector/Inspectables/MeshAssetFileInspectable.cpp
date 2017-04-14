@@ -4,6 +4,10 @@
 #include "Bang/XMLNode.h"
 #include "Bang/AssetsManager.h"
 
+MeshAssetFileInspectable::MeshAssetFileInspectable()
+{
+}
+
 MeshAssetFileInspectable::MeshAssetFileInspectable(
         const MeshAssetFile &meshFile)
     : m_meshAssetFile(meshFile)

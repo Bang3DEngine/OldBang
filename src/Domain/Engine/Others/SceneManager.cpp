@@ -4,9 +4,9 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/XMLParser.h"
+#include "Bang/Behaviour.h"
 #include "Bang/FileReader.h"
 #include "Bang/Application.h"
-#include "Bang/BehaviourHolder.h"
 #include "Bang/BehaviourManager.h"
 
 #ifdef BANG_EDITOR

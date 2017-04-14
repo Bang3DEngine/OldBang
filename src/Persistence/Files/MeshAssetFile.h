@@ -14,6 +14,7 @@ class SerializableObject;
 class MeshAssetFile : public File
 {
 public:
+    MeshAssetFile();
     MeshAssetFile(const QFileSystemModel *model, const QModelIndex &index);
     virtual const QPixmap& GetIcon() const override;
 

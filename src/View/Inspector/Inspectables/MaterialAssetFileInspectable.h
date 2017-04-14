@@ -7,11 +7,14 @@
 
 class MaterialAssetFileInspectable : public SerializableObject
 {
+    OBJECT(MaterialAssetFileInspectable)
+
 private:
     XMLNode m_xmlInfo;
     MaterialAssetFile m_materialAssetFile;
 
 public:
+    MaterialAssetFileInspectable();
     MaterialAssetFileInspectable(const MaterialAssetFile &materialAssetFile);
 
     virtual const QPixmap& GetIcon() const override;

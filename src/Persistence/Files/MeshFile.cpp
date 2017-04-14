@@ -11,6 +11,10 @@
 #include "Bang/MeshFileInspectable.h"
 #endif
 
+MeshFile::MeshFile()
+{
+}
+
 MeshFile::MeshFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {

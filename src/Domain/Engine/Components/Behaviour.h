@@ -1,6 +1,9 @@
 #ifndef BEHAVIOUR_H
 #define BEHAVIOUR_H
 
+#include <QLibrary>
+#include "Bang/WinUndef.h"
+
 #include "Bang/IO.h"
 #include "Bang/Math.h"
 #include "Bang/Time.h"
@@ -22,52 +25,41 @@
 #include "Bang/SingletonManager.h"
 #include "Bang/ISceneEventListener.h"
 
-
 #ifdef BANG_EDITOR
 #include "Bang/EditorWindow.h"
 #endif
-
-class BehaviourHolder;
 
 /**
  * @brief The Behaviour class is a base class which will be inherited by all
  * the User Behaviour classes. This lets the engine handle Behaviours uniformly.
  */
-class Behaviour : public ISceneEventListener
+class Behaviour : public Component
+                  #ifdef BANG_EDITOR
+                  ,public IAttrWidgetButtonListener
+                  #endif
 {
+    OBJECT(Behaviour)
+    COMPONENT_ICON(Behaviour, "Icons/BehaviourIcon.png")
 
 public:
     Behaviour();
     virtual ~Behaviour();
 
-    // Substitute CLASS_NAME
-    static String s_behaviourHeaderTemplate;
-    static String s_behaviourSourceTemplate;
-
-    String GetBehaviourName() const;
-
-    /**
-     * These variables must be copied from BehaviourHolder
-     */
-    GameObject* m_gameObject = nullptr;
-    GameObject* m_parent = nullptr;
-    Transform* m_transform = nullptr;
-
-    GameObject* const& gameObject = m_gameObject;
-    GameObject* const& parent = m_parent;
-    Transform*  const& transform  = m_transform;
-
-    virtual void OnUpdate() override;
-
-/**
- * @brief Set directly by BehaviourHolder (its a friend class), when
- * adding this Behaviour to itself.
- */
-private:
-    BehaviourHolder *p_behaviourHolder = nullptr;
-
-    void Init(BehaviourHolder *bh);
+    virtual void _OnStart () override;
     virtual void _OnUpdate() override;
+
+    virtual void CloneInto(ICloneable *clone) const override;
+
+    const String& GetSourceFilepath() const;
+    virtual void OnAddedToGameObject() override;
+    void RefreshBehaviourLib();
+
+    bool IsLoaded() const;
+
+    #ifdef BANG_EDITOR
+    void OnButtonClicked(const String &attrName) override;
+    static Behaviour* CreateNewBehaviour();
+    #endif
 
     /**
      * @brief Creates a Behaviour from its QLibrary passed as parameter.
@@ -87,17 +79,21 @@ private:
      * @return Success or not.
      */
     static bool DeleteDynamicBehaviour(const String &behaviourName,
-                                       Behaviour *b,
+                                       Behaviour *behaviour,
                                        QLibrary *openLibrary);
 
-    friend class BehaviourHolder;
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
+
+private:
+    static String s_behaviourHeaderTemplate;
+    static String s_behaviourSourceTemplate;
+
+    /// Path to the source file of this Behaviour
+    String m_sourceFilepath = "";
 };
 
-#endif
-
-
 // DEFINES
-
 #define BANG_BEHAVIOUR_CLASS(CLASS_NAME) \
 extern "C" Behaviour *CreateDynamically_##CLASS_NAME(\
         SingletonManager *mainBinarySingletonManager); \
@@ -121,17 +117,4 @@ extern "C" void DeleteDynamically_##CLASS_NAME(Behaviour *b) \
     delete b; \
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

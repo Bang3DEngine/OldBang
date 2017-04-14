@@ -9,6 +9,7 @@ protected:
     String m_contents = "";
 
 public:
+    TextFile();
     TextFile(const QFileSystemModel *model, const QModelIndex &index);
 
     String GetContents() const;

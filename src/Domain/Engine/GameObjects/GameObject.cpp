@@ -11,6 +11,7 @@
 #include "Bang/XMLNode.h"
 #include "Bang/UIImage.h"
 #include "Bang/Material.h"
+#include "Bang/Behaviour.h"
 #include "Bang/Component.h"
 #include "Bang/Transform.h"
 #include "Bang/PointLight.h"
@@ -22,7 +23,6 @@
 #include "Bang/RectTransform.h"
 #include "Bang/AudioListener.h"
 #include "Bang/GraphicPipeline.h"
-#include "Bang/BehaviourHolder.h"
 #include "Bang/SingletonManager.h"
 #include "Bang/DirectionalLight.h"
 
@@ -310,11 +310,33 @@ Transform *GameObject::GetTransform() const
 
 void GameObject::RemoveComponent(Component *c)
 {
+    if (!m_iteratingComponents)
+    {
+        RemoveComponentInstantly(c);
+    }
+    else
+    {
+        m_componentsToBeRemoved.push(c);
+    }
+}
+
+void GameObject::RemoveComponentInstantly(Component *c)
+{
     m_components.Remove(c);
     if (m_transform == c)
     {
         delete m_transform;
         m_transform = nullptr;
+    }
+}
+
+void GameObject::RemoveQueuedComponents()
+{
+    while (!m_componentsToBeRemoved.empty())
+    {
+        Component *c = m_componentsToBeRemoved.front();
+        RemoveComponentInstantly(c);
+        m_componentsToBeRemoved.pop();
     }
 }
 
@@ -450,9 +472,9 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
             {
                 c = AddComponent<Camera>();
             }
-            else if (tagName == "BehaviourHolder")
+            else if (tagName == "Behaviour")
             {
-                c = AddComponent<BehaviourHolder>();
+                c = AddComponent<Behaviour>();
             }
             else if (tagName == "AudioSource")
             {
@@ -659,7 +681,12 @@ bool GameObject::IsChildOf(const GameObject *goParent, bool recursive) const
 void GameObject::_OnStart()
 {
     OnStart();
+
+    m_iteratingComponents = true;
     PROPAGATE_EVENT(_OnStart(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
     PROPAGATE_EVENT(_OnStart(), m_children);
 }
 
@@ -680,15 +707,23 @@ void GameObject::_OnUpdate()
 
     if (canUpdate)
     {
+        m_iteratingComponents = true;
         PROPAGATE_EVENT(_OnUpdate(), m_components);
+        m_iteratingComponents = false;
+        RemoveQueuedComponents();
     }
     PROPAGATE_EVENT(_OnUpdate(), m_children);
+
 }
 
 void GameObject::_OnDestroy()
 {
     PROPAGATE_EVENT(_OnDestroy(), m_children);
+
+    m_iteratingComponents = true;
     PROPAGATE_EVENT(_OnDestroy(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
 
     OnDestroy();
 }

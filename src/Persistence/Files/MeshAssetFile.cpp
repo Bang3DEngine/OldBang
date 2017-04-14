@@ -10,6 +10,10 @@
 #include "Bang/MeshAssetFileInspectable.h"
 #endif
 
+MeshAssetFile::MeshAssetFile()
+{
+}
+
 MeshAssetFile::MeshAssetFile(
         const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)

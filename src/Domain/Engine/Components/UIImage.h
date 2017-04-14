@@ -10,7 +10,6 @@ class ICloneable;
 class UIImage : public UIRenderer
 {
     OBJECT(UIImage)
-    ICLONEABLE(UIImage)
     COMPONENT_ICON(UIImage, "Icons/ImageIcon.png")
 
 public:

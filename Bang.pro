@@ -163,7 +163,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/Physics/Matrix4.h                             \
     src/Domain/Engine/Physics/Sphere.h                              \
     src/Domain/Engine/Others/SystemUtils.h                          \
-    src/Domain/Engine/Components/BehaviourHolder.h                  \
     src/Domain/Engine/Others/SingletonManager.h                     \
     src/Domain/Engine/Components/CircleRenderer.h                   \
     src/Domain/Engine/Components/SingleLineRenderer.h               \
@@ -384,7 +383,6 @@ SOURCES += \
     src/Domain/Engine/Physics/Matrix4.cpp \
     src/Domain/Engine/Physics/Sphere.cpp \
     src/Domain/Engine/Others/SystemUtils.cpp \
-    src/Domain/Engine/Components/BehaviourHolder.cpp \
     src/Domain/Engine/Others/SingletonManager.cpp \
     src/Domain/Engine/Components/CircleRenderer.cpp \
     src/Domain/Engine/Components/SingleLineRenderer.cpp \

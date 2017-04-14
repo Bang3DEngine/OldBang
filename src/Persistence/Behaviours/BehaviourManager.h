@@ -17,12 +17,12 @@
 #include "Bang/BehaviourRefresherTimer.h"
 
 class QLibrary;
-class BehaviourHolder;
+class Behaviour;
 class BehaviourObjectCompileRunnable;
 
 /**
  * @brief Manages the compiling and loading of the Behaviour's QLibraries.
- * The compiling is asynchronous, so we must use the BehaviourHolder callback
+ * The compiling is asynchronous, so we must use the Behaviour callback
  * to notify its QLibrary has been created.
  */
 class BehaviourManager : public QObject
@@ -81,7 +81,7 @@ private:
                                               bool forGame = false);
 
     friend class Application;
-    friend class BehaviourHolder;
+    friend class Behaviour;
     friend class BehaviourRefresherTimer;
     friend class BehaviourObjectCompileRunnable;
 };

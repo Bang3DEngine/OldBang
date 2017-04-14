@@ -11,6 +11,10 @@
 #include "Bang/Texture2DAssetFileInspectable.h"
 #endif
 
+Texture2DAssetFile::Texture2DAssetFile()
+{
+}
+
 Texture2DAssetFile::Texture2DAssetFile
     (const QFileSystemModel *model, const QModelIndex &index) : File(model, index)
 {

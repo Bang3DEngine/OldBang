@@ -9,22 +9,22 @@
 #include "Bang/InspectorWidget.h"
 #include "Bang/FileReferencesManager.h"
 
+PrefabAssetFileInspectable::PrefabAssetFileInspectable()
+{
+}
+
 PrefabAssetFileInspectable::PrefabAssetFileInspectable(const File &f) :
     m_file(f)
 {
-    Prefab *prefab = new Prefab();
-    prefab->ReadFromFile(f.GetAbsolutePath());
-    m_prefabTempGameObject = prefab->InstantiateWithoutStarting();
-    delete prefab;
+    Prefab prefab;
+    prefab.ReadFromFile(f.GetAbsolutePath());
+    m_prefabTempGameObject = prefab.InstantiateWithoutStarting();
 }
 
 PrefabAssetFileInspectable::~PrefabAssetFileInspectable()
 {
     Inspector::GetInstance()->Clear();
-    if (m_prefabTempGameObject)
-    {
-        delete m_prefabTempGameObject;
-    }
+    if (m_prefabTempGameObject) { delete m_prefabTempGameObject; }
 }
 
 void PrefabAssetFileInspectable::ShowInInspector()
@@ -32,15 +32,18 @@ void PrefabAssetFileInspectable::ShowInInspector()
     Inspector::GetInstance()->ShowPrefabInspectableInfo(this);
 }
 
-void PrefabAssetFileInspectable::OnInspectorSlotChanged(
-        InspectorWidget *inspectorItem)
+void PrefabAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
-    Debug_Log("OnInspectorSlotChanged");
-    XMLNode *xmlInfo = new XMLNode();
+    SerializableObject::Read(xmlInfo);
+    m_prefabTempGameObject->Read(xmlInfo);
+    Debug_Log("Reading m_file " << m_file.GetAbsolutePath());
+    AssetsManager::UpdateAsset(m_file.GetAbsolutePath(),
+                               m_prefabTempGameObject->GetXMLInfo());
+}
+
+void PrefabAssetFileInspectable::Write(XMLNode *xmlInfo) const
+{
     m_prefabTempGameObject->Write(xmlInfo);
-    Debug_Log("xmlInfo.ToString(): " << xmlInfo->ToString());
-    AssetsManager::UpdateAsset(m_file.GetAbsolutePath(), *xmlInfo);
-    delete xmlInfo;
 }
 
 GameObject *PrefabAssetFileInspectable::GetPrefabTempGameObject() const

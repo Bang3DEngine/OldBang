@@ -7,9 +7,9 @@
 #include "Bang/List.h"
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
+#include "Bang/Behaviour.h"
 #include "Bang/Application.h"
 #include "Bang/SceneManager.h"
-#include "Bang/BehaviourHolder.h"
 #include "Bang/BehaviourManager.h"
 
 #ifdef BANG_EDITOR

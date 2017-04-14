@@ -7,10 +7,13 @@
 class XMLNode;
 class MeshFileInspectable : public SerializableObject
 {
+    OBJECT(MeshFileInspectable)
+
 private:
     MeshFile m_fileMesh;
 
 public:
+    MeshFileInspectable();
     MeshFileInspectable(const MeshFile &fileMesh);
 
     virtual const QPixmap& GetIcon() const override;

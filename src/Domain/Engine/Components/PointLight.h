@@ -10,7 +10,6 @@ class ICloneable;
 class PointLight : public Light
 {
     OBJECT(PointLight)
-    ICLONEABLE(PointLight)
     COMPONENT_ICON(PointLight, "Icons/PointLightIcon.png")
 
 public:

@@ -6,10 +6,13 @@
 
 class ImageFileInspectable : public SerializableObject
 {
+    OBJECT(ImageFileInspectable)
+
 private:
     ImageFile m_fileImage;
 
 public:
+    ImageFileInspectable();
     ImageFileInspectable(const ImageFile &fileImage);
 
     virtual const QPixmap& GetIcon() const override;
