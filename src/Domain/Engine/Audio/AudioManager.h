@@ -4,10 +4,6 @@
 #include <QThreadPool>
 #include "Bang/WinUndef.h"
 
-#include <AL/al.h>
-#include <AL/alc.h>
-#include <AL/alut.h>
-
 #include "Bang/Math.h"
 #include "Bang/List.h"
 #include "Bang/String.h"
@@ -16,26 +12,30 @@
 class AudioClip;
 class GameObject;
 class AudioSource;
+class AnonymousAudioPlayer;
 class AudioManager
 {
 public:
     static AudioManager *GetInstance();
 
+    static void PlayAudioClip(AudioClip *audioClip,
+                              int alSourceId,
+                              float delay = 0.0f);
+
+
     static void PlayAudioClip(const String& audioClipFilepath,
                               const Vector3& position = Vector3::Zero,
                               float volume            = 1.0f,
+                              bool  looping           = false,
                               float delay             = 0.0f,
                               float pitch             = 1.0f,
                               float range             = Math::Infinity<float>()
                               );
 
-    static void PlayAudioClip(AudioClip *audioClip,
-                              int alSourceId,
-                              float delay = 0.0f);
-
     static void PlaySound(const String &soundFilepath,
                           const Vector3& position = Vector3::Zero,
                           float volume            = 1.0f,
+                          bool  looping           = false,
                           float delay             = 0.0f,
                           float pitch             = 1.0f,
                           float range             = Math::Infinity<float>());
@@ -48,17 +48,12 @@ private:
     virtual ~AudioManager();
 
     QThreadPool m_threadPool;
-    List< std::pair<AudioSource*, AudioClip*> >
-                                m_anonymousAudioSources_audioClips;
-    GameObject *m_currentListener = nullptr;
+    AnonymousAudioPlayer *m_anonymousAudioPlayer = nullptr;
 
-    static AudioSource *CreateAudioSource(
-                    const Vector3& position = Vector3::Zero,
-                    float volume            = 1.0f,
-                    float pitch             = 1.0f,
-                    float range             = Math::Infinity<float>());
+    AnonymousAudioPlayer *GetAnonymousAudioPlayer() const;
 
     friend class Application;
+    friend class AnonymousAudioPlayer;
 };
 
 #endif // AUDIOMANAGER_H

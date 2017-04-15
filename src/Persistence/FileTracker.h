@@ -18,8 +18,6 @@ class FileTracker : public QObject
 {
     Q_OBJECT
 
-    typedef qint64 EpochTime;
-
 public:
     FileTracker();
 

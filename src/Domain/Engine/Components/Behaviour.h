@@ -12,7 +12,9 @@
 #include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Prefab.h"
+#include "Bang/UIText.h"
 #include "Bang/Random.h"
+#include "Bang/UIImage.h"
 #include "Bang/Renderer.h"
 #include "Bang/Material.h"
 #include "Bang/Transform.h"
@@ -92,6 +94,8 @@ private:
 
     /// Path to the source file of this Behaviour
     String m_sourceFilepath = "";
+
+    QLibrary *p_behavioursLibraryBeingUsed = nullptr;
 };
 
 // DEFINES

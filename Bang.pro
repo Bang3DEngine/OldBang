@@ -261,7 +261,8 @@ HEADERS +=                                                          \
     src/Domain/Engine/Components/CircleCulledRenderer.h \
     src/Persistence/Files/PrefabFile.h \
     src/Persistence/Files/SoundFile.h \
-    src/Persistence/Files/SoundFileInspectable.h
+    src/Persistence/Files/SoundFileInspectable.h \
+    src/Domain/Engine/Audio/AnonymousAudioPlayer.h
 
 EDITOR {
 HEADERS += \
@@ -478,7 +479,8 @@ SOURCES += \
     src/Domain/Engine/Components/CircleCulledRenderer.cpp \
     src/Persistence/Files/PrefabFile.cpp \
     src/Persistence/Files/SoundFile.cpp \
-    src/Persistence/Files/SoundFileInspectable.cpp
+    src/Persistence/Files/SoundFileInspectable.cpp \
+    src/Domain/Engine/Audio/AnonymousAudioPlayer.cpp
 
 EDITOR {
     SOURCES += \

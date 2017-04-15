@@ -25,8 +25,9 @@ void AudioPlayerRunnable::run()
         QThread::currentThread()->msleep(m_delayInSeconds * 1000);
     }
 
-    AudioManager::CheckALError();
+    AudioManager::ClearALErrors();
     alSourcePlay(m_alSourceId);
+    AudioManager::CheckALError();
 
     ALint state;
     do

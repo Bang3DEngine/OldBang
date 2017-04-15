@@ -141,7 +141,7 @@ void AudioSource::SetVolume(float volume)
 
 void AudioSource::SetPitch(float pitch)
 {
-    m_pitch = pitch;
+    m_pitch = Math::Max(pitch, 0.01f);
     alSourcef(GetALSourceId(), AL_PITCH, m_pitch);
 }
 

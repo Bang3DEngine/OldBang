@@ -69,6 +69,8 @@ public:
     float GetRange()  const;
     bool IsLooping()  const;
 
+    ALuint GetALSourceId() const;
+
 protected:
     virtual void OnUpdate() override;
     virtual void OnDrawGizmos(bool depthed, bool overlay) override;
@@ -77,12 +79,11 @@ private:
     ALuint m_alSourceId = 0;
 
     AudioClip *m_audioClip = nullptr;
-    float m_volume   = 1.0f;
-    float m_pitch    = 1.0f;
-    bool m_looping   = false;
-    float m_range    = 5.0f;
+    float m_volume         = 1.0f;
+    float m_pitch          = 1.0f;
+    bool m_looping         = false;
+    float m_range          = 5.0f;
 
-    ALuint GetALSourceId() const;
     void UpdateALProperties() const;
     void SetAudioClipNoDettachAttach(AudioClip *audioClip);
 

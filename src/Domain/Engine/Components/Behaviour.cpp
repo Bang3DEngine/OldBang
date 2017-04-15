@@ -177,6 +177,7 @@ void Behaviour::CloneInto(ICloneable *clone) const
     Component::CloneInto(clone);
     Behaviour *b = Object::SCast<Behaviour>(clone);
     b->m_sourceFilepath = GetSourceFilepath();
+    b->p_behavioursLibraryBeingUsed = p_behavioursLibraryBeingUsed;
 }
 
 const String &Behaviour::GetSourceFilepath() const
@@ -198,6 +199,7 @@ void Behaviour::RefreshBehaviourLib()
     // Create new Behaviour, and replace in the parent gameObject this old
     // behaviour with the new one created dynamically
     QLibrary *behavioursLib = BehaviourManager::GetBehavioursMergedLibrary();
+    p_behavioursLibraryBeingUsed = behavioursLib;
     ENSURE(behavioursLib);
 
     Behaviour *createdBehaviour = CreateDynamicBehaviour(behaviourName,
@@ -210,7 +212,9 @@ void Behaviour::RefreshBehaviourLib()
 bool Behaviour::IsLoaded() const
 {
     String absPath = IO::ToAbsolute(GetSourceFilepath(), false);
+    QLibrary *behavioursLib =  BehaviourManager::GetBehavioursMergedLibrary();
     return IO::ExistsFile(absPath) &&
+           p_behavioursLibraryBeingUsed == behavioursLib &&
            IO::GetFileName( GetSourceFilepath() ) == GetClassName();
 }
 

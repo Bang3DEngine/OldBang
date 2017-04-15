@@ -15,6 +15,7 @@
 #include "Bang/SceneManager.h"
 #include "Bang/EditorCamera.h"
 #include "Bang/BehaviourManager.h"
+#include "Bang/AnonymousAudioPlayer.h"
 
 EditorPlayStopFlowController::EditorPlayStopFlowController()
 {
@@ -76,6 +77,7 @@ void EditorPlayStopFlowController::StopScene()
     {
         Hierarchy::GetInstance()->Clear();
         SceneManager::SetActiveScene(nullptr);
+        AnonymousAudioPlayer::StopAndClearEverything();
         delete sceneCopy;
     }
 

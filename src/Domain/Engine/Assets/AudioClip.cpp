@@ -57,6 +57,7 @@ bool AudioClip::LoadFromFile(const String &filepath)
     ALvoid *data = alutLoadMemoryFromFile(filepath.ToCString(),
                                           &format, &size, &freq);
 
+    AudioManager::ClearALErrors();
     bool hasError = AudioManager::CheckALError();
     if (!hasError)
     {

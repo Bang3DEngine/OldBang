@@ -3,6 +3,10 @@
 #include <QThreadPool>
 #include "Bang/WinUndef.h"
 
+#include <AL/al.h>
+#include <AL/alc.h>
+#include <AL/alut.h>
+
 #include "Bang/Scene.h"
 #include "Bang/Debug.h"
 #include "Bang/Camera.h"
@@ -15,38 +19,24 @@
 #include "Bang/AudioListener.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/AudioPlayerRunnable.h"
+#include "Bang/AnonymousAudioPlayer.h"
 
 AudioManager::AudioManager()
 {
     alutInit(0, NULL);
     m_threadPool.setMaxThreadCount(256);
+    m_anonymousAudioPlayer = new AnonymousAudioPlayer();
 }
 
 AudioManager::~AudioManager()
 {
+    delete m_anonymousAudioPlayer;
     alutExit();
 }
 
-void AudioManager::PlayAudioClip(const String &audioClipFilepath,
-                                 const Vector3& position,
-                                 float volume,
-                                 float delay,
-                                 float pitch,
-                                 float range)
+AnonymousAudioPlayer *AudioManager::GetAnonymousAudioPlayer() const
 {
-    String absAudioClipFilepath = IO::ToAbsolute(audioClipFilepath, false);
-    if (!IO::ExistsFile(absAudioClipFilepath))
-    {
-        Debug_Warn("Audio file '" << audioClipFilepath <<
-                   "' could not be found");
-        return;
-    }
-
-    AudioClip *audioClip = AssetsManager::Load<AudioClip>(absAudioClipFilepath);
-    AudioSource *audioSource = AudioManager::CreateAudioSource(position, volume,
-                                                               pitch, range);
-    audioSource->SetAudioClip(audioClip);
-    AudioManager::PlayAudioClip(audioClip, audioSource->GetALSourceId(), delay);
+    return GetInstance()->m_anonymousAudioPlayer;
 }
 
 void AudioManager::PlayAudioClip(AudioClip *audioClip,
@@ -54,7 +44,6 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
                                  float delay)
 {
     ENSURE(audioClip);
-    AudioManager *audioManager = AudioManager::GetInstance();
 
     AudioListener *listener = SceneManager::GetActiveScene()->
             GetComponentInChildren<AudioListener>();
@@ -65,61 +54,31 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
 
     AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, alSourceId,
                                                           delay);
-    audioManager->m_threadPool.tryStart(player);
+    AudioManager::GetInstance()->m_threadPool.tryStart(player);
+}
+
+void AudioManager::PlayAudioClip(const String &audioClipFilepath,
+                                 const Vector3& position,
+                                 float volume,
+                                 bool  looping,
+                                 float delay,
+                                 float pitch,
+                                 float range)
+{
+    AnonymousAudioPlayer::PlayAudioClip(audioClipFilepath, position, volume,
+                                        looping, delay, pitch, range);
 }
 
 void AudioManager::PlaySound(const String &soundFilepath,
                              const Vector3& position,
                              float volume,
+                             bool  looping,
                              float delay,
                              float pitch,
                              float range)
 {
-    String absSoundFilepath = IO::ToAbsolute(soundFilepath, false);
-    if (!IO::ExistsFile(absSoundFilepath))
-    {
-        Debug_Warn("Audio file '" << soundFilepath << "' could not be found");
-        return;
-    }
-    AudioManager *am = AudioManager::GetInstance();
-
-    // Clean up old finished anonymous sound playings
-    for (auto it = am->m_anonymousAudioSources_audioClips.Begin();
-         it != am->m_anonymousAudioSources_audioClips.End(); ++it)
-    {
-        AudioSource *audioSource = it->first;
-        AudioClip *audioClip     = it->second;
-        if (!audioSource->IsPlaying())
-        {
-            audioSource->Stop();
-            delete audioSource; delete audioClip;
-            am->m_anonymousAudioSources_audioClips.Remove(it++);
-        }
-    }
-
-    // Load the audioClip, create the anonymous audioSource, and play it
-    AudioClip *audioClip = new AudioClip();
-    audioClip->LoadFromFile(absSoundFilepath);
-
-    AudioSource *audioSource = CreateAudioSource(position, volume,
-                                                 pitch, range);
-    am->m_anonymousAudioSources_audioClips.PushBack(
-                std::make_pair(audioSource, audioClip) );
-    audioSource->SetAudioClip(audioClip);
-    audioSource->Play(delay);
-}
-
-AudioSource *AudioManager::CreateAudioSource(const Vector3& position,
-                                             float volume,
-                                             float pitch,
-                                             float range)
-{
-    AudioSource *audioSource = new AudioSource();
-    audioSource->SetVolume(volume);
-    audioSource->SetPitch(pitch);
-    audioSource->SetRange(range);
-    alSourcefv(audioSource->GetALSourceId(), AL_POSITION, position.Values());
-    return audioSource;
+    AnonymousAudioPlayer::PlaySound(soundFilepath, position, volume, looping,
+                                    delay, pitch, range);
 }
 
 void AudioManager::ClearALErrors()

@@ -22,7 +22,7 @@ public:
 
     /**
      * @brief GetNow
-     * @return Returns the epoch time.
+     * @return Returns the epoch time in ms.
      */
     static unsigned long long GetNow();
 
