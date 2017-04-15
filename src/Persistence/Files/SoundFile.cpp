@@ -1,27 +1,27 @@
-#include "Bang/AudioFile.h"
+#include "Bang/SoundFile.h"
 
 #include "Bang/IO.h"
 #include "Bang/IconManager.h"
 
 #ifdef BANG_EDITOR
-#include "Bang/AudioFileInspectable.h"
+#include "Bang/SoundFileInspectable.h"
 #endif
 
-AudioFile::AudioFile(const QFileSystemModel *model, const QModelIndex &index)
+SoundFile::SoundFile(const QFileSystemModel *model, const QModelIndex &index)
     : File(model, index)
 {
 
 }
 
-const QPixmap& AudioFile::GetIcon() const
+const QPixmap& SoundFile::GetIcon() const
 {
     String path = IO::ToAbsolute("./Icons/AudioIcon.png", true);
     return IconManager::LoadPixmap(path, IconManager::IconOverlay::Data);
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *AudioFile::GetInspectable() const
+SerializableObject *SoundFile::GetInspectable() const
 {
-    return new AudioFileInspectable(*this);
+    return new SoundFileInspectable(*this);
 }
 #endif

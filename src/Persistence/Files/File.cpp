@@ -17,7 +17,7 @@
 #include "Bang/Material.h"
 #include "Bang/TextFile.h"
 #include "Bang/MeshFile.h"
-#include "Bang/AudioFile.h"
+#include "Bang/SoundFile.h"
 #include "Bang/AudioClip.h"
 #include "Bang/ImageFile.h"
 #include "Bang/Texture2D.h"
@@ -151,7 +151,7 @@ File *File::GetSpecificFile(const File &f)
     }
     else if (f.IsSound())
     {
-        return new AudioFile(f.m_fileSystemModel, f.m_modelIndex);
+        return new SoundFile(f.m_fileSystemModel, f.m_modelIndex);
     }
     else if (f.IsTexture2DAsset())
     {

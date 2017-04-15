@@ -32,11 +32,6 @@ void SceneManager::SetActiveScene(Scene *scene)
     SceneManager *sm = SceneManager::GetInstance(); ENSURE(sm);
     ENSURE(sm->m_activeScene != scene);
 
-    if (sm->m_activeScene)
-    {
-        sm->m_activeScene = nullptr;
-    }
-
     sm->m_activeScene = scene;
     if (sm->m_activeScene)
     {
@@ -48,6 +43,7 @@ void SceneManager::SetActiveScene(Scene *scene)
 
         Application::GetInstance()->ResetDeltaTime();
         sm->m_activeScene->_OnStart();
+        Application::GetInstance()->ResetDeltaTime();
         if (setCamera)
         {
             sm->m_activeScene->SetFirstFoundCameraOrDefaultOne();

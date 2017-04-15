@@ -95,12 +95,10 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     }
 }
 
-void AudioSource::Play(float delaySeconds)
+void AudioSource::Play(float delay)
 {
     ENSURE(m_audioClip);
-
-    AudioManager::PlayAudioClip(m_audioClip, GetALSourceId(),
-                                delaySeconds);
+    AudioManager::PlayAudioClip(m_audioClip, GetALSourceId(), delay);
 }
 
 void AudioSource::Pause()

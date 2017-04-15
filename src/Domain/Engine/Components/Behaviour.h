@@ -21,6 +21,7 @@
 #include "Bang/AudioSource.h"
 #include "Bang/MeshRenderer.h"
 #include "Bang/SceneManager.h"
+#include "Bang/AudioManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/SingletonManager.h"
 #include "Bang/ISceneEventListener.h"

@@ -42,7 +42,7 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    void Play(float delaySeconds = 0.0f);
+    void Play(float delay = 0.0f);
     void Pause();
     void Stop();
 
@@ -87,6 +87,7 @@ private:
     void SetAudioClipNoDettachAttach(AudioClip *audioClip);
 
     friend class AudioClip;
+    friend class AudioManager;
     friend class AudioClipAssetFileInspectable;
 };
 

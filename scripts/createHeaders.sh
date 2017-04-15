@@ -8,7 +8,7 @@ echo "Creating headers in '${HEADERS_DIR}'"
 mkdir -p "${HEADERS_DIR}"
 
 FILES="$(find . | grep -E ".*/src/.*/[A-Z][A-Za-z0-9_-]*\.h$" | xargs)"
-FILES="$FILES $(find . | grep -E "ui_.*\.h$"  | xargs)"
+#FILES="$FILES $(find . | grep -E "ui_.*\.h$"  | xargs)"
 for f in $FILES 
 do 
 	filename=$(echo $(basename "$f"));

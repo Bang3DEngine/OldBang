@@ -70,8 +70,6 @@ const QPixmap &AudioClipAssetFileInspectable::GetIcon() const
 
 void AudioClipAssetFileInspectable::OnButtonClicked(const String &attrName)
 {
-    String audioClipFilepath = m_audioClipAssetFile.GetAbsolutePath();
-
     bool hasToPlay = !m_tmpAudioSource || !m_tmpAudioSource->IsPlaying();
     if (hasToPlay)
     {

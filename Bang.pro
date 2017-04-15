@@ -223,7 +223,6 @@ HEADERS +=                                                          \
     src/Persistence/Files/TextFile.h \
     src/View/Windows/IWindow.h \
     src/View/Windows/GameWindow.h \
-    src/Persistence/Files/AudioFile.h \
     src/Domain/Engine/Physics/Math.h \
     src/Domain/Engine/Physics/Random.h \
     src/Domain/Engine/Components/AudioListener.h \
@@ -260,7 +259,9 @@ HEADERS +=                                                          \
     src/View/IconManager.h \
     src/Domain/Engine/Image.h \
     src/Domain/Engine/Components/CircleCulledRenderer.h \
-    src/Persistence/Files/PrefabFile.h
+    src/Persistence/Files/PrefabFile.h \
+    src/Persistence/Files/SoundFile.h \
+    src/Persistence/Files/SoundFileInspectable.h
 
 EDITOR {
 HEADERS += \
@@ -303,7 +304,6 @@ HEADERS += \
     src/View/Inspector/Inspectables/Texture2DAssetFileInspectable.h \
     src/View/Windows/WindowEventManager.h \
     src/View/Windows/SelectProjectWindow.h \
-    src/Persistence/Files/AudioFileInspectable.h \
     src/View/Toolbar.h \
     src/View/Inspector/Inspectables/AudioClipAssetFileInspectable.h \
     src/View/EditorState.h \
@@ -441,7 +441,6 @@ SOURCES += \
     src/Persistence/XML/XMLProperty.cpp \
     src/View/Windows/IWindow.cpp \
     src/View/Windows/GameWindow.cpp \
-    src/Persistence/Files/AudioFile.cpp \
     src/Domain/Engine/Physics/Math.cpp \
     src/Domain/Engine/Physics/Random.cpp \
     src/Domain/Engine/Components/AudioListener.cpp \
@@ -477,7 +476,9 @@ SOURCES += \
     src/View/IconManager.cpp \
     src/Domain/Engine/Image.cpp \
     src/Domain/Engine/Components/CircleCulledRenderer.cpp \
-    src/Persistence/Files/PrefabFile.cpp
+    src/Persistence/Files/PrefabFile.cpp \
+    src/Persistence/Files/SoundFile.cpp \
+    src/Persistence/Files/SoundFileInspectable.cpp
 
 EDITOR {
     SOURCES += \
@@ -499,7 +500,6 @@ EDITOR {
         src/Domain/Graphics/Buffers/SelectionFramebuffer.cpp \
         src/View/EditorPlayStopFlowController.cpp \
         src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
-        src/Persistence/Files/AudioFileInspectable.cpp \
         src/View/Windows/EditorWindow.cpp \
         src/View/Dialogs/DialogBrowseAssetFile.cpp \
         src/View/Windows/SelectProjectWindow.cpp \

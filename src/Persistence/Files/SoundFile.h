@@ -1,5 +1,5 @@
-#ifndef AUDIOFILE_H
-#define AUDIOFILE_H
+#ifndef SOUNDFILE_H
+#define SOUNDFILE_H
 
 #include <QPixmap>
 #include <QModelIndex>
@@ -8,10 +8,10 @@
 
 #include "Bang/File.h"
 
-class AudioFile : public File
+class SoundFile : public File
 {
 public:
-    AudioFile(const QFileSystemModel *model, const QModelIndex &index);
+    SoundFile(const QFileSystemModel *model, const QModelIndex &index);
 
     virtual const QPixmap& GetIcon() const override;
 
