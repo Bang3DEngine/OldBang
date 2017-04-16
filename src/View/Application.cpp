@@ -77,13 +77,7 @@ void Application::MainLoop()
         // Lost events in between Update and Render will be delayed by Input.
         Input::GetInstance()->ProcessEnqueuedEvents();
 
-        SceneManager::TryToLoadQueuedScene();
-        Scene *activeScene = SceneManager::GetActiveScene();
-        if (activeScene)
-        {
-            activeScene->_OnUpdate();
-        }
-        activeScene->DestroyQueuedGameObjects();
+        SceneManager::Update();
 
         // Render screen
         Screen::GetInstance()->Render();

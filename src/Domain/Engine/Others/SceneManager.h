@@ -18,12 +18,14 @@ public:
 
     static SceneManager* GetInstance();
 
+    static void Update();
+
 private:
     SceneManager();
 
     Scene *m_activeScene          = nullptr;
     String m_queuedSceneFilepath  = "";
-    String m_activeSceneFilepath = "";
+    String m_activeSceneFilepath  = "";
 
     static void TryToLoadQueuedScene();
     static void OpenScene(const String &filepath);

@@ -136,6 +136,7 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
     const bool addProjObjects = (clFlags & CLFlags::AddProjectObjectFiles) > 0;
     const bool addEngineObjects = (clFlags & CLFlags::AddEngineObjectFiles) > 0;
     const bool produceSharedLib = (clFlags & CLFlags::ProduceSharedLib) > 0;
+    const bool addAssetsIncludes = (clFlags & CLFlags::AddAssetsIncludeDirs) > 0;
 
     List<String> args;
     args.PushBack( produceSharedLib ? "-shared" : "-c" );
@@ -145,32 +146,34 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
                    "-lGLEW", "-lGL", "-lpthread"});
     if (editorMode) { args.PushBack("-DBANG_EDITOR"); }
 
-    {
     List<String> qtIncludeDirs = SystemUtils::GetQtIncludes();
     for(String &qtIncludeDir : qtIncludeDirs) { qtIncludeDir.Prepend("-I"); }
     args.PushBack(qtIncludeDirs);
     args.PushBack("-I" + IO::GetEngineRootAbs() + "/include");
+    if (addAssetsIncludes)
+    {
+        List<String> assetsSubDirs =
+                   IO::GetSubDirectories(IO::GetProjectAssetsRootAbs(), true);
+        for(String &subDir : assetsSubDirs) { subDir.Prepend("-I"); }
+        args.PushBack(assetsSubDirs);
     }
 
-    {
     List<String> objects;
     if (addProjObjects)
     {
         String dir = IO::GetDir(outputLibFilepath);
         objects.PushBack(IO::GetFiles(dir, true, {"*.o"}));
     }
+
     if (addEngineObjects)
     {
         objects.PushBack(SystemUtils::GetAllEngineObjects(editorMode));
     }
     args.PushBack(objects);
-    }
 
-    {
     List<String> qtLibDirs = SystemUtils::GetQtLibrariesDirs();
     for(String &libDir : qtLibDirs) { libDir.Prepend("-L"); }
     args.PushBack(qtLibDirs);
-    }
 
     args.PushBack({"-o", outputLibFilepath});
 

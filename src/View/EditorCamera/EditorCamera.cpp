@@ -160,41 +160,41 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
 
 void EditorCamera::HandleLookAtFocus()
 {
-    if (m_doingLookAt)
+    ENSURE (m_currentFocus);
+
+    Camera *cam = GetCamera();
+    Sphere focusBSphere = m_currentFocus->GetBoundingSphere();
+
+    Vector3 thisPos = transform->GetPosition();
+    Vector3 focusPos = focusBSphere.GetCenter();
+    Vector3 focusDir = (focusPos - thisPos).Normalized();
+
+    //LookAt Rotation
+    Quaternion originRot = transform->GetRotation();
+    Quaternion destRot = Quaternion::LookDirection(focusDir, Vector3::Up);
+    Quaternion final = Quaternion::Slerp(
+                originRot, destRot, Time::GetDeltaTime() * m_lookAtRotSpeed);
+
+    transform->SetLocalRotation(final);
+
+    //LookAt Move
+    float stopDist = 0.0f;
+    float radius = focusBSphere.GetRadius();
+    if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
     {
-        Camera *cam = GetCamera();
-        Sphere focusBSphere = m_currentFocus->GetBoundingSphere();
-
-        Vector3 thisPos = transform->GetPosition();
-        Vector3 focusPos = focusBSphere.GetCenter();
-        Vector3 focusDir = (focusPos - thisPos).Normalized();
-
-        //LookAt Rotation
-        Quaternion originRot = transform->GetRotation();
-        Quaternion destRot = Quaternion::LookDirection(focusDir, Vector3::Up);
-        Quaternion final = Quaternion::Slerp(
-                    originRot, destRot, Time::GetDeltaTime() * m_lookAtRotSpeed);
-
-        transform->SetLocalRotation(final);
-
-        //LookAt Move
-        float stopDist = 0.0f;
-        float radius = focusBSphere.GetRadius();
-        if (cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
-        {
-            float fov = Math::Deg2Rad(cam->GetFovDegrees() / 2.0f);
-            stopDist = radius / std::tan(fov) * 1.5f;
-        }
-        stopDist = std::max(stopDist, 1.0f); //In case boundingBox is empty
-        Vector3 dest = focusPos - (focusDir * stopDist);
-        float t = Time::GetDeltaTime() * m_lookAtMoveSpeed;
-        transform->SetPosition( Vector3::Lerp(thisPos, dest, t) );
-
-        m_doingLookAt =
-                Vector3::Distance(dest, thisPos) > 0.05f ||
-                Vector3::Dot(transform->GetForward(), focusDir) < 0.99999f;
+        float fov = Math::Deg2Rad(cam->GetFovDegrees() / 2.0f);
+        stopDist = radius / std::tan(fov) * 1.5f;
     }
+    stopDist = std::max(stopDist, 1.0f); //In case boundingBox is empty
+    Vector3 dest = focusPos - (focusDir * stopDist);
+    float t = Time::GetDeltaTime() * m_lookAtMoveSpeed;
+    transform->SetPosition( Vector3::Lerp(thisPos, dest, t) );
 
+    if( Vector3::Distance(dest, thisPos) <= 0.05f &&
+        Vector3::Dot(transform->GetForward(), focusDir) >= 0.99999f)
+    {
+        m_currentFocus = nullptr;
+    }
 }
 
 void EditorCamera::OnStart()
@@ -227,31 +227,32 @@ void EditorCamera::OnUpdate()
     bool hasMoved = false;
     bool unwrapMouse = true;
 
-    if (!m_doingLookAt)
+    HandleKeyMovement(&moveStep, &hasMoved); //WASD
+
+    if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
     {
-        HandleKeyMovement(&moveStep, &hasMoved); //WASD
+        HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
+    }
 
-        if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
-        {
-            HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
-        }
+    HandleWheelZoom(&moveStep, &hasMoved);
 
-        HandleWheelZoom(&moveStep, &hasMoved);
+    m_keysMoveSpeed += m_keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
+    m_keysMoveSpeed = Math::Clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
+    if (!hasMoved)
+    {
+        m_keysMoveSpeed = 0.0f; //reset speed
+    }
 
-        m_keysMoveSpeed += m_keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
-        m_keysMoveSpeed = Math::Clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
-        if (!hasMoved)
-        {
-            m_keysMoveSpeed = 0.0f; //reset speed
-        }
-
+    if (!m_currentFocus)
+    {
         transform->Translate(moveStep);
     }
     else
     {
         UpdateRotationVariables();
-        HandleLookAtFocus(); // Modifies m_doingLookAt
+        HandleLookAtFocus();
         UpdateRotationVariables();
+        if (hasMoved) { m_currentFocus = nullptr; }
     }
 
     if (unwrapMouse && Input::GetMouseWrapping())
@@ -267,14 +268,12 @@ void EditorCamera::OnGameObjectDestroyed(GameObject *destroyed)
     if (m_currentFocus == destroyed)
     {
         m_currentFocus = nullptr;
-        m_doingLookAt = false;
     }
 }
 
 void EditorCamera::AlignViewWithGameObject(GameObject *selected)
 {
     m_currentFocus = nullptr;
-    m_doingLookAt = false;
     m_camt->SetLocalRotation(Quaternion::Identity);
     transform->SetPosition(selected->transform->GetPosition());
     Vector3 up = Vector3::Up;
@@ -314,7 +313,6 @@ void EditorCamera::OnHierarchyGameObjectsSelected
     if (selectedGameObjects.Size() != 1) return;
     GameObject *selected = selectedGameObjects.Front();
     m_currentFocus = selected;
-    m_doingLookAt = false;
     */
 }
 
@@ -328,7 +326,6 @@ void EditorCamera::OnHierarchyGameObjectDoubleClicked(GameObject *selected)
 void EditorCamera::StartLookAt(GameObject *lookAtFocus)
 {
     m_currentFocus = lookAtFocus;
-    m_doingLookAt = true;
 }
 #endif
 

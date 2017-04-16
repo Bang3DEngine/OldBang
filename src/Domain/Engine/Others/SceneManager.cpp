@@ -27,6 +27,25 @@ SceneManager *SceneManager::GetInstance()
     return app ? app->m_sceneManager : nullptr;
 }
 
+void SceneManager::Update()
+{
+    SceneManager::TryToLoadQueuedScene();
+    Scene *activeScene = SceneManager::GetActiveScene();
+    if (activeScene)
+    {
+        activeScene->_OnUpdate();
+
+        #ifdef BANG_EDITOR
+        if (EditorWindow::GetInstance()->IsSceneTabActive())
+        {
+            EditorScene *edScene = Object::SCast<EditorScene>(activeScene);
+            edScene->SetEditorCamera();
+        }
+        #endif
+    }
+    activeScene->DestroyQueuedGameObjects();
+}
+
 void SceneManager::SetActiveScene(Scene *scene)
 {
     SceneManager *sm = SceneManager::GetInstance(); ENSURE(sm);

@@ -24,6 +24,7 @@ public:
         AddEngineObjectFiles  = 2,
         AddProjectObjectFiles = 4,
         ForGame               = 8,
+        AddAssetsIncludeDirs  = 16,
         Default = AddProjectObjectFiles | AddEngineObjectFiles
     };
 

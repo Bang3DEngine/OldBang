@@ -25,10 +25,13 @@ void BehaviourObjectCompileRunnable::CompileBehaviourObject()
     IO::Remove(objFilepath);
 
     typedef SystemUtils::CompilationFlags CLFlags;
-    bool successCompiling = false; String output = "";
+
+    String output = "";
+    bool successCompiling = false;
     List<String> sources = {m_behaviourFilepath};
     SystemUtils::Compile(sources, objFilepath,
-                         (m_forGame ? CLFlags::ForGame : CLFlags::None),
+                         (m_forGame ? CLFlags::ForGame : CLFlags::None) |
+                              CLFlags::AddAssetsIncludeDirs,
                          &successCompiling, &output);
     if (successCompiling)
     {

@@ -1,5 +1,6 @@
 #include "Bang/Quaternion.h"
 
+#include "Bang/Debug.h"
 #include "Bang/String.h"
 #include "Bang/Vector3.h"
 #include "Bang/Matrix4.h"
@@ -84,10 +85,11 @@ Quaternion Quaternion::FromTo(const Vector3 &from, const Vector3 &to)
     return Quaternion(s * 0.5f, c.x, c.y, c.z).Normalized();
 }
 
-Quaternion Quaternion::LookDirection(const Vector3 &_forward, const Vector3 &_up)
+Quaternion Quaternion::LookDirection(const Vector3 &_forward,
+                                     const Vector3 &_up)
 {
-    Vector3 forward = _forward;
-    Vector3 up = _up;
+    Vector3 forward = _forward.Normalized();
+    Vector3 up      = _up.Normalized();
 /*
     Vector3::OrthoNormalize(up, forward);
     Vector3 right = Vector3::Cross(up, forward);
@@ -100,8 +102,16 @@ Quaternion Quaternion::LookDirection(const Vector3 &_forward, const Vector3 &_up
     ret.z = (right.y - up.x) * w4_recip;
     return ret;
 */
+    if (Vector3::Dot(forward,  up) >= 0.99f ||
+        Vector3::Dot(forward, -up) >= 0.99f)
+    {
+        Debug_Warn("LookDirection: Forward and up aligned. Returning identity");
+        return Quaternion::Identity;
+    }
+
     Vector3 eye(0.0f);
-    return Quaternion( glm::quat_cast( glm::inverse(glm::lookAt(eye, forward, up)) ) );
+    return Quaternion( glm::quat_cast(
+                           glm::inverse( glm::lookAt(eye, forward, up)) ) );
 }
 
 Vector3 Quaternion::EulerAngles(const Quaternion &q)

@@ -104,7 +104,6 @@ private:
     GameObject *m_yawNode = nullptr;
 
     GameObject *m_currentFocus = nullptr;
-    bool m_doingLookAt = false;
     float m_lookAtRotSpeed = 3.0f;
     float m_lookAtMoveSpeed = 4.0f;
 
