@@ -108,6 +108,7 @@ private:
     QLabel *m_labelCurrentPath = nullptr;
     QLabel *m_labelFileName    = nullptr;
 
+    String GetPathUnderMouse() const;
     String GetFilepathFromModelIndex(const QModelIndex &qmi) const;
     String GetRelativeFilepathFromModelIndex(const QModelIndex &qmi) const;
     String GetDirFromModelIndex(const QModelIndex &qmi) const;

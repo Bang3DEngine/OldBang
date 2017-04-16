@@ -66,7 +66,8 @@ private:
     int m_timeSinceLastMouseDown = 0;
     const int c_TimeToStartDrag = 100;
     bool m_mouseDown = false;
-    bool m_dragging  = false, m_latestUpdateDragging  = false;
+    bool m_dragging  = false;
+    bool m_latestUpdateDragging  = false;
 
     DragDropAgent *m_latestDDAgentBelowMouse = nullptr;
     List<IDragDropListener*> m_dragDropListeners;

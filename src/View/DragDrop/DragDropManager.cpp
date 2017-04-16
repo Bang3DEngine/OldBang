@@ -23,8 +23,7 @@ void DragDropManager::InstallEventFilters()
     QTimer::singleShot(1000, this, SLOT(InstallEventFilters()));
 
     EditorWindow *ew = EditorWindow::GetInstance();
-    if (ew &&
-        ew->GetMainWindow())
+    if (ew && ew->GetMainWindow())
     {
         QMainWindow *mw = ew->GetMainWindow();
         QList<QWidget*> widgets = mw->findChildren<QWidget*>();
@@ -89,12 +88,14 @@ void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
     DragDropAgent *currentDDAgentBelowMouse =
             DragDropManager::GetDragDropAgentBelowMouse();
     m->m_ddInfo.sourceObject = Object::Cast<QObject>(currentDDAgentBelowMouse);
+    m->Update();
 }
 
 void DragDropManager::HandleGlobalMouseRelease(QObject *obj, QEvent *e)
 {
     DragDropManager *m = DragDropManager::s_ddManager; ENSURE(m);
     m->m_mouseDown = false;
+    m->Update();
 }
 
 QObject *DragDropManager::GetDragSource()
@@ -162,7 +163,6 @@ void DragDropManager::Update()
             }
         }
     }
-
     m_latestDDAgentBelowMouse = currentDDAgentBelowMouse;
 
     if (!m_dragging)
@@ -177,15 +177,9 @@ void DragDropManager::Update()
         }
         m_latestDDAgentBelowMouse = nullptr;
     }
-    m_latestUpdateDragging  = m_dragging;
+    m_latestUpdateDragging = m_dragging;
 
-    if (m_mouseDown)
-    {
-        m_timeSinceLastMouseDown += 100;
-    }
-    else
-    {
-        m_timeSinceLastMouseDown = 0;
-    }
+    if (m_mouseDown) { m_timeSinceLastMouseDown += 100; }
+    else { m_timeSinceLastMouseDown = 0; }
 }
 

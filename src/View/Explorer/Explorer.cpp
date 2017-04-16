@@ -466,15 +466,13 @@ void Explorer::OnDragStart(const DragDropInfo &ddi)
         setStyleSheet(IDragDropListener::acceptDragStyle);
     }
 
-    m_fileBeingDragged = GetSelectedFileOrDirPath();
+    m_fileBeingDragged = GetPathUnderMouse();
+    OnDragMove(ddi);
 }
 
 void Explorer::OnDragMove(const DragDropInfo &ddi)
 {
-
-    File destDir(m_fileSystemModel,
-                 indexAt( viewport()->mapFromGlobal(QCursor::pos()) ));
-    m_fileUnderMouse = destDir.GetAbsolutePath();
+    m_fileUnderMouse = GetPathUnderMouse();
 }
 
 void Explorer::OnDrop(const DragDropInfo &ddi)
@@ -496,6 +494,7 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
                                                       newMovedFileOrDirPath);
         }
     }
+    m_fileBeingDragged = m_fileUnderMouse = "";
 
     if (ddi.currentObject == this)
     {
@@ -512,8 +511,6 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
             IO::WriteToFile(path, selected->GetSerializedString());
         }
     }
-
-    m_fileBeingDragged = "";
 }
 
 void Explorer::dropEvent(QDropEvent *e)
@@ -550,4 +547,11 @@ void Explorer::updateGeometries()
 {
     QListView::updateGeometries();
     verticalScrollBar()->setSingleStep(3);
+}
+
+String Explorer::GetPathUnderMouse() const
+{
+    File destDir(m_fileSystemModel,
+                 indexAt( viewport()->mapFromGlobal(QCursor::pos()) ));
+    return destDir.GetAbsolutePath();
 }

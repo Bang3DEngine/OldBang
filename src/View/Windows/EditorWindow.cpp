@@ -93,7 +93,8 @@ void EditorWindow::RefreshDocksAndWindowTitles()
 {
     String sceneTitle = IO::GetFileName(
                             SceneManager::GetActiveSceneFilepath() );
-    if (!EditorState::IsPlaying() && !SceneManager::IsActiveSceneSaved())
+    if (!EditorState::IsPlaying() && !IsGameTabActive() &&
+        !SceneManager::IsActiveSceneSaved())
     {
         sceneTitle += " *";
     }
