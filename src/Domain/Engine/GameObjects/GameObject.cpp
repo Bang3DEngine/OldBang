@@ -323,12 +323,9 @@ void GameObject::RemoveComponent(Component *c)
 
 void GameObject::RemoveComponentInstantly(Component *c)
 {
+    if (m_transform == c) { m_transform = nullptr; }
     m_components.Remove(c);
-    if (m_transform == c)
-    {
-        delete m_transform;
-        m_transform = nullptr;
-    }
+    delete c;
 }
 
 void GameObject::RemoveQueuedComponents()

@@ -20,21 +20,24 @@ FileReferencesManager::~FileReferencesManager()
 
 void FileReferencesManager::RegisterSerializableObject(SerializableObject *fileable)
 {
-    m_inMemoryFileables.Insert(fileable);
+    m_inMemorySerialObjects.Insert(fileable);
 }
 
 void FileReferencesManager::UnRegisterSerializableObject(SerializableObject *fileable)
 {
-    m_inMemoryFileables.Remove(fileable);
+    m_inMemorySerialObjects.Remove(fileable);
 }
 
 void FileReferencesManager::OnFileOrDirNameAboutToBeChanged(
                                             const String &absFilepathBefore,
                                             const String &absFilepathNow)
 {
-    ENSURE(!absFilepathBefore.Empty()); ENSURE(!absFilepathNow.Empty());
+    ENSURE(!absFilepathBefore.Empty());
+    // ENSURE(!absFilepathNow.Empty());
+
     m_queuedNameChanges.push( std::make_pair(absFilepathBefore,
                                              absFilepathNow));
+
     QTimer::singleShot(100, this, SLOT(TreatNextQueuedFileOrDirNameChange()));
 }
 
@@ -81,8 +84,15 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
 
         String fileXMLContents = f.GetContents();
         XMLNode *auxXMLInfo = XMLNode::FromString(fileXMLContents);
-        if (auxXMLInfo && RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow))
+        if (filepath.Contains("tex2d"))
         {
+            Debug_Log("Trying to refactor file " << filepath << " from " <<
+                      relPathBefore << " to " << relPathNow);
+        }
+        if (auxXMLInfo &&
+            RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow, true))
+        {
+            Debug_Log("Refactored file " << filepath);
             IO::WriteToFile(filepath, auxXMLInfo->ToString());
         }
 
@@ -91,18 +101,19 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
 }
 
 void FileReferencesManager::RefactorSerializableObject(const String &relPathBefore,
-                                               const String &relPathNow)
+                                                       const String &relPathNow)
 {
-    for (SerializableObject *fileable : m_inMemoryFileables)
+    for (SerializableObject *serialObject : m_inMemorySerialObjects)
     {
         // First get its xml description, create an XMLNode, pass it to the
         // refactoring function, let the fileable read it to be updated, and
         // delete the created aux XMLNode
-        String xmlInfoStr = fileable->GetSerializedString();
+        String xmlInfoStr = serialObject->GetSerializedString();
         XMLNode *auxXMLInfo = XMLNode::FromString(xmlInfoStr);
-        if (auxXMLInfo && RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow))
+        if (auxXMLInfo &&
+            RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow, false))
         {
-            fileable->Read(*auxXMLInfo);
+            serialObject->Read(*auxXMLInfo);
         }
         if (auxXMLInfo) { delete auxXMLInfo; }
     }
@@ -110,7 +121,8 @@ void FileReferencesManager::RefactorSerializableObject(const String &relPathBefo
 
 bool FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
                                             const String &relPathBefore,
-                                            const String &relPathNow)
+                                            const String &relPathNow,
+                                            bool refactorXMLChildren)
 {
     bool hasBeenModified = false;
 
@@ -119,29 +131,28 @@ bool FileReferencesManager::RefactorXMLInfo(XMLNode *xmlInfo,
     for (const std::pair<String, XMLAttribute> &name_attr : xmlAttributes)
     {
         XMLAttribute attr = name_attr.second;
-        if (attr.GetType() != XMLAttribute::Type::File) { continue; }
+        if (attr.GetType() != XMLAttribute::Type::File)  { continue; }
         if (attr.HasProperty(XMLProperty::IsEngineFile)) { continue; }
 
         String relFilepath = attr.GetValue();
-        //Debug_Log(relFilepath << ", " << relPathBefore);
         int numReplacements = relFilepath.ReplaceInSitu(relPathBefore, relPathNow);
         if (numReplacements > 0)
         {
-          //  Debug_Log("Refactored in " << relFilepath << " attr " <<
-          //            name_attr.first << ": " << relPathBefore <<
-          //            " by " << relPathNow);
-            attr.SetValue(relFilepath);
-            xmlInfo->SetAttribute(attr);
+            XMLAttribute *attrPointer = xmlInfo->GetAttribute(attr.GetName());
+            attrPointer->SetValue(relFilepath);
             hasBeenModified = true;
         }
     }
 
-    // Now refactor its children
-    List<XMLNode*> xmlChildren = xmlInfo->GetChildren();
-    for (XMLNode *xmlChild : xmlChildren)
+    if (refactorXMLChildren)
     {
-        hasBeenModified = hasBeenModified ||
-                          RefactorXMLInfo(xmlChild, relPathBefore, relPathNow);
+        const List<XMLNode*>& xmlChildren = xmlInfo->GetChildren();
+        for (XMLNode *xmlChild : xmlChildren)
+        {
+            bool modified = RefactorXMLInfo(xmlChild, relPathBefore,
+                                            relPathNow, true);
+            hasBeenModified = hasBeenModified || modified;
+        }
     }
 
     return hasBeenModified;

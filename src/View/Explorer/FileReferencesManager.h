@@ -30,7 +30,7 @@ private:
     // Queue with the changes we are asked for to refactor references.
     // Its a queue of pairs (oldAbsPath, newAbsPath)
     std::queue< std::pair<String, String> > m_queuedNameChanges;
-    Set<SerializableObject*> m_inMemoryFileables;
+    Set<SerializableObject*> m_inMemorySerialObjects;
 
     FileReferencesManager();
     virtual ~FileReferencesManager();
@@ -43,7 +43,8 @@ private:
 
     bool RefactorXMLInfo(XMLNode *xmlInfo,
                          const String &relPathBefore,
-                         const String &relPathNow);
+                         const String &relPathNow,
+                         bool refactorXMLChildren);
 
 private slots:
     void TreatNextQueuedFileOrDirNameChange();
