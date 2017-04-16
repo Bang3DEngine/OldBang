@@ -14,6 +14,7 @@
 #include "Bang/Prefab.h"
 #include "Bang/UIText.h"
 #include "Bang/Random.h"
+#include "Bang/Camera.h"
 #include "Bang/UIImage.h"
 #include "Bang/Renderer.h"
 #include "Bang/Material.h"

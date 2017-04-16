@@ -26,24 +26,15 @@ public:
 
     void Clear();
 
-    void MoveInspectorWidget(InspectorWidget *inspectorWidget, int movement);
-    void SetInspectable(SerializableObject *inspectable, const String &title = "");
+    void SetInspectable(SerializableObject *inspectable,
+                        const String &title = "");
     void ShowGameObjectInfo(GameObject *gameObject);
 
     void RefreshSizeHints();
     void OnEditorPlay();
 
 public slots:
-    void ShowCurrentGameObjectInfo();
     void OnEnableGameObjectCheckBoxChanged(bool checked);
-
-    /**
-     * @brief RefreshHard must be used when some hidden or non-hidden
-     * attrWidgets are shown/hidden. Because of resizing reasons, we have
-     * to reconstruct the layout in order for it to be propperly
-     * renderered by Qt.
-     * @param widget
-     */
     void Refresh();
 
 public:
@@ -61,17 +52,11 @@ public:
 
     void AddWidget(InspectorWidget *widget, int row = -1);
 
-    List<SerializableObject*> GetCurrentInspectables() const;
     bool IsShowingInspectable(SerializableObject *inspectable) const;
     static Inspector* GetInstance();
 
     void dropEvent(QDropEvent *e) override;
 
-    /**
-     * @brief FormatInspectorLabel
-     * @param labelString
-     * @return Returns the label formatted. It replaces "_" with spaces.
-     */
     static String FormatInspectorLabel(const String &labelString);
 
 protected:

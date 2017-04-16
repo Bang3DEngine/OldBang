@@ -58,21 +58,18 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
-    m_enableGameObjectCheckBox->setVisible(false);
-
-    // Avoid double clearings
     ENSURE(!m_widget_To_Item.Empty());
 
+    clear();
     for (InspectorWidget *iw : m_currentInspectorWidgets) { iw->OnDestroy(); }
     m_currentInspectorWidgets.Clear();
     m_widget_To_Inspectables.Clear();
     m_currentInspectables.Clear();
     m_widget_To_Item.Clear();
 
-    clear();
-
     m_titleLabel->setText(tr(""));
     p_currentGameObject = nullptr;
+    m_enableGameObjectCheckBox->setVisible(false);
 }
 
 void Inspector::Refresh()
@@ -87,21 +84,6 @@ void Inspector::Refresh()
         SetInspectable(insp);
     }
     RefreshSizeHints();
-}
-
-void Inspector::MoveInspectorWidget(InspectorWidget *inspectorWidget,
-                                    int movement)
-{
-    QListWidgetItem *movingItem = m_widget_To_Item[inspectorWidget];
-    ENSURE(movingItem);
-
-    const int itemCount = count();
-    const int oldRow = row(movingItem);
-    ENSURE(oldRow >= 0 && oldRow < itemCount);
-
-    takeItem(oldRow);
-    const int newRow = (oldRow + movement + itemCount) % itemCount;
-    insertItem(newRow, movingItem);
 }
 
 void Inspector::SetInspectable(SerializableObject *inspectable,
@@ -160,11 +142,6 @@ void Inspector::OnEditorPlay()
     Clear();
 }
 
-void Inspector::ShowCurrentGameObjectInfo()
-{
-    ShowGameObjectInfo(p_currentGameObject);
-}
-
 void Inspector::OnEnableGameObjectCheckBoxChanged(bool checked)
 {
     if (p_currentGameObject)
@@ -184,7 +161,10 @@ void Inspector::OnMenuBarAddNewBehaviourClicked()
 {
     ENSURE(p_currentGameObject);
     Behaviour *newBehaviour = Behaviour::CreateNewBehaviour();
-    p_currentGameObject->AddComponent(newBehaviour);
+    if (newBehaviour)
+    {
+        p_currentGameObject->AddComponent(newBehaviour);
+    }
 }
 
 void Inspector::AddWidget(InspectorWidget *widget, int row)
@@ -200,11 +180,6 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
     m_currentInspectorWidgets.PushBack(widget);
 
     setItemWidget(item, widget);
-}
-
-List<SerializableObject *> Inspector::GetCurrentInspectables() const
-{
-    return m_currentInspectables;
 }
 
 bool Inspector::IsShowingInspectable(SerializableObject *inspectable) const

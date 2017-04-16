@@ -194,14 +194,17 @@ Console::MessageId Console::AddMessage(const Message &msg,
     }
 
     // Update collapse count text
-    if (m_collapsing)
+    if (m_collapsing && m_messageCount.ContainsKey(msg))
     {
         int count = m_messageCount[msg];
-        QTreeWidgetItem *collapsingItem = m_msg_to_collapsingItem[msg];
-        if (collapsingItem)
+        if (m_msg_to_collapsingItem.ContainsKey(msg))
         {
-            collapsingItem->setText(c_countColumn,
-                                    String::ToString(count).ToQString());
+            QTreeWidgetItem *collapsingItem = m_msg_to_collapsingItem[msg];
+            if (collapsingItem)
+            {
+                collapsingItem->setText(c_countColumn,
+                                        String::ToString(count).ToQString());
+            }
         }
     }
 

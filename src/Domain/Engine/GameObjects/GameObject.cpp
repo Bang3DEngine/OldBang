@@ -268,6 +268,7 @@ Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 
 void GameObject::AddComponent(Component *c)
 {
+    ENSURE(c);
     if (c->IsOfType<Transform>())
     {
         if (!HasComponent<Transform>())

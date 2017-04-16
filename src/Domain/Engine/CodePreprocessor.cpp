@@ -71,7 +71,7 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
     // Keep track of the user's source line number, to use #line directive
     int originalLineNum = 1;
 
-    for (auto it = lines.Begin(); it != lines.End(); ++it)
+    for (auto it = lines.Begin(); it != lines.End(); )
     {
         String line = (*it).Trim();
         if (line.BeginsWith("#include"))
@@ -91,6 +91,7 @@ void CodePreprocessor::PreprocessCode(String *srcCode,
                          contentLines.End());
             it = lines.Begin();
         }
+        else { ++it; }
 
         ++originalLineNum;
     }

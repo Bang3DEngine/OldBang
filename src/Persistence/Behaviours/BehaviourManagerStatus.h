@@ -31,8 +31,8 @@ public:
 
         List<String> includePaths = IO::GetSubDirectories(
                     IO::GetProjectAssetsRootAbs(), true);
+        includePaths.Add(IO::GetProjectAssetsRootAbs());
         CodePreprocessor::PreprocessCode(&code, includePaths);
-
         hash = IO::GetHashFromString(code);
     }
 

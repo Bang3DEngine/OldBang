@@ -162,8 +162,8 @@ void BehaviourManager::StartCompilingAllBehaviourObjects(bool forGame)
     for (const String &behFilepath : allBehaviourSources)
     {
         if (!bm->m_status.HasFailed(behFilepath) &&
-                !bm->m_status.IsReady(behFilepath) &&
-                !bm->m_status.IsBeingCompiled(behFilepath))
+            !bm->m_status.IsReady(behFilepath) &&
+            !bm->m_status.IsBeingCompiled(behFilepath))
         {
             BehaviourManager::StartCompilingBehaviourObject(behFilepath,
                                                             forGame);
