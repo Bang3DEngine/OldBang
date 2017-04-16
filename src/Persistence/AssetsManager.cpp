@@ -56,7 +56,6 @@ void AssetsManager::UpdateAsset(const String &assetFilepath,
         asset->Read(xmlChangedInfo);
     }
 
-    Debug_Log("UpdateAsset " << assetFilepath);
     if (IO::ExistsFile(assetFilepath))
     {
         IO::WriteToFile(assetFilepath, xmlChangedInfo.ToString());

@@ -37,11 +37,6 @@ void DragDropManager::InstallEventFilters()
     }
 }
 
-bool DragDropManager::eventFilter(QObject *obj, QEvent *e)
-{
-    return QObject::eventFilter(obj, e);
-}
-
 DragDropAgent* DragDropManager::GetDragDropAgentBelowMouse()
 {
     // Go up in the hierarchy (parent->parent->...->nullptr), until

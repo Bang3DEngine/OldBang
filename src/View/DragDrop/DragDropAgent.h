@@ -11,9 +11,9 @@
 #include <QDragLeaveEvent>
 #include "Bang/WinUndef.h"
 
+#include "Bang/List.h"
 #include "Bang/Color.h"
 #include "Bang/Vector2.h"
-#include "Bang/DragDropManager.h"
 
 class File;
 class GameObject;

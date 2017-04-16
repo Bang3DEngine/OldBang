@@ -466,7 +466,12 @@ void Explorer::OnDragStart(const DragDropInfo &ddi)
         setStyleSheet(IDragDropListener::acceptDragStyle);
     }
 
-    m_fileBeingDragged = GetPathUnderMouse();
+    m_fileBeingDragged = GetSelectedFileOrDirPath();
+    if (m_fileBeingDragged.Empty())
+    {
+        m_fileBeingDragged = GetPathUnderMouse();
+    }
+
     OnDragMove(ddi);
 }
 
@@ -479,22 +484,22 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
 {
     setStyleSheet("/* */");
 
-    if (ddi.sourceObject == this && underMouse()) // Handle file moving
+    String oldMovedFileOrDirPath = m_fileBeingDragged;
+    String destDirPath = m_fileUnderMouse;
+    if (oldMovedFileOrDirPath == destDirPath)
     {
-        String oldMovedFileOrDirPath = m_fileBeingDragged;
-        String destDirPath = m_fileUnderMouse;
-
-        if (!destDirPath.Empty())
-        {
-            String movedFileOrDirName =
-                    IO::GetFileNameWithExtension(oldMovedFileOrDirPath);
-            String newMovedFileOrDirPath = destDirPath + "/" + movedFileOrDirName;
-            m_fileRefsManager->OnFileOrDirNameAboutToBeChanged(
-                                                      oldMovedFileOrDirPath,
-                                                      newMovedFileOrDirPath);
-        }
+        m_fileUnderMouse = GetPathUnderMouse();
     }
-    m_fileBeingDragged = m_fileUnderMouse = "";
+
+    if (!destDirPath.Empty())
+    {
+        String movedFileOrDirName =
+                IO::GetFileNameWithExtension(oldMovedFileOrDirPath);
+        String newMovedFileOrDirPath = destDirPath + "/" + movedFileOrDirName;
+        m_fileRefsManager->OnFileOrDirNameAboutToBeChanged(
+                                                  oldMovedFileOrDirPath,
+                                                  newMovedFileOrDirPath);
+    }
 
     if (ddi.currentObject == this)
     {
@@ -511,6 +516,7 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
             IO::WriteToFile(path, selected->GetSerializedString());
         }
     }
+    m_fileBeingDragged = m_fileUnderMouse = "";
 }
 
 void Explorer::dropEvent(QDropEvent *e)

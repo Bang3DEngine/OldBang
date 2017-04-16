@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include <QLabel>
+#include <QTimer>
 #include <QLayout>
 #include <QWidget>
 #include <QCheckBox>

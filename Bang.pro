@@ -262,7 +262,8 @@ HEADERS +=                                                          \
     src/Persistence/Files/PrefabFile.h \
     src/Persistence/Files/SoundFile.h \
     src/Persistence/Files/SoundFileInspectable.h \
-    src/Domain/Engine/Audio/AnonymousAudioPlayer.h
+    src/Domain/Engine/Audio/AnonymousAudioPlayer.h \
+    src/View/DragDrop/DragDropInfo.h
 
 EDITOR {
 HEADERS += \

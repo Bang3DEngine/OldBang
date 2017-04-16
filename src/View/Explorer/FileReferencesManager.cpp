@@ -1,11 +1,14 @@
 #include "Bang/FileReferencesManager.h"
 
+#include <QTimer>
+#include "Bang/WinUndef.h"
+
+#include "Bang/IO.h"
 #include "Bang/Map.h"
 #include "Bang/File.h"
 #include "Bang/Debug.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Explorer.h"
-#include "Bang/IO.h"
 #include "Bang/XMLAttribute.h"
 #include "Bang/SerializableObject.h"
 
@@ -38,7 +41,7 @@ void FileReferencesManager::OnFileOrDirNameAboutToBeChanged(
     m_queuedNameChanges.push( std::make_pair(absFilepathBefore,
                                              absFilepathNow));
 
-    QTimer::singleShot(100, this, SLOT(TreatNextQueuedFileOrDirNameChange()));
+    QTimer::singleShot(500, this, SLOT(TreatNextQueuedFileOrDirNameChange()));
 }
 
 void FileReferencesManager::TreatNextQueuedFileOrDirNameChange()
@@ -52,7 +55,7 @@ void FileReferencesManager::TreatNextQueuedFileOrDirNameChange()
                         !IO::Exists(absFilepathBefore) &&
                          IO::Exists(absFilepathNow);
 
-    if (fileHasMoved) // Sometimes it triggers drop but nothing is moved, check
+    if (fileHasMoved)
     {
         String relPathBefore = IO::ToRelative(absFilepathBefore,false);
         String relPathNow    = IO::ToRelative(absFilepathNow, false);
@@ -84,15 +87,9 @@ void FileReferencesManager::RefactorFiles(const String &relPathBefore,
 
         String fileXMLContents = f.GetContents();
         XMLNode *auxXMLInfo = XMLNode::FromString(fileXMLContents);
-        if (filepath.Contains("tex2d"))
-        {
-            Debug_Log("Trying to refactor file " << filepath << " from " <<
-                      relPathBefore << " to " << relPathNow);
-        }
         if (auxXMLInfo &&
             RefactorXMLInfo(auxXMLInfo, relPathBefore, relPathNow, true))
         {
-            Debug_Log("Refactored file " << filepath);
             IO::WriteToFile(filepath, auxXMLInfo->ToString());
         }
 
