@@ -12,6 +12,7 @@
 #include "Bang/ImageFile.h"
 #include "Bang/Hierarchy.h"
 #include "Bang/GameObject.h"
+#include "Bang/FileTracker.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EditorWindow.h"
@@ -135,7 +136,7 @@ void Explorer::OnFileRenamed(const QString &dirPath,
     SelectFile(newAbsPath);
 
     String oldAbsPath = dirPath + "/" + oldName;
-    m_fileRefsManager->OnFileOrDirNameAboutToBeChanged(oldAbsPath, newAbsPath);
+    m_fileRefsManager->OnFileOrDirNameMoved(oldAbsPath, newAbsPath);
 }
 
 void Explorer::UpdateLabelText()
@@ -249,8 +250,6 @@ void Explorer::RefreshInspector()
     if (selectedIndex.isValid() && f.IsFile() &&
         IO::Exists(f.GetAbsolutePath()))
     {
-        m_lastSelectedPath = f.GetRelativePath();
-
         Inspector *inspector = Inspector::GetInstance();
         if (m_lastInspectableInInspector)
         {
@@ -465,41 +464,14 @@ void Explorer::OnDragStart(const DragDropInfo &ddi)
     {
         setStyleSheet(IDragDropListener::acceptDragStyle);
     }
-
-    m_fileBeingDragged = GetSelectedFileOrDirPath();
-    if (m_fileBeingDragged.Empty())
-    {
-        m_fileBeingDragged = GetPathUnderMouse();
-    }
-
-    OnDragMove(ddi);
-}
-
-void Explorer::OnDragMove(const DragDropInfo &ddi)
-{
-    m_fileUnderMouse = GetPathUnderMouse();
 }
 
 void Explorer::OnDrop(const DragDropInfo &ddi)
 {
     setStyleSheet("/* */");
 
-    String oldMovedFileOrDirPath = m_fileBeingDragged;
-    String destDirPath = m_fileUnderMouse;
-    if (oldMovedFileOrDirPath == destDirPath)
-    {
-        m_fileUnderMouse = GetPathUnderMouse();
-    }
-
-    if (!destDirPath.Empty())
-    {
-        String movedFileOrDirName =
-                IO::GetFileNameWithExtension(oldMovedFileOrDirPath);
-        String newMovedFileOrDirPath = destDirPath + "/" + movedFileOrDirName;
-        m_fileRefsManager->OnFileOrDirNameAboutToBeChanged(
-                                                  oldMovedFileOrDirPath,
-                                                  newMovedFileOrDirPath);
-    }
+    QTimer::singleShot(300, FileReferencesManager::GetInstance(),
+                       SLOT(CheckForMovedFiles()));
 
     if (ddi.currentObject == this)
     {
@@ -516,7 +488,6 @@ void Explorer::OnDrop(const DragDropInfo &ddi)
             IO::WriteToFile(path, selected->GetSerializedString());
         }
     }
-    m_fileBeingDragged = m_fileUnderMouse = "";
 }
 
 void Explorer::dropEvent(QDropEvent *e)

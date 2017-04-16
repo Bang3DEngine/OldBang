@@ -42,7 +42,6 @@ public:
     void StartRenaming(const String &filepath);
 
     virtual void OnDragStart(const DragDropInfo &ddi) override;
-    virtual void OnDragMove(const DragDropInfo &ddi) override;
     virtual void OnDrop(const DragDropInfo &ddi) override;
 
     void dropEvent(QDropEvent *e) override;
@@ -96,15 +95,11 @@ private:
 
     ExplorerContextMenu m_eContextMenu;
 
-    String m_fileBeingDragged = "";
-    String m_fileUnderMouse = "";
-
-    FileSystemModel *m_fileSystemModel = nullptr;
-    QToolButton *m_buttonDirUp = nullptr;
-    QToolButton *m_buttonChangeViewMode = nullptr;
+    FileSystemModel *m_fileSystemModel               = nullptr;
+    QToolButton *m_buttonDirUp                       = nullptr;
+    QToolButton *m_buttonChangeViewMode              = nullptr;
     SerializableObject *m_lastInspectableInInspector = nullptr;
 
-    String m_lastSelectedPath = "";
     QLabel *m_labelCurrentPath = nullptr;
     QLabel *m_labelFileName    = nullptr;
 

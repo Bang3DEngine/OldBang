@@ -3,6 +3,7 @@
 
 #include <queue>
 
+#include <QTimer>
 #include <QObject>
 #include "Bang/WinUndef.h"
 
@@ -23,13 +24,15 @@ public:
     void RegisterSerializableObject(SerializableObject *fileable);
     void UnRegisterSerializableObject(SerializableObject *fileable);
 
-    void OnFileOrDirNameAboutToBeChanged(const String &absFilepathBefore,
-                                         const String &absFilepathNow);
+public slots:
+    void CheckForMovedFiles();
 
 private:
+
+    QTimer m_timer;
+
     // Queue with the changes we are asked for to refactor references.
     // Its a queue of pairs (oldAbsPath, newAbsPath)
-    std::queue< std::pair<String, String> > m_queuedNameChanges;
     Set<SerializableObject*> m_inMemorySerialObjects;
 
     FileReferencesManager();
@@ -46,8 +49,8 @@ private:
                          const String &relPathNow,
                          bool refactorXMLChildren);
 
-private slots:
-    void TreatNextQueuedFileOrDirNameChange();
+    void OnFileOrDirNameMoved(const String &absFilepathBefore,
+                                         const String &absFilepathNow);
 
     friend class Explorer;
     friend class SerializableObject;

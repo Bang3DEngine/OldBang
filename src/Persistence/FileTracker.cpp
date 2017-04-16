@@ -6,7 +6,6 @@
 
 #include "Bang/IO.h"
 #include "Bang/File.h"
-#include "Bang/Debug.h"
 #include "Bang/Asset.h"
 #include "Bang/XMLParser.h"
 #include "Bang/AssetsManager.h"
@@ -22,6 +21,40 @@ FileTracker::FileTracker()
 
     QObject::connect(this, SIGNAL(ChangedFilesRefreshed()),
                      this, SLOT(ReloadChangedFiles()));
+}
+
+FileTracker *FileTracker::GetInstance()
+{
+    return Application::GetInstance()->m_fileTracker;
+}
+
+List< std::pair<String, String> > FileTracker::GetMovedPathsList() const
+{
+    List<String> oldPathsList = m_assetsPathsList;
+
+    RefreshAssetPathsList();
+    const List<String> &newPathsList = m_assetsPathsList;
+
+    List< std::pair<String,String> > result;
+    for (const String& oldPath : oldPathsList)
+    {
+        if (newPathsList.Contains(oldPath)) { continue; } // Not moved
+
+        // This old path is missing now...where has it gone?
+        // Search it in the new files list
+        String oldPathBaseName = IO::GetFileName(oldPath);
+        for (const String &newPath : newPathsList)
+        {
+            String newPathBaseName = IO::GetFileName(newPath);
+            if (oldPathBaseName != newPathBaseName) { continue; }
+            if (oldPathsList.Contains(newPath)) { continue; }
+
+            // This file is the older file moved. Because it has the same
+            // base name, and did not exist before. Register as renamed/moved.
+            result.PushBack( std::make_pair(oldPath, newPath) );
+        }
+    }
+    return result;
 }
 
 void FileTracker::Refresh()
@@ -143,4 +176,13 @@ bool FileTracker::HasChanged(const String& absFilepath,
     EpochTime changedTime = m_fileChangeTimes.Get(absFilepath);
     EpochTime seenTime    = m_fileSeenTimes.Get(absFilepath);
     return changedTime > seenTime;
+}
+
+void FileTracker::RefreshAssetPathsList() const
+{
+    const String& assetsPath = IO::GetProjectAssetsRootAbs();
+    List<String> files = IO::GetFiles(assetsPath, true);
+    List<String> dirs = IO::GetSubDirectories(assetsPath, true);
+
+    m_assetsPathsList = files.Concat(dirs);
 }

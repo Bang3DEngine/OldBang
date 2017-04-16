@@ -83,14 +83,12 @@ void DragDropManager::HandleGlobalMousePress(QObject *obj, QEvent *e)
     DragDropAgent *currentDDAgentBelowMouse =
             DragDropManager::GetDragDropAgentBelowMouse();
     m->m_ddInfo.sourceObject = Object::Cast<QObject>(currentDDAgentBelowMouse);
-    m->Update();
 }
 
 void DragDropManager::HandleGlobalMouseRelease(QObject *obj, QEvent *e)
 {
     DragDropManager *m = DragDropManager::s_ddManager; ENSURE(m);
     m->m_mouseDown = false;
-    m->Update();
 }
 
 QObject *DragDropManager::GetDragSource()

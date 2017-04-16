@@ -130,6 +130,16 @@ std::ostream &operator<<(std::ostream &log, const List<T> *l)
     log <<")";
     return log;
 }
+
+template <class T, class M>
+std::ostream &operator<<(std::ostream &log, const std::pair<T,M>& p)
+{
+    log << "<";
+    log << p.first << ", " << p.second;
+    log <<">";
+    return log;
+}
+
 template <class T>
 std::ostream &operator<<(std::ostream &log, const List<T> &l)
 {

@@ -65,6 +65,7 @@ private:
 private slots:
     bool CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent);
 
+    friend class FileTracker;
     friend class SceneManager;
     friend class BehaviourManager;
 };

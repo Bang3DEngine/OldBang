@@ -20,6 +20,8 @@ class FileTracker : public QObject
 
 public:
     FileTracker();
+    static FileTracker *GetInstance();
+    List< std::pair<String,String> > GetMovedPathsList() const;
 
 signals:
     void ChangedFilesRefreshed();
@@ -31,6 +33,7 @@ private slots:
 private:
     static constexpr int c_refreshTime = 3000;
 
+    mutable List<String> m_assetsPathsList;
     Map<String, EpochTime> m_fileChangeTimes;
     Map<String, EpochTime> m_fileSeenTimes;
     Map<String, List<String> > m_fileDependencies;
@@ -46,6 +49,7 @@ private:
     bool HasChanged(const String& absFilepath) const;
     bool HasChanged(const String& absFilepath,
                     Set<String>& alreadyCheckedFiles) const;
+    void RefreshAssetPathsList() const;
 };
 
 #endif // FILETRACKER_H

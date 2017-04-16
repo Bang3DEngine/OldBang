@@ -7,6 +7,7 @@
 #include "Bang/Map.h"
 #include "Bang/File.h"
 #include "Bang/Debug.h"
+#include "FileTracker.h"
 #include "Bang/XMLNode.h"
 #include "Bang/Explorer.h"
 #include "Bang/XMLAttribute.h"
@@ -14,6 +15,9 @@
 
 FileReferencesManager::FileReferencesManager()
 {
+    m_timer.start(1000);
+    QObject::connect(&m_timer, SIGNAL(timeout()),
+                     this, SLOT(CheckForMovedFiles()));
 }
 
 FileReferencesManager::~FileReferencesManager()
@@ -31,25 +35,11 @@ void FileReferencesManager::UnRegisterSerializableObject(SerializableObject *fil
     m_inMemorySerialObjects.Remove(fileable);
 }
 
-void FileReferencesManager::OnFileOrDirNameAboutToBeChanged(
-                                            const String &absFilepathBefore,
-                                            const String &absFilepathNow)
+void FileReferencesManager::OnFileOrDirNameMoved(const String &absFilepathBefore,
+                                                 const String &absFilepathNow)
 {
     ENSURE(!absFilepathBefore.Empty());
     // ENSURE(!absFilepathNow.Empty());
-
-    m_queuedNameChanges.push( std::make_pair(absFilepathBefore,
-                                             absFilepathNow));
-
-    QTimer::singleShot(500, this, SLOT(TreatNextQueuedFileOrDirNameChange()));
-}
-
-void FileReferencesManager::TreatNextQueuedFileOrDirNameChange()
-{
-    const std::pair<String,String> &fileNamesPair = m_queuedNameChanges.front();
-    String absFilepathBefore = fileNamesPair.first;
-    String absFilepathNow    = fileNamesPair.second;
-    m_queuedNameChanges.pop();
 
     bool fileHasMoved = !absFilepathBefore.Empty() &&
                         !IO::Exists(absFilepathBefore) &&
@@ -64,8 +54,24 @@ void FileReferencesManager::TreatNextQueuedFileOrDirNameChange()
             relPathBefore += "/";
             relPathNow += "/";
         }
+
         RefactorFiles(relPathBefore, relPathNow);
         RefactorSerializableObject(relPathBefore, relPathNow);
+    }
+}
+
+void FileReferencesManager::CheckForMovedFiles()
+{
+    FileReferencesManager *frm = FileReferencesManager::GetInstance();
+
+    List< std::pair<String, String> > movedPathsList =
+            FileTracker::GetInstance()->GetMovedPathsList();
+
+    for (const std::pair<String,String>& oldNewPath : movedPathsList)
+    {
+        const String &oldPath = oldNewPath.first;
+        const String &newPath = oldNewPath.second;
+        frm->OnFileOrDirNameMoved(oldPath, newPath);
     }
 }
 

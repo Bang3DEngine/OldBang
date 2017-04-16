@@ -60,7 +60,6 @@ void Inspector::Clear()
 {
     ENSURE(!m_widget_To_Item.Empty());
 
-    clear();
     for (InspectorWidget *iw : m_currentInspectorWidgets) { iw->OnDestroy(); }
     m_currentInspectorWidgets.Clear();
     m_widget_To_Inspectables.Clear();
@@ -70,6 +69,8 @@ void Inspector::Clear()
     m_titleLabel->setText(tr(""));
     p_currentGameObject = nullptr;
     m_enableGameObjectCheckBox->setVisible(false);
+
+    clear();
 }
 
 void Inspector::Refresh()
