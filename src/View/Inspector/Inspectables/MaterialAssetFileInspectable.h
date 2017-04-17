@@ -10,7 +10,7 @@ class MaterialAssetFileInspectable : public SerializableObject
     OBJECT(MaterialAssetFileInspectable)
 
 private:
-    XMLNode m_xmlInfo;
+    mutable XMLNode m_xmlInfo;
     MaterialAssetFile m_materialAssetFile;
 
 public:

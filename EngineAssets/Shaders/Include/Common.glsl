@@ -22,6 +22,7 @@ uniform bool  B_MaterialReceivesLighting;
 uniform vec4  B_MaterialDiffuseColor;
 uniform float B_AlphaCutoff = -1.0f;
 uniform float B_MaterialShininess;
+uniform vec2  B_UvMultiply = vec2(1);
 uniform bool  B_HasTexture = false;
 uniform sampler2D B_Texture0;
 // ///////////////////////////////////////

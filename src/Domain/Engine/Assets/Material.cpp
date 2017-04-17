@@ -52,6 +52,11 @@ String Material::GetFileExtension() const
     return Material::GetFileExtensionStatic();
 }
 
+void Material::SetUvMultiply(const Vector2 &uvMultiply)
+{
+    m_uvMultiply = uvMultiply;
+}
+
 void Material::Read(const XMLNode &xmlInfo)
 {
     Asset::Read(xmlInfo);
@@ -59,6 +64,7 @@ void Material::Read(const XMLNode &xmlInfo)
     SetDiffuseColor(xmlInfo.GetColor("DiffuseColor"));
     SetShininess(xmlInfo.GetFloat("Shininess"));
     SetReceivesLighting(xmlInfo.GetBool("ReceivesLighting"));
+    SetUvMultiply(xmlInfo.GetVector2("UvMultiply"));
 
     String texAssetFilepath = xmlInfo.GetString("Texture");
     Texture2D *texture = AssetsManager::Load<Texture2D>(texAssetFilepath);
@@ -80,11 +86,12 @@ void Material::Write(XMLNode *xmlInfo) const
 {
     Asset::Write(xmlInfo);
 
-    xmlInfo->SetColor("DiffuseColor", GetDiffuseColor());
-    xmlInfo->SetFloat("Shininess", GetShininess());
+    xmlInfo->SetColor("DiffuseColor",    GetDiffuseColor());
+    xmlInfo->SetFloat("Shininess",       GetShininess());
     xmlInfo->SetBool("ReceivesLighting", ReceivesLighting());
+    xmlInfo->SetVector2("UvMultiply",    GetUvMultiply());
 
-    String textureFilepath = m_texture ? m_texture->GetFilepath() : "";
+    String textureFilepath = GetTexture() ? GetTexture()->GetFilepath() : "";
     xmlInfo->SetFilepath("Texture", textureFilepath,
                          Texture2D::GetFileExtensionStatic());
 
@@ -141,6 +148,11 @@ void Material::SetDiffuseColor(const Color &diffuseColor)
     m_diffuseColor = diffuseColor;
 }
 
+const Vector2 &Material::GetUvMultiply() const
+{
+    return m_uvMultiply;
+}
+
 ShaderProgram *Material::GetShaderProgram() const
 {
     ShaderProgram *camReplacementSP = nullptr;
@@ -194,14 +206,15 @@ void Material::Bind() const
 
     sp->SetVec2("B_ScreenSize", Screen::GetSize());
 
-    sp->SetColor("B_MaterialDiffuseColor",     m_diffuseColor);
-    sp->SetFloat("B_MaterialShininess",        m_shininess);
-    sp->SetFloat("B_MaterialReceivesLighting", m_receivesLighting ? 1.0f : 0.0f);
+    sp->SetVec2( "B_UvMultiply",               GetUvMultiply());
+    sp->SetColor("B_MaterialDiffuseColor",     GetDiffuseColor());
+    sp->SetFloat("B_MaterialShininess",        GetShininess());
+    sp->SetFloat("B_MaterialReceivesLighting", ReceivesLighting() ? 1.0f : 0.0f);
 
-    float alphaCutoff = m_texture ? m_texture->GetAlphaCutoff() : -1.0f;
-    sp->SetTexture("B_Texture0",  m_texture);
+    float alphaCutoff = GetTexture() ? GetTexture()->GetAlphaCutoff() : -1.0f;
+    sp->SetTexture("B_Texture0",  GetTexture());
     sp->SetFloat("B_AlphaCutoff", alphaCutoff);
-    sp->SetBool("B_HasTexture",  m_texture != nullptr);
+    sp->SetBool("B_HasTexture",   GetTexture() != nullptr);
 
     GL::ApplyContextToShaderProgram(sp);
 }

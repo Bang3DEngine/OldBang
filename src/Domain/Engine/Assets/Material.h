@@ -4,6 +4,7 @@
 #include "Bang/Array.h"
 #include "Bang/Asset.h"
 #include "Bang/Color.h"
+#include "Bang/Vector2.h"
 
 class Texture2D;
 class ShaderProgram;
@@ -20,12 +21,14 @@ public:
     static String GetFileExtensionStatic();
     virtual String GetFileExtension() const override ;
 
+    void SetUvMultiply(const Vector2& uvMultiply);
     void SetShaderProgram(ShaderProgram *program);
     void SetTexture(const Texture2D *mtexture);
     void SetReceivesLighting(bool receivesLighting);
     void SetShininess(float shininess);
     void SetDiffuseColor(const Color &diffuseColor);
 
+    const Vector2&   GetUvMultiply() const;
     ShaderProgram*   GetShaderProgram() const;
     const Texture2D* GetTexture() const;
     bool ReceivesLighting() const;
@@ -39,13 +42,15 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
     static Material* GetMissingMaterial();
+
 private:
-    Color m_diffuseColor = Color::White;
-    float m_shininess = 60.0f;
+    Color m_diffuseColor    = Color::White;
+    float m_shininess       = 60.0f;
     bool m_receivesLighting = true;
+    Vector2 m_uvMultiply    = Vector2::One;
 
     ShaderProgram *m_shaderProgram = nullptr;
-    const Texture2D *m_texture = nullptr; // Currently supporting just one texture
+    const Texture2D *m_texture     = nullptr;
 
     friend class Renderer;
 };

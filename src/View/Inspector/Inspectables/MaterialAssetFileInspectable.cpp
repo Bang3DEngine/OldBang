@@ -39,7 +39,16 @@ void MaterialAssetFileInspectable::Read(const XMLNode &xmlInfo)
 void MaterialAssetFileInspectable::Write(XMLNode *xmlInfo) const
 {
     xmlInfo->SetTagName("MaterialAssetFileInspectable");
-    *xmlInfo = m_xmlInfo;
+
+    // Do Read & Write so that old files with different formats have the
+    // newer one
+    Material *mat = new Material();
+    mat->Read(m_xmlInfo);
+    mat->Write(xmlInfo);
+
+    m_xmlInfo = *xmlInfo;
+
+    delete mat;
 
     IconManager::InvalidatePixmap( m_materialAssetFile.GetAbsolutePath() );
 }
