@@ -9,15 +9,16 @@
 #include "Bang/EditorCamera.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
+#include "Bang/EditorPlayFlow.h"
 #include "Bang/GraphicPipeline.h"
 #include "Bang/BehaviourManager.h"
-#include "Bang/EditorPlayStopFlowController.h"
 
 Toolbar *Toolbar::s_tb = nullptr;
 
 Toolbar::Toolbar(QWidget *parent)
 : QWidget(parent),
   m_playStopShortcut     (this, KSeq("Ctrl+P"), SLOT(OnPlayStopShortcut())),
+  m_pauseShortcut        (this, KSeq("Ctrl+Shift+P"), SLOT(OnPauseShortcut())),
   m_translateShortcut    (this, KSeq("W"),      SLOT(OnTranslateClicked())),
   m_rotateShortcut       (this, KSeq("E"),      SLOT(OnRotateClicked())),
   m_scaleShortcut        (this, KSeq("R"),      SLOT(OnScaleClicked())),
@@ -44,6 +45,8 @@ void Toolbar::Init()
     tb->m_buttonShowGizmos          = w->buttonShowGizmos;
     tb->m_buttonFXAA                = w->buttonFXAA;
     tb->m_buttonPlay                = w->buttonPlay;
+    tb->m_buttonPause               = w->buttonPause;
+    tb->m_buttonStepFrame           = w->buttonStepFrame;
     tb->m_buttonStop                = w->buttonStop;
     tb->m_button3D                  = w->buttonOrthoPerspectiveMode;
     tb->m_gbufferAttachmentComboBox = w->comboBoxGBufferAttachment;
@@ -70,8 +73,11 @@ void Toolbar::Init()
             tb, SLOT(OnShowGizmosClicked(bool)));
     tb->OnShowGizmosClicked( tb->m_buttonShowGizmos->isChecked() );
 
-    connect(tb->m_buttonPlay, SIGNAL(clicked()), tb, SLOT(OnPlayClicked()));
-    connect(tb->m_buttonStop, SIGNAL(clicked()), tb, SLOT(OnStopClicked()));
+    connect(tb->m_buttonPlay,  SIGNAL(clicked()), tb, SLOT(OnPlayClicked()));
+    connect(tb->m_buttonPause, SIGNAL(clicked()), tb, SLOT(OnPauseClicked()));
+    connect(tb->m_buttonStepFrame, SIGNAL(clicked()),
+            tb, SLOT(OnStepFrameClicked()));
+    connect(tb->m_buttonStop,  SIGNAL(clicked()), tb, SLOT(OnStopClicked()));
 
     connect(tb->m_button3D, SIGNAL(clicked()),
             tb, SLOT(OnOrthoPerspectiveClicked()));
@@ -96,10 +102,7 @@ void Toolbar::UnCheckTransformModeButtons()
 
 Toolbar *Toolbar::GetInstance()
 {
-    if (!s_tb)
-    {
-        Toolbar::Init();
-    }
+    if (!s_tb) { Toolbar::Init(); }
     return s_tb;
 }
 
@@ -122,6 +125,14 @@ void Toolbar::SetTransformMode(EditorState::TransformMode transformMode)
     {
         m_buttonRectTransformMode->click();
     }
+}
+
+void Toolbar::OnEditorUpdate()
+{
+    m_buttonPlay->setChecked( EditorState::IsPlaying() );
+    m_buttonPause->setChecked( EditorState::IsPaused() );
+    m_buttonStepFrame->setChecked( !EditorState::IsStopped() );
+    m_buttonStop->setChecked( EditorState::IsStopped() );
 }
 
 void Toolbar::OnTranslateClicked()
@@ -189,23 +200,22 @@ void Toolbar::OnShowGizmosClicked(bool showGizmos)
 
 void Toolbar::OnPlayClicked()
 {
-    m_buttonPlay->setChecked(true);
-    m_buttonStop->setChecked(false);
+    EditorPlayFlow::OnPlayClicked();
+}
 
-    bool startedPlaying = EditorPlayStopFlowController::OnPlayClicked();
-    if (!startedPlaying)
-    {
-        m_buttonPlay->setChecked(false); // Revert the checking of the tool buttons
-        m_buttonStop->setChecked(true);
-    }
+void Toolbar::OnPauseClicked()
+{
+    EditorPlayFlow::OnPauseClicked();
+}
+
+void Toolbar::OnStepFrameClicked()
+{
+    EditorPlayFlow::OnStepFrameClicked();
 }
 
 void Toolbar::OnStopClicked()
 {
-    m_buttonPlay->setChecked(false);
-    m_buttonStop->setChecked(true);
-
-    EditorPlayStopFlowController::OnStopClicked();
+    EditorPlayFlow::OnStopClicked();
 }
 
 void Toolbar::OnOrthoPerspectiveClicked()
@@ -269,7 +279,13 @@ void Toolbar::OnSceneGameTabChanged()
 
 bool Toolbar::OnPlayStopShortcut()
 {
-    if (EditorState::IsPlaying()) { m_buttonStop->click(); }
-    else { m_buttonPlay->click(); }
-	return true;
+    if      (EditorState::IsPlaying()) { m_buttonStop->click(); }
+    else if (EditorState::IsPaused())  { m_buttonPause->click(); }
+    else if (EditorState::IsStopped()) { m_buttonPlay->click(); }
+    return true;
+}
+
+void Toolbar::OnPauseShortcut()
+{
+    m_buttonPause->click();
 }

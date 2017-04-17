@@ -14,9 +14,9 @@ EditorGizmo::~EditorGizmo()
 
 }
 
-void EditorGizmo::OnUpdate()
+void EditorGizmo::OnEditorUpdate()
 {
-    GameObject::OnUpdate();
+    GameObject::OnEditorUpdate();
 
     if (m_mouseIsOver && Input::GetMouseButtonDown(Input::MouseButton::Left))
     {

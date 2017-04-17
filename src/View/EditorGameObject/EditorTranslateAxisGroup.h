@@ -25,7 +25,7 @@ public:
     EditorTranslateAxisGroup(GameObject *attachedGameObject);
     virtual ~EditorTranslateAxisGroup();
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
 };
 
 #endif // EDITORTRANSLATEAXIS_H

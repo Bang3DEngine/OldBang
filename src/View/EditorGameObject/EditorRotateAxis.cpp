@@ -50,9 +50,9 @@ EditorRotateAxis::~EditorRotateAxis()
 {
 }
 
-void EditorRotateAxis::OnUpdate()
+void EditorRotateAxis::OnEditorUpdate()
 {
-    EditorAxis::OnUpdate();
+    EditorAxis::OnEditorUpdate();
 
     // Obtain mousePos in screen space for next calculations
     Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ENSURE(cam);
@@ -125,6 +125,8 @@ void EditorRotateAxis::OnUpdate()
             }
         }
     }
+
+    m_circle->OnUpdate();
 }
 
 void EditorRotateAxis::OnDrawGizmos(bool depthed, bool overlay)

@@ -22,7 +22,7 @@ public:
                                    GameObject *attachedGameObject);
     virtual ~EditorRectTransformCornerGizmo();
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
     void OnDrawGizmos(bool depthed, bool overlay) override;
 
 private:

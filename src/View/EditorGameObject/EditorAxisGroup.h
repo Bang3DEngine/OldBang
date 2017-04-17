@@ -31,7 +31,7 @@ private:
 public:
     EditorAxisGroup(GameObject *m_attachedGameObject);
 
-    virtual void OnUpdate() override;
+    virtual void OnEditorUpdate() override;
 };
 
 #endif // EDITORAXISGROUP_H

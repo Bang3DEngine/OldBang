@@ -34,9 +34,9 @@ EditorRectTransformCornerGizmo::~EditorRectTransformCornerGizmo()
 {
 }
 
-void EditorRectTransformCornerGizmo::OnUpdate()
+void EditorRectTransformCornerGizmo::OnEditorUpdate()
 {
-    EditorGizmo::OnUpdate();
+    EditorGizmo::OnEditorUpdate();
     ENSURE(m_attachedRectTransform);
 
     m_cornerColor = (!m_mouseIsOver && !m_grabbed) ?

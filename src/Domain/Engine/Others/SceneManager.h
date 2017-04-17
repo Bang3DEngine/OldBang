@@ -41,7 +41,7 @@ private:
     friend class Application;
     friend class EditorWindow;
     friend class ProjectManager;
-    friend class EditorPlayStopFlowController;
+    friend class EditorPlayFlow;
 };
 
 #endif // SCENEMANAGER_H

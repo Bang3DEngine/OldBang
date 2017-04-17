@@ -18,7 +18,7 @@ public:
     EditorRotateAxisGroup(GameObject *attachedGameObject);
     virtual ~EditorRotateAxisGroup();
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
     void OnDrawGizmos(bool depthed, bool overlay) override;
 };
 

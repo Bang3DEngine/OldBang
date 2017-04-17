@@ -1,4 +1,4 @@
-#include "Bang/EditorPlayStopFlowController.h"
+#include "Bang/EditorPlayFlow.h"
 
 #include <QProgressDialog>
 #include "Bang/WinUndef.h"
@@ -17,44 +17,79 @@
 #include "Bang/BehaviourManager.h"
 #include "Bang/AnonymousAudioPlayer.h"
 
-EditorPlayStopFlowController::EditorPlayStopFlowController()
+EditorPlayFlow::EditorPlayFlow()
 {
 }
 
-bool EditorPlayStopFlowController::OnPlayClicked()
+bool EditorPlayFlow::OnPlayClicked()
 {
-    return EditorPlayStopFlowController::GetInstance()->PlayScene();
+    if ( EditorState::IsPlaying() ) { return true; }
+    if ( EditorState::IsPaused()  ) { EditorPlayFlow::OnPauseClicked(); }
+    return EditorPlayFlow::GetInstance()->PlayScene();
 }
 
-void EditorPlayStopFlowController::OnStopClicked()
+void EditorPlayFlow::OnPauseClicked()
 {
-    EditorPlayStopFlowController::GetInstance()->StopScene();
+    ENSURE( !EditorState::IsStopped() );
+    EditorState::PlayState newPlayState = EditorState::IsPaused() ?
+                                             EditorState::PlayState::Playing :
+                                             EditorState::PlayState::Paused;
+    EditorState::SetPlayingState(newPlayState);
 }
 
-EditorPlayStopFlowController *EditorPlayStopFlowController::GetInstance()
+void EditorPlayFlow::OnStepFrameClicked()
+{
+    ENSURE( !EditorState::IsStopped() );
+    EditorPlayFlow::GetInstance()->m_stepNextFrame = true;
+
+    EditorPlayFlow::OnPauseClicked(); // Toggle pause
+}
+
+void EditorPlayFlow::OnStopClicked()
+{
+    ENSURE( !EditorState::IsStopped() );
+    EditorPlayFlow::GetInstance()->StopScene();
+    EditorPlayFlow::GetInstance()->m_stepNextFrame = false;
+}
+
+void EditorPlayFlow::OnFrameFinished()
+{
+    EditorPlayFlow *e = EditorPlayFlow::GetInstance();
+    if (EditorState::IsPlaying() && e->m_stepNextFrame)
+    {
+        EditorPlayFlow::OnPauseClicked();
+        e->m_stepNextFrame = false;
+    }
+}
+
+EditorPlayFlow *EditorPlayFlow::GetInstance()
 {
     return EditorWindow::GetInstance()->m_playStopController;
 }
 
-bool EditorPlayStopFlowController::PlayScene()
+bool EditorPlayFlow::PlayScene()
 {
 	if (EditorState::IsPlaying()) { return true; }
 
     if (!WaitForAllBehavioursToBeLoaded()) { return false; }
 
-    m_playing = true;
+    EditorState::SetPlayingState(EditorState::PlayState::Playing);
+
     Hierarchy::GetInstance()->clearSelection();
     Console::GetInstance()->OnEditorPlay();
     Inspector::GetInstance()->OnEditorPlay();
 
     // Pick the reference of the current scene, to restore it later
+    Scene *sceneCopy = nullptr;
     p_latestSceneBeforePlaying = SceneManager::GetActiveScene();
-    m_latestSceneBeforePlayingFilepath = SceneManager::GetActiveSceneFilepath();
-
-    Scene *sceneCopy = p_latestSceneBeforePlaying->Clone();
-    if (sceneCopy)
+    if (p_latestSceneBeforePlaying)
     {
-        SceneManager::SetActiveScene(sceneCopy);
+        m_latestSceneBeforePlayingFilepath = SceneManager::GetActiveSceneFilepath();
+        sceneCopy = p_latestSceneBeforePlaying->Clone();
+        if (sceneCopy)
+        {
+            SceneManager::SetActiveScene(sceneCopy);
+        }
     }
 
     EditorScene *edScene = Object::SCast<EditorScene>(sceneCopy);
@@ -66,11 +101,11 @@ bool EditorPlayStopFlowController::PlayScene()
     return true;
 }
 
-void EditorPlayStopFlowController::StopScene()
+void EditorPlayFlow::StopScene()
 {
-    ENSURE(EditorState::IsPlaying());
+    ENSURE(!EditorState::IsStopped());
 
-    m_playing = false;
+    EditorState::SetPlayingState(EditorState::PlayState::Stopped);
 
     Scene *sceneCopy = SceneManager::GetActiveScene();
     if (sceneCopy)
@@ -83,15 +118,12 @@ void EditorPlayStopFlowController::StopScene()
 
     SceneManager::SetActiveScene(p_latestSceneBeforePlaying);
     SceneManager::SetActiveSceneFilepath(m_latestSceneBeforePlayingFilepath);
-    EditorScene *edScene = Object::SCast<EditorScene>(
-                p_latestSceneBeforePlaying);
-    edScene->SetCamera( edScene->GetEditorCamera()->GetCamera() );
 
     EditorWindow *win = EditorWindow::GetInstance();
     win->tabContainerSceneGame->setCurrentWidget(win->tabScene);
 }
 
-bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
+bool EditorPlayFlow::WaitForAllBehavioursToBeLoaded()
 {
     EditorWindow *win = EditorWindow::GetInstance();
     QMainWindow *mainWin = win->GetMainWindow();
@@ -136,7 +168,7 @@ bool EditorPlayStopFlowController::WaitForAllBehavioursToBeLoaded()
     return success && !m_playingCanceled;
 }
 
-void EditorPlayStopFlowController::OnWaitingForBehavioursCanceled()
+void EditorPlayFlow::OnWaitingForBehavioursCanceled()
 {
     m_playingCanceled = true;
 }

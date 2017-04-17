@@ -44,7 +44,7 @@ public:
                         const Color &color = Color::Green,
                         float lineWidth = 1.0f, float livingTimeSecs = -1.0f);
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
     void OnDrawGizmos(bool depthed, bool overlay) override;
 };
 

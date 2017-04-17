@@ -67,9 +67,9 @@ void EditorScene::_OnStart()
     Scene::_OnStart();
 }
 
-void EditorScene::OnUpdate()
+void EditorScene::OnEditorUpdate()
 {
-    Scene::OnUpdate();
+    Scene::OnEditorUpdate();
 
     static List<int> latestFPS = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     int fps = 1.0f / (Time::s_deltaTime + 0.0001f);

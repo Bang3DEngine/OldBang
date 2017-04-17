@@ -38,9 +38,9 @@ EditorRotateAxisGroup::~EditorRotateAxisGroup()
     if (m_circle->GetMaterial()) { delete m_circle->GetMaterial(); }
 }
 
-void EditorRotateAxisGroup::OnUpdate()
+void EditorRotateAxisGroup::OnEditorUpdate()
 {
-    GameObject::OnUpdate();
+    GameObject::OnEditorUpdate();
 }
 
 void EditorRotateAxisGroup::OnDrawGizmos(bool depthed, bool overlay)

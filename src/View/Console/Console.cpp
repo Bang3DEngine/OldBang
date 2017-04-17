@@ -164,8 +164,7 @@ QTreeWidgetItem *Console::CreateItemFromMessageRow(const Message &mr)
     return item;
 }
 
-Console::MessageId Console::AddMessage(const Message &msg,
-                                             int forcedMsgId)
+Console::MessageId Console::AddMessage(const Message &msg, int forcedMsgId)
 {
     QScrollBar *scroll = verticalScrollBar();
     m_autoScroll = (scroll->value() == scroll->maximum());
@@ -194,17 +193,15 @@ Console::MessageId Console::AddMessage(const Message &msg,
     }
 
     // Update collapse count text
-    if (m_collapsing && m_messageCount.ContainsKey(msg))
+    if (m_collapsing)
     {
         int count = m_messageCount[msg];
-        if (m_msg_to_collapsingItem.ContainsKey(msg))
+        QTreeWidgetItem *collapsingItem = m_msg_to_collapsingItem[msg];
+        if (collapsingItem)
         {
-            QTreeWidgetItem *collapsingItem = m_msg_to_collapsingItem[msg];
-            if (collapsingItem)
-            {
-                collapsingItem->setText(c_countColumn,
-                                        String::ToString(count).ToQString());
-            }
+            // Bug here sometimes :(
+            collapsingItem->setText(c_countColumn,
+                                    String::ToString(count).ToQString());
         }
     }
 
@@ -285,7 +282,10 @@ void Console::ClearMessage(Console::MessageId id)
         UpdateMessagesCountTexts();
 
         QTreeWidgetItem *item = m_id_to_item[id];
-        if (item) { delete item; }
+        if (item && !m_msg_to_collapsingItem.ContainsValue(item))
+        {
+            delete item;
+        }
 
         m_id_to_item.Remove(id);
         m_id_to_messages.Remove(id);
@@ -294,6 +294,8 @@ void Console::ClearMessage(Console::MessageId id)
             m_messageCount[msg]--;
             if (m_messageCount[msg] <= 0)
             {
+                if (m_msg_to_collapsingItem[msg] == item) { delete item; }
+
                 m_messageCount.Remove(msg);
                 m_msg_to_collapsingItem.Remove(msg);
             }

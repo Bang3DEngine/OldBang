@@ -53,7 +53,7 @@ public:
     EditorAxis(EditorAxisDirection dir, GameObject *m_attachedGameObject);
     virtual ~EditorAxis();
 
-    virtual void OnUpdate() override;
+    virtual void OnEditorUpdate() override;
 };
 
 #endif // EDITORAXIS_H

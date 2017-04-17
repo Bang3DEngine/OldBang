@@ -27,7 +27,7 @@ EditorTranslateAxisGroup::~EditorTranslateAxisGroup()
 {
 }
 
-void EditorTranslateAxisGroup::OnUpdate()
+void EditorTranslateAxisGroup::OnEditorUpdate()
 {
 }
 

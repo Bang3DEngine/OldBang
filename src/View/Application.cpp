@@ -21,6 +21,7 @@
 #include "Bang/AudioManager.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/EditorPlayFlow.h"
 #include "Bang/BehaviourManager.h"
 #include "Bang/FontSheetCreator.h"
 
@@ -87,6 +88,8 @@ void Application::MainLoop()
         Input::GetInstance()->OnFrameFinished();
 
         #ifdef BANG_EDITOR
+        Toolbar::GetInstance()->OnEditorUpdate();
+        EditorPlayFlow::GetInstance()->OnFrameFinished();
         Console::GetInstance()->ProcessMessagesQueue();
         #endif
     }

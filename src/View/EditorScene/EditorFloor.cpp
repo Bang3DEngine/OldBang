@@ -33,9 +33,9 @@ EditorFloor::~EditorFloor()
     if (m_material) { delete m_material; }
 }
 
-void EditorFloor::OnUpdate()
+void EditorFloor::OnEditorUpdate()
 {
-    GameObject::OnUpdate();
+    GameObject::OnEditorUpdate();
 
     Camera *cam  = SceneManager::GetActiveScene()->GetCamera();
     Transform *camt = cam->gameObject->transform;

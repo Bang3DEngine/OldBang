@@ -18,7 +18,7 @@ public:
     EditorFloor();
     virtual ~EditorFloor();
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
     virtual void OnDrawGizmos(bool depthed, bool overlay) override;
 
 private:

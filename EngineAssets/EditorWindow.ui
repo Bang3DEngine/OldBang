@@ -316,6 +316,26 @@
               </widget>
              </item>
              <item>
+              <widget class="QToolButton" name="buttonPause">
+               <property name="text">
+                <string>P</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="buttonStepFrame">
+               <property name="text">
+                <string>&gt;</string>
+               </property>
+               <property name="checkable">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QToolButton" name="buttonStop">
                <property name="text">
                 <string>Stop</string>
@@ -389,7 +409,7 @@
      <x>0</x>
      <y>0</y>
      <width>1062</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -1216,8 +1236,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>416</width>
-              <height>68</height>
+              <width>406</width>
+              <height>76</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout">

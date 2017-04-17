@@ -19,7 +19,7 @@ public:
     EditorTranslateAxis(EditorAxis::EditorAxisDirection dir, GameObject *m_attachedGameObject);
     virtual ~EditorTranslateAxis();
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
     void OnDrawGizmos(bool depthed, bool overlay) override;
 };
 

@@ -15,6 +15,7 @@
 #include "Bang/EditorScene.h"
 #include "Bang/EditorState.h"
 #include "Bang/EditorWindow.h"
+#include "Bang/EditorPlayFlow.h"
 #endif
 
 SceneManager::SceneManager()
@@ -30,20 +31,26 @@ SceneManager *SceneManager::GetInstance()
 void SceneManager::Update()
 {
     SceneManager::TryToLoadQueuedScene();
+
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
-        activeScene->_OnUpdate();
+        if (EditorState::IsPlaying())
+        {
+            activeScene->_OnUpdate();
+        }
 
         #ifdef BANG_EDITOR
+        activeScene->_OnEditorUpdate();
         if (EditorWindow::GetInstance()->IsSceneTabActive())
         {
             EditorScene *edScene = Object::SCast<EditorScene>(activeScene);
             edScene->SetEditorCamera();
         }
         #endif
+
+        activeScene->DestroyQueuedGameObjects();
     }
-    activeScene->DestroyQueuedGameObjects();
 }
 
 void SceneManager::SetActiveScene(Scene *scene)

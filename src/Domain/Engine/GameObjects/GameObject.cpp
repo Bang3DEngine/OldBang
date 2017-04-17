@@ -29,10 +29,10 @@
 #ifdef BANG_EDITOR
 #include "Bang/Hierarchy.h"
 #include "Bang/EditorScene.h"
+#include "Bang/EditorPlayFlow.h"
 #include "Bang/WindowEventManager.h"
 #include "Bang/SelectionFramebuffer.h"
 #include "Bang/EditorSelectionGameObject.h"
-#include "Bang/EditorPlayStopFlowController.h"
 #endif
 
 GameObject::GameObject(const String &name)
@@ -692,8 +692,7 @@ void GameObject::_OnStart()
 void GameObject::_OnUpdate()
 {
     #ifdef BANG_EDITOR
-    bool canUpdate = EditorState::IsPlaying() ||
-                     HasHideFlag(HideFlags::HideInGame);
+    bool canUpdate = !HasHideFlag(HideFlags::HideInGame);
     #else
     bool canUpdate = true;
     #endif
@@ -711,7 +710,18 @@ void GameObject::_OnUpdate()
         RemoveQueuedComponents();
     }
     PROPAGATE_EVENT(_OnUpdate(), m_children);
+}
 
+void GameObject::_OnEditorUpdate()
+{
+    OnEditorUpdate();
+
+    m_iteratingComponents = true;
+    PROPAGATE_EVENT(_OnEditorUpdate(), m_components);
+    m_iteratingComponents = false;
+    RemoveQueuedComponents();
+
+    PROPAGATE_EVENT(_OnEditorUpdate(), m_children);
 }
 
 void GameObject::_OnDestroy()

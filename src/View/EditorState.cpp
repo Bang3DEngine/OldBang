@@ -1,7 +1,7 @@
 #include "Bang/EditorState.h"
 
 #include "Bang/EditorWindow.h"
-#include "Bang/EditorPlayStopFlowController.h"
+#include "Bang/EditorPlayFlow.h"
 
 EditorState::EditorState()
 {
@@ -9,7 +9,17 @@ EditorState::EditorState()
 
 bool EditorState::IsPlaying()
 {
-    return EditorPlayStopFlowController::GetInstance()->m_playing;
+    return EditorState::GetPlayState() == PlayState::Playing;
+}
+
+bool EditorState::IsPaused()
+{
+    return EditorState::GetPlayState() == PlayState::Paused;
+}
+
+bool EditorState::IsStopped()
+{
+    return EditorState::GetPlayState() == PlayState::Stopped;
 }
 
 bool EditorState::IsUsingGlobalCoords()
@@ -53,6 +63,11 @@ bool EditorState::IsShowingSceneTab()
     return win->tabContainerSceneGame->currentWidget() == win->tabScene;
 }
 
+EditorState::PlayState EditorState::GetPlayState()
+{
+    return EditorState::GetInstance()->m_playState;
+}
+
 void EditorState::SetTransformMode(EditorState::TransformMode transformMode)
 {
     Toolbar::GetInstance()->SetTransformMode(transformMode);
@@ -61,5 +76,10 @@ void EditorState::SetTransformMode(EditorState::TransformMode transformMode)
 EditorState *EditorState::GetInstance()
 {
     return EditorWindow::GetInstance()->m_editorState;
+}
+
+void EditorState::SetPlayingState(EditorState::PlayState playingState)
+{
+    EditorState::GetInstance()->m_playState = playingState;
 }
 

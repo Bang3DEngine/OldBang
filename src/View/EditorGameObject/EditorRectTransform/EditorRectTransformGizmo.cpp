@@ -61,7 +61,7 @@ EditorRectTransformGizmo::~EditorRectTransformGizmo()
 {
 }
 
-void EditorRectTransformGizmo::OnUpdate()
+void EditorRectTransformGizmo::OnEditorUpdate()
 {
 }
 

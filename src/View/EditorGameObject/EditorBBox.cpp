@@ -40,7 +40,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : GameObject("EditorBBox"
     AddHideFlag(HideFlags::HideAndDontSave);
 }
 
-void EditorBBox::OnUpdate()
+void EditorBBox::OnEditorUpdate()
 {
     ENSURE(m_attachedGameObject);
 

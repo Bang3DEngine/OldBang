@@ -164,6 +164,25 @@ public:
         return comps_l;
     }
 
+    template <class T>
+    T* GetComponentInParent() const
+    {
+        if (!parent) { return nullptr; }
+        T* comp = parent->GetComponent<T>();
+        if (comp) { return comp; }
+        return parent->GetComponentInParent<T>();
+    }
+
+    template <class T>
+    List<T*> GetComponentsInParent() const
+    {
+        List<T*> result;
+        if (!parent) { return result; }
+        result = parent->GetComponents<T>();
+        return result.Concat(parent->GetComponentsInParent<T>());
+    }
+
+
     /**
      * Returns the first Component<T> found in children
      */
@@ -313,6 +332,7 @@ protected:
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
+    virtual void _OnEditorUpdate () override;
     virtual void _OnDestroy () override;
 
     #ifdef BANG_EDITOR

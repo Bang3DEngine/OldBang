@@ -15,7 +15,7 @@
 class EditorState;
 class QApplication;
 class WindowEventManager;
-class EditorPlayStopFlowController;
+class EditorPlayFlow;
 class EditorWindow : public QObject,
                      public IWindow,
                      public Ui_EditorWindow
@@ -51,11 +51,11 @@ private:
     QTimer m_refreshTimer;
     EditorState *m_editorState = nullptr;
     WindowEventManager *m_winEventManager = nullptr;
-    EditorPlayStopFlowController *m_playStopController = nullptr;
+    EditorPlayFlow *m_playStopController = nullptr;
 
     friend class EditorState;
     friend class WindowEventManager;
-    friend class EditorPlayStopFlowController;
+    friend class EditorPlayFlow;
 };
 
 #endif // WINDOWMAIN_H

@@ -54,7 +54,7 @@ void EditorDebugGameObject::DrawScreenLine(const Vector2 &origin, const Vector2 
                                      livingTimeSecs, false, true));
 }
 
-void EditorDebugGameObject::OnUpdate()
+void EditorDebugGameObject::OnEditorUpdate()
 {
     // Remove the ones that have exhausted its time
     float dTime = Time::deltaTime;

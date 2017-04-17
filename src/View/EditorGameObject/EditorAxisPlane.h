@@ -20,7 +20,7 @@ public:
     EditorAxisPlane(EditorAxis *axis1, EditorAxis *axis2);
     virtual ~EditorAxisPlane();
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
 
 };
 

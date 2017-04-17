@@ -96,7 +96,7 @@ protected:
     void HandleLookAtFocus();
 
     void OnStart() override;
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
 
 private:
     Camera *m_cam = nullptr;

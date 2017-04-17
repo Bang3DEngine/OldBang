@@ -57,9 +57,9 @@ EditorScaleAxis::~EditorScaleAxis()
 }
 
 
-void EditorScaleAxis::OnUpdate()
+void EditorScaleAxis::OnEditorUpdate()
 {
-    EditorAxis::OnUpdate();
+    EditorAxis::OnEditorUpdate();
 
     Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ENSURE(cam);
     Transform *camTransform = cam->gameObject->transform; ENSURE(camTransform);

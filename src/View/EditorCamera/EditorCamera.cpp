@@ -216,9 +216,9 @@ void EditorCamera::OnStart()
     UpdateRotationVariables();
 }
 
-void EditorCamera::OnUpdate()
+void EditorCamera::OnEditorUpdate()
 {
-    GameObject::OnUpdate();
+    GameObject::OnEditorUpdate();
     ENSURE (EditorWindow::GetInstance()->IsSceneTabActive());
 
     AdjustSpeeds();

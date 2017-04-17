@@ -60,9 +60,9 @@ EditorTranslateAxis::~EditorTranslateAxis()
 }
 
 
-void EditorTranslateAxis::OnUpdate()
+void EditorTranslateAxis::OnEditorUpdate()
 {
-    EditorAxis::OnUpdate();
+    EditorAxis::OnEditorUpdate();
 
     Camera *cam = SceneManager::GetActiveScene()->GetCamera(); ENSURE(cam);
     Transform *camTransform = cam->gameObject->transform;

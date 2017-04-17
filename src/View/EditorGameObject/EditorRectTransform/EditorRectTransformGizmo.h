@@ -11,7 +11,7 @@ public:
     EditorRectTransformGizmo(GameObject *attachedGameObject);
     virtual ~EditorRectTransformGizmo();
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
     void OnDrawGizmos(bool depthed, bool overlay) override;
 
     bool SomeOtherCornerGrabbed(EditorRectTransformCornerGizmo *corner) const;

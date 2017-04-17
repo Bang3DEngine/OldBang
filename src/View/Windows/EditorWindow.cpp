@@ -9,10 +9,10 @@
 #include "Bang/EditorState.h"
 #include "Bang/EditorScene.h"
 #include "Bang/SceneManager.h"
+#include "Bang/EditorPlayFlow.h"
 #include "Bang/ProjectManager.h"
 #include "Bang/SingletonManager.h"
 #include "Bang/WindowEventManager.h"
-#include "Bang/EditorPlayStopFlowController.h"
 
 EditorWindow *EditorWindow::s_win = nullptr;
 
@@ -29,7 +29,7 @@ void EditorWindow::InitFromMainBinary(QMainWindow *window, QApplication *applica
     EditorWindow::s_win = new EditorWindow();
     EditorWindow::s_win->m_editorState        = new EditorState();
     EditorWindow::s_win->m_winEventManager    = new WindowEventManager();
-    EditorWindow::s_win->m_playStopController = new EditorPlayStopFlowController();
+    EditorWindow::s_win->m_playStopController = new EditorPlayFlow();
 
     SingletonManager::Set<IWindow>(EditorWindow::s_win);
 

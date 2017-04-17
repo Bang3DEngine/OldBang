@@ -14,7 +14,7 @@ public:
     EditorScaleAxis(EditorAxis::EditorAxisDirection dir, GameObject *attachedGameObject);
     virtual ~EditorScaleAxis();
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
     void OnDrawGizmos(bool depthed, bool overlay) override;
 
 protected:

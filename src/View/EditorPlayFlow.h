@@ -1,25 +1,30 @@
-#ifndef EDITORPLAYSTOPFLOWCONTROLLER_H
-#define EDITORPLAYSTOPFLOWCONTROLLER_H
+#ifndef EDITORPLAYFLOW_H
+#define EDITORPLAYFLOW_H
 
 #include <QObject>
 #include "Bang/WinUndef.h"
 
 #include "Bang/Scene.h"
+#include "Bang/EditorState.h"
 
-class EditorPlayStopFlowController : public QObject
+class EditorPlayFlow : public QObject
 {
     Q_OBJECT
 
 public:
-    EditorPlayStopFlowController();
+    EditorPlayFlow();
 
     static bool OnPlayClicked();
+    static void OnPauseClicked();
+    static void OnStepFrameClicked();
     static void OnStopClicked();
 
-    static EditorPlayStopFlowController* GetInstance();
+    static void OnFrameFinished();
+
+    static EditorPlayFlow* GetInstance();
 
 private:
-    bool m_playing = false;
+    bool m_stepNextFrame   = false;
     bool m_playingCanceled = false;
     Scene *p_latestSceneBeforePlaying = nullptr;
     String m_latestSceneBeforePlayingFilepath = "";
@@ -35,4 +40,4 @@ private slots:
     friend class EditorState;
 };
 
-#endif // EDITORPLAYSTOPFLOWCONTROLLER_H
+#endif // EDITORPLAYFLOW_H

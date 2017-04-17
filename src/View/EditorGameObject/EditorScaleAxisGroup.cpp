@@ -33,6 +33,6 @@ EditorScaleAxisGroup::~EditorScaleAxisGroup()
 {
 }
 
-void EditorScaleAxisGroup::OnUpdate()
+void EditorScaleAxisGroup::OnEditorUpdate()
 {
 }

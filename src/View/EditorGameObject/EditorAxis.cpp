@@ -47,9 +47,9 @@ Vector3 EditorAxis::GetVectorFromDir(EditorAxis::EditorAxisDirection dir)
     else return Vector3::One; // Central
 }
 
-void EditorAxis::OnUpdate()
+void EditorAxis::OnEditorUpdate()
 {
-    EditorGizmo::OnUpdate();
+    EditorGizmo::OnEditorUpdate();
 
     // Process line color
     bool thickerLine = m_mouseIsOver || m_grabbed;

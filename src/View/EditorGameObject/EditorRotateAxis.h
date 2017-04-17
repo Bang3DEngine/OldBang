@@ -34,10 +34,11 @@ protected:
     Renderer *GetAxisRenderer() const override;
 
 public:
-    EditorRotateAxis(EditorAxis::EditorAxisDirection dir, GameObject *m_attachedGameObject);
+    EditorRotateAxis(EditorAxis::EditorAxisDirection dir,
+                     GameObject *m_attachedGameObject);
     virtual ~EditorRotateAxis();
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
     void OnDrawGizmos(bool depthed, bool overlay) override;
 };
 

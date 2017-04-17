@@ -204,9 +204,12 @@ void Behaviour::RefreshBehaviourLib()
 
     Behaviour *createdBehaviour = CreateDynamicBehaviour(behaviourName,
                                                          behavioursLib);
-    gameObject->AddComponent(createdBehaviour);
-    CloneInto(createdBehaviour);
-    gameObject->RemoveComponent(this);
+    if (createdBehaviour)
+    {
+        gameObject->AddComponent(createdBehaviour);
+        CloneInto(createdBehaviour);
+        gameObject->RemoveComponent(this);
+    }
 }
 
 bool Behaviour::IsLoaded() const

@@ -263,7 +263,8 @@ HEADERS +=                                                          \
     src/Persistence/Files/SoundFile.h \
     src/Persistence/Files/SoundFileInspectable.h \
     src/Domain/Engine/Audio/AnonymousAudioPlayer.h \
-    src/View/DragDrop/DragDropInfo.h
+    src/View/DragDrop/DragDropInfo.h \
+    src/View/EditorPlayFlow.h
 
 EDITOR {
 HEADERS += \
@@ -285,7 +286,6 @@ HEADERS += \
     src/Domain/Graphics/Buffers/SelectionFramebuffer.h              \
     src/View/EditorGameObject/EditorTranslateAxis.h \
     src/View/EditorGameObject/EditorTranslateAxisGroup.h \
-    src/View/EditorPlayStopFlowController.h \
     src/View/Dialogs/DialogBrowseAssetFile.h                        \
     src/View/Inspector/AttributeWidgets/AttributeWidget.h           \
     src/View/Inspector/AttributeWidgets/AttrWidgetBool.h            \
@@ -481,7 +481,8 @@ SOURCES += \
     src/Persistence/Files/PrefabFile.cpp \
     src/Persistence/Files/SoundFile.cpp \
     src/Persistence/Files/SoundFileInspectable.cpp \
-    src/Domain/Engine/Audio/AnonymousAudioPlayer.cpp
+    src/Domain/Engine/Audio/AnonymousAudioPlayer.cpp \
+    src/View/EditorPlayFlow.cpp
 
 EDITOR {
     SOURCES += \
@@ -501,7 +502,6 @@ EDITOR {
         src/View/DragDrop/DragDropAgent.cpp \
         src/View/DragDrop/IDragDropListener.cpp \
         src/Domain/Graphics/Buffers/SelectionFramebuffer.cpp \
-        src/View/EditorPlayStopFlowController.cpp \
         src/View/EditorGameObject/EditorRotateAxisGroup.cpp \
         src/View/Windows/EditorWindow.cpp \
         src/View/Dialogs/DialogBrowseAssetFile.cpp \

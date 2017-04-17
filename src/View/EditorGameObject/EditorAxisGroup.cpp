@@ -33,7 +33,7 @@ void EditorAxisGroup::DisableAllGroups()
     m_esag->SetEnabled(false);
 }
 
-void EditorAxisGroup::OnUpdate()
+void EditorAxisGroup::OnEditorUpdate()
 {
     EditorState::TransformMode tm =
             EditorState::GetCurrentTransformMode();

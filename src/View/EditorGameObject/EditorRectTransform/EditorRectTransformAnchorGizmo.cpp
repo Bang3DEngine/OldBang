@@ -34,9 +34,9 @@ EditorRectTransformAnchorGizmo::~EditorRectTransformAnchorGizmo()
 
 }
 
-void EditorRectTransformAnchorGizmo::OnUpdate()
+void EditorRectTransformAnchorGizmo::OnEditorUpdate()
 {
-    EditorGizmo::OnUpdate();
+    EditorGizmo::OnEditorUpdate();
 
     float fading = (m_mouseIsOver || m_grabbed ? 1.0f : 0.75f);
     m_anchorColor = Color(Color::White * fading, 1);

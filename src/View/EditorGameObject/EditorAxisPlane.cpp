@@ -28,7 +28,7 @@ EditorAxisPlane::~EditorAxisPlane()
     delete m_material;
 }
 
-void EditorAxisPlane::OnUpdate()
+void EditorAxisPlane::OnEditorUpdate()
 {
 }
 

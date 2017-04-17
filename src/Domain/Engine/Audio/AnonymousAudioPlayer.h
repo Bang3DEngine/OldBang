@@ -70,7 +70,7 @@ private:
 
     friend class Application;
     friend class AudioManager;
-    friend class EditorPlayStopFlowController;
+    friend class EditorPlayFlow;
 };
 
 #endif // ANONYMOUSAUDIOPLAYER_H

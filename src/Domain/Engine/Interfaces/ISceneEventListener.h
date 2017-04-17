@@ -28,6 +28,13 @@ protected:
         OnUpdate();
     }
 
+    #ifdef BANG_EDITOR
+    virtual void _OnEditorUpdate ()
+    {
+        OnEditorUpdate();
+    }
+    #endif
+
     virtual void _OnDestroy()
     {
         OnDestroy();
@@ -42,6 +49,9 @@ protected:
 
     virtual void OnStart()   {}
     virtual void OnUpdate()  {}
+    #ifdef BANG_EDITOR
+    virtual void OnEditorUpdate()  {}
+    #endif
     virtual void OnDestroy() {}
     virtual void OnDrawGizmos(bool depthed, bool overlay) {}
 };

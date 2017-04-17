@@ -10,7 +10,7 @@ public:
     EditorGizmo(GameObject *attachedGameObject);
     virtual ~EditorGizmo();
 
-    virtual void OnUpdate() override;
+    virtual void OnEditorUpdate() override;
     virtual void OnMouseEnter(bool fromChildren) override;
     virtual void OnMouseExit(bool fromChildren) override;
 

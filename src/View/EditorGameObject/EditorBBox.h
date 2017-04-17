@@ -19,7 +19,7 @@ private:
 public:
     EditorBBox(GameObject *attachedGameObject);
 
-    void OnUpdate() override;
+    void OnEditorUpdate() override;
 };
 
 #endif // EDITORBBOX_H
