@@ -25,7 +25,7 @@ GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
     CreateColorAttachment( AttachmentId( AttDiffuse ),
                            Texture::Format::RGBA_Float16 );
     CreateColorAttachment( AttachmentId( AttMisc    ),
-                           Texture::Format::RGBA_Float32  );
+                           Texture::Format::RGBA_Float32 );
     CreateColorAttachment( AttachmentId( AttColor  ),
                            Texture::Format::RGBA_Float16  );
     CreateColorAttachment( AttachmentId( AttColorRead  ),

@@ -104,11 +104,19 @@ uniform sampler2D B_GTex_Color;
 // GBuffer Samplers //////////////////////
 #ifdef BANG_FRAGMENT
     vec4  B_SampleColor(vec2 uv) { return texture2D(B_GTex_Color, uv); }
-    vec3  B_SampleNormal(vec2 uv) { return texture2D(B_GTex_Normal, uv).xyz; }
+    vec3  B_SampleNormal(vec2 uv)
+    {
+        vec2 normXY = texture2D(B_GTex_Normal, uv).xy;
+        float normalZ = sqrt(1.0f - normXY.x * normXY.x - normXY.y * normXY.y);
+        return vec3(normXY.xy, normalZ);
+    }
     vec4  B_SampleDiffColor(vec2 uv) { return texture2D(B_GTex_DiffColor, uv); }
     bool  B_SampleReceivesLight (vec2 uv) { return texture2D(B_GTex_Misc, uv).r > 0.5; }
     float B_SampleShininess (vec2 uv) { return texture2D(B_GTex_Misc, uv).g; }
-    float B_SampleDepth(vec2 uv) { return texture2D(B_GTex_Misc, uv).b; }
+    float B_SampleDepth(vec2 uv)
+    {
+        return texture2D(B_GTex_Misc, uv).b;
+    }
 
     vec4  B_SampleColor()  { return B_SampleColor(B_ScreenUv); }
     vec3  B_SampleNormal() { return B_SampleNormal(B_ScreenUv); }

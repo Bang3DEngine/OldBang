@@ -11,11 +11,14 @@ class Material;
 class GBuffer : public Framebuffer
 {
 public:
-    static const AttachmentId AttNormal    = AttachmentId::ColorAttachment0;
-    static const AttachmentId AttDiffuse   = AttachmentId::ColorAttachment1;
 
-    // (receivesLighting, shininess, depth, ---)
-    static const AttachmentId AttMisc      = AttachmentId::ColorAttachment2;
+    // normal.z doesnt need to be stored since we assume normal is normalized.
+    // (normal.x, normal.y, depth_high, depth_low)
+    static const AttachmentId AttNormalDepth = AttachmentId::ColorAttachment0;
+    static const AttachmentId AttDiffuse     = AttachmentId::ColorAttachment1;
+
+    // (receivesLighting, shininess, stencil, ---)
+    static const AttachmentId AttMisc = AttachmentId::ColorAttachment2;
 
     // We need 2 color textures to PingPong them. This is to be able to do
     // screen passes, avoiding writing and reading to the same texture at

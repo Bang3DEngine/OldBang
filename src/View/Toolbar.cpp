@@ -241,7 +241,7 @@ void Toolbar::OnGBufferAttachmentIndexChanged(int newIndex)
     }
     else if (newIndex == 1)
     {
-        gp->SetGBufferAttachmentToBeRendered(GBuffer::AttNormal);
+        gp->SetGBufferAttachmentToBeRendered(GBuffer::AttNormalDepth);
     }
     else if (newIndex == 2)
     {
