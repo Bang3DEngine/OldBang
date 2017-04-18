@@ -142,10 +142,10 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     {
         //c.MarkEvent("RenderSelectionBuffer");
         RenderSelectionBuffer(renderers, sceneChildren, p_scene);
-        //if (Input::GetKey(Input::Key::S))
-        //{
-        //    RenderToScreen(m_selectionFB->GetColorTexture()); // To see selFB
-        //}
+        if (Input::GetKey(Input::Key::S))
+        {
+            RenderToScreen(m_selectionFB->GetColorTexture()); // To see selFB
+        }
     }
     #endif
 }
@@ -248,7 +248,7 @@ void GraphicPipeline::RenderSelectionBuffer(
     m_selectionFB->Bind();
 
     m_selectionFB->ClearColor(Color::One);
-    m_sceneSelectionPass->Pass(renderers, sceneChildren);
+    m_sceneSelectionPass->Pass (renderers, sceneChildren);
     m_canvasSelectionPass->Pass(renderers, sceneChildren);
     m_gizmosSelectionPass->Pass(renderers, sceneChildren);
 

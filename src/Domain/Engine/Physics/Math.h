@@ -90,6 +90,13 @@ public:
     }
 
     template<class T>
+    static T Fract(const T &value)
+    {
+        return value - Math::Floor(value);
+    }
+
+
+    template<class T>
     static T Pow(const T &base, const T &exponent)
     {
         return std::pow(base, exponent);

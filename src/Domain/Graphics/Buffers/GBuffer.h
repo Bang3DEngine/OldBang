@@ -19,8 +19,8 @@ public:
     // (diffColor.r, diffColor.g, diffColor.b, diffColor.a)
     static const AttachmentId AttDiffuse     = AttachmentId::ColorAttachment1;
 
-    // (receivesLighting, shininess, ---, ---)
-    static const AttachmentId AttMisc = AttachmentId::ColorAttachment2;
+    // (receivesLighting, shininess, stencil, ---)
+    static const AttachmentId AttMisc        = AttachmentId::ColorAttachment2;
 
     // We need 2 color textures to PingPong them. This is to be able to do
     // screen passes, avoiding writing and reading to the same texture at
@@ -54,8 +54,7 @@ public:
     void ClearStencil();
     void ClearDepth(float clearDepth = 1.0f) override;
 
-    void ClearBuffersAndBackground(const ::Color& backgroundColor,
-                                   const ::Color& clearValue = ::Color::Zero);
+    void ClearBuffersAndBackground(const ::Color& backgroundColor);
 
 private:
     RenderTexture *m_normalTexture    = nullptr;

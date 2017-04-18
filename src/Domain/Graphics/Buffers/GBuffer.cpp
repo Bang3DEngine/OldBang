@@ -1,9 +1,10 @@
 #include "Bang/GBuffer.h"
 
 #include "Bang/VAO.h"
-#include "Bang/Debug.h"
+#include "Bang/Math.h"
 #include "Bang/Mesh.h"
 #include "Bang/Rect.h"
+#include "Bang/Debug.h"
 #include "Bang/Scene.h"
 #include "Bang/Color.h"
 #include "Bang/Array.h"
@@ -148,20 +149,25 @@ void GBuffer::ClearStencil()
 void GBuffer::ClearDepth(float clearDepth)
 {
     Framebuffer::ClearDepth(clearDepth); // Clear typical depth buffer
-    SetDrawBuffers({GBuffer::AttMisc});
-    GL::ClearColorBuffer(Color::One, false, false, true, false);
+
+    const float encodedDepthHigh = Math::Floor(clearDepth * 1024);
+    const float encodedDepthLow  = Math::Fract(clearDepth * 1024);
+
+    SetDrawBuffers({GBuffer::AttNormalDepth});
+    GL::ClearColorBuffer(Color(0, 0, encodedDepthHigh, encodedDepthLow),
+                         false, false, true, true);
 }
 
-void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor,
-                                        const Color &clearValue)
+void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor)
 {
-    SetDrawBuffers({GBuffer::AttNormalDepth, GBuffer::AttDiffuse});
-    GL::ClearColorBuffer(clearValue);
+    ClearStencil();
+    SetDrawBuffers({GBuffer::AttNormalDepth});
+    GL::ClearColorBuffer(Color::Zero, true, true, false, false);
 
-    SetDrawBuffers({GBuffer::AttMisc});
-    GL::ClearColorBuffer(Color(0,0,1,0));
+    ClearDepth(1.0f);
 
-    GL::ClearDepthBuffer(1.0f);
+    SetDrawBuffers({GBuffer::AttDiffuse, GBuffer::AttMisc});
+    GL::ClearColorBuffer(Color::Zero);
 
     SetColorDrawBuffer();
     GL::ClearColorBuffer(backgroundColor);

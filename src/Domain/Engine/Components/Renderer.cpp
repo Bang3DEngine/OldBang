@@ -76,6 +76,9 @@ void Renderer::Bind() const
 
     Matrix4 model; transform->GetLocalToWorldMatrix(&model);
     GL::SetModelMatrix(model);
+
+    ShaderProgram *sp = GetMaterial()->GetShaderProgram();
+    sp->SetBool("B_IsSelected", gameObject->IsSelected());
 }
 
 void Renderer::RenderForSelectionWithoutMaterial() const

@@ -16,9 +16,10 @@ void EndMain()
 {
     B_GIn_NormalDepth  = vec4(B_Out_NormalWorld.xy, 0, 0);
     B_GIn_DiffColor    = B_Out_DiffColor;
-    B_GIn_Misc         = vec4(B_Out_ReceivesLighting ? 1 : 0,
+    B_GIn_Misc         = vec4(B_Out_ReceivesLighting ? 1.0 : 0.0,
                               B_Out_Shininess,
-                              1, 0);
+                              B_IsSelected ? 1.0 : 0.0,
+                              0);
 
     // Encode depth
     float depthHigh      = floor(B_Out_Depth * 1024);

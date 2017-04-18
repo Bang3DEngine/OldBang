@@ -138,9 +138,8 @@ Vector2 Framebuffer::GetSize() const
 
 void Framebuffer::Clear()
 {
-    SetAllDrawBuffers();
-    GL::ClearDepthBuffer();
-    GL::ClearColorBuffer();
+    ClearDepth(1.0f);
+    ClearColor(Color::Zero);
 }
 
 void Framebuffer::ClearDepth(float clearDepth)

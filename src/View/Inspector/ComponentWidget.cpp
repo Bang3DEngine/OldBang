@@ -10,8 +10,6 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
     m_iconLabel(this),
     m_cwContextMenu(this)
 {
-    Chrono c;
-    c.MarkEvent("Construct ComponentWidget " + relatedComponent->GetClassName());
     p_component = relatedComponent;
     InspectorWidget::Init(p_component->GetClassName(), p_component);
 
@@ -28,7 +26,6 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
                                  Qt::AlignRight | Qt::AlignVCenter);
     }
     RefreshWidgetValues();
-    c.Log();
 }
 
 ComponentWidget::~ComponentWidget()

@@ -1,4 +1,3 @@
-#extension GL_EXT_gpu_shader4 : enable
 
 // Matrices //////////////////////////////
 uniform mat4 B_Model;
@@ -15,7 +14,8 @@ uniform mat4 B_PVM;
 
 // Misc ////////////////////////////////
 // Uniform that's always False. Useful to fool glsl optimization.
-uniform bool B_False = false;
+uniform bool B_False      = false;
+uniform bool B_IsSelected = false;
 // ///////////////////////////////////////
 
 
@@ -80,6 +80,7 @@ uniform sampler2D  B_GTex_Color;
         bool  B_Out_ReceivesLighting;
         float B_Out_Shininess;
         float B_Out_Depth;
+        float B_Out_Stencil;
 
         in vec4 B_FragIn_PositionWorld;
         in vec3 B_FragIn_NormalWorld;
@@ -120,7 +121,7 @@ uniform sampler2D  B_GTex_Color;
     }
     float B_SampleShininess (vec2 uv)
     {
-        return float( texture2D(B_GTex_Misc, uv).g );
+        return texture2D(B_GTex_Misc, uv).g;
     }
 
     float B_SampleDepth(vec2 uv)
@@ -130,6 +131,10 @@ uniform sampler2D  B_GTex_Color;
         float depth     = (abs(depthHigh) + depthLow) / 1024;
         return depth;
     }
+    float B_SampleFlags(vec2 uv)
+    {
+        return texture2D(B_GTex_Misc, uv).z;
+    }
 
     vec4  B_SampleColor()  { return B_SampleColor(B_ScreenUv); }
     vec3  B_SampleNormal() { return B_SampleNormal(B_ScreenUv); }
@@ -137,6 +142,7 @@ uniform sampler2D  B_GTex_Color;
     bool  B_SampleReceivesLight() { return B_SampleReceivesLight(B_ScreenUv); }
     float B_SampleShininess () { return B_SampleShininess(B_ScreenUv); }
     float B_SampleDepth() { return B_SampleDepth(B_ScreenUv); }
+    float B_SampleFlags() { return B_SampleFlags(B_ScreenUv); }
 
     vec4  B_SampleColorOffset(vec2 pixOffset)
       { return B_SampleColor(B_ScreenUv + B_ScreenStep * pixOffset); }
@@ -150,6 +156,8 @@ uniform sampler2D  B_GTex_Color;
       { return B_SampleShininess(B_ScreenUv + B_ScreenStep * pixOffset); }
     float B_SampleDepthOffset(vec2 pixOffset)
       { return B_SampleDepth(B_ScreenUv + B_ScreenStep * pixOffset); }
+    float B_SampleFlagsOffset(vec2 pixOffset)
+      { return B_SampleFlags(B_ScreenUv + B_ScreenStep * pixOffset); }
 
     vec3 B_GetCameraPositionWorld()
     {
