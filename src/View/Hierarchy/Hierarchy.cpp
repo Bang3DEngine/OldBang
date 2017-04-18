@@ -19,8 +19,8 @@ Hierarchy::Hierarchy(QWidget *parent)
   m_rightShortcut    (this, KSeq(Qt::Key_Right),  SLOT(OnRightClicked())),
   m_leftShortcut     (this, KSeq(Qt::Key_Left),   SLOT(OnLeftClicked())),
   m_renameShortcut   (this, KSeq(Qt::Key_F2),     SLOT(OnRenameClicked())),
-  m_toggleShortcut   (this, KSeq(Qt::Key_Return), SLOT(OnToggleClicked())),
-  m_toggleShortcut2  (this, KSeq(Qt::Key_Space),  SLOT(OnToggleClicked())),
+  m_toggleShortcut   (this, KSeq(Qt::Key_Return), SLOT(OnEnterClicked())),
+  m_toggleShortcut2  (this, KSeq(Qt::Key_Space),  SLOT(OnSpaceClicked())),
   m_copyShortcut     (this, KSeq("Ctrl+C"),       SLOT(OnCopyClicked())),
   m_pasteShortcut    (this, KSeq("Ctrl+V"),       SLOT(OnPasteClicked())),
   m_duplicateShortcut(this, KSeq("Ctrl+D"),       SLOT(OnDuplicateClicked())),
@@ -123,6 +123,8 @@ void Hierarchy::keyPressEvent(QKeyEvent *e)
             edCam->StartLookAt(selected);
         }
     }
+
+    DragDropQTreeWidget::keyPressEvent(e);
 }
 
 void Hierarchy::mousePressEvent(QMouseEvent *e)
@@ -409,30 +411,47 @@ void Hierarchy::OnItemNameChanged(QTreeWidgetItem *item, int column)
 
 void Hierarchy::OnUpClicked()
 {
+    ENSURE (state() != State::EditingState);
     SelectItemAboveOrBelowSelected(true);
 }
 
 void Hierarchy::OnDownClicked()
 {
+    ENSURE (state() != State::EditingState);
     SelectItemAboveOrBelowSelected(false);
 }
 
 void Hierarchy::OnRightClicked()
 {
+    ENSURE (state() != State::EditingState);
     QTreeWidgetItem *item = GetFirstSelectedItem();
     if (item) { item->setExpanded(true); }
 }
 
 void Hierarchy::OnLeftClicked()
 {
+    ENSURE (state() != State::EditingState);
     QTreeWidgetItem *item = GetFirstSelectedItem();
     if (item) { item->setExpanded(false); }
 }
 
-void Hierarchy::OnToggleClicked()
+void Hierarchy::OnSpaceClicked()
 {
+    ENSURE (state() != State::EditingState);
     GameObject *go = GetFirstSelectedGameObject();
     ExpandToggle(go);
+}
+
+void Hierarchy::OnEnterClicked()
+{
+    if (state() != State::EditingState)
+    {
+        OnSpaceClicked();
+    }
+    else
+    {
+        setCurrentItem(nullptr); // End item editing
+    }
 }
 
 void Hierarchy::OnRenameClicked()

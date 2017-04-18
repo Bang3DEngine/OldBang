@@ -66,7 +66,8 @@ public slots:
     void OnDownClicked();
     void OnRightClicked();
     void OnLeftClicked();
-    void OnToggleClicked();
+    void OnSpaceClicked();
+    void OnEnterClicked();
     void OnRenameClicked();
     void OnCopyClicked();
     void OnPasteClicked();

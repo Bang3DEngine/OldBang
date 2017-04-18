@@ -19,7 +19,7 @@ public:
     // (diffColor.r, diffColor.g, diffColor.b, diffColor.a)
     static const AttachmentId AttDiffuse     = AttachmentId::ColorAttachment1;
 
-    // (receivesLighting, shininess, stencil, ---)
+    // (receivesLighting, shininess, flags, ---)
     static const AttachmentId AttMisc        = AttachmentId::ColorAttachment2;
 
     // We need 2 color textures to PingPong them. This is to be able to do

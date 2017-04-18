@@ -85,6 +85,9 @@ void EditorScene::OnEditorUpdate()
     static int totalFrameCount = 0;
     totalTime += Time::s_deltaTime;
     ++totalFrameCount;
+
+    // Send to back so that it renders on top of any user canvas element
+    m_fpsCounter->SetParent(this);
 }
 
 void EditorScene::SetEditorCamera()
