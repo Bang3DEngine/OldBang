@@ -1,3 +1,5 @@
+#extension GL_EXT_gpu_shader4 : enable
+
 // Matrices //////////////////////////////
 uniform mat4 B_Model;
 uniform mat4 B_ModelInv;
@@ -51,10 +53,10 @@ uniform vec3  B_LightPositionWorld;
 
 
 // GBuffer textures //////////////////////
-uniform sampler2D B_GTex_Normal;
-uniform sampler2D B_GTex_DiffColor;
-uniform sampler2D B_GTex_Misc;
-uniform sampler2D B_GTex_Color;
+uniform sampler2D  B_GTex_NormalDepth;
+uniform sampler2D  B_GTex_DiffColor;
+uniform sampler2D  B_GTex_Misc;
+uniform sampler2D  B_GTex_Color;
 // ///////////////////////////////////////
 
 
@@ -83,7 +85,7 @@ uniform sampler2D B_GTex_Color;
         in vec3 B_FragIn_NormalWorld;
         in vec2 B_FragIn_Uv;
 
-        out vec4 B_GIn_NormalWorld;
+        out vec4 B_GIn_NormalDepth;
         out vec4 B_GIn_DiffColor;
         out vec4 B_GIn_Misc;
         out vec4 B_GIn_Color;
@@ -106,16 +108,27 @@ uniform sampler2D B_GTex_Color;
     vec4  B_SampleColor(vec2 uv) { return texture2D(B_GTex_Color, uv); }
     vec3  B_SampleNormal(vec2 uv)
     {
-        vec2 normXY = texture2D(B_GTex_Normal, uv).xy;
-        float normalZ = sqrt(1.0f - normXY.x * normXY.x - normXY.y * normXY.y);
-        return vec3(normXY.xy, normalZ);
+        vec3 normXY   = texture2D(B_GTex_NormalDepth, uv).xyz;
+        float normalZSign = (normXY.z >= 0.0 ? 1.0 : -1.0);
+        float normalZ = sqrt(1.0f - dot(normXY.xy, normXY.xy));
+        return vec3(normXY.xy, normalZ * normalZSign);
     }
     vec4  B_SampleDiffColor(vec2 uv) { return texture2D(B_GTex_DiffColor, uv); }
-    bool  B_SampleReceivesLight (vec2 uv) { return texture2D(B_GTex_Misc, uv).r > 0.5; }
-    float B_SampleShininess (vec2 uv) { return texture2D(B_GTex_Misc, uv).g; }
+    bool  B_SampleReceivesLight (vec2 uv)
+    {
+        return texture2D(B_GTex_Misc, uv).r > 0;
+    }
+    float B_SampleShininess (vec2 uv)
+    {
+        return float( texture2D(B_GTex_Misc, uv).g );
+    }
+
     float B_SampleDepth(vec2 uv)
     {
-        return texture2D(B_GTex_Misc, uv).b;
+        float depthHigh = texture2D(B_GTex_NormalDepth, uv).z;
+        float depthLow  = texture2D(B_GTex_NormalDepth, uv).w;
+        float depth     = (abs(depthHigh) + depthLow) / 1024;
+        return depth;
     }
 
     vec4  B_SampleColor()  { return B_SampleColor(B_ScreenUv); }

@@ -15,9 +15,11 @@ public:
     // normal.z doesnt need to be stored since we assume normal is normalized.
     // (normal.x, normal.y, depth_high, depth_low)
     static const AttachmentId AttNormalDepth = AttachmentId::ColorAttachment0;
+
+    // (diffColor.r, diffColor.g, diffColor.b, diffColor.a)
     static const AttachmentId AttDiffuse     = AttachmentId::ColorAttachment1;
 
-    // (receivesLighting, shininess, stencil, ---)
+    // (receivesLighting, shininess, ---, ---)
     static const AttachmentId AttMisc = AttachmentId::ColorAttachment2;
 
     // We need 2 color textures to PingPong them. This is to be able to do

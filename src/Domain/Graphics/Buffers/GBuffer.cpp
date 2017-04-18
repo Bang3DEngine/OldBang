@@ -20,19 +20,19 @@
 
 GBuffer::GBuffer(int width, int height) : Framebuffer(width, height)
 {
-    CreateColorAttachment( AttachmentId( AttNormal  ),
+    CreateColorAttachment( AttachmentId( AttNormalDepth  ),
                            Texture::Format::RGBA_Float16 );
     CreateColorAttachment( AttachmentId( AttDiffuse ),
                            Texture::Format::RGBA_Float16 );
     CreateColorAttachment( AttachmentId( AttMisc    ),
-                           Texture::Format::RGBA_Float32 );
+                           Texture::Format::RGBA_Float16 );
     CreateColorAttachment( AttachmentId( AttColor  ),
-                           Texture::Format::RGBA_Float16  );
+                           Texture::Format::RGBA_Float16 );
     CreateColorAttachment( AttachmentId( AttColorRead  ),
-                           Texture::Format::RGBA_Float16  );
+                           Texture::Format::RGBA_Float16 );
     CreateDepthRenderbufferAttachment();
 
-    m_normalTexture    = GetAttachmentTexture(AttNormal);
+    m_normalTexture    = GetAttachmentTexture(AttNormalDepth);
     m_diffuseTexture   = GetAttachmentTexture(AttDiffuse);
     m_miscTexture      = GetAttachmentTexture(AttMisc);
     m_colorTexture     = GetAttachmentTexture(AttColor);
@@ -46,7 +46,7 @@ GBuffer::~GBuffer()
 void GBuffer::BindTextureBuffersTo(ShaderProgram *sp) const
 {
     // Color Attachments bindings as Shader Inputs
-    sp->SetTexture("B_GTex_Normal",    m_normalTexture);
+    sp->SetTexture("B_GTex_NormalDepth",    m_normalTexture);
     sp->SetTexture("B_GTex_DiffColor", m_diffuseTexture);
     sp->SetTexture("B_GTex_Misc",      m_miscTexture);
 
@@ -107,13 +107,13 @@ void GBuffer::PrepareColorReadBuffer(ShaderProgram *sp)
 
 void GBuffer::SetAllDrawBuffers() const
 {
-    SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse, GBuffer::AttMisc,
+    SetDrawBuffers({GBuffer::AttNormalDepth, GBuffer::AttDiffuse, GBuffer::AttMisc,
                     GBuffer::AttColor});
 }
 
 void GBuffer::SetAllDrawBuffersExceptColor()
 {
-    SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse, GBuffer::AttMisc});
+    SetDrawBuffers({GBuffer::AttNormalDepth, GBuffer::AttDiffuse, GBuffer::AttMisc});
 }
 
 void GBuffer::SetColorDrawBuffer()
@@ -155,7 +155,7 @@ void GBuffer::ClearDepth(float clearDepth)
 void GBuffer::ClearBuffersAndBackground(const Color &backgroundColor,
                                         const Color &clearValue)
 {
-    SetDrawBuffers({GBuffer::AttNormal, GBuffer::AttDiffuse});
+    SetDrawBuffers({GBuffer::AttNormalDepth, GBuffer::AttDiffuse});
     GL::ClearColorBuffer(clearValue);
 
     SetDrawBuffers({GBuffer::AttMisc});
