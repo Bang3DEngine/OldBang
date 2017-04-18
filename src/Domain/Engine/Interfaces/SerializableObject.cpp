@@ -12,6 +12,7 @@
 
 #ifdef BANG_EDITOR
 #include "Bang/Explorer.h"
+#include "Bang/Inspector.h"
 #include "Bang/FileReferencesManager.h"
 #endif
 
@@ -92,5 +93,6 @@ SerializableObject::~SerializableObject()
     #ifdef BANG_EDITOR
     FileReferencesManager *frm = FileReferencesManager::GetInstance();
     if (frm) { frm->UnRegisterSerializableObject(this); }
+    Inspector::GetInstance()->OnSerializableObjectDestroyed(this);
     #endif
 }

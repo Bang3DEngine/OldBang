@@ -39,9 +39,8 @@ void PrefabAssetFileInspectable::Read(const XMLNode &xmlInfo)
 }
 
 void PrefabAssetFileInspectable::OnInspectorSlotChanged(
-        InspectorWidget *inspectorWidget)
+                                             InspectorWidget *inspectorWidget)
 {
-    Debug_Log("OnInspectorSlotChanged" << m_prefabTempGameObject->GetXMLInfo());
     AssetsManager::UpdateAsset(m_file.GetAbsolutePath(),
                                m_prefabTempGameObject->GetXMLInfo());
 }

@@ -86,7 +86,6 @@ Scene *SceneManager::GetActiveScene()
 void SceneManager::LoadScene(const String &sceneFilepath)
 {
     SceneManager *sm = SceneManager::GetInstance();
-
     String spath = sceneFilepath;
     if (!IO::ExistsFile(spath))
     {

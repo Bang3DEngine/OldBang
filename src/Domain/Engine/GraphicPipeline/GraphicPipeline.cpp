@@ -134,11 +134,7 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     Camera *camera = scene->GetCamera();
     if (camera) { camera->Bind(); }
 
-    //ChronoGL c;
-    //c.MarkEvent("RenderGBuffer");
     RenderGBuffer(renderers, sceneChildren);
-
-    //c.MarkEvent("RenderToScreen");
     m_gbuffer->RenderToScreen(m_gbufferAttachToBeShown);
 
     #ifdef BANG_EDITOR
@@ -146,13 +142,12 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     {
         //c.MarkEvent("RenderSelectionBuffer");
         RenderSelectionBuffer(renderers, sceneChildren, p_scene);
-        if (Input::GetKey(Input::Key::S))
-        {
-            RenderToScreen(m_selectionFB->GetColorTexture()); // To see selFB
-        }
+        //if (Input::GetKey(Input::Key::S))
+        //{
+        //    RenderToScreen(m_selectionFB->GetColorTexture()); // To see selFB
+        //}
     }
     #endif
-    //c.Log();
 }
 
 void GraphicPipeline::ApplySelectionOutline()

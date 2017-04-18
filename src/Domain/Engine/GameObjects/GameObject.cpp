@@ -375,7 +375,7 @@ GameObject *GameObject::Find(const String &name)
     return scene->FindInChildren(name);
 }
 
-GameObject *GameObject::FindInChildren(const String &name)
+GameObject *GameObject::FindInChildren(const String &name, bool recursive)
 {
     for (GameObject *child : GetChildren())
     {
@@ -383,9 +383,9 @@ GameObject *GameObject::FindInChildren(const String &name)
         {
             return child;
         }
-        else
+        else if (recursive)
         {
-            GameObject *found = child->FindInChildren(name);
+            GameObject *found = child->FindInChildren(name, true);
             if (found)
             {
                 return found;

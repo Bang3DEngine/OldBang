@@ -63,7 +63,7 @@ void Inspector::Clear()
     for (InspectorWidget *iw : m_currentInspectorWidgets) { iw->OnDestroy(); }
     m_currentInspectorWidgets.Clear();
     m_widget_To_Inspectables.Clear();
-    m_currentInspectables.Clear();
+    m_currentSerialObjects.Clear();
     m_widget_To_Item.Clear();
 
     m_titleLabel->setText(tr(""));
@@ -79,9 +79,9 @@ void Inspector::Refresh()
     {
         ShowGameObjectInfo(p_currentGameObject);
     }
-    else if(m_currentInspectables.Size() == 1)
+    else if(m_currentSerialObjects.Size() == 1)
     {
-        SerializableObject *insp = m_currentInspectables.Front();
+        SerializableObject *insp = m_currentSerialObjects.Front();
         SetInspectable(insp);
     }
     RefreshSizeHints();
@@ -94,15 +94,13 @@ void Inspector::SetInspectable(SerializableObject *inspectable,
     InspectorWidget *iw = new InspectorWidget();
     iw->Init(title, inspectable);
     m_widget_To_Inspectables[iw] = inspectable;
-    m_currentInspectables.PushBack(inspectable);
+    m_currentSerialObjects.PushBack(inspectable);
     AddWidget(iw);
     RefreshSizeHints();
 }
 
 void Inspector::ShowGameObjectInfo(GameObject *gameObject)
 {
-    Chrono ch;
-    ch.MarkEvent("Clear");
     Clear();
 
     ENSURE(gameObject);
@@ -111,20 +109,17 @@ void Inspector::ShowGameObjectInfo(GameObject *gameObject)
     for (Component *c : gameObject->GetComponents())
     {
         String str = "Create ComponentWidget for "; str += c->ToString();
-        ch.MarkEvent(str);
         ComponentWidget *w = new ComponentWidget(c);
-        m_currentInspectables.PushBack(c);
+        m_currentSerialObjects.PushBack(c);
         m_widget_To_Inspectables[w] = c;
         w->RefreshWidgetValues();
         AddWidget(w);
     }
 
-    ch.MarkEvent("Refresh Size hints");
     RefreshSizeHints();
     m_titleLabel->setText(gameObject->name.ToQString());
     m_enableGameObjectCheckBox->setVisible(true);
     m_enableGameObjectCheckBox->setChecked( p_currentGameObject->IsEnabled() );
-    ch.Log();
 }
 
 void Inspector::RefreshSizeHints()
@@ -155,7 +150,7 @@ void Inspector::ShowPrefabInspectableInfo(
         PrefabAssetFileInspectable *prefabInspectable)
 {
     ShowGameObjectInfo(prefabInspectable->GetPrefabTempGameObject());
-    m_currentInspectables.PushBack(prefabInspectable);
+    m_currentSerialObjects.PushBack(prefabInspectable);
 }
 
 void Inspector::OnMenuBarAddNewBehaviourClicked()
@@ -165,6 +160,16 @@ void Inspector::OnMenuBarAddNewBehaviourClicked()
     if (newBehaviour)
     {
         p_currentGameObject->AddComponent(newBehaviour);
+    }
+}
+
+void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
+{
+    bool mustRefresh = (p_currentGameObject == destroyed);
+    mustRefresh = mustRefresh || m_currentSerialObjects.Contains(destroyed);
+    if (mustRefresh)
+    {
+        Refresh();
     }
 }
 
@@ -185,7 +190,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
 
 bool Inspector::IsShowingInspectable(SerializableObject *inspectable) const
 {
-    return m_currentInspectables.Contains(inspectable);
+    return m_currentSerialObjects.Contains(inspectable);
 }
 
 Inspector *Inspector::GetInstance()
@@ -222,13 +227,5 @@ String Inspector::FormatInspectorLabel(const String &labelString)
     return labelFormatted.Replace("  ", " ");
 }
 
-
-void Inspector::OnGameObjectDestroyed(GameObject *destroyed)
-{
-    if (p_currentGameObject == destroyed)
-    {
-        Clear();
-    }
-}
 
 

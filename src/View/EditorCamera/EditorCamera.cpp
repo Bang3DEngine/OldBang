@@ -155,7 +155,7 @@ void EditorCamera::HandleKeyMovement(Vector3 *moveStep, bool *hasMoved)
     }
 
     *moveStep += m;
-    *hasMoved = *hasMoved || (m.Length() != 0);
+    *hasMoved = *hasMoved || (m.Length() > 0);
 }
 
 void EditorCamera::HandleLookAtFocus()
@@ -227,7 +227,7 @@ void EditorCamera::OnEditorUpdate()
     bool hasMoved = false;
     bool unwrapMouse = true;
 
-    HandleKeyMovement(&moveStep, &hasMoved); //WASD
+    // HandleKeyMovement(&moveStep, &hasMoved); //WASD
 
     if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
     {

@@ -48,7 +48,7 @@ public:
         Refresh();
     }
     void OnMenuBarAddNewBehaviourClicked();
-    void OnGameObjectDestroyed(GameObject *destroyed);
+    void OnSerializableObjectDestroyed(SerializableObject *destroyed);
 
     void AddWidget(InspectorWidget *widget, int row = -1);
 
@@ -71,7 +71,7 @@ private:
 
     GameObject *p_currentGameObject = nullptr;
     List<InspectorWidget*> m_currentInspectorWidgets;
-    List<SerializableObject*> m_currentInspectables;
+    List<SerializableObject*> m_currentSerialObjects;
 
     Map<InspectorWidget*, QListWidgetItem*> m_widget_To_Item;
     Map<InspectorWidget*, SerializableObject*> m_widget_To_Inspectables;

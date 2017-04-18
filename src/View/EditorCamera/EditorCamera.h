@@ -99,22 +99,22 @@ protected:
     void OnEditorUpdate() override;
 
 private:
-    Camera *m_cam = nullptr;
-    Transform *m_camt = nullptr; //YawNode transform
+    Camera *m_cam         = nullptr;
+    Transform *m_camt     = nullptr; //YawNode transform
     GameObject *m_yawNode = nullptr;
 
     GameObject *m_currentFocus = nullptr;
-    float m_lookAtRotSpeed = 3.0f;
-    float m_lookAtMoveSpeed = 4.0f;
+    float m_lookAtRotSpeed     = 3.0f;
+    float m_lookAtMoveSpeed    = 4.0f;
 
     /**
      * These 4 variables are related to the speed when moving
      * the camera with WASD
      */
-    float m_maxMoveSpeed = 1.0f;
-    float m_minMoveSpeed = 0.1f;
+    float m_maxMoveSpeed  = 1.0f;
+    float m_minMoveSpeed  = 0.1f;
     float m_keysMoveAccel = 0.1f;
-    float m_keysMoveSpeed = 0.0f;
+    float m_keysMoveSpeed = 1.0f;
 
     /**
      * @brief How many units in world space do we have to move,

@@ -286,7 +286,7 @@ public:
     bool IsChildOf(const GameObject *parent, bool recursive = true) const;
 
     static GameObject *Find(const String &name);
-    GameObject *FindInChildren(const String &name);
+    GameObject *FindInChildren(const String &name, bool recursive = true);
 
     void UpdateXMLInfo(const XMLNode &xmlInfo);
     void ReadFirstTime(const XMLNode &xmlInfo);
