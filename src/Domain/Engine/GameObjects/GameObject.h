@@ -332,7 +332,9 @@ protected:
 
     virtual void _OnStart () override;
     virtual void _OnUpdate () override;
+    #ifdef BANG_EDITOR
     virtual void _OnEditorUpdate () override;
+    #endif
     virtual void _OnDestroy () override;
 
     #ifdef BANG_EDITOR

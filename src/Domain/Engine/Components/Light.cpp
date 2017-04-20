@@ -44,7 +44,7 @@ void Light::ApplyLight(GBuffer *gbuffer, const Rect &renderRect) const
     Rect improvedRenderRect = Rect::Intersection(GetRenderRect(cam), renderRect);
     GL::ApplyContextToShaderProgram(m_lightMaterialScreen->GetShaderProgram());
     gbuffer->ApplyPass(m_lightMaterialScreen->GetShaderProgram(),
-                       false,
+                       true,
                        improvedRenderRect);
 }
 

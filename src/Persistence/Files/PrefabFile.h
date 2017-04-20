@@ -7,12 +7,17 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/File.h"
+
+#ifdef BANG_EDITOR
 #include "Bang/IWindowEventManagerListener.h"
+#endif
 
 class GameObject;
 class PrefabFile : public File,
-                   public IWindowEventManagerListener,
                    public SerializableObject
+                   #ifdef BANG_EDITOR
+                   ,public IWindowEventManagerListener
+                   #endif
 {
 public:
     PrefabFile();
@@ -26,9 +31,8 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    void OnInspectorSlotChanged(InspectorWidget *inspectorItem) override;
-
     #ifdef BANG_EDITOR
+    void OnInspectorSlotChanged(InspectorWidget *inspectorItem) override;
     virtual SerializableObject *GetInspectable() const override;
     #endif
 

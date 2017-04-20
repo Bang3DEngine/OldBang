@@ -262,9 +262,7 @@ HEADERS +=                                                          \
     src/Persistence/Files/PrefabFile.h \
     src/Persistence/Files/SoundFile.h \
     src/Persistence/Files/SoundFileInspectable.h \
-    src/Domain/Engine/Audio/AnonymousAudioPlayer.h \
-    src/View/DragDrop/DragDropInfo.h \
-    src/View/EditorPlayFlow.h
+    src/Domain/Engine/Audio/AnonymousAudioPlayer.h
 
 EDITOR {
 HEADERS += \
@@ -346,6 +344,8 @@ HEADERS += \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformCornerGizmo.h \
     src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.h \
     src/View/EditorGameObject/EditorGizmo.h \
+    src/View/DragDrop/DragDropInfo.h \
+    src/View/EditorPlayFlow.h \
     src/Persistence/FileTracker.h
 }
 GAME {
@@ -480,9 +480,7 @@ SOURCES += \
     src/Domain/Engine/Components/CircleCulledRenderer.cpp \
     src/Persistence/Files/PrefabFile.cpp \
     src/Persistence/Files/SoundFile.cpp \
-    src/Persistence/Files/SoundFileInspectable.cpp \
-    src/Domain/Engine/Audio/AnonymousAudioPlayer.cpp \
-    src/View/EditorPlayFlow.cpp
+    src/Domain/Engine/Audio/AnonymousAudioPlayer.cpp
 
 EDITOR {
     SOURCES += \
@@ -491,6 +489,7 @@ EDITOR {
         src/View/GameBuilderJob.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/Explorer/FileSystemModel.cpp \
+        src/Persistence/Files/SoundFileInspectable.cpp \
         src/Persistence/Project/QtProjectManager.cpp \
         src/View/EditorState.cpp \
         src/View/DragDrop/DragDropManager.cpp \
@@ -564,7 +563,8 @@ EDITOR {
         src/View/EditorGameObject/EditorRectTransform/EditorRectTransformAnchorGizmo.cpp \
         src/View/EditorGameObject/EditorGizmo.cpp \
         src/View/EditorGameObject/EditorAxisPlane.cpp \
-        src/Persistence/FileTracker.cpp
+        src/Persistence/FileTracker.cpp \
+        src/View/EditorPlayFlow.cpp
 }
 GAME {
     #SOURCES +=

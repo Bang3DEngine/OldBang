@@ -73,7 +73,7 @@ void EditorRotateAxis::OnEditorUpdate()
             // We are going to get the two anchor points !!!
             // Get the two circle's closer points to the selected point
             // by the user in screen space.
-            int anchorIndex0, anchorIndex1;
+            int anchorIndex0 = 0, anchorIndex1 = 1;
             m_circle->GetTwoClosestPointsInScreenSpace(sMousePos,
                                                        &m_sAnchorPoint0,
                                                        &anchorIndex0,

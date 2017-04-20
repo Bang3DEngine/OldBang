@@ -47,15 +47,13 @@ void PrefabFile::Write(XMLNode *xmlInfo) const
     m_tmpGameObject->Write(xmlInfo);
 }
 
+#ifdef BANG_EDITOR
 void PrefabFile::OnInspectorSlotChanged(InspectorWidget *inspectorItem)
 {
-    #ifdef BANG_EDITOR
     AssetsManager::UpdateAsset(GetAbsolutePath(),
                                m_tmpGameObject->GetXMLInfo());
-    #endif
 }
 
-#ifdef BANG_EDITOR
 SerializableObject *PrefabFile::GetInspectable() const
 {
     return new PrefabAssetFileInspectable(*this);

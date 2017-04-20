@@ -35,7 +35,9 @@ void SceneManager::Update()
     Scene *activeScene = SceneManager::GetActiveScene();
     if (activeScene)
     {
+        #ifdef BANG_EDITOR
         if (EditorState::IsPlaying())
+        #endif
         {
             activeScene->_OnUpdate();
         }

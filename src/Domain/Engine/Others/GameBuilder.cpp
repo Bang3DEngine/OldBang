@@ -10,7 +10,6 @@
 #include "Bang/ProjectManager.h"
 #include "Bang/GameBuildDialog.h"
 #include "Bang/BehaviourManager.h"
-#include "Bang/WinUndef.h"
 
 GameBuilder *GameBuilder::s_instance = nullptr;
 

@@ -712,6 +712,7 @@ void GameObject::_OnUpdate()
     PROPAGATE_EVENT(_OnUpdate(), m_children);
 }
 
+#ifdef BANG_EDITOR
 void GameObject::_OnEditorUpdate()
 {
     OnEditorUpdate();
@@ -723,6 +724,7 @@ void GameObject::_OnEditorUpdate()
 
     PROPAGATE_EVENT(_OnEditorUpdate(), m_children);
 }
+#endif
 
 void GameObject::_OnDestroy()
 {

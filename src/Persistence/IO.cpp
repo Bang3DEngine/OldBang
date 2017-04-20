@@ -190,7 +190,7 @@ String IO::ToRelative(const String &absPath)
 
 bool IO::IsEngineFile(const String &filepath)
 {
-	if (filepath.Empty()) { return ""; }
+    if (filepath.Empty()) { return false; }
     return filepath.BeginsWith(IO::GetEngineAssetsRootAbs());
 }
 

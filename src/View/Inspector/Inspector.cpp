@@ -35,6 +35,7 @@ Inspector::Inspector(QWidget *parent)
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
     m_enableGameObjectCheckBox =
             parent->findChild<QCheckBox*>("enableGameObjectCheckBox");
+    m_enableGameObjectCheckBox->setVisible(false);
     setMinimumWidth(300);
 
     QObject::connect(m_enableGameObjectCheckBox, SIGNAL(toggled(bool)),
