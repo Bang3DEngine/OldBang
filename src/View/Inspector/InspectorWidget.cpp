@@ -90,9 +90,7 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
 InspectorWidget::~InspectorWidget()
 {
-    m_refreshTimer.stop();
-    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
-                        this, SLOT(RefreshWidgetValues()));
+    OnDestroy();
 }
 
 XMLNode InspectorWidget::GetInspectableXMLInfo() const

@@ -133,6 +133,8 @@ bool EditorPlayFlow::WaitForAllBehavioursToBeLoaded()
     // Create a progress dialog to show progress
     QProgressDialog progressDialog(mainWin);
     progressDialog.setRange(0, 100);
+    progressDialog.setFixedSize(350, 100);
+    progressDialog.setSizeGripEnabled(false);
     progressDialog.setModal(true); // Important to avoid Ctrl+P smashing
     progressDialog.setWindowTitle("Compiling behaviours");
     progressDialog.setLabelText(

@@ -462,7 +462,7 @@ void Explorer::OnDragStart(const DragDropInfo &ddi)
     Hierarchy *hierarchy = Hierarchy::GetInstance();
     if (ddi.sourceObject == hierarchy)
     {
-        setStyleSheet(IDragDropListener::acceptDragStyle);
+        // setStyleSheet(IDragDropListener::acceptDragStyle);
     }
 }
 

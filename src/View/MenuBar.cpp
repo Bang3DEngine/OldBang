@@ -195,6 +195,7 @@ void MenuBar::OpenScene(const String &filepath) const
 
 void MenuBar::OnSaveScene() const
 {
+    ENSURE(EditorState::IsStopped());
     String filepath = SceneManager::GetActiveSceneFilepath();
     filepath = IO::AppendExtension(
                            filepath, Scene::GetFileExtensionStatic());
@@ -209,6 +210,7 @@ void MenuBar::OnSaveScene() const
 
 void MenuBar::OnSaveSceneAs() const
 {
+    ENSURE(EditorState::IsStopped());
     Scene *scene = SceneManager::GetActiveScene(); ENSURE(scene);
     String sceneFilepath = SceneManager::GetActiveSceneFilepath();
     String sceneName = IO::GetFileName(sceneFilepath);

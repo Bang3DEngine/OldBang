@@ -29,6 +29,7 @@ Mesh::Mesh(const Mesh &m)
 
 Mesh::~Mesh()
 {
+    if (m_vao)                { delete m_vao;                }
     if (m_vertexPositionsVBO) { delete m_vertexPositionsVBO; }
     if (m_vertexNormalsVBO)   { delete m_vertexNormalsVBO;   }
     if (m_vertexUvsVBO)       { delete m_vertexUvsVBO;       }

@@ -31,6 +31,7 @@
 
 #ifdef BANG_EDITOR
 #include "Bang/Hierarchy.h"
+#include "Bang/EditorWindow.h"
 #include "Bang/GPPass_Selection.h"
 #include "Bang/SelectionFramebuffer.h"
 #endif
@@ -140,7 +141,6 @@ void GraphicPipeline::RenderScene(Scene *scene, bool inGame)
     #ifdef BANG_EDITOR
     if (!m_renderingInGame)
     {
-        //c.MarkEvent("RenderSelectionBuffer");
         RenderSelectionBuffer(renderers, sceneChildren, p_scene);
         if (Input::GetKey(Input::Key::S))
         {

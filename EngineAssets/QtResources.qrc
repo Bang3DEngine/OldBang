@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="/Bang">
+    <file>Icons/Pause.png</file>
+    <file>Icons/Step.png</file>
     <file>Icons/FolderIcon.png</file>
     <file>Icons/LetterIcon.png</file>
     <file>Icons/AddIcon.png</file>

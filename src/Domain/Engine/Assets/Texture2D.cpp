@@ -41,7 +41,6 @@ void Texture2D::LoadFromImage(const String &imageFilepath)
 
 void Texture2D::LoadFromImage(const Image &image)
 {
-    m_imageFilepath = "";
     if (image.GetData8())
     {
         m_width  = image.GetWidth();

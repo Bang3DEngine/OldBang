@@ -39,6 +39,8 @@ UIText::~UIText()
 
 Rect UIText::GetCharRect(char c) const
 {
+    if (!m_font) { return Rect::Empty; }
+
     Vector2 textSize = GetTextSizeScaled();
 
     Font::CharGlyphMetrics charMetrics = m_font->GetCharacterMetrics(c);
@@ -56,6 +58,8 @@ Rect UIText::GetCharRect(char c) const
 
 float UIText::GetCharAdvance(char current, char next) const
 {
+    if (!m_font) { return 0.0f; }
+
     int advancePx = -1;
 
     // TODO: Kerning
@@ -76,6 +80,8 @@ float UIText::GetCharAdvance(char current, char next) const
 
 void UIText::FillQuadsMeshPositions()
 {
+    if (!m_font) { m_mesh->LoadPositions({}); return; }
+
     Array<Vector3> quadPos;
 
     float totalAdv = 0.0f;
@@ -119,7 +125,8 @@ void UIText::FillQuadsMeshPositions()
 
 void UIText::FillQuadsMeshUvs()
 {
-    ENSURE(m_font);
+    if (!m_font) { m_mesh->LoadUvs({}); return; }
+
     Array<Vector2> quadUvs;
 
     for (char c : m_content)
@@ -137,7 +144,6 @@ void UIText::FillQuadsMeshUvs()
 
 void UIText::RefreshMesh()
 {
-    ENSURE(m_font);
     FillQuadsMeshPositions();
     FillQuadsMeshUvs();
     SetMesh(m_mesh);
@@ -214,7 +220,10 @@ void UIText::SetFont(Font *font)
     {
         m_font = font;
         RefreshMesh();
-        GetMaterial()->SetTexture( m_font->GetAtlasTexture() );
+        if (m_font)
+        {
+            GetMaterial()->SetTexture( m_font->GetAtlasTexture() );
+        }
     }
 }
 

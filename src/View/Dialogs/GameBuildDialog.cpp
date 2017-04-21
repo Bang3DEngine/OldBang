@@ -7,7 +7,7 @@
 GameBuildDialog::GameBuildDialog() :
     QProgressDialog("Building game...", "Cancel", 0, 100)
 {
-    setFixedSize(350, 80);
+    setFixedSize(300, 120);
     setSizeGripEnabled(false);
 
     setModal(true);

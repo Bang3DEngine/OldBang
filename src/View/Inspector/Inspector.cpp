@@ -166,8 +166,19 @@ void Inspector::OnMenuBarAddNewBehaviourClicked()
 
 void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
 {
-    bool mustRefresh = (p_currentGameObject == destroyed);
-    mustRefresh = mustRefresh || m_currentSerialObjects.Contains(destroyed);
+    bool mustRefresh = false;
+    if (p_currentGameObject == destroyed)
+    {
+        p_currentGameObject = nullptr;
+        mustRefresh = true;
+    }
+
+    if (m_currentSerialObjects.Contains(destroyed))
+    {
+        m_currentSerialObjects.Remove(destroyed);
+        mustRefresh = true;
+    }
+
     if (mustRefresh)
     {
         Refresh();

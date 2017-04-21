@@ -110,6 +110,7 @@ Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
 
     Texture2D *tex = mb->OnCreateTexture2D(newTexName);
     tex->LoadFromImage(f.GetAbsolutePath());
+
     AssetsManager::UpdateAsset(tex->GetFilepath(), tex->GetXMLInfo());
     Inspector::GetInstance()->SetInspectable(tex, newTexName);
 
