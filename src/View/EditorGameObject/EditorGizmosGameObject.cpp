@@ -26,7 +26,7 @@
 EditorGizmosGameObject::EditorGizmosGameObject(const String &name) :
     GameObject(name)
 {
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 void EditorGizmosGameObject::Init()

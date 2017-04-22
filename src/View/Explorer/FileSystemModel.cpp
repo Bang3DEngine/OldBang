@@ -3,7 +3,9 @@
 #include <QPainter>
 #include "Bang/WinUndef.h"
 
+#include "Bang/IO.h"
 #include "Bang/Debug.h"
+#include "Bang/Dialog.h"
 #include "Bang/String.h"
 #include "Bang/Explorer.h"
 #include "Bang/IconManager.h"

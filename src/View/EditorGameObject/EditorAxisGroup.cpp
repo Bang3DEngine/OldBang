@@ -23,7 +23,7 @@ EditorAxisGroup::EditorAxisGroup(GameObject *attachedGameObject) : GameObject("E
 
     DisableAllGroups();
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 void EditorAxisGroup::DisableAllGroups()

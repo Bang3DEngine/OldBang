@@ -18,7 +18,7 @@ EditorSelectionGameObject::EditorSelectionGameObject(GameObject *attachedGameObj
     //                            SetDiffuseColor(Vector4(1,0,0,1));
     //bbox->SetParent(this);
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorSelectionGameObject::~EditorSelectionGameObject()

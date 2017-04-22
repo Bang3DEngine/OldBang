@@ -32,7 +32,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     );
 
     m_axisCap = MeshFactory::GetConeGameObject();
-    m_axisCap->AddHideFlag(HideFlags::HideAndDontSave);
+    m_axisCap->GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
     m_axisCap->SetParent(this);
     if (dir == EditorAxis::EditorAxisDirection::X)
     {
@@ -52,7 +52,7 @@ EditorTranslateAxis::EditorTranslateAxis(EditorAxis::EditorAxisDirection dir,
     m_axisCap->GetComponent<MeshRenderer>()->
             SetDepthLayer(Renderer::DepthLayer::DepthLayerGizmos);
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorTranslateAxis::~EditorTranslateAxis()

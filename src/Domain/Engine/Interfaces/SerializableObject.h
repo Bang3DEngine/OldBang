@@ -10,6 +10,7 @@
 
 class String;
 class XMLNode;
+class InspectorWidget;
 class SerializableObject : public Object
 {
     OBJECT(SerializableObject)
@@ -38,8 +39,29 @@ public:
     virtual const QPixmap& GetIcon() const;
     virtual String GetFileExtension() const;
 
+    #ifdef BANG_EDITOR
+    enum InspectorFlag
+    {
+        None                     = 0,
+        IsEnabled                = 1,
+        IsEnabledCheckBoxVisible = 2,
+        DeleteWhenCleared        = 4,
+
+        Default = DeleteWhenCleared
+    };
+    CREATE_FLAGS(InspectorFlags, InspectorFlag);
+    const InspectorFlags& GetInspectorFlags() const;
+    InspectorFlags* GetInspectorFlags();
+
+    virtual String GetTitleInInspector() const;
+    virtual InspectorWidget *GetNewInspectorWidget();
+    virtual List<SerializableObject*> GetInspectorSerializableObjects();
+    #endif
+
 protected:
     SerializableObject();
+
+    InspectorFlags m_inspectorFlags = InspectorFlags(InspectorFlag::Default);
 };
 
 #endif // SERIALIZABLEOBJECT_H

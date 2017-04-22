@@ -58,6 +58,6 @@ void GPPass_Selection::InPass(const List<Renderer *> &renderers,
 bool GPPass_Selection::CanRender(const Renderer *renderer) const
 {
     return GPPass::CanRender(renderer) &&
-           !renderer->gameObject->HasHideFlag(HideFlags::HideInSelection);
+           !renderer->gameObject->GetHideFlags()->IsOn(HideFlag::HideInSelection);
 }
 

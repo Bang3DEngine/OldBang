@@ -7,19 +7,11 @@
 #include "Bang/Canvas.h"
 #include "Bang/Screen.h"
 #include "Bang/Prefab.h"
-#include "Bang/Camera.h"
-#include "Bang/UIText.h"
 #include "Bang/Project.h"
-#include "Bang/UIImage.h"
 #include "Bang/Material.h"
-#include "Bang/AudioClip.h"
-#include "Bang/Transform.h"
+#include "Bang/Inspector.h"
 #include "Bang/Texture2D.h"
-#include "Bang/GameObject.h"
-#include "Bang/Behaviour.h"
 #include "Bang/FileReader.h"
-#include "Bang/PointLight.h"
-#include "Bang/AudioSource.h"
 #include "Bang/MeshFactory.h"
 #include "Bang/SystemUtils.h"
 #include "Bang/EditorScene.h"
@@ -29,13 +21,9 @@
 #include "Bang/SceneManager.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
-#include "Bang/RectTransform.h"
-#include "Bang/AudioListener.h"
 #include "Bang/AssetsManager.h"
-#include "Bang/CircleRenderer.h"
 #include "Bang/ProjectManager.h"
-#include "Bang/DirectionalLight.h"
-#include "Bang/SingleLineRenderer.h"
+#include "Bang/SerializableObject.h"
 #include "Bang/WindowEventManager.h"
 
 MenuBar *MenuBar::s_instance = nullptr;
@@ -458,59 +446,78 @@ AudioClip* MenuBar::OnCreateAudioClip(const String &audioClipName) const
 
 void MenuBar::OnAddComponentNewBehaviour() const
 {
-    Inspector::GetInstance()->OnMenuBarAddNewBehaviourClicked();
+    GameObject* inspectorGameObject = GetInspectorGameObject();
+    ENSURE(inspectorGameObject);
+
+    Behaviour *newBehaviour = Behaviour::CreateNewBehaviour();
+    OnAddComponent(newBehaviour);
 }
 void MenuBar::OnAddComponentBehaviour() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<Behaviour>();
+    OnAddComponent<Behaviour>();
 }
 void MenuBar::OnAddComponentCamera() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<Camera>();
+    OnAddComponent<Camera>();
 }
 void MenuBar::OnAddComponentMeshRenderer() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<MeshRenderer>();
+    OnAddComponent<MeshRenderer>();
 }
 void MenuBar::OnAddComponentSingleLineRenderer() const
 {
-    Inspector::GetInstance()->
-            OnMenuBarAddComponentClicked<SingleLineRenderer>();
-}
+    OnAddComponent<SingleLineRenderer>();
+ }
 void MenuBar::OnAddComponentCircleRenderer() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<CircleRenderer>();
-}
-
+    OnAddComponent<CircleRenderer>();
+ }
 void MenuBar::OnAddComponentAudioSource() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<AudioSource>();
-}
-
+    OnAddComponent<AudioSource>();
+ }
 void MenuBar::OnAddComponentAudioListener() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<AudioListener>();
-}
+    OnAddComponent<AudioListener>();
+ }
 void MenuBar::OnAddComponentDirectionalLight() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<DirectionalLight>();
+    OnAddComponent<DirectionalLight>();
 }
 void MenuBar::OnAddComponentPointLight() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<PointLight>();
+    OnAddComponent<PointLight>();
 }
 void MenuBar::OnAddComponentCanvas() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<Canvas>();
+    OnAddComponent<Canvas>();
 }
 void MenuBar::OnAddComponentUIImage() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<UIImage>();
+    OnAddComponent<UIImage>();
 }
-
 void MenuBar::OnAddComponentUIText() const
 {
-    Inspector::GetInstance()->OnMenuBarAddComponentClicked<UIText>();
+    OnAddComponent<UIText>();
+}
+
+void MenuBar::OnAddComponent(Component *c) const
+{
+    ENSURE(c);
+    GameObject* inspectorGameObject = GetInspectorGameObject();
+    ENSURE(inspectorGameObject);
+    inspectorGameObject->AddComponent(c);
+}
+
+GameObject *MenuBar::GetInspectorGameObject() const
+{
+    Inspector *inspector = Inspector::GetInstance();
+    if (!inspector) { return nullptr; }
+
+    SerializableObject *serialObject = inspector->GetFirstSerializableObject();
+    if (!serialObject) { return nullptr; }
+
+    return Object::Cast<GameObject>(serialObject);
 }
 
 MenuBar *MenuBar::GetInstance()

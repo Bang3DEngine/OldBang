@@ -251,12 +251,7 @@ void Explorer::RefreshInspector()
         IO::Exists(f.GetAbsolutePath()))
     {
         Inspector *inspector = Inspector::GetInstance();
-        if (m_lastInspectableInInspector)
-        {
-            inspector->Clear();
-            // delete m_lastSerializableObjectInInspector;
-            m_lastInspectableInInspector = nullptr;
-        }
+        inspector->Clear();
 
         SerializableObject *newInspectable = nullptr;
         File *specificFile = File::GetSpecificFile(f);
@@ -283,14 +278,9 @@ void Explorer::RefreshInspector()
         {
             if (newInspectable)
             {
-                inspector->SetInspectable(newInspectable,
+                inspector->ShowInspectable(newInspectable,
                                           f.GetNameAndExtension());
             }
-        }
-
-        if (newInspectable)
-        {
-            m_lastInspectableInInspector = newInspectable;
         }
     }
 }

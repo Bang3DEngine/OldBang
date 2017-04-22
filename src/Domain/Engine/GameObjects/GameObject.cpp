@@ -39,6 +39,11 @@ GameObject::GameObject(const String &name)
     : m_name(name)
 {
     AddComponent<Transform>();
+
+    #ifdef BANG_EDITOR
+    GetInspectorFlags()->SetOff(
+                SerializableObject::InspectorFlag::DeleteWhenCleared);
+    #endif
 }
 
 
@@ -56,7 +61,7 @@ void GameObject::CloneInto(ICloneable *clone) const
 
     for (GameObject *child : m_children)
     {
-        if (child->HasHideFlag(HideFlags::DontClone)) { continue; }
+        if (child->GetHideFlags()->IsOn(HideFlag::DontClone)) { continue; }
         GameObject *childClone = child->Clone();
         childClone->SetParent(go);
     }
@@ -233,7 +238,7 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
         for (GameObject *child : m_children)
         {
             #ifdef BANG_EDITOR
-            if (child->HasHideFlag(HideFlags::HideInGame) ||
+            if (child->GetHideFlags()->IsOn(HideFlag::HideInGame) ||
                 child->IsDraggedGameObject()) continue;
             #endif
 
@@ -418,7 +423,7 @@ void GameObject::UpdateXMLInfo(const XMLNode &xmlInfo)
         {
             ENSURE(iChildren < children.Size());
             GameObject *child = children[iChildren];
-            while (children[iChildren]->HasHideFlag(HideFlags::DontSerialize))
+            while (children[iChildren]->GetHideFlags()->IsOn(HideFlag::DontSerialize))
             {
                 ++iChildren;
             }
@@ -550,7 +555,7 @@ void GameObject::Write(XMLNode *xmlInfo) const
 
     for (GameObject *child : m_children)
     {
-        if (!child->HasHideFlag(HideFlags::DontSerialize))
+        if (!child->GetHideFlags()->IsOn(HideFlag::DontSerialize))
         {
             XMLNode *xmlChild = new XMLNode();
             child->Write(xmlChild);
@@ -558,6 +563,23 @@ void GameObject::Write(XMLNode *xmlInfo) const
         }
     }
 }
+
+#ifdef BANG_EDITOR
+InspectorWidget *GameObject::GetNewInspectorWidget()
+{
+    // Inspector will use one InspectorWidget for each component
+    // not per GameObject
+    return nullptr;
+}
+
+List<SerializableObject *> GameObject::GetInspectorSerializableObjects()
+{
+    List<SerializableObject*> serialObjects;
+    for (Component *component : m_components) { serialObjects.Add(component); }
+    return serialObjects;
+}
+
+#endif
 
 bool GameObject::IsSelected() const
 {
@@ -582,7 +604,7 @@ void GameObject::ChangeTransformByRectTransform()
 void GameObject::OnHierarchyGameObjectsSelected(
         List<GameObject*> &selectedEntities)
 {
-    if (HasHideFlag(HideFlags::HideInHierarchy) ||
+    if (GetHideFlags()->IsOn(HideFlag::HideInHierarchy) ||
         IsOfType<Scene>()) return;
 
     bool selected = selectedEntities.Contains(this);
@@ -693,7 +715,7 @@ void GameObject::_OnStart()
 void GameObject::_OnUpdate()
 {
     #ifdef BANG_EDITOR
-    bool canUpdate = !HasHideFlag(HideFlags::HideInGame);
+    bool canUpdate = !GetHideFlags()->IsOn(HideFlag::HideInGame);
     #else
     bool canUpdate = true;
     #endif

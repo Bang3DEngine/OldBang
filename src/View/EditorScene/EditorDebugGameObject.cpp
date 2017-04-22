@@ -6,7 +6,7 @@
 EditorDebugGameObject::EditorDebugGameObject() :
     GameObject("EditorDebugGameObject")
 {
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorDebugGameObject::~EditorDebugGameObject()

@@ -26,7 +26,7 @@ EditorScaleAxisGroup::EditorScaleAxisGroup(GameObject *attachedGameObject) :
     m_axisZ->SetParent(this);
     m_axisCentral->SetParent(this);
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorScaleAxisGroup::~EditorScaleAxisGroup()

@@ -78,7 +78,7 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
     bool cameraFound = false;
     for (Camera *cam : cameras)
     {
-        if (!cam->gameObject->HasHideFlag(HideFlags::HideInHierarchy))
+        if (!cam->gameObject->GetHideFlags()->IsOn(HideFlag::HideInHierarchy))
         {
             SetCamera(cam);
             cameraFound = true;
@@ -93,7 +93,7 @@ void Scene::SetFirstFoundCameraOrDefaultOne()
         m_defaultCamera->transform->SetPosition(Vector3(90));
         m_defaultCamera->transform->LookAt(Vector3::Zero);
         m_defaultCamera->SetParent(this);
-        m_defaultCamera->AddHideFlag(HideFlags::HideAndDontSave);
+        m_defaultCamera->GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 
         Camera *cam = m_defaultCamera->AddComponent<Camera>();
         cam->SetFovDegrees(60.0f); cam->SetZNear(0.1f);
@@ -173,7 +173,7 @@ void Scene::Read(const XMLNode &xmlInfo)
 
 void Scene::Write(XMLNode *xmlInfo) const
 {
-    if (HasHideFlag(HideFlags::DontSerialize))
+    if (GetHideFlags().IsOn(HideFlag::DontSerialize))
     {
         xmlInfo = nullptr;
         return;

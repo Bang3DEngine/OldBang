@@ -30,7 +30,7 @@ EditorRotateAxisGroup::EditorRotateAxisGroup(GameObject *attachedGameObject)
     matCopy->SetDiffuseColor( Color::White );
     m_circle->SetMaterial(matCopy);
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorRotateAxisGroup::~EditorRotateAxisGroup()

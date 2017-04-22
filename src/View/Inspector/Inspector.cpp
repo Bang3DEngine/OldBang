@@ -33,13 +33,13 @@ Inspector::Inspector(QWidget *parent)
     setSelectionMode(QAbstractItemView::SingleSelection);
 
     m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
-    m_enableGameObjectCheckBox =
-            parent->findChild<QCheckBox*>("enableGameObjectCheckBox");
-    m_enableGameObjectCheckBox->setVisible(false);
+    //m_enableGameObjectCheckBox =
+    //        parent->findChild<QCheckBox*>("enableGameObjectCheckBox");
+    //m_enableGameObjectCheckBox->setVisible(false);
     setMinimumWidth(300);
 
-    QObject::connect(m_enableGameObjectCheckBox, SIGNAL(toggled(bool)),
-                     this, SLOT( OnEnableGameObjectCheckBoxChanged(bool) ));
+    //QObject::connect(m_enableGameObjectCheckBox, SIGNAL(toggled(bool)),
+    //                 this, SLOT( OnEnableGameObjectCheckBoxChanged(bool) ));
 
     horizontalScrollBar()->setEnabled(false);
 }
@@ -61,22 +61,21 @@ void Inspector::Clear()
 {
     ENSURE(!m_widget_To_Item.Empty());
 
-    if (!p_currentGameObject)
+    while (!m_currentSerialObjects.Empty())
     {
-        Debug_Log(m_currentSerialObjects);
-        for (InspectorWidget *iw : m_currentInspectorWidgets)
+        SerializableObject *serialObject = m_currentSerialObjects.Front();
+        if (serialObject->GetInspectorFlags()->IsOn(
+                    SerializableObject::InspectorFlag::DeleteWhenCleared))
         {
-            delete iw;
+            delete serialObject; // This will remove it from the list
         }
-
-        Debug_Log(m_currentSerialObjects.Size());
-        Debug_Log(m_currentSerialObjects);
-        while (!m_currentSerialObjects.Empty())
+        else
         {
-            SerializableObject *serialObject = m_currentSerialObjects.Front();
-            // delete serialObject; // This removes it from the list
+            m_currentSerialObjects.Remove(serialObject);
         }
     }
+    for (InspectorWidget *iw : m_currentInspectorWidgets) { delete iw; }
+
 
     m_currentInspectorWidgets.Clear();
     m_widget_To_Inspectables.Clear();
@@ -84,59 +83,43 @@ void Inspector::Clear()
     m_widget_To_Item.Clear();
 
     m_titleLabel->setText(tr(""));
-    p_currentGameObject = nullptr;
-    m_enableGameObjectCheckBox->setVisible(false);
+    //m_enableGameObjectCheckBox->setVisible(false);
 
     clear();
 }
 
 void Inspector::Refresh()
 {
-    if (p_currentGameObject)
-    {
-        ShowGameObjectInfo(p_currentGameObject);
-    }
-    else if(m_currentSerialObjects.Size() == 1)
+    ENSURE(!m_currentSerialObjects.Empty());
+    if(m_currentSerialObjects.Size() >= 1)
     {
         SerializableObject *insp = m_currentSerialObjects.Front();
-        SetInspectable(insp);
+        ShowInspectable(insp);
     }
     RefreshSizeHints();
 }
 
-void Inspector::SetInspectable(SerializableObject *inspectable,
-                               const String &title)
+void Inspector::ShowInspectable(SerializableObject *inspectable,
+                                const String &title)
 {
     Clear();
-    InspectorWidget *iw = new InspectorWidget();
-    iw->Init(title, inspectable);
-    m_widget_To_Inspectables[iw] = inspectable;
-    m_currentSerialObjects.PushBack(inspectable);
-    AddWidget(iw);
-    RefreshSizeHints();
-}
+    List<SerializableObject*> serialObjects =
+            inspectable->GetInspectorSerializableObjects();
 
-void Inspector::ShowGameObjectInfo(GameObject *gameObject)
-{
-    Clear();
-
-    ENSURE(gameObject);
-    p_currentGameObject = gameObject;
-
-    for (Component *c : gameObject->GetComponents())
+    for (SerializableObject *serialObject : serialObjects)
     {
-        String str = "Create ComponentWidget for "; str += c->ToString();
-        ComponentWidget *w = new ComponentWidget(c);
-        m_currentSerialObjects.PushBack(c);
-        m_widget_To_Inspectables[w] = c;
-        w->RefreshWidgetValues();
-        AddWidget(w);
-    }
+        InspectorWidget *iw = serialObject->GetNewInspectorWidget();
+        if (iw)
+        {
+            m_widget_To_Inspectables[iw] = serialObject;
+            m_currentSerialObjects.PushBack(serialObject);
 
+            iw->RefreshWidgetValues();
+            AddWidget(iw);
+        }
+    }
     RefreshSizeHints();
-    m_titleLabel->setText(gameObject->name.ToQString());
-    m_enableGameObjectCheckBox->setVisible(true);
-    m_enableGameObjectCheckBox->setChecked( p_currentGameObject->IsEnabled() );
+    //m_titleLabel->setText(gameObject->name.ToQString());
 }
 
 void Inspector::RefreshSizeHints()
@@ -155,6 +138,7 @@ void Inspector::OnEditorPlay()
     Clear();
 }
 
+/*
 void Inspector::OnEnableGameObjectCheckBoxChanged(bool checked)
 {
     if (p_currentGameObject)
@@ -162,55 +146,34 @@ void Inspector::OnEnableGameObjectCheckBoxChanged(bool checked)
         p_currentGameObject->SetEnabled(checked);
     }
 }
+*/
 
-void Inspector::ShowPrefabInspectableInfo(
-        PrefabAssetFileInspectable *prefabInspectable)
+SerializableObject *Inspector::GetFirstSerializableObject()
 {
-    ShowGameObjectInfo(prefabInspectable->GetPrefabTempGameObject());
-    m_currentSerialObjects.PushBack(prefabInspectable);
-}
-
-void Inspector::OnMenuBarAddNewBehaviourClicked()
-{
-    ENSURE(p_currentGameObject);
-    Behaviour *newBehaviour = Behaviour::CreateNewBehaviour();
-    if (newBehaviour)
-    {
-        p_currentGameObject->AddComponent(newBehaviour);
-    }
+    return !m_currentSerialObjects.Empty() ? m_currentSerialObjects.Front() :
+                                             nullptr;
 }
 
 void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
 {
     bool mustRefresh = false;
-    if (!p_currentGameObject)
-    {
-        if (m_currentSerialObjects.Contains(destroyed))
-        {
-            m_currentSerialObjects.Remove(destroyed);
-            mustRefresh = true;
-        }
 
-        List<InspectorWidget*> widgetsToRemove =
-                m_widget_To_Inspectables.GetKeysWithValue(destroyed);
-        for (InspectorWidget *inspectorWidget : widgetsToRemove)
-        {
-            QListWidgetItem *item = m_widget_To_Item[inspectorWidget];
-            removeItemWidget(item);
-            m_widget_To_Inspectables.Remove(inspectorWidget);
-            m_widget_To_Item.Remove(inspectorWidget);
-            m_currentInspectorWidgets.Remove(inspectorWidget);
-            delete inspectorWidget;
-        }
-    }
-    else
+    if (m_currentSerialObjects.Contains(destroyed))
     {
-        // Dont delete anything
-        if (p_currentGameObject == destroyed)
-        {
-            p_currentGameObject = nullptr;
-            mustRefresh = true;
-        }
+        m_currentSerialObjects.Remove(destroyed);
+        mustRefresh = true;
+    }
+
+    List<InspectorWidget*> widgetsToRemove =
+            m_widget_To_Inspectables.GetKeysWithValue(destroyed);
+    for (InspectorWidget *inspectorWidget : widgetsToRemove)
+    {
+        QListWidgetItem *item = m_widget_To_Item[inspectorWidget];
+        removeItemWidget(item);
+        m_widget_To_Inspectables.Remove(inspectorWidget);
+        m_widget_To_Item.Remove(inspectorWidget);
+        m_currentInspectorWidgets.Remove(inspectorWidget);
+        delete inspectorWidget;
     }
 
     if (mustRefresh)

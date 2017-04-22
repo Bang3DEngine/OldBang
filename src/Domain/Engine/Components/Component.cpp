@@ -4,9 +4,14 @@
 #include "Bang/XMLNode.h"
 #include "Bang/Transform.h"
 #include "Bang/GameObject.h"
+#include "Bang/ComponentWidget.h"
 
 Component::Component()
 {
+    #ifdef BANG_EDITOR
+    GetInspectorFlags()->SetOff(
+                SerializableObject::InspectorFlag::DeleteWhenCleared);
+    #endif
 }
 
 Component::~Component()
@@ -89,5 +94,12 @@ void Component::Write(XMLNode *xmlInfo) const
     xmlInfo->SetBool("enabled", m_enabled,
                      {XMLProperty::Hidden, XMLProperty::Readonly});
     xmlInfo->SetBool("closedInInspector", IsClosedInInspector(),
-                     {XMLProperty::Hidden, XMLProperty::Readonly});
+    {XMLProperty::Hidden, XMLProperty::Readonly});
 }
+
+#ifdef BANG_EDITOR
+InspectorWidget *Component::GetNewInspectorWidget()
+{
+    return new ComponentWidget(this);
+}
+#endif

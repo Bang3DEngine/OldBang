@@ -39,7 +39,7 @@ bool GPPass_DepthLayer::CanRender(const Renderer *renderer) const
     #ifdef BANG_EDITOR
     bool dontRenderEditorStuffInGame =
             !(EditorState::IsShowingGameTab() &&
-              renderer->gameObject->HasHideFlag(HideFlags::DontSerialize));
+              renderer->gameObject->GetHideFlags()->IsOn(HideFlag::DontSerialize));
     #else
     bool dontRenderEditorStuffInGame = true;
     #endif

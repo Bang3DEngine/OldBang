@@ -20,7 +20,7 @@ EditorTranslateAxisGroup::EditorTranslateAxisGroup(GameObject *attachedGameObjec
     //m_planeXZ->SetParent(this);
     //m_planeYZ->SetParent(this);
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorTranslateAxisGroup::~EditorTranslateAxisGroup()

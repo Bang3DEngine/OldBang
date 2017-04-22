@@ -204,7 +204,7 @@ Rect Camera::GetScreenBoundingRect(const AABox &bbox)
 #ifdef BANG_EDITOR
 void Camera::OnDrawGizmos(bool depthed, bool overlay)
 {
-    if (gameObject->HasHideFlag(HideFlags::HideInGame)) return;
+    if (gameObject->GetHideFlags()->IsOn(HideFlag::HideInGame)) return;
 
     Component::OnDrawGizmos(depthed, overlay);
 

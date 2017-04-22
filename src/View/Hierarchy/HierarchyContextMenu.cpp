@@ -1,5 +1,7 @@
 #include "Bang/HierarchyContextMenu.h"
 
+#include <QMenu>
+#include <QAction>
 #include <QTreeWidgetItem>
 #include "Bang/WinUndef.h"
 

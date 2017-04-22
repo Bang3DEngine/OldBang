@@ -26,28 +26,18 @@ public:
 
     void Clear();
 
-    void SetInspectable(SerializableObject *inspectable,
-                        const String &title = "");
-    void ShowGameObjectInfo(GameObject *gameObject);
+    void ShowInspectable(SerializableObject *inspectable,
+                          const String &title = "");
+    //void ShowGameObjectInfo(GameObject *gameObject);
 
-    void RefreshSizeHints();
     void OnEditorPlay();
 
 public slots:
-    void OnEnableGameObjectCheckBoxChanged(bool checked);
+    // void OnEnableGameObjectCheckBoxChanged(bool checked);
     void Refresh();
 
 public:
-    void ShowPrefabInspectableInfo(PrefabAssetFileInspectable *prefabInspectable);
-
-    template<class ComponentClass>
-    void OnMenuBarAddComponentClicked()
-    {
-        ENSURE(p_currentGameObject);
-        p_currentGameObject->AddComponent<ComponentClass>();
-        Refresh();
-    }
-    void OnMenuBarAddNewBehaviourClicked();
+    SerializableObject* GetFirstSerializableObject();
     void OnSerializableObjectDestroyed(SerializableObject *destroyed);
 
     void AddWidget(InspectorWidget *widget, int row = -1);
@@ -64,12 +54,13 @@ protected:
     virtual void updateGeometries() override;
 
 private:
+    void RefreshSizeHints();
+
     InspectorContextMenu m_iContextMenu;
 
     QLabel *m_titleLabel = nullptr;
-    QCheckBox *m_enableGameObjectCheckBox = nullptr;
+    // QCheckBox *m_enableGameObjectCheckBox = nullptr;
 
-    GameObject *p_currentGameObject = nullptr;
     List<InspectorWidget*> m_currentInspectorWidgets;
     List<SerializableObject*> m_currentSerialObjects;
 

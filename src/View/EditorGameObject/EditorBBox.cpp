@@ -37,7 +37,7 @@ EditorBBox::EditorBBox(GameObject *attachedGameObject) : GameObject("EditorBBox"
     mr->SetCullMode(GL::CullMode::Back);
     mr->SetRenderMode(GL::RenderMode::Triangles);
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 void EditorBBox::OnEditorUpdate()

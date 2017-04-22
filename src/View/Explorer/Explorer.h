@@ -1,6 +1,7 @@
 #ifndef EXPLORER_H
 #define EXPLORER_H
 
+#include <QLabel>
 #include <QListView>
 #include <QKeyEvent>
 #include <QMouseEvent>

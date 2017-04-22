@@ -1,6 +1,8 @@
 #include "Bang/Behaviour.h"
 
 #include "Bang/Time.h"
+#include "Bang/Dialog.h"
+#include "Bang/Explorer.h"
 #include "Bang/EditorState.h"
 #include "Bang/QtProjectManager.h"
 #include "Bang/SingletonManager.h"

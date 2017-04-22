@@ -243,7 +243,7 @@ void Hierarchy::LocateGameObject(GameObject *gameObjectToLocate,
 QTreeWidgetItem* Hierarchy::SyncHierarchyFromGameObject(GameObject *go)
 {
     if (!SceneManager::GetActiveScene()) { return nullptr; }
-    if (go->HasHideFlag(HideFlags::HideInHierarchy)) { return nullptr; }
+    if (go->GetHideFlags()->IsOn(HideFlag::HideInHierarchy)) { return nullptr; }
 
     QTreeWidgetItem *goItem = GetItemFromGameObject(go);
     if (!goItem)
@@ -555,7 +555,7 @@ void Hierarchy::_NotifyHierarchyGameObjectSelectionChanged()
     GameObject *selectedGameObject = GetFirstSelectedGameObject();
     if (selectedGameObject && GetItemFromGameObject(selectedGameObject))
     {
-        Inspector::GetInstance()->ShowGameObjectInfo(selectedGameObject);
+        Inspector::GetInstance()->ShowInspectable(selectedGameObject);
     }
 }
 

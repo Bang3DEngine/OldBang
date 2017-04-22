@@ -7,12 +7,25 @@
 
 #include "Bang/Dialog.h"
 #include "Bang/String.h"
+#include "Bang/Camera.h"
+#include "Bang/UIText.h"
+#include "Bang/UIImage.h"
+#include "Bang/Behaviour.h"
+#include "Bang/AudioClip.h"
+#include "Bang/Transform.h"
+#include "Bang/PointLight.h"
+#include "Bang/GameObject.h"
+#include "Bang/AudioSource.h"
+#include "Bang/RectTransform.h"
+#include "Bang/AudioListener.h"
+#include "Bang/CircleRenderer.h"
+#include "Bang/DirectionalLight.h"
+#include "Bang/SingleLineRenderer.h"
 
 class Mesh;
 class Material;
 class AudioClip;
 class Texture2D;
-class GameObject;
 class WindowEventManager;
 class MenuBar : public QMenuBar
 {
@@ -78,6 +91,21 @@ public slots:
     void OnAddComponentCanvas() const;
     void OnAddComponentUIImage() const;
     void OnAddComponentUIText() const;
+
+public:
+    void OnAddComponent(Component *c) const;
+
+    template<class ComponentClass>
+    void OnAddComponent() const
+    {
+        GameObject* inspectorGameObject = GetInspectorGameObject();
+        ENSURE(inspectorGameObject);
+
+        ComponentClass *c = inspectorGameObject->AddComponent<ComponentClass>();
+        OnAddComponent(c);
+    }
+
+    GameObject* GetInspectorGameObject() const;
 
 private:
     static MenuBar *s_instance;

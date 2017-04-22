@@ -25,7 +25,7 @@ EditorFloor::EditorFloor()
         //m_lineRenderers[i]->SetEnabled(false);
     }
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorFloor::~EditorFloor()

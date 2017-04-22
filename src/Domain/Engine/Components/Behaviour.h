@@ -29,10 +29,6 @@
 #include "Bang/SingletonManager.h"
 #include "Bang/ISceneEventListener.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/EditorWindow.h"
-#endif
-
 /**
  * @brief The Behaviour class is a base class which will be inherited by all
  * the User Behaviour classes. This lets the engine handle Behaviours uniformly.

@@ -20,7 +20,7 @@ EditorAxisPlane::EditorAxisPlane(EditorAxis *axis1, EditorAxis *axis2)
 
     SetTransformAccordingToAxis();
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorAxisPlane::~EditorAxisPlane()

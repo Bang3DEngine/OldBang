@@ -20,7 +20,7 @@ float EditorCamera::s_initialZFar       = 9999.9f;
 EditorCamera::EditorCamera() : GameObject("BANG_EditorCamera")
 {
     m_yawNode = new GameObject("BANG_EditorYawNode");
-    m_yawNode->AddHideFlag(HideFlags::HideAndDontSave);
+    m_yawNode->GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
     m_yawNode->SetParent(this);
 
     m_cam = m_yawNode->AddComponent<Camera>();
@@ -31,7 +31,7 @@ EditorCamera::EditorCamera() : GameObject("BANG_EditorCamera")
     m_cam->SetZFar(s_initialZFar);
     m_cam->SetFovDegrees(EditorCamera::s_initialFovDegrees);
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorCamera::~EditorCamera()

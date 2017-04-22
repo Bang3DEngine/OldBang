@@ -1,5 +1,9 @@
 #include "Bang/ComponentWidgetContextMenu.h"
 
+#include <QMenu>
+#include <QAction>
+#include "Bang/WinUndef.h"
+
 #include "Bang/Inspector.h"
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"

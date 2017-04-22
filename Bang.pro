@@ -230,7 +230,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/Components/RectTransform.h \
     src/View/Cursor.h \
     src/Domain/Graphics/RenderTexture.h \
-    src/Domain/Engine/HideFlags.h \
     src/Domain/Engine/Object.h \
     src/Domain/Engine/Others/GraphicPipelineDebugger.h \
     src/Domain/Engine/GraphicPipeline/GraphicPipeline.h \
@@ -262,7 +261,8 @@ HEADERS +=                                                          \
     src/Persistence/Files/PrefabFile.h \
     src/Persistence/Files/SoundFile.h \
     src/Persistence/Files/SoundFileInspectable.h \
-    src/Domain/Engine/Audio/AnonymousAudioPlayer.h
+    src/Domain/Engine/Audio/AnonymousAudioPlayer.h \
+    src/Domain/Engine/DataStructures/Flags.h
 
 EDITOR {
 HEADERS += \

@@ -11,7 +11,6 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/Array.h"
-#include "Bang/MenuBar.h"
 #include "Bang/XMLNode.h"
 
 #define PROPAGATE_EVENT_PAR(FUNCTION, ITERABLE) do {\

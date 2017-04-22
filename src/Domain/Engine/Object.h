@@ -1,10 +1,9 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include "Bang/Flags.h"
 #include "Bang/String.h"
-#include "Bang/HideFlags.h"
 #include "Bang/ICloneable.h"
-#include "Bang/WinUndef.h"
 
 #define OBJECT(CLASS) \
         ICLONEABLE(CLASS)\
@@ -16,6 +15,24 @@
         public: \
         virtual String GetClassName() const override { return #CLASS; }
 
+enum HideFlag
+{
+    None            = 0,
+    HideInHierarchy = 1,
+    HideInInspector = 2,
+    HideInGame      = 4,
+    DontSerialize   = 8,
+    DontClone       = 16,
+    HideInSelection = 32,
+    HideInChildren  = 64,
+
+    HideAndDontSave = HideInHierarchy | HideInInspector |
+                      HideInChildren  | HideInSelection |
+                      HideInGame      |
+                      DontSerialize   | DontClone
+};
+CREATE_FLAGS(HideFlags, HideFlag);
+
 class Object : public ICloneable
 {
 public:
@@ -24,11 +41,8 @@ public:
 
     virtual void CloneInto(ICloneable *clone) const override;
 
-    const HideFlags &GetHideFlags() const;
-    bool HasHideFlag(const HideFlags &hideFlag) const;
-
-    void AddHideFlag(const HideFlags &hideFlag);
-    void RemoveHideFlag(const HideFlags &hideFlag);
+    HideFlags* GetHideFlags();
+    const HideFlags& GetHideFlags() const;
 
     virtual String GetClassName() const = 0;
     virtual String GetInstanceId() const;
@@ -75,7 +89,7 @@ public:
     const T *ConstCast() const { return Object::Cast<const T>(this); }
 
 private:
-    HideFlags m_hideFlags = HideFlags::None;
+    HideFlags m_hideFlags = HideFlag::None;
 };
 
 #endif // OBJECT_H

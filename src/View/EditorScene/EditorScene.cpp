@@ -34,7 +34,7 @@ EditorScene::EditorScene() : Scene()
     m_floor->SetParent(this);
 
     m_fpsCounter = new GameObject("FPS_Counter");
-    m_fpsCounter->AddHideFlag(HideFlags::HideAndDontSave);
+    m_fpsCounter->GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
     m_fpsCounter->ChangeTransformByRectTransform();
     m_fpsCounter->SetParent(this);
     RectTransform *rtrans = Object::SCast<RectTransform>(m_fpsCounter->transform);
@@ -48,7 +48,7 @@ EditorScene::EditorScene() : Scene()
     m_fpsCounterText->SetVerticalAlign(UIText::VerticalAlignment::Top);
     m_fpsCounterText->SetTextSize(10);
 
-    AddHideFlag(HideFlags::HideInGame); // To enable updates in editor time
+    GetHideFlags()->SetOn(HideFlag::HideInGame); // To enable updates in editor time
 }
 
 EditorScene::~EditorScene()

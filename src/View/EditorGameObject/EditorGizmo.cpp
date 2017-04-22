@@ -6,7 +6,7 @@ EditorGizmo::EditorGizmo(GameObject *attachedGameObject)
 {
     m_attachedGameObject = attachedGameObject;
 
-    AddHideFlag(HideFlags::HideAndDontSave);
+    GetHideFlags()->SetOn(HideFlag::HideAndDontSave);
 }
 
 EditorGizmo::~EditorGizmo()
