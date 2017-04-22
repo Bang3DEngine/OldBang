@@ -18,6 +18,11 @@ Input::Input()
     m_cursor = new Cursor();
 }
 
+Input::~Input()
+{
+    if (m_cursor) { delete m_cursor; }
+}
+
 void Input::InitFromMainBinary() // Called from Screen
 {
     SingletonManager::Set<Input>(new Input());

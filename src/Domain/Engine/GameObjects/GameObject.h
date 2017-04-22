@@ -121,7 +121,7 @@ public:
     /**
      * Adds the Component c to this.
      */
-    void AddComponent(Component *c);
+    bool AddComponent(Component *c);
 
     /**
      * Creates a Component of type T, adds it to this,
@@ -131,7 +131,7 @@ public:
     T* AddComponent()
     {
         T *c = new T();
-        AddComponent(c);
+        if (!AddComponent(c)) { return nullptr; }
         return c;
     }
 

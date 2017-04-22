@@ -99,13 +99,20 @@ public:
         return this->find(key);
     }
 
-    List<Key> GetKeys() const
+    List<Key> GetKeysWithValue(const Value& v) const
     {
         List<Key> result;
         for (auto it = this->Begin(); it != this->End(); ++it)
         {
-            result.PushBack(it->first);
+            if (it->second == v) { result.PushBack(it->first); }
         }
+        return result;
+    }
+
+    List<Key> GetKeys() const
+    {
+        List<Key> result;
+        for (const auto& it : *this) { result.PushBack(it.first); }
         return result;
     }
 

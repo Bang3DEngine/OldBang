@@ -11,6 +11,7 @@
 #include "Bang/EditorState.h"
 #include "Bang/Application.h"
 #include "Bang/EditorScene.h"
+#include "Bang/AudioManager.h"
 #include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
 #include "Bang/EditorCamera.h"
@@ -34,6 +35,16 @@ void EditorPlayFlow::OnPauseClicked()
     EditorState::PlayState newPlayState = EditorState::IsPaused() ?
                                              EditorState::PlayState::Playing :
                                              EditorState::PlayState::Paused;
+
+    if (newPlayState == EditorState::PlayState::Playing)
+    {
+        AudioManager::ResumeAllSounds();
+    }
+    else
+    {
+        AudioManager::PauseAllSounds();
+    }
+
     EditorState::SetPlayingState(newPlayState);
 }
 
@@ -71,6 +82,7 @@ bool EditorPlayFlow::PlayScene()
 {
 	if (EditorState::IsPlaying()) { return true; }
 
+    AudioManager::StopAllSounds();
     if (!WaitForAllBehavioursToBeLoaded()) { return false; }
 
     EditorState::SetPlayingState(EditorState::PlayState::Playing);
@@ -92,8 +104,11 @@ bool EditorPlayFlow::PlayScene()
         }
     }
 
-    EditorScene *edScene = Object::SCast<EditorScene>(sceneCopy);
-    edScene->SetFirstFoundCameraOrDefaultOne();
+    if (sceneCopy)
+    {
+        EditorScene *edScene = Object::SCast<EditorScene>(sceneCopy);
+        edScene->SetFirstFoundCameraOrDefaultOne();
+    }
 
     EditorWindow *win = EditorWindow::GetInstance();
     win->tabContainerSceneGame->setCurrentWidget(win->tabGame);
@@ -105,6 +120,7 @@ void EditorPlayFlow::StopScene()
 {
     ENSURE(!EditorState::IsStopped());
 
+    AudioManager::StopAllSounds();
     EditorState::SetPlayingState(EditorState::PlayState::Stopped);
 
     Scene *sceneCopy = SceneManager::GetActiveScene();

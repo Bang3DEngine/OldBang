@@ -31,12 +31,18 @@ AudioManager::AudioManager()
 AudioManager::~AudioManager()
 {
     delete m_anonymousAudioPlayer;
+    StopAllSounds();
     alutExit();
 }
 
 AnonymousAudioPlayer *AudioManager::GetAnonymousAudioPlayer() const
 {
     return GetInstance()->m_anonymousAudioPlayer;
+}
+
+void AudioManager::OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer)
+{
+    m_currentAudios.Remove(audioPlayer);
 }
 
 void AudioManager::PlayAudioClip(AudioClip *audioClip,
@@ -54,7 +60,13 @@ void AudioManager::PlayAudioClip(AudioClip *audioClip,
 
     AudioPlayerRunnable *player = new AudioPlayerRunnable(audioClip, alSourceId,
                                                           delay);
-    AudioManager::GetInstance()->m_threadPool.tryStart(player);
+
+    AudioManager *am = AudioManager::GetInstance();
+    bool started = am->m_threadPool.tryStart(player);
+    if (started)
+    {
+        am->m_currentAudios.Add(player);
+    }
 }
 
 void AudioManager::PlayAudioClip(const String &audioClipFilepath,
@@ -79,6 +91,35 @@ void AudioManager::PlaySound(const String &soundFilepath,
 {
     AnonymousAudioPlayer::PlaySound(soundFilepath, position, volume, looping,
                                     delay, pitch, range);
+}
+
+void AudioManager::PauseAllSounds()
+{
+    AudioManager *am = AudioManager::GetInstance();
+    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudios)
+    {
+        audioPlayer->Pause();
+    }
+}
+
+void AudioManager::ResumeAllSounds()
+{
+    AudioManager *am = AudioManager::GetInstance();
+    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudios)
+    {
+        audioPlayer->Resume();
+    }
+}
+
+void AudioManager::StopAllSounds()
+{
+    AudioManager *am = AudioManager::GetInstance();
+    for (AudioPlayerRunnable *audioPlayer : am->m_currentAudios)
+    {
+        audioPlayer->Stop();
+        delete audioPlayer;
+    }
+    am->m_currentAudios.Clear();
 }
 
 void AudioManager::ClearALErrors()

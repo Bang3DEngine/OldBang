@@ -136,13 +136,6 @@ bool Application::notify(QObject *receiver, QEvent *e)
         DragDropManager::HandleGlobalMouseRelease(receiver, e);
     }
 
-    if (e->type() == QEvent::KeyPress)
-    {
-        QKeyEvent *ev = Object::SCast<QKeyEvent>(e);
-        m_lastKeyPressEvInfo.time = Time::GetNow();
-        m_lastKeyPressEvInfo.key = ev->key();
-    }
-
     #else // GAME
 
     Input *input = Input::GetInstance();
@@ -154,10 +147,4 @@ bool Application::notify(QObject *receiver, QEvent *e)
     #endif
 
     return QApplication::notify(receiver, e);
-}
-
-bool Application::CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent)
-{
-    return m_lastKeyPressEvInfo.key == keyReleaseEvent->key() &&
-           Time::GetNow() == m_lastKeyPressEvInfo.time;
 }

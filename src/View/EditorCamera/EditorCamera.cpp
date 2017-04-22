@@ -69,8 +69,8 @@ void EditorCamera::AdjustSpeeds()
 
 void EditorCamera::UpdateRotationVariables()
 {
-    m_mouseRotDegreesAccum = Vector2(0.0f);
-    m_startingRotation = transform->GetLocalRotation();
+    m_mouseRotDegreesAccum = Vector2::Zero;
+    m_startingRotation     = transform->GetLocalRotation();
 }
 
 void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
@@ -85,7 +85,7 @@ void EditorCamera::HandleWheelZoom(Vector3 *moveStep, bool *hasMoved)
         if (m_cam->GetProjectionMode() == Camera::ProjectionMode::Perspective)
         {
             *moveStep += m_zoomValue * m_camt->GetForward();
-            *hasMoved  = true;
+            *hasMoved  = (mouseWheel != 0.0f);
         }
         //Debug_Log(mouseWheel);
         m_orthoHeight -= 2.75f * mouseWheel; // Magic number here :)
@@ -172,10 +172,9 @@ void EditorCamera::HandleLookAtFocus()
     //LookAt Rotation
     Quaternion originRot = transform->GetRotation();
     Quaternion destRot = Quaternion::LookDirection(focusDir, Vector3::Up);
-    Quaternion final = Quaternion::Slerp(
-                originRot, destRot, Time::GetDeltaTime() * m_lookAtRotSpeed);
-
-    transform->SetLocalRotation(final);
+    Quaternion rot = Quaternion::Slerp(originRot, destRot,
+                                       Time::GetDeltaTime() * m_lookAtRotSpeed);
+    transform->SetLocalRotation(rot);
 
     //LookAt Move
     float stopDist = 0.0f;
@@ -190,7 +189,7 @@ void EditorCamera::HandleLookAtFocus()
     float t = Time::GetDeltaTime() * m_lookAtMoveSpeed;
     transform->SetPosition( Vector3::Lerp(thisPos, dest, t) );
 
-    if( Vector3::Distance(dest, thisPos) <= 0.05f &&
+    if( Vector3::Distance(dest, thisPos) <= 0.1f &&
         Vector3::Dot(transform->GetForward(), focusDir) >= 0.99999f)
     {
         m_currentFocus = nullptr;
@@ -223,28 +222,27 @@ void EditorCamera::OnEditorUpdate()
 
     AdjustSpeeds();
 
-    Vector3 moveStep(0.0f);
-    bool hasMoved = false;
     bool unwrapMouse = true;
-
-    // HandleKeyMovement(&moveStep, &hasMoved); //WASD
-
-    if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
-    {
-        HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
-    }
-
-    HandleWheelZoom(&moveStep, &hasMoved);
-
-    m_keysMoveSpeed += m_keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
-    m_keysMoveSpeed = Math::Clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
-    if (!hasMoved)
-    {
-        m_keysMoveSpeed = 0.0f; //reset speed
-    }
-
     if (!m_currentFocus)
     {
+        Vector3 moveStep(0.0f);
+        bool hasMoved = false;
+
+        // HandleKeyMovement(&moveStep, &hasMoved); //WASD
+        if (!HandleMouseRotation(&hasMoved, &unwrapMouse)) //Mouse rot with right click
+        {
+            HandleMousePanning(&hasMoved, &unwrapMouse); //Mouse move with mid click
+        }
+
+        HandleWheelZoom(&moveStep, &hasMoved);
+
+        m_keysMoveSpeed += m_keysMoveAccel; //TODO: must do this in FixedUpdate which does not exist yet
+        m_keysMoveSpeed = Math::Clamp(m_keysMoveSpeed, m_minMoveSpeed, m_maxMoveSpeed);
+        if (!hasMoved)
+        {
+            m_keysMoveSpeed = 0.0f; //reset speed
+        }
+
         transform->Translate(moveStep);
     }
     else
@@ -252,7 +250,6 @@ void EditorCamera::OnEditorUpdate()
         UpdateRotationVariables();
         HandleLookAtFocus();
         UpdateRotationVariables();
-        if (hasMoved) { m_currentFocus = nullptr; }
     }
 
     if (unwrapMouse && Input::GetMouseWrapping())

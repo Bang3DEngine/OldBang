@@ -12,6 +12,7 @@
 class AudioClip;
 class GameObject;
 class AudioSource;
+class AudioPlayerRunnable;
 class AnonymousAudioPlayer;
 class AudioManager
 {
@@ -40,6 +41,10 @@ public:
                           float pitch             = 1.0f,
                           float range             = Math::Infinity<float>());
 
+    static void PauseAllSounds();
+    static void ResumeAllSounds();
+    static void StopAllSounds();
+
     static void ClearALErrors();
     static bool CheckALError();
 
@@ -48,11 +53,15 @@ private:
     virtual ~AudioManager();
 
     QThreadPool m_threadPool;
+    List<AudioPlayerRunnable*> m_currentAudios;
     AnonymousAudioPlayer *m_anonymousAudioPlayer = nullptr;
 
     AnonymousAudioPlayer *GetAnonymousAudioPlayer() const;
 
+    void OnAudioFinishedPlaying(AudioPlayerRunnable *audioPlayer);
+
     friend class Application;
+    friend class AudioPlayerRunnable;
     friend class AnonymousAudioPlayer;
 };
 

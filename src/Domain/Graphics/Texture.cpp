@@ -127,13 +127,13 @@ GLint Texture::GetGLDataTypeFrom(Texture::Format texFormat)
 
 GLint Texture::GetGLFormatFrom(Texture::Format texFormat)
 {
-    if (texFormat == Texture::Format::RGBA_Byte8 ||
+    if (texFormat == Texture::Format::RGBA_Byte8   ||
         texFormat == Texture::Format::RGBA_Float16 ||
         texFormat == Texture::Format::RGBA_Float32)
     {
         return GL_RGBA;
     }
-    return GL_RGBA;
+    return GL_RGB;
 }
 
 GLint Texture::GetGLInternalFormatFrom(Texture::Format texFormat)

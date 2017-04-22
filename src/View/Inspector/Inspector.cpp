@@ -61,7 +61,23 @@ void Inspector::Clear()
 {
     ENSURE(!m_widget_To_Item.Empty());
 
-    for (InspectorWidget *iw : m_currentInspectorWidgets) { iw->OnDestroy(); }
+    if (!p_currentGameObject)
+    {
+        Debug_Log(m_currentSerialObjects);
+        for (InspectorWidget *iw : m_currentInspectorWidgets)
+        {
+            delete iw;
+        }
+
+        Debug_Log(m_currentSerialObjects.Size());
+        Debug_Log(m_currentSerialObjects);
+        while (!m_currentSerialObjects.Empty())
+        {
+            SerializableObject *serialObject = m_currentSerialObjects.Front();
+            // delete serialObject; // This removes it from the list
+        }
+    }
+
     m_currentInspectorWidgets.Clear();
     m_widget_To_Inspectables.Clear();
     m_currentSerialObjects.Clear();
@@ -167,16 +183,34 @@ void Inspector::OnMenuBarAddNewBehaviourClicked()
 void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
 {
     bool mustRefresh = false;
-    if (p_currentGameObject == destroyed)
+    if (!p_currentGameObject)
     {
-        p_currentGameObject = nullptr;
-        mustRefresh = true;
-    }
+        if (m_currentSerialObjects.Contains(destroyed))
+        {
+            m_currentSerialObjects.Remove(destroyed);
+            mustRefresh = true;
+        }
 
-    if (m_currentSerialObjects.Contains(destroyed))
+        List<InspectorWidget*> widgetsToRemove =
+                m_widget_To_Inspectables.GetKeysWithValue(destroyed);
+        for (InspectorWidget *inspectorWidget : widgetsToRemove)
+        {
+            QListWidgetItem *item = m_widget_To_Item[inspectorWidget];
+            removeItemWidget(item);
+            m_widget_To_Inspectables.Remove(inspectorWidget);
+            m_widget_To_Item.Remove(inspectorWidget);
+            m_currentInspectorWidgets.Remove(inspectorWidget);
+            delete inspectorWidget;
+        }
+    }
+    else
     {
-        m_currentSerialObjects.Remove(destroyed);
-        mustRefresh = true;
+        // Dont delete anything
+        if (p_currentGameObject == destroyed)
+        {
+            p_currentGameObject = nullptr;
+            mustRefresh = true;
+        }
     }
 
     if (mustRefresh)

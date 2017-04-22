@@ -54,17 +54,6 @@ private:
     const int c_redrawDelay = 16; // 60 FPS cap
     //const int c_redrawDelay = 35; // 30 FPS cap
 
-    // To detect when it's autorepeat (very fast Release after a Press)
-    struct LastKeyEventInfo
-    {
-        unsigned long long time;
-        int key;
-    };
-    LastKeyEventInfo m_lastKeyPressEvInfo;
-
-private slots:
-    bool CurrentKeyReleaseIsAutoRepeat(const QKeyEvent *keyReleaseEvent);
-
     friend class FileTracker;
     friend class SceneManager;
     friend class BehaviourManager;

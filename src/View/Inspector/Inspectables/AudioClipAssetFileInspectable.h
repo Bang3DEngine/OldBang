@@ -21,6 +21,7 @@ class AudioClipAssetFileInspectable : public SerializableObject,
 public:
     AudioClipAssetFileInspectable();
     AudioClipAssetFileInspectable(const AudioClipAssetFile &audioClipAssetFile);
+    virtual ~AudioClipAssetFileInspectable();
 
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;

@@ -16,6 +16,7 @@ public:
 
 protected:
     ICloneable() {}
+    virtual ~ICloneable() {}
     virtual void CloneInto(ICloneable *clone) const = 0;
 };
 

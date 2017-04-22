@@ -53,12 +53,15 @@ public:
     void SetPitch(float pitch);
     void SetRange(float range);
     void SetLooping(bool looping);
+    void SetPlayOnStart(bool playOnStart);
 
     bool IsPlaying() const;
     bool IsPaused() const;
     bool IsStopped() const;
 
     State GetState() const;
+
+    void OnStart() override;
 
     /**
      * @brief Returns the progress of the AudioSource playing in the range [0.0, 1.0].
@@ -68,6 +71,7 @@ public:
     float GetPitch()  const;
     float GetRange()  const;
     bool IsLooping()  const;
+    bool IsPlayOnStart() const;
 
     ALuint GetALSourceId() const;
 
@@ -81,8 +85,9 @@ private:
     AudioClip *m_audioClip = nullptr;
     float m_volume         = 1.0f;
     float m_pitch          = 1.0f;
-    bool m_looping         = false;
+    bool  m_looping        = false;
     float m_range          = 5.0f;
+    bool  m_playOnStart    = true;
 
     void UpdateALProperties() const;
     void SetAudioClipNoDettachAttach(AudioClip *audioClip);

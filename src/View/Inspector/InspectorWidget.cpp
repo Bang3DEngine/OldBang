@@ -90,7 +90,10 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
 InspectorWidget::~InspectorWidget()
 {
-    OnDestroy();
+    m_relatedInspectable = nullptr;
+    m_refreshTimer.stop();
+    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
+                        this, SLOT(RefreshWidgetValues()));
 }
 
 XMLNode InspectorWidget::GetInspectableXMLInfo() const
@@ -226,14 +229,6 @@ int InspectorWidget::GetHeightSizeHint()
     }
 
     return heightSizeHint;
-}
-
-void InspectorWidget::OnDestroy()
-{
-    m_refreshTimer.stop();
-    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
-                        this, SLOT(RefreshWidgetValues()));
-    m_relatedInspectable = nullptr;
 }
 
 void InspectorWidget::RefreshWidgetValues()

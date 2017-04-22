@@ -54,8 +54,8 @@ public:
 
 private:
 
-    String m_fontFilepath = "";
-    FT_Face m_freetypeFace;
+    String m_fontFilepath  = "";
+    FT_Face m_freetypeFace = nullptr;
 
     // A big texture with all the chars in it
     Texture2D *m_atlasTexture = nullptr;

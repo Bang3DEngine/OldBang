@@ -13,12 +13,19 @@ public:
     AudioPlayerRunnable(AudioClip *clip, int alSourceId,
                         float delayInSeconds = 0.0f);
 
+    void Resume();
+    void Pause();
+    void Stop();
+
     void run() override;
 
 private:
     AudioClip *m_audioClip = nullptr;
-    int m_alSourceId = 0;
     float m_delayInSeconds = 0.0f;
+    int m_alSourceId = 0;
+
+    volatile bool m_paused  = false;
+    volatile bool m_stopped = false;
 };
 
 #endif // AUDIOPLAYERRUNNABLE_H

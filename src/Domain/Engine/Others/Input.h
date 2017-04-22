@@ -18,6 +18,7 @@ class Input
 public:
     enum class Key
     {
+        None   = 0x00000000,
         Return = 0x01000004, Enter = 0x01000005, Insert = 0x01000006,
         Delete = 0x01000007, Pause = 0x01000008, Print = 0x01000009,
         SysReq = 0x0100000a, Clear = 0x0100000b, Home = 0x01000010,
@@ -86,7 +87,7 @@ public:
 
     enum class MouseButton
     {
-        NoButton         = 0x00000000,
+        None             = 0x00000000,
         Left             = 0x00000001,
         Right            = 0x00000002,
         Middle           = 0x00000004,
@@ -147,18 +148,19 @@ public:
 
 private:
     Input();
+    virtual ~Input();
 
-    class EventInfo
+    struct EventInfo
     {
-        public:
-            QEvent::Type m_eventType;
-            Input::Key m_key;
-            Input::MouseButton m_mouseButton;
-            bool m_autoRepeat;
-            int m_x, m_y;
-            float m_wheelDelta;
+        QEvent::Type m_eventType         = QEvent::Type::None;
+        Input::Key m_key                 = Input::Key::None;
+        Input::MouseButton m_mouseButton = Input::MouseButton::None;
+        bool m_autoRepeat               = false;
+        int m_x                         = 0;
+        int m_y                         = 0;
+        float m_wheelDelta              = 0.0f;
 
-            EventInfo(const QEvent *e);
+        EventInfo(const QEvent *e);
     };
 
 

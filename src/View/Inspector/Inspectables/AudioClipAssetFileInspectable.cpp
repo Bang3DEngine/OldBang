@@ -18,6 +18,12 @@ AudioClipAssetFileInspectable::AudioClipAssetFileInspectable(
 
 }
 
+AudioClipAssetFileInspectable::~AudioClipAssetFileInspectable()
+{
+    Debug_Log("Deleting " << m_tmpAudioSource);
+    if (m_tmpAudioSource) { delete m_tmpAudioSource; }
+}
+
 void AudioClipAssetFileInspectable::Read(const XMLNode &xmlInfo)
 {
     String audioFilepath = xmlInfo.GetFilepath("AudioFilepath");

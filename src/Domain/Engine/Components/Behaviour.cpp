@@ -206,9 +206,11 @@ void Behaviour::RefreshBehaviourLib()
                                                          behavioursLib);
     if (createdBehaviour)
     {
-        gameObject->AddComponent(createdBehaviour);
-        CloneInto(createdBehaviour);
-        gameObject->RemoveComponent(this);
+        if (gameObject->AddComponent(createdBehaviour))
+        {
+            CloneInto(createdBehaviour);
+            gameObject->RemoveComponent(this);
+        }
     }
 }
 

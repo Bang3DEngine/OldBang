@@ -12,6 +12,8 @@
 
 FileTracker::FileTracker()
 {
+    m_timeBeforeRefreshing = QDateTime::currentMSecsSinceEpoch();
+
     m_refreshTimer.setInterval(c_refreshTime);
     m_refreshTimer.moveToThread(&m_refreshThread);
     QObject::connect(&m_refreshTimer, SIGNAL(timeout()),

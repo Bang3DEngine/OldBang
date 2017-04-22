@@ -11,6 +11,10 @@
 #include "Bang/AudioManager.h"
 #include "Bang/AssetsManager.h"
 
+#ifdef BANG_EDITOR
+#include "Bang/EditorState.h"
+#endif
+
 AudioSource::AudioSource()
 {
     alGenSources(1, &m_alSourceId);
@@ -37,6 +41,7 @@ void AudioSource::CloneInto(ICloneable *clone) const
     as->SetPitch( GetPitch() );
     as->SetRange( GetRange() );
     as->SetLooping( IsLooping() );
+    as->SetPlayOnStart( IsPlayOnStart() );
 }
 
 #ifdef BANG_EDITOR
@@ -67,6 +72,7 @@ void AudioSource::Read(const XMLNode &xmlInfo)
     SetPitch(xmlInfo.GetFloat("Pitch"));
     SetRange(xmlInfo.GetFloat("Range"));
     SetLooping(xmlInfo.GetBool("Looping"));
+    SetPlayOnStart(xmlInfo.GetBool("PlayOnStart"));
 }
 
 void AudioSource::Write(XMLNode *xmlInfo) const
@@ -76,10 +82,11 @@ void AudioSource::Write(XMLNode *xmlInfo) const
     String audioClipFilepath = m_audioClip ? m_audioClip->GetFilepath() : "";
     xmlInfo->SetFilepath("AudioClip", audioClipFilepath,
                          AudioClip::GetFileExtensionStatic());
-    xmlInfo->SetFloat("Volume",   m_volume);
-    xmlInfo->SetFloat("Pitch",    m_pitch);
-    xmlInfo->SetFloat("Range",    m_range);
-    xmlInfo->SetBool("Looping",   m_looping);
+    xmlInfo->SetFloat("Volume",     m_volume);
+    xmlInfo->SetFloat("Pitch",      m_pitch);
+    xmlInfo->SetFloat("Range",      m_range);
+    xmlInfo->SetBool("Looping",     m_looping);
+    xmlInfo->SetBool("PlayOnStart", m_playOnStart);
 
     AudioSource *noConstThis = const_cast<AudioSource*>(this);
     if (IsPlaying())
@@ -157,6 +164,11 @@ void AudioSource::SetLooping(bool looping)
     alSourcef(GetALSourceId(), AL_LOOPING, m_looping);
 }
 
+void AudioSource::SetPlayOnStart(bool playOnStart)
+{
+    m_playOnStart = playOnStart;
+}
+
 bool AudioSource::IsPlaying() const
 {
     return GetState() == State::Playing;
@@ -177,6 +189,20 @@ AudioSource::State AudioSource::GetState() const
     ALint state;
     alGetSourcei(m_alSourceId, AL_SOURCE_STATE, &state);
     return static_cast<State>(state);
+}
+
+void AudioSource::OnStart()
+{
+    Component::OnStart();
+    if (m_playOnStart)
+    {
+        #ifdef BANG_EDITOR
+        if (EditorState::IsPlaying())
+        #endif
+        {
+            Play();
+        }
+    }
 }
 
 float AudioSource::GetPlayProgress() const
@@ -206,6 +232,11 @@ float AudioSource::GetRange() const
 bool AudioSource::IsLooping() const
 {
     return m_looping;
+}
+
+bool AudioSource::IsPlayOnStart() const
+{
+    return m_playOnStart;
 }
 
 void AudioSource::OnUpdate()

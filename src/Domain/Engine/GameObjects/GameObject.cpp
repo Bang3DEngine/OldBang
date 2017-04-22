@@ -266,9 +266,9 @@ Sphere GameObject::GetBoundingSphere(bool includeChildren) const
     return Sphere::FromBox(GetAABBox(includeChildren));
 }
 
-void GameObject::AddComponent(Component *c)
+bool GameObject::AddComponent(Component *c)
 {
-    ENSURE(c);
+    if (!c) { return false; }
     if (c->IsOfType<Transform>())
     {
         if (!HasComponent<Transform>())
@@ -279,11 +279,12 @@ void GameObject::AddComponent(Component *c)
         {
             Debug_Error("A gameObject must contain one and only one Transform.");
             delete c;
-            return;
+            return false;
         }
     }
     c->SetGameObject(this);
     m_components.PushBack(c);
+    return true;
 }
 
 #ifdef BANG_EDITOR

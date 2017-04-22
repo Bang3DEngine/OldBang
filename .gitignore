@@ -18,6 +18,8 @@ tmp
 callgrind.*
 nohup.out
 bin/*
+cov-int
+Bang.tgz
 
 # Visual Studio
 DependenciesProjects/freealut-1.1.0/Alut/.vs/*
