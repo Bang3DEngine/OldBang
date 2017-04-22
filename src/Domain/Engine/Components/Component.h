@@ -38,7 +38,7 @@ public:
     void SetGameObject(GameObject *gameObject);
 
     void SetEnabled(bool enabled);
-    bool IsEnabled() const;
+    bool IsEnabled(bool recursive = true) const;
 
     void SetClosedInInspector(bool closed);
     bool IsClosedInInspector() const;
@@ -48,6 +48,7 @@ public:
     virtual void Write(XMLNode *xmlInfo) const override;
 
     #ifdef BANG_EDITOR
+    virtual void OnEnabledChanged(bool enabled) override;
     virtual InspectorWidget *GetNewInspectorWidget() override;
     #endif
 

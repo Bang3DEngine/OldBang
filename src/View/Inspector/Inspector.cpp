@@ -1,30 +1,13 @@
 #include "Bang/Inspector.h"
 
+#include <QLabel>
+#include <QDropEvent>
 #include <QScrollBar>
 #include "Bang/WinUndef.h"
 
-#include "Bang/Scene.h"
-#include "Bang/Debug.h"
-#include "Bang/Chrono.h"
-#include "Bang/UIText.h"
-#include "Bang/Canvas.h"
-#include "Bang/Camera.h"
-#include "Bang/UIImage.h"
-#include "Bang/Component.h"
-#include "Bang/Transform.h"
-#include "Bang/Behaviour.h"
-#include "Bang/PointLight.h"
-#include "Bang/GameObject.h"
-#include "Bang/AudioSource.h"
-#include "Bang/Application.h"
 #include "Bang/EditorWindow.h"
-#include "Bang/MeshRenderer.h"
-#include "Bang/SceneManager.h"
-#include "Bang/AudioListener.h"
-#include "Bang/CircleRenderer.h"
-#include "Bang/ComponentWidget.h"
-#include "Bang/DirectionalLight.h"
-#include "Bang/SingleLineRenderer.h"
+#include "Bang/InspectorWidget.h"
+#include "Bang/SerializableObject.h"
 
 Inspector::Inspector(QWidget *parent)
     : DragDropQListWidget(), m_iContextMenu(this)
@@ -32,14 +15,13 @@ Inspector::Inspector(QWidget *parent)
     setAlternatingRowColors(true);
     setSelectionMode(QAbstractItemView::SingleSelection);
 
-    m_titleLabel = parent->findChild<QLabel*>("labelInspectorGameObjectName");
-    //m_enableGameObjectCheckBox =
-    //        parent->findChild<QCheckBox*>("enableGameObjectCheckBox");
-    //m_enableGameObjectCheckBox->setVisible(false);
+    m_titleLabel      = parent->findChild<QLabel*>("labelInspectorName");
+    m_enabledCheckBox = parent->findChild<QCheckBox*>("enabledInspectorCheckBox");
+    m_enabledCheckBox->setVisible(false);
     setMinimumWidth(300);
 
-    //QObject::connect(m_enableGameObjectCheckBox, SIGNAL(toggled(bool)),
-    //                 this, SLOT( OnEnableGameObjectCheckBoxChanged(bool) ));
+    QObject::connect(m_enabledCheckBox, SIGNAL(toggled(bool)),
+                     this, SLOT( OnEnabledCheckBoxChanged(bool) ));
 
     horizontalScrollBar()->setEnabled(false);
 }
@@ -59,11 +41,12 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
-    ENSURE(!m_widget_To_Item.Empty());
+    ENSURE(m_currentInspectable);
 
-    while (!m_currentSerialObjects.Empty())
+    m_currentInspectable = nullptr;
+    while (!m_currentInspectableChildren.Empty())
     {
-        SerializableObject *serialObject = m_currentSerialObjects.Front();
+        SerializableObject *serialObject = m_currentInspectableChildren.Front();
         if (serialObject->GetInspectorFlags()->IsOn(
                     SerializableObject::InspectorFlag::DeleteWhenCleared))
         {
@@ -71,55 +54,74 @@ void Inspector::Clear()
         }
         else
         {
-            m_currentSerialObjects.Remove(serialObject);
+            m_currentInspectableChildren.Remove(serialObject);
         }
     }
     for (InspectorWidget *iw : m_currentInspectorWidgets) { delete iw; }
 
-
     m_currentInspectorWidgets.Clear();
     m_widget_To_Inspectables.Clear();
-    m_currentSerialObjects.Clear();
+    m_currentInspectableChildren.Clear();
     m_widget_To_Item.Clear();
 
     m_titleLabel->setText(tr(""));
-    //m_enableGameObjectCheckBox->setVisible(false);
+    m_enabledCheckBox->setVisible(false);
 
     clear();
 }
 
 void Inspector::Refresh()
 {
-    ENSURE(!m_currentSerialObjects.Empty());
-    if(m_currentSerialObjects.Size() >= 1)
+    if (!m_currentInspectableChildren.Empty())
     {
-        SerializableObject *insp = m_currentSerialObjects.Front();
+        SerializableObject *insp = m_currentInspectableChildren.Front();
         ShowInspectable(insp);
     }
+    else { Clear(); }
+
     RefreshSizeHints();
 }
 
-void Inspector::ShowInspectable(SerializableObject *inspectable,
-                                const String &title)
+void Inspector::ShowInspectable(SerializableObject *insp, const String &title)
 {
     Clear();
-    List<SerializableObject*> serialObjects =
-            inspectable->GetInspectorSerializableObjects();
 
+    ENSURE(insp);
+    m_currentInspectable = insp;
+
+    typedef SerializableObject::InspectorFlag InspFlag;
+    bool showEnabledCheckBox = insp->GetInspectorFlags()->IsOn(
+                                          InspFlag::IsEnabledCheckBoxVisible);
+    m_enabledCheckBox->setVisible(showEnabledCheckBox);
+
+    bool checkBoxEnabled = insp->GetInspectorFlags()->IsOn(InspFlag::IsEnabled);
+    m_enabledCheckBox->setChecked(checkBoxEnabled);
+
+    List<SerializableObject*> serialObjects =
+            insp->GetInspectorSerializableObjects();
+
+    m_currentInspectable = insp;
     for (SerializableObject *serialObject : serialObjects)
     {
         InspectorWidget *iw = serialObject->GetNewInspectorWidget();
         if (iw)
         {
             m_widget_To_Inspectables[iw] = serialObject;
-            m_currentSerialObjects.PushBack(serialObject);
+            m_currentInspectableChildren.PushBack(serialObject);
 
             iw->RefreshWidgetValues();
             AddWidget(iw);
         }
     }
+
+    if (title.Empty())
+    {
+        String inspTitle = m_currentInspectable->GetTitleInInspector();
+        m_titleLabel->setText(inspTitle.ToQString());
+    }
+    else { m_titleLabel->setText(title.ToQString()); }
+
     RefreshSizeHints();
-    //m_titleLabel->setText(gameObject->name.ToQString());
 }
 
 void Inspector::RefreshSizeHints()
@@ -138,29 +140,24 @@ void Inspector::OnEditorPlay()
     Clear();
 }
 
-/*
-void Inspector::OnEnableGameObjectCheckBoxChanged(bool checked)
+void Inspector::OnEnabledCheckBoxChanged(bool checked)
 {
-    if (p_currentGameObject)
-    {
-        p_currentGameObject->SetEnabled(checked);
-    }
+    ENSURE(m_currentInspectable);
+    m_currentInspectable->OnEnabledChanged(checked);
 }
-*/
 
-SerializableObject *Inspector::GetFirstSerializableObject()
+SerializableObject *Inspector::GetCurrentInspectable()
 {
-    return !m_currentSerialObjects.Empty() ? m_currentSerialObjects.Front() :
-                                             nullptr;
+    return m_currentInspectable;
 }
 
 void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
 {
-    bool mustRefresh = false;
+    bool mustRefresh = (destroyed == m_currentInspectable);
 
-    if (m_currentSerialObjects.Contains(destroyed))
+    if (m_currentInspectableChildren.Contains(destroyed))
     {
-        m_currentSerialObjects.Remove(destroyed);
+        m_currentInspectableChildren.Remove(destroyed);
         mustRefresh = true;
     }
 
@@ -199,7 +196,7 @@ void Inspector::AddWidget(InspectorWidget *widget, int row)
 
 bool Inspector::IsShowingInspectable(SerializableObject *inspectable) const
 {
-    return m_currentSerialObjects.Contains(inspectable);
+    return m_currentInspectableChildren.Contains(inspectable);
 }
 
 Inspector *Inspector::GetInstance()

@@ -127,6 +127,7 @@ void EditorPlayFlow::StopScene()
     if (sceneCopy)
     {
         Hierarchy::GetInstance()->Clear();
+        Inspector::GetInstance()->Clear();
         SceneManager::SetActiveScene(nullptr);
         AnonymousAudioPlayer::StopAndClearEverything();
         delete sceneCopy;

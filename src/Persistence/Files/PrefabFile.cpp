@@ -9,6 +9,7 @@
 #include "Bang/IconManager.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/InspectorWidget.h"
+#include "Bang/PrefabAssetFileInspectable.h"
 
 PrefabFile::PrefabFile()
 {

@@ -53,6 +53,7 @@ public:
     const InspectorFlags& GetInspectorFlags() const;
     InspectorFlags* GetInspectorFlags();
 
+    virtual void OnEnabledChanged(bool enabled);
     virtual String GetTitleInInspector() const;
     virtual InspectorWidget *GetNewInspectorWidget();
     virtual List<SerializableObject*> GetInspectorSerializableObjects();

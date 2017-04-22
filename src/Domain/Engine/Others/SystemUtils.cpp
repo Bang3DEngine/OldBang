@@ -131,12 +131,12 @@ void SystemUtils::Compile(List<String> &sourceFilesList,
                           CompilationFlags clFlags,
                           bool *success, String *output)
 {
-    typedef CompilationFlags CLFlags;
-    const bool editorMode = (clFlags & CLFlags::ForGame) == 0;
-    const bool addProjObjects = (clFlags & CLFlags::AddProjectObjectFiles) > 0;
-    const bool addEngineObjects = (clFlags & CLFlags::AddEngineObjectFiles) > 0;
-    const bool produceSharedLib = (clFlags & CLFlags::ProduceSharedLib) > 0;
-    const bool addAssetsIncludes = (clFlags & CLFlags::AddAssetsIncludeDirs) > 0;
+    typedef CompilationFlag CLFlag;
+    const bool editorMode        = !clFlags.IsOn(CLFlag::ForGame);
+    const bool addProjObjects    =  clFlags.IsOn(CLFlag::AddProjectObjectFiles);
+    const bool addEngineObjects  =  clFlags.IsOn(CLFlag::AddEngineObjectFiles);
+    const bool produceSharedLib  =  clFlags.IsOn(CLFlag::ProduceSharedLib);
+    const bool addAssetsIncludes =  clFlags.IsOn(CLFlag::AddAssetsIncludeDirs);
 
     List<String> args;
     args.PushBack( produceSharedLib ? "-shared" : "-c" );

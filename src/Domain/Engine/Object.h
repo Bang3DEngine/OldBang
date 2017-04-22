@@ -29,7 +29,9 @@ enum HideFlag
     HideAndDontSave = HideInHierarchy | HideInInspector |
                       HideInChildren  | HideInSelection |
                       HideInGame      |
-                      DontSerialize   | DontClone
+                      DontSerialize   | DontClone,
+
+    Default = None
 };
 CREATE_FLAGS(HideFlags, HideFlag);
 

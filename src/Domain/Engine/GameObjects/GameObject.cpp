@@ -43,6 +43,9 @@ GameObject::GameObject(const String &name)
     #ifdef BANG_EDITOR
     GetInspectorFlags()->SetOff(
                 SerializableObject::InspectorFlag::DeleteWhenCleared);
+    GetInspectorFlags()->SetOn(
+                SerializableObject::InspectorFlag::IsEnabledCheckBoxVisible);
+    SetEnabled(true);
     #endif
 }
 
@@ -564,6 +567,16 @@ void GameObject::Write(XMLNode *xmlInfo) const
     }
 }
 
+String GameObject::GetTitleInInspector() const
+{
+    return GetName();
+}
+
+void GameObject::OnEnabledChanged(bool enabled)
+{
+    SetEnabled(enabled);
+}
+
 #ifdef BANG_EDITOR
 InspectorWidget *GameObject::GetNewInspectorWidget()
 {
@@ -643,6 +656,11 @@ void GameObject::OnHierarchyGameObjectsSelected(
 void GameObject::SetEnabled(bool enabled)
 {
     m_enabled = enabled;
+
+    #ifdef BANG_EDITOR
+    if (m_enabled) { GetInspectorFlags()->SetOn(InspectorFlag::IsEnabled); }
+    else { GetInspectorFlags()->SetOff(InspectorFlag::IsEnabled); }
+    #endif
 }
 
 bool GameObject::IsEnabled() const

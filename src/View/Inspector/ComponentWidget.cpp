@@ -19,7 +19,7 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
 
     if (!p_component->GetClassName().Contains("Transform"))
     {
-        m_enabledCheckbox.setChecked(p_component->IsEnabled());
+        m_enabledCheckbox.setChecked(p_component->IsEnabled(false));
         connect(&m_enabledCheckbox, SIGNAL(clicked(bool)),
                 this, SLOT(OnEnabledCheckboxPressed(bool)));
         m_headerLayout.addWidget(&m_enabledCheckbox, 0,

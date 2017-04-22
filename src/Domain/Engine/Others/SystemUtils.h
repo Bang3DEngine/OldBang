@@ -9,6 +9,7 @@
 #include <sys/types.h>
 
 #include "Bang/List.h"
+#include "Bang/Flags.h"
 #include "Bang/String.h"
 
 class QLibrary;
@@ -17,7 +18,7 @@ class SystemUtils
 {
 
 public:
-    enum CompilationFlags
+    enum CompilationFlag
     {
         None                  = 0,
         ProduceSharedLib      = 1,
@@ -25,8 +26,10 @@ public:
         AddProjectObjectFiles = 4,
         ForGame               = 8,
         AddAssetsIncludeDirs  = 16,
+
         Default = AddProjectObjectFiles | AddEngineObjectFiles
     };
+    CREATE_FLAGS(CompilationFlags, CompilationFlag);
 
     static List<String> GetAllEngineObjects(bool editorMode);
 
@@ -52,7 +55,7 @@ public:
 
     static void Compile(List<String> &sourceFilesList,
                         const String &outputLibFilepath,
-                        CompilationFlags clFlags = CompilationFlags::Default,
+                        CompilationFlags clFlags = CompilationFlag::Default,
                         bool *success = nullptr, String *output = nullptr);
 
     static void CloseLibrary(QLibrary *library);
@@ -67,19 +70,5 @@ private:
                         bool background);
 
 };
-
-inline SystemUtils::CompilationFlags operator|(SystemUtils::CompilationFlags a,
-                                               SystemUtils::CompilationFlags b)
-{
-    return static_cast<SystemUtils::CompilationFlags>(static_cast<int>(a) |
-                                                      static_cast<int>(b));
-}
-
-inline SystemUtils::CompilationFlags operator^(SystemUtils::CompilationFlags a,
-                                               SystemUtils::CompilationFlags b)
-{
-    return static_cast<SystemUtils::CompilationFlags>(static_cast<int>(a) ^
-                                                      static_cast<int>(b));
-}
 
 #endif // SYSTEMUTILS_H

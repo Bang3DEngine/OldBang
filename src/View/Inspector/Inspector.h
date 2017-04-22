@@ -1,19 +1,15 @@
 #ifndef LISTINSPECTOR_H
 #define LISTINSPECTOR_H
 
-#include <QLabel>
-#include <QDropEvent>
-#include "Bang/WinUndef.h"
-
 #include "Bang/Map.h"
-#include "Bang/Debug.h"
-#include "Bang/Component.h"
-#include "Bang/GameObject.h"
 #include "Bang/DragDropQListWidget.h"
 #include "Bang/InspectorContextMenu.h"
-#include "Bang/PrefabAssetFileInspectable.h"
 #include "Bang/IWindowEventManagerListener.h"
 
+class QLabel;
+class QCheckBox;
+class QDropEvent;
+class SerializableObject;
 class Inspector : public DragDropQListWidget,
                   public IWindowEventManagerListener
 {
@@ -28,16 +24,15 @@ public:
 
     void ShowInspectable(SerializableObject *inspectable,
                           const String &title = "");
-    //void ShowGameObjectInfo(GameObject *gameObject);
 
     void OnEditorPlay();
 
 public slots:
-    // void OnEnableGameObjectCheckBoxChanged(bool checked);
+    void OnEnabledCheckBoxChanged(bool checked);
     void Refresh();
 
 public:
-    SerializableObject* GetFirstSerializableObject();
+    SerializableObject* GetCurrentInspectable();
     void OnSerializableObjectDestroyed(SerializableObject *destroyed);
 
     void AddWidget(InspectorWidget *widget, int row = -1);
@@ -59,10 +54,11 @@ private:
     InspectorContextMenu m_iContextMenu;
 
     QLabel *m_titleLabel = nullptr;
-    // QCheckBox *m_enableGameObjectCheckBox = nullptr;
+    QCheckBox *m_enabledCheckBox = nullptr;
 
-    List<InspectorWidget*> m_currentInspectorWidgets;
-    List<SerializableObject*> m_currentSerialObjects;
+    SerializableObject       *m_currentInspectable;
+    List<InspectorWidget*>    m_currentInspectorWidgets;
+    List<SerializableObject*> m_currentInspectableChildren;
 
     Map<InspectorWidget*, QListWidgetItem*> m_widget_To_Item;
     Map<InspectorWidget*, SerializableObject*> m_widget_To_Inspectables;

@@ -11,6 +11,9 @@ Component::Component()
     #ifdef BANG_EDITOR
     GetInspectorFlags()->SetOff(
                 SerializableObject::InspectorFlag::DeleteWhenCleared);
+    GetInspectorFlags()->SetOn(
+                SerializableObject::InspectorFlag::IsEnabledCheckBoxVisible);
+    SetEnabled(true);
     #endif
 }
 
@@ -46,11 +49,17 @@ void Component::SetGameObject(GameObject *gameObject)
 void Component::SetEnabled(bool enabled)
 {
     m_enabled = enabled;
+
+    #ifdef BANG_EDITOR
+    if (m_enabled) { GetInspectorFlags()->SetOn(InspectorFlag::IsEnabled); }
+    else { GetInspectorFlags()->SetOff(InspectorFlag::IsEnabled); }
+    #endif
 }
 
-bool Component::IsEnabled() const
+bool Component::IsEnabled(bool recursive) const
 {
-    return gameObject && gameObject->IsEnabled() && m_enabled;
+    return recursive ? m_enabled && gameObject && gameObject->IsEnabled() :
+                       m_enabled;
 }
 
 void Component::SetClosedInInspector(bool closed)
@@ -95,6 +104,11 @@ void Component::Write(XMLNode *xmlInfo) const
                      {XMLProperty::Hidden, XMLProperty::Readonly});
     xmlInfo->SetBool("closedInInspector", IsClosedInInspector(),
     {XMLProperty::Hidden, XMLProperty::Readonly});
+}
+
+void Component::OnEnabledChanged(bool enabled)
+{
+    SetEnabled(enabled);
 }
 
 #ifdef BANG_EDITOR

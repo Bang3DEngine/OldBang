@@ -94,6 +94,10 @@ SerializableObject::InspectorFlags *SerializableObject::GetInspectorFlags()
     return &m_inspectorFlags;
 }
 
+void SerializableObject::OnEnabledChanged(bool enabled)
+{
+}
+
 String SerializableObject::GetTitleInInspector() const
 {
     return GetClassName();

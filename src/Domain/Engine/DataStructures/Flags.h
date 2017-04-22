@@ -6,7 +6,7 @@ class Flags
 {
 public:
     Flags() { }
-    Flags(int flagsOn) { SetOn(flagsOn); }
+    Flags(int flagsOn) { m_flags = Flag::None; SetOn(flagsOn); }
     Flags(Flag flagsOn) : Flags( static_cast<int>(flagsOn) ) { }
 
     void SetOn(int f)  { m_flags = m_flags | f; }
@@ -16,35 +16,35 @@ public:
     void SetOff(Flag f) { SetOff(static_cast<int>(f)); }
 
     bool IsOn(int f)  const { return (m_flags & f) > 0; }
-    bool IsOn(Flag f) const { IsOn(static_cast<int>(f)); }
+    bool IsOn(Flag f) const { return IsOn(static_cast<int>(f)); }
 
     inline Flags operator|(Flag f)
     {
-        return Flags(static_cast<Flag>(m_flags | f));
+        return Flags(m_flags | f);
     }
 
     inline Flags operator~()
     {
-        return Flags(static_cast<Flags>(~m_flags));
+        return Flags(~m_flags);
     }
 
     inline Flags operator&(Flag f)
     {
-        return Flags(static_cast<Flag>(m_flags & f));
+        return Flags(m_flags & f);
     }
 
     inline Flags operator^(Flag f)
     {
-        return Flags(static_cast<Flag>(m_flags ^ f));
+        return Flags(m_flags ^ f);
     }
 
     int ToInteger() const
     {
-        return static_cast<int>(m_flags);
+        return m_flags;
     }
 
 private:
-    int m_flags = 0;
+    int m_flags = Flag::Default;
 };
 
 #define CREATE_FLAGS(FlagsName, FlagType) typedef Flags<FlagType> FlagsName

@@ -417,7 +417,7 @@
      <x>0</x>
      <y>0</y>
      <width>1062</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
@@ -653,7 +653,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_7">
          <item>
-          <widget class="QLabel" name="labelInspectorGameObjectName">
+          <widget class="QLabel" name="labelInspectorName">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -670,7 +670,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="enableGameObjectCheckBox">
+          <widget class="QCheckBox" name="enabledInspectorCheckBox">
            <property name="text">
             <string>Enabled</string>
            </property>
@@ -1244,8 +1244,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>406</width>
-              <height>76</height>
+              <width>416</width>
+              <height>68</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout">
@@ -1749,8 +1749,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="QtResources.qrc"/>
   <include location="qdarkstyle/style.qrc"/>
+  <include location="QtResources.qrc"/>
  </resources>
  <connections/>
 </ui>

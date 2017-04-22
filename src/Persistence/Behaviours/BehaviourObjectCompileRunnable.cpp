@@ -24,14 +24,14 @@ void BehaviourObjectCompileRunnable::CompileBehaviourObject()
 
     IO::Remove(objFilepath);
 
-    typedef SystemUtils::CompilationFlags CLFlags;
+    typedef SystemUtils::CompilationFlag CLFlag;
 
     String output = "";
     bool successCompiling = false;
     List<String> sources = {m_behaviourFilepath};
     SystemUtils::Compile(sources, objFilepath,
-                         (m_forGame ? CLFlags::ForGame : CLFlags::None) |
-                              CLFlags::AddAssetsIncludeDirs,
+                         (m_forGame ? CLFlag::ForGame : CLFlag::None) |
+                           CLFlag::AddAssetsIncludeDirs,
                          &successCompiling, &output);
     if (successCompiling)
     {

@@ -43,12 +43,12 @@ void BehaviourMergeObjectsRunnable::Merge()
     }
     libOutputFilepath += version + ".1.1";
 
-    typedef SystemUtils::CompilationFlags CLFlags;
+    typedef SystemUtils::CompilationFlag CLFlag;
     bool successCompiling; String output;
     SystemUtils::Compile(behaviourObjects, libOutputFilepath,
-                         CLFlags::AddEngineObjectFiles  |
-                         CLFlags::ProduceSharedLib |
-                         (m_forGame ? CLFlags::ForGame : CLFlags::None),
+                         CLFlag::AddEngineObjectFiles  |
+                         CLFlag::ProduceSharedLib      |
+                         (m_forGame ? CLFlag::ForGame : CLFlag::None),
                          &successCompiling, &output);
     if (successCompiling)
     {
