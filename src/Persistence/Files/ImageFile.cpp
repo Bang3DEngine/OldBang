@@ -28,7 +28,7 @@ const QPixmap& ImageFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *ImageFile::GetInspectable() const
+SerializableObject *ImageFile::GetNewInspectable() const
 {
     return new ImageFileInspectable(*this);
 }

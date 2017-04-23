@@ -15,12 +15,9 @@
 
 Material::Material() : Asset()
 {
-    // TODO: Create shaderProgram asset and use AssetManager to load this
-    SetShaderProgram(new ShaderProgram(
-                      IO::ToAbsolute("Shaders/G_Default.vert", true),
-                      IO::ToAbsolute("Shaders/G_Default.frag", true)
-                     )
-                    );
+    SetShaderProgram(
+        AssetsManager::Load<ShaderProgram>("Shaders/G_Default.bshaderprogram",
+                                           true));
 }
 
 Material::Material(const Material &m)

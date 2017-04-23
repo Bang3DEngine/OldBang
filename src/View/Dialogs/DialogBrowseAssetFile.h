@@ -1,6 +1,8 @@
 #ifndef DIALOGBROWSEASSETFILE_H
 #define DIALOGBROWSEASSETFILE_H
 
+#include <QLabel>
+#include <QTimer>
 #include <QDialog>
 #include <QModelIndex>
 #include "Bang/WinUndef.h"
@@ -27,11 +29,12 @@ private:
     String *m_resultFile = nullptr;
     Map<QListWidgetItem*, String> m_item_To_absoluteFilepath;
 
-    const int c_iconSize = 60;
-    QTabWidget *m_tabWidget = nullptr;
+    const int c_iconSize           = 40;
+    QTabWidget *m_tabWidget        = nullptr;
     QListWidget *m_projectFileList = nullptr;
     QListWidget *m_engineFileList  = nullptr;
-    QPushButton *m_openButton = nullptr;
+    QPushButton *m_openButton      = nullptr;
+    QLabel *m_botFilepathLabel     = nullptr;
 
     void ShowOnList(QListWidget *listWidget,
                     bool engineFilepaths,

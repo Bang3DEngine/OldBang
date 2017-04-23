@@ -260,9 +260,12 @@ HEADERS +=                                                          \
     src/Domain/Engine/Components/CircleCulledRenderer.h \
     src/Persistence/Files/PrefabFile.h \
     src/Persistence/Files/SoundFile.h \
-    src/Persistence/Files/SoundFileInspectable.h \
     src/Domain/Engine/Audio/AnonymousAudioPlayer.h \
-    src/Domain/Engine/DataStructures/Flags.h
+    src/Domain/Engine/DataStructures/Flags.h \
+    src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.h \
+    src/Persistence/Files/ShaderProgramAssetFile.h \
+    src/View/Inspector/Inspectables/SoundFileInspectable.h \
+    src/Domain/Graphics/Shaders/ShaderManager.h
 
 EDITOR {
 HEADERS += \
@@ -480,7 +483,11 @@ SOURCES += \
     src/Domain/Engine/Components/CircleCulledRenderer.cpp \
     src/Persistence/Files/PrefabFile.cpp \
     src/Persistence/Files/SoundFile.cpp \
-    src/Domain/Engine/Audio/AnonymousAudioPlayer.cpp
+    src/Domain/Engine/Audio/AnonymousAudioPlayer.cpp \
+    src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.cpp \
+    src/Persistence/Files/ShaderProgramAssetFile.cpp \
+    src/View/Inspector/Inspectables/SoundFileInspectable.cpp \
+    src/Domain/Graphics/Shaders/ShaderManager.cpp
 
 EDITOR {
     SOURCES += \
@@ -489,7 +496,6 @@ EDITOR {
         src/View/GameBuilderJob.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
         src/View/Explorer/FileSystemModel.cpp \
-        src/Persistence/Files/SoundFileInspectable.cpp \
         src/Persistence/Project/QtProjectManager.cpp \
         src/View/EditorState.cpp \
         src/View/DragDrop/DragDropManager.cpp \

@@ -257,7 +257,7 @@ void Explorer::RefreshInspector()
         File *specificFile = File::GetSpecificFile(f);
         if (specificFile)
         {
-            newInspectable = specificFile->GetInspectable();
+            newInspectable = specificFile->GetNewInspectable();
             delete specificFile;
         }
 

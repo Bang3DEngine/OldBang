@@ -20,7 +20,7 @@ const QPixmap& SoundFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *SoundFile::GetInspectable() const
+SerializableObject *SoundFile::GetNewInspectable() const
 {
     return new SoundFileInspectable(*this);
 }

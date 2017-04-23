@@ -17,7 +17,7 @@ public:
     virtual const QPixmap& GetIcon() const override;
 
     #ifdef BANG_EDITOR
-    virtual SerializableObject *GetInspectable() const override;
+    virtual SerializableObject *GetNewInspectable() const override;
     #endif
 
     virtual bool IsAsset() const override;

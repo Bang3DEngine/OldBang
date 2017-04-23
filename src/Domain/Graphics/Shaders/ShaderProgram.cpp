@@ -6,6 +6,8 @@
 #include "Bang/Debug.h"
 #include "Bang/Shader.h"
 #include "Bang/Texture.h"
+#include "Bang/XMLNode.h"
+#include "Bang/ShaderManager.h"
 #include "Bang/TextureUnitManager.h"
 
 ShaderProgram::ShaderProgram()
@@ -16,26 +18,28 @@ ShaderProgram::ShaderProgram()
 ShaderProgram::ShaderProgram(const String &vshaderPath,
                              const String &fshaderPath) : ShaderProgram()
 {
-    Shader *vs = new Shader(Shader::Type::Vertex, vshaderPath);
-    BindVertexShader(vs);
-    Shader *fs = new Shader(Shader::Type::Fragment, fshaderPath);
-    BindFragmentShader(fs);
-    Link();
+    Shader *vs = ShaderManager::Load(Shader::Type::Vertex, vshaderPath);
+    SetVertexShader(vs);
+
+    Shader *fs = ShaderManager::Load(Shader::Type::Fragment, fshaderPath);
+    SetFragmentShader(fs);
 }
 
 ShaderProgram::~ShaderProgram()
 {
+    if (m_vshader) { ShaderManager::UnRegisterUsageOfShader(this, m_vshader); }
+    if (m_fshader) { ShaderManager::UnRegisterUsageOfShader(this, m_fshader); }
     glDeleteProgram(m_idGL);
 }
 
-void ShaderProgram::BindVertexShader(Shader *vshader)
+String ShaderProgram::GetFileExtensionStatic()
 {
-    m_vshader = vshader;
+    return "bshaderprogram";
 }
 
-void ShaderProgram::BindFragmentShader(Shader *fshader)
+String ShaderProgram::GetFileExtension() const
 {
-    m_fshader = fshader;
+    return ShaderProgram::GetFileExtensionStatic();
 }
 
 bool ShaderProgram::Link()
@@ -52,6 +56,9 @@ bool ShaderProgram::Link()
         return false;
     }
 
+    if (m_idGL > 0) { glDeleteProgram(m_idGL); }
+    m_idGL = glCreateProgram();
+
     glAttachShader(m_idGL, m_vshader->GetGLId());
     glAttachShader(m_idGL, m_fshader->GetGLId());
     glLinkProgram(m_idGL);
@@ -64,16 +71,16 @@ bool ShaderProgram::Link()
        glGetProgramiv(m_idGL, GL_INFO_LOG_LENGTH, &errorLength);
 
        if (errorLength > 1)
-        {
+       {
           char* errorLog = (char*) (malloc(sizeof(char) * errorLength));
           glGetProgramInfoLog(m_idGL, errorLength, NULL, errorLog);
 
           String errorStr(errorLog);
           Debug_Error("Can't link " << std::endl << this << std::endl <<
                        "   Reason:  " << errorStr);
-        }
+       }
 
-        glDeleteProgram(m_idGL);
+       glDeleteProgram(m_idGL); m_idGL = 0;
     }
 
     return linked;
@@ -188,6 +195,44 @@ bool ShaderProgram::SetTexture(const String &name, const Texture *texture) const
     return uniformIsUsed;
 }
 
+void ShaderProgram::Refresh()
+{
+    ENSURE(m_vshader && m_fshader);
+    Link();
+}
+
+void ShaderProgram::SetVertexShader(Shader *vertexShader)
+{
+    if (vertexShader->GetType() != Shader::Type::Vertex)
+    {
+        Debug_Error("You are trying to set as vertex shader a non-vertex shader");
+    }
+
+    if (m_vshader) { ShaderManager::UnRegisterUsageOfShader(this, m_vshader); }
+
+    m_vshader = vertexShader;
+
+    if (m_vshader) { ShaderManager::RegisterUsageOfShader(this, m_vshader); }
+
+    Refresh();
+}
+
+void ShaderProgram::SetFragmentShader(Shader *fragmentShader)
+{
+    if (fragmentShader->GetType() != Shader::Type::Fragment)
+    {
+        Debug_Error("You are trying to set as fragment shader a non-fragment shader");
+    }
+
+    if (m_fshader) { ShaderManager::UnRegisterUsageOfShader(this, m_fshader); }
+
+    m_fshader = fragmentShader;
+
+    if (m_fshader) { ShaderManager::RegisterUsageOfShader(this, m_fshader); }
+
+    Refresh();
+}
+
 Shader *ShaderProgram::GetVertexShader() const
 {
     return m_vshader;
@@ -257,3 +302,32 @@ void ShaderProgram::UpdateTextureBindings() const
     }
 }
 
+void ShaderProgram::Read(const XMLNode &xmlInfo)
+{
+    Asset::Read(xmlInfo);
+
+    String vShaderFilepath = xmlInfo.GetFilepath("VertexShader");
+    if (IO::ExistsFile(vShaderFilepath))
+    {
+        Shader *vShader = new Shader(Shader::Type::Vertex, vShaderFilepath);
+        SetVertexShader(vShader);
+    }
+
+    String fShaderFilepath = xmlInfo.GetFilepath("FragmentShader");
+    if (IO::ExistsFile(fShaderFilepath))
+    {
+        Shader *fShader = new Shader(Shader::Type::Fragment, fShaderFilepath);
+        SetFragmentShader(fShader);
+    }
+}
+
+void ShaderProgram::Write(XMLNode *xmlInfo) const
+{
+    Asset::Write(xmlInfo);
+
+    String vShaderFilepath = m_vshader ? m_vshader->GetFilepath() : "";
+    xmlInfo->SetFilepath("VertexShader",   vShaderFilepath, "vert glsl");
+
+    String fShaderFilepath = m_fshader ? m_fshader->GetFilepath() : "";
+    xmlInfo->SetFilepath("FragmentShader", fShaderFilepath, "frag glsl");
+}

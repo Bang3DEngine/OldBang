@@ -5,14 +5,13 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/IO.h"
-#include "Bang/File.h"
 #include "Bang/Asset.h"
 #include "Bang/XMLParser.h"
 #include "Bang/AssetsManager.h"
 
 FileTracker::FileTracker()
 {
-    m_timeBeforeRefreshing = QDateTime::currentMSecsSinceEpoch();
+    m_timeBeforeRefreshing = Time::GetNow();
 
     m_refreshTimer.setInterval(c_refreshTime);
     m_refreshTimer.moveToThread(&m_refreshThread);
@@ -32,10 +31,10 @@ FileTracker *FileTracker::GetInstance()
 
 List< std::pair<String, String> > FileTracker::GetMovedPathsList() const
 {
-    List<String> oldPathsList = m_assetsPathsList;
+    List<String> oldPathsList = m_lastPathsList;
+    m_lastPathsList = GetPathsToTrack();
 
-    RefreshAssetPathsList();
-    const List<String> &newPathsList = m_assetsPathsList;
+    const List<String> &newPathsList = m_lastPathsList;
 
     List< std::pair<String,String> > result;
     for (const String& oldPath : oldPathsList)
@@ -59,20 +58,37 @@ List< std::pair<String, String> > FileTracker::GetMovedPathsList() const
     return result;
 }
 
+void FileTracker::TrackFilesWithExtension(const String &extension)
+{
+    FileTracker *ft = FileTracker::GetInstance();
+    ft->m_additionalExtensions.Remove(extension);
+    ft->m_additionalExtensions.Add(extension);
+}
+
+bool FileTracker::HasFileChanged(const String &absFilepath, EpochTime since)
+{
+    FileTracker *ft = FileTracker::GetInstance();
+
+    if (!ft->m_lastModifTimes.ContainsKey(absFilepath)) { return true; }
+
+    EpochTime lastChangeTime = ft->m_lastModifTimes.Get(absFilepath);
+    return FileTracker::HasFileChanged(since, lastChangeTime);
+}
+
 void FileTracker::Refresh()
 {
-    m_timeBeforeRefreshing = QDateTime::currentMSecsSinceEpoch();
+    m_timeBeforeRefreshing = Time::GetNow();
 
-    List <String> allFiles = IO::GetFiles(IO::GetProjectAssetsRootAbs(), true);
+    List<String> allFiles = GetPathsToTrack();
 
     // Refresh files modification date and dependencies
     bool someFileHasChanged = false;
     for (const String& absFilepath : allFiles)
     {
-        bool isNewFile = !m_fileChangeTimes.ContainsKey(absFilepath);
-
         RefreshFileModificationDate(absFilepath);
-        if (isNewFile || HasChanged(absFilepath))
+
+        bool isNewFile = !m_lastModifTimes.ContainsKey(absFilepath);
+        if (isNewFile || HasFileChanged(absFilepath))
         {
             someFileHasChanged = true;
             RefreshFileDependencies(absFilepath);
@@ -87,11 +103,13 @@ void FileTracker::Refresh()
 
 void FileTracker::ReloadChangedFiles()
 {
-    List <String> allFiles = IO::GetFiles(IO::GetProjectAssetsRootAbs(), true);
+    // Reload the files that have changed from the last time
+
+    List<String> allFiles = GetPathsToTrack();
     for (const String& absFilepath : allFiles)
     {
         File file(absFilepath); // Treat file in case it has changed
-        if (file.IsAsset() && HasChanged(absFilepath))
+        if (MustTrackFile(file) && HasFileChanged(absFilepath))
         {
             AssetsManager::ReloadAsset(absFilepath);
         }
@@ -101,8 +119,31 @@ void FileTracker::ReloadChangedFiles()
     // changed files through the whole refresh process above, so no mark there.
     for (const String& absFilepath : allFiles)
     {
-        m_fileSeenTimes.Set(absFilepath, m_timeBeforeRefreshing);
+        m_lastSeenTimes.Set(absFilepath, m_timeBeforeRefreshing);
     }
+}
+
+List<String> FileTracker::GetPathsToTrack() const
+{
+    const String& engineRoot = IO::GetEngineAssetsRootAbs();
+    const String& assetsRoot = IO::GetProjectAssetsRootAbs();
+
+    List<String> files;
+    files = files.Concat(IO::GetFiles(assetsRoot, true));
+    files = files.Concat(IO::GetSubDirectories(assetsRoot, true));
+    files = files.Concat(IO::GetFiles(engineRoot, true, m_additionalExtensions));
+    files = files.Concat({assetsRoot});
+
+    return files;
+}
+
+bool FileTracker::MustTrackFile(const File &file) const
+{
+    return file.IsFile() &&
+           (
+                file.IsAsset() ||
+                m_additionalExtensions.Contains( file.GetExtension() )
+           );
 }
 
 void FileTracker::RefreshFileModificationDate(const String& absFilepath)
@@ -112,13 +153,13 @@ void FileTracker::RefreshFileModificationDate(const String& absFilepath)
     EpochTime modTime = fInfo.lastModified().toMSecsSinceEpoch();
 
     // If it is a new file, register it.
-    if (!m_fileChangeTimes.ContainsKey(absFilepath))
+    if (!m_lastModifTimes.ContainsKey(absFilepath))
     {
-        EpochTime currentEpoch = QDateTime::currentMSecsSinceEpoch();
-        m_fileSeenTimes.Set(absFilepath, currentEpoch);
+        EpochTime currentEpoch = Time::GetNow();
+        m_lastSeenTimes.Set(absFilepath, currentEpoch);
         m_fileDependencies.Set(absFilepath, List<String>());
     }
-    m_fileChangeTimes.Set(absFilepath, modTime);
+    m_lastModifTimes.Set(absFilepath, modTime);
 }
 
 void FileTracker::RefreshFileDependencies(const String &absFilepath)
@@ -127,64 +168,64 @@ void FileTracker::RefreshFileDependencies(const String &absFilepath)
     // examining the file contents, and finding all the attributes which are
     // filepaths.
     File file(absFilepath);
-    if ( file.IsAsset() )
-    {
-        List<String>& depsList = m_fileDependencies.Get(absFilepath);
-        depsList.Clear();
+    ENSURE ( MustTrackFile(file) );
 
-        XMLNode *xmlInfo = XMLParser::FromFile(absFilepath);
-        if (xmlInfo)
+    List<String>& depsList = m_fileDependencies.Get(absFilepath);
+    depsList.Clear();
+
+    XMLNode *xmlInfo = XMLParser::FromFile(absFilepath);
+    ENSURE(xmlInfo);
+
+    List< std::pair<String, XMLAttribute> > attrs =
+            xmlInfo->GetAttributesListInOrder();
+    for (const std::pair<String, XMLAttribute>& attrPair : attrs)
+    {
+        const XMLAttribute& attr = attrPair.second;
+        if (attr.GetType() == XMLAttribute::Type::File)
         {
-            List< std::pair<String, XMLAttribute> > attrs =
-                    xmlInfo->GetAttributesListInOrder();
-            for (const std::pair<String, XMLAttribute>& attrPair : attrs)
+            const String& depFilepath = attr.GetFilepath();
+            if (IO::ExistsFile(depFilepath))
             {
-                const XMLAttribute& attr = attrPair.second;
-                if (attr.GetType() == XMLAttribute::Type::File)
-                {
-                    const String& depFilepath = attr.GetFilepath();
-                    if (IO::ExistsFile(depFilepath))
-                    {
-                        depsList.Add(depFilepath);
-                    }
-                }
+                depsList.Add(depFilepath);
             }
-            delete xmlInfo;
         }
     }
+    delete xmlInfo;
 }
 
-bool FileTracker::HasChanged(const String &absFilepath) const
+bool FileTracker::HasFileChanged(const String &absFilepath) const
 {
     Set<String> alreadyCheckedFiles;
-    return HasChanged(absFilepath, alreadyCheckedFiles);
+    return HasFileChanged(absFilepath, alreadyCheckedFiles);
 }
 
-bool FileTracker::HasChanged(const String& absFilepath,
-                             Set<String>& alreadyCheckedFiles) const
+bool FileTracker::HasFileChanged(const String& absFilepath,
+                                 Set<String>& alreadyCheckedFiles) const
 {
-    if (!m_fileChangeTimes.ContainsKey(absFilepath)) { return false; }
-    if (!m_fileSeenTimes.ContainsKey(absFilepath)) { return false; }
+    if (!m_lastModifTimes.ContainsKey(absFilepath)) { return false; }
+    if (!m_lastSeenTimes.ContainsKey(absFilepath)) { return false; }
 
     if (!alreadyCheckedFiles.Contains(absFilepath))
     {
         alreadyCheckedFiles.Insert(absFilepath);
         for (const String& depAbsFilepath : m_fileDependencies.Get(absFilepath))
         {
-            if (HasChanged(depAbsFilepath, alreadyCheckedFiles)) { return true; }
+            if (HasFileChanged(depAbsFilepath, alreadyCheckedFiles)) { return true; }
         }
     }
 
-    EpochTime changedTime = m_fileChangeTimes.Get(absFilepath);
-    EpochTime seenTime    = m_fileSeenTimes.Get(absFilepath);
-    return changedTime > seenTime;
+    EpochTime changedTime = m_lastModifTimes.Get(absFilepath);
+    EpochTime seenTime    = m_lastSeenTimes.Get(absFilepath);
+    return FileTracker::HasFileChanged(seenTime, changedTime);
 }
 
-void FileTracker::RefreshAssetPathsList() const
+bool FileTracker::HasFileChanged(EpochTime lastSeenTime,
+                                 EpochTime modificationTime)
 {
-    const String& assetsPath = IO::GetProjectAssetsRootAbs();
-    List<String> files = IO::GetFiles(assetsPath, true);
-    List<String> dirs = IO::GetSubDirectories(assetsPath, true);
+    // Must compare like this because it can happen that the modification
+    // times given by the system are not in milis, but in seconds.
 
-    m_assetsPathsList = files.Concat(dirs);
+    // So, this is a bit conservative comparison, we dont want to miss any file
+    // changing.
+    return modificationTime >= lastSeenTime - c_refreshTime * 1.5;
 }

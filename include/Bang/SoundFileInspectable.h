@@ -1,2 +1,2 @@
 #include "Bang.h"
-#include "../.././src/Persistence/Files/SoundFileInspectable.h"
+#include "../.././src/View/Inspector/Inspectables/SoundFileInspectable.h"

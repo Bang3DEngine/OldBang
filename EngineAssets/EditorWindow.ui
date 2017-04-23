@@ -660,6 +660,12 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <pointsize>15</pointsize>
@@ -1749,8 +1755,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="qdarkstyle/style.qrc"/>
   <include location="QtResources.qrc"/>
+  <include location="qdarkstyle/style.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -18,12 +18,6 @@ public:
         Fragment = GL_FRAGMENT_SHADER
     };
 
-private:
-    String m_sourceCode = "";
-    String m_filepath = "";
-    Type m_type;
-
-public:
     Shader(Shader::Type t);
     Shader(Shader::Type t, const String &shaderPath);
 
@@ -35,6 +29,12 @@ public:
     const String& GetFilepath() const;
     Type GetType() const;
     String ToString() const;
+
+private:
+    String m_sourceCode = "";
+    String m_filepath = "";
+    Type m_type;
+
 };
 
 #endif // SHADER_H

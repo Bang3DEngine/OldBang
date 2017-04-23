@@ -33,7 +33,7 @@ public:
 
     #ifdef BANG_EDITOR
     void OnInspectorSlotChanged(InspectorWidget *inspectorItem) override;
-    virtual SerializableObject *GetInspectable() const override;
+    virtual SerializableObject *GetNewInspectable() const override;
     #endif
 
 private:

@@ -40,7 +40,7 @@ const QPixmap& Texture2DAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *Texture2DAssetFile::GetInspectable() const
+SerializableObject *Texture2DAssetFile::GetNewInspectable() const
 {
     return new Texture2DAssetFileInspectable(*this);
 }

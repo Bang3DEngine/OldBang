@@ -280,8 +280,6 @@ void EditorGizmosGameObject::RenderScreenLine(const Vector2 &origin,
     transform->SetPosition(Vector3::Zero);
     transform->SetScale(Vector3::One);
 
-    Material *mat = slr->GetMaterial();
-
     GL::SetViewProjMode(GL::ViewProjMode::IgnoreBoth);
     Render(slr);
     Reset();

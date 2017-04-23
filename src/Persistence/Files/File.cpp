@@ -24,9 +24,11 @@
 #include "Bang/PrefabFile.h"
 #include "Bang/IconManager.h"
 #include "Bang/MeshAssetFile.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/MaterialAssetFile.h"
 #include "Bang/AudioClipAssetFile.h"
 #include "Bang/Texture2DAssetFile.h"
+#include "Bang/ShaderProgramAssetFile.h"
 
 File::File()
 {
@@ -117,6 +119,11 @@ bool File::IsPrefabAsset() const
     return m_isFile && IsOfExtension(Prefab::GetFileExtensionStatic());
 }
 
+bool File::IsShaderProgramAssetFile() const
+{
+    return m_isFile && IsOfExtension(ShaderProgram::GetFileExtensionStatic());
+}
+
 bool File::IsDir() const
 {
     return !m_isFile;
@@ -180,6 +187,10 @@ File *File::GetSpecificFile(const File &f)
     else if (f.IsTextFile())
     {
         return new TextFile(f.m_fileSystemModel, f.m_modelIndex);
+    }
+    else if (f.IsShaderProgramAssetFile())
+    {
+        return new ShaderProgramAssetFile(f.m_fileSystemModel, f.m_modelIndex);
     }
 
     return new File(f.m_fileSystemModel, f.m_modelIndex);
@@ -255,7 +266,7 @@ const QPixmap& File::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *File::GetInspectable() const
+SerializableObject *File::GetNewInspectable() const
 {
     return nullptr;
 }

@@ -22,6 +22,7 @@
 #include "Bang/EditorWindow.h"
 #include "Bang/SceneManager.h"
 #include "Bang/AssetsManager.h"
+#include "Bang/ShaderProgram.h"
 #include "Bang/ProjectManager.h"
 #include "Bang/SerializableObject.h"
 #include "Bang/WindowEventManager.h"
@@ -405,13 +406,11 @@ void MenuBar::OnCreateMesh() const
 }
 void MenuBar::OnCreateShaderProgram() const
 {
-    /*
     String filepath = Explorer::GetInstance()->GetCurrentDir();
     filepath += "/New_ShaderProgram." + ShaderProgram::GetFileExtensionStatic();
-    filepath = IO::GetDuplicateName(filepath);
-    AssetsManager::CreateAsset<ShaderProgram>(filepath);
+    filepath = IO::GetDuplicatePath(filepath);
+    AssetsManager::Create<ShaderProgram>(filepath);
     Explorer::GetInstance()->StartRenaming(filepath);
-    */
 }
 Texture2D* MenuBar::OnCreateTexture2D(const String &tex2DFilepath) const
 {

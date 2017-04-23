@@ -1,0 +1,4 @@
+<ShaderProgram VertexShader:File="Shaders/G_Default.vert"{FileExtension="vert glsl", IsEngineFile}
+               FragmentShader:File="./Shaders/G_Default.frag"{FileExtension="frag glsl",IsEngineFile}
+              >
+</ShaderProgram>

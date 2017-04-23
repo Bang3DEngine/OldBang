@@ -4,6 +4,7 @@
 #include "Bang/Map.h"
 #include "Bang/UMap.h"
 #include "Bang/Color.h"
+#include "Bang/Asset.h"
 #include "Bang/Vector2.h"
 #include "Bang/Vector3.h"
 #include "Bang/Vector4.h"
@@ -13,9 +14,11 @@
 
 class Shader;
 class Texture;
-class ShaderProgram : public GLObject,
-                      public IToString
+class ShaderProgram : public Asset,
+                      public GLObject
 {
+    OBJECT(ShaderProgram)
+    ASSET_ICON(ShaderProgram, "Icons/BehaviourIcon.png")
 
 public:
     ShaderProgram();
@@ -23,8 +26,8 @@ public:
                   const String &fshaderPath);
     virtual ~ShaderProgram();
 
-    void BindVertexShader(Shader *vshader);
-    void BindFragmentShader(Shader *fshader);
+    static String GetFileExtensionStatic();
+    virtual String GetFileExtension() const override;
 
     bool Link();
 
@@ -43,6 +46,10 @@ public:
     bool SetMat4(const String &name, const Matrix4& m) const;
     bool SetTexture(const String &name, const Texture *texture) const;
 
+    void Refresh();
+    void SetVertexShader(Shader *vertexShader);
+    void SetFragmentShader(Shader *fragmentShader);
+
     Shader* GetVertexShader() const;
     Shader* GetFragmentShader() const;
 
@@ -50,6 +57,9 @@ public:
     GLint GetAttribLocation(const String &name) const;
 
     String ToString() const override;
+
+    virtual void Read(const XMLNode &xmlInfo) override;
+    virtual void Write(XMLNode *xmlInfo) const override;
 
 private:
     Shader *m_vshader = nullptr;

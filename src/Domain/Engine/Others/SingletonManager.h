@@ -45,6 +45,12 @@ public:
         return SingletonManager::s_mainBinarySM->m_singletons.Set<T>(singleton);
     }
 
+    template<class T>
+    static bool Exists()
+    {
+        return SingletonManager::s_mainBinarySM->m_singletons.ContainsKey<T>();
+    }
+
     /**
      * The Get methods should only be called by the method that
      * creates dynamically a user Behaviour.

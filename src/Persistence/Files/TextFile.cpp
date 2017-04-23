@@ -23,7 +23,7 @@ String TextFile::GetContents() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *TextFile::GetInspectable() const
+SerializableObject *TextFile::GetNewInspectable() const
 {
     return new TextFileInspectable(*this);
 }

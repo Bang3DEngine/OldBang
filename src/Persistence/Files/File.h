@@ -36,6 +36,7 @@ public:
     bool IsFontAssetFile() const;
 
     bool IsPrefabAsset() const;
+    bool IsShaderProgramAssetFile() const;
 
     bool IsDir() const;
     bool IsFile() const;
@@ -57,7 +58,7 @@ public:
     virtual const QPixmap& GetIcon() const;
 
     #ifdef BANG_EDITOR
-    virtual SerializableObject *GetInspectable() const;
+    virtual SerializableObject *GetNewInspectable() const;
     #endif
 
     String GetContents() const;

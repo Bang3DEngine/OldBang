@@ -36,7 +36,7 @@ const QPixmap& AudioClipAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *AudioClipAssetFile::GetInspectable() const
+SerializableObject *AudioClipAssetFile::GetNewInspectable() const
 {
     return new AudioClipAssetFileInspectable(*this);
 }

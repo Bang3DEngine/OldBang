@@ -7,10 +7,6 @@
 #include "Bang/IconManager.h"
 #include "Bang/SerializableObject.h"
 
-#ifdef BANG_EDITOR
-#include "Bang/SerializableObject.h"
-#endif
-
 class AssetsManager;
 class Asset : public IToString,
               public SerializableObject

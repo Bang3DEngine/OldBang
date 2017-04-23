@@ -25,7 +25,8 @@ ExplorerDirTree::ExplorerDirTree(QWidget *parent) : QTreeView(parent)
     this->setColumnHidden(2, true);
     this->setColumnHidden(3, true);
 
-    connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)), this, SLOT(OnDirLoaded(QString)));
+    connect(m_fileSystemModel, SIGNAL(directoryLoaded(QString)),
+            this, SLOT(OnDirLoaded(QString)));
 
     //Every X seconds, update all the slots values
     connect(&m_checkSelectionTimer, SIGNAL(timeout()),
