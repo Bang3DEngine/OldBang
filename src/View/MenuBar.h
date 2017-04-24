@@ -20,6 +20,7 @@
 #include "Bang/AudioListener.h"
 #include "Bang/CircleRenderer.h"
 #include "Bang/DirectionalLight.h"
+#include "Bang/PostProcessEffect.h"
 #include "Bang/SingleLineRenderer.h"
 
 class Mesh;
@@ -91,6 +92,7 @@ public slots:
     void OnAddComponentCanvas() const;
     void OnAddComponentUIImage() const;
     void OnAddComponentUIText() const;
+    void OnAddComponentPostProcessEffect() const;
 
 public:
     void OnAddComponent(Component *c) const;

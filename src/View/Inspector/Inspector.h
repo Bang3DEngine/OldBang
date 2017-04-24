@@ -4,14 +4,13 @@
 #include "Bang/Map.h"
 #include "Bang/DragDropQListWidget.h"
 #include "Bang/InspectorContextMenu.h"
-#include "Bang/IWindowEventManagerListener.h"
 
 class QLabel;
 class QCheckBox;
 class QDropEvent;
+class InspectorWidget;
 class SerializableObject;
-class Inspector : public DragDropQListWidget,
-                  public IWindowEventManagerListener
+class Inspector : public DragDropQListWidget
 {
     Q_OBJECT
 
@@ -22,10 +21,9 @@ public:
 
     void Clear();
 
+    void RefreshInspectable(SerializableObject *serializableObject);
     void ShowInspectable(SerializableObject *inspectable,
-                          const String &title = "");
-
-    void OnEditorPlay();
+                         const String &title = "");
 
 public slots:
     void OnEnabledCheckBoxChanged(bool checked);
@@ -37,10 +35,10 @@ public:
 
     void AddWidget(InspectorWidget *widget, int row = -1);
 
-    bool IsShowingInspectable(SerializableObject *inspectable) const;
     static Inspector* GetInstance();
 
     void dropEvent(QDropEvent *e) override;
+    List<InspectorWidget*> GetCurrentInspectorWidgets() const;
 
     static String FormatInspectorLabel(const String &labelString);
 
@@ -53,15 +51,11 @@ private:
 
     InspectorContextMenu m_iContextMenu;
 
-    QLabel *m_titleLabel = nullptr;
+    QLabel    *m_titleLabel      = nullptr;
     QCheckBox *m_enabledCheckBox = nullptr;
 
-    SerializableObject       *m_currentInspectable;
-    List<InspectorWidget*>    m_currentInspectorWidgets;
+    SerializableObject       *m_currentInspectable = nullptr;
     List<SerializableObject*> m_currentInspectableChildren;
-
-    Map<InspectorWidget*, QListWidgetItem*> m_widget_To_Item;
-    Map<InspectorWidget*, SerializableObject*> m_widget_To_Inspectables;
 
     friend class InspectorWidget;
     friend class InspectorContextMenu;

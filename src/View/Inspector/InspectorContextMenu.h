@@ -12,7 +12,7 @@ class InspectorContextMenu : public ContextMenu
     Q_OBJECT
 
 private:
-    Inspector *m_inspector;
+    Inspector *p_inspector;
 
 public:
     InspectorContextMenu(Inspector *inspector);

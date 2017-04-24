@@ -247,11 +247,9 @@ void Explorer::RefreshInspector()
 
     QModelIndex selectedIndex = selectedIndexes().front();
     File f(m_fileSystemModel, selectedIndex);
-    if (selectedIndex.isValid() && f.IsFile() &&
-        IO::Exists(f.GetAbsolutePath()))
+    if (selectedIndex.isValid() && f.IsFile() && IO::Exists(f.GetAbsolutePath()))
     {
-        Inspector *inspector = Inspector::GetInstance();
-        inspector->Clear();
+        Inspector::GetInstance()->Clear();
 
         SerializableObject *newInspectable = nullptr;
         File *specificFile = File::GetSpecificFile(f);
@@ -261,25 +259,19 @@ void Explorer::RefreshInspector()
             delete specificFile;
         }
 
-        if (!newInspectable && !f.IsDir())
-        {
-            inspector->Clear();
-        }
-
         if (f.IsPrefabAsset()) // bprefab special case
         {
             File f(m_fileSystemModel, selectedIndex);
             PrefabAssetFileInspectable *prefabInspectable =
                     new PrefabAssetFileInspectable(f);
-            newInspectable = prefabInspectable;
             prefabInspectable->ShowInInspector();
         }
         else
         {
             if (newInspectable)
             {
-                inspector->ShowInspectable(newInspectable,
-                                          f.GetNameAndExtension());
+                Inspector::GetInstance()->ShowInspectable(newInspectable,
+                                                          f.GetName());
             }
         }
     }

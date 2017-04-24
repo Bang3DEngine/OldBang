@@ -99,7 +99,6 @@ private:
     FileSystemModel *m_fileSystemModel               = nullptr;
     QToolButton *m_buttonDirUp                       = nullptr;
     QToolButton *m_buttonChangeViewMode              = nullptr;
-    SerializableObject *m_lastInspectableInInspector = nullptr;
 
     QLabel *m_labelCurrentPath = nullptr;
     QLabel *m_labelFileName    = nullptr;

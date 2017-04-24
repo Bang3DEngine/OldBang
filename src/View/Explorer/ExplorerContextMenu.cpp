@@ -199,15 +199,7 @@ void ExplorerContextMenu::OnDeleteClicked()
 
     if (reply == Dialog::Reply::Yes)
     {
-        Inspector *inspector = Inspector::GetInstance();
-        SerializableObject *lastInspectable =
-                p_explorer->m_lastInspectableInInspector;
-        if (inspector->IsShowingInspectable(lastInspectable))
-        {
-            inspector->Clear();
-            delete lastInspectable;
-            p_explorer->m_lastInspectableInInspector = nullptr;
-        }
+        Inspector::GetInstance()->Clear();
         IO::Remove(path);
     }
 }

@@ -28,6 +28,7 @@
 #include "Bang/TextureUnitManager.h"
 #include "Bang/GraphicPipelineDebugger.h"
 #include "Bang/GPPass_SP_DeferredLights.h"
+#include "Bang/GPPass_SP_PostProcessEffects.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/Hierarchy.h"
@@ -69,14 +70,17 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
        {
          new GPPass_SP_DeferredLights(this) //   Add light to transparent
        }),
-       new GPPass_G(this, false, true)     // Unlighted Transparent
+       new GPPass_G(this, false, true),     // Unlighted Transparent
+
+       new GPPass_SP_PostProcessEffects(this)
      });
 
     m_canvasPass =
      new GPPass_DepthLayer(this, DL::DepthLayerCanvas,
      {
       new GPPass_G(this, false, false),  // Canvas opaques
-      new GPPass_G(this, false, true)    // Canvas transparents
+      new GPPass_G(this, false, true),   // Canvas transparents
+      new GPPass_SP_PostProcessEffects(this)
      });
 
     m_gizmosPass = new GPPass_DepthLayer(this, DL::DepthLayerGizmos,
@@ -166,7 +170,8 @@ void GraphicPipeline::ApplySelectionOutline()
     m_gbuffer->SetAllDrawBuffersExceptColor();
     for (GameObject *go : sceneGameObjects)
     {
-        if (go->IsSelected() && !go->transform->IsOfType<RectTransform>())
+        if (go->IsSelected() &&
+            (!go->transform || !go->transform->IsOfType<RectTransform>()))
         {
             List<Renderer*> rends = go->GetComponents<Renderer>();
             for (Renderer *rend : rends)

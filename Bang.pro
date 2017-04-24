@@ -265,7 +265,9 @@ HEADERS +=                                                          \
     src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.h \
     src/Persistence/Files/ShaderProgramAssetFile.h \
     src/View/Inspector/Inspectables/SoundFileInspectable.h \
-    src/Domain/Graphics/Shaders/ShaderManager.h
+    src/Domain/Graphics/Shaders/ShaderManager.h \
+    src/Domain/Engine/Components/PostProcessEffect.h \
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.h
 
 EDITOR {
 HEADERS += \
@@ -487,7 +489,9 @@ SOURCES += \
     src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.cpp \
     src/Persistence/Files/ShaderProgramAssetFile.cpp \
     src/View/Inspector/Inspectables/SoundFileInspectable.cpp \
-    src/Domain/Graphics/Shaders/ShaderManager.cpp
+    src/Domain/Graphics/Shaders/ShaderManager.cpp \
+    src/Domain/Engine/Components/PostProcessEffect.cpp \
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp
 
 EDITOR {
     SOURCES += \
@@ -715,4 +719,5 @@ DISTFILES += \
     EngineAssets/Materials/UI/G_UIText_Pass2.bmat \
     EngineAssets/Shaders/UI/G_UIText_Pass2.frag \
     EngineAssets/Materials/UI/G_UIText.bmat \
-    EngineAssets/Shaders/UI/G_UIText.frag
+    EngineAssets/Shaders/UI/G_UIText.frag \
+    EngineAssets/Shaders/SP_Default.frag

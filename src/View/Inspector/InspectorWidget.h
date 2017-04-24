@@ -55,6 +55,8 @@ public:
      */
     XMLNode GetWidgetXMLInfo() const;
 
+    SerializableObject* GetRelatedInspectable() const;
+
     QGridLayout *GetGridLayout();
     int GetNextRowIndex() const;
 
@@ -74,7 +76,7 @@ public slots:
     void RefreshWidgetValues();
 
 protected:
-    SerializableObject *m_relatedInspectable = nullptr;
+    SerializableObject *p_relatedInspectable = nullptr;
 
     QVBoxLayout m_vLayout;
     QHBoxLayout m_headerLayout;

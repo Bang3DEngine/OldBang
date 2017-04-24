@@ -494,6 +494,8 @@
     <addaction name="actionAddComponentCanvas"/>
     <addaction name="actionAddComponentUIImage"/>
     <addaction name="actionAddComponentUIText"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddComponentPostProcessEffect"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -1703,6 +1705,15 @@
     <string>Redo</string>
    </property>
   </action>
+  <action name="actionAddComponentPostProcessEffect">
+   <property name="icon">
+    <iconset resource="QtResources.qrc">
+     <normaloff>:/Bang/Icons/ImageIcon.png</normaloff>:/Bang/Icons/ImageIcon.png</iconset>
+   </property>
+   <property name="text">
+    <string>PostProcess Effect</string>
+   </property>
+  </action>
   <zorder>dockExplorer</zorder>
   <zorder>dockHierarchy</zorder>
  </widget>
@@ -1755,8 +1766,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="QtResources.qrc"/>
   <include location="qdarkstyle/style.qrc"/>
+  <include location="QtResources.qrc"/>
  </resources>
  <connections/>
 </ui>

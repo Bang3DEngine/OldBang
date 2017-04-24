@@ -89,7 +89,7 @@ bool EditorPlayFlow::PlayScene()
 
     Hierarchy::GetInstance()->clearSelection();
     Console::GetInstance()->OnEditorPlay();
-    Inspector::GetInstance()->OnEditorPlay();
+    Inspector::GetInstance()->Clear();
 
     // Pick the reference of the current scene, to restore it later
     Scene *sceneCopy = nullptr;

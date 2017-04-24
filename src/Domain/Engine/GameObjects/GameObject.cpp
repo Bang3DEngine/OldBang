@@ -25,8 +25,10 @@
 #include "Bang/GraphicPipeline.h"
 #include "Bang/SingletonManager.h"
 #include "Bang/DirectionalLight.h"
+#include "Bang/PostProcessEffect.h"
 
 #ifdef BANG_EDITOR
+#include "Bang/Inspector.h"
 #include "Bang/Hierarchy.h"
 #include "Bang/EditorScene.h"
 #include "Bang/EditorPlayFlow.h"
@@ -246,7 +248,11 @@ AABox GameObject::GetObjectAABBox(bool includeChildren) const
             #endif
 
             AABox aabBoxChild = child->GetObjectAABBox(true);
-            Matrix4 mat = child->transform->GetLocalToParentMatrix();
+            Matrix4 mat;
+            if (child->transform)
+            {
+                mat = child->transform->GetLocalToParentMatrix();
+            }
             aabBoxChild = mat * aabBoxChild;
             aabBox = AABox::Union(aabBox, aabBoxChild);
         }
@@ -259,7 +265,7 @@ AABox GameObject::GetAABBox(bool includeChildren) const
 {
     AABox b = GetObjectAABBox(includeChildren);
     Matrix4 mat;
-    transform->GetLocalToWorldMatrix(&mat);
+    if (transform) { transform->GetLocalToWorldMatrix(&mat); }
     b = mat * b;
     return b;
 }
@@ -277,6 +283,8 @@ Sphere GameObject::GetBoundingSphere(bool includeChildren) const
 bool GameObject::AddComponent(Component *c)
 {
     if (!c) { return false; }
+    if (m_components.Contains(c)) { return false; }
+
     if (c->IsOfType<Transform>())
     {
         if (!HasComponent<Transform>())
@@ -290,8 +298,14 @@ bool GameObject::AddComponent(Component *c)
             return false;
         }
     }
+
     c->SetGameObject(this);
     m_components.PushBack(c);
+
+    #ifdef BANG_EDITOR
+    Inspector::GetInstance()->RefreshInspectable(this);
+    #endif
+
     return true;
 }
 
@@ -310,6 +324,10 @@ void GameObject::MoveComponent(Component *c, int distance)
             break;
         }
     }
+
+    #ifdef BANG_EDITOR
+    Inspector::GetInstance()->RefreshInspectable(this);
+    #endif
 }
 #endif
 
@@ -335,6 +353,10 @@ void GameObject::RemoveComponentInstantly(Component *c)
     if (m_transform == c) { m_transform = nullptr; }
     m_components.Remove(c);
     delete c;
+
+    #ifdef BANG_EDITOR
+    Inspector::GetInstance()->RefreshInspectable(this);
+    #endif
 }
 
 void GameObject::RemoveQueuedComponents()
@@ -510,6 +532,10 @@ void GameObject::ReadFirstTime(const XMLNode &xmlInfo)
             else if (tagName == "UIText")
             {
                 c = AddComponent<UIText>();
+            }
+            else if (tagName == "PostProcessEffect")
+            {
+                c = AddComponent<PostProcessEffect>();
             }
 
             if (c)

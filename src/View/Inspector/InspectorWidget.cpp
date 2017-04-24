@@ -24,14 +24,14 @@
 
 
 InspectorWidget::InspectorWidget()
-    : DragDropQWidget(Inspector::GetInstance())
+    : DragDropQWidget(nullptr)
 {
 }
 
 void InspectorWidget::Init(const String &title,
                            SerializableObject *relatedInspectable)
 {
-    m_relatedInspectable = relatedInspectable;
+    p_relatedInspectable = relatedInspectable;
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
     ConstructFromWidgetXMLInfo(title, xmlInfo);
@@ -75,9 +75,10 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     CreateWidgetSlots(xmlInfo);
     RefreshWidgetValues();
 
+    Debug_Log("Creating inspector widget " << p_relatedInspectable);
+
     if (autoUpdate)
     {
-        // To refresh all the slots values
         QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
                          this, SLOT(RefreshWidgetValues()));
         m_refreshTimer.start(50);
@@ -90,18 +91,15 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
 
 InspectorWidget::~InspectorWidget()
 {
-    m_relatedInspectable = nullptr;
-    m_refreshTimer.stop();
-    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
-                        this, SLOT(RefreshWidgetValues()));
+    OnDestroy();
 }
 
 XMLNode InspectorWidget::GetInspectableXMLInfo() const
 {
     XMLNode xmlInfo;
-    if (m_relatedInspectable)
+    if (p_relatedInspectable)
     {
-        m_relatedInspectable->Write(&xmlInfo);
+        p_relatedInspectable->Write(&xmlInfo);
     }
     return xmlInfo;
 }
@@ -195,6 +193,11 @@ XMLNode InspectorWidget::GetWidgetXMLInfo() const
     return xmlInfo;
 }
 
+SerializableObject *InspectorWidget::GetRelatedInspectable() const
+{
+    return p_relatedInspectable;
+}
+
 QGridLayout *InspectorWidget::GetGridLayout()
 {
     return &m_gridLayout;
@@ -229,6 +232,14 @@ int InspectorWidget::GetHeightSizeHint()
     }
 
     return heightSizeHint;
+}
+
+void InspectorWidget::OnDestroy()
+{
+    p_relatedInspectable = nullptr;
+    m_refreshTimer.stop();
+    QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
+                        this, SLOT(RefreshWidgetValues()));
 }
 
 void InspectorWidget::RefreshWidgetValues()
@@ -278,8 +289,8 @@ void InspectorWidget::CreateWidgetSlots(XMLNode &xmlInfo)
 
 void InspectorWidget::_OnSlotValueChanged()
 {
-    ENSURE(m_relatedInspectable);
-    if (m_created) { m_relatedInspectable->Read( GetWidgetXMLInfo() ); }
+    ENSURE(p_relatedInspectable);
+    if (m_created) { p_relatedInspectable->Read( GetWidgetXMLInfo() ); }
     WindowEventManager::GetInstance()->NotifyInspectorSlotChanged(this);
 }
 

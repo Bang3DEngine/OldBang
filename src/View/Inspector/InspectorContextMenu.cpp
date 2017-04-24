@@ -11,24 +11,22 @@
 #include "Bang/ComponentClipboard.h"
 
 InspectorContextMenu::InspectorContextMenu(Inspector *inspector)
-    : ContextMenu(inspector), m_inspector(inspector)
+    : ContextMenu(inspector), p_inspector(inspector)
 {
 }
 
 void InspectorContextMenu::OnCustomContextMenuRequested(QPoint point)
 {
-    ENSURE(m_inspector);
-    // ENSURE(m_inspector->p_currentGameObject);
-    ENSURE(!m_inspector->m_currentInspectorWidgets.Empty());
+    ENSURE(!p_inspector->GetCurrentInspectorWidgets().Empty());
 
-    QMenu contextMenu(tr("Inspector context menu"), m_inspector);
+    QMenu contextMenu(tr("Inspector context menu"), p_inspector);
     contextMenu.addActions(EditorWindow::GetInstance()->menuComponents->actions());
     contextMenu.addSeparator();
 
     ComponentWidget *cw = Object::SCast<ComponentWidget>(
-                m_inspector->m_currentInspectorWidgets.Front());
+                p_inspector->GetCurrentInspectorWidgets().Front());
 
-    QAction actionPasteComponent("Paste Component", m_inspector);
+    QAction actionPasteComponent("Paste Component", p_inspector);
     connect(&actionPasteComponent, SIGNAL(triggered()),
             &(cw->m_cwContextMenu), SLOT(OnPasteComponentSelected()));
     contextMenu.addAction(&actionPasteComponent);
@@ -38,5 +36,5 @@ void InspectorContextMenu::OnCustomContextMenuRequested(QPoint point)
         actionPasteComponent.setEnabled(false);
     }
 
-    contextMenu.exec(m_inspector->mapToGlobal(point));
+    contextMenu.exec(p_inspector->mapToGlobal(point));
 }

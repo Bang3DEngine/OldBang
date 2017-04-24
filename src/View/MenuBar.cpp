@@ -119,6 +119,8 @@ MenuBar::MenuBar(QWidget *parent) : QMenuBar(parent)
             this, SLOT(OnAddComponentUIImage()));
     connect(w->actionAddComponentUIText,  SIGNAL(triggered()),
             this, SLOT(OnAddComponentUIText()));
+    connect(w->actionAddComponentPostProcessEffect, SIGNAL(triggered()),
+            this, SLOT(OnAddComponentPostProcessEffect()));
 }
 
 void MenuBar::CreateNewScene() const
@@ -498,6 +500,11 @@ void MenuBar::OnAddComponentUIImage() const
 void MenuBar::OnAddComponentUIText() const
 {
     OnAddComponent<UIText>();
+}
+
+void MenuBar::OnAddComponentPostProcessEffect() const
+{
+    OnAddComponent<PostProcessEffect>();
 }
 
 void MenuBar::OnAddComponent(Component *c) const
