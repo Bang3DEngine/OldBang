@@ -2,10 +2,13 @@
 
 #include "Bang/Time.h"
 #include "Bang/Dialog.h"
-#include "Bang/Explorer.h"
 #include "Bang/EditorState.h"
 #include "Bang/QtProjectManager.h"
 #include "Bang/SingletonManager.h"
+
+#ifdef BANG_EDITOR
+#include "Bang/Explorer.h"
+#endif
 
 Behaviour::Behaviour()
 {
@@ -202,7 +205,7 @@ void Behaviour::RefreshBehaviourLib()
     // behaviour with the new one created dynamically
     QLibrary *behavioursLib = BehaviourManager::GetBehavioursMergedLibrary();
     p_behavioursLibraryBeingUsed = behavioursLib;
-    ENSURE(behavioursLib);
+    ENSURE(behavioursLib && behavioursLib->isLoaded());
 
     Behaviour *createdBehaviour = CreateDynamicBehaviour(behaviourName,
                                                          behavioursLib);

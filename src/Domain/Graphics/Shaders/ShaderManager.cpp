@@ -9,9 +9,12 @@ ShaderManager::ShaderManager()
     m_refreshTimer.start(3000);
     QObject::connect(&m_refreshTimer, SIGNAL(timeout()), this, SLOT(Refresh()));
 
+    #ifdef BANG_EDITOR
     FileTracker::TrackFilesWithExtension("glsl");
     FileTracker::TrackFilesWithExtension("vert");
     FileTracker::TrackFilesWithExtension("frag");
+    FileTracker::TrackFilesWithExtension("frag_pp");
+    #endif
 
     m_lastRefreshTime = Time::GetNow();
 }
@@ -69,10 +72,12 @@ void ShaderManager::UnRegisterUsageOfShader(ShaderProgram *shaderProgram,
 
 void ShaderManager::Refresh()
 {
+    #ifdef BANG_EDITOR
     List<String> shaderFilepaths = m_filepathToShaders.GetKeys();
     for (const String& shaderFilepath : shaderFilepaths)
     {
-        if (FileTracker::HasFileChanged(shaderFilepath, m_lastRefreshTime))
+        if (IO::ExistsFile(shaderFilepath) &&
+            FileTracker::HasFileChanged(shaderFilepath, m_lastRefreshTime))
         {
             Shader *shader = m_filepathToShaders.Get(shaderFilepath);
             shader->LoadFromFile(shaderFilepath);
@@ -86,4 +91,5 @@ void ShaderManager::Refresh()
         }
     }
     m_lastRefreshTime = Time::GetNow();
+    #endif
 }

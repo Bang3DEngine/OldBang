@@ -40,7 +40,9 @@ String ShaderProgramAssetFile::GetFragmentShaderFilepath() const
     return fShaderFilepath;
 }
 
+#ifdef BANG_EDITOR
 SerializableObject *ShaderProgramAssetFile::GetNewInspectable() const
 {
     return new ShaderProgramAssetFileInspectable(*this);
 }
+#endif

@@ -249,7 +249,6 @@ HEADERS +=                                                          \
     src/Domain/Engine/GraphicPipeline/GPPass.h \
     src/Domain/Graphics/Interfaces/GLObject.h \
     src/Domain/Engine/Debug/ChronoGL.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.h \
     src/Domain/Engine/DataStructures/Set.h \
     src/Domain/Engine/Interfaces/SerializableObject.h \
     src/Domain/Engine/GraphicPipeline/TextureUnitManager.h \
@@ -262,11 +261,9 @@ HEADERS +=                                                          \
     src/Persistence/Files/SoundFile.h \
     src/Domain/Engine/Audio/AnonymousAudioPlayer.h \
     src/Domain/Engine/DataStructures/Flags.h \
-    src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.h \
-    src/Persistence/Files/ShaderProgramAssetFile.h \
-    src/View/Inspector/Inspectables/SoundFileInspectable.h \
     src/Domain/Graphics/Shaders/ShaderManager.h \
     src/Domain/Engine/Components/PostProcessEffect.h \
+    src/Persistence/Files/ShaderProgramAssetFile.h \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.h
 
 EDITOR {
@@ -278,6 +275,8 @@ HEADERS += \
     src/Persistence/Project/QtProjectManager.h \
     src/View/DragDrop/DragDropQListView.h \
     src/View/Explorer/FileReferencesManager.h \
+    src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.h \
+    src/View/Inspector/Inspectables/SoundFileInspectable.h \
     src/View/DragDrop/DragDropQTreeWidget.h \
     src/View/DragDrop/DragDropQListWidget.h \
     src/View/DragDrop/DragDropAgent.h \
@@ -474,7 +473,6 @@ SOURCES += \
     src/Domain/Engine/GraphicPipeline/GPPass.cpp \
     src/Domain/Graphics/Interfaces/GLObject.cpp \
     src/Domain/Engine/Debug/ChronoGL.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_SP_FXAA.cpp \
     src/Domain/Engine/DataStructures/Set.cpp \
     src/Domain/Engine/Interfaces/SerializableObject.cpp \
     src/Domain/Engine/GraphicPipeline/TextureUnitManager.cpp \
@@ -486,11 +484,9 @@ SOURCES += \
     src/Persistence/Files/PrefabFile.cpp \
     src/Persistence/Files/SoundFile.cpp \
     src/Domain/Engine/Audio/AnonymousAudioPlayer.cpp \
-    src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.cpp \
-    src/Persistence/Files/ShaderProgramAssetFile.cpp \
-    src/View/Inspector/Inspectables/SoundFileInspectable.cpp \
     src/Domain/Graphics/Shaders/ShaderManager.cpp \
     src/Domain/Engine/Components/PostProcessEffect.cpp \
+    src/Persistence/Files/ShaderProgramAssetFile.cpp \
     src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp
 
 EDITOR {
@@ -498,7 +494,9 @@ EDITOR {
         src/View/EditorGameObject/EditorGizmosGameObject.cpp \
         src/Domain/Engine/GraphicPipeline/GPPass_Selection.cpp \
         src/View/GameBuilderJob.cpp \
+        src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
+        src/View/Inspector/Inspectables/SoundFileInspectable.cpp \
         src/View/Explorer/FileSystemModel.cpp \
         src/Persistence/Project/QtProjectManager.cpp \
         src/View/EditorState.cpp \
@@ -695,7 +693,7 @@ DISTFILES += \
     EngineAssets/Materials/G_DefaultNoSP.bmat \
     EngineAssets/Materials/UI/G_UIImage.bmat \
     EngineAssets/Materials/UI/SP_UIImage.bmat \
-    EngineAssets/Shaders/SP_FXAA.frag \
+    EngineAssets/Shaders/SP_FXAA.frag_pp \
     EngineAssets/Shaders/Include/Common.glsl \
     EngineAssets/Fonts/GreatFont.bfont \
     EngineAssets/Fonts/HandwrittenFont.bfont \

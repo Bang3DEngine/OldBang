@@ -106,12 +106,12 @@ void Component::Write(XMLNode *xmlInfo) const
     {XMLProperty::Hidden, XMLProperty::Readonly});
 }
 
+#ifdef BANG_EDITOR
 void Component::OnEnabledChanged(bool enabled)
 {
     SetEnabled(enabled);
 }
 
-#ifdef BANG_EDITOR
 InspectorWidget *Component::GetNewInspectorWidget()
 {
     return new ComponentWidget(this);

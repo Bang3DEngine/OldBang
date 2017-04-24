@@ -31,7 +31,8 @@ public:
     GBuffer(int width, int height);
     virtual ~GBuffer();
 
-    virtual void BindTextureBuffersTo(ShaderProgram *sp) const;
+    virtual void BindTextureBuffersTo(ShaderProgram *sp,
+                                      bool willReadFromColor) const;
 
     void ApplyPass(ShaderProgram *sp,
                    bool prepareReadFromColorBuffer = false,
@@ -39,7 +40,7 @@ public:
     void RenderToScreen(AttachmentId attachmentId);
     void RenderToScreen();
 
-    void PrepareColorReadBuffer(ShaderProgram *sp);
+    void PrepareColorReadBuffer();
 
     void SetAllDrawBuffers() const override;
     /**

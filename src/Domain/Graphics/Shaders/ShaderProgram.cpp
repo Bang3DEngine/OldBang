@@ -67,6 +67,8 @@ bool ShaderProgram::Link()
     glGetProgramiv(m_idGL, GL_LINK_STATUS, &linked);
     if (!linked)
     {
+       Debug_Error("The shader program " << this << " did not link");
+
        GLint errorLength = 0;
        glGetProgramiv(m_idGL, GL_INFO_LOG_LENGTH, &errorLength);
 
@@ -81,9 +83,11 @@ bool ShaderProgram::Link()
        }
 
        glDeleteProgram(m_idGL); m_idGL = 0;
+       return false;
     }
 
-    return linked;
+    m_nameToLocationCache.Clear(); // Invalidate cache
+    return true;
 }
 
 GL::BindTarget ShaderProgram::GetGLBindTarget() const
@@ -245,11 +249,11 @@ Shader *ShaderProgram::GetFragmentShader() const
 
 GLint ShaderProgram::GetUniformLocation(const String &name) const
 {
-    auto it = m_nameToLocationCache.Find(name);
-    if (it != m_nameToLocationCache.End()) { return it->second; }
+    //auto it = m_nameToLocationCache.Find(name);
+    //if (it != m_nameToLocationCache.End()) { return it->second; }
 
     const GLuint location = glGetUniformLocation(m_idGL, name.ToCString());
-    m_nameToLocationCache[name] = location;
+    //m_nameToLocationCache[name] = location;
     return location;
 }
 

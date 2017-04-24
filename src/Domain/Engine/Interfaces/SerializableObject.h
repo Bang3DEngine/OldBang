@@ -62,7 +62,9 @@ public:
 protected:
     SerializableObject();
 
+    #ifdef BANG_EDITOR
     InspectorFlags m_inspectorFlags = InspectorFlags(InspectorFlag::Default);
+    #endif
 };
 
 #endif // SERIALIZABLEOBJECT_H

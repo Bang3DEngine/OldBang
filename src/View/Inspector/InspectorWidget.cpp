@@ -75,8 +75,6 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(
     CreateWidgetSlots(xmlInfo);
     RefreshWidgetValues();
 
-    Debug_Log("Creating inspector widget " << p_relatedInspectable);
-
     if (autoUpdate)
     {
         QObject::connect(&m_refreshTimer, SIGNAL(timeout()),

@@ -35,7 +35,6 @@ public slots:
     void OnRectTransformClicked();
     void OnGlobalCoordsClicked();
     void OnLocalCoordsClicked();
-    void OnFXAAClicked(bool fxaa);
     void OnShowGizmosClicked(bool showGizmos);
     void OnPlayClicked();
     void OnPauseClicked();
@@ -59,7 +58,6 @@ private:
     QToolButton *m_buttonRectTransformMode   = nullptr;
     QToolButton *m_buttonGlobalCoords        = nullptr;
     QToolButton *m_buttonLocalCoords         = nullptr;
-    QToolButton *m_buttonFXAA                = nullptr;
     QToolButton *m_buttonShowGizmos          = nullptr;
     QToolButton *m_buttonPlay                = nullptr;
     QToolButton *m_buttonPause               = nullptr;

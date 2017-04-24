@@ -242,19 +242,6 @@
               </spacer>
              </item>
              <item>
-              <widget class="QToolButton" name="buttonFXAA">
-               <property name="text">
-                <string>FXAA</string>
-               </property>
-               <property name="checkable">
-                <bool>true</bool>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QToolButton" name="buttonShowGizmos">
                <property name="text">
                 <string>Gizmos</string>
@@ -1766,8 +1753,8 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="qdarkstyle/style.qrc"/>
   <include location="QtResources.qrc"/>
+  <include location="qdarkstyle/style.qrc"/>
  </resources>
  <connections/>
 </ui>

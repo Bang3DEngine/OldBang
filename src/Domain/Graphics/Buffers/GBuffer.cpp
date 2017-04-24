@@ -44,17 +44,18 @@ GBuffer::~GBuffer()
 {
 }
 
-void GBuffer::BindTextureBuffersTo(ShaderProgram *sp) const
+void GBuffer::BindTextureBuffersTo(ShaderProgram *sp,
+                                   bool willReadFromColor) const
 {
     // Color Attachments bindings as Shader Inputs
+    Bind();
     sp->SetTexture("B_GTex_NormalDepth",    m_normalTexture);
     sp->SetTexture("B_GTex_DiffColor", m_diffuseTexture);
     sp->SetTexture("B_GTex_Misc",      m_miscTexture);
 
-    sp->SetTexture("B_GTex_Color",
-                   m_willReadFromColorRead ? m_colorReadTexture :
-                                             m_colorTexture);
-    m_willReadFromColorRead = false;
+    sp->SetTexture("B_GTex_Color", willReadFromColor ? m_colorReadTexture :
+                                                       m_colorTexture);
+    UnBind();
 }
 
 
@@ -62,20 +63,15 @@ void GBuffer::ApplyPass(ShaderProgram *sp,
                         bool prepareReadFromColorBuffer,
                         const Rect &mask)
 {
-    sp->SetVec2("B_ScreenSize", Screen::GetSize());
-
     bool prevStencilWrite = m_stencilWrite;
     SetStencilWrite(false);
 
     Bind();
-    BindTextureBuffersTo(sp);
+    BindTextureBuffersTo(sp, prepareReadFromColorBuffer);
 
-    if (prepareReadFromColorBuffer)
-    {
-        PrepareColorReadBuffer(sp);
-    }
-
+    if (prepareReadFromColorBuffer) { PrepareColorReadBuffer(); }
     SetColorDrawBuffer();
+
     GraphicPipeline::GetActive()->ApplyScreenPass(sp, mask);
 
     UnBind();
@@ -95,15 +91,13 @@ void GBuffer::RenderToScreen()
     RenderToScreen(GBuffer::AttColor);
 }
 
-void GBuffer::PrepareColorReadBuffer(ShaderProgram *sp)
+void GBuffer::PrepareColorReadBuffer()
 {
     SetReadBuffer(AttColor);
     SetDrawBuffers({AttColorRead});
     glBlitFramebuffer(0, 0, GetWidth(), GetHeight(),
                       0, 0, GetWidth(), GetHeight(),
-                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-    m_willReadFromColorRead = true;
+                      GL_COLOR_BUFFER_BIT, GL_NEAREST);
 }
 
 void GBuffer::SetAllDrawBuffers() const

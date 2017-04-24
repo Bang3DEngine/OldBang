@@ -593,6 +593,7 @@ void GameObject::Write(XMLNode *xmlInfo) const
     }
 }
 
+#ifdef BANG_EDITOR
 String GameObject::GetTitleInInspector() const
 {
     return GetName();
@@ -603,7 +604,6 @@ void GameObject::OnEnabledChanged(bool enabled)
     SetEnabled(enabled);
 }
 
-#ifdef BANG_EDITOR
 InspectorWidget *GameObject::GetNewInspectorWidget()
 {
     // Inspector will use one InspectorWidget for each component

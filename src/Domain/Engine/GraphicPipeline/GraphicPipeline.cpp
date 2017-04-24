@@ -23,7 +23,6 @@
 #include "Bang/ShaderProgram.h"
 #include "Bang/AssetsManager.h"
 #include "Bang/RectTransform.h"
-#include "Bang/GPPass_SP_FXAA.h"
 #include "Bang/GPPass_G_Gizmos.h"
 #include "Bang/TextureUnitManager.h"
 #include "Bang/GraphicPipelineDebugger.h"
@@ -72,7 +71,8 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
        }),
        new GPPass_G(this, false, true),     // Unlighted Transparent
 
-       new GPPass_SP_PostProcessEffects(this)
+       new GPPass_SP_PostProcessEffects(this,
+                                        PostProcessEffect::Type::AfterScene)
      });
 
     m_canvasPass =
@@ -80,7 +80,8 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
      {
       new GPPass_G(this, false, false),  // Canvas opaques
       new GPPass_G(this, false, true),   // Canvas transparents
-      new GPPass_SP_PostProcessEffects(this)
+      new GPPass_SP_PostProcessEffects(this,
+                                       PostProcessEffect::Type::AfterCanvas)
      });
 
     m_gizmosPass = new GPPass_DepthLayer(this, DL::DepthLayerGizmos,
@@ -89,8 +90,6 @@ GraphicPipeline::GraphicPipeline(Screen *screen)
      new GPPass_G_Gizmos(this, false, false), // Gizmos normal
      new GPPass_G_Gizmos(this, false,  true)  // Gizmos with overlay
     });
-
-    m_fxaaPass = new GPPass_SP_FXAA(this);
 
     #ifdef BANG_EDITOR
     m_sceneSelectionPass  = new GPPass_DepthLayer(this, DL::DepthLayerScene,
@@ -114,7 +113,6 @@ GraphicPipeline::~GraphicPipeline()
     delete m_scenePass;
     delete m_canvasPass;
     delete m_gizmosPass;
-    delete m_fxaaPass;
 
     #ifdef BANG_EDITOR
     delete m_selectionFB;
@@ -231,7 +229,6 @@ void GraphicPipeline::RenderGBuffer(const List<Renderer*> &renderers,
     m_scenePass->Pass(renderers, sceneChildren);
     if (!m_renderingInGame) { ApplySelectionOutline(); }
     m_gbuffer->ClearStencil();
-    if (GetFXAA()) { m_fxaaPass->Pass(renderers, sceneChildren); }
 
     m_canvasPass->Pass(renderers, sceneChildren);
     m_gizmosPass->Pass(renderers, sceneChildren);
@@ -267,10 +264,10 @@ void GraphicPipeline::RenderSelectionBuffer(
 
 void GraphicPipeline::ApplyScreenPass(ShaderProgram *sp, const Rect &mask)
 {
+    sp->Bind();
     sp->SetVec2("B_rectMinCoord", mask.GetMin());
     sp->SetVec2("B_rectMaxCoord", mask.GetMax());
-
-    sp->Bind();
+    sp->SetVec2("B_ScreenSize", Screen::GetSize());
     RenderScreenPlane();
     sp->UnBind();
 }
@@ -326,16 +323,6 @@ void GraphicPipeline::SetGBufferAttachmentToBeRendered(
         GBuffer::AttachmentId attachment)
 {
     m_gbufferAttachToBeShown = attachment;
-}
-
-void GraphicPipeline::SetFXAA(bool enabled)
-{
-    m_FXAA = enabled;
-}
-
-bool GraphicPipeline::GetFXAA() const
-{
-    return m_FXAA;
 }
 
 GLContext *GraphicPipeline::GetGLContext() const

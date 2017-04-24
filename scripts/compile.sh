@@ -44,7 +44,7 @@ echo "RELEASE_OR_DEBUG on compile.sh: '${RELEASE_OR_DEBUG}'"
 echo "-----"
 sleep 5
 
-./scripts/createHeaders.sh
+#./scripts/createHeaders.sh
 
 qmake "BUILD_MODE=${BUILD_MODE}" "RELEASE_OR_DEBUG=${RELEASE_OR_DEBUG}"
 if [ $(command_exists colormake) ] && [ "${BUILD_MODE}" != "GAME" ]

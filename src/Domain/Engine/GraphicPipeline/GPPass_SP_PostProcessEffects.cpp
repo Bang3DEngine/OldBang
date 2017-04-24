@@ -7,9 +7,12 @@
 #include "Bang/PostProcessEffect.h"
 
 GPPass_SP_PostProcessEffects::GPPass_SP_PostProcessEffects(
-        GraphicPipeline *graphicPipeline, const List<GPPass *> &subPasses)
+        GraphicPipeline *graphicPipeline,
+        PostProcessEffect::Type type,
+        const List<GPPass *> &subPasses)
     : GPPass(graphicPipeline, subPasses)
 {
+    m_type = type;
 }
 
 void GPPass_SP_PostProcessEffects::InPass(const List<Renderer *> &renderers,
@@ -17,14 +20,25 @@ void GPPass_SP_PostProcessEffects::InPass(const List<Renderer *> &renderers,
 {
     List<PostProcessEffect*> postProcessEffects =
                        p_scene->GetComponentsInChildren<PostProcessEffect>();
+
+    postProcessEffects.Sort();
+
     for (PostProcessEffect *postProcessEffect : postProcessEffects)
     {
+        if (!postProcessEffect->IsEnabled() ||
+             postProcessEffect->GetType() != m_type) { continue; }
+
         ShaderProgram *postProcessShaderProgram =
                          postProcessEffect->GetPostProcessShaderProgram();
         if (postProcessShaderProgram)
         {
+            GL::SetTestDepth(false);
+            p_gbuffer->Bind();
             p_gbuffer->SetStencilTest(false);
+            p_gbuffer->SetStencilWrite(false);
             p_gbuffer->ApplyPass(postProcessShaderProgram, true);
+            p_gbuffer->UnBind();
+            GL::SetTestDepth(true);
         }
     }
 }

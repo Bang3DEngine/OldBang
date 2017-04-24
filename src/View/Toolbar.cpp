@@ -43,7 +43,6 @@ void Toolbar::Init()
     tb->m_buttonGlobalCoords        = w->buttonGlobalCoords;
     tb->m_buttonLocalCoords         = w->buttonLocalCoords;
     tb->m_buttonShowGizmos          = w->buttonShowGizmos;
-    tb->m_buttonFXAA                = w->buttonFXAA;
     tb->m_buttonPlay                = w->buttonPlay;
     tb->m_buttonPause               = w->buttonPause;
     tb->m_buttonStepFrame           = w->buttonStepFrame;
@@ -64,10 +63,6 @@ void Toolbar::Init()
             tb, SLOT(OnGlobalCoordsClicked()));
     connect(tb->m_buttonLocalCoords, SIGNAL(clicked()),
             tb, SLOT(OnLocalCoordsClicked()));
-
-    connect(tb->m_buttonFXAA, SIGNAL(clicked(bool)), tb,
-            SLOT(OnFXAAClicked(bool)));
-    tb->OnFXAAClicked( tb->m_buttonFXAA->isChecked() );
 
     connect(tb->m_buttonShowGizmos, SIGNAL(clicked(bool)),
             tb, SLOT(OnShowGizmosClicked(bool)));
@@ -179,11 +174,6 @@ void Toolbar::OnLocalCoordsClicked()
     m_buttonGlobalCoords->setChecked(false);
     m_buttonLocalCoords->setChecked(true);
     EditorState::GetInstance()->m_globalCoords = false;
-}
-
-void Toolbar::OnFXAAClicked(bool fxaa)
-{
-    GraphicPipeline::GetActive()->SetFXAA(fxaa);
 }
 
 void Toolbar::OnShowGizmosClicked(bool showGizmos)

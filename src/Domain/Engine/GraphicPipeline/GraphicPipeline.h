@@ -13,7 +13,6 @@ class Material;
 class GLContext;
 class GameObject;
 class Framebuffer;
-class GPPass_SP_FXAA;
 class TextureUnitManager;
 class SelectionFramebuffer;
 /**
@@ -39,9 +38,6 @@ public:
 
     void SetGBufferAttachmentToBeRendered(GBuffer::AttachmentId attachment);
 
-    void SetFXAA(bool enabled);
-    bool GetFXAA() const;
-
     GLContext *GetGLContext() const;
     GBuffer *GetGBuffer();
     TextureUnitManager *GetTextureUnitManager() const;
@@ -55,7 +51,6 @@ public:
     void ApplyDeferredLights(Renderer *rend = nullptr);
 
 private:
-    bool m_FXAA = 1;
     TextureUnitManager *m_texUnitManager = nullptr;
     GLContext *m_glContext = nullptr;
 
@@ -67,7 +62,6 @@ private:
     GPPass_DepthLayer *m_scenePass  = nullptr;
     GPPass_DepthLayer *m_canvasPass = nullptr;
     GPPass_DepthLayer *m_gizmosPass = nullptr;
-    GPPass_SP_FXAA *m_fxaaPass = nullptr;
 
     #ifdef BANG_EDITOR
     GPPass_DepthLayer *m_sceneSelectionPass  = nullptr;

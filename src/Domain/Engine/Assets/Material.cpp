@@ -199,7 +199,7 @@ void Material::Bind() const
     sp->Bind();
 
     GBuffer *gb = GraphicPipeline::GetActive()->GetGBuffer();
-    gb->BindTextureBuffersTo(sp);
+    gb->BindTextureBuffersTo(sp, false);
 
     sp->SetVec2("B_ScreenSize", Screen::GetSize());
 

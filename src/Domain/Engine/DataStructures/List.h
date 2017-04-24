@@ -216,6 +216,11 @@ public:
         return array;
     }
 
+    void Sort()
+    {
+        this->sort();
+    }
+
     Iterator Begin() { return this->begin(); }
     Iterator End() { return this->end(); }
     Const_Iterator Begin() const { return this->begin(); }

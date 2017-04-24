@@ -31,8 +31,7 @@ void GPPass_G::InPass(const List<Renderer*> &renderers,
         if (!CanRender(rend)) { continue; }
         if (rend->IsTransparent())
         {
-            p_gbuffer->PrepareColorReadBuffer(
-                        rend->GetMaterial()->GetShaderProgram());
+            p_gbuffer->PrepareColorReadBuffer();
             p_gbuffer->SetAllDrawBuffers();
         }
         rend->Render();
