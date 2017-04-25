@@ -264,7 +264,11 @@ HEADERS +=                                                          \
     src/Domain/Graphics/Shaders/ShaderManager.h \
     src/Domain/Engine/Components/PostProcessEffect.h \
     src/Persistence/Files/ShaderProgramAssetFile.h \
-    src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.h
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.h \
+    src/View/Inspector/Inspectables/Inspectable.h \
+    src/View/Inspector/Inspectables/GameObjectInspectable.h \
+    src/View/Inspector/Inspectables/IInspectable.h \
+    src/View/Inspector/Inspectables/FileInspectable.h
 
 EDITOR {
 HEADERS += \
@@ -276,7 +280,6 @@ HEADERS += \
     src/View/DragDrop/DragDropQListView.h \
     src/View/Explorer/FileReferencesManager.h \
     src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.h \
-    src/View/Inspector/Inspectables/SoundFileInspectable.h \
     src/View/DragDrop/DragDropQTreeWidget.h \
     src/View/DragDrop/DragDropQListWidget.h \
     src/View/DragDrop/DragDropAgent.h \
@@ -487,7 +490,11 @@ SOURCES += \
     src/Domain/Graphics/Shaders/ShaderManager.cpp \
     src/Domain/Engine/Components/PostProcessEffect.cpp \
     src/Persistence/Files/ShaderProgramAssetFile.cpp \
-    src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp
+    src/Domain/Engine/GraphicPipeline/GPPass_SP_PostProcessEffects.cpp \
+    src/View/Inspector/Inspectables/Inspectable.cpp \
+    src/View/Inspector/Inspectables/GameObjectInspectable.cpp \
+    src/View/Inspector/Inspectables/IInspectable.cpp \
+    src/View/Inspector/Inspectables/FileInspectable.cpp
 
 EDITOR {
     SOURCES += \
@@ -496,7 +503,6 @@ EDITOR {
         src/View/GameBuilderJob.cpp \
         src/View/Inspector/Inspectables/ShaderProgramAssetFileInspectable.cpp \
         src/View/Dialogs/GameBuildDialog.cpp \
-        src/View/Inspector/Inspectables/SoundFileInspectable.cpp \
         src/View/Explorer/FileSystemModel.cpp \
         src/Persistence/Project/QtProjectManager.cpp \
         src/View/EditorState.cpp \

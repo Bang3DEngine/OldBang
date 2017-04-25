@@ -294,13 +294,6 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    #ifdef BANG_EDITOR
-    virtual String GetTitleInInspector() const override;
-    virtual void OnEnabledChanged(bool enabled) override;
-    virtual InspectorWidget *GetNewInspectorWidget() override;
-    virtual List<SerializableObject*> GetInspectorSerializableObjects() override;
-    #endif
-
     void SetEnabled(bool m_enabled);
     bool IsEnabled() const;
 

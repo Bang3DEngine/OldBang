@@ -40,9 +40,9 @@ const QPixmap& MaterialAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *MaterialAssetFile::GetNewInspectable() const
+IInspectable *MaterialAssetFile::GetNewInspectable() const
 {
-    return new MaterialAssetFileInspectable(*this);
+    return nullptr;//new MaterialAssetFileInspectable(*this);
 }
 #endif
 

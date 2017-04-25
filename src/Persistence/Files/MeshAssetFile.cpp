@@ -34,9 +34,9 @@ const QPixmap& MeshAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *MeshAssetFile::GetNewInspectable() const
+IInspectable *MeshAssetFile::GetNewInspectable() const
 {
-    return new MeshAssetFileInspectable(*this);
+    return nullptr;//new MeshAssetFileInspectable(*this);
 }
 
 void MeshAssetFile::SetMeshFilepath(const String &meshFilepath)

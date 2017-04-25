@@ -55,8 +55,8 @@ void PrefabFile::OnInspectorSlotChanged(InspectorWidget *inspectorItem)
                                m_tmpGameObject->GetXMLInfo());
 }
 
-SerializableObject *PrefabFile::GetNewInspectable() const
+IInspectable *PrefabFile::GetNewInspectable() const
 {
-    return new PrefabAssetFileInspectable(*this);
+    return nullptr;//new PrefabAssetFileInspectable(*this);
 }
 #endif

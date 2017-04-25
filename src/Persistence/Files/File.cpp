@@ -23,6 +23,7 @@
 #include "Bang/Texture2D.h"
 #include "Bang/PrefabFile.h"
 #include "Bang/IconManager.h"
+#include "Bang/IInspectable.h"
 #include "Bang/MeshAssetFile.h"
 #include "Bang/ShaderProgram.h"
 #include "Bang/MaterialAssetFile.h"
@@ -266,7 +267,7 @@ const QPixmap& File::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *File::GetNewInspectable() const
+IInspectable* File::GetNewInspectable() const
 {
     return nullptr;
 }

@@ -6,6 +6,7 @@
 #include "Bang/WinUndef.h"
 
 #include "Bang/EditorWindow.h"
+#include "Bang/IInspectable.h"
 #include "Bang/InspectorWidget.h"
 #include "Bang/SerializableObject.h"
 
@@ -41,22 +42,11 @@ void Inspector::updateGeometries()
 
 void Inspector::Clear()
 {
-    while (!m_currentInspectableChildren.Empty())
-    {
-        SerializableObject *childSerialObject = m_currentInspectableChildren.Front();
-        if (childSerialObject->GetInspectorFlags()->IsOn(
-                    SerializableObject::InspectorFlag::DeleteWhenCleared))
-        {
-            delete childSerialObject;
-        }
-        m_currentInspectableChildren.Remove(childSerialObject);
-    }
+    delete m_currentInspectable;
+    m_currentInspectable = nullptr;
 
     List<InspectorWidget*> currentInspWidgets = GetCurrentInspectorWidgets();
     for (InspectorWidget *iw : currentInspWidgets) { iw->OnDestroy(); }
-
-    m_currentInspectable = nullptr;
-    m_currentInspectableChildren.Clear();
 
     m_titleLabel->setText(tr(""));
     m_enabledCheckBox->setVisible(false);
@@ -66,12 +56,9 @@ void Inspector::Clear()
     clear();
 }
 
-void Inspector::RefreshInspectable(SerializableObject *serializableObject)
+void Inspector::RefreshInspectable(IInspectable *inspectable)
 {
-    if (serializableObject == m_currentInspectable)
-    {
-        Refresh();
-    }
+    if (inspectable == m_currentInspectable) { Refresh(); }
 }
 
 void Inspector::Refresh()
@@ -79,30 +66,23 @@ void Inspector::Refresh()
     ShowInspectable(m_currentInspectable);
 }
 
-void Inspector::ShowInspectable(SerializableObject *insp, const String &title)
+void Inspector::ShowInspectable(IInspectable *insp, const String &title)
 {
     Clear();
 
-    m_currentInspectable = insp;
-    ENSURE(insp);
+    m_currentInspectable = insp; ENSURE(insp);
 
-    typedef SerializableObject::InspectorFlag InspFlag;
-    bool showEnabledCheckBox = insp->GetInspectorFlags()->IsOn(
-                                          InspFlag::IsEnabledCheckBoxVisible);
-    m_enabledCheckBox->setVisible(showEnabledCheckBox);
+    m_enabledCheckBox->setVisible(m_currentInspectable->NeedsEnabledCheckBox());
+    m_enabledCheckBox->setChecked(m_currentInspectable->IsEnabled());
 
-    bool checkBoxEnabled = insp->GetInspectorFlags()->IsOn(InspFlag::IsEnabled);
-    m_enabledCheckBox->setChecked(checkBoxEnabled);
+    List<IInspectable*> inspectablesToShow =
+            m_currentInspectable->GetNewInspectablesToShow();
 
-    List<SerializableObject*> serialObjects =
-            insp->GetInspectorSerializableObjects();
-
-    for (SerializableObject *serialObject : serialObjects)
+    for (IInspectable *inspectableToShow : inspectablesToShow)
     {
-        InspectorWidget *iw = serialObject->GetNewInspectorWidget();
+        InspectorWidget *iw = inspectableToShow->GetNewInspectorWidget();
         if (iw)
         {
-            m_currentInspectableChildren.PushBack(serialObject);
             iw->RefreshWidgetValues();
             AddWidget(iw);
         }
@@ -138,30 +118,27 @@ void Inspector::OnEnabledCheckBoxChanged(bool checked)
     m_currentInspectable->OnEnabledChanged(checked);
 }
 
-SerializableObject *Inspector::GetCurrentInspectable()
+IInspectable *Inspector::GetCurrentInspectable()
 {
     return m_currentInspectable;
 }
 
 void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
 {
-    if (destroyed == m_currentInspectable)
+    ENSURE(m_currentInspectable);
+    if (destroyed == m_currentInspectable->GetRelatedSerializableObject())
     {
         m_currentInspectable = nullptr;
-        m_currentInspectableChildren.Clear();
         Clear();
         return;
     }
 
-    m_currentInspectableChildren.Remove(destroyed);
     for (int i = 0; i < count(); ++i)
     {
         QListWidgetItem *itm = item(i);
-        InspectorWidget *iw = Object::SCast<InspectorWidget>(itemWidget(itm));
-        if (iw && iw->GetRelatedInspectable() == destroyed)
+        //if (iw && iw->GetRelatedInspectable() == destroyed)
         {
-            iw->OnDestroy();
-            delete itm;
+        //    delete itm;
         }
     }
 }

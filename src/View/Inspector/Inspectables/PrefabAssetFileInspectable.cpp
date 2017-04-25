@@ -29,7 +29,7 @@ PrefabAssetFileInspectable::~PrefabAssetFileInspectable()
 
 void PrefabAssetFileInspectable::ShowInInspector()
 {
-    Inspector::GetInstance()->ShowInspectable(m_prefabTempGameObject);
+    //Inspector::GetInstance()->ShowInspectable(m_prefabTempGameObject);
 }
 
 void PrefabAssetFileInspectable::Read(const XMLNode &xmlInfo)

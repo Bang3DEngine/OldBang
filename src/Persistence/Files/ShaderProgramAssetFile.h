@@ -20,7 +20,7 @@ public:
     String GetFragmentShaderFilepath() const;
 
     #ifdef BANG_EDITOR
-    virtual SerializableObject *GetNewInspectable() const override;
+    virtual IInspectable *GetNewInspectable() const override;
     #endif
 };
 

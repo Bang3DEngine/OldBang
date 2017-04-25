@@ -41,14 +41,6 @@ GameObject::GameObject(const String &name)
     : m_name(name)
 {
     AddComponent<Transform>();
-
-    #ifdef BANG_EDITOR
-    GetInspectorFlags()->SetOff(
-                SerializableObject::InspectorFlag::DeleteWhenCleared);
-    GetInspectorFlags()->SetOn(
-                SerializableObject::InspectorFlag::IsEnabledCheckBoxVisible);
-    SetEnabled(true);
-    #endif
 }
 
 
@@ -303,7 +295,7 @@ bool GameObject::AddComponent(Component *c)
     m_components.PushBack(c);
 
     #ifdef BANG_EDITOR
-    Inspector::GetInstance()->RefreshInspectable(this);
+    // Inspector::GetInstance()->RefreshInspectable(this);
     #endif
 
     return true;
@@ -326,7 +318,7 @@ void GameObject::MoveComponent(Component *c, int distance)
     }
 
     #ifdef BANG_EDITOR
-    Inspector::GetInstance()->RefreshInspectable(this);
+    // Inspector::GetInstance()->RefreshInspectable(this);
     #endif
 }
 #endif
@@ -355,7 +347,7 @@ void GameObject::RemoveComponentInstantly(Component *c)
     delete c;
 
     #ifdef BANG_EDITOR
-    Inspector::GetInstance()->RefreshInspectable(this);
+    // Inspector::GetInstance()->RefreshInspectable(this);
     #endif
 }
 
@@ -593,33 +585,6 @@ void GameObject::Write(XMLNode *xmlInfo) const
     }
 }
 
-#ifdef BANG_EDITOR
-String GameObject::GetTitleInInspector() const
-{
-    return GetName();
-}
-
-void GameObject::OnEnabledChanged(bool enabled)
-{
-    SetEnabled(enabled);
-}
-
-InspectorWidget *GameObject::GetNewInspectorWidget()
-{
-    // Inspector will use one InspectorWidget for each component
-    // not per GameObject
-    return nullptr;
-}
-
-List<SerializableObject *> GameObject::GetInspectorSerializableObjects()
-{
-    List<SerializableObject*> serialObjects;
-    for (Component *component : m_components) { serialObjects.Add(component); }
-    return serialObjects;
-}
-
-#endif
-
 bool GameObject::IsSelected() const
 {
     #ifdef BANG_EDITOR
@@ -682,11 +647,6 @@ void GameObject::OnHierarchyGameObjectsSelected(
 void GameObject::SetEnabled(bool enabled)
 {
     m_enabled = enabled;
-
-    #ifdef BANG_EDITOR
-    if (m_enabled) { GetInspectorFlags()->SetOn(InspectorFlag::IsEnabled); }
-    else { GetInspectorFlags()->SetOff(InspectorFlag::IsEnabled); }
-    #endif
 }
 
 bool GameObject::IsEnabled() const

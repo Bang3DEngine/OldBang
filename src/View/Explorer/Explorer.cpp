@@ -251,7 +251,7 @@ void Explorer::RefreshInspector()
     {
         Inspector::GetInstance()->Clear();
 
-        SerializableObject *newInspectable = nullptr;
+        IInspectable *newInspectable = nullptr;
         File *specificFile = File::GetSpecificFile(f);
         if (specificFile)
         {

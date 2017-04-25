@@ -81,42 +81,6 @@ String SerializableObject::GetFileExtension() const
     return "";
 }
 
-#ifdef BANG_EDITOR
-
-const SerializableObject::InspectorFlags&
-                SerializableObject::GetInspectorFlags() const
-{
-    return m_inspectorFlags;
-}
-
-SerializableObject::InspectorFlags *SerializableObject::GetInspectorFlags()
-{
-    return &m_inspectorFlags;
-}
-
-void SerializableObject::OnEnabledChanged(bool enabled)
-{
-}
-
-String SerializableObject::GetTitleInInspector() const
-{
-    return GetClassName();
-}
-
-InspectorWidget *SerializableObject::GetNewInspectorWidget()
-{
-    InspectorWidget *iw = new InspectorWidget();
-    iw->Init("", this);
-    return iw;
-}
-
-List<SerializableObject*>
-            SerializableObject::GetInspectorSerializableObjects()
-{
-    return {this};
-}
-#endif
-
 SerializableObject::SerializableObject()
 {
     #ifdef BANG_EDITOR

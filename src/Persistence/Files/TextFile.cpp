@@ -2,6 +2,7 @@
 
 #include "Bang/IO.h"
 #include "Bang/FileReader.h"
+#include "Bang/Inspectable.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/TextFileInspectable.h"
@@ -23,9 +24,9 @@ String TextFile::GetContents() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *TextFile::GetNewInspectable() const
+IInspectable *TextFile::GetNewInspectable() const
 {
-    return new TextFileInspectable(*this);
+    return nullptr;
 }
 #endif
 

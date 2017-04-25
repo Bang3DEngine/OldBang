@@ -3,6 +3,7 @@
 #include "Bang/Debug.h"
 #include "Bang/Image.h"
 #include "Bang/IconManager.h"
+#include "Bang/Inspectable.h"
 
 #ifdef BANG_EDITOR
 #include "Bang/ImageFileInspectable.h"
@@ -28,9 +29,9 @@ const QPixmap& ImageFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *ImageFile::GetNewInspectable() const
+IInspectable *ImageFile::GetNewInspectable() const
 {
-    return new ImageFileInspectable(*this);
+    return nullptr; //new Inspectable<ImageFileInspectable>(*this);
 }
 #endif
 

@@ -15,7 +15,7 @@ public:
     String GetContents() const;
 
     #ifdef BANG_EDITOR
-    virtual SerializableObject *GetNewInspectable() const override;
+    virtual IInspectable *GetNewInspectable() const override;
     #endif
 
     virtual bool IsAsset() const override;

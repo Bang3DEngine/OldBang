@@ -28,9 +28,9 @@ const QPixmap& MeshFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *MeshFile::GetNewInspectable() const
+IInspectable *MeshFile::GetNewInspectable() const
 {
-    return new MeshFileInspectable(*this);
+    return nullptr;//new MeshFileInspectable(*this);
 }
 #endif
 

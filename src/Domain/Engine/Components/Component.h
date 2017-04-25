@@ -47,11 +47,6 @@ public:
     virtual void Read(const XMLNode &xmlInfo) override;
     virtual void Write(XMLNode *xmlInfo) const override;
 
-    #ifdef BANG_EDITOR
-    virtual void OnEnabledChanged(bool enabled) override;
-    virtual InspectorWidget *GetNewInspectorWidget() override;
-    #endif
-
 protected:
     bool m_enabled = true;
     bool m_closedInInspector = false;

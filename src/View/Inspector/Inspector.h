@@ -8,6 +8,7 @@
 class QLabel;
 class QCheckBox;
 class QDropEvent;
+class IInspectable;
 class InspectorWidget;
 class SerializableObject;
 class Inspector : public DragDropQListWidget
@@ -21,16 +22,15 @@ public:
 
     void Clear();
 
-    void RefreshInspectable(SerializableObject *serializableObject);
-    void ShowInspectable(SerializableObject *inspectable,
-                         const String &title = "");
+    void RefreshInspectable(IInspectable *inspectable);
+    void ShowInspectable(IInspectable *inspectable, const String &title = "");
 
 public slots:
     void OnEnabledCheckBoxChanged(bool checked);
     void Refresh();
 
 public:
-    SerializableObject* GetCurrentInspectable();
+    IInspectable* GetCurrentInspectable();
     void OnSerializableObjectDestroyed(SerializableObject *destroyed);
 
     void AddWidget(InspectorWidget *widget, int row = -1);
@@ -54,8 +54,7 @@ private:
     QLabel    *m_titleLabel      = nullptr;
     QCheckBox *m_enabledCheckBox = nullptr;
 
-    SerializableObject       *m_currentInspectable = nullptr;
-    List<SerializableObject*> m_currentInspectableChildren;
+    IInspectable *m_currentInspectable = nullptr;
 
     friend class InspectorWidget;
     friend class InspectorContextMenu;

@@ -8,7 +8,8 @@
 #include "Bang/String.h"
 #include "Bang/SerializableObject.h"
 
-class File
+class IInspectable;
+class File : public SerializableObject
 {
 public:
 
@@ -58,7 +59,7 @@ public:
     virtual const QPixmap& GetIcon() const;
 
     #ifdef BANG_EDITOR
-    virtual SerializableObject *GetNewInspectable() const;
+    virtual IInspectable* GetNewInspectable() const;
     #endif
 
     String GetContents() const;

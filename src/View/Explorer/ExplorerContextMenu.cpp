@@ -112,7 +112,7 @@ Texture2D* ExplorerContextMenu::OnCreateTextureFromImageClicked()
     tex->LoadFromImage(f.GetAbsolutePath());
 
     AssetsManager::UpdateAsset(tex->GetFilepath(), tex->GetXMLInfo());
-    Inspector::GetInstance()->ShowInspectable(tex, newTexName);
+    //Inspector::GetInstance()->ShowInspectable(tex, newTexName);
 
     return tex;
 }
@@ -137,7 +137,7 @@ AudioClip *ExplorerContextMenu::OnCreateAudioClipFromSound()
     AudioClip *audio = mb->OnCreateAudioClip(newAudioName);
     audio->LoadFromFile(f.GetAbsolutePath());
     AssetsManager::UpdateAsset(audio->GetFilepath(), audio->GetXMLInfo());
-    Inspector::GetInstance()->ShowInspectable(audio, newAudioName);
+    //Inspector::GetInstance()->ShowInspectable(audio, newAudioName);
 
     return audio;
 }
@@ -164,7 +164,7 @@ Material* ExplorerContextMenu::OnCreateMaterialFromTextureClicked(Texture2D *tex
     Material *mat = mb->OnCreateMaterial(newMatName);
     mat->SetTexture(fromTexture);
     AssetsManager::UpdateAsset(mat->GetFilepath(), mat->GetXMLInfo());
-    Inspector::GetInstance()->ShowInspectable(mat, newMatName);
+    //Inspector::GetInstance()->ShowInspectable(mat, newMatName);
     return mat;
 }
 

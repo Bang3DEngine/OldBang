@@ -28,7 +28,7 @@ const QPixmap& FontAssetFile::GetIcon() const
 }
 
 #ifdef BANG_EDITOR
-SerializableObject *FontAssetFile::GetNewInspectable() const
+IInspectable *FontAssetFile::GetNewInspectable() const
 {
     return nullptr;
 }
