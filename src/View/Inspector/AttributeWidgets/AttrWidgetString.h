@@ -23,7 +23,7 @@ private:
 
 public:
     AttrWidgetString(const XMLAttribute &xmlAttribute,
-                     InspectorWidget *m_inspectorWidget);
+                     InspectorWidget *p_inspectorWidget);
 
     virtual void SetValue(const String &value);
     virtual String GetValue() const;

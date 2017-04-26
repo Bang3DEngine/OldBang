@@ -23,7 +23,7 @@ public:
 
 public:
     AttrWidgetFile(const XMLAttribute &xmlAttribute,
-                   InspectorWidget *m_inspectorWidget);
+                   InspectorWidget *p_inspectorWidget);
     virtual ~AttrWidgetFile();
 
     virtual void SetValue(const String &filepath, bool draggedFile = false);

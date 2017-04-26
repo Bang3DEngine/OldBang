@@ -30,7 +30,8 @@ void ImageFile::Read(const XMLNode &xmlInfo)
 
 void ImageFile::Write(XMLNode *xmlInfo) const
 {
-    xmlInfo->SetTagName( GetName() );
+    File::Write(xmlInfo);
+
     xmlInfo->SetString("FileName", GetName() + "." + GetExtension(),
                        {XMLProperty::Readonly});
     xmlInfo->SetFilepath("ImageFilePath", GetRelativePath(), "",

@@ -29,8 +29,8 @@ void TextFile::Read(const XMLNode &xmlInfo)
 
 void TextFile::Write(XMLNode *xmlInfo) const
 {
-    SerializableObject::Write(xmlInfo);
-    xmlInfo->SetTagName("Text file");
+    File::Write(xmlInfo);
+
     xmlInfo->SetString("Contents", GetContents(), {XMLProperty::BigText});
 }
 

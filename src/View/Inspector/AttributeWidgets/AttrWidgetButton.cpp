@@ -29,7 +29,9 @@ AttrWidgetButton::AttrWidgetButton(const XMLAttribute &xmlAttribute,
 
 void AttrWidgetButton::SetValue(const String &buttonText)
 {
+    m_button->blockSignals(true);
     m_button->setText(buttonText.ToQString());
+    m_button->blockSignals(false);
 }
 
 String AttrWidgetButton::GetValue() const

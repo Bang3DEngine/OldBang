@@ -15,7 +15,7 @@ private:
 
 public:
     AttrWidgetEnum(const XMLAttribute &xmlAttribute,
-                   InspectorWidget *m_inspectorWidget);
+                   InspectorWidget *p_inspectorWidget);
 
     virtual void SetValue(int index);
     virtual int GetValue();

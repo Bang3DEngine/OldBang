@@ -295,7 +295,10 @@ bool GameObject::AddComponent(Component *c)
     m_components.PushBack(c);
 
     #ifdef BANG_EDITOR
-    Inspector::GetInstance()->Refresh(this);
+    if (Inspector::GetInstance()->Refresh(this))
+    {
+        Inspector::GetInstance()->scrollToBottom();
+    }
     #endif
 
     return true;
@@ -345,10 +348,6 @@ void GameObject::RemoveComponentInstantly(Component *c)
     if (m_transform == c) { m_transform = nullptr; }
     m_components.Remove(c);
     delete c;
-
-    #ifdef BANG_EDITOR
-    Inspector::GetInstance()->Refresh(this);
-    #endif
 }
 
 void GameObject::RemoveQueuedComponents()

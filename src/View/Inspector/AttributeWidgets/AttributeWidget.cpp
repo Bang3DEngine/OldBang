@@ -23,7 +23,7 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
                                  bool isSubWidget,
                                  bool createLabel,
                                  bool labelAbove ) :
-    m_inspectorWidget(inspectorWidget)
+    p_inspectorWidget(inspectorWidget)
 {
     setVisible(false);
     m_xmlAttribute = xmlAttribute;
@@ -42,8 +42,8 @@ AttributeWidget::AttributeWidget(const XMLAttribute &xmlAttribute,
             label = name.ToQString();
         }
 
-        QGridLayout *gridLayout = m_inspectorWidget->GetGridLayout();
-        m_rowIndexInGridLayout = m_inspectorWidget->GetNextRowIndex();
+        QGridLayout *gridLayout = p_inspectorWidget->GetGridLayout();
+        m_rowIndexInGridLayout = p_inspectorWidget->GetNextRowIndex();
 
         const int widgetRow = m_rowIndexInGridLayout + (labelAbove ? 1 : 0);
         const int widgetCol = (labelAbove ? 0 : 1);
@@ -76,7 +76,7 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
     m_hidden   =  attribute.HasProperty(XMLProperty::Hidden);
     setEnabled(m_enabled);
 
-    const bool hasToBeHidden = m_hidden || m_inspectorWidget->IsClosed();
+    const bool hasToBeHidden = m_hidden || p_inspectorWidget->IsClosed();
     if (hasToBeHidden && !isHidden()) // Only hide, to avoid window flickering
     {
         hide();
@@ -91,7 +91,7 @@ void AttributeWidget::Refresh(const XMLAttribute &attribute)
 
 int AttributeWidget::GetHeightSizeHint()
 {
-    if (m_hidden || m_inspectorWidget->IsClosed())
+    if (m_hidden || p_inspectorWidget->IsClosed())
     {
         return 0;
     }

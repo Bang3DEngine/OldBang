@@ -22,8 +22,8 @@ public:
 
     void Clear();
 
-    void Refresh(SerializableObject *serialObject);
-    void ShowInspectable(IInspectable *inspectable, const String &title = "");
+    bool Refresh(SerializableObject *serialObject);
+    void ShowInspectable(IInspectable *inspectable);
 
 public slots:
     void OnEnabledCheckBoxChanged(bool checked);

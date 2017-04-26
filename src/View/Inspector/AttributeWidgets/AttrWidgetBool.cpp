@@ -17,7 +17,9 @@ AttrWidgetBool::AttrWidgetBool(const XMLAttribute &xmlAttribute,
 
 void AttrWidgetBool::SetValue(bool value)
 {
+    blockSignals(true);
     m_checkbox->setChecked(value);
+    blockSignals(false);
 }
 
 bool AttrWidgetBool::GetValue() const

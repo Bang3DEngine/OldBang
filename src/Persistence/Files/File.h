@@ -8,6 +8,7 @@
 #include "Bang/String.h"
 #include "Bang/SerializableObject.h"
 
+class XMLNode;
 class IInspectable;
 class File : public SerializableObject
 {
@@ -57,6 +58,8 @@ public:
     static String GetContents(const String &filepath);
 
     virtual const QPixmap& GetIcon() const;
+
+    void Write(XMLNode *xmlInfo) const override;
 
     #ifdef BANG_EDITOR
     virtual IInspectable* GetNewInspectable();

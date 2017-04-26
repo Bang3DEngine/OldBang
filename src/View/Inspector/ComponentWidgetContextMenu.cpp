@@ -7,6 +7,7 @@
 #include "Bang/Inspector.h"
 #include "Bang/Component.h"
 #include "Bang/GameObject.h"
+#include "Bang/EditorWindow.h"
 #include "Bang/ComponentWidget.h"
 #include "Bang/ComponentClipboard.h"
 
@@ -20,6 +21,12 @@ ComponentWidgetContextMenu::
 void ComponentWidgetContextMenu::OnCustomContextMenuRequested(QPoint point)
 {
     QMenu contextMenu(tr("Widget comp context menu"), m_cWidget);
+
+    QMenu menuCreateComponents("Create", m_cWidget);
+    menuCreateComponents.addActions(EditorWindow::GetInstance()->
+                                     menuComponents->actions());
+    contextMenu.addMenu(&menuCreateComponents);
+    contextMenu.addSeparator();
 
     QAction        actionCopyComponent("Copy Component",         m_cWidget);
     QAction       actionPasteComponent("Paste Component",        m_cWidget);
@@ -65,7 +72,8 @@ void ComponentWidgetContextMenu::OnCustomContextMenuRequested(QPoint point)
         actionPasteComponentValues.setEnabled(false);
     }
 
-    if (m_cWidget->p_component->GetClassName() == "Transform")
+    if (m_cWidget->p_component->GetClassName() == "Transform" ||
+        m_cWidget->p_component->GetClassName() == "RectTransform")
     {
         actionRemoveComponent.setEnabled(false);
     }

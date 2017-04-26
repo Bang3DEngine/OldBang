@@ -51,7 +51,7 @@ void MaterialAssetFile::Read(const XMLNode &xmlInfo)
 
 void MaterialAssetFile::Write(XMLNode *xmlInfo) const
 {
-    xmlInfo->SetTagName( GetName() );
+    File::Write(xmlInfo);
 
     // Do Read & Write so that old files with different formats have the
     // newer one

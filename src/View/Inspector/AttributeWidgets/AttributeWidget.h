@@ -39,7 +39,7 @@ protected:
     bool m_inlined  = false;
     bool m_hidden   = false;
 
-    InspectorWidget *m_inspectorWidget = nullptr;
+    InspectorWidget *p_inspectorWidget = nullptr;
 
     AttributeWidget(const XMLAttribute &xmlAttribute,
                     InspectorWidget *inspectorWidget,

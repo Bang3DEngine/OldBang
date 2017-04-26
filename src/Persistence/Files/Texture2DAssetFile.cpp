@@ -54,7 +54,7 @@ void Texture2DAssetFile::Read(const XMLNode &xmlInfo)
 
 void Texture2DAssetFile::Write(XMLNode *xmlInfo) const
 {
-    xmlInfo->SetTagName("Texture2DAssetFileInspectable");
+    File::Write(xmlInfo);
     *xmlInfo = m_xmlInfo;
 }
 

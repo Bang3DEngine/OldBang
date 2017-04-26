@@ -74,14 +74,14 @@ void AttrWidgetFile::Browse()
     String selectedFile = "";
     DialogBrowseAssetFile *dialog = new DialogBrowseAssetFile(&selectedFile);
     dialog->Show(EditorWindow::GetInstance()->GetMainWindow(),
-                 m_inspectorWidget->GetInspectableXMLInfo().GetTagName(),
+                 p_inspectorWidget->GetInspectableXMLInfo().GetTagName(),
                  m_fileExtension.Split(' ').ToList());
     while (dialog->isVisible()) { Application::processEvents(); }
 
     if (!selectedFile.Empty())
     {
         SetValue(selectedFile);
-        m_inspectorWidget->_OnSlotValueChanged();
+        p_inspectorWidget->_OnSlotValueChanged();
     }
 
     RefreshIcon();
@@ -115,12 +115,15 @@ void AttrWidgetFile::SetValue(const String &filepath, bool draggedFile)
 
     String fileName = IO::GetFileName(m_filepath);
     String fileText = !fileName.Empty() ? fileName : "None";
+
     m_filepathLineEdit->SetBold( !fileName.Empty() );
+    blockSignals(true);
     m_filepathLineEdit->setText(fileText.ToQString());
+    blockSignals(false);
 
     if (draggedFile)
     {
-        m_inspectorWidget->_OnSlotValueChanged();
+        p_inspectorWidget->_OnSlotValueChanged();
     }
     RefreshIcon();
 }

@@ -21,7 +21,7 @@ public:
     // isSubWidget indicates if it belongs to another parent attributeWidget,
     // such as AttrWidgetFloat's inside AttrWidgetVectorFloat
     AttrWidgetFloat(const XMLAttribute &xmlAttribute,
-                    InspectorWidget *m_inspectorWidget,
+                    InspectorWidget *p_inspectorWidget,
                     bool isSubWidget = false);
 
     virtual void SetValue(float f);

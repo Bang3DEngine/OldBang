@@ -63,9 +63,9 @@ void AudioClipAssetFile::Read(const XMLNode &xmlInfo)
 
 void AudioClipAssetFile::Write(XMLNode *xmlInfo) const
 {
-    AudioClip *audioClip = GetRelatedAudioClip();
+    File::Write(xmlInfo);
 
-    xmlInfo->SetTagName("AudioClipAssetFileInspectable");
+    AudioClip *audioClip = GetRelatedAudioClip();
 
     xmlInfo->SetFilepath("AudioFilepath", GetAudioFilepath(), "ogg wav", {});
 

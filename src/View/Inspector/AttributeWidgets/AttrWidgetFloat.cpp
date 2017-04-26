@@ -19,6 +19,8 @@ AttrWidgetFloat::AttrWidgetFloat(const XMLAttribute &xmlAttribute,
     m_lineEdit = new FloatComponentSlotSpinBox();
     m_lineEdit->setAlignment(Qt::AlignLeft);
     m_lineEdit->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
+    connect(m_lineEdit, SIGNAL(textChanged(QString)),
+            p_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
     // m_spinbox->setMaximum( 9999999999999999.9f);
     // m_spinbox->setMinimum(-9999999999999999.9f);
 
@@ -34,11 +36,9 @@ void AttrWidgetFloat::SetValue(float f)
 {
     if (!_editing)
     {
-        disconnect(m_lineEdit, SIGNAL(textChanged(QString)),
-                   m_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+        blockSignals(true);
         m_lineEdit->SetFloat(f);
-        connect(m_lineEdit, SIGNAL(textChanged(QString)),
-                m_inspectorWidget, SLOT(_OnSlotValueChanged(QString)));
+        blockSignals(false);
     }
 }
 

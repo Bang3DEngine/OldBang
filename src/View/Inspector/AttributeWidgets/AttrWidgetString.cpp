@@ -34,8 +34,10 @@ AttrWidgetString::AttrWidgetString(const XMLAttribute &xmlAttribute,
         textWidget = m_textEdit;
     }
 
-    //connect(m_strField, SIGNAL(textChanged()),
-    //        m_parent, SLOT(_OnSlotValueChanged()));
+    connect(m_lineEdit, SIGNAL(textChanged()),
+            p_inspectorWidget, SLOT(_OnSlotValueChanged()));
+    connect(m_textEdit, SIGNAL(textChanged()),
+            p_inspectorWidget, SLOT(_OnSlotValueChanged()));
 
     m_layout.addWidget(textWidget);
 
@@ -46,16 +48,16 @@ void AttrWidgetString::SetValue(const String &value)
 {
     if (!m_editing)
     {
+        blockSignals(true);
         if (m_lineEdit)
         {
-            //disconnect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
             m_lineEdit->setText( value.ToQString() );
-            //connect(m_strField, SIGNAL(textChanged()), m_parent, SLOT(_OnSlotValueChanged()));
         }
         else if (m_textEdit)
         {
             m_textEdit->setText( value.ToQString() );
         }
+        blockSignals(false);
     }
 }
 
@@ -87,12 +89,12 @@ void AttrWidgetString::OnFocusIn()
 void AttrWidgetString::OnFocusOut()
 {
     m_editing = false;
-    m_inspectorWidget->_OnSlotValueChanged();
+    p_inspectorWidget->_OnSlotValueChanged();
 }
 
 void AttrWidgetString::OnKeyPressed()
 {
-    m_inspectorWidget->_OnSlotValueChanged();
+    p_inspectorWidget->_OnSlotValueChanged();
 }
 
 QSize AttrWidgetString::sizeHint() const

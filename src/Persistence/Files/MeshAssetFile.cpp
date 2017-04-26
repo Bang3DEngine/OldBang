@@ -37,9 +37,8 @@ void MeshAssetFile::Read(const XMLNode &xmlInfo)
 
 void MeshAssetFile::Write(XMLNode *xmlInfo) const
 {
-    xmlInfo->SetTagName( GetName() );
-    xmlInfo->SetFilepath("MeshFilepath", GetMeshFilepath(),
-                         "obj");
+    File::Write(xmlInfo);
+    xmlInfo->SetFilepath("MeshFilepath", GetMeshFilepath(), "obj");
 }
 
 #ifdef BANG_EDITOR

@@ -14,6 +14,7 @@
 #include "Bang/Mesh.h"
 #include "Bang/Scene.h"
 #include "Bang/Prefab.h"
+#include "Bang/XMLNode.h"
 #include "Bang/Material.h"
 #include "Bang/TextFile.h"
 #include "Bang/MeshFile.h"
@@ -264,6 +265,12 @@ const QPixmap& File::GetIcon() const
     const QPixmap &pm =
          IconManager::LoadPixmap(absPath, IconManager::IconOverlay::None);
     return pm;
+}
+
+void File::Write(XMLNode *xmlInfo) const
+{
+    SerializableObject::Write(xmlInfo);
+    xmlInfo->SetTagName( GetName() );
 }
 
 #ifdef BANG_EDITOR

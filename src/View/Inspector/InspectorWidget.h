@@ -38,7 +38,7 @@ class InspectorWidget : public DragDropQWidget
 
 public:
     InspectorWidget();
-    void Init(const String &title, SerializableObject *relatedInspectable);
+    void Init(SerializableObject *relatedInspectable);
 
     virtual ~InspectorWidget();
 
@@ -107,8 +107,7 @@ private:
 
     void UpdateContentMargins();
     void CreateWidgetSlots(XMLNode &xmlInfo);
-    void ConstructFromWidgetXMLInfo(const String &title,
-                                    XMLNode &info, bool autoUpdate = true);
+    void ConstructFromWidgetXMLInfo(XMLNode &info);
 
 private slots:
     void _OnSlotValueChanged(int _);

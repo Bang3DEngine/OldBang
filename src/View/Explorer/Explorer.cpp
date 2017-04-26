@@ -255,8 +255,7 @@ void Explorer::RefreshInspector()
 
         if (newInspectable)
         {
-            Inspector::GetInstance()->ShowInspectable(newInspectable,
-                                                      f.GetName());
+            Inspector::GetInstance()->ShowInspectable(newInspectable);
         }
     }
 }

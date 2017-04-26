@@ -18,23 +18,25 @@ InspectorContextMenu::InspectorContextMenu(Inspector *inspector)
 void InspectorContextMenu::OnCustomContextMenuRequested(QPoint point)
 {
     ENSURE(!p_inspector->GetCurrentInspectorWidgets().Empty());
+    InspectorWidget *iw = p_inspector->GetCurrentInspectorWidgets().Front();
 
-    QMenu contextMenu(tr("Inspector context menu"), p_inspector);
-    contextMenu.addActions(EditorWindow::GetInstance()->menuComponents->actions());
-    contextMenu.addSeparator();
-
-    ComponentWidget *cw = Object::SCast<ComponentWidget>(
-                p_inspector->GetCurrentInspectorWidgets().Front());
-
-    QAction actionPasteComponent("Paste Component", p_inspector);
-    connect(&actionPasteComponent, SIGNAL(triggered()),
-            &(cw->m_cwContextMenu), SLOT(OnPasteComponentSelected()));
-    contextMenu.addAction(&actionPasteComponent);
-
-    if (ComponentClipboard::IsEmpty())
+    if (Object::IsOfType<ComponentWidget>(iw))
     {
-        actionPasteComponent.setEnabled(false);
-    }
+        QMenu contextMenu(tr("Inspector context menu"), p_inspector);
+        contextMenu.addActions(EditorWindow::GetInstance()->
+                               menuComponents->actions());
+        contextMenu.addSeparator();
 
-    contextMenu.exec(p_inspector->mapToGlobal(point));
+        ComponentWidget *cw = Object::SCast<ComponentWidget>(iw);
+        QAction actionPasteComponent("Paste Component", p_inspector);
+        connect(&actionPasteComponent, SIGNAL(triggered()),
+                &(cw->m_cwContextMenu), SLOT(OnPasteComponentSelected()));
+        contextMenu.addAction(&actionPasteComponent);
+
+        if (ComponentClipboard::IsEmpty())
+        {
+            actionPasteComponent.setEnabled(false);
+        }
+        contextMenu.exec(p_inspector->mapToGlobal(point));
+    }
 }

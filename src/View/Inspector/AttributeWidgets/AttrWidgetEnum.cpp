@@ -26,7 +26,9 @@ AttrWidgetEnum::AttrWidgetEnum(const XMLAttribute &xmlAttribute,
 
 void AttrWidgetEnum::SetValue(int index)
 {
+    m_comboBox->blockSignals(true);
     m_comboBox->setCurrentIndex(index);
+    m_comboBox->blockSignals(false);
 }
 
 int AttrWidgetEnum::GetValue()

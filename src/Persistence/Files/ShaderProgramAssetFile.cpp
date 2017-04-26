@@ -53,8 +53,8 @@ void ShaderProgramAssetFile::Read(const XMLNode &xmlInfo)
 
 void ShaderProgramAssetFile::Write(XMLNode *xmlInfo) const
 {
-    SerializableObject::Write(xmlInfo);
-    xmlInfo->SetTagName("ShaderProgram");
+    File::Write(xmlInfo);
+
     xmlInfo->SetFilepath("VertexShader", GetVertexShaderFilepath(),
                          "vert glsl");
     xmlInfo->SetFilepath("FragmentShader", GetFragmentShaderFilepath(),

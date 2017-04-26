@@ -167,8 +167,8 @@ void SceneManager::LoadSceneInstantly(Scene *scene)
     if (oldScene) { delete oldScene; }
 
     #ifdef BANG_EDITOR
-    Inspector::GetInstance()->Clear();
     Hierarchy::GetInstance()->Clear();
+    Inspector::GetInstance()->Clear();
     #endif
     SceneManager::SetActiveScene(nullptr);
 

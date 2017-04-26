@@ -35,7 +35,7 @@ void SoundFile::Read(const XMLNode &xmlInfo)
 
 void SoundFile::Write(XMLNode *xmlInfo) const
 {
-    xmlInfo->SetTagName("SoundFile");
+    File::Write(xmlInfo);
 
     xmlInfo->SetString("FileName", GetNameAndExtension(), {XMLProperty::Readonly});
 

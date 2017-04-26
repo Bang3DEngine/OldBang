@@ -16,7 +16,7 @@ public:
     Array<AttrWidgetFloat*> m_floatSlots;
 
     AttrWidgetVectorFloat(const XMLAttribute &xmlAttribute,
-                          InspectorWidget *m_inspectorWidget);
+                          InspectorWidget *p_inspectorWidget);
 
     virtual void SetValue(const Array<float> &v);
     virtual Array<float> GetValue();

@@ -56,13 +56,12 @@ void Inspector::Clear()
     clear();
 }
 
-void Inspector::Refresh(SerializableObject *serialObject)
+bool Inspector::Refresh(SerializableObject *serialObject)
 {
-    ENSURE(m_currentInspectable);
-    if (m_currentInspectable->GetRelatedSerializableObject() == serialObject)
-    {
-        Refresh();
-    }
+    bool update = m_currentInspectable &&
+        (m_currentInspectable->GetRelatedSerializableObject() == serialObject);
+    if (update) { Refresh(); }
+    return update;
 }
 
 void Inspector::Refresh()
@@ -72,12 +71,15 @@ void Inspector::Refresh()
     ShowInspectable(newInsp);
 }
 
-void Inspector::ShowInspectable(IInspectable *insp, const String &title)
+void Inspector::ShowInspectable(IInspectable *insp)
 {
     Clear();
 
     ENSURE(insp);
     m_currentInspectable = insp;
+
+    String inspTitle = m_currentInspectable->GetTitleInInspector();
+    m_titleLabel->setText(inspTitle.ToQString());
 
     m_enabledCheckBox->setVisible(m_currentInspectable->NeedsEnabledCheckBox());
     m_enabledCheckBox->setChecked(m_currentInspectable->IsEnabled());
@@ -94,13 +96,6 @@ void Inspector::ShowInspectable(IInspectable *insp, const String &title)
             AddWidget(iw);
         }
     }
-
-    String inspTitle = title;
-    if (inspTitle.Empty())
-    {
-        inspTitle = m_currentInspectable->GetTitleInInspector();
-    }
-    m_titleLabel->setText(inspTitle.ToQString());
 
     RefreshSizeHints();
 }
@@ -146,6 +141,7 @@ void Inspector::OnSerializableObjectDestroyed(SerializableObject *destroyed)
         InspectorWidget *iw = Object::SCast<InspectorWidget>(itemWidget(itm));
         if (iw && iw->GetRelatedInspectable() == destroyed)
         {
+            delete iw;
             delete itm;
         }
     }

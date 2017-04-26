@@ -31,7 +31,7 @@ void MeshFile::Read(const XMLNode &xmlInfo)
 
 void MeshFile::Write(XMLNode *xmlInfo) const
 {
-    xmlInfo->SetTagName("MeshFile");
+    File::Write(xmlInfo);
 
     xmlInfo->SetString("FileName", GetNameAndExtension(), {XMLProperty::Readonly});
     xmlInfo->SetString("Mode", IsTriangles() ? "Triangles" : "Quads",

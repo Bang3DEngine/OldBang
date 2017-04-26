@@ -27,13 +27,12 @@ InspectorWidget::InspectorWidget() : DragDropQWidget(nullptr)
 {
 }
 
-void InspectorWidget::Init(const String &title,
-                           SerializableObject *relatedSerialObj)
+void InspectorWidget::Init(SerializableObject *relatedSerialObj)
 {
     p_relatedSerialObj = relatedSerialObj;
 
     XMLNode xmlInfo = GetInspectableXMLInfo();
-    ConstructFromWidgetXMLInfo(title, xmlInfo);
+    ConstructFromWidgetXMLInfo(xmlInfo);
 
     SetIcon( relatedSerialObj->GetIcon() );
 
@@ -41,9 +40,7 @@ void InspectorWidget::Init(const String &title,
     RefreshWidgetValues();
 }
 
-void InspectorWidget::ConstructFromWidgetXMLInfo(const String &title,
-                                                 XMLNode &xmlInfo,
-                                                 bool autoUpdate)
+void InspectorWidget::ConstructFromWidgetXMLInfo(XMLNode &xmlInfo)
 {
     setVisible(false);
 
@@ -63,8 +60,8 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(const String &title,
                      this, SLOT(OnCloseOpenButtonClicked()));
     UpdateCloseOpenButtonIcon();
 
-    String fTitle = Inspector::FormatInspectorLabel(title);
-    m_titleLabel.setText(fTitle.ToQString());
+    String title = Inspector::FormatInspectorLabel( xmlInfo.GetTagName() );
+    m_titleLabel.setText(title.ToQString());
     QFont font = m_titleLabel.font();
     font.setPixelSize(13);
     font.setBold(true);
@@ -73,12 +70,9 @@ void InspectorWidget::ConstructFromWidgetXMLInfo(const String &title,
 
     CreateWidgetSlots(xmlInfo);
 
-    if (autoUpdate)
-    {
-        QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
-                         this, SLOT(RefreshWidgetValues()));
-        m_refreshTimer.start(50);
-    }
+    QObject::connect(&m_refreshTimer, SIGNAL(timeout()),
+                     this, SLOT(RefreshWidgetValues()));
+    m_refreshTimer.start(10);
 
     setLayout(&m_vLayout);
     m_created = true;
@@ -228,14 +222,16 @@ int InspectorWidget::GetHeightSizeHint()
 
 void InspectorWidget::OnDestroy()
 {
-    p_relatedSerialObj = nullptr;
     m_refreshTimer.stop();
+    p_relatedSerialObj = nullptr;
     QObject::disconnect(&m_refreshTimer, SIGNAL(timeout()),
                         this, SLOT(RefreshWidgetValues()));
 }
 
 void InspectorWidget::RefreshWidgetValues()
 {
+    ENSURE(p_relatedSerialObj);
+
     XMLNode xmlInfo = GetInspectableXMLInfo();
     xmlInfo.SetTagName(m_tagName);
     for (auto itAttr : xmlInfo.GetAttributesListInOrder())
@@ -314,9 +310,9 @@ void InspectorWidget::UpdateContentMargins()
     Inspector *insp = Inspector::GetInstance();
     bool scrollbarVisible = insp->verticalScrollBar()->isVisible();
     const int c_marginLeft  = 10;
-    const int c_marginTop = IsClosed() ? 0 : 10;
+    const int c_marginTop = IsClosed() ? 0 : 5;
     const int c_marginRight = scrollbarVisible ? 20 : 5;
-    const int c_marginBot = IsClosed() ? 0 : 20;
+    const int c_marginBot = IsClosed() ? 0 : 15;
     m_vLayout.setContentsMargins(c_marginLeft,  c_marginTop,
                                   c_marginRight, c_marginBot);
 }

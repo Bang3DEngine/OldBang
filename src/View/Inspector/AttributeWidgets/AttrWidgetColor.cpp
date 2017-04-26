@@ -76,7 +76,7 @@ void AttrWidgetColor::Refresh(const XMLAttribute &attribute)
 void AttrWidgetColor::OnColorChanged(const QColor &c)
 {
     SetValue(Color::FromQColor(c));
-    m_inspectorWidget->_OnSlotValueChanged();
+    p_inspectorWidget->_OnSlotValueChanged();
 }
 
 

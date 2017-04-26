@@ -11,7 +11,7 @@ ComponentWidget::ComponentWidget(Component *relatedComponent) :
     m_cwContextMenu(this)
 {
     p_component = relatedComponent;
-    InspectorWidget::Init(p_component->GetClassName(), p_component);
+    InspectorWidget::Init(p_component);
 
     m_closed = p_component->IsClosedInInspector();
     SetClosed(m_closed);
